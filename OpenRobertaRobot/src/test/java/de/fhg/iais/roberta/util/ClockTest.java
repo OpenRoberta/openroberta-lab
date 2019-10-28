@@ -2,10 +2,12 @@ package de.fhg.iais.roberta.util;
 
 import static org.junit.Assert.assertEquals;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class ClockTest {
 
+    @Ignore
     @Test
     public void test() throws InterruptedException {
         Clock c1 = Clock.start();

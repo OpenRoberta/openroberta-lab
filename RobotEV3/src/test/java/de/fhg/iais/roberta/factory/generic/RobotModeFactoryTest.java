@@ -17,11 +17,11 @@ import de.fhg.iais.roberta.mode.general.IndexLocation;
 import de.fhg.iais.roberta.mode.general.ListElementOperations;
 import de.fhg.iais.roberta.syntax.SC;
 import de.fhg.iais.roberta.util.PluginProperties;
-import de.fhg.iais.roberta.util.Util1;
+import de.fhg.iais.roberta.util.Util;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
 public class RobotModeFactoryTest {
-    EV3Factory factory = new EV3Factory(new PluginProperties("ev3lejosv0", "", "", Util1.loadProperties("classpath:/ev3lejosv0.properties")));
+    EV3Factory factory = new EV3Factory(new PluginProperties("ev3lejosv0", "", "", Util.loadProperties("classpath:/ev3lejosv0.properties")));
     BlocklyDropdownFactory dropdownFactory = this.factory.getBlocklyDropdownFactory();
 
     @Test

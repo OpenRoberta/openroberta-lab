@@ -3,12 +3,12 @@ package de.fhg.iais.roberta.util.test;
 import org.json.JSONObject;
 
 import de.fhg.iais.roberta.factory.BlocklyDropdownFactoryHelper;
-import de.fhg.iais.roberta.util.Util1;
+import de.fhg.iais.roberta.util.Util;
 
 public class GeneralTestsHelper {
     public static void loadBlocks(String uri) {
         JSONObject robotDescription = new JSONObject();
-        Util1.loadYAMLRecursive("", robotDescription, uri, false);
+        Util.loadYAMLRecursive("", robotDescription, uri, false);
         BlocklyDropdownFactoryHelper.loadBlocks(robotDescription);
     }
 

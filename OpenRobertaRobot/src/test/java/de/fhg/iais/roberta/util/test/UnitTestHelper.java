@@ -17,7 +17,7 @@ import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.util.PluginProperties;
-import de.fhg.iais.roberta.util.Util1;
+import de.fhg.iais.roberta.util.Util;
 import de.fhg.iais.roberta.util.jaxb.JaxbHelper;
 import de.fhg.iais.roberta.worker.IWorker;
 
@@ -38,7 +38,7 @@ public class UnitTestHelper {
     }
 
     public static void checkWorkers(IRobotFactory factory, String expectedSource, String programXmlFilename, IWorker... workers) {
-        String programXml = Util1.readResourceContent(programXmlFilename);
+        String programXml = Util.readResourceContent(programXmlFilename);
         Project.Builder builder = setupWithProgramXML(factory, programXml);
         builder.setWithWrapping(false);
         Project project = builder.build();
@@ -68,7 +68,7 @@ public class UnitTestHelper {
     }
 
     public static void checkProgramReverseTransformation(IRobotFactory factory, String programBlocklyXmlFilename) throws SAXException, IOException {
-        String programXml = Util1.readResourceContent(programBlocklyXmlFilename);
+        String programXml = Util.readResourceContent(programBlocklyXmlFilename);
         Project.Builder builder = setupWithProgramXML(factory, programXml);
         Project project = builder.build();
         String annotatedProgramXml = project.getAnnotatedProgramAsXml();
@@ -88,7 +88,7 @@ public class UnitTestHelper {
     }
 
     public static ArrayList<ArrayList<Phrase<Void>>> getAst(IRobotFactory factory, String programBlocklyXmlFilename) {
-        String programXml = Util1.readResourceContent(programBlocklyXmlFilename);
+        String programXml = Util.readResourceContent(programBlocklyXmlFilename);
         Project.Builder builder = setupWithProgramXML(factory, programXml);
         Project project = builder.build();
         return project.getProgramAst().getTree();
@@ -104,15 +104,15 @@ public class UnitTestHelper {
     }
 
     public static void checkGeneratedSourceEqualityWithExportXml(IRobotFactory factory, String expectedSourceFilename, String exportedXmlFilename) {
-        String exportedXml = Util1.readResourceContent(exportedXmlFilename);
+        String exportedXml = Util.readResourceContent(exportedXmlFilename);
         Project.Builder builder = setupWithExportXML(factory, exportedXml);
-        checkGeneratedSourceEquality(factory, Util1.readResourceContent(expectedSourceFilename), builder.build());
+        checkGeneratedSourceEquality(factory, Util.readResourceContent(expectedSourceFilename), builder.build());
     }
 
     public static void checkGeneratedSourceEqualityWithProgramXml(IRobotFactory factory, String expectedSourceFilename, String programXmlFilename) {
-        String programXml = Util1.readResourceContent(programXmlFilename);
+        String programXml = Util.readResourceContent(programXmlFilename);
         Project.Builder builder = setupWithProgramXML(factory, programXml);
-        checkGeneratedSourceEquality(factory, Util1.readResourceContent(expectedSourceFilename), builder.build());
+        checkGeneratedSourceEquality(factory, Util.readResourceContent(expectedSourceFilename), builder.build());
     }
 
     public static void checkGeneratedSourceEqualityWithProgramXml(
@@ -120,10 +120,10 @@ public class UnitTestHelper {
         String expectedSourceFilename,
         String programXmlFilename,
         ConfigurationAst configurationAst) {
-        String programXml = Util1.readResourceContent(programXmlFilename);
+        String programXml = Util.readResourceContent(programXmlFilename);
         Project.Builder builder = setupWithProgramXML(factory, programXml);
         builder.setConfigurationAst(configurationAst);
-        checkGeneratedSourceEquality(factory, Util1.readResourceContent(expectedSourceFilename), builder.build());
+        checkGeneratedSourceEquality(factory, Util.readResourceContent(expectedSourceFilename), builder.build());
     }
 
     public static void checkGeneratedSourceEqualityWithProgramXml(
@@ -131,12 +131,12 @@ public class UnitTestHelper {
         String expectedSourceFilename,
         String programXmlFilename,
         String configurationXmlFilename) {
-        String programXml = Util1.readResourceContent(programXmlFilename);
-        String configurationXml = Util1.readResourceContent(configurationXmlFilename);
+        String programXml = Util.readResourceContent(programXmlFilename);
+        String configurationXml = Util.readResourceContent(configurationXmlFilename);
         Project.Builder builder = setupWithConfigurationAndProgramXML(factory, programXml, configurationXml);
         builder.setSSID("mySSID");
         builder.setPassword("myPassw0rd");
-        checkGeneratedSourceEquality(factory, Util1.readResourceContent(expectedSourceFilename), builder.build());
+        checkGeneratedSourceEquality(factory, Util.readResourceContent(expectedSourceFilename), builder.build());
     }
 
     public static void checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(
@@ -144,7 +144,7 @@ public class UnitTestHelper {
         String expectedSource,
         String programXmlFilename,
         boolean withWrapping) {
-        String programXml = Util1.readResourceContent(programXmlFilename);
+        String programXml = Util.readResourceContent(programXmlFilename);
         Project.Builder builder = setupWithProgramXML(factory, programXml);
         builder.setWithWrapping(withWrapping);
         checkGeneratedSourceEquality(factory, expectedSource, builder.build());
@@ -156,7 +156,7 @@ public class UnitTestHelper {
         String programXmlFilename,
         ConfigurationAst configurationAst,
         boolean withWrapping) {
-        String programXml = Util1.readResourceContent(programXmlFilename);
+        String programXml = Util.readResourceContent(programXmlFilename);
         Project.Builder builder = setupWithProgramXML(factory, programXml);
         builder.setConfigurationAst(configurationAst);
         builder.setWithWrapping(withWrapping);
@@ -173,7 +173,7 @@ public class UnitTestHelper {
     public static class TestFactory extends RobotFactory {
 
         public TestFactory() {
-            super(new PluginProperties("test", "", "", Util1.loadProperties("classpath:/pluginProperties/test.properties")));
+            super(new PluginProperties("test", "", "", Util.loadProperties("classpath:/pluginProperties/test.properties")));
         }
 
     }

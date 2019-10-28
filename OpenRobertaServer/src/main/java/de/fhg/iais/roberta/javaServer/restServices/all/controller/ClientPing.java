@@ -23,7 +23,7 @@ import de.fhg.iais.roberta.javaServer.provider.OraData;
 import de.fhg.iais.roberta.persistence.util.HttpSessionState;
 import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
 import de.fhg.iais.roberta.util.Key;
-import de.fhg.iais.roberta.util.Util;
+import de.fhg.iais.roberta.util.UtilForREST;
 import de.fhg.iais.roberta.util.VersionChecker;
 import de.fhg.iais.roberta.util.dbc.DbcKeyException;
 
@@ -69,11 +69,11 @@ public class ClientPing {
             if ( counter % EVERY_REQUEST == 0 ) {
                 LOG.info("suppressed now " + counter + " DbcKeyExceptions. Last message was: " + e.getMessage());
             }
-            Util.addErrorInfo(response, Key.INIT_FAIL_PING_ERROR);
+            UtilForREST.addErrorInfo(response, Key.INIT_FAIL_PING_ERROR);
         } catch ( Exception e ) {
             LOG.info("suppressed exception is: " + e.getMessage());
-            Util.addErrorInfo(response, Key.INIT_FAIL_PING_ERROR);
+            UtilForREST.addErrorInfo(response, Key.INIT_FAIL_PING_ERROR);
         }
-        return Util.responseWithFrontendInfo(response, httpSessionState, this.brickCommunicator);
+        return UtilForREST.responseWithFrontendInfo(response, httpSessionState, this.brickCommunicator);
     }
 }

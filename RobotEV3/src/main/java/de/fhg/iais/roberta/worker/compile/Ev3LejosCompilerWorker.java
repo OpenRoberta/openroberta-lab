@@ -7,7 +7,7 @@ import de.fhg.iais.roberta.bean.CompilerSetupBean;
 import de.fhg.iais.roberta.components.Project;
 import de.fhg.iais.roberta.components.ev3lejos.JavaSourceCompiler;
 import de.fhg.iais.roberta.util.Key;
-import de.fhg.iais.roberta.util.Util1;
+import de.fhg.iais.roberta.util.Util;
 import de.fhg.iais.roberta.worker.IWorker;
 
 public class Ev3LejosCompilerWorker implements IWorker {
@@ -19,7 +19,7 @@ public class Ev3LejosCompilerWorker implements IWorker {
         CompilerSetupBean compilerWorkflowBean = (CompilerSetupBean) project.getWorkerResult("CompilerSetup");
         final String compilerResourcesDir = compilerWorkflowBean.getCompilerResourcesDir();
         final String tempDir = compilerWorkflowBean.getTempDir();
-        Util1.storeGeneratedProgram(tempDir, project.getSourceCode().toString(), project.getToken(), project.getProgramName(), ".java");
+        Util.storeGeneratedProgram(tempDir, project.getSourceCode().toString(), project.getToken(), project.getProgramName(), ".java");
 
         JavaSourceCompiler scp = new JavaSourceCompiler(project.getProgramName(), project.getSourceCode().toString(), compilerResourcesDir);
         scp.compileAndPackage(tempDir, project.getToken());

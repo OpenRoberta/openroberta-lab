@@ -23,8 +23,8 @@ import de.fhg.iais.roberta.persistence.util.HttpSessionState;
 import de.fhg.iais.roberta.persistence.util.SessionFactoryWrapper;
 import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
 import de.fhg.iais.roberta.util.Key;
+import de.fhg.iais.roberta.util.UtilForREST;
 import de.fhg.iais.roberta.util.Util;
-import de.fhg.iais.roberta.util.Util1;
 
 @Path("/conf")
 public class ClientConfiguration {
@@ -43,7 +43,7 @@ public class ClientConfiguration {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response command(@OraData HttpSessionState httpSessionState, JSONObject fullRequest) throws Exception {
-        Util.handleRequestInit(httpSessionState, LOG, fullRequest);
+        UtilForREST.handleRequestInit(httpSessionState, LOG, fullRequest);
         int userId = httpSessionState.getUserId();
         DbSession dbSession = this.sessionFactoryWrapper.getSession();
         final String robotName =
@@ -62,13 +62,13 @@ public class ClientConfiguration {
                 String configurationName = request.getString("name");
                 String configurationXml = request.getString("configuration");
                 cp.updateConfiguration(configurationName, userId, robotName, configurationXml, true);
-                Util.addResultInfo(response, cp);
+                UtilForREST.addResultInfo(response, cp);
 
             } else if ( cmd.equals("saveAsC") ) {
                 String configurationName = request.getString("name");
                 String configurationXml = request.getString("configuration");
                 cp.updateConfiguration(configurationName, userId, robotName, configurationXml, false);
-                Util.addResultInfo(response, cp);
+                UtilForREST.addResultInfo(response, cp);
 
             } else if ( cmd.equals("loadC") ) {
                 String configurationName = request.getString("name");
@@ -81,33 +81,33 @@ public class ClientConfiguration {
                 }
                 String configurationText = cp.getConfigurationText(configurationName, userId, robotName);
                 response.put("data", configurationText);
-                Util.addResultInfo(response, cp);
+                UtilForREST.addResultInfo(response, cp);
 
             } else if ( cmd.equals("deleteC") && httpSessionState.isUserLoggedIn() ) {
                 String configurationName = request.getString("name");
                 cp.deleteByName(configurationName, userId, robotName);
-                Util.addResultInfo(response, cp);
+                UtilForREST.addResultInfo(response, cp);
 
             } else if ( cmd.equals("loadCN") && httpSessionState.isUserLoggedIn() ) {
                 JSONArray configurationInfo = cp.getConfigurationInfo(userId, robotName);
                 response.put("configurationNames", configurationInfo);
-                Util.addResultInfo(response, cp);
+                UtilForREST.addResultInfo(response, cp);
 
             } else {
                 ClientConfiguration.LOG.error("Invalid command: " + cmd);
-                Util.addErrorInfo(response, Key.COMMAND_INVALID);
+                UtilForREST.addErrorInfo(response, Key.COMMAND_INVALID);
             }
             dbSession.commit();
         } catch ( Exception e ) {
             dbSession.rollback();
-            String errorTicketId = Util1.getErrorTicketId();
+            String errorTicketId = Util.getErrorTicketId();
             ClientConfiguration.LOG.error("Exception. Error ticket: " + errorTicketId, e);
-            Util.addErrorInfo(response, Key.SERVER_ERROR).append("parameters", errorTicketId);
+            UtilForREST.addErrorInfo(response, Key.SERVER_ERROR).append("parameters", errorTicketId);
         } finally {
             if ( dbSession != null ) {
                 dbSession.close();
             }
         }
-        return Util.responseWithFrontendInfo(response, httpSessionState, this.brickCommunicator);
+        return UtilForREST.responseWithFrontendInfo(response, httpSessionState, this.brickCommunicator);
     }
 }

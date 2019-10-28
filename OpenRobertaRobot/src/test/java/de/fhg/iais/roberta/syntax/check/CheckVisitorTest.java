@@ -20,7 +20,7 @@ import de.fhg.iais.roberta.syntax.action.speech.SetLanguageAction;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtTextComment;
 import de.fhg.iais.roberta.syntax.sensor.ExternalSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
-import de.fhg.iais.roberta.util.Util1;
+import de.fhg.iais.roberta.util.Util;
 import de.fhg.iais.roberta.util.test.UnitTestHelper;
 import de.fhg.iais.roberta.visitor.validate.AbstractProgramValidatorVisitor;
 import de.fhg.iais.roberta.worker.AbstractValidatorWorker;
@@ -114,7 +114,7 @@ public class CheckVisitorTest extends AstTest {
 
     @Test
     public void check_noLoops_returnsEmptyMap() throws Exception {
-        Project.Builder builder = UnitTestHelper.setupWithProgramXML(testFactory, Util1.readResourceContent("/visitors/invalide_use_of_variable.xml"));
+        Project.Builder builder = UnitTestHelper.setupWithProgramXML(testFactory, Util.readResourceContent("/visitors/invalide_use_of_variable.xml"));
         Project project = builder.build();
 
         TestProgramCheckWorker worker = new TestProgramCheckWorker();

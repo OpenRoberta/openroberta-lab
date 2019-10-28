@@ -41,7 +41,7 @@ import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.sensor.Sensor;
 import de.fhg.iais.roberta.syntax.sensor.SensorMetaDataBean;
 import de.fhg.iais.roberta.util.PluginProperties;
-import de.fhg.iais.roberta.util.Util1;
+import de.fhg.iais.roberta.util.Util;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
@@ -56,7 +56,7 @@ public class BlocklyDropdownFactory {
     public BlocklyDropdownFactory(PluginProperties pluginProperties) {
         String robotDescriptor = pluginProperties.getStringProperty("robot.descriptor");
         this.robotDescription = new JSONObject();
-        Util1.loadYAMLRecursive("", this.robotDescription, robotDescriptor, false);
+        Util.loadYAMLRecursive("", this.robotDescription, robotDescriptor, false);
         BlocklyDropdownFactoryHelper.loadBlocks(this.robotDescription);
         this.waMap = BlocklyDropdownFactoryHelper.getWaitUntils(this.robotDescription);
         this.modes = BlocklyDropdownFactoryHelper.getModes(this.robotDescription);

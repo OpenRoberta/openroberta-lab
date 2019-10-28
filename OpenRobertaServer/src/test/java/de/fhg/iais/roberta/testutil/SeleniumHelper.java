@@ -15,7 +15,7 @@ import org.openqa.selenium.WebDriver;
 import de.fhg.iais.roberta.main.ServerStarter;
 import de.fhg.iais.roberta.persistence.util.DbSetup;
 import de.fhg.iais.roberta.persistence.util.SessionFactoryWrapper;
-import de.fhg.iais.roberta.util.Util1;
+import de.fhg.iais.roberta.util.Util;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
 public class SeleniumHelper {
@@ -29,7 +29,7 @@ public class SeleniumHelper {
     public boolean browserVisibility;
 
     public SeleniumHelper(String baseUrl) throws Exception {
-        Properties properties = Util1.loadProperties("classpath:/openRoberta.properties");
+        Properties properties = Util.loadProperties("classpath:/openRoberta.properties");
         this.browserVisibility = Boolean.parseBoolean(properties.getProperty("browser.visibility"));
         List<String> addr = Arrays.asList("server.ip=localhost", "server.port=1998");
         this.serverStarter = new ServerStarter("classpath:/openRoberta.properties", addr);

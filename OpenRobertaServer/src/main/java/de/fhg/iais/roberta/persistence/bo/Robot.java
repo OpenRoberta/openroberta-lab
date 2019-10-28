@@ -9,7 +9,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-import de.fhg.iais.roberta.util.Util1;
+import de.fhg.iais.roberta.util.Util;
 
 @Entity
 @Table(name = "ROBOT")
@@ -42,7 +42,7 @@ public class Robot implements WithSurrogateId {
      */
     public Robot(String name) {
         this.name = name;
-        this.created = Util1.getNow();
+        this.created = Util.getNow();
     }
 
     @Override

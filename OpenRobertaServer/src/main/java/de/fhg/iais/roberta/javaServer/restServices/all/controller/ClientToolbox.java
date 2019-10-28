@@ -22,8 +22,8 @@ import de.fhg.iais.roberta.persistence.util.DbSession;
 import de.fhg.iais.roberta.persistence.util.HttpSessionState;
 import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
 import de.fhg.iais.roberta.util.Key;
+import de.fhg.iais.roberta.util.UtilForREST;
 import de.fhg.iais.roberta.util.Util;
-import de.fhg.iais.roberta.util.Util1;
 
 @Path("/toolbox")
 public class ClientToolbox {
@@ -40,7 +40,7 @@ public class ClientToolbox {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response command(@OraData HttpSessionState httpSessionState, @OraData DbSession dbSession, JSONObject fullRequest) throws Exception {
-        Util.handleRequestInit(httpSessionState, LOG, fullRequest);
+        UtilForREST.handleRequestInit(httpSessionState, LOG, fullRequest);
         JSONObject response = new JSONObject();
         try {
             JSONObject request = fullRequest.getJSONObject("data");
@@ -63,22 +63,22 @@ public class ClientToolbox {
                 if ( toolbox != null ) {
                     response.put("data", toolbox.getToolboxText());
                 }
-                Util.addResultInfo(response, tp);
+                UtilForREST.addResultInfo(response, tp);
             } else {
                 LOG.error("Invalid command: " + cmd);
-                Util.addErrorInfo(response, Key.COMMAND_INVALID);
+                UtilForREST.addErrorInfo(response, Key.COMMAND_INVALID);
             }
             dbSession.commit();
         } catch ( Exception e ) {
             dbSession.rollback();
-            String errorTicketId = Util1.getErrorTicketId();
+            String errorTicketId = Util.getErrorTicketId();
             LOG.error("Exception. Error ticket: " + errorTicketId, e);
-            Util.addErrorInfo(response, Key.SERVER_ERROR).append("parameters", errorTicketId);
+            UtilForREST.addErrorInfo(response, Key.SERVER_ERROR).append("parameters", errorTicketId);
         } finally {
             if ( dbSession != null ) {
                 dbSession.close();
             }
         }
-        return Util.responseWithFrontendInfo(response, httpSessionState, this.brickCommunicator);
+        return UtilForREST.responseWithFrontendInfo(response, httpSessionState, this.brickCommunicator);
     }
 }

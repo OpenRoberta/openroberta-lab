@@ -7,25 +7,26 @@ import java.util.Map;
 import de.fhg.iais.roberta.ast.AstTest;
 import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.components.ConfigurationComponent;
+import de.fhg.iais.roberta.util.Util;
 
 public class Ev3AstTest extends AstTest {
     protected static ConfigurationAst makeStandard() {
-        Map<String, String> motorBproperties = createMap("MOTOR_REGULATION", "TRUE", "MOTOR_REVERSE", "OFF", "MOTOR_DRIVE", "RIGHT");
+        Map<String, String> motorBproperties = Util.createMap("MOTOR_REGULATION", "TRUE", "MOTOR_REVERSE", "OFF", "MOTOR_DRIVE", "RIGHT");
         ConfigurationComponent motorB = new ConfigurationComponent("LARGE", true, "B", "B", motorBproperties);
 
-        Map<String, String> motorCproperties = createMap("MOTOR_REGULATION", "TRUE", "MOTOR_REVERSE", "OFF", "MOTOR_DRIVE", "LEFT");
+        Map<String, String> motorCproperties = Util.createMap("MOTOR_REGULATION", "TRUE", "MOTOR_REVERSE", "OFF", "MOTOR_DRIVE", "LEFT");
         ConfigurationComponent motorC = new ConfigurationComponent("LARGE", true, "C", "C", motorCproperties);
 
-        Map<String, String> touchSensorProperties = createMap();
+        Map<String, String> touchSensorProperties = Util.createMap();
         ConfigurationComponent touchSensor = new ConfigurationComponent("TOUCH", false, "S1", "1", touchSensorProperties);
 
-        Map<String, String> gyroSensorProperties = createMap();
+        Map<String, String> gyroSensorProperties = Util.createMap();
         ConfigurationComponent gyroSensor = new ConfigurationComponent("GYRO", false, "S2", "2", gyroSensorProperties);
 
-        Map<String, String> colourSensorProperties = createMap();
+        Map<String, String> colourSensorProperties = Util.createMap();
         ConfigurationComponent colourSensor = new ConfigurationComponent("COLOR", false, "S3", "3", colourSensorProperties);
 
-        Map<String, String> ultrasonicSensorProperties = createMap();
+        Map<String, String> ultrasonicSensorProperties = Util.createMap();
         ConfigurationComponent ultrasonicSensor = new ConfigurationComponent("ULTRASONIC", false, "S4", "4", ultrasonicSensorProperties);
 
         final ConfigurationAst.Builder builder = new ConfigurationAst.Builder();
@@ -36,25 +37,25 @@ public class Ev3AstTest extends AstTest {
     }
 
     protected static ConfigurationAst makeLargeLargeMediumTouchGyroColorUltrasonic() {
-        Map<String, String> motorAproperties = createMap("MOTOR_REGULATION", "TRUE", "MOTOR_REVERSE", "OFF", "MOTOR_DRIVE", "RIGHT");
+        Map<String, String> motorAproperties = Util.createMap("MOTOR_REGULATION", "TRUE", "MOTOR_REVERSE", "OFF", "MOTOR_DRIVE", "RIGHT");
         ConfigurationComponent motorA = new ConfigurationComponent("LARGE", true, "A", "A", motorAproperties);
 
-        Map<String, String> motorBproperties = createMap("MOTOR_REGULATION", "TRUE", "MOTOR_REVERSE", "OFF", "MOTOR_DRIVE", "RIGHT");
+        Map<String, String> motorBproperties = Util.createMap("MOTOR_REGULATION", "TRUE", "MOTOR_REVERSE", "OFF", "MOTOR_DRIVE", "RIGHT");
         ConfigurationComponent motorB = new ConfigurationComponent("LARGE", true, "B", "B", motorBproperties);
 
-        Map<String, String> motorDproperties = createMap("MOTOR_REGULATION", "TRUE", "MOTOR_REVERSE", "OFF", "MOTOR_DRIVE", "RIGHT");
+        Map<String, String> motorDproperties = Util.createMap("MOTOR_REGULATION", "TRUE", "MOTOR_REVERSE", "OFF", "MOTOR_DRIVE", "RIGHT");
         ConfigurationComponent motorD = new ConfigurationComponent("MEDIUM", true, "D", "D", motorDproperties);
 
-        Map<String, String> touchSensorProperties = createMap();
+        Map<String, String> touchSensorProperties = Util.createMap();
         ConfigurationComponent touchSensor = new ConfigurationComponent("TOUCH", false, "S1", "1", touchSensorProperties);
 
-        Map<String, String> gyroSensorProperties = createMap();
+        Map<String, String> gyroSensorProperties = Util.createMap();
         ConfigurationComponent gyroSensor = new ConfigurationComponent("GYRO", false, "S2", "2", gyroSensorProperties);
 
-        Map<String, String> colourSensorProperties = createMap();
+        Map<String, String> colourSensorProperties = Util.createMap();
         ConfigurationComponent colourSensor = new ConfigurationComponent("COLOR", false, "S3", "3", colourSensorProperties);
 
-        Map<String, String> ultrasonicSensorProperties = createMap();
+        Map<String, String> ultrasonicSensorProperties = Util.createMap();
         ConfigurationComponent ultrasonicSensor = new ConfigurationComponent("ULTRASONIC", false, "S4", "4", ultrasonicSensorProperties);
 
         final ConfigurationAst.Builder builder = new ConfigurationAst.Builder();
@@ -68,22 +69,22 @@ public class Ev3AstTest extends AstTest {
     }
 
     protected static ConfigurationAst makeMediumLargeTouchGyroColorUltrasonic() {
-        Map<String, String> motorBproperties = createMap("MOTOR_REGULATION", "TRUE", "MOTOR_REVERSE", "OFF", "MOTOR_DRIVE", "RIGHT");
+        Map<String, String> motorBproperties = Util.createMap("MOTOR_REGULATION", "TRUE", "MOTOR_REVERSE", "OFF", "MOTOR_DRIVE", "RIGHT");
         ConfigurationComponent motorB = new ConfigurationComponent("MEDIUM", true, "B", "B", motorBproperties);
 
-        Map<String, String> motorCproperties = createMap("MOTOR_REGULATION", "FALSE", "MOTOR_REVERSE", "OFF", "MOTOR_DRIVE", "LEFT");
+        Map<String, String> motorCproperties = Util.createMap("MOTOR_REGULATION", "FALSE", "MOTOR_REVERSE", "OFF", "MOTOR_DRIVE", "LEFT");
         ConfigurationComponent motorC = new ConfigurationComponent("LARGE", true, "C", "C", motorCproperties);
 
-        Map<String, String> touchSensorProperties = createMap();
+        Map<String, String> touchSensorProperties = Util.createMap();
         ConfigurationComponent touchSensor = new ConfigurationComponent("TOUCH", false, "S1", "1", touchSensorProperties);
 
-        Map<String, String> gyroSensorProperties = createMap();
+        Map<String, String> gyroSensorProperties = Util.createMap();
         ConfigurationComponent gyroSensor = new ConfigurationComponent("GYRO", false, "S2", "2", gyroSensorProperties);
 
-        Map<String, String> colourSensorProperties = createMap();
+        Map<String, String> colourSensorProperties = Util.createMap();
         ConfigurationComponent colourSensor = new ConfigurationComponent("COLOR", false, "S3", "3", colourSensorProperties);
 
-        Map<String, String> ultrasonicSensorProperties = createMap();
+        Map<String, String> ultrasonicSensorProperties = Util.createMap();
         ConfigurationComponent ultrasonicSensor = new ConfigurationComponent("ULTRASONIC", false, "S4", "4", ultrasonicSensorProperties);
 
         final ConfigurationAst.Builder builder = new ConfigurationAst.Builder();
@@ -94,22 +95,22 @@ public class Ev3AstTest extends AstTest {
     }
 
     protected static ConfigurationAst makeLargeLargeTouchGyroInfraredUltrasonic() {
-        Map<String, String> motorBproperties = createMap("MOTOR_REGULATION", "TRUE", "MOTOR_REVERSE", "OFF", "MOTOR_DRIVE", "LEFT");
+        Map<String, String> motorBproperties = Util.createMap("MOTOR_REGULATION", "TRUE", "MOTOR_REVERSE", "OFF", "MOTOR_DRIVE", "LEFT");
         ConfigurationComponent motorB = new ConfigurationComponent("LARGE", true, "A", "A", motorBproperties);
 
-        Map<String, String> motorCproperties = createMap("MOTOR_REGULATION", "TRUE", "MOTOR_REVERSE", "OFF", "MOTOR_DRIVE", "RIGHT");
+        Map<String, String> motorCproperties = Util.createMap("MOTOR_REGULATION", "TRUE", "MOTOR_REVERSE", "OFF", "MOTOR_DRIVE", "RIGHT");
         ConfigurationComponent motorC = new ConfigurationComponent("LARGE", true, "B", "B", motorCproperties);
 
-        Map<String, String> touchSensorProperties = createMap();
+        Map<String, String> touchSensorProperties = Util.createMap();
         ConfigurationComponent touchSensor = new ConfigurationComponent("TOUCH", false, "S1", "1", touchSensorProperties);
 
-        Map<String, String> gyroSensorProperties = createMap();
+        Map<String, String> gyroSensorProperties = Util.createMap();
         ConfigurationComponent gyroSensor = new ConfigurationComponent("GYRO", false, "S2", "2", gyroSensorProperties);
 
-        Map<String, String> infraredSensorProperties = createMap();
+        Map<String, String> infraredSensorProperties = Util.createMap();
         ConfigurationComponent colourSensor = new ConfigurationComponent("INFRARED", false, "S3", "3", infraredSensorProperties);
 
-        Map<String, String> ultrasonicSensorProperties = createMap();
+        Map<String, String> ultrasonicSensorProperties = Util.createMap();
         ConfigurationComponent ultrasonicSensor = new ConfigurationComponent("ULTRASONIC", false, "S4", "4", ultrasonicSensorProperties);
 
         final ConfigurationAst.Builder builder = new ConfigurationAst.Builder();
@@ -120,22 +121,22 @@ public class Ev3AstTest extends AstTest {
     }
 
     protected static ConfigurationAst makeStandardConfigurationNonRegulated() {
-        Map<String, String> motorBproperties = createMap("MOTOR_REGULATION", "TRUE", "MOTOR_REVERSE", "OFF", "MOTOR_DRIVE", "RIGHT");
+        Map<String, String> motorBproperties = Util.createMap("MOTOR_REGULATION", "TRUE", "MOTOR_REVERSE", "OFF", "MOTOR_DRIVE", "RIGHT");
         ConfigurationComponent motorB = new ConfigurationComponent("LARGE", true, "B", "B", motorBproperties);
 
-        Map<String, String> motorCproperties = createMap("MOTOR_REGULATION", "FALSE", "MOTOR_REVERSE", "OFF", "MOTOR_DRIVE", "LEFT");
+        Map<String, String> motorCproperties = Util.createMap("MOTOR_REGULATION", "FALSE", "MOTOR_REVERSE", "OFF", "MOTOR_DRIVE", "LEFT");
         ConfigurationComponent motorC = new ConfigurationComponent("LARGE", true, "C", "C", motorCproperties);
 
-        Map<String, String> touchSensorProperties = createMap();
+        Map<String, String> touchSensorProperties = Util.createMap();
         ConfigurationComponent touchSensor = new ConfigurationComponent("TOUCH", false, "S1", "1", touchSensorProperties);
 
-        Map<String, String> gyroSensorProperties = createMap();
+        Map<String, String> gyroSensorProperties = Util.createMap();
         ConfigurationComponent gyroSensor = new ConfigurationComponent("GYRO", false, "S2", "2", gyroSensorProperties);
 
-        Map<String, String> colourSensorProperties = createMap();
+        Map<String, String> colourSensorProperties = Util.createMap();
         ConfigurationComponent colourSensor = new ConfigurationComponent("COLOR", false, "S3", "3", colourSensorProperties);
 
-        Map<String, String> ultrasonicSensorProperties = createMap();
+        Map<String, String> ultrasonicSensorProperties = Util.createMap();
         ConfigurationComponent ultrasonicSensor = new ConfigurationComponent("ULTRASONIC", false, "S4", "4", ultrasonicSensorProperties);
 
         final ConfigurationAst.Builder builder = new ConfigurationAst.Builder();
@@ -146,10 +147,10 @@ public class Ev3AstTest extends AstTest {
     }
 
     protected static ConfigurationAst makeMediumLargeTouchUltrasonicColor() {
-        Map<String, String> motorAproperties = createMap("MOTOR_REGULATION", "TRUE", "MOTOR_REVERSE", "OFF", "MOTOR_DRIVE", "LEFT");
+        Map<String, String> motorAproperties = Util.createMap("MOTOR_REGULATION", "TRUE", "MOTOR_REVERSE", "OFF", "MOTOR_DRIVE", "LEFT");
         ConfigurationComponent motorA = new ConfigurationComponent("MEDIUM", true, "A", "A", motorAproperties);
 
-        Map<String, String> motorBproperties = createMap("MOTOR_REGULATION", "TRUE", "MOTOR_REVERSE", "OFF", "MOTOR_DRIVE", "RIGHT");
+        Map<String, String> motorBproperties = Util.createMap("MOTOR_REGULATION", "TRUE", "MOTOR_REVERSE", "OFF", "MOTOR_DRIVE", "RIGHT");
         ConfigurationComponent motorB = new ConfigurationComponent("LARGE", true, "B", "B", motorBproperties);
 
         ConfigurationComponent touchSensor = new ConfigurationComponent("TOUCH", false, "S1", "1", Collections.emptyMap());
@@ -161,10 +162,10 @@ public class Ev3AstTest extends AstTest {
     }
 
     protected static ConfigurationAst makeMediumLargeTouchUltrasonicColorUltrasonic() {
-        Map<String, String> motorAproperties = createMap("MOTOR_REGULATION", "TRUE", "MOTOR_REVERSE", "OFF", "MOTOR_DRIVE", "LEFT");
+        Map<String, String> motorAproperties = Util.createMap("MOTOR_REGULATION", "TRUE", "MOTOR_REVERSE", "OFF", "MOTOR_DRIVE", "LEFT");
         ConfigurationComponent motorA = new ConfigurationComponent("MEDIUM", true, "A", "A", motorAproperties);
 
-        Map<String, String> motorBproperties = createMap("MOTOR_REGULATION", "TRUE", "MOTOR_REVERSE", "OFF", "MOTOR_DRIVE", "RIGHT");
+        Map<String, String> motorBproperties = Util.createMap("MOTOR_REGULATION", "TRUE", "MOTOR_REVERSE", "OFF", "MOTOR_DRIVE", "RIGHT");
         ConfigurationComponent motorB = new ConfigurationComponent("LARGE", true, "B", "B", motorBproperties);
 
         ConfigurationComponent touchSensor = new ConfigurationComponent("TOUCH", false, "S1", "1", Collections.emptyMap());
@@ -176,10 +177,10 @@ public class Ev3AstTest extends AstTest {
     }
 
     protected static ConfigurationAst makeMediumLargeTouchGyroInfraredUltrasonic() {
-        Map<String, String> motorAproperties = createMap("MOTOR_REGULATION", "TRUE", "MOTOR_REVERSE", "OFF", "MOTOR_DRIVE", "LEFT");
+        Map<String, String> motorAproperties = Util.createMap("MOTOR_REGULATION", "TRUE", "MOTOR_REVERSE", "OFF", "MOTOR_DRIVE", "LEFT");
         ConfigurationComponent motorA = new ConfigurationComponent("MEDIUM", true, "A", "A", motorAproperties);
 
-        Map<String, String> motorBproperties = createMap("MOTOR_REGULATION", "TRUE", "MOTOR_REVERSE", "OFF", "MOTOR_DRIVE", "RIGHT");
+        Map<String, String> motorBproperties = Util.createMap("MOTOR_REGULATION", "TRUE", "MOTOR_REVERSE", "OFF", "MOTOR_DRIVE", "RIGHT");
         ConfigurationComponent motorB = new ConfigurationComponent("LARGE", true, "B", "B", motorBproperties);
         ConfigurationComponent touchSensor = new ConfigurationComponent("TOUCH", false, "S1", "1", Collections.emptyMap());
         ConfigurationComponent gyro = new ConfigurationComponent("GYRO", false, "S2", "2", Collections.emptyMap());
@@ -190,16 +191,16 @@ public class Ev3AstTest extends AstTest {
     }
 
     protected static ConfigurationAst makeRotateRegulatedUnregulatedForwardBackwardMotors() {
-        Map<String, String> motorAproperties = createMap("MOTOR_REGULATION", "TRUE", "MOTOR_REVERSE", "OFF", "MOTOR_DRIVE", "NONE");
+        Map<String, String> motorAproperties = Util.createMap("MOTOR_REGULATION", "TRUE", "MOTOR_REVERSE", "OFF", "MOTOR_DRIVE", "NONE");
         ConfigurationComponent motorA = new ConfigurationComponent("LARGE", true, "A", "A", motorAproperties);
 
-        Map<String, String> motorBproperties = createMap("MOTOR_REGULATION", "TRUE", "MOTOR_REVERSE", "ON", "MOTOR_DRIVE", "NONE");
+        Map<String, String> motorBproperties = Util.createMap("MOTOR_REGULATION", "TRUE", "MOTOR_REVERSE", "ON", "MOTOR_DRIVE", "NONE");
         ConfigurationComponent motorB = new ConfigurationComponent("LARGE", true, "B", "B", motorBproperties);
 
-        Map<String, String> motorCproperties = createMap("MOTOR_REGULATION", "FALSE", "MOTOR_REVERSE", "OFF", "MOTOR_DRIVE", "NONE");
+        Map<String, String> motorCproperties = Util.createMap("MOTOR_REGULATION", "FALSE", "MOTOR_REVERSE", "OFF", "MOTOR_DRIVE", "NONE");
         ConfigurationComponent motorC = new ConfigurationComponent("LARGE", true, "C", "C", motorCproperties);
 
-        Map<String, String> motorDproperties = createMap("MOTOR_REGULATION", "FALSE", "MOTOR_REVERSE", "ON", "MOTOR_DRIVE", "NONE");
+        Map<String, String> motorDproperties = Util.createMap("MOTOR_REGULATION", "FALSE", "MOTOR_REVERSE", "ON", "MOTOR_DRIVE", "NONE");
         ConfigurationComponent motorD = new ConfigurationComponent("LARGE", true, "D", "D", motorDproperties);
 
         return build(motorA, motorB, motorC, motorD);

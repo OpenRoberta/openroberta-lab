@@ -12,7 +12,7 @@ import de.fhg.iais.roberta.components.ev3c4ev3.Uf2Builder;
 import de.fhg.iais.roberta.components.ev3c4ev3.Uf2FileContainer;
 import de.fhg.iais.roberta.util.Key;
 import de.fhg.iais.roberta.util.Pair;
-import de.fhg.iais.roberta.util.Util1;
+import de.fhg.iais.roberta.util.Util;
 import de.fhg.iais.roberta.worker.IWorker;
 
 public class Ev3C4ev3CompilerWorker implements IWorker {
@@ -47,7 +47,7 @@ public class Ev3C4ev3CompilerWorker implements IWorker {
         final String tempDir = compilerWorkflowBean.getTempDir();
         String token = project.getToken();
         String programName = project.getProgramName();
-        Util1.storeGeneratedProgram(tempDir, project.getSourceCode().toString(), token, programName, "." + project.getSourceCodeFileExtension());
+        Util.storeGeneratedProgram(tempDir, project.getSourceCode().toString(), token, programName, "." + project.getSourceCodeFileExtension());
         String sourceCodeFileName = tempDir + token + "/" + programName + "/source/" + programName + "." + project.getSourceCodeFileExtension();
         String binaryFileName = tempDir + token + "/" + programName + "/target/" + programName + ".elf";
         // TODO: compiler output

@@ -19,7 +19,7 @@ import de.fhg.iais.roberta.codegen.CalliopeCompilerFlag;
 import de.fhg.iais.roberta.components.Project;
 import de.fhg.iais.roberta.util.Key;
 import de.fhg.iais.roberta.util.Pair;
-import de.fhg.iais.roberta.util.Util1;
+import de.fhg.iais.roberta.util.Util;
 
 public class CalliopeCompilerWorker implements IWorker {
     private static final Logger LOG = LoggerFactory.getLogger(CalliopeCompilerWorker.class);
@@ -57,7 +57,7 @@ public class CalliopeCompilerWorker implements IWorker {
         final String compilerBinDir = compilerWorkflowBean.getCompilerBinDir();
         final String compilerResourcesDir = compilerWorkflowBean.getCompilerResourcesDir();
         final String tempDir = compilerWorkflowBean.getTempDir();
-        Util1
+        Util
             .storeGeneratedProgram(
                 tempDir,
                 project.getSourceCode().toString(),

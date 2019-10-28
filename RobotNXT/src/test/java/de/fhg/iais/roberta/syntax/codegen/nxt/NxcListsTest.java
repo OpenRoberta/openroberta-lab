@@ -9,18 +9,19 @@ import org.junit.Test;
 import de.fhg.iais.roberta.NxtAstTest;
 import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.components.ConfigurationComponent;
+import de.fhg.iais.roberta.util.Util;
 import de.fhg.iais.roberta.util.test.UnitTestHelper;
 
 public class NxcListsTest extends NxtAstTest {
 
     public static ConfigurationAst makeConfiguration() {
-        Map<String, String> motorAproperties = createMap("MOTOR_REGULATION", "TRUE", "MOTOR_REVERSE", "OFF", "MOTOR_DRIVE", "NONE");
+        Map<String, String> motorAproperties = Util.createMap("MOTOR_REGULATION", "TRUE", "MOTOR_REVERSE", "OFF", "MOTOR_DRIVE", "NONE");
         ConfigurationComponent motorA = new ConfigurationComponent("LARGE", true, "A", "A", motorAproperties);
 
-        Map<String, String> motorBproperties = createMap("MOTOR_REGULATION", "TRUE", "MOTOR_REVERSE", "OFF", "MOTOR_DRIVE", "LEFT");
+        Map<String, String> motorBproperties = Util.createMap("MOTOR_REGULATION", "TRUE", "MOTOR_REVERSE", "OFF", "MOTOR_DRIVE", "LEFT");
         ConfigurationComponent motorB = new ConfigurationComponent("LARGE", true, "B", "B", motorBproperties);
 
-        Map<String, String> motorCproperties = createMap("MOTOR_REGULATION", "TRUE", "MOTOR_REVERSE", "OFF", "MOTOR_DRIVE", "RIGHT");
+        Map<String, String> motorCproperties = Util.createMap("MOTOR_REGULATION", "TRUE", "MOTOR_REVERSE", "OFF", "MOTOR_DRIVE", "RIGHT");
         ConfigurationComponent motorC = new ConfigurationComponent("LARGE", true, "C", "C", motorCproperties);
 
         ConfigurationComponent colorSensor = new ConfigurationComponent("COLOR", false, "S3", "3", Collections.emptyMap());

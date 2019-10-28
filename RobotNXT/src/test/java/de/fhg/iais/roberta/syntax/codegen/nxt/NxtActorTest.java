@@ -9,12 +9,13 @@ import org.junit.Test;
 import de.fhg.iais.roberta.NxtAstTest;
 import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.components.ConfigurationComponent;
+import de.fhg.iais.roberta.util.Util;
 import de.fhg.iais.roberta.util.test.UnitTestHelper;
 
 public class NxtActorTest extends NxtAstTest {
 
     private static ConfigurationAst makeOtherConsumerConfiguration() {
-        Map<String, String> otherPowerConsumerproperties = createMap("MOTOR_REGULATION", "FALSE", "MOTOR_REVERSE", "OFF", "MOTOR_DRIVE", "NONE");
+        Map<String, String> otherPowerConsumerproperties = Util.createMap("MOTOR_REGULATION", "FALSE", "MOTOR_REVERSE", "OFF", "MOTOR_DRIVE", "NONE");
         ConfigurationComponent otherPowerConsumer = new ConfigurationComponent("LARGE", true, "A", "A", otherPowerConsumerproperties);
 
         final ConfigurationAst.Builder builder = new ConfigurationAst.Builder();

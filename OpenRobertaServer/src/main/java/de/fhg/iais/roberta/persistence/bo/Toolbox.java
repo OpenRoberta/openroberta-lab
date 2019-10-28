@@ -11,7 +11,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import de.fhg.iais.roberta.util.Util1;
+import de.fhg.iais.roberta.util.Util;
 
 @Entity
 @Table(name = "TOOLBOX")
@@ -66,8 +66,8 @@ public class Toolbox implements WithSurrogateId {
     public Toolbox(String name, User owner) {
         this.name = name;
         this.owner = owner;
-        this.created = Util1.getNow();
-        this.lastChanged = Util1.getNow();
+        this.created = Util.getNow();
+        this.lastChanged = Util.getNow();
     }
 
     @Override
@@ -85,7 +85,7 @@ public class Toolbox implements WithSurrogateId {
 
     public void setToolboxText(String ToolboxText) {
         this.ToolboxText = ToolboxText;
-        this.lastChanged = Util1.getNow();
+        this.lastChanged = Util.getNow();
     }
 
     public Timestamp getLastChecked() {
@@ -110,7 +110,7 @@ public class Toolbox implements WithSurrogateId {
 
     public void setTags(String tags) {
         this.tags = tags;
-        this.lastChanged = Util1.getNow();
+        this.lastChanged = Util.getNow();
     }
 
     /**

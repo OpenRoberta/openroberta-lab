@@ -11,7 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import de.fhg.iais.roberta.util.PluginProperties;
-import de.fhg.iais.roberta.util.Util1;
+import de.fhg.iais.roberta.util.Util;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.worker.IWorker;
@@ -32,11 +32,11 @@ public class RobotFactory implements IRobotFactory {
     public RobotFactory(PluginProperties pluginProperties) {
         this.pluginProperties = pluginProperties;
         this.blocklyDropdown2EnumFactory = new BlocklyDropdownFactory(this.pluginProperties);
-        this.beginnerToolbox = Util1.readResourceContent(this.pluginProperties.getStringProperty("robot.program.toolbox.beginner"));
-        this.expertToolbox = Util1.readResourceContent(this.pluginProperties.getStringProperty("robot.program.toolbox.expert"));
-        this.programDefault = Util1.readResourceContent(this.pluginProperties.getStringProperty("robot.program.default"));
-        this.configurationToolbox = Util1.readResourceContent(this.pluginProperties.getStringProperty("robot.configuration.toolbox"));
-        this.configurationDefault = Util1.readResourceContent(this.pluginProperties.getStringProperty("robot.configuration.default"));
+        this.beginnerToolbox = Util.readResourceContent(this.pluginProperties.getStringProperty("robot.program.toolbox.beginner"));
+        this.expertToolbox = Util.readResourceContent(this.pluginProperties.getStringProperty("robot.program.toolbox.expert"));
+        this.programDefault = Util.readResourceContent(this.pluginProperties.getStringProperty("robot.program.default"));
+        this.configurationToolbox = Util.readResourceContent(this.pluginProperties.getStringProperty("robot.configuration.toolbox"));
+        this.configurationDefault = Util.readResourceContent(this.pluginProperties.getStringProperty("robot.configuration.default"));
         loadWorkers();
     }
 

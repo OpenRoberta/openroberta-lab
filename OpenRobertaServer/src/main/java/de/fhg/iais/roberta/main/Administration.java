@@ -42,7 +42,7 @@ import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.Location;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.util.Util;
-import de.fhg.iais.roberta.util.Util1;
+import de.fhg.iais.roberta.util.UtilForHtmlXml;
 import de.fhg.iais.roberta.util.jaxb.JaxbHelper;
 
 /**
@@ -140,7 +140,7 @@ public class Administration {
     }
 
     private String version(boolean isForDatabase) {
-        Properties serverProperties = Util1.loadProperties(false, null);
+        Properties serverProperties = Util.loadProperties(null);
         String version = serverProperties.getProperty("openRobertaServer.version");
         if ( isForDatabase ) {
             return version.replace("-SNAPSHOT", "");
@@ -343,7 +343,7 @@ public class Administration {
                 continue;
             }
             totalDescriptions += 1;
-            String checkedProgramText = Util.checkProgramTextForXSS(uncheckedProgramText);
+            String checkedProgramText = UtilForHtmlXml.checkProgramTextForXSS(uncheckedProgramText);
             if ( !checkedProgramText.equals(uncheckedProgramText) ) {
                 totalDifferent += 1;
                 try {

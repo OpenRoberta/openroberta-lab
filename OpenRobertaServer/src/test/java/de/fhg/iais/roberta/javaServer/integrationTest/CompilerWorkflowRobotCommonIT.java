@@ -41,7 +41,7 @@ import de.fhg.iais.roberta.testutil.JSONUtilForServer;
 import de.fhg.iais.roberta.util.Key;
 import de.fhg.iais.roberta.util.RandomUrlPostfix;
 import de.fhg.iais.roberta.util.ServerProperties;
-import de.fhg.iais.roberta.util.Util1;
+import de.fhg.iais.roberta.util.Util;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.util.testsetup.IntegrationTest;
 
@@ -96,12 +96,12 @@ public class CompilerWorkflowRobotCommonIT {
 
     @Before
     public void setup() throws Exception {
-        Properties baseServerProperties = Util1.loadProperties(null);
+        Properties baseServerProperties = Util.loadProperties(null);
         serverProperties = new ServerProperties(baseServerProperties);
         robotCommunicator = new RobotCommunicator();
         pluginMap = ServerStarter.configureRobotPlugins(robotCommunicator, serverProperties, EMPTY_STRING_LIST);
         httpSessionState = HttpSessionState.initOnlyLegalForDebugging(pluginMap, serverProperties, 1);
-        JSONObject testSpecification = Util1.loadYAML("classpath:/crossCompilerTests/common/testSpec.yml");
+        JSONObject testSpecification = Util.loadYAML("classpath:/crossCompilerTests/common/testSpec.yml");
         robotsFromTestSpec = testSpecification.getJSONObject("robots");
         progsFromTestSpec = testSpecification.getJSONObject("progs");
         Set<String> robots = robotsFromTestSpec.keySet();
@@ -266,10 +266,10 @@ public class CompilerWorkflowRobotCommonIT {
     }
 
     private static String getTemplateWithConfigReplaced(String robotDir, String robotName) {
-        String template = Util1.readResourceContent(RESOURCE_BASE + "template/" + robotDir + ".xml");
-        Properties robotProperties = Util1.loadProperties("classpath:/" + robotName + ".properties");
+        String template = Util.readResourceContent(RESOURCE_BASE + "template/" + robotDir + ".xml");
+        Properties robotProperties = Util.loadProperties("classpath:/" + robotName + ".properties");
         String defaultConfigurationURI = robotProperties.getProperty("robot.configuration.default");
-        String defaultConfig = Util1.readResourceContent(defaultConfigurationURI);
+        String defaultConfig = Util.readResourceContent(defaultConfigurationURI);
         final String templateWithConfig = template.replaceAll("\\[\\[conf\\]\\]", defaultConfig);
         return templateWithConfig;
     }
@@ -290,7 +290,7 @@ public class CompilerWorkflowRobotCommonIT {
 
     private static String read(String directoryName, String progNameWithXmlSuffix) {
         try {
-            return Util1.readResourceContent(RESOURCE_BASE + directoryName + "/" + progNameWithXmlSuffix);
+            return Util.readResourceContent(RESOURCE_BASE + directoryName + "/" + progNameWithXmlSuffix);
         } catch ( Exception e ) {
             // this happens, if no decl or fragment is available for the program given. This is legel.
             return null;
@@ -327,7 +327,7 @@ public class CompilerWorkflowRobotCommonIT {
     private void showFailingProgram(String token) {
         try {
             String tokenDir = serverProperties.getTempDir() + token;
-            Util1.fileStreamOfFileDirectory(tokenDir).forEach(f -> showFailingProgramFromTokenDir(tokenDir, f));
+            Util.fileStreamOfFileDirectory(tokenDir).forEach(f -> showFailingProgramFromTokenDir(tokenDir, f));
         } catch ( Exception e ) {
             LOG.error("could not show the failing program. Probably the generation failed.");
         }
@@ -335,12 +335,12 @@ public class CompilerWorkflowRobotCommonIT {
 
     private static void showFailingProgramFromTokenDir(String tokenDir, String dir) {
         String sourceDir = tokenDir + "/" + dir + "/source";
-        Util1.fileStreamOfFileDirectory(sourceDir).forEach(f -> showFailingProgramFromSourceDir(sourceDir, f));
+        Util.fileStreamOfFileDirectory(sourceDir).forEach(f -> showFailingProgramFromSourceDir(sourceDir, f));
     }
 
     private static void showFailingProgramFromSourceDir(String sourceDir, String fileName) {
         String sourceFile = sourceDir + "/" + fileName;
-        List<String> sourceLines = Util1.readFileLines(fileName);
+        List<String> sourceLines = Util.readFileLines(fileName);
         StringBuilder sb = new StringBuilder();
         int lineCounter = 1;
         for ( String sourceLine : sourceLines ) {

@@ -11,7 +11,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import de.fhg.iais.roberta.util.Util1;
+import de.fhg.iais.roberta.util.Util;
 
 @Entity
 @Table(name = "CONFIGURATION")
@@ -67,8 +67,8 @@ public class Configuration implements WithSurrogateId {
         this.name = name;
         this.owner = owner;
         this.robot = robot;
-        this.created = Util1.getNow();
-        this.lastChanged = Util1.getNow();
+        this.created = Util.getNow();
+        this.lastChanged = Util.getNow();
     }
 
     @Override
@@ -86,7 +86,7 @@ public class Configuration implements WithSurrogateId {
 
     public void setConfigurationHash(String configurationHash) {
         this.configurationHash = configurationHash;
-        this.lastChanged = Util1.getNow();
+        this.lastChanged = Util.getNow();
     }
 
     public Timestamp getLastChecked() {
@@ -111,7 +111,7 @@ public class Configuration implements WithSurrogateId {
 
     public void setTags(String tags) {
         this.tags = tags;
-        this.lastChanged = Util1.getNow();
+        this.lastChanged = Util.getNow();
     }
 
     /**

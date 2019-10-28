@@ -2,7 +2,6 @@ package de.fhg.iais.roberta.main;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -50,11 +49,10 @@ import de.fhg.iais.roberta.persistence.util.SessionFactoryWrapper;
 import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
 import de.fhg.iais.roberta.util.Key;
 import de.fhg.iais.roberta.util.Pair;
-import de.fhg.iais.roberta.util.PluginProperties;
 import de.fhg.iais.roberta.util.ServerProperties;
 import de.fhg.iais.roberta.util.Statistics;
+import de.fhg.iais.roberta.util.UtilForREST;
 import de.fhg.iais.roberta.util.Util;
-import de.fhg.iais.roberta.util.Util1;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import joptsimple.OptionParser;
 import joptsimple.OptionSet;
@@ -116,10 +114,10 @@ public class ServerStarter {
      * @param serverDefines is a list of properties (from the command line ...) which overwrite the properties from the propertyPath. May be null.
      */
     public ServerStarter(String propertyPath, List<String> serverDefines) {
-        Properties properties = Util1.loadAndMergeProperties(propertyPath, serverDefines);
+        Properties properties = Util.loadAndMergeProperties(propertyPath, serverDefines);
         setupPropertyForDatabaseConnection(properties);
         this.serverProperties = new ServerProperties(properties);
-        Util.setServerVersion(this.serverProperties.getStringProperty("openRobertaServer.version"));
+        UtilForREST.setServerVersion(this.serverProperties.getStringProperty("openRobertaServer.version"));
     }
 
     /**
@@ -324,45 +322,8 @@ public class ServerStarter {
             if ( robotName.equals("sim") ) {
                 continue;
             }
-            Properties basicPluginProperties = Util1.loadProperties("classpath:/" + robotName + ".properties");
-            if ( basicPluginProperties == null ) {
-                throw new DbcException("robot plugin " + robotName + " has no property file " + robotName + ".properties -  Server does NOT start");
-            }
-            String robotNameColon = robotName + ":";
-            if ( pluginDefines != null ) {
-                for ( String pluginDefine : pluginDefines ) {
-                    if ( pluginDefine.startsWith(robotNameColon) ) {
-                        String define = pluginDefine.substring(robotNameColon.length());
-                        String[] property = define.split("\\s*=\\s*");
-                        if ( property.length == 2 ) {
-                            LOG.info("new plugin property from command line: " + pluginDefine);
-                            basicPluginProperties.put(property[0], property[1]);
-                        } else {
-                            LOG.info("command line plugin property is invalid and thus ignored: " + pluginDefine);
-                        }
-                    }
-                }
-            }
-            String pluginFactory = basicPluginProperties.getProperty("robot.plugin.factory");
-            if ( pluginFactory == null ) {
-                throw new DbcException("robot plugin " + robotName + " has no factory. Check the properties - Server does NOT start");
-            } else {
-                try {
-                    PluginProperties pluginProperties = new PluginProperties(robotName, resourceDir, tempDir, basicPluginProperties);
-                    @SuppressWarnings("unchecked")
-                    Class<IRobotFactory> factoryClass = (Class<IRobotFactory>) ServerStarter.class.getClassLoader().loadClass(pluginFactory);
-                    Constructor<IRobotFactory> factoryConstructor = factoryClass.getDeclaredConstructor(PluginProperties.class);
-                    IRobotFactory factory = factoryConstructor.newInstance(pluginProperties);
-                    robotPlugins.put(robotName, factory);
-
-                } catch ( Exception e ) {
-                    throw new DbcException(
-                        " factory for robot plugin "
-                            + robotName
-                            + " could not be build. Plugin-jar not on the classpath? Invalid properties? Problems with validators? Server does NOT start",
-                        e);
-                }
-            }
+            IRobotFactory factory = Util.configureRobotPlugin(robotName, resourceDir, tempDir, pluginDefines);
+            robotPlugins.put(robotName, factory);
         }
         StringBuilder sb = new StringBuilder();
         sb.append("ROBOT PLUGINS: ").append(robotPlugins.size()).append(" plugins are found: ");

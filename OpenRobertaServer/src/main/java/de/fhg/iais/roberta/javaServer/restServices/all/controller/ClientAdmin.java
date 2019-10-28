@@ -25,8 +25,8 @@ import de.fhg.iais.roberta.util.Key;
 import de.fhg.iais.roberta.util.RandomUrlPostfix;
 import de.fhg.iais.roberta.util.ServerProperties;
 import de.fhg.iais.roberta.util.Statistics;
+import de.fhg.iais.roberta.util.UtilForREST;
 import de.fhg.iais.roberta.util.Util;
-import de.fhg.iais.roberta.util.Util1;
 
 @Path("/admin")
 public class ClientAdmin {
@@ -56,7 +56,7 @@ public class ClientAdmin {
     public Response command(@OraData HttpSessionState httpSessionState, @OraData DbSession dbSession, JSONObject fullRequest, @Context HttpHeaders httpHeaders)
         throws Exception //
     {
-        Util.handleRequestInit(httpSessionState, LOG, fullRequest);
+        UtilForREST.handleRequestInit(httpSessionState, LOG, fullRequest);
         JSONObject response = new JSONObject();
         try {
             JSONObject request = fullRequest.getJSONObject("data");
@@ -70,7 +70,7 @@ public class ClientAdmin {
                     LOG.info("debug token is presented by a user. Download to robots is disabled for this user. Debugging feature and not risky.");
                     httpSessionState.setToken(token);
                     addRobotUpdateInfo(response, null, null);
-                    Util.addSuccessInfo(response, Key.TOKEN_SET_SUCCESS);
+                    UtilForREST.addSuccessInfo(response, Key.TOKEN_SET_SUCCESS);
                     LOG.info("success: debug token is registered in the session");
                     Statistics.info("ConnectRobot", "success", true);
                 } else {
@@ -82,23 +82,23 @@ public class ClientAdmin {
                             String robotMenuVersion = this.brickCommunicator.getState(token).getMenuVersion();
                             String serverMenuVersion = httpSessionState.getRobotFactory().getMenuVersion();
                             addRobotUpdateInfo(response, robotMenuVersion, serverMenuVersion);
-                            Util.addSuccessInfo(response, Key.TOKEN_SET_SUCCESS);
+                            UtilForREST.addSuccessInfo(response, Key.TOKEN_SET_SUCCESS);
                             LOG.info("success: token " + token + " is registered in the session");
                             Statistics.info("ConnectRobot", "success", true);
                             break;
                         case TOKEN_SET_ERROR_WRONG_ROBOTTYPE:
-                            Util.addErrorInfo(response, Key.TOKEN_SET_ERROR_WRONG_ROBOTTYPE);
+                            UtilForREST.addErrorInfo(response, Key.TOKEN_SET_ERROR_WRONG_ROBOTTYPE);
                             LOG.info("error: token " + token + " not registered in the session, wrong robot type");
                             Statistics.info("ConnectRobot", "success", false);
                             break;
                         case TOKEN_SET_ERROR_NO_ROBOT_WAITING:
-                            Util.addErrorInfo(response, Key.TOKEN_SET_ERROR_NO_ROBOT_WAITING);
+                            UtilForREST.addErrorInfo(response, Key.TOKEN_SET_ERROR_NO_ROBOT_WAITING);
                             LOG.info("error: token " + token + " not registered in the session");
                             Statistics.info("ConnectRobot", "success", false);
                             break;
                         default:
                             LOG.error("invalid response for token agreement: " + tokenAgreement);
-                            Util.addErrorInfo(response, Key.SERVER_ERROR);
+                            UtilForREST.addErrorInfo(response, Key.SERVER_ERROR);
                             Statistics.info("ConnectRobot", "success", false);
                             break;
                     }
@@ -111,17 +111,17 @@ public class ClientAdmin {
                     // everything is fine
                     boolean isPossible = this.brickCommunicator.firmwareUpdateRequested(token);
                     if ( isPossible ) {
-                        Util.addSuccessInfo(response, Key.ROBOT_FIRMWAREUPDATE_POSSIBLE);
+                        UtilForREST.addSuccessInfo(response, Key.ROBOT_FIRMWAREUPDATE_POSSIBLE);
                     } else {
-                        Util.addErrorInfo(response, Key.ROBOT_FIRMWAREUPDATE_IMPOSSIBLE);
+                        UtilForREST.addErrorInfo(response, Key.ROBOT_FIRMWAREUPDATE_IMPOSSIBLE);
                     }
                 } else {
-                    Util.addErrorInfo(response, Key.ROBOT_NOT_CONNECTED);
+                    UtilForREST.addErrorInfo(response, Key.ROBOT_NOT_CONNECTED);
                 }
             } else if ( cmd.equals("setRobot") ) {
                 String robot = request.getString("robot");
                 if ( robot != null && this.serverProperties.getRobotWhitelist().contains(robot) ) {
-                    Util.addSuccessInfo(response, Key.ROBOT_SET_SUCCESS);
+                    UtilForREST.addSuccessInfo(response, Key.ROBOT_SET_SUCCESS);
                     if ( httpSessionState.getRobotName() != robot ) {
                         // disconnect previous robot
                         // TODO consider keeping it so that we can switch between robot and simulation
@@ -168,29 +168,29 @@ public class ClientAdmin {
                     }
                 } else {
                     LOG.error("Invalid command: " + cmd + " setting robot name to " + robot);
-                    Util.addErrorInfo(response, Key.ROBOT_DOES_NOT_EXIST);
+                    UtilForREST.addErrorInfo(response, Key.ROBOT_DOES_NOT_EXIST);
                 }
             } else {
                 LOG.error("Invalid command: " + cmd);
-                Util.addErrorInfo(response, Key.COMMAND_INVALID);
+                UtilForREST.addErrorInfo(response, Key.COMMAND_INVALID);
             }
             dbSession.commit();
         } catch ( Exception e ) {
             dbSession.rollback();
-            String errorTicketId = Util1.getErrorTicketId();
+            String errorTicketId = Util.getErrorTicketId();
             LOG.error("Exception. Error ticket: " + errorTicketId, e);
-            Util.addErrorInfo(response, Key.SERVER_ERROR, errorTicketId);
+            UtilForREST.addErrorInfo(response, Key.SERVER_ERROR, errorTicketId);
         } finally {
             if ( dbSession != null ) {
                 dbSession.close();
             }
         }
-        return Util.responseWithFrontendInfo(response, httpSessionState, this.brickCommunicator);
+        return UtilForREST.responseWithFrontendInfo(response, httpSessionState, this.brickCommunicator);
     }
 
-    private void addRobotUpdateInfo(JSONObject response, String robotMenuVersion, String serverMenuVersion) throws JSONException {
+    private static void addRobotUpdateInfo(JSONObject response, String robotMenuVersion, String serverMenuVersion) throws JSONException {
         if ( robotMenuVersion != null && serverMenuVersion != null ) {
-            response.put("robot.update", Util.versionCompare(robotMenuVersion, serverMenuVersion));
+            response.put("robot.update", ClientAdmin.versionCompare(robotMenuVersion, serverMenuVersion));
             response.put("robot.serverVersion", serverMenuVersion);
         } else {
             response.put("robot.update", 0);
@@ -198,4 +198,29 @@ public class ClientAdmin {
         }
     }
 
+    /**
+     * Compares two version strings.
+     *
+     * @note It does not work if "1.10" is supposed to be equal to "1.10.0".
+     * @param str1 a string of ordinal numbers separated by decimal points.
+     * @param str2 a string of ordinal numbers separated by decimal points.
+     * @return The result is a negative integer if str1 is _numerically_ less than str2. The result is a positive integer if str1 is _numerically_ greater than
+     *         str2. The result is zero if the strings are _numerically_ equal.
+     */
+    private static int versionCompare(String str1, String str2) {
+        String[] vals1 = str1.split("\\.");
+        String[] vals2 = str2.split("\\.");
+        int i = 0;
+
+        while ( i < vals1.length && i < vals2.length && vals1[i].equals(vals2[i]) ) {
+            i++;
+        }
+
+        if ( i < vals1.length && i < vals2.length ) {
+            int diff = Integer.valueOf(vals1[i]).compareTo(Integer.valueOf(vals2[i]));
+            return Integer.signum(diff);
+        }
+
+        return Integer.signum(vals1.length - vals2.length);
+    }
 }

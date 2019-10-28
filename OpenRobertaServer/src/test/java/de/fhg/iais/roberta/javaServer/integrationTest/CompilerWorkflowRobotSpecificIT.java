@@ -38,10 +38,11 @@ import de.fhg.iais.roberta.persistence.util.HttpSessionState;
 import de.fhg.iais.roberta.persistence.util.SessionFactoryWrapper;
 import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
 import de.fhg.iais.roberta.testutil.JSONUtilForServer;
+import de.fhg.iais.roberta.util.FileUtils;
 import de.fhg.iais.roberta.util.Key;
 import de.fhg.iais.roberta.util.RandomUrlPostfix;
 import de.fhg.iais.roberta.util.ServerProperties;
-import de.fhg.iais.roberta.util.Util1;
+import de.fhg.iais.roberta.util.Util;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.util.jaxb.JaxbHelper;
 import de.fhg.iais.roberta.util.testsetup.IntegrationTest;
@@ -98,14 +99,14 @@ public class CompilerWorkflowRobotSpecificIT {
 
     @Before
     public void setup() throws Exception {
-        Properties baseServerProperties = Util1.loadProperties(null);
+        Properties baseServerProperties = Util.loadProperties(null);
         serverProperties = new ServerProperties(baseServerProperties);
         robotCommunicator = new RobotCommunicator();
         pluginMap = ServerStarter.configureRobotPlugins(robotCommunicator, serverProperties, EMPTY_STRING_LIST);
         httpSessionState = HttpSessionState.initOnlyLegalForDebugging(pluginMap, serverProperties, 1);
 
         resourceBase = "/crossCompilerTests/robotSpecific/";
-        JSONObject testSpecification = Util1.loadYAML("classpath:" + resourceBase + "testSpec.yml");
+        JSONObject testSpecification = Util.loadYAML("classpath:" + resourceBase + "testSpec.yml");
         robots = testSpecification.getJSONObject("robots");
 
         this.restWorkflow = new ProjectWorkflowRestController(this.robotCommunicator);
@@ -140,7 +141,7 @@ public class CompilerWorkflowRobotSpecificIT {
             final String robotDir = robots.getJSONObject(robotName).getString("dir");
             final String resourceDirectory = resourceBase + robotDir;
             setRobotTo(robotName);
-            Boolean resultNext = Util1.fileStreamOfResourceDirectory(resourceDirectory).//
+            Boolean resultNext = FileUtils.fileStreamOfResourceDirectory(resourceDirectory).//
                 filter(f -> f.endsWith(".xml")).map(f -> compileNepo(robotName, robotDir, f)).reduce(true, (a, b) -> a && b);
             resultAcc = resultAcc && resultNext;
         }
@@ -172,7 +173,7 @@ public class CompilerWorkflowRobotSpecificIT {
         for ( final String robotName : robots.keySet() ) {
             final JSONObject robot = robots.getJSONObject(robotName);
             final String resourceDirectory = resourceBase + "/" + robot.getString("dir");
-            Boolean resultNext = Util1.fileStreamOfResourceDirectory(resourceDirectory). //
+            Boolean resultNext = FileUtils.fileStreamOfResourceDirectory(resourceDirectory). //
                 map(f -> compileNative(robotName, robot, f)).reduce(true, (a, b) -> a && b);
             resultAcc = resultAcc && resultNext;
         }
@@ -195,7 +196,7 @@ public class CompilerWorkflowRobotSpecificIT {
             if ( CROSSCOMPILER_CALL ) {
                 org.codehaus.jettison.json.JSONObject cmd = JSONUtilForServer.mkD("{'programName':'prog','language':'de'}");
 
-                String xmlText = Util1.readResourceContent(fullResource);
+                String xmlText = Util.readResourceContent(fullResource);
                 Export jaxbImportExport = JaxbHelper.xml2Element(xmlText, Export.class);
                 String programText = JaxbHelper.blockSet2xml(jaxbImportExport.getProgram().getBlockSet());
                 cmd.getJSONObject("data").put("programBlockSet", xmlText);
@@ -207,7 +208,7 @@ public class CompilerWorkflowRobotSpecificIT {
                     String compiledCode = entity.optString("compiledCode", null);
                     if ( compiledCode != null ) {
                         final String programName = resource.substring(0, resource.length() - 4);
-                        result = new StackMachineJsonRunner().runOneProgram(programName, programText, compiledCode);
+                        result = new StackMachineJsonRunner().run(programName, programText, compiledCode);
                     } else {
                         LOG.error("no compiled code found for program " + resource);
                         result = false;
@@ -239,7 +240,7 @@ public class CompilerWorkflowRobotSpecificIT {
             setRobotTo(robotName);
             if ( CROSSCOMPILER_CALL ) {
                 org.codehaus.jettison.json.JSONObject cmd = JSONUtilForServer.mkD("{'programName':'" + resource + "','language':'de'}");
-                String fileContent = Util1.readResourceContent(fullResource);
+                String fileContent = Util.readResourceContent(fullResource);
                 cmd.getJSONObject("data").put("programText", fileContent);
                 Response response = this.restWorkflow.compileNative(this.httpSessionState, cmd);
                 result = checkEntityRc(response, expectResult) != null;

@@ -16,6 +16,7 @@ import org.slf4j.LoggerFactory;
 import com.google.inject.Inject;
 
 import de.fhg.iais.roberta.components.Project;
+import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.javaServer.provider.OraData;
 import de.fhg.iais.roberta.javaServer.restServices.all.service.ProjectService;
 import de.fhg.iais.roberta.mode.action.Language;
@@ -23,8 +24,8 @@ import de.fhg.iais.roberta.persistence.util.HttpSessionState;
 import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
 import de.fhg.iais.roberta.util.Key;
 import de.fhg.iais.roberta.util.Statistics;
+import de.fhg.iais.roberta.util.UtilForREST;
 import de.fhg.iais.roberta.util.Util;
-import de.fhg.iais.roberta.util.Util1;
 
 @Path("/projectWorkflow")
 public class ProjectWorkflowRestController {
@@ -42,8 +43,8 @@ public class ProjectWorkflowRestController {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response getSourceCode(@OraData HttpSessionState httpSessionState, JSONObject request) {
-        Util.handleRequestInit(httpSessionState, LOG, request);
-        JSONObject dataPart = Util.extractDataPart(request);
+        UtilForREST.handleRequestInit(httpSessionState, LOG, request);
+        JSONObject dataPart = UtilForREST.extractDataPart(request);
         JSONObject response = new JSONObject();
         try {
             String configurationText = httpSessionState.getRobotFactory().getConfigurationDefault();
@@ -70,12 +71,12 @@ public class ProjectWorkflowRestController {
             response.put("cause", project.getResult().getKey());
             response.put("parameters", project.getResultParams());
             Statistics.info("ProgramSource", "success", project.hasSucceeded());
-            Util.responseWithFrontendInfo(response, httpSessionState, this.brickCommunicator);
+            UtilForREST.responseWithFrontendInfo(response, httpSessionState, this.brickCommunicator);
             return Response.ok(response).build();
         } catch ( Exception e ) {
             LOG.info("getSourceCode failed", e);
             Statistics.info("ProgramSource", "success", false);
-            return createErrorResponse(response, httpSessionState);
+            return createErrorResponse(response, httpSessionState, this.brickCommunicator);
         }
     }
 
@@ -84,8 +85,8 @@ public class ProjectWorkflowRestController {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response getSimulationVMCode(@OraData HttpSessionState httpSessionState, JSONObject request) {
-        Util.handleRequestInit(httpSessionState, LOG, request);
-        JSONObject dataPart = Util.extractDataPart(request);
+        UtilForREST.handleRequestInit(httpSessionState, LOG, request);
+        JSONObject dataPart = UtilForREST.extractDataPart(request);
         JSONObject response = new JSONObject();
         try {
             String configurationText = httpSessionState.getRobotFactory().getConfigurationDefault();
@@ -113,12 +114,12 @@ public class ProjectWorkflowRestController {
             response.put("cause", project.getResult().getKey());
             response.put("parameters", project.getResultParams());
             Statistics.info("SimulationRun", "LoggedIn", httpSessionState.isUserLoggedIn(), "success", project.hasSucceeded());
-            Util.responseWithFrontendInfo(response, httpSessionState, this.brickCommunicator);
+            UtilForREST.responseWithFrontendInfo(response, httpSessionState, this.brickCommunicator);
             return Response.ok(response).build();
         } catch ( Exception e ) {
             LOG.info("getSimulationVMCode failed", e);
             Statistics.info("SimulationRun", "LoggedIn", httpSessionState.isUserLoggedIn(), "success", true);
-            return createErrorResponse(response, httpSessionState);
+            return createErrorResponse(response, httpSessionState, this.brickCommunicator);
         }
     }
 
@@ -127,8 +128,8 @@ public class ProjectWorkflowRestController {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response runProgram(@OraData HttpSessionState httpSessionState, JSONObject request) {
-        Util.handleRequestInit(httpSessionState, LOG, request);
-        JSONObject dataPart = Util.extractDataPart(request);
+        UtilForREST.handleRequestInit(httpSessionState, LOG, request);
+        JSONObject dataPart = UtilForREST.extractDataPart(request);
         JSONObject response = new JSONObject();
         try {
             String configurationText = httpSessionState.getRobotFactory().getConfigurationDefault();
@@ -168,12 +169,12 @@ public class ProjectWorkflowRestController {
                     project.hasSucceeded(),
                     "programLength",
                     StringUtils.countMatches(project.getAnnotatedProgramAsXml(), "<block "));
-            Util.responseWithFrontendInfo(response, httpSessionState, this.brickCommunicator);
+            UtilForREST.responseWithFrontendInfo(response, httpSessionState, this.brickCommunicator);
             return Response.ok(response).build();
         } catch ( Exception e ) {
             LOG.info("runProgram failed", e);
             Statistics.info("ProgramRun", "LoggedIn", httpSessionState.isUserLoggedIn(), "success", false);
-            return createErrorResponse(response, httpSessionState);
+            return createErrorResponse(response, httpSessionState, this.brickCommunicator);
         }
     }
 
@@ -182,8 +183,8 @@ public class ProjectWorkflowRestController {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response runNative(@OraData HttpSessionState httpSessionState, JSONObject request) {
-        Util.handleRequestInit(httpSessionState, LOG, request);
-        JSONObject dataPart = Util.extractDataPart(request);
+        UtilForREST.handleRequestInit(httpSessionState, LOG, request);
+        JSONObject dataPart = UtilForREST.extractDataPart(request);
         JSONObject response = new JSONObject();
         try {
             Project project =
@@ -206,14 +207,13 @@ public class ProjectWorkflowRestController {
             response.put("message", project.getResult().getKey());
             response.put("cause", project.getResult().getKey());
             response.put("rc", project.hasSucceeded() ? "ok" : "error");
-            Statistics.info("ProgramRunNative", "LoggedIn", httpSessionState.isUserLoggedIn(),
-                            "success", project.hasSucceeded());
-            Util.responseWithFrontendInfo(response, httpSessionState, this.brickCommunicator);
+            Statistics.info("ProgramRunNative", "LoggedIn", httpSessionState.isUserLoggedIn(), "success", project.hasSucceeded());
+            UtilForREST.responseWithFrontendInfo(response, httpSessionState, this.brickCommunicator);
             return Response.ok(response).build();
         } catch ( Exception e ) {
             LOG.info("runNative failed", e);
             Statistics.info("ProgramRunNative", "LoggedIn", httpSessionState.isUserLoggedIn(), "success", false);
-            return createErrorResponse(response, httpSessionState);
+            return createErrorResponse(response, httpSessionState, this.brickCommunicator);
         }
     }
 
@@ -222,12 +222,12 @@ public class ProjectWorkflowRestController {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response compileProgram(@OraData HttpSessionState httpSessionState, JSONObject request) {
-        Util.handleRequestInit(httpSessionState, LOG, request);
-        JSONObject dataPart = Util.extractDataPart(request);
+        UtilForREST.handleRequestInit(httpSessionState, LOG, request);
+        JSONObject dataPart = UtilForREST.extractDataPart(request);
         JSONObject response = new JSONObject();
         try {
             Project project =
-                Util
+                ProjectWorkflowRestController
                     .setupWithExportXML(httpSessionState.getRobotFactory(), dataPart.getString("programBlockSet"))
                     .setProgramName(dataPart.getString("programName"))
                     .setSSID(dataPart.optString("SSID", null))
@@ -255,12 +255,12 @@ public class ProjectWorkflowRestController {
                     "programLength",
                     StringUtils.countMatches(project.getAnnotatedProgramAsXml(), "<block "));
             response.put("rc", project.hasSucceeded() ? "ok" : "error");
-            Util.responseWithFrontendInfo(response, httpSessionState, this.brickCommunicator);
+            UtilForREST.responseWithFrontendInfo(response, httpSessionState, this.brickCommunicator);
             return Response.ok(response).build();
         } catch ( Exception e ) {
             LOG.info("compileProgram failed", e);
             Statistics.info("ProgramCompile", "LoggedIn", httpSessionState.isUserLoggedIn(), "success", false);
-            return createErrorResponse(response, httpSessionState);
+            return createErrorResponse(response, httpSessionState, this.brickCommunicator);
         }
     }
 
@@ -269,22 +269,22 @@ public class ProjectWorkflowRestController {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response compileNative(@OraData HttpSessionState httpSessionState, JSONObject request) {
-        Util.handleRequestInit(httpSessionState, LOG, request);
-        JSONObject dataPart = Util.extractDataPart(request);
+        UtilForREST.handleRequestInit(httpSessionState, LOG, request);
+        JSONObject dataPart = UtilForREST.extractDataPart(request);
         JSONObject response = new JSONObject();
         try {
             Project project =
-                    new Project.Builder()
-                            .setProgramName(dataPart.getString("programName"))
-                            .setProgramNativeSource(dataPart.getString("programText"))
-                            .setSSID(dataPart.optString("SSID", null))
-                            .setPassword(dataPart.optString("password", null))
-                            .setLanguage(Language.findByAbbr(dataPart.optString("language")))
-                            .setToken(httpSessionState.getToken())
-                            .setRobot(dataPart.optString("robot", httpSessionState.getRobotName()))
-                            .setFactory(httpSessionState.getRobotFactory())
-                            .setRobotCommunicator(this.brickCommunicator)
-                            .build();
+                new Project.Builder()
+                    .setProgramName(dataPart.getString("programName"))
+                    .setProgramNativeSource(dataPart.getString("programText"))
+                    .setSSID(dataPart.optString("SSID", null))
+                    .setPassword(dataPart.optString("password", null))
+                    .setLanguage(Language.findByAbbr(dataPart.optString("language")))
+                    .setToken(httpSessionState.getToken())
+                    .setRobot(dataPart.optString("robot", httpSessionState.getRobotName()))
+                    .setFactory(httpSessionState.getRobotFactory())
+                    .setRobotCommunicator(this.brickCommunicator)
+                    .build();
             ProjectService.executeWorkflow("compilenative", httpSessionState.getRobotFactory(), project);
             response.put("cmd", "runNative");
             response.put("errorCounter", project.getErrorCounter());
@@ -294,22 +294,31 @@ public class ProjectWorkflowRestController {
             response.put("cause", project.getResult().getKey());
             response.put("rc", project.hasSucceeded() ? "ok" : "error");
             Statistics.info("ProgramCompileNative", "LoggedIn", httpSessionState.isUserLoggedIn(), "success", project.hasSucceeded());
-            Util.responseWithFrontendInfo(response, httpSessionState, this.brickCommunicator);
+            UtilForREST.responseWithFrontendInfo(response, httpSessionState, this.brickCommunicator);
             return Response.ok(response).build();
         } catch ( Exception e ) {
             LOG.info("compileNative failed", e);
             Statistics.info("ProgramCompileNative", "LoggedIn", httpSessionState.isUserLoggedIn(), "success", false);
-            return createErrorResponse(response, httpSessionState);
+            return createErrorResponse(response, httpSessionState, this.brickCommunicator);
         }
     }
 
-    private Response createErrorResponse(JSONObject response, HttpSessionState httpSessionState) {
+    private static Response createErrorResponse(JSONObject response, HttpSessionState httpSessionState, RobotCommunicator brickCommunicator) {
         try {
-            Util.addErrorInfo(response, Key.SERVER_ERROR).append("parameters", Util1.getErrorTicketId());
+            UtilForREST.addErrorInfo(response, Key.SERVER_ERROR).append("parameters", Util.getErrorTicketId());
         } catch ( JSONException ex ) {
             LOG.error("Could not add error info to response", ex);
         }
-        Util.responseWithFrontendInfo(response, httpSessionState, this.brickCommunicator);
+        UtilForREST.responseWithFrontendInfo(response, httpSessionState, brickCommunicator);
         return Response.ok(response).build();
+    }
+
+    private static Project.Builder setupWithExportXML(IRobotFactory factory, String exportXmlAsString) {
+        String[] parts = exportXmlAsString.split("\\s*</program>\\s*<config>\\s*");
+        String[] programParts = parts[0].split("<program>");
+        String program = programParts[1];
+        String[] configurationParts = parts[1].split("</config>");
+        String configuration = configurationParts[0];
+        return new Project.Builder().setConfigurationXml(configuration).setProgramXml(program).setFactory(factory);
     }
 }

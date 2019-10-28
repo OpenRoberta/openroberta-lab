@@ -16,7 +16,7 @@ import de.fhg.iais.roberta.persistence.dao.UserDao;
 import de.fhg.iais.roberta.persistence.util.DbSession;
 import de.fhg.iais.roberta.persistence.util.HttpSessionState;
 import de.fhg.iais.roberta.util.Key;
-import de.fhg.iais.roberta.util.Util1;
+import de.fhg.iais.roberta.util.Util;
 
 public class ConfigurationProcessor extends AbstractProcessor {
     public ConfigurationProcessor(DbSession dbSession, HttpSessionState httpSessionState) {
@@ -24,7 +24,7 @@ public class ConfigurationProcessor extends AbstractProcessor {
     }
 
     public String getConfigurationText(String configurationName, int userId, String robotName) {
-        if ( !Util1.isValidJavaIdentifier(configurationName) ) {
+        if ( !Util.isValidJavaIdentifier(configurationName) ) {
             Map<String, String> processorParameters = new HashMap<>();
             processorParameters.put("CONFIG_NAME", configurationName);
             setStatus(ProcessorStatus.FAILED, Key.CONFIGURATION_ERROR_ID_INVALID, processorParameters);
@@ -67,7 +67,7 @@ public class ConfigurationProcessor extends AbstractProcessor {
      * @param mayExist true, if an existing configuration may be changed; false if a configuration may be stored only, if it does not exist in the database
      */
     public void updateConfiguration(String configurationName, int ownerId, String robotName, String configurationText, boolean mayExist) {
-        if ( !Util1.isValidJavaIdentifier(configurationName) ) {
+        if ( !Util.isValidJavaIdentifier(configurationName) ) {
             Map<String, String> processorParameters = new HashMap<>();
             processorParameters.put("CONFIG_NAME", configurationName);
             setStatus(ProcessorStatus.FAILED, Key.CONFIGURATION_ERROR_ID_INVALID, processorParameters);

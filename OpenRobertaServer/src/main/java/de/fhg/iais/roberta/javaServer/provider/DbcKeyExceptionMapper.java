@@ -11,7 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import de.fhg.iais.roberta.util.Key;
-import de.fhg.iais.roberta.util.Util;
+import de.fhg.iais.roberta.util.UtilForREST;
 import de.fhg.iais.roberta.util.dbc.DbcKeyException;
 
 @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
@@ -33,7 +33,7 @@ public class DbcKeyExceptionMapper implements ExceptionMapper<DbcKeyException> {
             final JSONObject response = new JSONObject();
             response.put("rc", "error");
             response.put("message", errorKey).put("cause", errorKey).put("parameters", e.getParameter());
-            return Util.responseWithFrontendInfo(response, null, null);
+            return UtilForREST.responseWithFrontendInfo(response, null, null);
         } catch ( Exception eInE ) {
             LOG.error("server error - exception in exception processor", eInE);
             return Response.ok(ERROR_IN_ERROR).build();

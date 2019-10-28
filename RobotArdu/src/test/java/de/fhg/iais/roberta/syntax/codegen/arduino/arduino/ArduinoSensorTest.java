@@ -7,14 +7,15 @@ import org.junit.Test;
 
 import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.components.ConfigurationComponent;
+import de.fhg.iais.roberta.util.Util;
 import de.fhg.iais.roberta.util.test.UnitTestHelper;
 
 public class ArduinoSensorTest extends ArduinoAstTest {
 
     @Test
     public void analogDigitalReadTest() throws Exception {
-        Map<String, String> analogInputPins = createMap("OUTPUT", "A0");
-        Map<String, String> digitalInputPins = createMap("OUTPUT", "0");
+        Map<String, String> analogInputPins = Util.createMap("OUTPUT", "A0");
+        Map<String, String> digitalInputPins = Util.createMap("OUTPUT", "0");
         ConfigurationComponent analogInput = new ConfigurationComponent("ANALOG_PIN", true, "ANALOG_PIN", "S2", analogInputPins);
         ConfigurationComponent digitalInput = new ConfigurationComponent("DIGITAL_PIN", true, "DIGITAL_PIN", "S", digitalInputPins);
         ConfigurationAst.Builder builder = new ConfigurationAst.Builder();
@@ -29,7 +30,7 @@ public class ArduinoSensorTest extends ArduinoAstTest {
 
     @Test
     public void timerTest() throws Exception {
-        Map<String, String> ledPins = createMap("INPUT", "13");
+        Map<String, String> ledPins = Util.createMap("INPUT", "13");
         ConfigurationComponent led = new ConfigurationComponent("LED", true, "LED", "L", ledPins);
         ConfigurationAst.Builder builder = new ConfigurationAst.Builder();
         builder.setTrackWidth(17f).setWheelDiameter(5.6f).addComponents(Arrays.asList(led));
@@ -43,7 +44,7 @@ public class ArduinoSensorTest extends ArduinoAstTest {
 
     @Test
     public void buttonTest() throws Exception {
-        Map<String, String> buttonPins = createMap("PIN1", "2");
+        Map<String, String> buttonPins = Util.createMap("PIN1", "2");
         ConfigurationComponent button = new ConfigurationComponent("KEY", true, "key", "B", buttonPins);
         ConfigurationAst.Builder builder = new ConfigurationAst.Builder();
         builder.setTrackWidth(17f).setWheelDiameter(5.6f).addComponents(Arrays.asList(button));
@@ -57,7 +58,7 @@ public class ArduinoSensorTest extends ArduinoAstTest {
 
     @Test
     public void presenceTest() throws Exception {
-        Map<String, String> motionPins = createMap("OUTPUT", "7");
+        Map<String, String> motionPins = Util.createMap("OUTPUT", "7");
         ConfigurationComponent motion = new ConfigurationComponent("MOTION", true, "motion", "M", motionPins);
         ConfigurationAst.Builder builder = new ConfigurationAst.Builder();
         builder.setTrackWidth(17f).setWheelDiameter(5.6f).addComponents(Arrays.asList(motion));
@@ -71,7 +72,7 @@ public class ArduinoSensorTest extends ArduinoAstTest {
 
     @Test
     public void lightTest() throws Exception {
-        Map<String, String> lightPins = createMap("OUTPUT", "A0");
+        Map<String, String> lightPins = Util.createMap("OUTPUT", "A0");
         ConfigurationComponent light = new ConfigurationComponent("LIGHT", true, "light", "L", lightPins);
         ConfigurationAst.Builder builder = new ConfigurationAst.Builder();
         builder.setTrackWidth(17f).setWheelDiameter(5.6f).addComponents(Arrays.asList(light));
@@ -85,7 +86,7 @@ public class ArduinoSensorTest extends ArduinoAstTest {
 
     @Test
     public void infraredTest() throws Exception {
-        Map<String, String> infraredP = createMap("OUTPUT", "11");
+        Map<String, String> infraredP = Util.createMap("OUTPUT", "11");
         ConfigurationComponent infrared = new ConfigurationComponent("INFRARED", true, "IR", "I", infraredP);
         ConfigurationAst.Builder builder = new ConfigurationAst.Builder();
         builder.setTrackWidth(17f).setWheelDiameter(5.6f).addComponents(Arrays.asList(infrared));
@@ -99,7 +100,7 @@ public class ArduinoSensorTest extends ArduinoAstTest {
 
     @Test
     public void infraredPresenceTest() throws Exception {
-        Map<String, String> infraredP = createMap("OUTPUT", "11");
+        Map<String, String> infraredP = Util.createMap("OUTPUT", "11");
         ConfigurationComponent infrared = new ConfigurationComponent("INFRARED", true, "IR", "I", infraredP);
         ConfigurationAst.Builder builder = new ConfigurationAst.Builder();
         builder.setTrackWidth(17f).setWheelDiameter(5.6f).addComponents(Arrays.asList(infrared));
@@ -113,7 +114,7 @@ public class ArduinoSensorTest extends ArduinoAstTest {
 
     @Test
     public void temperatureTest() throws Exception {
-        Map<String, String> temperaturePins = createMap("OUTPUT", "A0");
+        Map<String, String> temperaturePins = Util.createMap("OUTPUT", "A0");
         ConfigurationComponent temperature = new ConfigurationComponent("TEMPERATURE", true, "temperature", "T", temperaturePins);
         ConfigurationAst.Builder builder = new ConfigurationAst.Builder();
         builder.setTrackWidth(17f).setWheelDiameter(5.6f).addComponents(Arrays.asList(temperature));
@@ -127,7 +128,7 @@ public class ArduinoSensorTest extends ArduinoAstTest {
 
     @Test
     public void humidityTest() throws Exception {
-        Map<String, String> humidityPins = createMap("OUTPUT", "2");
+        Map<String, String> humidityPins = Util.createMap("OUTPUT", "2");
         ConfigurationComponent humidity = new ConfigurationComponent("HUMIDITY", true, "humidity", "H", humidityPins);
         ConfigurationAst.Builder builder = new ConfigurationAst.Builder();
         builder.setTrackWidth(17f).setWheelDiameter(5.6f).addComponents(Arrays.asList(humidity));
@@ -141,7 +142,7 @@ public class ArduinoSensorTest extends ArduinoAstTest {
 
     @Test
     public void dropTest() throws Exception {
-        Map<String, String> dropPins = createMap("S", "A0");
+        Map<String, String> dropPins = Util.createMap("S", "A0");
         ConfigurationComponent drop = new ConfigurationComponent("DROP", true, "drop", "D", dropPins);
         ConfigurationAst.Builder builder = new ConfigurationAst.Builder();
         builder.setTrackWidth(17f).setWheelDiameter(5.6f).addComponents(Arrays.asList(drop));
@@ -155,7 +156,7 @@ public class ArduinoSensorTest extends ArduinoAstTest {
 
     @Test
     public void pulseTest() throws Exception {
-        Map<String, String> pulsePins = createMap("S", "A0");
+        Map<String, String> pulsePins = Util.createMap("S", "A0");
         ConfigurationComponent pulse = new ConfigurationComponent("PULSE", true, "pulse", "P", pulsePins);
         ConfigurationAst.Builder builder = new ConfigurationAst.Builder();
         builder.setTrackWidth(17f).setWheelDiameter(5.6f).addComponents(Arrays.asList(pulse));
@@ -169,7 +170,7 @@ public class ArduinoSensorTest extends ArduinoAstTest {
 
     @Test
     public void potentiometerTest() throws Exception {
-        Map<String, String> potentiometerPins = createMap("OUTPUT", "A0");
+        Map<String, String> potentiometerPins = Util.createMap("OUTPUT", "A0");
         ConfigurationComponent potentiometer = new ConfigurationComponent("POTENTIOMETER", true, "potentiometer", "P2", potentiometerPins);
         ConfigurationAst.Builder builder = new ConfigurationAst.Builder();
         builder.setTrackWidth(17f).setWheelDiameter(5.6f).addComponents(Arrays.asList(potentiometer));
@@ -183,7 +184,7 @@ public class ArduinoSensorTest extends ArduinoAstTest {
 
     @Test
     public void moistureTest() throws Exception {
-        Map<String, String> moisturePins = createMap("S", "A0");
+        Map<String, String> moisturePins = Util.createMap("S", "A0");
         ConfigurationComponent moisture = new ConfigurationComponent("MOISTURE", true, "moisture", "M", moisturePins);
         ConfigurationAst.Builder builder = new ConfigurationAst.Builder();
         builder.setTrackWidth(17f).setWheelDiameter(5.6f).addComponents(Arrays.asList(moisture));
@@ -197,7 +198,7 @@ public class ArduinoSensorTest extends ArduinoAstTest {
 
     @Test
     public void ultrasonicTest() throws Exception {
-        Map<String, String> ultrasonicPins = createMap("TRIG", "7", "ECHO", "6");
+        Map<String, String> ultrasonicPins = Util.createMap("TRIG", "7", "ECHO", "6");
         ConfigurationComponent ultrasonic = new ConfigurationComponent("ULTRASONIC", true, "ultrasonic", "U", ultrasonicPins);
         ConfigurationAst.Builder builder = new ConfigurationAst.Builder();
         builder.setTrackWidth(17f).setWheelDiameter(5.6f).addComponents(Arrays.asList(ultrasonic));
@@ -211,7 +212,7 @@ public class ArduinoSensorTest extends ArduinoAstTest {
 
     @Test
     public void rfidTest() throws Exception {
-        Map<String, String> rfidPins = createMap("RST", "9", "SDA", "10", "SCK", "13", "MOSI", "11", "MISO", "12");
+        Map<String, String> rfidPins = Util.createMap("RST", "9", "SDA", "10", "SCK", "13", "MOSI", "11", "MISO", "12");
         ConfigurationComponent rfid = new ConfigurationComponent("RFID", true, "rfid", "R", rfidPins);
         ConfigurationAst.Builder builder = new ConfigurationAst.Builder();
         builder.setTrackWidth(17f).setWheelDiameter(5.6f).addComponents(Arrays.asList(rfid));

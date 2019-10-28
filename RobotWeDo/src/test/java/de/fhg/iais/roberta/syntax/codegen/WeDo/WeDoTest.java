@@ -6,7 +6,7 @@ import org.junit.Test;
 import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.factory.RobotFactory;
 import de.fhg.iais.roberta.util.PluginProperties;
-import de.fhg.iais.roberta.util.Util1;
+import de.fhg.iais.roberta.util.Util;
 import de.fhg.iais.roberta.util.test.UnitTestHelper;
 
 public class WeDoTest {
@@ -15,7 +15,7 @@ public class WeDoTest {
 
     @BeforeClass
     public static void setup() {
-        testFactory = new RobotFactory(new PluginProperties("wedo", "", "", Util1.loadProperties("classpath:/wedo.properties")));
+        testFactory = new RobotFactory(new PluginProperties("wedo", "", "", Util.loadProperties("classpath:/wedo.properties")));
     }
 
     @Test

@@ -12,7 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 import de.fhg.iais.roberta.util.Encryption;
-import de.fhg.iais.roberta.util.Util1;
+import de.fhg.iais.roberta.util.Util;
 
 @Entity
 @Table(name = "USER")
@@ -64,8 +64,8 @@ public class User implements WithSurrogateId {
      */
     public User(String account) {
         this.account = account;
-        this.created = Util1.getNow();
-        this.lastLogin = Util1.getNow();
+        this.created = Util.getNow();
+        this.lastLogin = Util.getNow();
     }
 
     public boolean isPasswordCorrect(String passwordToCheck) throws Exception {
@@ -132,7 +132,7 @@ public class User implements WithSurrogateId {
     }
 
     public void setLastLogin() {
-        this.lastLogin = Util1.getNow();
+        this.lastLogin = Util.getNow();
     }
 
     public boolean isActivated() {

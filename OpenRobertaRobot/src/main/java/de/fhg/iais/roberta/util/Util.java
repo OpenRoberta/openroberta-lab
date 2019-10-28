@@ -6,7 +6,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.net.URISyntaxException;
+import java.lang.reflect.Constructor;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -17,8 +17,8 @@ import java.text.CharacterIterator;
 import java.text.StringCharacterIterator;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -33,11 +33,12 @@ import org.slf4j.LoggerFactory;
 import org.yaml.snakeyaml.LoaderOptions;
 import org.yaml.snakeyaml.Yaml;
 
+import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
-public class Util1 {
-    private static final Logger LOG = LoggerFactory.getLogger(Util1.class);
+public class Util {
+    private static final Logger LOG = LoggerFactory.getLogger(Util.class);
     private static final String PROPERTY_DEFAULT_PATH = "classpath:/openRoberta.properties";
 
     /**
@@ -62,67 +63,84 @@ public class Util1 {
 
     private static final AtomicInteger errorTicketNumber = new AtomicInteger(0);
 
-    private Util1() {
+    private Util() {
         // no objects
     }
 
     /**
-     * load a YAML object from a URI <b>recursively</b>. If the YAML object contains a top-level key "include", as value(s) either a sequence of URI's or a
-     * single URI is/are expected. This/these URI(s) are further YAML files, that should be loaded and merged with this one.<br>
-     * The URI(s) given refer either to the file system or to the classpath.<br>
-     * - If the URI-parameters start with "file:" the properties are loaded from the file system.<br>
-     * - If the URI-parameters start with "classpath:" the properties are loaded as a resource from the classpath.<br>
-     * <b>Note:</b> do not mix "file:" and "classpath:". This could rise confusion.
+     * Save generated program to the temp filesystem
      *
-     * @param prefixForDebug the path from the root of the YAML file include-hierarchy. For debugging of invalid YAML files.
-     * @param accumulator the JSONObject into which the content of all YAML files should be merged
-     * @param uri URI of the YAML file. Never null
-     * @param override whether the specific files should override content of the upstream files
-     * @throws DbcException if an inconsistency is detected
+     * @param tempDirectory TODO
+     * @param generatedSourceCode
+     * @param token
+     * @param programName
+     * @param ext
      */
-    public static void loadYAMLRecursive(String prefixForDebug, JSONObject accumulator, String uri, boolean override) {
-        Assert.notNull(accumulator, "accumulating JSONObject must not be null");
-        Assert.nonEmptyString(uri, "URI is null or empty at %s", prefixForDebug);
-        InputStream in = getInputStream(false, uri);
+    public static void storeGeneratedProgram(String tempDirectory, String generatedSourceCode, String token, String programName, String ext) {
         try {
-            Map<?, ?> map = (Map<?, ?>) YAML.load(in);
-            JSONObject toAdd = new JSONObject(map);
-            Object includeObject = toAdd.remove("include");
-            Util1.mergeJsonIntoFirst(prefixForDebug, accumulator, toAdd, override);
-            if ( includeObject != null ) {
-                if ( includeObject instanceof String ) {
-                    String include = (String) includeObject;
-                    loadYAMLRecursive(prefixForDebug + " > " + uri, accumulator, include, override);
-                } else if ( includeObject instanceof JSONArray ) {
-                    JSONArray includes = (JSONArray) includeObject;
-                    int length = includes.length();
-                    for ( int i = 0; i < length; i++ ) {
-                        loadYAMLRecursive(prefixForDebug + " > " + uri, accumulator, includes.getString(i), override);
-                    }
-                }
+            File sourceFile = new File(tempDirectory + token + "/" + programName + "/source/" + programName + ext);
+            Path path = Paths.get(tempDirectory + token + "/" + programName + "/target/");
+            try {
+                Files.createDirectories(path);
+                FileUtils.writeStringToFile(sourceFile, generatedSourceCode, StandardCharsets.UTF_8.displayName());
+            } catch ( IOException e ) {
+                String msg = "could not write source code to file system";
+                LOG.error(msg, e);
+                throw new DbcException(msg, e);
             }
+            LOG.info("stored under: " + sourceFile.getPath());
         } catch ( Exception e ) {
-            throw new DbcException("invalid YAML file " + uri + " at " + prefixForDebug, e);
+            LOG.error("Storing the generated program " + programName + " into directory " + token + " failed", e);
         }
     }
 
     /**
-     * load a YAML object from a URI. The URI refers either to the file system or to the classpath.<br>
-     * - If the URI-parameters start with "file:" the properties are loaded from the file system.<br>
-     * - If the URI-parameters start with "classpath:" the properties are loaded as a resource from the classpath.
+     * configure a plugin by reading the plugin properties and creating a factory used later for code generation and cross compilation
      *
-     * @param uri URI of the YAML file. Never null
-     * @return the YAML file as JSONObject. Never null, may be empty
-     * @throws DbcException if the content is syntacically incorrect or duplicate keys are found
+     * @param robotName the name of the plugin. Used to access the plugin's properties. Never null.
+     * @param resourceDir base directory from which the resources needed by the cross compiler are accessed, never null.
+     * @param tempDir directory to store generated source programs and the binaries generated by the cross compilers
+     * @param pluginDefines modifications of the plugin's properties as a list of "<pluginName>:<key>=<value>"
+     * @return the factory for this plugin
      */
-    public static JSONObject loadYAML(String uri) {
-        Assert.nonEmptyString(uri, "URI is null or empty");
-        InputStream in = getInputStream(false, uri);
-        try {
-            Map<?, ?> map = (Map<?, ?>) YAML.load(in);
-            return new JSONObject(map);
-        } catch ( Exception e ) {
-            throw new DbcException("invalid YAML file " + uri, e);
+    public static IRobotFactory configureRobotPlugin(String robotName, String resourceDir, String tempDir, List<String> pluginDefines) {
+        Properties basicPluginProperties = Util.loadProperties("classpath:/" + robotName + ".properties");
+        if ( basicPluginProperties == null ) {
+            throw new DbcException("robot plugin " + robotName + " has no property file " + robotName + ".properties -  Server does NOT start");
+        }
+        String robotNameColon = robotName + ":";
+        if ( pluginDefines != null ) {
+            for ( String pluginDefine : pluginDefines ) {
+                if ( pluginDefine.startsWith(robotNameColon) ) {
+                    String define = pluginDefine.substring(robotNameColon.length());
+                    String[] property = define.split("\\s*=\\s*");
+                    if ( property.length == 2 ) {
+                        LOG.info("new plugin property from command line: " + pluginDefine);
+                        basicPluginProperties.put(property[0], property[1]);
+                    } else {
+                        LOG.info("command line plugin property is invalid and thus ignored: " + pluginDefine);
+                    }
+                }
+            }
+        }
+        String pluginFactory = basicPluginProperties.getProperty("robot.plugin.factory");
+        if ( pluginFactory == null ) {
+            throw new DbcException("robot plugin " + robotName + " has no factory. Check the properties - Server does NOT start");
+        } else {
+            try {
+                PluginProperties pluginProperties = new PluginProperties(robotName, resourceDir, tempDir, basicPluginProperties);
+                @SuppressWarnings("unchecked")
+                Class<IRobotFactory> factoryClass = (Class<IRobotFactory>) Util.class.getClassLoader().loadClass(pluginFactory);
+                Constructor<IRobotFactory> factoryConstructor = factoryClass.getDeclaredConstructor(PluginProperties.class);
+                IRobotFactory factory = factoryConstructor.newInstance(pluginProperties);
+                return factory;
+            } catch ( Exception e ) {
+                throw new DbcException(
+                    " factory for robot plugin "
+                        + robotName
+                        + " could not be build. Plugin-jar not on the classpath? Invalid properties? Problems with validators? Server does NOT start",
+                    e);
+            }
         }
     }
 
@@ -153,7 +171,7 @@ public class Util1 {
      * @return the properties. Never null, maybe empty
      */
     public static Properties loadAndMergeProperties(String propertyURI, List<String> defines) {
-        Properties serverProperties = loadProperties(false, propertyURI);
+        Properties serverProperties = loadProperties(propertyURI);
         if ( defines != null ) {
             for ( String define : defines ) {
                 String[] property = define.split("\\s*=\\s*");
@@ -179,20 +197,20 @@ public class Util1 {
      * @param propertyURI URI of the property file. May be null
      * @return input stream
      */
-    public static InputStream getInputStream(boolean doLogging, String propertyURI) {
+    static InputStream getInputStream(boolean doLogging, String propertyURI) {
         try {
             if ( propertyURI.startsWith("file:") ) {
                 String filesystemPathName = propertyURI.substring(5);
                 if ( doLogging ) {
-                    Util1.LOG.info("Operating on the file system. Using the path: " + filesystemPathName);
+                    Util.LOG.info("Operating on the file system. Using the path: " + filesystemPathName);
                 }
                 return new FileInputStream(filesystemPathName);
             } else if ( propertyURI.startsWith("classpath:") ) {
                 String classPathName = propertyURI.substring(10);
                 if ( doLogging ) {
-                    Util1.LOG.info("Operating on the classpath. Using the resource: " + classPathName);
+                    Util.LOG.info("Operating on the classpath. Using the resource: " + classPathName);
                 }
-                InputStream resourceAsStream = Util1.class.getResourceAsStream(classPathName);
+                InputStream resourceAsStream = Util.class.getResourceAsStream(classPathName);
                 if ( resourceAsStream == null ) {
                     throw new DbcException("Could not open input stream for URI: " + propertyURI);
                 }
@@ -217,9 +235,9 @@ public class Util1 {
      * @param propertyURI URI of the property file. May be null
      * @return the properties. Never null, maybe empty
      */
-    public static Properties loadProperties(boolean doLogging, String propertyURI) {
+    private static Properties loadProperties(boolean doLogging, String propertyURI) {
         Properties properties = new Properties();
-        propertyURI = propertyURI == null || propertyURI.trim().equals("") ? Util1.PROPERTY_DEFAULT_PATH : propertyURI;
+        propertyURI = propertyURI == null || propertyURI.trim().equals("") ? Util.PROPERTY_DEFAULT_PATH : propertyURI;
         try {
             loadIncludes(properties, getInputStream(doLogging, propertyURI));
             properties.load(getInputStream(doLogging, propertyURI));
@@ -275,7 +293,7 @@ public class Util1 {
             }
             c = citer.next();
         }
-        return Arrays.binarySearch(Util1.reservedWords, s) < 0;
+        return Arrays.binarySearch(Util.reservedWords, s) < 0;
     }
 
     /**
@@ -288,25 +306,7 @@ public class Util1 {
     }
 
     public static String getErrorTicketId() {
-        return "E-" + Util1.errorTicketNumber.incrementAndGet();
-    }
-
-    public static String formatDouble1digit(double d) {
-        return String.format(Locale.UK, "%.1f", d);
-    }
-
-    /**
-     * compute 2 to the power of 'exp'.
-     *
-     * @param exp the exponent
-     * @return 2 to the power of 'exp' if 'exp' >= 0; 0 otherwise
-     */
-    public static int pow2(int exp) {
-        if ( exp < 0 ) {
-            return 0;
-        } else {
-            return 1 << exp;
-        }
+        return "E-" + Util.errorTicketNumber.incrementAndGet();
     }
 
     /**
@@ -316,7 +316,7 @@ public class Util1 {
      * @return the content of the resource as one String
      */
     public static String readResourceContent(String resourceName) {
-        final Class<?> clazz = Util1.class;
+        final Class<?> clazz = Util.class;
         final String lineSeparator = System.lineSeparator();
         final StringBuilder sb = new StringBuilder();
         try (BufferedReader in = new BufferedReader(new InputStreamReader(clazz.getResourceAsStream(resourceName), "UTF-8"))) {
@@ -345,20 +345,6 @@ public class Util1 {
     }
 
     /**
-     * write String into a file
-     *
-     * @param fileName of the file to be written
-     * @param content of the file. UTF-8 is enforced
-     */
-    public static void writeFile(String fileName, String content) {
-        try {
-            Files.write(Paths.get(fileName), content.getBytes(Charset.forName("UTF-8")));
-        } catch ( IOException e ) {
-            throw new DbcException("write to file failed for: " + fileName, e);
-        }
-    }
-
-    /**
      * read all lines from a file, concatenate them to a string separated by a newline
      *
      * @param fileName
@@ -379,33 +365,76 @@ public class Util1 {
     }
 
     /**
-     * return a stream of all files found in a resource directory<br>
-     * <b>Note:</b> this seems to work <i>not</i> always. We had cases where 'Util1.class.getResource(directory).toURI()' failed with the message, that a
-     * zip-file-system wasn't found. This occurs in the context of a resource dir located in an jar and may depend on the way a classpath is constructed.
-     * Example: sometimes travis + eclipse were ok, mvn in the bash failed.
+     * load a YAML object from a URI <b>recursively</b>. If the YAML object contains a top-level key "include", as value(s) either a sequence of URI's or a
+     * single URI is/are expected. This/these URI(s) are further YAML files, that should be loaded and merged with this one.<br>
+     * The URI(s) given refer either to the file system or to the classpath.<br>
+     * - If the URI-parameters start with "file:" the properties are loaded from the file system.<br>
+     * - If the URI-parameters start with "classpath:" the properties are loaded as a resource from the classpath.<br>
+     * <b>Note:</b> do not mix "file:" and "classpath:". This could rise confusion.
      *
-     * @param directory whose files are requested
-     * @return the stream of all files
+     * @param prefixForDebug the path from the root of the YAML file include-hierarchy. For debugging of invalid YAML files.
+     * @param accumulator the JSONObject into which the content of all YAML files should be merged
+     * @param uri URI of the YAML file. Never null
+     * @param override whether the specific files should override content of the upstream files
+     * @throws DbcException if an inconsistency is detected
      */
-    public static Stream<String> fileStreamOfResourceDirectory(String directory) {
+    public static void loadYAMLRecursive(String prefixForDebug, JSONObject accumulator, String uri, boolean override) {
+        Assert.notNull(accumulator, "accumulating JSONObject must not be null");
+        Assert.nonEmptyString(uri, "URI is null or empty at %s", prefixForDebug);
+        InputStream in = getInputStream(false, uri);
         try {
-            return Arrays.stream(Paths.get(Util1.class.getResource(directory).toURI()).toFile().list());
-        } catch ( URISyntaxException e ) {
-            throw new DbcException("getting a file stream from a resource directory failed for: " + directory, e);
+            Map<?, ?> map = (Map<?, ?>) YAML.load(in);
+            JSONObject toAdd = new JSONObject(map);
+            Object includeObject = toAdd.remove("include");
+            Util.mergeJsonIntoFirst(prefixForDebug, accumulator, toAdd, override);
+            if ( includeObject != null ) {
+                if ( includeObject instanceof String ) {
+                    String include = (String) includeObject;
+                    loadYAMLRecursive(prefixForDebug + " > " + uri, accumulator, include, override);
+                } else if ( includeObject instanceof JSONArray ) {
+                    JSONArray includes = (JSONArray) includeObject;
+                    int length = includes.length();
+                    for ( int i = 0; i < length; i++ ) {
+                        loadYAMLRecursive(prefixForDebug + " > " + uri, accumulator, includes.getString(i), override);
+                    }
+                }
+            }
+        } catch ( Exception e ) {
+            throw new DbcException("invalid YAML file " + uri + " at " + prefixForDebug, e);
         }
     }
 
     /**
-     * merge the properties of the JSONObject 'toAdd' RECURSIVELY to the JSONObject 'accumulator'. The keys of the leaves of the JSONObjects have to be
-     * disjunct when ignoreExisting is false, otherwise an 'DbcException' is thrown. If the ignoreExisting parameter is true the process wont fail and the
-     * older values are kept.
+     * load a YAML object from a URI. The URI refers either to the file system or to the classpath.<br>
+     * - If the URI-parameters start with "file:" the properties are loaded from the file system.<br>
+     * - If the URI-parameters start with "classpath:" the properties are loaded as a resource from the classpath.
+     *
+     * @param uri URI of the YAML file. Never null
+     * @return the YAML file as JSONObject. Never null, may be empty
+     * @throws DbcException if the content is syntacically incorrect or duplicate keys are found
+     */
+    public static JSONObject loadYAML(String uri) {
+        Assert.nonEmptyString(uri, "URI is null or empty");
+        InputStream in = getInputStream(false, uri);
+        try {
+            Map<?, ?> map = (Map<?, ?>) YAML.load(in);
+            return new JSONObject(map);
+        } catch ( Exception e ) {
+            throw new DbcException("invalid YAML file " + uri, e);
+        }
+    }
+
+    /**
+     * merge the properties of the JSONObject 'toAdd' RECURSIVELY to the JSONObject 'accumulator'. The keys of the leaves of the JSONObjects have to be disjunct
+     * when ignoreExisting is false, otherwise an 'DbcException' is thrown. If the ignoreExisting parameter is true the process wont fail and the older values
+     * are kept.
      *
      * @param prefixForDebug the path from the root of the JSONObjects to be merged. For debugging of invalid JSONObjects.
      * @param accumulator the JSONObject into which 'toAdd' should be merged
      * @param toAdd the JSONObject which has to be merged into 'accumulator'
      * @param ignoreExisting whether the 'toAdd' objects that already exist in 'accumulator' should be ignored
      */
-    public static void mergeJsonIntoFirst(String prefixForDebug, JSONObject accumulator, JSONObject toAdd, boolean ignoreExisting) {
+    static void mergeJsonIntoFirst(String prefixForDebug, JSONObject accumulator, JSONObject toAdd, boolean ignoreExisting) {
         for ( String k2 : toAdd.keySet() ) {
             Object v1 = accumulator.opt(k2);
             Object v2 = toAdd.get(k2);
@@ -424,29 +453,16 @@ public class Util1 {
     }
 
     /**
-     * Save generated program to the temp filesystem
+     * create a map with Strings as keys and values
      * 
-     * @param tempDirectory TODO
-     * @param generatedSourceCode
-     * @param token
-     * @param programName
-     * @param ext
+     * @param args key-value pairs (thus: the length MUST be even)
+     * @return the map created
      */
-    public static final void storeGeneratedProgram(String tempDirectory, String generatedSourceCode, String token, String programName, String ext) {
-        try {
-            File sourceFile = new File(tempDirectory + token + "/" + programName + "/source/" + programName + ext);
-            Path path = Paths.get(tempDirectory + token + "/" + programName + "/target/");
-            try {
-                Files.createDirectories(path);
-                FileUtils.writeStringToFile(sourceFile, generatedSourceCode, StandardCharsets.UTF_8.displayName());
-            } catch ( IOException e ) {
-                String msg = "could not write source code to file system";
-                LOG.error(msg, e);
-                throw new DbcException(msg, e);
-            }
-            LOG.info("stored under: " + sourceFile.getPath());
-        } catch ( Exception e ) {
-            LOG.error("Storing the generated program " + programName + " into directory " + token + " failed", e);
+    public static Map<String, String> createMap(String... args) {
+        Map<String, String> m = new HashMap<>();
+        for ( int i = 0; i < args.length; i += 2 ) {
+            m.put(args[i], args[i + 1]);
         }
+        return m;
     }
 }

@@ -7,7 +7,7 @@ import org.json.JSONObject;
 
 import de.fhg.iais.roberta.syntax.lang.functions.FunctionNames;
 import de.fhg.iais.roberta.util.HelperMethodGenerator;
-import de.fhg.iais.roberta.util.Util1;
+import de.fhg.iais.roberta.util.Util;
 import de.fhg.iais.roberta.util.dbc.Assert;
 
 public class CodeGeneratorSetupBean {
@@ -47,7 +47,7 @@ public class CodeGeneratorSetupBean {
 
         public CodeGeneratorSetupBean build() {
             JSONObject helperMethods = new JSONObject();
-            Util1.loadYAMLRecursive("", helperMethods, this.codeGeneratorBean.helperMethodFile, true);
+            Util.loadYAMLRecursive("", helperMethods, this.codeGeneratorBean.helperMethodFile, true);
             Assert.notNull(this.codeGeneratorBean.fileExtension, "File extension has to be set");
             this.codeGeneratorBean.helperMethodGenerator =
                 new HelperMethodGenerator(helperMethods, HelperMethodGenerator.getLanguageFromFileExtension(this.codeGeneratorBean.fileExtension));

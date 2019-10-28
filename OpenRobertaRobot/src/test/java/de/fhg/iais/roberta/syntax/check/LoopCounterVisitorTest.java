@@ -11,7 +11,7 @@ import de.fhg.iais.roberta.bean.UsedHardwareBean.Builder;
 import de.fhg.iais.roberta.components.Project;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
-import de.fhg.iais.roberta.util.Util1;
+import de.fhg.iais.roberta.util.Util;
 import de.fhg.iais.roberta.util.test.UnitTestHelper;
 import de.fhg.iais.roberta.visitor.collect.AbstractUsedHardwareCollectorVisitor;
 import de.fhg.iais.roberta.visitor.validate.AbstractCollectorVisitor;
@@ -41,7 +41,7 @@ public class LoopCounterVisitorTest extends AstTest {
 
     @Test
     public void check_noLoops_returnsEmptyMap() throws Exception {
-        Project.Builder builder = UnitTestHelper.setupWithProgramXML(testFactory, Util1.readResourceContent("/loop_counter/no_loops.xml"));
+        Project.Builder builder = UnitTestHelper.setupWithProgramXML(testFactory, Util.readResourceContent("/loop_counter/no_loops.xml"));
         Project project = builder.build();
 
         TestUsedHardwareWorker worker = new TestUsedHardwareWorker();
@@ -53,7 +53,7 @@ public class LoopCounterVisitorTest extends AstTest {
 
     @Test
     public void check_nestedLoopsNoBreakorContinue_returnsMapWithTwoFalseElements() throws Exception {
-        Project.Builder builder = UnitTestHelper.setupWithProgramXML(testFactory, Util1.readResourceContent("/loop_counter/nested_loops.xml"));
+        Project.Builder builder = UnitTestHelper.setupWithProgramXML(testFactory, Util.readResourceContent("/loop_counter/nested_loops.xml"));
         Project project = builder.build();
 
         TestUsedHardwareWorker worker = new TestUsedHardwareWorker();
@@ -65,7 +65,7 @@ public class LoopCounterVisitorTest extends AstTest {
 
     @Test
     public void check_loopsWithBreakAndContinue_returnsMapWithFiveFalseElements() throws Exception {
-        Project.Builder builder = UnitTestHelper.setupWithProgramXML(testFactory, Util1.readResourceContent("/loop_counter/loops_with_break_and_continue.xml"));
+        Project.Builder builder = UnitTestHelper.setupWithProgramXML(testFactory, Util.readResourceContent("/loop_counter/loops_with_break_and_continue.xml"));
         Project project = builder.build();
 
         TestUsedHardwareWorker worker = new TestUsedHardwareWorker();
@@ -78,7 +78,7 @@ public class LoopCounterVisitorTest extends AstTest {
     @Test
     public void check_loopWithBreakAndContinueInWait_returnsMapWithOneTrueElements() throws Exception {
         Project.Builder builder =
-            UnitTestHelper.setupWithProgramXML(testFactory, Util1.readResourceContent("/loop_counter/loop_with_break_and_continue_inside_wait.xml"));
+            UnitTestHelper.setupWithProgramXML(testFactory, Util.readResourceContent("/loop_counter/loop_with_break_and_continue_inside_wait.xml"));
         Project project = builder.build();
 
         TestUsedHardwareWorker worker = new TestUsedHardwareWorker();
@@ -92,7 +92,7 @@ public class LoopCounterVisitorTest extends AstTest {
     public void check_loopsWithBreakAndContinueFitstInWaitSecondNot_returnsMapWithTwoElementsFirsTrueSecondFalse() throws Exception {
         Project.Builder builder =
             UnitTestHelper
-                .setupWithProgramXML(testFactory, Util1.readResourceContent("/loop_counter/two_loop_with_break_and_continue_one_inside_wait_another_not.xml"));
+                .setupWithProgramXML(testFactory, Util.readResourceContent("/loop_counter/two_loop_with_break_and_continue_one_inside_wait_another_not.xml"));
         Project project = builder.build();
 
         TestUsedHardwareWorker worker = new TestUsedHardwareWorker();
@@ -106,7 +106,7 @@ public class LoopCounterVisitorTest extends AstTest {
     public void check_twoNestedloopsFirstWithBreakAndContinueInWaitSecondNot_returnsMapWithTwoElementsFirsTrueSecondFalse() throws Exception {
         Project.Builder builder =
             UnitTestHelper
-                .setupWithProgramXML(testFactory, Util1.readResourceContent("/loop_counter/two_nested_loops_first_with_break_in_wait_second_not.xml"));
+                .setupWithProgramXML(testFactory, Util.readResourceContent("/loop_counter/two_nested_loops_first_with_break_in_wait_second_not.xml"));
         Project project = builder.build();
 
         TestUsedHardwareWorker worker = new TestUsedHardwareWorker();
@@ -119,7 +119,7 @@ public class LoopCounterVisitorTest extends AstTest {
     @Test
     public void check_loopWithNestedTwoLoopsInsideWait_returnsMapWithThreeElementsFirsTrueSecondThirdFalse() throws Exception {
         Project.Builder builder =
-            UnitTestHelper.setupWithProgramXML(testFactory, Util1.readResourceContent("/loop_counter/loop_with_nested_two_loops_inside_wait.xml"));
+            UnitTestHelper.setupWithProgramXML(testFactory, Util.readResourceContent("/loop_counter/loop_with_nested_two_loops_inside_wait.xml"));
         Project project = builder.build();
 
         TestUsedHardwareWorker worker = new TestUsedHardwareWorker();
@@ -133,7 +133,7 @@ public class LoopCounterVisitorTest extends AstTest {
     public void check_loopWithNestedTwoLoopsInsideWaitSecondContainWait_returnsMapWithThreeElementsFirsAndThirdTrueSecondFalse() throws Exception {
         Project.Builder builder =
             UnitTestHelper
-                .setupWithProgramXML(testFactory, Util1.readResourceContent("/loop_counter/loop_with_nested_two_loops_inside_wait_second_contain_wait.xml"));
+                .setupWithProgramXML(testFactory, Util.readResourceContent("/loop_counter/loop_with_nested_two_loops_inside_wait_second_contain_wait.xml"));
         Project project = builder.build();
 
         TestUsedHardwareWorker worker = new TestUsedHardwareWorker();
@@ -149,7 +149,7 @@ public class LoopCounterVisitorTest extends AstTest {
             UnitTestHelper
                 .setupWithProgramXML(
                     testFactory,
-                    Util1.readResourceContent("/loop_counter/three_loops_with_nested_two_loops_inside_wait_second_contain_wait.xml"));
+                    Util.readResourceContent("/loop_counter/three_loops_with_nested_two_loops_inside_wait_second_contain_wait.xml"));
         Project project = builder.build();
 
         TestUsedHardwareWorker worker = new TestUsedHardwareWorker();

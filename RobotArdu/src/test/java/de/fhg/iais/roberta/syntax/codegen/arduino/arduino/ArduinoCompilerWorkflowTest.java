@@ -12,7 +12,7 @@ import de.fhg.iais.roberta.components.Project;
 import de.fhg.iais.roberta.factory.RobotFactory;
 import de.fhg.iais.roberta.util.PluginProperties;
 import de.fhg.iais.roberta.util.ServerProperties;
-import de.fhg.iais.roberta.util.Util1;
+import de.fhg.iais.roberta.util.Util;
 import de.fhg.iais.roberta.util.test.UnitTestHelper;
 import de.fhg.iais.roberta.worker.compile.ArduinoCompilerWorker;
 
@@ -33,23 +33,23 @@ public class ArduinoCompilerWorkflowTest {
             LOG.error("the environment variable \"" + ORA_CC_RSC_ENVVAR + "\" must contain the absolute path to the ora-cc-rsc repository - test fails");
             fail();
         }
-        PluginProperties properties = new PluginProperties("uno", System.getenv(ORA_CC_RSC_ENVVAR), "/tmp/", Util1.loadProperties("classpath:/uno.properties"));
+        PluginProperties properties = new PluginProperties("uno", System.getenv(ORA_CC_RSC_ENVVAR), "/tmp/", Util.loadProperties("classpath:/uno.properties"));
         this.unoFactory = new RobotFactory(properties);
-        properties = new PluginProperties("nano", System.getenv(ORA_CC_RSC_ENVVAR), "/tmp/", Util1.loadProperties("classpath:/nano.properties"));
-        properties = new PluginProperties("mega", System.getenv(ORA_CC_RSC_ENVVAR), "/tmp/", Util1.loadProperties("classpath:/mega.properties"));
-        properties = new PluginProperties("bob3", System.getenv(ORA_CC_RSC_ENVVAR), "/tmp/", Util1.loadProperties("classpath:/bob3.properties"));
+        properties = new PluginProperties("nano", System.getenv(ORA_CC_RSC_ENVVAR), "/tmp/", Util.loadProperties("classpath:/nano.properties"));
+        properties = new PluginProperties("mega", System.getenv(ORA_CC_RSC_ENVVAR), "/tmp/", Util.loadProperties("classpath:/mega.properties"));
+        properties = new PluginProperties("bob3", System.getenv(ORA_CC_RSC_ENVVAR), "/tmp/", Util.loadProperties("classpath:/bob3.properties"));
         this.bob3Factory = new RobotFactory(properties);
-        properties = new PluginProperties("botnroll", System.getenv(ORA_CC_RSC_ENVVAR), "/tmp/", Util1.loadProperties("classpath:/botnroll.properties"));
+        properties = new PluginProperties("botnroll", System.getenv(ORA_CC_RSC_ENVVAR), "/tmp/", Util.loadProperties("classpath:/botnroll.properties"));
         this.botnrollFactory = new RobotFactory(properties);
-        properties = new PluginProperties("mbot", System.getenv(ORA_CC_RSC_ENVVAR), "/tmp/", Util1.loadProperties("classpath:/mbot.properties"));
+        properties = new PluginProperties("mbot", System.getenv(ORA_CC_RSC_ENVVAR), "/tmp/", Util.loadProperties("classpath:/mbot.properties"));
         this.mbotFactory = new RobotFactory(properties);
     }
 
     @Ignore
     @Test
     public void arduinoCompilerWorkflowTest() throws Exception {
-        String configurationXML = Util1.readResourceContent("/syntax/actions/action_configuration.xml");
-        String programXML = Util1.readResourceContent("/syntax/actions/action_program.xml");
+        String configurationXML = Util.readResourceContent("/syntax/actions/action_configuration.xml");
+        String programXML = Util.readResourceContent("/syntax/actions/action_program.xml");
         Project transformer = UnitTestHelper.setupWithConfigurationAndProgramXML(this.unoFactory, programXML, configurationXML).build();
         ArduinoCompilerWorker worker = new ArduinoCompilerWorker();
         worker.execute(transformer);
@@ -58,8 +58,8 @@ public class ArduinoCompilerWorkflowTest {
     @Ignore
     @Test
     public void bob3CompilerWorkflowTest() throws Exception {
-        String configurationXML = Util1.readResourceContent("/syntax/actions/action_configuration.xml");
-        String programXML = Util1.readResourceContent("/syntax/actions/action_program.xml");
+        String configurationXML = Util.readResourceContent("/syntax/actions/action_configuration.xml");
+        String programXML = Util.readResourceContent("/syntax/actions/action_program.xml");
         Project transformer = UnitTestHelper.setupWithConfigurationAndProgramXML(this.bob3Factory, programXML, configurationXML).build();
         ArduinoCompilerWorker worker = new ArduinoCompilerWorker();
         worker.execute(transformer);
@@ -68,8 +68,8 @@ public class ArduinoCompilerWorkflowTest {
     @Ignore
     @Test
     public void mbotCompilerWorkflowTest() throws Exception {
-        String configurationXML = Util1.readResourceContent("/syntax/actions/action_configuration.xml");
-        String programXML = Util1.readResourceContent("/syntax/actions/action_program.xml");
+        String configurationXML = Util.readResourceContent("/syntax/actions/action_configuration.xml");
+        String programXML = Util.readResourceContent("/syntax/actions/action_program.xml");
         Project transformer = UnitTestHelper.setupWithConfigurationAndProgramXML(this.mbotFactory, programXML, configurationXML).build();
         ArduinoCompilerWorker worker = new ArduinoCompilerWorker();
         worker.execute(transformer);
@@ -78,8 +78,8 @@ public class ArduinoCompilerWorkflowTest {
     @Ignore
     @Test
     public void botnrollCompilerWorkflowTest() throws Exception {
-        String configurationXML = Util1.readResourceContent("/syntax/actions/action_configuration.xml");
-        String programXML = Util1.readResourceContent("/syntax/actions/action_program.xml");
+        String configurationXML = Util.readResourceContent("/syntax/actions/action_configuration.xml");
+        String programXML = Util.readResourceContent("/syntax/actions/action_program.xml");
         Project transformer = UnitTestHelper.setupWithConfigurationAndProgramXML(this.botnrollFactory, programXML, configurationXML).build();
         ArduinoCompilerWorker worker = new ArduinoCompilerWorker();
         worker.execute(transformer);
@@ -88,8 +88,8 @@ public class ArduinoCompilerWorkflowTest {
     @Ignore
     @Test
     public void senseboxCompilerWorkflowTest() throws Exception {
-        String configurationXML = Util1.readResourceContent("/syntax/actions/action_configuration.xml");
-        String programXML = Util1.readResourceContent("/syntax/actions/action_program.xml");
+        String configurationXML = Util.readResourceContent("/syntax/actions/action_configuration.xml");
+        String programXML = Util.readResourceContent("/syntax/actions/action_program.xml");
         Project transformer = UnitTestHelper.setupWithConfigurationAndProgramXML(this.senseboxFactory, programXML, configurationXML).build();
         ArduinoCompilerWorker worker = new ArduinoCompilerWorker();
         worker.execute(transformer);

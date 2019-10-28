@@ -11,7 +11,7 @@ import de.fhg.iais.roberta.factory.EV3Factory;
 import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.util.PluginProperties;
-import de.fhg.iais.roberta.util.Util1;
+import de.fhg.iais.roberta.util.Util;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.util.test.UnitTestHelper;
 
@@ -21,14 +21,14 @@ public class ActionTest extends AstTest {
 
     @Before
     public void setupTest() {
-        this.robotFactory = new EV3Factory(new PluginProperties("ev3lejosv1", "", "", Util1.loadProperties("classpath:/ev3lejosv1" + ".properties")));
+        this.robotFactory = new EV3Factory(new PluginProperties("ev3lejosv1", "", "", Util.loadProperties("classpath:/ev3lejosv1" + ".properties")));
     }
 
     @Test
     public void reverseTransformatinclearDisplay() throws Exception {
 
         String configurationText = this.robotFactory.getConfigurationDefault();
-        String programText = Util1.readResourceContent("/ast/actions/action_ClearDisplay.xml");
+        String programText = Util.readResourceContent("/ast/actions/action_ClearDisplay.xml");
 
         String projectXml =
             "<export xmlns=\"http://de.fhg.iais.roberta.blockly\"><program>" + programText + "</program><config>" + configurationText + "</config></export>";

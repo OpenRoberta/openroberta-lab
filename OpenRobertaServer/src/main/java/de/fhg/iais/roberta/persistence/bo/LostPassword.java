@@ -10,7 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 import de.fhg.iais.roberta.util.RandomUrlPostfix;
-import de.fhg.iais.roberta.util.Util1;
+import de.fhg.iais.roberta.util.Util;
 
 @Entity
 @Table(name = "LOST_PASSWORD")
@@ -42,7 +42,7 @@ public class LostPassword implements WithSurrogateId {
     public LostPassword(int userId) throws Exception {
         this.userID = userId;
         this.urlPostfix = RandomUrlPostfix.generate(12, 12, 3, 3, 3);
-        this.created = Util1.getNow();
+        this.created = Util.getNow();
     }
 
     public boolean isUrlCorrect(String urlToCheck) throws Exception {

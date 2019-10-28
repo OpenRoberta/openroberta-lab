@@ -7,13 +7,14 @@ import org.junit.Test;
 
 import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.components.ConfigurationComponent;
+import de.fhg.iais.roberta.util.Util;
 import de.fhg.iais.roberta.util.test.UnitTestHelper;
 
 public class ArduinoListsTest extends ArduinoAstTest {
 
     @Test
     public void listsTest() throws Exception {
-        Map<String, String> ledPins = createMap("INPUT", "13");
+        Map<String, String> ledPins = Util.createMap("INPUT", "13");
         ConfigurationComponent led = new ConfigurationComponent("LED", true, "LED", "L", ledPins);
         ConfigurationAst.Builder builder = new ConfigurationAst.Builder();
         builder.setTrackWidth(17f).setWheelDiameter(5.6f).addComponents(Arrays.asList(led));
@@ -23,7 +24,7 @@ public class ArduinoListsTest extends ArduinoAstTest {
 
     @Test
     public void listsOccuranceTest() throws Exception {
-        Map<String, String> ledPins = createMap("INPUT", "13");
+        Map<String, String> ledPins = Util.createMap("INPUT", "13");
         ConfigurationComponent led = new ConfigurationComponent("LED", true, "LED", "L", ledPins);
         ConfigurationAst.Builder builder = new ConfigurationAst.Builder();
         builder.setTrackWidth(17f).setWheelDiameter(5.6f).addComponents(Arrays.asList(led));
@@ -37,7 +38,7 @@ public class ArduinoListsTest extends ArduinoAstTest {
 
     @Test
     public void listsRepeatTest() throws Exception {
-        Map<String, String> ledPins = createMap("INPUT", "13");
+        Map<String, String> ledPins = Util.createMap("INPUT", "13");
         ConfigurationComponent led = new ConfigurationComponent("LED", true, "LED", "L", ledPins);
         ConfigurationAst.Builder builder = new ConfigurationAst.Builder();
         builder.setTrackWidth(17f).setWheelDiameter(5.6f).addComponents(Arrays.asList(led));
@@ -51,7 +52,7 @@ public class ArduinoListsTest extends ArduinoAstTest {
 
     @Test
     public void listsSublistTest() throws Exception {
-        Map<String, String> ledPins = createMap("INPUT", "13");
+        Map<String, String> ledPins = Util.createMap("INPUT", "13");
         ConfigurationComponent led = new ConfigurationComponent("LED", true, "LED", "L", ledPins);
         ConfigurationAst.Builder builder = new ConfigurationAst.Builder();
         builder.setTrackWidth(17f).setWheelDiameter(5.6f).addComponents(Arrays.asList(led));
@@ -65,7 +66,7 @@ public class ArduinoListsTest extends ArduinoAstTest {
 
     @Test
     public void listsGetSetTest() throws Exception {
-        Map<String, String> ledPins = createMap("INPUT", "13");
+        Map<String, String> ledPins = Util.createMap("INPUT", "13");
         ConfigurationComponent led = new ConfigurationComponent("LED", true, "LED", "L", ledPins);
         ConfigurationAst.Builder builder = new ConfigurationAst.Builder();
         builder.setTrackWidth(17f).setWheelDiameter(5.6f).addComponents(Arrays.asList(led));

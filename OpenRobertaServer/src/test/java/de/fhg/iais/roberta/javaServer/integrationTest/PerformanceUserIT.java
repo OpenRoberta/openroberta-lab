@@ -41,7 +41,7 @@ import de.fhg.iais.roberta.testutil.JSONUtilForServer;
 import de.fhg.iais.roberta.util.Clock;
 import de.fhg.iais.roberta.util.Key;
 import de.fhg.iais.roberta.util.ServerProperties;
-import de.fhg.iais.roberta.util.Util1;
+import de.fhg.iais.roberta.util.Util;
 import de.fhg.iais.roberta.util.testsetup.IntegrationTest;
 
 /**
@@ -79,7 +79,7 @@ public class PerformanceUserIT {
 
     @Before
     public void setupTest() throws Exception {
-        this.serverProperties = new ServerProperties(Util1.loadProperties(null));
+        this.serverProperties = new ServerProperties(Util.loadProperties(null));
         this.serverProperties.getserverProperties().put("server.public", "false");
         this.connectionUrl = "jdbc:hsqldb:mem:performanceTestInMemoryDb";
 

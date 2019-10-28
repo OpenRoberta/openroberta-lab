@@ -1,16 +1,21 @@
 package de.fhg.iais.roberta.ast.action;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import org.junit.Assert;
 import org.junit.Test;
 
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.codegen.arduino.arduino.ArduinoAstTest;
+import de.fhg.iais.roberta.util.Util;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.util.test.UnitTestHelper;
 
 public class ActionTest extends ArduinoAstTest {
+    public static void setupFactory() {
+        testFactory = Util.configureRobotPlugin("nano", "", "", Collections.emptyList());
+    }
 
     @Test
     public void clearDisplay() throws Exception {

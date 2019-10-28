@@ -12,7 +12,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import de.fhg.iais.roberta.util.Util;
-import de.fhg.iais.roberta.util.Util1;
+import de.fhg.iais.roberta.util.UtilForHtmlXml;
 import de.fhg.iais.roberta.util.dbc.Assert;
 
 @Entity
@@ -92,8 +92,8 @@ public class Program implements WithSurrogateId {
         this.owner = owner;
         this.robot = robot;
         this.author = author;
-        this.created = Util1.getNow();
-        this.lastChanged = Util1.getNow();
+        this.created = Util.getNow();
+        this.lastChanged = Util.getNow();
     }
 
     @Override
@@ -114,12 +114,12 @@ public class Program implements WithSurrogateId {
     }
 
     public String getProgramText() {
-        return Util.checkProgramTextForXSS(this.programText);
+        return UtilForHtmlXml.checkProgramTextForXSS(this.programText);
     }
 
     public void setProgramText(String programText) {
-        this.programText = Util.checkProgramTextForXSS(programText);
-        this.lastChanged = Util1.getNow();
+        this.programText = UtilForHtmlXml.checkProgramTextForXSS(programText);
+        this.lastChanged = Util.getNow();
     }
 
     /**
@@ -151,7 +151,7 @@ public class Program implements WithSurrogateId {
         Assert.isTrue(configName == null || configHash == null);
         this.configName = configName;
         this.configHash = configHash;
-        this.lastChanged = Util1.getNow();
+        this.lastChanged = Util.getNow();
     }
 
     public Timestamp getLastChecked() {
@@ -184,7 +184,7 @@ public class Program implements WithSurrogateId {
 
     public void setTags(String tags) {
         this.tags = tags;
-        this.lastChanged = Util1.getNow();
+        this.lastChanged = Util.getNow();
     }
 
     public void setIconNumber(int iconNumber) {

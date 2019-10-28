@@ -44,7 +44,7 @@ import de.fhg.iais.roberta.testutil.JSONUtilForServer;
 import de.fhg.iais.roberta.testutil.SeleniumHelper;
 import de.fhg.iais.roberta.util.Key;
 import de.fhg.iais.roberta.util.ServerProperties;
-import de.fhg.iais.roberta.util.Util1;
+import de.fhg.iais.roberta.util.Util;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.util.testsetup.IntegrationTest;
 
@@ -182,7 +182,7 @@ public class RoundTripIT {
 
     // TODO: properties have been refactored. This doesn't work anymore
     private void initialize() {
-        ServerProperties serverProperties = new ServerProperties(Util1.loadProperties("classpath:/openRoberta.properties"));
+        ServerProperties serverProperties = new ServerProperties(Util.loadProperties("classpath:/openRoberta.properties"));
         connectionUrl = serverProperties.getStringProperty("hibernate.connection.url");
         browserVisibility = Boolean.parseBoolean(serverProperties.getStringProperty("browser.visibility"));
 

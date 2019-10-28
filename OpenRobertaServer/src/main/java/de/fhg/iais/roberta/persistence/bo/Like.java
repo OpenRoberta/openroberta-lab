@@ -11,7 +11,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import de.fhg.iais.roberta.util.Util1;
+import de.fhg.iais.roberta.util.Util;
 import de.fhg.iais.roberta.util.dbc.Assert;
 
 @Entity
@@ -54,7 +54,7 @@ public class Like implements WithSurrogateId {
         Assert.notNull(program);
         this.user = user;
         this.program = program;
-        this.created = Util1.getNow();
+        this.created = Util.getNow();
     }
 
     /**

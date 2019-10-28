@@ -12,7 +12,7 @@ import de.fhg.iais.roberta.persistence.dao.UserDao;
 import de.fhg.iais.roberta.persistence.util.DbSession;
 import de.fhg.iais.roberta.persistence.util.HttpSessionState;
 import de.fhg.iais.roberta.util.Key;
-import de.fhg.iais.roberta.util.Util1;
+import de.fhg.iais.roberta.util.Util;
 
 public class ToolboxProcessor extends AbstractProcessor {
     public ToolboxProcessor(DbSession dbSession, HttpSessionState httpSessionState) {
@@ -20,7 +20,7 @@ public class ToolboxProcessor extends AbstractProcessor {
     }
 
     public Toolbox getToolbox(String toolboxName, int userId, String robotName) {
-        if ( !Util1.isValidJavaIdentifier(toolboxName) ) {
+        if ( !Util.isValidJavaIdentifier(toolboxName) ) {
             Map<String, String> processorParameters = new HashMap<>();
             processorParameters.put("TOOLBOX_NAME", toolboxName);
             setStatus(ProcessorStatus.FAILED, Key.TOOLBOX_ERROR_ID_INVALID, processorParameters);

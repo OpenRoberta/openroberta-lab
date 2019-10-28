@@ -1,7 +1,9 @@
 package de.fhg.iais.roberta.javaServer.restServices.all.controller;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
@@ -13,6 +15,7 @@ import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.apache.commons.io.FileUtils;
 import org.codehaus.jettison.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,6 +32,7 @@ import de.fhg.iais.roberta.util.ClientLogger;
 import de.fhg.iais.roberta.util.Key;
 import de.fhg.iais.roberta.util.ServerProperties;
 import de.fhg.iais.roberta.util.Statistics;
+import de.fhg.iais.roberta.util.UtilForREST;
 import de.fhg.iais.roberta.util.Util;
 import eu.bitwalker.useragentutils.UserAgent;
 
@@ -97,27 +101,27 @@ public class ClientInit {
             String pathToTutorial = this.serverProperties.getStringProperty("server.admin.dir") + "/tutorial";
             JSONObject tutorial =
                 new File(pathToTutorial).isDirectory() //
-                    ? Util.getJSONObjectsFromDirectory(pathToTutorial) //
+                    ? ClientInit.getJSONObjectsFromDirectory(pathToTutorial) //
                     : new JSONObject();
             server.put("tutorial", tutorial);
 
             String pathToLegalTexts = this.serverProperties.getStringProperty("server.admin.dir") + "/legalTexts";
-            JSONObject legalTextFiles = Util.getHTMLContentFromDirectory(pathToLegalTexts);
+            JSONObject legalTextFiles = ClientInit.getHTMLContentFromDirectory(pathToLegalTexts);
 
             server.put("legalTexts", legalTextFiles);
 
             String pathToHelp = staticRecourcesDir + File.separator + "help";
-            List<String> help = Util.getListOfFileNamesFromDirectory(pathToHelp, "html");
+            List<String> help = ClientInit.getListOfFileNamesFromDirectory(pathToHelp, "html");
             server.put("help", help);
             String theme = this.serverProperties.getStringProperty("server.theme");
             server.put("theme", theme);
             response.put("server", server);
-            Util.addSuccessInfo(response, Key.INIT_SUCCESS);
-            Util.addFrontendInfo(response, httpSessionState, this.brickCommunicator);
+            UtilForREST.addSuccessInfo(response, Key.INIT_SUCCESS);
+            UtilForREST.addFrontendInfo(response, httpSessionState, this.brickCommunicator);
             dbSession.commit();
         } catch ( Exception e ) {
             dbSession.rollback();
-            Util.addErrorInfo(response, Key.SERVER_ERROR);
+            UtilForREST.addErrorInfo(response, Key.SERVER_ERROR);
         } finally {
             if ( dbSession != null ) {
                 dbSession.close();
@@ -125,5 +129,77 @@ public class ClientInit {
         }
         MDC.clear();
         return Response.ok(response).build();
+    }
+
+    /**
+     * Look up file names with specific file extensions in a specific directory.
+     *
+     * @param path The path to the directory where to look for the files.
+     * @param extension The file extension(s).
+     * @return a list of files names or an empty list.
+     */
+    private static List<File> getListOfFilesFromDirectory(String path, String... extensions) {
+        File dir = new File(path);
+        try {
+            List<File> listOfFiles = (List<File>) FileUtils.listFiles(dir, extensions, true);
+            return listOfFiles;
+        } catch ( Exception e ) {
+            return Collections.<File> emptyList();
+        }
+    }
+
+    /**
+     * Reads all files provided by the list of paths. Assuming that the files content json data with one property "name" this method returns a JSON object
+     * containing the json data.
+     *
+     * @param path to the directory
+     * @param extensions of the files
+     * @return
+     */
+    private static JSONObject getJSONObjectsFromDirectory(String path) {
+        List<File> files = ClientInit.getListOfFilesFromDirectory(path, "json");
+        JSONObject jsonObjRepresentingTheDirectory = new JSONObject();
+        for ( File file : files ) {
+            try {
+                JSONObject jsonObjInDirectory = new JSONObject(Util.readFileContent(file.getAbsolutePath()));
+                jsonObjRepresentingTheDirectory.put(jsonObjInDirectory.getString("name").toLowerCase().replaceAll("\\s", ""), jsonObjInDirectory);
+            } catch ( Exception e ) {
+                // no problem, we simply ignore files without valid json data or without the property "name"
+            }
+        }
+        return jsonObjRepresentingTheDirectory;
+    }
+
+    private static JSONObject getHTMLContentFromDirectory(String directoryPath) {
+
+        List<File> files = ClientInit.getListOfFilesFromDirectory(directoryPath, "html");
+        JSONObject jsonObjRepresentingTheDirectory = new JSONObject();
+        for ( File file : files ) {
+            try {
+                String fileContent = Util.readFileContent(file.getAbsolutePath());
+                if ( !fileContent.trim().isEmpty() ) {
+                    jsonObjRepresentingTheDirectory.put(file.getName(), fileContent);
+                }
+            } catch ( Exception e ) {
+                //There should not be a problem in storing a String as property, but yeah, in case it does lets ignore that file
+            }
+        }
+        return jsonObjRepresentingTheDirectory;
+    }
+
+    /**
+     * Looks for files in a specific directory and returns the names of the files found.
+     *
+     * @param The path to the directory where to look for the files.
+     * @param extension The file extension(s).
+     * @return a list of files names or an empty list.
+     */
+    private static List<String> getListOfFileNamesFromDirectory(String path, String extensions) {
+        List<File> files = ClientInit.getListOfFilesFromDirectory(path, extensions);
+        List<String> listOfFileNames = new ArrayList<>();
+        for ( File file : files ) {
+            listOfFileNames.add(file.getName());
+        }
+        return listOfFileNames;
     }
 }

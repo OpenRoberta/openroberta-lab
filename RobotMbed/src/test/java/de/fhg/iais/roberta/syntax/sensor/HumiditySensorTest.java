@@ -1,11 +1,19 @@
 package de.fhg.iais.roberta.syntax.sensor;
 
+import java.util.Collections;
+
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import de.fhg.iais.roberta.ast.AstTest;
+import de.fhg.iais.roberta.util.Util;
 import de.fhg.iais.roberta.util.test.UnitTestHelper;
 
 public class HumiditySensorTest extends AstTest {
+    @BeforeClass
+    public static void setupFactory() {
+        testFactory = Util.configureRobotPlugin("calliope2017", "", "", Collections.emptyList());
+    }
 
     @Test
     public void make_ByDefault_ReturnInstanceOfTemperatureSensorClass() throws Exception {

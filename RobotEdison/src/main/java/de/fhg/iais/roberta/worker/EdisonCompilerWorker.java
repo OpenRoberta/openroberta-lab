@@ -14,7 +14,7 @@ import de.fhg.iais.roberta.components.Project;
 import de.fhg.iais.roberta.util.Key;
 import de.fhg.iais.roberta.util.Pair;
 import de.fhg.iais.roberta.util.PluginProperties;
-import de.fhg.iais.roberta.util.Util1;
+import de.fhg.iais.roberta.util.Util;
 
 /**
  * The workflow for the Edison compiler. Blockly blocks are first converted into EdPy Python2 code and then the code is converted into a WAV audio file.
@@ -49,7 +49,7 @@ public class EdisonCompilerWorker implements IWorker {
         final String compilerBinDir = compilerWorkflowBean.getCompilerBinDir(); // TODO should it be used?
         final String compilerResourcesDir = compilerWorkflowBean.getCompilerResourcesDir();
         final String tempDir = compilerWorkflowBean.getTempDir();
-        Util1
+        Util
             .storeGeneratedProgram(tempDir, project.getSourceCode().toString(), project.getToken(), project.getProgramName(), "." + project.getSourceCodeFileExtension());
         //get all directories
         String token = project.getToken();

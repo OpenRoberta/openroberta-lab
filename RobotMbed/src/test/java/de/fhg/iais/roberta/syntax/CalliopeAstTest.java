@@ -12,7 +12,7 @@ import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.components.ConfigurationComponent;
 import de.fhg.iais.roberta.factory.RobotFactory;
 import de.fhg.iais.roberta.util.PluginProperties;
-import de.fhg.iais.roberta.util.Util1;
+import de.fhg.iais.roberta.util.Util;
 
 public class CalliopeAstTest extends AstTest {
 
@@ -20,7 +20,7 @@ public class CalliopeAstTest extends AstTest {
 
     @BeforeClass
     public static void setup() {
-        testFactory = new RobotFactory(new PluginProperties("calliope2017", "", "", Util1.loadProperties("classpath:/calliope2017.properties")));
+        testFactory = new RobotFactory(new PluginProperties("calliope2017", "", "", Util.loadProperties("classpath:/calliope2017.properties")));
 
         ConfigurationComponent pin0 = new ConfigurationComponent("pin0", false, "P12", "0", Collections.emptyMap());
         ConfigurationComponent pin1 = new ConfigurationComponent("pin1", false, "P0", "1", Collections.emptyMap());

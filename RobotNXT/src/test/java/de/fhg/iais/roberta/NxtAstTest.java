@@ -11,7 +11,7 @@ import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.components.ConfigurationComponent;
 import de.fhg.iais.roberta.factory.RobotFactory;
 import de.fhg.iais.roberta.util.PluginProperties;
-import de.fhg.iais.roberta.util.Util1;
+import de.fhg.iais.roberta.util.Util;
 
 public class NxtAstTest extends AstTest {
 
@@ -22,18 +22,18 @@ public class NxtAstTest extends AstTest {
 
     @BeforeClass
     public static void setup() {
-        testFactory = new RobotFactory(new PluginProperties("nxt", "", "", Util1.loadProperties("classpath:/nxt.properties")));
+        testFactory = new RobotFactory(new PluginProperties("nxt", "", "", Util.loadProperties("classpath:/nxt.properties")));
 
-        Map<String, String> motorAproperties = createMap("MOTOR_REGULATION", "TRUE", "MOTOR_REVERSE", "OFF", "MOTOR_DRIVE", "LEFT");
+        Map<String, String> motorAproperties = Util.createMap("MOTOR_REGULATION", "TRUE", "MOTOR_REVERSE", "OFF", "MOTOR_DRIVE", "LEFT");
         ConfigurationComponent motorA = new ConfigurationComponent("LARGE", true, "A", "A", motorAproperties);
 
-        Map<String, String> motorBproperties = createMap("MOTOR_REGULATION", "TRUE", "MOTOR_REVERSE", "OFF", "MOTOR_DRIVE", "RIGHT");
+        Map<String, String> motorBproperties = Util.createMap("MOTOR_REGULATION", "TRUE", "MOTOR_REVERSE", "OFF", "MOTOR_DRIVE", "RIGHT");
         ConfigurationComponent motorB = new ConfigurationComponent("LARGE", true, "B", "B", motorBproperties);
 
-        Map<String, String> motorBLproperties = createMap("MOTOR_REGULATION", "TRUE", "MOTOR_REVERSE", "OFF", "MOTOR_DRIVE", "LEFT");
+        Map<String, String> motorBLproperties = Util.createMap("MOTOR_REGULATION", "TRUE", "MOTOR_REVERSE", "OFF", "MOTOR_DRIVE", "LEFT");
         ConfigurationComponent motorBL = new ConfigurationComponent("LARGE", true, "B", "B", motorBLproperties);
 
-        Map<String, String> motorCproperties = createMap("MOTOR_REGULATION", "TRUE", "MOTOR_REVERSE", "OFF", "MOTOR_DRIVE", "RIGHT");
+        Map<String, String> motorCproperties = Util.createMap("MOTOR_REGULATION", "TRUE", "MOTOR_REVERSE", "OFF", "MOTOR_DRIVE", "RIGHT");
         ConfigurationComponent motorC = new ConfigurationComponent("LARGE", true, "C", "C", motorCproperties);
 
         ConfigurationComponent sensorS1 = new ConfigurationComponent("TOUCH", true, "S1", "1", Collections.emptyMap());

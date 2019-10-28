@@ -9,7 +9,7 @@ import org.hibernate.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import de.fhg.iais.roberta.util.Util1;
+import de.fhg.iais.roberta.util.Util;
 
 /**
  * assembles all actions to be done to upgrade the server version. This may include<br>
@@ -35,7 +35,7 @@ public class Upgrader {
             LOG.info("database version " + serverVersionForDbDirectory + " is uptodate");
         } else {
             // server version upgrade is necessary
-            Properties serverProperties = Util1.loadProperties(false, null);
+            Properties serverProperties = Util.loadProperties(null);
             String[] previousServerVersions = serverProperties.getProperty("openRobertaServer.history").split(",");
             if ( previousServerVersions.length > 0 && serverVersionForDbDirectory.equals(previousServerVersions[0]) ) {
                 // if the first entry is the actual version, remove the entry ...

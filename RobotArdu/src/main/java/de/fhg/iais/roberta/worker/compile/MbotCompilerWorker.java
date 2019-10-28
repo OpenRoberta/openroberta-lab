@@ -12,7 +12,7 @@ import de.fhg.iais.roberta.codegen.AbstractCompilerWorkflow;
 import de.fhg.iais.roberta.components.Project;
 import de.fhg.iais.roberta.util.Key;
 import de.fhg.iais.roberta.util.Pair;
-import de.fhg.iais.roberta.util.Util1;
+import de.fhg.iais.roberta.util.Util;
 import de.fhg.iais.roberta.worker.IWorker;
 
 public class MbotCompilerWorker implements IWorker {
@@ -42,7 +42,7 @@ public class MbotCompilerWorker implements IWorker {
         final String compilerBinDir = compilerWorkflowBean.getCompilerBinDir();
         final String compilerResourcesDir = compilerWorkflowBean.getCompilerResourcesDir();
         final String tempDir = compilerWorkflowBean.getTempDir();
-        Util1
+        Util
             .storeGeneratedProgram(
                 tempDir,
                 project.getSourceCode().toString(),

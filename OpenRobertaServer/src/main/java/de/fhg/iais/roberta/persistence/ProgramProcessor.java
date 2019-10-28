@@ -29,7 +29,7 @@ import de.fhg.iais.roberta.persistence.util.DbSession;
 import de.fhg.iais.roberta.persistence.util.HttpSessionState;
 import de.fhg.iais.roberta.util.Key;
 import de.fhg.iais.roberta.util.Pair;
-import de.fhg.iais.roberta.util.Util1;
+import de.fhg.iais.roberta.util.Util;
 
 public class ProgramProcessor extends AbstractProcessor {
     private static final Logger LOG = LoggerFactory.getLogger(ProgramProcessor.class);
@@ -56,7 +56,7 @@ public class ProgramProcessor extends AbstractProcessor {
         processorParameters.put("ROBOT_NAME", robotName);
         processorParameters.put("AUTHOR_NAME", authorName);
 
-        if ( !Util1.isValidJavaIdentifier(programName) ) {
+        if ( !Util.isValidJavaIdentifier(programName) ) {
             setStatus(ProcessorStatus.FAILED, Key.PROGRAM_ERROR_ID_INVALID, processorParameters);
             return null;
         } else if ( this.httpSessionState.isUserLoggedIn() || owner.getId() < 3 ) {
@@ -266,7 +266,7 @@ public class ProgramProcessor extends AbstractProcessor {
         Timestamp programTimestamp,
         boolean isOwner) //
     {
-        if ( !Util1.isValidJavaIdentifier(programName) ) {
+        if ( !Util.isValidJavaIdentifier(programName) ) {
             Map<String, String> processorParameters = new HashMap<>();
             processorParameters.put("PROGRAM_NAME", programName);
             setStatus(ProcessorStatus.FAILED, Key.PROGRAM_ERROR_ID_INVALID, processorParameters);
