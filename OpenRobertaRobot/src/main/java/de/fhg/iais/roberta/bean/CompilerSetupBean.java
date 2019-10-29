@@ -1,7 +1,8 @@
 package de.fhg.iais.roberta.bean;
 
 /**
- * This bean contains all data needed during the compilation process, to execute the runBuild, usually
+ * Container for all compiler setup related information, to execute the runBuild, usually.
+ * Paths necessary for the compilers and specific compiler options are stored here.
  */
 public class CompilerSetupBean {
 

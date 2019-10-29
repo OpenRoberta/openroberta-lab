@@ -1,6 +1,7 @@
 package de.fhg.iais.roberta.visitor.collect;
 
 import de.fhg.iais.roberta.bean.CodeGeneratorSetupBean;
+import de.fhg.iais.roberta.bean.UsedMethodBean;
 import de.fhg.iais.roberta.syntax.lang.functions.FunctionNames;
 import de.fhg.iais.roberta.syntax.lang.functions.ListRepeat;
 import de.fhg.iais.roberta.syntax.lang.functions.MathNumPropFunct;
@@ -15,55 +16,55 @@ import de.fhg.iais.roberta.syntax.lang.functions.MathSingleFunct;
  */
 public abstract class AbstractUsedMethodCollectorVisitor implements ICollectorVisitor {
 
-    protected CodeGeneratorSetupBean.Builder builder;
+    protected UsedMethodBean.Builder builder;
 
-    public AbstractUsedMethodCollectorVisitor(CodeGeneratorSetupBean.Builder builder) {
+    public AbstractUsedMethodCollectorVisitor(UsedMethodBean.Builder builder) {
         this.builder = builder;
     }
 
     @Override
     public Void visitMathNumPropFunct(MathNumPropFunct<Void> mathNumPropFunct) {
-        this.builder.addUsedFunction(mathNumPropFunct.getFunctName());
+        this.builder.addUsedMethod(mathNumPropFunct.getFunctName());
         return ICollectorVisitor.super.visitMathNumPropFunct(mathNumPropFunct);
     }
 
     @Override
     public Void visitMathOnListFunct(MathOnListFunct<Void> mathOnListFunct) {
-        this.builder.addUsedFunction(mathOnListFunct.getFunctName());
+        this.builder.addUsedMethod(mathOnListFunct.getFunctName());
         return ICollectorVisitor.super.visitMathOnListFunct(mathOnListFunct);
     }
 
     @Override
     public Void visitMathSingleFunct(MathSingleFunct<Void> mathSingleFunct) {
         if ( mathSingleFunct.getFunctName() == FunctionNames.POW10 ) {
-            this.builder.addUsedFunction(FunctionNames.POWER); // combine pow10 and power into one
+            this.builder.addUsedMethod(FunctionNames.POWER); // combine pow10 and power into one
         } else {
-            this.builder.addUsedFunction(mathSingleFunct.getFunctName());
+            this.builder.addUsedMethod(mathSingleFunct.getFunctName());
         }
         return ICollectorVisitor.super.visitMathSingleFunct(mathSingleFunct);
     }
 
     @Override
     public Void visitListRepeat(ListRepeat<Void> listRepeat) {
-        this.builder.addUsedFunction(FunctionNames.LISTS_REPEAT);
+        this.builder.addUsedMethod(FunctionNames.LISTS_REPEAT);
         return ICollectorVisitor.super.visitListRepeat(listRepeat);
     }
 
     @Override
     public Void visitMathPowerFunct(MathPowerFunct<Void> mathPowerFunct) {
-        this.builder.addUsedFunction(FunctionNames.POWER);
+        this.builder.addUsedMethod(FunctionNames.POWER);
         return ICollectorVisitor.super.visitMathPowerFunct(mathPowerFunct);
     }
 
     @Override
     public Void visitMathRandomIntFunct(MathRandomIntFunct<Void> mathRandomIntFunct) {
-        this.builder.addUsedFunction(FunctionNames.RANDOM);
+        this.builder.addUsedMethod(FunctionNames.RANDOM);
         return ICollectorVisitor.super.visitMathRandomIntFunct(mathRandomIntFunct);
     }
 
     @Override
     public Void visitMathRandomFloatFunct(MathRandomFloatFunct<Void> mathRandomFloatFunct) {
-        this.builder.addUsedFunction(FunctionNames.RANDOM_DOUBLE);
+        this.builder.addUsedMethod(FunctionNames.RANDOM_DOUBLE);
         return ICollectorVisitor.super.visitMathRandomFloatFunct(mathRandomFloatFunct);
     }
 }

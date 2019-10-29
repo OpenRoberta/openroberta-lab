@@ -6,7 +6,6 @@ import java.util.ArrayList;
 
 import de.fhg.iais.roberta.bean.CodeGeneratorSetupBean;
 import de.fhg.iais.roberta.bean.UsedHardwareBean;
-import de.fhg.iais.roberta.bean.UsedHardwareBean.EdisonMethods;
 import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.light.LightAction;
@@ -44,6 +43,7 @@ import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.SoundSensor;
 import de.fhg.iais.roberta.syntax.sensors.edison.ResetSensor;
 import de.fhg.iais.roberta.util.dbc.DbcException;
+import de.fhg.iais.roberta.visitor.collect.EdisonMethods;
 import de.fhg.iais.roberta.visitor.hardware.IEdisonVisitor;
 import de.fhg.iais.roberta.visitor.lang.codegen.prog.AbstractPythonVisitor;
 
@@ -116,15 +116,9 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
         nlIndent(); //new line for helper methods
         nlIndent();
 
-        if ( !this.usedHardwareBean.getUsedMethods().isEmpty() ) {
+        if ( !this.codeGeneratorSetupBean.getUsedMethods().isEmpty() ) {
             String helperMethodImpls =
-                this.codeGeneratorSetupBean.getHelperMethodGenerator().getHelperMethodDefinitions(this.usedHardwareBean.getUsedMethods());
-            this.sb.append(helperMethodImpls);
-        }
-
-        if ( !this.codeGeneratorSetupBean.getUsedFunctions().isEmpty() ) {
-            String helperMethodImpls =
-                this.codeGeneratorSetupBean.getHelperMethodGenerator().getHelperMethodDefinitions(this.codeGeneratorSetupBean.getUsedFunctions());
+                this.codeGeneratorSetupBean.getHelperMethodGenerator().getHelperMethodDefinitions(this.codeGeneratorSetupBean.getUsedMethods());
             this.sb.append(helperMethodImpls);
         }
     }

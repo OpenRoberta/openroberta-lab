@@ -57,13 +57,6 @@ def main():
         while not hal.isKeyPressed('any'): hal.waitFor(500)
         raise
 
-def _randInt(min_val, max_val):
-    val = int.from_bytes(os.urandom(4), byteorder='big')
-    if min_val < max_val:
-        return min_val + (val % ((max_val - min_val) + 1))
-    else:
-        return max_val + (val % ((min_val - max_val) + 1))
-
 def _median(l):
     l = sorted(l)
     l_len = len(l)
@@ -73,6 +66,13 @@ def _median(l):
         return ( l[int( (l_len-1) / 2)] + l[int( (l_len+1) / 2)] ) / 2.0
     else:
         return l[int( (l_len-1) / 2)]
+
+def _randInt(min_val, max_val):
+    val = int.from_bytes(os.urandom(4), byteorder='big')
+    if min_val < max_val:
+        return min_val + (val % ((max_val - min_val) + 1))
+    else:
+        return max_val + (val % ((min_val - max_val) + 1))
 
 def _standard_deviation(l):
     mean = float(sum(l)) / len(l)

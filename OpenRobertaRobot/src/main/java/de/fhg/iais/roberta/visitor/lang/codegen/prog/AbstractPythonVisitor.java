@@ -941,9 +941,9 @@ public abstract class AbstractPythonVisitor extends AbstractLanguageVisitor {
 
     @Override
     protected void generateProgramSuffix(boolean withWrapping) {
-        if ( !this.codeGeneratorSetupBean.getUsedFunctions().isEmpty() ) {
+        if ( !this.codeGeneratorSetupBean.getUsedMethods().isEmpty() ) {
             String helperMethodImpls =
-                this.codeGeneratorSetupBean.getHelperMethodGenerator().getHelperMethodDefinitions(this.codeGeneratorSetupBean.getUsedFunctions());
+                this.codeGeneratorSetupBean.getHelperMethodGenerator().getHelperMethodDefinitions(this.codeGeneratorSetupBean.getUsedMethods());
             this.sb.append(helperMethodImpls);
         }
 

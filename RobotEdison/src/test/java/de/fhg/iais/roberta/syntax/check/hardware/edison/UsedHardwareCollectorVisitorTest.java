@@ -8,8 +8,10 @@ import org.junit.Test;
 import com.google.common.collect.Lists;
 
 import de.fhg.iais.roberta.ast.EdisonAstTest;
+import de.fhg.iais.roberta.bean.CodeGeneratorSetupBean;
 import de.fhg.iais.roberta.bean.UsedHardwareBean;
 import de.fhg.iais.roberta.bean.UsedHardwareBean.Builder;
+import de.fhg.iais.roberta.bean.UsedMethodBean;
 import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.components.ConfigurationComponent;
 import de.fhg.iais.roberta.syntax.Phrase;
@@ -56,7 +58,8 @@ public class UsedHardwareCollectorVisitorTest extends EdisonAstTest {
     public void TestAllHelperMethods() throws Exception {
         ArrayList<ArrayList<Phrase<Void>>> phrases = UnitTestHelper.getAst(testFactory, "/collector/all_helper_methods.xml");
         ConfigurationAst edisonConfig = makeConfig();
-        UsedHardwareBean.Builder builder = new Builder();
-        EdisonUsedHardwareCollectorVisitor checker = new EdisonUsedHardwareCollectorVisitor(builder, phrases, edisonConfig);
+        UsedHardwareBean.Builder usedHardwareBeanBuilder = new UsedHardwareBean.Builder();
+        UsedMethodBean.Builder usedMethodBeanBuilder = new UsedMethodBean.Builder();
+        EdisonUsedHardwareCollectorVisitor checker = new EdisonUsedHardwareCollectorVisitor(usedHardwareBeanBuilder, usedMethodBeanBuilder, edisonConfig);
     }
 }

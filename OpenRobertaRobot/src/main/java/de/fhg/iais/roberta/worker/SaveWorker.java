@@ -5,11 +5,15 @@ import de.fhg.iais.roberta.components.Project;
 import de.fhg.iais.roberta.util.Key;
 import de.fhg.iais.roberta.util.Util;
 
+/**
+ * Saves the generated program directly to the temporary directory for further processing.
+ * Used by robots/languages that need no compilation like ev3dev.
+ */
 public class SaveWorker implements IWorker {
     @Override
     public void execute(Project project) {
         CompilerSetupBean compilerWorkflowBean = (CompilerSetupBean) project.getWorkerResult("CompilerSetup");
-        final String tempDir = compilerWorkflowBean.getTempDir();
+        String tempDir = compilerWorkflowBean.getTempDir();
         Util
             .storeGeneratedProgram(tempDir, project.getSourceCode().toString(), project.getToken(), project.getProgramName(), "." + project.getSourceCodeFileExtension());
         project.setResult(Key.COMPILERWORKFLOW_SUCCESS);

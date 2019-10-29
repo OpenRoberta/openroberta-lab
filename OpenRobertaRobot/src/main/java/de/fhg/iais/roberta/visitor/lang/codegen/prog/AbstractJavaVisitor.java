@@ -715,10 +715,10 @@ public abstract class AbstractJavaVisitor extends AbstractLanguageVisitor {
     @Override
     protected void generateProgramSuffix(boolean withWrapping) {
         if ( withWrapping ) {
-            if ( !this.codeGeneratorSetupBean.getUsedFunctions().isEmpty() ) {
+            if ( !this.codeGeneratorSetupBean.getUsedMethods().isEmpty() ) {
                 incrIndentation();
                 String helperMethodImpls =
-                    this.codeGeneratorSetupBean.getHelperMethodGenerator().getHelperMethodDefinitions(this.codeGeneratorSetupBean.getUsedFunctions());
+                    this.codeGeneratorSetupBean.getHelperMethodGenerator().getHelperMethodDefinitions(this.codeGeneratorSetupBean.getUsedMethods());
                 Iterator<String> it = Arrays.stream(helperMethodImpls.split("\n")).iterator();
                 while ( it.hasNext() ) {
                     this.sb.append(it.next());

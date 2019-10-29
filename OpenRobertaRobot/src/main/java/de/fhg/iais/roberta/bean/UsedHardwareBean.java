@@ -15,7 +15,8 @@ import de.fhg.iais.roberta.syntax.lang.expr.VarDeclaration;
 import de.fhg.iais.roberta.syntax.lang.methods.Method;
 
 /**
- * This bean should contain all the hardware used in the project for futher use, for example code generation.
+ * Container for all used hardware related information, used in for example code generation.
+ * Currently used for more than just used hardware, should be split up into multiple separate beans in the future.
  */
 //TODO move unrelated data to specific beans. Refactor fields from Mbed into usedActors/Sensors
 public class UsedHardwareBean {
@@ -45,31 +46,8 @@ public class UsedHardwareBean {
     private boolean humidityUsed;
     private boolean calliBotUsed;
 
-    private final Set<Enum<?>> usedMethods = new HashSet<>(); //All needed helper methods as a Set
-
     //TODO: from NXT
     private boolean isVolumeVariableNeeded;
-
-    //TODO: edison nicer
-    public enum EdisonMethods {
-        OBSTACLEDETECTION, //Obstacle detection
-        IRSEND, //IR sender
-        IRSEEK, //IR seeker
-        MOTORON, //Motor on / motor on for... block
-        SHORTEN, //shorten a number for Edisons drive() methods
-        GETDIR, //reverse direction when negative speed is applied
-        DIFFCURVE, //for the steer block
-        DIFFDRIVE, //for driving
-        DIFFTURN, //for turning
-    }
-
-    public List<String> getGlobalVariables() {
-        return this.globalVariables;
-    }
-
-    public List<String> getDeclaredVariables() {
-        return this.declaredVariables;
-    }
 
     public List<VarDeclaration<Void>> getVisitedVars() {
         return this.visitedVars;
@@ -137,10 +115,6 @@ public class UsedHardwareBean {
 
     public boolean isCalliBotUsed() {
         return this.calliBotUsed;
-    }
-
-    public Set<Enum<?>> getUsedMethods() {
-        return Collections.unmodifiableSet(this.usedMethods);
     }
 
     public Map<Integer, Boolean> getLoopsLabelContainer() {
@@ -246,11 +220,6 @@ public class UsedHardwareBean {
 
         public Builder setCalliBotUsed(boolean calliBotUsed) {
             this.usedHardwareBean.calliBotUsed = calliBotUsed;
-            return this;
-        }
-
-        public Builder addUsedMethod(Enum<?> usedMethod) {
-            this.usedHardwareBean.usedMethods.add(usedMethod);
             return this;
         }
 

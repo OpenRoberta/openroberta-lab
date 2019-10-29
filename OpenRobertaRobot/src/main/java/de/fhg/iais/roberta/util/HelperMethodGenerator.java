@@ -3,12 +3,15 @@ package de.fhg.iais.roberta.util;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import org.json.JSONObject;
 
@@ -97,13 +100,16 @@ public class HelperMethodGenerator {
     public String getHelperMethodDefinitions(Set<? extends Enum<?>> usedMethods) {
         StringBuilder sb = new StringBuilder();
 
-        // guarantee order of methods
-        List<? extends Enum> sortedUsedMethods = new ArrayList<>(usedMethods);
-        Collections.sort(sortedUsedMethods);
+        // guarantee order of methods for tests & consistency
+        List<? extends Enum<?>> usedMethodsList = new ArrayList<>(usedMethods);
 
-        // append all method implementations
-        for ( Enum<?> usedFunction : sortedUsedMethods ) {
-            String implementation = this.helperMethods.get(usedFunction);
+        // sort indices based on the string representation of the enums
+        int[] sortedIndices = IntStream.range(0, usedMethodsList.size())
+                                       .boxed().sorted(Comparator.comparing(i -> usedMethodsList.get(i).toString()))
+                                       .mapToInt(e -> e).toArray();
+
+        for ( int sortedIndex : sortedIndices ) {
+            String implementation = this.helperMethods.get(usedMethodsList.get(sortedIndex));
             if ( implementation != null ) { // no implementation necessary for this method
                 sb.append('\n');
                 sb.append(implementation);

@@ -1,11 +1,8 @@
 package de.fhg.iais.roberta.visitor.collect;
 
-import java.util.ArrayList;
-
-import de.fhg.iais.roberta.bean.UsedHardwareBean.Builder;
-import de.fhg.iais.roberta.bean.UsedHardwareBean.EdisonMethods;
+import de.fhg.iais.roberta.bean.UsedHardwareBean;
+import de.fhg.iais.roberta.bean.UsedMethodBean;
 import de.fhg.iais.roberta.components.ConfigurationAst;
-import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorStopAction;
 import de.fhg.iais.roberta.syntax.action.motor.differential.CurveAction;
@@ -27,41 +24,43 @@ import de.fhg.iais.roberta.visitor.hardware.IEdisonVisitor;
  */
 public class EdisonUsedHardwareCollectorVisitor extends AbstractUsedHardwareCollectorVisitor implements IEdisonVisitor<Void> {
 
-    public EdisonUsedHardwareCollectorVisitor(Builder builder, ArrayList<ArrayList<Phrase<Void>>> programPhrases, ConfigurationAst robotConfiguration) {
-        super(builder, robotConfiguration);
+    private final UsedMethodBean.Builder usedMethodBeanBuilder;
+
+    public EdisonUsedHardwareCollectorVisitor(UsedHardwareBean.Builder usedHardwareBeanBuilder, UsedMethodBean.Builder usedMethodBeanBuilder, ConfigurationAst robotConfiguration) {
+        super(usedHardwareBeanBuilder, robotConfiguration);
+        this.usedMethodBeanBuilder = usedMethodBeanBuilder;
     }
 
     @Override
     public Void visitMotorOnAction(MotorOnAction<Void> motorOnAction) {
-        this.builder.addUsedMethod(EdisonMethods.MOTORON);
-        this.builder.addUsedMethod(EdisonMethods.SHORTEN); //used inside helper method
-        this.builder.addUsedMethod(EdisonMethods.GETDIR);
+        this.usedMethodBeanBuilder.addUsedMethod(EdisonMethods.MOTORON);
+        this.usedMethodBeanBuilder.addUsedMethod(EdisonMethods.SHORTEN); //used inside helper method
+        this.usedMethodBeanBuilder.addUsedMethod(EdisonMethods.GETDIR);
         return null;
-        //        return super.visitMotorOnAction(motorOnAction);
     }
 
     @Override
     public Void visitIRSeekerSensor(IRSeekerSensor<Void> irSeekerSensor) {
-        this.builder.addUsedMethod(EdisonMethods.IRSEEK);
+        this.usedMethodBeanBuilder.addUsedMethod(EdisonMethods.IRSEEK);
         return super.visitIRSeekerSensor(irSeekerSensor);
     }
 
     @Override
     public Void visitInfraredSensor(InfraredSensor<Void> infraredSensor) {
-        this.builder.addUsedMethod(EdisonMethods.OBSTACLEDETECTION);
+        this.usedMethodBeanBuilder.addUsedMethod(EdisonMethods.OBSTACLEDETECTION);
         return super.visitInfraredSensor(infraredSensor);
     }
 
     @Override
     public Void visitSendIRAction(SendIRAction<Void> sendIRAction) {
-        this.builder.addUsedMethod(EdisonMethods.IRSEND);
+        this.usedMethodBeanBuilder.addUsedMethod(EdisonMethods.IRSEND);
         sendIRAction.getCode().accept(this);
         return null;
     }
 
     @Override
     public Void visitReceiveIRAction(ReceiveIRAction<Void> receiveIRAction) {
-        this.builder.addUsedMethod(EdisonMethods.IRSEEK);
+        this.usedMethodBeanBuilder.addUsedMethod(EdisonMethods.IRSEEK);
         return null;
     }
 
@@ -72,9 +71,9 @@ public class EdisonUsedHardwareCollectorVisitor extends AbstractUsedHardwareColl
 
     @Override
     public Void visitDriveAction(DriveAction<Void> driveAction) {
-        this.builder.addUsedMethod(EdisonMethods.DIFFDRIVE);
-        this.builder.addUsedMethod(EdisonMethods.SHORTEN); //used inside helper method
-        this.builder.addUsedMethod(EdisonMethods.GETDIR);
+        this.usedMethodBeanBuilder.addUsedMethod(EdisonMethods.DIFFDRIVE);
+        this.usedMethodBeanBuilder.addUsedMethod(EdisonMethods.SHORTEN); //used inside helper method
+        this.usedMethodBeanBuilder.addUsedMethod(EdisonMethods.GETDIR);
         return null;
     }
 
@@ -90,9 +89,9 @@ public class EdisonUsedHardwareCollectorVisitor extends AbstractUsedHardwareColl
 
     @Override
     public Void visitCurveAction(CurveAction<Void> curveAction) {
-        this.builder.addUsedMethod(EdisonMethods.DIFFCURVE);
-        this.builder.addUsedMethod(EdisonMethods.SHORTEN); //used inside helper method
-        this.builder.addUsedMethod(EdisonMethods.GETDIR);
+        this.usedMethodBeanBuilder.addUsedMethod(EdisonMethods.DIFFCURVE);
+        this.usedMethodBeanBuilder.addUsedMethod(EdisonMethods.SHORTEN); //used inside helper method
+        this.usedMethodBeanBuilder.addUsedMethod(EdisonMethods.GETDIR);
         return null;
     }
 
@@ -107,9 +106,9 @@ public class EdisonUsedHardwareCollectorVisitor extends AbstractUsedHardwareColl
 
     @Override
     public Void visitTurnAction(TurnAction<Void> turnAction) {
-        this.builder.addUsedMethod(EdisonMethods.DIFFTURN);
-        this.builder.addUsedMethod(EdisonMethods.SHORTEN); //used inside helper method
-        this.builder.addUsedMethod(EdisonMethods.GETDIR);
+        this.usedMethodBeanBuilder.addUsedMethod(EdisonMethods.DIFFTURN);
+        this.usedMethodBeanBuilder.addUsedMethod(EdisonMethods.SHORTEN); //used inside helper method
+        this.usedMethodBeanBuilder.addUsedMethod(EdisonMethods.GETDIR);
         return null;
     }
 
@@ -122,10 +121,10 @@ public class EdisonUsedHardwareCollectorVisitor extends AbstractUsedHardwareColl
     public Void visitGetSampleSensor(GetSampleSensor<Void> sensorGetSample) {
         switch ( sensorGetSample.getSensorTypeAndMode() ) {
             case "INFRARED_OBSTACLE":
-                this.builder.addUsedMethod(EdisonMethods.OBSTACLEDETECTION);
+                this.usedMethodBeanBuilder.addUsedMethod(EdisonMethods.OBSTACLEDETECTION);
                 break;
             case "IRSEEKER_RCCODE":
-                this.builder.addUsedMethod(EdisonMethods.IRSEEK);
+                this.usedMethodBeanBuilder.addUsedMethod(EdisonMethods.IRSEEK);
                 break;
             default:
                 break;

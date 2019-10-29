@@ -10,7 +10,29 @@ import de.fhg.iais.roberta.util.Key;
 import de.fhg.iais.roberta.visitor.IVisitor;
 import de.fhg.iais.roberta.visitor.validate.AbstractProgramValidatorVisitor;
 
+/**
+ * Uses the {@link AbstractProgramValidatorVisitor} to visit the current AST and validate the hardware.
+ * May also annotate the AST to add information about inconsistencies in it.
+ */
 public abstract class AbstractValidatorWorker implements IWorker {
+
+    /**
+     * Returns the appropriate visitor for this worker. Used by subclasses to keep the execute method generic.
+     * Could be removed in the future, when visitors are specified in the properties as well, or inferred from the worker name.
+     *
+     * @param builder the used hardware bean builder
+     * @param project the project
+     * @return the appropriate visitor for the current robot
+     */
+    protected abstract AbstractProgramValidatorVisitor getVisitor(UsedHardwareBean.Builder builder, Project project);
+
+    /**
+     * Returns the bean name. Used by subclasses to keep the execute method generic.
+     * Specifies the bean name to be used by the abstract execute.
+     *
+     * @return the bean name
+     */
+    protected abstract String getBeanName();
 
     @Override
     public void execute(Project project) {
@@ -41,8 +63,4 @@ public abstract class AbstractValidatorWorker implements IWorker {
             }
         }
     }
-
-    protected abstract AbstractProgramValidatorVisitor getVisitor(UsedHardwareBean.Builder builder, Project project);
-
-    protected abstract String getBeanName();
 }
