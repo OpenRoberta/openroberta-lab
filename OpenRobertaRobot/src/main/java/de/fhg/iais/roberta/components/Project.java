@@ -32,7 +32,8 @@ import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.util.jaxb.JaxbHelper;
 
 /**
- * This class stores the AST representation of the program and the configuration
+ * This class stores the AST representation of the program and the configuration as well as everything needed for executing workflows
+ * it contains the result of code generation and compilation for the robots that are auto connected. This is the main data storage in the system.
  */
 public final class Project {
 
@@ -80,7 +81,7 @@ public final class Project {
     public String getSourceCodeFileExtension() {
         return this.robotFactory.getSourceCodeFileExtension();
     }
-    
+
     public String getBinaryFileExtension() {
         return this.robotFactory.getBinaryFileExtension();
     }
@@ -143,6 +144,9 @@ public final class Project {
         return this.indentationBuilder;
     }
 
+    /**
+     * @return this will actually return either Intel Hex or base 64 encoded binary
+     */
     public String getCompiledHex() {
         return this.compiledHex;
     }

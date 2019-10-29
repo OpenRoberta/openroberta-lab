@@ -10,6 +10,10 @@ import de.fhg.iais.roberta.util.HelperMethodGenerator;
 import de.fhg.iais.roberta.util.Util;
 import de.fhg.iais.roberta.util.dbc.Assert;
 
+/**
+ * This bean should contain all the code-generation specific data. Everything that a codegen visitor may require
+ */
+//TODO move data here from UsedHardwareBean. e.g. everything about variables.
 public class CodeGeneratorSetupBean {
 
     private String helperMethodFile = "";

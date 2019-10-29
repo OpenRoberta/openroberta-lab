@@ -14,6 +14,10 @@ import de.fhg.iais.roberta.components.UsedSensor;
 import de.fhg.iais.roberta.syntax.lang.expr.VarDeclaration;
 import de.fhg.iais.roberta.syntax.lang.methods.Method;
 
+/**
+ * This bean should contain all the hardware used in the project for futher use, for example code generation.
+ */
+//TODO move unrelated data to specific beans. Refactor fields from Mbed into usedActors/Sensors
 public class UsedHardwareBean {
 
     private List<String> globalVariables = new ArrayList<>();
