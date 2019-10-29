@@ -1,0 +1,269 @@
+{
+  "ops": [
+    {
+      "opc": "expr",
+      "expr": "NUM_CONST",
+      "value": "0"
+    },
+    {
+      "opc": "VarDeclaration",
+      "name": "sum",
+      "type": "NUMBER"
+    },
+    {
+      "opc": "expr",
+      "expr": "NUM_CONST",
+      "value": "0"
+    },
+    {
+      "opc": "VarDeclaration",
+      "name": "result",
+      "type": "NUMBER"
+    },
+    {
+      "opc": "expr",
+      "expr": "NUM_CONST",
+      "value": "0"
+    },
+    {
+      "opc": "VarDeclaration",
+      "name": "whole",
+      "type": "NUMBER"
+    },
+    {
+      "opc": "expr",
+      "expr": "NUM_CONST",
+      "value": "10"
+    },
+    {
+      "opc": "createMethodCallVoid",
+      "names": ["x1"],
+      "name": "repX"
+    },
+    {
+      "opc": "expr",
+      "expr": "NUM_CONST",
+      "value": "9"
+    },
+    {
+      "opc": "createMethodCallReturn",
+      "names": ["x2"],
+      "name": "retX"
+    },
+    {
+      "opc": "AssignStmt",
+      "name": "result"
+    },
+    {
+      "opc": "expr",
+      "name": "sum",
+      "expr": "Var"
+    },
+    {
+      "opc": "expr",
+      "name": "result",
+      "expr": "Var"
+    },
+    {
+      "op": "ADD",
+      "opc": "expr",
+      "expr": "Binary"
+    },
+    {
+      "opc": "AssignStmt",
+      "name": "whole"
+    },
+    {
+      "opc": "IfStatement",
+      "stmtList": [
+        {
+          "opc": "expr",
+          "name": "whole",
+          "expr": "Var"
+        },
+        {
+          "opc": "expr",
+          "expr": "NUM_CONST",
+          "value": "30"
+        },
+        {
+          "op": "EQ",
+          "opc": "expr",
+          "expr": "Binary"
+        },
+        {
+          "opc": "IfTrueStatement",
+          "stmtList": [
+            {
+              "opc": "expr",
+              "expr": "STRING_CONST",
+              "value": "ok"
+            },
+            {"opc": "ShowTextAction"},
+            {
+              "opc": "flowControl",
+              "conditional": false,
+              "break": true,
+              "kind": "IfStatement"
+            }
+          ]
+        },
+        {
+          "opc": "expr",
+          "expr": "STRING_CONST",
+          "value": "***** error ***** expected 30 got "
+        },
+        {
+          "opc": "expr",
+          "name": "whole",
+          "expr": "Var"
+        },
+        {
+          "NUMBER": 2,
+          "opc": "createTextJoin"
+        },
+        {"opc": "ShowTextAction"},
+        {
+          "opc": "flowControl",
+          "conditional": false,
+          "break": true,
+          "kind": "IfStatement"
+        }
+      ]
+    }
+  ],
+  "functionDeclaration": {
+    "retX": {
+      "opc": "createMethodReturn",
+      "name": "retX",
+      "statements": [
+        {
+          "opc": "expr",
+          "expr": "NUM_CONST",
+          "value": "0"
+        },
+        {
+          "opc": "expr",
+          "name": "x2",
+          "expr": "Var"
+        },
+        {
+          "opc": "expr",
+          "expr": "NUM_CONST",
+          "value": "2"
+        },
+        {
+          "mode": "FOR",
+          "opc": "RepeatStmt",
+          "stmtList": [{
+            "mode": "FOR",
+            "opc": "RepeatStmtCont",
+            "stmtList": [
+              {
+                "opc": "expr",
+                "name": "sum",
+                "expr": "Var"
+              },
+              {
+                "opc": "expr",
+                "expr": "NUM_CONST",
+                "value": "1"
+              },
+              {
+                "op": "ADD",
+                "opc": "expr",
+                "expr": "Binary"
+              },
+              {
+                "opc": "AssignStmt",
+                "name": "sum"
+              }
+            ],
+            "name": "j"
+          }],
+          "name": "j"
+        },
+        {
+          "opc": "expr",
+          "name": "sum",
+          "expr": "Var"
+        },
+        {
+          "opc": "expr",
+          "expr": "NUM_CONST",
+          "value": "2"
+        },
+        {
+          "op": "MULTIPLY",
+          "opc": "expr",
+          "expr": "Binary"
+        },
+        {
+          "opc": "flowControl",
+          "conditional": false,
+          "break": true,
+          "kind": "createMethodCallReturn"
+        }
+      ],
+      "type": "NUMBER"
+    },
+    "repX": {
+      "opc": "createMethodVoid",
+      "name": "repX",
+      "statements": [
+        {
+          "opc": "expr",
+          "expr": "NUM_CONST",
+          "value": "0"
+        },
+        {
+          "opc": "expr",
+          "name": "x1",
+          "expr": "Var"
+        },
+        {
+          "opc": "expr",
+          "expr": "NUM_CONST",
+          "value": "2"
+        },
+        {
+          "mode": "FOR",
+          "opc": "RepeatStmt",
+          "stmtList": [{
+            "mode": "FOR",
+            "opc": "RepeatStmtCont",
+            "stmtList": [
+              {
+                "opc": "expr",
+                "name": "sum",
+                "expr": "Var"
+              },
+              {
+                "opc": "expr",
+                "expr": "NUM_CONST",
+                "value": "1"
+              },
+              {
+                "op": "ADD",
+                "opc": "expr",
+                "expr": "Binary"
+              },
+              {
+                "opc": "AssignStmt",
+                "name": "sum"
+              }
+            ],
+            "name": "i"
+          }],
+          "name": "i"
+        },
+        {
+          "opc": "flowControl",
+          "conditional": false,
+          "break": true,
+          "kind": "createMethodCallVoid"
+        }
+      ]
+    }
+  }
+}

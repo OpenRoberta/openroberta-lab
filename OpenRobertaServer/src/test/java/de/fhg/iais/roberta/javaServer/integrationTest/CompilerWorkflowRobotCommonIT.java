@@ -62,11 +62,12 @@ import de.fhg.iais.roberta.util.testsetup.IntegrationTest;
 @RunWith(MockitoJUnitRunner.class)
 public class CompilerWorkflowRobotCommonIT {
     private static final Logger LOG = LoggerFactory.getLogger(CompilerWorkflowRobotCommonIT.class);
-    private static final boolean CROSSCOMPILER_CALL = true; // set to false, if the test logic has to be tested. NEVER commit with false.
-    private static final boolean SHOW_SUCCESS = true;
     private static final List<String> EMPTY_STRING_LIST = Collections.emptyList();
     private static final String RESOURCE_BASE = "/crossCompilerTests/common/";
     private static final String ORA_CC_RSC_ENVVAR = ServerProperties.CROSSCOMPILER_RESOURCE_BASE.replace('.', '_');
+
+    private boolean crosscompilerCall;
+    private boolean showSuccess;
 
     private JSONObject robotsFromTestSpec;
     private JSONObject progsFromTestSpec;
@@ -102,6 +103,8 @@ public class CompilerWorkflowRobotCommonIT {
         pluginMap = ServerStarter.configureRobotPlugins(robotCommunicator, serverProperties, EMPTY_STRING_LIST);
         httpSessionState = HttpSessionState.initOnlyLegalForDebugging(pluginMap, serverProperties, 1);
         JSONObject testSpecification = Util.loadYAML("classpath:/crossCompilerTests/common/testSpec.yml");
+        crosscompilerCall = testSpecification.getBoolean("crosscompilercall");
+        showSuccess = testSpecification.getBoolean("showsuccess");
         robotsFromTestSpec = testSpecification.getJSONObject("robots");
         progsFromTestSpec = testSpecification.getJSONObject("progs");
         Set<String> robots = robotsFromTestSpec.keySet();
@@ -215,7 +218,7 @@ public class CompilerWorkflowRobotCommonIT {
             String token = RandomUrlPostfix.generate(12, 12, 3, 3, 3);
             httpSessionState.setToken(token);
             template = generateFinalProgram(template, progName, prog);
-            if ( CROSSCOMPILER_CALL ) {
+            if ( crosscompilerCall ) {
                 setRobotTo(robotName);
                 org.codehaus.jettison.json.JSONObject cmd = JSONUtilForServer.mkD("{'programName':'prog','language':'de'}");
                 cmd.getJSONObject("data").put("programBlockSet", template);
@@ -257,7 +260,7 @@ public class CompilerWorkflowRobotCommonIT {
         LOG.info(String.format(format, name, fullResource));
         LOG.info("]]]]]]]]]]");
         if ( result ) {
-            if ( SHOW_SUCCESS ) {
+            if ( showSuccess ) {
                 results.add(String.format("succ; %-15s; %-60s;", name, fullResource));
             }
         } else {

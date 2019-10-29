@@ -1,0 +1,134 @@
+{
+  "ops": [
+    {
+      "opc": "expr",
+      "expr": "NUM_CONST",
+      "value": "0"
+    },
+    {
+      "opc": "VarDeclaration",
+      "name": "x",
+      "type": "NUMBER"
+    },
+    {
+      "mode": "WHILE",
+      "opc": "RepeatStmt",
+      "stmtList": [{
+        "mode": "WHILE",
+        "opc": "RepeatStmtCont",
+        "stmtList": [
+          {
+            "opc": "expr",
+            "name": "x",
+            "expr": "Var"
+          },
+          {
+            "opc": "expr",
+            "expr": "NUM_CONST",
+            "value": "2"
+          },
+          {
+            "op": "LT",
+            "opc": "expr",
+            "expr": "Binary"
+          },
+          {
+            "opc": "flowControl",
+            "conditional": true,
+            "break": true,
+            "kind": "RepeatStmt",
+            "BOOLEAN": false
+          },
+          {
+            "opc": "expr",
+            "name": "x",
+            "expr": "Var"
+          },
+          {"opc": "ShowTextAction"},
+          {
+            "opc": "expr",
+            "name": "x",
+            "expr": "Var"
+          },
+          {
+            "opc": "expr",
+            "expr": "NUM_CONST",
+            "value": "1"
+          },
+          {
+            "op": "ADD",
+            "opc": "expr",
+            "expr": "Binary"
+          },
+          {
+            "opc": "AssignStmt",
+            "name": "x"
+          }
+        ]
+      }]
+    },
+    {
+      "mode": "UNTIL",
+      "opc": "RepeatStmt",
+      "stmtList": [{
+        "mode": "UNTIL",
+        "opc": "RepeatStmtCont",
+        "stmtList": [
+          {
+            "opc": "expr",
+            "name": "x",
+            "expr": "Var"
+          },
+          {
+            "opc": "expr",
+            "expr": "NUM_CONST",
+            "value": "3"
+          },
+          {
+            "op": "GT",
+            "opc": "expr",
+            "expr": "Binary"
+          },
+          {
+            "op": "NOT",
+            "opc": "expr",
+            "expr": "Unary"
+          },
+          {
+            "opc": "flowControl",
+            "conditional": true,
+            "break": true,
+            "kind": "RepeatStmt",
+            "BOOLEAN": false
+          },
+          {
+            "opc": "expr",
+            "name": "x",
+            "expr": "Var"
+          },
+          {"opc": "ShowTextAction"},
+          {
+            "opc": "expr",
+            "name": "x",
+            "expr": "Var"
+          },
+          {
+            "opc": "expr",
+            "expr": "NUM_CONST",
+            "value": "1"
+          },
+          {
+            "op": "ADD",
+            "opc": "expr",
+            "expr": "Binary"
+          },
+          {
+            "opc": "AssignStmt",
+            "name": "x"
+          }
+        ]
+      }]
+    }
+  ],
+  "functionDeclaration": {}
+}

@@ -1,0 +1,91 @@
+{
+  "ops": [
+    {
+      "opc": "expr",
+      "expr": "NUM_CONST",
+      "value": "30"
+    },
+    {
+      "opc": "expr",
+      "expr": "NUM_CONST",
+      "value": "180"
+    },
+    {
+      "opc": "motorOnAction",
+      "port": "1",
+      "name": "w"
+    },
+    {
+      "opc": "motorStop",
+      "port": "1",
+      "name": "w"
+    },
+    {
+      "opc": "expr",
+      "expr": "NUM_CONST",
+      "value": "30"
+    },
+    {
+      "opc": "expr",
+      "expr": "NUM_CONST",
+      "value": -1
+    },
+    {
+      "opc": "motorOnAction",
+      "port": "1",
+      "name": "w"
+    },
+    {
+      "opc": "expr",
+      "expr": "NUM_CONST",
+      "value": "70"
+    },
+    {"opc": "WaitTimeSTMT"},
+    {
+      "opc": "motorStop",
+      "port": "1",
+      "name": "w"
+    },
+    {
+      "opc": "expr",
+      "expr": "NUM_CONST",
+      "value": "300"
+    },
+    {
+      "opc": "expr",
+      "expr": "NUM_CONST",
+      "value": "200"
+    },
+    {
+      "opc": "ToneAction",
+      "name": "w"
+    },
+    {
+      "opc": "expr",
+      "expr": "NUM_CONST",
+      "value": "261.626"
+    },
+    {
+      "opc": "expr",
+      "expr": "NUM_CONST",
+      "value": "2000"
+    },
+    {
+      "opc": "ToneAction",
+      "name": "w"
+    },
+    {
+      "opc": "expr",
+      "expr": "NUM_CONST",
+      "value": "70"
+    },
+    {"opc": "WaitTimeSTMT"},
+    {
+      "opc": "expr",
+      "expr": "STRING_CONST",
+      "value": "done"
+    },
+    {"opc": "ShowTextAction"}
+  ],
+  "functionDeclaration": {}
+}

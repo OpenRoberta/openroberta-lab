@@ -12,6 +12,8 @@ import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import de.fhg.iais.roberta.util.dbc.Assert;
+
 /**
  * <b>Testing the execution of stack machine code.</b> At the moment exclusively for the WeDo robot. To be extended to the simulation.<br>
  * <br>
@@ -44,12 +46,12 @@ import org.slf4j.LoggerFactory;
 public class StackMachineJsonRunner {
     private static final Logger LOG = LoggerFactory.getLogger(StackMachineJsonRunner.class);
 
-    private static final String TEMPDIR_IN_TARGET = "./target/generatedStackmachinePrograms/";
-
+    public final String generatedStackmachineProgramsDir;
     private List<String> resultsOfInterpretation;
 
-    public StackMachineJsonRunner() {
-        new File(TEMPDIR_IN_TARGET).mkdirs();
+    public StackMachineJsonRunner(String generatedStackmachineProgramsDir) {
+        this.generatedStackmachineProgramsDir = generatedStackmachineProgramsDir;
+        Assert.isTrue(new File(generatedStackmachineProgramsDir).isDirectory());
     }
 
     /**
@@ -62,15 +64,21 @@ public class StackMachineJsonRunner {
      */
     public boolean run(String programName, String programTextInclResultSpec, String stackmachineCode) throws Exception {
         final String utf8Charset = StandardCharsets.UTF_8.displayName();
-        FileUtils.writeStringToFile(new File(TEMPDIR_IN_TARGET + programName + ".json"), stackmachineCode, utf8Charset);
-        FileUtils.writeStringToFile(new File(TEMPDIR_IN_TARGET + programName + ".xml"), programTextInclResultSpec, utf8Charset);
-        String nodeCall = "node ../WedoInterpreter/jsGenerated/_main.js" + " " + TEMPDIR_IN_TARGET + " " + programName;
-        resultsOfInterpretation = runCommand(nodeCall);
+        FileUtils.writeStringToFile(new File(generatedStackmachineProgramsDir + programName + ".json"), stackmachineCode, utf8Charset);
+        FileUtils.writeStringToFile(new File(generatedStackmachineProgramsDir + programName + ".xml"), programTextInclResultSpec, utf8Charset);
+        resultsOfInterpretation = runCommand("node", "../WedoInterpreter/jsGenerated/_main.js", generatedStackmachineProgramsDir, programName);
         return showAndEvaluateResult();
     }
 
-    private static List<String> runCommand(String command) throws Exception {
-        BufferedReader br = new BufferedReader(new InputStreamReader(Runtime.getRuntime().exec(command).getInputStream(), Charset.forName("UTF-8")));
+    private static List<String> runCommand(String... command) throws Exception {
+        ProcessBuilder processBuilder = new ProcessBuilder(command);
+        Process process = processBuilder.start();
+        int returnCode = process.waitFor();
+        LOG.info("node call returned error code " + returnCode);
+        if ( returnCode != 0 ) {
+            LOG.error("node call returned error code " + returnCode);
+        }
+        BufferedReader br = new BufferedReader(new InputStreamReader(process.getInputStream(), Charset.forName("UTF-8")));
         return br.lines().collect(Collectors.toList());
     }
 

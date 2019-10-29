@@ -1,0 +1,299 @@
+{
+  "ops": [
+    {
+      "opc": "expr",
+      "expr": "NUM_CONST",
+      "value": "0"
+    },
+    {
+      "opc": "VarDeclaration",
+      "name": "x",
+      "type": "NUMBER"
+    },
+    {
+      "opc": "expr",
+      "name": "x",
+      "expr": "Var"
+    },
+    {
+      "opc": "expr",
+      "expr": "NUM_CONST",
+      "value": "4"
+    },
+    {
+      "op": "ROOT",
+      "opc": "expr",
+      "expr": "SingleFunction"
+    },
+    {
+      "op": "ADD",
+      "opc": "expr",
+      "expr": "Binary"
+    },
+    {
+      "opc": "AssignStmt",
+      "name": "x"
+    },
+    {
+      "opc": "expr",
+      "name": "x",
+      "expr": "Var"
+    },
+    {
+      "opc": "expr",
+      "expr": "NUM_CONST",
+      "value": "-2"
+    },
+    {
+      "op": "ABS",
+      "opc": "expr",
+      "expr": "SingleFunction"
+    },
+    {
+      "op": "ADD",
+      "opc": "expr",
+      "expr": "Binary"
+    },
+    {
+      "opc": "AssignStmt",
+      "name": "x"
+    },
+    {
+      "opc": "expr",
+      "name": "x",
+      "expr": "Var"
+    },
+    {
+      "opc": "expr",
+      "expr": "NUM_CONST",
+      "value": "-4"
+    },
+    {
+      "op": "NEG",
+      "opc": "expr",
+      "expr": "Unary"
+    },
+    {
+      "op": "ADD",
+      "opc": "expr",
+      "expr": "Binary"
+    },
+    {
+      "opc": "AssignStmt",
+      "name": "x"
+    },
+    {
+      "opc": "expr",
+      "name": "x",
+      "expr": "Var"
+    },
+    {
+      "opc": "expr",
+      "expr": "NUM_CONST",
+      "value": "2"
+    },
+    {
+      "op": "EXP",
+      "opc": "expr",
+      "expr": "SingleFunction"
+    },
+    {
+      "op": "LN",
+      "opc": "expr",
+      "expr": "SingleFunction"
+    },
+    {
+      "op": "ADD",
+      "opc": "expr",
+      "expr": "Binary"
+    },
+    {
+      "opc": "AssignStmt",
+      "name": "x"
+    },
+    {
+      "opc": "expr",
+      "name": "x",
+      "expr": "Var"
+    },
+    {
+      "opc": "expr",
+      "expr": "NUM_CONST",
+      "value": "100"
+    },
+    {
+      "op": "LOG10",
+      "opc": "expr",
+      "expr": "SingleFunction"
+    },
+    {
+      "op": "ADD",
+      "opc": "expr",
+      "expr": "Binary"
+    },
+    {
+      "opc": "AssignStmt",
+      "name": "x"
+    },
+    {
+      "opc": "expr",
+      "name": "x",
+      "expr": "Var"
+    },
+    {
+      "opc": "expr",
+      "expr": "NUM_CONST",
+      "value": "2"
+    },
+    {
+      "op": "POW10",
+      "opc": "expr",
+      "expr": "SingleFunction"
+    },
+    {
+      "op": "ADD",
+      "opc": "expr",
+      "expr": "Binary"
+    },
+    {
+      "opc": "AssignStmt",
+      "name": "x"
+    },
+    {
+      "opc": "expr",
+      "name": "x",
+      "expr": "Var"
+    },
+    {
+      "opc": "expr",
+      "expr": "NUM_CONST",
+      "value": "5"
+    },
+    {
+      "opc": "expr",
+      "expr": "NUM_CONST",
+      "value": "3"
+    },
+    {
+      "op": "MOD",
+      "opc": "expr",
+      "expr": "Binary"
+    },
+    {
+      "op": "ADD",
+      "opc": "expr",
+      "expr": "Binary"
+    },
+    {
+      "opc": "AssignStmt",
+      "name": "x"
+    },
+    {
+      "opc": "expr",
+      "name": "x",
+      "expr": "Var"
+    },
+    {
+      "opc": "expr",
+      "expr": "createMathConstant",
+      "value": "PI"
+    },
+    {
+      "opc": "expr",
+      "expr": "NUM_CONST",
+      "value": "2"
+    },
+    {
+      "op": "DIVIDE",
+      "opc": "expr",
+      "expr": "Binary"
+    },
+    {
+      "op": "SIN",
+      "opc": "expr",
+      "expr": "SingleFunction"
+    },
+    {
+      "op": "ADD",
+      "opc": "expr",
+      "expr": "Binary"
+    },
+    {
+      "opc": "AssignStmt",
+      "name": "x"
+    },
+    {
+      "opc": "expr",
+      "name": "x",
+      "expr": "Var"
+    },
+    {
+      "opc": "expr",
+      "expr": "NUM_CONST",
+      "value": "42.8"
+    },
+    {
+      "op": "ROUNDDOWN",
+      "opc": "expr",
+      "expr": "SingleFunction"
+    },
+    {
+      "op": "ADD",
+      "opc": "expr",
+      "expr": "Binary"
+    },
+    {
+      "opc": "AssignStmt",
+      "name": "x"
+    },
+    {
+      "opc": "expr",
+      "name": "x",
+      "expr": "Var"
+    },
+    {
+      "opc": "expr",
+      "expr": "NUM_CONST",
+      "value": "2"
+    },
+    {
+      "opc": "expr",
+      "expr": "NUM_CONST",
+      "value": "1"
+    },
+    {
+      "opc": "expr",
+      "expr": "NUM_CONST",
+      "value": "100"
+    },
+    {
+      "opc": "expr",
+      "expr": "MathConstrainFunct"
+    },
+    {
+      "op": "ADD",
+      "opc": "expr",
+      "expr": "Binary"
+    },
+    {
+      "opc": "AssignStmt",
+      "name": "x"
+    },
+    {
+      "opc": "expr",
+      "expr": "STRING_CONST",
+      "value": "expected: 159, got: "
+    },
+    {
+      "opc": "expr",
+      "name": "x",
+      "expr": "Var"
+    },
+    {
+      "NUMBER": 2,
+      "opc": "createTextJoin"
+    },
+    {"opc": "ShowTextAction"}
+  ],
+  "functionDeclaration": {}
+}

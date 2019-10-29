@@ -62,7 +62,7 @@ public class ServerProperties {
         if ( crosscompilerResourceDir == null || crosscompilerResourceDir.trim().isEmpty() ) {
             crosscompilerResourceDir = System.getenv(CROSSCOMPILER_RESOURCE_BASE.replace('.', '_'));
             if ( crosscompilerResourceDir == null ) {
-                LOG.warn("could not allocate a the crosscompiler resource directory, using '.' as default. This will NOT work, if the directory is needed.");
+                LOG.warn("could not allocate the crosscompiler resource directory, using '.' as default. This will NOT work, if the directory is needed.");
                 crosscompilerResourceDir = "./";
             }
         }

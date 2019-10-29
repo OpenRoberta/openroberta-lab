@@ -89,12 +89,12 @@ public class UtilForHtmlXml {
         HtmlChangeListener<List<String>> htmlChangeListener = new HtmlChangeListener<List<String>>() {
             @Override
             public void discardedTag(List<String> arg0, String tagName) {
-                UtilForHtmlXml.LOG.error("Discarding tag: " + tagName);
+                UtilForHtmlXml.LOG.debug("Discarding tag: " + tagName);
             }
 
             @Override
             public void discardedAttributes(List<String> arg0, String arg1, String... attributes) {
-                UtilForHtmlXml.LOG.error("Discarding attribute: " + arg1);
+                UtilForHtmlXml.LOG.debug("Discarding attribute: " + arg1);
             }
         };
 

@@ -4,6 +4,7 @@ import static org.junit.Assert.fail;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -65,20 +66,25 @@ import de.fhg.iais.roberta.util.testsetup.IntegrationTest;
 public class CompilerWorkflowRobotSpecificIT {
     private static final Logger LOG = LoggerFactory.getLogger(CompilerWorkflowRobotSpecificIT.class);
 
+    private static final String TEST_SPEC_YAML = "testSpec.yml";
+    // private static final String TEST_SPEC_YAML = "testSpecOnlyWedo.yml";
+
     private static final List<String> EMPTY_STRING_LIST = Collections.emptyList();
-    private static final boolean CROSSCOMPILER_CALL = true;
-    private static final boolean SHOW_SUCCESS = true;
     private static final String ORA_CC_RSC_ENVVAR = ServerProperties.CROSSCOMPILER_RESOURCE_BASE.replace('.', '_');
 
-    private JSONObject robots;
-    private String resourceBase;
+    private static JSONObject robots;
+    private static boolean crosscompilerCall;
+    private static boolean showSuccess;
+
+    private static String resourceBase;
+    private static String generatedStackmachineProgramsDir;
+
+    private static RobotCommunicator robotCommunicator;
+    private static ServerProperties serverProperties;
+    private static Map<String, IRobotFactory> pluginMap;
+    private static HttpSessionState httpSessionState;
 
     private final List<String> results = new ArrayList<>();
-
-    private RobotCommunicator robotCommunicator;
-    private ServerProperties serverProperties;
-    private Map<String, IRobotFactory> pluginMap;
-    private HttpSessionState httpSessionState;
 
     @Mock
     private DbSession dbSession;
@@ -95,21 +101,26 @@ public class CompilerWorkflowRobotSpecificIT {
             LOG.error("the environment variable \"" + ORA_CC_RSC_ENVVAR + "\" must contain the absolute path to the ora-cc-rsc repository - test fails");
             fail();
         }
-    }
-
-    @Before
-    public void setup() throws Exception {
         Properties baseServerProperties = Util.loadProperties(null);
         serverProperties = new ServerProperties(baseServerProperties);
         robotCommunicator = new RobotCommunicator();
         pluginMap = ServerStarter.configureRobotPlugins(robotCommunicator, serverProperties, EMPTY_STRING_LIST);
         httpSessionState = HttpSessionState.initOnlyLegalForDebugging(pluginMap, serverProperties, 1);
 
-        resourceBase = "/crossCompilerTests/robotSpecific/";
-        JSONObject testSpecification = Util.loadYAML("classpath:" + resourceBase + "testSpec.yml");
-        robots = testSpecification.getJSONObject("robots");
+        String tempDir = serverProperties.getTempDir().replace("\\", "/");
+        generatedStackmachineProgramsDir = tempDir + "generatedStackmachinePrograms/";
+        org.apache.commons.io.FileUtils.forceMkdir(new File(generatedStackmachineProgramsDir));
 
-        this.restWorkflow = new ProjectWorkflowRestController(this.robotCommunicator);
+        resourceBase = "/crossCompilerTests/robotSpecific/";
+        JSONObject testSpecification = Util.loadYAML("classpath:" + resourceBase + TEST_SPEC_YAML);
+        robots = testSpecification.getJSONObject("robots");
+        crosscompilerCall = testSpecification.getBoolean("crosscompilercall");
+        showSuccess = testSpecification.getBoolean("showsuccess");
+    }
+
+    @Before
+    public void setup() throws Exception {
+        this.restWorkflow = new ProjectWorkflowRestController(robotCommunicator);
         this.restAdmin = new ClientAdmin(robotCommunicator, serverProperties);
         when(this.sessionFactoryWrapper.getSession()).thenReturn(this.dbSession);
         doNothing().when(this.dbSession).commit();
@@ -138,11 +149,13 @@ public class CompilerWorkflowRobotSpecificIT {
         boolean resultAcc = true;
         LOG.info("XXXXXXXXXX START of the NEPO cross compiler tests XXXXXXXXXX");
         for ( final String robotName : robots.keySet() ) {
-            final String robotDir = robots.getJSONObject(robotName).getString("dir");
+            JSONObject robot = robots.getJSONObject(robotName);
+            final String robotDir = robot.getString("dir");
             final String resourceDirectory = resourceBase + robotDir;
+            final boolean evalGeneratedProgram = robot.optBoolean("eval", false);
             setRobotTo(robotName);
             Boolean resultNext = FileUtils.fileStreamOfResourceDirectory(resourceDirectory).//
-                filter(f -> f.endsWith(".xml")).map(f -> compileNepo(robotName, robotDir, f)).reduce(true, (a, b) -> a && b);
+                filter(f -> f.endsWith(".xml")).map(f -> compileNepo(robotName, robotDir, evalGeneratedProgram, f)).reduce(true, (a, b) -> a && b);
             resultAcc = resultAcc && resultNext;
         }
         if ( resultAcc ) {
@@ -159,8 +172,9 @@ public class CompilerWorkflowRobotSpecificIT {
         final String robotName = "wedo";
         final String programFileName = "ci_motor-and-tone";
         final String robotDir = robots.getJSONObject(robotName).getString("dir");
+        final boolean evalGeneratedProgram = true;
         setRobotTo(robotName);
-        boolean result = compileNepo(robotName, robotDir, programFileName + ".xml");
+        boolean result = compileNepo(robotName, robotDir, evalGeneratedProgram, programFileName + ".xml");
         if ( !result ) {
             fail();
         }
@@ -185,30 +199,30 @@ public class CompilerWorkflowRobotSpecificIT {
         }
     }
 
-    private boolean compileNepo(String robotName, String robotDir, String resource) {
+    private boolean compileNepo(String robotName, String robotDir, boolean evalGeneratedProgram, String resource) {
         httpSessionState.setToken(RandomUrlPostfix.generate(12, 12, 3, 3, 3));
         String expectResult = resource.startsWith("error") ? "error" : "ok";
-        String fullResource = this.resourceBase + robotDir + "/" + resource;
+        String fullResource = resourceBase + robotDir + "/" + resource;
         try {
             logStart(robotName, fullResource);
             boolean result = false;
             org.codehaus.jettison.json.JSONObject entity = null;
-            if ( CROSSCOMPILER_CALL ) {
+            if ( crosscompilerCall ) {
                 org.codehaus.jettison.json.JSONObject cmd = JSONUtilForServer.mkD("{'programName':'prog','language':'de'}");
 
                 String xmlText = Util.readResourceContent(fullResource);
                 Export jaxbImportExport = JaxbHelper.xml2Element(xmlText, Export.class);
                 String programText = JaxbHelper.blockSet2xml(jaxbImportExport.getProgram().getBlockSet());
                 cmd.getJSONObject("data").put("programBlockSet", xmlText);
-
-                Response response = this.restWorkflow.compileProgram(this.httpSessionState, cmd);
+                Response response = this.restWorkflow.compileProgram(httpSessionState, cmd);
                 entity = checkEntityRc(response, expectResult, "ORA_PROGRAM_INVALID_STATEMETNS");
                 result = entity != null;
-                if ( result && robotName.equals("wedo") ) {
+                if ( result && robotName.equals("wedo") && evalGeneratedProgram ) {
                     String compiledCode = entity.optString("compiledCode", null);
                     if ( compiledCode != null ) {
                         final String programName = resource.substring(0, resource.length() - 4);
-                        result = new StackMachineJsonRunner().run(programName, programText, compiledCode);
+                        StackMachineJsonRunner stackmachineRunner = new StackMachineJsonRunner(generatedStackmachineProgramsDir);
+                        result = stackmachineRunner.run(programName, programText, compiledCode);
                     } else {
                         LOG.error("no compiled code found for program " + resource);
                         result = false;
@@ -238,11 +252,11 @@ public class CompilerWorkflowRobotSpecificIT {
         try {
             logStart(robotName, fullResource);
             setRobotTo(robotName);
-            if ( CROSSCOMPILER_CALL ) {
+            if ( crosscompilerCall ) {
                 org.codehaus.jettison.json.JSONObject cmd = JSONUtilForServer.mkD("{'programName':'" + resource + "','language':'de'}");
                 String fileContent = Util.readResourceContent(fullResource);
                 cmd.getJSONObject("data").put("programText", fileContent);
-                Response response = this.restWorkflow.compileNative(this.httpSessionState, cmd);
+                Response response = this.restWorkflow.compileNative(httpSessionState, cmd);
                 result = checkEntityRc(response, expectResult) != null;
             } else {
                 result = true;
@@ -267,12 +281,15 @@ public class CompilerWorkflowRobotSpecificIT {
         if ( result ) {
             format = "++++++++++ Robot: %-15s succeeded compile file: %s";
         } else {
+            if ( thw != null ) {
+                LOG.error("EXCEPTION", thw);
+            }
             format = "---------- Robot: %-15s FAILED (" + cause + ") compile file: %s";
         }
         LOG.info(String.format(format, name, fullResource));
         LOG.info("]]]]]]]]]]");
         if ( result ) {
-            if ( SHOW_SUCCESS ) {
+            if ( showSuccess ) {
                 results.add(String.format("succ; %-15s; %-60s;", name, fullResource));
             }
         } else {

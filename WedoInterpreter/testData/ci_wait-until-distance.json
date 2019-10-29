@@ -1,0 +1,50 @@
+{
+  "ops": [
+    {
+      "opc": "WaitStmt",
+      "stmtList": [
+        {
+          "GetSample": "infrared",
+          "opc": "GetSample",
+          "port": "1",
+          "name": "w1"
+        },
+        {
+          "opc": "expr",
+          "expr": "NUM_CONST",
+          "value": "8"
+        },
+        {
+          "op": "LT",
+          "opc": "expr",
+          "expr": "Binary"
+        },
+        {
+          "opc": "IfTrueStatement",
+          "stmtList": [{
+            "opc": "flowControl",
+            "conditional": false,
+            "break": true,
+            "kind": "WaitStmt"
+          }]
+        },
+        {
+          "opc": "expr",
+          "expr": "NUM_CONST",
+          "value": 1
+        },
+        {"opc": "WaitTimeSTMT"}
+      ]
+    },
+    {
+      "opc": "expr",
+      "expr": "COLOR_CONST",
+      "value": 9
+    },
+    {
+      "opc": "ledOnAction",
+      "name": "w1"
+    }
+  ],
+  "functionDeclaration": {}
+}

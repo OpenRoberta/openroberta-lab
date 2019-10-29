@@ -1,3 +1,6 @@
+crosscompilercall : true
+showsuccess: true
+
 robots:
     ev3lejosv1:
        template: ev3

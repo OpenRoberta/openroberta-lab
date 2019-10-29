@@ -1,7 +1,5 @@
 FROM ubuntu:18.04
 
-ARG LAST_RUN_OF_BASE=2019-04-09
-
 RUN apt-get update && apt-get -y upgrade && \
     apt-get install -y locales && \
     apt-get install -y tzdata && \

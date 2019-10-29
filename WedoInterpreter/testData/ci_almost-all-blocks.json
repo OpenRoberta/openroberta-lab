@@ -1,0 +1,276 @@
+{
+  "ops": [
+    {
+      "opc": "expr",
+      "expr": "NUM_CONST",
+      "value": "0"
+    },
+    {
+      "opc": "VarDeclaration",
+      "name": "x",
+      "type": "NUMBER"
+    },
+    {
+      "opc": "expr",
+      "expr": "STRING_CONST",
+      "value": "s"
+    },
+    {
+      "opc": "VarDeclaration",
+      "name": "s",
+      "type": "STRING"
+    },
+    {
+      "opc": "expr",
+      "expr": "NUM_CONST",
+      "value": "30"
+    },
+    {
+      "opc": "expr",
+      "expr": "NUM_CONST",
+      "value": "1000"
+    },
+    {
+      "opc": "motorOnAction",
+      "port": "1",
+      "name": "W"
+    },
+    {
+      "opc": "motorStop",
+      "port": "1",
+      "name": "W"
+    },
+    {
+      "opc": "expr",
+      "expr": "NUM_CONST",
+      "value": "30"
+    },
+    {
+      "opc": "expr",
+      "expr": "NUM_CONST",
+      "value": -1
+    },
+    {
+      "opc": "motorOnAction",
+      "port": "1",
+      "name": "W"
+    },
+    {
+      "opc": "expr",
+      "expr": "NUM_CONST",
+      "value": "500"
+    },
+    {"opc": "WaitTimeSTMT"},
+    {
+      "opc": "motorStop",
+      "port": "1",
+      "name": "W"
+    },
+    {"opc": "ClearDisplay"},
+    {
+      "opc": "expr",
+      "expr": "NUM_CONST",
+      "value": "261.626"
+    },
+    {
+      "opc": "expr",
+      "expr": "NUM_CONST",
+      "value": "2000"
+    },
+    {
+      "opc": "ToneAction",
+      "name": "W"
+    },
+    {
+      "opc": "expr",
+      "expr": "NUM_CONST",
+      "value": "300"
+    },
+    {
+      "opc": "expr",
+      "expr": "NUM_CONST",
+      "value": "100"
+    },
+    {
+      "opc": "ToneAction",
+      "name": "W"
+    },
+    {
+      "opc": "expr",
+      "expr": "COLOR_CONST",
+      "value": 9
+    },
+    {
+      "opc": "ledOnAction",
+      "name": "W"
+    },
+    {
+      "opc": "expr",
+      "expr": "NUM_CONST",
+      "value": "500"
+    },
+    {"opc": "WaitTimeSTMT"},
+    {
+      "opc": "statusLightAction",
+      "name": "W"
+    },
+    {
+      "opc": "createResetTimer",
+      "port": "1"
+    },
+    {
+      "opc": "expr",
+      "expr": "NUM_CONST",
+      "value": "500"
+    },
+    {"opc": "WaitTimeSTMT"},
+    {
+      "opc": "WaitStmt",
+      "stmtList": [
+        {
+          "GetSample": "infrared",
+          "opc": "GetSample",
+          "port": "1",
+          "name": "W"
+        },
+        {
+          "opc": "expr",
+          "expr": "NUM_CONST",
+          "value": "10"
+        },
+        {
+          "op": "LT",
+          "opc": "expr",
+          "expr": "Binary"
+        },
+        {
+          "opc": "IfTrueStatement",
+          "stmtList": [{
+            "opc": "flowControl",
+            "conditional": false,
+            "break": true,
+            "kind": "WaitStmt"
+          }]
+        },
+        {
+          "opc": "expr",
+          "expr": "NUM_CONST",
+          "value": 1
+        },
+        {"opc": "WaitTimeSTMT"}
+      ]
+    },
+    {
+      "opc": "WaitStmt",
+      "stmtList": [
+        {
+          "GetSample": "timer",
+          "opc": "GetSample",
+          "port": "1"
+        },
+        {
+          "opc": "expr",
+          "expr": "NUM_CONST",
+          "value": "500"
+        },
+        {
+          "op": "GT",
+          "opc": "expr",
+          "expr": "Binary"
+        },
+        {
+          "opc": "IfTrueStatement",
+          "stmtList": [{
+            "opc": "flowControl",
+            "conditional": false,
+            "break": true,
+            "kind": "WaitStmt"
+          }]
+        },
+        {
+          "opc": "expr",
+          "expr": "NUM_CONST",
+          "value": 1
+        },
+        {"opc": "WaitTimeSTMT"}
+      ]
+    },
+    {
+      "opc": "WaitStmt",
+      "stmtList": [
+        {
+          "GetSample": "gyro",
+          "opc": "GetSample",
+          "port": "1",
+          "name": "W",
+          "slot": "UP"
+        },
+        {
+          "opc": "IfTrueStatement",
+          "stmtList": [{
+            "opc": "flowControl",
+            "conditional": false,
+            "break": true,
+            "kind": "WaitStmt"
+          }]
+        },
+        {
+          "opc": "expr",
+          "expr": "NUM_CONST",
+          "value": 1
+        },
+        {"opc": "WaitTimeSTMT"}
+      ]
+    },
+    {
+      "opc": "WaitStmt",
+      "stmtList": [
+        {
+          "GetSample": "buttons",
+          "opc": "GetSample",
+          "name": "W"
+        },
+        {
+          "opc": "IfTrueStatement",
+          "stmtList": [{
+            "opc": "flowControl",
+            "conditional": false,
+            "break": true,
+            "kind": "WaitStmt"
+          }]
+        },
+        {
+          "opc": "expr",
+          "expr": "NUM_CONST",
+          "value": 1
+        },
+        {"opc": "WaitTimeSTMT"}
+      ]
+    },
+    {
+      "opc": "expr",
+      "expr": "STRING_CONST",
+      "value": "s enthält "
+    },
+    {
+      "opc": "expr",
+      "name": "s",
+      "expr": "Var"
+    },
+    {
+      "NUMBER": 2,
+      "opc": "createTextJoin"
+    },
+    {
+      "opc": "AssignStmt",
+      "name": "s"
+    },
+    {
+      "opc": "expr",
+      "name": "s",
+      "expr": "Var"
+    },
+    {"opc": "ShowTextAction"}
+  ],
+  "functionDeclaration": {}
+}

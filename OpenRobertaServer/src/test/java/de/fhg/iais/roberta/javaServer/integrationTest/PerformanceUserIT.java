@@ -28,8 +28,8 @@ import com.google.common.io.Resources;
 
 import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.javaServer.restServices.all.controller.ClientAdmin;
-import de.fhg.iais.roberta.javaServer.restServices.all.controller.ClientUser;
 import de.fhg.iais.roberta.javaServer.restServices.all.controller.ClientProgramController;
+import de.fhg.iais.roberta.javaServer.restServices.all.controller.ClientUser;
 import de.fhg.iais.roberta.javaServer.restServices.robot.RobotCommand;
 import de.fhg.iais.roberta.javaServer.restServices.robot.RobotDownloadProgram;
 import de.fhg.iais.roberta.main.ServerStarter;
@@ -188,7 +188,7 @@ public class PerformanceUserIT {
         // "pid" updates p2, has 2 programs, get list of programs, assert that the names match
         thinkTimeInMillisec += think(random, 0, 6);
         Timestamp lastChanged = this.memoryDbSetup.getOne("select LAST_CHANGED from PROGRAM where OWNER_ID = " + sId + " and name = 'p2'");
-        JSONObject fullRequest = new JSONObject("{\"log\":[];\"data\":{\"cmd\":\"saveP\";\"programName\":\"p2\"}}");
+        JSONObject fullRequest = new JSONObject("{\"log\":[];\"data\":{\"cmd\":\"save\";\"programName\":\"p2\"}}");
         fullRequest.getJSONObject("data").put("programText", this.theProgramOfAllUserLol).put("timestamp", lastChanged.getTime());
         response = this.restProject.updateProject(s, fullRequest);
         JSONUtilForServer.assertEntityRc(response, "ok", Key.PROGRAM_SAVE_SUCCESS);

@@ -1,3 +1,6 @@
+crosscompilercall : true
+showsuccess: true
+
 robots:
     ev3lejosv1:
         dir: ev3
@@ -47,3 +50,4 @@ robots:
     wedo:
         dir: wedo
         suffix: ".json"
+        eval: true

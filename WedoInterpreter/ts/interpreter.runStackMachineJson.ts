@@ -2,7 +2,6 @@ import { RobotWeDoBehaviourTest } from 'interpreter.robotWeDoBehaviourTest';
 import { Interpreter } from 'interpreter.interpreter';
 import * as U from 'interpreter.util';
 import * as FS from 'fs';
-import * as HTML from 'html-entities'
 
 // general settings: directory with test files, extent of debugging (opLog is VERY gossipy)
 const showResult = false;
@@ -19,22 +18,26 @@ var allResults: any = {};
 const arg1 = process.argv[2];
 const arg2 = process.argv[3];
 
-if ( arg1 === '-d' ) {
-    if ( arg2 !== null && arg2 !== undefined && arg2.charAt( arg2.length - 1 ) === '/' ) {
-        directory = true;
-        baseDirectory = arg2;
-        processDirectory();
+try {
+    if ( arg1 === '-d' ) {
+        if ( arg2 !== null && arg2 !== undefined && arg2.charAt( arg2.length - 1 ) === '/' ) {
+            directory = true;
+            baseDirectory = arg2;
+            processDirectory();
+        } else {
+            p( MARK + ' -d needs a dir name (terminated by /) as second parameter - call aborted ' + MARK );
+        }
+    } else if ( arg1 !== null && arg1 !== undefined && arg1.charAt( arg1.length - 1 ) === '/' && arg2 !== null && arg2 !== undefined ) {
+        directory = false;
+        baseDirectory = arg1;
+        const fileName = arg2;
+        allXmlFiles.unshift( fileName );
+        processOps( allXmlFiles.pop() );
     } else {
-        p( MARK + ' -d needs a dir name (terminated by /) as second parameter - call aborted ' + MARK );
+        p( MARK + ' either use "-d <dir terminated by />" for all files from a dir or "<dir terminated by /> <file> for one file. Call aborted ' + MARK );
     }
-} else if ( arg1 !== null && arg1 !== undefined && arg1.charAt( arg1.length - 1 ) === '/' && arg2 !== null && arg2 !== undefined ) {
-    directory = false;
-    baseDirectory = arg1;
-    const fileName = arg2;
-    allXmlFiles.unshift( fileName );
-    processOps( allXmlFiles.pop() );
-} else {
-    p( MARK + ' either use "-d <dir terminated by />" for all files from a dir or "<dir terminated by /> <file> for one file. Call aborted ' + MARK );
+} catch ( e ) {
+    p( MARK + ' exception caught: ' + e );
 }
 
 function processDirectory() {
@@ -57,7 +60,6 @@ function processDirectory() {
 
 /**
 * run the operations, that are stored in file '<fileName>.json'
-* Run 'npm install [-g] html-entities' before to install the module needed to extract the expected result from the program doc
 */
 function processOps( fileName: string ) {
     if ( fileName === null || fileName === undefined ) {
@@ -73,7 +75,7 @@ function processOps( fileName: string ) {
             interpreter.run( new Date().getTime() + MAX_MSEC_TO_RUN );
         }
     } catch ( e ) {
-        p( MARK + ' ' + fileName + '.json not readable? Compilation error? ' + MARK );
+        p( MARK + ' ' + fileName + ' terminated with exception ' + MARK );
         allResults[fileName] = 'NOT_FOUND';
         processOps( allXmlFiles.pop() );
     }
@@ -105,9 +107,7 @@ function callbackOnTermination( fileName: string ) {
     if ( matchArray === null ) {
         result = "NO-DATA";
     } else {
-        const Entities = HTML.AllHtmlEntities;
-        const entities = new Entities();
-        const expectedResult = entities.decode( matchArray[1] ).replace( /<.[a-z\/]*>/g, '\n' ).replace( /&nbsp;/g, ' ' );
+        const expectedResult = matchArray[1].replace( /&amp;/g, '&' ).replace( /&nbsp;/g, ' ' ).replace( /&quot;/g, '"' ).replace( /&lt;[a-zA-Z;\/]*&gt;/g, '\n' );
         const expectedLinesRaw = expectedResult.trim().split( /[\r\n]+/ );
         const expectedLines = [];
         for ( let line of expectedLinesRaw ) {
