@@ -54,8 +54,7 @@ public final class VorwerkPythonVisitor extends AbstractPythonVisitor implements
         UsedHardwareBean usedHardwareBean,
         CodeGeneratorSetupBean codeGeneratorSetupBean,
         ConfigurationAst brickConfiguration,
-        ArrayList<ArrayList<Phrase<Void>>> programPhrases,
-        ILanguage language) {
+        ArrayList<ArrayList<Phrase<Void>>> programPhrases) {
         super(usedHardwareBean, codeGeneratorSetupBean, programPhrases);
 
         this.brickConfiguration = brickConfiguration;

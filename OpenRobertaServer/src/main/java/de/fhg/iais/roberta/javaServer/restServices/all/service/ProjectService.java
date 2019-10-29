@@ -2,9 +2,6 @@ package de.fhg.iais.roberta.javaServer.restServices.all.service;
 
 import java.util.List;
 
-import javax.xml.bind.JAXBException;
-
-import org.codehaus.jettison.json.JSONException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,7 +15,7 @@ public final class ProjectService {
     private ProjectService() {
     }
 
-    public static void executeWorkflow(String workflowName, IRobotFactory robotFactory, Project project) throws JSONException, JAXBException {
+    public static void executeWorkflow(String workflowName, IRobotFactory robotFactory, Project project) {
         List<IWorker> workflowPipe = robotFactory.getWorkerPipe(workflowName);
         if ( project.hasSucceeded() ) {
             for ( IWorker worker : workflowPipe ) {

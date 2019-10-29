@@ -17,6 +17,7 @@ public class VorwerkTransferWorker implements IWorker {
     public void execute(Project project) {
         CompilerSetupBean compilerWorkflowBean = (CompilerSetupBean) project.getWorkerResult("CompilerSetup");
         VorwerkCommunicator vorwerkCommunicator = new VorwerkCommunicator(compilerWorkflowBean.getCompilerResourcesDir());
+        vorwerkCommunicator.setCredentials(project.getConfigurationAst().getIpAddress(), project.getConfigurationAst().getUserName(), project.getConfigurationAst().getPassword());
         final String tempDir = compilerWorkflowBean.getTempDir();
         try {
             String programLocation = tempDir + project.getToken() + File.separator + project.getProgramName() + File.separator + "source";

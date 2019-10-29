@@ -152,6 +152,22 @@ public class ConfigurationAst {
         return map;
     }
 
+    public String getIpAddress() {
+        return this.ipAddress;
+    }
+
+    public String getPortNumber() {
+        return this.portNumber;
+    }
+
+    public String getUserName() {
+        return this.userName;
+    }
+
+    public String getPassword() {
+        return this.password;
+    }
+
     public BlockSet generateBlockSet() {
         final BlockSet blockSet = new BlockSet();
         this.configurationComponents.values().forEach(v -> {

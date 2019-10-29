@@ -23,7 +23,6 @@ public final class VorwerkUsedHardwareCollectorVisitor extends AbstractUsedHardw
 
     public VorwerkUsedHardwareCollectorVisitor(
         UsedHardwareBean.Builder builder,
-        ArrayList<ArrayList<Phrase<Void>>> phrasesSet,
         ConfigurationAst brickConfiguration) {
         super(builder, brickConfiguration);
     }
