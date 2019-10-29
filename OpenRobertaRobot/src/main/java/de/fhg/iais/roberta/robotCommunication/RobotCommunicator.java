@@ -261,10 +261,6 @@ public class RobotCommunicator {
                 return Key.ROBOT_NOT_WAITING;
             }
         }
-        //TODO this will be removed as soon as create-agent will be gone. 25.10.2019 - Artem Vinokurov
-        if ( robotName.equals("bob3") ) {
-            return Key.COMPILERWORKFLOW_SUCCESS;
-        }
         return Key.ROBOT_NOT_CONNECTED;
     }
 }
