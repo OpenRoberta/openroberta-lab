@@ -415,7 +415,7 @@ public final class BotnrollCppVisitor extends AbstractCommonArduinoCppVisitor im
         decrIndentation();
         mainTask.getVariables().accept(this);
         nlIndent();
-        if ( this.usedHardwareBean.isTimerSensorUsed() ) {
+        if ( this.usedHardwareBean.isSensorUsed(SC.TIMER) ) {
             nlIndent();
             this.sb.append("unsigned long __time = millis();");
         }

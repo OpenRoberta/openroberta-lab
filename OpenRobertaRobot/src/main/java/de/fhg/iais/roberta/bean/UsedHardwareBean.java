@@ -11,6 +11,7 @@ import java.util.Set;
 
 import de.fhg.iais.roberta.components.UsedActor;
 import de.fhg.iais.roberta.components.UsedSensor;
+import de.fhg.iais.roberta.syntax.SC;
 import de.fhg.iais.roberta.syntax.lang.expr.VarDeclaration;
 import de.fhg.iais.roberta.syntax.lang.methods.Method;
 
@@ -33,21 +34,7 @@ public class UsedHardwareBean {
 
     private Set<UsedSensor> usedSensors = new LinkedHashSet<>();
     private Set<UsedActor> usedActors = new LinkedHashSet<>();
-    private boolean isTimerSensorUsed = false;
     private Set<String> usedImages = new HashSet<>();
-    private boolean isSayTextUsed = false;
-
-    //TODO: from MbedUsedHardwareVisitor, needs refactoring
-    private boolean radioUsed;
-    private boolean accelerometerUsed;
-    private boolean greyScale;
-    private boolean fourDigitDisplayUsed;
-    private boolean ledBarUsed;
-    private boolean humidityUsed;
-    private boolean calliBotUsed;
-
-    //TODO: from NXT
-    private boolean isVolumeVariableNeeded;
 
     public List<VarDeclaration<Void>> getVisitedVars() {
         return this.visitedVars;
@@ -77,52 +64,20 @@ public class UsedHardwareBean {
         return this.usedActors;
     }
 
-    public boolean isTimerSensorUsed() {
-        return this.isTimerSensorUsed;
-    }
-
     public Set<String> getUsedImages() {
         return this.usedImages;
     }
 
-    public boolean isSayTextUsed() {
-        return this.isSayTextUsed;
+    public boolean isSensorUsed(String type) {
+        return this.usedSensors.stream().anyMatch(usedSensor -> usedSensor.getType().equals(type));
     }
 
-    public boolean isRadioUsed() {
-        return this.radioUsed;
-    }
-
-    public boolean isAccelerometerUsed() {
-        return this.accelerometerUsed;
-    }
-
-    public boolean isGreyScale() {
-        return this.greyScale;
-    }
-
-    public boolean isFourDigitDisplayUsed() {
-        return this.fourDigitDisplayUsed;
-    }
-
-    public boolean isLedBarUsed() {
-        return this.ledBarUsed;
-    }
-
-    public boolean isHumidityUsed() {
-        return this.humidityUsed;
-    }
-
-    public boolean isCalliBotUsed() {
-        return this.calliBotUsed;
+    public boolean isActorUsed(String type) {
+        return this.usedActors.stream().anyMatch(usedActor -> usedActor.getType().equals(type));
     }
 
     public Map<Integer, Boolean> getLoopsLabelContainer() {
         return loopsLabelContainer;
-    }
-
-    public boolean isVolumeVariableNeeded() {
-        return isVolumeVariableNeeded;
     }
 
     public static class Builder {
@@ -173,63 +128,13 @@ public class UsedHardwareBean {
             return this;
         }
 
-        public Builder setTimerSensorUsed(boolean isTimerSensorUsed) {
-            this.usedHardwareBean.isTimerSensorUsed = isTimerSensorUsed;
-            return this;
-        }
-
         public Builder addUsedImage(String usedImage) {
             this.usedHardwareBean.usedImages.add(usedImage);
             return this;
         }
 
-        public Builder setSayTextUsed(boolean isSayTextUsed) {
-            this.usedHardwareBean.isSayTextUsed = isSayTextUsed;
-            return this;
-        }
-
-        public Builder setRadioUsed(boolean radioUsed) {
-            this.usedHardwareBean.radioUsed = radioUsed;
-            return this;
-        }
-
-        public Builder setAccelerometerUsed(boolean accelerometerUsed) {
-            this.usedHardwareBean.accelerometerUsed = accelerometerUsed;
-            return this;
-        }
-
-        public Builder setGreyScale(boolean greyScale) {
-            this.usedHardwareBean.greyScale = greyScale;
-            return this;
-        }
-
-        public Builder setFourDigitDisplayUsed(boolean fourDigitDisplayUsed) {
-            this.usedHardwareBean.fourDigitDisplayUsed = fourDigitDisplayUsed;
-            return this;
-        }
-
-        public Builder setLedBarUsed(boolean ledBarUsed) {
-            this.usedHardwareBean.ledBarUsed = ledBarUsed;
-            return this;
-        }
-
-        public Builder setHumidityUsed(boolean humidityUsed) {
-            this.usedHardwareBean.humidityUsed = humidityUsed;
-            return this;
-        }
-
-        public Builder setCalliBotUsed(boolean calliBotUsed) {
-            this.usedHardwareBean.calliBotUsed = calliBotUsed;
-            return this;
-        }
-
         public Builder putLoopLabel(int loop, boolean isInWait) {
             this.usedHardwareBean.loopsLabelContainer.put(loop, isInWait);
-            return this;
-        }
-
-        public Builder setVolumeVariableNeeded(boolean isVolumeVariableNeeded) {
-            this.usedHardwareBean.isVolumeVariableNeeded = isVolumeVariableNeeded;
             return this;
         }
 

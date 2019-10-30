@@ -39,7 +39,7 @@ public class EV3ProgramUsedHardwareCheckTest extends Ev3LejosAstTest {
         //            "/visitors/hardware_check4.xml",
         //            "[UsedSensor [4, INFRARED, DISTANCE], UsedSensor [4, ULTRASONIC, DISTANCE], UsedSensor [1, TOUCH, DEFAULT]]",
         //            "[UsedActor [B, LARGE], UsedActor [A, LARGE]]");
-        runTest("/ast/control/wait_stmt.xml", "[]", "[]");
+        runTest("/ast/control/wait_stmt.xml", "[UsedSensor [1, TIMER, VALUE]]", "[]");
         runTest("/ast/control/wait_stmt1.xml", "[UsedSensor [1, TOUCH, PRESSED]]", "[]");
         runTest("/ast/control/wait_stmt2.xml", "[]", "[]");
         runTest("/ast/control/wait_stmt3.xml", "[UsedSensor [1, INFRARED, DISTANCE]]", "[]");

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import de.fhg.iais.roberta.bean.UsedHardwareBean;
 import de.fhg.iais.roberta.components.ConfigurationAst;
+import de.fhg.iais.roberta.components.UsedActor;
 import de.fhg.iais.roberta.components.UsedSensor;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.SC;
@@ -32,21 +33,21 @@ public final class NxtUsedHardwareCollectorVisitor extends AbstractUsedHardwareC
     @Override
     public Void visitVolumeAction(VolumeAction<Void> volumeAction) {
         super.visitVolumeAction(volumeAction);
-        this.builder.setVolumeVariableNeeded(true);
+        this.builder.addUsedActor(new UsedActor("", SC.SOUND));
         return null;
     }
 
     @Override
     public Void visitToneAction(ToneAction<Void> toneAction) {
         super.visitToneAction(toneAction);
-        this.builder.setVolumeVariableNeeded(true);
+        this.builder.addUsedActor(new UsedActor("", SC.SOUND));
         return null;
     }
 
     @Override
     public Void visitPlayNoteAction(PlayNoteAction<Void> playNoteAction) {
         super.visitPlayNoteAction(playNoteAction);
-        this.builder.setVolumeVariableNeeded(true);
+        this.builder.addUsedActor(new UsedActor("", SC.SOUND));
         return null;
     }
     /*TODO: rewrite it in a nicer way, check why it is not detecting inserted arrays, fix sensors

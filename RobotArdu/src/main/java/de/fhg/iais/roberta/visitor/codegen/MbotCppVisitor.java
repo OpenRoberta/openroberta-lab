@@ -373,7 +373,7 @@ public final class MbotCppVisitor extends AbstractCommonArduinoCppVisitor implem
         }
         nlIndent();
         //generateConfigurationVariables();
-        if ( this.usedHardwareBean.isTimerSensorUsed() ) {
+        if ( this.usedHardwareBean.isSensorUsed(SC.TIMER) ) {
             this.sb.append("unsigned long __time = millis();");
             nlIndent();
         }
@@ -382,7 +382,7 @@ public final class MbotCppVisitor extends AbstractCommonArduinoCppVisitor implem
                 .stream()
                 .filter(phrase -> phrase.getKind().getCategory() == Category.METHOD && !phrase.getKind().hasName("METHOD_CALL"))
                 .count();
-        if ( (this.configuration.getConfigurationComponents().isEmpty() || this.usedHardwareBean.isTimerSensorUsed()) && numberConf == 0 ) {
+        if ( (this.configuration.getConfigurationComponents().isEmpty() || this.usedHardwareBean.isSensorUsed(SC.TIMER)) && numberConf == 0 ) {
             nlIndent();
         }
         generateUserDefinedMethods();

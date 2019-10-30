@@ -3,6 +3,7 @@ package de.fhg.iais.roberta.visitor.collect;
 
 import de.fhg.iais.roberta.bean.UsedHardwareBean;
 import de.fhg.iais.roberta.components.ConfigurationAst;
+import de.fhg.iais.roberta.components.UsedActor;
 import de.fhg.iais.roberta.components.UsedSensor;
 import de.fhg.iais.roberta.syntax.SC;
 import de.fhg.iais.roberta.syntax.action.ev3.ShowPictureAction;
@@ -35,7 +36,7 @@ public final class Ev3UsedHardwareCollectorVisitor extends AbstractUsedHardwareC
     @Override
     public Void visitSayTextAction(SayTextAction<Void> sayTextAction) {
         super.visitSayTextAction(sayTextAction);
-        this.builder.setSayTextUsed(true);
+        this.builder.addUsedActor(new UsedActor("", SC.VOICE));
         return null;
     }
 

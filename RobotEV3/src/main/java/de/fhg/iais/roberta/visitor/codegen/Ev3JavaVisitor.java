@@ -671,7 +671,7 @@ public final class Ev3JavaVisitor extends AbstractJavaVisitor implements IEv3Vis
             this.sb.append("hal.startLogging();");
             this.isInDebugMode = true;
         }
-        if ( this.usedHardwareBean.isSayTextUsed() && !this.brickConfiguration.getRobotName().equals("ev3lejosv0") ) {
+        if ( this.usedHardwareBean.isActorUsed(SC.VOICE) && !this.brickConfiguration.getRobotName().equals("ev3lejosv0") ) {
             nlIndent();
             this.sb.append("hal.setLanguage(\"");
             this.sb.append(TTSLanguageMapper.getLanguageString(this.language));
@@ -1079,8 +1079,10 @@ public final class Ev3JavaVisitor extends AbstractJavaVisitor implements IEv3Vis
         StringBuilder sb = new StringBuilder();
         String arrayOfSensors = "";
         for ( UsedSensor usedSensor : this.usedHardwareBean.getUsedSensors() ) {
-            arrayOfSensors += generateRegenerateUsedSensor(usedSensor);
-            arrayOfSensors += ", ";
+            if (!usedSensor.getType().equals(SC.TIMER)) { // TODO this should be handled differently
+                arrayOfSensors += generateRegenerateUsedSensor(usedSensor);
+                arrayOfSensors += ", ";
+            }
         }
 
         sb.append("private Set<UsedSensor> usedSensors = " + "new LinkedHashSet<UsedSensor>(");

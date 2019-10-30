@@ -401,7 +401,7 @@ public final class MicrobitPythonVisitor extends AbstractPythonVisitor implement
         nlIndent();
         this.sb.append("import math");
         nlIndent();
-        if ( this.usedHardwareBean.isRadioUsed() ) {
+        if ( this.usedHardwareBean.isActorUsed(SC.RADIO) ) {
             this.sb.append("import radio");
             nlIndent();
         }
@@ -412,7 +412,7 @@ public final class MicrobitPythonVisitor extends AbstractPythonVisitor implement
         nlIndent();
         nlIndent();
         this.sb.append("timer1 = microbit.running_time()");
-        if ( this.usedHardwareBean.isRadioUsed() ) {
+        if ( this.usedHardwareBean.isActorUsed(SC.RADIO) ) {
             nlIndent();
             this.sb.append("radio.on()");
         }

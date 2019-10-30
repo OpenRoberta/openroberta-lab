@@ -187,7 +187,7 @@ public abstract class AbstractUsedHardwareCollectorVisitor extends AbstractColle
 
     @Override
     public Void visitTimerSensor(TimerSensor<Void> timerSensor) {
-        this.builder.setTimerSensorUsed(true);
+        this.builder.addUsedSensor(new UsedSensor(timerSensor.getPort(), SC.TIMER, timerSensor.getMode()));
         return null;
     }
 

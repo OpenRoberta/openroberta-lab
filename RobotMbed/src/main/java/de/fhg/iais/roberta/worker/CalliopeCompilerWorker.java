@@ -17,6 +17,7 @@ import de.fhg.iais.roberta.bean.UsedHardwareBean;
 import de.fhg.iais.roberta.codegen.AbstractCompilerWorkflow;
 import de.fhg.iais.roberta.codegen.CalliopeCompilerFlag;
 import de.fhg.iais.roberta.components.Project;
+import de.fhg.iais.roberta.syntax.SC;
 import de.fhg.iais.roberta.util.Key;
 import de.fhg.iais.roberta.util.Pair;
 import de.fhg.iais.roberta.util.Util;
@@ -34,7 +35,7 @@ public class CalliopeCompilerWorker implements IWorker {
         EnumSet<CalliopeCompilerFlag> compilerFlags =
             (usedHardwareBean == null)
                 ? EnumSet.noneOf(CalliopeCompilerFlag.class)
-                : (usedHardwareBean.isRadioUsed() ? EnumSet.of(CalliopeCompilerFlag.RADIO_USED) : EnumSet.noneOf(CalliopeCompilerFlag.class));
+                : (usedHardwareBean.isActorUsed(SC.RADIO) ? EnumSet.of(CalliopeCompilerFlag.RADIO_USED) : EnumSet.noneOf(CalliopeCompilerFlag.class));
         boolean isRadioUsed = compilerFlags.contains(CalliopeCompilerFlag.RADIO_USED);
 
         Pair<Key, String> workflowResult = runBuild(project, isRadioUsed);

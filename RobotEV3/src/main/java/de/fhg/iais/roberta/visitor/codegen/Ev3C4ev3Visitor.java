@@ -263,7 +263,7 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
     }
 
     private void generateTTSInitialization() {
-        if ( this.usedHardwareBean.isSayTextUsed() ) {
+        if ( this.usedHardwareBean.isActorUsed(SC.VOICE) ) {
             this.sb.append("SetLanguage(\"" + TTSLanguageMapper.getLanguageString(this.language) + "\");");
         }
     }

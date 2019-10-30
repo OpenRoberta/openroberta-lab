@@ -83,8 +83,6 @@ import de.fhg.iais.roberta.visitor.lang.codegen.prog.AbstractCppVisitor;
 /**
  * This class is implementing {@link IVisitor}. All methods are implemented and they append a human-readable NXC code representation of a phrase to a
  * StringBuilder. <b>This representation is correct NXC code for NXT.</b> <br>
- *
- * @param <V>
  */
 public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisitor<Void> {
 
@@ -820,10 +818,10 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
 
     @Override
     public Void visitMainTask(MainTask<Void> mainTask) {
-        if ( this.usedHardwareBean.isVolumeVariableNeeded() ) {
+        if ( this.usedHardwareBean.isActorUsed(SC.SOUND) ) {
             this.sb.append("byte volume = 0x02;");
         }
-        if ( this.usedHardwareBean.isTimerSensorUsed() ) {
+        if ( this.usedHardwareBean.isSensorUsed(SC.TIMER) ) {
             nlIndent();
             this.sb.append("long timer1;");
         }
@@ -1344,7 +1342,7 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
                     break;
             }
         }
-        if ( this.usedHardwareBean.isTimerSensorUsed() ) {
+        if ( this.usedHardwareBean.isSensorUsed(SC.TIMER) ) {
             nlIndent();
             this.sb.append("SetTimerValue(timer1);");
         }

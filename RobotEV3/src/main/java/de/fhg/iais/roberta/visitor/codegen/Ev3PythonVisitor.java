@@ -680,7 +680,7 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
         nlIndent();
         this.sb.append("hal = Hal(_brickConfiguration)");
 
-        if ( this.usedHardwareBean.isSayTextUsed() ) {
+        if ( this.usedHardwareBean.isActorUsed(SC.VOICE) ) {
             nlIndent();
             this.sb.append("hal.setLanguage(\"");
             this.sb.append(TTSLanguageMapper.getLanguageString(this.language));
