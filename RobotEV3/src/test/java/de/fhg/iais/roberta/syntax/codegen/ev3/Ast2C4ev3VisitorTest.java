@@ -175,7 +175,7 @@ public class Ast2C4ev3VisitorTest extends Ev3C4ev3AstTest {
                 + "if ( 5 < MotorPower(OUT_B) ) {\n"
                 + "    OnFwdReg(OUT_B, Speed(30));\n"
                 + "    RotateMotorForAngle(OUT_B, Speed(30), 360 * 1);\n"
-                + "    OnFwdSyncEx(OUT_AB, Speed(50), -200, RESET_NONE);"
+                + "    OnFwdSyncEx(OUT_AB, Speed(50), 200, RESET_NONE);"
                 + "}\n"
                 + "if ( ((MotorRotationCount(OUT_A) / 360.0) + ReadEV3IrSensorProximity(IN_3)) == ReadEV3UltrasonicSensorDistance(IN_4, CM) ) {\n"
                 + "    SetLedPattern(LED_BLACK);\n"

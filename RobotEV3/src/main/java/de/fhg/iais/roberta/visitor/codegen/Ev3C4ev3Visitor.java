@@ -96,6 +96,7 @@ import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
+import de.fhg.iais.roberta.util.Pair;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.visitor.codegen.utilities.TTSLanguageMapper;
 import de.fhg.iais.roberta.visitor.hardware.IEv3Visitor;
@@ -864,7 +865,7 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
     }
 
     private void generateDriveForDistance(Expr<Void> speedExpression, Expr<Void> distanceExpression, boolean reverse) {
-        this.sb.append("RotateMotorForAngle(" + getDriveMotorPorts() + ", ");
+        this.sb.append("RotateMotorForAngle(" + getDriveMotorPortsConstant() + ", ");
         visitSpeedExpression(speedExpression, reverse);
         this.sb.append(", ");
         visitDistanceOfDrive(distanceExpression);
@@ -879,7 +880,7 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
 
     private void generateDrive(Expr<Void> speedExpression, boolean reverse) {
         String methodName = reverse ? "OnRevSync" : "OnFwdSync";
-        this.sb.append(methodName + "(" + getDriveMotorPorts() + ", ");
+        this.sb.append(methodName + "(" + getDriveMotorPortsConstant() + ", ");
         visitSpeedExpression(speedExpression);
         this.sb.append(");");
     }
@@ -915,7 +916,7 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
 
     @Override
     public Void visitMotorDriveStopAction(MotorDriveStopAction<Void> stopAction) {
-        this.sb.append("Off(" + getDriveMotorPorts() + ");");
+        this.sb.append("Off(" + getDriveMotorPortsConstant() + ");");
         return null;
     }
 
@@ -949,6 +950,21 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
         return null;
     }
 
+    /**
+     * Returns whether the port order of the left and right motors needs to be reversed.
+     * This happens in {@link #getDriveMotorPortsConstant()} as the c4ev3 API only accepts the ports via ordered constants.
+     * This method is then used to check whether the order of the left and right (e.g C B - > B C) is reversed.
+     *
+     * @return whether the order of the left and right motors is reversed
+     */
+    private boolean isMotorLeftRightOrderReversed() {
+        Pair<String, String> driveMotorPorts = getDriveMotorPorts();
+        char[] charArray = (driveMotorPorts.getFirst() + driveMotorPorts.getSecond()).toCharArray();
+        char[] sortedCharArray = Arrays.copyOf(charArray, charArray.length);
+        Arrays.sort(sortedCharArray);
+        return !Arrays.equals(charArray, sortedCharArray);
+    }
+
     private int getTurn(TurnAction<Void> turnAction) {
         /**
          * Turn is from -200 to 200
@@ -960,7 +976,9 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
         if ( isAnyDriveMotorReverse() ) {
             turn *= -1;
         }
-        //if ( turnAction.getDirection() == TurnDirection.LEFT ) {
+        if ( !isMotorLeftRightOrderReversed() ) {
+            turn *= -1;
+        }
         if ( turnAction.getDirection() == TurnDirection.RIGHT ) {
             turn *= -1;
         }
@@ -968,7 +986,7 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
     }
 
     private void generateTurnForDistance(Expr<Void> speedExpression, Expr<Void> distanceExpression, int turn) {
-        this.sb.append("RotateMotorForAngleWithTurn(" + getDriveMotorPorts() + ", ");
+        this.sb.append("RotateMotorForAngleWithTurn(" + getDriveMotorPortsConstant() + ", ");
         visitSpeedExpression(speedExpression);
         this.sb.append(", ");
         visitDistanceOfTurn(distanceExpression);
@@ -982,7 +1000,7 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
     }
 
     private void generateTurn(Expr<Void> speedExpression, int turn) {
-        this.sb.append("OnFwdSyncEx(" + getDriveMotorPorts() + ", ");
+        this.sb.append("OnFwdSyncEx(" + getDriveMotorPortsConstant() + ", ");
         visitSpeedExpression(speedExpression);
         this.sb.append(", " + turn + ", RESET_NONE);");
 
@@ -1014,12 +1032,17 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
         return reverseProperty != null && reverseProperty.equals(SC.ON);
     }
 
-    private String getDriveMotorPorts() {
+    private Pair<String, String> getDriveMotorPorts() {
         ConfigurationComponent leftMotor = this.brickConfiguration.getFirstMotor(SC.LEFT);
         ConfigurationComponent rightMotor = this.brickConfiguration.getFirstMotor(SC.RIGHT);
         String leftMotorPort = leftMotor.getUserDefinedPortName();
         String rightMotorPort = rightMotor.getUserDefinedPortName();
-        return getMotorPortConstant(leftMotorPort + rightMotorPort);
+        return Pair.of(leftMotorPort, rightMotorPort);
+    }
+
+    private String getDriveMotorPortsConstant() {
+        Pair<String, String> driveMotorPorts = getDriveMotorPorts();
+        return getMotorPortConstant(driveMotorPorts.getFirst() + driveMotorPorts.getSecond());
     }
 
     private static String getMotorPortConstant(String ports) {

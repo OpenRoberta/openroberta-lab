@@ -207,16 +207,11 @@ public class ClientProgramController {
         ProgramProcessor programProcessor = new ProgramProcessor(dbSession, httpSessionState);
         JSONObject response = new JSONObject();
         try {
-            if ( !httpSessionState.isUserLoggedIn() ) {
-                LOG.error("Unauthorized");
-                UtilForREST.addErrorInfo(response, Key.USER_ERROR_NOT_LOGGED_IN);
-            } else {
-                String robot = getRobot(httpSessionState);
-                int userId = 1;
-                JSONArray programInfo = programProcessor.getProgramInfo(userId, robot, userId);
-                response.put("programNames", programInfo);
-                UtilForREST.addResultInfo(response, programProcessor);
-            }
+            String robot = getRobot(httpSessionState);
+            int userId = 1;
+            JSONArray programInfo = programProcessor.getProgramInfo(userId, robot, userId);
+            response.put("programNames", programInfo);
+            UtilForREST.addResultInfo(response, programProcessor);
         } catch ( DbcException | JSONException e ) {
             dbSession.rollback();
             String errorTicketId = Util.getErrorTicketId();
