@@ -111,7 +111,9 @@ define([ 'simulation.simulation', 'interpreter.constants', 'util', 'simulation.r
         });
         for (var i = 0; i < 4; i++) {
             if (this['pin' + i]) {
+                delete this['pin' + i].analogIn;
                 delete this['pin' + i].analogOut;
+                delete this['pin' + i].digitalIn;
                 delete this['pin' + i].digitalOut;
             }
         }
