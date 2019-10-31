@@ -11,8 +11,9 @@ import java.util.stream.Collectors;
 
 import org.apache.commons.text.StringEscapeUtils;
 
-import de.fhg.iais.roberta.bean.CodeGeneratorSetupBean;
-import de.fhg.iais.roberta.bean.UsedHardwareBean;
+import com.google.common.collect.ClassToInstanceMap;
+
+import de.fhg.iais.roberta.bean.IProjectBean;
 import de.fhg.iais.roberta.components.Category;
 import de.fhg.iais.roberta.inter.mode.general.IMode;
 import de.fhg.iais.roberta.syntax.Phrase;
@@ -52,25 +53,25 @@ public abstract class AbstractLanguageVisitor implements ILanguageVisitor<Void> 
     private int indentation = 0;
     private StringBuilder indent = new StringBuilder();
 
-    protected UsedHardwareBean usedHardwareBean;
-    protected CodeGeneratorSetupBean codeGeneratorSetupBean;
+    private final ClassToInstanceMap<IProjectBean> beans;
 
     /**
      * initialize the common language code generator visitor.
      */
-    public AbstractLanguageVisitor(
-        UsedHardwareBean usedHardwareBean,
-        CodeGeneratorSetupBean codeGeneratorSetupBean,
-        ArrayList<ArrayList<Phrase<Void>>> programPhrases) {
+    protected AbstractLanguageVisitor(List<ArrayList<Phrase<Void>>> programPhrases, ClassToInstanceMap<IProjectBean> beans) {
         Assert.isTrue(!programPhrases.isEmpty());
-        this.usedHardwareBean = usedHardwareBean;
-        this.codeGeneratorSetupBean = codeGeneratorSetupBean;
+        this.beans = beans;
+
         this.programPhrases =
             programPhrases
                 .stream()
                 .flatMap(e -> e.subList(1, e.size()).stream())
                 .filter(p -> p.getProperty().isInTask() == null ? true : p.getProperty().isInTask() && !p.getProperty().isDisabled()) //TODO check if we can avoid null value for inTask
                 .collect(Collectors.toList());
+    }
+
+    protected <T extends IProjectBean> T getBean(Class<T> clazz) {
+        return beans.getInstance(clazz);
     }
 
     public void setStringBuilders(StringBuilder sourceCode, StringBuilder indentation) {

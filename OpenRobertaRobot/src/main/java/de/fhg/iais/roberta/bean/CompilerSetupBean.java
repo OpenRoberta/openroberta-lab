@@ -4,7 +4,7 @@ package de.fhg.iais.roberta.bean;
  * Container for all compiler setup related information, to execute the runBuild, usually.
  * Paths necessary for the compilers and specific compiler options are stored here.
  */
-public class CompilerSetupBean {
+public class CompilerSetupBean implements IProjectBean {
 
     private String compilerBinDir;
     private String compilerResourcesDir;
@@ -32,7 +32,7 @@ public class CompilerSetupBean {
         return tempDir;
     }
 
-    public static class Builder {
+    public static class Builder implements IBuilder<CompilerSetupBean> {
         private final CompilerSetupBean compilerWorkflowBean = new CompilerSetupBean();
 
         public Builder setCompilerBinDir(String compilerBinDir) {

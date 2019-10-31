@@ -2,6 +2,9 @@ package de.fhg.iais.roberta.visitor.validate;
 
 import java.util.List;
 
+import com.google.common.collect.ClassToInstanceMap;
+
+import de.fhg.iais.roberta.bean.IProjectBean;
 import de.fhg.iais.roberta.bean.UsedHardwareBean;
 import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.components.ConfigurationComponent;
@@ -22,8 +25,8 @@ import de.fhg.iais.roberta.visitor.hardware.IEv3Visitor;
 
 public final class Ev3BrickValidatorVisitor extends AbstractBrickValidatorVisitor implements IEv3Visitor<Void> {
 
-    public Ev3BrickValidatorVisitor(UsedHardwareBean.Builder builder, ConfigurationAst brickConfiguration) {
-        super(builder, brickConfiguration);
+    public Ev3BrickValidatorVisitor(ConfigurationAst brickConfiguration, ClassToInstanceMap<IProjectBean.IBuilder<?>> beanBuilders) {
+        super(brickConfiguration, beanBuilders);
     }
 
     @Override
@@ -118,7 +121,7 @@ public final class Ev3BrickValidatorVisitor extends AbstractBrickValidatorVisito
     public Void visitHTColorSensor(HTColorSensor<Void> htColorSensor) {
         checkSensorPort(htColorSensor);
         String mode = htColorSensor.getMode();
-        this.builder.addUsedSensor(new UsedSensor(htColorSensor.getPort(), SC.HT_COLOR, mode));
+        this.getBuilder(UsedHardwareBean.Builder.class).addUsedSensor(new UsedSensor(htColorSensor.getPort(), SC.HT_COLOR, mode));
         return null;
     }
 }

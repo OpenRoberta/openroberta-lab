@@ -2,6 +2,9 @@ package de.fhg.iais.roberta.visitor.collect;
 
 import java.util.ArrayList;
 
+import com.google.common.collect.ClassToInstanceMap;
+
+import de.fhg.iais.roberta.bean.IProjectBean;
 import de.fhg.iais.roberta.bean.UsedHardwareBean;
 import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.components.UsedActor;
@@ -63,10 +66,10 @@ import de.fhg.iais.roberta.visitor.hardware.IMbedVisitor;
 public final class MbedUsedHardwareCollectorVisitor extends AbstractUsedHardwareCollectorVisitor implements IMbedVisitor<Void> {
 
     public MbedUsedHardwareCollectorVisitor(
-        UsedHardwareBean.Builder builder,
         ArrayList<ArrayList<Phrase<Void>>> phrasesSet,
-        ConfigurationAst robotConfiguration) {
-        super(builder, robotConfiguration);
+        ConfigurationAst robotConfiguration,
+        ClassToInstanceMap<IProjectBean.IBuilder<?>> beanBuilders) {
+        super(robotConfiguration, beanBuilders);
     }
 
     @Override
@@ -84,38 +87,38 @@ public final class MbedUsedHardwareCollectorVisitor extends AbstractUsedHardware
     @Override
     public Void visitRadioSendAction(RadioSendAction<Void> radioSendAction) {
         radioSendAction.getMsg().accept(this);
-        this.builder.addUsedActor(new UsedActor("", SC.RADIO));
+        this.getBuilder(UsedHardwareBean.Builder.class).addUsedActor(new UsedActor("", SC.RADIO));
         return null;
     }
 
     @Override
     public Void visitRadioReceiveAction(RadioReceiveAction<Void> radioReceiveAction) {
-        this.builder.addUsedActor(new UsedActor("", SC.RADIO));
+        this.getBuilder(UsedHardwareBean.Builder.class).addUsedActor(new UsedActor("", SC.RADIO));
         return null;
     }
 
     @Override
     public Void visitRadioSetChannelAction(RadioSetChannelAction<Void> radioSetChannelAction) {
         radioSetChannelAction.getChannel().accept(this);
-        this.builder.addUsedActor(new UsedActor("", SC.RADIO));
+        this.getBuilder(UsedHardwareBean.Builder.class).addUsedActor(new UsedActor("", SC.RADIO));
         return null;
     }
 
     @Override
     public Void visitGestureSensor(GestureSensor<Void> gestureSensor) {
-        this.builder.addUsedSensor(new UsedSensor(gestureSensor.getPort(), SC.ACCELEROMETER, gestureSensor.getMode()));
+        this.getBuilder(UsedHardwareBean.Builder.class).addUsedSensor(new UsedSensor(gestureSensor.getPort(), SC.ACCELEROMETER, gestureSensor.getMode()));
         return null;
     }
 
     @Override
     public Void visitCompassSensor(CompassSensor<Void> compassSensor) {
-        this.builder.addUsedSensor(new UsedSensor(compassSensor.getPort(), SC.ACCELEROMETER, compassSensor.getMode()));
+        this.getBuilder(UsedHardwareBean.Builder.class).addUsedSensor(new UsedSensor(compassSensor.getPort(), SC.ACCELEROMETER, compassSensor.getMode()));
         return null;
     }
 
     @Override
     public Void visitImage(Image<Void> image) {
-        this.builder.addUsedActor(new UsedActor("", SC.DISPLAY_GRAYSCALE));
+        this.getBuilder(UsedHardwareBean.Builder.class).addUsedActor(new UsedActor("", SC.DISPLAY_GRAYSCALE));
         return null;
     }
 
@@ -145,19 +148,19 @@ public final class MbedUsedHardwareCollectorVisitor extends AbstractUsedHardware
 
     @Override
     public Void visitDisplaySetBrightnessAction(DisplaySetBrightnessAction<Void> displaySetBrightnessAction) {
-        this.builder.addUsedActor(new UsedActor("", SC.DISPLAY_GRAYSCALE));
+        this.getBuilder(UsedHardwareBean.Builder.class).addUsedActor(new UsedActor("", SC.DISPLAY_GRAYSCALE));
         return null;
     }
 
     @Override
     public Void visitDisplayGetBrightnessAction(DisplayGetBrightnessAction<Void> displayGetBrightnessAction) {
-        this.builder.addUsedActor(new UsedActor("", SC.DISPLAY_GRAYSCALE));
+        this.getBuilder(UsedHardwareBean.Builder.class).addUsedActor(new UsedActor("", SC.DISPLAY_GRAYSCALE));
         return null;
     }
 
     @Override
     public Void visitDisplaySetPixelAction(DisplaySetPixelAction<Void> displaySetPixelAction) {
-        this.builder.addUsedActor(new UsedActor("", SC.DISPLAY_GRAYSCALE));
+        this.getBuilder(UsedHardwareBean.Builder.class).addUsedActor(new UsedActor("", SC.DISPLAY_GRAYSCALE));
         return null;
     }
 
@@ -168,7 +171,7 @@ public final class MbedUsedHardwareCollectorVisitor extends AbstractUsedHardware
 
     @Override
     public Void visitAccelerometer(AccelerometerSensor<Void> accelerometerSensor) {
-        this.builder.addUsedSensor(new UsedSensor(accelerometerSensor.getPort(), SC.ACCELEROMETER, accelerometerSensor.getMode()));
+        this.getBuilder(UsedHardwareBean.Builder.class).addUsedSensor(new UsedSensor(accelerometerSensor.getPort(), SC.ACCELEROMETER, accelerometerSensor.getMode()));
         return null;
     }
 
@@ -203,21 +206,21 @@ public final class MbedUsedHardwareCollectorVisitor extends AbstractUsedHardware
     public Void visitLedOnAction(LedOnAction<Void> ledOnAction) {
         ledOnAction.getLedColor().accept(this);
         if ( !ledOnAction.getPort().equals("0") ) {
-            this.builder.addUsedActor(new UsedActor("", SC.CALLIBOT));
+            this.getBuilder(UsedHardwareBean.Builder.class).addUsedActor(new UsedActor("", SC.CALLIBOT));
         }
         return null;
     }
 
     @Override
     public Void visitLightAction(LightAction<Void> lightAction) {
-        this.builder.addUsedActor(new UsedActor("", SC.CALLIBOT));
+        this.getBuilder(UsedHardwareBean.Builder.class).addUsedActor(new UsedActor("", SC.CALLIBOT));
         return null;
     }
 
     @Override
     public Void visitLightStatusAction(LightStatusAction<Void> lightStatusAction) {
         if ( !lightStatusAction.getPort().equals("0") ) {
-            this.builder.addUsedActor(new UsedActor("", SC.CALLIBOT));
+            this.getBuilder(UsedHardwareBean.Builder.class).addUsedActor(new UsedActor("", SC.CALLIBOT));
         }
         return null;
     }
@@ -227,10 +230,10 @@ public final class MbedUsedHardwareCollectorVisitor extends AbstractUsedHardware
         motorOnAction.getParam().getSpeed().accept(this);
         String port = motorOnAction.getUserDefinedPort();
         if ( port.equals("0") || port.equals("2") || port.equals("3") ) {
-            this.builder.addUsedActor(new UsedActor("", SC.CALLIBOT));
+            this.getBuilder(UsedHardwareBean.Builder.class).addUsedActor(new UsedActor("", SC.CALLIBOT));
         }
         if ( port.equals("3") || port.equals("AB") ) {
-            this.builder.addUsedActor(new UsedActor(port, SC.MOTOR_DRIVE));
+            this.getBuilder(UsedHardwareBean.Builder.class).addUsedActor(new UsedActor(port, SC.MOTOR_DRIVE));
         }
         return null;
     }
@@ -251,7 +254,7 @@ public final class MbedUsedHardwareCollectorVisitor extends AbstractUsedHardware
         if ( motorStopAction.getUserDefinedPort().equals("0")
             || motorStopAction.getUserDefinedPort().equals("2")
             || motorStopAction.getUserDefinedPort().equals("3") ) {
-            this.builder.addUsedActor(new UsedActor("", SC.CALLIBOT));
+            this.getBuilder(UsedHardwareBean.Builder.class).addUsedActor(new UsedActor("", SC.CALLIBOT));
         }
         return null;
     }
@@ -263,13 +266,13 @@ public final class MbedUsedHardwareCollectorVisitor extends AbstractUsedHardware
 
     @Override
     public Void visitRadioRssiSensor(RadioRssiSensor<Void> radioRssiSensor) {
-        this.builder.addUsedActor(new UsedActor("", SC.RADIO));
+        this.getBuilder(UsedHardwareBean.Builder.class).addUsedActor(new UsedActor("", SC.RADIO));
         return null;
     }
 
     @Override
     public Void visitGyroSensor(GyroSensor<Void> gyroSensor) {
-        this.builder.addUsedSensor(new UsedSensor(gyroSensor.getPort(), SC.ACCELEROMETER, gyroSensor.getMode()));
+        this.getBuilder(UsedHardwareBean.Builder.class).addUsedSensor(new UsedSensor(gyroSensor.getPort(), SC.ACCELEROMETER, gyroSensor.getMode()));
         return null;
     }
 
@@ -278,13 +281,13 @@ public final class MbedUsedHardwareCollectorVisitor extends AbstractUsedHardware
         fourDigitDisplayShowAction.getValue().accept(this);
         fourDigitDisplayShowAction.getPosition().accept(this);
         fourDigitDisplayShowAction.getColon().accept(this);
-        this.builder.addUsedActor(new UsedActor("", SC.FOUR_DIGIT_DISPLAY));
+        this.getBuilder(UsedHardwareBean.Builder.class).addUsedActor(new UsedActor("", SC.FOUR_DIGIT_DISPLAY));
         return null;
     }
 
     @Override
     public Void visitFourDigitDisplayClearAction(FourDigitDisplayClearAction<Void> fourDigitDisplayClearAction) {
-        this.builder.addUsedActor(new UsedActor("", SC.FOUR_DIGIT_DISPLAY));
+        this.getBuilder(UsedHardwareBean.Builder.class).addUsedActor(new UsedActor("", SC.FOUR_DIGIT_DISPLAY));
         return null;
     }
 
@@ -292,7 +295,7 @@ public final class MbedUsedHardwareCollectorVisitor extends AbstractUsedHardware
     public Void visitLedBarSetAction(LedBarSetAction<Void> ledBarSetAction) {
         ledBarSetAction.getX().accept(this);
         ledBarSetAction.getBrightness().accept(this);
-        this.builder.addUsedActor(new UsedActor("", SC.LED_BAR));
+        this.getBuilder(UsedHardwareBean.Builder.class).addUsedActor(new UsedActor("", SC.LED_BAR));
         return null;
     }
 
@@ -300,14 +303,14 @@ public final class MbedUsedHardwareCollectorVisitor extends AbstractUsedHardware
     public Void visitUltrasonicSensor(UltrasonicSensor<Void> ultrasonicSensor) {
         String port = ultrasonicSensor.getPort();
         if ( port.equals("2") ) {
-            this.builder.addUsedActor(new UsedActor("", SC.CALLIBOT));
+            this.getBuilder(UsedHardwareBean.Builder.class).addUsedActor(new UsedActor("", SC.CALLIBOT));
         }
         return null;
     }
 
     @Override
     public Void visitInfraredSensor(InfraredSensor<Void> infraredSensor) {
-        this.builder.addUsedActor(new UsedActor("", SC.CALLIBOT));
+        this.getBuilder(UsedHardwareBean.Builder.class).addUsedActor(new UsedActor("", SC.CALLIBOT));
         return null;
     }
 
@@ -321,7 +324,7 @@ public final class MbedUsedHardwareCollectorVisitor extends AbstractUsedHardware
         bothMotorsOnAction.getSpeedA().accept(this);
         bothMotorsOnAction.getSpeedB().accept(this);
         if ( bothMotorsOnAction.getPortA().equals("LEFT") ) {
-            this.builder.addUsedActor(new UsedActor("", SC.CALLIBOT));
+            this.getBuilder(UsedHardwareBean.Builder.class).addUsedActor(new UsedActor("", SC.CALLIBOT));
         }
         return null;
     }
@@ -333,7 +336,7 @@ public final class MbedUsedHardwareCollectorVisitor extends AbstractUsedHardware
 
     @Override
     public Void visitHumiditySensor(HumiditySensor<Void> humiditySensor) {
-        this.builder.addUsedSensor(new UsedSensor(humiditySensor.getPort(), SC.HUMIDITY, humiditySensor.getMode()));
+        this.getBuilder(UsedHardwareBean.Builder.class).addUsedSensor(new UsedSensor(humiditySensor.getPort(), SC.HUMIDITY, humiditySensor.getMode()));
         return null;
     }
 

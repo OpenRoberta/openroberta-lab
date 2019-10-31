@@ -5,7 +5,9 @@ import java.util.List;
 
 import org.apache.commons.text.WordUtils;
 
-import de.fhg.iais.roberta.bean.CodeGeneratorSetupBean;
+import com.google.common.collect.ClassToInstanceMap;
+
+import de.fhg.iais.roberta.bean.IProjectBean;
 import de.fhg.iais.roberta.bean.UsedHardwareBean;
 import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.mode.action.MotorStopMode;
@@ -117,14 +119,9 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
      * @param robotConfiguration hardware configuration of the brick
      * @param programPhrases to generate the code from
      */
-    public CalliopeCppVisitor(
-        UsedHardwareBean usedHardwareBean,
-        CodeGeneratorSetupBean codeGeneratorSetupBean,
-        ConfigurationAst robotConfiguration,
-        ArrayList<ArrayList<Phrase<Void>>> programPhrases) {
-        super(usedHardwareBean, codeGeneratorSetupBean, programPhrases);
+    public CalliopeCppVisitor(List<ArrayList<Phrase<Void>>> programPhrases, ConfigurationAst robotConfiguration, ClassToInstanceMap<IProjectBean> beans) {
+        super(programPhrases, beans);
         this.robotConfiguration = robotConfiguration;
-
     }
 
     @Override
@@ -207,7 +204,7 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
     }
 
     protected Void generateUsedVars() {
-        for ( final VarDeclaration<Void> var : this.usedHardwareBean.getVisitedVars() ) {
+        for ( final VarDeclaration<Void> var : this.getBean(UsedHardwareBean.class).getVisitedVars() ) {
             nlIndent();
             if ( !var.getValue().getKind().hasName("EMPTY_EXPR") ) {
                 this.sb.append("___" + var.getName());
@@ -675,7 +672,7 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
 
     @Override
     public Void visitMainTask(MainTask<Void> mainTask) {
-        if ( this.usedHardwareBean.isSensorUsed(SC.TIMER) ) {
+        if ( this.getBean(UsedHardwareBean.class).isSensorUsed(SC.TIMER) ) {
             this.sb.append("int _initTime = _uBit.systemTime();");
         }
         mainTask.getVariables().accept(this);
@@ -688,20 +685,20 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
         nlIndent();
         // Initialise the micro:bit runtime.
         this.sb.append("_uBit.init();");
-        if ( this.usedHardwareBean.isActorUsed(SC.CALLIBOT) ) {
+        if ( this.getBean(UsedHardwareBean.class).isActorUsed(SC.CALLIBOT) ) {
             nlIndent();
             this.sb.append("_cbInit(_buf, &_i2c, &_uBit);");
         }
         generateUsedVars();
         nlIndent();
-        if ( this.usedHardwareBean.isActorUsed(SC.DISPLAY_GRAYSCALE) ) {
+        if ( this.getBean(UsedHardwareBean.class).isActorUsed(SC.DISPLAY_GRAYSCALE) ) {
             this.sb.append("_uBit.display.setDisplayMode(DISPLAY_MODE_GREYSCALE);");
         }
-        if ( this.usedHardwareBean.isActorUsed(SC.RADIO) ) {
+        if ( this.getBean(UsedHardwareBean.class).isActorUsed(SC.RADIO) ) {
             nlIndent();
             this.sb.append("_uBit.radio.enable();");
         }
-        if ( this.usedHardwareBean.isSensorUsed(SC.ACCELEROMETER) ) {
+        if ( this.getBean(UsedHardwareBean.class).isSensorUsed(SC.ACCELEROMETER) ) {
             nlIndent();
             this.sb.append("_uBit.accelerometer.updateSample();");
         }
@@ -1133,7 +1130,7 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
     @Override
     protected void generateProgramSuffix(boolean withWrapping) {
         if ( withWrapping ) {
-            if ( this.usedHardwareBean.isActorUsed(SC.CALLIBOT) ) {
+            if ( this.getBean(UsedHardwareBean.class).isActorUsed(SC.CALLIBOT) ) {
                 nlIndent();
                 this.sb.append("_cbStop(_buf, &_i2c);");
             }
@@ -1226,36 +1223,36 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
         this.sb.append("#include \"MicroBit.h\"\n");
         this.sb.append("#include \"NEPODefs.h\"\n");
 
-        if ( this.usedHardwareBean.isActorUsed(SC.FOUR_DIGIT_DISPLAY) ) {
+        if ( this.getBean(UsedHardwareBean.class).isActorUsed(SC.FOUR_DIGIT_DISPLAY) ) {
             this.sb.append("#include \"FourDigitDisplay.h\"\n");
         }
-        if ( this.usedHardwareBean.isActorUsed(SC.LED_BAR) ) {
+        if ( this.getBean(UsedHardwareBean.class).isActorUsed(SC.LED_BAR) ) {
             this.sb.append("#include \"Grove_LED_Bar.h\"\n");
         }
-        if ( this.usedHardwareBean.isSensorUsed(SC.HUMIDITY) ) {
+        if ( this.getBean(UsedHardwareBean.class).isSensorUsed(SC.HUMIDITY) ) {
             this.sb.append("#include \"Sht31.h\"\n");
         }
         this.sb.append("#include <list>\n");
         this.sb.append("#include <array>\n");
         this.sb.append("#include <stdlib.h>\n");
         this.sb.append("MicroBit _uBit;\n");
-        if ( this.usedHardwareBean.isActorUsed(SC.FOUR_DIGIT_DISPLAY) ) {
+        if ( this.getBean(UsedHardwareBean.class).isActorUsed(SC.FOUR_DIGIT_DISPLAY) ) {
             this.sb.append("FourDigitDisplay _fdd(MICROBIT_PIN_P2, MICROBIT_PIN_P8);\n"); // Only works on the right UART Grove connector
         }
-        if ( this.usedHardwareBean.isActorUsed(SC.LED_BAR) ) {
+        if ( this.getBean(UsedHardwareBean.class).isActorUsed(SC.LED_BAR) ) {
             this.sb.append("Grove_LED_Bar _ledBar(MICROBIT_PIN_P8, MICROBIT_PIN_P2);\n"); // Only works on the right UART Grove connector; Clock/Data pins are swapped compared to 4DigitDisplay
         }
-        if ( this.usedHardwareBean.isSensorUsed(SC.HUMIDITY) ) {
+        if ( this.getBean(UsedHardwareBean.class).isSensorUsed(SC.HUMIDITY) ) {
             this.sb.append("Sht31 _sht31 = Sht31(MICROBIT_PIN_P8, MICROBIT_PIN_P2);\n");
         }
-        if ( this.usedHardwareBean.isActorUsed(SC.CALLIBOT) ) {
+        if ( this.getBean(UsedHardwareBean.class).isActorUsed(SC.CALLIBOT) ) {
             this.sb.append("MicroBitI2C _i2c(MICROBIT_PIN_P20, MICROBIT_PIN_P19);");
             nlIndent();
             this.sb.append("char _buf[5] = { 0, 0, 0, 0, 0 };");
             nlIndent();
             this.sb.append("uint8_t _cbLedState = 0x00;");
         }
-        if ( this.usedHardwareBean.isActorUsed(SC.MOTOR_DRIVE) ) {
+        if ( this.getBean(UsedHardwareBean.class).isActorUsed(SC.MOTOR_DRIVE) ) {
             nlIndent();
             this.sb.append("double _motorOnStore = 0.0;");
         }
@@ -1263,7 +1260,7 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
 
     @Override
     protected void generateSignaturesOfUserDefinedMethods() {
-        for ( final Method<Void> phrase : this.usedHardwareBean.getUserDefinedMethods() ) {
+        for ( final Method<Void> phrase : this.getBean(UsedHardwareBean.class).getUserDefinedMethods() ) {
             nlIndent();
             this.sb.append(getLanguageVarTypeFromBlocklyType(phrase.getReturnType()));
             this.sb.append(" " + phrase.getMethodName() + "(");

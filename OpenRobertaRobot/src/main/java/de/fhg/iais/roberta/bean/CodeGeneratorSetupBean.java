@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import org.json.JSONObject;
@@ -18,7 +17,7 @@ import de.fhg.iais.roberta.util.dbc.Assert;
  * Creates the HelperMethodGenerator for use in the code generation visitors.
  * TODO should include more general information like global variables etc.
  */
-public class CodeGeneratorSetupBean {
+public class CodeGeneratorSetupBean implements IProjectBean {
 
     private HelperMethodGenerator helperMethodGenerator;
     private final Set<Enum<?>> usedMethods = new HashSet<>(); //All needed helper methods as a Set
@@ -31,7 +30,7 @@ public class CodeGeneratorSetupBean {
         return Collections.unmodifiableSet(this.usedMethods);
     }
 
-    public static class Builder {
+    public static class Builder implements IBuilder<CodeGeneratorSetupBean> {
         private final CodeGeneratorSetupBean codeGeneratorBean = new CodeGeneratorSetupBean();
 
         private String helperMethodFile = null;

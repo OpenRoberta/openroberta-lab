@@ -11,8 +11,8 @@ import de.fhg.iais.roberta.util.Util;
  */
 public class SaveWorker implements IWorker {
     @Override
-    public void execute(Project project) {
-        CompilerSetupBean compilerWorkflowBean = (CompilerSetupBean) project.getWorkerResult("CompilerSetup");
+    public final void execute(Project project) {
+        CompilerSetupBean compilerWorkflowBean = project.getWorkerResult(CompilerSetupBean.class);
         String tempDir = compilerWorkflowBean.getTempDir();
         Util
             .storeGeneratedProgram(tempDir, project.getSourceCode().toString(), project.getToken(), project.getProgramName(), "." + project.getSourceCodeFileExtension());

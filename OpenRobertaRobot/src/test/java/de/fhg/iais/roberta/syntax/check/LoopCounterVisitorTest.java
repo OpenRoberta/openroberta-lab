@@ -5,9 +5,11 @@ import java.util.ArrayList;
 import org.junit.Assert;
 import org.junit.Test;
 
+import com.google.common.collect.ClassToInstanceMap;
+
 import de.fhg.iais.roberta.ast.AstTest;
+import de.fhg.iais.roberta.bean.IProjectBean;
 import de.fhg.iais.roberta.bean.UsedHardwareBean;
-import de.fhg.iais.roberta.bean.UsedHardwareBean.Builder;
 import de.fhg.iais.roberta.components.Project;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
@@ -21,15 +23,16 @@ public class LoopCounterVisitorTest extends AstTest {
 
     private class TestUsedHardwareWorker extends AbstractUsedHardwareCollectorWorker {
         @Override
-        protected AbstractCollectorVisitor getVisitor(Builder builder, Project project) {
-            return new TestUsedHardware(builder, project.getProgramAst().getTree());
+        protected AbstractCollectorVisitor getVisitor(
+            Project project, ClassToInstanceMap<IProjectBean.IBuilder<?>> beanBuilders) {
+            return new TestUsedHardware(project.getProgramAst().getTree(), beanBuilders);
         }
     }
 
     private class TestUsedHardware extends AbstractUsedHardwareCollectorVisitor {
         //TODO create fake for this class
-        public TestUsedHardware(UsedHardwareBean.Builder builder, ArrayList<ArrayList<Phrase<Void>>> phrases) {
-            super(builder, null);
+        public TestUsedHardware(ArrayList<ArrayList<Phrase<Void>>> phrases, ClassToInstanceMap<IProjectBean.IBuilder<?>> beanBuilders) {
+            super(null, beanBuilders);
         }
 
         @Override
@@ -46,7 +49,7 @@ public class LoopCounterVisitorTest extends AstTest {
 
         TestUsedHardwareWorker worker = new TestUsedHardwareWorker();
         worker.execute(project);
-        UsedHardwareBean bean = (UsedHardwareBean) project.getWorkerResult("CollectedHardware");
+        UsedHardwareBean bean = project.getWorkerResult(UsedHardwareBean.class);
 
         Assert.assertEquals("{}", bean.getLoopsLabelContainer().toString());
     }
@@ -58,7 +61,7 @@ public class LoopCounterVisitorTest extends AstTest {
 
         TestUsedHardwareWorker worker = new TestUsedHardwareWorker();
         worker.execute(project);
-        UsedHardwareBean bean = (UsedHardwareBean) project.getWorkerResult("CollectedHardware");
+        UsedHardwareBean bean = project.getWorkerResult(UsedHardwareBean.class);
 
         Assert.assertEquals("{1=false, 2=false}", bean.getLoopsLabelContainer().toString());
     }
@@ -70,7 +73,7 @@ public class LoopCounterVisitorTest extends AstTest {
 
         TestUsedHardwareWorker worker = new TestUsedHardwareWorker();
         worker.execute(project);
-        UsedHardwareBean bean = (UsedHardwareBean) project.getWorkerResult("CollectedHardware");
+        UsedHardwareBean bean = project.getWorkerResult(UsedHardwareBean.class);
 
         Assert.assertEquals("{1=false, 2=false, 3=false, 4=false, 5=false}", bean.getLoopsLabelContainer().toString());
     }
@@ -83,7 +86,7 @@ public class LoopCounterVisitorTest extends AstTest {
 
         TestUsedHardwareWorker worker = new TestUsedHardwareWorker();
         worker.execute(project);
-        UsedHardwareBean bean = (UsedHardwareBean) project.getWorkerResult("CollectedHardware");
+        UsedHardwareBean bean = project.getWorkerResult(UsedHardwareBean.class);
 
         Assert.assertEquals("{1=true}", bean.getLoopsLabelContainer().toString());
     }
@@ -97,7 +100,7 @@ public class LoopCounterVisitorTest extends AstTest {
 
         TestUsedHardwareWorker worker = new TestUsedHardwareWorker();
         worker.execute(project);
-        UsedHardwareBean bean = (UsedHardwareBean) project.getWorkerResult("CollectedHardware");
+        UsedHardwareBean bean = project.getWorkerResult(UsedHardwareBean.class);
 
         Assert.assertEquals("{1=true, 2=false}", bean.getLoopsLabelContainer().toString());
     }
@@ -111,7 +114,7 @@ public class LoopCounterVisitorTest extends AstTest {
 
         TestUsedHardwareWorker worker = new TestUsedHardwareWorker();
         worker.execute(project);
-        UsedHardwareBean bean = (UsedHardwareBean) project.getWorkerResult("CollectedHardware");
+        UsedHardwareBean bean = project.getWorkerResult(UsedHardwareBean.class);
 
         Assert.assertEquals("{1=true, 2=false}", bean.getLoopsLabelContainer().toString());
     }
@@ -124,7 +127,7 @@ public class LoopCounterVisitorTest extends AstTest {
 
         TestUsedHardwareWorker worker = new TestUsedHardwareWorker();
         worker.execute(project);
-        UsedHardwareBean bean = (UsedHardwareBean) project.getWorkerResult("CollectedHardware");
+        UsedHardwareBean bean = project.getWorkerResult(UsedHardwareBean.class);
 
         Assert.assertEquals("{1=true, 2=false, 3=false}", bean.getLoopsLabelContainer().toString());
     }
@@ -138,7 +141,7 @@ public class LoopCounterVisitorTest extends AstTest {
 
         TestUsedHardwareWorker worker = new TestUsedHardwareWorker();
         worker.execute(project);
-        UsedHardwareBean bean = (UsedHardwareBean) project.getWorkerResult("CollectedHardware");
+        UsedHardwareBean bean = project.getWorkerResult(UsedHardwareBean.class);
 
         Assert.assertEquals("{1=true, 2=false, 3=true}", bean.getLoopsLabelContainer().toString());
     }
@@ -154,7 +157,7 @@ public class LoopCounterVisitorTest extends AstTest {
 
         TestUsedHardwareWorker worker = new TestUsedHardwareWorker();
         worker.execute(project);
-        UsedHardwareBean bean = (UsedHardwareBean) project.getWorkerResult("CollectedHardware");
+        UsedHardwareBean bean = project.getWorkerResult(UsedHardwareBean.class);
 
         Assert.assertEquals("{1=true, 2=false, 3=true, 4=false, 5=true}", bean.getLoopsLabelContainer().toString());
     }

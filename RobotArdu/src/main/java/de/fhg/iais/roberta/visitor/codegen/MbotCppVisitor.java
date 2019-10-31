@@ -3,9 +3,12 @@ package de.fhg.iais.roberta.visitor.codegen;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Map;
 
-import de.fhg.iais.roberta.bean.CodeGeneratorSetupBean;
+import com.google.common.collect.ClassToInstanceMap;
+
+import de.fhg.iais.roberta.bean.IProjectBean;
 import de.fhg.iais.roberta.bean.UsedHardwareBean;
 import de.fhg.iais.roberta.components.Category;
 import de.fhg.iais.roberta.components.ConfigurationAst;
@@ -83,11 +86,10 @@ public final class MbotCppVisitor extends AbstractCommonArduinoCppVisitor implem
      * @param phrases to generate the code from
      */
     public MbotCppVisitor(
-        UsedHardwareBean usedHardwareBean,
-        CodeGeneratorSetupBean codeGeneratorSetupBean,
+        List<ArrayList<Phrase<Void>>> phrases,
         ConfigurationAst brickConfiguration,
-        ArrayList<ArrayList<Phrase<Void>>> phrases) {
-        super(usedHardwareBean, codeGeneratorSetupBean, brickConfiguration, phrases);
+        ClassToInstanceMap<IProjectBean> beans) {
+        super(phrases, brickConfiguration, beans);
     }
 
     @Override
@@ -356,7 +358,7 @@ public final class MbotCppVisitor extends AbstractCommonArduinoCppVisitor implem
 
     @Override
     public Void visitMotorDriveStopAction(MotorDriveStopAction<Void> stopAction) {
-        for ( final UsedActor actor : this.usedHardwareBean.getUsedActors() ) {
+        for ( final UsedActor actor : this.getBean(UsedHardwareBean.class).getUsedActors() ) {
             if ( actor.getType().equals(SC.DIFFERENTIAL_DRIVE) ) {
                 this.sb.append("_meDrive.stop();");
                 break;
@@ -462,7 +464,7 @@ public final class MbotCppVisitor extends AbstractCommonArduinoCppVisitor implem
         }
         nlIndent();
         //generateConfigurationVariables();
-        if ( this.usedHardwareBean.isSensorUsed(SC.TIMER) ) {
+        if ( this.getBean(UsedHardwareBean.class).isSensorUsed(SC.TIMER) ) {
             this.sb.append("unsigned long __time = millis();");
             nlIndent();
         }
@@ -471,7 +473,7 @@ public final class MbotCppVisitor extends AbstractCommonArduinoCppVisitor implem
                 .stream()
                 .filter(phrase -> phrase.getKind().getCategory() == Category.METHOD && !phrase.getKind().hasName("METHOD_CALL"))
                 .count();
-        if ( (this.configuration.getConfigurationComponents().isEmpty() || this.usedHardwareBean.isSensorUsed(SC.TIMER)) && numberConf == 0 ) {
+        if ( (this.configuration.getConfigurationComponents().isEmpty() || this.getBean(UsedHardwareBean.class).isSensorUsed(SC.TIMER)) && numberConf == 0 ) {
             nlIndent();
         }
         generateUserDefinedMethods();
@@ -528,7 +530,7 @@ public final class MbotCppVisitor extends AbstractCommonArduinoCppVisitor implem
     }
 
     private void predefineImages() {
-        Map<String, String[][]> usedIDImages = this.usedHardwareBean.getUsedIDImages();
+        Map<String, String[][]> usedIDImages = this.getBean(UsedHardwareBean.class).getUsedIDImages();
         int i = 0;
         for ( Map.Entry<String, String[][]> entry : usedIDImages.entrySet() ) {
             this.sb.append("const std::vector<uint8_t> __ledMatrix").append(i).append(" = ");
@@ -575,7 +577,7 @@ public final class MbotCppVisitor extends AbstractCommonArduinoCppVisitor implem
 
     private void generateSensors() {
         LinkedHashSet<Integer> usedInfraredPort = new LinkedHashSet<>();
-        for ( final UsedSensor usedSensor : this.usedHardwareBean.getUsedSensors() ) {
+        for ( final UsedSensor usedSensor : this.getBean(UsedHardwareBean.class).getUsedSensors() ) {
             switch ( usedSensor.getType() ) {
                 case SC.BUTTON:
                     nlIndent();
@@ -643,7 +645,7 @@ public final class MbotCppVisitor extends AbstractCommonArduinoCppVisitor implem
     }
 
     private void generateActors() {
-        for ( final UsedActor usedActor : this.usedHardwareBean.getUsedActors() ) {
+        for ( final UsedActor usedActor : this.getBean(UsedHardwareBean.class).getUsedActors() ) {
             switch ( usedActor.getType() ) {
                 case SC.LED_ON_BOARD:
                     nlIndent();
@@ -747,7 +749,7 @@ public final class MbotCppVisitor extends AbstractCommonArduinoCppVisitor implem
 
     @Override
     public Void visitLEDMatrixImage(LEDMatrixImage<Void> ledMatrixImage) {
-        Map<String, String[][]> usedIDImages=this.usedHardwareBean.getUsedIDImages();
+        Map<String, String[][]> usedIDImages=this.getBean(UsedHardwareBean.class).getUsedIDImages();
         this.sb.append("__ledMatrix").append(this.imageList.get(ledMatrixImage.getProperty().getBlocklyId()));
         return null;
     }

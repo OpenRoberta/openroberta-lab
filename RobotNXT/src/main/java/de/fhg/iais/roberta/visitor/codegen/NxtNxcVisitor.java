@@ -3,9 +3,12 @@ package de.fhg.iais.roberta.visitor.codegen;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
-import de.fhg.iais.roberta.bean.CodeGeneratorSetupBean;
+import com.google.common.collect.ClassToInstanceMap;
+
+import de.fhg.iais.roberta.bean.IProjectBean;
 import de.fhg.iais.roberta.bean.UsedHardwareBean;
 import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.components.ConfigurationComponent;
@@ -95,11 +98,10 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
      * @param programPhrases to generate the code from
      */
     public NxtNxcVisitor(
-        UsedHardwareBean usedHardwareBean,
-        CodeGeneratorSetupBean codeGeneratorSetupBean,
+        List<ArrayList<Phrase<Void>>> programPhrases,
         ConfigurationAst brickConfiguration,
-        ArrayList<ArrayList<Phrase<Void>>> programPhrases) {
-        super(usedHardwareBean, codeGeneratorSetupBean, programPhrases);
+        ClassToInstanceMap<IProjectBean> beans) {
+        super(programPhrases, beans);
         this.brickConfiguration = brickConfiguration;
     }
 
@@ -188,7 +190,7 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
     }
 
     protected Void generateUsedVars() {
-        for ( VarDeclaration<Void> var : this.usedHardwareBean.getVisitedVars() ) {
+        for ( VarDeclaration<Void> var : this.getBean(UsedHardwareBean.class).getVisitedVars() ) {
             nlIndent();
             if ( !var.getValue().getKind().hasName("EMPTY_EXPR") ) {
                 if ( var.getTypeVar().isArray() ) {
@@ -474,7 +476,7 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
 
     private boolean isActorOnPort(String port) {
         if ( port != null ) {
-            for ( UsedActor actor : this.usedHardwareBean.getUsedActors() ) {
+            for ( UsedActor actor : this.getBean(UsedHardwareBean.class).getUsedActors() ) {
                 if ( actor.getPort().equals(port) ) {
                     return true;
                 }
@@ -819,10 +821,10 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
 
     @Override
     public Void visitMainTask(MainTask<Void> mainTask) {
-        if ( this.usedHardwareBean.isActorUsed(SC.SOUND) ) {
+        if ( this.getBean(UsedHardwareBean.class).isActorUsed(SC.SOUND) ) {
             this.sb.append("byte volume = 0x02;");
         }
-        if ( this.usedHardwareBean.isSensorUsed(SC.TIMER) ) {
+        if ( this.getBean(UsedHardwareBean.class).isSensorUsed(SC.TIMER) ) {
             nlIndent();
             this.sb.append("long timer1;");
         }
@@ -1313,7 +1315,7 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
 
     private void generateSensors() {
         Map<String, UsedSensor> usedSensorMap = new HashMap<>();
-        for ( UsedSensor usedSensor : this.usedHardwareBean.getUsedSensors() ) {
+        for ( UsedSensor usedSensor : this.getBean(UsedHardwareBean.class).getUsedSensors() ) {
             nlIndent();
             this.sb.append("SetSensor(");
             ConfigurationComponent configurationComponent = this.brickConfiguration.getConfigurationComponent(usedSensor.getPort());
@@ -1343,7 +1345,7 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
                     break;
             }
         }
-        if ( this.usedHardwareBean.isSensorUsed(SC.TIMER) ) {
+        if ( this.getBean(UsedHardwareBean.class).isSensorUsed(SC.TIMER) ) {
             nlIndent();
             this.sb.append("SetTimerValue(timer1);");
         }

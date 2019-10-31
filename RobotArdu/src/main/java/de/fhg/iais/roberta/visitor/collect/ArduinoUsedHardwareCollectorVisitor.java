@@ -2,6 +2,9 @@ package de.fhg.iais.roberta.visitor.collect;
 
 import java.util.ArrayList;
 
+import com.google.common.collect.ClassToInstanceMap;
+
+import de.fhg.iais.roberta.bean.IProjectBean;
 import de.fhg.iais.roberta.bean.UsedHardwareBean;
 import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.components.UsedActor;
@@ -24,10 +27,10 @@ import de.fhg.iais.roberta.visitor.hardware.IArduinoVisitor;
 public final class ArduinoUsedHardwareCollectorVisitor extends AbstractUsedHardwareCollectorVisitor implements IArduinoVisitor<Void> {
 
     public ArduinoUsedHardwareCollectorVisitor(
-        UsedHardwareBean.Builder builder,
         ArrayList<ArrayList<Phrase<Void>>> phrasesSet,
-        ConfigurationAst robotConfiguration) {
-        super(builder, robotConfiguration);
+        ConfigurationAst robotConfiguration,
+        ClassToInstanceMap<IProjectBean.IBuilder<?>> beanBuilders) {
+        super(robotConfiguration, beanBuilders);
     }
 
     @Override
@@ -40,7 +43,7 @@ public final class ArduinoUsedHardwareCollectorVisitor extends AbstractUsedHardw
             //TODO: nothing done on MotorOnAction
             //Actor actor = this.brickConfiguration.getActors().get(motorOnAction.getPort());
             //if ( actor != null ) {
-            //    this.builder.addUsedActor(new UsedActor(motorOnAction.getPort(), actor.getName()));
+            //    this.getBuilder(UsedHardwareBean.Builder.class).addUsedActor(new UsedActor(motorOnAction.getPort(), actor.getName()));
             //}
         }
         return null;
@@ -48,7 +51,7 @@ public final class ArduinoUsedHardwareCollectorVisitor extends AbstractUsedHardw
 
     @Override
     public Void visitEncoderSensor(EncoderSensor<Void> encoderSensor) {
-        //        this.builder.addUsedSensor(new UsedSensor(encoderSensor.getPort(), SC.ENCODER, encoderSensor.getMode()));
+        //        this.getBuilder(UsedHardwareBean.Builder.class).addUsedSensor(new UsedSensor(encoderSensor.getPort(), SC.ENCODER, encoderSensor.getMode()));
         return null;
     }
 
@@ -59,21 +62,21 @@ public final class ArduinoUsedHardwareCollectorVisitor extends AbstractUsedHardw
 
     @Override
     public Void visitPinGetValueSensor(PinGetValueSensor<Void> pinGetValueSensor) {
-        this.builder.addUsedSensor(new UsedSensor(pinGetValueSensor.getPort(), SC.PIN_VALUE, pinGetValueSensor.getMode()));
+        this.getBuilder(UsedHardwareBean.Builder.class).addUsedSensor(new UsedSensor(pinGetValueSensor.getPort(), SC.PIN_VALUE, pinGetValueSensor.getMode()));
         return null;
     }
 
     @Override
     public Void visitPinWriteValueAction(PinWriteValueAction<Void> pinWriteValueSensor) {
         pinWriteValueSensor.getValue().accept(this);
-        this.builder.addUsedActor(new UsedActor(pinWriteValueSensor.getPort(), SC.ANALOG_PIN));
+        this.getBuilder(UsedHardwareBean.Builder.class).addUsedActor(new UsedActor(pinWriteValueSensor.getPort(), SC.ANALOG_PIN));
         return null;
     }
 
     @Override
     public Void visitSerialWriteAction(SerialWriteAction<Void> serialWriteAction) {
         serialWriteAction.getValue().accept(this);
-        this.builder.addUsedActor(new UsedActor(SC.SERIAL, SC.SERIAL));
+        this.getBuilder(UsedHardwareBean.Builder.class).addUsedActor(new UsedActor(SC.SERIAL, SC.SERIAL));
         return null;
     }
 }

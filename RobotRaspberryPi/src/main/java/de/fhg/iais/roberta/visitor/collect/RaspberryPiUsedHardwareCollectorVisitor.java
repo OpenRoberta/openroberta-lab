@@ -2,7 +2,9 @@ package de.fhg.iais.roberta.visitor.collect;
 
 import java.util.ArrayList;
 
-import de.fhg.iais.roberta.bean.UsedHardwareBean;
+import com.google.common.collect.ClassToInstanceMap;
+
+import de.fhg.iais.roberta.bean.IProjectBean;
 import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.raspberrypi.LedBlinkAction;
@@ -20,10 +22,10 @@ import de.fhg.iais.roberta.visitor.hardware.IRaspberryPiVisitor;
 public final class RaspberryPiUsedHardwareCollectorVisitor extends AbstractUsedHardwareCollectorVisitor implements IRaspberryPiVisitor<Void> {
 
     public RaspberryPiUsedHardwareCollectorVisitor(
-        UsedHardwareBean.Builder builder,
         ArrayList<ArrayList<Phrase<Void>>> phrasesSet,
-        ConfigurationAst brickConfiguration) {
-        super(builder, brickConfiguration);
+        ConfigurationAst brickConfiguration,
+        ClassToInstanceMap<IProjectBean.IBuilder<?>> beanBuilders) {
+        super(brickConfiguration, beanBuilders);
     }
 
     @Override

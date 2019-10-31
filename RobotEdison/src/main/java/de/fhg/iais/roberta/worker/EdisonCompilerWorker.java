@@ -27,7 +27,7 @@ public class EdisonCompilerWorker implements IWorker {
     public void execute(Project project) {
         String programName = project.getProgramName();
         String robot = project.getRobot();
-        Pair<Key, String> workflowResult = runBuild(project);
+        Pair<Key, String> workflowResult = this.runBuild(project);
         project.setResult(workflowResult.getFirst());
         project.addResultParam("MESSAGE", workflowResult.getSecond());
         if ( workflowResult.getFirst() == Key.COMPILERWORKFLOW_SUCCESS ) {
@@ -45,10 +45,9 @@ public class EdisonCompilerWorker implements IWorker {
      * @return a Key that gives information about the building process (success, failure, interrupted,...)
      */
     private Pair<Key, String> runBuild(Project project) {
-        CompilerSetupBean compilerWorkflowBean = (CompilerSetupBean) project.getWorkerResult("CompilerSetup");
-        final String compilerBinDir = compilerWorkflowBean.getCompilerBinDir(); // TODO should it be used?
-        final String compilerResourcesDir = compilerWorkflowBean.getCompilerResourcesDir();
-        final String tempDir = compilerWorkflowBean.getTempDir();
+        CompilerSetupBean compilerWorkflowBean = project.getWorkerResult(CompilerSetupBean.class);
+        String compilerResourcesDir = compilerWorkflowBean.getCompilerResourcesDir();
+        String tempDir = compilerWorkflowBean.getTempDir();
         Util
             .storeGeneratedProgram(tempDir, project.getSourceCode().toString(), project.getToken(), project.getProgramName(), "." + project.getSourceCodeFileExtension());
         //get all directories
@@ -58,15 +57,14 @@ public class EdisonCompilerWorker implements IWorker {
         String targetFilePath = tempDir + "/" + token + "/" + pyFile + "/target/";
 
         //build and start the Python process
-        String[] executableWithParameters =
-            new String[] {
-                "python2",
-                compilerResourcesDir + "EdPy.py",
-                compilerResourcesDir + "en_lang.json",
-                sourceFilePath + pyFile + ".py",
-                "-t",
-                targetFilePath + pyFile + ".wav"
-            };
+        String[] executableWithParameters = {
+            "python2",
+            compilerResourcesDir + "EdPy.py",
+            compilerResourcesDir + "en_lang.json",
+            sourceFilePath + pyFile + ".py",
+            "-t",
+            targetFilePath + pyFile + ".wav"
+        };
 
         Pair<Boolean, String> result = AbstractCompilerWorkflow.runCrossCompiler(executableWithParameters);
         Key resultKey = result.getFirst() ? Key.COMPILERWORKFLOW_SUCCESS : Key.COMPILERWORKFLOW_ERROR_PROGRAM_COMPILE_FAILED;

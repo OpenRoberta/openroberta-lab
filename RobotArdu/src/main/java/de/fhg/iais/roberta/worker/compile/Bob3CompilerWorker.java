@@ -19,9 +19,9 @@ public class Bob3CompilerWorker implements IWorker {
 
     @Override
     public void execute(Project project) {
-        CompilerSetupBean compilerWorkflowBean = (CompilerSetupBean) project.getWorkerResult("CompilerSetup");
-        final String compilerResourcesDir = compilerWorkflowBean.getCompilerResourcesDir();
-        final String tempDir = compilerWorkflowBean.getTempDir();
+        CompilerSetupBean compilerWorkflowBean = project.getWorkerResult(CompilerSetupBean.class);
+        String compilerResourcesDir = compilerWorkflowBean.getCompilerResourcesDir();
+        String tempDir = compilerWorkflowBean.getTempDir();
         String programName = project.getProgramName();
         String token = project.getToken();
         Util.storeGeneratedProgram(tempDir, project.getSourceCode().toString(), token, programName, "." + project.getSourceCodeFileExtension());

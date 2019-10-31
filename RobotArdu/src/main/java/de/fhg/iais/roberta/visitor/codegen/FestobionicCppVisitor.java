@@ -3,9 +3,12 @@ package de.fhg.iais.roberta.visitor.codegen;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Map;
 
-import de.fhg.iais.roberta.bean.CodeGeneratorSetupBean;
+import com.google.common.collect.ClassToInstanceMap;
+
+import de.fhg.iais.roberta.bean.IProjectBean;
 import de.fhg.iais.roberta.bean.UsedHardwareBean;
 import de.fhg.iais.roberta.components.Category;
 import de.fhg.iais.roberta.components.ConfigurationAst;
@@ -41,11 +44,10 @@ public final class FestobionicCppVisitor extends AbstractCommonArduinoCppVisitor
      * @param phrases to generate the code from
      */
     public FestobionicCppVisitor(
-        UsedHardwareBean usedHardwareBean,
-        CodeGeneratorSetupBean codeGeneratorSetupBean,
+        List<ArrayList<Phrase<Void>>> phrases,
         ConfigurationAst brickConfiguration,
-        ArrayList<ArrayList<Phrase<Void>>> phrases) {
-        super(usedHardwareBean, codeGeneratorSetupBean, brickConfiguration, phrases);
+        ClassToInstanceMap<IProjectBean> beans) {
+        super(phrases, brickConfiguration, beans);
     }
 
     @Override
@@ -72,7 +74,7 @@ public final class FestobionicCppVisitor extends AbstractCommonArduinoCppVisitor
         mainTask.getVariables().accept(this);
         nlIndent();
         generateConfigurationVariables();
-        if ( this.usedHardwareBean.isSensorUsed(SC.TIMER) ) {
+        if ( this.getBean(UsedHardwareBean.class).isSensorUsed(SC.TIMER) ) {
             this.sb.append("unsigned long __time = millis();");
             nlIndent();
         }
@@ -81,7 +83,7 @@ public final class FestobionicCppVisitor extends AbstractCommonArduinoCppVisitor
                 .stream()
                 .filter(phrase -> phrase.getKind().getCategory() == Category.METHOD && !phrase.getKind().hasName("METHOD_CALL"))
                 .count();
-        if ( (this.configuration.getConfigurationComponents().isEmpty() || this.usedHardwareBean.isSensorUsed(SC.TIMER)) && numberConf == 0 ) {
+        if ( (this.configuration.getConfigurationComponents().isEmpty() || this.getBean(UsedHardwareBean.class).isSensorUsed(SC.TIMER)) && numberConf == 0 ) {
             nlIndent();
         }
         generateUserDefinedMethods();
@@ -138,7 +140,7 @@ public final class FestobionicCppVisitor extends AbstractCommonArduinoCppVisitor
             this.sb.append(header);
             nlIndent();
         }
-        if ( this.usedHardwareBean.isListsUsed() ) {
+        if ( this.getBean(UsedHardwareBean.class).isListsUsed() ) {
             this.sb.append("#include <list>");
             nlIndent();
         }

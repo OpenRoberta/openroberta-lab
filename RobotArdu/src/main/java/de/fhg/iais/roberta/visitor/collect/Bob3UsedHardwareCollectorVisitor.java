@@ -2,6 +2,9 @@ package de.fhg.iais.roberta.visitor.collect;
 
 import java.util.ArrayList;
 
+import com.google.common.collect.ClassToInstanceMap;
+
+import de.fhg.iais.roberta.bean.IProjectBean;
 import de.fhg.iais.roberta.bean.UsedHardwareBean;
 import de.fhg.iais.roberta.components.UsedSensor;
 import de.fhg.iais.roberta.syntax.Phrase;
@@ -25,16 +28,16 @@ import de.fhg.iais.roberta.visitor.hardware.IBob3Visitor;
  */
 public final class Bob3UsedHardwareCollectorVisitor extends AbstractUsedHardwareCollectorVisitor implements IBob3Visitor<Void> {
 
-    public Bob3UsedHardwareCollectorVisitor(UsedHardwareBean.Builder builder, ArrayList<ArrayList<Phrase<Void>>> phrasesSet) {
-        super(builder, null);
+    public Bob3UsedHardwareCollectorVisitor(ArrayList<ArrayList<Phrase<Void>>> phrasesSet, ClassToInstanceMap<IProjectBean.IBuilder<?>> beanBuilders) {
+        super(null, beanBuilders);
     }
 
     @Override
     public Void visitBob3GetSampleSensor(GetSampleSensor<Void> sampleSensor) {
         if ( sampleSensor.getSensorTypeAndMode().equals("TIME") ) {
-            this.builder.addUsedSensor(new UsedSensor(null, SC.TIMER, null));
+            this.getBuilder(UsedHardwareBean.Builder.class).addUsedSensor(new UsedSensor(null, SC.TIMER, null));
         } else {
-            this.builder.addUsedSensor(new UsedSensor(null, SC.NONE, null));
+            this.getBuilder(UsedHardwareBean.Builder.class).addUsedSensor(new UsedSensor(null, SC.NONE, null));
         }
         return null;
     }

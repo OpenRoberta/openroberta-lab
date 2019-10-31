@@ -6,6 +6,7 @@ import org.junit.Test;
 import de.fhg.iais.roberta.syntax.codegen.arduino.arduino.ArduinoAstTest;
 import de.fhg.iais.roberta.util.test.UnitTestHelper;
 import de.fhg.iais.roberta.worker.codegen.ArduinoCxxGeneratorWorker;
+import de.fhg.iais.roberta.worker.collect.ArduinoUsedHardwareCollectorWorker;
 
 public class MathConstantTest extends ArduinoAstTest {
 
@@ -15,7 +16,7 @@ public class MathConstantTest extends ArduinoAstTest {
         String a = "PIM_EM_GOLDEN_RATIOM_SQRT2M_SQRT1_2INFINITY";
         //"Float.POSITIVE_INFINITY";
 
-        UnitTestHelper.checkWorkers(testFactory, a, "/syntax/math/math_constant.xml", new ArduinoCxxGeneratorWorker());
+        UnitTestHelper.checkWorkers(testFactory, a, "/syntax/math/math_constant.xml", new ArduinoUsedHardwareCollectorWorker(), new ArduinoCxxGeneratorWorker());
     }
 
     @Ignore

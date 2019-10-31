@@ -1,6 +1,8 @@
 package de.fhg.iais.roberta.visitor.validate;
 
-import de.fhg.iais.roberta.bean.UsedHardwareBean.Builder;
+import com.google.common.collect.ClassToInstanceMap;
+
+import de.fhg.iais.roberta.bean.IProjectBean;
 import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioReceiveAction;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioSendAction;
@@ -10,8 +12,8 @@ import de.fhg.iais.roberta.typecheck.NepoInfo;
 
 public final class Calliope2017ValidatorVisitor extends MbedBoardValidatorVisitor {
 
-    public Calliope2017ValidatorVisitor(Builder builder, ConfigurationAst brickConfiguration) {
-        super(builder, brickConfiguration);
+    public Calliope2017ValidatorVisitor(ConfigurationAst brickConfiguration, ClassToInstanceMap<IProjectBean.IBuilder<?>> beanBuilders) {
+        super(brickConfiguration, beanBuilders);
     }
 
     @Override

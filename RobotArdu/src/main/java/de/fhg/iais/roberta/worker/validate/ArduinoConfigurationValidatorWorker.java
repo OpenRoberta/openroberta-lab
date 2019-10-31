@@ -5,7 +5,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import de.fhg.iais.roberta.bean.UsedHardwareBean;
+import com.google.common.collect.ClassToInstanceMap;
+
+import de.fhg.iais.roberta.bean.IProjectBean;
 import de.fhg.iais.roberta.components.ConfigurationComponent;
 import de.fhg.iais.roberta.components.Project;
 import de.fhg.iais.roberta.typecheck.NepoInfo;
@@ -46,13 +48,8 @@ public class ArduinoConfigurationValidatorWorker extends AbstractValidatorWorker
     }
 
     @Override
-    protected AbstractProgramValidatorVisitor getVisitor(UsedHardwareBean.Builder builder, Project project) {
-        return new ArduinoBrickValidatorVisitor(builder, project.getConfigurationAst());
-    }
-
-    @Override
-    protected String getBeanName() {
-        return "ProgramValidator";
+    protected AbstractProgramValidatorVisitor getVisitor(Project project, ClassToInstanceMap<IProjectBean.IBuilder<?>> beanBuilders) {
+        return new ArduinoBrickValidatorVisitor(project.getConfigurationAst(), beanBuilders);
     }
 
     private void checkConfigurationBlock(ConfigurationComponent configurationComponent) {

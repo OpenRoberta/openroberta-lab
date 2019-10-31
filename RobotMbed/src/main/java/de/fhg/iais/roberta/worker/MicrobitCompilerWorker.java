@@ -16,30 +16,26 @@ public class MicrobitCompilerWorker implements IWorker {
 
     @Override
     public void execute(Project project) {
-        runBuild(project);
+        this.runBuild(project);
     }
 
     /**
      * run the build and create the complied hex file
      */
-    Key runBuild(Project project) {
-        CompilerSetupBean compilerWorkflowBean = (CompilerSetupBean) project.getWorkerResult("CompilerSetup");
-        final String compilerBinDir = compilerWorkflowBean.getCompilerBinDir();
-        final String compilerResourcesDir = compilerWorkflowBean.getCompilerResourcesDir();
-        final String tempDir = compilerWorkflowBean.getTempDir();
+    private Key runBuild(Project project) {
+        CompilerSetupBean compilerWorkflowBean = project.getWorkerResult(CompilerSetupBean.class);
+        String compilerBinDir = compilerWorkflowBean.getCompilerBinDir();
+        String compilerResourcesDir = compilerWorkflowBean.getCompilerResourcesDir();
         String sourceCode = project.getSourceCode().toString();
-
-        final StringBuilder sb = new StringBuilder();
 
         String scriptName = compilerResourcesDir + "/compile.py";
 
-        String[] executableWithParameters =
-            new String[] {
-                compilerBinDir + "python",
-                scriptName,
-                sourceCode
-            };
-        project.setCompiledHex(getBinaryFromCrossCompiler(executableWithParameters));
+        String[] executableWithParameters = {
+            compilerBinDir + "python",
+            scriptName,
+            sourceCode
+        };
+        project.setCompiledHex(this.getBinaryFromCrossCompiler(executableWithParameters));
         if ( project.getCompiledHex() != null ) {
             return Key.COMPILERWORKFLOW_SUCCESS;
         } else {

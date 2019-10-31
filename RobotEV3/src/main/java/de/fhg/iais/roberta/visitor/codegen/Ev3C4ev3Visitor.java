@@ -7,9 +7,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import com.google.common.collect.ClassToInstanceMap;
 import com.google.common.collect.Lists;
 
-import de.fhg.iais.roberta.bean.CodeGeneratorSetupBean;
+import de.fhg.iais.roberta.bean.IProjectBean;
 import de.fhg.iais.roberta.bean.UsedHardwareBean;
 import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.components.ConfigurationComponent;
@@ -115,13 +116,12 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
      * @param programPhrases
      */
     public Ev3C4ev3Visitor(
-        UsedHardwareBean usedHardwareBean,
-        CodeGeneratorSetupBean codeGeneratorSetupBean,
-        String programName,
+        List<ArrayList<Phrase<Void>>> programPhrases,
         ConfigurationAst brickConfiguration,
-        ArrayList<ArrayList<Phrase<Void>>> programPhrases,
-        ILanguage language) {
-        super(usedHardwareBean, codeGeneratorSetupBean, programPhrases);
+        String programName,
+        ILanguage language,
+        ClassToInstanceMap<IProjectBean> beans) {
+        super(programPhrases, beans);
         this.brickConfiguration = brickConfiguration;
         this.programName = programName;
         this.language = language;
@@ -188,7 +188,7 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
 
     private String getSensorsInitializationArguments() {
         Map<String, ConfigurationComponent> usedSensorMap = new HashMap<>(4);
-        for ( UsedSensor usedSensor : this.usedHardwareBean.getUsedSensors() ) {
+        for ( UsedSensor usedSensor : this.getBean(UsedHardwareBean.class).getUsedSensors() ) {
             String port = usedSensor.getPort();
             usedSensorMap.put(port, this.brickConfiguration.optConfigurationComponent(port));
         }
@@ -243,13 +243,13 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
     }
 
     private void generateTTSInitialization() {
-        if ( this.usedHardwareBean.isActorUsed(SC.VOICE) ) {
+        if ( this.getBean(UsedHardwareBean.class).isActorUsed(SC.VOICE) ) {
             this.sb.append("SetLanguage(\"" + TTSLanguageMapper.getLanguageString(this.language) + "\");");
         }
     }
 
     private void generateGyroInitialization() {
-        for ( UsedSensor usedSensor : this.usedHardwareBean.getUsedSensors() ) {
+        for ( UsedSensor usedSensor : this.getBean(UsedHardwareBean.class).getUsedSensors() ) {
             if ( usedSensor.getType().equals(SC.GYRO) ) {
                 this.generateResetGyroSensor(usedSensor.getPort());
                 this.nlIndent();
@@ -998,7 +998,7 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
 
     private boolean isActorOnPort(String port) {
         if ( port != null ) {
-            for ( UsedActor actor : this.usedHardwareBean.getUsedActors() ) {
+            for ( UsedActor actor : this.getBean(UsedHardwareBean.class).getUsedActors() ) {
                 if ( actor.getPort().equals(port) ) {
                     return true;
                 }
