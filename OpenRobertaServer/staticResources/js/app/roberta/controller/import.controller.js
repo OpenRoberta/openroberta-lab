@@ -1,6 +1,6 @@
 define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'program.controller', 'configuration.controller', 'program.model',
-        'robot.controller', 'prettify', 'blocks', 'jquery', 'jquery-validate', 'blocks-msg' ], function(exports, COMM, MSG, LOG, UTIL, GUISTATE_C, PROGRAM_C,
-        CONFIGURATION_C, PROGRAM, ROBOT_C, Prettify, Blockly, $) {
+        'robot.controller', 'blocks', 'jquery', 'jquery-validate', 'blocks-msg' ], function(exports, COMM, MSG, LOG, UTIL, GUISTATE_C, PROGRAM_C,
+        CONFIGURATION_C, PROGRAM, ROBOT_C, Blockly, $) {
 
     function init(callback) {
         $('#fileSelector').val(null);
@@ -26,6 +26,13 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'pr
         $('#fileSelector').trigger('click'); // opening dialog 
     }
     exports.importXml = importXml;
+    
+    function importSourceCode(callback) {
+        init(callback);
+        $('#fileSelector').attr("accept", "." + GUISTATE_C.getSourceCodeFileExtension());
+        $('#fileSelector').trigger('click'); // opening dialog 
+    }
+    exports.importSourceCode = importSourceCode;
 
     function openProgramFromXML(target) {
         var robotType = target[1];

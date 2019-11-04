@@ -1,5 +1,5 @@
-define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'robot.controller', 'program.model', 'prettify', 'blocks', 'jquery',
-        'jquery-validate', 'blocks-msg' ], function(exports, COMM, MSG, LOG, UTIL, GUISTATE_C, ROBOT_C, PROGRAM, Prettify, Blockly, $) {
+define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'robot.controller', 'program.model', 'progCode.controller', 'blocks', 'jquery',
+        'jquery-validate', 'blocks-msg' ], function(exports, COMM, MSG, LOG, UTIL, GUISTATE_C, ROBOT_C, PROGRAM, PROGCODE_C, Blockly, $) {
 
     var $formSingleModal;
 
@@ -486,7 +486,7 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'ro
         var language = GUISTATE_C.getLanguage();
         if ($('#codeDiv').hasClass('rightActive') && !opt_fromShowSource) {
             PROGRAM.showSourceProgram(GUISTATE_C.getProgramName(), configName, xmlProgram, xmlConfigText, language, function(result) {
-                $('#codeContent').html('<pre class="prettyprint linenums">' + prettyPrintOne(result.sourceCode.escapeHTML(), null, true) + '</pre>');
+                PROGCODE_C.setCode(result.sourceCode);
             });
         }
         setTimeout(function() {

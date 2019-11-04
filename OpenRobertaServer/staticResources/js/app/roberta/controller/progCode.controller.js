@@ -1,16 +1,50 @@
-define([ 'exports', 'message', 'log', 'util', 'guiState.controller', 'program.controller', 'program.model', 'prettify', 'blocks', 'jquery', 'blocks-msg' ], function(
-        exports, MSG, LOG, UTIL, GUISTATE_C, PROG_C, PROGRAM, Prettify, Blockly, $) {
+define([ 'exports', 'message', 'log', 'util', 'guiState.controller', 'program.controller', 'program.model', 'blocks', 'codeflask', 'jquery', 'blocks-msg' ], function(
+        exports, MSG, LOG, UTIL, GUISTATE_C, PROG_C, PROGRAM, Blockly, CodeFlask, $) {
 
     const INITIAL_WIDTH = 0.5;
     var blocklyWorkspace;
+    var flask;
     /**
      * 
      */
     function init() {
         blocklyWorkspace = GUISTATE_C.getBlocklyWorkspace();
+        flask = new CodeFlask('#codeContent', {
+            language: 'java',
+            lineNumbers: true
+        });
         initEvents();
     }
     exports.init = init;
+    
+    function setCode(sourceCode) {
+        flask.updateCode(sourceCode);
+    }
+    exports.setCode = setCode;
+    
+    function setCodeLanguage(language) {
+        var langToSet;
+        switch (language) {
+            case 'py': 
+                langToSet = 'python';
+                break;
+            case 'java': 
+                langToSet = 'java';
+                break;
+            case 'ino':
+            case 'nxc':
+            case 'cpp': 
+                langToSet = 'clike';
+                break;
+            case 'json': 
+                langToSet = 'js';
+                break;
+            default:
+                langToSet = 'js';
+        }
+        flask.updateLanguage(langToSet);
+    }
+    exports.setCodeLanguage = setCodeLanguage;
 
     function initEvents() {
         $('#codeButton').off('click touchend');
@@ -40,8 +74,7 @@ define([ 'exports', 'message', 'log', 'util', 'guiState.controller', 'program.co
                 PROG_C.reloadProgram(result, true);
                 if (result.rc == "ok") {
                     GUISTATE_C.setState(result);
-                    $('#codeContent').html('<pre class="prettyprint linenums">' + prettyPrintOne(result.sourceCode.escapeHTML(), null, true) + '</pre>');
-                    // TODO change javaSource to source on server                   // TODO change javaSource to source on server
+                    flask.updateCode(result.sourceCode);
                     GUISTATE_C.setProgramSource(result.sourceCode);
                 } else {
                     MSG.displayInformation(result, result.message, result.message, result.parameters);
@@ -67,7 +100,7 @@ define([ 'exports', 'message', 'log', 'util', 'guiState.controller', 'program.co
                 PROG_C.reloadProgram(result);
                 if (result.rc == "ok") {
                     GUISTATE_C.setState(result);
-                    $('#codeContent').html('<pre class="prettyprint linenums">' + prettyPrintOne(result.sourceCode.escapeHTML(), null, true) + '</pre>');
+                    flask.updateCode(result.sourceCode);
                     // TODO change javaSource to source on server
                     GUISTATE_C.setProgramSource(result.sourceCode);
                     $('#blockly').openRightView('code', INITIAL_WIDTH);

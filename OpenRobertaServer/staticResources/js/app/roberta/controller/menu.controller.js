@@ -311,6 +311,9 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
             case 'menuShowCode':
                 $('#codeButton').trigger("click");
                 break;
+            case 'menuSourceCodeEditor':
+                $('#tabSourceCodeEditor').trigger("click");
+                break;
             case 'menuImportProg':
                 IMPORT_C.importXml();
                 break;

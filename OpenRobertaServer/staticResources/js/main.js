@@ -1,6 +1,7 @@
 require.config({
     baseUrl : 'js/libs',
     paths : {
+        'codeflask' : 'codeflask/codeflask.min',
         'blockly' : '../../blockly/blockly_compressed',
         'blocks' : '../../blockly/blocks_compressed',
         'blocks-msg' : '../../blockly/msg/js/en',
@@ -15,7 +16,6 @@ require.config({
         'jquery-validate' : 'jquery/jquery.validate-1.17.0.min',
         'jquery-hotkeys' : 'jquery/jquery.hotkeys-0.2.0',
         'slick' : 'slick/slick.min',
-        'prettify' : 'code-prettify/prettify',
         'socket.io' : 'socket.io/socket.io',
         'volume-meter' : 'sound/volume-meter',
 
@@ -58,6 +58,8 @@ require.config({
         'cookieDisclaimer.controller' : '../app/roberta/controller/cookieDisclaimer.controller',
         'webview.controller' : '../app/roberta/controller/webview.controller',
         'wedo.model' : '../app/roberta/models/wedo.model',
+        
+        'sourceCodeEditor.controller' : '../app/roberta/controller/sourceCodeEditor.controller',
 
         'simulation.constants' : '../app/simulation/simulationLogic/constants',
         'simulation.math' : '../app/simulation/simulationLogic/math',
@@ -125,9 +127,8 @@ require.config({
 require([ 'require', 'wrap', 'log', 'jquery', 'jquery-cookie', 'guiState.controller', 'progList.controller', 'logList.controller', 'confList.controller',
         'progDelete.controller', 'confDelete.controller', 'progShare.controller', 'cookieDisclaimer.controller', 'menu.controller', 'multSim.controller',
         'user.controller', 'robot.controller', 'program.controller', 'progSim.controller', 'progCode.controller', 'progDelete.controller',
-        'progHelp.controller', 'progLegal.controller', 'progInfo.controller', 'progRun.controller', 'configuration.controller', 'language.controller',
-        'socket.controller', 'progTutorial.controller', 'tutorialList.controller', 'volume-meter', 'user.model', 'webview.controller' ], function(require) {
-
+        'progHelp.controller', 'progLegal.controller', 'progInfo.controller', 'progRun.controller', 'configuration.controller', 'language.controller', 'socket.controller',
+        'progTutorial.controller', 'tutorialList.controller', 'volume-meter', 'user.model', 'webview.controller', 'sourceCodeEditor.controller', 'codeflask' ], function(require) {
     $ = require('jquery', 'jquery-cookie');
     WRAP = require('wrap');
     LOG = require('log');
@@ -160,6 +161,8 @@ require([ 'require', 'wrap', 'log', 'jquery', 'jquery-cookie', 'guiState.control
     tutorialController = require('progTutorial.controller');
     tutorialListController = require('tutorialList.controller');
     webviewController = require('webview.controller');
+    sourceCodeEditorController = require('sourceCodeEditor.controller');
+    codeflask = require('codeflask');
 
     $(document).ready(WRAP.fn3(init, 'page init'));
 });
@@ -186,6 +189,8 @@ function init() {
         confDeleteController.init();
         progShareController.init();
         logListController.init();
+        
+        sourceCodeEditorController.init();
 
         programController.init();
         configurationController.init();

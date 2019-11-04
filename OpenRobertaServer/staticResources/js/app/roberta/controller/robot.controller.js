@@ -1,6 +1,6 @@
 define([ 'exports', 'util', 'log', 'message', 'guiState.controller', 'guiState.model', 'robot.model', 'program.controller', 'configuration.controller',
-        'webview.controller', 'socket.controller', 'jquery', 'jquery-validate' ], function(exports, UTIL, LOG, MSG, GUISTATE_C, GUISTATE, ROBOT, PROGRAM_C,
-        CONFIGURATION_C, WEBVIEW_C, SOCKET_C, $) {
+        'webview.controller', 'socket.controller', 'sourceCodeEditor.controller', 'progCode.controller', 'jquery', 'jquery-validate' ], function(exports, UTIL, LOG, MSG, GUISTATE_C, GUISTATE, ROBOT, PROGRAM_C,
+        CONFIGURATION_C, WEBVIEW_C, SOCKET_C, CODEEDITOR_C, PROGCODE_C, $) {
 
     var $formSingleModal;
     var $formSingleListModal;
@@ -315,6 +315,9 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.controller', 'guiState.m
         document.getElementById("wlanSsid").value = "";
         document.getElementById("wlanPassword").value = "";
 
+        PROGCODE_C.setCodeLanguage(GUISTATE_C.getSourceCodeFileExtension());
+        CODEEDITOR_C.setCodeLanguage(GUISTATE_C.getSourceCodeFileExtension());
+        
         var further;
         // no need to ask for saving programs if you switch the robot in between a group
         if (typeof opt_continue === 'undefined' && GUISTATE_C.findGroup(robot) == GUISTATE_C.getRobotGroup()) {

@@ -572,13 +572,24 @@ div.rightMenuButton:hover,
     background-color: white !important;
     background-image: none;
 }
-#simButtons,
-#codeButtons {
+#simButtons {
     left: 12px;
     bottom: 6px;
     position: absolute;
     z-index: 99;
 }
+
+#codeButtons {
+    left: 12px;
+    bottom: 0px;
+    position: absolute;
+    z-index: 99;
+    width: 100%;
+    background-color: #EEE;
+    height: 70px;
+    padding-top: 10px;
+}
+
 .btn-group-vertical>.btn.simbtn {
     margin: 8px 0;
 }
@@ -2204,4 +2215,59 @@ label.quiz.answer.fail {
 
 td[lkey="Blockly.Msg.POPUP_DOWNLOAD_STEP_A_SENSEBOX"] {
 	padding-bottom: 2.5em;
+}
+
+.btn.sourceEditor {
+	margin-right: 0;
+}
+
+#flaskEditor {
+    height: 100%; /*fix for FF calc thing*/
+}
+
+#sourceCodeEditor pre {
+    background-color: transparent;
+    border: 0px solid #ccc;
+    border-radius: 0px;
+    color: #000;
+    font-family: 'Roboto', sans-serif;
+}
+
+#sourceCodeEditor .codeflask {
+    margin-top: 80px;
+    height: calc(100% - 80px);
+    height: -moz-calc(100% - 80px);
+    height: -webkit-calc(100% - 80px);
+    position: relative;
+}
+
+#codeDiv pre {
+    background-color: transparent;
+    border: 0px solid #ccc;
+    border-radius: 0px;
+    color: #000;
+    font-family: 'Roboto', sans-serif;
+}
+
+#sourceCodeEditor .codeflask__flatten {
+    /*background-color: #FFF;*/
+    padding-top: 0px !important;
+    line-height: 18px;
+}
+
+#codeDiv .codeflask__flatten {
+    background-color: #FFF;
+    padding-bottom: 70px;
+    padding-top: 0px !important;
+    line-height: 18px;
+}
+
+.codeflask__lines {
+    background-color: #EEE;
+    padding-top: 0px !important;
+}
+
+.codeflask__lines__line {
+    color: #333;
+    line-height: 18px !important;
 }

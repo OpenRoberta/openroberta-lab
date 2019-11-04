@@ -111,7 +111,17 @@ define([ 'exports', 'log', 'jquery', 'guiState.controller', 'program.controller'
             if (value == undefined) {
                 console.log('UNDEFINED    key : value = ' + key + ' : ' + value);
             }
-            if (lkey === 'Blockly.Msg.MENU_EDIT_TOOLTIP') {
+            if (lkey === 'Blockly.Msg.SOURCE_CODE_EDITOR_PLACEHOLDER') {
+                $("#sourceCodeEditorTextArea").attr("placeholder", value);
+            } else if (lkey === 'Blockly.Msg.SOURCE_CODE_EDITOR_UPLOAD_TOOLTIP') {
+                $('#uploadSourceCodeEditor').attr('data-original-title', value);
+            } else if (lkey === 'Blockly.Msg.SOURCE_CODE_EDITOR_IMPORT_TOOLTIP') {
+                $('#importSourceCodeEditor').attr('data-original-title', value);
+            } else if (lkey === 'Blockly.Msg.SOURCE_CODE_EDITOR_BUILD_TOOLTIP') {
+                $('#buildSourceCodeEditor').attr('data-original-title', value);
+            } else if (lkey === 'Blockly.Msg.SOURCE_CODE_EDITOR_RUN_TOOLTIP') {
+                $('#runSourceCodeEditor').attr('data-original-title', value);
+            } else if (lkey === 'Blockly.Msg.MENU_EDIT_TOOLTIP') {
                 $('#head-navi-tooltip-program').attr('data-original-title', value);
                 $('#head-navi-tooltip-configuration').attr('data-original-title', value);
             } else if (lkey == 'Blockly.Msg.MENU_RIGHT_CODE_TOOLTIP') {
@@ -152,6 +162,7 @@ define([ 'exports', 'log', 'jquery', 'guiState.controller', 'program.controller'
                 $('#simResetPose').attr('data-original-title', value);
             } else if (lkey == 'Blockly.Msg.MENU_CODE_DOWNLOAD_TOOLTIP') {
                 $('#codeDownload').attr('data-original-title', value);
+                $('#downloadSourceCodeEditor').attr('data-original-title', value);
             } else if (lkey == 'Blockly.Msg.MENU_CODE_REFRESH_TOOLTIP') {
                 $('#codeRefresh').attr('data-original-title', value);
             } else if (lkey == 'Blockly.Msg.MENU_TUTORIAL_TOOLTIP') {
