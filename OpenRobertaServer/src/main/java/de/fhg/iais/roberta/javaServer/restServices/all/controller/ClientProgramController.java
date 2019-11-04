@@ -35,8 +35,8 @@ import de.fhg.iais.roberta.util.Key;
 import de.fhg.iais.roberta.util.ServerProperties;
 import de.fhg.iais.roberta.util.Statistics;
 import de.fhg.iais.roberta.util.Util;
-import de.fhg.iais.roberta.util.UtilForREST;
 import de.fhg.iais.roberta.util.UtilForHtmlXml;
+import de.fhg.iais.roberta.util.UtilForREST;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.util.jaxb.JaxbHelper;
 
@@ -80,7 +80,7 @@ public class ClientProgramController {
             String configText = dataPart.optString("configText", null);
             boolean isShared = dataPart.optBoolean("shared", false);
             Program program;
-            if ( dataPart.getString("cmd").equals("saveP") ) {
+            if ( dataPart.getString("cmd").equals("save") ) {
                 program =
                     programProcessor.persistProgramText(programName, programText, configName, configText, userId, robot, userId, programTimestamp, !isShared);
             } else {
@@ -125,10 +125,10 @@ public class ClientProgramController {
             } else {
                 String programName = dataPart.getString("programName");
                 String ownerName = dataPart.getString("owner");
-                String authorName = dataPart.getString("authorName");
+                String author = dataPart.getString("author");
                 String robot = getRobot(httpSessionState);
 
-                Program program = programProcessor.getProgram(programName, ownerName, robot, authorName);
+                Program program = programProcessor.getProgram(programName, ownerName, robot, author);
                 if ( program != null ) {
                     response.put("programText", program.getProgramText());
                     String configText = programProcessor.getProgramsConfig(program);
@@ -246,12 +246,12 @@ public class ClientProgramController {
                 UtilForREST.addErrorInfo(response, Key.USER_ERROR_NOT_LOGGED_IN);
             } else {
                 String robot = getRobot(httpSessionState);
-                String programName = dataPart.getString("name");
+                String programName = dataPart.getString("programName");
                 String ownerName = dataPart.getString("owner");
-                String authorName = dataPart.getString("author");
+                String author = dataPart.getString("author");
                 User owner = up.getUser(ownerName);
                 int ownerID = owner.getId();
-                int authorId = up.getUser(authorName).getId();
+                int authorId = up.getUser(author).getId();
                 JSONArray program = programProcessor.getProgramEntity(programName, ownerID, robot, authorId);
                 if ( program != null ) {
                     response.put("program", program);
@@ -429,7 +429,7 @@ public class ClientProgramController {
             } else {
                 String programName;
                 String author;
-                programName = dataPart.getString("name");
+                programName = dataPart.getString("programName");
                 author = dataPart.getString("author");
                 programProcessor.deleteByName(programName, userId, robot, author);
                 UtilForREST.addResultInfo(response, programProcessor);
@@ -470,14 +470,14 @@ public class ClientProgramController {
             } else {
                 String programName;
                 String robotName;
-                String authorName;
+                String author;
                 boolean like;
                 programName = dataPart.getString("programName");
                 robotName = dataPart.getString("robotName");
-                authorName = dataPart.getString("authorName");
+                author = dataPart.getString("author");
                 like = dataPart.getBoolean("like");
                 if ( like ) {
-                    lp.createLike(programName, robotName, authorName);
+                    lp.createLike(programName, robotName, author);
                     if ( lp.succeeded() ) {
                         // nothing to do
                         //argument: deleted tracks whether a like was set or taken away
@@ -487,7 +487,7 @@ public class ClientProgramController {
                         Statistics.info("GalleryLike", "success", false);
                     }
                 } else {
-                    lp.deleteLike(programName, robotName, authorName);
+                    lp.deleteLike(programName, robotName, author);
                     Statistics.info("GalleryLike", "success", true, "deleted", true);
                 }
                 UtilForREST.addResultInfo(response, lp);
@@ -659,7 +659,7 @@ public class ClientProgramController {
                 LOG.error("Unauthorized");
                 UtilForREST.addErrorInfo(response, Key.USER_ERROR_NOT_LOGGED_IN);
             } else {
-                String programName = dataPart.getString("name");
+                String programName = dataPart.getString("programName");
                 JSONArray relations = programProcessor.getProgramRelations(programName, userId, robot, userId);
                 response.put("relations", relations);
                 UtilForREST.addResultInfo(response, programProcessor);

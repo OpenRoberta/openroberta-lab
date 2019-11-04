@@ -19,6 +19,7 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
      */
     function saveAsProgramToServer(programName, xmlProgramText, configName, xmlConfigText, timestamp, successFn) {
         COMM.json("/program/save", {
+            "cmd" : "saveAs",
             "programName" : programName,
             "programText" : xmlProgramText,
             "configName" : configName,
@@ -46,6 +47,7 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
      */
     function saveProgramToServer(programName, xmlProgramText, configName, xmlConfigText, programShared, timestamp, successFn) {
         COMM.json("/program/save", {
+            "cmd" : "save",
             "programName" : programName,
             "programText" : xmlProgramText,
             "configName" : configName,
@@ -134,7 +136,7 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
      */
     function deleteProgramFromListing(programName, author, successFn) {
         COMM.json("/program/delete", {
-            "name" : programName,
+            "programName" : programName,
             "author" : author,
         }, function(result) {
             successFn(result, programName);
@@ -152,11 +154,11 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
      *            {String} - name of the owner of the program
      * 
      */
-    function loadProgramFromListing(programName, ownerName, authorName, successFn) {
+    function loadProgramFromListing(programName, ownerName, author, successFn) {
         COMM.json("/program/listing", {
-            "name" : programName,
+            "programName" : programName,
             "owner" : ownerName,
-            "authorName" : authorName
+            "author" : author
         }, successFn, "load program '" + programName + "' owned by '" + ownerName + "'");
     }
 
@@ -171,11 +173,11 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
      *            {String} - name of the owner of the program
      * 
      */
-    function loadProgramEntity(programName, authorName, ownerName, successFn) {
+    function loadProgramEntity(programName, author, ownerName, successFn) {
         COMM.json("/program/entity", {
-            "name" : programName,
+            "programName" : programName,
             "owner" : ownerName,
-            "author" : authorName
+            "author" : author
         }, successFn, "load programEntity '" + programName + "' owned by '" + ownerName + "'");
     }
 
@@ -329,7 +331,7 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
     function checkProgramCompatibility(programName, configName, xmlTextProgram, xmlTextConfig, successFn) {
         COMM.json("/program", {
             "cmd" : "checkP",
-            "name" : programName,
+            "programName" : programName,
             "configuration" : configName,
             "programText" : xmlTextProgram,
             "configurationText" : xmlTextConfig
@@ -345,11 +347,11 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
      *            {String} - name of the program from the gallery
      * 
      */
-    function likeProgram(like, programName, authorName, robotName, successFn) {
+    function likeProgram(like, programName, author, robotName, successFn) {
         COMM.json("/program/like", {
             "programName" : programName,
             "robotName" : robotName,
-            "authorName" : authorName,
+            "author" : author,
             "like" : like
         }, successFn, "like program '" + programName + "': '" + like + "'");
     }
