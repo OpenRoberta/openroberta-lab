@@ -67,7 +67,6 @@ public class SenseboxCompilerWorker implements IWorker {
             scriptName = compilerResourcesDir + "arduino-builder/osx/arduino-builder";
             os = "arduino-builder/osx";
         }
-        String fqbnArg = "-fqbn=sensebox:samd:sb:power=on";
         Path path = Paths.get(tempDir + project.getToken() + "/" + project.getProgramName());
         Path base = Paths.get("");
 
@@ -79,7 +78,7 @@ public class SenseboxCompilerWorker implements IWorker {
                 "-tools=" + compilerResourcesDir + "/" + os + "/tools-builder",
                 "-tools=" + compilerResourcesDir + "hardware/additional",
                 "-libraries=" + compilerResourcesDir + "/libraries",
-                fqbnArg,
+                compilerWorkflowBean.getFqbn(),
                 "-prefs=compiler.path=" + compilerBinDir,
                 "-vid-pid=0X04D8_0XEF66",
                 "-ide-version=10805",

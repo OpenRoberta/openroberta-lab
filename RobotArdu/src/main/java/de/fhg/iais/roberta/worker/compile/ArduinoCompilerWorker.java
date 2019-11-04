@@ -67,8 +67,8 @@ public class ArduinoCompilerWorker implements IWorker {
             scriptName = compilerResourcesDir + "arduino-builder/osx/arduino-builder";
             os = "arduino-builder/osx";
         }
-        final Path path = Paths.get(tempDir + project.getToken() + "/" + project.getProgramName());
-        final Path base = Paths.get("");
+        Path path = Paths.get(tempDir + project.getToken() + "/" + project.getProgramName());
+        Path base = Paths.get("");
 
         String[] executableWithParameters =
             {

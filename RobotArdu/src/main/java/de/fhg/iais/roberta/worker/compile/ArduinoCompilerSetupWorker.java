@@ -5,6 +5,7 @@ import de.fhg.iais.roberta.bean.CompilerSetupBean.Builder;
 import de.fhg.iais.roberta.components.Project;
 import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.util.PluginProperties;
+import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.worker.IWorker;
 
 public class ArduinoCompilerSetupWorker implements IWorker {
@@ -37,6 +38,11 @@ public class ArduinoCompilerSetupWorker implements IWorker {
             case "sensebox":
                 builder.setFqbn("-fqbn=sensebox:samd:sb:power=on");
                 break;
+            case "bob3":
+                builder.setFqbn("-fqbn=nicai:avr:bob3");
+                break;
+            default:
+                throw new DbcException("This type of Arduino is not supported");
         }
         CompilerSetupBean compilerWorkflowBean = builder.build();
         project.addWorkerResult("CompilerSetup", compilerWorkflowBean);
