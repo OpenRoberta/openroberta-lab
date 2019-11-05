@@ -36,6 +36,11 @@ robots:
        template: wedo
 
 progs:
+    emptyProgram:
+       decl: default
+       exclude:
+          ALL: "this program is empty and only for workflow tests"
+       remark: "an empty program with one comment"
     advancedListOperations:
        decl: advancedListOperations
        exclude:

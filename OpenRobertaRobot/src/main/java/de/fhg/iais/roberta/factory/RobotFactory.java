@@ -1,9 +1,11 @@
 package de.fhg.iais.roberta.factory;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -229,5 +231,10 @@ public class RobotFactory implements IRobotFactory {
             workerPipe.add(worker);
         }
         return workerPipe;
+    }
+
+    @Override
+    public Set<String> getWorkflows() {
+        return Collections.unmodifiableSet(this.workflows.keySet());
     }
 }

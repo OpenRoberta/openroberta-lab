@@ -47,6 +47,10 @@ public class UnitTestHelper {
         Assert.assertEquals(expectedSource.replaceAll("\\s+", ""), generatedProgramSource);
     }
 
+    public static Project.Builder setupWithNativeSource(IRobotFactory factory, String nativeSource) {
+        return new Project.Builder().setProgramNativeSource(nativeSource).setFactory(factory);
+    }
+
     public static Project.Builder setupWithExportXML(IRobotFactory factory, String exportXmlAsString) {
         String[] parts = exportXmlAsString.split("\\s*</program>\\s*<config>\\s*");
         String[] programParts = parts[0].split("<program>");

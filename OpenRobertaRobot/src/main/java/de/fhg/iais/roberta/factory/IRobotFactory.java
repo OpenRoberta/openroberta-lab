@@ -1,6 +1,7 @@
 package de.fhg.iais.roberta.factory;
 
 import java.util.List;
+import java.util.Set;
 
 import de.fhg.iais.roberta.util.PluginProperties;
 import de.fhg.iais.roberta.worker.IWorker;
@@ -78,4 +79,10 @@ public interface IRobotFactory {
     Boolean hasWlanCredentials();
 
     List<IWorker> getWorkerPipe(String workflow);
+
+    /**
+     * Returns all workflows this robot has registered in the properties.
+     * @return unmodifiable string set of workflows
+     */
+    Set<String> getWorkflows();
 }
