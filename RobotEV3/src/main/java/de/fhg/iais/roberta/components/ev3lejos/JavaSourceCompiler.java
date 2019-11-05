@@ -68,7 +68,7 @@ public class JavaSourceCompiler {
         this.success = isSuccess != null && isSuccess;
         final StringJoiner sj = new StringJoiner(System.getProperty("line.separator"));
         for ( Diagnostic<? extends JavaFileObject> diagnostic : diagnostics.getDiagnostics() ) {
-            sj.add(diagnostic.getMessage(Locale.ENGLISH));
+            sj.add(diagnostic.getMessage(Locale.ENGLISH) + " [" + diagnostic.getLineNumber() + ":" + diagnostic.getColumnNumber() + "]");
         }
         this.compilerResponse = sj.toString();
     }
