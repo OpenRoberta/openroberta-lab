@@ -4,6 +4,8 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
         UTIL, MSG, COMM, ROBOT_C, SOCKET_C, USER_C, USER, GUISTATE_C, CookieDisclaimer, PROGRAM_C, PROGRAM_M, MULT_SIM, RUN_C, CONFIGURATION_C, IMPORT_C,
         EnjoyHint, TOUR_C, SIM, PROGLIST, $, Blockly) {
 
+    var n = 0;
+
     function init() {
         initMenu();
         initMenuEvents();
@@ -11,14 +13,16 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
          * Regularly ping the server to keep status information up-to-date
          */
         function pingServer() {
-            if (GUISTATE_C.doPing()) {
-                setTimeout(function() {
+            setTimeout(function() {
+                n += 1000;
+                if (n >= GUISTATE_C.getPingTime() && GUISTATE_C.doPing()) {
                     COMM.ping(function(result) {
                         GUISTATE_C.setState(result);
                     });
-                    pingServer();
-                }, GUISTATE_C.getPingTime());
-            }
+                    n = 0;
+                }
+                pingServer();
+            }, 1000);
         }
         pingServer();
         LOG.info('init menu view');

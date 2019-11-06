@@ -33,6 +33,7 @@ define([ 'exports', 'util', 'log', 'message', 'program.controller', 'program.mod
      * Start the program on the brick
      */
     function runOnBrick() {
+        GUISTATE_C.setPing(false);
         GUISTATE_C.setConnectionState("busy");
         LOG.info('run ' + GUISTATE_C.getProgramName() + 'on brick');
         var xmlProgram = Blockly.Xml.workspaceToDom(blocklyWorkspace);
@@ -49,27 +50,32 @@ define([ 'exports', 'util', 'log', 'message', 'program.controller', 'program.mod
             PROGRAM.runOnBrick(GUISTATE_C.getProgramName(), configName, xmlTextProgram, xmlConfigText, PROG_C.SSID, PROG_C.password, language, function(result) {
                 runForAutoConnection(result);
                 PROG_C.reloadProgram(result);
+                GUISTATE_C.setPing(true);    
             });
         } else if (GUISTATE_C.getConnection() == connectionType.AGENT || GUISTATE_C.getConnection() == connectionType.AGENTORTOKEN && GUISTATE_C.getIsAgent()) {
             PROGRAM.runOnBrick(GUISTATE_C.getProgramName(), configName, xmlTextProgram, xmlConfigText, PROG_C.SSID, PROG_C.password, language, function(result) {
                 runForAgentConnection(result);
                 PROG_C.reloadProgram(result);
+                GUISTATE_C.setPing(true);    
             });
         } else if (GUISTATE_C.getConnection() == connectionType.WEBVIEW) {
             PROGRAM.runOnBrick(GUISTATE_C.getProgramName(), configName, xmlTextProgram, xmlConfigText, PROG_C.SSID, PROG_C.password, language, function(result) {
                 runForWebviewConnection(result);
                 PROG_C.reloadProgram(result);
+                GUISTATE_C.setPing(true);    
             });
         } else if (GUISTATE_C.getConnection() == connectionType.JSPLAY) {
             //For all robots that play their program file in the browser
             PROGRAM.runOnBrick(GUISTATE_C.getProgramName(), configName, xmlTextProgram, xmlConfigText, PROG_C.SSID, PROG_C.password, language, function(result) {
                 runForJSPlayConnection(result);
                 PROG_C.reloadProgram(result);
+                GUISTATE_C.setPing(true);    
             });
         } else {
             PROGRAM.runOnBrick(GUISTATE_C.getProgramName(), configName, xmlTextProgram, xmlConfigText, PROG_C.SSID, PROG_C.password, language, function(result) {
                 runForToken(result);
                 PROG_C.reloadProgram(result);
+                GUISTATE_C.setPing(true);           
             });
         }
     }

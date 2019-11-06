@@ -83,14 +83,14 @@ require.config({
         'util' : '../helper/util',
         'wrap' : '../helper/wrap',
 
-        'interpreter.constants': '../app/wedoInterpreter/interpreter.constants',
-        'interpreter.interpreter': '../app/wedoInterpreter/interpreter.interpreter',
-        'interpreter.aRobotBehaviour': '../app/wedoInterpreter/interpreter.aRobotBehaviour',
-        'interpreter.robotWeDoBehaviour': '../app/wedoInterpreter/interpreter.robotWeDoBehaviour',
-        'interpreter.robotWeDoBehaviourTest': '../app/wedoInterpreter/interpreter.robotWeDoBehaviourTest',
-        'interpreter.robotMbedBehaviour': '../app/wedoInterpreter/interpreter.robotMbedBehaviour',
-        'interpreter.state': '../app/wedoInterpreter/interpreter.state',
-        'interpreter.util': '../app/wedoInterpreter/interpreter.util'
+        'interpreter.constants' : '../app/wedoInterpreter/interpreter.constants',
+        'interpreter.interpreter' : '../app/wedoInterpreter/interpreter.interpreter',
+        'interpreter.aRobotBehaviour' : '../app/wedoInterpreter/interpreter.aRobotBehaviour',
+        'interpreter.robotWeDoBehaviour' : '../app/wedoInterpreter/interpreter.robotWeDoBehaviour',
+        'interpreter.robotWeDoBehaviourTest' : '../app/wedoInterpreter/interpreter.robotWeDoBehaviourTest',
+        'interpreter.robotMbedBehaviour' : '../app/wedoInterpreter/interpreter.robotMbedBehaviour',
+        'interpreter.state' : '../app/wedoInterpreter/interpreter.state',
+        'interpreter.util' : '../app/wedoInterpreter/interpreter.util'
 
     },
     shim : {
@@ -125,8 +125,8 @@ require.config({
 require([ 'require', 'wrap', 'log', 'jquery', 'jquery-cookie', 'guiState.controller', 'progList.controller', 'logList.controller', 'confList.controller',
         'progDelete.controller', 'confDelete.controller', 'progShare.controller', 'cookieDisclaimer.controller', 'menu.controller', 'multSim.controller',
         'user.controller', 'robot.controller', 'program.controller', 'progSim.controller', 'progCode.controller', 'progDelete.controller',
-        'progHelp.controller', 'progLegal.controller', 'progInfo.controller', 'progRun.controller', 'configuration.controller', 'language.controller', 'socket.controller',
-        'progTutorial.controller', 'tutorialList.controller', 'volume-meter', 'user.model', 'webview.controller' ], function(require) {
+        'progHelp.controller', 'progLegal.controller', 'progInfo.controller', 'progRun.controller', 'configuration.controller', 'language.controller',
+        'socket.controller', 'progTutorial.controller', 'tutorialList.controller', 'volume-meter', 'user.model', 'webview.controller' ], function(require) {
 
     $ = require('jquery', 'jquery-cookie');
     WRAP = require('wrap');
@@ -230,8 +230,13 @@ function handleServerErrors(jqXHR) {
     }
     if (this.url !== "/rest/ping" || COMM.errorNum > ALLOWED_PING_NUM) {
         guiStateController.setPing(false);
-        $('#message').attr('lkey', Blockly.Msg.SERVER_NOT_AVAILABLE);
-        $('#message').html(Blockly.Msg.SERVER_NOT_AVAILABLE);
+        if (jqXHR.status && jqXHR.status < 500) {
+            $('#message').attr('lkey', Blockly.Msg.ORA_COMMAND_INVALID);
+            $('#message').html(Blockly.Msg.ORA_COMMAND_INVALID);
+        } else {
+            $('#message').attr('lkey', Blockly.Msg.SERVER_NOT_AVAILABLE);
+            $('#message').html(Blockly.Msg.SERVER_NOT_AVAILABLE);
+        }
         $('#show-message').modal({
             backdrop : 'static',
             keyboard : false
