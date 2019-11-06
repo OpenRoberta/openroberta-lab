@@ -291,11 +291,11 @@ define([ 'simulation.simulation', 'simulation.robot.mbed', 'volume-meter' ], fun
         }
         // update tone
         var volume = this.robotBehaviour.getActionState("volume", true);
-        if (volume && AudioContext) {
+        if (volume && this.webAudio.context) {
             this.webAudio.volume = volume / 100.0;
         }
         var tone = this.robotBehaviour.getActionState("tone", true);
-        if (tone && AudioContext) {
+        if (tone && this.webAudio.context) {
             var ts = this.webAudio.context.currentTime;
             if (tone.frequency !== undefined) {
                 this.webAudio.oscillator.frequency.setValueAtTime(tone.frequency, ts);

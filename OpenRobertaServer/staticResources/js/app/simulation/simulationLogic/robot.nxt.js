@@ -255,11 +255,11 @@ define([ 'simulation.simulation', 'interpreter.constants', 'simulation.robot.ev3
         }
         // update tone
         var volume = this.robotBehaviour.getActionState("volume", true);
-        if (volume && AudioContext) {
+        if (volume && this.webAudio.context) {
             this.webAudio.volume = volume / 100.0;
         }
         var tone = this.robotBehaviour.getActionState("tone", true);
-        if (tone && AudioContext) {
+        if (tone && this.webAudio.context) {
             var ts = this.webAudio.context.currentTime;
             if (tone.frequency) {
                 this.webAudio.oscillator.frequency.setValueAtTime(tone.frequency, ts);
