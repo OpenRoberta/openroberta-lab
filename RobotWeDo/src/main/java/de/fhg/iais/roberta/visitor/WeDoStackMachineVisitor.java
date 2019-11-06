@@ -126,9 +126,9 @@ public final class WeDoStackMachineVisitor<V> extends AbstractStackMachineVisito
         ConfigurationComponent confGyroSensor = getConfigurationComponent(gyroSensor.getPort());
         String brickName = confGyroSensor.getProperty("VAR");
         String port = confGyroSensor.getProperty("CONNECTOR");
-        String slot = gyroSensor.getSlot().toString();
+        String slot = gyroSensor.getSlot().toString(); // the mode is in the slot?
         if ( brickName != null && port != null ) {
-            JSONObject o = mk(C.GET_SAMPLE).put(C.GET_SAMPLE, C.GYRO).put(C.NAME, brickName).put(C.PORT, port).put(C.SLOT, slot);
+            JSONObject o = mk(C.GET_SAMPLE).put(C.GET_SAMPLE, C.GYRO).put(C.NAME, brickName).put(C.PORT, port).put(C.MODE, slot);
             return app(o);
         } else {
             throw new DbcException("operation not supported");
