@@ -51,6 +51,10 @@ public class UnitTestHelper {
         return new Project.Builder().setProgramNativeSource(nativeSource).setFactory(factory);
     }
 
+    public static Project.Builder setupWithResetFirmware(IRobotFactory factory) {
+        return new Project.Builder().setCompiledProgramPath(factory.getFirmwareDefaultProgramName()).setFactory(factory);
+    }
+
     public static Project.Builder setupWithExportXML(IRobotFactory factory, String exportXmlAsString) {
         String[] parts = exportXmlAsString.split("\\s*</program>\\s*<config>\\s*");
         String[] programParts = parts[0].split("<program>");

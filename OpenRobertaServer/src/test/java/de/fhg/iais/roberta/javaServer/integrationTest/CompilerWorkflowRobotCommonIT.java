@@ -1,19 +1,8 @@
 package de.fhg.iais.roberta.javaServer.integrationTest;
 
-import org.apache.commons.lang3.StringUtils;
-import org.json.JSONObject;
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Ignore;
-import org.junit.Test;
-import org.junit.experimental.categories.Category;
-import org.junit.runner.RunWith;
-import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import static org.junit.Assert.fail;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -26,6 +15,21 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import javax.ws.rs.core.Response;
+
+import org.apache.commons.lang3.StringUtils;
+import org.json.JSONObject;
+import org.junit.AfterClass;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Ignore;
+import org.junit.Test;
+import org.junit.experimental.categories.Category;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.runners.MockitoJUnitRunner;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import de.fhg.iais.roberta.components.Project;
 import de.fhg.iais.roberta.factory.IRobotFactory;
@@ -45,10 +49,6 @@ import de.fhg.iais.roberta.util.Util;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.util.test.UnitTestHelper;
 import de.fhg.iais.roberta.util.testsetup.IntegrationTest;
-
-import static org.junit.Assert.fail;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.when;
 
 /**
  * <b>Testing the generation of native code and the CROSSCOMPILER</b><br>
@@ -72,17 +72,17 @@ public class CompilerWorkflowRobotCommonIT {
     private static final String ORA_CC_RSC_ENVVAR = ServerProperties.CROSSCOMPILER_RESOURCE_BASE.replace('.', '_');
     private static final String WORKFLOWS_PROG_NAME = "emptyProgram";
 
-    private boolean crosscompilerCall;
-    private boolean showSuccess;
+    private static RobotCommunicator robotCommunicator;
+    private static ServerProperties serverProperties;
+    private static Map<String, IRobotFactory> pluginMap;
+    private static HttpSessionState httpSessionState;
+    private static boolean crosscompilerCall;
+    private static boolean showSuccess;
 
-    private JSONObject robotsFromTestSpec;
-    private JSONObject progsFromTestSpec;
-    private List<String> results = new ArrayList<>();
+    private static JSONObject robotsFromTestSpec;
+    private static JSONObject progsFromTestSpec;
 
-    private RobotCommunicator robotCommunicator;
-    private ServerProperties serverProperties;
-    private Map<String, IRobotFactory> pluginMap;
-    private HttpSessionState httpSessionState;
+    private static List<String> results = new ArrayList<>();
 
     @Mock
     private DbSession dbSession;
@@ -99,10 +99,6 @@ public class CompilerWorkflowRobotCommonIT {
             LOG.error("the environment variable \"" + ORA_CC_RSC_ENVVAR + "\" must contain the absolute path to the ora-cc-rsc repository - test fails");
             fail();
         }
-    }
-
-    @Before
-    public void setup() throws Exception {
         Properties baseServerProperties = Util.loadProperties(null);
         serverProperties = new ServerProperties(baseServerProperties);
         robotCommunicator = new RobotCommunicator();
@@ -126,19 +122,22 @@ public class CompilerWorkflowRobotCommonIT {
             sb.append(program).append("\n    ");
         }
         LOG.info(sb.toString());
-
-        this.restWorkflow = new ProjectWorkflowRestController(this.robotCommunicator);
-        this.restAdmin = new ClientAdmin(robotCommunicator, serverProperties);
-        when(this.sessionFactoryWrapper.getSession()).thenReturn(this.dbSession);
-        doNothing().when(this.dbSession).commit();
     }
 
-    @After
-    public void tearDownAndPrintResults() {
+    @AfterClass
+    public static void printResults() {
         LOG.info("XXXXXXXXXX results of common compilations XXXXXXXXXX");
         for ( String result : results ) {
             LOG.info(result);
         }
+    }
+
+    @Before
+    public void setup() throws Exception {
+        this.restWorkflow = new ProjectWorkflowRestController(robotCommunicator);
+        this.restAdmin = new ClientAdmin(robotCommunicator, serverProperties);
+        when(this.sessionFactoryWrapper.getSession()).thenReturn(this.dbSession);
+        doNothing().when(this.dbSession).commit();
     }
 
     @Test
@@ -182,23 +181,21 @@ public class CompilerWorkflowRobotCommonIT {
         boolean resultAcc = true;
         try {
             // all robots and ignore excludes, a robot should be able to run each of its defined workflows
-            for ( String robotName : this.robotsFromTestSpec.keySet() ) {
-                String robotDir = this.robotsFromTestSpec.getJSONObject(robotName).getString("template");
+            for ( String robotName : robotsFromTestSpec.keySet() ) {
+                String robotDir = robotsFromTestSpec.getJSONObject(robotName).getString("template");
                 String templateWithConfig = getTemplateWithConfigReplaced(robotDir, robotName);
-                String finalProgram = generateFinalProgram(templateWithConfig, WORKFLOWS_PROG_NAME, this.progsFromTestSpec.getJSONObject(WORKFLOWS_PROG_NAME));
+                String finalProgram = generateFinalProgram(templateWithConfig, WORKFLOWS_PROG_NAME, progsFromTestSpec.getJSONObject(WORKFLOWS_PROG_NAME));
 
                 // test showsource workflow first, this should always work
                 String sourceCode = generateSourceWithShowSource(finalProgram, robotName);
-                if (sourceCode.isEmpty()) {
+                if ( sourceCode.isEmpty() ) {
                     LOG.error("Could not generate source code for robot {}", robotName);
                     resultAcc = false;
                     continue;
                 }
 
-                List<String> workflowsWithoutShowSource = this.pluginMap.get(robotName).getWorkflows()
-                                                                        .stream()
-                                                                        .filter(s -> !s.equals("showsource"))
-                                                                        .collect(Collectors.toList());
+                Set<String> allWorkflowsOfRobot = pluginMap.get(robotName).getWorkflows();
+                List<String> workflowsWithoutShowSource = allWorkflowsOfRobot.stream().filter(s -> !s.equals("showsource")).collect(Collectors.toList());
                 for ( String workflow : workflowsWithoutShowSource ) {
                     boolean resultNext = executeWorkflow(workflow, robotName, finalProgram, sourceCode);
                     resultAcc = resultAcc && resultNext;
@@ -216,66 +213,45 @@ public class CompilerWorkflowRobotCommonIT {
     }
 
     /**
-     * generate a program for different robots. May help testing ...<br>
-     * <br>
-     * - supply the program name<br>
-     * - supply the list of robots
-     */
-    @Ignore
-    @Test
-    public void testShowSomeGeneratedPrograms() {
-        String progName = "mathAndLists";
-        List<String> robots = Arrays.asList("ev3lejosv1");
-        for ( String robot : robots ) {
-            String robotDir = robotsFromTestSpec.getJSONObject(robot).getString("template");
-            final String template = getTemplateWithConfigReplaced(robotDir, robot);
-            final String generatedProgram = generateFinalProgram(template, progName, progsFromTestSpec.getJSONObject(progName));
-            LOG.info("********** program " + progName + " for robot " + robot + " **********:\n" + generatedProgram);
-        }
-        LOG.info("********** generation terminated **********");
-    }
-
-    /**
      * generate and compile a program for different robots. May help testing ...<br>
      * <br>
      * - supply the program name<br>
-     * - supply the list of robots (you may copy from the console output)
+     * - supply the list of robots (you may copy from the console output) - decide whether to generate only or to generate and compile
      */
     @Ignore
     @Test
     public void testGenerateAndCompileSomeGeneratedPrograms() {
         String progName = "controlFlowDecisons";
         Collection<String> robots = Arrays.asList("wedo");
-        // Collection<String> robots = robotsFromTestSpec.keySet();
+        boolean generateOnly = true;
         for ( String robotName : robots ) {
-            LOG.info("********** generate and compile program " + progName + " for robot " + robotName + " **********");
+            LOG.info("********** process program " + progName + " for robot " + robotName + " **********");
             String robotDir = robotsFromTestSpec.getJSONObject(robotName).getString("template");
             final String templateWithConfig = getTemplateWithConfigReplaced(robotDir, robotName);
-            generateAndCompileProgram(robotName, templateWithConfig, progName, progsFromTestSpec.getJSONObject(progName));
+            if ( generateOnly ) {
+                final String generatedProgram = generateFinalProgram(templateWithConfig, progName, progsFromTestSpec.getJSONObject(progName));
+                LOG.info("********** program " + progName + " for robot " + robotName + " **********:\n" + generatedProgram);
+            } else {
+                generateAndCompileProgram(robotName, templateWithConfig, progName, progsFromTestSpec.getJSONObject(progName));
+            }
         }
     }
 
     /**
-     * test a single workflow for different robots. May help testing ...
-     *
-     * - supply the workflow name
-     * - supply the list of robots (you may copy from the console output)
-     * - the showsource workflow is always run first
+     * test a single workflow for different robots. May help testing ... - supply the workflow name - supply the list of robots (you may copy from the console
+     * output) - the showsource workflow is always run first
      */
     @Ignore
     @Test
     public void testSingleWorkflow() {
         String workflowName = "runnative";
         Collection<String> robots = Arrays.asList("bob3");
-        // Collection<String> robots = robotsFromTestSpec.keySet();
         for ( String robotName : robots ) {
             LOG.info("********** execute workflow {} for robot {} **********", workflowName, robotName);
-            String robotDir = this.robotsFromTestSpec.getJSONObject(robotName).getString("template");
+            String robotDir = robotsFromTestSpec.getJSONObject(robotName).getString("template");
             String templateWithConfig = getTemplateWithConfigReplaced(robotDir, robotName);
-            String finalProgram = generateFinalProgram(templateWithConfig, WORKFLOWS_PROG_NAME, this.progsFromTestSpec.getJSONObject(WORKFLOWS_PROG_NAME));
-
+            String finalProgram = generateFinalProgram(templateWithConfig, WORKFLOWS_PROG_NAME, progsFromTestSpec.getJSONObject(WORKFLOWS_PROG_NAME));
             String sourceCode = generateSourceWithShowSource(finalProgram, robotName);
-
             executeWorkflow(workflowName, robotName, finalProgram, sourceCode);
         }
     }
@@ -309,13 +285,13 @@ public class CompilerWorkflowRobotCommonIT {
     }
 
     private String generateSourceWithShowSource(String program, String robotName) {
-        Project.Builder builder = UnitTestHelper.setupWithExportXML(this.pluginMap.get(robotName), program);
+        Project.Builder builder = UnitTestHelper.setupWithExportXML(pluginMap.get(robotName), program);
         builder.setRobot(robotName);
         builder.setProgramName(WORKFLOWS_PROG_NAME);
         Project showSourceProject = builder.build();
 
         // Every robot needs at least a show source workflow
-        ProjectService.executeWorkflow("showsource", this.pluginMap.get(robotName), showSourceProject);
+        ProjectService.executeWorkflow("showsource", pluginMap.get(robotName), showSourceProject);
         return showSourceProject.getSourceCode().toString();
     }
 
@@ -325,23 +301,25 @@ public class CompilerWorkflowRobotCommonIT {
         logStart(robotName, workflow, "execute workflow");
         try {
             String token = RandomUrlPostfix.generate(12, 12, 3, 3, 3);
-            IRobotFactory factory = this.pluginMap.get(robotName);
+            IRobotFactory factory = pluginMap.get(robotName);
             Project.Builder builder;
-            if (workflow.contains("native")) {
+            if ( workflow.contains("native") ) {
                 builder = UnitTestHelper.setupWithNativeSource(factory, sourceCode);
+            } else if ( workflow.endsWith("reset") ) {
+                builder = UnitTestHelper.setupWithResetFirmware(factory);
             } else {
                 builder = UnitTestHelper.setupWithExportXML(factory, program);
             }
             builder.setRobot(robotName);
             builder.setProgramName(WORKFLOWS_PROG_NAME);
-            builder.setRobotCommunicator(this.robotCommunicator);
+            builder.setRobotCommunicator(robotCommunicator);
             builder.setToken(token);
             Project project = builder.build();
 
             ProjectService.executeWorkflow(workflow, factory, project);
             if ( !project.hasSucceeded()
-                 && workflow.contains("run")
-                 && StringUtils.containsIgnoreCase(this.pluginMap.get(robotName).getConnectionType(), ("token")) ) {
+                && workflow.contains("run")
+                && StringUtils.containsIgnoreCase(pluginMap.get(robotName).getConnectionType(), ("token")) ) {
                 result = project.getResult() == Key.ROBOT_NOT_CONNECTED;
                 reason = String.valueOf(project.getResult());
             } else {
