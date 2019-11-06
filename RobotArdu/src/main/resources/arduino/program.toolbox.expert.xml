@@ -134,6 +134,7 @@
           </block>
         </value>
       </block>
+      <block type="controls_whileUntil"/>
       <block type="robControls_for">
         <value name="FROM">
           <block type="math_number">
