@@ -31,10 +31,10 @@
     },
     {
       "GetSample": "gyro",
+      "mode": "UP",
       "opc": "GetSample",
       "port": "1",
-      "name": "W",
-      "slot": "UP"
+      "name": "W"
     },
     {
       "opc": "AssignStmt",
@@ -187,10 +187,10 @@
       "stmtList": [
         {
           "GetSample": "gyro",
+          "mode": "UP",
           "opc": "GetSample",
           "port": "1",
-          "name": "W",
-          "slot": "UP"
+          "name": "W"
         },
         {
           "opc": "expr",
