@@ -295,6 +295,14 @@ export class Interpreter {
                         const b = s.pop();
                         return n.displaySetBrightnessAction( b );
                     }
+
+                    case C.IMAGE_SHIFT_ACTION: {
+                        const nShift = s.pop();
+                        const image = s.pop();
+                        s.push(this.shiftImageAction( image, stmt[C.DIRECTION], nShift ));
+                        break;
+                    }
+
                     case C.DISPLAY_SET_PIXEL_BRIGHTNESS_ACTION: {
                         const b = s.pop();
                         const y = s.pop();
@@ -845,46 +853,48 @@ export class Interpreter {
         }
         return image;
     }
+    
+    private shiftImageAction( image: number[][], direction: string, nShift: number ): number[][] {
+        nShift = Math.round( nShift );
+        var shift = {
+            down: function() {
+                image.pop();
+                image.unshift( [0, 0, 0, 0, 0] );
+            },
+            up: function() {
+                image.shift();
+                image.push( [0, 0, 0, 0, 0] );
+            },
+            right: function() {
+                image.forEach( function( array: number[] ) {
+                    array.pop();
+                    array.unshift( 0 );
+                } );
+            },
+            left: function() {
+                image.forEach( function( array: number[] ) {
+                    array.shift();
+                    array.push( 0 );
+                } );
+            }
+        };
+        if ( nShift < 0 ) {
+            nShift *= -1;
+            if ( direction === "up" ) {
+                direction = "down";
+            } else if ( direction === "down" ) {
+                direction = "up";
+            } else if ( direction === "left" ) {
+                direction = "right";
+            } else if ( direction === "right" ) {
+                direction = "left";
+            }
+        }
+        for ( var i = 0; i < nShift; i++ ) {
+            shift[direction]();
+        }
+        return image;
+    }
 
-    //    private shiftImage( image: Array<number>, direction: string, n: number ): Array<number> {
-    //        n = Math.round( n );
-    //        var shift = {
-    //            down: function() {
-    //                image.pop();
-    //                image.unshift( [0, 0, 0, 0, 0] );
-    //            },
-    //            up: function() {
-    //                image.shift();
-    //                image.push( [0, 0, 0, 0, 0] );
-    //            },
-    //            right: function() {
-    //                image.forEach( function( array: number[] ) {
-    //                    array.pop();
-    //                    array.unshift( 0 );
-    //                } );
-    //            },
-    //            left: function() {
-    //                image.forEach( function( array: Array<number> ) {
-    //                    array.shift();
-    //                    array.push( 0 );
-    //                } );
-    //            }
-    //        };
-    //        if ( n < 0 ) {
-    //            n *= -1;
-    //            if ( direction === "up" ) {
-    //                direction = "down";
-    //            } else if ( direction === "down" ) {
-    //                direction = "up";
-    //            } else if ( direction === "left" ) {
-    //                direction = "right";
-    //            } else if ( direction === "right" ) {
-    //                direction = "left";
-    //            }
-    //        }
-    //        for ( var i = 0; i < n; i++ ) {
-    //            shift[direction]();
-    //        }
-    //        return image;
-    //    }
+
 }

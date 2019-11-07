@@ -7,6 +7,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import de.fhg.iais.roberta.components.ConfigurationAst;
+import de.fhg.iais.roberta.inter.mode.general.IDirection;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.SC;
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
@@ -203,8 +204,11 @@ public class MbedStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> i
 
     @Override
     public V visitImageShiftFunction(ImageShiftFunction<V> imageShiftFunction) {
-        // TODO Auto-generated method stub
-        return null;
+        imageShiftFunction.getImage().accept(this);
+        imageShiftFunction.getPositions().accept(this);
+        IDirection direction = imageShiftFunction.getShiftDirection();
+        JSONObject o = mk(C.IMAGE_SHIFT_ACTION).put(C.DIRECTION, direction.toString().toLowerCase());
+        return app(o);
     }
 
     @Override

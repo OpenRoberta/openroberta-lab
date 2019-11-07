@@ -288,6 +288,12 @@ define(["require", "exports", "interpreter.state", "interpreter.constants", "int
                             var b = s.pop();
                             return n.displaySetBrightnessAction(b);
                         }
+                        case C.IMAGE_SHIFT_ACTION: {
+                            var nShift = s.pop();
+                            var image = s.pop();
+                            s.push(this.shiftImageAction(image, stmt[C.DIRECTION], nShift));
+                            break;
+                        }
                         case C.DISPLAY_SET_PIXEL_BRIGHTNESS_ACTION: {
                             var b = s.pop();
                             var y = s.pop();
@@ -941,6 +947,50 @@ define(["require", "exports", "interpreter.state", "interpreter.constants", "int
                 for (var j = 0; j < image[i].length; j++) {
                     image[i][j] = Math.abs(255 - image[i][j]);
                 }
+            }
+            return image;
+        };
+        Interpreter.prototype.shiftImageAction = function (image, direction, nShift) {
+            nShift = Math.round(nShift);
+            var shift = {
+                down: function () {
+                    image.pop();
+                    image.unshift([0, 0, 0, 0, 0]);
+                },
+                up: function () {
+                    image.shift();
+                    image.push([0, 0, 0, 0, 0]);
+                },
+                right: function () {
+                    image.forEach(function (array) {
+                        array.pop();
+                        array.unshift(0);
+                    });
+                },
+                left: function () {
+                    image.forEach(function (array) {
+                        array.shift();
+                        array.push(0);
+                    });
+                }
+            };
+            if (nShift < 0) {
+                nShift *= -1;
+                if (direction === "up") {
+                    direction = "down";
+                }
+                else if (direction === "down") {
+                    direction = "up";
+                }
+                else if (direction === "left") {
+                    direction = "right";
+                }
+                else if (direction === "right") {
+                    direction = "left";
+                }
+            }
+            for (var i = 0; i < nShift; i++) {
+                shift[direction]();
             }
             return image;
         };
