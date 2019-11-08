@@ -8,8 +8,8 @@ define([ 'simulation.simulation', 'simulation.robot.mbed' ], function(SIM, Mbed)
      * 
      * @class
      */
-    function Microbit(pose, robotBehaviour) {
-        Mbed.call(this, pose, robotBehaviour);
+    function Microbit(pose, num, robotBehaviour) {
+        Mbed.call(this, pose, num, robotBehaviour);
 
         var that = this;
         this.endless = true;
