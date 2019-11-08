@@ -69,7 +69,7 @@ define([ 'exports', 'log', 'jquery', 'blocks-msg' ], function(exports, LOG, $, B
                 } else {
                     value = value.replace(/\{[^\}]+\}/g, replaceWith);
                 }
-            } else {
+            } else if ( typeof replaceWith === "object" ) {
                 if (value.indexOf("$") >= 0) {
                     var keys = Object.keys(replaceWith);
                     value = value.replace("$", replaceWith[keys[0]]);
