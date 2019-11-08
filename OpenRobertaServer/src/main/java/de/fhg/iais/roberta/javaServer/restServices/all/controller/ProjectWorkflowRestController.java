@@ -47,6 +47,7 @@ public class ProjectWorkflowRestController {
         JSONObject dataPart = UtilForREST.extractDataPart(request);
         JSONObject response = new JSONObject();
         try {
+            response.put("data", dataPart.getString("programBlockSet")); // always return the program, even if the workflow fails
             String configurationText = httpSessionState.getRobotFactory().getConfigurationDefault();
             Project project =
                 new Project.Builder()
@@ -89,6 +90,7 @@ public class ProjectWorkflowRestController {
         JSONObject dataPart = UtilForREST.extractDataPart(request);
         JSONObject response = new JSONObject();
         try {
+            response.put("data", dataPart.getString("programBlockSet")); // always return the program, even if the workflow fails
             String configurationText = httpSessionState.getRobotFactory().getConfigurationDefault();
             Project project =
                 new Project.Builder()
@@ -132,6 +134,7 @@ public class ProjectWorkflowRestController {
         JSONObject dataPart = UtilForREST.extractDataPart(request);
         JSONObject response = new JSONObject();
         try {
+            response.put("data", dataPart.getString("programBlockSet")); // always return the program, even if the workflow fails
             String configurationText = httpSessionState.getRobotFactory().getConfigurationDefault();
             Project project =
                 new Project.Builder()
@@ -226,6 +229,7 @@ public class ProjectWorkflowRestController {
         JSONObject dataPart = UtilForREST.extractDataPart(request);
         JSONObject response = new JSONObject();
         try {
+            response.put("data", dataPart.getString("programBlockSet")); // always return the program, even if the workflow fails
             Project project =
                 ProjectWorkflowRestController
                     .setupWithExportXML(httpSessionState.getRobotFactory(), dataPart.getString("programBlockSet"))

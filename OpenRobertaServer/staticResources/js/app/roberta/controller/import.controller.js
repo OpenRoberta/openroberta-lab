@@ -112,8 +112,8 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'pr
     }
     exports.importNepoCodeToCompile = importNepoCodeToCompile;
 
-    function compileFromNepoCode() {
-        PROGRAM.compileP(name, event.target.result, GUISTATE_C.getLanguage(), function(result) {
+    function compileFromNepoCode(name, source) {
+        PROGRAM.compileP(name, source, GUISTATE_C.getLanguage(), function(result) {
             alert(result.rc);
         });
     }

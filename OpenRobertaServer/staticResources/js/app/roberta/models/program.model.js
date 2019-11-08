@@ -308,8 +308,8 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
     function compileP(programName, programText, language, successFn) {
         COMM.json("/projectWorkflow/compileProgram", {
             "cmd" : "compileP",
-            "name" : programName,
-            "program" : programText,
+            "programName" : programName,
+            "programBlockSet" : programText,
             "language" : language
         }, successFn, "compile program '" + programName + "'");
     }

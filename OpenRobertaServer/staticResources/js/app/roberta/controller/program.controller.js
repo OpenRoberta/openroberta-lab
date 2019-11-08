@@ -395,13 +395,8 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'ro
     }
 
     function reloadProgram(opt_result, opt_fromShowSource) {
-        //TODO: Clean this up
         if (opt_result) {
-            if (opt_result.data) {
-                program = opt_result.data;                
-            } else {
-                program = GUISTATE_C.getProgramXML();        
-            }
+            program = opt_result.data;
         } else {
             program = GUISTATE_C.getProgramXML();
         }
