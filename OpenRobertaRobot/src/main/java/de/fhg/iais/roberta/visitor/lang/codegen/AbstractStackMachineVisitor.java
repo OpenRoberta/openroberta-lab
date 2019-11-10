@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.google.common.collect.Lists;
@@ -295,6 +296,17 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
             case NULL:
                 o = mk(C.EXPR).put(C.EXPR, C.NULL_CONST);
                 break;
+            case IMAGE:
+                JSONArray jsonImage = new JSONArray();
+                for ( int i = 0; i < 5; i++ ) {
+                    ArrayList<Integer> a = new ArrayList<>();
+                    for ( int j = 0; j < 5; j++ ) {
+                        a.add(0);
+                    }
+                    jsonImage.put(new JSONArray(a));
+                }
+                o = mk(C.EXPR).put(C.EXPR, C.IMAGE_CONST).put(C.VALUE, jsonImage);
+                break;
             default:
                 throw new DbcException("Operation not supported");
         }
@@ -395,6 +407,7 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
                 List<JSONObject> timesExprs = popOpArray();
                 JSONObject decl = timesExprs.remove(1);
                 JSONObject listName = timesExprs.remove(1);
+                timesExprs.set(0, mk(C.EXPR).put(C.EXPR, C.NUM_CONST).put(C.VALUE, 0));
                 timesExprs.set(1, mk(C.EXPR).put(C.EXPR, C.NUM_CONST).put(C.VALUE, 1));
                 this.getOpArray().addAll(timesExprs);
                 String varName = decl.getString(C.NAME);

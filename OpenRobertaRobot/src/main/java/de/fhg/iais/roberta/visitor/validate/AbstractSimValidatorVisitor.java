@@ -3,17 +3,25 @@ package de.fhg.iais.roberta.visitor.validate;
 import de.fhg.iais.roberta.bean.UsedHardwareBean;
 import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.components.ConfigurationComponent;
+import de.fhg.iais.roberta.syntax.BlockType;
+import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.action.communication.BluetoothCheckConnectAction;
 import de.fhg.iais.roberta.syntax.action.communication.BluetoothConnectAction;
 import de.fhg.iais.roberta.syntax.action.communication.BluetoothReceiveAction;
 import de.fhg.iais.roberta.syntax.action.communication.BluetoothSendAction;
 import de.fhg.iais.roberta.syntax.action.communication.BluetoothWaitForConnectionAction;
+import de.fhg.iais.roberta.syntax.lang.expr.Binary;
 import de.fhg.iais.roberta.syntax.lang.expr.ConnectConst;
+import de.fhg.iais.roberta.syntax.lang.expr.EmptyExpr;
+import de.fhg.iais.roberta.syntax.lang.expr.Unary;
+import de.fhg.iais.roberta.syntax.lang.stmt.RepeatStmt;
+import de.fhg.iais.roberta.syntax.lang.stmt.RepeatStmt.Mode;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtFlowCon;
 import de.fhg.iais.roberta.syntax.sensor.ExternalSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
+import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.typecheck.NepoInfo;
 
 public abstract class AbstractSimValidatorVisitor extends AbstractProgramValidatorVisitor {
@@ -144,6 +152,30 @@ public abstract class AbstractSimValidatorVisitor extends AbstractProgramValidat
         super.visitColorSensor(colorSensor);
         if ( colorSensor.getMode().toString().equals("AMBIENTLIGHT") ) {
             colorSensor.addInfo(NepoInfo.warning("SIM_BLOCK_NOT_SUPPORTED"));
+        }
+        return null;
+    }
+
+    @Override
+    public Void visitRepeatStmt(RepeatStmt<Void> repeatStmt) {
+        super.visitRepeatStmt(repeatStmt);
+        if ( repeatStmt.getExpr() instanceof EmptyExpr ) {
+            repeatStmt.addInfo(NepoInfo.error("ERROR_MISSING_PARAMETER"));
+            this.errorCount++;
+        } else if ( repeatStmt.getExpr() instanceof Unary ) {
+            if ( ((Unary<Void>) repeatStmt.getExpr()).getExpr() instanceof EmptyExpr ) {
+                repeatStmt.addInfo(NepoInfo.error("ERROR_MISSING_PARAMETER"));
+                this.errorCount++;
+            }
+        } else if ( repeatStmt.getExpr() instanceof Binary ) {
+            if ( ((Binary<Void>) repeatStmt.getExpr()).getRight() instanceof EmptyExpr ) {
+                repeatStmt.addInfo(NepoInfo.error("ERROR_MISSING_PARAMETER"));
+                this.errorCount++;
+            }
+        }
+        if ( repeatStmt.getMode() == Mode.FOR_EACH && ((Binary<?>) repeatStmt.getExpr()).getRight().getKind().getName().equals("LIST_CREATE") ) {
+            ((Binary<?>) repeatStmt.getExpr()).getRight().addInfo(NepoInfo.error("SIM_BLOCK_NOT_SUPPORTED"));
+            this.errorCount++;
         }
         return null;
     }
