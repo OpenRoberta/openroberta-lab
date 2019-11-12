@@ -15,10 +15,6 @@ public class NepoInfo {
         this.message = message;
     }
 
-    public static NepoInfo of(Severity severity, String message) {
-        return new NepoInfo(severity, message);
-    }
-
     public static NepoInfo error(String message) {
         return new NepoInfo(Severity.ERROR, message);
     }

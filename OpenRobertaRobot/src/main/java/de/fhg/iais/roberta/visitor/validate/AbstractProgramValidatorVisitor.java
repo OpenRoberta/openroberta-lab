@@ -36,10 +36,14 @@ import de.fhg.iais.roberta.syntax.action.speech.SayTextAction;
 import de.fhg.iais.roberta.syntax.action.speech.SetLanguageAction;
 import de.fhg.iais.roberta.syntax.lang.expr.Binary;
 import de.fhg.iais.roberta.syntax.lang.expr.EmptyExpr;
+import de.fhg.iais.roberta.syntax.lang.expr.EvalExpr;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.syntax.lang.expr.NumConst;
 import de.fhg.iais.roberta.syntax.lang.expr.Unary;
 import de.fhg.iais.roberta.syntax.lang.expr.Var;
+import de.fhg.iais.roberta.syntax.lang.expr.VarDeclaration;
+import de.fhg.iais.roberta.syntax.lang.expr.eval.ExprlyTypechecker;
+import de.fhg.iais.roberta.syntax.lang.expr.eval.TcError;
 import de.fhg.iais.roberta.syntax.lang.functions.GetSubFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.IndexOfFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.LengthOfIsEmptyFunct;
@@ -67,7 +71,9 @@ import de.fhg.iais.roberta.syntax.sensor.generic.SoundSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
+import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.typecheck.NepoInfo;
+import de.fhg.iais.roberta.typecheck.NepoInfo.Severity;
 import de.fhg.iais.roberta.visitor.hardware.actor.IAllActorsVisitor;
 import de.fhg.iais.roberta.visitor.hardware.sensor.ISensorVisitor;
 
@@ -617,6 +623,47 @@ public abstract class AbstractProgramValidatorVisitor extends AbstractCollectorV
             && ((binary.getLeft() instanceof EmptyExpr) || (binary.getRight() instanceof EmptyExpr)) ) {
             binary.addInfo(NepoInfo.error("ERROR_MISSING_PARAMETER"));
             this.errorCount++;
+        }
+        return null;
+    }
+
+    @Override
+    public Void visitEvalExpr(EvalExpr<Void> evalExpr) {
+        for ( NepoInfo info : evalExpr.getInfos().getInfos() ) {
+            if ( info.getSeverity() == Severity.ERROR ) {
+                addError(info.getMessage(), evalExpr);
+                return null;
+            }
+        }
+        // Get the declared variables
+        int i = 0;
+        ArrayList<VarDeclaration<Void>> vars = new ArrayList<>(); // was:.getVisitedVars();
+        for ( int k = 1; k < vars.size(); k++ ) {
+            if ( vars.get(k).getName().equals(vars.get(0).getName()) ) {
+                i = k;
+                break;
+            }
+        }
+
+        // Get the robot name to check robot specific blocks
+        String name = this.robotConfiguration.getRobotName();
+        if ( name.contains("ev3") ) {
+            name = "ev3";
+        } else if ( name.equals("uno") || name.equals("nano") || name.equals("mega") ) {
+            name = "arduino";
+        } else if ( name.contains("calliope") ) {
+            name = "calliope";
+        }
+
+        // Check
+        ExprlyTypechecker<Void> checker = new ExprlyTypechecker<>(evalExpr.getExpr(), BlocklyType.get(evalExpr.getType()), vars.subList(i, vars.size()), name);
+        checker.check();
+        if ( checker.getNumErrors() > 0 ) {
+            StringBuilder error = new StringBuilder();
+            for ( TcError e : checker.getErrors() ) {
+                error.append(e.getError()).append("\n");
+            }
+            addError("PROGRAM_ERROR_EXPRBLOCK_TYPECHECK", evalExpr);
         }
         return null;
     }

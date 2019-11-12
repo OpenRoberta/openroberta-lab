@@ -80,6 +80,7 @@
             <groupId>org.seleniumhq.selenium</groupId>
             <artifactId>selenium-java</artifactId>
         </dependency>
+
         <dependency>
             <groupId>de.fhg.iais.openroberta</groupId>
             <artifactId>RobotArdu</artifactId>
@@ -118,7 +119,7 @@
         <dependency>
             <groupId>de.fhg.iais.openroberta</groupId>
             <artifactId>RobotWeDo</artifactId>
-            <version>${project.version}</version>
+            <version>${project.version}</version> <!-- removing this throws an error. Why? -->
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -127,11 +128,11 @@
             <type>test-jar</type>
             <scope>test</scope>
         </dependency>
+
         <dependency>
             <groupId>eu.bitwalker</groupId>
             <artifactId>UserAgentUtils</artifactId>
         </dependency>
-		<!-- https://mvnrepository.com/artifact/com.googlecode.owasp-java-html-sanitizer/owasp-java-html-sanitizer -->
         <dependency>
             <groupId>com.googlecode.owasp-java-html-sanitizer</groupId>
             <artifactId>owasp-java-html-sanitizer</artifactId>

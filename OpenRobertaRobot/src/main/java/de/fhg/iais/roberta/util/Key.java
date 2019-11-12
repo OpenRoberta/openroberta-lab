@@ -117,13 +117,15 @@ public enum Key {
     LIKE_DELETE_SUCCESS( true ),
     RASPBERRY_PROGRAM_UPLOAD_ERROR( false ),
     VORWERK_PROGRAM_UPLOAD_ERROR( false ),
-    LIST_CREATE_WITH_ERROR( false ), 
-    FIRMWARE_RESET_SUCCESS(true),
-    FIRMWARE_RESET_ERROR(false);
+    LIST_CREATE_WITH_ERROR( false ),
+    FIRMWARE_RESET_SUCCESS( true ),
+    FIRMWARE_RESET_ERROR( false ),
+    PROGRAM_ERROR_EXPRBLOCK_TYPECHECK( false ),
+    PROGRAM_ERROR_EXPRBLOCK_PARSE( false );
 
     /**
      * Creates a new Key and adds the needed ORA_ prefix for the blockly message.
-     * 
+     *
      * @param success whether this message signifies a success
      */
     Key(boolean success) {

@@ -159,6 +159,10 @@ block:
       category: EXPR
       implementor: de.fhg.iais.roberta.syntax.lang.expr.Binary
       type: [logic_compare,logic_operation,math_arithmetic,math_change,robMath_change,math_modulo,robText_append]
+  EVAL:
+      category: EXPR
+      implementor: de.fhg.iais.roberta.syntax.lang.expr.EvalExpr
+      type: [robActions_eval_expr]
   START_ACTIVITY_TASK:
       category: EXPR
       implementor: de.fhg.iais.roberta.syntax.lang.blocksequence.StartActivityTask

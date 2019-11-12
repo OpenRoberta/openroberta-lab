@@ -21,7 +21,6 @@ import de.fhg.iais.roberta.visitor.IVisitor;
  * - {@link #getAs(Class)}<br>
  */
 abstract public class Phrase<V> {
-    @SuppressWarnings("unused")
     private static final Logger LOG = LoggerFactory.getLogger(Phrase.class);
 
     private boolean readOnly = false;
@@ -105,7 +104,7 @@ abstract public class Phrase<V> {
      * @param visitor to be used
      */
     public final V accept(IVisitor<V> visitor) {
-        // LOG.info("{}", this);
+        LOG.info("{}", this);
         if ( getProperty().isDisabled() || (getProperty().isInTask() != null && getProperty().isInTask() == false) ) {
             return null;
         }

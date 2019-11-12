@@ -29,7 +29,7 @@ public class StmtExpr<V> extends Expr<V> {
      * @return expression with wrapped sensor inside
      */
     public static <V> StmtExpr<V> make(Stmt<V> stmt) {
-        return new StmtExpr<V>(stmt);
+        return new StmtExpr<>(stmt);
     }
 
     /**
@@ -56,7 +56,7 @@ public class StmtExpr<V> extends Expr<V> {
 
     @Override
     public String toString() {
-        return "SensorExpr [" + this.stmt + "]";
+        return "StmtExpr [" + this.stmt + "]";
     }
 
     @Override
