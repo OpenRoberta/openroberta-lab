@@ -829,8 +829,13 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
                     this.nlIndent();
                     ConfigurationComponent sensebox = this.configuration.getConfigurationComponentbyType(SC.SENSEBOX);
                     if ( sensebox != null ) {
-                        this.sb.append("OpenSenseMap _osm(\"").append(sensebox.getUserDefinedPortName()).append("\", _bee_);");
-                        nlIndent();
+                        for ( UsedActor usedActor : this.usedHardwareBean.getUsedActors() ) {
+                            if ( usedActor.getType().equals(SC.SEND_DATA) ) {
+                                this.sb.append("OpenSenseMap _osm(\"").append(sensebox.getUserDefinedPortName()).append("\", _bee_);");
+                                nlIndent();
+                                break;
+                            }
+                        }
                     } else {
                         throw new DbcException("SenseBox brick configuration block is missing!");
                     }
