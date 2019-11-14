@@ -293,16 +293,6 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
     }
 
     @Override
-    public Void visitPinWriteValueAction(PinWriteValueAction<Void> pinWriteValueSensor) {
-        return null;
-    }
-
-    @Override
-    public Void visitPinGetValueSensor(PinGetValueSensor<Void> pinGetValueSensor) {
-        return null;
-    }
-
-    @Override
     public Void visitRelayAction(RelayAction<Void> relayAction) {
         return null;
     }
@@ -514,6 +504,40 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
     }
 
     @Override
+    public Void visitPinWriteValueAction(PinWriteValueAction<Void> pinWriteValueAction) {
+        switch ( pinWriteValueAction.getMode() ) {
+            case SC.ANALOG:
+                this.sb.append("analogWrite(_output_").append(pinWriteValueAction.getPort()).append(", ");
+                pinWriteValueAction.getValue().accept(this);
+                this.sb.append(");");
+                break;
+            case SC.DIGITAL:
+                this.sb.append("digitalWrite(_output_").append(pinWriteValueAction.getPort()).append(", ");
+                pinWriteValueAction.getValue().accept(this);
+                this.sb.append(");");
+                break;
+            default:
+                break;
+        }
+        return null;
+    }
+
+    @Override
+    public Void visitPinGetValueSensor(PinGetValueSensor<Void> pinGetValueSensor) {
+        switch ( pinGetValueSensor.getMode() ) {
+            case SC.ANALOG:
+                this.sb.append("analogRead(_input_").append(pinGetValueSensor.getPort()).append(")");
+                break;
+            case SC.DIGITAL:
+                this.sb.append("digitalRead(_input_").append(pinGetValueSensor.getPort()).append(")");
+                break;
+            default:
+                break;
+        }
+        return null;
+    }
+
+    @Override
     public Void visitDataSendAction(SendDataAction<Void> sendDataAction) {
         if ( sendDataAction.getDestination().equals("SENSEMAP") ) {
             for ( Pair<String, Expr<Void>> entry : sendDataAction.getId2Phenomena() ) {
@@ -703,6 +727,16 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
                         }
                     }
                     break;
+                case SC.DIGITAL_PIN:
+                case SC.ANALOG_PIN:
+                    this.sb.append("pinMode(_input_" + usedConfigurationBlock.getUserDefinedPortName() + ", INPUT);");
+                    nlIndent();
+                    break;
+                case SC.ANALOG_INPUT:
+                case SC.DIGITAL_INPUT:
+                    this.sb.append("pinMode(_output_" + usedConfigurationBlock.getUserDefinedPortName() + ", OUTPUT);");
+                    nlIndent();
+                    break;
                 // no additional configuration needed:
                 case SC.SENSEBOX_COMPASS:
                 case SC.GYRO:
@@ -849,6 +883,16 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
                             break;
                         }
                     }
+                    break;
+                case SC.ANALOG_PIN:
+                case SC.DIGITAL_PIN:
+                    this.sb.append("int _input_").append(blockName).append(" = ").append(cc.getProperty("OUTPUT")).append(";");
+                    nlIndent();
+                    break;
+                case SC.ANALOG_INPUT:
+                case SC.DIGITAL_INPUT:
+                    this.sb.append("int _output_").append(blockName).append(" = ").append(cc.getProperty("INPUT")).append(";");
+                    nlIndent();
                     break;
                 case SC.SENSEBOX_PLOTTING:
                 case SC.SENSEBOX_COMPASS:

@@ -48,9 +48,17 @@
     <block type="robActions_led_off"/>
     <block type="robActions_sendData"/>
     <block type="robActions_plot_clear"/>
-    <block type="robActions_plot_point"/>    
+    <block type="robActions_plot_point"/>
+    <block type="robActions_write_pin">
+        <value name="VALUE">
+          <block type="math_number">
+            <field name="NUM">1</field>
+          </block>
+        </value>
+      </block> 
   </category>
   <category name="TOOLBOX_SENSOR" svg="true">
+    <block type="robSensors_out_getSample"/>
     <block type="robSensors_key_getSample"/>
     <block type="robSensors_light_getSample"/>
     <block type="robSensors_potentiometer_getSample"/>

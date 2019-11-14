@@ -1,5 +1,7 @@
 <toolbox_set id="toolbox" style="display: none">
   <category name="TOOLBOX_ACTION" svg="true">
+    <block type="robConf_digitalin" />
+    <block type="robConf_analogin" />
     <block type="robConf_led"/>
     <block type="robConf_rgbled"/>
     <block type="robConf_buzzer"/>
@@ -11,6 +13,8 @@
     
   </category>
   <category name="TOOLBOX_SENSOR" svg="true">
+    <block type="robConf_digitalout" />
+    <block type="robConf_analogout" />
     <block type="robConf_key" />
     <block type="robConf_light" />
     <block type="robConf_potentiometer" />
