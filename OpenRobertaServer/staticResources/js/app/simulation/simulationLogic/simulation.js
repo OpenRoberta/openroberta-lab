@@ -861,11 +861,10 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
     }
 
     function importImage() {
-        var input = $(document.createElement('input'));
-        input.attr("type", "file");
-        input.attr("accept", ".png, .jpg, .jpeg, .svg");
-        input.trigger('click'); // opening dialog
-        input.change(function(event) {
+        $('#backgroundFileSelector').val(null);
+        $('#backgroundFileSelector').attr("accept", ".png, .jpg, .jpeg, .svg");
+        $('#backgroundFileSelector').trigger('click'); // opening dialog
+        $('#backgroundFileSelector').change(function(event) {
             var file = event.target.files[0];
             var reader = new FileReader();
             reader.onload = function(event) {
@@ -893,6 +892,7 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
                 img.src = reader.result;
             };
             reader.readAsDataURL(file);
+            return false;
         });
     }
     exports.importImage = importImage;
