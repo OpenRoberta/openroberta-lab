@@ -882,12 +882,13 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
                     ctx.drawImage(img, 0, 0);
                     var dataURL = canvas.toDataURL("image/png");
                     localStorage.setItem("customBackground", dataURL.replace(/^data:image\/(png|jpg);base64,/, ""));
-                    var dataImage = localStorage.getItem('customBackground');
-                    var image = new Image();
-                    image.src = "data:image/png;base64," + dataImage;
-                    imgObjectList[imgObjectList.length] = image;
-                    setBackground(imgObjectList.length - 1, setBackground);
-                    initScene();
+                    var image = new Image(canvas.width, canvas.height);
+                    image.src = dataURL;
+                    image.onload = function() {
+                        imgObjectList[imgObjectList.length] = image;
+                        setBackground(imgObjectList.length - 1, setBackground);
+                        initScene();
+                    }
                 };
                 img.src = reader.result;
             };
