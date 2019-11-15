@@ -8,9 +8,9 @@
  */
 
 define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 'simulation.constants', 'util', 'program.controller',
-    'interpreter.interpreter', 'interpreter.robotMbedBehaviour', 'jquery'
+    'interpreter.interpreter', 'interpreter.robotMbedBehaviour', 'simulation.constants', 'jquery'
 ], function(exports, Scene, SIMATH, ROBERTA_PROGRAM, CONST, UTIL, PROGRAM_C,
-    SIM_I, MBED_R, $) {
+    SIM_I, MBED_R, C, $) {
 
     var interpreters;
     var scene;
@@ -871,10 +871,16 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
                 var img = new Image();
                 img.onload = function() {
                     var canvas = document.createElement("canvas");
-                    var scale = 1;
-                    if (img.height > 800) {
-                        scale = 800.0 / img.height;
+                    var scaleX = 1;
+                    var scaleY = 1;
+                    // - 20 because of the border pattern which is 10 pixels wide on both sides
+                    if (img.width > C.MAX_WIDTH - 20) {
+                        scaleX = (C.MAX_WIDTH - 20) / img.width;
                     }
+                    if (img.height > C.MAX_HEIGHT - 20) {
+                        scaleY = (C.MAX_HEIGHT - 20) / img.height;
+                    }
+                    var scale = Math.min(scaleX, scaleY);
                     canvas.width = img.width * scale;
                     canvas.height = img.height * scale;
                     var ctx = canvas.getContext("2d");
