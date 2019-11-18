@@ -114,6 +114,7 @@ WHICH_PYTHON=$(which $PYTHON)
 if [[ "$WHICH_PYTHON" == '' ]]
 then
     echo "variable PYTHON does not point to a Python binary. Log file analysis will NOT work"
+else
     VERSION_PYTHON=$($PYTHON -V)
     case "$VERSION_PYTHON" in
         Python\ 3*) : ;;
