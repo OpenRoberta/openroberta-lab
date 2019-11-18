@@ -548,6 +548,9 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
             }
         } else if ( sendDataAction.getDestination().equals("SDCARD") ) {
             ConfigurationComponent cc = this.configuration.getConfigurationComponentbyType(SC.SENSEBOX_SDCARD);
+            if ( cc == null ) {
+                return null;
+            }
             String filename = cc.getOptProperty("NAO_FILENAME");
             this.sb.append("_dataFile = SD.open(").append("\"").append(filename).append("\", FILE_WRITE);");
             nlIndent();
