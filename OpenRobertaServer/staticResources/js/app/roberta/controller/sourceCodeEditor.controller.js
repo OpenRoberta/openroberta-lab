@@ -33,6 +33,7 @@ define([ 'require', 'exports', 'message', 'log', 'util', 'comm', 'guiState.contr
                 langToSet = 'js';
         }
         flask.updateLanguage(langToSet);
+        getSourceCode();
     }
     exports.setCodeLanguage = setCodeLanguage;
 
@@ -79,8 +80,13 @@ define([ 'require', 'exports', 'message', 'log', 'util', 'comm', 'guiState.contr
         
         $('#tabSourceCodeEditor').onWrap('show.bs.tab', function() {
             $('#main-section').css('background-color', '#EEE');
+            getSourceCode();
         }, "background color changed by source code editor");
         
+        $('#tabSourceCodeEditor').onWrap('shown.bs.tab', function() {
+            GUISTATE_C.setView('tabSourceCodeEditor');
+        }, "background color changed by source code editor");
+
         $('#tabSourceCodeEditor').onWrap('hide.bs.tab', function() {
             $('#main-section').css('background-color', '#FFF');
         }, "background color changed by source code editor");
