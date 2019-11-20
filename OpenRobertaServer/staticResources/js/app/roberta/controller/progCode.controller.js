@@ -11,7 +11,8 @@ define([ 'exports', 'message', 'log', 'util', 'guiState.controller', 'program.co
         blocklyWorkspace = GUISTATE_C.getBlocklyWorkspace();
         flask = new CodeFlask('#codeContent', {
             language: 'java',
-            lineNumbers: true
+            lineNumbers: true,
+            readonly: true
         });
         initEvents();
     }
