@@ -2265,9 +2265,18 @@ td[lkey="Blockly.Msg.POPUP_DOWNLOAD_STEP_A_SENSEBOX"] {
 .codeflask__lines {
     background-color: #EEE;
     padding-top: 0px !important;
+    z-index: 5 !important;
 }
 
 .codeflask__lines__line {
     color: #333;
     line-height: 18px !important;
+}
+
+.codeflask--has-line-numbers::before {
+    z-index: 4 !important;
+}
+
+pre code {
+    white-space: inherit;
 }
