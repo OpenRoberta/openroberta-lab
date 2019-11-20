@@ -2255,9 +2255,16 @@ td[lkey="Blockly.Msg.POPUP_DOWNLOAD_STEP_A_SENSEBOX"] {
     line-height: 18px;
 }
 
+#codeDiv textarea {
+    padding-bottom: 0px !important;
+    z-index: 8;
+    color: #fff0 !important;
+    height: calc(100% - 70px);
+}
+
 #codeDiv .codeflask__flatten {
-    background-color: #FFF;
-    padding-bottom: 70px;
+    background-color: #FFF0;
+    padding-bottom: 90px;
     padding-top: 0px !important;
     line-height: 18px;
 }
