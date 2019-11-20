@@ -393,7 +393,12 @@ define(["require", "exports", "interpreter.state", "interpreter.constants", "int
                                 list[ix] = value;
                             }
                             else if (op == C.INSERT) {
-                                list.splice(ix, 0, value);
+                                if (loc === C.LAST) {
+                                    list.splice(ix + 1, 0, value);
+                                }
+                                else {
+                                    list.splice(ix, 0, value);
+                                }
                             }
                             break;
                         }
@@ -730,62 +735,72 @@ define(["require", "exports", "interpreter.state", "interpreter.constants", "int
                     var subOp = expr[C.OP];
                     var right = s.pop();
                     var left = s.pop();
-                    switch (subOp) {
-                        case C.EQ:
-                            s.push(left == right);
-                            break;
-                        case C.NEQ:
-                            s.push(left !== right);
-                            break;
-                        case C.LT:
-                            s.push(left < right);
-                            break;
-                        case C.LTE:
-                            s.push(left <= right);
-                            break;
-                        case C.GT:
-                            s.push(left > right);
-                            break;
-                        case C.GTE:
-                            s.push(left >= right);
-                            break;
-                        case C.AND:
-                            s.push(left && right);
-                            break;
-                        case C.OR:
-                            s.push(left || right);
-                            break;
-                        case C.ADD:
-                            s.push(0 + left + right);
-                            break;
-                        case C.MINUS:
-                            s.push(0 + left - right);
-                            break;
-                        case C.MULTIPLY:
-                            s.push(0 + left * right);
-                            break;
-                        case C.DIVIDE:
-                            s.push(0 + left / right);
-                            break;
-                        case C.POWER:
-                            s.push(Math.pow(left, right));
-                            break;
-                        case C.MOD:
-                            s.push(left % right);
-                            break;
-                        case C.IN:
-                            console.log("IN BINARY OPERATOR");
-                            break;
-                        //                    case C.IMAGE_SHIFT_ACTION: s.push( this.shiftImage( left, right ) ); break;
-                        default:
-                            U.dbcException("invalid binary expr supOp: " + subOp);
-                    }
+                    s.push(this.evalBinary(subOp, left, right));
                     break;
                 }
                 default:
                     U.dbcException("invalid expr op: " + kind);
             }
             var _a;
+        };
+        Interpreter.prototype.evalBinary = function (subOp, left, right) {
+            var leftIsArray = Array.isArray(left);
+            var rightIsArray = Array.isArray(right);
+            if (leftIsArray && rightIsArray) {
+                var leftLen = left.length;
+                var rightLen = right.length;
+                switch (subOp) {
+                    case C.EQ:
+                        if (leftLen === rightLen) {
+                            for (var i = 0; i < leftLen; i++) {
+                                if (!this.evalBinary(subOp, left[i], right[i])) {
+                                    return false;
+                                }
+                            }
+                            return true;
+                        }
+                        else {
+                            return false;
+                        }
+                    case C.NEQ:
+                        if (leftLen === rightLen) {
+                            for (var i = 0; i < leftLen; i++) {
+                                if (this.evalBinary(subOp, left[i], right[i])) {
+                                    return true;
+                                }
+                            }
+                            return false;
+                        }
+                        else {
+                            return true;
+                        }
+                    default:
+                        U.dbcException("invalid binary expr supOp for array-like structures: " + subOp);
+                }
+            }
+            else if (leftIsArray || rightIsArray) {
+                return false;
+            }
+            else {
+                switch (subOp) {
+                    case C.EQ: return left == right;
+                    case C.NEQ: return left !== right;
+                    case C.LT: return left < right;
+                    case C.LTE: return left <= right;
+                    case C.GT: return left > right;
+                    case C.GTE: return left >= right;
+                    case C.AND: return left && right;
+                    case C.OR: return left || right;
+                    case C.ADD: return 0 + left + right;
+                    case C.MINUS: return 0 + left - right;
+                    case C.MULTIPLY: return 0 + left * right;
+                    case C.DIVIDE: return 0 + left / right;
+                    case C.POWER: return Math.pow(left, right);
+                    case C.MOD: return left % right;
+                    default:
+                        U.dbcException("invalid binary expr supOp: " + subOp);
+                }
+            }
         };
         /**
          * called from @see evalOperation() to run a repeat statement

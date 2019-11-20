@@ -83,6 +83,7 @@ import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.typecheck.NepoInfo;
+import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.visitor.C;
 import de.fhg.iais.roberta.visitor.IVisitor;
@@ -294,6 +295,12 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
                 o = mk(C.EXPR).put(C.EXPR, C.LED_COLOR_CONST).put(C.VALUE, 3);
                 break;
             case NULL:
+            case ARRAY_BOOLEAN:
+            case ARRAY_COLOUR:
+            case ARRAY_CONNECTION:
+            case ARRAY_IMAGE:
+            case ARRAY_NUMBER:
+            case ARRAY_STRING:
                 o = mk(C.EXPR).put(C.EXPR, C.NULL_CONST);
                 break;
             case IMAGE:
@@ -350,30 +357,30 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
 
     @Override
     public V visitIfStmt(IfStmt<V> ifStmt) {
+        JSONObject stmtListEnd = mk(C.FLOW_CONTROL).put(C.KIND, C.IF_STMT).put(C.CONDITIONAL, false).put(C.BREAK, true);
+        int numberOfThens = ifStmt.getExpr().size();
         if ( ifStmt.isTernary() ) {
-            throw new DbcException("Operation not supported");
-        } else {
-            pushOpArray();
-            int numberOfThens = ifStmt.getExpr().size();
-            JSONObject stmtListEnd = mk(C.FLOW_CONTROL).put(C.KIND, C.IF_STMT).put(C.CONDITIONAL, false).put(C.BREAK, true);
-            // TODO: better a list of pairs. pair of lists needs this kind of for
-            for ( int i = 0; i < numberOfThens; i++ ) {
-                ifStmt.getExpr().get(i).accept(this);
-                pushOpArray();
-                ifStmt.getThenList().get(i).accept(this);
-                this.getOpArray().add(stmtListEnd);
-                List<JSONObject> thenStmts = popOpArray();
-                JSONObject ifTrue = mk(C.IF_TRUE_STMT).put(C.STMT_LIST, thenStmts);
-                this.getOpArray().add(ifTrue);
-            }
-            if ( !ifStmt.getElseList().get().isEmpty() ) {
-                ifStmt.getElseList().accept(this);
-            }
-            this.getOpArray().add(stmtListEnd);
-            List<JSONObject> ifThenElseOps = popOpArray();
-            JSONObject o = mk(C.IF_STMT).put(C.STMT_LIST, ifThenElseOps);
-            return app(o);
+            Assert.isTrue(numberOfThens == 1);
+            Assert.isFalse(ifStmt.getElseList().get().isEmpty());
         }
+        pushOpArray();
+        // TODO: better a list of pairs. pair of lists needs this kind of for
+        for ( int i = 0; i < numberOfThens; i++ ) {
+            ifStmt.getExpr().get(i).accept(this);
+            pushOpArray();
+            ifStmt.getThenList().get(i).accept(this);
+            this.getOpArray().add(stmtListEnd);
+            List<JSONObject> thenStmts = popOpArray();
+            JSONObject ifTrue = mk(C.IF_TRUE_STMT).put(C.STMT_LIST, thenStmts);
+            this.getOpArray().add(ifTrue);
+        }
+        if ( !ifStmt.getElseList().get().isEmpty() ) {
+            ifStmt.getElseList().accept(this);
+        }
+        this.getOpArray().add(stmtListEnd);
+        List<JSONObject> ifThenElseOps = popOpArray();
+        JSONObject o = mk(C.IF_STMT).put(C.STMT_LIST, ifThenElseOps);
+        return app(o);
     }
 
     @Override
