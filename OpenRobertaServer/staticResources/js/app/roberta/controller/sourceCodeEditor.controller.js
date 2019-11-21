@@ -2,6 +2,7 @@ define([ 'require', 'exports', 'message', 'log', 'util', 'comm', 'guiState.contr
         function(require, exports, MSG, LOG, UTIL, COMM, GUISTATE_C, PROGRAM, PROG_C, PROGRUN_C, IMPORT_C, Blockly, CodeFlask, $) {
 
     var flask;
+    var currentLanguage;
     
     function init() {
         flask = new CodeFlask('#flaskEditor', {
@@ -33,13 +34,25 @@ define([ 'require', 'exports', 'message', 'log', 'util', 'comm', 'guiState.contr
                 langToSet = 'js';
         }
         flask.updateLanguage(langToSet);
-        getSourceCode();
+        currentLanguage = langToSet;
     }
     exports.setCodeLanguage = setCodeLanguage;
 
     function initEvents() {
         $('#backSourceCodeEditor').onWrap('click', function() {
-            $('#' + GUISTATE_C.getPrevView()).trigger('click');
+            $('#show-message-confirm').one('shown.bs.modal', function(e) {
+                $('#confirm').off();
+                $('#confirm').on('click', function(e) {
+                    e.preventDefault();
+                    $('#tabProgram').trigger('click');
+                });
+                $('#confirmCancel').off();
+                $('#confirmCancel').on('click', function(e) {
+                    e.preventDefault();
+                    $('.modal').modal('hide');
+                });
+            });
+            MSG.displayMessage('All your changes will be lost!', 'POPUP', '', true, false);            
             return false;
         }, "back to previous view");
         
@@ -51,7 +64,7 @@ define([ 'require', 'exports', 'message', 'log', 'util', 'comm', 'guiState.contr
         $('#buildSourceCodeEditor').onWrap('click', function() {
             PROGRAM.compileN(GUISTATE_C.getProgramName(), flask.getCode(), GUISTATE_C.getLanguage(), function(result) {
                 if (result.rc == "ok") {
-                    MSG.displayPopupMessage(result.message, result.message, false);
+                    MSG.displayMessage(result.message, 'POPUP', '', false, false);
                 } else {
                     MSG.displayInformation(result, result.message, result.message, GUISTATE_C.getProgramName());
                 }
@@ -79,7 +92,11 @@ define([ 'require', 'exports', 'message', 'log', 'util', 'comm', 'guiState.contr
         }, "import from blockly button clicked");
         
         $('#tabSourceCodeEditor').onWrap('show.bs.tab', function() {
+            if(currentLanguage === 'python' || currentLanguage === 'json') {
+                $('#buildSourceCodeEditor').addClass('disabled');
+            }
             $('#main-section').css('background-color', '#EEE');
+            $('#head-navigation-robot').addClass('disabled');
             getSourceCode();
         }, "background color changed by source code editor");
         
@@ -88,6 +105,8 @@ define([ 'require', 'exports', 'message', 'log', 'util', 'comm', 'guiState.contr
         }, "background color changed by source code editor");
 
         $('#tabSourceCodeEditor').onWrap('hide.bs.tab', function() {
+            $('#head-navigation-robot').removeClass('disabled');
+            $('#buildSourceCodeEditor').removeClass('disabled');
             $('#main-section').css('background-color', '#FFF');
         }, "background color changed by source code editor");
     }

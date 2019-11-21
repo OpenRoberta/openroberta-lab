@@ -314,9 +314,6 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.controller', 'guiState.m
         PROGRAM_C.password = null;
         document.getElementById("wlanSsid").value = "";
         document.getElementById("wlanPassword").value = "";
-
-        PROGCODE_C.setCodeLanguage(GUISTATE_C.getSourceCodeFileExtension());
-        CODEEDITOR_C.setCodeLanguage(GUISTATE_C.getSourceCodeFileExtension());
         
         var further;
         // no need to ask for saving programs if you switch the robot in between a group
@@ -348,6 +345,8 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.controller', 'guiState.m
                     if ($('.rightMenuButton.rightActive')) {
                         $('.rightMenuButton.rightActive').trigger('click');
                     }
+                    PROGCODE_C.setCodeLanguage(GUISTATE_C.getSourceCodeFileExtension());
+                    CODEEDITOR_C.setCodeLanguage(GUISTATE_C.getSourceCodeFileExtension());
                     //TODO inform app if one is there
 //                    WEBVIEW_C.jsToAppInterface({
 //                        'target' : 'wedo',
