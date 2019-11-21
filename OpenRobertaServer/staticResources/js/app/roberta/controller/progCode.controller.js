@@ -10,38 +10,38 @@ define([ 'exports', 'message', 'log', 'util', 'guiState.controller', 'program.co
     function init() {
         blocklyWorkspace = GUISTATE_C.getBlocklyWorkspace();
         flask = new CodeFlask('#codeContent', {
-            language: 'java',
-            lineNumbers: true,
-            readonly: true
+            language : 'java',
+            lineNumbers : true,
+            readonly : true
         });
         initEvents();
     }
     exports.init = init;
-    
+
     function setCode(sourceCode) {
         flask.updateCode(sourceCode);
     }
     exports.setCode = setCode;
-    
+
     function setCodeLanguage(language) {
         var langToSet;
         switch (language) {
-            case 'py': 
-                langToSet = 'python';
-                break;
-            case 'java': 
-                langToSet = 'java';
-                break;
-            case 'ino':
-            case 'nxc':
-            case 'cpp': 
-                langToSet = 'clike';
-                break;
-            case 'json': 
-                langToSet = 'js';
-                break;
-            default:
-                langToSet = 'js';
+        case 'py':
+            langToSet = 'python';
+            break;
+        case 'java':
+            langToSet = 'java';
+            break;
+        case 'ino':
+        case 'nxc':
+        case 'cpp':
+            langToSet = 'clike';
+            break;
+        case 'json':
+            langToSet = 'js';
+            break;
+        default:
+            langToSet = 'js';
         }
         flask.updateLanguage(langToSet);
     }

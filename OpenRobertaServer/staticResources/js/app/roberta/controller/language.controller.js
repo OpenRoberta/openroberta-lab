@@ -41,6 +41,8 @@ define([ 'exports', 'log', 'jquery', 'guiState.controller', 'program.controller'
             language = 'zh-hans';
         } else if (navigator.language.indexOf("zh-hant") > -1) {
             language = 'zh-hant';
+        } else if (navigator.language.indexOf("ro") > -1) {
+            language = 'ro';
         } else {
             language = 'en';
         }

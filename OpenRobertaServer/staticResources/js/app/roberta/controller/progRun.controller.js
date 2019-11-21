@@ -39,14 +39,14 @@ define([ 'exports', 'util', 'log', 'message', 'program.controller', 'program.mod
         if (typeof sourceCode === 'undefined') {
             var xmlProgram = Blockly.Xml.workspaceToDom(blocklyWorkspace);
             var xmlTextProgram = Blockly.Xml.domToText(xmlProgram);
-    
+
             var isNamedConfig = !GUISTATE_C.isConfigurationStandard() && !GUISTATE_C.isConfigurationAnonymous();
             var configName = isNamedConfig ? GUISTATE_C.getConfigurationName() : undefined;
             var xmlConfigText = GUISTATE_C.isConfigurationAnonymous() ? GUISTATE_C.getConfigurationXML() : undefined;
         }
-        
+
         var language = GUISTATE_C.getLanguage();
-        
+
         var connectionType = GUISTATE_C.getConnectionTypeEnum();
         if (GUISTATE_C.getConnection() == connectionType.AUTO || GUISTATE_C.getConnection() == connectionType.LOCAL) {
             callback = function(result) {
@@ -77,11 +77,11 @@ define([ 'exports', 'util', 'log', 'message', 'program.controller', 'program.mod
             callback = function(result) {
                 runForToken(result);
                 PROG_C.reloadProgram(result);
-                GUISTATE_C.setPing(true);           
+                GUISTATE_C.setPing(true);
             };
         }
-        if(typeof sourceCode === 'undefined') {
-            PROGRAM.runOnBrick(GUISTATE_C.getProgramName(), configName, xmlTextProgram, xmlConfigText, PROG_C.SSID, PROG_C.password, language, callback);                    
+        if (typeof sourceCode === 'undefined') {
+            PROGRAM.runOnBrick(GUISTATE_C.getProgramName(), configName, xmlTextProgram, xmlConfigText, PROG_C.SSID, PROG_C.password, language, callback);
         } else {
             PROGRAM.runNative(GUISTATE_C.getProgramName(), sourceCode, language, callback);
         }
