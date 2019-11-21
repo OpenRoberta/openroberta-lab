@@ -12,7 +12,7 @@ public class MathConstantTest extends ArduinoAstTest {
     @Test
     public void Test() throws Exception {
 
-        String a = "PIM_EGOLDEN_RATIOM_SQRT2M_SQRT1_2INFINITY";
+        String a = "PIM_EM_GOLDEN_RATIOM_SQRT2M_SQRT1_2INFINITY";
         //"Float.POSITIVE_INFINITY";
 
         UnitTestHelper.checkWorkers(testFactory, a, "/syntax/math/math_constant.xml", new ArduinoCxxGeneratorWorker());

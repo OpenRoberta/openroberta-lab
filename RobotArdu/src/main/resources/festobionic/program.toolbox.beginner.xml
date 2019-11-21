@@ -1,0 +1,64 @@
+<toolbox_set id="toolbox" style="display: none">
+  <category name="TOOLBOX_ACTION" svg="true">
+    <block type="robActions_serial_print">
+      <value name="OUT">
+        <block type="text">
+          <field name="TEXT">Hallo</field>
+        </block>
+      </value>
+    </block>
+    <block type="robActions_motor_on_for_ardu">
+      <value name="POWER">
+        <block type="math_number" id="Dy#ytr1sQ2WFyWrdDQ_!" intask="true">
+          <field name="NUM">90</field>
+        </block>
+      </value>
+    </block>
+    <block type="robActions_brickLight_on"/>
+  </category>
+  <category name="TOOLBOX_SENSOR" svg="true">
+    <block type="robSensors_timer_getSample"/>
+    <block type="robSensors_timer_reset"/>
+  </category>
+  <category name="TOOLBOX_CONTROL" svg="true">
+    <block type="robControls_if"/>
+    <block type="robControls_ifElse"/>
+    <block type="robControls_loopForever"/>
+    <block type="controls_repeat"/>
+    <block type="robControls_wait_time">
+      <value name="WAIT">
+        <block type="math_number">
+          <field name="NUM">500</field>
+        </block>
+      </value>
+    </block>
+    <block type="robControls_wait_for">
+      <value name="WAIT0">
+        <block type="logic_compare">
+          <value name="A">
+            <block type="robSensors_getSample"/>
+          </value>
+          <value name="B">
+            <block type="math_number">
+              <field name="NUM">50</field>
+            </block>
+          </value>
+        </block>
+      </value>
+    </block>
+  </category>
+  <category name="TOOLBOX_LOGIC" svg="true">
+    <block type="logic_compare"/>
+    <block type="logic_operation"/>
+    <block type="logic_boolean"/>
+  </category>
+  <category name="TOOLBOX_MATH" svg="true">
+    <block type="math_number"/>
+    <block type="math_arithmetic"/>
+  </category>
+  <category name="TOOLBOX_TEXT" svg="true">t
+    <block type="text"/>
+    <block type="text_comment"/>
+  </category>
+  <category name="TOOLBOX_VARIABLE" custom="VARIABLE" svg="true"/>
+</toolbox_set>

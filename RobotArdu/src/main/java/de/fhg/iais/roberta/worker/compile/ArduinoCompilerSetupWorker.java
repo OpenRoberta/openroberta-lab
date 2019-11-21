@@ -41,6 +41,11 @@ public class ArduinoCompilerSetupWorker implements IWorker {
             case "bob3":
                 builder.setFqbn("-fqbn=nicai:avr:bob3");
                 break;
+            case "festobionic":
+                builder
+                    .setFqbn(
+                        "-fqbn=esp32:esp32:esp32:PSRAM=disabled,PartitionScheme=default,CPUFreq=240,FlashMode=qio,FlashFreq=80,FlashSize=4M,UploadSpeed=921600,DebugLevel=none");
+                break;
             default:
                 throw new DbcException("This type of Arduino is not supported");
         }

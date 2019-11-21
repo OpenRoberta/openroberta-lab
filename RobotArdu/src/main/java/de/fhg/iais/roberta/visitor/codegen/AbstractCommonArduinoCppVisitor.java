@@ -74,7 +74,7 @@ public abstract class AbstractCommonArduinoCppVisitor extends AbstractCppVisitor
                 this.sb.append("M_E");
                 break;
             case GOLDEN_RATIO:
-                this.sb.append("GOLDEN_RATIO");
+                this.sb.append("M_GOLDEN_RATIO");
                 break;
             case SQRT2:
                 this.sb.append("M_SQRT2");

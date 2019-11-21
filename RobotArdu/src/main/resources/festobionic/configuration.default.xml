@@ -1,0 +1,8 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="festobionic" xmlversion="2.0" description="" tags="">
+    <instance x="138" y="88">
+        <block type="robConf_led" id="1" intask="true">
+            <field name="NAME">L</field>
+            <field name="INPUT">13</field>
+        </block>
+    </instance>
+</block_set>

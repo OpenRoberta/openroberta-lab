@@ -54,7 +54,7 @@ public class RobotDownloadProgram {
             String fileName = null;
             String filePath = null;
 
-            // TODO: as the number of supported robot system grows, we should think about a better solution here :-D
+            // TODO: as the number of supported robot system grows, we should think about a better solution here :-D <- definitely
             // TODO: inconsistent names: "ev3lejosv1" "lejos" ???
             switch ( state.getFirmwareName() ) {
                 case "ev3lejosv1":
@@ -81,6 +81,10 @@ public class RobotDownloadProgram {
                 case "nano":
                 case "mbot":
                     fileName = programName + ".ino.hex";
+                    filePath = this.pathToCrosscompilerBaseDir + token + "/" + programName + "/target";
+                    break;
+                case "festobionic":
+                    fileName = programName + ".zip"; // TODO workaround, see FestobionicCompilerWorker
                     filePath = this.pathToCrosscompilerBaseDir + token + "/" + programName + "/target";
                     break;
                 case "edison":

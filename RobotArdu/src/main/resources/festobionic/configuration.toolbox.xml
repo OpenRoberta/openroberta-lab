@@ -1,0 +1,6 @@
+<toolbox_set id="toolbox" style="display: none">
+    <category name="TOOLBOX_ACTION" svg="true">
+        <block type="robConf_servo" />
+        <block type="robConf_led" />
+    </category>
+</toolbox_set>
