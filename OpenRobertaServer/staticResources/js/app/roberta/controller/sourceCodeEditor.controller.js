@@ -3,6 +3,7 @@ define([ 'require', 'exports', 'message', 'log', 'util', 'comm', 'guiState.contr
 
     var flask;
     var currentLanguage;
+    var wasEditedByUser;
     
     function init() {
         flask = new CodeFlask('#flaskEditor', {
@@ -39,20 +40,32 @@ define([ 'require', 'exports', 'message', 'log', 'util', 'comm', 'guiState.contr
     exports.setCodeLanguage = setCodeLanguage;
 
     function initEvents() {
+        flask.onUpdate((code) => {
+            if( $('#sourceCodeEditorPane').hasClass('active') ) {
+                wasEditedByUser = true;
+            }
+        });
+
         $('#backSourceCodeEditor').onWrap('click', function() {
-            $('#show-message-confirm').one('shown.bs.modal', function(e) {
-                $('#confirm').off();
-                $('#confirm').on('click', function(e) {
-                    e.preventDefault();
-                    $('#tabProgram').trigger('click');
+            if ( wasEditedByUser ) {
+                $('#show-message-confirm').one('shown.bs.modal', function(e) {
+                    $('#confirm').off();
+                    $('#confirm').on('click', function(e) {
+                        e.preventDefault();
+                        wasEditedByUser = false;
+                        $('#tabProgram').trigger('click');
+                    });
+                    $('#confirmCancel').off();
+                    $('#confirmCancel').on('click', function(e) {
+                        e.preventDefault();
+                        $('.modal').modal('hide');
+                    });
                 });
-                $('#confirmCancel').off();
-                $('#confirmCancel').on('click', function(e) {
-                    e.preventDefault();
-                    $('.modal').modal('hide');
-                });
-            });
-            MSG.displayMessage('All your changes will be lost!', 'POPUP', '', true, false);            
+                MSG.displayMessage('All your changes will be lost!', 'POPUP', '', true, false);
+            } else {
+                wasEditedByUser = false;
+                $('#tabProgram').trigger('click');
+            }
             return false;
         }, "back to previous view");
         
