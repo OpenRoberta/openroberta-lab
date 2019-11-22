@@ -36,13 +36,20 @@ define([ 'exports', 'util', 'log', 'message', 'program.controller', 'program.mod
         GUISTATE_C.setPing(false);
         GUISTATE_C.setConnectionState("busy");
         LOG.info('run ' + GUISTATE_C.getProgramName() + 'on brick');
-        if (typeof sourceCode === 'undefined') {
-            var xmlProgram = Blockly.Xml.workspaceToDom(blocklyWorkspace);
-            var xmlTextProgram = Blockly.Xml.domToText(xmlProgram);
+        var xmlProgram;
+        var xmlTextProgram;
 
-            var isNamedConfig = !GUISTATE_C.isConfigurationStandard() && !GUISTATE_C.isConfigurationAnonymous();
-            var configName = isNamedConfig ? GUISTATE_C.getConfigurationName() : undefined;
-            var xmlConfigText = GUISTATE_C.isConfigurationAnonymous() ? GUISTATE_C.getConfigurationXML() : undefined;
+        var isNamedConfig;
+        var configName;
+        var xmlConfigText;
+        
+        if (typeof sourceCode === 'undefined') {
+            xmlProgram = Blockly.Xml.workspaceToDom(blocklyWorkspace);
+            xmlTextProgram = Blockly.Xml.domToText(xmlProgram);
+
+            isNamedConfig = !GUISTATE_C.isConfigurationStandard() && !GUISTATE_C.isConfigurationAnonymous();
+            configName = isNamedConfig ? GUISTATE_C.getConfigurationName() : undefined;
+            xmlConfigText = GUISTATE_C.isConfigurationAnonymous() ? GUISTATE_C.getConfigurationXML() : undefined;
         }
 
         var language = GUISTATE_C.getLanguage();
