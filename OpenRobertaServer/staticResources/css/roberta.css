@@ -2247,6 +2247,10 @@ td[lkey="Blockly.Msg.POPUP_DOWNLOAD_STEP_A_SENSEBOX"] {
     border-radius: 0px;
     color: #000;
     font-family: 'Roboto', sans-serif;
+    background-image: linear-gradient(transparent 50%, rgba(247, 247, 247, 1) 0%);
+    background-size: 100% 2.77em;
+    background-repeat: repeat;
+    width: 100%;
 }
 
 #sourceCodeEditor .codeflask__flatten {
