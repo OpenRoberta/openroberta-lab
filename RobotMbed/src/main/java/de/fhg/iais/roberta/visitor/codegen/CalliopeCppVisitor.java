@@ -399,18 +399,21 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
                 this.sb.append(");");
                 break;
             case "3":
-                this.sb.append("_cbSetMotors(_buf, &_i2c, ");
+                this.sb.append("_motorOnStore = ");
                 motorOnAction.getParam().getSpeed().accept(this);
-                this.sb.append(", ");
-                motorOnAction.getParam().getSpeed().accept(this);
-                this.sb.append(");");
+                this.sb.append(";");
+                nlIndent();
+                this.sb.append("_cbSetMotors(_buf, &_i2c, _motorOnStore, _motorOnStore);");
                 break;
             case "AB":
-                this.sb.append("_uBit.soundmotor.motorAOn(");
+                this.sb.append("_motorOnStore = ");
                 motorOnAction.getParam().getSpeed().accept(this);
-                this.sb.append(");");
+                this.sb.append(";");
                 nlIndent();
-                port = "B";
+                this.sb.append("_uBit.soundmotor.motorAOn(_motorOnStore);");
+                nlIndent();
+                this.sb.append("_uBit.soundmotor.motorBOn(_motorOnStore);");
+                break;
             case "A":
             case "B":
                 this.sb.append("_uBit.soundmotor.motor").append(port).append("On(");
@@ -418,7 +421,7 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
                 this.sb.append(");");
                 break;
             default:
-                throw new DbcException("visitMotorOnAction; Invalide motor port: " + port);
+                throw new DbcException("visitMotorOnAction; Invalid motor port: " + port);
         }
         return null;
     }
@@ -1219,6 +1222,10 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
             this.sb.append("char _buf[5] = { 0, 0, 0, 0, 0 };");
             nlIndent();
             this.sb.append("uint8_t _cbLedState = 0x00;");
+        }
+        if ( this.usedHardwareBean.isActorUsed(SC.MOTOR_DRIVE) ) {
+            nlIndent();
+            this.sb.append("double _motorOnStore = 0.0;");
         }
     }
 

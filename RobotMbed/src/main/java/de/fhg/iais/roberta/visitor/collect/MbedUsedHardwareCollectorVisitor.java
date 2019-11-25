@@ -222,10 +222,12 @@ public final class MbedUsedHardwareCollectorVisitor extends AbstractUsedHardware
     @Override
     public Void visitMotorOnAction(MotorOnAction<Void> motorOnAction) {
         motorOnAction.getParam().getSpeed().accept(this);
-        if ( motorOnAction.getUserDefinedPort().equals("0")
-            || motorOnAction.getUserDefinedPort().equals("2")
-            || motorOnAction.getUserDefinedPort().equals("3") ) {
+        String port = motorOnAction.getUserDefinedPort();
+        if ( port.equals("0") || port.equals("2") || port.equals("3") ) {
             this.builder.addUsedActor(new UsedActor("", SC.CALLIBOT));
+        }
+        if ( port.equals("3") || port.equals("AB") ) {
+            this.builder.addUsedActor(new UsedActor(port, SC.MOTOR_DRIVE));
         }
         return null;
     }

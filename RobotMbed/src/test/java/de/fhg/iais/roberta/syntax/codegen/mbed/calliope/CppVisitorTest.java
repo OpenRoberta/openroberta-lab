@@ -447,11 +447,13 @@ public class CppVisitorTest extends CalliopeAstTest {
         String expectedResult =
             "" //
                 + IMPORTS
+                + "double _motorOnStore = 0.0;"
                 + MAIN
                 + "_uBit.soundmotor.motorAOn(30);\n"
                 + "_uBit.soundmotor.motorBOn(30);\n"
-                + "_uBit.soundmotor.motorAOn(30);\n"
-                + "_uBit.soundmotor.motorBOn(30);\n"
+                + "_motorOnStore = 30;"
+                + "_uBit.soundmotor.motorAOn(_motorOnStore);\n"
+                + "_uBit.soundmotor.motorBOn(_motorOnStore);\n"
                 + END;
 
         UnitTestHelper.checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, expectedResult, "/action/motor_on.xml", configuration, true);
