@@ -82,6 +82,7 @@ Blockly.Msg.BRUSH_OFF = "arrêter le balai";
 Blockly.Msg.BRUSH_OFF_TOOLTIP = "Arrête le balai";
 Blockly.Msg.BRUSH_ON = "allumer le balai (tours/min)";
 Blockly.Msg.BRUSH_ON_TOOLTIP = "Met en marche le balai à la vitesse donnée, en tours par minute entre 0 et 10000";
+Blockly.Msg.BUTTON_DO_SHARE = "Partager";
 Blockly.Msg.BUTTON_DO_UPLOAD_GALLERY = "Ajouter « $ » à la galerie";
 Blockly.Msg.BUTTON_EMPTY_LIST = "Vider la liste";
 Blockly.Msg.BUZZER_TOOLTIP = "Represents a buzzer";  // untranslated

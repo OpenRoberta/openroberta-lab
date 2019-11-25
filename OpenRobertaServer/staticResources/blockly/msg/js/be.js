@@ -82,6 +82,7 @@ Blockly.Msg.BRUSH_OFF = "выключыць шчотку";
 Blockly.Msg.BRUSH_OFF_TOOLTIP = "Выключае шчотку.";
 Blockly.Msg.BRUSH_ON = "уключыць шчотку на пэўную колькасць абаротаў за хвіліну";
 Blockly.Msg.BRUSH_ON_TOOLTIP = "Уключае шчотку з зададзенай колькасцю абаротаў за хвіліну ў дыяпазоне ад 0 да 1000.";
+Blockly.Msg.BUTTON_DO_SHARE = "Падзяліцца";
 Blockly.Msg.BUTTON_DO_UPLOAD_GALLERY = "Заладаваць »$« у галерэю";
 Blockly.Msg.BUTTON_EMPTY_LIST = "Ачысціць спіс ";
 Blockly.Msg.BUZZER_TOOLTIP = "Represents a buzzer";  // untranslated

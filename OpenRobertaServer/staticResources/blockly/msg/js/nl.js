@@ -82,6 +82,7 @@ Blockly.Msg.BRUSH_OFF = "turn brush Off";  // untranslated
 Blockly.Msg.BRUSH_OFF_TOOLTIP = "Turns the brush off.";  // untranslated
 Blockly.Msg.BRUSH_ON = "turn brush on (RPM)";  // untranslated
 Blockly.Msg.BRUSH_ON_TOOLTIP = "Turns on the brush with RPM of the motor (0<=RPM<=10000)";  // untranslated
+Blockly.Msg.BUTTON_DO_SHARE = "Deel";
 Blockly.Msg.BUTTON_DO_UPLOAD_GALLERY = "Upload »$« to the gallery";  // untranslated
 Blockly.Msg.BUTTON_EMPTY_LIST = "Lege lijst";
 Blockly.Msg.BUZZER_TOOLTIP = "Represents a buzzer";  // untranslated
@@ -1064,7 +1065,7 @@ Blockly.Msg.POPUP_CHANGE_PASSWORD = "change password ...";  // untranslated
 Blockly.Msg.POPUP_CONFIRM_CONTINUE = "<br><br><i>Press »OK« to discard your work. Press »Cancel« to stay here and save your work first.</i>";  // untranslated
 Blockly.Msg.POPUP_CONFIRM_DELETE_CONFIGURATION = "Do you really want to delete the configuration ?";  // untranslated
 Blockly.Msg.POPUP_CONFIRM_DELETE_GROUP = "Do you really want to delete these groups?";  // untranslated
-Blockly.Msg.POPUP_CONFIRM_DELETE_PROGRAM = "Do you really want to delete the following program or programs?<br>If you delete a shared program, you do not delete the program but the sharing.<br><br>If you delete a program with the owner »Gallery«, you remove your program from the gallery!";  // untranslated
+Blockly.Msg.POPUP_CONFIRM_DELETE_PROGRAM = "Do you really want to delete the following program or programs?<br><br>If you delete a program you share with others, you delete it for everyone.<br><br>If you delete a program shared with you, you do not delete the program but the sharing.<br><br>If you delete a program with the owner »Gallery«, you remove your program from the gallery!";  // untranslated
 Blockly.Msg.POPUP_CONFIRM_DELETE_USER_GROUP = "Do you really want to remove these users below from the current group?";  // untranslated
 Blockly.Msg.POPUP_CONFIRM_UPDATE_FIRMWARE = "There is a new firmware version for your robot available. You can try to run programs with the old version, but best bet is to update your robot now! You just have to click »Update now«.";  // untranslated
 Blockly.Msg.POPUP_CONTINUE = "continue anyway";  // untranslated

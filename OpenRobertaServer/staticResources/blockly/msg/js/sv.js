@@ -82,6 +82,7 @@ Blockly.Msg.BRUSH_OFF = "stäng av borste";
 Blockly.Msg.BRUSH_OFF_TOOLTIP = "Stänger av borste.";
 Blockly.Msg.BRUSH_ON = "sätt på borste (varvtal)";
 Blockly.Msg.BRUSH_ON_TOOLTIP = "Sätter på borste med varvtal för motorn (0<=varvtal<=10000)";
+Blockly.Msg.BUTTON_DO_SHARE = "Dela";
 Blockly.Msg.BUTTON_DO_UPLOAD_GALLERY = "Ladda upp »$« till galleriet";
 Blockly.Msg.BUTTON_EMPTY_LIST = "Töm lista";
 Blockly.Msg.BUZZER_TOOLTIP = "Represents a buzzer";  // untranslated

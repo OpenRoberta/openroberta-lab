@@ -82,6 +82,7 @@ Blockly.Msg.BRUSH_OFF = "opreste peria";
 Blockly.Msg.BRUSH_OFF_TOOLTIP = "Opreste peria";
 Blockly.Msg.BRUSH_ON = "Porneste peria (RPM)";
 Blockly.Msg.BRUSH_ON_TOOLTIP = "Pornește peria cu turația (RPM) a motorului (0 <= RPM <= 10000)";
+Blockly.Msg.BUTTON_DO_SHARE = "Partajează";
 Blockly.Msg.BUTTON_DO_UPLOAD_GALLERY = "Încărcati »$« în galerie";
 Blockly.Msg.BUTTON_EMPTY_LIST = "lista goala";
 Blockly.Msg.BUZZER_TOOLTIP = "Represents a buzzer";  // untranslated

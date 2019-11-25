@@ -144,7 +144,7 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'message', 'progList.model
 
         $(document).onWrap('click', '.deleteSomeProg', function() {
             var programs = $('#programNameTable').bootstrapTable('getSelections', {});
-            var names = '';
+            var names = '<br>';
             for (var i = 0; i < programs.length; i++) {
                 names += programs[i][0];
                 names += '<br>';
@@ -195,7 +195,7 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'message', 'progList.model
         'click .delete' : function(e, value, row, index) {
             e.stopPropagation();
             var selectedRows = [ row ];
-            var names = '';
+            var names = '<br>';
             for (var i = 0; i < selectedRows.length; i++) {
                 names += selectedRows[i][0];
                 names += '<br>';

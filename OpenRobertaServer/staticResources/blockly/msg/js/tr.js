@@ -82,6 +82,7 @@ Blockly.Msg.BRUSH_OFF = "turn brush Off";  // untranslated
 Blockly.Msg.BRUSH_OFF_TOOLTIP = "Turns the brush off.";  // untranslated
 Blockly.Msg.BRUSH_ON = "turn brush on (RPM)";  // untranslated
 Blockly.Msg.BRUSH_ON_TOOLTIP = "Turns on the brush with RPM of the motor (0<=RPM<=10000)";  // untranslated
+Blockly.Msg.BUTTON_DO_SHARE = "Paylaş";
 Blockly.Msg.BUTTON_DO_UPLOAD_GALLERY = "Upload »$« to the gallery";  // untranslated
 Blockly.Msg.BUTTON_EMPTY_LIST = "Boş Liste";
 Blockly.Msg.BUZZER_TOOLTIP = "Represents a buzzer";  // untranslated

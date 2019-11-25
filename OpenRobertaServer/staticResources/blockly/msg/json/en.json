@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2019-11-21 18:52:19.224750",
+		"lastupdated": "2019-11-25 13:43:54.689971",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -728,7 +728,7 @@
 	"POPUP_ROBOT_BATTERY": "Voltage",
 	"POPUP_ROBOT_WAIT": "Waiting time",
 	"POPUP_ROBOT_NOT_CONNECTED": "You have to make a connection to your robot first.",
-	"POPUP_CONFIRM_DELETE_PROGRAM": "Do you really want to delete the following program or programs?<br>If you delete a shared program, you do not delete the program but the sharing.<br><br>If you delete a program with the owner »Gallery«, you remove your program from the gallery!",
+	"POPUP_CONFIRM_DELETE_PROGRAM": "Do you really want to delete the following program or programs?<br><br>If you delete a program you share with others, you delete it for everyone.<br><br>If you delete a program shared with you, you do not delete the program but the sharing.<br><br>If you delete a program with the owner »Gallery«, you remove your program from the gallery!",
 	"POPUP_CONFIRM_DELETE_CONFIGURATION": "Do you really want to delete the configuration ?",
 	"POPUP_BEFOREUNLOAD": "You have unsaved changes in your program or configuration. Sign in and save your program or configuration.",
 	"POPUP_BEFOREUNLOAD_LOGGEDIN": "You have unsaved changes in your program or configuration.",
@@ -743,6 +743,8 @@
 	"POPUP_CHANGE_PASSWORD": "change password ...",
 	"POPUP_CONTINUE": "continue anyway",
 	"POPUP_ROBOT_SYSTEM": "System",
+	"POPUP_DISPLAY_HEADER": "Output from your program",
+	"BUTTON_DO_SHARE": "Share",
 	"BUTTON_DO_UPLOAD_GALLERY": "Upload »$« to the gallery",
 	"BUTTON_EMPTY_LIST": "Empty list",
 	"MESSAGE_NOT_AVAILABLE": "Not available.",

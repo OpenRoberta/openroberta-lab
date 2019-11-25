@@ -82,6 +82,7 @@ Blockly.Msg.BRUSH_OFF = "關閉刷子";
 Blockly.Msg.BRUSH_OFF_TOOLTIP = "關閉刷子。";
 Blockly.Msg.BRUSH_ON = "打開刷子 (轉速RPM)";
 Blockly.Msg.BRUSH_ON_TOOLTIP = "用馬達的轉速RPM打開刷子  (0<=RPM<=10000)";
+Blockly.Msg.BUTTON_DO_SHARE = "共享";
 Blockly.Msg.BUTTON_DO_UPLOAD_GALLERY = "上傳»$«到庫";
 Blockly.Msg.BUTTON_EMPTY_LIST = "空清單";
 Blockly.Msg.BUZZER_TOOLTIP = "Represents a buzzer";  // untranslated
