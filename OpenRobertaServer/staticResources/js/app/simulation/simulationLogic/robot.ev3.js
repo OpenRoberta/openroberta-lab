@@ -1,4 +1,4 @@
-define([ 'simulation.simulation', 'interpreter.constants', 'simulation.robot' ], function(SIM, C, Robot) {
+define([ 'simulation.simulation', 'interpreter.constants', 'simulation.robot', 'guiState.controller' ], function(SIM, C, Robot, GUISTATE_C) {
 
     /**
      * Creates a new Ev3 for a simulation.
@@ -512,6 +512,7 @@ define([ 'simulation.simulation', 'interpreter.constants', 'simulation.robot' ],
             }
         }
         // update sayText
+        this.sayText.language = GUISTATE_C.getLanguage(); // reset language
         var language = this.robotBehaviour.getActionState("language", true);
         if (language !== null && language !== undefined && window.speechSynthesis) {
             this.sayText.language = language;
