@@ -2226,6 +2226,10 @@ td[lkey="Blockly.Msg.POPUP_DOWNLOAD_STEP_A_SENSEBOX"] {
 }
 
 #sourceCodeEditor pre {
+    position: absolute;
+    top: 0px;
+    padding: 0px;
+    line-height: 18px;
     background-color: transparent;
     border: 0px solid #ccc;
     border-radius: 0px;
@@ -2234,14 +2238,23 @@ td[lkey="Blockly.Msg.POPUP_DOWNLOAD_STEP_A_SENSEBOX"] {
 }
 
 #sourceCodeEditor .codeflask {
-    margin-top: 80px;
     height: calc(100% - 80px);
     height: -moz-calc(100% - 80px);
     height: -webkit-calc(100% - 80px);
     position: relative;
 }
 
+#sourceCodeEditor textarea {
+    position: absolute;
+    top: 0px;
+    line-height: 18px;
+    font-size: 13px;
+    padding: 0px;
+}
+
 #codeDiv pre {
+    position: absolute;
+    top: 0px;
     background-color: transparent;
     border: 0px solid #ccc;
     border-radius: 0px;
@@ -2251,24 +2264,29 @@ td[lkey="Blockly.Msg.POPUP_DOWNLOAD_STEP_A_SENSEBOX"] {
     background-size: 100% 2.77em;
     background-repeat: repeat;
     width: 100%;
+    margin-top: 0px;
+    line-height: 18px;
+    padding: 0px;
 }
 
 #sourceCodeEditor .codeflask__flatten {
-    /*background-color: #FFF;*/
     padding-top: 0px !important;
     line-height: 18px;
 }
 
 #codeDiv textarea {
-    padding-bottom: 0px !important;
+    position: absolute;
+    top: 0px;
     z-index: 8;
-    color: #fff0 !important;
+    color: rgba(255, 255, 255, 0) !important;
     height: calc(100% - 70px);
+    margin-top: 0px;
+    line-height: 18px;
+    padding: 0px;
 }
 
 #codeDiv .codeflask__flatten {
     background-color: #FFF0;
-    padding-bottom: 90px;
     padding-top: 0px !important;
     line-height: 18px;
 }

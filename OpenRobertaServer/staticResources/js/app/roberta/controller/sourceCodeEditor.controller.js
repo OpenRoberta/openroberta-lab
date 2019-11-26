@@ -40,7 +40,7 @@ define([ 'require', 'exports', 'message', 'log', 'util', 'comm', 'guiState.contr
     exports.setCodeLanguage = setCodeLanguage;
 
     function initEvents() {
-        flask.onUpdate((code) => {
+        flask.onUpdate( function(code) {
             if( $('#sourceCodeEditorPane').hasClass('active') ) {
                 wasEditedByUser = true;
             }
