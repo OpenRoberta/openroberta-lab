@@ -1386,6 +1386,7 @@ Blockly.Msg.SOCKET = "Socket";
 Blockly.Msg.SOUND_GETSAMPLE_TOOLTIP = "Gibt den aktuellen Wert des Geräuschsensors im Intervall 0 bis 100 zurück. 0 ist leise und 100 laut.";
 Blockly.Msg.SOUND_TOOLTIP = "Block für den Geräuschsensor.";
 Blockly.Msg.SOURCE_CODE_EDITOR_BUILD_TOOLTIP = "Baue den Quellcode";
+Blockly.Msg.SOURCE_CODE_EDITOR_CLOSE_CONFIRMATION = "All deine Änderungen gehen verloren!";
 Blockly.Msg.SOURCE_CODE_EDITOR_IMPORT_TOOLTIP = "Importiere aktuelles NEPO Programm";
 Blockly.Msg.SOURCE_CODE_EDITOR_PLACEHOLDER = "Importiere das aktuelle NEPO Programm oder fange einfach an zu tippen";
 Blockly.Msg.SOURCE_CODE_EDITOR_RUN_TOOLTIP = "Starte auf dem Roboter";

@@ -61,7 +61,7 @@ define([ 'require', 'exports', 'message', 'log', 'util', 'comm', 'guiState.contr
                         $('.modal').modal('hide');
                     });
                 });
-                MSG.displayMessage('All your changes will be lost!', 'POPUP', '', true, false);
+                MSG.displayMessage('SOURCE_CODE_EDITOR_CLOSE_CONFIRMATION', 'POPUP', '', true, false);
             } else {
                 wasEditedByUser = false;
                 $('#tabProgram').trigger('click');

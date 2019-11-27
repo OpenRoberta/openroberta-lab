@@ -1386,6 +1386,7 @@ Blockly.Msg.SOCKET = "socket";  // untranslated
 Blockly.Msg.SOUND_GETSAMPLE_TOOLTIP = "Gets the current reading from the sound sensor in the range 0 to 100. 0 is quiet and 100 is loud.";  // untranslated
 Blockly.Msg.SOUND_TOOLTIP = "Representerar en ljudsensor.";
 Blockly.Msg.SOURCE_CODE_EDITOR_BUILD_TOOLTIP = "Build the source code";  // untranslated
+Blockly.Msg.SOURCE_CODE_EDITOR_CLOSE_CONFIRMATION = "All your changes will be lost!";  // untranslated
 Blockly.Msg.SOURCE_CODE_EDITOR_IMPORT_TOOLTIP = "Import current NEPO program";  // untranslated
 Blockly.Msg.SOURCE_CODE_EDITOR_PLACEHOLDER = "Import current NEPO program or just start typing";  // untranslated
 Blockly.Msg.SOURCE_CODE_EDITOR_RUN_TOOLTIP = "Run on the robot";  // untranslated
