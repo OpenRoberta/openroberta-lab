@@ -441,6 +441,18 @@ wait:
         implementor: de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor
         sensor: COMPASS
         mode: COMPASS
+  COMPASS_X :
+        implementor: de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor
+        sensor: COMPASS
+        mode: X
+  COMPASS_Y :
+        implementor: de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor
+        sensor: COMPASS
+        mode: Y
+  COMPASS_Z :
+        implementor: de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor
+        sensor: COMPASS
+        mode: Z
   DROP_OFF_DISTANCE :
         implementor: de.fhg.iais.roberta.syntax.sensor.generic.DropSensor
         sensor: DROP_OFF
@@ -517,6 +529,10 @@ wait:
         implementor: de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor
         sensor: GYRO
         mode: Y
+  GYRO_Z :
+        implementor: de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor
+        sensor: GYRO
+        mode: Z
   HUMIDITY_HUMIDITY :
         implementor: de.fhg.iais.roberta.syntax.sensor.generic.HumiditySensor
         sensor: HUMIDITY
