@@ -80,6 +80,7 @@ public class RobotDownloadProgram {
                 case "mega":
                 case "nano":
                 case "mbot":
+                case "unowifirev2":
                     fileName = programName + ".ino.hex";
                     filePath = this.pathToCrosscompilerBaseDir + token + "/" + programName + "/target";
                     break;

@@ -716,6 +716,26 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
                 expr.setInTask(false);
                 return false;
             }
+            // for IMU sensors of Arduino Uno Wifi Rev2, go to config first to create brickly workspace
+            if ((e.metaKey || e.ctrlKey) && (String.fromCharCode(e.which) === '6')) {
+                var expr = GUISTATE_C.getBricklyWorkspace().newBlock('robConf_accelerometer');
+                expr.initSvg();
+                expr.render();
+                expr.setInTask(false);
+                var expr = GUISTATE_C.getBricklyWorkspace().newBlock('robConf_gyro');
+                expr.initSvg();
+                expr.render();
+                expr.setInTask(false);
+                var expr = GUISTATE_C.getBlocklyWorkspace().newBlock('robSensors_accelerometer_getSample');
+                expr.initSvg();
+                expr.render();
+                expr.setInTask(false);
+                var expr = GUISTATE_C.getBlocklyWorkspace().newBlock('robSensors_gyro_getSample');
+                expr.initSvg();
+                expr.render();
+                expr.setInTask(false);
+                return false;
+            }
         });
     }
 });

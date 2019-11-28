@@ -763,7 +763,7 @@ mode:
   particle: [PM25, PM10]
   
 configuration:
-  ACCELEROMETER: [robBrick_accelerometer]
+  ACCELEROMETER: [robBrick_accelerometer, robConf_accelerometer]
   ANALOG_PIN: [robActions_write_to_pin, robConf_analogout]
   DIGITAL_PIN: [robConf_digitalout]
   ANALOG_INPUT: [robConf_analogin]
@@ -772,7 +772,7 @@ configuration:
   BUTTON: [robBrick_key_]
   BUZZER: [robConf_buzzer, robActions_play_tone]
   COLOR: [robBrick_colour]
-  COMPASS: [robBrick_compass]
+  COMPASS: [robBrick_compass, robConf_compass]
   DETECT_MARK: [naoSensors_naoMark]
   DROP: [robConf_drop, robBrick_drop]
   ENCODER: [robConf_encoder, robBrick_encoder]

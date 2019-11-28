@@ -23,6 +23,9 @@ public class ArduinoCompilerSetupWorker implements IWorker {
             case "uno":
                 builder.setFqbn("-fqbn=arduino:avr:uno");
                 break;
+            case "unowifirev2":
+                builder.setFqbn("-fqbn=arduino:megaavr:uno2018:mode=off");
+                break;
             case "nano":
                 builder.setFqbn("-fqbn=arduino:avr:nano:cpu=atmega328");
                 break;

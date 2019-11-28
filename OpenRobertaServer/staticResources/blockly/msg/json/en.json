@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2019-12-09 12:59:42.815572",
+		"lastupdated": "2019-12-09 16:04:30.640734",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -1334,6 +1334,7 @@
 	"SENSOR_UNIT_LUX": "lx",
 	"SENSOR_UNIT_IRRADIANCE": "μW/cm²",
 	"SENSOR_UNIT_PM": "μg/m³",
+	"SENSOR_UNIT_DEGREE_PER_SECOND": "°/s",
 	"SENSOR_PINTOUCH_BOB3": "arm",
 	"SENSOR_SOUND_CALLIOPE": "microphone",
 	"MODE_VALUE": "value",
@@ -1363,9 +1364,15 @@
 	"SENSOR_TEMPERATURE_PRESSURE_GETSAMPLE_TOOLTIP": "Gets the current reading of the air pressure sensor in Pascal. Normal air pressure is 101325 Pascal.",
 	"SENSOR_RSSI": "signal strength",
 	"SENSOR_RSSI_VALUE_GETSAMPLE_TOOLTIP": "Gets the signal strength from the last received message.",
-	"SENSOR_ACCELEROMETER_X_GETSAMPLE_TOOLTIP_SENSEBOX": "Returns the acceleration value on the X axis in g. Can be in range from -2g to 2g",
-	"SENSOR_ACCELEROMETER_Y_GETSAMPLE_TOOLTIP_SENSEBOX": "Returns the acceleration value on the Y axis in g. Can be in range from -2g to 2g",
-	"SENSOR_ACCELEROMETER_Z_GETSAMPLE_TOOLTIP_SENSEBOX": "Returns the acceleration value on the Z axis in g. Can be in range from -2g to 2g",
+	"SENSOR_ACCELEROMETER_X_GETSAMPLE_TOOLTIP_ARDUINO": "Returns the acceleration value on the X axis in g. Can be in range from -4 g to 4 g.",
+	"SENSOR_ACCELEROMETER_Y_GETSAMPLE_TOOLTIP_ARDUINO": "Returns the acceleration value on the Y axis in g. Can be in range from -4 g to 4 g.",
+	"SENSOR_ACCELEROMETER_Z_GETSAMPLE_TOOLTIP_ARDUINO": "Returns the acceleration value on the Z axis in g. Can be in range from -4 g to 4 g.",
+	"SENSOR_GYRO_X_GETSAMPLE_TOOLTIP_ARDUINO": "Returns the gyroscope output on the X axis in degrees per second. Can be in range from -2000 °/s to 2000 °/s.",
+	"SENSOR_GYRO_Y_GETSAMPLE_TOOLTIP_ARDUINO": "Returns the gyroscope output on the Y axis in degrees per second. Can be in range from -2000 °/s to 2000 °/s.",
+	"SENSOR_GYRO_Z_GETSAMPLE_TOOLTIP_ARDUINO": "Returns the gyroscope output on the Z axis in degrees per second. Can be in range from -2000 °/s to 2000 °/s.",
+	"SENSOR_ACCELEROMETER_X_GETSAMPLE_TOOLTIP_SENSEBOX": "Returns the acceleration value on the X axis in g. Can be in range from -2 g to 2 g.",
+	"SENSOR_ACCELEROMETER_Y_GETSAMPLE_TOOLTIP_SENSEBOX": "Returns the acceleration value on the Y axis in g. Can be in range from -2 g to 2 g.",
+	"SENSOR_ACCELEROMETER_Z_GETSAMPLE_TOOLTIP_SENSEBOX": "Returns the acceleration value on the Z axis in g. Can be in range from -2 g to 2 g.",
 	"SENSOR_GESTURE_UP_GETSAMPLE_TOOLTIP": "Returns »true« if the posture is upright.",
 	"SENSOR_GESTURE_DOWN_GETSAMPLE_TOOLTIP": "Returns »true« if the posture is down.",
 	"SENSOR_GESTURE_FACE_UP_GETSAMPLE_TOOLTIP": "Returns »true« if the posture is face up.",
@@ -1598,5 +1605,6 @@
 	"SOURCE_CODE_EDITOR_IMPORT_TOOLTIP": "Import current NEPO program",
 	"SOURCE_CODE_EDITOR_PLACEHOLDER": "Import current NEPO program or just start typing",
 	"SOURCE_CODE_EDITOR_CLOSE_CONFIRMATION": "All your changes will be lost!",
-	"CLEAR": "clear"
+	"CLEAR": "clear",
+	"ACCELEROMETER_TOOLTIP": "Represents an accelerometer."
 }

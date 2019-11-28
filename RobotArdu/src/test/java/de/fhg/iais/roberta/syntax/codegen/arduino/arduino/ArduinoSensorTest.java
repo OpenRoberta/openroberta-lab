@@ -223,4 +223,13 @@ public class ArduinoSensorTest extends ArduinoAstTest {
                 "/ast/sensors/arduino_rfid_test.xml",
                 builder.build());
     }
+
+    @Test
+    public void gyroAccelerometerTest() throws Exception {
+        UnitTestHelper
+            .checkGeneratedSourceEqualityWithExportXml(
+                testFactory,
+                "/ast/sensors/arduino_gyro_accelerometer_test.ino",
+                "/ast/sensors/arduino_gyro_accelerometer_test.xml");
+    }
 }

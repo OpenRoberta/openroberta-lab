@@ -77,7 +77,7 @@ public final class SenseboxUsedHardwareCollectorVisitor extends AbstractUsedHard
 
     @Override
     public Void visitCompassSensor(CompassSensor<Void> compassSensor) {
-        this.builder.addUsedSensor(new UsedSensor(compassSensor.getPort(), SC.SENSEBOX_COMPASS, compassSensor.getMode()));
+        this.builder.addUsedSensor(new UsedSensor(compassSensor.getPort(), SC.COMPASS, compassSensor.getMode()));
         return null;
     }
 

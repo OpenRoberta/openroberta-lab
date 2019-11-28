@@ -28,7 +28,9 @@ import de.fhg.iais.roberta.syntax.lang.expr.ColorConst;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.syntax.lang.expr.RgbColor;
 import de.fhg.iais.roberta.syntax.lang.expr.Var;
+import de.fhg.iais.roberta.syntax.sensor.generic.AccelerometerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.DropSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.HumiditySensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.KeysSensor;
@@ -402,6 +404,18 @@ public final class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor imp
     }
 
     @Override
+    public Void visitAccelerometer(AccelerometerSensor<Void> accelerometerSensor) {
+        this.sb.append("_imu_").append(accelerometerSensor.getPort()).append(".readFloatAccel").append(accelerometerSensor.getMode()).append("()");
+        return null;
+    }
+
+    @Override
+    public Void visitGyroSensor(GyroSensor<Void> gyroSensor) {
+        this.sb.append("_imu_").append(gyroSensor.getPort()).append(".readFloatGyro").append(gyroSensor.getMode()).append("()");
+        return null;
+    }
+
+    @Override
     public Void visitMainTask(MainTask<Void> mainTask) {
 
         mainTask.getVariables().accept(this);
@@ -498,6 +512,10 @@ public final class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor imp
                     break;
                 case SC.SERVOMOTOR:
                     headerFiles.add("#include <Servo.h>");
+                    break;
+                case SC.GYRO:
+                case SC.ACCELEROMETER:
+                    headerFiles.add("#include <SparkFunLSM6DS3.h>");
                     break;
                 case SC.ULTRASONIC:
                 case SC.MOTION:
@@ -629,6 +647,11 @@ public final class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor imp
                 case SC.ANALOG_INPUT:
                 case SC.DIGITAL_INPUT:
                     this.sb.append("pinMode(_output_" + usedConfigurationBlock.getUserDefinedPortName() + ", OUTPUT);");
+                    nlIndent();
+                    break;
+                case SC.GYRO:
+                case SC.ACCELEROMETER:
+                    this.sb.append("_imu_").append(usedConfigurationBlock.getUserDefinedPortName()).append(".begin();");
                     nlIndent();
                     break;
                 default:
@@ -773,6 +796,11 @@ public final class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor imp
                 case SC.ANALOG_INPUT:
                 case SC.DIGITAL_INPUT:
                     this.sb.append("int _output_").append(blockName).append(" = ").append(cc.getProperty("INPUT")).append(";");
+                    nlIndent();
+                    break;
+                case SC.GYRO:
+                case SC.ACCELEROMETER:
+                    this.sb.append("LSM6DS3 _imu_").append(blockName).append("(SPI_MODE, SPIIMU_SS);");
                     nlIndent();
                     break;
                 default:

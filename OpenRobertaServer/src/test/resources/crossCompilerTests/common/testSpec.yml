@@ -16,10 +16,6 @@ robots:
        template: microbit
     uno:
        template: ardu
-    nano:
-       template: ardu
-    mega:
-       template: ardu
     nao:
        template: nao
     bob3:

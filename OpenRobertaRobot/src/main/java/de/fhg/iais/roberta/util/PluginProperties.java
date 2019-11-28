@@ -5,6 +5,7 @@ import java.util.Properties;
 import org.apache.commons.lang3.SystemUtils;
 
 import de.fhg.iais.roberta.util.dbc.Assert;
+import de.fhg.iais.roberta.util.dbc.DbcException;
 
 public class PluginProperties {
 
@@ -35,11 +36,7 @@ public class PluginProperties {
         this.resourceDir = resourceDirPath(resourceDir, properties.getProperty("robot.plugin.compiler.resources.dir"));
         this.updateDir = resourceDirPath(resourceDir, properties.getProperty("robot.plugin.update.dir"));
         this.tempDir = tempDir;
-        String tempCompilerDir = properties.getProperty("robot.plugin.compiler." + getOs() + ".dir");
-        if ( SystemUtils.IS_OS_WINDOWS && tempCompilerDir != null && tempCompilerDir.equals("") ) {
-            tempCompilerDir = "\"\"";
-        }
-        this.compilerDir = ""; // TODO: set tempCompilerDir;
+        this.compilerDir = (String) properties.getOrDefault("robot.plugin.compiler." + getOs() + ".dir", "");
         this.pluginProperties = properties;
     }
 
@@ -113,10 +110,14 @@ public class PluginProperties {
     }
 
     private String getOs() {
-        String os = "linux";
         if ( SystemUtils.IS_OS_WINDOWS ) {
-            os = "windows";
+            return "windows";
+        } else if(SystemUtils.IS_OS_LINUX) {
+            return "linux";
+        } else if(SystemUtils.IS_OS_MAC_OSX) {
+            return "osx";
+        } else {
+            throw new DbcException("OS not supported/implemented!");
         }
-        return os;
     }
 }

@@ -8,6 +8,7 @@ public class MegaConfigurationValidatorWorker extends ArduinoConfigurationValida
         super(
             Stream
                 .of(
+                    "LED_BUILTIN",
                     "0",
                     "1",
                     "2",

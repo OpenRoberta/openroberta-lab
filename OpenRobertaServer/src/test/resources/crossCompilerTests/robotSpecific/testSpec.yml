@@ -23,6 +23,9 @@ robots:
     uno:
         dir: ardu
         suffix: ".ino"
+    unowifirev2:
+        dir: ardu
+        suffix: ".ino"
     nano:
         dir: ardu
         suffix: ".ino"
