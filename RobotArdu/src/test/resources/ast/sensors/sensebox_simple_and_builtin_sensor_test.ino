@@ -6,7 +6,7 @@
 #include "RobertaFunctions.h"
 #include "SenseBoxMCU.h"
 RobertaFunctions rob;
-    
+
 unsigned long _time = millis();
 
 bool ___item;
@@ -20,12 +20,9 @@ int _getValueFromBmx(int axis, int mode) {
     int _z_axis;
     switch (mode) {
         case 1:
-            _bmx055_A.getAcceleration(&_x_axis, &_y_axis, &_z_axis);
-            break;
-        case 2:
             _bmx055_A.getRotation(&_x_axis, &_y_axis, &_z_axis);
             break;
-        case 3:
+        case 2:
             _bmx055_A.getMagnet(&_x_axis, &_y_axis, &_z_axis);
             break;
     }
@@ -47,8 +44,10 @@ int _output_L = 1;
 void setup()
 {
     Serial.begin(9600); 
-    _bmx055_A.begin();
+    _bmx055_A.beginAcc(0x03);
     pinMode(_button_B, INPUT);
+    _bmx055_A.beginMagn();
+    _bmx055_A.beginGyro();
     ___item = true;
     ___item2 = 0;
 }
@@ -62,13 +61,13 @@ void loop()
     ___item2 = _hcsr04_U.getDistance();
     ___item2 = (int) (millis() - _time);
     _time = millis();
+    ___item2 = _bmx055_A.getAccelerationX();
+    ___item2 = _bmx055_A.getAccelerationY();
+    ___item2 = _bmx055_A.getAccelerationZ();
     ___item2 = _getValueFromBmx(1, 1);
     ___item2 = _getValueFromBmx(2, 1);
     ___item2 = _getValueFromBmx(3, 1);
     ___item2 = _getValueFromBmx(1, 2);
     ___item2 = _getValueFromBmx(2, 2);
     ___item2 = _getValueFromBmx(3, 2);
-    ___item2 = _getValueFromBmx(1, 3);
-    ___item2 = _getValueFromBmx(2, 3);
-    ___item2 = _getValueFromBmx(3, 3);
 }

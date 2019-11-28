@@ -385,20 +385,12 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
         this.sb.append("case 1:");
         incrIndentation();
         nlIndent();
-        this.sb.append("_bmx055_").append(portName).append(".getAcceleration(&_x_axis, &_y_axis, &_z_axis);");
-        nlIndent();
-        this.sb.append("break;");
-        decrIndentation();
-        nlIndent();
-        this.sb.append("case 2:");
-        incrIndentation();
-        nlIndent();
         this.sb.append("_bmx055_").append(portName).append(".getRotation(&_x_axis, &_y_axis, &_z_axis);");
         nlIndent();
         this.sb.append("break;");
         decrIndentation();
         nlIndent();
-        this.sb.append("case 3:");
+        this.sb.append("case 2:");
         incrIndentation();
         nlIndent();
         this.sb.append("_bmx055_").append(portName).append(".getMagnet(&_x_axis, &_y_axis, &_z_axis);");
@@ -441,7 +433,13 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
 
     @Override
     public Void visitAccelerometer(AccelerometerSensor<Void> accelerometerSensor) {
-        switch ( accelerometerSensor.getMode() ) {
+        this.sb.append("_bmx055_").append(accelerometerSensor.getPort()).append(".getAcceleration").append(accelerometerSensor.getMode()).append("()");
+        return null;
+    }
+
+    @Override
+    public Void visitGyroSensor(GyroSensor<Void> gyroSensor) {
+        switch ( gyroSensor.getMode() ) {
             case "X":
                 this.sb.append("_getValueFromBmx(1, 1)");
                 break;
@@ -456,8 +454,8 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
     }
 
     @Override
-    public Void visitGyroSensor(GyroSensor<Void> gyroSensor) {
-        switch ( gyroSensor.getMode() ) {
+    public Void visitCompassSensor(CompassSensor<Void> compassSensor) {
+        switch ( compassSensor.getMode() ) {
             case "X":
                 this.sb.append("_getValueFromBmx(1, 2)");
                 break;
@@ -466,22 +464,6 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
                 break;
             case "Z":
                 this.sb.append("_getValueFromBmx(3, 2)");
-                break;
-        }
-        return null;
-    }
-
-    @Override
-    public Void visitCompassSensor(CompassSensor<Void> compassSensor) {
-        switch ( compassSensor.getMode() ) {
-            case "X":
-                this.sb.append("_getValueFromBmx(1, 3)");
-                break;
-            case "Y":
-                this.sb.append("_getValueFromBmx(2, 3)");
-                break;
-            case "Z":
-                this.sb.append("_getValueFromBmx(3, 3)");
                 break;
         }
         return null;
@@ -572,6 +554,7 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
     }
 
     private void generateConfigurationSetup() {
+        String bmx55PortName;
         for ( ConfigurationComponent usedConfigurationBlock : this.configuration.getConfigurationComponentsValues() ) {
             switch ( usedConfigurationBlock.getComponentType() ) {
                 case SC.LED:
@@ -629,14 +612,22 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
                     break;
                 case SC.SENSEBOX_ACCELEROMETER:
                     for ( UsedSensor usedSensor : this.usedHardwareBean.getUsedSensors() ) {
-                        if ( usedSensor.getType().equals(SC.SENSEBOX_COMPASS)
-                            || usedSensor.getType().equals(SC.ACCELEROMETER)
-                            || usedSensor.getType().equals(SC.GYRO) ) {
-                            this.sb.append("_bmx055_").append(usedConfigurationBlock.getUserDefinedPortName()).append(".begin();");
+                        if ( usedSensor.getType().equals(SC.ACCELEROMETER) ) {
+                            this.sb.append("_bmx055_").append(usedConfigurationBlock.getUserDefinedPortName()).append(".beginAcc(0x03);");
                             nlIndent();
                             break;
                         }
                     }
+                    break;
+                case SC.SENSEBOX_COMPASS:
+                    bmx55PortName = this.configuration.getConfigurationComponentbyType(SC.SENSEBOX_ACCELEROMETER).getUserDefinedPortName();
+                    this.sb.append("_bmx055_").append(bmx55PortName).append(".beginMagn();");
+                    nlIndent();
+                    break;
+                case SC.GYRO:
+                    bmx55PortName = this.configuration.getConfigurationComponentbyType(SC.SENSEBOX_ACCELEROMETER).getUserDefinedPortName();
+                    this.sb.append("_bmx055_").append(bmx55PortName).append(".beginGyro();");
+                    nlIndent();
                     break;
                 case SC.SENSEBOX_SDCARD:
                     this.sb.append("SD.begin(28);");
@@ -741,8 +732,6 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
                     nlIndent();
                     break;
                 // no additional configuration needed:
-                case SC.SENSEBOX_COMPASS:
-                case SC.GYRO:
                 case SC.ULTRASONIC:
                 case SC.POTENTIOMETER:
                 case SC.LIGHT:

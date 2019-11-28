@@ -585,6 +585,10 @@ wait:
         implementor: de.fhg.iais.roberta.syntax.sensor.generic.LightSensor
         sensor: LIGHT_VALUE
         mode: LIGHT_VALUE
+  LIGHTVEML_LIGHT:
+        implementor: de.fhg.iais.roberta.syntax.sensor.generic.LightSensor
+        sensor: LIGHTVEML_LIGHT
+        mode: LIGHTVEML_LIGHT
   MICROPHONE :
         implementor: de.fhg.iais.roberta.syntax.sensor.generic.MicrophoneSensor
         sensor: MICROPHONE
@@ -634,7 +638,7 @@ wait:
         sensor: PIN_TOUCHED
         mode: PIN_TOUCHED
   POTENTIOMETER_VALUE :
-        implementor: de.fhg.iais.roberta.syntax.sensor.generic.PotentiometerSensor
+        implementor: de.fhg.iais.roberta.syntax.sensor.generic.VoltageSensor
         sensor: POTENTIOMETER
         mode: VALUE
   PULSE_VALUE :
@@ -658,6 +662,14 @@ wait:
         sensor: SOUND
         mode: SOUND
   TEMPERATURE :
+        implementor: de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor
+        sensor: TEMPERATURE
+        mode: TEMPERATURE
+  TEMPERATURE_PRESSURE:
+        implementor: de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor
+        sensor: TEMPERATURE
+        mode: PRESSURE
+  TEMPERATURE_TEMPERATURE:
         implementor: de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor
         sensor: TEMPERATURE
         mode: TEMPERATURE

@@ -28,7 +28,7 @@ public class Jaxb2ProgramAst<V> extends AbstractJaxb2Ast<V> {
     /**
      * Converts object of type {@link BlockSet} to AST tree.
      *
-     * @param program
+     * @param set the BlockSet to transform
      */
     public void transform(BlockSet set) {
         this.data.setRobotType(set.getRobottype());
@@ -69,13 +69,29 @@ public class Jaxb2ProgramAst<V> extends AbstractJaxb2Ast<V> {
 
     @SuppressWarnings("unchecked")
     private Phrase<V> invokeMethod(Block block, String className) {
-        Method method;
+        Method method = null;
         try {
             method = Class.forName(className).getMethod("jaxbToAst", Block.class, AbstractJaxb2Ast.class);
             return (Phrase<V>) method.invoke(null, block, this);
         } catch ( NoSuchMethodException | SecurityException | ClassNotFoundException | IllegalAccessException | IllegalArgumentException
             | InvocationTargetException | DbcException e ) {
-            throw new DbcException(e.getCause().getMessage());
+            if (method == null) {
+                throw new DbcException("Could not get method for " + className, e.getCause());
+            } else {
+                StringBuilder sb = new StringBuilder();
+                sb.append("Could not invoke method ");
+                sb.append(method.getName());
+                sb.append(" for block ");
+                sb.append(block.getType());
+                sb.append(" with fields ");
+                block.getField().forEach(field -> {
+                    sb.append(field.getName());
+                    sb.append(" ");
+                    sb.append(field.getValue());
+                    sb.append(" ");
+                });
+                throw new DbcException(sb.toString(), e.getCause());
+            }
         }
     }
 }

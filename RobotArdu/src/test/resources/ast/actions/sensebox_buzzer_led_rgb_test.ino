@@ -6,7 +6,7 @@
 #include "RobertaFunctions.h"
 #include "SenseBoxMCU.h"
 RobertaFunctions rob;
-    
+
 unsigned long _time = millis();
 
 unsigned int ___item;
@@ -26,6 +26,8 @@ void setup()
     pinMode(_led_red_R, OUTPUT);
     pinMode(_led_green_R, OUTPUT);
     pinMode(_led_blue_R, OUTPUT);
+    _bmx055_A.beginMagn();
+    _bmx055_A.beginGyro();
     pinMode(_led_L, OUTPUT);
     pinMode(_led_R1, OUTPUT);
     ___item = RGB(0xFF, 0xFF, 0xFF);

@@ -22,12 +22,9 @@ int _getValueFromBmx(int axis, int mode) {
     int _z_axis;
     switch (mode) {
         case 1:
-            _bmx055_B.getAcceleration(&_x_axis, &_y_axis, &_z_axis);
-            break;
-        case 2:
             _bmx055_B.getRotation(&_x_axis, &_y_axis, &_z_axis);
             break;
-        case 3:
+        case 2:
             _bmx055_B.getMagnet(&_x_axis, &_y_axis, &_z_axis);
             break;
     }
@@ -48,7 +45,9 @@ Plot _plot_L(&_display_L);
 void setup()
 {
     Serial.begin(9600); 
-    _bmx055_B.begin();
+    _bmx055_B.beginAcc(0x03);
+    _bmx055_B.beginMagn();
+    _bmx055_B.beginGyro();
     senseBoxIO.powerI2C(true);
     delay(2000);
     _display_L.begin(SSD1306_SWITCHCAPVCC, 0x3D);
@@ -70,7 +69,7 @@ void setup()
 void loop()
 {
     for (int ___i = 1; ___i < 100; ___i += 1) {
-        _plot_L.addDataPoint(___i, _getValueFromBmx(1, 1));
+        _plot_L.addDataPoint(___i, _bmx055_B.getAccelerationX());
         
         delay(100);
         delay(1);
