@@ -122,6 +122,8 @@ define([ 'require', 'exports', 'message', 'log', 'util', 'comm', 'guiState.contr
             $('#buildSourceCodeEditor').removeClass('disabled');
             $('#main-section').css('background-color', '#FFF');
         }, "background color changed by source code editor");
+        
+        $('#sourceCodeEditorPane').find('button[name="rightMostButton"]').attr('title', '').attr('rel', 'tooltip').attr('data-placement', 'left').attr('lkey', 'Blockly.Msg.SOURCE_CODE_EDITOR_IMPORT_TOOLTIP').attr('data-original-title', Blockly.Msg.BUTTON_EMPTY_LIST).tooltip('fixTitle');
     }
     
     function getSourceCode() {
