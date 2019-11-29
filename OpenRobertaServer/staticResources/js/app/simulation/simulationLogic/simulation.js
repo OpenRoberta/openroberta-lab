@@ -8,9 +8,9 @@
  */
 
 define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 'simulation.constants', 'util', 'program.controller',
-    'interpreter.interpreter', 'interpreter.robotMbedBehaviour', 'jquery'
+    'interpreter.interpreter', 'interpreter.robotMbedBehaviour', 'simulation.constants', 'jquery'
 ], function(exports, Scene, SIMATH, ROBERTA_PROGRAM, CONST, UTIL, PROGRAM_C,
-    SIM_I, MBED_R, $) {
+    SIM_I, MBED_R, C, $) {
 
     var interpreters;
     var scene;
@@ -861,21 +861,26 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
     }
 
     function importImage() {
-        var input = $(document.createElement('input'));
-        input.attr("type", "file");
-        input.attr("accept", ".png, .jpg, .jpeg, .svg");
-        input.trigger('click'); // opening dialog
-        input.change(function(event) {
+        $('#backgroundFileSelector').val(null);
+        $('#backgroundFileSelector').attr("accept", ".png, .jpg, .jpeg, .svg");
+        $('#backgroundFileSelector').trigger('click'); // opening dialog
+        $('#backgroundFileSelector').change(function(event) {
             var file = event.target.files[0];
             var reader = new FileReader();
             reader.onload = function(event) {
                 var img = new Image();
                 img.onload = function() {
                     var canvas = document.createElement("canvas");
-                    var scale = 1;
-                    if (img.height > 800) {
-                        scale = 800.0 / img.height;
+                    var scaleX = 1;
+                    var scaleY = 1;
+                    // - 20 because of the border pattern which is 10 pixels wide on both sides
+                    if (img.width > C.MAX_WIDTH - 20) {
+                        scaleX = (C.MAX_WIDTH - 20) / img.width;
                     }
+                    if (img.height > C.MAX_HEIGHT - 20) {
+                        scaleY = (C.MAX_HEIGHT - 20) / img.height;
+                    }
+                    var scale = Math.min(scaleX, scaleY);
                     canvas.width = img.width * scale;
                     canvas.height = img.height * scale;
                     var ctx = canvas.getContext("2d");
@@ -883,16 +888,18 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
                     ctx.drawImage(img, 0, 0);
                     var dataURL = canvas.toDataURL("image/png");
                     localStorage.setItem("customBackground", dataURL.replace(/^data:image\/(png|jpg);base64,/, ""));
-                    var dataImage = localStorage.getItem('customBackground');
-                    var image = new Image();
-                    image.src = "data:image/png;base64," + dataImage;
-                    imgObjectList[imgObjectList.length] = image;
-                    setBackground(imgObjectList.length - 1, setBackground);
-                    initScene();
+                    var image = new Image(canvas.width, canvas.height);
+                    image.src = dataURL;
+                    image.onload = function() {
+                        imgObjectList[imgObjectList.length] = image;
+                        setBackground(imgObjectList.length - 1, setBackground);
+                        initScene();
+                    }
                 };
                 img.src = reader.result;
             };
             reader.readAsDataURL(file);
+            return false;
         });
     }
     exports.importImage = importImage;
