@@ -95,6 +95,7 @@ Blockly.Msg.CENTER = "center";  // untranslated
 Blockly.Msg.CHANGE_VALUE_TITLE = "تةغییر مقدار:";
 Blockly.Msg.CHAT = "!وةگةرد هؤمکارةتان وة نام ئئ کادرة گةپ بةن";
 Blockly.Msg.CLEAN_UP = "تمیزکردن بلاکةل";
+Blockly.Msg.CLEAR = "clear";  // untranslated
 Blockly.Msg.COLLAPSE_ALL = "چؤیچانن/پشکانن بلاکةل";
 Blockly.Msg.COLLAPSE_BLOCK = "چؤیچانن/پشکانن بلاک";
 Blockly.Msg.COLON = "colon";  // untranslated

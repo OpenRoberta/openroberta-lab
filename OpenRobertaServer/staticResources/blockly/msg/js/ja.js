@@ -95,6 +95,7 @@ Blockly.Msg.CENTER = "center";  // untranslated
 Blockly.Msg.CHANGE_VALUE_TITLE = "値を変更します。";
 Blockly.Msg.CHAT = "このボックスに入力して共同編集者とチャットしよう！";
 Blockly.Msg.CLEAN_UP = "ブロックの整理";
+Blockly.Msg.CLEAR = "clear";  // untranslated
 Blockly.Msg.COLLAPSE_ALL = "ブロックを折りたたむ";
 Blockly.Msg.COLLAPSE_BLOCK = "ブロックを折りたたむ";
 Blockly.Msg.COLON = "colon";  // untranslated

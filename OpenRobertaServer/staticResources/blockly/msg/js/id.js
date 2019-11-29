@@ -95,6 +95,7 @@ Blockly.Msg.CENTER = "center";  // untranslated
 Blockly.Msg.CHANGE_VALUE_TITLE = "Ubah nilai:";
 Blockly.Msg.CHAT = "Chatting dengan kolaborator anda dengan mengetikkan di kotak ini!";
 Blockly.Msg.CLEAN_UP = "Bersihkan Blok";
+Blockly.Msg.CLEAR = "clear";  // untranslated
 Blockly.Msg.COLLAPSE_ALL = "Ciutkan Blok";
 Blockly.Msg.COLLAPSE_BLOCK = "Ciutkan Blok";
 Blockly.Msg.COLON = "colon";  // untranslated

@@ -95,6 +95,7 @@ Blockly.Msg.CENTER = "center";  // untranslated
 Blockly.Msg.CHANGE_VALUE_TITLE = "Keisti reikšmę:";
 Blockly.Msg.CHAT = "Galite susirašinėti su projekto bendradarbiais.";
 Blockly.Msg.CLEAN_UP = "Išvalyti blokus";
+Blockly.Msg.CLEAR = "clear";  // untranslated
 Blockly.Msg.COLLAPSE_ALL = "Suskleisti blokus";
 Blockly.Msg.COLLAPSE_BLOCK = "Suskleisti bloką";
 Blockly.Msg.COLON = "colon";  // untranslated

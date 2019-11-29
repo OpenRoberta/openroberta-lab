@@ -95,6 +95,7 @@ Blockly.Msg.CENTER = "center";
 Blockly.Msg.CHANGE_VALUE_TITLE = "Смена на вредност:";
 Blockly.Msg.CHAT = "Разговарајте со вашиот соработник во ова поле!";
 Blockly.Msg.CLEAN_UP = "Clean up Blocks";  // untranslated
+Blockly.Msg.CLEAR = "clear";  // untranslated
 Blockly.Msg.COLLAPSE_ALL = "Собери блокови";
 Blockly.Msg.COLLAPSE_BLOCK = "Собери блок";
 Blockly.Msg.COLON = "colon";  // untranslated

@@ -95,6 +95,7 @@ Blockly.Msg.CENTER = "center";  // untranslated
 Blockly.Msg.CHANGE_VALUE_TITLE = "மதிப்பை மாற்றவும்:";
 Blockly.Msg.CHAT = "இந்தப் பெட்டியில் தட்டச்சு செய்வதன் மூலம் கூட்டுப்பணியாளருடன் உரையாடலாம்!";
 Blockly.Msg.CLEAN_UP = "Clean up Blocks";  // untranslated
+Blockly.Msg.CLEAR = "clear";  // untranslated
 Blockly.Msg.COLLAPSE_ALL = "உறுப்புகளை மரை";
 Blockly.Msg.COLLAPSE_BLOCK = "உறுப்பை மரை";
 Blockly.Msg.COLON = "colon";  // untranslated

@@ -95,6 +95,7 @@ Blockly.Msg.CENTER = "center";  // untranslated
 Blockly.Msg.CHANGE_VALUE_TITLE = "Neie Variable...";
 Blockly.Msg.CHAT = "Sprech mit unsrem Mitoorweiter doorrich renschreiwe von Text hier in den Kaste!";
 Blockly.Msg.CLEAN_UP = "Clean up Blocks";  // untranslated
+Blockly.Msg.CLEAR = "clear";  // untranslated
 Blockly.Msg.COLLAPSE_ALL = "Blocke zusammerfalte";
 Blockly.Msg.COLLAPSE_BLOCK = "Block zusammerfalte";
 Blockly.Msg.COLON = "colon";  // untranslated

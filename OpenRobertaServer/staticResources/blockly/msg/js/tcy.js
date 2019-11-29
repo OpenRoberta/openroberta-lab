@@ -95,6 +95,7 @@ Blockly.Msg.CENTER = "center";  // untranslated
 Blockly.Msg.CHANGE_VALUE_TITLE = "ಮೌಲ್ಯೊದ ಬದಲಾವಣೆ";
 Blockly.Msg.CHAT = "ನಿಕ್ಲೆನ ಸಹಬೋಗಿನೊಟ್ಟುಗೆ ಈ ಪೆಟ್ಟಿಗೆಡ್ ಚಾಟಿಂಗ್‍ ನಮೂದು ಮಲ್ಪುಲೆ";
 Blockly.Msg.CLEAN_UP = "ನಿರ್ಬಂದೊಲೆನ್ ಸ್ವೊಚ್ಚೊ ಮಲ್ಪುಲೆ";
+Blockly.Msg.CLEAR = "clear";  // untranslated
 Blockly.Msg.COLLAPSE_ALL = "ಕುಗ್ಗಿಸಾದ್ ನಿರ್ಬಂಧಿಸಾಪುನೆ";
 Blockly.Msg.COLLAPSE_BLOCK = "ಕುಗ್ಗಿಸಾದ್ ತಡೆಪತ್ತುನೆ";
 Blockly.Msg.COLON = "colon";  // untranslated

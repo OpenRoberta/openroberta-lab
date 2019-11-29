@@ -95,6 +95,7 @@ Blockly.Msg.CENTER = "中心";
 Blockly.Msg.CHANGE_VALUE_TITLE = "更改值：";
 Blockly.Msg.CHAT = "通过在此框输入与您的合作者沟通！";
 Blockly.Msg.CLEAN_UP = "清理块";
+Blockly.Msg.CLEAR = "clear";  // untranslated
 Blockly.Msg.COLLAPSE_ALL = "折叠块";
 Blockly.Msg.COLLAPSE_BLOCK = "折叠块";
 Blockly.Msg.COLON = "冒号";

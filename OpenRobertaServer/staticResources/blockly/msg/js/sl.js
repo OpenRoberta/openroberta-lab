@@ -95,6 +95,7 @@ Blockly.Msg.CENTER = "center";  // untranslated
 Blockly.Msg.CHANGE_VALUE_TITLE = "Spremeni vrednost:";
 Blockly.Msg.CHAT = "Klepetaj s sodelavcem tako, da tipkaš v to okno!";
 Blockly.Msg.CLEAN_UP = "Ponastavi kocke";
+Blockly.Msg.CLEAR = "clear";  // untranslated
 Blockly.Msg.COLLAPSE_ALL = "Skrči kocke";
 Blockly.Msg.COLLAPSE_BLOCK = "Skrči kocko";
 Blockly.Msg.COLON = "colon";  // untranslated

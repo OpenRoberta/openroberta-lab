@@ -95,6 +95,7 @@ Blockly.Msg.CENTER = "center";  // untranslated
 Blockly.Msg.CHANGE_VALUE_TITLE = "Wäert änneren:";
 Blockly.Msg.CHAT = "Mat ärem Mataarbechter chatten an deem Dir an dës Këscht tippt!";
 Blockly.Msg.CLEAN_UP = "Bléck opraumen";
+Blockly.Msg.CLEAR = "clear";  // untranslated
 Blockly.Msg.COLLAPSE_ALL = "Bléck zesummeklappen";
 Blockly.Msg.COLLAPSE_BLOCK = "Block zesummeklappen";
 Blockly.Msg.COLON = "colon";  // untranslated

@@ -95,6 +95,7 @@ Blockly.Msg.CENTER = "center";  // untranslated
 Blockly.Msg.CHANGE_VALUE_TITLE = "Kemmañ an dalvoudenn :";
 Blockly.Msg.CHAT = "Flapañ gant ho kenlabourer en ur skrivañ er voest-se !";
 Blockly.Msg.CLEAN_UP = "Naetaat ar bloc'hoù";
+Blockly.Msg.CLEAR = "clear";  // untranslated
 Blockly.Msg.COLLAPSE_ALL = "Bihanaat ar bloc'hoù";
 Blockly.Msg.COLLAPSE_BLOCK = "Bihanaat ar bloc'h";
 Blockly.Msg.COLON = "colon";  // untranslated

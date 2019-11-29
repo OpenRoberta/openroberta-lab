@@ -95,6 +95,7 @@ Blockly.Msg.CENTER = "center";
 Blockly.Msg.CHANGE_VALUE_TITLE = "Érték módosítása:";
 Blockly.Msg.CHAT = "Ebben a mezőben tudsz a közreműködőkkel beszélgetni!";
 Blockly.Msg.CLEAN_UP = "Blokkok kiürítése";
+Blockly.Msg.CLEAR = "clear";  // untranslated
 Blockly.Msg.COLLAPSE_ALL = "Blokkok összecsukása";
 Blockly.Msg.COLLAPSE_BLOCK = "Blokk összecsukása";
 Blockly.Msg.COLON = "colon";  // untranslated

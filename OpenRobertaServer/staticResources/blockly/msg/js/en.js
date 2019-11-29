@@ -95,6 +95,7 @@ Blockly.Msg.CENTER = "center";
 Blockly.Msg.CHANGE_VALUE_TITLE = "Change value:";
 Blockly.Msg.CHAT = "Chat with your collaborator by typing in this box!";
 Blockly.Msg.CLEAN_UP = "Clean up Blocks";
+Blockly.Msg.CLEAR = "clear";
 Blockly.Msg.COLLAPSE_ALL = "Collapse Blocks";
 Blockly.Msg.COLLAPSE_BLOCK = "Collapse Block";
 Blockly.Msg.COLON = "colon";

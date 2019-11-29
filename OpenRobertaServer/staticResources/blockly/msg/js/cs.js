@@ -95,6 +95,7 @@ Blockly.Msg.CENTER = "prostřední";
 Blockly.Msg.CHANGE_VALUE_TITLE = "Změnit hodnotu:";
 Blockly.Msg.CHAT = "Psaním do tohoto políčka komunikujte se spolupracovníky!";
 Blockly.Msg.CLEAN_UP = "Uspořádat bloky";
+Blockly.Msg.CLEAR = "clear";  // untranslated
 Blockly.Msg.COLLAPSE_ALL = "Sbalit bloky";
 Blockly.Msg.COLLAPSE_BLOCK = "Sbalit blok";
 Blockly.Msg.COLON = "colon";  // untranslated

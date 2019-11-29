@@ -95,6 +95,7 @@ Blockly.Msg.CENTER = "center";  // untranslated
 Blockly.Msg.CHANGE_VALUE_TITLE = "Thay giá trị thành:";
 Blockly.Msg.CHAT = "Trò chuyện với cộng tác viên của bạn bằng cách gõ vào hộp này!";
 Blockly.Msg.CLEAN_UP = "Clean up Blocks";  // untranslated
+Blockly.Msg.CLEAR = "clear";  // untranslated
 Blockly.Msg.COLLAPSE_ALL = "Thu Nhỏ Mọi Mảnh";
 Blockly.Msg.COLLAPSE_BLOCK = "Thu Nhỏ Mảnh";
 Blockly.Msg.COLON = "colon";  // untranslated

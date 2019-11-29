@@ -95,6 +95,7 @@ Blockly.Msg.CENTER = "keski";
 Blockly.Msg.CHANGE_VALUE_TITLE = "Muuta arvoa:";
 Blockly.Msg.CHAT = "Keskustele yhteistyökumppanisi kanssa kirjoittamalla tähän kenttään!";
 Blockly.Msg.CLEAN_UP = "Siivoa lohkot";
+Blockly.Msg.CLEAR = "clear";  // untranslated
 Blockly.Msg.COLLAPSE_ALL = "Sulje lohkot";
 Blockly.Msg.COLLAPSE_BLOCK = "Sulje lohko";
 Blockly.Msg.COLON = "colon";  // untranslated

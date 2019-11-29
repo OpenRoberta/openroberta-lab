@@ -95,6 +95,7 @@ Blockly.Msg.CENTER = "centru";
 Blockly.Msg.CHANGE_VALUE_TITLE = "Schimbaţi valoarea:";
 Blockly.Msg.CHAT = "Discută cu colaboratorul tău tastând în cadrul acestei zone!";
 Blockly.Msg.CLEAN_UP = "Clean up Blocks";  // untranslated
+Blockly.Msg.CLEAR = "clear";  // untranslated
 Blockly.Msg.COLLAPSE_ALL = "Restrange blocurile";
 Blockly.Msg.COLLAPSE_BLOCK = "Restrange blocul";
 Blockly.Msg.COLON = "coloana";

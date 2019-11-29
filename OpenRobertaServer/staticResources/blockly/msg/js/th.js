@@ -95,6 +95,7 @@ Blockly.Msg.CENTER = "center";  // untranslated
 Blockly.Msg.CHANGE_VALUE_TITLE = "เปลี่ยนค่า:";
 Blockly.Msg.CHAT = "คุยกับผู้ร่วมงานของคุณโดยพิมพ์ลงในกล่องนี้!";
 Blockly.Msg.CLEAN_UP = "Clean up Blocks";  // untranslated
+Blockly.Msg.CLEAR = "clear";  // untranslated
 Blockly.Msg.COLLAPSE_ALL = "ย่อบล็อก";
 Blockly.Msg.COLLAPSE_BLOCK = "ย่อบล็อก";
 Blockly.Msg.COLON = "colon";  // untranslated

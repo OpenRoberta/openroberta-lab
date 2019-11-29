@@ -95,6 +95,7 @@ Blockly.Msg.CENTER = "center";  // untranslated
 Blockly.Msg.CHANGE_VALUE_TITLE = "Muda valori:";
 Blockly.Msg.CHAT = "Faedda cun su cumpàngiu tuo iscriende inoghe!";
 Blockly.Msg.CLEAN_UP = "Lìmpia is brocus";
+Blockly.Msg.CLEAR = "clear";  // untranslated
 Blockly.Msg.COLLAPSE_ALL = "Serra e stringi Brocus";
 Blockly.Msg.COLLAPSE_BLOCK = "Serra e stringi Brocu";
 Blockly.Msg.COLON = "colon";  // untranslated

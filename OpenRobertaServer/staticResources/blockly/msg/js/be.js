@@ -95,6 +95,7 @@ Blockly.Msg.CENTER = "Цэнтр";
 Blockly.Msg.CHANGE_VALUE_TITLE = "Змяніць значэння:";
 Blockly.Msg.CHAT = "Chat with your collaborator by typing in this box!";  // untranslated
 Blockly.Msg.CLEAN_UP = "Выраўнаваць блокі";
+Blockly.Msg.CLEAR = "clear";  // untranslated
 Blockly.Msg.COLLAPSE_ALL = "Згарнуць блокі";
 Blockly.Msg.COLLAPSE_BLOCK = "Згарнуць блок";
 Blockly.Msg.COLON = "двукроп'е";

@@ -95,6 +95,7 @@ Blockly.Msg.CENTER = "center";  // untranslated
 Blockly.Msg.CHANGE_VALUE_TITLE = "Змінити значення:";
 Blockly.Msg.CHAT = "Спілкуйтеся з вашими співавторами, набираючи у цьому полі!";
 Blockly.Msg.CLEAN_UP = "Вирівняти блоки";
+Blockly.Msg.CLEAR = "clear";  // untranslated
 Blockly.Msg.COLLAPSE_ALL = "Згорнути блоки";
 Blockly.Msg.COLLAPSE_BLOCK = "Згорнути блок";
 Blockly.Msg.COLON = "colon";  // untranslated

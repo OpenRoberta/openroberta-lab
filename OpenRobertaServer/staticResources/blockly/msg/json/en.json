@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2019-11-28 17:59:21.455754",
+		"lastupdated": "2019-11-29 11:44:57.419481",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -1586,5 +1586,6 @@
 	"SOURCE_CODE_EDITOR_UPLOAD_TOOLTIP": "Upload the source code",
 	"SOURCE_CODE_EDITOR_IMPORT_TOOLTIP": "Import current NEPO program",
 	"SOURCE_CODE_EDITOR_PLACEHOLDER": "Import current NEPO program or just start typing",
-	"SOURCE_CODE_EDITOR_CLOSE_CONFIRMATION": "All your changes will be lost!"
+	"SOURCE_CODE_EDITOR_CLOSE_CONFIRMATION": "All your changes will be lost!",
+	"CLEAR": "clear"
 }

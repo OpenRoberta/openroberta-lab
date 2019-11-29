@@ -95,6 +95,7 @@ Blockly.Msg.CENTER = "center";  // untranslated
 Blockly.Msg.CHANGE_VALUE_TITLE = "choH:";
 Blockly.Msg.CHAT = "beqpu'lI'vaD bIjawmeH naDev yIrI'!";
 Blockly.Msg.CLEAN_UP = "ngoghmeyvaD tlhegh rurmoH";
+Blockly.Msg.CLEAR = "clear";  // untranslated
 Blockly.Msg.COLLAPSE_ALL = "ngoghmey DejmoH";
 Blockly.Msg.COLLAPSE_BLOCK = "ngogh DejmoH";
 Blockly.Msg.COLON = "colon";  // untranslated

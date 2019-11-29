@@ -95,6 +95,7 @@ Blockly.Msg.CENTER = "center";  // untranslated
 Blockly.Msg.CHANGE_VALUE_TITLE = "Qiyməti dəyiş:";
 Blockly.Msg.CHAT = "Chat with your collaborator by typing in this box!";  // untranslated
 Blockly.Msg.CLEAN_UP = "Blokları təmizlə";
+Blockly.Msg.CLEAR = "clear";  // untranslated
 Blockly.Msg.COLLAPSE_ALL = "Blokları yığ";
 Blockly.Msg.COLLAPSE_BLOCK = "Bloku yığ";
 Blockly.Msg.COLON = "colon";  // untranslated

@@ -95,6 +95,7 @@ Blockly.Msg.CENTER = "center";  // untranslated
 Blockly.Msg.CHANGE_VALUE_TITLE = "Breyta gildi:";
 Blockly.Msg.CHAT = "Spjallaðu við félaga með því að skrifa í þennan reit!";
 Blockly.Msg.CLEAN_UP = "Hreinsa kubba";
+Blockly.Msg.CLEAR = "clear";  // untranslated
 Blockly.Msg.COLLAPSE_ALL = "Loka kubbum";
 Blockly.Msg.COLLAPSE_BLOCK = "Loka kubbi";
 Blockly.Msg.COLON = "colon";  // untranslated

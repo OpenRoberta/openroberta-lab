@@ -95,6 +95,7 @@ Blockly.Msg.CENTER = "center";  // untranslated
 Blockly.Msg.CHANGE_VALUE_TITLE = "လႅၵ်ႈလၢႆႈၼမ်ႉၵတ်ႉ";
 Blockly.Msg.CHAT = "​ပေႃႉလိၵ်ႈ ၼႂ်းလွၵ်းၼႆႉသေ ၶျၢတ်ႉၸူး ၵေႃႉႁူမ်ႈႁဵတ်းႁူမ်ႈသၢင်ႈ ၸဝ်ႈၵဝ်ႇ";
 Blockly.Msg.CLEAN_UP = "Clean up Blocks";  // untranslated
+Blockly.Msg.CLEAR = "clear";  // untranslated
 Blockly.Msg.COLLAPSE_ALL = "ပလွၵ်ႉတင်းၼမ် လႅဝ်";
 Blockly.Msg.COLLAPSE_BLOCK = "ပလွၵ်ႉလႅဝ်";
 Blockly.Msg.COLON = "colon";  // untranslated

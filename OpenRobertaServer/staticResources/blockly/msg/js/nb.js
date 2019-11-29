@@ -95,6 +95,7 @@ Blockly.Msg.CENTER = "center";
 Blockly.Msg.CHANGE_VALUE_TITLE = "Bytt verdi:";
 Blockly.Msg.CHAT = "Chat med din medarbeider ved å skrive i dette feltet!";
 Blockly.Msg.CLEAN_UP = "Rydd opp Blocks";
+Blockly.Msg.CLEAR = "clear";  // untranslated
 Blockly.Msg.COLLAPSE_ALL = "Skjul blokker";
 Blockly.Msg.COLLAPSE_BLOCK = "Skjul blokk";
 Blockly.Msg.COLON = "colon";  // untranslated

@@ -95,6 +95,7 @@ Blockly.Msg.CENTER = "center";  // untranslated
 Blockly.Msg.CHANGE_VALUE_TITLE = "قدر بدلايو";
 Blockly.Msg.CHAT = "هن دٻيءَ ۾ ٽائيپ ڪري پنهنجي ساٿاريءَ سان ڳالهايو";
 Blockly.Msg.CLEAN_UP = "بندشون هٽايو";
+Blockly.Msg.CLEAR = "clear";  // untranslated
 Blockly.Msg.COLLAPSE_ALL = "بلاڪَ ڍڪيو";
 Blockly.Msg.COLLAPSE_BLOCK = "بلاڪ ڍڪيو";
 Blockly.Msg.COLON = "colon";  // untranslated

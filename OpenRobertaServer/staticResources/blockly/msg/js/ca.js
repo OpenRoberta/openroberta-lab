@@ -95,6 +95,7 @@ Blockly.Msg.CENTER = "centrar";
 Blockly.Msg.CHANGE_VALUE_TITLE = "Canvia valor:";
 Blockly.Msg.CHAT = "Xateja amb el teu col·laborador escrivint en aquest quadre!";
 Blockly.Msg.CLEAN_UP = "Clean up Blocks";  // untranslated
+Blockly.Msg.CLEAR = "clear";  // untranslated
 Blockly.Msg.COLLAPSE_ALL = "Contraure blocs";
 Blockly.Msg.COLLAPSE_BLOCK = "Contraure bloc";
 Blockly.Msg.COLON = "colon";  // untranslated

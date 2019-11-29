@@ -95,6 +95,7 @@ Blockly.Msg.CENTER = "center";
 Blockly.Msg.CHANGE_VALUE_TITLE = "שנה ערך:";
 Blockly.Msg.CHAT = "שוחח עם משתף פעולה שלך על-ידי הקלדה בתיבה זו!";
 Blockly.Msg.CLEAN_UP = "סידור בלוקים";
+Blockly.Msg.CLEAR = "clear";  // untranslated
 Blockly.Msg.COLLAPSE_ALL = "צמצם קטעי קוד";
 Blockly.Msg.COLLAPSE_BLOCK = "צמצם קטע קוד";
 Blockly.Msg.COLON = "colon";  // untranslated

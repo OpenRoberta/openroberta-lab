@@ -95,6 +95,7 @@ Blockly.Msg.CENTER = "center";  // untranslated
 Blockly.Msg.CHANGE_VALUE_TITLE = "मान परिवर्तित करें:";
 Blockly.Msg.CHAT = "इस सन्दूक में लिखकर हमारे सहयोगी के साथ बातचीत करें!";
 Blockly.Msg.CLEAN_UP = "Clean up Blocks";  // untranslated
+Blockly.Msg.CLEAR = "clear";  // untranslated
 Blockly.Msg.COLLAPSE_ALL = "ब्लॉक संक्षिप्त करें";
 Blockly.Msg.COLLAPSE_BLOCK = "ब्लॉक को संक्षिप्त करें";
 Blockly.Msg.COLON = "colon";  // untranslated
