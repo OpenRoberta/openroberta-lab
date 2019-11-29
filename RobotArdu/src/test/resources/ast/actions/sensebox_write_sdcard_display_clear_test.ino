@@ -29,8 +29,6 @@ void setup()
     SD.begin(28);
     _dataFile = SD.open("test.txt", FILE_WRITE);
     _dataFile.close();
-    _bmx055_A.beginMagn();
-    _bmx055_A.beginGyro();
     senseBoxIO.powerI2C(true);
     delay(2000);
     _display_L.begin(SSD1306_SWITCHCAPVCC, 0x3D);

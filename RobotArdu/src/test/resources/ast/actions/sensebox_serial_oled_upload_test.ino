@@ -36,13 +36,11 @@ Plot _plot_L(&_display_L);
 void setup()
 {
     Serial.begin(9600); 
-    _bmx055_A.beginMagn();
     _bmp280_T.begin();
     _veml_V.begin();
     _tsl_V.begin();
     _bee_->connectToWifi("mySSID","myPassw0rd");
     delay(1000);
-    _bmx055_A.beginGyro();
     _hdc1080_H.begin();
     senseBoxIO.powerI2C(true);
     delay(2000);

@@ -46,8 +46,6 @@ void setup()
 {
     Serial.begin(9600); 
     _bmx055_B.beginAcc(0x03);
-    _bmx055_B.beginMagn();
-    _bmx055_B.beginGyro();
     senseBoxIO.powerI2C(true);
     delay(2000);
     _display_L.begin(SSD1306_SWITCHCAPVCC, 0x3D);
