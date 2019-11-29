@@ -216,7 +216,7 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
 
     @Override
     public Void visitSoundSensor(SoundSensor<Void> soundSensor) {
-        this.sb.append("analogRead(_mic_").append(soundSensor.getPort()).append(")");
+        this.sb.append("get_microphone_max(_mic_").append(soundSensor.getPort()).append(")");
         return null;
     }
 

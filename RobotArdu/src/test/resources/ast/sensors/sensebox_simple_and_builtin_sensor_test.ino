@@ -57,7 +57,7 @@ void loop()
     ___item = digitalRead(_button_B);
     ___item2 = analogRead(_output_L)/10.24;
     ___item2 = ((double)analogRead(_potentiometer_P))*5/1024;
-    ___item2 = analogRead(_mic_S);
+    ___item2 = get_microphone_max(_mic_S);
     ___item2 = _hcsr04_U.getDistance();
     ___item2 = (int) (millis() - _time);
     _time = millis();
