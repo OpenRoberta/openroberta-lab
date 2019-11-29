@@ -70,7 +70,7 @@ define([ 'require', 'exports', 'message', 'log', 'util', 'comm', 'guiState.contr
         }, "back to previous view");
         
         $('#runSourceCodeEditor').onWrap('click', function() {
-            PROGRUN_C.runOnBrick(flask.getCode());
+            PROGRUN_C.runOnBrickFromEditor(flask.getCode());
             return false;
         }, "run button clicked");
         

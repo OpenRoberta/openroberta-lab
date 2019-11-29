@@ -30,27 +30,68 @@ define([ 'exports', 'util', 'log', 'message', 'program.controller', 'program.mod
     }
 
     /**
+     * Start the program on brick from the source code editor
+     */
+
+    function runOnBrickFromEditor(sourceCode) {
+        GUISTATE_C.setPing(false);
+        GUISTATE_C.setConnectionState("busy");
+        LOG.info('run ' + GUISTATE_C.getProgramName() + 'on brick from source code editor');
+        var callback;
+        var language = GUISTATE_C.getLanguage();
+
+        var connectionType = GUISTATE_C.getConnectionTypeEnum();
+        if (GUISTATE_C.getConnection() == connectionType.AUTO || GUISTATE_C.getConnection() == connectionType.LOCAL) {
+            callback = function(result) {
+                runForAutoConnection(result);
+                PROG_C.reloadProgram(result);
+                GUISTATE_C.setPing(true);
+            };
+        } else if (GUISTATE_C.getConnection() == connectionType.AGENT || GUISTATE_C.getConnection() == connectionType.AGENTORTOKEN && GUISTATE_C.getIsAgent()) {
+            callback = function(result) {
+                runForAgentConnection(result);
+                PROG_C.reloadProgram(result);
+                GUISTATE_C.setPing(true);
+            };
+        } else if (GUISTATE_C.getConnection() == connectionType.WEBVIEW) {
+            callback = function(result) {
+                runForWebviewConnection(result);
+                PROG_C.reloadProgram(result);
+                GUISTATE_C.setPing(true);
+            };
+        } else if (GUISTATE_C.getConnection() == connectionType.JSPLAY) {
+            callback = function(result) {
+                runForJSPlayConnection(result);
+                PROG_C.reloadProgram(result);
+                GUISTATE_C.setPing(true);
+            };
+        } else {
+            callback = function(result) {
+                runForToken(result);
+                PROG_C.reloadProgram(result);
+                GUISTATE_C.setPing(true);
+            };
+        }
+        PROGRAM.runNative(GUISTATE_C.getProgramName(), sourceCode, language, callback);
+    }
+    exports.runOnBrickFromEditor = runOnBrickFromEditor;
+
+    /**
      * Start the program on the brick
      */
-    function runOnBrick(sourceCode) {
+    function runOnBrick() {
         GUISTATE_C.setPing(false);
         GUISTATE_C.setConnectionState("busy");
         LOG.info('run ' + GUISTATE_C.getProgramName() + 'on brick');
-        var xmlProgram;
-        var xmlTextProgram;
 
-        var isNamedConfig;
-        var configName;
-        var xmlConfigText;
-        
-        if (typeof sourceCode === 'undefined') {
-            xmlProgram = Blockly.Xml.workspaceToDom(blocklyWorkspace);
-            xmlTextProgram = Blockly.Xml.domToText(xmlProgram);
+        var xmlProgram = Blockly.Xml.workspaceToDom(blocklyWorkspace);
+        var xmlTextProgram = Blockly.Xml.domToText(xmlProgram);
 
-            isNamedConfig = !GUISTATE_C.isConfigurationStandard() && !GUISTATE_C.isConfigurationAnonymous();
-            configName = isNamedConfig ? GUISTATE_C.getConfigurationName() : undefined;
-            xmlConfigText = GUISTATE_C.isConfigurationAnonymous() ? GUISTATE_C.getConfigurationXML() : undefined;
-        }
+        var isNamedConfig = !GUISTATE_C.isConfigurationStandard() && !GUISTATE_C.isConfigurationAnonymous();
+        var configName = isNamedConfig ? GUISTATE_C.getConfigurationName() : undefined;
+        var xmlConfigText = GUISTATE_C.isConfigurationAnonymous() ? GUISTATE_C.getConfigurationXML() : undefined;
+
+        var callback;
 
         var language = GUISTATE_C.getLanguage();
 
@@ -87,11 +128,7 @@ define([ 'exports', 'util', 'log', 'message', 'program.controller', 'program.mod
                 GUISTATE_C.setPing(true);
             };
         }
-        if (typeof sourceCode === 'undefined') {
-            PROGRAM.runOnBrick(GUISTATE_C.getProgramName(), configName, xmlTextProgram, xmlConfigText, PROG_C.SSID, PROG_C.password, language, callback);
-        } else {
-            PROGRAM.runNative(GUISTATE_C.getProgramName(), sourceCode, language, callback);
-        }
+        PROGRAM.runOnBrick(GUISTATE_C.getProgramName(), configName, xmlTextProgram, xmlConfigText, PROG_C.SSID, PROG_C.password, language, callback);
     }
     exports.runOnBrick = runOnBrick;
 
