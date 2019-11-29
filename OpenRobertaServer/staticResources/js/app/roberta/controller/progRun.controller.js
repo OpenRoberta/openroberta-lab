@@ -24,7 +24,7 @@ define([ 'exports', 'util', 'log', 'message', 'program.controller', 'program.mod
             stopBrick();
             return false;
         });
-        if (GUISTATE_C.getConnection() != 'autoConnection' && GUISTATE_C.getConnection() != 'jsPlay') {
+        if (GUISTATE_C.getConnection() !== 'autoConnection' && GUISTATE_C.getConnection() !== 'jsPlay') {
             blocklyWorkspace.robControls.disable('runOnBrick');
         }
     }
@@ -33,48 +33,14 @@ define([ 'exports', 'util', 'log', 'message', 'program.controller', 'program.mod
      * Start the program on brick from the source code editor
      */
 
-    function runOnBrickFromEditor(sourceCode) {
+    function runNative(sourceCode) {
         GUISTATE_C.setPing(false);
         GUISTATE_C.setConnectionState("busy");
         LOG.info('run ' + GUISTATE_C.getProgramName() + 'on brick from source code editor');
-        var callback;
-        var language = GUISTATE_C.getLanguage();
-
-        var connectionType = GUISTATE_C.getConnectionTypeEnum();
-        if (GUISTATE_C.getConnection() == connectionType.AUTO || GUISTATE_C.getConnection() == connectionType.LOCAL) {
-            callback = function(result) {
-                runForAutoConnection(result);
-                PROG_C.reloadProgram(result);
-                GUISTATE_C.setPing(true);
-            };
-        } else if (GUISTATE_C.getConnection() == connectionType.AGENT || GUISTATE_C.getConnection() == connectionType.AGENTORTOKEN && GUISTATE_C.getIsAgent()) {
-            callback = function(result) {
-                runForAgentConnection(result);
-                PROG_C.reloadProgram(result);
-                GUISTATE_C.setPing(true);
-            };
-        } else if (GUISTATE_C.getConnection() == connectionType.WEBVIEW) {
-            callback = function(result) {
-                runForWebviewConnection(result);
-                PROG_C.reloadProgram(result);
-                GUISTATE_C.setPing(true);
-            };
-        } else if (GUISTATE_C.getConnection() == connectionType.JSPLAY) {
-            callback = function(result) {
-                runForJSPlayConnection(result);
-                PROG_C.reloadProgram(result);
-                GUISTATE_C.setPing(true);
-            };
-        } else {
-            callback = function(result) {
-                runForToken(result);
-                PROG_C.reloadProgram(result);
-                GUISTATE_C.setPing(true);
-            };
-        }
-        PROGRAM.runNative(GUISTATE_C.getProgramName(), sourceCode, language, callback);
+        var callback = getConnectionTypeCallback();
+        PROGRAM.runNative(GUISTATE_C.getProgramName(), sourceCode, GUISTATE_C.getLanguage(), callback);
     }
-    exports.runOnBrickFromEditor = runOnBrickFromEditor;
+    exports.runNative = runNative;
 
     /**
      * Start the program on the brick
@@ -86,51 +52,50 @@ define([ 'exports', 'util', 'log', 'message', 'program.controller', 'program.mod
 
         var xmlProgram = Blockly.Xml.workspaceToDom(blocklyWorkspace);
         var xmlTextProgram = Blockly.Xml.domToText(xmlProgram);
-
         var isNamedConfig = !GUISTATE_C.isConfigurationStandard() && !GUISTATE_C.isConfigurationAnonymous();
         var configName = isNamedConfig ? GUISTATE_C.getConfigurationName() : undefined;
         var xmlConfigText = GUISTATE_C.isConfigurationAnonymous() ? GUISTATE_C.getConfigurationXML() : undefined;
+        var callback = getConnectionTypeCallback();
+        PROGRAM.runOnBrick(GUISTATE_C.getProgramName(), configName, xmlTextProgram, xmlConfigText, PROG_C.SSID, PROG_C.password, GUISTATE_C.getLanguage(), callback);
+    }
+    exports.runOnBrick = runOnBrick;
 
-        var callback;
-
-        var language = GUISTATE_C.getLanguage();
-
+    function getConnectionTypeCallback() {
         var connectionType = GUISTATE_C.getConnectionTypeEnum();
-        if (GUISTATE_C.getConnection() == connectionType.AUTO || GUISTATE_C.getConnection() == connectionType.LOCAL) {
-            callback = function(result) {
+        if (GUISTATE_C.getConnection() === connectionType.AUTO || GUISTATE_C.getConnection() === connectionType.LOCAL) {
+            return function(result) {
                 runForAutoConnection(result);
                 PROG_C.reloadProgram(result);
                 GUISTATE_C.setPing(true);
             };
-        } else if (GUISTATE_C.getConnection() == connectionType.AGENT || GUISTATE_C.getConnection() == connectionType.AGENTORTOKEN && GUISTATE_C.getIsAgent()) {
-            callback = function(result) {
+        }
+        if (GUISTATE_C.getConnection() === connectionType.AGENT || GUISTATE_C.getConnection() === connectionType.AGENTORTOKEN && GUISTATE_C.getIsAgent()) {
+            return function(result) {
                 runForAgentConnection(result);
                 PROG_C.reloadProgram(result);
                 GUISTATE_C.setPing(true);
             };
-        } else if (GUISTATE_C.getConnection() == connectionType.WEBVIEW) {
-            callback = function(result) {
+        }
+        if (GUISTATE_C.getConnection() === connectionType.WEBVIEW) {
+            return function(result) {
                 runForWebviewConnection(result);
                 PROG_C.reloadProgram(result);
                 GUISTATE_C.setPing(true);
             };
-        } else if (GUISTATE_C.getConnection() == connectionType.JSPLAY) {
-            //For all robots that play their program file in the browser
-            callback = function(result) {
+        }
+        if (GUISTATE_C.getConnection() === connectionType.JSPLAY) {
+            return function(result) {
                 runForJSPlayConnection(result);
                 PROG_C.reloadProgram(result);
                 GUISTATE_C.setPing(true);
             };
-        } else {
-            callback = function(result) {
-                runForToken(result);
-                PROG_C.reloadProgram(result);
-                GUISTATE_C.setPing(true);
-            };
         }
-        PROGRAM.runOnBrick(GUISTATE_C.getProgramName(), configName, xmlTextProgram, xmlConfigText, PROG_C.SSID, PROG_C.password, language, callback);
+        return function(result) {
+            runForToken(result);
+            PROG_C.reloadProgram(result);
+            GUISTATE_C.setPing(true);
+        };
     }
-    exports.runOnBrick = runOnBrick;
 
     function runForAutoConnection(result) {
         GUISTATE_C.setState(result);
@@ -139,7 +104,7 @@ define([ 'exports', 'util', 'log', 'message', 'program.controller', 'program.mod
             if (GUISTATE_C.getBinaryFileExtension() === "ino.bin" || GUISTATE_C.getBinaryFileExtension() === "uf2") {
                 result.compiledCode = UTIL.base64decode(result.compiledCode);
             }
-            if (GUISTATE_C.isProgramToDownload() || navigator.userAgent.toLowerCase().match(/iPad|iPhone|android/i) != null) {
+            if (GUISTATE_C.isProgramToDownload() || navigator.userAgent.toLowerCase().match(/iPad|iPhone|android/i) !== null) {
                 // either the user doesn't want to see the modal anymore or he uses a smartphone / tablet, where you cannot choose the download folder.
                 UTIL.download(filename, result.compiledCode);
                 setTimeout(function() {
@@ -214,11 +179,11 @@ define([ 'exports', 'util', 'log', 'message', 'program.controller', 'program.mod
      *            program to it
      */
     function runForJSPlayConnection(result) {
-        if (result.rc != "ok") {
+        if (result.rc !== "ok") {
             GUISTATE_C.setConnectionState("wait");
             MSG.displayInformation(result, result.message, result.message, GUISTATE_C.getProgramName(), GUISTATE_C.getRobot());
         } else {
-            wavFileContent = UTIL.base64decode(result.compiledCode);
+            var wavFileContent = UTIL.base64decode(result.compiledCode);
             var audio;
             $('#changedDownloadFolder').addClass('hidden');
 
@@ -303,11 +268,6 @@ define([ 'exports', 'util', 'log', 'message', 'program.controller', 'program.mod
         } else {
             GUISTATE_C.setConnectionState("error");
         }
-    }
-
-    function switch2blockly() {
-        GUISTATE_C.setConnectionState("wait");
-        blocklyWorkspace.robControls.switchToStart();
     }
 
     function stopBrick() {
@@ -399,7 +359,7 @@ define([ 'exports', 'util', 'log', 'message', 'program.controller', 'program.mod
             UTIL.download(fileName, content);
             GUISTATE_C.setConnectionState("error");
         }
-
+        var downloadLink;
         if ('Blob' in window) {
             var contentAsBlob = new Blob([ content ], {
                 type : 'application/octet-stream'
@@ -407,13 +367,13 @@ define([ 'exports', 'util', 'log', 'message', 'program.controller', 'program.mod
             if ('msSaveOrOpenBlob' in navigator) {
                 navigator.msSaveOrOpenBlob(contentAsBlob, fileName);
             } else {
-                var downloadLink = document.createElement('a');
+                downloadLink = document.createElement('a');
                 downloadLink.download = fileName;
                 downloadLink.innerHTML = fileName;
                 downloadLink.href = window.URL.createObjectURL(contentAsBlob);
             }
         } else {
-            var downloadLink = document.createElement('a');
+            downloadLink = document.createElement('a');
             downloadLink.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(content));
             downloadLink.setAttribute('download', fileName);
             downloadLink.style.display = 'none';
@@ -448,10 +408,10 @@ define([ 'exports', 'util', 'log', 'message', 'program.controller', 'program.mod
      */
     function createPlayButton(audio) {
         $('#trA').removeClass('hidden');
-
+        var playButton;
         if ('Blob' in window) {
             //Create a bootstrap button
-            var playButton = document.createElement('button');
+            playButton = document.createElement('button');
             playButton.setAttribute('type', 'button');
             playButton.setAttribute('class', 'btn btn-primary');
 
