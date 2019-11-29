@@ -620,14 +620,24 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
                     }
                     break;
                 case SC.SENSEBOX_COMPASS:
-                    bmx55PortName = this.configuration.getConfigurationComponentbyType(SC.SENSEBOX_ACCELEROMETER).getUserDefinedPortName();
-                    this.sb.append("_bmx055_").append(bmx55PortName).append(".beginMagn();");
-                    nlIndent();
+                    for ( UsedSensor usedSensor : this.usedHardwareBean.getUsedSensors() ) {
+                        if ( usedSensor.getType().equals(SC.SENSEBOX_COMPASS) ) {
+                            bmx55PortName = this.configuration.getConfigurationComponentbyType(SC.SENSEBOX_ACCELEROMETER).getUserDefinedPortName();
+                            this.sb.append("_bmx055_").append(bmx55PortName).append(".beginMagn();");
+                            nlIndent();
+                            break;
+                        }
+                    }
                     break;
                 case SC.GYRO:
-                    bmx55PortName = this.configuration.getConfigurationComponentbyType(SC.SENSEBOX_ACCELEROMETER).getUserDefinedPortName();
-                    this.sb.append("_bmx055_").append(bmx55PortName).append(".beginGyro();");
-                    nlIndent();
+                    for ( UsedSensor usedSensor : this.usedHardwareBean.getUsedSensors() ) {
+                        if ( usedSensor.getType().equals(SC.GYRO) ) {
+                            bmx55PortName = this.configuration.getConfigurationComponentbyType(SC.SENSEBOX_ACCELEROMETER).getUserDefinedPortName();
+                            this.sb.append("_bmx055_").append(bmx55PortName).append(".beginGyro();");
+                            nlIndent();
+                            break;
+                        }
+                    }
                     break;
                 case SC.SENSEBOX_SDCARD:
                     this.sb.append("SD.begin(28);");
