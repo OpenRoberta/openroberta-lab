@@ -59,8 +59,10 @@ public class SenseboxBrickValidatorVisitor extends AbstractBrickValidatorVisitor
     public Void visitLightAction(LightAction<Void> lightAction) {
         if ( lightAction.getMode().toString().equals(BlocklyConstants.ON) && !this.robotConfiguration.isComponentTypePresent(SC.LED) ) {
             lightAction.addInfo(NepoInfo.error("CONFIGURATION_ERROR_ACTOR_MISSING"));
+            this.errorCount++;
         } else if ( lightAction.getMode().toString().equals(BlocklyConstants.DEFAULT) && !this.robotConfiguration.isComponentTypePresent(SC.RGBLED) ) {
             lightAction.addInfo(NepoInfo.error("CONFIGURATION_ERROR_ACTOR_MISSING"));
+            this.errorCount++;
         } else {
             // no errors, all blocks in place.
         }
@@ -71,14 +73,17 @@ public class SenseboxBrickValidatorVisitor extends AbstractBrickValidatorVisitor
     public Void visitDataSendAction(SendDataAction<Void> sendDataAction) {
         if ( SSID.equals("") || password.equals("") ) {
             sendDataAction.addInfo(NepoInfo.error("CONFIGURATION_ERROR_WLAN_CREDENTIALS_MISSING"));
+            this.errorCount++;
             return null;
         }
         if ( (sendDataAction.getDestination().equals("SENSEMAP") && !this.robotConfiguration.isComponentTypePresent(SC.WIRELESS)) ) {
             sendDataAction.addInfo(NepoInfo.error("CONFIGURATION_ERROR_ACTOR_MISSING"));
+            this.errorCount++;
             return null;
         }
         if ( (sendDataAction.getDestination().equals("SDCARD") && !this.robotConfiguration.isComponentTypePresent(SC.SENSEBOX_SDCARD)) ) {
             sendDataAction.addInfo(NepoInfo.error("CONFIGURATION_ERROR_ACTOR_MISSING"));
+            this.errorCount++;
             return null;
         }
         for ( Pair<String, Expr<Void>> value : sendDataAction.getId2Phenomena() ) {
@@ -86,6 +91,7 @@ public class SenseboxBrickValidatorVisitor extends AbstractBrickValidatorVisitor
                 // well, here can be an annotation if we encounter an empty input.
                 // this key, ACTION_ERROR_EMPTY_INPUT should be added to blockly, maybe.
                 sendDataAction.addInfo(NepoInfo.error("ACTION_ERROR_EMPTY_INPUT"));
+                this.errorCount++;
                 return null;
             }
             value.getSecond().accept(this);
@@ -166,6 +172,7 @@ public class SenseboxBrickValidatorVisitor extends AbstractBrickValidatorVisitor
     public Void visitToneAction(ToneAction<Void> toneAction) {
         if ( !this.robotConfiguration.isComponentTypePresent(SC.BUZZER) ) {
             toneAction.addInfo(NepoInfo.error("CONFIGURATION_ERROR_ACTOR_MISSING"));
+            this.errorCount++;
         }
         return null;
     }
@@ -174,6 +181,7 @@ public class SenseboxBrickValidatorVisitor extends AbstractBrickValidatorVisitor
     public Void visitLightStatusAction(LightStatusAction<Void> lightStatusAction) {
         if ( !this.robotConfiguration.isComponentTypePresent(SC.RGBLED) ) {
             lightStatusAction.addInfo(NepoInfo.error("CONFIGURATION_ERROR_ACTOR_MISSING"));
+            this.errorCount++;
         }
         return null;
     }
@@ -182,6 +190,7 @@ public class SenseboxBrickValidatorVisitor extends AbstractBrickValidatorVisitor
     public Void visitPlotPointAction(PlotPointAction<Void> plotPointAction) {
         if ( !this.robotConfiguration.isComponentTypePresent(SC.LCDI2C) ) {
             plotPointAction.addInfo(NepoInfo.error("CONFIGURATION_ERROR_ACTOR_MISSING"));
+            this.errorCount++;
         }
         return null;
     }
@@ -190,6 +199,7 @@ public class SenseboxBrickValidatorVisitor extends AbstractBrickValidatorVisitor
     public Void visitPlotClearAction(PlotClearAction<Void> plotClearAction) {
         if ( !this.robotConfiguration.isComponentTypePresent(SC.LCDI2C) ) {
             plotClearAction.addInfo(NepoInfo.error("CONFIGURATION_ERROR_ACTOR_MISSING"));
+            this.errorCount++;
         }
         return null;
     }
@@ -198,6 +208,7 @@ public class SenseboxBrickValidatorVisitor extends AbstractBrickValidatorVisitor
     public Void visitShowTextAction(ShowTextAction<Void> showTextAction) {
         if ( !this.robotConfiguration.isComponentTypePresent(SC.LCDI2C) ) {
             showTextAction.addInfo(NepoInfo.error("CONFIGURATION_ERROR_ACTOR_MISSING"));
+            this.errorCount++;
         }
         return null;
     }
@@ -206,6 +217,7 @@ public class SenseboxBrickValidatorVisitor extends AbstractBrickValidatorVisitor
     public Void visitClearDisplayAction(ClearDisplayAction<Void> clearDisplayAction) {
         if ( !this.robotConfiguration.isComponentTypePresent(SC.LCDI2C) ) {
             clearDisplayAction.addInfo(NepoInfo.error("CONFIGURATION_ERROR_ACTOR_MISSING"));
+            this.errorCount++;
         }
         return null;
     }
