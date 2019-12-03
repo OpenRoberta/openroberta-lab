@@ -1,6 +1,7 @@
 package de.fhg.iais.roberta.persistence.util;
 
 import java.io.Serializable;
+import java.util.concurrent.atomic.AtomicLong;
 
 import org.hibernate.Query;
 import org.hibernate.SQLQuery;
@@ -20,6 +21,8 @@ import de.fhg.iais.roberta.util.dbc.Assert;
  */
 public class DbSession {
     private static final Logger LOG = LoggerFactory.getLogger(DbSession.class);
+    private static final AtomicLong debugSessionCounter = new AtomicLong(0);
+
     private Session session;
 
     /**
@@ -31,6 +34,7 @@ public class DbSession {
         LOG.debug("open session + start transaction");
         this.session = session;
         this.session.beginTransaction();
+        debugSessionCounter.incrementAndGet();
     }
 
     /**
@@ -67,6 +71,7 @@ public class DbSession {
         }
         this.session.close();
         this.session = null;
+        debugSessionCounter.decrementAndGet();
     }
 
     /**
@@ -115,5 +120,9 @@ public class DbSession {
     public void delete(Object toBeDeleted) {
         this.session.delete(toBeDeleted);
         this.session.flush();
+    }
+
+    public static long getDebugSessionCounter() {
+        return debugSessionCounter.get();
     }
 }

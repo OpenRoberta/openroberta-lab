@@ -129,20 +129,31 @@ class Store:
         #plt.title(title)
         plt.savefig(file, bbox_inches='tight')
         
-    def showBar(self, title='bar plot', legend='best', file='D:/downloads/bar.png'):
+    def showBar(self, title='bar plot', legend='best', file='D:/downloads/bar.png', xAxisNbins=None, type='bar'):
         """
         REDUCE: show the content of a store as a bar chart
         
         :param title title to be used
         :param file for the plot output
+        :param type bar, scatter, plot
         """
         plt.close()
         keys = list(self.data.keys())
         counters = list(map(lambda v: v.counter, self.data.values()))
-        bar = plt.bar(keys, counters, color='rgbkymc')
-        plt.xticks(keys, rotation='vertical')
+        if type == 'bar':
+            bar = plt.bar(keys, counters, color='b')
+        elif type == 'scatter':
+            bar = plt.scatter(keys, counters)
+        else:
+            bar = plt.plot(keys, counters)
+            
         plt.title(title)
+        plt.xticks(keys)
+        plt.tick_params(axis ='x', rotation = 90) 
+        if xAxisNbins is not None:
+            plt.locator_params(axis='x', nbins=xAxisNbins)
         if legend is not None:
             labels = ['{0} - {1:6d}'.format(i,j) for i,j in zip(keys, counters)]
             plt.legend(bar, labels, loc=legend)
+        #plt.show()
         plt.savefig(file, bbox_inches='tight')

@@ -2,6 +2,8 @@ package de.fhg.iais.roberta.persistence.util;
 
 import java.io.Serializable;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicLong;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,11 +22,17 @@ public class HttpSessionState implements Serializable {
     private static final long serialVersionUID = 5423413372044585392L;
     private static final Logger LOG = LoggerFactory.getLogger(HttpSessionState.class);
 
+    private static final AtomicLong SESSION_COUNTER = new AtomicLong();
+
     public final static int NO_USER = -1;
 
-    private Map<String, IRobotFactory> robotPluginMap;
-    private String defaultRobotName;
-    private long sessionNumber;
+    private static boolean debugSessionStateIsConsistent = true;
+    private static final Map<Long, HttpSessionState> debugSessionStates = new ConcurrentHashMap<>();
+
+    private final Map<String, IRobotFactory> robotPluginMap;
+    private final String defaultRobotName;
+    private final long sessionNumber;
+    private final String countryCode;
 
     /**
      * the REST-service in ClientInit will set this token. The token is returned with each response and the front end must supply it with each request. The
@@ -49,13 +57,12 @@ public class HttpSessionState implements Serializable {
     private String toolbox;
     private boolean processing;
 
-    private String countryCode;
-
-    public HttpSessionState(Map<String, IRobotFactory> robotPluginMap, ServerProperties serverProperties, long sessionNumber) //
+    private HttpSessionState(Map<String, IRobotFactory> robotPluginMap, ServerProperties serverProperties, long sessionNumber, String countryCode) //
     {
         this.robotPluginMap = robotPluginMap;
         this.defaultRobotName = serverProperties.getDefaultRobot();
         this.sessionNumber = sessionNumber;
+        this.countryCode = countryCode;
         reset();
     }
 
@@ -80,11 +87,20 @@ public class HttpSessionState implements Serializable {
      * @param robotPluginMap
      * @param serverProperties
      * @param sessionNumber
+     * @param countryCode
      * @return
      */
-    public static HttpSessionState init(Map<String, IRobotFactory> robotPluginMap, ServerProperties serverProperties, long sessionNumber) //
+    public static HttpSessionState init(Map<String, IRobotFactory> robotPluginMap, ServerProperties serverProperties, String countryCode) //
     {
-        return new HttpSessionState(robotPluginMap, serverProperties, sessionNumber);
+        long sessionNumber = SESSION_COUNTER.incrementAndGet();
+        HttpSessionState httpSessionState = new HttpSessionState(robotPluginMap, serverProperties, sessionNumber, countryCode);
+        LOG.info("httpSessionState with session number " + sessionNumber + " created");
+        HttpSessionState previousStateMustNotExist = debugSessionStates.put(sessionNumber, httpSessionState);
+        if ( previousStateMustNotExist != null ) {
+            debugSessionStateIsConsistent = false;
+            LOG.error("httpSessionState with session number " + sessionNumber + " was found when trying to insert. This is a severe logic error");
+        }
+        return httpSessionState;
     }
 
     /**
@@ -99,7 +115,7 @@ public class HttpSessionState implements Serializable {
      */
     public static HttpSessionState initOnlyLegalForDebugging(Map<String, IRobotFactory> robotPluginMap, ServerProperties serverProperties, long sessionNumber) //
     {
-        HttpSessionState state = new HttpSessionState(robotPluginMap, serverProperties, sessionNumber);
+        HttpSessionState state = new HttpSessionState(robotPluginMap, serverProperties, sessionNumber, "..");
         state.tokenSetOnInit = "";
         return state;
     }
@@ -251,7 +267,21 @@ public class HttpSessionState implements Serializable {
         return this.countryCode;
     }
 
-    public void setCountryCode(String code) {
-        this.countryCode = code;
+    public static int getNumberOfHttpSessionStates() {
+        if ( debugSessionStateIsConsistent ) {
+            return debugSessionStates.size();
+        } else {
+            return -1;
+        }
+    }
+
+    public static void destroyDebugHttpSessionStateEntry(long sessionNumber) {
+        if ( debugSessionStateIsConsistent ) {
+            HttpSessionState deletedStateMustExist = debugSessionStates.remove(sessionNumber);
+            if ( deletedStateMustExist == null ) {
+                debugSessionStateIsConsistent = false;
+                LOG.error("httpSessionState #" + sessionNumber + " not found when trying to remove. This is a severe logic error");
+            }
+        }
     }
 }

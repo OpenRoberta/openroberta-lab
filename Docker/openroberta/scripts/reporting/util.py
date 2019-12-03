@@ -34,7 +34,7 @@ def getReader(baseDir, fileName, encoding='latin-1'):
     if fileName.endswith('.zip'):
         return ZipFileIterator(baseDir + '/' + fileName, fileName[:-4])
     else:
-        lineReader = open(fileName, mode='r', encoding=encoding)
+        lineReader = open(baseDir + '/' + fileName, mode='r', encoding=encoding)
         return lineReader
 
 def fromLog(line):

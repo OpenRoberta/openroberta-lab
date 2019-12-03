@@ -51,8 +51,8 @@ import de.fhg.iais.roberta.util.Key;
 import de.fhg.iais.roberta.util.Pair;
 import de.fhg.iais.roberta.util.ServerProperties;
 import de.fhg.iais.roberta.util.Statistics;
-import de.fhg.iais.roberta.util.UtilForREST;
 import de.fhg.iais.roberta.util.Util;
+import de.fhg.iais.roberta.util.UtilForREST;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import joptsimple.OptionParser;
 import joptsimple.OptionSet;
@@ -168,7 +168,7 @@ public class ServerStarter {
         ServletContextHandler restHttpHandler = new ServletContextHandler(ServletContextHandler.SESSIONS);
         restHttpHandler.setContextPath("/rest");
         restHttpHandler.setSessionHandler(new SessionHandler());
-        restHttpHandler.getSessionHandler().addEventListener(mkSessionListener(" for /rest REST endpoint"));
+        restHttpHandler.getSessionHandler().addEventListener(mkSessionListener());
         restHttpHandler.getSessionHandler().setMaxInactiveInterval(7200); // 2 hours, should be ok at least for schools :-)
         restHttpHandler.addEventListener(robertaGuiceServletConfig);
         restHttpHandler.addFilter(GuiceFilter.class, "/*", null);
@@ -407,11 +407,11 @@ public class ServerStarter {
         }
     }
 
-    private static final HttpSessionListener mkSessionListener(final String messageDetail) {
+    private static final HttpSessionListener mkSessionListener() {
         final HttpSessionListener listener = new HttpSessionListener() {
             @Override
             public void sessionCreated(HttpSessionEvent se) {
-                LOG.info("jetty session created " + messageDetail);
+                LOG.info("jetty session created for /rest endpoint");
             }
 
             @Override
@@ -419,22 +419,23 @@ public class ServerStarter {
                 String messageSuffix = "???";
                 long sessionNumber = -1;
                 if ( se == null ) {
-                    messageSuffix = "Http session event is null";
+                    messageSuffix = "No action: http session event is null";
                 } else {
                     HttpSession httpsession = se.getSession();
                     if ( httpsession == null ) {
-                        messageSuffix = "Http session is null";
+                        messageSuffix = "No action: http session is null";
                     } else {
                         HttpSessionState httpSessionState = (HttpSessionState) httpsession.getAttribute(OraDataProvider.OPEN_ROBERTA_STATE);
                         if ( httpSessionState == null ) {
-                            messageSuffix = "Http session state is null";
+                            messageSuffix = "No action: http session state is null";
                         } else {
                             sessionNumber = httpSessionState.getSessionNumber();
-                            messageSuffix = "Session number " + sessionNumber;
+                            HttpSessionState.destroyDebugHttpSessionStateEntry(sessionNumber);
+                            messageSuffix = "Session number " + sessionNumber + " destroyed";
                         }
                     }
                 }
-                LOG.info("jetty session destroyed " + messageDetail + ". " + messageSuffix);
+                LOG.info("jetty session destroy event for /rest endpoint. " + messageSuffix);
                 Statistics.info("SessionDestroy", "sessionId", (int) sessionNumber, "success", true);
             }
         };

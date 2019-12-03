@@ -10,6 +10,7 @@ BASE_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )"/.. && pwd )"
 SCRIPT_MAIN="${BASE_DIR}/scripts"
 SCRIPT_HELPER="${SCRIPT_MAIN}/helper"
 SCRIPT_REPORTING="${SCRIPT_MAIN}/reporting"
+SCRIPT_ANALYSIS="${SCRIPT_MAIN}/analysis"
 
 CMD=$1; shift
 while [  1 ]
@@ -116,6 +117,14 @@ case "$CMD" in
                   docker volume rm $(docker volume ls -q -f dangling=true)
                   echo '******************** remove unused containers, networks, images ********************'
                   docker system prune --force ;;
+    show-server)  ${SCRIPT_ANALYSIS}/serverStateOverview.sh ;;
+    show-resources) export SERVER_NAME=$1; shift
+                  export LOWERLIMIT=$1; shift
+                  export UPPERLIMIT=$1; shift
+                  export LOGFILE=$1; shift
+                  export SERVERURL=$1; shift
+                  export PID=$1; shift
+                  source ${SCRIPT_ANALYSIS}/showResources.sh ;;
     monthly-stat) SERVER_NAME=$1; shift; MONTH=$1; shift
                   source ${SCRIPT_HELPER}/_monthlyStat.sh ;;
     alive)        case $ALIVE_ACTIVE in

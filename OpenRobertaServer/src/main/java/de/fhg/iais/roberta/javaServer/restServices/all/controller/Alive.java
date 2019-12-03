@@ -14,6 +14,9 @@ import org.slf4j.LoggerFactory;
 
 import de.fhg.iais.roberta.util.AliveData;
 
+/**
+ * for compatability: external services check the availability of the server calling this REST service. Migrated (duplicated :-<) to class ServerData
+ */
 @Path("/alive")
 public class Alive {
     private static final Logger LOG = LoggerFactory.getLogger(Alive.class);

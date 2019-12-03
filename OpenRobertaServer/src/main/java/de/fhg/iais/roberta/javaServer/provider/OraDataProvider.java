@@ -3,7 +3,6 @@ package de.fhg.iais.roberta.javaServer.provider;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicLong;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -26,13 +25,12 @@ import de.fhg.iais.roberta.main.IIpToCountry;
 import de.fhg.iais.roberta.persistence.util.DbSession;
 import de.fhg.iais.roberta.persistence.util.HttpSessionState;
 import de.fhg.iais.roberta.persistence.util.SessionFactoryWrapper;
+import de.fhg.iais.roberta.util.Clock;
 import de.fhg.iais.roberta.util.ServerProperties;
 
 @Provider
 public class OraDataProvider implements InjectableProvider<OraData, Parameter> {
     private static final Logger LOG = LoggerFactory.getLogger(OraDataProvider.class);
-    private static final AtomicLong SESSION_COUNTER = new AtomicLong();
-
     public static final String OPEN_ROBERTA_STATE = "openRobertaState";
 
     public OraDataProvider() {
@@ -81,29 +79,34 @@ public class OraDataProvider implements InjectableProvider<OraData, Parameter> {
             HttpSession httpSession = OraDataProvider.this.servletRequest.getSession(true);
             HttpSessionState httpSessionState = (HttpSessionState) httpSession.getAttribute(OPEN_ROBERTA_STATE);
             if ( httpSessionState == null ) {
-                long sessionNumber = SESSION_COUNTER.incrementAndGet();
-                LOG.info("session #" + sessionNumber + " created");
-                String remoteAddr = "";
-                if ( OraDataProvider.this.servletRequest != null ) {
-                    remoteAddr = OraDataProvider.this.servletRequest.getHeader("X-FORWARDED-FOR");
-                    if ( remoteAddr == null || "".equals(remoteAddr) ) {
-                        remoteAddr = OraDataProvider.this.servletRequest.getRemoteAddr();
-                    }
-                }
-                InetAddress addrAsIp;
-                String countryCode = "..";
-                try {
-                    addrAsIp = InetAddress.getByName(remoteAddr);
-                    countryCode = ipToCountry.getCountryCode(addrAsIp);
-                } catch ( IOException e ) {
-                    LOG.info("Could not evaluate the actual ip as a country code. Likely a problem with the IpToCountry file.");
-                }
-
-                httpSessionState = HttpSessionState.init(this.robotPluginMap, this.serverProperties, sessionNumber);
-                httpSessionState.setCountryCode(countryCode);
+                httpSessionState = HttpSessionState.init(this.robotPluginMap, this.serverProperties, getCountryCode(servletRequest, ipToCountry));
                 httpSession.setAttribute(OPEN_ROBERTA_STATE, httpSessionState);
             }
             return httpSessionState;
         };
+    }
+
+    private static String getCountryCode(HttpServletRequest servletRequest, IIpToCountry ipToCountry) {
+        String remoteAddr = "";
+        if ( servletRequest != null ) {
+            remoteAddr = servletRequest.getHeader("X-FORWARDED-FOR");
+            if ( remoteAddr == null || "".equals(remoteAddr) ) {
+                remoteAddr = servletRequest.getRemoteAddr();
+            }
+        }
+        InetAddress addrAsIp;
+        String countryCode = "..";
+        try {
+            Clock getByNameTime = Clock.start();
+            addrAsIp = InetAddress.getByName(remoteAddr);
+            long elapsed = getByNameTime.elapsedMsec();
+            if ( elapsed > 1000 ) {
+                LOG.error("InetAddress.getByName(" + remoteAddr + ") + getCountryCode took " + elapsed + "msec");
+            }
+            countryCode = ipToCountry.getCountryCode(addrAsIp);
+        } catch ( IOException e ) {
+            LOG.info("Could not evaluate the actual ip as a country code. Likely a problem with the IpToCountry file.");
+        }
+        return countryCode;
     }
 }

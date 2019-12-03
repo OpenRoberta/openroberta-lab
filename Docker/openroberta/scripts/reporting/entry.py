@@ -22,7 +22,6 @@ class Entry:
         normalize(entry)
         self.entry = entry
         self.original = entry
-        self.assembled = None
         self.printer = printer
 
     def filter(self, lambdaFct, negate=False):
@@ -55,7 +54,10 @@ class Entry:
                     if not matcher is None:
                         return True
             return False
-        return self.filter(filterLambda,negate=negate)
+        if key is None:
+            return self
+        else:
+            return self.filter(filterLambda,negate=negate)
 
     def filterVal(self, key, *vals, substring=True, negate=False):
         """
@@ -74,7 +76,10 @@ class Entry:
                     if substring and val in keyVal or val == keyVal:
                         return True
             return False
-        return self.filter(filterLambda,negate=negate)
+        if key is None:
+            return self
+        else:
+            return self.filter(filterLambda,negate=negate)
 
     def map(self, lambdaFct):
         """
