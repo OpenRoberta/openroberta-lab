@@ -109,7 +109,6 @@ define([ 'require', 'exports', 'message', 'log', 'util', 'comm', 'guiState.contr
                 $('#buildSourceCodeEditor').addClass('disabled');
             }
             $('#main-section').css('background-color', '#EEE');
-            $('#head-navigation-robot').addClass('disabled');
             getSourceCode();
         }, "background color changed by source code editor");
         
@@ -118,7 +117,6 @@ define([ 'require', 'exports', 'message', 'log', 'util', 'comm', 'guiState.contr
         }, "background color changed by source code editor");
 
         $('#tabSourceCodeEditor').onWrap('hide.bs.tab', function() {
-            $('#head-navigation-robot').removeClass('disabled');
             $('#buildSourceCodeEditor').removeClass('disabled');
             $('#main-section').css('background-color', '#FFF');
         }, "background color changed by source code editor");

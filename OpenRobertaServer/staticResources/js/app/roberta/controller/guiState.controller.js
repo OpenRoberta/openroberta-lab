@@ -598,7 +598,8 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'progHelp.contro
         $('#head-navi-tooltip-configuration').attr('data-toggle', 'dropdown');
         $('#head-navi-tooltip-robot').attr('data-toggle', 'dropdown');
         $('#head-navigation-program-edit').removeClass('disabled');
-        $('#head-navigation-robot').removeClass('disabled');
+        $('.robotType').css('display', 'inline');
+        $('#navigation-robot>.divider').css('display', 'list-item');
         $('#head-navigation-configuration-edit').removeClass('disabled');
         $(".modal").modal("hide");
         GUISTATE.gui.prevView = GUISTATE.gui.view;
@@ -624,10 +625,10 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'progHelp.contro
             $('#menuTabProgram').parent().removeClass('disabled');
             $('#menuTabConfiguration').parent().removeClass('disabled');
             $('#head-navigation-program-edit').addClass('disabled');
-            $('#head-navigation-robot').addClass('disabled');
+            $('.robotType').css('display', 'none');
+            $('#navigation-robot>.divider').css('display', 'none');
             $('#head-navi-tooltip-program').attr('data-toggle', '');
             $('#head-navi-tooltip-configuration').attr('data-toggle', '');
-            $('#head-navi-tooltip-robot').attr('data-toggle', '');
         } else {
             $('#head-navi-tooltip-program').attr('data-toggle', '');
             $('#head-navi-tooltip-configuration').attr('data-toggle', '');
