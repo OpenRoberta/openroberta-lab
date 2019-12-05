@@ -46,7 +46,7 @@ The 'TypeScript IDE' is a nice and really fast ts editor and tsc plugin
 2. in preferences -> Javascript -> Runtimes
     * add the node location
     * select the node.js runtime
-    * error: this is resetted to chromium by eclipse
+    * error: this is reset to chromium by eclipse
 
 3. open a js file with the Javascript editor
     * outline ok
