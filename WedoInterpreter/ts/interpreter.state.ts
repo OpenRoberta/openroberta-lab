@@ -97,7 +97,7 @@ export class State {
      * update the value of a binding.
      * 
      * . @param name the name whose value is updated
-     * . @param value the new value for that bindinf
+     * . @param value the new value for that binding
      */
     public setVar( name: string, value: any ) {
         this.checkValidName( name );
@@ -127,7 +127,7 @@ export class State {
     /**
      * pop a value from the stack:
      * - discard the value
-     * - return the va
+     * - return the value
      */
     public pop() {
         if ( this.stack.length < 1 ) {

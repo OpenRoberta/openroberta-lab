@@ -1,14 +1,14 @@
 Open Roberta Lab
 ================
 
-### please read the file IMPORTANT_CHANGE.MD
+### Please read the file IMPORTANT_CHANGE.MD
 
-escpecially if you have forked or cloned the robertalab repository in the past!
+Especially if you have forked or cloned the robertalab repository in the past!
 
 
 ### Introduction
 
-The source of the openroberta lab are stored in the Github repository `https://github.com/OpenRoberta/openroberta-lab`.
+The source of the OpenRoberta Lab is stored in the Github repository `https://github.com/OpenRoberta/openroberta-lab`.
 
 The steps below explain how to get started with the sources. If you just want to run the server locally, please have a look into
 the [wiki - installation](https://github.com/OpenRoberta/openroberta-lab/wiki/Installation). If you want to contribute, please get in touch with us,
@@ -47,7 +47,7 @@ on windows:
   * install python
   * pip install uflash
   
-The crossompiler need resources to work properly (header files, libraries, ...). These resources change little over time and are stored in a repository of its own:
+The crossompiler needs resources to work properly (header files, libraries, ...). These resources change little over time and are stored in a repository of its own:
 
     https://github.com/OpenRoberta/ora-cc-rsc.git
 

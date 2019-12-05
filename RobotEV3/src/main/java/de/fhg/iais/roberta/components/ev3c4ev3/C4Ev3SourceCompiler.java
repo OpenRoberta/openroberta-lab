@@ -40,7 +40,7 @@ public class C4Ev3SourceCompiler {
     private String getStaticLibraryFolderName() {
         if ( compilerExecutableFileName.contains("uclibc") ) {
             /*
-             * Since we sue a compiler built against uclibc on raspberry, we also need to use a different static library
+             * Since we use a compiler built against uclibc on raspberry, we also need to use a different static library
              * of c4ev3, one built with a uclibc compiler
              */
             return "lib-uclibc";

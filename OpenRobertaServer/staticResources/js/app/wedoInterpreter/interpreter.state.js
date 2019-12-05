@@ -77,7 +77,7 @@ define(["require", "exports", "interpreter.constants", "interpreter.util"], func
          * update the value of a binding.
          *
          * . @param name the name whose value is updated
-         * . @param value the new value for that bindinf
+         * . @param value the new value for that binding
          */
         State.prototype.setVar = function (name, value) {
             this.checkValidName(name);
@@ -105,7 +105,7 @@ define(["require", "exports", "interpreter.constants", "interpreter.util"], func
         /**
          * pop a value from the stack:
          * - discard the value
-         * - return the va
+         * - return the value
          */
         State.prototype.pop = function () {
             if (this.stack.length < 1) {
