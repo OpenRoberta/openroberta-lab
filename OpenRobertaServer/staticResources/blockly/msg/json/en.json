@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2019-12-05 14:18:03.521165",
+		"lastupdated": "2019-12-05 14:50:29.226185",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -1354,6 +1354,7 @@
 	"SENSOR_IRSEEKER_RCCODE_GETSAMPLE_TOOLTIP_EDISON": "Receives a message from a remote control.",
 	"SENSOR_LIGHT_LIGHT_GETSAMPLE_TOOLTIP_EDISON": "Gets the current reading of the light sensor",
 	"SENSOR_SOUND_CLAP_GETSAMPLE_TOOLTIP_EDISON": "Is a clap detected?",
+	"SENSOR_TEMPERATURE_PRESSURE_GETSAMPLE_TOOLTIP": "Gets the current reading of the air pressure sensor in Pascal. Normal air pressure is 101325 Pascal.",
 	"SENSOR_RSSI": "signal strength",
 	"SENSOR_RSSI_VALUE_GETSAMPLE_TOOLTIP": "Gets the signal strength from the last received message.",
 	"SENSOR_ACCELEROMETER_X_GETSAMPLE_TOOLTIP_SENSEBOX": "Returns the acceleration value on the X axis in g. Can be in range from -2g to 2g",
