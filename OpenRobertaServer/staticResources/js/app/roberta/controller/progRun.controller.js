@@ -37,8 +37,11 @@ define([ 'exports', 'util', 'log', 'message', 'program.controller', 'program.mod
         GUISTATE_C.setPing(false);
         GUISTATE_C.setConnectionState("busy");
         LOG.info('run ' + GUISTATE_C.getProgramName() + 'on brick from source code editor');
-        var callback = getConnectionTypeCallback();
-        PROGRAM.runNative(GUISTATE_C.getProgramName(), sourceCode, GUISTATE_C.getLanguage(), callback);
+        var callback = getConnectionTypeCallbackForEditor();
+        PROGRAM.runNative(GUISTATE_C.getProgramName(), sourceCode, GUISTATE_C.getLanguage(), function(result) {
+            callback(result);
+            GUISTATE_C.setPing(true);
+        });
     }
     exports.runNative = runNative;
 
@@ -59,6 +62,33 @@ define([ 'exports', 'util', 'log', 'message', 'program.controller', 'program.mod
         PROGRAM.runOnBrick(GUISTATE_C.getProgramName(), configName, xmlTextProgram, xmlConfigText, PROG_C.SSID, PROG_C.password, GUISTATE_C.getLanguage(), callback);
     }
     exports.runOnBrick = runOnBrick;
+
+    function getConnectionTypeCallbackForEditor() {
+        var connectionType = GUISTATE_C.getConnectionTypeEnum();
+        if (GUISTATE_C.getConnection() === connectionType.AUTO || GUISTATE_C.getConnection() === connectionType.LOCAL) {
+            return function(result) {
+                runForAutoConnection(result);
+            };
+        }
+        if (GUISTATE_C.getConnection() === connectionType.AGENT || GUISTATE_C.getConnection() === connectionType.AGENTORTOKEN && GUISTATE_C.getIsAgent()) {
+            return function(result) {
+                runForAgentConnection(result);
+            };
+        }
+        if (GUISTATE_C.getConnection() === connectionType.WEBVIEW) {
+            return function(result) {
+                runForWebviewConnection(result);
+            };
+        }
+        if (GUISTATE_C.getConnection() === connectionType.JSPLAY) {
+            return function(result) {
+                runForJSPlayConnection(result);
+            };
+        }
+        return function(result) {
+            runForToken(result);
+        };
+    }
 
     function getConnectionTypeCallback() {
         var connectionType = GUISTATE_C.getConnectionTypeEnum();
