@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2019-12-05 11:38:37.731159",
+		"lastupdated": "2019-12-05 14:18:03.521165",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -1356,6 +1356,9 @@
 	"SENSOR_SOUND_CLAP_GETSAMPLE_TOOLTIP_EDISON": "Is a clap detected?",
 	"SENSOR_RSSI": "signal strength",
 	"SENSOR_RSSI_VALUE_GETSAMPLE_TOOLTIP": "Gets the signal strength from the last received message.",
+	"SENSOR_ACCELEROMETER_X_GETSAMPLE_TOOLTIP_SENSEBOX": "Returns the acceleration value on the X axis in g. Can be in range from -2g to 2g",
+	"SENSOR_ACCELEROMETER_Y_GETSAMPLE_TOOLTIP_SENSEBOX": "Returns the acceleration value on the Y axis in g. Can be in range from -2g to 2g",
+	"SENSOR_ACCELEROMETER_Z_GETSAMPLE_TOOLTIP_SENSEBOX": "Returns the acceleration value on the Z axis in g. Can be in range from -2g to 2g",
 	"SENSOR_GESTURE_UP_GETSAMPLE_TOOLTIP": "Returns »true« if the posture is upright.",
 	"SENSOR_GESTURE_DOWN_GETSAMPLE_TOOLTIP": "Returns »true« if the posture is down.",
 	"SENSOR_GESTURE_FACE_UP_GETSAMPLE_TOOLTIP": "Returns »true« if the posture is face up.",
