@@ -24,14 +24,4 @@
             <field name="NAME">B</field>
         </block>
     </instance>
-    <instance x="250" y="460">
-        <block type="robConf_gyro" id="9L:HO||CjNS(,!YiSk[P" intask="true" deletable="false">
-            <field name="NAME">K</field>
-        </block>
-    </instance>
-    <instance x="250" y="520">
-        <block type="robConf_compass" id="9L:HO||CjNS(,!YiSk[P" intask="true" deletable="false">
-            <field name="NAME">K2</field>
-        </block>
-    </instance>
 </block_set>
