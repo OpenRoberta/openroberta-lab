@@ -1,8 +1,5 @@
 package de.fhg.iais.roberta.visitor.codegen;
 
-import static de.fhg.iais.roberta.visitor.codegen.utilities.ColorSensorUtils.isEV3ColorSensor;
-import static de.fhg.iais.roberta.visitor.codegen.utilities.ColorSensorUtils.isHiTecColorSensor;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -68,6 +65,8 @@ import de.fhg.iais.roberta.visitor.IVisitor;
 import de.fhg.iais.roberta.visitor.codegen.utilities.TTSLanguageMapper;
 import de.fhg.iais.roberta.visitor.hardware.IEv3Visitor;
 import de.fhg.iais.roberta.visitor.lang.codegen.prog.AbstractPythonVisitor;
+import static de.fhg.iais.roberta.visitor.codegen.utilities.ColorSensorUtils.isEV3ColorSensor;
+import static de.fhg.iais.roberta.visitor.codegen.utilities.ColorSensorUtils.isHiTecColorSensor;
 
 /**
  * This class is implementing {@link IVisitor}. All methods are implemented and they append a human-readable Python code representation of a phrase to a
@@ -756,9 +755,11 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
 
     private boolean isActorUsed(ConfigurationComponent actor, String port) {
         for ( UsedActor usedActor : this.usedHardwareBean.getUsedActors() ) {
-            String usedActorComponentType = this.brickConfiguration.getConfigurationComponent(usedActor.getPort()).getComponentType();
-            if ( port.equals(usedActor.getPort()) && actor.getComponentType().equals(usedActorComponentType) ) {
-                return true;
+            if (!usedActor.getType().equals(SC.VOICE)) { // TODO workaround for the internal voice actor, should be removed once the new configuration is used
+                String usedActorComponentType = this.brickConfiguration.getConfigurationComponent(usedActor.getPort()).getComponentType();
+                if ( port.equals(usedActor.getPort()) && actor.getComponentType().equals(usedActorComponentType) ) {
+                    return true;
+                }
             }
         }
         return false;

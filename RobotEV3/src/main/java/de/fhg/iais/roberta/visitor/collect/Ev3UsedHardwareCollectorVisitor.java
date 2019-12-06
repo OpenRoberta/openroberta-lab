@@ -36,7 +36,7 @@ public final class Ev3UsedHardwareCollectorVisitor extends AbstractUsedHardwareC
     @Override
     public Void visitSayTextAction(SayTextAction<Void> sayTextAction) {
         super.visitSayTextAction(sayTextAction);
-        this.builder.addUsedActor(new UsedActor("", SC.VOICE));
+        this.builder.addUsedActor(new UsedActor(SC.VOICE, SC.VOICE));
         return null;
     }
 
