@@ -40,7 +40,7 @@
 ## [3.4.0] - 2019-05-28
 
 ### New features
- - CALLIOPE: implemented and adopted blocks and codegeneration for calli:bot
+ - CALLIOPE: implemented and adopted blocks and code generation for calli:bot
  - CALIIOPE/SIM: new calliope plugin for the new sim execution
  - MICROBIT: serial write implemented
  - NAO: NAO update process supports NAO v5 and v6
@@ -81,7 +81,7 @@ Hotfix
 ### General improvements
  - ALL: email address for support changed to support-o-r@iais.fraunhofer.de
  - ALL: play button does not get activated too soon after the press
- - ALL: trashcan is now bigger for easier block delition
+ - ALL: trashcan is now bigger for easier block deletion
  - ALL: colour data type handling improved
  - ALL: server-side code structural improvements
  - WEDO: interpreter improved (NodeJS vs Browser JS code specifics)
@@ -97,7 +97,7 @@ Hotfix
  - ARDUINO: get analog/digital value block does not destroy the program anymore
  - ARDUINO/CALLIOPE: functions returning lists now have correct return type
  - ARDUINO/CALLIOPE: insert at last position implemented correctly
- - CALLIOPE: saved programs with wait until button A/B pressed block behave correclty now
+ - CALLIOPE: saved programs with wait until button A/B pressed block behave correctly now
  - CALLIOPE: animate block now accepts list variable declaration as an input
  - CALLIOPE/MICROBIT/SENSEBOX: program download modal window’s header displays correct robot name after switching the robot system
  - SENSEBOX: gyro sensor block is not resetting anymore after code generation or program run

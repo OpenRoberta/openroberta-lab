@@ -25,7 +25,7 @@ working with linux don't face this problem, so it was unnoticed for some time. W
 also the name of the directory of the local copy of the remote repository) and the change of the prefix from
 "OpenRobertaParent/RobotArdu/resources" to "RobotArdu" will remedy that problem. If not, please file an issue.
 
-Then the unwanted resources are removed. We get the "same" history for the repositoroy, but different commit ids, of course.
+Then the unwanted resources are removed. We get the "same" history for the repository, but different commit ids, of course.
 
 AS A CONSEQUENCE EVERYBODY HAS TO DO A FRESH CLONE OF THE REPOSITORY NOW CALLED `openroberta-lab`.
 
