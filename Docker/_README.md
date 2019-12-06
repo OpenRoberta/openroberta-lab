@@ -38,7 +38,7 @@ docker push rbudde/openroberta_base:$BASE_VERSION
 
 Using the configuration file DockerfileIT_* you create an image, built upon the "base" image, that has executed a git clone of the
 main git repository `openroberta-lab` and has executed a `mvn clean install`. This is done to fill the
-(mvn) cache and speeds up later builds considerably. The entrypoint is defined as the bash script "runIT.sh".
+(mvn) cache and speeds up later builds considerably. The entry point is defined as the bash script "runIT.sh".
 If called, it will checkout a branch and runs both the tests and the integration tests.
 
 ```bash
@@ -123,7 +123,7 @@ The Apache2 configuration examples are in the directory `z-apache2`.
 
 Actually the prod machine is running nginx, the test machine is running apache2.
 
-## Conventionss
+## Conventions
 All data is stored relative to a base directory `$BASE_DIR` (your choice, we use `/data/openroberta-lab`). Abbreviations:
 
 ```bash

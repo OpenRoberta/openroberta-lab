@@ -117,14 +117,14 @@ All notable changes to this project will be documented in this file.
  - issue #N/A:  adapted to new folder structure
  - issue #N/A:  deployment/startup scripts updated
  - issue #N/A:  docker setup for production system
- - issue #N/A:  ora-cc-rsc repositry restructured
+ - issue #N/A:  ora-cc-rsc repository restructured
  - issue #N/A:  vorwerk icon
  - issue #15:   swapped "RST" and "SDA" in the code generation and in tests
  - issue #23:   boolean is treated as integer when assigning for Calliope (used to be String)
  - issue #26:   path resources for updating NAO, EV3 robots
  - issue #32:   modified the NAO update process to support NAO v5 and v6
  - issue #39:   improve logging for statistics
- - issue #1178: merged screen and plot configuration blocks fo SenseBox
+ - issue #1178: merged screen and plot configuration blocks of SenseBox
  - issue #1178: changed code generation to show plot axis and title for SenseBox
  
 ### Removed
