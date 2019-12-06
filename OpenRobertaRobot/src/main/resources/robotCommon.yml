@@ -383,6 +383,10 @@ block:
       category: STMT
       implementor: de.fhg.iais.roberta.syntax.lang.stmt.AssertStmt
       type: [robActions_assert]
+  PARTICLE_SENSOR_GETSAMPLE:
+      category: SENSOR
+      implementor: de.fhg.iais.roberta.syntax.sensor.generic.ParticleSensor
+      type: [robSensors_particle_getSample]
   
 wait:
   ACCELERATION :
@@ -725,7 +729,14 @@ wait:
         implementor: de.fhg.iais.roberta.syntax.sensor.generic.WallSensor
         sensor: WALL
         mode: DISTANCE
-
+  PARTICLE_PM25:
+        implementor: de.fhg.iais.roberta.syntax.sensor.generic.ParticleSensor
+        sensor: PARTICLE
+        mode: PM25
+  PARTICLE_PM10:
+        implementor: de.fhg.iais.roberta.syntax.sensor.generic.ParticleSensor
+        sensor: PARTICLE
+        mode: PM10
 
 mode:
   accelerometer: [DEFAULT,VALUE]
@@ -749,6 +760,7 @@ mode:
   rfid: [PRESENCE,SERIAL,VALUE]
   detect: [NAMEONE,IDONE,IDALL,NAMEALL]
   sound: [SOUND]
+  particle: [PM25, PM10]
   
 configuration:
   ACCELEROMETER: [robBrick_accelerometer]
@@ -802,3 +814,4 @@ configuration:
   ULTRASONIC: [robConf_ultrasonic, robBrick_ultrasonic]
   WEDO: [robBrick_WeDo-Brick]
   WIRELESS: [robConf_wireless]
+  PARTICLE: [robConf_particle]

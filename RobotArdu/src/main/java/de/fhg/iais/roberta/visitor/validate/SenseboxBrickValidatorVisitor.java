@@ -19,6 +19,7 @@ import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.syntax.sensor.generic.HumiditySensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.KeysSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.ParticleSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.PinGetValueSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
@@ -217,6 +218,15 @@ public class SenseboxBrickValidatorVisitor extends AbstractBrickValidatorVisitor
     public Void visitClearDisplayAction(ClearDisplayAction<Void> clearDisplayAction) {
         if ( !this.robotConfiguration.isComponentTypePresent(SC.LCDI2C) ) {
             clearDisplayAction.addInfo(NepoInfo.error("CONFIGURATION_ERROR_ACTOR_MISSING"));
+            this.errorCount++;
+        }
+        return null;
+    }
+
+    @Override
+    public Void visitParticleSensor(ParticleSensor<Void> particleSensor) {
+        if ( !this.robotConfiguration.isComponentTypePresent(SC.PARTICLE) ) {
+            particleSensor.addInfo(NepoInfo.error("CONFIGURATION_ERROR_ACTOR_MISSING"));
             this.errorCount++;
         }
         return null;

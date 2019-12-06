@@ -15,6 +15,7 @@ import de.fhg.iais.roberta.syntax.sensor.generic.KeysSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.MoistureSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.MotionSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.ParticleSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.PinGetValueSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.PinTouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.PulseSensor;
@@ -268,5 +269,15 @@ public interface ISensorVisitor<V> extends IHardwareVisitor<V> {
 
     default V visitVemlLightSensor(VemlLightSensor<V> vemlLightSensor) {
         throw new DbcException("VEML light sensor not implemented!");
+    }
+
+    /**
+     * visit a {@link ParticleSensor}.
+     *
+     * @param particleSensor to be visited
+     */
+
+    default V visitParticleSensor(ParticleSensor<V> particleSensor) {
+        throw new DbcException("Particle sensor not implemented!");
     }
 }

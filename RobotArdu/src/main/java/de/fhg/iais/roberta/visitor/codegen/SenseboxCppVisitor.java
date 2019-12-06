@@ -39,6 +39,7 @@ import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.HumiditySensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.KeysSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.ParticleSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.PinGetValueSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.SoundSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
@@ -553,6 +554,21 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
         return null;
     }
 
+    @Override
+    public Void visitParticleSensor(ParticleSensor<Void> particleSensor) {
+        switch ( particleSensor.getMode() ) {
+            case "PM25":
+                this.sb.append("_sds011_").append(particleSensor.getPort()).append(".getPm25()");
+                break;
+            case "PM10":
+                this.sb.append("_sds011_").append(particleSensor.getPort()).append(".getPm10()");
+                break;
+            default:
+                throw new DbcException("Wrong mode for particle sensor");
+        }
+        return null;
+    }
+
     private void generateConfigurationSetup() {
         String bmx55PortName;
         for ( ConfigurationComponent usedConfigurationBlock : this.configuration.getConfigurationComponentsValues() ) {
@@ -741,7 +757,15 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
                     this.sb.append("pinMode(_output_" + usedConfigurationBlock.getUserDefinedPortName() + ", OUTPUT);");
                     nlIndent();
                     break;
-                // no additional configuration needed:
+                case SC.PARTICLE:
+                    for ( UsedSensor usedSensor : this.usedHardwareBean.getUsedSensors() ) {
+                        if ( usedSensor.getType().equals(SC.PARTICLE) ) {
+                            this.sb.append(usedConfigurationBlock.getProperty("SERIAL")).append(".begin(9600);");
+                            nlIndent();
+                            break;
+                        }
+                    }
+                    // no additional configuration needed:
                 case SC.ULTRASONIC:
                 case SC.POTENTIOMETER:
                 case SC.LIGHT:
@@ -904,6 +928,20 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
                 case SC.SENSEBOX_PLOTTING:
                 case SC.SENSEBOX_COMPASS:
                 case SC.GYRO:
+                    break;
+                case SC.PARTICLE:
+                    for ( UsedSensor usedSensor : this.usedHardwareBean.getUsedSensors() ) {
+                        if ( usedSensor.getType().equals(SC.PARTICLE) ) {
+                            this.sb
+                                .append("SDS011 _sds011")
+                                .append("_")
+                                .append(cc.getUserDefinedPortName())
+                                .append("(")
+                                .append(cc.getProperty("SERIAL"))
+                                .append(");");
+                            break;
+                        }
+                    }
                     break;
                 default:
                     throw new DbcException("Configuration block is not supported: " + cc.getComponentType());

@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2019-12-05 14:50:29.226185",
+		"lastupdated": "2019-12-06 14:54:05.930770",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -566,6 +566,10 @@
 	"SENSOR_IS_PRESSED": "pressed?",
 	"SENSOR_IS_TOUCHED": "touched?",
 	"SENSOR_IS_TILTED": "tilted?",
+	"SENSOR_PARTICLE": "SDS011 particle sensor",
+	"PARTICLE_TOOLTIP": "Represents SDS011 particle sensor",
+	"SENSOR_PARTICLE_PM25_GETSAMPLE_TOOLTIP": "Reads the current value of PM2.5 from the particle sensor",
+	"SENSOR_PARTICLE_PM10_GETSAMPLE_TOOLTIP": "Reads the current value of PM10 from the particle sensor",
 	"PITCH": "pitch",
 	"ROLL": "roll",
 	"YAW": "yaw",
@@ -602,6 +606,8 @@
 	"MODE_Z": "Z-value",
 	"MODE_SENSOR1": "Light Sensor1",
 	"MODE_SENSOR2": "Light Sensor2",
+	"MODE_PM25": "PM2.5",
+	"MODE_PM10": "PM10",
 	"LOOP": "repeat until",
 	"LOOP_FOREVER": "repeat indefinitely",
 	"CONNECTION_SEND_DATA": "send message",
@@ -1328,6 +1334,7 @@
 	"SENSOR_UNIT_AMPERE": "A",
 	"SENSOR_UNIT_LUX": "lx",
 	"SENSOR_UNIT_IRRADIANCE": "μW/cm²",
+	"SENSOR_UNIT_PM": "μg/m³",
 	"SENSOR_PINTOUCH_BOB3": "arm",
 	"SENSOR_SOUND_CALLIOPE": "microphone",
 	"MODE_VALUE": "value",

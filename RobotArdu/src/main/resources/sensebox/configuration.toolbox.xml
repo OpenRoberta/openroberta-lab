@@ -23,5 +23,6 @@
     <block type="robConf_humidity" />
     <block type="robConf_temperature" />
     <block type="robConf_lightveml" />
+    <block type="robConf_particle" />
   </category>
 </toolbox_set>

@@ -16,6 +16,7 @@ import de.fhg.iais.roberta.syntax.actors.arduino.sensebox.PlotPointAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.sensebox.SendDataAction;
 import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.HumiditySensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.ParticleSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.PinGetValueSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.VemlLightSensor;
@@ -100,6 +101,12 @@ public final class SenseboxUsedHardwareCollectorVisitor extends AbstractUsedHard
         } else {
             this.builder.addUsedActor(new UsedActor(lightAction.getPort(), SC.RGBLED));
         }
+        return null;
+    }
+
+    @Override
+    public Void visitParticleSensor(ParticleSensor<Void> particleSensor) {
+        this.builder.addUsedSensor(new UsedSensor(particleSensor.getPort(), SC.PARTICLE, particleSensor.getMode()));
         return null;
     }
 }
