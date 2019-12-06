@@ -33,11 +33,17 @@ import de.fhg.iais.roberta.syntax.action.sound.PlayFileAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
 import de.fhg.iais.roberta.syntax.action.sound.VolumeAction;
+import de.fhg.iais.roberta.syntax.actors.arduino.LEDMatrixImageAction;
+import de.fhg.iais.roberta.syntax.actors.arduino.LEDMatrixSetBrightnessAction;
+import de.fhg.iais.roberta.syntax.actors.arduino.LEDMatrixTextAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.mbot.ReceiveIRAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.mbot.SendIRAction;
-import de.fhg.iais.roberta.syntax.expressions.arduino.LedMatrix;
+import de.fhg.iais.roberta.syntax.expressions.arduino.LEDMatrixImage;
+import de.fhg.iais.roberta.syntax.functions.arduino.LEDMatrixImageInvertFunction;
+import de.fhg.iais.roberta.syntax.functions.arduino.LEDMatrixImageShiftFunction;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
 import de.fhg.iais.roberta.syntax.lang.expr.ColorConst;
+import de.fhg.iais.roberta.syntax.lang.expr.EmptyExpr;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.syntax.lang.expr.RgbColor;
 import de.fhg.iais.roberta.syntax.lang.expr.Var;
@@ -57,6 +63,7 @@ import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.VoltageSensor;
 import de.fhg.iais.roberta.syntax.sensors.arduino.mbot.FlameSensor;
 import de.fhg.iais.roberta.syntax.sensors.arduino.mbot.Joystick;
+import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.visitor.IVisitor;
 import de.fhg.iais.roberta.visitor.hardware.IMbotVisitor;
@@ -82,12 +89,91 @@ public final class MbotCppVisitor extends AbstractCommonArduinoCppVisitor implem
     }
 
     @Override
+    public Void visitEmptyExpr(EmptyExpr<Void> emptyExpr) {
+        switch ( emptyExpr.getDefVal() ) {
+            case STRING:
+                this.sb.append("\"\"");
+                break;
+            case BOOLEAN:
+                this.sb.append("true");
+                break;
+            case NUMBER:
+            case NUMBER_INT:
+                this.sb.append("0");
+                break;
+            case ARRAY:
+                break;
+            case NULL:
+                break;
+            case COLOR:
+                this.sb.append("RGB(255, 255, 255)");
+                break;
+            case IMAGE:
+                this.sb.append("{0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}");
+                break;
+            default:
+                this.sb.append("NULL");
+                break;
+        }
+        return null;
+    }
+
+    @Override
+    protected String getLanguageVarTypeFromBlocklyType(BlocklyType type) {
+        switch ( type ) {
+            case ANY:
+            case COMPARABLE:
+            case ADDABLE:
+            case NULL:
+            case REF:
+            case PRIM:
+            case NOTHING:
+            case CAPTURED_TYPE:
+            case R:
+            case S:
+            case T:
+                return "";
+            case ARRAY:
+                return "std::list<double>";
+            case ARRAY_NUMBER:
+                return "std::list<double>";
+            case ARRAY_STRING:
+                return "std::list<String>";
+            case ARRAY_BOOLEAN:
+                return "std::list<bool>";
+            case ARRAY_COLOUR:
+                return "std::list<unsigned int>";
+            case ARRAY_IMAGE:
+                return "std::list<std::vector<uint8_t>>";
+            case BOOLEAN:
+                return "bool";
+            case NUMBER:
+                return "double";
+            case NUMBER_INT:
+                return "int";
+            case STRING:
+                return "String";
+            case VOID:
+                return "void";
+            case COLOR:
+                return "unsigned int";
+            case CONNECTION:
+                return "int";
+            case IMAGE:
+                return "std::vector<uint8_t>";
+            default:
+                throw new IllegalArgumentException("unhandled type");
+        }
+    }
+
+    @Override
     public Void visitShowTextAction(ShowTextAction<Void> showTextAction) {
         return null;
     }
 
     @Override
     public Void visitClearDisplayAction(ClearDisplayAction<Void> clearDisplayAction) {
+        this.sb.append("__meLEDMatrix_").append(clearDisplayAction.getPort()).append(".clearScreen();");
         return null;
     }
 
@@ -563,7 +649,7 @@ public final class MbotCppVisitor extends AbstractCommonArduinoCppVisitor implem
                     break;
                 case SC.LED_MATRIX:
                     nlIndent();
-                    this.sb.append("MeLEDMatrix _meLEDMatrix_" + usedActor.getPort() + "(" + usedActor.getPort() + ");");
+                    this.sb.append("MeLEDMatrix __meLEDMatrix_" + usedActor.getPort() + "(" + usedActor.getPort() + ");");
                     break;
                 case SC.BUZZER:
                     nlIndent();
@@ -588,12 +674,6 @@ public final class MbotCppVisitor extends AbstractCommonArduinoCppVisitor implem
     }
 
     @Override
-    public Void visitImage(LedMatrix<Void> ledMatrix) {
-        ledMatrix.getImage();
-        return null;
-    }
-
-    @Override
     public Void visitSerialWriteAction(SerialWriteAction<Void> serialWriteAction) {
         this.sb.append("Serial.println(");
         serialWriteAction.getValue().accept(this);
@@ -613,5 +693,114 @@ public final class MbotCppVisitor extends AbstractCommonArduinoCppVisitor implem
     public Void visitReceiveIRAction(ReceiveIRAction<Void> receiveIRAction) {
         this.sb.append("_meIr.getString()");
         return null;
+    }
+
+    @Override
+    public Void visitLEDMatrixImageAction(LEDMatrixImageAction<Void> ledMatrixImageAction) {
+        String end = ");";
+        if ( ledMatrixImageAction.getDisplayImageMode().equals("IMAGE") ) {
+            this.sb.append("__meLEDMatrix_").append(ledMatrixImageAction.getPort()).append(".drawBitmap(0,0,16,");
+            if ( ledMatrixImageAction.getValuesToDisplay().getKind().getName().equals("VAR")
+                || ledMatrixImageAction.getValuesToDisplay().getKind().getName().equals("FUNCTION_EXPR") ) {
+                this.sb.append("&");
+                ledMatrixImageAction.getValuesToDisplay().accept(this);
+                this.sb.append("[0]");
+            } else {
+                this.sb.append("new uint8_t[16]");
+                ledMatrixImageAction.getValuesToDisplay().accept(this);
+            }
+            this.sb.append(end);
+        } else if ( ledMatrixImageAction.getDisplayImageMode().equals("ANIMATION") ) {
+            this.sb.append("drawAnimationLEDMatrix(&__meLEDMatrix_").append(ledMatrixImageAction.getPort()).append(", ");
+            ledMatrixImageAction.getValuesToDisplay().accept(this);
+            this.sb.append(", 200");
+            this.sb.append(end);
+        } else {
+            throw new DbcException("LEDMatrix display mode is not supported: " + ledMatrixImageAction.getDisplayImageMode());
+        }
+        return null;
+    }
+
+    @Override
+    public Void visitLEDMatrixTextAction(LEDMatrixTextAction<Void> ledMatrixTextAction) {
+        this.sb.append("drawStrLEDMatrix(&__meLEDMatrix_").append(ledMatrixTextAction.getPort()).append(", ");
+        if ( !ledMatrixTextAction.getMsg().getVarType().equals(BlocklyType.STRING) ) {
+            this.sb.append("String(");
+            ledMatrixTextAction.getMsg().accept(this);
+            this.sb.append(")");
+        } else {
+            ledMatrixTextAction.getMsg().accept(this);
+        }
+        this.sb.append(", 100);");
+        return null;
+    }
+
+    @Override
+    public Void visitLEDMatrixImage(LEDMatrixImage<Void> ledMatrixImage) {
+        this.sb.append("{");
+        for ( int i = 0; i < 16; i++ ) {
+            this.sb.append("0x");
+            int hex = 0;
+            for ( int j = 0; j < 8; j++ ) {
+                String pixel = ledMatrixImage.getImage()[i][j].trim();
+                if ( pixel.equals("#") ) {
+                    hex += Math.pow(2, j);
+                }
+            }
+            this.sb.append(Integer.toHexString(hex));
+            if ( i < 15 ) {
+                this.sb.append(", ");
+            }
+        }
+        this.sb.append("}");
+        return null;
+    }
+
+    @Override
+    public Void visitLEDMatrixImageShiftFunction(LEDMatrixImageShiftFunction<Void> ledMatrixImageShiftFunction) {
+        this.sb.append("(shiftLEDMatrix");
+        this.sb.append(capitalizeFirstLetter(ledMatrixImageShiftFunction.getShiftDirection().toString()));
+        if ( ledMatrixImageShiftFunction.getImage().getKind().getName().equals("VAR")
+            || ledMatrixImageShiftFunction.getImage().getKind().getName().equals("FUNCTION_EXPR") ) {
+            this.sb.append("Vec(");
+            ledMatrixImageShiftFunction.getImage().accept(this);
+        } else {
+            this.sb.append("Arr(new uint8_t[16]");
+            ledMatrixImageShiftFunction.getImage().accept(this);
+        }
+        this.sb.append(", ");
+        ledMatrixImageShiftFunction.getPositions().accept(this);
+        this.sb.append("))");
+        return null;
+    }
+
+    @Override
+    public Void visitLEDMatrixImageInvertFunction(LEDMatrixImageInvertFunction<Void> ledMatrixImageInverFunction) {
+        if ( ledMatrixImageInverFunction.getImage().getKind().getName().equals("VAR")
+            || ledMatrixImageInverFunction.getImage().getKind().getName().equals("FUNCTION_EXPR") ) {
+            this.sb.append("(invertLEDMatrixVec(");
+            ledMatrixImageInverFunction.getImage().accept(this);
+        } else {
+            this.sb.append("(invertLEDMatrixArr(");
+            this.sb.append("new uint8_t[16]");
+            ledMatrixImageInverFunction.getImage().accept(this);
+        }
+        this.sb.append("))");
+        return null;
+    }
+
+    @Override
+    public Void visitLEDMatrixSetBrightnessAction(LEDMatrixSetBrightnessAction<Void> ledMatrixSetBrightnessAction) {
+        this.sb.append("__meLEDMatrix_").append(ledMatrixSetBrightnessAction.getPort()).append(".setBrightness(");
+        ledMatrixSetBrightnessAction.getBrightness().accept(this);
+        this.sb.append(");");
+        return null;
+    }
+
+    private String capitalizeFirstLetter(String original) {
+        if ( original == null || original.length() == 0 ) {
+            return original;
+        }
+        return original.substring(0, 1).toUpperCase() + original.substring(1).toLowerCase();
     }
 }

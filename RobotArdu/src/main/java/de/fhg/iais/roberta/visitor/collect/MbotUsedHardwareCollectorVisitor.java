@@ -4,11 +4,13 @@ import java.util.ArrayList;
 
 import de.fhg.iais.roberta.bean.UsedHardwareBean;
 import de.fhg.iais.roberta.components.ConfigurationAst;
+import de.fhg.iais.roberta.components.ConfigurationComponent;
 import de.fhg.iais.roberta.components.UsedActor;
 import de.fhg.iais.roberta.components.UsedSensor;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.SC;
 import de.fhg.iais.roberta.syntax.action.light.LightAction;
+import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
 import de.fhg.iais.roberta.syntax.action.motor.differential.CurveAction;
 import de.fhg.iais.roberta.syntax.action.motor.differential.DriveAction;
 import de.fhg.iais.roberta.syntax.action.motor.differential.MotorDriveStopAction;
@@ -16,11 +18,17 @@ import de.fhg.iais.roberta.syntax.action.motor.differential.TurnAction;
 import de.fhg.iais.roberta.syntax.action.serial.SerialWriteAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
+import de.fhg.iais.roberta.syntax.actors.arduino.LEDMatrixImageAction;
+import de.fhg.iais.roberta.syntax.actors.arduino.LEDMatrixSetBrightnessAction;
+import de.fhg.iais.roberta.syntax.actors.arduino.LEDMatrixTextAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.mbot.ReceiveIRAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.mbot.SendIRAction;
-import de.fhg.iais.roberta.syntax.expressions.arduino.LedMatrix;
+import de.fhg.iais.roberta.syntax.expressions.arduino.LEDMatrixImage;
+import de.fhg.iais.roberta.syntax.functions.arduino.LEDMatrixImageInvertFunction;
+import de.fhg.iais.roberta.syntax.functions.arduino.LEDMatrixImageShiftFunction;
 import de.fhg.iais.roberta.syntax.sensors.arduino.mbot.FlameSensor;
 import de.fhg.iais.roberta.syntax.sensors.arduino.mbot.Joystick;
+import de.fhg.iais.roberta.typecheck.NepoInfo;
 import de.fhg.iais.roberta.visitor.hardware.IMbotVisitor;
 
 /**
@@ -65,9 +73,7 @@ public final class MbotUsedHardwareCollectorVisitor extends AbstractUsedHardware
         if ( driveAction.getParam().getDuration() != null ) {
             driveAction.getParam().getDuration().getValue().accept(this);
         }
-
         this.builder.addUsedActor(new UsedActor(this.robotConfiguration.getFirstMotorPort(SC.LEFT), SC.DIFFERENTIAL_DRIVE));
-
         return null;
     }
 
@@ -78,9 +84,7 @@ public final class MbotUsedHardwareCollectorVisitor extends AbstractUsedHardware
         if ( curveAction.getParamLeft().getDuration() != null ) {
             curveAction.getParamLeft().getDuration().getValue().accept(this);
         }
-
         this.builder.addUsedActor(new UsedActor(this.robotConfiguration.getFirstMotorPort(SC.LEFT), SC.DIFFERENTIAL_DRIVE));
-
         return null;
     }
 
@@ -90,25 +94,16 @@ public final class MbotUsedHardwareCollectorVisitor extends AbstractUsedHardware
         if ( turnAction.getParam().getDuration() != null ) {
             turnAction.getParam().getDuration().getValue().accept(this);
         }
-
         this.builder.addUsedActor(new UsedActor(this.robotConfiguration.getFirstMotorPort(SC.LEFT), SC.DIFFERENTIAL_DRIVE));
-
-        return null;
-    }
-
-    @Override
-    public Void visitImage(LedMatrix<Void> ledMatrix) {
         return null;
     }
 
     @Override
     public Void visitMotorDriveStopAction(MotorDriveStopAction<Void> stopAction) {
-
         if ( (this.robotConfiguration.getFirstMotorPort(SC.LEFT) != null) && (this.robotConfiguration.getFirstMotorPort(SC.RIGHT) != null) ) {
             this.builder.addUsedActor(new UsedActor(this.robotConfiguration.getFirstMotorPort(SC.LEFT), SC.GEARED_MOTOR));
             this.builder.addUsedActor(new UsedActor(this.robotConfiguration.getFirstMotorPort(SC.RIGHT), SC.GEARED_MOTOR));
         }
-
         return null;
     }
 
@@ -133,6 +128,44 @@ public final class MbotUsedHardwareCollectorVisitor extends AbstractUsedHardware
     @Override
     public Void visitReceiveIRAction(ReceiveIRAction<Void> receiveIRAction) {
         this.builder.addUsedActor(new UsedActor("INTERNAL", SC.IR_TRANSMITTER));
+        return null;
+    }
+
+    @Override
+    public Void visitLEDMatrixImageAction(LEDMatrixImageAction<Void> ledMatrixImageAction) {
+        this.builder.addUsedActor(new UsedActor(ledMatrixImageAction.getPort(), SC.LED_MATRIX));
+        return null;
+    }
+
+    @Override
+    public Void visitLEDMatrixTextAction(LEDMatrixTextAction<Void> ledMatrixTextAction) {
+        ledMatrixTextAction.getMsg().accept(this);
+        this.builder.addUsedActor(new UsedActor(ledMatrixTextAction.getPort(), SC.LED_MATRIX));
+        return null;
+    }
+
+    @Override
+    public Void visitLEDMatrixImageShiftFunction(LEDMatrixImageShiftFunction<Void> ledMatrixImageShiftFunction) {
+        ledMatrixImageShiftFunction.getImage().accept(this);
+        this.builder.addUsedActor(new UsedActor("0", SC.LED_MATRIX));       
+        return null;
+    }
+
+    @Override
+    public Void visitLEDMatrixImageInvertFunction(LEDMatrixImageInvertFunction<Void> ledMatrixImageInverFunction) {
+        ledMatrixImageInverFunction.getImage().accept(this);
+        this.builder.addUsedActor(new UsedActor("0", SC.LED_MATRIX));       
+        return null;
+    }
+
+    @Override
+    public Void visitLEDMatrixImage(LEDMatrixImage<Void> ledMatrixImage) {
+        return null;
+    }
+
+    @Override
+    public Void visitLEDMatrixSetBrightnessAction(LEDMatrixSetBrightnessAction<Void> ledMatrixSetBrightnessAction) {
+        ledMatrixSetBrightnessAction.getBrightness().accept(this);
         return null;
     }
 }

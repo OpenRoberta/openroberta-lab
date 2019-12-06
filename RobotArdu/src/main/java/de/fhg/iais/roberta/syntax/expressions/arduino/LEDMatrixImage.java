@@ -1,6 +1,5 @@
 package de.fhg.iais.roberta.syntax.expressions.arduino;
 
-import java.awt.Image;
 import java.util.Arrays;
 import java.util.List;
 
@@ -25,25 +24,27 @@ import de.fhg.iais.roberta.visitor.hardware.IMbotVisitor;
  * <br>
  * To create an instance from this class use the method {@link #make(Expr, Expr, Expr, BlocklyBlockProperties, BlocklyComment)}.<br>
  */
-public class LedMatrix<V> extends Expr<V> {
+public class LEDMatrixImage<V> extends Expr<V> {
+    private final static int X = 16;
+    private final static int Y = 8; 
     private final String[][] image;
 
-    private LedMatrix(String[][] image, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockTypeContainer.getByName("MAKEBLOCK_LED_MATRIX"), properties, comment);
+    private LEDMatrixImage(String[][] image, BlocklyBlockProperties properties, BlocklyComment comment) {
+        super(BlockTypeContainer.getByName("LED_MATRIX_IMAGE"), properties, comment);
         this.image = image;
         setReadOnly();
     }
 
     /**
-     * creates instance of {@link Image}. This instance is read only and can not be modified.
+     * creates instance of {@link LEDMatrixImage}. This instance is read only and can not be modified.
      *
      * @param image ,
      * @param properties of the block (see {@link BlocklyBlockProperties}),
      * @param comment added from the user,
-     * @return read only object of class {@link Image}
+     * @return read only object of class {@link LEDMatrixImage}
      */
-    public static <V> LedMatrix<V> make(String[][] image, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new LedMatrix<>(image, properties, comment);
+    public static <V> LEDMatrixImage<V> make(String[][] image, BlocklyBlockProperties properties, BlocklyComment comment) {
+        return new LEDMatrixImage<>(image, properties, comment);
     }
 
     /**
@@ -72,7 +73,7 @@ public class LedMatrix<V> extends Expr<V> {
     public String toString() {
         StringBuilder returnString = new StringBuilder();
         returnString.append("Image [ ");
-        for ( int i = 0; i < 8; ++i ) {
+        for ( int i = 0; i < X; ++i ) {
             returnString.append(Arrays.toString(this.image[i]));
             returnString.append("\n");
         }
@@ -82,7 +83,7 @@ public class LedMatrix<V> extends Expr<V> {
 
     @Override
     protected V acceptImpl(IVisitor<V> visitor) {
-        return ((IMbotVisitor<V>) visitor).visitImage(this);
+        return ((IMbotVisitor<V>) visitor).visitLEDMatrixImage((LEDMatrixImage<Void>) this);
 
     }
 
@@ -94,23 +95,23 @@ public class LedMatrix<V> extends Expr<V> {
      * @return corresponding AST object
      */
     public static <V> Phrase<V> jaxbToAst(Block block, AbstractJaxb2Ast<V> helper) {
-        List<Field> fields = helper.extractFields(block, (short) 128);
-        String[][] image = new String[8][16];
-        for ( int i = 0; i < 8; i++ ) {
-            for ( int j = 0; j < 16; j++ ) {
-                image[i][j] = helper.extractField(fields, "P" + j + i);
+        List<Field> fields = helper.extractFields(block, (short) (X*Y));
+        String[][] image = new String[X][Y];
+        for ( int i = 0; i < X; i++ ) {
+            for ( int j = 0; j < Y; j++ ) {
+                image[i][j] = helper.extractField(fields, "P" + i + (Y-1-j));
             }
         }
-        return LedMatrix.make(image, helper.extractBlockProperties(block), helper.extractComment(block));
+        return LEDMatrixImage.make(image, helper.extractBlockProperties(block), helper.extractComment(block));
     }
 
     @Override
     public Block astToBlock() {
         Block jaxbDestination = new Block();
         Ast2JaxbHelper.setBasicProperties(this, jaxbDestination);
-        for ( int i = 0; i < 8; i++ ) {
-            for ( int j = 0; j < 16; j++ ) {
-                Ast2JaxbHelper.addField(jaxbDestination, "P" + j + i, this.image[i][j]);
+        for ( int i = 0; i < X; i++ ) {
+            for ( int j = 0; j < Y; j++ ) {
+                Ast2JaxbHelper.addField(jaxbDestination, "P" + i + (Y-1-j), this.image[i][j]);
             }
         }
         return jaxbDestination;

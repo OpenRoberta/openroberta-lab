@@ -6,10 +6,14 @@ import de.fhg.iais.roberta.syntax.action.motor.MotorStopAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayFileAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
 import de.fhg.iais.roberta.syntax.action.sound.VolumeAction;
+import de.fhg.iais.roberta.syntax.actors.arduino.LEDMatrixImageAction;
+import de.fhg.iais.roberta.syntax.actors.arduino.LEDMatrixTextAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.RelayAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.sensebox.PlotClearAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.sensebox.PlotPointAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.sensebox.SendDataAction;
+import de.fhg.iais.roberta.syntax.functions.arduino.LEDMatrixImageInvertFunction;
+import de.fhg.iais.roberta.syntax.functions.arduino.LEDMatrixImageShiftFunction;
 import de.fhg.iais.roberta.syntax.sensors.arduino.sensebox.GpsSensor;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.visitor.hardware.actor.IDisplayVisitor;
@@ -68,6 +72,22 @@ public interface IArduinoVisitor<V>
     }
 
     default V visitGpsSensor(GpsSensor<V> gpsSensor) {
+        throw new DbcException("Not supported!");
+    }
+
+    default V visitLEDMatrixImageAction(LEDMatrixTextAction<V> ledMatrixTextAction) {
+        throw new DbcException("Not supported!");
+    }
+
+    default V visitLEDMatrixTextAction(LEDMatrixImageAction<V> ledMatrixImageAction) {
+        throw new DbcException("Not supported!");
+    }
+
+    default V visitImageInvertFunction(LEDMatrixImageInvertFunction<V> imageInvertFunction) {
+        throw new DbcException("Not supported!");
+    }
+
+    default V visitImageShiftFunction(LEDMatrixImageShiftFunction<V> imageShiftFunction) {
         throw new DbcException("Not supported!");
     }
 
