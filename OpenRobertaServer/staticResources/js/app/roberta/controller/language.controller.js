@@ -43,6 +43,8 @@ define([ 'exports', 'log', 'jquery', 'guiState.controller', 'program.controller'
             language = 'zh-hant';
         } else if (navigator.language.indexOf("ro") > -1) {
             language = 'ro';
+        } else if (navigator.language.indexOf("eu") > -1) {
+            language = 'eu';
         } else {
             language = 'en';
         }
