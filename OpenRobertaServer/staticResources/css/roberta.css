@@ -1537,7 +1537,7 @@ div.galleryDescription, div.tutorialOverview {
 }
 .galleryTable td {
     border: none;
-    color: #BACC1E;
+    color: #333333;
     width: 100vw;
     position: relative;
     border: none !important;
