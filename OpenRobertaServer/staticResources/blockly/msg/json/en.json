@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2019-12-07 08:12:51.149204",
+		"lastupdated": "2019-12-09 12:59:42.815572",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -749,7 +749,6 @@
 	"POPUP_CHANGE_PASSWORD": "change password ...",
 	"POPUP_CONTINUE": "continue anyway",
 	"POPUP_ROBOT_SYSTEM": "System",
-	"POPUP_DISPLAY_HEADER": "Output from your program",
 	"BUTTON_DO_SHARE": "Share",
 	"BUTTON_DO_UPLOAD_GALLERY": "Upload »$« to the gallery",
 	"BUTTON_EMPTY_LIST": "Empty list",
