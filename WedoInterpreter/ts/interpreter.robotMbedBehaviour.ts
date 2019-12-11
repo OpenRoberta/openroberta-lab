@@ -202,8 +202,11 @@ export class RobotMbedBehaviour extends ARobotBehaviour {
         this.hardwareState.motors[C.MOTOR_RIGHT] = speed;
         let rotations = distance / ( C.WHEEL_DIAMETER * Math.PI );
         let rotationPerSecond = C.MAX_ROTATION * Math.abs( speed ) / 100.0;
-        let duration = rotations / rotationPerSecond * 1000;
-        return duration;
+        if ( rotationPerSecond == 0.0 ) {
+            return 0;
+        } else {
+            return rotations / rotationPerSecond * 1000;
+        }
     }
 
     public curveAction( name: string, direction: string, speedL: number, speedR: number, distance: number ): number {
@@ -225,8 +228,11 @@ export class RobotMbedBehaviour extends ARobotBehaviour {
         let rotations = distance / ( C.WHEEL_DIAMETER * Math.PI );
         let avgSpeed = 0.5 * ( Math.abs( speedL ) + Math.abs( speedR ) )
         let rotationPerSecond = C.MAX_ROTATION * avgSpeed / 100.0;
-        let duration = rotations / rotationPerSecond * 1000;
-        return duration;
+        if ( rotationPerSecond == 0.0 ) {
+            return 0;
+        } else {
+            return rotations / rotationPerSecond * 1000;
+        }
     }
 
     public turnAction( name: string, direction: string, speed: number, angle: number ): number {
@@ -239,8 +245,11 @@ export class RobotMbedBehaviour extends ARobotBehaviour {
         this.setTurnSpeed( speed, direction );
         let rotations = C.TURN_RATIO * ( angle / 720. );
         let rotationPerSecond = C.MAX_ROTATION * Math.abs( speed ) / 100.0;
-        angle = rotations / rotationPerSecond * 1000;
-        return angle;
+        if ( rotationPerSecond == 0.0 ) {
+            return 0;
+        } else {
+            return rotations / rotationPerSecond * 1000;
+        }
     }
 
     private setTurnSpeed( speed: number, direction: string ): void {

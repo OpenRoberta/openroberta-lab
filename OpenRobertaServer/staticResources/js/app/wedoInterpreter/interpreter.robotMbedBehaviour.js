@@ -190,8 +190,12 @@ define(["require", "exports", "interpreter.aRobotBehaviour", "interpreter.consta
             this.hardwareState.motors[C.MOTOR_RIGHT] = speed;
             var rotations = distance / (C.WHEEL_DIAMETER * Math.PI);
             var rotationPerSecond = C.MAX_ROTATION * Math.abs(speed) / 100.0;
-            var duration = rotations / rotationPerSecond * 1000;
-            return duration;
+            if (rotationPerSecond == 0.0) {
+                return 0;
+            }
+            else {
+                return rotations / rotationPerSecond * 1000;
+            }
         };
         RobotMbedBehaviour.prototype.curveAction = function (name, direction, speedL, speedR, distance) {
             var robotText = 'robot: ' + name + ', direction: ' + direction;
@@ -211,8 +215,12 @@ define(["require", "exports", "interpreter.aRobotBehaviour", "interpreter.consta
             var rotations = distance / (C.WHEEL_DIAMETER * Math.PI);
             var avgSpeed = 0.5 * (Math.abs(speedL) + Math.abs(speedR));
             var rotationPerSecond = C.MAX_ROTATION * avgSpeed / 100.0;
-            var duration = rotations / rotationPerSecond * 1000;
-            return duration;
+            if (rotationPerSecond == 0.0) {
+                return 0;
+            }
+            else {
+                return rotations / rotationPerSecond * 1000;
+            }
         };
         RobotMbedBehaviour.prototype.turnAction = function (name, direction, speed, angle) {
             var robotText = 'robot: ' + name + ', direction: ' + direction;
@@ -224,8 +232,12 @@ define(["require", "exports", "interpreter.aRobotBehaviour", "interpreter.consta
             this.setTurnSpeed(speed, direction);
             var rotations = C.TURN_RATIO * (angle / 720.);
             var rotationPerSecond = C.MAX_ROTATION * Math.abs(speed) / 100.0;
-            angle = rotations / rotationPerSecond * 1000;
-            return angle;
+            if (rotationPerSecond == 0.0) {
+                return 0;
+            }
+            else {
+                return rotations / rotationPerSecond * 1000;
+            }
         };
         RobotMbedBehaviour.prototype.setTurnSpeed = function (speed, direction) {
             if (direction == C.LEFT) {
