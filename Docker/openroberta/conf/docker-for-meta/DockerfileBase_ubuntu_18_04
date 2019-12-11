@@ -27,7 +27,6 @@ RUN git config --global core.fileMode false && \
     git config --global user.name "Reinhard Budde"
 
 RUN apt-get install -y libusb-0.1-4 && \
-    apt-get install -y gcc-avr binutils-avr gdb-avr avr-libc avrdude && \
     apt-get install -y nbc && \
     apt-get install -y gcc-arm-none-eabi srecord libssl-dev && \
     apt-get install -y g++-arm-linux-gnueabi

@@ -75,13 +75,16 @@ public class RobotDownloadProgram {
                     filePath = this.pathToCrosscompilerBaseDir + token + "/" + programName + "/target";
                     break;
                 case "ardu":
-                case "bob3":
                 case "uno":
                 case "mega":
                 case "nano":
                 case "mbot":
                 case "unowifirev2":
                     fileName = programName + ".ino.hex";
+                    filePath = this.pathToCrosscompilerBaseDir + token + "/" + programName + "/target";
+                    break;
+                case "bob3":
+                    fileName = programName + ".hex";
                     filePath = this.pathToCrosscompilerBaseDir + token + "/" + programName + "/target";
                     break;
                 case "festobionic":

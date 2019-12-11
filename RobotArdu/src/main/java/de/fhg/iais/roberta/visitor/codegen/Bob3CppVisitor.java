@@ -135,14 +135,8 @@ public final class Bob3CppVisitor extends AbstractCommonArduinoCppVisitor implem
                 isListUsed = true;
             }
         }
-        if ( isListUsed ) {
-            this.sb.append("#include <ArduinoSTL.h>\n");
-            this.sb.append("#include <list>\n");
-        }
         this.sb.append("#include <math.h> \n");
-        this.sb.append("#include <BOB3.h> \n");
-        this.sb.append("#define _BOB3_INCLUDES\n");
-        this.sb.append("#include <NEPODefs.h>\n");
+        this.sb.append("#include \"bob3.h\" \n");
         this.sb.append("Bob3 rob;\n");
 
     }

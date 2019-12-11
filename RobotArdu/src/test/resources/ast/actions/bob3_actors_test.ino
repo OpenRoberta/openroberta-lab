@@ -1,7 +1,5 @@
 #include <math.h> 
-#include <BOB3.h> 
-#define _BOB3_INCLUDES
-#include <NEPODefs.h>
+#include "bob3.h"
 Bob3 rob;
 
     
