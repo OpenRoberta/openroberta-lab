@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Google Code in</title>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.15.5/dist/bootstrap-table.min.css">
+  </head>
+  <body>
+    <div id="toolbar">
+  <button id="button" class="btn btn-secondary">filterBy</button>
+    </div>
+    <table
+    id="table"
+    data-toggle="table"
+    data-toolbar="#toolbar"
+    >
+      <thead>
+        <tr>
+          <th >Robot ID</th>
+          <th>Robot Name</th>
+
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1</td>
+          <td>Ev3</td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td>Mbot</td>
+        </tr>
+        <tr>
+          <td> 3 </td>
+          <td> WeDO </td>
+        </tr>
+        <tr>
+          <td> 4</td>
+          <td> Nepo4Arduino</td>
+        </tr>
+        <tr>
+          <td> 5 </td>
+          <td> Bob3 </td>
+        </tr>
+        <tr>
+          <td> 5 </td>
+          <td> OpenRobertaSim</td>
+        </tr>
+        <tr>
+          <td> 6 </td>
+          <td> Micro:Bit </td>
+        </tr>
+        <tr>
+          <td> 7 </td>
+          <td> NAO </td>
+        </tr>
+        <tr>
+          <td> 8 </td>
+          <td> Calliope Mini </td>
+        </tr>
+        <tr>
+          <td> 9 </td>
+          <td> BotnRoll </td>
+        </tr>
+        <tr> 
+          <td> 10 </td>
+          <td> SenseBox </td>
+        </tr>
+
+
+      </tbody>
+    </table>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/bootstrap-table@1.15.5/dist/bootstrap-table.min.js"></script>
+    <script type="text/javascript">
+    var $table = $('#table')
+  $(function() {
+    $table.bootstrapTable({
+    sorting: true,
+    search: true,
+    columns: [{
+    title: 'id',
+    field: 'Robot ID'
+  }, {
+    title: 'name',
+    field: 'Robot Name'
+  }],
+  data: [{
+    id: 1,
+    name: 'Ev3'
+    }, 
+    {
+    id: 2,
+    name: 'Mbot'
+    },
+    {
+      id: 3,
+      name: 'WeDO'
+    },
+    {
+      id: 4,
+      name: 'Nepo4Arduino'
+    },
+    {
+      id: 5,
+      name: 'Bob3'
+    },
+    {
+      id: 6,
+      name: 'OpenRobertaSim'
+    },
+    {
+      id: 7,
+      name: 'NAO'
+    },
+    {
+      id: 8,
+      name: 'Calliope Mini'
+    },
+    {
+      id: 9,
+      name: 'BotnRoll'
+    },
+    {
+      id: 10,
+      name: 'SenseBox'
+    }
+  }]
+})
+  }
+  var $button = $('#button')
+
+  $(function() {
+    $button.click(function () {
+      $table.bootstrapTable('filterBy', {
+        id: 1
+      })
+    })
+  })
+    </script>
+  </body>
+</html>
