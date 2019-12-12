@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2019-12-12 14:54:00.689704",
+		"lastupdated": "2019-12-12 15:15:51.794725",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -1612,7 +1612,7 @@
 	"SENSOR_GPS_LATITUDE_GETSAMPLE_TOOLTIP_SENSEBOX": "Returns the latitude in degree.",
 	"SENSOR_GPS_LONGITUDE_GETSAMPLE_TOOLTIP_SENSEBOX": "Returns the longitude in degree.",
 	"SENSOR_GPS_ALTITUDE_GETSAMPLE_TOOLTIP_SENSEBOX": "Returns the altitude in meters.",
-	"SENSOR_GPS_SPEED_GETSAMPLE_TOOLTIP_SENSEBOX": "Returns the speed in m/s.",
+	"SENSOR_GPS_SPEED_GETSAMPLE_TOOLTIP_SENSEBOX": "Returns the speed in km/h.",
 	"SENSOR_GPS_DATE_GETSAMPLE_TOOLTIP_SENSEBOX": "Returns the current date.",
 	"SENSOR_GPS_TIME_GETSAMPLE_TOOLTIP_SENSEBOX": "Returns the current time.",
 	"MODE_LATITUDE": "latitude",
@@ -1622,5 +1622,5 @@
 	"MODE_DATE": "date",
 	"MODE_TIME": "time",
 	"SENSOR_UNIT_METER": "m",
-	"SENSOR_UNIT_SPEED": "m/s"
+	"SENSOR_UNIT_SPEED": "km/h"
 }
