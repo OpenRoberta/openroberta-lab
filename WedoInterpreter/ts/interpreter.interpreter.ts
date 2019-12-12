@@ -468,6 +468,16 @@ export class Interpreter {
                 s.push( arr );
                 break;
             }
+            case C.CREATE_LIST_REPEAT: {
+                const rep = s.pop();
+                const val = s.pop();
+                var arr = new Array();
+                for ( let i = 0; i < rep; i++ ) {
+                    arr[i] = val;
+                }
+                s.push( arr );
+                break;
+            }
 
             case C.BOOL_CONST:
                 s.push( expr[C.VALUE] );

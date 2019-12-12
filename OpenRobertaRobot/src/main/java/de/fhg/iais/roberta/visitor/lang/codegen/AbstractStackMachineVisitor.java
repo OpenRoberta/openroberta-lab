@@ -605,7 +605,9 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
 
     @Override
     public V visitListRepeat(ListRepeat<V> listRepeat) {
-        throw new DbcException("Operation not supported");
+        listRepeat.getParam().forEach(x -> x.accept(this));
+        JSONObject o = mk(C.EXPR).put(C.EXPR, C.CREATE_LIST_REPEAT);
+        return app(o);
     }
 
     @Override

@@ -38,6 +38,7 @@ public class C {
     public static final String CONTINUE = "continue";
     public static final String CREATE_DEBUG_ACTION = "CreateDebugAction";
     public static final String CREATE_LIST = "createList";
+    public static final String CREATE_LIST_REPEAT = "createListREPEAT";
     public static final String CREATE_LIST_WITH_ITEM = "createCreateListWithItem";
     public static final String CURVE_ACTION = "CurveAction";
     public static final String DEBUG_ACTION = "DebugAction";

@@ -36,6 +36,7 @@ export const COMPASS: string = "compass";
 export const CONTINUE: string = "continue";
 export const CREATE_DEBUG_ACTION: string = "CreateDebugAction";
 export const CREATE_LIST: string = "createList";
+export const CREATE_LIST_REPEAT: string = "createListREPEAT";
 export const CREATE_LIST_WITH_ITEM: string = "createCreateListWithItem";
 export const CURVE_ACTION: string = "CurveAction";
 export const DEBUG_ACTION: string = "DebugAction";

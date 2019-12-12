@@ -459,6 +459,16 @@ define(["require", "exports", "interpreter.state", "interpreter.constants", "int
                     s.push(arr);
                     break;
                 }
+                case C.CREATE_LIST_REPEAT: {
+                    var rep = s.pop();
+                    var val = s.pop();
+                    var arr = new Array();
+                    for (var i = 0; i < rep; i++) {
+                        arr[i] = val;
+                    }
+                    s.push(arr);
+                    break;
+                }
                 case C.BOOL_CONST:
                     s.push(expr[C.VALUE]);
                     break;

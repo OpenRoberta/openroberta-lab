@@ -38,6 +38,7 @@ define(["require", "exports"], function (require, exports) {
     exports.CONTINUE = "continue";
     exports.CREATE_DEBUG_ACTION = "CreateDebugAction";
     exports.CREATE_LIST = "createList";
+    exports.CREATE_LIST_REPEAT = "createListREPEAT";
     exports.CREATE_LIST_WITH_ITEM = "createCreateListWithItem";
     exports.CURVE_ACTION = "CurveAction";
     exports.DEBUG_ACTION = "DebugAction";
