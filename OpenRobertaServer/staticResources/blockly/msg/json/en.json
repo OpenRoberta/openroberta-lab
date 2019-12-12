@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2019-12-09 16:04:30.640734",
+		"lastupdated": "2019-12-12 14:54:00.689704",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -1606,5 +1606,21 @@
 	"SOURCE_CODE_EDITOR_PLACEHOLDER": "Import current NEPO program or just start typing",
 	"SOURCE_CODE_EDITOR_CLOSE_CONFIRMATION": "All your changes will be lost!",
 	"CLEAR": "clear",
-	"ACCELEROMETER_TOOLTIP": "Represents an accelerometer."
+	"ACCELEROMETER_TOOLTIP": "Represents an accelerometer.",
+	"GPS_TOOLTIP": "Represents a GPS receiver.",
+	"SENSOR_GPS_SENSEBOX": "GPS receiver",
+	"SENSOR_GPS_LATITUDE_GETSAMPLE_TOOLTIP_SENSEBOX": "Returns the latitude in degree.",
+	"SENSOR_GPS_LONGITUDE_GETSAMPLE_TOOLTIP_SENSEBOX": "Returns the longitude in degree.",
+	"SENSOR_GPS_ALTITUDE_GETSAMPLE_TOOLTIP_SENSEBOX": "Returns the altitude in meters.",
+	"SENSOR_GPS_SPEED_GETSAMPLE_TOOLTIP_SENSEBOX": "Returns the speed in m/s.",
+	"SENSOR_GPS_DATE_GETSAMPLE_TOOLTIP_SENSEBOX": "Returns the current date.",
+	"SENSOR_GPS_TIME_GETSAMPLE_TOOLTIP_SENSEBOX": "Returns the current time.",
+	"MODE_LATITUDE": "latitude",
+	"MODE_LONGITUDE": "longitude",
+	"MODE_ALTITUDE": "altitude",
+	"MODE_SPEED": "speed",
+	"MODE_DATE": "date",
+	"MODE_TIME": "time",
+	"SENSOR_UNIT_METER": "m",
+	"SENSOR_UNIT_SPEED": "m/s"
 }

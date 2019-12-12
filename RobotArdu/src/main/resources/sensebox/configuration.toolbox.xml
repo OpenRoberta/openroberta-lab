@@ -24,5 +24,6 @@
     <block type="robConf_temperature" />
     <block type="robConf_lightveml" />
     <block type="robConf_particle" />
+    <block type="robConf_gps" />
   </category>
 </toolbox_set>

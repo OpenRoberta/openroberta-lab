@@ -47,6 +47,7 @@ import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.VemlLightSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.VoltageSensor;
+import de.fhg.iais.roberta.syntax.sensors.arduino.sensebox.GpsSensor;
 import de.fhg.iais.roberta.util.Pair;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.visitor.hardware.IArduinoVisitor;
@@ -569,6 +570,13 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
         return null;
     }
 
+    @Override
+    public Void visitGpsSensor(GpsSensor<Void> gpsSensor) {
+        String mode = gpsSensor.getMode().substring(0, 1) + gpsSensor.getMode().substring(1).toLowerCase();
+        this.sb.append("_gps_").append(gpsSensor.getPort()).append(".get").append(mode).append("()");
+        return null;
+    }
+
     private void generateConfigurationSetup() {
         String bmx55PortName;
         for ( ConfigurationComponent usedConfigurationBlock : this.configuration.getConfigurationComponentsValues() ) {
@@ -765,7 +773,11 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
                             break;
                         }
                     }
-                    // no additional configuration needed:
+                case SC.GPS:
+                    this.sb.append("_gps_" + usedConfigurationBlock.getUserDefinedPortName() + ".begin();");
+                    nlIndent();
+                    break;
+                // no additional configuration needed:
                 case SC.ULTRASONIC:
                 case SC.POTENTIOMETER:
                 case SC.LIGHT:
@@ -928,6 +940,10 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
                 case SC.SENSEBOX_PLOTTING:
                 case SC.COMPASS:
                 case SC.GYRO:
+                    break;
+                case SC.GPS:
+                    this.sb.append("GPS _gps_" + cc.getUserDefinedPortName() + ";");
+                    nlIndent();
                     break;
                 case SC.PARTICLE:
                     for ( UsedSensor usedSensor : this.usedHardwareBean.getUsedSensors() ) {

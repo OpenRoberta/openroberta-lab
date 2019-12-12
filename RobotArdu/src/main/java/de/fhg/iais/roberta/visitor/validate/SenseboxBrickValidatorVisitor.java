@@ -25,6 +25,7 @@ import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.VemlLightSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.VoltageSensor;
+import de.fhg.iais.roberta.syntax.sensors.arduino.sensebox.GpsSensor;
 import de.fhg.iais.roberta.typecheck.NepoInfo;
 import de.fhg.iais.roberta.util.Pair;
 import de.fhg.iais.roberta.visitor.hardware.IArduinoVisitor;
@@ -227,6 +228,15 @@ public class SenseboxBrickValidatorVisitor extends AbstractBrickValidatorVisitor
     public Void visitParticleSensor(ParticleSensor<Void> particleSensor) {
         if ( !this.robotConfiguration.isComponentTypePresent(SC.PARTICLE) ) {
             particleSensor.addInfo(NepoInfo.error("CONFIGURATION_ERROR_ACTOR_MISSING"));
+            this.errorCount++;
+        }
+        return null;
+    }
+
+    @Override
+    public Void visitGpsSensor(GpsSensor<Void> gpsSensor) {
+        if ( !this.robotConfiguration.isComponentTypePresent(SC.GPS) ) {
+            gpsSensor.addInfo(NepoInfo.error("CONFIGURATION_ERROR_SENSOR_MISSING"));
             this.errorCount++;
         }
         return null;

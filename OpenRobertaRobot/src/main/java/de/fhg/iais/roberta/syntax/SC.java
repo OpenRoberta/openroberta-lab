@@ -117,4 +117,5 @@ public interface SC {
     String SENSEBOX_SDCARD = "SENSEBOX_SDCARD";
     String SENSEBOX_PLOTTING = "SENSEBOX_PLOTTING";
     String PARTICLE = "PARTICLE";
+    String GPS = "GPS";
 }

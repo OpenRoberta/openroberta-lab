@@ -20,6 +20,7 @@ import de.fhg.iais.roberta.syntax.sensor.generic.ParticleSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.PinGetValueSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.VemlLightSensor;
+import de.fhg.iais.roberta.syntax.sensors.arduino.sensebox.GpsSensor;
 import de.fhg.iais.roberta.visitor.hardware.IArduinoVisitor;
 
 /**
@@ -107,6 +108,12 @@ public final class SenseboxUsedHardwareCollectorVisitor extends AbstractUsedHard
     @Override
     public Void visitParticleSensor(ParticleSensor<Void> particleSensor) {
         this.builder.addUsedSensor(new UsedSensor(particleSensor.getPort(), SC.PARTICLE, particleSensor.getMode()));
+        return null;
+    }
+
+    @Override
+    public Void visitGpsSensor(GpsSensor<Void> gpsSensor) {
+        this.builder.addUsedSensor(new UsedSensor(gpsSensor.getPort(), SC.GPS, gpsSensor.getMode()));
         return null;
     }
 }

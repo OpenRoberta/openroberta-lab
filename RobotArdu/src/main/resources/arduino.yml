@@ -70,8 +70,42 @@ block:
       category: ACTOR
       implementor: de.fhg.iais.roberta.syntax.actors.arduino.sensebox.PlotClearAction
       type: [robactions_plot_clear]
+  GPS:
+      category: SENSOR
+      implementor: de.fhg.iais.roberta.syntax.sensors.arduino.sensebox.GpsSensor
+      type: [robSensors_gps_getSample]
 
 configuration:
   SENSEBOX: [robBrick_senseBox-Brick]
   SENSEBOX_SDCARD: [robConf_sdcard]
   SENSEBOX_PLOTTING: [robConf_plotting]
+  GPS: [robConf_gps]
+
+mode:
+  GPS: [LATITUDE, LONGITUDE, ALTITUDE, SPEED, DATE, TIME]
+
+wait:
+  GPS_LATITUDE:
+        implementor: de.fhg.iais.roberta.syntax.sensors.arduino.sensebox.GpsSensor
+        sensor: GPS
+        mode: LATITUDE
+  GPS_LONGITUDE:
+        implementor: de.fhg.iais.roberta.syntax.sensors.arduino.sensebox.GpsSensor
+        sensor: GPS
+        mode: LONGITUDE
+  GPS_ALTITUDE:
+        implementor: de.fhg.iais.roberta.syntax.sensors.arduino.sensebox.GpsSensor
+        sensor: GPS
+        mode: ALTITUDE
+  GPS_SPEED:
+        implementor: de.fhg.iais.roberta.syntax.sensors.arduino.sensebox.GpsSensor
+        sensor: GPS
+        mode: SPEED
+  GPS_DATE:
+        implementor: de.fhg.iais.roberta.syntax.sensors.arduino.sensebox.GpsSensor
+        sensor: GPS
+        mode: DATE
+  GPS_TIME:
+        implementor: de.fhg.iais.roberta.syntax.sensors.arduino.sensebox.GpsSensor
+        sensor: GPS
+        mode: TIME
