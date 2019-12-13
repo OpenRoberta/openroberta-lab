@@ -38,6 +38,12 @@ RUN wget http://de.archive.ubuntu.com/ubuntu/pool/universe/n/newlib/libnewlib-de
     dpkg -i libnewlib-dev_3.0.0.20180802-2_all.deb libnewlib-arm-none-eabi_3.0.0.20180802-2_all.deb && \
     rm libnewlib-dev_3.0.0.20180802-2_all.deb libnewlib-arm-none-eabi_3.0.0.20180802-2_all.deb
 
+RUN wget http://downloads.arduino.cc/tools/avr-gcc-7.3.0-atmel3.6.1-arduino5-x86_64-pc-linux-gnu.tar.bz2
+WORKDIR /opt/compiler
+RUN tar -xf /tmp/avr-gcc-7.3.0-atmel3.6.1-arduino5-x86_64-pc-linux-gnu.tar.bz2 && \
+    rm /tmp/avr-gcc-7.3.0-atmel3.6.1-arduino5-x86_64-pc-linux-gnu.tar.bz2
+ENV PATH="${PATH}:/opt/compiler/avr/bin"
+
 WORKDIR /opt/ora-cc-rsc/
 COPY ./ ./
 ENV robot_crosscompiler_resourcebase=/opt/ora-cc-rsc/
