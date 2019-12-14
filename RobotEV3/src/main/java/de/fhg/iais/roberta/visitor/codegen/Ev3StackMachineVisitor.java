@@ -17,6 +17,10 @@ import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.MotorDuration;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.SC;
+import de.fhg.iais.roberta.syntax.action.communication.BluetoothConnectAction;
+import de.fhg.iais.roberta.syntax.action.communication.BluetoothReceiveAction;
+import de.fhg.iais.roberta.syntax.action.communication.BluetoothSendAction;
+import de.fhg.iais.roberta.syntax.action.communication.BluetoothWaitForConnectionAction;
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
 import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
 import de.fhg.iais.roberta.syntax.action.ev3.ShowPictureAction;
@@ -466,5 +470,25 @@ public class Ev3StackMachineVisitor<V> extends AbstractStackMachineVisitor<V> im
             app(mk(C.EXPR).put(C.EXPR, C.NUM_CONST).put(C.VALUE, 0));
         }
     }
+    @Override
+    public V visitBluetoothReceiveAction(BluetoothReceiveAction<V> bluetoothReceiveAction) {
+        return null;
+    }
+
+    @Override
+    public V visitBluetoothConnectAction(BluetoothConnectAction<V> bluetoothConnectAction) {
+        return null;
+    }
+
+    @Override
+    public V visitBluetoothSendAction(BluetoothSendAction<V> bluetoothSendAction) {
+        return null;
+    }
+
+    @Override
+    public V visitBluetoothWaitForConnectionAction(BluetoothWaitForConnectionAction<V> bluetoothWaitForConnection) {
+        return null;
+    }
+
 
 }
