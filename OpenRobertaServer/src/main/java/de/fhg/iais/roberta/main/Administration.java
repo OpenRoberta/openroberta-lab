@@ -72,10 +72,10 @@ public class Administration {
             Administration adminWork = new Administration(args);
             adminWork.run();
         } catch ( Exception e ) {
-            LOG.error("exception in run method", e);
-            exitCode = 12;
+            Administration.LOG.error("exception in run method", e);
+            Administration.exitCode = 12;
         }
-        System.exit(exitCode);
+        System.exit(Administration.exitCode);
     }
 
     /**
@@ -90,13 +90,13 @@ public class Administration {
         String cmd = this.args[0];
         switch ( cmd ) {
             case "version":
-                println(version(false));
+                Administration.println(version(false));
                 return;
             case "version-for-db":
-                println(version(true));
+                Administration.println(version(true));
                 return;
             default:
-                LOG.info("*** " + cmd + " ***");
+                Administration.LOG.info("*** " + cmd + " ***");
         }
         switch ( cmd ) {
             case "create-empty-db":
@@ -164,7 +164,7 @@ public class Administration {
      * backup the database. Needs as arg parameter<br>
      * 1. the database URI (e.g. "jdbc:hsqldb:hsql://localhost/openroberta-db")<br>
      * 2. the base directory to store the backup into<br>
-     * &nbsp;&nbsp;&nbsp;a. if the db server is runing in a docker container, the path is probably "/opt/administration/dbBackup"<br>
+     * &nbsp;&nbsp;&nbsp;a. if the db server is running in a docker container, the path is probably "/opt/administration/dbBackup"<br>
      * &nbsp;&nbsp;&nbsp;b. otherwise the path is probably "./backup"<br>
      */
     private void dbBackup() {
@@ -183,7 +183,7 @@ public class Administration {
         String backupFileName = this.args[2] + "/dbBackup-" + now.format(formatter) + "-u" + users + "-p" + programs + ".tgz";
 
         dbExecutor.ddl("BACKUP DATABASE TO '" + backupFileName + "' NOT BLOCKING;");
-        LOG.info("backup succeeded for a database with " + users + " users and " + programs + " programs");
+        Administration.LOG.info("backup succeeded for a database with " + users + " users and " + programs + " programs");
 
         nativeSession.getTransaction().commit();
         nativeSession.close();
@@ -206,7 +206,7 @@ public class Administration {
         try {
             dbExecutor.ddl("SHUTDOWN;");
         } finally {
-            LOG.info("shutdown for a database with " + users + " registered users and " + programs + " stored programs");
+            Administration.LOG.info("shutdown for a database with " + users + " registered users and " + programs + " stored programs");
         }
     }
 
@@ -237,22 +237,22 @@ public class Administration {
                     List<Object> resultset = dbExecutor.select(sqlStmt);
                     for ( Object result : resultset ) {
                         if ( result instanceof Object[] ) {
-                            println(Arrays.toString((Object[]) result));
+                            Administration.println(Arrays.toString((Object[]) result));
                         } else if ( result == null ) {
-                            println(null);
+                            Administration.println(null);
                         } else {
-                            println(result.toString());
+                            Administration.println(result.toString());
                         }
                     }
                 } else {
                     // better execute NOT: dbExecutor.sqlStmt(sqlStmt);
-                    println("for safety reasons only SELECT statements are processed");
+                    Administration.println("for safety reasons only SELECT statements are processed");
                 }
             }
         } catch ( IOException e ) {
             // termination is OK, it's an sql client
         } finally {
-            LOG.info("sqlclient terminates");
+            Administration.LOG.info("sqlclient terminates");
         }
     }
 
@@ -265,19 +265,19 @@ public class Administration {
             nativeSession.beginTransaction();
             @SuppressWarnings("unchecked")
             List<Object[]> resultSet = nativeSession.createSQLQuery(sqlQuery).list(); //NOSONAR : no sql injection possible here. Dangerous sql of course :-)
-            LOG.info("result set has " + resultSet.size() + " rows");
+            Administration.LOG.info("result set has " + resultSet.size() + " rows");
             for ( Object object : resultSet ) {
                 if ( object instanceof Object[] ) {
-                    LOG.info(">>>  " + Arrays.toString((Object[]) object));
+                    Administration.LOG.info(">>>  " + Arrays.toString((Object[]) object));
                 } else {
-                    LOG.info(">>>  " + object.toString());
+                    Administration.LOG.info(">>>  " + object.toString());
                 }
             }
             nativeSession.getTransaction().rollback();
             nativeSession.close();
         } else {
             // better not: dbExecutor.sqlStmt(sqlQuery);
-            println("for safety reasons only SELECT statements is processed");
+            Administration.println("for safety reasons only SELECT statements is processed");
         }
 
     }
@@ -298,23 +298,23 @@ public class Administration {
         DbSession session = sessionFactory.getSession();
         ConfigurationDao configurationDao = new ConfigurationDao(session);
         List<Configuration> configurationList = configurationDao.loadAll();
-        LOG.info("Total configurations: " + configurationList.size());
+        Administration.LOG.info("Total configurations: " + configurationList.size());
         Set<String> hashSet = new HashSet<>();
         int unusedConfigCounter = 0;
         for ( Configuration configuration : configurationList ) {
             hashSet.add(configuration.getConfigurationHash());
         }
-        LOG.info("Total unique configurations: " + hashSet.size());
+        Administration.LOG.info("Total unique configurations: " + hashSet.size());
 
         List<ConfigurationData> configurationDataList = configurationDao.loadAllConfigurationData();
-        LOG.info("Total configuration data entries: " + configurationDataList.size());
+        Administration.LOG.info("Total configuration data entries: " + configurationDataList.size());
 
         for ( ConfigurationData configurationData : configurationDataList ) {
             if ( !hashSet.contains(configurationData.getConfigurationHash()) ) {
                 unusedConfigCounter += 1;
             }
         }
-        LOG.info("Amount of unused configurations: " + unusedConfigCounter);
+        Administration.LOG.info("Amount of unused configurations: " + unusedConfigCounter);
         // seek all unused configurations and destroy them
         String deleteUnusedConfigurationsSQL = "DELETE FROM ConfigurationData WHERE configurationHash NOT IN (SELECT configurationHash FROM Configuration)";
         session.createQuery(deleteUnusedConfigurationsSQL).executeUpdate();
@@ -349,13 +349,13 @@ public class Administration {
                 try {
                     program.setProgramText(checkedProgramText);
                 } catch ( NullPointerException e ) {
-                    LOG.error("Program text is empty!", program.getName());
+                    Administration.LOG.error("Program text is empty!", program.getName());
                 }
             }
         }
-        LOG.info("Total programs processed: " + totalProcessed);
-        LOG.info("Total programs descriptions: " + totalDescriptions);
-        LOG.info("Total programs different: " + totalDifferent);
+        Administration.LOG.info("Total programs processed: " + totalProcessed);
+        Administration.LOG.info("Total programs descriptions: " + totalDescriptions);
+        Administration.LOG.info("Total programs different: " + totalDifferent);
         session.commit();
         session.createSqlQuery("shutdown").executeUpdate();
     }

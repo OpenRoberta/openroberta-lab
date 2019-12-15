@@ -37,8 +37,8 @@ import de.fhg.iais.roberta.util.AliveData;
 import de.fhg.iais.roberta.util.Key;
 import de.fhg.iais.roberta.util.ServerProperties;
 import de.fhg.iais.roberta.util.Statistics;
-import de.fhg.iais.roberta.util.UtilForREST;
 import de.fhg.iais.roberta.util.Util;
+import de.fhg.iais.roberta.util.UtilForREST;
 
 @Path("/user")
 public class ClientUser {
@@ -63,7 +63,7 @@ public class ClientUser {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response command(@OraData HttpSessionState httpSessionState, @OraData DbSession dbSession, JSONObject fullRequest) throws Exception {
-        UtilForREST.handleRequestInit(httpSessionState, LOG, fullRequest);
+        UtilForREST.handleRequestInit(httpSessionState, ClientUser.LOG, fullRequest);
         Map<String, String> responseParameters = new HashMap<>();
         final int userId = httpSessionState.getUserId();
         JSONObject response = new JSONObject();
@@ -123,7 +123,7 @@ public class ClientUser {
                 httpSessionState.setUserClearDataKeepTokenAndRobotId(HttpSessionState.NO_USER);
                 response.put("rc", "ok");
                 response.put("message", Key.USER_LOGOUT_SUCCESS.getKey());
-                // failing isnt logged in the statistics
+                // failing isn't logged in the statistics
                 ClientUser.LOG.info("logout of user " + userId);
                 Statistics.info("UserLogout", "success", true);
             } else if ( cmd.equals("createUser") ) {
@@ -244,19 +244,19 @@ public class ClientUser {
             } else if ( cmd.equals("getStatusText") ) {
                 Timestamp timestamp = new Timestamp(System.currentTimeMillis());
                 Long current = timestamp.getTime() / 1000L;
-                if ( current > statusTextTimestamp ) {
-                    statusText[0] = "";
-                    statusText[1] = "";
+                if ( current > ClientUser.statusTextTimestamp ) {
+                    ClientUser.statusText[0] = "";
+                    ClientUser.statusText[1] = "";
                 }
-                JSONArray statusTextJSON = new JSONArray(Arrays.asList(statusText));
+                JSONArray statusTextJSON = new JSONArray(Arrays.asList(ClientUser.statusText));
                 response.put("statustext", statusTextJSON);
                 response.put("rc", "ok");
                 // Util.addResultInfo(response, up); // should not be necessary
 
             } else if ( cmd.equals("setStatusText") && userId == 1 ) {
-                statusText[0] = request.getString("english");
-                statusText[1] = request.getString("german");
-                statusTextTimestamp = request.getLong("timestamp");
+                ClientUser.statusText[0] = request.getString("english");
+                ClientUser.statusText[1] = request.getString("german");
+                ClientUser.statusTextTimestamp = request.getLong("timestamp");
                 response.put("rc", "ok");
             } else {
                 ClientUser.LOG.error("Invalid command: " + cmd);

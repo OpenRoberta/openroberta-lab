@@ -51,8 +51,8 @@ import de.fhg.iais.roberta.util.Key;
 import de.fhg.iais.roberta.util.Pair;
 import de.fhg.iais.roberta.util.ServerProperties;
 import de.fhg.iais.roberta.util.Statistics;
-import de.fhg.iais.roberta.util.UtilForREST;
 import de.fhg.iais.roberta.util.Util;
+import de.fhg.iais.roberta.util.UtilForREST;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import joptsimple.OptionParser;
 import joptsimple.OptionSet;
@@ -82,14 +82,14 @@ public class ServerStarter {
     /**
      * startup and shutdown of the server. See {@link ServerStarter}.
      *
-     * @param args a sequence of -d key=value and -D plugin:key=value for server resp. plugin proerty modifications
+     * @param args a sequence of -d key=value and -D plugin:key=value for server resp. plugin property modifications
      */
     public static void main(String[] args) throws Exception {
-        initLoggingBeforeFirstUse(args);
+        ServerStarter.initLoggingBeforeFirstUse(args);
 
         OptionParser parser = new OptionParser();
-        OptionSpec<String> serverDefineOpt = parser.acceptsAll(asList("d", "server-property")).withRequiredArg().ofType(String.class);
-        OptionSpec<String> pluginDefineOpt = parser.acceptsAll(asList("D", "plugin-property")).withRequiredArg().ofType(String.class);
+        OptionSpec<String> serverDefineOpt = parser.acceptsAll(ServerStarter.asList("d", "server-property")).withRequiredArg().ofType(String.class);
+        OptionSpec<String> pluginDefineOpt = parser.acceptsAll(ServerStarter.asList("D", "plugin-property")).withRequiredArg().ofType(String.class);
         OptionSet options = parser.parse(args);
         List<String> serverDefines = serverDefineOpt.values(options);
         List<String> pluginDefines = pluginDefineOpt.values(options);
@@ -102,7 +102,7 @@ public class ServerStarter {
             System.exit(0);
         } catch ( Exception e ) {
             Statistics.info("ServerStart", "success", false);
-            LOG.error("Exception during server startup. Server NOT started", e);
+            ServerStarter.LOG.error("Exception during server startup. Server NOT started", e);
             System.exit(12);
         }
     }
@@ -159,7 +159,7 @@ public class ServerStarter {
 
         // configure robot plugins
         RobotCommunicator robotCommunicator = new RobotCommunicator();
-        Map<String, IRobotFactory> robotPluginMap = configureRobotPlugins(robotCommunicator, this.serverProperties, pluginDefines);
+        Map<String, IRobotFactory> robotPluginMap = ServerStarter.configureRobotPlugins(robotCommunicator, this.serverProperties, pluginDefines);
         IIpToCountry ipToCountry = configureIpToCountryDb();
         RobertaGuiceServletConfig robertaGuiceServletConfig =
             new RobertaGuiceServletConfig(this.serverProperties, robotPluginMap, robotCommunicator, ipToCountry);
@@ -168,7 +168,7 @@ public class ServerStarter {
         ServletContextHandler restHttpHandler = new ServletContextHandler(ServletContextHandler.SESSIONS);
         restHttpHandler.setContextPath("/rest");
         restHttpHandler.setSessionHandler(new SessionHandler());
-        restHttpHandler.getSessionHandler().addEventListener(mkSessionListener(" for /rest REST endpoint"));
+        restHttpHandler.getSessionHandler().addEventListener(ServerStarter.mkSessionListener(" for /rest REST endpoint"));
         restHttpHandler.getSessionHandler().setMaxInactiveInterval(7200); // 2 hours, should be ok at least for schools :-)
         restHttpHandler.addEventListener(robertaGuiceServletConfig);
         restHttpHandler.addFilter(GuiceFilter.class, "/*", null);
@@ -233,7 +233,7 @@ public class ServerStarter {
 
         checkRobotPluginsDB(robotPluginMap.values());
         Runtime.getRuntime().addShutdownHook(new ShutdownHook("embedded".equals(this.serverProperties.getStringProperty("database.mode")), this.injector));
-        LOG.info("Shutdown hook added. If the server is gracefully stopped in the future, a shutdown message is logged");
+        ServerStarter.LOG.info("Shutdown hook added. If the server is gracefully stopped in the future, a shutdown message is logged");
         logTheNumberOfStoredPrograms();
 
         return server;
@@ -279,12 +279,12 @@ public class ServerStarter {
         String adminDir = ".";
         String logLevel = "INFO";
         for ( String serverDefine : args ) {
-            if ( serverDefine.startsWith(LOG_CONFIGFILE) ) {
-                configFile = extractValue(serverDefine.substring(LOG_CONFIGFILE.length()));
-            } else if ( serverDefine.startsWith(ADMIN_DIR_KEY) ) {
-                adminDir = extractValue(serverDefine.substring(ADMIN_DIR_KEY.length()));
-            } else if ( serverDefine.startsWith(LOG_LEVEL_KEY) ) {
-                logLevel = extractValue(serverDefine.substring(LOG_LEVEL_KEY.length()));
+            if ( serverDefine.startsWith(ServerStarter.LOG_CONFIGFILE) ) {
+                configFile = ServerStarter.extractValue(serverDefine.substring(ServerStarter.LOG_CONFIGFILE.length()));
+            } else if ( serverDefine.startsWith(ServerStarter.ADMIN_DIR_KEY) ) {
+                adminDir = ServerStarter.extractValue(serverDefine.substring(ServerStarter.ADMIN_DIR_KEY.length()));
+            } else if ( serverDefine.startsWith(ServerStarter.LOG_LEVEL_KEY) ) {
+                logLevel = ServerStarter.extractValue(serverDefine.substring(ServerStarter.LOG_LEVEL_KEY.length()));
             }
         }
         System.setProperty("ADMINISTRATION_DIR", adminDir);
@@ -294,10 +294,10 @@ public class ServerStarter {
         jc.setContext(context);
         context.reset();
         jc.doConfigure(ServerStarter.class.getResource(configFile));
-        LOG = LoggerFactory.getLogger(ServerStarter.class); // here the initialization occurs
-        LOG.info("log config resource used: " + configFile);
-        LOG.info("admin directory: " + adminDir);
-        LOG.info("root logging level: " + logLevel);
+        ServerStarter.LOG = LoggerFactory.getLogger(ServerStarter.class); // here the initialization occurs
+        ServerStarter.LOG.info("log config resource used: " + configFile);
+        ServerStarter.LOG.info("admin directory: " + adminDir);
+        ServerStarter.LOG.info("root logging level: " + logLevel);
     }
 
     /**
@@ -330,7 +330,7 @@ public class ServerStarter {
         for ( String pluginName : robotWhitelist ) {
             sb.append(pluginName).append(" ");
         }
-        LOG.info(sb.toString());
+        ServerStarter.LOG.info(sb.toString());
         return robotPlugins;
     }
 
@@ -402,7 +402,7 @@ public class ServerStarter {
             }
             session.close();
         } catch ( Exception e ) {
-            LOG.error("Server could not check robot names in the database (exit 20)", e);
+            ServerStarter.LOG.error("Server could not check robot names in the database (exit 20)", e);
             System.exit(20);
         }
     }
@@ -411,7 +411,7 @@ public class ServerStarter {
         final HttpSessionListener listener = new HttpSessionListener() {
             @Override
             public void sessionCreated(HttpSessionEvent se) {
-                LOG.info("jetty session created " + messageDetail);
+                ServerStarter.LOG.info("jetty session created " + messageDetail);
             }
 
             @Override
@@ -434,7 +434,7 @@ public class ServerStarter {
                         }
                     }
                 }
-                LOG.info("jetty session destroyed " + messageDetail + ". " + messageSuffix);
+                ServerStarter.LOG.info("jetty session destroyed " + messageDetail + ". " + messageSuffix);
                 Statistics.info("SessionDestroy", "sessionId", (int) sessionNumber, "success", true);
             }
         };
