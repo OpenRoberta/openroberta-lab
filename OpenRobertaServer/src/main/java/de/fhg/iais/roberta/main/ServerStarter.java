@@ -51,8 +51,8 @@ import de.fhg.iais.roberta.util.Key;
 import de.fhg.iais.roberta.util.Pair;
 import de.fhg.iais.roberta.util.ServerProperties;
 import de.fhg.iais.roberta.util.Statistics;
-import de.fhg.iais.roberta.util.UtilForREST;
 import de.fhg.iais.roberta.util.Util;
+import de.fhg.iais.roberta.util.UtilForREST;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import joptsimple.OptionParser;
 import joptsimple.OptionSet;
@@ -82,7 +82,7 @@ public class ServerStarter {
     /**
      * startup and shutdown of the server. See {@link ServerStarter}.
      *
-     * @param args a sequence of -d key=value and -D plugin:key=value for server resp. plugin proerty modifications
+     * @param args a sequence of -d key=value and -D plugin:key=value for server resp. plugin property modifications
      */
     public static void main(String[] args) throws Exception {
         initLoggingBeforeFirstUse(args);
