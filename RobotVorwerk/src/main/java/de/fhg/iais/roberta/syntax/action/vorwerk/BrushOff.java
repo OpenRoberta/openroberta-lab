@@ -12,7 +12,7 @@ import de.fhg.iais.roberta.transformer.Ast2JaxbHelper;
 import de.fhg.iais.roberta.visitor.IVisitor;
 import de.fhg.iais.roberta.visitor.hardware.IVorwerkVisitor;
 
-/**
+/*
  * This class represents the <b>vorwerkActions_brush_off</b> block from Blockly into the AST (abstract syntax tree). Object from this class will generate code
  * for applying a posture<br/>
  * <br/>
@@ -25,7 +25,7 @@ public final class BrushOff<V> extends Action<V> {
         setReadOnly();
     }
 
-    /**
+    /*
      * Creates instance of {@link BrushOff}. This instance is read only and can not be modified.
      *
      * @param speed {@link Expr} speed of the brush,
