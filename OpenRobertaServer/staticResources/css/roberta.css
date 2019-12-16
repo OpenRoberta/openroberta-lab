@@ -1804,65 +1804,10 @@ img.img-responsive {
 .enjoyhint_close_btn:active, .enjoyhint_close_btn:hover{
      background: #C7D92B;
 }
-
-#cookieDisclaimer {
-	position: fixed;
-	left: 0;
-	right: 216px;
-	bottom: 0;
-	z-index: 2999;
-	padding: 16px;
-	background-color: #fff;
-	border: 1px solid #d8d8d8;
-	transition: transform .25s ease-in-out;
-}
-
-#cookieDisclaimer.accepted {
-	transform: translate(0, 100%);
-}
-
-
-#cookieDisclaimer > span,
-#cookieDisclaimer > .ok-button {
-	display: inline-block !important;
-	vertical-align: middle;
-}
-
-#cookieDisclaimer > span {
-	width: 80%;
-	width: calc(100% - 5em);
-	padding-right: 16px;
-}
-
-#cookieDisclaimer > .ok-button {
-	margin-right: 0;
-}
-
-#cookieDisclaimer > .no-button {
-	position: absolute;
-	top: 0;
-	right: 0;
-	padding: 0 6px;
-	font-size: 28px;
-}
-
-.cookies-enabled.cookie-hide,
-.cookies-disabled:not(.cookie-show) {
-	display: none;
-}
-
-@media (max-width: 40em), (max-width: 640px) {
-	#cookieDisclaimer {
-		right: 0;
-	}
-}
 @media print {
 	div#show-startup-message {
         display: none !important;
     }
-    div#cookieDisclaimer {
-        display: none;
-    }	
 	svg.blocklySvg {
         overflow: visible;
     }	

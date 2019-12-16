@@ -55,7 +55,6 @@ require.config({
         'user.model' : '../app/roberta/models/user.model',
         'rest.robot' : '../app/roberta/rest/robot',
         'socket.controller' : '../app/roberta/controller/socket.controller',
-        'cookieDisclaimer.controller' : '../app/roberta/controller/cookieDisclaimer.controller',
         'webview.controller' : '../app/roberta/controller/webview.controller',
         'wedo.model' : '../app/roberta/models/wedo.model',
         
@@ -125,7 +124,7 @@ require.config({
 });
 
 require([ 'require', 'wrap', 'log', 'jquery', 'jquery-cookie', 'guiState.controller', 'progList.controller', 'logList.controller', 'confList.controller',
-        'progDelete.controller', 'confDelete.controller', 'progShare.controller', 'cookieDisclaimer.controller', 'menu.controller', 'multSim.controller',
+        'progDelete.controller', 'confDelete.controller', 'progShare.controller', 'menu.controller', 'multSim.controller',
         'user.controller', 'robot.controller', 'program.controller', 'progSim.controller', 'progCode.controller', 'progDelete.controller',
         'progHelp.controller', 'legal.controller', 'progInfo.controller', 'progRun.controller', 'configuration.controller', 'language.controller', 'socket.controller',
         'progTutorial.controller', 'tutorialList.controller', 'volume-meter', 'user.model', 'webview.controller', 'sourceCodeEditor.controller', 'codeflask' ], function(require) {
@@ -139,7 +138,6 @@ require([ 'require', 'wrap', 'log', 'jquery', 'jquery-cookie', 'guiState.control
     guiStateController = require('guiState.controller');
     languageController = require('language.controller');
     logListController = require('logList.controller');
-    cookieDisclaimer = require('cookieDisclaimer.controller');
     menuController = require('menu.controller');
     multSimController = require('multSim.controller');
     progDeleteController = require('progDelete.controller');
@@ -201,18 +199,17 @@ function init() {
         menuController.init();
         tutorialController.init();
 
-        cookieDisclaimer.init();
+        // immediately remove old cookies TODO remove this and jquery-cookie after 30 days
+        var cookies = $.cookie();
+        for (var cookie in cookies) {
+            if (cookies.hasOwnProperty(cookie)) {
+                $.removeCookie(cookie);
+            }
+        }
+
         $(".cover").fadeOut(100, function() {
             if (!guiStateController.getStartWithoutPopup()) {
-                if (guiStateController.noCookie()) {
-                    $("#show-startup-message").modal("show");
-                } else {
-                    userModel.getStatusText(function(result) {
-                        if (result.statustext[0] !== "" && result.statustext[1] !== "") {
-                            $('#modal-statustext').modal("show");
-                        }
-                    });
-                }
+                $("#show-startup-message").modal("show");
             }
         });
 

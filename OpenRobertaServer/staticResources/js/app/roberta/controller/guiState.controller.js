@@ -16,18 +16,13 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'progHelp.contro
                 });
 
             }
-            var cookieName = "OpenRoberta_" + GUISTATE.server.version;
-
-            if ($.cookie(cookieName)) {
-                GUISTATE.gui.cookie = $.cookie(cookieName);
-            }
 
             GUISTATE.gui.view = 'tabProgram';
             GUISTATE.gui.prevView = 'tabProgram';
             GUISTATE.gui.language = language;
             GUISTATE.gui.startWithoutPopup = false;
 
-            GUISTATE.gui.robot = GUISTATE.gui.cookie || GUISTATE.server.defaultRobot;
+            GUISTATE.gui.robot = GUISTATE.server.defaultRobot;
             GUISTATE.gui.defaultRobot = GUISTATE.server.defaultRobot;
 
             GUISTATE.user.id = -1;
@@ -877,11 +872,6 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'progHelp.contro
         return GUISTATE.gui.configuration.conf;
     }
     exports.getConfigurationConf = getConfigurationConf;
-
-    function noCookie() {
-        return !GUISTATE.gui.cookie;
-    }
-    exports.noCookie = noCookie;
 
     function getStartWithoutPopup() {
         return GUISTATE.gui.startWithoutPopup;

@@ -1083,6 +1083,7 @@ Blockly.Msg.POPUP_CONFIRM_DELETE_PROGRAM = "Vil du virkeligt slette programmet ?
 Blockly.Msg.POPUP_CONFIRM_DELETE_USER_GROUP = "Do you really want to remove these users below from the current group?";  // untranslated
 Blockly.Msg.POPUP_CONFIRM_UPDATE_FIRMWARE = "Der er en ny software opdatering til din robot. Du kan forsøge at køre programmer med den gamle version, men det anbefales at du opdaterer din robot nu! Klik >>Opdater nu<< og genstart din robot bagefter.";
 Blockly.Msg.POPUP_CONTINUE = "continue anyway";
+Blockly.Msg.POPUP_CREATE_BOOKMARK = "Create a bookmark now to save your robot selection!";  // untranslated
 Blockly.Msg.POPUP_DISPLAY_HEADER = "output of your program";  // untranslated
 Blockly.Msg.POPUP_DOWNLOAD = "Download your program to »$«";  // untranslated
 Blockly.Msg.POPUP_DOWNLOAD_CHECK = "Okay, I've changed the download folder of my browser permanently. Don't show this popup again and download my programs directly.";  // untranslated

@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2019-12-27 11:01:54.883415",
+		"lastupdated": "2019-12-30 12:09:49.179017",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -723,7 +723,7 @@
 	"POPUP_ATTENTION": "Attention",
 	"POPUP_VALUE": "Value",
 	"POPUP_STARTUP_HELP": "Do you need help?",
-	"POPUP_STARTUP_HIDE": "Okay, don't show this window again and remember my choice.",
+	"POPUP_STARTUP_HIDE": "Okay, don't show this window again and remember my choice with a bookmark.",
 	"POPUP_STARTUP_COOKIES": "We use cookies to personalise content and to analyse our traffic.",
 	"POPUP_CANCEL": "Cancel",
 	"POPUP_ROBOT_NAME": "Name",
@@ -1609,6 +1609,7 @@
 	"SOURCE_CODE_EDITOR_CLOSE_CONFIRMATION": "All your changes will be lost!",
 	"CLEAR": "clear",
 	"ACCELEROMETER_TOOLTIP": "Represents an accelerometer.",
+	"POPUP_CREATE_BOOKMARK": "Create a bookmark now to save your robot selection!",
 	"GPS_TOOLTIP": "Represents a GPS receiver.",
 	"SENSOR_GPS_SENSEBOX": "GPS receiver",
 	"SENSOR_GPS_LATITUDE_GETSAMPLE_TOOLTIP_SENSEBOX": "Returns the latitude in degree.",

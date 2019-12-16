@@ -1,10 +1,66 @@
 define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socket.controller', 'user.controller', 'user.model', 'guiState.controller',
-        'cookieDisclaimer.controller', 'program.controller', 'program.model', 'multSim.controller', 'progRun.controller', 'configuration.controller',
+        'program.controller', 'program.model', 'multSim.controller', 'progRun.controller', 'configuration.controller',
         'import.controller', 'enjoyHint', 'tour.controller', 'simulation.simulation', 'progList.model', 'jquery', 'blocks', 'slick' ], function(exports, LOG,
-        UTIL, MSG, COMM, ROBOT_C, SOCKET_C, USER_C, USER, GUISTATE_C, CookieDisclaimer, PROGRAM_C, PROGRAM_M, MULT_SIM, RUN_C, CONFIGURATION_C, IMPORT_C,
+        UTIL, MSG, COMM, ROBOT_C, SOCKET_C, USER_C, USER, GUISTATE_C, PROGRAM_C, PROGRAM_M, MULT_SIM, RUN_C, CONFIGURATION_C, IMPORT_C,
         EnjoyHint, TOUR_C, SIM, PROGLIST, $, Blockly) {
 
     var n = 0;
+    
+    const QUERY_START = '?';
+    const QUERY_DELIMITER = '&';
+    const QUERY_ASSIGNMENT = '=';
+    const LOAD_SYSTEM_CALL = 'loadSystem';
+
+    function cleanUri() {
+        var uri = window.location.toString();
+        var clean_uri = uri.substring(0, uri.lastIndexOf("/"));
+        window.history.replaceState({}, document.title, clean_uri);
+    }
+
+    // from https://stackoverflow.com/questions/19491336/get-url-parameter-jquery-or-how-to-get-query-string-values-in-js/21903119#21903119
+    function getUrlParameter(sParam) {
+        var sPageURL = window.location.search.substring(1),
+            sURLVariables = sPageURL.split(QUERY_DELIMITER),
+            sParameterName,
+            i;
+
+        for (i = 0; i < sURLVariables.length; i++) {
+            sParameterName = sURLVariables[i].split(QUERY_ASSIGNMENT);
+
+            if (sParameterName[0] === sParam) {
+                return sParameterName[1] === undefined ? true : decodeURIComponent(sParameterName[1]);
+            }
+        }
+    }
+
+    function handleQuery() {
+        // old style queries
+        var target = decodeURI(document.location.hash).split("&&");
+        if (target[0] === "#forgotPassword") {
+            USER_C.showResetPassword(target[1]);
+        } else if (target[0] === "#loadProgram" && target.length >= 4) {
+            GUISTATE_C.setStartWithoutPopup();
+            IMPORT_C.openProgramFromXML(target);
+        } else if (target[0] === "#activateAccount") {
+            USER_C.activateAccount(target[1]);
+        } else if (target[0] === "#overview") {
+            GUISTATE_C.setStartWithoutPopup();
+            TOUR_C.start('overview');
+        } else if (target[0] === "#gallery") {
+            GUISTATE_C.setStartWithoutPopup();
+            $('#tabGalleryList').click();
+        } else if (target[0] === "#loadSystem" && target.length >= 2) {
+            GUISTATE_C.setStartWithoutPopup();
+            ROBOT_C.switchRobot(target[1], true);
+        }
+
+        // new style queries
+        var loadSystem = getUrlParameter(LOAD_SYSTEM_CALL);
+        if (loadSystem) {
+            GUISTATE_C.setStartWithoutPopup();
+            ROBOT_C.switchRobot(loadSystem, true);
+        }
+    }
 
     function init() {
         initMenu();
@@ -27,29 +83,8 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
         pingServer();
         LOG.info('init menu view');
 
-        var target = decodeURI(document.location.hash).split("&&");
-        if (target[0] === "#forgotPassword") {
-            USER_C.showResetPassword(target[1]);
-        } else if (target[0] === "#loadProgram" && target.length >= 4) {
-            GUISTATE_C.setStartWithoutPopup();
-            IMPORT_C.openProgramFromXML(target);
-        } else if (target[0] === "#activateAccount") {
-            USER_C.activateAccount(target[1]);
-        } else if (target[0] === "#overview") {
-            GUISTATE_C.setStartWithoutPopup();
-            TOUR_C.start('overview');
-        } else if (target[0] === "#gallery") {
-            GUISTATE_C.setStartWithoutPopup();
-            $('#tabGalleryList').click();
-        } else if (target[0] === "#loadSystem" && target.length >= 2) {
-            GUISTATE_C.setStartWithoutPopup();
-            ROBOT_C.switchRobot(target[1], true);
-        }
-        var uri = window.location.toString();
-        if (uri.indexOf("#") > 0) {
-            var clean_uri = uri.substring(0, uri.indexOf("#"));
-            window.history.replaceState({}, document.title, clean_uri);
-        }
+        handleQuery();
+        cleanUri();
 
         var firsttime = true
         $('#show-startup-message').on('shown.bs.modal', function(e) {
@@ -406,9 +441,6 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
             $('.modal').modal('hide'); // close all opened popups
             var domId = event.target.id;
             if (domId === 'menuShowStart') { // Submenu 'Help'
-                if (!GUISTATE_C.noCookie()) {
-                    $('#checkbox_id').prop('checked', true);
-                }
                 $("#show-startup-message").modal("show");
             } else if (domId === 'menuAbout') { // Submenu 'Help'
                 $("#version").text(GUISTATE_C.getServerVersion());
@@ -514,9 +546,6 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
         });
 
         $('#img-nepo').onWrap('click', function() {
-            if (!GUISTATE_C.noCookie()) {
-                $('#checkbox_id').prop('checked', true);
-            }
             $("#show-startup-message").modal("show");
         }, 'logo was clicked');
 
@@ -594,24 +623,21 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
                         $('#startPopupBack').removeClass('hidden');
                         return;
                     } else {
-                        ROBOT_C.switchRobot(choosenRobotType, true);
+                        if ($('#checkbox_id').is(':checked')) {
+                            var uri = window.location.toString();
+                            uri += QUERY_START + LOAD_SYSTEM_CALL + QUERY_ASSIGNMENT + choosenRobotType;
+                            window.history.replaceState({}, document.title, uri);
+
+                            $('#show-message').one('hidden.bs.modal', function(e) {
+                                e.preventDefault();
+                                cleanUri();
+                                ROBOT_C.switchRobot(choosenRobotType, true);
+                            });
+                            MSG.displayMessage("POPUP_CREATE_BOOKMARK", "POPUP", "");
+                        } else {
+                            ROBOT_C.switchRobot(choosenRobotType, true);
+                        }
                     }
-                }
-
-                var cookieName = "OpenRoberta_" + GUISTATE_C.getServerVersion();
-
-                if ($('#checkbox_id').is(':checked')) {
-
-                    var cookieSettings = {
-                        expires : 99,
-                        secure : GUISTATE_C.isPublicServerVersion(),
-                        domain : ''
-                    };
-
-                    CookieDisclaimer.saveCookie(cookieName, choosenRobotType, cookieSettings);
-
-                } else {
-                    $.removeCookie(cookieName);
                 }
 
                 $('#show-startup-message').modal('hide');

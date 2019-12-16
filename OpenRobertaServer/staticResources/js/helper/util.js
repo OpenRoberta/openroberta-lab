@@ -4,33 +4,6 @@ define([ 'exports', 'message', 'log', 'jquery', 'jquery-validate', 'bootstrap' ]
 
     var ratioWorkspace = 1;
     /**
-     * Set cookie
-     * 
-     * @param {key}
-     *            Key of the cookie
-     * @param {value}
-     *            Value of the cookie
-     */
-    function setCookie(key, value) {
-        var expires = new Date();
-        expires.setTime(expires.getTime() + (30 * 24 * 60 * 60 * 1000));
-        document.cookie = key + '=' + value + ';expires=' + expires.toUTCString();
-    }
-    exports.setCookie = setCookie;
-
-    /**
-     * Get cookie
-     * 
-     * @param {key}
-     *            Key of the cookie to read
-     */
-    function getCookie(key) {
-        var keyValue = document.cookie.match('(^|;) ?' + key + '=([^;]*)(;|$)');
-        return keyValue ? keyValue[2] : null;
-    }
-    exports.getCookie = getCookie;
-
-    /**
      * Decode base64 string to array of bytes
      * 
      * @param b64string

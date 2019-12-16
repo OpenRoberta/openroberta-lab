@@ -1083,6 +1083,7 @@ Blockly.Msg.POPUP_CONFIRM_DELETE_PROGRAM = "是否確實要刪除以下程式或
 Blockly.Msg.POPUP_CONFIRM_DELETE_USER_GROUP = "是否確實要從當前群組中刪除這些使用者？";
 Blockly.Msg.POPUP_CONFIRM_UPDATE_FIRMWARE = "有一個新的韌體版本為您的機器人可用。您可以嘗試使用舊版本運行程式, 但最好的辦法是立即更新您的機器人!你只需點擊»立即更新«。";
 Blockly.Msg.POPUP_CONTINUE = "無論如何繼續";
+Blockly.Msg.POPUP_CREATE_BOOKMARK = "Create a bookmark now to save your robot selection!";  // untranslated
 Blockly.Msg.POPUP_DISPLAY_HEADER = "從程式輸出";
 Blockly.Msg.POPUP_DOWNLOAD = "下載您的程式»$«";
 Blockly.Msg.POPUP_DOWNLOAD_CHECK = "好的, 我已永久更改了瀏覽器的下載資料夾。不要再次顯示此彈出式功能表並直接下載我的程式。";

@@ -1083,6 +1083,7 @@ Blockly.Msg.POPUP_CONFIRM_DELETE_PROGRAM = "Esti sigur ca vrei sa stergi program
 Blockly.Msg.POPUP_CONFIRM_DELETE_USER_GROUP = "Esti sigur ca vrei sa stergi persoanele de mai jos din grup?";
 Blockly.Msg.POPUP_CONFIRM_UPDATE_FIRMWARE = "Exista o versiune noua de firmware disponibila pentru robotul tau. Pot sa rulezi programele in versiunea veche, dar este mai bine sa iti actualizezi robotul acum! Trebuie sa apesi >>Actualizeaza acum<<.";
 Blockly.Msg.POPUP_CONTINUE = "continua oricum";
+Blockly.Msg.POPUP_CREATE_BOOKMARK = "Create a bookmark now to save your robot selection!";  // untranslated
 Blockly.Msg.POPUP_DISPLAY_HEADER = "Ce returneaza programul tau";
 Blockly.Msg.POPUP_DOWNLOAD = "Salveaza programul in";
 Blockly.Msg.POPUP_DOWNLOAD_CHECK = "Okay, am schimbat folderul de descarcare din broeser permanent. Nu mai arata acest popup si salveaza-mi programele direct.";
