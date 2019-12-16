@@ -173,11 +173,12 @@ export class Interpreter {
                         const name = stmt[C.NAME];
                         const port = stmt[C.PORT];
                         const durationType = stmt[C.MOTOR_DURATION];
-                        if ( durationType === C.DEGREE ) {
-                            duration /= 360.0
-                        } else if ( durationType === C.DEGREE || durationType === C.DISTANCE ) {
+                        if ( durationType === C.DEGREE || durationType === C.DISTANCE || durationType === C.ROTATIONS ) {
                             let rotationPerSecond = C.MAX_ROTATION * Math.abs( speed ) / 100.0;
                             duration = duration / rotationPerSecond * 1000;
+                            if ( durationType === C.DEGREE ) {
+                                duration /= 360.0;
+                            }
                         }
                         n.motorOnAction( name, port, duration, speed );
                         return duration;
