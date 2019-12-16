@@ -8,9 +8,9 @@
  */
 
 define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 'simulation.constants', 'util', 'program.controller',
-    'interpreter.interpreter', 'interpreter.robotMbedBehaviour', 'simulation.constants', 'jquery'
+    'interpreter.interpreter', 'interpreter.robotMbedBehaviour', 'volume-meter', 'simulation.constants', 'jquery'
 ], function(exports, Scene, SIMATH, ROBERTA_PROGRAM, CONST, UTIL, PROGRAM_C,
-    SIM_I, MBED_R, C, $) {
+    SIM_I, MBED_R, Volume, C, $) {
 
     var interpreters;
     var scene;
@@ -115,6 +115,37 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
         return currentBackground;
     }
     exports.getBackground = getBackground;
+
+    function initMicrophone(robot) {
+        if (navigator.mediaDevices === undefined) {
+            navigator.mediaDevices = {};
+        }
+        navigator.mediaDevices.getUserMedia = navigator.mediaDevices.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
+
+        try {
+            // ask for an audio input
+            navigator.mediaDevices.getUserMedia({
+                "audio" : {
+                    "mandatory" : {
+                        "googEchoCancellation" : "false",
+                        "googAutoGainControl" : "false",
+                        "googNoiseSuppression" : "false",
+                        "googHighpassFilter" : "false"
+                    },
+                    "optional" : []
+                },
+            }).then(function(stream) {
+                var mediaStreamSource = robot.webAudio.context.createMediaStreamSource(stream);
+                robot.sound = Volume.createAudioMeter(robot.webAudio.context);
+                mediaStreamSource.connect(robot.sound);
+            }, function() {
+                console.log("Sorry, but there is no microphone available on your system");
+            });
+        } catch ( e ) {
+            console.log("Sorry, but there is no microphone available on your system");
+        }
+    }
+    exports.initMicrophone = initMicrophone;
 
     var time;
     var renderTime = 5; // approx. time in ms only for the first rendering

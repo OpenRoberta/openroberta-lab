@@ -1,4 +1,4 @@
-define([ 'simulation.simulation', 'simulation.robot.mbed', 'volume-meter' ], function(SIM, Mbed, Volume) {
+define([ 'simulation.simulation', 'simulation.robot.mbed' ], function(SIM, Mbed) {
 
     /**
      * Creates a new Calliope device for a simulation.
@@ -227,33 +227,7 @@ define([ 'simulation.simulation', 'simulation.robot.mbed', 'volume-meter' ], fun
             touched : false,
             draw : that.pin0.draw
         };
-        if (navigator.mediaDevices === undefined) {
-            navigator.mediaDevices = {};
-        }
-        navigator.mediaDevices.getUserMedia = navigator.mediaDevices.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
-
-        try {
-            // ask for an audio input
-            navigator.mediaDevices.getUserMedia({
-                "audio" : {
-                    "mandatory" : {
-                        "googEchoCancellation" : "false",
-                        "googAutoGainControl" : "false",
-                        "googNoiseSuppression" : "false",
-                        "googHighpassFilter" : "false"
-                    },
-                    "optional" : []
-                },
-            }).then(function(stream) {
-                var mediaStreamSource = that.webAudio.context.createMediaStreamSource(stream);
-                that.sound = Volume.createAudioMeter(that.webAudio.context);
-                mediaStreamSource.connect(that.sound);
-            }, function() {
-                console.log("Sorry, but there is no microphone available on your system");
-            });
-        } catch ( e ) {
-            console.log("Sorry, but there is no microphone available on your system");
-        }
+        SIM.initMicrophone(this);
     }
 
     Calliope.prototype = Object.create(Mbed.prototype);

@@ -1,4 +1,4 @@
-define([ 'simulation.simulation', 'interpreter.constants', 'simulation.robot.ev3', 'volume-meter' ], function(SIM, C, Ev3, Volume) {
+define([ 'simulation.simulation', 'interpreter.constants', 'simulation.robot.ev3' ], function(SIM, C, Ev3) {
 
     /**
      * Creates a new robot for a simulation.
@@ -68,29 +68,7 @@ define([ 'simulation.simulation', 'interpreter.constants', 'simulation.robot.ev3
         this.timer = {
             timer1 : false
         };
-        if (navigator.mediaDevices === undefined) {
-            navigator.mediaDevices = {};
-        }
-        navigator.mediaDevices.getUserMedia = navigator.mediaDevices.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
-
-        // ask for an audio input  
-        navigator.mediaDevices.getUserMedia({
-            "audio" : {
-                "mandatory" : {
-                    "googEchoCancellation" : "false",
-                    "googAutoGainControl" : "false",
-                    "googNoiseSuppression" : "false",
-                    "googHighpassFilter" : "false"
-                },
-                "optional" : []
-            },
-        }).then(function(stream) {
-            var mediaStreamSource = that.webAudio.context.createMediaStreamSource(stream);
-            that.sound = Volume.createAudioMeter(that.webAudio.context);
-            mediaStreamSource.connect(that.sound);
-        }, function() {
-            console.log("Sorry, but there is no microphone available on your system");
-        });
+        SIM.initMicrophone(this);
     }
 
     Nxt.prototype = Object.create(Ev3.prototype);
