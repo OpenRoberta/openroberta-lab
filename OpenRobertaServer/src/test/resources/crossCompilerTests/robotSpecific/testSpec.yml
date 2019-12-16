@@ -24,13 +24,10 @@ robots:
         dir: ardu
         suffix: ".ino"
     unowifirev2:
-        dir: ardu
+        dir: unowifirev2
         suffix: ".ino"
-    nano:
-        dir: ardu
-        suffix: ".ino"
-    mega:
-        dir: ardu
+    botnroll:
+        dir: botnroll
         suffix: ".ino"
     nao:
         dir: nao

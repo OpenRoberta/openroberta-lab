@@ -1,9 +1,5 @@
 package de.fhg.iais.roberta.javaServer.integrationTest;
 
-import static org.junit.Assert.fail;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.when;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -12,11 +8,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import javax.ws.rs.core.Response;
 
-import org.apache.commons.lang3.StringUtils;
 import org.json.JSONObject;
 import org.junit.AfterClass;
 import org.junit.Assert;
@@ -31,11 +25,9 @@ import org.mockito.runners.MockitoJUnitRunner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import de.fhg.iais.roberta.components.Project;
 import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.javaServer.restServices.all.controller.ClientAdmin;
 import de.fhg.iais.roberta.javaServer.restServices.all.controller.ProjectWorkflowRestController;
-import de.fhg.iais.roberta.javaServer.restServices.all.service.ProjectService;
 import de.fhg.iais.roberta.main.ServerStarter;
 import de.fhg.iais.roberta.persistence.util.DbSession;
 import de.fhg.iais.roberta.persistence.util.HttpSessionState;
@@ -47,8 +39,10 @@ import de.fhg.iais.roberta.util.RandomUrlPostfix;
 import de.fhg.iais.roberta.util.ServerProperties;
 import de.fhg.iais.roberta.util.Util;
 import de.fhg.iais.roberta.util.dbc.DbcException;
-import de.fhg.iais.roberta.util.test.UnitTestHelper;
 import de.fhg.iais.roberta.util.testsetup.IntegrationTest;
+import static org.junit.Assert.fail;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.when;
 
 /**
  * <b>Testing the generation of native code and the CROSSCOMPILER</b><br>
@@ -70,11 +64,9 @@ public class CompilerWorkflowRobotCommonIT {
     private static final List<String> EMPTY_STRING_LIST = Collections.emptyList();
     private static final String RESOURCE_BASE = "/crossCompilerTests/common/";
     private static final String ORA_CC_RSC_ENVVAR = ServerProperties.CROSSCOMPILER_RESOURCE_BASE.replace('.', '_');
-    private static final String WORKFLOWS_PROG_NAME = "emptyProgram";
 
     private static RobotCommunicator robotCommunicator;
     private static ServerProperties serverProperties;
-    private static Map<String, IRobotFactory> pluginMap;
     private static HttpSessionState httpSessionState;
     private static boolean crosscompilerCall;
     private static boolean showSuccess;
@@ -102,7 +94,7 @@ public class CompilerWorkflowRobotCommonIT {
         Properties baseServerProperties = Util.loadProperties(null);
         serverProperties = new ServerProperties(baseServerProperties);
         robotCommunicator = new RobotCommunicator();
-        pluginMap = ServerStarter.configureRobotPlugins(robotCommunicator, serverProperties, EMPTY_STRING_LIST);
+        Map<String, IRobotFactory> pluginMap = ServerStarter.configureRobotPlugins(robotCommunicator, serverProperties, EMPTY_STRING_LIST);
         httpSessionState = HttpSessionState.initOnlyLegalForDebugging("", pluginMap, serverProperties, 1);
         JSONObject testSpecification = Util.loadYAML("classpath:/crossCompilerTests/common/testSpec.yml");
         crosscompilerCall = testSpecification.getBoolean("crosscompilercall");
@@ -166,48 +158,12 @@ public class CompilerWorkflowRobotCommonIT {
             }
         } catch ( Exception e ) {
             LOG.error("XXXXXXXXXX test terminated with an unexpected exception XXXXXXXXXX", e);
+            resultAcc = false;
         }
         if ( resultAcc ) {
             LOG.info("XXXXXXXXXX all of the NEPO common compilations succeeded XXXXXXXXXX");
         } else {
             LOG.error("XXXXXXXXXX at least one of the NEPO common compilations FAILED XXXXXXXXXX");
-            fail();
-        }
-    }
-
-    @Test
-    public void testWorkflows() {
-        LOG.info("XXXXXXXXXX START of the workflow executions XXXXXXXXXX");
-        boolean resultAcc = true;
-        try {
-            // all robots and ignore excludes, a robot should be able to run each of its defined workflows
-            for ( String robotName : robotsFromTestSpec.keySet() ) {
-                String robotDir = robotsFromTestSpec.getJSONObject(robotName).getString("template");
-                String templateWithConfig = getTemplateWithConfigReplaced(robotDir, robotName);
-                String finalProgram = generateFinalProgram(templateWithConfig, WORKFLOWS_PROG_NAME, progsFromTestSpec.getJSONObject(WORKFLOWS_PROG_NAME));
-
-                // test showsource workflow first, this should always work
-                String sourceCode = generateSourceWithShowSource(finalProgram, robotName);
-                if ( sourceCode.isEmpty() ) {
-                    LOG.error("Could not generate source code for robot {}", robotName);
-                    resultAcc = false;
-                    continue;
-                }
-
-                Set<String> allWorkflowsOfRobot = pluginMap.get(robotName).getWorkflows();
-                List<String> workflowsWithoutShowSource = allWorkflowsOfRobot.stream().filter(s -> !s.equals("showsource")).collect(Collectors.toList());
-                for ( String workflow : workflowsWithoutShowSource ) {
-                    boolean resultNext = executeWorkflow(workflow, robotName, finalProgram, sourceCode);
-                    resultAcc = resultAcc && resultNext;
-                }
-            }
-        } catch ( Exception e ) {
-            LOG.error("XXXXXXXXXX test terminated with an unexpected exception XXXXXXXXXX", e);
-        }
-        if ( resultAcc ) {
-            LOG.info("XXXXXXXXXX all of the workflow executions succeeded XXXXXXXXXX");
-        } else {
-            LOG.error("XXXXXXXXXX at least one of the workflow executions FAILED XXXXXXXXXX");
             fail();
         }
     }
@@ -237,29 +193,10 @@ public class CompilerWorkflowRobotCommonIT {
         }
     }
 
-    /**
-     * test a single workflow for different robots. May help testing ... - supply the workflow name - supply the list of robots (you may copy from the console
-     * output) - the showsource workflow is always run first
-     */
-    @Ignore
-    @Test
-    public void testSingleWorkflow() {
-        String workflowName = "runnative";
-        Collection<String> robots = Arrays.asList("bob3");
-        for ( String robotName : robots ) {
-            LOG.info("********** execute workflow {} for robot {} **********", workflowName, robotName);
-            String robotDir = robotsFromTestSpec.getJSONObject(robotName).getString("template");
-            String templateWithConfig = getTemplateWithConfigReplaced(robotDir, robotName);
-            String finalProgram = generateFinalProgram(templateWithConfig, WORKFLOWS_PROG_NAME, progsFromTestSpec.getJSONObject(WORKFLOWS_PROG_NAME));
-            String sourceCode = generateSourceWithShowSource(finalProgram, robotName);
-            executeWorkflow(workflowName, robotName, finalProgram, sourceCode);
-        }
-    }
-
     private boolean generateAndCompileProgram(String robotName, String template, String progName, JSONObject prog) throws DbcException {
         String reason = "?";
         boolean result = false;
-        logStart(robotName, progName, "compile file");
+        logStart(robotName, progName);
         try {
             String token = RandomUrlPostfix.generate(12, 12, 3, 3, 3);
             httpSessionState.setToken(token);
@@ -280,58 +217,7 @@ public class CompilerWorkflowRobotCommonIT {
             result = false;
             reason = "exception (" + e.getMessage() + ")";
         }
-        log(result, robotName, progName, reason, "compile file");
-        return result;
-    }
-
-    private String generateSourceWithShowSource(String program, String robotName) {
-        Project.Builder builder = UnitTestHelper.setupWithExportXML(pluginMap.get(robotName), program);
-        builder.setRobot(robotName);
-        builder.setProgramName(WORKFLOWS_PROG_NAME);
-        Project showSourceProject = builder.build();
-
-        // Every robot needs at least a show source workflow
-        ProjectService.executeWorkflow("showsource", pluginMap.get(robotName), showSourceProject);
-        return showSourceProject.getSourceCode().toString();
-    }
-
-    private boolean executeWorkflow(String workflow, String robotName, String program, String sourceCode) {
-        String reason = "?";
-        boolean result = false;
-        logStart(robotName, workflow, "execute workflow");
-        try {
-            String token = RandomUrlPostfix.generate(12, 12, 3, 3, 3);
-            IRobotFactory factory = pluginMap.get(robotName);
-            Project.Builder builder;
-            if ( workflow.contains("native") ) {
-                builder = UnitTestHelper.setupWithNativeSource(factory, sourceCode);
-            } else if ( workflow.endsWith("reset") ) {
-                builder = UnitTestHelper.setupWithResetFirmware(factory);
-            } else {
-                builder = UnitTestHelper.setupWithExportXML(factory, program);
-            }
-            builder.setRobot(robotName);
-            builder.setProgramName(WORKFLOWS_PROG_NAME);
-            builder.setRobotCommunicator(robotCommunicator);
-            builder.setToken(token);
-            Project project = builder.build();
-
-            ProjectService.executeWorkflow(workflow, factory, project);
-            if ( !project.hasSucceeded()
-                && workflow.contains("run")
-                && StringUtils.containsIgnoreCase(pluginMap.get(robotName).getConnectionType(), ("token")) ) {
-                result = project.getResult() == Key.ROBOT_NOT_CONNECTED;
-                reason = String.valueOf(project.getResult());
-            } else {
-                result = project.hasSucceeded();
-                reason = String.valueOf(project.getResult());
-            }
-        } catch ( Exception e ) {
-            LOG.error("Executing workflow failed", e);
-            result = false;
-            reason = "exception (" + e.getMessage() + ")";
-        }
-        log(result, robotName, workflow, reason, "execute workflow");
+        log(result, robotName, progName, reason);
         return result;
     }
 
@@ -340,18 +226,18 @@ public class CompilerWorkflowRobotCommonIT {
         JSONUtilForServer.assertEntityRc(response, "ok", Key.ROBOT_SET_SUCCESS);
     }
 
-    private void logStart(String name, String fullResource, String message) {
-        String format = "[[[[[[[[[[ Robot: %-15s " + message + ": %s";
+    private void logStart(String name, String fullResource) {
+        String format = "[[[[[[[[[[ Robot: %-15s compile file: %s";
         String msg = String.format(format, name, fullResource);
         LOG.info(msg);
     }
 
-    private void log(boolean result, String name, String fullResource, String reason, String message) {
+    private void log(boolean result, String name, String fullResource, String reason) {
         String format;
         if ( result ) {
-            format = "++++++++++ Robot: %-15s succeeded " + message + ": %s";
+            format = "++++++++++ Robot: %-15s succeeded compile file: %s";
         } else {
-            format = "---------- Robot: %-15s FAILED (" + reason + ")" + message + ": %s";
+            format = "---------- Robot: %-15s FAILED (" + reason + ") compile file: %s";
             showFailingProgram(httpSessionState.getToken());
         }
         LOG.info(String.format(format, name, fullResource));
