@@ -53,6 +53,8 @@ import de.fhg.iais.roberta.syntax.lang.functions.ListSetIndex;
 import de.fhg.iais.roberta.syntax.lang.functions.MathOnListFunct;
 import de.fhg.iais.roberta.syntax.lang.methods.MethodCall;
 import de.fhg.iais.roberta.syntax.lang.methods.MethodReturn;
+import de.fhg.iais.roberta.syntax.lang.stmt.ExprStmt;
+import de.fhg.iais.roberta.syntax.lang.stmt.IfStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.RepeatStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.Stmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
@@ -374,6 +376,19 @@ public abstract class AbstractProgramValidatorVisitor extends AbstractCollectorV
     @Override
     public Void visitSerialWriteAction(SerialWriteAction<Void> serialWriteAction) {
         serialWriteAction.getValue().accept(this);
+        return null;
+    }
+
+    @Override
+    public Void visitIfStmt(IfStmt<Void> ifStmt) {
+        if ( ifStmt.isTernary() ) {
+            if ( ifStmt.getExpr().get(0) instanceof EmptyExpr
+                || ((ExprStmt) ifStmt.getElseList().get().get(0)).getExpr() instanceof EmptyExpr
+                || ((ExprStmt) ifStmt.getThenList().get(0).get().get(0)).getExpr() instanceof EmptyExpr ) {
+                ifStmt.addInfo(NepoInfo.error("ERROR_MISSING_PARAMETER"));
+                this.errorCount++;
+            }
+        }
         return null;
     }
 
