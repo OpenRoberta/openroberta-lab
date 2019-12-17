@@ -231,7 +231,6 @@ public final class MbedBoardValidatorVisitor extends AbstractBoardValidatorVisit
 
     @Override
     public Void visitSwitchLedMatrixAction(SwitchLedMatrixAction<Void> switchLedMatrixAction) {
-        switchLedMatrixAction.addInfo(NepoInfo.warning("SIM_BLOCK_NOT_SUPPORTED"));
         return null;
     }
 }
