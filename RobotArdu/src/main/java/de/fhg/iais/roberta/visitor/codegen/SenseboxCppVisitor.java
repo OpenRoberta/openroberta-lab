@@ -773,6 +773,7 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
                             break;
                         }
                     }
+                    break;
                 case SC.GPS:
                     this.sb.append("_gps_" + usedConfigurationBlock.getUserDefinedPortName() + ".begin();");
                     nlIndent();

@@ -37,7 +37,7 @@ robots:
         suffix: ".py"
     bob3:
         dir: bob3
-        suffix: ".ino"
+        suffix: ".cpp"
     calliope2017:
         dir: calliope
         suffix: ".cpp"
