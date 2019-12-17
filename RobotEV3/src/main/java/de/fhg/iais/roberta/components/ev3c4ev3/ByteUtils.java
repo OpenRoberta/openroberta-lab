@@ -8,7 +8,7 @@ public class ByteUtils {
         System.arraycopy(bytes, 0, block, offset, bytes.length);
     }
 
-    /*
+    /**
      * set 4 bytes in the block byte array
      *
      * @param block block to which set the 4 bytes
