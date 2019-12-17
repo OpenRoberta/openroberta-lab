@@ -52,7 +52,6 @@
           </block>
         </value>
       </block>
-      <block type="robControls_forEach"/>
       <block type="controls_flow_statements"/>
     </category>
     <category name="TOOLBOX_WAIT" svg="true">
