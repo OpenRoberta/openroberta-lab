@@ -588,7 +588,7 @@ define([ 'simulation.simulation', 'simulation.math', 'util', 'interpreter.consta
                 this.robots[r].colorSensor.lightValue = ((red + green + blue) / 3 / 2.55);
 
                 values.color.light = this.robots[r].colorSensor.lightValue;
-                values.color.rgb = [UTIL.round(red / 2.55, 0), UTIL.round(green / 2.55, 0), UTIL.round(blue / 2.55, 0)];
+                values.color.rgb = [UTIL.round(red, 0), UTIL.round(green, 0), UTIL.round(blue, 0)];
                 values.color.ambientlight = 0;
 
                 values.light.light = this.robots[r].colorSensor.lightValue;
