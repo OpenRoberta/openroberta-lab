@@ -23,7 +23,7 @@ public class Uf2FileContainer {
      * The default payload length is 256, but the EV3 seems to support also other values.
      * The bigger the payload, the lower the number of blocks => smaller UF2 file.
      * The advantage of a smalled UF2 is a shorter upload time to the robot using USB (which is slow, ~10 sec for 1MB file).
-     * the payload max length is 476, but we have to put the file name a the end.
+     * the payload max length is 476, but we have to put the file name at the end.
      * A payload of 400 bytes seems reasonable to have a smaller file and still allowing long file names.
      */
     //private static final int UF2_BLOCK_PAYLOAD_SIZE = 256;
