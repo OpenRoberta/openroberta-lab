@@ -347,6 +347,7 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.controller', 'guiState.m
                     }
                     PROGCODE_C.setCodeLanguage(GUISTATE_C.getSourceCodeFileExtension());
                     CODEEDITOR_C.setCodeLanguage(GUISTATE_C.getSourceCodeFileExtension());
+                    CODEEDITOR_C.resetScroll();
                     //TODO inform app if one is there
 //                    WEBVIEW_C.jsToAppInterface({
 //                        'target' : 'wedo',

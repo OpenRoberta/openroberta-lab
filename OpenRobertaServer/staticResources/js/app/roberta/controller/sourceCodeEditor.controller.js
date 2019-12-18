@@ -39,6 +39,12 @@ define([ 'require', 'exports', 'message', 'log', 'util', 'comm', 'guiState.contr
     }
     exports.setCodeLanguage = setCodeLanguage;
 
+    function resetScroll() {
+        $('.codeflask__pre').attr('transform', 'translate3d(0px, 0px, 0px)');
+        $('.codeflask__lines').attr('transform', 'translate3d(0px, 0px, 0px)');
+    }
+    exports.resetScroll = resetScroll;
+
     function initEvents() {
         flask.onUpdate( function(code) {
             if( $('#sourceCodeEditorPane').hasClass('active') ) {
