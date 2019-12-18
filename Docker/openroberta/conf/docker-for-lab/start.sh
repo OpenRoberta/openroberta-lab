@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# all these -d parameter are independant from the server instance. Server-related -d parameter are added by '$*' from the script '_start.sh'
+# all these -d parameters are independent from the server instance. Server-related -d parameters are added by '$*' from the script '_start.sh'
 java -XX:+PrintGC -Xloggc:/opt/admin/gcLog-$(date +%s).txt \
      -cp lib/\* de.fhg.iais.roberta.main.ServerStarter \
      -d server.staticresources.dir=./staticResources \

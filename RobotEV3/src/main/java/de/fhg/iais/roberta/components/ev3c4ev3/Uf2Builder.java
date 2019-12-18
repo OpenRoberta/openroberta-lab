@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
 /**
- * Creates a UF2FileContainer contining all the needed files to install and run a NEPO program.
+ * Creates a UF2FileContainer containing all the needed files to install and run a NEPO program.
  * When the program starts the first time (when it is copied to the robot) the C program will move the program from the BrkProg_SAVE folder
  * to a folder with the same name as the program. This is done to allow the user to delete the program, which otherwise is not possible.
  * The files included in the built UF2 are:
