@@ -452,10 +452,8 @@ public abstract class AbstractProgramValidatorVisitor extends AbstractCollectorV
         if ( speedLeft.getKind().hasName("NUM_CONST") && speedRight.getKind().hasName("NUM_CONST") ) {
             Double speedLeftNumConst = Double.valueOf(((NumConst<Void>) speedLeft).getValue());
             Double speedRightNumConst = Double.valueOf(((NumConst<Void>) speedRight).getValue());
-            int signLeft = (int) Math.signum(speedLeftNumConst);
-            int signRight = (int) Math.signum(speedRightNumConst);
-            boolean sameSpeed = Math.abs(speedLeftNumConst) == Math.abs(speedRightNumConst); //NOSONAR : TODO: supply an delta of 0.1 (speed is in [0,100] ?
-            if ( sameSpeed && (signLeft != signRight) && (signLeft != 0) && (signRight != 0) ) {
+            double delta = 0.0001;
+            if ( (Math.abs(speedLeftNumConst) < delta) && (Math.abs(speedRightNumConst) < delta) ) {
                 action.addInfo(NepoInfo.warning("BLOCK_NOT_EXECUTED"));
                 this.warningCount++;
             }
