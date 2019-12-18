@@ -33,7 +33,8 @@ on linux:
 * NXT
   * sudo apt-get install nbc
 * Calliope
-  * sudo apt-get install gcc-arm-none-eabi srecord libssl-dev
+  * sudo apt-get install srecord libssl-dev
+  * install gcc-arm-none-eabi latest (see: https://developer.arm.com/tools-and-software/open-source-software/developer-tools/gnu-toolchain/gnu-rm/downloads)
 * micro:bit
   * pip install uflash
 * EV3 (c4ev3)
@@ -41,7 +42,7 @@ on linux:
  
 on windows:
 * Calliope
-  * install gcc-arm-none-eabi (see: http://gnuarmeclipse.github.io/toolchain/install/)
+  * install gcc-arm-none-eabi (see: https://developer.arm.com/tools-and-software/open-source-software/developer-tools/gnu-toolchain/gnu-rm/downloads)
   * install srecord (see: http://srecord.sourceforge.net/)
 * micro:bit
   * install python
