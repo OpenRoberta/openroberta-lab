@@ -9,6 +9,7 @@ define([ 'require', 'exports', 'message', 'log', 'util', 'comm', 'guiState.contr
         flask = new CodeFlask('#flaskEditor', {
             language: 'java',
             lineNumbers: true,
+            tabSize: 4,
         });
         initEvents();
     }
