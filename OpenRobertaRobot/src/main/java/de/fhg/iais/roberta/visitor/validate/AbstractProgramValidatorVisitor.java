@@ -411,7 +411,7 @@ public abstract class AbstractProgramValidatorVisitor extends AbstractCollectorV
     }
 
     private void checkMotorRotationDirection(Phrase<Void> driveAction, ConfigurationComponent m1, ConfigurationComponent m2) {
-        if ( (m1 != null) && (m2 != null) && !m1.getProperty(SC.MOTOR_REVERSE).equals(m2.getProperty(SC.MOTOR_REVERSE)) ) {
+        if ( m1 != null && m2 != null && !m1.getProperty(SC.MOTOR_REVERSE).equals(m2.getProperty(SC.MOTOR_REVERSE)) ) {
             driveAction.addInfo(NepoInfo.error("CONFIGURATION_ERROR_MOTORS_ROTATION_DIRECTION"));
             this.errorCount++;
         }
@@ -452,10 +452,7 @@ public abstract class AbstractProgramValidatorVisitor extends AbstractCollectorV
         if ( speedLeft.getKind().hasName("NUM_CONST") && speedRight.getKind().hasName("NUM_CONST") ) {
             Double speedLeftNumConst = Double.valueOf(((NumConst<Void>) speedLeft).getValue());
             Double speedRightNumConst = Double.valueOf(((NumConst<Void>) speedRight).getValue());
-            int signLeft = (int) Math.signum(speedLeftNumConst);
-            int signRight = (int) Math.signum(speedRightNumConst);
-            boolean sameSpeed = Math.abs(speedLeftNumConst) == Math.abs(speedRightNumConst); //NOSONAR : TODO: supply an delta of 0.1 (speed is in [0,100] ?
-            if ( sameSpeed && (signLeft != signRight) && (signLeft != 0) && (signRight != 0) ) {
+            if ( speedLeftNumConst == 0 && speedRightNumConst == 0 ) {
                 action.addInfo(NepoInfo.warning("BLOCK_NOT_EXECUTED"));
                 this.warningCount++;
             }
@@ -608,13 +605,13 @@ public abstract class AbstractProgramValidatorVisitor extends AbstractCollectorV
     @Override
     public Void visitBinary(Binary<Void> binary) {
         super.visitBinary(binary);
-        if ( ((binary.getOp() == Binary.Op.MATH_CHANGE) || (binary.getOp() == Binary.Op.TEXT_APPEND)) && (!(binary.getLeft() instanceof Var)) ) {
+        if ( (binary.getOp() == Binary.Op.MATH_CHANGE || binary.getOp() == Binary.Op.TEXT_APPEND) && !(binary.getLeft() instanceof Var) ) {
             binary.addInfo(NepoInfo.error("ERROR_MISSING_PARAMETER"));
             this.errorCount++;
         }
 
-        if ( ((binary.getOp() == Binary.Op.AND) || (binary.getOp() == Binary.Op.OR))
-            && ((binary.getLeft() instanceof EmptyExpr) || (binary.getRight() instanceof EmptyExpr)) ) {
+        if ( (binary.getOp() == Binary.Op.AND || binary.getOp() == Binary.Op.OR)
+            && (binary.getLeft() instanceof EmptyExpr || binary.getRight() instanceof EmptyExpr) ) {
             binary.addInfo(NepoInfo.error("ERROR_MISSING_PARAMETER"));
             this.errorCount++;
         }
