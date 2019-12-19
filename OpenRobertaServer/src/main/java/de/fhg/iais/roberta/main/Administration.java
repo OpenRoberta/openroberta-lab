@@ -164,7 +164,7 @@ public class Administration {
      * backup the database. Needs as arg parameter<br>
      * 1. the database URI (e.g. "jdbc:hsqldb:hsql://localhost/openroberta-db")<br>
      * 2. the base directory to store the backup into<br>
-     * &nbsp;&nbsp;&nbsp;a. if the db server is runing in a docker container, the path is probably "/opt/administration/dbBackup"<br>
+     * &nbsp;&nbsp;&nbsp;a. if the db server is running in a docker container, the path is probably "/opt/administration/dbBackup"<br>
      * &nbsp;&nbsp;&nbsp;b. otherwise the path is probably "./backup"<br>
      */
     private void dbBackup() {
