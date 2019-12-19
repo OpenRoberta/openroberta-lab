@@ -606,9 +606,13 @@ wait:
         sensor: LIGHT_VALUE
         mode: LIGHT_VALUE
   LIGHTVEML_LIGHT:
-        implementor: de.fhg.iais.roberta.syntax.sensor.generic.LightSensor
+        implementor: de.fhg.iais.roberta.syntax.sensor.generic.VemlLightSensor
         sensor: LIGHTVEML_LIGHT
-        mode: LIGHTVEML_LIGHT
+        mode: LIGHT
+  LIGHTVEML_UVLIGHT:
+        implementor: de.fhg.iais.roberta.syntax.sensor.generic.VemlLightSensor
+        sensor: LIGHTVEML_LIGHT
+        mode: UVLIGHT
   MICROPHONE :
         implementor: de.fhg.iais.roberta.syntax.sensor.generic.MicrophoneSensor
         sensor: MICROPHONE
@@ -752,7 +756,7 @@ mode:
   infrared: [AMBIENTLIGHT,DEFAULT,DISTANCE,OBSTACLE,PRESENCE,SEEK,LINE,MODULATED,UNMODULATED,VALUE,REFLEXION, RCCODE, EDISON_CODE]
   keys: [PRESSED,WAIT_FOR_PRESS,WAIT_FOR_PRESS_AND_RELEASE]
   light: [AMBIENTLIGHT,DEFAULT,LEFT,LIGHT,LIGHT_VALUE,RED,RIGHT,VALUE]
-  lightveml: [UVLIGHT]
+  lightveml: [UVLIGHT,LIGHT]
   moisture: [VALUE,PRESENCE,VALUE]
   pinpull: [DOWN,NONE,UP]
   pinvalue: [ANALOG,DEFAULT,DIGITAL,PULSEHIGH,PULSELOW]
