@@ -956,6 +956,7 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
                                 .append("(")
                                 .append(cc.getProperty("SERIAL"))
                                 .append(");");
+                            nlIndent();
                             break;
                         }
                     }
