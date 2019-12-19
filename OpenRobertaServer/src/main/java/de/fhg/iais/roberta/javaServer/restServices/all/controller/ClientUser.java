@@ -37,8 +37,8 @@ import de.fhg.iais.roberta.util.AliveData;
 import de.fhg.iais.roberta.util.Key;
 import de.fhg.iais.roberta.util.ServerProperties;
 import de.fhg.iais.roberta.util.Statistics;
-import de.fhg.iais.roberta.util.UtilForREST;
 import de.fhg.iais.roberta.util.Util;
+import de.fhg.iais.roberta.util.UtilForREST;
 
 @Path("/user")
 public class ClientUser {
@@ -123,7 +123,7 @@ public class ClientUser {
                 httpSessionState.setUserClearDataKeepTokenAndRobotId(HttpSessionState.NO_USER);
                 response.put("rc", "ok");
                 response.put("message", Key.USER_LOGOUT_SUCCESS.getKey());
-                // failing isnt logged in the statistics
+                // failing isn't logged in the statistics
                 ClientUser.LOG.info("logout of user " + userId);
                 Statistics.info("UserLogout", "success", true);
             } else if ( cmd.equals("createUser") ) {
