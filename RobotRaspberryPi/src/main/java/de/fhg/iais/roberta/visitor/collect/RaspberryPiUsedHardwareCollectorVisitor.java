@@ -13,7 +13,7 @@ import de.fhg.iais.roberta.syntax.lang.expr.ColorHexString;
 import de.fhg.iais.roberta.visitor.hardware.IRaspberryPiVisitor;
 
 /**
- * This visitor collects information for used actors and sensors in blockly program.
+ * This visitor collects information for used actors and sensors in Blockly program.
  *
  * @author kcvejoski
  */

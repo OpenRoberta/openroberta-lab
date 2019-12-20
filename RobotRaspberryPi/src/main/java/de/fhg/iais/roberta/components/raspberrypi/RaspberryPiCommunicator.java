@@ -122,7 +122,7 @@ public class RaspberryPiCommunicator {
     }
 
     /**
-     * copy local file to remote. If not successful, throw an exception
+     * copy local file to remote location. If not successful, throw an exception
      */
     private static void copyLocalToRemote(Session session, String from, String to, String fileName) throws Exception {
         Channel channel = null;
@@ -203,7 +203,7 @@ public class RaspberryPiCommunicator {
     }
 
     /**
-     * check the response from a channel. Return if ok; if an error occured, throw an exception
+     * check the response from a channel. Return if ok; if an error occurred, throw an exception
      *
      * @throws Exception
      */
