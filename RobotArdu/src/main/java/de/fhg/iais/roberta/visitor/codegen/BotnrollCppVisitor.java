@@ -468,7 +468,6 @@ public final class BotnrollCppVisitor extends AbstractCommonArduinoCppVisitor im
         //Bot'n Roll CoSpace Rescue Module library (for the additional sonar kit):
         this.sb.append("#include <BnrRescue.h>   // Bot'n Roll CoSpace Rescue Module library \n");
         //additional Roberta functions:
-        this.sb.append("#include <RobertaFunctions.h>   // Open Roberta library \n");
         this.sb.append("#include <BnrRoberta.h>    // Open Roberta library \n");
         // SPI communication library required by BnrOne.cpp"
         this.sb.append("#include <SPI.h>   // SPI communication library required by BnrOne.cpp \n");
@@ -477,7 +476,6 @@ public final class BotnrollCppVisitor extends AbstractCommonArduinoCppVisitor im
         // declaration of object variable to control the Bot'n Roll ONE A and Rescue:
         this.sb.append("BnrOneA one; \n");
         this.sb.append("BnrRescue brm; \n");
-        this.sb.append("RobertaFunctions rob;  \n");
         this.sb.append("BnrRoberta bnr(one, brm);  \n");
         this.sb.append("#define SSPIN  2 \n");
         this.sb.append("#define MODULE_ADDRESS 0x2C \n");

@@ -543,8 +543,6 @@ public final class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor imp
             this.sb.append(header);
             nlIndent();
         }
-        this.sb.append("#include <RobertaFunctions.h>   // Open Roberta library");
-        nlIndent();
         if ( this.usedHardwareBean.isListsUsed() ) {
             this.sb.append("#include <ArduinoSTL.h>");
             nlIndent();
@@ -553,8 +551,6 @@ public final class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor imp
         }
         this.sb.append("#include <NEPODefs.h>");
         nlIndent();
-        nlIndent();
-        this.sb.append("RobertaFunctions rob;");
     }
 
     @Override

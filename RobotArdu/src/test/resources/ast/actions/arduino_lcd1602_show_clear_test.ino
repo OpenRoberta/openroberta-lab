@@ -3,10 +3,8 @@
 #include <math.h>
 
 #include <LiquidCrystal.h>
-#include <RobertaFunctions.h>   // Open Roberta library
 #include <NEPODefs.h>
 
-RobertaFunctions rob;
 
 LiquidCrystal _lcd_L2(12, 11, 5, 4, 3, 2);
 void setup()

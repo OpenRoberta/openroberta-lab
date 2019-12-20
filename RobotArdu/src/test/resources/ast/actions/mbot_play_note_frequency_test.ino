@@ -8,10 +8,8 @@
 #include <SoftwareSerial.h>
 #include <MeDrive.h>
 #include <NEPODefs.h>
-#include <RobertaFunctions.h>
 
 MeBuzzer _meBuzzer;
-RobertaFunctions rob;
 
 void setup()
 {

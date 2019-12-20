@@ -3,7 +3,6 @@
 #undef min
 #define _ARDUINO_STL_NOT_NEEDED
 #include <NEPODefs.h>
-#include "RobertaFunctions.h"
 #include "SenseBoxMCU.h"
 #include <SPI.h>
 #include <Wire.h>
@@ -12,7 +11,6 @@
 #include <Plot.h>
 #include <stdlib.h>
 #include <list>
-RobertaFunctions rob;
     
 unsigned long _time = millis();
 

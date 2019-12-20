@@ -14,7 +14,6 @@ public class CppVisitorTest extends MbotAstTest {
             + "#include <MeMCore.h> \n"
             + "#include <Wire.h>\n"
             + "#include <SoftwareSerial.h>\n"
-            + "#include <RobertaFunctions.h>\n"
             + "#include <NEPODefs.h>"
             + "#include \"MeDrive.h\"\n\n";
 
@@ -26,7 +25,6 @@ public class CppVisitorTest extends MbotAstTest {
         final String a =
             "" //
                 + MAIN_METHOD1
-                + "RobertaFunctions rob;"
                 + "MeDCMotor motor1(M1);"
                 + MAIN_METHOD2
                 + "}"
@@ -41,7 +39,6 @@ public class CppVisitorTest extends MbotAstTest {
         final String a =
             "" //
                 + MAIN_METHOD1
-                + "RobertaFunctions rob;"
                 + "MeUltrasonicSensor ultraSensor4(PORT_4);"
                 + "MeDCMotor motor1(M1);"
                 + MAIN_METHOD2
@@ -64,7 +61,6 @@ public class CppVisitorTest extends MbotAstTest {
         final String a =
             "" //
                 + MAIN_METHOD1
-                + "RobertaFunctions rob;"
                 + "MeLineFollower lineFinder2(PORT_2);"
                 + "MeDCMotormotor1(M1);"
                 + MAIN_METHOD2
@@ -84,7 +80,6 @@ public class CppVisitorTest extends MbotAstTest {
         final String a =
             "" //
                 + MAIN_METHOD1
-                + "RobertaFunctions rob;"
                 + "MeTouchSensor myTouch1(PORT_1);"
                 + MAIN_METHOD2
                 + "}"
@@ -103,7 +98,6 @@ public class CppVisitorTest extends MbotAstTest {
         final String a =
             "" //
                 + MAIN_METHOD1
-                + "RobertaFunctions rob;"
                 + "MePIRMotionSensor pir3(PORT_3);"
                 + "MeDCMotormotor1(M1);"
                 + MAIN_METHOD2
@@ -123,7 +117,6 @@ public class CppVisitorTest extends MbotAstTest {
         final String a =
             "" //
                 + MAIN_METHOD1
-                + "RobertaFunctions rob;"
                 + "MeJoystick myJoystick3(PORT_3);"
                 + "MeDCMotormotor1(M1);"
                 + MAIN_METHOD2
@@ -147,7 +140,6 @@ public class CppVisitorTest extends MbotAstTest {
         final String a =
             "" //
                 + MAIN_METHOD1
-                + "RobertaFunctions rob;"
                 + "MeGyro myGyro1(PORT_1);"
                 + "MeDCMotor motor1(M1);"
                 + MAIN_METHOD2
@@ -173,7 +165,6 @@ public class CppVisitorTest extends MbotAstTest {
         final String a =
             "" //
                 + MAIN_METHOD1
-                + "RobertaFunctions rob;"
                 + "MeGyro myGyro1(PORT_1);"
                 + "MeDCMotor motor1(M1);"
                 + MAIN_METHOD2
@@ -198,7 +189,6 @@ public class CppVisitorTest extends MbotAstTest {
         final String a =
             "" //
                 + MAIN_METHOD1
-                + "RobertaFunctions rob;"
                 + "MeFlameSensor flameSensor1(PORT_1);"
                 + "MeDCMotor motor1(M1);"
                 + MAIN_METHOD2
@@ -218,7 +208,6 @@ public class CppVisitorTest extends MbotAstTest {
         final String a =
             "" //
                 + MAIN_METHOD1
-                + "RobertaFunctions rob;"
                 + "MeLightSensormyLight0(0);"
                 + "MeDCMotor motor1(M1);"
                 + MAIN_METHOD2
@@ -237,7 +226,6 @@ public class CppVisitorTest extends MbotAstTest {
         final String a =
             "" //
                 + MAIN_METHOD1
-                + "RobertaFunctions rob;"
                 + "MeSoundSensor mySound3(PORT_3);"
                 + "double item;"
                 + MAIN_METHOD2
@@ -257,7 +245,6 @@ public class CppVisitorTest extends MbotAstTest {
         final String a =
             "" //
                 + MAIN_METHOD1
-                + "RobertaFunctions rob;"
                 + "MeHumiture myTemp3(PORT_3);"
                 + "MeDCMotormotor1(M1);"
                 + MAIN_METHOD2
@@ -281,7 +268,6 @@ public class CppVisitorTest extends MbotAstTest {
         final String a =
             "" //
                 + MAIN_METHOD1
-                + "RobertaFunctions rob;"
                 + "double item;"
                 + "unsigned long __time = millis();"
                 + MAIN_METHOD2
@@ -301,7 +287,6 @@ public class CppVisitorTest extends MbotAstTest {
         String expectedResult =
             "" //
                 + MAIN_METHOD1
-                + "RobertaFunctions rob;"
                 + "MeBuzzer buzzer;"
                 + MAIN_METHOD2
                 + "}"
@@ -316,7 +301,6 @@ public class CppVisitorTest extends MbotAstTest {
         String expectedResult =
             "" //
                 + MAIN_METHOD1
-                + "RobertaFunctions rob;"
                 + "MeBuzzer buzzer;"
                 + MAIN_METHOD2
                 + "}"
@@ -332,7 +316,6 @@ public class CppVisitorTest extends MbotAstTest {
         String expectedResult =
             "" //
                 + MAIN_METHOD1
-                + "RobertaFunctions rob;"
                 + "MeRGBLedrgbled_7(7,7==7?2:4);"
                 + MAIN_METHOD2
                 + "}"
@@ -353,7 +336,6 @@ public class CppVisitorTest extends MbotAstTest {
         String expectedResult =
             "" //
                 + MAIN_METHOD1
-                + "RobertaFunctions rob;"
                 + "MeDrivemyDrive(M2,M1);"
                 + MAIN_METHOD2
                 + "}"
@@ -370,7 +352,6 @@ public class CppVisitorTest extends MbotAstTest {
         String expectedResult =
             "" //
                 + MAIN_METHOD1
-                + "RobertaFunctions rob;"
                 + "MeDrivemyDrive(M2,M1);"
                 + MAIN_METHOD2
                 + "}"
@@ -387,7 +368,6 @@ public class CppVisitorTest extends MbotAstTest {
         String expectedResult =
             "" //
                 + MAIN_METHOD1
-                + "RobertaFunctions rob;"
                 + "MeBuzzerbuzzer;"
                 + MAIN_METHOD2
                 + "}"
@@ -409,7 +389,6 @@ public class CppVisitorTest extends MbotAstTest {
         String expectedResult =
             "" //
                 + MAIN_METHOD1
-                + "RobertaFunctions rob;"
                 + "MePotentiometermyVoltageSensor4(PORT_4);"
                 + "MeBuzzerbuzzer;"
                 + MAIN_METHOD2

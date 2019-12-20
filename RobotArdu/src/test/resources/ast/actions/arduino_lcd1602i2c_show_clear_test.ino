@@ -2,10 +2,8 @@
 
 #include <math.h>
 #include <LiquidCrystal_I2C.h>
-#include <RobertaFunctions.h>   // Open Roberta library
 #include <NEPODefs.h>
 
-RobertaFunctions rob;
 
 LiquidCrystal_I2C _lcd_L(0x27, 16, 2);
 void setup()

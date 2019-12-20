@@ -2,9 +2,7 @@
 
 #include <math.h>
 #include <Servo.h>
-#include <RobertaFunctions.h>   // Open Roberta library
 
-RobertaFunctions rob;
 
 int _led_L = 13;
 Servo _servo_S;

@@ -115,7 +115,6 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
         this.sb.append("#undef min\n");
         this.sb.append("#define _ARDUINO_STL_NOT_NEEDED\n");
         this.sb.append("#include <NEPODefs.h>\n");
-        this.sb.append("#include \"RobertaFunctions.h\"\n");
         this.sb.append("#include \"SenseBoxMCU.h\"");
         if ( this.configuration.getConfigurationComponentbyType(SC.SENSEBOX_SDCARD) != null ) {
             this.sb.append("\n#include <SPI.h>");
@@ -134,8 +133,6 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
             this.sb.append("\n#include <stdlib.h>");
             this.sb.append("\n#include <list>");
         }
-
-        this.sb.append("\nRobertaFunctions rob;");
     }
 
     @Override

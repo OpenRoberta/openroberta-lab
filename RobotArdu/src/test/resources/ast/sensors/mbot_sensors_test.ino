@@ -8,13 +8,11 @@
 #include <SoftwareSerial.h>
 #include <MeDrive.h>
 #include <NEPODefs.h>
-#include <RobertaFunctions.h>
 
 MeUltrasonicSensor _meUltraSensor3(PORT_3);
 MeLineFollower __meLineFollower2(PORT_2);
 MeLightSensor _meLight6(PORT_6);
 MeLightSensor _meLight2(PORT_2);
-RobertaFunctions rob;
 
 double ___item;
 bool ___item2;

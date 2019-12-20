@@ -8,10 +8,8 @@
 #include <SoftwareSerial.h>
 #include <MeDrive.h>
 #include <NEPODefs.h>
-#include <RobertaFunctions.h>
 
 MeIR _meIr;
-RobertaFunctions rob;
 
 String ___header;
 String ___temp;

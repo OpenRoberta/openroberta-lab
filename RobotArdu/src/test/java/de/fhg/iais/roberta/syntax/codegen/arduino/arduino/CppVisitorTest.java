@@ -11,9 +11,7 @@ public class CppVisitorTest extends ArduinoAstTest {
     private static final String BASIC_INCLUDE =
         "//ThisfileisautomaticallygeneratedbytheOpenRobertaLab.\n"
             + "#include<math.h>\n"
-            + "#include<RobertaFunctions.h>//OpenRobertalibrary"
-            + "#include<NEPODefs.h>"
-            + "RobertaFunctionsrob;";
+            + "#include<NEPODefs.h>";
     private static final String INCLUDE =
         ""
             + "//ThisfileisautomaticallygeneratedbytheOpenRobertaLab.\n"
@@ -26,9 +24,7 @@ public class CppVisitorTest extends ArduinoAstTest {
             + "#include<Stepper.h>"
             + "#include<Servo.h>"
             + "#include<LiquidCrystal_I2C.h>"
-            + "#include<RobertaFunctions.h>//OpenRobertalibrary"
-            + "#include<NEPODefs.h>"
-            + "RobertaFunctionsrob;";
+            + "#include<NEPODefs.h>";
 
     private static final String DEFINES =
         ""
@@ -519,8 +515,6 @@ public class CppVisitorTest extends ArduinoAstTest {
                 + "#include<SPI.h>"
                 + "#include<MFRC522.h>"
                 + "#define_ANALOG0#define_DIGITAL1"
-                + "#include<RobertaFunctions.h>//OpenRobertalibrary"
-                + "RobertaFunctionsrob;"
                 + DEFINES
                 + "double_pinGetValue(intpinName,intmode)"
                 + "{pinMode(pinName,INPUT);"

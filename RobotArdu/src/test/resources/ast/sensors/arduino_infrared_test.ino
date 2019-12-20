@@ -2,10 +2,8 @@
 
 #include <math.h>
 #include <IRremote.h>
-#include <RobertaFunctions.h>   // Open Roberta library
 #include <NEPODefs.h>
 
-RobertaFunctions rob;
 
 double ___item;
 bool ___item2;

@@ -2,10 +2,8 @@
 
 #include <math.h>
 #include <IRremote.h>
-#include <RobertaFunctions.h>   // Open Roberta library
 #include <NEPODefs.h>
 
-RobertaFunctions rob;
 
 bool ___item;
 int _RECV_PIN_I = 11;

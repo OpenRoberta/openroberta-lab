@@ -2,10 +2,8 @@
 
 #include <math.h>
 #include <SparkFunLSM6DS3.h>
-#include <RobertaFunctions.h>   // Open Roberta library
 #include <NEPODefs.h>
 
-RobertaFunctions rob;
 
 String ___Element;
 LSM6DS3 _imu_B(SPI_MODE, SPIIMU_SS);

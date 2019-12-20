@@ -8,10 +8,8 @@
 #include <SoftwareSerial.h>
 #include <MeDrive.h>
 #include <NEPODefs.h>
-#include <RobertaFunctions.h>
 
 MeRGBLed _meRgbLed(7, 2);
-RobertaFunctions rob;
 
 unsigned int ___item;
 

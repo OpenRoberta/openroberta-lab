@@ -4,10 +4,8 @@
 #include <Servo.h>
 #include <SPI.h>
 #include <MFRC522.h>
-#include <RobertaFunctions.h>   // Open Roberta library
 #include <NEPODefs.h>
 
-RobertaFunctions rob;
 
 String ___item;
 bool ___item2;

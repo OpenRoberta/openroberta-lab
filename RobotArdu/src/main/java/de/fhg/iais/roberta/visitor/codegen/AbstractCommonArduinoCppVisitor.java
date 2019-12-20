@@ -275,11 +275,11 @@ public abstract class AbstractCommonArduinoCppVisitor extends AbstractCppVisitor
 
     @Override
     public Void visitMathConstrainFunct(MathConstrainFunct<Void> mathConstrainFunct) {
-        this.sb.append("rob.clamp(");
+        this.sb.append("std::min(std::max((double) ");
         mathConstrainFunct.getParam().get(0).accept(this);
-        this.sb.append(", ");
+        this.sb.append(", (double) ");
         mathConstrainFunct.getParam().get(1).accept(this);
-        this.sb.append(", ");
+        this.sb.append("), (double) ");
         mathConstrainFunct.getParam().get(2).accept(this);
         this.sb.append(")");
         return null;

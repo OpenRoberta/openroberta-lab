@@ -3,14 +3,12 @@
 #include <NEPODefs.h>
 #include <math.h> 
 #include <BnrOneA.h>   // Bot'n Roll ONE A library 
-#include <BnrRescue.h>   // Bot'n Roll CoSpace Rescue Module library 
-#include <RobertaFunctions.h>   // Open Roberta library 
+#include <BnrRescue.h>   // Bot'n Roll CoSpace Rescue Module library
 #include <BnrRoberta.h>    // Open Roberta library 
 #include <SPI.h>   // SPI communication library required by BnrOne.cpp 
 #include <Wire.h>   //a library required by BnrRescue.cpp for the additional sonar  
 BnrOneA one; 
-BnrRescue brm; 
-RobertaFunctions rob;  
+BnrRescue brm;
 BnrRoberta bnr(one, brm);  
 #define SSPIN  2 
 #define MODULE_ADDRESS 0x2C 

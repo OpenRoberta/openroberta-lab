@@ -135,16 +135,12 @@ public final class FestobionicCppVisitor extends AbstractCommonArduinoCppVisitor
             this.sb.append(header);
             nlIndent();
         }
-        this.sb.append("#include <RobertaFunctions.h>   // Open Roberta library"); // TODO only used for clamp, similar to Arduino, should be removed
-        nlIndent();
         if ( this.usedHardwareBean.isListsUsed() ) {
             this.sb.append("#include <list>");
             nlIndent();
         }
         this.sb.append("#include <NEPODefs.h>");
         nlIndent();
-        nlIndent();
-        this.sb.append("RobertaFunctions rob;"); // TODO see include
     }
 
     @Override

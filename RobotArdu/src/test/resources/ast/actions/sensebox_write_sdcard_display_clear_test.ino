@@ -3,7 +3,6 @@
 #undef min
 #define _ARDUINO_STL_NOT_NEEDED
 #include <NEPODefs.h>
-#include "RobertaFunctions.h"
 #include "SenseBoxMCU.h"
 #include <SPI.h>
 #include <SD.h>
@@ -12,7 +11,6 @@
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h>
 #include <Plot.h>
-RobertaFunctions rob;
 
 unsigned long _time = millis();
 

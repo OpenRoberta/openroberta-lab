@@ -2,10 +2,8 @@
 
 #include <math.h>
 #include <Stepper.h>
-#include <RobertaFunctions.h>   // Open Roberta library
 #include <NEPODefs.h>
 
-RobertaFunctions rob;
 
 int _SPU_S2 = 2048;
 Stepper Motor_S2(_SPU_S2, 6, 5, 4, 3);

@@ -2,10 +2,8 @@
 
 #include <math.h>
 #include <Servo.h>
-#include <RobertaFunctions.h>   // Open Roberta library
 #include <NEPODefs.h>
 
-RobertaFunctions rob;
 
 Servo _servo_S;
 void setup()

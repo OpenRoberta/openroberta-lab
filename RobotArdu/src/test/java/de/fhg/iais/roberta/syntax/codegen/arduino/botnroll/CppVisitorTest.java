@@ -13,13 +13,11 @@ public class CppVisitorTest extends BotnrollAstTest {
             + "#include<math.h>\n"
             + "#include<BnrOneA.h>//Bot'nRollONEAlibrary"
             + "#include<BnrRescue.h>//Bot'nRollCoSpaceRescueModulelibrary"
-            + "#include<RobertaFunctions.h>//OpenRobertalibrary"
             + "#include<BnrRoberta.h>//OpenRobertalibrary"
             + "#include<SPI.h>//SPIcommunicationlibraryrequiredbyBnrOne.cpp"
             + "#include<Wire.h>//alibraryrequiredbyBnrRescue.cppfortheadditionalsonar"
             + "BnrOneAone;"
             + "BnrRescuebrm;"
-            + "RobertaFunctionsrob;"
             + "BnrRoberta bnr(one, brm);";
 
     private static final String DEFINES = "" + "#defineSSPIN2" + "#defineMODULE_ADDRESS0x2C" + "bytecolorsLeft[3]={0,0,0};" + "bytecolorsRight[3]={0,0,0};";

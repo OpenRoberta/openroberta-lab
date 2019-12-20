@@ -8,12 +8,10 @@
 #include <SoftwareSerial.h>
 #include <MeDrive.h>
 #include <NEPODefs.h>
-#include <RobertaFunctions.h>
 
 MeDrive _meDrive(M1, M2);
 MeDCMotor _meDCmotor1(M1);
 MeDCMotor _meDCmotor2(M2);
-RobertaFunctions rob;
 
 void setup()
 {

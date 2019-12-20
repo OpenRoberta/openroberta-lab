@@ -9,7 +9,7 @@ public class MathConstrainTest extends BotnrollAstTest {
 
     @Test
     public void Test() throws Exception {
-        final String a = "rob.clamp(bnr.ultrasonicDistance(4),1,100)";
+        final String a = "std::min(std::max((double) bnr.ultrasonicDistance(4), (double) 1), (double) 100)";
 
         UnitTestHelper
             .checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, a, "/syntax/math/math_constrain.xml", makeConfiguration(), false);

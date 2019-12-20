@@ -463,12 +463,8 @@ public final class MbotCppVisitor extends AbstractCommonArduinoCppVisitor implem
         nlIndent();
         this.sb.append("#include <NEPODefs.h>");
         nlIndent();
-        this.sb.append("#include <RobertaFunctions.h>");
-        nlIndent();
         generateSensors();
         generateActors();
-        nlIndent();
-        this.sb.append("RobertaFunctions rob;");
     }
 
     @Override
