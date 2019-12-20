@@ -29,7 +29,8 @@ If you would like your local server to compile code for the different systems, y
 on linux:
 * Arduino based robots
   * sudo apt-get install libusb-0.1-4
-  * sudo apt-get install gcc-avr binutils-avr gdb-avr avr-libc avrdude
+  * sudo apt-get install binutils-avr gdb-avr avr-libc avrdude
+  * install avr-gcc (see: http://downloads.arduino.cc/tools/avr-gcc-7.3.0-atmel3.6.1-arduino5-x86_64-pc-linux-gnu.tar.bz2)
 * NXT
   * sudo apt-get install nbc
 * Calliope
@@ -41,6 +42,8 @@ on linux:
   * sudo apt-get install g++-arm-linux-gnueabi
  
 on windows:
+* Arduino based robots
+  * install avr-gcc (see: http://downloads.arduino.cc/tools/avr-gcc-7.3.0-atmel3.6.1-arduino5-i686-w64-mingw32.zip)
 * Calliope
   * install gcc-arm-none-eabi (see: https://developer.arm.com/tools-and-software/open-source-software/developer-tools/gnu-toolchain/gnu-rm/downloads)
   * install srecord (see: http://srecord.sourceforge.net/)
