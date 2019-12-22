@@ -57,7 +57,12 @@ public class Ast2C4ev3VisitorTest extends Ev3C4ev3AstTest {
         "" //
             + MAIN_INIT_EV3
             + "    NEPOSetAllSensors(NULL, NULL, HTColorV2, NULL);\n\n";
-
+    
+    private static final String BEGIN_MAIN__TOUCH_NULL_NULL_NULL =
+        "" //
+            + MAIN_INIT_EV3
+            + "    NEPOSetAllSensors(EV3Touch, NULL, NULL, NULL);\n\n";
+    
     private static final String BEGIN_MAIN__NULLSORS =
         "" //
             + MAIN_INIT_EV3
@@ -337,7 +342,20 @@ public class Ast2C4ev3VisitorTest extends Ev3C4ev3AstTest {
         UnitTestHelper
             .checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, expectedCode, "/syntax/methods/method_void_1.xml", makeStandard(), false);
     }
-
+    
+    @Test
+    public void testTimer() throws Exception {
+        String expectedCode =
+            "" //
+            + CONSTANTS_AND_IMPORTS
+            + BEGIN_MAIN__TOUCH_NULL_NULL_NULL
+            + "ResetTimer(1);\n"
+            + "DrawString(ToString(GetTimerValue(1)),0,0);\n"
+            + END_MAIN;
+        UnitTestHelper
+        .checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, expectedCode, "/syntax/code_generator/java/java_code_generator12.xml", makeStandard(), false);
+    }
+    
     @Test
     public void testVoidFunction() throws Exception {
         String expectedCode =

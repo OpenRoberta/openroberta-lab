@@ -1087,7 +1087,9 @@ public final class Ev3JavaVisitor extends AbstractJavaVisitor implements IEv3Vis
 
         sb.append("private Set<UsedSensor> usedSensors = " + "new LinkedHashSet<UsedSensor>(");
         if ( !this.usedHardwareBean.getUsedSensors().isEmpty() ) {
-            sb.append("Arrays.asList(" + arrayOfSensors.substring(0, arrayOfSensors.length() - 2) + ")");
+            if(arrayOfSensors.length() >= 2) {
+                sb.append("Arrays.asList(" + arrayOfSensors.substring(0, arrayOfSensors.length() - 2) + ")");
+            }
         }
         sb.append(");");
         return sb.toString();
