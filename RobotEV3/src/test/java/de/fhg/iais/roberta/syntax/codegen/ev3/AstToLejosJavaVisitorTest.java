@@ -695,6 +695,32 @@ public class AstToLejosJavaVisitorTest extends Ev3LejosAstTest {
     }
 
     @Test
+    public void test20() throws Exception {
+        String a =
+            "" //
+            + IMPORTS
+            + MAIN_CLASS
+            + BRICK_CONFIGURATION_DECL
+            + USED_SENSORS_DECL
+            + HAL
+            + createMainMethod(Arrays.asList("", "", "", "", "", ""), "")
+            + "    public void run() throwsException {\n"
+            + "         hal.resetTimer(1);"
+            + "         hal.drawText(String.valueOf(hal.getTimerValue(1)), 0, 0);"
+            + "    }\n\n"
+            + "}\n";
+
+        UnitTestHelper
+        .checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(
+            testFactory,
+            a,
+            "/syntax/code_generator/java/java_code_generator12.xml",
+            brickConfiguration,
+            true);
+
+    }
+    
+    @Test
     public void testStmtForEach() throws Exception {
         String a =
             "" //
