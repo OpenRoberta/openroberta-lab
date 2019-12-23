@@ -48,6 +48,7 @@ import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.HumiditySensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.IRSeekerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.KeysSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
@@ -413,6 +414,11 @@ public class Ev3StackMachineVisitor<V> extends AbstractStackMachineVisitor<V> im
 
     @Override
     public V visitAccelerometer(AccelerometerSensor<V> accelerometerSensor) {
+        return null;
+    }
+    
+    @Override
+    public V visitIRSeekerSensor(IRSeekerSensor<V> irSeekerSensor) {
         return null;
     }
 
