@@ -8,7 +8,8 @@ public enum ShowPicture implements IShowPicture {
     EYESOPEN( "AUGENOFFEN", "" ),
     EYESCLOSED( "AUGENZU", "AUGEN ZU" ),
     FLOWERS( "BLUMEN", "Blumen" ),
-    TACHO( "Tacho" );
+    TACHO( "Tacho" ),
+    STEERING("Steering");
 
     private final String[] values;
 
