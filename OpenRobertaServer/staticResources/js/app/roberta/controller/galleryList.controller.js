@@ -108,7 +108,13 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'message', 'guiState.contr
             $('#tabProgram').trigger('click');
             return false;
         }, "back to program view");
-
+        
+        $('#sortGalleryList').click(function() {
+            $('#galleryTable').bootstrapTable('refreshOptions', {
+                sortName : 6
+            })
+        });
+        
         $('#galleryTable').on('shown.bs.collapse hidden.bs.collapse', function(e) {
             $('#galleryTable').bootstrapTable('resetWidth');
         });
