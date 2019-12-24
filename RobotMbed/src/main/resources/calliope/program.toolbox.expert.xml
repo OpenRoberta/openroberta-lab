@@ -312,6 +312,7 @@
 				<block type="math_number" />
 			</value>
 		</block>
+		<block type="robLists_repeat"><value name="NUM"><block type="math_number"><field name="NUM">5</field></block></value></block>
 		<block type="robLists_length" />
 		<block type="robLists_isEmpty" />
 		<block type="robLists_indexOf" />
