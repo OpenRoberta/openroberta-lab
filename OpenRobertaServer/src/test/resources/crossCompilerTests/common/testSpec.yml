@@ -53,6 +53,7 @@ progs:
        decl: variablesNuStBo
        exclude:
           edison: ""
+          bob3: "no strings anymore"
        remark: "variable assignment for number, string and boolean"
     stringConcat:
        decl: stringConcat
