@@ -23,7 +23,10 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'message', 'guiState.contr
         LOG.info('init gallery list view');
     }
     exports.init = init;
-
+    function myFunction() {
+      alert("You clicked my button and its fun")
+}
+  
     function initGalleryList() {
 
         $('#galleryTable').bootstrapTable({
