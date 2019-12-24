@@ -112,6 +112,12 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'message', 'guiState.contr
         $('#galleryTable').on('shown.bs.collapse hidden.bs.collapse', function(e) {
             $('#galleryTable').bootstrapTable('resetWidth');
         });
+	
+	$('#filterGalleryList').onWrap('click', function() {
+            $('#galleryTable').bootstrapTable('filterBy', {
+            	0: 'ev3'
+            });
+        }, "filter ev3 programs");
 
         function update(result) {
             UTIL.response(result);
