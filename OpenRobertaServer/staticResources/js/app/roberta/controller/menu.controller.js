@@ -628,7 +628,7 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
 
         $('#takeATour').onWrap('click', function(event) {
             if (GUISTATE_C.getRobotGroup() !== 'ev3') {
-                ROBOT_C.switchRobot('ev3lejos', true);
+                ROBOT_C.switchRobot('ev3lejosv1', true);
             }
             if (GUISTATE_C.getProgramToolboxLevel() !== 'beginner') {
                 $('#beginner').trigger('click');
