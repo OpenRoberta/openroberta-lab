@@ -25,16 +25,6 @@ public class ActionTest extends ArduinoAstTest {
     }
 
     @Test
-    public void reverseTransformatinclearDisplay() throws Exception {
-        UnitTestHelper.checkProgramReverseTransformation(testFactory, "/ast/actions/action_ClearDisplay.xml");
-    }
-
-    @Test
-    public void reverseTransformatinclearDisplay1() throws Exception {
-        UnitTestHelper.checkProgramReverseTransformation(testFactory, "/ast/actions/action_ClearDisplay1.xml");
-    }
-
-    @Test
     public void stop() throws Exception {
         final String a = "BlockAST [project=[[Location [x=1, y=135], StopAction []]]]";
 

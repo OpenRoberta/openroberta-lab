@@ -167,6 +167,7 @@ public final class MbotBrickValidatorVisitor extends AbstractBrickValidatorVisit
     @Override
     public Void visitLEDMatrixSetBrightnessAction(LEDMatrixSetBrightnessAction<Void> ledMatrixSetBrightnessAction) {
         ledMatrixSetBrightnessAction.getBrightness().accept(this);
+        checkActorPort(ledMatrixSetBrightnessAction, ledMatrixSetBrightnessAction.getPort());
         return null;
     }
 

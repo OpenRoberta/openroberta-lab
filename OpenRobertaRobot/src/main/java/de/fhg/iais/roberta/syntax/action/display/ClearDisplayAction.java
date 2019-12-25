@@ -75,6 +75,7 @@ public final class ClearDisplayAction<V> extends Action<V> {
     public Block astToBlock() {
         Block jaxbDestination = new Block();
         Ast2JaxbHelper.setBasicProperties(this, jaxbDestination);
+        Ast2JaxbHelper.addField(jaxbDestination, BlocklyConstants.ACTORPORT, this.port);
         return jaxbDestination;
     }
 }
