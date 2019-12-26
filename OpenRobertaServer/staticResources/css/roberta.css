@@ -747,6 +747,14 @@ div.rightMenuButton:hover,
     box-shadow: 0 3px 5px #aeaeaf;
     -webkit-box-shadow: 0 3px 5px #aeaeaf;
 }
+
+@media (min-width: 768px) {
+    .dropdown-menu {
+    height: auto;
+    max-height: 90vh;
+    overflow-x: hidden;
+    }
+}
 .dropdown-menu>li>a {
     padding: 6px 12px;
 }
