@@ -53,7 +53,7 @@ public class Update {
     @Produces(MediaType.APPLICATION_OCTET_STREAM)
     @Deprecated
     /**
-     * After restructuring our projects we do not have any more of the OpenRobertaShared library
+     * After restructuring our projects we do not have any more the OpenRobertaShared library
      *
      * @return
      * @throws FileNotFoundException
