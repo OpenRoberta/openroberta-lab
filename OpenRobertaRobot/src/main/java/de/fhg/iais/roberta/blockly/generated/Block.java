@@ -107,7 +107,7 @@ public class Block {
     protected Boolean errorAttribute;
 
     /**
-     * Gets the value of the mutation property.
+     * Gets the value of the Mutation property.
      * 
      * @return
      *     possible object is
@@ -119,7 +119,7 @@ public class Block {
     }
 
     /**
-     * Sets the value of the mutation property.
+     * Sets the value of the Mutation property.
      * 
      * @param value
      *     allowed object is
@@ -160,7 +160,7 @@ public class Block {
     }
 
     /**
-     * Gets the value of the repetitions property.
+     * Gets the value of the Repetitions property.
      * 
      * @return
      *     possible object is
