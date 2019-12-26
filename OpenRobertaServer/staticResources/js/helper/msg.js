@@ -7,6 +7,11 @@ define([ 'exports', 'log', 'jquery', 'blocks-msg' ], function(exports, LOG, $, B
      * Display popup messages
      */
     function displayPopupMessage(lkey, value, cancel) {
+        var splitlkey = lkey.split("^^^");
+        lkey = splitlkey[0];
+        if(lkey=='Blockly.Msg.ORA_PROGRAM_IMPORT_ERROR_WRONG_ROBOT_TYPE'){
+            value=value + "<br> Type of program: "+splitlkey[1];
+        } 
         if (cancel) {
             $('#messageConfirm').attr('lkey', lkey);
             $('#messageConfirm').html(value + Blockly.Msg.POPUP_CONFIRM_CONTINUE);
@@ -46,6 +51,8 @@ define([ 'exports', 'log', 'jquery', 'blocks-msg' ], function(exports, LOG, $, B
      *            Text to replace an optional '$' in the message-text
      */
     function displayMessage(messageId, output, replaceWith, opt_cancel, opt_robot) {
+        var splitId = messageId.split("^^^");
+        messageId=splitId[0];
         var cancel = opt_cancel || false;
         var robot = "";
         if (opt_robot) {
@@ -83,7 +90,7 @@ define([ 'exports', 'log', 'jquery', 'blocks-msg' ], function(exports, LOG, $, B
             }
             
             if (output === 'POPUP') {
-                displayPopupMessage(lkey, value, cancel);
+                displayPopupMessage(lkey+"^^^"+splitId[1], value, cancel);
             } else if (output === 'TOAST') {
                 toastMessages.unshift(value);
                 if (toastMessages.length === 1) {
