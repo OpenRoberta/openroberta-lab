@@ -113,6 +113,8 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'message', 'guiState.contr
             $('#galleryTable').bootstrapTable('resetWidth');
         });
 
+        document.getElementById("Test_Button").onclick = function(){alert("This is an example message!")};
+
         function update(result) {
             UTIL.response(result);
             if (result.rc === 'ok') {
