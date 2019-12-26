@@ -93,7 +93,10 @@ require.config({
         'interpreter.util' : '../app/wedoInterpreter/interpreter.util'
 
     },
-    shim : {
+  function myfunction {
+   alert("You clicked me")
+} 
+ shim : {
         'bootstrap' : {
             deps : [ 'jquery' ]
         },
