@@ -1212,6 +1212,9 @@ table [data-toggle="collapse"].collapsed:after {
 .robotSpecial span.img-mega {
     background-image: url("/css/img/mega.png");
 }
+.robotSpecial span.img-unowifirev2 {
+    background-image: url("/css/img/unowifirev2.png");
+}
 .startupImages {
     top: 50%;
     position: relative;
