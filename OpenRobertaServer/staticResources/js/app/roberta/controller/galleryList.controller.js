@@ -90,6 +90,7 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'message', 'guiState.contr
 
         $('#tabGalleryList').on('show.bs.tab', function(e) {
             guiStateController.setView('tabGalleryList');
+            $(".pace").show(); // Show loading icon and hide gallery table
             PROGLIST.loadGalleryList(update);
         });
 
@@ -102,6 +103,7 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'message', 'guiState.contr
         });
 
         $('#galleryList').find('button[name="refresh"]').onWrap('click', function() {
+            $(".pace").show(); // Show loading icon and hide gallery table
             PROGLIST.loadGalleryList(update);
             return false;
         }, "refresh gallery list clicked");
@@ -125,6 +127,7 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'message', 'guiState.contr
                 $('#galleryTable').bootstrapTable("load", result.programNames);
                 //configureTagsInput();
             }
+            $(".pace").fadeOut(300); // Hide loading icon and show gallery table
         }
     }
 
