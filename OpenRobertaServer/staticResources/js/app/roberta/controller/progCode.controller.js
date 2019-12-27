@@ -86,7 +86,7 @@ define([ 'exports', 'message', 'log', 'util', 'guiState.controller', 'program.co
 
     function toggleCode() {
         Blockly.hideChaff();
-        if ($('#blockly').hasClass('rightActive')) {
+        if ($('#codeButton').hasClass('rightActive')) {
             $('#blockly').closeRightView();
         } else {
             var dom = Blockly.Xml.workspaceToDom(blocklyWorkspace);
@@ -97,7 +97,7 @@ define([ 'exports', 'message', 'log', 'util', 'guiState.controller', 'program.co
             var xmlConfigText = GUISTATE_C.isConfigurationAnonymous() ? GUISTATE_C.getConfigurationXML() : undefined;
             var language = GUISTATE_C.getLanguage();
             PROGRAM.showSourceProgram(GUISTATE_C.getProgramName(), configName, xmlProgram, xmlConfigText, PROG_C.SSID, PROG_C.password, language, function(
-                    result) {
+                    result) {              
                 PROG_C.reloadProgram(result);
                 if (result.rc == "ok") {
                     GUISTATE_C.setState(result);

@@ -414,6 +414,9 @@ body.blocklyMinimalBody * {
     border-right: 6px solid #C0C0C0;
     border-bottom: 5px solid transparent;
 }
+.rightMenuButton.rightActive {
+    color: #E2001A;
+}
 div.rightMenuButton:hover,
 .rightMenuButton:active {
     cursor: pointer;
@@ -1934,10 +1937,14 @@ img.img-responsive {
 li.L0, li.L1, li.L2, li.L3, li.L5, li.L6, li.L7, li.L8 {
     list-style-type: inherit !important;
 }
-#tutorialOverview .modal-content {
+#tutorialRoberta {
+    width: 200px;
+    height: 200px;
+    position: absolute;
+    bottom: -15%;
+    right: -5%;
     background-image: url(../css/svg/Roberta_zwinkernd.svg);
     background-repeat: no-repeat;
-    background-position: 105% 140%;
     background-size: 200px;
 }
 #tutorialOverview .modal-body {

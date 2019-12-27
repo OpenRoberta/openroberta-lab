@@ -45,7 +45,7 @@ define([ 'exports', 'message', 'log', 'jquery', 'jquery-validate', 'bootstrap' ]
         return new Uint8Array(byteNumbers);
     }
     exports.base64decode = base64decode;
-    
+
     function clone(obj) {
         var copy;
 
@@ -462,10 +462,10 @@ define([ 'exports', 'message', 'log', 'jquery', 'jquery-validate', 'bootstrap' ]
                         left : left - 4
                     });
                     $('#blockly').width(left + 3);
-                    $('.rightMenuButton.rightActive').css({
+                    $('.rightMenuButton').css({
                         'right' : $(window).width() - left
                     });
-                    $('.fromRight.rightActive').css({
+                    $('.fromRight').css({
                         'width' : $(window).width() - $('#blockly').width()
                     })
                     ratioWorkspace = $('#blockly').outerWidth() / $('#main-section').outerWidth();
@@ -513,15 +513,16 @@ define([ 'exports', 'message', 'log', 'jquery', 'jquery-validate', 'bootstrap' ]
             },
             step : function(now) {
                 that.width($('#main-section').outerWidth() - now);
-                $('.rightMenuButton.rightActive').css('right', now);
+                $('.rightMenuButton').css('right', now);
                 ratioWorkspace = $('#blockly').outerWidth() / $('#main-section').outerWidth();
                 $(window).resize();
             },
             done : function() {
                 that.width($('#main-section').outerWidth());
-                $('.rightMenuButton.rightActive').css('right', 0);
+                $('.rightMenuButton').css('right', 0);
                 $('.fromRight.rightActive.shifting').removeClass('shifting');
                 ratioWorkspace = 1;
+                $('.fromRight').width(0);
                 that.removeClass('rightActive');
                 $('.fromRight.rightActive').removeClass('rightActive');
                 $('.rightMenuButton.rightActive').removeClass('rightActive');
@@ -536,8 +537,6 @@ define([ 'exports', 'message', 'log', 'jquery', 'jquery-validate', 'bootstrap' ]
 
     $.fn.openRightView = function(viewName, initialViewWidth, opt_callBack) {
         Blockly.hideChaff();
-        this.addClass('rightActive');
-        $('#' + viewName + 'Div, #' + viewName + 'Button').addClass('rightActive');
         var width;
         var smallScreen;
         if ($(window).width() < 768) {
@@ -547,6 +546,21 @@ define([ 'exports', 'message', 'log', 'jquery', 'jquery-validate', 'bootstrap' ]
             smallScreen = false;
             width = this.width() * initialViewWidth;
         }
+        if ($('#blockly').hasClass('rightActive')) {
+            $('.fromRight.rightActive').removeClass('rightActive');
+            $('.rightMenuButton.rightActive').removeClass('rightActive');
+            $('#' + viewName + 'Div, #' + viewName + 'Button').addClass('rightActive');
+            $(window).resize();
+            if (smallScreen) {
+                $('.blocklyToolboxDiv').css('display', 'none');
+            }
+            if (typeof opt_callBack == 'function') {
+                opt_callBack();
+            }
+            return;
+        }
+        this.addClass('rightActive');
+        $('#' + viewName + 'Div, #' + viewName + 'Button').addClass('rightActive');
         var that = this;
         $('.fromRight.rightActive').animate({
             width : width
@@ -555,16 +569,16 @@ define([ 'exports', 'message', 'log', 'jquery', 'jquery-validate', 'bootstrap' ]
             start : function() {
                 $('#' + viewName + 'Div').addClass('shifting');
             },
-            step : function(now) {
+            step : function(now, tween) {
                 that.width($('#main-section').outerWidth() - now);
-                $('.rightMenuButton.rightActive').css('right', now);
+                $('.rightMenuButton').css('right', now);
                 ratioWorkspace = $('#blockly').outerWidth() / $('#main-section').outerWidth();
                 $(window).resize();
             },
             done : function() {
                 $('#sliderDiv').show();
                 that.width($('#main-section').outerWidth() - $('.fromRight.rightActive').width());
-                $('.rightMenuButton.rightActive').css('right', $('.fromRight.rightActive').width());
+                $('.rightMenuButton').css('right', $('.fromRight.rightActive').width());
                 $('#' + viewName + 'Div').removeClass('shifting');
                 ratioWorkspace = $('#blockly').outerWidth() / $('#main-section').outerWidth();
                 $(window).resize();
@@ -591,7 +605,7 @@ define([ 'exports', 'message', 'log', 'jquery', 'jquery-validate', 'bootstrap' ]
         if (!$('.fromRight.rightActive.shifting').length > 0) {
             if ($('.fromRight.rightActive').length > 0) {
                 $('.fromRight.rightActive').width(rightWidth);
-                $('.rightMenuButton.rightActive').css('right', rightWidth);
+                $('.rightMenuButton').css('right', rightWidth);
                 $('#sliderDiv').css('left', leftWidth - 7);
             }
             $('#blockly').width(leftWidth);

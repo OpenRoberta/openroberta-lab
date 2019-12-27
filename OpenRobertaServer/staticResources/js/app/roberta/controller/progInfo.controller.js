@@ -67,7 +67,7 @@ define([ 'exports', 'message', 'log', 'util', 'guiState.controller', 'blocks', '
 
     function toggleInfo() {
         Blockly.hideChaff();
-        if ($('#blockly').hasClass('rightActive')) {
+        if ($('#infoButton').hasClass('rightActive')) {
             $('#blockly').closeRightView();
         } else {
             $('#infoContent').html(blocklyWorkspace.description);

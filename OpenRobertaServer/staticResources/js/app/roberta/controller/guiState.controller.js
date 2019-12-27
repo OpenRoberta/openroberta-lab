@@ -1,4 +1,4 @@
-define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'progHelp.controller', 'progLegal.controller', 'webview.controller', 'socket.controller',
+define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'progHelp.controller', 'legal.controller', 'webview.controller', 'socket.controller',
         'jquery' ], function(exports, UTIL, LOG, MSG, GUISTATE, HELP_C, LEGAL_C, WEBVIEW_C, SOCKET_C, $) {
 
     var LONG = 300000; // Ping time 5min

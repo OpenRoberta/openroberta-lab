@@ -1,7 +1,7 @@
 define([ 'exports', 'comm', 'message', 'log', 'guiState.controller', 'program.controller', 'robot.controller', 'blocks', 'jquery' ], function(exports, COMM,
         MSG, LOG, GUISTATE_C, PROG_C, ROBOT_C, Blockly, $) {
 
-    const INITIAL_WIDTH = 0.3;
+    const INITIAL_WIDTH = 0.5;
     var blocklyWorkspace;
     var tutorialList;
     var tutorial;
@@ -314,7 +314,7 @@ define([ 'exports', 'comm', 'message', 'log', 'guiState.controller', 'program.co
     }
 
     function toggleTutorial() {
-        if ($('#blockly').hasClass('rightActive')) {
+        if ($('#tutorialButton').hasClass('rightActive')) {
             $('#blockly').closeRightView();
         } else {
             $('#blockly').openRightView('tutorial', INITIAL_WIDTH);

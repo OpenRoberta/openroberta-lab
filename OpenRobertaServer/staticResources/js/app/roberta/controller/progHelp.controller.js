@@ -54,7 +54,7 @@ define([ 'exports', 'message', 'log', 'util', 'guiState.controller', 'blocks', '
 
     function toggleHelp() {
         Blockly.hideChaff();
-        if ($('#blockly').hasClass('rightActive')) {
+        if ($('#helpButton').hasClass('rightActive')) {
             $('#blockly').closeRightView();
         } else {
             if (GUISTATE_C.getProgramToolboxLevel() === 'beginner') {

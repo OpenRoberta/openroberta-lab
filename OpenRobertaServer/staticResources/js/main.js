@@ -30,13 +30,13 @@ require.config({
         'guiState.model' : '../app/roberta/models/guiState.model',
         'import.controller' : '../app/roberta/controller/import.controller',
         'language.controller' : '../app/roberta/controller/language.controller',
+        'legal.controller' : '../app/roberta/controller/legal.controller',      
         'logList.controller' : '../app/roberta/controller/logList.controller',
         'logList.model' : '../app/roberta/models/logList.model',
         'menu.controller' : '../app/roberta/controller/menu.controller',
         'multSim.controller' : '../app/roberta/controller/multSim.controller',
         'progCode.controller' : '../app/roberta/controller/progCode.controller',
         'progDelete.controller' : '../app/roberta/controller/progDelete.controller',
-        'progLegal.controller' : '../app/roberta/controller/progLegal.controller',
         'progHelp.controller' : '../app/roberta/controller/progHelp.controller',
         'progInfo.controller' : '../app/roberta/controller/progInfo.controller',
         'progSim.controller' : '../app/roberta/controller/progSim.controller',
@@ -127,7 +127,7 @@ require.config({
 require([ 'require', 'wrap', 'log', 'jquery', 'jquery-cookie', 'guiState.controller', 'progList.controller', 'logList.controller', 'confList.controller',
         'progDelete.controller', 'confDelete.controller', 'progShare.controller', 'cookieDisclaimer.controller', 'menu.controller', 'multSim.controller',
         'user.controller', 'robot.controller', 'program.controller', 'progSim.controller', 'progCode.controller', 'progDelete.controller',
-        'progHelp.controller', 'progLegal.controller', 'progInfo.controller', 'progRun.controller', 'configuration.controller', 'language.controller', 'socket.controller',
+        'progHelp.controller', 'legal.controller', 'progInfo.controller', 'progRun.controller', 'configuration.controller', 'language.controller', 'socket.controller',
         'progTutorial.controller', 'tutorialList.controller', 'volume-meter', 'user.model', 'webview.controller', 'sourceCodeEditor.controller', 'codeflask' ], function(require) {
     $ = require('jquery', 'jquery-cookie');
     WRAP = require('wrap');
@@ -146,9 +146,9 @@ require([ 'require', 'wrap', 'log', 'jquery', 'jquery-cookie', 'guiState.control
     progListController = require('progList.controller');
     galleryListController = require('galleryList.controller');
     tutorialListController = require('tutorialList.controller');
+    legalController = require('legal.controller');    
     programController = require('program.controller');
     progHelpController = require('progHelp.controller');
-    progLegalController = require('progLegal.controller');
     progInfoController = require('progInfo.controller');
     progCodeController = require('progCode.controller');
     progSimController = require('progSim.controller');
@@ -189,13 +189,11 @@ function init() {
         confDeleteController.init();
         progShareController.init();
         logListController.init();
-        
+        legalController.init();
         sourceCodeEditorController.init();
-
         programController.init();
         configurationController.init();
         progHelpController.init();
-        progLegalController.init();
         progInfoController.init();
         progCodeController.init();
         progSimController.init();
