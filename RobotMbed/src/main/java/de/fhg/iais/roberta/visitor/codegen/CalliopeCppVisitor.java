@@ -669,9 +669,13 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
     }
 
     @Override
-    public Void visitListRepeat(ListRepeat<Void> listRepeat) {
-        throw new DbcException("Not supported list function " + listRepeat.getClass().getName());
-    }
+	public Void visitListRepeat(ListRepeat<Void> listRepeat) {
+		super.visitListRepeat(listRepeat);
+		if ( listRepeat.getTypeVar() == BlocklyType.CONNECTION && listRepeat.getParam().get(0).getVarType() == BlocklyType.NULL ) {
+			listRepeat.addInfo(NepoInfo.error("ERROR_MISSING_PARAMETER"));
+		}
+		return null;
+	}
 
     @Override
     public Void visitIndexOfFunct(IndexOfFunct<Void> indexOfFunct) {
