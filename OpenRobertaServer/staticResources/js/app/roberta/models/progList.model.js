@@ -28,6 +28,8 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
      * Refresh example list
      */
     function loadGalleryList(successFn) {
+        $(".pace").show(); // Show loading icon and hide gallery table
+        $(".galleryTable").fadeOut(200);
         COMM.json("/program/gallery", {
         }, successFn, "load gallery list");
     }

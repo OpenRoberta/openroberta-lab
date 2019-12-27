@@ -117,6 +117,8 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'message', 'guiState.contr
             UTIL.response(result);
             if (result.rc === 'ok') {
                 $('#galleryTable').bootstrapTable("load", result.programNames);
+                $(".pace").fadeOut(300); // Hide loading icon and show gallery table
+                $(".galleryTable").show();
                 //configureTagsInput();
             }
         }
