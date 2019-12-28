@@ -221,7 +221,7 @@ public class VorwerkCommunicator {
     }
 
     /**
-     * check the response from a channel. Return if ok; if an error occurred, throw an exception
+     * check the response from a channel. Return if ok; if an error occured, throw an exception
      *
      * @throws Exception
      */
