@@ -8,9 +8,9 @@ public enum ShowPicture implements IShowPicture {
     EYESOPEN( "AUGENOFFEN", "" ),
     EYESCLOSED( "AUGENZU", "AUGEN ZU" ),
     FLOWERS( "BLUMEN", "Blumen" ),
-    TACHO( "Tacho" ),
-    STEERING("Steering"),
-    CHECKMARK("Checkmark");
+    TACHO( "TACHO" ),
+    STEERING("STEERING"),
+    CHECKMARK("STEERING");
 
     private final String[] values;
 
