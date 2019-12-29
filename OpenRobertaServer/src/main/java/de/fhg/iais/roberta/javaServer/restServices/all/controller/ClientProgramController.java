@@ -56,7 +56,7 @@ public class ClientProgramController {
     private static String getRobot(HttpSessionState httpSessionState) {
         return (httpSessionState.getRobotFactory(httpSessionState.getRobotName()).getGroup().isEmpty())
             ? httpSessionState.getRobotName()
-            : httpSessionState.getRobotFactory(httpSessionState.getRobotName()).getGroup();
+                : httpSessionState.getRobotFactory(httpSessionState.getRobotName()).getGroup();
     }
 
     @POST
