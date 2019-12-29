@@ -1,5 +1,6 @@
 package de.fhg.iais.roberta.visitor.validate;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 
 import de.fhg.iais.roberta.bean.UsedHardwareBean;
@@ -462,9 +463,17 @@ public abstract class AbstractProgramValidatorVisitor extends AbstractCollectorV
     private void checkForZeroSpeed(Expr<Void> speed, Action<Void> action) {
         if ( speed.getKind().hasName("NUM_CONST") ) {
             NumConst<Void> speedNumConst = (NumConst<Void>) speed;
-            if ( Integer.valueOf(speedNumConst.getValue()) == 0 ) {
-                action.addInfo(NepoInfo.warning("MOTOR_SPEED_0"));
-                this.warningCount++;
+            try {
+                if (new BigInteger(speedNumConst.getValue()).compareTo(new BigInteger("0")) == 0) {
+                    action.addInfo(NepoInfo.warning("MOTOR_SPEED_0"));
+                    this.warningCount++;
+                }
+            }
+            catch(ClassCastException | NullPointerException e){
+                if(Integer.valueOf(speedNumConst.getValue()) == 0){
+                    action.addInfo(NepoInfo.warning("MOTOR_SPEED_0"));
+                    this.warningCount++;
+                }
             }
         }
     }
