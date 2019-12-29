@@ -1051,6 +1051,30 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
         }
         return robot;
     }
+    
+    function getWebAudio() {
+        if (!this.webAudio) {
+            this.webAudio = {};
+            var AudioContext = window.AudioContext || window.webkitAudioContext || false;
+            if (AudioContext) {
+                this.webAudio.context = new AudioContext();
+                this.webAudio.oscillator = this.webAudio.context.createOscillator();
+                this.webAudio.oscillator.type = 'square';
+                this.webAudio.gainNode = this.webAudio.context.createGain();
+                this.webAudio.oscillator.start(0);
+                this.webAudio.oscillator.connect(this.webAudio.gainNode);
+                this.webAudio.gainNode.connect(this.webAudio.context.destination);
+                this.webAudio.gainNode.gain.setValueAtTime(0, 0);
+            } else {
+                this.webAudio.context = null;
+                this.webAudio.oscillator = null;
+                this.webAudio.ganinNode = null;
+                console.log("Sorry, but the Web Audio API is not supported by your browser. Please, consider upgrading to the latest version or downloading Google Chrome or Mozilla Firefox");
+            }
+        }
+        return this.webAudio;
+    }
+    exports.getWebAudio = getWebAudio;
 });
 
 //http://paulirish.com/2011/requestanimationframe-for-smart-animating/

@@ -31,27 +31,12 @@ define([ 'simulation.simulation', 'simulation.constants' ], function(SIM, CONSTA
         this.timer = {};
         this.debug = false;
 
-        var AudioContext = window.AudioContext || window.webkitAudioContext || false;
-        if (AudioContext) {
-            var context = new AudioContext();
-
-            var oscillator = context.createOscillator();
-            oscillator.type = 'square';
-            var gainNode = context.createGain();
-            oscillator.start(0);
-
-            oscillator.connect(gainNode);
-            gainNode.connect(context.destination);
-            gainNode.gain.setValueAtTime(0, 0);
-        } else {
-            var context = null;
-            console.log("Sorry, but the Web Audio API is not supported by your browser. Please, consider upgrading to the latest version or downloading Google Chrome or Mozilla Firefox");
-        }
+        var webAudio = SIM.getWebAudio();
 
         this.webAudio = {
-            context : context,
-            oscillator : oscillator,
-            gainNode : gainNode,
+            context : webAudio.context,
+            oscillator : webAudio.oscillator,
+            gainNode : webAudio.gainNode,
             volume : 0.5,
         }
     }
