@@ -411,7 +411,7 @@ public class Util {
      *
      * @param uri URI of the YAML file. Never null
      * @return the YAML file as JSONObject. Never null, may be empty
-     * @throws DbcException if the content is syntacically incorrect or duplicate keys are found
+     * @throws DbcException if the content is syntactically incorrect or duplicate keys are found
      */
     public static JSONObject loadYAML(String uri) {
         Assert.nonEmptyString(uri, "URI is null or empty");
