@@ -1,6 +1,9 @@
 package de.fhg.iais.roberta.syntax;
 
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
+import de.fhg.iais.roberta.syntax.lang.expr.NumConst;
+
+import java.math.BigDecimal;
 
 /**
  * This class is parameter class used to set the speed of a motor and the type of movement the motor {@link MotorDuration.Mode}.
@@ -47,8 +50,26 @@ public class MotionParam<V> {
          * @return reference returned so calls can be chained
          */
         public Builder<V> speed(Expr<V> speed) {
-            this.speed = speed;
+//            this.speed = speed;
+            this.speed = NumConst.make(adjustSpeed(speed), speed.getProperty(), speed.getComment());
             return this;
+        }
+
+        public String adjustSpeed(Expr<V> speed){
+            BigDecimal val = new BigDecimal(((NumConst)speed).getValue());
+            String outVal;
+
+            if(val.compareTo(new BigDecimal(100)) == 1){
+                outVal = "100";
+            }
+            else if (val.compareTo(new BigDecimal(-100)) == -1){
+                outVal = "100";
+            }
+            else{
+                outVal = val.toString();
+            }
+
+            return outVal;
         }
 
         /**
