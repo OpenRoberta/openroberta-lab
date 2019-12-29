@@ -1,7 +1,7 @@
 package de.fhg.iais.roberta.util;
 
 /**
- * a pair of objects of arbitrary types. Use the factory method {@link #of(Object, Object)} to create pairs. Pairs are <b>immuntable</b>.
+ * a pair of objects of arbitrary types. Use the factory method {@link #of(Object, Object)} to create pairs. Pairs are <b>immutable</b>.
  *
  * @author rbudde
  * @param <X>

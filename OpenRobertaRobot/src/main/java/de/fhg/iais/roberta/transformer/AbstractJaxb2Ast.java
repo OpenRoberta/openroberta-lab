@@ -331,7 +331,7 @@ abstract public class AbstractJaxb2Ast<V> {
      *
      * @param values to be converted
      * @param defVal if the value is missing in the JAXB representation
-     * @param nItems that should be conveted
+     * @param nItems that should be converted
      * @param name of the values
      * @return
      */
