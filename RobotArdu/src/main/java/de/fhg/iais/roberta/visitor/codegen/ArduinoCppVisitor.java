@@ -211,23 +211,23 @@ public final class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor imp
         return null;
     }
 
-    public void measureDistanceUltrasonicSensor(String sensorName) {
-        this.sb.append("double _getUltrasonicDistance()");
+    public void createDistanceUltrasonicSensor() {
+        this.sb.append("double _getUltrasonicDistance(int trigger, int echo)");
         nlIndent();
         this.sb.append("{");
         incrIndentation();
         nlIndent();
-        this.sb.append("digitalWrite(_trigger_" + sensorName + ", LOW);");
+        this.sb.append("digitalWrite(trigger, LOW);");
         nlIndent();
         this.sb.append("delay(5);");
         nlIndent();
-        this.sb.append("digitalWrite(_trigger_" + sensorName + ", HIGH);");
+        this.sb.append("digitalWrite(trigger, HIGH);");
         nlIndent();
         this.sb.append("delay(10);");
         nlIndent();
-        this.sb.append("digitalWrite(_trigger_" + sensorName + ", LOW);");
+        this.sb.append("digitalWrite(trigger, LOW);");
         nlIndent();
-        this.sb.append("return pulseIn(_echo_" + sensorName + ", HIGH)*_signalToDistance;");
+        this.sb.append("return pulseIn(echo, HIGH) * 0.03432/2;");
         decrIndentation();
         nlIndent();
         this.sb.append("}");
@@ -236,7 +236,13 @@ public final class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor imp
 
     @Override
     public Void visitUltrasonicSensor(UltrasonicSensor<Void> ultrasonicSensor) {
-        this.sb.append("_getUltrasonicDistance()");
+        this.sb
+            .append("_getUltrasonicDistance(_trigger_")
+            .append(ultrasonicSensor.getPort())
+            .append(", ")
+            .append("_echo_")
+            .append(ultrasonicSensor.getPort())
+            .append(")");
         return null;
     }
 
@@ -286,14 +292,10 @@ public final class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor imp
     }
 
     public Void readRFIDData(String sensorName) {
-        this.sb.append("String _readRFIDData()");
-        nlIndent();
-        this.sb.append("{");
+        this.sb.append("String _readRFIDData(MFRC522 &mfrc522) {");
         incrIndentation();
         nlIndent();
-        this.sb.append("if(!_mfrc522_" + sensorName + ".PICC_IsNewCardPresent()) ");
-        nlIndent();
-        this.sb.append("{");
+        this.sb.append("if (!mfrc522.PICC_IsNewCardPresent()) {");
         incrIndentation();
         nlIndent();
         this.sb.append("return \"N/A\";");
@@ -301,9 +303,7 @@ public final class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor imp
         nlIndent();
         this.sb.append("}");
         nlIndent();
-        this.sb.append("if(!_mfrc522_" + sensorName + ".PICC_ReadCardSerial())");
-        nlIndent();
-        this.sb.append("{");
+        this.sb.append("if (!mfrc522.PICC_ReadCardSerial()) {");
         incrIndentation();
         nlIndent();
         this.sb.append("return \"N/D\";");
@@ -311,18 +311,15 @@ public final class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor imp
         nlIndent();
         this.sb.append("}");
         nlIndent();
-        this.sb
-            .append(
-                "return String(((long)(_mfrc522_"
-                    + sensorName
-                    + ".uid.uidByte[0])<<24)\n    |((long)(_mfrc522_"
-                    + sensorName
-                    + ".uid.uidByte[1])<<16)\n    | ((long)(_mfrc522_"
-                    + sensorName
-                    + ".uid.uidByte[2])<<8)\n    | ((long)_mfrc522_"
-                    + sensorName
-                    + ".uid.uidByte[3]), HEX);");
-
+        this.sb.append("return String(((long)(mfrc522.uid.uidByte[0])<<24)");
+        incrIndentation();
+        nlIndent();
+        this.sb.append("| ((long)(mfrc522.uid.uidByte[1])<<16)");
+        nlIndent();
+        this.sb.append("| ((long)(mfrc522.uid.uidByte[2])<<8)");
+        nlIndent();
+        this.sb.append("| ((long)(mfrc522.uid.uidByte[3]), HEX));");
+        decrIndentation();
         decrIndentation();
         nlIndent();
         this.sb.append("}");
@@ -338,7 +335,7 @@ public final class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor imp
                 this.sb.append("_mfrc522_" + rfidSensor.getPort() + ".PICC_IsNewCardPresent()");
                 break;
             case SC.IDONE:
-                this.sb.append("_readRFIDData()");
+                this.sb.append("_readRFIDData(_mfrc522_").append(rfidSensor.getPort()).append(")");
                 break;
             default:
                 throw new DbcException("Invalide mode for RFID Sensor!");
@@ -346,45 +343,50 @@ public final class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor imp
         return null;
     }
 
-    public void measureIRValue(UsedSensor infraredSensor) {
-        switch ( infraredSensor.getMode() ) {
-            case SC.PRESENCE:
-                this.sb.append("bool _getIRResults()\n{");
-                incrIndentation();
-                nlIndent();
-                this.sb.append("bool results = false;");
-                nlIndent();
-                this.sb.append("if (_irrecv_" + infraredSensor.getPort() + ".decode(&_results_" + infraredSensor.getPort() + ")) {");
-                incrIndentation();
-                nlIndent();
-                this.sb.append("results = true;");
-                nlIndent();
-                this.sb.append("_irrecv_" + infraredSensor.getPort() + ".resume();");
-                decrIndentation();
-                nlIndent();
-                this.sb.append("}");
-                break;
-            case SC.VALUE:
-                this.sb.append("long int _getIRResults()\n{");
-                incrIndentation();
-                nlIndent();
-                this.sb.append("long int results = 0;");
-                nlIndent();
-                this.sb.append("if (_irrecv_" + infraredSensor.getPort() + ".decode(&_results_" + infraredSensor.getPort() + ")) {");
-                incrIndentation();
-                nlIndent();
-                this.sb.append("results = _results_" + infraredSensor.getPort() + ".value;");
-                nlIndent();
-                this.sb.append("_irrecv_" + infraredSensor.getPort() + ".resume();");
-                decrIndentation();
-                nlIndent();
-                this.sb.append("}");
-                break;
-            default:
-                throw new DbcException("Invalide mode for IR Sensor!");
-        }
+    public void createMeasureIRSensor() {
+        this.sb.append("bool _getIRPresence(IRrecv irrecv, decode_results &irResults) {");
+        incrIndentation();
         nlIndent();
-        this.sb.append("return results;");
+        this.sb.append("if (irrecv.decode(&irResults)) {");
+        incrIndentation();
+        nlIndent();
+        this.sb.append("irrecv.resume();");
+        nlIndent();
+        this.sb.append("return true;");
+        decrIndentation();
+        nlIndent();
+        this.sb.append("} else {");
+        incrIndentation();
+        nlIndent();
+        this.sb.append("return false;");
+        decrIndentation();
+        nlIndent();
+        this.sb.append("}");
+        decrIndentation();
+        nlIndent();
+        this.sb.append("}");
+        nlIndent();
+        nlIndent();
+        this.sb.append("long int  _getIRValue(IRrecv irrecv, decode_results &irResults) {");
+        incrIndentation();
+        nlIndent();
+        this.sb.append("if (irrecv.decode(&irResults)) {");
+        incrIndentation();
+        nlIndent();
+        this.sb.append("long int tmpValue = irResults.value;");
+        nlIndent();
+        this.sb.append("irrecv.resume();");
+        nlIndent();
+        this.sb.append("return tmpValue;");
+        decrIndentation();
+        nlIndent();
+        this.sb.append("} else {");
+        incrIndentation();
+        nlIndent();
+        this.sb.append("return 0;");
+        decrIndentation();
+        nlIndent();
+        this.sb.append("}");
         decrIndentation();
         nlIndent();
         this.sb.append("}");
@@ -393,7 +395,16 @@ public final class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor imp
 
     @Override
     public Void visitInfraredSensor(InfraredSensor<Void> infraredSensor) {
-        this.sb.append("_getIRResults()");
+        switch ( infraredSensor.getMode() ) {
+            case SC.PRESENCE:
+                this.sb.append("_getIRPresence(_irrecv_").append(infraredSensor.getPort()).append(", _results_").append(infraredSensor.getPort()).append(")");
+                break;
+            case SC.VALUE:
+                this.sb.append("_getIRValue(_irrecv_").append(infraredSensor.getPort()).append(", _results_").append(infraredSensor.getPort()).append(")");
+                break;
+            default:
+                throw new DbcException(infraredSensor.getKind().getName() + " mode is not supported: " + infraredSensor.getMode());
+        }
         return null;
     }
 
@@ -439,14 +450,15 @@ public final class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor imp
         }
         for ( UsedSensor usedSensor : this.usedHardwareBean.getUsedSensors() ) {
             if ( usedSensor.getType().equals(SC.INFRARED) ) {
-                measureIRValue(usedSensor);
+                nlIndent();
+                createMeasureIRSensor();
                 nlIndent();
                 break;
             }
         }
         for ( ConfigurationComponent usedConfigurationBlock : this.configuration.getConfigurationComponentsValues() ) {
             if ( usedConfigurationBlock.getComponentType().equals(SC.ULTRASONIC) ) {
-                measureDistanceUltrasonicSensor(usedConfigurationBlock.getUserDefinedPortName());
+                createDistanceUltrasonicSensor();
                 nlIndent();
                 break;
             }
@@ -672,8 +684,6 @@ public final class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor imp
                     this.sb.append("int _trigger_" + blockName + " = ").append(cc.getProperty("TRIG")).append(";");
                     nlIndent();
                     this.sb.append("int _echo_" + blockName + " = ").append(cc.getProperty("ECHO")).append(";");
-                    nlIndent();
-                    this.sb.append("double _signalToDistance = 0.03432/2;");
                     nlIndent();
                     break;
                 case SC.MOISTURE:

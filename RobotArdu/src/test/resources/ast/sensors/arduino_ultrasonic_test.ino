@@ -7,15 +7,14 @@
 double ___item;
 int _trigger_U = 7;
 int _echo_U = 6;
-double _signalToDistance = 0.03432/2;
-double _getUltrasonicDistance()
+double _getUltrasonicDistance(int trigger, int echo)
 {
-    digitalWrite(_trigger_U, LOW);
+    digitalWrite(trigger, LOW);
     delay(5);
-    digitalWrite(_trigger_U, HIGH);
+    digitalWrite(trigger, HIGH);
     delay(10);
-    digitalWrite(_trigger_U, LOW);
-    return pulseIn(_echo_U, HIGH)*_signalToDistance;
+    digitalWrite(trigger, LOW);
+    return pulseIn(echo, HIGH) * 0.03432/2;
 }
 
 void setup()
@@ -23,7 +22,7 @@ void setup()
     Serial.begin(9600); 
     pinMode(_trigger_U, OUTPUT);
     pinMode(_echo_U, INPUT);
-    ___item = _getUltrasonicDistance();
+    ___item = _getUltrasonicDistance(_trigger_U, _echo_U);
 }
 
 void loop()

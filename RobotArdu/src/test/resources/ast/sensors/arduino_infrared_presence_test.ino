@@ -9,14 +9,24 @@ bool ___item;
 int _RECV_PIN_I = 11;
 IRrecv _irrecv_I(_RECV_PIN_I);
 decode_results _results_I;
-bool _getIRResults()
-{
-    bool results = false;
-    if (_irrecv_I.decode(&_results_I)) {
-        results = true;
-        _irrecv_I.resume();
+
+bool _getIRPresence(IRrecv irrecv, decode_results &irResults) {
+    if (irrecv.decode(&irResults)) {
+        irrecv.resume();
+        return true;
+    } else {
+        return false;
     }
-    return results;
+}
+
+long int  _getIRValue(IRrecv irrecv, decode_results &irResults) {
+    if (irrecv.decode(&irResults)) {
+        long int tmpValue = irResults.value;
+        irrecv.resume();
+        return tmpValue;
+    } else {
+        return 0;
+    }
 }
 
 void setup()
@@ -24,7 +34,7 @@ void setup()
     Serial.begin(9600); 
     pinMode(13, OUTPUT);
     _irrecv_I.enableIRIn();
-    ___item = _getIRResults();
+    ___item = _getIRPresence(_irrecv_I, _results_I);
 }
 
 void loop()

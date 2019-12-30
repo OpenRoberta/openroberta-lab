@@ -11,20 +11,17 @@ bool ___item2;
 #define SS_PIN_R 10
 #define RST_PIN_R 9
 MFRC522 _mfrc522_R(SS_PIN_R, RST_PIN_R);
-String _readRFIDData()
-{
-    if(!_mfrc522_R.PICC_IsNewCardPresent()) 
-    {
+String _readRFIDData(MFRC522 &mfrc522) {
+    if (!mfrc522.PICC_IsNewCardPresent()) {
         return "N/A";
     }
-    if(!_mfrc522_R.PICC_ReadCardSerial())
-    {
+    if (!mfrc522.PICC_ReadCardSerial()) {
         return "N/D";
     }
-    return String(((long)(_mfrc522_R.uid.uidByte[0])<<24)
-    |((long)(_mfrc522_R.uid.uidByte[1])<<16)
-    | ((long)(_mfrc522_R.uid.uidByte[2])<<8)
-    | ((long)_mfrc522_R.uid.uidByte[3]), HEX);
+    return String(((long)(mfrc522.uid.uidByte[0])<<24)
+        | ((long)(mfrc522.uid.uidByte[1])<<16)
+        | ((long)(mfrc522.uid.uidByte[2])<<8)
+        | ((long)(mfrc522.uid.uidByte[3]), HEX));
 }
 
 void setup()
@@ -32,7 +29,7 @@ void setup()
     Serial.begin(9600); 
     SPI.begin();
     _mfrc522_R.PCD_Init();
-    ___item = _readRFIDData();
+    ___item = _readRFIDData(_mfrc522_R);
     ___item2 = _mfrc522_R.PICC_IsNewCardPresent();
 }
 

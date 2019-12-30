@@ -17,20 +17,17 @@ MFRC522 _mfrc522_R6(SS_PIN_R6, RST_PIN_R6);
 #define RST_PIN_R7 9
 MFRC522 _mfrc522_R7(SS_PIN_R7, RST_PIN_R7);
 Servo _servo_S2;
-String _readRFIDData()
-{
-    if(!_mfrc522_R6.PICC_IsNewCardPresent()) 
-    {
+String _readRFIDData(MFRC522 &mfrc522) {
+    if (!mfrc522.PICC_IsNewCardPresent()) {
         return "N/A";
     }
-    if(!_mfrc522_R6.PICC_ReadCardSerial())
-    {
+    if (!mfrc522.PICC_ReadCardSerial()) {
         return "N/D";
     }
-    return String(((long)(_mfrc522_R6.uid.uidByte[0])<<24)
-    |((long)(_mfrc522_R6.uid.uidByte[1])<<16)
-    | ((long)(_mfrc522_R6.uid.uidByte[2])<<8)
-    | ((long)_mfrc522_R6.uid.uidByte[3]), HEX);
+    return String(((long)(mfrc522.uid.uidByte[0])<<24)
+        | ((long)(mfrc522.uid.uidByte[1])<<16)
+        | ((long)(mfrc522.uid.uidByte[2])<<8)
+        | ((long)(mfrc522.uid.uidByte[3]), HEX));
 }
 
 void setup()
@@ -50,6 +47,6 @@ void loop()
 {
     _servo_S.write(90);
     _servo_S.write(90);
-    ___item = _readRFIDData();
-    ___item = _readRFIDData();
+    ___item = _readRFIDData(_mfrc522_R6);
+    ___item = _readRFIDData(_mfrc522_R6);
 }
