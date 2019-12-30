@@ -236,6 +236,7 @@ Blockly.Msg.DISPLAY_PICTURE_EYES_CLOSED = "闭上眼";
 Blockly.Msg.DISPLAY_PICTURE_EYES_OPEN = "睁开眼睛";
 Blockly.Msg.DISPLAY_PICTURE_FLOWERS = "花";
 Blockly.Msg.DISPLAY_PICTURE_GLASSES = "眼镜";
+Blockly.Msg.DISPLAY_PICTURE_SMILEY = "smiley";  // untranslated
 Blockly.Msg.DISPLAY_PICTURE_TACHO = "速度表";
 Blockly.Msg.DISPLAY_PICTURE_TOOLTIP = "在屏幕上显示图片。";
 Blockly.Msg.DISPLAY_PIXEL_BRIGHTNESS = "亮度";

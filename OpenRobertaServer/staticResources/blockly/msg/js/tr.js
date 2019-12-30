@@ -236,6 +236,7 @@ Blockly.Msg.DISPLAY_PICTURE_EYES_CLOSED = "Gözler kapalı";
 Blockly.Msg.DISPLAY_PICTURE_EYES_OPEN = "Gözler açık";
 Blockly.Msg.DISPLAY_PICTURE_FLOWERS = "Çiçekler";
 Blockly.Msg.DISPLAY_PICTURE_GLASSES = "Bardaklar";
+Blockly.Msg.DISPLAY_PICTURE_SMILEY = "smiley";  // untranslated
 Blockly.Msg.DISPLAY_PICTURE_TACHO = "Tako";
 Blockly.Msg.DISPLAY_PICTURE_TOOLTIP = "Ekran üzerinde bir resim gösterir.";
 Blockly.Msg.DISPLAY_PIXEL_BRIGHTNESS = "brightness";  // untranslated

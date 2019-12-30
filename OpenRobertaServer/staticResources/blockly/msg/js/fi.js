@@ -236,6 +236,7 @@ Blockly.Msg.DISPLAY_PICTURE_EYES_CLOSED = "silmät kiinni";
 Blockly.Msg.DISPLAY_PICTURE_EYES_OPEN = "silmät auki";
 Blockly.Msg.DISPLAY_PICTURE_FLOWERS = "kukat";
 Blockly.Msg.DISPLAY_PICTURE_GLASSES = "lasit";
+Blockly.Msg.DISPLAY_PICTURE_SMILEY = "smiley";  // untranslated
 Blockly.Msg.DISPLAY_PICTURE_TACHO = "tacho";
 Blockly.Msg.DISPLAY_PICTURE_TOOLTIP = "Näytä kuva ruudulla.";
 Blockly.Msg.DISPLAY_PIXEL_BRIGHTNESS = "brightness";  // untranslated

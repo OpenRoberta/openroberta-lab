@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2019-12-27 11:01:54.883415",
+		"lastupdated": "2019-12-28 21:52:15.638419",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -497,6 +497,7 @@
 	"DISPLAY_ROW": "in row",
 	"DISPLAY_CLEAR": "clear display",
 	"DISPLAY_PICTURE": "picture",
+	"DISPLAY_PICTURE_SMILEY": "smiley",
 	"DISPLAY_PICTURE_GLASSES": "glasses",
 	"DISPLAY_PICTURE_EYES_OPEN": "eyes open",
 	"DISPLAY_PICTURE_EYES_CLOSED": "eyes closed",

@@ -236,6 +236,7 @@ Blockly.Msg.DISPLAY_PICTURE_EYES_CLOSED = "begiak itxita";
 Blockly.Msg.DISPLAY_PICTURE_EYES_OPEN = "begiak irekita";
 Blockly.Msg.DISPLAY_PICTURE_FLOWERS = "loreak";
 Blockly.Msg.DISPLAY_PICTURE_GLASSES = "betaurrekoak";
+Blockly.Msg.DISPLAY_PICTURE_SMILEY = "smiley";  // untranslated
 Blockly.Msg.DISPLAY_PICTURE_TACHO = "takometroa";
 Blockly.Msg.DISPLAY_PICTURE_TOOLTIP = "Pantailan irudi bat erakusten du.";
 Blockly.Msg.DISPLAY_PIXEL_BRIGHTNESS = "distira";

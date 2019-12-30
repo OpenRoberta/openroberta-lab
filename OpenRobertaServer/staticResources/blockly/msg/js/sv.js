@@ -236,6 +236,7 @@ Blockly.Msg.DISPLAY_PICTURE_EYES_CLOSED = "stängda ögon";
 Blockly.Msg.DISPLAY_PICTURE_EYES_OPEN = "öppna ögon";
 Blockly.Msg.DISPLAY_PICTURE_FLOWERS = "blommor";
 Blockly.Msg.DISPLAY_PICTURE_GLASSES = "glasögon";
+Blockly.Msg.DISPLAY_PICTURE_SMILEY = "smiley";  // untranslated
 Blockly.Msg.DISPLAY_PICTURE_TACHO = "varvräknare";
 Blockly.Msg.DISPLAY_PICTURE_TOOLTIP = "Visar en bild på skärmen.";
 Blockly.Msg.DISPLAY_PIXEL_BRIGHTNESS = "ljusstyrka";

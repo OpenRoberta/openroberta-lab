@@ -236,6 +236,7 @@ Blockly.Msg.DISPLAY_PICTURE_EYES_CLOSED = "Augen zu";
 Blockly.Msg.DISPLAY_PICTURE_EYES_OPEN = "Augen auf";
 Blockly.Msg.DISPLAY_PICTURE_FLOWERS = "Blumen";
 Blockly.Msg.DISPLAY_PICTURE_GLASSES = "Brille";
+Blockly.Msg.DISPLAY_PICTURE_SMILEY = "smiley";  // untranslated
 Blockly.Msg.DISPLAY_PICTURE_TACHO = "Tacho";
 Blockly.Msg.DISPLAY_PICTURE_TOOLTIP = "Zeigt ein Bild auf dem Bildschirm an.";
 Blockly.Msg.DISPLAY_PIXEL_BRIGHTNESS = "Helligkeit";

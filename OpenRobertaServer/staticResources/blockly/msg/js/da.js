@@ -236,6 +236,7 @@ Blockly.Msg.DISPLAY_PICTURE_EYES_CLOSED = "lukkede øjne";
 Blockly.Msg.DISPLAY_PICTURE_EYES_OPEN = "åbne øjne";
 Blockly.Msg.DISPLAY_PICTURE_FLOWERS = "bloster";
 Blockly.Msg.DISPLAY_PICTURE_GLASSES = "briller";
+Blockly.Msg.DISPLAY_PICTURE_SMILEY = "smiley";  // untranslated
 Blockly.Msg.DISPLAY_PICTURE_TACHO = "omdrejningstæller";
 Blockly.Msg.DISPLAY_PICTURE_TOOLTIP = "Viser et billede på skærmen.";
 Blockly.Msg.DISPLAY_PIXEL_BRIGHTNESS = "brightness";  // untranslated

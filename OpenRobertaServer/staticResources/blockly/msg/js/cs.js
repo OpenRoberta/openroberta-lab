@@ -236,6 +236,7 @@ Blockly.Msg.DISPLAY_PICTURE_EYES_CLOSED = "oči zavřené";
 Blockly.Msg.DISPLAY_PICTURE_EYES_OPEN = "oči otevřené";
 Blockly.Msg.DISPLAY_PICTURE_FLOWERS = "květiny";
 Blockly.Msg.DISPLAY_PICTURE_GLASSES = "brýle";
+Blockly.Msg.DISPLAY_PICTURE_SMILEY = "smiley";  // untranslated
 Blockly.Msg.DISPLAY_PICTURE_TACHO = "tachometr";
 Blockly.Msg.DISPLAY_PICTURE_TOOLTIP = "Zobrazí obrázek na displeji.";
 Blockly.Msg.DISPLAY_PIXEL_BRIGHTNESS = "jas";

@@ -236,6 +236,7 @@ Blockly.Msg.DISPLAY_PICTURE_EYES_CLOSED = "ochi inchisi";
 Blockly.Msg.DISPLAY_PICTURE_EYES_OPEN = "ochi deschisi";
 Blockly.Msg.DISPLAY_PICTURE_FLOWERS = "flori";
 Blockly.Msg.DISPLAY_PICTURE_GLASSES = "ochelari";
+Blockly.Msg.DISPLAY_PICTURE_SMILEY = "smiley";  // untranslated
 Blockly.Msg.DISPLAY_PICTURE_TACHO = "viteza";
 Blockly.Msg.DISPLAY_PICTURE_TOOLTIP = "Afisează o imagine pe ecran.";
 Blockly.Msg.DISPLAY_PIXEL_BRIGHTNESS = "strălucire";
