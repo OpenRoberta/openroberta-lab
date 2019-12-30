@@ -1,0 +1,94 @@
+<svg  xmlns="http://www.w3.org/2000/svg" class="EN FI DA ES" viewBox="0 0 310 82">
+   <g class="blocklyDraggable">
+                                        <path class="blocklyPath" fill="#E2001A" d="m 0,2 A 2,2 0 0,1 2,0 H 292.0489807128906 v 25 H 30 h -3.5l -4, 4 -4, -4 h -3.5 H 0 z
+"></path>
+                                        <path class="blocklyPathSelected" fill="none"></path>
+                                        <text class="blocklyText" y="12.5" transform="translate(37,5)">program-start</text>
+                                        <text class="blocklyText" y="12.5" transform="translate(134.95896911621094,5)">&nbsp;&nbsp;</text>
+                                        <g class="blocklyEditableText" style="cursor: default;" transform="translate(153.10292053222656,5)">
+                                        <rect rx="2" ry="2" x="-5" y="0" height="16" width="14.071975708007812"></rect>
+                                        <text class="blocklyText" y="12.5">&nbsp;</text>
+                                        <text class="blocklyText" x="-3" y="14" style="display: block;">✓</text></g>
+                                        <text class="blocklyText" y="12.5" transform="translate(167.17489624023438,5)">show&nbsp;sensor&nbsp;data</text>
+                                        <g class="blocklyIconGroup" display="block" transform="translate(10,5)">
+                                        <rect class="blocklyIconShape" height="16" width="16" fill-opacity="0" stroke-opacity="0"></rect>
+                                        <path class="blocklyIconSymbol"
+                                            d="M18 10h-4v-4c0-1.104-.896-2-2-2s-2 .896-2 2l.071 4h-4.071c-1.104 0-2 .896-2 2s.896 2 2 2l4.071-.071-.071 4.071c0 1.104.896 2 2 2s2-.896 2-2v-4.071l4 .071c1.104 0 2-.896 2-2s-.896-2-2-2z"
+                                            transform="scale(0.67)"></path></g>
+                                        <g class="blocklyDraggable" transform="translate(0,26)">
+                                        <path class="blocklyPath" fill="#F29400"
+                                            d="m 0,0 H 15 h 2.5l 5, 5 5, -5 h 2.5 H 187.32740783691406 v 4.1 l-5.154 -0.469c0 0 -1.096 3.125 -1.33 4.656s-0.25 3.703 0.406 5.078s 1.984 2.688 3.484 2.953s2.375 0.203 2.594 0.219 v 3.5 v 6 v 4.1 l-5.154 -0.469c0 0 -1.096 3.125 -1.33 4.656s-0.25 3.703 0.406 5.078s 1.984 2.688 3.484 2.953s2.375 0.203 2.594 0.219 v 3.5 v 5 H 30 h -3.5l -4, 4 -4, -4 h -3.5 H 2 a 2,2 0 0,1 -2,-2 z
+"></path>
+                                        <path class="blocklyPathSelected" fill="none"></path>
+                                        <g class="blocklyDraggable" transform="translate(188.32740783691406,0)">
+                                        <path class="blocklyPath" fill="#005A94" d="m 0,0 H 36.302215576171875 v 25 H 0 V 20 z
+"></path>
+                                        <path d="M 0,20v -5 c-4.217 0.097 -4.471 -0.54 -5.281 -1.609c-1.109 -1.46 -1.159 -3.82 -0.159 -7.12l0.33 -1.061l5.11 0.44 v -5.2z" fill="#005A94"
+                                            class="outputType"></path>
+                                        <path class="blocklyPathSelected" fill="none"></path>
+                                        <g class="blocklyEditableText" style="cursor: text;" transform="translate(10,5)">
+                                        <rect rx="2" ry="2" x="-5" y="0" height="16" width="26.302215576171875"></rect>
+                                        <text class="blocklyText" y="12.5">30</text></g></g>
+                                        <g class="blocklyDraggable" transform="translate(188.32740783691406,26)">
+                                        <path class="blocklyPath" fill="#005A94" d="m 0,0 H 36.302215576171875 v 25 H 0 V 20 z
+"></path>
+                                        <path d="M 0,20v -5 c-4.217 0.097 -4.471 -0.54 -5.281 -1.609c-1.109 -1.46 -1.159 -3.82 -0.159 -7.12l0.33 -1.061l5.11 0.44 v -5.2z" fill="#005A94"
+                                            class="outputType"></path>
+                                        <path class="blocklyPathSelected" fill="none"></path>
+                                        <g class="blocklyEditableText" style="cursor: text;" transform="translate(10,5)">
+                                        <rect rx="2" ry="2" x="-5" y="0" height="16" width="26.302215576171875"></rect>
+                                        <text class="blocklyText" y="12.5">20</text></g></g>
+                                        <text class="blocklyText" y="12.5" transform="translate(10,5)">drive</text>
+                                        <g class="blocklyEditableText" style="cursor: default;" transform="translate(51.76713562011719,5)">
+                                        <rect rx="2" ry="2" x="-5" y="0" height="16" width="77.62771606445312"></rect>
+                                        <text class="blocklyText" y="12.5">forwards<tspan style="fill: rgb(242, 148, 0);"> ▾</tspan></text></g>
+                                        <text class="blocklyText" y="12.5" transform="translate(129.3948516845703,5)">speed</text>
+                                        <text class="blocklyText" y="12.5" transform="translate(91.12973022460938,31)">distance&nbsp;cm</text></g></g>
+</svg>
+                                    <svg class="DE" viewBox="0 0 310 82">
+   <g class="blocklyDraggable">
+                                        <path class="blocklyPath" fill="#E2001A" d="m 0,2 A 2,2 0 0,1 2,0 H 308.3511962890625 v 25 H 30 h -3.5l -4, 4 -4, -4 h -3.5 H 0 z
+"></path>
+                                        <path class="blocklyPathSelected" fill="none"></path>
+                                        <text class="blocklyText" y="12.5" transform="translate(37,5)">Programmstart</text>
+                                        <text class="blocklyText" y="12.5" transform="translate(143.91159057617188,5)">&nbsp;&nbsp;</text>
+                                        <g class="blocklyEditableText" style="cursor: default;" transform="translate(162.0555419921875,5)">
+                                        <rect rx="2" ry="2" x="-5" y="0" height="16" width="14.071975708007812"></rect>
+                                        <text class="blocklyText" y="12.5">&nbsp;</text>
+                                        <text class="blocklyText" x="-3" y="14" style="display: block;">✓</text></g>
+                                        <text class="blocklyText" y="12.5" transform="translate(176.1275177001953,5)">zeige&nbsp;Sensordaten</text>
+                                        <g class="blocklyIconGroup" display="block" transform="translate(10,5)">
+                                        <rect class="blocklyIconShape" height="16" width="16" fill-opacity="0" stroke-opacity="0"></rect>
+                                        <path class="blocklyIconSymbol"
+                                            d="M18 10h-4v-4c0-1.104-.896-2-2-2s-2 .896-2 2l.071 4h-4.071c-1.104 0-2 .896-2 2s.896 2 2 2l4.071-.071-.071 4.071c0 1.104.896 2 2 2s2-.896 2-2v-4.071l4 .071c1.104 0 2-.896 2-2s-.896-2-2-2z"
+                                            transform="scale(0.67)"></path></g>
+                                        <g class="blocklyDraggable blocklySelected" transform="translate(0,26)">
+                                        <path class="blocklyPath" fill="#F29400"
+                                            d="m 0,0 H 15 h 2.5l 5, 5 5, -5 h 2.5 H 197.0811309814453 v 4.1 l-5.154 -0.469c0 0 -1.096 3.125 -1.33 4.656s-0.25 3.703 0.406 5.078s 1.984 2.688 3.484 2.953s2.375 0.203 2.594 0.219 v 3.5 v 6 v 4.1 l-5.154 -0.469c0 0 -1.096 3.125 -1.33 4.656s-0.25 3.703 0.406 5.078s 1.984 2.688 3.484 2.953s2.375 0.203 2.594 0.219 v 3.5 v 5 H 30 h -3.5l -4, 4 -4, -4 h -3.5 H 2 a 2,2 0 0,1 -2,-2 z
+"></path>
+                                        <path class="blocklyPathSelected" fill="none"></path>
+                                        <g class="blocklyDraggable" transform="translate(198.0811309814453,0)">
+                                        <path class="blocklyPath" fill="#005A94" d="m 0,0 H 36.302215576171875 v 25 H 0 V 20 z
+"></path>
+                                        <path d="M 0,20v -5 c-4.217 0.097 -4.471 -0.54 -5.281 -1.609c-1.109 -1.46 -1.159 -3.82 -0.159 -7.12l0.33 -1.061l5.11 0.44 v -5.2z" fill="#005A94"
+                                            class="outputType"></path>
+                                        <path class="blocklyPathSelected" fill="none"></path>
+                                        <g class="blocklyEditableText" style="cursor: text;" transform="translate(10,5)">
+                                        <rect rx="2" ry="2" x="-5" y="0" height="16" width="26.302215576171875"></rect>
+                                        <text class="blocklyText" y="12.5">30</text></g></g>
+                                        <g class="blocklyDraggable" transform="translate(198.0811309814453,26)">
+                                        <path class="blocklyPath" fill="#005A94" d="m 0,0 H 36.302215576171875 v 25 H 0 V 20 z
+"></path>
+                                        <path d="M 0,20v -5 c-4.217 0.097 -4.471 -0.54 -5.281 -1.609c-1.109 -1.46 -1.159 -3.82 -0.159 -7.12l0.33 -1.061l5.11 0.44 v -5.2z" fill="#005A94"
+                                            class="outputType"></path>
+                                        <path class="blocklyPathSelected" fill="none"></path>
+                                        <g class="blocklyEditableText" style="cursor: text;" transform="translate(10,5)">
+                                        <rect rx="2" ry="2" x="-5" y="0" height="16" width="26.302215576171875"></rect>
+                                        <text class="blocklyText" y="12.5">20</text></g></g>
+                                        <text class="blocklyText" y="12.5" transform="translate(10,5)">Fahre</text>
+                                        <g class="blocklyEditableText" style="cursor: default;" transform="translate(58.286590576171875,5)">
+                                        <rect rx="2" ry="2" x="-5" y="0" height="16" width="76.80473327636719"></rect>
+                                        <text class="blocklyText" y="12.5">vorwärts<tspan style="fill: rgb(242, 148, 0);"> ▾</tspan></text></g>
+                                        <text class="blocklyText" y="12.5" transform="translate(135.09132385253906,5)">Tempo</text>
+                                        <text class="blocklyText" y="12.5" transform="translate(105.78556823730469,31)">Strecke&nbsp;cm</text></g></g>
+</svg>
