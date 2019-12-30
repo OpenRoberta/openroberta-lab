@@ -654,7 +654,23 @@ define([ 'exports', 'log', 'message', 'util', 'user.model', 'guiState.controller
         $("#show-state-info").modal("show");
     }
     exports.showUserInfo = showUserInfo;
-
+    
+    /**
+     * Switch dark model
+     */
+    function switchDarkMode() {
+        if ($('#blocklyDiv, #bricklyDiv').css('background').includes("/css/")){
+            $('#blocklyDiv, #bricklyDiv').css('background', ($('#blocklyDiv, #bricklyDiv').css('background').replace('/css/','/cssDark/')));
+            $('link[href="/css/roberta.css"]').attr('href',"/cssDark/roberta.css");
+            $('#darkMode').text('Dark Mode Off');
+        } else {
+            $('#blocklyDiv, #bricklyDiv').css('background', ($('#blocklyDiv, #bricklyDiv').css('background').replace('/cssDark/','/css/')));
+            $('link[href="/cssDark/roberta.css"]').attr('href',"/css/roberta.css");
+            $('#darkMode').text('Dark Mode');
+        }
+    }
+    exports.switchDarkMode = switchDarkMode;
+    
     /**
      * Show the add statustext modal
      */
