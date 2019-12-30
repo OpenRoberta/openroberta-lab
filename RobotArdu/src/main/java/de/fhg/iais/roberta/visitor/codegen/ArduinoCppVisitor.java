@@ -344,10 +344,12 @@ public final class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor imp
     }
 
     public void createMeasureIRSensor() {
-        this.sb.append("bool _getIRPresence(IRrecv irrecv, decode_results &irResults) {");
+        this.sb.append("bool _getIRPresence(IRrecv &irrecv) {");
         incrIndentation();
         nlIndent();
-        this.sb.append("if (irrecv.decode(&irResults)) {");
+        this.sb.append("decode_results results;");
+        nlIndent();
+        this.sb.append("if (irrecv.decode(&results)) {");
         incrIndentation();
         nlIndent();
         this.sb.append("irrecv.resume();");
@@ -367,13 +369,15 @@ public final class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor imp
         this.sb.append("}");
         nlIndent();
         nlIndent();
-        this.sb.append("long int  _getIRValue(IRrecv irrecv, decode_results &irResults) {");
+        this.sb.append("long int  _getIRValue(IRrecv &irrecv) {");
         incrIndentation();
         nlIndent();
-        this.sb.append("if (irrecv.decode(&irResults)) {");
+        this.sb.append("decode_results results;");
+        nlIndent();
+        this.sb.append("if (irrecv.decode(&results)) {");
         incrIndentation();
         nlIndent();
-        this.sb.append("long int tmpValue = irResults.value;");
+        this.sb.append("long int tmpValue = results.value;");
         nlIndent();
         this.sb.append("irrecv.resume();");
         nlIndent();
@@ -397,10 +401,10 @@ public final class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor imp
     public Void visitInfraredSensor(InfraredSensor<Void> infraredSensor) {
         switch ( infraredSensor.getMode() ) {
             case SC.PRESENCE:
-                this.sb.append("_getIRPresence(_irrecv_").append(infraredSensor.getPort()).append(", _results_").append(infraredSensor.getPort()).append(")");
+                this.sb.append("_getIRPresence(_irrecv_").append(infraredSensor.getPort()).append(")");
                 break;
             case SC.VALUE:
-                this.sb.append("_getIRValue(_irrecv_").append(infraredSensor.getPort()).append(", _results_").append(infraredSensor.getPort()).append(")");
+                this.sb.append("_getIRValue(_irrecv_").append(infraredSensor.getPort()).append(")");
                 break;
             default:
                 throw new DbcException(infraredSensor.getKind().getName() + " mode is not supported: " + infraredSensor.getMode());
@@ -691,11 +695,7 @@ public final class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor imp
                     nlIndent();
                     break;
                 case SC.INFRARED:
-                    this.sb.append("int _RECV_PIN_" + blockName + " = ").append(cc.getProperty("OUTPUT")).append(";");
-                    nlIndent();
-                    this.sb.append("IRrecv _irrecv_" + blockName + "(_RECV_PIN_" + blockName + ");");
-                    nlIndent();
-                    this.sb.append("decode_results _results_" + blockName + ";");
+                    this.sb.append("IRrecv _irrecv_").append(blockName).append("(").append(cc.getProperty("OUTPUT")).append(");");
                     nlIndent();
                     break;
                 case SC.LIGHT:

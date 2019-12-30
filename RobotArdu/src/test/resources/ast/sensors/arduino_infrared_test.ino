@@ -7,12 +7,11 @@
 
 double ___item;
 bool ___item2;
-int _RECV_PIN_I = 11;
-IRrecv _irrecv_I(_RECV_PIN_I);
-decode_results _results_I;
+IRrecv _irrecv_I(11);
 
-bool _getIRPresence(IRrecv irrecv, decode_results &irResults) {
-    if (irrecv.decode(&irResults)) {
+bool _getIRPresence(IRrecv &irrecv) {
+    decode_results results;
+    if (irrecv.decode(&results)) {
         irrecv.resume();
         return true;
     } else {
@@ -20,9 +19,10 @@ bool _getIRPresence(IRrecv irrecv, decode_results &irResults) {
     }
 }
 
-long int  _getIRValue(IRrecv irrecv, decode_results &irResults) {
-    if (irrecv.decode(&irResults)) {
-        long int tmpValue = irResults.value;
+long int  _getIRValue(IRrecv &irrecv) {
+    decode_results results;
+    if (irrecv.decode(&results)) {
+        long int tmpValue = results.value;
         irrecv.resume();
         return tmpValue;
     } else {
@@ -35,8 +35,8 @@ void setup()
     Serial.begin(9600); 
     pinMode(13, OUTPUT);
     _irrecv_I.enableIRIn();
-    ___item = _getIRValue(_irrecv_I, _results_I);
-    ___item2 = _getIRPresence(_irrecv_I, _results_I);
+    ___item = _getIRValue(_irrecv_I);
+    ___item2 = _getIRPresence(_irrecv_I);
 }
 
 void loop()
