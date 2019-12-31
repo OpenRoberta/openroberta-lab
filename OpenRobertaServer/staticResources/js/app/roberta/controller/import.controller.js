@@ -81,6 +81,14 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'pr
                     MSG.displayInformation(result, "", Blockly.Msg.ORA_PROGRAM_IMPORT_ERROR, name);
                 }
             } else {
+                //Find a way to get specific robot type
+                if (result.parameters == 'ev3') {
+                    result.parameters = "ev3lejosv1";
+                } else if (result.parameters == 'calliope') {
+                    result.parameters = "calliope2017";
+                } else if (result.parameters == 'arduino') {
+                    result.parameters = "Nepo4Arduino Uno";
+                }
                 MSG.displayInformation(result, "", result.message, name);
             }
         });
