@@ -81,7 +81,18 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'pr
                     MSG.displayInformation(result, "", Blockly.Msg.ORA_PROGRAM_IMPORT_ERROR, name);
                 }
             } else {
-                MSG.displayInformation(result, "", result.message, name);
+                //Find a way to get specific robot type
+                if (result.robotType == 'ev3') {
+                    result.robotType = 'ev3lejosv1';
+                } else if (result.robotType == 'calliope') {
+                    result.robotType = 'calliope2017';
+                } else if (result.robotType == 'arduino') {
+                    result.robotType = 'uno';
+                } 
+                $('#confirm').onWrap('click', function() {
+                    ROBOT_C.switchRobot(result.robotType, true);
+                }, "switch to imported robot type");
+                MSG.displayInformation(result, "", result.message, result.robotType, undefined, "true");            
             }
         });
     }

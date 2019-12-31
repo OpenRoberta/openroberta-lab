@@ -344,6 +344,8 @@ public class ClientProgramController {
                     UtilForREST.addSuccessInfo(response, Key.PROGRAM_IMPORT_SUCCESS);
                     Statistics.info("ProgramImport", "success", true);
                 } else {
+                    response.put("robotType", robotType1);
+                    //Should find a way to get specific type of robot
                     UtilForREST.addErrorInfo(response, Key.PROGRAM_IMPORT_ERROR_WRONG_ROBOT_TYPE);
                     Statistics.info("ProgramImport", "success", false);
                 }

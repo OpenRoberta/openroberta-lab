@@ -6,16 +6,22 @@ define([ 'exports', 'log', 'jquery', 'blocks-msg' ], function(exports, LOG, $, B
     /**
      * Display popup messages
      */
-    function displayPopupMessage(lkey, value, cancel) {
+    function displayPopupMessage(lkey, value, cancel, opt_switchImport) {
         if (cancel) {
             $('#messageConfirm').attr('lkey', lkey);
             $('#messageConfirm').html(value + Blockly.Msg.POPUP_CONFIRM_CONTINUE);
             $("#show-message-confirm").modal("show");
-        } else {
-            $('#message').attr('lkey', lkey);
-            $('#message').html(value);
-            $("#show-message").modal("show");
-        }
+        } else {             
+            if (opt_switchImport) {
+                $('#messageConfirm').attr('lkey', lkey);
+                $('#messageConfirm').html(value);
+                $("#show-message-confirm").modal("show");
+            } else {
+                $('#message').attr('lkey', lkey);
+                $('#message').html(value);
+                $("#show-message").modal("show");
+            }
+        } 
     }
     exports.displayPopupMessage = displayPopupMessage;
 
@@ -45,7 +51,7 @@ define([ 'exports', 'log', 'jquery', 'blocks-msg' ], function(exports, LOG, $, B
      * @param {replaceWith}
      *            Text to replace an optional '$' in the message-text
      */
-    function displayMessage(messageId, output, replaceWith, opt_cancel, opt_robot) {
+    function displayMessage(messageId, output, replaceWith, opt_cancel, opt_robot, opt_switchImport) {
         var cancel = opt_cancel || false;
         var robot = "";
         if (opt_robot) {
@@ -83,7 +89,7 @@ define([ 'exports', 'log', 'jquery', 'blocks-msg' ], function(exports, LOG, $, B
             }
             
             if (output === 'POPUP') {
-                displayPopupMessage(lkey, value, cancel);
+                displayPopupMessage(lkey, value, cancel, opt_switchImport);
             } else if (output === 'TOAST') {
                 toastMessages.unshift(value);
                 if (toastMessages.length === 1) {
@@ -106,15 +112,15 @@ define([ 'exports', 'log', 'jquery', 'blocks-msg' ], function(exports, LOG, $, B
      * @param {messageParam}
      *            Parameter to be used in the message text.
      */
-    function displayInformation(result, successMessage, errorMessage, messageParam, opt_robot) {
+    function displayInformation(result, successMessage, errorMessage, messageParam, opt_robot, opt_switchImport) {
         if (result.rc === "ok") {
             $('.modal').modal('hide'); // close all opened popups
-            displayMessage(successMessage, "TOAST", messageParam, false, opt_robot);
+            displayMessage(successMessage, "TOAST", messageParam, false, opt_robot, opt_switchImport);
         } else {
         	if (result.parameters === undefined) {
-        		displayMessage(errorMessage, "POPUP", messageParam, false, opt_robot);        		
+        		displayMessage(errorMessage, "POPUP", messageParam, false, opt_robot, opt_switchImport);        		
         	} else {
-        		displayMessage(errorMessage, "POPUP", result.parameters, false, opt_robot);        		
+        		displayMessage(errorMessage, "POPUP", result.parameters, false, opt_robot, opt_switchImport);        		
         	}
         }
     }
