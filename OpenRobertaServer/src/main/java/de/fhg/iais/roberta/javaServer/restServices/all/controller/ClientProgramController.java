@@ -1,6 +1,8 @@
 package de.fhg.iais.roberta.javaServer.restServices.all.controller;
 
 import java.sql.Timestamp;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
@@ -19,6 +21,7 @@ import org.slf4j.LoggerFactory;
 import com.google.inject.Inject;
 
 import de.fhg.iais.roberta.blockly.generated.Export;
+import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.javaServer.provider.OraData;
 import de.fhg.iais.roberta.persistence.AccessRightProcessor;
 import de.fhg.iais.roberta.persistence.ConfigurationProcessor;
@@ -344,6 +347,9 @@ public class ClientProgramController {
                     UtilForREST.addSuccessInfo(response, Key.PROGRAM_IMPORT_SUCCESS);
                     Statistics.info("ProgramImport", "success", true);
                 } else {
+                    List<IRobotFactory> members = httpSessionState.getRobotFactoriesOfGroup(robotType1);
+                    List<String> realNames = members.stream().map(IRobotFactory::getRealName).collect(Collectors.toList());
+                    response.put("robotTypes", String.join(", ", realNames));
                     UtilForREST.addErrorInfo(response, Key.PROGRAM_IMPORT_ERROR_WRONG_ROBOT_TYPE);
                     Statistics.info("ProgramImport", "success", false);
                 }

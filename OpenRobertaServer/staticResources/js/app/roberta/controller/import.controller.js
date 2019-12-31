@@ -81,7 +81,7 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'pr
                     MSG.displayInformation(result, "", Blockly.Msg.ORA_PROGRAM_IMPORT_ERROR, name);
                 }
             } else {
-                MSG.displayInformation(result, "", result.message, name);
+                MSG.displayInformation(result, "", result.message, result.robotTypes);
             }
         });
     }

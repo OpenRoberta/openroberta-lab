@@ -1,9 +1,12 @@
 package de.fhg.iais.roberta.persistence.util;
 
 import java.io.Serializable;
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -249,6 +252,30 @@ public class HttpSessionState implements Serializable {
 
     public IRobotFactory getRobotFactory(String robotName) {
         return this.robotPluginMap.get(robotName);
+    }
+
+    /**
+     * Returns a list of robot factories associated with the group. In case the robot has no group a one element list the given robot is returned and in case
+     * an invalid robot is used an empty list is returned.
+     * 
+     * @param group the robot group
+     * @return the list of group member factories
+     */
+    public List<IRobotFactory> getRobotFactoriesOfGroup(String group) {
+        List<IRobotFactory> groupMembers = robotPluginMap.values().stream().filter(factory -> {
+            String propertyGroup = factory.getPluginProperties().getStringProperty("robot.plugin.group");
+            return (propertyGroup != null) && propertyGroup.equals(group);
+        }).collect(Collectors.toList());
+        if (groupMembers.isEmpty()) {
+            if ( !robotPluginMap.containsKey(group) ) {
+                LOG.warn("No robot plugin associated with this group or robot name.");
+                return Collections.emptyList();
+            } else {
+                return Collections.singletonList(getRobotFactory(group));
+            }
+        } else {
+            return groupMembers;
+        }
     }
 
     public long getSessionNumber() {
