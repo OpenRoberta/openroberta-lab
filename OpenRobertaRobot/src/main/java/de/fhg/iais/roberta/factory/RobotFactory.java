@@ -28,7 +28,7 @@ public class RobotFactory implements IRobotFactory {
     protected final String programDefault;
     protected final String configurationToolbox;
     protected final String configurationDefault;
-    protected Map<String, IWorker> workers = new HashMap<>(); //worker type to impllementing class(es) collect->de.fhg.iais.roberta.visitor.collect.Ev3UsedHardwareCollectorWorker
+    protected Map<String, IWorker> workers = new HashMap<>(); //worker type to implementing class(es) collect->de.fhg.iais.roberta.visitor.collect.Ev3UsedHardwareCollectorWorker
     protected Map<String, List<String>> workflows = new HashMap<>(); //workflow name to a list of types of applicable workers: showsource->collect,generate
 
     public RobotFactory(PluginProperties pluginProperties) {
@@ -51,12 +51,12 @@ public class RobotFactory implements IRobotFactory {
     public BlocklyDropdownFactory getBlocklyDropdownFactory() {
         return this.blocklyDropdown2EnumFactory;
     }
-    
+
     @Override
     public final String getSourceCodeFileExtension() {
         return this.pluginProperties.getStringProperty("robot.plugin.fileExtension.source");
     }
-    
+
     @Override
     public final String getBinaryFileExtension() {
         return this.pluginProperties.getStringProperty("robot.plugin.fileExtension.binary");
@@ -192,7 +192,7 @@ public class RobotFactory implements IRobotFactory {
     public final Boolean hasWlanCredentials() {
         return this.pluginProperties.getStringProperty("robot.haswlan") != null;
     }
-    
+
     @Override
     public final String getFirmwareDefaultProgramName() {
         return this.pluginProperties.getStringProperty("robot.factory.default");
