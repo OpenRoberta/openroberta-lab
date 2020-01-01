@@ -68,7 +68,7 @@ public interface ICompilerWorkflow {
      *
      * @param token the credential the end user (at the terminal) and the brick have both agreed to use
      * @param programName name of the program
-     * @param transformer to acces the AST of program and configuration
+     * @param transformer to access the AST of program and configuration
      * @param language the locale to be used for messages
      * @return a message key in case of an error; null otherwise
      */
@@ -97,7 +97,7 @@ public interface ICompilerWorkflow {
     Key getWorkflowResult();
 
     /**
-     * set the program source code. Only to be called when native programs have to be compiles (rare case :-)
+     * set the program source code. Only to be called when native programs have to be compiled (rare case :-)
      */
     void setSourceCode(String sourceCode);
 
