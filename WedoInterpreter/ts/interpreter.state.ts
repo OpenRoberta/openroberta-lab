@@ -45,7 +45,7 @@ export class State {
     }
 
     /**
-     * introduce a new binding. An old binding (if it exists) is hidden, until an unbinding occurs.
+     * introduces a new binding. An old binding (if it exists) is hidden, until an unbinding occurs.
      * 
      * . @param name the name to which a value is bound
      * . @param value the value that is bound to a name
@@ -170,7 +170,7 @@ export class State {
     }
 
     /**
-     * push the actual array of operations to the stack. 'ops' become the new actual array of operations.
+     * push the actual array of operations to the stack. 'ops' becomes the new actual array of operation.
      * The pc of the frozen array of operations is decremented by 1. This operation is typically called by
      * 'compound' statements as repeat, if, wait, but also for function calls.
      * 
