@@ -654,7 +654,32 @@ define([ 'exports', 'log', 'message', 'util', 'user.model', 'guiState.controller
         $("#show-state-info").modal("show");
     }
     exports.showUserInfo = showUserInfo;
-
+    
+    /**
+     * Switch dark model
+     */
+    function switchDarkMode() {
+        if ($('#blocklyDiv, #bricklyDiv').css('background').includes("/css/")){
+            $('#blocklyDiv, #bricklyDiv').css('background', ($('#blocklyDiv, #bricklyDiv').css('background').replace('/css/','/cssDark/')));
+            $('link[href="/css/roberta.css"]').attr('href',"/cssDark/roberta.css");
+            $('#darkMode').text('Dark Mode Off');
+            $('.bootstrap-table, .small').css('background-color','#333');
+            $('.blocklyToolboxDiv').css('background-color','#000000');
+            $('.codeflask__code, .language-java').css('background-color','#2b2b2bfa');
+            $('.token.punctuation').css('color','#a5a5a5');
+            $('.token.keyword, .token.number, .token.function').css('color','#cc94ff');
+        } else {
+            $('#blocklyDiv, #bricklyDiv').css('background', ($('#blocklyDiv, #bricklyDiv').css('background').replace('/cssDark/','/css/')));
+            $('link[href="/cssDark/roberta.css"]').attr('href',"/css/roberta.css");
+            $('#darkMode').text('Dark Mode');
+            $('.bootstrap-table,.blocklyToolboxDiv,.small').css('background-color','#eee');
+            $('.codeflask__code, .language-java').css('background-color','#00000000');
+            $('.token.punctuation').css('color','#4a4a4a');
+            $('.token.keyword, .token.number, .token.function').css('color','#8500ff');
+        }
+    }
+    exports.switchDarkMode = switchDarkMode;
+    
     /**
      * Show the add statustext modal
      */

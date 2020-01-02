@@ -421,6 +421,9 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
         $('#head-navigation-user').onWrap('click', '.dropdown-menu li:not(.disabled) a', function(event) {
             $('.modal').modal('hide'); // close all opened popups
             switch (event.target.id) {
+            case 'darkMode':
+                USER_C.switchDarkMode();
+                break;
             case 'menuLogin':
                 USER_C.showLoginForm();
                 break;
