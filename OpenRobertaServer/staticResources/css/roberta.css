@@ -2217,7 +2217,7 @@ td[lkey="Blockly.Msg.POPUP_DOWNLOAD_STEP_A_SENSEBOX"] {
 
 #codeDiv pre {
     position: absolute;
-    top: 0px;
+    top: 12px;
     background-color: transparent;
     border: 0px solid #ccc;
     border-radius: 0px;
@@ -2239,7 +2239,7 @@ td[lkey="Blockly.Msg.POPUP_DOWNLOAD_STEP_A_SENSEBOX"] {
 
 #codeDiv textarea {
     position: absolute;
-    top: 0px;
+    top: 12px;
     z-index: 8;
     color: rgba(255, 255, 255, 0) !important;
     height: calc(100% - 70px);
@@ -2252,6 +2252,12 @@ td[lkey="Blockly.Msg.POPUP_DOWNLOAD_STEP_A_SENSEBOX"] {
     background-color: #FFF0;
     padding-top: 0px !important;
     line-height: 18px;
+}
+
+#codeDiv .codeflask__lines {
+    background-color: #EEE;
+    padding-top: 12px !important;
+    z-index: 5 !important;
 }
 
 .codeflask__lines {
