@@ -260,7 +260,7 @@ define([ 'simulation.simulation', 'interpreter.constants', 'util', 'simulation.r
                     }
                 }
             }
-            if (display.brightness) {
+            if (display.brightness || display.brightness === 0) {
                 this.display.brightness = Math.round(display.brightness * 255.0 / 9.0, 0);
             }
         }
