@@ -17,6 +17,7 @@ import de.fhg.iais.roberta.syntax.actors.arduino.bob3.ReceiveIRAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.bob3.RememberAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.bob3.SendIRAction;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
+import de.fhg.iais.roberta.syntax.lang.expr.MathConst;
 import de.fhg.iais.roberta.syntax.lang.expr.VarDeclaration;
 import de.fhg.iais.roberta.syntax.lang.functions.MathConstrainFunct;
 import de.fhg.iais.roberta.syntax.lang.stmt.AssertStmt;
@@ -47,6 +48,34 @@ public final class Bob3CppVisitor extends AbstractCommonArduinoCppVisitor implem
     }
 
     @Override
+    public Void visitMathConst(MathConst<Void> mathConst) { // TODO Unify the math consts for all systems
+        switch ( mathConst.getMathConst() ) {
+            case PI:
+                this.sb.append("M_PI");
+                break;
+            case E:
+                this.sb.append("M_E");
+                break;
+            case GOLDEN_RATIO:
+                this.sb.append("1.61803398875");
+                break;
+            case SQRT2:
+                this.sb.append("M_SQRT2");
+                break;
+            case SQRT1_2:
+                this.sb.append("M_SQRT1_2");
+                break;
+            // IEEE 754 floating point representation
+            case INFINITY:
+                this.sb.append("INFINITY");
+                break;
+            default:
+                break;
+        }
+        return null;
+    }
+
+    @Override
     protected String getLanguageVarTypeFromBlocklyType(BlocklyType type) {
         switch ( type ) {
             case ANY:
@@ -61,20 +90,12 @@ public final class Bob3CppVisitor extends AbstractCommonArduinoCppVisitor implem
             case S:
             case T:
                 return "";
-            case ARRAY_NUMBER:
-                return "std::list<double>";
-            case ARRAY_BOOLEAN:
-                return "std::list<bool>";
-            case ARRAY_COLOUR:
-                return "std::list<unsigned int>";
             case BOOLEAN:
                 return "bool";
             case NUMBER:
                 return "double";
             case NUMBER_INT:
                 return "int";
-            case STRING:
-                return "String";
             case VOID:
                 return "void";
             case COLOR:
@@ -128,12 +149,6 @@ public final class Bob3CppVisitor extends AbstractCommonArduinoCppVisitor implem
     protected void generateProgramPrefix(boolean withWrapping) {
         if ( !withWrapping ) {
             return;
-        }
-        boolean isListUsed = false;
-        for ( VarDeclaration<Void> var : this.usedHardwareBean.getVisitedVars() ) {
-            if ( var.getVarType().toString().contains("ARRAY") ) {
-                isListUsed = true;
-            }
         }
         this.sb.append("#include <math.h> \n");
         this.sb.append("#include \"bob3.h\" \n");
