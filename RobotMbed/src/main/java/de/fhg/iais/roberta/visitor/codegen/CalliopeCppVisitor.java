@@ -65,7 +65,6 @@ import de.fhg.iais.roberta.syntax.lang.functions.FunctionNames;
 import de.fhg.iais.roberta.syntax.lang.functions.IndexOfFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.LengthOfIsEmptyFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.ListGetIndex;
-import de.fhg.iais.roberta.syntax.lang.functions.ListRepeat;
 import de.fhg.iais.roberta.syntax.lang.functions.ListSetIndex;
 import de.fhg.iais.roberta.syntax.lang.functions.MathConstrainFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathNumPropFunct;
@@ -669,11 +668,6 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
             this.sb.append("_uBit.accelerometer.updateSample();");
         }
         return null;
-    }
-
-    @Override
-    public Void visitListRepeat(ListRepeat<Void> listRepeat) {
-        throw new DbcException("Not supported list function " + listRepeat.getClass().getName());
     }
 
     @Override
