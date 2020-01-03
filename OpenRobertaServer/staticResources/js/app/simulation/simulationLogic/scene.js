@@ -202,7 +202,7 @@ define([ 'simulation.simulation', 'simulation.math', 'util', 'interpreter.consta
                 $("#notConstantValue").append('<div><label>Touch Sensor</label><span>' + UTIL.round(this.robots[r].touchSensor.value, 0) + '</span></div>');
                 $("#notConstantValue").append('<div><label>Light Sensor</label><span>' + UTIL.round(this.robots[r].colorSensor.lightValue, 0)
                         + '%</span></div>');
-                $("#notConstantValue").append('<div><label>Ultra Sensor</label><span>' + UTIL.round(this.robots[r].ultraSensor.distance / 3.0, 0)
+                $("#notConstantValue").append('<div><label>Ultra Sensor</label><span>' + UTIL.roundUltraSound(this.robots[r].ultraSensor.distance / 3.0, 0)
                         + 'cm</span></div>');
                 if (this.robots[r].sound) {
                     $("#notConstantValue").append('<div><label>Sound Sensor</label><span>' + UTIL.round(this.robots[r].sound.volume * 100, 0)
@@ -660,7 +660,7 @@ define([ 'simulation.simulation', 'simulation.math', 'util', 'interpreter.consta
                     values.ultrasonic.distance = 255.0;
                 }
                 values.ultrasonic.presence = false;
-                // treet the ultrasonic sensor as infrared sensor
+                // treat the ultrasonic sensor as infrared sensor
                 if (distance < 70) {
                     values.infrared.distance = 100.0 / 70.0 * distance;
                 } else {
