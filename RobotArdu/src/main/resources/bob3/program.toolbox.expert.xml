@@ -100,7 +100,6 @@
       </value>
     </block>
     <block type="math_round"/>
-    <block type="math_on_list"/>
     <block type="math_modulo"/>
     <block type="math_constrain">
       <value name="LOW">
@@ -129,9 +128,7 @@
     <block type="math_random_float"/>
   </category>
   <category name="TOOLBOX_TEXT" svg="true">
-    <block type="text"/>
     <block type="text_comment"/>
-    <block type="robText_append"/>
   </category>
   <category name="TOOLBOX_COLOUR" svg="true">
     <block type="robColour_picker">
