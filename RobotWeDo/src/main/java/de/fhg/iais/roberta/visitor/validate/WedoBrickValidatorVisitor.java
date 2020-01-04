@@ -118,7 +118,7 @@ public final class WedoBrickValidatorVisitor<V> extends AbstractBrickValidatorVi
     @Override
     public Void visitToneAction(ToneAction<Void> toneAction) {
         if ( toneAction.getInfos().getErrorCount() == 0 ) {
-            ConfigurationComponent usedConfigurationBlock = this.robotConfiguration.getConfigurationComponent(toneAction.getPort());
+            ConfigurationComponent usedConfigurationBlock = this.robotConfiguration.optConfigurationComponent(toneAction.getPort());
             if ( usedConfigurationBlock == null ) {
                 toneAction.addInfo(NepoInfo.error("CONFIGURATION_ERROR_ACTOR_MISSING"));
                 this.errorCount++;
