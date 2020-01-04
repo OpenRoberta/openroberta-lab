@@ -25,6 +25,7 @@ import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
+import de.fhg.iais.roberta.syntax.lang.expr.NumConst;
 import de.fhg.iais.roberta.syntax.lang.expr.SensorExpr;
 import de.fhg.iais.roberta.syntax.sensor.ExternalSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
@@ -113,6 +114,10 @@ public final class BotnrollCppVisitor extends AbstractCommonArduinoCppVisitor im
 
     @Override
     public Void visitToneAction(ToneAction<Void> toneAction) {
+        NumConst<Void> toneActionConst = (NumConst<Void>) toneAction.getDuration();
+        if ( Integer.valueOf(toneActionConst.getValue()) <= 0 ) {
+            return null;
+        }
         //9 - sound port
         this.sb.append("tone(9, ");
         toneAction.getFrequency().accept(this);

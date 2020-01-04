@@ -31,6 +31,7 @@ import de.fhg.iais.roberta.syntax.actors.arduino.sensebox.SendDataAction;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
 import de.fhg.iais.roberta.syntax.lang.expr.ColorConst;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
+import de.fhg.iais.roberta.syntax.lang.expr.NumConst;
 import de.fhg.iais.roberta.syntax.lang.expr.RgbColor;
 import de.fhg.iais.roberta.syntax.lang.expr.Var;
 import de.fhg.iais.roberta.syntax.sensor.generic.AccelerometerSensor;
@@ -201,6 +202,10 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
 
     @Override
     public Void visitToneAction(ToneAction<Void> toneAction) {
+        NumConst<Void> toneActionConst = (NumConst<Void>) toneAction.getDuration();
+        if ( Integer.valueOf(toneActionConst.getValue()) <= 0 ) {
+            return null;
+        }
         this.sb.append("tone(_buzzer_").append(toneAction.getPort()).append(", ");
         toneAction.getFrequency().accept(this);
         this.sb.append(");");

@@ -16,6 +16,7 @@ import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorStopAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
+import de.fhg.iais.roberta.syntax.lang.expr.NumConst;
 import de.fhg.iais.roberta.syntax.lang.stmt.AssertStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.DebugAction;
 import de.fhg.iais.roberta.syntax.sensor.generic.GetSampleSensor;
@@ -169,6 +170,10 @@ public final class WeDoStackMachineVisitor<V> extends AbstractStackMachineVisito
         ConfigurationComponent toneBlock = getConfigurationComponent(toneAction.getPort());
         String brickName = toneBlock.getProperty("VAR");
         if ( brickName != null ) {
+            NumConst<Void> toneActionConst = (NumConst<Void>) toneAction.getDuration();
+            if ( Integer.valueOf(toneActionConst.getValue()) <= 0 ) {
+                return null;
+            }
             toneAction.getFrequency().accept(this);
             toneAction.getDuration().accept(this);
             JSONObject o = mk(C.TONE_ACTION).put(C.NAME, brickName);

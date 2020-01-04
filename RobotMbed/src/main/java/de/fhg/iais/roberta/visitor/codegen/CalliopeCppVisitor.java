@@ -57,6 +57,7 @@ import de.fhg.iais.roberta.syntax.lang.expr.EmptyExpr;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.syntax.lang.expr.ListCreate;
 import de.fhg.iais.roberta.syntax.lang.expr.MathConst;
+import de.fhg.iais.roberta.syntax.lang.expr.NumConst;
 import de.fhg.iais.roberta.syntax.lang.expr.RgbColor;
 import de.fhg.iais.roberta.syntax.lang.expr.StringConst;
 import de.fhg.iais.roberta.syntax.lang.expr.Var;
@@ -370,6 +371,10 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
 
     @Override
     public Void visitToneAction(ToneAction<Void> toneAction) {
+        NumConst<Void> toneActionConst = (NumConst<Void>) toneAction.getDuration();
+        if ( Integer.valueOf(toneActionConst.getValue()) <= 0 ) {
+            return null;
+        }
         this.sb.append("_uBit.soundmotor.soundOn(");
         toneAction.getFrequency().accept(this);
         this.sb.append("); ").append("_uBit.sleep(");

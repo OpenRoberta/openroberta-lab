@@ -674,6 +674,10 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
      */
     @Override
     public Void visitToneAction(ToneAction<Void> toneAction) {
+        NumConst<Void> toneActionConst = (NumConst<Void>) toneAction.getDuration();
+        if ( Integer.valueOf(toneActionConst.getValue()) <= 0 ) {
+            return null;
+        }
         this.sb.append("Ed.PlayTone(8000000/");
         toneAction.getFrequency().accept(this);
         this.sb.append(", ");
