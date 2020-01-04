@@ -143,6 +143,8 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
     protected void generateProgramPrefix(boolean withWrapping) {
         generateConstants();
         generateImports();
+        nlIndent();
+        generateSignaturesOfUserDefinedMethods();
     }
 
     private void generateConstants() {
@@ -161,6 +163,7 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
         this.sb.append("#include <list>");
         nlIndent();
         this.sb.append("#include \"NEPODefs.h\"");
+        nlIndent();
     }
 
     @Override
@@ -269,6 +272,7 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
         nlIndent();
         this.sb.append("}");
         nlIndent();
+
     }
 
     @Override
