@@ -206,7 +206,7 @@ public class PythonVisitorTest extends EdisonAstTest {
 
     @Test
     public void visitToneActionTest() throws Exception {
-        String expectedResult = "Ed.PlayTone(8000000/300,0)Ed.TimeWait(0,Ed.TIME_MILLISECONDS)";
+        String expectedResult = "Ed.PlayTone(8000000/300,20)Ed.TimeWait(20,Ed.TIME_MILLISECONDS)";
         UnitTestHelper.checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, expectedResult, "/syntax/actor/tone_action.xml", false);
     }
 
