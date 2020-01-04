@@ -1,5 +1,8 @@
 package de.fhg.iais.roberta.syntax;
 
+import de.fhg.iais.roberta.syntax.lang.expr.Expr;
+import de.fhg.iais.roberta.syntax.lang.expr.NumConst;
+import de.fhg.iais.roberta.util.dbc.DbcException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -8,6 +11,8 @@ import de.fhg.iais.roberta.typecheck.NepoInfo;
 import de.fhg.iais.roberta.typecheck.NepoInfos;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.IVisitor;
+
+import java.math.BigDecimal;
 
 /**
  * the top class of all class used to represent the AST (abstract syntax tree) of a program. After construction an AST should be immutable. The logic to achieve
@@ -136,6 +141,41 @@ abstract public class Phrase<V> {
         }
         if ( text != null ) {
             sb.append(text);
+        }
+    }
+
+    /**
+     * As many blocks of different types are able to accept improper values, this function can be called
+     * to clamp the values to an acceptable range so that these values are not actually allowed
+     * to be compiled and run.
+     *
+     * @param initialExpression Expr<V> representation of the block,
+     * @param lowerBound of clamp (null if not required),
+     * @param upperBound of clamp (null if not required)
+     */
+    public Expr<V> clampValue(Expr<V> initialExpression, Number lowerBound, Number upperBound){
+        try{
+            if(lowerBound != null && upperBound != null){
+                Assert.isTrue((lowerBound.doubleValue() <= upperBound.doubleValue()));
+            }
+
+            BigDecimal value = new BigDecimal(((NumConst)initialExpression).getValue());
+            String finalValue;
+
+            if(upperBound != null && value.compareTo(new BigDecimal(upperBound.toString())) == 1){
+                finalValue = upperBound.toString();
+            }
+            else if(lowerBound != null && value.compareTo(new BigDecimal(lowerBound.toString())) == -1){
+                finalValue = lowerBound.toString();
+            }
+            else{
+                finalValue = value.toString();
+            }
+
+            return NumConst.make(finalValue, initialExpression.getProperty(), initialExpression.getComment());
+        }
+        catch(ClassCastException | NullPointerException | DbcException e){
+            return initialExpression;
         }
     }
 }

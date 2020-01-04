@@ -33,7 +33,7 @@ public class VolumeAction<V> extends Action<V> {
     private VolumeAction(Mode mode, Expr<V> volume, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(BlockTypeContainer.getByName("VOLUME_ACTION"), properties, comment);
         Assert.isTrue(volume != null && volume.isReadOnly() && mode != null);
-        this.volume = volume;
+        this.volume = clampValue(volume, 0, 100);
         this.mode = mode;
         setReadOnly();
     }
