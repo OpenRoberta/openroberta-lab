@@ -57,12 +57,12 @@ public class Ast2C4ev3VisitorTest extends Ev3C4ev3AstTest {
         "" //
             + MAIN_INIT_EV3
             + "    NEPOSetAllSensors(NULL, NULL, HTColorV2, NULL);\n\n";
-    
+
     private static final String BEGIN_MAIN__TOUCH_NULL_NULL_NULL =
         "" //
             + MAIN_INIT_EV3
             + "    NEPOSetAllSensors(EV3Touch, NULL, NULL, NULL);\n\n";
-    
+
     private static final String BEGIN_MAIN__NULLSORS =
         "" //
             + MAIN_INIT_EV3
@@ -332,6 +332,7 @@ public class Ast2C4ev3VisitorTest extends Ev3C4ev3AstTest {
         String expectedCode =
             "" //
                 + CONSTANTS_AND_IMPORTS
+                + "voidmacheEtwas(double___x,double___x2);\n"
                 + "void macheEtwas(double ___x, double ___x2) {\n"
                 + "    LcdPicture(LCD_COLOR_BLACK, 0, 0, OLDGLASSES);\n"
                 + "}\n"
@@ -342,25 +343,31 @@ public class Ast2C4ev3VisitorTest extends Ev3C4ev3AstTest {
         UnitTestHelper
             .checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, expectedCode, "/syntax/methods/method_void_1.xml", makeStandard(), false);
     }
-    
+
     @Test
     public void testTimer() throws Exception {
         String expectedCode =
             "" //
-            + CONSTANTS_AND_IMPORTS
-            + BEGIN_MAIN__TOUCH_NULL_NULL_NULL
-            + "ResetTimer(1);\n"
-            + "DrawString(ToString(GetTimerValue(1)),0,0);\n"
-            + END_MAIN;
+                + CONSTANTS_AND_IMPORTS
+                + BEGIN_MAIN__TOUCH_NULL_NULL_NULL
+                + "ResetTimer(1);\n"
+                + "DrawString(ToString(GetTimerValue(1)),0,0);\n"
+                + END_MAIN;
         UnitTestHelper
-        .checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, expectedCode, "/syntax/code_generator/java/java_code_generator12.xml", makeStandard(), false);
+            .checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(
+                testFactory,
+                expectedCode,
+                "/syntax/code_generator/java/java_code_generator12.xml",
+                makeStandard(),
+                false);
     }
-    
+
     @Test
     public void testVoidFunction() throws Exception {
         String expectedCode =
             "" //
                 + CONSTANTS_AND_IMPORTS
+                + "voidtest();\n"
                 + "void test() {\n"
                 + "    SetLedPattern(LED_GREEN);\n"
                 + "}\n"
@@ -376,6 +383,7 @@ public class Ast2C4ev3VisitorTest extends Ev3C4ev3AstTest {
         String expectedCode =
             "" //
                 + CONSTANTS_AND_IMPORTS
+                + "voidtest(bool___x);\n"
                 + "void test(bool ___x) {\n"
                 + "    if (___x) return;"
                 + "    SetLedPattern(LED_GREEN);\n"
@@ -397,6 +405,8 @@ public class Ast2C4ev3VisitorTest extends Ev3C4ev3AstTest {
         String expectedCode =
             "" //
                 + CONSTANTS_AND_IMPORTS
+                + "voidtest1(double___x,double___x2);\n"
+                + "voidtest2();\n"
                 + "double ___variablenName = 0;\n"
                 + "bool ___variablenName2 = true;\n"
                 + "void test1(double ___x, double ___x2) {\n"
@@ -419,6 +429,7 @@ public class Ast2C4ev3VisitorTest extends Ev3C4ev3AstTest {
         String expectedCode =
             "" //
                 + CONSTANTS_AND_IMPORTS
+                + "doubletest(double___x,std::list<std::string>___x2);\n"
                 + "std::list<std::string> ___variablenName = ((std::list<std::string>){\"a\", \"b\", \"c\"});\n"
                 + "double test(double ___x, std::list<std::string> ___x2) {\n"
                 + "    DrawString(ToString(___x2), ___x, 0);"
@@ -441,6 +452,7 @@ public class Ast2C4ev3VisitorTest extends Ev3C4ev3AstTest {
         String expectedCode =
             "" //
                 + CONSTANTS_AND_IMPORTS
+                + "Colortest();\n"
                 + "std::list<std::string> ___variablenName = ((std::list<std::string>){\"a\", \"b\", \"c\"});\n"
                 + "Color test() {\n"
                 + "    DrawString(ToString(___variablenName), 0, 0);"
@@ -463,6 +475,7 @@ public class Ast2C4ev3VisitorTest extends Ev3C4ev3AstTest {
         String expectedCode =
             "" //
                 + CONSTANTS_AND_IMPORTS
+                + "Colortest();\n"
                 + "std::list<std::string> ___variablenName = ((std::list<std::string>){\"a\", \"b\", \"c\"});\n"
                 + "Color test() {\n"
                 + "    if (true) return Red;\n"
