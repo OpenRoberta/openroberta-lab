@@ -278,6 +278,12 @@ public abstract class AbstractProgramValidatorVisitor extends AbstractCollectorV
 
     @Override
     public Void visitToneAction(ToneAction<Void> toneAction) {
+        NumConst<Void> toneActionConst = (NumConst<Void>) toneAction.getDuration();
+        if ( Integer.valueOf(toneActionConst.getValue()) <= 0 ) {
+            toneAction.addInfo(NepoInfo.warning("BLOCK_NOT_EXECUTED"));
+            this.errorCount++;
+            return null;
+        }
         toneAction.getDuration().accept(this);
         toneAction.getFrequency().accept(this);
         return null;
