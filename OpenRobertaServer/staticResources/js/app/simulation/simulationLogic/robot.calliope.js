@@ -271,11 +271,11 @@ define([ 'simulation.simulation', 'simulation.robot.mbed' ], function(SIM, Mbed)
         var tone = this.robotBehaviour.getActionState("tone", true);
         if (tone && this.webAudio.context) {
             var ts = this.webAudio.context.currentTime;
-            if (tone.frequency !== undefined) {
+            if (tone.frequency && tone.duration > 0) {
                 this.webAudio.oscillator.frequency.setValueAtTime(tone.frequency, ts);
                 this.webAudio.gainNode.gain.setValueAtTime(this.webAudio.volume, ts);
             }
-            if (tone.duration !== undefined) {
+            if (tone.duration > 0) {
                 ts += tone.duration / 1000.0;
                 this.webAudio.gainNode.gain.setValueAtTime(0, ts);
             }
