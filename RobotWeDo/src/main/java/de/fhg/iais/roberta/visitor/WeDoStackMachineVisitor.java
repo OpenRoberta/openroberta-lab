@@ -16,6 +16,7 @@ import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorStopAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
+import de.fhg.iais.roberta.syntax.lang.expr.NumConst;
 import de.fhg.iais.roberta.syntax.lang.stmt.AssertStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.DebugAction;
 import de.fhg.iais.roberta.syntax.sensor.generic.GetSampleSensor;
@@ -23,6 +24,7 @@ import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.KeysSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
+import de.fhg.iais.roberta.typecheck.NepoInfo;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.visitor.hardware.IWeDoVisitor;
 import de.fhg.iais.roberta.visitor.lang.codegen.AbstractStackMachineVisitor;
@@ -169,6 +171,11 @@ public final class WeDoStackMachineVisitor<V> extends AbstractStackMachineVisito
         ConfigurationComponent toneBlock = getConfigurationComponent(toneAction.getPort());
         String brickName = toneBlock.getProperty("VAR");
         if ( brickName != null ) {
+            NumConst<Void> toneActionConst = (NumConst<Void>) toneAction.getDuration();
+            if ( Integer.valueOf(toneActionConst.getValue()) <= 0 ) {
+                toneAction.addInfo(NepoInfo.warning("BLOCK_NOT_EXECUTED"));
+                return null;
+            }
             toneAction.getFrequency().accept(this);
             toneAction.getDuration().accept(this);
             JSONObject o = mk(C.TONE_ACTION).put(C.NAME, brickName);

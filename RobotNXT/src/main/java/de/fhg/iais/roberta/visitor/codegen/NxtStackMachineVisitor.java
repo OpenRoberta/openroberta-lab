@@ -36,6 +36,7 @@ import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
 import de.fhg.iais.roberta.syntax.action.sound.VolumeAction;
 import de.fhg.iais.roberta.syntax.lang.expr.ColorConst;
 import de.fhg.iais.roberta.syntax.lang.expr.ConnectConst;
+import de.fhg.iais.roberta.syntax.lang.expr.NumConst;
 import de.fhg.iais.roberta.syntax.sensor.generic.AccelerometerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
@@ -133,6 +134,11 @@ public class NxtStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> im
 
     @Override
     public V visitToneAction(ToneAction<V> toneAction) {
+        NumConst<Void> toneActionConst = (NumConst<Void>) toneAction.getDuration();
+        if ( Integer.valueOf(toneActionConst.getValue()) <= 0 ) {
+            toneAction.addInfo(NepoInfo.warning("BLOCK_NOT_EXECUTED"));
+            return null;
+        }
         toneAction.getFrequency().accept(this);
         toneAction.getDuration().accept(this);
         JSONObject o = mk(C.TONE_ACTION);

@@ -131,6 +131,11 @@ public class Ev3StackMachineVisitor<V> extends AbstractStackMachineVisitor<V> im
 
     @Override
     public V visitToneAction(ToneAction<V> toneAction) {
+        NumConst<Void> toneActionConst = (NumConst<Void>) toneAction.getDuration();
+        if ( Integer.valueOf(toneActionConst.getValue()) <= 0 ) {
+            toneAction.addInfo(NepoInfo.warning("BLOCK_NOT_EXECUTED"));
+            return null;
+        }
         toneAction.getFrequency().accept(this);
         toneAction.getDuration().accept(this);
         JSONObject o = mk(C.TONE_ACTION);
