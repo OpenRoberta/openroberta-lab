@@ -13,8 +13,10 @@ import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
 import de.fhg.iais.roberta.syntax.action.generic.PinWriteValueAction;
 import de.fhg.iais.roberta.syntax.action.light.LightAction;
 import de.fhg.iais.roberta.syntax.action.light.LightStatusAction;
+import de.fhg.iais.roberta.syntax.action.mbed.DisplayGetBrightnessAction;
 import de.fhg.iais.roberta.syntax.action.mbed.DisplayGetPixelAction;
 import de.fhg.iais.roberta.syntax.action.mbed.DisplayImageAction;
+import de.fhg.iais.roberta.syntax.action.mbed.DisplaySetBrightnessAction;
 import de.fhg.iais.roberta.syntax.action.mbed.DisplaySetPixelAction;
 import de.fhg.iais.roberta.syntax.action.mbed.DisplayTextAction;
 import de.fhg.iais.roberta.syntax.action.mbed.PinSetPullAction;
@@ -337,6 +339,20 @@ public final class MicrobitPythonVisitor extends AbstractPythonVisitor implement
         this.sb.append(")");
         return null;
     }
+
+    @Override
+    public Void visitDisplaySetBrightnessAction(DisplaySetBrightnessAction<Void> displaySetBrightnessAction) {
+        this.sb.append("_uBit.display.setBrightness((");
+        displaySetBrightnessAction.getBrightness().accept(this);
+        this.sb.append(") * _SET_BRIGHTNESS_MULTIPLIER);");
+        return null;
+    } 
+
+    @Override
+    public Void visitDisplayGetBrightnessAction(DisplayGetBrightnessAction<Void> displayGetBrightnessAction) {
+        this.sb.append("round(_uBit.display.getBrightness() * _GET_BRIGHTNESS_MULTIPLIER)");
+        return null;
+    }   
 
     @Override
     public Void visitPinWriteValueAction(PinWriteValueAction<Void> pinWriteValueAction) {
