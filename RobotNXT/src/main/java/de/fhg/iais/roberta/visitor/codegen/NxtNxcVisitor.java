@@ -1029,7 +1029,7 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
                 mathNumPropFunct.getParam().get(0).accept(this);
                 this.sb.append(")");
                 break;
-            // % in nxc doesn't leave a a fractional residual, e.g. 5.2%1 = 0, so it is not possible to cheack the wholeness by "%1", that is why
+            // % in nxc % doesn't leave a a fractional residual, e.g. 5.2%1 = 0, so it is not possible to check the wholeness by "%1", that is why
             //an additional function is used
             case WHOLE:
                 this.sb.append("MathIsWhole(");

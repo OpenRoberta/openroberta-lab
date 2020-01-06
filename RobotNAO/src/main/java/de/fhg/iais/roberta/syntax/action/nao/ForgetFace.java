@@ -20,7 +20,7 @@ import de.fhg.iais.roberta.visitor.IVisitor;
 import de.fhg.iais.roberta.visitor.hardware.INaoVisitor;
 
 /**
- * This class represents the <b>naoActions_sayText</b> block from Blockly into the AST (abstract syntax tree). Object from this class will generate code for
+ * This class represents the <b>naoActions_sayText</b> block from Blockly into the AST (abstract syntax tree). Objects from this class will generate code for
  * making the robot say the text.<br>
  * <br>
  * <br>
