@@ -1,8 +1,5 @@
 package de.fhg.iais.roberta.visitor.codegen;
 
-import static de.fhg.iais.roberta.visitor.codegen.utilities.ColorSensorUtils.isEV3ColorSensor;
-import static de.fhg.iais.roberta.visitor.codegen.utilities.ColorSensorUtils.isHiTecColorSensor;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -84,6 +81,7 @@ import de.fhg.iais.roberta.syntax.lang.stmt.DebugAction;
 import de.fhg.iais.roberta.syntax.lang.stmt.RepeatStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
+import de.fhg.iais.roberta.syntax.sensor.ev3.HTColorSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor;
@@ -1183,18 +1181,29 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
 
     @Override
     public Void visitColorSensor(ColorSensor<Void> colorSensor) {
-        String colorSensorType = this.brickConfiguration.getConfigurationComponent(colorSensor.getPort()).getComponentType();
         String mode = colorSensor.getMode();
         String port = getPrefixedInputPort(colorSensor.getPort());
-        if ( isHiTecColorSensor(colorSensorType) ) {
-            visitHiTecColorSensor(port, mode);
-        } else if ( isEV3ColorSensor(colorSensorType) ) {
-            visitEV3ColorSensor(port, mode);
+        switch ( mode ) {
+            case SC.COLOUR:
+                this.sb.append("ReadEV3ColorSensor(").append(port).append(")");
+                break;
+            case SC.LIGHT:
+                this.sb.append("ReadEV3ColorSensorLight(").append(port).append(", ReflectedLight)");
+                break;
+            case SC.AMBIENTLIGHT:
+                this.sb.append("ReadEV3ColorSensorLight(").append(port).append(", AmbientLight)");
+                break;
+            case SC.RGB:
+                this.sb.append("NEPOReadEV3ColorSensorRGB(").append(port).append(")");
+                break;
         }
         return null;
     }
 
-    private void visitHiTecColorSensor(String port, String mode) {
+    @Override
+    public Void visitHTColorSensor(HTColorSensor<Void> htColorSensor) {
+        String mode = htColorSensor.getMode();
+        String port = getPrefixedInputPort(htColorSensor.getPort());
         String functionName;
         switch ( mode ) {
             case SC.COLOUR:
@@ -1212,24 +1221,8 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
             default:
                 throw new DbcException("Invalid mode for HT Color Sensor V2!");
         }
-        this.sb.append(functionName + "(" + port + ")");
-    }
-
-    private void visitEV3ColorSensor(String port, String mode) {
-        switch ( mode ) {
-            case SC.COLOUR:
-                this.sb.append("ReadEV3ColorSensor(" + port + ")");
-                break;
-            case SC.LIGHT:
-                this.sb.append("ReadEV3ColorSensorLight(" + port + ", ReflectedLight)");
-                break;
-            case SC.AMBIENTLIGHT:
-                this.sb.append("ReadEV3ColorSensorLight(" + port + ", AmbientLight)");
-                break;
-            case SC.RGB:
-                this.sb.append("NEPOReadEV3ColorSensorRGB(" + port + ")");
-                break;
-        }
+        this.sb.append(functionName).append("(").append(port).append(")");
+        return null;
     }
 
     @Override

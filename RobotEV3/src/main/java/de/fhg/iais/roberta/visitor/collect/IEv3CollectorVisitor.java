@@ -17,6 +17,7 @@ import de.fhg.iais.roberta.syntax.action.sound.PlayFileAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
 import de.fhg.iais.roberta.syntax.action.sound.VolumeAction;
+import de.fhg.iais.roberta.syntax.sensor.ev3.HTColorSensor;
 import de.fhg.iais.roberta.visitor.hardware.IEv3Visitor;
 
 /**
@@ -30,6 +31,11 @@ public interface IEv3CollectorVisitor extends ICollectorVisitor, IEv3Visitor<Voi
     default Void visitShowPictureAction(ShowPictureAction<Void> showPictureAction) {
         showPictureAction.getX().accept(this);
         showPictureAction.getY().accept(this);
+        return null;
+    }
+
+    @Override
+    default Void visitHTColorSensor(HTColorSensor<Void> htColorSensor) {
         return null;
     }
 

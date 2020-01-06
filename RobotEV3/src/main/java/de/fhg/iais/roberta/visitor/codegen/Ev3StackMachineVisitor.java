@@ -42,6 +42,7 @@ import de.fhg.iais.roberta.syntax.action.speech.SayTextAction;
 import de.fhg.iais.roberta.syntax.action.speech.SetLanguageAction;
 import de.fhg.iais.roberta.syntax.lang.expr.ColorConst;
 import de.fhg.iais.roberta.syntax.lang.expr.NumConst;
+import de.fhg.iais.roberta.syntax.sensor.ev3.HTColorSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.AccelerometerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
@@ -330,6 +331,11 @@ public class Ev3StackMachineVisitor<V> extends AbstractStackMachineVisitor<V> im
         String mode = colorSensor.getMode();
         JSONObject o = mk(C.GET_SAMPLE).put(C.GET_SAMPLE, C.COLOR).put(C.MODE, mode.toLowerCase()).put(C.NAME, "ev3");
         return app(o);
+    }
+
+    @Override
+    public V visitHTColorSensor(HTColorSensor<V> htColorSensor) {
+        return null;
     }
 
     @Override

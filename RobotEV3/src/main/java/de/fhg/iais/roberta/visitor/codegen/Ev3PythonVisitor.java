@@ -49,6 +49,7 @@ import de.fhg.iais.roberta.syntax.lang.functions.MathRandomIntFunct;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtList;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
+import de.fhg.iais.roberta.syntax.sensor.ev3.HTColorSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor;
@@ -65,8 +66,6 @@ import de.fhg.iais.roberta.visitor.IVisitor;
 import de.fhg.iais.roberta.visitor.codegen.utilities.TTSLanguageMapper;
 import de.fhg.iais.roberta.visitor.hardware.IEv3Visitor;
 import de.fhg.iais.roberta.visitor.lang.codegen.prog.AbstractPythonVisitor;
-import static de.fhg.iais.roberta.visitor.codegen.utilities.ColorSensorUtils.isEV3ColorSensor;
-import static de.fhg.iais.roberta.visitor.codegen.utilities.ColorSensorUtils.isHiTecColorSensor;
 
 /**
  * This class is implementing {@link IVisitor}. All methods are implemented and they append a human-readable Python code representation of a phrase to a
@@ -405,48 +404,51 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
     @Override
     public Void visitColorSensor(ColorSensor<Void> colorSensor) {
         String colorSensorPort = colorSensor.getPort();
-        String colorSensorType = this.brickConfiguration.getConfigurationComponent(colorSensor.getPort()).getComponentType();
         String colorSensorMode = colorSensor.getMode();
         String methodName;
-        if ( isHiTecColorSensor(colorSensorType) ) {
-            methodName = getHiTecColorSensorMethodName(colorSensorMode);
-        } else if ( isEV3ColorSensor(colorSensorType) ) {
-            methodName = getEV3ColorSensorMethodName(colorSensorMode);
-        } else {
-            throw new DbcException("Invalid color sensor type: " + colorSensorType);
-        }
-        this.sb.append(methodName + "('" + colorSensorPort + "')");
-        return null;
-    }
-
-    private String getEV3ColorSensorMethodName(String colorSensorMode) {
         switch ( colorSensorMode ) {
             case SC.AMBIENTLIGHT:
-                return "hal.getColorSensorAmbient";
+                methodName = "hal.getColorSensorAmbient";
+                break;
             case SC.COLOUR:
-                return "hal.getColorSensorColour";
+                methodName = "hal.getColorSensorColour";
+                break;
             case SC.LIGHT:
-                return "hal.getColorSensorRed";
+                methodName = "hal.getColorSensorRed";
+                break;
             case SC.RGB:
-                return "hal.getColorSensorRgb";
+                methodName = "hal.getColorSensorRgb";
+                break;
             default:
                 throw new DbcException("Invalid mode for EV3 Color Sensor!");
         }
+        this.sb.append(methodName).append("('").append(colorSensorPort).append("')");
+        return null;
     }
 
-    private String getHiTecColorSensorMethodName(String colorSensorMode) {
+    @Override
+    public Void visitHTColorSensor(HTColorSensor<Void> htColorSensor) {
+        String colorSensorPort = htColorSensor.getPort();
+        String colorSensorMode = htColorSensor.getMode();
+        String methodName;
         switch ( colorSensorMode ) {
             case SC.AMBIENTLIGHT:
-                return "hal.getHiTecColorSensorV2Ambient";
+                methodName = "hal.getHiTecColorSensorV2Ambient";
+                break;
             case SC.COLOUR:
-                return "hal.getHiTecColorSensorV2Colour";
+                methodName = "hal.getHiTecColorSensorV2Colour";
+                break;
             case SC.LIGHT:
-                return "hal.getHiTecColorSensorV2Light";
+                methodName = "hal.getHiTecColorSensorV2Light";
+                break;
             case SC.RGB:
-                return "hal.getHiTecColorSensorV2Rgb";
+                methodName = "hal.getHiTecColorSensorV2Rgb";
+                break;
             default:
                 throw new DbcException("Invalid mode for HiTec Color Sensor V2!");
         }
+        this.sb.append(methodName).append("('").append(colorSensorPort).append("')");
+        return null;
     }
 
     @Override

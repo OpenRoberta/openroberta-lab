@@ -8,6 +8,7 @@ import de.fhg.iais.roberta.components.UsedSensor;
 import de.fhg.iais.roberta.syntax.SC;
 import de.fhg.iais.roberta.syntax.action.ev3.ShowPictureAction;
 import de.fhg.iais.roberta.syntax.action.speech.SayTextAction;
+import de.fhg.iais.roberta.syntax.sensor.ev3.HTColorSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
@@ -61,6 +62,10 @@ public final class Ev3UsedHardwareCollectorVisitor extends AbstractUsedHardwareC
         return null;
     }
 
-
-
+    @Override
+    public Void visitHTColorSensor(HTColorSensor<Void> htColorSensor) {
+        String mode = htColorSensor.getMode();
+        this.builder.addUsedSensor(new UsedSensor(htColorSensor.getPort(), SC.HT_COLOR, mode));
+        return null;
+    }
 }

@@ -1,15 +1,5 @@
 package de.fhg.iais.roberta.visitor.codegen;
 
-import static de.fhg.iais.roberta.mode.general.IndexLocation.FROM_END;
-import static de.fhg.iais.roberta.mode.general.IndexLocation.FROM_START;
-import static de.fhg.iais.roberta.mode.general.ListElementOperations.GET;
-import static de.fhg.iais.roberta.mode.general.ListElementOperations.GET_REMOVE;
-import static de.fhg.iais.roberta.mode.general.ListElementOperations.INSERT;
-import static de.fhg.iais.roberta.mode.general.ListElementOperations.REMOVE;
-import static de.fhg.iais.roberta.mode.general.ListElementOperations.SET;
-import static de.fhg.iais.roberta.visitor.codegen.utilities.ColorSensorUtils.isEV3ColorSensor;
-import static de.fhg.iais.roberta.visitor.codegen.utilities.ColorSensorUtils.isHiTecColorSensor;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -69,6 +59,7 @@ import de.fhg.iais.roberta.syntax.lang.functions.ListGetIndex;
 import de.fhg.iais.roberta.syntax.lang.functions.ListSetIndex;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
+import de.fhg.iais.roberta.syntax.sensor.ev3.HTColorSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor;
@@ -86,6 +77,13 @@ import de.fhg.iais.roberta.visitor.IVisitor;
 import de.fhg.iais.roberta.visitor.codegen.utilities.TTSLanguageMapper;
 import de.fhg.iais.roberta.visitor.hardware.IEv3Visitor;
 import de.fhg.iais.roberta.visitor.lang.codegen.prog.AbstractJavaVisitor;
+import static de.fhg.iais.roberta.mode.general.IndexLocation.FROM_END;
+import static de.fhg.iais.roberta.mode.general.IndexLocation.FROM_START;
+import static de.fhg.iais.roberta.mode.general.ListElementOperations.GET;
+import static de.fhg.iais.roberta.mode.general.ListElementOperations.GET_REMOVE;
+import static de.fhg.iais.roberta.mode.general.ListElementOperations.INSERT;
+import static de.fhg.iais.roberta.mode.general.ListElementOperations.REMOVE;
+import static de.fhg.iais.roberta.mode.general.ListElementOperations.SET;
 
 /**
  * This class is implementing {@link IVisitor}. All methods are implemented and they append a human-readable JAVA code representation of a phrase to a
@@ -485,49 +483,52 @@ public final class Ev3JavaVisitor extends AbstractJavaVisitor implements IEv3Vis
 
     @Override
     public Void visitColorSensor(ColorSensor<Void> colorSensor) {
-        String colorSensorPort = "SensorPort.S" + colorSensor.getPort();
-        String colorSensorType = this.brickConfiguration.getConfigurationComponent(colorSensor.getPort()).getComponentType();
-        String colorSensorMode = colorSensor.getMode();
+        String port = "SensorPort.S" + colorSensor.getPort();
+        String mode = colorSensor.getMode();
         String methodName;
-        if ( isHiTecColorSensor(colorSensorType) ) {
-            methodName = getHiTecColorSensorMethodName(colorSensorMode);
-        } else if ( isEV3ColorSensor(colorSensorType) ) {
-            methodName = getEV3ColorSensorMethodName(colorSensorMode);
-        } else {
-            throw new DbcException("Invalid color sensor type: " + colorSensorType);
+        switch ( mode ) {
+            case SC.COLOUR:
+                methodName = "hal.getColorSensorColour";
+                break;
+            case SC.LIGHT:
+                methodName = "hal.getColorSensorRed";
+                break;
+            case SC.AMBIENTLIGHT:
+                methodName = "hal.getColorSensorAmbient";
+                break;
+            case SC.RGB:
+                methodName = "hal.getColorSensorRgb";
+                break;
+            default:
+                throw new DbcException("Invalid mode for EV3 Color Sensor!");
         }
-        this.sb.append(methodName + "(" + colorSensorPort + ")");
+        this.sb.append(methodName).append("(").append(port).append(")");
         return null;
     }
 
-    private String getHiTecColorSensorMethodName(String mode) {
+    @Override
+    public Void visitHTColorSensor(HTColorSensor<Void> htColorSensor) {
+        String port = "SensorPort.S" + htColorSensor.getPort();
+        String mode = htColorSensor.getMode();
+        String methodName;
         switch ( mode ) {
             case SC.COLOUR:
-                return "hal.getHiTecColorSensorV2Colour";
+                methodName = "hal.getHiTecColorSensorV2Colour";
+                break;
             case SC.LIGHT:
-                return "hal.getHiTecColorSensorV2Light";
+                methodName = "hal.getHiTecColorSensorV2Light";
+                break;
             case SC.AMBIENTLIGHT:
-                return "hal.getHiTecColorSensorV2Ambient";
+                methodName = "hal.getHiTecColorSensorV2Ambient";
+                break;
             case SC.RGB:
-                return "hal.getHiTecColorSensorV2Rgb";
+                methodName = "hal.getHiTecColorSensorV2Rgb";
+                break;
             default:
                 throw new DbcException("Invalid mode for EV3 Color Sensor!");
         }
-    }
-
-    private String getEV3ColorSensorMethodName(String mode) {
-        switch ( mode ) {
-            case SC.COLOUR:
-                return "hal.getColorSensorColour";
-            case SC.LIGHT:
-                return "hal.getColorSensorRed";
-            case SC.AMBIENTLIGHT:
-                return "hal.getColorSensorAmbient";
-            case SC.RGB:
-                return "hal.getColorSensorRgb";
-            default:
-                throw new DbcException("Invalid mode for EV3 Color Sensor!");
-        }
+        this.sb.append(methodName).append("(").append(port).append(")");
+        return null;
     }
 
     @Override

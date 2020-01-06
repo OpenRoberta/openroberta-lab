@@ -5,6 +5,7 @@ import java.util.List;
 import de.fhg.iais.roberta.bean.UsedHardwareBean;
 import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.components.ConfigurationComponent;
+import de.fhg.iais.roberta.components.UsedSensor;
 import de.fhg.iais.roberta.syntax.SC;
 import de.fhg.iais.roberta.syntax.action.ev3.ShowPictureAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
@@ -12,6 +13,8 @@ import de.fhg.iais.roberta.syntax.action.speech.SayTextAction;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.syntax.lang.expr.ListCreate;
 import de.fhg.iais.roberta.syntax.lang.functions.ListRepeat;
+import de.fhg.iais.roberta.syntax.sensor.ExternalSensor;
+import de.fhg.iais.roberta.syntax.sensor.ev3.HTColorSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.typecheck.NepoInfo;
@@ -21,6 +24,27 @@ public final class Ev3BrickValidatorVisitor extends AbstractBrickValidatorVisito
 
     public Ev3BrickValidatorVisitor(UsedHardwareBean.Builder builder, ConfigurationAst brickConfiguration) {
         super(builder, brickConfiguration);
+    }
+
+    @Override
+    protected void checkSensorPort(ExternalSensor<Void> sensor) {
+        super.checkSensorPort(sensor);
+        ConfigurationComponent usedSensor = this.robotConfiguration.optConfigurationComponent(sensor.getPort());
+        if ( usedSensor == null ) {
+            // should be handled by super implementation
+        } else {
+            String type = usedSensor.getComponentType();
+            switch ( sensor.getKind().getName() ) {
+                case "HTCOLOR_SENSING":
+                    if ( !type.equals("HT_COLOR") ) {
+                        sensor.addInfo(NepoInfo.error("CONFIGURATION_ERROR_SENSOR_WRONG"));
+                        this.errorCount++;
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
     }
 
     @Override
@@ -87,6 +111,14 @@ public final class Ev3BrickValidatorVisitor extends AbstractBrickValidatorVisito
     public Void visitShowPictureAction(ShowPictureAction<Void> showPictureAction) {
         showPictureAction.getX().accept(this);
         showPictureAction.getY().accept(this);
+        return null;
+    }
+
+    @Override
+    public Void visitHTColorSensor(HTColorSensor<Void> htColorSensor) {
+        checkSensorPort(htColorSensor);
+        String mode = htColorSensor.getMode();
+        this.builder.addUsedSensor(new UsedSensor(htColorSensor.getPort(), SC.HT_COLOR, mode));
         return null;
     }
 }

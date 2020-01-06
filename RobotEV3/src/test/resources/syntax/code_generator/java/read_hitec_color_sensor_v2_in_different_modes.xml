@@ -56,7 +56,7 @@
             <mutation datatype="Colour"></mutation>
             <field name="VAR">color</field>
             <value name="VALUE">
-                <block type="robSensors_colour_getSample" id="N-_yXEEm^+E.0bN;f_eM" intask="true">
+                <block type="robSensors_htcolour_getSample" id="N-_yXEEm^+E.0bN;f_eM" intask="true">
                     <mutation mode="COLOUR"></mutation>
                     <field name="MODE">COLOUR</field>
                     <field name="SENSORPORT">3</field>
@@ -68,7 +68,7 @@
             <mutation datatype="Number"></mutation>
             <field name="VAR">light</field>
             <value name="VALUE">
-                <block type="robSensors_colour_getSample" id="5-OoBm@~3:,z,JC#HWlf" intask="true">
+                <block type="robSensors_htcolour_getSample" id="5-OoBm@~3:,z,JC#HWlf" intask="true">
                     <mutation mode="LIGHT"></mutation>
                     <field name="MODE">LIGHT</field>
                     <field name="SENSORPORT">3</field>
@@ -80,7 +80,7 @@
             <mutation datatype="Number"></mutation>
             <field name="VAR">light</field>
             <value name="VALUE">
-                <block type="robSensors_colour_getSample" id="8-pq94_%L|i?Utk[_H^c" intask="true">
+                <block type="robSensors_htcolour_getSample" id="8-pq94_%L|i?Utk[_H^c" intask="true">
                     <mutation mode="AMBIENTLIGHT"></mutation>
                     <field name="MODE">AMBIENTLIGHT</field>
                     <field name="SENSORPORT">3</field>
@@ -92,7 +92,7 @@
             <mutation datatype="Array_Number"></mutation>
             <field name="VAR">rgb</field>
             <value name="VALUE">
-                <block type="robSensors_colour_getSample" id="S-JhX=6.mxJa`ihdF:P/" intask="true">
+                <block type="robSensors_htcolour_getSample" id="S-JhX=6.mxJa`ihdF:P/" intask="true">
                     <mutation mode="RGB"></mutation>
                     <field name="MODE">RGB</field>
                     <field name="SENSORPORT">3</field>
