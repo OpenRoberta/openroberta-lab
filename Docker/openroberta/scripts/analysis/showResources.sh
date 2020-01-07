@@ -8,7 +8,7 @@
 # LOWERLIMIT: if the number of open file descriptors is less than this value, nothing is logged. Default: 100
 # UPPERLIMIT: if the number of open file descriptors is greater than this value, http sessions and db sessions are logged, too. Default: 200
 # LOGFILE: every 10 seconds the resource usage data is appended to this file. Default: $BASE_DIR/logs/server-resources.log
-# URL: the url where we get the http+db session data from. Default: retrieved via the server name
+# SERVERURL: the url where we get the http+db session data from. Default: retrieved via the server name
 # PID: the pid of the server process. Default: retrieved via the server name
 
 function showResourceLoop {
@@ -16,6 +16,8 @@ function showResourceLoop {
     echo "showResources process has pid $$" >> $LOGFILE
     echo "server $SERVER_NAME lower $LOWERLIMIT upper $UPPERLIMIT url $SERVERURL pid $PID" >> $LOGFILE
     echo 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx' >> $LOGFILE
+    
+    SECOND_OF_START=$(date +%s)
     while [ true ]
     do
         sleep 10
@@ -33,6 +35,14 @@ function showResourceLoop {
                 RESPONSE=$(curl $SERVERURL/rest/data/robot/summary 2>/dev/null)
                 echo "$RESPONSE" >> $LOGFILE
             fi
+        fi
+        SECOND_NOW=$(date +%s)
+        DELTA=$(expr "$SECOND_NOW" - "$SECOND_OF_START")
+        if [ "$DELTA" -gt 90000 ] # 24*60*60 + 60*60 == 90000 one day and a hour for not loosing data
+        then
+            echo 'exit after a day of work' >> $LOGFILE
+            echo 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx' >> $LOGFILE
+            exit 0
         fi
     done
 }
