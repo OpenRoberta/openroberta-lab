@@ -79,12 +79,12 @@ public class SenseboxBrickValidatorVisitor extends AbstractBrickValidatorVisitor
             return null;
         }
         if ( (sendDataAction.getDestination().equals("SENSEMAP") && !this.robotConfiguration.isComponentTypePresent(SC.WIRELESS)) ) {
-            sendDataAction.addInfo(NepoInfo.error("CONFIGURATION_ERROR_ACTOR_MISSING"));
+            sendDataAction.addInfo(NepoInfo.error("CONFIGURATION_ERROR_WLAN_MISSING"));
             this.errorCount++;
             return null;
         }
         if ( (sendDataAction.getDestination().equals("SDCARD") && !this.robotConfiguration.isComponentTypePresent(SC.SENSEBOX_SDCARD)) ) {
-            sendDataAction.addInfo(NepoInfo.error("CONFIGURATION_ERROR_ACTOR_MISSING"));
+            sendDataAction.addInfo(NepoInfo.error("CONFIGURATION_ERROR_SDCARD_MISSING"));
             this.errorCount++;
             return null;
         }
