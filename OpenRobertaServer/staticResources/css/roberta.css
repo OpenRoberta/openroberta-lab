@@ -2011,6 +2011,7 @@ ul#tutorial-close {
 	margin: 10px;
 	padding: 16px;
 	font-size: 18px;
+	overflow-y: auto;
 }
 div#helpDiv {
     margin-top: 24px;
