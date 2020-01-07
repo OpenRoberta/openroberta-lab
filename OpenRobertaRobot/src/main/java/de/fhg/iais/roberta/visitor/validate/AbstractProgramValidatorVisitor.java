@@ -34,14 +34,7 @@ import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
 import de.fhg.iais.roberta.syntax.action.sound.VolumeAction;
 import de.fhg.iais.roberta.syntax.action.speech.SayTextAction;
 import de.fhg.iais.roberta.syntax.action.speech.SetLanguageAction;
-import de.fhg.iais.roberta.syntax.lang.expr.Binary;
-import de.fhg.iais.roberta.syntax.lang.expr.EmptyExpr;
-import de.fhg.iais.roberta.syntax.lang.expr.EvalExpr;
-import de.fhg.iais.roberta.syntax.lang.expr.Expr;
-import de.fhg.iais.roberta.syntax.lang.expr.NumConst;
-import de.fhg.iais.roberta.syntax.lang.expr.Unary;
-import de.fhg.iais.roberta.syntax.lang.expr.Var;
-import de.fhg.iais.roberta.syntax.lang.expr.VarDeclaration;
+import de.fhg.iais.roberta.syntax.lang.expr.*;
 import de.fhg.iais.roberta.syntax.lang.expr.eval.ExprlyTypechecker;
 import de.fhg.iais.roberta.syntax.lang.expr.eval.TcError;
 import de.fhg.iais.roberta.syntax.lang.functions.GetSubFunct;
@@ -290,7 +283,7 @@ public abstract class AbstractProgramValidatorVisitor extends AbstractCollectorV
 
     @Override
     public Void visitVolumeAction(VolumeAction<Void> volumeAction) {
-        volumeAction.getVolume().accept(this);
+        checkVolumeAction(volumeAction);
         return null;
     }
 
@@ -434,6 +427,25 @@ public abstract class AbstractProgramValidatorVisitor extends AbstractCollectorV
     private void checkMotorRotationDirection(Phrase<Void> driveAction, ConfigurationComponent m1, ConfigurationComponent m2) {
         if ( (m1 != null) && (m2 != null) && !m1.getProperty(SC.MOTOR_REVERSE).equals(m2.getProperty(SC.MOTOR_REVERSE)) ) {
             driveAction.addInfo(NepoInfo.error("CONFIGURATION_ERROR_MOTORS_ROTATION_DIRECTION"));
+            this.errorCount++;
+        }
+    }
+
+    public void checkVolumeAction(VolumeAction<Void> volumeAction) {
+        volumeAction.getVolume().accept(this);
+
+        if ( volumeAction != null
+            && volumeAction.getMode() == VolumeAction.Mode.SET
+            && (volumeAction.getVolume() instanceof NumConst)
+            && Double.parseDouble(((NumConst) volumeAction.getVolume()).getValue()) < 0 ) {
+            Expr originalVolume = volumeAction.getVolume();
+
+            volumeAction.setVolume(NumConst.make("0", originalVolume.getProperty(), originalVolume.getComment()));
+
+            volumeAction.addInfo(NepoInfo.warning("BLOCK_NOT_EXECUTED"));
+            this.warningCount++;
+        } else if ( !(volumeAction.getVolume() instanceof NumConst) ) {
+            volumeAction.addInfo(NepoInfo.error("ERROR_MISSING_PARAMETER"));
             this.errorCount++;
         }
     }

@@ -28,7 +28,7 @@ import de.fhg.iais.roberta.visitor.hardware.actor.ISoundVisitor;
  */
 public class VolumeAction<V> extends Action<V> {
     private final Mode mode;
-    private final Expr<V> volume;
+    private Expr<V> volume;
 
     private VolumeAction(Mode mode, Expr<V> volume, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(BlockTypeContainer.getByName("VOLUME_ACTION"), properties, comment);
@@ -49,6 +49,13 @@ public class VolumeAction<V> extends Action<V> {
      */
     public static <V> VolumeAction<V> make(Mode mode, Expr<V> volume, BlocklyBlockProperties properties, BlocklyComment comment) {
         return new VolumeAction<V>(mode, volume, properties, comment);
+    }
+
+    /**
+     * @param volume of the block
+     */
+    public void setVolume(Expr<V> volume) {
+        this.volume = volume;
     }
 
     /**
