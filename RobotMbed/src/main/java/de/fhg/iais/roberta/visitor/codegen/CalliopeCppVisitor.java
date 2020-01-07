@@ -74,6 +74,8 @@ import de.fhg.iais.roberta.syntax.lang.functions.MathRandomFloatFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathRandomIntFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.TextJoinFunct;
 import de.fhg.iais.roberta.syntax.lang.methods.Method;
+import de.fhg.iais.roberta.syntax.lang.methods.MethodReturn;
+import de.fhg.iais.roberta.syntax.lang.methods.MethodVoid;
 import de.fhg.iais.roberta.syntax.lang.stmt.AssertStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.DebugAction;
 import de.fhg.iais.roberta.syntax.lang.stmt.RepeatStmt;
@@ -105,7 +107,7 @@ import de.fhg.iais.roberta.visitor.lang.codegen.prog.AbstractCppVisitor;
  * StringBuilder. <b>This representation is correct C++ code for Calliope systems.</b> <br>
  */
 public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbedVisitor<Void> {
-
+    boolean insideParameterList = false;
     private final ConfigurationAst robotConfiguration;
 
     /**
@@ -160,8 +162,48 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
     }
 
     @Override
+    public Void visitMethodVoid(MethodVoid<Void> methodVoid) {
+        nlIndent();
+        this.sb.append("void ");
+        this.sb.append(methodVoid.getMethodName()).append("(");
+        insideParameterList = true;
+        methodVoid.getParameters().accept(this);
+        insideParameterList = false;
+        this.sb.append(") {");
+        incrIndentation();
+        methodVoid.getBody().accept(this);
+        decrIndentation();
+        nlIndent();
+        this.sb.append("}");
+        return null;
+    }
+
+    @Override
+    public Void visitMethodReturn(MethodReturn<Void> methodReturn) {
+        nlIndent();
+        this.sb.append(getLanguageVarTypeFromBlocklyType(methodReturn.getReturnType()));
+        this.sb.append(" ").append(methodReturn.getMethodName()).append("(");
+        insideParameterList = true;
+        methodReturn.getParameters().accept(this);
+        insideParameterList = false;
+        this.sb.append(") {");
+        incrIndentation();
+        methodReturn.getBody().accept(this);
+        nlIndent();
+        this.sb.append("return ");
+        methodReturn.getReturnValue().accept(this);
+        this.sb.append(";");
+        decrIndentation();
+        nlIndent();
+        this.sb.append("}");
+        return null;
+    }
+
+    @Override
     public Void visitVarDeclaration(VarDeclaration<Void> var) {
-        this.sb.append("static ");
+        if ( !insideParameterList ) {
+            this.sb.append("static ");
+        }
         this.sb.append(getLanguageVarTypeFromBlocklyType(var.getTypeVar()));
         if ( var.getTypeVar().isArray() && var.getValue().getKind().hasName("EMPTY_EXPR") ) {
             this.sb.append(" &");
@@ -1236,7 +1278,9 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
             nlIndent();
             this.sb.append(getLanguageVarTypeFromBlocklyType(phrase.getReturnType()));
             this.sb.append(" " + phrase.getMethodName() + "(");
+            insideParameterList = true;
             phrase.getParameters().accept(this);
+            insideParameterList = false;
             this.sb.append(");");
             nlIndent();
         }
