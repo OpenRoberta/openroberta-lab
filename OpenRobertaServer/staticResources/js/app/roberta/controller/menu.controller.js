@@ -624,6 +624,7 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
                         return;
                     } else {
                         if ($('#checkbox_id').is(':checked')) {
+                            cleanUri(); // removes # which may potentially be added by other operations
                             var uri = window.location.toString();
                             uri += QUERY_START + LOAD_SYSTEM_CALL + QUERY_ASSIGNMENT + choosenRobotType;
                             window.history.replaceState({}, document.title, uri);
