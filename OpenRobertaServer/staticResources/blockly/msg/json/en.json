@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2020-01-07 14:56:44.738559",
+		"lastupdated": "2020-01-08 09:22:27.196930",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -948,7 +948,7 @@
 	"ANALOG": "analog",
 	"DIGITAL": "digital",
 	"SENSOR_IS_PIN": "is",
-	"ORA_PROGRAM_IMPORT_ERROR_WRONG_ROBOT_TYPE": "You tried to import a program suitable for &, which is different from your menu selection.<br> Please switch the robot type in the robot's menu and try to import again!",
+	"ORA_PROGRAM_IMPORT_ERROR_WRONG_ROBOT_TYPE": "You tried to import a program suitable for »$«, which is different from your menu selection.<br> Please switch the robot type in the robot's menu and try to import again!",
 	"DISPLAY_IMAGE": "image",
 	"DISPLAY_ANIMATION": "animation",
 	"PLAY_NOTE": "note",
