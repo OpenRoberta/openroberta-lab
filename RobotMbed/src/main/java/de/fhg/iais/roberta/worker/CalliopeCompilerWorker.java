@@ -66,7 +66,8 @@ public class CalliopeCompilerWorker implements IWorker {
                 project.getProgramName(),
                 "." + project.getSourceCodeFileExtension());
         String scriptName = compilerResourcesDir + "../compile." + (SystemUtils.IS_OS_WINDOWS ? "bat" : "sh");
-        String bluetooth = radioUsed ? "" : "-b";
+        Boolean noBluetooth = project.getRobot().equals("calliope2017NoBlue");
+        String bluetooth = radioUsed || noBluetooth ? "" : "-b";
         Path pathToSrcFile = Paths.get(tempDir + project.getToken() + "/" + project.getProgramName());
 
         String[] executableWithParameters =

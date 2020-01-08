@@ -25,7 +25,7 @@ public abstract class AstTest {
         } else if ( pwd.contains("RobotEV3") ) {
             robotName = "ev3dev";
         } else if ( pwd.contains("RobotMbed") ) {
-            robotName = "calliope2017";
+            robotName = "calliope2017NoBlue";
         } else if ( pwd.contains("RobotNAO") ) {
             robotName = "nao";
         } else if ( pwd.contains("RobotNXT") ) {

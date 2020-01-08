@@ -204,7 +204,7 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
                     var robotName = key; // robot name is the same as robot group
                     var robotRName = key;
                     if (key === "calliope") {
-                        robotRName = "calliope2017";
+                        robotRName = "calliope2017NoBlue";
                     }
                     var clone = proto.clone().prop('id', 'menu-' + robotName);
                     clone.attr('data-type', robotRName);

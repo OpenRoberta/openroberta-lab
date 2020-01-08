@@ -20,7 +20,7 @@ robots:
        template: nao
     bob3:
        template: bob3
-    calliope2017:
+    calliope2017NoBlue:
        template: calliope  
     calliope2016:
        template: calliope
