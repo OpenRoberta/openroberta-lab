@@ -138,8 +138,8 @@ define(["require", "exports", "interpreter.aRobotBehaviour", "interpreter.consta
         };
         RobotMbedBehaviour.prototype.setVolumeAction = function (volume) {
             U.debug('set volume: ' + volume);
-            this.hardwareState.actions.volume = volume;
-            this.hardwareState.volume = volume;
+            this.hardwareState.actions.volume = Math.max(Math.min(100, volume), 0);
+            this.hardwareState.volume = Math.max(Math.min(100, volume), 0);
         };
         RobotMbedBehaviour.prototype.getVolumeAction = function (s) {
             U.debug('get volume');

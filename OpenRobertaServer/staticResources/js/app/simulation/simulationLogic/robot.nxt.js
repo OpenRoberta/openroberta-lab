@@ -234,7 +234,7 @@ define([ 'simulation.simulation', 'interpreter.constants', 'simulation.robot.ev3
         }
         // update tone
         var volume = this.robotBehaviour.getActionState("volume", true);
-        if (volume && this.webAudio.context) {
+        if ((volume || volume === 0) && this.webAudio.context) {
             this.webAudio.volume = volume / 100.0;
         }
         var tone = this.robotBehaviour.getActionState("tone", true);
