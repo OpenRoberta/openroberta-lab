@@ -62,8 +62,8 @@ public class ClientUser {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response command(@OraData HttpSessionState httpSessionState, @OraData DbSession dbSession, JSONObject fullRequest) throws Exception {
-        UtilForREST.handleRequestInit(httpSessionState, LOG, fullRequest);
+    public Response command(@OraData DbSession dbSession, JSONObject fullRequest) throws Exception {
+        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, fullRequest);
         Map<String, String> responseParameters = new HashMap<>();
         final int userId = httpSessionState.getUserId();
         JSONObject response = new JSONObject();

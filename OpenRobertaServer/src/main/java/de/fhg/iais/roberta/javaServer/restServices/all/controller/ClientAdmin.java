@@ -25,8 +25,8 @@ import de.fhg.iais.roberta.util.Key;
 import de.fhg.iais.roberta.util.RandomUrlPostfix;
 import de.fhg.iais.roberta.util.ServerProperties;
 import de.fhg.iais.roberta.util.Statistics;
-import de.fhg.iais.roberta.util.UtilForREST;
 import de.fhg.iais.roberta.util.Util;
+import de.fhg.iais.roberta.util.UtilForREST;
 
 @Path("/admin")
 public class ClientAdmin {
@@ -53,10 +53,9 @@ public class ClientAdmin {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response command(@OraData HttpSessionState httpSessionState, @OraData DbSession dbSession, JSONObject fullRequest, @Context HttpHeaders httpHeaders)
-        throws Exception //
+    public Response command(@OraData DbSession dbSession, JSONObject fullRequest, @Context HttpHeaders httpHeaders) throws Exception //
     {
-        UtilForREST.handleRequestInit(httpSessionState, LOG, fullRequest);
+        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, fullRequest);
         JSONObject response = new JSONObject();
         try {
             JSONObject request = fullRequest.getJSONObject("data");
@@ -160,7 +159,7 @@ public class ClientAdmin {
                         response.put("sourceCodeFileExtension", robotFactory.getSourceCodeFileExtension());
                         response.put("binaryFileExtension", robotFactory.getBinaryFileExtension());
                         response.put("hasWlan", robotFactory.hasWlanCredentials());
-                        response.put("firmwareDefault", robotFactory.getFirmwareDefaultProgramName());           
+                        response.put("firmwareDefault", robotFactory.getFirmwareDefaultProgramName());
                         LOG.info("set robot to {}", robot);
                         Statistics.info("ChangeRobot", "success", true);
                     } else {

@@ -18,6 +18,7 @@ import de.fhg.iais.roberta.robotCommunication.RobotCommunicationData;
 import de.fhg.iais.roberta.robotCommunication.RobotCommunicationData.State;
 import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
 import de.fhg.iais.roberta.util.dbc.DbcException;
+import de.fhg.iais.roberta.util.dbc.DbcKeyException;
 
 public class UtilForREST {
     private static final Logger LOG = LoggerFactory.getLogger(UtilForREST.class);
@@ -47,14 +48,49 @@ public class UtilForREST {
      * @param fullRequest
      * @return
      */
-    public static void handleRequestInit(HttpSessionState httpSessionState, Logger loggerForRequest, JSONObject fullRequest) {
+    public static HttpSessionState handleRequestInit(Logger loggerForRequest, JSONObject fullRequest) {
         AliveData.rememberClientCall();
+        String tokenSetOnInit = fullRequest.optString("initToken");
+        HttpSessionState httpSessionState = validateTokenSetOnInit(tokenSetOnInit);
         MDC.put("sessionId", String.valueOf(httpSessionState.getSessionNumber()));
         MDC.put("userId", String.valueOf(httpSessionState.getUserId()));
         MDC.put("robotName", String.valueOf(httpSessionState.getRobotName()));
         new ClientLogger().log(loggerForRequest, fullRequest);
-        String initToken = fullRequest.optString("initToken");
-        httpSessionState.validateInitToken(initToken);
+        return httpSessionState;
+    }
+
+    /**
+     * validate the init-token from the frontend-request and the init-token from the state stored in this object.<br>
+     * If an error is detected a {@linkplain DbcKeyException} is thrown.<br>
+     * <i>Only for debugging:</i> if the init-token in this object is set to "", all checks are disabled. This should <i>NEVER</i> happen, when a real server is
+     * started
+     *
+     * @param checkInitToken true: consistency checks; false: avoid them (used by ping services)
+     * @param tokenSetOnInit the token from the frontend-request, retrieved from the server when the connection front-end to server was established
+     * @return a HttpSessionState object matching the tokenSetOnInit
+     */
+    private static HttpSessionState validateTokenSetOnInit(String tokenSetOnInit) {
+        HttpSessionState httpSessionState = null;
+        String errorMsgIfError;
+        Key errorKey;
+        if ( tokenSetOnInit == null ) {
+            errorMsgIfError = "frontend request has no tokenSetOnInit";
+            errorKey = Key.INIT_FAIL_HTTPSESSION_EXPECTED_BUT_NOT_FOUND;
+        } else {
+            httpSessionState = HttpSessionState.initToken2HttpSessionstate.get(tokenSetOnInit);
+            if ( httpSessionState == null ) {
+                errorMsgIfError = "initToken is not initialized in the session";
+                errorKey = Key.INIT_FAIL_MULTIPLE_FRONTENDS_ONE_HTTPSESSION;
+            } else {
+                errorMsgIfError = null;
+                errorKey = null;
+            }
+        }
+        if ( errorMsgIfError != null || errorKey != null ) {
+            LOG.error(errorMsgIfError);
+            throw new DbcKeyException(errorMsgIfError, errorKey, null);
+        }
+        return httpSessionState;
     }
 
     public static JSONObject extractDataPart(JSONObject request) {
@@ -147,9 +183,7 @@ public class UtilForREST {
                         }
                     }
                 }
-                if ( httpSessionState.isInitTokenInitialized() ) {
-                    response.put("initToken", httpSessionState.getInitToken());
-                }
+                response.put("initToken", httpSessionState.getInitToken());
             }
         } catch ( Exception e ) {
             UtilForREST.LOG.error("when adding info for the client, an unexpected exception occurred. Some info for the client may be missing", e);

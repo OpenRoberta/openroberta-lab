@@ -22,8 +22,8 @@ import de.fhg.iais.roberta.persistence.util.DbSession;
 import de.fhg.iais.roberta.persistence.util.HttpSessionState;
 import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
 import de.fhg.iais.roberta.util.Key;
-import de.fhg.iais.roberta.util.UtilForREST;
 import de.fhg.iais.roberta.util.Util;
+import de.fhg.iais.roberta.util.UtilForREST;
 
 @Path("/toolbox")
 public class ClientToolbox {
@@ -39,8 +39,8 @@ public class ClientToolbox {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response command(@OraData HttpSessionState httpSessionState, @OraData DbSession dbSession, JSONObject fullRequest) throws Exception {
-        UtilForREST.handleRequestInit(httpSessionState, LOG, fullRequest);
+    public Response command(@OraData DbSession dbSession, JSONObject fullRequest) throws Exception {
+        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, fullRequest);
         JSONObject response = new JSONObject();
         try {
             JSONObject request = fullRequest.getJSONObject("data");

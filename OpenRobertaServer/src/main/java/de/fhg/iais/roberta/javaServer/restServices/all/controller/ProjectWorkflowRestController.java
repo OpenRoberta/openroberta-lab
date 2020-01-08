@@ -17,15 +17,14 @@ import com.google.inject.Inject;
 
 import de.fhg.iais.roberta.components.Project;
 import de.fhg.iais.roberta.factory.IRobotFactory;
-import de.fhg.iais.roberta.javaServer.provider.OraData;
 import de.fhg.iais.roberta.javaServer.restServices.all.service.ProjectService;
 import de.fhg.iais.roberta.mode.action.Language;
 import de.fhg.iais.roberta.persistence.util.HttpSessionState;
 import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
 import de.fhg.iais.roberta.util.Key;
 import de.fhg.iais.roberta.util.Statistics;
-import de.fhg.iais.roberta.util.UtilForREST;
 import de.fhg.iais.roberta.util.Util;
+import de.fhg.iais.roberta.util.UtilForREST;
 
 @Path("/projectWorkflow")
 public class ProjectWorkflowRestController {
@@ -42,8 +41,8 @@ public class ProjectWorkflowRestController {
     @Path("/source")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getSourceCode(@OraData HttpSessionState httpSessionState, JSONObject request) {
-        UtilForREST.handleRequestInit(httpSessionState, LOG, request);
+    public Response getSourceCode(JSONObject request) {
+        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, request);
         JSONObject dataPart = UtilForREST.extractDataPart(request);
         JSONObject response = new JSONObject();
         try {
@@ -85,8 +84,8 @@ public class ProjectWorkflowRestController {
     @Path("/sourceSimulation")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getSimulationVMCode(@OraData HttpSessionState httpSessionState, JSONObject request) {
-        UtilForREST.handleRequestInit(httpSessionState, LOG, request);
+    public Response getSimulationVMCode(JSONObject request) {
+        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, request);
         JSONObject dataPart = UtilForREST.extractDataPart(request);
         JSONObject response = new JSONObject();
         try {
@@ -129,8 +128,8 @@ public class ProjectWorkflowRestController {
     @Path("/run")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response runProgram(@OraData HttpSessionState httpSessionState, JSONObject request) {
-        UtilForREST.handleRequestInit(httpSessionState, LOG, request);
+    public Response runProgram(JSONObject request) {
+        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, request);
         JSONObject dataPart = UtilForREST.extractDataPart(request);
         JSONObject response = new JSONObject();
         try {
@@ -185,8 +184,8 @@ public class ProjectWorkflowRestController {
     @Path("/runNative")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response runNative(@OraData HttpSessionState httpSessionState, JSONObject request) {
-        UtilForREST.handleRequestInit(httpSessionState, LOG, request);
+    public Response runNative(JSONObject request) {
+        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, request);
         JSONObject dataPart = UtilForREST.extractDataPart(request);
         JSONObject response = new JSONObject();
         try {
@@ -224,8 +223,8 @@ public class ProjectWorkflowRestController {
     @Path("/compileProgram")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response compileProgram(@OraData HttpSessionState httpSessionState, JSONObject request) {
-        UtilForREST.handleRequestInit(httpSessionState, LOG, request);
+    public Response compileProgram(JSONObject request) {
+        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, request);
         JSONObject dataPart = UtilForREST.extractDataPart(request);
         JSONObject response = new JSONObject();
         try {
@@ -272,8 +271,8 @@ public class ProjectWorkflowRestController {
     @Path("/compileNative")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response compileNative(@OraData HttpSessionState httpSessionState, JSONObject request) {
-        UtilForREST.handleRequestInit(httpSessionState, LOG, request);
+    public Response compileNative(JSONObject request) {
+        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, request);
         JSONObject dataPart = UtilForREST.extractDataPart(request);
         JSONObject response = new JSONObject();
         try {
@@ -306,13 +305,13 @@ public class ProjectWorkflowRestController {
             return createErrorResponse(response, httpSessionState, this.brickCommunicator);
         }
     }
-    
+
     @POST
     @Path("/reset")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response reset(@OraData HttpSessionState httpSessionState, JSONObject request) {
-        UtilForREST.handleRequestInit(httpSessionState, LOG, request);
+    public Response reset(JSONObject request) {
+        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, request);
         JSONObject dataPart = UtilForREST.extractDataPart(request);
         JSONObject response = new JSONObject();
         try {

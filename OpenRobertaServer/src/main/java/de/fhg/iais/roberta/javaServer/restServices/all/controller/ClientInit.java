@@ -1,80 +1,88 @@
 package de.fhg.iais.roberta.javaServer.restServices.all.controller;
 
 import java.io.File;
+import java.io.IOException;
+import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
-import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.apache.commons.io.FileUtils;
+import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
 
 import com.google.inject.Inject;
+import com.google.inject.name.Named;
 
+import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.javaServer.provider.OraData;
+import de.fhg.iais.roberta.main.IIpToCountry;
 import de.fhg.iais.roberta.persistence.util.DbSession;
 import de.fhg.iais.roberta.persistence.util.HttpSessionState;
 import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
 import de.fhg.iais.roberta.util.AliveData;
 import de.fhg.iais.roberta.util.ClientLogger;
+import de.fhg.iais.roberta.util.Clock;
 import de.fhg.iais.roberta.util.Key;
 import de.fhg.iais.roberta.util.ServerProperties;
 import de.fhg.iais.roberta.util.Statistics;
-import de.fhg.iais.roberta.util.UtilForREST;
 import de.fhg.iais.roberta.util.Util;
+import de.fhg.iais.roberta.util.UtilForREST;
 import eu.bitwalker.useragentutils.UserAgent;
 
 @Path("/init")
 public class ClientInit {
     private static final Logger LOG = LoggerFactory.getLogger(ClientInit.class);
+
+    private final Map<String, IRobotFactory> robotPluginMap;
     private final RobotCommunicator brickCommunicator;
     private final ServerProperties serverProperties;
+    private final IIpToCountry ipToCountry;
 
     @Inject
-    public ClientInit(RobotCommunicator brickCommunicator, ServerProperties serverProperties) {
+    public ClientInit(
+        @Named("robotPluginMap") Map<String, IRobotFactory> robotPluginMap,
+        RobotCommunicator brickCommunicator,
+        ServerProperties serverProperties,
+        IIpToCountry ipToCountry) //
+    {
+        this.robotPluginMap = robotPluginMap;
         this.brickCommunicator = brickCommunicator;
         this.serverProperties = serverProperties;
+        this.ipToCountry = ipToCountry;
     }
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response command(@OraData HttpSessionState httpSessionState, @OraData DbSession dbSession, JSONObject fullRequest, @Context HttpHeaders httpHeaders)
-        throws Exception {
-
+    public Response command(@OraData DbSession dbSession, JSONObject fullRequest, @Context HttpServletRequest httpRequest) throws JSONException //
+    {
         AliveData.rememberClientCall();
-        MDC.put("sessionId", String.valueOf(httpSessionState.getSessionNumber()));
-        MDC.put("userId", String.valueOf(httpSessionState.getUserId()));
-        MDC.put("robotName", String.valueOf(httpSessionState.getRobotName()));
         new ClientLogger().log(ClientInit.LOG, fullRequest);
         JSONObject response = new JSONObject();
         try {
             JSONObject request = fullRequest.getJSONObject("data");
             ClientInit.LOG.info("INIT command. Trying to build a new HttpSessionState");
             response.put("cmd", "init");
-            if ( httpSessionState.isInitTokenInitialized() ) {
-                ClientInit.LOG
-                    .error("init-token was found during init: reload/re-use of old session? more than 1 tab? NOTE: the old init-token will be destroyed");
-                httpSessionState.reset();
-            }
-            httpSessionState.setInitToken();
-            List<String> userAgentList = httpHeaders.getRequestHeader("User-Agent");
-            String userAgentString = "";
-            if ( userAgentList != null ) {
-                userAgentString = userAgentList.get(0);
-            }
+            HttpSessionState httpSessionState = HttpSessionState.init(this.robotPluginMap, this.serverProperties, getCountryCode(httpRequest, ipToCountry));
+            MDC.put("sessionId", String.valueOf(httpSessionState.getSessionNumber()));
+            MDC.put("userId", String.valueOf(httpSessionState.getUserId()));
+            MDC.put("robotName", String.valueOf(httpSessionState.getRobotName()));
+            String userAgentString = httpRequest.getHeader("User-Agent");
             UserAgent userAgent = UserAgent.parseUserAgentString(userAgentString);
             Statistics.infoUserAgent("Initialization", userAgent, httpSessionState.getCountryCode(), request);
 
@@ -129,6 +137,30 @@ public class ClientInit {
         }
         MDC.clear();
         return Response.ok(response).build();
+    }
+
+    private static String getCountryCode(HttpServletRequest servletRequest, IIpToCountry ipToCountry) {
+        String remoteAddr = "";
+        if ( servletRequest != null ) {
+            remoteAddr = servletRequest.getHeader("X-FORWARDED-FOR");
+            if ( remoteAddr == null || "".equals(remoteAddr) ) {
+                remoteAddr = servletRequest.getRemoteAddr();
+            }
+        }
+        InetAddress addrAsIp;
+        String countryCode = "..";
+        try {
+            Clock getByNameTime = Clock.start();
+            addrAsIp = InetAddress.getByName(remoteAddr);
+            long elapsed = getByNameTime.elapsedMsec();
+            if ( elapsed > 1000 ) {
+                LOG.error("InetAddress.getByName(" + remoteAddr + ") + getCountryCode took " + elapsed + "msec");
+            }
+            countryCode = ipToCountry.getCountryCode(addrAsIp);
+        } catch ( IOException e ) {
+            LOG.info("Could not evaluate the actual ip as a country code. Likely a problem with the IpToCountry file.");
+        }
+        return countryCode;
     }
 
     /**

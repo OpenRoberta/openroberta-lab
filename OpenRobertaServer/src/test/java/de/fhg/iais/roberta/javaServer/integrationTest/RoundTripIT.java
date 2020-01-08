@@ -33,8 +33,8 @@ import com.google.common.base.Charsets;
 import com.google.common.io.Resources;
 
 import de.fhg.iais.roberta.factory.IRobotFactory;
-import de.fhg.iais.roberta.javaServer.restServices.all.controller.ClientUser;
 import de.fhg.iais.roberta.javaServer.restServices.all.controller.ClientProgramController;
+import de.fhg.iais.roberta.javaServer.restServices.all.controller.ClientUser;
 import de.fhg.iais.roberta.main.ServerStarter;
 import de.fhg.iais.roberta.persistence.util.DbSetup;
 import de.fhg.iais.roberta.persistence.util.HttpSessionState;
@@ -196,7 +196,7 @@ public class RoundTripIT {
         restProject = new ClientProgramController(sessionFactoryWrapper, serverProperties);
         Map<String, IRobotFactory> robotPlugins = new HashMap<>();
         loadPlugin(robotPlugins);
-        s1 = HttpSessionState.initOnlyLegalForDebugging(robotPlugins, serverProperties, 1);
+        s1 = HttpSessionState.initOnlyLegalForDebugging("", robotPlugins, serverProperties, 1);
     }
 
     private void setUpDatabase() throws Exception {
@@ -204,7 +204,6 @@ public class RoundTripIT {
         response =
             restUser
                 .command(
-                    s1,
                     sessionFactoryWrapper.getSession(),
                     JSONUtilForServer
                         .mkD("{'cmd':'createUser';'accountName':'orA';'userName':'orA';'password':'Pid';'userEmail':'cavy@home';'role':'STUDENT'}"));
@@ -213,7 +212,6 @@ public class RoundTripIT {
         response = //
             restUser
                 .command( //
-                    s1,
                     sessionFactoryWrapper.getSession(),
                     JSONUtilForServer.mkD("{'cmd':'login';'accountName':'orA';'password':'Pid'}"));
         JSONUtilForServer.assertEntityRc(response, "ok", Key.USER_GET_ONE_SUCCESS);
@@ -224,7 +222,7 @@ public class RoundTripIT {
             blocklyProgram = Resources.toString(PerformanceUserIT.class.getResource(resourcePath + program + ".xml"), Charsets.UTF_8);
             JSONObject fullRequest = new JSONObject("{\"log\":[];\"data\":{\"cmd\":\"saveAsP\";\"name\":\"" + program + "\";\"timestamp\":0}}");
             fullRequest.getJSONObject("data").put("program", blocklyProgram);
-            response = restProject.updateProject(s1, fullRequest);
+            response = restProject.updateProject(fullRequest);
             JSONUtilForServer.assertEntityRc(response, "ok", Key.PROGRAM_SAVE_SUCCESS);
         }
     }
@@ -267,7 +265,7 @@ public class RoundTripIT {
         WebElement userProgramSaveAsElement = (new WebDriverWait(driver, 10)).until(ExpectedConditions.elementToBeClickable(By.id("menuSaveProg")));
         userProgramSaveAsElement.click();
 
-        response = restProject.importProgram(s1, JSONUtilForServer.mkD("{'cmd':'loadP';'name':'" + programName + "';'owner':'orA'}"));
+        response = restProject.importProgram(JSONUtilForServer.mkD("{'cmd':'loadP';'name':'" + programName + "';'owner':'orA'}"));
         String resultProgram = ((JSONObject) response.getEntity()).getString("data");
         return resultProgram;
     }

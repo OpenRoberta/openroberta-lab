@@ -14,7 +14,6 @@ import org.slf4j.LoggerFactory;
 
 import com.google.inject.Inject;
 
-import de.fhg.iais.roberta.javaServer.provider.OraData;
 import de.fhg.iais.roberta.persistence.ConfigurationProcessor;
 import de.fhg.iais.roberta.persistence.UserProcessor;
 import de.fhg.iais.roberta.persistence.bo.User;
@@ -23,8 +22,8 @@ import de.fhg.iais.roberta.persistence.util.HttpSessionState;
 import de.fhg.iais.roberta.persistence.util.SessionFactoryWrapper;
 import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
 import de.fhg.iais.roberta.util.Key;
-import de.fhg.iais.roberta.util.UtilForREST;
 import de.fhg.iais.roberta.util.Util;
+import de.fhg.iais.roberta.util.UtilForREST;
 
 @Path("/conf")
 public class ClientConfiguration {
@@ -42,8 +41,8 @@ public class ClientConfiguration {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response command(@OraData HttpSessionState httpSessionState, JSONObject fullRequest) throws Exception {
-        UtilForREST.handleRequestInit(httpSessionState, LOG, fullRequest);
+    public Response command(JSONObject fullRequest) throws Exception {
+        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, fullRequest);
         int userId = httpSessionState.getUserId();
         DbSession dbSession = this.sessionFactoryWrapper.getSession();
         final String robotName =

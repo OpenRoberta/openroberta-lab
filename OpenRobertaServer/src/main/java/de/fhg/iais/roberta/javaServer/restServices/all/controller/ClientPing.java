@@ -19,7 +19,6 @@ import org.slf4j.MDC;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 
-import de.fhg.iais.roberta.javaServer.provider.OraData;
 import de.fhg.iais.roberta.persistence.util.HttpSessionState;
 import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
 import de.fhg.iais.roberta.util.Key;
@@ -51,10 +50,12 @@ public class ClientPing {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response command(@OraData HttpSessionState httpSessionState, JSONObject fullRequest, @PathParam("version") String version) throws Exception {
+    public Response command(JSONObject fullRequest, @PathParam("version") String version) throws Exception {
         Date date = new Date();
+        HttpSessionState httpSessionState = null;
         JSONObject response = new JSONObject().put("version", this.openRobertaServerVersion).put("date", date.getTime()).put("dateAsString", date.toString());
         try {
+            httpSessionState = UtilForREST.handleRequestInit(LOG, fullRequest);
             MDC.put("sessionId", String.valueOf(httpSessionState.getSessionNumber()));
             MDC.put("userId", String.valueOf(httpSessionState.getUserId()));
             MDC.put("robotName", String.valueOf(httpSessionState.getRobotName()));
@@ -64,6 +65,7 @@ public class ClientPing {
             if ( counter % EVERY_REQUEST == 0 ) {
                 LOG.info("/ping [count:" + counter + "]");
             }
+            return UtilForREST.responseWithFrontendInfo(response, httpSessionState, this.brickCommunicator);
         } catch ( DbcKeyException e ) {
             int counter = pingKeyExceptionsSuppressed.incrementAndGet();
             if ( counter % EVERY_REQUEST == 0 ) {

@@ -103,7 +103,7 @@ public class CompilerWorkflowRobotCommonIT {
         serverProperties = new ServerProperties(baseServerProperties);
         robotCommunicator = new RobotCommunicator();
         pluginMap = ServerStarter.configureRobotPlugins(robotCommunicator, serverProperties, EMPTY_STRING_LIST);
-        httpSessionState = HttpSessionState.initOnlyLegalForDebugging(pluginMap, serverProperties, 1);
+        httpSessionState = HttpSessionState.initOnlyLegalForDebugging("", pluginMap, serverProperties, 1);
         JSONObject testSpecification = Util.loadYAML("classpath:/crossCompilerTests/common/testSpec.yml");
         crosscompilerCall = testSpecification.getBoolean("crosscompilercall");
         showSuccess = testSpecification.getBoolean("showsuccess");
@@ -268,7 +268,7 @@ public class CompilerWorkflowRobotCommonIT {
                 setRobotTo(robotName);
                 org.codehaus.jettison.json.JSONObject cmd = JSONUtilForServer.mkD("{'programName':'prog','language':'de'}");
                 cmd.getJSONObject("data").put("programBlockSet", template);
-                Response response = this.restWorkflow.compileProgram(this.httpSessionState, cmd);
+                Response response = this.restWorkflow.compileProgram(cmd);
                 result = checkEntityRc(response, "ok", "PROGRAM_INVALID_STATEMETNS");
                 reason = "response-info";
             } else {
@@ -336,7 +336,7 @@ public class CompilerWorkflowRobotCommonIT {
     }
 
     private void setRobotTo(String robot) throws Exception {
-        Response response = this.restAdmin.command(httpSessionState, this.dbSession, JSONUtilForServer.mkD("{'cmd':'setRobot','robot':'" + robot + "'}"), null);
+        Response response = this.restAdmin.command(this.dbSession, JSONUtilForServer.mkD("{'cmd':'setRobot','robot':'" + robot + "'}"), null);
         JSONUtilForServer.assertEntityRc(response, "ok", Key.ROBOT_SET_SUCCESS);
     }
 

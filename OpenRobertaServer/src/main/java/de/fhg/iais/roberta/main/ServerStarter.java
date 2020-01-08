@@ -10,10 +10,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
-import javax.servlet.http.HttpSession;
-import javax.servlet.http.HttpSessionEvent;
-import javax.servlet.http.HttpSessionListener;
-
 import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.HttpConnectionFactory;
 import org.eclipse.jetty.server.Server;
@@ -39,12 +35,10 @@ import ch.qos.logback.classic.joran.JoranConfigurator;
 import ch.qos.logback.core.joran.spi.JoranException;
 import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.guice.RobertaGuiceServletConfig;
-import de.fhg.iais.roberta.javaServer.provider.OraDataProvider;
 import de.fhg.iais.roberta.javaServer.websocket.Ev3SensorLoggingWS;
 import de.fhg.iais.roberta.persistence.bo.Robot;
 import de.fhg.iais.roberta.persistence.dao.RobotDao;
 import de.fhg.iais.roberta.persistence.util.DbSession;
-import de.fhg.iais.roberta.persistence.util.HttpSessionState;
 import de.fhg.iais.roberta.persistence.util.SessionFactoryWrapper;
 import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
 import de.fhg.iais.roberta.util.Key;
@@ -168,8 +162,6 @@ public class ServerStarter {
         ServletContextHandler restHttpHandler = new ServletContextHandler(ServletContextHandler.SESSIONS);
         restHttpHandler.setContextPath("/rest");
         restHttpHandler.setSessionHandler(new SessionHandler());
-        restHttpHandler.getSessionHandler().addEventListener(mkSessionListener());
-        restHttpHandler.getSessionHandler().setMaxInactiveInterval(7200); // 2 hours, should be ok at least for schools :-)
         restHttpHandler.addEventListener(robertaGuiceServletConfig);
         restHttpHandler.addFilter(GuiceFilter.class, "/*", null);
         restHttpHandler.addServlet(DefaultServlet.class, "/*");
@@ -405,41 +397,6 @@ public class ServerStarter {
             LOG.error("Server could not check robot names in the database (exit 20)", e);
             System.exit(20);
         }
-    }
-
-    private static final HttpSessionListener mkSessionListener() {
-        final HttpSessionListener listener = new HttpSessionListener() {
-            @Override
-            public void sessionCreated(HttpSessionEvent se) {
-                LOG.info("jetty session created for /rest endpoint");
-            }
-
-            @Override
-            public void sessionDestroyed(HttpSessionEvent se) {
-                String messageSuffix = "???";
-                long sessionNumber = -1;
-                if ( se == null ) {
-                    messageSuffix = "No action: http session event is null";
-                } else {
-                    HttpSession httpsession = se.getSession();
-                    if ( httpsession == null ) {
-                        messageSuffix = "No action: http session is null";
-                    } else {
-                        HttpSessionState httpSessionState = (HttpSessionState) httpsession.getAttribute(OraDataProvider.OPEN_ROBERTA_STATE);
-                        if ( httpSessionState == null ) {
-                            messageSuffix = "No action: http session state is null";
-                        } else {
-                            sessionNumber = httpSessionState.getSessionNumber();
-                            HttpSessionState.destroyDebugHttpSessionStateEntry(sessionNumber);
-                            messageSuffix = "Session number " + sessionNumber + " destroyed";
-                        }
-                    }
-                }
-                LOG.info("jetty session destroy event for /rest endpoint. " + messageSuffix);
-                Statistics.info("SessionDestroy", "sessionId", (int) sessionNumber, "success", true);
-            }
-        };
-        return listener;
     }
 
     private static String extractValue(String valueMaybeQuoted) {

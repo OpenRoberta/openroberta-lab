@@ -152,7 +152,7 @@ public class PerformanceUserIT {
         PerformanceUserIT.LOG.info("" + userNumber + ";start;");
         Random random = new Random(userNumber);
 
-        HttpSessionState s = HttpSessionState.initOnlyLegalForDebugging(this.robotPlugins, serverProperties, 1);
+        HttpSessionState s = HttpSessionState.initOnlyLegalForDebugging("", this.robotPlugins, serverProperties, 1);
         Assert.assertTrue(!s.isUserLoggedIn());
 
         // create user "pid-*" with success
@@ -165,7 +165,7 @@ public class PerformanceUserIT {
             "'isYoungerThen14':0;" + //
             "'userEmail':'cavy-" + userNumber + "@home';" + //
             "'role':'STUDENT'}");
-        Response response = this.restUser.command(s, this.sessionFactoryWrapper.getSession(), request);
+        Response response = this.restUser.command(this.sessionFactoryWrapper.getSession(), request);
         JSONUtilForServer.assertEntityRc(response, "ok", Key.USER_CREATE_SUCCESS);
 
         // login with user "pid-*" and create 2 programs
@@ -173,15 +173,14 @@ public class PerformanceUserIT {
         response = //
             this.restUser
                 .command( //
-                    s,
                     this.sessionFactoryWrapper.getSession(),
                     JSONUtilForServer.mkD("{'cmd':'login';'accountName':'pid-acc-" + userNumber + "';'password':'dip-" + userNumber + "'}"));
         JSONUtilForServer.assertEntityRc(response, "ok", Key.USER_GET_ONE_SUCCESS);
         Assert.assertTrue(s.isUserLoggedIn());
         int sId = s.getUserId();
-        response = this.restProject.updateProject(s, JSONUtilForServer.mkD("{'cmd':'saveAsP';'programName':'p1';'programText':'<program>...</program>'}"));
+        response = this.restProject.updateProject(JSONUtilForServer.mkD("{'cmd':'saveAsP';'programName':'p1';'programText':'<program>...</program>'}"));
         JSONUtilForServer.assertEntityRc(response, "ok", Key.PROGRAM_SAVE_SUCCESS);
-        response = this.restProject.updateProject(s, JSONUtilForServer.mkD("{'cmd':'saveAsP';'programName':'p2';'programText':'<program>...</program>'}"));
+        response = this.restProject.updateProject(JSONUtilForServer.mkD("{'cmd':'saveAsP';'programName':'p2';'programText':'<program>...</program>'}"));
         JSONUtilForServer.assertEntityRc(response, "ok", Key.PROGRAM_SAVE_SUCCESS);
         Assert.assertEquals(2, this.memoryDbSetup.getOneBigIntegerAsLong("select count(*) from PROGRAM where OWNER_ID = " + sId));
 
@@ -190,10 +189,10 @@ public class PerformanceUserIT {
         Timestamp lastChanged = this.memoryDbSetup.getOne("select LAST_CHANGED from PROGRAM where OWNER_ID = " + sId + " and name = 'p2'");
         JSONObject fullRequest = new JSONObject("{\"log\":[];\"data\":{\"cmd\":\"save\";\"programName\":\"p2\"}}");
         fullRequest.getJSONObject("data").put("programText", this.theProgramOfAllUserLol).put("timestamp", lastChanged.getTime());
-        response = this.restProject.updateProject(s, fullRequest);
+        response = this.restProject.updateProject(fullRequest);
         JSONUtilForServer.assertEntityRc(response, "ok", Key.PROGRAM_SAVE_SUCCESS);
         Assert.assertEquals(2, this.memoryDbSetup.getOneBigIntegerAsLong("select count(*) from PROGRAM where OWNER_ID = " + sId));
-        response = this.restProject.importProgram(s, JSONUtilForServer.mkD("{'cmd':'loadPN'}"));
+        response = this.restProject.importProgram(JSONUtilForServer.mkD("{'cmd':'loadPN'}"));
         JSONUtilForServer.assertEntityRc(response, "ok", Key.PROGRAM_GET_ALL_SUCCESS);
         JSONArray programListing = ((JSONObject) response.getEntity()).getJSONArray("programNames");
         JSONArray programNames = new JSONArray();

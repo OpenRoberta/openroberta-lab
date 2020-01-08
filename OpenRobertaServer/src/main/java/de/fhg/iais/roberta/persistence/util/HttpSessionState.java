@@ -29,26 +29,21 @@ public class HttpSessionState implements Serializable {
 
     public final static int NO_USER = -1;
 
-    private static boolean debugSessionStateIsConsistent = true;
-    private static final Map<Long, HttpSessionState> debugSessionStates = new ConcurrentHashMap<>();
-
-    private final Map<String, IRobotFactory> robotPluginMap;
-    private final String defaultRobotName;
-    private final long sessionNumber;
-    private final String countryCode;
+    public static final Map<String, HttpSessionState> initToken2HttpSessionstate = new ConcurrentHashMap<>();
 
     /**
-     * the REST-service in ClientInit will set this token. The token is returned with each response and the front end must supply it with each request. The
-     * token is needed to detect two problematic cases in the client-server communication:
-     * <ul>
-     * <li>if it is already SET when ClientInit is called, it is likely, that the user opened a second tab and accessed the lab (again). This is a problem, as
-     * we cannot sync the two clients. <i>Thus we will invalidate the old, previous state.</i>
-     * <li>if it is NOT SET and another function than init is called, it is likely, that either the server was restarted or a user session moved from one server
-     * to another server. In the latter case the session must be migrated to the new server. <i>This is not yet implemented. Actually we abort the request.</i>
-     * </ul>
-     * The token value of "" is used for debugging purposes and will deactivate all consistency checks (see {@linkplain initOnlyLegalForDebugging})
+     * the REST-service in ClientInit will set tokenSetOnInit. It is returned with each response and the front end must supply it with each request. The token
+     * is needed to detect when it is NOT SET and another function than init is called. It is likely, that then either the server was restarted or a user
+     * session moved from one server to another server. In the latter case the session must be migrated to the new server. <i>This is not yet implemented.
+     * Actually we abort the request.</i> A value of "" for tokenSetOnInit is used for debugging purposes and will deactivate all consistency checks (see
+     * {@linkplain initOnlyLegalForDebugging})
      */
-    private String tokenSetOnInit;
+    private final String tokenSetOnInit;
+    private final long sessionNumber;
+    private final Map<String, IRobotFactory> robotPluginMap;
+    private final String defaultRobotName;
+    private final String countryCode;
+
     private int userId;
     private String robotName;
     private String token;
@@ -60,17 +55,19 @@ public class HttpSessionState implements Serializable {
     private String toolbox;
     private boolean processing;
 
-    private HttpSessionState(Map<String, IRobotFactory> robotPluginMap, ServerProperties serverProperties, long sessionNumber, String countryCode) //
+    private HttpSessionState(
+        String tokenSetOnInit,
+        long sessionNumber,
+        Map<String, IRobotFactory> robotPluginMap,
+        ServerProperties serverProperties,
+        String countryCode) //
     {
+        this.tokenSetOnInit = tokenSetOnInit;
+        this.sessionNumber = sessionNumber;
         this.robotPluginMap = robotPluginMap;
         this.defaultRobotName = serverProperties.getDefaultRobot();
-        this.sessionNumber = sessionNumber;
         this.countryCode = countryCode;
-        reset();
-    }
 
-    public void reset() {
-        this.tokenSetOnInit = null;
         this.userId = HttpSessionState.NO_USER;
         this.robotName = defaultRobotName;
         this.token = RandomUrlPostfix.generate(12, 12, 3, 3, 3);
@@ -81,11 +78,17 @@ public class HttpSessionState implements Serializable {
         this.toolboxName = null;
         this.toolbox = null;
         this.setProcessing(false);
+
+        // remember the HttpSessionState object in a global map which 'tokenSetOnInit' as key
+        HttpSessionState previousStateMustNotExist = initToken2HttpSessionstate.put(tokenSetOnInit, this);
+        if ( previousStateMustNotExist != null && !"".equals(tokenSetOnInit) ) {
+            LOG.error("FATAL! HttpSessionState with session number " + sessionNumber + " and tokenSetOnInit '" + tokenSetOnInit + "' found");
+        }
     }
 
     /**
      * factory method to create and initialize a {@linkplain HttpSessionState} object. This object stores the server-related state of the user's work with the
-     * openroberta-lab.
+     * lab.
      *
      * @param robotPluginMap
      * @param serverProperties
@@ -95,14 +98,10 @@ public class HttpSessionState implements Serializable {
      */
     public static HttpSessionState init(Map<String, IRobotFactory> robotPluginMap, ServerProperties serverProperties, String countryCode) //
     {
+        String tokenSetOnInit = RandomUrlPostfix.generate(12, 12, 3, 3, 3);
         long sessionNumber = SESSION_COUNTER.incrementAndGet();
-        HttpSessionState httpSessionState = new HttpSessionState(robotPluginMap, serverProperties, sessionNumber, countryCode);
-        LOG.info("httpSessionState with session number " + sessionNumber + " created");
-        HttpSessionState previousStateMustNotExist = debugSessionStates.put(sessionNumber, httpSessionState);
-        if ( previousStateMustNotExist != null ) {
-            debugSessionStateIsConsistent = false;
-            LOG.error("httpSessionState with session number " + sessionNumber + " was found when trying to insert. This is a severe logic error");
-        }
+        HttpSessionState httpSessionState = new HttpSessionState(tokenSetOnInit, sessionNumber, robotPluginMap, serverProperties, countryCode);
+        LOG.info("session " + sessionNumber + " created");
         return httpSessionState;
     }
 
@@ -116,10 +115,13 @@ public class HttpSessionState implements Serializable {
      * @param sessionNumber
      * @return
      */
-    public static HttpSessionState initOnlyLegalForDebugging(Map<String, IRobotFactory> robotPluginMap, ServerProperties serverProperties, long sessionNumber) //
+    public static HttpSessionState initOnlyLegalForDebugging(
+        String tokenSetOnInit,
+        Map<String, IRobotFactory> robotPluginMap,
+        ServerProperties serverProperties,
+        long sessionNumber) //
     {
-        HttpSessionState state = new HttpSessionState(robotPluginMap, serverProperties, sessionNumber, "..");
-        state.tokenSetOnInit = "";
+        HttpSessionState state = new HttpSessionState(tokenSetOnInit, sessionNumber, robotPluginMap, serverProperties, "..");
         return state;
     }
 
@@ -150,18 +152,9 @@ public class HttpSessionState implements Serializable {
         this.robotName = robotName;
     }
 
-    public boolean isInitTokenInitialized() {
-        return tokenSetOnInit != null;
-    }
-
     public String getInitToken() {
         Assert.notNull(tokenSetOnInit, "init token not initialized. This is a SEVERE error");
         return tokenSetOnInit;
-    }
-
-    public void setInitToken() {
-        Assert.isFalse("".equals(tokenSetOnInit));
-        this.tokenSetOnInit = RandomUrlPostfix.generate(12, 12, 3, 3, 3);
     }
 
     /**
@@ -181,9 +174,6 @@ public class HttpSessionState implements Serializable {
         if ( initToken == null ) {
             errorMsgIfError = "frontend request has no initToken";
             errorKey = Key.INIT_FAIL_HTTPSESSION_EXPECTED_BUT_NOT_FOUND;
-        } else if ( !isInitTokenInitialized() ) {
-            errorMsgIfError = "initToken is not initialized in the session";
-            errorKey = Key.INIT_FAIL_MULTIPLE_FRONTENDS_ONE_HTTPSESSION;
         } else if ( !getInitToken().equals(initToken) ) {
             errorMsgIfError = "initToken from frontend and from session are different";
             errorKey = Key.INIT_FAIL_MULTIPLE_FRONTENDS_ONE_HTTPSESSION;
@@ -255,9 +245,9 @@ public class HttpSessionState implements Serializable {
     }
 
     /**
-     * Returns a list of robot factories associated with the group. In case the robot has no group a one element list the given robot is returned and in case
-     * an invalid robot is used an empty list is returned.
-     * 
+     * Returns a list of robot factories associated with the group. In case the robot has no group a one element list the given robot is returned and in case an
+     * invalid robot is used an empty list is returned.
+     *
      * @param group the robot group
      * @return the list of group member factories
      */
@@ -266,7 +256,7 @@ public class HttpSessionState implements Serializable {
             String propertyGroup = factory.getPluginProperties().getStringProperty("robot.plugin.group");
             return (propertyGroup != null) && propertyGroup.equals(group);
         }).collect(Collectors.toList());
-        if (groupMembers.isEmpty()) {
+        if ( groupMembers.isEmpty() ) {
             if ( !robotPluginMap.containsKey(group) ) {
                 LOG.warn("No robot plugin associated with this group or robot name.");
                 return Collections.emptyList();
@@ -295,20 +285,6 @@ public class HttpSessionState implements Serializable {
     }
 
     public static int getNumberOfHttpSessionStates() {
-        if ( debugSessionStateIsConsistent ) {
-            return debugSessionStates.size();
-        } else {
-            return -1;
-        }
-    }
-
-    public static void destroyDebugHttpSessionStateEntry(long sessionNumber) {
-        if ( debugSessionStateIsConsistent ) {
-            HttpSessionState deletedStateMustExist = debugSessionStates.remove(sessionNumber);
-            if ( deletedStateMustExist == null ) {
-                debugSessionStateIsConsistent = false;
-                LOG.error("httpSessionState #" + sessionNumber + " not found when trying to remove. This is a severe logic error");
-            }
-        }
+        return initToken2HttpSessionstate.size();
     }
 }

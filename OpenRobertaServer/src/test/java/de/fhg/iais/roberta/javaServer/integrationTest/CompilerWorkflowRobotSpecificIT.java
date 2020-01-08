@@ -105,7 +105,7 @@ public class CompilerWorkflowRobotSpecificIT {
         serverProperties = new ServerProperties(baseServerProperties);
         robotCommunicator = new RobotCommunicator();
         pluginMap = ServerStarter.configureRobotPlugins(robotCommunicator, serverProperties, EMPTY_STRING_LIST);
-        httpSessionState = HttpSessionState.initOnlyLegalForDebugging(pluginMap, serverProperties, 1);
+        httpSessionState = HttpSessionState.initOnlyLegalForDebugging("", pluginMap, serverProperties, 1);
 
         String tempDir = serverProperties.getTempDir().replace("\\", "/");
         generatedStackmachineProgramsDir = tempDir + "generatedStackmachinePrograms/";
@@ -214,7 +214,7 @@ public class CompilerWorkflowRobotSpecificIT {
                 Export jaxbImportExport = JaxbHelper.xml2Element(xmlText, Export.class);
                 String programText = JaxbHelper.blockSet2xml(jaxbImportExport.getProgram().getBlockSet());
                 cmd.getJSONObject("data").put("programBlockSet", xmlText);
-                Response response = this.restWorkflow.compileProgram(httpSessionState, cmd);
+                Response response = this.restWorkflow.compileProgram(cmd);
                 entity = checkEntityRc(response, expectResult, "ORA_PROGRAM_INVALID_STATEMETNS");
                 result = entity != null;
                 if ( result && robotName.equals("wedo") && evalGeneratedProgram ) {
@@ -256,7 +256,7 @@ public class CompilerWorkflowRobotSpecificIT {
                 org.codehaus.jettison.json.JSONObject cmd = JSONUtilForServer.mkD("{'programName':'" + resource + "','language':'de'}");
                 String fileContent = Util.readResourceContent(fullResource);
                 cmd.getJSONObject("data").put("programText", fileContent);
-                Response response = this.restWorkflow.compileNative(httpSessionState, cmd);
+                Response response = this.restWorkflow.compileNative(cmd);
                 result = checkEntityRc(response, expectResult) != null;
             } else {
                 result = true;
@@ -298,7 +298,7 @@ public class CompilerWorkflowRobotSpecificIT {
     }
 
     private void setRobotTo(String robot) throws Exception, JSONException {
-        Response response = this.restAdmin.command(httpSessionState, this.dbSession, JSONUtilForServer.mkD("{'cmd':'setRobot','robot':'" + robot + "'}"), null);
+        Response response = this.restAdmin.command(this.dbSession, JSONUtilForServer.mkD("{'cmd':'setRobot','robot':'" + robot + "'}"), null);
         JSONUtilForServer.assertEntityRc(response, "ok", Key.ROBOT_SET_SUCCESS);
     }
 
