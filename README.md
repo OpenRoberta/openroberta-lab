@@ -38,8 +38,10 @@ on linux:
   * install gcc-arm-none-eabi latest (see: https://developer.arm.com/tools-and-software/open-source-software/developer-tools/gnu-toolchain/gnu-rm/downloads)
 * micro:bit
   * pip install uflash
-* EV3 (c4ev3)
+* EV3 c4ev3
   * sudo apt-get install g++-arm-linux-gnueabi
+* Edison
+  * sudo apt-get python2
  
 on windows:
 * Arduino based robots
@@ -48,8 +50,10 @@ on windows:
   * install gcc-arm-none-eabi (see: https://developer.arm.com/tools-and-software/open-source-software/developer-tools/gnu-toolchain/gnu-rm/downloads)
   * install srecord (see: http://srecord.sourceforge.net/)
 * micro:bit
-  * install python
+  * install python 3
   * pip install uflash
+* Edison
+  * install python 2
   
 The crossompiler needs resources to work properly (header files, libraries, ...). These resources change little over time and are stored in a repository of its own:
 
