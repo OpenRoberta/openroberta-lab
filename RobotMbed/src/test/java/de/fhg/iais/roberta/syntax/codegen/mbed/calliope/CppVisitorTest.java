@@ -54,7 +54,7 @@ public class CppVisitorTest extends CalliopeAstTest {
             "" //
                 + IMPORTS
                 + "int _initTime = _uBit.systemTime();"
-                + "static double ___item;"
+                + "double ___item;"
                 + MAIN
                 + "___item = 0;\n"
                 + "___item = ( _uBit.systemTime() - _initTime );"
@@ -89,8 +89,8 @@ public class CppVisitorTest extends CalliopeAstTest {
         String expectedResult =
             "" //
                 + IMPORTS
-                + "static MicroBitImage ___Element;"
-                + "static MicroBitImage ___Element2;"
+                + "MicroBitImage ___Element;"
+                + "MicroBitImage ___Element2;"
                 + MAIN
                 + "___Element = MicroBitImage(\"0,255,0,255,0\\n255,255,255,255,255\\n255,255,255,255,255\\n0,255,255,255,0\\n0,0,255,0,0\\n\");"
                 + "___Element2 = MicroBitImage(\"255,255,255,255,255\\n255,255,0,255,255\\n0,0,0,0,0\\n0,255,0,255,0\\n0,255,255,255,0\\n\");"
@@ -895,7 +895,7 @@ public class CppVisitorTest extends CalliopeAstTest {
         String expectedResult =
             "" //
                 + IMPORTS
-                + "static std::list<double> ___item;"
+                + "std::list<double> ___item;"
                 + MAIN
                 + "___item = {1, 2, 3, 4};"
                 + "_uBit.display.scroll(ManagedString(_getListSum(___item)));\n"
@@ -917,7 +917,7 @@ public class CppVisitorTest extends CalliopeAstTest {
             "" //
                 + IMPORTS
                 + "void doSomething(std::list<MicroBitImage> & ___x);"
-                + "static std::list<MicroBitImage> ___item;\n"
+                + "std::list<MicroBitImage> ___item;\n"
                 + MAIN
                 + "___item={MicroBitImage(\"0,255,0,255,0\\n255,255,255,255,255\\n255,255,255,255,255\\n0,255,255,255,0\\n0,0,255,0,0\\n\"),MicroBitImage(\"0,0,0,0,0\\n0,255,0,255,0\\n0,255,255,255,0\\n0,0,255,0,0\\n0,0,0,0,0\\n\"),MicroBitImage(\"0,255,0,255,0\\n255,255,255,255,255\\n255,255,255,255,255\\n0,255,255,255,0\\n0,0,255,0,0\\n\")};"
                 + "doSomething(___item);"
@@ -986,7 +986,7 @@ public class CppVisitorTest extends CalliopeAstTest {
         String a =
             "" //
                 + IMPORTS
-                + "static std::list<double> ___item2;"
+                + "std::list<double> ___item2;"
                 + MAIN
                 + "___item2 = {0, 0, 0};"
                 + "while (true) {"
