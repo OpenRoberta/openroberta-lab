@@ -12,9 +12,9 @@ define([ 'simulation.simulation', 'interpreter.constants', 'simulation.robot', '
      */
     function Ev3(pose, num, robotBehaviour) {
         Robot.call(this, pose, robotBehaviour);
-        that = this;
+        var that = this;
 
-        num = num || 0;
+        var num = num || 0;
         this.id = num;
         this.left = 0;
         this.right = 0;
@@ -169,6 +169,10 @@ define([ 'simulation.simulation', 'interpreter.constants', 'simulation.robot', '
                 pitch = pitch * 0.02 + 0.001; // use range 0.0 - 2.0; + 0.001 as some voices dont accept 0
 
                 var utterThis = new SpeechSynthesisUtterance(text);
+                // https://bugs.chromium.org/p/chromium/issues/detail?id=509488#c11
+                // Workaround to keep utterance object from being garbage collected by the browser
+                window.utterances = [];
+                utterances.push( utterThis );
                 if (lang === "") {
                     console.log("Language is not supported!");
                 } else {

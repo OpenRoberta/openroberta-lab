@@ -13,6 +13,11 @@ define([ 'exports', 'message', 'log', 'util', 'simulation.simulation', 'guiState
     function initEvents() {
         $('#simButton').off('click touchend');
         $('#simButton').on('click touchend', function(event) {
+            // Workaround for IOS speech synthesis, speech must be triggered once by a button click explicitly before it can be used programmatically
+            if (window.speechSynthesis && GUISTATE_C.getRobot().indexOf("ev3") !== -1) {
+                window.speechSynthesis.speak(new SpeechSynthesisUtterance(""));
+            }
+
             toggleSim();
             return false;
         });
