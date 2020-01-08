@@ -54,7 +54,7 @@ public class CppVisitorTest extends CalliopeAstTest {
             "" //
                 + IMPORTS
                 + "int _initTime = _uBit.systemTime();"
-                + "double ___item;"
+                + "static double ___item;"
                 + MAIN
                 + "___item = 0;\n"
                 + "___item = ( _uBit.systemTime() - _initTime );"
@@ -89,8 +89,8 @@ public class CppVisitorTest extends CalliopeAstTest {
         String expectedResult =
             "" //
                 + IMPORTS
-                + "MicroBitImage ___Element;"
-                + "MicroBitImage ___Element2;"
+                + "static MicroBitImage ___Element;"
+                + "static MicroBitImage ___Element2;"
                 + MAIN
                 + "___Element = MicroBitImage(\"0,255,0,255,0\\n255,255,255,255,255\\n255,255,255,255,255\\n0,255,255,255,0\\n0,0,255,0,0\\n\");"
                 + "___Element2 = MicroBitImage(\"255,255,255,255,255\\n255,255,0,255,255\\n0,0,0,0,0\\n0,255,0,255,0\\n0,255,255,255,0\\n\");"
@@ -895,7 +895,7 @@ public class CppVisitorTest extends CalliopeAstTest {
         String expectedResult =
             "" //
                 + IMPORTS
-                + "std::list<double> ___item;"
+                + "static std::list<double> ___item;"
                 + MAIN
                 + "___item = {1, 2, 3, 4};"
                 + "_uBit.display.scroll(ManagedString(_getListSum(___item)));\n"
@@ -917,7 +917,7 @@ public class CppVisitorTest extends CalliopeAstTest {
             "" //
                 + IMPORTS
                 + "void doSomething(std::list<MicroBitImage> & ___x);"
-                + "std::list<MicroBitImage> ___item;\n"
+                + "static std::list<MicroBitImage> ___item;\n"
                 + MAIN
                 + "___item={MicroBitImage(\"0,255,0,255,0\\n255,255,255,255,255\\n255,255,255,255,255\\n0,255,255,255,0\\n0,0,255,0,0\\n\"),MicroBitImage(\"0,0,0,0,0\\n0,255,0,255,0\\n0,255,255,255,0\\n0,0,255,0,0\\n0,0,0,0,0\\n\"),MicroBitImage(\"0,255,0,255,0\\n255,255,255,255,255\\n255,255,255,255,255\\n0,255,255,255,0\\n0,0,255,0,0\\n\")};"
                 + "doSomething(___item);"
@@ -954,7 +954,6 @@ public class CppVisitorTest extends CalliopeAstTest {
                 + END;
 
         UnitTestHelper.checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, a, "/stmts/no_loops.xml", configuration, true);
-        ;
     }
 
     @Ignore("Test is ignored until next commit")
@@ -980,7 +979,6 @@ public class CppVisitorTest extends CalliopeAstTest {
                 + "}"
                 + END;
         UnitTestHelper.checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, a, "/stmts/nested_loops.xml", configuration, true);
-        ;
     }
 
     @Test
@@ -988,7 +986,7 @@ public class CppVisitorTest extends CalliopeAstTest {
         String a =
             "" //
                 + IMPORTS
-                + "std::list<double> ___item2;"
+                + "static std::list<double> ___item2;"
                 + MAIN
                 + "___item2 = {0, 0, 0};"
                 + "while (true) {"
@@ -1034,7 +1032,6 @@ public class CppVisitorTest extends CalliopeAstTest {
                 + END;
         UnitTestHelper
             .checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, a, "/stmts/loops_with_break_and_continue.xml", configuration, true);
-        ;
     }
 
     @Ignore("Test is ignored currently")
@@ -1069,7 +1066,6 @@ public class CppVisitorTest extends CalliopeAstTest {
                 "/stmts/loop_with_break_and_continue_inside_wait.xml",
                 configuration,
                 true);
-        ;
     }
 
     @Test
@@ -1109,7 +1105,6 @@ public class CppVisitorTest extends CalliopeAstTest {
                 "/stmts/two_loop_with_break_and_continue_one_inside_wait_another_not.xml",
                 configuration,
                 true);
-        ;
     }
 
     @Test
@@ -1148,7 +1143,6 @@ public class CppVisitorTest extends CalliopeAstTest {
                 "/stmts/two_nested_loops_first_with_break_in_wait_second_not.xml",
                 configuration,
                 true);
-        ;
     }
 
     @Test
@@ -1194,7 +1188,6 @@ public class CppVisitorTest extends CalliopeAstTest {
                 "/stmts/loop_with_nested_two_loops_inside_wait.xml",
                 configuration,
                 true);
-        ;
     }
 
     @Test
@@ -1249,7 +1242,6 @@ public class CppVisitorTest extends CalliopeAstTest {
                 "/stmts/loop_with_nested_two_loops_inside_wait_second_contain_wait.xml",
                 configuration,
                 true);
-        ;
     }
 
     @Test
@@ -1326,6 +1318,5 @@ public class CppVisitorTest extends CalliopeAstTest {
                 "/stmts/three_loops_with_nested_two_loops_inside_wait_second_contain_wait.xml",
                 configuration,
                 true);
-        ;
     }
 }

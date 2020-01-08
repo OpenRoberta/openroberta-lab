@@ -107,7 +107,7 @@ import de.fhg.iais.roberta.visitor.lang.codegen.prog.AbstractCppVisitor;
  * StringBuilder. <b>This representation is correct C++ code for Calliope systems.</b> <br>
  */
 public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbedVisitor<Void> {
-    boolean insideParameterList = false;
+    boolean topLevelVariableDecl = false;
     private final ConfigurationAst robotConfiguration;
 
     /**
@@ -166,9 +166,7 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
         nlIndent();
         this.sb.append("void ");
         this.sb.append(methodVoid.getMethodName()).append("(");
-        insideParameterList = true;
         methodVoid.getParameters().accept(this);
-        insideParameterList = false;
         this.sb.append(") {");
         incrIndentation();
         methodVoid.getBody().accept(this);
@@ -183,9 +181,7 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
         nlIndent();
         this.sb.append(getLanguageVarTypeFromBlocklyType(methodReturn.getReturnType()));
         this.sb.append(" ").append(methodReturn.getMethodName()).append("(");
-        insideParameterList = true;
         methodReturn.getParameters().accept(this);
-        insideParameterList = false;
         this.sb.append(") {");
         incrIndentation();
         methodReturn.getBody().accept(this);
@@ -201,7 +197,7 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
 
     @Override
     public Void visitVarDeclaration(VarDeclaration<Void> var) {
-        if ( !insideParameterList ) {
+        if ( topLevelVariableDecl ) {
             this.sb.append("static ");
         }
         this.sb.append(getLanguageVarTypeFromBlocklyType(var.getTypeVar()));
@@ -684,7 +680,9 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
         if ( this.usedHardwareBean.isSensorUsed(SC.TIMER) ) {
             this.sb.append("int _initTime = _uBit.systemTime();");
         }
+        topLevelVariableDecl = true;
         mainTask.getVariables().accept(this);
+        topLevelVariableDecl = false;
         nlIndent();
         nlIndent();
         this.sb.append("int main()");
@@ -1278,9 +1276,7 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
             nlIndent();
             this.sb.append(getLanguageVarTypeFromBlocklyType(phrase.getReturnType()));
             this.sb.append(" " + phrase.getMethodName() + "(");
-            insideParameterList = true;
             phrase.getParameters().accept(this);
-            insideParameterList = false;
             this.sb.append(");");
             nlIndent();
         }

@@ -7,12 +7,12 @@
 #include <stdlib.h>
 MicroBit _uBit;
 
-std::list<double> ___item;
-double ___item2;
-std::list<bool> ___item3;
-std::list<ManagedString> ___item4;
-std::list<MicroBitColor> ___item5;
-std::list<MicroBitImage> ___item6;
+static std::list<double> ___item;
+static double ___item2;
+static std::list<bool> ___item3;
+static std::list<ManagedString> ___item4;
+static std::list<MicroBitColor> ___item5;
+static std::list<MicroBitImage> ___item6;
 
 int main()
 {

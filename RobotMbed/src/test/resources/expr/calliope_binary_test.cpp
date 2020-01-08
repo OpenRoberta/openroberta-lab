@@ -7,9 +7,9 @@
 #include <stdlib.h>
 MicroBit _uBit;
 
-ManagedString ___item;
-double ___item2;
-bool ___item3;
+static ManagedString ___item;
+static double ___item2;
+static bool ___item3;
 
 int main()
 {
