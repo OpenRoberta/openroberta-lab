@@ -38,7 +38,7 @@ robots:
     bob3:
         dir: bob3
         suffix: ".cpp"
-    calliope2017:
+    calliope2017NoBlue:
         dir: calliope
         suffix: ".cpp"
     calliope2016:
