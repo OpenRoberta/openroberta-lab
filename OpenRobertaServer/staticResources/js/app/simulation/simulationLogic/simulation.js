@@ -87,7 +87,6 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
             return currentBackground;
         }
         setPause(true);
-        $('#simControl').addClass('typcn-media-stop').removeClass('typcn-media-play-outline');
         $('#simControl').attr('data-original-title', Blockly.Msg.MENU_SIM_STOP_TOOLTIP);
         if (num === -1) {
             currentBackground += 1;
