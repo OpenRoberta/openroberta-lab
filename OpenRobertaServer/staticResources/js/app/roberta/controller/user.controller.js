@@ -635,6 +635,18 @@ define([ 'exports', 'log', 'message', 'util', 'user.model', 'guiState.controller
     exports.showDeleteUserModal = showDeleteUserModal;
 
     /**
+     * Change the theme to and from dark theme
+     */
+    function changeTheme() {
+        var css = document.getElementsByTagName("link");
+        for (var i = 0; i < css.length; i++) {
+            if (css[i].href.endsWith('/css/roberta.css')) {css[i].setAttribute("href", '/css/roberta-dark.css');}
+            else if (css[i].href.endsWith('/css/roberta-dark.css')) {css[i].setAttribute("href", '/css/roberta.css');}
+        }
+    }
+    exports.changeTheme=changeTheme;
+    
+    /**
      * Show user info
      */
     function showUserInfo() {
