@@ -34,6 +34,7 @@ define(["require", "exports"], function (require, exports) {
     exports.COLOR_CONST = "COLOR_CONST";
     exports.CONDITIONAL = "conditional";
     exports.COLOUR = "colorValue";
+    exports.COMMENT = "comment";
     exports.COMPASS = "compass";
     exports.CONTINUE = "continue";
     exports.CREATE_DEBUG_ACTION = "CreateDebugAction";

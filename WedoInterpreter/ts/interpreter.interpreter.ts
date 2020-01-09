@@ -434,6 +434,8 @@ export class Interpreter {
                         n.assertAction( stmt[C.MSG], left, stmt[C.OP], right, value );
                         break;
                     }
+                    case C.COMMENT:
+                        break;
                     default:
                         U.dbcException( "invalid stmt op: " + opCode );
                 }

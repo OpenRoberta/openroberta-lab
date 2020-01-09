@@ -534,7 +534,9 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
 
     @Override
     public V visitStmtTextComment(StmtTextComment<V> textComment) {
-        return null;
+        JSONObject o;
+        o = mk(C.COMMENT).put(C.VALUE, textComment.getTextComment());
+        return app(o);
     }
 
     @Override
