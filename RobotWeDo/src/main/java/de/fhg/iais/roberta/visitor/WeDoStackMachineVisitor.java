@@ -2,6 +2,7 @@ package de.fhg.iais.roberta.visitor;
 
 import java.util.ArrayList;
 
+import de.fhg.iais.roberta.syntax.lang.stmt.StmtTextComment;
 import org.json.JSONObject;
 
 import de.fhg.iais.roberta.bean.UsedHardwareBean;
@@ -192,6 +193,13 @@ public final class WeDoStackMachineVisitor<V> extends AbstractStackMachineVisito
             default:
                 throw new DbcException("Invalid Timer Mode " + timerSensor.getMode());
         }
+        return app(o);
+    }
+
+    @Override
+    public V visitStmtTextComment(StmtTextComment<V> textComment) {
+        JSONObject o;
+        o = mk(C.COMMENT).put(C.VALUE, textComment.getTextComment());
         return app(o);
     }
 

@@ -32,6 +32,7 @@ export const COLOR: string = "color";
 export const COLOR_CONST: string = "COLOR_CONST";
 export const CONDITIONAL: string = "conditional";
 export const COLOUR: string = "colorValue";
+export const COMMENT: string = "comment";
 export const COMPASS: string = "compass";
 export const CONTINUE: string = "continue";
 export const CREATE_DEBUG_ACTION: string = "CreateDebugAction";
