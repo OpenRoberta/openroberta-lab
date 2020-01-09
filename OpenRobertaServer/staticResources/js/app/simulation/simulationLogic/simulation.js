@@ -27,6 +27,7 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
     var timerStep = 0;
     var canceled;
     var storedPrograms;
+    var localStorageAvailable = true;
 
     var imgObstacle1 = new Image();
     var imgPattern = new Image();
@@ -64,11 +65,16 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
                 imgObjectList[i - 3].src = imgList[i];
             }
         }
-        if (localStorage.getItem("customBackground") !== null) {
-            var dataImage = localStorage.getItem('customBackground');
-            imgObjectList[i - 3] = new Image();
-            imgObjectList[i - 3].src = "data:image/png;base64," + dataImage;
-        }
+        try {
+            if (localStorage.getItem("customBackground") !== null) {
+                var dataImage = localStorage.getItem('customBackground');
+                imgObjectList[i - 3] = new Image();
+                imgObjectList[i - 3].src = "data:image/png;base64," + dataImage;                
+            }
+            localStorageAvailable = true;
+        } catch(e) {
+            localStorageAvailable = false;
+        }       
     }
     preloadImages();
 
@@ -298,11 +304,11 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
             currentBackground = 2;
         }
         if (currentBackground > 1) {
-            if (isIE() || isEdge()) { // TODO IE and Edge: Input event not firing for file type of input
+            if (isIE() || isEdge() || !localStorageAvailable) { // TODO IE and Edge: Input event not firing for file type of input
                 $('.dropdown.sim, .simScene').show();
                 $('#simImport').hide();
             } else {
-                $('.dropdown.sim, .simScene, #simImport, #simResetPose').show();
+                $('.dropdown.sim, .simScene, #simImport, #simResetPose').show();                
             }
             if ($('#device-size').find('div:visible').first().attr('id')) {
                 $('#simButtonsHead').show();
@@ -900,30 +906,34 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
             reader.onload = function(event) {
                 var img = new Image();
                 img.onload = function() {
-                    var canvas = document.createElement("canvas");
-                    var scaleX = 1;
-                    var scaleY = 1;
-                    // - 20 because of the border pattern which is 10 pixels wide on both sides
-                    if (img.width > C.MAX_WIDTH - 20) {
-                        scaleX = (C.MAX_WIDTH - 20) / img.width;
-                    }
-                    if (img.height > C.MAX_HEIGHT - 20) {
-                        scaleY = (C.MAX_HEIGHT - 20) / img.height;
-                    }
-                    var scale = Math.min(scaleX, scaleY);
-                    canvas.width = img.width * scale;
-                    canvas.height = img.height * scale;
-                    var ctx = canvas.getContext("2d");
-                    ctx.scale(scale, scale);
-                    ctx.drawImage(img, 0, 0);
-                    var dataURL = canvas.toDataURL("image/png");
-                    localStorage.setItem("customBackground", dataURL.replace(/^data:image\/(png|jpg);base64,/, ""));
-                    var image = new Image(canvas.width, canvas.height);
-                    image.src = dataURL;
-                    image.onload = function() {
-                        imgObjectList[imgObjectList.length] = image;
-                        setBackground(imgObjectList.length - 1, setBackground);
-                        initScene();
+                    try {
+                        var canvas = document.createElement("canvas");
+                        var scaleX = 1;
+                        var scaleY = 1;
+                        // - 20 because of the border pattern which is 10 pixels wide on both sides
+                        if (img.width > C.MAX_WIDTH - 20) {
+                            scaleX = (C.MAX_WIDTH - 20) / img.width;
+                        }
+                        if (img.height > C.MAX_HEIGHT - 20) {
+                            scaleY = (C.MAX_HEIGHT - 20) / img.height;
+                        }
+                        var scale = Math.min(scaleX, scaleY);
+                        canvas.width = img.width * scale;
+                        canvas.height = img.height * scale;
+                        var ctx = canvas.getContext("2d");
+                        ctx.scale(scale, scale);
+                        ctx.drawImage(img, 0, 0);
+                        var dataURL = canvas.toDataURL("image/png");
+                        localStorage.setItem("customBackground", dataURL.replace(/^data:image\/(png|jpg);base64,/, ""));
+                        var image = new Image(canvas.width, canvas.height);
+                        image.src = dataURL;
+                        image.onload = function() {
+                            imgObjectList[imgObjectList.length] = image;
+                            setBackground(imgObjectList.length - 1, setBackground);
+                            initScene();
+                        }
+                    } catch(e) {
+                        alert("This function is not available. You browser may block cookies or local storage at all!")
                     }
                 };
                 img.src = reader.result;
