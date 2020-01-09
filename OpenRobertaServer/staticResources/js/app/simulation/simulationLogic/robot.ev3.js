@@ -526,6 +526,11 @@ define([ 'simulation.simulation', 'interpreter.constants', 'simulation.robot', '
             if (sayText.text) {
                 this.sayText.say(sayText.text, this.sayText.language, sayText.speed, sayText.pitch);
             }
+            else {
+                if(typeof sayText.text==='number'){this.sayText.say(sayText.text, this.sayText.language, sayText.speed, sayText.pitch);}
+                if(typeof sayText.text==='boolean') {this.sayText.say(sayText.text, this.sayText.language, sayText.speed, sayText.pitch);}
+                if(typeof sayText.text==='string'){this.sayText.say("Empty", this.sayText.language, sayText.speed, sayText.pitch);}
+            } 
         }
         // update timer
         var timer = this.robotBehaviour.getActionState("timer", false);
