@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.EnumSet;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.SystemUtils;
@@ -13,11 +12,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import de.fhg.iais.roberta.bean.CompilerSetupBean;
-import de.fhg.iais.roberta.bean.UsedHardwareBean;
 import de.fhg.iais.roberta.codegen.AbstractCompilerWorkflow;
-import de.fhg.iais.roberta.codegen.CalliopeCompilerFlag;
 import de.fhg.iais.roberta.components.Project;
-import de.fhg.iais.roberta.syntax.SC;
 import de.fhg.iais.roberta.util.Key;
 import de.fhg.iais.roberta.util.Pair;
 import de.fhg.iais.roberta.util.Util;
@@ -31,14 +27,7 @@ public class CalliopeCompilerWorker implements IWorker {
         String robot = project.getRobot();
 
         // TODO: check how to do this sensibly, without having the UsedHardwareWorker beforehand
-        UsedHardwareBean usedHardwareBean = (UsedHardwareBean) project.getWorkerResult("CollectedHardware");
-        EnumSet<CalliopeCompilerFlag> compilerFlags =
-            (usedHardwareBean == null)
-                ? EnumSet.noneOf(CalliopeCompilerFlag.class)
-                : (usedHardwareBean.isActorUsed(SC.RADIO) ? EnumSet.of(CalliopeCompilerFlag.RADIO_USED) : EnumSet.noneOf(CalliopeCompilerFlag.class));
-        boolean isRadioUsed = compilerFlags.contains(CalliopeCompilerFlag.RADIO_USED);
-
-        Pair<Key, String> workflowResult = runBuild(project, isRadioUsed);
+        Pair<Key, String> workflowResult = runBuild(project);
         project.setResult(workflowResult.getFirst());
         project.addResultParam("MESSAGE", workflowResult.getSecond());
         if ( workflowResult.getFirst() == Key.COMPILERWORKFLOW_SUCCESS ) {
@@ -53,7 +42,7 @@ public class CalliopeCompilerWorker implements IWorker {
      *
      * @return a pair of Key.COMPILERWORKFLOW_SUCCESS or Key.COMPILERWORKFLOW_ERROR_PROGRAM_COMPILE_FAILED and the cross compiler output
      */
-    private Pair<Key, String> runBuild(Project project, boolean radioUsed) {
+    private Pair<Key, String> runBuild(Project project) {
         CompilerSetupBean compilerWorkflowBean = (CompilerSetupBean) project.getWorkerResult("CompilerSetup");
         final String compilerBinDir = compilerWorkflowBean.getCompilerBinDir();
         final String compilerResourcesDir = compilerWorkflowBean.getCompilerResourcesDir();
@@ -66,8 +55,8 @@ public class CalliopeCompilerWorker implements IWorker {
                 project.getProgramName(),
                 "." + project.getSourceCodeFileExtension());
         String scriptName = compilerResourcesDir + "../compile." + (SystemUtils.IS_OS_WINDOWS ? "bat" : "sh");
-        Boolean noBluetooth = project.getRobot().equals("calliope2017NoBlue");
-        String bluetooth = radioUsed || noBluetooth ? "" : "-b";
+        Boolean bluetooth = project.getRobot().equals("calliope2017");
+        String bluetoothParam = bluetooth ? "-b" : "";
         Path pathToSrcFile = Paths.get(tempDir + project.getToken() + "/" + project.getProgramName());
 
         String[] executableWithParameters =
@@ -77,7 +66,7 @@ public class CalliopeCompilerWorker implements IWorker {
                 project.getProgramName(),
                 Paths.get("").resolve(pathToSrcFile).toAbsolutePath().normalize() + "/",
                 compilerResourcesDir,
-                bluetooth
+                bluetoothParam
             };
 
         Pair<Boolean, String> result = AbstractCompilerWorkflow.runCrossCompiler(executableWithParameters);

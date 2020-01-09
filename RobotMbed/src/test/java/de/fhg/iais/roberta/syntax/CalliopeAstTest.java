@@ -20,7 +20,7 @@ public class CalliopeAstTest extends AstTest {
 
     @BeforeClass
     public static void setup() {
-        testFactory = new RobotFactory(new PluginProperties("calliope2017", "", "", Util.loadProperties("classpath:/calliope2017.properties")));
+        testFactory = new RobotFactory(new PluginProperties("calliope2017NoBlue", "", "", Util.loadProperties("classpath:/calliope2017NoBlue.properties")));
 
         ConfigurationComponent pin0 = new ConfigurationComponent("pin0", false, "P12", "0", Collections.emptyMap());
         ConfigurationComponent pin1 = new ConfigurationComponent("pin1", false, "P0", "1", Collections.emptyMap());
