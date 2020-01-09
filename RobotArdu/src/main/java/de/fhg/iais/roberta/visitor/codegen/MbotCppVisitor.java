@@ -650,6 +650,8 @@ public final class MbotCppVisitor extends AbstractCommonArduinoCppVisitor implem
                 case SC.LED_MATRIX:
                     nlIndent();
                     this.sb.append("MeLEDMatrix __meLEDMatrix_" + usedActor.getPort() + "(" + usedActor.getPort() + ");");
+                    nlIndent();
+                    this.sb.append("std::vector<uint8_t> __ledMatrix;");
                     break;
                 case SC.BUZZER:
                     nlIndent();
@@ -699,16 +701,20 @@ public final class MbotCppVisitor extends AbstractCommonArduinoCppVisitor implem
     public Void visitLEDMatrixImageAction(LEDMatrixImageAction<Void> ledMatrixImageAction) {
         String end = ");";
         if ( ledMatrixImageAction.getDisplayImageMode().equals("IMAGE") ) {
-            this.sb.append("__meLEDMatrix_").append(ledMatrixImageAction.getPort()).append(".drawBitmap(0,0,16,");
+            
             if ( ledMatrixImageAction.getValuesToDisplay().getKind().getName().equals("VAR")
                 || ledMatrixImageAction.getValuesToDisplay().getKind().getName().equals("FUNCTION_EXPR") ) {
+                this.sb.append("__meLEDMatrix_").append(ledMatrixImageAction.getPort()).append(".drawBitmap(0, 0, 16, ");                
                 this.sb.append("&");
                 ledMatrixImageAction.getValuesToDisplay().accept(this);
                 this.sb.append("[0]");
             } else {
-                this.sb.append("new uint8_t[16]");
+                this.sb.append("__ledMatrix = ");
                 ledMatrixImageAction.getValuesToDisplay().accept(this);
-            }
+                this.sb.append(";");
+                nlIndent();
+                this.sb.append("__meLEDMatrix_").append(ledMatrixImageAction.getPort()).append(".drawBitmap(0, 0, 16, &__ledMatrix[0]");
+                    }
             this.sb.append(end);
         } else if ( ledMatrixImageAction.getDisplayImageMode().equals("ANIMATION") ) {
             this.sb.append("drawAnimationLEDMatrix(&__meLEDMatrix_").append(ledMatrixImageAction.getPort()).append(", ");

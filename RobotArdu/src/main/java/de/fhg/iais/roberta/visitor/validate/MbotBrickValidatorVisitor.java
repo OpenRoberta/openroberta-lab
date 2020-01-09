@@ -3,6 +3,7 @@ package de.fhg.iais.roberta.visitor.validate;
 import de.fhg.iais.roberta.bean.UsedHardwareBean;
 import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.components.ConfigurationComponent;
+import de.fhg.iais.roberta.syntax.BlockType;
 import de.fhg.iais.roberta.syntax.SC;
 import de.fhg.iais.roberta.syntax.action.Action;
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
@@ -20,16 +21,27 @@ import de.fhg.iais.roberta.syntax.actors.arduino.mbot.SendIRAction;
 import de.fhg.iais.roberta.syntax.expressions.arduino.LEDMatrixImage;
 import de.fhg.iais.roberta.syntax.functions.arduino.LEDMatrixImageInvertFunction;
 import de.fhg.iais.roberta.syntax.functions.arduino.LEDMatrixImageShiftFunction;
+import de.fhg.iais.roberta.syntax.lang.expr.Binary;
+import de.fhg.iais.roberta.syntax.lang.expr.Expr;
+import de.fhg.iais.roberta.syntax.lang.expr.ListCreate;
+import de.fhg.iais.roberta.syntax.lang.functions.ListRepeat;
+import de.fhg.iais.roberta.syntax.lang.methods.MethodReturn;
+import de.fhg.iais.roberta.syntax.lang.methods.MethodVoid;
+import de.fhg.iais.roberta.syntax.lang.stmt.RepeatStmt;
+import de.fhg.iais.roberta.syntax.lang.stmt.RepeatStmt.Mode;
 import de.fhg.iais.roberta.syntax.sensor.ExternalSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.AccelerometerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.VoltageSensor;
 import de.fhg.iais.roberta.syntax.sensors.arduino.mbot.FlameSensor;
 import de.fhg.iais.roberta.syntax.sensors.arduino.mbot.Joystick;
+import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.typecheck.NepoInfo;
 import de.fhg.iais.roberta.visitor.hardware.IMbotVisitor;
 
 public final class MbotBrickValidatorVisitor extends AbstractBrickValidatorVisitor implements IMbotVisitor<Void> {
+
+    private boolean main = false;
 
     public MbotBrickValidatorVisitor(UsedHardwareBean.Builder builder, ConfigurationAst brickConfiguration) {
         super(builder, brickConfiguration);
@@ -225,4 +237,48 @@ public final class MbotBrickValidatorVisitor extends AbstractBrickValidatorVisit
     public Void visitMotorDriveStopAction(MotorDriveStopAction<Void> stopAction) {
         return null;
     }
+
+    @Override
+    public Void visitRepeatStmt(RepeatStmt<Void> repeatStmt) {
+        super.visitRepeatStmt(repeatStmt);
+        if ( repeatStmt.getMode() == Mode.FOREVER_ARDU ) {
+            this.main = true;
+        }
+        repeatStmt.getList().accept(this);
+        this.main = false;
+        return null;
+    }
+
+    @Override
+    public Void visitMethodVoid(MethodVoid<Void> methodVoid) {
+        super.visitMethodVoid(methodVoid);
+        this.main = true;
+        methodVoid.getParameters().accept(this);
+        methodVoid.getBody().accept(this);
+        this.main = false;
+        return null;
+    }
+
+    @Override
+    public Void visitMethodReturn(MethodReturn<Void> methodReturn) {
+        super.visitMethodReturn(methodReturn);
+        this.main = true;
+        methodReturn.getParameters().accept(this);
+        methodReturn.getBody().accept(this);
+        methodReturn.getReturnValue().accept(this);
+        this.main = false;
+        return null;
+    }
+
+    @Override
+    public Void visitListCreate(ListCreate<Void> listCreate) {
+        super.visitListCreate(listCreate);
+        listCreate.getValue().accept(this);
+        if ( this.main && listCreate.getTypeVar() == BlocklyType.IMAGE ) {
+            listCreate.addInfo(NepoInfo.error("BLOCK_NOT_SUPPORTED"));
+            this.errorCount++;
+        }
+        return null;
+    }
+
 }
