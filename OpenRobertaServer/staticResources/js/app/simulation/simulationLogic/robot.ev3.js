@@ -526,14 +526,12 @@ define([ 'simulation.simulation', 'interpreter.constants', 'simulation.robot', '
         }
         var sayText = this.robotBehaviour.getActionState("sayText", true);
         if (sayText && window.speechSynthesis) {
-            if (sayText.text) {
+            if (sayText.text !== undefined) {
+                if(sayText.text === "") {
+                    this.sayText.say(" ", this.sayText.language, sayText.speed, sayText.pitch); 
+                }
                 this.sayText.say(sayText.text, this.sayText.language, sayText.speed, sayText.pitch);
             }
-            else {
-                if(typeof sayText.text==='number'){this.sayText.say(sayText.text, this.sayText.language, sayText.speed, sayText.pitch);}
-                if(typeof sayText.text==='boolean') {this.sayText.say(sayText.text, this.sayText.language, sayText.speed, sayText.pitch);}
-                if(typeof sayText.text==='string'){this.sayText.say("Empty", this.sayText.language, sayText.speed, sayText.pitch);}
-            } 
         }
         // update timer
         var timer = this.robotBehaviour.getActionState("timer", false);
