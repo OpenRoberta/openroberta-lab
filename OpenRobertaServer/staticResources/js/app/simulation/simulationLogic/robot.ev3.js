@@ -502,6 +502,9 @@ define([ 'simulation.simulation', 'interpreter.constants', 'simulation.robot', '
         }
         var tone = this.robotBehaviour.getActionState("tone", true);
         if (tone && this.webAudio.context) {
+            if (this.webAudio.context.state === "interrupted") {
+                this.webAudio.context.resume();
+            }
             var ts = this.webAudio.context.currentTime;
             if (tone.frequency) {
                 this.webAudio.oscillator.frequency.setValueAtTime(tone.frequency, ts);

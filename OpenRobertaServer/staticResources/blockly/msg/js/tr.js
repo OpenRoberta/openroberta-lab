@@ -139,7 +139,6 @@ Blockly.Msg.CONFIGURATION_ERROR_MOTOR_RIGHT_UNREGULATED = "Sağ motor ayarlanama
 Blockly.Msg.CONFIGURATION_ERROR_MULTIPLE_LEFT_MOTORS = "Kurulumunuzda birden fazla sol motor tanımlı!";
 Blockly.Msg.CONFIGURATION_ERROR_MULTIPLE_RIGHT_MOTORS = "Kurulumunuzda birden fazla sağ motor tanımlı!";
 Blockly.Msg.CONFIGURATION_ERROR_OTHER_NOT_SUPPORTED = "Other power consumer does not support this type of block!";  // untranslated
-Blockly.Msg.CONFIGURATION_ERROR_SDCARD_MISSING = "SD card is not configured. Please add the corresponding block in the configuration tab!";  // untranslated
 Blockly.Msg.CONFIGURATION_ERROR_SENSOR_MISSING = "Bu sensör port'a tanımlanmadı!";
 Blockly.Msg.CONFIGURATION_ERROR_SENSOR_WRONG = "Belirtilen port'a yanlış sensör bağlandı!";
 Blockly.Msg.CONFIGURATION_ERROR_WLAN_CREDENTIALS_MISSING = "Missing WLAN credentials, please enter them in robot -> WLAN credentials ... !";  // untranslated

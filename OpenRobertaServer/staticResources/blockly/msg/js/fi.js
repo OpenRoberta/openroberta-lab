@@ -139,7 +139,6 @@ Blockly.Msg.CONFIGURATION_ERROR_MOTOR_RIGHT_UNREGULATED = "Oikeaa moottoria ei s
 Blockly.Msg.CONFIGURATION_ERROR_MULTIPLE_LEFT_MOTORS = "Konfiguraatiossa on useita vasemmanpuoleisia moottoreita.";
 Blockly.Msg.CONFIGURATION_ERROR_MULTIPLE_RIGHT_MOTORS = "Konfiguraatiossa on useita oikeanpuoleisia moottoreita.";
 Blockly.Msg.CONFIGURATION_ERROR_OTHER_NOT_SUPPORTED = "Other power consumer does not support this type of block!";  // untranslated
-Blockly.Msg.CONFIGURATION_ERROR_SDCARD_MISSING = "SD card is not configured. Please add the corresponding block in the configuration tab!";  // untranslated
 Blockly.Msg.CONFIGURATION_ERROR_SENSOR_MISSING = "Sensoria ei ole asetettu porttiin!";
 Blockly.Msg.CONFIGURATION_ERROR_SENSOR_WRONG = "Annettuun porttiin on yhdistetty väärä sensori!";
 Blockly.Msg.CONFIGURATION_ERROR_WLAN_CREDENTIALS_MISSING = "Missing WLAN credentials, please enter them in robot -> WLAN credentials ... !";  // untranslated
