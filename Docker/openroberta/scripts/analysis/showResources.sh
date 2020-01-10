@@ -1,15 +1,17 @@
-# show the usage of some server resources. Expected sh variables are:
+# show the usage of some server resources:
 # - file descriptors
 # - threads
 # - http sessions
 # - db sessions
 # Usage: 'showResources' with the following sh variables, which must be EXPORTed:
-# SERVER_NAME: name of a server, as test, dev, dev1...dev9. Used to find both URL and PID
-# LOWERLIMIT: if the number of open file descriptors is less than this value, nothing is logged. Default: 100
-# UPPERLIMIT: if the number of open file descriptors is greater than this value, http sessions and db sessions are logged, too. Default: 200
-# LOGFILE: every 10 seconds the resource usage data is appended to this file. Default: $BASE_DIR/logs/server-resources.log
-# SERVERURL: the url where we get the http+db session data from. Default: retrieved via the server name
-# PID: the pid of the server process. Default: retrieved via the server name
+# SERVER_NAME: name of a server, as test, dev, dev1...dev9. Used to find both URL and PID. REQUIRED.
+# LOGFILE: every 10 seconds the resource usage data is appended to this file. DEFAULT: $BASE_DIR/logs/server-resources.log
+# LOWERLIMIT: if the number of open file descriptors is less than this value, nothing is logged. DEFAULT: 100
+# UPPERLIMIT: if the number of open file descriptors is greater than this value, http sessions and db sessions are logged, too. DEFAULT: 200
+# SERVERURL: the url where we get the http+db session data from. DEFAULT: retrieved via the server name
+# PID: the pid of the server process. DEFAULT: retrieved via the server name
+# if a variable has a default and its value is '-', the default is taken. For instance, this is a valid call which supplies a new upper limit
+# and keeps the default everywhere else: .../run.sh show-resources test - - 150
 
 function showResourceLoop {
     echo 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx' >> $LOGFILE
@@ -38,7 +40,7 @@ function showResourceLoop {
         fi
         SECOND_NOW=$(date +%s)
         DELTA=$(expr "$SECOND_NOW" - "$SECOND_OF_START")
-        if [ "$DELTA" -gt 90000 ] # 24*60*60 + 60*60 == 90000 one day and a hour for not loosing data
+        if [ "$DELTA" -gt 72000 ] # 24*60*60 - 4*60*60 == 90000 twenty hours are enough
         then
             echo 'exit after a day of work' >> $LOGFILE
             echo 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx' >> $LOGFILE
@@ -53,27 +55,28 @@ function guessPidOfServerRunningTheLab {
     [[ "$PSTREE" =~ .*java,([0-9]*).* ]] && echo ${BASH_REMATCH[1]}
 }
 
+isServerNameValid ${SERVER_NAME}
+
+case "$LOGFILE" in
+  ''|'-') LOGFILE="$BASE_DIR/logs/server-resources.log" ;;
+  *)      : ;;
+esac
 case "$LOWERLIMIT" in
-  '') LOWERLIMIT=100 ;;
-  *)  : ;;
+  ''|'-') LOWERLIMIT=100 ;;
+  *)      : ;;
 esac
 case "$UPPERLIMIT" in
-  '') UPPERLIMIT=200 ;;
-  *)  : ;;
-esac
-case "$LOGFILE" in
-  '') LOGFILE="$BASE_DIR/logs/server-resources.log" ;;
-  *)  : ;;
+  ''|'-') UPPERLIMIT=200 ;;
+  *)      : ;;
 esac
 case "$SERVERURL" in
-  '') isServerNameValid ${SERVER_NAME}
-      SERVER_DIR_OF_ONE_SERVER=${SERVER_DIR}/${SERVER_NAME}
-      isDirectoryValid $SERVER_DIR_OF_ONE_SERVER
-      cd $SERVER_DIR_OF_ONE_SERVER
-      source ./decl.sh
-      isDeclShValid
-      SERVERURL="http://localhost:$PORT" ;;
-  *)  : ;;
+  ''|'-') SERVER_DIR_OF_ONE_SERVER=${SERVER_DIR}/${SERVER_NAME}
+          isDirectoryValid $SERVER_DIR_OF_ONE_SERVER
+          cd $SERVER_DIR_OF_ONE_SERVER
+          source ./decl.sh
+          isDeclShValid
+          SERVERURL="http://localhost:$PORT" ;;
+  *)      : ;;
 esac
 case "$PID" in
   '') PID=$(guessPidOfServerRunningTheLab) ;;

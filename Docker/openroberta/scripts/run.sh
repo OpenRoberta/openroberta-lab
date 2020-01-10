@@ -119,9 +119,9 @@ case "$CMD" in
                   docker system prune --force ;;
     show-server)  ${SCRIPT_ANALYSIS}/serverStateOverview.sh ;;
     show-resources) export SERVER_NAME=$1; shift
+                  export LOGFILE=$1; shift
                   export LOWERLIMIT=$1; shift
                   export UPPERLIMIT=$1; shift
-                  export LOGFILE=$1; shift
                   export SERVERURL=$1; shift
                   export PID=$1; shift
                   source ${SCRIPT_ANALYSIS}/showResources.sh ;;
