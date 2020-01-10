@@ -139,7 +139,6 @@ Blockly.Msg.CONFIGURATION_ERROR_MOTOR_RIGHT_UNREGULATED = "Le moteur droit n'est
 Blockly.Msg.CONFIGURATION_ERROR_MULTIPLE_LEFT_MOTORS = "La configuration du robot ne peut pas contenir plus qu'un moteur gauche.";
 Blockly.Msg.CONFIGURATION_ERROR_MULTIPLE_RIGHT_MOTORS = "La configuration du robot ne peut pas contenir plus qu'un moteur droite.";
 Blockly.Msg.CONFIGURATION_ERROR_OTHER_NOT_SUPPORTED = "Other power consumer does not support this type of block!";  // untranslated
-Blockly.Msg.CONFIGURATION_ERROR_SDCARD_MISSING = "SD card is not configured. Please add the corresponding block in the configuration tab!";  // untranslated
 Blockly.Msg.CONFIGURATION_ERROR_SENSOR_MISSING = "Le capteur n'est pas connecté à ce port !";
 Blockly.Msg.CONFIGURATION_ERROR_SENSOR_WRONG = "Un autre capteur est branché à ce port !";
 Blockly.Msg.CONFIGURATION_ERROR_WLAN_CREDENTIALS_MISSING = "Missing WLAN credentials, please enter them in robot -> WLAN credentials ... !";  // untranslated

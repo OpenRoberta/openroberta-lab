@@ -84,7 +84,7 @@ public class SenseboxBrickValidatorVisitor extends AbstractBrickValidatorVisitor
             return null;
         }
         if ( (sendDataAction.getDestination().equals("SDCARD") && !this.robotConfiguration.isComponentTypePresent(SC.SENSEBOX_SDCARD)) ) {
-            sendDataAction.addInfo(NepoInfo.error("CONFIGURATION_ERROR_SDCARD_MISSING"));
+            sendDataAction.addInfo(NepoInfo.error("CONFIGURATION_ERROR_ACTOR_MISSING"));
             this.errorCount++;
             return null;
         }
