@@ -36,6 +36,10 @@ public class EdisonUsedHardwareCollectorVisitor extends AbstractUsedHardwareColl
         this.usedMethodBeanBuilder.addUsedMethod(EdisonMethods.MOTORON);
         this.usedMethodBeanBuilder.addUsedMethod(EdisonMethods.SHORTEN); //used inside helper method
         this.usedMethodBeanBuilder.addUsedMethod(EdisonMethods.GETDIR);
+        motorOnAction.getParam().getSpeed().accept(this);
+        if ( motorOnAction.getParam().getDuration() != null ) {
+            motorOnAction.getDurationValue().accept(this);
+        }
         return null;
     }
 
@@ -74,6 +78,10 @@ public class EdisonUsedHardwareCollectorVisitor extends AbstractUsedHardwareColl
         this.usedMethodBeanBuilder.addUsedMethod(EdisonMethods.DIFFDRIVE);
         this.usedMethodBeanBuilder.addUsedMethod(EdisonMethods.SHORTEN); //used inside helper method
         this.usedMethodBeanBuilder.addUsedMethod(EdisonMethods.GETDIR);
+        driveAction.getParam().getSpeed().accept(this);
+        if ( driveAction.getParam().getDuration() != null ) {
+            driveAction.getParam().getDuration().getValue().accept(this);
+        }
         return null;
     }
 
@@ -92,6 +100,11 @@ public class EdisonUsedHardwareCollectorVisitor extends AbstractUsedHardwareColl
         this.usedMethodBeanBuilder.addUsedMethod(EdisonMethods.DIFFCURVE);
         this.usedMethodBeanBuilder.addUsedMethod(EdisonMethods.SHORTEN); //used inside helper method
         this.usedMethodBeanBuilder.addUsedMethod(EdisonMethods.GETDIR);
+        curveAction.getParamLeft().getSpeed().accept(this);
+        curveAction.getParamRight().getSpeed().accept(this);
+        if ( curveAction.getParamLeft().getDuration() != null ) {
+            curveAction.getParamLeft().getDuration().getValue().accept(this);
+        }
         return null;
     }
 
@@ -109,6 +122,10 @@ public class EdisonUsedHardwareCollectorVisitor extends AbstractUsedHardwareColl
         this.usedMethodBeanBuilder.addUsedMethod(EdisonMethods.DIFFTURN);
         this.usedMethodBeanBuilder.addUsedMethod(EdisonMethods.SHORTEN); //used inside helper method
         this.usedMethodBeanBuilder.addUsedMethod(EdisonMethods.GETDIR);
+        turnAction.getParam().getSpeed().accept(this);
+        if ( turnAction.getParam().getDuration() != null ) {
+            turnAction.getParam().getDuration().getValue().accept(this);
+        }
         return null;
     }
 
