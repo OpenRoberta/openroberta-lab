@@ -69,6 +69,7 @@ define([ 'simulation.simulation', 'interpreter.constants', 'simulation.robot.ev3
             timer1 : false
         };
         SIM.initMicrophone(this);
+        $("#simRobotContent").html(this.svg);
     }
 
     Nxt.prototype = Object.create(Ev3.prototype);
