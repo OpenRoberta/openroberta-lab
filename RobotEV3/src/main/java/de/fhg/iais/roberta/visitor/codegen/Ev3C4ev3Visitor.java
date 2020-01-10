@@ -63,8 +63,6 @@ import de.fhg.iais.roberta.syntax.lang.expr.ExprList;
 import de.fhg.iais.roberta.syntax.lang.expr.ListCreate;
 import de.fhg.iais.roberta.syntax.lang.expr.MathConst;
 import de.fhg.iais.roberta.syntax.lang.expr.StringConst;
-import de.fhg.iais.roberta.syntax.lang.expr.Var;
-import de.fhg.iais.roberta.syntax.lang.expr.VarDeclaration;
 import de.fhg.iais.roberta.syntax.lang.functions.FunctionNames;
 import de.fhg.iais.roberta.syntax.lang.functions.IndexOfFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.LengthOfIsEmptyFunct;
@@ -539,17 +537,17 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
     }
 
     private void generateForEachPrefix(Expr<Void> expression) {
-        ((VarDeclaration<Void>) ((Binary<Void>) expression).getLeft()).accept(this);
+        ((Binary<Void>) expression).getLeft().accept(this);
         this.sb.append(";");
         nlIndent();
         this.sb.append("for(int i = 0; i < ArrayLen(");
-        this.sb.append(((Var<Void>) ((Binary<Void>) expression).getRight()).getValue());
+        ((Binary<Void>) expression).getRight().accept(this);
         this.sb.append("); ++i) {");
         incrIndentation();
         nlIndent();
-        this.sb.append(((VarDeclaration<Void>) ((Binary<Void>) expression).getLeft()).getName());
+        ((Binary<Void>) expression).getLeft().accept(this);
         this.sb.append(" = _getListElementByIndex(");
-        this.sb.append(((Var<Void>) ((Binary<Void>) expression).getRight()).getValue());
+        ((Binary<Void>) expression).getRight().accept(this);
         this.sb.append(", i);");
         decrIndentation();
     }
@@ -772,7 +770,7 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
     public Void visitMathRandomIntFunct(MathRandomIntFunct<Void> mathRandomIntFunct) {
         Expr<Void> min = mathRandomIntFunct.getParam().get(0);
         Expr<Void> max = mathRandomIntFunct.getParam().get(1);
-        this.sb.append("((rand() % (");
+        this.sb.append("((rand() % (int) (");
         min.accept(this);
         this.sb.append(" - ");
         max.accept(this);
