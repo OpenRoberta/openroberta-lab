@@ -158,6 +158,8 @@ define([ 'simulation.simulation', 'interpreter.constants', 'simulation.robot', '
         this.sayText = {
             language : "en-US",
             say : function(text, lang, speed, pitch) {
+                // Prevents an empty string from crashing the simulation
+                if (text === "") text = " ";
                 // IE apparently doesnt support default parameters, this prevents it from crashing the whole simulation
                 speed = (speed === undefined) ? 30 : speed;
                 pitch = (pitch === undefined) ? 50 : pitch;
@@ -527,9 +529,6 @@ define([ 'simulation.simulation', 'interpreter.constants', 'simulation.robot', '
         var sayText = this.robotBehaviour.getActionState("sayText", true);
         if (sayText && window.speechSynthesis) {
             if (sayText.text !== undefined) {
-                if(sayText.text === "") {
-                    this.sayText.say(" ", this.sayText.language, sayText.speed, sayText.pitch); 
-                }
                 this.sayText.say(sayText.text, this.sayText.language, sayText.speed, sayText.pitch);
             }
         }
