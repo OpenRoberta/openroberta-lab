@@ -327,7 +327,6 @@ define([ 'require', 'exports', 'log', 'util', 'message', 'comm', 'guiState.contr
                             }
                         });
                     }
-                    MSG.displayInformation(result, result.message, result.message, values.shareWithInput);
                     LOG.info("share program " + row.name + " with '" + values.shareWithInput + " having right '" + right + "'");
                     $('#progList').find('button[name="refresh"]').trigger('click');
                 } else {
