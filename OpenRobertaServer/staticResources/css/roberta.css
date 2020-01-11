@@ -291,6 +291,8 @@ body.blocklyMinimalBody * {
 #codeContent {
     overflow-y: auto;
     padding-bottom: 60px;
+    padding-top: 12px;
+    background-color: #eee;
 }
 #infoContent {
     border: solid 10px #eee;
@@ -2218,7 +2220,6 @@ td[lkey="Blockly.Msg.POPUP_DOWNLOAD_STEP_A_SENSEBOX"] {
 
 #codeDiv pre {
     position: absolute;
-    top: 12px;
     background-color: transparent;
     border: 0px solid #ccc;
     border-radius: 0px;
@@ -2240,10 +2241,9 @@ td[lkey="Blockly.Msg.POPUP_DOWNLOAD_STEP_A_SENSEBOX"] {
 
 #codeDiv textarea {
     position: absolute;
-    top: 12px;
     z-index: 8;
     color: rgba(255, 255, 255, 0) !important;
-    height: calc(100% - 70px);
+    height: calc(100% - 82px);
     margin-top: 0px;
     line-height: 18px;
     padding: 0px;

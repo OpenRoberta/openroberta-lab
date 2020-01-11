@@ -133,6 +133,7 @@ public final class MbotUsedHardwareCollectorVisitor extends AbstractUsedHardware
 
     @Override
     public Void visitLEDMatrixImageAction(LEDMatrixImageAction<Void> ledMatrixImageAction) {
+        ledMatrixImageAction.getValuesToDisplay().accept(this);
         this.builder.addUsedActor(new UsedActor(ledMatrixImageAction.getPort(), SC.LED_MATRIX));
         return null;
     }
@@ -147,19 +148,18 @@ public final class MbotUsedHardwareCollectorVisitor extends AbstractUsedHardware
     @Override
     public Void visitLEDMatrixImageShiftFunction(LEDMatrixImageShiftFunction<Void> ledMatrixImageShiftFunction) {
         ledMatrixImageShiftFunction.getImage().accept(this);
-        this.builder.addUsedActor(new UsedActor("0", SC.LED_MATRIX));       
         return null;
     }
 
     @Override
     public Void visitLEDMatrixImageInvertFunction(LEDMatrixImageInvertFunction<Void> ledMatrixImageInverFunction) {
         ledMatrixImageInverFunction.getImage().accept(this);
-        this.builder.addUsedActor(new UsedActor("0", SC.LED_MATRIX));       
         return null;
     }
 
     @Override
     public Void visitLEDMatrixImage(LEDMatrixImage<Void> ledMatrixImage) {
+        this.builder.addUsedIDImage(ledMatrixImage.getProperty().getBlocklyId(), ledMatrixImage.getImage());      
         return null;
     }
 

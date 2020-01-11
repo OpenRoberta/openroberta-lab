@@ -35,6 +35,7 @@ public class UsedHardwareBean {
     private Set<UsedSensor> usedSensors = new LinkedHashSet<>();
     private Set<UsedActor> usedActors = new LinkedHashSet<>();
     private Set<String> usedImages = new HashSet<>();
+    private Map<String, String[][]> usedIDImages = new HashMap<>();
 
     public List<VarDeclaration<Void>> getVisitedVars() {
         return this.visitedVars;
@@ -66,6 +67,10 @@ public class UsedHardwareBean {
 
     public Set<String> getUsedImages() {
         return this.usedImages;
+    }
+    
+    public Map<String, String[][]> getUsedIDImages() {
+        return this.usedIDImages;
     }
 
     public boolean isSensorUsed(String type) {
@@ -130,6 +135,11 @@ public class UsedHardwareBean {
 
         public Builder addUsedImage(String usedImage) {
             this.usedHardwareBean.usedImages.add(usedImage);
+            return this;
+        }
+        
+        public Builder addUsedIDImage(String id, String[][] usedImage) {
+            this.usedHardwareBean.usedIDImages.put(id, usedImage);
             return this;
         }
 

@@ -74,6 +74,8 @@ import de.fhg.iais.roberta.visitor.hardware.IMbotVisitor;
  */
 public final class MbotCppVisitor extends AbstractCommonArduinoCppVisitor implements IMbotVisitor<Void> {
 
+    private HashMap<String, Integer> imageList = new HashMap<String, Integer>();
+
     /**
      * Initialize the C++ code generator visitor.
      *
@@ -453,6 +455,7 @@ public final class MbotCppVisitor extends AbstractCommonArduinoCppVisitor implem
 
     @Override
     public Void visitMainTask(MainTask<Void> mainTask) {
+        predefineImages();
         mainTask.getVariables().accept(this);
         if ( !mainTask.getVariables().toString().equals("") ) {
             nlIndent();
@@ -522,6 +525,19 @@ public final class MbotCppVisitor extends AbstractCommonArduinoCppVisitor implem
         this.sb.append("}");
         nlIndent();
         return null;
+    }
+
+    private void predefineImages() {
+        Map<String, String[][]> usedIDImages = this.usedHardwareBean.getUsedIDImages();
+        int i = 0;
+        for ( Map.Entry<String, String[][]> entry : usedIDImages.entrySet() ) {
+            this.sb.append("const std::vector<uint8_t> __ledMatrix").append(i).append(" = ");
+            writeImage(entry.getValue());
+            this.sb.append(";");
+            nlIndent();
+            this.imageList.put(entry.getKey(), i);
+            i++;
+        }
     }
 
     @Override
@@ -650,8 +666,6 @@ public final class MbotCppVisitor extends AbstractCommonArduinoCppVisitor implem
                 case SC.LED_MATRIX:
                     nlIndent();
                     this.sb.append("MeLEDMatrix __meLEDMatrix_" + usedActor.getPort() + "(" + usedActor.getPort() + ");");
-                    nlIndent();
-                    this.sb.append("std::vector<uint8_t> __ledMatrix;");
                     break;
                 case SC.BUZZER:
                     nlIndent();
@@ -701,20 +715,10 @@ public final class MbotCppVisitor extends AbstractCommonArduinoCppVisitor implem
     public Void visitLEDMatrixImageAction(LEDMatrixImageAction<Void> ledMatrixImageAction) {
         String end = ");";
         if ( ledMatrixImageAction.getDisplayImageMode().equals("IMAGE") ) {
-            
-            if ( ledMatrixImageAction.getValuesToDisplay().getKind().getName().equals("VAR")
-                || ledMatrixImageAction.getValuesToDisplay().getKind().getName().equals("FUNCTION_EXPR") ) {
-                this.sb.append("__meLEDMatrix_").append(ledMatrixImageAction.getPort()).append(".drawBitmap(0, 0, 16, ");                
-                this.sb.append("&");
-                ledMatrixImageAction.getValuesToDisplay().accept(this);
-                this.sb.append("[0]");
-            } else {
-                this.sb.append("__ledMatrix = ");
-                ledMatrixImageAction.getValuesToDisplay().accept(this);
-                this.sb.append(";");
-                nlIndent();
-                this.sb.append("__meLEDMatrix_").append(ledMatrixImageAction.getPort()).append(".drawBitmap(0, 0, 16, &__ledMatrix[0]");
-                    }
+            this.sb.append("__meLEDMatrix_").append(ledMatrixImageAction.getPort()).append(".drawBitmap(0, 0, 16, ");
+            this.sb.append("&");
+            ledMatrixImageAction.getValuesToDisplay().accept(this);
+            this.sb.append("[0]");
             this.sb.append(end);
         } else if ( ledMatrixImageAction.getDisplayImageMode().equals("ANIMATION") ) {
             this.sb.append("drawAnimationLEDMatrix(&__meLEDMatrix_").append(ledMatrixImageAction.getPort()).append(", ");
@@ -743,12 +747,18 @@ public final class MbotCppVisitor extends AbstractCommonArduinoCppVisitor implem
 
     @Override
     public Void visitLEDMatrixImage(LEDMatrixImage<Void> ledMatrixImage) {
+        Map<String, String[][]> usedIDImages=this.usedHardwareBean.getUsedIDImages();
+        this.sb.append("__ledMatrix").append(this.imageList.get(ledMatrixImage.getProperty().getBlocklyId()));
+        return null;
+    }
+
+    private void writeImage(String[][] image) {
         this.sb.append("{");
         for ( int i = 0; i < 16; i++ ) {
             this.sb.append("0x");
             int hex = 0;
             for ( int j = 0; j < 8; j++ ) {
-                String pixel = ledMatrixImage.getImage()[i][j].trim();
+                String pixel = image[i][j].trim();
                 if ( pixel.equals("#") ) {
                     hex += Math.pow(2, j);
                 }
@@ -759,21 +769,15 @@ public final class MbotCppVisitor extends AbstractCommonArduinoCppVisitor implem
             }
         }
         this.sb.append("}");
-        return null;
     }
 
     @Override
     public Void visitLEDMatrixImageShiftFunction(LEDMatrixImageShiftFunction<Void> ledMatrixImageShiftFunction) {
         this.sb.append("(shiftLEDMatrix");
         this.sb.append(capitalizeFirstLetter(ledMatrixImageShiftFunction.getShiftDirection().toString()));
-        if ( ledMatrixImageShiftFunction.getImage().getKind().getName().equals("VAR")
-            || ledMatrixImageShiftFunction.getImage().getKind().getName().equals("FUNCTION_EXPR") ) {
             this.sb.append("Vec(");
             ledMatrixImageShiftFunction.getImage().accept(this);
-        } else {
-            this.sb.append("Arr(new uint8_t[16]");
-            ledMatrixImageShiftFunction.getImage().accept(this);
-        }
+        
         this.sb.append(", ");
         ledMatrixImageShiftFunction.getPositions().accept(this);
         this.sb.append("))");
@@ -782,15 +786,9 @@ public final class MbotCppVisitor extends AbstractCommonArduinoCppVisitor implem
 
     @Override
     public Void visitLEDMatrixImageInvertFunction(LEDMatrixImageInvertFunction<Void> ledMatrixImageInverFunction) {
-        if ( ledMatrixImageInverFunction.getImage().getKind().getName().equals("VAR")
-            || ledMatrixImageInverFunction.getImage().getKind().getName().equals("FUNCTION_EXPR") ) {
             this.sb.append("(invertLEDMatrixVec(");
             ledMatrixImageInverFunction.getImage().accept(this);
-        } else {
-            this.sb.append("(invertLEDMatrixArr(");
-            this.sb.append("new uint8_t[16]");
-            ledMatrixImageInverFunction.getImage().accept(this);
-        }
+        
         this.sb.append("))");
         return null;
     }
