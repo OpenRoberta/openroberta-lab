@@ -10,7 +10,6 @@ import javax.ws.rs.core.Response;
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
-import org.hibernate.Session;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -49,7 +48,7 @@ import de.fhg.iais.roberta.util.dbc.DbcException;
  * program to the data base, the number of rows of the <code>PROGRAM</code> table should have increased by 1 and a select using the primary key of the
  * <code>PROGRAM</code> table (name,owner,robot) in the <code>where</code> clause should return a matching single row. The core setup of the database is run
  * <b>once</b> for a JVM, i.e. it cannot be repeated. This is also true for tests from different classes using the same Junit runner. If tests need an
- * <b>empty</b> data base, the have to start with a call to <code>this.memoryDbSetup.deleteAllFromUserAndProgram()</code> <br>
+ * <b>empty</b> data base, they have to start with a call to <code>this.memoryDbSetup.deleteAllFromUserAndProgram()</code> <br>
  * The following conventions for REST calls should be used:<br>
  * - check the preconditions (in most cases using SQL),<br>
  * - call the REST service,<br>
@@ -92,14 +91,13 @@ public class RestInterfaceTest {
         this.serverProperties = new ServerProperties(Util.loadProperties(null));
         this.serverProperties.getserverProperties().put("server.public", "true"); // not dangerous! For this.restUser the mail management is set to null
 
-        this.connectionUrl = "jdbc:hsqldb:mem:restTestInMemoryDb";
         this.robotCommunicator = new RobotCommunicator();
         this.restUser = new ClientUser(this.robotCommunicator, serverProperties, null);
 
-        this.sessionFactoryWrapper = new SessionFactoryWrapper("hibernate-test-cfg.xml", this.connectionUrl);
-        Session nativeSession = this.sessionFactoryWrapper.getNativeSession();
-        this.memoryDbSetup = new DbSetup(nativeSession);
-        this.memoryDbSetup.createEmptyDatabase();
+        TestConfiguration tc = TestConfiguration.setup();
+        this.sessionFactoryWrapper = tc.getSessionFactoryWrapper();
+        this.memoryDbSetup = tc.getMemoryDbSetup();
+
         this.restProject = new ClientProgramController(this.serverProperties);
         this.restConfiguration = new ClientConfiguration(this.robotCommunicator);
         Map<String, IRobotFactory> robotPlugins = ServerStarter.configureRobotPlugins(robotCommunicator, serverProperties, EMPTY_STRING_LIST);
@@ -756,7 +754,7 @@ public class RestInterfaceTest {
      * @throws Exception
      */
     private void restUser(HttpSessionState httpSession, String jsonAsString, String result, Key msgOpt) throws Exception {
-        this.response = this.restUser.command(this.sessionFactoryWrapper.getSession(), JSONUtilForServer.mkD(httpSession.getInitToken(), jsonAsString));
+        this.response = this.restUser.command(newDbSession(), JSONUtilForServer.mkD(httpSession.getInitToken(), jsonAsString));
         JSONUtilForServer.assertEntityRc(this.response, result, msgOpt);
     }
 

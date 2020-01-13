@@ -2,7 +2,6 @@ package de.fhg.iais.roberta.javaServer.basics;
 
 import java.util.List;
 
-import org.hibernate.Session;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -25,17 +24,19 @@ import de.fhg.iais.roberta.persistence.util.SessionFactoryWrapper;
 public class PersistUserProgramTest {
     private SessionFactoryWrapper sessionFactoryWrapper;
     private DbSetup memoryDbSetup;
-    private String connectionUrl;
 
     private static final int TOTAL_USERS = 100;
 
     @Before
     public void setup() throws Exception {
-        this.connectionUrl = "jdbc:hsqldb:mem:userProgramInMemoryDb";
-        this.sessionFactoryWrapper = new SessionFactoryWrapper("hibernate-test-cfg.xml", this.connectionUrl);
-        Session nativeSession = this.sessionFactoryWrapper.getNativeSession();
-        this.memoryDbSetup = new DbSetup(nativeSession);
-        this.memoryDbSetup.createEmptyDatabase();
+        TestConfiguration tc = TestConfiguration.setup();
+        this.sessionFactoryWrapper = tc.getSessionFactoryWrapper();
+        this.memoryDbSetup = tc.getMemoryDbSetup();
+    }
+
+    @After
+    public void tearDown() {
+        this.memoryDbSetup.deleteAllFromUserAndProgramTmpPasswords();
     }
 
     @Test
@@ -64,7 +65,7 @@ public class PersistUserProgramTest {
         Assert.assertTrue(userList.size() == 10);
 
         //Create one program per user
-        for ( int userNumber = 0; userNumber < PersistUserProgramTest.TOTAL_USERS; userNumber++ ) {
+        for ( int userNumber = 0; userNumber < TOTAL_USERS; userNumber++ ) {
             User owner = userDao.loadUser("account-" + userNumber);
             Program program = programDao.load("program-" + userNumber, owner, robot, owner);
             if ( program == null ) {
@@ -76,7 +77,7 @@ public class PersistUserProgramTest {
             }
         }
         List<Program> programList = programDao.loadAll();
-        Assert.assertTrue(programList.size() == 101);
+        Assert.assertTrue(programList.size() == 100);
 
         //User 0 invites all inpair  users to write to its program
         User owner = userDao.loadUser("account-0");
@@ -102,11 +103,6 @@ public class PersistUserProgramTest {
             List<AccessRight> userProgramList2 = userProgramDao.loadAccessRightsForUser(user, robot);
             Assert.assertTrue(userProgramList2.size() == 1);
         }
-    }
-
-    @After
-    public void tearDown() {
-        this.memoryDbSetup.deleteAllFromUserAndProgramTmpPasswords();
     }
 
     private long getOneBigInteger(String sqlStmt) {

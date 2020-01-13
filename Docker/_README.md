@@ -22,7 +22,7 @@ in git and a version number in docker.
 
 ```bash
 BASE_DIR=/data/openroberta-lab
-BASE_VERSION=9
+BASE_VERSION=10
 CC_RESOURCES=/data/openroberta-lab/git/ora-cc-rsc
 cd $CC_RESOURCES
 
@@ -43,7 +43,7 @@ If called, it will checkout a branch and runs both the tests and the integration
 
 ```bash
 BASE_DIR=/data/openroberta-lab
-BASE_VERSION=9
+BASE_VERSION=10
 BRANCH=develop
 cd $BASE_DIR/conf/docker-for-test
 docker build --no-cache --build-arg BASE_VERSION=$BASE_VERSION --build-arg BRANCH=$BRANCH \
@@ -57,7 +57,7 @@ in case of success it returns 0, in case of errors/failures it returns 16. This 
 CI system (jenkins, travis, gitlab, bamboo, ...). To run it, execute:
 
 ```bash
-BASE_VERSION=9
+BASE_VERSION=10
 export BRANCH='develop'
 docker run rbudde/openroberta_it_ubuntu_18_04:$BASE_VERSION $BRANCH x.x.x # x.x.x is the db version and unused for tests
 ```

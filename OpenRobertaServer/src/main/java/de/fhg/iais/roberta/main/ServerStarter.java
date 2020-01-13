@@ -349,9 +349,9 @@ public class ServerStarter {
         String databaseMode = properties.getProperty("database.mode");
         String dbUrl;
         if ( "embedded".equals(databaseMode) ) {
-            dbUrl = "jdbc:hsqldb:file:" + databaseParentDir + "/db-" + serverVersionForDbDirectory + "/" + databaseName + ";ifexists=true";
+            dbUrl = "jdbc:hsqldb:file:" + databaseParentDir + "/db-" + serverVersionForDbDirectory + "/" + databaseName + ";ifexists=true;hsqldb.tx=mvcc";
         } else if ( "server".equals(databaseMode) ) {
-            dbUrl = "jdbc:hsqldb:hsql://" + databaseUri + "/" + databaseName;
+            dbUrl = "jdbc:hsqldb:hsql://" + databaseUri + "/" + databaseName + ";hsqldb.tx=mvcc";
         } else {
             throw new DbcException("invalid database mode (use either embedded or server): " + databaseMode);
         }
@@ -361,7 +361,7 @@ public class ServerStarter {
     private void logTheNumberOfStoredPrograms() {
         try {
             DbSession session = this.injector.getInstance(SessionFactoryWrapper.class).getSession();
-            List<?> numberOfProgramsInList = session.getSession().createSQLQuery("select count(*) from PROGRAM").list();
+            List<?> numberOfProgramsInList = session.createSqlQuery("select count(*) from PROGRAM").list();
             ServerStarter.LOG.info("Number of programs stored in the database: " + numberOfProgramsInList);
             session.close();
         } catch ( Exception e ) {

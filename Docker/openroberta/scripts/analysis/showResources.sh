@@ -42,7 +42,7 @@ function showResourceLoop {
         fi
         SECOND_NOW=$(date +%s)
         DELTA=$(expr "$SECOND_NOW" - "$SECOND_OF_START")
-        if [ "$DELTA" -gt 72000 ] # 24*60*60 - 4*60*60 == 90000 twenty hours are enough
+        if [ "$DELTA" -gt 72000 ] # 24*60*60 - 4*60*60 == 72000 twenty hours are enough
         then
             echo 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx' >> $LOGFILE
             echo "exit of pid $$ after a day of work" >> $LOGFILE

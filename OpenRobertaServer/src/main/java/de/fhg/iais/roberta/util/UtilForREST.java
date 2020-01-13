@@ -50,8 +50,8 @@ public class UtilForREST {
      */
     public static HttpSessionState handleRequestInit(Logger loggerForRequest, JSONObject fullRequest) {
         AliveData.rememberClientCall();
-        String tokenSetOnInit = fullRequest.optString("initToken");
-        HttpSessionState httpSessionState = validateTokenSetOnInit(tokenSetOnInit);
+        String initToken = fullRequest.optString("initToken");
+        HttpSessionState httpSessionState = validateInitToken(initToken);
         MDC.put("sessionId", String.valueOf(httpSessionState.getSessionNumber()));
         MDC.put("userId", String.valueOf(httpSessionState.getUserId()));
         MDC.put("robotName", String.valueOf(httpSessionState.getRobotName()));
@@ -66,31 +66,25 @@ public class UtilForREST {
      * started
      *
      * @param checkInitToken true: consistency checks; false: avoid them (used by ping services)
-     * @param tokenSetOnInit the token from the frontend-request, retrieved from the server when the connection front-end to server was established
-     * @return a HttpSessionState object matching the tokenSetOnInit
+     * @param initToken the token from the frontend-request, retrieved from the server when the connection front-end to server was established
+     * @return a HttpSessionState object matching the initToken
      */
-    private static HttpSessionState validateTokenSetOnInit(String tokenSetOnInit) {
-        HttpSessionState httpSessionState = null;
-        String errorMsgIfError;
-        Key errorKey;
-        if ( tokenSetOnInit == null ) {
-            errorMsgIfError = "frontend request has no tokenSetOnInit";
-            errorKey = Key.INIT_FAIL_INVALID_INIT_TOKEN;
+    private static HttpSessionState validateInitToken(String initToken) {
+        if ( initToken == null ) {
+            String errorMsgIfError = "frontend request has no initToken";
+            LOG.error(errorMsgIfError);
+            throw new DbcKeyException(errorMsgIfError, Key.INIT_FAIL_INVALID_INIT_TOKEN, null);
         } else {
-            httpSessionState = HttpSessionState.initToken2HttpSessionstate.get(tokenSetOnInit);
+            HttpSessionState httpSessionState = HttpSessionState.initToken2HttpSessionstate.get(initToken);
             if ( httpSessionState == null ) {
-                errorMsgIfError = "initToken is not initialized in the session";
-                errorKey = Key.INIT_FAIL_INVALID_INIT_TOKEN;
+                String errorMsgIfError = "initToken is not initialized in the session";
+                LOG.error(errorMsgIfError);
+                throw new DbcKeyException(errorMsgIfError, Key.INIT_FAIL_INVALID_INIT_TOKEN, null);
             } else {
-                errorMsgIfError = null;
-                errorKey = null;
+                httpSessionState.rememberFrontendAccessTime();
+                return httpSessionState;
             }
         }
-        if ( errorMsgIfError != null || errorKey != null ) {
-            LOG.error(errorMsgIfError);
-            throw new DbcKeyException(errorMsgIfError, errorKey, null);
-        }
-        return httpSessionState;
     }
 
     public static JSONObject extractDataPart(JSONObject request) {

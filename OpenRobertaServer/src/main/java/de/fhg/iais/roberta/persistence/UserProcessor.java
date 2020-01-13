@@ -42,7 +42,7 @@ public class UserProcessor extends AbstractProcessor {
         } else {
             UserDao userDao = new UserDao(this.dbSession);
             User user = userDao.loadUser(account);
-            if ( user != null && user.isPasswordCorrect(password) && !account_check ) {
+            if ( user != null && user.isPasswordCorrect(password) ) {
                 setStatus(ProcessorStatus.SUCCEEDED, Key.USER_GET_ONE_SUCCESS, new HashMap<>());
                 return user;
             } else {
@@ -107,20 +107,6 @@ public class UserProcessor extends AbstractProcessor {
                 }
             }
         }
-    }
-
-    private boolean isMailUsed(String account, String email) {
-        UserDao userDao = new UserDao(this.dbSession);
-        if ( !email.equals("") ) {
-            User user = userDao.loadUserByEmail(email);
-            if ( user != null && !user.getAccount().equals(account) ) {
-                Map<String, String> processorParameters = new HashMap<>();
-                processorParameters.put("ACCOUNT", account);
-                setStatus(ProcessorStatus.FAILED, Key.USER_ERROR_EMAIL_USED, processorParameters);
-                return true;
-            }
-        }
-        return false;
     }
 
     public void updatePassword(String account, String oldPassword, String newPassword) throws Exception {
@@ -225,5 +211,19 @@ public class UserProcessor extends AbstractProcessor {
         } else {
             setStatus(ProcessorStatus.FAILED, Key.USER_DELETE_ERROR_ID_NOT_FOUND, processorParameters);
         }
+    }
+
+    private boolean isMailUsed(String account, String email) {
+        UserDao userDao = new UserDao(this.dbSession);
+        if ( !email.equals("") ) {
+            User user = userDao.loadUserByEmail(email);
+            if ( user != null && !user.getAccount().equals(account) ) {
+                Map<String, String> processorParameters = new HashMap<>();
+                processorParameters.put("ACCOUNT", account);
+                setStatus(ProcessorStatus.FAILED, Key.USER_ERROR_EMAIL_USED, processorParameters);
+                return true;
+            }
+        }
+        return false;
     }
 }

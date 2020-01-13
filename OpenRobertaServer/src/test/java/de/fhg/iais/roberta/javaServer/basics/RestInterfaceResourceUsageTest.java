@@ -89,7 +89,7 @@
 //        this.sPid = HttpSessionState.initOnlyLegalForDebugging("pid", robotPlugins, serverProperties, 1);
 //        this.sMinscha = HttpSessionState.initOnlyLegalForDebugging("minscha", robotPlugins, serverProperties, 2);
 //
-//        this.sessionFactoryWrapper = new SessionFactoryWrapper("hibernate-test-cfg.xml", this.connectionUrl);
+//        this.sessionFactoryWrapper = new SessionFactoryWrapper("hibernate-cfg.xml", this.connectionUrl);
 //        Session nativeSession = this.sessionFactoryWrapper.getNativeSession();
 //        this.memoryDbSetup = new DbSetup(nativeSession);
 //        this.memoryDbSetup.createEmptyDatabase();

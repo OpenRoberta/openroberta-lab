@@ -39,7 +39,7 @@ public class SessionFactoryWrapper {
                 configuration.setProperty("hibernate.connection.url", databaseUrl);
                 StandardServiceRegistryBuilder serviceRegistryBuilder = new StandardServiceRegistryBuilder().applySettings(configuration.getProperties());
                 this.sessionFactory = configuration.buildSessionFactory(serviceRegistryBuilder.build());
-                LOG.info("session factory successfully created");
+                LOG.info("session factory successfully created for dbUrl: " + databaseUrl);
                 return;
             } catch ( Exception e ) {
                 LOG.error("session factory creation failed (" + retrycount + "). Trying again in 5 seconds", e);

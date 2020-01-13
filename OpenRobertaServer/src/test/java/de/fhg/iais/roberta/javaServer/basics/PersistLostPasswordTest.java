@@ -2,7 +2,6 @@ package de.fhg.iais.roberta.javaServer.basics;
 
 import java.util.List;
 
-import org.hibernate.Session;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -20,8 +19,6 @@ import de.fhg.iais.roberta.util.dbc.Assert;
 public class PersistLostPasswordTest {
     private SessionFactoryWrapper sessionFactoryWrapper;
     private DbSetup memoryDbSetup;
-    private String connectionUrl;
-    private Session nativeSession;
     private DbSession hSession;
     private UserDao userDao;
     private LostPasswordDao lostPasswordDao;
@@ -30,11 +27,9 @@ public class PersistLostPasswordTest {
 
     @Before
     public void setup() throws Exception {
-        this.connectionUrl = "jdbc:hsqldb:mem:passwordInMemoryDb";
-        this.sessionFactoryWrapper = new SessionFactoryWrapper("hibernate-test-cfg.xml", this.connectionUrl);
-        this.nativeSession = this.sessionFactoryWrapper.getNativeSession();
-        this.memoryDbSetup = new DbSetup(this.nativeSession);
-        this.memoryDbSetup.createEmptyDatabase();
+        TestConfiguration tc = TestConfiguration.setup();
+        this.sessionFactoryWrapper = tc.getSessionFactoryWrapper();
+        this.memoryDbSetup = tc.getMemoryDbSetup();
 
         this.hSession = this.sessionFactoryWrapper.getSession();
         this.userDao = new UserDao(this.hSession);
@@ -53,6 +48,11 @@ public class PersistLostPasswordTest {
                 this.hSession.commit();
             }
         }
+    }
+
+    @After
+    public void tearDown() {
+        this.memoryDbSetup.deleteAllFromUserAndProgramTmpPasswords();
     }
 
     @Test
@@ -91,11 +91,6 @@ public class PersistLostPasswordTest {
         }
         User userChanged = this.userDao.loadUser("account-2");
         Assert.isTrue(userChanged.isPasswordCorrect("1"));
-    }
-
-    @After
-    public void tearDown() {
-        this.memoryDbSetup.deleteAllFromUserAndProgramTmpPasswords();
     }
 
 }

@@ -13,6 +13,7 @@ import org.hibernate.Transaction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import de.fhg.iais.roberta.persistence.bo.WithSurrogateId;
 import de.fhg.iais.roberta.util.dbc.Assert;
 
 /**
@@ -63,11 +64,12 @@ public class DbSession {
      */
     public void rollback() {
         LOG.info("rollback");
+        addTransaction("rollback"); // for analyzing db session usage.
+
         Transaction transaction = this.session.getTransaction();
-        if ( transaction.isActive() ) {
-            transaction.rollback();
-            addTransaction("rollback"); // for analyzing db session usage.
-        }
+        transaction.rollback();
+
+        this.session.beginTransaction();
     }
 
     /**
@@ -75,11 +77,11 @@ public class DbSession {
      */
     public void commit() {
         LOG.debug("commit + start transaction");
+        addTransaction("commit"); // for analyzing db session usage.
+
         Transaction transaction = this.session.getTransaction();
-        if ( transaction.isActive() ) {
-            transaction.commit();
-            addTransaction("commit"); // for analyzing db session usage.
-        }
+        transaction.commit();
+
         this.session.beginTransaction();
     }
 
@@ -88,23 +90,54 @@ public class DbSession {
      */
     public void close() {
         LOG.debug("close session (after commit)");
+        // enable NEVER on prod systems: LOG.error("session close\n" + DbSession.getFullInfo(); // for analyzing db session usage.
         Transaction transaction = this.session.getTransaction();
-        if ( transaction.isActive() ) {
-            transaction.commit();
-        }
+        transaction.commit();
         this.session.close();
         this.session = null;
 
         // for analyzing db session usage.
+        long sessionAge = new Date().getTime() - creationTime;
+        if ( new Date().getTime() - creationTime > DURATION_TIMEOUT_MSEC ) {
+            LOG.error("db session " + sessionId + " too old: " + sessionAge + "msec\n" + getFullInfo());
+        }
         currentOpenSessionCounter.decrementAndGet();
         if ( this.numberOfActions == 0 ) {
             unusedSessionCounter.getAndIncrement();
         }
         debugSessionMap.remove(this.sessionId);
-        long sessionAge = new Date().getTime() - creationTime;
-        if ( new Date().getTime() - creationTime > DURATION_TIMEOUT_MSEC ) {
-            LOG.error("db session " + sessionId + " too old: " + sessionAge + "msec");
-        }
+    }
+
+    /**
+     * load an object persisted in the database, identified by its key.<br>
+     * <b>It is assumed, that the object exists! If in doubt, use get :-)</b> If the object doesn't reside in the db, accesssing the proxy returned will
+     * generate a org.hibernate.ObjectNotFoundException later. This is probably <i>not</i> what you want.
+     *
+     * @param type the type of the object to be retrieved
+     * @param id the primary key (usually a <i>technical</i> key)
+     * @return the database object, never null
+     */
+    public <T> T load(Class<T> type, int id) {
+        actions.append("load of " + type.getSimpleName() + " with id " + id + "\n"); // for analyzing db session usage.
+        Object entityMayNotExist = this.session.load(type, id);
+        ((WithSurrogateId) entityMayNotExist).getId();
+        @SuppressWarnings("unchecked")
+        T entity = (T) entityMayNotExist;
+        return entity;
+    }
+
+    /**
+     * get an object persisted in the database, identified by its key.
+     *
+     * @param type the type of the object to be retrieved
+     * @param id the primary key (usually a <i>technical</i> key)
+     * @return the database object, always initialized; null, if not found in the db
+     */
+    public <T> T get(Class<T> type, int id) {
+        actions.append("get of " + type.getSimpleName() + " with id " + id + "\n"); // for analyzing db session usage.
+        @SuppressWarnings("unchecked")
+        T entity = (T) this.session.get(type, id);
+        return entity;
     }
 
     /**
@@ -146,7 +179,9 @@ public class DbSession {
      */
     public Serializable save(Object toBePersisted) {
         addAction("save", toBePersisted); // for analyzing db session usage.
-        return this.session.save(toBePersisted);
+        Serializable persisted = this.session.save(toBePersisted);
+        this.session.flush();
+        return persisted;
     }
 
     /**
@@ -175,7 +210,7 @@ public class DbSession {
         if ( object == null ) {
             actions.append(cmd).append(": null");
         } else {
-            actions.append(cmd).append(": ").append(object.getClass().getSimpleName()).append("\n");
+            actions.append(cmd).append(": ").append(object.getClass().getSimpleName()).append(" ").append(object.toString()).append("\n");
         }
         numberOfActions++;
     }
