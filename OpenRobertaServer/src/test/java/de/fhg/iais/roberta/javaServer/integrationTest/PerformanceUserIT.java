@@ -33,6 +33,7 @@ import de.fhg.iais.roberta.javaServer.restServices.all.controller.ClientUser;
 import de.fhg.iais.roberta.javaServer.restServices.robot.RobotCommand;
 import de.fhg.iais.roberta.javaServer.restServices.robot.RobotDownloadProgram;
 import de.fhg.iais.roberta.main.ServerStarter;
+import de.fhg.iais.roberta.persistence.util.DbSession;
 import de.fhg.iais.roberta.persistence.util.DbSetup;
 import de.fhg.iais.roberta.persistence.util.HttpSessionState;
 import de.fhg.iais.roberta.persistence.util.SessionFactoryWrapper;
@@ -89,7 +90,7 @@ public class PerformanceUserIT {
         this.robotCommunicator = new RobotCommunicator();
 
         this.restUser = new ClientUser(this.robotCommunicator, serverProperties, null);
-        this.restProject = new ClientProgramController(this.sessionFactoryWrapper, this.serverProperties);
+        this.restProject = new ClientProgramController(this.serverProperties);
         this.restBlocks = new ClientAdmin(this.robotCommunicator, serverProperties);
         this.downloadJar = new RobotDownloadProgram(this.robotCommunicator, serverProperties);
         this.brickCommand = new RobotCommand(this.robotCommunicator);
@@ -178,9 +179,13 @@ public class PerformanceUserIT {
         JSONUtilForServer.assertEntityRc(response, "ok", Key.USER_GET_ONE_SUCCESS);
         Assert.assertTrue(s.isUserLoggedIn());
         int sId = s.getUserId();
-        response = this.restProject.updateProject(JSONUtilForServer.mkD("{'cmd':'saveAsP';'programName':'p1';'programText':'<program>...</program>'}"));
+        response =
+            this.restProject
+                .updateProject(newDbSession(), JSONUtilForServer.mkD("{'cmd':'saveAsP';'programName':'p1';'programText':'<program>...</program>'}"));
         JSONUtilForServer.assertEntityRc(response, "ok", Key.PROGRAM_SAVE_SUCCESS);
-        response = this.restProject.updateProject(JSONUtilForServer.mkD("{'cmd':'saveAsP';'programName':'p2';'programText':'<program>...</program>'}"));
+        response =
+            this.restProject
+                .updateProject(newDbSession(), JSONUtilForServer.mkD("{'cmd':'saveAsP';'programName':'p2';'programText':'<program>...</program>'}"));
         JSONUtilForServer.assertEntityRc(response, "ok", Key.PROGRAM_SAVE_SUCCESS);
         Assert.assertEquals(2, this.memoryDbSetup.getOneBigIntegerAsLong("select count(*) from PROGRAM where OWNER_ID = " + sId));
 
@@ -189,7 +194,7 @@ public class PerformanceUserIT {
         Timestamp lastChanged = this.memoryDbSetup.getOne("select LAST_CHANGED from PROGRAM where OWNER_ID = " + sId + " and name = 'p2'");
         JSONObject fullRequest = new JSONObject("{\"log\":[];\"data\":{\"cmd\":\"save\";\"programName\":\"p2\"}}");
         fullRequest.getJSONObject("data").put("programText", this.theProgramOfAllUserLol).put("timestamp", lastChanged.getTime());
-        response = this.restProject.updateProject(fullRequest);
+        response = this.restProject.updateProject(newDbSession(), fullRequest);
         JSONUtilForServer.assertEntityRc(response, "ok", Key.PROGRAM_SAVE_SUCCESS);
         Assert.assertEquals(2, this.memoryDbSetup.getOneBigIntegerAsLong("select count(*) from PROGRAM where OWNER_ID = " + sId));
         response = this.restProject.importProgram(JSONUtilForServer.mkD("{'cmd':'loadPN'}"));
@@ -216,5 +221,9 @@ public class PerformanceUserIT {
             Thread.sleep(think);
         }
         return think;
+    }
+
+    private DbSession newDbSession() {
+        return this.sessionFactoryWrapper.getSession();
     }
 }

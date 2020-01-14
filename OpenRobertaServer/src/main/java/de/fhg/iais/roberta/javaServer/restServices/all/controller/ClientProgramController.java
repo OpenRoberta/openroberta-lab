@@ -22,6 +22,7 @@ import com.google.inject.Inject;
 
 import de.fhg.iais.roberta.blockly.generated.Export;
 import de.fhg.iais.roberta.factory.IRobotFactory;
+import de.fhg.iais.roberta.javaServer.provider.OraData;
 import de.fhg.iais.roberta.persistence.AccessRightProcessor;
 import de.fhg.iais.roberta.persistence.ConfigurationProcessor;
 import de.fhg.iais.roberta.persistence.LikeProcessor;
@@ -32,7 +33,6 @@ import de.fhg.iais.roberta.persistence.bo.User;
 import de.fhg.iais.roberta.persistence.dao.ConfigurationDao;
 import de.fhg.iais.roberta.persistence.util.DbSession;
 import de.fhg.iais.roberta.persistence.util.HttpSessionState;
-import de.fhg.iais.roberta.persistence.util.SessionFactoryWrapper;
 import de.fhg.iais.roberta.util.Key;
 import de.fhg.iais.roberta.util.ServerProperties;
 import de.fhg.iais.roberta.util.Statistics;
@@ -46,12 +46,10 @@ import de.fhg.iais.roberta.util.jaxb.JaxbHelper;
 public class ClientProgramController {
     private static final Logger LOG = LoggerFactory.getLogger(ClientProgramController.class);
 
-    private final SessionFactoryWrapper sessionFactoryWrapper;
     private final boolean isPublicServer;
 
     @Inject
-    public ClientProgramController(SessionFactoryWrapper sessionFactoryWrapper, ServerProperties serverProperties) {
-        this.sessionFactoryWrapper = sessionFactoryWrapper;
+    public ClientProgramController(ServerProperties serverProperties) {
         this.isPublicServer = serverProperties.getBooleanProperty("server.public");
     }
 
@@ -65,10 +63,9 @@ public class ClientProgramController {
     @Path("/save")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response updateProject(JSONObject request) {
+    public Response updateProject(@OraData DbSession dbSession, JSONObject request) {
         HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, request);
         JSONObject dataPart = UtilForREST.extractDataPart(request);
-        DbSession dbSession = this.sessionFactoryWrapper.getSession();
         ProgramProcessor programProcessor = new ProgramProcessor(dbSession, httpSessionState);
         JSONObject response = new JSONObject();
         try {
@@ -114,10 +111,9 @@ public class ClientProgramController {
     @Path("/listing")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getProgram(JSONObject request) {
+    public Response getProgram(@OraData DbSession dbSession, JSONObject request) {
         HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, request);
         JSONObject dataPart = UtilForREST.extractDataPart(request);
-        DbSession dbSession = this.sessionFactoryWrapper.getSession();
         ProgramProcessor programProcessor = new ProgramProcessor(dbSession, httpSessionState);
         JSONObject response = new JSONObject();
         try {
@@ -166,9 +162,8 @@ public class ClientProgramController {
     @Path("/listing/names")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getProgramNames(JSONObject request) {
+    public Response getProgramNames(@OraData DbSession dbSession, JSONObject request) {
         HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, request);
-        DbSession dbSession = this.sessionFactoryWrapper.getSession();
         ProgramProcessor programProcessor = new ProgramProcessor(dbSession, httpSessionState);
         JSONObject response = new JSONObject();
         try {
@@ -203,9 +198,8 @@ public class ClientProgramController {
     @Path("/examples/names")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getProgramExampleNames(JSONObject request) {
+    public Response getProgramExampleNames(@OraData DbSession dbSession, JSONObject request) {
         HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, request);
-        DbSession dbSession = this.sessionFactoryWrapper.getSession();
         ProgramProcessor programProcessor = new ProgramProcessor(dbSession, httpSessionState);
         JSONObject response = new JSONObject();
         try {
@@ -235,10 +229,9 @@ public class ClientProgramController {
     @Path("/entity")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getProgramEntity(JSONObject request) {
+    public Response getProgramEntity(@OraData DbSession dbSession, JSONObject request) {
         HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, request);
         JSONObject dataPart = UtilForREST.extractDataPart(request);
-        DbSession dbSession = this.sessionFactoryWrapper.getSession();
         ProgramProcessor programProcessor = new ProgramProcessor(dbSession, httpSessionState);
         UserProcessor up = new UserProcessor(dbSession, httpSessionState);
         JSONObject response = new JSONObject();
@@ -281,9 +274,8 @@ public class ClientProgramController {
     @Path("/gallery")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getGallery(JSONObject request) {
+    public Response getGallery(@OraData DbSession dbSession, JSONObject request) {
         HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, request);
-        DbSession dbSession = this.sessionFactoryWrapper.getSession();
         ProgramProcessor programProcessor = new ProgramProcessor(dbSession, httpSessionState);
         JSONObject response = new JSONObject();
         try {
@@ -371,10 +363,9 @@ public class ClientProgramController {
     @Path("/share")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response shareProgram(JSONObject request) {
+    public Response shareProgram(@OraData DbSession dbSession, JSONObject request) {
         HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, request);
         JSONObject dataPart = UtilForREST.extractDataPart(request);
-        DbSession dbSession = this.sessionFactoryWrapper.getSession();
         UserProcessor userProcessor = new UserProcessor(dbSession, httpSessionState);
         AccessRightProcessor accessRightProcessor = new AccessRightProcessor(dbSession, httpSessionState);
         JSONObject response = new JSONObject();
@@ -418,10 +409,9 @@ public class ClientProgramController {
     @Path("/delete")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response deleteProject(JSONObject request) {
+    public Response deleteProject(@OraData DbSession dbSession, JSONObject request) {
         HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, request);
         JSONObject dataPart = UtilForREST.extractDataPart(request);
-        DbSession dbSession = this.sessionFactoryWrapper.getSession();
         ProgramProcessor programProcessor = new ProgramProcessor(dbSession, httpSessionState);
         JSONObject response = new JSONObject();
         try {
@@ -461,10 +451,9 @@ public class ClientProgramController {
     @Path("/like")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response likeProject(JSONObject request) {
+    public Response likeProject(@OraData DbSession dbSession, JSONObject request) {
         HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, request);
         JSONObject dataPart = UtilForREST.extractDataPart(request);
-        DbSession dbSession = this.sessionFactoryWrapper.getSession();
         LikeProcessor lp = new LikeProcessor(dbSession, httpSessionState);
         JSONObject response = new JSONObject();
         try {
@@ -518,10 +507,9 @@ public class ClientProgramController {
     @Path("/share/delete")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response deleteProjectShare(JSONObject request) {
+    public Response deleteProjectShare(@OraData DbSession dbSession, JSONObject request) {
         HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, request);
         JSONObject dataPart = UtilForREST.extractDataPart(request);
-        DbSession dbSession = this.sessionFactoryWrapper.getSession();
         ProgramProcessor programProcessor = new ProgramProcessor(dbSession, httpSessionState);
         AccessRightProcessor accessRightProcessor = new AccessRightProcessor(dbSession, httpSessionState);
         UserProcessor userProcessor = new UserProcessor(dbSession, httpSessionState);
@@ -568,10 +556,9 @@ public class ClientProgramController {
     @Path("/share/create")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response createProjectShare(JSONObject request) {
+    public Response createProjectShare(@OraData DbSession dbSession, JSONObject request) {
         HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, request);
         JSONObject dataPart = UtilForREST.extractDataPart(request);
-        DbSession dbSession = this.sessionFactoryWrapper.getSession();
         ProgramProcessor programProcessor = new ProgramProcessor(dbSession, httpSessionState);
         AccessRightProcessor accessRightProcessor = new AccessRightProcessor(dbSession, httpSessionState);
         UserProcessor userProcessor = new UserProcessor(dbSession, httpSessionState);
@@ -651,10 +638,9 @@ public class ClientProgramController {
     @Path("/relations")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getProjectRelations(JSONObject request) {
+    public Response getProjectRelations(@OraData DbSession dbSession, JSONObject request) {
         HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, request);
         JSONObject dataPart = UtilForREST.extractDataPart(request);
-        DbSession dbSession = this.sessionFactoryWrapper.getSession();
         ProgramProcessor programProcessor = new ProgramProcessor(dbSession, httpSessionState);
         JSONObject response = new JSONObject();
         try {

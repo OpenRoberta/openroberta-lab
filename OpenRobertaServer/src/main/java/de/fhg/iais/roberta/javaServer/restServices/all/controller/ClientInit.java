@@ -29,9 +29,7 @@ import com.google.inject.Inject;
 import com.google.inject.name.Named;
 
 import de.fhg.iais.roberta.factory.IRobotFactory;
-import de.fhg.iais.roberta.javaServer.provider.OraData;
 import de.fhg.iais.roberta.main.IIpToCountry;
-import de.fhg.iais.roberta.persistence.util.DbSession;
 import de.fhg.iais.roberta.persistence.util.HttpSessionState;
 import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
 import de.fhg.iais.roberta.util.AliveData;
@@ -69,7 +67,7 @@ public class ClientInit {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response command(@OraData DbSession dbSession, JSONObject fullRequest, @Context HttpServletRequest httpRequest) throws JSONException //
+    public Response command(JSONObject fullRequest, @Context HttpServletRequest httpRequest) throws JSONException //
     {
         AliveData.rememberClientCall();
         new ClientLogger().log(ClientInit.LOG, fullRequest);
@@ -126,14 +124,8 @@ public class ClientInit {
             response.put("server", server);
             UtilForREST.addSuccessInfo(response, Key.INIT_SUCCESS);
             UtilForREST.addFrontendInfo(response, httpSessionState, this.brickCommunicator);
-            dbSession.commit();
         } catch ( Exception e ) {
-            dbSession.rollback();
             UtilForREST.addErrorInfo(response, Key.SERVER_ERROR);
-        } finally {
-            if ( dbSession != null ) {
-                dbSession.close();
-            }
         }
         MDC.clear();
         return Response.ok(response).build();

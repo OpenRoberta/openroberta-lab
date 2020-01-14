@@ -36,6 +36,7 @@ import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.javaServer.restServices.all.controller.ClientProgramController;
 import de.fhg.iais.roberta.javaServer.restServices.all.controller.ClientUser;
 import de.fhg.iais.roberta.main.ServerStarter;
+import de.fhg.iais.roberta.persistence.util.DbSession;
 import de.fhg.iais.roberta.persistence.util.DbSetup;
 import de.fhg.iais.roberta.persistence.util.HttpSessionState;
 import de.fhg.iais.roberta.persistence.util.SessionFactoryWrapper;
@@ -193,7 +194,7 @@ public class RoundTripIT {
         brickCommunicator = new RobotCommunicator();
 
         restUser = new ClientUser(brickCommunicator, serverProperties, null);
-        restProject = new ClientProgramController(sessionFactoryWrapper, serverProperties);
+        restProject = new ClientProgramController(serverProperties);
         Map<String, IRobotFactory> robotPlugins = new HashMap<>();
         loadPlugin(robotPlugins);
         s1 = HttpSessionState.initOnlyLegalForDebugging("", robotPlugins, serverProperties, 1);
@@ -222,7 +223,7 @@ public class RoundTripIT {
             blocklyProgram = Resources.toString(PerformanceUserIT.class.getResource(resourcePath + program + ".xml"), Charsets.UTF_8);
             JSONObject fullRequest = new JSONObject("{\"log\":[];\"data\":{\"cmd\":\"saveAsP\";\"name\":\"" + program + "\";\"timestamp\":0}}");
             fullRequest.getJSONObject("data").put("program", blocklyProgram);
-            response = restProject.updateProject(fullRequest);
+            response = restProject.updateProject(newDbSession(), fullRequest);
             JSONUtilForServer.assertEntityRc(response, "ok", Key.PROGRAM_SAVE_SUCCESS);
         }
     }
@@ -324,4 +325,7 @@ public class RoundTripIT {
         }
     }
 
+    private static DbSession newDbSession() {
+        return sessionFactoryWrapper.getSession();
+    }
 }

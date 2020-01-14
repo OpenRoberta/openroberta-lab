@@ -21,6 +21,7 @@ import de.fhg.iais.roberta.javaServer.restServices.all.controller.ClientConfigur
 import de.fhg.iais.roberta.javaServer.restServices.all.controller.ClientProgramController;
 import de.fhg.iais.roberta.javaServer.restServices.all.controller.ClientUser;
 import de.fhg.iais.roberta.main.ServerStarter;
+import de.fhg.iais.roberta.persistence.util.DbSession;
 import de.fhg.iais.roberta.persistence.util.DbSetup;
 import de.fhg.iais.roberta.persistence.util.HttpSessionState;
 import de.fhg.iais.roberta.persistence.util.SessionFactoryWrapper;
@@ -99,8 +100,8 @@ public class RestInterfaceTest {
         Session nativeSession = this.sessionFactoryWrapper.getNativeSession();
         this.memoryDbSetup = new DbSetup(nativeSession);
         this.memoryDbSetup.createEmptyDatabase();
-        this.restProject = new ClientProgramController(this.sessionFactoryWrapper, this.serverProperties);
-        this.restConfiguration = new ClientConfiguration(this.sessionFactoryWrapper, this.robotCommunicator);
+        this.restProject = new ClientProgramController(this.serverProperties);
+        this.restConfiguration = new ClientConfiguration(this.robotCommunicator);
         Map<String, IRobotFactory> robotPlugins = ServerStarter.configureRobotPlugins(robotCommunicator, serverProperties, EMPTY_STRING_LIST);
         this.sPid = HttpSessionState.initOnlyLegalForDebugging("pid", robotPlugins, serverProperties, 1);
         this.sMinscha = HttpSessionState.initOnlyLegalForDebugging("minscha", robotPlugins, serverProperties, 2);
@@ -772,13 +773,13 @@ public class RestInterfaceTest {
     private void restProgram(HttpSessionState httpSession, String jsonAsString, String result, Key msgOpt) throws JSONException, Exception {
         // TODO handle this in a better way
         if ( jsonAsString.contains("loadP") ) {
-            this.response = this.restProject.getProgram(JSONUtilForServer.mkD(httpSession.getInitToken(), jsonAsString));
+            this.response = this.restProject.getProgram(newDbSession(), JSONUtilForServer.mkD(httpSession.getInitToken(), jsonAsString));
         } else if ( jsonAsString.contains("shareP") ) {
-            this.response = this.restProject.shareProgram(JSONUtilForServer.mkD(httpSession.getInitToken(), jsonAsString));
+            this.response = this.restProject.shareProgram(newDbSession(), JSONUtilForServer.mkD(httpSession.getInitToken(), jsonAsString));
         } else if ( jsonAsString.contains("deleteP") ) {
-            this.response = this.restProject.deleteProject(JSONUtilForServer.mkD(httpSession.getInitToken(), jsonAsString));
+            this.response = this.restProject.deleteProject(newDbSession(), JSONUtilForServer.mkD(httpSession.getInitToken(), jsonAsString));
         } else if ( jsonAsString.contains("shareDelete") ) {
-            this.response = this.restProject.deleteProjectShare(JSONUtilForServer.mkD(httpSession.getInitToken(), jsonAsString));
+            this.response = this.restProject.deleteProjectShare(newDbSession(), JSONUtilForServer.mkD(httpSession.getInitToken(), jsonAsString));
         } else {
             throw new DbcException("Unexpected JSON command");
         }
@@ -816,7 +817,7 @@ public class RestInterfaceTest {
             jsonAsString += ";'configText':'" + confText + "'";
         }
         jsonAsString += ";}";
-        this.response = this.restProject.updateProject(JSONUtilForServer.mkD(httpSession.getInitToken(), jsonAsString));
+        this.response = this.restProject.updateProject(newDbSession(), JSONUtilForServer.mkD(httpSession.getInitToken(), jsonAsString));
         JSONUtilForServer.assertEntityRc(this.response, result, msgOpt);
     }
 
@@ -861,7 +862,7 @@ public class RestInterfaceTest {
             jsonAsString += ";'configText':'" + confText + "'";
         }
         jsonAsString += ";}";
-        this.response = this.restProject.updateProject(JSONUtilForServer.mkD(httpSession.getInitToken(), jsonAsString));
+        this.response = this.restProject.updateProject(newDbSession(), JSONUtilForServer.mkD(httpSession.getInitToken(), jsonAsString));
         JSONUtilForServer.assertEntityRc(this.response, result, msgOpt);
     }
 
@@ -886,7 +887,7 @@ public class RestInterfaceTest {
             jsonAsString += ";'configuration':'" + configText + "'";
         }
         jsonAsString += ";}";
-        this.response = this.restConfiguration.command(JSONUtilForServer.mkD(httpSession.getInitToken(), jsonAsString));
+        this.response = this.restConfiguration.command(newDbSession(), JSONUtilForServer.mkD(httpSession.getInitToken(), jsonAsString));
         JSONUtilForServer.assertEntityRc(this.response, result, msgOpt);
     }
 
@@ -904,12 +905,12 @@ public class RestInterfaceTest {
     private void saveConfig(HttpSessionState httpSession, int owner, String name, String conf, String result, Key msgOpt) throws Exception //
     {
         String jsonAsString = "{'cmd':'saveC';'name':'" + name + "';'configuration':'" + conf + "';}";
-        this.response = this.restConfiguration.command(JSONUtilForServer.mkD(httpSession.getInitToken(), jsonAsString));
+        this.response = this.restConfiguration.command(newDbSession(), JSONUtilForServer.mkD(httpSession.getInitToken(), jsonAsString));
         JSONUtilForServer.assertEntityRc(this.response, result, msgOpt);
     }
 
     private JSONArray assertProgramListingAsExpected(HttpSessionState httpSession, String expectedProgramNamesAsJson) throws Exception, JSONException {
-        this.response = this.restProject.getProgramNames(JSONUtilForServer.mkD(httpSession.getInitToken(), "{'cmd':'loadPN'}"));
+        this.response = this.restProject.getProgramNames(newDbSession(), JSONUtilForServer.mkD(httpSession.getInitToken(), "{'cmd':'loadPN'}"));
         JSONUtilForServer.assertEntityRc(this.response, "ok", Key.PROGRAM_GET_ALL_SUCCESS);
         JSONArray programListing = ((JSONObject) this.response.getEntity()).getJSONArray("programNames");
         JSONArray programNames = new JSONArray();
@@ -918,5 +919,9 @@ public class RestInterfaceTest {
         }
         JSONUtilForServer.assertJsonEquals(expectedProgramNamesAsJson, programNames, false);
         return programListing;
+    }
+
+    private DbSession newDbSession() {
+        return this.sessionFactoryWrapper.getSession();
     }
 }

@@ -14,12 +14,12 @@ import org.slf4j.LoggerFactory;
 
 import com.google.inject.Inject;
 
+import de.fhg.iais.roberta.javaServer.provider.OraData;
 import de.fhg.iais.roberta.persistence.ConfigurationProcessor;
 import de.fhg.iais.roberta.persistence.UserProcessor;
 import de.fhg.iais.roberta.persistence.bo.User;
 import de.fhg.iais.roberta.persistence.util.DbSession;
 import de.fhg.iais.roberta.persistence.util.HttpSessionState;
-import de.fhg.iais.roberta.persistence.util.SessionFactoryWrapper;
 import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
 import de.fhg.iais.roberta.util.Key;
 import de.fhg.iais.roberta.util.Util;
@@ -29,33 +29,30 @@ import de.fhg.iais.roberta.util.UtilForREST;
 public class ClientConfiguration {
     private static final Logger LOG = LoggerFactory.getLogger(ClientConfiguration.class);
 
-    private final SessionFactoryWrapper sessionFactoryWrapper;
     private final RobotCommunicator brickCommunicator;
 
     @Inject
-    public ClientConfiguration(SessionFactoryWrapper sessionFactoryWrapper, RobotCommunicator brickCommunicator) {
-        this.sessionFactoryWrapper = sessionFactoryWrapper;
+    public ClientConfiguration(RobotCommunicator brickCommunicator) {
         this.brickCommunicator = brickCommunicator;
     }
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response command(JSONObject fullRequest) throws Exception {
+    public Response command(@OraData DbSession dbSession, JSONObject fullRequest) throws Exception {
         HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, fullRequest);
         int userId = httpSessionState.getUserId();
-        DbSession dbSession = this.sessionFactoryWrapper.getSession();
         final String robotName =
             httpSessionState.getRobotFactory(httpSessionState.getRobotName()).getGroup() != ""
                 ? httpSessionState.getRobotFactory(httpSessionState.getRobotName()).getGroup()
                 : httpSessionState.getRobotName();
-        UserProcessor up = new UserProcessor(dbSession, httpSessionState);
         JSONObject response = new JSONObject();
         try {
             JSONObject request = fullRequest.getJSONObject("data");
             String cmd = request.getString("cmd");
             ClientConfiguration.LOG.info("command is: " + cmd);
             response.put("cmd", cmd);
+            UserProcessor up = new UserProcessor(dbSession, httpSessionState);
             ConfigurationProcessor cp = new ConfigurationProcessor(dbSession, httpSessionState);
             if ( cmd.equals("saveC") ) {
                 String configurationName = request.getString("name");

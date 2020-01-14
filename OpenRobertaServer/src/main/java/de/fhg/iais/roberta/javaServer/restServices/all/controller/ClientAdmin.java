@@ -17,8 +17,6 @@ import org.slf4j.LoggerFactory;
 import com.google.inject.Inject;
 
 import de.fhg.iais.roberta.factory.IRobotFactory;
-import de.fhg.iais.roberta.javaServer.provider.OraData;
-import de.fhg.iais.roberta.persistence.util.DbSession;
 import de.fhg.iais.roberta.persistence.util.HttpSessionState;
 import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
 import de.fhg.iais.roberta.util.Key;
@@ -53,7 +51,7 @@ public class ClientAdmin {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response command(@OraData DbSession dbSession, JSONObject fullRequest, @Context HttpHeaders httpHeaders) throws Exception //
+    public Response command(JSONObject fullRequest, @Context HttpHeaders httpHeaders) throws Exception //
     {
         HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, fullRequest);
         JSONObject response = new JSONObject();
@@ -174,16 +172,10 @@ public class ClientAdmin {
                 LOG.error("Invalid command: " + cmd);
                 UtilForREST.addErrorInfo(response, Key.COMMAND_INVALID);
             }
-            dbSession.commit();
         } catch ( Exception e ) {
-            dbSession.rollback();
             String errorTicketId = Util.getErrorTicketId();
             LOG.error("Exception. Error ticket: " + errorTicketId, e);
             UtilForREST.addErrorInfo(response, Key.SERVER_ERROR, errorTicketId);
-        } finally {
-            if ( dbSession != null ) {
-                dbSession.close();
-            }
         }
         return UtilForREST.responseWithFrontendInfo(response, httpSessionState, this.brickCommunicator);
     }
