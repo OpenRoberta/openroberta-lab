@@ -181,7 +181,8 @@ define(["require", "exports", "interpreter.aRobotBehaviour", "interpreter.consta
             if (this.hardwareState.actions.motors == undefined) {
                 this.hardwareState.actions.motors = {};
             }
-            if (direction != C.FOREWARD) {
+            // This is to handle negative values entered in the distance parameter in the drive block
+            if ((direction != C.FOREWARD && distance > 0) || (direction == C.FOREWARD && distance < 0)) {
                 speed *= -1;
             }
             this.hardwareState.actions.motors[C.MOTOR_LEFT] = speed;
@@ -204,7 +205,8 @@ define(["require", "exports", "interpreter.aRobotBehaviour", "interpreter.consta
             if (this.hardwareState.actions.motors == undefined) {
                 this.hardwareState.actions.motors = {};
             }
-            if (direction != C.FOREWARD) {
+            // This is to handle negative values entered in the distance parameter in the steer block
+            if ((direction != C.FOREWARD && distance > 0) || (direction == C.FOREWARD && distance < 0)) {
                 speedL *= -1;
                 speedR *= -1;
             }
