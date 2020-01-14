@@ -74,12 +74,18 @@ public class ServerData {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response tellUsageOfHttpAndDatabaseSessions() throws Exception {
-        long dbSessions = DbSession.getDebugSessionCounter();
-        int httpSessions = HttpSessionState.getNumberOfHttpSessionStates();
         JSONObject answer = new JSONObject();
-        answer.put("dbSessions", dbSessions);
-        answer.put("httpSessions", httpSessions);
+        answer.put("dbSessions", DbSession.getDebugSessionCounter());
+        answer.put("unusedDbSessions", DbSession.getUnusedSessionCounter());
+        answer.put("httpSessions", HttpSessionState.getNumberOfHttpSessionStates());
         return Response.ok(answer).build();
     }
 
+    @Path("/server/dbsessions")
+    @GET
+    @Produces(MediaType.TEXT_PLAIN)
+    public Response tellUsageOfDatabaseSessions() throws Exception {
+        String dbSessionData = DbSession.getFullInfo();
+        return Response.ok(dbSessionData).build();
+    }
 }

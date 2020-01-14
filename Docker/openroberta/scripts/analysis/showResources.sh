@@ -31,10 +31,12 @@ function showResourceLoop {
             printf "%s fd: %-10d\n" "$DATE" "$FD" >> $LOGFILE
             pstree $PID >> $LOGFILE
             if [ "$FD" -gt "$UPPERLIMIT" ]
-            then
-                RESPONSE=$(curl $SERVERURL/rest/data/server/resources 2>/dev/null)
+            then 
+                RESPONSE=$(curl $SERVERURL/rest/data/server/resources  2>/dev/null)
                 echo "$RESPONSE" >> $LOGFILE
-                RESPONSE=$(curl $SERVERURL/rest/data/robot/summary 2>/dev/null)
+                RESPONSE=$(curl $SERVERURL/rest/data/server/dbsessions 2>/dev/null)
+                echo "$RESPONSE" >> $LOGFILE
+                RESPONSE=$(curl $SERVERURL/rest/data/robot/summary     2>/dev/null)
                 echo "$RESPONSE" >> $LOGFILE
             fi
         fi
@@ -42,8 +44,8 @@ function showResourceLoop {
         DELTA=$(expr "$SECOND_NOW" - "$SECOND_OF_START")
         if [ "$DELTA" -gt 72000 ] # 24*60*60 - 4*60*60 == 90000 twenty hours are enough
         then
-            echo 'exit after a day of work' >> $LOGFILE
             echo 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx' >> $LOGFILE
+            echo "exit of pid $$ after a day of work" >> $LOGFILE
             exit 0
         fi
     done
