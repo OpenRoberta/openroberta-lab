@@ -193,14 +193,15 @@ export class RobotMbedBehaviour extends ARobotBehaviour {
         if ( this.hardwareState.actions.motors == undefined ) {
             this.hardwareState.actions.motors = {};
         }
-        if ( direction != C.FOREWARD ) {
+        // This is to handle negative values entered in the distance parameter in the drive block
+        if ((direction != C.FOREWARD && distance > 0) || (direction == C.FOREWARD && distance < 0)) {
             speed *= -1;
         }
         this.hardwareState.actions.motors[C.MOTOR_LEFT] = speed;
         this.hardwareState.actions.motors[C.MOTOR_RIGHT] = speed;
         this.hardwareState.motors[C.MOTOR_LEFT] = speed;
         this.hardwareState.motors[C.MOTOR_RIGHT] = speed;
-        let rotations = distance / ( C.WHEEL_DIAMETER * Math.PI );
+        let rotations = Math.abs(distance) / ( C.WHEEL_DIAMETER * Math.PI );
         let rotationPerSecond = C.MAX_ROTATION * Math.abs( speed ) / 100.0;
         if ( rotationPerSecond == 0.0 ) {
             return 0;
@@ -216,7 +217,8 @@ export class RobotMbedBehaviour extends ARobotBehaviour {
         if ( this.hardwareState.actions.motors == undefined ) {
             this.hardwareState.actions.motors = {};
         }
-        if ( direction != C.FOREWARD ) {
+        // This is to handle negative values entered in the distance parameter in the steer block
+        if ((direction != C.FOREWARD && distance > 0) || (direction == C.FOREWARD && distance < 0)) {
             speedL *= -1;
             speedR *= -1;
         }
@@ -225,7 +227,7 @@ export class RobotMbedBehaviour extends ARobotBehaviour {
         this.hardwareState.motors[C.MOTOR_LEFT] = speedL;
         this.hardwareState.motors[C.MOTOR_RIGHT] = speedR;
 
-        let rotations = distance / ( C.WHEEL_DIAMETER * Math.PI );
+        let rotations = Math.abs(distance) / ( C.WHEEL_DIAMETER * Math.PI );
         let avgSpeed = 0.5 * ( Math.abs( speedL ) + Math.abs( speedR ) )
         let rotationPerSecond = C.MAX_ROTATION * avgSpeed / 100.0;
         if ( rotationPerSecond == 0.0 ) {
@@ -242,8 +244,12 @@ export class RobotMbedBehaviour extends ARobotBehaviour {
         if ( this.hardwareState.actions.motors == undefined ) {
             this.hardwareState.actions.motors = {};
         }
+        // This is to handle negative values entered in the degree parameter in the turn block 
+        if((direction == C.LEFT && angle < 0)|| (direction == C.RIGHT && angle < 0)){
+            speed *= -1;
+        }
         this.setTurnSpeed( speed, direction );
-        let rotations = C.TURN_RATIO * ( angle / 720. );
+        let rotations = C.TURN_RATIO * ( Math.abs(angle) / 720. );
         let rotationPerSecond = C.MAX_ROTATION * Math.abs( speed ) / 100.0;
         if ( rotationPerSecond == 0.0 ) {
             return 0;
