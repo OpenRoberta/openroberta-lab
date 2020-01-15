@@ -356,7 +356,7 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'message', 'progList.model
     /**
      * Load the program and configuration that was selected in program list
      */
-    function loadFromListing(program) {
+    function loadFromListing(program, opt_resetView) {
         var right = 'none';
         LOG.info('loadFromList ' + program[0]);
         PROGRAM.loadProgramFromListing(program[0], program[1], program[3], function(result) {
@@ -366,7 +366,7 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'message', 'progList.model
                 if (alien) {
                     result.programShared = 'READ';
                 }
-                if (program[2].sharedFrom) {
+                if (!opt_resetView && program[2].sharedFrom) {
                     var right = program[2].sharedFrom;
                     result.programShared = right;
                 }
@@ -386,6 +386,12 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'message', 'progList.model
                     GUISTATE_C.setConfigurationName(result.configName);
                     GUISTATE_C.setConfigurationXML(result.configText);
                 }
+
+                if(opt_resetView){
+                    CONFIGURATION_C.reloadConf();
+                    PROGRAM_C.reloadProgram();
+                }
+
                 $('#tabProgram').one('shown.bs.tab', function(e) {
                     CONFIGURATION_C.reloadConf();
                     PROGRAM_C.reloadProgram();
@@ -393,7 +399,13 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'message', 'progList.model
                 $('#tabProgram').trigger('click');
 
             }
-            MSG.displayInformation(result, "", result.message);
+            if(opt_resetView) {
+                MSG.displayInformationNoClear(result, "", result.message);
+            }
+            else{
+                MSG.displayInformation(result, "", result.message);
+            }
         });
     }
+    exports.loadFromListing = loadFromListing;
 });

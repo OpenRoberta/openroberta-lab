@@ -119,4 +119,30 @@ define([ 'exports', 'log', 'jquery', 'blocks-msg' ], function(exports, LOG, $, B
         }
     }
     exports.displayInformation = displayInformation;
+
+    /**
+     * Display information without closing popups (Used for changing
+     * robots in multi-sim mode)
+     *
+     * @param {result}
+     *            Response of a REST-call.
+     * @param {successMessage}
+     *            Toast-message to be displayed if REST-call was ok.
+     * @param {result}
+     *            Popup-message to be displayed if REST-call failed.
+     * @param {messageParam}
+     *            Parameter to be used in the message text.
+     */
+    function displayInformationNoClear(result, successMessage, errorMessage, messageParam, opt_robot) {
+        if (result.rc === "ok") {
+            displayMessage(successMessage, "TOAST", messageParam, false, opt_robot);
+        } else {
+            if (result.parameters === undefined) {
+                displayMessage(errorMessage, "POPUP", messageParam, false, opt_robot);
+            } else {
+                displayMessage(errorMessage, "POPUP", result.parameters, false, opt_robot);
+            }
+        }
+    }
+    exports.displayInformationNoClear = displayInformationNoClear;
 });

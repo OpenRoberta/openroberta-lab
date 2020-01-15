@@ -8,9 +8,9 @@
  */
 
 define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 'simulation.constants', 'util', 'program.controller',
-    'interpreter.interpreter', 'interpreter.robotMbedBehaviour', 'volume-meter', 'simulation.constants', 'jquery'
+    'interpreter.interpreter', 'interpreter.robotMbedBehaviour', 'volume-meter', 'guiState.controller', 'progList.controller', 'simulation.constants', 'jquery'
 ], function(exports, Scene, SIMATH, ROBERTA_PROGRAM, CONST, UTIL, PROGRAM_C,
-    SIM_I, MBED_R, Volume, C, $) {
+    SIM_I, MBED_R, Volume, GUISTATE_C, ProgList, C, $) {
 
     var interpreters;
     var scene;
@@ -633,7 +633,11 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
                 var boolDown = (dx * dx + dy * dy < robots[i].mouse.r * robots[i].mouse.r);
                 if (boolDown) {
                     $("#svg" + robotIndex).hide();
-                    robotIndex = i;
+                    var oldRobotIndex = robotIndex;
+                    robotIndex = i; //Place that double click changes
+                    if(robotIndex != oldRobotIndex){
+                        ProgList.loadFromListing([robots[robotIndex].savedName, GUISTATE_C.getUserAccountName(), robots[robotIndex].type, GUISTATE_C.getUserAccountName()], true);
+                    }
                     $("#svg" + robotIndex).show();
                     $("#robotIndex")[0][i].selected = true;
                     break;
@@ -839,7 +843,11 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
         });
         $("#robotIndex").change(function(e) {
             $("#svg" + robotIndex).hide();
-            robotIndex = e.target.selectedIndex;
+            var oldRobotIndex = robotIndex;
+            robotIndex = e.target.selectedIndex; // Place that changing from sensor view changes
+            if(numRobots > 1 && robotIndex != oldRobotIndex){
+                ProgList.loadFromListing([robots[robotIndex].savedName, GUISTATE_C.getUserAccountName(), robots[robotIndex].type, GUISTATE_C.getUserAccountName()], true);
+            }
             $("#svg" + robotIndex).show();
         }).change();
     }
