@@ -38,6 +38,7 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'message', 'progList.model
                 title : "<span lkey='Blockly.Msg.DATATABLE_CREATED_BY'>" + (Blockly.Msg.DATATABLE_CREATED_BY || "Erzeugt von") + "</span>",
                 sortable : true,
             }, {
+                events : eventsRelations,
                 title : "<span class='typcn typcn-flow-merge'></span>",
                 sortable : true,
                 sorter : sortRelations,
@@ -190,7 +191,15 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'message', 'progList.model
             $('#programNameTable').find('[rel="tooltip"]').tooltip();
         }
     }
-
+    
+    var eventsRelations = {
+        'click .showRelations' : function(e, value, row, index) {
+            e.stopPropagation();
+            var collapseName = '.relation' + index;
+            $(collapseName).collapse('toggle');
+        }
+    }
+    
     var eventsDeleteShareLoad = {
         'click .delete' : function(e, value, row, index) {
             e.stopPropagation();
