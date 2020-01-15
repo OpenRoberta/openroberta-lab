@@ -108,10 +108,10 @@ public abstract class AbstractJavaVisitor extends AbstractLanguageVisitor {
                 this.sb.append("(float) Math.PI");
                 break;
             case E:
-                this.sb.append("Math.E");
+                this.sb.append("(float) Math.E");
                 break;
             case GOLDEN_RATIO:
-                this.sb.append("((1.0 + Math.sqrt(5.0)) / 2.0)");
+                this.sb.append("(float) ((1.0 + Math.sqrt(5.0)) / 2.0)");
                 break;
             case SQRT2:
                 this.sb.append("(float) Math.sqrt(2)");
@@ -408,7 +408,7 @@ public abstract class AbstractJavaVisitor extends AbstractLanguageVisitor {
 
     @Override
     public Void visitMathRandomFloatFunct(MathRandomFloatFunct<Void> mathRandomFloatFunct) {
-        this.sb.append("Math.random()");
+        this.sb.append("(float) Math.random()");
         return null;
     }
 
@@ -425,7 +425,7 @@ public abstract class AbstractJavaVisitor extends AbstractLanguageVisitor {
 
     @Override
     public Void visitMathPowerFunct(MathPowerFunct<Void> mathPowerFunct) {
-        this.sb.append("Math.pow(");
+        this.sb.append("(float) Math.pow(");
         super.visitMathPowerFunct(mathPowerFunct);
         return null;
     }
