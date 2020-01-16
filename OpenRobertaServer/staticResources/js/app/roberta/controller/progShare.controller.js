@@ -232,11 +232,11 @@ define([ 'require', 'exports', 'log', 'util', 'message', 'comm', 'guiState.contr
                     if (result.rc === 'ok') {
                         MSG.displayMessage(result.message, "TOAST", sharedWith);
                         LOG.info("share program " + progName + " with '" + sharedWith + " having right '" + right + "'");                      
+                        $('#progList').find('button[name="refresh"]').trigger('click');                    
                     }
                 });
             }
         }
-        $('#progList').find('button[name="refresh"]').trigger('click');
         $('#show-relations').modal("hide");
     }
 
@@ -327,6 +327,7 @@ define([ 'require', 'exports', 'log', 'util', 'message', 'comm', 'guiState.contr
                             }
                         });
                     }
+                    MSG.displayMessage(result.message, "TOAST", values.shareWithInput);
                     LOG.info("share program " + row.name + " with '" + values.shareWithInput + " having right '" + right + "'");
                     $('#progList').find('button[name="refresh"]').trigger('click');
                 } else {
