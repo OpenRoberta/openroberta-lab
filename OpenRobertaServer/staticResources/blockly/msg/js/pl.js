@@ -612,6 +612,7 @@ Blockly.Msg.MENU_CREATE_LINK = "utwórz łącze programu...";
 Blockly.Msg.MENU_DELETE_USER = "usuń użytkownika ...";
 Blockly.Msg.MENU_EDIT = "edycja";
 Blockly.Msg.MENU_EDIT_TOOLTIP = "edycja";
+Blockly.Msg.MENU_ERROR_SESSION = "This browser tab is not valid anymore, because the openroberta server was restarted.<br><br>You may edit or export your program, but it is impossible to compile or send it to your device. Please click on the »Refresh« <font size=4>↻</font> button!";  // untranslated
 Blockly.Msg.MENU_EV3 = "Przygotowanie robota";
 Blockly.Msg.MENU_EXPERT = "exprert";
 Blockly.Msg.MENU_EXPORT_PROG = "exprotuj program";
@@ -939,8 +940,8 @@ Blockly.Msg.NXTBRICK_TOOLTIP = "Reprezentuje bloki NXT z podłączonymi urządze
 Blockly.Msg.OFF = "wyłącz";
 Blockly.Msg.OLDER_THEN_14 = "Mam 16 lat lub więcej!";
 Blockly.Msg.ON = "włącz";
-Blockly.Msg.ORA_ACCESS_RIGHT_CHANGED = "The shared right is updated!";  // untranslated
-Blockly.Msg.ORA_ACCESS_RIGHT_DELETED = "The shared right is deleted!";  // untranslated
+Blockly.Msg.ORA_ACCESS_RIGHT_CHANGED = "The shared right for user »$« is updated!";  // untranslated
+Blockly.Msg.ORA_ACCESS_RIGHT_DELETED = "The shared right for user »$« is deleted!";  // untranslated
 Blockly.Msg.ORA_ACCOUNT_NOT_ACTIVATED_TO_SHARE = "Nie masz uprawnień do udostępniania. Prosimy, aktywuj swoje konto! <br><a href=\"https://www.roberta-home.de/index.php?id=138&L=1\" target=\"_blank\">Więcej informacji...</a>";
 Blockly.Msg.ORA_COMMAND_INVALID = "Błęde polecenie Javascript";
 Blockly.Msg.ORA_COMPILERWORKFLOW_ERROR_CONFIGURATION_NOT_FOUND = "Na serwerze nIe znaleziono konfiguracji robota";

@@ -612,6 +612,7 @@ Blockly.Msg.MENU_CREATE_LINK = "create program link ...";  // untranslated
 Blockly.Msg.MENU_DELETE_USER = "erabiltzailea ezabatu ...";
 Blockly.Msg.MENU_EDIT = "editatu";
 Blockly.Msg.MENU_EDIT_TOOLTIP = "editatu";
+Blockly.Msg.MENU_ERROR_SESSION = "This browser tab is not valid anymore, because the openroberta server was restarted.<br><br>You may edit or export your program, but it is impossible to compile or send it to your device. Please click on the »Refresh« <font size=4>↻</font> button!";  // untranslated
 Blockly.Msg.MENU_EV3 = "EV3-aren antolaketa";
 Blockly.Msg.MENU_EXPERT = "aditua";
 Blockly.Msg.MENU_EXPORT_PROG = "programa esportatu";

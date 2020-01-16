@@ -612,6 +612,7 @@ Blockly.Msg.MENU_CREATE_LINK = "crează o llegătură către program ...";
 Blockly.Msg.MENU_DELETE_USER = "sterge utilizator ...";
 Blockly.Msg.MENU_EDIT = "editează";
 Blockly.Msg.MENU_EDIT_TOOLTIP = "editează";
+Blockly.Msg.MENU_ERROR_SESSION = "This browser tab is not valid anymore, because the openroberta server was restarted.<br><br>You may edit or export your program, but it is impossible to compile or send it to your device. Please click on the »Refresh« <font size=4>↻</font> button!";  // untranslated
 Blockly.Msg.MENU_EV3 = "pregătește robotul";
 Blockly.Msg.MENU_EXPERT = "expert";
 Blockly.Msg.MENU_EXPORT_PROG = "exportă programul";

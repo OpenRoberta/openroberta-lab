@@ -3,8 +3,7 @@ package de.fhg.iais.roberta.util;
 public enum Key {
     SERVER_ERROR( false ),
     COMMAND_INVALID( false ),
-    INIT_FAIL_MULTIPLE_FRONTENDS_ONE_HTTPSESSION( false ),
-    INIT_FAIL_HTTPSESSION_EXPECTED_BUT_NOT_FOUND( false ),
+    INIT_FAIL_INVALID_INIT_TOKEN( false ),
     INIT_FAIL_PING_ERROR( false ),
     INIT_SUCCESS( true ),
     TOKEN_SET_SUCCESS( true ),

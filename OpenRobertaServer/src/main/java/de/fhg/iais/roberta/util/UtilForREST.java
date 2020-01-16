@@ -75,12 +75,12 @@ public class UtilForREST {
         Key errorKey;
         if ( tokenSetOnInit == null ) {
             errorMsgIfError = "frontend request has no tokenSetOnInit";
-            errorKey = Key.INIT_FAIL_HTTPSESSION_EXPECTED_BUT_NOT_FOUND;
+            errorKey = Key.INIT_FAIL_INVALID_INIT_TOKEN;
         } else {
             httpSessionState = HttpSessionState.initToken2HttpSessionstate.get(tokenSetOnInit);
             if ( httpSessionState == null ) {
                 errorMsgIfError = "initToken is not initialized in the session";
-                errorKey = Key.INIT_FAIL_MULTIPLE_FRONTENDS_ONE_HTTPSESSION;
+                errorKey = Key.INIT_FAIL_INVALID_INIT_TOKEN;
             } else {
                 errorMsgIfError = null;
                 errorKey = null;

@@ -612,6 +612,7 @@ Blockly.Msg.MENU_CREATE_LINK = "erstelle Programmlink  ...";
 Blockly.Msg.MENU_DELETE_USER = "Benutzer löschen ...";
 Blockly.Msg.MENU_EDIT = "Bearbeiten";
 Blockly.Msg.MENU_EDIT_TOOLTIP = "Bearbeiten";
+Blockly.Msg.MENU_ERROR_SESSION = "Dieser Browsertab ist nicht mehr gültig weil der Openroberta-Server neu gestartet wurde.<br><br>Du kannst dein Programm zwar noch verändern oder exportieren, aber nicht mehr übersetzen oder auf dein Gerät übertragen. Bitte lade diese Seite neu indem du auf »Aktualisieren« <font size=4>↻</font> klickst!";
 Blockly.Msg.MENU_EV3 = "Roboter vorbereiten";
 Blockly.Msg.MENU_EXPERT = "Experte";
 Blockly.Msg.MENU_EXPORT_PROG = "exportiere Programm";
@@ -939,8 +940,8 @@ Blockly.Msg.NXTBRICK_TOOLTIP = "Block für den NXT Stein mit den angeschlossenen
 Blockly.Msg.OFF = "aus";
 Blockly.Msg.OLDER_THEN_14 = "Ich bin 16 oder älter!";
 Blockly.Msg.ON = "an";
-Blockly.Msg.ORA_ACCESS_RIGHT_CHANGED = "Das Programm wurde geteilt.";
-Blockly.Msg.ORA_ACCESS_RIGHT_DELETED = "Das Programm wird nicht mehr geteilt!";
+Blockly.Msg.ORA_ACCESS_RIGHT_CHANGED = "Das Programm wurde mit »$« geteilt.";
+Blockly.Msg.ORA_ACCESS_RIGHT_DELETED = "Das Programm wird nun nicht mehr mit »$« geteilt!";
 Blockly.Msg.ORA_ACCOUNT_NOT_ACTIVATED_TO_SHARE = "Du kannst Programme nur teilen oder in die Gallerie hochladen, wenn dein Benutzerkonto verifiziert wurde.<br><a href='https://www.roberta-home.de/index.php?id=138' target='_blank'>Mehr Infos ...</a>";
 Blockly.Msg.ORA_COMMAND_INVALID = "Dein Konfigurationsname ist vom System reserviert. Wähle bitte einen anderen Namen und versuche es noch einmal!";
 Blockly.Msg.ORA_COMPILERWORKFLOW_ERROR_CONFIGURATION_NOT_FOUND = "Der Server konnte die Roboterkonfiguration nicht finden.";

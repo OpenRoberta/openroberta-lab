@@ -612,6 +612,7 @@ Blockly.Msg.MENU_CREATE_LINK = "創建程式連結 ...";
 Blockly.Msg.MENU_DELETE_USER = "刪除使用者 ...";
 Blockly.Msg.MENU_EDIT = "編輯";
 Blockly.Msg.MENU_EDIT_TOOLTIP = "編輯";
+Blockly.Msg.MENU_ERROR_SESSION = "This browser tab is not valid anymore, because the openroberta server was restarted.<br><br>You may edit or export your program, but it is impossible to compile or send it to your device. Please click on the »Refresh« <font size=4>↻</font> button!";  // untranslated
 Blockly.Msg.MENU_EV3 = "機器人準備";
 Blockly.Msg.MENU_EXPERT = "專家";
 Blockly.Msg.MENU_EXPORT_PROG = "導出程式";

@@ -2257,7 +2257,6 @@ td[lkey="Blockly.Msg.POPUP_DOWNLOAD_STEP_A_SENSEBOX"] {
 
 #codeDiv .codeflask__lines {
     background-color: #EEE;
-    padding-top: 12px !important;
     z-index: 5 !important;
 }
 

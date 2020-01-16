@@ -59,10 +59,6 @@ define([ 'exports', 'jquery', 'wrap', 'log' ], function(exports, $, WRAP, LOG) {
      * POST a JSON object as ENTITY and expect a JSON object as response.
      */
     function json(url, data, successFn, message) {
-        if (!frontendSessionValid) {
-            LOG.error('The frontend session is invalid. No REST call to the server allowed');
-            return;
-        }
         var log = LOG.reportToComm();
         var load = {
             log : log,
@@ -70,16 +66,10 @@ define([ 'exports', 'jquery', 'wrap', 'log' ], function(exports, $, WRAP, LOG) {
             initToken : initToken
         };
         function successFnWrapper(response) {
-            if (response !== undefined && response.message !== undefined && response.message.indexOf("ORA_INIT_FAIL_") >= 0) {
+            if (response !== undefined && response.message !== undefined && response.message === "ORA_INIT_FAIL_INVALID_INIT_TOKEN") {
                 frontendSessionValid = false;
-                var message;
-                if (navigator.language.indexOf("de") > -1) {
-                    message = "Dieser Browsertab ist nicht mehr gültig, z. B. \n- weil du einen weiteren Browsertab geöffnet hast\n- oder länger als 2 Stunden nicht mehr mit dem Browser gearbeitet hast\n- oder der Openroberta-Server neu gestartet wurde.\n\nDu kannst dein Programm zwar noch verändern oder exportieren, aber nicht mehr übersetzen oder auf dein Gerät übertragen. Bitte öffne einen neuen Browsertab oder wechsele zu dem neuen!";
-                } else {
-                    message = "This browser tab is not valid anymore, e.g.\n- because you have opened another browser tab,\n- or you didn't use your browser for more than 2 hours,\n- or the openroberta server was restarted .\n\nYou may edit or export your program, but it is impossible to compile or send it to your device. Better open a new browser tab or switch to the new one!";
-                }
-                alert(message);
-             } else {
+                showServerError("INIT_TOKEN");
+            } else {
                 successFn(response);
             }
         }
@@ -116,8 +106,12 @@ define([ 'exports', 'jquery', 'wrap', 'log' ], function(exports, $, WRAP, LOG) {
      * SuccessFn is optional.
      */
     function ping(successFn) {
-        return json('/ping', {}, successFn === undefined ? function() {
-        } : successFn);
+        if (!frontendSessionValid) {
+            return;
+        } else {
+            return json('/ping', {}, successFn === undefined ? function() {
+            } : successFn);
+        }
     }
     exports.ping = ping;
 
@@ -182,4 +176,33 @@ define([ 'exports', 'jquery', 'wrap', 'log' ], function(exports, $, WRAP, LOG) {
     }
 
     exports.sendProgramHexToAgent = sendProgramHexToAgent;
+
+    function showServerError(type) {
+        type += navigator.language.indexOf("de") > -1 ? "_DE" : "_EN";
+        var message;
+        switch (type) {
+        case "INIT_TOKEN_DE":
+            message = "Dieser Browsertab ist nicht mehr gültig weil der Openroberta-Server neu gestartet wurde.\n\nDu kannst dein Programm zwar noch verändern oder exportieren, aber nicht mehr übersetzen oder auf dein Gerät übertragen. Bitte lade diese Seite neu indem du auf »Aktualisieren« ↻ klickst!";
+            break;
+        case "INIT_TOKEN_EN":
+            message = "This browser tab is not valid anymore, because the openroberta server was restarted.\n\nYou may edit or export your program, but it is impossible to compile or send it to your device. Please click on the »Refresh« ↻ button!";
+            break;
+        case "CONNECTION_DE":
+            message = "Deine Verbindung zum Open Roberta Server ist langsam oder unterbrochen. Du kannst dein Programm exportieren, um es zu sichern.";
+            break;
+        case "CONNECTION_EN":
+            message = "Your connection to the Open Roberta Server is slow or broken. To avoid data loss you may export your program.";
+            break;
+        case "FRONTEND_DE":
+            message = "Dein Browser hat ein ungültiges Kommando geschickt. Bitte lösche den Browser-Cache!";
+            break;
+        case "FRONTEND_EN":
+            message = "Your browser has sent an invalid command, please clear your browser cache!";
+            break;
+        default:
+            message = "Connection error! Please clear your browser cache!"
+        }
+        alert(message);
+    }
+    exports.showServerError = showServerError;
 });

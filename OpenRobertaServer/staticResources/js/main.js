@@ -30,7 +30,7 @@ require.config({
         'guiState.model' : '../app/roberta/models/guiState.model',
         'import.controller' : '../app/roberta/controller/import.controller',
         'language.controller' : '../app/roberta/controller/language.controller',
-        'legal.controller' : '../app/roberta/controller/legal.controller',      
+        'legal.controller' : '../app/roberta/controller/legal.controller',
         'logList.controller' : '../app/roberta/controller/logList.controller',
         'logList.model' : '../app/roberta/models/logList.model',
         'menu.controller' : '../app/roberta/controller/menu.controller',
@@ -57,7 +57,7 @@ require.config({
         'socket.controller' : '../app/roberta/controller/socket.controller',
         'webview.controller' : '../app/roberta/controller/webview.controller',
         'wedo.model' : '../app/roberta/models/wedo.model',
-        
+
         'sourceCodeEditor.controller' : '../app/roberta/controller/sourceCodeEditor.controller',
 
         'simulation.constants' : '../app/simulation/simulationLogic/constants',
@@ -124,10 +124,11 @@ require.config({
 });
 
 require([ 'require', 'wrap', 'log', 'jquery', 'jquery-cookie', 'guiState.controller', 'progList.controller', 'logList.controller', 'confList.controller',
-        'progDelete.controller', 'confDelete.controller', 'progShare.controller', 'menu.controller', 'multSim.controller',
-        'user.controller', 'robot.controller', 'program.controller', 'progSim.controller', 'progCode.controller', 'progDelete.controller',
-        'progHelp.controller', 'legal.controller', 'progInfo.controller', 'progRun.controller', 'configuration.controller', 'language.controller', 'socket.controller',
-        'progTutorial.controller', 'tutorialList.controller', 'volume-meter', 'user.model', 'webview.controller', 'sourceCodeEditor.controller', 'codeflask' ], function(require) {
+        'progDelete.controller', 'confDelete.controller', 'progShare.controller', 'menu.controller', 'multSim.controller', 'user.controller',
+        'robot.controller', 'program.controller', 'progSim.controller', 'progCode.controller', 'progDelete.controller', 'progHelp.controller',
+        'legal.controller', 'progInfo.controller', 'progRun.controller', 'configuration.controller', 'language.controller', 'socket.controller',
+        'progTutorial.controller', 'tutorialList.controller', 'volume-meter', 'user.model', 'webview.controller', 'sourceCodeEditor.controller', 'codeflask' ], function(
+        require) {
     $ = require('jquery', 'jquery-cookie');
     WRAP = require('wrap');
     LOG = require('log');
@@ -144,7 +145,7 @@ require([ 'require', 'wrap', 'log', 'jquery', 'jquery-cookie', 'guiState.control
     progListController = require('progList.controller');
     galleryListController = require('galleryList.controller');
     tutorialListController = require('tutorialList.controller');
-    legalController = require('legal.controller');    
+    legalController = require('legal.controller');
     programController = require('program.controller');
     progHelpController = require('progHelp.controller');
     progInfoController = require('progInfo.controller');
@@ -201,7 +202,7 @@ function init() {
 
         // immediately remove old cookies TODO remove this and jquery-cookie after 30 days
         var cookies = $.cookie();
-        for (var cookie in cookies) {
+        for ( var cookie in cookies) {
             if (cookies.hasOwnProperty(cookie)) {
                 $.removeCookie(cookie);
             }
@@ -231,21 +232,11 @@ function handleServerErrors(jqXHR) {
     if (this.url !== "/rest/ping" || COMM.errorNum > ALLOWED_PING_NUM) {
         guiStateController.setPing(false);
         if (jqXHR.status && jqXHR.status < 500) {
-            $('#message').attr('lkey', Blockly.Msg.ORA_COMMAND_INVALID);
-            $('#message').html(Blockly.Msg.ORA_COMMAND_INVALID);
+            COMM.showServerError("FRONTEND");
         } else {
-            $('#message').attr('lkey', Blockly.Msg.SERVER_NOT_AVAILABLE);
-            $('#message').html(Blockly.Msg.SERVER_NOT_AVAILABLE);
+            COMM.showServerError("CONNECTION");
         }
-        $('#show-message').modal({
-            backdrop : 'static',
-            keyboard : false
-        })
-        $('#show-message :button').hide();
-        $('#show-message').one('hidden.bs.modal', function(e) {
-            // $("#show-message").modal("show");
-            guiStateController.setPing(true);
-        });
-        $("#show-message").modal("show");
+        guiStateController.setPing(true);
+
     }
 }

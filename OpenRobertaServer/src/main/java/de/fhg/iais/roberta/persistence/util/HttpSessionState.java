@@ -157,37 +157,6 @@ public class HttpSessionState implements Serializable {
         return tokenSetOnInit;
     }
 
-    /**
-     * validate the init-token from the frontend-request and the init-token from the state stored in this object.<br>
-     * If an error is detected a {@linkplain DbcKeyException} is thrown.<br>
-     * <i>Only for debugging:</i> if the init-token in this object is set to "", all checks are disabled. This should <i>NEVER</i> happen, when a real server is
-     * started
-     *
-     * @param initToken the init token from the frontend-request
-     */
-    public void validateInitToken(String initToken) {
-        if ( "".equals(tokenSetOnInit) ) {
-            return; // DEBUG session
-        }
-        String errorMsgIfError;
-        Key errorKey;
-        if ( initToken == null ) {
-            errorMsgIfError = "frontend request has no initToken";
-            errorKey = Key.INIT_FAIL_HTTPSESSION_EXPECTED_BUT_NOT_FOUND;
-        } else if ( !getInitToken().equals(initToken) ) {
-            errorMsgIfError = "initToken from frontend and from session are different";
-            errorKey = Key.INIT_FAIL_MULTIPLE_FRONTENDS_ONE_HTTPSESSION;
-        } else {
-            errorMsgIfError = null;
-            errorKey = null;
-        }
-        if ( errorMsgIfError != null || errorKey != null ) {
-            LOG.error(errorMsgIfError);
-            throw new DbcKeyException(errorMsgIfError, errorKey, null);
-        }
-
-    }
-
     public String getToken() {
         return this.token;
     }
