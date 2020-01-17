@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2020-01-17 11:29:50.035939",
+		"lastupdated": "2020-01-17 15:29:56.700838",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -1608,7 +1608,7 @@
 	"CLEAR": "clear",
 	"ACCELEROMETER_TOOLTIP": "Represents an accelerometer.",
 	"POPUP_CREATE_BOOKMARK": "Create a bookmark now to save your robot selection!",
-	"POPUP_BACKGROUND_STORAGE": "The Open Roberta Lab can automatically load your simulation background on your next visits. For this purpose, we will save data in the Local Storage on your computer. <a href=“https://www.roberta-home.de/en/privacy-policy-open-roberta-lab/” target=“_blank“>More information in our privacy policy.</a>",
+	"POPUP_BACKGROUND_STORAGE": "The Open Roberta Lab can automatically load your simulation background on your next visits. For this purpose, we will save data in the Local Storage on your computer. <a href='https://www.roberta-home.de/en/privacy-policy-open-roberta-lab/' target='_blank'>More information in our privacy policy.</a>",
 	"GPS_TOOLTIP": "Represents a GPS receiver.",
 	"SENSOR_GPS_SENSEBOX": "GPS receiver",
 	"SENSOR_GPS_LATITUDE_GETSAMPLE_TOOLTIP_SENSEBOX": "Returns the latitude in degree.",

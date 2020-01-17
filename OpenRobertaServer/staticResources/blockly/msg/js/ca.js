@@ -1070,7 +1070,7 @@ Blockly.Msg.POPUP_ABOUT_TEXT_DEV = "Open Roberta Lab es una plataforma de progra
 Blockly.Msg.POPUP_ABOUT_TEXT_GOOG = "Open Roberta se inició en colaboración con Google Germany para reducir las barreras para alumnos, profesores y escuelas que usan robots para educación. Open Roberta esta financiada por Google.org (2 14 - 2.15) con 1M de Euros.</a>";
 Blockly.Msg.POPUP_AGE = "Age";  // untranslated
 Blockly.Msg.POPUP_ATTENTION = "Atención";
-Blockly.Msg.POPUP_BACKGROUND_STORAGE = "The Open Roberta Lab can automatically load your simulation background on your next visits. For this purpose, we will save data in the Local Storage on your computer. <a href=“https://www.roberta-home.de/en/privacy-policy-open-roberta-lab/” target=“_blank“>More information in our privacy policy.</a>";  // untranslated
+Blockly.Msg.POPUP_BACKGROUND_STORAGE = "The Open Roberta Lab can automatically load your simulation background on your next visits. For this purpose, we will save data in the Local Storage on your computer. <a href='https://www.roberta-home.de/en/privacy-policy-open-roberta-lab/' target='_blank'>More information in our privacy policy.</a>";  // untranslated
 Blockly.Msg.POPUP_BEFOREUNLOAD = "Tienes cambios sin guardar en tu programa o configuración. Accede a tu cuenta y guarda tu programa o configuración.";
 Blockly.Msg.POPUP_BEFOREUNLOAD_LOGGEDIN = "Tienes cambios sin guardar en tu programa o configuración.";
 Blockly.Msg.POPUP_CANCEL = "Cancelar";

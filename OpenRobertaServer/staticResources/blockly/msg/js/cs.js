@@ -1070,7 +1070,7 @@ Blockly.Msg.POPUP_ABOUT_TEXT_DEV = "Open Roberta Lab je open source vývojová p
 Blockly.Msg.POPUP_ABOUT_TEXT_GOOG = "Open Roberta byla založena ve spolupráci s Google Německo aby zmenšila překážky studentů, učitelů a škol při programování výukových robotů. Open Roberta je financována  Google.org (2014 - 2015) částkou 1Mio Euro.</a>";
 Blockly.Msg.POPUP_AGE = "Věk";
 Blockly.Msg.POPUP_ATTENTION = "Pozor";
-Blockly.Msg.POPUP_BACKGROUND_STORAGE = "The Open Roberta Lab can automatically load your simulation background on your next visits. For this purpose, we will save data in the Local Storage on your computer. <a href=“https://www.roberta-home.de/en/privacy-policy-open-roberta-lab/” target=“_blank“>More information in our privacy policy.</a>";  // untranslated
+Blockly.Msg.POPUP_BACKGROUND_STORAGE = "The Open Roberta Lab can automatically load your simulation background on your next visits. For this purpose, we will save data in the Local Storage on your computer. <a href='https://www.roberta-home.de/en/privacy-policy-open-roberta-lab/' target='_blank'>More information in our privacy policy.</a>";  // untranslated
 Blockly.Msg.POPUP_BEFOREUNLOAD = "V programu nebo nastavení jsou neuložené změny. Přihlašte se a uložte program nebo nastavení.";
 Blockly.Msg.POPUP_BEFOREUNLOAD_LOGGEDIN = "V programu nebo nastavení jsou neuložené změny.";
 Blockly.Msg.POPUP_CANCEL = "Storno";
