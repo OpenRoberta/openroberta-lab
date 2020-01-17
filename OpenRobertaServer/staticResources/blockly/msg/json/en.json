@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2020-01-15 18:48:30.348966",
+		"lastupdated": "2020-01-17 11:29:50.035939",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -783,7 +783,6 @@
 	"ORA_TOOLBOX_DELETE_ERROR": "An error has occurred while deleting the toolbox, please try it again!",
 	"ORA_TOOLBOX_TRANSFORM_ERROR": "Transformation error?",
 	"ORA_TOOLBOX_SAVE_ERROR_NOT_SAVED_TO_DB": "An error error has occurred while saving the configuration in the database.",
-	"ORA_COMMAND_INVALID": "Invalid Javascript-command",
 	"ORA_CONFIGURATION_ERROR_ID_INVALID": "Configuration name is not a valid identifier.",
 	"ORA_CONFIGURATION_GET_ONE_ERROR_NOT_FOUND": "The robot configuration could not be found in the database.",
 	"ORA_CONFIGURATION_GET_ONE_SUCCESS": "Configuration loaded",
@@ -1593,8 +1592,6 @@
 	"XTICK": "distance between X ticks",
 	"YTICK": "distance between Y ticks",
 	"ACTION_PLOT_TICKMARK": "at tickmark",
-	"INIT_FAIL_MULTIPLE_FRONTENDS_ONE_HTTPSESSION": "You are trying to connect to the openroberta-lab multiple times, e.g. by opening multiple tabs. This is not supported at the moment. Please close this view.",
-	"INIT_FAIL_HTTPSESSION_EXPECTED_BUT_NOT_FOUND": "The connection to the openroberta-lab was closed unexpectedly. This case is rare and may happen, if the openroberta-lab-server is restarted. Please start a new connection to the openroberta-lab, e.g. by closing and starting the browser or by hitting the »reload«-button.",
 	"PROGRAM_ERROR_EXPRBLOCK_TYPECHECK": "This expression is invalid. The type check failed.",
 	"PROGRAM_ERROR_EXPRBLOCK_PARSE": "This expression is syntactically incorrect.",
 	"ICON_BLOCKING_TOOLTIP": "Blocking block! This blocks needs some time to be executed, so other's have to wait until it gives back the control to the caller function.",
@@ -1611,7 +1608,7 @@
 	"CLEAR": "clear",
 	"ACCELEROMETER_TOOLTIP": "Represents an accelerometer.",
 	"POPUP_CREATE_BOOKMARK": "Create a bookmark now to save your robot selection!",
-	"MENU_ERROR_SESSION": "This browser tab is not valid anymore, because the openroberta server was restarted.<br><br>You may edit or export your program, but it is impossible to compile or send it to your device. Please click on the »Refresh« <font size=4>↻</font> button!",
+	"POPUP_BACKGROUND_STORAGE": "The Open Roberta Lab can automatically load your simulation background on your next visits. For this purpose, we will save data in the Local Storage on your computer. <a href=“https://www.roberta-home.de/en/privacy-policy-open-roberta-lab/” target=“_blank“>More information in our privacy policy.</a>",
 	"GPS_TOOLTIP": "Represents a GPS receiver.",
 	"SENSOR_GPS_SENSEBOX": "GPS receiver",
 	"SENSOR_GPS_LATITUDE_GETSAMPLE_TOOLTIP_SENSEBOX": "Returns the latitude in degree.",

@@ -27,7 +27,7 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
     var timerStep = 0;
     var canceled;
     var storedPrograms;
-    var localStorageAvailable = true;
+    var customBackgroundLoaded = false;
 
     var imgObstacle1 = new Image();
     var imgPattern = new Image();
@@ -65,15 +65,31 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
                 imgObjectList[i - 3].src = imgList[i];
             }
         }
-        try {
-            if (localStorage.getItem("customBackground") !== null) {
-                var dataImage = localStorage.getItem('customBackground');
-                imgObjectList[i - 3] = new Image();
-                imgObjectList[i - 3].src = "data:image/png;base64," + dataImage;                
+        if (UTIL.isLocalStorageAvailable()) {
+            var customBackground = localStorage.getItem("customBackground");
+
+            if (customBackground) {
+                // TODO backwards compatibility for non timestamped background images; can be removed after some time
+                try {
+                    JSON.parse(customBackground);
+                } catch (e) {
+                    localStorage.setItem("customBackground", JSON.stringify({image:customBackground, timestamp:new Date().getTime()}));
+                    customBackground = localStorage.getItem("customBackground");
+                }
+
+                customBackground = JSON.parse(customBackground);
+                // remove images older than 30 days
+                var currentTimestamp = new Date().getTime();
+                if (currentTimestamp - customBackground.timestamp > 30 * 24 * 60 * 60 * 1000) {
+                    localStorage.removeItem('customBackground');
+                } else {
+                    // add image to backgrounds if recent
+                    var dataImage = customBackground.image;
+                    imgObjectList[i - 3] = new Image();
+                    imgObjectList[i - 3].src = "data:image/png;base64," + dataImage;
+                    customBackgroundLoaded = true;
+                }
             }
-            localStorageAvailable = true;
-        } catch(e) {
-            localStorageAvailable = false;
         }       
     }
     preloadImages();
@@ -98,6 +114,10 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
             currentBackground += 1;
             if (currentBackground >= imgObjectList.length) {
                 currentBackground = 2;
+            }
+            if (currentBackground == (imgObjectList.length - 1) && customBackgroundLoaded && UTIL.isLocalStorageAvailable()) {
+                // update timestamp of custom background
+                localStorage.setItem("customBackground", JSON.stringify({image: JSON.parse(localStorage.getItem("customBackground")).image, timestamp: new Date().getTime()}));
             }
         } else {
             currentBackground = num;
@@ -304,7 +324,7 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
             currentBackground = 2;
         }
         if (currentBackground > 1) {
-            if (isIE() || isEdge() || !localStorageAvailable) { // TODO IE and Edge: Input event not firing for file type of input
+            if (isIE() || isEdge()) { // TODO IE and Edge: Input event not firing for file type of input
                 $('.dropdown.sim, .simScene').show();
                 $('#simImport').hide();
             } else {
@@ -896,7 +916,7 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
         return edge > -1;
     }
 
-    function importImage() {
+    function importImage(doStore) {
         $('#backgroundFileSelector').val(null);
         $('#backgroundFileSelector').attr("accept", ".png, .jpg, .jpeg, .svg");
         $('#backgroundFileSelector').trigger('click'); // opening dialog
@@ -906,34 +926,37 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
             reader.onload = function(event) {
                 var img = new Image();
                 img.onload = function() {
-                    try {
-                        var canvas = document.createElement("canvas");
-                        var scaleX = 1;
-                        var scaleY = 1;
-                        // - 20 because of the border pattern which is 10 pixels wide on both sides
-                        if (img.width > C.MAX_WIDTH - 20) {
-                            scaleX = (C.MAX_WIDTH - 20) / img.width;
-                        }
-                        if (img.height > C.MAX_HEIGHT - 20) {
-                            scaleY = (C.MAX_HEIGHT - 20) / img.height;
-                        }
-                        var scale = Math.min(scaleX, scaleY);
-                        canvas.width = img.width * scale;
-                        canvas.height = img.height * scale;
-                        var ctx = canvas.getContext("2d");
-                        ctx.scale(scale, scale);
-                        ctx.drawImage(img, 0, 0);
-                        var dataURL = canvas.toDataURL("image/png");
-                        localStorage.setItem("customBackground", dataURL.replace(/^data:image\/(png|jpg);base64,/, ""));
-                        var image = new Image(canvas.width, canvas.height);
-                        image.src = dataURL;
-                        image.onload = function() {
+                    var canvas = document.createElement("canvas");
+                    var scaleX = 1;
+                    var scaleY = 1;
+                    // - 20 because of the border pattern which is 10 pixels wide on both sides
+                    if (img.width > C.MAX_WIDTH - 20) {
+                        scaleX = (C.MAX_WIDTH - 20) / img.width;
+                    }
+                    if (img.height > C.MAX_HEIGHT - 20) {
+                        scaleY = (C.MAX_HEIGHT - 20) / img.height;
+                    }
+                    var scale = Math.min(scaleX, scaleY);
+                    canvas.width = img.width * scale;
+                    canvas.height = img.height * scale;
+                    var ctx = canvas.getContext("2d");
+                    ctx.scale(scale, scale);
+                    ctx.drawImage(img, 0, 0);
+                    var dataURL = canvas.toDataURL("image/png");
+                    var image = new Image(canvas.width, canvas.height);
+                    image.src = dataURL;
+                    image.onload = function() {
+                        if (customBackgroundLoaded) {
+                            // replace previous image
+                            imgObjectList[imgObjectList.length - 1] = image;
+                        } else {
                             imgObjectList[imgObjectList.length] = image;
-                            setBackground(imgObjectList.length - 1, setBackground);
-                            initScene();
                         }
-                    } catch(e) {
-                        alert("This function is not available. You browser may block cookies or local storage at all!")
+                        setBackground(imgObjectList.length - 1, setBackground);
+                        initScene();
+                    }
+                    if (doStore) {
+                        localStorage.setItem("customBackground", JSON.stringify({image: dataURL.replace(/^data:image\/(png|jpg);base64,/, ""), timestamp: new Date().getTime()}));
                     }
                 };
                 img.src = reader.result;
