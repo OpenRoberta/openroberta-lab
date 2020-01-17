@@ -404,6 +404,17 @@ define([ 'exports', 'message', 'log', 'jquery', 'jquery-validate', 'bootstrap' ]
     }
     exports.countBlocks = countBlocks;
 
+    function isLocalStorageAvailable() {
+        try {
+            localStorage.setItem("test", "test");
+            localStorage.removeItem("test");
+            return true;
+        } catch(e) {
+            return false;
+        }
+    }
+    exports.isLocalStorageAvailable = isLocalStorageAvailable;
+
     var __entityMap = {
         "&" : "&amp;",
         "<" : "&lt;",

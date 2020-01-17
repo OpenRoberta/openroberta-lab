@@ -6,10 +6,14 @@ define([ 'exports', 'log', 'jquery', 'blocks-msg' ], function(exports, LOG, $, B
     /**
      * Display popup messages
      */
-    function displayPopupMessage(lkey, value, cancel) {
+    function displayPopupMessage(lkey, value, cancel, opt_showConfirmText) {
         if (cancel) {
             $('#messageConfirm').attr('lkey', lkey);
-            $('#messageConfirm').html(value + Blockly.Msg.POPUP_CONFIRM_CONTINUE);
+            if (opt_showConfirmText) {
+                $('#messageConfirm').html(value + Blockly.Msg.POPUP_CONFIRM_CONTINUE);
+            } else {
+                $('#messageConfirm').html(value);
+            }
             $("#show-message-confirm").modal("show");
         } else {
             $('#message').attr('lkey', lkey);
@@ -83,7 +87,7 @@ define([ 'exports', 'log', 'jquery', 'blocks-msg' ], function(exports, LOG, $, B
             }
             
             if (output === 'POPUP') {
-                displayPopupMessage(lkey, value, cancel);
+                displayPopupMessage(lkey, value, cancel, true);
             } else if (output === 'TOAST') {
                 toastMessages.unshift(value);
                 if (toastMessages.length === 1) {

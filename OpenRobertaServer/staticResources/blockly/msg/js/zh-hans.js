@@ -349,8 +349,6 @@ Blockly.Msg.INFRARED_GETSAMPLE_TOOLTIP = "Gets the current reading from the infr
 Blockly.Msg.INFRARED_GETSAMPLE_TOOLTIP_MBOT = "Gets the current reading from the light sensor -- if a black line is detected (true/false).";  // untranslated
 Blockly.Msg.INFRARED_PRESENCE_GETSAMPLE_TOOLTIP = "Returns an array of measurements for the presence of a beacon.";  // untranslated
 Blockly.Msg.INFRARED_TOOLTIP = "表示红外传感器。";
-Blockly.Msg.INIT_FAIL_HTTPSESSION_EXPECTED_BUT_NOT_FOUND = "The connection to the openroberta-lab was closed unexpectedly. This case is rare and may happen, if the openroberta-lab-server is restarted. Please start a new connection to the openroberta-lab, e.g. by closing and starting the browser or by hitting the »reload«-button.";  // untranslated
-Blockly.Msg.INIT_FAIL_MULTIPLE_FRONTENDS_ONE_HTTPSESSION = "You are trying to connect to the openroberta-lab multiple times, e.g. by opening multiple tabs. This is not supported at the moment. Please close this view.";  // untranslated
 Blockly.Msg.INLINE_INPUTS = "单行输入";
 Blockly.Msg.INPUT = "输入";
 Blockly.Msg.INTERNAL_PORT = "内部";
@@ -612,7 +610,6 @@ Blockly.Msg.MENU_CREATE_LINK = "创建程序链接 ...";
 Blockly.Msg.MENU_DELETE_USER = "删除用户 ...";
 Blockly.Msg.MENU_EDIT = "编辑";
 Blockly.Msg.MENU_EDIT_TOOLTIP = "编辑";
-Blockly.Msg.MENU_ERROR_SESSION = "This browser tab is not valid anymore, because the openroberta server was restarted.<br><br>You may edit or export your program, but it is impossible to compile or send it to your device. Please click on the »Refresh« <font size=4>↻</font> button!";  // untranslated
 Blockly.Msg.MENU_EV3 = "机器人准备";
 Blockly.Msg.MENU_EXPERT = "专家";
 Blockly.Msg.MENU_EXPORT_PROG = "導出程序";
@@ -943,7 +940,6 @@ Blockly.Msg.ON = "打开";
 Blockly.Msg.ORA_ACCESS_RIGHT_CHANGED = "共享权限已更新!";
 Blockly.Msg.ORA_ACCESS_RIGHT_DELETED = "共享权限被删除!";
 Blockly.Msg.ORA_ACCOUNT_NOT_ACTIVATED_TO_SHARE = "你不被允许分享。请激活您的帐户! <br><a href=\"https://www.roberta-home.de/index.php?id=138&L=1\" target=\"_blank\">更多信息...</a>";
-Blockly.Msg.ORA_COMMAND_INVALID = "不正确的Javascript命令";
 Blockly.Msg.ORA_COMPILERWORKFLOW_ERROR_CONFIGURATION_NOT_FOUND = "在服务器上找不到机器人配置。";
 Blockly.Msg.ORA_COMPILERWORKFLOW_ERROR_CONFIGURATION_TRANSFORM_FAILED = "机器人的配置不能转化为机器人编程语言。";
 Blockly.Msg.ORA_COMPILERWORKFLOW_ERROR_PROGRAM_COMPILE_FAILED = "请检查您的编程方块和配置中的错误信息!程序有错误, 因此无法编译。";
@@ -1074,6 +1070,7 @@ Blockly.Msg.POPUP_ABOUT_TEXT_DEV = "Open Roberta实验室是一个开源的编�
 Blockly.Msg.POPUP_ABOUT_TEXT_GOOG = "Open Roberta是与谷歌德国合作发起的, 用于减少学生、教师和学校机器人编程教育的障碍。";
 Blockly.Msg.POPUP_AGE = "年龄";
 Blockly.Msg.POPUP_ATTENTION = "注意";
+Blockly.Msg.POPUP_BACKGROUND_STORAGE = "The Open Roberta Lab can automatically load your simulation background on your next visits. For this purpose, we will save data in the Local Storage on your computer. <a href='https://www.roberta-home.de/en/privacy-policy-open-roberta-lab/' target='_blank'>More information in our privacy policy.</a>";  // untranslated
 Blockly.Msg.POPUP_BEFOREUNLOAD = "您的程序或配置中有未保存的更改。登录并保存您的程序或配置。";
 Blockly.Msg.POPUP_BEFOREUNLOAD_LOGGEDIN = "您的程序或配置中有未保存的更改。";
 Blockly.Msg.POPUP_CANCEL = "取消";

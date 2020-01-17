@@ -349,8 +349,6 @@ Blockly.Msg.INFRARED_GETSAMPLE_TOOLTIP = "Gets the current reading from the infr
 Blockly.Msg.INFRARED_GETSAMPLE_TOOLTIP_MBOT = "Gets the current reading from the light sensor -- if a black line is detected (true/false).";  // untranslated
 Blockly.Msg.INFRARED_PRESENCE_GETSAMPLE_TOOLTIP = "Returns an array of measurements for the presence of a beacon.";  // untranslated
 Blockly.Msg.INFRARED_TOOLTIP = "Represents an infrared sensor.";  // untranslated
-Blockly.Msg.INIT_FAIL_HTTPSESSION_EXPECTED_BUT_NOT_FOUND = "The connection to the openroberta-lab was closed unexpectedly. This case is rare and may happen, if the openroberta-lab-server is restarted. Please start a new connection to the openroberta-lab, e.g. by closing and starting the browser or by hitting the »reload«-button.";  // untranslated
-Blockly.Msg.INIT_FAIL_MULTIPLE_FRONTENDS_ONE_HTTPSESSION = "You are trying to connect to the openroberta-lab multiple times, e.g. by opening multiple tabs. This is not supported at the moment. Please close this view.";  // untranslated
 Blockly.Msg.INLINE_INPUTS = "내부 입력";
 Blockly.Msg.INPUT = "input";  // untranslated
 Blockly.Msg.INTERNAL_PORT = "internal";  // untranslated
@@ -612,7 +610,6 @@ Blockly.Msg.MENU_CREATE_LINK = "create program link ...";  // untranslated
 Blockly.Msg.MENU_DELETE_USER = "delete user ...";  // untranslated
 Blockly.Msg.MENU_EDIT = "edit";  // untranslated
 Blockly.Msg.MENU_EDIT_TOOLTIP = "edit";  // untranslated
-Blockly.Msg.MENU_ERROR_SESSION = "This browser tab is not valid anymore, because the openroberta server was restarted.<br><br>You may edit or export your program, but it is impossible to compile or send it to your device. Please click on the »Refresh« <font size=4>↻</font> button!";  // untranslated
 Blockly.Msg.MENU_EV3 = "Robot preparation";  // untranslated
 Blockly.Msg.MENU_EXPERT = "expert";  // untranslated
 Blockly.Msg.MENU_EXPORT_PROG = "export program";  // untranslated
@@ -943,7 +940,6 @@ Blockly.Msg.ON = "on";  // untranslated
 Blockly.Msg.ORA_ACCESS_RIGHT_CHANGED = "The shared right for user »$« is updated!";  // untranslated
 Blockly.Msg.ORA_ACCESS_RIGHT_DELETED = "The shared right for user »$« is deleted!";  // untranslated
 Blockly.Msg.ORA_ACCOUNT_NOT_ACTIVATED_TO_SHARE = "Your are not allowed to share. Please activate your account! <br><a href='https://www.roberta-home.de/index.php?id=138&L=1' target='_blank'>Further information ...</a>";  // untranslated
-Blockly.Msg.ORA_COMMAND_INVALID = "Invalid Javascript-command";  // untranslated
 Blockly.Msg.ORA_COMPILERWORKFLOW_ERROR_CONFIGURATION_NOT_FOUND = "The robot configuration could not be found on the server.";  // untranslated
 Blockly.Msg.ORA_COMPILERWORKFLOW_ERROR_CONFIGURATION_TRANSFORM_FAILED = "The robot configuration could not be transformed into the robots programming language.";  // untranslated
 Blockly.Msg.ORA_COMPILERWORKFLOW_ERROR_PROGRAM_COMPILE_FAILED = "Your program has errors so it cannot be compiled. The compiler messages are: <span style='background-color:#ddd;font-family:courier;'>{MESSAGE}</span>";  // untranslated
@@ -1074,6 +1070,7 @@ Blockly.Msg.POPUP_ABOUT_TEXT_DEV = "The Open Roberta Lab is an open-source progr
 Blockly.Msg.POPUP_ABOUT_TEXT_GOOG = "Open Roberta was initiated in collaboration with Google Germany to reduce the hurdles for students, teachers and schools programming educational robots.</a>";  // untranslated
 Blockly.Msg.POPUP_AGE = "Age";  // untranslated
 Blockly.Msg.POPUP_ATTENTION = "Attention";  // untranslated
+Blockly.Msg.POPUP_BACKGROUND_STORAGE = "The Open Roberta Lab can automatically load your simulation background on your next visits. For this purpose, we will save data in the Local Storage on your computer. <a href='https://www.roberta-home.de/en/privacy-policy-open-roberta-lab/' target='_blank'>More information in our privacy policy.</a>";  // untranslated
 Blockly.Msg.POPUP_BEFOREUNLOAD = "You have unsaved changes in your program or configuration. Sign in and save your program or configuration.";  // untranslated
 Blockly.Msg.POPUP_BEFOREUNLOAD_LOGGEDIN = "You have unsaved changes in your program or configuration.";  // untranslated
 Blockly.Msg.POPUP_CANCEL = "Cancel";  // untranslated

@@ -349,8 +349,6 @@ Blockly.Msg.INFRARED_GETSAMPLE_TOOLTIP = "Gets the current reading from the infr
 Blockly.Msg.INFRARED_GETSAMPLE_TOOLTIP_MBOT = "Gets the current reading from the light sensor -- if a black line is detected (true/false).";  // untranslated
 Blockly.Msg.INFRARED_PRESENCE_GETSAMPLE_TOOLTIP = "Returns an array of measurements for the presence of a beacon.";  // untranslated
 Blockly.Msg.INFRARED_TOOLTIP = "Representerar en IR sensor.";
-Blockly.Msg.INIT_FAIL_HTTPSESSION_EXPECTED_BUT_NOT_FOUND = "The connection to the openroberta-lab was closed unexpectedly. This case is rare and may happen, if the openroberta-lab-server is restarted. Please start a new connection to the openroberta-lab, e.g. by closing and starting the browser or by hitting the »reload«-button.";  // untranslated
-Blockly.Msg.INIT_FAIL_MULTIPLE_FRONTENDS_ONE_HTTPSESSION = "You are trying to connect to the openroberta-lab multiple times, e.g. by opening multiple tabs. This is not supported at the moment. Please close this view.";  // untranslated
 Blockly.Msg.INLINE_INPUTS = "Radinmatning";
 Blockly.Msg.INPUT = "input";
 Blockly.Msg.INTERNAL_PORT = "intern";
@@ -612,7 +610,6 @@ Blockly.Msg.MENU_CREATE_LINK = "skapa programlänk ...";
 Blockly.Msg.MENU_DELETE_USER = "ta bort användare...";
 Blockly.Msg.MENU_EDIT = "redigera";
 Blockly.Msg.MENU_EDIT_TOOLTIP = "redigera";
-Blockly.Msg.MENU_ERROR_SESSION = "This browser tab is not valid anymore, because the openroberta server was restarted.<br><br>You may edit or export your program, but it is impossible to compile or send it to your device. Please click on the »Refresh« <font size=4>↻</font> button!";  // untranslated
 Blockly.Msg.MENU_EV3 = "Robotförberedelser";
 Blockly.Msg.MENU_EXPERT = "expert";
 Blockly.Msg.MENU_EXPORT_PROG = "exportera program";
@@ -943,7 +940,6 @@ Blockly.Msg.ON = "på";
 Blockly.Msg.ORA_ACCESS_RIGHT_CHANGED = "De delade rättigheterna är uppdaterade!";
 Blockly.Msg.ORA_ACCESS_RIGHT_DELETED = "De delade rättigheterna är borttagna!";
 Blockly.Msg.ORA_ACCOUNT_NOT_ACTIVATED_TO_SHARE = "Du har inte behörighet att dela. Vänligen aktivera ditt konto! <br> <a href=\"https://www.roberta-home.de/index.php?id=138&L=1\" target=\"_blank\"> Ytterligare information ... </a>";
-Blockly.Msg.ORA_COMMAND_INVALID = "Ogiltigt Javascript-kommando";
 Blockly.Msg.ORA_COMPILERWORKFLOW_ERROR_CONFIGURATION_NOT_FOUND = "Robotkonfigurationen kunde inte hittas på servern.";
 Blockly.Msg.ORA_COMPILERWORKFLOW_ERROR_CONFIGURATION_TRANSFORM_FAILED = "Robotkonfigurationen kunde inte omvandlas till robotprogrammeringsspråket.";
 Blockly.Msg.ORA_COMPILERWORKFLOW_ERROR_PROGRAM_COMPILE_FAILED = "Programmet kunde inte omvandlas till maskinkod.";
@@ -1074,6 +1070,7 @@ Blockly.Msg.POPUP_ABOUT_TEXT_DEV = "Open Roberta Lab är en öppen källkodsprog
 Blockly.Msg.POPUP_ABOUT_TEXT_GOOG = "Open Roberta inleddes i samarbete med Google Tyskland för att minska hindren för studenter, lärare och skolor som programmerar utbildningsrobotar. </a>";
 Blockly.Msg.POPUP_AGE = "Ålder";
 Blockly.Msg.POPUP_ATTENTION = "Var uppmärksam";
+Blockly.Msg.POPUP_BACKGROUND_STORAGE = "The Open Roberta Lab can automatically load your simulation background on your next visits. For this purpose, we will save data in the Local Storage on your computer. <a href='https://www.roberta-home.de/en/privacy-policy-open-roberta-lab/' target='_blank'>More information in our privacy policy.</a>";  // untranslated
 Blockly.Msg.POPUP_BEFOREUNLOAD = "Du har osparade ändringar i ditt program eller konfiguration. Logga in och spara ditt program eller konfiguration.";
 Blockly.Msg.POPUP_BEFOREUNLOAD_LOGGEDIN = "Du har osparade ändringar i ditt program eller konfiguration.";
 Blockly.Msg.POPUP_CANCEL = "Avbryt";
