@@ -42,7 +42,6 @@ Plot _plot_L(&_display_L);
 
 void setup()
 {
-    Serial.begin(9600); 
     _bmx055_B.beginAcc(0x03);
     senseBoxIO.powerI2C(true);
     delay(2000);

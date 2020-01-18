@@ -8,7 +8,6 @@
 LiquidCrystal_I2C _lcd_L(0x27, 16, 2);
 void setup()
 {
-    Serial.begin(9600); 
     _lcd_L.begin();
 }
 

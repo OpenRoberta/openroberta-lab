@@ -8,7 +8,6 @@ int _output_A = 0;
 int _output_A2 = 3;
 void setup()
 {
-    Serial.begin(9600); 
     pinMode(_output_A, OUTPUT);
     pinMode(_output_A2, OUTPUT);
 }

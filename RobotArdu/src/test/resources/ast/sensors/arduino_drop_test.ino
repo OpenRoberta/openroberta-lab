@@ -8,7 +8,6 @@ double ___item;
 int _S_D = A0;
 void setup()
 {
-    Serial.begin(9600); 
     ___item = analogRead(_S_D)/10.24;
 }
 

@@ -73,6 +73,7 @@ public final class ArduinoUsedHardwareCollectorVisitor extends AbstractUsedHardw
     @Override
     public Void visitSerialWriteAction(SerialWriteAction<Void> serialWriteAction) {
         serialWriteAction.getValue().accept(this);
+        this.builder.addUsedActor(new UsedActor(SC.SERIAL, SC.SERIAL));
         return null;
     }
 }

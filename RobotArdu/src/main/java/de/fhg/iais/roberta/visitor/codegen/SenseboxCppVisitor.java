@@ -96,7 +96,10 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
         this.sb.append("{");
         this.incrIndentation();
         this.nlIndent();
-        this.sb.append("Serial.begin(9600); ");
+        if ( this.usedHardwareBean.isActorUsed(SC.SERIAL) ) {
+            sb.append("Serial.begin(9600);");
+            nlIndent();
+        }
         this.nlIndent();
         this.generateConfigurationSetup();
         this.generateUsedVars();

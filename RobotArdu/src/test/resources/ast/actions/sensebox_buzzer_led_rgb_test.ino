@@ -19,7 +19,6 @@ int _led_R1 = 7;
 
 void setup()
 {
-    Serial.begin(9600); 
     pinMode(_led_R2, OUTPUT);
     pinMode(_led_red_R, OUTPUT);
     pinMode(_led_green_R, OUTPUT);

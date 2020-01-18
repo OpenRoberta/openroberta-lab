@@ -8,7 +8,6 @@ double ___item;
 int _moisturePin_M = A0;
 void setup()
 {
-    Serial.begin(9600); 
     ___item = analogRead(_moisturePin_M)/10.24;
 }
 

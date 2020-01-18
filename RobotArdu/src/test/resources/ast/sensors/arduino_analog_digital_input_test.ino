@@ -10,7 +10,6 @@ int _input_S = 0;
 int _input_S2 = A0;
 void setup()
 {
-    Serial.begin(9600); 
     pinMode(_input_S, INPUT);
     pinMode(_input_S2, INPUT);
     ___item = analogRead(_input_S2);

@@ -10,6 +10,7 @@ import de.fhg.iais.roberta.bean.UsedHardwareBean;
 import de.fhg.iais.roberta.components.Category;
 import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.components.ConfigurationComponent;
+import de.fhg.iais.roberta.components.UsedActor;
 import de.fhg.iais.roberta.components.UsedSensor;
 import de.fhg.iais.roberta.mode.action.MotorMoveMode;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
@@ -483,8 +484,10 @@ public final class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor imp
         this.sb.append("{");
         incrIndentation();
         nlIndent();
-        this.sb.append("Serial.begin(9600); ");
-        nlIndent();
+        if ( this.usedHardwareBean.isActorUsed(SC.SERIAL) ) {
+            sb.append("Serial.begin(9600);");
+            nlIndent();
+        }
         generateConfigurationSetup();
         generateUsedVars();
         this.sb.delete(this.sb.lastIndexOf("\n"), this.sb.length());

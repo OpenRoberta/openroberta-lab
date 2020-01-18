@@ -26,7 +26,6 @@ String _readRFIDData(MFRC522 &mfrc522) {
 
 void setup()
 {
-    Serial.begin(9600); 
     SPI.begin();
     _mfrc522_R.PCD_Init();
     ___item = _readRFIDData(_mfrc522_R);

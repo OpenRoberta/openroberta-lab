@@ -69,7 +69,6 @@ public class CppVisitorTest extends ArduinoAstTest {
             + "if(!_mfrc522_R.PICC_ReadCardSerial()){return\"N/D\";}"
             + "returnString(((long)(_mfrc522_RFID.uid.uidByte[0])<<24)|((long)(_mfrc522_RFID.uid.uidByte[1])<<16)|((long)(_mfrc522_RFID.uid.uidByte[2])<<8)|((long)_mfrc522_RFID.uid.uidByte[3]),HEX);}"
             + "voidsetup(){"
-            + "Serial.begin(9600);"
             + "pinMode(_SW_ENCODER,INPUT);"
             + "attachInterrupt(digitalPinToInterrupt(_SW_ENCODER),Interrupt,CHANGE);"
             + "_dht_HUMIDITY.begin();"

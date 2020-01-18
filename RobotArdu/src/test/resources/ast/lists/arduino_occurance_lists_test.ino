@@ -12,7 +12,6 @@ bool ___item3;
 int _led_L = 13;
 void setup()
 {
-    Serial.begin(9600); 
     pinMode(_led_L, OUTPUT);
     ___item = {"b", "v", "b"};
     ___item2 = _getFirstOccuranceOfElement(___item, String("v"));
