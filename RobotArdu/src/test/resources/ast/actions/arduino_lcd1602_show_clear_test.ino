@@ -9,7 +9,6 @@
 LiquidCrystal _lcd_L2(12, 11, 5, 4, 3, 2);
 void setup()
 {
-    Serial.begin(9600); 
     _lcd_L2.begin(16, 2);
 }
 

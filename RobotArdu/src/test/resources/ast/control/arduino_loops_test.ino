@@ -10,7 +10,6 @@ std::list<double> ___item2;
 int _led_L = 13;
 void setup()
 {
-    Serial.begin(9600); 
     pinMode(_led_L, OUTPUT);
     ___item2 = {0, 0, 0};
 }

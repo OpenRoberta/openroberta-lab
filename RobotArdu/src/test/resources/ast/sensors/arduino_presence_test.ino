@@ -8,7 +8,6 @@ bool ___item;
 int _output_M = 7;
 void setup()
 {
-    Serial.begin(9600); 
     pinMode(_output_M, INPUT);
     ___item = digitalRead(_output_M);
 }

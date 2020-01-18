@@ -8,7 +8,6 @@
 Servo _servo_S;
 void setup()
 {
-    Serial.begin(9600); 
     _servo_S.attach(8);
 }
 

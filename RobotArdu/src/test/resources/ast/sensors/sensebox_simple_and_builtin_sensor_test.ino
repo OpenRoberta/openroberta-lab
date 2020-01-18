@@ -40,8 +40,7 @@ Ultrasonic _hcsr04_U(5, 6);
 int _output_L = 1;
 
 void setup()
-{
-    Serial.begin(9600); 
+{ 
     _bmx055_A.beginAcc(0x03);
     pinMode(_button_B, INPUT);
     _bmx055_A.beginMagn();

@@ -10,6 +10,7 @@ import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.SC;
 import de.fhg.iais.roberta.syntax.action.generic.PinWriteValueAction;
 import de.fhg.iais.roberta.syntax.action.light.LightAction;
+import de.fhg.iais.roberta.syntax.action.serial.SerialWriteAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.RelayAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.sensebox.PlotClearAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.sensebox.PlotPointAction;
@@ -114,6 +115,13 @@ public final class SenseboxUsedHardwareCollectorVisitor extends AbstractUsedHard
     @Override
     public Void visitGpsSensor(GpsSensor<Void> gpsSensor) {
         this.builder.addUsedSensor(new UsedSensor(gpsSensor.getPort(), SC.GPS, gpsSensor.getMode()));
+        return null;
+    }
+    
+    @Override
+    public Void visitSerialWriteAction(SerialWriteAction<Void> serialWriteAction) {
+        serialWriteAction.getValue().accept(this);
+        this.builder.addUsedActor(new UsedActor(SC.SERIAL, SC.SERIAL));
         return null;
     }
 }

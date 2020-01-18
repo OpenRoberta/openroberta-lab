@@ -8,7 +8,6 @@ bool ___item;
 int _taster_B = 2;
 void setup()
 {
-    Serial.begin(9600); 
     pinMode(_taster_B, INPUT);
     ___item = digitalRead(_taster_B);
 }

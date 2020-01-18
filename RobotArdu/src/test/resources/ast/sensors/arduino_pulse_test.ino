@@ -8,7 +8,6 @@ double ___item;
 int _SensorPin_P = A0;
 void setup()
 {
-    Serial.begin(9600); 
     ___item = analogRead(_SensorPin_P);
 }
 

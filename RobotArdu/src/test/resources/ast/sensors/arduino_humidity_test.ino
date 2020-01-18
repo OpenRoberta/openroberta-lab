@@ -12,7 +12,6 @@ double ___item2;
 DHT _dht_H(DHTPINH, DHTTYPE);
 void setup()
 {
-    Serial.begin(9600); 
     _dht_H.begin();
     ___item = _dht_H.readHumidity();
     ___item2 = _dht_H.readTemperature();

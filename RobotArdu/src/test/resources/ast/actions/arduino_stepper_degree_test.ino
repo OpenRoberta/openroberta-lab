@@ -8,9 +8,7 @@
 int _SPU_S2 = 2048;
 Stepper Motor_S2(_SPU_S2, 6, 5, 4, 3);
 void setup()
-{
-    Serial.begin(9600); 
-}
+{}
 
 void loop()
 {

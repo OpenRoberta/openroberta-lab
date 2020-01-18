@@ -10,7 +10,6 @@ int _taster_T = 0;
 
 void setup()
 {
-    Serial.begin(9600); 
     pinMode(_led_L, OUTPUT);
     _servo_S.attach(1);
     pinMode(_taster_T, INPUT);

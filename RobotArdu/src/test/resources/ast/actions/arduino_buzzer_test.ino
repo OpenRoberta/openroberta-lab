@@ -6,9 +6,7 @@
 
 int _spiele_B = 5;
 void setup()
-{
-    Serial.begin(9600); 
-}
+{}
 
 void loop()
 {
