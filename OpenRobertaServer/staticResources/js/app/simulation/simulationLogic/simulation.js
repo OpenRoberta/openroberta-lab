@@ -951,12 +951,17 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
     function createRobots(reqRobot, numRobots) {
         robots = [];
         if (numRobots >= 1) {
-            var tempRobot = createRobot(reqRobot, 0, 0, interpreters[0].getRobotBehaviour());
+            var multipleSimulation = false;
+            if (numRobots > 1) {
+                multipleSimulation = true;
+            }
+
+            var tempRobot = createRobot(reqRobot, 0, 0, interpreters[0].getRobotBehaviour(), multipleSimulation);
             tempRobot.savedName = userPrograms[0].savedName;
             robots[0] = tempRobot;
             for (var i = 1; i < numRobots; i++) {
                 var yOffset = 60 * (Math.floor((i + 1) / 2)) * (Math.pow((-1), i));
-                tempRobot = createRobot(reqRobot, i, yOffset, interpreters[i].getRobotBehaviour());
+                tempRobot = createRobot(reqRobot, i, yOffset, interpreters[i].getRobotBehaviour(), multipleSimulation);
                 tempRobot.savedName = userPrograms[i].savedName;
                 var tempcolor = arrToRgb(colorsAdmissible[((i - 1) % (colorsAdmissible.length))]);
                 tempRobot.geom.color = tempcolor;
@@ -969,27 +974,35 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
         }
     }
 
-    function createRobot(reqRobot, num, optYOffset, robotBehaviour) {
+    function createRobot(reqRobot, num, optYOffset, robotBehaviour, opt_MultipleRobots) {
         var yOffset = optYOffset || 0;
         var robot;
         if (currentBackground == 2) {
+            var yPos = 200 + yOffset;
+            if (opt_MultipleRobots) {
+                yPos = 10 + yOffset + imgObjectList[currentBackground].height / 2.0;
+            }
             robot = new reqRobot({
                 x: 240,
-                y: 200 + yOffset,
+                y: yPos,
                 theta: 0,
                 xOld: 240,
-                yOld: 200 + yOffset,
+                yOld: yPos,
                 transX: 0,
                 transY: 0
             }, num, robotBehaviour);
             robot.canDraw = false;
         } else if (currentBackground == 3) {
+            var yPos = 200 + yOffset;
+            if (opt_MultipleRobots) {
+                yPos = 10 + yOffset + imgObjectList[currentBackground].height / 2.0;
+            }
             robot = new reqRobot({
                 x: 200,
-                y: 200 + yOffset,
+                y: yPos,
                 theta: 0,
                 xOld: 200,
-                yOld: 200 + yOffset,
+                yOld: yPos,
                 transX: 0,
                 transY: 0
             }, num, robotBehaviour);
@@ -997,34 +1010,46 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
             robot.drawColor = "#000000";
             robot.drawWidth = 10;
         } else if (currentBackground == 4) {
+            var yPos = 104 + yOffset;
+            if (opt_MultipleRobots) {
+                yPos = 10 + yOffset + imgObjectList[currentBackground].height / 2.0;
+            }
             robot = new reqRobot({
                 x: 70,
-                y: 104 + yOffset,
+                y: yPos,
                 theta: 0,
                 xOld: 70,
-                yOld: 104 + yOffset,
+                yOld: yPos,
                 transX: 0,
                 transY: 0
             }, num, robotBehaviour);
             robot.canDraw = false;
         } else if (currentBackground == 5) {
+            var yPos = 50 + yOffset;
+            if (opt_MultipleRobots) {
+                yPos = 10 + yOffset + imgObjectList[currentBackground].height / 2.0;
+            }
             robot = new reqRobot({
                 x: 400,
-                y: 50 + yOffset,
+                y: yPos,
                 theta: 0,
                 xOld: 400,
-                yOld: 50 + yOffset,
+                yOld: yPos,
                 transX: 0,
                 transY: 0
             }, num, robotBehaviour);
             robot.canDraw = false;
         } else if (currentBackground == 6) {
+            var yPos = 440 + yOffset;
+            if (opt_MultipleRobots) {
+                yPos = 10 + yOffset + imgObjectList[currentBackground].height / 2.0;
+            }
             robot = new reqRobot({
                 x: 800,
-                y: 440 + yOffset,
+                y: yPos,
                 theta: -Math.PI / 2,
                 xOld: 800,
-                yOld: 440 + yOffset,
+                yOld: yPos,
                 transX: 0,
                 transY: 0
             }, num, robotBehaviour);
