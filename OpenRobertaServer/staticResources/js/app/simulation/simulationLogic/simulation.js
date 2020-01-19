@@ -1038,9 +1038,14 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
             robot.drawColor = "#000000";
             robot.drawWidth = 10;
         } else if (currentBackground == 4) {
+        	var robotY = 104 + yOffset;
+        	if (num >= 2) {
+        		robotY = 104 + 60 * (num-1);
+        		console.log(robotY);
+        	}
             robot = new reqRobot({
                 x: 70,
-                y: 104 + yOffset,
+                y: robotY,
                 theta: 0,
                 xOld: 70,
                 yOld: 104 + yOffset,
@@ -1051,7 +1056,7 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
         } else if (currentBackground == 5) {
             robot = new reqRobot({
                 x: 400,
-                y: 50 + yOffset,
+                y: 50 + 60 * num,
                 theta: 0,
                 xOld: 400,
                 yOld: 50 + yOffset,
@@ -1060,9 +1065,13 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
             }, num, robotBehaviour);
             robot.canDraw = false;
         } else if (currentBackground == 6) {
+        	var robotY = 440 + yOffset;
+        	if (num > 2) {
+        		robotY = 440 - 60 * (num-1);
+        	}
             robot = new reqRobot({
                 x: 800,
-                y: 440 + yOffset,
+                y: robotY,
                 theta: -Math.PI / 2,
                 xOld: 800,
                 yOld: 440 + yOffset,
