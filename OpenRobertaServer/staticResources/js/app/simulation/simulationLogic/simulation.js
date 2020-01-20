@@ -8,9 +8,9 @@
  */
 
 define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 'simulation.constants', 'util', 'program.controller',
-    'interpreter.interpreter', 'interpreter.robotMbedBehaviour', 'volume-meter', 'simulation.constants', 'jquery'
+    'interpreter.interpreter', 'interpreter.robotMbedBehaviour', 'volume-meter', 'simulation.constants', 'message', 'jquery'
 ], function(exports, Scene, SIMATH, ROBERTA_PROGRAM, CONST, UTIL, PROGRAM_C,
-    SIM_I, MBED_R, Volume, C, $) {
+    SIM_I, MBED_R, Volume, C, MSG, $) {
 
     var interpreters;
     var scene;
@@ -916,7 +916,7 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
         return edge > -1;
     }
 
-    function importImage(doStore) {
+    function importImage() {
         $('#backgroundFileSelector').val(null);
         $('#backgroundFileSelector').attr("accept", ".png, .jpg, .jpeg, .svg");
         $('#backgroundFileSelector').trigger('click'); // opening dialog
@@ -955,8 +955,20 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
                         setBackground(imgObjectList.length - 1, setBackground);
                         initScene();
                     }
-                    if (doStore) {
-                        localStorage.setItem("customBackground", JSON.stringify({image: dataURL.replace(/^data:image\/(png|jpg);base64,/, ""), timestamp: new Date().getTime()}));
+
+                    if (UTIL.isLocalStorageAvailable()) {
+                        $('#show-message-confirm').one('shown.bs.modal', function(e) {
+                            $('#confirm').off();
+                            $('#confirm').on('click', function(e) {
+                                e.preventDefault();
+                                localStorage.setItem("customBackground", JSON.stringify({image: dataURL.replace(/^data:image\/(png|jpg);base64,/, ""), timestamp: new Date().getTime()}));
+                            });
+                            $('#confirmCancel').off();
+                            $('#confirmCancel').on('click', function(e) {
+                                e.preventDefault();
+                            });
+                        });
+                        MSG.displayPopupMessage("Blockly.Msg.POPUP_BACKGROUND_STORAGE", Blockly.Msg.POPUP_BACKGROUND_STORAGE, Blockly.Msg.YES, Blockly.Msg.NO);
                     }
                 };
                 img.src = reader.result;

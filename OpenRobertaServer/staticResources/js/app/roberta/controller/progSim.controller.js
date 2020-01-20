@@ -73,27 +73,9 @@ define([ 'exports', 'message', 'log', 'util', 'simulation.simulation', 'guiState
                 }
             }
         });
-        if (UTIL.isLocalStorageAvailable()) {
-            $('#simImport').onWrap('click', function(event) {
-                $('#show-message-confirm').one('shown.bs.modal', function(e) {
-                    $('#confirm').off();
-                    $('#confirm').on('click', function(e) {
-                        e.preventDefault();
-                        SIM.importImage(true);
-                    });
-                    $('#confirmCancel').off();
-                    $('#confirmCancel').on('click', function(e) {
-                        e.preventDefault();
-                        SIM.importImage(false);
-                    });
-                });
-                MSG.displayPopupMessage("Blockly.Msg.POPUP_BACKGROUND_STORAGE", Blockly.Msg.POPUP_BACKGROUND_STORAGE, true);
-            }, 'simImport clicked');
-        } else {
-            $('#simImport').onWrap('click', function(event) {
-                SIM.importImage(false);
-            }, 'simImport clicked');
-        }
+        $('#simImport').onWrap('click', function(event) {
+            SIM.importImage();
+        }, 'simImport clicked');
 
         $('#simButtonsCollapse').collapse({
             'toggle' : false
