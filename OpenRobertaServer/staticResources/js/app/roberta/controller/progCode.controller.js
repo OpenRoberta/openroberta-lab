@@ -1,5 +1,5 @@
-define([ 'exports', 'message', 'log', 'util', 'guiState.controller', 'program.controller', 'program.model', 'blocks', 'codeflask', 'jquery', 'blocks-msg' ], function(
-        exports, MSG, LOG, UTIL, GUISTATE_C, PROG_C, PROGRAM, Blockly, CodeFlask, $) {
+define([ 'exports', 'message', 'log', 'util', 'guiState.controller', 'program.controller', 'simulation.simulation', 'program.model', 'blocks', 'codeflask', 'jquery', 'blocks-msg' ], function(
+        exports, MSG, LOG, UTIL, GUISTATE_C, PROG_C, SIM, PROGRAM, Blockly, CodeFlask, $) {
 
     const INITIAL_WIDTH = 0.5;
     var blocklyWorkspace;
@@ -50,7 +50,11 @@ define([ 'exports', 'message', 'log', 'util', 'guiState.controller', 'program.co
     function initEvents() {
         $('#codeButton').off('click touchend');
         $('#codeButton').on('click touchend', function(event) {
-            toggleCode();
+            if (SIM.getNumRobots() > 1 && $('#simButton').hasClass('rightActive')) {
+                toggleCodeConfirm();
+            } else {
+                toggleCode();
+            }
             return false;
         });
         $('#codeDownload').onWrap('click', function(event) {
@@ -83,7 +87,28 @@ define([ 'exports', 'message', 'log', 'util', 'guiState.controller', 'program.co
             });
         }, 'code refresh clicked');
     }
-
+    
+    function toggleCodeConfirm() {
+        $('#show-message-confirm').one('shown.bs.modal', function(e) {
+            $('#confirm').off();
+            $('#confirm').on('click', function(e) {
+                e.preventDefault();
+                toggleCode();
+            });
+            $('#confirmCancel').off();
+            $('#confirmCancel').on('click', function(e) {
+                e.preventDefault();
+                $('.modal').modal('hide');
+            });
+        });
+        var messageId = "POPUP_SWITCH_SOURCE_CODE_MULTI_SIM";
+        var lkey = 'Blockly.Msg.' + messageId;
+        var value = Blockly.Msg[messageId];
+        $('#message').attr('lkey', lkey);
+        $('#messageConfirm').html(Blockly.Msg[messageId]);
+        $("#show-message-confirm").modal("show");
+    }
+    
     function toggleCode() {
         Blockly.hideChaff();
         if ($('#codeButton').hasClass('rightActive')) {
