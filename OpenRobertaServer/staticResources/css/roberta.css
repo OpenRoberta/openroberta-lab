@@ -2278,3 +2278,7 @@ td[lkey="Blockly.Msg.POPUP_DOWNLOAD_STEP_A_SENSEBOX"] {
 pre code {
     white-space: inherit;
 }
+
+#confirm, #confirmCancel {
+    text-transform: capitalize;
+}
