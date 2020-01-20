@@ -80,7 +80,7 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
                 customBackground = JSON.parse(customBackground);
                 // remove images older than 30 days
                 var currentTimestamp = new Date().getTime();
-                if (currentTimestamp - customBackground.timestamp > 30 * 24 * 60 * 60 * 1000) {
+                if (currentTimestamp - customBackground.timestamp > 63 * 24 * 60 * 60 * 1000) {
                     localStorage.removeItem('customBackground');
                 } else {
                     // add image to backgrounds if recent
