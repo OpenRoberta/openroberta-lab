@@ -1,5 +1,5 @@
-define([ 'exports', 'message', 'log', 'util', 'guiState.controller', 'blocks', 'jquery', 'jquery-validate', 'blocks-msg' ], function(exports, MSG, LOG, UTIL,
-        GUISTATE_C, Blockly, $) {
+define([ 'exports', 'message', 'log', 'util', 'guiState.controller', 'simulation.simulation', 'blocks', 'jquery', 'jquery-validate', 'blocks-msg' ], function(exports, MSG, LOG, UTIL,
+        GUISTATE_C, SIM, Blockly, $) {
 
     const INITIAL_WIDTH = 0.3;
     var blocklyWorkspace;
@@ -45,13 +45,34 @@ define([ 'exports', 'message', 'log', 'util', 'guiState.controller', 'blocks', '
     function initEvents() {
         $('#helpButton').off('click touchend');
         $('#helpButton').on('click touchend', function(event) {
-            if ($('#helpButton').is(":visible")) {
+            if (SIM.getNumRobots() > 1 && $('#simButton').hasClass('rightActive')) {
+                toggleHelpConfirm();
+            } else {
                 toggleHelp();
             }
             return false;
         });
     }
-
+    
+    function toggleHelpConfirm() {
+        $('#show-message-confirm').one('shown.bs.modal', function(e) {
+            $('#confirm').off();
+            $('#confirm').on('click', function(e) {
+                e.preventDefault();
+                toggleHelp();
+            });
+            $('#confirmCancel').off();
+            $('#confirmCancel').on('click', function(e) {
+                e.preventDefault();
+                $('.modal').modal('hide');
+            });
+        });
+        var messageId = "POPUP_SWITCH_VIEW_MULTI_SIM";
+        var lkey = 'Blockly.Msg.' + messageId;
+        var value = Blockly.Msg[messageId];
+        MSG.displayPopupMessage(lkey, value, "OK", Blockly.Msg.POPUP_CANCEL);
+    }
+    
     function toggleHelp() {
         Blockly.hideChaff();
         if ($('#helpButton').hasClass('rightActive')) {

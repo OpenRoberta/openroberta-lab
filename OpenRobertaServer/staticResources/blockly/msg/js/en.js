@@ -1126,6 +1126,7 @@ Blockly.Msg.POPUP_STARTUP_HELP_TEXT = "In our detailed help, we will explain eve
 Blockly.Msg.POPUP_STARTUP_HIDE = "Okay, don't show this window again and remember my choice with a bookmark.";
 Blockly.Msg.POPUP_STARTUP_START = "Choose your system!";
 Blockly.Msg.POPUP_STARTUP_TOUR_TEXT = "Would you like to get started, but do not know exactly how? We will show you the first steps in an interactive tutorial.";
+Blockly.Msg.POPUP_SWITCH_VIEW_MULTI_SIM = "Visiting a different view will close the multiple robot simulation. <br> Would you like to continue?";
 Blockly.Msg.POPUP_TOUR = "take a tour";
 Blockly.Msg.POPUP_USERNAME = "Username";
 Blockly.Msg.POPUP_USERNAME_LOGOFF = "You are not logged in.";
