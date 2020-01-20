@@ -6,10 +6,10 @@ define([ 'exports', 'log', 'jquery', 'blocks-msg' ], function(exports, LOG, $, B
     /**
      * Display popup messages
      */
-    function displayPopupMessage(lkey, value, confirmMsg, denyMsg) {
+    function displayPopupMessage(lkey, value, confirmMsg, opt_denyMsg) {
         $('#confirm').attr('value', confirmMsg);
-        if (denyMsg) {
-            $('#confirmCancel').attr('value', denyMsg);
+        if (opt_denyMsg) {
+            $('#confirmCancel').attr('value', opt_denyMsg);
             $('#messageConfirm').attr('lkey', lkey);
             $('#messageConfirm').html(value);
             $("#show-message-confirm").modal("show");
