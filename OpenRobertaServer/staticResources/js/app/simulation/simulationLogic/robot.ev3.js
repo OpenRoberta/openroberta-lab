@@ -300,7 +300,6 @@ define([ 'simulation.simulation', 'interpreter.constants', 'simulation.robot', '
                 + '" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">' + '<stop offset="0%" style="stop-color:rgb(255,255,255);stop-opacity:0" />'
                 + '<stop offset="100%" style="stop-color:rgb(211,211,211);stop-opacity:1" />' + '</radialGradient>' + '</defs>' + '</svg>';
         $("#simRobotContent").html(this.svg);
-        $("#svg" + this.id).hide();
     }
 
     Ev3.prototype = Object.create(Robot.prototype);
