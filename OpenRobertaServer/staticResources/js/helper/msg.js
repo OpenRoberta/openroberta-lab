@@ -6,14 +6,12 @@ define([ 'exports', 'log', 'jquery', 'blocks-msg' ], function(exports, LOG, $, B
     /**
      * Display popup messages
      */
-    function displayPopupMessage(lkey, value, cancel, opt_showConfirmText) {
-        if (cancel) {
+    function displayPopupMessage(lkey, value, confirmMsg, opt_denyMsg) {
+        $('#confirm').attr('value', confirmMsg);
+        if (opt_denyMsg) {
+            $('#confirmCancel').attr('value', opt_denyMsg);
             $('#messageConfirm').attr('lkey', lkey);
-            if (opt_showConfirmText) {
-                $('#messageConfirm').html(value + Blockly.Msg.POPUP_CONFIRM_CONTINUE);
-            } else {
-                $('#messageConfirm').html(value);
-            }
+            $('#messageConfirm').html(value);
             $("#show-message-confirm").modal("show");
         } else {
             $('#message').attr('lkey', lkey);
@@ -87,7 +85,11 @@ define([ 'exports', 'log', 'jquery', 'blocks-msg' ], function(exports, LOG, $, B
             }
             
             if (output === 'POPUP') {
-                displayPopupMessage(lkey, value, cancel, true);
+                if (cancel) {
+                    displayPopupMessage(lkey, value + Blockly.Msg.POPUP_CONFIRM_CONTINUE, "OK", Blockly.Msg.POPUP_CANCEL);
+                } else {
+                    displayPopupMessage(lkey, value, "OK");
+                }
             } else if (output === 'TOAST') {
                 toastMessages.unshift(value);
                 if (toastMessages.length === 1) {
