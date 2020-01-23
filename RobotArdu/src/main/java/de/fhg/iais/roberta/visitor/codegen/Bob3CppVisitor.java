@@ -20,6 +20,7 @@ import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
 import de.fhg.iais.roberta.syntax.lang.expr.MathConst;
 import de.fhg.iais.roberta.syntax.lang.expr.VarDeclaration;
 import de.fhg.iais.roberta.syntax.lang.functions.MathConstrainFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.MathSingleFunct;
 import de.fhg.iais.roberta.syntax.lang.stmt.AssertStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.DebugAction;
 import de.fhg.iais.roberta.syntax.sensor.generic.GetSampleSensor;
@@ -277,6 +278,70 @@ public final class Bob3CppVisitor extends AbstractCommonArduinoCppVisitor implem
         this.sb.append(", ");
         mathConstrainFunct.getParam().get(2).accept(this);
         this.sb.append(")");
+        return null;
+    }
+
+    @Override
+    public Void visitMathSingleFunct(MathSingleFunct<Void> mathSingleFunct) {
+        boolean extraPar = false;
+        switch ( mathSingleFunct.getFunctName() ) {
+            case ROOT:
+                this.sb.append("sqrt(");
+                break;
+            case ABS:
+                this.sb.append("absD(");
+                break;
+            case LN:
+                this.sb.append("log(");
+                break;
+            case LOG10:
+                this.sb.append("log10(");
+                break;
+            case EXP:
+                this.sb.append("exp(");
+                break;
+            case POW10:
+                this.sb.append("pow(10.0, ");
+                break;
+            case SIN:
+                extraPar = true;
+                this.sb.append("sin(M_PI / 180.0 * (");
+                break;
+            case COS:
+                extraPar = true;
+                this.sb.append("cos(M_PI / 180.0 * (");
+                break;
+            case TAN:
+                extraPar = true;
+                this.sb.append("tan(M_PI / 180.0 * (");
+                break;
+            case ASIN:
+                this.sb.append("180.0 / M_PI * asin(");
+                break;
+            case ATAN:
+                this.sb.append("180.0 / M_PI * atan(");
+                break;
+            case ACOS:
+                this.sb.append("180.0 / M_PI * acos(");
+                break;
+            case ROUND:
+                this.sb.append("round(");
+                break;
+            case ROUNDUP:
+                this.sb.append("ceil(");
+                break;
+            case ROUNDDOWN:
+                this.sb.append("floor(");
+                break;
+            default:
+                break;
+        }
+        mathSingleFunct.getParam().get(0).accept(this);
+        if ( extraPar ) {
+            this.sb.append(")");
+        }
+        this.sb.append(")");
+
         return null;
     }
 
