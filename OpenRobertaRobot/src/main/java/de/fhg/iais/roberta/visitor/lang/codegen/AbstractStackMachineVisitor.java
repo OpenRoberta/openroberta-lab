@@ -315,6 +315,9 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
                 }
                 o = mk(C.EXPR).put(C.EXPR, C.IMAGE_CONST).put(C.VALUE, jsonImage);
                 break;
+            case CAPTURED_TYPE: // TODO: get the captured type
+                o = mk(C.EXPR).put(C.EXPR, C.NUM_CONST).put(C.VALUE, 0);
+                break;
             default:
                 throw new DbcException("Operation not supported");
         }
@@ -413,15 +416,20 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
                 pushOpArray();
                 repeatStmt.getExpr().accept(this);
                 List<JSONObject> timesExprs = popOpArray();
-                JSONObject decl = timesExprs.remove(1);
-                JSONObject listName = timesExprs.remove(1);
-                timesExprs.set(0, mk(C.EXPR).put(C.EXPR, C.NUM_CONST).put(C.VALUE, 0));
-                timesExprs.set(1, mk(C.EXPR).put(C.EXPR, C.NUM_CONST).put(C.VALUE, 1));
+                timesExprs.remove(0);
+                JSONObject varDecl = timesExprs.remove(0);
+                JSONObject listDecl = timesExprs.remove(0);
+                timesExprs.remove(0);
+                Assert.isTrue(timesExprs.size() == 0);
+                timesExprs.add(mk(C.EXPR).put(C.EXPR, C.NUM_CONST).put(C.VALUE, 0));
+                timesExprs.add(mk(C.EXPR).put(C.EXPR, C.NUM_CONST).put(C.VALUE, 1));
+                //timesExprs.add(inExpr);
                 this.getOpArray().addAll(timesExprs);
-                String varName = decl.getString(C.NAME);
+                String varName = varDecl.getString(C.NAME);
                 String runVarName = varName + "_runningVariable";
-                cont.put(C.NAME, varName).put(C.EACH_COUNTER, runVarName).put(C.LIST, listName.getString(C.NAME));
-                repeat.put(C.NAME, varName).put(C.EACH_COUNTER, runVarName).put(C.LIST, listName.getString(C.NAME));
+                String listName = listDecl.getString(C.NAME);
+                cont.put(C.NAME, varName).put(C.EACH_COUNTER, runVarName).put(C.LIST, listName);
+                repeat.put(C.NAME, varName).put(C.EACH_COUNTER, runVarName).put(C.LIST, listName);
                 return app(repeat);
             } else {
                 pushOpArray();

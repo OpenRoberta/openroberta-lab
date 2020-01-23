@@ -41,7 +41,6 @@ import de.fhg.iais.roberta.syntax.action.sound.VolumeAction;
 import de.fhg.iais.roberta.syntax.action.speech.SayTextAction;
 import de.fhg.iais.roberta.syntax.action.speech.SetLanguageAction;
 import de.fhg.iais.roberta.syntax.lang.expr.ColorConst;
-import de.fhg.iais.roberta.syntax.lang.expr.EmptyExpr;
 import de.fhg.iais.roberta.syntax.lang.expr.NumConst;
 import de.fhg.iais.roberta.syntax.sensor.ev3.HTColorSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.AccelerometerSensor;
@@ -423,7 +422,7 @@ public class Ev3StackMachineVisitor<V> extends AbstractStackMachineVisitor<V> im
     public V visitAccelerometer(AccelerometerSensor<V> accelerometerSensor) {
         return null;
     }
-    
+
     @Override
     public V visitIRSeekerSensor(IRSeekerSensor<V> irSeekerSensor) {
         return null;
@@ -483,6 +482,7 @@ public class Ev3StackMachineVisitor<V> extends AbstractStackMachineVisitor<V> im
             app(mk(C.EXPR).put(C.EXPR, C.NUM_CONST).put(C.VALUE, 0));
         }
     }
+
     @Override
     public V visitBluetoothReceiveAction(BluetoothReceiveAction<V> bluetoothReceiveAction) {
         return null;
@@ -502,10 +502,4 @@ public class Ev3StackMachineVisitor<V> extends AbstractStackMachineVisitor<V> im
     public V visitBluetoothWaitForConnectionAction(BluetoothWaitForConnectionAction<V> bluetoothWaitForConnection) {
         return null;
     }
-    @Override
-    public V visitEmptyExpr(EmptyExpr<V> emptyExpr) {
-        return null;
-    }
-
-
 }
