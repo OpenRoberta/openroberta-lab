@@ -110,6 +110,16 @@ Start your browser at: http://localhost:1999
 
 That's it!
 
+You can also import the project into IDE's such as Eclipse and IntelliJ!
+
+### Eclipse Setup
+
+You can find instructions for importing the project into Eclipse on [Importing into Eclipse](https://github.com/OpenRoberta/openroberta-lab/wiki/Importing-into-Eclipse)
+
+### IntelliJ Setup
+
+You can find instructions for importing the project into IntelliJ on [Importing into IntelliJ](https://github.com/OpenRoberta/openroberta-lab/wiki/Importing-into-IntelliJ)
+
 ### Development notes
 
 You can follow the test status on https://travis-ci.org/OpenRoberta/.
