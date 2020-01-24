@@ -75,18 +75,6 @@
   <category name="TOOLBOX_MATH" svg="true">
     <block type="math_number"/>
     <block type="math_arithmetic"/>
-    <block type="math_random_int">
-      <value name="FROM">
-        <block type="math_number">
-          <field name="NUM">1</field>
-        </block>
-      </value>
-      <value name="TO">
-        <block type="math_number">
-          <field name="NUM">100</field>
-        </block>
-      </value>
-    </block>
   </category>
   <category name="TOOLBOX_TEXT" svg="true">
     <block type="text"/>
