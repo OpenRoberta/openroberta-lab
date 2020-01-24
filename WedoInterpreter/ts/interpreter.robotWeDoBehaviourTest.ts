@@ -68,6 +68,7 @@ export class RobotWeDoBehaviourTest extends ARobotBehaviour {
     public toneAction( name: string, frequency: number, duration: number ) {
         const robotText = 'robot: ' + name;
         U.info( robotText + ' piezo: ' + ', frequency: ' + frequency + ', duration: ' + duration );
+        return duration;
     }
 
     public motorOnAction( name: string, port: number, duration: number, speed: number ): number {

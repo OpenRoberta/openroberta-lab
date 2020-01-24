@@ -68,6 +68,7 @@ define(["require", "exports", "interpreter.aRobotBehaviour", "interpreter.consta
         RobotWeDoBehaviourTest.prototype.toneAction = function (name, frequency, duration) {
             var robotText = 'robot: ' + name;
             U.info(robotText + ' piezo: ' + ', frequency: ' + frequency + ', duration: ' + duration);
+            return duration;
         };
         RobotWeDoBehaviourTest.prototype.motorOnAction = function (name, port, duration, speed) {
             var robotText = 'robot: ' + name + ', port: ' + port;

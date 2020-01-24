@@ -39,7 +39,7 @@ export abstract class ARobotBehaviour {
     abstract ledOnAction( name: string, port: number, color: number ): void;
     abstract lightAction( mode: string, color: string ): void;
     abstract statusLightOffAction( name: string, port: number ): void;
-    abstract toneAction( name: string, frequency: number, duration: number ): void;
+    abstract toneAction( name: string, frequency: number, duration: number ): number;
     abstract playFileAction( file: string ): number;
     abstract setVolumeAction( volume: number ): void;
     abstract getVolumeAction( s: State ): void;
