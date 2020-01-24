@@ -214,6 +214,7 @@ export class RobotWeDoBehaviour extends ARobotBehaviour {
         U.debug( robotText + ' piezo: ' + ', frequency: ' + frequency + ', duration: ' + duration );
         const cmd = { 'target': 'wedo', 'type': 'command', 'actuator': 'piezo', 'brickid': brickid, 'frequency': Math.floor( frequency ), 'duration': Math.floor( duration ) };
         this.btInterfaceFct( cmd );
+        return 0;
     }
 
     public motorOnAction( name: string, port: any, duration: number, speed: number ): number {
