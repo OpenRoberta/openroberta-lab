@@ -835,12 +835,12 @@ public final class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor imp
     public Void visitPinWriteValueAction(PinWriteValueAction<Void> pinWriteValueAction) {
         switch ( pinWriteValueAction.getMode() ) {
             case SC.ANALOG:
-                this.sb.append("analogWrite(_output_").append(pinWriteValueAction.getPort()).append(", ");
+                this.sb.append("analogWrite(_output_").append(pinWriteValueAction.getPort()).append(", (int)");
                 pinWriteValueAction.getValue().accept(this);
                 this.sb.append(");");
                 break;
             case SC.DIGITAL:
-                this.sb.append("digitalWrite(_output_").append(pinWriteValueAction.getPort()).append(", ");
+                this.sb.append("digitalWrite(_output_").append(pinWriteValueAction.getPort()).append(", (int)");
                 pinWriteValueAction.getValue().accept(this);
                 this.sb.append(");");
                 break;

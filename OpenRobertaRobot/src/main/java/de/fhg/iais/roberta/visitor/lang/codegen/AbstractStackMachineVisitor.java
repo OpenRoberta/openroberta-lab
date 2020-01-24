@@ -295,6 +295,7 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
                 o = mk(C.EXPR).put(C.EXPR, C.LED_COLOR_CONST).put(C.VALUE, 3);
                 break;
             case NULL:
+            case CONNECTION:
             case ARRAY_BOOLEAN:
             case ARRAY_COLOUR:
             case ARRAY_CONNECTION:

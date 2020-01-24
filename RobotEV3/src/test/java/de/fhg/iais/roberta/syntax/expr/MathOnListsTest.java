@@ -51,7 +51,7 @@ public class MathOnListsTest extends Ev3LejosAstTest {
 
     @Test
     public void mathOnListRandom() throws Exception {
-        String a = "newArrayList<>(Arrays.asList((float) 5, (float) 3, (float) 2)).get(0))}";
+        String a = "newArrayList<>(Arrays.asList((float) 5, (float) 3, (float) 2)).get(0)}";
 
         UnitTestHelper.checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, a, "/syntax/math/math_on_list_random.xml", false);
     }

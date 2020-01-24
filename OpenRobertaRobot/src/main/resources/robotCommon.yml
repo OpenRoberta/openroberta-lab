@@ -673,10 +673,10 @@ wait:
         implementor: de.fhg.iais.roberta.syntax.sensor.generic.RfidSensor
         sensor: RFID
         mode: PRESENCE
-  RFID_SERIAL :
+  RFID_IDONE :
         implementor: de.fhg.iais.roberta.syntax.sensor.generic.RfidSensor
         sensor: RFID
-        mode: SERIAL
+        mode: IDONE
   SOUND :
         implementor: de.fhg.iais.roberta.syntax.sensor.generic.SoundSensor
         sensor: SOUND

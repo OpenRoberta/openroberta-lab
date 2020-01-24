@@ -283,7 +283,7 @@ public abstract class AbstractJavaVisitor extends AbstractLanguageVisitor {
 
     @Override
     public Void visitListRepeat(ListRepeat<Void> listRepeat) {
-        this.sb.append("new ArrayList<>(Collections.nCopies(");
+        this.sb.append("new ArrayList<>(Collections.nCopies( (int) ");
         listRepeat.getParam().get(1).accept(this);
         this.sb.append(", ");
         if ( listRepeat.getParam().get(0).getVarType() == BlocklyType.NUMBER ) {
@@ -395,7 +395,7 @@ public abstract class AbstractJavaVisitor extends AbstractLanguageVisitor {
                 break;
             case RANDOM:
                 mathOnListFunct.getParam().get(0).accept(this);
-                this.sb.append(".get(0)"); // TODO remove? implement?
+                this.sb.append(".get(0"); // TODO remove? implement?
                 break;
             default:
                 this.sb.append(this.codeGeneratorSetupBean.getHelperMethodGenerator().getHelperMethodName(mathOnListFunct.getFunctName())).append("(");

@@ -700,12 +700,14 @@ public final class Ev3JavaVisitor extends AbstractJavaVisitor implements IEv3Vis
                 this.sb.append(".size() - 1");
                 break;
             case FROM_START:
+                this.sb.append("(int) ");
                 getSubFunct.getParam().get(1).accept(this);
                 break;
             case FROM_END:
                 this.sb.append("(");
                 getSubFunct.getParam().get(0).accept(this);
                 this.sb.append(".size() - 1) - ");
+                this.sb.append("(int) ");
                 getSubFunct.getParam().get(1).accept(this);
                 break;
         }
@@ -721,6 +723,7 @@ public final class Ev3JavaVisitor extends AbstractJavaVisitor implements IEv3Vis
                 this.sb.append(".size()");
                 break;
             case FROM_START:
+                this.sb.append("(int) ");
                 if ( isLeftAParam ) {
                     getSubFunct.getParam().get(2).accept(this);
                 } else {
@@ -731,6 +734,7 @@ public final class Ev3JavaVisitor extends AbstractJavaVisitor implements IEv3Vis
                 this.sb.append("(");
                 getSubFunct.getParam().get(0).accept(this);
                 this.sb.append(".size() - 1) - ");
+                this.sb.append("(int) ");
                 if ( isLeftAParam ) {
                     getSubFunct.getParam().get(2).accept(this);
                 } else {

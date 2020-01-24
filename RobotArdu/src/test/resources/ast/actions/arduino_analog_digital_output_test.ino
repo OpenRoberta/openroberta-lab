@@ -15,6 +15,6 @@ void setup()
 
 void loop()
 {
-    digitalWrite(_output_A, 1);
-    analogWrite(_output_A2, 1);
+    digitalWrite(_output_A, (int) 1);
+    analogWrite(_output_A2, (int) 1);
 }
