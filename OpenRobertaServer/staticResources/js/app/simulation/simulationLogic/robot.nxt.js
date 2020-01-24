@@ -239,16 +239,25 @@ define([ 'simulation.simulation', 'interpreter.constants', 'simulation.robot.ev3
         }
         var tone = this.robotBehaviour.getActionState("tone", true);
         if (tone && this.webAudio.context) {
-            var ts = this.webAudio.context.currentTime;
+            var cT = this.webAudio.context.currentTime;
             if (tone.frequency && tone.duration > 0) {
-                this.webAudio.oscillator.frequency.setValueAtTime(tone.frequency, ts);
-                this.webAudio.gainNode.gain.setValueAtTime(this.webAudio.volume, ts);
+                var oscillator = this.webAudio.context.createOscillator();
+                oscillator.type = 'square';
+                oscillator.connect(this.webAudio.context.destination);
+                var that = this;
+                function oscillatorFinish() {
+                    that.tone.finished = true;
+                    oscillator.disconnect(that.webAudio.context.destination);
+                    delete oscillator;
+                }
+                oscillator.onended = function(e) {
+                    oscillatorFinish();                    
+                }
+                oscillator.frequency.value = tone.frequency;
+                oscillator.start(cT);
+                oscillator.stop(cT + tone.duration / 1000.0); 
             }
-            if (tone.duration > 0) {
-                ts += tone.duration / 1000.0;
-                this.webAudio.gainNode.gain.setValueAtTime(0, ts);
-            }
-            if (tone.file != undefined) {
+            if (tone.file !== undefined) {
                 this.tone.file[tone.file](this.webAudio);
             }
         }

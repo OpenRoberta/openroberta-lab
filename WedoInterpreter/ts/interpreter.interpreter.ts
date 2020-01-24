@@ -348,8 +348,7 @@ export class Interpreter {
                     case C.TONE_ACTION: {
                         const duration = s.pop();
                         const frequency = s.pop();
-                        n.toneAction( stmt[C.NAME], frequency, duration );
-                        return duration;
+                        return n.toneAction( stmt[C.NAME], frequency, duration );
                     }
                     case C.PLAY_FILE_ACTION:
                         return n.playFileAction( stmt[C.FILE] );

@@ -338,8 +338,7 @@ define(["require", "exports", "interpreter.state", "interpreter.constants", "int
                         case C.TONE_ACTION: {
                             var duration = s.pop();
                             var frequency = s.pop();
-                            n.toneAction(stmt[C.NAME], frequency, duration);
-                            return duration;
+                            return n.toneAction(stmt[C.NAME], frequency, duration);
                         }
                         case C.PLAY_FILE_ACTION:
                             return n.playFileAction(stmt[C.FILE]);

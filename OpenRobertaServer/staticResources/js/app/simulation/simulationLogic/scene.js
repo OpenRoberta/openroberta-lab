@@ -758,6 +758,10 @@ define([ 'simulation.simulation', 'simulation.math', 'util', 'interpreter.consta
                 this.robots[r].robotBehaviour.setBlocking(false);
                 this.robots[r].sayText.finished = false;
             }
+            if (this.robots[r].tone && this.robots[r].tone.finished) {
+                this.robots[r].robotBehaviour.setBlocking(false);
+                this.robots[r].tone.finished = false;
+            }
             values.frameTime = SIM.getDt();
         }
     };

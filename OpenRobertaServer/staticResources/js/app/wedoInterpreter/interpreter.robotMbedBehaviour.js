@@ -116,7 +116,8 @@ define(["require", "exports", "interpreter.aRobotBehaviour", "interpreter.consta
             this.hardwareState.actions.tone = {};
             this.hardwareState.actions.tone.frequency = frequency;
             this.hardwareState.actions.tone.duration = duration;
-            return duration;
+            this.setBlocking(true);
+            return 0;
         };
         RobotMbedBehaviour.prototype.playFileAction = function (file) {
             U.debug('play file: ' + file);

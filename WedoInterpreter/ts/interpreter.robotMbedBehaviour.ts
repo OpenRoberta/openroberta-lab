@@ -118,7 +118,8 @@ export class RobotMbedBehaviour extends ARobotBehaviour {
         this.hardwareState.actions.tone = {};
         this.hardwareState.actions.tone.frequency = frequency;
         this.hardwareState.actions.tone.duration = duration;
-        return duration;
+        this.setBlocking( true );
+        return 0;
     }
 
     public playFileAction( file: string ): number {
