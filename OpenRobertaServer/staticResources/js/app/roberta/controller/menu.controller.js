@@ -441,7 +441,23 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
             $('.modal').modal('hide'); // close all opened popups
             var domId = event.target.id;
             if (domId === 'menuShowStart') { // Submenu 'Help'
-                $("#show-startup-message").modal("show");
+                $('#show-message-confirm').one('shown.bs.modal', function(e) {
+                    $('#confirm').off();
+                    $('#confirm').on('click', function(e) {
+                        e.preventDefault();
+                        $("#show-startup-message").modal("show");
+                    });
+                    $('#confirmCancel').off();
+                    $('#confirmCancel').on('click', function(e) {
+                        e.preventDefault();
+                        $('.modal').modal('hide');
+                    });
+                });
+                if (GUISTATE_C.isUserLoggedIn()) {
+                    MSG.displayMessage("POPUP_BEFOREUNLOAD_LOGGEDIN", "POPUP", "", true);
+                } else {
+                    MSG.displayMessage("POPUP_BEFOREUNLOAD", "POPUP", "", true);
+                }
             } else if (domId === 'menuAbout') { // Submenu 'Help'
                 $("#version").text(GUISTATE_C.getServerVersion());
                 $("#show-about").modal("show");
