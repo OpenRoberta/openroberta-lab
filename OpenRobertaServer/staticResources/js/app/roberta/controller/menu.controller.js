@@ -255,6 +255,7 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
         proto.find('.img-beta').css('visibility', 'hidden');
         proto.find('a[href]').css('visibility', 'hidden');
         $('#show-startup-message>.modal-body').append('<input type="button" class="btn backButton hidden" data-dismiss="modal" lkey="Blockly.Msg.POPUP_CANCEL"></input>');
+        $('.simStop').parent().addClass('disabled');
         USER.getStatusText(function(result) {
             if (result.statustext[0] !== "" && result.statustext[1] !== "") {
 //                $('#statustext-en').html("<span class='typcn typcn-info-large'></span> " + result.statustext[0]);
@@ -517,6 +518,10 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
             case 'menuSimMath':
                 $('.simMath').parent().addClass('disabled');
                 SIM.setBackground(7, SIM.setBackground);
+                break;
+            case 'menuSimStop':
+                $('.simStop').parent().addClass('disabled');
+                SIM.stopProgram();
                 break;
             default:
                 break;

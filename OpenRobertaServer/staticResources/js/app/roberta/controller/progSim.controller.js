@@ -35,7 +35,7 @@ define([ 'exports', 'message', 'log', 'util', 'simulation.simulation', 'guiState
                     var xmlConfigText = GUISTATE_C.isConfigurationAnonymous() ? GUISTATE_C.getConfigurationXML() : undefined;
 
                     var language = GUISTATE_C.getLanguage();
-
+                    $('.simStop').parent().removeClass('disabled');
                     PROGRAM.runInSim(GUISTATE_C.getProgramName(), configName, xmlTextProgram, xmlConfigText, language, function(result) {
                         if (result.rc == "ok") {
                             MSG.displayMessage("MESSAGE_EDIT_START", "TOAST", GUISTATE_C.getProgramName());
@@ -54,14 +54,15 @@ define([ 'exports', 'message', 'log', 'util', 'simulation.simulation', 'guiState
                 } else {
                     $('#simControl').addClass('typcn-media-play-outline').removeClass('typcn-media-stop');
                     $('#simControl').attr('data-original-title', Blockly.Msg.MENU_SIM_START_TOOLTIP);
+                    $('.simStop').parent().addClass('disabled');
                     SIM.stopProgram();
-
                 }
             } else {
                 if ($('#simControl').hasClass('typcn-media-play-outline')) {
                     MSG.displayMessage("MESSAGE_EDIT_START", "TOAST", "multiple simulation");
                     $('#simControl').addClass('typcn-media-stop').removeClass('typcn-media-play-outline');
                     $('#simControl').attr('data-original-title', Blockly.Msg.MENU_SIM_STOP_TOOLTIP);
+                    $('.simStop').parent().removeClass('disabled');
                     SIM.run(false, GUISTATE_C.getRobotGroup());
                     setTimeout(function() {
                         SIM.setPause(false);
@@ -69,6 +70,7 @@ define([ 'exports', 'message', 'log', 'util', 'simulation.simulation', 'guiState
                 } else {
                     $('#simControl').addClass('typcn-media-play-outline').removeClass('typcn-media-stop');
                     $('#simControl').attr('data-original-title', Blockly.Msg.MENU_SIM_START_TOOLTIP);
+                    $('.simStop').parent().addClass('disabled');
                     SIM.stopProgram();
                 }
             }
