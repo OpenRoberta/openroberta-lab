@@ -546,6 +546,7 @@ export class Interpreter {
                 const value = s.pop();
                 U.debug( '---------- ' + subOp + ' with ' + value )
                 switch ( subOp ) {
+                    case 'SQUARE': s.push( Math.pow( value, 2 ) ); break;
                     case 'ROOT': s.push( Math.sqrt( value ) ); break;
                     case 'ABS': s.push( Math.abs( value ) ); break;
                     case 'LN': s.push( Math.log( value ) ); break;

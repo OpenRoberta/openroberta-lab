@@ -297,6 +297,11 @@ public abstract class AbstractJavaVisitor extends AbstractLanguageVisitor {
     @Override
     public Void visitMathSingleFunct(MathSingleFunct<Void> mathSingleFunct) {
         switch ( mathSingleFunct.getFunctName() ) {
+            case SQUARE:
+            	this.sb.append("(float) Math.pow(");
+            	mathSingleFunct.getParam().get(0).accept(this);
+            	this.sb.append(", 2)");
+            	return null;
             case ROOT:
                 this.sb.append("(float) Math.sqrt(");
                 break;

@@ -403,6 +403,11 @@ public abstract class AbstractCppVisitor extends AbstractLanguageVisitor {
     public Void visitMathSingleFunct(MathSingleFunct<Void> mathSingleFunct) {
         boolean extraPar = false;
         switch ( mathSingleFunct.getFunctName() ) {
+            case SQUARE:
+                this.sb.append("pow(");
+                mathSingleFunct.getParam().get(0).accept(this);
+                this.sb.append(", 2)");
+                return null;
             case ROOT:
                 this.sb.append("sqrt(");
                 break;
