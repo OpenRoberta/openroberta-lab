@@ -273,6 +273,11 @@ public abstract class AbstractPythonVisitor extends AbstractLanguageVisitor {
     @Override
     public Void visitMathSingleFunct(MathSingleFunct<Void> mathSingleFunct) {
         switch ( mathSingleFunct.getFunctName() ) {
+            case SQUARE:
+                this.sb.append("math.pow(");
+                mathSingleFunct.getParam().get(0).accept(this);
+                this.sb.append(", 2)");
+                return null;
             case ROOT:
                 this.sb.append("math.sqrt(");
                 break;

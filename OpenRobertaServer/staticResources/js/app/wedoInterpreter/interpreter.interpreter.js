@@ -544,6 +544,9 @@ define(["require", "exports", "interpreter.state", "interpreter.constants", "int
                     var value = s.pop();
                     U.debug('---------- ' + subOp + ' with ' + value);
                     switch (subOp) {
+                        case 'SQUARE':
+                            s.push(Math.pow(value, 2));
+                            return null;
                         case 'ROOT':
                             s.push(Math.sqrt(value));
                             break;

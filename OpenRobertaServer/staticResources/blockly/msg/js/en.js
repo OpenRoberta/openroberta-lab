@@ -582,6 +582,7 @@ Blockly.Msg.MATH_SINGLE_TOOLTIP_LOG10 = "Return the base 10 logarithm of a numbe
 Blockly.Msg.MATH_SINGLE_TOOLTIP_NEG = "Return the negation of a number.";
 Blockly.Msg.MATH_SINGLE_TOOLTIP_POW10 = "Return 10 to the power of a number.";
 Blockly.Msg.MATH_SINGLE_TOOLTIP_ROOT = "Return the square root of a number.";
+Blockly.Msg.MATH_SINGLE_TOOLTIP_SQUARE = "Return the number multiplied by itself.";
 Blockly.Msg.MATH_SUBTRACTION_SYMBOL = "-";
 Blockly.Msg.MATH_TRIG_ACOS = "acos";
 Blockly.Msg.MATH_TRIG_ASIN = "asin";

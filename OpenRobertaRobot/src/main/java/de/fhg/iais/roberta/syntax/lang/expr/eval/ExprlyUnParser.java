@@ -672,6 +672,7 @@ public class ExprlyUnParser<T> {
         names.put(FunctionNames.AVERAGE, "avg");
         names.put(FunctionNames.MEDIAN, "median");
         names.put(FunctionNames.STD_DEV, "sd");
+        names.put(FunctionNames.SQUARE, "square");
         names.put(FunctionNames.ROOT, "sqrt");
         names.put(FunctionNames.ABS, "abs");
         names.put(FunctionNames.LN, "ln");
