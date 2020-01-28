@@ -123,6 +123,7 @@ case "$CMD" in
                   export LOWERLIMIT=$1; shift
                   export UPPERLIMIT=$1; shift
                   export SERVERURL=$1; shift
+                  export DURATION=$1; shift
                   export PID=$1; shift
                   source ${SCRIPT_ANALYSIS}/showResources.sh ;;
     monthly-stat) SERVER_NAME=$1; shift; MONTH=$1; shift

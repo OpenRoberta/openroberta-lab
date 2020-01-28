@@ -13,7 +13,7 @@ echo "       alive <url> [mail={always|error}] [msg=<msg>]                 is th
 echo "       docker-info | network | logs | test-info                      container state, network and some log from running containers; info about deployed servers"
 echo "       monthly-stat <server> [month]                                 run the monthly stats for a server. Optionally supply the month (e.g. '05' or '12')"
 echo "       show-server                                                   some data about processes with many open file descriptors (FD)"
-echo "       show-resources <server> [<file> [<lower> [<upper> [ <url> [<pid>]]]] show resource usage. See header in file analysis/showResources.sh"
+echo "       show-resources <server> [<file> [<lower> [<upper> [ <url> [<hours> [<pid>]]]]] show resource usage. Parameter description is in file analysis/showResources.sh"
 echo ""
 echo "dangerous commands:"
 echo "       prune                                                         rm as much unused data from docker as possible"
