@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2020-01-17 15:29:56.700838",
+		"lastupdated": "2020-01-29 17:10:20.787193",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -1571,6 +1571,9 @@
 	"CB_RIGHT": "Calli:bot right",
 	"CB_BOTH": "Calli:bot both",
 	"CB_ALL": "Calli:bot all",
+	"MK_LEFT": "MotionKit left",
+	"MK_RIGHT": "MotionKit right",
+	"MK_BOTH": "MotionKit both",
 	"PORT_INTERNAL": "Port internal",
 	"CONFIGURATION_ERROR_WLAN_CREDENTIALS_MISSING": "Missing WLAN credentials, please enter them in robot -> WLAN credentials ... !",
 	"MENU_WLAN_CREDENTIALS": "WLAN credentials",
