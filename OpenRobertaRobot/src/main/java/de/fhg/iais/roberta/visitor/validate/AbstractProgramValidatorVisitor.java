@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import de.fhg.iais.roberta.bean.UsedHardwareBean;
 import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.components.ConfigurationComponent;
+import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.MotorDuration;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.SC;
@@ -34,14 +35,7 @@ import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
 import de.fhg.iais.roberta.syntax.action.sound.VolumeAction;
 import de.fhg.iais.roberta.syntax.action.speech.SayTextAction;
 import de.fhg.iais.roberta.syntax.action.speech.SetLanguageAction;
-import de.fhg.iais.roberta.syntax.lang.expr.Binary;
-import de.fhg.iais.roberta.syntax.lang.expr.EmptyExpr;
-import de.fhg.iais.roberta.syntax.lang.expr.EvalExpr;
-import de.fhg.iais.roberta.syntax.lang.expr.Expr;
-import de.fhg.iais.roberta.syntax.lang.expr.NumConst;
-import de.fhg.iais.roberta.syntax.lang.expr.Unary;
-import de.fhg.iais.roberta.syntax.lang.expr.Var;
-import de.fhg.iais.roberta.syntax.lang.expr.VarDeclaration;
+import de.fhg.iais.roberta.syntax.lang.expr.*;
 import de.fhg.iais.roberta.syntax.lang.expr.eval.ExprlyTypechecker;
 import de.fhg.iais.roberta.syntax.lang.expr.eval.TcError;
 import de.fhg.iais.roberta.syntax.lang.functions.GetSubFunct;
@@ -586,6 +580,7 @@ public abstract class AbstractProgramValidatorVisitor extends AbstractCollectorV
     @Override
     public Void visitListRepeat(ListRepeat<Void> listRepeat) {
         super.visitListRepeat(listRepeat);
+        checkListRepeat(listRepeat);
         boolean oneParamEmpty = false;
         for ( Expr<Void> expr : listRepeat.getParam() ) {
             oneParamEmpty = oneParamEmpty ? true : expr instanceof EmptyExpr;
@@ -593,6 +588,26 @@ public abstract class AbstractProgramValidatorVisitor extends AbstractCollectorV
         if ( oneParamEmpty ) {
             listRepeat.addInfo(NepoInfo.error("ERROR_MISSING_PARAMETER"));
             this.errorCount++;
+        }
+        return null;
+    }
+
+    public Void checkListRepeat(ListRepeat<Void> listRepeat) {
+        try {
+            NumConst expectedNum = (NumConst) (listRepeat.getParam().get(1));
+
+            try {
+                double temp = Double.valueOf(expectedNum.getValue());
+
+                if ( temp > BlocklyConstants.MAX_LIST_SIZE ) {
+                    listRepeat.addInfo(NepoInfo.error("ERROR_TOO_LARGE"));
+                    this.errorCount++;
+                }
+            } catch ( ArithmeticException e ) {
+                listRepeat.addInfo(NepoInfo.error("ERROR_TOO_LARGE"));
+                this.errorCount++;
+            }
+        } catch ( ClassCastException e ) {
         }
         return null;
     }

@@ -369,4 +369,6 @@ public final class BlocklyConstants {
     public static final String PROTOCOL = "PROTOCOL";
     public static final String TICKMARK = "TICKMARK";
     public static final String ON = "ON";
+
+    public static final int MAX_LIST_SIZE = 1000;
 }
