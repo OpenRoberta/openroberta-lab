@@ -30,8 +30,8 @@ git checkout develop; git pull; git checkout master; git pull
 git checkout tags/$BASE_VERSION
 
 mvn clean install # necessary to create the update resources for ev3 lejos-based systems
-docker build --no-cache -t rbudde/openroberta_base:$BASE_VERSION -f $BASE_DIR/conf/docker-for-meta/DockerfileBase_ubuntu_18_04 .
-docker push rbudde/openroberta_base:$BASE_VERSION
+docker build --no-cache -t openroberta/base:$BASE_VERSION -f $BASE_DIR/conf/docker-for-meta/DockerfileBase_ubuntu_18_04 .
+docker push openroberta/base:$BASE_VERSION
 ```
 
 ## generate the image for INTEGRATION TEST.
@@ -47,8 +47,8 @@ BASE_VERSION=10
 BRANCH=develop
 cd $BASE_DIR/conf/docker-for-test
 docker build --no-cache --build-arg BASE_VERSION=$BASE_VERSION --build-arg BRANCH=$BRANCH \
-       -t rbudde/openroberta_it_ubuntu_18_04:$BASE_VERSION -f DockerfileIT_ubuntu_18_04 .
-docker push rbudde/openroberta_it_ubuntu_18_04:$BASE_VERSION
+       -t openroberta/it:$BASE_VERSION -f DockerfileIT_ubuntu_18_04 .
+docker push openroberta/it:$BASE_VERSION
 ```
 ## Run the integration tests
 
@@ -59,7 +59,7 @@ CI system (jenkins, travis, gitlab, bamboo, ...). To run it, execute:
 ```bash
 BASE_VERSION=10
 export BRANCH='develop'
-docker run rbudde/openroberta_it_ubuntu_18_04:$BASE_VERSION $BRANCH x.x.x # x.x.x is the db version and unused for tests
+docker run openroberta/it:$BASE_VERSION $BRANCH x.x.x # x.x.x is the db version and unused for tests
 ```
 
 # Operating Instructions for the Test and Prod Server
@@ -83,7 +83,7 @@ The template for this framework is contained in directory `Docker/openroberta`. 
 * db - contains the databases. Each database has a name (one of master,test,dev,dev1...dev9) matching the name of the jetty server who needs this data.
   the name of the database is the name of a directory, which in turn contains all database files. All databases are served by one Hsqldb server instance.
   Directory `dbAdmin` stores logging data and all database backups.
-  There is one docker image `rbudde/openroberta_db_server` and usually a running container, whose name is essentially `db-server`.
+  There is one docker image `openroberta/db_server` and usually a running container, whose name is essentially `db-server`.
 
 ## Overview
 
@@ -153,9 +153,9 @@ The names of the servers are (b.t.w.: this matches the virtual host names of the
 
 The name of the docker images and the name of the running containers are:
 
-* test: image is `rbudde/openroberta_${INAME}_test:$BASE_VERSION` and the running container has name `${INAME}-test`
-* dev: image is `rbudde/openroberta_${INAME}_dev:$BASE_VERSION` and the running container has name `${INAME}-dev`
-* dev1 up to dev9: images are `rbudde/openroberta_${INAME}_dev1:$BASE_VERSION` to `rbudde/openroberta_${INAME}_dev9:$BASE_VERSION` and
+* test: image is `openroberta/server_${INAME}_test:$BASE_VERSION` and the running container has name `${INAME}-test`
+* dev: image is `openroberta/server_${INAME}_dev:$BASE_VERSION` and the running container has name `${INAME}-dev`
+* dev1 up to dev9: images are `openroberta/server_${INAME}_dev1:$BASE_VERSION` to `openroberta/server_${INAME}_dev9:$BASE_VERSION` and
   the running container have names `${INAME}-dev1` to `${INAME}-dev9`
 
 Generating the images is done by using the data from `decl.sh` from the server directory. Generation will:

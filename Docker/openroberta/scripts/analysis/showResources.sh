@@ -67,11 +67,11 @@ case "$LOGFILE" in
   *)      : ;;
 esac
 case "$LOWERLIMIT" in
-  ''|'-') LOWERLIMIT=190 ;;
+  ''|'-') LOWERLIMIT=225 ;;
   *)      : ;;
 esac
 case "$UPPERLIMIT" in
-  ''|'-') UPPERLIMIT=220 ;;
+  ''|'-') UPPERLIMIT=250 ;;
   *)      : ;;
 esac
 case "$SERVERURL" in

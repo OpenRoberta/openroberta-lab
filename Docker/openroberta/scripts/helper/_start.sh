@@ -20,7 +20,7 @@ case "${SERVER_NAME}" in
      *)     IMAGE_VERSION="$BASE_VERSION" ;;
 esac
 
-IMAGE="rbudde/openroberta_${INAME}_${SERVER_NAME}:$IMAGE_VERSION"
+IMAGE="openroberta/server_${INAME}_${SERVER_NAME}:$IMAGE_VERSION"
 CONTAINER="${INAME}-${SERVER_NAME}"
 RUN="\
 docker run -d --name=${CONTAINER} \

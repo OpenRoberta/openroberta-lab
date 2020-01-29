@@ -1,5 +1,5 @@
 ARG BASE_VERSION
-FROM rbudde/openroberta_base:$BASE_VERSION
+FROM openroberta/base:$BASE_VERSION
 
 VOLUME /opt/admin
 EXPOSE 1999

@@ -55,7 +55,7 @@ esac
     cp ${CONF_DIR}/docker-for-lab/start.sh $SERVER_DIR_OF_ONE_SERVER/export
     cp ${CONF_DIR}/docker-for-lab/admin.sh $SERVER_DIR_OF_ONE_SERVER/export
     chmod ugo+x $SERVER_DIR_OF_ONE_SERVER/export/*.sh
-    IMAGE="rbudde/openroberta_${INAME}_$SERVER_NAME:$BASE_VERSION"
+    IMAGE="openroberta/server_${INAME}_$SERVER_NAME:$BASE_VERSION"
     DOCKERRM=$(docker rmi $IMAGE 2>/dev/null)
     case "$DOCKERRM" in
         '') echo "found no docker image '$IMAGE' to remove. That is ok." ;;
@@ -65,7 +65,7 @@ esac
     
     case "$BRANCH" in
         master) MVN_VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
-                docker tag $IMAGE "rbudde/openroberta_${INAME}_$SERVER_NAME:${MVN_VERSION}" ;;
+                docker tag $IMAGE "openroberta/server_${INAME}_$SERVER_NAME:${MVN_VERSION}" ;;
         *)      ;;
     esac
     
