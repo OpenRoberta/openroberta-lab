@@ -891,6 +891,19 @@ public class CppVisitorTest extends CalliopeAstTest {
     }
 
     @Test
+    public void visitServoSet_SetServoToValues_ReturnsCorrectCppProgram() throws Exception {
+        String expectedResult =
+            "" //
+                + IMPORTS
+                + MAIN
+                + "_uBit.io.P3.setServoValue(90);\n"
+                + END;
+        UnitTestHelper
+            .checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, expectedResult, "/action/servo_set.xml", configuration, true);
+        ;
+    }
+
+    @Test
     public void visitMathOnListFunct_DisplayAllMathOnListFunctsResults_ReturnsCorrectCppProgram() throws Exception {
         String expectedResult =
             "" //

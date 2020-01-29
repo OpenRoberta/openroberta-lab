@@ -35,6 +35,7 @@ import de.fhg.iais.roberta.syntax.action.mbed.PinSetPullAction;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioReceiveAction;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioSendAction;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioSetChannelAction;
+import de.fhg.iais.roberta.syntax.action.mbed.ServoSetAction;
 import de.fhg.iais.roberta.syntax.action.mbed.SingleMotorOnAction;
 import de.fhg.iais.roberta.syntax.action.mbed.SingleMotorStopAction;
 import de.fhg.iais.roberta.syntax.action.mbed.SwitchLedMatrixAction;
@@ -1395,6 +1396,17 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
         } else {
             super.visitAssertStmt(assertStmt);
         }
+        return null;
+    }
+
+    @Override
+    public Void visitServoSetAction(ServoSetAction<Void> servoSetAction) {
+        String userDefinedName = servoSetAction.getPort();
+        String port = this.robotConfiguration.getConfigurationComponent(userDefinedName).getPortName();
+        this.sb.append("_uBit.io.").append(port).append(".setServoValue(");
+        servoSetAction.getValue().accept(this);
+        this.sb.append(");");
+
         return null;
     }
 }
