@@ -76,6 +76,13 @@ public class JavaSourceCompiler {
     public void compileAndPackage(String pathToCrosscompilerBaseDir, String token) {
         compile();
         File jarFile;
+
+        if ( this.fileManager.getClassJavaFileObject() == null ) {
+            this.success = false;
+            this.compilerResponse = "The program body is empty";
+            return;
+        }
+
         if ( this.success ) {
             ByteArrayOutputStream jarArchive = createJarArchive();
             jarFile = new File(pathToCrosscompilerBaseDir + "/" + token + "/" + this.programName + "/target/" + this.programName + ".jar");
