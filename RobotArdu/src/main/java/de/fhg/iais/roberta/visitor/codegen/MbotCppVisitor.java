@@ -555,13 +555,7 @@ public final class MbotCppVisitor extends AbstractCommonArduinoCppVisitor implem
         this.sb.append("#define ANALOG2PERCENT 0.0978");
         nlIndent();
         nlIndent();
-        this.sb.append("#include <math.h>");
-        nlIndent();
         this.sb.append("#include <MeMCore.h>");
-        nlIndent();
-        this.sb.append("#include <Wire.h>");
-        nlIndent();
-        this.sb.append("#include <SoftwareSerial.h>");
         nlIndent();
         this.sb.append("#include <MeDrive.h>");
         nlIndent();
@@ -569,7 +563,8 @@ public final class MbotCppVisitor extends AbstractCommonArduinoCppVisitor implem
         nlIndent();
         generateSensors();
         generateActors();
-
+        nlIndent();
+        nlIndent();
         super.generateProgramPrefix(withWrapping);
     }
 

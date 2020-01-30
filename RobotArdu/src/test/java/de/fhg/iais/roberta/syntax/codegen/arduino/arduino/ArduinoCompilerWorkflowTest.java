@@ -1,7 +1,5 @@
 package de.fhg.iais.roberta.syntax.codegen.arduino.arduino;
 
-import static org.junit.Assert.fail;
-
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -15,6 +13,7 @@ import de.fhg.iais.roberta.util.ServerProperties;
 import de.fhg.iais.roberta.util.Util;
 import de.fhg.iais.roberta.util.test.UnitTestHelper;
 import de.fhg.iais.roberta.worker.compile.ArduinoCompilerWorker;
+import static org.junit.Assert.fail;
 
 public class ArduinoCompilerWorkflowTest {
     private static final String ORA_CC_RSC_ENVVAR = ServerProperties.CROSSCOMPILER_RESOURCE_BASE.replace('.', '_');

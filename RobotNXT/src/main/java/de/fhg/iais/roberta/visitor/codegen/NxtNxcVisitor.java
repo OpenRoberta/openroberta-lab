@@ -1225,7 +1225,6 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
         this.sb.append("#include \"NEPODefs.h\" // contains NEPO declarations for the NXC NXT API resources");
         nlIndent();
         nlIndent();
-        generateSignaturesOfUserDefinedMethods();
         super.generateProgramPrefix(withWrapping);
     }
 

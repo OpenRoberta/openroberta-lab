@@ -487,24 +487,24 @@ public abstract class AbstractCppVisitor extends AbstractLanguageVisitor {
                 break;
             case SIN:
                 extraPar = true;
-                this.sb.append("sin(PI / 180.0 * (");
+                this.sb.append("sin(M_PI / 180.0 * (");
                 break;
             case COS:
                 extraPar = true;
-                this.sb.append("cos(PI / 180.0 * (");
+                this.sb.append("cos(M_PI / 180.0 * (");
                 break;
             case TAN:
                 extraPar = true;
-                this.sb.append("tan(PI / 180.0 * (");
+                this.sb.append("tan(M_PI / 180.0 * (");
                 break;
             case ASIN:
-                this.sb.append("180.0 / PI * asin(");
+                this.sb.append("180.0 / M_PI * asin(");
                 break;
             case ATAN:
-                this.sb.append("180.0 / PI * atan(");
+                this.sb.append("180.0 / M_PI * atan(");
                 break;
             case ACOS:
-                this.sb.append("180.0 / PI * acos(");
+                this.sb.append("180.0 / M_PI * acos(");
                 break;
             case ROUND:
                 this.sb.append("round(");
@@ -802,6 +802,7 @@ public abstract class AbstractCppVisitor extends AbstractLanguageVisitor {
     @Override
     protected void generateProgramPrefix(boolean withWrapping) {
         if (withWrapping) {
+            generateSignaturesOfUserDefinedMethods();
             if (!this.getBean(CodeGeneratorSetupBean.class).getUsedMethods().isEmpty()) {
                 String helperMethodImpls =
                     this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodDeclarations(this.getBean(CodeGeneratorSetupBean.class).getUsedMethods());

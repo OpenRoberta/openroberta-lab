@@ -122,7 +122,6 @@ public final class Bob3CppVisitor extends AbstractCommonArduinoCppVisitor implem
         if ( !withWrapping ) {
             return;
         }
-        this.sb.append("#include <math.h> \n");
         this.sb.append("#include \"bob3.h\" \n");
         this.sb.append("Bob3 rob;\n");
 

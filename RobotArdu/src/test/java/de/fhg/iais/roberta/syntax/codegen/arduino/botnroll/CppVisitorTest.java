@@ -10,7 +10,6 @@ public class CppVisitorTest extends BotnrollAstTest {
 
     private static final String MAIN_METHOD1 =
         ""
-            + "#include<math.h>\n"
             + "#include<BnrOneA.h>//Bot'nRollONEAlibrary"
             + "#include<BnrRescue.h>//Bot'nRollCoSpaceRescueModulelibrary"
             + "#include<BnrRoberta.h>//OpenRobertalibrary"

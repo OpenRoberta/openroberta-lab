@@ -1,7 +1,4 @@
-#include <ArduinoSTL.h>
-#include <list>
-#include <math.h> 
-#include <BOB3.h> 
+#include <BOB3.h>
 #define _BOB3_INCLUDES
 #include <NEPODefs.h>
 Bob3 rob;

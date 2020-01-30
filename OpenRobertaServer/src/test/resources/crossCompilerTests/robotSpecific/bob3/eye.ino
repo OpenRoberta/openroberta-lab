@@ -1,5 +1,4 @@
-#include <math.h> 
-#include <BOB3.h> 
+#include <BOB3.h>
 #include <Wire.h>
 #include <SoftwareSerial.h>
 

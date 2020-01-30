@@ -10,12 +10,10 @@ public class CppVisitorTest extends ArduinoAstTest {
 
     private static final String BASIC_INCLUDE =
         "//ThisfileisautomaticallygeneratedbytheOpenRobertaLab.\n"
-            + "#include<math.h>\n"
             + "#include<NEPODefs.h>";
     private static final String INCLUDE =
         ""
             + "//ThisfileisautomaticallygeneratedbytheOpenRobertaLab.\n"
-            + "#include<math.h>\n"
             + "#include<Encoder.h>"
             + "#include<DHT.h>"
             + "#include<IRremote.h>"
@@ -503,7 +501,6 @@ public class CppVisitorTest extends ArduinoAstTest {
         final String a =
             "" //
                 + "//ThisfileisautomaticallygeneratedbytheOpenRobertaLab.\n"
-                + "#include<math.h>\n"
                 + "#include<Encoder.h>"
                 + "#include<DHT.h>"
                 + "#include<IRremote.h>"

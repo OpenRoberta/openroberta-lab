@@ -119,16 +119,16 @@ public final class FestobionicCppVisitor extends AbstractCommonArduinoCppVisitor
         nlIndent();
         this.sb.append("#define _ARDUINO_STL_NOT_NEEDED"); // TODO remove negation and thus double negation in NEPODEFS.h, maybe define when necessary
         nlIndent();
+        this.sb.append("#include <Arduino.h>\n");
+        nlIndent();
         this.sb.append("#define LED_BUILTIN 13");
         nlIndent();
-        nlIndent();
-        this.sb.append("#include <math.h>");
         nlIndent();
         LinkedHashSet<String> headerFiles = new LinkedHashSet<>();
         for ( ConfigurationComponent usedConfigurationBlock : this.configuration.getConfigurationComponentsValues() ) {
             switch ( usedConfigurationBlock.getComponentType() ) {
                 case SC.SERVOMOTOR:
-                    headerFiles.add("#include <ESP32_Servo.h>");
+                    headerFiles.add("#include <ESP32Servo/src/ESP32Servo.h>");
                     break;
                 case SC.LED:
                     break;
@@ -138,10 +138,6 @@ public final class FestobionicCppVisitor extends AbstractCommonArduinoCppVisitor
         }
         for ( String header : headerFiles ) {
             this.sb.append(header);
-            nlIndent();
-        }
-        if ( this.getBean(UsedHardwareBean.class).isListsUsed() ) {
-            this.sb.append("#include <list>");
             nlIndent();
         }
         this.sb.append("#include <NEPODefs.h>");

@@ -10,7 +10,6 @@ public class CppVisitorTest extends MbotAstTest {
 
     private static final String MAIN_METHOD1 =
         ""
-            + "#include <math.h> \n"
             + "#include <MeMCore.h> \n"
             + "#include <Wire.h>\n"
             + "#include <SoftwareSerial.h>\n"

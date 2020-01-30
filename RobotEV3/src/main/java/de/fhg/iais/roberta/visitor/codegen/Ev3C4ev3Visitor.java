@@ -130,10 +130,13 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
 
     @Override
     protected void generateProgramPrefix(boolean withWrapping) {
+        if (!withWrapping) {
+            return;
+        }
+
         generateConstants();
         generateImports();
         nlIndent();
-        generateSignaturesOfUserDefinedMethods();
 
         super.generateProgramPrefix(withWrapping);
     }

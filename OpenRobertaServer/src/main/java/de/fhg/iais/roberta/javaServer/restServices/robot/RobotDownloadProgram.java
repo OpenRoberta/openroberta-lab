@@ -51,7 +51,7 @@ public class RobotDownloadProgram {
             RobotCommunicationData state = this.brickCommunicator.getState(token);
             String programName = state.getProgramName();
 
-            String fileName = null;
+            String fileName;
             String filePath = null;
 
             // TODO: as the number of supported robot system grows, we should think about a better solution here :-D <- definitely
@@ -63,9 +63,6 @@ public class RobotDownloadProgram {
                     filePath = this.pathToCrosscompilerBaseDir + token + "/" + programName + "/target";
                     break;
                 case "Nao":
-                    fileName = programName + ".py";
-                    filePath = this.pathToCrosscompilerBaseDir + token + "/" + programName + "/source";
-                    break;
                 case "ev3dev":
                     fileName = programName + ".py";
                     filePath = this.pathToCrosscompilerBaseDir + token + "/" + programName + "/source";
@@ -80,15 +77,12 @@ public class RobotDownloadProgram {
                 case "nano":
                 case "mbot":
                 case "unowifirev2":
-                    fileName = programName + ".ino.hex";
-                    filePath = this.pathToCrosscompilerBaseDir + token + "/" + programName + "/target";
-                    break;
                 case "bob3":
                     fileName = programName + ".hex";
                     filePath = this.pathToCrosscompilerBaseDir + token + "/" + programName + "/target";
                     break;
                 case "festobionic":
-                    fileName = programName + ".zip"; // TODO workaround, see FestobionicCompilerWorker
+                    fileName = programName + ".zip";
                     filePath = this.pathToCrosscompilerBaseDir + token + "/" + programName + "/target";
                     break;
                 case "edison":

@@ -1,12 +1,8 @@
-#include <ArduinoSTL.h>
-#include <list>
+#include <Arduino.h>
 #include <NEPODefs.h>
-#include <math.h> 
 #include <BnrOneA.h>   // Bot'n Roll ONE A library 
 #include <BnrRescue.h>   // Bot'n Roll CoSpace Rescue Module library
-#include <BnrRoberta.h>    // Open Roberta library 
-#include <SPI.h>   // SPI communication library required by BnrOne.cpp 
-#include <Wire.h>   //a library required by BnrRescue.cpp for the additional sonar  
+#include <BnrRoberta.h>    // Open Roberta library
 BnrOneA one; 
 BnrRescue brm;
 BnrRoberta bnr(one, brm);  

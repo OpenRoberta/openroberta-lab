@@ -959,7 +959,6 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
             return;
         }
         addIncludes();
-        generateSignaturesOfUserDefinedMethods();
         super.generateProgramPrefix(withWrapping);
     }
 

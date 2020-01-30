@@ -9,15 +9,10 @@ public class CompilerSetupBean implements IProjectBean {
     private String compilerBinDir;
     private String compilerResourcesDir;
     private String tempDir;
-    private String fqbn;
     private String ip;
 
     public String getIp() {
         return ip;
-    }
-
-    public String getFqbn() {
-        return fqbn;
     }
 
     public String getCompilerBinDir() {
@@ -47,11 +42,6 @@ public class CompilerSetupBean implements IProjectBean {
 
         public Builder setTempDir(String tempDir) {
             compilerWorkflowBean.tempDir = tempDir;
-            return this;
-        }
-
-        public Builder setFqbn(String fqbn) {
-            compilerWorkflowBean.fqbn = fqbn;
             return this;
         }
 
