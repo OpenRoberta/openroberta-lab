@@ -324,7 +324,7 @@ define([ 'simulation.simulation', 'simulation.math', 'util', 'interpreter.consta
             this.rCtx.stroke();
             this.rCtx.lineDashOffset = 0;
             this.rCtx.setLineDash([]);
-            if (this.robots[r].canDraw) {
+            if (this.robots[r].canDraw && $('#simControl').hasClass('typcn-media-stop')) {
                 this.bCtx.lineCap = 'round';
                 this.bCtx.beginPath();
                 this.bCtx.lineWidth = this.robots[r].drawWidth;
