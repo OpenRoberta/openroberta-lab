@@ -143,7 +143,7 @@ Furthermore, the project OpenRobertaServer contains in directory staticResources
 * HTML and CSS
 * Javascript libraries based on jquery and bootstrap for the frontend
   * assertions (DBC), ajax-based server calls (COMM), logging (LOG) and
-  * javascript resources for blockly (see: http://code.google.com/p/blockly/)
+  * javascript resources for blockly (see: [developers.google.com/blockly](https://developers.google.com/blockly))
   * controller and models written in Javascript, which implement the GUI
 
 To run tests, use `mvn test`. Running `mvn clean install` will make a stable, reproducible build with all unit tests executed.
