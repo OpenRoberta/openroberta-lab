@@ -186,6 +186,12 @@ define(["require", "exports", "interpreter.aRobotBehaviour", "interpreter.consta
             if ((direction != C.FOREWARD && distance > 0) || (direction == C.FOREWARD && distance < 0)) {
                 speed *= -1;
             }
+
+            // This is to handle 0 distance being passed in
+            if (distance === 0) {
+                speed = 0;
+            }
+
             this.hardwareState.actions.motors[C.MOTOR_LEFT] = speed;
             this.hardwareState.actions.motors[C.MOTOR_RIGHT] = speed;
             this.hardwareState.motors[C.MOTOR_LEFT] = speed;
@@ -211,6 +217,13 @@ define(["require", "exports", "interpreter.aRobotBehaviour", "interpreter.consta
                 speedL *= -1;
                 speedR *= -1;
             }
+
+            // This is to handle 0 distance being passed in
+            if (distance === 0) {
+                speedR = 0;
+                speedL = 0;
+            }
+
             this.hardwareState.actions.motors[C.MOTOR_LEFT] = speedL;
             this.hardwareState.actions.motors[C.MOTOR_RIGHT] = speedR;
             this.hardwareState.motors[C.MOTOR_LEFT] = speedL;
@@ -236,6 +249,12 @@ define(["require", "exports", "interpreter.aRobotBehaviour", "interpreter.consta
             if ((direction == C.LEFT && angle < 0) || (direction == C.RIGHT && angle < 0)) {
                 speed *= -1;
             }
+
+            // This is to handle an angle of 0 being passed in
+            if (angle === 0) {
+                speed = 0;
+            }
+
             this.setTurnSpeed(speed, direction);
             var rotations = C.TURN_RATIO * (Math.abs(angle) / 720.);
             var rotationPerSecond = C.MAX_ROTATION * Math.abs(speed) / 100.0;
