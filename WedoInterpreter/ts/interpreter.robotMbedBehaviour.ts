@@ -198,6 +198,10 @@ export class RobotMbedBehaviour extends ARobotBehaviour {
         if ((direction != C.FOREWARD && distance > 0) || (direction == C.FOREWARD && distance < 0)) {
             speed *= -1;
         }
+        // This is to handle 0 distance being passed in
+        if (distance === 0) {
+            speed = 0;
+        }
         this.hardwareState.actions.motors[C.MOTOR_LEFT] = speed;
         this.hardwareState.actions.motors[C.MOTOR_RIGHT] = speed;
         this.hardwareState.motors[C.MOTOR_LEFT] = speed;
@@ -222,6 +226,11 @@ export class RobotMbedBehaviour extends ARobotBehaviour {
         if ((direction != C.FOREWARD && distance > 0) || (direction == C.FOREWARD && distance < 0)) {
             speedL *= -1;
             speedR *= -1;
+        }
+        // This is to handle 0 distance being passed in
+        if (distance === 0) {
+            speedR = 0;
+            speedL = 0;
         }
         this.hardwareState.actions.motors[C.MOTOR_LEFT] = speedL;
         this.hardwareState.actions.motors[C.MOTOR_RIGHT] = speedR;
@@ -248,6 +257,10 @@ export class RobotMbedBehaviour extends ARobotBehaviour {
         // This is to handle negative values entered in the degree parameter in the turn block 
         if((direction == C.LEFT && angle < 0)|| (direction == C.RIGHT && angle < 0)){
             speed *= -1;
+        }
+        // This is to handle an angle of 0 being passed in
+        if (angle === 0) {
+            speed = 0;
         }
         this.setTurnSpeed( speed, direction );
         let rotations = C.TURN_RATIO * ( Math.abs(angle) / 720. );
