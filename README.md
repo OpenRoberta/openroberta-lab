@@ -3,7 +3,7 @@ Open Roberta Lab
 
 ### Please read the file IMPORTANT_CHANGE.MD
 
-Especially if you have forked or cloned the robertalab repository in the past!
+Especially if you have forked or cloned the '[robertalab](https://github.com/OpenRoberta/robertalab)' repository in the past!
 
 
 ### Introduction
@@ -120,7 +120,7 @@ You can also import the project into IDE's such as [Eclipse](https://github.com/
 
 You can follow the test status [here](https://travis-ci.org/OpenRoberta/).
 
-Development happens in the `develop` branch. Please sent PRs against that branch.
+Development happens in the [develop](https://github.com/OpenRoberta/openroberta-lab/tree/develop) branch. Please sent PRs against that branch.
 
     git clone https://github.com/OpenRoberta/openroberta-lab.git
     cd openroberta-lab
