@@ -8,7 +8,7 @@ Especially if you have forked or cloned the robertalab repository in the past!
 
 ### Introduction
 
-The source of the OpenRoberta Lab is stored in the Github repository ['openroberta-lab'](https://github.com/OpenRoberta/openroberta-lab).
+The source of the OpenRoberta Lab is stored in the Github repository '[openroberta-lab](https://github.com/OpenRoberta/openroberta-lab)'.
 
 The steps below explain how to get started with the sources. If you just want to run the server locally, please have a look into
 the [Wiki - Installation](https://github.com/OpenRoberta/openroberta-lab/wiki/Installation). If you want to contribute, please get in touch with us,
