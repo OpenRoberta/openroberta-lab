@@ -8,11 +8,11 @@ Especially if you have forked or cloned the robertalab repository in the past!
 
 ### Introduction
 
-The source of the OpenRoberta Lab is stored in the Github repository `https://github.com/OpenRoberta/openroberta-lab`.
+The source of the OpenRoberta Lab is stored in the Github repository ['openroberta-lab'](https://github.com/OpenRoberta/openroberta-lab).
 
 The steps below explain how to get started with the sources. If you just want to run the server locally, please have a look into
-the [wiki - installation](https://github.com/OpenRoberta/openroberta-lab/wiki/Installation). If you want to contribute, please get in touch with us,
-see [wiki - Community](https://github.com/OpenRoberta/openroberta-lab/wiki/Community) before you start.
+the [Wiki - Installation](https://github.com/OpenRoberta/openroberta-lab/wiki/Installation). If you want to contribute, please get in touch with us,
+see [Wiki - Community](https://github.com/OpenRoberta/openroberta-lab/wiki/Community) before you start.
 
 After a fresh git clone you get the **openroberta-lab** project folder. It includes almost everything you need to setup and extend your own openrobertalab server.
 License information is available in the **docs** folder.
@@ -30,12 +30,12 @@ on linux:
 * Arduino based robots
   * sudo apt-get install libusb-0.1-4
   * sudo apt-get install binutils-avr gdb-avr avr-libc avrdude
-  * install avr-gcc (see: http://downloads.arduino.cc/tools/avr-gcc-7.3.0-atmel3.6.1-arduino5-x86_64-pc-linux-gnu.tar.bz2)
+  * install [avr-gcc](http://downloads.arduino.cc/tools/avr-gcc-7.3.0-atmel3.6.1-arduino5-x86_64-pc-linux-gnu.tar.bz2)
 * NXT
   * sudo apt-get install nbc
 * Calliope
   * sudo apt-get install srecord libssl-dev
-  * install gcc-arm-none-eabi latest (see: https://developer.arm.com/tools-and-software/open-source-software/developer-tools/gnu-toolchain/gnu-rm/downloads)
+  * install [gcc-arm-none-eabi](https://developer.arm.com/tools-and-software/open-source-software/developer-tools/gnu-toolchain/gnu-rm/downloads) latest
 * micro:bit
   * pip install uflash
 * EV3 c4ev3
@@ -45,19 +45,17 @@ on linux:
  
 on windows:
 * Arduino based robots
-  * install avr-gcc (see: http://downloads.arduino.cc/tools/avr-gcc-7.3.0-atmel3.6.1-arduino5-i686-w64-mingw32.zip)
+  * install [avr-gcc](http://downloads.arduino.cc/tools/avr-gcc-7.3.0-atmel3.6.1-arduino5-i686-w64-mingw32.zip)
 * Calliope
-  * install gcc-arm-none-eabi (see: https://developer.arm.com/tools-and-software/open-source-software/developer-tools/gnu-toolchain/gnu-rm/downloads)
-  * install srecord (see: http://srecord.sourceforge.net/)
+  * install [gcc-arm-none-eabi](https://developer.arm.com/tools-and-software/open-source-software/developer-tools/gnu-toolchain/gnu-rm/downloads)
+  * install [srecord](http://srecord.sourceforge.net/)
 * micro:bit
   * install python 3
   * pip install uflash
 * Edison
   * install python 2
   
-The crossompiler needs resources to work properly (header files, libraries, ...). These resources change little over time and are stored in a repository of its own:
-
-    https://github.com/OpenRoberta/ora-cc-rsc.git
+The crossompiler needs resources to work properly (header files, libraries, ...). These resources change little over time and are stored in the '[ora-cc-rsc](https://github.com/OpenRoberta/ora-cc-rsc)' repository.
 
 Please clone that directory. When the openrobertalab server is started, you have to supply the path to these resources (see below). If the resources are not available,
 everything works fine (writing programs, import, export, creating accounts, etc.), but running programs on real robots doesn't work, because the crosscompiler will fail.
@@ -110,7 +108,7 @@ You can also run `./ora.sh help` to see more commands for administration of the 
 
 #### Step 4: Accessing your programming environment
 
-Start your browser at: http://localhost:1999
+Start your browser [here](http://localhost:1999).
 
 That's it!
 
@@ -120,7 +118,7 @@ You can also import the project into IDE's such as [Eclipse](https://github.com/
 
 ### Development notes
 
-You can follow the test status on https://travis-ci.org/OpenRoberta/.
+You can follow the test status [here](https://travis-ci.org/OpenRoberta/).
 
 Development happens in the `develop` branch. Please sent PRs against that branch.
 
@@ -143,7 +141,7 @@ Furthermore, the project OpenRobertaServer contains in directory staticResources
 * HTML and CSS
 * Javascript libraries based on jquery and bootstrap for the frontend
   * assertions (DBC), ajax-based server calls (COMM), logging (LOG) and
-  * javascript resources for blockly (see: http://code.google.com/p/blockly/)
+  * javascript resources for [blockly](http://code.google.com/p/blockly/)
   * controller and models written in Javascript, which implement the GUI
 
 To run tests, use `mvn test`. Running `mvn clean install` will make a stable, reproducible build with all unit tests executed.
