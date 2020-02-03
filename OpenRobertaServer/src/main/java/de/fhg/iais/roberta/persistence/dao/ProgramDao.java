@@ -1,10 +1,13 @@
 package de.fhg.iais.roberta.persistence.dao;
 
 import java.sql.Timestamp;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import org.codehaus.jettison.json.JSONArray;
 import org.hibernate.Query;
+import org.hibernate.SQLQuery;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -235,5 +238,28 @@ public class ProgramDao extends AbstractDao<Program> {
         @SuppressWarnings("unchecked")
         List<Program> il = hql.list();
         return Collections.unmodifiableList(il);
+    }
+
+    public JSONArray loadGallery(int galleryId, int userId) {
+        String galleryProgramSql = "" + //
+            "select r.NAME as rname, p.NAME as pname, p.PROGRAM_TEXT as ptext, u.ACCOUNT as owner, p.CREATED as created, p.VIEWED as views," + //
+            "       (select count(l1.ID) from USER_PROGRAM_LIKE l1 where l1.PROGRAM_ID=p.ID) as likes," + //
+            "       (select count(l2.ID) from USER_PROGRAM_LIKE l2 where l2.PROGRAM_ID=p.ID and l2.USER_ID=:userId) as iLikedIt " + //
+            "from PROGRAM p, ROBOT r, USER u " + //
+            "where p.OWNER_ID = :galleryId " + //
+            "  and p.ROBOT_ID = r.ID " + //
+            "  and p.AUTHOR_ID = u.ID ";
+        SQLQuery query = session.createSqlQuery(galleryProgramSql);
+        query.setInteger("userId", userId);
+        query.setInteger("galleryId", galleryId);
+
+        @SuppressWarnings("unchecked")
+        List<Object[]> galleryList = query.list();
+
+        JSONArray programs = new JSONArray();
+        for ( Object[] program : galleryList ) {
+            programs.put(Arrays.asList(program));
+        }
+        return programs;
     }
 }
