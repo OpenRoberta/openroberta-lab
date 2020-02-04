@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2020-01-29 17:10:20.787193",
+		"lastupdated": "2020-02-04 15:04:20.212087",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -924,7 +924,7 @@
 	"ORA_USER_PASSWORD_RECOVERY_EXPIRED_URL": "The link is not valid anymore. Please ask for resetting your password again, if you still cannot remember it!",
 	"ORA_USER_PASSWORD_RECOVERY_SENT_MAIL_FAIL": "Sorry, we cannot send a mail to you, please contact »support-o-r@iais.fraunhofer.de«",
 	"ORA_USER_PASSWORD_RECOVERY_SENT_MAIL_SUCCESS": "We send a mail to you, please check your mailbox!",
-	"ORA_USER_UPDATE_SUCCESS": "Your password has been successfully changed!",
+	"ORA_USER_UPDATE_SUCCESS": "Your changes have been successfully saved!",
 	"LIGHT_TOOLTIP": "Represents a light sensor.",
 	"LIGHT_ARDU_TOOLTIP": "Represents 8 light sensors.",
 	"CENTER": "center",

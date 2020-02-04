@@ -405,6 +405,11 @@ define([ 'exports', 'log', 'message', 'util', 'user.model', 'guiState.controller
     }
 
     function showRegisterForm() {
+        $formRegister.off('submit');
+        $formRegister.onWrap('submit', function(e) {
+            e.preventDefault();
+            createUserToServer();
+        });
         $("#registerUser").text(Blockly.Msg["POPUP_REGISTER_USER"]);
         $("#registerAccountName").prop("disabled", false);
         $("#userInfoLabel").addClass('hidden');
@@ -432,10 +437,6 @@ define([ 'exports', 'log', 'message', 'util', 'user.model', 'guiState.controller
         $formLogin.onWrap('submit', function(e) {
             e.preventDefault();
             login();
-        });
-        $formRegister.onWrap('submit', function(e) {
-            e.preventDefault();
-            createUserToServer();
         });
         $('#register-form input.form-control, #register-form select.form-control').focus(function(e) {
             $(this).parent().next('.hint').fadeIn($msgAnimateTime);
@@ -562,10 +563,9 @@ define([ 'exports', 'log', 'message', 'util', 'user.model', 'guiState.controller
 
     function showUserDataForm() {
         getUserFromServer();
-        $formRegister.unbind('submit');
+        $formRegister.off('submit');
         $formRegister.onWrap('submit', function(e) {
             e.preventDefault();
-            console.log(e);
             updateUserToServer();
         });
         $("#registerUser").text("OK");
@@ -682,12 +682,6 @@ define([ 'exports', 'log', 'message', 'util', 'user.model', 'guiState.controller
         });
     }
     exports.showResetPassword = showResetPassword;
-
-    //TODO: Do we need to set some style here?
-    function showRegisterUserModal() {
-        $("#register-user").modal('show');
-    }
-    exports.showRegisterUserModal = showRegisterUserModal;
 
     function initValidationMessages() {
         validateLoginUser();
