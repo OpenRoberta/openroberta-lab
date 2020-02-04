@@ -51,8 +51,6 @@ public class HttpSessionState implements Serializable {
     private String token;
     private String programName;
     private String program;
-    private String configurationName;
-    private String configuration;
     private String toolboxName;
     private String toolbox;
     private boolean processing;
@@ -77,8 +75,6 @@ public class HttpSessionState implements Serializable {
         this.token = RandomUrlPostfix.generate(12, 12, 3, 3, 3);
         this.programName = null;
         this.program = null;
-        this.configurationName = null;
-        this.configuration = null;
         this.toolboxName = null;
         this.toolbox = null;
         this.setProcessing(false);
@@ -169,8 +165,6 @@ public class HttpSessionState implements Serializable {
         this.userId = userId;
         this.programName = null;
         this.program = null;
-        this.configurationName = null;
-        this.configuration = null;
     }
 
     public String getRobotName() {
@@ -207,19 +201,6 @@ public class HttpSessionState implements Serializable {
     public void setProgramNameAndProgramText(String programName, String program) {
         this.programName = programName;
         this.program = program;
-    }
-
-    public String getConfigurationName() {
-        return this.configurationName;
-    }
-
-    public String getConfiguration() {
-        return this.configuration;
-    }
-
-    public void setConfigurationNameAndConfiguration(String configurationName, String configuration) {
-        this.configurationName = configurationName;
-        this.configuration = configuration;
     }
 
     public String getToolboxName() {

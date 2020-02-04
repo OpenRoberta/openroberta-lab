@@ -83,6 +83,7 @@ public class ProgramDao extends AbstractDao<Program> {
             } else if ( timestamp.equals(program.getLastChanged()) ) {
                 program.setProgramText(programText);
                 program.setConfigData(confName, confHash);
+                this.session.getSession().flush();
                 return Pair.of(Key.PROGRAM_SAVE_SUCCESS, program); // the only legal key if success
             } else {
                 ProgramDao.LOG.error("update was requested, timestamps don't match. Has another user updated the program in the meantime?");
@@ -244,7 +245,10 @@ public class ProgramDao extends AbstractDao<Program> {
         String galleryProgramSql = "" + //
             "select r.NAME as rname, p.NAME as pname, p.PROGRAM_TEXT as ptext, u.ACCOUNT as owner, p.CREATED as created, p.VIEWED as views," + //
             "       (select count(l1.ID) from USER_PROGRAM_LIKE l1 where l1.PROGRAM_ID=p.ID) as likes," + //
-            "       (select count(l2.ID) from USER_PROGRAM_LIKE l2 where l2.PROGRAM_ID=p.ID and l2.USER_ID=:userId) as iLikedIt " + //
+            "       p.TAGS as tags," + //
+            "       case when (select count(l2.ID) from USER_PROGRAM_LIKE l2 where l2.PROGRAM_ID=p.ID and l2.USER_ID=:userId)>0 then TRUE " + //
+            "            else FALSE " + //
+            "       end as iLikedIt " + //
             "from PROGRAM p, ROBOT r, USER u " + //
             "where p.OWNER_ID = :galleryId " + //
             "  and p.ROBOT_ID = r.ID " + //
@@ -262,4 +266,13 @@ public class ProgramDao extends AbstractDao<Program> {
         }
         return programs;
     }
+
+    /**
+     * create a write lock for the table PROGRAM. Avoid deadlocks, when programs are created or updated. The lock is released implicitly when the session closes
+     */
+    public void lockTable() {
+        this.session.createSqlQuery("lock table PROGRAM write").executeUpdate();
+        this.session.addToLog("lock", "is now aquired");
+    }
+
 }

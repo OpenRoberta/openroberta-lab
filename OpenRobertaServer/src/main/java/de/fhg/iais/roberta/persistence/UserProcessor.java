@@ -15,7 +15,7 @@ import de.fhg.iais.roberta.util.Key;
 public class UserProcessor extends AbstractProcessor {
 
     public UserProcessor(DbSession dbSession, HttpSessionState httpSessionState) {
-        super(dbSession, httpSessionState);
+        super(dbSession, httpSessionState.getUserId());
     }
 
     public User getUser(String account) {
@@ -76,8 +76,8 @@ public class UserProcessor extends AbstractProcessor {
         }
     }
 
-    public void createUser(String account, String password, String userName, String roleAsString, String email, String tags, boolean youngerThen14)
-        throws Exception {
+    public void createUser(String account, String password, String userName, String role, String email, String tags, boolean youngerThen14) throws Exception //
+    {
         Pattern p = Pattern.compile("[^a-zA-Z0-9=+!?.,%#+&^@_\\- ]", Pattern.CASE_INSENSITIVE);
         Matcher acc_symbols = p.matcher(account);
         boolean account_check = acc_symbols.find();
@@ -93,9 +93,10 @@ public class UserProcessor extends AbstractProcessor {
         } else if ( account.length() > 25 || userName.length() > 25 ) {
             setStatus(ProcessorStatus.FAILED, Key.USER_CREATE_ERROR_ACCOUNT_LENGTH, processorParameters);
         } else {
-            if ( !isMailUsed(account, email) ) {
-                UserDao userDao = new UserDao(this.dbSession);
-                User user = userDao.persistUser(account, password, roleAsString);
+            UserDao userDao = new UserDao(this.dbSession);
+            userDao.lockTable();
+            if ( !isMailUsed(userDao, account, email) ) {
+                User user = userDao.persistUser(account, password, role);
                 if ( user != null ) {
                     setStatus(ProcessorStatus.SUCCEEDED, Key.USER_CREATE_SUCCESS, new HashMap<>());
                     user.setUserName(userName);
@@ -116,7 +117,7 @@ public class UserProcessor extends AbstractProcessor {
             setStatus(ProcessorStatus.FAILED, Key.USER_UPDATE_ERROR_ACCOUNT_WRONG, processorParameters);
         } else {
             User user = getUser(account, oldPassword);
-            if ( user != null && this.httpSessionState.getUserId() == user.getId() ) {
+            if ( user != null && getIdOfLoggedInUser() == user.getId() ) {
                 user.setPassword(newPassword);
                 setStatus(ProcessorStatus.SUCCEEDED, Key.USER_UPDATE_SUCCESS, new HashMap<>());
             } else {
@@ -180,9 +181,10 @@ public class UserProcessor extends AbstractProcessor {
             setStatus(ProcessorStatus.FAILED, Key.USER_UPDATE_ERROR_ACCOUNT_WRONG, processorParameters);
         } else {
             UserDao userDao = new UserDao(this.dbSession);
+            userDao.lockTable();
             User user = userDao.loadUser(account);
-            if ( user != null && this.httpSessionState.getUserId() == user.getId() ) {
-                if ( !isMailUsed(account, email) ) {
+            if ( user != null && getIdOfLoggedInUser() == user.getId() ) {
+                if ( !isMailUsed(userDao, account, email) ) {
                     user.setUserName(userName);
                     user.setRole(Role.valueOf(roleAsString));
                     user.setEmail(email);
@@ -198,6 +200,7 @@ public class UserProcessor extends AbstractProcessor {
 
     public void deleteUser(String account, String password) throws Exception {
         UserDao userDao = new UserDao(this.dbSession);
+        userDao.lockTable();
         User user = userDao.loadUser(account);
         Map<String, String> processorParameters = new HashMap<>();
         processorParameters.put("ACCOUNT", account);
@@ -213,8 +216,15 @@ public class UserProcessor extends AbstractProcessor {
         }
     }
 
-    private boolean isMailUsed(String account, String email) {
-        UserDao userDao = new UserDao(this.dbSession);
+    /**
+     * is the mail address used? NOTE: this accesses the database
+     *
+     * @param userDao dao to access the database
+     * @param account whose mail address is checked
+     * @param email the mail address to ckeck
+     * @return true, if the mail address either is not used or used by the account given as parameter; otherwise false
+     */
+    private boolean isMailUsed(UserDao userDao, String account, String email) {
         if ( !email.equals("") ) {
             User user = userDao.loadUserByEmail(email);
             if ( user != null && !user.getAccount().equals(account) ) {

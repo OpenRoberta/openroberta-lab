@@ -50,7 +50,7 @@ public class UserDao extends AbstractDao<User> {
         Query hql = this.session.createQuery("from User where account=:account");
         hql.setString("account", account);
 
-        return checkUserExistance(hql);
+        return getOneOrNoUser(hql);
     }
 
     public User loadUser(int id) {
@@ -58,7 +58,7 @@ public class UserDao extends AbstractDao<User> {
         Query hql = this.session.createQuery("from User where id=:id");
         hql.setInteger("id", id);
 
-        return checkUserExistance(hql);
+        return getOneOrNoUser(hql);
     }
 
     public User loadUserByEmail(String email) {
@@ -66,7 +66,7 @@ public class UserDao extends AbstractDao<User> {
         Query hql = this.session.createQuery("from User where email=:email");
         hql.setString("email", email);
 
-        return checkUserExistance(hql);
+        return getOneOrNoUser(hql);
     }
 
     @Deprecated
@@ -90,7 +90,15 @@ public class UserDao extends AbstractDao<User> {
         return 1;
     }
 
-    private User checkUserExistance(Query hql) {
+    /**
+     * create a write lock for the table USER. Avoids deadlocks, when users are created or updated. The lock is released implicitly when the session closes
+     */
+    public void lockTable() {
+        this.session.createSqlQuery("lock table USER write").executeUpdate();
+        this.session.addToLog("lock", "is now aquired");
+    }
+
+    private User getOneOrNoUser(Query hql) {
         @SuppressWarnings("unchecked")
         List<User> il = hql.list();
         Assert.isTrue(il.size() <= 1);

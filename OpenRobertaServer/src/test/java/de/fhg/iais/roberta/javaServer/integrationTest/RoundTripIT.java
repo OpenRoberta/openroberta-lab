@@ -210,7 +210,7 @@ public class RoundTripIT {
             blocklyProgram = Resources.toString(PerformanceUserIT.class.getResource(resourcePath + program + ".xml"), Charsets.UTF_8);
             JSONObject fullRequest = new JSONObject("{\"log\":[];\"data\":{\"cmd\":\"saveAsP\";\"name\":\"" + program + "\";\"timestamp\":0}}");
             fullRequest.getJSONObject("data").put("program", blocklyProgram);
-            response = restProject.updateProject(newDbSession(), fullRequest);
+            response = restProject.saveProgram(newDbSession(), fullRequest);
             JSONUtilForServer.assertEntityRc(response, "ok", Key.PROGRAM_SAVE_SUCCESS);
         }
     }

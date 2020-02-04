@@ -41,8 +41,6 @@ import de.fhg.iais.roberta.persistence.dao.RobotDao;
 import de.fhg.iais.roberta.persistence.util.DbSession;
 import de.fhg.iais.roberta.persistence.util.SessionFactoryWrapper;
 import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
-import de.fhg.iais.roberta.util.Key;
-import de.fhg.iais.roberta.util.Pair;
 import de.fhg.iais.roberta.util.ServerProperties;
 import de.fhg.iais.roberta.util.Statistics;
 import de.fhg.iais.roberta.util.Util;
@@ -349,9 +347,9 @@ public class ServerStarter {
         String databaseMode = properties.getProperty("database.mode");
         String dbUrl;
         if ( "embedded".equals(databaseMode) ) {
-            dbUrl = "jdbc:hsqldb:file:" + databaseParentDir + "/db-" + serverVersionForDbDirectory + "/" + databaseName + ";ifexists=true;hsqldb.tx=mvcc";
+            dbUrl = "jdbc:hsqldb:file:" + databaseParentDir + "/db-" + serverVersionForDbDirectory + "/" + databaseName + ";ifexists=true"; // ;hsqldb.tx=mvcc";
         } else if ( "server".equals(databaseMode) ) {
-            dbUrl = "jdbc:hsqldb:hsql://" + databaseUri + "/" + databaseName + ";hsqldb.tx=mvcc";
+            dbUrl = "jdbc:hsqldb:hsql://" + databaseUri + "/" + databaseName; // + ";hsqldb.tx=mvcc";
         } else {
             throw new DbcException("invalid database mode (use either embedded or server): " + databaseMode);
         }
@@ -387,9 +385,9 @@ public class ServerStarter {
                 Robot pluginRobot = robotDao.loadRobot(robotForDb);
                 if ( pluginRobot == null ) {
                     // add missing robot type to database
-                    Pair<Key, Robot> result = robotDao.persistRobot(robotForDb);
-                    session.save(result.getSecond());
-                    ServerStarter.LOG.info(result.getSecond().getName() + " added to the database");
+                    Robot robot = new Robot(robotForDb);
+                    session.save(robot);
+                    ServerStarter.LOG.info(robot.getName() + " added to the database");
                 }
             }
             session.close();

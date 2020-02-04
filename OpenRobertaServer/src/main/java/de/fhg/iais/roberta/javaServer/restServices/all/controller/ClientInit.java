@@ -69,10 +69,10 @@ public class ClientInit {
     @Produces(MediaType.APPLICATION_JSON)
     public Response command(JSONObject fullRequest, @Context HttpServletRequest httpRequest) throws JSONException //
     {
-        AliveData.rememberClientCall();
-        new ClientLogger().log(ClientInit.LOG, fullRequest);
         JSONObject response = new JSONObject();
         try {
+            AliveData.rememberClientCall();
+            new ClientLogger().log(ClientInit.LOG, fullRequest);
             JSONObject request = fullRequest.getJSONObject("data");
             ClientInit.LOG.info("INIT command. Trying to build a new HttpSessionState");
             response.put("cmd", "init");

@@ -6,8 +6,6 @@ import org.hibernate.Query;
 
 import de.fhg.iais.roberta.persistence.bo.Robot;
 import de.fhg.iais.roberta.persistence.util.DbSession;
-import de.fhg.iais.roberta.util.Key;
-import de.fhg.iais.roberta.util.Pair;
 import de.fhg.iais.roberta.util.dbc.Assert;
 
 public class RobotDao extends AbstractDao<Robot> {
@@ -34,24 +32,5 @@ public class RobotDao extends AbstractDao<Robot> {
         } else {
             return il.get(0);
         }
-    }
-
-    /**
-     * persist a robot object that is owned by the caller
-     *
-     * @param name the name of the robot, never null
-     * @param user the id of the robot, never null
-     * @return a pair of (message-key, robot). If the program is persisted successfully, the program is NOT null.
-     */
-    public Pair<Key, Robot> persistRobot(String name) {
-        Assert.notNull(name);
-        Robot robot = new Robot(name);
-        return Pair.of(Key.PROGRAM_SAVE_SUCCESS, robot); // the only legal key if success
-    }
-
-    public int deleteRobot(Robot robotToBeDeleted) {
-        Assert.notNull(robotToBeDeleted);
-        this.session.delete(robotToBeDeleted);
-        return 1;
     }
 }

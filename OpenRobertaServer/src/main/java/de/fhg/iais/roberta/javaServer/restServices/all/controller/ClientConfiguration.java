@@ -40,14 +40,12 @@ public class ClientConfiguration {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response command(@OraData DbSession dbSession, JSONObject fullRequest) throws Exception {
-        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, fullRequest);
-        int userId = httpSessionState.getUserId();
-        final String robotName =
-            httpSessionState.getRobotFactory(httpSessionState.getRobotName()).getGroup() != ""
-                ? httpSessionState.getRobotFactory(httpSessionState.getRobotName()).getGroup()
-                : httpSessionState.getRobotName();
         JSONObject response = new JSONObject();
+        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, fullRequest);
         try {
+            int userId = httpSessionState.getUserId();
+            String robotGroup = httpSessionState.getRobotFactory(httpSessionState.getRobotName()).getGroup();
+            final String robotName = robotGroup != "" ? robotGroup : httpSessionState.getRobotName();
             JSONObject request = fullRequest.getJSONObject("data");
             String cmd = request.getString("cmd");
             ClientConfiguration.LOG.info("command is: " + cmd);
@@ -93,7 +91,6 @@ public class ClientConfiguration {
                 ClientConfiguration.LOG.error("Invalid command: " + cmd);
                 UtilForREST.addErrorInfo(response, Key.COMMAND_INVALID);
             }
-            dbSession.commit();
         } catch ( Exception e ) {
             dbSession.rollback();
             String errorTicketId = Util.getErrorTicketId();

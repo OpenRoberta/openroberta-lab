@@ -63,11 +63,11 @@ public class ClientUser {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response command(@OraData DbSession dbSession, JSONObject fullRequest) throws Exception {
-        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, fullRequest);
-        Map<String, String> responseParameters = new HashMap<>();
-        final int userId = httpSessionState.getUserId();
         JSONObject response = new JSONObject();
+        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, fullRequest);
         try {
+            Map<String, String> responseParameters = new HashMap<>();
+            final int userId = httpSessionState.getUserId();
             JSONObject request = fullRequest.getJSONObject("data");
             String cmd = request.getString("cmd");
             ClientUser.LOG.info("command is: " + cmd);
@@ -262,7 +262,6 @@ public class ClientUser {
                 ClientUser.LOG.error("Invalid command: " + cmd);
                 UtilForREST.addErrorInfo(response, Key.COMMAND_INVALID);
             }
-            dbSession.commit();
         } catch ( Exception e ) {
             dbSession.rollback();
             String errorTicketId = Util.getErrorTicketId();

@@ -22,7 +22,7 @@ public class AccessRightProcessor extends AbstractProcessor {
     private static final Logger LOG = LoggerFactory.getLogger(AccessRightProcessor.class);
 
     public AccessRightProcessor(DbSession dbSession, HttpSessionState httpSessionState) {
-        super(dbSession, httpSessionState);
+        super(dbSession, httpSessionState.getUserId());
     }
 
     /**
@@ -62,8 +62,8 @@ public class AccessRightProcessor extends AbstractProcessor {
     }
 
     /**
-     * a program, which is identified by the triple (ownerId, robotId, programName)<br>
-     * - has to be shared with another user (right is either "WRITE" or "READ") or <br>
+     * a program, identified by ownerId, robotId, programName<br>
+     * - is either shared with another user (right is either "WRITE" or "READ") or <br>
      * - the access right has to be removed (right is "NONE")
      *
      * @param owner
@@ -72,7 +72,7 @@ public class AccessRightProcessor extends AbstractProcessor {
      * @param userToShare
      * @param right
      */
-    public void executeShare(User owner, String robotName, String programName, User author, User userToShare, String right) {
+    private void executeShare(User owner, String robotName, String programName, User author, User userToShare, String right) {
         ProgramDao programDao = new ProgramDao(this.dbSession);
         RobotDao robotDao = new RobotDao(this.dbSession);
 

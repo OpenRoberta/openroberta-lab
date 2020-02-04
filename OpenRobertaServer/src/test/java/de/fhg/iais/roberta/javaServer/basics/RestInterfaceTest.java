@@ -775,9 +775,9 @@ public class RestInterfaceTest {
         } else if ( jsonAsString.contains("shareP") ) {
             this.response = this.restProject.shareProgram(newDbSession(), JSONUtilForServer.mkD(httpSession.getInitToken(), jsonAsString));
         } else if ( jsonAsString.contains("deleteP") ) {
-            this.response = this.restProject.deleteProject(newDbSession(), JSONUtilForServer.mkD(httpSession.getInitToken(), jsonAsString));
+            this.response = this.restProject.deleteProgram(newDbSession(), JSONUtilForServer.mkD(httpSession.getInitToken(), jsonAsString));
         } else if ( jsonAsString.contains("shareDelete") ) {
-            this.response = this.restProject.deleteProjectShare(newDbSession(), JSONUtilForServer.mkD(httpSession.getInitToken(), jsonAsString));
+            this.response = this.restProject.deleteSharedProgram(newDbSession(), JSONUtilForServer.mkD(httpSession.getInitToken(), jsonAsString));
         } else {
             throw new DbcException("Unexpected JSON command");
         }
@@ -815,7 +815,7 @@ public class RestInterfaceTest {
             jsonAsString += ";'configText':'" + confText + "'";
         }
         jsonAsString += ";}";
-        this.response = this.restProject.updateProject(newDbSession(), JSONUtilForServer.mkD(httpSession.getInitToken(), jsonAsString));
+        this.response = this.restProject.saveProgram(newDbSession(), JSONUtilForServer.mkD(httpSession.getInitToken(), jsonAsString));
         JSONUtilForServer.assertEntityRc(this.response, result, msgOpt);
     }
 
@@ -860,7 +860,7 @@ public class RestInterfaceTest {
             jsonAsString += ";'configText':'" + confText + "'";
         }
         jsonAsString += ";}";
-        this.response = this.restProject.updateProject(newDbSession(), JSONUtilForServer.mkD(httpSession.getInitToken(), jsonAsString));
+        this.response = this.restProject.saveProgram(newDbSession(), JSONUtilForServer.mkD(httpSession.getInitToken(), jsonAsString));
         JSONUtilForServer.assertEntityRc(this.response, result, msgOpt);
     }
 
@@ -908,7 +908,7 @@ public class RestInterfaceTest {
     }
 
     private JSONArray assertProgramListingAsExpected(HttpSessionState httpSession, String expectedProgramNamesAsJson) throws Exception, JSONException {
-        this.response = this.restProject.getProgramNames(newDbSession(), JSONUtilForServer.mkD(httpSession.getInitToken(), "{'cmd':'loadPN'}"));
+        this.response = this.restProject.getInfosOfProgramsOfLoggedInUser(newDbSession(), JSONUtilForServer.mkD(httpSession.getInitToken(), "{'cmd':'loadPN'}"));
         JSONUtilForServer.assertEntityRc(this.response, "ok", Key.PROGRAM_GET_ALL_SUCCESS);
         JSONArray programListing = ((JSONObject) this.response.getEntity()).getJSONArray("programNames");
         JSONArray programNames = new JSONArray();

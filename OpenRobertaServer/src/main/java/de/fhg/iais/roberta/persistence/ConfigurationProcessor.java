@@ -20,7 +20,7 @@ import de.fhg.iais.roberta.util.Util;
 
 public class ConfigurationProcessor extends AbstractProcessor {
     public ConfigurationProcessor(DbSession dbSession, HttpSessionState httpSessionState) {
-        super(dbSession, httpSessionState);
+        super(dbSession, httpSessionState.getUserId());
     }
 
     public String getConfigurationText(String configurationName, int userId, String robotName) {
@@ -34,7 +34,7 @@ public class ConfigurationProcessor extends AbstractProcessor {
             Configuration configuration = null;
             RobotDao robotDao = new RobotDao(this.dbSession);
             Robot robot = robotDao.loadRobot(robotName);
-            if ( this.httpSessionState.isUserLoggedIn() ) {
+            if ( isUserLoggedIn() ) {
                 UserDao userDao = new UserDao(this.dbSession);
                 User owner = userDao.get(userId);
                 configuration = configurationDao.load(configurationName, owner, robot);
@@ -73,8 +73,7 @@ public class ConfigurationProcessor extends AbstractProcessor {
             setStatus(ProcessorStatus.FAILED, Key.CONFIGURATION_ERROR_ID_INVALID, processorParameters);
             return;
         }
-        this.httpSessionState.setConfigurationNameAndConfiguration(configurationName, configurationText);
-        if ( this.httpSessionState.isUserLoggedIn() ) {
+        if ( isUserLoggedIn() ) {
             UserDao userDao = new UserDao(this.dbSession);
             ConfigurationDao configurationDao = new ConfigurationDao(this.dbSession);
             RobotDao robotDao = new RobotDao(this.dbSession);

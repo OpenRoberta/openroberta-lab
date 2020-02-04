@@ -7,7 +7,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import de.fhg.iais.roberta.persistence.util.DbSession;
-import de.fhg.iais.roberta.persistence.util.HttpSessionState;
 import de.fhg.iais.roberta.util.Key;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
@@ -21,15 +20,23 @@ public abstract class AbstractProcessor {
     private static final Logger LOG = LoggerFactory.getLogger(AbstractProcessor.class);
 
     protected final DbSession dbSession;
-    protected final HttpSessionState httpSessionState;
+    protected final int idOfLoggedInUser;
 
     private Key message;
     private ProcessorStatus status;
     private Map<String, String> parameters;
 
-    protected AbstractProcessor(DbSession dbSession, HttpSessionState httpSessionState) {
+    protected AbstractProcessor(DbSession dbSession, int idOfLoggedInUser) {
         this.dbSession = dbSession;
-        this.httpSessionState = httpSessionState;
+        this.idOfLoggedInUser = idOfLoggedInUser;
+    }
+
+    protected boolean isUserLoggedIn() {
+        return this.idOfLoggedInUser > 1;
+    }
+
+    protected int getIdOfLoggedInUser() {
+        return this.idOfLoggedInUser;
     }
 
     public void setParameters(Map<String, String> parameters) {
@@ -68,7 +75,7 @@ public abstract class AbstractProcessor {
 
     /**
      * Check if processor state is SUCCEEDED or FAILED
-     * 
+     *
      * @return return true if SUCCEEDED, false if FAILED and throw an {@link DbcException} otherwise
      */
 

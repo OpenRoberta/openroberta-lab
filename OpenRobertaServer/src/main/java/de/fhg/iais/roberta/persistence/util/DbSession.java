@@ -77,6 +77,7 @@ public class DbSession {
      */
     public void commit() {
         LOG.debug("commit + start transaction");
+        // LOG.debug("commit + start transaction [implicitly close session and open a new one]");
         addTransaction("commit"); // for analyzing db session usage.
 
         Transaction transaction = this.session.getTransaction();
@@ -91,12 +92,11 @@ public class DbSession {
     public void close() {
         LOG.debug("close session (after commit)");
         // enable NEVER on prod systems: LOG.error("session close\n" + DbSession.getFullInfo(); // for analyzing db session usage.
-        Transaction transaction = this.session.getTransaction();
-        transaction.commit();
         this.session.close();
         this.session = null;
 
         // for analyzing db session usage.
+        addTransaction("close");
         long sessionAge = new Date().getTime() - creationTime;
         if ( new Date().getTime() - creationTime > DURATION_TIMEOUT_MSEC ) {
             LOG.error("db session " + sessionId + " too old: " + sessionAge + "msec\n" + getFullInfo());
@@ -105,7 +105,9 @@ public class DbSession {
         if ( this.numberOfActions == 0 ) {
             unusedSessionCounter.getAndIncrement();
         }
-        debugSessionMap.remove(this.sessionId);
+        if ( debugSessionMap.remove(this.sessionId) == null ) {
+            LOG.error("FATAL: could not remove db session " + this.sessionId);
+        }
     }
 
     /**
@@ -156,7 +158,7 @@ public class DbSession {
      * @return the Query object
      */
     public Query createQuery(String query) {
-        addQuery("hql", query); // for analyzing db session usage.
+        addToLog("hql", query); // for analyzing db session usage.
         return this.session.createQuery(query);
     }
 
@@ -167,7 +169,7 @@ public class DbSession {
      * @return the Query object
      */
     public SQLQuery createSqlQuery(String query) {
-        addQuery("sql", query); // for analyzing db session usage.
+        addToLog("sql", query); // for analyzing db session usage.
         return this.session.createSQLQuery(query);
     }
 
@@ -178,7 +180,7 @@ public class DbSession {
      * @return the key of the persisted object
      */
     public Serializable save(Object toBePersisted) {
-        addAction("save", toBePersisted); // for analyzing db session usage.
+        addSaveOrDelete("save", toBePersisted); // for analyzing db session usage.
         Serializable persisted = this.session.save(toBePersisted);
         this.session.flush();
         return persisted;
@@ -190,29 +192,24 @@ public class DbSession {
      * @param toBeDeleted the entity to be deleted
      */
     public void delete(Object toBeDeleted) {
-        addAction("delete", toBeDeleted); // for analyzing db session usage.
+        addSaveOrDelete("delete", toBeDeleted); // for analyzing db session usage.
         this.session.delete(toBeDeleted);
         this.session.flush();
     }
 
     // helper for analyzing db session usage.
 
-    private void addTransaction(String kind) {
-        actions.append("transaction: ").append(kind).append("\n");
-    }
-
-    private void addQuery(String cmd, String query) {
+    public void addToLog(String cmd, String query) {
         actions.append(cmd).append(": ").append(query).append("\n");
         numberOfActions++;
     }
 
-    private void addAction(String cmd, Object object) {
-        if ( object == null ) {
-            actions.append(cmd).append(": null");
-        } else {
-            actions.append(cmd).append(": ").append(object.getClass().getSimpleName()).append(" ").append(object.toString()).append("\n");
-        }
-        numberOfActions++;
+    private void addTransaction(String kind) {
+        addToLog("transaction", kind);
+    }
+
+    private void addSaveOrDelete(String cmd, Object object) {
+        addToLog(cmd, object == null ? "null" : (object.getClass().getSimpleName() + " " + object.toString()));
     }
 
     /**

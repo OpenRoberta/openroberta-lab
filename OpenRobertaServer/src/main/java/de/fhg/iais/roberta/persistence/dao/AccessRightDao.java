@@ -40,6 +40,7 @@ public class AccessRightDao extends AbstractDao<AccessRight> {
         Assert.notNull(program);
         Assert.notNull(relation);
 
+        lockTable();
         AccessRight accessRight = loadAccessRight(user, program);
         if ( accessRight == null ) {
             accessRight = new AccessRight(user, program, relation);
@@ -48,6 +49,20 @@ public class AccessRightDao extends AbstractDao<AccessRight> {
             accessRight.setRelation(relation);
         }
         return accessRight;
+    }
+
+    /**
+     * delete a given access right
+     *
+     * @param user the user whose access right has to be deleted
+     * @param program the program affected
+     */
+    public void deleteAccessRight(User user, Program program) {
+        lockTable();
+        AccessRight toBeDeleted = loadAccessRight(user, program);
+        if ( toBeDeleted != null ) {
+            this.session.delete(toBeDeleted);
+        }
     }
 
     /**
@@ -108,19 +123,6 @@ public class AccessRightDao extends AbstractDao<AccessRight> {
 
     }
 
-    /**
-     * delete a given access right
-     *
-     * @param user the user whose access right has to be deleted
-     * @param program the program affected
-     */
-    public void deleteAccessRight(User user, Program program) {
-        AccessRight toBeDeleted = loadAccessRight(user, program);
-        if ( toBeDeleted != null ) {
-            this.session.delete(toBeDeleted);
-        }
-    }
-
     public AccessRight loadAccessRightForUser(int userId, String programName, int ownerId, String authorName) {
         Assert.isTrue(userId > 0);
 
@@ -138,4 +140,13 @@ public class AccessRightDao extends AbstractDao<AccessRight> {
         Assert.isTrue(il.size() <= 1);
         return il.size() == 0 ? null : il.get(0);
     }
+
+    /**
+     * create a write lock for the table USER_PROGRAM. Avoids deadlocks, when access rights are created or deleted. The lock is released on session close
+     */
+    private void lockTable() {
+        this.session.createSqlQuery("lock table USER_PROGRAM write").executeUpdate();
+        this.session.addToLog("lock", "is now aquired");
+    }
+
 }

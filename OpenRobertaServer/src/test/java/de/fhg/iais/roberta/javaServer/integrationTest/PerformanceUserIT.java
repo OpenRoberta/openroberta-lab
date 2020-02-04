@@ -20,7 +20,6 @@ import org.codehaus.jettison.json.JSONObject;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.slf4j.Logger;
@@ -55,7 +54,6 @@ import de.fhg.iais.roberta.util.testsetup.IntegrationTest;
  *
  * @author rbudde
  */
-@Ignore
 @Category(IntegrationTest.class)
 public class PerformanceUserIT {
     private static final Logger LOG = LoggerFactory.getLogger("workflow");
@@ -191,9 +189,9 @@ public class PerformanceUserIT {
         JSONUtilForServer.assertEntityRc(response, "ok", Key.USER_GET_ONE_SUCCESS);
         Assert.assertTrue(s.isUserLoggedIn());
         int sId = s.getUserId();
-        response = this.restProject.updateProject(newDbSession(), mkCmd(iTkn, "{'cmd':'saveAsP';'programName':'p1';'programText':'<program>...</program>'}"));
+        response = this.restProject.saveProgram(newDbSession(), mkCmd(iTkn, "{'cmd':'saveAsP';'programName':'p1';'programText':'<program>...</program>'}"));
         JSONUtilForServer.assertEntityRc(response, "ok", Key.PROGRAM_SAVE_SUCCESS);
-        response = this.restProject.updateProject(newDbSession(), mkCmd(iTkn, "{'cmd':'saveAsP';'programName':'p2';'programText':'<program>...</program>'}"));
+        response = this.restProject.saveProgram(newDbSession(), mkCmd(iTkn, "{'cmd':'saveAsP';'programName':'p2';'programText':'<program>...</program>'}"));
         JSONUtilForServer.assertEntityRc(response, "ok", Key.PROGRAM_SAVE_SUCCESS);
         Assert.assertEquals(2, this.memoryDbSetup.getOneBigIntegerAsLong("select count(*) from PROGRAM where OWNER_ID = " + sId));
 
@@ -203,10 +201,10 @@ public class PerformanceUserIT {
         Timestamp lastChanged = this.memoryDbSetup.getOne("select LAST_CHANGED from PROGRAM where OWNER_ID = " + sId + " and name = 'p2'");
         request = mkCmd(iTkn, "{'cmd':'save';'programName':'p2'}");
         request.getJSONObject("data").put("programText", this.theProgramOfAllUserLol).put("timestamp", lastChanged.getTime());
-        response = this.restProject.updateProject(newDbSession(), request);
+        response = this.restProject.saveProgram(newDbSession(), request);
         JSONUtilForServer.assertEntityRc(response, "ok", Key.PROGRAM_SAVE_SUCCESS);
         Assert.assertEquals(2, this.memoryDbSetup.getOneBigIntegerAsLong("select count(*) from PROGRAM where OWNER_ID = " + sId));
-        response = this.restProject.getProgramNames(newDbSession(), mkCmd(iTkn, "{'cmd':'loadPN'}"));
+        response = this.restProject.getInfosOfProgramsOfLoggedInUser(newDbSession(), mkCmd(iTkn, "{'cmd':'loadPN'}"));
         JSONUtilForServer.assertEntityRc(response, "ok", Key.PROGRAM_GET_ALL_SUCCESS);
         JSONArray programListing = ((JSONObject) response.getEntity()).getJSONArray("programNames");
         JSONArray programNames = new JSONArray();

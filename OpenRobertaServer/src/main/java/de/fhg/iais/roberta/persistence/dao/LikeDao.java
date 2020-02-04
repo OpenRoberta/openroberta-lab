@@ -34,6 +34,7 @@ public class LikeDao extends AbstractDao<Like> {
     public Pair<Key, Like> persistsLike(User user, Program program) throws Exception {
         Assert.notNull(user);
         Assert.notNull(program);
+        lockTable();
         Like like = loadLike(user, program);
 
         if ( like == null ) {
@@ -93,4 +94,14 @@ public class LikeDao extends AbstractDao<Like> {
         List<Like> il = hql.list();
         return Collections.unmodifiableList(il);
     }
+
+    /**
+     * create a write lock for the table USER_PROGRAM_LIKE. Avoids deadlocks, when likes are created or deleted. The lock is released implicitly when the
+     * session closes
+     */
+    private void lockTable() {
+        this.session.createSqlQuery("lock table USER_PROGRAM_LIKE write").executeUpdate();
+        this.session.addToLog("lock", "is now aquired");
+    }
+
 }

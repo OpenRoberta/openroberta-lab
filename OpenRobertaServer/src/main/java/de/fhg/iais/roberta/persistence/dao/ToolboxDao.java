@@ -52,6 +52,16 @@ public class ToolboxDao extends AbstractDao<Toolbox> {
         }
     }
 
+    public int deleteByName(String name, User owner, Robot robot) {
+        Toolbox toBeDeleted = load(name, owner, robot);
+        if ( toBeDeleted == null ) {
+            return 0;
+        } else {
+            this.session.delete(toBeDeleted);
+            return 1;
+        }
+    }
+
     /**
      * load a toolbox from the database, identified by its owner and its name (both make up the "business" key of a toolbox)
      *
@@ -78,16 +88,6 @@ public class ToolboxDao extends AbstractDao<Toolbox> {
         List<Toolbox> il = hql.list();
         Assert.isTrue(il.size() <= 1);
         return il.size() == 0 ? null : il.get(0);
-    }
-
-    public int deleteByName(String name, User owner, Robot robot) {
-        Toolbox toBeDeleted = load(name, owner, robot);
-        if ( toBeDeleted == null ) {
-            return 0;
-        } else {
-            this.session.delete(toBeDeleted);
-            return 1;
-        }
     }
 
     /**
