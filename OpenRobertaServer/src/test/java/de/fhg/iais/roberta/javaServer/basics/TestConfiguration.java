@@ -6,7 +6,7 @@ import de.fhg.iais.roberta.persistence.util.DbSetup;
 import de.fhg.iais.roberta.persistence.util.SessionFactoryWrapper;
 
 public class TestConfiguration {
-    private static String CONNECTION_URL = "jdbc:hsqldb:mem:testInMemoryDb"; // ;hsqldb.tx=mvcc"; // use MVCC as transaction manager in tests, too!
+    private static String CONNECTION_URL = "jdbc:hsqldb:mem:testInMemoryDb;hsqldb.tx=mvcc"; // use MVCC as transaction manager in tests, too!
     private final SessionFactoryWrapper sessionFactoryWrapper;
     private final DbSetup memoryDbSetup;
 

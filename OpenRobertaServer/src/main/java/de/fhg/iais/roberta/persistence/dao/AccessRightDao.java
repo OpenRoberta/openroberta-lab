@@ -142,7 +142,7 @@ public class AccessRightDao extends AbstractDao<AccessRight> {
     }
 
     /**
-     * create a write lock for the table USER_PROGRAM. Avoids deadlocks, when access rights are created or deleted. The lock is released on session close
+     * create a write lock for the table USER_PROGRAM. To avoid deadlocks, is a no op if concurrency control is not 2PL, but MVCC
      */
     private void lockTable() {
         this.session.createSqlQuery("lock table USER_PROGRAM write").executeUpdate();

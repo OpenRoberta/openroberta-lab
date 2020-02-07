@@ -59,21 +59,6 @@ public class ClientUser {
     private static String[] statusText = new String[2];
     private static long statusTextTimestamp;
 
-    private void sendActivationMail(UserProcessor up, String urlPostfix, String account, String email, String lang, boolean isYoungerThen14) throws Exception {
-        Map<String, String> responseParameters = new HashMap<>();
-        String[] body =
-            {
-                account,
-                urlPostfix
-            };
-        try {
-            this.mailManagement.send(email, "activate", body, lang, isYoungerThen14);
-            up.setStatus(ProcessorStatus.SUCCEEDED, Key.USER_ACTIVATION_SENT_MAIL_SUCCESS, responseParameters);
-        } catch ( Exception e ) {
-            up.setStatus(ProcessorStatus.FAILED, Key.USER_ACTIVATION_SENT_MAIL_FAIL, responseParameters);
-        }
-    }
-
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
@@ -646,5 +631,20 @@ public class ClientUser {
             UtilForREST.addErrorInfo(response, Key.SERVER_ERROR).append("parameters", errorTicketId);
         }
         return UtilForREST.responseWithFrontendInfo(response, httpSessionState, this.brickCommunicator);
+    }
+
+    private void sendActivationMail(UserProcessor up, String urlPostfix, String account, String email, String lang, boolean isYoungerThen14) throws Exception {
+        Map<String, String> responseParameters = new HashMap<>();
+        String[] body =
+            {
+                account,
+                urlPostfix
+            };
+        try {
+            this.mailManagement.send(email, "activate", body, lang, isYoungerThen14);
+            up.setStatus(ProcessorStatus.SUCCEEDED, Key.USER_ACTIVATION_SENT_MAIL_SUCCESS, responseParameters);
+        } catch ( Exception e ) {
+            up.setStatus(ProcessorStatus.FAILED, Key.USER_ACTIVATION_SENT_MAIL_FAIL, responseParameters);
+        }
     }
 }

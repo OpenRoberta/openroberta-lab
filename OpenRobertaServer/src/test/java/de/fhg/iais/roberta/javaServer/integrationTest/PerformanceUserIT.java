@@ -20,6 +20,7 @@ import org.codehaus.jettison.json.JSONObject;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.slf4j.Logger;
@@ -54,6 +55,7 @@ import de.fhg.iais.roberta.util.testsetup.IntegrationTest;
  *
  * @author rbudde
  */
+@Ignore
 @Category(IntegrationTest.class)
 public class PerformanceUserIT {
     private static final Logger LOG = LoggerFactory.getLogger("workflow");
