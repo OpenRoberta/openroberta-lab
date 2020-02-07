@@ -1,6 +1,9 @@
 package de.fhg.iais.roberta.util;
 
 import java.util.Date;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentHashMap.KeySetView;
+import java.util.concurrent.atomic.AtomicLong;
 
 import javax.ws.rs.core.Response;
 
@@ -22,7 +25,10 @@ import de.fhg.iais.roberta.util.dbc.DbcKeyException;
 
 public class UtilForREST {
     private static final Logger LOG = LoggerFactory.getLogger(UtilForREST.class);
+    private static final long INVALID_INIT_TOKEN_REPORT_LIMIT = 100;
     private static String serverVersion;
+    private static final AtomicLong invalidInitTokenCounter = new AtomicLong(0);
+    private static final KeySetView<String, Boolean> invalidTokenThatAccess = ConcurrentHashMap.newKeySet();
 
     private UtilForREST() {
         // no objects
@@ -75,15 +81,18 @@ public class UtilForREST {
             LOG.error(errorMsgIfError);
             throw new DbcKeyException(errorMsgIfError, Key.INIT_FAIL_INVALID_INIT_TOKEN, null);
         } else {
-            HttpSessionState httpSessionState = HttpSessionState.initToken2HttpSessionstate.get(initToken);
+            HttpSessionState httpSessionState = HttpSessionState.get(initToken);
             if ( httpSessionState == null ) {
-                String errorMsgIfError = "initToken is not initialized in the session";
-                LOG.error(errorMsgIfError);
-                throw new DbcKeyException(errorMsgIfError, Key.INIT_FAIL_INVALID_INIT_TOKEN, null);
-            } else {
-                httpSessionState.rememberFrontendAccessTime();
-                return httpSessionState;
+                long invalidCounter = invalidInitTokenCounter.incrementAndGet();
+                if ( invalidCounter > INVALID_INIT_TOKEN_REPORT_LIMIT ) {
+                    invalidTokenThatAccess.add(initToken);
+                    LOG.info("got " + INVALID_INIT_TOKEN_REPORT_LIMIT + " many invalid init calls with tokens " + invalidTokenThatAccess.toString());
+                    invalidInitTokenCounter.set(0);
+                    invalidTokenThatAccess.clear();
+                }
+                throw new DbcKeyException("invalid init token", Key.INIT_FAIL_INVALID_INIT_TOKEN, null);
             }
+            return httpSessionState;
         }
     }
 

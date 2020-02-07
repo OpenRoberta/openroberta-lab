@@ -9,6 +9,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.HttpConnectionFactory;
@@ -39,6 +42,7 @@ import de.fhg.iais.roberta.javaServer.websocket.Ev3SensorLoggingWS;
 import de.fhg.iais.roberta.persistence.bo.Robot;
 import de.fhg.iais.roberta.persistence.dao.RobotDao;
 import de.fhg.iais.roberta.persistence.util.DbSession;
+import de.fhg.iais.roberta.persistence.util.HttpSessionState;
 import de.fhg.iais.roberta.persistence.util.SessionFactoryWrapper;
 import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
 import de.fhg.iais.roberta.util.ServerProperties;
@@ -152,7 +156,11 @@ public class ServerStarter {
         // configure robot plugins
         RobotCommunicator robotCommunicator = new RobotCommunicator();
         Map<String, IRobotFactory> robotPluginMap = configureRobotPlugins(robotCommunicator, this.serverProperties, pluginDefines);
+
+        // setup services and threads to run the services
         IIpToCountry ipToCountry = configureIpToCountryDb();
+        configureHttpSessionStateCleanup();
+
         RobertaGuiceServletConfig robertaGuiceServletConfig =
             new RobertaGuiceServletConfig(this.serverProperties, robotPluginMap, robotCommunicator, ipToCountry);
 
@@ -230,34 +238,6 @@ public class ServerStarter {
     }
 
     /**
-     * To get rid of Matomo, logging of the country code will be handled with the help of the ipToCountry class which maps the ip to the country code before
-     * something is logged.<br>
-     * In case the server is public make sure that there is database IpToCountry.csv available in the folder defined in the "server.iptocountry.dir" property,
-     * downloaded from <a href="http://software77.net/geo-ip/?DL=1">http://software77.net</a></br>
-     * If "server.iptocountry.dir" property is provided a valid database is expected and will be used, regardless of whether the server is public or not.
-     *
-     * @return ipToCountry of type IIpToCountry
-     */
-    private IIpToCountry configureIpToCountryDb() {
-        Boolean isPublicServer = this.serverProperties.getBooleanProperty("server.public");
-        String pathIpToCountryDb = this.serverProperties.getStringProperty("server.iptocountry.dir");
-
-        IIpToCountry ipToCountry;
-        if ( pathIpToCountryDb != null ) {
-            try {
-                ipToCountry = new IpToCountry(pathIpToCountryDb);
-            } catch ( IOException e ) {
-                throw new DbcException("Path to IpToCountry.cvs or IpToCountry.cvs seems to be invalid. Server does NOT start", e);
-            }
-        } else if ( isPublicServer ) {
-            throw new DbcException("Path to IpToCountry is obligatorily for public server. Server does NOT start");
-        } else {
-            ipToCountry = new IpToCountryDefault();
-        }
-        return ipToCountry;
-    }
-
-    /**
      * First initialize logging. This is tricky, because we have to avoid any call to a method, that expects logging initialized already. In this case, a
      * default initialization would occur. This is NOT wanted. The variables needed for logging are read from the args assuming a fixed layout (see
      * "openRoberta.properties" for details)
@@ -325,12 +305,55 @@ public class ServerStarter {
     }
 
     /**
-     * returns the guice injector configured in this class. This not dangerous, but you should ask yourself, why you need that ...</b>
+     * returns the guice injector configured in this class. This is not dangerous, but you should ask yourself, why you need that ...</b>
      *
      * @return the injector
      */
     public Injector getInjectorForTests() {
         return this.injector;
+    }
+
+    /**
+     * Configure the ipToCountry service, which maps the ip to the country code before something is logged. The ip of a user is not stored.<br>
+     * To achieve this, database IpToCountry.csv has to be made available in the folder defined in the "server.iptocountry.dir" property, usually downloaded
+     * from <a href="http://software77.net/geo-ip/?DL=1">http://software77.net</a> before</br>
+     * This service MUST be configured for a public server, otherwise the server start will fail, for other server it is optional. In the latter case the ip is
+     * replaced by the country code "ZZ"
+     *
+     * @return the translation service (either real or a dummy)
+     */
+    private IIpToCountry configureIpToCountryDb() {
+        Boolean isPublicServer = this.serverProperties.getBooleanProperty("server.public");
+        String pathIpToCountryDb = this.serverProperties.getStringProperty("server.iptocountry.dir");
+
+        IIpToCountry ipToCountry;
+        if ( pathIpToCountryDb != null ) {
+            try {
+                ipToCountry = new IpToCountry(pathIpToCountryDb);
+            } catch ( IOException e ) {
+                throw new DbcException("Path to IpToCountry.cvs or IpToCountry.cvs seems to be invalid. Server does NOT start", e);
+            }
+        } else if ( isPublicServer ) {
+            throw new DbcException("Path to IpToCountry is obligatorily for public server. Server does NOT start");
+        } else {
+            ipToCountry = new IpToCountryDefault();
+        }
+        return ipToCountry;
+    }
+
+    /**
+     * configure a thread, that runs every 3 hours a service, that will remove expired HttpSessionState objects
+     */
+    private void configureHttpSessionStateCleanup() {
+        final long intervalToRunRemoveExpired = TimeUnit.HOURS.toSeconds(3);
+        ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+        Runnable cleanupHttpSessionState = new Runnable() {
+            @Override
+            public void run() {
+                HttpSessionState.removeExpired();
+            }
+        };
+        scheduler.scheduleAtFixedRate(cleanupHttpSessionState, intervalToRunRemoveExpired, intervalToRunRemoveExpired, TimeUnit.SECONDS);
     }
 
     /**

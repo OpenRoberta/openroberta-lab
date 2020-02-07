@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
@@ -13,9 +14,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import de.fhg.iais.roberta.factory.IRobotFactory;
-import de.fhg.iais.roberta.util.Pair;
 import de.fhg.iais.roberta.util.RandomUrlPostfix;
 import de.fhg.iais.roberta.util.ServerProperties;
+import de.fhg.iais.roberta.util.Statistics;
 import de.fhg.iais.roberta.util.dbc.Assert;
 
 /**
@@ -24,12 +25,12 @@ import de.fhg.iais.roberta.util.dbc.Assert;
 public class HttpSessionState implements Serializable {
     private static final long serialVersionUID = 5423413372044585392L;
     private static final Logger LOG = LoggerFactory.getLogger(HttpSessionState.class);
+    public final static int NO_USER = -1;
+    public final static long EXPIRATION_TIME_SEC = 10800; // 3 hours = 3*60*60 = 10.800
 
     private static final AtomicLong SESSION_COUNTER = new AtomicLong();
 
-    public final static int NO_USER = -1;
-
-    public static final Map<String, HttpSessionState> initToken2HttpSessionstate = new ConcurrentHashMap<>();
+    private static final Map<String, HttpSessionState> initToken2HttpSessionstate = new ConcurrentHashMap<>();
 
     /**
      * the REST-service in ClientInit sets the 'initToken'. It is returned with each response and the front end must supply it with each request. The token is
@@ -44,7 +45,7 @@ public class HttpSessionState implements Serializable {
     private final String countryCode;
 
     private final long initTime;
-    private long lastFrontendAccessTime;
+    private long lastAccessTime;
 
     private int userId;
     private String robotName;
@@ -68,7 +69,7 @@ public class HttpSessionState implements Serializable {
         this.defaultRobotName = serverProperties.getDefaultRobot();
         this.countryCode = countryCode;
         this.initTime = new Date().getTime();
-        this.lastFrontendAccessTime = 0;
+        this.lastAccessTime = 0;
 
         this.userId = HttpSessionState.NO_USER;
         this.robotName = defaultRobotName;
@@ -135,24 +136,17 @@ public class HttpSessionState implements Serializable {
      * this method is called to remember the time of the http request. The value is used to invalidate this object, if no http request hits the server for a
      * long time.
      */
-    public void rememberFrontendAccessTime() {
-        this.lastFrontendAccessTime = new Date().getTime();
+    private void rememberAccessTime() {
+        this.lastAccessTime = new Date().getTime();
     }
 
     /**
-     * return the number of seconds since the last http request.<br>
+     * return the number of seconds since the last access. The accessor usually is the frontend<br>
      * Usage: if a http request hits the serverthe time of the http request is remembered. This call return the number of seconds between now and the last
      * request. This value in turn is used to invalidate this object, if no http request hits the server for a long time.
      */
-    public long secondsSinceLastFrontendAccess() {
-        return (new Date().getTime() - this.lastFrontendAccessTime) / 1000;
-    }
-
-    /**
-     * return the creation time and the number of seconds since the last http request
-     */
-    public Pair<Long, Long> creationTimeAndSecondsOfLastAccess() {
-        return Pair.of(this.initTime, secondsSinceLastFrontendAccess());
+    public long getSecondsSinceLastAccess() {
+        return (new Date().getTime() - this.lastAccessTime) / 1000;
     }
 
     public boolean isUserLoggedIn() {
@@ -264,7 +258,26 @@ public class HttpSessionState implements Serializable {
         return this.countryCode;
     }
 
+    public static HttpSessionState get(String initToken) {
+        HttpSessionState httpSessionState = initToken2HttpSessionstate.get(initToken);
+        if ( httpSessionState != null ) {
+            httpSessionState.rememberAccessTime();
+        }
+        return initToken2HttpSessionstate.get(initToken);
+    }
+
     public static int getNumberOfHttpSessionStates() {
         return initToken2HttpSessionstate.size();
+    }
+
+    public static void removeExpired() {
+        for ( Entry<String, HttpSessionState> entry : initToken2HttpSessionstate.entrySet() ) {
+            if ( entry.getValue().getSecondsSinceLastAccess() > EXPIRATION_TIME_SEC ) {
+                String initToken = entry.getKey();
+                Statistics.info("SessionExpire", "initToken", initToken, "success", true);
+                LOG.info("Session with token " + initToken + " expired");
+                initToken2HttpSessionstate.remove(initToken);
+            }
+        }
     }
 }
