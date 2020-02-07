@@ -92,6 +92,7 @@ public class DbSession {
     public void close() {
         LOG.debug("close session (after commit)");
         // enable NEVER on prod systems: LOG.error("session close\n" + DbSession.getFullInfo(); // for analyzing db session usage.
+        commit();
         this.session.close();
         this.session = null;
 

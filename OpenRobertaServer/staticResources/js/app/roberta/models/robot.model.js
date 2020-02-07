@@ -10,7 +10,7 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
      * 
      */
     function updateFirmware(successFn) {
-        COMM.json("/admin", {
+        COMM.json("/admin/updateFirmware", {
             "cmd" : "updateFirmware"
         }, successFn, "update firmware");
     }
@@ -24,7 +24,7 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
      *            {String} - token for paring
      */
     function setToken(token, successFn) {
-        COMM.json("/admin", {
+        COMM.json("/admin/setToken", {
             "cmd" : "setToken",
             "token" : token
         }, successFn, "set token '" + token + "'");
@@ -39,7 +39,7 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
      *            {String} - robot type
      */
     function setRobot(robot, successFn) {
-        return COMM.json("/admin", {
+        return COMM.json("/admin/setRobot", {
             "cmd" : "setRobot",
             "robot" : robot
         }, successFn, "set robot '" + robot + "'");

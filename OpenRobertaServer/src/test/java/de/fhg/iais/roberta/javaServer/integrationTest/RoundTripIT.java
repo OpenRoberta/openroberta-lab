@@ -196,12 +196,12 @@ public class RoundTripIT {
         Assert.assertEquals(1, getOneBigInteger("select count(*) from USER"));
         response =
             restUser
-                .command(
+                .createUser(
                     newDbSession(),
                     mkCmd("{'cmd':'createUser';'accountName':'orA';'userName':'orA';'password':'Pid';'userEmail':'cavy@home';'role':'STUDENT'}"));
         Assert.assertEquals(2, getOneBigInteger("select count(*) from USER"));
         Assert.assertTrue(!s1.isUserLoggedIn());
-        response = restUser.command(newDbSession(), mkCmd("{'cmd':'login';'accountName':'orA';'password':'Pid'}"));
+        response = restUser.login(newDbSession(), mkCmd("{'cmd':'login';'accountName':'orA';'password':'Pid'}"));
         JSONUtilForServer.assertEntityRc(response, "ok", Key.USER_GET_ONE_SUCCESS);
         Assert.assertTrue(s1.isUserLoggedIn());
         int s1Id = s1.getUserId();

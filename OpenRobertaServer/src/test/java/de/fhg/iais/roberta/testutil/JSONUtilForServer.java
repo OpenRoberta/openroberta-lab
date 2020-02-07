@@ -205,7 +205,7 @@ public class JSONUtilForServer {
         ThreadedFunction theUser = new ThreadedFunction() {
             @Override
             public boolean apply() throws Exception {
-                Response response = restBlocks.command(JSONUtilForServer.mkD("{'cmd':'setToken';'token':'" + token + "'}"), null);
+                Response response = restBlocks.setToken(JSONUtilForServer.mkD("{'cmd':'setToken';'token':'" + token + "'}"));
                 return ((JSONObject) response.getEntity()).getString("rc").equals("ok");
             }
         };

@@ -11,7 +11,7 @@ public class TestConfiguration {
     private final DbSetup memoryDbSetup;
 
     private TestConfiguration() {
-        this.sessionFactoryWrapper = new SessionFactoryWrapper("hibernate-test-cfg.xml", CONNECTION_URL);
+        this.sessionFactoryWrapper = new SessionFactoryWrapper("hibernate-cfg.xml", CONNECTION_URL);
         Session nativeSession = this.sessionFactoryWrapper.getNativeSession();
         this.memoryDbSetup = new DbSetup(nativeSession);
         this.memoryDbSetup.createEmptyDatabase();

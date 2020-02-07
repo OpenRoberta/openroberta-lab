@@ -1,5 +1,9 @@
 package de.fhg.iais.roberta.javaServer.integrationTest;
 
+import static org.junit.Assert.fail;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.when;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -40,9 +44,6 @@ import de.fhg.iais.roberta.util.ServerProperties;
 import de.fhg.iais.roberta.util.Util;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.util.testsetup.IntegrationTest;
-import static org.junit.Assert.fail;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.when;
 
 /**
  * <b>Testing the generation of native code and the CROSSCOMPILER</b><br>
@@ -222,7 +223,7 @@ public class CompilerWorkflowRobotCommonIT {
     }
 
     private void setRobotTo(String robot) throws Exception {
-        Response response = this.restAdmin.command(JSONUtilForServer.mkD("{'cmd':'setRobot','robot':'" + robot + "'}"), null);
+        Response response = this.restAdmin.setRobot(JSONUtilForServer.mkD("{'cmd':'setRobot','robot':'" + robot + "'}"));
         JSONUtilForServer.assertEntityRc(response, "ok", Key.ROBOT_SET_SUCCESS);
     }
 

@@ -298,7 +298,7 @@ public class CompilerWorkflowRobotSpecificIT {
     }
 
     private void setRobotTo(String robot) throws Exception, JSONException {
-        Response response = this.restAdmin.command(JSONUtilForServer.mkD("{'cmd':'setRobot','robot':'" + robot + "'}"), null);
+        Response response = this.restAdmin.setRobot(JSONUtilForServer.mkD("{'cmd':'setRobot','robot':'" + robot + "'}"));
         JSONUtilForServer.assertEntityRc(response, "ok", Key.ROBOT_SET_SUCCESS);
     }
 

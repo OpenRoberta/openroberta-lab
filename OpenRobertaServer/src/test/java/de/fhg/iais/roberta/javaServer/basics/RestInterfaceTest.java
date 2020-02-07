@@ -754,7 +754,32 @@ public class RestInterfaceTest {
      * @throws Exception
      */
     private void restUser(HttpSessionState httpSession, String jsonAsString, String result, Key msgOpt) throws Exception {
-        this.response = this.restUser.command(newDbSession(), JSONUtilForServer.mkD(httpSession.getInitToken(), jsonAsString));
+        JSONObject jsonCmd = JSONUtilForServer.mkD(httpSession.getInitToken(), jsonAsString);
+        switch ( jsonCmd.getJSONObject("data").getString("cmd") ) {
+            case "activateUser":
+                this.response = this.restUser.activateUser(newDbSession(), jsonCmd);
+                break;
+            case "changePassword":
+                this.response = this.restUser.changePassword(newDbSession(), jsonCmd);
+                break;
+            case "login":
+                this.response = this.restUser.login(newDbSession(), jsonCmd);
+                break;
+            case "logout":
+                this.response = this.restUser.logout(jsonCmd);
+                break;
+            case "createUser":
+                this.response = this.restUser.createUser(newDbSession(), jsonCmd);
+                break;
+            case "updateUser":
+                this.response = this.restUser.updateUser(newDbSession(), jsonCmd);
+                break;
+            case "getUser":
+                this.response = this.restUser.getUser(newDbSession(), jsonCmd);
+                break;
+            default:
+                throw new DbcException("Unexpected JSON command");
+        }
         JSONUtilForServer.assertEntityRc(this.response, result, msgOpt);
     }
 
@@ -769,7 +794,6 @@ public class RestInterfaceTest {
      * @throws Exception
      */
     private void restProgram(HttpSessionState httpSession, String jsonAsString, String result, Key msgOpt) throws JSONException, Exception {
-        // TODO handle this in a better way
         if ( jsonAsString.contains("loadP") ) {
             this.response = this.restProject.getProgram(newDbSession(), JSONUtilForServer.mkD(httpSession.getInitToken(), jsonAsString));
         } else if ( jsonAsString.contains("shareP") ) {
@@ -885,7 +909,7 @@ public class RestInterfaceTest {
             jsonAsString += ";'configuration':'" + configText + "'";
         }
         jsonAsString += ";}";
-        this.response = this.restConfiguration.command(newDbSession(), JSONUtilForServer.mkD(httpSession.getInitToken(), jsonAsString));
+        this.response = this.restConfiguration.saveAsConfig(newDbSession(), JSONUtilForServer.mkD(httpSession.getInitToken(), jsonAsString));
         JSONUtilForServer.assertEntityRc(this.response, result, msgOpt);
     }
 
@@ -903,12 +927,13 @@ public class RestInterfaceTest {
     private void saveConfig(HttpSessionState httpSession, int owner, String name, String conf, String result, Key msgOpt) throws Exception //
     {
         String jsonAsString = "{'cmd':'saveC';'name':'" + name + "';'configuration':'" + conf + "';}";
-        this.response = this.restConfiguration.command(newDbSession(), JSONUtilForServer.mkD(httpSession.getInitToken(), jsonAsString));
+        this.response = this.restConfiguration.saveConfig(newDbSession(), JSONUtilForServer.mkD(httpSession.getInitToken(), jsonAsString));
         JSONUtilForServer.assertEntityRc(this.response, result, msgOpt);
     }
 
     private JSONArray assertProgramListingAsExpected(HttpSessionState httpSession, String expectedProgramNamesAsJson) throws Exception, JSONException {
-        this.response = this.restProject.getInfosOfProgramsOfLoggedInUser(newDbSession(), JSONUtilForServer.mkD(httpSession.getInitToken(), "{'cmd':'loadPN'}"));
+        this.response =
+            this.restProject.getInfosOfProgramsOfLoggedInUser(newDbSession(), JSONUtilForServer.mkD(httpSession.getInitToken(), "{'cmd':'loadPN'}"));
         JSONUtilForServer.assertEntityRc(this.response, "ok", Key.PROGRAM_GET_ALL_SUCCESS);
         JSONArray programListing = ((JSONObject) this.response.getEntity()).getJSONArray("programNames");
         JSONArray programNames = new JSONArray();

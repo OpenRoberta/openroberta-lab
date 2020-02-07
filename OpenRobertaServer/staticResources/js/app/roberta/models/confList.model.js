@@ -10,7 +10,7 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
      * Refresh program list
      */
     function loadConfList(successFn) {
-        COMM.json("/conf", {
+        COMM.json("/conf/loadCN", {
             "cmd" : "loadCN"
         }, successFn, 'refresh configuration list');
     }
