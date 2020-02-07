@@ -191,9 +191,7 @@ public class ClientUser {
         JSONObject response = new JSONObject();
         HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, fullRequest);
         try {
-            Map<String, String> responseParameters = new HashMap<>();
             final int userId = httpSessionState.getUserId();
-            JSONObject request = fullRequest.getJSONObject("data");
             String cmd = "logout";
             ClientUser.LOG.info("command is: " + cmd);
             response.put("cmd", cmd);
@@ -230,7 +228,6 @@ public class ClientUser {
             ClientUser.LOG.info("command is: " + cmd);
             response.put("cmd", cmd);
             UserProcessor up = new UserProcessor(dbSession, httpSessionState);
-            PendingEmailConfirmationsProcessor pendingConfirmationProcessor = new PendingEmailConfirmationsProcessor(dbSession, httpSessionState);
 
             String account = request.getString("accountName");
             String password = request.getString("password");
@@ -241,6 +238,7 @@ public class ClientUser {
             boolean isYoungerThen14 = request.getString("isYoungerThen14").equals("1");
             up.createUser(account, password, userName, role, email, null, isYoungerThen14);
             if ( this.isPublicServer && !email.equals("") && up.succeeded() ) {
+                PendingEmailConfirmationsProcessor pendingConfirmationProcessor = new PendingEmailConfirmationsProcessor(dbSession, httpSessionState);
                 String lang = request.getString("language");
                 PendingEmailConfirmations confirmation = pendingConfirmationProcessor.createEmailConfirmation(account);
                 sendActivationMail(up, confirmation.getUrlPostfix(), account, email, lang, isYoungerThen14);

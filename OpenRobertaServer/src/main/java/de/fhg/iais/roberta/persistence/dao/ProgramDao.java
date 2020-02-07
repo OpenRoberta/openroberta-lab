@@ -268,7 +268,7 @@ public class ProgramDao extends AbstractDao<Program> {
     }
 
     /**
-     * create a write lock for the table PROGRAM. To avoid deadlocks, is a no op if concurrency control is not 2PL, but MVCC
+     * create a write lock for the table PROGRAM to avoid deadlocks. This is a no op if concurrency control is not 2PL, but MVCC
      */
     public void lockTable() {
         this.session.createSqlQuery("lock table PROGRAM write").executeUpdate();
