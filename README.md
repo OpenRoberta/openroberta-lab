@@ -1,11 +1,6 @@
 Open Roberta Lab
 ================
 
-### Please read the file IMPORTANT_CHANGE.MD
-
-Especially if you have forked or cloned the '[robertalab](https://github.com/OpenRoberta/robertalab)' repository in the past!
-
-
 ### Introduction
 
 The source of the OpenRoberta Lab is stored in the Github repository '[openroberta-lab](https://github.com/OpenRoberta/openroberta-lab)'.
