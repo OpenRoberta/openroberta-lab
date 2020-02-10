@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2020-02-04 15:04:20.212087",
+		"lastupdated": "2020-02-10 14:41:23.298176",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -378,7 +378,7 @@
 	"MOTOR_ON_FOR_TOOLTIP": "Turns motor on and stops motor after execution of rotations/degrees.",
 	"MOTOR_ON_FOR_TOOLTIP_MS": "Turns motor on and stops motor after execution after time has passed.",
 	"MOTOR_ON_FOR_TOOLTIP_RPM": "Turns motor on at speed in rpms (rotation per minute) and stops motor after execution of rotations/degrees.",
-	"MOTOR_ON_FOR_TOOLTIP_SERVO": "Turns motor on and stops motor after execution of rotations/degrees.",
+	"MOTOR_ON_FOR_TOOLTIP_SERVO": "Sets the servo motor to a specific position in degrees.",
 	"STEP_MOTOR_ON_TOOLTIP": "Turns motor on with a provided speed in rpm and stops motor after execution of provided number of rotations.",
 	"MOTOR_GETPOWER_TOOLTIP": "Gets current power of this motor.",
 	"MOTOR_SETPOWER_TOOLTIP": "Sets power of this motor.",
