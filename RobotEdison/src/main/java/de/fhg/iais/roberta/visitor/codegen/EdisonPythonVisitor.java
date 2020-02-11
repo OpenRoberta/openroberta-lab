@@ -1,7 +1,5 @@
 package de.fhg.iais.roberta.visitor.codegen;
 
-import static de.fhg.iais.roberta.syntax.lang.functions.FunctionNames.SUM;
-
 import java.util.ArrayList;
 
 import de.fhg.iais.roberta.bean.CodeGeneratorSetupBean;
@@ -32,6 +30,7 @@ import de.fhg.iais.roberta.syntax.lang.functions.FunctionNames;
 import de.fhg.iais.roberta.syntax.lang.functions.MathOnListFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathPowerFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathSingleFunct;
+import de.fhg.iais.roberta.syntax.lang.methods.MethodIfReturn;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtList;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
@@ -46,6 +45,7 @@ import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.visitor.collect.EdisonMethods;
 import de.fhg.iais.roberta.visitor.hardware.IEdisonVisitor;
 import de.fhg.iais.roberta.visitor.lang.codegen.prog.AbstractPythonVisitor;
+import static de.fhg.iais.roberta.syntax.lang.functions.FunctionNames.SUM;
 
 /**
  * This class visits the Blockly blocks for the Edison robot and translates them into EdPy Python2 code (https://github.com/Bdanilko/EdPy)
@@ -796,6 +796,19 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
         this.sb.append("(");
         sensorGetSample.getSensor().accept(this);
         this.sb.append(")");
+        return null;
+    }
+
+    @Override
+    public Void visitMethodIfReturn(MethodIfReturn<Void> methodIfReturn) {
+        this.sb.append("if ");
+        methodIfReturn.getCondition().accept(this);
+        if ( !methodIfReturn.getReturnValue().getKind().hasName("EMPTY_EXPR") ) {
+            this.sb.append(": return ");
+            methodIfReturn.getReturnValue().accept(this);
+        } else {
+            this.sb.append(": return");
+        }
         return null;
     }
 

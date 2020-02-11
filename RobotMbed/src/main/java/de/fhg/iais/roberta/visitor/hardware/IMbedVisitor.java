@@ -17,6 +17,7 @@ import de.fhg.iais.roberta.syntax.action.mbed.PinSetPullAction;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioReceiveAction;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioSendAction;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioSetChannelAction;
+import de.fhg.iais.roberta.syntax.action.mbed.ServoSetAction;
 import de.fhg.iais.roberta.syntax.action.mbed.SingleMotorOnAction;
 import de.fhg.iais.roberta.syntax.action.mbed.SingleMotorStopAction;
 import de.fhg.iais.roberta.syntax.action.mbed.SwitchLedMatrixAction;
@@ -255,6 +256,15 @@ public interface IMbedVisitor<V>
      * @param switchLedMatrixAction phrase to be visited
      */
     default V visitSwitchLedMatrixAction(SwitchLedMatrixAction<V> switchLedMatrixAction) {
+        throw new DbcException("Block is not implemented!");
+    }
+
+    /**
+     * visit a {@link ServoSetAction}.
+     *
+     * @param servoSetAction phrase to be visited
+     */
+    default V visitServoSetAction(ServoSetAction<V> servoSetAction) {
         throw new DbcException("Block is not implemented!");
     }
 

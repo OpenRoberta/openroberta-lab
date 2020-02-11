@@ -39,6 +39,8 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'message', 'guiState.contr
             buttonsAlign : 'right',
             resizable : 'true',
             iconsPrefix : 'typcn',
+            pageSize : 12,
+            pageList : [ 12, 24, 48, 96 ],
             icons : {
                 paginationSwitchDown : 'typcn-document-text',
                 paginationSwitchUp : 'typcn-book',
@@ -89,6 +91,10 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'message', 'guiState.contr
         $('#tabGalleryList').on('show.bs.tab', function(e) {
             guiStateController.setView('tabGalleryList');
             PROGLIST.loadGalleryList(update);
+        });
+
+        $('#tabGalleryList').on('shown.bs.tab', function(e) {
+            $(window).trigger("resize");
         });
 
         $('#galleryTable').on('all.bs.table', function(e) {

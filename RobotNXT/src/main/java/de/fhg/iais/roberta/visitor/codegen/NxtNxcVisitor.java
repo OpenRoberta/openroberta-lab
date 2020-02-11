@@ -382,7 +382,8 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
                     || showTextAction.getMsg().toString().contains("MotorGetPower")
                     || showTextAction.getMsg().toString().contains("VolumeAction") ) {
                     methodName = "NumOut";
-                } else if ( showTextAction.getMsg().toString().contains("EQ")
+                } else if ( showTextAction.getMsg().toString().contains("Boolean")
+                    || showTextAction.getMsg().toString().contains("EQ")
                     || showTextAction.getMsg().toString().contains("NEQ")
                     || showTextAction.getMsg().toString().contains("LT")
                     || showTextAction.getMsg().toString().contains("LTE")

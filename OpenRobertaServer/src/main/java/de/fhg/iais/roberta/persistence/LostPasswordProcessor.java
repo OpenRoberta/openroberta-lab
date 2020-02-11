@@ -11,7 +11,7 @@ import de.fhg.iais.roberta.util.Key;
 
 public class LostPasswordProcessor extends AbstractProcessor {
     public LostPasswordProcessor(DbSession dbSession, HttpSessionState httpSessionState) {
-        super(dbSession, httpSessionState);
+        super(dbSession, httpSessionState.getUserId());
     }
 
     public LostPassword createLostPassword(int userId) throws Exception {

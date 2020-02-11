@@ -69,6 +69,16 @@ public class ConfigurationDao extends AbstractDao<Program> {
         return optionalStore(configurationText);
     }
 
+    public int deleteByName(String name, User owner, Robot robot) {
+        Configuration toBeDeleted = load(name, owner, robot);
+        if ( toBeDeleted == null ) {
+            return 0;
+        } else {
+            this.session.delete(toBeDeleted);
+            return 1;
+        }
+    }
+
     /**
      * load a configuration from the database, identified by its name, its owner and the robot it is usable for (these make up the "business" key of a
      * configuration)
@@ -122,16 +132,6 @@ public class ConfigurationDao extends AbstractDao<Program> {
         @SuppressWarnings("unchecked")
         List<ConfigurationData> il = hql.list();
         return Collections.unmodifiableList(il);
-    }
-
-    public int deleteByName(String name, User owner, Robot robot) {
-        Configuration toBeDeleted = load(name, owner, robot);
-        if ( toBeDeleted == null ) {
-            return 0;
-        } else {
-            this.session.delete(toBeDeleted);
-            return 1;
-        }
     }
 
     /**

@@ -90,12 +90,14 @@ public class ArduinoSensorTest extends ArduinoAstTest {
         ConfigurationComponent infrared = new ConfigurationComponent("INFRARED", true, "IR", "I", infraredP);
         ConfigurationAst.Builder builder = new ConfigurationAst.Builder();
         builder.setTrackWidth(17f).setWheelDiameter(5.6f).addComponents(Arrays.asList(infrared));
+        ConfigurationAst configurationAst = builder.build();
+        configurationAst.setRobotName("nano"); // TODO remove once rfid library is supported for unowifirev2
         UnitTestHelper
             .checkGeneratedSourceEqualityWithProgramXml(
                 testFactory,
                 "/ast/sensors/arduino_infrared_test.ino",
                 "/ast/sensors/arduino_infrared_test.xml",
-                builder.build());
+                configurationAst);
     }
 
     @Test
@@ -104,12 +106,14 @@ public class ArduinoSensorTest extends ArduinoAstTest {
         ConfigurationComponent infrared = new ConfigurationComponent("INFRARED", true, "IR", "I", infraredP);
         ConfigurationAst.Builder builder = new ConfigurationAst.Builder();
         builder.setTrackWidth(17f).setWheelDiameter(5.6f).addComponents(Arrays.asList(infrared));
+        ConfigurationAst configurationAst = builder.build();
+        configurationAst.setRobotName("nano"); // TODO remove once rfid library is supported for unowifirev2
         UnitTestHelper
             .checkGeneratedSourceEqualityWithProgramXml(
                 testFactory,
                 "/ast/sensors/arduino_infrared_presence_test.ino",
                 "/ast/sensors/arduino_infrared_presence_test.xml",
-                builder.build());
+                configurationAst);
     }
 
     @Test
@@ -216,12 +220,13 @@ public class ArduinoSensorTest extends ArduinoAstTest {
         ConfigurationComponent rfid = new ConfigurationComponent("RFID", true, "rfid", "R", rfidPins);
         ConfigurationAst.Builder builder = new ConfigurationAst.Builder();
         builder.setTrackWidth(17f).setWheelDiameter(5.6f).addComponents(Arrays.asList(rfid));
+        ConfigurationAst configurationAst = builder.build();
+        configurationAst.setRobotName("nano"); // TODO remove once rfid library is supported for unowifirev2
         UnitTestHelper
             .checkGeneratedSourceEqualityWithProgramXml(
                 testFactory,
                 "/ast/sensors/arduino_rfid_test.ino",
-                "/ast/sensors/arduino_rfid_test.xml",
-                builder.build());
+                "/ast/sensors/arduino_rfid_test.xml", configurationAst);
     }
 
     @Test

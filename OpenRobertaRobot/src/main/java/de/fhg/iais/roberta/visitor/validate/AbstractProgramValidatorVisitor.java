@@ -85,6 +85,7 @@ public abstract class AbstractProgramValidatorVisitor extends AbstractCollectorV
     protected int errorCount = 0;
     protected int warningCount = 0;
     protected ConfigurationAst robotConfiguration;
+    public static final double DOUBLE_EPS = 1E-7;
 
     public AbstractProgramValidatorVisitor(UsedHardwareBean.Builder builder, ConfigurationAst robotConfiguration) {
         super(builder);
@@ -469,7 +470,7 @@ public abstract class AbstractProgramValidatorVisitor extends AbstractCollectorV
     private void checkForZeroSpeed(Expr<Void> speed, Action<Void> action) {
         if ( speed.getKind().hasName("NUM_CONST") ) {
             NumConst<Void> speedNumConst = (NumConst<Void>) speed;
-            if ( Integer.valueOf(speedNumConst.getValue()) == 0 ) {
+            if ( Math.abs(Double.valueOf(speedNumConst.getValue())) < DOUBLE_EPS ) {
                 action.addInfo(NepoInfo.warning("MOTOR_SPEED_0"));
                 this.warningCount++;
             }
@@ -480,8 +481,7 @@ public abstract class AbstractProgramValidatorVisitor extends AbstractCollectorV
         if ( speedLeft.getKind().hasName("NUM_CONST") && speedRight.getKind().hasName("NUM_CONST") ) {
             Double speedLeftNumConst = Double.valueOf(((NumConst<Void>) speedLeft).getValue());
             Double speedRightNumConst = Double.valueOf(((NumConst<Void>) speedRight).getValue());
-            double delta = 0.0001;
-            if ( (Math.abs(speedLeftNumConst) < delta) && (Math.abs(speedRightNumConst) < delta) ) {
+            if ( (Math.abs(speedLeftNumConst) < DOUBLE_EPS) && (Math.abs(speedRightNumConst) < DOUBLE_EPS) ) {
                 action.addInfo(NepoInfo.warning("BLOCK_NOT_EXECUTED"));
                 this.warningCount++;
             }

@@ -32,6 +32,12 @@ public class LostPasswordDao extends AbstractDao<LostPassword> {
         return lostPassword;
     }
 
+    public int deleteLostPassword(LostPassword lostPassword) {
+        Assert.notNull(lostPassword);
+        this.session.delete(lostPassword);
+        return 1;
+    }
+
     /**
      * Load url postfix for a user
      *
@@ -72,12 +78,6 @@ public class LostPasswordDao extends AbstractDao<LostPassword> {
         } else {
             return il.get(0);
         }
-    }
-
-    public int deleteLostPassword(LostPassword lostPassword) {
-        Assert.notNull(lostPassword);
-        this.session.delete(lostPassword);
-        return 1;
     }
 
 }

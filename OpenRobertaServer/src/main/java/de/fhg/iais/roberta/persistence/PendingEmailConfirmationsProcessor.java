@@ -13,7 +13,7 @@ import de.fhg.iais.roberta.util.Key;
 
 public class PendingEmailConfirmationsProcessor extends AbstractProcessor {
     public PendingEmailConfirmationsProcessor(DbSession dbSession, HttpSessionState httpSessionState) {
-        super(dbSession, httpSessionState);
+        super(dbSession, httpSessionState.getUserId());
     }
 
     public PendingEmailConfirmations createEmailConfirmation(String account) throws Exception {

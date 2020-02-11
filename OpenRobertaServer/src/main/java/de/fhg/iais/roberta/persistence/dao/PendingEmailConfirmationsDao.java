@@ -32,6 +32,12 @@ public class PendingEmailConfirmationsDao extends AbstractDao<PendingEmailConfir
         return confirmation;
     }
 
+    public int deleteConfirmation(PendingEmailConfirmations confirmation) {
+        Assert.notNull(confirmation);
+        this.session.delete(confirmation);
+        return 1;
+    }
+
     /**
      * Load url postfix for a user
      *
@@ -72,12 +78,6 @@ public class PendingEmailConfirmationsDao extends AbstractDao<PendingEmailConfir
         } else {
             return il.get(0);
         }
-    }
-
-    public int deleteConfirmation(PendingEmailConfirmations confirmation) {
-        Assert.notNull(confirmation);
-        this.session.delete(confirmation);
-        return 1;
     }
 
 }

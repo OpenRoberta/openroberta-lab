@@ -475,9 +475,6 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
             case 'menuLogout':
                 USER_C.logout();
                 break;
-            case 'menuNewUser':
-                USER_C.showRegisterUserModal();
-                break;
             case 'menuChangeUser':
                 USER_C.showUserDataForm();
                 break;

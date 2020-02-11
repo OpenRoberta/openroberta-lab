@@ -1,9 +1,6 @@
 package de.fhg.iais.roberta.persistence;
 
 import java.util.HashMap;
-import java.util.List;
-
-import org.json.JSONArray;
 
 import de.fhg.iais.roberta.persistence.bo.Like;
 import de.fhg.iais.roberta.persistence.bo.Program;
@@ -20,11 +17,11 @@ import de.fhg.iais.roberta.util.Pair;
 
 public class LikeProcessor extends AbstractProcessor {
     public LikeProcessor(DbSession dbSession, HttpSessionState httpSessionState) {
-        super(dbSession, httpSessionState);
+        super(dbSession, httpSessionState.getUserId());
     }
 
     public Like createLike(String programName, String robotName, String authorName) throws Exception {
-        if ( this.httpSessionState.isUserLoggedIn() ) {
+        if ( isUserLoggedIn() ) {
             ProgramDao programDao = new ProgramDao(this.dbSession);
             UserDao userDao = new UserDao(this.dbSession);
             RobotDao robotDao = new RobotDao(this.dbSession);
@@ -32,7 +29,7 @@ public class LikeProcessor extends AbstractProcessor {
 
             User gallery = userDao.loadUser("Gallery");
             User author = userDao.loadUser(authorName);
-            User userWhoLike = userDao.loadUser(this.httpSessionState.getUserId());
+            User userWhoLikes = userDao.loadUser(getIdOfLoggedInUser());
 
             Robot robot = robotDao.loadRobot(robotName);
             if ( robot == null ) {
@@ -44,7 +41,7 @@ public class LikeProcessor extends AbstractProcessor {
                 setStatus(ProcessorStatus.FAILED, Key.PROGRAM_GET_ONE_ERROR_NOT_FOUND, new HashMap<>());
                 return null;
             }
-            Pair<Key, Like> result = likeDao.persistsLike(userWhoLike, program);
+            Pair<Key, Like> result = likeDao.persistsLike(userWhoLikes, program);
 
             // a bit strange, but necessary as Java has no N-tuple
             if ( result.getFirst() == Key.LIKE_SAVE_SUCCESS ) {
@@ -59,40 +56,6 @@ public class LikeProcessor extends AbstractProcessor {
         }
     }
 
-    public Like loadLike(User user, Program program) throws Exception {
-        LikeDao likeDao = new LikeDao(this.dbSession);
-        Like like = likeDao.loadLike(user, program);
-        if ( like != null ) {
-            setStatus(ProcessorStatus.SUCCEEDED, Key.LIKE_GET_ONE_SUCCESS, new HashMap<>());
-            return like;
-        } else {
-            setStatus(ProcessorStatus.FAILED, Key.LIKE_GET_ONE_ERROR_NOT_FOUND, new HashMap<>());
-            return null;
-        }
-    }
-
-    public JSONArray getLikesPerProgram(Program program) {
-        LikeDao likeDao = new LikeDao(this.dbSession);
-        JSONArray likes = new JSONArray();
-        List<Like> likesList = likeDao.loadLikesByProgram(program);
-        for ( Like like : likesList ) {
-            likes.put(like.getUser().getAccount());
-        }
-        setStatus(ProcessorStatus.SUCCEEDED, Key.LIKE_GET_ALL_SUCCESS, new HashMap<>());
-        return likes;
-    }
-
-    public int getNumberOfLikesPerProgram(Program program) {
-        JSONArray likes = getLikesPerProgram(program);
-        return likes.length();
-    }
-
-    public List<Like> getLikesPerUser(User user) {
-        LikeDao likeDao = new LikeDao(this.dbSession);
-        List<Like> likesList = likeDao.loadLikesByUser(user);
-        return likesList;
-    }
-
     public void deleteLike(String programName, String robotName, String authorName) throws Exception {
         ProgramDao programDao = new ProgramDao(this.dbSession);
         UserDao userDao = new UserDao(this.dbSession);
@@ -101,7 +64,7 @@ public class LikeProcessor extends AbstractProcessor {
 
         User gallery = userDao.loadUser("Gallery");
         User author = userDao.loadUser(authorName);
-        User userWhoLike = userDao.loadUser(this.httpSessionState.getUserId());
+        User userWhoLike = userDao.loadUser(getIdOfLoggedInUser());
 
         Robot robot = robotDao.loadRobot(robotName);
         if ( robot == null ) {

@@ -2,8 +2,10 @@ package de.fhg.iais.roberta.persistence.util;
 
 import java.io.Serializable;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
@@ -12,11 +14,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import de.fhg.iais.roberta.factory.IRobotFactory;
-import de.fhg.iais.roberta.util.Key;
 import de.fhg.iais.roberta.util.RandomUrlPostfix;
 import de.fhg.iais.roberta.util.ServerProperties;
+import de.fhg.iais.roberta.util.Statistics;
 import de.fhg.iais.roberta.util.dbc.Assert;
-import de.fhg.iais.roberta.util.dbc.DbcKeyException;
 
 /**
  * Objects of this class store the server-related state of the user's work with the openroberta-lab.
@@ -24,65 +25,65 @@ import de.fhg.iais.roberta.util.dbc.DbcKeyException;
 public class HttpSessionState implements Serializable {
     private static final long serialVersionUID = 5423413372044585392L;
     private static final Logger LOG = LoggerFactory.getLogger(HttpSessionState.class);
+    public final static int NO_USER = -1;
+    public final static long EXPIRATION_TIME_SEC = 10800; // 3 hours = 3*60*60 = 10.800
 
     private static final AtomicLong SESSION_COUNTER = new AtomicLong();
 
-    public final static int NO_USER = -1;
-
-    public static final Map<String, HttpSessionState> initToken2HttpSessionstate = new ConcurrentHashMap<>();
+    private static final Map<String, HttpSessionState> initToken2HttpSessionstate = new ConcurrentHashMap<>();
 
     /**
-     * the REST-service in ClientInit will set tokenSetOnInit. It is returned with each response and the front end must supply it with each request. The token
-     * is needed to detect when it is NOT SET and another function than init is called. It is likely, that then either the server was restarted or a user
-     * session moved from one server to another server. In the latter case the session must be migrated to the new server. <i>This is not yet implemented.
-     * Actually we abort the request.</i> A value of "" for tokenSetOnInit is used for debugging purposes and will deactivate all consistency checks (see
-     * {@linkplain initOnlyLegalForDebugging})
+     * the REST-service in ClientInit sets the 'initToken'. It is returned with each response and the front end must supply it with each request. The token is
+     * needed to detect when it is NOT SET and another function than init is called. It is likely, that then either the server was restarted or a user session
+     * moved from one server to another server. In the latter case the session must be migrated to the new server. <i>This is not yet implemented. Actually we
+     * abort the request.</i>
      */
-    private final String tokenSetOnInit;
+    private final String initToken;
     private final long sessionNumber;
     private final Map<String, IRobotFactory> robotPluginMap;
     private final String defaultRobotName;
     private final String countryCode;
+
+    private final long initTime;
+    private long lastAccessTime;
 
     private int userId;
     private String robotName;
     private String token;
     private String programName;
     private String program;
-    private String configurationName;
-    private String configuration;
     private String toolboxName;
     private String toolbox;
     private boolean processing;
 
     private HttpSessionState(
-        String tokenSetOnInit,
+        String initToken,
         long sessionNumber,
         Map<String, IRobotFactory> robotPluginMap,
         ServerProperties serverProperties,
         String countryCode) //
     {
-        this.tokenSetOnInit = tokenSetOnInit;
+        this.initToken = initToken;
         this.sessionNumber = sessionNumber;
         this.robotPluginMap = robotPluginMap;
         this.defaultRobotName = serverProperties.getDefaultRobot();
         this.countryCode = countryCode;
+        this.initTime = new Date().getTime();
+        this.lastAccessTime = 0;
 
         this.userId = HttpSessionState.NO_USER;
         this.robotName = defaultRobotName;
         this.token = RandomUrlPostfix.generate(12, 12, 3, 3, 3);
         this.programName = null;
         this.program = null;
-        this.configurationName = null;
-        this.configuration = null;
         this.toolboxName = null;
         this.toolbox = null;
         this.setProcessing(false);
 
-        // remember the HttpSessionState object in a global map which 'tokenSetOnInit' as key
-        HttpSessionState previousStateMustNotExist = initToken2HttpSessionstate.put(tokenSetOnInit, this);
-        if ( previousStateMustNotExist != null && !"".equals(tokenSetOnInit) ) {
-            LOG.error("FATAL! HttpSessionState with session number " + sessionNumber + " and tokenSetOnInit '" + tokenSetOnInit + "' found");
+        // now remember the HttpSessionState object in a global map and use the 'initToken' as key
+        HttpSessionState previousStateMustNotExist = initToken2HttpSessionstate.put(this.initToken, this);
+        if ( previousStateMustNotExist != null && !"".equals(this.initToken) ) {
+            LOG.error("FATAL! Key collision! HttpSessionState with session number " + sessionNumber + " and initToken '" + this.initToken + "' found");
         }
     }
 
@@ -98,9 +99,9 @@ public class HttpSessionState implements Serializable {
      */
     public static HttpSessionState init(Map<String, IRobotFactory> robotPluginMap, ServerProperties serverProperties, String countryCode) //
     {
-        String tokenSetOnInit = RandomUrlPostfix.generate(12, 12, 3, 3, 3);
+        String initTokenString = RandomUrlPostfix.generate(12, 12, 3, 3, 3);
         long sessionNumber = SESSION_COUNTER.incrementAndGet();
-        HttpSessionState httpSessionState = new HttpSessionState(tokenSetOnInit, sessionNumber, robotPluginMap, serverProperties, countryCode);
+        HttpSessionState httpSessionState = new HttpSessionState(initTokenString, sessionNumber, robotPluginMap, serverProperties, countryCode);
         LOG.info("session " + sessionNumber + " created");
         return httpSessionState;
     }
@@ -116,17 +117,36 @@ public class HttpSessionState implements Serializable {
      * @return
      */
     public static HttpSessionState initOnlyLegalForDebugging(
-        String tokenSetOnInit,
+        String initTokenString,
         Map<String, IRobotFactory> robotPluginMap,
         ServerProperties serverProperties,
         long sessionNumber) //
     {
-        HttpSessionState state = new HttpSessionState(tokenSetOnInit, sessionNumber, robotPluginMap, serverProperties, "..");
+        HttpSessionState state = new HttpSessionState(initTokenString, sessionNumber, robotPluginMap, serverProperties, "..");
         return state;
     }
 
     public int getUserId() {
         return this.userId;
+    }
+
+    /**
+     * remember the time of this call<br>
+     * Usage: if a http request hits the server, it contains a value for key 'initToken', which is used to retrieve an object of this class. In this context
+     * this method is called to remember the time of the http request. The value is used to invalidate this object, if no http request hits the server for a
+     * long time.
+     */
+    private void rememberAccessTime() {
+        this.lastAccessTime = new Date().getTime();
+    }
+
+    /**
+     * return the number of seconds since the last access. The accessor usually is the frontend<br>
+     * Usage: if a http request hits the serverthe time of the http request is remembered. This call return the number of seconds between now and the last
+     * request. This value in turn is used to invalidate this object, if no http request hits the server for a long time.
+     */
+    public long getSecondsSinceLastAccess() {
+        return (new Date().getTime() - this.lastAccessTime) / 1000;
     }
 
     public boolean isUserLoggedIn() {
@@ -139,8 +159,6 @@ public class HttpSessionState implements Serializable {
         this.userId = userId;
         this.programName = null;
         this.program = null;
-        this.configurationName = null;
-        this.configuration = null;
     }
 
     public String getRobotName() {
@@ -153,8 +171,8 @@ public class HttpSessionState implements Serializable {
     }
 
     public String getInitToken() {
-        Assert.notNull(tokenSetOnInit, "init token not initialized. This is a SEVERE error");
-        return tokenSetOnInit;
+        Assert.notNull(initToken, "init token not initialized. This is a SEVERE error");
+        return initToken;
     }
 
     public String getToken() {
@@ -177,19 +195,6 @@ public class HttpSessionState implements Serializable {
     public void setProgramNameAndProgramText(String programName, String program) {
         this.programName = programName;
         this.program = program;
-    }
-
-    public String getConfigurationName() {
-        return this.configurationName;
-    }
-
-    public String getConfiguration() {
-        return this.configuration;
-    }
-
-    public void setConfigurationNameAndConfiguration(String configurationName, String configuration) {
-        this.configurationName = configurationName;
-        this.configuration = configuration;
     }
 
     public String getToolboxName() {
@@ -253,7 +258,26 @@ public class HttpSessionState implements Serializable {
         return this.countryCode;
     }
 
+    public static HttpSessionState get(String initToken) {
+        HttpSessionState httpSessionState = initToken2HttpSessionstate.get(initToken);
+        if ( httpSessionState != null ) {
+            httpSessionState.rememberAccessTime();
+        }
+        return initToken2HttpSessionstate.get(initToken);
+    }
+
     public static int getNumberOfHttpSessionStates() {
         return initToken2HttpSessionstate.size();
+    }
+
+    public static void removeExpired() {
+        for ( Entry<String, HttpSessionState> entry : initToken2HttpSessionstate.entrySet() ) {
+            if ( entry.getValue().getSecondsSinceLastAccess() > EXPIRATION_TIME_SEC ) {
+                String initToken = entry.getKey();
+                Statistics.info("SessionExpire", "initToken", initToken, "success", true);
+                LOG.info("Session with token " + initToken + " expired");
+                initToken2HttpSessionstate.remove(initToken);
+            }
+        }
     }
 }

@@ -36,7 +36,6 @@ import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
 import de.fhg.iais.roberta.syntax.action.sound.VolumeAction;
 import de.fhg.iais.roberta.syntax.lang.expr.ColorConst;
 import de.fhg.iais.roberta.syntax.lang.expr.ConnectConst;
-import de.fhg.iais.roberta.syntax.lang.expr.EmptyExpr;
 import de.fhg.iais.roberta.syntax.sensor.generic.AccelerometerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
@@ -448,7 +447,7 @@ public class NxtStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> im
             app(mk(C.EXPR).put(C.EXPR, C.NUM_CONST).put(C.VALUE, 0));
         }
     }
-    
+
     @Override
     public V visitBluetoothSendAction(BluetoothSendAction<V> bluetoothSendAction) {
         // Overrides default implementation so that server error is not produced
@@ -472,10 +471,4 @@ public class NxtStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> im
         // Overrides default implementation so that server error is not produced
         return null;
     }
-    
-    @Override
-    public V visitEmptyExpr(EmptyExpr<V> emptyExpr) {
-        return null;
-    }
-
 }

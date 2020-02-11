@@ -135,6 +135,14 @@
 				</value>
 			</block>
 			<block type="mbedActions_single_motor_stop" />
+			<block type="mbedActions_servo_set">
+				<field name="PIN_PORT">C04</field>
+				<value name="VALUE">
+					<block type="math_number">
+						<field name="NUM">90</field>
+					</block>
+				</value>
+			</block>
 		</category>
 		<category name="TOOLBOX_SOUND" svg="true">
 			<block type="mbedActions_play_tone">

@@ -157,12 +157,14 @@ public class ArduinoActorTest extends ArduinoAstTest {
         ConfigurationComponent digitalOutput = new ConfigurationComponent("DIGITAL_INPUT", true, "DIGITAL_INPUT", "A", digitalOuputPins);
         ConfigurationAst.Builder builder = new ConfigurationAst.Builder();
         builder.setTrackWidth(17f).setWheelDiameter(5.6f).addComponents(Arrays.asList(digitalOutput, analogOutput));
+        ConfigurationAst configurationAst = builder.build();
+        configurationAst.setRobotName("nano"); // TODO remove once rfid library is supported for unowifirev2
         UnitTestHelper
             .checkGeneratedSourceEqualityWithProgramXml(
                 testFactory,
                 "/ast/actions/arduino_analog_digital_output_test.ino",
                 "/ast/actions/arduino_analog_digital_output_test.xml",
-                builder.build());
+                configurationAst);
     }
 
     @Test
@@ -175,12 +177,14 @@ public class ArduinoActorTest extends ArduinoAstTest {
         ConfigurationComponent rfid2 = new ConfigurationComponent("RFID", true, "rfid", "R7", rfidPins);
         ConfigurationAst.Builder builder = new ConfigurationAst.Builder();
         builder.setTrackWidth(17f).setWheelDiameter(5.6f).addComponents(Arrays.asList(rfid1, rfid2, servoMotor1, servoMotor2));
+        ConfigurationAst configurationAst = builder.build();
+        configurationAst.setRobotName("nano"); // TODO remove once rfid library is supported for unowifirev2
         UnitTestHelper
             .checkGeneratedSourceEqualityWithProgramXml(
                 testFactory,
                 "/ast/brickConfiguration/arduino_multi_include_test.ino",
                 "/ast/brickConfiguration/arduino_multi_include_test.xml",
-                builder.build());
+                configurationAst);
     }
 
     @Test(expected = DbcException.class)
@@ -193,11 +197,13 @@ public class ArduinoActorTest extends ArduinoAstTest {
         ConfigurationComponent rfid2 = new ConfigurationComponent("NON-EXISTING-COMPONENT2", true, "rfid", "R7", rfidPins);
         ConfigurationAst.Builder builder = new ConfigurationAst.Builder();
         builder.setTrackWidth(17f).setWheelDiameter(5.6f).addComponents(Arrays.asList(rfid1, rfid2, servoMotor1, servoMotor2));
+        ConfigurationAst configurationAst = builder.build();
+        configurationAst.setRobotName("nano"); // TODO remove once rfid library is supported for unowifirev2
         UnitTestHelper
             .checkGeneratedSourceEqualityWithProgramXml(
                 testFactory,
                 "/ast/brickConfiguration/arduino_multi_include_test.ino",
                 "/ast/brickConfiguration/arduino_multi_include_test.xml",
-                builder.build());
+                configurationAst);
     }
 }

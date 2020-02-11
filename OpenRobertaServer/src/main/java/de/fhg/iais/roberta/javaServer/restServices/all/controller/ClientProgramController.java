@@ -22,6 +22,7 @@ import com.google.inject.Inject;
 
 import de.fhg.iais.roberta.blockly.generated.Export;
 import de.fhg.iais.roberta.factory.IRobotFactory;
+import de.fhg.iais.roberta.javaServer.provider.OraData;
 import de.fhg.iais.roberta.persistence.AccessRightProcessor;
 import de.fhg.iais.roberta.persistence.ConfigurationProcessor;
 import de.fhg.iais.roberta.persistence.LikeProcessor;
@@ -32,26 +33,22 @@ import de.fhg.iais.roberta.persistence.bo.User;
 import de.fhg.iais.roberta.persistence.dao.ConfigurationDao;
 import de.fhg.iais.roberta.persistence.util.DbSession;
 import de.fhg.iais.roberta.persistence.util.HttpSessionState;
-import de.fhg.iais.roberta.persistence.util.SessionFactoryWrapper;
 import de.fhg.iais.roberta.util.Key;
 import de.fhg.iais.roberta.util.ServerProperties;
 import de.fhg.iais.roberta.util.Statistics;
 import de.fhg.iais.roberta.util.Util;
 import de.fhg.iais.roberta.util.UtilForHtmlXml;
 import de.fhg.iais.roberta.util.UtilForREST;
-import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.util.jaxb.JaxbHelper;
 
 @Path("/program")
 public class ClientProgramController {
     private static final Logger LOG = LoggerFactory.getLogger(ClientProgramController.class);
 
-    private final SessionFactoryWrapper sessionFactoryWrapper;
     private final boolean isPublicServer;
 
     @Inject
-    public ClientProgramController(SessionFactoryWrapper sessionFactoryWrapper, ServerProperties serverProperties) {
-        this.sessionFactoryWrapper = sessionFactoryWrapper;
+    public ClientProgramController(ServerProperties serverProperties) {
         this.isPublicServer = serverProperties.getBooleanProperty("server.public");
     }
 
@@ -65,13 +62,12 @@ public class ClientProgramController {
     @Path("/save")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response updateProject(JSONObject request) {
-        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, request);
-        JSONObject dataPart = UtilForREST.extractDataPart(request);
-        DbSession dbSession = this.sessionFactoryWrapper.getSession();
-        ProgramProcessor programProcessor = new ProgramProcessor(dbSession, httpSessionState);
+    public Response saveProgram(@OraData DbSession dbSession, JSONObject request) {
         JSONObject response = new JSONObject();
         try {
+            HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, request);
+            JSONObject dataPart = UtilForREST.extractDataPart(request);
+            ProgramProcessor programProcessor = new ProgramProcessor(dbSession, httpSessionState);
             int userId = httpSessionState.getUserId();
             String robot = getRobot(httpSessionState);
             Long timestamp = dataPart.optLong("timestamp");
@@ -81,8 +77,9 @@ public class ClientProgramController {
             String configName = dataPart.optString("configName", null);
             String configText = dataPart.optString("configText", null);
             boolean isShared = dataPart.optBoolean("shared", false);
+            boolean isSaveCommand = dataPart.getString("cmd").equals("save");
             Program program;
-            if ( dataPart.getString("cmd").equals("save") ) {
+            if ( isSaveCommand ) {
                 program =
                     programProcessor.persistProgramText(programName, programText, configName, configText, userId, robot, userId, programTimestamp, !isShared);
             } else {
@@ -93,7 +90,49 @@ public class ClientProgramController {
             }
             UtilForREST.addResultInfo(response, programProcessor);
             Statistics.info("ProgramSave", "success", programProcessor.succeeded());
-        } catch ( DbcException | JSONException e ) {
+        } catch ( Exception e ) {
+            dbSession.rollback();
+            String errorTicketId = Util.getErrorTicketId();
+            LOG.error("Exception. Error ticket: {}", errorTicketId, e);
+            try {
+                UtilForREST.addErrorInfo(response, Key.SERVER_ERROR).append("parameters", errorTicketId);
+            } catch ( JSONException ex ) {
+                LOG.error("Could not add error info to response!", ex);
+            }
+        } finally {
+            if ( dbSession != null ) {
+                dbSession.close();
+            }
+        }
+        return Response.ok(response).build();
+    }
+
+    @POST
+    @Path("/delete")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response deleteProgram(@OraData DbSession dbSession, JSONObject request) {
+        JSONObject response = new JSONObject();
+        try {
+            HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, request);
+            JSONObject dataPart = UtilForREST.extractDataPart(request);
+            ProgramProcessor programProcessor = new ProgramProcessor(dbSession, httpSessionState);
+            int userId = httpSessionState.getUserId();
+            String robot = getRobot(httpSessionState);
+            if ( !httpSessionState.isUserLoggedIn() ) {
+                LOG.error("Unauthorized");
+                UtilForREST.addErrorInfo(response, Key.USER_ERROR_NOT_LOGGED_IN);
+                Statistics.info("ProgramDelete", "success", false);
+            } else {
+                String programName;
+                String author;
+                programName = dataPart.getString("programName");
+                author = dataPart.getString("author");
+                programProcessor.deleteByName(programName, userId, robot, author);
+                UtilForREST.addResultInfo(response, programProcessor);
+                Statistics.info("ProgramDelete", "success", programProcessor.succeeded());
+            }
+        } catch ( Exception e ) {
             dbSession.rollback();
             String errorTicketId = Util.getErrorTicketId();
             LOG.error("Exception. Error ticket: {}", errorTicketId, e);
@@ -114,13 +153,12 @@ public class ClientProgramController {
     @Path("/listing")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getProgram(JSONObject request) {
-        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, request);
-        JSONObject dataPart = UtilForREST.extractDataPart(request);
-        DbSession dbSession = this.sessionFactoryWrapper.getSession();
-        ProgramProcessor programProcessor = new ProgramProcessor(dbSession, httpSessionState);
+    public Response getProgram(@OraData DbSession dbSession, JSONObject request) {
         JSONObject response = new JSONObject();
         try {
+            HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, request);
+            JSONObject dataPart = UtilForREST.extractDataPart(request);
+            ProgramProcessor programProcessor = new ProgramProcessor(dbSession, httpSessionState);
             if ( !httpSessionState.isUserLoggedIn() && !dataPart.getString("owner").equals("Roberta") && !dataPart.getString("owner").equals("Gallery") ) {
                 LOG.info("Unauthorized load request");
                 UtilForREST.addErrorInfo(response, Key.USER_ERROR_NOT_LOGGED_IN);
@@ -145,76 +183,7 @@ public class ClientProgramController {
                 UtilForREST.addResultInfo(response, programProcessor);
                 Statistics.info("ProgramLoad", "success", programProcessor.succeeded());
             }
-        } catch ( DbcException | JSONException e ) {
-            dbSession.rollback();
-            String errorTicketId = Util.getErrorTicketId();
-            LOG.error("Exception. Error ticket: {}", errorTicketId, e);
-            try {
-                UtilForREST.addErrorInfo(response, Key.SERVER_ERROR).append("parameters", errorTicketId);
-            } catch ( JSONException ex ) {
-                LOG.error("Could not add error info to response!", ex);
-            }
-        } finally {
-            if ( dbSession != null ) {
-                dbSession.close();
-            }
-        }
-        return Response.ok(response).build();
-    }
-
-    @POST
-    @Path("/listing/names")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response getProgramNames(JSONObject request) {
-        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, request);
-        DbSession dbSession = this.sessionFactoryWrapper.getSession();
-        ProgramProcessor programProcessor = new ProgramProcessor(dbSession, httpSessionState);
-        JSONObject response = new JSONObject();
-        try {
-            String robot = getRobot(httpSessionState);
-            if ( !httpSessionState.isUserLoggedIn() ) {
-                LOG.error("Unauthorized");
-                UtilForREST.addErrorInfo(response, Key.USER_ERROR_NOT_LOGGED_IN);
-            } else {
-                int userId = httpSessionState.getUserId();
-                JSONArray programInfo = programProcessor.getProgramInfo(userId, robot, userId);
-                response.put("programNames", programInfo);
-                UtilForREST.addResultInfo(response, programProcessor);
-            }
-        } catch ( DbcException | JSONException e ) {
-            dbSession.rollback();
-            String errorTicketId = Util.getErrorTicketId();
-            LOG.error("Exception. Error ticket: {}", errorTicketId, e);
-            try {
-                UtilForREST.addErrorInfo(response, Key.SERVER_ERROR).append("parameters", errorTicketId);
-            } catch ( JSONException ex ) {
-                LOG.error("Could not add error info to response!", ex);
-            }
-        } finally {
-            if ( dbSession != null ) {
-                dbSession.close();
-            }
-        }
-        return Response.ok(response).build();
-    }
-
-    @POST
-    @Path("/examples/names")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response getProgramExampleNames(JSONObject request) {
-        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, request);
-        DbSession dbSession = this.sessionFactoryWrapper.getSession();
-        ProgramProcessor programProcessor = new ProgramProcessor(dbSession, httpSessionState);
-        JSONObject response = new JSONObject();
-        try {
-            String robot = getRobot(httpSessionState);
-            int userId = 1;
-            JSONArray programInfo = programProcessor.getProgramInfo(userId, robot, userId);
-            response.put("programNames", programInfo);
-            UtilForREST.addResultInfo(response, programProcessor);
-        } catch ( DbcException | JSONException e ) {
+        } catch ( Exception e ) {
             dbSession.rollback();
             String errorTicketId = Util.getErrorTicketId();
             LOG.error("Exception. Error ticket: {}", errorTicketId, e);
@@ -235,14 +204,13 @@ public class ClientProgramController {
     @Path("/entity")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getProgramEntity(JSONObject request) {
-        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, request);
-        JSONObject dataPart = UtilForREST.extractDataPart(request);
-        DbSession dbSession = this.sessionFactoryWrapper.getSession();
-        ProgramProcessor programProcessor = new ProgramProcessor(dbSession, httpSessionState);
-        UserProcessor up = new UserProcessor(dbSession, httpSessionState);
+    public Response getProgramEntity(@OraData DbSession dbSession, JSONObject request) {
         JSONObject response = new JSONObject();
         try {
+            HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, request);
+            JSONObject dataPart = UtilForREST.extractDataPart(request);
+            ProgramProcessor programProcessor = new ProgramProcessor(dbSession, httpSessionState);
+            UserProcessor up = new UserProcessor(dbSession, httpSessionState);
             if ( !httpSessionState.isUserLoggedIn() ) {
                 LOG.error("Unauthorized");
                 UtilForREST.addErrorInfo(response, Key.USER_ERROR_NOT_LOGGED_IN);
@@ -260,7 +228,7 @@ public class ClientProgramController {
                 }
                 UtilForREST.addResultInfo(response, programProcessor);
             }
-        } catch ( DbcException | JSONException e ) {
+        } catch ( Exception e ) {
             dbSession.rollback();
             String errorTicketId = Util.getErrorTicketId();
             LOG.error("Exception. Error ticket: {}", errorTicketId, e);
@@ -278,21 +246,56 @@ public class ClientProgramController {
     }
 
     @POST
-    @Path("/gallery")
+    @Path("/listing/names")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getGallery(JSONObject request) {
-        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, request);
-        DbSession dbSession = this.sessionFactoryWrapper.getSession();
-        ProgramProcessor programProcessor = new ProgramProcessor(dbSession, httpSessionState);
+    public Response getInfosOfProgramsOfLoggedInUser(@OraData DbSession dbSession, JSONObject request) {
         JSONObject response = new JSONObject();
         try {
-            int userId = httpSessionState.getUserId();
-            JSONArray programInfo = programProcessor.getProgramGallery(userId);
+            HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, request);
+            ProgramProcessor programProcessor = new ProgramProcessor(dbSession, httpSessionState);
+            String robot = getRobot(httpSessionState);
+            if ( !httpSessionState.isUserLoggedIn() ) {
+                LOG.error("Unauthorized");
+                UtilForREST.addErrorInfo(response, Key.USER_ERROR_NOT_LOGGED_IN);
+            } else {
+                int userId = httpSessionState.getUserId();
+                JSONArray programInfo = programProcessor.getProgramInfo(userId, robot, userId);
+                response.put("programNames", programInfo);
+                UtilForREST.addResultInfo(response, programProcessor);
+            }
+        } catch ( Exception e ) {
+            dbSession.rollback();
+            String errorTicketId = Util.getErrorTicketId();
+            LOG.error("Exception. Error ticket: {}", errorTicketId, e);
+            try {
+                UtilForREST.addErrorInfo(response, Key.SERVER_ERROR).append("parameters", errorTicketId);
+            } catch ( JSONException ex ) {
+                LOG.error("Could not add error info to response!", ex);
+            }
+        } finally {
+            if ( dbSession != null ) {
+                dbSession.close();
+            }
+        }
+        return Response.ok(response).build();
+    }
+
+    @POST
+    @Path("/examples/names")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getInfosOfExamplePrograms(@OraData DbSession dbSession, JSONObject request) {
+        JSONObject response = new JSONObject();
+        try {
+            HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, request);
+            ProgramProcessor programProcessor = new ProgramProcessor(dbSession, httpSessionState);
+            String robot = getRobot(httpSessionState);
+            int userId = 1;
+            JSONArray programInfo = programProcessor.getProgramInfo(userId, robot, userId);
             response.put("programNames", programInfo);
             UtilForREST.addResultInfo(response, programProcessor);
-            Statistics.info("GalleryView", "success", programProcessor.succeeded());
-        } catch ( DbcException | JSONException e ) {
+        } catch ( Exception e ) {
             dbSession.rollback();
             String errorTicketId = Util.getErrorTicketId();
             LOG.error("Exception. Error ticket: {}", errorTicketId, e);
@@ -371,14 +374,13 @@ public class ClientProgramController {
     @Path("/share")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response shareProgram(JSONObject request) {
-        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, request);
-        JSONObject dataPart = UtilForREST.extractDataPart(request);
-        DbSession dbSession = this.sessionFactoryWrapper.getSession();
-        UserProcessor userProcessor = new UserProcessor(dbSession, httpSessionState);
-        AccessRightProcessor accessRightProcessor = new AccessRightProcessor(dbSession, httpSessionState);
+    public Response shareProgram(@OraData DbSession dbSession, JSONObject request) {
         JSONObject response = new JSONObject();
         try {
+            HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, request);
+            JSONObject dataPart = UtilForREST.extractDataPart(request);
+            UserProcessor userProcessor = new UserProcessor(dbSession, httpSessionState);
+            AccessRightProcessor accessRightProcessor = new AccessRightProcessor(dbSession, httpSessionState);
             int userId = httpSessionState.getUserId();
             String robot = getRobot(httpSessionState);
             if ( !httpSessionState.isUserLoggedIn() ) {
@@ -415,59 +417,15 @@ public class ClientProgramController {
     }
 
     @POST
-    @Path("/delete")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response deleteProject(JSONObject request) {
-        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, request);
-        JSONObject dataPart = UtilForREST.extractDataPart(request);
-        DbSession dbSession = this.sessionFactoryWrapper.getSession();
-        ProgramProcessor programProcessor = new ProgramProcessor(dbSession, httpSessionState);
-        JSONObject response = new JSONObject();
-        try {
-            int userId = httpSessionState.getUserId();
-            String robot = getRobot(httpSessionState);
-            if ( !httpSessionState.isUserLoggedIn() ) {
-                LOG.error("Unauthorized");
-                UtilForREST.addErrorInfo(response, Key.USER_ERROR_NOT_LOGGED_IN);
-                Statistics.info("ProgramDelete", "success", false);
-            } else {
-                String programName;
-                String author;
-                programName = dataPart.getString("programName");
-                author = dataPart.getString("author");
-                programProcessor.deleteByName(programName, userId, robot, author);
-                UtilForREST.addResultInfo(response, programProcessor);
-                Statistics.info("ProgramDelete", "success", programProcessor.succeeded());
-            }
-        } catch ( DbcException | JSONException e ) {
-            dbSession.rollback();
-            String errorTicketId = Util.getErrorTicketId();
-            LOG.error("Exception. Error ticket: {}", errorTicketId, e);
-            try {
-                UtilForREST.addErrorInfo(response, Key.SERVER_ERROR).append("parameters", errorTicketId);
-            } catch ( JSONException ex ) {
-                LOG.error("Could not add error info to response!", ex);
-            }
-        } finally {
-            if ( dbSession != null ) {
-                dbSession.close();
-            }
-        }
-        return Response.ok(response).build();
-    }
-
-    @POST
     @Path("/like")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response likeProject(JSONObject request) {
-        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, request);
-        JSONObject dataPart = UtilForREST.extractDataPart(request);
-        DbSession dbSession = this.sessionFactoryWrapper.getSession();
-        LikeProcessor lp = new LikeProcessor(dbSession, httpSessionState);
+    public Response likeProgram(@OraData DbSession dbSession, JSONObject request) {
         JSONObject response = new JSONObject();
         try {
+            HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, request);
+            JSONObject dataPart = UtilForREST.extractDataPart(request);
+            LikeProcessor lp = new LikeProcessor(dbSession, httpSessionState);
             if ( !httpSessionState.isUserLoggedIn() ) {
                 LOG.error("Unauthorized");
                 UtilForREST.addErrorInfo(response, Key.USER_ERROR_NOT_LOGGED_IN);
@@ -485,7 +443,7 @@ public class ClientProgramController {
                     lp.createLike(programName, robotName, author);
                     if ( lp.succeeded() ) {
                         // nothing to do
-                        //argument: deleted tracks whether a like was set or taken away
+                        // argument: deleted tracks whether a like was set or taken away
                         Statistics.info("GalleryLike", "success", true, "deleted", false);
                     } else {
                         UtilForREST.addErrorInfo(response, Key.LIKE_SAVE_ERROR_EXISTS);
@@ -515,69 +473,20 @@ public class ClientProgramController {
     }
 
     @POST
-    @Path("/share/delete")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response deleteProjectShare(JSONObject request) {
-        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, request);
-        JSONObject dataPart = UtilForREST.extractDataPart(request);
-        DbSession dbSession = this.sessionFactoryWrapper.getSession();
-        ProgramProcessor programProcessor = new ProgramProcessor(dbSession, httpSessionState);
-        AccessRightProcessor accessRightProcessor = new AccessRightProcessor(dbSession, httpSessionState);
-        UserProcessor userProcessor = new UserProcessor(dbSession, httpSessionState);
-        JSONObject response = new JSONObject();
-        try {
-            int userId = httpSessionState.getUserId();
-            String robot = getRobot(httpSessionState);
-            if ( !httpSessionState.isUserLoggedIn() ) {
-                LOG.error("Unauthorized");
-                Statistics.info("ProgramShareDelete", "success", false);
-                UtilForREST.addErrorInfo(response, Key.USER_ERROR_NOT_LOGGED_IN);
-            } else {
-                String programName = dataPart.getString("programName");
-                String owner = dataPart.getString("owner");
-                String author = dataPart.getString("author");
-                accessRightProcessor.shareDelete(owner, robot, programName, author, userId);
-                UtilForREST.addResultInfo(response, accessRightProcessor);
-                // if this program was shared from the gallery we need to delete the copy of it as well
-                if ( owner.equals("Gallery") ) {
-                    int ownerId = userProcessor.getUser(owner).getId();
-                    programProcessor.deleteByName(programName, ownerId, robot, userId);
-                    Statistics.info("ProgramShareDelete", "success", true);
-                    UtilForREST.addResultInfo(response, programProcessor);
-                }
-            }
-        } catch ( DbcException | JSONException e ) {
-            dbSession.rollback();
-            String errorTicketId = Util.getErrorTicketId();
-            LOG.error("Exception. Error ticket: {}", errorTicketId, e);
-            try {
-                UtilForREST.addErrorInfo(response, Key.SERVER_ERROR).append("parameters", errorTicketId);
-            } catch ( JSONException ex ) {
-                LOG.error("Could not add error info to response!", ex);
-            }
-        } finally {
-            if ( dbSession != null ) {
-                dbSession.close();
-            }
-        }
-        return Response.ok(response).build();
-    }
-
-    @POST
     @Path("/share/create")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response createProjectShare(JSONObject request) {
-        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, request);
-        JSONObject dataPart = UtilForREST.extractDataPart(request);
-        DbSession dbSession = this.sessionFactoryWrapper.getSession();
-        ProgramProcessor programProcessor = new ProgramProcessor(dbSession, httpSessionState);
-        AccessRightProcessor accessRightProcessor = new AccessRightProcessor(dbSession, httpSessionState);
-        UserProcessor userProcessor = new UserProcessor(dbSession, httpSessionState);
-        ConfigurationProcessor configurationProcessor = new ConfigurationProcessor(dbSession, httpSessionState);
+    public Response shareProgramInGallery(@OraData DbSession dbSession, JSONObject request) {
         JSONObject response = new JSONObject();
         try {
+            HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, request);
+            JSONObject dataPart = UtilForREST.extractDataPart(request);
+
+            ProgramProcessor programProcessor = new ProgramProcessor(dbSession, httpSessionState);
+            AccessRightProcessor accessRightProcessor = new AccessRightProcessor(dbSession, httpSessionState);
+            UserProcessor userProcessor = new UserProcessor(dbSession, httpSessionState);
+            ConfigurationProcessor configurationProcessor = new ConfigurationProcessor(dbSession, httpSessionState);
+
             int userId = httpSessionState.getUserId();
             String robot = getRobot(httpSessionState);
             if ( !httpSessionState.isUserLoggedIn() ) {
@@ -589,9 +498,9 @@ public class ClientProgramController {
                 // generating a unique name for the program owned by the gallery.
                 User user = userProcessor.getUser(userId);
                 String userAccount = user.getAccount();
-                if ( !this.isPublicServer || ((user != null) && user.isActivated()) ) {
+                if ( !this.isPublicServer || user != null && user.isActivated() ) {
                     // get the program from the origin user to share with the gallery
-                    Program program = programProcessor.getProgram(programName, userAccount, robot, userAccount);
+                    Program program = programProcessor.getProgramAndLockTable(programName, userAccount, robot, userAccount);
                     String confText;
                     if ( program != null ) {
                         if ( program.getConfigName() == null ) {
@@ -648,16 +557,103 @@ public class ClientProgramController {
     }
 
     @POST
+    @Path("/share/delete")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response deleteSharedProgram(@OraData DbSession dbSession, JSONObject request) {
+        JSONObject response = new JSONObject();
+        try {
+            HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, request);
+            JSONObject dataPart = UtilForREST.extractDataPart(request);
+            ProgramProcessor programProcessor = new ProgramProcessor(dbSession, httpSessionState);
+            AccessRightProcessor accessRightProcessor = new AccessRightProcessor(dbSession, httpSessionState);
+            UserProcessor userProcessor = new UserProcessor(dbSession, httpSessionState);
+            int userId = httpSessionState.getUserId();
+            String robot = getRobot(httpSessionState);
+            if ( !httpSessionState.isUserLoggedIn() ) {
+                LOG.error("Unauthorized");
+                Statistics.info("ProgramShareDelete", "success", false);
+                UtilForREST.addErrorInfo(response, Key.USER_ERROR_NOT_LOGGED_IN);
+            } else {
+                String programName = dataPart.getString("programName");
+                String owner = dataPart.getString("owner");
+                String author = dataPart.getString("author");
+                accessRightProcessor.shareDelete(owner, robot, programName, author, userId);
+                UtilForREST.addResultInfo(response, accessRightProcessor);
+                // if this program was shared from the gallery we need to delete the copy of it as well
+                if ( owner.equals("Gallery") ) {
+                    int galleryId = userProcessor.getUser(owner).getId();
+                    programProcessor.deleteByName(programName, galleryId, robot, userId);
+                    Statistics.info("ProgramShareDelete", "success", true);
+                    UtilForREST.addResultInfo(response, programProcessor);
+                }
+            }
+        } catch ( Exception e ) {
+            dbSession.rollback();
+            String errorTicketId = Util.getErrorTicketId();
+            LOG.error("Exception. Error ticket: {}", errorTicketId, e);
+            try {
+                UtilForREST.addErrorInfo(response, Key.SERVER_ERROR).append("parameters", errorTicketId);
+            } catch ( JSONException ex ) {
+                LOG.error("Could not add error info to response!", ex);
+            }
+        } finally {
+            if ( dbSession != null ) {
+                dbSession.close();
+            }
+        }
+        return Response.ok(response).build();
+    }
+
+    @POST
+    @Path("/gallery")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getProgramsFromGallery(@OraData DbSession dbSession, JSONObject request) {
+        JSONObject response = new JSONObject();
+        try {
+            HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, request);
+            ProgramProcessor programProcessor = new ProgramProcessor(dbSession, httpSessionState);
+            int userId = httpSessionState.getUserId();
+            JSONArray programInfo = programProcessor.getProgramGallery(userId);
+            response.put("programNames", programInfo);
+            UtilForREST.addResultInfo(response, programProcessor);
+            Statistics.info("GalleryView", "success", programProcessor.succeeded());
+        } catch ( Exception e ) {
+            dbSession.rollback();
+            String errorTicketId = Util.getErrorTicketId();
+            LOG.error("Exception. Error ticket: {}", errorTicketId, e);
+            try {
+                UtilForREST.addErrorInfo(response, Key.SERVER_ERROR).append("parameters", errorTicketId);
+            } catch ( JSONException ex ) {
+                LOG.error("Could not add error info to response!", ex);
+            }
+        } finally {
+            if ( dbSession != null ) {
+                dbSession.close();
+            }
+        }
+        return Response.ok(response).build();
+    }
+
+    /**
+     * TODO: really needed? No use found in client
+     *
+     * @param dbSession
+     * @param request
+     * @return
+     */
+    @POST
     @Path("/relations")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getProjectRelations(JSONObject request) {
-        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, request);
-        JSONObject dataPart = UtilForREST.extractDataPart(request);
-        DbSession dbSession = this.sessionFactoryWrapper.getSession();
-        ProgramProcessor programProcessor = new ProgramProcessor(dbSession, httpSessionState);
+    @Deprecated
+    public Response getProjectRelations(@OraData DbSession dbSession, JSONObject request) {
         JSONObject response = new JSONObject();
         try {
+            HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, request);
+            JSONObject dataPart = UtilForREST.extractDataPart(request);
+            ProgramProcessor programProcessor = new ProgramProcessor(dbSession, httpSessionState);
             int userId = httpSessionState.getUserId();
             String robot = getRobot(httpSessionState);
             if ( !httpSessionState.isUserLoggedIn() ) {
@@ -669,7 +665,7 @@ public class ClientProgramController {
                 response.put("relations", relations);
                 UtilForREST.addResultInfo(response, programProcessor);
             }
-        } catch ( DbcException | JSONException e ) {
+        } catch ( Exception e ) {
             dbSession.rollback();
             String errorTicketId = Util.getErrorTicketId();
             LOG.error("Exception. Error ticket: {}", errorTicketId, e);

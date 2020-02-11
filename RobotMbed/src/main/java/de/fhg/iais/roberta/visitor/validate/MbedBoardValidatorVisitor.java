@@ -20,6 +20,7 @@ import de.fhg.iais.roberta.syntax.action.mbed.PinSetPullAction;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioReceiveAction;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioSendAction;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioSetChannelAction;
+import de.fhg.iais.roberta.syntax.action.mbed.ServoSetAction;
 import de.fhg.iais.roberta.syntax.action.mbed.SingleMotorOnAction;
 import de.fhg.iais.roberta.syntax.action.mbed.SingleMotorStopAction;
 import de.fhg.iais.roberta.syntax.action.mbed.SwitchLedMatrixAction;
@@ -231,6 +232,11 @@ public class MbedBoardValidatorVisitor extends AbstractBoardValidatorVisitor imp
 
     @Override
     public Void visitSwitchLedMatrixAction(SwitchLedMatrixAction<Void> switchLedMatrixAction) {
+        return null;
+    }
+
+    @Override
+    public Void visitServoSetAction(ServoSetAction<Void> servoSetAction) {
         return null;
     }
 }

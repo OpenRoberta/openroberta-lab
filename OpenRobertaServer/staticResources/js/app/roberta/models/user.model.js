@@ -10,7 +10,7 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
      * 
      */
     function clear(successFn) {
-        COMM.json("/user", {
+        COMM.json("/user/clear", {
             "cmd" : "clear",
         }, successFn, "clear user");
     }
@@ -28,7 +28,7 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
      * 
      */
     function login(accountName, passwd, successFn) {
-        COMM.json("/user", {
+        COMM.json("/user/login", {
             "cmd" : "login",
             "accountName" : accountName,
             "password" : passwd
@@ -43,7 +43,7 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
      * @memberof USER
      */
     function logout(successFn) {
-        COMM.json("/user", {
+        COMM.json("/user/logout", {
             "cmd" : "logout"
         }, successFn, "logout user");
     }
@@ -59,7 +59,7 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
      * 
      */
     function getUserFromServer(accountName, successFn) {
-        COMM.json("/user", {
+        COMM.json("/user/getUser", {
             "cmd" : "getUser"
         }, successFn, "got user info from server");
     }
@@ -80,7 +80,7 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
      * 
      */
     function createUserToServer(accountName, userName, userEmail, passwd, isYoungerThen14, language, successFn) {
-        COMM.json("/user", {
+        COMM.json("/user/createUser", {
             "cmd" : "createUser",
             "accountName" : accountName,
             "userName" : userName,
@@ -106,7 +106,7 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
      * 
      */
     function updateUserToServer(accountName, userName, userEmail, isYoungerThen14, language, successFn) {
-        COMM.json("/user", {
+        COMM.json("/user/updateUser", {
             "cmd" : "updateUser",
             "accountName" : accountName,
             "userName" : userName,
@@ -130,7 +130,7 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
      * 
      */
     function updateUserPasswordToServer(accountName, oldPassword, newPassword, successFn) {
-        COMM.json("/user", {
+        COMM.json("/user/changePassword", {
             "cmd" : "changePassword",
             "accountName" : accountName,
             "oldPassword" : oldPassword,
@@ -151,7 +151,7 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
      * 
      */
     function resetPasswordToServer(resetPasswordLink, newPassword, successFn) {
-        COMM.json("/user", {
+        COMM.json("/user/resetPassword", {
             "cmd" : "resetPassword",
             "resetPasswordLink" : resetPasswordLink,
             "newPassword" : newPassword
@@ -168,7 +168,7 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
      * 
      */
     function checkTargetRecovery(target, successFn) {
-        COMM.json("/user", {
+        COMM.json("/user/isResetPasswordLinkExpired", {
             "cmd" : "isResetPasswordLinkExpired",
             "resetPasswordLink" : target
         }, successFn, "check password recovery for '" + target + "'");
@@ -184,7 +184,7 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
      * 
      */
     function userPasswordRecovery(lostEmail, lang, successFn) {
-        COMM.json("/user", {
+        COMM.json("/user/passwordRecovery", {
             "cmd" : "passwordRecovery",
             "lostEmail" : lostEmail,
             "language" : lang
@@ -203,7 +203,7 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
      * 
      */
     function userSendAccountActivation(accountName, language, successFn) {
-        COMM.json("/user", {
+        COMM.json("/user/resendActivation", {
             "cmd" : "resendActivation",
             "accountName" : accountName,
             "language" : language
@@ -219,7 +219,7 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
      *            {String} - url for the account
      */
     function userActivateAccount(url, successFn) {
-        COMM.json("/user", {
+        COMM.json("/user/activateUser", {
             "cmd" : "activateUser",
             "userActivationLink" : url
         }, successFn, "send account activation mail for '" + url + "'");
@@ -237,7 +237,7 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
      * 
      */
     function deleteUserOnServer(accountName, passwd, successFn) {
-        COMM.json("/user", {
+        COMM.json("/user/deleteUser", {
             "cmd" : "deleteUser",
             "accountName" : accountName,
             "password" : passwd
@@ -247,7 +247,7 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
     exports.deleteUserOnServer = deleteUserOnServer;
 
     function getStatusText(successFn) {
-        COMM.json("/user", {
+        COMM.json("/user/getStatusText", {
             "cmd" : "getStatusText"
         }, successFn);
     }
@@ -255,7 +255,7 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
     exports.getStatusText = getStatusText;
 
     function setStatusText(english, german, timestamp, successFn) {
-        COMM.json("/user", {
+        COMM.json("/user/setStatusText", {
             "cmd" : "setStatusText",
             "english" : english,
             "german" : german,

@@ -16,7 +16,7 @@ import de.fhg.iais.roberta.util.Util;
 
 public class ToolboxProcessor extends AbstractProcessor {
     public ToolboxProcessor(DbSession dbSession, HttpSessionState httpSessionState) {
-        super(dbSession, httpSessionState);
+        super(dbSession, httpSessionState.getUserId());
     }
 
     public Toolbox getToolbox(String toolboxName, int userId, String robotName) {

@@ -9,9 +9,12 @@
 # LOWERLIMIT: if the number of open file descriptors is less than this value, nothing is logged. DEFAULT: 100
 # UPPERLIMIT: if the number of open file descriptors is greater than this value, http sessions and db sessions are logged, too. DEFAULT: 200
 # SERVERURL: the url where we get the http+db session data from. DEFAULT: retrieved via the server name
+# DURATION: the number of hours after which the script should terminate itself. DEFAULT: 20
 # PID: the pid of the server process. DEFAULT: retrieved via the server name
+#
 # if a variable has a default and its value is '-', the default is taken. For instance, this is a valid call which supplies a new upper limit
-# and keeps the default everywhere else: .../run.sh show-resources test - - 150
+# and keeps the default everywhere else: .../run.sh show-resources test - - 150 - - -
+# Note, that the last three '-' can be omitted
 
 function showResourceLoop {
     echo 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx' >> $LOGFILE
@@ -31,19 +34,21 @@ function showResourceLoop {
             printf "%s fd: %-10d\n" "$DATE" "$FD" >> $LOGFILE
             pstree $PID >> $LOGFILE
             if [ "$FD" -gt "$UPPERLIMIT" ]
-            then
-                RESPONSE=$(curl $SERVERURL/rest/data/server/resources 2>/dev/null)
+            then 
+                RESPONSE=$(curl $SERVERURL/rest/data/server/resources  2>/dev/null)
                 echo "$RESPONSE" >> $LOGFILE
-                RESPONSE=$(curl $SERVERURL/rest/data/robot/summary 2>/dev/null)
+                RESPONSE=$(curl $SERVERURL/rest/data/server/dbsessions 2>/dev/null)
+                echo "$RESPONSE" >> $LOGFILE
+                RESPONSE=$(curl $SERVERURL/rest/data/robot/summary     2>/dev/null)
                 echo "$RESPONSE" >> $LOGFILE
             fi
         fi
         SECOND_NOW=$(date +%s)
-        DELTA=$(expr "$SECOND_NOW" - "$SECOND_OF_START")
-        if [ "$DELTA" -gt 72000 ] # 24*60*60 - 4*60*60 == 90000 twenty hours are enough
+        DELTA=$(("$SECOND_NOW" - "$SECOND_OF_START"))
+        if [ "$DELTA" -gt "$DURATION" ]
         then
-            echo 'exit after a day of work' >> $LOGFILE
             echo 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx' >> $LOGFILE
+            echo "exit of pid $$ after a day of work" >> $LOGFILE
             exit 0
         fi
     done
@@ -58,15 +63,15 @@ function guessPidOfServerRunningTheLab {
 isServerNameValid ${SERVER_NAME}
 
 case "$LOGFILE" in
-  ''|'-') LOGFILE="$BASE_DIR/logs/server-resources.log" ;;
+  ''|'-') LOGFILE="$BASE_DIR/logs/server-resources-${SERVER_NAME}.log" ;;
   *)      : ;;
 esac
 case "$LOWERLIMIT" in
-  ''|'-') LOWERLIMIT=100 ;;
+  ''|'-') LOWERLIMIT=225 ;;
   *)      : ;;
 esac
 case "$UPPERLIMIT" in
-  ''|'-') UPPERLIMIT=200 ;;
+  ''|'-') UPPERLIMIT=250 ;;
   *)      : ;;
 esac
 case "$SERVERURL" in
@@ -78,9 +83,14 @@ case "$SERVERURL" in
           SERVERURL="http://localhost:$PORT" ;;
   *)      : ;;
 esac
+case "$DURATION" in
+  ''|'-') DURATION=20 ;;
+  *)      : ;;
+esac
+DURATION=$(($DURATION * 60 * 60)) # convert hours to seconds
 case "$PID" in
-  '') PID=$(guessPidOfServerRunningTheLab) ;;
-  *)  : ;;
+  ''|'-') PID=$(guessPidOfServerRunningTheLab) ;;
+  *)      : ;;
 esac
 
 echo "the log file of showResources is: $LOGFILE"

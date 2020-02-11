@@ -14,12 +14,12 @@ import org.slf4j.LoggerFactory;
 
 import com.google.inject.Inject;
 
+import de.fhg.iais.roberta.javaServer.provider.OraData;
 import de.fhg.iais.roberta.persistence.ConfigurationProcessor;
 import de.fhg.iais.roberta.persistence.UserProcessor;
 import de.fhg.iais.roberta.persistence.bo.User;
 import de.fhg.iais.roberta.persistence.util.DbSession;
 import de.fhg.iais.roberta.persistence.util.HttpSessionState;
-import de.fhg.iais.roberta.persistence.util.SessionFactoryWrapper;
 import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
 import de.fhg.iais.roberta.util.Key;
 import de.fhg.iais.roberta.util.Util;
@@ -29,78 +29,179 @@ import de.fhg.iais.roberta.util.UtilForREST;
 public class ClientConfiguration {
     private static final Logger LOG = LoggerFactory.getLogger(ClientConfiguration.class);
 
-    private final SessionFactoryWrapper sessionFactoryWrapper;
     private final RobotCommunicator brickCommunicator;
 
     @Inject
-    public ClientConfiguration(SessionFactoryWrapper sessionFactoryWrapper, RobotCommunicator brickCommunicator) {
-        this.sessionFactoryWrapper = sessionFactoryWrapper;
+    public ClientConfiguration(RobotCommunicator brickCommunicator) {
         this.brickCommunicator = brickCommunicator;
     }
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response command(JSONObject fullRequest) throws Exception {
-        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, fullRequest);
-        int userId = httpSessionState.getUserId();
-        DbSession dbSession = this.sessionFactoryWrapper.getSession();
-        final String robotName =
-            httpSessionState.getRobotFactory(httpSessionState.getRobotName()).getGroup() != ""
-                ? httpSessionState.getRobotFactory(httpSessionState.getRobotName()).getGroup()
-                : httpSessionState.getRobotName();
-        UserProcessor up = new UserProcessor(dbSession, httpSessionState);
+    @Path("/saveC")
+    public Response saveConfig(@OraData DbSession dbSession, JSONObject fullRequest) throws Exception {
         JSONObject response = new JSONObject();
+        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, fullRequest);
         try {
+            int userId = httpSessionState.getUserId();
+            String robotGroup = httpSessionState.getRobotFactory(httpSessionState.getRobotName()).getGroup();
+            final String robotName = robotGroup != "" ? robotGroup : httpSessionState.getRobotName();
             JSONObject request = fullRequest.getJSONObject("data");
-            String cmd = request.getString("cmd");
-            ClientConfiguration.LOG.info("command is: " + cmd);
+            String cmd = "saveC";
+            LOG.info("command is: " + cmd);
             response.put("cmd", cmd);
             ConfigurationProcessor cp = new ConfigurationProcessor(dbSession, httpSessionState);
-            if ( cmd.equals("saveC") ) {
-                String configurationName = request.getString("name");
-                String configurationXml = request.getString("configuration");
-                cp.updateConfiguration(configurationName, userId, robotName, configurationXml, true);
-                UtilForREST.addResultInfo(response, cp);
 
-            } else if ( cmd.equals("saveAsC") ) {
-                String configurationName = request.getString("name");
-                String configurationXml = request.getString("configuration");
-                cp.updateConfiguration(configurationName, userId, robotName, configurationXml, false);
-                UtilForREST.addResultInfo(response, cp);
-
-            } else if ( cmd.equals("loadC") ) {
-                String configurationName = request.getString("name");
-                String ownerName = request.getString("owner").trim();
-                if ( !ownerName.isEmpty() ) {
-                    User user = up.getUser(ownerName);
-                    if ( user != null ) {
-                        userId = user.getId();
-                    }
-                }
-                String configurationText = cp.getConfigurationText(configurationName, userId, robotName);
-                response.put("data", configurationText);
-                UtilForREST.addResultInfo(response, cp);
-
-            } else if ( cmd.equals("deleteC") && httpSessionState.isUserLoggedIn() ) {
-                String configurationName = request.getString("name");
-                cp.deleteByName(configurationName, userId, robotName);
-                UtilForREST.addResultInfo(response, cp);
-
-            } else if ( cmd.equals("loadCN") && httpSessionState.isUserLoggedIn() ) {
-                JSONArray configurationInfo = cp.getConfigurationInfo(userId, robotName);
-                response.put("configurationNames", configurationInfo);
-                UtilForREST.addResultInfo(response, cp);
-
-            } else {
-                ClientConfiguration.LOG.error("Invalid command: " + cmd);
-                UtilForREST.addErrorInfo(response, Key.COMMAND_INVALID);
-            }
-            dbSession.commit();
+            String configurationName = request.getString("name");
+            String configurationXml = request.getString("configuration");
+            cp.updateConfiguration(configurationName, userId, robotName, configurationXml, true);
+            UtilForREST.addResultInfo(response, cp);
         } catch ( Exception e ) {
             dbSession.rollback();
             String errorTicketId = Util.getErrorTicketId();
-            ClientConfiguration.LOG.error("Exception. Error ticket: " + errorTicketId, e);
+            LOG.error("Exception. Error ticket: " + errorTicketId, e);
+            UtilForREST.addErrorInfo(response, Key.SERVER_ERROR).append("parameters", errorTicketId);
+        } finally {
+            if ( dbSession != null ) {
+                dbSession.close();
+            }
+        }
+        return UtilForREST.responseWithFrontendInfo(response, httpSessionState, this.brickCommunicator);
+    }
+
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/saveAsC")
+    public Response saveAsConfig(@OraData DbSession dbSession, JSONObject fullRequest) throws Exception {
+        JSONObject response = new JSONObject();
+        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, fullRequest);
+        try {
+            int userId = httpSessionState.getUserId();
+            String robotGroup = httpSessionState.getRobotFactory(httpSessionState.getRobotName()).getGroup();
+            final String robotName = robotGroup != "" ? robotGroup : httpSessionState.getRobotName();
+            JSONObject request = fullRequest.getJSONObject("data");
+            String cmd = "saveAsC";
+            LOG.info("command is: " + cmd);
+            response.put("cmd", cmd);
+            ConfigurationProcessor cp = new ConfigurationProcessor(dbSession, httpSessionState);
+
+            String configurationName = request.getString("name");
+            String configurationXml = request.getString("configuration");
+            cp.updateConfiguration(configurationName, userId, robotName, configurationXml, false);
+            UtilForREST.addResultInfo(response, cp);
+        } catch ( Exception e ) {
+            dbSession.rollback();
+            String errorTicketId = Util.getErrorTicketId();
+            LOG.error("Exception. Error ticket: " + errorTicketId, e);
+            UtilForREST.addErrorInfo(response, Key.SERVER_ERROR).append("parameters", errorTicketId);
+        } finally {
+            if ( dbSession != null ) {
+                dbSession.close();
+            }
+        }
+        return UtilForREST.responseWithFrontendInfo(response, httpSessionState, this.brickCommunicator);
+    }
+
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/loadC")
+    public Response loadConfig(@OraData DbSession dbSession, JSONObject fullRequest) throws Exception {
+        JSONObject response = new JSONObject();
+        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, fullRequest);
+        try {
+            int userId = httpSessionState.getUserId();
+            String robotGroup = httpSessionState.getRobotFactory(httpSessionState.getRobotName()).getGroup();
+            final String robotName = robotGroup != "" ? robotGroup : httpSessionState.getRobotName();
+            JSONObject request = fullRequest.getJSONObject("data");
+            String cmd = "loadC";
+            LOG.info("command is: " + cmd);
+            response.put("cmd", cmd);
+            ConfigurationProcessor cp = new ConfigurationProcessor(dbSession, httpSessionState);
+            UserProcessor up = new UserProcessor(dbSession, httpSessionState);
+
+            String configurationName = request.getString("name");
+            String ownerName = request.getString("owner").trim();
+            if ( !ownerName.isEmpty() ) {
+                User user = up.getUser(ownerName);
+                if ( user != null ) {
+                    userId = user.getId();
+                }
+            }
+            String configurationText = cp.getConfigurationText(configurationName, userId, robotName);
+            response.put("data", configurationText);
+            UtilForREST.addResultInfo(response, cp);
+        } catch ( Exception e ) {
+            dbSession.rollback();
+            String errorTicketId = Util.getErrorTicketId();
+            LOG.error("Exception. Error ticket: " + errorTicketId, e);
+            UtilForREST.addErrorInfo(response, Key.SERVER_ERROR).append("parameters", errorTicketId);
+        } finally {
+            if ( dbSession != null ) {
+                dbSession.close();
+            }
+        }
+        return UtilForREST.responseWithFrontendInfo(response, httpSessionState, this.brickCommunicator);
+    }
+
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/deleteC")
+    public Response deleteConfig(@OraData DbSession dbSession, JSONObject fullRequest) throws Exception {
+        JSONObject response = new JSONObject();
+        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, fullRequest);
+        try {
+            int userId = httpSessionState.getUserId();
+            String robotGroup = httpSessionState.getRobotFactory(httpSessionState.getRobotName()).getGroup();
+            final String robotName = robotGroup != "" ? robotGroup : httpSessionState.getRobotName();
+            JSONObject request = fullRequest.getJSONObject("data");
+            String cmd = "deleteC";
+            LOG.info("command is: " + cmd);
+            response.put("cmd", cmd);
+            ConfigurationProcessor cp = new ConfigurationProcessor(dbSession, httpSessionState);
+
+            String configurationName = request.getString("name");
+            cp.deleteByName(configurationName, userId, robotName);
+            UtilForREST.addResultInfo(response, cp);
+        } catch ( Exception e ) {
+            dbSession.rollback();
+            String errorTicketId = Util.getErrorTicketId();
+            LOG.error("Exception. Error ticket: " + errorTicketId, e);
+            UtilForREST.addErrorInfo(response, Key.SERVER_ERROR).append("parameters", errorTicketId);
+        } finally {
+            if ( dbSession != null ) {
+                dbSession.close();
+            }
+        }
+        return UtilForREST.responseWithFrontendInfo(response, httpSessionState, this.brickCommunicator);
+    }
+
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/loadCN")
+    public Response loadConfigNames(@OraData DbSession dbSession, JSONObject fullRequest) throws Exception {
+        JSONObject response = new JSONObject();
+        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, fullRequest);
+        try {
+            int userId = httpSessionState.getUserId();
+            String robotGroup = httpSessionState.getRobotFactory(httpSessionState.getRobotName()).getGroup();
+            final String robotName = robotGroup != "" ? robotGroup : httpSessionState.getRobotName();
+            String cmd = "loadCN";
+            LOG.info("command is: " + cmd);
+            response.put("cmd", cmd);
+            ConfigurationProcessor cp = new ConfigurationProcessor(dbSession, httpSessionState);
+
+            JSONArray configurationInfo = cp.getConfigurationInfo(userId, robotName);
+            response.put("configurationNames", configurationInfo);
+            UtilForREST.addResultInfo(response, cp);
+        } catch ( Exception e ) {
+            dbSession.rollback();
+            String errorTicketId = Util.getErrorTicketId();
+            LOG.error("Exception. Error ticket: " + errorTicketId, e);
             UtilForREST.addErrorInfo(response, Key.SERVER_ERROR).append("parameters", errorTicketId);
         } finally {
             if ( dbSession != null ) {

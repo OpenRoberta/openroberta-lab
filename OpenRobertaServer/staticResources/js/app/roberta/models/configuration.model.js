@@ -16,7 +16,7 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
      *            {String} - XML representation of the robot configuration
      */
     function saveAsConfigurationToServer(configName, xmlText, successFn) {
-        COMM.json("/conf", {
+        COMM.json("/conf/saveAsC", {
             "cmd" : "saveAsC",
             "name" : configName,
             "configuration" : xmlText
@@ -35,7 +35,7 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
      *            {String} - XML representation of the robot configuration
      */
     function saveConfigurationToServer(configName, xmlText, successFn) {
-        COMM.json("/conf", {
+        COMM.json("/conf/saveC", {
             "cmd" : "saveC",
             "name" : configName,
             "configuration" : xmlText
@@ -52,7 +52,7 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
      * 
      */
     function deleteConfigurationFromListing(configName, successFn) {
-        COMM.json("/conf", {
+        COMM.json("/conf/deleteC", {
             "cmd" : "deleteC",
             "name" : configName
         }, function(result) {
@@ -71,7 +71,7 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
      *            {String} - configuration owner
      */
     function loadConfigurationFromListing(configName, owner, successFn) {
-        COMM.json("/conf", {
+        COMM.json("/conf/loadC", {
             "cmd" : "loadC",
             "name" : configName,
             "owner" : owner
@@ -85,7 +85,7 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
      * 
      */
     function refreshList(successFn) {
-        COMM.json("/conf", {
+        COMM.json("/conf/loadCN", {
             "cmd" : "loadCN"
         }, successFn, 'refresh configuration list');
     }

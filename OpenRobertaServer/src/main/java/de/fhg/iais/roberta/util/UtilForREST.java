@@ -1,6 +1,9 @@
 package de.fhg.iais.roberta.util;
 
 import java.util.Date;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentHashMap.KeySetView;
+import java.util.concurrent.atomic.AtomicLong;
 
 import javax.ws.rs.core.Response;
 
@@ -22,7 +25,10 @@ import de.fhg.iais.roberta.util.dbc.DbcKeyException;
 
 public class UtilForREST {
     private static final Logger LOG = LoggerFactory.getLogger(UtilForREST.class);
+    private static final long INVALID_INIT_TOKEN_REPORT_LIMIT = 100;
     private static String serverVersion;
+    private static final AtomicLong invalidInitTokenCounter = new AtomicLong(0);
+    private static final KeySetView<String, Boolean> invalidTokenThatAccess = ConcurrentHashMap.newKeySet();
 
     private UtilForREST() {
         // no objects
@@ -50,8 +56,8 @@ public class UtilForREST {
      */
     public static HttpSessionState handleRequestInit(Logger loggerForRequest, JSONObject fullRequest) {
         AliveData.rememberClientCall();
-        String tokenSetOnInit = fullRequest.optString("initToken");
-        HttpSessionState httpSessionState = validateTokenSetOnInit(tokenSetOnInit);
+        String initToken = fullRequest.optString("initToken");
+        HttpSessionState httpSessionState = validateInitToken(initToken);
         MDC.put("sessionId", String.valueOf(httpSessionState.getSessionNumber()));
         MDC.put("userId", String.valueOf(httpSessionState.getUserId()));
         MDC.put("robotName", String.valueOf(httpSessionState.getRobotName()));
@@ -66,31 +72,28 @@ public class UtilForREST {
      * started
      *
      * @param checkInitToken true: consistency checks; false: avoid them (used by ping services)
-     * @param tokenSetOnInit the token from the frontend-request, retrieved from the server when the connection front-end to server was established
-     * @return a HttpSessionState object matching the tokenSetOnInit
+     * @param initToken the token from the frontend-request, retrieved from the server when the connection front-end to server was established
+     * @return a HttpSessionState object matching the initToken
      */
-    private static HttpSessionState validateTokenSetOnInit(String tokenSetOnInit) {
-        HttpSessionState httpSessionState = null;
-        String errorMsgIfError;
-        Key errorKey;
-        if ( tokenSetOnInit == null ) {
-            errorMsgIfError = "frontend request has no tokenSetOnInit";
-            errorKey = Key.INIT_FAIL_INVALID_INIT_TOKEN;
-        } else {
-            httpSessionState = HttpSessionState.initToken2HttpSessionstate.get(tokenSetOnInit);
-            if ( httpSessionState == null ) {
-                errorMsgIfError = "initToken is not initialized in the session";
-                errorKey = Key.INIT_FAIL_INVALID_INIT_TOKEN;
-            } else {
-                errorMsgIfError = null;
-                errorKey = null;
-            }
-        }
-        if ( errorMsgIfError != null || errorKey != null ) {
+    private static HttpSessionState validateInitToken(String initToken) {
+        if ( initToken == null ) {
+            String errorMsgIfError = "frontend request has no initToken";
             LOG.error(errorMsgIfError);
-            throw new DbcKeyException(errorMsgIfError, errorKey, null);
+            throw new DbcKeyException(errorMsgIfError, Key.INIT_FAIL_INVALID_INIT_TOKEN, null);
+        } else {
+            HttpSessionState httpSessionState = HttpSessionState.get(initToken);
+            if ( httpSessionState == null ) {
+                long invalidCounter = invalidInitTokenCounter.incrementAndGet();
+                if ( invalidCounter > INVALID_INIT_TOKEN_REPORT_LIMIT ) {
+                    invalidTokenThatAccess.add(initToken);
+                    LOG.info("got " + INVALID_INIT_TOKEN_REPORT_LIMIT + " many invalid init calls with tokens " + invalidTokenThatAccess.toString());
+                    invalidInitTokenCounter.set(0);
+                    invalidTokenThatAccess.clear();
+                }
+                throw new DbcKeyException("invalid init token", Key.INIT_FAIL_INVALID_INIT_TOKEN, null);
+            }
+            return httpSessionState;
         }
-        return httpSessionState;
     }
 
     public static JSONObject extractDataPart(JSONObject request) {

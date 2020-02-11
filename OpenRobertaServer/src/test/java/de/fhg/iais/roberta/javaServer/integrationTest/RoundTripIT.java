@@ -15,7 +15,6 @@ import javax.ws.rs.core.Response;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 import org.eclipse.jetty.server.Server;
-import org.hibernate.Session;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -33,9 +32,11 @@ import com.google.common.base.Charsets;
 import com.google.common.io.Resources;
 
 import de.fhg.iais.roberta.factory.IRobotFactory;
+import de.fhg.iais.roberta.javaServer.basics.TestConfiguration;
 import de.fhg.iais.roberta.javaServer.restServices.all.controller.ClientProgramController;
 import de.fhg.iais.roberta.javaServer.restServices.all.controller.ClientUser;
 import de.fhg.iais.roberta.main.ServerStarter;
+import de.fhg.iais.roberta.persistence.util.DbSession;
 import de.fhg.iais.roberta.persistence.util.DbSetup;
 import de.fhg.iais.roberta.persistence.util.HttpSessionState;
 import de.fhg.iais.roberta.persistence.util.SessionFactoryWrapper;
@@ -80,8 +81,6 @@ public class RoundTripIT {
     private static DbSetup memoryDbSetup;
     private static RobotCommunicator brickCommunicator;
 
-    private static String connectionUrl;
-
     private static ClientUser restUser;
     private static ClientProgramController restProject;
 
@@ -89,15 +88,38 @@ public class RoundTripIT {
     private static HttpSessionState s1;
 
     private static String blocklyProgram;
-    private static Session nativeSession;
     private static StringBuffer verificationErrors = new StringBuffer();
 
     @Before
     public void setUp() throws Exception {
-        initialize();
+        // TODO: Does this work? Check and re-engineer
+        ServerProperties serverProperties = new ServerProperties(Util.loadProperties("classpath:/openRoberta.properties"));
+        browserVisibility = Boolean.parseBoolean(serverProperties.getStringProperty("browser.visibility"));
+        brickCommunicator = new RobotCommunicator();
+
+        TestConfiguration tc = TestConfiguration.setup();
+        sessionFactoryWrapper = tc.getSessionFactoryWrapper();
+        memoryDbSetup = tc.getMemoryDbSetup();
+
+        restUser = new ClientUser(brickCommunicator, serverProperties, null);
+        restProject = new ClientProgramController(serverProperties);
+        Map<String, IRobotFactory> robotPlugins = new HashMap<>();
+        loadPlugin(robotPlugins);
+        s1 = HttpSessionState.initOnlyLegalForDebugging("", robotPlugins, serverProperties, 1);
+
         driver = SeleniumHelper.runBrowser(browserVisibility);
         setUpDatabase();
         startServerAndLogin();
+    }
+
+    @After
+    public void tearDown() throws Exception {
+        driver.quit();
+        String verificationErrorString = verificationErrors.toString();
+        if ( !"".equals(verificationErrorString) ) {
+            Assert.fail(verificationErrorString);
+        }
+        server.stop();
     }
 
     @Test
@@ -170,50 +192,16 @@ public class RoundTripIT {
         assertRoundTrip(blocklyPrograms[13]);
     }
 
-    @After
-    public void tearDown() throws Exception {
-        driver.quit();
-        String verificationErrorString = verificationErrors.toString();
-        if ( !"".equals(verificationErrorString) ) {
-            Assert.fail(verificationErrorString);
-        }
-        server.stop();
-    }
-
-    // TODO: properties have been refactored. This doesn't work anymore
-    private void initialize() {
-        ServerProperties serverProperties = new ServerProperties(Util.loadProperties("classpath:/openRoberta.properties"));
-        connectionUrl = serverProperties.getStringProperty("hibernate.connection.url");
-        browserVisibility = Boolean.parseBoolean(serverProperties.getStringProperty("browser.visibility"));
-
-        sessionFactoryWrapper = new SessionFactoryWrapper("hibernate-cfg.xml", connectionUrl);
-        nativeSession = sessionFactoryWrapper.getNativeSession();
-        memoryDbSetup = new DbSetup(nativeSession);
-        memoryDbSetup.createEmptyDatabase();
-        brickCommunicator = new RobotCommunicator();
-
-        restUser = new ClientUser(brickCommunicator, serverProperties, null);
-        restProject = new ClientProgramController(sessionFactoryWrapper, serverProperties);
-        Map<String, IRobotFactory> robotPlugins = new HashMap<>();
-        loadPlugin(robotPlugins);
-        s1 = HttpSessionState.initOnlyLegalForDebugging("", robotPlugins, serverProperties, 1);
-    }
-
     private void setUpDatabase() throws Exception {
         Assert.assertEquals(1, getOneBigInteger("select count(*) from USER"));
         response =
             restUser
-                .command(
-                    sessionFactoryWrapper.getSession(),
-                    JSONUtilForServer
-                        .mkD("{'cmd':'createUser';'accountName':'orA';'userName':'orA';'password':'Pid';'userEmail':'cavy@home';'role':'STUDENT'}"));
+                .createUser(
+                    newDbSession(),
+                    mkCmd("{'cmd':'createUser';'accountName':'orA';'userName':'orA';'password':'Pid';'userEmail':'cavy@home';'role':'STUDENT'}"));
         Assert.assertEquals(2, getOneBigInteger("select count(*) from USER"));
         Assert.assertTrue(!s1.isUserLoggedIn());
-        response = //
-            restUser
-                .command( //
-                    sessionFactoryWrapper.getSession(),
-                    JSONUtilForServer.mkD("{'cmd':'login';'accountName':'orA';'password':'Pid'}"));
+        response = restUser.login(newDbSession(), mkCmd("{'cmd':'login';'accountName':'orA';'password':'Pid'}"));
         JSONUtilForServer.assertEntityRc(response, "ok", Key.USER_GET_ONE_SUCCESS);
         Assert.assertTrue(s1.isUserLoggedIn());
         int s1Id = s1.getUserId();
@@ -222,7 +210,7 @@ public class RoundTripIT {
             blocklyProgram = Resources.toString(PerformanceUserIT.class.getResource(resourcePath + program + ".xml"), Charsets.UTF_8);
             JSONObject fullRequest = new JSONObject("{\"log\":[];\"data\":{\"cmd\":\"saveAsP\";\"name\":\"" + program + "\";\"timestamp\":0}}");
             fullRequest.getJSONObject("data").put("program", blocklyProgram);
-            response = restProject.updateProject(fullRequest);
+            response = restProject.saveProgram(newDbSession(), fullRequest);
             JSONUtilForServer.assertEntityRc(response, "ok", Key.PROGRAM_SAVE_SUCCESS);
         }
     }
@@ -313,7 +301,7 @@ public class RoundTripIT {
         return memoryDbSetup.getOneBigIntegerAsLong(sqlStmt);
     }
 
-    private void loadPlugin(Map<String, IRobotFactory> robotPlugins) {
+    private static void loadPlugin(Map<String, IRobotFactory> robotPlugins) {
         try {
             @SuppressWarnings("unchecked")
             Class<IRobotFactory> factoryClass = (Class<IRobotFactory>) ServerStarter.class.getClassLoader().loadClass("de.fhg.iais.roberta.factory.EV3Factory");
@@ -324,4 +312,11 @@ public class RoundTripIT {
         }
     }
 
+    private static DbSession newDbSession() {
+        return sessionFactoryWrapper.getSession();
+    }
+
+    private static JSONObject mkCmd(String cmdAsString) throws JSONException {
+        return JSONUtilForServer.mkD(cmdAsString);
+    }
 }

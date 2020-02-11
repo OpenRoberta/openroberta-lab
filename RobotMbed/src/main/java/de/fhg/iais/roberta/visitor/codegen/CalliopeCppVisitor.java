@@ -35,6 +35,7 @@ import de.fhg.iais.roberta.syntax.action.mbed.PinSetPullAction;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioReceiveAction;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioSendAction;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioSetChannelAction;
+import de.fhg.iais.roberta.syntax.action.mbed.ServoSetAction;
 import de.fhg.iais.roberta.syntax.action.mbed.SingleMotorOnAction;
 import de.fhg.iais.roberta.syntax.action.mbed.SingleMotorStopAction;
 import de.fhg.iais.roberta.syntax.action.mbed.SwitchLedMatrixAction;
@@ -439,6 +440,25 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
                 nlIndent();
                 this.sb.append("_cbSetMotors(_buf, &_i2c, _motorOnStore, _motorOnStore);");
                 break;
+            case "4":
+                this.sb.append("_uBit.io.P2.setServoValue(");
+                motorOnAction.getParam().getSpeed().accept(this);
+                this.sb.append(" * -0.9 + 90);");
+                break;
+            case "5":
+                this.sb.append("_uBit.io.P8.setServoValue(");
+                motorOnAction.getParam().getSpeed().accept(this);
+                this.sb.append(" * 0.9 + 90);");
+                break;
+            case "6":
+                this.sb.append("_motorOnStore = ");
+                motorOnAction.getParam().getSpeed().accept(this);
+                this.sb.append(";");
+                nlIndent();
+                this.sb.append("_uBit.io.P2.setServoValue(_motorOnStore * -0.9 + 90);");
+                nlIndent();
+                this.sb.append("_uBit.io.P8.setServoValue(_motorOnStore * 0.9 + 90);");
+                break;
             case "AB":
                 this.sb.append("_motorOnStore = ");
                 motorOnAction.getParam().getSpeed().accept(this);
@@ -488,6 +508,17 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
                 break;
             case "3":
                 this.sb.append("_cbSetMotors(_buf, &_i2c, 0, 0);");
+                break;
+            case "4":
+                this.sb.append("_uBit.io.P2.setServoValue(0);");
+                break;
+            case "5":
+                this.sb.append("_uBit.io.P8.setServoValue(0);");
+                break;
+            case "6":
+                this.sb.append("_uBit.io.P2.setServoValue(0);");
+                nlIndent();
+                this.sb.append("_uBit.io.P8.setServoValue(0);");
                 break;
             case "AB":
                 this.sb.append("_uBit.soundmotor.motorAOff();");
@@ -1286,6 +1317,14 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
             this.sb.append(", ");
             bothMotorsOnAction.getSpeedB().accept(this);
             this.sb.append(");");
+        } else if ( bothMotorsOnAction.getPortA().equals("MK_LEFT")) {
+            this.sb.append("_uBit.io.P2.setServoValue(");
+            bothMotorsOnAction.getSpeedA().accept(this);
+            this.sb.append(" * -0.9 + 90);");
+            nlIndent();
+            this.sb.append("_uBit.io.P8.setServoValue(");
+            bothMotorsOnAction.getSpeedB().accept(this);
+            this.sb.append(" * 0.9 + 90);");
         }
         return null;
     }
@@ -1395,6 +1434,17 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
         } else {
             super.visitAssertStmt(assertStmt);
         }
+        return null;
+    }
+
+    @Override
+    public Void visitServoSetAction(ServoSetAction<Void> servoSetAction) {
+        String userDefinedName = servoSetAction.getPort();
+        String port = this.robotConfiguration.getConfigurationComponent(userDefinedName).getPortName();
+        this.sb.append("_uBit.io.").append(port).append(".setServoValue(");
+        servoSetAction.getValue().accept(this);
+        this.sb.append(");");
+
         return null;
     }
 }

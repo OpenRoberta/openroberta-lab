@@ -891,6 +891,19 @@ public class CppVisitorTest extends CalliopeAstTest {
     }
 
     @Test
+    public void visitServoSet_SetServoToValues_ReturnsCorrectCppProgram() throws Exception {
+        String expectedResult =
+            "" //
+                + IMPORTS
+                + MAIN
+                + "_uBit.io.P3.setServoValue(90);\n"
+                + END;
+        UnitTestHelper
+            .checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, expectedResult, "/action/servo_set.xml", configuration, true);
+        ;
+    }
+
+    @Test
     public void visitMathOnListFunct_DisplayAllMathOnListFunctsResults_ReturnsCorrectCppProgram() throws Exception {
         String expectedResult =
             "" //
@@ -904,7 +917,7 @@ public class CppVisitorTest extends CalliopeAstTest {
                 + "_uBit.display.scroll(ManagedString(_getListAverage(___item)));\n"
                 + "_uBit.display.scroll(ManagedString(_getListMedian(___item)));\n"
                 + "_uBit.display.scroll(ManagedString(_getListStandardDeviation(___item)));\n"
-                + "_uBit.display.scroll(ManagedString((___item)));"
+                + "_uBit.display.scroll(ManagedString(_getListElementByIndex(___item,0)));"
                 + END;
         UnitTestHelper
             .checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, expectedResult, "/action/math_on_list.xml", configuration, true);

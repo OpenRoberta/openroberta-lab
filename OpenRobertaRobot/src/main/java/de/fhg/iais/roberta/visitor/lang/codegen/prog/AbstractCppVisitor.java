@@ -386,7 +386,11 @@ public abstract class AbstractCppVisitor extends AbstractLanguageVisitor {
                 this.sb.append("_getListSum(");
                 break;
             case RANDOM:
-                this.sb.append("(");
+                // TODO it has no implementation and should probably be removed from blockly as well
+                this.sb.append("_getListElementByIndex(");
+                mathOnListFunct.getParam().get(0).accept(this);
+                this.sb.append(", 0)");
+                return null;
             default:
                 break;
         }

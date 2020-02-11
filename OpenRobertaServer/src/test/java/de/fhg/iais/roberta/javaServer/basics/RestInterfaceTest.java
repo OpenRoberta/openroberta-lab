@@ -10,7 +10,6 @@ import javax.ws.rs.core.Response;
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
-import org.hibernate.Session;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -21,6 +20,7 @@ import de.fhg.iais.roberta.javaServer.restServices.all.controller.ClientConfigur
 import de.fhg.iais.roberta.javaServer.restServices.all.controller.ClientProgramController;
 import de.fhg.iais.roberta.javaServer.restServices.all.controller.ClientUser;
 import de.fhg.iais.roberta.main.ServerStarter;
+import de.fhg.iais.roberta.persistence.util.DbSession;
 import de.fhg.iais.roberta.persistence.util.DbSetup;
 import de.fhg.iais.roberta.persistence.util.HttpSessionState;
 import de.fhg.iais.roberta.persistence.util.SessionFactoryWrapper;
@@ -48,7 +48,7 @@ import de.fhg.iais.roberta.util.dbc.DbcException;
  * program to the data base, the number of rows of the <code>PROGRAM</code> table should have increased by 1 and a select using the primary key of the
  * <code>PROGRAM</code> table (name,owner,robot) in the <code>where</code> clause should return a matching single row. The core setup of the database is run
  * <b>once</b> for a JVM, i.e. it cannot be repeated. This is also true for tests from different classes using the same Junit runner. If tests need an
- * <b>empty</b> data base, the have to start with a call to <code>this.memoryDbSetup.deleteAllFromUserAndProgram()</code> <br>
+ * <b>empty</b> data base, they have to start with a call to <code>this.memoryDbSetup.deleteAllFromUserAndProgram()</code> <br>
  * The following conventions for REST calls should be used:<br>
  * - check the preconditions (in most cases using SQL),<br>
  * - call the REST service,<br>
@@ -91,16 +91,15 @@ public class RestInterfaceTest {
         this.serverProperties = new ServerProperties(Util.loadProperties(null));
         this.serverProperties.getserverProperties().put("server.public", "true"); // not dangerous! For this.restUser the mail management is set to null
 
-        this.connectionUrl = "jdbc:hsqldb:mem:restTestInMemoryDb";
         this.robotCommunicator = new RobotCommunicator();
         this.restUser = new ClientUser(this.robotCommunicator, serverProperties, null);
 
-        this.sessionFactoryWrapper = new SessionFactoryWrapper("hibernate-test-cfg.xml", this.connectionUrl);
-        Session nativeSession = this.sessionFactoryWrapper.getNativeSession();
-        this.memoryDbSetup = new DbSetup(nativeSession);
-        this.memoryDbSetup.createEmptyDatabase();
-        this.restProject = new ClientProgramController(this.sessionFactoryWrapper, this.serverProperties);
-        this.restConfiguration = new ClientConfiguration(this.sessionFactoryWrapper, this.robotCommunicator);
+        TestConfiguration tc = TestConfiguration.setup();
+        this.sessionFactoryWrapper = tc.getSessionFactoryWrapper();
+        this.memoryDbSetup = tc.getMemoryDbSetup();
+
+        this.restProject = new ClientProgramController(this.serverProperties);
+        this.restConfiguration = new ClientConfiguration(this.robotCommunicator);
         Map<String, IRobotFactory> robotPlugins = ServerStarter.configureRobotPlugins(robotCommunicator, serverProperties, EMPTY_STRING_LIST);
         this.sPid = HttpSessionState.initOnlyLegalForDebugging("pid", robotPlugins, serverProperties, 1);
         this.sMinscha = HttpSessionState.initOnlyLegalForDebugging("minscha", robotPlugins, serverProperties, 2);
@@ -755,7 +754,32 @@ public class RestInterfaceTest {
      * @throws Exception
      */
     private void restUser(HttpSessionState httpSession, String jsonAsString, String result, Key msgOpt) throws Exception {
-        this.response = this.restUser.command(this.sessionFactoryWrapper.getSession(), JSONUtilForServer.mkD(httpSession.getInitToken(), jsonAsString));
+        JSONObject jsonCmd = JSONUtilForServer.mkD(httpSession.getInitToken(), jsonAsString);
+        switch ( jsonCmd.getJSONObject("data").getString("cmd") ) {
+            case "activateUser":
+                this.response = this.restUser.activateUser(newDbSession(), jsonCmd);
+                break;
+            case "changePassword":
+                this.response = this.restUser.changePassword(newDbSession(), jsonCmd);
+                break;
+            case "login":
+                this.response = this.restUser.login(newDbSession(), jsonCmd);
+                break;
+            case "logout":
+                this.response = this.restUser.logout(jsonCmd);
+                break;
+            case "createUser":
+                this.response = this.restUser.createUser(newDbSession(), jsonCmd);
+                break;
+            case "updateUser":
+                this.response = this.restUser.updateUser(newDbSession(), jsonCmd);
+                break;
+            case "getUser":
+                this.response = this.restUser.getUser(newDbSession(), jsonCmd);
+                break;
+            default:
+                throw new DbcException("Unexpected JSON command");
+        }
         JSONUtilForServer.assertEntityRc(this.response, result, msgOpt);
     }
 
@@ -770,15 +794,14 @@ public class RestInterfaceTest {
      * @throws Exception
      */
     private void restProgram(HttpSessionState httpSession, String jsonAsString, String result, Key msgOpt) throws JSONException, Exception {
-        // TODO handle this in a better way
         if ( jsonAsString.contains("loadP") ) {
-            this.response = this.restProject.getProgram(JSONUtilForServer.mkD(httpSession.getInitToken(), jsonAsString));
+            this.response = this.restProject.getProgram(newDbSession(), JSONUtilForServer.mkD(httpSession.getInitToken(), jsonAsString));
         } else if ( jsonAsString.contains("shareP") ) {
-            this.response = this.restProject.shareProgram(JSONUtilForServer.mkD(httpSession.getInitToken(), jsonAsString));
+            this.response = this.restProject.shareProgram(newDbSession(), JSONUtilForServer.mkD(httpSession.getInitToken(), jsonAsString));
         } else if ( jsonAsString.contains("deleteP") ) {
-            this.response = this.restProject.deleteProject(JSONUtilForServer.mkD(httpSession.getInitToken(), jsonAsString));
+            this.response = this.restProject.deleteProgram(newDbSession(), JSONUtilForServer.mkD(httpSession.getInitToken(), jsonAsString));
         } else if ( jsonAsString.contains("shareDelete") ) {
-            this.response = this.restProject.deleteProjectShare(JSONUtilForServer.mkD(httpSession.getInitToken(), jsonAsString));
+            this.response = this.restProject.deleteSharedProgram(newDbSession(), JSONUtilForServer.mkD(httpSession.getInitToken(), jsonAsString));
         } else {
             throw new DbcException("Unexpected JSON command");
         }
@@ -816,7 +839,7 @@ public class RestInterfaceTest {
             jsonAsString += ";'configText':'" + confText + "'";
         }
         jsonAsString += ";}";
-        this.response = this.restProject.updateProject(JSONUtilForServer.mkD(httpSession.getInitToken(), jsonAsString));
+        this.response = this.restProject.saveProgram(newDbSession(), JSONUtilForServer.mkD(httpSession.getInitToken(), jsonAsString));
         JSONUtilForServer.assertEntityRc(this.response, result, msgOpt);
     }
 
@@ -861,7 +884,7 @@ public class RestInterfaceTest {
             jsonAsString += ";'configText':'" + confText + "'";
         }
         jsonAsString += ";}";
-        this.response = this.restProject.updateProject(JSONUtilForServer.mkD(httpSession.getInitToken(), jsonAsString));
+        this.response = this.restProject.saveProgram(newDbSession(), JSONUtilForServer.mkD(httpSession.getInitToken(), jsonAsString));
         JSONUtilForServer.assertEntityRc(this.response, result, msgOpt);
     }
 
@@ -886,7 +909,7 @@ public class RestInterfaceTest {
             jsonAsString += ";'configuration':'" + configText + "'";
         }
         jsonAsString += ";}";
-        this.response = this.restConfiguration.command(JSONUtilForServer.mkD(httpSession.getInitToken(), jsonAsString));
+        this.response = this.restConfiguration.saveAsConfig(newDbSession(), JSONUtilForServer.mkD(httpSession.getInitToken(), jsonAsString));
         JSONUtilForServer.assertEntityRc(this.response, result, msgOpt);
     }
 
@@ -904,12 +927,13 @@ public class RestInterfaceTest {
     private void saveConfig(HttpSessionState httpSession, int owner, String name, String conf, String result, Key msgOpt) throws Exception //
     {
         String jsonAsString = "{'cmd':'saveC';'name':'" + name + "';'configuration':'" + conf + "';}";
-        this.response = this.restConfiguration.command(JSONUtilForServer.mkD(httpSession.getInitToken(), jsonAsString));
+        this.response = this.restConfiguration.saveConfig(newDbSession(), JSONUtilForServer.mkD(httpSession.getInitToken(), jsonAsString));
         JSONUtilForServer.assertEntityRc(this.response, result, msgOpt);
     }
 
     private JSONArray assertProgramListingAsExpected(HttpSessionState httpSession, String expectedProgramNamesAsJson) throws Exception, JSONException {
-        this.response = this.restProject.getProgramNames(JSONUtilForServer.mkD(httpSession.getInitToken(), "{'cmd':'loadPN'}"));
+        this.response =
+            this.restProject.getInfosOfProgramsOfLoggedInUser(newDbSession(), JSONUtilForServer.mkD(httpSession.getInitToken(), "{'cmd':'loadPN'}"));
         JSONUtilForServer.assertEntityRc(this.response, "ok", Key.PROGRAM_GET_ALL_SUCCESS);
         JSONArray programListing = ((JSONObject) this.response.getEntity()).getJSONArray("programNames");
         JSONArray programNames = new JSONArray();
@@ -918,5 +942,9 @@ public class RestInterfaceTest {
         }
         JSONUtilForServer.assertJsonEquals(expectedProgramNamesAsJson, programNames, false);
         return programListing;
+    }
+
+    private DbSession newDbSession() {
+        return this.sessionFactoryWrapper.getSession();
     }
 }
