@@ -302,14 +302,18 @@ class Entry:
             self.printer('{:25} {}'.format(self.entry['time'], self.entry[key]))
         return self
     
-    def showEntry(self):
+    def showEntry(self, printer=None):
         """
         REDUCE: show the complete entry with all of its keys
         
         :param entry to be used
+        :param printer (optional printer to use
         """
         if self.entry is not None:
-            self.printer('{:25} {}'.format(self.entry['time'], str(self.entry)))
+            if printer is not None:
+                printer('{:25} {}'.format(self.entry['time'], str(self.entry)))
+            else:
+                self.printer('{:25} {}'.format(self.entry['time'], str(self.entry)))
         return self
     
 def normalize(entry):

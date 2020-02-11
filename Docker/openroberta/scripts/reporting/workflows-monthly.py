@@ -47,7 +47,7 @@ def processInitData(logDir, logFileNameOptionallyWithZip, outputDir, fromTime='0
 def processRobotUsage(fromTime, untilTime, baseDir, fileName):
     sessionIdRobotSet = Store(storeSet=True)
     for line in getReader(baseDir, fileName):
-        fromStat(line).after(fromTime).before(untilTime).filterVal('action','ServerStart','Initialization','ChangeRobot',negate=True,substring=False)\
+        fromStat(line).after(fromTime).before(untilTime).filterVal('action','ServerStart','Initialization','ChangeRobot','SessionDestroy',negate=True,substring=False)\
         .keyValStore('sessionId','robotName', sessionIdRobotSet)
     robotSessionIdSet = Store()
     invertStore(sessionIdRobotSet,robotSessionIdSet)
