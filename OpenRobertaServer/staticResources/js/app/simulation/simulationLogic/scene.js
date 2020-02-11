@@ -2,8 +2,8 @@
  * @fileOverview Scene for a robot simulation
  * @author Beate Jost <beate.jost@iais.fraunhofer.de>
  */
-define([ 'simulation.simulation', 'simulation.math', 'util', 'interpreter.constants', 'simulation.constants', 'program.controller', 'jquery' ], function(SIM,
-        SIMATH, UTIL, IC, C, PROGRAM_C, $) {
+define([ 'simulation.simulation', 'simulation.math', 'util', 'interpreter.constants', 'simulation.constants', 'progSim.controller', 'program.controller', 'jquery' ], function(SIM,
+        SIMATH, UTIL, IC, C, PROGSIM, PROGRAM_C, $) {
 
     /**
      * Creates a new Scene.
@@ -324,7 +324,7 @@ define([ 'simulation.simulation', 'simulation.math', 'util', 'interpreter.consta
             this.rCtx.stroke();
             this.rCtx.lineDashOffset = 0;
             this.rCtx.setLineDash([]);
-            if (this.robots[r].canDraw) {
+            if (this.robots[r].canDraw && PROGSIM.simIsRunning() == 1) {
                 this.bCtx.lineCap = 'round';
                 this.bCtx.beginPath();
                 this.bCtx.lineWidth = this.robots[r].drawWidth;
