@@ -39,6 +39,7 @@ public class CalliopeConfiguration extends ConfigurationAst {
         ConfigurationComponent A = new ConfigurationComponent("A", false, "A", "A", Collections.emptyMap());
         ConfigurationComponent B = new ConfigurationComponent("B", false, "B", "B", Collections.emptyMap());
         ConfigurationComponent AB = new ConfigurationComponent("AB", false, "AB", "AB", Collections.emptyMap());
+        ConfigurationComponent BOTH = new ConfigurationComponent("BOTH", false, "BOTH", "BOTH", Collections.emptyMap());
 
         ArrayList<ConfigurationComponent> components =
             Lists
@@ -69,7 +70,8 @@ public class CalliopeConfiguration extends ConfigurationAst {
                     NO_PORT,
                     A,
                     B,
-                    AB);
+                    AB,
+                    BOTH);
         configuration = new ConfigurationAst.Builder().addComponents(components).build();
     }
 

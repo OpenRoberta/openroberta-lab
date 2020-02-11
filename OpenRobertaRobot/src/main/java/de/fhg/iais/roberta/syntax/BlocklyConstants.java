@@ -68,6 +68,8 @@ public final class BlocklyConstants {
     public static final String MOTORROTATION = "MOTORROTATION";
     public static final String DISTANCE = "DISTANCE";
     public static final String DIRECTION = "DIRECTION";
+    public static final String DIRECTION_LEFT = "DIRECTION_LEFT";
+    public static final String DIRECTION_RIGHT = "DIRECTION_RIGHT";
     public static final String VALUE = "VALUE";
     public static final String POWER = "POWER";
     public static final String POWER_A = "POWER_A";

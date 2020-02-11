@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2020-02-10 14:41:23.298176",
+		"lastupdated": "2020-02-11 15:18:38.383574",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -1571,9 +1571,6 @@
 	"CB_RIGHT": "Calli:bot right",
 	"CB_BOTH": "Calli:bot both",
 	"CB_ALL": "Calli:bot all",
-	"MK_LEFT": "MotionKit left",
-	"MK_RIGHT": "MotionKit right",
-	"MK_BOTH": "MotionKit both",
 	"PORT_INTERNAL": "Port internal",
 	"CONFIGURATION_ERROR_WLAN_CREDENTIALS_MISSING": "Missing WLAN credentials, please enter them in robot -> WLAN credentials ... !",
 	"MENU_WLAN_CREDENTIALS": "WLAN credentials",
@@ -1612,6 +1609,9 @@
 	"ACCELEROMETER_TOOLTIP": "Represents an accelerometer.",
 	"POPUP_CREATE_BOOKMARK": "Create a bookmark now to save your robot selection!",
 	"POPUP_BACKGROUND_STORAGE": "The Open Roberta Lab can automatically load your simulation background on your next visits. For this purpose, we will save data in the Local Storage on your computer. <a href='https://www.roberta-home.de/en/privacy-policy-open-roberta-lab/' target='_blank'>More information in our privacy policy.</a>",
+	"MOTIONKIT": "MotionKit",
+	"MOTIONKIT_SINGLE_TOOLTIP": "Sets the selected MotionKit motor/motors to the specified direction.",
+	"MOTIONKIT_DUAL_TOOLTIP": "Sets each MotionKit motor to the specified direction.",
 	"GPS_TOOLTIP": "Represents a GPS receiver.",
 	"SENSOR_GPS_SENSEBOX": "GPS receiver",
 	"SENSOR_GPS_LATITUDE_GETSAMPLE_TOOLTIP_SENSEBOX": "Returns the latitude in degree.",

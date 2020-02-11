@@ -891,6 +891,38 @@ public class CppVisitorTest extends CalliopeAstTest {
     }
 
     @Test
+    public void visitMotionKitSingleSet_SetMotionKitSingle_ReturnsCorrectCppProgram() throws Exception {
+        String expectedResult =
+            "" //
+                + IMPORTS
+                + MAIN
+                + "_uBit.io.P8.setServoValue(180);\n"
+                + "_uBit.io.P2.setServoValue(180);\n"
+                + "_uBit.io.P2.setAnalogValue(0);\n"
+                + "_uBit.io.P8.setAnalogValue(0);\n"
+                + END;
+        UnitTestHelper
+            .checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, expectedResult, "/action/motionkit_single_set.xml", configuration, true);
+        ;
+    }
+
+    @Test
+    public void visitMotionKitDualSet_SetMotionKitDual_ReturnsCorrectCppProgram() throws Exception {
+        String expectedResult =
+            "" //
+                + IMPORTS
+                + MAIN
+                + "_uBit.io.P2.setServoValue(180);\n"
+                + "_uBit.io.P8.setServoValue(180);\n"
+                + "_uBit.io.P2.setAnalogValue(0);\n"
+                + "_uBit.io.P8.setServoValue(0);\n"
+                + END;
+        UnitTestHelper
+            .checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, expectedResult, "/action/motionkit_dual_set.xml", configuration, true);
+        ;
+    }
+
+    @Test
     public void visitServoSet_SetServoToValues_ReturnsCorrectCppProgram() throws Exception {
         String expectedResult =
             "" //

@@ -143,6 +143,14 @@
 					</block>
 				</value>
 			</block>
+			<block type="mbedActions_motionkit_single_set">
+				<field name="MOTORPORT">C17</field>
+				<field name="DIRECTION">FOREWARD</field>
+			</block>
+			<block type="mbedActions_motionkit_dual_set">
+				<field name="DIRECTION_LEFT">FOREWARD</field>
+				<field name="DIRECTION_RIGHT">FOREWARD</field>
+			</block>
 		</category>
 		<category name="TOOLBOX_SOUND" svg="true">
 			<block type="mbedActions_play_tone">

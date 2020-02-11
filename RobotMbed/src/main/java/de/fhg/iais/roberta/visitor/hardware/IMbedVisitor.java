@@ -13,6 +13,8 @@ import de.fhg.iais.roberta.syntax.action.mbed.FourDigitDisplayClearAction;
 import de.fhg.iais.roberta.syntax.action.mbed.FourDigitDisplayShowAction;
 import de.fhg.iais.roberta.syntax.action.mbed.LedBarSetAction;
 import de.fhg.iais.roberta.syntax.action.mbed.LedOnAction;
+import de.fhg.iais.roberta.syntax.action.mbed.MotionKitDualSetAction;
+import de.fhg.iais.roberta.syntax.action.mbed.MotionKitSingleSetAction;
 import de.fhg.iais.roberta.syntax.action.mbed.PinSetPullAction;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioReceiveAction;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioSendAction;
@@ -265,6 +267,24 @@ public interface IMbedVisitor<V>
      * @param servoSetAction phrase to be visited
      */
     default V visitServoSetAction(ServoSetAction<V> servoSetAction) {
+        throw new DbcException("Block is not implemented!");
+    }
+
+    /**
+     * visit a {@link MotionKitSingleSetAction}.
+     *
+     * @param motionKitSingleSetAction phrase to be visited
+     */
+    default V visitMotionKitSingleSetAction(MotionKitSingleSetAction<V> motionKitSingleSetAction) {
+        throw new DbcException("Block is not implemented!");
+    }
+
+    /**
+     * visit a {@link MotionKitDualSetAction}.
+     *
+     * @param motionKitDualSetAction phrase to be visited
+     */
+    default V visitMotionKitDualSetAction(MotionKitDualSetAction<V> motionKitDualSetAction) {
         throw new DbcException("Block is not implemented!");
     }
 

@@ -46,6 +46,7 @@ public class BlocklyDropdownFactoryHelper {
         return colorDefs;
     }
 
+    // TODO probably should be a set, the modes are mapped to themselves
     public static Map<String, String> getModes(JSONObject robotDescription) {
         Map<String, String> map = new HashMap<>();
         JSONObject modes = robotDescription.getJSONObject("mode");

@@ -26,6 +26,8 @@ import de.fhg.iais.roberta.syntax.action.mbed.FourDigitDisplayClearAction;
 import de.fhg.iais.roberta.syntax.action.mbed.FourDigitDisplayShowAction;
 import de.fhg.iais.roberta.syntax.action.mbed.LedBarSetAction;
 import de.fhg.iais.roberta.syntax.action.mbed.LedOnAction;
+import de.fhg.iais.roberta.syntax.action.mbed.MotionKitDualSetAction;
+import de.fhg.iais.roberta.syntax.action.mbed.MotionKitSingleSetAction;
 import de.fhg.iais.roberta.syntax.action.mbed.PinSetPullAction;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioReceiveAction;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioSendAction;
@@ -440,6 +442,16 @@ public class MbedStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> i
 
     @Override
     public V visitServoSetAction(ServoSetAction<V> servoSetAction) {
+        return null;
+    }
+
+    @Override
+    public V visitMotionKitSingleSetAction(MotionKitSingleSetAction<V> motionKitSingleSetAction) {
+        return null;
+    }
+
+    @Override
+    public V visitMotionKitDualSetAction(MotionKitDualSetAction<V> motionKitDualSetAction) {
         return null;
     }
 }

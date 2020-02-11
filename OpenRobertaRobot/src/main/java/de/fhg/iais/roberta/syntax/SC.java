@@ -118,4 +118,7 @@ public interface SC {
     String SENSEBOX_PLOTTING = "SENSEBOX_PLOTTING";
     String PARTICLE = "PARTICLE";
     String GPS = "GPS";
+    String FOREWARD = "FOREWARD";
+    String BACKWARD = "BACKWARD";
+    String BOTH = "BOTH";
 }
