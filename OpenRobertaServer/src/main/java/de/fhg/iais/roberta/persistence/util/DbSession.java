@@ -68,8 +68,8 @@ public class DbSession {
 
         Transaction transaction = this.session.getTransaction();
         transaction.rollback();
-
-        this.session.beginTransaction();
+        this.session.close();
+        this.session = null;
     }
 
     /**
@@ -92,12 +92,17 @@ public class DbSession {
     public void close() {
         LOG.debug("close session (after commit)");
         // enable NEVER on prod systems: LOG.error("session close\n" + DbSession.getFullInfo(); // for analyzing db session usage.
-        commit();
-        this.session.close();
-        this.session = null;
+        // session may be null, if a rollback occured, that will destroy the session explicitly
+        if ( this.session != null ) {
+            commit();
+            this.session.close();
+            this.session = null;
+            addTransaction("close");
+        } else {
+            addTransaction("close (but is already closed, rollback?)");
+        }
 
         // for analyzing db session usage.
-        addTransaction("close");
         long sessionAge = new Date().getTime() - creationTime;
         if ( new Date().getTime() - creationTime > DURATION_TIMEOUT_MSEC ) {
             LOG.error("db session " + sessionId + " too old: " + sessionAge + "msec\n" + getFullInfo());

@@ -315,7 +315,7 @@ public class ProgramProcessor extends AbstractProcessor {
         Timestamp programTimestamp,
         boolean isOwner) //
     {
-        if ( !Util.isValidJavaIdentifier(programName) ) {
+        if ( !Util.isValidJavaIdentifier(programName) || programName.length() > 255 ) {
             Map<String, String> processorParameters = new HashMap<>();
             processorParameters.put("PROGRAM_NAME", programName);
             setStatus(ProcessorStatus.FAILED, Key.PROGRAM_ERROR_ID_INVALID, processorParameters);
