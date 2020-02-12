@@ -12,6 +12,7 @@
     },
     {
       "opc": "motorOnAction",
+      "speedOnly": false,
       "port": "1",
       "name": "W"
     },

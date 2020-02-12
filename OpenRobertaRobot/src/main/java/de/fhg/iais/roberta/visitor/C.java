@@ -242,6 +242,7 @@ public class C {
     public static final String SOUND = "sound";
     public static final String SPEED = "speed";
     public static final String SPEED_L = "speedL";
+    public static final String SPEED_ONLY = "speedOnly";
     public static final String SPEED_R = "speedR";
     public static final String STATEMENTS = "statements";
     public static final String STATUS_LIGHT_ACTION = "statusLightAction";

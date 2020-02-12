@@ -330,6 +330,7 @@
                     },
                     {
                       "opc": "motorOnAction",
+                      "speedOnly": false,
                       "port": "1",
                       "name": "W"
                     },
@@ -344,12 +345,8 @@
                       "value": "30"
                     },
                     {
-                      "opc": "expr",
-                      "expr": "NUM_CONST",
-                      "value": -1
-                    },
-                    {
                       "opc": "motorOnAction",
+                      "speedOnly": true,
                       "port": "1",
                       "name": "W"
                     },
@@ -426,6 +423,7 @@
                 },
                 {
                   "opc": "motorOnAction",
+                  "speedOnly": false,
                   "port": "1",
                   "name": "W"
                 },
@@ -507,6 +505,7 @@
           },
           {
             "opc": "motorOnAction",
+            "speedOnly": false,
             "port": "1",
             "name": "W"
           },
@@ -549,6 +548,7 @@
           },
           {
             "opc": "motorOnAction",
+            "speedOnly": false,
             "port": "1",
             "name": "W"
           },
@@ -1521,6 +1521,7 @@
         },
         {
           "opc": "motorOnAction",
+          "speedOnly": false,
           "port": "1",
           "name": "W"
         },

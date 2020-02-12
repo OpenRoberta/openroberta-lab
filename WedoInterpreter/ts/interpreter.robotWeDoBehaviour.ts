@@ -220,7 +220,7 @@ export class RobotWeDoBehaviour extends ARobotBehaviour {
     public motorOnAction( name: string, port: any, duration: number, speed: number ): number {
         var brickid = this.getBrickIdByName( name ); // TODO: better style
         const robotText = 'robot: ' + name + ', port: ' + port;
-        const durText = duration === 0 ? ' w.o. duration' : ( ' for ' + duration + ' msec' );
+        const durText = duration === undefined ? ' w.o. duration' : ( ' for ' + duration + ' msec' );
         U.debug( robotText + ' motor speed ' + speed + durText );
         const cmd = { 'target': 'wedo', 'type': 'command', 'actuator': 'motor', 'brickid': brickid, 'action': 'on', 'id': port, 'direction': speed < 0 ? 1 : 0, 'power': Math.abs( speed ) };
         this.btInterfaceFct( cmd );

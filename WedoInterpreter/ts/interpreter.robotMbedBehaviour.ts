@@ -170,7 +170,7 @@ export class RobotMbedBehaviour extends ARobotBehaviour {
 
     public motorOnAction( name: string, port: any, duration: number, speed: number ): number {
         const robotText = 'robot: ' + name + ', port: ' + port;
-        const durText = duration === 0 ? ' w.o. duration' : ( ' for ' + duration + ' msec' );
+        const durText = duration === undefined ? ' w.o. duration' : ( ' for ' + duration + ' msec' );
         U.debug( robotText + ' motor speed ' + speed + durText );
         if ( this.hardwareState.actions.motors == undefined ) {
             this.hardwareState.actions.motors = {};
@@ -189,7 +189,7 @@ export class RobotMbedBehaviour extends ARobotBehaviour {
 
     public driveAction( name: string, direction: string, speed: number, distance: number ): number {
         const robotText = 'robot: ' + name + ', direction: ' + direction;
-        const durText = distance === 0 ? ' w.o. duration' : ( ' for ' + distance + ' msec' );
+        const durText = distance === undefined ? ' w.o. duration' : ( ' for ' + distance + ' msec' );
         U.debug( robotText + ' motor speed ' + speed + durText );
         if ( this.hardwareState.actions.motors == undefined ) {
             this.hardwareState.actions.motors = {};
@@ -206,18 +206,18 @@ export class RobotMbedBehaviour extends ARobotBehaviour {
         this.hardwareState.actions.motors[C.MOTOR_RIGHT] = speed;
         this.hardwareState.motors[C.MOTOR_LEFT] = speed;
         this.hardwareState.motors[C.MOTOR_RIGHT] = speed;
-        let rotations = Math.abs(distance) / ( C.WHEEL_DIAMETER * Math.PI );
-        let rotationPerSecond = C.MAX_ROTATION * Math.abs( speed ) / 100.0;
-        if ( rotationPerSecond == 0.0 ) {
+        const rotationPerSecond = C.MAX_ROTATION * Math.abs( speed ) / 100.0;
+        if ( rotationPerSecond == 0.0 || distance === undefined ) {
             return 0;
         } else {
+            const rotations = Math.abs(distance) / ( C.WHEEL_DIAMETER * Math.PI );
             return rotations / rotationPerSecond * 1000;
         }
     }
 
     public curveAction( name: string, direction: string, speedL: number, speedR: number, distance: number ): number {
         const robotText = 'robot: ' + name + ', direction: ' + direction;
-        const durText = distance === 0 ? ' w.o. duration' : ( ' for ' + distance + ' msec' );
+        const durText = distance === undefined ? ' w.o. duration' : ( ' for ' + distance + ' msec' );
         U.debug( robotText + ' left motor speed ' + speedL + ' right motor speed ' + speedR + durText );
         if ( this.hardwareState.actions.motors == undefined ) {
             this.hardwareState.actions.motors = {};
@@ -236,20 +236,19 @@ export class RobotMbedBehaviour extends ARobotBehaviour {
         this.hardwareState.actions.motors[C.MOTOR_RIGHT] = speedR;
         this.hardwareState.motors[C.MOTOR_LEFT] = speedL;
         this.hardwareState.motors[C.MOTOR_RIGHT] = speedR;
-
-        let rotations = Math.abs(distance) / ( C.WHEEL_DIAMETER * Math.PI );
-        let avgSpeed = 0.5 * ( Math.abs( speedL ) + Math.abs( speedR ) )
-        let rotationPerSecond = C.MAX_ROTATION * avgSpeed / 100.0;
-        if ( rotationPerSecond == 0.0 ) {
+        const avgSpeed = 0.5 * ( Math.abs( speedL ) + Math.abs( speedR ) )
+        const rotationPerSecond = C.MAX_ROTATION * avgSpeed / 100.0;
+        if ( rotationPerSecond == 0.0 || distance === undefined ) {
             return 0;
         } else {
+            const rotations = Math.abs(distance) / ( C.WHEEL_DIAMETER * Math.PI );
             return rotations / rotationPerSecond * 1000;
         }
     }
 
     public turnAction( name: string, direction: string, speed: number, angle: number ): number {
         const robotText = 'robot: ' + name + ', direction: ' + direction;
-        const durText = angle === 0 ? ' w.o. duration' : ( ' for ' + angle + ' msec' );
+        const durText = angle === undefined ? ' w.o. duration' : ( ' for ' + angle + ' msec' );
         U.debug( robotText + ' motor speed ' + speed + durText );
         if ( this.hardwareState.actions.motors == undefined ) {
             this.hardwareState.actions.motors = {};
@@ -263,11 +262,11 @@ export class RobotMbedBehaviour extends ARobotBehaviour {
             speed = 0;
         }
         this.setTurnSpeed( speed, direction );
-        let rotations = C.TURN_RATIO * ( Math.abs(angle) / 720. );
-        let rotationPerSecond = C.MAX_ROTATION * Math.abs( speed ) / 100.0;
-        if ( rotationPerSecond == 0.0 ) {
+        const rotationPerSecond = C.MAX_ROTATION * Math.abs( speed ) / 100.0;
+        if ( rotationPerSecond == 0.0 || angle === undefined ) {
             return 0;
         } else {
+            const rotations = C.TURN_RATIO * ( Math.abs(angle) / 720. );
             return rotations / rotationPerSecond * 1000;
         }
     }

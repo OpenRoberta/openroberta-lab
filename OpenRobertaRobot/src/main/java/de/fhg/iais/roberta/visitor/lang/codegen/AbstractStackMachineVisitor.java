@@ -90,14 +90,9 @@ import de.fhg.iais.roberta.visitor.IVisitor;
 import de.fhg.iais.roberta.visitor.lang.ILanguageVisitor;
 
 public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor<V> {
-    protected int loopsCounter = 0;
-    protected int currentLoop = 0;
-    protected int stmtsNumber = 0;
-    protected int methodsNumber = 0;
-
     private JSONObject fctDecls = new JSONObject();
-    protected List<JSONObject> opArray = new ArrayList<>();
-    protected final List<List<JSONObject>> opArrayStack = new ArrayList<>();
+    private List<JSONObject> opArray = new ArrayList<>();
+    private final List<List<JSONObject>> opArrayStack = new ArrayList<>();
     protected final ConfigurationAst configuration;
 
     protected AbstractStackMachineVisitor(ConfigurationAst configuration) {
@@ -749,9 +744,18 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
         return configurationComponent;
     }
 
-    protected void appendDuration(MotorDuration<V> duration) {
+    /**
+     * Processes the optional duration and adds it to the stack if it is available.
+     *
+     * @param duration the duration, may be null, represents distance/duration/degrees depending on the method
+     * @return whether the duration was pushed to the the stack
+     */
+    protected boolean processOptionalDuration(MotorDuration<V> duration) {
         if ( duration != null ) {
             duration.getValue().accept(this);
+            return true;
+        } else {
+            return false;
         }
     }
 

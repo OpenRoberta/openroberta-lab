@@ -72,7 +72,7 @@ define(["require", "exports", "interpreter.aRobotBehaviour", "interpreter.consta
         };
         RobotWeDoBehaviourTest.prototype.motorOnAction = function (name, port, duration, speed) {
             var robotText = 'robot: ' + name + ', port: ' + port;
-            var durText = duration === -1 ? ' w.o. duration' : (' for ' + duration + ' msec');
+            var durText = duration === undefined ? ' w.o. duration' : (' for ' + duration + ' msec');
             U.info(robotText + ' motor speed ' + speed + durText);
             return 0;
         };

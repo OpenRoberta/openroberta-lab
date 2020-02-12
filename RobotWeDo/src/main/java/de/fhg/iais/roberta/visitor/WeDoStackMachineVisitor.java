@@ -7,6 +7,7 @@ import org.json.JSONObject;
 import de.fhg.iais.roberta.bean.UsedHardwareBean;
 import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.components.ConfigurationComponent;
+import de.fhg.iais.roberta.syntax.MotorDuration;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
 import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
@@ -62,21 +63,19 @@ public final class WeDoStackMachineVisitor<V> extends AbstractStackMachineVisito
 
     @Override
     public V visitMotorOnAction(MotorOnAction<V> motorOnAction) {
-        boolean isDuration = motorOnAction.getParam().getDuration() != null;
         ConfigurationComponent confMotorBlock = getConfigurationComponent(motorOnAction.getUserDefinedPort());
         String brickName = confMotorBlock.getProperty("VAR");
         String port = confMotorBlock.getProperty("CONNECTOR");
         if ( brickName != null && port != null ) {
             motorOnAction.getParam().getSpeed().accept(this);
-            JSONObject o = mk(C.MOTOR_ON_ACTION).put(C.NAME, brickName).put(C.PORT, port);
-            if ( isDuration ) {
-                motorOnAction.getParam().getDuration().getValue().accept(this);
+            MotorDuration<V> duration = motorOnAction.getParam().getDuration();
+            boolean speedOnly = !processOptionalDuration(duration);
+            JSONObject o = mk(C.MOTOR_ON_ACTION).put(C.NAME, brickName).put(C.PORT, port).put(C.SPEED_ONLY, speedOnly).put(C.SPEED_ONLY, speedOnly);
+            if ( speedOnly ) {
+                return app(o);
+            } else {
                 app(o);
                 return app(mk(C.MOTOR_STOP).put(C.NAME, brickName).put(C.PORT, port));
-            } else {
-                JSONObject nullDuration = mk(C.EXPR).put(C.EXPR, C.NUM_CONST).put(C.VALUE, -1);
-                this.opArray.add(nullDuration);
-                return app(o);
             }
         } else {
             throw new DbcException("No robot name or no port");

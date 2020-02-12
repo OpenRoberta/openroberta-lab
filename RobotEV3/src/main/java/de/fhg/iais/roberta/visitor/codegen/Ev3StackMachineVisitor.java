@@ -205,62 +205,58 @@ public class Ev3StackMachineVisitor<V> extends AbstractStackMachineVisitor<V> im
     @Override
     public V visitDriveAction(DriveAction<V> driveAction) {
         driveAction.getParam().getSpeed().accept(this);
-        MotorDuration<V> duration = driveAction.getParam().getDuration();
-        appendDuration(duration);
+        boolean speedOnly = !processOptionalDuration(driveAction.getParam().getDuration());
         ConfigurationComponent leftMotor = this.configuration.getFirstMotor(SC.LEFT);
         IDriveDirection leftMotorRotationDirection = DriveDirection.get(leftMotor.getProperty(SC.MOTOR_REVERSE));
         DriveDirection driveDirection = (DriveDirection) driveAction.getDirection();
         if ( leftMotorRotationDirection != DriveDirection.FOREWARD ) {
             driveDirection = getDriveDirection(driveAction.getDirection() == DriveDirection.FOREWARD);
         }
-        JSONObject o = mk(C.DRIVE_ACTION).put(C.DRIVE_DIRECTION, driveDirection).put(C.NAME, "ev3");
-        if ( duration != null ) {
+        JSONObject o = mk(C.DRIVE_ACTION).put(C.DRIVE_DIRECTION, driveDirection).put(C.NAME, "ev3").put(C.SPEED_ONLY, speedOnly);
+        if ( speedOnly ) {
+            return app(o);
+        } else {
             app(o);
             return app(mk(C.STOP_DRIVE).put(C.NAME, "ev3"));
-        } else {
-            return app(o);
         }
     }
 
     @Override
     public V visitTurnAction(TurnAction<V> turnAction) {
         turnAction.getParam().getSpeed().accept(this);
-        MotorDuration<V> duration = turnAction.getParam().getDuration();
-        appendDuration(duration);
+        boolean speedOnly = !processOptionalDuration(turnAction.getParam().getDuration());
         ConfigurationComponent leftMotor = this.configuration.getFirstMotor(SC.LEFT);
         IDriveDirection leftMotorRotationDirection = DriveDirection.get(leftMotor.getProperty(SC.MOTOR_REVERSE));
         ITurnDirection turnDirection = turnAction.getDirection();
         if ( leftMotorRotationDirection != DriveDirection.FOREWARD ) {
             turnDirection = getTurnDirection(turnAction.getDirection() == TurnDirection.LEFT);
         }
-        JSONObject o = mk(C.TURN_ACTION).put(C.TURN_DIRECTION, turnDirection.toString().toLowerCase()).put(C.NAME, "ev3");
-        if ( duration != null ) {
+        JSONObject o = mk(C.TURN_ACTION).put(C.TURN_DIRECTION, turnDirection.toString().toLowerCase()).put(C.NAME, "ev3").put(C.SPEED_ONLY, speedOnly);
+        if ( speedOnly ) {
+            return app(o);
+        } else {
             app(o);
             return app(mk(C.STOP_DRIVE).put(C.NAME, "ev3"));
-        } else {
-            return app(o);
         }
-
     }
 
     @Override
     public V visitCurveAction(CurveAction<V> curveAction) {
         curveAction.getParamLeft().getSpeed().accept(this);
         curveAction.getParamRight().getSpeed().accept(this);
-        MotorDuration<V> duration = curveAction.getParamLeft().getDuration();
-        appendDuration(duration);
+        boolean speedOnly = !processOptionalDuration(curveAction.getParamLeft().getDuration());
         ConfigurationComponent leftMotor = this.configuration.getFirstMotor(SC.LEFT);
         IDriveDirection leftMotorRotationDirection = DriveDirection.get(leftMotor.getProperty(SC.MOTOR_REVERSE));
         DriveDirection driveDirection = (DriveDirection) curveAction.getDirection();
         if ( leftMotorRotationDirection != DriveDirection.FOREWARD ) {
             driveDirection = getDriveDirection(curveAction.getDirection() == DriveDirection.FOREWARD);
         }
-        JSONObject o = mk(C.CURVE_ACTION).put(C.DRIVE_DIRECTION, driveDirection).put(C.NAME, "ev3");
-        if ( duration != null ) {
+        JSONObject o = mk(C.CURVE_ACTION).put(C.DRIVE_DIRECTION, driveDirection).put(C.NAME, "ev3").put(C.SPEED_ONLY, speedOnly);
+        if ( speedOnly ) {
+            return app(o);
+        } else {
             app(o);
             return app(mk(C.STOP_DRIVE).put(C.NAME, "ev3"));
-        } else {
-            return app(o);
         }
     }
 
@@ -272,19 +268,18 @@ public class Ev3StackMachineVisitor<V> extends AbstractStackMachineVisitor<V> im
 
     @Override
     public V visitMotorOnAction(MotorOnAction<V> motorOnAction) {
-        boolean isDuration = motorOnAction.getParam().getDuration() != null;
         motorOnAction.getParam().getSpeed().accept(this);
+        MotorDuration<V> duration = motorOnAction.getParam().getDuration();
+        boolean speedOnly = !processOptionalDuration(duration);
         String port = motorOnAction.getUserDefinedPort();
-        JSONObject o = mk(C.MOTOR_ON_ACTION).put(C.PORT, port.toLowerCase()).put(C.NAME, port.toLowerCase());
-        if ( isDuration ) {
-            String durationType = motorOnAction.getParam().getDuration().getType().toString().toLowerCase();
-            motorOnAction.getParam().getDuration().getValue().accept(this);
+        JSONObject o = mk(C.MOTOR_ON_ACTION).put(C.PORT, port.toLowerCase()).put(C.NAME, port.toLowerCase()).put(C.SPEED_ONLY, speedOnly);
+        if ( speedOnly ) {
+            return app(o);
+        } else {
+            String durationType = duration.getType().toString().toLowerCase();
             o.put(C.MOTOR_DURATION, durationType);
             app(o);
             return app(mk(C.MOTOR_STOP).put(C.PORT, port.toLowerCase()));
-        } else {
-            app(mk(C.EXPR).put(C.EXPR, C.NUM_CONST).put(C.VALUE, 0));
-            return app(o);
         }
     }
 
@@ -471,15 +466,6 @@ public class Ev3StackMachineVisitor<V> extends AbstractStackMachineVisitor<V> im
                 return "zh-CN";
             default:
                 return "";
-        }
-    }
-
-    @Override
-    protected void appendDuration(MotorDuration<V> duration) {
-        if ( duration != null ) {
-            duration.getValue().accept(this);
-        } else {
-            app(mk(C.EXPR).put(C.EXPR, C.NUM_CONST).put(C.VALUE, 0));
         }
     }
 
