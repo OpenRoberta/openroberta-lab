@@ -175,6 +175,7 @@ export class Interpreter {
                         const port = stmt[C.PORT];
                         const durationType = stmt[C.MOTOR_DURATION];
                         if ( durationType === C.DEGREE || durationType === C.DISTANCE || durationType === C.ROTATIONS ) {
+                            // if durationType is defined, then duration must be defined, too. Thus, it is never 'undefined' :-)
                             let rotationPerSecond = C.MAX_ROTATION * Math.abs( speed ) / 100.0;
                             duration = duration / rotationPerSecond * 1000;
                             if ( durationType === C.DEGREE ) {

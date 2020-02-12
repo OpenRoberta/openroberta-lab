@@ -117,11 +117,11 @@ accessible port on the host machine (this maybe 1999 again, or 1998, ... or any 
 * `host:8080` and
 * the web server map that to the offical addresses `lab.open-roberta.org.443` and `lab.open-roberta.org.80`
 
-The nginx configuration examples are in the directory `z-nginx`. The configuration directory on the host machine is usually `/etc/nginx/`.
-In the example file `nginx.conf` see the ssl-, -server and include-section in the example file for the global configuration. The example file `lab.open-roberta` contains the open-roberta specific configuration. 
-The Apache2 configuration examples are in the directory `z-apache2`.
+The nginx configuration examples are in the directory `z-nginx`. The configuration directory on the host machine is `/etc/nginx/`.
+In the example file `nginx.conf` see the ssl-, -server and include-section in the example file for the global configuration. The example file `lab.open-roberta`
+contains the open-roberta specific configuration. The Apache2 configuration examples are in the directory `z-apache2`.
 
-Actually the prod machine is running nginx, the test machine is running apache2.
+Actually we are using nginx. Apache would do it as well.
 
 ## Conventions
 All data is stored relative to a base directory `$BASE_DIR` (your choice, we use `/data/openroberta-lab`). Abbreviations:
