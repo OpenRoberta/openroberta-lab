@@ -3,15 +3,16 @@ package de.fhg.iais.roberta.visitor.lang.codegen.prog;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.List;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
 import org.apache.commons.text.StringEscapeUtils;
 
-import de.fhg.iais.roberta.bean.CodeGeneratorSetupBean;
 import com.google.common.collect.ClassToInstanceMap;
+
+import de.fhg.iais.roberta.bean.CodeGeneratorSetupBean;
 import de.fhg.iais.roberta.bean.IProjectBean;
 import de.fhg.iais.roberta.bean.UsedHardwareBean;
 import de.fhg.iais.roberta.mode.general.IndexLocation;
@@ -24,6 +25,7 @@ import de.fhg.iais.roberta.syntax.lang.expr.EmptyList;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.syntax.lang.expr.ExprList;
 import de.fhg.iais.roberta.syntax.lang.expr.ListCreate;
+import de.fhg.iais.roberta.syntax.lang.expr.MathConst;
 import de.fhg.iais.roberta.syntax.lang.expr.NullConst;
 import de.fhg.iais.roberta.syntax.lang.expr.RgbColor;
 import de.fhg.iais.roberta.syntax.lang.expr.StringConst;
@@ -175,6 +177,34 @@ public abstract class AbstractCppVisitor extends AbstractLanguageVisitor {
         }
         listRepeat.getElement().accept(this);
         this.sb.append(")");
+        return null;
+    }
+
+    @Override
+    public Void visitMathConst(MathConst<Void> mathConst) {
+        switch ( mathConst.getMathConst() ) {
+            case PI:
+                this.sb.append("M_PI");
+                break;
+            case E:
+                this.sb.append("M_E");
+                break;
+            case GOLDEN_RATIO:
+                this.sb.append("M_GOLDEN_RATIO");
+                break;
+            case SQRT2:
+                this.sb.append("M_SQRT2");
+                break;
+            case SQRT1_2:
+                this.sb.append("M_SQRT1_2");
+                break;
+            // IEEE 754 floating point representation
+            case INFINITY:
+                this.sb.append("M_INFINITY");
+                break;
+            default:
+                break;
+        }
         return null;
     }
 

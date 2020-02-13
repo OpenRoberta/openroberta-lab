@@ -16,7 +16,6 @@ import de.fhg.iais.roberta.syntax.lang.expr.Binary;
 import de.fhg.iais.roberta.syntax.lang.expr.Binary.Op;
 import de.fhg.iais.roberta.syntax.lang.expr.ColorConst;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
-import de.fhg.iais.roberta.syntax.lang.expr.MathConst;
 import de.fhg.iais.roberta.syntax.lang.expr.StringConst;
 import de.fhg.iais.roberta.syntax.lang.expr.VarDeclaration;
 import de.fhg.iais.roberta.syntax.lang.functions.FunctionNames;
@@ -60,34 +59,6 @@ public abstract class AbstractCommonArduinoCppVisitor extends AbstractCppVisitor
     public Void visitVarDeclaration(VarDeclaration<Void> var) {
         this.sb.append(getLanguageVarTypeFromBlocklyType(var.getTypeVar()));
         this.sb.append(whitespace() + var.getCodeSafeName());
-        return null;
-    }
-
-    @Override
-    public Void visitMathConst(MathConst<Void> mathConst) { // TODO Unify the math consts for all systems
-        switch ( mathConst.getMathConst() ) {
-            case PI:
-                this.sb.append("PI");
-                break;
-            case E:
-                this.sb.append("M_E");
-                break;
-            case GOLDEN_RATIO:
-                this.sb.append("M_GOLDEN_RATIO");
-                break;
-            case SQRT2:
-                this.sb.append("M_SQRT2");
-                break;
-            case SQRT1_2:
-                this.sb.append("M_SQRT1_2");
-                break;
-            // IEEE 754 floating point representation
-            case INFINITY:
-                this.sb.append("INFINITY");
-                break;
-            default:
-                break;
-        }
         return null;
     }
 

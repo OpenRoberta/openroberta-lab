@@ -20,7 +20,6 @@ import de.fhg.iais.roberta.syntax.actors.arduino.bob3.ReceiveIRAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.bob3.RememberAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.bob3.SendIRAction;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
-import de.fhg.iais.roberta.syntax.lang.expr.MathConst;
 import de.fhg.iais.roberta.syntax.lang.functions.MathConstrainFunct;
 import de.fhg.iais.roberta.syntax.lang.stmt.AssertStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.DebugAction;
@@ -47,34 +46,6 @@ public final class Bob3CppVisitor extends AbstractCommonArduinoCppVisitor implem
      */
     public Bob3CppVisitor(List<ArrayList<Phrase<Void>>> phrases, ClassToInstanceMap<IProjectBean> beans) {
         super(phrases, new ConfigurationAst.Builder().build(), beans);
-    }
-
-    @Override
-    public Void visitMathConst(MathConst<Void> mathConst) { // TODO Unify the math consts for all systems
-        switch ( mathConst.getMathConst() ) {
-            case PI:
-                this.sb.append("M_PI");
-                break;
-            case E:
-                this.sb.append("M_E");
-                break;
-            case GOLDEN_RATIO:
-                this.sb.append("1.61803398875");
-                break;
-            case SQRT2:
-                this.sb.append("M_SQRT2");
-                break;
-            case SQRT1_2:
-                this.sb.append("M_SQRT1_2");
-                break;
-            // IEEE 754 floating point representation
-            case INFINITY:
-                this.sb.append("INFINITY");
-                break;
-            default:
-                break;
-        }
-        return null;
     }
 
     @Override

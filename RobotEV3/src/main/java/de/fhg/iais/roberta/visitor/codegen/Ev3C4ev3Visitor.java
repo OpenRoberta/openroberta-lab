@@ -293,28 +293,11 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
 
     @Override
     public Void visitMathConst(MathConst<Void> mathConst) {
-        String constantName = getCMathConstantName(mathConst.getMathConst());
-        this.sb.append(constantName);
-        return null;
-    }
-
-    private String getCMathConstantName(MathConst.Const constant) {
-        switch ( constant ) {
-            case PI:
-                return "M_PI";
-            case E:
-                return "M_E";
-            case GOLDEN_RATIO:
-                return "GOLDEN_RATIO";
-            case SQRT2:
-                return "M_SQRT2";
-            case SQRT1_2:
-                return "M_SQRT1_2";
-            // IEEE 754 floating point representation
-            case INFINITY:
-                return "HUGE_VAL";
-            default:
-                throw new DbcException("unknown constant");
+        if (mathConst.getMathConst() == MathConst.Const.INFINITY) {
+            this.sb.append("HUGE_VAL");
+            return null;
+        } else {
+            return super.visitMathConst(mathConst);
         }
     }
 

@@ -46,7 +46,6 @@ import de.fhg.iais.roberta.syntax.lang.expr.Binary;
 import de.fhg.iais.roberta.syntax.lang.expr.Binary.Op;
 import de.fhg.iais.roberta.syntax.lang.expr.ColorConst;
 import de.fhg.iais.roberta.syntax.lang.expr.ListCreate;
-import de.fhg.iais.roberta.syntax.lang.expr.MathConst;
 import de.fhg.iais.roberta.syntax.lang.expr.Var;
 import de.fhg.iais.roberta.syntax.lang.expr.VarDeclaration;
 import de.fhg.iais.roberta.syntax.lang.functions.FunctionNames;
@@ -159,34 +158,6 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
             color = "INPUT_" + color + "COLOR";
         }
         this.sb.append(color);
-        return null;
-    }
-
-    @Override
-    public Void visitMathConst(MathConst<Void> mathConst) {
-        switch ( mathConst.getMathConst() ) {
-            case PI:
-                this.sb.append("PI");
-                break;
-            case E:
-                this.sb.append("E");
-                break;
-            case GOLDEN_RATIO:
-                this.sb.append("GOLDEN_RATIO");
-                break;
-            case SQRT2:
-                this.sb.append("SQRT2");
-                break;
-            case SQRT1_2:
-                this.sb.append("SQRT1_2");
-                break;
-            // IEEE 754 floating point representation
-            case INFINITY:
-                this.sb.append("INFINITY");
-                break;
-            default:
-                break;
-        }
         return null;
     }
 
@@ -1138,7 +1109,7 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
                 break;
             case EXP:
                 this.sb.append(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(FunctionNames.POWER));
-                this.sb.append("(E, ");
+                this.sb.append("(M_E, ");
                 break;
             case POW10:
                 this.sb.append(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(FunctionNames.POWER));
@@ -1234,15 +1205,17 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
         nlIndent();
         this.sb.append("#define MAX(X, Y) (((X) > (Y)) ? (X) : (Y))");
         nlIndent();
-        this.sb.append("#define E 2.718281828459045");
+        this.sb.append("#define M_PI PI");
         nlIndent();
-        this.sb.append("#define GOLDEN_RATIO 1.61803398875");
+        this.sb.append("#define M_E 2.718281828459045");
         nlIndent();
-        this.sb.append("#define SQRT2 1.41421356237");
+        this.sb.append("#define M_GOLDEN_RATIO 1.61803398875");
         nlIndent();
-        this.sb.append("#define SQRT1_2 0.707106781187");
+        this.sb.append("#define M_SQRT2 1.41421356237");
         nlIndent();
-        this.sb.append("#define INFINITY 0x7f800000");
+        this.sb.append("#define M_SQRT1_2 0.707106781187");
+        nlIndent();
+        this.sb.append("#define M_INFINITY 0x7f800000");
         nlIndent();
         this.sb.append("#include \"NEPODefs.h\" // contains NEPO declarations for the NXC NXT API resources");
         nlIndent();

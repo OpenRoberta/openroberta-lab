@@ -133,33 +133,6 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
     }
 
     @Override
-    public Void visitMathConst(MathConst<Void> mathConst) {
-        switch ( mathConst.getMathConst() ) {
-            case PI:
-                this.sb.append("M_PI");
-                break;
-            case E:
-                this.sb.append("M_E");
-                break;
-            case GOLDEN_RATIO:
-                this.sb.append("M_GOLDEN_RATIO");
-                break;
-            case SQRT2:
-                this.sb.append("M_SQRT2");
-                break;
-            case SQRT1_2:
-                this.sb.append("M_SQRT1_2");
-                break;
-            case INFINITY:
-                this.sb.append("M_INFINITY");
-                break;
-            default:
-                break;
-        }
-        return null;
-    }
-
-    @Override
     public Void visitMethodVoid(MethodVoid<Void> methodVoid) {
         nlIndent();
         this.sb.append("void ");
