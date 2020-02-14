@@ -13,8 +13,8 @@ _brickConfiguration = {
     'wheel-diameter': 5.6,
     'track-width': 18.0,
     'actors': {
-        'B':Hal.makeLargeMotor(ev3dev.OUTPUT_B, 'on', 'foreward', 'right'),
-        'C':Hal.makeLargeMotor(ev3dev.OUTPUT_C, 'on', 'foreward', 'left'),
+        'B':Hal.makeLargeMotor(ev3dev.OUTPUT_B, 'on', 'foreward'),
+        'C':Hal.makeLargeMotor(ev3dev.OUTPUT_C, 'on', 'foreward'),
     },
     'sensors': {
     },
