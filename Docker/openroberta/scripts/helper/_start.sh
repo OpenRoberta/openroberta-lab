@@ -8,7 +8,6 @@ cd $SERVER_DIR_OF_ONE_SERVER
 source ./decl.sh
 isDeclShValid
 
-echo '******************** '$DATE' ********************'
 echo "trying to start server ${SERVER_NAME}"
 case "${SERVER_NAME}" in
     master) question 'do you really want to deploy master (that would be a PROD deployment)?'

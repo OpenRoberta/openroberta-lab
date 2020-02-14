@@ -10,7 +10,6 @@ then
     fi
 fi
 MONTH=$(printf "%02d" $MONTH)
-echo '******************** '$DATE' ********************'
 echo "generating the monthly statistics for month $MONTH"
 YEAR=$(date +'%Y')
 STATISTICS_DIR=${SERVER_DIR}/${SERVER_NAME}/admin/logging/statistics-$YEAR

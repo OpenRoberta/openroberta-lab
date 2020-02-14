@@ -15,13 +15,13 @@ esac
 isDirectoryValid ${GIT_REPO}
 case "$BRANCH" in
     master) DEBUG=true
-            question 'you deploy MASTER. Do you have modified the MASTER branch as usual before deployment?' ;;
+            question 'you deploy MASTER. Is this ok?' ;;
      *)     : ;;
 esac
 
 # ----- AQUIRE A FILE LOCK. Checkout, build binaries, export, build container -----
-( flock -w 1200 9 || (echo "$DATE: deployement of ${SERVER_NAME} was delayed for more than 20 minutes. Exit 12"; exit 12) 
-    [ "$DEBUG" = 'true' ] && echo "$DATE: got the lock for file '${GIT_DIR}/lockfile'"
+( flock -w 1200 9 || (echo "deployement of ${SERVER_NAME} was delayed for more than 20 minutes. Exit 12"; exit 12) 
+    [ "$DEBUG" = 'true' ] && echo "got the lock for file '${GIT_DIR}/lockfile'"
     cd ${GIT_REPO}
     if [ "$GIT_PULL_BEFORE_BUILD" == 'false' ]
     then
