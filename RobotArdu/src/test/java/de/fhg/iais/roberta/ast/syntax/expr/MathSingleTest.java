@@ -11,7 +11,7 @@ public class MathSingleTest extends ArduinoAstTest {
 
     @Test
     public void Test() throws Exception {
-        final String a = "sqrt(0)absD(0)-(0)log(0)log10(0)exp(0)pow(10.0,0)";
+        final String a = "sqrt(0)abs(0)-(0)log(0)log10(0)exp(0)pow(10.0,0)";
         UnitTestHelper.checkWorkers(testFactory, a, "/syntax/math/math_single.xml", new ArduinoUsedHardwareCollectorWorker(), new ArduinoCxxGeneratorWorker());
     }
 

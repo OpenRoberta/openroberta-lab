@@ -579,11 +579,8 @@ public final class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor imp
         }
         this.sb.append("#include <NEPODefs.h>");
         nlIndent();
-    }
 
-    @Override
-    protected void generateProgramSuffix(boolean withWrapping) {
-        // nothing to do because the arduino loop closes the program
+        super.generateProgramPrefix(withWrapping);
     }
 
     private void generateConfigurationSetup() {

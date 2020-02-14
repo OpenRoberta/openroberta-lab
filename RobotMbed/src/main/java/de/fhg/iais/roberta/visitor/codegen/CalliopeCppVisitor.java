@@ -12,7 +12,6 @@ import de.fhg.iais.roberta.bean.UsedHardwareBean;
 import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.mode.action.MotorStopMode;
 import de.fhg.iais.roberta.mode.action.mbed.DisplayTextMode;
-import de.fhg.iais.roberta.mode.general.IndexLocation;
 import de.fhg.iais.roberta.mode.general.ListElementOperations;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
@@ -61,25 +60,16 @@ import de.fhg.iais.roberta.syntax.lang.expr.ColorConst;
 import de.fhg.iais.roberta.syntax.lang.expr.EmptyExpr;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.syntax.lang.expr.ListCreate;
-import de.fhg.iais.roberta.syntax.lang.expr.MathConst;
 import de.fhg.iais.roberta.syntax.lang.expr.RgbColor;
 import de.fhg.iais.roberta.syntax.lang.expr.StringConst;
 import de.fhg.iais.roberta.syntax.lang.expr.Var;
 import de.fhg.iais.roberta.syntax.lang.expr.VarDeclaration;
-import de.fhg.iais.roberta.syntax.lang.functions.FunctionNames;
-import de.fhg.iais.roberta.syntax.lang.functions.IndexOfFunct;
-import de.fhg.iais.roberta.syntax.lang.functions.LengthOfIsEmptyFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.ListGetIndex;
 import de.fhg.iais.roberta.syntax.lang.functions.ListSetIndex;
 import de.fhg.iais.roberta.syntax.lang.functions.MathConstrainFunct;
-import de.fhg.iais.roberta.syntax.lang.functions.MathNumPropFunct;
-import de.fhg.iais.roberta.syntax.lang.functions.MathPowerFunct;
-import de.fhg.iais.roberta.syntax.lang.functions.MathRandomFloatFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathRandomIntFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.TextJoinFunct;
 import de.fhg.iais.roberta.syntax.lang.methods.Method;
-import de.fhg.iais.roberta.syntax.lang.methods.MethodReturn;
-import de.fhg.iais.roberta.syntax.lang.methods.MethodVoid;
 import de.fhg.iais.roberta.syntax.lang.stmt.AssertStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.DebugAction;
 import de.fhg.iais.roberta.syntax.lang.stmt.RepeatStmt;
@@ -129,40 +119,6 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
         this.sb.append("ManagedString(");
         super.visitStringConst(stringConst);
         this.sb.append(")");
-        return null;
-    }
-
-    @Override
-    public Void visitMethodVoid(MethodVoid<Void> methodVoid) {
-        nlIndent();
-        this.sb.append("void ");
-        this.sb.append(methodVoid.getMethodName()).append("(");
-        methodVoid.getParameters().accept(this);
-        this.sb.append(") {");
-        incrIndentation();
-        methodVoid.getBody().accept(this);
-        decrIndentation();
-        nlIndent();
-        this.sb.append("}");
-        return null;
-    }
-
-    @Override
-    public Void visitMethodReturn(MethodReturn<Void> methodReturn) {
-        nlIndent();
-        this.sb.append(getLanguageVarTypeFromBlocklyType(methodReturn.getReturnType()));
-        this.sb.append(" ").append(methodReturn.getMethodName()).append("(");
-        methodReturn.getParameters().accept(this);
-        this.sb.append(") {");
-        incrIndentation();
-        methodReturn.getBody().accept(this);
-        nlIndent();
-        this.sb.append("return ");
-        methodReturn.getReturnValue().accept(this);
-        this.sb.append(";");
-        decrIndentation();
-        nlIndent();
-        this.sb.append("}");
         return null;
     }
 
@@ -679,42 +635,6 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
     }
 
     @Override
-    public Void visitIndexOfFunct(IndexOfFunct<Void> indexOfFunct) {
-        if ( indexOfFunct.getParam().get(0).toString().contains("ListCreate ") ) {
-            this.sb.append("null");
-            return null;
-        }
-        String methodName = "_getFirstOccuranceOfElement(";
-        if ( indexOfFunct.getLocation() != IndexLocation.FIRST ) {
-            methodName = "_getLastOccuranceOfElement(";
-        }
-        this.sb.append(methodName);
-
-        indexOfFunct.getParam().get(0).accept(this);
-        this.sb.append(", ");
-        indexOfFunct.getParam().get(1).accept(this);
-        this.sb.append(")");
-        return null;
-    }
-
-    @Override
-    public Void visitLengthOfIsEmptyFunct(LengthOfIsEmptyFunct<Void> lengthOfIsEmptyFunct) {
-        if ( lengthOfIsEmptyFunct.getParam().get(0).toString().contains("ListCreate ") ) {
-            this.sb.append("null");
-            return null;
-        }
-        if ( lengthOfIsEmptyFunct.getFunctName() == FunctionNames.LIST_IS_EMPTY ) {
-            lengthOfIsEmptyFunct.getParam().get(0).accept(this);
-            this.sb.append(".empty()");
-        } else {
-            this.sb.append("((int) ");
-            lengthOfIsEmptyFunct.getParam().get(0).accept(this);
-            this.sb.append(".size())");
-        }
-        return null;
-    }
-
-    @Override
     public Void visitMathConstrainFunct(MathConstrainFunct<Void> mathConstrainFunct) {
         this.sb.append("min(max(");
         mathConstrainFunct.getParam().get(0).accept(this);
@@ -723,57 +643,6 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
         this.sb.append("), ");
         mathConstrainFunct.getParam().get(2).accept(this);
         this.sb.append(")");
-        return null;
-    }
-
-    @Override
-    public Void visitMathNumPropFunct(MathNumPropFunct<Void> mathNumPropFunct) {
-        switch ( mathNumPropFunct.getFunctName() ) {
-            case EVEN:
-                this.sb.append("(fmod(");
-                mathNumPropFunct.getParam().get(0).accept(this);
-                this.sb.append(", 2) == 0");
-                break;
-            case ODD:
-                this.sb.append("(fmod(");
-                mathNumPropFunct.getParam().get(0).accept(this);
-                this.sb.append(", 2) != 0");
-                break;
-            case PRIME:
-                this.sb.append("isPrimeD(");
-                mathNumPropFunct.getParam().get(0).accept(this);
-                break;
-            case WHOLE:
-                this.sb.append("isWholeD(");
-                mathNumPropFunct.getParam().get(0).accept(this);
-                break;
-            case POSITIVE:
-                this.sb.append("(");
-                mathNumPropFunct.getParam().get(0).accept(this);
-                this.sb.append(" > 0");
-                break;
-            case NEGATIVE:
-                this.sb.append("(");
-                mathNumPropFunct.getParam().get(0).accept(this);
-                this.sb.append(" < 0");
-                break;
-            case DIVISIBLE_BY:
-                this.sb.append("(fmod(");
-                mathNumPropFunct.getParam().get(0).accept(this);
-                this.sb.append(",");
-                mathNumPropFunct.getParam().get(1).accept(this);
-                this.sb.append(") == 0");
-                break;
-            default:
-                break;
-        }
-        this.sb.append(")");
-        return null;
-    }
-
-    @Override
-    public Void visitMathRandomFloatFunct(MathRandomFloatFunct<Void> mathRandomFloatFunct) {
-        this.sb.append("((double) rand() / (RAND_MAX))");
         return null;
     }
 
@@ -787,13 +656,6 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
         this.sb.append(" + ");
         mathRandomIntFunct.getParam().get(0).accept(this);
         this.sb.append(")");
-        return null;
-    }
-
-    @Override
-    public Void visitMathPowerFunct(MathPowerFunct<Void> mathPowerFunct) {
-        this.sb.append("pow(");
-        super.visitMathPowerFunct(mathPowerFunct);
         return null;
     }
 
@@ -1098,6 +960,7 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
         }
         addIncludes();
         generateSignaturesOfUserDefinedMethods();
+        super.generateProgramPrefix(withWrapping);
     }
 
     @Override
@@ -1115,6 +978,7 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
             nlIndent();
             generateUserDefinedMethods();
         }
+        super.generateProgramSuffix(withWrapping);
     }
 
     @Override

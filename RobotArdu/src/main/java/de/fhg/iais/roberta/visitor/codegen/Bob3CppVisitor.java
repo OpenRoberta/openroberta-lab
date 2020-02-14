@@ -23,7 +23,6 @@ import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
 import de.fhg.iais.roberta.syntax.lang.functions.MathConstrainFunct;
 import de.fhg.iais.roberta.syntax.lang.stmt.AssertStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.DebugAction;
-import de.fhg.iais.roberta.syntax.sensor.generic.GetSampleSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.PinTouchSensor;
@@ -127,13 +126,7 @@ public final class Bob3CppVisitor extends AbstractCommonArduinoCppVisitor implem
         this.sb.append("#include \"bob3.h\" \n");
         this.sb.append("Bob3 rob;\n");
 
-    }
-
-    @Override
-    protected void generateProgramSuffix(boolean withWrapping) {
-        //        if ( withWrapping ) {
-        //            this.sb.append("\n}\n");
-        //        }
+        super.generateProgramPrefix(withWrapping);
     }
 
     @Override
@@ -195,12 +188,6 @@ public final class Bob3CppVisitor extends AbstractCommonArduinoCppVisitor implem
     @Override
     public Void visitReceiveIRAction(ReceiveIRAction<Void> receiveIRAction) {
         this.sb.append("rob.receiveIRCode(500)");
-        return null;
-    }
-
-    @Override
-    public Void visitBob3GetSampleSensor(GetSampleSensor<Void> getSampleSensor) {
-        getSampleSensor.getSensor().accept(this);
         return null;
     }
 

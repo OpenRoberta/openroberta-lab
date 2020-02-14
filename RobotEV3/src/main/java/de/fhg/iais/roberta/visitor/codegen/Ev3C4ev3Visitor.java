@@ -64,17 +64,10 @@ import de.fhg.iais.roberta.syntax.lang.expr.ExprList;
 import de.fhg.iais.roberta.syntax.lang.expr.ListCreate;
 import de.fhg.iais.roberta.syntax.lang.expr.MathConst;
 import de.fhg.iais.roberta.syntax.lang.expr.StringConst;
-import de.fhg.iais.roberta.syntax.lang.functions.FunctionNames;
 import de.fhg.iais.roberta.syntax.lang.functions.IndexOfFunct;
-import de.fhg.iais.roberta.syntax.lang.functions.LengthOfIsEmptyFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.ListGetIndex;
 import de.fhg.iais.roberta.syntax.lang.functions.ListSetIndex;
-import de.fhg.iais.roberta.syntax.lang.functions.MathConstrainFunct;
-import de.fhg.iais.roberta.syntax.lang.functions.MathNumPropFunct;
-import de.fhg.iais.roberta.syntax.lang.functions.MathPowerFunct;
-import de.fhg.iais.roberta.syntax.lang.functions.MathRandomFloatFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathRandomIntFunct;
-import de.fhg.iais.roberta.syntax.lang.functions.MathSingleFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.TextJoinFunct;
 import de.fhg.iais.roberta.syntax.lang.stmt.DebugAction;
 import de.fhg.iais.roberta.syntax.lang.stmt.RepeatStmt;
@@ -141,6 +134,8 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
         generateImports();
         nlIndent();
         generateSignaturesOfUserDefinedMethods();
+
+        super.generateProgramPrefix(withWrapping);
     }
 
     private void generateConstants() {
@@ -269,6 +264,7 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
         this.sb.append("}");
         nlIndent();
 
+        super.generateProgramSuffix(withWrapping);
     }
 
     @Override
@@ -299,32 +295,6 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
         } else {
             return super.visitMathConst(mathConst);
         }
-    }
-
-    @Override
-    public Void visitMathSingleFunct(MathSingleFunct<Void> mathSingleFunct) {
-        if ( isSingleMathFunctAbs(mathSingleFunct.getFunctName()) ) {
-            this.generateSingleMathFunctAbs(mathSingleFunct);
-            return null;
-        }
-        return super.visitMathSingleFunct(mathSingleFunct);
-    }
-
-    private boolean isSingleMathFunctAbs(FunctionNames functionName) {
-        return functionName.equals(FunctionNames.ABS);
-    }
-
-    private void generateSingleMathFunctAbs(MathSingleFunct<Void> mathSingleFunct) {
-        this.sb.append("abs(");
-        mathSingleFunct.getParam().get(0).accept(this);
-        this.sb.append(")");
-    }
-
-    @Override
-    public Void visitMathPowerFunct(MathPowerFunct<Void> mathPowerFunct) {
-        this.sb.append("pow(");
-        super.visitMathPowerFunct(mathPowerFunct);
-        return null;
     }
 
     @Override
@@ -368,44 +338,6 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
                 throw new DbcException("Invalid color constant: " + hex);
         }
     }
-
-    //    @Override
-    //    public Void visitBinary(Binary<Void> binary) {
-    //        // TODO: Clean
-    //        Binary.Op op = binary.getOp();
-    //        if ( op == Binary.Op.ADD || op == Binary.Op.MINUS || op == Binary.Op.DIVIDE || op == Binary.Op.MULTIPLY ) {
-    //            this.sb.append("(");
-    //        }
-    //        if (op == Binary.Op.MOD) {
-    //            this.sb.append("fmod(");
-    //        }
-    //        generateSubExpr(this.sb, false, binary.getLeft(), binary);
-    //        String sym = getBinaryOperatorSymbol(op);
-    //        this.sb.append(" " + sym + " ");
-    //        switch ( op ) {
-    //            case TEXT_APPEND:
-    //                if ( binary.getRight().getVarType().toString().contains("NUMBER") ) {
-    //                    this.sb.append("ToString(");
-    //                    generateSubExpr(this.sb, false, binary.getRight(), binary);
-    //                    this.sb.append(")");
-    //                } else {
-    //                    generateSubExpr(this.sb, false, binary.getRight(), binary);
-    //                }
-    //                break;
-    //            case DIVIDE:
-    //                this.sb.append("((");
-    //                generateSubExpr(this.sb, parenthesesCheck(binary), binary.getRight(), binary);
-    //                this.sb.append(")*1.0)");
-    //                break;
-    //
-    //            default:
-    //                generateSubExpr(this.sb, parenthesesCheck(binary), binary.getRight(), binary);
-    //        }
-    //        if ( op == Binary.Op.ADD || op == Binary.Op.MINUS || op == Binary.Op.DIVIDE || op == Binary.Op.MULTIPLY || op == Binary.Op.MOD) {
-    //            this.sb.append(")");
-    //        }
-    //        return null;
-    //    }
 
     // copied from AbstractCommonArduinoCppVisitor
     @Override
@@ -523,9 +455,9 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
         ((Binary<Void>) expression).getLeft().accept(this);
         this.sb.append(";");
         nlIndent();
-        this.sb.append("for(int i = 0; i < ArrayLen(");
+        this.sb.append("for(int i = 0; i < ");
         ((Binary<Void>) expression).getRight().accept(this);
-        this.sb.append("); ++i) {");
+        this.sb.append(".size(); ++i) {");
         incrIndentation();
         nlIndent();
         ((Binary<Void>) expression).getLeft().accept(this);
@@ -586,25 +518,6 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
         return null;
     }
 
-    @Override
-    public Void visitLengthOfIsEmptyFunct(LengthOfIsEmptyFunct<Void> lengthOfIsEmptyFunct) {
-        if ( lengthOfIsEmptyFunct.getParam().get(0).toString().contains("ListCreate ") ) {
-            this.sb.append("NULL");
-            return null;
-        }
-        if ( lengthOfIsEmptyFunct.getFunctName() == FunctionNames.LIST_IS_EMPTY ) {
-            this.sb.append("(");
-            lengthOfIsEmptyFunct.getParam().get(0).accept(this);
-            this.sb.append(".size()");
-            this.sb.append(" == 0)");
-        } else {
-            this.sb.append("((int) ");
-            lengthOfIsEmptyFunct.getParam().get(0).accept(this);
-            this.sb.append(".size())");
-        }
-        return null;
-    }
-
     // end copied from Arduino
 
     @Override
@@ -656,98 +569,6 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
     }
 
     // end copied from calliope
-
-    @Override
-    public Void visitMathConstrainFunct(MathConstrainFunct<Void> mathConstrainFunct) {
-        Expr<Void> n = mathConstrainFunct.getParam().get(0);
-        Expr<Void> min = mathConstrainFunct.getParam().get(1);
-        Expr<Void> max = mathConstrainFunct.getParam().get(2);
-        this.sb.append("std::min(std::max((double) ");
-        n.accept(this);
-        this.sb.append(", (double) ");
-        min.accept(this);
-        this.sb.append("), (double) ");
-        max.accept(this);
-        this.sb.append(")");
-        return null;
-    }
-
-    @Override
-    public Void visitMathNumPropFunct(MathNumPropFunct<Void> mathNumPropFunct) {
-        if ( mathPropNeedFunctionCall(mathNumPropFunct.getFunctName()) ) {
-            generateFunctionCallForMathProp(mathNumPropFunct);
-        } else {
-            generateInlineMathProp(mathNumPropFunct);
-        }
-        return null;
-    }
-
-    private boolean mathPropNeedFunctionCall(FunctionNames functionName) {
-        try {
-            getMathPropFunctionName(functionName);
-            return true;
-        } catch ( DbcException e ) {
-            return false;
-        }
-    }
-
-    private void generateFunctionCallForMathProp(MathNumPropFunct<Void> mathNumPropFunct) {
-        this.sb.append(getMathPropFunctionName(mathNumPropFunct.getFunctName()) + "(");
-        mathNumPropFunct.getParam().get(0).accept(this);
-        this.sb.append(")");
-    }
-
-    private String getMathPropFunctionName(FunctionNames functionName) {
-        switch ( functionName ) {
-            case PRIME:
-                return "IsPrime";
-            case WHOLE:
-                return "IsWhole";
-            default:
-                throw new DbcException("Unknown function name");
-        }
-    }
-
-    private void generateInlineMathProp(MathNumPropFunct<Void> mathNumPropFunct) {
-        Expr<Void> n = mathNumPropFunct.getParam().get(0);
-        switch ( mathNumPropFunct.getFunctName() ) {
-            case EVEN:
-                this.sb.append("(((int) ");
-                n.accept(this);
-                this.sb.append(" ) % 2 == 0)");
-                break;
-            case ODD:
-                this.sb.append("(((int) ");
-                n.accept(this);
-                this.sb.append(" ) % 2 != 0)");
-                break;
-            case POSITIVE:
-                this.sb.append("( ");
-                n.accept(this);
-                this.sb.append(" > 0)");
-                break;
-            case NEGATIVE:
-                this.sb.append("( ");
-                n.accept(this);
-                this.sb.append(" < 0)");
-                break;
-            case DIVISIBLE_BY:
-                this.sb.append("(((int) ");
-                n.accept(this);
-                this.sb.append(" ) % ((int) ");
-                mathNumPropFunct.getParam().get(1).accept(this);
-                this.sb.append(" ) == 0)");
-                break;
-            default:
-                throw new DbcException("Unknown math prop");
-        }
-    }
-
-    @Override
-    public Void visitMathRandomFloatFunct(MathRandomFloatFunct<Void> mathRandomFloatFunct) {
-        this.sb.append("rand()");
-        return null;
-    }
 
     @Override
     public Void visitMathRandomIntFunct(MathRandomIntFunct<Void> mathRandomIntFunct) {

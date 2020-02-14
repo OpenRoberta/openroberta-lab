@@ -1128,7 +1128,10 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
     public Void visitMathPowerFunct(MathPowerFunct<Void> mathPowerFunct) {
         this.sb.append(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(FunctionNames.POWER));
         this.sb.append("(");
-        super.visitMathPowerFunct(mathPowerFunct);
+        mathPowerFunct.getParam().get(0).accept(this);
+        this.sb.append(", ");
+        mathPowerFunct.getParam().get(1).accept(this);
+        this.sb.append(")");
         return null;
     }
 

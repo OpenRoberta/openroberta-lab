@@ -569,10 +569,8 @@ public final class MbotCppVisitor extends AbstractCommonArduinoCppVisitor implem
         nlIndent();
         generateSensors();
         generateActors();
-    }
 
-    @Override
-    protected void generateProgramSuffix(boolean withWrapping) {
+        super.generateProgramPrefix(withWrapping);
     }
 
     private void generateSensors() {

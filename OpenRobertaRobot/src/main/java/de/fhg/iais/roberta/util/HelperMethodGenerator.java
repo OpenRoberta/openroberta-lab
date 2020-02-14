@@ -56,7 +56,7 @@ public class HelperMethodGenerator {
     private void loadFromJson(JSONObject jsonHelperMethods, Language baseProgLanguage) {
         for ( String methodName : jsonHelperMethods.keySet() ) {
             JSONObject jsonHelperMethod = jsonHelperMethods.getJSONObject(methodName);
-            String implementation = jsonHelperMethod.optString(baseProgLanguage.toString());
+            String implementation = jsonHelperMethod.optString(baseProgLanguage.toString(), null);
             if ( implementation != null ) {
                 for ( Class<? extends Enum> anEnum : this.enums ) {
                     try {

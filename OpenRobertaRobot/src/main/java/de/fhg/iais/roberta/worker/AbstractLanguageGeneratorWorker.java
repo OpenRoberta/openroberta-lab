@@ -22,23 +22,19 @@ public abstract class AbstractLanguageGeneratorWorker implements IWorker {
         UsedMethodBean usedMethodBean = project.getWorkerResult(UsedMethodBean.class);
 
         AbstractLanguageVisitor visitor;
-        if ( project.getRobotFactory().getPluginProperties().getStringProperty("robot.helperMethods") != null ) {
-            // Prepare bean for the code generation visitor
-            CodeGeneratorSetupBean.Builder codeGenSetupBeanBuilder = new CodeGeneratorSetupBean.Builder();
-            codeGenSetupBeanBuilder.setFileExtension(project.getSourceCodeFileExtension());
-            codeGenSetupBeanBuilder.setHelperMethodFile(project.getRobotFactory().getPluginProperties().getStringProperty("robot.helperMethods"));
-            codeGenSetupBeanBuilder.addAdditionalEnums(usedMethodBean.getAdditionalEnums());
-            codeGenSetupBeanBuilder.addUsedMethods(usedMethodBean.getUsedMethods());
-            ClassToInstanceMap<IProjectBean> beans =
-                ImmutableClassToInstanceMap
-                    .<IProjectBean> builder()
-                    .put(UsedHardwareBean.class, usedHardwareBean)
-                    .put(CodeGeneratorSetupBean.class, codeGenSetupBeanBuilder.build())
-                    .build();
-            visitor = this.getVisitor(project, beans);
-        } else {
-            visitor = this.getVisitor(project, ImmutableClassToInstanceMap.of(UsedHardwareBean.class, usedHardwareBean));
-        }
+        // Prepare bean for the code generation visitor
+        CodeGeneratorSetupBean.Builder codeGenSetupBeanBuilder = new CodeGeneratorSetupBean.Builder();
+        codeGenSetupBeanBuilder.setFileExtension(project.getSourceCodeFileExtension());
+        codeGenSetupBeanBuilder.setHelperMethodFile(project.getRobotFactory().getPluginProperties().getStringProperty("robot.helperMethods"));
+        codeGenSetupBeanBuilder.addAdditionalEnums(usedMethodBean.getAdditionalEnums());
+        codeGenSetupBeanBuilder.addUsedMethods(usedMethodBean.getUsedMethods());
+        ClassToInstanceMap<IProjectBean> beans =
+            ImmutableClassToInstanceMap
+                .<IProjectBean> builder()
+                .put(UsedHardwareBean.class, usedHardwareBean)
+                .put(CodeGeneratorSetupBean.class, codeGenSetupBeanBuilder.build())
+                .build();
+        visitor = this.getVisitor(project, beans);
         visitor.setStringBuilders(project.getSourceCode(), project.getIndentation());
         visitor.generateCode(project.isWithWrapping());
         project.setResult(Key.COMPILERWORKFLOW_PROGRAM_GENERATION_SUCCESS);

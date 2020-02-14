@@ -32,10 +32,16 @@ import de.fhg.iais.roberta.syntax.lang.expr.StringConst;
 import de.fhg.iais.roberta.syntax.lang.expr.Unary;
 import de.fhg.iais.roberta.syntax.lang.functions.FunctionNames;
 import de.fhg.iais.roberta.syntax.lang.functions.GetSubFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.IndexOfFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.LengthOfIsEmptyFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.ListGetIndex;
 import de.fhg.iais.roberta.syntax.lang.functions.ListRepeat;
 import de.fhg.iais.roberta.syntax.lang.functions.ListSetIndex;
+import de.fhg.iais.roberta.syntax.lang.functions.MathConstrainFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.MathNumPropFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathOnListFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.MathPowerFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.MathRandomFloatFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathSingleFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.TextPrintFunct;
 import de.fhg.iais.roberta.syntax.lang.methods.Method;
@@ -209,6 +215,25 @@ public abstract class AbstractCppVisitor extends AbstractLanguageVisitor {
     }
 
     @Override
+    public Void visitIndexOfFunct(IndexOfFunct<Void> indexOfFunct) {
+        if ( indexOfFunct.getParam().get(0).toString().contains("ListCreate ") ) {
+            this.sb.append("NULL");
+            return null;
+        }
+        String methodName = "_getFirstOccuranceOfElement(";
+        if ( indexOfFunct.getLocation() != IndexLocation.FIRST ) {
+            methodName = "_getLastOccuranceOfElement(";
+        }
+        this.sb.append(methodName);
+
+        indexOfFunct.getParam().get(0).accept(this);
+        this.sb.append(", ");
+        indexOfFunct.getParam().get(1).accept(this);
+        this.sb.append(")");
+        return null;
+    }
+
+    @Override
     public Void visitGetSubFunct(GetSubFunct<Void> getSubFunct) {
         if ( getSubFunct.getFunctName() == FunctionNames.GET_SUBLIST ) {
             this.sb.append("_getSubList(");
@@ -263,7 +288,7 @@ public abstract class AbstractCppVisitor extends AbstractLanguageVisitor {
     @Override
     public Void visitListGetIndex(ListGetIndex<Void> listGetIndex) {
         if ( listGetIndex.getParam().get(0).toString().contains("ListCreate ") ) {
-            this.sb.append("null");
+            this.sb.append("NULL");
             return null;
         }
         String operation = "";
@@ -397,6 +422,23 @@ public abstract class AbstractCppVisitor extends AbstractLanguageVisitor {
     }
 
     @Override
+    public Void visitLengthOfIsEmptyFunct(LengthOfIsEmptyFunct<Void> lengthOfIsEmptyFunct) {
+        if ( lengthOfIsEmptyFunct.getParam().get(0).toString().contains("ListCreate ") ) {
+            this.sb.append("NULL");
+            return null;
+        }
+        if ( lengthOfIsEmptyFunct.getFunctName() == FunctionNames.LIST_IS_EMPTY ) {
+            lengthOfIsEmptyFunct.getParam().get(0).accept(this);
+            this.sb.append(".empty()");
+        } else {
+            this.sb.append("((int) ");
+            lengthOfIsEmptyFunct.getParam().get(0).accept(this);
+            this.sb.append(".size())");
+        }
+        return null;
+    }
+
+    @Override
     public Void visitMathOnListFunct(MathOnListFunct<Void> mathOnListFunct) {
         switch ( mathOnListFunct.getFunctName() ) {
             case AVERAGE:
@@ -444,7 +486,7 @@ public abstract class AbstractCppVisitor extends AbstractLanguageVisitor {
                 this.sb.append("sqrt(");
                 break;
             case ABS:
-                this.sb.append("absD(");
+                this.sb.append("abs(");
                 break;
             case LN:
                 this.sb.append("log(");
@@ -497,6 +539,82 @@ public abstract class AbstractCppVisitor extends AbstractLanguageVisitor {
         }
         this.sb.append(")");
 
+        return null;
+    }
+
+    @Override
+    public Void visitMathConstrainFunct(MathConstrainFunct<Void> mathConstrainFunct) {
+        Expr<Void> n = mathConstrainFunct.getParam().get(0);
+        Expr<Void> min = mathConstrainFunct.getParam().get(1);
+        Expr<Void> max = mathConstrainFunct.getParam().get(2);
+        this.sb.append("std::min(std::max((double) ");
+        n.accept(this);
+        this.sb.append(", (double) ");
+        min.accept(this);
+        this.sb.append("), (double) ");
+        max.accept(this);
+        this.sb.append(")");
+        return null;
+    }
+
+    @Override
+    public Void visitMathNumPropFunct(MathNumPropFunct<Void> mathNumPropFunct) {
+        switch ( mathNumPropFunct.getFunctName() ) {
+            case EVEN:
+                this.sb.append("(fmod(");
+                mathNumPropFunct.getParam().get(0).accept(this);
+                this.sb.append(", 2) == 0");
+                break;
+            case ODD:
+                this.sb.append("(fmod(");
+                mathNumPropFunct.getParam().get(0).accept(this);
+                this.sb.append(", 2) != 0");
+                break;
+            case PRIME:
+                this.sb.append(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(FunctionNames.PRIME));
+                this.sb.append("(");
+                mathNumPropFunct.getParam().get(0).accept(this);
+                break;
+            case WHOLE:
+                this.sb.append("(");
+                mathNumPropFunct.getParam().get(0).accept(this);
+                this.sb.append(" == floor(");
+                mathNumPropFunct.getParam().get(0).accept(this);
+                this.sb.append(")");
+                break;
+            case POSITIVE:
+                this.sb.append("(");
+                mathNumPropFunct.getParam().get(0).accept(this);
+                this.sb.append(" > 0");
+                break;
+            case NEGATIVE:
+                this.sb.append("(");
+                mathNumPropFunct.getParam().get(0).accept(this);
+                this.sb.append(" < 0");
+                break;
+            case DIVISIBLE_BY:
+                this.sb.append("(fmod(");
+                mathNumPropFunct.getParam().get(0).accept(this);
+                this.sb.append(",");
+                mathNumPropFunct.getParam().get(1).accept(this);
+                this.sb.append(") == 0");
+                break;
+            default:
+                break;
+        }
+        this.sb.append(")");
+        return null;
+    }
+
+    @Override
+    public Void visitMathPowerFunct(MathPowerFunct<Void> mathPowerFunct) {
+        this.sb.append("pow(");
+        return super.visitMathPowerFunct(mathPowerFunct);
+    }
+
+    @Override
+    public Void visitMathRandomFloatFunct(MathRandomFloatFunct<Void> mathRandomFloatFunct) {
+        this.sb.append("((double) rand() / (RAND_MAX))");
         return null;
     }
 

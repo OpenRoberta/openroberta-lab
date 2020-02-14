@@ -18,13 +18,7 @@ import de.fhg.iais.roberta.syntax.lang.expr.ColorConst;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.syntax.lang.expr.StringConst;
 import de.fhg.iais.roberta.syntax.lang.expr.VarDeclaration;
-import de.fhg.iais.roberta.syntax.lang.functions.FunctionNames;
 import de.fhg.iais.roberta.syntax.lang.functions.IndexOfFunct;
-import de.fhg.iais.roberta.syntax.lang.functions.LengthOfIsEmptyFunct;
-import de.fhg.iais.roberta.syntax.lang.functions.MathConstrainFunct;
-import de.fhg.iais.roberta.syntax.lang.functions.MathNumPropFunct;
-import de.fhg.iais.roberta.syntax.lang.functions.MathPowerFunct;
-import de.fhg.iais.roberta.syntax.lang.functions.MathRandomFloatFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathRandomIntFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.TextJoinFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.TextPrintFunct;
@@ -179,34 +173,9 @@ public abstract class AbstractCommonArduinoCppVisitor extends AbstractCppVisitor
     }
 
     @Override
-    public Void visitMathPowerFunct(MathPowerFunct<Void> mathPowerFunct) {
-        this.sb.append("pow(");
-        super.visitMathPowerFunct(mathPowerFunct);
-        return null;
-    }
-
-    @Override
-    public Void visitTextJoinFunct(TextJoinFunct<Void> textJoinFunct) {
-        return null;
-    }
-
-    @Override
-    public Void visitTextPrintFunct(TextPrintFunct<Void> textPrintFunct) {
-        return null;
-    }
-
-    @Override
-    public Void visitWaitTimeStmt(WaitTimeStmt<Void> waitTimeStmt) {
-        this.sb.append("delay(");
-        waitTimeStmt.getTime().accept(this);
-        this.sb.append(");");
-        return null;
-    }
-
-    @Override
     public Void visitIndexOfFunct(IndexOfFunct<Void> indexOfFunct) {
         if ( indexOfFunct.getParam().get(0).toString().contains("ListCreate ") ) {
-            this.sb.append("null");
+            this.sb.append("NULL");
             return null;
         }
         String methodName = indexOfFunct.getLocation() == IndexLocation.LAST ? "_getLastOccuranceOfElement(" : "_getFirstOccuranceOfElement(";
@@ -225,84 +194,20 @@ public abstract class AbstractCommonArduinoCppVisitor extends AbstractCppVisitor
     }
 
     @Override
-    public Void visitLengthOfIsEmptyFunct(LengthOfIsEmptyFunct<Void> lengthOfIsEmptyFunct) {
-        if ( lengthOfIsEmptyFunct.getParam().get(0).toString().contains("ListCreate ") ) {
-            this.sb.append("NULL");
-            return null;
-        }
-        if ( lengthOfIsEmptyFunct.getFunctName() == FunctionNames.LIST_IS_EMPTY ) {
-            this.sb.append("(");
-            lengthOfIsEmptyFunct.getParam().get(0).accept(this);
-            this.sb.append(".size()");
-            this.sb.append(" == 0)");
-        } else {
-            this.sb.append("((int) ");
-            lengthOfIsEmptyFunct.getParam().get(0).accept(this);
-            this.sb.append(".size())");
-        }
+    public Void visitTextJoinFunct(TextJoinFunct<Void> textJoinFunct) {
         return null;
     }
 
     @Override
-    public Void visitMathConstrainFunct(MathConstrainFunct<Void> mathConstrainFunct) {
-        this.sb.append("std::min(std::max((double) ");
-        mathConstrainFunct.getParam().get(0).accept(this);
-        this.sb.append(", (double) ");
-        mathConstrainFunct.getParam().get(1).accept(this);
-        this.sb.append("), (double) ");
-        mathConstrainFunct.getParam().get(2).accept(this);
-        this.sb.append(")");
+    public Void visitTextPrintFunct(TextPrintFunct<Void> textPrintFunct) {
         return null;
     }
 
     @Override
-    public Void visitMathNumPropFunct(MathNumPropFunct<Void> mathNumPropFunct) {
-        switch ( mathNumPropFunct.getFunctName() ) {
-            case EVEN:
-                this.sb.append("(fmod(");
-                mathNumPropFunct.getParam().get(0).accept(this);
-                this.sb.append(", 2) == 0");
-                break;
-            case ODD:
-                this.sb.append("(fmod(");
-                mathNumPropFunct.getParam().get(0).accept(this);
-                this.sb.append(", 2) != 0");
-                break;
-            case PRIME:
-                this.sb.append("isPrimeD(");
-                mathNumPropFunct.getParam().get(0).accept(this);
-                break;
-            case WHOLE:
-                this.sb.append("isWholeD(");
-                mathNumPropFunct.getParam().get(0).accept(this);
-                break;
-            case POSITIVE:
-                this.sb.append("(");
-                mathNumPropFunct.getParam().get(0).accept(this);
-                this.sb.append(" > 0");
-                break;
-            case NEGATIVE:
-                this.sb.append("(");
-                mathNumPropFunct.getParam().get(0).accept(this);
-                this.sb.append(" < 0");
-                break;
-            case DIVISIBLE_BY:
-                this.sb.append("(fmod(");
-                mathNumPropFunct.getParam().get(0).accept(this);
-                this.sb.append(",");
-                mathNumPropFunct.getParam().get(1).accept(this);
-                this.sb.append(") == 0");
-                break;
-            default:
-                break;
-        }
-        this.sb.append(")");
-        return null;
-    }
-
-    @Override
-    public Void visitMathRandomFloatFunct(MathRandomFloatFunct<Void> mathRandomFloatFunct) {
-        this.sb.append("_randomFloat()");
+    public Void visitWaitTimeStmt(WaitTimeStmt<Void> waitTimeStmt) {
+        this.sb.append("delay(");
+        waitTimeStmt.getTime().accept(this);
+        this.sb.append(");");
         return null;
     }
 

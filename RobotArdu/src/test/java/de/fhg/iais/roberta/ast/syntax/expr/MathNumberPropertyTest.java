@@ -11,7 +11,7 @@ public class MathNumberPropertyTest extends ArduinoAstTest {
 
     @Test
     public void Test() throws Exception {
-        final String a = "(fmod(0,2)==0)(fmod(0,2)!=0)isPrimeD(0)isWholeD(0)(0>0)(0<0)(fmod(0,0)==0)";
+        final String a = "(fmod(0,2)==0)(fmod(0,2)!=0)_isPrime(0)(0==floor(0))(0>0)(0<0)(fmod(0,0)==0)";
 
         UnitTestHelper.checkWorkers(testFactory, a, "/syntax/math/math_number_property.xml", new ArduinoUsedHardwareCollectorWorker(), new ArduinoCxxGeneratorWorker());
     }

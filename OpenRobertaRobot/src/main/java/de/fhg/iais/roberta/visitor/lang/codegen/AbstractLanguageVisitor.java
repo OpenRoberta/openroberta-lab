@@ -71,7 +71,9 @@ public abstract class AbstractLanguageVisitor implements ILanguageVisitor<Void> 
     }
 
     protected <T extends IProjectBean> T getBean(Class<T> clazz) {
-        return beans.getInstance(clazz);
+        T bean = beans.getInstance(clazz);
+        Assert.notNull(bean, "This bean does not exist!");
+        return bean;
     }
 
     public void setStringBuilders(StringBuilder sourceCode, StringBuilder indentation) {

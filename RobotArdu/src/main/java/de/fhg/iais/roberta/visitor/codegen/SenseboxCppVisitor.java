@@ -138,11 +138,8 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
             this.sb.append("\n#include <stdlib.h>");
             this.sb.append("\n#include <list>");
         }
-    }
 
-    @Override
-    protected void generateProgramSuffix(boolean withWrapping) {
-        // nothing to do because the arduino loop closes the program
+        super.generateProgramPrefix(withWrapping);
     }
 
     @Override

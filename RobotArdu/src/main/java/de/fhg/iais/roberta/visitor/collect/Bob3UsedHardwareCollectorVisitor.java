@@ -5,10 +5,7 @@ import java.util.ArrayList;
 import com.google.common.collect.ClassToInstanceMap;
 
 import de.fhg.iais.roberta.bean.IProjectBean;
-import de.fhg.iais.roberta.bean.UsedHardwareBean;
-import de.fhg.iais.roberta.components.UsedSensor;
 import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.syntax.SC;
 import de.fhg.iais.roberta.syntax.actors.arduino.bob3.BodyLEDAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.bob3.LedOffAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.bob3.LedOnAction;
@@ -16,7 +13,6 @@ import de.fhg.iais.roberta.syntax.actors.arduino.bob3.RecallAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.bob3.ReceiveIRAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.bob3.RememberAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.bob3.SendIRAction;
-import de.fhg.iais.roberta.syntax.sensor.generic.GetSampleSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.PinTouchSensor;
 import de.fhg.iais.roberta.syntax.sensors.arduino.bob3.CodePadSensor;
 import de.fhg.iais.roberta.visitor.hardware.IBob3Visitor;
@@ -30,16 +26,6 @@ public final class Bob3UsedHardwareCollectorVisitor extends AbstractUsedHardware
 
     public Bob3UsedHardwareCollectorVisitor(ArrayList<ArrayList<Phrase<Void>>> phrasesSet, ClassToInstanceMap<IProjectBean.IBuilder<?>> beanBuilders) {
         super(null, beanBuilders);
-    }
-
-    @Override
-    public Void visitBob3GetSampleSensor(GetSampleSensor<Void> sampleSensor) {
-        if ( sampleSensor.getSensorTypeAndMode().equals("TIME") ) {
-            this.getBuilder(UsedHardwareBean.Builder.class).addUsedSensor(new UsedSensor(null, SC.TIMER, null));
-        } else {
-            this.getBuilder(UsedHardwareBean.Builder.class).addUsedSensor(new UsedSensor(null, SC.NONE, null));
-        }
-        return null;
     }
 
     @Override

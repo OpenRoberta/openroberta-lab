@@ -484,13 +484,8 @@ public final class BotnrollCppVisitor extends AbstractCommonArduinoCppVisitor im
         this.sb.append("#define MODULE_ADDRESS 0x2C \n");
         this.sb.append("byte colorsLeft[3]={0,0,0}; \n");
         this.sb.append("byte colorsRight[3]={0,0,0};");
-    }
 
-    @Override
-    protected void generateProgramSuffix(boolean withWrapping) {
-        //        if ( withWrapping ) {
-        //            this.sb.append("\n}\n");
-        //        }
+        super.generateProgramPrefix(withWrapping);
     }
 
     private void generateSensors() {
