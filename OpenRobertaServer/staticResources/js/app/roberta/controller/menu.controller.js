@@ -759,6 +759,11 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
                 expr.setInTask(false);
                 return false;
             }
+            //Overriding the Ctrl + S for save
+            if ((e.metaKey || e.ctrlKey) && (String.fromCharCode(e.which) === 'S')) {
+                e.preventDefault();
+                PROGRAM_C.showSaveAsModal();
+            }
         });
     }
 });
