@@ -1,10 +1,12 @@
 package de.fhg.iais.roberta.visitor.codegen;
 
 import java.util.ArrayList;
+import java.util.List;
 
-import de.fhg.iais.roberta.bean.CodeGeneratorSetupBean;
+import com.google.common.collect.ClassToInstanceMap;
+
+import de.fhg.iais.roberta.bean.IProjectBean;
 import de.fhg.iais.roberta.bean.UsedHardwareBean;
-import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.inter.mode.general.IMode;
 import de.fhg.iais.roberta.mode.action.mbed.DisplayTextMode;
 import de.fhg.iais.roberta.syntax.Phrase;
@@ -61,15 +63,10 @@ public final class MicrobitPythonVisitor extends AbstractPythonVisitor implement
     /**
      * initialize the Python code generator visitor.
      *
-     * @param brickConfiguration hardware configuration of the brick
      * @param programPhrases to generate the code from
      */
-    public MicrobitPythonVisitor(
-        UsedHardwareBean usedHardwareBean,
-        CodeGeneratorSetupBean codeGeneratorSetupBean,
-        ConfigurationAst brickConfiguration,
-        ArrayList<ArrayList<Phrase<Void>>> programPhrases) {
-        super(usedHardwareBean, codeGeneratorSetupBean, programPhrases);
+    public MicrobitPythonVisitor(List<ArrayList<Phrase<Void>>> programPhrases, ClassToInstanceMap<IProjectBean> beans) {
+        super(programPhrases, beans);
     }
 
     @Override
@@ -401,7 +398,7 @@ public final class MicrobitPythonVisitor extends AbstractPythonVisitor implement
         nlIndent();
         this.sb.append("import math");
         nlIndent();
-        if ( this.usedHardwareBean.isActorUsed(SC.RADIO) ) {
+        if ( this.getBean(UsedHardwareBean.class).isActorUsed(SC.RADIO) ) {
             this.sb.append("import radio");
             nlIndent();
         }
@@ -412,7 +409,7 @@ public final class MicrobitPythonVisitor extends AbstractPythonVisitor implement
         nlIndent();
         nlIndent();
         this.sb.append("timer1 = microbit.running_time()");
-        if ( this.usedHardwareBean.isActorUsed(SC.RADIO) ) {
+        if ( this.getBean(UsedHardwareBean.class).isActorUsed(SC.RADIO) ) {
             nlIndent();
             this.sb.append("radio.on()");
         }

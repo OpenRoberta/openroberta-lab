@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import org.junit.Assert;
 import org.junit.Test;
 
+import com.google.common.collect.ImmutableClassToInstanceMap;
+
 import de.fhg.iais.roberta.ast.AstTest;
 import de.fhg.iais.roberta.bean.UsedHardwareBean;
 import de.fhg.iais.roberta.syntax.Phrase;
@@ -18,7 +20,7 @@ public class PythonGlobalVariableCheckTest extends AstTest {
         ArrayList<ArrayList<Phrase<Void>>> phrases = UnitTestHelper.getAst(testFactory, "/visitors/python_global_variables_check_one_used_variables.xml");
         UsedHardwareBean.Builder builder = new UsedHardwareBean.Builder();
 
-        Ev3UsedHardwareCollectorVisitor checkVisitor = new Ev3UsedHardwareCollectorVisitor(builder, null);
+        Ev3UsedHardwareCollectorVisitor checkVisitor = new Ev3UsedHardwareCollectorVisitor(null, ImmutableClassToInstanceMap.of(UsedHardwareBean.Builder.class, builder));
         for ( ArrayList<Phrase<Void>> tree : phrases ) {
             for ( Phrase<Void> phrase : tree ) {
                 phrase.accept(checkVisitor);
@@ -34,7 +36,7 @@ public class PythonGlobalVariableCheckTest extends AstTest {
         ArrayList<ArrayList<Phrase<Void>>> phrases = UnitTestHelper.getAst(testFactory, "/visitors/python_global_variables_check_no_used_variables.xml");
         UsedHardwareBean.Builder builder = new UsedHardwareBean.Builder();
 
-        Ev3UsedHardwareCollectorVisitor checkVisitor = new Ev3UsedHardwareCollectorVisitor(builder, null);
+        Ev3UsedHardwareCollectorVisitor checkVisitor = new Ev3UsedHardwareCollectorVisitor(null, ImmutableClassToInstanceMap.of(UsedHardwareBean.Builder.class, builder));
         for ( ArrayList<Phrase<Void>> tree : phrases ) {
             for ( Phrase<Void> phrase : tree ) {
                 phrase.accept(checkVisitor);
@@ -50,7 +52,7 @@ public class PythonGlobalVariableCheckTest extends AstTest {
         ArrayList<ArrayList<Phrase<Void>>> phrases = UnitTestHelper.getAst(testFactory, "/visitors/python_global_variables_check_two_used_variables.xml");
         UsedHardwareBean.Builder builder = new UsedHardwareBean.Builder();
 
-        Ev3UsedHardwareCollectorVisitor checkVisitor = new Ev3UsedHardwareCollectorVisitor(builder, null);
+        Ev3UsedHardwareCollectorVisitor checkVisitor = new Ev3UsedHardwareCollectorVisitor(null, ImmutableClassToInstanceMap.of(UsedHardwareBean.Builder.class, builder));
         for ( ArrayList<Phrase<Void>> tree : phrases ) {
             for ( Phrase<Void> phrase : tree ) {
                 phrase.accept(checkVisitor);

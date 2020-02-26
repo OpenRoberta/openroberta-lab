@@ -1,5 +1,8 @@
 package de.fhg.iais.roberta.visitor.collect;
 
+import com.google.common.collect.ClassToInstanceMap;
+
+import de.fhg.iais.roberta.bean.IProjectBean;
 import de.fhg.iais.roberta.bean.UsedHardwareBean;
 import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.components.ConfigurationComponent;
@@ -60,8 +63,9 @@ public abstract class AbstractUsedHardwareCollectorVisitor extends AbstractColle
 
     protected final ConfigurationAst robotConfiguration;
 
-    public AbstractUsedHardwareCollectorVisitor(UsedHardwareBean.Builder builder, ConfigurationAst configurationAst) {
-        super(builder);
+    public AbstractUsedHardwareCollectorVisitor(
+        ConfigurationAst configurationAst, ClassToInstanceMap<IProjectBean.IBuilder<?>> beanBuilders) {
+        super(beanBuilders);
         this.robotConfiguration = configurationAst;
     }
 
@@ -72,122 +76,122 @@ public abstract class AbstractUsedHardwareCollectorVisitor extends AbstractColle
 
     @Override
     public Void visitColorSensor(ColorSensor<Void> colorSensor) {
-        this.builder.addUsedSensor(new UsedSensor(colorSensor.getPort(), SC.COLOR, colorSensor.getMode()));
+        this.getBuilder(UsedHardwareBean.Builder.class).addUsedSensor(new UsedSensor(colorSensor.getPort(), SC.COLOR, colorSensor.getMode()));
         return null;
     }
 
     @Override
     public Void visitLightSensor(LightSensor<Void> lightSensor) {
-        this.builder.addUsedSensor(new UsedSensor(lightSensor.getPort(), SC.LIGHT, lightSensor.getMode()));
+        this.getBuilder(UsedHardwareBean.Builder.class).addUsedSensor(new UsedSensor(lightSensor.getPort(), SC.LIGHT, lightSensor.getMode()));
         return null;
     }
 
     @Override
     public Void visitSoundSensor(SoundSensor<Void> soundSensor) {
-        this.builder.addUsedSensor(new UsedSensor(soundSensor.getPort(), SC.SOUND, soundSensor.getMode()));
+        this.getBuilder(UsedHardwareBean.Builder.class).addUsedSensor(new UsedSensor(soundSensor.getPort(), SC.SOUND, soundSensor.getMode()));
         return null;
     }
 
     @Override
     public Void visitTemperatureSensor(TemperatureSensor<Void> temperatureSensor) {
-        this.builder.addUsedSensor(new UsedSensor(temperatureSensor.getPort(), SC.TEMPERATURE, temperatureSensor.getMode()));
+        this.getBuilder(UsedHardwareBean.Builder.class).addUsedSensor(new UsedSensor(temperatureSensor.getPort(), SC.TEMPERATURE, temperatureSensor.getMode()));
         return null;
     }
 
     @Override
     public Void visitVoltageSensor(VoltageSensor<Void> voltageSensor) {
-        this.builder.addUsedSensor(new UsedSensor(voltageSensor.getPort(), SC.VOLTAGE, voltageSensor.getMode()));
+        this.getBuilder(UsedHardwareBean.Builder.class).addUsedSensor(new UsedSensor(voltageSensor.getPort(), SC.VOLTAGE, voltageSensor.getMode()));
         return null;
     }
 
     @Override
     public Void visitEncoderSensor(EncoderSensor<Void> encoderSensor) {
         ConfigurationComponent actor = this.robotConfiguration.getConfigurationComponent(encoderSensor.getPort());
-        this.builder.addUsedActor(new UsedActor(encoderSensor.getPort(), actor.getComponentType()));
+        this.getBuilder(UsedHardwareBean.Builder.class).addUsedActor(new UsedActor(encoderSensor.getPort(), actor.getComponentType()));
         return null;
     }
 
     @Override
     public Void visitGyroSensor(GyroSensor<Void> gyroSensor) {
-        this.builder.addUsedSensor(new UsedSensor(gyroSensor.getPort(), SC.GYRO, gyroSensor.getMode()));
+        this.getBuilder(UsedHardwareBean.Builder.class).addUsedSensor(new UsedSensor(gyroSensor.getPort(), SC.GYRO, gyroSensor.getMode()));
         return null;
     }
 
     @Override
     public Void visitInfraredSensor(InfraredSensor<Void> infraredSensor) {
-        this.builder.addUsedSensor(new UsedSensor(infraredSensor.getPort(), SC.INFRARED, infraredSensor.getMode()));
+        this.getBuilder(UsedHardwareBean.Builder.class).addUsedSensor(new UsedSensor(infraredSensor.getPort(), SC.INFRARED, infraredSensor.getMode()));
         return null;
     }
 
     @Override
     public Void visitIRSeekerSensor(IRSeekerSensor<Void> irSeekerSensor) {
-        this.builder.addUsedSensor(new UsedSensor(irSeekerSensor.getPort(), SC.IRSEEKER, irSeekerSensor.getMode()));
+        this.getBuilder(UsedHardwareBean.Builder.class).addUsedSensor(new UsedSensor(irSeekerSensor.getPort(), SC.IRSEEKER, irSeekerSensor.getMode()));
         return null;
     }
 
     @Override
     public Void visitTouchSensor(TouchSensor<Void> touchSensor) {
-        this.builder.addUsedSensor(new UsedSensor(touchSensor.getPort(), SC.TOUCH, touchSensor.getMode()));
+        this.getBuilder(UsedHardwareBean.Builder.class).addUsedSensor(new UsedSensor(touchSensor.getPort(), SC.TOUCH, touchSensor.getMode()));
         return null;
     }
 
     @Override
     public Void visitUltrasonicSensor(UltrasonicSensor<Void> ultrasonicSensor) {
-        this.builder.addUsedSensor(new UsedSensor(ultrasonicSensor.getPort(), SC.ULTRASONIC, ultrasonicSensor.getMode()));
+        this.getBuilder(UsedHardwareBean.Builder.class).addUsedSensor(new UsedSensor(ultrasonicSensor.getPort(), SC.ULTRASONIC, ultrasonicSensor.getMode()));
         return null;
     }
 
     @Override
     public Void visitHumiditySensor(HumiditySensor<Void> humiditySensor) {
-        this.builder.addUsedSensor(new UsedSensor(humiditySensor.getPort(), SC.HUMIDITY, humiditySensor.getMode()));
+        this.getBuilder(UsedHardwareBean.Builder.class).addUsedSensor(new UsedSensor(humiditySensor.getPort(), SC.HUMIDITY, humiditySensor.getMode()));
         return null;
     }
 
     @Override
     public Void visitCompassSensor(CompassSensor<Void> compassSensor) {
-        this.builder.addUsedSensor(new UsedSensor(compassSensor.getPort(), SC.COMPASS, compassSensor.getMode()));
+        this.getBuilder(UsedHardwareBean.Builder.class).addUsedSensor(new UsedSensor(compassSensor.getPort(), SC.COMPASS, compassSensor.getMode()));
         return null;
     }
 
     @Override
     public Void visitMotionSensor(MotionSensor<Void> motionSensor) {
-        this.builder.addUsedSensor(new UsedSensor(motionSensor.getPort(), SC.MOTION, motionSensor.getMode()));
+        this.getBuilder(UsedHardwareBean.Builder.class).addUsedSensor(new UsedSensor(motionSensor.getPort(), SC.MOTION, motionSensor.getMode()));
         return null;
     }
 
     @Override
     public Void visitDropSensor(DropSensor<Void> dropSensor) {
-        this.builder.addUsedSensor(new UsedSensor(dropSensor.getPort(), SC.DROP, dropSensor.getMode()));
+        this.getBuilder(UsedHardwareBean.Builder.class).addUsedSensor(new UsedSensor(dropSensor.getPort(), SC.DROP, dropSensor.getMode()));
         return null;
     }
 
     @Override
     public Void visitMoistureSensor(MoistureSensor<Void> mositureSensor) {
-        this.builder.addUsedSensor(new UsedSensor(mositureSensor.getPort(), SC.MOISTURE, mositureSensor.getMode()));
+        this.getBuilder(UsedHardwareBean.Builder.class).addUsedSensor(new UsedSensor(mositureSensor.getPort(), SC.MOISTURE, mositureSensor.getMode()));
         return null;
     }
 
     @Override
     public Void visitAccelerometer(AccelerometerSensor<Void> accelerometerSensor) {
-        this.builder.addUsedSensor(new UsedSensor(accelerometerSensor.getPort(), SC.ACCELEROMETER, accelerometerSensor.getMode()));
+        this.getBuilder(UsedHardwareBean.Builder.class).addUsedSensor(new UsedSensor(accelerometerSensor.getPort(), SC.ACCELEROMETER, accelerometerSensor.getMode()));
         return null;
     }
 
     @Override
     public Void visitPulseSensor(PulseSensor<Void> pulseSensor) {
-        this.builder.addUsedSensor(new UsedSensor(pulseSensor.getPort(), SC.PULSE, pulseSensor.getMode()));
+        this.getBuilder(UsedHardwareBean.Builder.class).addUsedSensor(new UsedSensor(pulseSensor.getPort(), SC.PULSE, pulseSensor.getMode()));
         return null;
     }
 
     @Override
     public Void visitRfidSensor(RfidSensor<Void> rfidSensor) {
-        this.builder.addUsedSensor(new UsedSensor(rfidSensor.getPort(), SC.RFID, rfidSensor.getMode()));
+        this.getBuilder(UsedHardwareBean.Builder.class).addUsedSensor(new UsedSensor(rfidSensor.getPort(), SC.RFID, rfidSensor.getMode()));
         return null;
     }
 
     @Override
     public Void visitTimerSensor(TimerSensor<Void> timerSensor) {
-        this.builder.addUsedSensor(new UsedSensor(timerSensor.getPort(), SC.TIMER, timerSensor.getMode()));
+        this.getBuilder(UsedHardwareBean.Builder.class).addUsedSensor(new UsedSensor(timerSensor.getPort(), SC.TIMER, timerSensor.getMode()));
         return null;
     }
 
@@ -234,8 +238,8 @@ public abstract class AbstractUsedHardwareCollectorVisitor extends AbstractColle
             String userDefinedLeftPortName = this.robotConfiguration.getFirstMotor("LEFT").getUserDefinedPortName();
             String userDefinedRightPortName = this.robotConfiguration.getFirstMotor("RIGHT").getUserDefinedPortName();
             if ( (userDefinedLeftPortName != null) && (userDefinedRightPortName != null) ) {
-                this.builder.addUsedActor(new UsedActor(userDefinedLeftPortName, SC.LARGE));
-                this.builder.addUsedActor(new UsedActor(userDefinedRightPortName, SC.LARGE));
+                this.getBuilder(UsedHardwareBean.Builder.class).addUsedActor(new UsedActor(userDefinedLeftPortName, SC.LARGE));
+                this.getBuilder(UsedHardwareBean.Builder.class).addUsedActor(new UsedActor(userDefinedRightPortName, SC.LARGE));
             }
         }
     }
@@ -243,7 +247,7 @@ public abstract class AbstractUsedHardwareCollectorVisitor extends AbstractColle
     @Override
     public Void visitMotorGetPowerAction(MotorGetPowerAction<Void> motorGetPowerAction) {
         ConfigurationComponent actor = this.robotConfiguration.getConfigurationComponent(motorGetPowerAction.getUserDefinedPort());
-        this.builder.addUsedActor(new UsedActor(motorGetPowerAction.getUserDefinedPort(), actor.getComponentType()));
+        this.getBuilder(UsedHardwareBean.Builder.class).addUsedActor(new UsedActor(motorGetPowerAction.getUserDefinedPort(), actor.getComponentType()));
         return null;
     }
 
@@ -254,7 +258,7 @@ public abstract class AbstractUsedHardwareCollectorVisitor extends AbstractColle
             motorOnAction.getDurationValue().accept(this);
         }
         ConfigurationComponent actor = this.robotConfiguration.getConfigurationComponent(motorOnAction.getUserDefinedPort());
-        this.builder.addUsedActor(new UsedActor(motorOnAction.getUserDefinedPort(), actor.getComponentType()));
+        this.getBuilder(UsedHardwareBean.Builder.class).addUsedActor(new UsedActor(motorOnAction.getUserDefinedPort(), actor.getComponentType()));
         return null;
     }
 
@@ -262,14 +266,14 @@ public abstract class AbstractUsedHardwareCollectorVisitor extends AbstractColle
     public Void visitMotorSetPowerAction(MotorSetPowerAction<Void> motorSetPowerAction) {
         motorSetPowerAction.getPower().accept(this);
         ConfigurationComponent actor = this.robotConfiguration.getConfigurationComponent(motorSetPowerAction.getUserDefinedPort());
-        this.builder.addUsedActor(new UsedActor(motorSetPowerAction.getUserDefinedPort(), actor.getComponentType()));
+        this.getBuilder(UsedHardwareBean.Builder.class).addUsedActor(new UsedActor(motorSetPowerAction.getUserDefinedPort(), actor.getComponentType()));
         return null;
     }
 
     @Override
     public Void visitMotorStopAction(MotorStopAction<Void> motorStopAction) {
         ConfigurationComponent actor = this.robotConfiguration.getConfigurationComponent(motorStopAction.getUserDefinedPort());
-        this.builder.addUsedActor(new UsedActor(motorStopAction.getUserDefinedPort(), actor.getComponentType()));
+        this.getBuilder(UsedHardwareBean.Builder.class).addUsedActor(new UsedActor(motorStopAction.getUserDefinedPort(), actor.getComponentType()));
         return null;
     }
 

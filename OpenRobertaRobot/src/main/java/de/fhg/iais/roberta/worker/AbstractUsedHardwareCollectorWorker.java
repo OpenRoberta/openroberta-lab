@@ -3,7 +3,12 @@ package de.fhg.iais.roberta.worker;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.common.collect.ClassToInstanceMap;
+import com.google.common.collect.ImmutableClassToInstanceMap;
+
+import de.fhg.iais.roberta.bean.IProjectBean;
 import de.fhg.iais.roberta.bean.UsedHardwareBean;
+import de.fhg.iais.roberta.bean.UsedMethodBean;
 import de.fhg.iais.roberta.components.Project;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.visitor.IVisitor;
@@ -17,36 +22,43 @@ import de.fhg.iais.roberta.visitor.validate.AbstractCollectorVisitor;
  */
 public abstract class AbstractUsedHardwareCollectorWorker implements IWorker {
 
-    /**
-     * Returns the appropriate visitor for this worker. Used by subclasses to keep the execute method generic.
-     * Could be removed in the future, when visitors are specified in the properties as well, or inferred from the worker name.
-     *
-     * @param builder the used hardware bean builder
-     * @param project the project
-     * @return the appropriate visitor for the current robot
-     */
-    protected abstract AbstractCollectorVisitor getVisitor(UsedHardwareBean.Builder builder, Project project);
-
     @Override
-    public void execute(Project project) {
-        UsedHardwareBean.Builder builder = new UsedHardwareBean.Builder();
-        AbstractCollectorVisitor visitor = getVisitor(builder, project);
-        ArrayList<ArrayList<Phrase<Void>>> tree = project.getProgramAst().getTree();
+    public final void execute(Project project) {
+        UsedHardwareBean.Builder usedHardwareBeanBuilder = new UsedHardwareBean.Builder();
+        UsedMethodBean.Builder usedMethodBeanBuilder = new UsedMethodBean.Builder();
+        ImmutableClassToInstanceMap<IProjectBean.IBuilder<?>> beanBuilders =
+            ImmutableClassToInstanceMap.<IProjectBean
+                .IBuilder<?>> builder()
+                .put(UsedHardwareBean.Builder.class, usedHardwareBeanBuilder)
+                .put(UsedMethodBean.Builder.class, usedMethodBeanBuilder)
+                .build();
+        AbstractCollectorVisitor visitor = this.getVisitor(project, beanBuilders);
+        List<ArrayList<Phrase<Void>>> tree = project.getProgramAst().getTree();
         collectGlobalVariables(tree, visitor);
-        for ( ArrayList<Phrase<Void>> phrases : tree ) {
+        for ( List<Phrase<Void>> phrases : tree ) {
             for ( Phrase<Void> phrase : phrases ) {
                 if ( phrase.getKind().getName().equals("MAIN_TASK") ) {
-                    builder.setProgramEmpty(phrases.size() == 2);
+                    usedHardwareBeanBuilder.setProgramEmpty(phrases.size() == 2);
                 } else {
                     phrase.accept(visitor);
                 }
             }
         }
-        UsedHardwareBean bean = builder.build();
-        project.addWorkerResult("CollectedHardware", bean);
+        project.addWorkerResult(usedHardwareBeanBuilder.build());
+        project.addWorkerResult(usedMethodBeanBuilder.build());
     }
 
-    protected static void collectGlobalVariables(List<ArrayList<Phrase<Void>>> phrasesSet, IVisitor<Void> visitor) {
+    /**
+     * Returns the appropriate visitor for this worker. Used by subclasses to keep the execute method generic.
+     * Could be removed in the future, when visitors are specified in the properties as well, or inferred from the worker name.
+     *
+     * @param project the project
+     * @param beanBuilders a map of available bean builders, may be empty
+     * @return the appropriate visitor for the current robot
+     */
+    protected abstract AbstractCollectorVisitor getVisitor(Project project, ClassToInstanceMap<IProjectBean.IBuilder<?>> beanBuilders);
+
+    private static void collectGlobalVariables(Iterable<ArrayList<Phrase<Void>>> phrasesSet, IVisitor<Void> visitor) {
         for ( List<Phrase<Void>> phrases : phrasesSet ) {
             Phrase<Void> phrase = phrases.get(1);
             if ( phrase.getKind().getName().equals("MAIN_TASK") ) {

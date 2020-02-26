@@ -1,8 +1,11 @@
 package de.fhg.iais.roberta.visitor.codegen;
 
 import java.util.ArrayList;
+import java.util.List;
 
-import de.fhg.iais.roberta.bean.CodeGeneratorSetupBean;
+import com.google.common.collect.ClassToInstanceMap;
+
+import de.fhg.iais.roberta.bean.IProjectBean;
 import de.fhg.iais.roberta.bean.UsedHardwareBean;
 import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.syntax.Phrase;
@@ -17,12 +20,9 @@ import de.fhg.iais.roberta.syntax.actors.arduino.bob3.ReceiveIRAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.bob3.RememberAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.bob3.SendIRAction;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
-import de.fhg.iais.roberta.syntax.lang.expr.MathConst;
-import de.fhg.iais.roberta.syntax.lang.expr.VarDeclaration;
 import de.fhg.iais.roberta.syntax.lang.functions.MathConstrainFunct;
 import de.fhg.iais.roberta.syntax.lang.stmt.AssertStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.DebugAction;
-import de.fhg.iais.roberta.syntax.sensor.generic.GetSampleSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.PinTouchSensor;
@@ -43,36 +43,8 @@ public final class Bob3CppVisitor extends AbstractCommonArduinoCppVisitor implem
      *
      * @param phrases to generate the code from
      */
-    public Bob3CppVisitor(UsedHardwareBean usedHardwareBean, CodeGeneratorSetupBean codeGeneratorSetupBean, ArrayList<ArrayList<Phrase<Void>>> phrases) {
-        super(usedHardwareBean, codeGeneratorSetupBean, new ConfigurationAst.Builder().build(), phrases);
-    }
-
-    @Override
-    public Void visitMathConst(MathConst<Void> mathConst) { // TODO Unify the math consts for all systems
-        switch ( mathConst.getMathConst() ) {
-            case PI:
-                this.sb.append("M_PI");
-                break;
-            case E:
-                this.sb.append("M_E");
-                break;
-            case GOLDEN_RATIO:
-                this.sb.append("1.61803398875");
-                break;
-            case SQRT2:
-                this.sb.append("M_SQRT2");
-                break;
-            case SQRT1_2:
-                this.sb.append("M_SQRT1_2");
-                break;
-            // IEEE 754 floating point representation
-            case INFINITY:
-                this.sb.append("INFINITY");
-                break;
-            default:
-                break;
-        }
-        return null;
+    public Bob3CppVisitor(List<ArrayList<Phrase<Void>>> phrases, ClassToInstanceMap<IProjectBean> beans) {
+        super(phrases, new ConfigurationAst.Builder().build(), beans);
     }
 
     @Override
@@ -126,7 +98,7 @@ public final class Bob3CppVisitor extends AbstractCommonArduinoCppVisitor implem
         decrIndentation();
         mainTask.getVariables().accept(this);
         nlIndent();
-        if ( this.usedHardwareBean.isSensorUsed(SC.TIMER) ) {
+        if ( this.getBean(UsedHardwareBean.class).isSensorUsed(SC.TIMER) ) {
             this.sb.append("unsigned long __time = millis();");
             nlIndent();
         }
@@ -154,13 +126,7 @@ public final class Bob3CppVisitor extends AbstractCommonArduinoCppVisitor implem
         this.sb.append("#include \"bob3.h\" \n");
         this.sb.append("Bob3 rob;\n");
 
-    }
-
-    @Override
-    protected void generateProgramSuffix(boolean withWrapping) {
-        //        if ( withWrapping ) {
-        //            this.sb.append("\n}\n");
-        //        }
+        super.generateProgramPrefix(withWrapping);
     }
 
     @Override
@@ -222,12 +188,6 @@ public final class Bob3CppVisitor extends AbstractCommonArduinoCppVisitor implem
     @Override
     public Void visitReceiveIRAction(ReceiveIRAction<Void> receiveIRAction) {
         this.sb.append("rob.receiveIRCode(500)");
-        return null;
-    }
-
-    @Override
-    public Void visitBob3GetSampleSensor(GetSampleSensor<Void> getSampleSensor) {
-        getSampleSensor.getSensor().accept(this);
         return null;
     }
 

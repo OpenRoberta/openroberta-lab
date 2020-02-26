@@ -23,7 +23,7 @@ public class SenseboxCompilerWorker implements IWorker {
     public void execute(Project project) {
         String programName = project.getProgramName();
         String robot = project.getRobot();
-        Pair<Key, String> workflowResult = runBuild(project);
+        Pair<Key, String> workflowResult = this.runBuild(project);
         project.setResult(workflowResult.getFirst());
         project.addResultParam("MESSAGE", workflowResult.getSecond());
         if ( workflowResult.getFirst() == Key.COMPILERWORKFLOW_SUCCESS ) {
@@ -38,11 +38,11 @@ public class SenseboxCompilerWorker implements IWorker {
      *
      * @return a pair of Key.COMPILERWORKFLOW_SUCCESS or Key.COMPILERWORKFLOW_ERROR_PROGRAM_COMPILE_FAILED and the cross compiler output
      */
-    Pair<Key, String> runBuild(Project project) {
-        CompilerSetupBean compilerWorkflowBean = (CompilerSetupBean) project.getWorkerResult("CompilerSetup");
-        final String compilerBinDir = compilerWorkflowBean.getCompilerBinDir();
-        final String compilerResourcesDir = compilerWorkflowBean.getCompilerResourcesDir();
-        final String tempDir = compilerWorkflowBean.getTempDir();
+    private Pair<Key, String> runBuild(Project project) {
+        CompilerSetupBean compilerWorkflowBean = (CompilerSetupBean) project.getWorkerResult(CompilerSetupBean.class);
+        String compilerBinDir = compilerWorkflowBean.getCompilerBinDir();
+        String compilerResourcesDir = compilerWorkflowBean.getCompilerResourcesDir();
+        String tempDir = compilerWorkflowBean.getTempDir();
         Util
             .storeGeneratedProgram(
                 tempDir,

@@ -9,14 +9,14 @@ public class TimerSensorTest extends NxtAstTest {
 
     @Test
     public void getTimerValue() throws Exception {
-        String a = "\nGetTimerValue(timer1)";
+        String a = "\n(CurrentTick()-timer1)";
 
         UnitTestHelper.checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, a, "/ast/sensors/sensor_getSampleTimer.xml", false);
     }
 
     @Test
     public void resetTimer() throws Exception {
-        String a = "\nResetTimerValue(timer1);";
+        String a = "\ntimer1=CurrentTick();";
 
         UnitTestHelper.checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, a, "/ast/sensors/sensor_resetTimer.xml", false);
     }

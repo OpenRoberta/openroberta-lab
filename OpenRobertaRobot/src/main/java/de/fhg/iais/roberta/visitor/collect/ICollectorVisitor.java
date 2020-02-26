@@ -95,6 +95,7 @@ import de.fhg.iais.roberta.syntax.sensor.generic.KeysSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.MoistureSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.MotionSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.ParticleSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.PinGetValueSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.PinTouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.PulseSensor;
@@ -711,6 +712,11 @@ public interface ICollectorVisitor extends ISensorVisitor<Void>, IAllActorsVisit
 
     @Override
     default Void visitVemlLightSensor(VemlLightSensor<Void> vemlLightSensor) {
+        return null;
+    }
+
+    @Override
+    default Void visitParticleSensor(ParticleSensor<Void> particleSensor) {
         return null;
     }
 }

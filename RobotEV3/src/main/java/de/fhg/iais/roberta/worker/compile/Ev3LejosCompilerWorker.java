@@ -16,9 +16,9 @@ public class Ev3LejosCompilerWorker implements IWorker {
 
     @Override
     public void execute(Project project) {
-        CompilerSetupBean compilerWorkflowBean = (CompilerSetupBean) project.getWorkerResult("CompilerSetup");
-        final String compilerResourcesDir = compilerWorkflowBean.getCompilerResourcesDir();
-        final String tempDir = compilerWorkflowBean.getTempDir();
+        CompilerSetupBean compilerWorkflowBean = project.getWorkerResult(CompilerSetupBean.class);
+        String compilerResourcesDir = compilerWorkflowBean.getCompilerResourcesDir();
+        String tempDir = compilerWorkflowBean.getTempDir();
         Util.storeGeneratedProgram(tempDir, project.getSourceCode().toString(), project.getToken(), project.getProgramName(), ".java");
 
         JavaSourceCompiler scp = new JavaSourceCompiler(project.getProgramName(), project.getSourceCode().toString(), compilerResourcesDir);

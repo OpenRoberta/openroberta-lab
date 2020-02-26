@@ -3,8 +3,10 @@ package de.fhg.iais.roberta.syntax.check;
 import org.junit.Assert;
 import org.junit.Test;
 
+import com.google.common.collect.ClassToInstanceMap;
+
 import de.fhg.iais.roberta.ast.AstTest;
-import de.fhg.iais.roberta.bean.UsedHardwareBean;
+import de.fhg.iais.roberta.bean.IProjectBean;
 import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.components.Project;
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
@@ -29,20 +31,15 @@ public class CheckVisitorTest extends AstTest {
 
     private class TestProgramCheckWorker extends AbstractValidatorWorker {
         @Override
-        protected AbstractProgramValidatorVisitor getVisitor(UsedHardwareBean.Builder builder, Project project) {
-            return new TestProgramCheckVisitor(builder, project.getConfigurationAst());
-        }
-
-        @Override
-        protected String getBeanName() {
-            return "ProgramValidator";
+        protected AbstractProgramValidatorVisitor getVisitor(Project project, ClassToInstanceMap<IProjectBean.IBuilder<?>> beanBuilders) {
+            return new TestProgramCheckVisitor(project.getConfigurationAst(), beanBuilders);
         }
     }
 
     class TestProgramCheckVisitor extends AbstractProgramValidatorVisitor {
 
-        public TestProgramCheckVisitor(UsedHardwareBean.Builder builder, ConfigurationAst brickConfiguration) {
-            super(builder, brickConfiguration);
+        public TestProgramCheckVisitor(ConfigurationAst brickConfiguration, ClassToInstanceMap<IProjectBean.IBuilder<?>> beanBuilders) {
+            super(brickConfiguration, beanBuilders);
         }
 
         @Override

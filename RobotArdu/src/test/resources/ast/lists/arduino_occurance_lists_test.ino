@@ -21,6 +21,6 @@ void setup()
 void loop()
 {
     ___item2 = _getLastOccuranceOfElement(___item, String("v"));
-    ___item2 = null;
-    ___item3 = (___item.size() == 0);
+    ___item2 = NULL;
+    ___item3 = ___item.empty();
 }

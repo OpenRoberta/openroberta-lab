@@ -1,13 +1,15 @@
 package de.fhg.iais.roberta.visitor.collect;
 
-import de.fhg.iais.roberta.bean.UsedHardwareBean;
+import com.google.common.collect.ClassToInstanceMap;
+
+import de.fhg.iais.roberta.bean.IProjectBean;
 import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
 
 public class WedoUsedHardwareCollectorVisitor extends AbstractUsedHardwareCollectorVisitor {
 
-    public WedoUsedHardwareCollectorVisitor(UsedHardwareBean.Builder builder, ConfigurationAst configuration) {
-        super(builder, configuration);
+    public WedoUsedHardwareCollectorVisitor(ConfigurationAst configuration, ClassToInstanceMap<IProjectBean.IBuilder<?>> beanBuilders) {
+        super(configuration, beanBuilders);
     }
 
     @Override

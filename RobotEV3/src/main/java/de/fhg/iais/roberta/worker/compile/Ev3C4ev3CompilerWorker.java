@@ -21,13 +21,13 @@ public class Ev3C4ev3CompilerWorker implements IWorker {
 
     @Override
     public void execute(Project project) {
-        CompilerSetupBean compilerWorkflowBean = (CompilerSetupBean) project.getWorkerResult("CompilerSetup");
+        CompilerSetupBean compilerWorkflowBean = project.getWorkerResult(CompilerSetupBean.class);
         String robot = project.getRobot();
-        final String compilerResourcesDir = compilerWorkflowBean.getCompilerResourcesDir();
+        String compilerResourcesDir = compilerWorkflowBean.getCompilerResourcesDir();
         String programName = project.getProgramName();
         C4Ev3SourceCompiler compiler = new C4Ev3SourceCompiler(compilerResourcesDir);
         Uf2Builder uf2Builder = new Uf2Builder(compilerResourcesDir);
-        Pair<Key, String> workflowResult = runBuild(project, compiler, uf2Builder);
+        Pair<Key, String> workflowResult = this.runBuild(project, compiler, uf2Builder);
         project.setResult(workflowResult.getFirst());
         project.addResultParam("MESSAGE", workflowResult.getSecond());
         if ( workflowResult.getFirst() == Key.COMPILERWORKFLOW_SUCCESS ) {
@@ -42,9 +42,9 @@ public class Ev3C4ev3CompilerWorker implements IWorker {
      *
      * @return a pair of Key.COMPILERWORKFLOW_SUCCESS or Key.COMPILERWORKFLOW_ERROR_PROGRAM_COMPILE_FAILED and the cross compiler output
      */
-    public Pair<Key, String> runBuild(Project project, C4Ev3SourceCompiler compiler, Uf2Builder uf2Builder) {
-        CompilerSetupBean compilerWorkflowBean = (CompilerSetupBean) project.getWorkerResult("CompilerSetup");
-        final String tempDir = compilerWorkflowBean.getTempDir();
+    private Pair<Key, String> runBuild(Project project, C4Ev3SourceCompiler compiler, Uf2Builder uf2Builder) {
+        CompilerSetupBean compilerWorkflowBean = (CompilerSetupBean) project.getWorkerResult(CompilerSetupBean.class);
+        String tempDir = compilerWorkflowBean.getTempDir();
         String token = project.getToken();
         String programName = project.getProgramName();
         Util.storeGeneratedProgram(tempDir, project.getSourceCode().toString(), token, programName, "." + project.getSourceCodeFileExtension());

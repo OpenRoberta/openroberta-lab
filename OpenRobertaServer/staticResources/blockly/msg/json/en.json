@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2020-02-18 11:09:06.796148",
+		"lastupdated": "2020-02-26 10:22:17.402526",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -854,7 +854,7 @@
 	"DATATABLE_SHARED": "Shared",
 	"DATATABLE_SHARED_WITH": "Shared with",
 	"DATATABLE_CREATED_ON": "Creation date",
-	"DATATABLE_ACTUALIZATION": "Actualization date",
+	"DATATABLE_ACTUALIZATION": "Modification date",
 	"DATATABLE_CONFIGURATION_NAME": "Configuration name",
 	"DATATABLE_PROGRAMS": "programs",
 	"DATATABLE_CONFIGURATIONS": "configurations",
@@ -1311,7 +1311,7 @@
 	"BOB3_READNUMBER_TOOLTIP": "Returns the previously stored number.",
 	"NAO_RECOGNIZEWORD_TOOLTIP": "Returns a word from the given list when recognized by NAO",
 	"POPUP_CONFIRM_CONTINUE": "<br><br><i>Press »OK« to discard your work. Press »Cancel« to stay here and save your work first.</i>",
-	"MENU_SIM_POSE_TOOLTIP": "Move the robot back to it's initial position.",
+	"MENU_SIM_POSE_TOOLTIP": "Move the robot back to its initial position.",
 	"RESEND_ACTIVATION": "resend verification email",
 	"ORA_USER_ACTIVATION_INVALID_URL": "The link is not valid anymore. Please ask for resending your verification mail again",
 	"FLYOUT_VARIABLE_TEXT": "You need a variable? Please declare it first with a click on the + sign at the »start«\u00a0block.",
@@ -1612,6 +1612,8 @@
 	"MOTIONKIT": "MotionKit",
 	"MOTIONKIT_SINGLE_TOOLTIP": "Sets the selected MotionKit motor/motors to the specified direction.",
 	"MOTIONKIT_DUAL_TOOLTIP": "Sets each MotionKit motor to the specified direction.",
+	"MATH_SINGLE_OP_SQUARE": "square",
+	"MATH_SINGLE_TOOLTIP_SQUARE": "Return the number multiplied by itself.",
 	"GPS_TOOLTIP": "Represents a GPS receiver.",
 	"SENSOR_GPS_SENSEBOX": "GPS receiver",
 	"SENSOR_GPS_LATITUDE_GETSAMPLE_TOOLTIP_SENSEBOX": "Returns the latitude in degree.",

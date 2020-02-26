@@ -4,9 +4,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import de.fhg.iais.roberta.bean.CodeGeneratorSetupBean;
-import de.fhg.iais.roberta.bean.CodeGeneratorSetupBean.Builder;
-import de.fhg.iais.roberta.bean.UsedHardwareBean;
 import de.fhg.iais.roberta.bean.UsedMethodBean;
 import de.fhg.iais.roberta.components.Project;
 import de.fhg.iais.roberta.syntax.Phrase;
@@ -15,9 +12,24 @@ import de.fhg.iais.roberta.visitor.collect.ICollectorVisitor;
 
 /**
  * Uses the {@link AbstractUsedMethodCollectorVisitor} to visit the current AST and collect all used methods.
- * Data collected is stored in the {@link UsedHardwareBean}.
+ * Data collected is stored in the {@link UsedMethodBean}.
  */
 public abstract class AbstractUsedMethodCollectorWorker implements IWorker {
+
+    @Override
+    public final void execute(Project project) {
+        UsedMethodBean.Builder builder = new UsedMethodBean.Builder();
+        ICollectorVisitor visitor = this.getVisitor(builder);
+        Iterable<ArrayList<Phrase<Void>>> tree = project.getProgramAst().getTree();
+        for ( Iterable<Phrase<Void>> phrases : tree ) {
+            for ( Phrase<Void> phrase : phrases ) {
+                phrase.accept(visitor);
+            }
+        }
+        builder.addAdditionalEnums(this.getAdditionalMethodEnums());
+        UsedMethodBean bean = builder.build();
+        project.appendWorkerResult(bean);
+    }
 
     /**
      * Returns the appropriate visitor for this worker. Used by subclasses to keep the execute method generic.
@@ -33,25 +45,7 @@ public abstract class AbstractUsedMethodCollectorWorker implements IWorker {
      *
      * @return the additional enums required
      */
-    protected List<Class<? extends Enum<?>>> getAdditionalEnums() {
+    protected List<Class<? extends Enum<?>>> getAdditionalMethodEnums() {
         return Collections.emptyList();
-    }
-
-    @Override
-    public void execute(Project project) {
-        UsedMethodBean.Builder usedMethodBeanBuilder = new UsedMethodBean.Builder();
-        ICollectorVisitor visitor = getVisitor(usedMethodBeanBuilder);
-        ArrayList<ArrayList<Phrase<Void>>> tree = project.getProgramAst().getTree();
-        for ( ArrayList<Phrase<Void>> phrases : tree ) {
-            for ( Phrase<Void> phrase : phrases ) {
-                phrase.accept(visitor);
-            }
-        }
-        CodeGeneratorSetupBean.Builder codeGenSetupBeanBuilder = new CodeGeneratorSetupBean.Builder();
-        codeGenSetupBeanBuilder.setFileExtension(project.getSourceCodeFileExtension());
-        codeGenSetupBeanBuilder.setHelperMethodFile(project.getRobotFactory().getPluginProperties().getStringProperty("robot.helperMethods"));
-        codeGenSetupBeanBuilder.addAdditionalEnums(getAdditionalEnums());
-        codeGenSetupBeanBuilder.addUsedMethods(usedMethodBeanBuilder.build().getUsedMethods());
-        project.addWorkerResult("CodeGeneratorSetup", codeGenSetupBeanBuilder.build());
     }
 }

@@ -15,9 +15,9 @@ public class RaspberryPiTransferWorker implements IWorker {
 
     @Override
     public void execute(Project project) {
-        CompilerSetupBean compilerWorkflowBean = (CompilerSetupBean) project.getWorkerResult("CompilerSetup");
-        final String tempDir = compilerWorkflowBean.getTempDir();
-        final String ip = compilerWorkflowBean.getIp();
+        CompilerSetupBean compilerWorkflowBean = project.getWorkerResult(CompilerSetupBean.class);
+        String tempDir = compilerWorkflowBean.getTempDir();
+        String ip = compilerWorkflowBean.getIp();
         RaspberryPiCommunicator communicator = new RaspberryPiCommunicator(project.getRobotFactory().getPluginProperties());
         try {
             String programLocation = tempDir + project.getToken() + File.separator + project.getProgramName() + File.separator + "source";

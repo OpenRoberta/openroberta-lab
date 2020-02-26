@@ -53,7 +53,7 @@ public class ArduinoCompilerSetupWorker implements IWorker {
                 throw new DbcException("This type of Arduino is not supported");
         }
         CompilerSetupBean compilerWorkflowBean = builder.build();
-        project.addWorkerResult("CompilerSetup", compilerWorkflowBean);
+        project.addWorkerResult(compilerWorkflowBean);
     }
 
 }

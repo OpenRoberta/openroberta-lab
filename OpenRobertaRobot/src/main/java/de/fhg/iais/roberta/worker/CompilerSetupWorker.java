@@ -13,7 +13,7 @@ import de.fhg.iais.roberta.util.PluginProperties;
 public class CompilerSetupWorker implements IWorker {
 
     @Override
-    public void execute(Project project) {
+    public final void execute(Project project) {
         IRobotFactory factory = project.getRobotFactory();
         PluginProperties properties = factory.getPluginProperties();
         CompilerSetupBean.Builder builder = new Builder();
@@ -21,6 +21,6 @@ public class CompilerSetupWorker implements IWorker {
         builder.setCompilerResourcesDir(properties.getCompilerResourceDir());
         builder.setTempDir(properties.getTempDir());
         CompilerSetupBean compilerWorkflowBean = builder.build();
-        project.addWorkerResult("CompilerSetup", compilerWorkflowBean);
+        project.addWorkerResult(compilerWorkflowBean);
     }
 }

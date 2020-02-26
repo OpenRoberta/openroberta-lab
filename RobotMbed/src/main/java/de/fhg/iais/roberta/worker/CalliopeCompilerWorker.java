@@ -27,7 +27,7 @@ public class CalliopeCompilerWorker implements IWorker {
         String robot = project.getRobot();
 
         // TODO: check how to do this sensibly, without having the UsedHardwareWorker beforehand
-        Pair<Key, String> workflowResult = runBuild(project);
+        Pair<Key, String> workflowResult = this.runBuild(project);
         project.setResult(workflowResult.getFirst());
         project.addResultParam("MESSAGE", workflowResult.getSecond());
         if ( workflowResult.getFirst() == Key.COMPILERWORKFLOW_SUCCESS ) {
@@ -43,10 +43,10 @@ public class CalliopeCompilerWorker implements IWorker {
      * @return a pair of Key.COMPILERWORKFLOW_SUCCESS or Key.COMPILERWORKFLOW_ERROR_PROGRAM_COMPILE_FAILED and the cross compiler output
      */
     private Pair<Key, String> runBuild(Project project) {
-        CompilerSetupBean compilerWorkflowBean = (CompilerSetupBean) project.getWorkerResult("CompilerSetup");
-        final String compilerBinDir = compilerWorkflowBean.getCompilerBinDir();
-        final String compilerResourcesDir = compilerWorkflowBean.getCompilerResourcesDir();
-        final String tempDir = compilerWorkflowBean.getTempDir();
+        CompilerSetupBean compilerWorkflowBean = project.getWorkerResult(CompilerSetupBean.class);
+        String compilerBinDir = compilerWorkflowBean.getCompilerBinDir();
+        String compilerResourcesDir = compilerWorkflowBean.getCompilerResourcesDir();
+        String tempDir = compilerWorkflowBean.getTempDir();
         Util
             .storeGeneratedProgram(
                 tempDir,

@@ -9,7 +9,7 @@ public class MathRandomIntTest extends NxtAstTest {
 
     @Test
     public void Test() throws Exception {
-        final String a = "RandomIntegerInRange(1,100)";
+        final String a = "Random(100-1)+1";
 
         UnitTestHelper.checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, a, "/syntax/math/math_random_int.xml", false);
     }

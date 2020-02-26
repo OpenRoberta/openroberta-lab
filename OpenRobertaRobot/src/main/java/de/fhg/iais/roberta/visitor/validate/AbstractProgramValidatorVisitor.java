@@ -2,6 +2,9 @@ package de.fhg.iais.roberta.visitor.validate;
 
 import java.util.ArrayList;
 
+import com.google.common.collect.ClassToInstanceMap;
+
+import de.fhg.iais.roberta.bean.IProjectBean;
 import de.fhg.iais.roberta.bean.UsedHardwareBean;
 import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.components.ConfigurationComponent;
@@ -87,8 +90,8 @@ public abstract class AbstractProgramValidatorVisitor extends AbstractCollectorV
     protected ConfigurationAst robotConfiguration;
     public static final double DOUBLE_EPS = 1E-7;
 
-    public AbstractProgramValidatorVisitor(UsedHardwareBean.Builder builder, ConfigurationAst robotConfiguration) {
-        super(builder);
+    public AbstractProgramValidatorVisitor(ConfigurationAst robotConfiguration, ClassToInstanceMap<IProjectBean.IBuilder<?>> beanBuilders) {
+        super(beanBuilders);
         this.robotConfiguration = robotConfiguration;
     }
 
@@ -111,7 +114,7 @@ public abstract class AbstractProgramValidatorVisitor extends AbstractCollectorV
     @Override
     public Void visitVar(Var<Void> var) {
         String name = var.getValue();
-        if ( !this.builder.containsDeclaredVariable(name) ) {
+        if ( !this.getBuilder(UsedHardwareBean.Builder.class).containsDeclaredVariable(name) ) {
             var.addInfo(NepoInfo.error("VARIABLE_USED_BEFORE_DECLARATION"));
             this.errorCount++;
         }

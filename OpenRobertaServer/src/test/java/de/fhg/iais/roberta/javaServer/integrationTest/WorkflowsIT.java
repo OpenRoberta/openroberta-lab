@@ -13,7 +13,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.json.JSONObject;
 import org.junit.After;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
@@ -114,12 +113,11 @@ public class WorkflowsIT {
      * output) - the showsource workflow is always run first
      */
 
-    @Ignore
     @Test
     public void testSingleWorkflow() throws Exception {
-        final String robotName = "unowifirev2";
+        final String robotName = "nxt";
         String workflowName = "compile";
-        String programFileName = "sensors";
+        String programFileName = "sensors_default";
         String robotDir = robots.getJSONObject(robotName).getString("dir");
         String fullResource = resourceBase + robotDir + "/allBlocks/" + programFileName + ".xml";
         String xmlText = Util.readResourceContent(fullResource);

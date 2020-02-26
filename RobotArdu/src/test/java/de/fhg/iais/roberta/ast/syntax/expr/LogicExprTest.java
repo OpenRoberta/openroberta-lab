@@ -5,6 +5,7 @@ import org.junit.Test;
 import de.fhg.iais.roberta.syntax.codegen.arduino.arduino.ArduinoAstTest;
 import de.fhg.iais.roberta.util.test.UnitTestHelper;
 import de.fhg.iais.roberta.worker.codegen.ArduinoCxxGeneratorWorker;
+import de.fhg.iais.roberta.worker.collect.ArduinoUsedHardwareCollectorWorker;
 
 public class LogicExprTest extends ArduinoAstTest {
 
@@ -21,20 +22,20 @@ public class LogicExprTest extends ArduinoAstTest {
                 + "((5 + 7)==(5 + 7) )>= (((5 + 7)== (5 + 7)) && ((5 + 7) <= (5 + 7)))\n"
                 + "!((5 + 7)==(5 + 7) )== true";
 
-        UnitTestHelper.checkWorkers(testFactory, a, "/syntax/expr/logic_expr.xml", new ArduinoCxxGeneratorWorker());
+        UnitTestHelper.checkWorkers(testFactory, a, "/syntax/expr/logic_expr.xml", new ArduinoUsedHardwareCollectorWorker(), new ArduinoCxxGeneratorWorker());
     }
 
     @Test
     public void logicNegate() throws Exception {
         final String a = "\n!((0!= 0)&&false)";
 
-        UnitTestHelper.checkWorkers(testFactory, a, "/syntax/expr/logic_negate.xml", new ArduinoCxxGeneratorWorker());
+        UnitTestHelper.checkWorkers(testFactory, a, "/syntax/expr/logic_negate.xml", new ArduinoUsedHardwareCollectorWorker(), new ArduinoCxxGeneratorWorker());
     }
 
     @Test
     public void logicNull() throws Exception {
         final String a = "\nNULL";
 
-        UnitTestHelper.checkWorkers(testFactory, a, "/syntax/expr/logic_null.xml", new ArduinoCxxGeneratorWorker());
+        UnitTestHelper.checkWorkers(testFactory, a, "/syntax/expr/logic_null.xml", new ArduinoUsedHardwareCollectorWorker(), new ArduinoCxxGeneratorWorker());
     }
 }
