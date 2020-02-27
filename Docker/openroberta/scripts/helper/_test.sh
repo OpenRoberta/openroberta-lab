@@ -2,7 +2,7 @@
 
 CMD="$1"; shift
 
-echo '******************** '" test command ${CMD} executed at $DATE"' ********************'
+echo "test command ${CMD} executed at $DATE"
 case "$CMD" in
     lock)   echo 'aquire a lock for 60 sec'
             ( flock -w 60 9

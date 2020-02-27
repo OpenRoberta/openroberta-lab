@@ -3,7 +3,7 @@
 # - threads
 # - http sessions
 # - db sessions
-# Usage: 'showResources' with the following sh variables, which must be EXPORTed:
+# Usage: with the following sh variables, which must be EXPORTed:
 # SERVER_NAME: name of a server, as test, dev, dev1...dev9. Used to find both URL and PID. REQUIRED.
 # LOGFILE: every 10 seconds the resource usage data is appended to this file. DEFAULT: $BASE_DIR/logs/server-resources.log
 # LOWERLIMIT: if the number of open file descriptors is less than this value, nothing is logged. DEFAULT: 100

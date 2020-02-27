@@ -33,7 +33,12 @@ fi
 source ${BASE_DIR}/decl.sh
 source ${SCRIPT_HELPER}/__defs.sh
 
-echo "$STAR_DATE_STAR"
+case "$CMD" in
+    auto-deploy)        : ;;
+    show-activity-once) : ;;
+    *)            echo "$STAR_DATE_STAR" ;;
+esac
+
 [ "$DEBUG" = 'true' ] && echo "$DATE: executing command '$CMD'"
 case "$CMD" in
     help)         [ "$QUIET" == true ] && source ${SCRIPT_HELPER}/_help.sh ;;
@@ -108,15 +113,6 @@ case "$CMD" in
                   docker volume rm $(docker volume ls -q -f dangling=true)
                   headerMessage "remove unused containers, networks, images"
                   docker system prune --force ;;
-    show-server)  source ${SCRIPT_HELPER}/_serverStateOverview.sh ;;
-    show-resources) export SERVER_NAME=$1; shift
-                  export LOGFILE=$1; shift
-                  export LOWERLIMIT=$1; shift
-                  export UPPERLIMIT=$1; shift
-                  export SERVERURL=$1; shift
-                  export DURATION=$1; shift
-                  export PID=$1; shift
-                  source ${SCRIPT_HELPER}/_showResources.sh ;;
     monthly-stat) SERVER_NAME=$1; shift; MONTH=$1; shift
                   source ${SCRIPT_HELPER}/_monthlyStat.sh ;;
     alive)        case $ALIVE_ACTIVE in
@@ -138,8 +134,21 @@ case "$CMD" in
                       shift
                   done
                   source ${SCRIPT_HELPER}/_alive.sh ;;
-    test)         headerMessage "TEST MODE START"
-                  source ${SCRIPT_HELPER}/_test.sh
-                  headerMessage "TEST MODE TERMINATED" ;;
-    *)            echo "invalid command: '$CMD'" ;;
+
+    show-server)         source ${SCRIPT_HELPER}/_serverStateOverview.sh ;;
+    show-resources)      export SERVER_NAME=$1; shift
+                         export LOGFILE=$1; shift
+                         export LOWERLIMIT=$1; shift
+                         export UPPERLIMIT=$1; shift
+                         export SERVERURL=$1; shift
+                         export DURATION=$1; shift
+                         export PID=$1; shift
+                         source ${SCRIPT_HELPER}/_showResources.sh ;;
+    show-activity-once)  SERVER_NAME=$1; shift
+                         LOGFILE=$1; shift
+                         SERVERURL=$1; shift
+                         source ${SCRIPT_HELPER}/_showActivityOnce.sh ;;
+
+    test)                source ${SCRIPT_HELPER}/_test.sh ;;
+    *)                   echo "invalid command: '$CMD'" ;;
 esac
