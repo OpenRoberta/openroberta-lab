@@ -12,10 +12,7 @@
 // compilation errors #include "NEPODefs.h" // contains NEPO declarations for the NXC NXT API resources
 
 task main() {
-    SetSensor(S1, SENSOR_TOUCH);
-    SetSensor(S2, SENSOR_SOUND);
-    SetSensor(S3, SENSOR_LIGHT);
-    SetSensor(S4, SENSOR_LOWSPEED);
-    RotateMotorEx(OUT_BC, MIN(MAX(30, -100), 100), (20 * 360 / (M_PI * WHEELDIAMETER)), 0, true, true);
+    RotateMotorEx(OUT_BC, MIN(MAX(30, -100), 100), (20 * 360 / (PI * WHEELDIAMETER)), 0, true, true);
     Wait(1);
+    BoolOut(0, (MAXLINES - 1) * MAXLINES, true);
 }
