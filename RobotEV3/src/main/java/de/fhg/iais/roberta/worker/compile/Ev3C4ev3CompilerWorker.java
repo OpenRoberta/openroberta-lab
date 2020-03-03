@@ -43,27 +43,25 @@ public class Ev3C4ev3CompilerWorker implements IWorker {
      * @return a pair of Key.COMPILERWORKFLOW_SUCCESS or Key.COMPILERWORKFLOW_ERROR_PROGRAM_COMPILE_FAILED and the cross compiler output
      */
     private Pair<Key, String> runBuild(Project project, C4Ev3SourceCompiler compiler, Uf2Builder uf2Builder) {
-        CompilerSetupBean compilerWorkflowBean = (CompilerSetupBean) project.getWorkerResult(CompilerSetupBean.class);
+        CompilerSetupBean compilerWorkflowBean = project.getWorkerResult(CompilerSetupBean.class);
         String tempDir = compilerWorkflowBean.getTempDir();
         String token = project.getToken();
         String programName = project.getProgramName();
         Util.storeGeneratedProgram(tempDir, project.getSourceCode().toString(), token, programName, "." + project.getSourceCodeFileExtension());
         String sourceCodeFileName = tempDir + token + "/" + programName + "/source/" + programName + "." + project.getSourceCodeFileExtension();
         String binaryFileName = tempDir + token + "/" + programName + "/target/" + programName + ".elf";
-        // TODO: compiler output
-        boolean compilationSuccess = compiler.compile(sourceCodeFileName, binaryFileName);
-        if ( !compilationSuccess ) {
-            return Pair.of(Key.COMPILERWORKFLOW_ERROR_PROGRAM_COMPILE_FAILED, "");
+        Pair<Boolean, String> result = compiler.compile(sourceCodeFileName, binaryFileName);
+        Key resultKey = result.getFirst() ? Key.COMPILERWORKFLOW_SUCCESS : Key.COMPILERWORKFLOW_ERROR_PROGRAM_COMPILE_FAILED;
+        if ( result.getFirst() ) {
+            try {
+                Uf2FileContainer uf2 = uf2Builder.createUf2File(programName, binaryFileName);
+                project.setCompiledHex(uf2.toBase64());
+                resultKey = Key.COMPILERWORKFLOW_SUCCESS;
+            } catch ( IOException e ) {
+                LOG.error("Could not create uf2", e);
+                resultKey = Key.COMPILERWORKFLOW_ERROR_PROGRAM_COMPILE_FAILED;
+            }
         }
-        Uf2FileContainer uf2;
-        try {
-            uf2 = uf2Builder.createUf2File(programName, binaryFileName);
-        } catch ( IOException e ) {
-            LOG.error("Could not create uf2", e);
-            return Pair.of(Key.COMPILERWORKFLOW_ERROR_PROGRAM_COMPILE_FAILED, "");
-        }
-        project.setCompiledHex(uf2.toBase64());
-        LOG.info("uf2 for program {} generated successfully", programName);
-        return Pair.of(Key.COMPILERWORKFLOW_SUCCESS, "");
+        return Pair.of(resultKey, result.getSecond());
     }
 }

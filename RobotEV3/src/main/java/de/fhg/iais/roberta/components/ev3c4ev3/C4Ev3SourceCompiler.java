@@ -1,11 +1,11 @@
 package de.fhg.iais.roberta.components.ev3c4ev3;
 
-import java.io.IOException;
-
 import org.apache.commons.lang3.SystemUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import de.fhg.iais.roberta.codegen.AbstractCompilerWorkflow;
+import de.fhg.iais.roberta.util.Pair;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
 public class C4Ev3SourceCompiler {
@@ -48,9 +48,9 @@ public class C4Ev3SourceCompiler {
         return "lib";
     }
 
-    public boolean compile(String sourceCodeFileName, String binaryOutputFile) {
+    public Pair<Boolean, String> compile(String sourceCodeFileName, String binaryOutputFile) {
         String[] compilerArguments = getCompilerArguments(compilerExecutableFileName, sourceCodeFileName, binaryOutputFile);
-        return executeCompilation(compilerArguments);
+        return AbstractCompilerWorkflow.runCrossCompiler(compilerArguments);
     }
 
     private String[] getCompilerArguments(String compilerExecutableFileName, String sourceCodeFileName, String binaryOutputFile) {
@@ -78,29 +78,5 @@ public class C4Ev3SourceCompiler {
             "-Wl,--gc-sections",
             "-s",
         };
-    }
-
-    private boolean executeCompilation(String[] compilerArguments) {
-        ProcessBuilder processBuilder = getProcessBuilder(compilerArguments);
-        try {
-            final Process p = processBuilder.start();
-            final int exitCode = p.waitFor();
-            if ( exitCode != 0 ) {
-                LOG.error("c4ev3 compiler exited with non zero code: " + exitCode);
-                return false;
-            }
-            return true;
-        } catch ( IOException | InterruptedException e ) {
-            LOG.error("c4ev3 compilation failed", e);
-            return false;
-        }
-    }
-
-    private ProcessBuilder getProcessBuilder(String[] compilerArguments) {
-        ProcessBuilder processBuilder = new ProcessBuilder(compilerArguments);
-        processBuilder.redirectInput(ProcessBuilder.Redirect.INHERIT);
-        processBuilder.redirectOutput(ProcessBuilder.Redirect.INHERIT);
-        processBuilder.redirectError(ProcessBuilder.Redirect.INHERIT);
-        return processBuilder;
     }
 }
