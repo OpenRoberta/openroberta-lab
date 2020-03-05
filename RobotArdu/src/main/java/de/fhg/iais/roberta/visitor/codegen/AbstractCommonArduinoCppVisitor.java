@@ -1,6 +1,5 @@
 package de.fhg.iais.roberta.visitor.codegen;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.google.common.collect.ClassToInstanceMap;
@@ -34,7 +33,7 @@ public abstract class AbstractCommonArduinoCppVisitor extends AbstractCppVisitor
 
     protected ConfigurationAst configuration;
 
-    protected AbstractCommonArduinoCppVisitor(List<ArrayList<Phrase<Void>>> programPhrases, ConfigurationAst configuration, ClassToInstanceMap<IProjectBean> beans) {
+    protected AbstractCommonArduinoCppVisitor(List<List<Phrase<Void>>> programPhrases, ConfigurationAst configuration, ClassToInstanceMap<IProjectBean> beans) {
         super(programPhrases, beans);
         this.configuration = configuration;
     }

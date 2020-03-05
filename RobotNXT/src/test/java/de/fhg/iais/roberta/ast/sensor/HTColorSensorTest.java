@@ -1,6 +1,5 @@
 package de.fhg.iais.roberta.ast.sensor;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Assert;
@@ -27,7 +26,7 @@ public class HTColorSensorTest extends NxtAstTest {
 
     @Test
     public void getMode() throws Exception {
-        List<ArrayList<Phrase<Void>>> forest = UnitTestHelper.getAst(testFactory, "/ast/sensors/sensor_setHTColor.xml");
+        List<List<Phrase<Void>>> forest = UnitTestHelper.getProgramAst(testFactory, "/ast/sensors/sensor_setHTColor.xml");
 
         HTColorSensor<Void> cs0 = (HTColorSensor<Void>) forest.get(0).get(1);
         HTColorSensor<Void> cs1 = (HTColorSensor<Void>) forest.get(1).get(1);
@@ -42,7 +41,7 @@ public class HTColorSensorTest extends NxtAstTest {
 
     @Test
     public void getPort() throws Exception {
-        List<ArrayList<Phrase<Void>>> forest = UnitTestHelper.getAst(testFactory, "/ast/sensors/sensor_setHTColor.xml");
+        List<List<Phrase<Void>>> forest = UnitTestHelper.getProgramAst(testFactory, "/ast/sensors/sensor_setHTColor.xml");
 
         HTColorSensor<Void> cs0 = (HTColorSensor<Void>) forest.get(0).get(1);
         HTColorSensor<Void> cs1 = (HTColorSensor<Void>) forest.get(1).get(1);

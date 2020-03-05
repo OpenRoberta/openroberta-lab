@@ -75,7 +75,7 @@ abstract public class AbstractJaxb2Ast<V> {
     /**
      * @return abstract syntax tree generated from JAXB objects.
      */
-    public ArrayList<ArrayList<Phrase<V>>> getTree() {
+    public List<List<Phrase<V>>> getTree() {
         return this.data.getTree();
     }
 

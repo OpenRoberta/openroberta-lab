@@ -1,6 +1,5 @@
 package de.fhg.iais.roberta.visitor.lang.codegen.prog;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Iterator;
@@ -70,7 +69,7 @@ public abstract class AbstractCppVisitor extends AbstractLanguageVisitor {
     /**
      * initialize the cpp code generator visitor.
      */
-    protected AbstractCppVisitor(List<ArrayList<Phrase<Void>>> programPhrases, ClassToInstanceMap<IProjectBean> beans) {
+    protected AbstractCppVisitor(List<List<Phrase<Void>>> programPhrases, ClassToInstanceMap<IProjectBean> beans) {
         super(programPhrases, beans);
     }
 

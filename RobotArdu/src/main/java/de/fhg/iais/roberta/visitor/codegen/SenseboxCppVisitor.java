@@ -1,6 +1,5 @@
 package de.fhg.iais.roberta.visitor.codegen;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -61,7 +60,7 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
     private final String password;
 
     public SenseboxCppVisitor(
-        List<ArrayList<Phrase<Void>>> programPhrases,
+        List<List<Phrase<Void>>> programPhrases,
         ConfigurationAst brickConfiguration,
         String SSID,
         String password,

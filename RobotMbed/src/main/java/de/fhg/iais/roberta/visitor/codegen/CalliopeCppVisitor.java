@@ -1,6 +1,5 @@
 package de.fhg.iais.roberta.visitor.codegen;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.text.WordUtils;
@@ -109,7 +108,7 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
      * @param robotConfiguration hardware configuration of the brick
      * @param programPhrases to generate the code from
      */
-    public CalliopeCppVisitor(List<ArrayList<Phrase<Void>>> programPhrases, ConfigurationAst robotConfiguration, ClassToInstanceMap<IProjectBean> beans) {
+    public CalliopeCppVisitor(List<List<Phrase<Void>>> programPhrases, ConfigurationAst robotConfiguration, ClassToInstanceMap<IProjectBean> beans) {
         super(programPhrases, beans);
         this.robotConfiguration = robotConfiguration;
     }

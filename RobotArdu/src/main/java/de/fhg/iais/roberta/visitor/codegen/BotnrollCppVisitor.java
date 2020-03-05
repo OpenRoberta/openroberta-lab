@@ -1,6 +1,5 @@
 package de.fhg.iais.roberta.visitor.codegen;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.google.common.collect.ClassToInstanceMap;
@@ -55,7 +54,7 @@ public final class BotnrollCppVisitor extends AbstractCommonArduinoCppVisitor im
      * @param phrases to generate the code from
      */
     public BotnrollCppVisitor(
-        List<ArrayList<Phrase<Void>>> phrases,
+        List<List<Phrase<Void>>> phrases,
         ConfigurationAst brickConfiguration,
         ClassToInstanceMap<IProjectBean> beans) {
         super(phrases, brickConfiguration, beans);

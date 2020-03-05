@@ -1,6 +1,6 @@
 package de.fhg.iais.roberta.ast.sensor;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -22,7 +22,7 @@ public class GyroSensorTest extends AstTest {
 
     @Test
     public void getMode() throws Exception {
-        ArrayList<ArrayList<Phrase<Void>>> forest = UnitTestHelper.getAst(testFactory, "/ast/sensors/sensor_setGyro.xml");
+        List<List<Phrase<Void>>> forest = UnitTestHelper.getProgramAst(testFactory, "/ast/sensors/sensor_setGyro.xml");
 
         GyroSensor<Void> cs = (GyroSensor<Void>) forest.get(0).get(1);
         GyroSensor<Void> cs1 = (GyroSensor<Void>) forest.get(1).get(1);
@@ -33,7 +33,7 @@ public class GyroSensorTest extends AstTest {
 
     @Test
     public void getPort() throws Exception {
-        ArrayList<ArrayList<Phrase<Void>>> forest = UnitTestHelper.getAst(testFactory, "/ast/sensors/sensor_setGyro.xml");
+        List<List<Phrase<Void>>> forest = UnitTestHelper.getProgramAst(testFactory, "/ast/sensors/sensor_setGyro.xml");
 
         GyroSensor<Void> cs = (GyroSensor<Void>) forest.get(0).get(1);
         GyroSensor<Void> cs1 = (GyroSensor<Void>) forest.get(1).get(1);

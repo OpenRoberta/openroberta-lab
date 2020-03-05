@@ -1,5 +1,11 @@
 package de.fhg.iais.roberta.visitor.lang.codegen.prog;
 
+import static de.fhg.iais.roberta.mode.general.ListElementOperations.GET;
+import static de.fhg.iais.roberta.mode.general.ListElementOperations.GET_REMOVE;
+import static de.fhg.iais.roberta.mode.general.ListElementOperations.INSERT;
+import static de.fhg.iais.roberta.mode.general.ListElementOperations.REMOVE;
+import static de.fhg.iais.roberta.mode.general.ListElementOperations.SET;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -63,11 +69,6 @@ import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.visitor.IVisitor;
 import de.fhg.iais.roberta.visitor.lang.codegen.AbstractLanguageVisitor;
-import static de.fhg.iais.roberta.mode.general.ListElementOperations.GET;
-import static de.fhg.iais.roberta.mode.general.ListElementOperations.GET_REMOVE;
-import static de.fhg.iais.roberta.mode.general.ListElementOperations.INSERT;
-import static de.fhg.iais.roberta.mode.general.ListElementOperations.REMOVE;
-import static de.fhg.iais.roberta.mode.general.ListElementOperations.SET;
 
 /**
  * This class is implementing {@link IVisitor}. All methods are implemented and they append a human-readable Python code representation of a phrase to a
@@ -83,7 +84,7 @@ public abstract class AbstractPythonVisitor extends AbstractLanguageVisitor {
      *
      * @param programPhrases to generate the code from
      */
-    protected AbstractPythonVisitor(List<ArrayList<Phrase<Void>>> programPhrases, ClassToInstanceMap<IProjectBean> beans) {
+    protected AbstractPythonVisitor(List<List<Phrase<Void>>> programPhrases, ClassToInstanceMap<IProjectBean> beans) {
         super(programPhrases, beans);
     }
 

@@ -38,7 +38,7 @@ public class IfStmtTest extends AstTest {
     @Test
     public void getExpr() throws Exception {
 
-        IfStmt<Void> ifStmt = (IfStmt<Void>) UnitTestHelper.getAst(testFactory, "/ast/control/if_stmt1.xml").get(0).get(1);
+        IfStmt<Void> ifStmt = (IfStmt<Void>) UnitTestHelper.getProgramAst(testFactory, "/ast/control/if_stmt1.xml").get(0).get(1);
 
         String a = "[Binary [EQ, EmptyExpr [defVal=NUMBER_INT], EmptyExpr [defVal=NUMBER_INT]]]";
         Assert.assertEquals(a, ifStmt.getExpr().toString());
@@ -46,7 +46,7 @@ public class IfStmtTest extends AstTest {
 
     @Test
     public void getThen() throws Exception {
-        IfStmt<Void> ifStmt = (IfStmt<Void>) UnitTestHelper.getAst(testFactory, "/ast/control/if_stmt1.xml").get(0).get(1);
+        IfStmt<Void> ifStmt = (IfStmt<Void>) UnitTestHelper.getProgramAst(testFactory, "/ast/control/if_stmt1.xml").get(0).get(1);
 
         String a = "[\nexprStmt Binary [MATH_CHANGE, Var [variablenName], NumConst [1]]]";
         Assert.assertEquals(a, ifStmt.getThenList().toString());
@@ -54,7 +54,7 @@ public class IfStmtTest extends AstTest {
 
     @Test
     public void getElse() throws Exception {
-        IfStmt<Void> ifStmt = (IfStmt<Void>) UnitTestHelper.getAst(testFactory, "/ast/control/if_stmt1.xml").get(0).get(1);
+        IfStmt<Void> ifStmt = (IfStmt<Void>) UnitTestHelper.getProgramAst(testFactory, "/ast/control/if_stmt1.xml").get(0).get(1);
 
         String a = "\nSensorStmt EncoderSensor [A, RESET, NO_SLOT]";
         Assert.assertEquals(a, ifStmt.getElseList().toString());

@@ -1,6 +1,6 @@
 package de.fhg.iais.roberta.visitor.collect;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import com.google.common.collect.ClassToInstanceMap;
 
@@ -34,7 +34,7 @@ import de.fhg.iais.roberta.visitor.hardware.IArduinoVisitor;
  */
 public final class SenseboxUsedHardwareCollectorVisitor extends AbstractUsedHardwareCollectorVisitor implements IArduinoVisitor<Void> {
 
-    public SenseboxUsedHardwareCollectorVisitor(ArrayList<ArrayList<Phrase<Void>>> phrasesSet, ClassToInstanceMap<IProjectBean.IBuilder<?>> beanBuilders) {
+    public SenseboxUsedHardwareCollectorVisitor(List<List<Phrase<Void>>> phrasesSet, ClassToInstanceMap<IProjectBean.IBuilder<?>> beanBuilders) {
         super(null, beanBuilders);
     }
 

@@ -1,6 +1,5 @@
 package de.fhg.iais.roberta.worker;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.google.common.collect.ClassToInstanceMap;
@@ -25,7 +24,7 @@ public abstract class AbstractValidatorWorker implements IWorker {
     public void execute(Project project) {
         UsedHardwareBean.Builder builder = new UsedHardwareBean.Builder();
         AbstractProgramValidatorVisitor visitor = this.getVisitor(project, ImmutableClassToInstanceMap.of(UsedHardwareBean.Builder.class, builder));
-        List<ArrayList<Phrase<Void>>> tree = project.getProgramAst().getTree();
+        List<List<Phrase<Void>>> tree = project.getProgramAst().getTree();
         // workaround: because methods in the tree may use global variables before the main task is
         // reached within the tree, the variables may not exist yet and show up as not declared
         collectGlobalVariables(tree, visitor);
@@ -52,7 +51,7 @@ public abstract class AbstractValidatorWorker implements IWorker {
      */
     protected abstract AbstractProgramValidatorVisitor getVisitor(Project project, ClassToInstanceMap<IProjectBean.IBuilder<?>> beanBuilders);
 
-    private void collectGlobalVariables(Iterable<ArrayList<Phrase<Void>>> phrasesSet, IVisitor<Void> visitor) {
+    private void collectGlobalVariables(Iterable<List<Phrase<Void>>> phrasesSet, IVisitor<Void> visitor) {
         for ( List<Phrase<Void>> phrases : phrasesSet ) {
             Phrase<Void> phrase = phrases.get(1);
             if ( phrase.getKind().getName().equals("MAIN_TASK") ) {

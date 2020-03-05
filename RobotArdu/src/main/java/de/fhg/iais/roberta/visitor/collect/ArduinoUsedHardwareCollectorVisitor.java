@@ -1,6 +1,6 @@
 package de.fhg.iais.roberta.visitor.collect;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import com.google.common.collect.ClassToInstanceMap;
 
@@ -27,7 +27,7 @@ import de.fhg.iais.roberta.visitor.hardware.IArduinoVisitor;
 public final class ArduinoUsedHardwareCollectorVisitor extends AbstractUsedHardwareCollectorVisitor implements IArduinoVisitor<Void> {
 
     public ArduinoUsedHardwareCollectorVisitor(
-        ArrayList<ArrayList<Phrase<Void>>> phrasesSet,
+        List<List<Phrase<Void>>> phrasesSet,
         ConfigurationAst robotConfiguration,
         ClassToInstanceMap<IProjectBean.IBuilder<?>> beanBuilders) {
         super(robotConfiguration, beanBuilders);

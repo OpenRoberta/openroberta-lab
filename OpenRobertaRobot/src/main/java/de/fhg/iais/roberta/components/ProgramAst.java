@@ -1,16 +1,16 @@
 package de.fhg.iais.roberta.components;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.visitor.IVisitor;
 
 public class ProgramAst<V> {
     private String robotType = "";
     private String xmlVersion = "";
     private String description = "";
     private String tags = "";
-    private ArrayList<ArrayList<Phrase<V>>> forests = new ArrayList<>();
+    private List<List<Phrase<V>>> forests = new ArrayList<>();
 
     public String getRobotType() {
         return this.robotType;
@@ -44,19 +44,11 @@ public class ProgramAst<V> {
         this.tags = tags;
     }
 
-    public ArrayList<ArrayList<Phrase<V>>> getTree() {
+    public List<List<Phrase<V>>> getTree() {
         return this.forests;
     }
 
-    public void setTree(ArrayList<ArrayList<Phrase<V>>> tree) {
+    public void setTree(List<List<Phrase<V>>> tree) {
         this.forests = tree;
-    }
-
-    public void accept(IVisitor<V> visitor) {
-        for ( ArrayList<Phrase<V>> forest : this.forests ) {
-            for ( Phrase<V> tree : forest ) {
-                tree.accept(visitor);
-            }
-        }
     }
 }

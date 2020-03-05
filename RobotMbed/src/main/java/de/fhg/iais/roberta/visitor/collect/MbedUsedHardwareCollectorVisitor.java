@@ -1,6 +1,6 @@
 package de.fhg.iais.roberta.visitor.collect;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import com.google.common.collect.ClassToInstanceMap;
 
@@ -66,7 +66,7 @@ import de.fhg.iais.roberta.visitor.hardware.IMbedVisitor;
 public final class MbedUsedHardwareCollectorVisitor extends AbstractUsedHardwareCollectorVisitor implements IMbedVisitor<Void> {
 
     public MbedUsedHardwareCollectorVisitor(
-        ArrayList<ArrayList<Phrase<Void>>> phrasesSet,
+        List<List<Phrase<Void>>> phrasesSet,
         ConfigurationAst robotConfiguration,
         ClassToInstanceMap<IProjectBean.IBuilder<?>> beanBuilders) {
         super(robotConfiguration, beanBuilders);

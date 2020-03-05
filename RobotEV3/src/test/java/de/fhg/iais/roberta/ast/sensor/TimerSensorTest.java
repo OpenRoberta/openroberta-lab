@@ -1,6 +1,6 @@
 package de.fhg.iais.roberta.ast.sensor;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -15,7 +15,7 @@ public class TimerSensorTest extends AstTest {
 
     @Test
     public void getMode() throws Exception {
-        ArrayList<ArrayList<Phrase<Void>>> forest = UnitTestHelper.getAst(testFactory, "/ast/sensors/sensor_resetTimer.xml");
+        List<List<Phrase<Void>>> forest = UnitTestHelper.getProgramAst(testFactory, "/ast/sensors/sensor_resetTimer.xml");
 
         TimerSensor<Void> cs = (TimerSensor<Void>) forest.get(0).get(1);
 
@@ -24,7 +24,7 @@ public class TimerSensorTest extends AstTest {
 
     @Test
     public void getTimer() throws Exception {
-        ArrayList<ArrayList<Phrase<Void>>> forest = UnitTestHelper.getAst(testFactory, "/ast/sensors/sensor_resetTimer.xml");
+        List<List<Phrase<Void>>> forest = UnitTestHelper.getProgramAst(testFactory, "/ast/sensors/sensor_resetTimer.xml");
 
         TimerSensor<Void> cs = (TimerSensor<Void>) forest.get(0).get(1);
 

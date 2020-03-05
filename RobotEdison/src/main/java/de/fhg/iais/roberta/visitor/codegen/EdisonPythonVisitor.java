@@ -1,6 +1,7 @@
 package de.fhg.iais.roberta.visitor.codegen;
 
-import java.util.ArrayList;
+import static de.fhg.iais.roberta.syntax.lang.functions.FunctionNames.SUM;
+
 import java.util.List;
 
 import com.google.common.collect.ClassToInstanceMap;
@@ -47,7 +48,6 @@ import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.visitor.collect.EdisonMethods;
 import de.fhg.iais.roberta.visitor.hardware.IEdisonVisitor;
 import de.fhg.iais.roberta.visitor.lang.codegen.prog.AbstractPythonVisitor;
-import static de.fhg.iais.roberta.syntax.lang.functions.FunctionNames.SUM;
 
 /**
  * This class visits the Blockly blocks for the Edison robot and translates them into EdPy Python2 code (https://github.com/Bdanilko/EdPy)
@@ -64,7 +64,7 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
      *
      * @param programPhrases to generate the code from
      */
-    public EdisonPythonVisitor(List<ArrayList<Phrase<Void>>> programPhrases, ClassToInstanceMap<IProjectBean> beans) {
+    public EdisonPythonVisitor(List<List<Phrase<Void>>> programPhrases, ClassToInstanceMap<IProjectBean> beans) {
         super(programPhrases, beans);
     }
 

@@ -1,6 +1,5 @@
 package de.fhg.iais.roberta.visitor.codegen;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.google.common.collect.ClassToInstanceMap;
@@ -66,7 +65,7 @@ public final class MicrobitPythonVisitor extends AbstractPythonVisitor implement
      *
      * @param programPhrases to generate the code from
      */
-    public MicrobitPythonVisitor(List<ArrayList<Phrase<Void>>> programPhrases, ClassToInstanceMap<IProjectBean> beans) {
+    public MicrobitPythonVisitor(List<List<Phrase<Void>>> programPhrases, ClassToInstanceMap<IProjectBean> beans) {
         super(programPhrases, beans);
     }
 

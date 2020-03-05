@@ -1,6 +1,5 @@
 package de.fhg.iais.roberta.visitor.lang.codegen.prog;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Iterator;
@@ -76,7 +75,7 @@ public abstract class AbstractJavaVisitor extends AbstractLanguageVisitor {
      * @param programPhrases to generate the code from
      * @param programName name of the program
      */
-    protected AbstractJavaVisitor(List<ArrayList<Phrase<Void>>> programPhrases, String programName, ClassToInstanceMap<IProjectBean> beans) {
+    protected AbstractJavaVisitor(List<List<Phrase<Void>>> programPhrases, String programName, ClassToInstanceMap<IProjectBean> beans) {
         super(programPhrases, beans);
         this.programName = programName;
     }

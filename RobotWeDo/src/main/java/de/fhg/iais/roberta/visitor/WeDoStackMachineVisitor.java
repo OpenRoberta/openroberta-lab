@@ -1,6 +1,6 @@
 package de.fhg.iais.roberta.visitor;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import org.json.JSONObject;
 
@@ -30,7 +30,7 @@ import de.fhg.iais.roberta.visitor.lang.codegen.AbstractStackMachineVisitor;
 
 public final class WeDoStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> implements IWeDoVisitor<V> {
 
-    public WeDoStackMachineVisitor(UsedHardwareBean usedHardwareBean, ConfigurationAst configuration, ArrayList<ArrayList<Phrase<Void>>> phrases) {
+    public WeDoStackMachineVisitor(UsedHardwareBean usedHardwareBean, ConfigurationAst configuration, List<List<Phrase<Void>>> phrases) {
         super(configuration);
     }
 

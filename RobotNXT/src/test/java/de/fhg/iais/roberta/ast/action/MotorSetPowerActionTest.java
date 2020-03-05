@@ -1,6 +1,6 @@
 package de.fhg.iais.roberta.ast.action;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -20,14 +20,14 @@ public class MotorSetPowerActionTest extends NxtAstTest {
 
     @Test
     public void getPort() throws Exception {
-        ArrayList<ArrayList<Phrase<Void>>> forest = UnitTestHelper.getAst(testFactory, "/ast/actions/action_MotorSetPower.xml");
+        List<List<Phrase<Void>>> forest = UnitTestHelper.getProgramAst(testFactory, "/ast/actions/action_MotorSetPower.xml");
         MotorSetPowerAction<Void> mgp = (MotorSetPowerAction<Void>) forest.get(0).get(1);
         Assert.assertEquals("B", mgp.getUserDefinedPort());
     }
 
     @Test
     public void getPower() throws Exception {
-        ArrayList<ArrayList<Phrase<Void>>> forest = UnitTestHelper.getAst(testFactory, "/ast/actions/action_MotorSetPower.xml");
+        List<List<Phrase<Void>>> forest = UnitTestHelper.getProgramAst(testFactory, "/ast/actions/action_MotorSetPower.xml");
         MotorSetPowerAction<Void> mgp = (MotorSetPowerAction<Void>) forest.get(0).get(1);
         Assert.assertEquals("NumConst [30]", mgp.getPower().toString());
     }

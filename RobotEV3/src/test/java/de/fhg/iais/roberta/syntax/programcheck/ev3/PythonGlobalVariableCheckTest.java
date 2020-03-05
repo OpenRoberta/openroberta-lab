@@ -1,6 +1,6 @@
 package de.fhg.iais.roberta.syntax.programcheck.ev3;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -17,11 +17,11 @@ public class PythonGlobalVariableCheckTest extends AstTest {
 
     @Test
     public void check_GlobalVariableUsedInUserCreatedFunction_returnsListWithOneElement() throws Exception {
-        ArrayList<ArrayList<Phrase<Void>>> phrases = UnitTestHelper.getAst(testFactory, "/visitors/python_global_variables_check_one_used_variables.xml");
+        List<List<Phrase<Void>>> phrases = UnitTestHelper.getProgramAst(testFactory, "/visitors/python_global_variables_check_one_used_variables.xml");
         UsedHardwareBean.Builder builder = new UsedHardwareBean.Builder();
 
         Ev3UsedHardwareCollectorVisitor checkVisitor = new Ev3UsedHardwareCollectorVisitor(null, ImmutableClassToInstanceMap.of(UsedHardwareBean.Builder.class, builder));
-        for ( ArrayList<Phrase<Void>> tree : phrases ) {
+        for ( List<Phrase<Void>> tree : phrases ) {
             for ( Phrase<Void> phrase : tree ) {
                 phrase.accept(checkVisitor);
             }
@@ -33,11 +33,11 @@ public class PythonGlobalVariableCheckTest extends AstTest {
 
     @Test
     public void check_GlobalVariableUsedInUserCreatedFunction_returnsListWithNoElements() throws Exception {
-        ArrayList<ArrayList<Phrase<Void>>> phrases = UnitTestHelper.getAst(testFactory, "/visitors/python_global_variables_check_no_used_variables.xml");
+        List<List<Phrase<Void>>> phrases = UnitTestHelper.getProgramAst(testFactory, "/visitors/python_global_variables_check_no_used_variables.xml");
         UsedHardwareBean.Builder builder = new UsedHardwareBean.Builder();
 
         Ev3UsedHardwareCollectorVisitor checkVisitor = new Ev3UsedHardwareCollectorVisitor(null, ImmutableClassToInstanceMap.of(UsedHardwareBean.Builder.class, builder));
-        for ( ArrayList<Phrase<Void>> tree : phrases ) {
+        for ( List<Phrase<Void>> tree : phrases ) {
             for ( Phrase<Void> phrase : tree ) {
                 phrase.accept(checkVisitor);
             }
@@ -49,11 +49,11 @@ public class PythonGlobalVariableCheckTest extends AstTest {
 
     @Test
     public void check_GlobalVariableUsedInUserCreatedFunction_returnsListWithTwoElements() throws Exception {
-        ArrayList<ArrayList<Phrase<Void>>> phrases = UnitTestHelper.getAst(testFactory, "/visitors/python_global_variables_check_two_used_variables.xml");
+        List<List<Phrase<Void>>> phrases = UnitTestHelper.getProgramAst(testFactory, "/visitors/python_global_variables_check_two_used_variables.xml");
         UsedHardwareBean.Builder builder = new UsedHardwareBean.Builder();
 
         Ev3UsedHardwareCollectorVisitor checkVisitor = new Ev3UsedHardwareCollectorVisitor(null, ImmutableClassToInstanceMap.of(UsedHardwareBean.Builder.class, builder));
-        for ( ArrayList<Phrase<Void>> tree : phrases ) {
+        for ( List<Phrase<Void>> tree : phrases ) {
             for ( Phrase<Void> phrase : tree ) {
                 phrase.accept(checkVisitor);
             }

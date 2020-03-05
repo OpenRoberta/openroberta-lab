@@ -1,6 +1,5 @@
 package de.fhg.iais.roberta.visitor.codegen;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -89,7 +88,7 @@ public final class NaoPythonVisitor extends AbstractPythonVisitor implements INa
      *
      * @param programPhrases to generate the code from
      */
-    public NaoPythonVisitor(List<ArrayList<Phrase<Void>>> programPhrases, ILanguage language, ClassToInstanceMap<IProjectBean> beans) {
+    public NaoPythonVisitor(List<List<Phrase<Void>>> programPhrases, ILanguage language, ClassToInstanceMap<IProjectBean> beans) {
         super(programPhrases, beans);
 
         this.language = language;

@@ -1,6 +1,6 @@
 package de.fhg.iais.roberta.visitor.codegen;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import org.json.JSONObject;
 
@@ -61,7 +61,7 @@ import de.fhg.iais.roberta.visitor.lang.codegen.AbstractStackMachineVisitor;
 
 public class NxtStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> implements INxtVisitor<V> {
 
-    public NxtStackMachineVisitor(ConfigurationAst configuration, ArrayList<ArrayList<Phrase<Void>>> phrases) {
+    public NxtStackMachineVisitor(ConfigurationAst configuration, List<List<Phrase<Void>>> phrases) {
         super(configuration);
         Assert.isTrue(!phrases.isEmpty());
     }

@@ -90,14 +90,6 @@ public class VorwerkConfiguration extends ConfigurationAst {
     }
 
     /**
-     * @return text which defines the brick configuration
-     */
-    @Override
-    public String generateText(String name) {
-        return "";
-    }
-
-    /**
      * This class is a builder of {@link ConfigurationAst}
      */
     public static class Builder extends ConfigurationAst.Builder {

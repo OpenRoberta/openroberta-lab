@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -25,9 +26,9 @@ import de.fhg.iais.roberta.exprly.generated.ExprlyParser.ExpressionContext;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.syntax.lang.expr.FunctionExpr;
-import de.fhg.iais.roberta.syntax.lang.expr.eval.ExprlyVisitor;
 import de.fhg.iais.roberta.syntax.lang.expr.eval.ExprlyTypechecker;
 import de.fhg.iais.roberta.syntax.lang.expr.eval.ExprlyUnParser;
+import de.fhg.iais.roberta.syntax.lang.expr.eval.ExprlyVisitor;
 import de.fhg.iais.roberta.syntax.lang.functions.ListRepeat;
 import de.fhg.iais.roberta.syntax.lang.stmt.ExprStmt;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
@@ -376,7 +377,7 @@ public class ExprlyBasicAstTest extends AstTest {
 
     @Test
     public void testFromXml() throws Exception {
-        Phrase<Void> ast = UnitTestHelper.getAst(testFactory, "/expressionblock/eval_expr_1add2.xml").get(0).get(1);
+        Phrase<Void> ast = UnitTestHelper.getProgramAst(testFactory, "/expressionblock/eval_expr_1add2.xml").get(0).get(1);
         String t = "Binary [ADD, NumConst [1], NumConst [2]]";
         Assert.assertEquals(t, ast.toString());
         checkCode((Expr<Void>) ast);
@@ -418,9 +419,9 @@ public class ExprlyBasicAstTest extends AstTest {
         ImmutableClassToInstanceMap<IProjectBean> beansPy = ImmutableClassToInstanceMap.<IProjectBean>builder().put(UsedHardwareBean.class, usedHardwareBean).put(
             CodeGeneratorSetupBean.class,
             codeGeneratorSetupBeanPy).build();
-        ArrayList<Phrase<Void>> addInList = new ArrayList<>();
+        List<Phrase<Void>> addInList = new ArrayList<>();
         addInList.add(expr);
-        ArrayList<ArrayList<Phrase<Void>>> addInListInList = new ArrayList<>();
+        List<List<Phrase<Void>>> addInListInList = new ArrayList<>();
         addInListInList.add(addInList);
         CalliopeCppVisitor cppVisitor = new CalliopeCppVisitor(addInListInList, null, beansCpp);
         cppVisitor.visitExprStmt(ExprStmt.make(expr));

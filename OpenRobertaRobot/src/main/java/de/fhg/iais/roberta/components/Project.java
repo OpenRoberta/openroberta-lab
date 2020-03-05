@@ -247,14 +247,14 @@ public final class Project {
 
     private static BlockSet astToJaxb(ProgramAst<Void> program) {
         Assert.notNull(program);
-        ArrayList<ArrayList<Phrase<Void>>> astProgram = program.getTree();
+        List<List<Phrase<Void>>> astProgram = program.getTree();
         final BlockSet blockSet = new BlockSet();
         blockSet.setDescription(program.getDescription());
         blockSet.setRobottype(program.getRobotType());
         blockSet.setTags(program.getTags());
         blockSet.setXmlversion(program.getXmlVersion());
 
-        for ( final ArrayList<Phrase<Void>> tree : astProgram ) {
+        for ( List<Phrase<Void>> tree : astProgram ) {
             final Instance instance = new Instance();
             blockSet.getInstance().add(instance);
             for ( final Phrase<Void> phrase : tree ) {

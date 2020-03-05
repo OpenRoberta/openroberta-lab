@@ -1,6 +1,6 @@
 package de.fhg.iais.roberta.ast.action;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -22,14 +22,14 @@ public class TurnActionTest extends NxtAstTest {
 
     @Test
     public void getDirection() throws Exception {
-        ArrayList<ArrayList<Phrase<Void>>> forest = UnitTestHelper.getAst(testFactory, "/ast/actions/action_MotorDiffTurnFor.xml");
+        List<List<Phrase<Void>>> forest = UnitTestHelper.getProgramAst(testFactory, "/ast/actions/action_MotorDiffTurnFor.xml");
         TurnAction<Void> ta = (TurnAction<Void>) forest.get(0).get(1);
         Assert.assertEquals(TurnDirection.RIGHT, ta.getDirection());
     }
 
     @Test
     public void getParam() throws Exception {
-        ArrayList<ArrayList<Phrase<Void>>> forest = UnitTestHelper.getAst(testFactory, "/ast/actions/action_MotorDiffTurnFor.xml");
+        List<List<Phrase<Void>>> forest = UnitTestHelper.getProgramAst(testFactory, "/ast/actions/action_MotorDiffTurnFor.xml");
         TurnAction<Void> ta = (TurnAction<Void>) forest.get(0).get(1);
         Assert.assertEquals("MotionParam [speed=NumConst [50], duration=MotorDuration [type=DEGREE, value=NumConst [20]]]", ta.getParam().toString());
     }

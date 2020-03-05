@@ -1,6 +1,6 @@
 package de.fhg.iais.roberta.visitor.codegen;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import org.json.JSONObject;
 
@@ -68,7 +68,7 @@ import de.fhg.iais.roberta.visitor.lang.codegen.AbstractStackMachineVisitor;
 
 public class Ev3StackMachineVisitor<V> extends AbstractStackMachineVisitor<V> implements IEv3Visitor<V> {
 
-    public Ev3StackMachineVisitor(ConfigurationAst configuration, ArrayList<ArrayList<Phrase<Void>>> phrases, ILanguage language) {
+    public Ev3StackMachineVisitor(ConfigurationAst configuration, List<List<Phrase<Void>>> phrases, ILanguage language) {
         super(configuration);
         Assert.isTrue(!phrases.isEmpty());
 

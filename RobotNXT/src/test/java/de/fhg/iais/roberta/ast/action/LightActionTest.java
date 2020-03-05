@@ -1,6 +1,6 @@
 package de.fhg.iais.roberta.ast.action;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -23,14 +23,14 @@ public class LightActionTest extends NxtAstTest {
 
     @Test
     public void getLight() throws Exception {
-        ArrayList<ArrayList<Phrase<Void>>> forest = UnitTestHelper.getAst(testFactory, "/ast/actions/action_LightSensorAction.xml");
+        List<List<Phrase<Void>>> forest = UnitTestHelper.getProgramAst(testFactory, "/ast/actions/action_LightSensorAction.xml");
         LightAction<Void> la = (LightAction<Void>) forest.get(0).get(1);
         Assert.assertEquals(BrickLedColor.RED, la.getColor());
     }
 
     @Test
     public void getPort() throws Exception {
-        ArrayList<ArrayList<Phrase<Void>>> forest = UnitTestHelper.getAst(testFactory, "/ast/actions/action_LightSensorAction.xml");
+        List<List<Phrase<Void>>> forest = UnitTestHelper.getProgramAst(testFactory, "/ast/actions/action_LightSensorAction.xml");
 
         LightAction<Void> cs = (LightAction<Void>) forest.get(0).get(1);
         LightAction<Void> cs1 = (LightAction<Void>) forest.get(0).get(2);
@@ -45,7 +45,7 @@ public class LightActionTest extends NxtAstTest {
 
     @Test
     public void getState() throws Exception {
-        ArrayList<ArrayList<Phrase<Void>>> forest = UnitTestHelper.getAst(testFactory, "/ast/actions/action_LightSensorAction.xml");
+        List<List<Phrase<Void>>> forest = UnitTestHelper.getProgramAst(testFactory, "/ast/actions/action_LightSensorAction.xml");
         LightAction<Void> st = (LightAction<Void>) forest.get(0).get(1);
         LightAction<Void> st1 = (LightAction<Void>) forest.get(0).get(4);
         Assert.assertEquals(LightMode.ON, st.getMode());

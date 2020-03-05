@@ -1,6 +1,5 @@
 package de.fhg.iais.roberta.worker;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -20,7 +19,7 @@ public abstract class AbstractUsedMethodCollectorWorker implements IWorker {
     public final void execute(Project project) {
         UsedMethodBean.Builder builder = new UsedMethodBean.Builder();
         ICollectorVisitor visitor = this.getVisitor(builder);
-        Iterable<ArrayList<Phrase<Void>>> tree = project.getProgramAst().getTree();
+        Iterable<List<Phrase<Void>>> tree = project.getProgramAst().getTree();
         for ( Iterable<Phrase<Void>> phrases : tree ) {
             for ( Phrase<Void> phrase : phrases ) {
                 phrase.accept(visitor);

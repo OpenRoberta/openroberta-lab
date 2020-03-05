@@ -1,6 +1,5 @@
 package de.fhg.iais.roberta.visitor.codegen;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.google.common.collect.ClassToInstanceMap;
@@ -43,7 +42,7 @@ public final class Bob3CppVisitor extends AbstractCommonArduinoCppVisitor implem
      *
      * @param phrases to generate the code from
      */
-    public Bob3CppVisitor(List<ArrayList<Phrase<Void>>> phrases, ClassToInstanceMap<IProjectBean> beans) {
+    public Bob3CppVisitor(List<List<Phrase<Void>>> phrases, ClassToInstanceMap<IProjectBean> beans) {
         super(phrases, new ConfigurationAst.Builder().build(), beans);
     }
 

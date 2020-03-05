@@ -1,6 +1,6 @@
 package de.fhg.iais.roberta.visitor.collect;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import com.google.common.collect.ClassToInstanceMap;
 
@@ -24,7 +24,7 @@ import de.fhg.iais.roberta.visitor.hardware.IBotnrollVisitor;
 public final class BotnrollUsedHardwareCollectorVisitor extends AbstractUsedHardwareCollectorVisitor implements IBotnrollVisitor<Void> {
 
     public BotnrollUsedHardwareCollectorVisitor(
-        ArrayList<ArrayList<Phrase<Void>>> phrasesSet,
+        List<List<Phrase<Void>>> phrasesSet,
         ConfigurationAst robotConfiguration,
         ClassToInstanceMap<IProjectBean.IBuilder<?>> beanBuilders) {
         super(robotConfiguration, beanBuilders);

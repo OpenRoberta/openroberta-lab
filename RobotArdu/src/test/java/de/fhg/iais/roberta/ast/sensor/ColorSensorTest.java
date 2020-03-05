@@ -1,6 +1,6 @@
 package de.fhg.iais.roberta.ast.sensor;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -25,7 +25,7 @@ public class ColorSensorTest extends AstTest {
 
     @Test
     public void getMode() throws Exception {
-        final ArrayList<ArrayList<Phrase<Void>>> forest = UnitTestHelper.getAst(testFactory, "/ast/sensors/sensor_setColor.xml");
+        final List<List<Phrase<Void>>> forest = UnitTestHelper.getProgramAst(testFactory, "/ast/sensors/sensor_setColor.xml");
 
         final ColorSensor<Void> cs = (ColorSensor<Void>) forest.get(0).get(1);
 
@@ -34,7 +34,7 @@ public class ColorSensorTest extends AstTest {
 
     @Test
     public void getPort() throws Exception {
-        final ArrayList<ArrayList<Phrase<Void>>> forest = UnitTestHelper.getAst(testFactory, "/ast/sensors/sensor_setColor.xml");
+        final List<List<Phrase<Void>>> forest = UnitTestHelper.getProgramAst(testFactory, "/ast/sensors/sensor_setColor.xml");
 
         final ColorSensor<Void> cs = (ColorSensor<Void>) forest.get(0).get(1);
         final ColorSensor<Void> cs1 = (ColorSensor<Void>) forest.get(1).get(1);

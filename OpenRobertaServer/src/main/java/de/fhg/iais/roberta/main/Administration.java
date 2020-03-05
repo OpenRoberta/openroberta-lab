@@ -7,7 +7,6 @@ import java.io.StringWriter;
 import java.math.BigInteger;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -382,11 +381,11 @@ public class Administration {
         return source.replaceAll(oldWord, newWord);
     }
 
-    private BlockSet astToJaxb(ArrayList<ArrayList<Phrase<Void>>> astProgram) {
+    private BlockSet astToJaxb(List<List<Phrase<Void>>> astProgram) {
         BlockSet blockSet = new BlockSet();
 
         Instance instance = new Instance();
-        for ( ArrayList<Phrase<Void>> tree : astProgram ) {
+        for ( List<Phrase<Void>> tree : astProgram ) {
             for ( Phrase<Void> phrase : tree ) {
                 if ( phrase.getKind().hasName("LOCATION") ) {
                     blockSet.getInstance().add(instance);

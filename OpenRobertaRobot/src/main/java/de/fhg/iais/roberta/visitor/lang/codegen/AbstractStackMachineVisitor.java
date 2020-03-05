@@ -769,8 +769,8 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
         return isReverse ? TurnDirection.RIGHT : TurnDirection.LEFT;
     }
 
-    public void generateCodeFromPhrases(ArrayList<ArrayList<Phrase<V>>> phrasesSet) {
-        for ( ArrayList<Phrase<V>> phrases : phrasesSet ) {
+    public void generateCodeFromPhrases(List<List<Phrase<V>>> phrasesSet) {
+        for ( List<Phrase<V>> phrases : phrasesSet ) {
             for ( Phrase<V> phrase : phrases ) {
                 phrase.accept(this);
             }

@@ -1,6 +1,5 @@
 package de.fhg.iais.roberta.visitor.codegen;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -61,9 +60,8 @@ public final class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor imp
      *
      * @param phrases to generate the code from
      */
-    public ArduinoCppVisitor(List<ArrayList<Phrase<Void>>> phrases, ConfigurationAst brickConfiguration, ClassToInstanceMap<IProjectBean> beans) {
+    public ArduinoCppVisitor(List<List<Phrase<Void>>> phrases, ConfigurationAst brickConfiguration, ClassToInstanceMap<IProjectBean> beans) {
         super(phrases, brickConfiguration, beans);
-
     }
 
     @Override

@@ -1,6 +1,6 @@
 package de.fhg.iais.roberta.ast.sensor;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -21,14 +21,14 @@ public class BrickSensorTest extends NxtAstTest {
 
     @Test
     public void getKey() throws Exception {
-        ArrayList<ArrayList<Phrase<Void>>> forest = UnitTestHelper.getAst(testFactory, "/ast/sensors/sensor_brick1.xml");
+        List<List<Phrase<Void>>> forest = UnitTestHelper.getProgramAst(testFactory, "/ast/sensors/sensor_brick1.xml");
         KeysSensor<Void> bs = (KeysSensor<Void>) forest.get(0).get(1);
         Assert.assertEquals("ENTER", bs.getPort());
     }
 
     @Test
     public void getMode() throws Exception {
-        ArrayList<ArrayList<Phrase<Void>>> forest = UnitTestHelper.getAst(testFactory, "/ast/sensors/sensor_brick1.xml");
+        List<List<Phrase<Void>>> forest = UnitTestHelper.getProgramAst(testFactory, "/ast/sensors/sensor_brick1.xml");
         KeysSensor<Void> bs = (KeysSensor<Void>) forest.get(0).get(1);
         Assert.assertEquals(SC.PRESSED, bs.getMode());
     }

@@ -1,7 +1,7 @@
 package de.fhg.iais.roberta.ast.action;
 
-import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -53,7 +53,7 @@ public class ActionTest extends ArduinoAstTest {
 
     @Test
     public void disabledComment() throws Exception {
-        final ArrayList<ArrayList<Phrase<Void>>> t = UnitTestHelper.getAst(testFactory, "/ast/actions/action_DisabledComment.xml");
+        final List<List<Phrase<Void>>> t = UnitTestHelper.getProgramAst(testFactory, "/ast/actions/action_DisabledComment.xml");
 
         Assert.assertEquals(true, t.get(0).get(2).getProperty().isDisabled());
         Assert.assertEquals("h#,,", t.get(0).get(1).getComment().getComment());

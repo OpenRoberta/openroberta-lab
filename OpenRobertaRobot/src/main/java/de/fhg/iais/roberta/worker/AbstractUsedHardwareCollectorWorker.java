@@ -1,10 +1,9 @@
 package de.fhg.iais.roberta.worker;
 
+import java.util.List;
+
 import com.google.common.collect.ClassToInstanceMap;
 import com.google.common.collect.ImmutableClassToInstanceMap;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import de.fhg.iais.roberta.bean.IProjectBean;
 import de.fhg.iais.roberta.bean.UsedHardwareBean;
@@ -33,7 +32,7 @@ public abstract class AbstractUsedHardwareCollectorWorker implements IWorker {
                 .put(UsedMethodBean.Builder.class, usedMethodBeanBuilder)
                 .build();
         AbstractCollectorVisitor visitor = this.getVisitor(project, beanBuilders);
-        List<ArrayList<Phrase<Void>>> tree = project.getProgramAst().getTree();
+        List<List<Phrase<Void>>> tree = project.getProgramAst().getTree();
         collectGlobalVariables(tree, visitor);
         for ( List<Phrase<Void>> phrases : tree ) {
             for ( Phrase<Void> phrase : phrases ) {
@@ -58,7 +57,7 @@ public abstract class AbstractUsedHardwareCollectorWorker implements IWorker {
      */
     protected abstract AbstractCollectorVisitor getVisitor(Project project, ClassToInstanceMap<IProjectBean.IBuilder<?>> beanBuilders);
 
-    private static void collectGlobalVariables(Iterable<ArrayList<Phrase<Void>>> phrasesSet, IVisitor<Void> visitor) {
+    private static void collectGlobalVariables(Iterable<List<Phrase<Void>>> phrasesSet, IVisitor<Void> visitor) {
         for ( List<Phrase<Void>> phrases : phrasesSet ) {
             Phrase<Void> phrase = phrases.get(1);
             if ( phrase.getKind().getName().equals("MAIN_TASK") ) {

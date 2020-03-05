@@ -2,6 +2,7 @@ package de.fhg.iais.roberta.syntax.check.hardware.edison;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 import org.junit.Test;
 
@@ -57,7 +58,7 @@ public class UsedHardwareCollectorVisitorTest extends EdisonAstTest {
     @Test
     // TODO this test does nothing
     public void TestAllHelperMethods() throws Exception {
-        ArrayList<ArrayList<Phrase<Void>>> phrases = UnitTestHelper.getAst(testFactory, "/collector/all_helper_methods.xml");
+        List<List<Phrase<Void>>> phrases = UnitTestHelper.getProgramAst(testFactory, "/collector/all_helper_methods.xml");
         ConfigurationAst edisonConfig = makeConfig();
         UsedHardwareBean.Builder usedHardwareBeanBuilder = new UsedHardwareBean.Builder();
         UsedMethodBean.Builder usedMethodBeanBuilder = new UsedMethodBean.Builder();

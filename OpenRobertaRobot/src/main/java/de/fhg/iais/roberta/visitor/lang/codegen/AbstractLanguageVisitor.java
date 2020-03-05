@@ -1,7 +1,6 @@
 package de.fhg.iais.roberta.visitor.lang.codegen;
 
 import java.util.AbstractMap;
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -58,7 +57,7 @@ public abstract class AbstractLanguageVisitor implements ILanguageVisitor<Void> 
     /**
      * initialize the common language code generator visitor.
      */
-    protected AbstractLanguageVisitor(List<ArrayList<Phrase<Void>>> programPhrases, ClassToInstanceMap<IProjectBean> beans) {
+    protected AbstractLanguageVisitor(List<List<Phrase<Void>>> programPhrases, ClassToInstanceMap<IProjectBean> beans) {
         Assert.isTrue(!programPhrases.isEmpty());
         this.beans = beans;
 
@@ -66,7 +65,7 @@ public abstract class AbstractLanguageVisitor implements ILanguageVisitor<Void> 
             programPhrases
                 .stream()
                 .flatMap(e -> e.subList(1, e.size()).stream())
-                .filter(p -> p.getProperty().isInTask() == null ? true : p.getProperty().isInTask() && !p.getProperty().isDisabled()) //TODO check if we can avoid null value for inTask
+                .filter(p -> p.getProperty().isInTask() == null || p.getProperty().isInTask() && !p.getProperty().isDisabled()) //TODO check if we can avoid null value for inTask
                 .collect(Collectors.toList());
     }
 

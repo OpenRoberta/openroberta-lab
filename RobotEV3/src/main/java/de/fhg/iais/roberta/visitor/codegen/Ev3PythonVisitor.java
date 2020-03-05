@@ -1,6 +1,5 @@
 package de.fhg.iais.roberta.visitor.codegen;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -88,7 +87,7 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
      * @param programPhrases to generate the code from
      */
     public Ev3PythonVisitor(
-        List<ArrayList<Phrase<Void>>> programPhrases,
+        List<List<Phrase<Void>>> programPhrases,
         ConfigurationAst brickConfiguration,
         ILanguage language,
         ClassToInstanceMap<IProjectBean> beans) {

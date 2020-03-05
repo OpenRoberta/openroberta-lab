@@ -1,6 +1,5 @@
 package de.fhg.iais.roberta.visitor.codegen;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -99,7 +98,7 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
      * @param programPhrases to generate the code from
      */
     public NxtNxcVisitor(
-        List<ArrayList<Phrase<Void>>> programPhrases,
+        List<List<Phrase<Void>>> programPhrases,
         ConfigurationAst brickConfiguration,
         ClassToInstanceMap<IProjectBean> beans) {
         super(programPhrases, beans);

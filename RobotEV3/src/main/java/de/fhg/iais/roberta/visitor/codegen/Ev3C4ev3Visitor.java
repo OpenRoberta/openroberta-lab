@@ -1,6 +1,5 @@
 package de.fhg.iais.roberta.visitor.codegen;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -109,7 +108,7 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
      * @param programPhrases
      */
     public Ev3C4ev3Visitor(
-        List<ArrayList<Phrase<Void>>> programPhrases,
+        List<List<Phrase<Void>>> programPhrases,
         ConfigurationAst brickConfiguration,
         String programName,
         ILanguage language,

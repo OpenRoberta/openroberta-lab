@@ -2,6 +2,7 @@ package de.fhg.iais.roberta.visitor.codegen;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -70,7 +71,7 @@ import de.fhg.iais.roberta.visitor.lang.codegen.AbstractStackMachineVisitor;
 
 public class MbedStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> implements IMbedVisitor<V> {
 
-    public MbedStackMachineVisitor(ConfigurationAst configuration, ArrayList<ArrayList<Phrase<Void>>> phrases) {
+    public MbedStackMachineVisitor(ConfigurationAst configuration, List<List<Phrase<Void>>> phrases) {
         super(configuration);
         Assert.isTrue(!phrases.isEmpty());
 

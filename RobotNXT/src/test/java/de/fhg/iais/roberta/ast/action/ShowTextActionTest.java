@@ -1,6 +1,6 @@
 package de.fhg.iais.roberta.ast.action;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -20,21 +20,21 @@ public class ShowTextActionTest extends NxtAstTest {
 
     @Test
     public void getMsg() throws Exception {
-        ArrayList<ArrayList<Phrase<Void>>> forest = UnitTestHelper.getAst(testFactory, "/ast/actions/action_ShowText.xml");
+        List<List<Phrase<Void>>> forest = UnitTestHelper.getProgramAst(testFactory, "/ast/actions/action_ShowText.xml");
         ShowTextAction<Void> spa = (ShowTextAction<Void>) forest.get(0).get(1);
         Assert.assertEquals("StringConst [Hallo]", spa.getMsg().toString());
     }
 
     @Test
     public void getX() throws Exception {
-        ArrayList<ArrayList<Phrase<Void>>> forest = UnitTestHelper.getAst(testFactory, "/ast/actions/action_ShowText.xml");
+        List<List<Phrase<Void>>> forest = UnitTestHelper.getProgramAst(testFactory, "/ast/actions/action_ShowText.xml");
         ShowTextAction<Void> spa = (ShowTextAction<Void>) forest.get(0).get(1);
         Assert.assertEquals("NumConst [0]", spa.getX().toString());
     }
 
     @Test
     public void getY() throws Exception {
-        ArrayList<ArrayList<Phrase<Void>>> forest = UnitTestHelper.getAst(testFactory, "/ast/actions/action_ShowText.xml");
+        List<List<Phrase<Void>>> forest = UnitTestHelper.getProgramAst(testFactory, "/ast/actions/action_ShowText.xml");
         ShowTextAction<Void> spa = (ShowTextAction<Void>) forest.get(0).get(1);
         Assert.assertEquals("NumConst [0]", spa.getY().toString());
     }

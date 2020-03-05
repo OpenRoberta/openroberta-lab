@@ -1,6 +1,6 @@
 package de.fhg.iais.roberta.ast.sensor;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -24,7 +24,7 @@ public class LightSensorTest extends NxtAstTest {
 
     @Test
     public void getMode() throws Exception {
-        final ArrayList<ArrayList<Phrase<Void>>> forest = UnitTestHelper.getAst(testFactory, "/ast/sensors/sensor_setLight.xml");
+        final List<List<Phrase<Void>>> forest = UnitTestHelper.getProgramAst(testFactory, "/ast/sensors/sensor_setLight.xml");
 
         final LightSensor<Void> cs = (LightSensor<Void>) forest.get(0).get(1);
 
@@ -34,7 +34,7 @@ public class LightSensorTest extends NxtAstTest {
 
     @Test
     public void getPort() throws Exception {
-        final ArrayList<ArrayList<Phrase<Void>>> forest = UnitTestHelper.getAst(testFactory, "/ast/sensors/sensor_setLight.xml");
+        final List<List<Phrase<Void>>> forest = UnitTestHelper.getProgramAst(testFactory, "/ast/sensors/sensor_setLight.xml");
 
         final LightSensor<Void> cs = (LightSensor<Void>) forest.get(0).get(1);
         final LightSensor<Void> cs1 = (LightSensor<Void>) forest.get(1).get(1);

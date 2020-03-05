@@ -1,6 +1,6 @@
 package de.fhg.iais.roberta.ast.action;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -22,7 +22,7 @@ public class LightStatusActionTest extends AstTest {
 
     @Test
     public void getStatus() throws Exception {
-        ArrayList<ArrayList<Phrase<Void>>> forest = UnitTestHelper.getAst(testFactory, "/ast/actions/action_BrickLightStatus.xml");
+        List<List<Phrase<Void>>> forest = UnitTestHelper.getProgramAst(testFactory, "/ast/actions/action_BrickLightStatus.xml");
         LightStatusAction<Void> lsa = (LightStatusAction<Void>) forest.get(0).get(1);
         Assert.assertEquals(LightStatusAction.Status.OFF, lsa.getStatus());
     }

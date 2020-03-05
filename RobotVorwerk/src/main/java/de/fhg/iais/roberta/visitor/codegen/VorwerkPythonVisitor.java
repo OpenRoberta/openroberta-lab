@@ -1,6 +1,5 @@
 package de.fhg.iais.roberta.visitor.codegen;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.google.common.collect.ClassToInstanceMap;
@@ -52,7 +51,7 @@ public final class VorwerkPythonVisitor extends AbstractPythonVisitor implements
      * @param programPhrases to generate the code from
      */
     public VorwerkPythonVisitor(
-        List<ArrayList<Phrase<Void>>> programPhrases,
+        List<List<Phrase<Void>>> programPhrases,
         ConfigurationAst brickConfiguration,
         ClassToInstanceMap<IProjectBean> beans
         ) {

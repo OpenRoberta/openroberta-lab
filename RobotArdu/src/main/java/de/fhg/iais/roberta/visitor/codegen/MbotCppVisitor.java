@@ -1,6 +1,5 @@
 package de.fhg.iais.roberta.visitor.codegen;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -85,7 +84,7 @@ public final class MbotCppVisitor extends AbstractCommonArduinoCppVisitor implem
      * @param brickConfiguration hardware configuration of the brick
      * @param phrases to generate the code from
      */
-    public MbotCppVisitor(List<ArrayList<Phrase<Void>>> phrases, ConfigurationAst brickConfiguration, ClassToInstanceMap<IProjectBean> beans) {
+    public MbotCppVisitor(List<List<Phrase<Void>>> phrases, ConfigurationAst brickConfiguration, ClassToInstanceMap<IProjectBean> beans) {
         super(phrases, brickConfiguration, beans);
     }
 
