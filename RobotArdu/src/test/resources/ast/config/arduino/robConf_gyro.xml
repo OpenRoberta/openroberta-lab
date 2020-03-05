@@ -1,0 +1,7 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" description="" robottype="arduino" tags="" xmlversion="2.0">
+    <instance x="1402" y="611">
+        <block id=",2cec=8o=ts)p(fxe)Z_" intask="true" type="robConf_gyro">
+            <field name="NAME">K</field>
+        </block>
+    </instance>
+</block_set>

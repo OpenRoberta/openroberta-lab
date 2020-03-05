@@ -1,0 +1,8 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" description="" robottype="arduino" tags="" xmlversion="2.0">
+    <instance x="1091" y="439">
+        <block id="*mA?a/K}?+OA9VjT?rNH" intask="true" type="robConf_motion">
+            <field name="NAME">B</field>
+            <field name="OUTPUT">7</field>
+        </block>
+    </instance>
+</block_set>

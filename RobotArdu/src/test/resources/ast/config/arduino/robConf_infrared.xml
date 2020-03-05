@@ -1,0 +1,8 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" description="" robottype="arduino" tags="" xmlversion="2.0">
+    <instance x="1364" y="101">
+        <block id="I#U2dhzE6fnj22t~6!x7" intask="true" type="robConf_infrared">
+            <field name="NAME">I</field>
+            <field name="OUTPUT">11</field>
+        </block>
+    </instance>
+</block_set>

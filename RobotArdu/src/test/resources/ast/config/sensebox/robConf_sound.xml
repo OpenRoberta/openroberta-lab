@@ -1,0 +1,8 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" description="" robottype="sensebox" tags="" xmlversion="2.0">
+    <instance x="488" y="671">
+        <block id="q]52,kut:`|hnWktVax*" intask="true" type="robConf_sound">
+            <field name="NAME">G2</field>
+            <field name="OUT">1</field>
+        </block>
+    </instance>
+</block_set>

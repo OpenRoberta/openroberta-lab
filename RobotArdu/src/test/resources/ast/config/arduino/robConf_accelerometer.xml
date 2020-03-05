@@ -1,0 +1,7 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" description="" robottype="arduino" tags="" xmlversion="2.0">
+    <instance x="1407" y="548">
+        <block id="2AQyeN[4b!*Zr7-Z}1]?" intask="true" type="robConf_accelerometer">
+            <field name="NAME">B</field>
+        </block>
+    </instance>
+</block_set>

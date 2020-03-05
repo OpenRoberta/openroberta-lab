@@ -1,0 +1,8 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" description="" robottype="sensebox" tags="" xmlversion="2.0">
+    <instance x="523" y="1261">
+        <block id="NeH[B^#q!KM0Gv|2j[Pb" intask="true" type="robConf_gps">
+            <field name="NAME">G3</field>
+            <field name="I2C">I2C</field>
+        </block>
+    </instance>
+</block_set>

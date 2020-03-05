@@ -1,6 +1,6 @@
 package de.fhg.iais.roberta.ast;
 
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.BeforeClass;
@@ -9,15 +9,16 @@ import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.util.Util;
 
 public abstract class AstTest {
-    private static final List<String> emptyList = Collections.emptyList();
+    private static final List<String> pluginDefines = new ArrayList<>();
     protected static IRobotFactory testFactory;
 
     @BeforeClass
     public static void setup() {
         String robotName = "test";
         String pwd = System.getProperty("user.dir");
-        if ( pwd == null || pwd.isEmpty() ) {
+        if ( pwd == null || pwd.isEmpty() || pwd.contains("OpenRobertaRobot") ) {
             robotName = "test";
+            pluginDefines.add("test:robot.configuration.type = new");
         } else if ( pwd.contains("RobotArdu") ) {
             robotName = "nano";
         } else if ( pwd.contains("RobotEdison") ) {
@@ -36,9 +37,7 @@ public abstract class AstTest {
             robotName = "vorwerk";
         } else if ( pwd.contains("RobotWeDo") ) {
             robotName = "wedo";
-        } else if ( pwd.contains("RobotArdu") ) {
-            robotName = "nano";
         }
-        testFactory = Util.configureRobotPlugin(robotName, "", "", emptyList);
+        testFactory = Util.configureRobotPlugin(robotName, "", "", pluginDefines);
     }
 }

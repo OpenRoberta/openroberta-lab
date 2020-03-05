@@ -1,0 +1,7 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" description="" robottype="sensebox" tags="" xmlversion="2.0">
+    <instance x="506" y="1342">
+        <block deletable="false" id="9L:HO||CjNS(,!YiSk[P" intask="true" type="robConf_accelerometer">
+            <field name="NAME">B</field>
+        </block>
+    </instance>
+</block_set>

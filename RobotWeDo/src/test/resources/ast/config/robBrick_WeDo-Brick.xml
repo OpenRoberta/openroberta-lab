@@ -1,0 +1,7 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" description="" robottype="wedo" tags="" xmlversion="2.0">
+    <instance x="279" y="53">
+        <block deletable="false" id="1" intask="true" type="robBrick_WeDo-Brick">
+            <field name="VAR">W</field>
+        </block>
+    </instance>
+</block_set>

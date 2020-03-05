@@ -1,0 +1,8 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" description="" robottype="sensebox" tags="" xmlversion="2.0">
+    <instance x="488" y="238">
+        <block id="_WybPKs/%=(iblX^d4#p" intask="true" type="robConf_digitalout">
+            <field name="NAME">S3</field>
+            <field name="OUTPUT">1</field>
+        </block>
+    </instance>
+</block_set>

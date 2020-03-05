@@ -88,7 +88,7 @@ public final class VorwerkPythonVisitor extends AbstractPythonVisitor implements
     @Override
     public Void visitMotorOnAction(MotorOnAction<Void> motorOnAction) {
         String userDefinedPort = motorOnAction.getUserDefinedPort();
-        String port = this.brickConfiguration.getConfigurationComponent(userDefinedPort).getPortName();
+        String port = this.brickConfiguration.getConfigurationComponent(userDefinedPort).getInternalPortName();
         this.sb.append("hal." + port + "_motor_on(");
         motorOnAction.getParam().getSpeed().accept(this);
         this.sb.append(", ");
@@ -100,7 +100,7 @@ public final class VorwerkPythonVisitor extends AbstractPythonVisitor implements
     @Override
     public Void visitMotorStopAction(MotorStopAction<Void> motorStopAction) {
         String userDefinedPort = motorStopAction.getUserDefinedPort();
-        String port = this.brickConfiguration.getConfigurationComponent(userDefinedPort).getPortName();
+        String port = this.brickConfiguration.getConfigurationComponent(userDefinedPort).getInternalPortName();
         this.sb.append("hal." + port + "_motor_stop()");
         return null;
     }
@@ -228,7 +228,7 @@ public final class VorwerkPythonVisitor extends AbstractPythonVisitor implements
 
     private String getDevicePortName(ExternalSensor<Void> sensor) {
         String userDefinedPort = sensor.getPort();
-        String port = this.brickConfiguration.getConfigurationComponent(userDefinedPort).getPortName();
+        String port = this.brickConfiguration.getConfigurationComponent(userDefinedPort).getInternalPortName();
         return "'" + port + "'";
     }
 

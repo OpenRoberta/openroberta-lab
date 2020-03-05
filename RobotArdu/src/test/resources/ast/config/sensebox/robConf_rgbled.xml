@@ -1,0 +1,10 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" description="" robottype="sensebox" tags="" xmlversion="2.0">
+    <instance x="140" y="307">
+        <block id="@uAE`{)BJ+T}MlQvKfq@" intask="true" type="robConf_rgbled">
+            <field name="NAME">R2</field>
+            <field name="RED">1</field>
+            <field name="GREEN">2</field>
+            <field name="BLUE">3</field>
+        </block>
+    </instance>
+</block_set>

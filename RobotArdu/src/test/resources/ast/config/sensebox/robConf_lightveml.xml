@@ -1,0 +1,8 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" description="" robottype="sensebox" tags="" xmlversion="2.0">
+    <instance x="508" y="1111">
+        <block id="J}SAgc;G)F6jzEbDWnm." intask="true" type="robConf_lightveml">
+            <field name="NAME">S5</field>
+            <field name="I2C">I2C</field>
+        </block>
+    </instance>
+</block_set>

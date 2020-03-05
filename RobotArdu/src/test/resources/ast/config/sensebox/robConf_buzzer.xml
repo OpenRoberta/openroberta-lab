@@ -1,0 +1,8 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" description="" robottype="sensebox" tags="" xmlversion="2.0">
+    <instance x="141" y="458">
+        <block id="TXY6a*gSELVp=Q_AG/|S" intask="true" type="robConf_buzzer">
+            <field name="NAME">S</field>
+            <field name="+">1</field>
+        </block>
+    </instance>
+</block_set>

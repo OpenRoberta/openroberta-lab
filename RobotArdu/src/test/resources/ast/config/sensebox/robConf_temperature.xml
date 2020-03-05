@@ -1,0 +1,8 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" description="" robottype="sensebox" tags="" xmlversion="2.0">
+    <instance x="499" y="1031">
+        <block id="l@*)[6%[TcLZ^V3y+u2s" intask="true" type="robConf_temperature">
+            <field name="NAME">T2</field>
+            <field name="I2C">I2C</field>
+        </block>
+    </instance>
+</block_set>

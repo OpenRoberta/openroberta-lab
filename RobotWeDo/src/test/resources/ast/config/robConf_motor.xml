@@ -1,0 +1,9 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" description="" robottype="wedo" tags="" xmlversion="2.0">
+    <instance x="277" y="125">
+        <block id="2" intask="true" type="robConf_motor">
+            <field name="NAME">M</field>
+            <field name="VAR">W</field>
+            <field name="CONNECTOR">1</field>
+        </block>
+    </instance>
+</block_set>

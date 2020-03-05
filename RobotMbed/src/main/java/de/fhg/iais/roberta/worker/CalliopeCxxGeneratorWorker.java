@@ -12,6 +12,6 @@ public class CalliopeCxxGeneratorWorker extends AbstractLanguageGeneratorWorker 
 
     @Override
     protected AbstractLanguageVisitor getVisitor(Project project, ClassToInstanceMap<IProjectBean> beans) {
-        return new CalliopeCppVisitor(project.getProgramAst().getTree(), new CalliopeConfiguration.Builder().build(), beans);
+        return new CalliopeCppVisitor(project.getProgramAst().getTree(), new CalliopeConfiguration.Builder().build(CalliopeConfiguration.class), beans);
     }
 }

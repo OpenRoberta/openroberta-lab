@@ -1,0 +1,8 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" description="" robottype="arduino" tags="" xmlversion="2.0">
+    <instance x="832" y="384">
+        <block id="2wq~|@?hL6R;c.kK~y#D" intask="true" type="robConf_buzzer">
+            <field name="NAME">S3</field>
+            <field name="+">5</field>
+        </block>
+    </instance>
+</block_set>

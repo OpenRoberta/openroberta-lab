@@ -1,0 +1,8 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" description="" robottype="arduino" tags="" xmlversion="2.0">
+    <instance x="1385" y="248">
+        <block id="RF*e,nlLD~~%pT4-PPjQ" intask="true" type="robConf_temperature">
+            <field name="NAME">T2</field>
+            <field name="OUTPUT">A0</field>
+        </block>
+    </instance>
+</block_set>

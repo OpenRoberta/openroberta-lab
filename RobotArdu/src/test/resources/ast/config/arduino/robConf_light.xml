@@ -1,0 +1,8 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" description="" robottype="arduino" tags="" xmlversion="2.0">
+    <instance x="1105" y="567">
+        <block id="rKWC*o@1e=(/2e-.26^b" intask="true" type="robConf_light">
+            <field name="NAME">L4</field>
+            <field name="OUTPUT">A0</field>
+        </block>
+    </instance>
+</block_set>

@@ -460,7 +460,7 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
     @Override
     public Void visitKeysSensor(KeysSensor<Void> keysSensor) {
         String userDefined = keysSensor.getPort();
-        String port = this.robotConfiguration.getConfigurationComponent(userDefined).getPortName();
+        String port = this.robotConfiguration.getConfigurationComponent(userDefined).getInternalPortName();
         this.sb.append("_uBit.button").append(port).append(".isPressed()");
         return null;
     }
@@ -524,7 +524,7 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
     @Override
     public Void visitGyroSensor(GyroSensor<Void> gyroSensor) {
         String userDefined = gyroSensor.getPort();
-        String port = this.robotConfiguration.getConfigurationComponent(userDefined).getPortName();
+        String port = this.robotConfiguration.getConfigurationComponent(userDefined).getInternalPortName();
         this.sb.append("_uBit.accelerometer.get").append(port).append("()");
         return null;
     }
@@ -548,7 +548,7 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
     @Override
     public Void visitPinTouchSensor(PinTouchSensor<Void> pinTouchSensor) {
         String userDefinedName = pinTouchSensor.getPort();
-        String port = this.robotConfiguration.getConfigurationComponent(userDefinedName).getPortName();
+        String port = this.robotConfiguration.getConfigurationComponent(userDefinedName).getInternalPortName();
         this.sb.append("_uBit.io." + port + ".isTouched()");
         return null;
     }
@@ -556,7 +556,7 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
     @Override
     public Void visitPinGetValueSensor(PinGetValueSensor<Void> pinValueSensor) {
         String userDefinedName = pinValueSensor.getPort();
-        String port = this.robotConfiguration.getConfigurationComponent(userDefinedName).getPortName();
+        String port = this.robotConfiguration.getConfigurationComponent(userDefinedName).getInternalPortName();
         String mode = pinValueSensor.getMode();
         this.sb.append("_uBit.io." + port);
         switch ( mode ) {
@@ -581,7 +581,7 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
     @Override
     public Void visitPinWriteValueAction(PinWriteValueAction<Void> pinWriteValueSensor) {
         String userDefinedName = pinWriteValueSensor.getPort();
-        String port = this.robotConfiguration.getConfigurationComponent(userDefinedName).getPortName();
+        String port = this.robotConfiguration.getConfigurationComponent(userDefinedName).getInternalPortName();
         String valueType = pinWriteValueSensor.getMode().equals(SC.DIGITAL) ? "DigitalValue(" : "AnalogValue(";
         this.sb.append("_uBit.io.").append(port).append(".set").append(valueType);
         pinWriteValueSensor.getValue().accept(this);
@@ -592,7 +592,7 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
     @Override
     public Void visitPinSetPullAction(PinSetPullAction<Void> pinSetPullAction) {
         String userDefinedName = pinSetPullAction.getPort();
-        String port = this.robotConfiguration.getConfigurationComponent(userDefinedName).getPortName();
+        String port = this.robotConfiguration.getConfigurationComponent(userDefinedName).getInternalPortName();
         String mode = pinSetPullAction.getMode();
         this.sb.append("_uBit.io." + port + ".setPull(Pull").append(WordUtils.capitalizeFully(mode)).append(");");
         return null;
@@ -1236,7 +1236,7 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
     @Override
     public Void visitServoSetAction(ServoSetAction<Void> servoSetAction) {
         String userDefinedName = servoSetAction.getPort();
-        String port = this.robotConfiguration.getConfigurationComponent(userDefinedName).getPortName();
+        String port = this.robotConfiguration.getConfigurationComponent(userDefinedName).getInternalPortName();
         this.sb.append("_uBit.io.").append(port).append(".setServoValue(");
         servoSetAction.getValue().accept(this);
         this.sb.append(");");
@@ -1247,9 +1247,9 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
     @Override
     public Void visitMotionKitSingleSetAction(MotionKitSingleSetAction<Void> motionKitSingleSetAction) {
         String userDefinedName = motionKitSingleSetAction.getPort();
-        String currentPort = this.robotConfiguration.getConfigurationComponent(userDefinedName).getPortName();
-        String rightMotorPort = this.robotConfiguration.getConfigurationComponent("C16").getPortName(); // C16 is the right motor
-        String leftMotorPort = this.robotConfiguration.getConfigurationComponent("C17").getPortName(); // C17 is the left motor
+        String currentPort = this.robotConfiguration.getConfigurationComponent(userDefinedName).getInternalPortName();
+        String rightMotorPort = this.robotConfiguration.getConfigurationComponent("C16").getInternalPortName(); // C16 is the right motor
+        String leftMotorPort = this.robotConfiguration.getConfigurationComponent("C17").getInternalPortName(); // C17 is the left motor
         String direction = motionKitSingleSetAction.getDirection();
         // for the right motor (C16) 0 is forwards and 180 is backwards
         // for the left  motor (C17) 180 is forwards and 0 is backwards
@@ -1297,8 +1297,8 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
 
     @Override
     public Void visitMotionKitDualSetAction(MotionKitDualSetAction<Void> motionKitDualSetAction) {
-        String rightMotorPort = this.robotConfiguration.getConfigurationComponent("C16").getPortName(); // C16 is the right motor
-        String leftMotorPort = this.robotConfiguration.getConfigurationComponent("C17").getPortName(); // C17 is the left motor
+        String rightMotorPort = this.robotConfiguration.getConfigurationComponent("C16").getInternalPortName(); // C16 is the right motor
+        String leftMotorPort = this.robotConfiguration.getConfigurationComponent("C17").getInternalPortName(); // C17 is the left motor
         // for the right motor (C16) 0 is forwards and 180 is backwards
         // for the left  motor (C17) 180 is forwards and 0 is backwards
         switch ( motionKitDualSetAction.getDirectionRight() ) {

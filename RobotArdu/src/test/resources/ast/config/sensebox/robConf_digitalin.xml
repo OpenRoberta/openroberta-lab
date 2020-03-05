@@ -1,0 +1,8 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" description="" robottype="sensebox" tags="" xmlversion="2.0">
+    <instance x="142" y="55">
+        <block id="p@*+5%xyVh,0ncBqIeYR" intask="true" type="robConf_digitalin">
+            <field name="NAME">A</field>
+            <field name="INPUT">1</field>
+        </block>
+    </instance>
+</block_set>

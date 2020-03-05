@@ -1,0 +1,7 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" description="" robottype="arduino" tags="" xmlversion="2.0">
+    <instance x="598" y="498">
+        <block id="92),[t_A[|)w@y.bfTm+" intask="true" type="robConf_lcdi2c">
+            <field name="NAME">L3</field>
+        </block>
+    </instance>
+</block_set>

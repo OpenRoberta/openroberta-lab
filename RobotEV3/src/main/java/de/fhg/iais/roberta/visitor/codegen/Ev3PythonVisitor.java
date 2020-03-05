@@ -749,8 +749,8 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
     private String generateRegenerateConfiguration() {
         StringBuilder sb = new StringBuilder();
         sb.append("_brickConfiguration = {\n");
-        sb.append("    'wheel-diameter': " + this.brickConfiguration.getWheelDiameterCM() + ",\n");
-        sb.append("    'track-width': " + this.brickConfiguration.getTrackWidthCM() + ",\n");
+        sb.append("    'wheel-diameter': " + this.brickConfiguration.getWheelDiameter() + ",\n");
+        sb.append("    'track-width': " + this.brickConfiguration.getTrackWidth() + ",\n");
         appendActors(sb);
         appendSensors(sb);
         sb.append("}");

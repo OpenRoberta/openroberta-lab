@@ -1,0 +1,8 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" description="" robottype="sensebox" tags="" xmlversion="2.0">
+    <instance x="494" y="947">
+        <block id="LR.;nsJ5]:dZ5?~TqHA/" intask="true" type="robConf_humidity">
+            <field name="NAME">L3</field>
+            <field name="I2C">I2C</field>
+        </block>
+    </instance>
+</block_set>

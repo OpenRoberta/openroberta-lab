@@ -8,6 +8,7 @@ import java.util.List;
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.BlockSet;
 import de.fhg.iais.roberta.blockly.generated.Instance;
+import de.fhg.iais.roberta.components.ProgramAst;
 import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.syntax.BlockType;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
@@ -30,26 +31,30 @@ public class Jaxb2ProgramAst<V> extends AbstractJaxb2Ast<V> {
      *
      * @param set the BlockSet to transform
      */
-    public void transform(BlockSet set) {
-        this.data.setRobotType(set.getRobottype());
-        this.data.setXmlVersion(set.getXmlversion());
-        this.data.setDescription(set.getDescription());
-        this.data.setTags(set.getTags());
+    public ProgramAst<V> blocks2Ast(BlockSet set) {
+        ProgramAst<V> programAst =
+            new ProgramAst.Builder()
+                .setRobotType(set.getRobottype())
+                .setXmlVersion(set.getXmlversion())
+                .setDescription(set.getDescription())
+                .setTags(set.getTags())
+                .build();
         List<Instance> instances = set.getInstance();
         for ( Instance instance : instances ) {
-            instanceToAST(instance);
+            programAst.getTree().add(instanceToAST(instance));
         }
+        return programAst;
     }
 
-    private void instanceToAST(Instance instance) {
+    private List<Phrase<V>> instanceToAST(Instance instance) {
         List<Block> blocks = instance.getBlock();
         Location<V> location = Location.make(instance.getX(), instance.getY());
-        ArrayList<Phrase<V>> range = new ArrayList<>();
+        List<Phrase<V>> range = new ArrayList<>();
         range.add(location);
         for ( Block block : blocks ) {
             range.add(blockToAST(block));
         }
-        this.data.getTree().add(range);
+        return range;
     }
 
     @Override
@@ -75,7 +80,7 @@ public class Jaxb2ProgramAst<V> extends AbstractJaxb2Ast<V> {
             return (Phrase<V>) method.invoke(null, block, this);
         } catch ( NoSuchMethodException | SecurityException | ClassNotFoundException | IllegalAccessException | IllegalArgumentException
             | InvocationTargetException | DbcException e ) {
-            if (method == null) {
+            if ( method == null ) {
                 throw new DbcException("Could not get method for " + className, e.getCause());
             } else {
                 StringBuilder sb = new StringBuilder();

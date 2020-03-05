@@ -1,0 +1,8 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" description="" robottype="festobionic" tags="" xmlversion="2.0">
+    <instance x="423" y="255">
+        <block id="A+uOd.:p1TnQDQ0;WC#r" intask="true" type="robConf_servo">
+            <field name="NAME">S</field>
+            <field name="PULSE">1</field>
+        </block>
+    </instance>
+</block_set>

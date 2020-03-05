@@ -1,0 +1,8 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" description="" robottype="arduino" tags="" xmlversion="2.0">
+    <instance x="321" y="179">
+        <block id="w8hraOt9~_GMhCO7~u_L" intask="true" type="robConf_analogin">
+            <field name="NAME">A2</field>
+            <field name="INPUT">3</field>
+        </block>
+    </instance>
+</block_set>

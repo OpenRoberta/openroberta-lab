@@ -1,0 +1,17 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" description="" robottype="sensebox" tags="" xmlversion="2.0">
+    <instance x="140" y="726">
+        <block id="AR8P8taRhH:K0--@ne[y" intask="true" type="robConf_lcdi2c">
+            <field name="NAME">myDisplay</field>
+            <field name="TITLE">P</field>
+            <field name="XLABEL">X</field>
+            <field name="YLABEL">Y</field>
+            <field name="XSTART">0</field>
+            <field name="XEND">100</field>
+            <field name="YSTART">0</field>
+            <field name="YEND">50</field>
+            <field name="XTICK">10</field>
+            <field name="YTICK">10</field>
+            <field name="I2C">I2C</field>
+        </block>
+    </instance>
+</block_set>

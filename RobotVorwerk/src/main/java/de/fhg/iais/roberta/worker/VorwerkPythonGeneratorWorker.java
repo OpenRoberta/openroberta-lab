@@ -3,6 +3,7 @@ package de.fhg.iais.roberta.worker;
 import com.google.common.collect.ClassToInstanceMap;
 
 import de.fhg.iais.roberta.bean.IProjectBean;
+import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.components.Project;
 import de.fhg.iais.roberta.components.vorwerk.VorwerkConfiguration;
 import de.fhg.iais.roberta.visitor.codegen.VorwerkPythonVisitor;
@@ -17,10 +18,11 @@ public final class VorwerkPythonGeneratorWorker extends AbstractLanguageGenerato
         // TODO checking the actual hardcoded configuration is needed. This should be removed once the configuration is correctly saved in the default xml.
         return new VorwerkPythonVisitor(
             project.getProgramAst().getTree(),
-            new VorwerkConfiguration(project.getConfigurationAst().getIpAddress(),
-                                     project.getConfigurationAst().getPortNumber(),
-                                     project.getConfigurationAst().getUserName(),
-                                     project.getConfigurationAst().getPassword()),
+            new ConfigurationAst.Builder()
+                .setIpAddress(project.getConfigurationAst().getIpAddress())
+                .setUserName(project.getConfigurationAst().getUserName())
+                .setPassword(project.getConfigurationAst().getPassword())
+                .build(VorwerkConfiguration.class),
             beans);
     }
 }

@@ -1,0 +1,8 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" description="" robottype="sensebox" tags="" xmlversion="2.0">
+    <instance x="159" y="551">
+        <block id="ccB:xF6|x_kYK`5(MO3Q" intask="true" type="robConf_wireless">
+            <field name="NAME">W</field>
+            <field name="Socket">XBEE1</field>
+        </block>
+    </instance>
+</block_set>

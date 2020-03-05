@@ -1,0 +1,8 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" description="" robottype="arduino" tags="" xmlversion="2.0">
+    <instance x="1398" y="405">
+        <block id="77ajzRB__])9G}CTWfA9" intask="true" type="robConf_humidity">
+            <field name="NAME">L5</field>
+            <field name="OUTPUT">2</field>
+        </block>
+    </instance>
+</block_set>

@@ -1,0 +1,9 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" description="" robottype="wedo" tags="" xmlversion="2.0">
+    <instance x="276" y="559">
+        <block id="hZ{O0)NA!RB(Xp8eY99k" intask="true" type="robConf_gyro">
+            <field name="NAME">N</field>
+            <field name="VAR">W</field>
+            <field name="CONNECTOR">1</field>
+        </block>
+    </instance>
+</block_set>

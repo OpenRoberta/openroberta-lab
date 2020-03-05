@@ -1,0 +1,13 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" description="" robottype="arduino" tags="" xmlversion="2.0">
+    <instance x="584" y="198">
+        <block id="Me~!e%6?)Zn*qhWL6oF0" intask="true" type="robConf_lcd">
+            <field name="NAME">L2</field>
+            <field name="RS">12</field>
+            <field name="E">11</field>
+            <field name="D4">5</field>
+            <field name="D5">4</field>
+            <field name="D6">3</field>
+            <field name="D7">2</field>
+        </block>
+    </instance>
+</block_set>

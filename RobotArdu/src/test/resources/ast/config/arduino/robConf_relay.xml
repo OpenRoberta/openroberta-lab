@@ -1,0 +1,8 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" description="" robottype="arduino" tags="" xmlversion="2.0">
+    <instance x="561" y="61">
+        <block id="@L]-Pa~{98pV)uo5Q_7*" intask="true" type="robConf_relay">
+            <field name="NAME">R</field>
+            <field name="IN">6</field>
+        </block>
+    </instance>
+</block_set>

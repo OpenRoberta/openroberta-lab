@@ -142,8 +142,8 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
 
     private void generateConstants() {
         this.sb.append("#define PROGRAM_NAME \"" + this.programName + "\"\n");
-        this.sb.append("#define WHEEL_DIAMETER " + this.brickConfiguration.getWheelDiameterCM() + "\n");
-        this.sb.append("#define TRACK_WIDTH " + this.brickConfiguration.getTrackWidthCM() + "\n");
+        this.sb.append("#define WHEEL_DIAMETER " + this.brickConfiguration.getWheelDiameter() + "\n");
+        this.sb.append("#define TRACK_WIDTH " + this.brickConfiguration.getTrackWidth() + "\n");
         decrIndentation();
     }
 

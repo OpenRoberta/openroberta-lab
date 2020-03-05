@@ -1,0 +1,9 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" description="" robottype="sensebox" tags="" xmlversion="2.0">
+    <instance x="163" y="621">
+        <block id="sj4=9*zu2t)W_;I%)oV+" intask="true" type="robConf_sdcard">
+            <field name="NAME">S2</field>
+            <field name="NAO_FILENAME">FILE.TXT</field>
+            <field name="Socket">XBEE2</field>
+        </block>
+    </instance>
+</block_set>

@@ -1,0 +1,8 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" description="" robottype="sensebox" tags="" xmlversion="2.0">
+    <instance x="486" y="551">
+        <block id="#]Nar?{T)~M/IK|SO+m4" intask="true" type="robConf_potentiometer">
+            <field name="NAME">P</field>
+            <field name="OUTPUT">1</field>
+        </block>
+    </instance>
+</block_set>

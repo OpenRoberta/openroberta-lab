@@ -1,0 +1,9 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" description="" robottype="sensebox" tags="" xmlversion="2.0">
+    <instance x="500" y="793">
+        <block id=")Vpy6HTgFB:9*hx]K)3R" intask="true" type="robConf_ultrasonic">
+            <field name="NAME">U</field>
+            <field name="TRIG">1</field>
+            <field name="ECHO">2</field>
+        </block>
+    </instance>
+</block_set>

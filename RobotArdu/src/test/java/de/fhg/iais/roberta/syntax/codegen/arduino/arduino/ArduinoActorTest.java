@@ -181,9 +181,7 @@ public class ArduinoActorTest extends ArduinoAstTest {
         configurationAst.setRobotName("nano"); // TODO remove once rfid library is supported for unowifirev2
         UnitTestHelper
             .checkGeneratedSourceEqualityWithProgramXml(
-                testFactory,
-                "/ast/brickConfiguration/arduino_multi_include_test.ino",
-                "/ast/brickConfiguration/arduino_multi_include_test.xml",
+                testFactory, "/ast/config/arduino_multi_include_test.ino", "/ast/config/arduino_multi_include_test.xml",
                 configurationAst);
     }
 
@@ -201,9 +199,7 @@ public class ArduinoActorTest extends ArduinoAstTest {
         configurationAst.setRobotName("nano"); // TODO remove once rfid library is supported for unowifirev2
         UnitTestHelper
             .checkGeneratedSourceEqualityWithProgramXml(
-                testFactory,
-                "/ast/brickConfiguration/arduino_multi_include_test.ino",
-                "/ast/brickConfiguration/arduino_multi_include_test.xml",
+                testFactory, "/ast/config/arduino_multi_include_test.ino", "/ast/config/arduino_multi_include_test.xml",
                 configurationAst);
     }
 }

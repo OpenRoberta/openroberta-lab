@@ -1,0 +1,8 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" description="" robottype="sensebox" tags="" xmlversion="2.0">
+    <instance x="518" y="1183">
+        <block id="|{2Qfu,[c~Oi`p.ZBJGU" intask="true" type="robConf_particle">
+            <field name="NAME">S6</field>
+            <field name="SERIAL">Serial1</field>
+        </block>
+    </instance>
+</block_set>

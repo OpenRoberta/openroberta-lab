@@ -13,7 +13,6 @@ import de.fhg.iais.roberta.blockly.generated.Shadow;
 import de.fhg.iais.roberta.blockly.generated.Statement;
 import de.fhg.iais.roberta.blockly.generated.Value;
 import de.fhg.iais.roberta.components.Category;
-import de.fhg.iais.roberta.components.ProgramAst;
 import de.fhg.iais.roberta.factory.BlocklyDropdownFactory;
 import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
@@ -50,18 +49,11 @@ import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
 abstract public class AbstractJaxb2Ast<V> {
-    protected ProgramAst<V> data = new ProgramAst<>();
-
     private final IRobotFactory robotFactory;
     private int variableCounter = 0;
 
-    public ProgramAst<V> getData() {
-        return this.data;
-    }
-
     protected AbstractJaxb2Ast(IRobotFactory factory) {
         this.robotFactory = factory;
-
     }
 
     public BlocklyDropdownFactory getDropdownFactory() {
@@ -70,13 +62,6 @@ abstract public class AbstractJaxb2Ast<V> {
 
     public IRobotFactory getRobotFactory() {
         return this.robotFactory;
-    }
-
-    /**
-     * @return abstract syntax tree generated from JAXB objects.
-     */
-    public List<List<Phrase<V>>> getTree() {
-        return this.data.getTree();
     }
 
     /**
@@ -91,11 +76,6 @@ abstract public class AbstractJaxb2Ast<V> {
      */
     public void setVariableCounter(int variableCounter) {
         this.variableCounter = variableCounter;
-    }
-
-    @Override
-    public String toString() {
-        return "BlockAST [project=" + this.data.getTree() + "]";
     }
 
     /**
@@ -221,9 +201,8 @@ abstract public class AbstractJaxb2Ast<V> {
      * @param statements list for saving statements
      * @param valAndStmt list to be separated
      */
-    public void convertStmtValList(List<Value> values, List<Statement> statements, List<Object> valAndStmt) {
-        for ( int i = 0; i < valAndStmt.size(); i++ ) {
-            Object ob = valAndStmt.get(i);
+    public static void convertStmtValList(List<Value> values, List<Statement> statements, List<Object> valAndStmt) {
+        for ( Object ob : valAndStmt ) {
             if ( ob.getClass() == Value.class ) {
                 values.add((Value) ob);
             } else {
@@ -291,7 +270,7 @@ abstract public class AbstractJaxb2Ast<V> {
      * @param arguments to be transformed
      * @return array of AST expressions
      */
-    public BlocklyType[] argumentsToParametersType(List<Arg> arguments) {
+    public static BlocklyType[] argumentsToParametersType(List<Arg> arguments) {
         BlocklyType[] types = new BlocklyType[arguments.size()];
         int i = 0;
         for ( Arg arg : arguments ) {
@@ -306,7 +285,6 @@ abstract public class AbstractJaxb2Ast<V> {
      * Converts {@link Phrase} to {@link Expr}.
      *
      * @param p to be converted to expression
-     * @return
      */
     public Expr<V> convertPhraseToExpr(Phrase<V> p) {
         Expr<V> expr;
@@ -327,13 +305,11 @@ abstract public class AbstractJaxb2Ast<V> {
     }
 
     /**
-     * Convert list of values ({@link Values}) to list of expressions ({@link ExprList}).
+     * Convert list of values ({@link Value}) to list of expressions ({@link ExprList}).
      *
      * @param values to be converted
-     * @param defVal if the value is missing in the JAXB representation
      * @param nItems that should be converted
      * @param name of the values
-     * @return
      */
     public ExprList<V> valuesToExprList(List<Value> values, BlocklyType[] parametersTypes, int nItems, String name) {
         ExprList<V> exprList = ExprList.make();
@@ -347,11 +323,10 @@ abstract public class AbstractJaxb2Ast<V> {
     /**
      * Extract the operation from block.
      *
-     * @param block
      * @param operationType name of the xml element where the operation is stored
      * @return the name of the operation
      */
-    public String getOperation(Block block, String operationType) {
+    public static String getOperation(Block block, String operationType) {
         String op = operationType;
         if ( !block.getField().isEmpty() ) {
             op = extractOperation(block, operationType);
@@ -361,11 +336,6 @@ abstract public class AbstractJaxb2Ast<V> {
 
     /**
      * Extract repeat statement from {@link Block}.
-     *
-     * @param block
-     * @param expr
-     * @param mode
-     * @return
      */
     public Phrase<V> extractRepeatStatement(Block block, Phrase<V> expr, String mode) {
         return extractRepeatStatement(block, expr, mode, BlocklyConstants.DO, 1);
@@ -393,7 +363,7 @@ abstract public class AbstractJaxb2Ast<V> {
      * @param numOfValues to be extracted
      * @return list of {@link Value}
      */
-    public List<Value> extractValues(Block block, short numOfValues) {
+    public static List<Value> extractValues(Block block, short numOfValues) {
         List<Value> values;
         values = block.getValue();
         Assert.isTrue(values.size() <= numOfValues, "Values size is not less or equal to " + numOfValues + "!");
@@ -431,7 +401,7 @@ abstract public class AbstractJaxb2Ast<V> {
 
     }
 
-    private Block shadow2block(Shadow shadow) {
+    private static Block shadow2block(Shadow shadow) {
         Block block = new Block();
         block.setId(shadow.getId());
         block.setType(shadow.getType());
@@ -450,7 +420,7 @@ abstract public class AbstractJaxb2Ast<V> {
      * @param numOfStatements to be extracted
      * @return list of statements
      */
-    public List<Statement> extractStatements(Block block, short numOfStatements) {
+    public static List<Statement> extractStatements(Block block, short numOfStatements) {
         List<Statement> statements;
         statements = block.getStatement();
         Assert.isTrue(statements.size() <= numOfStatements, "Statements size is not less or equal to " + numOfStatements + "!");
@@ -462,7 +432,6 @@ abstract public class AbstractJaxb2Ast<V> {
      *
      * @param statements as source
      * @param stmtName to be extracted
-     * @return
      */
     public StmtList<V> extractStatement(List<Statement> statements, String stmtName) {
         StmtList<V> stmtList = StmtList.make();
@@ -480,7 +449,6 @@ abstract public class AbstractJaxb2Ast<V> {
      *
      * @param statements as source
      * @param stmtName of statement to be extracted
-     * @return
      */
     public ExprList<V> statementsToExprs(List<Statement> statements, String stmtName) {
         ExprList<V> exprList = ExprList.make();
@@ -502,7 +470,7 @@ abstract public class AbstractJaxb2Ast<V> {
      * @param numOfFields to be extracted
      * @return list of fields
      */
-    public List<Field> extractFields(Block block, short numOfFields) {
+    public static List<Field> extractFields(Block block, short numOfFields) {
         List<Field> fields;
         fields = block.getField();
         Assert.isTrue(fields.size() <= numOfFields, "Number of fields is not equal to " + numOfFields + "!");
@@ -510,7 +478,7 @@ abstract public class AbstractJaxb2Ast<V> {
     }
 
     /**
-     * Extract field from list of {@link Field}. If the field with the given name is not found it returns the {@link defaultValue}.<br>
+     * Extract field from list of {@link Field}. If the field with the given name is not found it returns the default {@link Value}.<br>
      * <br>
      * Throws {@link DbcException} if the field is not found and the defaultValue is set to <b>null</b>.
      *
@@ -519,7 +487,7 @@ abstract public class AbstractJaxb2Ast<V> {
      * @param defaultValue if the field is not existent
      * @return value containing the field
      */
-    public String extractField(List<Field> fields, String name, String defaultValue) {
+    public static String extractField(List<Field> fields, String name, String defaultValue) {
         for ( Field field : fields ) {
             if ( field.getName().equals(name) ) {
                 return field.getValue();
@@ -541,7 +509,7 @@ abstract public class AbstractJaxb2Ast<V> {
      * @param name of the field to be extracted
      * @return value containing the field
      */
-    public String extractField(List<Field> fields, String name) {
+    public static String extractField(List<Field> fields, String name) {
         for ( Field field : fields ) {
             if ( field.getName().equals(name) ) {
                 return field.getValue();
@@ -558,7 +526,7 @@ abstract public class AbstractJaxb2Ast<V> {
      * @param name of the field to be extracted
      * @return value containing the field; if the key was not found, return null
      */
-    public String optField(List<Field> fields, String name) {
+    public static String optField(List<Field> fields, String name) {
         for ( Field field : fields ) {
             if ( field.getName().equals(name) ) {
                 return field.getValue();
@@ -567,19 +535,17 @@ abstract public class AbstractJaxb2Ast<V> {
         return null;
     }
 
-    public String extractOperation(Block block, String name) {
+    public static String extractOperation(Block block, String name) {
         List<Field> fields = extractFields(block, (short) 1);
-        String operation = extractField(fields, name);
-        return operation;
+        return extractField(fields, name);
     }
 
     /**
      * Extracts the comment from {@link Block}
      *
      * @param block as source
-     * @return
      */
-    public BlocklyComment extractComment(Block block) {
+    public static BlocklyComment extractComment(Block block) {
         if ( block.getComment() != null ) {
             Comment comment = block.getComment();
             return BlocklyComment.make(comment.getValue(), comment.isPinned(), comment.getH(), comment.getW());
@@ -591,9 +557,8 @@ abstract public class AbstractJaxb2Ast<V> {
      * Extracts the visual state of the {@link Block}.
      *
      * @param block as a source
-     * @return
      */
-    public BlocklyBlockProperties extractBlockProperties(Block block) {
+    public static BlocklyBlockProperties extractBlockProperties(Block block) {
         return BlocklyBlockProperties
             .make(
                 block.getType(),
@@ -608,14 +573,14 @@ abstract public class AbstractJaxb2Ast<V> {
                 isErrorAttribute(block));
     }
 
-    public int getElseIf(Mutation mutation) {
+    public static int getElseIf(Mutation mutation) {
         if ( (mutation != null) && (mutation.getElseif() != null) ) {
             return mutation.getElseif().intValue();
         }
         return 0;
     }
 
-    public int getElse(Mutation mutation) {
+    public static int getElse(Mutation mutation) {
         if ( (mutation != null) && (mutation.getElse() != null) ) {
             return mutation.getElse().intValue();
         }
@@ -672,50 +637,50 @@ abstract public class AbstractJaxb2Ast<V> {
         return RepeatStmt.make(RepeatStmt.Mode.get(mode), convertPhraseToExpr(expr), stmtList, extractBlockProperties(block), extractComment(block));
     }
 
-    private boolean isDisabled(Block block) {
-        return block.isDisabled() == null ? false : true;
+    private static boolean isDisabled(Block block) {
+        return block.isDisabled() != null;
     }
 
-    private boolean isCollapsed(Block block) {
-        return block.isCollapsed() == null ? false : true;
+    private static boolean isCollapsed(Block block) {
+        return block.isCollapsed() != null;
     }
 
-    private Boolean isInline(Block block) {
+    private static Boolean isInline(Block block) {
         if ( block.isInline() == null ) {
             return null;
         }
         return block.isInline();
     }
 
-    private Boolean isDeletable(Block block) {
+    private static Boolean isDeletable(Block block) {
         if ( block.isDeletable() == null ) {
             return null;
         }
         return block.isDeletable();
     }
 
-    private Boolean isMovable(Block block) {
+    private static Boolean isMovable(Block block) {
         if ( block.isMovable() == null ) {
             return null;
         }
         return block.isMovable();
     }
 
-    private Boolean isInTask(Block block) {
+    private static Boolean isInTask(Block block) {
         if ( block.isIntask() == null ) {
             return null;
         }
         return block.isIntask();
     }
 
-    private Boolean isShadow(Block block) {
+    private static Boolean isShadow(Block block) {
         if ( block.isShadow() == null ) {
             return null;
         }
         return block.isShadow();
     }
 
-    private Boolean isErrorAttribute(Block block) {
+    private static Boolean isErrorAttribute(Block block) {
         if ( block.isErrorAttribute() == null ) {
             return null;
         }

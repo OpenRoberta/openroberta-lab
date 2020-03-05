@@ -19,8 +19,6 @@ import org.slf4j.LoggerFactory;
 import org.xml.sax.InputSource;
 
 import de.fhg.iais.roberta.blockly.generated.BlockSet;
-import de.fhg.iais.roberta.factory.IRobotFactory;
-import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 
 public class JaxbHelper {
     private static final Logger LOG = LoggerFactory.getLogger(JaxbHelper.class);
@@ -101,19 +99,4 @@ public class JaxbHelper {
     public static BlockSet path2BlockSet(String pathToblocklyXml) throws Exception {
         return xml2BlockSet(IOUtils.toString(JaxbHelper.class.getResourceAsStream(pathToblocklyXml), "UTF-8"));
     }
-
-    /**
-     * return the jaxb transformer for a given XML program text.
-     *
-     * @param blocklyXml the program XML as String
-     * @return jaxb the transformer
-     * @throws Exception
-     */
-    public static Jaxb2ProgramAst<Void> generateProgramTransformer(IRobotFactory factory, String blocklyXml) throws Exception {
-        BlockSet project = JaxbHelper.xml2BlockSet(blocklyXml);
-        Jaxb2ProgramAst<Void> transformer = new Jaxb2ProgramAst<>(factory);
-        transformer.transform(project);
-        return transformer;
-    }
-
 }

@@ -1,0 +1,11 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" description="" robottype="arduino" tags="" xmlversion="2.0">
+    <instance x="358" y="399">
+        <block id="ASKwV+EkzlS.ey/UZSie" intask="true" type="robConf_stepmotor">
+            <field name="NAME">S2</field>
+            <field name="IN1">6</field>
+            <field name="IN2">5</field>
+            <field name="IN3">4</field>
+            <field name="IN4">3</field>
+        </block>
+    </instance>
+</block_set>

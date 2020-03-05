@@ -1,0 +1,8 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" description="" robottype="arduino" tags="" xmlversion="2.0">
+    <instance x="1092" y="103">
+        <block id="[[Z1jRBm5gk~He2E|:XB" intask="true" type="robConf_digitalout">
+            <field name="NAME">S4</field>
+            <field name="OUTPUT">0</field>
+        </block>
+    </instance>
+</block_set>

@@ -979,9 +979,9 @@ public final class Ev3JavaVisitor extends AbstractJavaVisitor implements IEv3Vis
         this.sb.append(" brickConfiguration = new EV3Configuration.Builder()");
         incrIndentation();
         nlIndent();
-        this.sb.append(".setWheelDiameter(").append(this.brickConfiguration.getWheelDiameterCM()).append(")");
+        this.sb.append(".setWheelDiameter(").append(this.brickConfiguration.getWheelDiameter()).append(")");
         nlIndent();
-        this.sb.append(".setTrackWidth(").append(this.brickConfiguration.getTrackWidthCM()).append(")");
+        this.sb.append(".setTrackWidth(").append(this.brickConfiguration.getTrackWidth()).append(")");
         nlIndent();
         appendActors();
         appendSensors();

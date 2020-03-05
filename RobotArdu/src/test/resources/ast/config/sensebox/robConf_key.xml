@@ -1,0 +1,8 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" description="" robottype="sensebox" tags="" xmlversion="2.0">
+    <instance x="479" y="374">
+        <block id="NUo({@QL.bR}8yRsw6FU" intask="true" type="robConf_key">
+            <field name="NAME">T</field>
+            <field name="PIN1">2</field>
+        </block>
+    </instance>
+</block_set>
