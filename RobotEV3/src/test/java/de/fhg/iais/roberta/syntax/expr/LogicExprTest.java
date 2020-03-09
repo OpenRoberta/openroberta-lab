@@ -38,7 +38,7 @@ public class LogicExprTest extends Ev3LejosAstTest {
 
     @Test
     public void logicTernary() throws Exception {
-        String a = "\n( 0 == 0 ) ? false : true}";
+        String a = "\n( ( 0 == 0 ) ? false : true )}";
 
         UnitTestHelper.checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, a, "/syntax/expr/logic_ternary.xml", false);
     }

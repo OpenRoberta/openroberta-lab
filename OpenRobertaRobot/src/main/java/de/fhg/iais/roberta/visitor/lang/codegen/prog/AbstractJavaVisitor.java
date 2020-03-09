@@ -613,12 +613,13 @@ public abstract class AbstractJavaVisitor extends AbstractLanguageVisitor {
 
     @Override
     protected void generateCodeFromTernary(IfStmt<Void> ifStmt) {
-        this.sb.append("(" + whitespace());
+        this.sb.append("(" + whitespace() + "(" + whitespace());
         ifStmt.getExpr().get(0).accept(this);
         this.sb.append(whitespace() + ")" + whitespace() + "?" + whitespace());
         ((ExprStmt<Void>) ifStmt.getThenList().get(0).get().get(0)).getExpr().accept(this);
         this.sb.append(whitespace() + ":" + whitespace());
         ((ExprStmt<Void>) ifStmt.getElseList().get().get(0)).getExpr().accept(this);
+        this.sb.append(whitespace() + ")");
     }
 
     @Override
