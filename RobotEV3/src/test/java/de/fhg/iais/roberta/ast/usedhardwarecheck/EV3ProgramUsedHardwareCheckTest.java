@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import org.junit.Assert;
 import org.junit.Test;
 
+import com.google.common.collect.ImmutableClassToInstanceMap;
+
 import de.fhg.iais.roberta.Ev3LejosAstTest;
 import de.fhg.iais.roberta.bean.UsedHardwareBean;
 import de.fhg.iais.roberta.bean.UsedHardwareBean.Builder;
@@ -18,7 +20,7 @@ public class EV3ProgramUsedHardwareCheckTest extends Ev3LejosAstTest {
         ArrayList<ArrayList<Phrase<Void>>> phrasesOfPhrases = UnitTestHelper.getAst(testFactory, pathToXml);
         UsedHardwareBean.Builder builder = new Builder();
         Ev3UsedHardwareCollectorVisitor checkVisitor =
-            new Ev3UsedHardwareCollectorVisitor(builder, makeLargeLargeMediumTouchGyroColorUltrasonic());
+            new Ev3UsedHardwareCollectorVisitor(makeLargeLargeMediumTouchGyroColorUltrasonic(), ImmutableClassToInstanceMap.of(UsedHardwareBean.Builder.class, builder));
         for ( ArrayList<Phrase<Void>> phrases : phrasesOfPhrases ) {
             for ( Phrase<Void> phrase : phrases ) {
                 phrase.accept(checkVisitor);

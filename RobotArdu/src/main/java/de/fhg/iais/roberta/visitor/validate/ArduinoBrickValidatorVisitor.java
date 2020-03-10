@@ -1,6 +1,8 @@
 package de.fhg.iais.roberta.visitor.validate;
 
-import de.fhg.iais.roberta.bean.UsedHardwareBean;
+import com.google.common.collect.ClassToInstanceMap;
+
+import de.fhg.iais.roberta.bean.IProjectBean;
 import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.components.ConfigurationComponent;
 import de.fhg.iais.roberta.syntax.SC;
@@ -34,8 +36,8 @@ import de.fhg.iais.roberta.visitor.hardware.sensor.ISensorVisitor;
 
 public final class ArduinoBrickValidatorVisitor extends AbstractBrickValidatorVisitor implements ISensorVisitor<Void>, IArduinoVisitor<Void> {
 
-    public ArduinoBrickValidatorVisitor(UsedHardwareBean.Builder builder, ConfigurationAst brickConfiguration) {
-        super(builder, brickConfiguration);
+    public ArduinoBrickValidatorVisitor(ConfigurationAst brickConfiguration, ClassToInstanceMap<IProjectBean.IBuilder<?>> beanBuilders) {
+        super(brickConfiguration, beanBuilders);
     }
 
     @Override

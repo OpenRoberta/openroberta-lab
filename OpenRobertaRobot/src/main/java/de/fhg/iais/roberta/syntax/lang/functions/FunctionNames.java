@@ -25,6 +25,7 @@ public enum FunctionNames {
     MEDIAN( 10, Assoc.LEFT ),
     MODE( 10, Assoc.LEFT ),
     STD_DEV( 10, Assoc.LEFT ),
+    SQUARE( 10, Assoc.LEFT ),
     ROOT( 10, Assoc.LEFT, "SQRT" ),
     ABS( 10, Assoc.LEFT ),
     LN( 10, Assoc.LEFT ),

@@ -10,29 +10,50 @@ import de.fhg.iais.roberta.syntax.functions.arduino.LEDMatrixImageInvertFunction
 import de.fhg.iais.roberta.syntax.functions.arduino.LEDMatrixImageShiftFunction;
 import de.fhg.iais.roberta.syntax.sensors.arduino.mbot.FlameSensor;
 import de.fhg.iais.roberta.syntax.sensors.arduino.mbot.Joystick;
+import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.visitor.hardware.actor.IActors4AutonomousDriveRobots;
 import de.fhg.iais.roberta.visitor.hardware.actor.ISerialVisitor;
 import de.fhg.iais.roberta.visitor.hardware.sensor.ISensorVisitor;
 
 public interface IMbotVisitor<V> extends IActors4AutonomousDriveRobots<V>, ISensorVisitor<V>, ISerialVisitor<V> {
 
-    V visitJoystick(Joystick<V> joystick);
+    default V visitJoystick(Joystick<V> joystick) {
+        throw new DbcException("Block is not implemented!");
+    }
 
-    V visitFlameSensor(FlameSensor<V> flameSensor);
+    default V visitFlameSensor(FlameSensor<V> flameSensor) {
+        throw new DbcException("Block is not implemented!");
+    }
 
-    V visitSendIRAction(SendIRAction<V> sendIRAction);
+    default V visitSendIRAction(SendIRAction<V> sendIRAction) {
+        throw new DbcException("Block is not implemented!");
+    }
 
-    V visitReceiveIRAction(ReceiveIRAction<V> receiveIRAction);
-    
-    V visitLEDMatrixImageAction(LEDMatrixImageAction<V> ledMatrixImageAction);
-    
-    V visitLEDMatrixTextAction(LEDMatrixTextAction<V> ledMatrixTextAction);
-     
-    V visitLEDMatrixImage(LEDMatrixImage<Void> ledMatrixImage);
+    default V visitReceiveIRAction(ReceiveIRAction<V> receiveIRAction) {
+        throw new DbcException("Block is not implemented!");
+    }
 
-    V visitLEDMatrixImageShiftFunction(LEDMatrixImageShiftFunction<Void> ledMatrixImageShiftFunction);
+    default V visitLEDMatrixImageAction(LEDMatrixImageAction<V> ledMatrixImageAction) {
+        throw new DbcException("Block is not implemented!");
+    }
 
-    V visitLEDMatrixImageInvertFunction(LEDMatrixImageInvertFunction<Void> ledMatrixImageInverFunction);
+    default V visitLEDMatrixTextAction(LEDMatrixTextAction<V> ledMatrixTextAction) {
+        throw new DbcException("Block is not implemented!");
+    }
 
-    V visitLEDMatrixSetBrightnessAction(LEDMatrixSetBrightnessAction<V> ledMatrixSetBrightnessAction);
+    default V visitLEDMatrixImage(LEDMatrixImage<Void> ledMatrixImage) {
+        throw new DbcException("Block is not implemented!");
+    }
+
+    default V visitLEDMatrixImageShiftFunction(LEDMatrixImageShiftFunction<Void> ledMatrixImageShiftFunction) {
+        throw new DbcException("Block is not implemented!");
+    }
+
+    default V visitLEDMatrixImageInvertFunction(LEDMatrixImageInvertFunction<Void> ledMatrixImageInverFunction) {
+        throw new DbcException("Block is not implemented!");
+    }
+
+    default V visitLEDMatrixSetBrightnessAction(LEDMatrixSetBrightnessAction<V> ledMatrixSetBrightnessAction) {
+        throw new DbcException("Block is not implemented!");
+    }
 }

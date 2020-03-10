@@ -1,11 +1,10 @@
 define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socket.controller', 'user.controller', 'user.model', 'guiState.controller',
-        'program.controller', 'program.model', 'multSim.controller', 'progRun.controller', 'configuration.controller',
-        'import.controller', 'enjoyHint', 'tour.controller', 'simulation.simulation', 'progList.model', 'jquery', 'blocks', 'slick' ], function(exports, LOG,
-        UTIL, MSG, COMM, ROBOT_C, SOCKET_C, USER_C, USER, GUISTATE_C, PROGRAM_C, PROGRAM_M, MULT_SIM, RUN_C, CONFIGURATION_C, IMPORT_C,
-        EnjoyHint, TOUR_C, SIM, PROGLIST, $, Blockly) {
+        'program.controller', 'program.model', 'multSim.controller', 'progRun.controller', 'configuration.controller', 'import.controller', 'enjoyHint',
+        'tour.controller', 'simulation.simulation', 'progList.model', 'jquery', 'blocks', 'slick' ], function(exports, LOG, UTIL, MSG, COMM, ROBOT_C, SOCKET_C,
+        USER_C, USER, GUISTATE_C, PROGRAM_C, PROGRAM_M, MULT_SIM, RUN_C, CONFIGURATION_C, IMPORT_C, EnjoyHint, TOUR_C, SIM, PROGLIST, $, Blockly) {
 
     var n = 0;
-    
+
     const QUERY_START = '?';
     const QUERY_DELIMITER = '&';
     const QUERY_ASSIGNMENT = '=';
@@ -19,10 +18,7 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
 
     // from https://stackoverflow.com/questions/19491336/get-url-parameter-jquery-or-how-to-get-query-string-values-in-js/21903119#21903119
     function getUrlParameter(sParam) {
-        var sPageURL = window.location.search.substring(1),
-            sURLVariables = sPageURL.split(QUERY_DELIMITER),
-            sParameterName,
-            i;
+        var sPageURL = window.location.search.substring(1), sURLVariables = sPageURL.split(QUERY_DELIMITER), sParameterName, i;
 
         for (i = 0; i < sURLVariables.length; i++) {
             sParameterName = sURLVariables[i].split(QUERY_ASSIGNMENT);
@@ -651,6 +647,9 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
         }, 'show more releases clicked');
 
         $('#takeATour').onWrap('click', function(event) {
+            if (GUISTATE_C.getView() !== "tabProgram") {
+                $('#tabProgram').click();
+            }
             if (GUISTATE_C.getRobotGroup() !== 'ev3') {
                 ROBOT_C.switchRobot('ev3lejosv1', true);
             }

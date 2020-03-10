@@ -1,0 +1,191 @@
+include: "classpath:/common.methods.yml"
+
+POWER:
+  C: |
+    float MathPow(float firstValue, float secondValue) {
+        float result = 1;
+        for (int i = 0; i < abs(secondValue); i++) {
+            result = result * firstValue;
+        }
+        if (secondValue < 0) {
+            if (firstValue == 0) {
+                return NULL;
+            } else {
+                return 1 / result;
+            }
+        } else {
+            return result;
+        }
+    }
+ROUNDDOWN:
+  C: |
+    int MathFloor(float val) {
+        int temp = val;
+        return temp;
+    }
+ROUND:
+  C: |
+    int MathRound(float val) {
+        return MathFloor(0.5 + val);
+    }
+ROUNDUP:
+  C: |
+    int MathRoundUp(float val) {
+        return (1 + MathFloor(val));
+    }
+WHOLE:
+  C: |
+    bool MathIsWhole(float val) {
+        int intPart = val;
+        return ((val - intPart) == 0);
+    }
+PRIME:
+  C: |
+    bool MathPrime(float number) {
+        if ((number % 2 == 0) || (number == 1)) return false;
+        //if not, then just check the odds
+        for (int i = 3; i * i <= number; i += 2) {
+            if (number % i == 0)
+                return false;
+        }
+        return true;
+    }
+LN:
+  C: |
+    float MathLn(float val) {
+        if (val > 1) {
+            float values[] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 10000};
+            float results[] = {0, 0.693147, 1.098612, 1.386294, 1.609438, 1.791759, 1.945910, 2.079442, 2.197225, 2.302585, 2.995732, 3.401197, 3.688879, 3.912023, 4.094345, 4.248495, 4.382027, 4.499810, 4.605170, 5.298317, 5.703782, 5.991465, 6.214608, 6.396930, 6.551080, 6.684612, 6.802395, 6.907755, 9.210340};
+            int i = 1;
+            while (values[i] < abs(val)) {
+                i++;
+            }
+            float result = results[i - 1] + (abs(val) - values[i - 1]) * (results[i] - results[i - 1]) / (values[i] - values[i - 1]);
+            if (val <= 100000) {
+                return result;
+            } else {
+                return 9.22;
+            }
+        } else if ((val > 0) && (val <= 1)) {
+            float summ = 0;
+            for (int n = 1; n < 10; n++) {
+                summ += MathPow(-1, (n + 1)) * MathPow((val - 1), n) / n;
+            }
+            return summ;
+        } else {
+            TextOut(0, LCD_LINE1, "invalid value");
+            Wait(1000);
+            ClearScreen();
+            return NULL;
+        }
+    }
+LOG10:
+  C: |
+    float MathLog(float val) {
+        return MathLn(val) / MathLn(2.71828);
+    }
+FACTORIAL:
+  C: |
+    float MathFactorial(float val) {
+        float result = val;
+        if (val == 0) {
+            return 1;
+        } else {
+            for (int i = 1; i < val; i++) {
+                result = result * (val - i);
+            }
+            return result;
+        }
+    }
+SIN:
+  C: |
+    float MathSin(float val) {
+        float angle = PI * val / 180;
+        float summ = 0;
+        for (int n = 0; n < 10; n++) {
+            summ += MathPow(-1, n) * MathPow(angle, (2 * n + 1)) / MathFactorial(2 * n + 1);
+        }
+        return summ;
+    }
+COS:
+  C: |
+    float MathCos(float val) {
+        float angle = PI * val / 180;
+        float summ = 0;
+        for (float n = 0; n < 10; n++) {
+            summ += (MathPow(-1, n) / MathFactorial(2 * n)) * MathPow(angle, (2 * n));
+        }
+        return summ;
+    }
+TAN:
+  C: |
+    float MathTan(float val) {
+        return MathSin(val) / MathCos(val);
+    }
+ASIN:
+  C: |
+    float MathAsin(float val) {
+        if (abs(val) > 1) {
+            TextOut(0, LCD_LINE1, "invalid value");
+            Wait(1000);
+            ClearScreen();
+            return NULL;
+        } else {
+            float summ = 0;
+            for (float n = 0; n < 15; n++) {
+                summ += MathFactorial(2 * n) * MathPow(val, (2 * n + 1)) / MathPow(4, n) / MathPow(MathFactorial(n), 2) / (2 * n + 1);
+            }
+            return summ * 180 / PI;
+        }
+    }
+ACOS:
+  C: |
+    float MathAcos(float val) {
+        if (abs(val) > 1) {
+            TextOut(0, LCD_LINE1, "invalid value");
+            Wait(1000);
+            ClearScreen();
+            return NULL;
+        } else {
+            return 90 - MathAsin(val);
+        }
+    }
+ATAN:
+  C: |
+    float MathAtan(float val) {
+        if (abs(val) > 1) {
+            float values[] = {1, sqrt(3), 2, 3, 0x7f800000};
+            float results[] = {45, 60, 63.435, 71.565, 90};
+            int i = 1;
+            while (values[i] < abs(val)) {
+                i++;
+            }
+            float result = results[i - 1] + (abs(val) - values[i - 1]) * (results[i] - results[i - 1]) / (values[i] - values[i - 1]);
+            if (val > 0) {
+                return result;
+            } else {
+                return -result;
+            }
+        } else {
+            float summ = 0;
+            for (float n = 1; n < 15; n++) {
+                summ += MathPow(-1, (n - 1)) * MathPow(val, (2 * n - 1)) / (2 * n - 1);
+            }
+            return summ * 180 / PI;
+        }
+    }
+STD_DEV: # defined here because standard deviation depends on MathPow, which is not available in the NEPODefs.h
+  C: |
+    float ArrayStdDev(float arr[]) {
+        int n = idty(ArrayLen(arr));
+        if (n == 0) {
+            return 0;
+        }
+        float variance = 0;
+        float mean = ArrayMean(arr);
+        for (int i = 0; i < ArrayLen(arr); i++) {
+            variance += MathPow(arr[i] - mean, 2);
+        }
+        variance /= n;
+        return sqrt(variance);
+    }

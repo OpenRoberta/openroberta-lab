@@ -468,6 +468,8 @@ define({
 
     BUTTON_B: "B",
 
+    COMMENT : "comment",
+
     COMPASS: "compass",
 
     GESTURE: "gesture",

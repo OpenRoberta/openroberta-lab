@@ -10,7 +10,7 @@ public class MotorDriveStopActionTest extends NxtAstTest {
     @Test
     public void stop() throws Exception {
         final String a =
-            "#defineWHEELDIAMETER5.6#defineTRACKWIDTH11.0#defineMAXLINES8#include\"NEPODefs.h\"//containsNEPOdeclarationsfortheNXCNXTAPIresources"
+            DEFINES_INCLUDES
                 + "\nOff(OUT_BC);}";
 
         UnitTestHelper.checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, a, "/ast/actions/action_Stop.xml", brickConfigurationBC, true);

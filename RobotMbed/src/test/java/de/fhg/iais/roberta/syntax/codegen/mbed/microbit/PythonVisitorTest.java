@@ -338,6 +338,29 @@ public class PythonVisitorTest extends MicrobitAstTest {
     }
 
     @Test
+    public void visitLightSensor_ScriptDisplayCompassHeading_ReturnsMicroPythonScript() throws Exception {
+        String expectedResult =
+            "" //
+                + IMPORTS
+                + "\n"
+                + "def run():\n"
+                + "    global timer1\n"
+                + "    microbit.display.scroll(str((microbit.display.read_light_level() / 2.55)))\n"
+                + "\n"
+                + "def main():\n"
+                + "    try:\n"
+                + "        run()\n"
+                + "    except Exception as e:\n"
+                + "        raise\n"
+                + "\n"
+                + "if __name__ == \"__main__\":\n"
+                + "    main()";
+
+        UnitTestHelper
+            .checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, expectedResult, "/sensor/get_light_level.xml", true);
+    }
+
+    @Test
     public void visitImage_ScriptCreatingImage_ReturnsMicroPythonScript() throws Exception {
         String expectedResult =
             "" //

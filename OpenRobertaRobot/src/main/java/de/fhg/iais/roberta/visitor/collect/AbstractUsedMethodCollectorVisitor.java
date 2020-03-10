@@ -1,8 +1,12 @@
 package de.fhg.iais.roberta.visitor.collect;
 
 import de.fhg.iais.roberta.bean.UsedMethodBean;
+import de.fhg.iais.roberta.inter.mode.general.IListElementOperations;
+import de.fhg.iais.roberta.mode.general.ListElementOperations;
 import de.fhg.iais.roberta.syntax.lang.functions.FunctionNames;
+import de.fhg.iais.roberta.syntax.lang.functions.ListGetIndex;
 import de.fhg.iais.roberta.syntax.lang.functions.ListRepeat;
+import de.fhg.iais.roberta.syntax.lang.functions.ListSetIndex;
 import de.fhg.iais.roberta.syntax.lang.functions.MathNumPropFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathOnListFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathPowerFunct;
@@ -65,5 +69,25 @@ public abstract class AbstractUsedMethodCollectorVisitor implements ICollectorVi
     public Void visitMathRandomFloatFunct(MathRandomFloatFunct<Void> mathRandomFloatFunct) {
         this.builder.addUsedMethod(FunctionNames.RANDOM_DOUBLE);
         return ICollectorVisitor.super.visitMathRandomFloatFunct(mathRandomFloatFunct);
+    }
+
+    @Override
+    public Void visitListGetIndex(ListGetIndex<Void> listGetIndex) {
+        IListElementOperations iOp = listGetIndex.getElementOperation();
+        if (iOp instanceof ListElementOperations) {
+            ListElementOperations op = (ListElementOperations) iOp;
+            this.builder.addUsedMethod(op);
+        }
+        return ICollectorVisitor.super.visitListGetIndex(listGetIndex);
+    }
+
+    @Override
+    public Void visitListSetIndex(ListSetIndex<Void> listSetIndex) {
+        IListElementOperations iOp = listSetIndex.getElementOperation();
+        if (iOp instanceof ListElementOperations) {
+            ListElementOperations op = (ListElementOperations) iOp;
+            this.builder.addUsedMethod(op);
+        }
+        return ICollectorVisitor.super.visitListSetIndex(listSetIndex);
     }
 }

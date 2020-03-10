@@ -17,10 +17,9 @@
 # Note, that the last three '-' can be omitted
 
 function showResourceLoop {
-    echo 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx' >> $LOGFILE
-    echo "showResources process has pid $$" >> $LOGFILE
-    echo "server $SERVER_NAME lower $LOWERLIMIT upper $UPPERLIMIT url $SERVERURL pid $PID" >> $LOGFILE
-    echo 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx' >> $LOGFILE
+    headerMessage "start of showResources process with pid $$" >> $LOGFILE
+    echo "observing server $SERVER_NAME lower $LOWERLIMIT upper $UPPERLIMIT url $SERVERURL pid $PID" >> $LOGFILE
+    echo '' >> $LOGFILE
     
     SECOND_OF_START=$(date +%s)
     while [ true ]
@@ -47,13 +46,12 @@ function showResourceLoop {
         DELTA=$(("$SECOND_NOW" - "$SECOND_OF_START"))
         if [ "$DELTA" -gt "$DURATION" ]
         then
-            echo 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx' >> $LOGFILE
-            echo "exit of pid $$ after a day of work" >> $LOGFILE
+            headerMessage "exit of show resources process $$" >> $LOGFILE
             exit 0
         fi
     done
 }
-typeset -fx showResourceLoop
+export -f showResourceLoop
 
 function guessPidOfServerRunningTheLab {
     PSTREE=$(pstree -alp | egrep '.*java.*PrintGC.*'"$SERVER_NAME" | fgrep -v grep)

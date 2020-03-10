@@ -1,7 +1,6 @@
 package de.fhg.iais.roberta.bean;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
@@ -11,7 +10,6 @@ import java.util.Set;
 
 import de.fhg.iais.roberta.components.UsedActor;
 import de.fhg.iais.roberta.components.UsedSensor;
-import de.fhg.iais.roberta.syntax.SC;
 import de.fhg.iais.roberta.syntax.lang.expr.VarDeclaration;
 import de.fhg.iais.roberta.syntax.lang.methods.Method;
 
@@ -20,7 +18,7 @@ import de.fhg.iais.roberta.syntax.lang.methods.Method;
  * Currently used for more than just used hardware, should be split up into multiple separate beans in the future.
  */
 //TODO move unrelated data to specific beans. Refactor fields from Mbed into usedActors/Sensors
-public class UsedHardwareBean {
+public class UsedHardwareBean implements IProjectBean {
 
     private List<String> globalVariables = new ArrayList<>();
     private List<String> declaredVariables = new ArrayList<>();
@@ -85,7 +83,7 @@ public class UsedHardwareBean {
         return loopsLabelContainer;
     }
 
-    public static class Builder {
+    public static class Builder implements IBuilder<UsedHardwareBean> {
         private final UsedHardwareBean usedHardwareBean = new UsedHardwareBean();
 
         public Builder addGlobalVariable(String globalVariable) {

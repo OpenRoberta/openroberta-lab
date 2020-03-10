@@ -70,9 +70,9 @@ fi
 OUTPUT="$(df -h)"
 HOSTNAME="$(hostname)"
 
-echo "*** checking liveness of $LAB_URL as seen by host $HOSTNAME with result alive==$ALIVE ***"
+echo '******************** '"$DATE: checking liveness of $LAB_URL, host $HOSTNAME with result alive==$ALIVE"' ********************'
 
 if [[ "$ALIVE" = false || "$REPORT_ALWAYS" = true ]]
 then
-    generate_output | sudo nc $ALIVE_MAIL_SMTP_SERVER $ALIVE_MAIL_SMTP_PORT
+    generate_output | sudo nc $ALIVE_MAIL_SMTP_SERVER $ALIVE_MAIL_SMTP_PORT >/tmp/smtpOutputForDebugging
 fi

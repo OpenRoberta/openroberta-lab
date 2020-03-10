@@ -1,7 +1,8 @@
 package de.fhg.iais.roberta.worker.codegen;
 
-import de.fhg.iais.roberta.bean.CodeGeneratorSetupBean;
-import de.fhg.iais.roberta.bean.UsedHardwareBean;
+import com.google.common.collect.ClassToInstanceMap;
+
+import de.fhg.iais.roberta.bean.IProjectBean;
 import de.fhg.iais.roberta.components.Project;
 import de.fhg.iais.roberta.visitor.codegen.Ev3PythonVisitor;
 import de.fhg.iais.roberta.visitor.lang.codegen.AbstractLanguageVisitor;
@@ -10,12 +11,11 @@ import de.fhg.iais.roberta.worker.AbstractLanguageGeneratorWorker;
 public final class Ev3PythonGeneratorWorker extends AbstractLanguageGeneratorWorker {
 
     @Override
-    protected AbstractLanguageVisitor getVisitor(UsedHardwareBean usedHardwareBean, CodeGeneratorSetupBean codeGeneratorSetupBean, Project project) {
+    protected AbstractLanguageVisitor getVisitor(Project project, ClassToInstanceMap<IProjectBean> beans) {
         return new Ev3PythonVisitor(
-            usedHardwareBean,
-            codeGeneratorSetupBean,
-            project.getConfigurationAst(),
             project.getProgramAst().getTree(),
-            project.getLanguage());
+            project.getConfigurationAst(),
+            project.getLanguage(),
+            beans);
     }
 }

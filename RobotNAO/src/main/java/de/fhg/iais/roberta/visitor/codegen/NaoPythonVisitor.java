@@ -5,9 +5,10 @@ import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 
-import de.fhg.iais.roberta.bean.CodeGeneratorSetupBean;
+import com.google.common.collect.ClassToInstanceMap;
+
+import de.fhg.iais.roberta.bean.IProjectBean;
 import de.fhg.iais.roberta.bean.UsedHardwareBean;
-import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.components.UsedSensor;
 import de.fhg.iais.roberta.inter.mode.action.ILanguage;
 import de.fhg.iais.roberta.mode.action.DriveDirection;
@@ -86,16 +87,10 @@ public final class NaoPythonVisitor extends AbstractPythonVisitor implements INa
     /**
      * initialize the Python code generator visitor.
      *
-     * @param brickConfiguration hardware configuration of the brick
      * @param programPhrases to generate the code from
      */
-    public NaoPythonVisitor(
-        UsedHardwareBean usedHardwareBean,
-        CodeGeneratorSetupBean codeGeneratorSetupBean,
-        ConfigurationAst brickConfiguration,
-        ArrayList<ArrayList<Phrase<Void>>> programPhrases,
-        ILanguage language) {
-        super(usedHardwareBean, codeGeneratorSetupBean, programPhrases);
+    public NaoPythonVisitor(List<ArrayList<Phrase<Void>>> programPhrases, ILanguage language, ClassToInstanceMap<IProjectBean> beans) {
+        super(programPhrases, beans);
 
         this.language = language;
     }
@@ -968,7 +963,7 @@ public final class NaoPythonVisitor extends AbstractPythonVisitor implements INa
         nlIndent();
         generateSensors();
 
-        if ( !usedHardwareBean.getLoopsLabelContainer().isEmpty() ) {
+        if ( !this.getBean(UsedHardwareBean.class).getLoopsLabelContainer().isEmpty() ) {
             nlIndent();
             this.sb.append("class BreakOutOfALoop(Exception): pass");
             nlIndent();
@@ -1031,7 +1026,7 @@ public final class NaoPythonVisitor extends AbstractPythonVisitor implements INa
     }
 
     private void generateSensors() {
-        for ( UsedSensor usedSensor : this.usedHardwareBean.getUsedSensors() ) {
+        for ( UsedSensor usedSensor : this.getBean(UsedHardwareBean.class).getUsedSensors() ) {
             switch ( usedSensor.getType() ) {
                 case SC.ULTRASONIC:
                     this.sb.append("h.sonar.subscribe(\"OpenRobertaApp\")");
@@ -1074,7 +1069,7 @@ public final class NaoPythonVisitor extends AbstractPythonVisitor implements INa
     }
 
     private void removeSensors() {
-        for ( UsedSensor usedSensor : this.usedHardwareBean.getUsedSensors() ) {
+        for ( UsedSensor usedSensor : this.getBean(UsedHardwareBean.class).getUsedSensors() ) {
             String sensorType = usedSensor.getType();
             switch ( sensorType ) {
                 case BlocklyConstants.COLOR:

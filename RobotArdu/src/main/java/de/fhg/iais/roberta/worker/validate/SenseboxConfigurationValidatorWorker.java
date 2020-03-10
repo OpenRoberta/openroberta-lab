@@ -3,7 +3,9 @@ package de.fhg.iais.roberta.worker.validate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import de.fhg.iais.roberta.bean.UsedHardwareBean;
+import com.google.common.collect.ClassToInstanceMap;
+
+import de.fhg.iais.roberta.bean.IProjectBean;
 import de.fhg.iais.roberta.components.Project;
 import de.fhg.iais.roberta.visitor.validate.AbstractProgramValidatorVisitor;
 import de.fhg.iais.roberta.visitor.validate.SenseboxBrickValidatorVisitor;
@@ -14,7 +16,7 @@ public class SenseboxConfigurationValidatorWorker extends ArduinoConfigurationVa
     }
 
     @Override
-    protected AbstractProgramValidatorVisitor getVisitor(UsedHardwareBean.Builder builder, Project project) {
-        return new SenseboxBrickValidatorVisitor(builder, project.getConfigurationAst(), project.getSSID(), project.getPassword());
+    protected AbstractProgramValidatorVisitor getVisitor(Project project, ClassToInstanceMap<IProjectBean.IBuilder<?>> beanBuilders) {
+        return new SenseboxBrickValidatorVisitor(project.getConfigurationAst(), beanBuilders, project.getSSID(), project.getPassword());
     }
 }

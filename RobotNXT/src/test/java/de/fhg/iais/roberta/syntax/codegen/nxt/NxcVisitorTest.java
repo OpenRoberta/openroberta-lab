@@ -8,16 +8,6 @@ import de.fhg.iais.roberta.util.test.UnitTestHelper;
 
 public class NxcVisitorTest extends NxtAstTest {
 
-    //TODO: change diameter and trackwidth to changeable
-    // when sensors are added to nxt, fix the sensors description here
-
-    private static final String IMPORTS_CONSTANTS =
-        "" //
-            + "#define WHEELDIAMETER 5.6\n"
-            + "#define TRACKWIDTH 11.0\n"
-            + "#define MAXLINES 8 \n"
-            + "#include\"NEPODefs.h\" // contains NEPO declarations for the NXC NXT API resources";
-
     private static final String SUFFIX = "";
 
     @Test
@@ -25,7 +15,7 @@ public class NxcVisitorTest extends NxtAstTest {
 
         final String a =
             "" //
-                + IMPORTS_CONSTANTS
+                + DEFINES_INCLUDES
                 + "task main() {"
 
                 + "        TextOut(0,(MAXLINES - 3) * MAXLINES,\"Hallo\");\n"
@@ -48,7 +38,7 @@ public class NxcVisitorTest extends NxtAstTest {
 
         final String a =
             ""
-                + IMPORTS_CONSTANTS
+                + DEFINES_INCLUDES
                 + "task main() {"
 
                 + "        for ( int ___k0 = 0; ___k0 < 10; ___k0+=1 ) {\n"
@@ -73,7 +63,7 @@ public class NxcVisitorTest extends NxtAstTest {
 
         final String a =
             "" //
-                + IMPORTS_CONSTANTS
+                + DEFINES_INCLUDES
                 + "float__speed; task main() {"
 
                 + "        if (SENSOR_1) {\n"
@@ -110,7 +100,7 @@ public class NxcVisitorTest extends NxtAstTest {
 
         final String a =
             "" //
-                + IMPORTS_CONSTANTS
+                + DEFINES_INCLUDES
                 + "float__speed; float__speed; task main() {"
                 + "    SetSensor(S3,STYPE_COLORGREEN);\n"
 
@@ -148,7 +138,7 @@ public class NxcVisitorTest extends NxtAstTest {
 
         final String a =
             "" //
-                + IMPORTS_CONSTANTS
+                + DEFINES_INCLUDES
                 + "float__speed; float__speed; task main() {"
 
                 + "        if ( 5 < MotorPower(OUT_B); ) {\n\n\n"
@@ -186,7 +176,7 @@ public class NxcVisitorTest extends NxtAstTest {
 
         final String a =
             "" //
-                + IMPORTS_CONSTANTS
+                + DEFINES_INCLUDES
                 + "float__speed; float__speed; task main() {"
 
                 + "          OnFwdReg(OUT_B,0,100);"
@@ -213,7 +203,7 @@ public class NxcVisitorTest extends NxtAstTest {
 
         final String a =
             "" //
-                + IMPORTS_CONSTANTS
+                + DEFINES_INCLUDES
                 + "byte volume = 0x02;\n"
                 + "task main() {"
                 + "        TextOut(0,(MAXLINES - 0) * MAXLINES,\"Hallo\");\n"
@@ -236,7 +226,7 @@ public class NxcVisitorTest extends NxtAstTest {
     public void test7() throws Exception {
         final String a =
             "" //
-                + IMPORTS_CONSTANTS
+                + DEFINES_INCLUDES
                 + "float__speed; float__speed; task main() {"
 
                 + "          OnFwdReg(OUT_B,30,100);\n"
@@ -259,7 +249,7 @@ public class NxcVisitorTest extends NxtAstTest {
 
         final String a =
             "" //
-                + IMPORTS_CONSTANTS
+                + DEFINES_INCLUDES
                 + "float__speed; float__speed; task main() {"
                 + "        float item = 10;\n"
                 + "        string item2 = \"TTTT\";\n"
@@ -287,7 +277,7 @@ public class NxcVisitorTest extends NxtAstTest {
 
         final String a =
             "" //
-                + IMPORTS_CONSTANTS
+                + DEFINES_INCLUDES
                 + "float__speed; float__speed; task main() {"
                 + "        float variablenName = 0;\n"
 
@@ -334,7 +324,7 @@ public class NxcVisitorTest extends NxtAstTest {
 
         final String a =
             "" //
-                + IMPORTS_CONSTANTS
+                + DEFINES_INCLUDES
                 + "    void test();"
                 + "task main() {"
                 + "    SetSensor(S3, SENSOR_COLORFULL);\n"
@@ -355,7 +345,7 @@ public class NxcVisitorTest extends NxtAstTest {
 
         final String a =
             "" //
-                + IMPORTS_CONSTANTS
+                + DEFINES_INCLUDES
                 + "     void test(bool ___x);"
                 + "task main() {"
                 + "    SetSensor(S3, SENSOR_COLORFULL);\n"
@@ -378,7 +368,7 @@ public class NxcVisitorTest extends NxtAstTest {
 
         final String a =
             "" //
-                + IMPORTS_CONSTANTS
+                + DEFINES_INCLUDES
                 + "     void test1(float ___x, float ___x2);"
                 + "    void test2();"
                 + "float ___variablenName;\n"
@@ -409,7 +399,7 @@ public class NxcVisitorTest extends NxtAstTest {
 
         final String a =
             "" //
-                + IMPORTS_CONSTANTS
+                + DEFINES_INCLUDES
                 + "float__speed; task main() {"
                 + "    string variablenName[]={\"a\",\"b\",\"c\"};\n"
 
@@ -466,7 +456,7 @@ public class NxcVisitorTest extends NxtAstTest {
         // regression test for https://mp-devel.iais.fraunhofer.de/jira/browse/ORA-610
         final String a =
             "" //
-                + IMPORTS_CONSTANTS
+                + DEFINES_INCLUDES
                 + "string ___message;\n"
                 + " task main() {"
                 + "___message=\"exit\";"
@@ -484,7 +474,7 @@ public class NxcVisitorTest extends NxtAstTest {
     public void test18() throws Exception {
         final String a =
             "" //
-                + IMPORTS_CONSTANTS
+                + DEFINES_INCLUDES
                 + "    float ___item;\n"
                 + "    string ___item2;\n"
                 + "task main() {"
@@ -505,19 +495,19 @@ public class NxcVisitorTest extends NxtAstTest {
     public void testCurveBlocks() throws Exception {
         final String a =
             "" //
-                + IMPORTS_CONSTANTS
+                + DEFINES_INCLUDES
                 + "task main() {"
                 + "    SetSensor(S4, SENSOR_LIGHT);\n"
-                + "  SteerDriveEx( OUT_A, OUT_B,SpeedTest(30),SpeedTest(-20), true, 20 );\n"
-                + "  SteerDriveEx( OUT_A, OUT_B, SpeedTest(50),SpeedTest(-50), false, 20 );\n"
+                + "  SteerDriveEx( OUT_A, OUT_B, MIN(MAX(30, -100), 100), MIN(MAX(-20, -100), 100), true, 20 );\n"
+                + "  SteerDriveEx( OUT_A, OUT_B, MIN(MAX(50, -100), 100), MIN(MAX(-50, -100), 100), false, 20 );\n"
                 + "  while ( true ) {\n"
                 + "    while ( true ) {\n"
                 + "      if ( _readLightSensor( S4, 1 ) < 50 ) {\n"
-                + "        SteerDrive( OUT_A, OUT_B, SpeedTest(30),SpeedTest(10), true );\n"
+                + "        SteerDrive( OUT_A, OUT_B, MIN(MAX(30, -100), 100), MIN(MAX(10, -100), 100), true );\n"
                 + "          break;\n"
                 + "      }\n"
                 + "      if ( _readLightSensor( S4, 1 ) >= 50 ) {\n"
-                + "        SteerDrive( OUT_A, OUT_B, SpeedTest(10),SpeedTest(30), true );\n"
+                + "        SteerDrive( OUT_A, OUT_B, MIN(MAX(10, -100), 100), MIN(MAX(30, -100), 100), true );\n"
                 + "        break;\n"
                 + "      }\n"
                 + "      Wait( 15 );\n"
@@ -541,7 +531,7 @@ public class NxcVisitorTest extends NxtAstTest {
     public void testStmtForEach() throws Exception {
         final String a =
             "" //
-                + IMPORTS_CONSTANTS
+                + DEFINES_INCLUDES
                 + "float__speed; task main() {"
                 + "ArrayList<Pickcolor>variablenName=BlocklyMethods.createListWithColour(Pickcolor.NONE,Pickcolor.RED,Pickcolor.BLUE);\n"
                 + "    public void run() throwsException {\n"
@@ -559,7 +549,7 @@ public class NxcVisitorTest extends NxtAstTest {
     public void visitToneAction_PlayTone50Hz500ms_ReturnsCorrectNXCProgram() throws Exception {
         String expectedResult =
             "" //
-                + IMPORTS_CONSTANTS
+                + DEFINES_INCLUDES
                 + "PlayToneEx(50, 500, volume, false);"
                 + "Wait(500);"
                 + "}";
@@ -578,7 +568,7 @@ public class NxcVisitorTest extends NxtAstTest {
     public void visitPlayNoteAction_PlayNote261dot626Hz2000ms_ReturnsCorrectNXCProgram() throws Exception {
         String expectedResult =
             "" //
-                + IMPORTS_CONSTANTS
+                + DEFINES_INCLUDES
                 + "PlayToneEx(261.626, 2000, volume, false);"
                 + "Wait(2000);"
                 + "}";
@@ -597,7 +587,7 @@ public class NxcVisitorTest extends NxtAstTest {
     public void check_noLoops_returnsNoLabeledLoops() throws Exception {
         String a =
             "" //
-                + IMPORTS_CONSTANTS
+                + DEFINES_INCLUDES
                 + "task main() {"
                 + "    SetSensor(S1, SENSOR_TOUCH);\n"
                 + "if (30 == 20) {"
@@ -617,7 +607,7 @@ public class NxcVisitorTest extends NxtAstTest {
     public void check_nestedLoopsNoBreakorContinue_returnsNoLabeledLoops() throws Exception {
         String a =
             "" //
-                + IMPORTS_CONSTANTS
+                + DEFINES_INCLUDES
                 + "task main() {"
                 + "    SetSensor(S1, SENSOR_TOUCH);\n"
                 + "while (true) {"
@@ -641,7 +631,7 @@ public class NxcVisitorTest extends NxtAstTest {
     public void check_loopsWithBreakAndContinue_returnsNoLabeledLoops() throws Exception {
         String a =
             "" //
-                + IMPORTS_CONSTANTS
+                + DEFINES_INCLUDES
                 + "float ___item2[3];"
                 + "task main() {"
                 + "float _____item2[] = {0, 0, 0};"
@@ -708,7 +698,7 @@ public class NxcVisitorTest extends NxtAstTest {
     public void check_loopWithBreakAndContinueInWait_returnsOneLabeledLoop() throws Exception {
         String a =
             "" //
-                + IMPORTS_CONSTANTS
+                + DEFINES_INCLUDES
                 + "task main() {"
                 + "    SetSensor(S1, SENSOR_TOUCH);\n"
                 + "while (true) {"
@@ -741,7 +731,7 @@ public class NxcVisitorTest extends NxtAstTest {
     public void check_loopsWithBreakAndContinueFitstInWaitSecondNot_returnsFirstLoopLabeled() throws Exception {
         String a =
             "" //
-                + IMPORTS_CONSTANTS
+                + DEFINES_INCLUDES
                 + "task main() {"
                 + "    SetSensor(S1, SENSOR_TOUCH);\n"
                 + "while (true) {"
@@ -780,7 +770,7 @@ public class NxcVisitorTest extends NxtAstTest {
     public void check_twoNestedloopsFirstWithBreakAndContinueInWaitSecondNot_returnsFirstLoopLabeled() throws Exception {
         String a =
             "" //
-                + IMPORTS_CONSTANTS
+                + DEFINES_INCLUDES
                 + "task main() {"
                 + "    SetSensor(S1, SENSOR_TOUCH);\n"
                 + "while (true) {"
@@ -818,7 +808,7 @@ public class NxcVisitorTest extends NxtAstTest {
     public void check_loopWithNestedTwoLoopsInsideWait_returnsFirstLoopLabeled() throws Exception {
         String a =
             "" //
-                + IMPORTS_CONSTANTS
+                + DEFINES_INCLUDES
                 + "task main() {"
                 + "    SetSensor(S1, SENSOR_TOUCH);\n"
                 + "while (true) {"
@@ -862,7 +852,7 @@ public class NxcVisitorTest extends NxtAstTest {
     public void check_loopWithNestedTwoLoopsInsideWaitSecondContainWait_returnsFirstAndThirdLoopLabeled() throws Exception {
         String a =
             "" //
-                + IMPORTS_CONSTANTS
+                + DEFINES_INCLUDES
                 + "task main() {"
                 + "    SetSensor(S1, SENSOR_TOUCH);\n"
                 + "while (true) {"
@@ -915,7 +905,7 @@ public class NxcVisitorTest extends NxtAstTest {
     public void check_threeLoopsWithNestedTwoLoopsInsideWaitSecondContainWait_returnsFirstThirdAndFourthLoopLabeled() throws Exception {
         String a =
             "" //
-                + IMPORTS_CONSTANTS
+                + DEFINES_INCLUDES
                 + "task main() {"
                 + "    SetSensor(S1, SENSOR_TOUCH);\n"
                 + "while (true) {"

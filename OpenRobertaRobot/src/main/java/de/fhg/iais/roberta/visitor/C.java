@@ -34,6 +34,7 @@ public class C {
     public static final String COLOR_CONST = "COLOR_CONST";
     public static final String CONDITIONAL = "conditional";
     public static final String COLOUR = "colorValue";
+    public static final String COMMENT = "comment";
     public static final String COMPASS = "compass";
     public static final String CONTINUE = "continue";
     public static final String CREATE_DEBUG_ACTION = "CreateDebugAction";

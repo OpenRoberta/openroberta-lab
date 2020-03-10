@@ -1,14 +1,16 @@
 package de.fhg.iais.roberta.visitor.validate;
 
-import de.fhg.iais.roberta.bean.UsedHardwareBean;
+import com.google.common.collect.ClassToInstanceMap;
+
+import de.fhg.iais.roberta.bean.IProjectBean;
 import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.syntax.action.MoveAction;
 import de.fhg.iais.roberta.syntax.sensor.ExternalSensor;
 
 public abstract class AbstractBoardValidatorVisitor extends AbstractProgramValidatorVisitor {
 
-    public AbstractBoardValidatorVisitor(UsedHardwareBean.Builder builder, ConfigurationAst brickConfiguration) {
-        super(builder, brickConfiguration);
+    public AbstractBoardValidatorVisitor(ConfigurationAst brickConfiguration, ClassToInstanceMap<IProjectBean.IBuilder<?>> beanBuilders) {
+        super(brickConfiguration, beanBuilders);
     }
 
     @Override

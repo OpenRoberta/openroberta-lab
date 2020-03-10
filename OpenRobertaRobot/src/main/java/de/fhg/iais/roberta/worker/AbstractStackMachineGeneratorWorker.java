@@ -13,20 +13,10 @@ import de.fhg.iais.roberta.visitor.lang.codegen.AbstractStackMachineVisitor;
  */
 public abstract class AbstractStackMachineGeneratorWorker implements IWorker {
 
-    /**
-     * Returns the appropriate visitor for this worker. Used by subclasses to keep the execute method generic.
-     * Could be removed in the future, when visitors are specified in the properties as well, or inferred from the worker name.
-     *
-     * @param usedHardwareBean the used hardware bean
-     * @param project the project
-     * @return the appropriate visitor for the current robot
-     */
-    protected abstract AbstractStackMachineVisitor<Void> getVisitor(UsedHardwareBean usedHardwareBean, Project project);
-
     @Override
-    public void execute(Project project) {
-        Object usedHardwareBean = project.getWorkerResult("CollectedHardware");
-        AbstractStackMachineVisitor<Void> visitor = getVisitor((UsedHardwareBean) usedHardwareBean, project);
+    public final void execute(Project project) {
+        UsedHardwareBean usedHardwareBean = project.getWorkerResult(UsedHardwareBean.class);
+        AbstractStackMachineVisitor<Void> visitor = this.getVisitor(project, usedHardwareBean);
         visitor.generateCodeFromPhrases(project.getProgramAst().getTree());
         JSONObject generatedCode = new JSONObject();
         generatedCode.put(C.OPS, visitor.getOpArray()).put(C.FUNCTION_DECLARATION, visitor.getFctDecls());
@@ -34,4 +24,14 @@ public abstract class AbstractStackMachineGeneratorWorker implements IWorker {
         project.setCompiledHex(generatedCode.toString(2));
         project.setResult(Key.COMPILERWORKFLOW_PROGRAM_GENERATION_SUCCESS);
     }
+
+    /**
+     * Returns the appropriate visitor for this worker. Used by subclasses to keep the execute method generic.
+     * Could be removed in the future, when visitors are specified in the properties as well, or inferred from the worker name.
+     *
+     * @param project the project
+     * @param usedHardwareBean the used hardware bean
+     * @return the appropriate visitor for the current robot
+     */
+    protected abstract AbstractStackMachineVisitor<Void> getVisitor(Project project, UsedHardwareBean usedHardwareBean);
 }

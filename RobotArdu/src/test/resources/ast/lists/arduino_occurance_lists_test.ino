@@ -12,7 +12,6 @@ bool ___item3;
 int _led_L = 13;
 void setup()
 {
-    Serial.begin(9600); 
     pinMode(_led_L, OUTPUT);
     ___item = {"b", "v", "b"};
     ___item2 = _getFirstOccuranceOfElement(___item, String("v"));
@@ -22,6 +21,6 @@ void setup()
 void loop()
 {
     ___item2 = _getLastOccuranceOfElement(___item, String("v"));
-    ___item2 = null;
-    ___item3 = (___item.size() == 0);
+    ___item2 = NULL;
+    ___item3 = ___item.empty();
 }

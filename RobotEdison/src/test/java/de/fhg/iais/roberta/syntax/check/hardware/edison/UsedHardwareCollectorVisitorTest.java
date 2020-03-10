@@ -5,10 +5,11 @@ import java.util.Collections;
 
 import org.junit.Test;
 
+import com.google.common.collect.ImmutableClassToInstanceMap;
 import com.google.common.collect.Lists;
 
 import de.fhg.iais.roberta.ast.EdisonAstTest;
-import de.fhg.iais.roberta.bean.CodeGeneratorSetupBean;
+import de.fhg.iais.roberta.bean.IProjectBean;
 import de.fhg.iais.roberta.bean.UsedHardwareBean;
 import de.fhg.iais.roberta.bean.UsedHardwareBean.Builder;
 import de.fhg.iais.roberta.bean.UsedMethodBean;
@@ -60,6 +61,9 @@ public class UsedHardwareCollectorVisitorTest extends EdisonAstTest {
         ConfigurationAst edisonConfig = makeConfig();
         UsedHardwareBean.Builder usedHardwareBeanBuilder = new UsedHardwareBean.Builder();
         UsedMethodBean.Builder usedMethodBeanBuilder = new UsedMethodBean.Builder();
-        EdisonUsedHardwareCollectorVisitor checker = new EdisonUsedHardwareCollectorVisitor(usedHardwareBeanBuilder, usedMethodBeanBuilder, edisonConfig);
+        ImmutableClassToInstanceMap<IProjectBean.IBuilder<?>> beanBuilders =
+            ImmutableClassToInstanceMap.<IProjectBean
+                .IBuilder<?>> builder().put(Builder.class, usedHardwareBeanBuilder).put(UsedMethodBean.Builder.class, usedMethodBeanBuilder).build();
+        EdisonUsedHardwareCollectorVisitor checker = new EdisonUsedHardwareCollectorVisitor(edisonConfig, beanBuilders);
     }
 }

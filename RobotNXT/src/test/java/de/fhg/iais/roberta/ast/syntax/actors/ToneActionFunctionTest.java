@@ -10,7 +10,7 @@ public class ToneActionFunctionTest extends NxtAstTest {
     @Test
     public void playTone() throws Exception {
         final String a =
-            "#defineWHEELDIAMETER5.6#defineTRACKWIDTH11.0#defineMAXLINES8#include\"NEPODefs.h\"//containsNEPOdeclarationsfortheNXCNXTAPIresources"
+            DEFINES_INCLUDES
                 + "void macheEtwas();"
                 + "byte volume = 0x02;\n"
                 + "float ___Element;"

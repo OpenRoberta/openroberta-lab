@@ -22,7 +22,7 @@ public class NxtCompilerWorker implements IWorker {
     public void execute(Project project) {
         String programName = project.getProgramName();
         String robot = project.getRobot();
-        Pair<Key, String> workflowResult = runBuild(project);
+        Pair<Key, String> workflowResult = this.runBuild(project);
         project.setResult(workflowResult.getFirst());
         project.addResultParam("MESSAGE", workflowResult.getSecond());
         if ( workflowResult.getFirst() == Key.COMPILERWORKFLOW_SUCCESS ) {
@@ -37,12 +37,12 @@ public class NxtCompilerWorker implements IWorker {
      *
      * @return a pair of Key.COMPILERWORKFLOW_SUCCESS or Key.COMPILERWORKFLOW_ERROR_PROGRAM_COMPILE_FAILED and the cross compiler output
      */
-    Pair<Key, String> runBuild(Project project) {
+    private Pair<Key, String> runBuild(Project project) {
         String token = project.getToken();
         String mainFile = project.getProgramName();
-        CompilerSetupBean compilerWorkflowBean = (CompilerSetupBean) project.getWorkerResult("CompilerSetup");
-        final String compilerResourcesDir = compilerWorkflowBean.getCompilerResourcesDir();
-        final String tempDir = compilerWorkflowBean.getTempDir();
+        CompilerSetupBean compilerWorkflowBean = project.getWorkerResult(CompilerSetupBean.class);
+        String compilerResourcesDir = compilerWorkflowBean.getCompilerResourcesDir();
+        String tempDir = compilerWorkflowBean.getTempDir();
         Util
             .storeGeneratedProgram(
                 tempDir,

@@ -119,7 +119,7 @@ else
     case "$VERSION_PYTHON" in
         Python\ 3*) : ;;
         Python\ 2*) echo "variable PYTHON seems to point to a Python2 binary. Log file analysis will NOT work" ;;
-        *) echo "could not get version information from Python installation. It's likely, that log file analysis will NOT work" ;;
+        *) echo "could not get version information from Python installation. Log file analysis will NOT work" ;;
     esac
 fi
 
@@ -138,3 +138,13 @@ if [ "$QUIET" != true ]
 then
     echo "working on host ${HOSTNAME} for installation ${INAME} at BASE_DIR $BASE_DIR"
 fi
+
+export DATE=$(date '+%Y-%m-%d %H:%M:%S')
+export STAR='********************'
+export STAR_DATE_STAR="$STAR $DATE $STAR"
+
+function headerMessage {
+    echo "$STAR $DATE $1 $STAR"
+}
+
+export -f headerMessage

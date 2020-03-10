@@ -10,7 +10,6 @@ BASE_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )"/.. && pwd )"
 SCRIPT_MAIN="${BASE_DIR}/scripts"
 SCRIPT_HELPER="${SCRIPT_MAIN}/helper"
 SCRIPT_REPORTING="${SCRIPT_MAIN}/reporting"
-SCRIPT_ANALYSIS="${SCRIPT_MAIN}/analysis"
 
 CMD=$1; shift
 while [  1 ]
@@ -34,16 +33,15 @@ fi
 source ${BASE_DIR}/decl.sh
 source ${SCRIPT_HELPER}/__defs.sh
 
-DATE=$(date '+%Y-%m-%d %H:%M:%S')
-
+echo "$STAR_DATE_STAR"
 [ "$DEBUG" = 'true' ] && echo "$DATE: executing command '$CMD'"
 case "$CMD" in
     help)         [ "$QUIET" == true ] && source ${SCRIPT_HELPER}/_help.sh ;;
     gen)          SERVER_NAME=$1; shift
                   isServerNameValid ${SERVER_NAME}
-                  echo "$DATE: generating the server '${SERVER_NAME}'"
+                  headerMessage "generating the server ${SERVER_NAME}"
                   source ${SCRIPT_HELPER}/_gen.sh
-                  echo "generating the server '${SERVER_NAME}' finished" ;;
+                  headerMessage "generating the server ${SERVER_NAME} finished" ;;
     start)        SERVER_NAME=$1; shift
                   OPTIONAL_VERSION=$1; shift
                   source ${SCRIPT_HELPER}/_stop.sh
@@ -62,15 +60,13 @@ case "$CMD" in
     auto-restart) SERVER_NAME=$1; shift; SERVER_URL=$1; shift
                   source ${SCRIPT_HELPER}/_autorestart.sh ;;
     auto-deploy)  source ${SCRIPT_HELPER}/_autodeploy.sh ;;
-    start-all)    echo '******************** '$DATE' ********************'
-                  echo 'start database container and all server container'
+    start-all)    echo 'start database container and all server container'
                   ${SCRIPT_MAIN}/run.sh -q start-dbc
                   sleep 10
                   for SERVER_NAME in $SERVERS; do
                       ${SCRIPT_MAIN}/run.sh -q start ${SERVER_NAME}
                   done ;;
-    stop-all)     echo '******************** '$DATE' ********************'
-                  echo 'stop database container and all server container'
+    stop-all)     echo 'stop database container and all server container'
                   for SERVER_NAME in $SERVERS; do
                       ${SCRIPT_MAIN}/run.sh -q stop ${SERVER_NAME}
                   done
@@ -87,37 +83,32 @@ case "$CMD" in
                   source ${SCRIPT_HELPER}/_dbContainerBackup.sh ;;
     backup-save)  FROM_PATH=$1; TO_PATH=$2
                   source ${SCRIPT_HELPER}/_dbBackupSave.sh ;;
-    network)      echo '******************** '$DATE' ********************'
-                  echo '******************** network inspect'
+    network)      headerMessage "network inspect"
                   docker network inspect $DOCKER_NETWORK_NAME ;;
-    docker-info)  echo '******************** '$DATE' ********************'
-                  echo '******************** system df'
+    docker-info)  headerMessage "system df"
                   docker system df
-                  echo '******************** all images'
+                  headerMessage "all images"
                   docker images
-                  echo '******************** all container'
+                  headerMessage "all container"
                   docker ps -a ;;
-    logs)         echo '******************** '$DATE' ********************'
-                  set $(docker ps --format "{{.Names}}")
+    logs)         set $(docker ps --format "{{.Names}}")
                   for NAME do
-                      echo "******************** $NAME"
+                      headerMessage "$NAME"
                       docker logs --tail 10 $NAME
                   done ;;
-    test-info)    echo '******************** '$DATE' ********************'
-                  cat ${BASE_DIR}/decl.sh
+    test-info)    cat ${BASE_DIR}/decl.sh
                   for SERVER_NAME in $SERVERS
                   do
-                      echo "******************** decl.sh of server ${SERVER_NAME}"
+                      headerMessage "decl.sh of server ${SERVER_NAME}"
                       cat ${SERVER_DIR}/${SERVER_NAME}/decl.sh
                   done ;;
-    prune)        echo '******************** '$DATE' ********************'
-                  echo '******************** removing all exited container ********************'
+    prune)        headerMessage "removing all exited container"
                   docker rm $(docker ps -q -f status=exited)
-                  echo '******************** removing stale volumes ********************'
+                  headerMessage "removing stale volumes"
                   docker volume rm $(docker volume ls -q -f dangling=true)
-                  echo '******************** remove unused containers, networks, images ********************'
+                  headerMessage "remove unused containers, networks, images"
                   docker system prune --force ;;
-    show-server)  ${SCRIPT_ANALYSIS}/serverStateOverview.sh ;;
+    show-server)  source ${SCRIPT_HELPER}/_serverStateOverview.sh ;;
     show-resources) export SERVER_NAME=$1; shift
                   export LOGFILE=$1; shift
                   export LOWERLIMIT=$1; shift
@@ -125,13 +116,13 @@ case "$CMD" in
                   export SERVERURL=$1; shift
                   export DURATION=$1; shift
                   export PID=$1; shift
-                  source ${SCRIPT_ANALYSIS}/showResources.sh ;;
+                  source ${SCRIPT_HELPER}/_showResources.sh ;;
     monthly-stat) SERVER_NAME=$1; shift; MONTH=$1; shift
                   source ${SCRIPT_HELPER}/_monthlyStat.sh ;;
     alive)        case $ALIVE_ACTIVE in
                       true) : ;;
-                      *)    echo "variable ALIVE_ACTIVE not true. Functionality not available. Exit 12"
-                            exit 12 ;;
+                      *)    echo "variable ALIVE_ACTIVE not true. Functionality not available. This is no error. Exit 0"
+                            exit 0 ;;
                   esac
                  
                   LAB_URL="$1"; shift
@@ -142,13 +133,13 @@ case "$CMD" in
                       case "$1" in
                           mail=always) REPORT_ALWAYS=true ;;
                           mail=error)  REPORT_ALWAYS=false ;;
-                          msg=*)       SPLIT=(${1/=/ }); REPORT_MESSAGE=${SPLIT[1]} ;;
+                          msg=*)       REPORT_MESSAGE="$REPORT_MESSAGE. ${1:4}" ;;
                       esac
                       shift
                   done
                   source ${SCRIPT_HELPER}/_alive.sh ;;
-    test)         echo '******************** TEST MODE START ********************'
+    test)         headerMessage "TEST MODE START"
                   source ${SCRIPT_HELPER}/_test.sh
-                  echo '******************** TEST MODE TERMINATED ***************' ;;
-    *)            echo "$DATE: invalid command: '$CMD'" ;;
+                  headerMessage "TEST MODE TERMINATED" ;;
+    *)            echo "invalid command: '$CMD'" ;;
 esac

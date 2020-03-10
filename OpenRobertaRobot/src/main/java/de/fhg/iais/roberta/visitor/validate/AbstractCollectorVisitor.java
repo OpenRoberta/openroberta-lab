@@ -2,6 +2,9 @@ package de.fhg.iais.roberta.visitor.validate;
 
 import java.util.HashMap;
 
+import com.google.common.collect.ClassToInstanceMap;
+
+import de.fhg.iais.roberta.bean.IProjectBean;
 import de.fhg.iais.roberta.bean.UsedHardwareBean;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
 import de.fhg.iais.roberta.syntax.lang.expr.Binary;
@@ -56,13 +59,17 @@ import de.fhg.iais.roberta.visitor.lang.ILanguageVisitor;
 
 public abstract class AbstractCollectorVisitor implements ILanguageVisitor<Void> {
 
-    protected final UsedHardwareBean.Builder builder;
+    private final ClassToInstanceMap<IProjectBean.IBuilder<?>> beanBuilders;
     private final HashMap<Integer, Integer> waitsInLoops = new HashMap<>();
     private int loopCounter = 0;
     private int currentLoop = 0;
 
-    protected AbstractCollectorVisitor(UsedHardwareBean.Builder builder) {
-        this.builder = builder;
+    protected AbstractCollectorVisitor(ClassToInstanceMap<IProjectBean.IBuilder<?>> beanBuilders) {
+        this.beanBuilders = beanBuilders;
+    }
+
+    protected <T extends IProjectBean.IBuilder<?>> T getBuilder(Class<T> clazz) {
+        return beanBuilders.getInstance(clazz);
     }
 
     @Override
@@ -117,7 +124,7 @@ public abstract class AbstractCollectorVisitor implements ILanguageVisitor<Void>
     @Override
     public Void visitVarDeclaration(VarDeclaration<Void> var) {
         if ( var.isGlobal() ) {
-            this.builder.addVisitedVariable(var);
+            this.getBuilder(UsedHardwareBean.Builder.class).addVisitedVariable(var);
         }
         if ( var.getVarType().equals(BlocklyType.ARRAY)
             || var.getVarType().equals(BlocklyType.ARRAY_BOOLEAN)
@@ -126,11 +133,11 @@ public abstract class AbstractCollectorVisitor implements ILanguageVisitor<Void>
             || var.getVarType().equals(BlocklyType.ARRAY_CONNECTION)
             || var.getVarType().equals(BlocklyType.ARRAY_IMAGE)
             || var.getVarType().equals(BlocklyType.ARRAY_STRING) ) {
-            this.builder.setListsUsed(true);
+            this.getBuilder(UsedHardwareBean.Builder.class).setListsUsed(true);
         }
         var.getValue().accept(this);
-        this.builder.addGlobalVariable(var.getName());
-        this.builder.addDeclaredVariable(var.getName());
+        this.getBuilder(UsedHardwareBean.Builder.class).addGlobalVariable(var.getName());
+        this.getBuilder(UsedHardwareBean.Builder.class).addDeclaredVariable(var.getName());
         return null;
     }
 
@@ -155,7 +162,7 @@ public abstract class AbstractCollectorVisitor implements ILanguageVisitor<Void>
 
     @Override
     public Void visitEmptyList(EmptyList<Void> emptyList) {
-        this.builder.setListsUsed(true);
+        this.getBuilder(UsedHardwareBean.Builder.class).setListsUsed(true);
         return null;
     }
 
@@ -174,8 +181,8 @@ public abstract class AbstractCollectorVisitor implements ILanguageVisitor<Void>
     public final Void visitAssignStmt(AssignStmt<Void> assignStmt) {
         assignStmt.getExpr().accept(this);
         String variableName = assignStmt.getName().getValue();
-        if ( this.builder.containsGlobalVariable(variableName) ) {
-            this.builder.addMarkedVariableAsGlobal(variableName);
+        if ( this.getBuilder(UsedHardwareBean.Builder.class).containsGlobalVariable(variableName) ) {
+            this.getBuilder(UsedHardwareBean.Builder.class).addMarkedVariableAsGlobal(variableName);
         }
         return null;
     }
@@ -195,7 +202,7 @@ public abstract class AbstractCollectorVisitor implements ILanguageVisitor<Void>
         if ( repeatStmt.getExpr().getKind().hasName("EXPR_LIST") ) {
             ExprList<Void> exprList = (ExprList<Void>) repeatStmt.getExpr();
             String varName = ((Var<Void>) exprList.get().get(0)).getValue();
-            this.builder.addDeclaredVariable(varName);
+            this.getBuilder(UsedHardwareBean.Builder.class).addDeclaredVariable(varName);
             exprList.accept(this);
         } else {
             repeatStmt.getExpr().accept(this);
@@ -214,7 +221,7 @@ public abstract class AbstractCollectorVisitor implements ILanguageVisitor<Void>
     @Override
     public Void visitStmtFlowCon(StmtFlowCon<Void> stmtFlowCon) {
         boolean isInWaitStmt = this.waitsInLoops.get(this.currentLoop) != 0;
-        this.builder.putLoopLabel(this.currentLoop, isInWaitStmt);
+        this.getBuilder(UsedHardwareBean.Builder.class).putLoopLabel(this.currentLoop, isInWaitStmt);
         return null;
     }
 
@@ -346,7 +353,7 @@ public abstract class AbstractCollectorVisitor implements ILanguageVisitor<Void>
 
     @Override
     public Void visitMethodVoid(MethodVoid<Void> methodVoid) {
-        this.builder.addUserDefinedMethod(methodVoid);
+        this.getBuilder(UsedHardwareBean.Builder.class).addUserDefinedMethod(methodVoid);
         methodVoid.getParameters().accept(this);
         methodVoid.getBody().accept(this);
         return null;
@@ -354,7 +361,7 @@ public abstract class AbstractCollectorVisitor implements ILanguageVisitor<Void>
 
     @Override
     public Void visitMethodReturn(MethodReturn<Void> methodReturn) {
-        this.builder.addUserDefinedMethod(methodReturn);
+        this.getBuilder(UsedHardwareBean.Builder.class).addUserDefinedMethod(methodReturn);
         methodReturn.getParameters().accept(this);
         methodReturn.getBody().accept(this);
         methodReturn.getReturnValue().accept(this);
@@ -395,7 +402,7 @@ public abstract class AbstractCollectorVisitor implements ILanguageVisitor<Void>
     private void increaseLoopCounter() {
         this.loopCounter++;
         this.currentLoop = this.loopCounter;
-        this.builder.putLoopLabel(this.loopCounter, false);
+        this.getBuilder(UsedHardwareBean.Builder.class).putLoopLabel(this.loopCounter, false);
         this.waitsInLoops.put(this.loopCounter, 0);
     }
 

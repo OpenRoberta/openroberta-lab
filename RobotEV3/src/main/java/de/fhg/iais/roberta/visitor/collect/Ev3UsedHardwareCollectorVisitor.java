@@ -1,6 +1,8 @@
 package de.fhg.iais.roberta.visitor.collect;
 
+import com.google.common.collect.ClassToInstanceMap;
 
+import de.fhg.iais.roberta.bean.IProjectBean;
 import de.fhg.iais.roberta.bean.UsedHardwareBean;
 import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.components.UsedActor;
@@ -21,9 +23,9 @@ import de.fhg.iais.roberta.visitor.hardware.IEv3Visitor;
  */
 public final class Ev3UsedHardwareCollectorVisitor extends AbstractUsedHardwareCollectorVisitor implements IEv3Visitor<Void> {
     public Ev3UsedHardwareCollectorVisitor(
-        UsedHardwareBean.Builder builder,
-        ConfigurationAst brickConfiguration) {
-        super(builder, brickConfiguration);
+        ConfigurationAst brickConfiguration,
+        ClassToInstanceMap<IProjectBean.IBuilder<?>> beanBuilders) {
+        super(brickConfiguration, beanBuilders);
     }
 
     @Override
@@ -37,7 +39,7 @@ public final class Ev3UsedHardwareCollectorVisitor extends AbstractUsedHardwareC
     @Override
     public Void visitSayTextAction(SayTextAction<Void> sayTextAction) {
         super.visitSayTextAction(sayTextAction);
-        this.builder.addUsedActor(new UsedActor(SC.VOICE, SC.VOICE));
+        this.getBuilder(UsedHardwareBean.Builder.class).addUsedActor(new UsedActor(SC.VOICE, SC.VOICE));
         return null;
     }
 
@@ -48,7 +50,7 @@ public final class Ev3UsedHardwareCollectorVisitor extends AbstractUsedHardwareC
 
     @Override
     public Void visitShowPictureAction(ShowPictureAction<Void> showPictureAction) {
-        this.builder.addUsedImage(showPictureAction.getPicture().toString());
+        this.getBuilder(UsedHardwareBean.Builder.class).addUsedImage(showPictureAction.getPicture().toString());
         return null;
     }
 
@@ -58,14 +60,14 @@ public final class Ev3UsedHardwareCollectorVisitor extends AbstractUsedHardwareC
         if ( infraredSensor.getMode().equals(SC.PRESENCE) ) {
             mode = SC.SEEK;
         }
-        this.builder.addUsedSensor(new UsedSensor(infraredSensor.getPort(), SC.INFRARED, mode));
+        this.getBuilder(UsedHardwareBean.Builder.class).addUsedSensor(new UsedSensor(infraredSensor.getPort(), SC.INFRARED, mode));
         return null;
     }
 
     @Override
     public Void visitHTColorSensor(HTColorSensor<Void> htColorSensor) {
         String mode = htColorSensor.getMode();
-        this.builder.addUsedSensor(new UsedSensor(htColorSensor.getPort(), SC.HT_COLOR, mode));
+        this.getBuilder(UsedHardwareBean.Builder.class).addUsedSensor(new UsedSensor(htColorSensor.getPort(), SC.HT_COLOR, mode));
         return null;
     }
 }

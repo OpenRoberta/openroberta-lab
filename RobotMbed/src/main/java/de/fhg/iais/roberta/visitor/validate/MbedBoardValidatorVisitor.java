@@ -1,6 +1,8 @@
 package de.fhg.iais.roberta.visitor.validate;
 
-import de.fhg.iais.roberta.bean.UsedHardwareBean;
+import com.google.common.collect.ClassToInstanceMap;
+
+import de.fhg.iais.roberta.bean.IProjectBean;
 import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.mode.action.mbed.DisplayImageMode;
 import de.fhg.iais.roberta.syntax.action.generic.PinWriteValueAction;
@@ -36,6 +38,7 @@ import de.fhg.iais.roberta.syntax.lang.expr.RgbColor;
 import de.fhg.iais.roberta.syntax.sensor.generic.AccelerometerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GestureSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.HumiditySensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.PinGetValueSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.RadioRssiSensor;
@@ -44,8 +47,8 @@ import de.fhg.iais.roberta.visitor.hardware.IMbedVisitor;
 
 public class MbedBoardValidatorVisitor extends AbstractBoardValidatorVisitor implements IMbedVisitor<Void> {
 
-    public MbedBoardValidatorVisitor(UsedHardwareBean.Builder builder, ConfigurationAst brickConfiguration) {
-        super(builder, brickConfiguration);
+    public MbedBoardValidatorVisitor(ConfigurationAst brickConfiguration, ClassToInstanceMap<IProjectBean.IBuilder<?>> beanBuilders) {
+        super(brickConfiguration, beanBuilders);
     }
 
     @Override
@@ -94,6 +97,11 @@ public class MbedBoardValidatorVisitor extends AbstractBoardValidatorVisitor imp
 
     @Override
     public Void visitTemperatureSensor(TemperatureSensor<Void> temperatureSensor) {
+        return null;
+    }
+
+    @Override
+    public Void visitLightSensor(LightSensor<Void> lightSensor) {
         return null;
     }
 

@@ -7,7 +7,6 @@
 int _relay_R = 6;
 void setup()
 {
-    Serial.begin(9600); 
     pinMode(_relay_R, OUTPUT);
 }
 

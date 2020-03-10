@@ -13,8 +13,11 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.collect.ImmutableClassToInstanceMap;
+
 import de.fhg.iais.roberta.ast.AstTest;
 import de.fhg.iais.roberta.bean.CodeGeneratorSetupBean;
+import de.fhg.iais.roberta.bean.IProjectBean;
 import de.fhg.iais.roberta.bean.UsedHardwareBean;
 import de.fhg.iais.roberta.exprly.generated.ExprlyLexer;
 import de.fhg.iais.roberta.exprly.generated.ExprlyParser;
@@ -409,14 +412,20 @@ public class ExprlyBasicAstTest extends AstTest {
         UsedHardwareBean usedHardwareBean = new UsedHardwareBean.Builder().build();
         CodeGeneratorSetupBean codeGeneratorSetupBeanCpp = new CodeGeneratorSetupBean.Builder().setHelperMethodFile(helperFile).setFileExtension("cpp").build();
         CodeGeneratorSetupBean codeGeneratorSetupBeanPy = new CodeGeneratorSetupBean.Builder().setHelperMethodFile(helperFile).setFileExtension("py").build();
+        ImmutableClassToInstanceMap<IProjectBean> beansCpp = ImmutableClassToInstanceMap.<IProjectBean>builder().put(UsedHardwareBean.class, usedHardwareBean).put(
+            CodeGeneratorSetupBean.class,
+            codeGeneratorSetupBeanCpp).build();
+        ImmutableClassToInstanceMap<IProjectBean> beansPy = ImmutableClassToInstanceMap.<IProjectBean>builder().put(UsedHardwareBean.class, usedHardwareBean).put(
+            CodeGeneratorSetupBean.class,
+            codeGeneratorSetupBeanPy).build();
         ArrayList<Phrase<Void>> addInList = new ArrayList<>();
         addInList.add(expr);
         ArrayList<ArrayList<Phrase<Void>>> addInListInList = new ArrayList<>();
         addInListInList.add(addInList);
-        CalliopeCppVisitor cppVisitor = new CalliopeCppVisitor(usedHardwareBean, codeGeneratorSetupBeanCpp, null, addInListInList);
+        CalliopeCppVisitor cppVisitor = new CalliopeCppVisitor(addInListInList, null, beansCpp);
         cppVisitor.visitExprStmt(ExprStmt.make(expr));
         LOG.info("generated C++ code: " + cppVisitor.getSb().toString());
-        MicrobitPythonVisitor pythonVisitor = new MicrobitPythonVisitor(usedHardwareBean, codeGeneratorSetupBeanPy, null, addInListInList);
+        MicrobitPythonVisitor pythonVisitor = new MicrobitPythonVisitor(addInListInList, beansPy);
         pythonVisitor.visitExprStmt(ExprStmt.make(expr));
         LOG.info("generated Python code: " + pythonVisitor.getSb().toString());
     }

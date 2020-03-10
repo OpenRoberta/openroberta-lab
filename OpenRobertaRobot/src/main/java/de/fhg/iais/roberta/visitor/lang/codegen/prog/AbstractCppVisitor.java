@@ -1,13 +1,19 @@
 package de.fhg.iais.roberta.visitor.lang.codegen.prog;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
 import org.apache.commons.text.StringEscapeUtils;
 
+import com.google.common.collect.ClassToInstanceMap;
+
 import de.fhg.iais.roberta.bean.CodeGeneratorSetupBean;
+import de.fhg.iais.roberta.bean.IProjectBean;
 import de.fhg.iais.roberta.bean.UsedHardwareBean;
 import de.fhg.iais.roberta.mode.general.IndexLocation;
 import de.fhg.iais.roberta.mode.general.ListElementOperations;
@@ -19,16 +25,23 @@ import de.fhg.iais.roberta.syntax.lang.expr.EmptyList;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.syntax.lang.expr.ExprList;
 import de.fhg.iais.roberta.syntax.lang.expr.ListCreate;
+import de.fhg.iais.roberta.syntax.lang.expr.MathConst;
 import de.fhg.iais.roberta.syntax.lang.expr.NullConst;
 import de.fhg.iais.roberta.syntax.lang.expr.RgbColor;
 import de.fhg.iais.roberta.syntax.lang.expr.StringConst;
 import de.fhg.iais.roberta.syntax.lang.expr.Unary;
 import de.fhg.iais.roberta.syntax.lang.functions.FunctionNames;
 import de.fhg.iais.roberta.syntax.lang.functions.GetSubFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.IndexOfFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.LengthOfIsEmptyFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.ListGetIndex;
 import de.fhg.iais.roberta.syntax.lang.functions.ListRepeat;
 import de.fhg.iais.roberta.syntax.lang.functions.ListSetIndex;
+import de.fhg.iais.roberta.syntax.lang.functions.MathConstrainFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.MathNumPropFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathOnListFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.MathPowerFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.MathRandomFloatFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathSingleFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.TextPrintFunct;
 import de.fhg.iais.roberta.syntax.lang.methods.Method;
@@ -57,11 +70,8 @@ public abstract class AbstractCppVisitor extends AbstractLanguageVisitor {
     /**
      * initialize the cpp code generator visitor.
      */
-    protected AbstractCppVisitor(
-        UsedHardwareBean usedHardwareBean,
-        CodeGeneratorSetupBean codeGeneratorSetupBean,
-        ArrayList<ArrayList<Phrase<Void>>> programPhrases) {
-        super(usedHardwareBean, codeGeneratorSetupBean, programPhrases);
+    protected AbstractCppVisitor(List<ArrayList<Phrase<Void>>> programPhrases, ClassToInstanceMap<IProjectBean> beans) {
+        super(programPhrases, beans);
     }
 
     @Override
@@ -135,8 +145,8 @@ public abstract class AbstractCppVisitor extends AbstractLanguageVisitor {
 
     @Override
     public Void visitStmtFlowCon(StmtFlowCon<Void> stmtFlowCon) {
-        if ( this.usedHardwareBean.getLoopsLabelContainer().get(this.currenLoop.getLast()) != null ) {
-            if ( this.usedHardwareBean.getLoopsLabelContainer().get(this.currenLoop.getLast()) ) {
+        if ( this.getBean(UsedHardwareBean.class).getLoopsLabelContainer().get(this.currenLoop.getLast()) != null ) {
+            if ( this.getBean(UsedHardwareBean.class).getLoopsLabelContainer().get(this.currenLoop.getLast()) ) {
                 this.sb.append("goto " + stmtFlowCon.getFlow().toString().toLowerCase() + "_loop" + this.currenLoop.getLast() + ";");
                 return null;
             }
@@ -172,6 +182,53 @@ public abstract class AbstractCppVisitor extends AbstractLanguageVisitor {
             this.sb.append("(" + getLanguageVarTypeFromBlocklyType(itemType) + ") ");
         }
         listRepeat.getElement().accept(this);
+        this.sb.append(")");
+        return null;
+    }
+
+    @Override
+    public Void visitMathConst(MathConst<Void> mathConst) {
+        switch ( mathConst.getMathConst() ) {
+            case PI:
+                this.sb.append("M_PI");
+                break;
+            case E:
+                this.sb.append("M_E");
+                break;
+            case GOLDEN_RATIO:
+                this.sb.append("M_GOLDEN_RATIO");
+                break;
+            case SQRT2:
+                this.sb.append("M_SQRT2");
+                break;
+            case SQRT1_2:
+                this.sb.append("M_SQRT1_2");
+                break;
+            // IEEE 754 floating point representation
+            case INFINITY:
+                this.sb.append("M_INFINITY");
+                break;
+            default:
+                break;
+        }
+        return null;
+    }
+
+    @Override
+    public Void visitIndexOfFunct(IndexOfFunct<Void> indexOfFunct) {
+        if ( indexOfFunct.getParam().get(0).toString().contains("ListCreate ") ) {
+            this.sb.append("NULL");
+            return null;
+        }
+        String methodName = "_getFirstOccuranceOfElement(";
+        if ( indexOfFunct.getLocation() != IndexLocation.FIRST ) {
+            methodName = "_getLastOccuranceOfElement(";
+        }
+        this.sb.append(methodName);
+
+        indexOfFunct.getParam().get(0).accept(this);
+        this.sb.append(", ");
+        indexOfFunct.getParam().get(1).accept(this);
         this.sb.append(")");
         return null;
     }
@@ -231,7 +288,7 @@ public abstract class AbstractCppVisitor extends AbstractLanguageVisitor {
     @Override
     public Void visitListGetIndex(ListGetIndex<Void> listGetIndex) {
         if ( listGetIndex.getParam().get(0).toString().contains("ListCreate ") ) {
-            this.sb.append("null");
+            this.sb.append("NULL");
             return null;
         }
         String operation = "";
@@ -365,6 +422,23 @@ public abstract class AbstractCppVisitor extends AbstractLanguageVisitor {
     }
 
     @Override
+    public Void visitLengthOfIsEmptyFunct(LengthOfIsEmptyFunct<Void> lengthOfIsEmptyFunct) {
+        if ( lengthOfIsEmptyFunct.getParam().get(0).toString().contains("ListCreate ") ) {
+            this.sb.append("NULL");
+            return null;
+        }
+        if ( lengthOfIsEmptyFunct.getFunctName() == FunctionNames.LIST_IS_EMPTY ) {
+            lengthOfIsEmptyFunct.getParam().get(0).accept(this);
+            this.sb.append(".empty()");
+        } else {
+            this.sb.append("((int) ");
+            lengthOfIsEmptyFunct.getParam().get(0).accept(this);
+            this.sb.append(".size())");
+        }
+        return null;
+    }
+
+    @Override
     public Void visitMathOnListFunct(MathOnListFunct<Void> mathOnListFunct) {
         switch ( mathOnListFunct.getFunctName() ) {
             case AVERAGE:
@@ -403,11 +477,16 @@ public abstract class AbstractCppVisitor extends AbstractLanguageVisitor {
     public Void visitMathSingleFunct(MathSingleFunct<Void> mathSingleFunct) {
         boolean extraPar = false;
         switch ( mathSingleFunct.getFunctName() ) {
+            case SQUARE:
+                this.sb.append("pow(");
+                mathSingleFunct.getParam().get(0).accept(this);
+                this.sb.append(", 2)");
+                return null;
             case ROOT:
                 this.sb.append("sqrt(");
                 break;
             case ABS:
-                this.sb.append("absD(");
+                this.sb.append("abs(");
                 break;
             case LN:
                 this.sb.append("log(");
@@ -460,6 +539,82 @@ public abstract class AbstractCppVisitor extends AbstractLanguageVisitor {
         }
         this.sb.append(")");
 
+        return null;
+    }
+
+    @Override
+    public Void visitMathConstrainFunct(MathConstrainFunct<Void> mathConstrainFunct) {
+        Expr<Void> n = mathConstrainFunct.getParam().get(0);
+        Expr<Void> min = mathConstrainFunct.getParam().get(1);
+        Expr<Void> max = mathConstrainFunct.getParam().get(2);
+        this.sb.append("std::min(std::max((double) ");
+        n.accept(this);
+        this.sb.append(", (double) ");
+        min.accept(this);
+        this.sb.append("), (double) ");
+        max.accept(this);
+        this.sb.append(")");
+        return null;
+    }
+
+    @Override
+    public Void visitMathNumPropFunct(MathNumPropFunct<Void> mathNumPropFunct) {
+        switch ( mathNumPropFunct.getFunctName() ) {
+            case EVEN:
+                this.sb.append("(fmod(");
+                mathNumPropFunct.getParam().get(0).accept(this);
+                this.sb.append(", 2) == 0");
+                break;
+            case ODD:
+                this.sb.append("(fmod(");
+                mathNumPropFunct.getParam().get(0).accept(this);
+                this.sb.append(", 2) != 0");
+                break;
+            case PRIME:
+                this.sb.append(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(FunctionNames.PRIME));
+                this.sb.append("(");
+                mathNumPropFunct.getParam().get(0).accept(this);
+                break;
+            case WHOLE:
+                this.sb.append("(");
+                mathNumPropFunct.getParam().get(0).accept(this);
+                this.sb.append(" == floor(");
+                mathNumPropFunct.getParam().get(0).accept(this);
+                this.sb.append(")");
+                break;
+            case POSITIVE:
+                this.sb.append("(");
+                mathNumPropFunct.getParam().get(0).accept(this);
+                this.sb.append(" > 0");
+                break;
+            case NEGATIVE:
+                this.sb.append("(");
+                mathNumPropFunct.getParam().get(0).accept(this);
+                this.sb.append(" < 0");
+                break;
+            case DIVISIBLE_BY:
+                this.sb.append("(fmod(");
+                mathNumPropFunct.getParam().get(0).accept(this);
+                this.sb.append(",");
+                mathNumPropFunct.getParam().get(1).accept(this);
+                this.sb.append(") == 0");
+                break;
+            default:
+                break;
+        }
+        this.sb.append(")");
+        return null;
+    }
+
+    @Override
+    public Void visitMathPowerFunct(MathPowerFunct<Void> mathPowerFunct) {
+        this.sb.append("pow(");
+        return super.visitMathPowerFunct(mathPowerFunct);
+    }
+
+    @Override
+    public Void visitMathRandomFloatFunct(MathRandomFloatFunct<Void> mathRandomFloatFunct) {
+        this.sb.append("((double) rand() / (RAND_MAX))");
         return null;
     }
 
@@ -556,7 +711,7 @@ public abstract class AbstractCppVisitor extends AbstractLanguageVisitor {
 
     protected void addContinueLabelToLoop() {
         Integer lastLoop = this.currenLoop.getLast();
-        if ( this.usedHardwareBean.getLoopsLabelContainer().get(lastLoop) ) {
+        if ( this.getBean(UsedHardwareBean.class).getLoopsLabelContainer().get(lastLoop) ) {
             nlIndent();
             this.sb.append("continue_loop" + this.currenLoop.getLast() + ":");
         }
@@ -564,7 +719,7 @@ public abstract class AbstractCppVisitor extends AbstractLanguageVisitor {
 
     protected void addBreakLabelToLoop(boolean isWaitStmt) {
         if ( !isWaitStmt ) {
-            if ( this.usedHardwareBean.getLoopsLabelContainer().get(this.currenLoop.getLast()) ) {
+            if ( this.getBean(UsedHardwareBean.class).getLoopsLabelContainer().get(this.currenLoop.getLast()) ) {
                 nlIndent();
                 this.sb.append("break_loop" + this.currenLoop.getLast() + ":");
                 nlIndent();
@@ -659,8 +814,44 @@ public abstract class AbstractCppVisitor extends AbstractLanguageVisitor {
         this.sb.append("}");
     }
 
+    @Override
+    protected void generateProgramPrefix(boolean withWrapping) {
+        if (withWrapping) {
+            if (!this.getBean(CodeGeneratorSetupBean.class).getUsedMethods().isEmpty()) {
+                String helperMethodImpls =
+                    this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodDeclarations(this.getBean(CodeGeneratorSetupBean.class).getUsedMethods());
+                Iterator<String> it = Arrays.stream(helperMethodImpls.split("\n")).iterator();
+                while ( it.hasNext() ) {
+                    this.sb.append(it.next());
+                    if ( it.hasNext() ) {
+                        nlIndent();
+                    }
+                }
+                nlIndent();
+            }
+        }
+    }
+
+    @Override
+    protected void generateProgramSuffix(boolean withWrapping) {
+        if ( withWrapping ) {
+            if ( !this.getBean(CodeGeneratorSetupBean.class).getUsedMethods().isEmpty() ) {
+                String helperMethodImpls =
+                    this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodDefinitions(this.getBean(CodeGeneratorSetupBean.class).getUsedMethods());
+                Iterator<String> it = Arrays.stream(helperMethodImpls.split("\n")).iterator();
+                while ( it.hasNext() ) {
+                    this.sb.append(it.next());
+                    if ( it.hasNext() ) {
+                        nlIndent();
+                    }
+                }
+                nlIndent();
+            }
+        }
+    }
+
     protected void generateSignaturesOfUserDefinedMethods() {
-        for ( Method<Void> phrase : this.usedHardwareBean.getUserDefinedMethods() ) {
+        for ( Method<Void> phrase : this.getBean(UsedHardwareBean.class).getUserDefinedMethods() ) {
             this.sb.append(getLanguageVarTypeFromBlocklyType(phrase.getReturnType()) + " ");
             this.sb.append(phrase.getMethodName() + "(");
             phrase.getParameters().accept(this);

@@ -9,12 +9,12 @@ source ./decl.sh
 isDeclShValid
 
 case "${SERVER_NAME}" in
-    master) question 'do you really want to stop the running container with the MASTER server?'
-            question 'you know, that this may stop the PROD system?' ;;
+    master) question 'do you really want to stop the running container with the MASTER server?' ;;
      *)     : ;;
 esac
 
 CONTAINER="${INAME}-${SERVER_NAME}"
+
 echo "stopping the server container '${CONTAINER}', if it is running"
 DOCKERSTOP=$(docker stop ${CONTAINER} 2>/dev/null)
 case "$DOCKERSTOP" in

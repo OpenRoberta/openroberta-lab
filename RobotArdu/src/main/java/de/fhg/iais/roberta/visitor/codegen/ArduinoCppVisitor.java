@@ -3,9 +3,12 @@ package de.fhg.iais.roberta.visitor.codegen;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Map;
 
-import de.fhg.iais.roberta.bean.CodeGeneratorSetupBean;
+import com.google.common.collect.ClassToInstanceMap;
+
+import de.fhg.iais.roberta.bean.IProjectBean;
 import de.fhg.iais.roberta.bean.UsedHardwareBean;
 import de.fhg.iais.roberta.components.Category;
 import de.fhg.iais.roberta.components.ConfigurationAst;
@@ -59,11 +62,10 @@ public final class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor imp
      * @param phrases to generate the code from
      */
     public ArduinoCppVisitor(
-        UsedHardwareBean usedHardwareBean,
-        CodeGeneratorSetupBean codeGeneratorSetupBean,
+        List<ArrayList<Phrase<Void>>> phrases,
         ConfigurationAst brickConfiguration,
-        ArrayList<ArrayList<Phrase<Void>>> phrases) {
-        super(usedHardwareBean, codeGeneratorSetupBean, brickConfiguration, phrases);
+        ClassToInstanceMap<IProjectBean> beans) {
+        super(phrases, brickConfiguration, beans);
 
     }
 
@@ -440,23 +442,23 @@ public final class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor imp
         mainTask.getVariables().accept(this);
         nlIndent();
         generateConfigurationVariables();
-        if ( this.usedHardwareBean.isSensorUsed(SC.TIMER) ) {
+        if ( this.getBean(UsedHardwareBean.class).isSensorUsed(SC.TIMER) ) {
             this.sb.append("unsigned long __time = millis();");
             nlIndent();
         }
         long numberConf =
             this.programPhrases
                 .stream()
-                .filter(phrase -> phrase.getKind().getCategory() == Category.METHOD && !phrase.getKind().hasName("METHOD_CALL"))
+                .filter(phrase -> (phrase.getKind().getCategory() == Category.METHOD) && !phrase.getKind().hasName("METHOD_CALL"))
                 .count();
-        if ( (this.configuration.getConfigurationComponents().isEmpty() || this.usedHardwareBean.isSensorUsed(SC.TIMER)) && numberConf == 0 ) {
+        if ( (this.configuration.getConfigurationComponents().isEmpty() || this.getBean(UsedHardwareBean.class).isSensorUsed(SC.TIMER)) && (numberConf == 0) ) {
             nlIndent();
         }
         generateUserDefinedMethods();
         if ( numberConf != 0 ) {
             nlIndent();
         }
-        for ( UsedSensor usedSensor : this.usedHardwareBean.getUsedSensors() ) {
+        for ( UsedSensor usedSensor : this.getBean(UsedHardwareBean.class).getUsedSensors() ) {
             if ( usedSensor.getType().equals(SC.INFRARED) && !configuration.getRobotName().equals("unowifirev2")) { // TODO remove once infrared library is supported for unowifirev2
                 nlIndent();
                 createMeasureIRSensor();
@@ -483,8 +485,10 @@ public final class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor imp
         this.sb.append("{");
         incrIndentation();
         nlIndent();
-        this.sb.append("Serial.begin(9600); ");
-        nlIndent();
+        if ( this.getBean(UsedHardwareBean.class).isActorUsed(SC.SERIAL) ) {
+            sb.append("Serial.begin(9600);");
+            nlIndent();
+        }
         generateConfigurationSetup();
         generateUsedVars();
         this.sb.delete(this.sb.lastIndexOf("\n"), this.sb.length());
@@ -567,7 +571,7 @@ public final class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor imp
             this.sb.append(header);
             nlIndent();
         }
-        if ( this.usedHardwareBean.isListsUsed() ) {
+        if ( this.getBean(UsedHardwareBean.class).isListsUsed() ) {
             this.sb.append("#include <ArduinoSTL.h>");
             nlIndent();
             this.sb.append("#include <list>");
@@ -575,11 +579,8 @@ public final class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor imp
         }
         this.sb.append("#include <NEPODefs.h>");
         nlIndent();
-    }
 
-    @Override
-    protected void generateProgramSuffix(boolean withWrapping) {
-        // nothing to do because the arduino loop closes the program
+        super.generateProgramPrefix(withWrapping);
     }
 
     private void generateConfigurationSetup() {

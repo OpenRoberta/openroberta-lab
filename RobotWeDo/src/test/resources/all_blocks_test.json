@@ -800,6 +800,10 @@
       "name": "item2"
     },
     {
+      "opc": "comment",
+      "value": "123"
+    },
+    {
       "opc": "expr",
       "expr": "STRING_CONST",
       "value": "Hallo"

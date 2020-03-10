@@ -425,6 +425,8 @@ define(["require", "exports", "interpreter.state", "interpreter.constants", "int
                             n.assertAction(stmt[C.MSG], left, stmt[C.OP], right, value);
                             break;
                         }
+                        case C.COMMENT:
+                            break;
                         default:
                             U.dbcException("invalid stmt op: " + opCode);
                     }
@@ -549,6 +551,9 @@ define(["require", "exports", "interpreter.state", "interpreter.constants", "int
                     var value = s.pop();
                     U.debug('---------- ' + subOp + ' with ' + value);
                     switch (subOp) {
+                        case 'SQUARE':
+                            s.push(Math.pow(value, 2));
+                            break;
                         case 'ROOT':
                             s.push(Math.sqrt(value));
                             break;

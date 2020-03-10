@@ -1,8 +1,11 @@
 package de.fhg.iais.roberta.visitor.codegen;
 
 import java.util.ArrayList;
+import java.util.List;
 
-import de.fhg.iais.roberta.bean.CodeGeneratorSetupBean;
+import com.google.common.collect.ClassToInstanceMap;
+
+import de.fhg.iais.roberta.bean.IProjectBean;
 import de.fhg.iais.roberta.bean.UsedHardwareBean;
 import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.components.ConfigurationComponent;
@@ -52,11 +55,10 @@ public final class BotnrollCppVisitor extends AbstractCommonArduinoCppVisitor im
      * @param phrases to generate the code from
      */
     public BotnrollCppVisitor(
-        UsedHardwareBean usedHardwareBean,
-        CodeGeneratorSetupBean codeGeneratorSetupBean,
+        List<ArrayList<Phrase<Void>>> phrases,
         ConfigurationAst brickConfiguration,
-        ArrayList<ArrayList<Phrase<Void>>> phrases) {
-        super(usedHardwareBean, codeGeneratorSetupBean, brickConfiguration, phrases);
+        ClassToInstanceMap<IProjectBean> beans) {
+        super(phrases, brickConfiguration, beans);
     }
 
     @Override
@@ -416,7 +418,7 @@ public final class BotnrollCppVisitor extends AbstractCommonArduinoCppVisitor im
         decrIndentation();
         mainTask.getVariables().accept(this);
         nlIndent();
-        if ( this.usedHardwareBean.isSensorUsed(SC.TIMER) ) {
+        if ( this.getBean(UsedHardwareBean.class).isSensorUsed(SC.TIMER) ) {
             nlIndent();
             this.sb.append("unsigned long __time = millis();");
         }
@@ -482,17 +484,12 @@ public final class BotnrollCppVisitor extends AbstractCommonArduinoCppVisitor im
         this.sb.append("#define MODULE_ADDRESS 0x2C \n");
         this.sb.append("byte colorsLeft[3]={0,0,0}; \n");
         this.sb.append("byte colorsRight[3]={0,0,0};");
-    }
 
-    @Override
-    protected void generateProgramSuffix(boolean withWrapping) {
-        //        if ( withWrapping ) {
-        //            this.sb.append("\n}\n");
-        //        }
+        super.generateProgramPrefix(withWrapping);
     }
 
     private void generateSensors() {
-        for ( UsedSensor usedSensor : this.usedHardwareBean.getUsedSensors() ) {
+        for ( UsedSensor usedSensor : this.getBean(UsedHardwareBean.class).getUsedSensors() ) {
             switch ( usedSensor.getType() ) {
                 case SC.COLOR:
                     nlIndent();

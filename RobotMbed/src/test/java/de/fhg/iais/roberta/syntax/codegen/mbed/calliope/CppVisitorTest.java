@@ -638,7 +638,7 @@ public class CppVisitorTest extends CalliopeAstTest {
             "" //
                 + IMPORTS
                 + MAIN
-                + "_uBit.display.scroll(ManagedString(isWholeD(2)));\n"
+                + "_uBit.display.scroll(ManagedString((2==floor(2))));\n"
                 + END;
 
         UnitTestHelper
@@ -651,9 +651,31 @@ public class CppVisitorTest extends CalliopeAstTest {
         String expectedResult =
             "" //
                 + IMPORTS
+                + "inline bool _isPrime(doubled);"
                 + MAIN
-                + "_uBit.display.scroll(ManagedString(isPrimeD(2)));\n"
-                + END;
+                + "_uBit.display.scroll(ManagedString(_isPrime(2)));\n"
+                + END
+                + "inline bool _isPrime(double d) {\n"
+                + "    if (!(d == floor(d))) {\n"
+                + "        return false;\n"
+                + "    }\n"
+                + "    int n = (int)d;\n"
+                + "    if (n < 2) {\n"
+                + "        return false;\n"
+                + "    }\n"
+                + "    if (n == 2) {\n"
+                + "        return true;\n"
+                + "    }\n"
+                + "    if (n % 2 == 0) {\n"
+                + "        return false;\n"
+                + "    }\n"
+                + "    for (int i = 3, s = (int)(sqrt(d) + 1); i <= s; i += 2) {\n"
+                + "        if (n % i == 0) {\n"
+                + "            return false;\n"
+                + "        }\n"
+                + "    }\n"
+                + "    return true;\n"
+                + "}";
 
         UnitTestHelper
             .checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, expectedResult, "/function/is_prime_number.xml", configuration, true);

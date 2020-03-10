@@ -19,7 +19,6 @@ double _getUltrasonicDistance(int trigger, int echo)
 
 void setup()
 {
-    Serial.begin(9600); 
     pinMode(_trigger_U, OUTPUT);
     pinMode(_echo_U, INPUT);
     ___item = _getUltrasonicDistance(_trigger_U, _echo_U);

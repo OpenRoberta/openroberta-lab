@@ -32,7 +32,6 @@ long int  _getIRValue(IRrecv &irrecv) {
 
 void setup()
 {
-    Serial.begin(9600); 
     pinMode(13, OUTPUT);
     _irrecv_I.enableIRIn();
     ___item = _getIRValue(_irrecv_I);

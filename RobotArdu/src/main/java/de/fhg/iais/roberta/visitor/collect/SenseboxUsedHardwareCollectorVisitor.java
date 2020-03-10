@@ -2,6 +2,9 @@ package de.fhg.iais.roberta.visitor.collect;
 
 import java.util.ArrayList;
 
+import com.google.common.collect.ClassToInstanceMap;
+
+import de.fhg.iais.roberta.bean.IProjectBean;
 import de.fhg.iais.roberta.bean.UsedHardwareBean;
 import de.fhg.iais.roberta.components.UsedActor;
 import de.fhg.iais.roberta.components.UsedSensor;
@@ -10,6 +13,7 @@ import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.SC;
 import de.fhg.iais.roberta.syntax.action.generic.PinWriteValueAction;
 import de.fhg.iais.roberta.syntax.action.light.LightAction;
+import de.fhg.iais.roberta.syntax.action.serial.SerialWriteAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.RelayAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.sensebox.PlotClearAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.sensebox.PlotPointAction;
@@ -30,8 +34,8 @@ import de.fhg.iais.roberta.visitor.hardware.IArduinoVisitor;
  */
 public final class SenseboxUsedHardwareCollectorVisitor extends AbstractUsedHardwareCollectorVisitor implements IArduinoVisitor<Void> {
 
-    public SenseboxUsedHardwareCollectorVisitor(UsedHardwareBean.Builder builder, ArrayList<ArrayList<Phrase<Void>>> phrasesSet) {
-        super(builder, null);
+    public SenseboxUsedHardwareCollectorVisitor(ArrayList<ArrayList<Phrase<Void>>> phrasesSet, ClassToInstanceMap<IProjectBean.IBuilder<?>> beanBuilders) {
+        super(null, beanBuilders);
     }
 
     @Override
@@ -51,7 +55,7 @@ public final class SenseboxUsedHardwareCollectorVisitor extends AbstractUsedHard
 
     @Override
     public Void visitVemlLightSensor(VemlLightSensor<Void> lightSensor) {
-        this.builder.addUsedSensor(new UsedSensor(lightSensor.getPort(), SC.LIGHTVEML, lightSensor.getMode()));
+        this.getBuilder(UsedHardwareBean.Builder.class).addUsedSensor(new UsedSensor(lightSensor.getPort(), SC.LIGHTVEML, lightSensor.getMode()));
         return null;
     }
 
@@ -60,60 +64,67 @@ public final class SenseboxUsedHardwareCollectorVisitor extends AbstractUsedHard
         // TODO check that WiFi config block is used, otherwise throw an exception
         // and show user the error, that they must use this block in conjunction
         // with WiFi/ethernet/LoRa
-        this.builder.addUsedActor(new UsedActor(SC.NONE, SC.SEND_DATA));
+        this.getBuilder(UsedHardwareBean.Builder.class).addUsedActor(new UsedActor(SC.NONE, SC.SEND_DATA));
         return null;
     }
 
     @Override
     public Void visitTemperatureSensor(TemperatureSensor<Void> temperatureSensor) {
-        this.builder.addUsedSensor(new UsedSensor(temperatureSensor.getPort(), SC.TEMPERATURE, temperatureSensor.getMode()));
+        this.getBuilder(UsedHardwareBean.Builder.class).addUsedSensor(new UsedSensor(temperatureSensor.getPort(), SC.TEMPERATURE, temperatureSensor.getMode()));
         return null;
     }
 
     @Override
     public Void visitHumiditySensor(HumiditySensor<Void> humiditySensor) {
-        this.builder.addUsedSensor(new UsedSensor(humiditySensor.getPort(), SC.HUMIDITY, humiditySensor.getMode()));
+        this.getBuilder(UsedHardwareBean.Builder.class).addUsedSensor(new UsedSensor(humiditySensor.getPort(), SC.HUMIDITY, humiditySensor.getMode()));
         return null;
     }
 
     @Override
     public Void visitCompassSensor(CompassSensor<Void> compassSensor) {
-        this.builder.addUsedSensor(new UsedSensor(compassSensor.getPort(), SC.COMPASS, compassSensor.getMode()));
+        this.getBuilder(UsedHardwareBean.Builder.class).addUsedSensor(new UsedSensor(compassSensor.getPort(), SC.COMPASS, compassSensor.getMode()));
         return null;
     }
 
     @Override
     public Void visitPlotPointAction(PlotPointAction<Void> plotPointAction) {
-        this.builder.addUsedActor(new UsedActor(plotPointAction.getPort(), SC.SENSEBOX_PLOTTING));
+        this.getBuilder(UsedHardwareBean.Builder.class).addUsedActor(new UsedActor(plotPointAction.getPort(), SC.SENSEBOX_PLOTTING));
         plotPointAction.getValue().accept(this);
         return null;
     }
 
     @Override
     public Void visitPlotClearAction(PlotClearAction<Void> plotClearAction) {
-        this.builder.addUsedActor(new UsedActor(plotClearAction.getPort(), SC.SENSEBOX_PLOTTING));
+        this.getBuilder(UsedHardwareBean.Builder.class).addUsedActor(new UsedActor(plotClearAction.getPort(), SC.SENSEBOX_PLOTTING));
         return null;
     }
 
     @Override
     public Void visitLightAction(LightAction<Void> lightAction) {
         if ( !lightAction.getMode().toString().equals(BlocklyConstants.DEFAULT) ) {
-            this.builder.addUsedActor(new UsedActor(lightAction.getPort(), SC.LED));
+            this.getBuilder(UsedHardwareBean.Builder.class).addUsedActor(new UsedActor(lightAction.getPort(), SC.LED));
         } else {
-            this.builder.addUsedActor(new UsedActor(lightAction.getPort(), SC.RGBLED));
+            this.getBuilder(UsedHardwareBean.Builder.class).addUsedActor(new UsedActor(lightAction.getPort(), SC.RGBLED));
         }
         return null;
     }
 
     @Override
     public Void visitParticleSensor(ParticleSensor<Void> particleSensor) {
-        this.builder.addUsedSensor(new UsedSensor(particleSensor.getPort(), SC.PARTICLE, particleSensor.getMode()));
+        this.getBuilder(UsedHardwareBean.Builder.class).addUsedSensor(new UsedSensor(particleSensor.getPort(), SC.PARTICLE, particleSensor.getMode()));
         return null;
     }
 
     @Override
     public Void visitGpsSensor(GpsSensor<Void> gpsSensor) {
-        this.builder.addUsedSensor(new UsedSensor(gpsSensor.getPort(), SC.GPS, gpsSensor.getMode()));
+        this.getBuilder(UsedHardwareBean.Builder.class).addUsedSensor(new UsedSensor(gpsSensor.getPort(), SC.GPS, gpsSensor.getMode()));
+        return null;
+    }
+    
+    @Override
+    public Void visitSerialWriteAction(SerialWriteAction<Void> serialWriteAction) {
+        serialWriteAction.getValue().accept(this);
+        this.getBuilder(UsedHardwareBean.Builder.class).addUsedActor(new UsedActor(SC.SERIAL, SC.SERIAL));
         return null;
     }
 }

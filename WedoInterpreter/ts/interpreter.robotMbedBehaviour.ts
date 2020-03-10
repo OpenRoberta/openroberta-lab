@@ -143,8 +143,8 @@ export class RobotMbedBehaviour extends ARobotBehaviour {
 
     public setVolumeAction( volume: number ): void {
         U.debug( 'set volume: ' + volume );
-        this.hardwareState.actions.volume = volume;
-        this.hardwareState.volume = volume;
+        this.hardwareState.actions.volume = Math.max(Math.min(100, volume), 0);
+        this.hardwareState.volume = Math.max(Math.min(100, volume), 0);
     }
 
     public getVolumeAction( s: State ): void {

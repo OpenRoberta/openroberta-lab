@@ -23,7 +23,6 @@ Plot _plot_L(&_display_L);
 
 void setup()
 {
-    Serial.begin(9600); 
     SD.begin(28);
     _dataFile = SD.open("test.txt", FILE_WRITE);
     _dataFile.close();
