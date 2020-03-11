@@ -54,6 +54,7 @@ Blockly.Msg.BATTERY_GETSAMPLE_TOOLTIP = "Gets the current voltage from the batte
 Blockly.Msg.BELOW = "below";  // untranslated
 Blockly.Msg.BLOCK_NOT_EXECUTED = "Uruchomienie tego bloku nie będzie miało żadnego skutku!";
 Blockly.Msg.BLOCK_NOT_SUPPORTED = "This robot does not support this block!";  // untranslated
+Blockly.Msg.BLOCK_USED_INCORRECTLY = "Unfortunately, this block cannot be used in this way.";  // untranslated
 Blockly.Msg.BOB3_READNUMBER_TOOLTIP = "Zwraca poprzednio zapamiętaną liczbę.";
 Blockly.Msg.BOB3_RECALL_NUMBER = "przypomnij liczbę";
 Blockly.Msg.BOB3_REMEMBER_NUMBER = "zapamiętaj liczbę";

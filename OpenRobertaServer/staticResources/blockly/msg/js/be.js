@@ -54,6 +54,7 @@ Blockly.Msg.BATTERY_GETSAMPLE_TOOLTIP = "Gets the current voltage from the batte
 Blockly.Msg.BELOW = "below";  // untranslated
 Blockly.Msg.BLOCK_NOT_EXECUTED = "Выпаўненне гэтага блоку не прынясе ніякіх вынікаў!";
 Blockly.Msg.BLOCK_NOT_SUPPORTED = "This robot does not support this block!";  // untranslated
+Blockly.Msg.BLOCK_USED_INCORRECTLY = "Unfortunately, this block cannot be used in this way.";  // untranslated
 Blockly.Msg.BOB3_READNUMBER_TOOLTIP = "Вяртае раней захаваны лік.";
 Blockly.Msg.BOB3_RECALL_NUMBER = "узгадаць лік";
 Blockly.Msg.BOB3_REMEMBER_NUMBER = "запомніць лік";

@@ -54,6 +54,7 @@ Blockly.Msg.BATTERY_GETSAMPLE_TOOLTIP = "Liest die aktuelle Spannung der Batteri
 Blockly.Msg.BELOW = "unten";
 Blockly.Msg.BLOCK_NOT_EXECUTED = "Überprüfe die Einstellungen bei diesem Block. Er wird so nichts ausführen können.";
 Blockly.Msg.BLOCK_NOT_SUPPORTED = "Dieser Block wird von diesem Roboter nicht unterstützt!";
+Blockly.Msg.BLOCK_USED_INCORRECTLY = "Dieser Block kann leider nicht auf diese Weise verwendet werden!";
 Blockly.Msg.BOB3_READNUMBER_TOOLTIP = "Gibt die zuvor gespeicherte Zahl zurück.";
 Blockly.Msg.BOB3_RECALL_NUMBER = "lese Zahl aus Speicher";
 Blockly.Msg.BOB3_REMEMBER_NUMBER = "Speichere Zahl";

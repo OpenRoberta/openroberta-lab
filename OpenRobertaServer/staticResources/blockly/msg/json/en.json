@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2020-02-26 10:22:17.402526",
+		"lastupdated": "2020-03-11 12:06:43.586226",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -1305,6 +1305,7 @@
 	"CONNECTION_SEND_TOOLTIP_BOB3": "Sends a message of type number to another Bob3. Hold the Bob3's face to face!",
 	"BLOCK_NOT_EXECUTED": "The exection of this block will have no effect!",
 	"BLOCK_NOT_SUPPORTED": "This robot does not support this block!",
+	"BLOCK_USED_INCORRECTLY": "Unfortunately, this block cannot be used in this way.",
 	"BOB3_RECALL_NUMBER": "recall number",
 	"BOB3_REMEMBER_NUMBER": "remember number",
 	"BOB3_SAVENUMBER_TOOLTIP": "The number to store should be an integer in the range of 0 to 255",

@@ -21,7 +21,7 @@ public final class C4ev3BrickValidatorVisitor extends Ev3BrickValidatorVisitor  
     @Override
     public Void visitIndexOfFunct(IndexOfFunct<Void> indexOfFunct) {
         if ( indexOfFunct.getParam().get(0).toString().contains("ListCreate ") ) {
-            indexOfFunct.addInfo(NepoInfo.error("BLOCK_NOT_SUPPORTED"));
+            indexOfFunct.addInfo(NepoInfo.error("BLOCK_USED_INCORRECTLY"));
             this.errorCount++;
         }
         return super.visitIndexOfFunct(indexOfFunct);
@@ -30,7 +30,7 @@ public final class C4ev3BrickValidatorVisitor extends Ev3BrickValidatorVisitor  
     @Override
     public Void visitListGetIndex(ListGetIndex<Void> listGetIndex) {
         if ( listGetIndex.getParam().get(0).toString().contains("ListCreate ") ) {
-            listGetIndex.addInfo(NepoInfo.error("BLOCK_NOT_SUPPORTED"));
+            listGetIndex.addInfo(NepoInfo.error("BLOCK_USED_INCORRECTLY"));
             this.errorCount++;
         }
         return super.visitListGetIndex(listGetIndex);
@@ -39,7 +39,7 @@ public final class C4ev3BrickValidatorVisitor extends Ev3BrickValidatorVisitor  
     @Override
     public Void visitListSetIndex(ListSetIndex<Void> listSetIndex) {
         if ( listSetIndex.getParam().get(0).toString().contains("ListCreate ") ) {
-            listSetIndex.addInfo(NepoInfo.error("BLOCK_NOT_SUPPORTED"));
+            listSetIndex.addInfo(NepoInfo.error("BLOCK_USED_INCORRECTLY"));
             this.errorCount++;
         }
         return super.visitListSetIndex(listSetIndex);
@@ -48,7 +48,7 @@ public final class C4ev3BrickValidatorVisitor extends Ev3BrickValidatorVisitor  
     @Override
     public Void visitLengthOfIsEmptyFunct(LengthOfIsEmptyFunct<Void> lengthOfIsEmptyFunct) {
         if ( lengthOfIsEmptyFunct.getParam().get(0).toString().contains("ListCreate ") ) {
-            lengthOfIsEmptyFunct.addInfo(NepoInfo.error("BLOCK_NOT_SUPPORTED"));
+            lengthOfIsEmptyFunct.addInfo(NepoInfo.error("BLOCK_USED_INCORRECTLY"));
             this.errorCount++;
         }
         return super.visitLengthOfIsEmptyFunct(lengthOfIsEmptyFunct);
@@ -57,7 +57,7 @@ public final class C4ev3BrickValidatorVisitor extends Ev3BrickValidatorVisitor  
     @Override
     public Void visitMathOnListFunct(MathOnListFunct<Void> mathOnListFunct) {
         if ( mathOnListFunct.getParam().get(0).toString().contains("ListCreate ") ) {
-            mathOnListFunct.addInfo(NepoInfo.error("BLOCK_NOT_SUPPORTED"));
+            mathOnListFunct.addInfo(NepoInfo.error("BLOCK_USED_INCORRECTLY"));
             this.errorCount++;
         }
         return super.visitMathOnListFunct(mathOnListFunct);
@@ -66,7 +66,7 @@ public final class C4ev3BrickValidatorVisitor extends Ev3BrickValidatorVisitor  
     @Override
     public Void visitGetSubFunct(GetSubFunct<Void> getSubFunct) {
         if ( getSubFunct.getParam().get(0).toString().contains("ListCreate ") ) {
-            getSubFunct.addInfo(NepoInfo.error("BLOCK_NOT_SUPPORTED"));
+            getSubFunct.addInfo(NepoInfo.error("BLOCK_USED_INCORRECTLY"));
             this.errorCount++;
         }
         return super.visitGetSubFunct(getSubFunct);
