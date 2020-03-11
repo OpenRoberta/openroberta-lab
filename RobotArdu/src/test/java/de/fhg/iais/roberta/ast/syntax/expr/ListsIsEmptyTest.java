@@ -11,7 +11,7 @@ public class ListsIsEmptyTest extends ArduinoAstTest {
 
     @Test
     public void Test() throws Exception {
-        final String a = "NULL";
+        final String a = "{0,0,0}.empty()";
 
         UnitTestHelper.checkWorkers(testFactory, a, "/syntax/lists/lists_is_empty.xml", new ArduinoUsedHardwareCollectorWorker(), new ArduinoCxxGeneratorWorker());
     }

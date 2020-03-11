@@ -19,14 +19,17 @@ import de.fhg.iais.roberta.util.Util;
 import de.fhg.iais.roberta.util.jaxb.JaxbHelper;
 import de.fhg.iais.roberta.worker.IWorker;
 
-public class UnitTestHelper {
+public final class UnitTestHelper {
+
+    private UnitTestHelper() {
+    }
 
     private static boolean executeWorkflow(String workflowName, IRobotFactory robotFactory, Project project) {
         List<IWorker> workflowPipe = robotFactory.getWorkerPipe(workflowName);
         if ( project.hasSucceeded() ) {
             for ( IWorker worker : workflowPipe ) {
                 worker.execute(project);
-                Assert.assertTrue("Worker " + worker.getClass().getSimpleName() + " failed", project.hasSucceeded());
+                Assert.assertTrue("Worker " + worker.getClass().getSimpleName() + " failed with " + project.getErrorCounter() + " errors", project.hasSucceeded());
                 if ( !project.hasSucceeded() ) {
                     break;
                 }
@@ -45,6 +48,14 @@ public class UnitTestHelper {
         }
         String generatedProgramSource = project.getSourceCode().toString().replaceAll("\\s+", "");
         Assert.assertEquals(expectedSource.replaceAll("\\s+", ""), generatedProgramSource);
+    }
+
+    public static Project checkWorkflow(IRobotFactory factory, String workflow, String exportXmlFilename) {
+        String xmlText = Util.readResourceContent(exportXmlFilename);
+        Project.Builder builder = setupWithExportXML(factory, xmlText);
+        Project project = builder.build();
+        executeWorkflow(workflow, factory, project);
+        return project;
     }
 
     public static Project.Builder setupWithNativeSource(IRobotFactory factory, String nativeSource) {

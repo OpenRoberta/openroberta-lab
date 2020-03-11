@@ -216,10 +216,6 @@ public abstract class AbstractCppVisitor extends AbstractLanguageVisitor {
 
     @Override
     public Void visitIndexOfFunct(IndexOfFunct<Void> indexOfFunct) {
-        if ( indexOfFunct.getParam().get(0).toString().contains("ListCreate ") ) {
-            this.sb.append("NULL");
-            return null;
-        }
         String methodName = "_getFirstOccuranceOfElement(";
         if ( indexOfFunct.getLocation() != IndexLocation.FIRST ) {
             methodName = "_getLastOccuranceOfElement(";
@@ -287,10 +283,6 @@ public abstract class AbstractCppVisitor extends AbstractLanguageVisitor {
 
     @Override
     public Void visitListGetIndex(ListGetIndex<Void> listGetIndex) {
-        if ( listGetIndex.getParam().get(0).toString().contains("ListCreate ") ) {
-            this.sb.append("NULL");
-            return null;
-        }
         String operation = "";
         switch ( (ListElementOperations) listGetIndex.getElementOperation() ) {
             case GET:
@@ -347,9 +339,6 @@ public abstract class AbstractCppVisitor extends AbstractLanguageVisitor {
 
     @Override
     public Void visitListSetIndex(ListSetIndex<Void> listSetIndex) {
-        if ( listSetIndex.getParam().get(0).toString().contains("ListCreate ") ) {
-            return null;
-        }
         String operation = "";
         switch ( (ListElementOperations) listSetIndex.getElementOperation() ) {
             case GET:
@@ -423,10 +412,6 @@ public abstract class AbstractCppVisitor extends AbstractLanguageVisitor {
 
     @Override
     public Void visitLengthOfIsEmptyFunct(LengthOfIsEmptyFunct<Void> lengthOfIsEmptyFunct) {
-        if ( lengthOfIsEmptyFunct.getParam().get(0).toString().contains("ListCreate ") ) {
-            this.sb.append("NULL");
-            return null;
-        }
         if ( lengthOfIsEmptyFunct.getFunctName() == FunctionNames.LIST_IS_EMPTY ) {
             lengthOfIsEmptyFunct.getParam().get(0).accept(this);
             this.sb.append(".empty()");

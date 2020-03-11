@@ -18,6 +18,12 @@ import de.fhg.iais.roberta.syntax.actors.arduino.sensebox.PlotPointAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.sensebox.SendDataAction;
 import de.fhg.iais.roberta.syntax.lang.expr.EmptyExpr;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
+import de.fhg.iais.roberta.syntax.lang.functions.GetSubFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.IndexOfFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.LengthOfIsEmptyFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.ListGetIndex;
+import de.fhg.iais.roberta.syntax.lang.functions.ListSetIndex;
+import de.fhg.iais.roberta.syntax.lang.functions.MathOnListFunct;
 import de.fhg.iais.roberta.syntax.sensor.generic.HumiditySensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.KeysSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
@@ -242,5 +248,59 @@ public class SenseboxBrickValidatorVisitor extends AbstractBrickValidatorVisitor
             this.errorCount++;
         }
         return null;
+    }
+
+    @Override
+    public Void visitIndexOfFunct(IndexOfFunct<Void> indexOfFunct) {
+        if ( indexOfFunct.getParam().get(0).toString().contains("ListCreate ") ) {
+            indexOfFunct.addInfo(NepoInfo.error("BLOCK_NOT_SUPPORTED"));
+            this.errorCount++;
+        }
+        return super.visitIndexOfFunct(indexOfFunct);
+    }
+
+    @Override
+    public Void visitListGetIndex(ListGetIndex<Void> listGetIndex) {
+        if ( listGetIndex.getParam().get(0).toString().contains("ListCreate ") ) {
+            listGetIndex.addInfo(NepoInfo.error("BLOCK_NOT_SUPPORTED"));
+            this.errorCount++;
+        }
+        return super.visitListGetIndex(listGetIndex);
+    }
+
+    @Override
+    public Void visitListSetIndex(ListSetIndex<Void> listSetIndex) {
+        if ( listSetIndex.getParam().get(0).toString().contains("ListCreate ") ) {
+            listSetIndex.addInfo(NepoInfo.error("BLOCK_NOT_SUPPORTED"));
+            this.errorCount++;
+        }
+        return super.visitListSetIndex(listSetIndex);
+    }
+
+    @Override
+    public Void visitLengthOfIsEmptyFunct(LengthOfIsEmptyFunct<Void> lengthOfIsEmptyFunct) {
+        if ( lengthOfIsEmptyFunct.getParam().get(0).toString().contains("ListCreate ") ) {
+            lengthOfIsEmptyFunct.addInfo(NepoInfo.error("BLOCK_NOT_SUPPORTED"));
+            this.errorCount++;
+        }
+        return super.visitLengthOfIsEmptyFunct(lengthOfIsEmptyFunct);
+    }
+
+    @Override
+    public Void visitMathOnListFunct(MathOnListFunct<Void> mathOnListFunct) {
+        if ( mathOnListFunct.getParam().get(0).toString().contains("ListCreate ") ) {
+            mathOnListFunct.addInfo(NepoInfo.error("BLOCK_NOT_SUPPORTED"));
+            this.errorCount++;
+        }
+        return super.visitMathOnListFunct(mathOnListFunct);
+    }
+
+    @Override
+    public Void visitGetSubFunct(GetSubFunct<Void> getSubFunct) {
+        if ( getSubFunct.getParam().get(0).toString().contains("ListCreate ") ) {
+            getSubFunct.addInfo(NepoInfo.error("BLOCK_NOT_SUPPORTED"));
+            this.errorCount++;
+        }
+        return super.visitGetSubFunct(getSubFunct);
     }
 }

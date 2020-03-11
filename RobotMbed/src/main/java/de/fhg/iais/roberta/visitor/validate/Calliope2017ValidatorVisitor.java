@@ -10,7 +10,7 @@ import de.fhg.iais.roberta.syntax.action.mbed.RadioSetChannelAction;
 import de.fhg.iais.roberta.syntax.sensor.mbed.RadioRssiSensor;
 import de.fhg.iais.roberta.typecheck.NepoInfo;
 
-public final class Calliope2017ValidatorVisitor extends MbedBoardValidatorVisitor {
+public final class Calliope2017ValidatorVisitor extends CalliopeValidatorVisitor {
 
     public Calliope2017ValidatorVisitor(ConfigurationAst brickConfiguration, ClassToInstanceMap<IProjectBean.IBuilder<?>> beanBuilders) {
         super(brickConfiguration, beanBuilders);

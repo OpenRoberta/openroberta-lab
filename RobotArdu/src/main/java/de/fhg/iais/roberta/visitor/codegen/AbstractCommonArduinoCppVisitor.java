@@ -174,10 +174,6 @@ public abstract class AbstractCommonArduinoCppVisitor extends AbstractCppVisitor
 
     @Override
     public Void visitIndexOfFunct(IndexOfFunct<Void> indexOfFunct) {
-        if ( indexOfFunct.getParam().get(0).toString().contains("ListCreate ") ) {
-            this.sb.append("NULL");
-            return null;
-        }
         String methodName = indexOfFunct.getLocation() == IndexLocation.LAST ? "_getLastOccuranceOfElement(" : "_getFirstOccuranceOfElement(";
         this.sb.append(methodName);
         indexOfFunct.getParam().get(0).accept(this);
