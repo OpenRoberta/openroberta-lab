@@ -1,4 +1,4 @@
-package de.fhg.iais.roberta.syntax.sensor.ev3;
+package de.fhg.iais.roberta.syntax.sensor.generic;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
@@ -9,8 +9,7 @@ import de.fhg.iais.roberta.syntax.sensor.ExternalSensor;
 import de.fhg.iais.roberta.syntax.sensor.SensorMetaDataBean;
 import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
 import de.fhg.iais.roberta.visitor.IVisitor;
-import de.fhg.iais.roberta.visitor.hardware.IEv3Visitor;
-
+import de.fhg.iais.roberta.visitor.hardware.sensor.ISensorVisitor;
 
 public class HTColorSensor<V> extends ExternalSensor<V> {
 
@@ -25,7 +24,7 @@ public class HTColorSensor<V> extends ExternalSensor<V> {
 
     @Override
     protected V acceptImpl(IVisitor<V> visitor) {
-        return ((IEv3Visitor<V>) visitor).visitHTColorSensor(this);
+        return ((ISensorVisitor<V>) visitor).visitHTColorSensor(this);
     }
 
     /**

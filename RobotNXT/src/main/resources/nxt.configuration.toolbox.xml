@@ -9,6 +9,6 @@
         <block type='robBrick_light' />
         <block type='robBrick_ultrasonic' />
         <block type='robBrick_colour' />
-        <block type='robBrick_HiTechnic_colour' />
+        <block type='robBrick_htcolour' />
     </category>
 </toolbox_set>

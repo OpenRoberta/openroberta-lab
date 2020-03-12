@@ -1,6 +1,5 @@
 package de.fhg.iais.roberta.visitor.hardware;
 
-import de.fhg.iais.roberta.syntax.sensor.ev3.HTColorSensor;
 import de.fhg.iais.roberta.syntax.action.ev3.ShowPictureAction;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.visitor.hardware.actor.IActors4AutonomousDriveRobots;
@@ -12,6 +11,4 @@ public interface IEv3Visitor<V> extends IActors4AutonomousDriveRobots<V>, IBluet
     default V visitShowPictureAction(ShowPictureAction<V> showPictureAction) {
         throw new DbcException("Block is not implemented!");
     }
-
-    default V visitHTColorSensor(HTColorSensor<V> htColorSensor) { throw new DbcException("Block is not implemented!"); }
 }

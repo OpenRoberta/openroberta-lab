@@ -1,24 +1,6 @@
 include: "classpath:/robotCommon.yml"
 block:
-  HTCOLOR_SENSING:
-    category: SENSOR
-    implementor: de.fhg.iais.roberta.syntax.sensor.ev3.HTColorSensor
-    type: [robSensors_htcolour_getSample]
   SHOW_PICTURE_ACTION:
     category: ACTOR
     implementor: de.fhg.iais.roberta.syntax.action.ev3.ShowPictureAction
     type: [robActions_display_picture,robActions_display_picture_new]
-
-wait:
-  HTCOLOUR_AMBIENTLIGHT:
-    implementor: de.fhg.iais.roberta.syntax.sensor.ev3.HTColorSensor
-    sensor: COLOUR
-    mode: AMBIENTLIGHT
-  HTCOLOUR_COLOUR:
-    implementor: de.fhg.iais.roberta.syntax.sensor.ev3.HTColorSensor
-    sensor: COLOUR
-    mode: COLOUR
-  HTCOLOUR_LIGHT:
-    implementor: de.fhg.iais.roberta.syntax.sensor.ev3.HTColorSensor
-    sensor: COLOUR
-    mode: LIGHT

@@ -12,13 +12,15 @@ import de.fhg.iais.roberta.syntax.action.light.LightAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
 import de.fhg.iais.roberta.syntax.action.sound.VolumeAction;
+import de.fhg.iais.roberta.syntax.sensor.generic.HTColorSensor;
 import de.fhg.iais.roberta.visitor.IVisitor;
+import de.fhg.iais.roberta.visitor.hardware.INxtVisitor;
 
 /**
  * This class is implementing {@link IVisitor}. All methods are implemented and they append a human-readable JAVA code representation of a phrase to a
  * StringBuilder. <b>This representation is correct JAVA code.</b> <br>
  */
-public final class NxtUsedHardwareCollectorVisitor extends AbstractUsedHardwareCollectorVisitor {
+public final class NxtUsedHardwareCollectorVisitor extends AbstractUsedHardwareCollectorVisitor implements INxtVisitor<Void> {
 
     public NxtUsedHardwareCollectorVisitor(
         ConfigurationAst robotConfiguration,
@@ -48,5 +50,12 @@ public final class NxtUsedHardwareCollectorVisitor extends AbstractUsedHardwareC
     public Void visitPlayNoteAction(PlayNoteAction<Void> playNoteAction) {
         this.getBuilder(UsedHardwareBean.Builder.class).addUsedActor(new UsedActor("", SC.SOUND));
         return super.visitPlayNoteAction(playNoteAction);
+    }
+
+    @Override
+    public Void visitHTColorSensor(HTColorSensor<Void> htColorSensor) {
+        String mode = htColorSensor.getMode();
+        this.getBuilder(UsedHardwareBean.Builder.class).addUsedSensor(new UsedSensor(htColorSensor.getPort(), SC.HT_COLOR, mode));
+        return null;
     }
 }

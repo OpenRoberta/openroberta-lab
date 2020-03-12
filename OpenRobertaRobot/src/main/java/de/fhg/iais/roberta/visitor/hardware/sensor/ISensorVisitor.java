@@ -8,6 +8,7 @@ import de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GestureSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GetSampleSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.HTColorSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.HumiditySensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.IRSeekerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
@@ -279,5 +280,14 @@ public interface ISensorVisitor<V> extends IHardwareVisitor<V> {
 
     default V visitParticleSensor(ParticleSensor<V> particleSensor) {
         throw new DbcException("Particle sensor not implemented!");
+    }
+
+    /**
+     * visit a {@link HTColorSensor}.
+     *
+     * @param htColorSensor to be visited
+     */
+    default V visitHTColorSensor(HTColorSensor<V> htColorSensor) {
+        throw new DbcException("HTColorSensor not implemented!");
     }
 }

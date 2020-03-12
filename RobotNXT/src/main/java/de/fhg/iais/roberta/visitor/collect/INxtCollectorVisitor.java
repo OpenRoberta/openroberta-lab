@@ -18,6 +18,7 @@ import de.fhg.iais.roberta.syntax.action.sound.PlayFileAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
 import de.fhg.iais.roberta.syntax.action.sound.VolumeAction;
+import de.fhg.iais.roberta.syntax.sensor.generic.HTColorSensor;
 import de.fhg.iais.roberta.visitor.hardware.INxtVisitor;
 
 /**
@@ -26,6 +27,11 @@ import de.fhg.iais.roberta.visitor.hardware.INxtVisitor;
  * Defines the specific parent implementation to use (the one of the collector) due to unrelated defaults.
  */
 public interface INxtCollectorVisitor extends ICollectorVisitor, INxtVisitor<Void> {
+
+    @Override
+    default Void visitHTColorSensor(HTColorSensor<Void> htColorSensor) {
+        return null;
+    }
 
     // following methods are used to specify unrelated defaults
 

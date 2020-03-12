@@ -387,6 +387,10 @@ block:
       category: SENSOR
       implementor: de.fhg.iais.roberta.syntax.sensor.generic.ParticleSensor
       type: [robSensors_particle_getSample]
+  HTCOLOR_SENSING:
+      category: SENSOR
+      implementor: de.fhg.iais.roberta.syntax.sensor.generic.HTColorSensor
+      type: [robSensors_htcolour_getSample]
   
 wait:
   ACCELERATION :
@@ -537,6 +541,18 @@ wait:
         implementor: de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor
         sensor: GYRO
         mode: Z
+  HTCOLOUR_AMBIENTLIGHT:
+        implementor: de.fhg.iais.roberta.syntax.sensor.generic.HTColorSensor
+        sensor: COLOUR
+        mode: AMBIENTLIGHT
+  HTCOLOUR_COLOUR:
+        implementor: de.fhg.iais.roberta.syntax.sensor.generic.HTColorSensor
+        sensor: COLOUR
+        mode: COLOUR
+  HTCOLOUR_LIGHT:
+        implementor: de.fhg.iais.roberta.syntax.sensor.generic.HTColorSensor
+        sensor: COLOUR
+        mode: LIGHT
   HUMIDITY_HUMIDITY :
         implementor: de.fhg.iais.roberta.syntax.sensor.generic.HumiditySensor
         sensor: HUMIDITY

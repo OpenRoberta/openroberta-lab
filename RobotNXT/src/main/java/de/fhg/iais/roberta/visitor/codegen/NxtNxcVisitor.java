@@ -69,6 +69,7 @@ import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.HTColorSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.KeysSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.SoundSensor;
@@ -718,16 +719,17 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
 
     @Override
     public Void visitColorSensor(ColorSensor<Void> colorSensor) {
-        String colorSensorType = this.brickConfiguration.getConfigurationComponent(colorSensor.getPort()).getComponentType();
-        if ( colorSensorType.toLowerCase().contains(SC.HT_COLOR.toLowerCase()) ) {
-            this.sb.append("SensorHtColor(");
-        } else if ( colorSensorType.toLowerCase().contains(SC.COLOR.toLowerCase()) ) {
-            this.sb.append("SensorColor(");
-        } else {
-            throw new DbcException("Invalide sensor type:" + colorSensorType + "!");
-        }
+        this.sb.append("SensorColor(");
         String portName = this.brickConfiguration.getConfigurationComponent(colorSensor.getPort()).getPortName();
-        this.sb.append(portName + ", \"" + colorSensor.getMode() + "\")");
+        this.sb.append(portName).append(", \"").append(colorSensor.getMode()).append("\")");
+        return null;
+    }
+
+    @Override
+    public Void visitHTColorSensor(HTColorSensor<Void> htColorSensor) {
+        this.sb.append("SensorHtColor(");
+        String portName = this.brickConfiguration.getConfigurationComponent(htColorSensor.getPort()).getPortName();
+        this.sb.append(portName).append(", \"").append(htColorSensor.getMode()).append("\")");
         return null;
     }
 
