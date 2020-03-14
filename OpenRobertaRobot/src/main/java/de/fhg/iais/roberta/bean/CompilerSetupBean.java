@@ -8,6 +8,7 @@ public class CompilerSetupBean implements IProjectBean {
 
     private String compilerBinDir;
     private String compilerResourcesDir;
+    private String compilerBinaryName;
     private String tempDir;
     private String fqbn;
     private String ip;
@@ -31,6 +32,8 @@ public class CompilerSetupBean implements IProjectBean {
     public String getTempDir() {
         return tempDir;
     }
+
+    public String getCompilerBinaryName() { return compilerBinaryName; }
 
     public static class Builder implements IBuilder<CompilerSetupBean> {
         private final CompilerSetupBean compilerWorkflowBean = new CompilerSetupBean();
@@ -57,6 +60,11 @@ public class CompilerSetupBean implements IProjectBean {
 
         public Builder setIp(String ip) {
             compilerWorkflowBean.ip = ip;
+            return this;
+        }
+
+        public Builder setCompilerBinaryName(String compilerBinaryName) {
+            compilerWorkflowBean.compilerBinaryName = compilerBinaryName;
             return this;
         }
 

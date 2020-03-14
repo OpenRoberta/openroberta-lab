@@ -15,14 +15,17 @@ public class C4Ev3SourceCompiler {
     private final String compilerResourcesDir;
     private final String compilerExecutableFileName;
     private final String staticLibraryFolderName;
+    private final String compilerBinaryName;
 
-    public C4Ev3SourceCompiler(String compilerResourcesDir) {
+    public C4Ev3SourceCompiler(String compilerResourcesDir, String compilerBinaryName) {
         this.compilerResourcesDir = compilerResourcesDir;
         this.compilerExecutableFileName = getCompilerExecutableFileName();
         this.staticLibraryFolderName = getStaticLibraryFolderName();
+        this.compilerBinaryName = compilerBinaryName;
     }
 
     private String getCompilerExecutableFileName() {
+        /*
         if ( SystemUtils.IS_OS_LINUX ) {
             if ( System.getProperty("os.arch").contains("arm") ) {
                 return "arm-c4ev3-linux-uclibceabi-g++";
@@ -35,6 +38,8 @@ public class C4Ev3SourceCompiler {
             return "";
         }
         throw new DbcException("Unknown c4ev3 compiler executable file name for current platform");
+        */
+        return compilerBinaryName;
     }
 
     private String getStaticLibraryFolderName() {

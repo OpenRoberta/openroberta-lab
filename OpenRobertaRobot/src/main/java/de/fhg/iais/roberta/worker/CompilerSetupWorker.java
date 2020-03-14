@@ -20,6 +20,7 @@ public class CompilerSetupWorker implements IWorker {
         builder.setCompilerBinDir(properties.getCompilerBinDir());
         builder.setCompilerResourcesDir(properties.getCompilerResourceDir());
         builder.setTempDir(properties.getTempDir());
+        builder.setCompilerBinaryName(properties.getStringProperty("robot.plugin.compiler.executable"));
         CompilerSetupBean compilerWorkflowBean = builder.build();
         project.addWorkerResult(compilerWorkflowBean);
     }
