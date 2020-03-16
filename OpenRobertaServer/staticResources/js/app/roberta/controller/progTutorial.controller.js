@@ -1,7 +1,8 @@
-define([ 'exports', 'comm', 'message', 'log', 'guiState.controller', 'program.controller', 'robot.controller', 'blocks', 'jquery' ], function(exports, COMM,
-        MSG, LOG, GUISTATE_C, PROG_C, ROBOT_C, Blockly, $) {
+define([ 'exports', 'comm', 'message', 'log', 'guiState.controller', 'program.controller', 'robot.controller', 'import.controller', 'blocks', 'jquery' ], function(
+        exports, COMM, MSG, LOG, GUISTATE_C, PROG_C, ROBOT_C, IMPORT_C, Blockly, $) {
 
     const INITIAL_WIDTH = 0.5;
+    const MAX_LEVEL = 3;
     var blocklyWorkspace;
     var tutorialList;
     var tutorial;
@@ -9,6 +10,7 @@ define([ 'exports', 'comm', 'message', 'log', 'guiState.controller', 'program.co
     var maxSteps = 0;
     var credits = [];
     var maxCredits = [];
+    var quiz = false;
 
     function init() {
         tutorialList = GUISTATE_C.getListOfTutorials();
@@ -36,10 +38,20 @@ define([ 'exports', 'comm', 'message', 'log', 'guiState.controller', 'program.co
 
         function startTutorial() {
             $('#tabProgram').trigger('click');
+            if (tutorial.initXML) {
+                IMPORT_C.loadProgramFromXML('egal', tutorial.initXML);
+            }
             maxSteps = tutorial.step.length;
             step = 0;
             credits = [];
             maxCredits = [];
+            quiz = false;
+            for (var i = 0; i < tutorial.step.length; i++) {
+                if (tutorial.step[i].quiz) {
+                    quiz = true;
+                    break;
+                }
+            }
             $('#tutorial-list').empty();
 
             // create this tutorial navigation
@@ -82,16 +94,41 @@ define([ 'exports', 'comm', 'message', 'log', 'guiState.controller', 'program.co
     function showOverview() {
         if (!tutorial.overview)
             return;
-        $('#tutorialOverviewText').html(tutorial.overview.description + '</br></br><b>Lernziel: </b>' + tutorial.overview.goal
-                + '</br></br><b>Vorkenntnisse: </b>' + tutorial.overview.previous);
-        $('#tutorialOverviewTitle').html(tutorial.name);
-        $('#tutorialOverview').modal();
-        $('#tutorialOverview.modal').one('click.dismiss.bs.modal', function(event) {
-            if (event.target.id === 'tutorialContinue') {
-                return false;
+        var html = tutorial.overview.description;
+        html += '</br></br><b>Lernziel: </b>';
+        html += tutorial.overview.goal;
+        html += '</br></br><b>Vorkenntnisse: </b>';
+        html += tutorial.overview.previous;
+        html += '<hr style="border: 2px solid #33B8CA; margin: 10px 0">';
+        html += '<span class="typcn typcn-stopwatch"/>&emsp;&emsp;';
+        html += tutorial.time;
+        html += '</br><span class="typcn typcn-group"/>&emsp;&emsp;';
+        html += tutorial.age;
+        html += '</br><span class="typcn typcn-simulation"/>&emsp;&emsp;';
+        html += tutorial.sim === "sim" ? "ja" : "nein";
+        if (tutorial.level) {
+            html += '</br><span class="typcn typcn-mortar-board"/>&emsp;&emsp;';
+            for (var i = 1; i <= MAX_LEVEL; i++) {
+                if (i <= tutorial.level) {
+                    html += '<span class="typcn typcn-star-full-outline"/>'
+                } else {
+                    html += '<span class="typcn typcn-star-outline"/>'
+                }
             }
+        }
+        html += '</br><span class="typcn typcn-roberta"/>&emsp;&emsp;';
+        html += GUISTATE_C.getMenuRobotRealName(tutorial.robot);
+        $('#tutorialOverviewText').html(html);
+        $('#tutorialOverviewTitle').html(tutorial.name);
+        $('#tutorialAbort').off('click.dismiss.bs.modal');
+        $('#tutorialAbort').onWrap('click.dismiss.bs.modal', function(event) {
             exitTutorial();
             return false;
+        });
+        $('#tutorialOverview').modal({
+            backdrop : 'static',
+            keyboard : false,
+            show : true
         });
     }
 
@@ -110,10 +147,11 @@ define([ 'exports', 'comm', 'message', 'log', 'guiState.controller', 'program.co
                 if (tutorial.step[step].header) {
                     $('#tutorialContent').append($('<h3>').attr('class', 'quiz header').append(tutorial.step[step].header));
                 }
-                if (tutorial.step[step].tip) {
-                    $('#tutorialContent').append($('<div>').attr('class', 'quiz tip').append(tutorial.step[step].tip));
-                }
                 $('#tutorialContent').append(tutorial.step[step].instruction);
+                if (tutorial.step[step].tip) {
+                    $('#tutorialContent').append('<br><br>').append($('<ul>').attr('class', 'tip').append('<li>' + tutorial.step[step].tip + '</li>'));
+                }
+
                 if (tutorial.step[step].solution) {
                     $('#tutorialContent').append($('<div>').attr('id', 'helpDiv').append($('<button>', {
                         'text' : 'Hilfe',
@@ -124,6 +162,7 @@ define([ 'exports', 'comm', 'message', 'log', 'guiState.controller', 'program.co
                         }
                     })));
                 }
+
                 if (step == maxSteps - 1) { // last step
                     $('#tutorialContent').append($('<div>').attr('class', 'quiz continue').append($('<button>', {
                         'text' : 'Tutorial beenden',
@@ -198,7 +237,7 @@ define([ 'exports', 'comm', 'message', 'log', 'guiState.controller', 'program.co
             $("#tutorial-list .step a:contains('" + (step + 1) + "')").parent().addClass("active");
             $("#tutorial-list .step a:contains('" + (step) + "')").parent().addClass("preActive");
             createInstruction();
-            if (step == maxSteps - 1) {
+            if (step == maxSteps - 1 && quiz) {
                 var finalMaxCredits = 0;
                 for (var i = maxCredits.length; i--;) {
                     if (maxCredits[i]) {
@@ -211,7 +250,7 @@ define([ 'exports', 'comm', 'message', 'log', 'guiState.controller', 'program.co
                         finalCredits += credits[i]
                     }
                 }
-                var percent = 100;
+                var percent = 0;
                 if (finalMaxCredits !== 0) {
                     percent = Math.round(100 / finalMaxCredits * finalCredits);
                 }
@@ -263,11 +302,15 @@ define([ 'exports', 'comm', 'message', 'log', 'guiState.controller', 'program.co
 
     function checkQuiz() {
         var countCorrect = 0;
+        var countChecked = 0;
         var totalQuestions = $('.quiz.question').length;
         var totalCorrect = $('.quiz.answer [value=true').length;
         $('.quiz input').each(function(i, elem) {
             $this = $(this);
             $label = $('label>span[for="' + $this.attr('id') + '"]');
+            if ($(this).is(':checked')) {
+                countChecked++;
+            }
             if ($(this).val() === 'true' && $(this).is(':checked')) {
                 $label.parent().addClass('correct');
                 countCorrect++;
@@ -287,7 +330,9 @@ define([ 'exports', 'comm', 'message', 'log', 'guiState.controller', 'program.co
                 }
             }));
             var confirmText;
-            if (totalQuestions == 1) {
+            if (countChecked == 0) {
+                confirmText = 'Bitte kreuze mindestens eine Anwort an.';
+            } else if (totalQuestions == 1) {
                 confirmText = 'Die Antwort ist leider nicht ganz richtig.';
             } else {
                 confirmText = countCorrect + ' Anworten von ' + totalCorrect + ' sind richtig!';

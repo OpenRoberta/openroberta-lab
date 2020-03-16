@@ -14,6 +14,7 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'message', 'guiState.contr
             '#FF69B4', '#DF01D7' ];
     var currentColorIndex;
     var tutorialList;
+    const MAX_LEVEL = 3;
     /**
      * Initialize table of tutorials
      */
@@ -40,8 +41,8 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'message', 'guiState.contr
             cardView : 'true',
             rowStyle : GALLERYLIST_C.rowStyle,
             rowAttributes : rowAttributes,
-            sortName : 4,
-            sortOrder : 'desc',
+            sortName : 'index',
+            sortOrder : 'asc',
             search : true,
             buttonsAlign : 'right',
             resizable : 'true',
@@ -85,13 +86,20 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'message', 'guiState.contr
                 sortable : true,
                 formatter : formatSim,
             }, {
+                field : 'level',
+                title : titleLevel,
+                sortable : true,
+                formatter : formatLevel,
+            }, {
                 field : 'tags',
                 sortable : true,
                 formatter : formatTags,
             }, {
                 field : 'index',
                 visible : false,
-                formatter : formatIndex,
+            }, {
+                field : 'group',
+                visible : false,
             } ]
         });
         $('#tutorialTable').bootstrapTable('togglePagination');
@@ -150,7 +158,7 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'message', 'guiState.contr
         currentColorIndex = hash % BACKGROUND_COLORS.length;
         return {
             style : 'background-color :' + BACKGROUND_COLORS[currentColorIndex] + ';' + //
-            'padding: 24px; border: solid 12px white; z-index: 1; cursor: pointer;'
+            'padding: 24px 24px 6px 24px; border: solid 12px white; z-index: 1; cursor: pointer;'
         }
     }
     var titleTime = '<span class="tutorialIcon typcn typcn-stopwatch" />';
@@ -159,27 +167,24 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'message', 'guiState.contr
 
     var titleAge = '<span class="tutorialIcon typcn typcn-group" />';
 
+    var titleLevel = '<span class="tutorialIcon typcn typcn-mortar-board"/>';
+
     var formatRobot = function(robot, row, index) {
         return '<div class="typcn typcn-' + GUISTATE_C.findGroup(robot) + '"></div>';
     }
 
-
     var formatName = function(value, row, index) {
         return '<div class="galleryProgramname">' + value + '</div>';
     }
-   
 
     var formatTutorialOverview = function(overview, row, index) {
         switch (overview) {
         case row.overview.description:
             return '<div class="tutorialOverview color' + currentColorIndex + '">' + overview + '</div>';
-            break;
         case row.overview.goal:
             return '<div class="tutorialOverview color' + currentColorIndex + '"><b>Lernziel: </b>' + overview + '</div>';
-            break;
         case row.overview.previous:
             return '<div class="tutorialOverview color' + currentColorIndex + '"><b>Vorkenntnisse: </b>' + overview + '</div>';
-            break;
         default:
             return '';
         }
@@ -193,16 +198,22 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'message', 'guiState.contr
     }
     exports.formatTags = formatTags;
 
-    var formatTime = function(time, row, index) {
-        return time + ' min';
-    }
-
-    var formatIndex = function(time, row, index) {
-        return index;
-    }
-
     var formatSim = function(sim, row, index) {
         return sim === 'sim' ? 'ja<span style="display:none;">simulation</span>' : 'nein<span style="display:none;">real</span>';
+    }
+
+    var formatLevel = function(level, row, index) {
+        var value = "";
+        if (level) {
+            for (var i = 1; i <= MAX_LEVEL; i++) {
+                if (i <= level) {
+                    value = '<span class="tutorialLevel typcn typcn-star-full-outline"/>' + value;
+                } else {
+                    value = '<span class="tutorialLevel typcn typcn-star-outline"/>' + value;
+                }
+            }
+        }
+        return value;
     }
 
     function configureTagsInput() {
