@@ -345,7 +345,7 @@ public class PythonVisitorTest extends MicrobitAstTest {
                 + "\n"
                 + "def run():\n"
                 + "    global timer1\n"
-                + "    microbit.display.scroll(str((microbit.display.read_light_level() / 2.55)))\n"
+                + "    microbit.display.scroll(str(round(microbit.display.read_light_level() / 2.55)))\n"
                 + "\n"
                 + "def main():\n"
                 + "    try:\n"
