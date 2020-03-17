@@ -80,7 +80,7 @@ public class AccessRightProcessor extends AbstractProcessor {
         Key responseKey = null;
         if ( owner == null ) {
             responseKey = Key.OWNER_DOES_NOT_EXIST;
-        } else if ( userToShare == null ) {
+        } else if ( userToShare == null || userToShare.getId() <= 1 ) {
             responseKey = Key.USER_TO_SHARE_DOES_NOT_EXIST;
         } else {
             Robot robot = robotDao.loadRobot(robotName);
