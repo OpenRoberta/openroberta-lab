@@ -120,33 +120,70 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'message', 'guiState.contr
         $('#galleryTable').on('shown.bs.collapse hidden.bs.collapse', function(e) {
             $('#galleryTable').bootstrapTable('resetWidth');
         });
+    }
 
-        function update(result) {
-            UTIL.response(result);
-            if (result.rc === 'ok') {
-                $('#galleryTable').bootstrapTable("load", result.programNames);
-                //configureTagsInput();
+    function update(result) {
+        UTIL.response(result);
+        if (result.rc === 'ok') {
+            $('#galleryTable').bootstrapTable("load", result.programNames);
+        }
+        $(".pace").fadeOut(300); // Hide loading icon and show gallery table
+    }
+
+    function updateRow(index, result) {
+        UTIL.response(result);
+        var array = result.programNames;
+        array.sort(compareDateColumn);
+        function compareDateColumn(a, b) {
+            if (a[4] === b[4]) {
+                return 0;
+            } else {
+                return (a[4] > b[4]) ? -1 : 1;
             }
-            $(".pace").fadeOut(300); // Hide loading icon and show gallery table
+        }
+        if (result.rc === 'ok') {
+            $('#galleryTable').bootstrapTable("updateRow", {
+                index : index,
+                row : array[index]
+            });
         }
     }
 
     var eventsLike = {
         'click .like' : function(e, value, row, index) {
             e.stopPropagation();
+            if ($(e.target).data('blocked') == 1)
+                return;
+            $(e.target).data('blocked', 1);
             PROGRAM.likeProgram(true, row[1], row[3], row[0], function(result) {
                 if (result.rc == "ok") {
-                    $('#galleryList').find('button[name="refresh"]').trigger('click');
+                    // TODO create a new rest call for only one row
+                    PROGLIST.loadGalleryList(function(result) {
+                        updateRow(index, result);
+                        $(e.target).data('blocked', 0);
+                    });
+                } else {
+                    $(e.target).data('blocked', 0);
                 }
                 MSG.displayInformation(result, result.message, result.message, row[1]);
             });
             return false;
+
         },
         'click .dislike' : function(e, value, row, index) {
             e.stopPropagation();
+            if ($(e.target).data('blocked') == 1)
+                return;
+            $(e.target).data('blocked', 1);
             PROGRAM.likeProgram(false, row[1], row[3], row[0], function(result) {
                 if (result.rc == "ok") {
-                    $('#galleryList').find('button[name="refresh"]').trigger('click');
+                    // TODO create a new rest call for only one row
+                    PROGLIST.loadGalleryList(function(result) {
+                        updateRow(index, result);
+                        $(e.target).data('blocked', 0);
+                    });
+                } else {
+                    $(e.target).data('blocked', 0);
                 }
                 MSG.displayInformation(result, result.message, result.message, row[1]);
             });
