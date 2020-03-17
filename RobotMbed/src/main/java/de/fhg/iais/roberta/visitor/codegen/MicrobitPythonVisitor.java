@@ -219,7 +219,7 @@ public final class MicrobitPythonVisitor extends AbstractPythonVisitor implement
 
     @Override
     public Void visitLightSensor(LightSensor<Void> lightSensor) {
-        this.sb.append("(microbit.display.read_light_level() / 2.55)");
+        this.sb.append("round(microbit.display.read_light_level() / 2.55)");
         return null;
     }
 

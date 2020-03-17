@@ -38,6 +38,7 @@ import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GestureSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.HumiditySensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.PinGetValueSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.PinTouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
@@ -107,6 +108,11 @@ public final class MicrobitSimValidatorVisitor extends AbstractSimValidatorVisit
 
     @Override
     public Void visitCompassSensor(CompassSensor<Void> compassSensor) {
+        return null;
+    }
+
+    @Override
+    public Void visitLightSensor(LightSensor<Void> lightSensor) {
         return null;
     }
 
