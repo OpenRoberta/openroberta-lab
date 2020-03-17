@@ -103,7 +103,6 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'message', 'guiState.contr
         });
 
         $('#galleryList').find('button[name="refresh"]').onWrap('click', function() {
-            $(".pace").show(); // Show loading icon and hide gallery table
             PROGLIST.loadGalleryList(update);
             return false;
         }, "refresh gallery list clicked");
