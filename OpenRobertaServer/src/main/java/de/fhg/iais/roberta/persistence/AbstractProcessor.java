@@ -32,7 +32,7 @@ public abstract class AbstractProcessor {
     }
 
     protected boolean isUserLoggedIn() {
-        return this.idOfLoggedInUser > 1;
+        return this.idOfLoggedInUser >= 1;
     }
 
     protected int getIdOfLoggedInUser() {
