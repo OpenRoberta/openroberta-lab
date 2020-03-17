@@ -49,19 +49,29 @@ define([ 'simulation.simulation', 'interpreter.constants', 'simulation.robot.ev3
             ry : 0,
             r : 30
         };
-        this.svg = '<svg xmlns="http://www.w3.org/2000/svg" width="254px" height="400px" viewBox="0 0 254 400" preserveAspectRatio="xMidYMid meet">'
+        this.brick = '<svg id="brick'
+                + this.id 
+                + '" xmlns="http://www.w3.org/2000/svg" width="254px" height="400px" viewBox="0 0 254 400" preserveAspectRatio="xMidYMid meet">'
                 + '<rect x="7" y="1" style="stroke-width: 2px;" stroke="black" id="backgroundConnectors" width="240" height="398" fill="#6D6E6C" />'
                 + '<rect x="1" y="24" style="stroke-width: 2px;" stroke="black" id="backgroundSides" width="252" height="352" fill="#F2F3F2" />'
                 + '<rect x="44" y="68" style="stroke-width: 4px;" stroke="#cccccc" width="170" height="106" fill="#DDDDDD" rx="4" ry="4" />'
                 + '<g id="display" clip-path="url(#clipPath)" fill="#000" transform="translate(50, 72)" font-family="Courier New" letter-spacing="2px" font-size="10pt"></g>'
                 + '<defs><clipPath id="clipPath"><rect x="0" y="0" width="160" height="96"/></clipPath></defs>'
                 + '<rect x="101" y="216" style="stroke-width: 2px;" stroke="#cccccc" id="bg-center" width="52" height="90" fill="#cccccc" rx="4" ry="4" />'
-                + '<rect x="105" y="220" style="stroke-width: 1px;" stroke="black" id="enter" class="simKey" width="44" height="44" fill="#DA8540" rx="2" ry="2" />'
-                + '<rect x="105" y="280" style="stroke-width: 1px;" stroke="black" id="escape" class="simKey" width="44" height="22" fill="#6D6E6C" rx="2" ry="2" />'
+                + '<rect x="105" y="220" style="stroke-width: 1px;" stroke="black" id="enter'
+                + this.id
+                + '" class="simKey" width="44" height="44" fill="#DA8540" rx="2" ry="2" />'
+                + '<rect x="105" y="280" style="stroke-width: 1px;" stroke="black" id="escape'
+                + this.id
+                + '" class="simKey" width="44" height="22" fill="#6D6E6C" rx="2" ry="2" />'
                 + '<path d="M0.5,-4.13 l-4,7 h8 z" style="vector-effect: non-scaling-stroke; stroke-width: 8px; stroke-linecap: round; stroke-linejoin: round;" stroke="#cccccc" id="bg-left" transform="matrix(0, -5.5, 5.5, 0, 74.0, 245.0)" fill="#cccccc" />'
                 + '<path d="M0.0,16.7 l-4,7 h8 z" style="vector-effect: non-scaling-stroke; stroke-width: 8px; stroke-linecap: round; stroke-linejoin: round;" stroke="#cccccc" id="bg-right" transform="matrix(-0.0, 5.5, -5.5, -0.0, 294, 241)" fill="#cccccc" />'
-                + '<path d="M0.0,16.7 l-4,7 h8 z" style="vector-effect: non-scaling-stroke; stroke-width: 1px; stroke-linecap: round; stroke-linejoin: round;" stroke="black" id="right" class="simKey" transform="matrix(-0.0, 5.5, -5.5, -0.0, 294, 241)" fill="#A3A2A4" />'
-                + '<path d="M0.5,-4.13 l-4,7 h8 z" style="vector-effect: non-scaling-stroke; stroke-width: 1px; stroke-linecap: round; stroke-linejoin: round;" stroke="black" id="left" class="simKey" transform="matrix(0, -5.5, 5.5, 0, 74.0, 245.0)" fill="#A3A2A4" />'
+                + '<path d="M0.0,16.7 l-4,7 h8 z" style="vector-effect: non-scaling-stroke; stroke-width: 1px; stroke-linecap: round; stroke-linejoin: round;" stroke="black" id="right'
+                + this.id
+                + '" class="simKey" transform="matrix(-0.0, 5.5, -5.5, -0.0, 294, 241)" fill="#A3A2A4" />'
+                + '<path d="M0.5,-4.13 l-4,7 h8 z" style="vector-effect: non-scaling-stroke; stroke-width: 1px; stroke-linecap: round; stroke-linejoin: round;" stroke="black" id="left'
+                + this.id
+                + '" class="simKey" transform="matrix(0, -5.5, 5.5, 0, 74.0, 245.0)" fill="#A3A2A4" />'
                 + '<rect x="8" y="22" style="stroke-width: 1px; stroke: none;" id="bg-bordertop" width="238" height="3" fill="#6D6E6C" />'
                 + '<rect x="8" y="375" style="stroke-width: 1px; stroke: none;" id="bg-borderbottom" width="238" height="3" fill="#6D6E6C" />'
                 + '<line id="bg-line" x1="126" y1="176" x2="126" y2="216" style="stroke-width: 4px; fill: none;" stroke="#cccccc" />' + '</svg>';
@@ -69,7 +79,6 @@ define([ 'simulation.simulation', 'interpreter.constants', 'simulation.robot.ev3
             timer1 : false
         };
         SIM.initMicrophone(this);
-        $("#simRobotContent").html(this.svg);
     }
 
     Nxt.prototype = Object.create(Ev3.prototype);
@@ -80,20 +89,18 @@ define([ 'simulation.simulation', 'interpreter.constants', 'simulation.robot.ev3
         this.encoder.left = 0;
         this.encoder.right = 0;
         this.ledSensor.color = '';
-        // this.time = 0;
         for ( var key in this.timer) {
             this.timer[key] = 0;
         }
-        var robot = this;
-        $("#simRobotContent").html(this.svg);
+        var robot = this;       
         for ( var property in robot.buttons) {
-            $('#' + property).off('mousedown');
-            $('#' + property).on('mousedown', function() {
-                robot.buttons[this.id] = true;
+            $('#' + property + robot.id).off('mousedown touchstart');
+            $('#' + property + robot.id).on('mousedown touchstart', function() {
+                robot.buttons[this.id.replace(/\d+$/, "")] = true;
             });
-            $('#' + property).off('mouseup');
-            $('#' + property).on('mouseup', function() {
-                robot.buttons[this.id] = false;
+            $('#' + property + robot.id).off('mouseup touchend');
+            $('#' + property + robot.id).on('mouseup touchend', function() {
+                robot.buttons[this.id.replace(/\d+$/, "")] = false;
             });
         }
         $("#display").html('');

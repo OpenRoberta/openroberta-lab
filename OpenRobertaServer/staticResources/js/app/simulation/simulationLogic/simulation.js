@@ -100,10 +100,12 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
         if (num == undefined) {
             setObstacle();
             setRuler();
+            removeMouseEvents();
             scene = new Scene(imgObjectList[currentBackground], robots, obstacle, imgPattern, ruler);
             scene.updateBackgrounds();
             scene.drawObjects();
             scene.drawRuler();
+            addMouseEvents();
             reloadProgram();
             resizeAll();
             return currentBackground;
@@ -122,14 +124,13 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
         } else {
             currentBackground = num;
         }
-        var debug = robots[0].debug;
-        $("#simRobotContent").empty();
-        $("#simRobotModal").modal("hide");
+        var debug = robots[0].debug;       
         var moduleName = 'simulation.robot.' + simRobotType;
         require([moduleName], function(ROBOT) {
             createRobots(ROBOT, numRobots);
             for (var i = 0; i < robots.length; i++) {
                 robots[i].debug = debug;
+                robots[i].reset();
             }
             callback();
         });
@@ -313,7 +314,6 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
         for (i = 0; i < programs.length; i++) {
             runRenderUntil[i] = 0;
         }
-        robotIndex = 0;
         if (robotType.indexOf("calliope") >= 0) {
             currentBackground = 0;
             $('.dropdown.sim, .simScene, #simImport, #simResetPose, #simButtonsHead').hide();
@@ -344,11 +344,10 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
             isDownRobots.push(false);
         }
         if (refresh) {
+            robotIndex = 0;            
             robots = [];
             readyRobots = [];
             isDownRobots = [];
-            $("#simRobotContent").empty();
-
             require(['simulation.robot.' + simRobotType], function(reqRobot) {
                 createRobots(reqRobot, numRobots);
                 for (var i = 0; i < numRobots; i++) {
@@ -658,9 +657,9 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
                 dy = startY - robots[i].mouse.ry;
                 var boolDown = (dx * dx + dy * dy < robots[i].mouse.r * robots[i].mouse.r);
                 if (boolDown) {
-                    $("#svg" + robotIndex).hide();
+                    $("#brick" + robotIndex).hide();
                     robotIndex = i;
-                    $("#svg" + robotIndex).show();
+                    $("#brick" + robotIndex).show();
                     $("#robotIndex")[0][i].selected = true;
                     break;
                 }
@@ -859,14 +858,10 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
         $(document).on('keydown', function(e) {
             handleKeyEvent(e);
         });
-        var that = this;
-        $("#simRobotModal").on("shown.bs.modal", function() {
-            $("#svg" + robotIndex).show();
-        });
         $("#robotIndex").change(function(e) {
-            $("#svg" + robotIndex).hide();
+            $("#brick" + robotIndex).hide();
             robotIndex = e.target.selectedIndex;
-            $("#svg" + robotIndex).show();
+            $("#brick" + robotIndex).show();
         }).change();
     }
 
@@ -990,11 +985,16 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
     }
 
     function createRobots(reqRobot, numRobots) {
+        $("#simRobotContent").empty();
+        $("#simRobotModal").modal("hide");
         robots = [];
         if (numRobots >= 1) {
             var tempRobot = createRobot(reqRobot, 0, 0, interpreters[0].getRobotBehaviour());
             tempRobot.savedName = userPrograms[0].savedName;
             robots[0] = tempRobot;
+            if (robots[0].brick) {
+                $("#simRobotContent").append(robots[0].brick);
+            }
             for (var i = 1; i < numRobots; i++) {
                 var yOffset = 60 * (Math.floor((i + 1) / 2)) * (Math.pow((-1), i));
                 tempRobot = createRobot(reqRobot, i, yOffset, interpreters[i].getRobotBehaviour());
@@ -1003,6 +1003,10 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
                 tempRobot.geom.color = tempcolor;
                 tempRobot.touchSensor.color = tempcolor;
                 robots[i] = tempRobot;
+                if (robots[i].brick) {
+                    $("#simRobotContent").append(robots[i].brick); 
+                    $("#brick" + i).hide();
+                }
             }
         } else {
             // should not happen

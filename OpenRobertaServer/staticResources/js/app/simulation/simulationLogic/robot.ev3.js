@@ -251,7 +251,7 @@ define([ 'simulation.simulation', 'interpreter.constants', 'simulation.robot', '
                 }
             }
         };
-        this.svg = '<svg id="svg'
+        this.brick = '<svg id="brick'
                 + this.id
                 + '" xmlns="http://www.w3.org/2000/svg" width="313" height="482" viewBox="0 0 313 482">'
                 + '<path stroke-alignment="inner" d="M1 88h17.5v-87h276v87h17.5v306h-17.5v87h-276v-87h-17.5z" style="fill:#fff;stroke:#000;stroke-width:2"/>'
@@ -299,7 +299,6 @@ define([ 'simulation.simulation', 'interpreter.constants', 'simulation.robot', '
                 + '<stop offset="100%" style="stop-color:rgb(0,128,0);stop-opacity:1" />' + '</radialGradient>' + '<radialGradient id="LIGHTGRAY' + this.id
                 + '" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">' + '<stop offset="0%" style="stop-color:rgb(255,255,255);stop-opacity:0" />'
                 + '<stop offset="100%" style="stop-color:rgb(211,211,211);stop-opacity:1" />' + '</radialGradient>' + '</defs>' + '</svg>';
-        $("#simRobotContent").html(this.svg);
     }
 
     Ev3.prototype = Object.create(Robot.prototype);
