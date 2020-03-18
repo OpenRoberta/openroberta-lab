@@ -9,7 +9,7 @@
 isServerNameValid ${SERVER_NAME}
 
 case "$LOGFILE" in
-  ''|'-') LOGFILE="$BASE_DIR/logs/server-resources-${SERVER_NAME}.log" ;;
+  ''|'-') LOGFILE="$BASE_DIR/logs/server-activities-${SERVER_NAME}.log" ;;
   *)      : ;;
 esac
 case "$SERVERURL" in

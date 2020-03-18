@@ -38,7 +38,7 @@ then
                     echo "$DATE: $DIFF new commits found in branch $BRANCH. A reset --hard to origin/$BRANCH is executed"
                     git reset --hard origin/$BRANCH
                     echo "$DATE: the server ${SERVER_NAME} will be deployed now"
-                    ${SCRIPT_MAIN}/run.sh deploy ${SERVER_NAME}
+                    ${SCRIPT_MAIN}/run.sh -q deploy ${SERVER_NAME}
                     UPDATED_SERVERS=$(($UPDATED_SERVERS + 1))
                 fi
             done
