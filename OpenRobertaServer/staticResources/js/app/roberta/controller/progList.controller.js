@@ -86,7 +86,7 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'message', 'progList.model
             if ($('#tabProgList').data('type') === 'userProgram') {
                 PROGLIST.loadProgList(update);
             } else {
-                PROGLIST.loadExampleList(update);
+                PROGLIST.loadExampleList(updateExamplePrograms);
             }
         });
 
@@ -94,7 +94,7 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'message', 'progList.model
             if ($('#tabProgList').data('type') === 'userProgram') {
                 PROGLIST.loadProgList(update);
             } else {
-                PROGLIST.loadExampleList(update);
+                PROGLIST.loadExampleList(updateExamplePrograms);
             }
             return false;
         }, "refresh program list clicked");
@@ -167,14 +167,8 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'message', 'progList.model
             UTIL.response(result);
             if (result.rc === 'ok') {
                 $('#programNameTable').bootstrapTable("load", result.programNames);
-                $('#programNameTable').bootstrapTable("showColumn", '2');
-                $('#programNameTable').bootstrapTable("showColumn", '3');
-                if ($('#tabProgList').data('type') === 'userProgram') {
-                    $('.deleteSomeProg').show();
-                } else {
-                    $('.deleteSomeProg').hide();
-                }
-            } else {
+                $('.deleteSomeProg').show();
+              } else {
                 if (result.cmd === "loadPN") {
                     $('#backProgList').click();
                 }
@@ -190,6 +184,26 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'message', 'progList.model
                     || 'Click here to load your program in the programming environment.');
             $('#programNameTable').find('[rel="tooltip"]').tooltip();
         }
+    }
+    
+    function updateExamplePrograms(result) {
+        UTIL.response(result);
+        if (result.rc === 'ok') {
+            $('#programNameTable').bootstrapTable("load", result.programNames);
+            $('#programNameTable').bootstrapTable("hideColumn", 2 );
+            $('#programNameTable').bootstrapTable("hideColumn", 6 );
+            $('#programNameTable').bootstrapTable("refreshOptions", {
+                "sortName": 0,"sortOrder": "asc"
+            });
+            $('.deleteSomeProg').hide();
+        } else {
+            if (result.cmd === "loadPN") {
+                $('#backProgList').click();
+            }
+        }
+        $('#programNameTable').find('.load').attr('data-original-title', Blockly.Msg.PROGLIST_LOAD_TOOLTIP
+                || 'Click here to load your program in the programming environment.');
+        $('#programNameTable').find('[rel="tooltip"]').tooltip();
     }
     
     var eventsRelations = {
