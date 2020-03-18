@@ -7,52 +7,52 @@ The source of the OpenRoberta Lab is stored in the Github repository '[openrober
 
 The steps below explain how to get started with the sources. If you just want to run the server locally, please have a look into
 the [Wiki - Installation](https://github.com/OpenRoberta/openroberta-lab/wiki/Installation). If you want to contribute, please get in touch with us,
-see [Wiki - Community](https://github.com/OpenRoberta/openroberta-lab/wiki/Community) before you start.
+see [Wiki - Community](https://github.com/OpenRoberta/openroberta-lab/wiki/Community), before you start.
 
 After a fresh git clone you get the **openroberta-lab** project folder. It includes almost everything you need to setup and extend your own openrobertalab server.
 License information is available in the **docs** folder.
 
 Things you need on your computer:
 
-* Java 1.8
+* Java >= 1.8
 * Maven >= 3.2
 * Git
 * Web browser
 
-If you would like your local server to compile code for the different systems, you need to install additional software (crosscompiler, ...):
+If you would like your local server to compile code for the different systems, you need to install additional software (crosscompilers, libraries, ...):
 
-on linux:
+on Ubuntu:
 * Arduino based robots
-  * sudo apt-get install libusb-0.1-4
-  * sudo apt-get install binutils-avr gdb-avr avr-libc avrdude
+  * `sudo apt-get install libusb-0.1-4`
+  * `sudo apt-get install binutils-avr gdb-avr avrdude`
   * install [avr-gcc](http://downloads.arduino.cc/tools/avr-gcc-7.3.0-atmel3.6.1-arduino5-x86_64-pc-linux-gnu.tar.bz2)
 * NXT
-  * sudo apt-get install nbc
+  * `sudo apt-get install nbc`
 * Calliope
-  * sudo apt-get install srecord libssl-dev
-  * install [gcc-arm-none-eabi](https://developer.arm.com/tools-and-software/open-source-software/developer-tools/gnu-toolchain/gnu-rm/downloads) latest
+  * `sudo apt-get install srecord libssl-dev`
+  * install the latest [gcc-arm-none-eabi](https://developer.arm.com/tools-and-software/open-source-software/developer-tools/gnu-toolchain/gnu-rm/downloads)
 * micro:bit
-  * pip install uflash
+  * `pip install uflash` (to install pip run `sudo apt install python-pip`)
 * EV3 c4ev3
-  * sudo apt-get install g++-arm-linux-gnueabi
+  * `sudo apt-get install g++-arm-linux-gnueabi`
 * Edison
-  * sudo apt-get python2
+  * `sudo apt-get python` (Python 2 is needed, it is called `python` for Ubuntu 18.04)
  
-on windows:
+on Windows:
 * Arduino based robots
   * install [avr-gcc](http://downloads.arduino.cc/tools/avr-gcc-7.3.0-atmel3.6.1-arduino5-i686-w64-mingw32.zip)
 * Calliope
   * install [gcc-arm-none-eabi](https://developer.arm.com/tools-and-software/open-source-software/developer-tools/gnu-toolchain/gnu-rm/downloads)
   * install [srecord](http://srecord.sourceforge.net/)
 * micro:bit
-  * install python 3
-  * pip install uflash
+  * install Python 3
+  * `pip install uflash`
 * Edison
-  * install python 2
+  * install Python 2
   
-The crossompiler needs resources to work properly (header files, libraries, ...). These resources change little over time and are stored in the '[ora-cc-rsc](https://github.com/OpenRoberta/ora-cc-rsc)' repository.
+The crosscompiler needs resources to work properly (header files, libraries, ...). These resources change little over time and are stored in the '[ora-cc-rsc](https://github.com/OpenRoberta/ora-cc-rsc)' repository.
 
-Please clone that directory. When the openrobertalab server is started, you have to supply the path to these resources (see below). If the resources are not available,
+Please clone that directory. When the openroberta-lab server is started, you have to supply the path to these resources (see below). If the resources are not available,
 everything works fine (writing programs, import, export, creating accounts, etc.), but running programs on real robots doesn't work, because the crosscompiler will fail.
 
 Please also check our wiki for detailed installation instructions, development procedure, coding conventions and further reading. We also use the github issue tracking system.
@@ -86,20 +86,7 @@ If you have a fresh clone of the server, make sure that the OpenRobertaServer fo
 
     ./ora.sh start-from-git [optional-path-to-crosscompiler-resources] # start the server using the default properties
 
-You can also run `./ora.sh help` to see more commands for administration of the server. If you have Eclipse installed and
-
-* the repositories base directory is imported as maven project (this will import all submodules automatically)
-* a maven build in the repositories base directory has been executed and a database is created (see above!)
-* a run configuration is created with
-  * OpenRobertaServer as project
-  * de.fhg.iais.roberta.main.ServerStarter as main class
-  * and the program arguments are set to
-
-        -d server.staticresources.dir=./staticResources
-        -d robot.crosscompiler.resourcebase=[optional-path-to-crosscompiler-resources]
-        -d database.parentdir=. -d server.tutorial.dir=../Resources/tutorial
-
-* then the server can be started with this run configuration
+You can also run `./ora.sh help` to see more commands for administration of the server.
 
 #### Step 4: Accessing your programming environment
 
@@ -140,6 +127,8 @@ Furthermore, the project OpenRobertaServer contains in directory staticResources
   * controller and models written in Javascript, which implement the GUI
 
 To run tests, use `mvn test`. Running `mvn clean install` will make a stable, reproducible build with all unit tests executed.
+
+To run the integration tests you have to supply an additional flag: `mvn clean install -PrunIT`.
 
 #### Blockly
 
