@@ -264,7 +264,7 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'ro
             rules : {
                 singleModalInput : {
                     required : true,
-                    regex : /^[a-zA-Z_öäüÖÄÜß$€][a-zA-Z0-9_öäüÖÄÜß$€]*$/
+                    regex : /^[a-zA-Z_öäüÖÄÜß$€][a-zA-Z0-9_öäüÖÄÜß$€]{1,254}$/
                 }
             },
             errorClass : "form-invalid",
