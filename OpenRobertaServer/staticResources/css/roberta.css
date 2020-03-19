@@ -301,6 +301,8 @@ body.blocklyMinimalBody * {
     overflow: auto;
     height: inherit;
     width: inherit;
+    -webkit-user-select: text;
+    user-select: text;
 }
 #infoContent[data-placeholder]:before {
     color: #555;
