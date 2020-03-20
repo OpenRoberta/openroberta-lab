@@ -195,7 +195,7 @@ export class RobotMbedBehaviour extends ARobotBehaviour {
             this.hardwareState.actions.motors = {};
         }
         // This is to handle negative values entered in the distance parameter in the drive block
-        if ((direction != C.FOREWARD && distance > 0) || (direction == C.FOREWARD && distance < 0)) {
+        if ((direction != C.FOREWARD && distance > 0) || (direction == C.FOREWARD && distance < 0) || (direction != C.FOREWARD && !distance)) {
             speed *= -1;
         }
         // This is to handle 0 distance being passed in
@@ -223,7 +223,7 @@ export class RobotMbedBehaviour extends ARobotBehaviour {
             this.hardwareState.actions.motors = {};
         }
         // This is to handle negative values entered in the distance parameter in the steer block
-        if ((direction != C.FOREWARD && distance > 0) || (direction == C.FOREWARD && distance < 0)) {
+        if ((direction != C.FOREWARD && distance > 0) || (direction == C.FOREWARD && distance < 0) || (direction != C.FOREWARD && !distance)) {
             speedL *= -1;
             speedR *= -1;
         }
