@@ -30,6 +30,8 @@ robots:
        template: edison
     wedo:
        template: wedo
+    festobionic:
+       template: ardu
 
 progs:
     emptyProgram:
@@ -64,6 +66,7 @@ progs:
           nxt: "Comparison of string and char not possible"
           bob3: "Comparison of string and char not possible"
           uno: "Comparison of string and char not possible"
+          festobionic: "Comparison of string and char not possible"
           edison: "Edison does not support Strings/chars"
        remark: "different combinations of string concatenation"
     mathBasics:

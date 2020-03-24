@@ -138,6 +138,12 @@ public final class UnitTestHelper {
         checkGeneratedSourceEquality(factory, Util.readResourceContent(expectedSourceFilename), builder.build());
     }
 
+    public static void checkGeneratedSourceEqualityWithExportXmlAndSourceAsString(IRobotFactory factory, String expectedSource, String exportedXmlFilename) {
+        String exportedXml = Util.readResourceContent(exportedXmlFilename);
+        Project.Builder builder = setupWithExportXML(factory, exportedXml);
+        checkGeneratedSourceEquality(factory, expectedSource, builder.build());
+    }
+
     public static void checkGeneratedSourceEqualityWithProgramXml(IRobotFactory factory, String expectedSourceFilename, String programXmlFilename) {
         String programXml = Util.readResourceContent(programXmlFilename);
         Project.Builder builder = setupWithProgramXML(factory, programXml);

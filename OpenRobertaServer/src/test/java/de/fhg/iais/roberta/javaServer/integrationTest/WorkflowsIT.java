@@ -13,6 +13,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.json.JSONObject;
 import org.junit.After;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
@@ -112,12 +113,12 @@ public class WorkflowsIT {
      * test a single workflow for different robots. May help testing ... - supply the workflow name - supply the list of robots (you may copy from the console
      * output) - the showsource workflow is always run first
      */
-
+    @Ignore
     @Test
     public void testSingleWorkflow() throws Exception {
-        final String robotName = "nxt";
-        String workflowName = "compile";
-        String programFileName = "sensors_default";
+        final String robotName = "festobionic";
+        String workflowName = "reset";
+        String programFileName = "sensors";
         String robotDir = robots.getJSONObject(robotName).getString("dir");
         String fullResource = resourceBase + robotDir + "/allBlocks/" + programFileName + ".xml";
         String xmlText = Util.readResourceContent(fullResource);
@@ -231,7 +232,7 @@ public class WorkflowsIT {
 
             ProjectService.executeWorkflow(workflow, factory, project);
             if ( !project.hasSucceeded()
-                && workflow.contains("run")
+                && (workflow.contains("run") || workflow.contains("reset"))
                 && StringUtils.containsIgnoreCase(pluginMap.get(robotName).getConnectionType(), ("token")) ) {
                 result = project.getResult() == Key.ROBOT_NOT_CONNECTED ? (program.contains(PARTIAL_SUCCESS_DEF) ? Result.PARTIAL_SUCCESS : Result.SUCCESS) : Result.FAILURE;
                 reason = String.valueOf(project.getResult());

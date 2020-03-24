@@ -51,3 +51,6 @@ robots:
         dir: wedo
         suffix: ".json"
         eval: true
+    festobionic:
+        dir: festobionic
+        suffix: ".cpp"

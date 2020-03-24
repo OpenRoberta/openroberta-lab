@@ -37,6 +37,8 @@ on Ubuntu:
   * `sudo apt-get install g++-arm-linux-gnueabi`
 * Edison
   * `sudo apt-get python` (Python 2 is needed, it is called `python` for Ubuntu 18.04)
+* Bionics4Education
+  * install [xtensa-esp32-elf](https://dl.espressif.com/dl/xtensa-esp32-elf-linux64-1.22.0-61-gab8375a-5.2.0.tar.gz)
  
 on Windows:
 * Arduino based robots
@@ -49,6 +51,8 @@ on Windows:
   * `pip install uflash`
 * Edison
   * install Python 2
+* Bionics4Education
+  * install [xtensa-esp32-elf with ESP-IDF Tools](https://docs.espressif.com/projects/esp-idf/en/latest/esp32/get-started/windows-setup.html)
   
 The crosscompiler needs resources to work properly (header files, libraries, ...). These resources change little over time and are stored in the '[ora-cc-rsc](https://github.com/OpenRoberta/ora-cc-rsc)' repository.
 
