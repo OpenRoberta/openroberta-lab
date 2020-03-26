@@ -62,6 +62,9 @@ define([ 'exports', 'message', 'log', 'util', 'guiState.controller', 'blocks', '
             } else {
                 $('.help.expert').show();
             }
+            var robotGroup = GUISTATE_C.findGroup(GUISTATE_C.getRobot());
+            var exludeClass = "".concat(".help.not", robotGroup.charAt(0).toUpperCase(), robotGroup.slice(1));
+            $(exludeClass).hide();
             if (currentHelp != GUISTATE_C.getRobotGroup() + '_' + GUISTATE_C.getLanguage().toLowerCase()) {
                 init();
             }
