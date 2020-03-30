@@ -90,7 +90,9 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'message', 'guiState.contr
 
         $('#tabGalleryList').on('show.bs.tab', function(e) {
             guiStateController.setView('tabGalleryList');
-            $(".pace").show(); // Show loading icon and hide gallery table
+            if ($('#galleryTable').bootstrapTable("getData").length === 0) {
+                $(".pace").show(); // Show loading icon and hide gallery table 
+            }
             PROGLIST.loadGalleryList(update);
         });
 
@@ -129,23 +131,19 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'message', 'guiState.contr
         $(".pace").fadeOut(300); // Hide loading icon and show gallery table
     }
 
-    function updateRow(index, result) {
-        UTIL.response(result);
-        var array = result.programNames;
-        array.sort(compareDateColumn);
-        function compareDateColumn(a, b) {
-            if (a[4] === b[4]) {
-                return 0;
-            } else {
-                return (a[4] > b[4]) ? -1 : 1;
-            }
-        }
-        if (result.rc === 'ok') {
-            $('#galleryTable').bootstrapTable("updateRow", {
-                index : index,
-                row : array[index]
-            });
-        }
+    function updateLike(value, index, row) {
+        var likes = row[6] + value;
+        $('#galleryTable').bootstrapTable("updateCell", {
+            index : index,
+            field : 6,
+            value : likes
+        });
+        var like = value > 0 ? true : false;
+        $('#galleryTable').bootstrapTable("updateCell", {
+            index : index,
+            field : 8,
+            value : like
+        });
     }
 
     var eventsLike = {
@@ -156,11 +154,8 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'message', 'guiState.contr
             $(e.target).data('blocked', 1);
             PROGRAM.likeProgram(true, row[1], row[3], row[0], function(result) {
                 if (result.rc == "ok") {
-                    // TODO create a new rest call for only one row
-                    PROGLIST.loadGalleryList(function(result) {
-                        updateRow(index, result);
-                        $(e.target).data('blocked', 0);
-                    });
+                    updateLike(1, index, row);
+                    $(e.target).data('blocked', 0);
                 } else {
                     $(e.target).data('blocked', 0);
                 }
@@ -176,11 +171,8 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'message', 'guiState.contr
             $(e.target).data('blocked', 1);
             PROGRAM.likeProgram(false, row[1], row[3], row[0], function(result) {
                 if (result.rc == "ok") {
-                    // TODO create a new rest call for only one row
-                    PROGLIST.loadGalleryList(function(result) {
-                        updateRow(index, result);
-                        $(e.target).data('blocked', 0);
-                    });
+                    updateLike(-1, index, row);
+                    $(e.target).data('blocked', 0);
                 } else {
                     $(e.target).data('blocked', 0);
                 }
