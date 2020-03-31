@@ -1,0 +1,337 @@
+<head><title></title><meta http-equiv="content-type" content="text/html; charset=utf-8"></head><body><div id="helpContent"><div id="robControls_start" class="help beginner"><h3 id="ProgrammingblocksNAO-»start«"><span style="color: rgb(0,0,0);">»start«</span><span style="color: rgb(0,0,0);"> </span></h3><p>Each program starts with the red »start« block.</p><p>This block is always available in the Open Roberta Lab and cannot be deleted. The little triangle below the start block is called  »sequence connector«. The first block you want to use will be connected by using the »sequence connector« at the start block.  The sequence connector color changes to yellow when a suitable block comes into its range.</p><p>Settings:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-plus">create a new global variable</li><li class="typcn typcn-minus">delete the global variable</li>
+</ul> <p>If global variables have been created:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-pen">Text, name of the variable</li><li class="typcn typcn-arrow-sorted-down">Type of the variable, »Number«, »Boolean«, »String«, »Colour«, »Image«, »List Number«, »List Boolean«, »List String«, »List Image«</li><li class="typcn typcn-arrow-left">Value, that corresponds to the variable type. This is the initial value of the variable.</li>
+</ul></div><div id="naoActions_set_mode" class="help beginner"><h3 id="ProgrammingblocksNAO-»setmode«"><span style="color: rgb(0,0,0);">»set mode«</span></h3><p>With the »set mode« block you can move your NAO to a specific mode. </p><p>Settings and input values:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-sorted-down">Active (standing), Rest or Sit.</li>
+</ul></div><div id="naoActions_apply_posture" class="help expert"><h3 id="ProgrammingblocksNAO-»applyposture«[Expert-Block]"><span style="color: rgb(0,0,0);">»apply posture« </span><span class="typcn typcn-star"></span></h3><p>With the »apply posture« block you can move your NAO to a specific predefined posture. Please note that NAO will calculate the way from its current posture to the given one and try to reach it.</p><p>Settings and input values:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-sorted-down">Stand, StandInit, StandZero, Sit, SitRelax, LyingBelly, LyingBack, Crouch</li>
+</ul></div><div id="naoActions_stiffness" class="help beginner"><h3 id="ProgrammingblocksNAO-»stiffnessof«"><span style="color: rgb(0,0,0);">»stiffness of« </span></h3><p>With the »stiffness« block you can enslave the joints of NAO. Be aware that NAO can fall when he is standing and you remove the stiffness from the legs.</p><p>Settings and input values:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-sorted-down">Body (all joints), Head, Arms, left Arm, right Arm, Legs, left Leg, right Leg</li><li class="typcn typcn-arrow-sorted-down">on, off</li>
+</ul></div><div id="naoActions_hand" class="help expert"><h3 id="ProgrammingblocksNAO-»hand«[Expert-Block]"><span style="color: rgb(0,0,0);">»hand« </span><span class="typcn typcn-star"></span></h3><p>With the »hand« block you can open and close NAOs hands.</p><p>Settings and input values:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-sorted-down">right, left</li><li class="typcn typcn-arrow-sorted-down">open, close</li>
+</ul></div><div id="naoActions_move_joint" class="help expert"><h3 id="ProgrammingblocksNAO-»movejoint«[Expert-Block]"><span style="color: rgb(0,0,0);">»move joint« </span><span class="typcn typcn-star"></span></h3><p>With the »move joint« block you can move every joint of NAO for a number of degrees. You can select if you want the joint to move relative or absolute to its current position.</p><p>Settings and input values:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-sorted-down">joints - head yaw, head pitch, left shoulder pitch, left shoulder roll, left elbow yaw, left elbow roll, left wrist yaw, left hand, left hip yaw pitch, left hip roll, left hip pitch, left knee pitch, left ankle pitch, left ankle roll, right hip yaw pitch, right hip roll, right hip pitch, right knee pitch, right ankle pitch, left ankle roll, right shoulder pitch, right shoulder roll, right elbow yaw, right elbow roll, right wrist yaw, right hand</li><li class="typcn typcn-arrow-sorted-down">absolute, relative</li><li class="typcn typcn-arrow-left">Number of degrees you want to turn the joint.</li>
+</ul></div><div id="naoActions_walk" class="help beginner"><h3 id="ProgrammingblocksNAO-»walk«"><span style="color: rgb(0,0,0);">»walk« </span></h3><p>With the »walk« block you can make NAO walk for a distance.</p><p>Settings and input values:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-sorted-down">direction - forwards, backwards</li><li class="typcn typcn-arrow-left">The distance in centimeter you want NAO to walk.</li>
+</ul></div><div id="naoActions_turn" class="help beginner"><h3 id="ProgrammingblocksNAO-»turn«"><span style="color: rgb(0,0,0);">»turn« </span></h3><p>With the »turn« block you can make NAO turn for a number of degrees.</p><p>Settings and input values:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-sorted-down">direction - left, right</li><li class="typcn typcn-arrow-left">The angle in degrees you want NAO to turn.</li>
+</ul></div><div id="naoActions_walkTo" class="help expert"><h3 id="ProgrammingblocksNAO-»walkto«[Expert-Block]"><span style="color: rgb(0,0,0);">»walk to« </span><span class="typcn typcn-star"></span></h3><p>With the »walk to« block you can make NAO move to a position described by coordinates.</p><p>Settings and input values:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-left">x - coordinate</li><li class="typcn typcn-arrow-left">y - coordinate</li><li class="typcn typcn-arrow-left">theta - coordinate</li>
+</ul></div><div id="naoActions_stop" class="help beginner"><h3 id="ProgrammingblocksNAO-»stopmovement«"><span style="color: rgb(0,0,0);">»stop movement«</span></h3><p>With the »stop movement« block you can make NAO stop every movement.</p></div><div id="naoActions_animation" class="help beginner"><h3 id="ProgrammingblocksNAO-»perform«"><span style="color: rgb(0,0,0);">»perform« </span></h3><p>With the »perform« block you can make NAO perform an animation.</p><p>Settings and input values:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-sorted-down">tai chi, wave, blink, wipe forehead</li>
+</ul></div><div id="naoActions_pointLookAt" class="help expert"><h3 id="ProgrammingblocksNAO-»point/lookat«[Expert-Block]"><span style="color: rgb(0,0,0);">»point/look at« </span><span class="typcn typcn-star"></span></h3><p>With the »point/look at« block you can make NAO point with one hand or look to a position specified with coordinates</p><p>Settings and input values:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-sorted-down">point, look</li><li class="typcn typcn-arrow-sorted-down">frame the coordinates relate to - torso, world, robot</li><li class="typcn typcn-arrow-left">x-coordinate</li><li class="typcn typcn-arrow-left">y-coordinate</li><li class="typcn typcn-arrow-left">z-coordinate</li><li class="typcn typcn-arrow-left">speed of the movement in percent</li>
+</ul></div><div id="naoActions_setVolume" class="help beginner"><h3 id="ProgrammingblocksNAO-»setvolume«"><span style="color: rgb(0,0,0);">»set volume«</span></h3><p>With the »set volume« block you can set the volume of NAOs loudspeakers in percent</p><p>Settings and input values:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-left">volume in percent</li>
+</ul></div><div id="naoActions_getVolume" class="help beginner"><h3 id="ProgrammingblocksNAO-»getvolume«"><span style="color: rgb(0,0,0);">»get volume«</span></h3><p>With the »get volume« block you can get the volume of NAOs loudspeakers in percent</p></div><div id="naoActions_setLanguage" class="help beginner"><h3 id="ProgrammingblocksNAO-»setLanguage«"><span style="color: rgb(0,0,0);">»set Language« </span></h3><p>With the »set language« block you can set the language of your NAO. The language has to be installed.</p><p>Settings and input values:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-sorted-down">Language - German, English, French, Japanese, Chinese, Spanish, Korean, Italian, Dutch, Finnish, Polnish, Russian, Turkish, Arabic, Czech, Portuguese, Brazilian, Swedish, Danish, Norwegian, Greek</li>
+</ul></div><div id="naoActions_getLanguage" class="help expert"><h3 id="ProgrammingblocksNAO-»getlanguage«[Expert-Block]"><span style="color: rgb(0,0,0);">»get language« </span><span class="typcn typcn-star"></span></h3><p>With the »get language« block you can get the language of your NAO.</p></div><div id="naoActions_sayText" class="help beginner"><h3 id="ProgrammingblocksNAO-»say«"><span style="color: rgb(0,0,0);">»say«</span></h3><p>With the »say« block you can make NAO say a text or a character.</p><p>Settings and input values:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-left">text or character</li>
+</ul></div><div id="naoActions_playFile" class="help expert"><h3 id="ProgrammingblocksNAO-»playfile«[Expert-Block]"><span style="color: rgb(0,0,0);">»play file« </span><span class="typcn typcn-star"></span></h3><p>With the »play file« block you can make NAO play a sound file from NAOs file system.  </p><div class="confluence-information-macro confluence-information-macro-information"><div class="confluence-information-macro-body"><p>The file has to be placed in the »/usr/share/naoqi/wav/« folder on your NAO and it has to be a .wav file. You can find more information about accessing the file system here: <a href="http://doc.aldebaran.com/2-1/dev/tools/opennao.html#opennao-ssh" class="external-link" rel="nofollow">NAO Documentation</a>.</p></div></div><p>Settings and input values:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-left">filename</li>
+</ul></div><div id="naoActions_takePicture" class="help beginner"><h3 id="ProgrammingblocksNAO-»takepicture«"><span style="color: rgb(0,0,0);">»take picture«</span></h3><p>With the »take picture« block you can make NAO take a picture with one of its cameras and save it on the robot..  </p><div class="confluence-information-macro confluence-information-macro-information"><div class="confluence-information-macro-body"><p>The picture is saved in the »/home/nao/recordings/cameras/« folder on your NAO as a JPG. You can find more information about accessing the file system here: <a href="http://doc.aldebaran.com/2-1/dev/tools/opennao.html#opennao-ssh" class="external-link" rel="nofollow">NAO Documentation</a>.</p></div></div><p>Settings and input values:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-sorted-down">top, bottom</li><li class="typcn typcn-arrow-left">filename</li>
+</ul></div><div id="naoActions_recordVideo" class="help expert"><h3 id="ProgrammingblocksNAO-»recordvideo«[Expert-Block]"><span style="color: rgb(0,0,0);">»record video« </span><span class="typcn typcn-star"></span></h3><h3 id="ProgrammingblocksNAO-"><span style="color: rgb(0,0,0);"> </span></h3><h3 id="ProgrammingblocksNAO-.1"><span style="color: rgb(0,0,0);"> </span></h3><p>With the »record video« block you can make NAO record a video with one of its cameras and save it on the robot.</p><div class="confluence-information-macro confluence-information-macro-information"><div class="confluence-information-macro-body"><p>The picture is saved in the »/home/nao/recordings/cameras/« folder on your NAO. You can find more information about accessing the file system here: <a href="http://doc.aldebaran.com/2-1/dev/tools/opennao.html#opennao-ssh" class="external-link" rel="nofollow">NAO Documentation</a>.</p></div></div><p>Settings and input values:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-sorted-down">resolution - 160*120, 320*240, 640*480</li><li class="typcn typcn-arrow-sorted-down">camera - top, bottom</li><li class="typcn typcn-arrow-left">duration of recording in milliseconds</li><li class="typcn typcn-arrow-left">filename</li>
+</ul></div><div id="naoActions_rgbLeds" class="help beginner"><h3 id="ProgrammingblocksNAO-»RGBLed«"><span style="color: rgb(0,0,0);">»RGB Led«</span></h3><p>With the »RGB Led« block you can color NAOs RGB leds.</p><p>Settings and input values:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-sorted-down">led name - eyes, left eye, right eye, left foot, right foot, all</li><li class="typcn typcn-arrow-left">colour</li>
+</ul></div><div id="naoActions_setIntensity" class="help beginner"><h3 id="ProgrammingblocksNAO-»Ledintensity«"><span style="color: rgb(0,0,0);">»Led intensity«</span></h3><p>With the »Led intensity« block you can set the intensity of NAOs single color LEDs.</p><p>Settings and input values:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-sorted-down">led name - ears, left ear, right ear, chest, head</li><li class="typcn typcn-arrow-left">intensity in percent</li>
+</ul></div><div id="naoActions_ledOff" class="help beginner"><h3 id="ProgrammingblocksNAO-»Ledoff«"><span style="color: rgb(0,0,0);">»Led off«</span></h3><p>With the »Led off« block you can turn NAOs LEDs off.</p><p>Settings and input values:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-sorted-down">led name - eyes, left eye, right eye, left foot, right foot, ears, left ear, right ear, chest, head, all</li>
+</ul></div><div id="naoActions_ledReset" class="help expert"><h3 id="ProgrammingblocksNAO-»Ledreset«[Expert-Block]"><span style="color: rgb(0,0,0);">»Led reset« </span><span class="typcn typcn-star"></span></h3><h3 id="ProgrammingblocksNAO-.2"><span style="color: rgb(0,0,0);"> </span></h3><p>With the »Led reset« block you can reset NAOs LEDs to their initial state after boot up.</p><p>Settings and input values:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-sorted-down">led name - eyes, left eye, right eye, left foot, right foot, ears, left ear, right ear, chest, head, all</li>
+</ul></div><div id="naoActions_randomEyes" class="help beginner"><h3 id="ProgrammingblocksNAO-»Randomeyes«"><span style="color: rgb(0,0,0);">»Random eyes«</span></h3><p>With the »random eyes« block you can make NAO change the colour of its eyes randomly.</p><p>Settings and input values:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+duration
+</ul></div><div id="naoActions_rasta" class="help beginner"><h3 id="ProgrammingblocksNAO-»Randomeyes«.1"><span style="color: rgb(0,0,0);">»Random eyes«</span></h3><p>With the »rasta« block you can make NAO change the colour of its eyes between red, green and blue.</p><p>Settings and input values:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+duration
+</ul></div><div id="naoSensors_touch" class="help beginner"><h3 id="ProgrammingblocksNAO-»Touchsensor«"><span style="color: rgb(0,0,0);">»Touchsensor«</span></h3><p>With the »touchsensor« block you can check if a touchsensor on NAOs body is touched. If the selected sensor is touched the block returns true.</p><p>Settings:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+touchsensor (hand, bumper, head), side (left, right, front, middle, rear)
+</ul>Return value:
+<ul style="margin-top: 0; margin-bottom: 10px">
+true when sensor is touched
+</ul></div><div id="naoSensors_sonar" class="help beginner"><h3 id="ProgrammingblocksNAO-»Sonar«"><span style="color: rgb(0,0,0);">»Sonar«</span></h3><p>With the »sonar« block you can get a measure fron the ultasonic sensors in NAOs chest. The block returns the measured distance.</p><p>Return value:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+distance in cm
+</ul></div><div id="naoSensors_gyrometer" class="help beginner"><h3 id="ProgrammingblocksNAO-»Gyrometer«"><span style="color: rgb(0,0,0);">»Gyrometer«</span></h3><p>With the »gyrometer« block you can get the raw data of the gyrometer(gyroscope) located in NAOs torso. </p><p>More information: <a href="http://doc.aldebaran.com/2-1/family/robots/inertial_robot.html" class="external-link" rel="nofollow">NAO Documentation</a></p><p>Settings:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+direction - X, Y, Z
+</ul>Return value:
+<ul style="margin-top: 0; margin-bottom: 10px">
+number - raw value
+</ul></div><div id="naoSensors_accelerometer" class="help beginner"><h3 id="ProgrammingblocksNAO-»Accelerometer«"><span style="color: rgb(0,0,0);">»Accelerometer«</span></h3><p>With the »accelerometer« block you can get the raw data of the accelerometer located in NAOs torso. </p><p>More information: <a href="http://doc.aldebaran.com/2-1/family/robots/inertial_robot.html" class="external-link" rel="nofollow">NAO Documentation</a></p><p>Settings:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+direction - X, Y, Z
+</ul>Return value:
+<ul style="margin-top: 0; margin-bottom: 10px">
+number - raw value
+</ul></div><div id="naoSensors_fsr" class="help beginner"><h3 id="ProgrammingblocksNAO-»Forcesensitiveresistor«"><span style="color: rgb(0,0,0);">»Force sensitive resistor«</span></h3><p>With the »force sensitive resistor« block you can get data from the FSRs under NAOs feet. The calculated sum of the FSRs values is returned.</p><p>Settings:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+side - left, right
+</ul>Return value:
+<ul style="margin-top: 0; margin-bottom: 10px">
+number - calculated value
+</ul></div><div id="naoSensors_current" class="help expert"><h3 id="ProgrammingblocksNAO-»Electriccurrent«[Expert-Block]"><span style="color: rgb(0,0,0);">»Electric current« </span><span class="typcn typcn-star"></span></h3><h3 id="ProgrammingblocksNAO-.3"><span style="color: rgb(0,0,0);"> </span></h3><p>With the »electric current« block you can get data from the motor shunts. The electric current of the selected motor/joint is returned.</p><p>Settings:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+motor/joint
+</ul>Return value:
+<ul style="margin-top: 0; margin-bottom: 10px">
+number - electric current in mA
+</ul></div><div id="naoSensors_naomark" class="help beginner"><h3 id="ProgrammingblocksNAO-»NAOmark«"><span style="color: rgb(0,0,0);">»NAO mark«</span></h3><p>With the »NAO mark« block you can detect a NAO mark. The id of the NAO mark is returned.</p><p>You can find the NAO marks <a href="http://doc.aldebaran.com/2-1/_downloads/NAOmark.pdf" class="external-link" rel="nofollow">here</a>. Print them out. You can find the id in the top left corner.</p><p><br>Return value:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+number - id of the mark
+</ul></div><div id="naoSensors_recognizedWord" class="help expert"><h3 id="ProgrammingblocksNAO-»Recognizedword«[Expert-Block]"><span style="color: rgb(0,0,0);">»Recognized word« </span><span class="typcn typcn-star"></span></h3><h3 id="ProgrammingblocksNAO-.4"><span style="color: rgb(0,0,0);"> </span></h3><p>With the »recognized word« block you can use NAOs speech recognition engine. The last word NAO understood is returned. If NAO hasn`t recognized any word it will return an empty string.</p><p><br>Return value:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+string - last recognized word
+</ul></div><div id="naoSensors_learnFace" class="help expert"><h3 id="ProgrammingblocksNAO-»Learnface«[Expert-Block]"><span style="color: rgb(0,0,0);">»Learn face« </span><span class="typcn typcn-star"></span></h3><h3 id="ProgrammingblocksNAO-.5"><span style="color: rgb(0,0,0);"> </span></h3><p>With the »learn face« block you can use NAOs face recognition algorithm. NAO will make a picture and save it in its vision database. The picture will be saved under the name you enter.</p><p><br>Input value:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+string - name
+</ul></div><div id="naoSensors_forgetFace" class="help expert"><h3 id="ProgrammingblocksNAO-»Forgetface«[Expert-Block]"><span style="color: rgb(0,0,0);">»Forget face« </span><span class="typcn typcn-star"></span></h3><h3 id="ProgrammingblocksNAO-.6"><span style="color: rgb(0,0,0);"> </span></h3><p>With the »forget face« block you can use NAOs face recognition algorithm. The database entry marked with the name you use as input for this block will be deleted from the database. Please be aware that this is permanent.</p><p><br>Input value:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+string - name
+</ul></div><div id="naoSensors_detectFace" class="help expert"><h3 id="ProgrammingblocksNAO-»Detectface«[Expert-Block]"><span style="color: rgb(0,0,0);">»Detect face« </span><span class="typcn typcn-star"></span></h3><h3 id="ProgrammingblocksNAO-.7"><span style="color: rgb(0,0,0);"> </span></h3><p>With the »detect face« block you can use NAOs face recognition algorithm. NAO uses its camera to detect a face. The entries in the vision database on the robot will be used for recognition. If a known person is detected the block returns true.</p><p><br>Return value:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+boolean - true, if face detected
+</ul></div><div id="robControls_if" class="help beginner"><h3 id="ProgrammingblocksNAO-»ifdo«"><strong>»if do«<br></strong></h3><p>With the block »if do« you can selectively trigger actions to be executed by your robot. The »if do« block therefore requires a logical value as an input parameter, the condition. Only if the condition of the »if« statement is true, the inserted block will be executed. In a nested »if do« block, if a further distinction was added, the first »if« condition is queried. If it is not fulfilled (condition = false), the second »else if« condition will be checked. Also this second condition requires a logical value as an input parameter.</p><p>The conditions may arbitrarily be expanded by clicking the "+" plus symbol. The "-" minus symbol reduces the block.</p><p>Settings and input values:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-plus">Insert an additional condition.</li><li class="typcn typcn-minus">Delete the last condition.</li><li class="typcn typcn-arrow-left">Boolean value, »true« or »false«.</li><li class="normalBullet">Blocks that will be executed</li>
+</ul></div><div id="robControls_ifElse" class="help beginner"><h3 id="ProgrammingblocksNAO-»ifdoelse«">»if do else«</h3><p>With the block »if do else« you can selectively trigger actions which are executed by your robot. The »if do then« block therefore requires a logical value as an input parameter. If the condition in »if« is true the  inserted block will be executed, otherwise (condition is not fulfilled = false) the block connected to the »else« statement will be executed. In a nested »if do else« block with further distinctions added, the first  »if« condition is queried. If it is not true, the second condition »else if«  is checked. Also the second condition requires a logical value as an input parameter. Only when both conditions are not true, the block which is inserted at the »else« statement will be executed.</p><p>The conditions may arbitrarily be expanded by clicking the "+" plus symbol. The "-" minus symbol reduces the block.</p><p>Settings:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-plus">Insert an additional if-do-else condition.</li><li class="typcn typcn-minus">Delete the last if-do-else condition.</li><li class="typcn typcn-arrow-left">Boolean value, »true« or »false«.</li><li class="normalBullet">Do blocks that will be executed if the according condition evaluates to »true«.</li><li class="normalBullet">Else blocks that will be executed if the according condition evaluates to »false«.</li>
+</ul></div><div id="robControls_loopForever" class="help beginner  notWedo"><h3 id="ProgrammingblocksNAO-»repeatindefinitely«">»repeat indefinitely«</h3><p>With the block »repeat indefinitely« you can endlessly run the blocks on your robot. All blocks which are within the »repeat indefinitely« block will be executed endlessly. The blocks are applied sequentially from top to bottom. Once the last block has been executed, the program repeats with the first block again. Therefore, this block is also called »loop«.</p><p>Input:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="normalBullet">Blocks to be repeated indefinitely.</li>
+</ul><br></div><div id="controls_repeat_ext" class="help beginner"><h3 id="ProgrammingblocksNAO-»repeatntimes«">»repeat n times«</h3><p>With the block »repeat« you can run other block as many times as you like. All blocks in the »repeat« block will be executed as often as defined in the entry field. The blocks are applied sequentially from top to bottom. Once the last block has been executed, the program repeats with the first block again. Therefore, this block is also called »loop«.</p><div class="confluence-information-macro confluence-information-macro-information"><div class="confluence-information-macro-body"><p>Only integer values can be entered.</p></div></div><p>Settings and input:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-left">Number that indicates how often the contained blocks will be repeated.</li><li class="normalBullet">Blocks to be repeated as often as defined.</li>
+</ul><br></div><div id="robControls_wait_time" class="help beginner"><h3 id="ProgrammingblocksNAO-»wait«">»wait«</h3><p>With the block »wait« you can "pause" your program at the point where you inserted the »wait« block. Your program will then remain for the specified duration at this point. After the specified time the next block will be executed. For example you can display text in the screen of your robot for exactly the time you specified in the »wait« block.</p><p>Settings and input values:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-sorted-down">Number, waiting time in milliseconds.</li>
+</ul></div><div id="robControls_wait_for" class="help beginner"><h3 id="ProgrammingblocksNAO-»waituntil«">»wait until«</h3><p>With the block »wait until« you can "stop" your program at the point you insert the »wait until« block. Your program then waits until the condition is true. The »wait until« block you can extended by click on "+" symbol. Your program then waits until (at least) one of the condition of your »wait until« block is true.</p><p>Settings:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-plus">Add a new condition.</li><li class="typcn typcn-pen">Delete the last condition.</li><li class="typcn typcn-arrow-left">Boolean value, »true« or »false«.</li>
+</ul></div><div id="controls_flow_statements" class="help expert"><h3 id="ProgrammingblocksNAO-»breakout/continuewithnextiterationofloop«[Expert-block]">»break out/continue with next iteration of loop« <span class="typcn typcn-star"></span></h3><p>With the block »break out/continue with next iteration of loop« a loop can be terminated ahead of schedule. As soon as the block is entered within a sequence of blocks, all further blocks up to the end of the loop will be ignored.</p><p>Settings:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-sorted-down">Type of breaking behavior, »break out« or »continue with next iteration«.</li>
+</ul></div><div id="robControls_for" class="help expert"><h3 id="ProgrammingblocksNAO-»countwithfromto«[Expert-block]">»count with from to« <span class="typcn typcn-star"></span></h3><p>With the block »count with from to« you can run other block as many times as you like. All blocks in the »count with from to« block will be executed as long as the counting is in progress. The blocks are applied sequentially from top to bottom. Once the last block has been executed, the program repeats with the first block again if the counting is in progress. The last parameter declares the step width for counting.</p><p>Settings:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-pen">Variable, name of free choice; numbers of the counter will be delivered one after the other to the variable. </li><li class="typcn typcn-arrow-left">Number, initial value of the counter.</li><li class="typcn typcn-arrow-left">Number, final value of the counter. As the counter exceeds this value the loop ends.</li><li class="typcn typcn-arrow-left">Number, defining the increment. The variable value will increase by this amount after every loop cycle.</li><li class="typcn typcn-arrow-sorted-down">Blocks that will be executed in every loop cycle.</li>
+</ul></div><div id="robControls_forEach" class="help expert  notWedo notBob3"><h3 id="ProgrammingblocksNAO-»foreachiteminlist«[Expert-block]">»for each item in list« <span class="typcn typcn-star"></span></h3><p>With the block »for each item in list« all list items will successively be bound to a variable. The variable can be used within the loop. With each loop cycle the next item of the list will be bound until all list elements have been processed.</p><p>Settings and input value:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-sorted-down">Type of list elements, »Number«, »String«, »Boolean«, »Colour«, »Connection«</li><li class="typcn typcn-pen">Variable, name of free choice; list elements will be delivered one after the other to the variable.</li><li class="typcn typcn-arrow-left">List  that contains elements of the desired type. If the list elements are not of the correct type then the list will not fit to the input slot.</li><li class="normalBullet">Blocks which will be executed as often as there are elements in the list.</li>
+</ul></div><div id="controls_whileUntil" class="help expert"><h3 id="ProgrammingblocksNAO-»repeatwhile/until«[Expert-block]">»repeat while/until« <span class="typcn typcn-star"></span></h3><p>With the block »repeat while/until« you can run other block as many times as you like. All blocks in the »repeat while/until« block will be executed as long as the condition in the entry field is true. The blocks are applied sequentially from top to bottom. Once the last block has been executed, the program repeats with the first block again if the condition is still true. Therefore, this block is also called »conditional loop«.</p><p>Settings and input values:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-sorted-down">Option, »while« or »until«, defining the type of the conditional repetition.</li><li class="typcn typcn-arrow-left">Boolean value, »true« or »false«.</li><li class="normalBullet">Blocks that will be repeated while/until the condition evaluates to »true«. </li>
+</ul></div><div id="logic_compare" class="help beginner"><h3 id="ProgrammingblocksNAO-»comparison«">»comparison«</h3><p>With the block »comparison« you can compare different parameters of the same type (number, color, logical value, text). This block can only be used in conjunction with another block which requires a logical value as an input parameter.</p><p>Settings and input values:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-left">Value for the left hand side.</li><li class="typcn typcn-arrow-sorted-down">Comparison, select one of =, ≠, &lt;, ≤, &gt;, ≥</li><li class="typcn typcn-arrow-left">Value for the right hand side.</li>
+</ul><p style="text-align: left;">Return value:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right">Boolean value, »true« or »false«.</li>
+</ul></div><div id="logic_operation" class="help beginner"><h3 id="ProgrammingblocksNAO-»and/or«">»and/or«</h3><p>With the block »and/or« you can interrelate logical values with each other. The »and/or« block with the setting "and" will be true only if both logical parameters are "'true"'. If the block has the setting »or« it is sufficient if one of the two parameters is "true", so that the »and/or« block will return true.</p><p>Settings:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-left">Boolean value on the left hand side.</li><li class="typcn typcn-arrow-sorted-down">Boolean function, »and« or »or«.</li><li class="typcn typcn-arrow-left">Boolean value on the right hand side.</li>
+</ul>Return value:
+<ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right">Boolean value »true« or»false«.</li>
+</ul></div><div id="logic_boolean" class="help beginner"><h3 id="ProgrammingblocksNAO-»true/false«">»true/false«</h3><p>With the block »true/false« you can return either the logical value »true« or »false« to another block.</p><p>Settings:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-sorted-down">Boolean value, make your choice.</li>
+</ul>Return value:
+<ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right">Boolean value, »true« or »false«.</li>
+</ul></div><div id="logic_negate" class="help expert"><h3 id="ProgrammingblocksNAO-»not«[Expert-block]">»not« <span class="typcn typcn-star"></span></h3><p>Using the »not« lets you invert a logical value and pass this value to another block.</p><p>Input value:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-left">Boolean value, to be inverted.</li>
+</ul>Return value:
+<ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right">Boolean value, »true« or »false«; result of inverting.</li>
+</ul></div><div id="logic_ternary" class="help expert notWedo"><h3 id="ProgrammingblocksNAO-»test«[Expert-block]">»test« <span class="typcn typcn-star"></span></h3><p>Using the »test« block will perform a test and returns a value which depends on the test result.</p><p>Input values:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-left">Boolean value for the test; if no input value is given "true" will be assumed.</li><li class="typcn typcn-arrow-left">Arbitrary value, evaluated by a block.</li><li class="typcn typcn-arrow-left">Arbitrary value, evaluated by a block.</li>
+</ul>Return value:
+<ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right">Value of arbitrary type.</li>
+</ul></div><div id="logic_null" class="help expert"><h3 id="ProgrammingblocksNAO-»null«[Expert-block]">»null« <span class="typcn typcn-star"></span></h3><p style="text-align: left;">The block »null« is a place holder for an input value that is not yet specified. If for instance a new connection variable has been created and is not yet bound, the initial value of this connection will be set to »null«.</p><p style="text-align: left;">Return value::
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-sorted-down">Boolean value, »null«.</li>
+</ul></div><div id="math_number" class="help beginner"><h3 id="ProgrammingblocksNAO-»parameter«">»parameter«</h3><p>With the block »parameter« you can send numbers to another block.</p><p>  Settings and input values:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-left">Number</li>
+</ul><p style="text-align: left;">Return value:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right"> Number</li>
+</ul><br></div><div id="math_arithmetic" class="help beginner"><h3 id="ProgrammingblocksNAO-»calculating«">»calculating«</h3><p>With the block »calculating« you can sum up, subtract, multiply, and divide numbers. This block can only be used in conjunction with another block which requires a number as an input parameter.</p><p>Settings and input values:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-left"> Number, first number on the left you want to calculate with.</li><li class="typcn typcn-arrow-sorted-down">Option, mathematical operator, choose one of +, −, ×, ÷, ^.</li><li class="typcn typcn-arrow-left">Number, second number on the right you want to calculate with.</li>
+</ul>Return value:
+<ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-sorted-down">Number, result of the calculation.</li>
+</ul></div><div id="math_single" class="help expert"><h3 id="ProgrammingblocksNAO-»mathematicalfunction«[Expert-block]">»mathematical function« <span class="typcn typcn-star"></span></h3><p>With the block »mathematical function« some elementary mathematical functions may be calculated. Available functions are »square root«, »absolute«, »invert« (multiply by -1), »ln« (natural logarithm), »log10« (decadic logarithm), »e^« (exponential function), »10^« (base 10 exponent)</p><p>Settings and input value:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-sorted-down">Option, mathematical function, choose one.</li><li class="typcn typcn-arrow-left">Number to apply the function to.</li>
+</ul>Return value:
+<ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right"> Number, result of the function application.</li>
+</ul></div><div id="math_trig" class="help expert"><h3 id="ProgrammingblocksNAO-»trigonometricfunctions«[Expert-block]">»trigonometric functions« <span class="typcn typcn-star"></span></h3><p>With the block »trigonometric function« sine, cosine, tangent and their respective revers functions can be calculated. Input values are expected in radian measure(see hint above).</p><p>Settings and input value:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-sorted-down">Option, trigonometric function to choose from.</li><li class="typcn typcn-arrow-left">Number, in radian measure.</li>
+</ul><br><p>Return value:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right">Number, result of the trigonometric calculation.</li>
+</ul></div><div id="math_constant" class="help expert"><h3 id="ProgrammingblocksNAO-»constant«[Expert-block]">»constant« <span class="typcn typcn-star"></span></h3><p>With the »constant« block some mathematical constant values are available: »π« (3,1415...), »e« (2,718...), »φ« (1,618...), »sqrt(2)« (1,414...), »sqrt(½)« (0,7071...), »∞«</p><p>Settings:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-sorted-down">Option, mathematical constants, choose one.</li>
+</ul>Return value:
+<ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-sorted-down"> Number, value of the selected mathematical constant. Infinity will return »infinity«.</li>
+</ul></div><div id="number_property" class="help expert"><h3 id="ProgrammingblocksNAO-»numberproperty«[Expert-block]">»number property« <span class="typcn typcn-star"></span></h3><p>With the block »number property« you check whether a given number has a specific property: »even«, »odd«, »prime«, »whole«, »positive«, »negative«, »divisible by«.</p><p>Settings and input values:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-left">Number, the property of this input value will be checked.</li><li class="typcn typcn-arrow-sorted-down">Option, number property, choose one.</li><li class="typcn typcn-arrow-left">Number, evaluated from a block. The second input value is only required for the property »divisible by«.</li>
+</ul>Return value:
+<ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right">Boolean value, »true« or »false«, depending on the selected property.</li>
+</ul></div><div id="robMath_change" class="help expert"><h3 id="ProgrammingblocksNAO-»changeby...«[Expert-block]">»change by ... « <span class="typcn typcn-star"></span></h3><p>The block »change by ... « increments a numerical variable by a defined value.</p><p>Settings and input values:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-left">Variable name, which value is to be changed. Choose the variable to be changed.</li><li class="typcn typcn-arrow-left">Number, given by a block.</li>
+</ul></div><div id="math_round" class="help expert"><h3 id="ProgrammingblocksNAO-»round«[Expert-block]">»round« <span class="typcn typcn-star"></span></h3><p>With the block »round« values may be rounded. Rounding will set the decimal places to 0. It depends on the value of the decimal places whether the block rounds up or down. You may also decide by settings to always round up or down.</p><p>Settings and input value:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-sorted-down">Type of rounding, choose a round mode.</li><li class="typcn typcn-arrow-left">Number you want to round.</li>
+</ul>Return value:
+<ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right">Number, rounded whole number, according to the round mode.</li>
+</ul></div><div id="math_on_list" class="help expert notWedo notBob3"><h3 id="ProgrammingblocksNAO-»listevaluation«[Expert-block]">»list evaluation« <span class="typcn typcn-star"></span></h3><p>With the block »list evaluation« you may analyse a list.</p><p>Modes for list evaluation:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-sorted-down">sum - addition of all list values</li><li class="typcn typcn-arrow-sorted-down">min - smallest value in the list</li><li class="typcn typcn-arrow-sorted-down">max - largest value in the list</li><li class="typcn typcn-arrow-sorted-down">average - average of all list values</li><li class="typcn typcn-arrow-sorted-down">median - median of all list values</li><li class="typcn typcn-arrow-sorted-down">standard deviation - standard deviation of all list values</li><li class="typcn typcn-arrow-sorted-down">random item - one list value randomly selected</li>
+</ul>Settings and input value:
+<ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-sorted-down">Mode of list evaluation, choose one mode.</li><li class="typcn typcn-arrow-left">List of numbers</li>
+</ul>Return value:
+<ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-sorted-down">Number, calculated according to the selected list evaluation mode.</li>
+</ul></div><div id="math_modulo" class="help expert"><h3 id="ProgrammingblocksNAO-»remainderof«[Expert-block]">»remainder of« <span class="typcn typcn-star"></span></h3><p>The block »remainder of« calculates a divison and returns the remainder of the division.</p><p>Input values:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-left">Number to be divided (dividend).</li><li class="typcn typcn-arrow-left">Number, divisor.</li>
+</ul>Return value:
+<ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right">Number, rest of the division.</li>
+</ul></div><div id="math_constrain" class="help expert"><h3 id="ProgrammingblocksNAO-»constrain«[Expert-block]">»constrain« <span class="typcn typcn-star"></span></h3><p>The block »constrain« ensures that given boundaries will not be exceeded.</p><p>Input values:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-left">Number, that will be constrained.</li><li class="typcn typcn-arrow-left">Number, lower bound.</li><li class="typcn typcn-arrow-left">Number, upper bound.</li>
+</ul>Return value:
+<ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right">Number, constrained by the lower and the upper bound.</li>
+</ul></div><div id="math_random_int" class="help expert"><h3 id="ProgrammingblocksNAO-»randominteger«[Expert-block]">»random integer« <span class="typcn typcn-star"></span></h3><p>With the block »random integer« you may generate random integer numbers within defined limits</p><p>Input values:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-left">Number, lower bound</li><li class="typcn typcn-arrow-left">Number, upper bound</li>
+</ul>Return value:
+<ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right">Number, a whole random number from within the upper and lower bounds.</li>
+</ul></div><div id="math-random_float" class="help expert"><h3 id="ProgrammingblocksNAO-»randomfraction«[Expert-block]">»random fraction« <span class="typcn typcn-star"></span></h3><p>With the block »random fraction« a random value between 0.0 and 1.0 is calculated.</p><p>Return value:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right">Number, positive random value between 0.0 and 1.0.</li>
+</ul></div><div id="text" class="help beginner notBob3"><h3 id="ProgrammingblocksNAO-»Text«">»Text«</h3><p>The simple »Text« block creates a little text.</p><p>Input value:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-left">String, containing arbitrary characters.</li>
+</ul><br><p>Return value:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right">String, containing arbitrary characters.</li>
+</ul></div><div id="text_comment" class="help beginner"><h3 class="auto-cursor-target" id="ProgrammingblocksNAO-»comment«">»comment«</h3><p>Document your program with this block, so that you and others will find it easier to understand your program later. This comment will also be visible in the generated source code.  </p><p>Input value:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-left">String, containing arbitrary characters.</li>
+</ul></div><div id="robText_join" class="help expert notBob3"><h3 id="ProgrammingblocksNAO-»createText«[Expert-block]">»create Text« <span class="typcn typcn-star"></span></h3><p>The »create text« block compiles a text from different input parameters. Using the + sign will insert further input slots. All input parameters will be connected one after the other. Essentially the »create text« block converts an arbitrary input value into a text string.</p><p>Input values:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-left">Arbitrary values [numbers, text, logical values, colours)</li>
+</ul>Return value:
+<ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right">String, containing arbitrary characters, compiled sequentially from all input values.</li>
+</ul></div><div id="robtext_append" class="help expert notWedo notBob3"><h3 id="ProgrammingblocksNAO-»appendText«[Expert-block]">»append Text« <span class="typcn typcn-star"></span></h3><p>The »append text« block will append some string to a given string, for instance to extend a message with a signature.</p><p>Input values:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-left">String, to which some other text will be appended.</li><li class="typcn typcn-arrow-left">String, that shall be appended.</li>
+</ul></div><div id="robLists_create_with" class="help expert notWedo notBob3"><h3 id="ProgrammingblocksNAO-»createlist«">»create list«</h3><p>The block »empty list« creates a list with no content.The block »list« generates a list with some predefined values.</p><p>This block may only be used in the context of a »set variable« block.</p><p>Using »+« or »−« enables you to extend or reduce the list at its end.</p><p>Settings and input values:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-sorted-down">List type, »Number«, »String«, »Boolean«, »Colour«, »Connection«.</li><li class="typcn typcn-plus">Create further list element, append to the end of the list.</li><li class="typcn typcn-minus">Delete list element at the end of the list.</li><li class="typcn typcn-arrow-left">Values, according to the list type. Here the input of initial values is possible.</li>
+</ul>Return value:
+<ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right">Empty list or list, containing elements of the specified list type.</li>
+</ul></div><div id="robLists_repeat" class="help expert notWedo notBob3"><h3 id="ProgrammingblocksNAO-»repeatelementinlist«">»repeat element in list«</h3><p>The »repeat element in list« block generates a list of equal elements.  </p><p>Settings and input values:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-sorted-down">List type, »Number«, »Boolean«, »String«, »Colour« or »Connection«.</li><li class="typcn typcn-arrow-sorted-down">List element, according to the selected list type. This value will be repeated in the list.</li><li class="typcn typcn-arrow-left">Number, defining how often the list element will be repeated.</li>
+</ul>Return value:
+<ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right">List of the specified list type, containing the specified number of equal elements.</li>
+</ul></div><div id="robLists_length" class="help expert notWedo notBob3"><h3 id="ProgrammingblocksNAO-»lengthof«">»length of«</h3><p>The »length of« block returns a value which is the length of the list given as parameter. An empty list has a length of 0.</p><p>Input value:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-left">List, evaluated by an appropriate block.</li>
+</ul>Return value:
+<ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right">Number, number of list elements.</li>
+</ul><br></div><div id="robLists_isEmpty" class="help expert notWedo notBob3"><h3 id="ProgrammingblocksNAO-»isempty?«">»is empty?«</h3><p>A list given as parameter will be checked whether it is empty.</p><p>Input value:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-left">List, evaluated by an appropriate block.</li>
+</ul>Return value:
+<ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right">Boolean, either »true« or »false«.</li>
+</ul></div><div id="roblists_indexOf" class="help expert notWedo notBob3"><h3 id="ProgrammingblocksNAO-»findinlist«">»find in list«</h3><p>A list is searched for an item. If the item is in the list, the list position will be returned. If the item is not in the list the result is -1.</p><p>Settings and input values:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-left">List, that will be examined.</li><li class="typcn typcn-arrow-sorted-down">Position of the occurrence, either »first« or »last«.</li><li class="typcn typcn-arrow-left">Value, list item to be found.</li>
+</ul>Return value:
+<ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-sorted-down"><p>Number, indicating the position where the element was found in the list.</p><p>Note: Counting list positions will start with 0.</p></li>
+</ul></div><div id="robLists_getIndex" class="help expert notWedo notBob3"><h3 id="ProgrammingblocksNAO-»getlistelement«">»get list element«</h3><p>This block accesses an item of a list. Depending on the settings this item may be altered.</p><p>A list is given as parameter. Then a drop-down-list specifies what will happen to the list item under consideration.</p><p>Settings:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-left">List, that is under consideration.</li><li class="typcn typcn-arrow-sorted-down">Option, action for the element found: »get« reads the element and leaves it unchanged, »get and remove« reads the element and removes it from the list, »remove« just removes the element from the list.</li><li class="typcn typcn-arrow-sorted-down">Option, position of the element found: »#«, »# from end«, »first«, »last« or »random« .</li><li class="typcn typcn-arrow-left"><p>Number, indicating the list position. This input value is not required if »first«, »last« or »random« was selected as position.</p><p>Note: Counting of list positions starts with 0.</p></li>
+</ul>Return value:
+<ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right"><p>List element that has been found at the specified list position; »undefined«, if the list position does not exist.</p><p>With selection of »remove« there is no return value; instead the list will be shortened by this list element.</p></li>
+</ul></div><div id="robLists_setIndex" class="help expert notWedo notBob3"><h3 id="ProgrammingblocksNAO-»setlistelement«">»set list element«</h3><p>In a list given as input parameter one specified element will be replaced by a new value.</p><p>Settings and input values:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-sorted-down">List, that will be changed.</li><li class="typcn typcn-arrow-sorted-down">Option, action for the element found; »set« changes the element, »insert at« inserts a new element into the list.</li><li class="typcn typcn-arrow-sorted-down">Option, position for the element to be changed: »#«, »# from end«, »first«, »last« or »random« .</li><li class="typcn typcn-arrow-sorted-down">Number, indicating the list position. This input value is not required if »first«, »last« or »random« was selected.<br>Note: Counting of list positions begins with 0.</li><li class="typcn typcn-arrow-sorted-down">List element, that will be set or inserted at the selected list position.</li>
+</ul></div><div id="robLists_getSublist" class="help expert notWedo notBob3"><h3 id="ProgrammingblocksNAO-»getsublist«">»get sublist«</h3><p>From a list given as parameter a sublist will be created. The sublist contains all those elements that match the further specifications of the block.</p><p>Settings and input values:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-left">List to be examined.</li><li class="typcn typcn-arrow-sorted-down">Position, start of the sublist: »#«, »# from end« or »first«.</li><li class="typcn typcn-arrow-left"><p>Number, indicating the list position. This input value is not required if »first« has been selected.</p><p>Note: Counting of list positions starts with 0.</p></li><li class="typcn typcn-arrow-left">Position, end of the sublist: »#«, »# from end« or »last«.</li><li class="typcn typcn-arrow-left"><p>Number, indicating the list position. This input value is not required if »last« has been selected.</p><p>Note: Counting of list positions starts with 0.</p></li>
+</ul>Return value:
+<ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right">List, a sublist of the same type as the given list.</li>
+</ul></div><div id="robProcedures_defnoreturn" class="help expert"><h3 id="ProgrammingblocksNAO-»Functionblockswith/withoutinputparametersandnoreturnstatement«">»Function blocks with/without input parameters and no return statement«</h3><p>In a function block with/without input parameter and without return parameter a sequence of program statements will be condensed. The input parameters will be determined by the local variables of the function block. Local variables may be generated by using the »+« sign of the function block. Local variables will not be initialized.</p><p>If a function block contains an if-block the function may be terminated before reaching it's end.</p><p>The function block is available in the »Functions« category immediately after its definition. Using function blocks improves the readability of complex programs.</p><p>Settings:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-pen">Function name, no special characters and white spaces allowed.</li><li class="typcn typcn-plus">Generate new local variables, that will be assigned with the function call.</li><li class="typcn typcn-minus">Delete the associated local variable.</li>
+</ul><br><div class="confluence-information-macro confluence-information-macro-warning"><div class="confluence-information-macro-body"><ul><li><p>The name of a function block has to start with a lower case letter. Special characters are not allowed in a function block name.</p></li><li><p>If the function block defines input parameters (local variables), all the parameter slots have to be occupied when calling the function.</p></li></ul></div></div></div><div id="robProcedures_defreturn" class="help expert"><h3 id="ProgrammingblocksNAO-»Functionblockswith/withoutinputparameterswithreturnstatements«">»Function blocks with/without input parameters with return statements«</h3><p>In a function block with/without input parameter and with return parameter a sequence of program statements will be condensed. The input parameters will be determined by the local variables of the function block. Local variables may be generated by using the »+« sign of the function block. Local variables will not be initialized. After running through all the blocks of the function a value will be returned.</p><p>If a function block contains an if-block the function may be terminated before reaching it's end. An alternative value may be returned by the if-block.</p><p>The function block is available in the »Functions« category immediately after its definition. Using function blocks improves the readability of complex programs.</p><p>Settings:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-pen">Function name, no special characters and white spaces allowed.</li><li class="typcn typcn-plus">Generate new local variables, that will be assigned with the function call.</li><li class="typcn typcn-minus">Delete the associated local variable.</li><li class="typcn typcn-arrow-sorted-down">Data type for the return value; choose one data type.</li><li class="typcn typcn-arrow-sorted-down">Block, that returns a value of the defined data type.</li>
+</ul>Return value:
+<ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right">Value of the defined data type, evaluated in an appropriate block.</li>
+</ul><br><div class="confluence-information-macro confluence-information-macro-warning"><div class="confluence-information-macro-body"><ul><li>The name of a function block has to start with a lower case letter. Special characters are not allowed in a function block name.</li><li>If the function block defines input parameters (local variables), all the parameter slots have to be occupied when calling the function.</li></ul></div></div></div><div id="robProcedures_ifreturn" class="help expert"><h3 id="ProgrammingblocksNAO-»ifblocktobeusedwithinafunction«">»if block to be used within a function«</h3><p>The if statement within a function is of special importance. As the function sequence meets an if statement the validity of the condition will be checked.</p><h4 id="ProgrammingblocksNAO-Ifstatementwithinafunctionwithreturnvalue:">If statement within a function with return value:</h4><ul><li>If the condition evaluates to »true« the rest of the function will be ignored and the function terminates. The second input value of the if statement will be returned. A possibly defined return value of the function will be ignored. The return value data type is determined by the return data type of the function definition.</li><li>If the condition evaluates to »false« the sequence of the function blocks will be continued. The return value of the function will be returned after reaching the end of the function.</li></ul><h4 id="ProgrammingblocksNAO-Ifstatementwithinafunctionwithnoreturnvalue:">If statement within a function with no return value:</h4><ul><li>An if statement within a function without return value has just the if statement as input parameter.</li><li>If the condition evaluates to »true« the rest of the function will be ignored and the function terminates.</li><li>If the condition evaluates to »false« the sequence of the function blocks will be continued.</li></ul><p>Settings and input values:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-sorted-down">Boolean value, possibly evaluated by a condition.</li><li class="typcn typcn-arrow-sorted-down">Value of the specified data type.</li>
+</ul><br><p>Return value:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+Value of the specified data type.
+</ul></div></div></body>

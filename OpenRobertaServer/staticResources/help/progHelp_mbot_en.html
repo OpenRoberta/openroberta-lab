@@ -1,550 +1,301 @@
-<head><title></title><meta http-equiv="content-type" content="text/html; charset=utf-8"></head><body><div id="helpContent"><div class="cell normal" data-type="normal">
-<div class="innerCell">
- <div id="robControls_start" class="help beginner"><br><h3 id="BlockdescriptionsmBot-»Start«">»Start«</h3><p>Each program starts with the »start« block, which cannot be deleted. The first block to be used is connected directly to the »Sequence connection« on the program »start« block.</p><p>Setting options:
+<head><title></title><meta http-equiv="content-type" content="text/html; charset=utf-8"></head><body><div id="helpContent"><div id="robControls_start" class="help beginner"><br><h3 id="BlockdescriptionsmBot-»Start«">»Start«</h3><p>Each program starts with the »start« block, which cannot be deleted. The first block to be used is connected directly to the »Sequence connection« on the program »start« block.</p><p>Setting options:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-plus">Create a new global variable.</li><li class="typcn typcn-minus">Remove the global variable.</li>
 </ul><br>If global variables have been created:
 <ul style="margin-top: 0; margin-bottom: 10px">
-<li class="typcn typcn-pen">Text, name of the variable.</li><li class="typcn typcn-arrow-down">Type of variables.</li><li class="typcn typcn-arrow-left">Value, initial value of the variable.</li>
-</ul><br></div></div>
-</div><div class="cell normal" data-type="normal">
-<div class="innerCell">
-<h2 id="BlockdescriptionsmBot-Action">Action</h2><p>The category »Action« contains all blocks with which your mBot directly performs an action.</p><p>The following blocks belong to the category »Action«:</p><ul style="list-style-type: square;"><li>Blocks to control the motors</li><li>Blocks for output control</li><li>Speaker control blocks</li><li>Blocks for controlling the status lights</li></ul><p>In expert mode, the »Action« category is subdivided into the following subcategories:</p><ul style="list-style-type: square;"><li>»Driving«</li><li>»Move«</li><li>»Display«</li><li>»Sound«</li><li>»Status light«</li></ul></div>
-</div><div class="cell normal" data-type="normal">
-<div class="innerCell">
-<div id="robActions_motorDiff_on_for" class="help beginner"><h3 id="BlockdescriptionsmBot-»Drive...speed%...timems...«">»Drive ... speed % ... time ms ... «</h3><p>With this block you can move your mBot. The mBot then moves at the entered speed for the specified time.</p><p>Settings and input values:
+<li class="typcn typcn-pen">Text, name of the variable.</li><li class="typcn typcn-arrow-sorted-down">Type of variables.</li><li class="typcn typcn-arrow-left">Value, initial value of the variable.</li>
+</ul><br></div><div id="robActions_motorDiff_on_for" class="help beginner"><h3 id="BlockdescriptionsmBot-»Drive...speed%...timems...«">»Drive ... speed % ... time ms ... «</h3><p>With this block you can move your mBot. The mBot then moves at the entered speed for the specified time.</p><p>Settings and input values:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
-<li class="typcn typcn-arrow-down">Option, direction in which your mBot should move, either forward or backward.</li><li class="typcn typcn-arrow-left">Number, tempo with which your mBot should move. Between 1 and 100, where 1 means »very slow« and 100 »very fast«.</li><li class="typcn typcn-arrow-left">Number, time your mBot should move for, in milliseconds.</li>
-</ul><br></div></div>
-</div><div class="cell normal" data-type="normal">
-<div class="innerCell">
-<div id="robActions_motorDiff_on" class="help beginner"><h3 id="BlockdescriptionsmBot-»Drive...speed%...«">»Drive ... speed % ... «</h3><p>With this block you let your mBot drive in the desired direction with the given speed without setting a time. So the robot will keep going if you don't stop it.</p><p>Settings and input values:
+<li class="typcn typcn-arrow-sorted-down">Option, direction in which your mBot should move, either forward or backward.</li><li class="typcn typcn-arrow-left">Number, tempo with which your mBot should move. Between 1 and 100, where 1 means »very slow« and 100 »very fast«.</li><li class="typcn typcn-arrow-left">Number, time your mBot should move for, in milliseconds.</li>
+</ul><br></div><div id="robActions_motorDiff_on" class="help beginner"><h3 id="BlockdescriptionsmBot-»Drive...speed%...«">»Drive ... speed % ... «</h3><p>With this block you let your mBot drive in the desired direction with the given speed without setting a time. So the robot will keep going if you don't stop it.</p><p>Settings and input values:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
-<li class="typcn typcn-arrow-down">Option, direction in which your robot should move.</li><li class="typcn typcn-arrow-left">Number, speed at which your robot should move, between 1 and 100, where 1 means »very slow« and 100 »very fast«.</li>
-</ul></div></div>
-</div><div class="cell normal" data-type="normal">
-<div class="innerCell">
-<div id="robActions_motorDiff_turn_for" class="help beginner"><h3 id="BlockdescriptionsmBot-»Turn...speed%...timems...«">»Turn ... speed % ... time ms ... «</h3><p>With this block you can rotate your robot in the desired direction. The robot rotates at the specified speed for the specified time.</p><p>Settings and input value:
+<li class="typcn typcn-arrow-sorted-down">Option, direction in which your robot should move.</li><li class="typcn typcn-arrow-left">Number, speed at which your robot should move, between 1 and 100, where 1 means »very slow« and 100 »very fast«.</li>
+</ul></div><div id="robActions_motorDiff_turn_for" class="help beginner"><h3 id="BlockdescriptionsmBot-»Turn...speed%...timems...«">»Turn ... speed % ... time ms ... «</h3><p>With this block you can rotate your robot in the desired direction. The robot rotates at the specified speed for the specified time.</p><p>Settings and input value:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
-<li class="typcn typcn-arrow-down">Option, direction in which your robot should rotate.</li><li class="typcn typcn-arrow-down">Number, speed at which your robot should rotate, between 1 and 100, where 1 means »very slow« and 100 »very fast«.</li><li class="typcn typcn-arrow-down">Number, time your robot should spin for, in milliseconds.</li>
-</ul></div></div>
-</div><div class="cell normal" data-type="normal">
-<div class="innerCell">
-<div id="robActions_motorDiff_turn" class="help beginner"><h3 id="BlockdescriptionsmBot-»Turn...speed%...«">»Turn ... speed % ... «</h3><p>With this block you can rotate your robot in the desired direction. The robot rotates at the given speed until you stop it again.</p><p>Settings and input value:
+<li class="typcn typcn-arrow-sorted-down">Option, direction in which your robot should rotate.</li><li class="typcn typcn-arrow-sorted-down">Number, speed at which your robot should rotate, between 1 and 100, where 1 means »very slow« and 100 »very fast«.</li><li class="typcn typcn-arrow-sorted-down">Number, time your robot should spin for, in milliseconds.</li>
+</ul></div><div id="robActions_motorDiff_turn" class="help beginner"><h3 id="BlockdescriptionsmBot-»Turn...speed%...«">»Turn ... speed % ... «</h3><p>With this block you can rotate your robot in the desired direction. The robot rotates at the given speed until you stop it again.</p><p>Settings and input value:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
-<li class="typcn typcn-arrow-down">Option, direction in which your robot should rotate.</li><li class="typcn typcn-arrow-down">Number, speed at which your robot should rotate, between 1 and 100, where 1 means »very slow« and 100 »very fast«.</li>
-</ul></div></div>
-</div><div class="cell normal" data-type="normal">
-<div class="innerCell">
-<div id="robActions_motorDiff_curve_for" class="help beginner"><h3 id="BlockdescriptionsmBot-»Steer...speed%left...speed%right...time...«">»Steer ... speed % left ... speed % right ... time ... «</h3><p>With this block you can let your robot take a curve by setting the speed of the two motors independently of each other. You can also control how long you want your robot to take this turn.</p><p>Settings and input value:
+<li class="typcn typcn-arrow-sorted-down">Option, direction in which your robot should rotate.</li><li class="typcn typcn-arrow-sorted-down">Number, speed at which your robot should rotate, between 1 and 100, where 1 means »very slow« and 100 »very fast«.</li>
+</ul></div><div id="robActions_motorDiff_curve_for" class="help beginner"><h3 id="BlockdescriptionsmBot-»Steer...speed%left...speed%right...time...«">»Steer ... speed % left ... speed % right ... time ... «</h3><p>With this block you can let your robot take a curve by setting the speed of the two motors independently of each other. You can also control how long you want your robot to take this turn.</p><p>Settings and input value:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
-<li class="typcn typcn-arrow-down">Option, direction in which your robot should move.</li><li class="typcn typcn-arrow-left">Number, speed of the left motor, between 1 and 100, where 1 means »very slow« and 100 »very fast«.</li><li class="typcn typcn-arrow-left">Number, speed of the right engine, between 1 and 100, where 1 means »very slow« and 100 »very fast«.</li><li class="typcn typcn-arrow-left">Number, time in milliseconds your robot should take the curve for.</li>
-</ul></div></div>
-</div><div class="cell normal" data-type="normal">
-<div class="innerCell">
-<div id="robActions_motorDiff_curve" class="help beginner"><h3 id="BlockdescriptionsmBot-»Steer...speed%left...speed%right...«">»Steer ... speed % left ... speed % right ... «</h3><p>With this block you can let your robot take a curve by setting the speed of the two motors independently of each other. Your robot will keep driving this curve until you stop it.</p><p>Settings and input value:
+<li class="typcn typcn-arrow-sorted-down">Option, direction in which your robot should move.</li><li class="typcn typcn-arrow-left">Number, speed of the left motor, between 1 and 100, where 1 means »very slow« and 100 »very fast«.</li><li class="typcn typcn-arrow-left">Number, speed of the right engine, between 1 and 100, where 1 means »very slow« and 100 »very fast«.</li><li class="typcn typcn-arrow-left">Number, time in milliseconds your robot should take the curve for.</li>
+</ul></div><div id="robActions_motorDiff_curve" class="help beginner"><h3 id="BlockdescriptionsmBot-»Steer...speed%left...speed%right...«">»Steer ... speed % left ... speed % right ... «</h3><p>With this block you can let your robot take a curve by setting the speed of the two motors independently of each other. Your robot will keep driving this curve until you stop it.</p><p>Settings and input value:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
-<li class="typcn typcn-arrow-down">Option, direction in which your robot should move.</li><li class="typcn typcn-arrow-down">Number, speed of the left motor, between 1 and 100, where 1 means »very slow« and 100 »very fast«.</li><li class="typcn typcn-arrow-down">Number, speed of the right engine, between 1 and 100, where 1 means »very slow« and 100 »very fast«.</li>
-</ul><br></div></div>
-</div><div class="cell normal" data-type="normal">
-<div class="innerCell">
-<div id="robActions_motorDiff_stop" class="help beginner"><h3 id="BlockdescriptionsmBot-»Stop«">»Stop«</h3><p>This block stops your robot immediately.</p></div></div>
-</div><div class="cell normal" data-type="normal">
-<div class="innerCell">
-<div id="robActions_motor_on_for" class="help expert"><h3 id="BlockdescriptionsmBot-»Motor...onspeed%...timems...«[Expert-Block]">»Motor ... on speed % ... time ms ... « <span class="typcn typcn-star"></span></h3><p>With this block you can control a motor connected to your robot. You can also control the speed of the motor and the time the motor should run for.</p><p>Settings and input value:
+<li class="typcn typcn-arrow-sorted-down">Option, direction in which your robot should move.</li><li class="typcn typcn-arrow-sorted-down">Number, speed of the left motor, between 1 and 100, where 1 means »very slow« and 100 »very fast«.</li><li class="typcn typcn-arrow-sorted-down">Number, speed of the right engine, between 1 and 100, where 1 means »very slow« and 100 »very fast«.</li>
+</ul><br></div><div id="robActions_motorDiff_stop" class="help beginner"><h3 id="BlockdescriptionsmBot-»Stop«">»Stop«</h3><p>This block stops your robot immediately.</p></div><div id="robActions_motor_on_for" class="help expert"><h3 id="BlockdescriptionsmBot-»Motor...onspeed%...timems...«[Expert-Block]">»Motor ... on speed % ... time ms ... « <span class="typcn typcn-star"></span></h3><p>With this block you can control a motor connected to your robot. You can also control the speed of the motor and the time the motor should run for.</p><p>Settings and input value:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
-<li class="typcn typcn-arrow-down">Option, motor you want to control.</li><li class="typcn typcn-arrow-left">Number, speed of the motor, between -100 and 100. The motor runs backwards if the speed is a negative number.</li><li class="typcn typcn-arrow-left">Number, time for which the motor should run.</li>
-</ul></div></div>
-</div><div class="cell normal" data-type="normal">
-<div class="innerCell">
-<div id="robActions_motor_on" class="help expert"><h3 id="BlockdescriptionsmBot-»Motor...onspeed%...«[Expert-Block]">»Motor ... on speed % ... « <span class="typcn typcn-star"></span></h3><p>With this block you can control a motor of your robot by controlling its speed. The motor will continue to run at the specified speed until you stop it or change its speed.</p><p>Settings and input value:
+<li class="typcn typcn-arrow-sorted-down">Option, motor you want to control.</li><li class="typcn typcn-arrow-left">Number, speed of the motor, between -100 and 100. The motor runs backwards if the speed is a negative number.</li><li class="typcn typcn-arrow-left">Number, time for which the motor should run.</li>
+</ul></div><div id="robActions_motor_on" class="help expert"><h3 id="BlockdescriptionsmBot-»Motor...onspeed%...«[Expert-Block]">»Motor ... on speed % ... « <span class="typcn typcn-star"></span></h3><p>With this block you can control a motor of your robot by controlling its speed. The motor will continue to run at the specified speed until you stop it or change its speed.</p><p>Settings and input value:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
-<li class="typcn typcn-arrow-down">Option, motor you want to control.</li><li class="typcn typcn-arrow-left">Number, speed of the motor, between -100 and 100. The motor runs backwards if the speed is a negative number.</li>
-</ul></div></div>
-</div><div class="cell normal" data-type="normal">
-<div class="innerCell">
-<div id="robActions_motor_stop" class="help expert"><h3 id="BlockdescriptionsmBot-»Stopmotorport...«[Expert-Block]">»Stop motor port ... « <span class="typcn typcn-star"></span></h3><p>With this block you can stop an engine of your robot.</p><p>Settings and input value:
+<li class="typcn typcn-arrow-sorted-down">Option, motor you want to control.</li><li class="typcn typcn-arrow-left">Number, speed of the motor, between -100 and 100. The motor runs backwards if the speed is a negative number.</li>
+</ul></div><div id="robActions_motor_stop" class="help expert"><h3 id="BlockdescriptionsmBot-»Stopmotorport...«[Expert-Block]">»Stop motor port ... « <span class="typcn typcn-star"></span></h3><p>With this block you can stop an engine of your robot.</p><p>Settings and input value:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
-<li class="typcn typcn-arrow-down">Option, motor you want to stop.</li>
-</ul><br></div></div>
-</div><div class="cell normal" data-type="normal">
-<div class="innerCell">
-<div id="robActions_serial_print" class="help beginner"><h3 id="BlockdescriptionsmBot-»ShowonSerialMonitor«">»Show on Serial Monitor «</h3><p>With this block your robot can output a string via the serial bus. To receive these messages, you need to connect your robot to your computer via USB.</p><p>Settings and input value:
+<li class="typcn typcn-arrow-sorted-down">Option, motor you want to stop.</li>
+</ul><br></div><div id="robActions_serial_print" class="help beginner"><h3 id="BlockdescriptionsmBot-»ShowonSerialMonitor«">»Show on Serial Monitor «</h3><p>With this block your robot can output a string via the serial bus. To receive these messages, you need to connect your robot to your computer via USB.</p><p>Settings and input value:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-left">String, message to be displayed on the Serial Monitor.</li>
-</ul></div></div>
-</div><div class="cell normal" data-type="normal">
-<div class="innerCell">
-<div id="robActions_play_tone" class="help expert"><h3 id="BlockdescriptionsmBot-»PlayfrequencyHz...durationms...«[Expert-Block]">»Play frequency Hz ... duration ms ... « <span class="typcn typcn-star"></span></h3><p>With this block you can get your robot to play a sound from its speaker. You can control the frequency and duration of the sound.</p><p>Settings and input value:
+</ul></div><div id="robActions_play_tone" class="help expert"><h3 id="BlockdescriptionsmBot-»PlayfrequencyHz...durationms...«[Expert-Block]">»Play frequency Hz ... duration ms ... « <span class="typcn typcn-star"></span></h3><p>With this block you can get your robot to play a sound from its speaker. You can control the frequency and duration of the sound.</p><p>Settings and input value:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-left">Number, frequency of the tone, tones are only audible between 20 and 20000 Hz.</li><li class="typcn typcn-arrow-left">Number, duration for which the sound is to be played.</li>
-</ul></div></div>
-</div><div class="cell normal" data-type="normal">
-<div class="innerCell">
-<div id="mbedActions_play_note" class="help beginner"><h3 id="BlockdescriptionsmBot-»Play...note...«">»Play ... note ... «</h3><p>With this block you let your robot play a note for a certain time.</p><p>Settings and input value:
+</ul></div><div id="mbedActions_play_note" class="help beginner"><h3 id="BlockdescriptionsmBot-»Play...note...«">»Play ... note ... «</h3><p>With this block you let your robot play a note for a certain time.</p><p>Settings and input value:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
-<li class="typcn typcn-arrow-down">Option, playing time of the note.</li><li class="typcn typcn-arrow-down">Option, note to be played.</li>
-</ul></div></div>
-</div><div class="cell normal" data-type="normal">
-<div class="innerCell">
-<div id="robActions_led_on" class="help beginner"><h3 id="BlockdescriptionsmBot-»TurnLEDon...colour...«">»Turn LED on ... colour ... «</h3><p>With this block you can control one of the RGB-LEDs of your robot and let the LED light up in one color.</p><p>Settings and input value:
+<li class="typcn typcn-arrow-sorted-down">Option, playing time of the note.</li><li class="typcn typcn-arrow-sorted-down">Option, note to be played.</li>
+</ul></div><div id="robActions_led_on" class="help beginner"><h3 id="BlockdescriptionsmBot-»TurnLEDon...colour...«">»Turn LED on ... colour ... «</h3><p>With this block you can control one of the RGB-LEDs of your robot and let the LED light up in one color.</p><p>Settings and input value:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
-<li class="typcn typcn-arrow-down">Option, position of the LED you want to turn on.</li><li class="typcn typcn-arrow-left">Colour, the color in which the LED should light.</li>
-</ul></div></div>
-</div><div class="cell normal" data-type="normal">
-<div class="innerCell">
-<div id="robActions_led_off" class="help beginner"><h3 id="BlockdescriptionsmBot-»TurnLEDoff...«">»Turn LED off ... «</h3><p>With this block you can switch off one of the LEDs of your robot.</p><p>Settings and input value:
+<li class="typcn typcn-arrow-sorted-down">Option, position of the LED you want to turn on.</li><li class="typcn typcn-arrow-left">Colour, the color in which the LED should light.</li>
+</ul></div><div id="robActions_led_off" class="help beginner"><h3 id="BlockdescriptionsmBot-»TurnLEDoff...«">»Turn LED off ... «</h3><p>With this block you can switch off one of the LEDs of your robot.</p><p>Settings and input value:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
-<li class="typcn typcn-arrow-down">Option, position of the LED you want to turn off.</li>
-</ul></div></div>
-</div><div class="cell normal" data-type="normal">
-<div class="innerCell">
-<h2 id="BlockdescriptionsmBot-Sensors">Sensors</h2><p>The category »Sensors« contains blocks with which you can control and read the sensors of your mBot. The following sensors can be controlled:</p><ul style="list-style-type: square;"><li>Buttons</li><li>Ultrasonic sensor</li><li>Infrared sensor</li><li>Light sensor</li><li>Timer</li></ul><p>A special feature of the sensor blocks in contrast to the action blocks is that many sensor blocks return a »value«. You can recognize the value type returned by a sensor block by the colour of the connector. The connector is the connector with which NEPO blocks can be inserted into other blocks. A detailed description can be found in the NEPO section.</p></div>
-</div><div class="cell normal" data-type="normal">
-<div class="innerCell">
-<div id="robSensors_key_getSample" class="help beginner"><h3 id="BlockdescriptionsmBot-»Buttonpressed?«">»Button pressed? «</h3><p>With this block you can check the status of the button of your mBot.</p><p>Return value:
+<li class="typcn typcn-arrow-sorted-down">Option, position of the LED you want to turn off.</li>
+</ul></div><div id="robSensors_key_getSample" class="help beginner"><h3 id="BlockdescriptionsmBot-»Buttonpressed?«">»Button pressed? «</h3><p>With this block you can check the status of the button of your mBot.</p><p>Return value:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-right">Logical value, »true« if the key is pressed, otherwise »false«.</li>
-</ul></div></div>
-</div><div class="cell normal" data-type="normal">
-<div class="innerCell">
-<div id="robSensors_ultrasonic_getSample" class="help beginner"><h3 id="BlockdescriptionsmBot-»GetdistancecmultrasonicsensorPort...«">»Get distance cm ultrasonic sensor Port ... «</h3><p>With this block you can check your distance sensor. It measures the distance to the next obstacle in front of the robot by emitting ultrasonic waves and measures how long they take to return.</p><p>Settings and input value:
+</ul></div><div id="robSensors_ultrasonic_getSample" class="help beginner"><h3 id="BlockdescriptionsmBot-»GetdistancecmultrasonicsensorPort...«">»Get distance cm ultrasonic sensor Port ... «</h3><p>With this block you can check your distance sensor. It measures the distance to the next obstacle in front of the robot by emitting ultrasonic waves and measures how long they take to return.</p><p>Settings and input value:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
-<li class="typcn typcn-arrow-down">Option, port to which the ultrasonic sensor is connected.</li>
+<li class="typcn typcn-arrow-sorted-down">Option, port to which the ultrasonic sensor is connected.</li>
 </ul><br><p>Return value:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-right">Number, distance to the next obstacle, in centimeters.</li>
-</ul><br></div></div>
-</div><div class="cell normal" data-type="normal">
-<div class="innerCell">
-<div id="robSensors_infrared_getSample" class="help beginner"><h3 id="BlockdescriptionsmBot-»GetLineinfraredsensorPort......«">»Get Line infrared sensor Port ... ...«</h3><p>With this block you can query the state of the infrared sensor. This sensor measures the shading of the background by infrared light.</p><p>Settings and input value:
+</ul><br></div><div id="robSensors_infrared_getSample" class="help beginner"><h3 id="BlockdescriptionsmBot-»GetLineinfraredsensorPort......«">»Get Line infrared sensor Port ... ...«</h3><p>With this block you can query the state of the infrared sensor. This sensor measures the shading of the background by infrared light.</p><p>Settings and input value:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
-<li class="typcn typcn-arrow-down">Option, port to which the sensor is connected.</li><li class="typcn typcn-arrow-down">Option, position of the sensor to be checked.</li>
+<li class="typcn typcn-arrow-sorted-down">Option, port to which the sensor is connected.</li><li class="typcn typcn-arrow-sorted-down">Option, position of the sensor to be checked.</li>
 </ul><br>Return value:
 <ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-right">Logical value, "true" if the background is dark, otherwise "false".</li>
-</ul></div></div>
-</div><div class="cell normal" data-type="normal">
-<div class="innerCell">
-<div id="robSensors_light_getSample" class="help beginner"><h3 id="BlockdescriptionsmBot-»Getlight%lightsensorPort...«">»Get light % light sensor Port ... «</h3><p>With this block you can check the state of the light sensor. This sensor can measure the brightness of the environment.</p><p>Settings and input value:
+</ul></div><div id="robSensors_light_getSample" class="help beginner"><h3 id="BlockdescriptionsmBot-»Getlight%lightsensorPort...«">»Get light % light sensor Port ... «</h3><p>With this block you can check the state of the light sensor. This sensor can measure the brightness of the environment.</p><p>Settings and input value:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
-<li class="typcn typcn-arrow-down">Option, port to which the light sensor is connected.</li>
+<li class="typcn typcn-arrow-sorted-down">Option, port to which the light sensor is connected.</li>
 </ul>Return value:
 <ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-right">Number, brightness of the ambient light, between 1 and 100, where 1 means »dark« and 100 »bright«.</li>
-</ul><br></div></div>
-</div><div class="cell normal" data-type="normal">
-<div class="innerCell">
-<div id="robSensors_timer_getSample" class="help beginner"><h3 id="BlockdescriptionsmBot-»Getvaluemstimer...«">»Get value ms timer ... «</h3><p>With this block you can display the value of a timer.</p><p>Settings and input value:
+</ul><br></div><div id="robSensors_timer_getSample" class="help beginner"><h3 id="BlockdescriptionsmBot-»Getvaluemstimer...«">»Get value ms timer ... «</h3><p>With this block you can display the value of a timer.</p><p>Settings and input value:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
-<li class="typcn typcn-arrow-down">Option, number of the timekeeper you want to query</li>
+<li class="typcn typcn-arrow-sorted-down">Option, number of the timekeeper you want to query</li>
 </ul>Return value:
 <ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-right">Number, time since last reset or program start, in milliseconds.</li>
-</ul><div class="confluence-information-macro confluence-information-macro-information"><div class="confluence-information-macro-body"><p>Timer 1 is started automatically at program start, it does not have to be started manually at the beginning.</p></div></div></div></div>
-</div><div class="cell normal" data-type="normal">
-<div class="innerCell">
-<div id="robSensors_timer_reset" class="help beginner"><h3 id="BlockdescriptionsmBot-»Resettimer...«">»Reset timer ... «</h3><p>With this block you can reset a timer or start a new one if the selected number has not measured any time before.</p><p>Settings and input value:
+</ul><div class="confluence-information-macro confluence-information-macro-information"><div class="confluence-information-macro-body"><p>Timer 1 is started automatically at program start, it does not have to be started manually at the beginning.</p></div></div></div><div id="robSensors_timer_reset" class="help beginner"><h3 id="BlockdescriptionsmBot-»Resettimer...«">»Reset timer ... «</h3><p>With this block you can reset a timer or start a new one if the selected number has not measured any time before.</p><p>Settings and input value:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
-<li class="typcn typcn-arrow-down">Option, number of the timekeeper to be reset or started.</li>
-</ul></div></div>
-</div><div class="cell normal" data-type="normal">
-<div class="innerCell">
-<h2 id="BlockdescriptionsmBot-Control">Control</h2><p>The category "control" includes blocks with which the program sequence can be controlled. The category includes the following blocks:</p><ul><li>if do</li><li>if do else</li><li>repeat indefinitely</li><li>repeat n times</li><li>wait</li><li>wait until</li><li>repeat while/until <span class="typcn typcn-star"></span></li><li>for each item in list <span class="typcn typcn-star"></span></li><li>count with from to <span class="typcn typcn-star"></span></li><li>break out/continue with next iteration of loop <span class="typcn typcn-star"></span></li></ul></div>
-</div><div class="cell normal" data-type="normal">
-<div class="innerCell">
-<div id="robControls_if" class="help beginner"><h3 id="BlockdescriptionsmBot-»ifdo«"><strong>»if do«<br></strong></h3><p>With the block »if do« you can selectively trigger actions to be executed by your robot. The »if do« block therefore requires a logical value as an input parameter, the condition. Only if the condition of the »if« statement is true, the inserted block will be executed. In a nested »if do« block, if a further distinction was added, the first »if« condition is queried. If it is not fulfilled (condition = false), the second »else if« condition will be checked. Also this second condition requires a logical value as an input parameter.</p><p>The conditions may arbitrarily be expanded by clicking the "+" plus symbol. The "-" minus symbol reduces the block.</p><p>Settings and input values:
+<li class="typcn typcn-arrow-sorted-down">Option, number of the timekeeper to be reset or started.</li>
+</ul></div><div id="robControls_if" class="help beginner"><h3 id="BlockdescriptionsmBot-»ifdo«"><strong>»if do«<br></strong></h3><p>With the block »if do« you can selectively trigger actions to be executed by your robot. The »if do« block therefore requires a logical value as an input parameter, the condition. Only if the condition of the »if« statement is true, the inserted block will be executed. In a nested »if do« block, if a further distinction was added, the first »if« condition is queried. If it is not fulfilled (condition = false), the second »else if« condition will be checked. Also this second condition requires a logical value as an input parameter.</p><p>The conditions may arbitrarily be expanded by clicking the "+" plus symbol. The "-" minus symbol reduces the block.</p><p>Settings and input values:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-plus">Insert an additional condition.</li><li class="typcn typcn-minus">Delete the last condition.</li><li class="typcn typcn-arrow-left">Boolean value, »true« or »false«.</li><li class="normalBullet">Blocks that will be executed</li>
-</ul></div></div>
-</div><div class="cell normal" data-type="normal">
-<div class="innerCell">
-<div id="robControls_ifElse" class="help beginner"><h3 id="BlockdescriptionsmBot-»ifdoelse«">»if do else«</h3><p>With the block »if do else« you can selectively trigger actions which are executed by your robot. The »if do then« block therefore requires a logical value as an input parameter. If the condition in »if« is true the  inserted block will be executed, otherwise (condition is not fulfilled = false) the block connected to the »else« statement will be executed. In a nested »if do else« block with further distinctions added, the first  »if« condition is queried. If it is not true, the second condition »else if«  is checked. Also the second condition requires a logical value as an input parameter. Only when both conditions are not true, the block which is inserted at the »else« statement will be executed.</p><p>The conditions may arbitrarily be expanded by clicking the "+" plus symbol. The "-" minus symbol reduces the block.</p><p>Settings:
+</ul></div><div id="robControls_ifElse" class="help beginner"><h3 id="BlockdescriptionsmBot-»ifdoelse«">»if do else«</h3><p>With the block »if do else« you can selectively trigger actions which are executed by your robot. The »if do then« block therefore requires a logical value as an input parameter. If the condition in »if« is true the  inserted block will be executed, otherwise (condition is not fulfilled = false) the block connected to the »else« statement will be executed. In a nested »if do else« block with further distinctions added, the first  »if« condition is queried. If it is not true, the second condition »else if«  is checked. Also the second condition requires a logical value as an input parameter. Only when both conditions are not true, the block which is inserted at the »else« statement will be executed.</p><p>The conditions may arbitrarily be expanded by clicking the "+" plus symbol. The "-" minus symbol reduces the block.</p><p>Settings:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-plus">Insert an additional if-do-else condition.</li><li class="typcn typcn-minus">Delete the last if-do-else condition.</li><li class="typcn typcn-arrow-left">Boolean value, »true« or »false«.</li><li class="normalBullet">Do blocks that will be executed if the according condition evaluates to »true«.</li><li class="normalBullet">Else blocks that will be executed if the according condition evaluates to »false«.</li>
-</ul></div></div>
-</div><div class="cell normal" data-type="normal">
-<div class="innerCell">
-<div id="robControls_loopForever" class="help beginner"><h3 id="BlockdescriptionsmBot-»repeatindefinitely«">»repeat indefinitely«</h3><p>With the block »repeat indefinitely« you can endlessly run the blocks on your robot. All blocks which are within the »repeat indefinitely« block will be executed endlessly. The blocks are applied sequentially from top to bottom. Once the last block has been executed, the program repeats with the first block again. Therefore, this block is also called »loop«.</p><p>Input:
+</ul></div><div id="robControls_loopForever" class="help beginner  notWedo"><h3 id="BlockdescriptionsmBot-»repeatindefinitely«">»repeat indefinitely«</h3><p>With the block »repeat indefinitely« you can endlessly run the blocks on your robot. All blocks which are within the »repeat indefinitely« block will be executed endlessly. The blocks are applied sequentially from top to bottom. Once the last block has been executed, the program repeats with the first block again. Therefore, this block is also called »loop«.</p><p>Input:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="normalBullet">Blocks to be repeated indefinitely.</li>
-</ul><br></div></div>
-</div><div class="cell normal" data-type="normal">
-<div class="innerCell">
-<div id="controls_repeat_ext" class="help beginner"><h3 id="BlockdescriptionsmBot-»repeatntimes«">»repeat n times«</h3><p>With the block »repeat« you can run other block as many times as you like. All blocks in the »repeat« block will be executed as often as defined in the entry field. The blocks are applied sequentially from top to bottom. Once the last block has been executed, the program repeats with the first block again. Therefore, this block is also called »loop«.</p><div class="confluence-information-macro confluence-information-macro-information"><div class="confluence-information-macro-body"><p>Only integer values can be entered.</p></div></div><p>Settings and input:
+</ul><br></div><div id="controls_repeat_ext" class="help beginner"><h3 id="BlockdescriptionsmBot-»repeatntimes«">»repeat n times«</h3><p>With the block »repeat« you can run other block as many times as you like. All blocks in the »repeat« block will be executed as often as defined in the entry field. The blocks are applied sequentially from top to bottom. Once the last block has been executed, the program repeats with the first block again. Therefore, this block is also called »loop«.</p><div class="confluence-information-macro confluence-information-macro-information"><div class="confluence-information-macro-body"><p>Only integer values can be entered.</p></div></div><p>Settings and input:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-left">Number that indicates how often the contained blocks will be repeated.</li><li class="normalBullet">Blocks to be repeated as often as defined.</li>
-</ul><br></div></div>
-</div><div class="cell normal" data-type="normal">
-<div class="innerCell">
-<div id="robControls_wait_time" class="help beginner"><h3 id="BlockdescriptionsmBot-»wait«">»wait«</h3><p>With the block »wait« you can "pause" your program at the point where you inserted the »wait« block. Your program will then remain for the specified duration at this point. After the specified time the next block will be executed. For example you can display text in the screen of your robot for exactly the time you specified in the »wait« block.</p><p>Settings and input values:
+</ul><br></div><div id="robControls_wait_time" class="help beginner"><h3 id="BlockdescriptionsmBot-»wait«">»wait«</h3><p>With the block »wait« you can "pause" your program at the point where you inserted the »wait« block. Your program will then remain for the specified duration at this point. After the specified time the next block will be executed. For example you can display text in the screen of your robot for exactly the time you specified in the »wait« block.</p><p>Settings and input values:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
-<li class="typcn typcn-arrow-down">Number, waiting time in milliseconds.</li>
-</ul></div></div>
-</div><div class="cell normal" data-type="normal">
-<div class="innerCell">
-<div id="robControls_wait_for" class="help beginner"><h3 id="BlockdescriptionsmBot-»waituntil«">»wait until«</h3><p>With the block »wait until« you can "stop" your program at the point you insert the »wait until« block. Your program then waits until the condition is true. The »wait until« block you can extended by click on "+" symbol. Your program then waits until (at least) one of the condition of your »wait until« block is true.</p><p>Settings:
+<li class="typcn typcn-arrow-sorted-down">Number, waiting time in milliseconds.</li>
+</ul></div><div id="robControls_wait_for" class="help beginner"><h3 id="BlockdescriptionsmBot-»waituntil«">»wait until«</h3><p>With the block »wait until« you can "stop" your program at the point you insert the »wait until« block. Your program then waits until the condition is true. The »wait until« block you can extended by click on "+" symbol. Your program then waits until (at least) one of the condition of your »wait until« block is true.</p><p>Settings:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-plus">Add a new condition.</li><li class="typcn typcn-pen">Delete the last condition.</li><li class="typcn typcn-arrow-left">Boolean value, »true« or »false«.</li>
-</ul></div></div>
-</div><div class="cell normal" data-type="normal">
-<div class="innerCell">
-<div id="controls_flow_statements" class="help expert"><h3 id="BlockdescriptionsmBot-»breakout/continuewithnextiterationofloop«[Expert-block]">»break out/continue with next iteration of loop« <span class="typcn typcn-star"></span></h3><p>With the block »break out/continue with next iteration of loop« a loop can be terminated ahead of schedule. As soon as the block is entered within a sequence of blocks, all further blocks up to the end of the loop will be ignored.</p><p>Settings:
+</ul></div><div id="controls_flow_statements" class="help expert"><h3 id="BlockdescriptionsmBot-»breakout/continuewithnextiterationofloop«[Expert-block]">»break out/continue with next iteration of loop« <span class="typcn typcn-star"></span></h3><p>With the block »break out/continue with next iteration of loop« a loop can be terminated ahead of schedule. As soon as the block is entered within a sequence of blocks, all further blocks up to the end of the loop will be ignored.</p><p>Settings:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
-<li class="typcn typcn-arrow-down">Type of breaking behavior, »break out« or »continue with next iteration«.</li>
-</ul></div></div>
-</div><div class="cell normal" data-type="normal">
-<div class="innerCell">
-<div id="robControls_for" class="help expert"><h3 id="BlockdescriptionsmBot-»countwithfromto«[Expert-block]">»count with from to« <span class="typcn typcn-star"></span></h3><p>With the block »count with from to« you can run other block as many times as you like. All blocks in the »count with from to« block will be executed as long as the counting is in progress. The blocks are applied sequentially from top to bottom. Once the last block has been executed, the program repeats with the first block again if the counting is in progress. The last parameter declares the step width for counting.</p><p>Settings:
+<li class="typcn typcn-arrow-sorted-down">Type of breaking behavior, »break out« or »continue with next iteration«.</li>
+</ul></div><div id="robControls_for" class="help expert"><h3 id="BlockdescriptionsmBot-»countwithfromto«[Expert-block]">»count with from to« <span class="typcn typcn-star"></span></h3><p>With the block »count with from to« you can run other block as many times as you like. All blocks in the »count with from to« block will be executed as long as the counting is in progress. The blocks are applied sequentially from top to bottom. Once the last block has been executed, the program repeats with the first block again if the counting is in progress. The last parameter declares the step width for counting.</p><p>Settings:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
-<li class="typcn typcn-pen">Variable, name of free choice; numbers of the counter will be delivered one after the other to the variable. </li><li class="typcn typcn-arrow-left">Number, initial value of the counter.</li><li class="typcn typcn-arrow-left">Number, final value of the counter. As the counter exceeds this value the loop ends.</li><li class="typcn typcn-arrow-left">Number, defining the increment. The variable value will increase by this amount after every loop cycle.</li><li class="typcn typcn-arrow-down">Blocks that will be executed in every loop cycle.</li>
-</ul></div></div>
-</div><div class="cell normal" data-type="normal">
-<div class="innerCell">
-<div id="robControls_forEach" class="help expert"><h3 id="BlockdescriptionsmBot-»foreachiteminlist«[Expert-block]">»for each item in list« <span class="typcn typcn-star"></span></h3><p>With the block »for each item in list« all list items will successively be bound to a variable. The variable can be used within the loop. With each loop cycle the next item of the list will be bound until all list elements have been processed.</p><p>Settings and input value:
+<li class="typcn typcn-pen">Variable, name of free choice; numbers of the counter will be delivered one after the other to the variable. </li><li class="typcn typcn-arrow-left">Number, initial value of the counter.</li><li class="typcn typcn-arrow-left">Number, final value of the counter. As the counter exceeds this value the loop ends.</li><li class="typcn typcn-arrow-left">Number, defining the increment. The variable value will increase by this amount after every loop cycle.</li><li class="typcn typcn-arrow-sorted-down">Blocks that will be executed in every loop cycle.</li>
+</ul></div><div id="robControls_forEach" class="help expert  notWedo notBob3"><h3 id="BlockdescriptionsmBot-»foreachiteminlist«[Expert-block]">»for each item in list« <span class="typcn typcn-star"></span></h3><p>With the block »for each item in list« all list items will successively be bound to a variable. The variable can be used within the loop. With each loop cycle the next item of the list will be bound until all list elements have been processed.</p><p>Settings and input value:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
-<li class="typcn typcn-arrow-down">Type of list elements, »Number«, »String«, »Boolean«, »Colour«, »Connection«</li><li class="typcn typcn-pen">Variable, name of free choice; list elements will be delivered one after the other to the variable.</li><li class="typcn typcn-arrow-left">List  that contains elements of the desired type. If the list elements are not of the correct type then the list will not fit to the input slot.</li><li class="normalBullet">Blocks which will be executed as often as there are elements in the list.</li>
-</ul></div></div>
-</div><div class="cell normal" data-type="normal">
-<div class="innerCell">
-<div id="controls_whileUntil" class="help expert"><h3 id="BlockdescriptionsmBot-»repeatwhile/until«[Expert-block]">»repeat while/until« <span class="typcn typcn-star"></span></h3><p>With the block »repeat while/until« you can run other block as many times as you like. All blocks in the »repeat while/until« block will be executed as long as the condition in the entry field is true. The blocks are applied sequentially from top to bottom. Once the last block has been executed, the program repeats with the first block again if the condition is still true. Therefore, this block is also called »conditional loop«.</p><p>Settings and input values:
+<li class="typcn typcn-arrow-sorted-down">Type of list elements, »Number«, »String«, »Boolean«, »Colour«, »Connection«</li><li class="typcn typcn-pen">Variable, name of free choice; list elements will be delivered one after the other to the variable.</li><li class="typcn typcn-arrow-left">List  that contains elements of the desired type. If the list elements are not of the correct type then the list will not fit to the input slot.</li><li class="normalBullet">Blocks which will be executed as often as there are elements in the list.</li>
+</ul></div><div id="controls_whileUntil" class="help expert"><h3 id="BlockdescriptionsmBot-»repeatwhile/until«[Expert-block]">»repeat while/until« <span class="typcn typcn-star"></span></h3><p>With the block »repeat while/until« you can run other block as many times as you like. All blocks in the »repeat while/until« block will be executed as long as the condition in the entry field is true. The blocks are applied sequentially from top to bottom. Once the last block has been executed, the program repeats with the first block again if the condition is still true. Therefore, this block is also called »conditional loop«.</p><p>Settings and input values:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
-<li class="typcn typcn-arrow-down">Option, »while« or »until«, defining the type of the conditional repetition.</li><li class="typcn typcn-arrow-left">Boolean value, »true« or »false«.</li><li class="normalBullet">Blocks that will be repeated while/until the condition evaluates to »true«. </li>
-</ul></div></div>
-</div><div class="cell normal" data-type="normal">
-<div class="innerCell">
-<h2 id="BlockdescriptionsmBot-Logic">Logic</h2><p>With the »logic« blocks you can "create" conditions. With this condition you can interrelate states, values, and events with each other.</p><p>The following »logic« blocks are available at NEPO :</p><ul><li>comparison</li><li>and/or</li><li>not <span class="typcn typcn-star"></span></li><li>true/false</li><li>null <span class="typcn typcn-star"></span></li><li>test <span class="typcn typcn-star"></span></li></ul></div>
-</div><div class="cell normal" data-type="normal">
-<div class="innerCell">
-<div id="logic_compare" class="help beginner"><h3 id="BlockdescriptionsmBot-»comparison«">»comparison«</h3><p>With the block »comparison« you can compare different parameters of the same type (number, color, logical value, text). This block can only be used in conjunction with another block which requires a logical value as an input parameter.</p><p>Settings and input values:
+<li class="typcn typcn-arrow-sorted-down">Option, »while« or »until«, defining the type of the conditional repetition.</li><li class="typcn typcn-arrow-left">Boolean value, »true« or »false«.</li><li class="normalBullet">Blocks that will be repeated while/until the condition evaluates to »true«. </li>
+</ul></div><div id="logic_compare" class="help beginner"><h3 id="BlockdescriptionsmBot-»comparison«">»comparison«</h3><p>With the block »comparison« you can compare different parameters of the same type (number, color, logical value, text). This block can only be used in conjunction with another block which requires a logical value as an input parameter.</p><p>Settings and input values:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
-<li class="typcn typcn-arrow-left">Value for the left hand side.</li><li class="typcn typcn-arrow-down">Comparison, select one of =, ≠, &lt;, ≤, &gt;, ≥</li><li class="typcn typcn-arrow-left">Value for the right hand side.</li>
+<li class="typcn typcn-arrow-left">Value for the left hand side.</li><li class="typcn typcn-arrow-sorted-down">Comparison, select one of =, ≠, &lt;, ≤, &gt;, ≥</li><li class="typcn typcn-arrow-left">Value for the right hand side.</li>
 </ul><p style="text-align: left;">Return value:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-right">Boolean value, »true« or »false«.</li>
-</ul></div></div>
-</div><div class="cell normal" data-type="normal">
-<div class="innerCell">
-<div id="logic_operation" class="help beginner"><h3 id="BlockdescriptionsmBot-»and/or«">»and/or«</h3><p>With the block »and/or« you can interrelate logical values with each other. The »and/or« block with the setting "and" will be true only if both logical parameters are "'true"'. If the block has the setting »or« it is sufficient if one of the two parameters is "true", so that the »and/or« block will return true.</p><p>Settings:
+</ul></div><div id="logic_operation" class="help beginner"><h3 id="BlockdescriptionsmBot-»and/or«">»and/or«</h3><p>With the block »and/or« you can interrelate logical values with each other. The »and/or« block with the setting "and" will be true only if both logical parameters are "'true"'. If the block has the setting »or« it is sufficient if one of the two parameters is "true", so that the »and/or« block will return true.</p><p>Settings:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
-<li class="typcn typcn-arrow-left">Boolean value on the left hand side.</li><li class="typcn typcn-arrow-down">Boolean function, »and« or »or«.</li><li class="typcn typcn-arrow-left">Boolean value on the right hand side.</li>
+<li class="typcn typcn-arrow-left">Boolean value on the left hand side.</li><li class="typcn typcn-arrow-sorted-down">Boolean function, »and« or »or«.</li><li class="typcn typcn-arrow-left">Boolean value on the right hand side.</li>
 </ul>Return value:
 <ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-right">Boolean value »true« or»false«.</li>
-</ul></div></div>
-</div><div class="cell normal" data-type="normal">
-<div class="innerCell">
-<div id="logic_boolean" class="help beginner"><h3 id="BlockdescriptionsmBot-»true/false«">»true/false«</h3><p>With the block »true/false« you can return either the logical value »true« or »false« to another block.</p><p>Settings:
+</ul></div><div id="logic_boolean" class="help beginner"><h3 id="BlockdescriptionsmBot-»true/false«">»true/false«</h3><p>With the block »true/false« you can return either the logical value »true« or »false« to another block.</p><p>Settings:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
-<li class="typcn typcn-arrow-down">Boolean value, make your choice.</li>
+<li class="typcn typcn-arrow-sorted-down">Boolean value, make your choice.</li>
 </ul>Return value:
 <ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-right">Boolean value, »true« or »false«.</li>
-</ul></div></div>
-</div><div class="cell normal" data-type="normal">
-<div class="innerCell">
-<div id="logic_negate" class="help expert"><h3 id="BlockdescriptionsmBot-»not«[Expert-block]">»not« <span class="typcn typcn-star"></span></h3><p>Using the »not« lets you invert a logical value and pass this value to another block.</p><p>Input value:
+</ul></div><div id="logic_negate" class="help expert"><h3 id="BlockdescriptionsmBot-»not«[Expert-block]">»not« <span class="typcn typcn-star"></span></h3><p>Using the »not« lets you invert a logical value and pass this value to another block.</p><p>Input value:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-left">Boolean value, to be inverted.</li>
 </ul>Return value:
 <ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-right">Boolean value, »true« or »false«; result of inverting.</li>
-</ul></div></div>
-</div><div class="cell normal" data-type="normal">
-<div class="innerCell">
-<div id="logic_ternary" class="help expert"><h3 id="BlockdescriptionsmBot-»test«[Expert-block]">»test« <span class="typcn typcn-star"></span></h3><p>Using the »test« block will perform a test and returns a value which depends on the test result.</p><p>Input values:
+</ul></div><div id="logic_ternary" class="help expert notWedo"><h3 id="BlockdescriptionsmBot-»test«[Expert-block]">»test« <span class="typcn typcn-star"></span></h3><p>Using the »test« block will perform a test and returns a value which depends on the test result.</p><p>Input values:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-left">Boolean value for the test; if no input value is given "true" will be assumed.</li><li class="typcn typcn-arrow-left">Arbitrary value, evaluated by a block.</li><li class="typcn typcn-arrow-left">Arbitrary value, evaluated by a block.</li>
 </ul>Return value:
 <ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-right">Value of arbitrary type.</li>
-</ul></div></div>
-</div><div class="cell normal" data-type="normal">
-<div class="innerCell">
-<div id="logic_null" class="help expert"><h3 id="BlockdescriptionsmBot-»null«[Expert-block]">»null« <span class="typcn typcn-star"></span></h3><p style="text-align: left;">The block »null« is a place holder for an input value that is not yet specified. If for instance a new connection variable has been created and is not yet bound, the initial value of this connection will be set to »null«.</p><p style="text-align: left;">Return value::
+</ul></div><div id="logic_null" class="help expert"><h3 id="BlockdescriptionsmBot-»null«[Expert-block]">»null« <span class="typcn typcn-star"></span></h3><p style="text-align: left;">The block »null« is a place holder for an input value that is not yet specified. If for instance a new connection variable has been created and is not yet bound, the initial value of this connection will be set to »null«.</p><p style="text-align: left;">Return value::
 </p><ul style="margin-top: 0; margin-bottom: 10px">
-<li class="typcn typcn-arrow-down">Boolean value, »null«.</li>
-</ul></div></div>
-</div><div class="cell normal" data-type="normal">
-<div class="innerCell">
-<h2 id="BlockdescriptionsmBot-Math">Math</h2><p>Using »Math« blocks offers calculations and parameter settings.</p><p>The following »Math« blocks are available at NEPO:</p><ul><li>parameter</li><li>calculating</li><li>mathematical function <span class="typcn typcn-star"></span></li><li>trigonometric function <span class="typcn typcn-star"></span></li><li>constant <span class="typcn typcn-star"></span></li><li>number property <span class="typcn typcn-star"></span></li><li>change by ...  <span class="typcn typcn-star"></span></li><li>round <span class="typcn typcn-star"></span></li><li>list evaluation  <span class="typcn typcn-star"></span></li><li>remainder of <span class="typcn typcn-star"></span></li><li>constrain <span class="typcn typcn-star"></span></li><li>random integer <span class="typcn typcn-star"></span></li><li>random fraction <span class="typcn typcn-star"></span></li></ul></div>
-</div><div class="cell normal" data-type="normal">
-<div class="innerCell">
-<div id="math_number" class="help beginner"><h3 id="BlockdescriptionsmBot-»parameter«">»parameter«</h3><p>With the block »parameter« you can send numbers to another block.</p><p>  Settings and input values:
+<li class="typcn typcn-arrow-sorted-down">Boolean value, »null«.</li>
+</ul></div><div id="math_number" class="help beginner"><h3 id="BlockdescriptionsmBot-»parameter«">»parameter«</h3><p>With the block »parameter« you can send numbers to another block.</p><p>  Settings and input values:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-left">Number</li>
 </ul><p style="text-align: left;">Return value:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-right"> Number</li>
-</ul><br></div></div>
-</div><div class="cell normal" data-type="normal">
-<div class="innerCell">
-<div id="math_arithmetic" class="help beginner"><h3 id="BlockdescriptionsmBot-»calculating«">»calculating«</h3><p>With the block »calculating« you can sum up, subtract, multiply, and divide numbers. This block can only be used in conjunction with another block which requires a number as an input parameter.</p><p>Settings and input values:
+</ul><br></div><div id="math_arithmetic" class="help beginner"><h3 id="BlockdescriptionsmBot-»calculating«">»calculating«</h3><p>With the block »calculating« you can sum up, subtract, multiply, and divide numbers. This block can only be used in conjunction with another block which requires a number as an input parameter.</p><p>Settings and input values:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
-<li class="typcn typcn-arrow-left"> Number, first number on the left you want to calculate with.</li><li class="typcn typcn-arrow-down">Option, mathematical operator, choose one of +, −, ×, ÷, ^.</li><li class="typcn typcn-arrow-left">Number, second number on the right you want to calculate with.</li>
+<li class="typcn typcn-arrow-left"> Number, first number on the left you want to calculate with.</li><li class="typcn typcn-arrow-sorted-down">Option, mathematical operator, choose one of +, −, ×, ÷, ^.</li><li class="typcn typcn-arrow-left">Number, second number on the right you want to calculate with.</li>
 </ul>Return value:
 <ul style="margin-top: 0; margin-bottom: 10px">
-<li class="typcn typcn-arrow-down">Number, result of the calculation.</li>
-</ul></div></div>
-</div><div class="cell normal" data-type="normal">
-<div class="innerCell">
-<div class="confluence-information-macro confluence-information-macro-note"><p class="title">Degree and Radiant Measurements</p><div class="confluence-information-macro-body"><p>In standard blocks of Open Roberta, especially along with the actions »turn… by x degree« and in the sensor block »get angle gyrosensor …« the angles will be represented in degree (0° ... 360°). The unit is called degree and will be represented by the Symbol °. 90° represents a right angle, 180° a half circle or a turn around, and 360° represents a full circle.</p><p>The trigonometric functions in the expert mode, like sin, cos, tan, ... the input parameters will be expected to be given in radian measure. The unit is called RAD. A right angle is represented by π/2, the half circle or turn around is π, and the full cirle is 2π.</p><p>To convert degree (°) into radian measure (RAD) or vice versa  you may use the following calculations:</p><ul><li>degree to radian measure: (x degree / 180) * π</li><li>radian measure to degree: (x RAD * 180) / π</li></ul></div></div></div>
-</div><div class="cell normal" data-type="normal">
-<div class="innerCell">
-<div id="math_single" class="help expert"><h3 id="BlockdescriptionsmBot-»mathematicalfunction«[Expert-block]">»mathematical function« <span class="typcn typcn-star"></span></h3><p>With the block »mathematical function« some elementary mathematical functions may be calculated. Available functions are »square root«, »absolute«, »invert« (multiply by -1), »ln« (natural logarithm), »log10« (decadic logarithm), »e^« (exponential function), »10^« (base 10 exponent)</p><p>Settings and input value:
+<li class="typcn typcn-arrow-sorted-down">Number, result of the calculation.</li>
+</ul></div><div id="math_single" class="help expert"><h3 id="BlockdescriptionsmBot-»mathematicalfunction«[Expert-block]">»mathematical function« <span class="typcn typcn-star"></span></h3><p>With the block »mathematical function« some elementary mathematical functions may be calculated. Available functions are »square root«, »absolute«, »invert« (multiply by -1), »ln« (natural logarithm), »log10« (decadic logarithm), »e^« (exponential function), »10^« (base 10 exponent)</p><p>Settings and input value:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
-<li class="typcn typcn-arrow-down">Option, mathematical function, choose one.</li><li class="typcn typcn-arrow-left">Number to apply the function to.</li>
+<li class="typcn typcn-arrow-sorted-down">Option, mathematical function, choose one.</li><li class="typcn typcn-arrow-left">Number to apply the function to.</li>
 </ul>Return value:
 <ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-right"> Number, result of the function application.</li>
-</ul></div></div>
-</div><div class="cell normal" data-type="normal">
-<div class="innerCell">
-<div id="math_trig" class="help expert"><h3 id="BlockdescriptionsmBot-»trigonometricfunctions«[Expert-block]">»trigonometric functions« <span class="typcn typcn-star"></span></h3><p>With the block »trigonometric function« sine, cosine, tangent and their respective revers functions can be calculated. Input values are expected in radian measure(see hint above).</p><p>Settings and input value:
+</ul></div><div id="math_trig" class="help expert"><h3 id="BlockdescriptionsmBot-»trigonometricfunctions«[Expert-block]">»trigonometric functions« <span class="typcn typcn-star"></span></h3><p>With the block »trigonometric function« sine, cosine, tangent and their respective revers functions can be calculated. Input values are expected in radian measure(see hint above).</p><p>Settings and input value:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
-<li class="typcn typcn-arrow-down">Option, trigonometric function to choose from.</li><li class="typcn typcn-arrow-left">Number, in radian measure.</li>
+<li class="typcn typcn-arrow-sorted-down">Option, trigonometric function to choose from.</li><li class="typcn typcn-arrow-left">Number, in radian measure.</li>
 </ul><br><p>Return value:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-right">Number, result of the trigonometric calculation.</li>
-</ul></div></div>
-</div><div class="cell normal" data-type="normal">
-<div class="innerCell">
-<div id="math_constant" class="help expert"><h3 id="BlockdescriptionsmBot-»constant«[Expert-block]">»constant« <span class="typcn typcn-star"></span></h3><p>With the »constant« block some mathematical constant values are available: »π« (3,1415...), »e« (2,718...), »φ« (1,618...), »sqrt(2)« (1,414...), »sqrt(½)« (0,7071...), »∞«</p><p>Settings:
+</ul></div><div id="math_constant" class="help expert"><h3 id="BlockdescriptionsmBot-»constant«[Expert-block]">»constant« <span class="typcn typcn-star"></span></h3><p>With the »constant« block some mathematical constant values are available: »π« (3,1415...), »e« (2,718...), »φ« (1,618...), »sqrt(2)« (1,414...), »sqrt(½)« (0,7071...), »∞«</p><p>Settings:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
-<li class="typcn typcn-arrow-down">Option, mathematical constants, choose one.</li>
+<li class="typcn typcn-arrow-sorted-down">Option, mathematical constants, choose one.</li>
 </ul>Return value:
 <ul style="margin-top: 0; margin-bottom: 10px">
-<li class="typcn typcn-arrow-down"> Number, value of the selected mathematical constant. Infinity will return »infinity«.</li>
-</ul></div></div>
-</div><div class="cell normal" data-type="normal">
-<div class="innerCell">
-<div id="number_property" class="help expert"><h3 id="BlockdescriptionsmBot-»numberproperty«[Expert-block]">»number property« <span class="typcn typcn-star"></span></h3><p>With the block »number property« you check whether a given number has a specific property: »even«, »odd«, »prime«, »whole«, »positive«, »negative«, »divisible by«.</p><p>Settings and input values:
+<li class="typcn typcn-arrow-sorted-down"> Number, value of the selected mathematical constant. Infinity will return »infinity«.</li>
+</ul></div><div id="number_property" class="help expert"><h3 id="BlockdescriptionsmBot-»numberproperty«[Expert-block]">»number property« <span class="typcn typcn-star"></span></h3><p>With the block »number property« you check whether a given number has a specific property: »even«, »odd«, »prime«, »whole«, »positive«, »negative«, »divisible by«.</p><p>Settings and input values:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
-<li class="typcn typcn-arrow-left">Number, the property of this input value will be checked.</li><li class="typcn typcn-arrow-down">Option, number property, choose one.</li><li class="typcn typcn-arrow-left">Number, evaluated from a block. The second input value is only required for the property »divisible by«.</li>
+<li class="typcn typcn-arrow-left">Number, the property of this input value will be checked.</li><li class="typcn typcn-arrow-sorted-down">Option, number property, choose one.</li><li class="typcn typcn-arrow-left">Number, evaluated from a block. The second input value is only required for the property »divisible by«.</li>
 </ul>Return value:
 <ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-right">Boolean value, »true« or »false«, depending on the selected property.</li>
-</ul></div></div>
-</div><div class="cell normal" data-type="normal">
-<div class="innerCell">
-<div id="robMath_change" class="help expert"><h3 id="BlockdescriptionsmBot-»changeby...«[Expert-block]">»change by ... « <span class="typcn typcn-star"></span></h3><p>The block »change by ... « increments a numerical variable by a defined value.</p><p>Settings and input values:
+</ul></div><div id="robMath_change" class="help expert"><h3 id="BlockdescriptionsmBot-»changeby...«[Expert-block]">»change by ... « <span class="typcn typcn-star"></span></h3><p>The block »change by ... « increments a numerical variable by a defined value.</p><p>Settings and input values:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-left">Variable name, which value is to be changed. Choose the variable to be changed.</li><li class="typcn typcn-arrow-left">Number, given by a block.</li>
-</ul></div></div>
-</div><div class="cell normal" data-type="normal">
-<div class="innerCell">
-<div id="math_round" class="help expert"><h3 id="BlockdescriptionsmBot-»round«[Expert-block]">»round« <span class="typcn typcn-star"></span></h3><p>With the block »round« values may be rounded. Rounding will set the decimal places to 0. It depends on the value of the decimal places whether the block rounds up or down. You may also decide by settings to always round up or down.</p><p>Settings and input value:
+</ul></div><div id="math_round" class="help expert"><h3 id="BlockdescriptionsmBot-»round«[Expert-block]">»round« <span class="typcn typcn-star"></span></h3><p>With the block »round« values may be rounded. Rounding will set the decimal places to 0. It depends on the value of the decimal places whether the block rounds up or down. You may also decide by settings to always round up or down.</p><p>Settings and input value:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
-<li class="typcn typcn-arrow-down">Type of rounding, choose a round mode.</li><li class="typcn typcn-arrow-left">Number you want to round.</li>
+<li class="typcn typcn-arrow-sorted-down">Type of rounding, choose a round mode.</li><li class="typcn typcn-arrow-left">Number you want to round.</li>
 </ul>Return value:
 <ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-right">Number, rounded whole number, according to the round mode.</li>
-</ul></div></div>
-</div><div class="cell normal" data-type="normal">
-<div class="innerCell">
-<div id="math_on_list" class="help expert"><h3 id="BlockdescriptionsmBot-»listevaluation«[Expert-block]">»list evaluation« <span class="typcn typcn-star"></span></h3><p>With the block »list evaluation« you may analyse a list.</p><p>Modes for list evaluation:
+</ul></div><div id="math_on_list" class="help expert notWedo notBob3"><h3 id="BlockdescriptionsmBot-»listevaluation«[Expert-block]">»list evaluation« <span class="typcn typcn-star"></span></h3><p>With the block »list evaluation« you may analyse a list.</p><p>Modes for list evaluation:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
-<li class="typcn typcn-arrow-down">sum - addition of all list values</li><li class="typcn typcn-arrow-down">min - smallest value in the list</li><li class="typcn typcn-arrow-down">max - largest value in the list</li><li class="typcn typcn-arrow-down">average - average of all list values</li><li class="typcn typcn-arrow-down">median - median of all list values</li><li class="typcn typcn-arrow-down">standard deviation - standard deviation of all list values</li><li class="typcn typcn-arrow-down">random item - one list value randomly selected</li>
+<li class="typcn typcn-arrow-sorted-down">sum - addition of all list values</li><li class="typcn typcn-arrow-sorted-down">min - smallest value in the list</li><li class="typcn typcn-arrow-sorted-down">max - largest value in the list</li><li class="typcn typcn-arrow-sorted-down">average - average of all list values</li><li class="typcn typcn-arrow-sorted-down">median - median of all list values</li><li class="typcn typcn-arrow-sorted-down">standard deviation - standard deviation of all list values</li><li class="typcn typcn-arrow-sorted-down">random item - one list value randomly selected</li>
 </ul>Settings and input value:
 <ul style="margin-top: 0; margin-bottom: 10px">
-<li class="typcn typcn-arrow-down">Mode of list evaluation, choose one mode.</li><li class="typcn typcn-arrow-left">List of numbers</li>
+<li class="typcn typcn-arrow-sorted-down">Mode of list evaluation, choose one mode.</li><li class="typcn typcn-arrow-left">List of numbers</li>
 </ul>Return value:
 <ul style="margin-top: 0; margin-bottom: 10px">
-<li class="typcn typcn-arrow-down">Number, calculated according to the selected list evaluation mode.</li>
-</ul></div></div>
-</div><div class="cell normal" data-type="normal">
-<div class="innerCell">
-<div id="math_modulo" class="help expert"><h3 id="BlockdescriptionsmBot-»remainderof«[Expert-block]">»remainder of« <span class="typcn typcn-star"></span></h3><p>The block »remainder of« calculates a divison and returns the remainder of the division.</p><p>Input values:
+<li class="typcn typcn-arrow-sorted-down">Number, calculated according to the selected list evaluation mode.</li>
+</ul></div><div id="math_modulo" class="help expert"><h3 id="BlockdescriptionsmBot-»remainderof«[Expert-block]">»remainder of« <span class="typcn typcn-star"></span></h3><p>The block »remainder of« calculates a divison and returns the remainder of the division.</p><p>Input values:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-left">Number to be divided (dividend).</li><li class="typcn typcn-arrow-left">Number, divisor.</li>
 </ul>Return value:
 <ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-right">Number, rest of the division.</li>
-</ul></div></div>
-</div><div class="cell normal" data-type="normal">
-<div class="innerCell">
-<div id="math_constrain" class="help expert"><h3 id="BlockdescriptionsmBot-»constrain«[Expert-block]">»constrain« <span class="typcn typcn-star"></span></h3><p>The block »constrain« ensures that given boundaries will not be exceeded.</p><p>Input values:
+</ul></div><div id="math_constrain" class="help expert"><h3 id="BlockdescriptionsmBot-»constrain«[Expert-block]">»constrain« <span class="typcn typcn-star"></span></h3><p>The block »constrain« ensures that given boundaries will not be exceeded.</p><p>Input values:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-left">Number, that will be constrained.</li><li class="typcn typcn-arrow-left">Number, lower bound.</li><li class="typcn typcn-arrow-left">Number, upper bound.</li>
 </ul>Return value:
 <ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-right">Number, constrained by the lower and the upper bound.</li>
-</ul></div></div>
-</div><div class="cell normal" data-type="normal">
-<div class="innerCell">
-<div id="math_random_int" class="help expert"><h3 id="BlockdescriptionsmBot-»randominteger«[Expert-block]">»random integer« <span class="typcn typcn-star"></span></h3><p>With the block »random integer« you may generate random integer numbers within defined limits</p><p>Input values:
+</ul></div><div id="math_random_int" class="help expert"><h3 id="BlockdescriptionsmBot-»randominteger«[Expert-block]">»random integer« <span class="typcn typcn-star"></span></h3><p>With the block »random integer« you may generate random integer numbers within defined limits</p><p>Input values:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-left">Number, lower bound</li><li class="typcn typcn-arrow-left">Number, upper bound</li>
 </ul>Return value:
 <ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-right">Number, a whole random number from within the upper and lower bounds.</li>
-</ul></div></div>
-</div><div class="cell normal" data-type="normal">
-<div class="innerCell">
-<div id="math-random_float" class="help expert"><h3 id="BlockdescriptionsmBot-»randomfraction«[Expert-block]">»random fraction« <span class="typcn typcn-star"></span></h3><p>With the block »random fraction« a random value between 0.0 and 1.0 is calculated.</p><p>Return value:
+</ul></div><div id="math-random_float" class="help expert"><h3 id="BlockdescriptionsmBot-»randomfraction«[Expert-block]">»random fraction« <span class="typcn typcn-star"></span></h3><p>With the block »random fraction« a random value between 0.0 and 1.0 is calculated.</p><p>Return value:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-right">Number, positive random value between 0.0 and 1.0.</li>
-</ul></div></div>
-</div><div class="cell normal" data-type="normal">
-<div class="innerCell">
-<h2 id="BlockdescriptionsmBot-Text"><span style="color: rgb(51,153,102);"><span style="color: rgb(0,0,0);">Text</span></span></h2><p>»Text« blocks perform simple operations on text strings.</p><p>Available »Text« blocks in NEPO are:</p><ul><li>Text</li><li>create text <span class="typcn typcn-star"></span></li><li>append text <span class="typcn typcn-star"></span></li></ul></div>
-</div><div class="cell normal" data-type="normal">
-<div class="innerCell">
-<div id="text" class="help beginner"><h3 id="BlockdescriptionsmBot-»Text«">»Text«</h3><p>The simple »Text« block creates a little text.</p><p>Input value:
+</ul></div><div id="text" class="help beginner notBob3"><h3 id="BlockdescriptionsmBot-»Text«">»Text«</h3><p>The simple »Text« block creates a little text.</p><p>Input value:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-left">String, containing arbitrary characters.</li>
 </ul><br><p>Return value:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-right">String, containing arbitrary characters.</li>
-</ul></div></div>
-</div><div class="cell normal" data-type="normal">
-<div class="innerCell">
-<div id="robText_join" class="help expert"><h3 id="BlockdescriptionsmBot-»createText«[Expert-block]">»create Text« <span class="typcn typcn-star"></span></h3><p>The »create text« block compiles a text from different input parameters. Using the + sign will insert further input slots. All input parameters will be connected one after the other. Essentially the »create text« block converts an arbitrary input value into a text string.</p><p>Input values:
+</ul></div><div id="text_comment" class="help beginner"><h3 class="auto-cursor-target" id="BlockdescriptionsmBot-»comment«">»comment«</h3><p>Document your program with this block, so that you and others will find it easier to understand your program later. This comment will also be visible in the generated source code.  </p><p>Input value:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-left">String, containing arbitrary characters.</li>
+</ul></div><div id="robText_join" class="help expert notBob3"><h3 id="BlockdescriptionsmBot-»createText«[Expert-block]">»create Text« <span class="typcn typcn-star"></span></h3><p>The »create text« block compiles a text from different input parameters. Using the + sign will insert further input slots. All input parameters will be connected one after the other. Essentially the »create text« block converts an arbitrary input value into a text string.</p><p>Input values:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-left">Arbitrary values [numbers, text, logical values, colours)</li>
 </ul>Return value:
 <ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-right">String, containing arbitrary characters, compiled sequentially from all input values.</li>
-</ul></div></div>
-</div><div class="cell normal" data-type="normal">
-<div class="innerCell">
-<div id="robtext_append" class="help expert"><h3 id="BlockdescriptionsmBot-»appendText«[Expert-block]">»append Text« <span class="typcn typcn-star"></span></h3><p>The »append text« block will append some string to a given string, for instance to extend a message with a signature.</p><p>Input values:
+</ul></div><div id="robtext_append" class="help expert notWedo notBob3"><h3 id="BlockdescriptionsmBot-»appendText«[Expert-block]">»append Text« <span class="typcn typcn-star"></span></h3><p>The »append text« block will append some string to a given string, for instance to extend a message with a signature.</p><p>Input values:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-left">String, to which some other text will be appended.</li><li class="typcn typcn-arrow-left">String, that shall be appended.</li>
-</ul></div></div>
-</div><div class="cell normal" data-type="normal">
-<div class="innerCell">
-<h2 id="BlockdescriptionsmBot-Variables"><span style="color: rgb(51,153,102);"><span style="color: rgb(0,0,0);">Variables</span></span></h2><p>The »Variables« blocks are used to create global variables of six different parameter types. The global variables store values which may be used at arbitrary positions in a program.</p><p>Each variable has to be created prior to its use. Create a variable by clicking the »+« sign in the »start« block. Each variable has to be assigned a name and a parameter type. Further clicks on the »+« sign will create additional variables.</p><p>The name of a variable has to be unique in a program.</p><p>Settings and input values:
+</ul></div><div id="robLists_create_with" class="help expert notWedo notBob3"><h3 id="BlockdescriptionsmBot-»createlist«">»create list«</h3><p>The block »empty list« creates a list with no content.The block »list« generates a list with some predefined values.</p><p>This block may only be used in the context of a »set variable« block.</p><p>Using »+« or »−« enables you to extend or reduce the list at its end.</p><p>Settings and input values:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
-<li class="typcn typcn-plus">Insert another variable.</li><li class="typcn typcn-minus">Delete this variable.</li><li class="typcn typcn-pen">Variable name, special characters and space sign are not allowed.</li><li class="typcn typcn-arrow-down">Variable type, »number«, »boolean«, »string«, »colour«, »connection«, »list number«, »list boolean«, »list string« oder »list connection«</li><li class="typcn typcn-arrow-left">Initial values, according to the variable type.</li>
-</ul><br><p><span style="color: rgb(51,153,102);"><span style="color: rgb(0,0,0);">These »Variables« blocks are available in NEPO:</span></span></p><ul style="list-style-type: square;"><li>set variable</li><li>get variable</li></ul></div>
-</div><div class="cell normal" data-type="normal">
-<div class="innerCell">
-<div id="" class="help beginner"><h3 id="BlockdescriptionsmBot-»setvariable«">»set variable«</h3><p>Using the block »set variable« will assign a value to a variable. Depending on the variable type the value may be assigned by an input connector.</p><p>Settings and input value:
-</p><ul style="margin-top: 0; margin-bottom: 10px">
-<li class="typcn typcn-arrow-down">Variable, which value is to be changed.</li><li class="typcn typcn-arrow-left">Value, new value for the variable, evaluated from a suitable block.</li>
-</ul></div></div>
-</div><div class="cell normal" data-type="normal">
-<div class="innerCell">
-<div id="" class="help beginner"><h3 id="BlockdescriptionsmBot-»getvariable«">»get variable«</h3><p>Using the block »get variable« returns the value of a variable to another block.The type of the output parameter is equal to the type that has been assigned to the variable in the »start« block.</p><p><span>Settings:<br></span>
-</p><ul style="margin-top: 0; margin-bottom: 10px">
-<li class="typcn typcn-arrow-down">Variable, that will be read. The value will not be changed by reading.</li>
-</ul><span class="auto-cursor-target"><br></span><p><span>Return value:<br></span>
-</p><ul style="margin-top: 0; margin-bottom: 10px">
-<li class="typcn typcn-arrow-right">Value, stored in the variable.</li>
-</ul><span class="auto-cursor-target"><br></span></div></div>
-</div><div class="cell normal" data-type="normal">
-<div class="innerCell">
-<h2 id="BlockdescriptionsmBot-Lists[Expert-blocks]"><span style="color: rgb(51,153,102);"><span style="color: rgb(0,0,0);">Lists <span class="typcn typcn-star"></span></span></span></h2><p>A list is a sequence of data (of identical parameter types) with elements in a fixed succession. Create a »list« type variable to make use of a »Lists« block. NEPO provides five different parameter types for lists: number, string, boolean, colour and connection.</p><p>NEPO provides the following »Lists« blocks:</p><ul><li>create list</li><li>repeat element in list</li><li>length of</li><li>is empty?</li><li>find in list</li><li>get list element</li><li>set list element</li><li>get sublist</li></ul></div>
-</div><div class="cell normal" data-type="normal">
-<div class="innerCell">
-<div id="robLists_create_with" class="help expert"><h3 id="BlockdescriptionsmBot-»createlist«">»create list«</h3><p>The block »empty list« creates a list with no content.The block »list« generates a list with some predefined values.</p><p>This block may only be used in the context of a »set variable« block.</p><p>Using »+« or »−« enables you to extend or reduce the list at its end.</p><p>Settings and input values:
-</p><ul style="margin-top: 0; margin-bottom: 10px">
-<li class="typcn typcn-arrow-down">List type, »Number«, »String«, »Boolean«, »Colour«, »Connection«.</li><li class="typcn typcn-plus">Create further list element, append to the end of the list.</li><li class="typcn typcn-minus">Delete list element at the end of the list.</li><li class="typcn typcn-arrow-left">Values, according to the list type. Here the input of initial values is possible.</li>
+<li class="typcn typcn-arrow-sorted-down">List type, »Number«, »String«, »Boolean«, »Colour«, »Connection«.</li><li class="typcn typcn-plus">Create further list element, append to the end of the list.</li><li class="typcn typcn-minus">Delete list element at the end of the list.</li><li class="typcn typcn-arrow-left">Values, according to the list type. Here the input of initial values is possible.</li>
 </ul>Return value:
 <ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-right">Empty list or list, containing elements of the specified list type.</li>
-</ul></div></div>
-</div><div class="cell normal" data-type="normal">
-<div class="innerCell">
-<div id="robLists_repeat" class="help expert"><h3 id="BlockdescriptionsmBot-»repeatelementinlist«">»repeat element in list«</h3><p>The »repeat element in list« block generates a list of equal elements.  </p><p>Settings and input values:
+</ul></div><div id="robLists_repeat" class="help expert notWedo notBob3"><h3 id="BlockdescriptionsmBot-»repeatelementinlist«">»repeat element in list«</h3><p>The »repeat element in list« block generates a list of equal elements.  </p><p>Settings and input values:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
-<li class="typcn typcn-arrow-down">List type, »Number«, »Boolean«, »String«, »Colour« or »Connection«.</li><li class="typcn typcn-arrow-down">List element, according to the selected list type. This value will be repeated in the list.</li><li class="typcn typcn-arrow-left">Number, defining how often the list element will be repeated.</li>
+<li class="typcn typcn-arrow-sorted-down">List type, »Number«, »Boolean«, »String«, »Colour« or »Connection«.</li><li class="typcn typcn-arrow-sorted-down">List element, according to the selected list type. This value will be repeated in the list.</li><li class="typcn typcn-arrow-left">Number, defining how often the list element will be repeated.</li>
 </ul>Return value:
 <ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-right">List of the specified list type, containing the specified number of equal elements.</li>
-</ul></div></div>
-</div><div class="cell normal" data-type="normal">
-<div class="innerCell">
-<div id="robLists_length" class="help expert"><h3 id="BlockdescriptionsmBot-»lengthof«">»length of«</h3><p>The »length of« block returns a value which is the length of the list given as parameter. An empty list has a length of 0.</p><p>Input value:
+</ul></div><div id="robLists_length" class="help expert notWedo notBob3"><h3 id="BlockdescriptionsmBot-»lengthof«">»length of«</h3><p>The »length of« block returns a value which is the length of the list given as parameter. An empty list has a length of 0.</p><p>Input value:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-left">List, evaluated by an appropriate block.</li>
 </ul>Return value:
 <ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-right">Number, number of list elements.</li>
-</ul><br></div></div>
-</div><div class="cell normal" data-type="normal">
-<div class="innerCell">
-<div id="robLists_isEmpty" class="help expert"><h3 id="BlockdescriptionsmBot-»isempty?«">»is empty?«</h3><p>A list given as parameter will be checked whether it is empty.</p><p>Input value:
+</ul><br></div><div id="robLists_isEmpty" class="help expert notWedo notBob3"><h3 id="BlockdescriptionsmBot-»isempty?«">»is empty?«</h3><p>A list given as parameter will be checked whether it is empty.</p><p>Input value:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-left">List, evaluated by an appropriate block.</li>
 </ul>Return value:
 <ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-right">Boolean, either »true« or »false«.</li>
-</ul></div></div>
-</div><div class="cell normal" data-type="normal">
-<div class="innerCell">
-<div id="roblists_indexOf" class="help expert"><h3 id="BlockdescriptionsmBot-»findinlist«">»find in list«</h3><p>A list is searched for an item. If the item is in the list, the list position will be returned. If the item is not in the list the result is -1.</p><p>Settings and input values:
+</ul></div><div id="roblists_indexOf" class="help expert notWedo notBob3"><h3 id="BlockdescriptionsmBot-»findinlist«">»find in list«</h3><p>A list is searched for an item. If the item is in the list, the list position will be returned. If the item is not in the list the result is -1.</p><p>Settings and input values:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
-<li class="typcn typcn-arrow-left">List, that will be examined.</li><li class="typcn typcn-arrow-down">Position of the occurrence, either »first« or »last«.</li><li class="typcn typcn-arrow-left">Value, list item to be found.</li>
+<li class="typcn typcn-arrow-left">List, that will be examined.</li><li class="typcn typcn-arrow-sorted-down">Position of the occurrence, either »first« or »last«.</li><li class="typcn typcn-arrow-left">Value, list item to be found.</li>
 </ul>Return value:
 <ul style="margin-top: 0; margin-bottom: 10px">
-<li class="typcn typcn-arrow-down"><p>Number, indicating the position where the element was found in the list.</p><p>Note: Counting list positions will start with 0.</p></li>
-</ul></div></div>
-</div><div class="cell normal" data-type="normal">
-<div class="innerCell">
-<div id="robLists_getIndex" class="help expert"><h3 id="BlockdescriptionsmBot-»getlistelement«">»get list element«</h3><p>This block accesses an item of a list. Depending on the settings this item may be altered.</p><p>A list is given as parameter. Then a drop-down-list specifies what will happen to the list item under consideration.</p><p>Settings:
+<li class="typcn typcn-arrow-sorted-down"><p>Number, indicating the position where the element was found in the list.</p><p>Note: Counting list positions will start with 0.</p></li>
+</ul></div><div id="robLists_getIndex" class="help expert notWedo notBob3"><h3 id="BlockdescriptionsmBot-»getlistelement«">»get list element«</h3><p>This block accesses an item of a list. Depending on the settings this item may be altered.</p><p>A list is given as parameter. Then a drop-down-list specifies what will happen to the list item under consideration.</p><p>Settings:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
-<li class="typcn typcn-arrow-left">List, that is under consideration.</li><li class="typcn typcn-arrow-down">Option, action for the element found: »get« reads the element and leaves it unchanged, »get and remove« reads the element and removes it from the list, »remove« just removes the element from the list.</li><li class="typcn typcn-arrow-down">Option, position of the element found: »#«, »# from end«, »first«, »last« or »random« .</li><li class="typcn typcn-arrow-left"><p>Number, indicating the list position. This input value is not required if »first«, »last« or »random« was selected as position.</p><p>Note: Counting of list positions starts with 0.</p></li>
+<li class="typcn typcn-arrow-left">List, that is under consideration.</li><li class="typcn typcn-arrow-sorted-down">Option, action for the element found: »get« reads the element and leaves it unchanged, »get and remove« reads the element and removes it from the list, »remove« just removes the element from the list.</li><li class="typcn typcn-arrow-sorted-down">Option, position of the element found: »#«, »# from end«, »first«, »last« or »random« .</li><li class="typcn typcn-arrow-left"><p>Number, indicating the list position. This input value is not required if »first«, »last« or »random« was selected as position.</p><p>Note: Counting of list positions starts with 0.</p></li>
 </ul>Return value:
 <ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-right"><p>List element that has been found at the specified list position; »undefined«, if the list position does not exist.</p><p>With selection of »remove« there is no return value; instead the list will be shortened by this list element.</p></li>
-</ul></div></div>
-</div><div class="cell normal" data-type="normal">
-<div class="innerCell">
-<div id="robLists_setIndex" class="help expert"><h3 id="BlockdescriptionsmBot-»setlistelement«">»set list element«</h3><p>In a list given as input parameter one specified element will be replaced by a new value.</p><p>Settings and input values:
+</ul></div><div id="robLists_setIndex" class="help expert notWedo notBob3"><h3 id="BlockdescriptionsmBot-»setlistelement«">»set list element«</h3><p>In a list given as input parameter one specified element will be replaced by a new value.</p><p>Settings and input values:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
-<li class="typcn typcn-arrow-down">List, that will be changed.</li><li class="typcn typcn-arrow-down">Option, action for the element found; »set« changes the element, »insert at« inserts a new element into the list.</li><li class="typcn typcn-arrow-down">Option, position for the element to be changed: »#«, »# from end«, »first«, »last« or »random« .</li><li class="typcn typcn-arrow-down">Number, indicating the list position. This input value is not required if »first«, »last« or »random« was selected.<br>Note: Counting of list positions begins with 0.</li><li class="typcn typcn-arrow-down">List element, that will be set or inserted at the selected list position.</li>
-</ul></div></div>
-</div><div class="cell normal" data-type="normal">
-<div class="innerCell">
-<div id="robLists_getSublist" class="help expert"><h3 id="BlockdescriptionsmBot-»getsublist«">»get sublist«</h3><p>From a list given as parameter a sublist will be created. The sublist contains all those elements that match the further specifications of the block.</p><p>Settings and input values:
+<li class="typcn typcn-arrow-sorted-down">List, that will be changed.</li><li class="typcn typcn-arrow-sorted-down">Option, action for the element found; »set« changes the element, »insert at« inserts a new element into the list.</li><li class="typcn typcn-arrow-sorted-down">Option, position for the element to be changed: »#«, »# from end«, »first«, »last« or »random« .</li><li class="typcn typcn-arrow-sorted-down">Number, indicating the list position. This input value is not required if »first«, »last« or »random« was selected.<br>Note: Counting of list positions begins with 0.</li><li class="typcn typcn-arrow-sorted-down">List element, that will be set or inserted at the selected list position.</li>
+</ul></div><div id="robLists_getSublist" class="help expert notWedo notBob3"><h3 id="BlockdescriptionsmBot-»getsublist«">»get sublist«</h3><p>From a list given as parameter a sublist will be created. The sublist contains all those elements that match the further specifications of the block.</p><p>Settings and input values:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
-<li class="typcn typcn-arrow-left">List to be examined.</li><li class="typcn typcn-arrow-down">Position, start of the sublist: »#«, »# from end« or »first«.</li><li class="typcn typcn-arrow-left"><p>Number, indicating the list position. This input value is not required if »first« has been selected.</p><p>Note: Counting of list positions starts with 0.</p></li><li class="typcn typcn-arrow-left">Position, end of the sublist: »#«, »# from end« or »last«.</li><li class="typcn typcn-arrow-left"><p>Number, indicating the list position. This input value is not required if »last« has been selected.</p><p>Note: Counting of list positions starts with 0.</p></li>
+<li class="typcn typcn-arrow-left">List to be examined.</li><li class="typcn typcn-arrow-sorted-down">Position, start of the sublist: »#«, »# from end« or »first«.</li><li class="typcn typcn-arrow-left"><p>Number, indicating the list position. This input value is not required if »first« has been selected.</p><p>Note: Counting of list positions starts with 0.</p></li><li class="typcn typcn-arrow-left">Position, end of the sublist: »#«, »# from end« or »last«.</li><li class="typcn typcn-arrow-left"><p>Number, indicating the list position. This input value is not required if »last« has been selected.</p><p>Note: Counting of list positions starts with 0.</p></li>
 </ul>Return value:
 <ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-right">List, a sublist of the same type as the given list.</li>
-</ul></div></div>
-</div><div class="cell normal" data-type="normal">
-<div class="innerCell">
-<h2 id="BlockdescriptionsmBot-Functions[Expert-blocks]"><span style="color: rgb(51,153,102);"><span style="color: rgb(0,0,0);">Functions <span class="typcn typcn-star"></span></span></span></h2><p>With »Functions« blocks (in Java also called »methods« or »subprograms«) you may create more readable programs. NEPO offers some function blocks:</p><ul><li>Function blocks with/without input parameters and no return parameter</li><li>Function blocks with/without input parameters and one return parameter</li><li>If block to be used within a function</li></ul><p>With elementary function blocks you may program simple and complex functions which may be used by function calls. Each programmed function is available immediately as an additional block in the »Functions« category. Those are</p><ul><li>Function calls with/without input parameters and without return parameter</li><li>Function calls with/without input parameters and also one return parameter</li></ul><p>Depending from the number of input and return parameters the selection of function blocks varies.</p><p>A unique name is assigned by NEPO to each new function definition (doSomething, doSomething2, ...). This name may be altered. Overwriting of a defined function is not possible.</p></div>
-</div><div class="cell normal" data-type="normal">
-<div class="innerCell">
-<div id="robProcedures_defnoreturn" class="help expert"><h3 id="BlockdescriptionsmBot-»Functionblockswith/withoutinputparametersandnoreturnstatement«">»Function blocks with/without input parameters and no return statement«</h3><p>In a function block with/without input parameter and without return parameter a sequence of program statements will be condensed. The input parameters will be determined by the local variables of the function block. Local variables may be generated by using the »+« sign of the function block. Local variables will not be initialized.</p><p>If a function block contains an if-block the function may be terminated before reaching it's end.</p><p>The function block is available in the »Functions« category immediately after its definition. Using function blocks improves the readability of complex programs.</p><p>Settings:
+</ul></div><div id="robProcedures_defnoreturn" class="help expert"><h3 id="BlockdescriptionsmBot-»Functionblockswith/withoutinputparametersandnoreturnstatement«">»Function blocks with/without input parameters and no return statement«</h3><p>In a function block with/without input parameter and without return parameter a sequence of program statements will be condensed. The input parameters will be determined by the local variables of the function block. Local variables may be generated by using the »+« sign of the function block. Local variables will not be initialized.</p><p>If a function block contains an if-block the function may be terminated before reaching it's end.</p><p>The function block is available in the »Functions« category immediately after its definition. Using function blocks improves the readability of complex programs.</p><p>Settings:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-pen">Function name, no special characters and white spaces allowed.</li><li class="typcn typcn-plus">Generate new local variables, that will be assigned with the function call.</li><li class="typcn typcn-minus">Delete the associated local variable.</li>
-</ul><br><div class="confluence-information-macro confluence-information-macro-warning"><div class="confluence-information-macro-body"><ul><li><p>The name of a function block has to start with a lower case letter. Special characters are not allowed in a function block name.</p></li><li><p>If the function block defines input parameters (local variables), all the parameter slots have to be occupied when calling the function.</p></li></ul></div></div></div></div>
-</div><div class="cell normal" data-type="normal">
-<div class="innerCell">
-<div id="robProcedures_defreturn" class="help expert"><h3 id="BlockdescriptionsmBot-»Functionblockswith/withoutinputparameterswithreturnstatements«">»Function blocks with/without input parameters with return statements«</h3><p>In a function block with/without input parameter and with return parameter a sequence of program statements will be condensed. The input parameters will be determined by the local variables of the function block. Local variables may be generated by using the »+« sign of the function block. Local variables will not be initialized. After running through all the blocks of the function a value will be returned.</p><p>If a function block contains an if-block the function may be terminated before reaching it's end. An alternative value may be returned by the if-block.</p><p>The function block is available in the »Functions« category immediately after its definition. Using function blocks improves the readability of complex programs.</p><p>Settings:
+</ul><br><div class="confluence-information-macro confluence-information-macro-warning"><div class="confluence-information-macro-body"><ul><li><p>The name of a function block has to start with a lower case letter. Special characters are not allowed in a function block name.</p></li><li><p>If the function block defines input parameters (local variables), all the parameter slots have to be occupied when calling the function.</p></li></ul></div></div></div><div id="robProcedures_defreturn" class="help expert"><h3 id="BlockdescriptionsmBot-»Functionblockswith/withoutinputparameterswithreturnstatements«">»Function blocks with/without input parameters with return statements«</h3><p>In a function block with/without input parameter and with return parameter a sequence of program statements will be condensed. The input parameters will be determined by the local variables of the function block. Local variables may be generated by using the »+« sign of the function block. Local variables will not be initialized. After running through all the blocks of the function a value will be returned.</p><p>If a function block contains an if-block the function may be terminated before reaching it's end. An alternative value may be returned by the if-block.</p><p>The function block is available in the »Functions« category immediately after its definition. Using function blocks improves the readability of complex programs.</p><p>Settings:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
-<li class="typcn typcn-pen">Function name, no special characters and white spaces allowed.</li><li class="typcn typcn-plus">Generate new local variables, that will be assigned with the function call.</li><li class="typcn typcn-minus">Delete the associated local variable.</li><li class="typcn typcn-arrow-down">Data type for the return value; choose one data type.</li><li class="typcn typcn-arrow-down">Block, that returns a value of the defined data type.</li>
+<li class="typcn typcn-pen">Function name, no special characters and white spaces allowed.</li><li class="typcn typcn-plus">Generate new local variables, that will be assigned with the function call.</li><li class="typcn typcn-minus">Delete the associated local variable.</li><li class="typcn typcn-arrow-sorted-down">Data type for the return value; choose one data type.</li><li class="typcn typcn-arrow-sorted-down">Block, that returns a value of the defined data type.</li>
 </ul>Return value:
 <ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-right">Value of the defined data type, evaluated in an appropriate block.</li>
-</ul><br><div class="confluence-information-macro confluence-information-macro-warning"><div class="confluence-information-macro-body"><ul><li>The name of a function block has to start with a lower case letter. Special characters are not allowed in a function block name.</li><li>If the function block defines input parameters (local variables), all the parameter slots have to be occupied when calling the function.</li></ul></div></div></div></div>
-</div><div class="cell normal" data-type="normal">
-<div class="innerCell">
-<div id="robProcedures_ifreturn" class="help expert"><h3 id="BlockdescriptionsmBot-»ifblocktobeusedwithinafunction«">»if block to be used within a function«</h3><p>The if statement within a function is of special importance. As the function sequence meets an if statement the validity of the condition will be checked.</p><h4 id="BlockdescriptionsmBot-Ifstatementwithinafunctionwithreturnvalue:">If statement within a function with return value:</h4><ul><li>If the condition evaluates to »true« the rest of the function will be ignored and the function terminates. The second input value of the if statement will be returned. A possibly defined return value of the function will be ignored. The return value data type is determined by the return data type of the function definition.</li><li>If the condition evaluates to »false« the sequence of the function blocks will be continued. The return value of the function will be returned after reaching the end of the function.</li></ul><h4 id="BlockdescriptionsmBot-Ifstatementwithinafunctionwithnoreturnvalue:">If statement within a function with no return value:</h4><ul><li>An if statement within a function without return value has just the if statement as input parameter.</li><li>If the condition evaluates to »true« the rest of the function will be ignored and the function terminates.</li><li>If the condition evaluates to »false« the sequence of the function blocks will be continued.</li></ul><p>Settings and input values:
+</ul><br><div class="confluence-information-macro confluence-information-macro-warning"><div class="confluence-information-macro-body"><ul><li>The name of a function block has to start with a lower case letter. Special characters are not allowed in a function block name.</li><li>If the function block defines input parameters (local variables), all the parameter slots have to be occupied when calling the function.</li></ul></div></div></div><div id="robProcedures_ifreturn" class="help expert"><h3 id="BlockdescriptionsmBot-»ifblocktobeusedwithinafunction«">»if block to be used within a function«</h3><p>The if statement within a function is of special importance. As the function sequence meets an if statement the validity of the condition will be checked.</p><h4 id="BlockdescriptionsmBot-Ifstatementwithinafunctionwithreturnvalue:">If statement within a function with return value:</h4><ul><li>If the condition evaluates to »true« the rest of the function will be ignored and the function terminates. The second input value of the if statement will be returned. A possibly defined return value of the function will be ignored. The return value data type is determined by the return data type of the function definition.</li><li>If the condition evaluates to »false« the sequence of the function blocks will be continued. The return value of the function will be returned after reaching the end of the function.</li></ul><h4 id="BlockdescriptionsmBot-Ifstatementwithinafunctionwithnoreturnvalue:">If statement within a function with no return value:</h4><ul><li>An if statement within a function without return value has just the if statement as input parameter.</li><li>If the condition evaluates to »true« the rest of the function will be ignored and the function terminates.</li><li>If the condition evaluates to »false« the sequence of the function blocks will be continued.</li></ul><p>Settings and input values:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
-<li class="typcn typcn-arrow-down">Boolean value, possibly evaluated by a condition.</li><li class="typcn typcn-arrow-down">Value of the specified data type.</li>
+<li class="typcn typcn-arrow-sorted-down">Boolean value, possibly evaluated by a condition.</li><li class="typcn typcn-arrow-sorted-down">Value of the specified data type.</li>
 </ul><br><p>Return value:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
 Value of the specified data type.
-</ul></div></div>
-</div><div class="cell normal" data-type="normal">
-<div class="innerCell">
-<h2 id="BlockdescriptionsmBot-Messages[Expert-Blocks]">Messages <span class="typcn typcn-star"></span></h2><p>This category contains blocks with which your mBot can communicate with other mBots. This is done by infrared signal, so the mBots should be able to see each other to communicate with each other.</p><p>This category contains the following blocks:</p><ul style="list-style-type: square;"><li>»Send message«</li><li>»Receive message«</li></ul></div>
-</div><div class="cell normal" data-type="normal">
-<div class="innerCell">
-<div id="robCommunications_ir_sendBlock" class="help expert"><h3 id="BlockdescriptionsmBot-»Sendmessage...«">»Send message ... «</h3><p>With this block your mBot can send a message to all other mBots nearby.</p><p>Input option:
+</ul></div><div id="robCommunications_ir_sendBlock" class="help expert"><h3 id="BlockdescriptionsmBot-»Sendmessage...«">»Send message ... «</h3><p>With this block your mBot can send a message to all other mBots nearby.</p><p>Input option:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-left">String, message you want to send.</li>
-</ul></div></div>
-</div><div class="cell normal" data-type="normal">
-<div class="innerCell">
-<div id="robCommunications_ir_receiveBlock" class="help expert"><h3 id="BlockdescriptionsmBot-»Receivemessage«">»Receive message«</h3><p>With this block your mBot can receive messages from other mBots in the area.</p><p>Return value:
+</ul></div><div id="robCommunications_ir_receiveBlock" class="help expert"><h3 id="BlockdescriptionsmBot-»Receivemessage«">»Receive message«</h3><p>With this block your mBot can receive messages from other mBots in the area.</p><p>Return value:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-right">String, received message from other mBots in the environment.</li>
-</ul></div></div>
-</div></div></body>
+</ul></div></div></body>
