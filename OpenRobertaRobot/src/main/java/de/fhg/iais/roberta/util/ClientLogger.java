@@ -46,6 +46,8 @@ public class ClientLogger {
                         Statistics.info("ProgramNew", "success", true);
                     } else if ( logLine.contains("ProgramLinkShare") ) {
                         Statistics.info("ProgramLinkShare", "success", true);
+                    } else if ( logLine.contains("tutorial executed") ) {
+                        Statistics.info("TutorialExecuted", "success", true, "tutorial", logLine.substring(logLine.lastIndexOf(" ") + 1));
                     }
                 }
             }

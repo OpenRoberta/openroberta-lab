@@ -14,7 +14,6 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'message', 'guiState.contr
             '#FF69B4', '#DF01D7' ];
     var currentColorIndex;
     var tutorialList;
-    const MAX_LEVEL = 3;
     /**
      * Initialize table of tutorials
      */
@@ -154,7 +153,7 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'message', 'guiState.contr
         }
     }
     var rowAttributes = function(row, index) {
-        var hash = UTIL.getHashFrom(row.robot + row.name);
+        var hash = UTIL.getHashFrom(row.robot + row.name + row.index);
         currentColorIndex = hash % BACKGROUND_COLORS.length;
         return {
             style : 'background-color :' + BACKGROUND_COLORS[currentColorIndex] + ';' + //
@@ -199,21 +198,29 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'message', 'guiState.contr
     exports.formatTags = formatTags;
 
     var formatSim = function(sim, row, index) {
-        return sim === 'sim' ? 'ja<span style="display:none;">simulation</span>' : 'nein<span style="display:none;">real</span>';
+        if (sim && (sim === "sim" || sim === 1)) {
+            return 'ja<span style="display:none;">simulation</span>';
+        } else {
+            return 'nein<span style="display:none;">real</span>';
+        }
     }
 
     var formatLevel = function(level, row, index) {
-        var value = "";
+        var html = "";
         if (level) {
-            for (var i = 1; i <= MAX_LEVEL; i++) {
-                if (i <= level) {
-                    value = '<span class="tutorialLevel typcn typcn-star-full-outline"/>' + value;
+            var maxLevel = isNaN(level) ? level.split("/")[1] : 3;
+            var thisLevel = isNaN(level) ? level.split("/")[0] : level;
+            for (var i = 1; i <= maxLevel; i++) {
+                if (i <= thisLevel) {
+                    html = '<span style="left: 0;" class="tutorialLevel typcn typcn-star-full-outline"/>' + html;
                 } else {
-                    value = '<span class="tutorialLevel typcn typcn-star-outline"/>' + value;
+                    html = '<span class="tutorialLevel typcn typcn-star-outline"/>' + html;
                 }
             }
+            html = '<span class="tutorialLevelStars" style="left:' + (maxLevel * 16 + 20) + ';">' + html;
+            html += '</span>'
         }
-        return value;
+        return html;
     }
 
     function configureTagsInput() {

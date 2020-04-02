@@ -2,7 +2,6 @@ define([ 'exports', 'comm', 'message', 'log', 'guiState.controller', 'program.co
         exports, COMM, MSG, LOG, GUISTATE_C, PROG_C, ROBOT_C, IMPORT_C, Blockly, $) {
 
     const INITIAL_WIDTH = 0.5;
-    const MAX_LEVEL = 3;
     var blocklyWorkspace;
     var tutorialList;
     var tutorial;
@@ -29,9 +28,10 @@ define([ 'exports', 'comm', 'message', 'log', 'guiState.controller', 'program.co
         });
     }
 
-    function loadFromTutorial(tutorialId) {
-        // initialize this tutorial       
-        tutorial = tutorialList[tutorialId];
+    function loadFromTutorial(tutId) {
+        // initialize this tutorial
+        tutorialId = tutId;
+        tutorial = tutorialList[tutId];
         if (tutorial) {
             ROBOT_C.switchRobot(tutorial.robot, null, startTutorial);
         }
@@ -105,14 +105,16 @@ define([ 'exports', 'comm', 'message', 'log', 'guiState.controller', 'program.co
         html += '</br><span class="typcn typcn-group"/>&emsp;&emsp;';
         html += tutorial.age;
         html += '</br><span class="typcn typcn-simulation"/>&emsp;&emsp;';
-        html += tutorial.sim === "sim" ? "ja" : "nein";
+        html += tutorial.sim && (tutorial.sim === "sim" || tutorial.sim === 1) ? "ja" : "nein";
         if (tutorial.level) {
             html += '</br><span class="typcn typcn-mortar-board"/>&emsp;&emsp;';
-            for (var i = 1; i <= MAX_LEVEL; i++) {
-                if (i <= tutorial.level) {
-                    html += '<span class="typcn typcn-star-full-outline"/>'
+            var maxLevel = isNaN(tutorial.level) ? (tutorial.level).split("/")[1] : 3;
+            var thisLevel = isNaN(tutorial.level) ? (tutorial.level).split("/")[0] : tutorial.level;
+            for (var i = 1; i <= maxLevel; i++) {
+                if (i <= thisLevel) {
+                    html += '<span class="typcn typcn-star-full-outline"/>';
                 } else {
-                    html += '<span class="typcn typcn-star-outline"/>'
+                    html += '<span class="typcn typcn-star-outline"/>';
                 }
             }
         }
@@ -125,6 +127,12 @@ define([ 'exports', 'comm', 'message', 'log', 'guiState.controller', 'program.co
             exitTutorial();
             return false;
         });
+        $('#tutorialContinue').off('click.dismiss.bs.modal');
+        $('#tutorialContinue').onWrap('click.dismiss.bs.modal', function(event) {
+            LOG.info('tutorial executed ' + tutorial.index + tutorialId);
+            return false;
+        });
+
         $('#tutorialOverview').modal({
             backdrop : 'static',
             keyboard : false,
@@ -149,7 +157,14 @@ define([ 'exports', 'comm', 'message', 'log', 'guiState.controller', 'program.co
                 }
                 $('#tutorialContent').append(tutorial.step[step].instruction);
                 if (tutorial.step[step].tip) {
-                    $('#tutorialContent').append('<br><br>').append($('<ul>').attr('class', 'tip').append('<li>' + tutorial.step[step].tip + '</li>'));
+                    $('#tutorialContent').append('<br><br>').append($('<ul>').attr('class', 'tip'));
+                    if (Array.isArray(tutorial.step[step].tip)) {
+                        for (var i = 0; i < tutorial.step[step].tip.length; i++) {
+                            $('#tutorialContent ul.tip').append('<li>' + tutorial.step[step].tip[i] + '</li>');
+                        }
+                    } else {
+                        $('#tutorialContent ul.tip').append('<li>' + tutorial.step[step].tip + '</li>');
+                    }
                 }
 
                 if (tutorial.step[step].solution) {

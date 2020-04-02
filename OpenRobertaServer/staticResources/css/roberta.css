@@ -1896,23 +1896,20 @@ li.L0, li.L1, li.L2, li.L3, li.L5, li.L6, li.L7, li.L8 {
     background-repeat: no-repeat;
     background-size: 200px;
 }
-
+.tutorialLevelStars {
+	position: relative;
+    left: 116px;
+}
 .tutorialLevel.typcn::before {
     position: relative;
-    left: 0%;
+    left: 0;
     font-size: 24px;
     top: 4px;
-    left: 70px;
     color: #333;
 }
-#tutorialOverview .modal-body {
-    font-size: 24px;
-}
 #tutorialOverview .modal-dialog {
     border: 2px solid #33B8CA;
-}
-#tutorialOverview .modal-dialog {
-    border: 2px solid #33B8CA;
+    font-size: 18px;
 }
 #tutorial-navigation {
 	display:none;

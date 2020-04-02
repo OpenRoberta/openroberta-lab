@@ -76,7 +76,8 @@ public class ClientInit {
             JSONObject request = fullRequest.getJSONObject("data");
             ClientInit.LOG.info("INIT command. Trying to build a new HttpSessionState");
             response.put("cmd", "init");
-            HttpSessionState httpSessionState = HttpSessionState.init(this.robotPluginMap, this.serverProperties, getCountryCode(httpRequest, ipToCountry));
+            HttpSessionState httpSessionState =
+                HttpSessionState.init(this.robotPluginMap, this.serverProperties, getCountryCode(httpRequest, this.ipToCountry));
             MDC.put("sessionId", String.valueOf(httpSessionState.getSessionNumber()));
             MDC.put("userId", String.valueOf(httpSessionState.getUserId()));
             MDC.put("robotName", String.valueOf(httpSessionState.getRobotName()));
@@ -186,9 +187,9 @@ public class ClientInit {
         for ( File file : files ) {
             try {
                 JSONObject jsonObjInDirectory = new JSONObject(Util.readFileContent(file.getAbsolutePath()));
-                jsonObjRepresentingTheDirectory.put(jsonObjInDirectory.getString("name").toLowerCase().replaceAll("\\s", ""), jsonObjInDirectory);
+                jsonObjRepresentingTheDirectory.put(file.getName().replaceFirst("[.][^.]+$", "").toLowerCase().replaceAll("\\s", ""), jsonObjInDirectory);
             } catch ( Exception e ) {
-                // no problem, we simply ignore files without valid json data or without the property "name"
+                // no problem, we simply ignore files without valid json data
             }
         }
         return jsonObjRepresentingTheDirectory;
