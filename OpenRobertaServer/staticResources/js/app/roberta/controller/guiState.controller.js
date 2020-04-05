@@ -1,5 +1,5 @@
-define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'progHelp.controller', 'legal.controller', 'webview.controller', 'socket.controller',
-        'jquery' ], function(exports, UTIL, LOG, MSG, GUISTATE, HELP_C, LEGAL_C, WEBVIEW_C, SOCKET_C, $) {
+define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'progHelp.controller', 'legal.controller', 'webview.controller', 'socket.controller', 'jquery' ], function(
+        exports, UTIL, LOG, MSG, GUISTATE, HELP_C, LEGAL_C, WEBVIEW_C, SOCKET_C, $) {
 
     var LONG = 300000; // Ping time 5min
     var SHORT = 3000; // Ping time 3sec
@@ -517,18 +517,31 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'progHelp.contro
     }
     exports.getIsRobotBeta = getIsRobotBeta;
 
-    function getRobotInfo(robotName) {
+    function getRobotInfoDE(robotName) {
         for ( var robot in getRobots()) {
             if (!getRobots().hasOwnProperty(robot)) {
                 continue;
             }
             if (getRobots()[robot].name == robotName) {
-                return getRobots()[robot].info;
+                return getRobots()[robot].infoDE;
             }
         }
-        return "Info not found";
+        return "#";
     }
-    exports.getRobotInfo = getRobotInfo;
+    exports.getRobotInfoDE = getRobotInfoDE;
+
+    function getRobotInfoEN(robotName) {
+        for ( var robot in getRobots()) {
+            if (!getRobots().hasOwnProperty(robot)) {
+                continue;
+            }
+            if (getRobots()[robot].name == robotName) {
+                return getRobots()[robot].infoEN;
+            }
+        }
+        return "#";
+    }
+    exports.getRobotInfoEN = getRobotInfoEN;
 
     function isRobotConnected() {
         if (GUISTATE.robot.time > 0) {
@@ -582,7 +595,7 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'progHelp.contro
         return GUISTATE.robot.version;
     }
     exports.getRobotVersion = getRobotVersion;
-    
+
     function hasRobotDefaultFirmware() {
         return GUISTATE.gui.firmwareDefault;
     }
@@ -741,12 +754,12 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'progHelp.contro
         return GUISTATE.gui.sourceCodeFileExtension;
     }
     exports.getSourceCodeFileExtension = getSourceCodeFileExtension;
-  
+
     function getBinaryFileExtension() {
         return GUISTATE.gui.binaryFileExtension;
     }
     exports.getBinaryFileExtension = getBinaryFileExtension;
-    
+
     function isUserLoggedIn() {
         return GUISTATE.user.id >= 0;
     }

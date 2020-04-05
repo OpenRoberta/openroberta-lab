@@ -95,7 +95,10 @@ public class ClientInit {
                 robotDescription.put("name", robot);
                 if ( !ServerProperties.NAME_OF_SIM.equals(robot) ) {
                     robotDescription.put("realName", httpSessionState.getRobotFactory(robot).getRealName());
-                    robotDescription.put("info", httpSessionState.getRobotFactory(robot).getInfo());
+                    String robotInfoDE = httpSessionState.getRobotFactory(robot).getInfoDE();
+                    String robotInfoEN = httpSessionState.getRobotFactory(robot).getInfoEN();
+                    robotDescription.put("infoDE", robotInfoDE);
+                    robotDescription.put("infoEN", robotInfoEN);
                     robotDescription.put("beta", httpSessionState.getRobotFactory(robot).isBeta());
                     robotDescription.put("group", httpSessionState.getRobotFactory(robot).getGroup());
                 }
