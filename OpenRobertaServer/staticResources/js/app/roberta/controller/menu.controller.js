@@ -176,9 +176,31 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
             return groupsDict[key];
         }
 
+        /**
+         * This method either changes or removes the info link for further
+         * information to the buttons in the carousel/group member view
+         */
         var addInfoLink = function(clone, robotName) {
-            if (GUISTATE_C.getRobotInfo(robotName) != 'Info not found') {
-                clone.find('a').attr('onclick', 'window.open("' + GUISTATE_C.getRobotInfo(robotName) + '");return false;');
+            var robotInfoDE = GUISTATE_C.getRobotInfoDE(robotName);
+            var robotInfoEN = GUISTATE_C.getRobotInfoEN(robotName);
+            if (robotInfoDE !== "#" || robotInfoEN !== "#") {
+                var $de = clone.find('a');
+                var $en = $de.clone();
+                if (robotInfoDE === "#") {
+                    robotInfoDE = robotInfoEN;
+                }
+                if (robotInfoEN === "#") {
+                    robotInfoEN = robotInfoDE;
+                }
+                $de.attr({
+                    'onclick' : 'window.open("' + robotInfoDE + '");return false;',
+                    'class' : 'DE'
+                });
+                $en.attr({
+                    'onclick' : 'window.open("' + robotInfoEN + '");return false;',
+                    'class' : 'EN'
+                });
+                $en.appendTo(clone);
             } else {
                 clone.find('a').remove();
             }
@@ -198,17 +220,16 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
                 if (groupsDict[key].length == 1 || key === "calliope") { //this means that a robot has no subgroup
 
                     var robotName = key; // robot name is the same as robot group
-                    var robotRName = key;
-                    if (key === "calliope") {
-                        robotRName = "calliope2017NoBlue";
-                    }
                     var clone = proto.clone().prop('id', 'menu-' + robotName);
-                    clone.attr('data-type', robotRName);
                     clone.find('span:eq( 0 )').removeClass('typcn-open');
                     clone.find('span:eq( 0 )').addClass('typcn-' + robotName);
-                    clone.find('span:eq( 1 )').html(GUISTATE_C.getMenuRobotRealName(robotRName));
+                    if (key === "calliope") {
+                        robotName = "calliope2017NoBlue";
+                    }
+                    clone.find('span:eq( 1 )').html(GUISTATE_C.getMenuRobotRealName(robotName));
+                    clone.attr('data-type', robotName);
                     addInfoLink(clone, robotName);
-                    if (!GUISTATE_C.getIsRobotBeta(robotRName)) {
+                    if (!GUISTATE_C.getIsRobotBeta(robotName)) {
                         clone.find('img.img-beta').css('visibility', 'hidden');
                     }
                     $("#popup-robot-main").append(clone);
@@ -248,19 +269,25 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
                 }
             }
         }
+
         proto.find('.img-beta').css('visibility', 'hidden');
         proto.find('a[href]').css('visibility', 'hidden');
         $('#show-startup-message>.modal-body').append('<input type="button" class="btn backButton hidden" data-dismiss="modal" lkey="Blockly.Msg.POPUP_CANCEL"></input>');
         USER.getStatusText(function(result) {
             if (result.statustext[0] !== "" && result.statustext[1] !== "") {
-//                $('#statustext-en').html("<span class='typcn typcn-info-large'></span> " + result.statustext[0]);
-//                $('#statustext-de').html("<span class='typcn typcn-info-large'></span> " + result.statustext[1]);
                 $('#statustext-en').html(result.statustext[0]);
                 $('#statustext-de').html(result.statustext[1]);
                 $('#modal-statustext-text-en').html(result.statustext[0]);
                 $('#modal-statustext-text-de').html(result.statustext[1]);
             }
         })
+        if (GUISTATE_C.getLanguage() === 'de') {
+            $('.popup-robot .EN').css('display', 'none');
+            $('.popup-robot .DE').css('display', 'inline');
+        } else {
+            $('.popup-robot .DE').css('display', 'none');
+            $('.popup-robot .EN').css('display', 'inline');
+        }
         GUISTATE_C.setInitialState();
     }
 

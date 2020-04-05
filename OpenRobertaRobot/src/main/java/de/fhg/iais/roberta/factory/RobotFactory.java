@@ -109,8 +109,23 @@ public class RobotFactory implements IRobotFactory {
     }
 
     @Override
-    public final String getInfo() {
-        return this.pluginProperties.getStringProperty("robot.info") != null ? this.pluginProperties.getStringProperty("robot.info") : "#";
+    public final String getInfoDE() {
+        String robotInfoDE = this.pluginProperties.getStringProperty("robot.info.de");
+        if ( robotInfoDE == null ) {
+            return "#";
+        } else {
+            return robotInfoDE;
+        }
+    }
+
+    @Override
+    public final String getInfoEN() {
+        String robotInfoEN = this.pluginProperties.getStringProperty("robot.info.en");
+        if ( robotInfoEN == null ) {
+            return "#";
+        } else {
+            return robotInfoEN;
+        }
     }
 
     @Override
@@ -139,7 +154,7 @@ public class RobotFactory implements IRobotFactory {
 
     @Override
     public final String getConfigurationType() {
-        final String configurationType = this.pluginProperties.getStringProperty("robot.configuration.type");
+        String configurationType = this.pluginProperties.getStringProperty("robot.configuration.type");
         if ( configurationType == null ) {
             throw new DbcException("no property robot.configuration.type");
         } else if ( configurationType.equals("new") ) {
@@ -154,7 +169,7 @@ public class RobotFactory implements IRobotFactory {
 
     @Override
     public final String getSensorPrefix() {
-        final String configurationType = this.pluginProperties.getStringProperty("robot.configuration.type");
+        String configurationType = this.pluginProperties.getStringProperty("robot.configuration.type");
         if ( configurationType == null || configurationType.equals("new") || !configurationType.startsWith("old-") ) {
             throw new DbcException("no or invalid property robot.configuration.type");
         } else {
@@ -164,7 +179,7 @@ public class RobotFactory implements IRobotFactory {
 
     @Override
     public final String getTopBlockOfOldConfiguration() {
-        final String topLevelBlock = this.pluginProperties.getStringProperty("robot.configuration.old.toplevelblock");
+        String topLevelBlock = this.pluginProperties.getStringProperty("robot.configuration.old.toplevelblock");
         if ( topLevelBlock == null ) {
             throw new DbcException("no property robot.configuration.old.toplevelblock");
         } else {
