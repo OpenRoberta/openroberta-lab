@@ -1,7 +1,10 @@
 var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
     return function (d, b) {
         extendStatics(d, b);
         function __() { this.constructor = d; }
@@ -11,7 +14,7 @@ var __extends = (this && this.__extends) || (function () {
 define(["require", "exports", "interpreter.aRobotBehaviour", "interpreter.constants", "interpreter.util"], function (require, exports, interpreter_aRobotBehaviour_1, C, U) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    var RobotMbedBehaviour = (function (_super) {
+    var RobotMbedBehaviour = /** @class */ (function (_super) {
         __extends(RobotMbedBehaviour, _super);
         function RobotMbedBehaviour() {
             var _this = _super.call(this) || this;
@@ -30,7 +33,7 @@ define(["require", "exports", "interpreter.aRobotBehaviour", "interpreter.consta
                 s.push(this.getEncoderValue(mode, port));
             }
             else {
-                s.push(this.getSensorValue(sensorName, mode));
+                s.push(this.getSensorValue(sensorName, port, mode));
             }
         };
         RobotMbedBehaviour.prototype.getEncoderValue = function (mode, port) {
@@ -59,13 +62,19 @@ define(["require", "exports", "interpreter.aRobotBehaviour", "interpreter.consta
                     return 0;
             }
         };
-        RobotMbedBehaviour.prototype.getSensorValue = function (sensorName, mode) {
+        RobotMbedBehaviour.prototype.getSensorValue = function (sensorName, port, mode) {
             var sensor = this.hardwareState.sensors[sensorName];
             if (sensor === undefined) {
                 return "undefined";
             }
             if (mode != undefined) {
-                var v = sensor[mode];
+                var v;
+                if (port != undefined) {
+                    v = sensor[port][mode];
+                }
+                else {
+                    v = sensor[mode];
+                }
                 if (v === undefined) {
                     return false;
                 }

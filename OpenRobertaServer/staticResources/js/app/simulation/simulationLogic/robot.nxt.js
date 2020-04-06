@@ -1,4 +1,4 @@
-define([ 'simulation.simulation', 'interpreter.constants', 'simulation.robot.ev3' ], function(SIM, C, Ev3) {
+define(['simulation.simulation', 'interpreter.constants', 'simulation.robot.ev3'], function(SIM, C, Ev3) {
 
     /**
      * Creates a new robot for a simulation.
@@ -10,73 +10,40 @@ define([ 'simulation.simulation', 'interpreter.constants', 'simulation.robot.ev3
      * 
      * @class
      */
-    function Nxt(pose, num, robotBehaviour) {
-        Ev3.call(this, pose, num, robotBehaviour);
-        var that = this;
+    function Nxt(pose, configuration, num, robotBehaviour) {
+        Ev3.call(this, pose, configuration, num, robotBehaviour);
 
         this.geom = {
-            x : -20,
-            y : -20,
-            w : 40,
-            h : 50,
-            color : 'LIGHTGREY'
+            x: -20,
+            y: -20,
+            w: 40,
+            h: 50,
+            color: 'LIGHTGREY'
         };
         this.ledSensor = {
-            x : 0,
-            y : -15,
-            color : '',
+            x: 0,
+            y: -15,
+            color: '',
         };
-        this.touchSensor = {
-            x : 0,
-            y : -25,
-            x1 : 0,
-            y1 : 0,
-            x2 : 0,
-            y2 : 0,
-            value : 0,
-            color : 'LIGHTGREY'
-        };
+        for (var s in this.touchSensor) {
+            this.touchSensor[s].color = 'LIGHTGREY';
+        }
         this.buttons = {
-            escape : false,
-            left : false,
-            enter : false,
-            right : false
+            escape: false,
+            left: false,
+            enter: false,
+            right: false
         };
         this.mouse = {
-            x : 0,
-            y : 5,
-            rx : 0,
-            ry : 0,
-            r : 30
+            x: 0,
+            y: 5,
+            rx: 0,
+            ry: 0,
+            r: 30
         };
-        this.brick = '<svg id="brick'
-                + this.id 
-                + '" xmlns="http://www.w3.org/2000/svg" width="254px" height="400px" viewBox="0 0 254 400" preserveAspectRatio="xMidYMid meet">'
-                + '<rect x="7" y="1" style="stroke-width: 2px;" stroke="black" id="backgroundConnectors" width="240" height="398" fill="#6D6E6C" />'
-                + '<rect x="1" y="24" style="stroke-width: 2px;" stroke="black" id="backgroundSides" width="252" height="352" fill="#F2F3F2" />'
-                + '<rect x="44" y="68" style="stroke-width: 4px;" stroke="#cccccc" width="170" height="106" fill="#DDDDDD" rx="4" ry="4" />'
-                + '<g id="display" clip-path="url(#clipPath)" fill="#000" transform="translate(50, 72)" font-family="Courier New" letter-spacing="2px" font-size="10pt"></g>'
-                + '<defs><clipPath id="clipPath"><rect x="0" y="0" width="160" height="96"/></clipPath></defs>'
-                + '<rect x="101" y="216" style="stroke-width: 2px;" stroke="#cccccc" id="bg-center" width="52" height="90" fill="#cccccc" rx="4" ry="4" />'
-                + '<rect x="105" y="220" style="stroke-width: 1px;" stroke="black" id="enter'
-                + this.id
-                + '" class="simKey" width="44" height="44" fill="#DA8540" rx="2" ry="2" />'
-                + '<rect x="105" y="280" style="stroke-width: 1px;" stroke="black" id="escape'
-                + this.id
-                + '" class="simKey" width="44" height="22" fill="#6D6E6C" rx="2" ry="2" />'
-                + '<path d="M0.5,-4.13 l-4,7 h8 z" style="vector-effect: non-scaling-stroke; stroke-width: 8px; stroke-linecap: round; stroke-linejoin: round;" stroke="#cccccc" id="bg-left" transform="matrix(0, -5.5, 5.5, 0, 74.0, 245.0)" fill="#cccccc" />'
-                + '<path d="M0.0,16.7 l-4,7 h8 z" style="vector-effect: non-scaling-stroke; stroke-width: 8px; stroke-linecap: round; stroke-linejoin: round;" stroke="#cccccc" id="bg-right" transform="matrix(-0.0, 5.5, -5.5, -0.0, 294, 241)" fill="#cccccc" />'
-                + '<path d="M0.0,16.7 l-4,7 h8 z" style="vector-effect: non-scaling-stroke; stroke-width: 1px; stroke-linecap: round; stroke-linejoin: round;" stroke="black" id="right'
-                + this.id
-                + '" class="simKey" transform="matrix(-0.0, 5.5, -5.5, -0.0, 294, 241)" fill="#A3A2A4" />'
-                + '<path d="M0.5,-4.13 l-4,7 h8 z" style="vector-effect: non-scaling-stroke; stroke-width: 1px; stroke-linecap: round; stroke-linejoin: round;" stroke="black" id="left'
-                + this.id
-                + '" class="simKey" transform="matrix(0, -5.5, 5.5, 0, 74.0, 245.0)" fill="#A3A2A4" />'
-                + '<rect x="8" y="22" style="stroke-width: 1px; stroke: none;" id="bg-bordertop" width="238" height="3" fill="#6D6E6C" />'
-                + '<rect x="8" y="375" style="stroke-width: 1px; stroke: none;" id="bg-borderbottom" width="238" height="3" fill="#6D6E6C" />'
-                + '<line id="bg-line" x1="126" y1="176" x2="126" y2="216" style="stroke-width: 4px; fill: none;" stroke="#cccccc" />' + '</svg>';
+        this.brick = '<svg id="brick' + this.id + '" xmlns="http://www.w3.org/2000/svg" width="254px" height="400px" viewBox="0 0 254 400" preserveAspectRatio="xMidYMid meet">' + '<rect x="7" y="1" style="stroke-width: 2px;" stroke="black" id="backgroundConnectors" width="240" height="398" fill="#6D6E6C" />' + '<rect x="1" y="24" style="stroke-width: 2px;" stroke="black" id="backgroundSides" width="252" height="352" fill="#F2F3F2" />' + '<rect x="44" y="68" style="stroke-width: 4px;" stroke="#cccccc" width="170" height="106" fill="#DDDDDD" rx="4" ry="4" />' + '<g id="display" clip-path="url(#clipPath)" fill="#000" transform="translate(50, 72)" font-family="Courier New" letter-spacing="2px" font-size="10pt"></g>' + '<defs><clipPath id="clipPath"><rect x="0" y="0" width="160" height="96"/></clipPath></defs>' + '<rect x="101" y="216" style="stroke-width: 2px;" stroke="#cccccc" id="bg-center" width="52" height="90" fill="#cccccc" rx="4" ry="4" />' + '<rect x="105" y="220" style="stroke-width: 1px;" stroke="black" id="enter' + this.id + '" class="simKey" width="44" height="44" fill="#DA8540" rx="2" ry="2" />' + '<rect x="105" y="280" style="stroke-width: 1px;" stroke="black" id="escape' + this.id + '" class="simKey" width="44" height="22" fill="#6D6E6C" rx="2" ry="2" />' + '<path d="M0.5,-4.13 l-4,7 h8 z" style="vector-effect: non-scaling-stroke; stroke-width: 8px; stroke-linecap: round; stroke-linejoin: round;" stroke="#cccccc" id="bg-left" transform="matrix(0, -5.5, 5.5, 0, 74.0, 245.0)" fill="#cccccc" />' + '<path d="M0.0,16.7 l-4,7 h8 z" style="vector-effect: non-scaling-stroke; stroke-width: 8px; stroke-linecap: round; stroke-linejoin: round;" stroke="#cccccc" id="bg-right" transform="matrix(-0.0, 5.5, -5.5, -0.0, 294, 241)" fill="#cccccc" />' + '<path d="M0.0,16.7 l-4,7 h8 z" style="vector-effect: non-scaling-stroke; stroke-width: 1px; stroke-linecap: round; stroke-linejoin: round;" stroke="black" id="right' + this.id + '" class="simKey" transform="matrix(-0.0, 5.5, -5.5, -0.0, 294, 241)" fill="#A3A2A4" />' + '<path d="M0.5,-4.13 l-4,7 h8 z" style="vector-effect: non-scaling-stroke; stroke-width: 1px; stroke-linecap: round; stroke-linejoin: round;" stroke="black" id="left' + this.id + '" class="simKey" transform="matrix(0, -5.5, 5.5, 0, 74.0, 245.0)" fill="#A3A2A4" />' + '<rect x="8" y="22" style="stroke-width: 1px; stroke: none;" id="bg-bordertop" width="238" height="3" fill="#6D6E6C" />' + '<rect x="8" y="375" style="stroke-width: 1px; stroke: none;" id="bg-borderbottom" width="238" height="3" fill="#6D6E6C" />' + '<line id="bg-line" x1="126" y1="176" x2="126" y2="216" style="stroke-width: 4px; fill: none;" stroke="#cccccc" />' + '</svg>';
         this.timer = {
-            timer1 : false
+            timer1: false
         };
         SIM.initMicrophone(this);
     }
@@ -85,15 +52,14 @@ define([ 'simulation.simulation', 'interpreter.constants', 'simulation.robot.ev3
     Nxt.prototype.constructor = Nxt;
 
     Nxt.prototype.reset = function() {
-        var Nxt = this;
         this.encoder.left = 0;
         this.encoder.right = 0;
         this.ledSensor.color = '';
-        for ( var key in this.timer) {
+        for (var key in this.timer) {
             this.timer[key] = 0;
         }
-        var robot = this;       
-        for ( var property in robot.buttons) {
+        var robot = this;
+        for (var property in robot.buttons) {
             $('#' + property + robot.id).off('mousedown touchstart');
             $('#' + property + robot.id).on('mousedown touchstart', function() {
                 robot.buttons[this.id.replace(/\d+$/, "")] = true;
@@ -118,7 +84,7 @@ define([ 'simulation.simulation', 'interpreter.constants', 'simulation.robot.ev3
      *            motors/wheels, display, led ...
      * 
      */
-    Nxt.prototype.update = function(actions) {
+    Nxt.prototype.update = function() {
         var motors = this.robotBehaviour.getActionState("motors", true);
         if (motors) {
             var left = motors.c;
@@ -203,34 +169,41 @@ define([ 'simulation.simulation', 'interpreter.constants', 'simulation.robot.ev3
         this.backLeft = this.translate(sin, cos, this.backLeft);
         this.backMiddle = this.translate(sin, cos, this.backMiddle);
 
-        this.touchSensor = this.translate(sin, cos, this.touchSensor);
-        this.colorSensor = this.translate(sin, cos, this.colorSensor);
-        this.ultraSensor = this.translate(sin, cos, this.ultraSensor);
+        for (var s in this.touchSensor) {
+            this.touchSensor[s] = this.translate(sin, cos, this.touchSensor[s]);
+        }
+        for (var s in this.colorSensor) {
+            this.colorSensor[s] = this.translate(sin, cos, this.colorSensor[s]);
+        }
+        for (var s in this.ultraSensor) {
+            this.ultraSensor[s] = this.translate(sin, cos, this.ultraSensor[s]);
+        }
         this.mouse = this.translate(sin, cos, this.mouse);
 
-        this.touchSensor.x1 = this.frontRight.rx;
-        this.touchSensor.y1 = this.frontRight.ry;
-        this.touchSensor.x2 = this.frontLeft.rx;
-        this.touchSensor.y2 = this.frontLeft.ry;
+        for (var s in this.touchSensor) {
+            this.touchSensor[s].x1 = this.frontRight.rx;
+            this.touchSensor[s].y1 = this.frontRight.ry;
+            this.touchSensor[s].x2 = this.frontLeft.rx;
+            this.touchSensor[s].y2 = this.frontLeft.ry;
+        }
 
         //update led(s)
         var led = this.robotBehaviour.getActionState("led", true);
         if (led) {
             switch (led.mode) {
-            case "off":
-                this.ledSensor.color = '';
-                break;
-            case "on":
-                this.ledSensor.color = led.color.toUpperCase();
-                break;
+                case "off":
+                    this.ledSensor.color = '';
+                    break;
+                case "on":
+                    this.ledSensor.color = led.color.toUpperCase();
+                    break;
             }
         }
         // update display
         var display = this.robotBehaviour.getActionState("display", true);
         if (display) {
             if (display.text) {
-                $("#display").html($("#display").html() + '<text x=' + display.x * 1.5 + ' y=' + (display.y) * 12 + '>' + display.text
-                        + '</text>');
+                $("#display").html($("#display").html() + '<text x=' + display.x * 1.5 + ' y=' + (display.y) * 12 + '>' + display.text + '</text>');
             }
             if (display.picture) {
                 $("#display").html(this.display[display.picture]);
@@ -252,17 +225,18 @@ define([ 'simulation.simulation', 'interpreter.constants', 'simulation.robot.ev3
                 oscillator.type = 'square';
                 oscillator.connect(this.webAudio.context.destination);
                 var that = this;
+
                 function oscillatorFinish() {
                     that.tone.finished = true;
                     oscillator.disconnect(that.webAudio.context.destination);
                     delete oscillator;
                 }
                 oscillator.onended = function(e) {
-                    oscillatorFinish();                    
-                }
+                    oscillatorFinish();
+                };
                 oscillator.frequency.value = tone.frequency;
                 oscillator.start(cT);
-                oscillator.stop(cT + tone.duration / 1000.0); 
+                oscillator.stop(cT + tone.duration / 1000.0);
             }
             if (tone.file !== undefined) {
                 this.tone.file[tone.file](this.webAudio);
@@ -271,7 +245,7 @@ define([ 'simulation.simulation', 'interpreter.constants', 'simulation.robot.ev3
         // update timer
         var timer = this.robotBehaviour.getActionState("timer", false);
         if (timer) {
-            for ( var key in timer) {
+            for (var key in timer) {
                 if (timer[key] == 'reset') {
                     this.timer[key] = 0;
                 }

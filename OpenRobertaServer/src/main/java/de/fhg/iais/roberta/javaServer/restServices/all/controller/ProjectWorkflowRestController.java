@@ -114,6 +114,7 @@ public class ProjectWorkflowRestController {
             response.put("message", project.getResult().getKey());
             response.put("cause", project.getResult().getKey());
             response.put("parameters", project.getResultParams());
+            response.put("javaScriptConfiguration", project.getSimSensorConfigurationJSON());
             Statistics.info("SimulationRun", "LoggedIn", httpSessionState.isUserLoggedIn(), "success", project.hasSucceeded());
             UtilForREST.responseWithFrontendInfo(response, httpSessionState, this.brickCommunicator);
             return Response.ok(response).build();
@@ -156,7 +157,7 @@ public class ProjectWorkflowRestController {
             response.put("compiledCode", project.getCompiledHex());
             // TODO auto connection robots return COMPILERWORKFLOW_SUCCESS or COMPILERWORKFLOW_PROGRAM_GENERATION_SUCCESS
             // TODO which is not mapped to anything in the frontend, ROBOT_PUSH_RUN is mapped to the message that was used before workflows
-            if ( (project.getResult() == Key.COMPILERWORKFLOW_SUCCESS) || (project.getResult() == Key.COMPILERWORKFLOW_PROGRAM_GENERATION_SUCCESS) ) {
+            if ( project.getResult() == Key.COMPILERWORKFLOW_SUCCESS || project.getResult() == Key.COMPILERWORKFLOW_PROGRAM_GENERATION_SUCCESS ) {
                 project.setResult(Key.ROBOT_PUSH_RUN);
             }
             response.put("message", project.getResult().getKey());

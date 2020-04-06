@@ -3,12 +3,16 @@ package de.fhg.iais.roberta.worker;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.codehaus.jettison.json.JSONException;
+import org.codehaus.jettison.json.JSONObject;
+
 import com.google.common.collect.ClassToInstanceMap;
 import com.google.common.collect.ImmutableClassToInstanceMap;
 
 import de.fhg.iais.roberta.bean.IProjectBean;
 import de.fhg.iais.roberta.bean.UsedHardwareBean;
 import de.fhg.iais.roberta.bean.UsedMethodBean;
+import de.fhg.iais.roberta.components.ConfigurationComponent;
 import de.fhg.iais.roberta.components.Project;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.visitor.IVisitor;
@@ -46,6 +50,16 @@ public abstract class AbstractUsedHardwareCollectorWorker implements IWorker {
         }
         project.addWorkerResult(usedHardwareBeanBuilder.build());
         project.addWorkerResult(usedMethodBeanBuilder.build());
+
+        JSONObject simSensorConfigurationJSON = new JSONObject();
+        for ( ConfigurationComponent s : project.getConfigurationAst().getSensors() ) {
+            try {
+                simSensorConfigurationJSON.put(s.getUserDefinedPortName(), s.getComponentType());
+            } catch ( JSONException e ) {
+                // ok
+            }
+        }
+        project.setSimSensorConfigurationJSON(simSensorConfigurationJSON);
     }
 
     /**

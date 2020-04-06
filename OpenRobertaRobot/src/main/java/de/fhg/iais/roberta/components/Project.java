@@ -1,5 +1,7 @@
 package de.fhg.iais.roberta.components;
 
+import static de.fhg.iais.roberta.transformer.Jaxb2ConfigurationAst.block2OldConfiguration;
+
 import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -11,6 +13,7 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 
+import org.codehaus.jettison.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,7 +35,6 @@ import de.fhg.iais.roberta.util.Key;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.util.jaxb.JaxbHelper;
-import static de.fhg.iais.roberta.transformer.Jaxb2ConfigurationAst.block2OldConfiguration;
 
 /**
  * This class stores the AST representation of the program and the configuration as well as everything needed for executing workflows
@@ -60,6 +62,7 @@ public final class Project {
 
     private StringBuilder sourceCodeBuilder = new StringBuilder();
     private final StringBuilder indentationBuilder = new StringBuilder();
+    private JSONObject simSensorConfigurationJSON;
 
     private String compiledHex = "";
 
@@ -146,7 +149,7 @@ public final class Project {
 
     public void appendWorkerResult(IProjectBean bean) {
         IProjectBean existingBean = this.workerResults.get(bean.getClass());
-        if (existingBean == null) {
+        if ( existingBean == null ) {
             this.addWorkerResult(bean);
         } else {
             existingBean.merge(bean);
@@ -223,6 +226,14 @@ public final class Project {
             throw new DbcException("Transformation of configuration AST into blockset and into XML failed.", e);
         }
         return configurationXML;
+    }
+
+    public JSONObject getSimSensorConfigurationJSON() {
+        return this.simSensorConfigurationJSON;
+    }
+
+    public void setSimSensorConfigurationJSON(JSONObject simSensorConfigurationJSON2) {
+        this.simSensorConfigurationJSON = simSensorConfigurationJSON2;
     }
 
     private static String jaxbToXml(BlockSet blockSet) throws JAXBException {
@@ -344,7 +355,7 @@ public final class Project {
                 Assert.isNull(this.programXml, "Program XML should not be set when using native compile");
                 Assert.isNull(this.configurationXml, "Configuration XML should not be set when using native compile");
                 this.project.setSourceCode(this.programNativeSource);
-            } else { // STANDARD CASE - Used to follow the default generation, compilation, run from blockly            
+            } else { // STANDARD CASE - Used to follow the default generation, compilation, run from blockly
                 if ( this.project.configuration == null ) {
                     transformConfiguration();
                 }
@@ -359,7 +370,7 @@ public final class Project {
          * Transforms program XML into AST.
          */
         private void transformProgram() {
-            if ( (this.programXml == null) || this.programXml.trim().isEmpty() ) {
+            if ( this.programXml == null || this.programXml.trim().isEmpty() ) {
                 this.project.result = Key.COMPILERWORKFLOW_ERROR_PROGRAM_NOT_FOUND;
             } else {
                 try {
@@ -376,7 +387,7 @@ public final class Project {
          * Transforms configuration XML into AST.
          */
         private void transformConfiguration() {
-            if ( (this.configurationXml == null) || this.configurationXml.trim().isEmpty() ) {
+            if ( this.configurationXml == null || this.configurationXml.trim().isEmpty() ) {
                 this.project.result = Key.COMPILERWORKFLOW_ERROR_CONFIGURATION_NOT_FOUND;
             } else {
                 try {
