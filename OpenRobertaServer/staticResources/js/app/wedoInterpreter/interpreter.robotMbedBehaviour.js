@@ -67,22 +67,29 @@ define(["require", "exports", "interpreter.aRobotBehaviour", "interpreter.consta
             if (sensor === undefined) {
                 return "undefined";
             }
+            var v;
             if (mode != undefined) {
-                var v;
                 if (port != undefined) {
                     v = sensor[port][mode];
                 }
                 else {
                     v = sensor[mode];
                 }
-                if (v === undefined) {
-                    return false;
-                }
-                else {
-                    return v;
+            }
+            else if (port != undefined) {
+                if (mode === undefined) {
+                    v = sensor[port];
                 }
             }
-            return sensor;
+            else {
+                return sensor;
+            }
+            if (v === undefined) {
+                return false;
+            }
+            else {
+                return v;
+            }
         };
         RobotMbedBehaviour.prototype.encoderReset = function (port) {
             U.debug('encoderReset for ' + port);

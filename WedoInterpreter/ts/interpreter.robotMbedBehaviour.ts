@@ -59,21 +59,25 @@ export class RobotMbedBehaviour extends ARobotBehaviour {
 		if (sensor === undefined) {
 			return "undefined";
 		}
+		var v: string;
 		if (mode != undefined) {
-			var v: string;
 			if (port != undefined) {
 				v = sensor[port][mode];
 			} else {
 				v = sensor[mode];
 			}
-			if (v === undefined) {
-				return false;
+		} else if (port != undefined) {
+			if (mode === undefined) {
+				v = sensor[port];
 			}
-			else {
-				return v;
-			}
+		} else {
+			return sensor;
 		}
-		return sensor;
+		if (v === undefined) {
+			return false;
+		} else {
+			return v;
+		}
 	}
 
 	public encoderReset(port: string) {

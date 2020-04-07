@@ -118,10 +118,10 @@ define(['simulation.simulation', 'interpreter.constants', 'simulation.robot', 'g
         var ultraSensorProto = this.ultraSensor;
         this.colorSensor = [];
         this.ultraSensor = [];
-        if (countGyro >= 0) {
+        if (countGyro > 0) {
             this.gyroSensor = [];
         }
-        if (countTouch >= 0) {
+        if (countTouch > 0) {
             this.touchSensor = [];
         }
         for (var c in configuration) {

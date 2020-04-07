@@ -216,7 +216,7 @@ define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constan
             this.rCtx.scale(SIM.getScale(), SIM.getScale());
             this.rCtx.save();
             this.rCtx.translate(this.robots[r].pose.x, this.robots[r].pose.y);
-            this.rCtx.rotate(SIMATH.toRadians(SIMATH.toDegree(this.robots[r].pose.theta) - 90));
+            this.rCtx.rotate(this.robots[r].pose.theta - Math.PI / 2);
             this.rCtx.scale(1, -1);
             //axis
             this.rCtx.lineWidth = "2.5";
@@ -350,9 +350,13 @@ define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constan
                 this.rCtx.lineTo(ultraSensors[s].cx, ultraSensors[s].cy);
                 this.rCtx.stroke();
                 if (s !== 0) {
+                    this.rCtx.translate(ultraSensors[s].rx,ultraSensors[s].ry);
+                    this.rCtx.rotate(this.robots[r].pose.theta);                    
                     this.rCtx.beginPath();
                     this.rCtx.fillStyle = "#555555";
-                    this.rCtx.fillText(s, ultraSensors[s].rx + (ultraSensors[s].y !== 30 ? 10 : -10), ultraSensors[s].ry + 4);
+                    this.rCtx.fillText(s, (ultraSensors[s].y !== 30 ? 10 : -10), 4);
+                    this.rCtx.rotate(-this.robots[r].pose.theta);                   
+                    this.rCtx.translate(-ultraSensors[s].rx,-ultraSensors[s].ry);
                 }
             }
 
@@ -399,176 +403,181 @@ define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constan
                 }
             }
             if (this.robots[r].touchSensor) {
-                var touchSensors = this.robots[r].touchSensor;
-                values.touch = {};
-                for (var s in touchSensors) {
-                    touchSensors[s].value = 0;
-                    this.robots[r].frontLeft.bumped = false;
-                    this.robots[r].frontRight.bumped = false;
-                    this.robots[r].backLeft.bumped = false;
-                    this.robots[r].backRight.bumped = false;
-                    for (var i = 0; i < personalObstacleList.length; i++) {
-                        var p = personalObstacleList[i];
-                        if (i === 0) {
+                var touchSensor;
+                if (Array.isArray(this.robots[r].touchSensor)) {
+                    for (var s in this.robots[r].touchSensor) {
+                        touchSensor = this.robots[r].touchSensor[s];
+                        break;
+                    }
+                } else {
+                    touchSensor = this.robots[r].touchSensor;
+                }
+                touchSensor.value = 0;
+                this.robots[r].frontLeft.bumped = false;
+                this.robots[r].frontRight.bumped = false;
+                this.robots[r].backLeft.bumped = false;
+                this.robots[r].backRight.bumped = false;
+                for (var i = 0; i < personalObstacleList.length; i++) {
+                    var p = personalObstacleList[i];
+                    if (i === 0) {
+                        var x = this.robots[r].frontLeft.rx;
+                        var y = this.robots[r].frontLeft.ry;
+                        if (x < p.x || x > p.x + p.w || y < p.y || y > p.y + p.h) {
+                            this.robots[r].frontLeft.bumped = true;
+                            touchSensor.value = 1;
+                        }
+                        x = this.robots[r].frontRight.rx;
+                        y = this.robots[r].frontRight.ry;
+                        if (x < p.x || x > p.x + p.w || y < p.y || y > p.y + p.h) {
+                            this.robots[r].frontRight.bumped = true;
+                            touchSensor.value = 1;
+                        }
+                        x = this.robots[r].backLeft.rx;
+                        y = this.robots[r].backLeft.ry;
+                        if (x < p.x || x > p.x + p.w || y < p.y || y > p.y + p.h) {
+                            this.robots[r].backLeft.bumped = true;
+                        }
+                        x = this.robots[r].backRight.rx;
+                        y = this.robots[r].backRight.ry;
+                        if (x < p.x || x > p.x + p.w || y < p.y || y > p.y + p.h) {
+                            this.robots[r].backRight.bumped = true;
+                        }
+                    } else {
+                        if (p.isParallelToAxis) {
                             var x = this.robots[r].frontLeft.rx;
                             var y = this.robots[r].frontLeft.ry;
-                            if (x < p.x || x > p.x + p.w || y < p.y || y > p.y + p.h) {
+                            if (x > p.x && x < p.x + p.w && y > p.y && y < p.y + p.h) {
                                 this.robots[r].frontLeft.bumped = true;
-                                touchSensors[s].value = 1;
+                                touchSensor.value = 1;
                             }
                             x = this.robots[r].frontRight.rx;
                             y = this.robots[r].frontRight.ry;
-                            if (x < p.x || x > p.x + p.w || y < p.y || y > p.y + p.h) {
+                            if (x > p.x && x < p.x + p.w && y > p.y && y < p.y + p.h) {
                                 this.robots[r].frontRight.bumped = true;
-                                touchSensors[s].value = 1;
+                                touchSensor.value = 1;
                             }
                             x = this.robots[r].backLeft.rx;
                             y = this.robots[r].backLeft.ry;
-                            if (x < p.x || x > p.x + p.w || y < p.y || y > p.y + p.h) {
+                            if (x > p.x && x < p.x + p.w && y > p.y && y < p.y + p.h) {
                                 this.robots[r].backLeft.bumped = true;
                             }
                             x = this.robots[r].backRight.rx;
                             y = this.robots[r].backRight.ry;
-                            if (x < p.x || x > p.x + p.w || y < p.y || y > p.y + p.h) {
+                            if (x > p.x && x < p.x + p.w && y > p.y && y < p.y + p.h) {
                                 this.robots[r].backRight.bumped = true;
                             }
                         } else {
-                            if (p.isParallelToAxis) {
-                                var x = this.robots[r].frontLeft.rx;
-                                var y = this.robots[r].frontLeft.ry;
-                                if (x > p.x && x < p.x + p.w && y > p.y && y < p.y + p.h) {
-                                    this.robots[r].frontLeft.bumped = true;
-                                    touchSensors[s].value = 1;
+                            var rectobj = {
+                                p1: {
+                                    x: p.backLeft.rx,
+                                    y: p.backLeft.ry
+                                },
+                                p2: {
+                                    x: p.frontLeft.rx,
+                                    y: p.frontLeft.ry
+                                },
+                                p3: {
+                                    x: p.frontRight.rx,
+                                    y: p.frontRight.ry
+                                },
+                                p4: {
+                                    x: p.backRight.rx,
+                                    y: p.backRight.ry
                                 }
-                                x = this.robots[r].frontRight.rx;
-                                y = this.robots[r].frontRight.ry;
-                                if (x > p.x && x < p.x + p.w && y > p.y && y < p.y + p.h) {
-                                    this.robots[r].frontRight.bumped = true;
-                                    touchSensors[s].value = 1;
-                                }
-                                x = this.robots[r].backLeft.rx;
-                                y = this.robots[r].backLeft.ry;
-                                if (x > p.x && x < p.x + p.w && y > p.y && y < p.y + p.h) {
-                                    this.robots[r].backLeft.bumped = true;
-                                }
-                                x = this.robots[r].backRight.rx;
-                                y = this.robots[r].backRight.ry;
-                                if (x > p.x && x < p.x + p.w && y > p.y && y < p.y + p.h) {
-                                    this.robots[r].backRight.bumped = true;
-                                }
-                            } else {
-                                var rectobj = {
-                                    p1: {
-                                        x: p.backLeft.rx,
-                                        y: p.backLeft.ry
-                                    },
-                                    p2: {
-                                        x: p.frontLeft.rx,
-                                        y: p.frontLeft.ry
-                                    },
-                                    p3: {
-                                        x: p.frontRight.rx,
-                                        y: p.frontRight.ry
-                                    },
-                                    p4: {
-                                        x: p.backRight.rx,
-                                        y: p.backRight.ry
-                                    }
-                                };
-                                var x = this.robots[r].frontLeft.rx;
-                                var y = this.robots[r].frontLeft.ry;
-                                if (SIMATH.isPointInsideRectangle({
-                                        x: x,
-                                        y: y
-                                    }, rectobj)) {
-                                    this.robots[r].frontLeft.bumped = true;
-                                    touchSensors[s].value = 1;
-                                }
-                                x = this.robots[r].frontRight.rx;
-                                y = this.robots[r].frontRight.ry;
-                                if (SIMATH.isPointInsideRectangle({
-                                        x: x,
-                                        y: y
-                                    }, rectobj)) {
-                                    this.robots[r].frontRight.bumped = true;
-                                    touchSensors[s].value = 1;
-                                }
-                                x = this.robots[r].backLeft.rx;
-                                y = this.robots[r].backLeft.ry;
-                                if (SIMATH.isPointInsideRectangle({
-                                        x: x,
-                                        y: y
-                                    }, rectobj)) {
-                                    this.robots[r].backLeft.bumped = true;
-                                }
-                                x = this.robots[r].backRight.rx;
-                                y = this.robots[r].backRight.ry;
-                                if (SIMATH.isPointInsideRectangle({
-                                        x: x,
-                                        y: y
-                                    }, rectobj)) {
-                                    this.robots[r].backRight.bumped = true;
-                                }
+                            };
+                            var x = this.robots[r].frontLeft.rx;
+                            var y = this.robots[r].frontLeft.ry;
+                            if (SIMATH.isPointInsideRectangle({
+                                    x: x,
+                                    y: y
+                                }, rectobj)) {
+                                this.robots[r].frontLeft.bumped = true;
+                                touchSensor.value = 1;
                             }
-                            if (touchSensors[s].value === 0) {
-                                var obstacleLines = SIMATH.getLinesFromRect(personalObstacleList[i]);
-                                for (var k = 0; k < obstacleLines.length; k++) {
-                                    var interPoint = SIMATH.getIntersectionPoint({
-                                        x1: this.robots[r].frontLeft.rx,
-                                        x2: this.robots[r].frontRight.rx,
-                                        y1: this.robots[r].frontLeft.ry,
-                                        y2: this.robots[r].frontRight.ry
-                                    }, obstacleLines[k]);
-                                    if (interPoint) {
-                                        if (Math.abs(this.robots[r].frontLeft.rx - interPoint.x) < Math.abs(this.robots[r].frontRight.rx - interPoint.x)) {
-                                            this.robots[r].frontLeft.bumped = true;
-                                        } else {
-                                            this.robots[r].frontRight.bumped = true;
-                                        }
-                                        touchSensors[s].value = 1;
+                            x = this.robots[r].frontRight.rx;
+                            y = this.robots[r].frontRight.ry;
+                            if (SIMATH.isPointInsideRectangle({
+                                    x: x,
+                                    y: y
+                                }, rectobj)) {
+                                this.robots[r].frontRight.bumped = true;
+                                touchSensor.value = 1;
+                            }
+                            x = this.robots[r].backLeft.rx;
+                            y = this.robots[r].backLeft.ry;
+                            if (SIMATH.isPointInsideRectangle({
+                                    x: x,
+                                    y: y
+                                }, rectobj)) {
+                                this.robots[r].backLeft.bumped = true;
+                            }
+                            x = this.robots[r].backRight.rx;
+                            y = this.robots[r].backRight.ry;
+                            if (SIMATH.isPointInsideRectangle({
+                                    x: x,
+                                    y: y
+                                }, rectobj)) {
+                                this.robots[r].backRight.bumped = true;
+                            }
+                        }
+                        if (touchSensor.value === 0) {
+                            var obstacleLines = SIMATH.getLinesFromRect(personalObstacleList[i]);
+                            for (var k = 0; k < obstacleLines.length; k++) {
+                                var interPoint = SIMATH.getIntersectionPoint({
+                                    x1: this.robots[r].frontLeft.rx,
+                                    x2: this.robots[r].frontRight.rx,
+                                    y1: this.robots[r].frontLeft.ry,
+                                    y2: this.robots[r].frontRight.ry
+                                }, obstacleLines[k]);
+                                if (interPoint) {
+                                    if (Math.abs(this.robots[r].frontLeft.rx - interPoint.x) < Math.abs(this.robots[r].frontRight.rx - interPoint.x)) {
+                                        this.robots[r].frontLeft.bumped = true;
                                     } else {
-                                        var p = SIMATH.getDistanceToLine({
-                                            x: touchSensors[s].rx,
-                                            y: touchSensors[s].ry
-                                        }, {
-                                            x: obstacleLines[k].x1,
-                                            y: obstacleLines[k].y1
-                                        }, {
-                                            x: obstacleLines[k].x2,
-                                            y: obstacleLines[k].y2
-                                        });
-                                        if (SIMATH.sqr(touchSensors[s].rx - p.x) + SIMATH.sqr(touchSensors[s].ry - p.y) < SIM.getDt() * Math.max(Math.abs(this.robots[r].right), Math.abs(this.robots[r].left))) {
-                                            this.robots[r].frontLeft.bumped = true;
-                                            this.robots[r].frontRight.bumped = true;
-                                            touchSensors[s].value = 1;
-                                        } else {
-                                            var interPoint = SIMATH.getIntersectionPoint({
-                                                x1: this.robots[r].backLeft.rx,
-                                                x2: this.robots[r].backRight.rx,
-                                                y1: this.robots[r].backLeft.ry,
-                                                y2: this.robots[r].backRight.ry
-                                            }, obstacleLines[k]);
-                                            if (interPoint) {
-                                                if (Math.abs(this.robots[r].backLeft.rx - interPoint.x) < Math.abs(this.robots[r].backRight.rx - interPoint.x)) {
-                                                    this.robots[r].backLeft.bumped = true;
-                                                } else {
-                                                    this.robots[r].backRight.bumped = true;
-                                                }
+                                        this.robots[r].frontRight.bumped = true;
+                                    }
+                                    touchSensor.value = 1;
+                                } else {
+                                    var p = SIMATH.getDistanceToLine({
+                                        x: touchSensor.rx,
+                                        y: touchSensor.ry
+                                    }, {
+                                        x: obstacleLines[k].x1,
+                                        y: obstacleLines[k].y1
+                                    }, {
+                                        x: obstacleLines[k].x2,
+                                        y: obstacleLines[k].y2
+                                    });
+                                    if (SIMATH.sqr(touchSensor.rx - p.x) + SIMATH.sqr(touchSensor.ry - p.y) < SIM.getDt() * Math.max(Math.abs(this.robots[r].right), Math.abs(this.robots[r].left))) {
+                                        this.robots[r].frontLeft.bumped = true;
+                                        this.robots[r].frontRight.bumped = true;
+                                        touchSensor.value = 1;
+                                    } else {
+                                        var interPoint = SIMATH.getIntersectionPoint({
+                                            x1: this.robots[r].backLeft.rx,
+                                            x2: this.robots[r].backRight.rx,
+                                            y1: this.robots[r].backLeft.ry,
+                                            y2: this.robots[r].backRight.ry
+                                        }, obstacleLines[k]);
+                                        if (interPoint) {
+                                            if (Math.abs(this.robots[r].backLeft.rx - interPoint.x) < Math.abs(this.robots[r].backRight.rx - interPoint.x)) {
+                                                this.robots[r].backLeft.bumped = true;
                                             } else {
-                                                var p = SIMATH.getDistanceToLine({
-                                                    x: touchSensors[s].rx,
-                                                    y: touchSensors[s].ry
-                                                }, {
-                                                    x: obstacleLines[k].x1,
-                                                    y: obstacleLines[k].y1
-                                                }, {
-                                                    x: obstacleLines[k].x2,
-                                                    y: obstacleLines[k].y2
-                                                });
-                                                if (SIMATH.sqr(this.robots[r].backMiddle.rx - p.x) + SIMATH.sqr(this.robots[r].backMiddle.ry - p.y) < SIM.getDt() * Math.max(Math.abs(this.robots[r].right), Math.abs(this.robots[r].left))) {
-                                                    this.robots[r].backLeft.bumped = true;
-                                                    this.robots[r].backRight.bumped = true;
-                                                }
+                                                this.robots[r].backRight.bumped = true;
+                                            }
+                                        } else {
+                                            var p = SIMATH.getDistanceToLine({
+                                                x: touchSensor.rx,
+                                                y: touchSensor.ry
+                                            }, {
+                                                x: obstacleLines[k].x1,
+                                                y: obstacleLines[k].y1
+                                            }, {
+                                                x: obstacleLines[k].x2,
+                                                y: obstacleLines[k].y2
+                                            });
+                                            if (SIMATH.sqr(this.robots[r].backMiddle.rx - p.x) + SIMATH.sqr(this.robots[r].backMiddle.ry - p.y) < SIM.getDt() * Math.max(Math.abs(this.robots[r].right), Math.abs(this.robots[r].left))) {
+                                                this.robots[r].backLeft.bumped = true;
+                                                this.robots[r].backRight.bumped = true;
                                             }
                                         }
                                     }
@@ -576,7 +585,10 @@ define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constan
                             }
                         }
                     }
-                    if (touchSensors[s].value === 1) {
+                }
+                values.touch = {};
+                for (var s in this.robots[r].touchSensor) {
+                    if (touchSensor.value === 1) {
                         values.touch[s] = true;
                     } else {
                         values.touch[s] = false;
