@@ -42,12 +42,12 @@ import de.fhg.iais.roberta.syntax.action.speech.SayTextAction;
 import de.fhg.iais.roberta.syntax.action.speech.SetLanguageAction;
 import de.fhg.iais.roberta.syntax.lang.expr.ColorConst;
 import de.fhg.iais.roberta.syntax.lang.expr.NumConst;
-import de.fhg.iais.roberta.syntax.sensor.generic.HTColorSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.AccelerometerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.HTColorSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.HumiditySensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.IRSeekerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
@@ -317,14 +317,16 @@ public class Ev3StackMachineVisitor<V> extends AbstractStackMachineVisitor<V> im
 
     @Override
     public V visitTouchSensor(TouchSensor<V> touchSensor) {
-        JSONObject o = mk(C.GET_SAMPLE).put(C.GET_SAMPLE, C.TOUCH).put(C.NAME, "ev3");
+        String port = touchSensor.getPort();
+        JSONObject o = mk(C.GET_SAMPLE).put(C.GET_SAMPLE, C.TOUCH).put(C.PORT, port).put(C.NAME, "ev3");
         return app(o);
     }
 
     @Override
     public V visitColorSensor(ColorSensor<V> colorSensor) {
         String mode = colorSensor.getMode();
-        JSONObject o = mk(C.GET_SAMPLE).put(C.GET_SAMPLE, C.COLOR).put(C.MODE, mode.toLowerCase()).put(C.NAME, "ev3");
+        String port = colorSensor.getPort();
+        JSONObject o = mk(C.GET_SAMPLE).put(C.GET_SAMPLE, C.COLOR).put(C.PORT, port).put(C.MODE, mode.toLowerCase()).put(C.NAME, "ev3");
         return app(o);
     }
 
@@ -348,6 +350,7 @@ public class Ev3StackMachineVisitor<V> extends AbstractStackMachineVisitor<V> im
 
     @Override
     public V visitTemperatureSensor(TemperatureSensor<V> temperatureSensor) {
+        // TODO check if this is really supported!
         String mode = temperatureSensor.getMode();
         JSONObject o = mk(C.GET_SAMPLE).put(C.GET_SAMPLE, C.TEMPERATURE).put(C.PORT, mode.toLowerCase()).put(C.NAME, "ev3");
         return app(o);
@@ -362,6 +365,7 @@ public class Ev3StackMachineVisitor<V> extends AbstractStackMachineVisitor<V> im
 
     @Override
     public V visitLightSensor(LightSensor<V> lightSensor) {
+        // TODO check if this is really supported!
         JSONObject o = mk(C.GET_SAMPLE).put(C.GET_SAMPLE, C.LIGHT).put(C.PORT, C.AMBIENTLIGHT).put(C.NAME, "ev3");
         return app(o);
     }
@@ -380,6 +384,7 @@ public class Ev3StackMachineVisitor<V> extends AbstractStackMachineVisitor<V> im
 
     @Override
     public V visitPinTouchSensor(PinTouchSensor<V> sensorGetSample) {
+        // TODO check if this is really supported!
         String port = sensorGetSample.getPort();
         String mode = sensorGetSample.getMode();
 
@@ -389,12 +394,14 @@ public class Ev3StackMachineVisitor<V> extends AbstractStackMachineVisitor<V> im
 
     @Override
     public V visitSoundSensor(SoundSensor<V> soundSensor) {
+        // TODO check if this is really supported!
         JSONObject o = mk(C.GET_SAMPLE).put(C.GET_SAMPLE, C.SOUND).put(C.MODE, C.VOLUME).put(C.NAME, "ev3");
         return app(o);
     }
 
     @Override
     public V visitCompassSensor(CompassSensor<V> compassSensor) {
+        // TODO check if this is really supported!
         String mode = compassSensor.getMode();
         JSONObject o = mk(C.GET_SAMPLE).put(C.GET_SAMPLE, C.COMPASS).put(C.MODE, mode.toLowerCase()).put(C.NAME, "ev3");
         return app(o);
@@ -408,7 +415,7 @@ public class Ev3StackMachineVisitor<V> extends AbstractStackMachineVisitor<V> im
         if ( mode.equals(C.RESET) ) {
             o = mk(C.GYRO_SENSOR_RESET).put(C.PORT, port).put(C.NAME, "ev3");
         } else {
-            o = mk(C.GET_SAMPLE).put(C.GET_SAMPLE, C.GYRO).put(C.MODE, mode).put(C.NAME, "ev3");
+            o = mk(C.GET_SAMPLE).put(C.GET_SAMPLE, C.GYRO).put(C.MODE, mode).put(C.PORT, port).put(C.NAME, "ev3");
         }
         return app(o);
     }
@@ -436,7 +443,8 @@ public class Ev3StackMachineVisitor<V> extends AbstractStackMachineVisitor<V> im
     @Override
     public V visitUltrasonicSensor(UltrasonicSensor<V> ultrasonicSensor) {
         String mode = ultrasonicSensor.getMode();
-        JSONObject o = mk(C.GET_SAMPLE).put(C.GET_SAMPLE, C.ULTRASONIC).put(C.MODE, mode.toLowerCase()).put(C.NAME, "ev3");
+        String port = ultrasonicSensor.getPort();
+        JSONObject o = mk(C.GET_SAMPLE).put(C.GET_SAMPLE, C.ULTRASONIC).put(C.PORT, port).put(C.MODE, mode.toLowerCase()).put(C.NAME, "ev3");
         return app(o);
     }
 

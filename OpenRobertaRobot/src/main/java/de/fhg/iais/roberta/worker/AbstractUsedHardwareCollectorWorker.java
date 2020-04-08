@@ -1,10 +1,10 @@
 package de.fhg.iais.roberta.worker;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.google.common.collect.ClassToInstanceMap;
 import com.google.common.collect.ImmutableClassToInstanceMap;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import de.fhg.iais.roberta.bean.IProjectBean;
 import de.fhg.iais.roberta.bean.UsedHardwareBean;

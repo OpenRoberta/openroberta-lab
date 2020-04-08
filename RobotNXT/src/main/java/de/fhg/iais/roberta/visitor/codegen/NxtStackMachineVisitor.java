@@ -285,20 +285,23 @@ public class NxtStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> im
     public V visitLightAction(LightAction<V> lightAction) {
         String mode = lightAction.getMode().toString().toLowerCase();
         String color = lightAction.getColor().toString().toLowerCase();
-        JSONObject o = mk(C.LIGHT_ACTION).put(C.MODE, mode).put(C.COLOR, color);
+        String port = lightAction.getPort();
+        JSONObject o = mk(C.LIGHT_ACTION).put(C.MODE, mode).put(C.PORT, port).put(C.COLOR, color);
         return app(o);
     }
 
     @Override
     public V visitTouchSensor(TouchSensor<V> touchSensor) {
-        JSONObject o = mk(C.GET_SAMPLE).put(C.GET_SAMPLE, C.TOUCH).put(C.NAME, "ev3");
+        String port = touchSensor.getPort();
+        JSONObject o = mk(C.GET_SAMPLE).put(C.GET_SAMPLE, C.TOUCH).put(C.PORT, port).put(C.NAME, "ev3");
         return app(o);
     }
 
     @Override
     public V visitColorSensor(ColorSensor<V> colorSensor) {
         String mode = colorSensor.getMode();
-        JSONObject o = mk(C.GET_SAMPLE).put(C.GET_SAMPLE, C.COLOR).put(C.MODE, mode.toLowerCase()).put(C.NAME, "ev3");
+        String port = colorSensor.getPort();
+        JSONObject o = mk(C.GET_SAMPLE).put(C.GET_SAMPLE, C.COLOR).put(C.PORT, port).put(C.MODE, mode.toLowerCase()).put(C.NAME, "ev3");
         return app(o);
     }
 
@@ -360,7 +363,8 @@ public class NxtStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> im
 
     @Override
     public V visitSoundSensor(SoundSensor<V> soundSensor) {
-        JSONObject o = mk(C.GET_SAMPLE).put(C.GET_SAMPLE, C.SOUND).put(C.MODE, C.VOLUME).put(C.NAME, "ev3");
+        String port = soundSensor.getPort();
+        JSONObject o = mk(C.GET_SAMPLE).put(C.GET_SAMPLE, C.SOUND).put(C.MODE, C.VOLUME).put(C.PORT, port).put(C.NAME, "ev3");
         return app(o);
     }
 
@@ -402,7 +406,8 @@ public class NxtStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> im
     @Override
     public V visitUltrasonicSensor(UltrasonicSensor<V> ultrasonicSensor) {
         String mode = ultrasonicSensor.getMode();
-        JSONObject o = mk(C.GET_SAMPLE).put(C.GET_SAMPLE, C.ULTRASONIC).put(C.MODE, mode.toLowerCase()).put(C.NAME, "ev3");
+        String port = ultrasonicSensor.getPort();
+        JSONObject o = mk(C.GET_SAMPLE).put(C.GET_SAMPLE, C.ULTRASONIC).put(C.MODE, mode.toLowerCase()).put(C.PORT, port).put(C.NAME, "ev3");
         return app(o);
     }
 

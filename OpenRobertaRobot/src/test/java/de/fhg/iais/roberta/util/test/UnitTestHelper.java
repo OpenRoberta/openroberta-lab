@@ -1,13 +1,13 @@
 package de.fhg.iais.roberta.util.test;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
 import org.custommonkey.xmlunit.Diff;
 import org.custommonkey.xmlunit.XMLUnit;
 import org.junit.Assert;
 import org.xml.sax.SAXException;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import de.fhg.iais.roberta.blockly.generated.BlockSet;
 import de.fhg.iais.roberta.components.ConfigurationAst;
@@ -41,6 +41,19 @@ public final class UnitTestHelper {
     public static void checkWorkers(IRobotFactory factory, String expectedSource, String programXmlFilename, IWorker... workers) {
         String programXml = Util.readResourceContent(programXmlFilename);
         Project.Builder builder = setupWithProgramXML(factory, programXml);
+        builder.setWithWrapping(false);
+        Project project = builder.build();
+        for ( IWorker worker : workers ) {
+            worker.execute(project);
+        }
+        String generatedProgramSource = project.getSourceCode().toString().replaceAll("\\s+", "");
+        Assert.assertEquals(expectedSource.replaceAll("\\s+", ""), generatedProgramSource);
+    }
+
+    public static void checkWorkersWithConf(IRobotFactory factory, ConfigurationAst configuration, String expectedSource, String programXmlFilename, IWorker... workers) {
+        String programXml = Util.readResourceContent(programXmlFilename);
+        Project.Builder builder = setupWithProgramXML(factory, programXml);
+        builder.setConfigurationAst(configuration);
         builder.setWithWrapping(false);
         Project project = builder.build();
         for ( IWorker worker : workers ) {
