@@ -197,8 +197,11 @@ define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constan
                 $("#notConstantValue").append('<div><label>Robot θ</label><span>' + UTIL.round(SIMATH.toDegree(this.robots[r].pose.theta), 0) + '°</span></div>');
                 $("#notConstantValue").append('<div><label>Motor left</label><span>' + UTIL.round(this.robots[r].encoder.left * C.ENC, 0) + '°</span></div>');
                 $("#notConstantValue").append('<div><label>Motor right</label><span>' + UTIL.round(this.robots[r].encoder.right * C.ENC, 0) + '°</span></div>');
-                for (var s in this.robots[r].touchSensor) {
-                    $("#notConstantValue").append('<div><label>Touch Sensor ' + s + '</label><span>' + UTIL.round(this.robots[r].touchSensor[s].value, 0) + '</span></div>');
+                if (Array.isArray(this.robots[r].touchSensor)) {
+                    for (var s in this.robots[r].touchSensor) {
+                        $("#notConstantValue").append('<div><label>Touch Sensor ' + s + '</label><span>' + UTIL.round(this.robots[r].touchSensor[s].value, 0) + '</span></div>');
+                        break;
+                    }
                 }
                 for (var s in this.robots[r].colorSensor) {
                     $("#notConstantValue").append('<div><label>Light Sensor ' + s + '</label><span>' + UTIL.round(this.robots[r].colorSensor[s].lightValue, 0) + '%</span></div>');
@@ -230,9 +233,12 @@ define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constan
             this.rCtx.fillRect(this.robots[r].wheelBack.x, this.robots[r].wheelBack.y, this.robots[r].wheelBack.w, this.robots[r].wheelBack.h);
             this.rCtx.shadowBlur = 0;
             this.rCtx.shadowOffsetX = 0;
-            for (var s in this.robots[r].touchSensor) {
-                this.rCtx.fillStyle = this.robots[r].touchSensor[s].color;
-            }
+            this.rCtx.fillStyle = "black";
+            this.rCtx.fillRect(this.robots[r].frontRight.x + 12.5, this.robots[r].frontRight.y, 20, 10);
+
+            this.rCtx.shadowBlur = 0;
+            this.rCtx.shadowOffsetX = 0;
+            this.rCtx.fillStyle = this.robots[r].touchSensor.color;
             this.rCtx.fillRect(this.robots[r].frontRight.x + 12.5, this.robots[r].frontRight.y, 20, 10);
             if (this.robots[r].led) {
                 this.rCtx.fillStyle = this.robots[r].led.color;
@@ -246,7 +252,6 @@ define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constan
 
             this.rCtx.shadowBlur = 5;
             this.rCtx.shadowColor = "black";
-
             this.rCtx.beginPath();
             this.rCtx.moveTo(this.robots[r].geom.x + 2.5, this.robots[r].geom.y);
             this.rCtx.lineTo(this.robots[r].geom.x + this.robots[r].geom.w - 2.5, this.robots[r].geom.y);
@@ -259,28 +264,6 @@ define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constan
             this.rCtx.quadraticCurveTo(this.robots[r].geom.x, this.robots[r].geom.y, this.robots[r].geom.x + 2.5, this.robots[r].geom.y);
             this.rCtx.closePath();
             this.rCtx.fill();
-            this.rCtx.shadowBlur = 5;
-            this.rCtx.shadowColor = "black";
-
-            //touch
-            this.rCtx.shadowBlur = 5;
-            this.rCtx.shadowOffsetX = 2;
-
-            var touch = false;
-            for (var s in this.robots[r].touchSensor) {
-                touch = true;
-                if (this.robots[r].touchSensor[s].value === 1) {
-                    this.rCtx.fillStyle = 'red';
-                    this.rCtx.fillRect(this.robots[r].frontRight.x, this.robots[r].frontRight.y, this.robots[r].frontLeft.x - this.robots[r].frontRight.x, 3.5);
-                } else {
-                    this.rCtx.fillStyle = this.robots[r].touchSensor[s].color;
-                    this.rCtx.fillRect(this.robots[r].frontRight.x, this.robots[r].frontRight.y, this.robots[r].frontLeft.x - this.robots[r].frontRight.x, 3.5);
-                }
-            }
-            if (!touch) {
-                this.rCtx.fillStyle = this.robots[r].touchSensor.color;
-                this.rCtx.fillRect(this.robots[r].frontRight.x, this.robots[r].frontRight.y, this.robots[r].frontLeft.x - this.robots[r].frontRight.x, 3.5);
-            }
             this.rCtx.shadowBlur = 0;
             this.rCtx.shadowOffsetX = 0;
             //LED
@@ -290,6 +273,29 @@ define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constan
                 this.rCtx.arc(this.robots[r].led.x, this.robots[r].led.y, 2.5, 0, Math.PI * 2);
                 this.rCtx.fill();
             }
+            //touch
+            this.rCtx.shadowBlur = 5;
+            this.rCtx.shadowOffsetX = 2;
+            var touchSensor;
+            var touch = false;            
+            if (Array.isArray(this.robots[r].touchSensor)) {
+                for (var s in this.robots[r].touchSensor) {
+                    touchSensor = this.robots[r].touchSensor[s];
+                    touch = true;
+                    break;
+                }
+            } else {
+                touchSensor = this.robots[r].touchSensor;
+            }
+            if (touch && touchSensor.value === 1) {
+                this.rCtx.fillStyle = 'red';
+                this.rCtx.fillRect(this.robots[r].frontRight.x, this.robots[r].frontRight.y, this.robots[r].frontLeft.x - this.robots[r].frontRight.x, 3.5);
+            } else {
+                this.rCtx.fillStyle = touchSensor.color;
+                this.rCtx.fillRect(this.robots[r].frontRight.x, this.robots[r].frontRight.y, this.robots[r].frontLeft.x - this.robots[r].frontRight.x, 3.5);
+            }
+            this.rCtx.shadowBlur = 0;
+            this.rCtx.shadowOffsetX = 0;
             //wheels
             this.rCtx.fillStyle = this.robots[r].wheelLeft.color;
             this.rCtx.fillRect(this.robots[r].wheelLeft.x, this.robots[r].wheelLeft.y, this.robots[r].wheelLeft.w, this.robots[r].wheelLeft.h);
