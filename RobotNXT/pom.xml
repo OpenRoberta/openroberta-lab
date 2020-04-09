@@ -14,7 +14,7 @@
 	<parent>
 		<groupId>de.fhg.iais.openroberta</groupId>
 		<artifactId>OpenRobertaParent</artifactId>
-		<version>3.8.7</version>
+		<version>3.8.8</version>
 	</parent>
 	<artifactId>RobotNXT</artifactId>
 	<name>RobotNXT</name>
