@@ -136,7 +136,6 @@ body.blocklyMinimalBody * {
     height: 65px;
     padding: 0;
     margin: 4px 16px 0px 0;
-    width: 210px;
 }
 .logo {
     position: absolute;
@@ -1027,7 +1026,6 @@ div.rightMenuButton:hover,
     -webkit-box-shadow: none;
     box-shadow: none;
     cursor: pointer;
-    box-shadow: none;
 }
 .simbtn.btn:hover,
 .simbtn.btn:active:focus,
@@ -1132,9 +1130,8 @@ table [data-toggle="collapse"].collapsed:after {
     visibility: visible;
 }
 .robot-container {
-    border: 1px solid;
     border-radius: 4px;
-    border-color: #ddd;
+    border: 1px solid #ddd;
     width: 140px;
     height: 88px;
     display: inline-block;
@@ -1291,15 +1288,13 @@ label.form-invalid {
 }
 label.form-invalid:after {
     right: 10%;
-    border: solid transparent;
     content: " ";
     height: 0;
     width: 0;
     position: absolute;
     pointer-events: none;
-    border-color: transparent;
+    border: 6px solid transparent;
     border-top-color: #E2001A;
-    border-width: 6px;
     margin-top: 28px;
     z-index: 20;
 }
@@ -1713,7 +1708,7 @@ input[type=range]:focus::-ms-fill-upper {
         top: 88px;
     }
     .logo {
-        top: 11;
+        top: 11px;
     }
     .img-nepo {
         width: 120px;
