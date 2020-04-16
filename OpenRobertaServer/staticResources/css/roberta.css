@@ -53,7 +53,6 @@ body {
     left: 0;
     right: 0;
     bottom: 0;
-    height: 12rem;
     line-height: 12rem;
     font-size: 2rem;
     color: transparent;
@@ -193,7 +192,6 @@ body.blocklyMinimalBody * {
     padding: 8px 2px 0 8px;
     cursor: pointer;
     background-color: #fff;
-    padding: 8px 2px 0 28px;
     float: left;
 }
 .hidden {
@@ -668,8 +666,6 @@ div.rightMenuButton:hover,
     margin: 0;
     padding: 0;
     border: 0;
-    overflow: hidden;
-    padding: 0;
 }
 .nav#head-navigation-tabs>li>a {
     margin: 0;
@@ -733,7 +729,7 @@ div.rightMenuButton:hover,
 .navbar-fixed-bottom {
     border: 0;
     padding: 16px 68px;
-    margin-bottom: 20;
+    margin-bottom: 20px;
 }
 .head-navi-title {
     margin-left: 6px;
@@ -926,7 +922,7 @@ div.rightMenuButton:hover,
 }
 .simRobotModal .modal-header {
     position: fixed;
-    right: 16;
+    right: 16px;
 }
 .simRobotModal .modal-dialog {
     width: inherit;
@@ -1019,7 +1015,6 @@ div.rightMenuButton:hover,
     -webkit-box-shadow: none;
     box-shadow: none;
     outline: none;
-    box-shadow: none;
 }
 .btn:not(.editor) {
     margin-right: 16px;
@@ -1059,7 +1054,6 @@ div.rightMenuButton:hover,
     -webkit-box-shadow: none;
     box-shadow: none;
     cursor: pointer;
-    box-shadow: none;
 }
 .fixed-table-toolbar .btn:hover {
     background-color: #C7D92B;
@@ -1110,7 +1104,6 @@ table [data-toggle="collapse"].collapsed:after {
     -webkit-box-shadow: none;
     box-shadow: none;
     cursor: pointer;
-    box-shadow: none;
 }
 .blbtn:hover {
     background-color: #BACC1E;
