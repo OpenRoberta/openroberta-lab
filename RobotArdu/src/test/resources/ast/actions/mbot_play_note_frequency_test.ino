@@ -16,7 +16,5 @@ void setup()
 void loop()
 {
     _meBuzzer.tone(8, 300, 100);
-    delay(20); 
     _meBuzzer.tone(8, 261.626, 2000);
-    delay(20); 
 }

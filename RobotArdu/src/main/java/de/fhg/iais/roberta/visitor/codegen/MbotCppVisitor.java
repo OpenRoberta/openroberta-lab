@@ -77,7 +77,7 @@ import de.fhg.iais.roberta.visitor.hardware.IMbotVisitor;
  */
 public final class MbotCppVisitor extends AbstractCommonArduinoCppVisitor implements IMbotVisitor<Void> {
 
-    private HashMap<String, Integer> imageList = new HashMap<String, Integer>();
+    private final HashMap<String, Integer> imageList = new HashMap<String, Integer>();
 
     /**
      * Initialize the C++ code generator visitor.
@@ -85,10 +85,7 @@ public final class MbotCppVisitor extends AbstractCommonArduinoCppVisitor implem
      * @param brickConfiguration hardware configuration of the brick
      * @param phrases to generate the code from
      */
-    public MbotCppVisitor(
-        List<ArrayList<Phrase<Void>>> phrases,
-        ConfigurationAst brickConfiguration,
-        ClassToInstanceMap<IProjectBean> beans) {
+    public MbotCppVisitor(List<ArrayList<Phrase<Void>>> phrases, ConfigurationAst brickConfiguration, ClassToInstanceMap<IProjectBean> beans) {
         super(phrases, brickConfiguration, beans);
     }
 
@@ -256,8 +253,6 @@ public final class MbotCppVisitor extends AbstractCommonArduinoCppVisitor implem
         this.sb.append(", ");
         toneAction.getDuration().accept(this);
         this.sb.append(");");
-        nlIndent();
-        this.sb.append("delay(20); ");
         return null;
     }
 
@@ -269,8 +264,6 @@ public final class MbotCppVisitor extends AbstractCommonArduinoCppVisitor implem
         this.sb.append(", ");
         this.sb.append(playNoteAction.getDuration());
         this.sb.append(");");
-        nlIndent();
-        this.sb.append("delay(20); ");
         return null;
     }
 
@@ -742,7 +735,7 @@ public final class MbotCppVisitor extends AbstractCommonArduinoCppVisitor implem
 
     @Override
     public Void visitLEDMatrixImage(LEDMatrixImage<Void> ledMatrixImage) {
-        Map<String, String[][]> usedIDImages=this.getBean(UsedHardwareBean.class).getUsedIDImages();
+        Map<String, String[][]> usedIDImages = this.getBean(UsedHardwareBean.class).getUsedIDImages();
         this.sb.append("__ledMatrix").append(this.imageList.get(ledMatrixImage.getProperty().getBlocklyId()));
         return null;
     }
@@ -770,9 +763,9 @@ public final class MbotCppVisitor extends AbstractCommonArduinoCppVisitor implem
     public Void visitLEDMatrixImageShiftFunction(LEDMatrixImageShiftFunction<Void> ledMatrixImageShiftFunction) {
         this.sb.append("(shiftLEDMatrix");
         this.sb.append(capitalizeFirstLetter(ledMatrixImageShiftFunction.getShiftDirection().toString()));
-            this.sb.append("Vec(");
-            ledMatrixImageShiftFunction.getImage().accept(this);
-        
+        this.sb.append("Vec(");
+        ledMatrixImageShiftFunction.getImage().accept(this);
+
         this.sb.append(", ");
         ledMatrixImageShiftFunction.getPositions().accept(this);
         this.sb.append("))");
@@ -781,9 +774,9 @@ public final class MbotCppVisitor extends AbstractCommonArduinoCppVisitor implem
 
     @Override
     public Void visitLEDMatrixImageInvertFunction(LEDMatrixImageInvertFunction<Void> ledMatrixImageInverFunction) {
-            this.sb.append("(invertLEDMatrixVec(");
-            ledMatrixImageInverFunction.getImage().accept(this);
-        
+        this.sb.append("(invertLEDMatrixVec(");
+        ledMatrixImageInverFunction.getImage().accept(this);
+
         this.sb.append("))");
         return null;
     }
