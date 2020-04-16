@@ -603,6 +603,9 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'progHelp.contro
             getBlocklyWorkspace().robControls.disable('runOnBrick');
             $('#runSourceCodeEditor').addClass('disabled');
         }
+        if ($('.rightMenuButton.rightActive')) {
+            $('.rightMenuButton.rightActive').trigger('click');
+        }
         if (view === 'tabConfiguration') {
             $('#head-navigation-program-edit').css('display', 'none');
             $('#head-navigation-configuration-edit').css('display', 'inline');
