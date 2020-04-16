@@ -134,9 +134,14 @@ To run tests, use `mvn test`. Running `mvn clean install` will make a stable, re
 
 To run the integration tests you have to supply an additional flag: `mvn clean install -PrunIT`.
 
-#### Blockly
+#### Some Frameworks used
 
-We are using Blockly, it is located in a separate repository. The build of the blockly is only done in the OpenRoberta/Blockly project and then copied to the OpenRobertaServer/staticResources. You can not build Blockly in OpenRobertaServer project directly.
+We use Blockly, it is located in a separate repository. The build of the blockly is only done in the OpenRoberta/Blockly project and then copied to the OpenRobertaServer/staticResources. You can not build Blockly in OpenRobertaServer project directly.
+
+We use BrowserStack for Cross-Browser Testing
+
+[<img src="https://github.com/OpenRoberta/openroberta-lab/blob/develop/Resources/images/blockly.png" width="100">](https://developers.google.com/blockly/)
+[<img src="https://github.com/OpenRoberta/openroberta-lab/blob/develop/Resources/images/browserstack-logo-600x315.png" width="150">](http://browserstack.com/)
 
 #### Have a look at the notes in LICENCE and NOTICE
 
