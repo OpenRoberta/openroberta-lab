@@ -1475,6 +1475,7 @@ div.galleryDescription, div.tutorialOverview {
     text-align: justify;
     margin-right: -1em;
     padding-right: 1em;
+    word-break: break-all;
 }
 .galleryDescription:before, .tutorialOverview:before {
     content: '...';
@@ -1528,6 +1529,11 @@ div.galleryDescription, div.tutorialOverview {
 }
 .galleryDescription.color12:after, .tutorialOverview.color12:after {
     background: #DF01D7;
+}
+.galleryAuthor {
+	overflow: hidden; 
+	word-break: break-all; 
+	height: 22px;
 }
 .galleryLike.typcn:before {
     position: inherit;

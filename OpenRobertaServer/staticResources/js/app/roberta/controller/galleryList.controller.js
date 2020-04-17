@@ -57,12 +57,11 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'message', 'guiState.contr
                 sortable : true,
                 formatter : formatProgramDescription,
             }, {
-                title : titleAuthor,
+                formatter : formatAuthor,
                 sortable : true,
             }, {
-                title : titleDate,
                 sortable : true,
-                formatter : UTIL.formatDate
+                formatter : formatDate,
             }, {
                 title : titleNumberOfViews,
                 sortable : true,
@@ -194,19 +193,13 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'message', 'guiState.contr
         var hash = UTIL.getHashFrom(row[0] + row[1] + row[3]);
         currentColorIndex = hash % BACKGROUND_COLORS.length;
         return {
-            style : 'background-color :' + BACKGROUND_COLORS[currentColorIndex] + ';' + 'padding: 24px; border: solid 12px white; z-index: 1; cursor: pointer;'
+            style : 'background-color :' + BACKGROUND_COLORS[currentColorIndex] + ';' + 'padding: 24px; border: solid 12px white; z-index: 1; float: left; cursor: pointer;'
         }
     }
     exports.rowAttributes = rowAttributes;
 
-    var titleAuthor = "<span lkey='Blockly.Msg.GALLERY_BY'>" + (Blockly.Msg.GALLERY_BY || "von") + "</span>";
-    exports.titleAuthor = titleAuthor;
-
     var titleNumberOfViews = '<span class="galleryIcon typcn typcn-eye-outline" />';
     exports.titleNumberOfViews = titleNumberOfViews;
-
-    var titleDate = "<span lkey='Blockly.Msg.GALLERY_DATE'>" + (Blockly.Msg.GALLERY_DATE || "erstellt") + "</span>";
-    exports.titleDate = titleDate;
 
     var titleLikes = '<span class="galleryIcon typcn typcn-heart-full-outline" />';
     exports.titleLikes = titleLikes;
@@ -230,6 +223,17 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'message', 'guiState.contr
         return '<div class="galleryDescription color' + currentColorIndex + '">' + description + '</div>';
     }
     exports.formatProgramDescription = formatProgramDescription;
+
+    var formatAuthor = function(value, row, index) {
+        return "<div class='galleryAuthor'><span class='title' lkey='Blockly.Msg.GALLERY_BY'>" + (Blockly.Msg.GALLERY_BY || "von") + "</span>" + value
+                + "</span></div>";
+    }
+    exports.formatAuthor = formatAuthor;
+
+    var formatDate = function(value, row, index) {
+        return ("<span class='title' lkey='Blockly.Msg.GALLERY_DATE'>" + (Blockly.Msg.GALLERY_DATE || "erstellt") + "</span>" + UTIL.formatDate(value.replace(/\s/, 'T')));
+    }
+    exports.formatDate = formatDate;
 
     var formatTags = function(value, row, index) {
         var xmlDoc = Blockly.Xml.textToDom(row[2], Blockly.getMainWorkspace());
