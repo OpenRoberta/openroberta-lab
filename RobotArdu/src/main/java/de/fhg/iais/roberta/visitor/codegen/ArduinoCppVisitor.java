@@ -177,11 +177,11 @@ public final class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor imp
     public Void visitMotorOnAction(MotorOnAction<Void> motorOnAction) {
         boolean step = motorOnAction.getParam().getDuration() != null;
         if ( step ) {//step motor
-            this.sb.append("Motor_" + motorOnAction.getUserDefinedPort() + ".setSpeed(");
+            this.sb.append("_stepper_" + motorOnAction.getUserDefinedPort() + ".setSpeed(");
             motorOnAction.getParam().getSpeed().accept(this);
             this.sb.append(");");
             nlIndent();
-            this.sb.append("Motor_" + motorOnAction.getUserDefinedPort() + ".step(_SPU_" + motorOnAction.getUserDefinedPort() + "*(");
+            this.sb.append("_stepper_" + motorOnAction.getUserDefinedPort() + ".step(_SPU_" + motorOnAction.getUserDefinedPort() + "*(");
             motorOnAction.getDurationValue().accept(this);
             this.sb.append(")");
             if ( motorOnAction.getDurationMode().equals(MotorMoveMode.DEGREE) ) {
@@ -791,12 +791,12 @@ public final class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor imp
                     this.sb.append("int _SPU_" + blockName + " = ").append("2048;"); //TODO: change 2048 to customized
                     nlIndent();
                     this.sb
-                        .append("Stepper Motor_" + blockName + "(_SPU_" + blockName + ", ")
+                        .append("Stepper _stepper_" + blockName + "(_SPU_" + blockName + ", ")
                         .append(cc.getProperty("IN1"))
                         .append(", ")
-                        .append(cc.getProperty("IN2"))
-                        .append(", ")
                         .append(cc.getProperty("IN3"))
+                        .append(", ")
+                        .append(cc.getProperty("IN2"))
                         .append(", ")
                         .append(cc.getProperty("IN4"))
                         .append(");");
