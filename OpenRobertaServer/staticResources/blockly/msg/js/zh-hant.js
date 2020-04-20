@@ -43,6 +43,7 @@ Blockly.Msg.ACTIVITY_TOOLTIP = "標記一個額外的活動";
 Blockly.Msg.ACTOR_ANALOGIN_TOOLTIP = "Writes an analog value (PWM wave) to a pin. Only values between 0 and 255 should be used";  // untranslated
 Blockly.Msg.ACTOR_DIGITALIN_TOOLTIP = "Writes a HIGH or a LOW value to a digital pin. Only the values HIGH »1« and LOW »0« should be used.";  // untranslated
 Blockly.Msg.ACTOR_TOOLTIP = "表示任一執行器";
+Blockly.Msg.ADDRESS = "address";  // untranslated
 Blockly.Msg.ADD_COMMENT = "加入註解";
 Blockly.Msg.ANALOG = "類比";
 Blockly.Msg.ANALOGIN_TOOLTIP = "Represents any actuator connected to an analog pin.";  // untranslated

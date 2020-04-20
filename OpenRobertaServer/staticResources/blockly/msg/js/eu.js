@@ -43,6 +43,7 @@ Blockly.Msg.ACTIVITY_TOOLTIP = "Jarduera osagarri batentzako blokea.";
 Blockly.Msg.ACTOR_ANALOGIN_TOOLTIP = "Writes an analog value (PWM wave) to a pin. Only values between 0 and 255 should be used";  // untranslated
 Blockly.Msg.ACTOR_DIGITALIN_TOOLTIP = "Writes a HIGH or a LOW value to a digital pin. Only the values HIGH »1« and LOW »0« should be used.";  // untranslated
 Blockly.Msg.ACTOR_TOOLTIP = "Edozein aktore irudikatzen du.";
+Blockly.Msg.ADDRESS = "address";  // untranslated
 Blockly.Msg.ADD_COMMENT = "Iruzkina gehitu";
 Blockly.Msg.ANALOG = "analogikoa";
 Blockly.Msg.ANALOGIN_TOOLTIP = "Represents any actuator connected to an analog pin.";  // untranslated

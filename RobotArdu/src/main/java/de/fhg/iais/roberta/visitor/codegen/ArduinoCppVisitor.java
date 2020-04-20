@@ -764,7 +764,12 @@ public final class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor imp
                     nlIndent();
                     break;
                 case SC.LCDI2C:
-                    this.sb.append("LiquidCrystal_I2C _lcd_" + blockName + "(0x27, 16, 2);");
+                    String address = cc.getOptProperty("ADDRESS");
+                    // TODO check if this is still needed after we rework the configuration back-transformation
+                    if ( address == null ) {
+                        address = "0x27";
+                    }
+                    this.sb.append("LiquidCrystal_I2C _lcd_").append(blockName).append("(").append(address).append(", 16, 2);");
                     nlIndent();
                     break;
                 case SC.LED:

@@ -1624,5 +1624,6 @@
 	"MODE_DATE": "",
 	"MODE_TIME": "",
 	"SENSOR_UNIT_METER": "",
-	"SENSOR_UNIT_SPEED": ""
+	"SENSOR_UNIT_SPEED": "",
+	"ADDRESS": ""
 }

@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2020-04-19 08:07:19.349319",
+		"lastupdated": "2020-04-20 16:58:09.812042",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -1630,5 +1630,6 @@
 	"MODE_DATE": "date",
 	"MODE_TIME": "time",
 	"SENSOR_UNIT_METER": "m",
-	"SENSOR_UNIT_SPEED": "km/h"
+	"SENSOR_UNIT_SPEED": "km/h",
+	"ADDRESS": "address"
 }

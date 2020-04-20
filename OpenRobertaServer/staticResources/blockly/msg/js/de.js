@@ -43,6 +43,7 @@ Blockly.Msg.ACTIVITY_TOOLTIP = "Block für eine zusätzliche Aktivität.";
 Blockly.Msg.ACTOR_ANALOGIN_TOOLTIP = "Schreibt einen analogen Wert (PWM wave) auf einen Pin. Werte zwischen 0 und 255 können eingegeben werden.";
 Blockly.Msg.ACTOR_DIGITALIN_TOOLTIP = "Schreibt einen digitalen Wert auf einen Pin. Die Werte HIGH »1« oder LOW »0« können eingegeben werden.";
 Blockly.Msg.ACTOR_TOOLTIP = "Represents any actor.";
+Blockly.Msg.ADDRESS = "Adresse";
 Blockly.Msg.ADD_COMMENT = "Kommentar hinzufügen";
 Blockly.Msg.ANALOG = "analogen";
 Blockly.Msg.ANALOGIN_TOOLTIP = "Block für einen beliebigen Aktor, der mit einem analogen Signal gesteuert wird.";
