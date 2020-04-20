@@ -1,20 +1,11 @@
+
 <block type="robGlobalVariables_declare" id="hx((XC9,d#Z6dhZR#HZY" intask="true" deletable="false" movable="false">
-	<mutation next="true" declaration_type="Number"></mutation>
-	<field name="VAR">x</field>
-	<field name="TYPE">Number</field>
-	<value name="VALUE">
-		<block type="math_number" id="Hea0]COK|iN~z2Tm=cNB" intask="true">
-			<field name="NUM">0</field>
-		</block>
-	</value>
-</block>
-<block type="robGlobalVariables_declare" id="*ZsUO;0e#F,!F5EqMxYJ" intask="true" deletable="false" movable="false">
-	<mutation next="false" declaration_type="String"></mutation>
-	<field name="VAR">result</field>
-	<field name="TYPE">String</field>
-	<value name="VALUE">
-		<block type="text" id="s@EtX40!E+L@wXcj7ocr" intask="true">
-			<field name="TEXT">expected: 169; got: </field>
-		</block>
-	</value>
+    <mutation next="false" declaration_type="Number"></mutation>
+    <field name="VAR">x</field>
+    <field name="TYPE">Number</field>
+    <value name="VALUE">
+        <block type="math_number" id="Hea0]COK|iN~z2Tm=cNB" intask="true">
+            <field name="NUM">0</field>
+        </block>
+    </value>
 </block>
