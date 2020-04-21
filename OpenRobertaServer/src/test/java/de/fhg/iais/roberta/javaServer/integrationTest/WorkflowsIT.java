@@ -1,5 +1,7 @@
 package de.fhg.iais.roberta.javaServer.integrationTest;
 
+import static org.junit.Assert.fail;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -36,7 +38,6 @@ import de.fhg.iais.roberta.util.ServerProperties;
 import de.fhg.iais.roberta.util.Util;
 import de.fhg.iais.roberta.util.test.UnitTestHelper;
 import de.fhg.iais.roberta.util.testsetup.IntegrationTest;
-import static org.junit.Assert.fail;
 
 /**
  * <b>Testing the generation of native code and the CROSSCOMPILER</b><br>
@@ -137,7 +138,7 @@ public class WorkflowsIT {
         LOG.info("XXXXXXXXXX START of the workflow executions XXXXXXXXXX");
         AtomicBoolean resultAcc = new AtomicBoolean(true);
         try {
-            robots.keySet().parallelStream().forEach(robotName -> {
+            robots.keySet().stream().forEach(robotName -> {
                 String robotDir = robots.getJSONObject(robotName).getString("dir") + "/allBlocks";
                 LOG.info(resourceBase);
                 LOG.info(robotDir);
@@ -234,7 +235,10 @@ public class WorkflowsIT {
             if ( !project.hasSucceeded()
                 && (workflow.contains("run") || workflow.contains("reset"))
                 && StringUtils.containsIgnoreCase(pluginMap.get(robotName).getConnectionType(), ("token")) ) {
-                result = project.getResult() == Key.ROBOT_NOT_CONNECTED ? (program.contains(PARTIAL_SUCCESS_DEF) ? Result.PARTIAL_SUCCESS : Result.SUCCESS) : Result.FAILURE;
+                result =
+                    project.getResult() == Key.ROBOT_NOT_CONNECTED
+                        ? (program.contains(PARTIAL_SUCCESS_DEF) ? Result.PARTIAL_SUCCESS : Result.SUCCESS)
+                        : Result.FAILURE;
                 reason = String.valueOf(project.getResult());
             } else {
                 result = project.hasSucceeded() ? (program.contains(PARTIAL_SUCCESS_DEF) ? Result.PARTIAL_SUCCESS : Result.SUCCESS) : Result.FAILURE;
@@ -267,7 +271,7 @@ public class WorkflowsIT {
         LOG.info("]]]]]]]]]]");
         if ( result == Result.SUCCESS || result == Result.PARTIAL_SUCCESS ) {
             if ( showSuccess ) {
-                if (result == Result.SUCCESS) {
+                if ( result == Result.SUCCESS ) {
                     results.add(String.format("succ; %-15s; %-60s;", name, fullResource));
                 } else {
                     results.add(String.format("part; %-15s; %-60s;", name, fullResource));
