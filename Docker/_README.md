@@ -22,14 +22,14 @@ in git and a version number in docker.
 
 ```bash
 BASE_DIR=/data/openroberta-lab
-BASE_VERSION=14
+BASE_VERSION=15
 CC_RESOURCES=/data/openroberta-lab/git/ora-cc-rsc
 cd $CC_RESOURCES
 
 git checkout develop; git pull; git checkout master; git pull
 git checkout tags/$BASE_VERSION
 
-mvn clean install # necessary to create the update resources for ev3 lejos-based systems
+mvn clean install # necessary to create the update resources for ev3- and arduino-based systems
 docker build --no-cache -t openroberta/base:$BASE_VERSION -f $BASE_DIR/conf/docker-for-meta/DockerfileBase_ubuntu_18_04 .
 docker push openroberta/base:$BASE_VERSION
 ```
@@ -43,7 +43,7 @@ If called, it will checkout a branch and runs both the tests and the integration
 
 ```bash
 BASE_DIR=/data/openroberta-lab
-BASE_VERSION=14
+BASE_VERSION=15
 BRANCH=develop
 cd $BASE_DIR/conf/docker-for-test
 docker build --no-cache --build-arg BASE_VERSION=$BASE_VERSION --build-arg BRANCH=$BRANCH \
@@ -57,7 +57,7 @@ in case of success it returns 0, in case of errors/failures it returns 16. This 
 CI system (jenkins, travis, gitlab, bamboo, ...). To run it, execute:
 
 ```bash
-BASE_VERSION=14
+BASE_VERSION=15
 export BRANCH='develop'
 docker run openroberta/it:$BASE_VERSION $BRANCH x.x.x # x.x.x is the db version and unused for tests
 ```
