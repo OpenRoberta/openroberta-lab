@@ -1,11 +1,6 @@
 package de.fhg.iais.roberta.javaServer.restServices.all.controller;
 
-import javax.ws.rs.Consumes;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
+import com.google.inject.Inject;
 
 import org.apache.commons.lang3.StringUtils;
 import org.codehaus.jettison.json.JSONException;
@@ -13,7 +8,12 @@ import org.codehaus.jettison.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.inject.Inject;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import de.fhg.iais.roberta.components.Project;
 import de.fhg.iais.roberta.factory.IRobotFactory;
@@ -46,13 +46,13 @@ public class ProjectWorkflowRestController {
         JSONObject dataPart = UtilForREST.extractDataPart(request);
         JSONObject response = new JSONObject();
         try {
-            response.put("data", dataPart.getString("programBlockSet")); // always return the program, even if the workflow fails
+            response.put("progXML", dataPart.getString("progXML")); // always return the program, even if the workflow fails
             String configurationText = httpSessionState.getRobotFactory().getConfigurationDefault();
             Project project =
                 new Project.Builder()
                     .setProgramName(dataPart.getString("programName"))
-                    .setProgramXml(dataPart.getString("programBlockSet"))
-                    .setConfigurationXml(dataPart.optString("configurationBlockSet", configurationText))
+                    .setProgramXml(dataPart.getString("progXML"))
+                    .setConfigurationXml(dataPart.optString("confXML", configurationText))
                     .setSSID(dataPart.optString("SSID", null))
                     .setPassword(dataPart.optString("password", null))
                     .setLanguage(Language.findByAbbr(dataPart.optString("language")))
@@ -64,8 +64,8 @@ public class ProjectWorkflowRestController {
             // To make this compatible with old frontend we will have to use the old names...
             response.put("cmd", "showSourceP");
             response.put("sourceCode", project.getSourceCode());
-            response.put("data", project.getAnnotatedProgramAsXml());
-            response.put("configuration", project.getAnnotatedConfigurationAsXml());
+            response.put("progXML", project.getAnnotatedProgramAsXml());
+            response.put("confXML", project.getAnnotatedConfigurationAsXml());
             response.put("rc", project.hasSucceeded() ? "ok" : "error");
             response.put("message", project.getResult().getKey());
             response.put("cause", project.getResult().getKey());
@@ -89,13 +89,13 @@ public class ProjectWorkflowRestController {
         JSONObject dataPart = UtilForREST.extractDataPart(request);
         JSONObject response = new JSONObject();
         try {
-            response.put("data", dataPart.getString("programBlockSet")); // always return the program, even if the workflow fails
+            response.put("progXML", dataPart.getString("progXML")); // always return the program, even if the workflow fails
             String configurationText = httpSessionState.getRobotFactory().getConfigurationDefault();
             Project project =
                 new Project.Builder()
                     .setProgramName(dataPart.getString("programName"))
-                    .setProgramXml(dataPart.getString("programBlockSet"))
-                    .setConfigurationXml(dataPart.optString("configurationBlockSet", configurationText))
+                    .setProgramXml(dataPart.getString("progXML"))
+                    .setConfigurationXml(dataPart.optString("confXML", configurationText))
                     .setSSID(dataPart.optString("SSID", null))
                     .setPassword(dataPart.optString("password", null))
                     .setLanguage(Language.findByAbbr(dataPart.optString("language")))
@@ -108,8 +108,8 @@ public class ProjectWorkflowRestController {
             response.put("cmd", "runPSim");
             response.put("javaScriptProgram", project.getSourceCode());
             response.put("fileExtension", project.getSourceCodeFileExtension());
-            response.put("data", project.getAnnotatedProgramAsXml());
-            response.put("configuration", project.getAnnotatedConfigurationAsXml());
+            response.put("progXML", project.getAnnotatedProgramAsXml());
+            response.put("confXML", project.getAnnotatedConfigurationAsXml());
             response.put("rc", project.hasSucceeded() ? "ok" : "error");
             response.put("message", project.getResult().getKey());
             response.put("cause", project.getResult().getKey());
@@ -134,13 +134,13 @@ public class ProjectWorkflowRestController {
         JSONObject dataPart = UtilForREST.extractDataPart(request);
         JSONObject response = new JSONObject();
         try {
-            response.put("data", dataPart.getString("programBlockSet")); // always return the program, even if the workflow fails
+            response.put("progXML", dataPart.getString("progXML")); // always return the program, even if the workflow fails
             String configurationText = httpSessionState.getRobotFactory().getConfigurationDefault();
             Project project =
                 new Project.Builder()
                     .setProgramName(dataPart.getString("programName"))
-                    .setProgramXml(dataPart.getString("programBlockSet"))
-                    .setConfigurationXml(dataPart.optString("configurationBlockSet", configurationText))
+                    .setProgramXml(dataPart.getString("progXML"))
+                    .setConfigurationXml(dataPart.optString("confXML", configurationText))
                     .setSSID(dataPart.optString("SSID", null))
                     .setPassword(dataPart.optString("password", null))
                     .setLanguage(Language.findByAbbr(dataPart.optString("language")))
@@ -151,7 +151,7 @@ public class ProjectWorkflowRestController {
                     .build();
             ProjectService.executeWorkflow("run", httpSessionState.getRobotFactory(), project);
             response.put("cmd", "runPBack");
-            response.put("data", project.getAnnotatedProgramAsXml());
+            response.put("progXML", project.getAnnotatedProgramAsXml());
             response.put("errorCounter", project.getErrorCounter());
             response.put("parameters", project.getResultParams());
             response.put("compiledCode", project.getCompiledHex());
@@ -193,7 +193,7 @@ public class ProjectWorkflowRestController {
             Project project =
                 new Project.Builder()
                     .setProgramName(dataPart.getString("programName"))
-                    .setProgramNativeSource(dataPart.getString("programText"))
+                    .setProgramNativeSource(dataPart.getString("progXML"))
                     .setSSID(dataPart.optString("SSID", null))
                     .setPassword(dataPart.optString("password", null))
                     .setLanguage(Language.findByAbbr(dataPart.optString("language")))
@@ -229,10 +229,10 @@ public class ProjectWorkflowRestController {
         JSONObject dataPart = UtilForREST.extractDataPart(request);
         JSONObject response = new JSONObject();
         try {
-            response.put("data", dataPart.getString("programBlockSet")); // always return the program, even if the workflow fails
+            response.put("progXML", dataPart.getString("progXML")); // always return the program, even if the workflow fails
             Project project =
                 ProjectWorkflowRestController
-                    .setupWithExportXML(httpSessionState.getRobotFactory(), dataPart.getString("programBlockSet"))
+                    .setupWithExportXML(httpSessionState.getRobotFactory(), dataPart.getString("progXML"))
                     .setProgramName(dataPart.getString("programName"))
                     .setSSID(dataPart.optString("SSID", null))
                     .setPassword(dataPart.optString("password", null))
@@ -243,7 +243,7 @@ public class ProjectWorkflowRestController {
                     .build();
             ProjectService.executeWorkflow("compile", httpSessionState.getRobotFactory(), project);
             response.put("cmd", "compileP");
-            response.put("data", project.getAnnotatedProgramAsXml());
+            response.put("progXML", project.getAnnotatedProgramAsXml());
             response.put("errorCounter", project.getErrorCounter());
             response.put("message", project.getResult().getKey());
             response.put("cause", project.getResult().getKey());
@@ -280,7 +280,7 @@ public class ProjectWorkflowRestController {
             Project project =
                 new Project.Builder()
                     .setProgramName(dataPart.getString("programName"))
-                    .setProgramNativeSource(dataPart.getString("programText"))
+                    .setProgramNativeSource(dataPart.getString("progXML"))
                     .setSSID(dataPart.optString("SSID", null))
                     .setPassword(dataPart.optString("password", null))
                     .setLanguage(Language.findByAbbr(dataPart.optString("language")))

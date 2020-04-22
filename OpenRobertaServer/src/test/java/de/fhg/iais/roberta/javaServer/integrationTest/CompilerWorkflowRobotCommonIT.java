@@ -1,20 +1,5 @@
 package de.fhg.iais.roberta.javaServer.integrationTest;
 
-import static org.junit.Assert.fail;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.when;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
-import java.util.Set;
-
-import javax.ws.rs.core.Response;
-
 import org.json.JSONObject;
 import org.junit.AfterClass;
 import org.junit.Assert;
@@ -28,6 +13,17 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
+import java.util.Set;
+
+import javax.ws.rs.core.Response;
 
 import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.javaServer.restServices.all.controller.ClientAdmin;
@@ -44,6 +40,10 @@ import de.fhg.iais.roberta.util.ServerProperties;
 import de.fhg.iais.roberta.util.Util;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.util.testsetup.IntegrationTest;
+
+import static org.junit.Assert.fail;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.when;
 
 /**
  * <b>Testing the generation of native code and the CROSSCOMPILER</b><br>
@@ -205,7 +205,7 @@ public class CompilerWorkflowRobotCommonIT {
             if ( crosscompilerCall ) {
                 setRobotTo(robotName);
                 org.codehaus.jettison.json.JSONObject cmd = JSONUtilForServer.mkD("{'programName':'prog','language':'de'}");
-                cmd.getJSONObject("data").put("programBlockSet", template);
+                cmd.getJSONObject("data").put("progXML", template);
                 Response response = this.restWorkflow.compileProgram(cmd);
                 result = checkEntityRc(response, "ok", "PROGRAM_INVALID_STATEMETNS");
                 reason = "response-info";

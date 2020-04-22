@@ -65,11 +65,11 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'pr
                 result.programShared = false;
                 result.programTimestamp = '';
                 try {
-                    CONFIGURATION_C.configurationToBricklyWorkspace(result.configText);
-                    GUISTATE_C.setConfigurationXML(result.configText);
-                    PROGRAM_C.programToBlocklyWorkspace(result.programText);
+                    CONFIGURATION_C.configurationToBricklyWorkspace(result.confXML);
+                    GUISTATE_C.setConfigurationXML(result.confXML);
+                    PROGRAM_C.programToBlocklyWorkspace(result.progXML);
                     GUISTATE_C.setProgram(result);
-                    GUISTATE_C.setProgramXML(result.programText);
+                    GUISTATE_C.setProgramXML(result.progXML);
                     LOG.info('show program ' + GUISTATE_C.getProgramName());
                 } catch (e) {
                     // restore old Program

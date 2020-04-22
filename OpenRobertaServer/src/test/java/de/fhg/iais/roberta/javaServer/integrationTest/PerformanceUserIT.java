@@ -202,7 +202,7 @@ public class PerformanceUserIT {
         thinkTimeInMillisec += think(random, 0, 6);
         Timestamp lastChanged = this.memoryDbSetup.getOne("select LAST_CHANGED from PROGRAM where OWNER_ID = " + sId + " and name = 'p2'");
         request = mkCmd(iTkn, "{'cmd':'save';'programName':'p2'}");
-        request.getJSONObject("data").put("programText", this.theProgramOfAllUserLol).put("timestamp", lastChanged.getTime());
+        request.getJSONObject("data").put("progXML", this.theProgramOfAllUserLol).put("timestamp", lastChanged.getTime());
         response = this.restProject.saveProgram(newDbSession(), request);
         JSONUtilForServer.assertEntityRc(response, "ok", Key.PROGRAM_SAVE_SUCCESS);
         Assert.assertEquals(2, this.memoryDbSetup.getOneBigIntegerAsLong("select count(*) from PROGRAM where OWNER_ID = " + sId));

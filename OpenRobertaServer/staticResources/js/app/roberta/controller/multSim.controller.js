@@ -77,20 +77,20 @@ define([ 'exports', 'message', 'util', 'progList.model', 'program.controller', '
                             }
                             dat.savedName = item[0];
                             extractedprograms[i] = dat;
-                            var xmlTextProgram = dat.programText;
+                            var xmlTextProgram = dat.progXML;
                             var configName;
                             var xmlConfigText;
                             if (dat.configName === undefined) {
-                                if (dat.configText === undefined) {
+                                if (dat.confXML === undefined) {
                                     configName = undefined;
                                     xmlConfigText = undefined;
                                 } else {
                                     configName = undefined;
-                                    xmlConfigText = dat.configText;
+                                    xmlConfigText = dat.confXML;
                                 }
                             } else {
                                 configName = dat.configName;
-                                xmlConfigText = dat.configText;
+                                xmlConfigText = dat.confXML;
                             }
                             var language = GUISTATE_C.getLanguage();
                             PROGRAM_M.runInSim(dat.savedName, configName, xmlTextProgram, xmlConfigText, language, function(result) {

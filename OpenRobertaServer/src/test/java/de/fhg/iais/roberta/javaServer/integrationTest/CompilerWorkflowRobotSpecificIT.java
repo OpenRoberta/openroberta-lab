@@ -1,19 +1,5 @@
 package de.fhg.iais.roberta.javaServer.integrationTest;
 
-import static org.junit.Assert.fail;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.when;
-
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
-import java.util.Set;
-
-import javax.ws.rs.core.Response;
-
 import org.codehaus.jettison.json.JSONException;
 import org.json.JSONObject;
 import org.junit.After;
@@ -28,6 +14,16 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
+import java.util.Set;
+
+import javax.ws.rs.core.Response;
 
 import de.fhg.iais.roberta.blockly.generated.Export;
 import de.fhg.iais.roberta.factory.IRobotFactory;
@@ -47,6 +43,10 @@ import de.fhg.iais.roberta.util.Util;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.util.jaxb.JaxbHelper;
 import de.fhg.iais.roberta.util.testsetup.IntegrationTest;
+
+import static org.junit.Assert.fail;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.when;
 
 /**
  * <b>Testing the generation of native code and the CROSSCOMPILER</b><br>
@@ -213,7 +213,7 @@ public class CompilerWorkflowRobotSpecificIT {
                 String xmlText = Util.readResourceContent(fullResource);
                 Export jaxbImportExport = JaxbHelper.xml2Element(xmlText, Export.class);
                 String programText = JaxbHelper.blockSet2xml(jaxbImportExport.getProgram().getBlockSet());
-                cmd.getJSONObject("data").put("programBlockSet", xmlText);
+                cmd.getJSONObject("data").put("progXML", xmlText);
                 Response response = this.restWorkflow.compileProgram(cmd);
                 entity = checkEntityRc(response, expectResult, "ORA_PROGRAM_INVALID_STATEMETNS");
                 result = entity != null;
@@ -255,7 +255,7 @@ public class CompilerWorkflowRobotSpecificIT {
             if ( crosscompilerCall ) {
                 org.codehaus.jettison.json.JSONObject cmd = JSONUtilForServer.mkD("{'programName':'" + resource + "','language':'de'}");
                 String fileContent = Util.readResourceContent(fullResource);
-                cmd.getJSONObject("data").put("programText", fileContent);
+                cmd.getJSONObject("data").put("progXML", fileContent);
                 Response response = this.restWorkflow.compileNative(cmd);
                 result = checkEntityRc(response, expectResult) != null;
             } else {

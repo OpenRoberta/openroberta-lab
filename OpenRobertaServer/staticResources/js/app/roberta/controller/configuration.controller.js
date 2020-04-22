@@ -286,7 +286,7 @@ define([ 'exports', 'log', 'util', 'comm', 'message', 'guiState.controller', 'bl
      */
     function showConfiguration(result) {
         if (result.rc == 'ok') {
-            configurationToBricklyWorkspace(result.data);
+            configurationToBricklyWorkspace(result.confXML);
             GUISTATE_C.setConfiguration(result);
             LOG.info('show configuration ' + GUISTATE_C.getConfigurationName());
         }
@@ -301,7 +301,7 @@ define([ 'exports', 'log', 'util', 'comm', 'message', 'guiState.controller', 'bl
     function reloadConf(opt_result) {
         var conf;
         if (opt_result) {
-            conf = opt_result.data;
+            conf = opt_result.confXML;
         } else {
             conf = GUISTATE_C.getConfigurationXML();
         }

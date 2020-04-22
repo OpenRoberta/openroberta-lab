@@ -1,5 +1,13 @@
 package de.fhg.iais.roberta.javaServer.restServices.all.controller;
 
+import com.google.inject.Inject;
+
+import org.codehaus.jettison.json.JSONArray;
+import org.codehaus.jettison.json.JSONException;
+import org.codehaus.jettison.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -11,14 +19,6 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.xml.bind.UnmarshalException;
-
-import org.codehaus.jettison.json.JSONArray;
-import org.codehaus.jettison.json.JSONException;
-import org.codehaus.jettison.json.JSONObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.google.inject.Inject;
 
 import de.fhg.iais.roberta.blockly.generated.Export;
 import de.fhg.iais.roberta.factory.IRobotFactory;
@@ -73,9 +73,9 @@ public class ClientProgramController {
             Long timestamp = dataPart.optLong("timestamp");
             Timestamp programTimestamp = new Timestamp(timestamp);
             String programName = dataPart.getString("programName");
-            String programText = dataPart.getString("programText");
+            String programText = dataPart.getString("progXML");
             String configName = dataPart.optString("configName", null);
-            String configText = dataPart.optString("configText", null);
+            String configText = dataPart.optString("confXML", null);
             boolean isShared = dataPart.optBoolean("shared", false);
             boolean isSaveCommand = dataPart.getString("cmd").equals("save");
             Program program;
@@ -170,10 +170,10 @@ public class ClientProgramController {
 
                 Program program = programProcessor.getProgram(programName, ownerName, robot, author);
                 if ( program != null ) {
-                    response.put("programText", program.getProgramText());
+                    response.put("progXML", program.getProgramText());
                     String configText = programProcessor.getProgramsConfig(program);
                     response.put("configName", program.getConfigName()); // may be null, if an anonymous configuration is used
-                    response.put("configText", configText); // may be null, if the default configuration is used
+                    response.put("confXML", configText); // may be null, if the default configuration is used
                     response.put("lastChanged", program.getLastChanged().getTime());
                     // count the views if the program is from the gallery!
                     if ( ownerName.equals("Gallery") ) {
@@ -322,7 +322,7 @@ public class ClientProgramController {
         JSONObject response = new JSONObject();
         try {
             String robot = getRobot(httpSessionState);
-            String xmlText = dataPart.getString("programBlockSet");
+            String xmlText = dataPart.getString("progXML");
             xmlText = UtilForHtmlXml.checkProgramTextForXSS(xmlText);
             if ( xmlText.contains("robottype=\"ardu\"") ) {
                 xmlText = xmlText.replaceAll("robottype=\"ardu\"", "robottype=\"botnroll\"");
@@ -344,8 +344,8 @@ public class ClientProgramController {
                 String robotType2 = jaxbImportExport.getConfig().getBlockSet().getRobottype();
                 if ( robotType1.equals(robot) && robotType2.equals(robot) ) {
                     response.put("programName", programName);
-                    response.put("programText", JaxbHelper.blockSet2xml(jaxbImportExport.getProgram().getBlockSet()));
-                    response.put("configText", JaxbHelper.blockSet2xml(jaxbImportExport.getConfig().getBlockSet()));
+                    response.put("progXML", JaxbHelper.blockSet2xml(jaxbImportExport.getProgram().getBlockSet()));
+                    response.put("confXML", JaxbHelper.blockSet2xml(jaxbImportExport.getConfig().getBlockSet()));
                     UtilForREST.addSuccessInfo(response, Key.PROGRAM_IMPORT_SUCCESS);
                     Statistics.info("ProgramImport", "success", true);
                 } else {

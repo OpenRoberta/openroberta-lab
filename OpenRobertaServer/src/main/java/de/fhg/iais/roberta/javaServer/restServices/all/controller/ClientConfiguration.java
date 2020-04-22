@@ -1,18 +1,18 @@
 package de.fhg.iais.roberta.javaServer.restServices.all.controller;
 
-import javax.ws.rs.Consumes;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
+import com.google.inject.Inject;
 
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.inject.Inject;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import de.fhg.iais.roberta.javaServer.provider.OraData;
 import de.fhg.iais.roberta.persistence.ConfigurationProcessor;
@@ -131,7 +131,7 @@ public class ClientConfiguration {
                 }
             }
             String configurationText = cp.getConfigurationText(configurationName, userId, robotName);
-            response.put("data", configurationText);
+            response.put("confXML", configurationText);
             UtilForREST.addResultInfo(response, cp);
         } catch ( Exception e ) {
             dbSession.rollback();

@@ -1,12 +1,5 @@
 package de.fhg.iais.roberta.javaServer.basics;
 
-import java.sql.Timestamp;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-
-import javax.ws.rs.core.Response;
-
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
@@ -14,6 +7,13 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+
+import java.sql.Timestamp;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+
+import javax.ws.rs.core.Response;
 
 import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.javaServer.restServices.all.controller.ClientConfiguration;
@@ -390,17 +390,17 @@ public class RestInterfaceTest {
         restProgram(this.sPid, "{'cmd':'loadP';'programName':'p1';'owner':'minscha';'author':'minscha'}", "ok", Key.PROGRAM_GET_ONE_SUCCESS);
         JSONObject responseJson = (JSONObject) this.response.getEntity();
         Assert.assertFalse(responseJson.has("configName"));
-        Assert.assertFalse(responseJson.has("configText"));
+        Assert.assertFalse(responseJson.has("confXML"));
         saveProgram(this.sMinscha, minschaId, -1, "p1", "<program>p1.1.1.minscha</program>", "c1", null, "ok", Key.PROGRAM_SAVE_SUCCESS);
         restProgram(this.sPid, "{'cmd':'loadP';'programName':'p1';'owner':'minscha';'author':'minscha'}", "ok", Key.PROGRAM_GET_ONE_SUCCESS);
         responseJson = (JSONObject) this.response.getEntity();
         Assert.assertEquals("c1", responseJson.getString("configName"));
-        Assert.assertTrue(responseJson.getString("configText").contains("c1.2.conf.minscha"));
+        Assert.assertTrue(responseJson.getString("confXML").contains("c1.2.conf.minscha"));
         saveProgram(this.sMinscha, minschaId, -1, "p2", "<program>p2.2.1.minscha</program>", "c1", null, "ok", Key.PROGRAM_SAVE_SUCCESS);
         restProgram(this.sPid, "{'cmd':'loadP';'programName':'p1';'owner':'minscha';'author':'minscha'}", "ok", Key.PROGRAM_GET_ONE_SUCCESS);
         responseJson = (JSONObject) this.response.getEntity();
         Assert.assertEquals("c1", responseJson.getString("configName"));
-        Assert.assertTrue(responseJson.getString("configText").contains("c1.2.conf.minscha"));
+        Assert.assertTrue(responseJson.getString("confXML").contains("c1.2.conf.minscha"));
         saveProgram(
             this.sMinscha,
             minschaId,
@@ -414,11 +414,11 @@ public class RestInterfaceTest {
         restProgram(this.sPid, "{'cmd':'loadP';'programName':'p1';'owner':'minscha';'author':'minscha'}", "ok", Key.PROGRAM_GET_ONE_SUCCESS);
         responseJson = (JSONObject) this.response.getEntity();
         Assert.assertFalse(responseJson.has("configName"));
-        Assert.assertTrue(responseJson.getString("configText").contains("p1.3.conf.minscha"));
+        Assert.assertTrue(responseJson.getString("confXML").contains("p1.3.conf.minscha"));
         restProgram(this.sPid, "{'cmd':'loadP';'programName':'p2';'owner':'minscha';'author':'minscha'}", "ok", Key.PROGRAM_GET_ONE_SUCCESS);
         responseJson = (JSONObject) this.response.getEntity();
         Assert.assertEquals("c1", responseJson.getString("configName"));
-        Assert.assertTrue(responseJson.getString("configText").contains("c1.2.conf.minscha"));
+        Assert.assertTrue(responseJson.getString("confXML").contains("c1.2.conf.minscha"));
 
         String program = this.memoryDbSetup.getOne("select PROGRAM_TEXT from PROGRAM where OWNER_ID = " + minschaId + " and NAME = 'p2'");
         Assert.assertTrue(program.contains("p2.2.1.minscha"));
@@ -831,12 +831,12 @@ public class RestInterfaceTest {
         Key msgOpt)
         throws Exception //
     {
-        String jsonAsString = "{'cmd':'saveAsP';'programName':'" + name + "';'programText':'" + program + "'";
+        String jsonAsString = "{'cmd':'saveAsP';'programName':'" + name + "';'progXML':'" + program + "'";
         if ( confName != null ) {
             jsonAsString += ";'configName':'" + confName + "'";
         }
         if ( confText != null ) {
-            jsonAsString += ";'configText':'" + confText + "'";
+            jsonAsString += ";'confXML':'" + confText + "'";
         }
         jsonAsString += ";}";
         this.response = this.restProject.saveProgram(newDbSession(), JSONUtilForServer.mkD(httpSession.getInitToken(), jsonAsString));
@@ -876,12 +876,12 @@ public class RestInterfaceTest {
             timestamp = changed.getTime();
         }
         String jsonAsString =
-            "{'cmd':'save';'shared':" + shared + ";'programName':'" + name + "';'timestamp':" + timestamp + ";'programText':'" + program + "'";
+            "{'cmd':'save';'shared':" + shared + ";'programName':'" + name + "';'timestamp':" + timestamp + ";'progXML':'" + program + "'";
         if ( confName != null ) {
             jsonAsString += ";'configName':'" + confName + "'";
         }
         if ( confText != null ) {
-            jsonAsString += ";'configText':'" + confText + "'";
+            jsonAsString += ";'confXML':'" + confText + "'";
         }
         jsonAsString += ";}";
         this.response = this.restProject.saveProgram(newDbSession(), JSONUtilForServer.mkD(httpSession.getInitToken(), jsonAsString));

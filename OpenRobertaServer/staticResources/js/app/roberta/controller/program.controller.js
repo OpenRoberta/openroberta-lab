@@ -213,20 +213,20 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'ro
                     result.programShared = 'READ';
                     result.name = programName;
                     GUISTATE_C.setProgram(result, owner, user);
-                    GUISTATE_C.setProgramXML(result.programText);
+                    GUISTATE_C.setProgramXML(result.progXML);
 //                    GUISTATE_C.setConfigurationName('');
-//                    GUISTATE_C.setConfigurationXML(result.configText);
+//                    GUISTATE_C.setConfigurationXML(result.confXML);
                     if (result.configName === undefined) {
-                        if (result.configText === undefined) {
+                        if (result.confXML === undefined) {
                             GUISTATE_C.setConfigurationNameDefault();
                             GUISTATE_C.setConfigurationXML(GUISTATE_C.getConfigurationConf());
                         } else {
                             GUISTATE_C.setConfigurationName('');
-                            GUISTATE_C.setConfigurationXML(result.configText);
+                            GUISTATE_C.setConfigurationXML(result.confXML);
                         }
                     } else {
                         GUISTATE_C.setConfigurationName(result.configName);
-                        GUISTATE_C.setConfigurationXML(result.configText);
+                        GUISTATE_C.setConfigurationXML(result.confXML);
                     }
                     $('#tabProgram').one('shown.bs.tab', function(e) {
                         reloadProgram();
@@ -396,7 +396,7 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'ro
 
     function reloadProgram(opt_result, opt_fromShowSource) {
         if (opt_result) {
-            program = opt_result.data;
+            program = opt_result.progXML;
         } else {
             program = GUISTATE_C.getProgramXML();
         }

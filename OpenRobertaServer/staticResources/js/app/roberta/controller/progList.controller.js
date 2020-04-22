@@ -395,19 +395,19 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'message', 'progList.model
                 }
                 result.name = program[0];
                 GUISTATE_C.setProgram(result, alien);
-                GUISTATE_C.setProgramXML(result.programText);
+                GUISTATE_C.setProgramXML(result.progXML);
 
                 if (result.configName === undefined) {
-                    if (result.configText === undefined) {
+                    if (result.confXML === undefined) {
                         GUISTATE_C.setConfigurationNameDefault();
                         GUISTATE_C.setConfigurationXML(GUISTATE_C.getConfigurationConf());
                     } else {
                         GUISTATE_C.setConfigurationName('');
-                        GUISTATE_C.setConfigurationXML(result.configText);
+                        GUISTATE_C.setConfigurationXML(result.confXML);
                     }
                 } else {
                     GUISTATE_C.setConfigurationName(result.configName);
-                    GUISTATE_C.setConfigurationXML(result.configText);
+                    GUISTATE_C.setConfigurationXML(result.confXML);
                 }
                 $('#tabProgram').one('shown.bs.tab', function(e) {
                     CONFIGURATION_C.reloadConf();

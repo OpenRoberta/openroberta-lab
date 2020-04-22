@@ -21,9 +21,9 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
         COMM.json("/program/save", {
             "cmd" : "saveAs",
             "programName" : programName,
-            "programText" : xmlProgramText,
+            "progXML" : xmlProgramText,
             "configName" : configName,
-            "configText" : xmlConfigText,
+            "confXML" : xmlConfigText,
             "shared" : false,
             "timestamp" : timestamp
         }, successFn, "save program to server with new name '" + programName + "'");
@@ -49,9 +49,9 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
         COMM.json("/program/save", {
             "cmd" : "save",
             "programName" : programName,
-            "programText" : xmlProgramText,
+            "progXML" : xmlProgramText,
             "configName" : configName,
-            "configText" : xmlConfigText,
+            "confXML" : xmlConfigText,
             "shared" : programShared,
             "timestamp" : timestamp
         }, successFn, "save program '" + programName + "' to server");
@@ -70,7 +70,7 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
     function loadProgramFromXML(programName, xmlText, successFn) {
         COMM.json("/program/import", {
             "programName" : programName,
-            "programBlockSet" : xmlText
+            "progXML" : xmlText
         }, successFn, "open program '" + programName + "' from XML");
     }
 
@@ -213,8 +213,8 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
         COMM.json("/projectWorkflow/source", {
             "programName" : programName,
             "configurationName" : configName,
-            "programBlockSet" : xmlTextProgram,
-            "configurationBlockSet" : xmlTextConfig,
+            "progXML" : xmlTextProgram,
+            "confXML" : xmlTextConfig,
             "SSID" : SSID,
             "password" : password,
             "language" : language
@@ -243,8 +243,8 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
         COMM.json("/projectWorkflow/run", {
             "programName" : programName,
             "configurationName" : configName,
-            "programBlockSet" : xmlTextProgram,
-            "configurationBlockSet" : xmlTextConfig,
+            "progXML" : xmlTextProgram,
+            "confXML" : xmlTextConfig,
             "SSID" : SSID,
             "password" : password,
             "language" : language
@@ -269,8 +269,8 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
         COMM.json("/projectWorkflow/sourceSimulation", {
             "programName" : programName,
             "configurationName" : configName,
-            "programBlockSet" : xmlTextProgram,
-            "configurationBlockSet" : xmlTextConfig,
+            "progXML" : xmlTextProgram,
+            "confXML" : xmlTextConfig,
             "language" : language
         }, successFn, "run program '" + programName + "' with configuration '" + configName + "'");
     }
@@ -289,7 +289,7 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
     function runNative(programName, programText, language, successFn) {
         COMM.json("/projectWorkflow/runNative", {
             "programName" : programName,
-            "programText" : programText,
+            "progXML" : programText,
             "language" : language
         }, successFn, "run program '" + programName + "'");
     }
@@ -308,7 +308,7 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
     function compileN(programName, programText, language, successFn) {
         COMM.json("/projectWorkflow/compileNative", {
             "programName" : programName,
-            "programText" : programText,
+            "progXML" : programText,
             "language" : language
         }, successFn, "compile program '" + programName + "'");
     }
@@ -328,7 +328,7 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
         COMM.json("/projectWorkflow/compileProgram", {
             "cmd" : "compileP",
             "programName" : programName,
-            "programBlockSet" : programText,
+            "progXML" : programText,
             "language" : language
         }, successFn, "compile program '" + programName + "'");
     }
@@ -352,8 +352,8 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
             "cmd" : "checkP",
             "programName" : programName,
             "configuration" : configName,
-            "programText" : xmlTextProgram,
-            "configurationText" : xmlTextConfig
+            "progXML" : xmlTextProgram,
+            "confXML" : xmlTextConfig
         }, successFn, "check program '" + programName + "' with configuration '" + configName + "'");
     }
 
