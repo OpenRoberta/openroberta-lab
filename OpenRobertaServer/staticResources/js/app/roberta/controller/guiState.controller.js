@@ -399,8 +399,9 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'progHelp.contro
         } else {
             $('#robotWlan').addClass('hidden');
         }
-    }
 
+        UTIL.clearTabAlert('tabConfiguration'); // also clear tab alert when switching robots
+    }
     exports.setRobot = setRobot;
 
     function findGroup(robot) {
@@ -626,6 +627,7 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'progHelp.contro
             $('#head-navigation-configuration-edit').css('display', 'inline');
             $('#menuTabProgram').parent().removeClass('disabled');
             $('#menuTabConfiguration').parent().addClass('disabled');
+            UTIL.clearTabAlert(view);
         } else if (view === 'tabProgram') {
             $('#head-navigation-configuration-edit').css('display', 'none');
             $('#head-navigation-program-edit').css('display', 'inline');

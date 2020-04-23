@@ -1,9 +1,9 @@
 package de.fhg.iais.roberta.syntax.codegen.arduino.arduino;
 
+import org.junit.Test;
+
 import java.util.Arrays;
 import java.util.Map;
-
-import org.junit.Test;
 
 import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.components.ConfigurationComponent;
@@ -169,14 +169,16 @@ public class ArduinoActorTest extends ArduinoAstTest {
 
     @Test
     public void multiIncludeTest() throws Exception {
-        Map<String, String> servoMotorPins = Util.createMap("PULSE", "8");
-        ConfigurationComponent servoMotor1 = new ConfigurationComponent("SERVOMOTOR", true, "servo", "S", servoMotorPins);
-        ConfigurationComponent servoMotor2 = new ConfigurationComponent("SERVOMOTOR", true, "servo", "S2", servoMotorPins);
-        Map<String, String> rfidPins = Util.createMap("RST", "9", "SDA", "10", "SCK", "13", "MOSI", "11", "MISO", "12");
-        ConfigurationComponent rfid1 = new ConfigurationComponent("RFID", true, "rfid", "R6", rfidPins);
-        ConfigurationComponent rfid2 = new ConfigurationComponent("RFID", true, "rfid", "R7", rfidPins);
+        Map<String, String> servoMotorPins1 = Util.createMap("PULSE", "7");
+        Map<String, String> servoMotorPins2 = Util.createMap("PULSE", "8");
+        ConfigurationComponent servoMotor1 = new ConfigurationComponent("SERVOMOTOR", true, "servo", "S", servoMotorPins1);
+        ConfigurationComponent servoMotor2 = new ConfigurationComponent("SERVOMOTOR", true, "servo", "S2", servoMotorPins2);
+        Map<String, String> rfidPins1 = Util.createMap("RST", "2", "SDA", "3", "SCK", "4", "MOSI", "5", "MISO", "6");
+        Map<String, String> rfidPins2 = Util.createMap("RST", "9", "SDA", "10", "SCK", "13", "MOSI", "11", "MISO", "12");
+        ConfigurationComponent rfid1 = new ConfigurationComponent("RFID", true, "rfid", "R6", rfidPins1);
+        ConfigurationComponent rfid2 = new ConfigurationComponent("RFID", true, "rfid", "R7", rfidPins2);
         ConfigurationAst.Builder builder = new ConfigurationAst.Builder();
-        builder.setTrackWidth(17f).setWheelDiameter(5.6f).addComponents(Arrays.asList(rfid1, rfid2, servoMotor1, servoMotor2));
+        builder.addComponents(Arrays.asList(rfid1, rfid2, servoMotor1, servoMotor2));
         ConfigurationAst configurationAst = builder.build();
         configurationAst.setRobotName("nano"); // TODO remove once rfid library is supported for unowifirev2
         UnitTestHelper
@@ -187,14 +189,16 @@ public class ArduinoActorTest extends ArduinoAstTest {
 
     @Test(expected = DbcException.class)
     public void negativeIncludeTest() throws Exception {
-        Map<String, String> servoMotorPins = Util.createMap("PULSE", "8");
-        ConfigurationComponent servoMotor1 = new ConfigurationComponent("NON-EXISTING-COMPONENT", true, "servo", "S", servoMotorPins);
-        ConfigurationComponent servoMotor2 = new ConfigurationComponent("NON-EXISTING-COMPONENT2", true, "servo", "S2", servoMotorPins);
-        Map<String, String> rfidPins = Util.createMap("RST", "9", "SDA", "10", "SCK", "13", "MOSI", "11", "MISO", "12");
-        ConfigurationComponent rfid1 = new ConfigurationComponent("NON-EXISTING-COMPONENT", true, "rfid", "R6", rfidPins);
-        ConfigurationComponent rfid2 = new ConfigurationComponent("NON-EXISTING-COMPONENT2", true, "rfid", "R7", rfidPins);
+        Map<String, String> servoMotorPins1 = Util.createMap("PULSE", "7");
+        Map<String, String> servoMotorPins2 = Util.createMap("PULSE", "8");
+        ConfigurationComponent servoMotor1 = new ConfigurationComponent("NON-EXISTING-COMPONENT", true, "servo", "S", servoMotorPins1);
+        ConfigurationComponent servoMotor2 = new ConfigurationComponent("NON-EXISTING-COMPONENT2", true, "servo", "S2", servoMotorPins2);
+        Map<String, String> rfidPins1 = Util.createMap("RST", "2", "SDA", "3", "SCK", "4", "MOSI", "5", "MISO", "6");
+        Map<String, String> rfidPins2 = Util.createMap("RST", "9", "SDA", "10", "SCK", "13", "MOSI", "11", "MISO", "12");
+        ConfigurationComponent rfid1 = new ConfigurationComponent("NON-EXISTING-COMPONENT", true, "rfid", "R6", rfidPins1);
+        ConfigurationComponent rfid2 = new ConfigurationComponent("NON-EXISTING-COMPONENT2", true, "rfid", "R7", rfidPins2);
         ConfigurationAst.Builder builder = new ConfigurationAst.Builder();
-        builder.setTrackWidth(17f).setWheelDiameter(5.6f).addComponents(Arrays.asList(rfid1, rfid2, servoMotor1, servoMotor2));
+        builder.addComponents(Arrays.asList(rfid1, rfid2, servoMotor1, servoMotor2));
         ConfigurationAst configurationAst = builder.build();
         configurationAst.setRobotName("nano"); // TODO remove once rfid library is supported for unowifirev2
         UnitTestHelper

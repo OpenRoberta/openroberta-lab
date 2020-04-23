@@ -2313,3 +2313,24 @@ pre code {
 #confirm, #confirmCancel {
     text-transform: capitalize;
 }
+
+.blinking{
+    animation:blinkingBackground 1.2s infinite;
+}
+.blinking > span {
+    animation:blinkingForeground 1.2s infinite;
+}
+@keyframes blinkingBackground{
+    0%  {   background-color: #E2001A;     border-bottom: 4px solid #E2001A;     }
+    49% {   background-color: #E2001A;     border-bottom: 4px solid #E2001A;     }
+    60% {   background-color: transparent; border-bottom: 4px solid transparent; }
+    99% {   background-color: transparent; border-bottom: 4px solid transparent; }
+    100%{   background-color: #E2001A;     border-bottom: 4px solid #E2001A;     }
+}
+@keyframes blinkingForeground{
+    0%  { color: #fff; }
+    49% { color: #fff; }
+    60% { color: #333; }
+    99% { color: #333; }
+    100%{ color: #fff; }
+}

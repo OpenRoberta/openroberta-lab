@@ -48,6 +48,7 @@ public class ProjectWorkflowRestController {
         try {
             response.put("progXML", dataPart.getString("progXML")); // always return the program, even if the workflow fails
             String configurationText = httpSessionState.getRobotFactory().getConfigurationDefault();
+            response.put("confXML", dataPart.optString("confXML", configurationText)); // always return the configuration, even if the workflow fails
             Project project =
                 new Project.Builder()
                     .setProgramName(dataPart.getString("programName"))
@@ -91,6 +92,8 @@ public class ProjectWorkflowRestController {
         try {
             response.put("progXML", dataPart.getString("progXML")); // always return the program, even if the workflow fails
             String configurationText = httpSessionState.getRobotFactory().getConfigurationDefault();
+            response.put("confXML", dataPart.optString("confXML", configurationText)); // always return the configuration, even if the workflow fails
+
             Project project =
                 new Project.Builder()
                     .setProgramName(dataPart.getString("programName"))
@@ -136,6 +139,7 @@ public class ProjectWorkflowRestController {
         try {
             response.put("progXML", dataPart.getString("progXML")); // always return the program, even if the workflow fails
             String configurationText = httpSessionState.getRobotFactory().getConfigurationDefault();
+            response.put("confXML", dataPart.optString("confXML", configurationText)); // always return the configuration, even if the workflow fails
             Project project =
                 new Project.Builder()
                     .setProgramName(dataPart.getString("programName"))

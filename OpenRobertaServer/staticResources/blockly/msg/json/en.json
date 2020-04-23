@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2020-04-20 16:58:09.812042",
+		"lastupdated": "2020-04-30 17:21:19.223354",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -849,6 +849,7 @@
 	"CONFIGURATION_ERROR_MOTOR_LEFT_UNREGULATED": "Left motor is not regulated!",
 	"CONFIGURATION_ERROR_MOTOR_RIGHT_UNREGULATED": "Right motor is not regulated!",
 	"CONFIGURATION_ERROR_OTHER_NOT_SUPPORTED": "Other power consumer does not support this type of block!",
+	"CONFIGURATION_ERROR_OVERLAPPING_PORTS": "Another component is already using the same port!",
 	"DATATABLE_PROGRAM_NAME": "Program name",
 	"DATATABLE_CREATED_BY": "Creator",
 	"DATATABLE_SHARED": "Shared",
@@ -1284,7 +1285,7 @@
 	"GET_CODE_TOOLTIP": "Returns the value of the solderable code pad in the head piece. Values are in range 0-31.",
 	"MOTOR_SPEED_0": "Motor Speed is 0!",
 	"VARIABLE_USED_BEFORE_DECLARATION": "The variable is used before declaration.",
-	"ORA_PROGRAM_INVALID_STATEMETNS": "There are errors in your program. Please check the messages",
+	"ORA_PROGRAM_INVALID_STATEMETNS": "There are errors in your program or configuration. Please check the messages.",
 	"TIMEOUT": "timeout",
 	"SLEEP": "sleep",
 	"HINT_USER_ACCOUNT": "»IAmBotman« or »RobellaStracciatella«? Not everyone needs to know your real name. Think of a cool nickname that you can easily remember.",

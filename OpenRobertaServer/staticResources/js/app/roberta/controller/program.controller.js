@@ -94,7 +94,7 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'ro
         $('#tabProgram').on('shown.bs.tab', function(e) {
             blocklyWorkspace.markFocused();
             blocklyWorkspace.setVisible(true);
-            if (!seen) {
+            if (!seen) { // TODO may need to be removed if program tab can recieve changes while in background
                 reloadView();
             }
             $(window).resize();
@@ -397,6 +397,10 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'ro
     function reloadProgram(opt_result, opt_fromShowSource) {
         if (opt_result) {
             program = opt_result.progXML;
+            if (opt_result.confXML.indexOf('error') !== -1) {
+                GUISTATE_C.setConfigurationXML(opt_result.confXML);
+                UTIL.alertTab('tabConfiguration');
+            }
         } else {
             program = GUISTATE_C.getProgramXML();
         }

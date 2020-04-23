@@ -141,6 +141,7 @@ Blockly.Msg.CONFIGURATION_ERROR_MOTOR_RIGHT_UNREGULATED = "Правы матор
 Blockly.Msg.CONFIGURATION_ERROR_MULTIPLE_LEFT_MOTORS = "У Вашай кафігурацыі больш за адзін левы матор!";
 Blockly.Msg.CONFIGURATION_ERROR_MULTIPLE_RIGHT_MOTORS = "У Вашай канфігурацыі больш за адзін правы матор!";
 Blockly.Msg.CONFIGURATION_ERROR_OTHER_NOT_SUPPORTED = "Іншы спажывец не падтрымлівае дадзены тып блока.";
+Blockly.Msg.CONFIGURATION_ERROR_OVERLAPPING_PORTS = "Another component is already using the same port!";  // untranslated
 Blockly.Msg.CONFIGURATION_ERROR_SENSOR_MISSING = "Гэты датчык не падключаны да порту!";
 Blockly.Msg.CONFIGURATION_ERROR_SENSOR_WRONG = "Да дадзенага порту падключаны неадпаведны датчык!";
 Blockly.Msg.CONFIGURATION_ERROR_WLAN_CREDENTIALS_MISSING = "Missing WLAN credentials, please enter them in robot -> WLAN credentials ... !";  // untranslated

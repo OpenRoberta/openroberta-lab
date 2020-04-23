@@ -141,6 +141,7 @@ Blockly.Msg.CONFIGURATION_ERROR_MOTOR_RIGHT_UNREGULATED = "Motorul din dreapta n
 Blockly.Msg.CONFIGURATION_ERROR_MULTIPLE_LEFT_MOTORS = "Ai in configuratie mai multe motoare pe partea stanga!";
 Blockly.Msg.CONFIGURATION_ERROR_MULTIPLE_RIGHT_MOTORS = "Ai in configuratie mai multe motoare pe partea dreapta!";
 Blockly.Msg.CONFIGURATION_ERROR_OTHER_NOT_SUPPORTED = "Un alt consumator de energie nu acceptă acest tip de bloc!";
+Blockly.Msg.CONFIGURATION_ERROR_OVERLAPPING_PORTS = "Another component is already using the same port!";  // untranslated
 Blockly.Msg.CONFIGURATION_ERROR_SENSOR_MISSING = "Acest senzor nu are alocat un port!";
 Blockly.Msg.CONFIGURATION_ERROR_SENSOR_WRONG = "Ai conectat senzorul gresit pe portul dat!";
 Blockly.Msg.CONFIGURATION_ERROR_WLAN_CREDENTIALS_MISSING = "Missing WLAN credentials, please enter them in robot -> WLAN credentials ... !";  // untranslated

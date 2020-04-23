@@ -415,6 +415,20 @@ define([ 'exports', 'message', 'log', 'jquery', 'jquery-validate', 'bootstrap' ]
     }
     exports.isLocalStorageAvailable = isLocalStorageAvailable;
 
+    function alertTab(tabIdentifier) {
+        clearTabAlert(tabIdentifier);
+        $('#' + tabIdentifier).width(); // trigger a reflow to sync animations
+        $('#' + tabIdentifier).prepend('<span class="typcn typcn-warning-outline"></span>') // add alert typicon
+        $('#' + tabIdentifier).addClass('blinking');
+    }
+    exports.alertTab = alertTab;
+
+    function clearTabAlert(tabIdentifier) {
+        $('#' + tabIdentifier).children().remove('.typcn') // remove alert typicon
+        $('#' + tabIdentifier).removeClass('blinking');
+    }
+    exports.clearTabAlert = clearTabAlert;
+
     var __entityMap = {
         "&" : "&amp;",
         "<" : "&lt;",

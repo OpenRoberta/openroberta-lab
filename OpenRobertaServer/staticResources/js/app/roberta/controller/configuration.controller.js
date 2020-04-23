@@ -68,9 +68,8 @@ define([ 'exports', 'log', 'util', 'comm', 'message', 'guiState.controller', 'bl
                 bricklyWorkspace.setVisible(false);
             }
             $(window).resize();
-            if (!seen) {
-                reloadConf();
-            }
+            // always reload the configuration as it may have changed from REST responses
+            reloadConf();
         }, 'tabConfiguration clicked');
 
         $('#tabConfiguration').on('hide.bs.tab', function(e) {

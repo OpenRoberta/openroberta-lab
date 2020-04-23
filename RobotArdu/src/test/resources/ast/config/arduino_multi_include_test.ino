@@ -9,8 +9,8 @@
 String ___item;
 bool ___item2;
 Servo _servo_S;
-#define SS_PIN_R6 10
-#define RST_PIN_R6 9
+#define SS_PIN_R6 3
+#define RST_PIN_R6 2
 MFRC522 _mfrc522_R6(SS_PIN_R6, RST_PIN_R6);
 #define SS_PIN_R7 10
 #define RST_PIN_R7 9
@@ -31,7 +31,7 @@ String _readRFIDData(MFRC522 &mfrc522) {
 
 void setup()
 {
-    _servo_S.attach(8);
+    _servo_S.attach(7);
     SPI.begin();
     _mfrc522_R6.PCD_Init();
     SPI.begin();
