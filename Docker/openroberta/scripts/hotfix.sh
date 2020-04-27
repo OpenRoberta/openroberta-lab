@@ -37,7 +37,6 @@ echo "script directory is $SCRIPT, working directory is $CWD, parent pom in $PAR
 source $SCRIPT/helper/__githelper.sh
 
 # ACK PRECONDITIONS:
-question 'did you update the element <openRobertaServer.history> in the parent pom?'
 question 'is a database upgrade necessary? Did you change the class Upgrader.java and the SQL script "create-tables.sql" if needed?'
 question 'is an update of versions for the EV3 robots in RobotEV3/pom.xml (e.g. <ev3runtime.v0.version>) needed?' 
 

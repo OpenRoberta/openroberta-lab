@@ -1,7 +1,6 @@
 package de.fhg.iais.roberta.main;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.StringWriter;
@@ -37,7 +36,6 @@ import de.fhg.iais.roberta.persistence.util.DbExecutor;
 import de.fhg.iais.roberta.persistence.util.DbSession;
 import de.fhg.iais.roberta.persistence.util.DbSetup;
 import de.fhg.iais.roberta.persistence.util.SessionFactoryWrapper;
-import de.fhg.iais.roberta.persistence.util.Upgrader;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.Location;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
@@ -90,10 +88,7 @@ public class Administration {
         String cmd = this.args[0];
         switch ( cmd ) {
             case "version":
-                println(version(false));
-                return;
-            case "version-for-db":
-                println(version(true));
+                println(version());
                 return;
             default:
                 LOG.info("*** " + cmd + " ***");
@@ -114,9 +109,6 @@ public class Administration {
             case "sql-exec":
                 sqlexec();
                 break;
-            case "upgrade":
-                upgrade();
-                break;
             // old stuff for some old problematic upgrades of the database
             case "configuration-clean-up":
                 // removeUnusedConfigurations();
@@ -130,23 +122,16 @@ public class Administration {
             case "user:encryptpasswords":
                 // encryptpasswords();
                 break;
-            case "db:update":
-                // update_db();
-                break;
             default:
                 Administration.LOG.error("invalid argument: " + this.args[0] + " - exit 12");
                 System.exit(12);
         }
     }
 
-    private String version(boolean isForDatabase) {
+    private String version() {
         Properties serverProperties = Util.loadProperties(null);
         String version = serverProperties.getProperty("openRobertaServer.version");
-        if ( isForDatabase ) {
-            return version.replace("-SNAPSHOT", "");
-        } else {
-            return version;
-        }
+        return version;
     }
 
     private void createEmptyDatabase() {
@@ -156,6 +141,7 @@ public class Administration {
         DbSetup dbSetup = new DbSetup(nativeSession);
         nativeSession.beginTransaction();
         dbSetup.createEmptyDatabase();
+        nativeSession.getTransaction().commit();
         nativeSession.createSQLQuery("shutdown").executeUpdate();
         nativeSession.close();
     }
@@ -280,16 +266,6 @@ public class Administration {
             println("for safety reasons only SELECT statements is processed");
         }
 
-    }
-
-    /**
-     * upgrade the database. Needs as parameter from the main args the database parent directory<br>
-     * Accesses the database in embedded mode!
-     */
-    private void upgrade() {
-        expectArgs(2);
-        String versionForDb = version(true);
-        Upgrader.checkForUpgrade(versionForDb, new File(this.args[1]));
     }
 
     @SuppressWarnings("unused")

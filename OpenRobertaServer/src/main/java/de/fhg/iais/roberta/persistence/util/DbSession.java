@@ -43,7 +43,8 @@ public class DbSession {
     private long numberOfActions = 0;
 
     /**
-     * wrap a hibernate session. Package visible: may only be called from {@link SessionFactoryWrapper}
+     * wrap a hibernate session.<br>
+     * <b><i>Be very careful:</i> may only be called from {@link SessionFactoryWrapper} and the upgrader of the database</b>
      *
      * @param session the hibernate session to be wrapped
      */
