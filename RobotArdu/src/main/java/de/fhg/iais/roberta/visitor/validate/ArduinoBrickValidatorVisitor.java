@@ -231,11 +231,19 @@ public final class ArduinoBrickValidatorVisitor extends AbstractBrickValidatorVi
 
     @Override
     public Void visitPinGetValueSensor(PinGetValueSensor<Void> pinGetValueSensor) {
+        checkSensorPort(pinGetValueSensor);
         return null;
     }
 
     @Override
     public Void visitPinWriteValueAction(PinWriteValueAction<Void> pinWriteValueAction) {
+        if ( pinWriteValueAction.getInfos().getErrorCount() == 0 ) {
+            ConfigurationComponent usedConfigurationBlock = this.robotConfiguration.optConfigurationComponent(pinWriteValueAction.getPort());
+            if ( usedConfigurationBlock == null ) {
+                pinWriteValueAction.addInfo(NepoInfo.error("CONFIGURATION_ERROR_ACTOR_MISSING"));
+                this.errorCount++;
+            }
+        }
         return null;
     }
 
