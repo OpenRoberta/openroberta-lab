@@ -77,6 +77,8 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'progHelp.contro
         }
         // Robot?
         $('#menu-' + GUISTATE.gui.robot).parent().addClass('disabled');
+        // Tutorials?
+        updateTutorialMenu();
     }
 
     exports.setInitialState = setInitialState;
