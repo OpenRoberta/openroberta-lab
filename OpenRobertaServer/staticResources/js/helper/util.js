@@ -515,6 +515,7 @@ define([ 'exports', 'message', 'log', 'jquery', 'jquery-validate', 'bootstrap' ]
             duration : ANIMATION_DURATION,
             start : function() {
                 $(".modal").modal("hide");
+                $('.rightMenuButton.rightActive').removeClass('rightActive');
             },
             step : function(now) {
                 that.width($('#main-section').outerWidth() - now);
@@ -530,7 +531,6 @@ define([ 'exports', 'message', 'log', 'jquery', 'jquery-validate', 'bootstrap' ]
                 $('.fromRight').width(0);
                 that.removeClass('rightActive');
                 $('.fromRight.rightActive').removeClass('rightActive');
-                $('.rightMenuButton.rightActive').removeClass('rightActive');
                 $('#sliderDiv').hide();
                 $(window).resize();
                 if (typeof opt_callBack == 'function') {
