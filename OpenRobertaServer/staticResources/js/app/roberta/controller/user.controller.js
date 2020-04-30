@@ -362,15 +362,8 @@ define([ 'exports', 'log', 'message', 'util', 'user.model', 'guiState.controller
 
     //Animate between forms in login modal
     function modalAnimate($oldForm, $newForm) {
-        var $oldH = $oldForm.height();
-        var $newH = $newForm.height();
-        $divForms.css("height", $oldH);
         $oldForm.fadeToggle($modalAnimateTime, function() {
-            $divForms.animate({
-                height : $newH
-            }, $modalAnimateTime, function() {
-                $newForm.fadeToggle($modalAnimateTime);
-            });
+            $newForm.fadeToggle();
         });
     }
 
@@ -416,12 +409,12 @@ define([ 'exports', 'log', 'message', 'util', 'user.model', 'guiState.controller
         if (!GUISTATE_C.isPublicServerVersion()) {
             $("#fgUserAge").addClass('hidden');
         }
-        $("#fgRegisterPass").show()
-        $("#fgRegisterPassConfirm").show()
+        $("#fgRegisterPass").show();
+        $("#fgRegisterPassConfirm").show();
         $("#showChangeUserPassword").addClass('hidden');
         $("#resendActivation").addClass('hidden');
-        $("#register_login_btn").show()
-        $("#register_lost_btn").show()
+        $("#register_login_btn").show();
+        $("#register_lost_btn").show();
     }
 
     function initLoginModal() {
@@ -439,10 +432,10 @@ define([ 'exports', 'log', 'message', 'util', 'user.model', 'guiState.controller
             login();
         });
         $('#register-form input.form-control, #register-form select.form-control').focus(function(e) {
-            $(this).parent().next('.hint').fadeIn($msgAnimateTime);
+            $(this).parent().next('.hint').slideDown($msgAnimateTime);
         });
         $('#register-form input.form-control, #register-form select.form-control').blur(function(e) {
-            $(this).parent().next('.hint').fadeOut($msgAnimateTime);
+            $(this).parent().next('.hint').slideUp($msgAnimateTime);
         });
 
         $("#registerUserEmail").on("change paste keyup", function() {
@@ -574,19 +567,16 @@ define([ 'exports', 'log', 'message', 'util', 'user.model', 'guiState.controller
         $("#loginLabel").addClass('hidden');
         $("#registerInfoLabel").addClass('hidden');
         $("#forgotPasswordLabel").addClass('hidden');
-        $("#fgRegisterPass").hide()
-        $("#fgRegisterPassConfirm").hide()
-        $("#register_login_btn").hide()
+        $("#fgRegisterPass").hide();
+        $("#fgRegisterPassConfirm").hide();
+        $("#register_login_btn").hide();
         $("#showChangeUserPassword").removeClass('hidden');
         if (GUISTATE_C.isPublicServerVersion()) {
             $("#resendActivation").removeClass('hidden');
         }
-        $("#register_lost_btn").hide()
-        $formLogin.hide()
+        $("#register_lost_btn").hide();
+        $formLogin.hide();
         $formRegister.show();
-        $('#div-login-forms').css('height', 'auto');
-        $('#div-login-forms').css('max-height', '100%');
-        $('#div-login-forms').css('display', 'table');
         $("#login-user").modal('show');
     }
     exports.showUserDataForm = showUserDataForm;
@@ -595,12 +585,9 @@ define([ 'exports', 'log', 'message', 'util', 'user.model', 'guiState.controller
         $("#userInfoLabel").addClass('hidden');
         $("#registerInfoLabel").addClass('hidden');
         $("#forgotPasswordLabel").addClass('hidden');
-        $formLogin.show()
+        $formLogin.show();
         $formLost.hide();
         $formRegister.hide();
-        $('#div-login-forms').css('height', 'auto');
-        $('#div-login-forms').css('max-height', '100%');
-        $('#div-login-forms').css('display', 'table');
         $("#login-user").modal('show');
     }
     exports.showLoginForm = showLoginForm;

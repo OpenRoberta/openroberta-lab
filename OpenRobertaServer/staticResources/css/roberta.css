@@ -1317,7 +1317,7 @@ label.form-invalid:after {
     width: 100%;
 }
 .form-group .hint {
-	position: absolute;
+    position: relative;
     border-radius: 2px;
     margin-top: 12px;
     color: #8FA402;
