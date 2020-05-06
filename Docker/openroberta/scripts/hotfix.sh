@@ -37,7 +37,7 @@ echo "script directory is $SCRIPT, working directory is $CWD, parent pom in $PAR
 source $SCRIPT/helper/__githelper.sh
 
 # ACK PRECONDITIONS:
-question 'is a database upgrade necessary? Did you change the class Upgrader.java and the SQL script "create-tables.sql" if needed?'
+question 'is a database upgrade necessary? Did you change the class DbUpgrader.java and the SQL script "create-tables.sql" if needed?'
 question 'is an update of versions for the EV3 robots in RobotEV3/pom.xml (e.g. <ev3runtime.v0.version>) needed?' 
 
 # CONSISTENCY CHECKS:

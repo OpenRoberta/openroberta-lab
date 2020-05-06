@@ -124,6 +124,15 @@ This kind of installation is useful for small productive systems (e.g. an a Rasp
 needs more support as available with the scripts **ora.sh** and **admin.sh**. We deploy our openroberta installation using docker. It is described in detail in file **Docker/README.md**. Inside the
 **Docker** directory everything is contained which is needed to create images and start them. You can try it. If there are problems, you can contact us.
 
+### Remarks about the database
+
+OpenRoberta needs a database to store user accounts, programs, etc. It uses HyperSQL. Other database systems (MySql, Postgres, ..., oracle, db2, ...) would work, too. There are no
+special requirements on the database, that would exclude one. Only a Hibernate binding and a full transaction support is needed.
+
+As described above either **db-embedded** or **db-server** is the name of the directory, in which the database files reside. Sometimes the database must be upgraded, e.g. new tables or
+new columns for new features. The java class **DbUpgrader** is responsible for detecting the need for an upgrade and executing the upgrade (once and only once). This is done,
+when the database is openend at server startup. There is no need for the developer to care about database upgrades.
+
 ### Importing the Project
 
 You can also import the project into IDE's such as [Eclipse](https://github.com/OpenRoberta/openroberta-lab/wiki/Importing-into-Eclipse) and [IntelliJ](https://github.com/OpenRoberta/openroberta-lab/wiki/Importing-into-IntelliJ)!
