@@ -130,8 +130,11 @@ OpenRoberta needs a database to store user accounts, programs, etc. It uses Hype
 special requirements on the database, that would exclude one. Only a Hibernate binding and a full transaction support is needed.
 
 As described above either **db-embedded** or **db-server** is the name of the directory, in which the database files reside. Sometimes the database must be upgraded, e.g. new tables or
-new columns for new features. The java class **DbUpgrader** is responsible for detecting the need for an upgrade and executing the upgrade (once and only once). This is done,
-when the database is openend at server startup. There is no need for the developer to care about database upgrades.
+new columns for new features. The java class **DbUpgrader** is responsible for detecting the need for an upgrade and executing the upgrade (once and only once) when the database is openend
+at server startup. If a database needs more than one upgrade, this is no problem. They are executed one after the other.
+
+There is _no_ need for the developer to care about database upgrades. But note, that is _not_ possible to upgrade databases with versions before **3.1.0**. As this a very old version, this should
+never be necessary. If this is needed, please contact the OpenRoberta team.
 
 ### Importing the Project
 
