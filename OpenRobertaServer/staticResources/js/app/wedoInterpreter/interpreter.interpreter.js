@@ -1,7 +1,7 @@
 define(["require", "exports", "interpreter.state", "interpreter.constants", "interpreter.util"], function (require, exports, interpreter_state_1, C, U) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    var Interpreter = /** @class */ (function () {
+    var Interpreter = (function () {
         /*
          *
          * . @param generatedCode argument contains the operations and the function definitions
@@ -446,7 +446,6 @@ define(["require", "exports", "interpreter.state", "interpreter.constants", "int
          * . @param expr to be evaluated
          */
         Interpreter.prototype.evalExpr = function (expr) {
-            var _a;
             var kind = expr[C.EXPR];
             var s = this.s;
             switch (kind) {
@@ -761,6 +760,7 @@ define(["require", "exports", "interpreter.state", "interpreter.constants", "int
                 default:
                     U.dbcException("invalid expr op: " + kind);
             }
+            var _a;
         };
         Interpreter.prototype.evalBinary = function (subOp, left, right) {
             var leftIsArray = Array.isArray(left);

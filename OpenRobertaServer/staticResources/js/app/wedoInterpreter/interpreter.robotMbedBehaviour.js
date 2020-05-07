@@ -1,10 +1,7 @@
 var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
     return function (d, b) {
         extendStatics(d, b);
         function __() { this.constructor = d; }
@@ -14,7 +11,7 @@ var __extends = (this && this.__extends) || (function () {
 define(["require", "exports", "interpreter.aRobotBehaviour", "interpreter.constants", "interpreter.util"], function (require, exports, interpreter_aRobotBehaviour_1, C, U) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    var RobotMbedBehaviour = /** @class */ (function (_super) {
+    var RobotMbedBehaviour = (function (_super) {
         __extends(RobotMbedBehaviour, _super);
         function RobotMbedBehaviour() {
             var _this = _super.call(this) || this;
@@ -71,6 +68,20 @@ define(["require", "exports", "interpreter.aRobotBehaviour", "interpreter.consta
             if (mode != undefined) {
                 if (port != undefined) {
                     v = sensor[port][mode];
+                    if (sensorName === 'gyro' && mode === 'angle') {
+                        var reset = this.hardwareState['angleReset'];
+                        if (reset != undefined) {
+                            var resetValue = reset[port];
+                            if (resetValue != undefined) {
+                                var value = +v;
+                                value = value - resetValue;
+                                if (value < 0) {
+                                    value = value + 360;
+                                }
+                                v = '' + value;
+                            }
+                        }
+                    }
                 }
                 else {
                     v = sensor[mode];
@@ -376,7 +387,18 @@ define(["require", "exports", "interpreter.aRobotBehaviour", "interpreter.consta
             this.hardwareState.actions["pin" + pin][mode] = value;
         };
         RobotMbedBehaviour.prototype.gyroReset = function (_port) {
-            throw new Error("Method not implemented.");
+            var gyro = this.hardwareState.sensors['gyro'];
+            if (gyro !== undefined) {
+                var port = gyro[_port];
+                if (port !== undefined) {
+                    var angle = port['angle'];
+                    if (angle !== undefined) {
+                        this.hardwareState['angleReset'] = {};
+                        this.hardwareState['angleReset'][_port] = angle;
+                        console.log('angleReset=' + this.hardwareState['angleReset']);
+                    }
+                }
+            }
         };
         RobotMbedBehaviour.prototype.getState = function () {
             return this.hardwareState;

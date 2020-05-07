@@ -1,10 +1,7 @@
 var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
     return function (d, b) {
         extendStatics(d, b);
         function __() { this.constructor = d; }
@@ -14,7 +11,7 @@ var __extends = (this && this.__extends) || (function () {
 define(["require", "exports", "interpreter.aRobotBehaviour", "interpreter.constants", "interpreter.util"], function (require, exports, interpreter_aRobotBehaviour_1, C, U) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    var RobotWeDoBehaviour = /** @class */ (function (_super) {
+    var RobotWeDoBehaviour = (function (_super) {
         __extends(RobotWeDoBehaviour, _super);
         function RobotWeDoBehaviour(btInterfaceFct, toDisplayFct) {
             var _this = _super.call(this) || this;

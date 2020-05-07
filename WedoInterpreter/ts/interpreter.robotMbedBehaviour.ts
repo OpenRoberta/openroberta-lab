@@ -63,6 +63,20 @@ export class RobotMbedBehaviour extends ARobotBehaviour {
 		if (mode != undefined) {
 			if (port != undefined) {
 				v = sensor[port][mode];
+				if (sensorName === 'gyro' && mode === 'angle') {
+					var reset = this.hardwareState['angleReset'];
+					if (reset != undefined) {
+						var resetValue : number = reset[port];
+						if (resetValue != undefined) {
+							var value : number = +v;
+							value = value - resetValue;
+							if (value < 0) {
+								value = value + 360;
+							}
+							v = '' + value;
+						}
+					}
+				}
 			} else {
 				v = sensor[mode];
 			}
@@ -393,7 +407,18 @@ export class RobotMbedBehaviour extends ARobotBehaviour {
 	}
 
 	public gyroReset(_port: number): void {
-		throw new Error("Method not implemented.");
+		var gyro = this.hardwareState.sensors['gyro'];
+		if (gyro !== undefined) {
+				var port = gyro[_port];
+				if (port !== undefined) {
+						var angle = port['angle'];
+						if (angle !== undefined) {
+								this.hardwareState['angleReset'] = {};
+								this.hardwareState['angleReset'][_port] = angle;
+								console.log('angleReset=' + this.hardwareState['angleReset']);
+						}
+				}
+		}
 	}
 
 
