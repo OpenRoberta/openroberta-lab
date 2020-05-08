@@ -1,6 +1,6 @@
 #!/bin/bash
 # start of the openroberta database server in a docker container.
-# needs the list of databases to serve as runtime arguments
+# needs the list of databases as runtime arguments
 
 function log { 
   echo $1
@@ -8,7 +8,13 @@ function log {
 }
 
 case "$1" in
-  '') log 'at least one parameter declaring at least one database is required. Exit 12'
+  -Xmx*) DATABASEXMX=$1; shift ;;
+  *)     log 'first parameter must declare the maximum heap size (e.g. -Xmx4G). Exit 12'
+	       exit 12 ;;
+esac
+
+case "$1" in
+  '') log 'at least one parameter declaring a database is required. Exit 12'
 	    exit 12 ;;
 	*)  : ;;
 esac
@@ -43,7 +49,7 @@ function trapSignals {
   kill -INT $child
 }
 trap trapSignals TERM INT
-eval "java -Xmx4G -cp lib/\* org.hsqldb.Server $HSQL_DB_DECLS | tee -a $DB_LOGFILE &"
+eval "java $DATABASEXMX -cp lib/\* org.hsqldb.Server $HSQL_DB_DECLS | tee -a $DB_LOGFILE &"
 child="$!"
 log "waiting for child with pid $child to terminate"
 wait "$child"

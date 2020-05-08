@@ -64,7 +64,6 @@ function isFileValid {
 }
 
 function isDeclShValid { 
-    isDefined DATE_SETUP
     isDefined PORT
     isDefined LOG_LEVEL DEBUG INFO WARN ERROR
     isDefined LOG_CONFIG_FILE
@@ -92,11 +91,18 @@ isDirectoryValid ${CONF_DIR}
 isDirectoryValid ${SERVER_DIR}
 isDirectoryValid ${GIT_DIR}
 isDirectoryValid ${DATABASE_DIR}
-isDirectoryValid $DB_ADMIN_DIR
+isDirectoryValid ${DB_ADMIN_DIR}
 
 isDefined INAME
 isDefined DATABASE_SERVER_PORT
 isDefined DOCKER_NETWORK_NAME
+
+case $(uname -m) in # get the architecture
+  x*)   ARCH=x64 ;;
+  arm*) ARCH=arm32v7 ;;
+  *)    echo "works on x86 and arm32v7 architecture only. Exit 12"
+        exit 12 ;;
+esac
 
 isDefined ALIVE_ACTIVE
 case $ALIVE_ACTIVE in
@@ -132,6 +138,12 @@ done
 for NAME in $DATABASES; do
     isServerNameValid "$NAME"
 done
+isDefined DATABASEXMX
+case "$DATABASEXMX" in
+  -Xmx*) : ;;
+  *)     echo "variable DATABASEXMX is '$DATABASEXMX' and not like '-Xmx4G' for example. Exit 12"
+         exit 12 ;;
+esac
 
 HOSTNAME=$(hostname)
 if [ "$QUIET" != true ]

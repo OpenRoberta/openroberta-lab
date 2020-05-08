@@ -1,7 +1,6 @@
 ARG BASE_VERSION
-FROM openroberta/base:$BASE_VERSION
+FROM openroberta/base-x64:$BASE_VERSION
 
-ARG LAST_RUN_OF_BASE=2019-07-30-15:00:00
 WORKDIR /opt
 
 RUN apt-get update -yq \

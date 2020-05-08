@@ -120,7 +120,7 @@ create-empty-db) databaseurl="jdbc:hsqldb:file:$DB_PARENTDIR/$DB_NAME"
                 echo "creating an empty db using the url $databaseurl - an existing db is NOT overwritten"
                 java -cp ${JAVA_LIB_DIR}/\* "$ADMIN_CLASS" create-empty-db "$databaseurl" ;;
 
-new-test-setup) base_dir="$1"
+new-docker-setup) base_dir="$1"
                 if [[ -d $base_dir ]]
                 then
                   echo "basedir '$base_dir' exists. Exit 12"
@@ -128,14 +128,15 @@ new-test-setup) base_dir="$1"
                 fi
                 cp -r Docker/openroberta $base_dir
                 cp Docker/_README.md $base_dir
-                echo "new test server setup created in $base_dir. Edit 'decl.sh' and setup db and servers now" ;;
+                echo "New docker setup created in $base_dir. Edit 'decl.sh' and setup databases and servers now."
+                echo "Create servers by calling './ora.sh new-server-in-docker-setup $base_dir SERVER_NAME'" ;;
 
-new-server-in-test-setup)
+new-server-in-docker-setup)
                 base_dir="$1"
                 server_name="$2"
                 if [[ ! -d $base_dir || ! -f $base_dir/decl.sh ]]
                 then
-                  echo "basedir '$base_dir' no valid dir for test server setup. Exit 12"
+                  echo "basedir '$base_dir' is no valid dir for docker setup. Exit 12"
                   exit 12
                 fi
                 server_dir="$base_dir/server/$server_name"
@@ -146,14 +147,15 @@ new-server-in-test-setup)
                   exit 12
                 fi
                 cp -r Docker/openroberta/server/_server-template $server_dir
-                cp -r Docker/openroberta/db/_empty-db-template $db_dir
-                echo "new db and new server $server_name created in ${base_dir}. Edit '$base_dir/decl.sh' and '$server_dir/decl.sh'" ;;
+                echo "New server $server_name created. Edit '$base_dir/decl.sh' and '$server_dir/decl.sh'"
+                echo "Copy an existing database or create an empty database after 'mvn clean install -DskipTests'"
+                echo "by calling './ora.sh -dbParentdir $base_dir/db/$server_name create-empty-db'" ;;
 
-update-test-setup)
+update-docker-setup)
                 base_dir="$1"
                 if [[ ! -d $base_dir || ! -f $base_dir/decl.sh ]]
                 then
-                  echo "basedir '$base_dir' no valid dir for test server setup. Exit 12"
+                  echo "basedir '$base_dir' no valid dir for docker setup. Exit 12"
                   exit 12
                 fi
                 rm -rf $base_dir/conf $base_dir/scripts

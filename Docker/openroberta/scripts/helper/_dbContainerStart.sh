@@ -3,7 +3,7 @@
 for DATABASE_NAME in $DATABASES
 do
     isServerNameValid $DATABASE_NAME
-done  
+done
 
 CONTAINER=${INAME}-db-server
 
@@ -19,5 +19,5 @@ DOCKERID=$(docker run -d --name=${CONTAINER} \
                   -v ${DATABASE_DIR}:/opt/db \
                   -v $DB_ADMIN_DIR:/opt/dbAdmin \
                   -p $DATABASE_SERVER_PORT:9001 \
-                  openroberta/db_server:2.4.0 $DATABASES)
+                  openroberta/db_server:2.4.0 $DATABASEXMX $DATABASES)
 echo "database container started with id $DOCKERID"

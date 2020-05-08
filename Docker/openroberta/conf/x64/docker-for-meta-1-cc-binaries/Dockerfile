@@ -4,6 +4,7 @@ RUN apt-get update && apt-get -y upgrade && \
     apt-get install -y locales && \
     apt-get install -y tzdata && \
     apt-get install -y git maven && \
+    git config --global core.fileMode false && \
     apt-get install -y python-pip && \
     pip install uflash esptool && \
     apt-get update && apt-get -y upgrade && \
@@ -21,10 +22,6 @@ RUN ln -fs /usr/share/zoneinfo/Europe/Berlin /etc/localtime; \
     export DEBIAN_FRONTEND=noninteractive; \
     apt-get install -y tzdata; \
     dpkg-reconfigure --frontend noninteractive tzdata
-
-RUN git config --global core.fileMode false && \
-    git config --global user.email "reinhard.budde@iais.fraunhofer.de" && \
-    git config --global user.name "Reinhard Budde"
 
 RUN apt-get install -y libusb-0.1-4 && \
     apt-get install -y nbc && \
@@ -47,7 +44,3 @@ RUN tar -xf  /tmp/avr-gcc-7.3.0-atmel3.6.1-arduino5-x86_64-pc-linux-gnu.tar.bz2 
     tar -xzf /tmp/xtensa-esp32-elf-linux64-1.22.0-61-gab8375a-5.2.0.tar.gz && \
     rm -rf /tmp/*
 ENV PATH="${PATH}:/opt/compiler/avr/bin:/opt/compiler/gcc-arm-none-eabi-9-2019-q4-major/bin:/opt/compiler/xtensa-esp32-elf/bin"
-
-WORKDIR /opt/ora-cc-rsc/
-COPY ./ ./
-ENV robot_crosscompiler_resourcebase=/opt/ora-cc-rsc/
