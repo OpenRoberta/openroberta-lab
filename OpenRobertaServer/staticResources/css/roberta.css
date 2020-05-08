@@ -1282,10 +1282,7 @@ table [data-toggle="collapse"].collapsed:after {
 /***** END typicons *****/
 
 label.form-invalid {
-    position: absolute;
-    bottom: 40px;
-    left: 0;
-    right: 0;
+    position: relative;
     width: 100%;
     padding: 6px 6px;
     background: rgb(221, 221, 221);

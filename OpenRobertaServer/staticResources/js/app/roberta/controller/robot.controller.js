@@ -85,7 +85,7 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.controller', 'guiState.m
             },
             errorClass : "form-invalid",
             errorPlacement : function(label, element) {
-                label.insertBefore(element);
+                label.insertBefore(element.parent());
             },
             messages : {
                 wlanSsid : {
