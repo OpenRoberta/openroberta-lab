@@ -209,7 +209,13 @@ function init() {
         }
 
         $(".cover").fadeOut(100, function() {
-            if (!guiStateController.getStartWithoutPopup()) {
+            if (guiStateController.getStartWithoutPopup()) {
+                userModel.getStatusText(function(result) {
+                    if (result.statustext[0] !== "" && result.statustext[1] !== "") {
+                        $('#modal-statustext').modal("show");
+                    }
+                });
+            } else {
                 $("#show-startup-message").modal("show");
             }
         });
