@@ -54,12 +54,12 @@ on Windows:
 * Bionics4Education
   * install [xtensa-esp32-elf with ESP-IDF Tools](https://docs.espressif.com/projects/esp-idf/en/latest/esp32/get-started/windows-setup.html)
   
-The crosscompiler needs resources to work properly (header files, libraries, ...). These resources change little over time and are stored in the '[ora-cc-rsc](https://github.com/OpenRoberta/ora-cc-rsc)' repository.
+The cross-compiler needs resources to work properly (header files, libraries, ...). These resources change little over time and are stored in the '[ora-cc-rsc](https://github.com/OpenRoberta/ora-cc-rsc)' repository.
 
 Please clone that directory. When the openroberta-lab server is started, you have to supply the path to these resources (see below). If the resources are not available,
-everything works fine (writing programs, import, export, creating accounts, etc.), but running programs on real robots doesn't work, because the crosscompiler will fail.
+everything works fine (writing programs, import, export, creating accounts, etc.), but running programs on real robots doesn't work, because the cross-compiler will fail.
 
-Please also check our wiki for detailed installation instructions, development procedure, coding conventions and further reading. We also use the github issue tracking system.
+Please also check our wiki for detailed installation instructions, development procedure, coding conventions and further reading. We also use the Github issue tracking system.
 Please file issues in the main project **openroberta-lab**.
 
 ### Fast installation with maven
@@ -88,7 +88,7 @@ If you have a fresh clone of the server, make sure that the OpenRobertaServer fo
     
 If you try to create a new database, but one exists, the old one is *not* changed and the command has no effect. The new database is found in the folder **OpenRobertaServer/db-embedded**.
 
-#### Step 3: Starting your own server instance using a unix-like shell (on either lin* or win*).
+#### Step 3: Starting your own server instance using a Unix-like shell (on either lin* or win*).
 
     ./ora.sh [-oraccrsc <optional-path-to-crosscompiler-resources, defaults-to '../ora-cc-rsc'>] start-from-git
 
@@ -98,7 +98,7 @@ Start your browser at [http://localhost:1999](http://localhost:1999) That's it!
 
 ### Creating an installation outside of the git repo
 
-Often you want to run an openroberta installation of a fixed version for a long time. This is easy. Lets assume, that you want to use the (non-existing) directory /data/my-openroberta.
+Often you want to run an openroberta installation of a fixed version for a long time. This is easy. Let's assume, that you want to use the (non-existing) directory /data/my-openroberta.
 
     mvn clean install                          # generate the server in the git repo
     ./ora.sh export /data/my-openroberta gzip  # export to the target directory. gzip compresses the static web resources fpr better performance.
