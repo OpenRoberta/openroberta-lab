@@ -231,7 +231,6 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
         }
     }
     exports.setInfo = setInfo;
-
     function resetPose() {
         for (var i = 0; i < numRobots; i++) {
             if (robots[i].resetPose) {
@@ -241,6 +240,9 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
                 robots[i].time = 0;
             }
         }
+        obstacle.x = obstacle.xStart;
+        obstacle.y = obstacle.yStart;
+        scene.drawObjects();
     }
     exports.resetPose = resetPose;
 
@@ -272,8 +274,10 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
         h: 0,
         wOld: 0,
         hOld: 0,
-        isParallelToAxis: true
-    };
+        isParallelToAxis: true,
+        xStart: 0,
+        yStart:0,
+}
     exports.obstacleList = [ground, obstacle];
 
     var ruler = {
@@ -566,6 +570,8 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
             obstacle.color = "#33B8CA";
             obstacle.img = null;
         }
+        obstacle.xStart = obstacle.x;
+        obstacle.yStart = obstacle.y;
     }
 
     function setRuler() {
