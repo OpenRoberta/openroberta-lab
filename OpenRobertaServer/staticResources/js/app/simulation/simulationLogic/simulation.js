@@ -231,6 +231,7 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
         }
     }
     exports.setInfo = setInfo;
+
     function resetPose() {
         for (var i = 0; i < numRobots; i++) {
             if (robots[i].resetPose) {
@@ -276,8 +277,8 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
         hOld: 0,
         isParallelToAxis: true,
         xStart: 0,
-        yStart:0,
-}
+        yStart:0
+};
     exports.obstacleList = [ground, obstacle];
 
     var ruler = {
