@@ -72,6 +72,8 @@ public class ServerStarter {
     private static final String ADMIN_DIR_KEY = "server.admin.dir=";
     private static final String LOG_LEVEL_KEY = "server.log.level=";
 
+    private static final long INTERVAL_TO_CHECK_EXPIRATIONS_SEC = TimeUnit.HOURS.toSeconds(3);
+
     private final ServerProperties serverProperties; // for the startup
     private Injector injector;
 
@@ -160,6 +162,7 @@ public class ServerStarter {
         // setup services and threads to run the services
         IIpToCountry ipToCountry = configureIpToCountryDb();
         configureHttpSessionStateCleanup();
+        configureDbSessionCleanup();
 
         RobertaGuiceServletConfig robertaGuiceServletConfig =
             new RobertaGuiceServletConfig(this.serverProperties, robotPluginMap, robotCommunicator, ipToCountry);
@@ -345,7 +348,6 @@ public class ServerStarter {
      * configure a thread, that runs every 3 hours a service, that will remove expired HttpSessionState objects
      */
     private void configureHttpSessionStateCleanup() {
-        final long intervalToRunRemoveExpired = TimeUnit.HOURS.toSeconds(3);
         ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
         Runnable cleanupHttpSessionState = new Runnable() {
             @Override
@@ -353,7 +355,21 @@ public class ServerStarter {
                 HttpSessionState.removeExpired();
             }
         };
-        scheduler.scheduleAtFixedRate(cleanupHttpSessionState, intervalToRunRemoveExpired, intervalToRunRemoveExpired, TimeUnit.SECONDS);
+        scheduler.scheduleAtFixedRate(cleanupHttpSessionState, INTERVAL_TO_CHECK_EXPIRATIONS_SEC + 1, INTERVAL_TO_CHECK_EXPIRATIONS_SEC, TimeUnit.SECONDS);
+    }
+
+    /**
+     * configure a thread, that runs every 3 hours a service, that will remove expired database sessions (sessions older than 2 hours)
+     */
+    private void configureDbSessionCleanup() {
+        ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+        Runnable cleanupDbSession = new Runnable() {
+            @Override
+            public void run() {
+                DbSession.cleanupSessions();
+            }
+        };
+        scheduler.scheduleAtFixedRate(cleanupDbSession, INTERVAL_TO_CHECK_EXPIRATIONS_SEC + 2, INTERVAL_TO_CHECK_EXPIRATIONS_SEC, TimeUnit.SECONDS);
     }
 
     /**

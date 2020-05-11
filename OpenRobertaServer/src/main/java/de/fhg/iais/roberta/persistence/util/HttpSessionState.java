@@ -271,13 +271,18 @@ public class HttpSessionState implements Serializable {
     }
 
     public static void removeExpired() {
+        boolean somethingExpired = false;
         for ( Entry<String, HttpSessionState> entry : initToken2HttpSessionstate.entrySet() ) {
             if ( entry.getValue().getSecondsSinceLastAccess() > EXPIRATION_TIME_SEC ) {
                 String initToken = entry.getKey();
                 Statistics.info("SessionExpire", "initToken", initToken, "success", true);
-                LOG.info("Session with token " + initToken + " expired");
+                LOG.info("session with token " + initToken + " expired");
                 initToken2HttpSessionstate.remove(initToken);
+                somethingExpired = true;
             }
+        }
+        if ( !somethingExpired ) {
+            LOG.info("no sessions expired");
         }
     }
 }
