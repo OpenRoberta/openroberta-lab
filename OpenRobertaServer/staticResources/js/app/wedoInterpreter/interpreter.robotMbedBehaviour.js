@@ -393,9 +393,10 @@ define(["require", "exports", "interpreter.aRobotBehaviour", "interpreter.consta
                 if (port !== undefined) {
                     var angle = port['angle'];
                     if (angle !== undefined) {
-                        this.hardwareState['angleReset'] = {};
+                        if (this.hardwareState['angleReset'] == undefined) {
+                            this.hardwareState['angleReset'] = {};
+                        }
                         this.hardwareState['angleReset'][_port] = angle;
-                        console.log('angleReset=' + this.hardwareState['angleReset']);
                     }
                 }
             }
