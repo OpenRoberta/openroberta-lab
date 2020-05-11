@@ -243,10 +243,11 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
         }
         obstacle.x = obstacle.xStart;
         obstacle.y = obstacle.yStart;
+        scene.drawBackground();
+        scene.drawRuler();
         scene.drawObjects();
     }
-    exports.resetPose = resetPose;
-
+ree
     function stopProgram() {
         setPause(true);
         for (var i = 0; i < numRobots; i++) {
