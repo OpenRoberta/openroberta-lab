@@ -33,7 +33,8 @@ public class ArduinoCompilerWorker implements IWorker {
         String tempDir = compilerWorkflowBean.getTempDir();
         String programName = project.getProgramName();
         String token = project.getToken();
-        Util.storeGeneratedProgram(tempDir, project.getSourceCode().toString(), token, programName, "." + project.getSourceCodeFileExtension());
+        final String crosscompilerSource = project.getSourceCode().toString();
+        Util.storeGeneratedProgram(tempDir, crosscompilerSource, token, programName, "." + project.getSourceCodeFileExtension());
         String scriptName = compilerResourcesDir + "arduino-resources/build_project.sh";
 
         String boardVariant = "";
@@ -111,7 +112,7 @@ public class ArduinoCompilerWorker implements IWorker {
                 project.getRobot(),
                 arduinoArch
             };
-        Pair<Boolean, String> result = AbstractCompilerWorkflow.runCrossCompiler(executableWithParameters);
+        Pair<Boolean, String> result = AbstractCompilerWorkflow.runCrossCompiler(executableWithParameters, crosscompilerSource);
         Key resultKey = result.getFirst() ? Key.COMPILERWORKFLOW_SUCCESS : Key.COMPILERWORKFLOW_ERROR_PROGRAM_COMPILE_FAILED;
         if ( result.getFirst() ) {
             String base64EncodedHex = null;

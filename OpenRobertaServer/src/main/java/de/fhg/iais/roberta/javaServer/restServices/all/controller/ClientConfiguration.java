@@ -42,7 +42,7 @@ public class ClientConfiguration {
     @Path("/saveC")
     public Response saveConfig(@OraData DbSession dbSession, JSONObject fullRequest) throws Exception {
         JSONObject response = new JSONObject();
-        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, fullRequest);
+        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, fullRequest, true);
         try {
             int userId = httpSessionState.getUserId();
             String robotGroup = httpSessionState.getRobotFactory(httpSessionState.getRobotName()).getGroup();
@@ -76,7 +76,7 @@ public class ClientConfiguration {
     @Path("/saveAsC")
     public Response saveAsConfig(@OraData DbSession dbSession, JSONObject fullRequest) throws Exception {
         JSONObject response = new JSONObject();
-        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, fullRequest);
+        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, fullRequest, true);
         try {
             int userId = httpSessionState.getUserId();
             String robotGroup = httpSessionState.getRobotFactory(httpSessionState.getRobotName()).getGroup();
@@ -110,7 +110,7 @@ public class ClientConfiguration {
     @Path("/loadC")
     public Response loadConfig(@OraData DbSession dbSession, JSONObject fullRequest) throws Exception {
         JSONObject response = new JSONObject();
-        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, fullRequest);
+        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, fullRequest, true);
         try {
             int userId = httpSessionState.getUserId();
             String robotGroup = httpSessionState.getRobotFactory(httpSessionState.getRobotName()).getGroup();
@@ -152,7 +152,7 @@ public class ClientConfiguration {
     @Path("/deleteC")
     public Response deleteConfig(@OraData DbSession dbSession, JSONObject fullRequest) throws Exception {
         JSONObject response = new JSONObject();
-        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, fullRequest);
+        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, fullRequest, true);
         try {
             int userId = httpSessionState.getUserId();
             String robotGroup = httpSessionState.getRobotFactory(httpSessionState.getRobotName()).getGroup();
@@ -185,7 +185,7 @@ public class ClientConfiguration {
     @Path("/loadCN")
     public Response loadConfigNames(@OraData DbSession dbSession, JSONObject fullRequest) throws Exception {
         JSONObject response = new JSONObject();
-        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, fullRequest);
+        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, fullRequest, true);
         try {
             int userId = httpSessionState.getUserId();
             String robotGroup = httpSessionState.getRobotFactory(httpSessionState.getRobotName()).getGroup();

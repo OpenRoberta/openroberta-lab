@@ -41,7 +41,7 @@ public class ClientToolbox {
     @Produces(MediaType.APPLICATION_JSON)
     public Response command(@OraData DbSession dbSession, JSONObject fullRequest) throws Exception {
         JSONObject response = new JSONObject();
-        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, fullRequest);
+        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, fullRequest, true);
         try {
             JSONObject request = fullRequest.getJSONObject("data");
             String cmd = request.getString("cmd");

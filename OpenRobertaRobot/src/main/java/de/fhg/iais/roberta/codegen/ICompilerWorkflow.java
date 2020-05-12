@@ -22,24 +22,6 @@ public interface ICompilerWorkflow {
     void generateSourceCode(String token, String programName, Project transformer, ILanguage language);
 
     /**
-     * - take the program, configuration, SSID and password for WLAN (require, that these are without errors)<br>
-     * - generate and typecheck the AST, execute sanity checks, check the matching robot configuration<br>
-     * - generate source code in the target language for the robot<br>
-     *
-     * @param token the credential supplied by the user. Needed to provide a unique directory name for crosscompilation
-     * @param programName name of the program
-     * @param transformer holding program and configuration. Require, that <code>transformer.getErrorMessage() == null</code>
-     * @param SSID - WLAN SSID for WiFi enabled robots
-     * @param password - WLAN password
-     * @param language locale to be used for messages
-     * @return the generated source code; null in case of an error
-     */
-
-    default void generateSourceCode(String token, String programName, Project transformer, String SSID, String password, ILanguage language) {
-        generateSourceCode(token, programName, transformer, language);
-    }
-
-    /**
      * - take the source program<br>
      * - store the code in a token-specific (thus user-specific) target directory<br>
      * - compile the code and generate a library in the target directory<br>

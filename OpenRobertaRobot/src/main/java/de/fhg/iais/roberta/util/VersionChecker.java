@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
+@Deprecated // TODO: remove class and cleanup the parent pom
 public class VersionChecker {
     private static final Logger LOG = LoggerFactory.getLogger(VersionChecker.class);
 

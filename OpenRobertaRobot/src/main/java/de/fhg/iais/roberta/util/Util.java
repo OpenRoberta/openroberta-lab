@@ -454,7 +454,7 @@ public class Util {
 
     /**
      * create a map with Strings as keys and values
-     * 
+     *
      * @param args key-value pairs (thus: the length MUST be even)
      * @return the map created
      */
@@ -464,5 +464,14 @@ public class Util {
             m.put(args[i], args[i + 1]);
         }
         return m;
+    }
+
+    public static void logCrosscompilerError(Logger reporterLogger, String crosscompilerResponse, String crosscompilerSourceForDebuggingOnly) {
+        reporterLogger.info("crosscompilation of program failed. Messages logged to logger 'crosscompiler_error'");
+        StringBuilder sb = new StringBuilder();
+        sb.append("\n***** cross compilation failed with response:\n").append(crosscompilerResponse);
+        sb.append("\n***** for program:\n").append(crosscompilerSourceForDebuggingOnly).append("\n*****");
+        LoggerFactory.getLogger("crosscompiler_error").info(sb.toString());
+
     }
 }

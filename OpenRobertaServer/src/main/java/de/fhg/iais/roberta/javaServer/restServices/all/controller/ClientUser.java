@@ -65,7 +65,7 @@ public class ClientUser {
     @Path("/clear")
     public Response clear(JSONObject fullRequest) throws Exception {
         JSONObject response = new JSONObject();
-        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, fullRequest);
+        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, fullRequest, true);
         try {
             final int userId = httpSessionState.getUserId();
             String cmd = "clear";
@@ -91,7 +91,7 @@ public class ClientUser {
     @Path("/login")
     public Response login(@OraData DbSession dbSession, JSONObject fullRequest) throws Exception {
         JSONObject response = new JSONObject();
-        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, fullRequest);
+        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, fullRequest, true);
         try {
             JSONObject request = fullRequest.getJSONObject("data");
             String cmd = "login";
@@ -144,7 +144,7 @@ public class ClientUser {
     @Path("/getUser")
     public Response getUser(@OraData DbSession dbSession, JSONObject fullRequest) throws Exception {
         JSONObject response = new JSONObject();
-        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, fullRequest);
+        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, fullRequest, true);
         try {
             String cmd = "getUser";
             ClientUser.LOG.info("command is: " + cmd);
@@ -189,7 +189,7 @@ public class ClientUser {
     @Path("/logout")
     public Response logout(JSONObject fullRequest) throws Exception {
         JSONObject response = new JSONObject();
-        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, fullRequest);
+        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, fullRequest, true);
         try {
             final int userId = httpSessionState.getUserId();
             String cmd = "logout";
@@ -221,7 +221,7 @@ public class ClientUser {
     @Path("/createUser")
     public Response createUser(@OraData DbSession dbSession, JSONObject fullRequest) throws Exception {
         JSONObject response = new JSONObject();
-        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, fullRequest);
+        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, fullRequest, true);
         try {
             JSONObject request = fullRequest.getJSONObject("data");
             String cmd = "createUser";
@@ -264,7 +264,7 @@ public class ClientUser {
     @Path("/updateUser")
     public Response updateUser(@OraData DbSession dbSession, JSONObject fullRequest) throws Exception {
         JSONObject response = new JSONObject();
-        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, fullRequest);
+        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, fullRequest, true);
         try {
             JSONObject request = fullRequest.getJSONObject("data");
             String cmd = "updateUser";
@@ -308,7 +308,7 @@ public class ClientUser {
     @Path("/changePassword")
     public Response changePassword(@OraData DbSession dbSession, JSONObject fullRequest) throws Exception {
         JSONObject response = new JSONObject();
-        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, fullRequest);
+        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, fullRequest, true);
         try {
             JSONObject request = fullRequest.getJSONObject("data");
             String cmd = "changePassword";
@@ -340,7 +340,7 @@ public class ClientUser {
     @Path("/resetPassword")
     public Response resetPassword(@OraData DbSession dbSession, JSONObject fullRequest) throws Exception {
         JSONObject response = new JSONObject();
-        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, fullRequest);
+        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, fullRequest, true);
         try {
             JSONObject request = fullRequest.getJSONObject("data");
             String cmd = "resetPassword";
@@ -378,7 +378,7 @@ public class ClientUser {
     @Path("/isResetPasswordLinkExpired")
     public Response isResetPasswordLinkExpired(@OraData DbSession dbSession, JSONObject fullRequest) throws Exception {
         JSONObject response = new JSONObject();
-        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, fullRequest);
+        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, fullRequest, true);
         try {
             Map<String, String> responseParameters = new HashMap<>();
             JSONObject request = fullRequest.getJSONObject("data");
@@ -419,7 +419,7 @@ public class ClientUser {
     @Path("/passwordRecovery")
     public Response passwordRecovery(@OraData DbSession dbSession, JSONObject fullRequest) throws Exception {
         JSONObject response = new JSONObject();
-        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, fullRequest);
+        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, fullRequest, true);
         try {
             Map<String, String> responseParameters = new HashMap<>();
             JSONObject request = fullRequest.getJSONObject("data");
@@ -468,7 +468,7 @@ public class ClientUser {
     @Path("/activateUser")
     public Response activateUser(@OraData DbSession dbSession, JSONObject fullRequest) throws Exception {
         JSONObject response = new JSONObject();
-        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, fullRequest);
+        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, fullRequest, true);
         try {
             JSONObject request = fullRequest.getJSONObject("data");
             String cmd = "activateUser";
@@ -507,7 +507,7 @@ public class ClientUser {
     @Path("/resendActivation")
     public Response resendActivation(@OraData DbSession dbSession, JSONObject fullRequest) throws Exception {
         JSONObject response = new JSONObject();
-        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, fullRequest);
+        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, fullRequest, true);
         try {
             JSONObject request = fullRequest.getJSONObject("data");
             String cmd = "resendActivation";
@@ -544,7 +544,7 @@ public class ClientUser {
     @Path("/deleteUser")
     public Response deleteUser(@OraData DbSession dbSession, JSONObject fullRequest) throws Exception {
         JSONObject response = new JSONObject();
-        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, fullRequest);
+        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, fullRequest, true);
         try {
             JSONObject request = fullRequest.getJSONObject("data");
             String cmd = "deleteUser";
@@ -576,7 +576,7 @@ public class ClientUser {
     @Path("/getStatusText")
     public Response getStatusText(JSONObject fullRequest) throws Exception {
         JSONObject response = new JSONObject();
-        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, fullRequest);
+        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, fullRequest, true);
         try {
             String cmd = "getStatusText";
             ClientUser.LOG.info("command is: " + cmd);
@@ -606,7 +606,7 @@ public class ClientUser {
     @Path("/setStatusText")
     public Response setStatusText(JSONObject fullRequest) throws Exception {
         JSONObject response = new JSONObject();
-        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, fullRequest);
+        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, fullRequest, true);
         try {
             final int userId = httpSessionState.getUserId();
             JSONObject request = fullRequest.getJSONObject("data");

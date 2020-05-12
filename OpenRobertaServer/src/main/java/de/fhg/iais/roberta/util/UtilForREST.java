@@ -14,7 +14,6 @@ import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
 
 import de.fhg.iais.roberta.javaServer.restServices.all.controller.ClientAdmin;
-import de.fhg.iais.roberta.javaServer.restServices.all.controller.ClientInit;
 import de.fhg.iais.roberta.persistence.AbstractProcessor;
 import de.fhg.iais.roberta.persistence.util.HttpSessionState;
 import de.fhg.iais.roberta.robotCommunication.RobotCommunicationData;
@@ -44,18 +43,18 @@ public class UtilForREST {
     }
 
     /**
-     * all REST services, excluded is only the /init and the /ping request, have to call this method. It processes the init-token, which protects user and
-     * server against<br>
-     * - multiple frontend sessions connected to one backend session (see class {@link ClientInit})<br>
-     * - a frontend session not backed by a backend session (occurs when the server is restarted)<br>
+     * all REST services, excluded is only the /init request, have to call this method. It processes the init-token, which protects user and server against a
+     * frontend session not backed up by a backend session (occurs only when the server is restarted)<br>
      *
-     * @param httpSessionState
      * @param loggerForRequest
      * @param fullRequest
+     * @param rememberTheCall if true, count the request as a real call (a login, e.g.); otherwise don't increase the call counter (a ping, e.g.)
      * @return
      */
-    public static HttpSessionState handleRequestInit(Logger loggerForRequest, JSONObject fullRequest) {
-        AliveData.rememberClientCall();
+    public static HttpSessionState handleRequestInit(Logger loggerForRequest, JSONObject fullRequest, boolean rememberTheCall) {
+        if ( rememberTheCall ) {
+            AliveData.rememberClientCall();
+        }
         String initToken = fullRequest.optString("initToken");
         HttpSessionState httpSessionState = validateInitToken(initToken);
         MDC.put("sessionId", String.valueOf(httpSessionState.getSessionNumber()));

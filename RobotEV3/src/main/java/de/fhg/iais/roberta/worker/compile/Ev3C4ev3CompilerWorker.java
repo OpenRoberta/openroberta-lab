@@ -43,14 +43,15 @@ public class Ev3C4ev3CompilerWorker implements IWorker {
      * @return a pair of Key.COMPILERWORKFLOW_SUCCESS or Key.COMPILERWORKFLOW_ERROR_PROGRAM_COMPILE_FAILED and the cross compiler output
      */
     private Pair<Key, String> runBuild(Project project, C4Ev3SourceCompiler compiler, Uf2Builder uf2Builder) {
-        CompilerSetupBean compilerWorkflowBean = project.getWorkerResult(CompilerSetupBean.class);
-        String tempDir = compilerWorkflowBean.getTempDir();
-        String token = project.getToken();
-        String programName = project.getProgramName();
-        Util.storeGeneratedProgram(tempDir, project.getSourceCode().toString(), token, programName, "." + project.getSourceCodeFileExtension());
+        final CompilerSetupBean compilerWorkflowBean = project.getWorkerResult(CompilerSetupBean.class);
+        final String tempDir = compilerWorkflowBean.getTempDir();
+        final String token = project.getToken();
+        final String programName = project.getProgramName();
+        final String crosscompilerSource = project.getSourceCode().toString();
+        Util.storeGeneratedProgram(tempDir, crosscompilerSource, token, programName, "." + project.getSourceCodeFileExtension());
         String sourceCodeFileName = tempDir + token + "/" + programName + "/source/" + programName + "." + project.getSourceCodeFileExtension();
         String binaryFileName = tempDir + token + "/" + programName + "/target/" + programName + ".elf";
-        Pair<Boolean, String> result = compiler.compile(sourceCodeFileName, binaryFileName);
+        Pair<Boolean, String> result = compiler.compile(sourceCodeFileName, binaryFileName, crosscompilerSource);
         Key resultKey = result.getFirst() ? Key.COMPILERWORKFLOW_SUCCESS : Key.COMPILERWORKFLOW_ERROR_PROGRAM_COMPILE_FAILED;
         if ( result.getFirst() ) {
             try {

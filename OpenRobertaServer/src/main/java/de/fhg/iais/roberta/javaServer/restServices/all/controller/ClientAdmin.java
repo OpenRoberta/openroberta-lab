@@ -52,7 +52,7 @@ public class ClientAdmin {
     @Path("/setToken")
     public Response setToken(JSONObject fullRequest) throws Exception //
     {
-        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, fullRequest);
+        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, fullRequest, true);
         JSONObject response = new JSONObject();
         try {
             JSONObject request = fullRequest.getJSONObject("data");
@@ -112,7 +112,7 @@ public class ClientAdmin {
     public Response updateFirmware(JSONObject fullRequest) throws Exception //
     {
         // TODO: This should be moved to an update server
-        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, fullRequest);
+        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, fullRequest, true);
         JSONObject response = new JSONObject();
         try {
             String cmd = "updateFirmware";
@@ -145,7 +145,7 @@ public class ClientAdmin {
     @Path("/setRobot")
     public Response setRobot(JSONObject fullRequest) throws Exception //
     {
-        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, fullRequest);
+        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, fullRequest, true);
         JSONObject response = new JSONObject();
         try {
             JSONObject request = fullRequest.getJSONObject("data");

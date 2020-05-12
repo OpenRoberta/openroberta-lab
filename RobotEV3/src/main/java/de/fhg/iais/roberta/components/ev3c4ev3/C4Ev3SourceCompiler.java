@@ -48,9 +48,9 @@ public class C4Ev3SourceCompiler {
         return "lib";
     }
 
-    public Pair<Boolean, String> compile(String sourceCodeFileName, String binaryOutputFile) {
+    public Pair<Boolean, String> compile(String sourceCodeFileName, String binaryOutputFile, String crosscompilerSourceForDebuggingOnly) {
         String[] compilerArguments = getCompilerArguments(compilerExecutableFileName, sourceCodeFileName, binaryOutputFile);
-        return AbstractCompilerWorkflow.runCrossCompiler(compilerArguments);
+        return AbstractCompilerWorkflow.runCrossCompiler(compilerArguments, crosscompilerSourceForDebuggingOnly);
     }
 
     private String[] getCompilerArguments(String compilerExecutableFileName, String sourceCodeFileName, String binaryOutputFile) {

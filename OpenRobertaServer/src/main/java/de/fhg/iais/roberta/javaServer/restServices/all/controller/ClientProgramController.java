@@ -65,7 +65,7 @@ public class ClientProgramController {
     public Response saveProgram(@OraData DbSession dbSession, JSONObject request) {
         JSONObject response = new JSONObject();
         try {
-            HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, request);
+            HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, request, true);
             JSONObject dataPart = UtilForREST.extractDataPart(request);
             ProgramProcessor programProcessor = new ProgramProcessor(dbSession, httpSessionState);
             int userId = httpSessionState.getUserId();
@@ -114,7 +114,7 @@ public class ClientProgramController {
     public Response deleteProgram(@OraData DbSession dbSession, JSONObject request) {
         JSONObject response = new JSONObject();
         try {
-            HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, request);
+            HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, request, true);
             JSONObject dataPart = UtilForREST.extractDataPart(request);
             ProgramProcessor programProcessor = new ProgramProcessor(dbSession, httpSessionState);
             int userId = httpSessionState.getUserId();
@@ -156,7 +156,7 @@ public class ClientProgramController {
     public Response getProgram(@OraData DbSession dbSession, JSONObject request) {
         JSONObject response = new JSONObject();
         try {
-            HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, request);
+            HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, request, true);
             JSONObject dataPart = UtilForREST.extractDataPart(request);
             ProgramProcessor programProcessor = new ProgramProcessor(dbSession, httpSessionState);
             if ( !httpSessionState.isUserLoggedIn() && !dataPart.getString("owner").equals("Roberta") && !dataPart.getString("owner").equals("Gallery") ) {
@@ -207,7 +207,7 @@ public class ClientProgramController {
     public Response getProgramEntity(@OraData DbSession dbSession, JSONObject request) {
         JSONObject response = new JSONObject();
         try {
-            HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, request);
+            HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, request, true);
             JSONObject dataPart = UtilForREST.extractDataPart(request);
             ProgramProcessor programProcessor = new ProgramProcessor(dbSession, httpSessionState);
             UserProcessor up = new UserProcessor(dbSession, httpSessionState);
@@ -252,7 +252,7 @@ public class ClientProgramController {
     public Response getInfosOfProgramsOfLoggedInUser(@OraData DbSession dbSession, JSONObject request) {
         JSONObject response = new JSONObject();
         try {
-            HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, request);
+            HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, request, true);
             ProgramProcessor programProcessor = new ProgramProcessor(dbSession, httpSessionState);
             String robot = getRobot(httpSessionState);
             if ( !httpSessionState.isUserLoggedIn() ) {
@@ -288,7 +288,7 @@ public class ClientProgramController {
     public Response getInfosOfExamplePrograms(@OraData DbSession dbSession, JSONObject request) {
         JSONObject response = new JSONObject();
         try {
-            HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, request);
+            HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, request, true);
             ProgramProcessor programProcessor = new ProgramProcessor(dbSession, httpSessionState);
             String robot = getRobot(httpSessionState);
             int userId = 1;
@@ -317,7 +317,7 @@ public class ClientProgramController {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response importProgram(JSONObject request) {
-        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, request);
+        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, request, true);
         JSONObject dataPart = UtilForREST.extractDataPart(request);
         JSONObject response = new JSONObject();
         try {
@@ -377,7 +377,7 @@ public class ClientProgramController {
     public Response shareProgram(@OraData DbSession dbSession, JSONObject request) {
         JSONObject response = new JSONObject();
         try {
-            HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, request);
+            HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, request, true);
             JSONObject dataPart = UtilForREST.extractDataPart(request);
             UserProcessor userProcessor = new UserProcessor(dbSession, httpSessionState);
             AccessRightProcessor accessRightProcessor = new AccessRightProcessor(dbSession, httpSessionState);
@@ -423,7 +423,7 @@ public class ClientProgramController {
     public Response likeProgram(@OraData DbSession dbSession, JSONObject request) {
         JSONObject response = new JSONObject();
         try {
-            HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, request);
+            HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, request, true);
             JSONObject dataPart = UtilForREST.extractDataPart(request);
             LikeProcessor lp = new LikeProcessor(dbSession, httpSessionState);
             if ( !httpSessionState.isUserLoggedIn() ) {
@@ -479,7 +479,7 @@ public class ClientProgramController {
     public Response shareProgramInGallery(@OraData DbSession dbSession, JSONObject request) {
         JSONObject response = new JSONObject();
         try {
-            HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, request);
+            HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, request, true);
             JSONObject dataPart = UtilForREST.extractDataPart(request);
 
             ProgramProcessor programProcessor = new ProgramProcessor(dbSession, httpSessionState);
@@ -563,7 +563,7 @@ public class ClientProgramController {
     public Response deleteSharedProgram(@OraData DbSession dbSession, JSONObject request) {
         JSONObject response = new JSONObject();
         try {
-            HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, request);
+            HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, request, true);
             JSONObject dataPart = UtilForREST.extractDataPart(request);
             ProgramProcessor programProcessor = new ProgramProcessor(dbSession, httpSessionState);
             AccessRightProcessor accessRightProcessor = new AccessRightProcessor(dbSession, httpSessionState);
@@ -612,7 +612,7 @@ public class ClientProgramController {
     public Response getProgramsFromGallery(@OraData DbSession dbSession, JSONObject request) {
         JSONObject response = new JSONObject();
         try {
-            HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, request);
+            HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, request, true);
             ProgramProcessor programProcessor = new ProgramProcessor(dbSession, httpSessionState);
             int userId = httpSessionState.getUserId();
             JSONArray programInfo = programProcessor.getProgramGallery(userId);
@@ -651,7 +651,7 @@ public class ClientProgramController {
     public Response getProjectRelations(@OraData DbSession dbSession, JSONObject request) {
         JSONObject response = new JSONObject();
         try {
-            HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, request);
+            HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, request, true);
             JSONObject dataPart = UtilForREST.extractDataPart(request);
             ProgramProcessor programProcessor = new ProgramProcessor(dbSession, httpSessionState);
             int userId = httpSessionState.getUserId();

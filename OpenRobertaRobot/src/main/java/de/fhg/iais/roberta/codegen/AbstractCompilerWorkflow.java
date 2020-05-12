@@ -22,6 +22,7 @@ import de.fhg.iais.roberta.inter.mode.action.ILanguage;
 import de.fhg.iais.roberta.util.Key;
 import de.fhg.iais.roberta.util.Pair;
 import de.fhg.iais.roberta.util.PluginProperties;
+import de.fhg.iais.roberta.util.Util;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
@@ -70,9 +71,10 @@ public abstract class AbstractCompilerWorkflow implements ICompilerWorkflow {
      * run a crosscompiler in a process of its own, store the compiler response in field crosscompilerResponse
      *
      * @param executableWithParameters
+     * @param crosscompilerSourceForDebuggingOnly for logging if the crosscompiler fails. Allows debugging of erros in the code generators
      * @return true, when the crosscompiler succeeds; false, otherwise
      */
-    public static Pair<Boolean, String> runCrossCompiler(String[] executableWithParameters) {
+    public static Pair<Boolean, String> runCrossCompiler(String[] executableWithParameters, String crosscompilerSourceForDebuggingOnly) {
         int ecode = -1;
         String crosscompilerResponse;
         try {
@@ -92,9 +94,8 @@ public abstract class AbstractCompilerWorkflow implements ICompilerWorkflow {
             LOG.error(crosscompilerResponse, e);
             ecode = -1;
         }
-        LOG.debug("DEBUG INFO: " + crosscompilerResponse);
         if ( ecode != 0 ) {
-            LOG.info("compilation of program failed with message: \n" + crosscompilerResponse);
+            Util.logCrosscompilerError(LOG, crosscompilerResponse, crosscompilerSourceForDebuggingOnly);
         }
         return Pair.of(ecode == 0, crosscompilerResponse);
     }

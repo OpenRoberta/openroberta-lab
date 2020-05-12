@@ -42,7 +42,7 @@ public class ProjectWorkflowRestController {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response getSourceCode(JSONObject request) {
-        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, request);
+        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, request, true);
         JSONObject dataPart = UtilForREST.extractDataPart(request);
         JSONObject response = new JSONObject();
         try {
@@ -86,7 +86,7 @@ public class ProjectWorkflowRestController {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response getSimulationVMCode(JSONObject request) {
-        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, request);
+        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, request, true);
         JSONObject dataPart = UtilForREST.extractDataPart(request);
         JSONObject response = new JSONObject();
         try {
@@ -133,7 +133,7 @@ public class ProjectWorkflowRestController {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response runProgram(JSONObject request) {
-        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, request);
+        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, request, true);
         JSONObject dataPart = UtilForREST.extractDataPart(request);
         JSONObject response = new JSONObject();
         try {
@@ -190,7 +190,7 @@ public class ProjectWorkflowRestController {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response runNative(JSONObject request) {
-        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, request);
+        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, request, true);
         JSONObject dataPart = UtilForREST.extractDataPart(request);
         JSONObject response = new JSONObject();
         try {
@@ -229,7 +229,7 @@ public class ProjectWorkflowRestController {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response compileProgram(JSONObject request) {
-        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, request);
+        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, request, true);
         JSONObject dataPart = UtilForREST.extractDataPart(request);
         JSONObject response = new JSONObject();
         try {
@@ -277,7 +277,7 @@ public class ProjectWorkflowRestController {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response compileNative(JSONObject request) {
-        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, request);
+        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, request, true);
         JSONObject dataPart = UtilForREST.extractDataPart(request);
         JSONObject response = new JSONObject();
         try {
@@ -316,7 +316,7 @@ public class ProjectWorkflowRestController {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response reset(JSONObject request) {
-        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, request);
+        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, request, true);
         JSONObject dataPart = UtilForREST.extractDataPart(request);
         JSONObject response = new JSONObject();
         try {

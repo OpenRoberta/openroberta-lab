@@ -16,10 +16,11 @@ public class Ev3LejosCompilerWorker implements IWorker {
 
     @Override
     public void execute(Project project) {
-        CompilerSetupBean compilerWorkflowBean = project.getWorkerResult(CompilerSetupBean.class);
-        String compilerResourcesDir = compilerWorkflowBean.getCompilerResourcesDir();
-        String tempDir = compilerWorkflowBean.getTempDir();
-        Util.storeGeneratedProgram(tempDir, project.getSourceCode().toString(), project.getToken(), project.getProgramName(), ".java");
+        final CompilerSetupBean compilerWorkflowBean = project.getWorkerResult(CompilerSetupBean.class);
+        final String compilerResourcesDir = compilerWorkflowBean.getCompilerResourcesDir();
+        final String tempDir = compilerWorkflowBean.getTempDir();
+        final String crosscompilerSource = project.getSourceCode().toString();
+        Util.storeGeneratedProgram(tempDir, crosscompilerSource, project.getToken(), project.getProgramName(), ".java");
 
         JavaSourceCompiler scp = new JavaSourceCompiler(project.getProgramName(), project.getSourceCode().toString(), compilerResourcesDir);
         scp.compileAndPackage(tempDir, project.getToken());
@@ -28,7 +29,7 @@ public class Ev3LejosCompilerWorker implements IWorker {
             project.setResult(Key.COMPILERWORKFLOW_SUCCESS);
             project.addResultParam("MESSAGE", "");
         } else {
-            LOG.error("build exception. Messages from the compiler are:\n{}", scp.getCompilerResponse());
+            Util.logCrosscompilerError(LOG, scp.getCompilerResponse(), crosscompilerSource);
             project.setResult(Key.COMPILERWORKFLOW_ERROR_PROGRAM_COMPILE_FAILED);
             project.addResultParam("MESSAGE", scp.getCompilerResponse());
         }
