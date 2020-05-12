@@ -10,7 +10,8 @@
         "baseUrl": "./ts",
         "paths": {
             "interpreter.*": ["*"]
-        }
+        },
+		"noUnusedParameters": true
     },
     "exclude": [
         "**/node_modules",
