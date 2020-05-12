@@ -13,15 +13,49 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'message', 'guiState.contr
     var BACKGROUND_COLORS = [ '#33B8CA', '#EBC300', '#39378B', '#005A94', '#179C7D', '#F29400', '#E2001A', '#EB6A0A', '#8FA402', '#BACC1E', '#9085BA',
             '#FF69B4', '#DF01D7' ];
     var currentColorIndex;
+    var currentViewMode = 'gallery';
     /**
      * Initialize table of programs
      */
     function init() {
 
+        initGalleryToolbar();
         initGalleryList();
         initGalleryListEvents();
     }
     exports.init = init;
+
+    //TODO: Robot group names exists in plugin properties
+    function getRobotGroups() {
+        var robots = GUISTATE_C.getRobots();
+        var groups = {};
+
+        var coerceName = function(name, group) {
+            if (group === "arduino")
+                return "Nepo4Arduino";
+            if (group === "ev3")
+                return "Ev3";
+            return GUISTATE_C.getMenuRobotRealName(name)
+        }
+
+        for ( var propt in robots) {
+            var group = robots[propt].group;
+            var name = robots[propt].name;
+            if (group && !groups[group]) {
+                groups[group] = coerceName(name, group);
+            }
+        }
+        return groups;
+    }
+
+    function initGalleryToolbar() {
+        var groups = getRobotGroups();
+        var filterField = $('#filterRobot');
+        for ( var group in groups) {
+            filterField.append(new Option(groups[group], group));
+        }
+        filterField.append(new Option("All robots", "all", true, true));
+    }
 
     function initGalleryList() {
 
@@ -87,11 +121,12 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'message', 'guiState.contr
         });
 
         $('#tabGalleryList').on('show.bs.tab', function(e) {
+            $('#filterRobot').val(GUISTATE_C.getRobotGroup());
             guiStateController.setView('tabGalleryList');
             if ($('#galleryTable').bootstrapTable("getData").length === 0) {
                 $(".pace").show(); // Show loading icon and hide gallery table 
             }
-            PROGLIST.loadGalleryList(update);
+            loadGalleryData();
         });
 
         $('#tabGalleryList').on('shown.bs.tab', function(e) {
@@ -103,7 +138,7 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'message', 'guiState.contr
         });
 
         $('#galleryList').find('button[name="refresh"]').onWrap('click', function() {
-            PROGLIST.loadGalleryList(update);
+            loadGalleryData();
             return false;
         }, "refresh gallery list clicked");
 
@@ -119,6 +154,41 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'message', 'guiState.contr
         $('#galleryTable').on('shown.bs.collapse hidden.bs.collapse', function(e) {
             $('#galleryTable').bootstrapTable('resetWidth');
         });
+
+        $('#filterRobot').onWrap('change', loadGalleryData, "gallery filter changed");
+
+        $('#fieldOrderBy').change(function(e) {
+            var fieldData = e.target.value.split(':');
+            var row = parseInt(fieldData[0]);
+            console.log(row);
+            $('#galleryTable').bootstrapTable('refreshOptions', {
+                sortName : row,
+                sortOrder : fieldData[1],
+            });
+        });
+//        TODO reactivate this once the table-view is improved
+//        $('#toogleView').click(function (e) {
+//            // toggle button icon
+//            var iconClassName = '';
+//            if (currentViewMode === 'gallery') {
+//                currentViewMode = 'list';
+//                iconClassName = 'typcn-th-large';
+//            } else {
+//                currentViewMode = 'gallery';
+//                iconClassName = 'typcn-th-list';
+//            }
+//            $('#toogleView > i').attr('class', 'typcn ' + iconClassName);
+//            $('#galleryTable').bootstrapTable('refreshOptions', {});
+//        });
+    }
+
+    function loadGalleryData() {
+        var params = {};
+        var group = $('#filterRobot').val();
+        if (group !== 'all') {
+            params['group'] = group;
+        }
+        PROGLIST.loadGalleryList(update, params);
     }
 
     function update(result) {
@@ -182,7 +252,7 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'message', 'guiState.contr
 
     var rowStyle = function(row, index) {
         return {
-            classes : 'col-xl-2 col-lg-3 col-md-4 col-sm-6'
+            classes : currentViewMode === 'gallery' ? 'galleryNode col-xl-2 col-lg-3 col-md-4 col-sm-6' : 'listNode',
         };
     }
     exports.rowStyle = rowStyle;
@@ -192,7 +262,7 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'message', 'guiState.contr
         var hash = UTIL.getHashFrom(row[0] + row[1] + row[3]);
         currentColorIndex = hash % BACKGROUND_COLORS.length;
         return {
-            style : 'background-color :' + BACKGROUND_COLORS[currentColorIndex] + ';' + 'padding: 24px; border: solid 12px white; z-index: 1; float: left; cursor: pointer;'
+            style : 'background-color :' + BACKGROUND_COLORS[currentColorIndex] + ';' + 'border: solid 12px white; cursor: pointer;  z-index: 1;',
         }
     }
     exports.rowAttributes = rowAttributes;

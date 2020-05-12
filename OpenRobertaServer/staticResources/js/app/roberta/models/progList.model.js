@@ -10,8 +10,7 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
      * Refresh program list
      */
     function loadProgList(successFn) {
-        COMM.json("/program/listing/names", {
-        }, successFn, "load program list");
+        COMM.json("/program/listing/names", {}, successFn, "load program list");
     }
     exports.loadProgList = loadProgList;
 
@@ -19,17 +18,16 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
      * Refresh example list
      */
     function loadExampleList(successFn) {
-        COMM.json("/program/examples/names", {
-        }, successFn, "load example list");
+        COMM.json("/program/examples/names", {}, successFn, "load example list");
     }
     exports.loadExampleList = loadExampleList;
 
     /**
      * Refresh example list
      */
-    function loadGalleryList(successFn) {
-        COMM.json("/program/gallery", {
-        }, successFn, "load gallery list");
+    function loadGalleryList(successFn, filters) {
+        var data = !!filters ? filters : {};
+        COMM.json("/program/gallery", data, successFn, "load gallery list");
     }
     exports.loadGalleryList = loadGalleryList;
 

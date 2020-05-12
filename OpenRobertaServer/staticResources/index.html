@@ -484,6 +484,24 @@ limitations under the License.
                 <button id="backGalleryList" class="btn">
                     <i class="typcn typcn-arrow-left"></i>
                 </button>
+                <div class="filters search form-inline">
+                    <select id="filterRobot" class="form-control"></select>
+                    <input id="galleryListSearch" placeholder="Search" name="search" class="form-control">
+                    <div class="form-group">
+                        <label>Order by:</label>
+                        <select id="fieldOrderBy" class="form-control">
+                            <option value="4:desc" selected>Newest</option>
+                            <option value="4:asc">Oldest</option>
+                            <option value="1:asc">Program name</option>
+                            <option value="0:asc">Robot</option>
+                        </select>
+                    </div>
+                    <!-- TODO reactivate this once the table-view is improved
+                    <button id="toogleView" class="btn">
+                        <i class="typcn typcn-th-list"></i>
+                    </button> -->
+                </div>
+
             </div>
             <table id="galleryTable" class="galleryTable">
             </table>

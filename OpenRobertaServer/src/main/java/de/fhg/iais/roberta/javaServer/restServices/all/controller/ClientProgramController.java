@@ -615,7 +615,12 @@ public class ClientProgramController {
             HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, request, true);
             ProgramProcessor programProcessor = new ProgramProcessor(dbSession, httpSessionState);
             int userId = httpSessionState.getUserId();
-            JSONArray programInfo = programProcessor.getProgramGallery(userId);
+            JSONObject data = request.getJSONObject("data");
+            String group = "";
+            if ( data.has("group") ) {
+                group = data.getString("group");
+            }
+            JSONArray programInfo = programProcessor.getProgramGallery(userId, group);
             response.put("programNames", programInfo);
             UtilForREST.addResultInfo(response, programProcessor);
             Statistics.info("GalleryView", "success", programProcessor.succeeded());
