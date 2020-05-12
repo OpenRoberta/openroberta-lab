@@ -381,12 +381,13 @@ define([ 'exports', 'log', 'message', 'util', 'user.model', 'guiState.controller
 
     /**
      * Resets the validation of every form in login modal
-     * 
+     * also resets the shown hint
      */
     function resetForm() {
         $formLogin.validate().resetForm();
         $formLost.validate().resetForm();
         $formRegister.validate().resetForm();
+        $("#register-form .hint").hide();
     }
 
     /**
@@ -432,10 +433,9 @@ define([ 'exports', 'log', 'message', 'util', 'user.model', 'guiState.controller
             login();
         });
         $('#register-form input.form-control, #register-form select.form-control').focus(function(e) {
-            $(this).parent().next('.hint').slideDown($msgAnimateTime);
-        });
-        $('#register-form input.form-control, #register-form select.form-control').blur(function(e) {
-            $(this).parent().next('.hint').slideUp($msgAnimateTime);
+            var $hint = $(this).parent().next('.hint');
+            $("#register-form .hint").not($hint).slideUp($msgAnimateTime);
+            $hint.slideDown($msgAnimateTime);
         });
 
         $("#registerUserEmail").on("change paste keyup", function() {
