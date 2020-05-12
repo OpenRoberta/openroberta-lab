@@ -281,11 +281,11 @@ public class ProgramProcessor extends AbstractProcessor {
      * @param galleryId the gallery user
      */
 
-    public JSONArray getProgramGallery(int userId) {
+    public JSONArray getProgramGallery(int userId, String robotGroup) {
         UserDao userDao = new UserDao(this.dbSession);
         ProgramDao programDao = new ProgramDao(this.dbSession);
         int galleryId = userDao.loadUser("Gallery").getId();
-        JSONArray programs = programDao.loadGallery(galleryId, userId);
+        JSONArray programs = programDao.loadGallery(galleryId, userId, robotGroup);
         Map<String, String> processorParameters = new HashMap<>();
         processorParameters.put("PROGRAMS_LENGTH", "" + programs.length());
         setStatus(ProcessorStatus.SUCCEEDED, Key.PROGRAM_GET_ALL_SUCCESS, processorParameters);

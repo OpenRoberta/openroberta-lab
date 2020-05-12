@@ -241,7 +241,7 @@ public class ProgramDao extends AbstractDao<Program> {
         return Collections.unmodifiableList(il);
     }
 
-    public JSONArray loadGallery(int galleryId, int userId) {
+    public JSONArray loadGallery(int galleryId, int userId, String robotGroup) {
         String galleryProgramSql = "" + //
             "select r.NAME as rname, p.NAME as pname, p.PROGRAM_TEXT as ptext, u.ACCOUNT as owner, p.CREATED as created, p.VIEWED as views," + //
             "       (select count(l1.ID) from USER_PROGRAM_LIKE l1 where l1.PROGRAM_ID=p.ID) as likes," + //
@@ -253,9 +253,18 @@ public class ProgramDao extends AbstractDao<Program> {
             "where p.OWNER_ID = :galleryId " + //
             "  and p.ROBOT_ID = r.ID " + //
             "  and p.AUTHOR_ID = u.ID ";
+
+        if ( !robotGroup.isEmpty() ) {
+            galleryProgramSql = galleryProgramSql + "" + //
+                " and r.NAME = :robotGroup ";
+        }
+
         SQLQuery query = session.createSqlQuery(galleryProgramSql);
         query.setInteger("userId", userId);
         query.setInteger("galleryId", galleryId);
+        if ( !robotGroup.isEmpty() ) {
+            query.setString("robotGroup", robotGroup);
+        }
 
         @SuppressWarnings("unchecked")
         List<Object[]> galleryList = query.list();

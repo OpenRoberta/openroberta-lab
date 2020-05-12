@@ -27,9 +27,9 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
     /**
      * Refresh example list
      */
-    function loadGalleryList(successFn) {
-        COMM.json("/program/gallery", {
-        }, successFn, "load gallery list");
+    function loadGalleryList(successFn, filters) {
+        var data = filters ?? {};
+        COMM.json("/program/gallery", data, successFn, "load gallery list");
     }
     exports.loadGalleryList = loadGalleryList;
 
