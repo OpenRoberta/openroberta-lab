@@ -75,8 +75,9 @@ public class ServerData {
     @Produces(MediaType.APPLICATION_JSON)
     public Response tellUsageOfHttpAndDatabaseSessions() throws Exception {
         JSONObject answer = new JSONObject();
-        answer.put("dbSessions", DbSession.getDebugSessionCounter());
+        answer.put("dbSessions", DbSession.getOpenSessionCounter());
         answer.put("unusedDbSessions", DbSession.getUnusedSessionCounter());
+        answer.put("cleanedDbSessions", DbSession.getCleanedSessionCounter());
         answer.put("httpSessions", HttpSessionState.getNumberOfHttpSessionStates());
         return Response.ok(answer).build();
     }

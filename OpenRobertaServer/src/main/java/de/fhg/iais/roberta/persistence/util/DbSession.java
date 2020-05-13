@@ -35,6 +35,7 @@ public class DbSession {
 
     // data for analyzing db session usage. Global storage, access MUST be atomically/synchronized
     private static final AtomicLong currentOpenSessionCounter = new AtomicLong(0);
+    private static final AtomicLong cleanedSessionCounter = new AtomicLong(0);
     private static final AtomicLong unusedSessionCounter = new AtomicLong(0);
     private static final AtomicLong sessionIdGenerator = new AtomicLong(0);
     private static final Map<Long, DbSession> sessionMap = new ConcurrentHashMap<>(); // potentially dangerous resource usage!
@@ -237,6 +238,8 @@ public class DbSession {
                     LOG.error("rollback and remove of the expired database session " + sessionIdToRemove);
                     sessionToCheck.rollback();
                     sessionMap.remove(sessionIdToRemove);
+                    currentOpenSessionCounter.decrementAndGet();
+                    cleanedSessionCounter.incrementAndGet();
                     somethingExpired = true;
                 }
             } catch ( Exception e ) {
@@ -252,8 +255,12 @@ public class DbSession {
     /**
      * @return the number of open db sessions. Should be 0 or very close to zero, if no deadlock has occured.
      */
-    public static long getDebugSessionCounter() {
+    public static long getOpenSessionCounter() {
         return currentOpenSessionCounter.get();
+    }
+
+    public static long getCleanedSessionCounter() {
+        return cleanedSessionCounter.get();
     }
 
     /**
@@ -269,36 +276,13 @@ public class DbSession {
     public static String getFullInfo() {
         StringBuilder sb = new StringBuilder();
         sb.append("number of db sessions created: ").append(sessionIdGenerator).append("\n");
-        sb.append("number of db sessions created but not used: ").append(unusedSessionCounter).append("\n");
+        sb.append("number of db sessions created but not used (should be 0): ").append(unusedSessionCounter).append("\n");
         sb.append("number of db sessions currently in use: ").append(currentOpenSessionCounter).append("\n");
+        sb.append("number of db sessions closed by the db cleanup thread: ").append(cleanedSessionCounter).append("\n");
         for ( DbSession dbSession : sessionMap.values() ) {
             sb.append("***** ").append(dbSession.sessionId).append(":\n").append(dbSession.actions);
         }
         return sb.toString();
     }
 
-    /**
-     * info about the state of open db sessions. Limited to:<br>
-     * - NUMBER_OF_SESSIONS_TO_SHOW many sessions<br>
-     * - sessions that have been created DURATION_TIMEOUT_MSEC or earlier
-     *
-     * @return the info. May be a LONG String!
-     */
-    public static String getInfo() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("number of db sessions created: ").append(sessionIdGenerator).append("\n");
-        sb.append("number of db sessions created but not used: ").append(unusedSessionCounter).append("\n");
-        sb.append("number of db sessions currently in use: ").append(currentOpenSessionCounter).append("\n");
-        final long now = new Date().getTime();
-        int numberOfSessions = 0;
-        for ( DbSession dbSession : sessionMap.values() ) {
-            if ( numberOfSessions++ > NUMBER_OF_SESSIONS_TO_SHOW ) {
-                break;
-            }
-            if ( now - dbSession.creationTime > DURATION_TIMEOUT_MSEC_FOR_LOGGING ) {
-                sb.append("***** ").append(dbSession.sessionId).append(":\n").append(dbSession.actions);
-            }
-        }
-        return sb.toString();
-    }
 }

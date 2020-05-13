@@ -9,7 +9,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import de.fhg.iais.roberta.bean.CompilerSetupBean;
-import de.fhg.iais.roberta.codegen.AbstractCompilerWorkflow;
 import de.fhg.iais.roberta.components.Project;
 import de.fhg.iais.roberta.util.Key;
 import de.fhg.iais.roberta.util.Pair;
@@ -66,7 +65,7 @@ public class EdisonCompilerWorker implements IWorker {
                 targetFilePath + pyFile + ".wav"
             };
 
-        Pair<Boolean, String> result = AbstractCompilerWorkflow.runCrossCompiler(executableWithParameters, crosscompilerSource);
+        Pair<Boolean, String> result = Util.runCrossCompiler(executableWithParameters, crosscompilerSource);
         Key resultKey = result.getFirst() ? Key.COMPILERWORKFLOW_SUCCESS : Key.COMPILERWORKFLOW_ERROR_PROGRAM_COMPILE_FAILED;
         if ( result.getFirst() ) {
             try {

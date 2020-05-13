@@ -4,8 +4,8 @@ import org.apache.commons.lang3.SystemUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import de.fhg.iais.roberta.codegen.AbstractCompilerWorkflow;
 import de.fhg.iais.roberta.util.Pair;
+import de.fhg.iais.roberta.util.Util;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
 public class C4Ev3SourceCompiler {
@@ -50,7 +50,7 @@ public class C4Ev3SourceCompiler {
 
     public Pair<Boolean, String> compile(String sourceCodeFileName, String binaryOutputFile, String crosscompilerSourceForDebuggingOnly) {
         String[] compilerArguments = getCompilerArguments(compilerExecutableFileName, sourceCodeFileName, binaryOutputFile);
-        return AbstractCompilerWorkflow.runCrossCompiler(compilerArguments, crosscompilerSourceForDebuggingOnly);
+        return Util.runCrossCompiler(compilerArguments, crosscompilerSourceForDebuggingOnly);
     }
 
     private String[] getCompilerArguments(String compilerExecutableFileName, String sourceCodeFileName, String binaryOutputFile) {
