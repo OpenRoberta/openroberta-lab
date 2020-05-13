@@ -295,11 +295,12 @@ public interface IMbedVisitor<V>
 
     @Override
     default V visitVolumeAction(VolumeAction<V> volumeAction) {
-        throw new DbcException("Not supported!");
+        throw new DbcException("Block is not implemented!");
     }
 
     @Override
     default V visitPlayFileAction(PlayFileAction<V> playFileAction) {
-        throw new DbcException("Not supported!");
+        throw new DbcException("Block is not implemented!");
     }
+
 }

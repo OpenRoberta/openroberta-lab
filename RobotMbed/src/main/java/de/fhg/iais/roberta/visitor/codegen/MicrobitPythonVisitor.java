@@ -408,6 +408,10 @@ public final class MicrobitPythonVisitor extends AbstractPythonVisitor implement
             this.sb.append("import radio");
             nlIndent();
         }
+        if ( this.getBean(UsedHardwareBean.class).isActorUsed(SC.MUSIC) ) {
+            this.sb.append("import music");
+            nlIndent();
+        }
         nlIndent();
         this.sb.append("class BreakOutOfALoop(Exception): pass");
         nlIndent();
@@ -437,6 +441,27 @@ public final class MicrobitPythonVisitor extends AbstractPythonVisitor implement
         this.sb.append("print(");
         serialWriteAction.getValue().accept(this);
         this.sb.append(")");
+        return null;
+    }
+
+    @Override
+    public Void visitToneAction(ToneAction<Void> toneAction) {
+        this.sb.append("music.pitch(");
+        toneAction.getFrequency().accept(this);
+        this.sb.append(", ");
+        toneAction.getDuration().accept(this);
+        this.sb.append(")");
+        return null;
+    }
+
+    @Override
+    public Void visitPlayNoteAction(PlayNoteAction<Void> playNoteAction) {
+        this.sb
+            .append("music.pitch(")
+            .append(Integer.parseInt(playNoteAction.getFrequency().split("\\.")[0]))
+            .append(", ")
+            .append(playNoteAction.getDuration())
+            .append(")");
         return null;
     }
 
@@ -475,13 +500,4 @@ public final class MicrobitPythonVisitor extends AbstractPythonVisitor implement
         throw new DbcException("Not supported!");
     }
 
-    @Override
-    public Void visitToneAction(ToneAction<Void> toneAction) {
-        throw new DbcException("Not supported!");
-    }
-
-    @Override
-    public Void visitPlayNoteAction(PlayNoteAction<Void> playNoteAction) {
-        throw new DbcException("Not supported!");
-    }
 }

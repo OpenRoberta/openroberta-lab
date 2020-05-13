@@ -227,7 +227,6 @@ define([ 'simulation.simulation', 'simulation.robot.mbed' ], function(SIM, Mbed)
             touched : false,
             draw : that.pin0.draw
         };
-        this.tone = {};
         SIM.initMicrophone(this);
     }
 
@@ -264,32 +263,7 @@ define([ 'simulation.simulation', 'simulation.robot.mbed' ], function(SIM, Mbed)
                     this.led.color = 'grey';
             }
         }
-        // update tone
-        var volume = this.robotBehaviour.getActionState("volume", true);
-        if ((volume || volume === 0) && this.webAudio.context) {
-            this.webAudio.volume = volume / 100.0;
-        }
-        var tone = this.robotBehaviour.getActionState("tone", true);
-        if (tone && this.webAudio.context) {
-            var cT = this.webAudio.context.currentTime;
-            if (tone.frequency && tone.duration > 0) {
-                var oscillator = this.webAudio.context.createOscillator();
-                oscillator.type = 'square';
-                oscillator.connect(this.webAudio.context.destination);
-                var that = this;
-                function oscillatorFinish() {
-                    that.tone.finished = true;
-                    oscillator.disconnect(that.webAudio.context.destination);
-                    delete oscillator;
-                }
-                oscillator.onended = function(e) {
-                    oscillatorFinish();                    
-                }
-                oscillator.frequency.value = tone.frequency;
-                oscillator.start(cT);
-                oscillator.stop(cT + tone.duration / 1000.0);               
-            }
-        }
+        
         // update motors
         var motors = this.robotBehaviour.getActionState("motors", true);
         if (motors) {

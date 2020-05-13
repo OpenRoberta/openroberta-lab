@@ -39,6 +39,8 @@ import de.fhg.iais.roberta.syntax.action.mbed.SwitchLedMatrixAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorSetPowerAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorStopAction;
+import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
+import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
 import de.fhg.iais.roberta.syntax.expr.mbed.Image;
 import de.fhg.iais.roberta.syntax.expr.mbed.PredefinedImage;
 import de.fhg.iais.roberta.syntax.functions.mbed.ImageInvertFunction;
@@ -171,7 +173,9 @@ public final class MbedUsedHardwareCollectorVisitor extends AbstractUsedHardware
 
     @Override
     public Void visitAccelerometer(AccelerometerSensor<Void> accelerometerSensor) {
-        this.getBuilder(UsedHardwareBean.Builder.class).addUsedSensor(new UsedSensor(accelerometerSensor.getPort(), SC.ACCELEROMETER, accelerometerSensor.getMode()));
+        this
+            .getBuilder(UsedHardwareBean.Builder.class)
+            .addUsedSensor(new UsedSensor(accelerometerSensor.getPort(), SC.ACCELEROMETER, accelerometerSensor.getMode()));
         return null;
     }
 
@@ -305,6 +309,20 @@ public final class MbedUsedHardwareCollectorVisitor extends AbstractUsedHardware
         if ( port.equals("2") ) {
             this.getBuilder(UsedHardwareBean.Builder.class).addUsedActor(new UsedActor("", SC.CALLIBOT));
         }
+        return null;
+    }
+
+    @Override
+    public Void visitToneAction(ToneAction<Void> toneAction) {
+        toneAction.getFrequency().accept(this);
+        toneAction.getDuration().accept(this);
+        this.getBuilder(UsedHardwareBean.Builder.class).addUsedActor(new UsedActor("", SC.MUSIC));
+        return null;
+    }
+
+    @Override
+    public Void visitPlayNoteAction(PlayNoteAction<Void> playNoteAction) {
+        this.getBuilder(UsedHardwareBean.Builder.class).addUsedActor(new UsedActor("", SC.MUSIC));
         return null;
     }
 
