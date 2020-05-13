@@ -1,6 +1,7 @@
 define(["require", "exports", "interpreter.constants"], function (require, exports, C) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
+    exports.getInfoResult = exports.info = exports.debug = exports.opLog = exports.loggingEnabled = exports.expectExc = exports.dbcException = exports.dbc = void 0;
     function dbc(expected, actual) {
         if (expected !== actual) {
             var msg = 'DBC. Expected: ' + expected + ' but got: ' + actual;

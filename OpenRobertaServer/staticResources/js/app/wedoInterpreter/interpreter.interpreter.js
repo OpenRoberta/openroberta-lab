@@ -1,6 +1,7 @@
 define(["require", "exports", "interpreter.state", "interpreter.constants", "interpreter.util"], function (require, exports, interpreter_state_1, C, U) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
+    exports.Interpreter = void 0;
     var Interpreter = /** @class */ (function () {
         /*
          *
