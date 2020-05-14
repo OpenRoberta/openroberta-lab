@@ -55,7 +55,7 @@ public class CompilerSetupBean implements IProjectBean {
                 compilerWorkflowBean.compilerBinaryName = properties.getStringProperty("robot.plugin.compiler.executable.linux");
             } else if ( SystemUtils.IS_OS_MAC ) {
                 compilerWorkflowBean.compilerBinaryName = properties.getStringProperty("robot.plugin.compiler.executable.mac");
-            }else{
+            } else {
                 compilerWorkflowBean.compilerBinaryName = properties.getStringProperty("robot.plugin.compiler.executable");
             }
             return this;
