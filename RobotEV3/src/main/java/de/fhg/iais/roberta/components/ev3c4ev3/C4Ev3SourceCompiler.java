@@ -13,32 +13,17 @@ public class C4Ev3SourceCompiler {
     private static final Logger LOG = LoggerFactory.getLogger(C4Ev3SourceCompiler.class);
 
     private final String compilerResourcesDir;
-    private final String compilerExecutableFileName;
     private final String staticLibraryFolderName;
+    private final String compilerBinaryName;
 
-    public C4Ev3SourceCompiler(String compilerResourcesDir) {
+    public C4Ev3SourceCompiler(String compilerResourcesDir, String compilerBinaryName) {
         this.compilerResourcesDir = compilerResourcesDir;
-        this.compilerExecutableFileName = getCompilerExecutableFileName();
         this.staticLibraryFolderName = getStaticLibraryFolderName();
-    }
-
-    private String getCompilerExecutableFileName() {
-        if ( SystemUtils.IS_OS_LINUX ) {
-            if ( System.getProperty("os.arch").contains("arm") ) {
-                return "arm-c4ev3-linux-uclibceabi-g++";
-            }
-            return "arm-linux-gnueabi-g++";
-        } else if ( SystemUtils.IS_OS_MAC ) {
-            return "arm-none-linux-gnueabi-g++";
-        } else if ( SystemUtils.IS_OS_WINDOWS ) {
-            // TODO: Set path for Windows
-            return "";
-        }
-        throw new DbcException("Unknown c4ev3 compiler executable file name for current platform");
+        this.compilerBinaryName = compilerBinaryName;
     }
 
     private String getStaticLibraryFolderName() {
-        if ( compilerExecutableFileName.contains("uclibc") ) {
+        if ( compilerBinaryName.contains("uclibc") ) {
             /*
              * Since we use a compiler built against uclibc on raspberry, we also need to use a different static library
              * of c4ev3, one built with a uclibc compiler
@@ -49,7 +34,7 @@ public class C4Ev3SourceCompiler {
     }
 
     public Pair<Boolean, String> compile(String sourceCodeFileName, String binaryOutputFile, String crosscompilerSourceForDebuggingOnly) {
-        String[] compilerArguments = getCompilerArguments(compilerExecutableFileName, sourceCodeFileName, binaryOutputFile);
+        String[] compilerArguments = getCompilerArguments(compilerBinaryName, sourceCodeFileName, binaryOutputFile);
         return Util.runCrossCompiler(compilerArguments, crosscompilerSourceForDebuggingOnly);
     }
 
