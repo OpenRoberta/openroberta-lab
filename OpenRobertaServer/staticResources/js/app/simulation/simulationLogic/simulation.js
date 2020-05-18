@@ -279,8 +279,8 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
         hOld: 0,
         isParallelToAxis: true,
         xStart: 0,
-        yStart:0
-};
+        yStart: 0
+    };
     exports.obstacleList = [ground, obstacle];
 
     var ruler = {
