@@ -16,7 +16,7 @@ import de.fhg.iais.roberta.util.dbc.DbcException;
 
 public class FileUtils {
     /**
-     * return a stream of all files found in a resource directory<br>
+     * return a stream of all files found in a resource directory sorted using natural order<br>
      * <b>Note:</b> this is a method used in tests. This method itself is tested below ... .
      *
      * @param directory whose files are requested
@@ -24,7 +24,9 @@ public class FileUtils {
      */
     public static Stream<String> fileStreamOfResourceDirectory(String directory) {
         try {
-            return Arrays.stream(Paths.get(Util.class.getResource(directory).toURI()).toFile().list());
+            final String[] fileNameList = Paths.get(Util.class.getResource(directory).toURI()).toFile().list();
+            Arrays.sort(fileNameList);
+            return Arrays.stream(fileNameList);
         } catch ( URISyntaxException e ) {
             throw new DbcException("getting a file stream from a resource directory failed for: " + directory, e);
         }
