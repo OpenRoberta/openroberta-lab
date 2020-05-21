@@ -30,14 +30,14 @@ Commands of the ora.sh script:
 The following commands are used by admins of the test and prod server. These systems are running as docker instances. See Docker/README.md for details.
 the base-dir of the docker setup is usually '/data/openroberta-lab'
   
-  new-test-setup {base-dir}
+  new-docker-setup {base-dir}
              creates a new test server setup in {base-dir}. {base-dir} must not exist. Afterwards you have to edit '{base-dir}/config.sh' CAREFULLY.
              Needs root privileges. Must be executed on a test machine from an UP-TO-DATE git repository. 
-  new-server-in-test-setup {base-dir} {server-name}
+  new-server-in-docker-setup {base-dir} {server-name}
              creates a server in the existing test server setup '{base-dir}'. The dirs '{base-dir}/server/{server-name}' and '{base-dir}/db/{server-name}' must not exist.
              Afterwards you have to edit '{base-dir}/server/{server-name}/decl.sh' CAREFULLY and to think about whether an empty database is ok or not.
              In '{base-dir}/config.sh' {server-name} can be added to the variables SERVERS, AUTODEPLOY and DATABASES.
              Needs root privileges. Must be executed on a test machine from an UP-TO-DATE git repository. 
-  update-test-setup [{base-dir}]
+  update-docker-setup [{base-dir}]
              expects the test server setup in {base-dir}. Copies all resources from the git-dir 'Docker/openroberta/conf'
              into {base-dir}/conf. Needs root privileges. Must be executed on a test machine from an UP-TO-DATE git repository. 
