@@ -56,7 +56,7 @@ on Windows:
   
 The cross-compiler needs resources to work properly (header files, libraries, ...). These resources change little over time and are stored in the '[ora-cc-rsc](https://github.com/OpenRoberta/ora-cc-rsc)' repository.
 
-Please clone that directory. When the openroberta-lab server is started, you have to supply the path to these resources (see below). If the resources are not available,
+Please clone that directory and build it using `mvn clean install`. When the openroberta-lab server is started, you have to supply the path to these resources (see below). If the resources are not available,
 everything works fine (writing programs, import, export, creating accounts, etc.), but running programs on real robots doesn't work, because the cross-compiler will fail.
 
 Please also check our wiki for detailed installation instructions, development procedure, coding conventions and further reading. We also use the Github issue tracking system.
