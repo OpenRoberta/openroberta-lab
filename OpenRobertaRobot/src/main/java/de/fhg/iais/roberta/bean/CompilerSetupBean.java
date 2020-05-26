@@ -55,10 +55,10 @@ public class CompilerSetupBean implements IProjectBean {
                 compilerWorkflowBean.compilerBinaryName = properties.getStringProperty("robot.plugin.compiler.executable.linux");
             } else if ( SystemUtils.IS_OS_MAC ) {
                 compilerWorkflowBean.compilerBinaryName = properties.getStringProperty("robot.plugin.compiler.executable.mac");
-            } else {
-                compilerWorkflowBean.compilerBinaryName = properties.getStringProperty("robot.plugin.compiler.executable");
+            } else if ( SystemUtils.IS_OS_WINDOWS ) {
+                compilerWorkflowBean.compilerBinaryName = properties.getStringProperty("robot.plugin.compiler.executable.windows");
             }
-            return this;
+            throw new DbcException("Unknown compiler executable file name for current platform");
         }
 
         public Builder setTempDir(String tempDir) {
