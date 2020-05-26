@@ -132,7 +132,6 @@ define( ['exports', 'guiState.controller', 'interpreter.interpreter', 'interpret
             OpenRoberta.jsToAppInterface( JSON.stringify( data ) );
             return true;
         } catch ( error ) {
-            LOG.error( "no Android Webview: " + error );
             return false;
         }
     }
@@ -142,7 +141,6 @@ define( ['exports', 'guiState.controller', 'interpreter.interpreter', 'interpret
             window.webkit.messageHandlers.OpenRoberta.postMessage( JSON.stringify( data ) );
             return true;
         } catch ( error ) {
-            LOG.error( "no IOS Webview: " + error );
             return false;
         }
     }

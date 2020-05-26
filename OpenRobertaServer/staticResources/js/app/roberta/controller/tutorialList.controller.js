@@ -27,7 +27,6 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'message', 'guiState.contr
         }
         initTutorialList();
         initTutorialListEvents();
-        LOG.info('init tutorial list view');
     }
     exports.init = init;
 

@@ -18,7 +18,6 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.controller', 'guiState.m
             }
         })).then(function() {
             initRobotForms();
-            LOG.info('init robot forms');
             ready.resolve();
         });
         return ready.promise();

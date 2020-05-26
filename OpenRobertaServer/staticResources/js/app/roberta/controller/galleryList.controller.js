@@ -20,7 +20,6 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'message', 'guiState.contr
 
         initGalleryList();
         initGalleryListEvents();
-        LOG.info('init gallery list view');
     }
     exports.init = init;
 

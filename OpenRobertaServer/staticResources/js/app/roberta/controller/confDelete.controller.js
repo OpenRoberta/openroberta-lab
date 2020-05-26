@@ -4,7 +4,6 @@ define([ 'require', 'exports', 'log', 'util', 'message', 'comm', 'configuration.
     function init() {
 //        initView();
         initEvents();
-        LOG.info('init configuration delete');
     }
     exports.init = init;
 

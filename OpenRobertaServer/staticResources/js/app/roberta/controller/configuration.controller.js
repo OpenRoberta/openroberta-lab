@@ -12,7 +12,6 @@ define([ 'exports', 'log', 'util', 'comm', 'message', 'guiState.controller', 'bl
         initEvents();
         initConfigurationForms();
         initConfigurationEnvironment();
-        LOG.info('init configuration view');
     }
 
     exports.init = init;

@@ -52,7 +52,6 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'progHelp.contro
                     GUISTATE.server.theme = 'default';
                 });
             }
-            LOG.info('init gui state');
             ready.resolve();
         });
         return ready.promise();
@@ -387,11 +386,13 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'progHelp.contro
         }
         if (groupSwitched) {
             HELP_C.initView();
-            WEBVIEW_C.jsToAppInterface({
-                'target' : 'internal',
-                'type' : 'setRobot',
-                'robot' : robotGroup
-            });
+            if (inWebview()) {
+                WEBVIEW_C.jsToAppInterface({
+                    'target' : 'internal',
+                    'type' : 'setRobot',
+                    'robot' : robotGroup
+                });                
+            }
         }
 
         if (GUISTATE.gui.hasWlan) {

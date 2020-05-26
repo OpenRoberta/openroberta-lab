@@ -6,10 +6,8 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'message', 'progList.model
      * Initialize table of programs
      */
     function init() {
-
         initProgList();
         initProgListEvents();
-        LOG.info('init program list view');
     }
     exports.init = init;
 

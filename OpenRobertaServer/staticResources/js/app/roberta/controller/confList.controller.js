@@ -8,7 +8,6 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'confList.model', 'configu
 
         initConfList();
         initConfListEvents();
-        LOG.info('init configuration view');
     }
     exports.init = init;
 

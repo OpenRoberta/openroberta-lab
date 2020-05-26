@@ -547,7 +547,6 @@ define([ 'exports', 'log', 'message', 'util', 'user.model', 'guiState.controller
             initLoginModal();
             initStatusTextModal();
             initUserPasswordChangeModal();
-            LOG.info('init user forms');
             ready.resolve();
         });
         return ready.promise();

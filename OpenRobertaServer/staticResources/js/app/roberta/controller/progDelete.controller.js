@@ -4,7 +4,6 @@ define([ 'require', 'exports', 'log', 'util', 'message', 'comm', 'program.model'
     function init() {
 //        initView();
         initEvents();
-        LOG.info('init program delete');
     }
     exports.init = init;
 

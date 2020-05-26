@@ -77,7 +77,6 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
             }, 1000);
         }
         pingServer();
-        LOG.info('init menu view');
 
         handleQuery();
         cleanUri();

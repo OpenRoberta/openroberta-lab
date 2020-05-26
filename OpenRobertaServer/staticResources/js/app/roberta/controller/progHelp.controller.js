@@ -11,7 +11,6 @@ define([ 'exports', 'message', 'log', 'util', 'guiState.controller', 'blocks', '
         blocklyWorkspace = GUISTATE_C.getBlocklyWorkspace();
         initView();
         initEvents();
-        LOG.info('init help view');
     }
     exports.init = init;
 

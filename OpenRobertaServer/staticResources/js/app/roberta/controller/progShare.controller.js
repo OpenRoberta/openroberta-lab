@@ -4,7 +4,6 @@ define([ 'require', 'exports', 'log', 'util', 'message', 'comm', 'guiState.contr
     function init() {
         initView();
         initEvents();
-        LOG.info('init program sharing view');
     }
     exports.init = init;
 
