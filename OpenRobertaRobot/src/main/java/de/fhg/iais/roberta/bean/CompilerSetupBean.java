@@ -57,8 +57,10 @@ public class CompilerSetupBean implements IProjectBean {
                 compilerWorkflowBean.compilerBinaryName = properties.getStringProperty("robot.plugin.compiler.executable.mac");
             } else if ( SystemUtils.IS_OS_WINDOWS ) {
                 compilerWorkflowBean.compilerBinaryName = properties.getStringProperty("robot.plugin.compiler.executable.windows");
+            } else {
+                throw new DbcException("Compiler binary name not found for this platform");
             }
-            throw new DbcException("Unknown compiler executable file name for current platform");
+            return this;
         }
 
         public Builder setTempDir(String tempDir) {

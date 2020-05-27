@@ -18,8 +18,9 @@ public class C4Ev3SourceCompiler {
 
     public C4Ev3SourceCompiler(String compilerResourcesDir, String compilerBinaryName) {
         this.compilerResourcesDir = compilerResourcesDir;
-        this.staticLibraryFolderName = getStaticLibraryFolderName();
         this.compilerBinaryName = compilerBinaryName;
+        this.staticLibraryFolderName = getStaticLibraryFolderName();
+
     }
 
     private String getStaticLibraryFolderName() {
