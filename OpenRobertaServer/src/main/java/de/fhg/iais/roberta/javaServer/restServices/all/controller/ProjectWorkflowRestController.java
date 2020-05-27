@@ -1,19 +1,18 @@
 package de.fhg.iais.roberta.javaServer.restServices.all.controller;
 
 import com.google.inject.Inject;
-
-import org.apache.commons.lang3.StringUtils;
-import org.codehaus.jettison.json.JSONException;
-import org.codehaus.jettison.json.JSONObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+
+import org.apache.commons.lang3.StringUtils;
+import org.codehaus.jettison.json.JSONException;
+import org.codehaus.jettison.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import de.fhg.iais.roberta.components.Project;
 import de.fhg.iais.roberta.factory.IRobotFactory;
@@ -48,7 +47,6 @@ public class ProjectWorkflowRestController {
         try {
             response.put("progXML", dataPart.getString("progXML")); // always return the program, even if the workflow fails
             String configurationText = httpSessionState.getRobotFactory().getConfigurationDefault();
-            response.put("confXML", dataPart.optString("confXML", configurationText)); // always return the configuration, even if the workflow fails
             Project project =
                 new Project.Builder()
                     .setProgramName(dataPart.getString("programName"))
@@ -66,7 +64,7 @@ public class ProjectWorkflowRestController {
             response.put("cmd", "showSourceP");
             response.put("sourceCode", project.getSourceCode());
             response.put("progXML", project.getAnnotatedProgramAsXml());
-            response.put("confXML", project.getAnnotatedConfigurationAsXml());
+            response.put("confAnnos", project.getConfAnnotationList());
             response.put("rc", project.hasSucceeded() ? "ok" : "error");
             response.put("message", project.getResult().getKey());
             response.put("cause", project.getResult().getKey());
@@ -92,7 +90,6 @@ public class ProjectWorkflowRestController {
         try {
             response.put("progXML", dataPart.getString("progXML")); // always return the program, even if the workflow fails
             String configurationText = httpSessionState.getRobotFactory().getConfigurationDefault();
-            response.put("confXML", dataPart.optString("confXML", configurationText)); // always return the configuration, even if the workflow fails
 
             Project project =
                 new Project.Builder()
@@ -112,7 +109,7 @@ public class ProjectWorkflowRestController {
             response.put("javaScriptProgram", project.getSourceCode());
             response.put("fileExtension", project.getSourceCodeFileExtension());
             response.put("progXML", project.getAnnotatedProgramAsXml());
-            response.put("confXML", project.getAnnotatedConfigurationAsXml());
+            response.put("confAnno", project.getConfAnnotationList());
             response.put("rc", project.hasSucceeded() ? "ok" : "error");
             response.put("message", project.getResult().getKey());
             response.put("cause", project.getResult().getKey());
@@ -139,7 +136,6 @@ public class ProjectWorkflowRestController {
         try {
             response.put("progXML", dataPart.getString("progXML")); // always return the program, even if the workflow fails
             String configurationText = httpSessionState.getRobotFactory().getConfigurationDefault();
-            response.put("confXML", dataPart.optString("confXML", configurationText)); // always return the configuration, even if the workflow fails
             Project project =
                 new Project.Builder()
                     .setProgramName(dataPart.getString("programName"))
@@ -155,7 +151,7 @@ public class ProjectWorkflowRestController {
                     .build();
             ProjectService.executeWorkflow("run", httpSessionState.getRobotFactory(), project);
             response.put("cmd", "runPBack");
-            response.put("progXML", project.getAnnotatedProgramAsXml());
+            response.put("progAnno", project.getConfAnnotationList());
             response.put("errorCounter", project.getErrorCounter());
             response.put("parameters", project.getResultParams());
             response.put("compiledCode", project.getCompiledHex());

@@ -68,8 +68,11 @@ define([ 'exports', 'log', 'util', 'comm', 'message', 'guiState.controller', 'bl
                 bricklyWorkspace.setVisible(false);
             }
             $(window).resize();
-            // always reload the configuration as it may have changed from REST responses
-            reloadConf();
+            clearAnnotations();
+            if (GUISTATE_C.confAnnos !== undefined) {
+                annotateConf(GUISTATE_C.confAnnos);
+                delete GUISTATE_C.confAnnos;
+            }
         }, 'tabConfiguration clicked');
 
         $('#tabConfiguration').on('hide.bs.tab', function(e) {
@@ -382,4 +385,56 @@ define([ 'exports', 'log', 'util', 'comm', 'message', 'guiState.controller', 'bl
         }
     }
     exports.configurationToBricklyWorkspace = configurationToBricklyWorkspace;
+
+    /**
+     * Remove error and warning annotation from all blocks located in this workspace. Usually this is done 
+     * with a reload of all blocks, but here we only want to remove the annotations.
+     */
+    function clearAnnotations() {
+        var allBlocks = bricklyWorkspace.getAllBlocks();
+        for (var i = 0; i < allBlocks.length; i++) {
+            var icons = allBlocks[i].getIcons();
+            for (var k = 0; k < icons.length; k++) {
+                var block = icons[k].block_;
+                if (block.error) {
+                    block.error.dispose();
+                    block.render();
+                } else if (block.warning) {
+                    block.warning.dispose();
+                    block.render();
+                }
+            }
+        }
+    }
+
+    /**
+     * Annotate the visible configuration blocks with warnings and errors
+     * generated server side.
+     * 
+     * @param {object}
+     *            confAnnos - {block id, type of annotation:message key}
+     */
+    function annotateConf(confAnnos) {
+        for ( var annoId in confAnnos) {
+            var block = bricklyWorkspace.getBlockById(annoId);
+            if (block) {
+                var anno = confAnnos[annoId].split(":");
+                var annoType = anno[0];
+                var annoMsg = Blockly.Msg[anno[1]] || anno[1] || "unknown error";
+                switch (annoType) {
+                case "ERROR":
+                    block.setErrorText(annoMsg);
+                    block.error.setVisible(true);
+                    break;
+                case "WARNING":
+                    block.setWarningText(annoMsg);
+                    block.warning.setVisible(true);
+                    break;
+                default:
+                    console.warn("Unsupported annotation in configuration: " + annoType);
+                }
+            }
+        }
+
+    }
 });

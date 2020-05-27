@@ -27,6 +27,7 @@ import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.Location;
 import de.fhg.iais.roberta.transformer.Jaxb2ConfigurationAst;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
+import de.fhg.iais.roberta.typecheck.NepoInfo;
 import de.fhg.iais.roberta.util.Key;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
@@ -52,7 +53,9 @@ public final class Project {
     private boolean withWrapping = true;
 
     private ProgramAst<Void> program = null;
+
     private ConfigurationAst configuration = null;
+    private final Map<String, NepoInfo> confAnnotationList = new HashMap<String, NepoInfo>();
 
     private final ClassToInstanceMap<IProjectBean> workerResults = MutableClassToInstanceMap.create();
 
@@ -129,6 +132,14 @@ public final class Project {
      */
     public ConfigurationAst getConfigurationAst() {
         return this.configuration;
+    }
+
+    public Map<String, NepoInfo> getConfAnnotationList() {
+        return this.confAnnotationList;
+    }
+
+    public void addToConfAnnotationList(String blockId, NepoInfo nepoInfo) {
+        this.confAnnotationList.put(blockId, nepoInfo);
     }
 
     public <T extends IProjectBean> T getWorkerResult(Class<T> beanClass) {

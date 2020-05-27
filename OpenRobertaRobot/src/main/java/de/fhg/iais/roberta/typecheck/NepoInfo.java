@@ -33,7 +33,7 @@ public class NepoInfo {
 
     @Override
     public String toString() {
-        return "NepoProblem [" + this.severity + ": " + this.message + "]";
+        return this.severity + ":" + this.message;
     }
 
     public static enum Severity {

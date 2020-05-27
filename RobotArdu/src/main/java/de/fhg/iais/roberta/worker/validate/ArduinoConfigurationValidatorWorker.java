@@ -1,7 +1,5 @@
 package de.fhg.iais.roberta.worker.validate;
 
-import com.google.common.collect.ClassToInstanceMap;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -10,6 +8,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import com.google.common.collect.ClassToInstanceMap;
 
 import de.fhg.iais.roberta.bean.IProjectBean;
 import de.fhg.iais.roberta.components.ConfigurationComponent;
@@ -81,14 +81,16 @@ public class ArduinoConfigurationValidatorWorker extends AbstractValidatorWorker
                 } else {
                     project.addToErrorCounter(1);
                     project.setResult(Key.PROGRAM_INVALID_STATEMETNS);
-                    configurationComponent.addInfo(NepoInfo.error("CONFIGURATION_ERROR_OVERLAPPING_PORTS"));
+                    String blockId = configurationComponent.getProperty().getBlocklyId();
+                    project.addToConfAnnotationList(blockId, NepoInfo.error("CONFIGURATION_ERROR_OVERLAPPING_PORTS"));
                 }
             }
         });
         if ( blockPins.stream().distinct().count() != blockPins.size() ) {
             project.addToErrorCounter(1);
             project.setResult(Key.PROGRAM_INVALID_STATEMETNS);
-            configurationComponent.addInfo(NepoInfo.error("CONFIGURATION_ERROR_OVERLAPPING_PORTS"));
+            String blockId = configurationComponent.getProperty().getBlocklyId();
+            project.addToConfAnnotationList(blockId, NepoInfo.error("CONFIGURATION_ERROR_OVERLAPPING_PORTS"));
         }
     }
 }

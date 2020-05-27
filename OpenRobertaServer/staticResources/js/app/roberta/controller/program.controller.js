@@ -397,8 +397,8 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'ro
     function reloadProgram(opt_result, opt_fromShowSource) {
         if (opt_result) {
             program = opt_result.progXML;
-            if (opt_result.confXML.indexOf('error') !== -1) {
-                GUISTATE_C.setConfigurationXML(opt_result.confXML);
+            if (!$.isEmptyObject(opt_result.confAnnos)) {
+                GUISTATE_C.confAnnos = opt_result.confAnnos;
                 UTIL.alertTab('tabConfiguration');
             }
         } else {
