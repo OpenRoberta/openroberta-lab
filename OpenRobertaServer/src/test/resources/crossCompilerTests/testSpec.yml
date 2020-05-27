@@ -1,0 +1,204 @@
+crosscompilercall : true
+showsuccess: true
+
+robots:
+    bob3:
+        template: bob3
+        dir: bob3
+        suffix: ".cpp"
+    botnroll:
+        template: ardu
+        dir: botnroll
+        suffix: ".ino"
+    calliope2016:
+        template: calliope
+        dir: calliope
+        suffix: ".cpp"
+    calliope2017NoBlue:
+        template: calliope
+        dir: calliope
+        suffix: ".cpp"
+    edison:
+        template: edison
+        dir: edison
+        suffix: ".wav"
+    ev3c4ev3:
+        template: ev3
+        dir: ev3
+        suffix: ".cpp"
+    ev3dev:
+        template: ev3
+        dir: ev3
+        suffix: ".py"
+    ev3lejosv1:
+        template: ev3
+        dir: ev3
+        suffix: ".java"
+    ev3lejosv0:
+        template: ev3
+        dir: ev3
+        suffix: ".java"
+    festobionic:
+        template: ardu
+        dir: festobionic
+        suffix: ".cpp"
+    microbit:
+        template: microbit
+        dir: microbit
+        suffix: ".py"
+    nao:
+        template: nao
+        dir: nao
+        suffix: ".py"
+    nxt:
+        template: nxt
+        dir: nxt
+        suffix: ".nxc"
+    sensebox:
+        template: sensebox
+        dir: sensebox
+        suffix: ".ino"
+    uno:
+        template: ardu
+        dir: ardu
+        suffix: ".ino"
+    unowifirev2:
+        template: ardu
+        dir: unowifirev2
+        suffix: ".ino"
+    wedo:
+        template: wedo
+        dir: wedo
+        suffix: ".json"
+        eval: false
+
+progs:
+    assign:
+       decl: default
+       exclude:
+          edison: "not supported"
+       remark: "simple assignment. For testing the test only"
+    controlFlowDecisons:
+       decl: controlFlowDecisons
+       exclude:
+          edison: "not supported"
+       remark: "all combinations for IF-THEN-ELSE upto two levels"
+    controlFlowLoops:
+       decl: controlFlowLoops
+       exclude:
+          edison: ""
+       remark: "all combinations of loops"
+    controlFlowNestedLoops:
+       decl: controlFlowNestedLoops
+       exclude:
+          edison: "not supported"
+       remark: "all combinations of nested loops"
+    functionsBasic:
+       fragment: basicFunctions
+       decl: basicFunctions
+       exclude:
+          edison: "not supported"
+       remark: "basic function calls"
+    functionWithWithoutParameter:
+       fragment: functionWithWithoutParameter
+       decl: functionWithWithoutParameter
+       exclude:
+          ALL: "crashes all crosscompilers"
+          edison: ""
+          bob3: "LedColor is used in the program. Doesn't work here"
+       remark: "functions with various return types, with and without parameters"
+    listOperations:
+       decl: listOperations
+       exclude:
+          edison: "Lists are implemented as an Array in edison robot and thus not expandable"
+          nxt: "no extendable lists"
+          bob3: "no lists"
+       remark: "test of mutable lists"
+    listOperationsAdvanced:
+       decl: advancedListOperations
+       exclude:
+          ALL: "crashes code generation or compilation"
+          bob3: "no lists"
+       remark: "advanced list operations"
+    listOperationsBasic:
+       decl: basicListOperations
+       exclude:
+          nxt: "no extendable lists"
+          bob3: "no lists"
+          edison: "Edisons lists are not extendable"
+       remark: "basic list operations"
+    logicBooleanOp:
+       decl: logicBooleanOp
+       exclude:
+          edison: "not supported"
+       remark: "all combinations for boolean operator"
+    logicBooleanOpTernary:
+       decl: logicBooleanOpTernary
+       exclude:
+          edison: "AND/OR blocks not supported"
+          wedo: "re-enable after simulation refactoring"
+       remark: "all combinations for ternary operator"
+    mathAndLists:
+       decl: mathAndLists
+       exclude:
+          edison: "no extendable lists"
+          nxt: "no extendable lists"
+          bob3: "no lists"
+          wedo: "re-enable after simulation refactoring"
+       remark: "list functions and math functions (sum of list items, ...) on lists"
+    mathBasics:
+       decl: mathBasics
+       exclude:
+          edison: "no real numeric type"
+       remark: "basic math operations"
+    mathBrackets:
+       decl: mathBrackets
+       exclude:
+          edison: "no real numeric type"
+       remark: "different combinations for math brackets"
+    mathFunctions:
+       decl: mathFunctions
+       exclude:
+          edison: "Most math functions are not supported"
+       remark: "some math functions (min, sin, pi, ...), similar to mathLogic. For testing the test only"
+    mathLogic-1:
+       decl: mathLogic
+       exclude:
+          edison: "Most math functions are not supported"
+       remark: "math functions (min, random, ...)"
+    mathLogic-2:
+       decl: mathLogic
+       exclude:
+          edison: "edison only supports integers as numbers which would mean that f.e. sqrt(2) == 1 == sqrt(1/2)"
+       remark: "trigonometric functions (min, sin, pi, ...)"
+    mathPower:
+       decl: mathPower
+       exclude:
+          nxt: "Nested calls to the same function are not supported"
+          edison: "Not all pow functions are supported"
+       remark: "different combinations for math power of"
+    stringConcat:
+       decl: stringConcat
+       exclude:
+          uno: "Comparison of string and char not possible"
+          mega: "Comparison of string and char not possible"
+          nano: "Comparison of string and char not possible"
+          botnroll: "Comparison of string and char not possible"
+          unowifirev2: "Comparison of string and char not possible"
+          sensebox: "Comparison of string and char not possible"
+          nxt: "Comparison of string and char not possible"
+          bob3: "no strings"
+          festobionic: "Comparison of string and char not possible"
+          edison: "no strings"
+       remark: "different combinations of string concatenation"
+    variablesNuStBo:
+       decl: variablesNuStBo
+       exclude:
+          edison: "not supported"
+          bob3: "no strings"
+       remark: "variable assignment for number, string and boolean"
+    workflowTest:
+       decl: default
+       exclude:
+          ALL: "this program is only for workflow tests"
+       remark: "a small program to test the validity of workflows (as much as possible :-)"
