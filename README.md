@@ -171,6 +171,7 @@ Furthermore, the project OpenRobertaServer contains in directory staticResources
 To run tests, use `mvn test`. Running `mvn clean install` will make a stable, reproducible build with all unit tests executed.
 
 To run the integration tests you have to supply an additional flag: `mvn clean install -PrunIT`.
+For these you need an environment variable `robot_crosscompiler_resourcebase` pointing to your `ora-cc-rsc` directory.
 
 #### Some Frameworks used
 
