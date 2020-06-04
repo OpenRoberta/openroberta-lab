@@ -2,8 +2,8 @@
 
 CMD="$1"; shift
 
-echo "test command ${CMD} executed at $DATE"
-case "$CMD" in
+echo "test command ${CMD} executed at ${DATE}"
+case "${CMD}" in
     lock)   echo 'aquire a lock for 60 sec'
             ( flock -w 60 9
                   echo 'starting to sleep for 60 sec'
@@ -13,9 +13,9 @@ case "$CMD" in
     check)  echo 'check if somebody locked'
             flock -n 9 9>${GIT_DIR}/lockfile
             RC=$?
-            case "$RC" in
+            case "${RC}" in
                 0) echo "was NOT LOCKED" ;;
                 *) echo "was LOCKED" ;;
             esac ;;
-    *)      echo "invalid test command: $CMD"
+    *)      echo "invalid test command: ${CMD}"
 esac

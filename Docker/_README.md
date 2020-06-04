@@ -1,18 +1,22 @@
-# Operating Instructions for the Test and Prod Server using DOCKER container (2020-05-08)
+# Instructions to setup and run the test and prod server using DOCKER container (2020-06-08)
 
-This text describes the docker-related scripts, that are used to run OpenRoberta's prod and test servers. On every Linux-based machine it should be easy to run
-our setup. To create an instance of our docker installation, clone the openroberta-lab git and run `./ora.sh new-docker-setup BASEDIR_MUST_NOT_EXIST`. Follow the instructions
-from the script. From this point use the the administration script `BASEDIR/scripts/run.sh` (abbreviated as `RUN``). You have to
+This text describes the docker-related scripts, that are used to setup a docker network, create docker images and run docker container of the OpenRoberta lab. Exactly these
+scripts are used to run OpenRoberta's prod and test servers. On every Linux-based machine it should be easy to run our setup. To create an instance of our docker installation,
+clone the openroberta-lab git and run `./ora.sh new-docker-setup <BASEDIR_MUST_NOT_EXIST>`. Follow the instructions
+from the script. From this point use the the administration script `<BASEDIR>/scripts/run.sh` (abbreviated as `RUN`). Execute `RUN` without parameters to get a message
+explaining all commands available. You have to
 
-* clone the openroberta-lab repository into `BASEDIR/git`, update the server's `decl.sh appropriately` (set the repo, select the branch, ...)
+* clone the openroberta-lab repository into `<BASEDIR>/git`, update the server's `decl.sh appropriately` (set the repo, select the branch, ...)
 * create a new docker bridge network (`RUN gen-net`). The name is defined in the global `decl.sh`.
 * create the databases needed in directory `db`. Server names are test, dev, dev1...dev9 and must not exist. For each server one database with exactly the server's name is needed.
-  You can create empty databases by calling `./ora.sh create-empty-database` and copy them to the desired location. Put the database names into the global `decl.sh`.
+  You can create empty databases by
+  * either calling `./ora.sh -dbParentdir <non-existing-directory-of-your-choice> create-empty-database` after a `mvn clean install -DskipTests`
+  * or by using the already created empty database at `db/dbEmpty`
+  and copy them to the desired location. Put the database names into the global `decl.sh`.
 * generate a database server image and start the database container (`RUN gen-dbc` and `RUN start-dbc`). Check the result with `docker ps`. Inspect the log file in `BASEDIR/db/dbAdmin/`
 * create the servers for which you prepared databases (see above) by calling `./ora.sh new-server-in-docker-setup BASEDIR SERVER`. For each server in `BASEDIR/server/SERVER`
   update the `decl.sh (set the repo, select the branch, ...). Note, that `test, dev, dev1...dev9` are the only names accepted as server names.
 * deploy the server ((`RUN deploy SERVER`). Check result with `docker ps`. Inspect the log file in `BASEDIR/server/SERVER/admin/logging/...`
-
 
 Looks more complicated as it is :-). Details of the file system structure used and the more functionality supported (database backup, alice checking, autorestart) are described later.
 I tried to make all scripts as robust as possible. Please send any problems, improvements, ideas to reinhard.budde at iais.fraunhofer.de
@@ -185,8 +189,6 @@ SERVER_DIR=$BASE_DIR/server
 DATABASE_DIR=$BASE_DIR/db
 ```
 
-The whole setup has a unique name `$INAME`, defined in `$BASE_DIR/decl.sh`.
-
 ## Description of a typical setup of a docker installation for many openroberta lab server
 
 The ports `1999` to `1989` are used by up to 11 openroberta server. Each of these servers is based on an embedded jetty.
@@ -206,10 +208,10 @@ The names of the servers are (b.t.w.: this matches the virtual host names of the
 
 The name of the docker images and the name of the running containers are:
 
-* test: image is `openroberta/server_${INAME}_test:$BASE_VERSION` and the running container has name `${INAME}-test`
-* dev: image is `openroberta/server_${INAME}_dev:$BASE_VERSION` and the running container has name `${INAME}-dev`
-* dev1 up to dev9: images are `openroberta/server_${INAME}_dev1:$BASE_VERSION` to `openroberta/server_${INAME}_dev9:$BASE_VERSION` and
-  the running container have names `${INAME}-dev1` to `${INAME}-dev9`
+* test: image is `openroberta/server_test:$BASE_VERSION` and the running container has name `test`
+* dev: image is `openroberta/server_dev:$BASE_VERSION` and the running container has name `dev`
+* dev1 up to dev9: images are `openroberta/server__dev1:$BASE_VERSION` to `openroberta/server_dev9:$BASE_VERSION` and
+  the running container have names `dev1` to `dev9`
 
 Generating the images is done by using the data from `decl.sh` from the server directory. Generation will:
 
@@ -235,11 +237,11 @@ These databases are served by one database server. The database files are locate
 * `$DATABASE_DIR/dev`
 * `$DATABASE_DIR/dev1` to `$BASE/db/dev9`
 
-The database server is deployed in a docker container with name `ora-${INAME}-db-server` created from the docker image `rbudde/openroberta-${INAME}-db-server:2.4.0`.
+The database server is deployed in a docker container with name `ora-db-server` created from the docker image `rbudde/openroberta--db-server:2.4.0`.
 The database server is listening to the port `$DATABASE_SERVER_PORT` as defined in the global `decl.sh`. This is often the
 Hsqldb default `9001`.
 
-## Automatic deploy, database backup, removing temporary files
+## Automatic deploy, database backup, removing temporary files, automatic restart
 
 The shell script `$SCRIPT_DIR/run.sh` has commands, that are used for operating purposes.
  
@@ -264,6 +266,14 @@ The shell script `$SCRIPT_DIR/run.sh` has commands, that are used for operating 
   
 ```bash
 20 2 * * * bash <SCRIPT_DIR>/run.sh -q admin <server-name> cleanup-temp-user-dirs >><BASE_DIR>/logs/cronlog.txt
+```
+
+* `auto-restart`: this command spawns a process, that will not terminate by itself. It checks the availablity of the server (using the server-url)
+  and, if the server is not available when tried to access twice, it will restart the server. Logging info is written to `<BASE_DIR>/logs/autorestart.txt`.
+  the pid of the auto-restart process is logged. The process may be terminated at any time. The process can be initiated explicitly by executing:
+  
+```bash
+bash <SCRIPT_DIR>/run.sh -q auto-restart <server-name> <server-url>
 ```
 
 * `alive`: usually called from cron. It takes a server URL and checks whether the server is alive. It sends by default mail to admins.

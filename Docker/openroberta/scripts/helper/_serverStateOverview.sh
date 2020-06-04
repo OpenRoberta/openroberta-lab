@@ -4,15 +4,15 @@ AUTORESTART_LOG='/data/openroberta-lab/logs/autorestart.txt'
 (   cd /proc
     for pid in [0-9]*
     do
-        echo "$(ls /proc/$pid/fd/ | wc -l) $pid"
+        echo "$(ls /proc/${pid}/fd/ | wc -l) ${pid}"
     done \
     | sort -rn -k1 | head -5 \
     | while read -r fdcount pid
       do
-        command=$(ps -o cmd -p "$pid" -hc)
-        printf "pid: %5d fd: %5d cmd: %s\n" "$pid" "$fdcount" "$command"
-        case "$command" in
-          *java*) pstree $pid ;;
+        command=$(ps -o cmd -p "${pid}" -hc)
+        printf "pid: %5d fd: %5d cmd: %s\n" "${pid}" "${fdcount}" "${command}"
+        case "${command}" in
+          *java*) pstree ${pid} ;;
           *)      ;;
         esac
       done \

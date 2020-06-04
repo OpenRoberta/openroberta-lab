@@ -112,10 +112,10 @@ case "$CMD" in
   'sqlclient')       echo 'command line sql client. Type commands, exit with an empty line'
                      java $XMX -cp $JAVA_LIB_DIR/\* de.fhg.iais.roberta.main.Administration sql-client "$DB_URI" ;;
   'sqlgui')          hsqldbJar="$JAVA_LIB_DIR/hsqldb-2.4.0.jar"
-                     java -jar "${hsqldbJar}" --driver org.hsqldb.jdbc.JDBCDriver --url "$DB_URI" --user orA --password Pid ;;
+                     java $XMX -jar "${hsqldbJar}" --driver org.hsqldb.jdbc.JDBCDriver --url "$DB_URI" --user orA --password Pid ;;
   'sqlguiEmbedded')  hsqldbJar="$JAVA_LIB_DIR/hsqldb-2.4.0.jar"
                      databaseurl="jdbc:hsqldb:file:$DB_PARENTDIR/$DB_NAME"
-                     java -jar "${hsqldbJar}" --driver org.hsqldb.jdbc.JDBCDriver --url "$databaseurl" --user orA --password Pid ;;
+                     java $XMX -jar "${hsqldbJar}" --driver org.hsqldb.jdbc.JDBCDriver --url "$databaseurl" --user orA --password Pid ;;
   'sqlexec')         SQL="$1";
                      echo "execute the sql statement '$SQL'"
                      java $XMX -cp $JAVA_LIB_DIR/\* de.fhg.iais.roberta.main.Administration sql-exec "$DB_URI" "$SQL"

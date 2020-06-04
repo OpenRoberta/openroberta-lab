@@ -5,7 +5,7 @@ function question {
 	echo -n "$1 (\"y\" if ok) "
 	local ANSWER
 	read ANSWER
-	case "$ANSWER" in
+	case "${ANSWER}" in
 	  y) : ;;
 	  *) exit 12 ;;
 	esac
@@ -14,13 +14,13 @@ function question {
 # check whether mvn is on the path. If not exit 12
 function mavenOnPath {
 	local MVN=$(mvn -version)
-	if [ -z "$MVN" ]
+	if [ -z "${MVN}" ]
 	then
 		echo "mvn is not on the path. Build is impossible - exit 12"
 		exit 12
 	else
-		MVN=$(echo "$MVN"|head -1);
-		echo "using $MVN"
+		MVN=$(echo "${MVN}"|head -1);
+		echo "using ${MVN}"
 	fi
 }
 
@@ -38,11 +38,11 @@ function checkGitProjectDir {
 # check whether we have a pom.xml in the build directory (given as $1). If not exit 12
 function checkMavenBuildDir {
 	local BUILD=$1
-	if [ -d "$BUILD" -a -f "$BUILD/pom.xml" ]
+	if [ -d "${BUILD}" -a -f "${BUILD}/pom.xml" ]
 	then
 		:
 	else
-		echo "\"$BUILD\" is no valid directory for maven builds - exit 12"
+		echo "\"${BUILD}\" is no valid directory for maven builds - exit 12"
 		exit 12
 	fi
 }
@@ -50,7 +50,7 @@ function checkMavenBuildDir {
 # return the name of the branch we are in. Get it with: local B = $(getBranchName)
 function getBranchName {
 	local BRANCH=$(git rev-parse --abbrev-ref HEAD)
-	echo "$BRANCH"
+	echo "${BRANCH}"
 	return 0
 }
 
@@ -58,9 +58,9 @@ function getBranchName {
 function checkBranch {
 	local EXPECTED=$1
 	local BRANCH=$(git rev-parse --abbrev-ref HEAD)
-	if [ "$BRANCH" != "$EXPECTED" ];
+	if [ "${BRANCH}" != "${EXPECTED}" ];
 	then
-		echo "this script expects branch $EXPECTED, but we are in $BRANCH - exit 12"
+		echo "this script expects branch ${EXPECTED}, but we are in ${BRANCH} - exit 12"
 		exit 12
 	fi
 }
@@ -72,7 +72,7 @@ function parent2child {
 	git merge-base --is-ancestor master develop
 	if [ $? -ne 0 ]
 	then
-		echo "$PARENT IS NO ANCESTOR OF $CHILD. Solve this problem - exit 12"
+		echo "${PARENT} IS NO ANCESTOR OF ${CHILD}. Solve this problem - exit 12"
 		exit 12
 	fi
 }
@@ -80,17 +80,17 @@ function parent2child {
 # check whether the branch (given in $1) is clean. If not exit 12
 function checkBranchClean {
 	local BRANCH=$1
-	git checkout $BRANCH
+	git checkout ${BRANCH}
 	if [ $? -ne 0 ]
 	then
-		echo "checkout of branch $BRANCH failed - exit 12"
+		echo "checkout of branch ${BRANCH} failed - exit 12"
 		exit 12
 	fi
 	if [ -z "$(git status --porcelain)" ];
 	then
 		:
 	else
-		echo "please commit your changes in branch $BRANCH first. Exit 12"
+		echo "please commit your changes in branch ${BRANCH} first. Exit 12"
 		exit 12
 	fi
 }
@@ -100,11 +100,11 @@ function checkBranchClean {
 function versionStringIsValid {
 	local VERSION=$1
 	local HINT=$2
-	case "$VERSION" in
-	  '')         echo "$HINT version is missing - exit 12"
+	case "${VERSION}" in
+	  '')         echo "${HINT} version is missing - exit 12"
 				  exit 12 ;;
 	  *-SNAPSHOT) echo 'snapshot version not legal here (remove -SNAPSHOT) - exit 12'
 				  exit 12 ;;
-	  *)          echo "$HINT version will bumped to version $VERSION" ;;
+	  *)          echo "${HINT} version will bumped to version ${VERSION}" ;;
 	esac
 }
