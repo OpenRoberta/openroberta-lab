@@ -1,0 +1,19 @@
+{
+	"name": "nepo",
+	"version": "1.0.0",
+	"description": "",
+	"main": "main.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"author": "",
+	"license": "ISC",
+	"dependencies": {
+		"@types/ajv": "^1.0.0",
+		"@types/jquery": "^3.3.36",
+		"ajv": "^6.12.2",
+		"blockly": "^3.20200625.2",
+		"jquery": "^3.5.0",
+		"typescript": "^3.9.2"
+	}
+}

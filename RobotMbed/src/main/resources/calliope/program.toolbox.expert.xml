@@ -1,4 +1,4 @@
-<toolbox_set id="toolboxExpert" style="display: none">
+<toolbox_set id="toolbox-categories" style="display: none">
 	<category name="TOOLBOX_ACTION" svg="true">
 		<category name="TOOLBOX_DISPLAY" svg="true">
 			<block type="mbedActions_display_text">

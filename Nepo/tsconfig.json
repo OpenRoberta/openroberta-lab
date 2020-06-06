@@ -1,0 +1,31 @@
+{
+	"compilerOptions": {
+		"outDir": "./js",
+		"sourceMap": true,
+		"target": "es5",
+		"rootDir": "./ts",
+		"module": "amd",
+		"moduleResolution": "Node",
+		"baseUrl": "./ts",
+		"noUnusedLocals": true,
+		"noUnusedParameters": true,
+		"allowJs": true,
+		"skipLibCheck": true,
+		"lib": [
+			"es2015",
+			"es2017.object",
+			"dom"
+		]
+	},
+	"files": [
+		"ts/nepo.blockly.overridings.ts",
+		"ts/require.js",
+		"ts/main.js",
+		"ts/nepo.blockly.ts",
+		"ts/nepo.procedures.ts",
+		"ts/playground.ts",
+		"ts/require.js"
+	],
+	"compileOnSave": true,
+	"buildOnSave": true
+}

@@ -1,0 +1,1097 @@
+{
+	"title": "common",
+	"blocks": [
+		{
+			"type": "controls_start",
+			"message0": "%{BKY_CONTROLS_START} %1",
+			"args0": [
+				{
+					"type": "input_dummy"
+				}
+			],
+			"style": "start_blocks",
+			"mutator": "variable_plus_mutator",
+			"nextStatement": true,
+			"extensions": [
+				"variable_scope_extension"
+			]
+		},
+		{
+			"type": "controls_if",
+			"message0": "%{BKY_CONTROLS_IF} %1",
+			"args0": [
+				{
+					"type": "input_value",
+					"name": "IF0",
+					"check": "Boolean"
+				}
+			],
+			"message1": "%{BKY_CONTROLS_IF_MSG_THEN} %1",
+			"args1": [
+				{
+					"type": "input_statement",
+					"name": "DO0"
+				}
+			],
+			"style": "control_blocks",
+			"mutator": "controls_if_mutator",
+			"extensions": [
+				"controls_if_tooltip"
+			]
+		},
+		{
+			"type": "controls_repeat_ext",
+			"message0": "%{BKY_CONTROLS_REPEAT_EXT}",
+			"args0": [
+				{
+					"type": "input_value",
+					"name": "TIMES",
+					"check": "Number"
+				}
+			],
+			"message1": "%{BKY_CONTROLS_REPEAT_INPUT_DO} %1",
+			"args1": [
+				{
+					"type": "input_statement",
+					"name": "DO"
+				}
+			],
+			"style": "control_blocks"
+		},
+		{
+			"type": "controls_whileUntil",
+			"message0": "%1 %2",
+			"args0": [
+				{
+					"type": "field_dropdown",
+					"name": "MODE",
+					"options": [
+						[
+							"%{BKY_CONTROLS_WHILEUNTIL_OPERATOR_WHILE}",
+							"WHILE"
+						],
+						[
+							"%{BKY_CONTROLS_WHILEUNTIL_OPERATOR_UNTIL}",
+							"UNTIL"
+						]
+					]
+				},
+				{
+					"type": "input_value",
+					"name": "BOOL",
+					"check": "Boolean"
+				}
+			],
+			"message1": "%{BKY_CONTROLS_REPEAT_INPUT_DO} %1",
+			"args1": [
+				{
+					"type": "input_statement",
+					"name": "DO"
+				}
+			],
+			"style": "control_blocks"
+		},
+		{
+			"type": "controls_for",
+			"message0": "%{BKY_CONTROLS_FOR}",
+			"args0": [
+				{
+					"type": "field_input",
+					"name": "VAR"
+				},
+				{
+					"type": "input_value",
+					"name": "FROM",
+					"check": "Number",
+					"align": "RIGHT"
+				},
+				{
+					"type": "input_value",
+					"name": "TO",
+					"check": "Number",
+					"align": "RIGHT"
+				},
+				{
+					"type": "input_value",
+					"name": "BY",
+					"check": "Number",
+					"align": "RIGHT"
+				}
+			],
+			"message1": "%{BKY_CONTROLS_REPEAT_INPUT_DO} %1",
+			"args1": [
+				{
+					"type": "input_statement",
+					"name": "DO"
+				}
+			],
+			"inputsInline": true,
+			"style": "control_blocks",
+			"extensions": [
+				"internal_variable_declaration_extension",
+				"variable_scope_extension"
+			]
+		},
+		{
+			"type": "controls_forEach",
+			"message0": "%{BKY_CONTROLS_FOREACH}",
+			"args0": [
+				{
+					"type": "field_input",
+					"name": "VAR"
+				},
+				{
+					"type": "input_value",
+					"name": "LIST",
+					"check": "Array"
+				}
+			],
+			"message1": "%{BKY_CONTROLS_REPEAT_INPUT_DO} %1",
+			"args1": [
+				{
+					"type": "input_statement",
+					"name": "DO"
+				}
+			],
+			"style": "control_blocks",
+			"extensions": [
+				"internal_variable_declaration_extension",
+				"variable_scope_extension"
+			]
+		},
+		{
+			"type": "controls_flow_statements",
+			"message0": "%1",
+			"args0": [
+				{
+					"type": "field_dropdown",
+					"name": "FLOW",
+					"options": [
+						[
+							"%{BKY_CONTROLS_FLOW_STATEMENTS_OPERATOR_BREAK}",
+							"BREAK"
+						],
+						[
+							"%{BKY_CONTROLS_FLOW_STATEMENTS_OPERATOR_CONTINUE}",
+							"CONTINUE"
+						]
+					]
+				}
+			],
+			"style": "control_blocks"
+		},
+		{
+			"type": "controls_wait_time",
+			"message0": "%{BKY_CONTROLS_WAIT_TIME} %1",
+			"args0": [
+				{
+					"type": "input_value",
+					"name": "WAIT",
+					"check": "Number"
+				}
+			],
+			"style": "control_blocks"
+		},
+		{
+			"type": "controls_wait_for",
+			"message0": "%{BKY_CONTROLS_WAIT_FOR} %1",
+			"args0": [
+				{
+					"type": "input_value",
+					"name": "WAIT0",
+					"check": "Boolean"
+				}
+			],
+			"style": "control_blocks",
+			"mutator": "controls_wait_for_mutator"
+		},
+		{
+			"type": "math_number",
+			"message0": "%1",
+			"args0": [
+				{
+					"type": "field_number",
+					"name": "NUM",
+					"value": 0
+				}
+			],
+			"output": "Number",
+			"style": "math_blocks",
+			"extensions": [
+				"parent_tooltip_extension"
+			]
+		},
+		{
+			"type": "math_arithmetic",
+			"message0": "%1 %2 %3",
+			"args0": [
+				{
+					"type": "input_value",
+					"name": "A",
+					"check": "Number"
+				},
+				{
+					"type": "field_dropdown",
+					"name": "OP",
+					"options": [
+						[
+							"%{BKY_MATH_ADDITION_SYMBOL}",
+							"ADD"
+						],
+						[
+							"%{BKY_MATH_SUBTRACTION_SYMBOL}",
+							"MINUS"
+						],
+						[
+							"%{BKY_MATH_MULTIPLICATION_SYMBOL}",
+							"MULTIPLY"
+						],
+						[
+							"%{BKY_MATH_DIVISION_SYMBOL}",
+							"DIVIDE"
+						],
+						[
+							"%{BKY_MATH_POWER_SYMBOL}",
+							"POWER"
+						]
+					]
+				},
+				{
+					"type": "input_value",
+					"name": "B",
+					"check": "Number"
+				}
+			],
+			"inputsInline": true,
+			"output": "Number",
+			"style": "math_blocks"
+		},
+		{
+			"type": "math_single",
+			"message0": "%1 %2",
+			"args0": [
+				{
+					"type": "field_dropdown",
+					"name": "OP",
+					"options": [
+						[
+							"%{BKY_MATH_SINGLE_OP_ROOT}",
+							"ROOT"
+						],
+						[
+							"%{BKY_MATH_SINGLE_OP_ABSOLUTE}",
+							"ABS"
+						],
+						[
+							"-",
+							"NEG"
+						],
+						[
+							"ln",
+							"LN"
+						],
+						[
+							"log10",
+							"LOG10"
+						],
+						[
+							"e^",
+							"EXP"
+						],
+						[
+							"10^",
+							"POW10"
+						]
+					]
+				},
+				{
+					"type": "input_value",
+					"name": "NUM",
+					"check": "Number"
+				}
+			],
+			"output": "Number",
+			"style": "math_blocks"
+		},
+		{
+			"type": "math_trig",
+			"message0": "%1 %2",
+			"args0": [
+				{
+					"type": "field_dropdown",
+					"name": "OP",
+					"options": [
+						[
+							"%{BKY_MATH_TRIG_SIN}",
+							"SIN"
+						],
+						[
+							"%{BKY_MATH_TRIG_COS}",
+							"COS"
+						],
+						[
+							"%{BKY_MATH_TRIG_TAN}",
+							"TAN"
+						],
+						[
+							"%{BKY_MATH_TRIG_ASIN}",
+							"ASIN"
+						],
+						[
+							"%{BKY_MATH_TRIG_ACOS}",
+							"ACOS"
+						],
+						[
+							"%{BKY_MATH_TRIG_ATAN}",
+							"ATAN"
+						]
+					]
+				},
+				{
+					"type": "input_value",
+					"name": "NUM",
+					"check": "Number"
+				}
+			],
+			"output": "Number",
+			"style": "math_blocks"
+		},
+		{
+			"type": "math_constant",
+			"message0": "%1",
+			"args0": [
+				{
+					"type": "field_dropdown",
+					"name": "CONSTANT",
+					"options": [
+						[
+							"\u03c0",
+							"PI"
+						],
+						[
+							"e",
+							"E"
+						],
+						[
+							"\u03c6",
+							"GOLDEN_RATIO"
+						],
+						[
+							"sqrt(2)",
+							"SQRT2"
+						],
+						[
+							"sqrt(\u00bd)",
+							"SQRT1_2"
+						],
+						[
+							"\u221e",
+							"INFINITY"
+						]
+					]
+				}
+			],
+			"output": "Number",
+			"style": "math_blocks"
+		},
+		{
+			"type": "math_number_property",
+			"message0": "%1 %2",
+			"args0": [
+				{
+					"type": "input_value",
+					"name": "NUMBER_TO_CHECK",
+					"check": "Number"
+				},
+				{
+					"type": "field_dropdown",
+					"name": "PROPERTY",
+					"options": [
+						[
+							"%{BKY_MATH_IS_EVEN}",
+							"EVEN"
+						],
+						[
+							"%{BKY_MATH_IS_ODD}",
+							"ODD"
+						],
+						[
+							"%{BKY_MATH_IS_PRIME}",
+							"PRIME"
+						],
+						[
+							"%{BKY_MATH_IS_WHOLE}",
+							"WHOLE"
+						],
+						[
+							"%{BKY_MATH_IS_POSITIVE}",
+							"POSITIVE"
+						],
+						[
+							"%{BKY_MATH_IS_NEGATIVE}",
+							"NEGATIVE"
+						],
+						[
+							"%{BKY_MATH_IS_DIVISIBLE_BY}",
+							"DIVISIBLE_BY"
+						]
+					]
+				}
+			],
+			"inputsInline": true,
+			"output": "Boolean",
+			"style": "math_blocks",
+			"mutator": "math_is_divisibleby_mutator"
+		},
+		{
+			"type": "math_change",
+			"message0": "%{BKY_MATH_CHANGE}",
+			"args0": [
+				{
+					"type": "field_variable",
+					"name": "VAR",
+					"variable": "%{BKY_MATH_CHANGE_ITEM}"
+				},
+				{
+					"type": "input_value",
+					"name": "DELTA",
+					"check": "Number"
+				}
+			],
+			"style": "variable_blocks"
+		},
+		{
+			"type": "math_round",
+			"message0": "%1 %2",
+			"args0": [
+				{
+					"type": "field_dropdown",
+					"name": "OP",
+					"options": [
+						[
+							"%{BKY_MATH_ROUND_OPERATOR_ROUND}",
+							"ROUND"
+						],
+						[
+							"%{BKY_MATH_ROUND_OPERATOR_ROUNDUP}",
+							"ROUNDUP"
+						],
+						[
+							"%{BKY_MATH_ROUND_OPERATOR_ROUNDDOWN}",
+							"ROUNDDOWN"
+						]
+					]
+				},
+				{
+					"type": "input_value",
+					"name": "NUM",
+					"check": "Number"
+				}
+			],
+			"output": "Number",
+			"style": "math_blocks"
+		},
+		{
+			"type": "math_on_list",
+			"message0": "%1 %2",
+			"args0": [
+				{
+					"type": "field_dropdown",
+					"name": "OP",
+					"options": [
+						[
+							"%{BKY_MATH_ONLIST_OPERATOR_SUM}",
+							"SUM"
+						],
+						[
+							"%{BKY_MATH_ONLIST_OPERATOR_MIN}",
+							"MIN"
+						],
+						[
+							"%{BKY_MATH_ONLIST_OPERATOR_MAX}",
+							"MAX"
+						],
+						[
+							"%{BKY_MATH_ONLIST_OPERATOR_AVERAGE}",
+							"AVERAGE"
+						],
+						[
+							"%{BKY_MATH_ONLIST_OPERATOR_MEDIAN}",
+							"MEDIAN"
+						],
+						[
+							"%{BKY_MATH_ONLIST_OPERATOR_MODE}",
+							"MODE"
+						],
+						[
+							"%{BKY_MATH_ONLIST_OPERATOR_STD_DEV}",
+							"STD_DEV"
+						],
+						[
+							"%{BKY_MATH_ONLIST_OPERATOR_RANDOM}",
+							"RANDOM"
+						]
+					]
+				},
+				{
+					"type": "input_value",
+					"name": "LIST",
+					"check": "Array"
+				}
+			],
+			"output": "Number",
+			"style": "math_blocks"
+		},
+		{
+			"type": "math_modulo",
+			"message0": "%{BKY_MATH_MODULO}",
+			"args0": [
+				{
+					"type": "input_value",
+					"name": "DIVIDEND",
+					"check": "Number"
+				},
+				{
+					"type": "input_value",
+					"name": "DIVISOR",
+					"check": "Number"
+				}
+			],
+			"inputsInline": true,
+			"output": "Number",
+			"style": "math_blocks"
+		},
+		{
+			"type": "math_constrain",
+			"message0": "%{BKY_MATH_CONSTRAIN}",
+			"args0": [
+				{
+					"type": "input_value",
+					"name": "VALUE",
+					"check": "Number"
+				},
+				{
+					"type": "input_value",
+					"name": "LOW",
+					"check": "Number"
+				},
+				{
+					"type": "input_value",
+					"name": "HIGH",
+					"check": "Number"
+				}
+			],
+			"inputsInline": true,
+			"output": "Number",
+			"style": "math_blocks"
+		},
+		{
+			"type": "math_random_int",
+			"message0": "%{BKY_MATH_RANDOM_INT}",
+			"args0": [
+				{
+					"type": "input_value",
+					"name": "FROM",
+					"check": "Number"
+				},
+				{
+					"type": "input_value",
+					"name": "TO",
+					"check": "Number"
+				}
+			],
+			"inputsInline": true,
+			"output": "Number",
+			"style": "math_blocks"
+		},
+		{
+			"type": "math_random_float",
+			"message0": "%{BKY_MATH_RANDOM_FLOAT}",
+			"output": "Number",
+			"style": "math_blocks"
+		},
+		{
+			"type": "math_atan2",
+			"message0": "%{BKY_MATH_ATAN2}",
+			"args0": [
+				{
+					"type": "input_value",
+					"name": "X",
+					"check": "Number"
+				},
+				{
+					"type": "input_value",
+					"name": "Y",
+					"check": "Number"
+				}
+			],
+			"inputsInline": true,
+			"output": "Number",
+			"style": "math_blocks"
+		},
+		{
+			"type": "logic_boolean",
+			"message0": "%1",
+			"args0": [
+				{
+					"type": "field_dropdown",
+					"name": "BOOL",
+					"options": [
+						[
+							"%{BKY_LOGIC_BOOLEAN_TRUE}",
+							"TRUE"
+						],
+						[
+							"%{BKY_LOGIC_BOOLEAN_FALSE}",
+							"FALSE"
+						]
+					]
+				}
+			],
+			"output": "Boolean",
+			"style": "logic_blocks"
+		},
+		{
+			"type": "logic_compare",
+			"message0": "%1 %2 %3",
+			"args0": [
+				{
+					"type": "input_value",
+					"name": "A"
+				},
+				{
+					"type": "field_dropdown",
+					"name": "OP",
+					"options": [
+						[
+							"=",
+							"EQ"
+						],
+						[
+							"\u2260",
+							"NEQ"
+						],
+						[
+							"\u200F<",
+							"LT"
+						],
+						[
+							"\u200F\u2264",
+							"LTE"
+						],
+						[
+							"\u200F>",
+							"GT"
+						],
+						[
+							"\u200F\u2265",
+							"GTE"
+						]
+					]
+				},
+				{
+					"type": "input_value",
+					"name": "B"
+				}
+			],
+			"inputsInline": true,
+			"output": "Boolean",
+			"style": "logic_blocks"
+		},
+		{
+			"type": "logic_operation",
+			"message0": "%1 %2 %3",
+			"args0": [
+				{
+					"type": "input_value",
+					"name": "A",
+					"check": "Boolean"
+				},
+				{
+					"type": "field_dropdown",
+					"name": "OP",
+					"options": [
+						[
+							"%{BKY_LOGIC_OPERATION_AND}",
+							"AND"
+						],
+						[
+							"%{BKY_LOGIC_OPERATION_OR}",
+							"OR"
+						]
+					]
+				},
+				{
+					"type": "input_value",
+					"name": "B",
+					"check": "Boolean"
+				}
+			],
+			"output": "Boolean",
+			"style": "logic_blocks",
+			"inputsInline": true
+		},
+		{
+			"type": "logic_negate",
+			"message0": "%{BKY_LOGIC_NEGATE}",
+			"args0": [
+				{
+					"type": "input_value",
+					"name": "BOOL",
+					"check": "Boolean"
+				}
+			],
+			"output": "Boolean",
+			"style": "logic_blocks"
+		},
+		{
+			"type": "logic_null",
+			"message0": "%{BKY_LOGIC_NULL}",
+			"output": "Boolean",
+			"style": "logic_blocks"
+		},
+		{
+			"type": "logic_ternary",
+			"message0": "%{BKY_LOGIC_TERNARY} %1",
+			"args0": [
+				{
+					"type": "input_value",
+					"name": "IF",
+					"check": "Boolean"
+				}
+			],
+			"message1": "%{BKY_LOGIC_TERNARY_IF_TRUE} %1",
+			"args1": [
+				{
+					"type": "input_value",
+					"name": "THEN"
+				}
+			],
+			"message2": "%{BKY_LOGIC_TERNARY_IF_FALSE} %1",
+			"args2": [
+				{
+					"type": "input_value",
+					"name": "ELSE"
+				}
+			],
+			"output": "Boolean",
+			"style": "logic_blocks"
+		},
+		{
+			"type": "text",
+			"message0": "%1",
+			"args0": [
+				{
+					"type": "field_input",
+					"name": "TEXT",
+					"text": ""
+				}
+			],
+			"output": "String",
+			"style": "text_blocks",
+			"extensions": [
+				"text_quotes",
+				"parent_tooltip_extension"
+			]
+		},
+		{
+			"type": "text_comment",
+			"message0": "%1",
+			"args0": [
+				{
+					"type": "field_input",
+					"name": "TEXT",
+					"text": ""
+				}
+			],
+			"style": "text_blocks",
+			"extensions": [
+				"text_comments",
+				"text_comment_validator"
+			]
+		},
+		{
+			"type": "text_join",
+			"message0": "%{BKY_TEXT_JOIN} %1",
+			"args0": [
+				{
+					"type": "input_value",
+					"name": "ADD0"
+				}
+			],
+			"message1": "%1",
+			"args1": [
+				{
+					"type": "input_value",
+					"name": "ADD1"
+				}
+			],
+			"output": "String",
+			"style": "text_blocks",
+			"mutator": "text_join_mutator"
+		},
+		{
+			"type": "text_append",
+			"message0": "%{BKY_TEXT_APPEND}",
+			"args0": [
+				{
+					"type": "input_value",
+					"name": "VAR",
+					"variable": "%{BKY_TEXT_APPEND_VARIABLE}"
+				},
+				{
+					"type": "input_value",
+					"name": "TEXT"
+				}
+			],
+			"inputsInline": true,
+			"style": "text_blocks"
+		},
+		{
+			"type": "colour_picker",
+			"message0": "%1",
+			"args0": [
+			  {
+				"type": "field_colour",
+				"name": "NAME",
+				"colour": "#ff0000"
+			  }
+			],
+			"output": "Colour",
+			"style": "colour_blocks"
+		  },
+		  {
+			"type": "colour_rgb",
+			"message0": "%{BKY_COLOUR_RGB}",
+			"args0": [
+			  {
+				"type": "input_value",
+				"name": "RED",
+				"align": "RIGHT"
+			  },
+			  {
+				"type": "input_value",
+				"name": "GREEN",
+				"align": "RIGHT"
+			  },
+			  {
+				"type": "input_value",
+				"name": "BLUE",
+				"align": "RIGHT"
+			  }
+			],
+			"output": "Colour",
+			"style": "colour_blocks"
+		},
+		{
+			"type": "variable_declare",
+			"message0": "%{BKY_VARIABLE_DECLARE} %3",
+			"args0": [
+				{
+					"type": "field_input",
+					"name": "VAR"
+				},
+				{
+					"type": "field_dropdown",
+					"name": "DATATYPE",
+					"options": [
+						[
+							"Number",
+							"NUMBER"
+						]
+					]
+				},
+				{
+					"type": "input_value",
+					"name": "VALUE",
+					"check": "Number"
+				}
+			],
+			"style": "variable_blocks",
+			"mutator": "variable_minus_mutator",
+			"extensions": [
+				"variable_declaration_extension",
+				"datatype_dropdown_validator_extension"
+			]
+		},
+		{
+			"type": "variable_param_declare",
+			"message0": "%{BKY_VARIABLE_DECLARE}",
+			"args0": [
+				{
+					"type": "field_input",
+					"name": "VAR"
+				},
+				{
+					"type": "field_dropdown",
+					"name": "DATATYPE",
+					"options": [
+						[
+							"Number",
+							"NUMBER"
+						]
+					]
+				}
+			],
+			"style": "variable_blocks",
+			"mutator": "variable_minus_mutator",
+			"extensions": [
+				"variable_declaration_extension",
+				"datatype_dropdown_validator_extension"
+			]
+		},
+		{
+			"type": "variable_scope",
+			"message0": "{ %1 %2 } %3",
+			"args0": [
+				{
+					"type": "input_dummy",
+					"align": "RIGHT"
+				},
+				{
+					"type": "input_statement",
+					"name": "DO",
+					"align": "RIGHT"
+				},
+				{
+					"type": "input_dummy",
+					"align": "RIGHT"
+				}
+			],
+			"style": "variable_blocks",
+			"mutator": "variable_plus_mutator",
+			"extensions": [
+				"variable_scope_extension"
+			]
+		},
+		{
+			"type": "variables_get",
+			"message0": "%1",
+			"args0": [
+				{
+					"type": "field_variable",
+					"name": "VAR"
+				}
+			],
+			"output": "Number",
+			"style": "variable_blocks",
+			"extensions": [
+				"variable_mixin"
+			]
+		},
+		{
+			"type": "variables_set",
+			"message0": "%{BKY_VARIABLES_SET}",
+			"args0": [
+				{
+					"type": "field_variable",
+					"name": "VAR"
+				},
+				{
+					"type": "input_value",
+					"name": "VALUE",
+					"check": "Number"
+				}
+			],
+			"style": "variable_blocks",
+			"extensions": [
+				"variable_mixin"
+			]
+		},
+		{
+			"type": "procedures_defnoreturn",
+			"message0": "%1",
+			"args0": [
+				{
+					"type": "field_input",
+					"name": "NAME"
+				}
+			],
+			"message1": "%1",
+			"args1": [
+				{
+					"type": "input_statement",
+					"name": "STACK"
+				}
+			],
+			"mutator": "variable_plus_mutator",
+			"style": "procedure_blocks",
+			"extensions": [
+				"procedure_extension",
+				"variable_scope_extension"
+			]
+		},
+		{
+			"type": "procedures_callnoreturn",
+			"message0": "%1",
+			"args0": [
+				{
+					"type": "field_label",
+					"name": "NAME"
+				}
+			],
+			"style": "procedure_blocks",
+			"extensions": [
+				"procedure_call_extension"
+			]
+		},
+		{
+			"type": "procedures_defreturn",
+			"message0": "%1",
+			"args0": [
+				{
+					"type": "field_input",
+					"name": "NAME"
+				}
+			],
+			"message1": "%1",
+			"args1": [
+				{
+					"type": "input_statement",
+					"name": "STACK"
+				}
+			],
+			"message2": "%{BKY_PROCEDURES_DEFRETURN_RETURN} %1 %2",
+			"args2": [
+				{
+					"type": "field_dropdown",
+					"align": "RIGHT",
+					"name": "DATATYPE",
+					"options": [
+						[
+							"Number",
+							"NUMBER"
+						]
+					]
+				},
+				{
+					"type": "input_value",
+					"name": "RETURN",
+					"align": "RIGHT"
+				}
+			],
+			"mutator": "variable_plus_mutator",
+			"style": "procedure_blocks",
+			"extensions": [
+				"procedure_extension",
+				"variable_scope_extension",
+				"datatype_dropdown_validator_extension"
+			]
+		},
+		{
+			"type": "procedures_callreturn",
+			"message0": "%1",
+			"args0": [
+				{
+					"type": "field_label",
+					"name": "NAME"
+				}
+			],
+			"output": "Number",
+			"style": "procedure_blocks",
+			"extensions": [
+				"procedure_call_extension"
+			]
+		}
+	]
+}

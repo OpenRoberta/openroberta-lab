@@ -52,6 +52,7 @@
         <module>RobotRaspberryPi</module>
         <module>OpenRobertaServer</module>
         <module>WedoInterpreter</module>
+        <module>Nepo</module>
     </modules>
     <repositories>
         <repository>
@@ -146,6 +147,11 @@
             <dependency>
                 <groupId>de.fhg.iais.openroberta</groupId>
                 <artifactId>WedoInterpreter</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>de.fhg.iais.openroberta</groupId>
+                <artifactId>Nepo</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>

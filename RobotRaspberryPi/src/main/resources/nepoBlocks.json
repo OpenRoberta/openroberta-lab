@@ -1,0 +1,14 @@
+{
+    "title": "raspberrypi",
+    "robotGroup": "raspberrypi",
+    "dataTypes": [
+        "Number",
+        "Boolean",
+        "String"
+    ],
+    "listTypes": [
+        "Number",
+        "Boolean",
+        "String"
+    ]
+}
