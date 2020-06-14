@@ -61,6 +61,7 @@ import de.fhg.iais.roberta.syntax.lang.stmt.StmtList;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtTextComment;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
+import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.visitor.IVisitor;
 
 public interface ILanguageVisitor<V> extends IVisitor<V> {
@@ -464,6 +465,8 @@ public interface ILanguageVisitor<V> extends IVisitor<V> {
         }
         return null;
     }
+
+    V visitTimerSensor(TimerSensor<V> timerSensor);
 
     V visitAssertStmt(AssertStmt<V> assertStmt);
 

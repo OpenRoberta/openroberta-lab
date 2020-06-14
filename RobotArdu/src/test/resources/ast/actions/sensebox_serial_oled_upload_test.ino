@@ -8,8 +8,7 @@
 #include <Adafruit_SSD1306.h>
 #include <Plot.h>
 #include <stdlib.h>
-    
-unsigned long _time = millis();
+
 
 std::list<double> ___values;
 char* _temperature = "111111111111111111111112";

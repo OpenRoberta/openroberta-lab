@@ -456,10 +456,7 @@ public final class MbotCppVisitor extends AbstractCommonArduinoCppVisitor implem
         }
         nlIndent();
         //generateConfigurationVariables();
-        if ( this.getBean(UsedHardwareBean.class).isSensorUsed(SC.TIMER) ) {
-            this.sb.append("unsigned long __time = millis();");
-            nlIndent();
-        }
+        generateTimerVariables();
         long numberConf =
             this.programPhrases
                 .stream()

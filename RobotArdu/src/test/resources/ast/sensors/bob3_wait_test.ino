@@ -2,7 +2,7 @@
 Bob3 rob;
 
     
-unsigned long __time = millis();
+unsigned long __time_1 = millis();
 
 void setup()
 {
@@ -78,7 +78,7 @@ void loop()
         delay(1);
     }
     while (true) {
-        if ( (int) (millis() - __time) > 500 ) {
+        if ( (int) (millis() - __time_1) > 500 ) {
             break;
         }
         delay(1);

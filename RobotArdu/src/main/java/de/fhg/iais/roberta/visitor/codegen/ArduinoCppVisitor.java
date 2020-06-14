@@ -441,10 +441,7 @@ public final class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor imp
         mainTask.getVariables().accept(this);
         nlIndent();
         generateConfigurationVariables();
-        if ( this.getBean(UsedHardwareBean.class).isSensorUsed(SC.TIMER) ) {
-            this.sb.append("unsigned long __time = millis();");
-            nlIndent();
-        }
+        generateTimerVariables();
         long numberConf =
             this.programPhrases
                 .stream()
@@ -863,4 +860,5 @@ public final class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor imp
         }
         return null;
     }
+
 }

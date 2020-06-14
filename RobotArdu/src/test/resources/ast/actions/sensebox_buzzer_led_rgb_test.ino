@@ -5,8 +5,6 @@
 #undef min
 #include <NEPODefs.h>
 
-unsigned long _time = millis();
-
 unsigned int ___item;
 unsigned int ___item2;
 int _led_R2 = 8;

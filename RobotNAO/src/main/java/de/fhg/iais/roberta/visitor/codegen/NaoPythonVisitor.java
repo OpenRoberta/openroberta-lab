@@ -61,6 +61,7 @@ import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
 import de.fhg.iais.roberta.syntax.sensor.generic.AccelerometerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GetSampleSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
 import de.fhg.iais.roberta.syntax.sensor.nao.DetectFaceSensor;
@@ -1132,6 +1133,11 @@ public final class NaoPythonVisitor extends AbstractPythonVisitor implements INa
     public Void visitColorConst(ColorConst<Void> colorConst) {
         this.sb.append(colorConst.getHexIntAsString());
         return null;
+    }
+
+    @Override
+    public Void visitTimerSensor(TimerSensor<Void> timerSensor) {
+        throw new DbcException("Not supported!");
     }
 
 }

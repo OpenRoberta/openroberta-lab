@@ -5,10 +5,8 @@ import java.util.List;
 import com.google.common.collect.ClassToInstanceMap;
 
 import de.fhg.iais.roberta.bean.IProjectBean;
-import de.fhg.iais.roberta.bean.UsedHardwareBean;
 import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.syntax.SC;
 import de.fhg.iais.roberta.syntax.action.light.LightAction;
 import de.fhg.iais.roberta.syntax.action.light.LightStatusAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.bob3.BodyLEDAction;
@@ -97,10 +95,7 @@ public final class Bob3CppVisitor extends AbstractCommonArduinoCppVisitor implem
         decrIndentation();
         mainTask.getVariables().accept(this);
         nlIndent();
-        if ( this.getBean(UsedHardwareBean.class).isSensorUsed(SC.TIMER) ) {
-            this.sb.append("unsigned long __time = millis();");
-            nlIndent();
-        }
+        generateTimerVariables();
         generateUserDefinedMethods();
         nlIndent();
         this.sb.append("void setup()");

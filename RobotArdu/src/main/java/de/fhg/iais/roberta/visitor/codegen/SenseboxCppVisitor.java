@@ -45,7 +45,6 @@ import de.fhg.iais.roberta.syntax.sensor.generic.ParticleSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.PinGetValueSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.SoundSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.VemlLightSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.VoltageSensor;
@@ -74,18 +73,17 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
     public Void visitMainTask(MainTask<Void> mainTask) {
         this.decrIndentation();
         this.nlIndent();
-        this.sb.append("unsigned long _time = millis();");
-        this.nlIndent();
         mainTask.getVariables().accept(this);
         this.nlIndent();
         this.generateConfigurationVariables();
+        generateTimerVariables();
         this.nlIndent();
         long numberConf =
             this.programPhrases
                 .stream()
-                .filter(phrase -> (phrase.getKind().getCategory() == Category.METHOD) && !phrase.getKind().hasName("METHOD_CALL"))
+                .filter(phrase -> phrase.getKind().getCategory() == Category.METHOD && !phrase.getKind().hasName("METHOD_CALL"))
                 .count();
-        if ( this.configuration.getConfigurationComponents().isEmpty() && (numberConf == 0) ) {
+        if ( this.configuration.getConfigurationComponents().isEmpty() && numberConf == 0 ) {
             nlIndent();
         }
         generateUserDefinedMethods();
@@ -98,7 +96,7 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
         this.incrIndentation();
         this.nlIndent();
         if ( this.getBean(UsedHardwareBean.class).isActorUsed(SC.SERIAL) ) {
-            sb.append("Serial.begin(9600);");
+            this.sb.append("Serial.begin(9600);");
             nlIndent();
         }
         this.nlIndent();
@@ -460,22 +458,6 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
             case "Z":
                 this.sb.append("_getValueFromBmx(3, 2)");
                 break;
-        }
-        return null;
-    }
-
-    @Override
-    public Void visitTimerSensor(TimerSensor<Void> timerSensor) {
-        switch ( timerSensor.getMode() ) {
-            case SC.DEFAULT:
-            case SC.VALUE:
-                this.sb.append("(int) (millis() - _time)");
-                break;
-            case SC.RESET:
-                this.sb.append("_time = millis();");
-                break;
-            default:
-                throw new DbcException("Invalid Time Mode!");
         }
         return null;
     }

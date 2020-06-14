@@ -6,15 +6,15 @@
 
 double ___item;
 int _led_L = 13;
-unsigned long __time = millis();
+unsigned long __time_1 = millis();
 
 void setup()
 { 
     pinMode(_led_L, OUTPUT);
-    ___item = (int) (millis() - __time);
+    ___item = (int) (millis() - __time_1);
 }
 
 void loop()
 {
-    __time = millis();
+    __time_1 = millis();
 }

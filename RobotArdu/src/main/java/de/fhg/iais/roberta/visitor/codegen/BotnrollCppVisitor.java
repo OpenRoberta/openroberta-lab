@@ -53,10 +53,7 @@ public final class BotnrollCppVisitor extends AbstractCommonArduinoCppVisitor im
      * @param brickConfiguration hardware configuration of the brick
      * @param phrases to generate the code from
      */
-    public BotnrollCppVisitor(
-        List<List<Phrase<Void>>> phrases,
-        ConfigurationAst brickConfiguration,
-        ClassToInstanceMap<IProjectBean> beans) {
+    public BotnrollCppVisitor(List<List<Phrase<Void>>> phrases, ConfigurationAst brickConfiguration, ClassToInstanceMap<IProjectBean> beans) {
         super(phrases, brickConfiguration, beans);
     }
 
@@ -417,10 +414,7 @@ public final class BotnrollCppVisitor extends AbstractCommonArduinoCppVisitor im
         decrIndentation();
         mainTask.getVariables().accept(this);
         nlIndent();
-        if ( this.getBean(UsedHardwareBean.class).isSensorUsed(SC.TIMER) ) {
-            nlIndent();
-            this.sb.append("unsigned long __time = millis();");
-        }
+        generateTimerVariables();
         generateUserDefinedMethods();
         nlIndent();
         this.sb.append("void setup()");
