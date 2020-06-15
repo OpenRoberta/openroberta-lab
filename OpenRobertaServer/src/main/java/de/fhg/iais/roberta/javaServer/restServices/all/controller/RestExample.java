@@ -8,7 +8,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import org.codehaus.jettison.json.JSONObject;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,7 +34,7 @@ public class RestExample {
     public Response handle2() throws Exception {
         LOG.info("somebody wants to see HW as json - jsonobject");
         JSONObject answer = new JSONObject().put("greeting", "Hello World").put("from", "jersey").put("to", "browser");
-        return Response.ok(answer).build();
+        return Response.ok(answer.toString()).build();
     }
 
     @Path("/txt")

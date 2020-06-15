@@ -5,9 +5,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.codehaus.jettison.json.JSONArray;
-import org.codehaus.jettison.json.JSONException;
-import org.codehaus.jettison.json.JSONObject;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -88,7 +88,6 @@ public class ProgramProcessor extends AbstractProcessor {
     }
 
     public JSONArray getProgramEntity(String programName, int ownerId, String robotName, int authorId) {
-
         if ( isUserLoggedIn() ) {
             UserDao userDao = new UserDao(this.dbSession);
             RobotDao robotDao = new RobotDao(this.dbSession);
@@ -300,9 +299,9 @@ public class ProgramProcessor extends AbstractProcessor {
      * @param configName the name of the attached configuration. Null, if the configurartion is anonymous.
      * @param configText the XML definition of the attached configuration. Null, if the configuration is the default configuration.
      * @param userId the owner of the program
+     * @param robotName the name of the robot the program was written for
      * @param programTimestamp timestamp of the last change of the program (if it already existed); <code>null</code> if a new program is saved
      * @param isOwner true, if the owner updates a program; false if a user with access right WRITE updates a program
-     * @param robotId the id of the robot the program was written for
      */
     public Program persistProgramText(
         String programName,

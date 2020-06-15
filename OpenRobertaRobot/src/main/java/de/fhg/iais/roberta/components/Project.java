@@ -10,7 +10,7 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 
-import org.codehaus.jettison.json.JSONObject;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,8 +34,8 @@ import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.util.jaxb.JaxbHelper;
 
 /**
- * This class stores the AST representation of the program and the configuration as well as everything needed for executing workflows
- * it contains the result of code generation and compilation for the robots that are auto connected. This is the main data storage in the system.
+ * This class stores the AST representation of the program and the configuration as well as everything needed for executing workflows it contains the result of
+ * code generation and compilation for the robots that are auto connected. This is the main data storage in the system.
  */
 public final class Project {
 
@@ -55,7 +55,7 @@ public final class Project {
     private ProgramAst<Void> program = null;
 
     private ConfigurationAst configuration = null;
-    private final Map<String, JSONObject> confAnnotationList = new HashMap<String, JSONObject>();
+    private final Map<String, JSONObject> confAnnotationList = new HashMap<>();
 
     private final ClassToInstanceMap<IProjectBean> workerResults = MutableClassToInstanceMap.create();
 
@@ -374,7 +374,6 @@ public final class Project {
                 this.project.programName = this.compiledProgramPath.substring(index + 1);
             } else if ( this.programNativeSource != null ) { // Used to run native code directly
                 Assert.isNull(this.programXml, "Program XML should not be set when using native compile");
-                Assert.isNull(this.configurationXml, "Configuration XML should not be set when using native compile");
                 this.project.setSourceCode(this.programNativeSource);
             } else { // STANDARD CASE - Used to follow the default generation, compilation, run from blockly
                 if ( this.project.configuration == null ) {
@@ -433,5 +432,4 @@ public final class Project {
             }
         }
     }
-
 }

@@ -33,6 +33,7 @@ import org.slf4j.LoggerFactory;
 import de.fhg.iais.roberta.blockly.generated.Export;
 import de.fhg.iais.roberta.components.Project;
 import de.fhg.iais.roberta.factory.IRobotFactory;
+import de.fhg.iais.roberta.generated.restEntities.FullRestRequest;
 import de.fhg.iais.roberta.javaServer.restServices.all.controller.ClientAdmin;
 import de.fhg.iais.roberta.javaServer.restServices.all.controller.ProjectWorkflowRestController;
 import de.fhg.iais.roberta.javaServer.restServices.all.service.ProjectService;
@@ -205,8 +206,10 @@ public class CompilerWorkflowRobotCommonIT {
                     }
                 }
                 JSONObject workflowDeclFromTestSpec = progDeclsFromTestSpec.getJSONObject(WORKFLOWTESTPROG_NAME);
-                String generatedWorkflowXml = generateFinalProgram(templateWithConfig, WORKFLOWTESTPROG_NAME, workflowDeclFromTestSpec);
-                resultAcc = (executeAllWorkflows(robotName, generatedWorkflowXml)) && resultAcc;
+                if ( crosscompilerCall ) {
+                    String generatedWorkflowXml = generateFinalProgram(templateWithConfig, WORKFLOWTESTPROG_NAME, workflowDeclFromTestSpec);
+                    resultAcc = (executeAllWorkflows(robotName, generatedWorkflowXml)) && resultAcc;
+                }
             }
         } catch ( Exception e ) {
             LOG.error("---------- test terminated with an unexpected exception ----------", e);
@@ -296,10 +299,10 @@ public class CompilerWorkflowRobotCommonIT {
      *
      * @param robotName ...
      * @param progName ...
-     * @param programXml ...
+     * @param programAndConfigXml ...
      * @return Result.SUCCESS, if the crosscompiler call succeeded, Result.FAILURE otherwise
      */
-    private Result compileProgramViaRestService(String robotName, String progName, String programXml) {
+    private Result compileProgramViaRestService(String robotName, String progName, String programAndConfigXml) {
         String reason = "?";
         Result result;
         logStart(robotName, "crosscompile", progName);
@@ -308,9 +311,9 @@ public class CompilerWorkflowRobotCommonIT {
             httpSessionState.setToken(token);
             if ( crosscompilerCall ) {
                 setRobotTo(robotName);
-                org.codehaus.jettison.json.JSONObject cmd = JSONUtilForServer.mkD("{'programName':'prog','language':'de'}");
-                cmd.getJSONObject("data").put("progXML", programXml);
-                Response response = this.restWorkflow.compileProgram(cmd);
+                JSONObject cmd = JSONUtilForServer.mkD("{'programName':'prog','language':'de'}");
+                cmd.getJSONObject("data").put("progXML", programAndConfigXml);
+                Response response = this.restWorkflow.compileProgram(FullRestRequest.make(cmd));
                 result = checkEntityRc(response, "ok", "PROGRAM_INVALID_STATEMETNS");
                 reason = "response-info";
             } else {
@@ -342,11 +345,11 @@ public class CompilerWorkflowRobotCommonIT {
             String token = RandomUrlPostfix.generate(12, 12, 3, 3, 3);
             httpSessionState.setToken(token);
             setRobotTo(robotName);
-            org.codehaus.jettison.json.JSONObject cmd = JSONUtilForServer.mkD("{'programName':'prog','language':'de'}");
+            JSONObject cmd = JSONUtilForServer.mkD("{'programName':'prog','language':'de'}");
             Export jaxbImportExport = JaxbHelper.xml2Element(programAndConfXml, Export.class);
             String programXml = JaxbHelper.blockSet2xml(jaxbImportExport.getProgram().getBlockSet());
             cmd.getJSONObject("data").put("progXML", programXml);
-            Response response = this.restWorkflow.getSimulationVMCode(cmd);
+            Response response = this.restWorkflow.getSimulationVMCode(FullRestRequest.make(cmd));
             result = checkEntityRc(response, "ok", "PROGRAM_INVALID_STATEMETNS");
             reason = "response-info";
         } catch ( Exception e ) {
@@ -465,7 +468,7 @@ public class CompilerWorkflowRobotCommonIT {
      * @param robotName ...
      */
     private void setRobotTo(String robotName) throws Exception {
-        Response response = this.restAdmin.setRobot(JSONUtilForServer.mkD("{'cmd':'setRobot','robot':'" + robotName + "'}"));
+        Response response = this.restAdmin.setRobot(JSONUtilForServer.mkFRR("{'cmd':'setRobot','robot':'" + robotName + "'}"));
         JSONUtilForServer.assertEntityRc(response, "ok", Key.ROBOT_SET_SUCCESS);
     }
 
@@ -608,7 +611,7 @@ public class CompilerWorkflowRobotCommonIT {
      */
     private static Result checkEntityRc(Response response, String rc, String... acceptableErrorCodes) {
         de.fhg.iais.roberta.util.dbc.Assert.nonEmptyString(rc);
-        org.codehaus.jettison.json.JSONObject entity = (org.codehaus.jettison.json.JSONObject) response.getEntity();
+        JSONObject entity = new JSONObject((String) response.getEntity());
         String returnCode = entity.optString("rc", "");
         if ( rc.equals(returnCode) ) {
             return Result.SUCCESS;

@@ -1,6 +1,7 @@
 package de.fhg.iais.roberta.util;
 
 public enum Key {
+    SERVER_SUCCESS( true ),
     SERVER_ERROR( false ),
     COMMAND_INVALID( false ),
     INIT_FAIL_INVALID_INIT_TOKEN( false ),
@@ -91,7 +92,7 @@ public enum Key {
     ACCOUNT_NOT_ACTIVATED_TO_SHARE( false ),
     COMPILERWORKFLOW_SUCCESS( true ),
     COMPILERWORKFLOW_ERROR_PROGRAM_NOT_FOUND( false ),
-    COMPILERWORKFLOW_ERROR_CONFIGURATION_NOT_FOUND( true ), // TODO should there be another level?
+    COMPILERWORKFLOW_ERROR_CONFIGURATION_NOT_FOUND( false ), // TODO should there be another level?
     COMPILERWORKFLOW_ERROR_PROGRAM_TRANSFORM_FAILED( false ),
     COMPILERWORKFLOW_ERROR_CONFIGURATION_TRANSFORM_FAILED( false ),
     COMPILERWORKFLOW_ERROR_PROGRAM_STORE_FAILED( false ),

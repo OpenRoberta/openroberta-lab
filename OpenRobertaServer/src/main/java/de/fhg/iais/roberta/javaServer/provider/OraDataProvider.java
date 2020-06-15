@@ -2,9 +2,6 @@ package de.fhg.iais.roberta.javaServer.provider;
 
 import javax.ws.rs.ext.Provider;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.google.inject.Inject;
 import com.sun.jersey.api.model.Parameter;
 import com.sun.jersey.core.spi.component.ComponentContext;
@@ -17,7 +14,6 @@ import de.fhg.iais.roberta.persistence.util.SessionFactoryWrapper;
 
 @Provider
 public class OraDataProvider implements InjectableProvider<OraData, Parameter> {
-    private static final Logger LOG = LoggerFactory.getLogger(OraDataProvider.class);
     public static final String OPEN_ROBERTA_STATE = "openRobertaState";
 
     public OraDataProvider() {

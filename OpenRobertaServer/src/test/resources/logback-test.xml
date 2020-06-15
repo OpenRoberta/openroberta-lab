@@ -18,4 +18,8 @@
     <logger name="statistics" level="ERROR" additivity="false">
         <appender-ref ref="LOG" />
     </logger>
+    <logger name="crosscompiler_error" level="INFO" additivity="false">
+        <appender-ref ref="LOG" />
+    </logger>
+   
 </configuration>

@@ -4,8 +4,8 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.codehaus.jettison.json.JSONException;
-import org.codehaus.jettison.json.JSONObject;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -91,7 +91,7 @@ public final class Statistics {
                         "DeviceType",
                         userAgent.getOperatingSystem().getDeviceType().getName(),
                         "ScreenSize",
-                        request.getString("screenSize")));
+                        request.getJSONArray("screenSize").toString()));
         } catch ( Exception e ) {
             LOG.error("Logging statistics failed for: " + action);
         }

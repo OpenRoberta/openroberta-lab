@@ -5,9 +5,9 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import org.codehaus.jettison.json.JSONArray;
 import org.hibernate.Query;
 import org.hibernate.SQLQuery;
+import org.json.JSONArray;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

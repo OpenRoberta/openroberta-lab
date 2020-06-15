@@ -87,7 +87,7 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
             "userEmail" : userEmail,
             "password" : passwd,
             "role" : 'TEACHER',
-            "isYoungerThen14" : isYoungerThen14,
+            "isYoungerThen14" : isYoungerThen14 === "1" ? true : false,
             "language" : language
         }, successFn, "save user '" + accountName + "' to server");
     }
@@ -111,7 +111,7 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
             "accountName" : accountName,
             "userName" : userName,
             "userEmail" : userEmail,
-            "isYoungerThen14" : isYoungerThen14,
+            "isYoungerThen14" : isYoungerThen14 === "1" ? true : false,
             "language" : language,
             "role" : 'TEACHER'
         }, successFn, "update user '" + accountName + "' to server");

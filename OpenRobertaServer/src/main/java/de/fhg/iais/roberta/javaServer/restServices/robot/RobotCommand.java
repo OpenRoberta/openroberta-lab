@@ -9,8 +9,8 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import org.codehaus.jettison.json.JSONException;
-import org.codehaus.jettison.json.JSONObject;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -75,7 +75,7 @@ public class RobotCommand {
                     new RobotCommunicationData(token, robot, macaddr, brickname, batteryvoltage, menuversion, runtimeVersion, firmwarename, firmwareversion);
                 boolean result = this.brickCommunicator.brickWantsTokenToBeApproved(state);
                 response = new JSONObject().put("response", result ? "ok" : "error").put("cmd", result ? CMD_REPEAT : CMD_ABORT);
-                return Response.ok(response).build();
+                return Response.ok(response.toString()).build();
             case CMD_PUSH:
                 int counter = pushRequestCounterForLogging.incrementAndGet();
                 boolean logPush = counter % EVERY_REQUEST == 0;
@@ -103,7 +103,7 @@ public class RobotCommand {
                     }
                     response = new JSONObject().put(CMD, command);
                     response.put(SUBTYPE, this.brickCommunicator.getSubtype());
-                    return Response.ok(response).build();
+                    return Response.ok(response.toString()).build();
                 }
             default:
                 LOG.error("Robot request aborted. Robot uses an invalid \"cmd\" in JSON: " + requestEntity);

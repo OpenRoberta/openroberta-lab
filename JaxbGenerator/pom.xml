@@ -33,6 +33,11 @@
             <artifactId>jaxb-api</artifactId>
             <version>2.3.1</version>
         </dependency>
+        <dependency>
+            <groupId>org.json</groupId>
+            <artifactId>json</artifactId>
+            <version>20180130</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -54,6 +59,25 @@
                             <outputDirectory>src/main/java</outputDirectory>
                             <packageName>de.fhg.iais.roberta.blockly.generated</packageName>
                         </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>de.fhg.iais.tools</groupId>
+                <artifactId>TransportGenerator</artifactId>
+                <version>15.0.1-SNAPSHOT</version>
+                <configuration>
+                    <transportConfigFiles>
+                        <file>src/main/resources/restEntities.json</file>
+                    </transportConfigFiles>
+                    <transportBeanOutputDir>src/main/java</transportBeanOutputDir>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>default-cli</id>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
                     </execution>
                 </executions>
             </plugin>

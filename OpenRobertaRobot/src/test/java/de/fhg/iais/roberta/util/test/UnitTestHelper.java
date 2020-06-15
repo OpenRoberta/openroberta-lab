@@ -13,6 +13,7 @@ import de.fhg.iais.roberta.blockly.generated.BlockSet;
 import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.components.ConfigurationComponent;
 import de.fhg.iais.roberta.components.Project;
+import de.fhg.iais.roberta.components.Project.Builder;
 import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
@@ -30,7 +31,10 @@ public final class UnitTestHelper {
         if ( project.hasSucceeded() ) {
             for ( IWorker worker : workflowPipe ) {
                 worker.execute(project);
-                Assert.assertTrue("Worker " + worker.getClass().getSimpleName() + " failed with " + project.getErrorCounter() + " errors", project.hasSucceeded());
+                Assert
+                    .assertTrue(
+                        "Worker " + worker.getClass().getSimpleName() + " failed with " + project.getErrorCounter() + " errors",
+                        project.hasSucceeded());
                 if ( !project.hasSucceeded() ) {
                     break;
                 }
@@ -51,7 +55,12 @@ public final class UnitTestHelper {
         Assert.assertEquals(expectedSource.replaceAll("\\s+", ""), generatedProgramSource);
     }
 
-    public static void checkWorkersWithConf(IRobotFactory factory, ConfigurationAst configuration, String expectedSource, String programXmlFilename, IWorker... workers) {
+    public static void checkWorkersWithConf(
+        IRobotFactory factory,
+        ConfigurationAst configuration,
+        String expectedSource,
+        String programXmlFilename,
+        IWorker... workers) {
         String programXml = Util.readResourceContent(programXmlFilename);
         Project.Builder builder = setupWithProgramXML(factory, programXml);
         builder.setConfigurationAst(configuration);
@@ -94,7 +103,8 @@ public final class UnitTestHelper {
     }
 
     public static Project.Builder setupWithProgramXML(IRobotFactory factory, String programXmlAsString) {
-        return new Project.Builder().setProgramXml(programXmlAsString).setFactory(factory).setProgramName("Test");
+        Builder builder = new Project.Builder().setProgramXml(programXmlAsString).setProgramName("Test");
+        return builder.setConfigurationXml(factory.getConfigurationDefault()).setFactory(factory);
     }
 
     public static Project.Builder setupWithConfigXML(IRobotFactory factory, String configXmlAsString) {

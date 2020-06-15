@@ -3,7 +3,7 @@ package de.fhg.iais.roberta.util;
 import java.util.Date;
 import java.util.concurrent.atomic.AtomicLong;
 
-import org.codehaus.jettison.json.JSONObject;
+import org.json.JSONObject;
 
 public class AliveData {
     private static final AtomicLong clientCallsTotal = new AtomicLong(0);
@@ -47,7 +47,7 @@ public class AliveData {
 
     /**
      * remember that a robot-related REST-call was accepted. Optionally save the number of robots connected or waiting for token approval
-     * 
+     *
      * @param robotCommunicationDataSize number of robots connected to the lab; -1 if its value is unknown for the REST call
      */
     public static void rememberRobotCall(long robotCommunicationDataSize) {

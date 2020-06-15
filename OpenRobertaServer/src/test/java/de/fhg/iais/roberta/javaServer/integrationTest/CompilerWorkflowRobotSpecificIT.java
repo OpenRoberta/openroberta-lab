@@ -15,7 +15,6 @@ import java.util.Set;
 
 import javax.ws.rs.core.Response;
 
-import org.codehaus.jettison.json.JSONException;
 import org.json.JSONObject;
 import org.junit.AfterClass;
 import org.junit.Assert;
@@ -32,6 +31,7 @@ import org.slf4j.LoggerFactory;
 
 import de.fhg.iais.roberta.blockly.generated.Export;
 import de.fhg.iais.roberta.factory.IRobotFactory;
+import de.fhg.iais.roberta.generated.restEntities.FullRestRequest;
 import de.fhg.iais.roberta.javaServer.restServices.all.controller.ClientAdmin;
 import de.fhg.iais.roberta.javaServer.restServices.all.controller.ProjectWorkflowRestController;
 import de.fhg.iais.roberta.main.ServerStarter;
@@ -213,23 +213,25 @@ public class CompilerWorkflowRobotSpecificIT {
         try {
             logStart(robotName, fullResource);
             boolean result = false;
-            org.codehaus.jettison.json.JSONObject entity = null;
+            JSONObject entity = null;
             Response response = null;
             if ( crosscompilerCall ) {
                 String xmlText = Util.readResourceContent(fullResource);
-                Export jaxbImportExport = JaxbHelper.xml2Element(xmlText, Export.class);
-                String programText = JaxbHelper.blockSet2xml(jaxbImportExport.getProgram().getBlockSet());
 
-                org.codehaus.jettison.json.JSONObject cmdCompile = JSONUtilForServer.mkD("{'programName':'prog','language':'de'}");
+                JSONObject cmdCompile = JSONUtilForServer.mkD("{'programName':'prog','language':'de'}");
                 cmdCompile.getJSONObject("data").put("progXML", xmlText).put("SSID", "1").put("password", "2");
-                response = this.restWorkflow.compileProgram(cmdCompile);
+                response = this.restWorkflow.compileProgram(FullRestRequest.make(cmdCompile));
                 entity = checkEntityRc(response, expectResult, "ORA_PROGRAM_INVALID_STATEMETNS");
                 boolean resultCompile = entity != null;
 
-                if ( false && pluginMap.get(robotName).hasSim() ) {
-                    org.codehaus.jettison.json.JSONObject cmdGenSim = JSONUtilForServer.mkD("{'programName':'prog','language':'de'}");
-                    cmdGenSim.getJSONObject("data").put("progXML", programText).put("SSID", "1").put("password", "2");
-                    response = this.restWorkflow.getSimulationVMCode(cmdGenSim);
+                Export jaxbImportExport = JaxbHelper.xml2Element(xmlText, Export.class);
+                String programText = JaxbHelper.blockSet2xml(jaxbImportExport.getProgram().getBlockSet());
+                String configText = JaxbHelper.blockSet2xml(jaxbImportExport.getConfig().getBlockSet());
+
+                if ( false && pluginMap.get(robotName).hasSim() ) { // TODO: re-enable generation of simulation code
+                    JSONObject cmdGenSim = JSONUtilForServer.mkD("{'programName':'prog','language':'de'}");
+                    cmdGenSim.getJSONObject("data").put("progXML", programText).put("configXML", configText).put("SSID", "1").put("password", "2");
+                    response = this.restWorkflow.getSimulationVMCode(FullRestRequest.make(cmdGenSim));
                     entity = checkEntityRc(response, expectResult, "ORA_PROGRAM_INVALID_STATEMETNS");
                     boolean resultSimCode = entity != null;
                     result = resultCompile && resultSimCode;
@@ -272,10 +274,10 @@ public class CompilerWorkflowRobotSpecificIT {
             logStart(robotName, fullResource);
             setRobotTo(robotName);
             if ( crosscompilerCall ) {
-                org.codehaus.jettison.json.JSONObject cmd = JSONUtilForServer.mkD("{'programName':'" + resource + "','language':'de'}");
+                JSONObject cmd = JSONUtilForServer.mkD("{'programName':'" + resource + "','language':'de'}");
                 String fileContent = Util.readResourceContent(fullResource);
                 cmd.getJSONObject("data").put("progXML", fileContent);
-                Response response = this.restWorkflow.compileNative(cmd);
+                Response response = this.restWorkflow.compileNative(FullRestRequest.make(cmd));
                 result = checkEntityRc(response, expectResult) != null;
             } else {
                 result = true;
@@ -316,8 +318,8 @@ public class CompilerWorkflowRobotSpecificIT {
         }
     }
 
-    private void setRobotTo(String robot) throws Exception, JSONException {
-        Response response = this.restAdmin.setRobot(JSONUtilForServer.mkD("{'cmd':'setRobot','robot':'" + robot + "'}"));
+    private void setRobotTo(String robot) throws Exception {
+        Response response = this.restAdmin.setRobot(JSONUtilForServer.mkFRR("{'cmd':'setRobot','robot':'" + robot + "'}"));
         JSONUtilForServer.assertEntityRc(response, "ok", Key.ROBOT_SET_SUCCESS);
     }
 
@@ -329,9 +331,9 @@ public class CompilerWorkflowRobotSpecificIT {
      * @param acceptableErrorCodes the codes, that are acceptable, if the rc is equal "error". In this case the test passes.
      * @return the entity attached to the response, if result is as expected, null otherwise
      */
-    private static org.codehaus.jettison.json.JSONObject checkEntityRc(Response response, String rc, String... acceptableErrorCodes) {
+    private static JSONObject checkEntityRc(Response response, String rc, String... acceptableErrorCodes) {
         de.fhg.iais.roberta.util.dbc.Assert.nonEmptyString(rc);
-        org.codehaus.jettison.json.JSONObject entity = (org.codehaus.jettison.json.JSONObject) response.getEntity();
+        JSONObject entity = new JSONObject((String) response.getEntity());
         String returnCode = entity.optString("rc", "");
         if ( rc.equals(returnCode) ) {
             return entity;
