@@ -338,6 +338,24 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
         $('#simButtonsHead').onWrap('click', '', function(event) {
             $('#navbarCollapse').collapse('hide');
         });
+        if (GUISTATE_C.isPublicServerVersion()) {
+            var feadbackButton = '<div href="#" id="feadbackButton" class="rightMenuButton" rel="tooltip" data-original-title="" title="">'
+                    +'<span id="" class="feadbackButton typcn typcn-thumbs-up"></span>'
+                    +'</div>'
+            $("#rightMenuDiv").append(feadbackButton);
+                window.closeFeadback = function(){
+                    $('#feadbackModal').modal('hide');
+                };                  
+                $('#feadbackButton').onWrap('click', '', function(event) {
+                $('#feadbackModal').on('shown.bs.modal', function () {
+	               $("#feadbackIframe").attr("src" ,"https://www.roberta-home.de/lab/feedback/");
+                   $("#feedbackIframe").on('load', function(){
+                       this.style.height = this.contentWindow.document.body.offsetHeight + 'px';
+                   });
+                });
+                $('#feadbackModal').modal({show:true});
+            });
+        }
 
         // EDIT Menu
         $('#head-navigation-program-edit').onWrap('click', '.dropdown-menu li:not(.disabled) a', function(event) {
