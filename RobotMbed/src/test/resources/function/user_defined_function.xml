@@ -1,33 +1,27 @@
-<block_set xmlns="http://de.fhg.iais.roberta.blockly"
-	robottype="calliope" xmlversion="2.0" description="" tags="">
-	<instance x="409" y="-3">
-		<block type="robControls_start" id="Q?^lMDnzhvC)t16daUM2"
-			intask="true" deletable="false">
-			<mutation declare="true"></mutation>
-			<field name="DEBUG">TRUE</field>
-			<statement name="ST">
-				<block type="robGlobalVariables_declare" id=")VxI[%UMrd-xHx=P7ZwQ"
-					intask="true" deletable="false" movable="false">
-					<mutation next="false" declaration_type="Array_Image"></mutation>
-					<field name="VAR">item</field>
-					<field name="TYPE">Array_Image</field>
-					<value name="VALUE">
-						<block type="robLists_create_with" id="4~snTE}7-VF[@Q[R_a^/"
-							intask="true">
-							<mutation items="3" list_type="Image"></mutation>
-							<field name="LIST_TYPE">Image</field>
-							<value name="ADD0">
-								<block type="mbedImage_get_image" id="kdsJV2RE^(CdZJd64Yv,"
-									intask="true">
-									<field name="IMAGE">HEART</field>
-								</block>
-							</value>
-							<value name="ADD1">
-								<block type="mbedImage_get_image" id="rO#eHkzkG~=}8e~x8fF%"
-									intask="true">
-									<field name="IMAGE">HEART_SMALL</field>
-								</block>
-							</value>
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="calliope" xmlversion="3.0" description="" tags="">
+    <instance x="409" y="-3">
+        <block type="robControls_start" id="Q?^lMDnzhvC)t16daUM2" intask="true" deletable="false">
+            <mutation declare="true"></mutation>
+            <field name="DEBUG">TRUE</field>
+            <statement name="ST">
+                <block type="robGlobalVariables_declare" id=")VxI[%UMrd-xHx=P7ZwQ" intask="true" deletable="false" movable="false">
+                    <mutation next="false" declaration_type="Array_Image"></mutation>
+                    <field name="VAR">item</field>
+                    <field name="TYPE">Array_Image</field>
+                    <value name="VALUE">
+                        <block type="robLists_create_with" id="4~snTE}7-VF[@Q[R_a^/" intask="true">
+                            <mutation items="3" list_type="Image"></mutation>
+                            <field name="LIST_TYPE">Image</field>
+                            <value name="ADD0">
+                                <block type="mbedImage_get_image" id="kdsJV2RE^(CdZJd64Yv," intask="true">
+                                    <field name="IMAGE">HEART</field>
+                                </block>
+                            </value>
+                            <value name="ADD1">
+                                <block type="mbedImage_get_image" id="rO#eHkzkG~=}8e~x8fF%" intask="true">
+                                    <field name="IMAGE">HEART_SMALL</field>
+                                </block>
+                            </value>
 							<value name="ADD2">
 								<block type="mbedImage_get_image" id="Cv#SgAX!oRFqLM1WcqFQ"
 									intask="true">

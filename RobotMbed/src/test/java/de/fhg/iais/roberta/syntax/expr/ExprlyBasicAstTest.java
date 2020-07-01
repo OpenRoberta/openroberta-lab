@@ -426,7 +426,7 @@ public class ExprlyBasicAstTest extends AstTest {
         CalliopeCppVisitor cppVisitor = new CalliopeCppVisitor(addInListInList, null, beansCpp);
         cppVisitor.visitExprStmt(ExprStmt.make(expr));
         LOG.info("generated C++ code: " + cppVisitor.getSb().toString());
-        MicrobitPythonVisitor pythonVisitor = new MicrobitPythonVisitor(addInListInList, beansPy);
+        MicrobitPythonVisitor pythonVisitor = new MicrobitPythonVisitor(addInListInList, null, beansPy);
         pythonVisitor.visitExprStmt(ExprStmt.make(expr));
         LOG.info("generated Python code: " + pythonVisitor.getSb().toString());
     }

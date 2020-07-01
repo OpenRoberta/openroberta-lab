@@ -1,0 +1,88 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="calliope" xmlversion="2.0" description="" tags="">
+    <instance x="512" y="50">
+        <block type="robControls_start" id="9T9,HaI3oP%{Xv]%-HN?" intask="true" deletable="false">
+            <mutation declare="false"></mutation>
+            <field name="DEBUG"></field>
+        </block>
+        <block type="robActions_debug" id="yq*-kreO0k=2+4,8a@.|" intask="true">
+            <value name="OUT">
+                <block type="robSensors_accelerometer_getSample" id="MT?0aDMVHTPWfxxwN9yW" intask="true">
+                    <mutation mode="VALUE"></mutation>
+                    <field name="MODE">VALUE</field>
+                    <field name="SENSORPORT">X</field>
+                    <field name="SLOT"></field>
+                </block>
+            </value>
+        </block>
+        <block type="robActions_debug" id="[ohG2F@.v]fmy=FP6Oq[" intask="true">
+            <value name="OUT">
+                <block type="robSensors_accelerometer_getSample" id="[5ltJIU`u)cYHJ[:Cs/X" intask="true">
+                    <mutation mode="VALUE"></mutation>
+                    <field name="MODE">VALUE</field>
+                    <field name="SENSORPORT">Y</field>
+                    <field name="SLOT"></field>
+                </block>
+            </value>
+        </block>
+        <block type="robActions_debug" id="S8i|XB67(B_z5tVcWu^," intask="true">
+            <value name="OUT">
+                <block type="robSensors_accelerometer_getSample" id="B;V]Q-gI`3r,HfW(C0AG" intask="true">
+                    <mutation mode="VALUE"></mutation>
+                    <field name="MODE">VALUE</field>
+                    <field name="SENSORPORT">Z</field>
+                    <field name="SLOT"></field>
+                </block>
+            </value>
+        </block>
+        <block type="robActions_debug" id=")~Dw?rmn{J/z*8.AH3@w" intask="true">
+            <value name="OUT">
+                <block type="robSensors_accelerometer_getSample" id="Q%R!%#+I^_Zai+b:r-3j" intask="true">
+                    <mutation mode="VALUE"></mutation>
+                    <field name="MODE">VALUE</field>
+                    <field name="SENSORPORT">STRENGTH</field>
+                    <field name="SLOT"></field>
+                </block>
+            </value>
+        </block>
+        <block type="robActions_debug" id="4Qq64Pp)9~IQI=2{Ym9G" intask="true">
+            <value name="OUT">
+                <block type="robSensors_getSample" id="+GHg#ULh^aGkbtoKKnzQ" intask="true">
+                    <mutation input="ACCELEROMETER_VALUE"></mutation>
+                    <field name="SENSORTYPE">ACCELEROMETER_VALUE</field>
+                    <field name="SENSORPORT">X</field>
+                    <field name="SLOT"></field>
+                </block>
+            </value>
+        </block>
+        <block type="robActions_debug" id="=7_P3`.9hh{[n#DxwaT|" intask="true">
+            <value name="OUT">
+                <block type="robSensors_getSample" id="x``1YO~FJ4QKzQ!I|(|;" intask="true">
+                    <mutation input="ACCELEROMETER_VALUE"></mutation>
+                    <field name="SENSORTYPE">ACCELEROMETER_VALUE</field>
+                    <field name="SENSORPORT">Y</field>
+                    <field name="SLOT"></field>
+                </block>
+            </value>
+        </block>
+        <block type="robActions_debug" id="fnkXPzWZf:=%CC(7@9,5" intask="true">
+            <value name="OUT">
+                <block type="robSensors_getSample" id="AXM%=;v+`IcsGV7iVbqV" intask="true">
+                    <mutation input="ACCELEROMETER_VALUE"></mutation>
+                    <field name="SENSORTYPE">ACCELEROMETER_VALUE</field>
+                    <field name="SENSORPORT">Z</field>
+                    <field name="SLOT"></field>
+                </block>
+            </value>
+        </block>
+        <block type="robActions_debug" id="ss/x95uEmhBqW)-hj.og" intask="true">
+            <value name="OUT">
+                <block type="robSensors_getSample" id="GsafIchthK*|LjYJbSQS" intask="true">
+                    <mutation input="ACCELEROMETER_VALUE"></mutation>
+                    <field name="SENSORTYPE">ACCELEROMETER_VALUE</field>
+                    <field name="SENSORPORT">STRENGTH</field>
+                    <field name="SLOT"></field>
+                </block>
+            </value>
+        </block>
+    </instance>
+</block_set>

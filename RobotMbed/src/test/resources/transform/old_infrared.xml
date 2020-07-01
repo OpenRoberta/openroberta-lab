@@ -1,0 +1,48 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="calliope" xmlversion="2.0" description="" tags="">
+    <instance x="512" y="50">
+        <block type="robControls_start" id="9T9,HaI3oP%{Xv]%-HN?" intask="true" deletable="false">
+            <mutation declare="false"></mutation>
+            <field name="DEBUG"></field>
+        </block>
+        <block type="robActions_debug" id="|Ps{VtG(DNehW(b}:F@s" intask="true">
+            <value name="OUT">
+                <block type="robSensors_infrared_getSample" id="G7XwphQ+2N`AQN([Y}X*" intask="true">
+                    <mutation mode="LINE"></mutation>
+                    <field name="MODE">LINE</field>
+                    <field name="SENSORPORT">2</field>
+                    <field name="SLOT"></field>
+                </block>
+            </value>
+        </block>
+        <block type="robActions_debug" id="Z98msAWG/f`0rKeCwIlv" intask="true">
+            <value name="OUT">
+                <block type="robSensors_infrared_getSample" id="R#4PnS7{PGNcQyR]FAm_" intask="true">
+                    <mutation mode="LINE"></mutation>
+                    <field name="MODE">LINE</field>
+                    <field name="SENSORPORT">1</field>
+                    <field name="SLOT"></field>
+                </block>
+            </value>
+        </block>
+        <block type="robActions_debug" id="Dsv^/FM@a]/v]HM!+/KM" intask="true">
+            <value name="OUT">
+                <block type="robSensors_getSample" id="G{:i{Fnl7[jT^l9Q.}b2" intask="true">
+                    <mutation input="INFRARED_LINE"></mutation>
+                    <field name="SENSORTYPE">INFRARED_LINE</field>
+                    <field name="SENSORPORT">2</field>
+                    <field name="SLOT"></field>
+                </block>
+            </value>
+        </block>
+        <block type="robActions_debug" id="Pp5+,-{hhsb|11[LywzN" intask="true">
+            <value name="OUT">
+                <block type="robSensors_getSample" id="+H8mG#X:q~ob=MSODxyu" intask="true">
+                    <mutation input="INFRARED_LINE"></mutation>
+                    <field name="SENSORTYPE">INFRARED_LINE</field>
+                    <field name="SENSORPORT">1</field>
+                    <field name="SLOT"></field>
+                </block>
+            </value>
+        </block>
+    </instance>
+</block_set>

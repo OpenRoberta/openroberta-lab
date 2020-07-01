@@ -133,14 +133,25 @@ public final class UnitTestHelper {
 
     public static void checkProgramAstEquality(IRobotFactory factory, String expectedAst, String programBlocklyXmlFilename) {
         String generatedAst = getProgramAst(factory, programBlocklyXmlFilename).toString();
-        generatedAst = "BlockAST [project=" + generatedAst + "]";
-        Assert.assertEquals(expectedAst.replaceAll("\\s+", ""), generatedAst.replaceAll("\\s+", ""));
+        checkAstEquality(generatedAst, expectedAst);
     }
 
     public static void checkConfigAstEquality(IRobotFactory factory, String expectedAst, String configBlocklyXmlFilename) {
         String generatedAst = getConfigAst(factory, configBlocklyXmlFilename).toString();
+        checkAstEquality(generatedAst, expectedAst);
+    }
+
+    public static void checkAstEquality(String generatedAst, String expectedAst) {
         generatedAst = "BlockAST [project=" + generatedAst + "]";
         Assert.assertEquals(expectedAst.replaceAll("\\s+", ""), generatedAst.replaceAll("\\s+", ""));
+    }
+
+    public static void checkAstContains(String generatedAst, String[] expectedToBeInAst) {
+        generatedAst = "BlockAST [project=" + generatedAst + "]";
+        String preparedGeneratedAst = generatedAst.replaceAll("\\s+", "");
+        for ( String s : expectedToBeInAst ) {
+            Assert.assertTrue(preparedGeneratedAst.contains(s.replaceAll("\\s+", "")));
+        }
     }
 
     public static Phrase<Void> getAstOfFirstBlock(IRobotFactory factory, String programBlocklyXmlFilename) {

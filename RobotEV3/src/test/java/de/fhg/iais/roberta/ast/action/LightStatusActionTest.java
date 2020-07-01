@@ -15,7 +15,7 @@ public class LightStatusActionTest extends AstTest {
 
     @Test
     public void make() throws Exception {
-        String a = "BlockAST [project=[[Location [x=-8, y=105], LightStatusAction [OFF]]]]";
+        String a = "BlockAST [project=[[Location [x=-8, y=105], LightStatusAction [0, OFF]]]]";
 
         UnitTestHelper.checkProgramAstEquality(testFactory, a, "/ast/actions/action_BrickLightStatus.xml");
     }
@@ -40,7 +40,7 @@ public class LightStatusActionTest extends AstTest {
 
     @Test
     public void brickLightStatus1() throws Exception {
-        String a = "BlockAST [project=[[Location [x=-8, y=105], LightStatusAction [RESET]]]]";
+        String a = "BlockAST [project=[[Location [x=-8, y=105], LightStatusAction [0, RESET]]]]";
 
         UnitTestHelper.checkProgramAstEquality(testFactory, a, "/ast/actions/action_BrickLightStatus1.xml");
     }

@@ -9,7 +9,8 @@ public class MicrobitSensorsTest extends MicrobitAstTest {
 
     @Test
     public void waitTimeConditionTest() throws Exception {
-        UnitTestHelper.checkGeneratedSourceEqualityWithProgramXml(testFactory, "/sensor/microbit_timer_test.py", "/sensor/microbit_timer_test.xml");
+        UnitTestHelper
+            .checkGeneratedSourceEqualityWithProgramXml(testFactory, "/sensor/microbit_timer_test.py", "/sensor/microbit_timer_test.xml", configuration);
     }
 
 }

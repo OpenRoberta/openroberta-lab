@@ -21,7 +21,7 @@ public class SenseboxConfigCompTest extends AstTest {
     @Test
     public void accelerometer_make_ByDefault_ReturnInstanceOfConfigurationComponentClass() {
         String expectedResult =
-            "BlockAST [project=[ConfigurationComponent[componentType=ACCELEROMETER,isActor=true,userDefinedName=B,portName=null,componentProperties={}]]]";
+            "BlockAST [project=[ConfigurationComponent[componentType=ACCELEROMETER,isActor=true,userDefinedName=B,portName=B,componentProperties={}]]]";
         UnitTestHelper.checkConfigAstEquality(testFactory, expectedResult, "/ast/config/sensebox/robConf_accelerometer.xml");
     }
 
@@ -33,7 +33,7 @@ public class SenseboxConfigCompTest extends AstTest {
     @Test
     public void analogin_make_ByDefault_ReturnInstanceOfConfigurationComponentClass() {
         String expectedResult =
-            "BlockAST [project=[ConfigurationComponent[componentType=ANALOG_INPUT,isActor=true,userDefinedName=A2,portName=null,componentProperties={INPUT=1}]]]";
+            "BlockAST [project=[ConfigurationComponent[componentType=ANALOG_INPUT,isActor=true,userDefinedName=A2,portName=A2,componentProperties={INPUT=1}]]]";
         UnitTestHelper.checkConfigAstEquality(testFactory, expectedResult, "/ast/config/sensebox/robConf_analogin.xml");
     }
 
@@ -45,7 +45,7 @@ public class SenseboxConfigCompTest extends AstTest {
     @Test
     public void analogout_make_ByDefault_ReturnInstanceOfConfigurationComponentClass() {
         String expectedResult =
-            "BlockAST [project=[ConfigurationComponent[componentType=ANALOG_PIN,isActor=true,userDefinedName=S4,portName=null,componentProperties={OUTPUT=1}]]]";
+            "BlockAST [project=[ConfigurationComponent[componentType=ANALOG_PIN,isActor=true,userDefinedName=S4,portName=S4,componentProperties={OUTPUT=1}]]]";
         UnitTestHelper.checkConfigAstEquality(testFactory, expectedResult, "/ast/config/sensebox/robConf_analogout.xml");
     }
 
@@ -57,7 +57,7 @@ public class SenseboxConfigCompTest extends AstTest {
     @Test
     public void buzzer_make_ByDefault_ReturnInstanceOfConfigurationComponentClass() {
         String expectedResult =
-            "BlockAST [project=[ConfigurationComponent[componentType=BUZZER,isActor=true,userDefinedName=S,portName=null,componentProperties={+=1}]]]";
+            "BlockAST [project=[ConfigurationComponent[componentType=BUZZER,isActor=true,userDefinedName=S,portName=S,componentProperties={+=1}]]]";
         UnitTestHelper.checkConfigAstEquality(testFactory, expectedResult, "/ast/config/sensebox/robConf_buzzer.xml");
     }
 
@@ -69,7 +69,7 @@ public class SenseboxConfigCompTest extends AstTest {
     @Test
     public void digitalin_make_ByDefault_ReturnInstanceOfConfigurationComponentClass() {
         String expectedResult =
-            "BlockAST [project=[ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=A,portName=null,componentProperties={INPUT=1}]]]";
+            "BlockAST [project=[ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=A,portName=A,componentProperties={INPUT=1}]]]";
         UnitTestHelper.checkConfigAstEquality(testFactory, expectedResult, "/ast/config/sensebox/robConf_digitalin.xml");
     }
 
@@ -81,7 +81,7 @@ public class SenseboxConfigCompTest extends AstTest {
     @Test
     public void digitalout_make_ByDefault_ReturnInstanceOfConfigurationComponentClass() {
         String expectedResult =
-            "BlockAST [project=[ConfigurationComponent[componentType=DIGITAL_PIN,isActor=true,userDefinedName=S3,portName=null,componentProperties={OUTPUT=1}]]]";
+            "BlockAST [project=[ConfigurationComponent[componentType=DIGITAL_PIN,isActor=true,userDefinedName=S3,portName=S3,componentProperties={OUTPUT=1}]]]";
         UnitTestHelper.checkConfigAstEquality(testFactory, expectedResult, "/ast/config/sensebox/robConf_digitalout.xml");
     }
 
@@ -93,7 +93,7 @@ public class SenseboxConfigCompTest extends AstTest {
     @Test
     public void gps_make_ByDefault_ReturnInstanceOfConfigurationComponentClass() {
         String expectedResult =
-            "BlockAST [project=[ConfigurationComponent[componentType=GPS,isActor=true,userDefinedName=G3,portName=null,componentProperties={I2C=I2C}]]]";
+            "BlockAST [project=[ConfigurationComponent[componentType=GPS,isActor=true,userDefinedName=G3,portName=G3,componentProperties={I2C=I2C}]]]";
         UnitTestHelper.checkConfigAstEquality(testFactory, expectedResult, "/ast/config/sensebox/robConf_gps.xml");
     }
 
@@ -105,7 +105,7 @@ public class SenseboxConfigCompTest extends AstTest {
     @Test
     public void humidity_make_ByDefault_ReturnInstanceOfConfigurationComponentClass() {
         String expectedResult =
-            "BlockAST [project=[ConfigurationComponent[componentType=HUMIDITY,isActor=true,userDefinedName=L3,portName=null,componentProperties={I2C=I2C}]]]";
+            "BlockAST [project=[ConfigurationComponent[componentType=HUMIDITY,isActor=true,userDefinedName=L3,portName=L3,componentProperties={I2C=I2C}]]]";
         UnitTestHelper.checkConfigAstEquality(testFactory, expectedResult, "/ast/config/sensebox/robConf_humidity.xml");
     }
 
@@ -117,7 +117,7 @@ public class SenseboxConfigCompTest extends AstTest {
     @Test
     public void key_make_ByDefault_ReturnInstanceOfConfigurationComponentClass() {
         String expectedResult =
-            "BlockAST [project=[ConfigurationComponent[componentType=KEY,isActor=true,userDefinedName=T,portName=null,componentProperties={PIN1=2}]]]";
+            "BlockAST [project=[ConfigurationComponent[componentType=KEY,isActor=true,userDefinedName=T,portName=T,componentProperties={PIN1=2}]]]";
         UnitTestHelper.checkConfigAstEquality(testFactory, expectedResult, "/ast/config/sensebox/robConf_key.xml");
     }
 
@@ -129,7 +129,7 @@ public class SenseboxConfigCompTest extends AstTest {
     @Test
     public void lcdi2c_make_ByDefault_ReturnInstanceOfConfigurationComponentClass() {
         String expectedResult =
-            "BlockAST [project=[ConfigurationComponent[componentType=LCDI2C,isActor=true,userDefinedName=myDisplay,portName=null,componentProperties={TITLE=P,XLABEL=X,YLABEL=Y,XSTART=0,XEND=100,YSTART=0,YEND=50,XTICK=10,YTICK=10,I2C=I2C}]]]";
+            "BlockAST [project=[ConfigurationComponent[componentType=LCDI2C,isActor=true,userDefinedName=myDisplay,portName=myDisplay,componentProperties={TITLE=P,XLABEL=X,YLABEL=Y,XSTART=0,XEND=100,YSTART=0,YEND=50,XTICK=10,YTICK=10,I2C=I2C}]]]";
         UnitTestHelper.checkConfigAstEquality(testFactory, expectedResult, "/ast/config/sensebox/robConf_lcdi2c.xml");
     }
 
@@ -141,7 +141,7 @@ public class SenseboxConfigCompTest extends AstTest {
     @Test
     public void led_make_ByDefault_ReturnInstanceOfConfigurationComponentClass() {
         String expectedResult =
-            "BlockAST [project=[ConfigurationComponent[componentType=LED,isActor=true,userDefinedName=G,portName=null,componentProperties={INPUT=8}]]]";
+            "BlockAST [project=[ConfigurationComponent[componentType=LED,isActor=true,userDefinedName=G,portName=G,componentProperties={INPUT=8}]]]";
         UnitTestHelper.checkConfigAstEquality(testFactory, expectedResult, "/ast/config/sensebox/robConf_led.xml");
     }
 
@@ -153,7 +153,7 @@ public class SenseboxConfigCompTest extends AstTest {
     @Test
     public void light_make_ByDefault_ReturnInstanceOfConfigurationComponentClass() {
         String expectedResult =
-            "BlockAST [project=[ConfigurationComponent[componentType=LIGHT,isActor=true,userDefinedName=L2,portName=null,componentProperties={OUTPUT=1}]]]";
+            "BlockAST [project=[ConfigurationComponent[componentType=LIGHT,isActor=true,userDefinedName=L2,portName=L2,componentProperties={OUTPUT=1}]]]";
         UnitTestHelper.checkConfigAstEquality(testFactory, expectedResult, "/ast/config/sensebox/robConf_light.xml");
     }
 
@@ -165,7 +165,7 @@ public class SenseboxConfigCompTest extends AstTest {
     @Test
     public void lightveml_make_ByDefault_ReturnInstanceOfConfigurationComponentClass() {
         String expectedResult =
-            "BlockAST [project=[ConfigurationComponent[componentType=LIGHTVEML,isActor=true,userDefinedName=S5,portName=null,componentProperties={I2C=I2C}]]]";
+            "BlockAST [project=[ConfigurationComponent[componentType=LIGHTVEML,isActor=true,userDefinedName=S5,portName=S5,componentProperties={I2C=I2C}]]]";
         UnitTestHelper.checkConfigAstEquality(testFactory, expectedResult, "/ast/config/sensebox/robConf_lightveml.xml");
     }
 
@@ -177,7 +177,7 @@ public class SenseboxConfigCompTest extends AstTest {
     @Test
     public void particle_make_ByDefault_ReturnInstanceOfConfigurationComponentClass() {
         String expectedResult =
-            "BlockAST [project=[ConfigurationComponent[componentType=PARTICLE,isActor=true,userDefinedName=S6,portName=null,componentProperties={SERIAL=Serial1}]]]";
+            "BlockAST [project=[ConfigurationComponent[componentType=PARTICLE,isActor=true,userDefinedName=S6,portName=S6,componentProperties={SERIAL=Serial1}]]]";
         UnitTestHelper.checkConfigAstEquality(testFactory, expectedResult, "/ast/config/sensebox/robConf_particle.xml");
     }
 
@@ -189,7 +189,7 @@ public class SenseboxConfigCompTest extends AstTest {
     @Test
     public void potentiometer_make_ByDefault_ReturnInstanceOfConfigurationComponentClass() {
         String expectedResult =
-            "BlockAST [project=[ConfigurationComponent[componentType=POTENTIOMETER,isActor=true,userDefinedName=P,portName=null,componentProperties={OUTPUT=1}]]]";
+            "BlockAST [project=[ConfigurationComponent[componentType=POTENTIOMETER,isActor=true,userDefinedName=P,portName=P,componentProperties={OUTPUT=1}]]]";
         UnitTestHelper.checkConfigAstEquality(testFactory, expectedResult, "/ast/config/sensebox/robConf_potentiometer.xml");
     }
 
@@ -201,7 +201,7 @@ public class SenseboxConfigCompTest extends AstTest {
     @Test
     public void rgbled_make_ByDefault_ReturnInstanceOfConfigurationComponentClass() {
         String expectedResult =
-            "BlockAST [project=[ConfigurationComponent[componentType=RGBLED,isActor=true,userDefinedName=R2,portName=null,componentProperties={RED=1,GREEN=2,BLUE=3}]]]";
+            "BlockAST [project=[ConfigurationComponent[componentType=RGBLED,isActor=true,userDefinedName=R2,portName=R2,componentProperties={RED=1,GREEN=2,BLUE=3}]]]";
         UnitTestHelper.checkConfigAstEquality(testFactory, expectedResult, "/ast/config/sensebox/robConf_rgbled.xml");
     }
 
@@ -213,7 +213,7 @@ public class SenseboxConfigCompTest extends AstTest {
     @Test
     public void sdcard_make_ByDefault_ReturnInstanceOfConfigurationComponentClass() {
         String expectedResult =
-            "BlockAST [project=[ConfigurationComponent[componentType=SENSEBOX_SDCARD,isActor=true,userDefinedName=S2,portName=null,componentProperties={NAO_FILENAME=FILE.TXT,Socket=XBEE2}]]]";
+            "BlockAST [project=[ConfigurationComponent[componentType=SENSEBOX_SDCARD,isActor=true,userDefinedName=S2,portName=S2,componentProperties={NAO_FILENAME=FILE.TXT,Socket=XBEE2}]]]";
         UnitTestHelper.checkConfigAstEquality(testFactory, expectedResult, "/ast/config/sensebox/robConf_sdcard.xml");
     }
 
@@ -225,7 +225,7 @@ public class SenseboxConfigCompTest extends AstTest {
     @Test
     public void sound_make_ByDefault_ReturnInstanceOfConfigurationComponentClass() {
         String expectedResult =
-            "BlockAST [project=[ConfigurationComponent[componentType=SOUND,isActor=true,userDefinedName=G2,portName=null,componentProperties={OUT=1}]]]";
+            "BlockAST [project=[ConfigurationComponent[componentType=SOUND,isActor=true,userDefinedName=G2,portName=G2,componentProperties={OUT=1}]]]";
         UnitTestHelper.checkConfigAstEquality(testFactory, expectedResult, "/ast/config/sensebox/robConf_sound.xml");
     }
 
@@ -237,7 +237,7 @@ public class SenseboxConfigCompTest extends AstTest {
     @Test
     public void temperature_make_ByDefault_ReturnInstanceOfConfigurationComponentClass() {
         String expectedResult =
-            "BlockAST [project=[ConfigurationComponent[componentType=TEMPERATURE,isActor=true,userDefinedName=T2,portName=null,componentProperties={I2C=I2C}]]]";
+            "BlockAST [project=[ConfigurationComponent[componentType=TEMPERATURE,isActor=true,userDefinedName=T2,portName=T2,componentProperties={I2C=I2C}]]]";
         UnitTestHelper.checkConfigAstEquality(testFactory, expectedResult, "/ast/config/sensebox/robConf_temperature.xml");
     }
 
@@ -249,7 +249,7 @@ public class SenseboxConfigCompTest extends AstTest {
     @Test
     public void ultrasonic_make_ByDefault_ReturnInstanceOfConfigurationComponentClass() {
         String expectedResult =
-            "BlockAST [project=[ConfigurationComponent[componentType=ULTRASONIC,isActor=true,userDefinedName=U,portName=null,componentProperties={TRIG=1,ECHO=2}]]]";
+            "BlockAST [project=[ConfigurationComponent[componentType=ULTRASONIC,isActor=true,userDefinedName=U,portName=U,componentProperties={TRIG=1,ECHO=2}]]]";
         UnitTestHelper.checkConfigAstEquality(testFactory, expectedResult, "/ast/config/sensebox/robConf_ultrasonic.xml");
     }
 
@@ -261,7 +261,7 @@ public class SenseboxConfigCompTest extends AstTest {
     @Test
     public void wireless_make_ByDefault_ReturnInstanceOfConfigurationComponentClass() {
         String expectedResult =
-            "BlockAST [project=[ConfigurationComponent[componentType=WIRELESS,isActor=true,userDefinedName=W,portName=null,componentProperties={Socket=XBEE1}]]]";
+            "BlockAST [project=[ConfigurationComponent[componentType=WIRELESS,isActor=true,userDefinedName=W,portName=W,componentProperties={Socket=XBEE1}]]]";
         UnitTestHelper.checkConfigAstEquality(testFactory, expectedResult, "/ast/config/sensebox/robConf_wireless.xml");
     }
 

@@ -1,45 +1,38 @@
-<block_set xmlns="http://de.fhg.iais.roberta.blockly"
-	robottype="calliope2016" xmlversion="2.0" description="" tags="">
-	<instance x="293" y="-390">
-		<block type="robControls_start" id="@vdJc~w=wNX]WrSXorOT"
-			intask="true" deletable="false">
-			<mutation declare="false"></mutation>
-			<field name="DEBUG">TRUE</field>
-		</block>
-		<block type="robControls_loopForever" id="k1tN/jf%=#km;HT8/EfB"
-			intask="true">
-			<statement name="DO">
-				<block type="robControls_wait_for" id="**h=oPtgE]oGX_{Q)xl!"
-					intask="true">
-					<mutation wait="1"></mutation>
-					<repetitions>
-						<value name="WAIT0">
-							<block type="logic_compare" id="J}d^Um8/R0d~`b]NSe2)"
-								intask="true">
-								<field name="OP">EQ</field>
-								<value name="A">
-									<block type="mbedSensors_getSample" id="=]Nuo=(JTVl#50,DZ/|F"
-										intask="true" deletable="false" movable="false">
-										<mutation input="KEY_PRESSED"></mutation>
-										<field name="SENSORTYPE">KEY_PRESSED</field>
-										<field name="SENSORPORT">A</field><field name="SLOT" />
-										<data>microbit</data>
-									</block>
-								</value>
-								<value name="B">
-									<block type="logic_boolean" id="/#!HzqDkZ8g@^BRR|9s3"
-										intask="true">
-										<field name="BOOL">TRUE</field>
-									</block>
-								</value>
-							</block>
-						</value>
-						<statement name="DO0">
-							<block type="robControls_for" id="q{B}xx3O:?4!yQfu+}Zb"
-								intask="true">
-								<field name="VAR">i</field>
-								<value name="FROM">
-									<block type="math_number" id="@*PxxS~u7iV+tvf?RGZg"
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="calliope2016" xmlversion="3.0" description="" tags="">
+    <instance x="293" y="-390">
+        <block type="robControls_start" id="@vdJc~w=wNX]WrSXorOT" intask="true" deletable="false">
+            <mutation declare="false"></mutation>
+            <field name="DEBUG">TRUE</field>
+        </block>
+        <block type="robControls_loopForever" id="k1tN/jf%=#km;HT8/EfB" intask="true">
+            <statement name="DO">
+                <block type="robControls_wait_for" id="**h=oPtgE]oGX_{Q)xl!" intask="true">
+                    <mutation wait="1"></mutation>
+                    <repetitions>
+                        <value name="WAIT0">
+                            <block type="logic_compare" id="J}d^Um8/R0d~`b]NSe2)" intask="true">
+                                <field name="OP">EQ</field>
+                                <value name="A">
+                                    <block type="mbedSensors_getSample" id="=]Nuo=(JTVl#50,DZ/|F" intask="true" deletable="false" movable="false">
+                                        <mutation input="KEY_PRESSED"></mutation>
+                                        <field name="SENSORTYPE">KEY_PRESSED</field>
+                                        <field name="SENSORPORT">A</field>
+                                        <field name="SLOT" />
+                                        <data>microbit</data>
+                                    </block>
+                                </value>
+                                <value name="B">
+                                    <block type="logic_boolean" id="/#!HzqDkZ8g@^BRR|9s3" intask="true">
+                                        <field name="BOOL">TRUE</field>
+                                    </block>
+                                </value>
+                            </block>
+                        </value>
+                        <statement name="DO0">
+                            <block type="robControls_for" id="q{B}xx3O:?4!yQfu+}Zb" intask="true">
+                                <field name="VAR">i</field>
+                                <value name="FROM">
+                                    <block type="math_number" id="@*PxxS~u7iV+tvf?RGZg"
 										intask="true">
 										<field name="NUM">1</field>
 									</block>

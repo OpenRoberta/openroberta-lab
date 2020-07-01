@@ -1,0 +1,48 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="calliope" xmlversion="2.0" description="" tags="">
+    <instance x="512" y="50">
+        <block type="robControls_start" id="9T9,HaI3oP%{Xv]%-HN?" intask="true" deletable="false">
+            <mutation declare="false"></mutation>
+            <field name="DEBUG"></field>
+        </block>
+        <block type="robActions_debug" id="0+^b3?yx*t:rwb1I?[7Z" intask="true">
+            <value name="OUT">
+                <block type="robSensors_humidity_getSample" id="qjhuykBiG5lJbNF79A1R" intask="true">
+                    <mutation mode="HUMIDITY"></mutation>
+                    <field name="MODE">HUMIDITY</field>
+                    <field name="SENSORPORT">5</field>
+                    <field name="SLOT"></field>
+                </block>
+            </value>
+        </block>
+        <block type="robActions_debug" id="Xnkp%%H.q%XmDS9MC76~" intask="true">
+            <value name="OUT">
+                <block type="robSensors_humidity_getSample" id="!g/r}4CMTihAGbtQs.(7" intask="true">
+                    <mutation mode="TEMPERATURE"></mutation>
+                    <field name="MODE">TEMPERATURE</field>
+                    <field name="SENSORPORT">5</field>
+                    <field name="SLOT"></field>
+                </block>
+            </value>
+        </block>
+        <block type="robActions_debug" id="4Qq64Pp)9~IQI=2{Ym9G" intask="true">
+            <value name="OUT">
+                <block type="robSensors_getSample" id="+GHg#ULh^aGkbtoKKnzQ" intask="true">
+                    <mutation input="HUMIDITY_HUMIDITY"></mutation>
+                    <field name="SENSORTYPE">HUMIDITY_HUMIDITY</field>
+                    <field name="SENSORPORT">5</field>
+                    <field name="SLOT"></field>
+                </block>
+            </value>
+        </block>
+        <block type="robActions_debug" id="kc]kGjEdPiP:sZt5-Z92" intask="true">
+            <value name="OUT">
+                <block type="robSensors_getSample" id="W,9m;1el,2WOa;wzY%)Q" intask="true">
+                    <mutation input="HUMIDITY_TEMPERATURE"></mutation>
+                    <field name="SENSORTYPE">HUMIDITY_TEMPERATURE</field>
+                    <field name="SENSORPORT">5</field>
+                    <field name="SLOT"></field>
+                </block>
+            </value>
+        </block>
+    </instance>
+</block_set>

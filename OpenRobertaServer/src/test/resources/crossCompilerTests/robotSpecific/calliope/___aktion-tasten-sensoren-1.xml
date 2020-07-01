@@ -1,6 +1,6 @@
 <export xmlns="http://de.fhg.iais.roberta.blockly">
     <program>
-        <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="calliope" xmlversion="2.0" description="" tags="">
+        <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="calliope" xmlversion="3.0" description="" tags="">
             <instance x="-454" y="-411">
                 <block type="robControls_start" id="s)xKKX_M2A%oPDESR|0W" intask="true" deletable="false">
                     <mutation declare="true"></mutation>
@@ -53,47 +53,31 @@
                             <field name="TYPE">IMAGE</field>
                             <value name="VALUE">
                                 <block type="mbedImage_image" id="UkF#eGcZ;j^Z{{[w,*`#" intask="true">
-                                    <field name="P00">
-                                    </field>
-                                    <field name="P10">
-                                    </field>
+                                    <field name="P00"></field>
+                                    <field name="P10"></field>
                                     <field name="P20">#</field>
-                                    <field name="P30">
-                                    </field>
-                                    <field name="P40">
-                                    </field>
-                                    <field name="P01">
-                                    </field>
-                                    <field name="P11">
-                                    </field>
+                                    <field name="P30"></field>
+                                    <field name="P40"></field>
+                                    <field name="P01"></field>
+                                    <field name="P11"></field>
                                     <field name="P21">#</field>
-                                    <field name="P31">
-                                    </field>
-                                    <field name="P41">
-                                    </field>
+                                    <field name="P31"></field>
+                                    <field name="P41"></field>
                                     <field name="P02">#</field>
                                     <field name="P12">#</field>
                                     <field name="P22">#</field>
                                     <field name="P32">#</field>
                                     <field name="P42">#</field>
-                                    <field name="P03">
-                                    </field>
-                                    <field name="P13">
-                                    </field>
+                                    <field name="P03"></field>
+                                    <field name="P13"></field>
                                     <field name="P23">#</field>
-                                    <field name="P33">
-                                    </field>
-                                    <field name="P43">
-                                    </field>
-                                    <field name="P04">
-                                    </field>
-                                    <field name="P14">
-                                    </field>
+                                    <field name="P33"></field>
+                                    <field name="P43"></field>
+                                    <field name="P04"></field>
+                                    <field name="P14"></field>
                                     <field name="P24">#</field>
-                                    <field name="P34">
-                                    </field>
-                                    <field name="P44">
-                                    </field>
+                                    <field name="P34"></field>
+                                    <field name="P44"></field>
                                 </block>
                             </value>
                         </block>
@@ -133,52 +117,30 @@
                             <value name="VALUE">
                                 <block type="mbedImage_image" id="o12VVL}Vj,~X~z0-Os?#" intask="true">
                                     <field name="P00">#</field>
-                                    <field name="P10">
-                                    </field>
+                                    <field name="P10"></field>
                                     <field name="P20">#</field>
-                                    <field name="P30">
-                                    </field>
+                                    <field name="P30"></field>
                                     <field name="P40">#</field>
-                                    <field name="P01">
-                                    </field>
-                                    <field name="P11">
-                                    </field>
-                                    <field name="P21">
-                                    </field>
-                                    <field name="P31">
-                                    </field>
-                                    <field name="P41">
-                                    </field>
-                                    <field name="P02">
-                                    </field>
-                                    <field name="P12">
-                                    </field>
-                                    <field name="P22">
-                                    </field>
-                                    <field name="P32">
-                                    </field>
-                                    <field name="P42">
-                                    </field>
-                                    <field name="P03">
-                                    </field>
-                                    <field name="P13">
-                                    </field>
-                                    <field name="P23">
-                                    </field>
-                                    <field name="P33">
-                                    </field>
-                                    <field name="P43">
-                                    </field>
-                                    <field name="P04">
-                                    </field>
-                                    <field name="P14">
-                                    </field>
-                                    <field name="P24">
-                                    </field>
-                                    <field name="P34">
-                                    </field>
-                                    <field name="P44">
-                                    </field>
+                                    <field name="P01"></field>
+                                    <field name="P11"></field>
+                                    <field name="P21"></field>
+                                    <field name="P31"></field>
+                                    <field name="P41"></field>
+                                    <field name="P02"></field>
+                                    <field name="P12"></field>
+                                    <field name="P22"></field>
+                                    <field name="P32"></field>
+                                    <field name="P42"></field>
+                                    <field name="P03"></field>
+                                    <field name="P13"></field>
+                                    <field name="P23"></field>
+                                    <field name="P33"></field>
+                                    <field name="P43"></field>
+                                    <field name="P04"></field>
+                                    <field name="P14"></field>
+                                    <field name="P24"></field>
+                                    <field name="P34"></field>
+                                    <field name="P44"></field>
                                 </block>
                             </value>
                         </block>
@@ -288,6 +250,7 @@
                         </block>
                         <block type="mbedActions_display_clear" id="FPg)lT*DvZfF;U(*Sf~V" intask="true"></block>
                         <block type="mbedActions_leds_on" id="D(lv1J#flS4c?3#4{:_c" intask="true">
+                            <field name="ACTORPORT">R</field>
                             <value name="COLOR">
                                 <block type="mbedColour_picker" id="~cl,(2z#{Ti3cu;Czbk7" intask="true">
                                     <field name="COLOUR">#ff0000</field>
@@ -302,6 +265,7 @@
                             </value>
                         </block>
                         <block type="mbedActions_leds_on" id="TPIwF:X+(cQtDuZsN_AE" intask="true">
+                            <field name="ACTORPORT">R</field>
                             <value name="COLOR">
                                 <block type="mbedColour_picker" id="6ds8%38m9P+E~vfZDy#k" intask="true">
                                     <field name="COLOUR">#009900</field>
@@ -315,7 +279,9 @@
                                 </block>
                             </value>
                         </block>
-                        <block type="mbedActions_leds_off" id="xdSYs)AImgQ+xCqccpmQ" intask="true"></block>
+                        <block type="mbedActions_leds_off" id="xdSYs)AImgQ+xCqccpmQ" intask="true">
+                            <field name="ACTORPORT">R</field>
+                        </block>
                         <block type="mbedActions_play_tone" id="TbwP8B,*z.,fTcF]EC.L" intask="true">
                             <value name="FREQUENCE">
                                 <block type="math_number" id="Y2h)X*qYr.=%C-}Rue}S" intask="true">
@@ -341,6 +307,7 @@
                     <field name="NAME">tastenKontrolle</field>
                     <statement name="STACK">
                         <block type="mbedActions_leds_on" id="4yobAC/QTYl-F}=^=H*5" intask="true">
+                            <field name="ACTORPORT">R</field>
                             <value name="COLOR">
                                 <block type="mbedColour_picker" id=".^RjC|azqesE=oYdT`}W" intask="true">
                                     <field name="COLOUR">#ff0000</field>
@@ -358,6 +325,7 @@
                             </value>
                         </block>
                         <block type="mbedActions_leds_on" id="#sB}[aqSP[nFI!;gf^1F" intask="true">
+                            <field name="ACTORPORT">R</field>
                             <value name="COLOR">
                                 <block type="mbedColour_picker" id="0a=XW.+o4{wQ9tPaxU3|" intask="true">
                                     <field name="COLOUR">#009900</field>
@@ -384,7 +352,9 @@
                                 </block>
                             </value>
                         </block>
-                        <block type="mbedActions_leds_off" id=":C7vy]QRyw;iJv5Z]Gl[" intask="true"></block>
+                        <block type="mbedActions_leds_off" id=":C7vy]QRyw;iJv5Z]Gl[" intask="true">
+                            <field name="ACTORPORT">R</field>
+                        </block>
                         <block type="robControls_loopForever" id="1N*U|br,8l9pseZvUw?i" intask="true">
                             <statement name="DO">
                                 <block type="mbedControls_wait_for" id="7Sb/SGarjIH/C7KH{=d]" intask="true">
@@ -408,6 +378,7 @@
                                     </value>
                                 </block>
                                 <block type="mbedActions_leds_on" id="}mtj(Vj1C1kmUc(L_vy_" intask="true">
+                                    <field name="ACTORPORT">R</field>
                                     <value name="COLOR">
                                         <block type="mbedColour_picker" id="LDd`N|vR.rPx5!.REVy." intask="true">
                                             <field name="COLOUR">#009900</field>
@@ -435,6 +406,7 @@
                                     </value>
                                 </block>
                                 <block type="mbedActions_leds_on" id=")s]J9DWAQ5kxEj9!5=Sy" intask="true">
+                                    <field name="ACTORPORT">R</field>
                                     <value name="COLOR">
                                         <block type="mbedColour_picker" id="va}-fTkxn%uD4]DR.Jfv" intask="true">
                                             <field name="COLOUR">#ff0000</field>
@@ -473,7 +445,9 @@
                                 </block>
                             </statement>
                         </block>
-                        <block type="mbedActions_leds_off" id="Jz^sgsg=Duu71ZY({g6c" intask="true"></block>
+                        <block type="mbedActions_leds_off" id="Jz^sgsg=Duu71ZY({g6c" intask="true">
+                            <field name="ACTORPORT">R</field>
+                        </block>
                         <block type="mbedControls_wait_for" id="msFF5*|gxyAF]!@j3LKY" intask="true">
                             <value name="WAIT0">
                                 <block type="logic_negate" id="Ae+Lt+9QvRK-?O1qy25/" intask="true">
@@ -489,6 +463,7 @@
                             </value>
                         </block>
                         <block type="mbedActions_leds_on" id="8`w,N|fAXOA@pkZ;7WA)" intask="true">
+                            <field name="ACTORPORT">R</field>
                             <value name="COLOR">
                                 <block type="mbedColour_picker" id="ovL6:4[x13#Tu_Dk_]ov" intask="true">
                                     <field name="COLOUR">#ff0000</field>
@@ -520,6 +495,7 @@
                                         </value>
                                         <statement name="DO0">
                                             <block type="mbedActions_leds_on" id="_Z]|-(gB+y3bw+nVKP:]" intask="true">
+                                                <field name="ACTORPORT">R</field>
                                                 <value name="COLOR">
                                                     <block type="mbedColour_picker" id="r}D/uN(ZWL/0fIp@zA]a" intask="true">
                                                         <field name="COLOUR">#009900</field>
@@ -547,6 +523,7 @@
                                                 </value>
                                             </block>
                                             <block type="mbedActions_leds_on" id="Lowuhs`jms42*8U_nk88" intask="true">
+                                                <field name="ACTORPORT">R</field>
                                                 <value name="COLOR">
                                                     <block type="mbedColour_picker" id="{bANdhXV^pz,h=_KCk:v" intask="true">
                                                         <field name="COLOUR">#ff0000</field>
@@ -581,7 +558,9 @@
                                 </block>
                             </statement>
                         </block>
-                        <block type="mbedActions_leds_off" id="pqlR^InO.Z+d|uef@RWt" intask="true"></block>
+                        <block type="mbedActions_leds_off" id="pqlR^InO.Z+d|uef@RWt" intask="true">
+                            <field name="ACTORPORT">R</field>
+                        </block>
                         <block type="mbedControls_wait_for" id="gU04j@1inY;E=8d:J2Sb" intask="true">
                             <value name="WAIT0">
                                 <block type="logic_negate" id="[{[E5rq|Hy^Rh!XW*]IR" intask="true">
@@ -597,6 +576,7 @@
                             </value>
                         </block>
                         <block type="mbedActions_leds_on" id="3}JTL_%WVf^E;BnZJh+d" intask="true">
+                            <field name="ACTORPORT">R</field>
                             <value name="COLOR">
                                 <block type="mbedColour_picker" id="ga55czs`x,MH*jX:gPp_" intask="true">
                                     <field name="COLOUR">#ff0000</field>
@@ -622,6 +602,7 @@
                             </value>
                         </block>
                         <block type="mbedActions_leds_on" id="*WYZczM9DqeZOQdY`]2:" intask="true">
+                            <field name="ACTORPORT">R</field>
                             <value name="COLOR">
                                 <block type="mbedColour_picker" id="c?ho%1p6U_htzNP.#~Rg" intask="true">
                                     <field name="COLOUR">#009900</field>
@@ -639,6 +620,7 @@
                             </value>
                         </block>
                         <block type="mbedActions_leds_on" id="GnJ8ZKA}ki`.qy!#uV5{" intask="true">
+                            <field name="ACTORPORT">R</field>
                             <value name="COLOR">
                                 <block type="mbedColour_picker" id="ss_`@dc0_N:Y6F-a/,|+" intask="true">
                                     <field name="COLOUR">#ff0000</field>
@@ -656,6 +638,7 @@
                             </value>
                         </block>
                         <block type="mbedActions_leds_on" id="-yYn5YhU/~zO|[q8}X(T" intask="true">
+                            <field name="ACTORPORT">R</field>
                             <value name="COLOR">
                                 <block type="mbedColour_picker" id="b=2Pc+szVgdE`?,`?L]}" intask="true">
                                     <field name="COLOUR">#009900</field>
@@ -673,6 +656,7 @@
                             </value>
                         </block>
                         <block type="mbedActions_leds_on" id="K2V0Y8C*/r`Lut(gf;W9" intask="true">
+                            <field name="ACTORPORT">R</field>
                             <value name="COLOR">
                                 <block type="mbedColour_picker" id="2D(@H92=2_U[ZUJ(Snq1" intask="true">
                                     <field name="COLOUR">#ff0000</field>
@@ -687,7 +671,7 @@
                                         <block type="robSensors_light_getSample" id="RL%0_z-7oNpPawl:*R?V" intask="true">
                                             <mutation mode="VALUE"></mutation>
                                             <field name="MODE">VALUE</field>
-                                            <field name="SENSORPORT"></field>
+                                            <field name="SENSORPORT">L</field>
                                             <field name="SLOT"></field>
                                         </block>
                                     </value>
@@ -700,6 +684,7 @@
                             </value>
                         </block>
                         <block type="mbedActions_leds_on" id=")+7wf`y_::zIElre`%N5" intask="true">
+                            <field name="ACTORPORT">R</field>
                             <value name="COLOR">
                                 <block type="mbedColour_picker" id="``h}7bsuMFQ+B!;BBzh5" intask="true">
                                     <field name="COLOUR">#009900</field>
@@ -714,7 +699,7 @@
                                         <block type="robSensors_light_getSample" id="(8`NMZo#~##SU~8oFFSG" intask="true">
                                             <mutation mode="VALUE"></mutation>
                                             <field name="MODE">VALUE</field>
-                                            <field name="SENSORPORT"></field>
+                                            <field name="SENSORPORT">L</field>
                                             <field name="SLOT"></field>
                                         </block>
                                     </value>
@@ -727,6 +712,7 @@
                             </value>
                         </block>
                         <block type="mbedActions_leds_on" id=";QvqweK@G+2]#7)z^Ic%" intask="true">
+                            <field name="ACTORPORT">R</field>
                             <value name="COLOR">
                                 <block type="mbedColour_picker" id="x^@ak!aDy:Q@Q{kMj#D}" intask="true">
                                     <field name="COLOUR">#ff0000</field>
@@ -757,6 +743,7 @@
                             </value>
                         </block>
                         <block type="mbedActions_leds_on" id="S@^Z[SAXvrL`0^0!4D4W" intask="true">
+                            <field name="ACTORPORT">R</field>
                             <value name="COLOR">
                                 <block type="mbedColour_picker" id="er=nyJBdTL,2BQg+x;]j" intask="true">
                                     <field name="COLOUR">#009900</field>
@@ -770,7 +757,7 @@
                                 <block type="robSensors_compass_getSample" id="b,i%m.C)RQg/;lPs4B3Z" intask="true">
                                     <mutation mode="ANGLE"></mutation>
                                     <field name="MODE">ANGLE</field>
-                                    <field name="SENSORPORT"></field>
+                                    <field name="SENSORPORT">C</field>
                                     <field name="SLOT"></field>
                                 </block>
                             </value>
@@ -813,7 +800,7 @@
                                                                 <block type="robSensors_compass_getSample" id=":[ZN(8dq^mkt6sUMx:-0" intask="true">
                                                                     <mutation mode="ANGLE"></mutation>
                                                                     <field name="MODE">ANGLE</field>
-                                                                    <field name="SENSORPORT"></field>
+                                                                    <field name="SENSORPORT">C</field>
                                                                     <field name="SLOT"></field>
                                                                 </block>
                                                             </value>
@@ -829,7 +816,9 @@
                                         </block>
                                     </value>
                                     <statement name="DO0">
-                                        <block type="mbedActions_leds_off" id="_QItL7;`t#Zgmwd4I]e8" intask="true"></block>
+                                        <block type="mbedActions_leds_off" id="_QItL7;`t#Zgmwd4I]e8" intask="true">
+                                            <field name="ACTORPORT">R</field>
+                                        </block>
                                         <block type="controls_flow_statements" id="Nv9CjA,PYywQfi[eG98g" intask="true">
                                             <field name="FLOW">BREAK</field>
                                         </block>
@@ -869,8 +858,8 @@
                 <block type="robSensors_accelerometer_getSample" id="(]{iO;++4idG;hx_3/D[" intask="false">
                     <mutation mode="VALUE"></mutation>
                     <field name="MODE">VALUE</field>
-                    <field name="SENSORPORT">X</field>
-                    <field name="SLOT"></field>
+                    <field name="SENSORPORT">Acc</field>
+                    <field name="SLOT">X</field>
                 </block>
             </instance>
             <instance x="235" y="812">
@@ -907,9 +896,59 @@
         </block_set>
     </program>
     <config>
-        <block_set robottype="calliope" xmlversion="2.0" description="" tags="" xmlns="http://de.fhg.iais.roberta.blockly">
-            <instance x="138" y="88">
-                <block type="mbedBrick_Calliope-Brick" id="1" intask="true"/>
+        <block_set robottype="calliope" xmlversion="3.0" description="" tags="" xmlns="http://de.fhg.iais.roberta.blockly">
+            <instance x="1136" y="-1065">
+                <block type="robConf_accelerometer" id="#(ufvG,s^FcqI,aFn/A{" intask="true">
+                    <field name="NAME">Acc</field>
+                </block>
+            </instance>
+            <instance x="1269" y="-1254">
+                <block type="robConf_key" id="Kbp:=x@gw@n.b~NH|1|e" intask="true">
+                    <field name="NAME">A</field>
+                    <field name="PIN1">A</field>
+                </block>
+            </instance>
+            <instance x="1662" y="-1251">
+                <block type="robConf_rgbled" id="lgi%C3,J!smR:eP0aal_" intask="true">
+                    <field name="NAME">R</field>
+                    <field name="PIN1">0</field>
+                </block>
+            </instance>
+            <instance x="1269" y="-1190">
+                <block type="robConf_key" id="~wk*JZQvB.fj=I`N#NWp" intask="true">
+                    <field name="NAME">B</field>
+                    <field name="PIN1">B</field>
+                </block>
+            </instance>
+            <instance x="1400" y="-1190">
+                <block type="robConf_compass" id="O%Oi0Tq`hGEvrgHGPYY=" intask="true">
+                    <field name="NAME">C</field>
+                </block>
+            </instance>
+            <instance x="1348" y="-974">
+                <block type="robConf_gyro" id="lIT?C5y|(7FWCQIUn~pc" intask="true">
+                    <field name="NAME">G</field>
+                </block>
+            </instance>
+            <instance x="1692" y="-1133">
+                <block type="robConf_buzzer" id="}%d2_68IJd*7Oy{qrMR," intask="true">
+                    <field name="NAME">BZ</field>
+                </block>
+            </instance>
+            <instance x="1428" y="-1061">
+                <block type="robConf_temperature" id="0y].dnS)P)~Jjzeu3/0C" intask="true">
+                    <field name="NAME">TM</field>
+                </block>
+            </instance>
+            <instance x="1400" y="-1254">
+                <block type="robConf_light" id="9Ktt(7_4+XmKC0]5Zha?" intask="true">
+                    <field name="NAME">L</field>
+                </block>
+            </instance>
+            <instance x="1400" y="-1123">
+                <block type="robConf_sound" id="e:4V0FcDx%9,.7xO,Ns@" intask="true">
+                    <field name="NAME">M</field>
+                </block>
             </instance>
         </block_set>
     </config>

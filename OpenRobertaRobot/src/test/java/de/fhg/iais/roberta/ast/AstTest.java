@@ -18,7 +18,8 @@ public abstract class AstTest {
         String pwd = System.getProperty("user.dir");
         if ( pwd == null || pwd.isEmpty() || pwd.contains("OpenRobertaRobot") ) {
             robotName = "test";
-            pluginDefines.add("test:robot.configuration.type = new");
+            pluginDefines.add("test:robot.configuration.type = old-S");
+            pluginDefines.add("test:robot.configuration.old.toplevelblock = robBrick_EV3-Brick");
         } else if ( pwd.contains("RobotArdu") ) {
             robotName = "nano";
         } else if ( pwd.contains("RobotEdison") ) {

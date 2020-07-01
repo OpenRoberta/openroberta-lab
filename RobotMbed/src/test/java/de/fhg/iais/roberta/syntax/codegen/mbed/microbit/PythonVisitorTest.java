@@ -2,7 +2,6 @@ package de.fhg.iais.roberta.syntax.codegen.mbed.microbit;
 
 import org.junit.Test;
 
-import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.syntax.MicrobitAstTest;
 import de.fhg.iais.roberta.util.test.UnitTestHelper;
 
@@ -16,14 +15,6 @@ public class PythonVisitorTest extends MicrobitAstTest {
             + "class BreakOutOfALoop(Exception): pass\n"
             + "class ContinueLoop(Exception): pass\n\n"
             + "timer1 = microbit.running_time()\n";
-
-    private static ConfigurationAst brickConfiguration;
-
-    //    @BeforeClass
-    //    public static void setupConfigurationForAllTests() {
-    //        MicrobitConfiguration.Builder configuration = new MicrobitConfiguration.Builder();
-    //        brickConfiguration = configuration.build();
-    //    }
 
     @Test
     public void visitMainTask_ByDefault_ReturnsEmptyMicroPythonScript() throws Exception {
@@ -49,7 +40,13 @@ public class PythonVisitorTest extends MicrobitAstTest {
                 + "if __name__ == \"__main__\":\n"
                 + "    main()";
 
-        UnitTestHelper.checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, expectedResult, "/task/main_task_no_variables_empty.xml", true);
+        UnitTestHelper
+            .checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(
+                testFactory,
+                expectedResult,
+                "/task/main_task_no_variables_empty.xml",
+                configuration,
+                true);
     }
 
     @Test
@@ -71,7 +68,13 @@ public class PythonVisitorTest extends MicrobitAstTest {
                 + "if __name__ == \"__main__\":\n"
                 + "    main()";
 
-        UnitTestHelper.checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, expectedResult, "/action/display_text_show_hello.xml", true);
+        UnitTestHelper
+            .checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(
+                testFactory,
+                expectedResult,
+                "/action/display_text_show_hello.xml",
+                configuration,
+                true);
     }
 
     @Test
@@ -99,6 +102,7 @@ public class PythonVisitorTest extends MicrobitAstTest {
                 testFactory,
                 expectedResult,
                 "/expr/image_get_image_defined_as_global_variables.xml",
+                configuration,
                 true);
     }
 
@@ -127,6 +131,7 @@ public class PythonVisitorTest extends MicrobitAstTest {
                 testFactory,
                 expectedResult,
                 "/action/display_image_show_imag_and_animation.xml",
+                configuration,
                 true);
     }
 
@@ -150,7 +155,12 @@ public class PythonVisitorTest extends MicrobitAstTest {
                 + "    main()";
 
         UnitTestHelper
-            .checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, expectedResult, "/action/display_image_missing_image_name.xml", true);
+            .checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(
+                testFactory,
+                expectedResult,
+                "/action/display_image_missing_image_name.xml",
+                configuration,
+                true);
     }
 
     @Test
@@ -172,7 +182,8 @@ public class PythonVisitorTest extends MicrobitAstTest {
                 + "if __name__ == \"__main__\":\n"
                 + "    main()";
 
-        UnitTestHelper.checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, expectedResult, "/action/display_clear.xml", true);
+        UnitTestHelper
+            .checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, expectedResult, "/action/display_clear.xml", configuration, true);
     }
 
     @Test
@@ -195,7 +206,8 @@ public class PythonVisitorTest extends MicrobitAstTest {
                 + "if __name__ == \"__main__\":\n"
                 + "    main()";
 
-        UnitTestHelper.checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, expectedResult, "/function/image_shift_up_down.xml", true);
+        UnitTestHelper
+            .checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, expectedResult, "/function/image_shift_up_down.xml", configuration, true);
     }
 
     @Test
@@ -217,7 +229,12 @@ public class PythonVisitorTest extends MicrobitAstTest {
                 + "if __name__ == \"__main__\":\n"
                 + "    main()";
         UnitTestHelper
-            .checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, expectedResult, "/action/write_value_to_pin_microbit.xml", true);
+            .checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(
+                testFactory,
+                expectedResult,
+                "/action/write_value_to_pin_microbit.xml",
+                configuration,
+                true);
     }
 
     @Test
@@ -244,6 +261,7 @@ public class PythonVisitorTest extends MicrobitAstTest {
                 testFactory,
                 expectedResult,
                 "/function/image_shift_missing_image_and_position.xml",
+                configuration,
                 true);
     }
 
@@ -266,7 +284,13 @@ public class PythonVisitorTest extends MicrobitAstTest {
                 + "if __name__ == \"__main__\":\n"
                 + "    main()";
 
-        UnitTestHelper.checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, expectedResult, "/function/image_invert_heart_image.xml", true);
+        UnitTestHelper
+            .checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(
+                testFactory,
+                expectedResult,
+                "/function/image_invert_heart_image.xml",
+                configuration,
+                true);
     }
 
     @Test
@@ -289,7 +313,12 @@ public class PythonVisitorTest extends MicrobitAstTest {
                 + "    main()";
 
         UnitTestHelper
-            .checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, expectedResult, "/function/image_invert_missing_image.xml", true);
+            .checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(
+                testFactory,
+                expectedResult,
+                "/function/image_invert_missing_image.xml",
+                configuration,
+                true);
     }
 
     @Test
@@ -311,7 +340,13 @@ public class PythonVisitorTest extends MicrobitAstTest {
                 + "if __name__ == \"__main__\":\n"
                 + "    main()";
 
-        UnitTestHelper.checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, expectedResult, "/sensor/check_if_key_A_is_pressed.xml", true);
+        UnitTestHelper
+            .checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(
+                testFactory,
+                expectedResult,
+                "/sensor/check_if_key_A_is_pressed.xml",
+                configuration,
+                true);
     }
 
     @Test
@@ -334,7 +369,12 @@ public class PythonVisitorTest extends MicrobitAstTest {
                 + "    main()";
 
         UnitTestHelper
-            .checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, expectedResult, "/sensor/get_compass_orientation_value.xml", true);
+            .checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(
+                testFactory,
+                expectedResult,
+                "/sensor/get_compass_orientation_value.xml",
+                configuration,
+                true);
     }
 
     @Test
@@ -357,7 +397,7 @@ public class PythonVisitorTest extends MicrobitAstTest {
                 + "    main()";
 
         UnitTestHelper
-            .checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, expectedResult, "/sensor/get_light_level.xml", true);
+            .checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, expectedResult, "/sensor/get_light_level.xml", configuration, true);
     }
 
     @Test
@@ -379,7 +419,7 @@ public class PythonVisitorTest extends MicrobitAstTest {
                 + "if __name__ == \"__main__\":\n"
                 + "    main()";
 
-        UnitTestHelper.checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, expectedResult, "/expr/image_create.xml", true);
+        UnitTestHelper.checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, expectedResult, "/expr/image_create.xml", configuration, true);
     }
 
     @Test
@@ -402,7 +442,8 @@ public class PythonVisitorTest extends MicrobitAstTest {
                 + "if __name__ == \"__main__\":\n"
                 + "    main()";
 
-        UnitTestHelper.checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, expectedResult, "/sensor/check_gesture.xml", true);
+        UnitTestHelper
+            .checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, expectedResult, "/sensor/check_gesture.xml", configuration, true);
     }
 
     @Test
@@ -424,7 +465,8 @@ public class PythonVisitorTest extends MicrobitAstTest {
                 + "if __name__ == \"__main__\":\n"
                 + "    main()";
 
-        UnitTestHelper.checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, expectedResult, "/sensor/get_temperature.xml", true);
+        UnitTestHelper
+            .checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, expectedResult, "/sensor/get_temperature.xml", configuration, true);
     }
 
     @Test
@@ -447,7 +489,8 @@ public class PythonVisitorTest extends MicrobitAstTest {
                 + "if __name__ == \"__main__\":\n"
                 + "    main()";
 
-        UnitTestHelper.checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, expectedResult, "/sensor/pin_is_touched.xml", true);
+        UnitTestHelper
+            .checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, expectedResult, "/sensor/pin_is_touched.xml", configuration, true);
     }
 
     @Test
@@ -470,7 +513,13 @@ public class PythonVisitorTest extends MicrobitAstTest {
                 + "if __name__ == \"__main__\":\n"
                 + "    main()";
 
-        UnitTestHelper.checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, expectedResult, "/sensor/read_value_from_pin.xml", true);
+        UnitTestHelper
+            .checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(
+                testFactory,
+                expectedResult,
+                "/sensor/read_value_from_pin_microbit.xml",
+                configuration,
+                true);
     }
 
     @Test
@@ -495,7 +544,8 @@ public class PythonVisitorTest extends MicrobitAstTest {
                 + "if __name__ == \"__main__\":\n"
                 + "    main()";
 
-        UnitTestHelper.checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, expectedResult, "/sensor/acceleration_sensor.xml", true);
+        UnitTestHelper
+            .checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, expectedResult, "/sensor/acceleration_sensor.xml", configuration, true);
     }
 
     @Test
@@ -520,7 +570,7 @@ public class PythonVisitorTest extends MicrobitAstTest {
                 + "if __name__ == \"__main__\":\n"
                 + "    main()";
 
-        UnitTestHelper.checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, a, "/stmts/microbit/no_loops.xml", true);
+        UnitTestHelper.checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, a, "/stmts/microbit/no_loops.xml", configuration, true);
     }
 
     @Test
@@ -548,7 +598,7 @@ public class PythonVisitorTest extends MicrobitAstTest {
                 + "if __name__ == \"__main__\":\n"
                 + "    main()";
 
-        UnitTestHelper.checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, a, "/stmts/microbit/nested_loops.xml", true);
+        UnitTestHelper.checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, a, "/stmts/microbit/nested_loops.xml", configuration, true);
     }
 
     @Test
@@ -583,7 +633,12 @@ public class PythonVisitorTest extends MicrobitAstTest {
                 + "    main()";
 
         UnitTestHelper
-            .checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, a, "/stmts/microbit/loop_with_break_and_continue_inside_wait.xml", true);
+            .checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(
+                testFactory,
+                a,
+                "/stmts/microbit/loop_with_break_and_continue_inside_wait.xml",
+                configuration,
+                true);
     }
 
     @Test
@@ -625,6 +680,7 @@ public class PythonVisitorTest extends MicrobitAstTest {
                 testFactory,
                 a,
                 "/stmts/microbit/two_loop_with_break_and_continue_one_inside_wait_another_not.xml",
+                configuration,
                 true);
     }
 
@@ -667,6 +723,7 @@ public class PythonVisitorTest extends MicrobitAstTest {
                 testFactory,
                 a,
                 "/stmts/microbit/two_nested_loops_first_with_break_in_wait_second_not.xml",
+                configuration,
                 true);
     }
 
@@ -708,7 +765,12 @@ public class PythonVisitorTest extends MicrobitAstTest {
                 + "    main()";
 
         UnitTestHelper
-            .checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, a, "/stmts/microbit/loop_with_nested_two_loops_inside_wait.xml", true);
+            .checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(
+                testFactory,
+                a,
+                "/stmts/microbit/loop_with_nested_two_loops_inside_wait.xml",
+                configuration,
+                true);
     }
 
     @Test
@@ -762,6 +824,7 @@ public class PythonVisitorTest extends MicrobitAstTest {
                 testFactory,
                 a,
                 "/stmts/microbit/loop_with_nested_two_loops_inside_wait_second_contain_wait.xml",
+                configuration,
                 true);
     }
 
@@ -832,6 +895,7 @@ public class PythonVisitorTest extends MicrobitAstTest {
                 testFactory,
                 a,
                 "/stmts/microbit/three_loops_with_nested_two_loops_inside_wait_second_contain_wait.xml",
+                configuration,
                 true);
     }
 }

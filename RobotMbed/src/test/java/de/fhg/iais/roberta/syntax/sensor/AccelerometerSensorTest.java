@@ -12,10 +12,10 @@ public class AccelerometerSensorTest extends AstTest {
         String expectedResult =
             "BlockAST [project=[[Location [x=88, y=63], "
                 + "MainTask [], "
-                + "DisplayTextAction [TEXT, SensorExpr [AccelerometerSensor [X, VALUE, NO_SLOT]]], "
-                + "DisplayTextAction [TEXT, SensorExpr [AccelerometerSensor [Y, VALUE, NO_SLOT]]], "
-                + "DisplayTextAction [TEXT, SensorExpr [AccelerometerSensor [Z, VALUE, NO_SLOT]]], "
-                + "DisplayTextAction [TEXT, SensorExpr [AccelerometerSensor [STRENGTH, VALUE, NO_SLOT]]]]]]";
+                + "DisplayTextAction [TEXT, SensorExpr [AccelerometerSensor [G, VALUE, X]]], "
+                + "DisplayTextAction [TEXT, SensorExpr [AccelerometerSensor [G, VALUE, Y]]], "
+                + "DisplayTextAction [TEXT, SensorExpr [AccelerometerSensor [G, VALUE, Z]]], "
+                + "DisplayTextAction [TEXT, SensorExpr [AccelerometerSensor [G, VALUE, STRENGTH]]]]]]";
 
         UnitTestHelper.checkProgramAstEquality(testFactory, expectedResult, "/sensor/acceleration_sensor.xml");
 

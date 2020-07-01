@@ -47,28 +47,33 @@
 		{
 			"opc": "expr",
 			"expr": "NUM_CONST",
-			"value": 0
-		},
-		{
-			"opc": "motorOnAction",
-			"port": "b",
-			"name": "b"
-		},
-		{
-			"opc": "expr",
-			"expr": "NUM_CONST",
-			"value": "30"
-		},
-		{
-			"opc": "expr",
-			"expr": "NUM_CONST",
-			"value": 0
-		},
-		{
-			"opc": "motorOnAction",
-			"port": "ab",
-			"name": "ab"
-		},
+          "value": 0
+        },
+      {
+        "opc": "motorOnAction",
+        "port": "b",
+        "name": "b"
+      },
+      {
+        "opc": "expr",
+        "expr": "NUM_CONST",
+        "value": "30"
+      },
+      {
+        "opc": "expr",
+        "expr": "NUM_CONST",
+        "value": "30"
+      },
+      {
+        "opc": "expr",
+        "expr": "NUM_CONST",
+        "value": 0
+      },
+      {
+        "opc": "bothMotorsOnAction",
+        "portA": "a",
+        "portB": "b"
+      },
 		{
 			"opc": "motorStop",
 			"port": "a"

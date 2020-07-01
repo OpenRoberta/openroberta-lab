@@ -1,0 +1,72 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="calliope" xmlversion="2.0" description="" tags="">
+    <instance x="512" y="50">
+        <block type="robControls_start" id="9T9,HaI3oP%{Xv]%-HN?" intask="true" deletable="false">
+            <mutation declare="false"></mutation>
+            <field name="DEBUG"></field>
+        </block>
+        <block type="mbedActions_servo_set" id="S|};d%;ptFF{QlBpt|.^" intask="true">
+            <field name="PIN_PORT">1</field>
+            <value name="VALUE">
+                <block type="math_number" id="`5e1Iy0;#*cuOu9u6]`3" intask="true">
+                    <field name="NUM">90</field>
+                </block>
+            </value>
+        </block>
+        <block type="mbedActions_servo_set" id="u!.a-`DPMq#6+24,LNe:" intask="true">
+            <field name="PIN_PORT">2</field>
+            <value name="VALUE">
+                <block type="math_number" id="`*GH9ppo5B-x+Er:}{v7" intask="true">
+                    <field name="NUM">90</field>
+                </block>
+            </value>
+        </block>
+        <block type="mbedActions_servo_set" id="0^N%hSKtZ4jle=;}X`=1" intask="true">
+            <field name="PIN_PORT">5</field>
+            <value name="VALUE">
+                <block type="math_number" id="uA%HWoO@Kr3X15:COkuj" intask="true">
+                    <field name="NUM">90</field>
+                </block>
+            </value>
+        </block>
+        <block type="mbedActions_servo_set" id="_a:rq,!.`I)e+C/x)JDo" intask="true">
+            <field name="PIN_PORT">C04</field>
+            <value name="VALUE">
+                <block type="math_number" id="^|[lC9%+=b:((i+6I-t[" intask="true">
+                    <field name="NUM">90</field>
+                </block>
+            </value>
+        </block>
+        <block type="mbedActions_servo_set" id="q?2;w`LjB(kZ#kGN%jUp" intask="true">
+            <field name="PIN_PORT">C05</field>
+            <value name="VALUE">
+                <block type="math_number" id="E07^5EcOFKskZ,N+ddU@" intask="true">
+                    <field name="NUM">90</field>
+                </block>
+            </value>
+        </block>
+        <block type="mbedActions_servo_set" id="va85Ok@)P.),xv)f3m7`" intask="true">
+            <field name="PIN_PORT">C06</field>
+            <value name="VALUE">
+                <block type="math_number" id="AKZfb}`gVNBBeE145iT*" intask="true">
+                    <field name="NUM">90</field>
+                </block>
+            </value>
+        </block>
+        <block type="mbedActions_servo_set" id="V?FjRjM{[}jc%#g7asa=" intask="true">
+            <field name="PIN_PORT">C16</field>
+            <value name="VALUE">
+                <block type="math_number" id="NRwEpcDDEmt(uPi]:9!|" intask="true">
+                    <field name="NUM">90</field>
+                </block>
+            </value>
+        </block>
+        <block type="mbedActions_servo_set" id="eHHJHe3klp/`4T?eN{_*" intask="true">
+            <field name="PIN_PORT">C17</field>
+            <value name="VALUE">
+                <block type="math_number" id="a}}D#fpB;lvuy]H]+EIS" intask="true">
+                    <field name="NUM">90</field>
+                </block>
+            </value>
+        </block>
+    </instance>
+</block_set>

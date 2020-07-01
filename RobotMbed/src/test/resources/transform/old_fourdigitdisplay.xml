@@ -1,0 +1,26 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="calliope" xmlversion="2.0" description="" tags="">
+    <instance x="512" y="50">
+        <block type="robControls_start" id="9T9,HaI3oP%{Xv]%-HN?" intask="true" deletable="false">
+            <mutation declare="false"></mutation>
+            <field name="DEBUG"></field>
+        </block>
+        <block type="mbedActions_fourDigitDisplay_show" id="6jAG:SEP(VeqP9Q*8#Ft" intask="true">
+            <value name="VALUE">
+                <block type="math_number" id="~BzV=6MnT[B1oFaLO^)F" intask="true">
+                    <field name="NUM">1234</field>
+                </block>
+            </value>
+            <value name="POSITION">
+                <block type="math_number" id="3auWfOYPI5pFp:l70Gak" intask="true">
+                    <field name="NUM">0</field>
+                </block>
+            </value>
+            <value name="COLON">
+                <block type="logic_boolean" id=")Iq88%D.JqB0nX.Wn4.w" intask="true">
+                    <field name="BOOL">TRUE</field>
+                </block>
+            </value>
+        </block>
+        <block type="mbedActions_fourDigitDisplay_clear" id="mF+xi(e[}gyK,^R0Z;UA" intask="true"></block>
+    </instance>
+</block_set>

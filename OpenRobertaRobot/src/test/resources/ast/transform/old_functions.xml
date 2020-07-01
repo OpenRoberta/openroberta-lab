@@ -1,0 +1,102 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="calliope" xmlversion="2.0" description="" tags="">
+    <instance x="671" y="5">
+        <block type="robControls_start" id="*?q%A7YL)j]uvV#K68@P" intask="true" deletable="false">
+            <mutation declare="false"></mutation>
+            <field name="DEBUG"></field>
+        </block>
+        <block type="robProcedures_callnoreturn" id="tW@+I5QnHEj,V1SBkW(^" intask="true">
+            <mutation name="f1"></mutation>
+        </block>
+    </instance>
+    <instance x="169" y="122">
+        <block type="robProcedures_defnoreturn" id="5`13ilh9n9j~N~l7aGO6" intask="true">
+            <mutation declare="false"></mutation>
+            <field name="NAME">f1</field>
+            <statement name="STACK">
+                <block type="robActions_debug" id="Kd528xjqhSUToC:]mLtD" intask="true">
+                    <value name="OUT">
+                        <block type="robSensors_key_getSample" id="e%g{SLXLg7ul#saXowR|" intask="true">
+                            <mutation mode="PRESSED"></mutation>
+                            <field name="MODE">PRESSED</field>
+                            <field name="SENSORPORT">A</field>
+                            <field name="SLOT"></field>
+                        </block>
+                    </value>
+                </block>
+                <block type="robActions_debug" id="DMIK3K`FW1N;(LE6`7%," intask="true">
+                    <value name="OUT">
+                        <block type="robProcedures_callreturn" id="{WoLn%ccs;n.|vn@km)7" intask="true">
+                            <mutation name="f2" output_type="Boolean"></mutation>
+                        </block>
+                    </value>
+                </block>
+            </statement>
+        </block>
+    </instance>
+    <instance x="167" y="225">
+        <block type="robProcedures_defreturn" id="e,ip+vzu~y;a~[v*}H9F" intask="true">
+            <mutation declare="false" return_type="Boolean"></mutation>
+            <field name="NAME">f2</field>
+            <field name="TYPE">Boolean</field>
+            <repetitions>
+                <statement name="STACK">
+                    <block type="robProcedures_ifreturn" id="w4Dq7p#:m@t~d4n|,m2e" intask="true">
+                        <mutation value="1" return_type="Boolean"></mutation>
+                        <value name="CONDITION">
+                            <block type="robSensors_key_getSample" id="lPIn?1-C+tn*XhhDV{cp" intask="true">
+                                <mutation mode="PRESSED"></mutation>
+                                <field name="MODE">PRESSED</field>
+                                <field name="SENSORPORT">B</field>
+                                <field name="SLOT"></field>
+                            </block>
+                        </value>
+                        <value name="VALUE">
+                            <block type="robSensors_key_getSample" id="~0hU;m[UtfkAtvo179Hn" intask="true">
+                                <mutation mode="PRESSED"></mutation>
+                                <field name="MODE">PRESSED</field>
+                                <field name="SENSORPORT">B</field>
+                                <field name="SLOT"></field>
+                            </block>
+                        </value>
+                    </block>
+                    <block type="robActions_debug" id="^,_+u+)ywk(BjlxUILWx" intask="true">
+                        <value name="OUT">
+                            <block type="robSensors_key_getSample" id="7r5bn`ZSN]0_bzx.U^Mr" intask="true">
+                                <mutation mode="PRESSED"></mutation>
+                                <field name="MODE">PRESSED</field>
+                                <field name="SENSORPORT">B</field>
+                                <field name="SLOT"></field>
+                            </block>
+                        </value>
+                    </block>
+                </statement>
+                <value name="RETURN">
+                    <block type="robSensors_key_getSample" id="Nm8/.@q^bks3oOc*W}[/" intask="true">
+                        <mutation mode="PRESSED"></mutation>
+                        <field name="MODE">PRESSED</field>
+                        <field name="SENSORPORT">B</field>
+                        <field name="SLOT"></field>
+                    </block>
+                </value>
+            </repetitions>
+        </block>
+    </instance>
+    <instance x="166" y="355">
+        <block type="robProcedures_defnoreturn" id="IhU(se@NFStXQ|84M,:." intask="true">
+            <mutation declare="false"></mutation>
+            <field name="NAME">unused</field>
+            <statement name="STACK">
+                <block type="robActions_debug" id="vM-obSl8BAe|7i0ugzl[" intask="true">
+                    <value name="OUT">
+                        <block type="robSensors_key_getSample" id="F@I_8/snMOf|:[ovA8K/" intask="true">
+                            <mutation mode="PRESSED"></mutation>
+                            <field name="MODE">PRESSED</field>
+                            <field name="SENSORPORT">A</field>
+                            <field name="SLOT"></field>
+                        </block>
+                    </value>
+                </block>
+            </statement>
+        </block>
+    </instance>
+</block_set>

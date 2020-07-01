@@ -1,0 +1,18 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="calliope" xmlversion="2.0" description="" tags="">
+    <instance x="671" y="5">
+        <block type="robControls_start" id="MW/]q99~EBI!T]xMP.2r" intask="true" deletable="false">
+            <mutation declare="false"></mutation>
+            <field name="DEBUG"></field>
+        </block>
+        <block type="mbedControls_wait_for" id="JWhlY%]e!j[SK`3YM/;!" intask="true">
+            <value name="WAIT0">
+                <block type="robSensors_getSample" id=")-ixI%5lU+!tf1Yya0GG" intask="true">
+                    <mutation input="KEY_PRESSED"></mutation>
+                    <field name="SENSORTYPE">KEY_PRESSED</field>
+                    <field name="SENSORPORT">A</field>
+                    <field name="SLOT"></field>
+                </block>
+            </value>
+        </block>
+    </instance>
+</block_set>

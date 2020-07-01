@@ -1,0 +1,30 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="calliope" xmlversion="2.0" description="" tags="">
+    <instance x="512" y="50">
+        <block type="robControls_start" id="9T9,HaI3oP%{Xv]%-HN?" intask="true" deletable="false">
+            <mutation declare="false"></mutation>
+            <field name="DEBUG"></field>
+        </block>
+        <block type="mbedActions_motor_on" id="=o6nNaP]s|Smc}TJ.wIJ" intask="true">
+            <field name="MOTORPORT">AB</field>
+            <value name="POWER">
+                <block type="math_number" id="lDk;oTC7Cad^BPc{WNRe" intask="true">
+                    <field name="NUM">30</field>
+                </block>
+            </value>
+        </block>
+        <block type="mbedActions_motor_on" id="bXPvVqpA0zrwX^u?PpoI" intask="true">
+            <field name="MOTORPORT">3</field>
+            <value name="POWER">
+                <block type="math_number" id="rBl0?:Nep9BJBI[.3?%+" intask="true">
+                    <field name="NUM">30</field>
+                </block>
+            </value>
+        </block>
+        <block type="mbedActions_motor_stop" id=":l9Xt0trOMdcsmoiOt)+" intask="true">
+            <field name="MOTORPORT">AB</field>
+        </block>
+        <block type="mbedActions_motor_stop" id="[^fomVSuu1[#/J*A;N]+" intask="true">
+            <field name="MOTORPORT">3</field>
+        </block>
+    </instance>
+</block_set>

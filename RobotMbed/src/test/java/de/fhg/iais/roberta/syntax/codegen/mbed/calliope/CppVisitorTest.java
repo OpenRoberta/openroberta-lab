@@ -3,8 +3,8 @@ package de.fhg.iais.roberta.syntax.codegen.mbed.calliope;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.syntax.CalliopeAstTest;
+import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.util.test.UnitTestHelper;
 
 public class CppVisitorTest extends CalliopeAstTest {
@@ -21,14 +21,6 @@ public class CppVisitorTest extends CalliopeAstTest {
     private static final String MAIN = "int main() { _uBit.init();";
 
     private static final String END = "release_fiber();}";
-
-    private static ConfigurationAst brickConfiguration;
-
-    //    @BeforeClass
-    //    public static void setupConfigurationForAllTests() {
-    //        CalliopeConfiguration.Builder configuration = new CalliopeConfiguration.Builder();
-    //        brickConfiguration = configuration.build();
-    //    }
 
     @Test
     public void visitMainTask_ByDefault_ReturnsEmptyCppProgram() throws Exception {
@@ -447,20 +439,18 @@ public class CppVisitorTest extends CalliopeAstTest {
         String expectedResult =
             "" //
                 + IMPORTS
-                + "double _motorOnStore = 0.0;"
                 + MAIN
                 + "_uBit.soundmotor.motorAOn(30);\n"
                 + "_uBit.soundmotor.motorBOn(30);\n"
-                + "_motorOnStore = 30;"
-                + "_uBit.soundmotor.motorAOn(_motorOnStore);\n"
-                + "_uBit.soundmotor.motorBOn(_motorOnStore);\n"
+                + "_uBit.soundmotor.motorAOn(30);\n"
+                + "_uBit.soundmotor.motorBOn(30);\n"
                 + END;
 
         UnitTestHelper.checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, expectedResult, "/action/motor_on.xml", configuration, true);
         ;
     }
 
-    @Test
+    @Test(expected = DbcException.class)
     public void visitSingleMotorOnAction_TurnOnMotor_ReturnsCorrectCppProgram() throws Exception {
         String expectedResult =
             "" //
@@ -597,7 +587,7 @@ public class CppVisitorTest extends CalliopeAstTest {
         ;
     }
 
-    @Test
+    @Test(expected = DbcException.class)
     public void visitSingleMotorStopAction_StopMotorFloatNonFloatSleep_ReturnsCorrectCppProgram() throws Exception {
         String expectedResult =
             "" //

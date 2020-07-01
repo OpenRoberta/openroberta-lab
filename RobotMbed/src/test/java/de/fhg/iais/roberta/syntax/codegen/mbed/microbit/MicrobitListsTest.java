@@ -10,12 +10,21 @@ public class MicrobitListsTest extends MicrobitAstTest {
     @Test
     public void mathOnListsTest() throws Exception {
         UnitTestHelper
-            .checkGeneratedSourceEqualityWithProgramXml(testFactory, "/lists/microbit_math_on_lists_test.py", "/lists/microbit_math_on_lists_test.xml");
+            .checkGeneratedSourceEqualityWithProgramXml(
+                testFactory,
+                "/lists/microbit_math_on_lists_test.py",
+                "/lists/microbit_math_on_lists_test.xml",
+                configuration);
     }
 
     @Test
     public void fullListsTest() throws Exception {
-        UnitTestHelper.checkGeneratedSourceEqualityWithProgramXml(testFactory, "/lists/microbit_lists_full_test.py", "/lists/microbit_lists_full_test.xml");
+        UnitTestHelper
+            .checkGeneratedSourceEqualityWithProgramXml(
+                testFactory,
+                "/lists/microbit_lists_full_test.py",
+                "/lists/microbit_lists_full_test.xml",
+                configuration);
     }
 
 }

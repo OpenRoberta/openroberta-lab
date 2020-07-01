@@ -9,7 +9,8 @@ public class CalliopeExpressionsTest extends CalliopeAstTest {
 
     @Test
     public void calliopeBinaryTest() throws Exception {
-        UnitTestHelper.checkGeneratedSourceEqualityWithProgramXml(testFactory, "/expr/calliope_binary_test.cpp", "/expr/calliope_binary_test.xml");
+        UnitTestHelper
+            .checkGeneratedSourceEqualityWithProgramXml(testFactory, "/expr/calliope_binary_test.cpp", "/expr/calliope_binary_test.xml", configuration);
     }
 
 }

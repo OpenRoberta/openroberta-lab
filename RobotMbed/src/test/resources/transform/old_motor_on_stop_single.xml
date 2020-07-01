@@ -1,0 +1,52 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="calliope" xmlversion="2.0" description="" tags="">
+    <instance x="512" y="50">
+        <block type="robControls_start" id="9T9,HaI3oP%{Xv]%-HN?" intask="true" deletable="false">
+            <mutation declare="false"></mutation>
+            <field name="DEBUG"></field>
+        </block>
+        <block type="mbedActions_motor_on" id="Xcf=iB/NOswAdrG;-ziL" intask="true">
+            <field name="MOTORPORT">A</field>
+            <value name="POWER">
+                <block type="math_number" id="(RpY|-AUT4xvq:Diyr*!" intask="true">
+                    <field name="NUM">30</field>
+                </block>
+            </value>
+        </block>
+        <block type="mbedActions_motor_on" id="so#d/KBj*=rXAZaiqaUy" intask="true">
+            <field name="MOTORPORT">B</field>
+            <value name="POWER">
+                <block type="math_number" id=":X;cu.r_Fyl|VBeM+fp*" intask="true">
+                    <field name="NUM">30</field>
+                </block>
+            </value>
+        </block>
+        <block type="mbedActions_motor_on" id="Y+U3~p}?#`x,g2GHBo^5" intask="true">
+            <field name="MOTORPORT">0</field>
+            <value name="POWER">
+                <block type="math_number" id="Jf~OqMt:|BGOgJ{BA0xL" intask="true">
+                    <field name="NUM">30</field>
+                </block>
+            </value>
+        </block>
+        <block type="mbedActions_motor_on" id="^@+Ma09h0X9i28oDFWi|" intask="true">
+            <field name="MOTORPORT">2</field>
+            <value name="POWER">
+                <block type="math_number" id="Gw(xv#Bc_L5OO!we.Lmw" intask="true">
+                    <field name="NUM">30</field>
+                </block>
+            </value>
+        </block>
+        <block type="mbedActions_motor_stop" id="OgI]-G8ysSi}jqd;W|?a" intask="true">
+            <field name="MOTORPORT">A</field>
+        </block>
+        <block type="mbedActions_motor_stop" id="3JFenvQkR^eQ?V@ixbX6" intask="true">
+            <field name="MOTORPORT">B</field>
+        </block>
+        <block type="mbedActions_motor_stop" id="e),!_h2as?v8mU*StRVC" intask="true">
+            <field name="MOTORPORT">0</field>
+        </block>
+        <block type="mbedActions_motor_stop" id="Sw4RxM-I-Pa`C[Gz/%C0" intask="true">
+            <field name="MOTORPORT">2</field>
+        </block>
+    </instance>
+</block_set>

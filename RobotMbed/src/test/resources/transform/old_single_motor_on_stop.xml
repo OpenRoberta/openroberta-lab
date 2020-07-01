@@ -1,0 +1,24 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="calliope" xmlversion="2.0" description="" tags="">
+    <instance x="512" y="50">
+        <block type="robControls_start" id="9T9,HaI3oP%{Xv]%-HN?" intask="true" deletable="false">
+            <mutation declare="false"></mutation>
+            <field name="DEBUG"></field>
+        </block>
+        <block type="mbedActions_single_motor_on" id="?=sE9;)qh`bq(Ws^iEr," intask="true">
+            <value name="POWER">
+                <block type="math_number" id="CTa6S/YU`e5nkXdOA_?V" intask="true">
+                    <field name="NUM">30</field>
+                </block>
+            </value>
+        </block>
+        <block type="mbedActions_single_motor_stop" id="QvM4n6WuE8AiE:npy-id" intask="true">
+            <field name="MODE">FLOAT</field>
+        </block>
+        <block type="mbedActions_single_motor_stop" id="8b9@!9_72)KQDDj2vaig" intask="true">
+            <field name="MODE">NONFLOAT</field>
+        </block>
+        <block type="mbedActions_single_motor_stop" id="Q4eZ#bPcsc7_5VSvJ8*V" intask="true">
+            <field name="MODE">SLEEP</field>
+        </block>
+    </instance>
+</block_set>

@@ -107,7 +107,7 @@ public class ActorTest extends EdisonAstTest {
 
     @Test
     public void TestLedOff() throws Exception {
-        String expected = insertIntoResult("[[Location [x=444, y=218], LightStatusAction [RESET]]]");
+        String expected = insertIntoResult("[[Location [x=444, y=218], LightStatusAction [LLED, RESET]]]");
         UnitTestHelper.checkProgramAstEquality(testFactory, expected, "/ast/actor/led_off.xml");
     }
 

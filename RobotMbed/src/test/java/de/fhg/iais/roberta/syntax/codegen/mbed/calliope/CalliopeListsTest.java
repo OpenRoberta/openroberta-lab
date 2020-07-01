@@ -12,7 +12,11 @@ public class CalliopeListsTest extends CalliopeAstTest {
     @Test
     public void calliopeGetSetTest() throws Exception {
         UnitTestHelper
-            .checkGeneratedSourceEqualityWithProgramXml(testFactory, "/lists/calliope_lists_get_set_test.cpp", "/lists/calliope_lists_get_set_test.xml");
+            .checkGeneratedSourceEqualityWithProgramXml(
+                testFactory,
+                "/lists/calliope_lists_get_set_test.cpp",
+                "/lists/calliope_lists_get_set_test.xml",
+                configuration);
     }
 
     @Test
@@ -21,7 +25,8 @@ public class CalliopeListsTest extends CalliopeAstTest {
             .checkGeneratedSourceEqualityWithProgramXml(
                 testFactory,
                 "/lists/calliope_lists_find_last_first_test.cpp",
-                "/lists/calliope_lists_find_last_first_test.xml");
+                "/lists/calliope_lists_find_last_first_test.xml",
+                configuration);
     }
 
     @Rule

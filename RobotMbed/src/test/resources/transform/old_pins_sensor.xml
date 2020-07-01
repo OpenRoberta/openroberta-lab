@@ -1,0 +1,658 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="calliope" xmlversion="2.0" description="" tags="">
+    <instance x="512" y="50">
+        <block type="robControls_start" id="1@MdS{Yto9BD_x+N/=~I" intask="true" deletable="false">
+            <mutation declare="false"></mutation>
+            <field name="DEBUG"></field>
+        </block>
+        <block type="robActions_debug" id="iOJmb+Qa#z[+3([P9Cfe" intask="true">
+            <value name="OUT">
+                <block type="robSensors_pin_getSample" id="5lH(XnfWn(G+wvj]/qA-" intask="true">
+                    <mutation mode="ANALOG"></mutation>
+                    <field name="MODE">ANALOG</field>
+                    <field name="SENSORPORT">1</field>
+                    <field name="SLOT"></field>
+                </block>
+            </value>
+        </block>
+        <block type="robActions_debug" id="9syCq^VbZ[DN@?E%pPkf" intask="true">
+            <value name="OUT">
+                <block type="robSensors_pin_getSample" id="CBtTb)1#EYqAzRJl9@zj" intask="true">
+                    <mutation mode="ANALOG"></mutation>
+                    <field name="MODE">ANALOG</field>
+                    <field name="SENSORPORT">2</field>
+                    <field name="SLOT"></field>
+                </block>
+            </value>
+        </block>
+        <block type="robActions_debug" id="6htVQ;TC:;;--iR*T;GM" intask="true">
+            <value name="OUT">
+                <block type="robSensors_pin_getSample" id="h_*xLuE(c[f-jrQ2fewq" intask="true">
+                    <mutation mode="ANALOG"></mutation>
+                    <field name="MODE">ANALOG</field>
+                    <field name="SENSORPORT">5</field>
+                    <field name="SLOT"></field>
+                </block>
+            </value>
+        </block>
+        <block type="robActions_debug" id="]6=v[hd*PW~OXd)G.*e~" intask="true">
+            <value name="OUT">
+                <block type="robSensors_pin_getSample" id="LtMcfJ+5{Iz.H~Nv2_5*" intask="true">
+                    <mutation mode="ANALOG"></mutation>
+                    <field name="MODE">ANALOG</field>
+                    <field name="SENSORPORT">C04</field>
+                    <field name="SLOT"></field>
+                </block>
+            </value>
+        </block>
+        <block type="robActions_debug" id=":mY8nA[CO/6mPtXR0(nB" intask="true">
+            <value name="OUT">
+                <block type="robSensors_pin_getSample" id="!SBGHwg:WU3ja3,zQAdA" intask="true">
+                    <mutation mode="ANALOG"></mutation>
+                    <field name="MODE">ANALOG</field>
+                    <field name="SENSORPORT">C05</field>
+                    <field name="SLOT"></field>
+                </block>
+            </value>
+        </block>
+        <block type="robActions_debug" id="p{gZthc750D!tEkl_^@i" intask="true">
+            <value name="OUT">
+                <block type="robSensors_pin_getSample" id="T(lHu!c+57_#yxl~xO,z" intask="true">
+                    <mutation mode="ANALOG"></mutation>
+                    <field name="MODE">ANALOG</field>
+                    <field name="SENSORPORT">C06</field>
+                    <field name="SLOT"></field>
+                </block>
+            </value>
+        </block>
+        <block type="robActions_debug" id="S)!G#hXg}Uo6sJ5U;h%S" intask="true">
+            <value name="OUT">
+                <block type="robSensors_pin_getSample" id="mN%-EKg8L@t6M,+`(%_y" intask="true">
+                    <mutation mode="ANALOG"></mutation>
+                    <field name="MODE">ANALOG</field>
+                    <field name="SENSORPORT">C16</field>
+                    <field name="SLOT"></field>
+                </block>
+            </value>
+        </block>
+        <block type="robActions_debug" id="];?/lgZT|njODf2P*Duj" intask="true">
+            <value name="OUT">
+                <block type="robSensors_pin_getSample" id="i`_V.P[.K_5{vV1F*F|X" intask="true">
+                    <mutation mode="ANALOG"></mutation>
+                    <field name="MODE">ANALOG</field>
+                    <field name="SENSORPORT">C17</field>
+                    <field name="SLOT"></field>
+                </block>
+            </value>
+        </block>
+        <block type="robActions_debug" id="9m;ncicV;n7Ao367OiI+" intask="true">
+            <value name="OUT">
+                <block type="robSensors_pin_getSample" id="uz=Qk!}xB=nX.bP,)679" intask="true">
+                    <mutation mode="DIGITAL"></mutation>
+                    <field name="MODE">DIGITAL</field>
+                    <field name="SENSORPORT">0</field>
+                    <field name="SLOT"></field>
+                </block>
+            </value>
+        </block>
+        <block type="robActions_debug" id="!zvHUp4TH9,{H4XSg8%(" intask="true">
+            <value name="OUT">
+                <block type="robSensors_pin_getSample" id="%%^*[ij5Qy+IS0lO*F2I" intask="true">
+                    <mutation mode="DIGITAL"></mutation>
+                    <field name="MODE">DIGITAL</field>
+                    <field name="SENSORPORT">1</field>
+                    <field name="SLOT"></field>
+                </block>
+            </value>
+        </block>
+        <block type="robActions_debug" id="15~s2@,?xftE!FA}T1.;" intask="true">
+            <value name="OUT">
+                <block type="robSensors_pin_getSample" id="8w%Wh//m*4zN{6rB3z[W" intask="true">
+                    <mutation mode="DIGITAL"></mutation>
+                    <field name="MODE">DIGITAL</field>
+                    <field name="SENSORPORT">2</field>
+                    <field name="SLOT"></field>
+                </block>
+            </value>
+        </block>
+        <block type="robActions_debug" id="U}:~JF4_6i)pqnaIum?V" intask="true">
+            <value name="OUT">
+                <block type="robSensors_pin_getSample" id="Lv^KMP},M6B:P!EVc2lI" intask="true">
+                    <mutation mode="DIGITAL"></mutation>
+                    <field name="MODE">DIGITAL</field>
+                    <field name="SENSORPORT">3</field>
+                    <field name="SLOT"></field>
+                </block>
+            </value>
+        </block>
+        <block type="robActions_debug" id="LRV-e3!4y+YEp}maiQYD" intask="true">
+            <value name="OUT">
+                <block type="robSensors_pin_getSample" id="]_Hb0yM~lv~}=vf@{Mq@" intask="true">
+                    <mutation mode="DIGITAL"></mutation>
+                    <field name="MODE">DIGITAL</field>
+                    <field name="SENSORPORT">4</field>
+                    <field name="SLOT"></field>
+                </block>
+            </value>
+        </block>
+        <block type="robActions_debug" id="n}N{~vQw-YQ;bjaL1)V}" intask="true">
+            <value name="OUT">
+                <block type="robSensors_pin_getSample" id="]Z6x/3+cSzc9|hXO0F|E" intask="true">
+                    <mutation mode="DIGITAL"></mutation>
+                    <field name="MODE">DIGITAL</field>
+                    <field name="SENSORPORT">5</field>
+                    <field name="SLOT"></field>
+                </block>
+            </value>
+        </block>
+        <block type="robActions_debug" id="o.GK973=*:!SihxWfI]+" intask="true">
+            <value name="OUT">
+                <block type="robSensors_pin_getSample" id="~Z3RZsq,e6pYUjEn-D1Q" intask="true">
+                    <mutation mode="DIGITAL"></mutation>
+                    <field name="MODE">DIGITAL</field>
+                    <field name="SENSORPORT">C04</field>
+                    <field name="SLOT"></field>
+                </block>
+            </value>
+        </block>
+        <block type="robActions_debug" id="~MbWi-]tpOZ%5-*@esdd" intask="true">
+            <value name="OUT">
+                <block type="robSensors_pin_getSample" id="3W^?6YZ@U:~OT6r[E_*g" intask="true">
+                    <mutation mode="DIGITAL"></mutation>
+                    <field name="MODE">DIGITAL</field>
+                    <field name="SENSORPORT">C05</field>
+                    <field name="SLOT"></field>
+                </block>
+            </value>
+        </block>
+        <block type="robActions_debug" id="4yBPM6NX8/Pnsi8*zYe7" intask="true">
+            <value name="OUT">
+                <block type="robSensors_pin_getSample" id="w`^wGQ8Gr]+*O[w;_).0" intask="true">
+                    <mutation mode="DIGITAL"></mutation>
+                    <field name="MODE">DIGITAL</field>
+                    <field name="SENSORPORT">C06</field>
+                    <field name="SLOT"></field>
+                </block>
+            </value>
+        </block>
+        <block type="robActions_debug" id="~.RZ*Tn?[[Jkcx,?,vI9" intask="true">
+            <value name="OUT">
+                <block type="robSensors_pin_getSample" id="|`6cfb4ZS-xte1NO=+0?" intask="true">
+                    <mutation mode="DIGITAL"></mutation>
+                    <field name="MODE">DIGITAL</field>
+                    <field name="SENSORPORT">C07</field>
+                    <field name="SLOT"></field>
+                </block>
+            </value>
+        </block>
+        <block type="robActions_debug" id=";SkTCTI}fcHM*yC5Ks@%" intask="true">
+            <value name="OUT">
+                <block type="robSensors_pin_getSample" id="6b%]Lz6sBdUmG01tuDKq" intask="true">
+                    <mutation mode="DIGITAL"></mutation>
+                    <field name="MODE">DIGITAL</field>
+                    <field name="SENSORPORT">C08</field>
+                    <field name="SLOT"></field>
+                </block>
+            </value>
+        </block>
+        <block type="robActions_debug" id="UraOW?z#E|r3O!_-5Vr_" intask="true">
+            <value name="OUT">
+                <block type="robSensors_pin_getSample" id="~[OR*Xbv-L49H_hz]h~B" intask="true">
+                    <mutation mode="DIGITAL"></mutation>
+                    <field name="MODE">DIGITAL</field>
+                    <field name="SENSORPORT">C09</field>
+                    <field name="SLOT"></field>
+                </block>
+            </value>
+        </block>
+        <block type="robActions_debug" id="l7TBYV#P%pX@U]c0Uhd{" intask="true">
+            <value name="OUT">
+                <block type="robSensors_pin_getSample" id="D:bj0Y?4dM4d;|{6fOe(" intask="true">
+                    <mutation mode="DIGITAL"></mutation>
+                    <field name="MODE">DIGITAL</field>
+                    <field name="SENSORPORT">C10</field>
+                    <field name="SLOT"></field>
+                </block>
+            </value>
+        </block>
+        <block type="robActions_debug" id="uS0V+q!sebv?1K~Gk}d!" intask="true">
+            <value name="OUT">
+                <block type="robSensors_pin_getSample" id="yW=sPz@?l?;E@__e,Z_D" intask="true">
+                    <mutation mode="DIGITAL"></mutation>
+                    <field name="MODE">DIGITAL</field>
+                    <field name="SENSORPORT">C11</field>
+                    <field name="SLOT"></field>
+                </block>
+            </value>
+        </block>
+        <block type="robActions_debug" id="W;rJ=tt7rI`eVG6P8K|v" intask="true">
+            <value name="OUT">
+                <block type="robSensors_pin_getSample" id="`N(dNQ+L{s#ltf@G%xcw" intask="true">
+                    <mutation mode="DIGITAL"></mutation>
+                    <field name="MODE">DIGITAL</field>
+                    <field name="SENSORPORT">C12</field>
+                    <field name="SLOT"></field>
+                </block>
+            </value>
+        </block>
+        <block type="robActions_debug" id="0UZq%vo2ka;4b7fy~Auh" intask="true">
+            <value name="OUT">
+                <block type="robSensors_pin_getSample" id="xRl{zxlcr!aTF;%!2+^k" intask="true">
+                    <mutation mode="DIGITAL"></mutation>
+                    <field name="MODE">DIGITAL</field>
+                    <field name="SENSORPORT">C16</field>
+                    <field name="SLOT"></field>
+                </block>
+            </value>
+        </block>
+        <block type="robActions_debug" id="j|1dGbRk+J(NQ_^uH+or" intask="true">
+            <value name="OUT">
+                <block type="robSensors_pin_getSample" id="=4f-,xez:G*Ez8+%?0Ax" intask="true">
+                    <mutation mode="DIGITAL"></mutation>
+                    <field name="MODE">DIGITAL</field>
+                    <field name="SENSORPORT">C17</field>
+                    <field name="SLOT"></field>
+                </block>
+            </value>
+        </block>
+        <block type="robActions_debug" id="m/-|+p@UcpEA3@{89aGV" intask="true">
+            <value name="OUT">
+                <block type="robSensors_pin_getSample" id="u?BHS!S.@df2Gl8*sa4+" intask="true">
+                    <mutation mode="DIGITAL"></mutation>
+                    <field name="MODE">DIGITAL</field>
+                    <field name="SENSORPORT">C18</field>
+                    <field name="SLOT"></field>
+                </block>
+            </value>
+        </block>
+        <block type="robActions_debug" id="h5QF7dyAkEF2n1WEV4g[" intask="true">
+            <value name="OUT">
+                <block type="robSensors_pin_getSample" id="V},~K@3mqb7/EJGCn]y+" intask="true">
+                    <mutation mode="DIGITAL"></mutation>
+                    <field name="MODE">DIGITAL</field>
+                    <field name="SENSORPORT">C19</field>
+                    <field name="SLOT"></field>
+                </block>
+            </value>
+        </block>
+        <block type="robActions_debug" id="uBP8KR@~3+}jcWggd1a:" intask="true">
+            <value name="OUT">
+                <block type="robSensors_pin_getSample" id="Z.o{O]AbVweO+[6L,6ou" intask="true">
+                    <mutation mode="PULSEHIGH"></mutation>
+                    <field name="MODE">PULSEHIGH</field>
+                    <field name="SENSORPORT">0</field>
+                    <field name="SLOT"></field>
+                </block>
+            </value>
+        </block>
+        <block type="robActions_debug" id="ABtQBNpjj08R|DqVh/s[" intask="true">
+            <value name="OUT">
+                <block type="robSensors_pin_getSample" id="Pv+ZGP#lSG:!`%,5bhuC" intask="true">
+                    <mutation mode="PULSEHIGH"></mutation>
+                    <field name="MODE">PULSEHIGH</field>
+                    <field name="SENSORPORT">1</field>
+                    <field name="SLOT"></field>
+                </block>
+            </value>
+        </block>
+        <block type="robActions_debug" id="4@%LRar`-){_bp`:@a+d" intask="true">
+            <value name="OUT">
+                <block type="robSensors_pin_getSample" id="I,KNgEE8tVodn@HE_CBW" intask="true">
+                    <mutation mode="PULSEHIGH"></mutation>
+                    <field name="MODE">PULSEHIGH</field>
+                    <field name="SENSORPORT">2</field>
+                    <field name="SLOT"></field>
+                </block>
+            </value>
+        </block>
+        <block type="robActions_debug" id="2WN/m}rT-y];`SiHgRnG" intask="true">
+            <value name="OUT">
+                <block type="robSensors_pin_getSample" id="sP)BzR?oYw3YCOU{*n)z" intask="true">
+                    <mutation mode="PULSEHIGH"></mutation>
+                    <field name="MODE">PULSEHIGH</field>
+                    <field name="SENSORPORT">3</field>
+                    <field name="SLOT"></field>
+                </block>
+            </value>
+        </block>
+        <block type="robActions_debug" id="2!R,!db1(`H!2E1|?15t" intask="true">
+            <value name="OUT">
+                <block type="robSensors_pin_getSample" id="4LCHb;xdx4X%5@-cFvey" intask="true">
+                    <mutation mode="PULSEHIGH"></mutation>
+                    <field name="MODE">PULSEHIGH</field>
+                    <field name="SENSORPORT">4</field>
+                    <field name="SLOT"></field>
+                </block>
+            </value>
+        </block>
+        <block type="robActions_debug" id=")gJb)z2;Rs;KP#p{/twz" intask="true">
+            <value name="OUT">
+                <block type="robSensors_pin_getSample" id="0Rw{eM}a!Q8bci:Pa7(1" intask="true">
+                    <mutation mode="PULSEHIGH"></mutation>
+                    <field name="MODE">PULSEHIGH</field>
+                    <field name="SENSORPORT">5</field>
+                    <field name="SLOT"></field>
+                </block>
+            </value>
+        </block>
+        <block type="robActions_debug" id="6tqRbA-,F@h@lt2N#)aV" intask="true">
+            <value name="OUT">
+                <block type="robSensors_pin_getSample" id="CR(Vp-op;ez:Yb)vYFsS" intask="true">
+                    <mutation mode="PULSEHIGH"></mutation>
+                    <field name="MODE">PULSEHIGH</field>
+                    <field name="SENSORPORT">C04</field>
+                    <field name="SLOT"></field>
+                </block>
+            </value>
+        </block>
+        <block type="robActions_debug" id="=/;~Lv]n4?I|Z~@8zaCW" intask="true">
+            <value name="OUT">
+                <block type="robSensors_pin_getSample" id="|*h`6:K*cQM+KJg(a]3c" intask="true">
+                    <mutation mode="PULSEHIGH"></mutation>
+                    <field name="MODE">PULSEHIGH</field>
+                    <field name="SENSORPORT">C05</field>
+                    <field name="SLOT"></field>
+                </block>
+            </value>
+        </block>
+        <block type="robActions_debug" id="}!6?:[RTSbBxazlK3sQ4" intask="true">
+            <value name="OUT">
+                <block type="robSensors_pin_getSample" id="EMi8qTH~twa%`+jlQU6%" intask="true">
+                    <mutation mode="PULSEHIGH"></mutation>
+                    <field name="MODE">PULSEHIGH</field>
+                    <field name="SENSORPORT">C06</field>
+                    <field name="SLOT"></field>
+                </block>
+            </value>
+        </block>
+        <block type="robActions_debug" id="flqd4p-?gPivhlb]yRaY" intask="true">
+            <value name="OUT">
+                <block type="robSensors_pin_getSample" id="]@f%uFSjP[BtdQn6bcG?" intask="true">
+                    <mutation mode="PULSEHIGH"></mutation>
+                    <field name="MODE">PULSEHIGH</field>
+                    <field name="SENSORPORT">C07</field>
+                    <field name="SLOT"></field>
+                </block>
+            </value>
+        </block>
+        <block type="robActions_debug" id="LsD//sAs2IF|H35|{g`4" intask="true">
+            <value name="OUT">
+                <block type="robSensors_pin_getSample" id="v7cl814N]w@Kmt2;:;R)" intask="true">
+                    <mutation mode="PULSEHIGH"></mutation>
+                    <field name="MODE">PULSEHIGH</field>
+                    <field name="SENSORPORT">C08</field>
+                    <field name="SLOT"></field>
+                </block>
+            </value>
+        </block>
+        <block type="robActions_debug" id="QKA@gld;a)=8}x%noCmY" intask="true">
+            <value name="OUT">
+                <block type="robSensors_pin_getSample" id="=Jb06P/Er:NKFuUdIea}" intask="true">
+                    <mutation mode="PULSEHIGH"></mutation>
+                    <field name="MODE">PULSEHIGH</field>
+                    <field name="SENSORPORT">C09</field>
+                    <field name="SLOT"></field>
+                </block>
+            </value>
+        </block>
+        <block type="robActions_debug" id="=t.9LqJsg1j_z^sY@8_f" intask="true">
+            <value name="OUT">
+                <block type="robSensors_pin_getSample" id=":C_yb^:R|Y*l0[c}hilQ" intask="true">
+                    <mutation mode="PULSEHIGH"></mutation>
+                    <field name="MODE">PULSEHIGH</field>
+                    <field name="SENSORPORT">C10</field>
+                    <field name="SLOT"></field>
+                </block>
+            </value>
+        </block>
+        <block type="robActions_debug" id=".H;at98XyF@dLq~+1oH0" intask="true">
+            <value name="OUT">
+                <block type="robSensors_pin_getSample" id="7]fXo6~4eEint{WU6S0M" intask="true">
+                    <mutation mode="PULSEHIGH"></mutation>
+                    <field name="MODE">PULSEHIGH</field>
+                    <field name="SENSORPORT">C11</field>
+                    <field name="SLOT"></field>
+                </block>
+            </value>
+        </block>
+        <block type="robActions_debug" id="{C%|ox%J{F1B^1eD:T-c" intask="true">
+            <value name="OUT">
+                <block type="robSensors_pin_getSample" id="V{ZA0k1w9`xIGjK/dF:2" intask="true">
+                    <mutation mode="PULSEHIGH"></mutation>
+                    <field name="MODE">PULSEHIGH</field>
+                    <field name="SENSORPORT">C12</field>
+                    <field name="SLOT"></field>
+                </block>
+            </value>
+        </block>
+        <block type="robActions_debug" id="e]`}oZ?A=dgI0yc2_wAi" intask="true">
+            <value name="OUT">
+                <block type="robSensors_pin_getSample" id="K]yf+`G@XlHU=m|]sRJZ" intask="true">
+                    <mutation mode="PULSEHIGH"></mutation>
+                    <field name="MODE">PULSEHIGH</field>
+                    <field name="SENSORPORT">C16</field>
+                    <field name="SLOT"></field>
+                </block>
+            </value>
+        </block>
+        <block type="robActions_debug" id="aM4pnSUS+%/Ia/[nF:oV" intask="true">
+            <value name="OUT">
+                <block type="robSensors_pin_getSample" id="EG{cD^G:qEAay,|9c03P" intask="true">
+                    <mutation mode="PULSEHIGH"></mutation>
+                    <field name="MODE">PULSEHIGH</field>
+                    <field name="SENSORPORT">C17</field>
+                    <field name="SLOT"></field>
+                </block>
+            </value>
+        </block>
+        <block type="robActions_debug" id="eK]V9r_]4K-/h(%_;RuJ" intask="true">
+            <value name="OUT">
+                <block type="robSensors_pin_getSample" id="5NO5jpQ0u+@sg:QjuHdN" intask="true">
+                    <mutation mode="PULSEHIGH"></mutation>
+                    <field name="MODE">PULSEHIGH</field>
+                    <field name="SENSORPORT">C18</field>
+                    <field name="SLOT"></field>
+                </block>
+            </value>
+        </block>
+        <block type="robActions_debug" id="1bA)f,c`(4`fg5oLwFyb" intask="true">
+            <value name="OUT">
+                <block type="robSensors_pin_getSample" id="NxB2`Bg1-?i0DrM+h?~I" intask="true">
+                    <mutation mode="PULSEHIGH"></mutation>
+                    <field name="MODE">PULSEHIGH</field>
+                    <field name="SENSORPORT">C19</field>
+                    <field name="SLOT"></field>
+                </block>
+            </value>
+        </block>
+        <block type="robActions_debug" id="W7)@,j^ZV}|q.7*w/8Ss" intask="true">
+            <value name="OUT">
+                <block type="robSensors_pin_getSample" id="an6LalWtJ;}eig5w6Ju_" intask="true">
+                    <mutation mode="PULSELOW"></mutation>
+                    <field name="MODE">PULSELOW</field>
+                    <field name="SENSORPORT">0</field>
+                    <field name="SLOT"></field>
+                </block>
+            </value>
+        </block>
+        <block type="robActions_debug" id="3y)l;1hMQC{:PlpK8ZgP" intask="true">
+            <value name="OUT">
+                <block type="robSensors_pin_getSample" id="+~+@5rAXLiH3!FA=r`9o" intask="true">
+                    <mutation mode="PULSELOW"></mutation>
+                    <field name="MODE">PULSELOW</field>
+                    <field name="SENSORPORT">1</field>
+                    <field name="SLOT"></field>
+                </block>
+            </value>
+        </block>
+        <block type="robActions_debug" id="UB0(wzQ;acNd2sEDc]mS" intask="true">
+            <value name="OUT">
+                <block type="robSensors_pin_getSample" id="P;|~3l*@[xpKHX)Bys{t" intask="true">
+                    <mutation mode="PULSELOW"></mutation>
+                    <field name="MODE">PULSELOW</field>
+                    <field name="SENSORPORT">2</field>
+                    <field name="SLOT"></field>
+                </block>
+            </value>
+        </block>
+        <block type="robActions_debug" id="=%EEive(BL|0wH:{7]X:" intask="true">
+            <value name="OUT">
+                <block type="robSensors_pin_getSample" id=")nnZ26##PQbN;iDKcwFL" intask="true">
+                    <mutation mode="PULSELOW"></mutation>
+                    <field name="MODE">PULSELOW</field>
+                    <field name="SENSORPORT">3</field>
+                    <field name="SLOT"></field>
+                </block>
+            </value>
+        </block>
+        <block type="robActions_debug" id="]5d~vOb!j){j+{GMGnqy" intask="true">
+            <value name="OUT">
+                <block type="robSensors_pin_getSample" id="T/W1.+Y%0Mb4K%A_6`2Z" intask="true">
+                    <mutation mode="PULSELOW"></mutation>
+                    <field name="MODE">PULSELOW</field>
+                    <field name="SENSORPORT">4</field>
+                    <field name="SLOT"></field>
+                </block>
+            </value>
+        </block>
+        <block type="robActions_debug" id="G2`rW7Qg:}.p69NVJXb^" intask="true">
+            <value name="OUT">
+                <block type="robSensors_pin_getSample" id="-C0F(B]wmkEE~mCTV[rG" intask="true">
+                    <mutation mode="PULSELOW"></mutation>
+                    <field name="MODE">PULSELOW</field>
+                    <field name="SENSORPORT">5</field>
+                    <field name="SLOT"></field>
+                </block>
+            </value>
+        </block>
+        <block type="robActions_debug" id="bWjJ#19Q1O2`(LPbb)}+" intask="true">
+            <value name="OUT">
+                <block type="robSensors_pin_getSample" id="^,w8bUh{^;d/kyA{B:h4" intask="true">
+                    <mutation mode="PULSELOW"></mutation>
+                    <field name="MODE">PULSELOW</field>
+                    <field name="SENSORPORT">C04</field>
+                    <field name="SLOT"></field>
+                </block>
+            </value>
+        </block>
+        <block type="robActions_debug" id="#DsDO`?T(H:oHlQ)7[?a" intask="true">
+            <value name="OUT">
+                <block type="robSensors_pin_getSample" id="kA?kmX(VQ~pWxg!5}lL+" intask="true">
+                    <mutation mode="PULSELOW"></mutation>
+                    <field name="MODE">PULSELOW</field>
+                    <field name="SENSORPORT">C05</field>
+                    <field name="SLOT"></field>
+                </block>
+            </value>
+        </block>
+        <block type="robActions_debug" id="MSO**}_WtGDGDIyh,Z/2" intask="true">
+            <value name="OUT">
+                <block type="robSensors_pin_getSample" id="HF`6kAX{~]7.Bo4/pzhZ" intask="true">
+                    <mutation mode="PULSELOW"></mutation>
+                    <field name="MODE">PULSELOW</field>
+                    <field name="SENSORPORT">C06</field>
+                    <field name="SLOT"></field>
+                </block>
+            </value>
+        </block>
+        <block type="robActions_debug" id="/vfY^xUvE)Z^C/d%^kRp" intask="true">
+            <value name="OUT">
+                <block type="robSensors_pin_getSample" id="*E*p;?Dx_O4b5siU#W=i" intask="true">
+                    <mutation mode="PULSELOW"></mutation>
+                    <field name="MODE">PULSELOW</field>
+                    <field name="SENSORPORT">C07</field>
+                    <field name="SLOT"></field>
+                </block>
+            </value>
+        </block>
+        <block type="robActions_debug" id="]B=4Rqux{OW238-ZQ!dh" intask="true">
+            <value name="OUT">
+                <block type="robSensors_pin_getSample" id="3GB([JUwjidYJ0KU4ZuU" intask="true">
+                    <mutation mode="PULSELOW"></mutation>
+                    <field name="MODE">PULSELOW</field>
+                    <field name="SENSORPORT">C08</field>
+                    <field name="SLOT"></field>
+                </block>
+            </value>
+        </block>
+        <block type="robActions_debug" id="ogJN1dG/wk8n7UBB|^#K" intask="true">
+            <value name="OUT">
+                <block type="robSensors_pin_getSample" id="[.}D]H5#~K[W[d)bka,!" intask="true">
+                    <mutation mode="PULSELOW"></mutation>
+                    <field name="MODE">PULSELOW</field>
+                    <field name="SENSORPORT">C09</field>
+                    <field name="SLOT"></field>
+                </block>
+            </value>
+        </block>
+        <block type="robActions_debug" id="l2^!at_]pS4oN{9h96Y|" intask="true">
+            <value name="OUT">
+                <block type="robSensors_pin_getSample" id="QN:?l,cd/V8Qy2/56XW^" intask="true">
+                    <mutation mode="PULSELOW"></mutation>
+                    <field name="MODE">PULSELOW</field>
+                    <field name="SENSORPORT">C10</field>
+                    <field name="SLOT"></field>
+                </block>
+            </value>
+        </block>
+        <block type="robActions_debug" id="mn!))7-f[[[{a5F-R!-," intask="true">
+            <value name="OUT">
+                <block type="robSensors_pin_getSample" id="72P4MgYq3wzG=`_)[!A2" intask="true">
+                    <mutation mode="PULSELOW"></mutation>
+                    <field name="MODE">PULSELOW</field>
+                    <field name="SENSORPORT">C11</field>
+                    <field name="SLOT"></field>
+                </block>
+            </value>
+        </block>
+        <block type="robActions_debug" id="evvDN8^y~b[}lL/-G4zZ" intask="true">
+            <value name="OUT">
+                <block type="robSensors_pin_getSample" id="C^YLR3XxS^,IQ%;f|cSQ" intask="true">
+                    <mutation mode="PULSELOW"></mutation>
+                    <field name="MODE">PULSELOW</field>
+                    <field name="SENSORPORT">C12</field>
+                    <field name="SLOT"></field>
+                </block>
+            </value>
+        </block>
+        <block type="robActions_debug" id="GyQB#1#)(FHSF(L1Sr)L" intask="true">
+            <value name="OUT">
+                <block type="robSensors_pin_getSample" id="X]wZN||%5;q*/kdYDxSr" intask="true">
+                    <mutation mode="PULSELOW"></mutation>
+                    <field name="MODE">PULSELOW</field>
+                    <field name="SENSORPORT">C16</field>
+                    <field name="SLOT"></field>
+                </block>
+            </value>
+        </block>
+        <block type="robActions_debug" id="BvwIbnO`39r=kI!M3GJm" intask="true">
+            <value name="OUT">
+                <block type="robSensors_pin_getSample" id="1FfjmQ.,mf+98*HEN`:Z" intask="true">
+                    <mutation mode="PULSELOW"></mutation>
+                    <field name="MODE">PULSELOW</field>
+                    <field name="SENSORPORT">C17</field>
+                    <field name="SLOT"></field>
+                </block>
+            </value>
+        </block>
+        <block type="robActions_debug" id="y#F`ztQ-fl^sveJ{1C##" intask="true">
+            <value name="OUT">
+                <block type="robSensors_pin_getSample" id="5/[9rsDkFD!2q2N|xwX}" intask="true">
+                    <mutation mode="PULSELOW"></mutation>
+                    <field name="MODE">PULSELOW</field>
+                    <field name="SENSORPORT">C18</field>
+                    <field name="SLOT"></field>
+                </block>
+            </value>
+        </block>
+        <block type="robActions_debug" id="L~M)1Jd*)eGX|oNCuovH" intask="true">
+            <value name="OUT">
+                <block type="robSensors_pin_getSample" id="HXgp7~Yd_%SauFxc}r9V" intask="true">
+                    <mutation mode="PULSELOW"></mutation>
+                    <field name="MODE">PULSELOW</field>
+                    <field name="SENSORPORT">C19</field>
+                    <field name="SLOT"></field>
+                </block>
+            </value>
+        </block>
+    </instance>
+</block_set>

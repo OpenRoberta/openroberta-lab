@@ -414,7 +414,7 @@ public class CompilerWorkflowRobotCommonIT {
             builder.setToken(token).setLanguage(Language.ENGLISH);
             Project project = builder.build();
 
-            ProjectService.executeWorkflow(workflow, factory, project);
+            ProjectService.executeWorkflow(workflow, project);
             result =
                 project.hasSucceeded() || project.getResult() == Key.ROBOT_NOT_CONNECTED
                     ? (programXml.contains(PARTIAL_SUCCESS_DEF) ? Result.PARTIAL_SUCCESS : Result.SUCCESS)
@@ -448,7 +448,7 @@ public class CompilerWorkflowRobotCommonIT {
             Project showSourceProject = builder.build();
 
             // Every robot needs at least a show source workflow
-            ProjectService.executeWorkflow("showsource", pluginMap.get(robotName), showSourceProject);
+            ProjectService.executeWorkflow("showsource", showSourceProject);
             sourceCode = showSourceProject.getSourceCode().toString();
             result = showSourceProject.hasSucceeded() ? (programXml.contains(PARTIAL_SUCCESS_DEF) ? Result.PARTIAL_SUCCESS : Result.SUCCESS) : Result.FAILURE;
             reason = String.valueOf(showSourceProject.getResult());

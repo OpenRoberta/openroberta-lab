@@ -1,0 +1,37 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="calliope" xmlversion="2.0" description="" tags="">
+    <instance x="512" y="50">
+        <block type="robControls_start" id="9T9,HaI3oP%{Xv]%-HN?" intask="true" deletable="false">
+            <mutation declare="false"></mutation>
+            <field name="DEBUG"></field>
+        </block>
+        <block type="mbedActions_motors_on" id="xB-s;g#VOqtE]_-L}]+t" intask="true">
+            <field name="A">A</field>
+            <field name="B">B</field>
+            <value name="POWER_A">
+                <block type="math_number" id="ywt?Q^s]PLr#JL#?F=zu" intask="true">
+                    <field name="NUM">30</field>
+                </block>
+            </value>
+            <value name="POWER_B">
+                <block type="math_number" id="M36MsdX)X.7At_8pH!A_" intask="true">
+                    <field name="NUM">10</field>
+                </block>
+            </value>
+        </block>
+        <block type="mbedActions_motors_on" id="xB-s;g#VOqtE]_-L}]+t" intask="true">
+            <field name="A">LEFT</field>
+            <field name="B">RIGHT</field>
+            <value name="POWER_A">
+                <block type="math_number" id="ywt?Q^s]PLr#JL#?F=zu" intask="true">
+                    <field name="NUM">30</field>
+                </block>
+            </value>
+            <value name="POWER_B">
+                <block type="math_number" id="M36MsdX)X.7At_8pH!A_" intask="true">
+                    <field name="NUM">10</field>
+                </block>
+            </value>
+        </block>
+        <block type="mbedActions_motors_stop" id="OQBKi~b,6=q^w#p74Yqb" intask="true"></block>
+    </instance>
+</block_set>
