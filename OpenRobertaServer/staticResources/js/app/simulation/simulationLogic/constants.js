@@ -527,5 +527,11 @@ define({
 
     MAX_HEIGHT: 820,
 
-    WAVE_LENGTH: 60
+    WAVE_LENGTH: 60,
+
+    DEBUG_BREAKPOINT: "DebugBreakpoint",
+
+    DEBUG_STEP_INTO: "DebugStepInto",
+
+    DEBUG_STEP_OVER: "DebugStepOver"
 });

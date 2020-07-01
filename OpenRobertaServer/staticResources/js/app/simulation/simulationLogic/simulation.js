@@ -29,6 +29,9 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
     var canceled;
     var storedPrograms;
     var customBackgroundLoaded = false;
+    var debugMode = false;
+    var breakpoints = [];
+    var observers = {};
 
     var imgObstacle1 = new Image();
     var imgPattern = new Image();
@@ -192,7 +195,7 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
                 setPause(false);
             }, 100);
         } else {
-            if (value) {
+            if (value && !debugMode) {
                 $('#simControl').addClass('typcn-media-play-outline').removeClass('typcn-media-stop');
                 $('#simControl').attr('data-original-title', Blockly.Msg.MENU_SIM_START_TOOLTIP);
             } else {
@@ -250,6 +253,16 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
             robots[i].reset();
         }
         reloadProgram();
+        for (var i = 0; i < numRobots; i++) {
+            interpreters[i].removeHighlights();
+        }
+
+        setTimeout(function() {
+            init(userPrograms, false, simRobotType);
+            addMouseEvents();
+        }, 205);
+
+
     }
     exports.stopProgram = stopProgram;
 
@@ -304,7 +317,7 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
         console.log("END of Sim");
     }
 
-    function init(programs, refresh, robotType) {        
+    function init(programs, refresh, robotType) {
         mouseOnRobotIndex = -1;
         storedPrograms = programs;
         numRobots = programs.length;
@@ -339,9 +352,9 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
         interpreters = programs.map(function(x) {
             var src = JSON.parse(x.javaScriptProgram);
             configurations.push(x.javaScriptConfiguration);
-            return new SIM_I.Interpreter(src, new MBED_R.RobotMbedBehaviour(), callbackOnTermination);
+            return new SIM_I.Interpreter(src, new MBED_R.RobotMbedBehaviour(), callbackOnTermination,breakpoints);
         });
-        
+        updateDebugMode(debugMode);
 
         isDownRobots = [];
         for (var i = 0; i < numRobots; i++) {
@@ -370,6 +383,7 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
                 setObstacle();
                 setRuler();
                 initScene();
+
             });
 
         } else {
@@ -444,31 +458,34 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
                         var nowNext = new Date().getTime();
                         runRenderUntil[i] = nowNext + delayMs;
                     }
-                } else if (interpreters[i].isTerminated() && !robots[i].endless) {
-                    robots[i].pause = true;
-                    robots[i].reset();
-                } else if (reset) {
+                } else if (reset || interpreters[i].isTerminated() && !robots[i].endless) {
                     reset = false;
                     robots[i].buttons.Reset = false;
                     removeMouseEvents();
                     robots[i].pause = true;
                     robots[i].reset();
                     scene.drawRobots();
+                    scene.drawVariables();
+
                     // some time to cancel all timeouts
                     setTimeout(function() {
                         init(userPrograms, false, simRobotType);
                         addMouseEvents();
                     }, 205);
-                    setTimeout(function() {
-                        //delete robot.button.Reset;
-                        setPause(false);
-                        for (var i = 0; i < robots.length; i++) {
-                            robots[i].pause = false;
-                        }
-                    }, 1000);
+
+                    if (!(interpreters[i].isTerminated() && !robots[i].endless)){
+                        setTimeout(function() {
+                            //delete robot.button.Reset;
+                            setPause(false);
+                            for (var i = 0; i < robots.length; i++) {
+                                robots[i].pause = false;
+                            }
+                        }, 1000);
+                    }
                 }
             }
             robots[i].update();
+            updateBreakpointEvent();
         }
         var renderTimeStart = new Date().getTime();
 
@@ -490,6 +507,7 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
         reset = robots[0].buttons.Reset;
         scene.updateSensorValues(!pause);
         scene.drawRobots();
+        scene.drawVariables();
         renderTime = new Date().getTime() - renderTimeStart;
     }
 
@@ -884,6 +902,7 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
         scene.drawObjects();
         scene.drawRuler();
         scene.drawRobots();
+        scene.drawVariables();
         addMouseEvents();
         for (var i = 0; i < numRobots; i++) {
             readyRobots[i] = true;
@@ -1133,6 +1152,129 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
         return this.webAudio;
     }
     exports.getWebAudio = getWebAudio;
+
+    function updateBreakpointEvent() {
+        if (debugMode) {
+            Blockly.getMainWorkspace().getAllBlocks().forEach(function (block) {
+                if (!$(block.svgGroup_).hasClass('blocklyDisabled')) {
+
+                    if (observers.hasOwnProperty(block.id)) {
+                        observers[block.id].disconnect();
+                    }
+
+                    var observer = new MutationObserver(function (mutations) {
+                        mutations.forEach((mutation) => {
+                            if ($(block.svgGroup_).hasClass('blocklyDisabled')) {
+                                removeBreakPoint(block);
+                                $(block.svgPath_).removeClass('breakpoint').removeClass('selectedBreakpoint');
+                            }
+                            else{
+                                if ($(block.svgGroup_).hasClass('blocklySelected')) {
+                                    if ($(block.svgPath_).hasClass('breakpoint')) {
+                                        removeBreakPoint(block);
+                                        $(block.svgPath_).removeClass('breakpoint');
+                                    } else if ($(block.svgPath_).hasClass('selectedBreakpoint')) {
+                                        removeBreakPoint(block);
+                                        $(block.svgPath_).removeClass('selectedBreakpoint').addClass('highlight');
+                                    } else {
+                                        addBreakPoint(block);
+                                        if ($(block.svgPath_).hasClass('highlight')){
+                                            $(block.svgPath_).addClass('selectedBreakpoint')
+                                        }
+                                        else{
+                                            $(block.svgPath_).addClass('breakpoint');
+                                        }
+                                    }
+                                }
+                            }
+                        });
+                    });
+                    observers[block.id] = observer;
+                    observer.observe(block.svgGroup_, {attributes: true});
+
+                }
+            });
+        } else {
+            Blockly.getMainWorkspace().getAllBlocks().forEach(function (block) {
+                if (observers.hasOwnProperty(block.id)) {
+                    observers[block.id].disconnect();
+                }
+                $(block.svgPath_).removeClass('breakpoint');
+            })
+        }
+    }
+
+    function updateDebugMode(mode) {
+        debugMode = mode;
+        if (interpreters !== null) {
+            for (var i = 0; i < numRobots; i++) {
+                interpreters[i].setDebugMode(mode);
+            }
+        }
+        updateBreakpointEvent();
+
+
+    }
+
+    exports.updateDebugMode = updateDebugMode;
+
+    function addBreakPoint(block) {
+        breakpoints.push(block.id);
+    }
+
+    exports.addBreakPoint = addBreakPoint;
+
+    function removeBreakPoint(block) {
+        for (var i = 0; i < breakpoints.length; i++) {
+            if (breakpoints[i] === block.id) {
+                breakpoints.splice(i, 1);
+            }
+        }
+        if (!breakpoints.length > 0) {
+            if (interpreters !== null) {
+                for (var i = 0; i < numRobots; i++) {
+                    interpreters[i].removeEvent(CONST.DEBUG_BREAKPOINT);
+                }
+            }
+        }
+    }
+
+    exports.removeBreakPoint = removeBreakPoint;
+
+    function interpreterAddEvent(mode) {
+        updateBreakpointEvent();
+        if (interpreters !== null) {
+            for (var i = 0; i < numRobots; i++) {
+                interpreters[i].addEvent(mode);
+            }
+        }
+    }
+
+    exports.interpreterAddEvent = interpreterAddEvent;
+
+    function endDebugging() {
+        if (interpreters !== null) {
+            for (var i = 0; i < numRobots; i++) {
+                interpreters[i].setDebugMode(false);
+                interpreters[i].breakPoints = [];
+            }
+        }
+        breakpoints = [];
+        debugMode = false;
+        updateBreakpointEvent();
+    }
+
+    exports.endDebugging = endDebugging;
+
+    function getSimVariables() {
+        if (interpreters !== null) {
+            return interpreters[0].getVariables();
+        } else {
+            return {};
+        }
+    }
+
+    exports.getSimVariables = getSimVariables;
 });
 
 //http://paulirish.com/2011/requestanimationframe-for-smart-animating/

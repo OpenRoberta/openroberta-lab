@@ -1,7 +1,17 @@
-define(["require", "exports", "interpreter.constants", "interpreter.util"], function (require, exports, C, U) {
+(function (factory) {
+    if (typeof module === "object" && typeof module.exports === "object") {
+        var v = factory(require, exports);
+        if (v !== undefined) module.exports = v;
+    }
+    else if (typeof define === "function" && define.amd) {
+        define(["require", "exports", "interpreter.constants", "interpreter.util"], factory);
+    }
+})(function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.State = void 0;
+    var C = require("interpreter.constants");
+    var U = require("interpreter.util");
     var State = /** @class */ (function () {
         /**
          * initialization of the state.
@@ -17,8 +27,18 @@ define(["require", "exports", "interpreter.constants", "interpreter.util"], func
             this.operationsStack = [];
             this.bindings = {};
             this.stack = [];
+            this.currentBlocks = {};
+            this.debugMode = false;
             // p( 'storeCode with state reset' );
         }
+        /** returns the boolean debugMode */
+        State.prototype.getDebugMode = function () {
+            return this.debugMode;
+        };
+        /** updates the boolean debugMode */
+        State.prototype.setDebugMode = function (mode) {
+            this.debugMode = mode;
+        };
         /**
          * returns the code block of a function. The code block contains formal parameter names and the array of operations implementing the function
          *
@@ -75,6 +95,12 @@ define(["require", "exports", "interpreter.constants", "interpreter.util"], func
             return nameBindings[0];
         };
         /**
+         * gets all the bindings.
+         */
+        State.prototype.getVariables = function () {
+            return this.bindings;
+        };
+        /**
          * update the value of a binding.
          *
          * . @param name the name whose value is updated
@@ -117,17 +143,6 @@ define(["require", "exports", "interpreter.constants", "interpreter.util"], func
             return value;
         };
         /**
-         * helper: get a value from the stack. Do not discard the value
-         *
-         * . @param i the i'th value (starting from 0) is requested
-         */
-        State.prototype.get = function (i) {
-            if (this.stack.length === 0) {
-                U.dbcException('get failed with empty stack');
-            }
-            return this.stack[this.stack.length - 1 - i];
-        };
-        /**
          * get the first (top) value from the stack. Do not discard the value
          */
         State.prototype.get0 = function () {
@@ -144,6 +159,33 @@ define(["require", "exports", "interpreter.constants", "interpreter.util"], func
          */
         State.prototype.get2 = function () {
             return this.get(2);
+        };
+        /**
+         * helper: get a value from the stack. Do not discard the value
+         *
+         * . @param i the i'th value (starting from 0) is requested
+         */
+        State.prototype.get = function (i) {
+            if (this.stack.length === 0) {
+                U.dbcException('get failed with empty stack');
+            }
+            return this.stack[this.stack.length - 1 - i];
+        };
+        /**
+         * for early error detection: assert, that a name given (for a binding) is valid
+         */
+        State.prototype.checkValidName = function (name) {
+            if (name === undefined || name === null) {
+                U.dbcException('invalid name');
+            }
+        };
+        /**
+         * for early error detection: assert, that a value given (for a binding) is valid
+         */
+        State.prototype.checkValidValue = function (value) {
+            if (value === undefined || value === null) {
+                U.dbcException('bindVar value invalid');
+            }
         };
         /**
          * push the actual array of operations to the stack. 'ops' becomes the new actual array of operation.
@@ -196,6 +238,7 @@ define(["require", "exports", "interpreter.constants", "interpreter.util"], func
                     throw 'pop ops until ' + target + '-stmt failed';
                 }
                 var suspendedStmt = opsWrapper[C.OPS][opsWrapper[C.PC]];
+                this.terminateBlock(suspendedStmt);
                 if (suspendedStmt !== undefined) {
                     if (suspendedStmt[C.OPCODE] === C.REPEAT_STMT && (suspendedStmt[C.MODE] === C.TIMES || suspendedStmt[C.MODE] === C.FOR)) {
                         this.unbindVar(suspendedStmt[C.NAME]);
@@ -219,21 +262,74 @@ define(["require", "exports", "interpreter.constants", "interpreter.util"], func
         State.prototype.opLog = function (msg) {
             U.opLog(msg, this.operations, this.pc);
         };
-        /**
-         * for early error detection: assert, that a name given (for a binding) is valid
-         */
-        State.prototype.checkValidName = function (name) {
-            if (name === undefined || name === null) {
-                U.dbcException('invalid name');
+        /** adds/removes block from currentBlocks and applies correct highlight to block**/
+        State.prototype.processBlock = function (stmt) {
+            for (var id in this.currentBlocks) {
+                var block = this.currentBlocks[id].block;
+                if (this.currentBlocks[id].terminate) {
+                    if (this.debugMode) {
+                        if (stackmachineJsHelper.getJqueryObject(block.svgPath_).hasClass("selectedBreakpoint")) {
+                            stackmachineJsHelper.getJqueryObject(block.svgPath_).removeClass("selectedBreakpoint").addClass("breakpoint");
+                        }
+                        stackmachineJsHelper.getJqueryObject(block.svgPath_).removeClass("highlight");
+                    }
+                    delete this.currentBlocks[id];
+                }
+            }
+            if (stmt.hasOwnProperty(C.BLOCK_ID)) {
+                var block = stackmachineJsHelper.getBlockById(stmt[C.BLOCK_ID]);
+                if (!this.currentBlocks.hasOwnProperty(stmt[C.BLOCK_ID])) {
+                    if (this.debugMode) {
+                        if (stackmachineJsHelper.getJqueryObject(block.svgPath_).hasClass("breakpoint")) {
+                            stackmachineJsHelper.getJqueryObject(block.svgPath_).removeClass("breakpoint").addClass("selectedBreakpoint");
+                        }
+                        stackmachineJsHelper.getJqueryObject(block.svgPath_).addClass("highlight");
+                    }
+                    this.currentBlocks[stmt[C.BLOCK_ID]] = { "block": block, "terminate": false };
+                }
             }
         };
-        /**
-         * for early error detection: assert, that a value given (for a binding) is valid
-         */
-        State.prototype.checkValidValue = function (value) {
-            if (value === undefined || value === null) {
-                U.dbcException('bindVar value invalid');
+        /** Marks a block to be terminated in the next iteration of the interpreter **/
+        State.prototype.terminateBlock = function (stmt) {
+            if (stmt.hasOwnProperty(C.BLOCK_ID)) {
+                var block_id = stmt[C.BLOCK_ID];
+                if (block_id in this.currentBlocks) {
+                    this.currentBlocks[block_id].terminate = true;
+                }
             }
+        };
+        /** Returns true if the current block is currently being executed**/
+        State.prototype.beingExecuted = function (stmt) {
+            if (stmt.hasOwnProperty(C.BLOCK_ID)) {
+                return this.currentBlocks.hasOwnProperty(stmt[C.BLOCK_ID]);
+            }
+            return false;
+        };
+        /** Will add highlights from all currently blocks being currently executed and all given Breakpoints
+         * @param breakPoints the array of breakpoint block id's to have their highlights added*/
+        State.prototype.addHighlights = function (breakPoints) {
+            for (var id in this.currentBlocks) {
+                stackmachineJsHelper.getJqueryObject(this.currentBlocks[id].block.svgPath_).addClass("highlight");
+            }
+            breakPoints.forEach(function (id) {
+                var block = stackmachineJsHelper.getBlockById(id);
+                stackmachineJsHelper.getJqueryObject(block.svgPath_).addClass("breakpoint");
+            });
+        };
+        /** Will remove highlights from all currently blocks being currently executed and all given Breakpoints
+         * @param breakPoints the array of breakpoint block id's to have their highlights removed*/
+        State.prototype.removeHighlights = function (breakPoints) {
+            for (var id in this.currentBlocks) {
+                var object = stackmachineJsHelper.getJqueryObject(this.currentBlocks[id].block.svgPath_);
+                if (object.hasClass("selectedBreakpoint")) {
+                    object.removeClass("selectedBreakpoint").addClass("breakpoint");
+                }
+                object.removeClass("highlight");
+            }
+            breakPoints.forEach(function (id) {
+                var block = stackmachineJsHelper.getBlockById(id);
+                stackmachineJsHelper.getJqueryObject(block.svgPath_).removeClass("breakpoint").removeClass("selectedBreakpoint");
+            });
         };
         return State;
     }());

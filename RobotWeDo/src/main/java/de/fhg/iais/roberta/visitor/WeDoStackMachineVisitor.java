@@ -39,6 +39,17 @@ public final class WeDoStackMachineVisitor<V> extends AbstractStackMachineVisito
     }
 
     @Override
+    protected V app(JSONObject o) {
+        this.getOpArray().add(o);
+        return null;
+    }
+
+    @Override
+    protected JSONObject mk(String opCode, Phrase<V> phrase) {
+        return super.mk(opCode);
+    }
+
+    @Override
     public V visitLightAction(LightAction<V> lightAction) {
         ConfigurationComponent confLedBlock = getConfigurationComponent(lightAction.getPort());
         String brickName = confLedBlock.getProperty("VAR");

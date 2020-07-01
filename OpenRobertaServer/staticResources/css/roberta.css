@@ -458,6 +458,7 @@ body.blocklyMinimalBody * {
     z-index: 9;
 }
 
+#variablesContent,
 #mbedContent,
 #valuesContent {
     background-color: #fff;
@@ -1050,10 +1051,26 @@ div.rightMenuButton:hover,
     color: #f1f1f1;
 }
 
+.modal#simVariablesContent button.close,
 .modal#simValuesModal button.close {
     margin-right: -10px;
     margin-top: -14px;
     color: #bbb;
+}
+
+#VariablesContent {
+    height: 300px;
+    overflow: auto;
+    width: auto;
+}
+
+#simVariablesContent label {
+    display: inline-block;
+    float: left;
+    clear: left;
+    width: auto;
+    text-align: left;
+    margin-right: 6px;
 }
 
 #simValuesContent label {
@@ -1065,10 +1082,18 @@ div.rightMenuButton:hover,
     margin-right: 6px;
 }
 
+#simVariablesContent div > div,
 #simValuesContent div > div {
     white-space: nowrap;
     overflow: hidden;
-    min-width: 166px;
+    min-width: 250px;
+}
+
+#simVariablesContent span {
+    display: inline;
+    float: right;
+    padding: 0 10px;
+    width: auto;
 }
 
 #simValuesContent span {
@@ -1078,12 +1103,14 @@ div.rightMenuButton:hover,
     width: 60px;
 }
 
+
 .modal#simRobotModal button.close:hover {
     margin-right: -10px;
     margin-top: -14px;
     color: #ffffff;
 }
 
+.modal#simVariablesModal button.close,
 .modal#simValuesModal button.close:hover {
     margin-right: -10px;
     margin-top: -14px;
@@ -1979,28 +2006,27 @@ div.galleryDescription, div.tutorialOverview {
 
 
 #progListScopeSelect {
-	display: inline-block;
-	float: left;
-	width: auto;
-	margin-right: 3px;
-	height: 48px;
-	min-width: 25vw;
+    display: inline-block;
+    float: left;
+    width: auto;
+    margin-right: 3px;
+    height: 48px;
+    min-width: 25vw;
 }
 
 @media only screen and (max-width: 767px) {
-	/* Manually set bootstrap < sm rules */
-	
-	#progListToolbar .bars.pull-left {
-		margin-bottom: 68px;
-	}
-	
-	#progListScopeSelect {
-		position: absolute;
-		right: 0;
-		bottom: calc(-100% - 10px);
-		width: calc(100vw - 32px);
-		margin: 0;
-	}
+    /* Manually set bootstrap < sm rules */
+    #progListToolbar .bars.pull-left {
+        margin-bottom: 68px;
+    }
+
+    #progListScopeSelect {
+        position: absolute;
+        right: 0;
+        bottom: calc(-100% - 10px);
+        width: calc(100vw - 32px);
+        margin: 0;
+    }
 }
 
 input[type=range] {
@@ -2158,108 +2184,113 @@ input[type=range]:focus::-ms-fill-upper {
 
 
 #create-user-group .modal-body {
-	margin-bottom: 1em 0 2.5em;
+    margin-bottom: 1em 0 2.5em;
 }
 
 #userGroupList .btn-group > .btn:not(.dropdown-toggle),
 #userGroupMemberList .btn-group > .btn:not(.dropdown-toggle) {
-	border-radius: 2px;
+    border-radius: 2px;
 }
 
 #userGroupMemberTable .member-name:not(.active),
 #userGroupMemberTable .edit-member-name:not(.active) {
-	display: none;
+    display: none;
 }
 
 #userGroupMemberTable .btn {
-	display: inline-block;
-	font-size: 16px;
-	height: calc(1.25em + 14px);
-	vertical-align: top;
-	border: none;
-	margin-right: 0;
+    display: inline-block;
+    font-size: 16px;
+    height: calc(1.25em + 14px);
+    vertical-align: top;
+    border: none;
+    margin-right: 0;
 }
 
 #userGroupMemberTable.table-hover > tbody > tr:hover {
-	background-color: transparent;
+    background-color: transparent;
 }
 
 #userGroupMemberTable .btn:focus,
 #userGroupMemberTable .btn:active {
-	outline: none;
-	-webkit-box-shadow: none;
-	box-shadow: none;
+    outline: none;
+    -webkit-box-shadow: none;
+    box-shadow: none;
 }
 
 #userGroupMemberTable .member-name-column {
-	position: relative;
-	display: inline-block;
-	padding: 8px;
-	margin: -8px;
+    position: relative;
+    display: inline-block;
+    padding: 8px;
+    margin: -8px;
 }
 
-#userGroupMemberTable tr.selected  .member-name-column.active {
-	background-color: rgba(255, 255, 255, .5);
+#userGroupMemberTable tr.selected .member-name-column.active {
+    background-color: rgba(255, 255, 255, .5);
 }
 
 #userGroupMemberTable .member-name {
-	display: inline-block;
-	padding: 7px 0;
-	line-height: 1.25;
-	font-size: 16px;
-	margin-left: 16px;
+    display: inline-block;
+    padding: 7px 0;
+    line-height: 1.25;
+    font-size: 16px;
+    margin-left: 16px;
 }
 
 #userGroupMemberTable .edit-member-name,
 #userGroupMemberTable .edit-member-name form {
-	display: inline-block;
+    display: inline-block;
 }
 
 #userGroupMemberTable .edit-member-name form {
-	margin: 0;
-	padding: 0;
+    margin: 0;
+    padding: 0;
 }
 
 #userGroupMemberTable .edit-member-name form label.form-invalid {
-	position: absolute;
-	left: 0px;
-	right: 0px;
-	bottom: 0;
-	margin-bottom: 0px;
-	transform: translateY(100%);
+    position: absolute;
+    left: 0px;
+    right: 0px;
+    bottom: 0;
+    margin-bottom: 0px;
+    transform: translateY(100%);
 }
 
 #userGroupMemberTable .edit-member-name form label.form-invalid:after {
-	top: 0;
-	right: 25%;
-	margin-top: 0;
-	transform: translateY(-100%);
-	border-bottom-color: red;
-	border-top-color: transparent;
+    top: 0;
+    right: 25%;
+    margin-top: 0;
+    transform: translateY(-100%);
+    border-bottom-color: red;
+    border-top-color: transparent;
 }
 
 #userGroupMemberTable .edit-member-name input.form-control {
-	font-size: 16px;
-	line-height: 1.25;
-	padding: 4px 12px 4px 15px;
-	margin-bottom: 0;
+    font-size: 16px;
+    line-height: 1.25;
+    padding: 4px 12px 4px 15px;
+    margin-bottom: 0;
 }
 
 #userGroupMemberTable .edit-member-name .btn.iais-loading-spin:before {
-	display: inline-block;
-	animation: iais-loading-spin 1.2s linear infinite;
+    display: inline-block;
+    animation: iais-loading-spin 1.2s linear infinite;
 }
 
 @keyframes iais-loading-spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
 }
 
 .pull-none .pull-right {
-	margin-left: 3px;
+    margin-left: 3px;
 }
+
 .pull-none .pull-left {
-	margin-right: 3px;
+    margin-right: 3px;
 }
 
 @media only screen and (max-width: 767px) {
@@ -3009,4 +3040,28 @@ pre code {
     100% {
         color: #fff;
     }
+}
+
+#blockly.debug path.blocklyPath.breakpoint {
+    stroke-opacity: 1;
+    transition: none;
+    stroke: red;
+    stroke-width: 2px;
+}
+
+#blockly.debug path.blocklyPath.selectedBreakpoint {
+    stroke-opacity: 1;
+    transition: none;
+    stroke: purple;
+    stroke-width: 2px;
+}
+
+#blockly.debug path.blocklyPath {
+    fill-opacity: 0.3;
+    transition: fill-opacity 0.25s linear;
+}
+
+#blockly.debug path.blocklyPath.highlight {
+    fill-opacity: 1;
+    transition: none;
 }
