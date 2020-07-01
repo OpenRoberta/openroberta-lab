@@ -1,7 +1,0 @@
-<block_set xmlns="http://de.fhg.iais.roberta.blockly"
-	robottype="ev3" xmlversion="" description="" tags="">
-	<instance x="38" y="238">
-		<block type="robSensors_battery_voltage"
-			id="kz_KD#{Ad|ST77z:vfS!" intask="false"></block>
-	</instance>
-</block_set>
