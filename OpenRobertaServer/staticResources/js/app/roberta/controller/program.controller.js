@@ -45,8 +45,6 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'ro
             group : GUISTATE_C.getRobotGroup(),
             robot : GUISTATE_C.getRobot()
         });
-        //TODO: add the version information in the Parent POM!.
-        blocklyWorkspace.setVersion('2.0');
         GUISTATE_C.setBlocklyWorkspace(blocklyWorkspace);
         blocklyWorkspace.robControls.disable('saveProgram');
         blocklyWorkspace.robControls.refreshTooltips(GUISTATE_C.getRobotRealName());
@@ -427,8 +425,6 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'ro
             group : GUISTATE_C.getRobotGroup(),
             robot : GUISTATE_C.getRobot()
         });
-        //TODO: add the version information in the Parent POM!.
-        blocklyWorkspace.setVersion('2.0');
         initProgramEnvironment();
         var toolbox = GUISTATE_C.getProgramToolbox();
         blocklyWorkspace.updateToolbox(toolbox);
@@ -468,6 +464,7 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'ro
         blocklyWorkspace.clear();
         var dom = Blockly.Xml.textToDom(xml, blocklyWorkspace);
         Blockly.Xml.domToWorkspace(dom, blocklyWorkspace);
+        blocklyWorkspace.setVersion(dom.getAttribute('xmlversion'));
         $('#infoContent').html(blocklyWorkspace.description);
         if (typeof blocklyWorkspace.description === 'string' && blocklyWorkspace.description.length) {
             $('#infoButton').addClass('notEmpty');

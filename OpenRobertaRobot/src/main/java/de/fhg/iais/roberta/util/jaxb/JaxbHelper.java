@@ -7,6 +7,7 @@ import java.nio.charset.StandardCharsets;
 
 import javax.xml.XMLConstants;
 import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.transform.stream.StreamSource;
@@ -48,7 +49,7 @@ public class JaxbHelper {
      * @param blocklyXml the blockly XML as String
      * @return the BlockSet instance corresponding to the XML
      */
-    public static BlockSet xml2BlockSet(String blocklyXml) throws Exception {
+    public static BlockSet xml2BlockSet(String blocklyXml) throws JAXBException {
         Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
         jaxbUnmarshaller.setSchema(blockSetSchema);
 
@@ -66,7 +67,7 @@ public class JaxbHelper {
      * @return the element instance corresponding to the XML
      */
     @SuppressWarnings("unchecked")
-    public static <T> T xml2Element(String xml, Class<T> clazz) throws Exception {
+    public static <T> T xml2Element(String xml, Class<T> clazz) throws JAXBException {
         JAXBContext jaxbContext = JAXBContext.newInstance(clazz);
         Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
         jaxbUnmarshaller.setSchema(blockSetSchema);

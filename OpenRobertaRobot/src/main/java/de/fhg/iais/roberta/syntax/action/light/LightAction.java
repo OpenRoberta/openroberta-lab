@@ -52,7 +52,7 @@ public class LightAction<V> extends Action<V> {
      * @param comment added from the user,
      * @return read only object of class {@link LightAction}
      */
-    private static <V> LightAction<V> make(
+    public static <V> LightAction<V> make(
         String port,
         IBrickLedColor color,
         ILightMode mode,

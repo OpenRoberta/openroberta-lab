@@ -1,4 +1,4 @@
-<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="vorwerk" xmlversion="">
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="vorwerk" xmlversion="3.0">
     <instance x="138" y="88">
         <block id="1" type='robBrick_vorwerk-Brick'>
             <field name='IP_ADDRESS'>192.168.1.2</field>

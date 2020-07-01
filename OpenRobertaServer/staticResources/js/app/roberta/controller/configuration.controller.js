@@ -47,7 +47,6 @@ define([ 'exports', 'log', 'util', 'comm', 'message', 'guiState.controller', 'bl
             group : GUISTATE_C.getRobotGroup(),
             robot : GUISTATE_C.getRobot()
         });
-        bricklyWorkspace.setVersion('2.0');
         // Configurations can't be executed
         bricklyWorkspace.robControls.runOnBrick.setAttribute("style", "display : none");
         GUISTATE_C.setBricklyWorkspace(bricklyWorkspace);
@@ -346,7 +345,6 @@ define([ 'exports', 'log', 'util', 'comm', 'message', 'guiState.controller', 'bl
             group : GUISTATE_C.getRobotGroup(),
             robot : GUISTATE_C.getRobot()
         });
-        bricklyWorkspace.setVersion('2.0');
         initConfigurationEnvironment();
         var toolbox = GUISTATE_C.getConfigurationToolbox();
         bricklyWorkspace.updateToolbox(toolbox);
@@ -365,6 +363,7 @@ define([ 'exports', 'log', 'util', 'comm', 'message', 'guiState.controller', 'bl
         Blockly.svgResize(bricklyWorkspace);
         var dom = Blockly.Xml.textToDom(xml, bricklyWorkspace);
         Blockly.Xml.domToWorkspace(dom, bricklyWorkspace);
+        bricklyWorkspace.setVersion(dom.getAttribute('xmlversion'));
         var name = xml == GUISTATE_C.getConfigurationConf() ? GUISTATE_C.getRobotGroup().toUpperCase() + "basis" : '';
         GUISTATE_C.setConfigurationName(name);
         GUISTATE_C.setConfigurationSaved(true);

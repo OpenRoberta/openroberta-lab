@@ -33,7 +33,7 @@ public class BothMotorsStopAction<V> extends Action<V> {
      * @param comment added from the user,
      * @return read only object of class {@link BothMotorsStopAction}
      */
-    private static <V> BothMotorsStopAction<V> make(BlocklyBlockProperties properties, BlocklyComment comment) {
+    public static <V> BothMotorsStopAction<V> make(BlocklyBlockProperties properties, BlocklyComment comment) {
         return new BothMotorsStopAction<>(properties, comment);
     }
 

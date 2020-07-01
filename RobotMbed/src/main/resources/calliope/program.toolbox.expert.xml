@@ -127,16 +127,7 @@
 				</value>
 			</block>
 			<block type="mbedActions_motor_stop" />
-			<block type="mbedActions_single_motor_on">
-				<value name="POWER">
-					<block type="math_number">
-						<field name="NUM">30</field>
-					</block>
-				</value>
-			</block>
-			<block type="mbedActions_single_motor_stop" />
 			<block type="mbedActions_servo_set">
-				<field name="PIN_PORT">C04</field>
 				<value name="VALUE">
 					<block type="math_number">
 						<field name="NUM">90</field>

@@ -52,7 +52,7 @@ public class DisplaySetPixelAction<V> extends Action<V> {
      * @param comment added from the user,
      * @return read only object of class {@link DisplaySetPixelAction}
      */
-    private static <V> DisplaySetPixelAction<V> make(Expr<V> x, Expr<V> y, Expr<V> brightness, BlocklyBlockProperties properties, BlocklyComment comment) {
+    public static <V> DisplaySetPixelAction<V> make(Expr<V> x, Expr<V> y, Expr<V> brightness, BlocklyBlockProperties properties, BlocklyComment comment) {
         return new DisplaySetPixelAction<>(x, y, brightness, properties, comment);
     }
 

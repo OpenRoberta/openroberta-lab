@@ -20,6 +20,7 @@ import org.slf4j.LoggerFactory;
 import com.google.inject.Inject;
 
 import de.fhg.iais.roberta.blockly.generated.Export;
+import de.fhg.iais.roberta.components.Project;
 import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.generated.restEntities.BaseResponse;
 import de.fhg.iais.roberta.generated.restEntities.EntityResponse;
@@ -36,6 +37,7 @@ import de.fhg.iais.roberta.generated.restEntities.ShareCreateRequest;
 import de.fhg.iais.roberta.generated.restEntities.ShareDeleteRequest;
 import de.fhg.iais.roberta.generated.restEntities.ShareRequest;
 import de.fhg.iais.roberta.javaServer.provider.OraData;
+import de.fhg.iais.roberta.javaServer.restServices.all.service.ProjectService;
 import de.fhg.iais.roberta.persistence.AccessRightProcessor;
 import de.fhg.iais.roberta.persistence.ConfigurationProcessor;
 import de.fhg.iais.roberta.persistence.LikeProcessor;
@@ -47,11 +49,13 @@ import de.fhg.iais.roberta.persistence.dao.ConfigurationDao;
 import de.fhg.iais.roberta.persistence.util.DbSession;
 import de.fhg.iais.roberta.persistence.util.HttpSessionState;
 import de.fhg.iais.roberta.util.Key;
+import de.fhg.iais.roberta.util.Pair;
 import de.fhg.iais.roberta.util.ServerProperties;
 import de.fhg.iais.roberta.util.Statistics;
 import de.fhg.iais.roberta.util.Util;
 import de.fhg.iais.roberta.util.UtilForHtmlXml;
 import de.fhg.iais.roberta.util.UtilForREST;
+import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.util.jaxb.JaxbHelper;
 
 @Path("/program")
@@ -179,10 +183,11 @@ public class ClientProgramController {
                 if ( program == null ) {
                     return UtilForREST.makeBaseResponseForError(programProcessor.getMessage(), httpSessionState, null);
                 } else {
-                    response.setProgXML(program.getProgramText());
                     String configText = programProcessor.getProgramsConfig(program);
+                    Pair<String, String> progConfPair = transformBetweenVersions(httpSessionState.getRobotFactory(), program.getProgramText(), configText);
+                    response.setProgXML(progConfPair.getFirst());
                     response.setConfigName(program.getConfigName()); // may be null, if an anonymous configuration is used
-                    response.setConfigXML(configText); // may be null, if the default configuration is used
+                    response.setConfigXML(progConfPair.getSecond()); // may be null, if the default configuration is used
                     response.setLastChanged(program.getLastChanged().getTime());
                     // count the views if the program is from the gallery!
                     if ( ownerName.equals("Gallery") ) {
@@ -325,11 +330,10 @@ public class ClientProgramController {
             if ( !Util.isValidJavaIdentifier(programName) ) {
                 programName = "NEPOprog";
             }
-
             Export jaxbImportExport;
             try {
                 jaxbImportExport = JaxbHelper.xml2Element(xmlText, Export.class);
-            } catch ( UnmarshalException | org.xml.sax.SAXException e ) {
+            } catch ( UnmarshalException e ) {
                 jaxbImportExport = null;
             }
             if ( jaxbImportExport != null ) {
@@ -337,8 +341,9 @@ public class ClientProgramController {
                 String robotType2 = jaxbImportExport.getConfig().getBlockSet().getRobottype();
                 if ( robotType1.equals(robot) && robotType2.equals(robot) ) {
                     response.setProgramName(programName);
-                    response.setProgXML(JaxbHelper.blockSet2xml(jaxbImportExport.getProgram().getBlockSet()));
-                    response.setConfXML(JaxbHelper.blockSet2xml(jaxbImportExport.getConfig().getBlockSet()));
+                    Pair<String, String> progConfPair = transformBetweenVersions(httpSessionState.getRobotFactory(), JaxbHelper.blockSet2xml(jaxbImportExport.getProgram().getBlockSet()), JaxbHelper.blockSet2xml(jaxbImportExport.getConfig().getBlockSet()));
+                    response.setProgXML(progConfPair.getFirst());
+                    response.setConfXML(progConfPair.getSecond());
                     UtilForREST.addSuccessInfo(response, Key.PROGRAM_IMPORT_SUCCESS);
                     Statistics.info("ProgramImport", "success", true);
                     return UtilForREST.responseWithFrontendInfo(response, httpSessionState, null);
@@ -610,5 +615,20 @@ public class ClientProgramController {
         return (httpSessionState.getRobotFactory(httpSessionState.getRobotName()).getGroup().isEmpty())
             ? httpSessionState.getRobotName()
             : httpSessionState.getRobotFactory(httpSessionState.getRobotName()).getGroup();
+    }
+
+    // Transform programs with old xml versions to new xml versions
+    private static Pair<String, String> transformBetweenVersions(IRobotFactory robotFactory, String programText, String configText) {
+        if ( robotFactory.hasWorkflow("transform") ) {
+            Project project = new Project.Builder().setFactory(robotFactory).setProgramXml(programText).setConfigurationXml(configText).build();
+            ProjectService.executeWorkflow("transform", project);
+            if ( configText != null ) {
+                return Pair.of(project.getAnnotatedProgramAsXml(), project.getAnnotatedConfigurationAsXml());
+            } else {
+                return Pair.of(project.getAnnotatedProgramAsXml(), null);
+            }
+        } else {
+            throw new DbcException("Every robot needs a transform workflow!");
+        }
     }
 }

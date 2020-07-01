@@ -40,7 +40,10 @@ import de.fhg.iais.roberta.util.jaxb.JaxbHelper;
 public final class Project {
 
     private static final Logger LOG = LoggerFactory.getLogger(Project.class);
-
+    private final Map<String, JSONObject> confAnnotationList = new HashMap<String, JSONObject>();
+    private final ClassToInstanceMap<IProjectBean> workerResults = MutableClassToInstanceMap.create();
+    private final StringBuilder indentationBuilder = new StringBuilder();
+    private final Map<String, String> resultParams = new HashMap<>();
     private String token;
     private String robot;
     private String programName;
@@ -51,25 +54,65 @@ public final class Project {
     private RobotCommunicator robotCommunicator;
     private IRobotFactory robotFactory;
     private boolean withWrapping = true;
-
     private ProgramAst<Void> program = null;
-
     private ConfigurationAst configuration = null;
-    private final Map<String, JSONObject> confAnnotationList = new HashMap<>();
-
-    private final ClassToInstanceMap<IProjectBean> workerResults = MutableClassToInstanceMap.create();
-
     private StringBuilder sourceCodeBuilder = new StringBuilder();
-    private final StringBuilder indentationBuilder = new StringBuilder();
     private JSONObject simSensorConfigurationJSON;
-
     private String compiledHex = "";
-
     private Key result = Key.COMPILERWORKFLOW_PROJECT_BUILD_SUCCESS;
-    private final Map<String, String> resultParams = new HashMap<>();
     private int errorCounter = 0;
 
     private Project() {
+    }
+
+    private static String jaxbToXml(BlockSet blockSet) throws JAXBException {
+        JAXBContext jaxbContext = JAXBContext.newInstance(BlockSet.class);
+        Marshaller marshaller = jaxbContext.createMarshaller();
+        marshaller.setProperty(Marshaller.JAXB_FRAGMENT, true);
+        StringWriter writer = new StringWriter();
+        marshaller.marshal(blockSet, writer);
+        return writer.toString();
+    }
+
+    private static BlockSet astToJaxb(ProgramAst<Void> program) {
+        Assert.notNull(program);
+        List<List<Phrase<Void>>> astProgram = program.getTree();
+        BlockSet blockSet = new BlockSet();
+        blockSet.setDescription(program.getDescription());
+        blockSet.setRobottype(program.getRobotType());
+        blockSet.setTags(program.getTags());
+        blockSet.setXmlversion(program.getXmlVersion());
+
+        for ( List<Phrase<Void>> tree : astProgram ) {
+            Instance instance = new Instance();
+            blockSet.getInstance().add(instance);
+            for ( Phrase<Void> phrase : tree ) {
+                if ( phrase.getKind().hasName("LOCATION") ) {
+                    instance.setX(((Location<Void>) phrase).getX());
+                    instance.setY(((Location<Void>) phrase).getY());
+                }
+                instance.getBlock().add(phrase.astToBlock());
+            }
+        }
+        return blockSet;
+    }
+
+    private static BlockSet astToJaxb(ConfigurationAst config) {
+        Assert.notNull(config);
+        Map<String, ConfigurationComponent> configurationComponents = config.getConfigurationComponents();
+        BlockSet blockSet = new BlockSet();
+        blockSet.setRobottype(config.getRobotType());
+        blockSet.setXmlversion(config.getXmlVersion());
+        blockSet.setDescription(config.getDescription());
+        blockSet.setTags(config.getTags());
+        for ( ConfigurationComponent configComp : configurationComponents.values() ) {
+            Instance instance = new Instance();
+            blockSet.getInstance().add(instance);
+            instance.setX(String.valueOf(configComp.getX()));
+            instance.setY(String.valueOf(configComp.getY()));
+            instance.getBlock().add(configComp.astToBlock());
+        }
+        return blockSet;
     }
 
     public String getToken() {
@@ -127,11 +170,19 @@ public final class Project {
         return this.program;
     }
 
+    public void setProgramAst(ProgramAst<Void> program) {
+        this.program = program;
+    }
+
     /**
      * @return the robot configuration
      */
     public ConfigurationAst getConfigurationAst() {
         return this.configuration;
+    }
+
+    public void setConfigurationAst(ConfigurationAst configuration) {
+        this.configuration = configuration;
     }
 
     public Map<String, JSONObject> getConfAnnotationList() {
@@ -239,56 +290,6 @@ public final class Project {
         this.simSensorConfigurationJSON = simSensorConfigurationJSON2;
     }
 
-    private static String jaxbToXml(BlockSet blockSet) throws JAXBException {
-        JAXBContext jaxbContext = JAXBContext.newInstance(BlockSet.class);
-        Marshaller marshaller = jaxbContext.createMarshaller();
-        marshaller.setProperty(Marshaller.JAXB_FRAGMENT, true);
-        StringWriter writer = new StringWriter();
-        marshaller.marshal(blockSet, writer);
-        return writer.toString();
-    }
-
-    private static BlockSet astToJaxb(ProgramAst<Void> program) {
-        Assert.notNull(program);
-        List<List<Phrase<Void>>> astProgram = program.getTree();
-        BlockSet blockSet = new BlockSet();
-        blockSet.setDescription(program.getDescription());
-        blockSet.setRobottype(program.getRobotType());
-        blockSet.setTags(program.getTags());
-        blockSet.setXmlversion(program.getXmlVersion());
-
-        for ( List<Phrase<Void>> tree : astProgram ) {
-            Instance instance = new Instance();
-            blockSet.getInstance().add(instance);
-            for ( Phrase<Void> phrase : tree ) {
-                if ( phrase.getKind().hasName("LOCATION") ) {
-                    instance.setX(((Location<Void>) phrase).getX());
-                    instance.setY(((Location<Void>) phrase).getY());
-                }
-                instance.getBlock().add(phrase.astToBlock());
-            }
-        }
-        return blockSet;
-    }
-
-    private static BlockSet astToJaxb(ConfigurationAst config) {
-        Assert.notNull(config);
-        Map<String, ConfigurationComponent> configurationComponents = config.getConfigurationComponents();
-        BlockSet blockSet = new BlockSet();
-        blockSet.setRobottype(config.getRobotType());
-        blockSet.setXmlversion(config.getXmlVersion());
-        blockSet.setDescription(config.getDescription());
-        blockSet.setTags(config.getTags());
-        for ( ConfigurationComponent configComp : configurationComponents.values() ) {
-            Instance instance = new Instance();
-            blockSet.getInstance().add(instance);
-            instance.setX(String.valueOf(configComp.getX()));
-            instance.setY(String.valueOf(configComp.getY()));
-            instance.getBlock().add(configComp.astToBlock());
-        }
-        return blockSet;
-    }
-
     public static class Builder {
         private final Project project = new Project();
 
@@ -390,14 +391,19 @@ public final class Project {
          * Transforms program XML into AST.
          */
         private void transformProgram() {
-            if ( this.programXml == null || this.programXml.trim().isEmpty() ) {
+            if ( (this.programXml == null) || this.programXml.trim().isEmpty() ) {
                 this.project.result = Key.COMPILERWORKFLOW_ERROR_PROGRAM_NOT_FOUND;
             } else {
                 try {
                     BlockSet blockSet = JaxbHelper.xml2BlockSet(this.programXml);
+                    // Assume any program without or an empty xmlVersion is 2.0
+                    String xmlversion = blockSet.getXmlversion();
+                    if ( (xmlversion == null) || xmlversion.isEmpty() ) {
+                        blockSet.setXmlversion("2.0");
+                    }
                     Jaxb2ProgramAst<Void> transformer = new Jaxb2ProgramAst<>(this.project.robotFactory);
                     this.project.program = transformer.blocks2Ast(blockSet);
-                } catch ( Exception e ) {
+                } catch ( JAXBException e ) {
                     LOG.error("Transformer failed", e);
                     this.project.result = Key.COMPILERWORKFLOW_ERROR_PROGRAM_TRANSFORM_FAILED;
                 }
@@ -408,24 +414,39 @@ public final class Project {
          * Transforms configuration XML into AST.
          */
         private void transformConfiguration() {
-            if ( this.configurationXml == null || this.configurationXml.trim().isEmpty() ) {
+            if ( (this.configurationXml == null) || this.configurationXml.trim().isEmpty() ) {
                 this.project.result = Key.COMPILERWORKFLOW_ERROR_CONFIGURATION_NOT_FOUND;
             } else {
                 try {
                     BlockSet blockSet = JaxbHelper.xml2BlockSet(this.configurationXml);
-                    if ( this.project.robotFactory.getConfigurationType().equals("new") ) {
+                    // Assume any program without or an empty xmlVersion is 2.0
+                    String xmlversion = blockSet.getXmlversion();
+                    if ( (xmlversion == null) || xmlversion.isEmpty() ) {
+                        blockSet.setXmlversion("2.0");
+                    }
+                    String topBlock = this.project.robotFactory.optTopBlockOfOldConfiguration();
+                    if ( this.project.robotFactory.getConfigurationType().equals("new") ) { // new configuration
+                        // if the program has a new configuration but still has the old top block in the XML, the new default configuration should be loaded
+                        if ( topBlock != null ) {
+                            if ( this.configurationXml.contains(topBlock) ) {
+                                blockSet = JaxbHelper.xml2BlockSet(this.project.robotFactory.getConfigurationDefault());
+                            }
+                        }
                         this.project.configuration = Jaxb2ConfigurationAst.blocks2NewConfig(blockSet, this.project.robotFactory.getBlocklyDropdownFactory());
-                    } else {
+                    } else { // old configuration
+                        if ( topBlock == null ) {
+                            throw new DbcException("A top block is required for an old configuration!");
+                        }
                         this.project.configuration =
                             Jaxb2ConfigurationAst
                                 .blocks2OldConfig(
                                     blockSet,
                                     this.project.robotFactory.getBlocklyDropdownFactory(),
-                                    this.project.robotFactory.getTopBlockOfOldConfiguration(),
+                                    topBlock,
                                     this.project.robotFactory.getSensorPrefix());
                     }
                     this.project.configuration.setRobotName(this.project.getRobot()); // TODO remove dependencies on robot name to remove this
-                } catch ( Exception e ) {
+                } catch ( JAXBException e ) {
                     LOG.error("Generation of the configuration failed", e);
                     this.project.result = Key.COMPILERWORKFLOW_ERROR_CONFIGURATION_TRANSFORM_FAILED;
                 }

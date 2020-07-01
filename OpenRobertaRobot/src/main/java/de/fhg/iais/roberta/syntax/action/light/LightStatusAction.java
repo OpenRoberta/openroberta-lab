@@ -56,7 +56,7 @@ public class LightStatusAction<V> extends Action<V> {
 
     @Override
     public String toString() {
-        return "LightStatusAction [" + this.status + "]";
+        return "LightStatusAction [" + this.port + ", " + this.status + "]";
     }
 
     /**

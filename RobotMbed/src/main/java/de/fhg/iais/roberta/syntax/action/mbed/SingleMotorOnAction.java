@@ -45,7 +45,7 @@ public final class SingleMotorOnAction<V> extends Action<V> {
      * @param comment added from the user,
      * @return read only object of class {@link SingleMotorOnAction}
      */
-    private static <V> SingleMotorOnAction<V> make(Expr<V> speed, BlocklyBlockProperties properties, BlocklyComment comment) {
+    public static <V> SingleMotorOnAction<V> make(Expr<V> speed, BlocklyBlockProperties properties, BlocklyComment comment) {
         return new SingleMotorOnAction<>(speed, properties, comment);
     }
 

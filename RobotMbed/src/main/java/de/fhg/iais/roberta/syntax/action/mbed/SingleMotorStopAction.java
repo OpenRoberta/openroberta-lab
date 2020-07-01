@@ -43,7 +43,7 @@ public class SingleMotorStopAction<V> extends Action<V> {
      * @param comment added from the user,
      * @return read only object of class {@link SingleMotorStopAction}
      */
-    private static <V> SingleMotorStopAction<V> make(IMotorStopMode mode, BlocklyBlockProperties properties, BlocklyComment comment) {
+    public static <V> SingleMotorStopAction<V> make(IMotorStopMode mode, BlocklyBlockProperties properties, BlocklyComment comment) {
         return new SingleMotorStopAction<>(mode, properties, comment);
     }
 

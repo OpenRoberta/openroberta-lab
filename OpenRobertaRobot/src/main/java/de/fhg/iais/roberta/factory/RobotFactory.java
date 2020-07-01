@@ -28,6 +28,7 @@ public class RobotFactory implements IRobotFactory {
     protected final String programDefault;
     protected final String configurationToolbox;
     protected final String configurationDefault;
+    protected final String configurationTransformer;
     protected Map<String, IWorker> workers = new HashMap<>(); //worker type to implementing class(es) collect->de.fhg.iais.roberta.visitor.collect.Ev3UsedHardwareCollectorWorker
     protected Map<String, List<String>> workflows = new HashMap<>(); //workflow name to a list of types of applicable workers: showsource->collect,generate
 
@@ -39,6 +40,12 @@ public class RobotFactory implements IRobotFactory {
         this.programDefault = Util.readResourceContent(this.pluginProperties.getStringProperty("robot.program.default"));
         this.configurationToolbox = Util.readResourceContent(this.pluginProperties.getStringProperty("robot.configuration.toolbox"));
         this.configurationDefault = Util.readResourceContent(this.pluginProperties.getStringProperty("robot.configuration.default"));
+        String propConfTrans = this.pluginProperties.getStringProperty("robot.configuration.transformer");
+        if ( propConfTrans == null ) {
+            this.configurationTransformer = null;
+        } else {
+            this.configurationTransformer = Util.readResourceContent(propConfTrans);
+        }
         loadWorkers();
     }
 
@@ -91,6 +98,11 @@ public class RobotFactory implements IRobotFactory {
     @Override
     public final String getConfigurationDefault() {
         return this.configurationDefault;
+    }
+
+    @Override
+    public String getConfigurationTransformer() {
+        return this.configurationTransformer;
     }
 
     @Override
@@ -178,14 +190,8 @@ public class RobotFactory implements IRobotFactory {
     }
 
     @Override
-    public final String getTopBlockOfOldConfiguration() {
-        String topLevelBlock = this.pluginProperties.getStringProperty("robot.configuration.old.toplevelblock");
-        if ( topLevelBlock == null ) {
-            throw new DbcException("no property robot.configuration.old.toplevelblock");
-        } else {
-            return topLevelBlock;
-        }
-
+    public final String optTopBlockOfOldConfiguration() {
+        return this.pluginProperties.getStringProperty("robot.configuration.old.toplevelblock");
     }
 
     @Override
@@ -256,5 +262,10 @@ public class RobotFactory implements IRobotFactory {
     @Override
     public Set<String> getWorkflows() {
         return Collections.unmodifiableSet(this.workflows.keySet());
+    }
+
+    @Override
+    public boolean hasWorkflow(String workflow) {
+        return this.workflows.get(workflow) != null;
     }
 }

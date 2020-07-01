@@ -7,6 +7,8 @@ import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.typecheck.NepoInfo;
 import de.fhg.iais.roberta.typecheck.NepoInfos;
 import de.fhg.iais.roberta.util.dbc.Assert;
+import de.fhg.iais.roberta.util.dbc.DbcException;
+import de.fhg.iais.roberta.visitor.ITransformerVisitor;
 import de.fhg.iais.roberta.visitor.IVisitor;
 
 /**
@@ -115,6 +117,27 @@ abstract public class Phrase<V> {
      * accept an visitor
      */
     protected abstract V acceptImpl(IVisitor<V> visitor);
+
+    /**
+     * Can be used to modify the Phrase itself. Used in conjunction with {@link ITransformerVisitor} to replace phrases with copies of themselves or even other
+     * phrases.
+     *
+     * @param visitor the modify visitor to use
+     * @return a newly constructed phrase
+     */
+    public final Phrase<Void> modify(ITransformerVisitor<?> visitor) {
+        // don't use accept, go over ALL blocks
+        @SuppressWarnings("unchecked")
+        V v = this.acceptImpl((IVisitor<V>) visitor);
+
+        if ( v instanceof Phrase ) {
+            @SuppressWarnings("unchecked")
+            Phrase<Void> voidPhrase = (Phrase<Void>) v;
+            return voidPhrase;
+        } else {
+            throw new DbcException("Template parameter of this phrase is not a Phrase!");
+        }
+    }
 
     /**
      * @return converts AST representation of block to JAXB representation of block

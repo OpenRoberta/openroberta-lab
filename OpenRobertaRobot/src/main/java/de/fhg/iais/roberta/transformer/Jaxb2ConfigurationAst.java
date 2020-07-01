@@ -1,6 +1,10 @@
 package de.fhg.iais.roberta.transformer;
 
-import org.apache.commons.lang3.StringUtils;
+import static de.fhg.iais.roberta.transformer.AbstractJaxb2Ast.extractBlockProperties;
+import static de.fhg.iais.roberta.transformer.AbstractJaxb2Ast.extractComment;
+import static de.fhg.iais.roberta.transformer.AbstractJaxb2Ast.extractFields;
+import static de.fhg.iais.roberta.transformer.AbstractJaxb2Ast.extractValues;
+import static de.fhg.iais.roberta.transformer.AbstractJaxb2Ast.optField;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -11,6 +15,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.regex.Pattern;
+
+import org.apache.commons.lang3.StringUtils;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.BlockSet;
@@ -24,12 +30,6 @@ import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.util.Callback;
 import de.fhg.iais.roberta.util.dbc.DbcException;
-
-import static de.fhg.iais.roberta.transformer.AbstractJaxb2Ast.extractBlockProperties;
-import static de.fhg.iais.roberta.transformer.AbstractJaxb2Ast.extractComment;
-import static de.fhg.iais.roberta.transformer.AbstractJaxb2Ast.extractFields;
-import static de.fhg.iais.roberta.transformer.AbstractJaxb2Ast.extractValues;
-import static de.fhg.iais.roberta.transformer.AbstractJaxb2Ast.optField;
 
 public final class Jaxb2ConfigurationAst {
 
@@ -171,7 +171,7 @@ public final class Jaxb2ConfigurationAst {
             return new ConfigurationComponent(
                 componentType,
                 true,
-                null, // TODO take a look at internal port name!
+                userDefinedName,
                 userDefinedName,
                 map,
                 extractBlockProperties(firstBlock),

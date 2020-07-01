@@ -8,6 +8,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import de.fhg.iais.roberta.components.ConfigurationAst;
+import de.fhg.iais.roberta.components.ConfigurationComponent;
 import de.fhg.iais.roberta.inter.mode.general.IDirection;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.SC;
@@ -34,8 +35,6 @@ import de.fhg.iais.roberta.syntax.action.mbed.RadioReceiveAction;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioSendAction;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioSetChannelAction;
 import de.fhg.iais.roberta.syntax.action.mbed.ServoSetAction;
-import de.fhg.iais.roberta.syntax.action.mbed.SingleMotorOnAction;
-import de.fhg.iais.roberta.syntax.action.mbed.SingleMotorStopAction;
 import de.fhg.iais.roberta.syntax.action.mbed.SwitchLedMatrixAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorGetPowerAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
@@ -175,9 +174,12 @@ public class MbedStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> i
     public V visitMotorOnAction(MotorOnAction<V> motorOnAction) {
         motorOnAction.getParam().getSpeed().accept(this);
         app(mk(C.EXPR).put(C.EXPR, C.NUM_CONST).put(C.VALUE, 0));
-        String port = motorOnAction.getUserDefinedPort();
 
-        JSONObject o = mk(C.MOTOR_ON_ACTION).put(C.PORT, port.toLowerCase()).put(C.NAME, port.toLowerCase());
+        String port = motorOnAction.getUserDefinedPort();
+        ConfigurationComponent configurationComponent = this.configuration.getConfigurationComponent(port);
+        String pin1 = configurationComponent.getProperty("PIN1");
+
+        JSONObject o = mk(C.MOTOR_ON_ACTION).put(C.PORT, pin1.toLowerCase()).put(C.NAME, pin1.toLowerCase());
         return app(o);
     }
 
@@ -189,7 +191,10 @@ public class MbedStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> i
     @Override
     public V visitMotorStopAction(MotorStopAction<V> motorStopAction) {
         String port = motorStopAction.getUserDefinedPort();
-        JSONObject o = mk(C.MOTOR_STOP).put(C.PORT, port.toLowerCase());
+        ConfigurationComponent configurationComponent = this.configuration.getConfigurationComponent(port);
+        String pin1 = configurationComponent.getProperty("PIN1");
+
+        JSONObject o = mk(C.MOTOR_STOP).put(C.PORT, pin1.toLowerCase());
         return app(o);
     }
 
@@ -203,9 +208,12 @@ public class MbedStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> i
     @Override
     public V visitPinWriteValueAction(PinWriteValueAction<V> pinWriteValueAction) {
         pinWriteValueAction.getValue().accept(this);
-        String pin = pinWriteValueAction.getPort();
+        String port = pinWriteValueAction.getPort();
+        ConfigurationComponent configurationComponent = this.configuration.getConfigurationComponent(port);
+        String pin1 = configurationComponent.getProperty("PIN1");
+
         String mode = pinWriteValueAction.getMode();
-        JSONObject o = mk(C.WRITE_PIN_ACTION).put(C.PIN, pin).put(C.MODE, mode.toLowerCase());
+        JSONObject o = mk(C.WRITE_PIN_ACTION).put(C.PIN, pin1).put(C.MODE, mode.toLowerCase());
         return app(o);
     }
 
@@ -242,7 +250,10 @@ public class MbedStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> i
     @Override
     public V visitKeysSensor(KeysSensor<V> keysSensor) {
         String port = keysSensor.getPort();
-        JSONObject o = mk(C.GET_SAMPLE).put(C.GET_SAMPLE, C.BUTTONS).put(C.MODE, port).put(C.NAME, "calliope");
+        ConfigurationComponent configurationComponent = this.configuration.getConfigurationComponent(port);
+        String pin1 = configurationComponent.getProperty("PIN1");
+
+        JSONObject o = mk(C.GET_SAMPLE).put(C.GET_SAMPLE, C.BUTTONS).put(C.MODE, pin1).put(C.NAME, "calliope");
         return app(o);
     }
 
@@ -296,9 +307,11 @@ public class MbedStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> i
     @Override
     public V visitPinGetValueSensor(PinGetValueSensor<V> pinValueSensor) {
         String port = pinValueSensor.getPort();
+        ConfigurationComponent configurationComponent = this.configuration.getConfigurationComponent(port);
+        String pin1 = configurationComponent.getProperty("PIN1");
         String mode = pinValueSensor.getMode();
 
-        JSONObject o = mk(C.GET_SAMPLE).put(C.GET_SAMPLE, C.PIN + port).put(C.MODE, mode.toLowerCase()).put(C.NAME, "calliope");
+        JSONObject o = mk(C.GET_SAMPLE).put(C.GET_SAMPLE, C.PIN + pin1).put(C.MODE, mode.toLowerCase()).put(C.NAME, "calliope");
 
         return app(o);
     }
@@ -339,18 +352,6 @@ public class MbedStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> i
     }
 
     @Override
-    public V visitSingleMotorOnAction(SingleMotorOnAction<V> singleMotorOnAction) {
-
-        return null;
-    }
-
-    @Override
-    public V visitSingleMotorStopAction(SingleMotorStopAction<V> singleMotorStopAction) {
-
-        return null;
-    }
-
-    @Override
     public V visitAccelerometer(AccelerometerSensor<V> accelerometerSensor) {
         return null;
     }
@@ -365,8 +366,16 @@ public class MbedStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> i
         bothMotorsOnAction.getSpeedA().accept(this);
         bothMotorsOnAction.getSpeedB().accept(this);
         app(mk(C.EXPR).put(C.EXPR, C.NUM_CONST).put(C.VALUE, 0));
+
+        String portA = bothMotorsOnAction.getPortA();
+        ConfigurationComponent configurationComponentA = this.configuration.getConfigurationComponent(portA);
+        String pin1A = configurationComponentA.getProperty("PIN1");
+        String portB = bothMotorsOnAction.getPortB();
+        ConfigurationComponent configurationComponentB = this.configuration.getConfigurationComponent(portB);
+        String pin1B = configurationComponentB.getProperty("PIN1");
+
         JSONObject o =
-            mk(C.BOTH_MOTORS_ON_ACTION).put(C.PORT_A, bothMotorsOnAction.getPortA().toLowerCase()).put(C.PORT_B, bothMotorsOnAction.getPortB().toLowerCase());
+            mk(C.BOTH_MOTORS_ON_ACTION).put(C.PORT_A, pin1A.toLowerCase()).put(C.PORT_B, pin1B.toLowerCase());
 
         return app(o);
     }

@@ -55,8 +55,8 @@ public class DriveAction<V> extends Action<V> {
      * @param comment added from the user,
      * @return read only object of class {@link DriveAction}
      */
-    private static <V> DriveAction<V> make(IDriveDirection direction, MotionParam<V> param, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new DriveAction<V>(direction, param, properties, comment);
+    public static <V> DriveAction<V> make(IDriveDirection direction, MotionParam<V> param, BlocklyBlockProperties properties, BlocklyComment comment) {
+        return new DriveAction<>(direction, param, properties, comment);
     }
 
     /**

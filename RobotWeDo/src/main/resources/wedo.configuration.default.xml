@@ -1,4 +1,4 @@
-<block_set robottype="wedo" xmlns="http://de.fhg.iais.roberta.blockly" xmlversion="2.0" description="" tags="">
+<block_set robottype="wedo" xmlns="http://de.fhg.iais.roberta.blockly" xmlversion="3.0" description="" tags="">
     <instance x="42" y="10">
         <block type="robBrick_WeDo-Brick" id="1" intask="true" deletable="false">
             <field name="VAR">W</field>

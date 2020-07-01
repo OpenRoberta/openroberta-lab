@@ -22,6 +22,7 @@ import de.fhg.iais.roberta.visitor.hardware.sensor.ISensorVisitor;
  * To create an instance from this class use the method {@link #make(UltrasonicSensorMode, SensorPort, BlocklyBlockProperties, BlocklyComment)}.<br>
  */
 public class UltrasonicSensor<V> extends ExternalSensor<V> {
+
     private UltrasonicSensor(SensorMetaDataBean sensorMetaDataBean, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(sensorMetaDataBean, BlockTypeContainer.getByName("ULTRASONIC_SENSING"), properties, comment);
         setReadOnly();

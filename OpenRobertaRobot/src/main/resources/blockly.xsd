@@ -16,19 +16,14 @@
 
 	<xs:element name="block_set">
 		<xs:complexType>
-			<xs:sequence>
-				<xs:element name="instance" maxOccurs="unbounded"
-					type="instance"></xs:element>
-			</xs:sequence>
-			<xs:attribute name="robottype" type="xs:string"
-				default="ev3" use="optional" />
-			<xs:attribute name="xmlversion" type="xs:string"
-				default="2.0" use="optional" />
-			<xs:attribute name="description" type="xs:string"
-				default="" use="optional" />
-			<xs:attribute name="tags" type="xs:string" default=""
-				use="optional" />
-		</xs:complexType>
+            <xs:sequence>
+                <xs:element name="instance" maxOccurs="unbounded" type="instance"></xs:element>
+            </xs:sequence>
+            <xs:attribute name="robottype" type="xs:string" default="ev3" use="optional" />
+            <xs:attribute name="xmlversion" type="xs:string" default="3.0" use="optional" />
+            <xs:attribute name="description" type="xs:string" default="" use="optional" />
+            <xs:attribute name="tags" type="xs:string" default="" use="optional" />
+        </xs:complexType>
 	</xs:element>
 
 	<xs:complexType name="program">

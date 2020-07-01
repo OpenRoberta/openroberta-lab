@@ -7,6 +7,7 @@ import com.google.common.collect.ClassToInstanceMap;
 import de.fhg.iais.roberta.bean.IProjectBean;
 import de.fhg.iais.roberta.bean.UsedHardwareBean;
 import de.fhg.iais.roberta.components.ConfigurationAst;
+import de.fhg.iais.roberta.components.ConfigurationComponent;
 import de.fhg.iais.roberta.components.UsedActor;
 import de.fhg.iais.roberta.components.UsedSensor;
 import de.fhg.iais.roberta.syntax.Phrase;
@@ -209,7 +210,10 @@ public final class MbedUsedHardwareCollectorVisitor extends AbstractUsedHardware
     @Override
     public Void visitLedOnAction(LedOnAction<Void> ledOnAction) {
         ledOnAction.getLedColor().accept(this);
-        if ( !ledOnAction.getPort().equals("0") ) {
+        String port = ledOnAction.getPort();
+        ConfigurationComponent configurationComponent = this.robotConfiguration.getConfigurationComponent(port);
+        String pin1 = configurationComponent.getComponentProperties().get("PIN1");
+        if ( !pin1.equals("0") ) {
             this.getBuilder(UsedHardwareBean.Builder.class).addUsedActor(new UsedActor("", SC.CALLIBOT));
         }
         return null;
@@ -223,7 +227,10 @@ public final class MbedUsedHardwareCollectorVisitor extends AbstractUsedHardware
 
     @Override
     public Void visitLightStatusAction(LightStatusAction<Void> lightStatusAction) {
-        if ( !lightStatusAction.getPort().equals("0") ) {
+        String port = lightStatusAction.getPort();
+        ConfigurationComponent configurationComponent = this.robotConfiguration.getConfigurationComponent(port);
+        String pin1 = configurationComponent.getComponentProperties().get("PIN1");
+        if ( !pin1.equals("0") ) {
             this.getBuilder(UsedHardwareBean.Builder.class).addUsedActor(new UsedActor("", SC.CALLIBOT));
         }
         return null;
@@ -233,11 +240,10 @@ public final class MbedUsedHardwareCollectorVisitor extends AbstractUsedHardware
     public Void visitMotorOnAction(MotorOnAction<Void> motorOnAction) {
         motorOnAction.getParam().getSpeed().accept(this);
         String port = motorOnAction.getUserDefinedPort();
-        if ( port.equals("0") || port.equals("2") || port.equals("3") ) {
+        ConfigurationComponent configurationComponent = this.robotConfiguration.getConfigurationComponent(port);
+        String pin1 = configurationComponent.getComponentProperties().get("PIN1");
+        if ( pin1.equals("0") || pin1.equals("2") || pin1.equals("3") ) {
             this.getBuilder(UsedHardwareBean.Builder.class).addUsedActor(new UsedActor("", SC.CALLIBOT));
-        }
-        if ( port.equals("3") || port.equals("AB") ) {
-            this.getBuilder(UsedHardwareBean.Builder.class).addUsedActor(new UsedActor(port, SC.MOTOR_DRIVE));
         }
         return null;
     }
@@ -255,9 +261,10 @@ public final class MbedUsedHardwareCollectorVisitor extends AbstractUsedHardware
 
     @Override
     public Void visitMotorStopAction(MotorStopAction<Void> motorStopAction) {
-        if ( motorStopAction.getUserDefinedPort().equals("0")
-            || motorStopAction.getUserDefinedPort().equals("2")
-            || motorStopAction.getUserDefinedPort().equals("3") ) {
+        String port = motorStopAction.getUserDefinedPort();
+        ConfigurationComponent configurationComponent = this.robotConfiguration.getConfigurationComponent(port);
+        String pin1 = configurationComponent.getComponentProperties().get("PIN1");
+        if ( pin1.equals("0") || pin1.equals("2") || pin1.equals("3") ) {
             this.getBuilder(UsedHardwareBean.Builder.class).addUsedActor(new UsedActor("", SC.CALLIBOT));
         }
         return null;
@@ -306,7 +313,9 @@ public final class MbedUsedHardwareCollectorVisitor extends AbstractUsedHardware
     @Override
     public Void visitUltrasonicSensor(UltrasonicSensor<Void> ultrasonicSensor) {
         String port = ultrasonicSensor.getPort();
-        if ( port.equals("2") ) {
+        ConfigurationComponent configurationComponent = this.robotConfiguration.getConfigurationComponent(port);
+        String pin1 = configurationComponent.getComponentProperties().get("PIN1");
+        if ( pin1.equals("2") ) {
             this.getBuilder(UsedHardwareBean.Builder.class).addUsedActor(new UsedActor("", SC.CALLIBOT));
         }
         return null;
@@ -341,7 +350,10 @@ public final class MbedUsedHardwareCollectorVisitor extends AbstractUsedHardware
     public Void visitBothMotorsOnAction(BothMotorsOnAction<Void> bothMotorsOnAction) {
         bothMotorsOnAction.getSpeedA().accept(this);
         bothMotorsOnAction.getSpeedB().accept(this);
-        if ( bothMotorsOnAction.getPortA().equals("LEFT") ) {
+        String portA = bothMotorsOnAction.getPortA();
+        ConfigurationComponent configurationComponent = this.robotConfiguration.getConfigurationComponent(portA);
+        String pin1A = configurationComponent.getComponentProperties().get("PIN1");
+        if ( pin1A.equals("0") ) {
             this.getBuilder(UsedHardwareBean.Builder.class).addUsedActor(new UsedActor("", SC.CALLIBOT));
         }
         return null;

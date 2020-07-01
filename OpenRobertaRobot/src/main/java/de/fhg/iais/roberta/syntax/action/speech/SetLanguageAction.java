@@ -48,7 +48,7 @@ public final class SetLanguageAction<V> extends Action<V> {
      * @param comment added from the user,
      * @return read only object of class {@link SetLanguageAction}
      */
-    private static <V> SetLanguageAction<V> make(ILanguage language, BlocklyBlockProperties properties, BlocklyComment comment) {
+    public static <V> SetLanguageAction<V> make(ILanguage language, BlocklyBlockProperties properties, BlocklyComment comment) {
         return new SetLanguageAction<V>(language, properties, comment);
     }
 

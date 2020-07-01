@@ -32,18 +32,18 @@ public class Jaxb2ProgramAst<V> extends AbstractJaxb2Ast<V> {
      * @param set the BlockSet to transform
      */
     public ProgramAst<V> blocks2Ast(BlockSet set) {
-        ProgramAst<V> programAst =
-            new ProgramAst.Builder()
+        ProgramAst.Builder<V> builder =
+            new ProgramAst.Builder<V>()
                 .setRobotType(set.getRobottype())
                 .setXmlVersion(set.getXmlversion())
                 .setDescription(set.getDescription())
-                .setTags(set.getTags())
-                .build();
+                .setTags(set.getTags());
+
         List<Instance> instances = set.getInstance();
         for ( Instance instance : instances ) {
-            programAst.getTree().add(instanceToAST(instance));
+            builder.addToTree(instanceToAST(instance));
         }
-        return programAst;
+        return builder.build();
     }
 
     private List<Phrase<V>> instanceToAST(Instance instance) {

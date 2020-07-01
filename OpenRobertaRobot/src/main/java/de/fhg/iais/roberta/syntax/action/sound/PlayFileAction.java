@@ -40,7 +40,7 @@ public class PlayFileAction<V> extends Action<V> {
      * @param comment added from the user,
      * @return read only object of class {@link PlayFileAction}
      */
-    private static <V> PlayFileAction<V> make(String filename, BlocklyBlockProperties properties, BlocklyComment comment) {
+    public static <V> PlayFileAction<V> make(String filename, BlocklyBlockProperties properties, BlocklyComment comment) {
         return new PlayFileAction<V>(filename, properties, comment);
     }
 

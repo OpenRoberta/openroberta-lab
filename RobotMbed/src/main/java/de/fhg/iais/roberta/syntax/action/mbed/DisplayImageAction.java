@@ -52,7 +52,7 @@ public class DisplayImageAction<V> extends Action<V> {
      * @param comment added from the user,
      * @return read only object of class {@link DisplayImageAction}
      */
-    private static <V> DisplayImageAction<V> make(
+    public static <V> DisplayImageAction<V> make(
         DisplayImageMode displayImageMode,
         Expr<V> valuesToDisplay,
         BlocklyBlockProperties properties,

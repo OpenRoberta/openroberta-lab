@@ -36,6 +36,8 @@ public interface IRobotFactory {
 
     String getConfigurationDefault();
 
+    String getConfigurationTransformer();
+
     String getRealName();
 
     Boolean hasSim();
@@ -68,7 +70,7 @@ public interface IRobotFactory {
 
     String getSensorPrefix();
 
-    String getTopBlockOfOldConfiguration();
+    String optTopBlockOfOldConfiguration();
 
     String getGroup();
 
@@ -96,4 +98,6 @@ public interface IRobotFactory {
      * @return unmodifiable string set of workflows
      */
     Set<String> getWorkflows();
+
+    boolean hasWorkflow(String workflow);
 }

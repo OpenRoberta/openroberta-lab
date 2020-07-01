@@ -54,7 +54,7 @@ public class ProjectWorkflowRestController {
         try {
             response.setProgXML(wfRequest.getProgXML()); // always return the program, even if the workflow fails
             Project project = request2project(wfRequest, httpSessionState, robotCommunicator, true, false);
-            ProjectService.executeWorkflow("showsource", httpSessionState.getRobotFactory(), project);
+            ProjectService.executeWorkflow("showsource", project);
             // To make this compatible with old frontend we will have to use the old names...
             response.setCmd("showSourceP");
             response.setSourceCode(project.getSourceCode().toString());
@@ -81,7 +81,7 @@ public class ProjectWorkflowRestController {
             ProjectSourceSimulationResponse response = ProjectSourceSimulationResponse.make();
             response.setProgXML(wfRequest.getProgXML()); // always return the program, even if the workflow fails
             Project project = request2project(wfRequest, httpSessionState, robotCommunicator, true, false);
-            ProjectService.executeWorkflow("getsimulationcode", httpSessionState.getRobotFactory(), project);
+            ProjectService.executeWorkflow("getsimulationcode", project);
             // To make this compatible with old frontend we will have to use the old names...
             response.setCmd("runPSim");
             response.setJavaScriptProgram(project.getSourceCode().toString());
@@ -110,7 +110,7 @@ public class ProjectWorkflowRestController {
             ProjectNepoResponse response = ProjectNepoResponse.make();
             response.setProgXML(wfRequest.getProgXML()); // always return the program, even if the workflow fails
             Project project = request2project(wfRequest, httpSessionState, robotCommunicator, true, false);
-            ProjectService.executeWorkflow("run", httpSessionState.getRobotFactory(), project);
+            ProjectService.executeWorkflow("run", project);
             response.setCmd("runPBack");
             response.setConfAnnos(project.getConfAnnotationList());
             response.setErrorCounter(project.getErrorCounter());
@@ -148,7 +148,7 @@ public class ProjectWorkflowRestController {
             ProjectNepoResponse response = ProjectNepoResponse.make();
             response.setProgXML(wfRequest.getProgXML()); // always return the program, even if the workflow fails
             Project project = request2project(wfRequest, httpSessionState, robotCommunicator, true, true);
-            ProjectService.executeWorkflow("compile", httpSessionState.getRobotFactory(), project);
+            ProjectService.executeWorkflow("compile", project);
             response.setCmd("compileP");
             response.setProgXML(project.getAnnotatedProgramAsXml());
             response.setErrorCounter(project.getErrorCounter());
@@ -174,7 +174,7 @@ public class ProjectWorkflowRestController {
             ProjectWorkflowRequest wfRequest = ProjectWorkflowRequest.make(fullRequest.getData());
             ProjectNativeResponse response = ProjectNativeResponse.make();
             Project project = request2project(wfRequest, httpSessionState, robotCommunicator, false, false);
-            ProjectService.executeWorkflow("runnative", httpSessionState.getRobotFactory(), project);
+            ProjectService.executeWorkflow("runnative", project);
             response.setCmd("runNative");
             response.setErrorCounter(project.getErrorCounter());
             response.setCompiledCode(project.getCompiledHex());
@@ -198,7 +198,7 @@ public class ProjectWorkflowRestController {
             ProjectWorkflowRequest wfRequest = ProjectWorkflowRequest.make(fullRequest.getData());
             ProjectNativeResponse response = ProjectNativeResponse.make();
             Project project = request2project(wfRequest, httpSessionState, robotCommunicator, false, false);
-            ProjectService.executeWorkflow("compilenative", httpSessionState.getRobotFactory(), project);
+            ProjectService.executeWorkflow("compilenative", project);
             response.setCmd("runNative");
             response.setErrorCounter(project.getErrorCounter());
             response.setCompiledCode(project.getCompiledHex());
@@ -229,7 +229,7 @@ public class ProjectWorkflowRestController {
                     .setFactory(httpSessionState.getRobotFactory())
                     .setRobotCommunicator(this.robotCommunicator)
                     .build();
-            ProjectService.executeWorkflow("reset", httpSessionState.getRobotFactory(), project);
+            ProjectService.executeWorkflow("reset", project);
             response.setCmd("reset");
             response.setProgramName(project.getProgramName());
             response.setErrorCounter(project.getErrorCounter());

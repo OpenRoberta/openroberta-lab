@@ -51,7 +51,7 @@ public class FourDigitDisplayShowAction<V> extends Action<V> {
      * @param comment added from the user,
      * @return read only object of class {@link FourDigitDisplayShowAction}
      */
-    private static <V> FourDigitDisplayShowAction<V> make(
+    public static <V> FourDigitDisplayShowAction<V> make(
         Expr<V> value,
         Expr<V> position,
         Expr<V> colon,

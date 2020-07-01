@@ -62,7 +62,7 @@ public class CurveAction<V> extends Action<V> {
      * @param comment added from the user,
      * @return read only object of class {@link CurveAction}
      */
-    private static <V> CurveAction<V> make(
+    public static <V> CurveAction<V> make(
         IDriveDirection direction,
         MotionParam<V> paramLeft,
         MotionParam<V> paramRight,

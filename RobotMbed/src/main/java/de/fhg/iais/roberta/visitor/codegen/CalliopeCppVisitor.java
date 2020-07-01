@@ -1,6 +1,9 @@
 package de.fhg.iais.roberta.visitor.codegen;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.apache.commons.text.WordUtils;
 
@@ -9,6 +12,7 @@ import com.google.common.collect.ClassToInstanceMap;
 import de.fhg.iais.roberta.bean.IProjectBean;
 import de.fhg.iais.roberta.bean.UsedHardwareBean;
 import de.fhg.iais.roberta.components.ConfigurationAst;
+import de.fhg.iais.roberta.components.ConfigurationComponent;
 import de.fhg.iais.roberta.mode.action.MotorStopMode;
 import de.fhg.iais.roberta.mode.action.mbed.DisplayTextMode;
 import de.fhg.iais.roberta.mode.general.ListElementOperations;
@@ -38,8 +42,6 @@ import de.fhg.iais.roberta.syntax.action.mbed.RadioReceiveAction;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioSendAction;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioSetChannelAction;
 import de.fhg.iais.roberta.syntax.action.mbed.ServoSetAction;
-import de.fhg.iais.roberta.syntax.action.mbed.SingleMotorOnAction;
-import de.fhg.iais.roberta.syntax.action.mbed.SingleMotorStopAction;
 import de.fhg.iais.roberta.syntax.action.mbed.SwitchLedMatrixAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorGetPowerAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
@@ -101,6 +103,29 @@ import de.fhg.iais.roberta.visitor.lang.codegen.prog.AbstractCppVisitor;
  */
 public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbedVisitor<Void> {
     private final ConfigurationAst robotConfiguration;
+
+    private static final Map<String, String> PIN_MAP = new HashMap<>(); // TODO better?
+    static {
+        PIN_MAP.put("0", "P12");
+        PIN_MAP.put("1", "P0");
+        PIN_MAP.put("2", "P1");
+        PIN_MAP.put("3", "P16");
+        PIN_MAP.put("4", "P19");
+        PIN_MAP.put("5", "P2");
+        PIN_MAP.put("C04", "P3");
+        PIN_MAP.put("C05", "P4");
+        PIN_MAP.put("C06", "P10");
+        PIN_MAP.put("C07", "P13");
+        PIN_MAP.put("C08", "P14");
+        PIN_MAP.put("C09", "P15");
+        PIN_MAP.put("C10", "P9");
+        PIN_MAP.put("C11", "P7");
+        PIN_MAP.put("C12", "P6");
+        PIN_MAP.put("C16", "P2");
+        PIN_MAP.put("C17", "P8");
+        PIN_MAP.put("C18", "P20");
+        PIN_MAP.put("C19", "P19");
+    }
 
     /**
      * initialize the C++ code generator visitor.
@@ -313,7 +338,9 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
     @Override
     public Void visitLightStatusAction(LightStatusAction<Void> lightStatusAction) {
         String port = lightStatusAction.getPort();
-        switch ( port ) {
+        ConfigurationComponent configurationComponent = this.robotConfiguration.getConfigurationComponent(port);
+        String pin1 = configurationComponent.getProperty("PIN1");
+        switch ( pin1 ) {
             case "0":
                 this.sb.append("_uBit.rgb.off();");
                 break;
@@ -322,10 +349,10 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
             case "3":
             case "4":
             case "5":
-                this.sb.append("_cbSetRGBLed(_buf, &_i2c, ").append(port).append(", 0);");
+                this.sb.append("_cbSetRGBLed(_buf, &_i2c, ").append(pin1).append(", 0);");
                 break;
             default:
-                throw new DbcException("LedOffAction; invalid port: " + port);
+                throw new DbcException("LedOffAction; invalid port: " + pin1);
         }
         return null;
     }
@@ -353,48 +380,31 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
     @Override
     public Void visitMotorOnAction(MotorOnAction<Void> motorOnAction) {
         String port = motorOnAction.getUserDefinedPort();
-        switch ( port ) {
+        ConfigurationComponent configurationComponent = this.robotConfiguration.getConfigurationComponent(port);
+        String pin1 = configurationComponent.getProperty("PIN1");
+        switch ( pin1 ) {
             case "0":
             case "2":
-                this.sb.append("_cbSetMotor(_buf, &_i2c, ").append(port).append(", ");
+                this.sb.append("_cbSetMotor(_buf, &_i2c, ").append(pin1).append(", ");
                 motorOnAction.getParam().getSpeed().accept(this);
                 this.sb.append(");");
                 break;
-            case "3":
-                this.sb.append("_motorOnStore = ");
-                motorOnAction.getParam().getSpeed().accept(this);
-                this.sb.append(";");
-                nlIndent();
-                this.sb.append("_cbSetMotors(_buf, &_i2c, _motorOnStore, _motorOnStore);");
-                break;
-            case "AB":
-                this.sb.append("_motorOnStore = ");
-                motorOnAction.getParam().getSpeed().accept(this);
-                this.sb.append(";");
-                nlIndent();
-                this.sb.append("_uBit.soundmotor.motorAOn(_motorOnStore);");
-                nlIndent();
-                this.sb.append("_uBit.soundmotor.motorBOn(_motorOnStore);");
-                break;
             case "A":
             case "B":
-                this.sb.append("_uBit.soundmotor.motor").append(port).append("On(");
+                this.sb.append("_uBit.soundmotor.motor");
+                if ( isDualMode() ) {
+                    this.sb.append(pin1);
+                }
+                this.sb.append("On(");
                 motorOnAction.getParam().getSpeed().accept(this);
                 this.sb.append(");");
                 break;
             default:
-                throw new DbcException("visitMotorOnAction; Invalid motor port: " + port);
+                throw new DbcException("visitMotorOnAction; Invalid motor port: " + pin1);
         }
         return null;
     }
 
-    @Override
-    public Void visitSingleMotorOnAction(SingleMotorOnAction<Void> singleMotorOnAction) {
-        this.sb.append("_uBit.soundmotor.motorOn(");
-        singleMotorOnAction.getSpeed().accept(this);
-        this.sb.append(");");
-        return null;
-    }
 
     @Override
     public Void visitMotorSetPowerAction(MotorSetPowerAction<Void> motorSetPowerAction) {
@@ -409,44 +419,36 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
     @Override
     public Void visitMotorStopAction(MotorStopAction<Void> motorStopAction) {
         String port = motorStopAction.getUserDefinedPort();
-        switch ( port ) {
+        ConfigurationComponent configurationComponent = this.robotConfiguration.getConfigurationComponent(port);
+        String pin1 = configurationComponent.getProperty("PIN1");
+        switch ( pin1 ) {
             case "0":
             case "2":
-                this.sb.append("_cbSetMotor(_buf, &_i2c, ").append(port).append(", 0);");
-                break;
-            case "3":
-                this.sb.append("_cbSetMotors(_buf, &_i2c, 0, 0);");
-                break;
-            case "AB":
-                this.sb.append("_uBit.soundmotor.motorAOff();");
-                nlIndent();
-                this.sb.append("_uBit.soundmotor.motorBOff();");
+                this.sb.append("_cbSetMotor(_buf, &_i2c, ").append(pin1).append(", 0);");
                 break;
             case "A":
             case "B":
-                this.sb.append("_uBit.soundmotor.motor").append(port).append("Off();");
+                if ( isDualMode() ) {
+                    this.sb.append("_uBit.soundmotor.motor").append(pin1).append("Off();"); // Coast vs OFF
+                } else {
+                    this.sb.append("_uBit.soundmotor.motor");
+                    switch ( (MotorStopMode) motorStopAction.getMode() ) {
+                        case FLOAT:
+                            this.sb.append("Coast();");
+                            break;
+                        case NONFLOAT:
+                            this.sb.append("Break();");
+                            break;
+                        case SLEEP:
+                            this.sb.append("Sleep();");
+                            break;
+                        default:
+                            throw new DbcException("Invalide stop mode " + motorStopAction.getMode());
+                    }
+                }
                 break;
             default:
-                throw new DbcException("visitMotorStopAction; Invalide motor port: " + port);
-        }
-        return null;
-    }
-
-    @Override
-    public Void visitSingleMotorStopAction(SingleMotorStopAction<Void> singleMotorStopAction) {
-        this.sb.append("_uBit.soundmotor.motor");
-        switch ( (MotorStopMode) singleMotorStopAction.getMode() ) {
-            case FLOAT:
-                this.sb.append("Coast();");
-                break;
-            case NONFLOAT:
-                this.sb.append("Break();");
-                break;
-            case SLEEP:
-                this.sb.append("Sleep();");
-                break;
-            default:
-                throw new DbcException("Invalide stop mode " + singleMotorStopAction.getMode());
+                throw new DbcException("visitMotorStopAction; Invalide motor port: " + pin1);
         }
         return null;
     }
@@ -459,9 +461,10 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
 
     @Override
     public Void visitKeysSensor(KeysSensor<Void> keysSensor) {
-        String userDefined = keysSensor.getPort();
-        String port = this.robotConfiguration.getConfigurationComponent(userDefined).getInternalPortName();
-        this.sb.append("_uBit.button").append(port).append(".isPressed()");
+        String port = keysSensor.getPort();
+        ConfigurationComponent configurationComponent = this.robotConfiguration.getConfigurationComponent(port);
+        String pin1 = configurationComponent.getProperty("PIN1");
+        this.sb.append("_uBit.button").append(pin1).append(".isPressed()");
         return null;
     }
 
@@ -497,7 +500,9 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
     @Override
     public Void visitUltrasonicSensor(UltrasonicSensor<Void> ultrasonicSensor) {
         String port = ultrasonicSensor.getPort();
-        switch ( port ) {
+        ConfigurationComponent configurationComponent = this.robotConfiguration.getConfigurationComponent(port);
+        String pin1 = configurationComponent.getProperty("PIN1");
+        switch ( pin1 ) {
             case "1":
                 this.sb.append("(_uBit.io.P2.readPulseHigh() * 0.017)");
                 break;
@@ -505,7 +510,7 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
                 this.sb.append("_cbGetSampleUltrasonic(_buf, &_i2c)");
                 break;
             default:
-                throw new DbcException("UltrasonicSensor; Invalid ultrasonic port: " + port);
+                throw new DbcException("UltrasonicSensor; Invalid ultrasonic port: " + pin1);
         }
         return null;
     }
@@ -513,8 +518,10 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
     @Override
     public Void visitInfraredSensor(InfraredSensor<Void> infraredSensor) {
         String port = infraredSensor.getPort();
-        if ( port.equals("1") || port.contentEquals("2") ) {
-            this.sb.append("_cbGetSampleInfrared(_buf, &_i2c, ").append(port).append(")");
+        ConfigurationComponent configurationComponent = this.robotConfiguration.getConfigurationComponent(port);
+        String pin1 = configurationComponent.getProperty("PIN1");
+        if ( pin1.equals("1") || pin1.contentEquals("2") ) {
+            this.sb.append("_cbGetSampleInfrared(_buf, &_i2c, ").append(pin1).append(")");
         } else {
             throw new DbcException("InfraredSensor; Invalid infrared port: " + port);
         }
@@ -523,9 +530,14 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
 
     @Override
     public Void visitGyroSensor(GyroSensor<Void> gyroSensor) {
-        String userDefined = gyroSensor.getPort();
-        String port = this.robotConfiguration.getConfigurationComponent(userDefined).getInternalPortName();
-        this.sb.append("_uBit.accelerometer.get").append(port).append("()");
+        String slot = gyroSensor.getSlot();
+        if ( slot.equals("X") ) { // TODO rename to Pitch and Roll in the configuration?
+            this.sb.append("_uBit.accelerometer.getPitch()");
+        } else if ( slot.equals("Y") ) {
+            this.sb.append("_uBit.accelerometer.getRoll()");
+        } else {
+            throw new DbcException("Slot " + slot + " is not valid!");
+        }
         return null;
     }
 
@@ -547,18 +559,17 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
 
     @Override
     public Void visitPinTouchSensor(PinTouchSensor<Void> pinTouchSensor) {
-        String userDefinedName = pinTouchSensor.getPort();
-        String port = this.robotConfiguration.getConfigurationComponent(userDefinedName).getInternalPortName();
-        this.sb.append("_uBit.io." + port + ".isTouched()");
+        this.sb.append("_uBit.io." + PIN_MAP.get(pinTouchSensor.getPort()) + ".isTouched()");
         return null;
     }
 
     @Override
     public Void visitPinGetValueSensor(PinGetValueSensor<Void> pinValueSensor) {
-        String userDefinedName = pinValueSensor.getPort();
-        String port = this.robotConfiguration.getConfigurationComponent(userDefinedName).getInternalPortName();
+        String port = pinValueSensor.getPort();
+        ConfigurationComponent configurationComponent = this.robotConfiguration.getConfigurationComponent(port);
+        String pin1 = configurationComponent.getProperty("PIN1");
         String mode = pinValueSensor.getMode();
-        this.sb.append("_uBit.io." + port);
+        this.sb.append("_uBit.io." + PIN_MAP.get(pin1));
         switch ( mode ) {
             case SC.DIGITAL:
                 this.sb.append(".getDigitalValue()");
@@ -580,10 +591,11 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
 
     @Override
     public Void visitPinWriteValueAction(PinWriteValueAction<Void> pinWriteValueSensor) {
-        String userDefinedName = pinWriteValueSensor.getPort();
-        String port = this.robotConfiguration.getConfigurationComponent(userDefinedName).getInternalPortName();
+        String port = pinWriteValueSensor.getPort();
+        ConfigurationComponent configurationComponent = this.robotConfiguration.getConfigurationComponent(port);
+        String pin1 = configurationComponent.getProperty("PIN1");
         String valueType = pinWriteValueSensor.getMode().equals(SC.DIGITAL) ? "DigitalValue(" : "AnalogValue(";
-        this.sb.append("_uBit.io.").append(port).append(".set").append(valueType);
+        this.sb.append("_uBit.io.").append(PIN_MAP.get(pin1)).append(".set").append(valueType);
         pinWriteValueSensor.getValue().accept(this);
         this.sb.append(");");
         return null;
@@ -591,10 +603,11 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
 
     @Override
     public Void visitPinSetPullAction(PinSetPullAction<Void> pinSetPullAction) {
-        String userDefinedName = pinSetPullAction.getPort();
-        String port = this.robotConfiguration.getConfigurationComponent(userDefinedName).getInternalPortName();
+        String port = pinSetPullAction.getPort();
+        ConfigurationComponent configurationComponent = this.robotConfiguration.getConfigurationComponent(port);
+        String pin1 = configurationComponent.getProperty("PIN1");
         String mode = pinSetPullAction.getMode();
-        this.sb.append("_uBit.io." + port + ".setPull(Pull").append(WordUtils.capitalizeFully(mode)).append(");");
+        this.sb.append("_uBit.io." + PIN_MAP.get(pin1) + ".setPull(Pull").append(WordUtils.capitalizeFully(mode)).append(");");
         return null;
     }
 
@@ -769,7 +782,9 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
     @Override
     public Void visitLedOnAction(LedOnAction<Void> ledOnAction) {
         String port = ledOnAction.getPort();
-        switch ( port ) {
+        ConfigurationComponent configurationComponent = this.robotConfiguration.getConfigurationComponent(port);
+        String pin1 = configurationComponent.getProperty("PIN1");
+        switch ( pin1 ) {
             case "0":
                 this.sb.append("_uBit.rgb.setColour(");
                 ledOnAction.getLedColor().accept(this);
@@ -780,18 +795,21 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
             case "3":
             case "4":
             case "5":
-                this.sb.append("_cbSetRGBLed(_buf, &_i2c, ").append(port).append(", ");
+                this.sb.append("_cbSetRGBLed(_buf, &_i2c, ").append(pin1).append(", ");
                 ledOnAction.getLedColor().accept(this);
                 this.sb.append(");");
                 break;
             default:
-                throw new DbcException("LedOnAction; invalid port: " + port);
+                throw new DbcException("LedOnAction; invalid port: " + pin1);
         }
         return null;
     }
 
     @Override
     public Void visitLightAction(LightAction<Void> lightAction) {
+        String port = lightAction.getPort();
+        ConfigurationComponent configurationComponent = this.robotConfiguration.getConfigurationComponent(port);
+        String pin1 = configurationComponent.getProperty("PIN1");
         String mode = lightAction.getMode().getValues()[0];
         if ( mode.equals(BlocklyConstants.HIGH) ) {
             mode = "1";
@@ -800,7 +818,7 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
         } else {
             throw new DbcException("LightAction; invalid mode: " + mode);
         }
-        this.sb.append("_cbSetLed(_buf, &_i2c, _cbLedState, ").append(lightAction.getPort()).append(", ").append(mode).append(");");
+        this.sb.append("_cbSetLed(_buf, &_i2c, _cbLedState, ").append(pin1).append(", ").append(mode).append(");");
         return null;
     }
 
@@ -865,10 +883,10 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
     @Override
     public Void visitAccelerometer(AccelerometerSensor<Void> accelerometerSensor) {
         this.sb.append("_uBit.accelerometer.get");
-        if ( accelerometerSensor.getPort().equals("STRENGTH") ) {
+        if ( accelerometerSensor.getSlot().equals("STRENGTH") ) {
             this.sb.append("Strength");
         } else {
-            this.sb.append(accelerometerSensor.getPort());
+            this.sb.append(accelerometerSensor.getSlot());
         }
         this.sb.append("()");
         return null;
@@ -1087,10 +1105,6 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
             nlIndent();
             this.sb.append("uint8_t _cbLedState = 0x00;");
         }
-        if ( this.getBean(UsedHardwareBean.class).isActorUsed(SC.MOTOR_DRIVE) ) {
-            nlIndent();
-            this.sb.append("double _motorOnStore = 0.0;");
-        }
     }
 
     @Override
@@ -1107,7 +1121,10 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
 
     @Override
     public Void visitBothMotorsOnAction(BothMotorsOnAction<Void> bothMotorsOnAction) {
-        if ( bothMotorsOnAction.getPortA().contentEquals(BlocklyConstants.A) ) {
+        String port = bothMotorsOnAction.getPortA();
+        ConfigurationComponent configurationComponent = this.robotConfiguration.getConfigurationComponent(port);
+        String pin1 = configurationComponent.getProperty("PIN1");
+        if ( pin1.equals("A") ) {
             this.sb.append("_uBit.soundmotor.motorAOn(");
             bothMotorsOnAction.getSpeedA().accept(this);
             this.sb.append(");");
@@ -1115,7 +1132,7 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
             this.sb.append("_uBit.soundmotor.motorBOn(");
             bothMotorsOnAction.getSpeedB().accept(this);
             this.sb.append(");");
-        } else if ( bothMotorsOnAction.getPortA().equals("LEFT") ) {
+        } else if ( pin1.equals("0") ) {
             this.sb.append("_cbSetMotors(_buf, &_i2c, ");
             bothMotorsOnAction.getSpeedA().accept(this);
             this.sb.append(", ");
@@ -1127,9 +1144,19 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
 
     @Override
     public Void visitBothMotorsStopAction(BothMotorsStopAction<Void> bothMotorsStopAction) {
-        this.sb.append("_uBit.soundmotor.motorAOff();");
-        nlIndent();
-        this.sb.append("_uBit.soundmotor.motorBOff();");
+        List<ConfigurationComponent> motors = getMotors();
+        boolean both = false;
+        if ( motors.stream().anyMatch(motor -> motor.getProperty("PIN1").equals("A") || motor.getProperty("PIN1").equals("B")) ) { // Internal motors
+            this.sb.append("_uBit.soundmotor.motorAOff();");
+            nlIndent();
+            this.sb.append("_uBit.soundmotor.motorBOff();");
+            both = true;
+        }
+        if ( motors.stream().anyMatch(motor -> motor.getProperty("PIN1").equals("0") || motor.getProperty("PIN1").equals("2")) ) { // Calli:bot motors
+            if ( both )
+                nlIndent();
+            this.sb.append("_cbSetMotors(_buf, &_i2c, 0, 0);");
+        }
         return null;
     }
 
@@ -1235,9 +1262,10 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
 
     @Override
     public Void visitServoSetAction(ServoSetAction<Void> servoSetAction) {
-        String userDefinedName = servoSetAction.getPort();
-        String port = this.robotConfiguration.getConfigurationComponent(userDefinedName).getInternalPortName();
-        this.sb.append("_uBit.io.").append(port).append(".setServoValue(");
+        String port = servoSetAction.getPort();
+        ConfigurationComponent configurationComponent = this.robotConfiguration.getConfigurationComponent(port);
+        String pin1 = configurationComponent.getProperty("PIN1");
+        this.sb.append("_uBit.io.").append(PIN_MAP.get(pin1)).append(".setServoValue(");
         servoSetAction.getValue().accept(this);
         this.sb.append(");");
 
@@ -1247,13 +1275,13 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
     @Override
     public Void visitMotionKitSingleSetAction(MotionKitSingleSetAction<Void> motionKitSingleSetAction) {
         String userDefinedName = motionKitSingleSetAction.getPort();
-        String currentPort = this.robotConfiguration.getConfigurationComponent(userDefinedName).getInternalPortName();
-        String rightMotorPort = this.robotConfiguration.getConfigurationComponent("C16").getInternalPortName(); // C16 is the right motor
-        String leftMotorPort = this.robotConfiguration.getConfigurationComponent("C17").getInternalPortName(); // C17 is the left motor
+        String currentPort = PIN_MAP.get(userDefinedName);
+        String rightMotorPort = PIN_MAP.get("C16"); // C16 is the right motor
+        String leftMotorPort = PIN_MAP.get("C17"); // C17 is the left motor
         String direction = motionKitSingleSetAction.getDirection();
         // for the right motor (C16) 0 is forwards and 180 is backwards
         // for the left  motor (C17) 180 is forwards and 0 is backwards
-        if (currentPort.equals(SC.BOTH)) {
+        if ( userDefinedName.equals(SC.BOTH) ) {
             switch ( direction ) {
                 case SC.FOREWARD:
                     this.sb.append("_uBit.io.").append(rightMotorPort).append(".setServoValue(0);");
@@ -1297,8 +1325,8 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
 
     @Override
     public Void visitMotionKitDualSetAction(MotionKitDualSetAction<Void> motionKitDualSetAction) {
-        String rightMotorPort = this.robotConfiguration.getConfigurationComponent("C16").getInternalPortName(); // C16 is the right motor
-        String leftMotorPort = this.robotConfiguration.getConfigurationComponent("C17").getInternalPortName(); // C17 is the left motor
+        String rightMotorPort = PIN_MAP.get("C16"); // C16 is the right motor
+        String leftMotorPort = PIN_MAP.get("C17"); // C17 is the left motor
         // for the right motor (C16) 0 is forwards and 180 is backwards
         // for the left  motor (C17) 180 is forwards and 0 is backwards
         switch ( motionKitDualSetAction.getDirectionRight() ) {
@@ -1329,5 +1357,18 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
                 throw new DbcException("Invalid direction!");
         }
         return null;
+    }
+
+    private List<ConfigurationComponent> getMotors() {
+        return this.robotConfiguration
+            .getConfigurationComponentsValues()
+            .stream()
+            .filter(cc -> cc.getComponentType().equals("MOTOR"))
+            .collect(Collectors.toList());
+    }
+
+    private boolean isDualMode() {
+        List<ConfigurationComponent> motors = getMotors();
+        return motors.stream().filter(motor -> motor.getProperty("PIN1").equals("A") || motor.getProperty("PIN1").equals("B")).count() > 1;
     }
 }

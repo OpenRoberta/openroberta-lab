@@ -52,7 +52,7 @@ public class TurnAction<V> extends Action<V> {
      * @param comment added from the user,
      * @return read only object of class {@link TurnAction}.
      */
-    private static <V> TurnAction<V> make(ITurnDirection direction, MotionParam<V> param, BlocklyBlockProperties properties, BlocklyComment comment) {
+    public static <V> TurnAction<V> make(ITurnDirection direction, MotionParam<V> param, BlocklyBlockProperties properties, BlocklyComment comment) {
         return new TurnAction<V>(direction, param, properties, comment);
     }
 

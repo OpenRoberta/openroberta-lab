@@ -94,6 +94,10 @@ public class ListGetIndex<V> extends Function<V> {
         return this.mode;
     }
 
+    public String getDataType() {
+        return this.dataType;
+    }
+
     @Override
     public int getPrecedence() {
         return 10;

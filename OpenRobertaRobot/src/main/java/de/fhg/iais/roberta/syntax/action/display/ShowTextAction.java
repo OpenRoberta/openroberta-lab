@@ -33,7 +33,7 @@ public class ShowTextAction<V> extends Action<V> {
     private final Expr<V> msg;
     private final Expr<V> x;
     private final Expr<V> y;
-    private final String port;
+    private String port;
 
     private ShowTextAction(Expr<V> msg, Expr<V> column, Expr<V> row, String port, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(BlockTypeContainer.getByName("SHOW_TEXT_ACTION"), properties, comment);
@@ -56,7 +56,7 @@ public class ShowTextAction<V> extends Action<V> {
      * @param comment added from the user,
      * @return read only object of class {@link ShowTextAction}
      */
-    private static <V> ShowTextAction<V> make(Expr<V> msg, Expr<V> x, Expr<V> y, String port, BlocklyBlockProperties properties, BlocklyComment comment) {
+    public static <V> ShowTextAction<V> make(Expr<V> msg, Expr<V> x, Expr<V> y, String port, BlocklyBlockProperties properties, BlocklyComment comment) {
         return new ShowTextAction<>(msg, x, y, port, properties, comment);
     }
 
@@ -133,5 +133,4 @@ public class ShowTextAction<V> extends Action<V> {
         Ast2JaxbHelper.addValue(jaxbDestination, BlocklyConstants.ROW, getY());
         return jaxbDestination;
     }
-
 }

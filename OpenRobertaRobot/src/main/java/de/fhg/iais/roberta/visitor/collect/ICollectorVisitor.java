@@ -13,6 +13,7 @@ import de.fhg.iais.roberta.syntax.action.communication.BluetoothSendAction;
 import de.fhg.iais.roberta.syntax.action.communication.BluetoothWaitForConnectionAction;
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
 import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
+import de.fhg.iais.roberta.syntax.action.generic.PinWriteValueAction;
 import de.fhg.iais.roberta.syntax.action.light.LightAction;
 import de.fhg.iais.roberta.syntax.action.light.LightStatusAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorGetPowerAction;
@@ -717,6 +718,12 @@ public interface ICollectorVisitor extends ISensorVisitor<Void>, IAllActorsVisit
 
     @Override
     default Void visitParticleSensor(ParticleSensor<Void> particleSensor) {
+        return null;
+    }
+
+    @Override
+    default Void visitPinWriteValueAction(PinWriteValueAction<Void> pinWriteValueAction) {
+        pinWriteValueAction.getValue().accept(this);
         return null;
     }
 }

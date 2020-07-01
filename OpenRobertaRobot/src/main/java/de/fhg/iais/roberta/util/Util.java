@@ -554,4 +554,30 @@ public class Util {
             return null;
         }
     }
+
+    /**
+     * Compares two version strings.
+     *
+     * @note It does not work if "1.10" is supposed to be equal to "1.10.0".
+     * @param str1 a string of ordinal numbers separated by decimal points.
+     * @param str2 a string of ordinal numbers separated by decimal points.
+     * @return The result is a negative integer if str1 is _numerically_ less than str2. The result is a positive integer if str1 is _numerically_ greater than
+     *         str2. The result is zero if the strings are _numerically_ equal.
+     */
+    public static int versionCompare(String str1, String str2) {
+        String[] vals1 = str1.split("\\.");
+        String[] vals2 = str2.split("\\.");
+        int i = 0;
+
+        while ( i < vals1.length && i < vals2.length && vals1[i].equals(vals2[i]) ) {
+            i++;
+        }
+
+        if ( i < vals1.length && i < vals2.length ) {
+            int diff = Integer.valueOf(vals1[i]).compareTo(Integer.valueOf(vals2[i]));
+            return Integer.signum(diff);
+        }
+
+        return Integer.signum(vals1.length - vals2.length);
+    }
 }

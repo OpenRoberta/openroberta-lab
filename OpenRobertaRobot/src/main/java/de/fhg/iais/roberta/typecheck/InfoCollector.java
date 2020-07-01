@@ -11,6 +11,7 @@ import de.fhg.iais.roberta.syntax.action.communication.BluetoothSendAction;
 import de.fhg.iais.roberta.syntax.action.communication.BluetoothWaitForConnectionAction;
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
 import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
+import de.fhg.iais.roberta.syntax.action.generic.PinWriteValueAction;
 import de.fhg.iais.roberta.syntax.action.light.LightAction;
 import de.fhg.iais.roberta.syntax.action.light.LightStatusAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorGetPowerAction;
@@ -715,6 +716,11 @@ public class InfoCollector<T> implements ILanguageVisitor<T>, ISensorVisitor<T>,
     @Override
     public T visitDebugAction(DebugAction<T> debugAction) {
         // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public T visitPinWriteValueAction(PinWriteValueAction<T> pinWriteValueAction) {
         return null;
     }
 }

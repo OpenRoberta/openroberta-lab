@@ -59,7 +59,6 @@ public class ConfigurationComponent extends Phrase<Void> {
 
     /**
      * Creates a configuration component. Should only be used by {@link Jaxb2ConfigurationAst}.
-     * TODO currently used by some hardcoded configurations, which should be removed if possible
      *
      * @param componentType the type of configuration component
      * @param isActor whether the component is an actor or not
