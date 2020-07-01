@@ -19,6 +19,7 @@ public class C {
     public static final String BACKWARD = "backward";
     public static final String BACK = "back";
     public static final String BINARY = "Binary";
+    public static final String BLOCK_ID = "BLOCK_ID";
     public static final String BOOLEAN = "BOOLEAN";
     public static final String BOOL_CONST = "BOOL_CONST";
     public static final String BREAK = "break";
@@ -47,6 +48,9 @@ public class C {
     public static final String CREATE_LIST_WITH_ITEM = "createCreateListWithItem";
     public static final String CURVE_ACTION = "CurveAction";
     public static final String DEBUG_ACTION = "DebugAction";
+    public static final String DEBUG_BREAKPOINT = "DebugBreakpoint";
+    public static final String DEBUG_STEP_OVER = "DebugStepOver";
+    public static final String DEBUG_STEP_INTO = "DebugStepInto";
     public static final String DEGREE = "degree";
     public static final String DIGITAL = "digital";
     public static final String DIRECTION = "direction";
@@ -110,6 +114,7 @@ public class C {
     public static final String IMAGE_SHIFT_ACTION = "ImageShiftAction";
     public static final String IN = "in";
     public static final String INFRARED = "infrared";
+    public static final String INITIATE_BLOCK = "INITIATE_BLOCK";
     public static final String INSERT = "insert";
     public static final String ITEM = "item";
     public static final String KIND = "kind";
@@ -258,6 +263,7 @@ public class C {
     public static final String STRING = "STRING";
     public static final String STRING_CONST = "STRING_CONST";
     public static final String SUM = "sum";
+    public static final String TERMINATE_BLOCK = "TERMINATE_BLOCK";
     public static final String TEMPERATURE = "temperature";
     public static final String TERNARY_EXPR = "createTernaryExpr";
     public static final String TEXT = "text";

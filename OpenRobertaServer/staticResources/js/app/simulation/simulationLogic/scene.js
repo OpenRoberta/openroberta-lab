@@ -121,6 +121,19 @@ define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constan
         }
     };
 
+    Scene.prototype.drawVariables = function () {
+        $("#variableValue").html("");
+        var variables = SIM.getSimVariables()
+        if (Object.keys(variables).length > 0) {
+            for (var v in variables) {
+                var value = variables[v][0];
+                addVariableValue(v, value);
+            }
+        } else {
+            $('#variableValue').append('<div><label> No variables instantiated</label></div>')
+        }
+    }
+
     Scene.prototype.drawMbed = function() {
         this.rCtx.clearRect(0, 0, C.MAX_WIDTH, C.MAX_HEIGHT);
         this.rCtx.restore();
@@ -277,7 +290,7 @@ define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constan
             this.rCtx.shadowBlur = 5;
             this.rCtx.shadowOffsetX = 2;
             var touchSensor;
-            var touch = false;            
+            var touch = false;
             if (Array.isArray(this.robots[r].touchSensor)) {
                 for (var s in this.robots[r].touchSensor) {
                     touchSensor = this.robots[r].touchSensor[s];
@@ -356,13 +369,13 @@ define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constan
                 this.rCtx.lineTo(ultraSensors[s].cx, ultraSensors[s].cy);
                 this.rCtx.stroke();
                 if (s !== 0) {
-                    this.rCtx.translate(ultraSensors[s].rx,ultraSensors[s].ry);
-                    this.rCtx.rotate(this.robots[r].pose.theta);                    
+                    this.rCtx.translate(ultraSensors[s].rx, ultraSensors[s].ry);
+                    this.rCtx.rotate(this.robots[r].pose.theta);
                     this.rCtx.beginPath();
                     this.rCtx.fillStyle = "#555555";
                     this.rCtx.fillText(s, (ultraSensors[s].y !== 30 ? 10 : -10), 4);
-                    this.rCtx.rotate(-this.robots[r].pose.theta);                   
-                    this.rCtx.translate(-ultraSensors[s].rx,-ultraSensors[s].ry);
+                    this.rCtx.rotate(-this.robots[r].pose.theta);
+                    this.rCtx.translate(-ultraSensors[s].rx, -ultraSensors[s].ry);
                 }
             }
 
@@ -841,6 +854,29 @@ define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constan
         var f = typeof fn == 'function';
         var s = f && ((fn.name && ['', fn.name]) || fn.toString().match(/function ([^\(]+)/));
         return (!f && 'not a function') || (s && s[1] || 'anonymous');
+    }
+
+    function addVariableValue(name, value) {
+        switch (typeof value) {
+            case "number": {
+                $("#variableValue").append('<div><label>' + name + ' :  </label><span> ' + UTIL.round(value, 0) + '</span></div>');
+                break;
+            }
+            case "string": {
+                $("#variableValue").append('<div><label>' + name + ' :  </label><span> ' + value + '</span></div>');
+                break;
+            }
+            case "boolean": {
+                $("#variableValue").append('<div><label>' + name + ' :  </label><span> ' + value + '</span></div>');
+                break;
+            }
+            case "object": {
+                for (var i = 0; i < value.length; i++) {
+                    addVariableValue(name + " [" + String(i) + "]", value[i]);
+                }
+                break;
+            }
+        }
     }
 
     return Scene;

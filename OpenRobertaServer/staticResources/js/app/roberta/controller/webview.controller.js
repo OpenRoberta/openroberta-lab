@@ -102,7 +102,7 @@ define( ['exports', 'guiState.controller', 'interpreter.interpreter', 'interpret
     }
 
     function getInterpreter( program ) {
-        interpreter = new WEDO_I.Interpreter( program, wedo, callbackOnTermination );
+        interpreter = new WEDO_I.Interpreter( program, wedo, callbackOnTermination ,[]);
         return interpreter;
     }
     exports.getInterpreter = getInterpreter;

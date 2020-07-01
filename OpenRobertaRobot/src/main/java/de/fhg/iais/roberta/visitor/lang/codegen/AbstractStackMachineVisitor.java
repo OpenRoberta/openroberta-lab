@@ -105,32 +105,32 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
 
     @Override
     public V visitNumConst(NumConst<V> numConst) {
-        JSONObject o = mk(C.EXPR).put(C.EXPR, numConst.getKind().getName()).put(C.VALUE, numConst.getValue());
+        JSONObject o = mk(C.EXPR, numConst).put(C.EXPR, numConst.getKind().getName()).put(C.VALUE, numConst.getValue());
         return app(o);
     }
 
     @Override
     public V visitMathConst(MathConst<V> mathConst) {
-        JSONObject o = mk(C.EXPR).put(C.EXPR, C.MATH_CONST).put(C.VALUE, mathConst.getMathConst());
+        JSONObject o = mk(C.EXPR, mathConst).put(C.EXPR, C.MATH_CONST).put(C.VALUE, mathConst.getMathConst());
         return app(o);
     }
 
     @Override
     public V visitBoolConst(BoolConst<V> boolConst) {
-        JSONObject o = mk(C.EXPR).put(C.EXPR, boolConst.getKind().getName()).put(C.VALUE, boolConst.getValue());
+        JSONObject o = mk(C.EXPR, boolConst).put(C.EXPR, boolConst.getKind().getName()).put(C.VALUE, boolConst.getValue());
         return app(o);
     }
 
     @Override
     public V visitStringConst(StringConst<V> stringConst) {
-        JSONObject o = mk(C.EXPR).put(C.EXPR, stringConst.getKind().getName());
+        JSONObject o = mk(C.EXPR, stringConst).put(C.EXPR, stringConst.getKind().getName());
         o.put(C.VALUE, stringConst.getValue().replaceAll("[<>\\$]", ""));
         return app(o);
     }
 
     @Override
     public V visitNullConst(NullConst<V> nullConst) {
-        JSONObject o = mk(C.EXPR).put(C.EXPR, "C." + nullConst.getKind().getName());
+        JSONObject o = mk(C.EXPR, nullConst).put(C.EXPR, "C." + nullConst.getKind().getName());
         return app(o);
     }
 
@@ -173,7 +173,7 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
                 colorConst.addInfo(NepoInfo.error("SIM_BLOCK_NOT_SUPPORTED"));
                 throw new DbcException("Invalid color constant: " + colorConst.getHexIntAsString());
         }
-        JSONObject o = mk(C.EXPR).put(C.EXPR, C.COLOR_CONST).put(C.VALUE, colorId);
+        JSONObject o = mk(C.EXPR, colorConst).put(C.EXPR, C.COLOR_CONST).put(C.VALUE, colorId);
         return app(o);
     }
 
@@ -182,7 +182,7 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
         rgbColor.getR().accept(this);
         rgbColor.getG().accept(this);
         rgbColor.getB().accept(this);
-        JSONObject o = mk(C.EXPR).put(C.EXPR, C.RGB_COLOR_CONST);
+        JSONObject o = mk(C.EXPR, rgbColor).put(C.EXPR, C.RGB_COLOR_CONST);
         return app(o);
     }
 
@@ -198,7 +198,7 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
 
     @Override
     public V visitVar(Var<V> var) {
-        JSONObject o = mk(C.EXPR).put(C.EXPR, C.VAR).put(C.NAME, var.getValue());
+        JSONObject o = mk(C.EXPR, var).put(C.EXPR, C.VAR).put(C.NAME, var.getValue());
         return app(o);
     }
 
@@ -214,14 +214,14 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
         } else {
             var.getValue().accept(this);
         }
-        JSONObject o = mk(C.VAR_DECLARATION).put(C.TYPE, var.getTypeVar()).put(C.NAME, var.getName());
+        JSONObject o = mk(C.VAR_DECLARATION, var).put(C.TYPE, var.getTypeVar()).put(C.NAME, var.getName());
         return app(o);
     }
 
     @Override
     public V visitUnary(Unary<V> unary) {
         unary.getExpr().accept(this);
-        JSONObject o = mk(C.EXPR).put(C.EXPR, C.UNARY).put(C.OP, unary.getOp());
+        JSONObject o = mk(C.EXPR, unary).put(C.EXPR, C.UNARY).put(C.OP, unary.getOp());
         return app(o);
     }
 
@@ -233,13 +233,13 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
         // FIXME: The math change should be removed from the binary expression since it is a statement
         switch ( binary.getOp() ) {
             case MATH_CHANGE:
-                o = mk(C.MATH_CHANGE).put(C.NAME, ((Var<V>) binary.getLeft()).getValue());
+                o = mk(C.MATH_CHANGE, binary).put(C.NAME, ((Var<V>) binary.getLeft()).getValue());
                 break;
             case TEXT_APPEND:
-                o = mk(C.TEXT_APPEND).put(C.NAME, ((Var<V>) binary.getLeft()).getValue());
+                o = mk(C.TEXT_APPEND, binary).put(C.NAME, ((Var<V>) binary.getLeft()).getValue());
                 break;
             default:
-                o = mk(C.EXPR).put(C.EXPR, C.BINARY).put(C.OP, binary.getOp());
+                o = mk(C.EXPR, binary).put(C.EXPR, C.BINARY).put(C.OP, binary.getOp());
                 break;
         }
         return app(o);
@@ -249,7 +249,7 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
     public V visitMathPowerFunct(MathPowerFunct<V> mathPowerFunct) {
         mathPowerFunct.getParam().get(0).accept(this);
         mathPowerFunct.getParam().get(1).accept(this);
-        JSONObject o = mk(C.EXPR).put(C.EXPR, C.BINARY).put(C.OP, mathPowerFunct.getFunctName());
+        JSONObject o = mk(C.EXPR, mathPowerFunct).put(C.EXPR, C.BINARY).put(C.OP, mathPowerFunct.getFunctName());
         return app(o);
     }
 
@@ -281,17 +281,17 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
         JSONObject o;
         switch ( emptyExpr.getDefVal() ) {
             case STRING:
-                o = mk(C.EXPR).put(C.EXPR, C.STRING_CONST).put(C.VALUE, "");
+                o = mk(C.EXPR, emptyExpr).put(C.EXPR, C.STRING_CONST).put(C.VALUE, "");
                 break;
             case BOOLEAN:
-                o = mk(C.EXPR).put(C.EXPR, C.BOOL_CONST).put(C.VALUE, "true");
+                o = mk(C.EXPR, emptyExpr).put(C.EXPR, C.BOOL_CONST).put(C.VALUE, "true");
                 break;
             case NUMBER_INT:
             case NUMBER:
-                o = mk(C.EXPR).put(C.EXPR, C.NUM_CONST).put(C.VALUE, 0);
+                o = mk(C.EXPR, emptyExpr).put(C.EXPR, C.NUM_CONST).put(C.VALUE, 0);
                 break;
             case COLOR:
-                o = mk(C.EXPR).put(C.EXPR, C.LED_COLOR_CONST).put(C.VALUE, 3);
+                o = mk(C.EXPR, emptyExpr).put(C.EXPR, C.LED_COLOR_CONST).put(C.VALUE, 3);
                 break;
             case NULL:
             case CONNECTION:
@@ -301,7 +301,7 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
             case ARRAY_IMAGE:
             case ARRAY_NUMBER:
             case ARRAY_STRING:
-                o = mk(C.EXPR).put(C.EXPR, C.NULL_CONST);
+                o = mk(C.EXPR, emptyExpr).put(C.EXPR, C.NULL_CONST);
                 break;
             case IMAGE:
                 JSONArray jsonImage = new JSONArray();
@@ -312,10 +312,10 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
                     }
                     jsonImage.put(new JSONArray(a));
                 }
-                o = mk(C.EXPR).put(C.EXPR, C.IMAGE_CONST).put(C.VALUE, jsonImage);
+                o = mk(C.EXPR, emptyExpr).put(C.EXPR, C.IMAGE_CONST).put(C.VALUE, jsonImage);
                 break;
             case CAPTURED_TYPE: // TODO: get the captured type
-                o = mk(C.EXPR).put(C.EXPR, C.NUM_CONST).put(C.VALUE, 0);
+                o = mk(C.EXPR, emptyExpr).put(C.EXPR, C.NUM_CONST).put(C.VALUE, 0);
                 break;
             default:
                 throw new DbcException("Operation not supported");
@@ -348,7 +348,7 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
     @Override
     public V visitAssignStmt(AssignStmt<V> assignStmt) {
         assignStmt.getExpr().accept(this);
-        JSONObject o = mk(C.ASSIGN_STMT).put(C.NAME, assignStmt.getName().getValue());
+        JSONObject o = mk(C.ASSIGN_STMT, assignStmt).put(C.NAME, assignStmt.getName().getValue());
         return app(o);
     }
 
@@ -360,7 +360,7 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
 
     @Override
     public V visitIfStmt(IfStmt<V> ifStmt) {
-        JSONObject stmtListEnd = mk(C.FLOW_CONTROL).put(C.KIND, C.IF_STMT).put(C.CONDITIONAL, false).put(C.BREAK, true);
+        JSONObject stmtListEnd = mk(C.FLOW_CONTROL, ifStmt).put(C.KIND, C.IF_STMT).put(C.CONDITIONAL, false).put(C.BREAK, true);
         int numberOfThens = ifStmt.getExpr().size();
         if ( ifStmt.isTernary() ) {
             Assert.isTrue(numberOfThens == 1);
@@ -374,7 +374,7 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
             ifStmt.getThenList().get(i).accept(this);
             this.getOpArray().add(stmtListEnd);
             List<JSONObject> thenStmts = popOpArray();
-            JSONObject ifTrue = mk(C.IF_TRUE_STMT).put(C.STMT_LIST, thenStmts);
+            JSONObject ifTrue = mk(C.IF_TRUE_STMT, ifStmt).put(C.STMT_LIST, thenStmts);
             this.getOpArray().add(ifTrue);
         }
         if ( !ifStmt.getElseList().get().isEmpty() ) {
@@ -382,7 +382,7 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
         }
         this.getOpArray().add(stmtListEnd);
         List<JSONObject> ifThenElseOps = popOpArray();
-        JSONObject o = mk(C.IF_STMT).put(C.STMT_LIST, ifThenElseOps);
+        JSONObject o = mk(C.IF_STMT, ifStmt).put(C.STMT_LIST, ifThenElseOps);
         return app(o);
     }
 
@@ -395,10 +395,10 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
             repeatStmt.getExpr().accept(this);
             pushOpArray();
             repeatStmt.getList().accept(this);
-            JSONObject stmtListEnd = mk(C.FLOW_CONTROL).put(C.KIND, C.WAIT_STMT).put(C.CONDITIONAL, false).put(C.BREAK, true);
+            JSONObject stmtListEnd = mk(C.FLOW_CONTROL, repeatStmt).put(C.KIND, C.WAIT_STMT).put(C.CONDITIONAL, false).put(C.BREAK, true);
             this.getOpArray().add(stmtListEnd);
             List<JSONObject> waitBody = popOpArray();
-            JSONObject o = mk(C.IF_TRUE_STMT).put(C.STMT_LIST, waitBody);
+            JSONObject o = mk(C.IF_TRUE_STMT, repeatStmt).put(C.STMT_LIST, waitBody);
             return app(o);
         }
 
@@ -407,14 +407,18 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
             pushOpArray();
             repeatStmt.getList().accept(this);
             List<JSONObject> repeatBody = popOpArray();
-            JSONObject cont = mk(C.REPEAT_STMT_CONTINUATION).put(C.MODE, mode).put(C.STMT_LIST, repeatBody);
-            JSONObject repeat = mk(C.REPEAT_STMT).put(C.MODE, mode).put(C.STMT_LIST, Arrays.asList(cont));
+            JSONObject cont = mk(C.REPEAT_STMT_CONTINUATION, repeatStmt).put(C.MODE, mode).put(C.STMT_LIST, repeatBody);
+            JSONObject repeat = mk(C.REPEAT_STMT, repeatStmt).put(C.MODE, mode).put(C.STMT_LIST, Arrays.asList(cont));
             if ( mode == Mode.FOREVER ) {
                 return app(repeat);
             } else if ( mode == Mode.FOR_EACH ) {
                 pushOpArray();
                 repeatStmt.getExpr().accept(this);
-                List<JSONObject> timesExprs = popOpArray();
+                List<JSONObject> timesExprs =
+                    popOpArray()
+                        .stream()
+                        .filter(d -> (d.get(C.OPCODE) != C.TERMINATE_BLOCK && d.get(C.OPCODE) != C.INITIATE_BLOCK))
+                        .collect(Collectors.toList());
                 timesExprs.remove(0);
                 JSONObject varDecl = timesExprs.remove(0);
                 JSONObject listDecl = timesExprs.remove(0);
@@ -433,7 +437,12 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
             } else {
                 pushOpArray();
                 repeatStmt.getExpr().accept(this); // expected: expr list length 4: var, start, end, incr
-                List<JSONObject> timesExprs = popOpArray();
+                List<JSONObject> timesExprs =
+                    popOpArray()
+                        .stream()
+                        .filter(d -> (d.get(C.OPCODE) != C.TERMINATE_BLOCK && d.get(C.OPCODE) != C.INITIATE_BLOCK))
+                        .collect(Collectors.toList());
+                ;
                 JSONObject decl = timesExprs.remove(0);
                 this.getOpArray().addAll(timesExprs);
                 String runVarName = decl.getString(C.NAME);
@@ -450,11 +459,11 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
             pushOpArray();
             repeatStmt.getList().accept(this);
             List<JSONObject> body = popOpArray();
-            JSONObject cont = mk(C.REPEAT_STMT_CONTINUATION).put(C.MODE, mode);
-            JSONObject repeat = mk(C.REPEAT_STMT).put(C.MODE, mode).put(C.STMT_LIST, Arrays.asList(cont));
+            JSONObject cont = mk(C.REPEAT_STMT_CONTINUATION, repeatStmt).put(C.MODE, mode);
+            JSONObject repeat = mk(C.REPEAT_STMT, repeatStmt).put(C.MODE, mode).put(C.STMT_LIST, Arrays.asList(cont));
             List<JSONObject> exprAndBody = new ArrayList<>();
             exprAndBody.addAll(expr);
-            exprAndBody.add(mk(C.FLOW_CONTROL).put(C.KIND, C.REPEAT_STMT).put(C.CONDITIONAL, true).put(C.BREAK, true).put(C.BOOLEAN, false));
+            exprAndBody.add(mk(C.FLOW_CONTROL, repeatStmt).put(C.KIND, C.REPEAT_STMT).put(C.CONDITIONAL, true).put(C.BREAK, true).put(C.BOOLEAN, false));
             exprAndBody.addAll(body);
             cont.put(C.STMT_LIST, exprAndBody);
             return app(repeat);
@@ -473,7 +482,7 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
     public V visitStmtFlowCon(StmtFlowCon<V> stmtFlowCon) {
         boolean breakAndNotContinue = stmtFlowCon.getFlow() == Flow.BREAK;
         String targetStmt = breakAndNotContinue ? C.REPEAT_STMT : C.REPEAT_STMT_CONTINUATION;
-        JSONObject o = mk(C.FLOW_CONTROL).put(C.KIND, targetStmt).put(C.CONDITIONAL, false).put(C.BREAK, breakAndNotContinue);
+        JSONObject o = mk(C.FLOW_CONTROL, stmtFlowCon).put(C.KIND, targetStmt).put(C.CONDITIONAL, false).put(C.BREAK, breakAndNotContinue);
         return app(o);
     }
 
@@ -489,7 +498,7 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
     public V visitMainTask(MainTask<V> mainTask) {
         mainTask.getVariables().accept(this);
         if ( mainTask.getDebug().equals("TRUE") ) {
-            JSONObject o = mk(C.CREATE_DEBUG_ACTION);
+            JSONObject o = mk(C.CREATE_DEBUG_ACTION, mainTask);
             return app(o);
         }
         return null;
@@ -515,14 +524,14 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
         this.getOpArray().add(mk(C.EXPR).put(C.EXPR, C.NUM_CONST).put(C.VALUE, 1));
         this.getOpArray().add(mk(C.WAIT_TIME_STMT));
         List<JSONObject> waitBlocks = popOpArray();
-        JSONObject o = mk(C.WAIT_STMT).put(C.STMT_LIST, waitBlocks);
+        JSONObject o = mk(C.WAIT_STMT, waitStmt).put(C.STMT_LIST, waitBlocks);
         return app(o);
     }
 
     @Override
     public V visitWaitTimeStmt(WaitTimeStmt<V> waitTimeStmt) {
         waitTimeStmt.getTime().accept(this);
-        JSONObject o = mk(C.WAIT_TIME_STMT);
+        JSONObject o = mk(C.WAIT_TIME_STMT, waitTimeStmt);
         return app(o);
     }
 
@@ -539,7 +548,7 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
     @Override
     public V visitStmtTextComment(StmtTextComment<V> textComment) {
         JSONObject o;
-        o = mk(C.COMMENT).put(C.VALUE, textComment.getTextComment());
+        o = mk(C.COMMENT, textComment).put(C.VALUE, textComment.getTextComment());
         return app(o);
     }
 
@@ -560,7 +569,7 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
         getSubFunct.getParam().forEach(x -> x.accept(this));
 
         JSONObject o =
-            mk(C.EXPR)
+            mk(C.EXPR, getSubFunct)
                 .put(C.EXPR, C.LIST_OPERATION)
                 .put(C.OP, C.LIST_GET_SUBLIST)
                 .put(C.POSITION, getSubFunct.getStrParam().stream().map(x -> x.toString().toLowerCase()).toArray());
@@ -572,14 +581,17 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
     public V visitIndexOfFunct(IndexOfFunct<V> indexOfFunct) {
         indexOfFunct.getParam().forEach(x -> x.accept(this));
         JSONObject o =
-            mk(C.EXPR).put(C.EXPR, C.LIST_OPERATION).put(C.OP, C.LIST_FIND_ITEM).put(C.POSITION, indexOfFunct.getLocation().toString().toLowerCase());
+            mk(C.EXPR, indexOfFunct)
+                .put(C.EXPR, C.LIST_OPERATION)
+                .put(C.OP, C.LIST_FIND_ITEM)
+                .put(C.POSITION, indexOfFunct.getLocation().toString().toLowerCase());
         return app(o);
     }
 
     @Override
     public V visitLengthOfIsEmptyFunct(LengthOfIsEmptyFunct<V> lengthOfIsEmptyFunct) {
         lengthOfIsEmptyFunct.getParam().get(0).accept(this);
-        JSONObject o = mk(C.EXPR).put(C.EXPR, C.LIST_OPERATION).put(C.OP, lengthOfIsEmptyFunct.getFunctName().toString().toLowerCase());
+        JSONObject o = mk(C.EXPR, lengthOfIsEmptyFunct).put(C.EXPR, C.LIST_OPERATION).put(C.OP, lengthOfIsEmptyFunct.getFunctName().toString().toLowerCase());
         return app(o);
     }
 
@@ -588,7 +600,7 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
         listCreate.getValue().accept(this);
         int n = listCreate.getValue().get().size();
 
-        JSONObject o = mk(C.EXPR).put(C.EXPR, C.CREATE_LIST).put(C.NUMBER, n);
+        JSONObject o = mk(C.EXPR, listCreate).put(C.EXPR, C.CREATE_LIST).put(C.NUMBER, n);
         return app(o);
     }
 
@@ -596,7 +608,7 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
     public V visitListSetIndex(ListSetIndex<V> listSetIndex) {
         listSetIndex.getParam().forEach(x -> x.accept(this));
         JSONObject o =
-            mk(C.LIST_OPERATION)
+            mk(C.LIST_OPERATION, listSetIndex)
                 .put(C.OP, listSetIndex.getElementOperation().toString().toLowerCase())
                 .put(C.POSITION, listSetIndex.getLocation().toString().toLowerCase());
         return app(o);
@@ -606,7 +618,7 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
     public V visitListGetIndex(ListGetIndex<V> listGetIndex) {
         listGetIndex.getParam().forEach(x -> x.accept(this));
         JSONObject o =
-            mk(C.EXPR)
+            mk(C.EXPR, listGetIndex)
                 .put(C.EXPR, C.LIST_OPERATION)
                 .put(C.OP, listGetIndex.getElementOperation().toString().toLowerCase())
                 .put(C.POSITION, listGetIndex.getLocation().toString().toLowerCase());
@@ -616,7 +628,7 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
     @Override
     public V visitListRepeat(ListRepeat<V> listRepeat) {
         listRepeat.getParam().forEach(x -> x.accept(this));
-        JSONObject o = mk(C.EXPR).put(C.EXPR, C.CREATE_LIST_REPEAT);
+        JSONObject o = mk(C.EXPR, listRepeat).put(C.EXPR, C.CREATE_LIST_REPEAT);
         return app(o);
     }
 
@@ -625,7 +637,7 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
         mathConstrainFunct.getParam().get(0).accept(this);
         mathConstrainFunct.getParam().get(1).accept(this);
         mathConstrainFunct.getParam().get(2).accept(this);
-        JSONObject o = mk(C.EXPR).put(C.EXPR, C.MATH_CONSTRAIN_FUNCTION);
+        JSONObject o = mk(C.EXPR, mathConstrainFunct).put(C.EXPR, C.MATH_CONSTRAIN_FUNCTION);
         return app(o);
     }
 
@@ -635,20 +647,20 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
         if ( mathNumPropFunct.getFunctName() == FunctionNames.DIVISIBLE_BY ) {
             mathNumPropFunct.getParam().get(1).accept(this);
         }
-        JSONObject o = mk(C.EXPR).put(C.EXPR, C.MATH_PROP_FUNCT).put(C.OP, mathNumPropFunct.getFunctName());
+        JSONObject o = mk(C.EXPR, mathNumPropFunct).put(C.EXPR, C.MATH_PROP_FUNCT).put(C.OP, mathNumPropFunct.getFunctName());
         return app(o);
     }
 
     @Override
     public V visitMathOnListFunct(MathOnListFunct<V> mathOnListFunct) {
         mathOnListFunct.getParam().forEach(x -> x.accept(this));
-        JSONObject o = mk(C.EXPR).put(C.EXPR, C.MATH_ON_LIST).put(C.OP, mathOnListFunct.getFunctName().toString().toLowerCase());
+        JSONObject o = mk(C.EXPR, mathOnListFunct).put(C.EXPR, C.MATH_ON_LIST).put(C.OP, mathOnListFunct.getFunctName().toString().toLowerCase());
         return app(o);
     }
 
     @Override
     public V visitMathRandomFloatFunct(MathRandomFloatFunct<V> mathRandomFloatFunct) {
-        JSONObject o = mk(C.EXPR).put(C.EXPR, C.RANDOM_DOUBLE);
+        JSONObject o = mk(C.EXPR, mathRandomFloatFunct).put(C.EXPR, C.RANDOM_DOUBLE);
         return app(o);
     }
 
@@ -656,14 +668,14 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
     public V visitMathRandomIntFunct(MathRandomIntFunct<V> mathRandomIntFunct) {
         mathRandomIntFunct.getParam().get(0).accept(this);
         mathRandomIntFunct.getParam().get(1).accept(this);
-        JSONObject o = mk(C.EXPR).put(C.EXPR, C.RANDOM_INT);
+        JSONObject o = mk(C.EXPR, mathRandomIntFunct).put(C.EXPR, C.RANDOM_INT);
         return app(o);
     }
 
     @Override
     public V visitMathSingleFunct(MathSingleFunct<V> mathSingleFunct) {
         mathSingleFunct.getParam().get(0).accept(this);
-        JSONObject o = mk(C.EXPR).put(C.EXPR, C.SINGLE_FUNCTION).put(C.OP, mathSingleFunct.getFunctName());
+        JSONObject o = mk(C.EXPR, mathSingleFunct).put(C.EXPR, C.SINGLE_FUNCTION).put(C.OP, mathSingleFunct.getFunctName());
         return app(o);
     }
 
@@ -700,7 +712,7 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
     public V visitTextJoinFunct(TextJoinFunct<V> textJoinFunct) {
         textJoinFunct.getParam().accept(this);
         int n = textJoinFunct.getParam().get().size();
-        JSONObject o = mk(C.TEXT_JOIN).put(C.NUMBER, n);
+        JSONObject o = mk(C.TEXT_JOIN, textJoinFunct).put(C.NUMBER, n);
         return app(o);
     }
 
@@ -711,10 +723,10 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
         popOpArray();
         pushOpArray();
         methodVoid.getBody().accept(this);
-        JSONObject terminateMethodCall = mk(C.FLOW_CONTROL).put(C.KIND, C.METHOD_CALL_VOID).put(C.CONDITIONAL, false).put(C.BREAK, true);
+        JSONObject terminateMethodCall = mk(C.FLOW_CONTROL, methodVoid).put(C.KIND, C.METHOD_CALL_VOID).put(C.CONDITIONAL, false).put(C.BREAK, true);
         this.getOpArray().add(terminateMethodCall);
         List<JSONObject> methodBody = popOpArray();
-        JSONObject o = mk(C.METHOD_VOID).put(C.NAME, methodVoid.getMethodName()).put(C.STATEMENTS, methodBody);
+        JSONObject o = mk(C.METHOD_VOID, methodVoid).put(C.NAME, methodVoid.getMethodName()).put(C.STATEMENTS, methodBody);
         this.getFctDecls().put(methodVoid.getMethodName(), o);
         return null;
     }
@@ -727,10 +739,11 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
         pushOpArray();
         methodReturn.getBody().accept(this);
         methodReturn.getReturnValue().accept(this);
-        JSONObject terminateMethodCall = mk(C.FLOW_CONTROL).put(C.KIND, C.METHOD_CALL_RETURN).put(C.CONDITIONAL, false).put(C.BREAK, true);
+        JSONObject terminateMethodCall = mk(C.FLOW_CONTROL, methodReturn).put(C.KIND, C.METHOD_CALL_RETURN).put(C.CONDITIONAL, false).put(C.BREAK, true);
         this.getOpArray().add(terminateMethodCall);
         List<JSONObject> methodBody = popOpArray();
-        JSONObject o = mk(C.METHOD_RETURN).put(C.TYPE, methodReturn.getReturnType()).put(C.NAME, methodReturn.getMethodName()).put(C.STATEMENTS, methodBody);
+        JSONObject o =
+            mk(C.METHOD_RETURN, methodReturn).put(C.TYPE, methodReturn.getReturnType()).put(C.NAME, methodReturn.getMethodName()).put(C.STATEMENTS, methodBody);
         this.getFctDecls().put(methodReturn.getMethodName(), o);
         return null;
     }
@@ -740,10 +753,10 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
         methodIfReturn.getCondition().accept(this);
         pushOpArray();
         methodIfReturn.getReturnValue().accept(this);
-        JSONObject terminateMethodCall = mk(C.FLOW_CONTROL).put(C.KIND, C.METHOD_CALL_RETURN).put(C.CONDITIONAL, false).put(C.BREAK, true);
+        JSONObject terminateMethodCall = mk(C.FLOW_CONTROL, methodIfReturn).put(C.KIND, C.METHOD_CALL_RETURN).put(C.CONDITIONAL, false).put(C.BREAK, true);
         this.getOpArray().add(terminateMethodCall);
         List<JSONObject> returnValueExpr = popOpArray();
-        JSONObject o = mk(C.IF_RETURN).put(C.STMT_LIST, returnValueExpr);
+        JSONObject o = mk(C.IF_RETURN, methodIfReturn).put(C.STMT_LIST, returnValueExpr);
         return app(o);
     }
 
@@ -758,14 +771,20 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
         List<Expr<V>> parametersNames = methodCall.getParameters().get();
         pushOpArray();
         parametersNames.stream().forEach(n -> n.accept(this));
-        List<String> names = this.getOpArray().stream().map(d -> d.getString(C.NAME)).collect(Collectors.toList());
+        List<String> names =
+            this
+                .getOpArray()
+                .stream()
+                .filter(d -> (d.get(C.OPCODE) != C.TERMINATE_BLOCK && d.get(C.OPCODE) != C.INITIATE_BLOCK))
+                .map(d -> d.getString(C.NAME))
+                .collect(Collectors.toList());
         names = Lists.reverse(names);
         popOpArray();
         List<Expr<V>> parametersValues = methodCall.getParametersValues().get();
         parametersValues.stream().forEach(v -> v.accept(this));
         // TODO: better AST needed. Push and pop used only to get the parameter names
         String methodKind = methodCall.getReturnType() == BlocklyType.VOID ? C.METHOD_CALL_VOID : C.METHOD_CALL_RETURN;
-        JSONObject call = mk(methodKind).put(C.NAME, methodCall.getMethodName()).put(C.NAMES, names);
+        JSONObject call = mk(methodKind, methodCall).put(C.NAME, methodCall.getMethodName()).put(C.NAMES, names);
         return app(call);
     }
 
@@ -814,8 +833,18 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
         return new JSONObject().put(C.OPCODE, opCode);
     }
 
+    protected JSONObject mk(String opCode, Phrase<V> phrase) {
+        return new JSONObject().put(C.OPCODE, opCode).put(C.BLOCK_ID, phrase.getProperty().getBlocklyId());
+    }
+
     protected V app(JSONObject o) {
-        this.getOpArray().add(o);
+        if ( o.has(C.BLOCK_ID) ) {
+            this.getOpArray().add(mk(C.INITIATE_BLOCK).put(C.BLOCK_ID, o.get(C.BLOCK_ID)).put(C.OP, o.get(C.OPCODE)));
+            this.getOpArray().add(o);
+            this.getOpArray().add(mk(C.TERMINATE_BLOCK).put(C.BLOCK_ID, o.get(C.BLOCK_ID)));
+        } else {
+            this.getOpArray().add(o);
+        }
         return null;
     }
 
@@ -837,14 +866,14 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
         ((Binary<Void>) assertStmt.getAssert()).getLeft().accept((IVisitor<Void>) this);
         ((Binary<Void>) assertStmt.getAssert()).getRight().accept((IVisitor<Void>) this);
         String op = ((Binary<Void>) assertStmt.getAssert()).getOp().toString();
-        JSONObject o = mk(C.ASSERT_ACTION).put(C.MSG, assertStmt.getMsg()).put(C.OP, op);
+        JSONObject o = mk(C.ASSERT_ACTION, assertStmt).put(C.MSG, assertStmt.getMsg()).put(C.OP, op);
         return app(o);
     }
 
     @Override
     public V visitDebugAction(DebugAction<V> debugAction) {
         debugAction.getValue().accept(this);
-        JSONObject o = mk(C.DEBUG_ACTION);
+        JSONObject o = mk(C.DEBUG_ACTION, debugAction);
         return app(o);
     }
 

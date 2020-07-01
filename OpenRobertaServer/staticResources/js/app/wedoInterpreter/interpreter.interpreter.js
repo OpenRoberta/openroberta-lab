@@ -1,7 +1,18 @@
-define(["require", "exports", "interpreter.state", "interpreter.constants", "interpreter.util"], function (require, exports, interpreter_state_1, C, U) {
+(function (factory) {
+    if (typeof module === "object" && typeof module.exports === "object") {
+        var v = factory(require, exports);
+        if (v !== undefined) module.exports = v;
+    }
+    else if (typeof define === "function" && define.amd) {
+        define(["require", "exports", "interpreter.state", "interpreter.constants", "interpreter.util"], factory);
+    }
+})(function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Interpreter = void 0;
+    var interpreter_state_1 = require("interpreter.state");
+    var C = require("interpreter.constants");
+    var U = require("interpreter.util");
     var Interpreter = /** @class */ (function () {
         /*
          *
@@ -9,7 +20,7 @@ define(["require", "exports", "interpreter.state", "interpreter.constants", "int
          * . @param r implementation of the ARobotBehaviour class
          * . @param cbOnTermination is called when the program has terminated
         */
-        function Interpreter(generatedCode, r, cbOnTermination) {
+        function Interpreter(generatedCode, r, cbOnTermination, simBreakpoints) {
             this.terminated = false;
             this.callbackOnTermination = undefined;
             this.terminated = false;
@@ -17,6 +28,13 @@ define(["require", "exports", "interpreter.state", "interpreter.constants", "int
             var stmts = generatedCode[C.OPS];
             var functions = generatedCode[C.FUNCTION_DECLARATION];
             this.r = r;
+            this.breakpoints = simBreakpoints;
+            this.events = {};
+            this.events[C.DEBUG_STEP_INTO] = false;
+            this.events[C.DEBUG_BREAKPOINT] = false;
+            this.events[C.DEBUG_STEP_OVER] = false;
+            this.stepBlock = null;
+            this.previousBlockId = null;
             var stop = {};
             stop[C.OPCODE] = "stop";
             stmts.push(stop);
@@ -43,9 +61,39 @@ define(["require", "exports", "interpreter.state", "interpreter.constants", "int
             this.terminated = true;
             this.callbackOnTermination();
             this.r.close();
+            this.s.removeHighlights([]);
         };
         Interpreter.prototype.getRobotBehaviour = function () {
             return this.r;
+        };
+        /** Returns the map of interpreters variables */
+        Interpreter.prototype.getVariables = function () {
+            return this.s.getVariables();
+        };
+        /** Removes all highlights from currently executing blocks*/
+        Interpreter.prototype.removeHighlights = function () {
+            this.s.removeHighlights([]);
+        };
+        /** Sets the debug mode*/
+        Interpreter.prototype.setDebugMode = function (mode) {
+            var s = this.s;
+            s.setDebugMode(mode);
+            if (mode) {
+                stackmachineJsHelper.getJqueryObject("#blockly").addClass("debug");
+                s.addHighlights(this.breakpoints);
+            }
+            else {
+                s.removeHighlights(this.breakpoints);
+                stackmachineJsHelper.getJqueryObject("#blockly").removeClass("debug");
+            }
+        };
+        /** sets relevant event value to true */
+        Interpreter.prototype.addEvent = function (mode) {
+            this.events[mode] = true;
+        };
+        /** sets relevant event value to false */
+        Interpreter.prototype.removeEvent = function (mode) {
+            this.events[mode] = false;
         };
         /**
          * the central interpreter. It is a stack machine interpreting operations given as JSON objects. The operations are all IMMUTABLE. It
@@ -82,355 +130,66 @@ define(["require", "exports", "interpreter.state", "interpreter.constants", "int
          * - change the values of the binding (assign)
          * - push and pop values to the stack (expressions)
          * - push and pop to the stack of operations-arrays
+         *
+         * Debugging functions:
+         *
+         * -StepOver will step over a given line. If the line contains a function the function will be executed and the result returned without debugging each line.
+         * -StepInto If the line does not contain a function it behaves the same as “step over” but if it does the debugger will enter the called function
+         * and continue line-by-line debugging there.
+         * -BreakPoint will continue execution until the next breakpoint is reached or the program exits.
+    
          */
         Interpreter.prototype.evalOperation = function (maxRunTime) {
             var s = this.s;
             var n = this.r;
             while (maxRunTime >= new Date().getTime() && !n.getBlocking()) {
-                s.opLog('actual ops: ');
-                var stmt = s.getOp();
-                if (stmt === undefined) {
-                    U.debug('PROGRAM TERMINATED. No ops remaining');
-                    this.terminated = true;
-                }
-                else {
-                    var opCode = stmt[C.OPCODE];
-                    switch (opCode) {
-                        case C.ASSIGN_STMT: {
-                            var name_1 = stmt[C.NAME];
-                            s.setVar(name_1, s.pop());
-                            break;
-                        }
-                        case C.CLEAR_DISPLAY_ACTION: {
-                            n.clearDisplay();
-                            return 0;
-                        }
-                        case C.CREATE_DEBUG_ACTION: {
-                            U.debug('NYI');
-                            break;
-                        }
-                        case C.EXPR:
-                            this.evalExpr(stmt);
-                            break;
-                        case C.FLOW_CONTROL: {
-                            var conditional = stmt[C.CONDITIONAL];
-                            var activatedBy = stmt[C.BOOLEAN] === undefined ? true : stmt[C.BOOLEAN];
-                            var doIt = conditional ? (s.pop() === activatedBy) : true;
-                            if (doIt) {
-                                s.popOpsUntil(stmt[C.KIND]);
-                                if (stmt[C.BREAK]) {
-                                    s.getOp();
+                var op = s.getOp();
+                var results = this.evalSingleOperation(s, n, op);
+                var result = results[0];
+                var stop_1 = results[1];
+                if (s.getDebugMode()) {
+                    if (this.events[C.DEBUG_BREAKPOINT]) {
+                        if (this.isPossibleBreakPoint(op)) {
+                            for (var i = 0; i < this.breakpoints.length; i++) {
+                                if (op[C.BLOCK_ID] === this.breakpoints[i]) {
+                                    stackmachineJsHelper.setSimBreak();
+                                    this.previousBlockId = op[C.BLOCK_ID];
+                                    this.events[C.DEBUG_BREAKPOINT] = false;
+                                    return result;
                                 }
                             }
-                            break;
                         }
-                        case C.GET_SAMPLE: {
-                            n.getSample(s, stmt[C.NAME], stmt[C.GET_SAMPLE], stmt[C.PORT], stmt[C.MODE]);
-                            break;
-                        }
-                        case C.IF_STMT:
-                            s.pushOps(stmt[C.STMT_LIST]);
-                            break;
-                        case C.IF_TRUE_STMT:
-                            if (s.pop()) {
-                                s.pushOps(stmt[C.STMT_LIST]);
-                            }
-                            break;
-                        case C.IF_RETURN:
-                            if (s.pop()) {
-                                s.pushOps(stmt[C.STMT_LIST]);
-                            }
-                            break;
-                        case C.LED_ON_ACTION: {
-                            var color = s.pop();
-                            n.ledOnAction(stmt[C.NAME], stmt[C.PORT], color);
-                            break;
-                        }
-                        case C.METHOD_CALL_VOID:
-                        case C.METHOD_CALL_RETURN: {
-                            for (var _i = 0, _a = stmt[C.NAMES]; _i < _a.length; _i++) {
-                                var parameterName = _a[_i];
-                                s.bindVar(parameterName, s.pop());
-                            }
-                            var body = s.getFunction(stmt[C.NAME])[C.STATEMENTS];
-                            s.pushOps(body);
-                            break;
-                        }
-                        case C.MOTOR_ON_ACTION: {
-                            var speedOnly = stmt[C.SPEED_ONLY];
-                            var duration = speedOnly ? undefined : s.pop();
-                            var speed = s.pop();
-                            var name_2 = stmt[C.NAME];
-                            var port = stmt[C.PORT];
-                            var durationType = stmt[C.MOTOR_DURATION];
-                            if (durationType === C.DEGREE || durationType === C.DISTANCE || durationType === C.ROTATIONS) {
-                                // if durationType is defined, then duration must be defined, too. Thus, it is never 'undefined' :-)
-                                var rotationPerSecond = C.MAX_ROTATION * Math.abs(speed) / 100.0;
-                                duration = duration / rotationPerSecond * 1000;
-                                if (durationType === C.DEGREE) {
-                                    duration /= 360.0;
-                                }
-                            }
-                            n.motorOnAction(name_2, port, duration, speed);
-                            return duration ? duration : 0;
-                        }
-                        case C.DRIVE_ACTION: {
-                            var speedOnly = stmt[C.SPEED_ONLY];
-                            var distance = speedOnly ? undefined : s.pop();
-                            var speed = s.pop();
-                            var name_3 = stmt[C.NAME];
-                            var direction = stmt[C.DRIVE_DIRECTION];
-                            var duration = n.driveAction(name_3, direction, speed, distance);
-                            return duration;
-                        }
-                        case C.TURN_ACTION: {
-                            var speedOnly = stmt[C.SPEED_ONLY];
-                            var angle = speedOnly ? undefined : s.pop();
-                            var speed = s.pop();
-                            var name_4 = stmt[C.NAME];
-                            var direction = stmt[C.TURN_DIRECTION];
-                            var duration = n.turnAction(name_4, direction, speed, angle);
-                            return duration;
-                        }
-                        case C.CURVE_ACTION: {
-                            var speedOnly = stmt[C.SPEED_ONLY];
-                            var distance = speedOnly ? undefined : s.pop();
-                            var speedR = s.pop();
-                            var speedL = s.pop();
-                            var name_5 = stmt[C.NAME];
-                            var direction = stmt[C.DRIVE_DIRECTION];
-                            var duration = n.curveAction(name_5, direction, speedL, speedR, distance);
-                            return duration;
-                        }
-                        case C.STOP_DRIVE:
-                            var name_6 = stmt[C.NAME];
-                            n.driveStop(name_6);
-                            return 0;
-                        case C.BOTH_MOTORS_ON_ACTION: {
-                            var duration = s.pop();
-                            var speedB = s.pop();
-                            var speedA = s.pop();
-                            var portA = stmt[C.PORT_A];
-                            var portB = stmt[C.PORT_B];
-                            n.motorOnAction(portA, portA, duration, speedA);
-                            n.motorOnAction(portB, portB, duration, speedB);
-                            return duration;
-                        }
-                        case C.MOTOR_STOP: {
-                            n.motorStopAction(stmt[C.NAME], stmt[C.PORT]);
-                            return 0;
-                        }
-                        case C.MOTOR_SET_POWER: {
-                            var speed = s.pop();
-                            var name_7 = stmt[C.NAME];
-                            var port = stmt[C.PORT];
-                            n.setMotorSpeed(name_7, port, speed);
-                            return 0;
-                        }
-                        case C.MOTOR_GET_POWER: {
-                            var port = stmt[C.PORT];
-                            n.getMotorSpeed(s, name_6, port);
-                            break;
-                        }
-                        case C.REPEAT_STMT:
-                            this.evalRepeat(stmt);
-                            break;
-                        case C.REPEAT_STMT_CONTINUATION:
-                            if (stmt[C.MODE] === C.FOR || stmt[C.MODE] === C.TIMES) {
-                                var runVariableName = stmt[C.NAME];
-                                var end = s.get1();
-                                var incr = s.get0();
-                                var value = s.getVar(runVariableName) + incr;
-                                if (+value >= +end) {
-                                    s.popOpsUntil(C.REPEAT_STMT);
-                                    s.getOp(); // the repeat has terminated
-                                }
-                                else {
-                                    s.setVar(runVariableName, value);
-                                    s.pushOps(stmt[C.STMT_LIST]);
-                                }
-                            }
-                            else if (stmt[C.MODE] === C.FOR_EACH) {
-                                var runVariableName = stmt[C.EACH_COUNTER];
-                                var varName = stmt[C.NAME];
-                                var listName = stmt[C.LIST];
-                                var list = s.getVar(listName);
-                                var end = list.length;
-                                var incr = s.get0();
-                                var value = s.getVar(runVariableName) + incr;
-                                if (+value >= +end) {
-                                    s.popOpsUntil(C.REPEAT_STMT);
-                                    s.getOp(); // the repeat has terminated
-                                }
-                                else {
-                                    s.setVar(runVariableName, value);
-                                    s.bindVar(varName, list[value]);
-                                    s.pushOps(stmt[C.STMT_LIST]);
-                                }
-                            }
-                            break;
-                        case C.SHOW_TEXT_ACTION: {
-                            var text = s.pop();
-                            var name_8 = stmt[C.NAME];
-                            if (name_8 === "ev3") {
-                                var x = s.pop();
-                                var y = s.pop();
-                                n.showTextActionPosition(text, x, y);
-                                return 0;
-                            }
-                            return n.showTextAction(text, stmt[C.MODE]);
-                        }
-                        case C.SHOW_IMAGE_ACTION: {
-                            var image = void 0;
-                            if (stmt[C.NAME] == "ev3") {
-                                image = stmt[C.IMAGE];
-                            }
-                            else {
-                                image = s.pop();
-                            }
-                            return n.showImageAction(image, stmt[C.MODE]);
-                        }
-                        case C.DISPLAY_SET_BRIGHTNESS_ACTION: {
-                            var b = s.pop();
-                            return n.displaySetBrightnessAction(b);
-                        }
-                        case C.IMAGE_SHIFT_ACTION: {
-                            var nShift = s.pop();
-                            var image = s.pop();
-                            s.push(this.shiftImageAction(image, stmt[C.DIRECTION], nShift));
-                            break;
-                        }
-                        case C.DISPLAY_SET_PIXEL_BRIGHTNESS_ACTION: {
-                            var b = s.pop();
-                            var y = s.pop();
-                            var x = s.pop();
-                            return n.displaySetPixelBrightnessAction(x, y, b);
-                        }
-                        case C.DISPLAY_GET_PIXEL_BRIGHTNESS_ACTION: {
-                            var y = s.pop();
-                            var x = s.pop();
-                            n.displayGetPixelBrightnessAction(s, x, y);
-                            break;
-                        }
-                        case C.LIGHT_ACTION:
-                            n.lightAction(stmt[C.MODE], stmt[C.COLOR]);
-                            return 0;
-                        case C.STATUS_LIGHT_ACTION:
-                            n.statusLightOffAction(stmt[C.NAME], stmt[C.PORT]);
-                            return 0;
-                        case C.STOP:
-                            U.debug("PROGRAM TERMINATED. stop op");
-                            this.terminated = true;
-                            break;
-                        case C.TEXT_JOIN: {
-                            var n_1 = stmt[C.NUMBER];
-                            var result = new Array(n_1);
-                            for (var i = 0; i < n_1; i++) {
-                                var e = s.pop();
-                                result[n_1 - i - 1] = e;
-                            }
-                            s.push(result.join(""));
-                            break;
-                        }
-                        case C.TIMER_SENSOR_RESET:
-                            n.timerReset(stmt[C.PORT]);
-                            break;
-                        case C.ENCODER_SENSOR_RESET:
-                            n.encoderReset(stmt[C.PORT]);
-                            return 0;
-                        case C.GYRO_SENSOR_RESET:
-                            n.gyroReset(stmt[C.PORT]);
-                            return 0;
-                        case C.TONE_ACTION: {
-                            var duration = s.pop();
-                            var frequency = s.pop();
-                            return n.toneAction(stmt[C.NAME], frequency, duration);
-                        }
-                        case C.PLAY_FILE_ACTION:
-                            return n.playFileAction(stmt[C.FILE]);
-                        case C.SET_VOLUME_ACTION:
-                            n.setVolumeAction(s.pop());
-                            return 0;
-                        case C.GET_VOLUME:
-                            n.getVolumeAction(s);
-                            break;
-                        case C.SET_LANGUAGE_ACTION:
-                            n.setLanguage(stmt[C.LANGUAGE]);
-                            break;
-                        case C.SAY_TEXT_ACTION: {
-                            var pitch = s.pop();
-                            var speed = s.pop();
-                            var text = s.pop();
-                            return n.sayTextAction(text, speed, pitch);
-                        }
-                        case C.VAR_DECLARATION: {
-                            var name_9 = stmt[C.NAME];
-                            s.bindVar(name_9, s.pop());
-                            break;
-                        }
-                        case C.WAIT_STMT: {
-                            U.debug('waitstmt started');
-                            s.pushOps(stmt[C.STMT_LIST]);
-                            break;
-                        }
-                        case C.WAIT_TIME_STMT: {
-                            var time = s.pop();
-                            return time; // wait for handler being called
-                        }
-                        case C.WRITE_PIN_ACTION: {
-                            var value = s.pop();
-                            var mode = stmt[C.MODE];
-                            var pin = stmt[C.PIN];
-                            n.writePinAction(pin, mode, value);
-                            return 0;
-                        }
-                        case C.LIST_OPERATION: {
-                            var op = stmt[C.OP];
-                            var loc = stmt[C.POSITION];
-                            var ix = 0;
-                            if (loc != C.LAST && loc != C.FIRST) {
-                                ix = s.pop();
-                            }
-                            var value = s.pop();
-                            var list = s.pop();
-                            ix = this.getIndex(list, loc, ix);
-                            if (op == C.SET) {
-                                list[ix] = value;
-                            }
-                            else if (op == C.INSERT) {
-                                if (loc === C.LAST) {
-                                    list.splice(ix + 1, 0, value);
-                                }
-                                else {
-                                    list.splice(ix, 0, value);
-                                }
-                            }
-                            break;
-                        }
-                        case C.TEXT_APPEND:
-                        case C.MATH_CHANGE: {
-                            var value = s.pop();
-                            var name_10 = stmt[C.NAME];
-                            s.bindVar(name_10, s.pop() + value);
-                            break;
-                        }
-                        case C.DEBUG_ACTION: {
-                            var value = s.pop();
-                            n.debugAction(value);
-                            break;
-                        }
-                        case C.ASSERT_ACTION: {
-                            var right = s.pop();
-                            var left = s.pop();
-                            var value = s.pop();
-                            n.assertAction(stmt[C.MSG], left, stmt[C.OP], right, value);
-                            break;
-                        }
-                        case C.COMMENT:
-                            break;
-                        default:
-                            U.dbcException("invalid stmt op: " + opCode);
                     }
+                    if (this.events[C.DEBUG_STEP_INTO]) {
+                        if (this.isPossibleStepInto(op)) {
+                            stackmachineJsHelper.setSimBreak();
+                            this.previousBlockId = op[C.BLOCK_ID];
+                            this.events[C.DEBUG_STEP_INTO] = false;
+                            return result;
+                        }
+                    }
+                    if (this.events[C.DEBUG_STEP_OVER]) {
+                        if (this.stepBlock !== null && !s.beingExecuted(this.stepBlock) && this.isPossibleStepInto(op)) {
+                            stackmachineJsHelper.setSimBreak();
+                            this.previousBlockId = op[C.BLOCK_ID];
+                            this.events[C.DEBUG_STEP_OVER] = false;
+                            this.stepBlock = null;
+                            return result;
+                        }
+                        else if (this.stepBlock === null && this.isPossibleStepOver(op)) {
+                            this.stepBlock = op;
+                        }
+                        else if (this.stepBlock === null && this.isPossibleStepInto(op)) {
+                            stackmachineJsHelper.setSimBreak();
+                            this.previousBlockId = op[C.BLOCK_ID];
+                            this.events[C.DEBUG_STEP_OVER] = false;
+                            return result;
+                        }
+                    }
+                }
+                this.previousBlockId = op[C.BLOCK_ID];
+                if (result > 0 || stop_1) {
+                    return result;
                 }
                 if (this.terminated) {
                     // termination either requested by the client or by executing 'stop' or after last statement
@@ -442,7 +201,373 @@ define(["require", "exports", "interpreter.state", "interpreter.constants", "int
             return 0;
         };
         /**
-         *  called from @see evalOperation() to evaluate all kinds of expressions
+         *  called from @see evalOperation() to evaluate all the operations
+         *
+         * @param s the S (state) component to store the state of the interpretation.
+         * @param n the R (robotBehaviour) component for accessing hardware sensors and actors
+         * @param stmt the operation to be evaluated
+         * @returns [result,stop] result will be time required till next instruction and stop indicates if evalOperation should return result or not.
+         */
+        Interpreter.prototype.evalSingleOperation = function (s, n, stmt) {
+            s.opLog('actual ops: ');
+            s.processBlock(stmt);
+            if (stmt === undefined) {
+                U.debug('PROGRAM TERMINATED. No ops remaining');
+                this.terminated = true;
+            }
+            else {
+                var opCode = stmt[C.OPCODE];
+                switch (opCode) {
+                    case C.ASSIGN_STMT: {
+                        var name_1 = stmt[C.NAME];
+                        s.setVar(name_1, s.pop());
+                        break;
+                    }
+                    case C.CLEAR_DISPLAY_ACTION: {
+                        n.clearDisplay();
+                        return [0, true];
+                    }
+                    case C.CREATE_DEBUG_ACTION: {
+                        U.debug('NYI');
+                        break;
+                    }
+                    case C.EXPR:
+                        this.evalExpr(stmt);
+                        break;
+                    case C.FLOW_CONTROL: {
+                        var conditional = stmt[C.CONDITIONAL];
+                        var activatedBy = stmt[C.BOOLEAN] === undefined ? true : stmt[C.BOOLEAN];
+                        var doIt = conditional ? (s.pop() === activatedBy) : true;
+                        if (doIt) {
+                            s.popOpsUntil(stmt[C.KIND]);
+                            if (stmt[C.BREAK]) {
+                                s.getOp();
+                            }
+                            s.terminateBlock(stmt);
+                        }
+                        break;
+                    }
+                    case C.GET_SAMPLE: {
+                        n.getSample(s, stmt[C.NAME], stmt[C.GET_SAMPLE], stmt[C.PORT], stmt[C.MODE]);
+                        break;
+                    }
+                    case C.IF_STMT:
+                        s.pushOps(stmt[C.STMT_LIST]);
+                        break;
+                    case C.IF_TRUE_STMT:
+                        if (s.pop()) {
+                            s.pushOps(stmt[C.STMT_LIST]);
+                        }
+                        break;
+                    case C.IF_RETURN:
+                        if (s.pop()) {
+                            s.pushOps(stmt[C.STMT_LIST]);
+                        }
+                        break;
+                    case C.LED_ON_ACTION: {
+                        var color = s.pop();
+                        n.ledOnAction(stmt[C.NAME], stmt[C.PORT], color);
+                        break;
+                    }
+                    case C.METHOD_CALL_VOID:
+                    case C.METHOD_CALL_RETURN: {
+                        for (var _i = 0, _a = stmt[C.NAMES]; _i < _a.length; _i++) {
+                            var parameterName = _a[_i];
+                            s.bindVar(parameterName, s.pop());
+                        }
+                        var body = s.getFunction(stmt[C.NAME])[C.STATEMENTS];
+                        s.processBlock(body[body.length - 1]);
+                        s.pushOps(body);
+                        break;
+                    }
+                    case C.MOTOR_ON_ACTION: {
+                        var speedOnly = stmt[C.SPEED_ONLY];
+                        var duration = speedOnly ? undefined : s.pop();
+                        var speed = s.pop();
+                        var name_2 = stmt[C.NAME];
+                        var port = stmt[C.PORT];
+                        var durationType = stmt[C.MOTOR_DURATION];
+                        if (durationType === C.DEGREE || durationType === C.DISTANCE || durationType === C.ROTATIONS) {
+                            // if durationType is defined, then duration must be defined, too. Thus, it is never 'undefined' :-)
+                            var rotationPerSecond = C.MAX_ROTATION * Math.abs(speed) / 100.0;
+                            duration = duration / rotationPerSecond * 1000;
+                            if (durationType === C.DEGREE) {
+                                duration /= 360.0;
+                            }
+                        }
+                        n.motorOnAction(name_2, port, duration, speed);
+                        return [duration ? duration : 0, true];
+                    }
+                    case C.DRIVE_ACTION: {
+                        var speedOnly = stmt[C.SPEED_ONLY];
+                        var distance = speedOnly ? undefined : s.pop();
+                        var speed = s.pop();
+                        var name_3 = stmt[C.NAME];
+                        var direction = stmt[C.DRIVE_DIRECTION];
+                        var duration = n.driveAction(name_3, direction, speed, distance);
+                        return [duration, true];
+                    }
+                    case C.TURN_ACTION: {
+                        var speedOnly = stmt[C.SPEED_ONLY];
+                        var angle = speedOnly ? undefined : s.pop();
+                        var speed = s.pop();
+                        var name_4 = stmt[C.NAME];
+                        var direction = stmt[C.TURN_DIRECTION];
+                        var duration = n.turnAction(name_4, direction, speed, angle);
+                        return [duration, true];
+                    }
+                    case C.CURVE_ACTION: {
+                        var speedOnly = stmt[C.SPEED_ONLY];
+                        var distance = speedOnly ? undefined : s.pop();
+                        var speedR = s.pop();
+                        var speedL = s.pop();
+                        var name_5 = stmt[C.NAME];
+                        var direction = stmt[C.DRIVE_DIRECTION];
+                        var duration = n.curveAction(name_5, direction, speedL, speedR, distance);
+                        return [duration, true];
+                    }
+                    case C.STOP_DRIVE:
+                        var name_6 = stmt[C.NAME];
+                        n.driveStop(name_6);
+                        return [0, true];
+                    case C.BOTH_MOTORS_ON_ACTION: {
+                        var duration = s.pop();
+                        var speedB = s.pop();
+                        var speedA = s.pop();
+                        var portA = stmt[C.PORT_A];
+                        var portB = stmt[C.PORT_B];
+                        n.motorOnAction(portA, portA, duration, speedA);
+                        n.motorOnAction(portB, portB, duration, speedB);
+                        return [duration, true];
+                    }
+                    case C.MOTOR_STOP: {
+                        n.motorStopAction(stmt[C.NAME], stmt[C.PORT]);
+                        return [0, true];
+                    }
+                    case C.MOTOR_SET_POWER: {
+                        var speed = s.pop();
+                        var name_7 = stmt[C.NAME];
+                        var port = stmt[C.PORT];
+                        n.setMotorSpeed(name_7, port, speed);
+                        return [0, true];
+                    }
+                    case C.MOTOR_GET_POWER: {
+                        var port = stmt[C.PORT];
+                        n.getMotorSpeed(s, name_6, port);
+                        break;
+                    }
+                    case C.REPEAT_STMT:
+                        this.evalRepeat(stmt);
+                        break;
+                    case C.REPEAT_STMT_CONTINUATION:
+                        if (stmt[C.MODE] === C.FOR || stmt[C.MODE] === C.TIMES) {
+                            var runVariableName = stmt[C.NAME];
+                            var end = s.get1();
+                            var incr = s.get0();
+                            var value = s.getVar(runVariableName) + incr;
+                            if (+value >= +end) {
+                                s.popOpsUntil(C.REPEAT_STMT);
+                                s.getOp(); // the repeat has terminated
+                            }
+                            else {
+                                s.setVar(runVariableName, value);
+                                s.pushOps(stmt[C.STMT_LIST]);
+                            }
+                        }
+                        else if (stmt[C.MODE] === C.FOR_EACH) {
+                            var runVariableName = stmt[C.EACH_COUNTER];
+                            var varName = stmt[C.NAME];
+                            var listName = stmt[C.LIST];
+                            var list = s.getVar(listName);
+                            var end = list.length;
+                            var incr = s.get0();
+                            var value = s.getVar(runVariableName) + incr;
+                            if (+value >= +end) {
+                                s.popOpsUntil(C.REPEAT_STMT);
+                                s.getOp(); // the repeat has terminated
+                            }
+                            else {
+                                s.setVar(runVariableName, value);
+                                s.bindVar(varName, list[value]);
+                                s.pushOps(stmt[C.STMT_LIST]);
+                            }
+                        }
+                        break;
+                    case C.SHOW_TEXT_ACTION: {
+                        var text = s.pop();
+                        var name_8 = stmt[C.NAME];
+                        if (name_8 === "ev3") {
+                            var x = s.pop();
+                            var y = s.pop();
+                            n.showTextActionPosition(text, x, y);
+                            return [0, true];
+                        }
+                        return [n.showTextAction(text, stmt[C.MODE]), true];
+                    }
+                    case C.SHOW_IMAGE_ACTION: {
+                        var image = void 0;
+                        if (stmt[C.NAME] == "ev3") {
+                            image = stmt[C.IMAGE];
+                        }
+                        else {
+                            image = s.pop();
+                        }
+                        return [n.showImageAction(image, stmt[C.MODE]), true];
+                    }
+                    case C.DISPLAY_SET_BRIGHTNESS_ACTION: {
+                        var b = s.pop();
+                        return [n.displaySetBrightnessAction(b), true];
+                    }
+                    case C.IMAGE_SHIFT_ACTION: {
+                        var nShift = s.pop();
+                        var image = s.pop();
+                        s.push(this.shiftImageAction(image, stmt[C.DIRECTION], nShift));
+                        break;
+                    }
+                    case C.DISPLAY_SET_PIXEL_BRIGHTNESS_ACTION: {
+                        var b = s.pop();
+                        var y = s.pop();
+                        var x = s.pop();
+                        return [n.displaySetPixelBrightnessAction(x, y, b), true];
+                    }
+                    case C.DISPLAY_GET_PIXEL_BRIGHTNESS_ACTION: {
+                        var y = s.pop();
+                        var x = s.pop();
+                        n.displayGetPixelBrightnessAction(s, x, y);
+                        break;
+                    }
+                    case C.LIGHT_ACTION:
+                        n.lightAction(stmt[C.MODE], stmt[C.COLOR]);
+                        return [0, true];
+                    case C.STATUS_LIGHT_ACTION:
+                        n.statusLightOffAction(stmt[C.NAME], stmt[C.PORT]);
+                        return [0, true];
+                    case C.STOP:
+                        U.debug("PROGRAM TERMINATED. stop op");
+                        this.terminated = true;
+                        break;
+                    case C.TEXT_JOIN: {
+                        var n_1 = stmt[C.NUMBER];
+                        var result = new Array(n_1);
+                        for (var i = 0; i < n_1; i++) {
+                            var e = s.pop();
+                            result[n_1 - i - 1] = e;
+                        }
+                        s.push(result.join(""));
+                        break;
+                    }
+                    case C.TIMER_SENSOR_RESET:
+                        n.timerReset(stmt[C.PORT]);
+                        break;
+                    case C.ENCODER_SENSOR_RESET:
+                        n.encoderReset(stmt[C.PORT]);
+                        return [0, true];
+                    case C.GYRO_SENSOR_RESET:
+                        n.gyroReset(stmt[C.PORT]);
+                        return [0, true];
+                    case C.TONE_ACTION: {
+                        var duration = s.pop();
+                        var frequency = s.pop();
+                        return [n.toneAction(stmt[C.NAME], frequency, duration), true];
+                    }
+                    case C.PLAY_FILE_ACTION:
+                        return [n.playFileAction(stmt[C.FILE]), true];
+                    case C.SET_VOLUME_ACTION:
+                        n.setVolumeAction(s.pop());
+                        return [0, true];
+                    case C.GET_VOLUME:
+                        n.getVolumeAction(s);
+                        break;
+                    case C.SET_LANGUAGE_ACTION:
+                        n.setLanguage(stmt[C.LANGUAGE]);
+                        break;
+                    case C.SAY_TEXT_ACTION: {
+                        var pitch = s.pop();
+                        var speed = s.pop();
+                        var text = s.pop();
+                        return [n.sayTextAction(text, speed, pitch), true];
+                    }
+                    case C.VAR_DECLARATION: {
+                        var name_9 = stmt[C.NAME];
+                        s.bindVar(name_9, s.pop());
+                        break;
+                    }
+                    case C.WAIT_STMT: {
+                        U.debug('waitstmt started');
+                        s.pushOps(stmt[C.STMT_LIST]);
+                        break;
+                    }
+                    case C.WAIT_TIME_STMT: {
+                        var time = s.pop();
+                        return [time, true]; // wait for handler being called
+                    }
+                    case C.WRITE_PIN_ACTION: {
+                        var value = s.pop();
+                        var mode = stmt[C.MODE];
+                        var pin = stmt[C.PIN];
+                        n.writePinAction(pin, mode, value);
+                        return [0, true];
+                    }
+                    case C.LIST_OPERATION: {
+                        var op = stmt[C.OP];
+                        var loc = stmt[C.POSITION];
+                        var ix = 0;
+                        if (loc != C.LAST && loc != C.FIRST) {
+                            ix = s.pop();
+                        }
+                        var value = s.pop();
+                        var list = s.pop();
+                        ix = this.getIndex(list, loc, ix);
+                        if (op == C.SET) {
+                            list[ix] = value;
+                        }
+                        else if (op == C.INSERT) {
+                            if (loc === C.LAST) {
+                                list.splice(ix + 1, 0, value);
+                            }
+                            else {
+                                list.splice(ix, 0, value);
+                            }
+                        }
+                        break;
+                    }
+                    case C.TEXT_APPEND:
+                    case C.MATH_CHANGE: {
+                        var value = s.pop();
+                        var name_10 = stmt[C.NAME];
+                        s.bindVar(name_10, s.pop() + value);
+                        break;
+                    }
+                    case C.DEBUG_ACTION: {
+                        var value = s.pop();
+                        n.debugAction(value);
+                        break;
+                    }
+                    case C.ASSERT_ACTION: {
+                        var right = s.pop();
+                        var left = s.pop();
+                        var value = s.pop();
+                        n.assertAction(stmt[C.MSG], left, stmt[C.OP], right, value);
+                        break;
+                    }
+                    case C.COMMENT: {
+                        break;
+                    }
+                    case C.INITIATE_BLOCK: {
+                        break;
+                    }
+                    case C.TERMINATE_BLOCK: {
+                        s.terminateBlock(stmt);
+                        break;
+                    }
+                    default:
+                        U.dbcException("invalid stmt op: " + opCode);
+                }
+            }
+            return [0, false];
+        };
+        /**
+         *  called from @see evalSingleOperation() to evaluate all kinds of expressions
          *
          * . @param expr to be evaluated
          */
@@ -824,20 +949,34 @@ define(["require", "exports", "interpreter.state", "interpreter.constants", "int
             }
             else {
                 switch (subOp) {
-                    case C.EQ: return left == right;
-                    case C.NEQ: return left !== right;
-                    case C.LT: return left < right;
-                    case C.LTE: return left <= right;
-                    case C.GT: return left > right;
-                    case C.GTE: return left >= right;
-                    case C.AND: return left && right;
-                    case C.OR: return left || right;
-                    case C.ADD: return 0 + left + right;
-                    case C.MINUS: return 0 + left - right;
-                    case C.MULTIPLY: return 0 + left * right;
-                    case C.DIVIDE: return 0 + left / right;
-                    case C.POWER: return Math.pow(left, right);
-                    case C.MOD: return left % right;
+                    case C.EQ:
+                        return left == right;
+                    case C.NEQ:
+                        return left !== right;
+                    case C.LT:
+                        return left < right;
+                    case C.LTE:
+                        return left <= right;
+                    case C.GT:
+                        return left > right;
+                    case C.GTE:
+                        return left >= right;
+                    case C.AND:
+                        return left && right;
+                    case C.OR:
+                        return left || right;
+                    case C.ADD:
+                        return 0 + left + right;
+                    case C.MINUS:
+                        return 0 + left - right;
+                    case C.MULTIPLY:
+                        return 0 + left * right;
+                    case C.DIVIDE:
+                        return 0 + left / right;
+                    case C.POWER:
+                        return Math.pow(left, right);
+                    case C.MOD:
+                        return left % right;
                     default:
                         U.dbcException("invalid binary expr supOp: " + subOp);
                 }
@@ -1049,6 +1188,73 @@ define(["require", "exports", "interpreter.state", "interpreter.constants", "int
                 shift[direction]();
             }
             return image;
+        };
+        /** Returns true if the operation is a possible breakpoint*/
+        Interpreter.prototype.isPossibleBreakPoint = function (op) {
+            if (op.hasOwnProperty(C.BLOCK_ID)) {
+                if (op[C.BLOCK_ID] !== this.previousBlockId) {
+                    switch (op[C.OPCODE]) {
+                        case C.INITIATE_BLOCK:
+                        case C.REPEAT_STMT_CONTINUATION:
+                        case C.REPEAT_STMT:
+                        case C.METHOD_CALL_VOID:
+                        case C.METHOD_CALL_RETURN:
+                            return true;
+                        default:
+                            return false;
+                    }
+                }
+            }
+            return false;
+        };
+        /** Returns true if the operation is a possible block where stepInto should stop*/
+        Interpreter.prototype.isPossibleStepInto = function (op) {
+            if (op.hasOwnProperty(C.BLOCK_ID)) {
+                if (this.previousBlockId == null || op[C.BLOCK_ID] !== this.previousBlockId) {
+                    switch (op[C.OPCODE]) {
+                        case C.INITIATE_BLOCK: {
+                            switch (op[C.OP]) {
+                                case C.EXPR:
+                                case C.GET_SAMPLE:
+                                case C.VAR_DECLARATION:
+                                    return false;
+                            }
+                            return true;
+                        }
+                        case C.REPEAT_STMT:
+                        case C.REPEAT_STMT_CONTINUATION:
+                        case C.METHOD_CALL_VOID:
+                        case C.METHOD_CALL_RETURN:
+                            return true;
+                        default: {
+                            return false;
+                        }
+                    }
+                }
+                return false;
+            }
+        };
+        /** Returns true if the operation is a possible block where stepOver should stop*/
+        Interpreter.prototype.isPossibleStepOver = function (op) {
+            if (op.hasOwnProperty(C.BLOCK_ID)) {
+                switch (op[C.OPCODE]) {
+                    case C.METHOD_CALL_VOID:
+                    case C.METHOD_CALL_RETURN:
+                        return true;
+                    case C.INITIATE_BLOCK: {
+                        switch (op[C.OP]) {
+                            case C.METHOD_CALL_VOID:
+                            case C.METHOD_CALL_RETURN:
+                                return true;
+                        }
+                        return false;
+                    }
+                    default: {
+                        return false;
+                    }
+                }
+            }
+            return false;
         };
         return Interpreter;
     }());

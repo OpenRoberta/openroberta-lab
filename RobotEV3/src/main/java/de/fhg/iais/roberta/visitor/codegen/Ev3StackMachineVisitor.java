@@ -106,27 +106,27 @@ public class Ev3StackMachineVisitor<V> extends AbstractStackMachineVisitor<V> im
                 colorConst.addInfo(NepoInfo.error("SIM_BLOCK_NOT_SUPPORTED"));
                 throw new DbcException("Invalid color constant: " + colorConst.getHexValueAsString());
         }
-        JSONObject o = mk(C.EXPR).put(C.EXPR, C.COLOR_CONST).put(C.VALUE, color);
+        JSONObject o = mk(C.EXPR, colorConst).put(C.EXPR, C.COLOR_CONST).put(C.VALUE, color);
         return app(o);
     }
 
     @Override
     public V visitShowPictureAction(ShowPictureAction<V> showPictureAction) {
         String image = showPictureAction.getPicture().toString();
-        JSONObject o = mk(C.SHOW_IMAGE_ACTION).put(C.IMAGE, image).put(C.NAME, "ev3");
+        JSONObject o = mk(C.SHOW_IMAGE_ACTION, showPictureAction).put(C.IMAGE, image).put(C.NAME, "ev3");
         return app(o);
     }
 
     @Override
     public V visitClearDisplayAction(ClearDisplayAction<V> clearDisplayAction) {
-        JSONObject o = mk(C.CLEAR_DISPLAY_ACTION);
+        JSONObject o = mk(C.CLEAR_DISPLAY_ACTION, clearDisplayAction);
 
         return app(o);
     }
 
     @Override
     public V visitLightStatusAction(LightStatusAction<V> lightStatusAction) {
-        JSONObject o = mk(C.STATUS_LIGHT_ACTION).put(C.NAME, "ev3").put(C.PORT, "internal");
+        JSONObject o = mk(C.STATUS_LIGHT_ACTION, lightStatusAction).put(C.NAME, "ev3").put(C.PORT, "internal");
         return app(o);
     }
 
@@ -134,7 +134,7 @@ public class Ev3StackMachineVisitor<V> extends AbstractStackMachineVisitor<V> im
     public V visitToneAction(ToneAction<V> toneAction) {
         toneAction.getFrequency().accept(this);
         toneAction.getDuration().accept(this);
-        JSONObject o = mk(C.TONE_ACTION);
+        JSONObject o = mk(C.TONE_ACTION, toneAction);
         return app(o);
     }
 
@@ -144,14 +144,14 @@ public class Ev3StackMachineVisitor<V> extends AbstractStackMachineVisitor<V> im
         String duration = playNoteAction.getDuration();
         app(mk(C.EXPR).put(C.EXPR, C.NUM_CONST).put(C.VALUE, freq));
         app(mk(C.EXPR).put(C.EXPR, C.NUM_CONST).put(C.VALUE, duration));
-        JSONObject o = mk(C.TONE_ACTION);
+        JSONObject o = mk(C.TONE_ACTION, playNoteAction);
         return app(o);
     }
 
     @Override
     public V visitPlayFileAction(PlayFileAction<V> playFileAction) {
         String image = playFileAction.getFileName().toString();
-        JSONObject o = mk(C.PLAY_FILE_ACTION).put(C.FILE, image).put(C.NAME, "ev3");
+        JSONObject o = mk(C.PLAY_FILE_ACTION, playFileAction).put(C.FILE, image).put(C.NAME, "ev3");
         return app(o);
     }
 
@@ -159,10 +159,10 @@ public class Ev3StackMachineVisitor<V> extends AbstractStackMachineVisitor<V> im
     public V visitVolumeAction(VolumeAction<V> volumeAction) {
         JSONObject o;
         if ( volumeAction.getMode() == VolumeAction.Mode.GET ) {
-            o = mk(C.GET_VOLUME);
+            o = mk(C.GET_VOLUME, volumeAction);
         } else {
             volumeAction.getVolume().accept(this);
-            o = mk(C.SET_VOLUME_ACTION);
+            o = mk(C.SET_VOLUME_ACTION, volumeAction);
         }
         return app(o);
     }
@@ -170,7 +170,7 @@ public class Ev3StackMachineVisitor<V> extends AbstractStackMachineVisitor<V> im
     @Override
     public V visitSetLanguageAction(SetLanguageAction<V> setLanguageAction) {
         String language = getLanguageString(setLanguageAction.getLanguage());
-        JSONObject o = mk(C.SET_LANGUAGE_ACTION).put(C.LANGUAGE, language);
+        JSONObject o = mk(C.SET_LANGUAGE_ACTION, setLanguageAction).put(C.LANGUAGE, language);
         return app(o);
     }
 
@@ -190,7 +190,7 @@ public class Ev3StackMachineVisitor<V> extends AbstractStackMachineVisitor<V> im
         } else {
             sayTextAction.getPitch().accept(this);
         }
-        JSONObject o = mk(C.SAY_TEXT_ACTION);
+        JSONObject o = mk(C.SAY_TEXT_ACTION, sayTextAction);
 
         return app(o);
     }
@@ -198,7 +198,7 @@ public class Ev3StackMachineVisitor<V> extends AbstractStackMachineVisitor<V> im
     @Override
     public V visitMotorGetPowerAction(MotorGetPowerAction<V> motorGetPowerAction) {
         String port = motorGetPowerAction.getUserDefinedPort();
-        JSONObject o = mk(C.MOTOR_GET_POWER).put(C.PORT, port.toLowerCase());
+        JSONObject o = mk(C.MOTOR_GET_POWER, motorGetPowerAction).put(C.PORT, port.toLowerCase());
         return app(o);
     }
 
@@ -212,12 +212,12 @@ public class Ev3StackMachineVisitor<V> extends AbstractStackMachineVisitor<V> im
         if ( leftMotorRotationDirection != DriveDirection.FOREWARD ) {
             driveDirection = getDriveDirection(driveAction.getDirection() == DriveDirection.FOREWARD);
         }
-        JSONObject o = mk(C.DRIVE_ACTION).put(C.DRIVE_DIRECTION, driveDirection).put(C.NAME, "ev3").put(C.SPEED_ONLY, speedOnly);
+        JSONObject o = mk(C.DRIVE_ACTION, driveAction).put(C.DRIVE_DIRECTION, driveDirection).put(C.NAME, "ev3").put(C.SPEED_ONLY, speedOnly);
         if ( speedOnly ) {
             return app(o);
         } else {
             app(o);
-            return app(mk(C.STOP_DRIVE).put(C.NAME, "ev3"));
+            return app(mk(C.STOP_DRIVE, driveAction).put(C.NAME, "ev3"));
         }
     }
 
@@ -231,12 +231,13 @@ public class Ev3StackMachineVisitor<V> extends AbstractStackMachineVisitor<V> im
         if ( leftMotorRotationDirection != DriveDirection.FOREWARD ) {
             turnDirection = getTurnDirection(turnAction.getDirection() == TurnDirection.LEFT);
         }
-        JSONObject o = mk(C.TURN_ACTION).put(C.TURN_DIRECTION, turnDirection.toString().toLowerCase()).put(C.NAME, "ev3").put(C.SPEED_ONLY, speedOnly);
+        JSONObject o =
+            mk(C.TURN_ACTION, turnAction).put(C.TURN_DIRECTION, turnDirection.toString().toLowerCase()).put(C.NAME, "ev3").put(C.SPEED_ONLY, speedOnly);
         if ( speedOnly ) {
             return app(o);
         } else {
             app(o);
-            return app(mk(C.STOP_DRIVE).put(C.NAME, "ev3"));
+            return app(mk(C.STOP_DRIVE, turnAction).put(C.NAME, "ev3"));
         }
     }
 
@@ -251,18 +252,18 @@ public class Ev3StackMachineVisitor<V> extends AbstractStackMachineVisitor<V> im
         if ( leftMotorRotationDirection != DriveDirection.FOREWARD ) {
             driveDirection = getDriveDirection(curveAction.getDirection() == DriveDirection.FOREWARD);
         }
-        JSONObject o = mk(C.CURVE_ACTION).put(C.DRIVE_DIRECTION, driveDirection).put(C.NAME, "ev3").put(C.SPEED_ONLY, speedOnly);
+        JSONObject o = mk(C.CURVE_ACTION, curveAction).put(C.DRIVE_DIRECTION, driveDirection).put(C.NAME, "ev3").put(C.SPEED_ONLY, speedOnly);
         if ( speedOnly ) {
             return app(o);
         } else {
             app(o);
-            return app(mk(C.STOP_DRIVE).put(C.NAME, "ev3"));
+            return app(mk(C.STOP_DRIVE, curveAction).put(C.NAME, "ev3"));
         }
     }
 
     @Override
     public V visitMotorDriveStopAction(MotorDriveStopAction<V> stopAction) {
-        JSONObject o = mk(C.STOP_DRIVE).put(C.NAME, "ev3");
+        JSONObject o = mk(C.STOP_DRIVE, stopAction).put(C.NAME, "ev3");
         return app(o);
     }
 
@@ -272,14 +273,14 @@ public class Ev3StackMachineVisitor<V> extends AbstractStackMachineVisitor<V> im
         MotorDuration<V> duration = motorOnAction.getParam().getDuration();
         boolean speedOnly = !processOptionalDuration(duration);
         String port = motorOnAction.getUserDefinedPort();
-        JSONObject o = mk(C.MOTOR_ON_ACTION).put(C.PORT, port.toLowerCase()).put(C.NAME, port.toLowerCase()).put(C.SPEED_ONLY, speedOnly);
+        JSONObject o = mk(C.MOTOR_ON_ACTION, motorOnAction).put(C.PORT, port.toLowerCase()).put(C.NAME, port.toLowerCase()).put(C.SPEED_ONLY, speedOnly);
         if ( speedOnly ) {
             return app(o);
         } else {
             String durationType = duration.getType().toString().toLowerCase();
             o.put(C.MOTOR_DURATION, durationType);
             app(o);
-            return app(mk(C.MOTOR_STOP).put(C.PORT, port.toLowerCase()));
+            return app(mk(C.MOTOR_STOP, motorOnAction).put(C.PORT, port.toLowerCase()));
         }
     }
 
@@ -287,14 +288,14 @@ public class Ev3StackMachineVisitor<V> extends AbstractStackMachineVisitor<V> im
     public V visitMotorSetPowerAction(MotorSetPowerAction<V> motorSetPowerAction) {
         String port = motorSetPowerAction.getUserDefinedPort();
         motorSetPowerAction.getPower().accept(this);
-        JSONObject o = mk(C.MOTOR_SET_POWER).put(C.PORT, port.toLowerCase());
+        JSONObject o = mk(C.MOTOR_SET_POWER, motorSetPowerAction).put(C.PORT, port.toLowerCase());
         return app(o);
     }
 
     @Override
     public V visitMotorStopAction(MotorStopAction<V> motorStopAction) {
         String port = motorStopAction.getUserDefinedPort();
-        JSONObject o = mk(C.MOTOR_STOP).put(C.PORT, port.toLowerCase());
+        JSONObject o = mk(C.MOTOR_STOP, motorStopAction).put(C.PORT, port.toLowerCase());
         return app(o);
     }
 
@@ -303,7 +304,7 @@ public class Ev3StackMachineVisitor<V> extends AbstractStackMachineVisitor<V> im
         showTextAction.getY().accept(this);
         showTextAction.getX().accept(this);
         showTextAction.getMsg().accept(this);
-        JSONObject o = mk(C.SHOW_TEXT_ACTION).put(C.NAME, "ev3");
+        JSONObject o = mk(C.SHOW_TEXT_ACTION, showTextAction).put(C.NAME, "ev3");
         return app(o);
     }
 
@@ -311,14 +312,14 @@ public class Ev3StackMachineVisitor<V> extends AbstractStackMachineVisitor<V> im
     public V visitLightAction(LightAction<V> lightAction) {
         String mode = lightAction.getMode().toString().toLowerCase();
         String color = lightAction.getColor().toString().toLowerCase();
-        JSONObject o = mk(C.LIGHT_ACTION).put(C.MODE, mode).put(C.COLOR, color);
+        JSONObject o = mk(C.LIGHT_ACTION, lightAction).put(C.MODE, mode).put(C.COLOR, color);
         return app(o);
     }
 
     @Override
     public V visitTouchSensor(TouchSensor<V> touchSensor) {
         String port = touchSensor.getPort();
-        JSONObject o = mk(C.GET_SAMPLE).put(C.GET_SAMPLE, C.TOUCH).put(C.PORT, port).put(C.NAME, "ev3");
+        JSONObject o = mk(C.GET_SAMPLE, touchSensor).put(C.GET_SAMPLE, C.TOUCH).put(C.PORT, port).put(C.NAME, "ev3");
         return app(o);
     }
 
@@ -326,7 +327,7 @@ public class Ev3StackMachineVisitor<V> extends AbstractStackMachineVisitor<V> im
     public V visitColorSensor(ColorSensor<V> colorSensor) {
         String mode = colorSensor.getMode();
         String port = colorSensor.getPort();
-        JSONObject o = mk(C.GET_SAMPLE).put(C.GET_SAMPLE, C.COLOR).put(C.PORT, port).put(C.MODE, mode.toLowerCase()).put(C.NAME, "ev3");
+        JSONObject o = mk(C.GET_SAMPLE, colorSensor).put(C.GET_SAMPLE, C.COLOR).put(C.PORT, port).put(C.MODE, mode.toLowerCase()).put(C.NAME, "ev3");
         return app(o);
     }
 
@@ -341,9 +342,9 @@ public class Ev3StackMachineVisitor<V> extends AbstractStackMachineVisitor<V> im
         String port = encoderSensor.getPort().toLowerCase();
         JSONObject o;
         if ( mode.equals(C.RESET) ) {
-            o = mk(C.ENCODER_SENSOR_RESET).put(C.PORT, port).put(C.NAME, "ev3");
+            o = mk(C.ENCODER_SENSOR_RESET, encoderSensor).put(C.PORT, port).put(C.NAME, "ev3");
         } else {
-            o = mk(C.GET_SAMPLE).put(C.GET_SAMPLE, C.ENCODER_SENSOR_SAMPLE).put(C.PORT, port).put(C.MODE, mode).put(C.NAME, "ev3");
+            o = mk(C.GET_SAMPLE, encoderSensor).put(C.GET_SAMPLE, C.ENCODER_SENSOR_SAMPLE).put(C.PORT, port).put(C.MODE, mode).put(C.NAME, "ev3");
         }
         return app(o);
     }
@@ -352,21 +353,21 @@ public class Ev3StackMachineVisitor<V> extends AbstractStackMachineVisitor<V> im
     public V visitTemperatureSensor(TemperatureSensor<V> temperatureSensor) {
         // TODO check if this is really supported!
         String mode = temperatureSensor.getMode();
-        JSONObject o = mk(C.GET_SAMPLE).put(C.GET_SAMPLE, C.TEMPERATURE).put(C.PORT, mode.toLowerCase()).put(C.NAME, "ev3");
+        JSONObject o = mk(C.GET_SAMPLE, temperatureSensor).put(C.GET_SAMPLE, C.TEMPERATURE).put(C.PORT, mode.toLowerCase()).put(C.NAME, "ev3");
         return app(o);
     }
 
     @Override
     public V visitKeysSensor(KeysSensor<V> keysSensor) {
         String mode = keysSensor.getPort().toLowerCase();
-        JSONObject o = mk(C.GET_SAMPLE).put(C.GET_SAMPLE, C.BUTTONS).put(C.MODE, mode).put(C.NAME, "ev3");
+        JSONObject o = mk(C.GET_SAMPLE, keysSensor).put(C.GET_SAMPLE, C.BUTTONS).put(C.MODE, mode).put(C.NAME, "ev3");
         return app(o);
     }
 
     @Override
     public V visitLightSensor(LightSensor<V> lightSensor) {
         // TODO check if this is really supported!
-        JSONObject o = mk(C.GET_SAMPLE).put(C.GET_SAMPLE, C.LIGHT).put(C.PORT, C.AMBIENTLIGHT).put(C.NAME, "ev3");
+        JSONObject o = mk(C.GET_SAMPLE, lightSensor).put(C.GET_SAMPLE, C.LIGHT).put(C.PORT, C.AMBIENTLIGHT).put(C.NAME, "ev3");
         return app(o);
     }
 
@@ -375,9 +376,9 @@ public class Ev3StackMachineVisitor<V> extends AbstractStackMachineVisitor<V> im
         String port = timerSensor.getPort();
         JSONObject o;
         if ( timerSensor.getMode().equals(SC.DEFAULT) || timerSensor.getMode().equals(SC.VALUE) ) {
-            o = mk(C.GET_SAMPLE).put(C.GET_SAMPLE, C.TIMER).put(C.PORT, port).put(C.NAME, "ev3");
+            o = mk(C.GET_SAMPLE, timerSensor).put(C.GET_SAMPLE, C.TIMER).put(C.PORT, port).put(C.NAME, "ev3");
         } else {
-            o = mk(C.TIMER_SENSOR_RESET).put(C.PORT, port).put(C.NAME, "ev3");
+            o = mk(C.TIMER_SENSOR_RESET, timerSensor).put(C.PORT, port).put(C.NAME, "ev3");
         }
         return app(o);
     }
@@ -388,14 +389,14 @@ public class Ev3StackMachineVisitor<V> extends AbstractStackMachineVisitor<V> im
         String port = sensorGetSample.getPort();
         String mode = sensorGetSample.getMode();
 
-        JSONObject o = mk(C.GET_SAMPLE).put(C.GET_SAMPLE, C.PIN + port).put(C.MODE, mode.toLowerCase()).put(C.NAME, "ev3");
+        JSONObject o = mk(C.GET_SAMPLE, sensorGetSample).put(C.GET_SAMPLE, C.PIN + port).put(C.MODE, mode.toLowerCase()).put(C.NAME, "ev3");
         return app(o);
     }
 
     @Override
     public V visitSoundSensor(SoundSensor<V> soundSensor) {
         // TODO check if this is really supported!
-        JSONObject o = mk(C.GET_SAMPLE).put(C.GET_SAMPLE, C.SOUND).put(C.MODE, C.VOLUME).put(C.NAME, "ev3");
+        JSONObject o = mk(C.GET_SAMPLE, soundSensor).put(C.GET_SAMPLE, C.SOUND).put(C.MODE, C.VOLUME).put(C.NAME, "ev3");
         return app(o);
     }
 
@@ -403,7 +404,7 @@ public class Ev3StackMachineVisitor<V> extends AbstractStackMachineVisitor<V> im
     public V visitCompassSensor(CompassSensor<V> compassSensor) {
         // TODO check if this is really supported!
         String mode = compassSensor.getMode();
-        JSONObject o = mk(C.GET_SAMPLE).put(C.GET_SAMPLE, C.COMPASS).put(C.MODE, mode.toLowerCase()).put(C.NAME, "ev3");
+        JSONObject o = mk(C.GET_SAMPLE, compassSensor).put(C.GET_SAMPLE, C.COMPASS).put(C.MODE, mode.toLowerCase()).put(C.NAME, "ev3");
         return app(o);
     }
 
@@ -413,9 +414,9 @@ public class Ev3StackMachineVisitor<V> extends AbstractStackMachineVisitor<V> im
         String port = gyroSensor.getPort().toLowerCase();
         JSONObject o;
         if ( mode.equals(C.RESET) ) {
-            o = mk(C.GYRO_SENSOR_RESET).put(C.PORT, port).put(C.NAME, "ev3");
+            o = mk(C.GYRO_SENSOR_RESET, gyroSensor).put(C.PORT, port).put(C.NAME, "ev3");
         } else {
-            o = mk(C.GET_SAMPLE).put(C.GET_SAMPLE, C.GYRO).put(C.MODE, mode).put(C.PORT, port).put(C.NAME, "ev3");
+            o = mk(C.GET_SAMPLE, gyroSensor).put(C.GET_SAMPLE, C.GYRO).put(C.MODE, mode).put(C.PORT, port).put(C.NAME, "ev3");
         }
         return app(o);
     }
@@ -444,7 +445,7 @@ public class Ev3StackMachineVisitor<V> extends AbstractStackMachineVisitor<V> im
     public V visitUltrasonicSensor(UltrasonicSensor<V> ultrasonicSensor) {
         String mode = ultrasonicSensor.getMode();
         String port = ultrasonicSensor.getPort();
-        JSONObject o = mk(C.GET_SAMPLE).put(C.GET_SAMPLE, C.ULTRASONIC).put(C.PORT, port).put(C.MODE, mode.toLowerCase()).put(C.NAME, "ev3");
+        JSONObject o = mk(C.GET_SAMPLE, ultrasonicSensor).put(C.GET_SAMPLE, C.ULTRASONIC).put(C.PORT, port).put(C.MODE, mode.toLowerCase()).put(C.NAME, "ev3");
         return app(o);
     }
 
