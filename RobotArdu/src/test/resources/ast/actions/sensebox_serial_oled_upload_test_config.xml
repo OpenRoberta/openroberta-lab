@@ -1,21 +1,21 @@
-<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="sensebox" xmlversion="2.0" description="" tags="">
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="sensebox" xmlversion="3.0" description="" tags="">
     <instance x="857" y="41">
-    <block type="robBrick_senseBox-Brick" id="DC@kFZs8?McKYe+9Bl3y" intask="true" deletable="false">
-        <mutation items="6"/>
-        <field name="BOX_ID">111111111111111111111111</field>
-        <field name="NAME1">temperature</field>
-        <field name="ID1">111111111111111111111112</field>
-        <field name="NAME2">pressure</field>
-        <field name="ID2">111111111111111111111113</field>
-        <field name="NAME3">humidity</field>
-        <field name="ID3">111111111111111111111114</field>
-        <field name="NAME4">temperature2</field>
-        <field name="ID4">111111111111111111111115</field>
-        <field name="NAME5">uvlight</field>
-        <field name="ID5">111111111111111111111116</field>
-        <field name="NAME6">visiblelight</field>
-        <field name="ID6">111111111111111111111117</field>
-    </block>
+        <block type="robBrick_senseBox-Brick" id="DC@kFZs8?McKYe+9Bl3y" intask="true" deletable="false">
+            <mutation items="6" />
+            <field name="BOX_ID">111111111111111111111111</field>
+            <field name="NAME1">temperature</field>
+            <field name="ID1">111111111111111111111112</field>
+            <field name="NAME2">pressure</field>
+            <field name="ID2">111111111111111111111113</field>
+            <field name="NAME3">humidity</field>
+            <field name="ID3">111111111111111111111114</field>
+            <field name="NAME4">temperature2</field>
+            <field name="ID4">111111111111111111111115</field>
+            <field name="NAME5">uvlight</field>
+            <field name="ID5">111111111111111111111116</field>
+            <field name="NAME6">visiblelight</field>
+            <field name="ID6">111111111111111111111117</field>
+        </block>
     </instance>
     <instance x="192" y="105">
     <block type="robConf_wireless" id="cNgFi!HIbm=rI:]]j3Hc" intask="true">

@@ -1,4 +1,4 @@
-<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="edison" xmlversion="2.0" description="" tags="">
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="edison" xmlversion="3.0" description="" tags="">
     <instance x="396" y="177">
         <block type="robActions_motorDiff_on_for" id="z1WqZXh)FYBmt7iVQLzJ" intask="false">
             <field name="DIRECTION">FOREWARD</field>

@@ -1,4 +1,4 @@
-<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="edison" xmlversion="2.0" description="" tags="">
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="edison" xmlversion="3.0" description="" tags="">
     <instance x="404" y="132">
         <block type="math_single" id="{#2QX^wT?%uaKv{=^K0^" intask="false">
             <field name="OP">ROOT</field>

@@ -1,12 +1,10 @@
-<block_set xmlns="http://de.fhg.iais.roberta.blockly"
-	robottype="ev3" xmlversion="" description="" tags="">
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="ev3" xmlversion="3.0" description="" tags="">
 	<instance x="1" y="7">
 		<block type="robControls_start" id="166" deletable="false">
 			<mutation declare="true"></mutation>
 			<field name="DEBUG">FALSE</field>
 			<statement name="ST">
-				<block type="robGlobalvariables_declare" id="325"
-					inline="true" deletable="false" movable="false">
+				<block type="robGlobalvariables_declare" id="325" inline="true" deletable="false" movable="false">
 					<mutation next="true" declaration_type="Number"></mutation>
 					<field name="VAR">item</field>
 					<field name="TYPE">Number</field>
@@ -16,8 +14,7 @@
 						</block>
 					</value>
 				</block>
-				<block type="robGlobalvariables_declare" id="332"
-					inline="true" deletable="false" movable="false">
+				<block type="robGlobalvariables_declare" id="332" inline="true" deletable="false" movable="false">
 					<mutation next="true" declaration_type="String"></mutation>
 					<field name="VAR">item2</field>
 					<field name="TYPE">String</field>

@@ -1,14 +1,14 @@
-<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="ev3" xmlversion="" description="" tags="">
-  <instance x="-337" y="63">
-    <block type="robControls_start" id="Ygk66?kW]SNtalLW;DR(" intask="true" deletable="false">
-      <mutation declare="true"></mutation>
-      <field name="DEBUG">FALSE</field>
-      <statement name="ST">
-        <block type="robGlobalVariables_declare" id="(s0Tee0s6fw178c/Co:`" intask="true" deletable="false" movable="false">
-          <mutation next="true" declaration_type="Number"></mutation>
-          <field name="VAR">Element</field>
-          <field name="TYPE">Number</field>
-          <value name="VALUE">
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="ev3" xmlversion="3.0" description="" tags="">
+    <instance x="-337" y="63">
+        <block type="robControls_start" id="Ygk66?kW]SNtalLW;DR(" intask="true" deletable="false">
+            <mutation declare="true"></mutation>
+            <field name="DEBUG">FALSE</field>
+            <statement name="ST">
+                <block type="robGlobalVariables_declare" id="(s0Tee0s6fw178c/Co:`" intask="true" deletable="false" movable="false">
+                    <mutation next="true" declaration_type="Number"></mutation>
+                    <field name="VAR">Element</field>
+                    <field name="TYPE">Number</field>
+                    <value name="VALUE">
             <block type="math_round" id="478" inline="false" intask="true">
               <field name="OP">ROUND</field>
               <value name="NUM">

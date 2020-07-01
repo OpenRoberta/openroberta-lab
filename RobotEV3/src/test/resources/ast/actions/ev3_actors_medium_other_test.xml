@@ -1,34 +1,34 @@
-<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="ev3" xmlversion="2.0" description="" tags="">
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="ev3" xmlversion="3.0" description="" tags="">
     <instance x="381" y="50">
-    <block type="robControls_start" id="y``}3f}=u*X2Zz@W]iYH" intask="true" deletable="false">
-        <mutation declare="true"/>
-        <field name="DEBUG">FALSE</field>
-        <statement name="ST">
-        <block type="robGlobalVariables_declare" id="wq{JKI?P[1kC=Tgw2y`E" intask="true" deletable="false" movable="false">
-            <mutation next="true" declaration_type="Number"/>
-            <field name="VAR">item</field>
-            <field name="TYPE">Number</field>
-            <value name="VALUE">
-            <block type="robActions_motor_getPower" id="pJNwCkdsT3Q2iZ/*q|cH" intask="true">
-                <field name="MOTORPORT">A</field>
-            </block>
-            </value>
+        <block type="robControls_start" id="y``}3f}=u*X2Zz@W]iYH" intask="true" deletable="false">
+            <mutation declare="true" />
+            <field name="DEBUG">FALSE</field>
+            <statement name="ST">
+                <block type="robGlobalVariables_declare" id="wq{JKI?P[1kC=Tgw2y`E" intask="true" deletable="false" movable="false">
+                    <mutation next="true" declaration_type="Number" />
+                    <field name="VAR">item</field>
+                    <field name="TYPE">Number</field>
+                    <value name="VALUE">
+                        <block type="robActions_motor_getPower" id="pJNwCkdsT3Q2iZ/*q|cH" intask="true">
+                            <field name="MOTORPORT">A</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="robGlobalVariables_declare" id="{}B!4^wE1]O?matBAInj" intask="true" deletable="false" movable="false">
+                    <mutation next="false" declaration_type="Number" />
+                    <field name="VAR">item2</field>
+                    <field name="TYPE">Number</field>
+                    <value name="VALUE">
+                        <block type="robActions_motor_getPower" id="EI?_Ql5+NSC(/v6Z3w.n" intask="true">
+                            <field name="MOTORPORT">B</field>
+                        </block>
+                    </value>
+                </block>
+            </statement>
         </block>
-        <block type="robGlobalVariables_declare" id="{}B!4^wE1]O?matBAInj" intask="true" deletable="false" movable="false">
-            <mutation next="false" declaration_type="Number"/>
-            <field name="VAR">item2</field>
-            <field name="TYPE">Number</field>
-            <value name="VALUE">
-            <block type="robActions_motor_getPower" id="EI?_Ql5+NSC(/v6Z3w.n" intask="true">
-                <field name="MOTORPORT">B</field>
-            </block>
-            </value>
-        </block>
-        </statement>
-    </block>
-    <block type="robActions_motor_on" id="?!Ce`@#Xs(Lo{!CG{UUj" intask="true">
-        <field name="MOTORPORT">A</field>
-        <value name="POWER">
+        <block type="robActions_motor_on" id="?!Ce`@#Xs(Lo{!CG{UUj" intask="true">
+            <field name="MOTORPORT">A</field>
+            <value name="POWER">
         <block type="math_number" id="pf,J.Gb@WjruZBd5+Q[o" intask="true">
             <field name="NUM">30</field>
         </block>

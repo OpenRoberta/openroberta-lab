@@ -1,34 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <export xmlns="http://de.fhg.iais.roberta.blockly">
 	<program>
-		<block_set xmlns="http://de.fhg.iais.roberta.blockly"
-			robottype="ev3" xmlversion="2.0" description="" tags="">
+		<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="ev3" xmlversion="3.0" description="" tags="">
 			<instance x="-279" y="-47">
-				<block type="robControls_start" id="?RN9ZuhLq@IhuC/x3,Zt"
-					intask="true" deletable="false">
-					<mutation declare="true">
-					</mutation>
+				<block type="robControls_start" id="?RN9ZuhLq@IhuC/x3,Zt" intask="true" deletable="false">
+					<mutation declare="true"></mutation>
 					<field name="DEBUG">FALSE</field>
 					<statement name="ST">
-						<block type="robGlobalVariables_declare"
-							id="Zw/`4D0dJfs=1No0}L1]" intask="true" deletable="false"
-							movable="false">
-							<mutation next="true" declaration_type="Number">
-							</mutation>
+						<block type="robGlobalVariables_declare" id="Zw/`4D0dJfs=1No0}L1]" intask="true" deletable="false" movable="false">
+							<mutation next="true" declaration_type="Number"></mutation>
 							<field name="VAR">ergebnis</field>
 							<field name="TYPE">Number</field>
 							<value name="VALUE">
-								<block type="math_number" id="f+KVK%Y1kDKKR{ftIR1Q"
-									intask="true">
+								<block type="math_number" id="f+KVK%Y1kDKKR{ftIR1Q" intask="true">
 									<field name="NUM">0</field>
 								</block>
 							</value>
 						</block>
-						<block type="robGlobalVariables_declare"
-							id="drlM|~{P;bneJFA}Kt6c" intask="true" deletable="false"
-							movable="false">
-							<mutation next="false" declaration_type="Boolean">
-							</mutation>
+						<block type="robGlobalVariables_declare" id="drlM|~{P;bneJFA}Kt6c" intask="true" deletable="false" movable="false">
+							<mutation next="false" declaration_type="Boolean"></mutation>
 							<field name="VAR">result</field>
 							<field name="TYPE">Boolean</field>
 							<value name="VALUE">
@@ -888,19 +878,16 @@
 						</block>
 					</value>
 				</block>
-				<block type="text_comment" id="^P%5Q9{)cM|+?-+]{#QX"
-					intask="true">
+				<block type="text_comment" id="^P%5Q9{)cM|+?-+]{#QX" intask="true">
 					<field name="TEXT">Grundrechenarten Basics --END--</field>
 				</block>
 			</instance>
 		</block_set>
 	</program>
 	<config>
-		<block_set robottype="ev3" xmlversion="2.0" description=""
-			tags="" xmlns="http://de.fhg.iais.roberta.blockly">
+		<block_set robottype="ev3" xmlversion="3.0" description="" tags="" xmlns="http://de.fhg.iais.roberta.blockly">
 			<instance x="213" y="213">
-				<block type="robBrick_EV3-Brick" id="1" intask="true"
-					deletable="false">
+				<block type="robBrick_EV3-Brick" id="1" intask="true" deletable="false">
 					<field name="WHEEL_DIAMETER">5.6</field>
 					<field name="TRACK_WIDTH">18</field>
 					<value name="S1">

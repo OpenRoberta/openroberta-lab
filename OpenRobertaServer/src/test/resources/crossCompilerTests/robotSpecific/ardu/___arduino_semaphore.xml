@@ -1,36 +1,36 @@
 <export xmlns="http://de.fhg.iais.roberta.blockly">
   <program>
-    <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="arduino" xmlversion="2.0" description="" tags="">
-      <instance x="384" y="50">
-        <block type="robControls_start_ardu" id="}6/XVi11Hb+*D;`pR1q@" intask="true" deletable="false">
-          <mutation declare="true"/>
-          <field name="DEBUG"/>
-          <statement name="ST">
-            <block type="robGlobalVariables_declare" id="?H/x5Z?L=9XAOc#Ko4iN" intask="true" deletable="false" movable="false">
-              <mutation next="true" declaration_type="Colour"/>
-              <field name="VAR">red</field>
-              <field name="TYPE">Colour</field>
-              <value name="VALUE">
-                <block type="naoColour_rgb" id="|%A?/SnxslL}4~m8erTF" intask="true">
-                  <value name="RED">
-                    <block type="math_number" id="lZ8qb*co5-zc){IE*@h_" intask="true">
-                      <field name="NUM">255</field>
-                    </block>
-                  </value>
-                  <value name="GREEN">
-                    <block type="math_number" id="{r6gXx|?YL8h/B?jcs-o" intask="true">
-                      <field name="NUM">0</field>
-                    </block>
-                  </value>
-                  <value name="BLUE">
-                    <block type="math_number" id="~JgPF3tWky]a{}0]@q4e" intask="true">
-                      <field name="NUM">0</field>
-                    </block>
-                  </value>
-                </block>
-              </value>
-            </block>
-            <block type="robGlobalVariables_declare" id="IC,Ku~z^2Ye8*dl/fB/4" intask="true" deletable="false" movable="false">
+      <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="arduino" xmlversion="3.0" description="" tags="">
+          <instance x="384" y="50">
+              <block type="robControls_start_ardu" id="}6/XVi11Hb+*D;`pR1q@" intask="true" deletable="false">
+                  <mutation declare="true" />
+                  <field name="DEBUG" />
+                  <statement name="ST">
+                      <block type="robGlobalVariables_declare" id="?H/x5Z?L=9XAOc#Ko4iN" intask="true" deletable="false" movable="false">
+                          <mutation next="true" declaration_type="Colour" />
+                          <field name="VAR">red</field>
+                          <field name="TYPE">Colour</field>
+                          <value name="VALUE">
+                              <block type="naoColour_rgb" id="|%A?/SnxslL}4~m8erTF" intask="true">
+                                  <value name="RED">
+                                      <block type="math_number" id="lZ8qb*co5-zc){IE*@h_" intask="true">
+                                          <field name="NUM">255</field>
+                                      </block>
+                                  </value>
+                                  <value name="GREEN">
+                                      <block type="math_number" id="{r6gXx|?YL8h/B?jcs-o" intask="true">
+                                          <field name="NUM">0</field>
+                                      </block>
+                                  </value>
+                                  <value name="BLUE">
+                                      <block type="math_number" id="~JgPF3tWky]a{}0]@q4e" intask="true">
+                                          <field name="NUM">0</field>
+                                      </block>
+                                  </value>
+                              </block>
+                          </value>
+                      </block>
+                      <block type="robGlobalVariables_declare" id="IC,Ku~z^2Ye8*dl/fB/4" intask="true" deletable="false" movable="false">
               <mutation next="true" declaration_type="Colour"/>
               <field name="VAR">green</field>
               <field name="TYPE">Colour</field>
@@ -141,32 +141,32 @@
             </block>
             <block type="robControls_wait_time" id="(MhLHYh~c@H^6euc(xUe" intask="true">
               <value name="WAIT">
-                <block type="math_number" id="eHxUEUCV1W|U)zHDDkK*" intask="true">
-                  <field name="NUM">500</field>
-                </block>
+                  <block type="math_number" id="eHxUEUCV1W|U)zHDDkK*" intask="true">
+                      <field name="NUM">500</field>
+                  </block>
               </value>
             </block>
           </statement>
         </block>
-      </instance>
-    </block_set>
+          </instance>
+      </block_set>
   </program>
-  <config>
-    <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="arduino" xmlversion="2.0" description="" tags="">
-      <instance x="396" y="131">
-        <block type="robConf_led" id="1" intask="true">
-          <field name="NAME">L</field>
-          <field name="INPUT">13</field>
-        </block>
-      </instance>
-      <instance x="446" y="280">
-        <block type="robConf_rgbled" id="=P3fvkU1]-Xnj;HD5O+l" intask="true">
-          <field name="NAME">R</field>
-          <field name="RED">6</field>
-          <field name="GREEN">5</field>
-          <field name="BLUE">3</field>
-        </block>
-      </instance>
-    </block_set>
-  </config>
+    <config>
+        <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="arduino" xmlversion="3.0" description="" tags="">
+            <instance x="396" y="131">
+                <block type="robConf_led" id="1" intask="true">
+                    <field name="NAME">L</field>
+                    <field name="INPUT">13</field>
+                </block>
+            </instance>
+            <instance x="446" y="280">
+                <block type="robConf_rgbled" id="=P3fvkU1]-Xnj;HD5O+l" intask="true">
+                    <field name="NAME">R</field>
+                    <field name="RED">6</field>
+                    <field name="GREEN">5</field>
+                    <field name="BLUE">3</field>
+                </block>
+            </instance>
+        </block_set>
+    </config>
 </export>

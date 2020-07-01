@@ -1,14 +1,14 @@
-<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="ev3" xmlversion="" description="" tags="">
-  <instance x="49" y="5">
-    <block type="robControls_start" id="43" deletable="false"></block>
-    <block type="lists_setIndex" id="276" inline="true">
-      <mutation at="true"></mutation>
-      <field name="MODE">SET</field>
-      <field name="WHERE">FROM_START</field>
-      <value name="LIST">
-        <block type="variables_get" id="277">
-          <field name="VAR">liste</field>
-        </block>
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="ev3" xmlversion="3.0" description="" tags="">
+    <instance x="49" y="5">
+        <block type="robControls_start" id="43" deletable="false"></block>
+        <block type="lists_setIndex" id="276" inline="true">
+            <mutation at="true"></mutation>
+            <field name="MODE">SET</field>
+            <field name="WHERE">FROM_START</field>
+            <value name="LIST">
+                <block type="variables_get" id="277">
+                    <field name="VAR">liste</field>
+                </block>
       </value>
       <value name="AT">
         <block type="math_number" id="278">

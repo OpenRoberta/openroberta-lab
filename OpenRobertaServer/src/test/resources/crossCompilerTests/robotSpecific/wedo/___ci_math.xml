@@ -1,13 +1,13 @@
 <export xmlns="http://de.fhg.iais.roberta.blockly">
 	<program>
-		<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="wedo" xmlversion="2.0" description="" tags="">
+		<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="wedo" xmlversion="3.0" description="" tags="">
 			<instance x="157" y="31">
 				<block type="robControls_start" id="]tK0c1?wEw7qH#H-_o9q" intask="true" deletable="false">
-					<mutation declare="true"/>
+					<mutation declare="true" />
 					<field name="DEBUG">FALSE</field>
 					<statement name="ST">
 						<block type="robGlobalVariables_declare" id="hx((XC9,d#Z6dhZR#HZY" intask="true" deletable="false" movable="false">
-							<mutation next="false" declaration_type="Number"/>
+							<mutation next="false" declaration_type="Number" />
 							<field name="VAR">x</field>
 							<field name="TYPE">Number</field>
 							<value name="VALUE">
@@ -19,14 +19,14 @@
 					</statement>
 				</block>
 				<block type="variables_set" id="E=vSn)8.5G6CB79M{,4," intask="true">
-					<mutation datatype="Number"/>
+					<mutation datatype="Number" />
 					<field name="VAR">x</field>
 					<value name="VALUE">
 						<block type="math_arithmetic" id="[!bk4x]~p.P^|8O9~KhM" intask="true">
 							<field name="OP">ADD</field>
 							<value name="A">
 								<block type="variables_get" id="%d8okmaiQAGn{nbQ9vic" intask="true">
-									<mutation datatype="Number"/>
+									<mutation datatype="Number" />
 									<field name="VAR">x</field>
 								</block>
 							</value>
@@ -304,7 +304,7 @@
 				<block type="robActions_display_text" id="ob@|y+1f,[nOI(%4`|~W" intask="true">
 					<value name="OUT">
 						<block type="robText_join" id="%~O5[8=d[1T=.94dU]7," intask="true">
-							<mutation items="2"/>
+							<mutation items="2" />
 							<value name="ADD0">
 								<block type="text" id="s@EtX40!E+L@wXcj7ocr" intask="true">
 									<field name="TEXT">erwartet: 169</field>
@@ -312,7 +312,7 @@
 							</value>
 							<value name="ADD1">
 								<block type="variables_get" id="iVNsDyYob5tTLW5mOFc8" intask="true">
-									<mutation datatype="Number"/>
+									<mutation datatype="Number" />
 									<field name="VAR">x</field>
 								</block>
 							</value>
@@ -323,7 +323,7 @@
 		</block_set>
 	</program>
 	<config>
-		<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="wedo" xmlversion="2.0" description="" tags="">
+		<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="wedo" xmlversion="3.0" description="" tags="">
 			<instance x="42" y="10">
 				<block type="robBrick_WeDo-Brick" id="1" intask="true" deletable="false">
 					<field name="VAR">W</field>

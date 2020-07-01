@@ -1,34 +1,34 @@
-<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="nxt" xmlversion="2.0" description="" tags="">
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="nxt" xmlversion="3.0" description="" tags="">
     <instance x="392" y="61">
-    <block type="robControls_start" id="=)*zy%xwr/yMz)]0mKm]" intask="true" deletable="false">
-        <mutation declare="true"/>
-        <field name="DEBUG">TRUE</field>
-        <statement name="ST">
-        <block type="robGlobalVariables_declare" id=";{i?m*|J]WMiTn)3AE.H" intask="true" deletable="false" movable="false">
-            <mutation next="true" declaration_type="Number"/>
-            <field name="VAR">item</field>
-            <field name="TYPE">Number</field>
-            <value name="VALUE">
-            <block type="math_number" id="|NA@L_e.L{!X}XbnvA/(" intask="true">
-                <field name="NUM">0</field>
-            </block>
-            </value>
-        </block>
-        <block type="robGlobalVariables_declare" id="o/*6YY(6A{4c;yeq-RIk" intask="true" deletable="false" movable="false">
-            <mutation next="true" declaration_type="Boolean"/>
-            <field name="VAR">item2</field>
-            <field name="TYPE">Boolean</field>
-            <value name="VALUE">
-            <block type="logic_boolean" id="j@|P4lYel6;a76^v_=0r" intask="true">
-                <field name="BOOL">TRUE</field>
-            </block>
-            </value>
-        </block>
-        <block type="robGlobalVariables_declare" id="K`818%TT!]NT=ZfHMD+g" intask="true" deletable="false" movable="false">
-            <mutation next="true" declaration_type="String"/>
-            <field name="VAR">item3</field>
-            <field name="TYPE">String</field>
-            <value name="VALUE">
+        <block type="robControls_start" id="=)*zy%xwr/yMz)]0mKm]" intask="true" deletable="false">
+            <mutation declare="true" />
+            <field name="DEBUG">TRUE</field>
+            <statement name="ST">
+                <block type="robGlobalVariables_declare" id=";{i?m*|J]WMiTn)3AE.H" intask="true" deletable="false" movable="false">
+                    <mutation next="true" declaration_type="Number" />
+                    <field name="VAR">item</field>
+                    <field name="TYPE">Number</field>
+                    <value name="VALUE">
+                        <block type="math_number" id="|NA@L_e.L{!X}XbnvA/(" intask="true">
+                            <field name="NUM">0</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="robGlobalVariables_declare" id="o/*6YY(6A{4c;yeq-RIk" intask="true" deletable="false" movable="false">
+                    <mutation next="true" declaration_type="Boolean" />
+                    <field name="VAR">item2</field>
+                    <field name="TYPE">Boolean</field>
+                    <value name="VALUE">
+                        <block type="logic_boolean" id="j@|P4lYel6;a76^v_=0r" intask="true">
+                            <field name="BOOL">TRUE</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="robGlobalVariables_declare" id="K`818%TT!]NT=ZfHMD+g" intask="true" deletable="false" movable="false">
+                    <mutation next="true" declaration_type="String" />
+                    <field name="VAR">item3</field>
+                    <field name="TYPE">String</field>
+                    <value name="VALUE">
             <block type="text" id="kU;FleWK:b`Ov9Wb)/X-" intask="true">
                 <field name="TEXT"/>
             </block>

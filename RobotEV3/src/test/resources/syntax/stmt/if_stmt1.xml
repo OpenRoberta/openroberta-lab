@@ -1,5 +1,5 @@
-<block_set  xmlns="http://de.fhg.iais.roberta.blockly" robottype="ev3" xmlversion="" description="" tags="">
-   <instance x="19" y="205">
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="ev3" xmlversion="3.0" description="" tags="">
+  <instance x="19" y="205">
     <block type="robControls_if" id="28" inline="false">
       <value name="IF0">
         <block type="logic_compare" id="2" inline="true">

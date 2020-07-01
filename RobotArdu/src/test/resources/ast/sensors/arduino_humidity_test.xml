@@ -1,24 +1,24 @@
-<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="arduino" xmlversion="2.0" description="" tags="">
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="arduino" xmlversion="3.0" description="" tags="">
     <instance x="97" y="72">
-    <block type="robControls_start_ardu" id="C}MT`vIdUNK8E`?C=ypH" intask="true" deletable="false">
-        <mutation declare="true"/>
-        <field name="DEBUG"/>
-        <statement name="ST">
-        <block type="robGlobalVariables_declare" id="8A{+~;A8`Y)-@[fgPR4k" intask="true" deletable="false" movable="false">
-            <mutation next="true" declaration_type="Number"/>
-            <field name="VAR">item</field>
-            <field name="TYPE">Number</field>
-            <value name="VALUE">
-            <block type="robSensors_humidity_getSample" id="armDe3%jN.~8o}+ZUeg}" intask="true">
-                <mutation mode="HUMIDITY"/>
-                <field name="MODE">HUMIDITY</field>
-                <field name="SENSORPORT">H</field>
-                <field name="SLOT"/>
-            </block>
-            </value>
-        </block>
-        <block type="robGlobalVariables_declare" id="CFOPOX!FdMM|PXcOoinJ" intask="true" deletable="false" movable="false">
-            <mutation next="false" declaration_type="Number"/>
+        <block type="robControls_start_ardu" id="C}MT`vIdUNK8E`?C=ypH" intask="true" deletable="false">
+            <mutation declare="true" />
+            <field name="DEBUG" />
+            <statement name="ST">
+                <block type="robGlobalVariables_declare" id="8A{+~;A8`Y)-@[fgPR4k" intask="true" deletable="false" movable="false">
+                    <mutation next="true" declaration_type="Number" />
+                    <field name="VAR">item</field>
+                    <field name="TYPE">Number</field>
+                    <value name="VALUE">
+                        <block type="robSensors_humidity_getSample" id="armDe3%jN.~8o}+ZUeg}" intask="true">
+                            <mutation mode="HUMIDITY" />
+                            <field name="MODE">HUMIDITY</field>
+                            <field name="SENSORPORT">H</field>
+                            <field name="SLOT" />
+                        </block>
+                    </value>
+                </block>
+                <block type="robGlobalVariables_declare" id="CFOPOX!FdMM|PXcOoinJ" intask="true" deletable="false" movable="false">
+                    <mutation next="false" declaration_type="Number" />
             <field name="VAR">item2</field>
             <field name="TYPE">Number</field>
             <value name="VALUE">

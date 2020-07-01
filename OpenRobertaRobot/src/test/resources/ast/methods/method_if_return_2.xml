@@ -1,5 +1,4 @@
-<block_set xmlns="http://de.fhg.iais.roberta.blockly"
-	robottype="ev3" xmlversion="" description="" tags="">
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="ev3" xmlversion="3.0" description="" tags="">
 	<instance x="44" y="104">
 		<block type="robProcedures_defreturn" id="67" inline="false">
 			<mutation declare="true" return_type="Number"></mutation>
@@ -7,14 +6,12 @@
 			<field name="TYPE">Number</field>
 			<repetitions>
 				<statement name="ST">
-					<block type="robLocalVariables_declare" id="70"
-						deletable="false" movable="false">
+					<block type="robLocalVariables_declare" id="70" deletable="false" movable="false">
 						<mutation next="true" declaration_type="Number"></mutation>
 						<field name="VAR">x</field>
 						<field name="TYPE">Number</field>
 					</block>
-					<block type="robLocalVariables_declare" id="71"
-						deletable="false" movable="false">
+					<block type="robLocalVariables_declare" id="71" deletable="false" movable="false">
 						<mutation next="true" declaration_type="Number"></mutation>
 						<field name="VAR">x2</field>
 						<field name="TYPE">Number</field>

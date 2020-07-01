@@ -1,18 +1,15 @@
-<block_set xmlns="http://de.fhg.iais.roberta.blockly"
-	robottype="ev3" xmlversion="" description="" tags="">
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="ev3" xmlversion="3.0" description="" tags="">
 	<instance x="5" y="28">
 		<block type="robProcedures_defnoreturn" id="296">
 			<mutation declare="true"></mutation>
 			<field name="NAME">Funktionsblock</field>
 			<statement name="ST">
-				<block type="robLocalVariables_declare" id="300"
-					deletable="false" movable="false">
+				<block type="robLocalVariables_declare" id="300" deletable="false" movable="false">
 					<mutation next="true" declaration_type="Number"></mutation>
 					<field name="VAR">x</field>
 					<field name="TYPE">Number</field>
 				</block>
-				<block type="robLocalVariables_declare" id="301"
-					deletable="false" movable="false">
+				<block type="robLocalVariables_declare" id="301" deletable="false" movable="false">
 					<mutation next="false" declaration_type="Number"></mutation>
 					<field name="VAR">x2</field>
 					<field name="TYPE">Number</field>

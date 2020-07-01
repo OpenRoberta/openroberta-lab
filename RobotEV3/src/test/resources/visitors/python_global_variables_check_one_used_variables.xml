@@ -1,14 +1,14 @@
-<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="ev3" xmlversion="" description="" tags="">
-  <instance x="13" y="13">
-    <block type="robControls_start" id="]9@T8i5#Zaq=KNQ;739*" intask="true" deletable="false">
-      <mutation declare="true"></mutation>
-      <field name="DEBUG">FALSE</field>
-      <statement name="ST">
-        <block type="robGlobalVariables_declare" id="V5tazpaL1kW_O4b]VVl2" intask="true" deletable="false" movable="false">
-          <mutation next="true" declaration_type="Number"></mutation>
-          <field name="VAR">Element</field>
-          <field name="TYPE">Number</field>
-          <value name="VALUE">
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="ev3" xmlversion="3.0" description="" tags="">
+    <instance x="13" y="13">
+        <block type="robControls_start" id="]9@T8i5#Zaq=KNQ;739*" intask="true" deletable="false">
+            <mutation declare="true"></mutation>
+            <field name="DEBUG">FALSE</field>
+            <statement name="ST">
+                <block type="robGlobalVariables_declare" id="V5tazpaL1kW_O4b]VVl2" intask="true" deletable="false" movable="false">
+                    <mutation next="true" declaration_type="Number"></mutation>
+                    <field name="VAR">Element</field>
+                    <field name="TYPE">Number</field>
+                    <value name="VALUE">
             <block type="math_number" id="CLSo}y%|;b9A+J5EB1j1" intask="true">
               <field name="NUM">0</field>
             </block>

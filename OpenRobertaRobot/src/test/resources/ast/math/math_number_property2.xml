@@ -1,8 +1,6 @@
-<block_set xmlns="http://de.fhg.iais.roberta.blockly"
-	robottype="ev3" xmlversion="" description="" tags="">
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="ev3" xmlversion="3.0" description="" tags="">
 	<instance x="-683" y="152">
-		<block type="math_number_property" id="60" inline="true"
-			disabled="true">
+		<block type="math_number_property" id="60" inline="true" disabled="true">
 			<mutation divisor_input="false"></mutation>
 			<field name="PROPERTY">EVEN</field>
 			<value name="NUMBER_TO_CHECK">
@@ -13,8 +11,7 @@
 		</block>
 	</instance>
 	<instance x="-663" y="192">
-		<block type="math_number_property" id="95" inline="true"
-			disabled="true">
+		<block type="math_number_property" id="95" inline="true" disabled="true">
 			<mutation divisor_input="false"></mutation>
 			<field name="PROPERTY">ODD</field>
 			<value name="NUMBER_TO_CHECK">

@@ -1,5 +1,4 @@
-<block_set xmlns="http://de.fhg.iais.roberta.blockly"
-	robottype="ev3" xmlversion="" description="" tags="">
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="ev3" xmlversion="3.0" description="" tags="">
 	<instance x="33" y="-573">
 		<block type="controls_repeat_ext" id="52" inline="true">
 			<value name="TIMES">

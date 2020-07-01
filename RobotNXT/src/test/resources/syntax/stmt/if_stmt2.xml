@@ -1,5 +1,5 @@
-<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="nxt" xmlversion="" description="" tags="">
-     <instance x="30" y="11">
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="nxt" xmlversion="3.0" description="" tags="">
+  <instance x="30" y="11">
     <block type="robControls_ifElse" id="51" inline="false">
       <mutation elseif="1" else="1"></mutation>
       <repetitions>

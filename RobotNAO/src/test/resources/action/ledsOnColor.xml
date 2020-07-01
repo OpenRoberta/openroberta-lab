@@ -1,14 +1,14 @@
-<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="nao" xmlversion="" description="" tags="">
-  <instance x="138" y="163">
-    <block type="naoActions_rgbLeds" id="kgi647^Cby;~W.Wk2Yix" intask="false">
-      <field name="LED">EYES</field>
-      <value name="COLOR">
-        <block type="naoColour_picker" id="4m.u-zLy0l/vf.HH%o-+" intask="false">
-          <field name="COLOUR">#ffcc33</field>
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="nao" xmlversion="3.0" description="" tags="">
+    <instance x="138" y="163">
+        <block type="naoActions_rgbLeds" id="kgi647^Cby;~W.Wk2Yix" intask="false">
+            <field name="LED">EYES</field>
+            <value name="COLOR">
+                <block type="naoColour_picker" id="4m.u-zLy0l/vf.HH%o-+" intask="false">
+                    <field name="COLOUR">#ffcc33</field>
+                </block>
+            </value>
         </block>
-      </value>
-    </block>
-    <block type="naoActions_rgbLeds" id=")Vsd!9@NLHn^(Lf6,5yr" intask="false">
+        <block type="naoActions_rgbLeds" id=")Vsd!9@NLHn^(Lf6,5yr" intask="false">
       <field name="LED">LEFTEYE</field>
       <value name="COLOR">
         <block type="naoColour_picker" id=";7/F-HMJ#To#pqpr@-gP" intask="false">

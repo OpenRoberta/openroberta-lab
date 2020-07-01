@@ -1,14 +1,14 @@
-<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="ev3" xmlversion="" description="" tags="">
-  <instance x="-39" y="-1">
-    <block type="robControls_start" id="726" deletable="false"></block>
-    <block type="controls_if" id="731" inline="false">
-      <value name="IF0">
-        <block type="robSensors_touch_getSample" id="831">
-          <field name="SENSORPORT">1</field>
-        </block>
-      </value>
-      <statement name="DO0">
-        <block type="text_append" id="818" inline="false">
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="ev3" xmlversion="3.0" description="" tags="">
+    <instance x="-39" y="-1">
+        <block type="robControls_start" id="726" deletable="false"></block>
+        <block type="controls_if" id="731" inline="false">
+            <value name="IF0">
+                <block type="robSensors_touch_getSample" id="831">
+                    <field name="SENSORPORT">1</field>
+                </block>
+            </value>
+            <statement name="DO0">
+                <block type="text_append" id="818" inline="false">
           <field name="VAR">item</field>
           <value name="TEXT">
             <block type="text" id="819">

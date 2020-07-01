@@ -1,24 +1,24 @@
-<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="sensebox" xmlversion="2.0" description="" tags="">
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="sensebox" xmlversion="3.0" description="" tags="">
     <instance x="384" y="50">
-    <block type="robControls_start_ardu" id="yp?.yxa9Z@[xOX{sQgW?" intask="true" deletable="false">
-        <mutation declare="true"/>
-        <field name="DEBUG"/>
-        <statement name="ST">
-        <block type="robGlobalVariables_declare" id="?/)6hu|1fJmai/81dHg@" intask="true" deletable="false" movable="false">
-            <mutation next="true" declaration_type="Boolean"/>
-            <field name="VAR">item</field>
-            <field name="TYPE">Boolean</field>
-            <value name="VALUE">
-            <block type="logic_boolean" id="kvDX@w8bG-qcd9hV!fJB" intask="true">
-                <field name="BOOL">TRUE</field>
-            </block>
-            </value>
-        </block>
-        <block type="robGlobalVariables_declare" id="KFgN.Gqs:{uVW{op`z8D" intask="true" deletable="false" movable="false">
-            <mutation next="false" declaration_type="Number"/>
-            <field name="VAR">item2</field>
-            <field name="TYPE">Number</field>
-            <value name="VALUE">
+        <block type="robControls_start_ardu" id="yp?.yxa9Z@[xOX{sQgW?" intask="true" deletable="false">
+            <mutation declare="true" />
+            <field name="DEBUG" />
+            <statement name="ST">
+                <block type="robGlobalVariables_declare" id="?/)6hu|1fJmai/81dHg@" intask="true" deletable="false" movable="false">
+                    <mutation next="true" declaration_type="Boolean" />
+                    <field name="VAR">item</field>
+                    <field name="TYPE">Boolean</field>
+                    <value name="VALUE">
+                        <block type="logic_boolean" id="kvDX@w8bG-qcd9hV!fJB" intask="true">
+                            <field name="BOOL">TRUE</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="robGlobalVariables_declare" id="KFgN.Gqs:{uVW{op`z8D" intask="true" deletable="false" movable="false">
+                    <mutation next="false" declaration_type="Number" />
+                    <field name="VAR">item2</field>
+                    <field name="TYPE">Number</field>
+                    <value name="VALUE">
             <block type="math_number" id="}t_Y0nw0zafw*%8kNuUy" intask="true">
                 <field name="NUM">0</field>
             </block>

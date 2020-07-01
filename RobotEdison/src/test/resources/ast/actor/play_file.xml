@@ -1,4 +1,4 @@
-<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="edison" xmlversion="2.0" description="" tags="">
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="edison" xmlversion="3.0" description="" tags="">
     <instance x="399" y="134">
         <block type="robActions_play_file" id="Zp5jKw@)e(9GY6OHA)d." intask="false">
             <field name="FILE">0</field>

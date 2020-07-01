@@ -1,24 +1,24 @@
-<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="bob3" xmlversion="2.0" description="" tags="">
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="bob3" xmlversion="3.0" description="" tags="">
     <instance x="384" y="50">
-    <block type="robControls_start_ardu" id="?v!e~iR@wQ?a_/[aWcWZ" intask="true" deletable="false">
-        <mutation declare="true"/>
-        <field name="DEBUG"/>
-        <statement name="ST">
-        <block type="robGlobalVariables_declare" id="6A[~=5s0?3.pPsChP3_c" intask="true" deletable="false" movable="false">
-            <mutation next="true" declaration_type="Number"/>
-            <field name="VAR">item</field>
-            <field name="TYPE">Number</field>
-            <value name="VALUE">
-            <block type="math_constrain" id="*H+E4;?t+Zg@EMK^o.jc" intask="true">
-                <value name="VALUE">
-                <block type="math_number" id="tnr(v,,+)iRQ6nSg#[G4" intask="true">
-                    <field name="NUM">0</field>
-                </block>
-                </value>
-                <value name="LOW">
-                <block type="math_number" id="{pJfsV|peXlfvVhxpJ:n" intask="true">
-                    <field name="NUM">1</field>
-                </block>
+        <block type="robControls_start_ardu" id="?v!e~iR@wQ?a_/[aWcWZ" intask="true" deletable="false">
+            <mutation declare="true" />
+            <field name="DEBUG" />
+            <statement name="ST">
+                <block type="robGlobalVariables_declare" id="6A[~=5s0?3.pPsChP3_c" intask="true" deletable="false" movable="false">
+                    <mutation next="true" declaration_type="Number" />
+                    <field name="VAR">item</field>
+                    <field name="TYPE">Number</field>
+                    <value name="VALUE">
+                        <block type="math_constrain" id="*H+E4;?t+Zg@EMK^o.jc" intask="true">
+                            <value name="VALUE">
+                                <block type="math_number" id="tnr(v,,+)iRQ6nSg#[G4" intask="true">
+                                    <field name="NUM">0</field>
+                                </block>
+                            </value>
+                            <value name="LOW">
+                                <block type="math_number" id="{pJfsV|peXlfvVhxpJ:n" intask="true">
+                                    <field name="NUM">1</field>
+                                </block>
                 </value>
                 <value name="HIGH">
                 <block type="math_number" id="d`0dvDCRz{XSewOq77K+" intask="true">

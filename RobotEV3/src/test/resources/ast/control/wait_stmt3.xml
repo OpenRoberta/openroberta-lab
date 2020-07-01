@@ -1,14 +1,14 @@
-<block_set  xmlns="http://de.fhg.iais.roberta.blockly" robottype="ev3" xmlversion="" description="" tags="">
-  <instance x="31" y="21">
-    <block type="robControls_wait_for" id="26" inline="false">
-      <mutation wait="7"></mutation>
-      <repetitions>
-        <value name="WAIT0">
-          <block type="logic_compare" id="27" inline="true" disabled="true">
-            <field name="OP">EQ</field>
-            <value name="A">
-              <block type="robSensors_getSample" id="28" disabled="true">
-                <mutation input="TOUCH_PRESSED"></mutation>
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="ev3" xmlversion="3.0" description="" tags="">
+    <instance x="31" y="21">
+        <block type="robControls_wait_for" id="26" inline="false">
+            <mutation wait="7"></mutation>
+            <repetitions>
+                <value name="WAIT0">
+                    <block type="logic_compare" id="27" inline="true" disabled="true">
+                        <field name="OP">EQ</field>
+                        <value name="A">
+                            <block type="robSensors_getSample" id="28" disabled="true">
+                                <mutation input="TOUCH_PRESSED"></mutation>
                 <field name="SENSORTYPE">TOUCH_PRESSED</field>
                 <field name="SENSORPORT">1</field><field name="SLOT" />
               </block>

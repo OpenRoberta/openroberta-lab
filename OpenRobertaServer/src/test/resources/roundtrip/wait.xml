@@ -1,14 +1,14 @@
-<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="ev3" xmlversion="" description="" tags="">
-  <instance x="83" y="8">
-    <block type="robControls_start" id="21" intask="true" deletable="false">
-      <mutation declare="false"></mutation>
-    </block>
-    <block type="robControls_wait_time" id="24" inline="true" intask="true">
-      <value name="WAIT">
-        <block type="math_number" id="25" intask="true">
-          <field name="NUM">500</field>
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="ev3" xmlversion="3.0" description="" tags="">
+    <instance x="83" y="8">
+        <block type="robControls_start" id="21" intask="true" deletable="false">
+            <mutation declare="false"></mutation>
         </block>
-      </value>
+        <block type="robControls_wait_time" id="24" inline="true" intask="true">
+            <value name="WAIT">
+                <block type="math_number" id="25" intask="true">
+                    <field name="NUM">500</field>
+                </block>
+            </value>
     </block>
     <block type="robControls_wait_for" id="35" inline="false" intask="true">
       <mutation wait="12"></mutation>
