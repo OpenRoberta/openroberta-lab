@@ -50,9 +50,11 @@ case "${CMD}" in
     from-hub)     SERVER_NAME=$1; shift
                   REPO_NAME=$1; shift
                   isServerNameValid ${SERVER_NAME}
+                  question "pulling from hub STOPs the server ${SERVER_NAME} first"
                   headerMessage "pulling image for server ${SERVER_NAME} from a hub"
+                  source ${SCRIPT_HELPER}/_stop.sh
                   source ${SCRIPT_HELPER}/_fromHub.sh
-                  headerMessage "pulling the image for server ${SERVER_NAME} from a hub finished" ;;
+                  headerMessage "pulling the image for server ${SERVER_NAME} from a hub finished. YOU have to start the server!" ;;
     start)        SERVER_NAME=$1; shift
                   OPTIONAL_VERSION=$1; shift
                   source ${SCRIPT_HELPER}/_stop.sh
@@ -62,9 +64,12 @@ case "${CMD}" in
     stop)         SERVER_NAME=$1
                   source ${SCRIPT_HELPER}/_stop.sh ;;
     deploy)       SERVER_NAME=$1; shift
-                  echo "${DATE}: deploying (generating,starting) the server '${SERVER_NAME}'"
-                  ${SCRIPT_MAIN}/run.sh -q gen ${SERVER_NAME}
-                  ${SCRIPT_MAIN}/run.sh -q start ${SERVER_NAME} ;;
+                  isServerNameValid ${SERVER_NAME}
+                  headerMessage "deploying (stopping,generating,starting) the server '${SERVER_NAME}'"
+                  source ${SCRIPT_HELPER}/_stop.sh
+                  source ${SCRIPT_HELPER}/_gen.sh
+                  source ${SCRIPT_HELPER}/_start.sh
+                  headerMessage "deploying (stopping,generating,starting) the server '${SERVER_NAME}' finished" ;;
     admin)        SERVER_NAME=$1; shift
                   ADMIN_CMD=$1; shift
                   source ${SCRIPT_HELPER}/_containerAdmin.sh ;;

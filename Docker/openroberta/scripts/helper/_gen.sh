@@ -67,8 +67,17 @@ esac
     docker build --no-cache --build-arg FROM=${FROM} -f ${CONF_DIR}/y-docker-for-lab/Dockerfile -t ${IMAGE} ${SERVER_DIR_OF_ONE_SERVER}/export
     
     case "${BRANCH}" in
-        *)      MVN_VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout) # for testing, replace * later by master
-                docker tag ${IMAGE} "openroberta/server_${ARCH}:${MVN_VERSION}" ;;
+        rbTest) MVN_VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout) # for testing, replace later by master
+                IMAGE_FOR_PUSH="openroberta/server_${ARCH}:${MVN_VERSION}"
+                DOCKERRM=$(docker rmi ${IMAGE_FOR_PUSH} 2>/dev/null)
+                case "${DOCKERRM}" in
+                    '') echo "found no docker image '${IMAGE_FOR_PUSH}' to remove. That is ok." ;;
+                    * ) echo "removed docker image '${IMAGE_FOR_PUSH}'"
+                esac
+
+                docker tag ${IMAGE} ${IMAGE_FOR_PUSH}
+                # docker push ${IMAGE_FOR_PUSH}
+                echo "image ${IMAGE_FOR_PUSH} is NOT pushed, maybe activated later" ;;
         *)      ;;
     esac
     
