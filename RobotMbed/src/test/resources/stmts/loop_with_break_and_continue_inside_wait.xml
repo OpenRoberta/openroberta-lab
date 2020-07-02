@@ -6,7 +6,7 @@
         </block>
         <block type="robControls_loopForever" id="k1tN/jf%=#km;HT8/EfB" intask="true">
             <statement name="DO">
-                <block type="mbedControls_wait_for" id="Ph)BvOmjiImC9HA%bp[{" intask="true">
+                <block type="robControls_wait_for" id="Ph)BvOmjiImC9HA%bp[{" intask="true">
                     <mutation wait="1"></mutation>
                     <repetitions>
                         <value name="WAIT0">

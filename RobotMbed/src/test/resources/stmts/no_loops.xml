@@ -21,7 +21,7 @@
                 </block>
             </value>
             <statement name="DO0">
-                <block type="mbedControls_wait_for" id="MT0r2!6[QAssODz*7SPL" intask="true">
+                <block type="robControls_wait_for" id="MT0r2!6[QAssODz*7SPL" intask="true">
                     <value name="WAIT0">
                         <block type="logic_compare" id="3)N-wENd~B-=}{O_}.(," intask="true">
                             <field name="OP">EQ</field>

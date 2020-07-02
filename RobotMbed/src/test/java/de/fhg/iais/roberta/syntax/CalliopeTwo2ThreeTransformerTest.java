@@ -1,13 +1,49 @@
 package de.fhg.iais.roberta.syntax;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.junit.Assert;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
+import de.fhg.iais.roberta.blockly.generated.BlockSet;
+import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.components.Project;
+import de.fhg.iais.roberta.factory.IRobotFactory;
+import de.fhg.iais.roberta.transformer.Jaxb2ConfigurationAst;
 import de.fhg.iais.roberta.util.Util;
+import de.fhg.iais.roberta.util.jaxb.JaxbHelper;
 import de.fhg.iais.roberta.util.test.UnitTestHelper;
 import de.fhg.iais.roberta.worker.MbedTwo2ThreeTransformerWorker;
 
-public class CalliopePortTransformerTest extends CalliopeAstTest {
+public class CalliopeTwo2ThreeTransformerTest {
+
+    private static IRobotFactory testFactory;
+    private static ConfigurationAst configuration;
+
+    private static final String OLD_CONFIGURATION_XML =
+        "<block_set xmlns=\"http://de.fhg.iais.roberta.blockly\" robottype=\"calliope\" xmlversion=\"2.0\">"
+            + "    <instance x=\"138\" y=\"88\">"
+            + "        <block id=\"1\" type=\"mbedBrick_Calliope-Brick\" />"
+            + "    </instance>"
+            + "</block_set>";
+
+    @BeforeClass
+    public static void setupBefore() throws Exception {
+        List<String> pluginDefines = new ArrayList<>();
+        pluginDefines.add("calliope2017NoBlue:robot.configuration.type = old-S");
+        pluginDefines.add("calliope2017NoBlue:robot.configuration.old.toplevelblock = mbedBrick_Calliope-Brick");
+        testFactory = Util.configureRobotPlugin("calliope2017NoBlue", "", "", pluginDefines);
+        BlockSet blockSet = JaxbHelper.xml2BlockSet(OLD_CONFIGURATION_XML);
+        configuration =
+            Jaxb2ConfigurationAst
+                .blocks2OldConfig(
+                    blockSet,
+                    testFactory.getBlocklyDropdownFactory(),
+                    testFactory.optTopBlockOfOldConfiguration(),
+                    testFactory.optSensorPrefix());
+    }
 
     @Test
     public void executeTransformer_ShouldReturnTransformedCompass_WhenGivenOldCompass() {
@@ -200,7 +236,10 @@ public class CalliopePortTransformerTest extends CalliopeAstTest {
             };
 
         Project project =
-            UnitTestHelper.setupWithProgramXML(testFactory, Util.readResourceContent("/transform/old_pin_pull.xml")).setConfigurationAst(configuration).build();
+            UnitTestHelper
+                .setupWithProgramXML(testFactory, Util.readResourceContent("/transform/calliope/old_pin_pull.xml"))
+                .setConfigurationAst(configuration)
+                .build();
 
         new MbedTwo2ThreeTransformerWorker().execute(project);
         UnitTestHelper.checkAstEquality(project.getProgramAst().getTree().toString(), expectedProgramAst);
@@ -337,7 +376,7 @@ public class CalliopePortTransformerTest extends CalliopeAstTest {
 
         Project project =
             UnitTestHelper
-                .setupWithProgramXML(testFactory, Util.readResourceContent("/transform/old_write_to_pin.xml"))
+                .setupWithProgramXML(testFactory, Util.readResourceContent("/transform/calliope/old_write_to_pin.xml"))
                 .setConfigurationAst(configuration)
                 .build();
 
@@ -595,7 +634,7 @@ public class CalliopePortTransformerTest extends CalliopeAstTest {
 
         Project project =
             UnitTestHelper
-                .setupWithProgramXML(testFactory, Util.readResourceContent("/transform/old_pins_sensor.xml"))
+                .setupWithProgramXML(testFactory, Util.readResourceContent("/transform/calliope/old_pins_sensor.xml"))
                 .setConfigurationAst(configuration)
                 .build();
 
@@ -748,5 +787,19 @@ public class CalliopePortTransformerTest extends CalliopeAstTest {
         new MbedTwo2ThreeTransformerWorker().execute(project);
         UnitTestHelper.checkAstEquality(project.getProgramAst().getTree().toString(), expectedProgramAst);
         UnitTestHelper.checkAstContains(project.getConfigurationAst().getConfigurationComponentsValues().toString(), expectedToBeInConfigAst);
+    }
+
+    @Test
+    public void executeTransformer_ShouldReturnTransformedWaitFor_WhenGivenOldWaitFor() {
+        String expectedProgramAst =
+            "BlockAST[project=[[Location[x=512,y=50],MainTask[],"
+                + "WaitStmt[(repeat[WAIT,SensorExpr[GetSampleSensor[GestureSensor[NO_PORT,UP,EMPTY_SLOT]]]])]]]]";
+
+        Project project =
+            UnitTestHelper.setupWithProgramXML(testFactory, Util.readResourceContent("/transform/old_wait_for.xml")).setConfigurationAst(configuration).build();
+
+        new MbedTwo2ThreeTransformerWorker().execute(project);
+        UnitTestHelper.checkAstEquality(project.getProgramAst().getTree().toString(), expectedProgramAst);
+        Assert.assertEquals("robControls_wait_for", project.getProgramAst().getTree().get(0).get(2).getProperty().getBlockType());
     }
 }

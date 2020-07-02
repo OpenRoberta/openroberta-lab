@@ -180,13 +180,9 @@ public class RobotFactory implements IRobotFactory {
     }
 
     @Override
-    public final String getSensorPrefix() {
+    public final String optSensorPrefix() {
         String configurationType = this.pluginProperties.getStringProperty("robot.configuration.type");
-        if ( configurationType == null || configurationType.equals("new") || !configurationType.startsWith("old-") ) {
-            throw new DbcException("no or invalid property robot.configuration.type");
-        } else {
-            return configurationType.substring(4);
-        }
+        return configurationType.substring(4);
     }
 
     @Override

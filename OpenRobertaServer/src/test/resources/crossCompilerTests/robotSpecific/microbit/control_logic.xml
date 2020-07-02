@@ -309,7 +309,7 @@
                                 </value>
                             </repetitions>
                         </block>
-                        <block type="mbedControls_wait_for" id="l}.nx`CrbMXU2.eN,6?~" intask="true">
+                        <block type="robControls_wait_for" id="l}.nx`CrbMXU2.eN,6?~" intask="true">
                             <value name="WAIT0">
                                 <block type="variables_get" id="{n1,(%h/#o[wOV91s4,1" intask="true">
                                     <mutation datatype="Boolean"></mutation>

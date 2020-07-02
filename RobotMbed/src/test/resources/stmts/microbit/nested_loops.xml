@@ -23,7 +23,7 @@
                         </block>
                     </value>
                     <statement name="DO0">
-                        <block type="mbedControls_wait_for" id="Hx{*:C#hIN*rwCV^)aH+" intask="true">
+                        <block type="robControls_wait_for" id="Hx{*:C#hIN*rwCV^)aH+" intask="true">
                             <value name="WAIT0">
                                 <block type="logic_compare" id="l9|Sdy;uWR,#dCKTy8P." intask="true">
                                     <field name="OP">EQ</field>
@@ -31,9 +31,10 @@
                                         <block type="mbedSensors_getSample" id="Zp~-a7bVlkZ_Zvpc}x0;" intask="true" deletable="false" movable="false">
                                             <mutation input="KEY_PRESSED"></mutation>
                                             <field name="SENSORTYPE">KEY_PRESSED</field>
-											<field name="SENSORPORT">A</field><field name="SLOT" />
-											<data>microbit</data>
-										</block>
+                                            <field name="SENSORPORT">A</field>
+                                            <field name="SLOT" />
+                                            <data>microbit</data>
+                                        </block>
 									</value>
 									<value name="B">
 										<block type="logic_boolean" id="[[qVAvX=HsvE:xaQW7Fi"

@@ -24,6 +24,8 @@ import de.fhg.iais.roberta.syntax.action.motor.MotorStopAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
+import de.fhg.iais.roberta.syntax.lang.stmt.StmtList;
+import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.sensor.ExternalSensor;
 import de.fhg.iais.roberta.syntax.sensor.SensorMetaDataBean;
 import de.fhg.iais.roberta.syntax.sensor.generic.AccelerometerSensor;
@@ -481,6 +483,16 @@ public class MbedTwo2ThreeTransformerVisitor implements IMbedTransformerVisitor<
                     sensorGetSample.getComment(),
                     getBlocklyDropdownFactory());
         }
+    }
+
+    @Override
+    public Phrase<Void> visitWaitStmt(WaitStmt<Phrase<Void>> waitStmt) {
+        // replaces the specific and now deprecated mbedControls_wait_for with the generic robControls_wait_for
+        return WaitStmt
+            .make(
+                (StmtList<Void>) waitStmt.getStatements().modify(this),
+                modifyPropertyType(waitStmt.getProperty(), "robControls_wait_for"),
+                waitStmt.getComment());
     }
 
     private BlocklyBlockProperties modifyPropertyType(BlocklyBlockProperties oldProperty, String newType) {

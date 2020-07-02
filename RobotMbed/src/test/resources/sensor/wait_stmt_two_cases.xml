@@ -4,7 +4,7 @@
             <mutation declare="false"></mutation>
             <field name="DEBUG">TRUE</field>
         </block>
-        <block type="mbedControls_wait_for" id="B:CHfLt5][k?oWqIaJIs" intask="true">
+        <block type="robControls_wait_for" id="B:CHfLt5][k?oWqIaJIs" intask="true">
             <value name="WAIT0">
                 <block type="logic_compare" id="lCPSg(qHeiNx9fmw%FX-" intask="true">
                     <field name="OP">EQ</field>
@@ -32,7 +32,7 @@
                 </block>
             </value>
         </block>
-        <block type="mbedControls_wait_for" id="/Z~8{EZ3qp.^|1`-u=Op" intask="true">
+        <block type="robControls_wait_for" id="/Z~8{EZ3qp.^|1`-u=Op" intask="true">
             <value name="WAIT0">
                 <block type="logic_compare" id="OxTCR@|*cQO0.P3oCf7u" intask="true">
                     <field name="OP">GT</field>

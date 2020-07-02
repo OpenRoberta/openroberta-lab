@@ -434,8 +434,9 @@ public final class Project {
                         }
                         this.project.configuration = Jaxb2ConfigurationAst.blocks2NewConfig(blockSet, this.project.robotFactory.getBlocklyDropdownFactory());
                     } else { // old configuration
-                        if ( topBlock == null ) {
-                            throw new DbcException("A top block is required for an old configuration!");
+                        String sensorPrefix = this.project.robotFactory.optSensorPrefix();
+                        if ( topBlock == null || sensorPrefix == null ) {
+                            throw new DbcException("A top block and a sensor prefix are required for an old configuration!");
                         }
                         this.project.configuration =
                             Jaxb2ConfigurationAst
@@ -443,7 +444,7 @@ public final class Project {
                                     blockSet,
                                     this.project.robotFactory.getBlocklyDropdownFactory(),
                                     topBlock,
-                                    this.project.robotFactory.getSensorPrefix());
+                                    sensorPrefix);
                     }
                     this.project.configuration.setRobotName(this.project.getRobot()); // TODO remove dependencies on robot name to remove this
                 } catch ( JAXBException e ) {

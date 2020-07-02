@@ -68,8 +68,18 @@ public interface IRobotFactory {
 
     String getConfigurationType();
 
-    String getSensorPrefix();
+    /**
+     * Returns the sensor prefix if the robot has on an old configuration, null otherwise.
+     * 
+     * @return the sensor prefix, may be null
+     */
+    String optSensorPrefix();
 
+    /**
+     * Returns the top block if the robot has on an old configuration, null otherwise.
+     * 
+     * @return the top block, may be null
+     */
     String optTopBlockOfOldConfiguration();
 
     String getGroup();

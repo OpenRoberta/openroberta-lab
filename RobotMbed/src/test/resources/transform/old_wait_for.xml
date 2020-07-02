@@ -1,0 +1,18 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="calliope" xmlversion="2.0" description="" tags="">
+    <instance x="512" y="50">
+        <block type="robControls_start" id="p)=G0rFB`czj0psUqCD[" intask="true" deletable="false">
+            <mutation declare="false"></mutation>
+            <field name="DEBUG"></field>
+        </block>
+        <block type="mbedControls_wait_for" id="[.~OF@}_`!=Q7ob14fQw" intask="true">
+            <value name="WAIT0">
+                <block type="robSensors_getSample" id="FH6WIH:c=}#V9n!wl.4F" intask="true">
+                    <mutation input="GESTURE_UP"></mutation>
+                    <field name="SENSORTYPE">GESTURE_UP</field>
+                    <field name="SENSORPORT"></field>
+                    <field name="SLOT"></field>
+                </block>
+            </value>
+        </block>
+    </instance>
+</block_set>
