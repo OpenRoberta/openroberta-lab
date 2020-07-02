@@ -62,6 +62,10 @@ robots:
         template: ardu
         dir: ardu
         suffix: ".ino"
+    unowifirev2:
+        template: ardu
+        dir: unowifirev2
+        suffix: ".ino"
     wedo:
         template: wedo
         dir: wedo
