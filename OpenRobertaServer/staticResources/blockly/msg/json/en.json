@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2020-07-02 16:19:07.018367",
+		"lastupdated": "2020-07-03 15:49:53.770077",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -1611,7 +1611,7 @@
 	"SOURCE_CODE_EDITOR_CLOSE_CONFIRMATION": "All your changes will be lost!",
 	"CLEAR": "clear",
 	"ACCELEROMETER_TOOLTIP": "Represents an accelerometer.",
-	"POPUP_CREATE_BOOKMARK": "Create a bookmark now to save your robot selection!",
+	"POPUP_CREATE_BOOKMARK": "Create a browser bookmark now to save your robot selection!",
 	"POPUP_BACKGROUND_STORAGE": "The Open Roberta Lab can automatically load your simulation background on your next visits. For this purpose, we will save data in the Local Storage on your computer. <a href='https://www.roberta-home.de/en/privacy-policy-open-roberta-lab/' target='_blank'>More information in our privacy policy.</a>",
 	"MOTIONKIT": "MotionKit",
 	"MOTIONKIT_SINGLE_TOOLTIP": "Sets the selected MotionKit motor/motors to the specified direction.",
