@@ -11,8 +11,10 @@
         "paths": {
             "interpreter.*": ["*"]
         },
-		"noUnusedParameters": true
+		"noUnusedParameters": true,
+		"allowJs": true
     },
+    "include": ["ts/**/*"],
     "exclude": [
         "**/node_modules",
         "**/interpreter.runStackMachineJson.ts"
