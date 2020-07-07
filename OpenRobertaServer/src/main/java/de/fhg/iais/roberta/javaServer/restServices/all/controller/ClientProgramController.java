@@ -623,7 +623,17 @@ public class ClientProgramController {
             Project project = new Project.Builder().setFactory(robotFactory).setProgramXml(programText).setConfigurationXml(configText).build();
             ProjectService.executeWorkflow("transform", project);
             if ( configText != null ) {
-                return Pair.of(project.getAnnotatedProgramAsXml(), project.getAnnotatedConfigurationAsXml());
+                if ( project.getRobotFactory().getConfigurationType().equals("new") ) {
+                    return Pair.of(project.getAnnotatedProgramAsXml(), project.getAnnotatedConfigurationAsXml());
+                } else {
+                    // old style configurations do not implement a correct backtransformation, return the input instead
+                    // however the version needs to be updated anyway
+                    // TODO replace all old configurations with new ones
+                    if ( configText.contains("xmlversion=\"2.0\"") ) {
+                        configText = configText.replace("xmlversion=\"2.0\"", "xmlversion=\"3.0\"");
+                    }
+                    return Pair.of(project.getAnnotatedProgramAsXml(), configText);
+                }
             } else {
                 return Pair.of(project.getAnnotatedProgramAsXml(), null);
             }
