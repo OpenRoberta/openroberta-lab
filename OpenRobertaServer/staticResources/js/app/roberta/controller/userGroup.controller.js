@@ -87,7 +87,7 @@ define([ 'exports', 'log', 'message', 'comm', 'util', 'userGroup.model', 'guiSta
                     return value.length || 0;
                 }
             }, {
-                title : "<span lkey='Blockly.Msg.DATATABLE_SHARED_PROGRAMS'>" + (Blockly.Msg.DATATABLE_MEMBERS || "Geteilte Programme") + "</span>",
+                title : "<span lkey='Blockly.Msg.DATATABLE_SHARED_PROGRAMS'>" + (Blockly.Msg.DATATABLE_SHARED_PROGRAMS || "Geteilte Programme") + "</span>",
                 field: 'programs',
                 sortable : false,
                 formatter : function(value, row, index) {

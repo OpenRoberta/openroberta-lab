@@ -10,6 +10,7 @@ import de.fhg.iais.roberta.persistence.bo.Role;
 import de.fhg.iais.roberta.persistence.bo.User;
 import de.fhg.iais.roberta.persistence.bo.UserGroup;
 import de.fhg.iais.roberta.persistence.dao.UserDao;
+import de.fhg.iais.roberta.persistence.dao.UserGroupDao;
 import de.fhg.iais.roberta.persistence.util.DbSession;
 import de.fhg.iais.roberta.persistence.util.HttpSessionState;
 import de.fhg.iais.roberta.util.Key;
@@ -258,8 +259,7 @@ public class UserProcessor extends AbstractProcessor {
     }
 
     /**
-     * Deletes a user.
-     * Is not used to delete user group members.
+     * Deletes a user. Does not work with user group members
      *
      * @param account
      * @param password
@@ -267,19 +267,27 @@ public class UserProcessor extends AbstractProcessor {
      */
     public void deleteUser(String account, String password) throws Exception {
         UserDao userDao = new UserDao(this.dbSession);
+        UserGroupDao userGroupDao = new UserGroupDao(this.dbSession);
         userDao.lockTable();
         User user = userDao.loadUser(null, account);
         Map<String, String> processorParameters = new HashMap<>();
         processorParameters.put("ACCOUNT", account);
-        if ( user != null && user.isPasswordCorrect(password) ) {
-            int rowCount = userDao.deleteUser(user);
-            if ( rowCount > 0 ) {
-                setStatus(ProcessorStatus.SUCCEEDED, Key.USER_DELETE_SUCCESS, new HashMap<>());
-            } else {
-                setStatus(ProcessorStatus.FAILED, Key.USER_DELETE_ERROR_NOT_DELETED_IN_DB, processorParameters);
-            }
-        } else {
+
+        if ( user == null || !user.isPasswordCorrect(password) || user.getUserGroup() != null ) {
             setStatus(ProcessorStatus.FAILED, Key.USER_DELETE_ERROR_ID_NOT_FOUND, processorParameters);
+            return;
+        }
+
+        if ( userGroupDao.getNumberOfGroupsOfOwner(user) > 0 ) {
+            setStatus(ProcessorStatus.FAILED, Key.USER_DELETE_ERROR_HAS_GROUPS, new HashMap<>());
+            return;
+        }
+
+        int rowCount = userDao.deleteUser(user);
+        if ( rowCount > 0 ) {
+            setStatus(ProcessorStatus.SUCCEEDED, Key.USER_DELETE_SUCCESS, new HashMap<>());
+        } else {
+            setStatus(ProcessorStatus.FAILED, Key.USER_DELETE_ERROR_NOT_DELETED_IN_DB, processorParameters);
         }
     }
 

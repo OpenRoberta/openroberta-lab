@@ -262,6 +262,15 @@ public class ClientProgramController {
             } else {
                 int userId = httpSessionState.getUserId();
                 JSONArray programInfo = programProcessor.getProgramInfo(userId, robot, userId);
+
+                if ( !programProcessor.succeeded() ) {
+                    if ( programProcessor.getMessage().equals(Key.PROGRAM_GET_ALL_ERROR_USER_NOT_FOUND) ) {
+                        return UtilForREST.makeBaseResponseForError(Key.USER_ERROR_NOT_LOGGED_IN, httpSessionState, null);
+                    } else {
+                        return UtilForREST.makeBaseResponseForError(programProcessor.getMessage(), httpSessionState, null);
+                    }
+                }
+
                 response.setProgramNames(programInfo);
                 UtilForREST.addResultInfo(response, programProcessor);
                 return UtilForREST.responseWithFrontendInfo(response, httpSessionState, null);

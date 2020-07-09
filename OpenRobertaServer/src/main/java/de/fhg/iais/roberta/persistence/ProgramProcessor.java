@@ -240,6 +240,11 @@ public class ProgramProcessor extends AbstractProcessor {
         User owner = userDao.get(ownerId);
         Robot robot = robotDao.loadRobot(robotName);
 
+        if ( owner == null ) {
+            setStatus(ProcessorStatus.FAILED, Key.PROGRAM_GET_ALL_ERROR_USER_NOT_FOUND, new HashMap<>());
+            return null;
+        }
+
         // First we obtain all programs owned by the user
         List<Program> programs = programDao.loadAll(owner, robot);
 
