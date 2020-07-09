@@ -1,7 +1,7 @@
-define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socket.controller', 'user.controller', 'user.model', 'guiState.controller',
+define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socket.controller', 'user.controller', 'user.model', 'userGroup.controller' ,'guiState.controller',
         'program.controller', 'program.model', 'multSim.controller', 'progRun.controller', 'configuration.controller', 'import.controller', 'enjoyHint',
         'tour.controller', 'simulation.simulation', 'progList.model', 'jquery', 'blocks', 'slick' ], function(exports, LOG, UTIL, MSG, COMM, ROBOT_C, SOCKET_C,
-        USER_C, USER, GUISTATE_C, PROGRAM_C, PROGRAM_M, MULT_SIM, RUN_C, CONFIGURATION_C, IMPORT_C, EnjoyHint, TOUR_C, SIM, PROGLIST, $, Blockly) {
+        USER_C, USER, USERGROUP_C, GUISTATE_C, PROGRAM_C, PROGRAM_M, MULT_SIM, RUN_C, CONFIGURATION_C, IMPORT_C, EnjoyHint, TOUR_C, SIM, PROGLIST, $, Blockly) {
 
     var n = 0;
 
@@ -481,8 +481,14 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
             case 'menuLogin':
                 USER_C.showLoginForm();
                 break;
+            case 'menuUserGroupLogin':	
+                USER_C.showUserGroupLoginForm();	
+                break;
             case 'menuLogout':
                 USER_C.logout();
+                break;
+            case 'menuGroupPanel':	
+                USERGROUP_C.showPanel();	
                 break;
             case 'menuChangeUser':
                 USER_C.showUserDataForm();
