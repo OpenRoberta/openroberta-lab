@@ -20,6 +20,8 @@ public class LoginResponse extends BaseResponse {
     protected String userName;
     protected boolean isAccountActivated;
     protected boolean isAccountActivatedDefined = false;
+    protected String userGroupOwner;
+    protected String userGroupName;
     
     /**
      * the response for the /login REST request
@@ -43,7 +45,7 @@ public class LoginResponse extends BaseResponse {
     /**
      * the response for the /login REST request
      */
-    public static LoginResponse makeFromProperties(String cmd,String rc,String message,String cause,JSONObject parameters,String initToken,long serverTime,String serverVersion,long robotWait,String robotBattery,String robotName,String robotVersion,String robotFirmwareName,JSONObject robotSensorvalues,int robotNepoexitvalue,String robotState,int userId,String userRole,String userAccountName,String userName,boolean isAccountActivated) {
+    public static LoginResponse makeFromProperties(String cmd,String rc,String message,String cause,JSONObject parameters,String initToken,long serverTime,String serverVersion,long robotWait,String robotBattery,String robotName,String robotVersion,String robotFirmwareName,JSONObject robotSensorvalues,int robotNepoexitvalue,String robotState,int userId,String userRole,String userAccountName,String userName,boolean isAccountActivated,String userGroupOwner,String userGroupName) {
         LoginResponse entity = new LoginResponse();
         entity.setCmd(cmd);
         entity.setRc(rc);
@@ -66,6 +68,8 @@ public class LoginResponse extends BaseResponse {
         entity.setUserAccountName(userAccountName);
         entity.setUserName(userName);
         entity.setIsAccountActivated(isAccountActivated);
+        entity.setUserGroupOwner(userGroupOwner);
+        entity.setUserGroupName(userGroupName);
         entity.immutable();
         return entity;
     }
@@ -128,6 +132,10 @@ public class LoginResponse extends BaseResponse {
                     setUserName(jsonO.optString(key));
                 } else if ("isAccountActivated".equals(key)) {
                     setIsAccountActivated(jsonO.getBoolean(key));
+                } else if ("userGroupOwner".equals(key)) {
+                    setUserGroupOwner(jsonO.getString(key));
+                } else if ("userGroupName".equals(key)) {
+                    setUserGroupName(jsonO.getString(key));
                 } else {
                     throw new RuntimeException("JSON parse error. Found invalid key: " + key + " in " + jsonO);
                 }
@@ -183,6 +191,12 @@ public class LoginResponse extends BaseResponse {
         }
         if ( !isAccountActivatedDefined) {
             _message = "required property isAccountActivated of LoginResponse-object is not set: " + toString();
+        }
+        if ( userGroupOwner == null) {
+            _message = "required property userGroupOwner of LoginResponse-object is not set: " + toString();
+        }
+        if ( userGroupName == null) {
+            _message = "required property userGroupName of LoginResponse-object is not set: " + toString();
         }
         if ( _message != null ) {
             this.immutable = false;
@@ -308,6 +322,48 @@ public class LoginResponse extends BaseResponse {
     }
     
     /**
+     * GET userGroupOwner. Object must be immutable. Never return null or an undefined/default value.
+     */
+    public String getUserGroupOwner() {
+        if (!this.immutable) {
+            throw new RuntimeException("no userGroupOwner from an object under construction: " + toString());
+        }
+        return this.userGroupOwner;
+    }
+    
+    /**
+     * SET userGroupOwner. Object must be mutable.
+     */
+    public LoginResponse setUserGroupOwner(String userGroupOwner) {
+        if (this.immutable) {
+            throw new RuntimeException("userGroupOwner assigned to an immutable object: " + toString());
+        }
+        this.userGroupOwner = userGroupOwner;
+        return this;
+    }
+    
+    /**
+     * GET userGroupName. Object must be immutable. Never return null or an undefined/default value.
+     */
+    public String getUserGroupName() {
+        if (!this.immutable) {
+            throw new RuntimeException("no userGroupName from an object under construction: " + toString());
+        }
+        return this.userGroupName;
+    }
+    
+    /**
+     * SET userGroupName. Object must be mutable.
+     */
+    public LoginResponse setUserGroupName(String userGroupName) {
+        if (this.immutable) {
+            throw new RuntimeException("userGroupName assigned to an immutable object: " + toString());
+        }
+        this.userGroupName = userGroupName;
+        return this;
+    }
+    
+    /**
      * generates a JSON-object from an immutable bean.<br>
      * Throws a runtime exception if inconsistencies are detected.
      */
@@ -365,6 +421,8 @@ public class LoginResponse extends BaseResponse {
                 jsonO.put("userName", this.userName);
             }
             jsonO.put("isAccountActivated", this.isAccountActivated);
+            jsonO.put("userGroupOwner", this.userGroupOwner);
+            jsonO.put("userGroupName", this.userGroupName);
         } catch (JSONException e) {
             throw new RuntimeException("JSON unparse error when unparsing: " + this, e);
         }
@@ -373,7 +431,7 @@ public class LoginResponse extends BaseResponse {
     
     @Override
     public String toString() {
-        return "LoginResponse [immutable=" + this.immutable + ", cmd=" + this.cmd + ", rc=" + this.rc + ", message=" + this.message + ", cause=" + this.cause + ", parameters=" + this.parameters + ", initToken=" + this.initToken + ", serverTime=" + this.serverTime + ", serverVersion=" + this.serverVersion + ", robotWait=" + this.robotWait + ", robotBattery=" + this.robotBattery + ", robotName=" + this.robotName + ", robotVersion=" + this.robotVersion + ", robotFirmwareName=" + this.robotFirmwareName + ", robotSensorvalues=" + this.robotSensorvalues + ", robotNepoexitvalue=" + this.robotNepoexitvalue + ", robotState=" + this.robotState + ", userId=" + this.userId + ", userRole=" + this.userRole + ", userAccountName=" + this.userAccountName + ", userName=" + this.userName + ", isAccountActivated=" + this.isAccountActivated + " ]";
+        return "LoginResponse [immutable=" + this.immutable + ", cmd=" + this.cmd + ", rc=" + this.rc + ", message=" + this.message + ", cause=" + this.cause + ", parameters=" + this.parameters + ", initToken=" + this.initToken + ", serverTime=" + this.serverTime + ", serverVersion=" + this.serverVersion + ", robotWait=" + this.robotWait + ", robotBattery=" + this.robotBattery + ", robotName=" + this.robotName + ", robotVersion=" + this.robotVersion + ", robotFirmwareName=" + this.robotFirmwareName + ", robotSensorvalues=" + this.robotSensorvalues + ", robotNepoexitvalue=" + this.robotNepoexitvalue + ", robotState=" + this.robotState + ", userId=" + this.userId + ", userRole=" + this.userRole + ", userAccountName=" + this.userAccountName + ", userName=" + this.userName + ", isAccountActivated=" + this.isAccountActivated + ", userGroupOwner=" + this.userGroupOwner + ", userGroupName=" + this.userGroupName + " ]";
     }
     @Override
     public int hashCode() {

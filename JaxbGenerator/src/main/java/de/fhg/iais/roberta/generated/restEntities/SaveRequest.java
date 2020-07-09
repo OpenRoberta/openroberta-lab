@@ -18,7 +18,7 @@ public class SaveRequest extends BaseRequest {
     protected String progXML;
     protected String configName;
     protected String confXML;
-    protected Boolean shared;
+    protected String ownerAccount;
     
     /**
      * the request description for the /save REST request
@@ -42,7 +42,7 @@ public class SaveRequest extends BaseRequest {
     /**
      * the request description for the /save REST request
      */
-    public static SaveRequest makeFromProperties(String cmd,Long timestamp,String programName,String progXML,String configName,String confXML,Boolean shared) {
+    public static SaveRequest makeFromProperties(String cmd,Long timestamp,String programName,String progXML,String configName,String confXML,String ownerAccount) {
         SaveRequest entity = new SaveRequest();
         entity.setCmd(cmd);
         entity.setTimestamp(timestamp);
@@ -50,7 +50,7 @@ public class SaveRequest extends BaseRequest {
         entity.setProgXML(progXML);
         entity.setConfigName(configName);
         entity.setConfXML(confXML);
-        entity.setShared(shared);
+        entity.setOwnerAccount(ownerAccount);
         entity.immutable();
         return entity;
     }
@@ -83,8 +83,8 @@ public class SaveRequest extends BaseRequest {
                     setConfigName(jsonO.optString(key));
                 } else if ("confXML".equals(key)) {
                     setConfXML(jsonO.optString(key));
-                } else if ("shared".equals(key)) {
-                    setShared(jsonO.optBoolean(key));
+                } else if ("ownerAccount".equals(key)) {
+                    setOwnerAccount(jsonO.optString(key));
                 } else {
                     throw new RuntimeException("JSON parse error. Found invalid key: " + key + " in " + jsonO);
                 }
@@ -263,13 +263,13 @@ public class SaveRequest extends BaseRequest {
     }
     
     /**
-     * GET shared. Object must be immutable. Never return null or an undefined/default value.
+     * GET ownerAccount. Object must be immutable. Never return null or an undefined/default value.
      */
-    public Boolean getShared() {
+    public String getOwnerAccount() {
         if (!this.immutable) {
-            throw new RuntimeException("no shared from an object under construction: " + toString());
+            throw new RuntimeException("no ownerAccount from an object under construction: " + toString());
         }
-        return this.shared;
+        return this.ownerAccount;
     }
     
     /**
@@ -277,18 +277,18 @@ public class SaveRequest extends BaseRequest {
      *
      * @return true if the property is defined (has been set)
      */
-    public boolean sharedDefined() {
-        return this.shared != null;
+    public boolean ownerAccountDefined() {
+        return this.ownerAccount != null;
     }
     
     /**
-     * SET shared. Object must be mutable.
+     * SET ownerAccount. Object must be mutable.
      */
-    public SaveRequest setShared(Boolean shared) {
+    public SaveRequest setOwnerAccount(String ownerAccount) {
         if (this.immutable) {
-            throw new RuntimeException("shared assigned to an immutable object: " + toString());
+            throw new RuntimeException("ownerAccount assigned to an immutable object: " + toString());
         }
-        this.shared = shared;
+        this.ownerAccount = ownerAccount;
         return this;
     }
     
@@ -317,8 +317,8 @@ public class SaveRequest extends BaseRequest {
             if (this.confXML != null) {
                 jsonO.put("confXML", this.confXML);
             }
-            if (this.shared != null) {
-                jsonO.put("shared", this.shared);
+            if (this.ownerAccount != null) {
+                jsonO.put("ownerAccount", this.ownerAccount);
             }
         } catch (JSONException e) {
             throw new RuntimeException("JSON unparse error when unparsing: " + this, e);
@@ -328,7 +328,7 @@ public class SaveRequest extends BaseRequest {
     
     @Override
     public String toString() {
-        return "SaveRequest [immutable=" + this.immutable + ", cmd=" + this.cmd + ", timestamp=" + this.timestamp + ", programName=" + this.programName + ", progXML=" + this.progXML + ", configName=" + this.configName + ", confXML=" + this.confXML + ", shared=" + this.shared + " ]";
+        return "SaveRequest [immutable=" + this.immutable + ", cmd=" + this.cmd + ", timestamp=" + this.timestamp + ", programName=" + this.programName + ", progXML=" + this.progXML + ", configName=" + this.configName + ", confXML=" + this.confXML + ", ownerAccount=" + this.ownerAccount + " ]";
     }
     @Override
     public int hashCode() {

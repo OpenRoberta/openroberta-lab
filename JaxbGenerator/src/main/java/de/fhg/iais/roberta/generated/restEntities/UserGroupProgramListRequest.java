@@ -8,25 +8,24 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
- * the request description for the /share REST request<br><br>
+ * the request description for the /program/userGroupMembers/names REST request, response is: ListingNamesResponse<br><br>
  * Version: 1<br>
  * Datum: 2020-06-15
  */
-public class ShareRequest extends BaseRequest {
-    protected String programName;
-    protected JSONObject shareData;
+public class UserGroupProgramListRequest extends BaseRequest {
+    protected String groupName;
     
     /**
-     * the request description for the /share REST request
+     * the request description for the /program/userGroupMembers/names REST request, response is: ListingNamesResponse
      */
-    public static ShareRequest make() {
-        return new ShareRequest();
+    public static UserGroupProgramListRequest make() {
+        return new UserGroupProgramListRequest();
     }
     
     /**
-     * the request description for the /share REST request
+     * the request description for the /program/userGroupMembers/names REST request, response is: ListingNamesResponse
      */
-    public static ShareRequest makeFromString(String jsonS) {
+    public static UserGroupProgramListRequest makeFromString(String jsonS) {
         try {
             JSONObject jsonO = new JSONObject(jsonS);
             return make(jsonO);
@@ -36,21 +35,20 @@ public class ShareRequest extends BaseRequest {
     }
     
     /**
-     * the request description for the /share REST request
+     * the request description for the /program/userGroupMembers/names REST request, response is: ListingNamesResponse
      */
-    public static ShareRequest makeFromProperties(String cmd,String programName,JSONObject shareData) {
-        ShareRequest entity = new ShareRequest();
+    public static UserGroupProgramListRequest makeFromProperties(String cmd,String groupName) {
+        UserGroupProgramListRequest entity = new UserGroupProgramListRequest();
         entity.setCmd(cmd);
-        entity.setProgramName(programName);
-        entity.setShareData(shareData);
+        entity.setGroupName(groupName);
         entity.immutable();
         return entity;
     }
     
     /**
-     * the request description for the /share REST request
+     * the request description for the /program/userGroupMembers/names REST request, response is: ListingNamesResponse
      */
-    public static ShareRequest make(JSONObject jsonO) {
+    public static UserGroupProgramListRequest make(JSONObject jsonO) {
         return make().merge(jsonO).immutable();
     }
     
@@ -59,16 +57,14 @@ public class ShareRequest extends BaseRequest {
      * The keys of the JSON-Object must be valid. The bean remains "under construction".<br>
      * Throws a runtime exception if inconsistencies are detected.
      */
-    public ShareRequest merge(JSONObject jsonO) {
+    public UserGroupProgramListRequest merge(JSONObject jsonO) {
         try {
             for (String key : JSONObject.getNames(jsonO)) {
                 if ("_version".equals(key)) {
                 } else if ("cmd".equals(key)) {
                     setCmd(jsonO.optString(key));
-                } else if ("programName".equals(key)) {
-                    setProgramName(jsonO.getString(key));
-                } else if ("shareData".equals(key)) {
-                    setShareData(jsonO.getJSONObject(key));
+                } else if ("groupName".equals(key)) {
+                    setGroupName(jsonO.getString(key));
                 } else {
                     throw new RuntimeException("JSON parse error. Found invalid key: " + key + " in " + jsonO);
                 }
@@ -84,7 +80,7 @@ public class ShareRequest extends BaseRequest {
      * Checks whether all required fields are set. All lists are made immutable.<br>
      * Throws a runtime exception if inconsistencies are detected.
      */
-    public ShareRequest immutable() {
+    public UserGroupProgramListRequest immutable() {
         if (this.immutable) {
             return this;
         }
@@ -96,16 +92,13 @@ public class ShareRequest extends BaseRequest {
      * Checks whether all required fields are set.<br>
      * Throws a runtime exception if inconsistencies are detected.
      */
-    private ShareRequest validate() {
+    private UserGroupProgramListRequest validate() {
         String _message = null;
         if ( !this.immutable ) {
-            _message = "ShareRequest-object is already immutable: " + toString();
+            _message = "UserGroupProgramListRequest-object is already immutable: " + toString();
         }
-        if ( programName == null) {
-            _message = "required property programName of ShareRequest-object is not set: " + toString();
-        }
-        if ( shareData == null) {
-            _message = "required property shareData of ShareRequest-object is not set: " + toString();
+        if ( groupName == null) {
+            _message = "required property groupName of UserGroupProgramListRequest-object is not set: " + toString();
         }
         if ( _message != null ) {
             this.immutable = false;
@@ -115,44 +108,23 @@ public class ShareRequest extends BaseRequest {
     }
     
     /**
-     * GET programName. Object must be immutable. Never return null or an undefined/default value.
+     * GET groupName. Object must be immutable. Never return null or an undefined/default value.
      */
-    public String getProgramName() {
+    public String getGroupName() {
         if (!this.immutable) {
-            throw new RuntimeException("no programName from an object under construction: " + toString());
+            throw new RuntimeException("no groupName from an object under construction: " + toString());
         }
-        return this.programName;
+        return this.groupName;
     }
     
     /**
-     * SET programName. Object must be mutable.
+     * SET groupName. Object must be mutable.
      */
-    public ShareRequest setProgramName(String programName) {
+    public UserGroupProgramListRequest setGroupName(String groupName) {
         if (this.immutable) {
-            throw new RuntimeException("programName assigned to an immutable object: " + toString());
+            throw new RuntimeException("groupName assigned to an immutable object: " + toString());
         }
-        this.programName = programName;
-        return this;
-    }
-    
-    /**
-     * GET shareData. Object must be immutable. Never return null or an undefined/default value.
-     */
-    public JSONObject getShareData() {
-        if (!this.immutable) {
-            throw new RuntimeException("no shareData from an object under construction: " + toString());
-        }
-        return this.shareData;
-    }
-    
-    /**
-     * SET shareData. Object must be mutable.
-     */
-    public ShareRequest setShareData(JSONObject shareData) {
-        if (this.immutable) {
-            throw new RuntimeException("shareData assigned to an immutable object: " + toString());
-        }
-        this.shareData = shareData;
+        this.groupName = groupName;
         return this;
     }
     
@@ -170,8 +142,7 @@ public class ShareRequest extends BaseRequest {
             if (this.cmd != null) {
                 jsonO.put("cmd", this.cmd);
             }
-            jsonO.put("programName", this.programName);
-            jsonO.put("shareData", this.shareData);
+            jsonO.put("groupName", this.groupName);
         } catch (JSONException e) {
             throw new RuntimeException("JSON unparse error when unparsing: " + this, e);
         }
@@ -180,7 +151,7 @@ public class ShareRequest extends BaseRequest {
     
     @Override
     public String toString() {
-        return "ShareRequest [immutable=" + this.immutable + ", cmd=" + this.cmd + ", programName=" + this.programName + ", shareData=" + this.shareData + " ]";
+        return "UserGroupProgramListRequest [immutable=" + this.immutable + ", cmd=" + this.cmd + ", groupName=" + this.groupName + " ]";
     }
     @Override
     public int hashCode() {

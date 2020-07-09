@@ -49,7 +49,7 @@
         { "name": "robot.sensorvalues", "type": "JSONObject", "description": "map with sensor values", "required": false },
         { "name": "robot.nepoexitvalue", "type": "int", "description": "exit value if robot program has terminated", "required": false },
         { "name": "robot.state", "type": "String", "description": "state: busy, disconnected or wait", "required": false }
-	    ],
+	    ]
     },
     {
       "name": "InitResponse",
@@ -82,7 +82,7 @@
         { "name": "progXML", "type": "String" },
         { "name": "configName", "type": "String", "required": false },
         { "name": "confXML", "type": "String", "required": false },
-        { "name": "shared", "type": "Boolean", "required": false }
+        { "name": "ownerAccount", "type": "String", "required": false }
       ]
     },
     {
@@ -166,8 +166,15 @@
       "description": "the request description for the /share REST request",
       "properties": [
         { "name": "programName", "type": "String" },
-        { "name": "userToShare", "type": "String" },
-        { "name": "right", "type": "String" }
+        { "name": "shareData", "type": "JSONObject" }
+      ]
+    },
+    {
+      "name": "ShareResponse",
+      "extends": "BaseResponse",
+      "description": "the response for the /share request",
+      "properties": [
+         { "name": "sharedWith", "type": "JSONArray", "description": "listing of the share objects for a given program" }
       ]
     },
     {
@@ -195,7 +202,7 @@
     {
 	    "name": "EntityResponse",
 	    "extends": "BaseResponse",
-      "description": "the response for the /entity request",
+      "description": "the response for the /program/entity request",
       "properties": [
          { "name": "program", "type": "JSONArray", "description": "program description for table view" }
 	    ]
@@ -203,7 +210,7 @@
     {
 	    "name": "ListingNamesResponse",
 	    "extends": "BaseResponse",
-      "description": "the response for the /listing/names request",
+      "description": "the response for the /program/listing/names request",
       "properties": [
          { "name": "programNames", "type": "JSONArray", "description": "listing of the names of the programs of a user (maybe the gallery) for the robot selected" }
 	    ]
@@ -211,7 +218,7 @@
     {
       "name": "DeleteRequest",
       "extends": "BaseRequest",
-    	"description": "the request description for the /delete REST request",
+    	"description": "the request description for the /program/delete REST request",
       "properties": [
         { "name": "programName", "type": "String" },
         { "name": "author", "type": "String" }
@@ -268,7 +275,7 @@
       "description": "the request description for the /saveC and /saveAsC REST request",
       "properties": [
         { "name": "name", "type": "String" },
-        { "name": "configuration", "type": "String" },
+        { "name": "configuration", "type": "String" }
       ]
     },
     {
@@ -277,7 +284,7 @@
     	"description": "the request description for the /loadC REST request",
       "properties": [
         { "name": "name", "type": "String" },
-        { "name": "owner", "type": "String", "required": false },
+        { "name": "owner", "type": "String", "required": false }
       ]
     },
     {
@@ -306,6 +313,8 @@
       "properties": [
         { "name": "accountName", "type": "String" },
         { "name": "password", "type": "String" },
+        { "name": "userGroupOwner", "type": "String", "required": false },
+        { "name": "userGroupName", "type": "String", "required": false }
       ]
     },
     {
@@ -317,7 +326,9 @@
         { "name": "userRole", "type": "String", "description": "the role (toString() of enum Role)" },
         { "name": "userAccountName", "type": "String", "description": "the account name" },
         { "name": "userName", "type": "String", "description": "the user name", "required": false },
-        { "name": "isAccountActivated", "type": "boolean", "description": "is account activated?" }
+        { "name": "isAccountActivated", "type": "boolean", "description": "is account activated?" },
+        { "name": "userGroupOwner", "type": "String" },
+        { "name": "userGroupName", "type": "String" }
       ]
     },
     {
@@ -509,6 +520,64 @@
     	"description": "the response for the /toolbox REST request",
       "properties": [
         { "name": "data", "type": "String" }
+      ]
+    },
+    {
+      "name": "UserGroupProgramListRequest",
+      "extends": "BaseRequest",
+      "description": "the request description for the /program/userGroupMembers/names REST request, response is: ListingNamesResponse",
+      "properties": [
+        { "name": "groupName", "type": "String" }
+      ]
+    },
+    {
+      "name": "UserGroupRequest",
+      "extends": "BaseRequest",
+      "description": "the request description for the /userGroup/getUserGroup REST request, returns UserGroupResponse",
+      "properties": [
+        { "name": "groupName", "type": "String" }
+      ]
+    },
+    {
+      "name": "UserGroupResponse",
+      "extends": "BaseResponse",
+    	"description": "the response for the /userGroup/getUserGroup REST request",
+      "properties": [
+        { "name": "userGroup", "type": "JSONObject" }
+      ]
+    },
+    {
+      "name": "UserGroupListResponse",
+      "extends": "BaseResponse",
+    	"description": "the response for the /userGroup/getUserGroupList REST request",
+      "properties": [
+        { "name": "userGroups", "type": "JSONArray" }
+      ]
+    },
+    {
+      "name": "ChangeUserGroupRequest",
+      "extends": "BaseRequest",
+      "description": "the request description for the /userGroup/createUserGroup and /userGroup/addGroupMembers REST request, returns UserGroupResponse",
+      "properties": [
+        { "name": "groupName", "type": "String" },
+        { "name": "groupMemberCount", "type": "int" }
+      ]
+    },
+    {
+      "name": "UserGroupsRequest",
+      "extends": "BaseRequest",
+      "description": "the request description for the /userGroup/deleteUserGroups REST request",
+      "properties": [
+        { "name": "groupNames", "type": "String[]" }
+      ]
+    },
+    {
+      "name": "UserGroupMembersRequest",
+      "extends": "BaseRequest",
+      "description": "the request description for the /userGroup/deleteGroupMembers and /userGroup/setUserGroupMembersDefaultPasswords REST request",
+      "properties": [
+        { "name": "groupName", "type": "String" },
+        { "name": "groupMemberAccounts", "type": "String[]" }
       ]
     }
   ]

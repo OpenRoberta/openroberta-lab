@@ -9,24 +9,24 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
- * the response for the /program/listing/names request<br><br>
+ * the response for the /share request<br><br>
  * Version: 1<br>
  * Datum: 2020-06-15
  */
-public class ListingNamesResponse extends BaseResponse {
-    protected JSONArray programNames;
+public class ShareResponse extends BaseResponse {
+    protected JSONArray sharedWith;
     
     /**
-     * the response for the /program/listing/names request
+     * the response for the /share request
      */
-    public static ListingNamesResponse make() {
-        return new ListingNamesResponse();
+    public static ShareResponse make() {
+        return new ShareResponse();
     }
     
     /**
-     * the response for the /program/listing/names request
+     * the response for the /share request
      */
-    public static ListingNamesResponse makeFromString(String jsonS) {
+    public static ShareResponse makeFromString(String jsonS) {
         try {
             JSONObject jsonO = new JSONObject(jsonS);
             return make(jsonO);
@@ -36,10 +36,10 @@ public class ListingNamesResponse extends BaseResponse {
     }
     
     /**
-     * the response for the /program/listing/names request
+     * the response for the /share request
      */
-    public static ListingNamesResponse makeFromProperties(String cmd,String rc,String message,String cause,JSONObject parameters,String initToken,long serverTime,String serverVersion,long robotWait,String robotBattery,String robotName,String robotVersion,String robotFirmwareName,JSONObject robotSensorvalues,int robotNepoexitvalue,String robotState,JSONArray programNames) {
-        ListingNamesResponse entity = new ListingNamesResponse();
+    public static ShareResponse makeFromProperties(String cmd,String rc,String message,String cause,JSONObject parameters,String initToken,long serverTime,String serverVersion,long robotWait,String robotBattery,String robotName,String robotVersion,String robotFirmwareName,JSONObject robotSensorvalues,int robotNepoexitvalue,String robotState,JSONArray sharedWith) {
+        ShareResponse entity = new ShareResponse();
         entity.setCmd(cmd);
         entity.setRc(rc);
         entity.setMessage(message);
@@ -56,15 +56,15 @@ public class ListingNamesResponse extends BaseResponse {
         entity.setRobotSensorvalues(robotSensorvalues);
         entity.setRobotNepoexitvalue(robotNepoexitvalue);
         entity.setRobotState(robotState);
-        entity.setProgramNames(programNames);
+        entity.setSharedWith(sharedWith);
         entity.immutable();
         return entity;
     }
     
     /**
-     * the response for the /program/listing/names request
+     * the response for the /share request
      */
-    public static ListingNamesResponse make(JSONObject jsonO) {
+    public static ShareResponse make(JSONObject jsonO) {
         return make().merge(jsonO).immutable();
     }
     
@@ -73,7 +73,7 @@ public class ListingNamesResponse extends BaseResponse {
      * The keys of the JSON-Object must be valid. The bean remains "under construction".<br>
      * Throws a runtime exception if inconsistencies are detected.
      */
-    public ListingNamesResponse merge(JSONObject jsonO) {
+    public ShareResponse merge(JSONObject jsonO) {
         try {
             for (String key : JSONObject.getNames(jsonO)) {
                 if ("_version".equals(key)) {
@@ -109,8 +109,8 @@ public class ListingNamesResponse extends BaseResponse {
                     setRobotNepoexitvalue(jsonO.optInt(key));
                 } else if ("robot.state".equals(key)) {
                     setRobotState(jsonO.optString(key));
-                } else if ("programNames".equals(key)) {
-                    setProgramNames(jsonO.getJSONArray(key));
+                } else if ("sharedWith".equals(key)) {
+                    setSharedWith(jsonO.getJSONArray(key));
                 } else {
                     throw new RuntimeException("JSON parse error. Found invalid key: " + key + " in " + jsonO);
                 }
@@ -126,7 +126,7 @@ public class ListingNamesResponse extends BaseResponse {
      * Checks whether all required fields are set. All lists are made immutable.<br>
      * Throws a runtime exception if inconsistencies are detected.
      */
-    public ListingNamesResponse immutable() {
+    public ShareResponse immutable() {
         if (this.immutable) {
             return this;
         }
@@ -138,25 +138,25 @@ public class ListingNamesResponse extends BaseResponse {
      * Checks whether all required fields are set.<br>
      * Throws a runtime exception if inconsistencies are detected.
      */
-    private ListingNamesResponse validate() {
+    private ShareResponse validate() {
         String _message = null;
         if ( !this.immutable ) {
-            _message = "ListingNamesResponse-object is already immutable: " + toString();
+            _message = "ShareResponse-object is already immutable: " + toString();
         }
         if ( rc == null) {
-            _message = "required property rc of ListingNamesResponse-object is not set: " + toString();
+            _message = "required property rc of ShareResponse-object is not set: " + toString();
         }
         if ( initToken == null) {
-            _message = "required property initToken of ListingNamesResponse-object is not set: " + toString();
+            _message = "required property initToken of ShareResponse-object is not set: " + toString();
         }
         if ( !serverTimeDefined) {
-            _message = "required property serverTime of ListingNamesResponse-object is not set: " + toString();
+            _message = "required property serverTime of ShareResponse-object is not set: " + toString();
         }
         if ( serverVersion == null) {
-            _message = "required property serverVersion of ListingNamesResponse-object is not set: " + toString();
+            _message = "required property serverVersion of ShareResponse-object is not set: " + toString();
         }
-        if ( programNames == null) {
-            _message = "required property programNames of ListingNamesResponse-object is not set: " + toString();
+        if ( sharedWith == null) {
+            _message = "required property sharedWith of ShareResponse-object is not set: " + toString();
         }
         if ( _message != null ) {
             this.immutable = false;
@@ -166,23 +166,23 @@ public class ListingNamesResponse extends BaseResponse {
     }
     
     /**
-     * GET programNames. Object must be immutable. Never return null or an undefined/default value.
+     * GET sharedWith. Object must be immutable. Never return null or an undefined/default value.
      */
-    public JSONArray getProgramNames() {
+    public JSONArray getSharedWith() {
         if (!this.immutable) {
-            throw new RuntimeException("no programNames from an object under construction: " + toString());
+            throw new RuntimeException("no sharedWith from an object under construction: " + toString());
         }
-        return this.programNames;
+        return this.sharedWith;
     }
     
     /**
-     * SET programNames. Object must be mutable.
+     * SET sharedWith. Object must be mutable.
      */
-    public ListingNamesResponse setProgramNames(JSONArray programNames) {
+    public ShareResponse setSharedWith(JSONArray sharedWith) {
         if (this.immutable) {
-            throw new RuntimeException("programNames assigned to an immutable object: " + toString());
+            throw new RuntimeException("sharedWith assigned to an immutable object: " + toString());
         }
-        this.programNames = programNames;
+        this.sharedWith = sharedWith;
         return this;
     }
     
@@ -237,7 +237,7 @@ public class ListingNamesResponse extends BaseResponse {
             if (this.robotState != null) {
                 jsonO.put("robot.state", this.robotState);
             }
-            jsonO.put("programNames", this.programNames);
+            jsonO.put("sharedWith", this.sharedWith);
         } catch (JSONException e) {
             throw new RuntimeException("JSON unparse error when unparsing: " + this, e);
         }
@@ -246,7 +246,7 @@ public class ListingNamesResponse extends BaseResponse {
     
     @Override
     public String toString() {
-        return "ListingNamesResponse [immutable=" + this.immutable + ", cmd=" + this.cmd + ", rc=" + this.rc + ", message=" + this.message + ", cause=" + this.cause + ", parameters=" + this.parameters + ", initToken=" + this.initToken + ", serverTime=" + this.serverTime + ", serverVersion=" + this.serverVersion + ", robotWait=" + this.robotWait + ", robotBattery=" + this.robotBattery + ", robotName=" + this.robotName + ", robotVersion=" + this.robotVersion + ", robotFirmwareName=" + this.robotFirmwareName + ", robotSensorvalues=" + this.robotSensorvalues + ", robotNepoexitvalue=" + this.robotNepoexitvalue + ", robotState=" + this.robotState + ", programNames=" + this.programNames + " ]";
+        return "ShareResponse [immutable=" + this.immutable + ", cmd=" + this.cmd + ", rc=" + this.rc + ", message=" + this.message + ", cause=" + this.cause + ", parameters=" + this.parameters + ", initToken=" + this.initToken + ", serverTime=" + this.serverTime + ", serverVersion=" + this.serverVersion + ", robotWait=" + this.robotWait + ", robotBattery=" + this.robotBattery + ", robotName=" + this.robotName + ", robotVersion=" + this.robotVersion + ", robotFirmwareName=" + this.robotFirmwareName + ", robotSensorvalues=" + this.robotSensorvalues + ", robotNepoexitvalue=" + this.robotNepoexitvalue + ", robotState=" + this.robotState + ", sharedWith=" + this.sharedWith + " ]";
     }
     @Override
     public int hashCode() {

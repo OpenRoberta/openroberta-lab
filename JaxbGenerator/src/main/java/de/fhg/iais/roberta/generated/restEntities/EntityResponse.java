@@ -9,7 +9,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
- * the response for the /entity request<br><br>
+ * the response for the /program/entity request<br><br>
  * Version: 1<br>
  * Datum: 2020-06-15
  */
@@ -17,14 +17,14 @@ public class EntityResponse extends BaseResponse {
     protected JSONArray program;
     
     /**
-     * the response for the /entity request
+     * the response for the /program/entity request
      */
     public static EntityResponse make() {
         return new EntityResponse();
     }
     
     /**
-     * the response for the /entity request
+     * the response for the /program/entity request
      */
     public static EntityResponse makeFromString(String jsonS) {
         try {
@@ -36,7 +36,7 @@ public class EntityResponse extends BaseResponse {
     }
     
     /**
-     * the response for the /entity request
+     * the response for the /program/entity request
      */
     public static EntityResponse makeFromProperties(String cmd,String rc,String message,String cause,JSONObject parameters,String initToken,long serverTime,String serverVersion,long robotWait,String robotBattery,String robotName,String robotVersion,String robotFirmwareName,JSONObject robotSensorvalues,int robotNepoexitvalue,String robotState,JSONArray program) {
         EntityResponse entity = new EntityResponse();
@@ -62,7 +62,7 @@ public class EntityResponse extends BaseResponse {
     }
     
     /**
-     * the response for the /entity request
+     * the response for the /program/entity request
      */
     public static EntityResponse make(JSONObject jsonO) {
         return make().merge(jsonO).immutable();
