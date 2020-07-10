@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2020-07-08 11:58:52.001396",
+		"lastupdated": "2020-07-10 15:16:53.172988",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -1682,5 +1682,9 @@
 	"HINT_USERGROUP_MEMBER": "Enter the member id of your user here. It should be a two digit number.",
 	"DELETE_USERGROUP_MEMBER_WARNING": "Are you sure that you want to delete the selected member(s)?",
 	"DELETE_USERGROUP_MEMBER_AFTER_LOGIN_WARNING": "A member you want to delete did already log in and might have create own programs. Are you sure that you want to delete the selected member(s)?",
-	"ORA_USER_UPDATE_ERROR_NOT_SAVED_TO_DB": "The password could not be saved to the database. Are you sure that you entered the old password correctly?"
+	"ORA_USER_UPDATE_ERROR_NOT_SAVED_TO_DB": "The password could not be saved to the database. Are you sure that you entered the old password correctly?",
+	"USERGROUP_DELETE_WITH_MEMBERS_WARNING": "Are your sure that you want to delete the usergroup including all members? No member did log in so far.",
+	"ORA_PROGRAM_GET_ALL_ERROR_USER_NOT_FOUND": "Can not load the programs of the specified user. Please reload the lab and try again.",
+	"ORA_USER_DELETE_ERROR_HAS_GROUPS": "You have user groups associated with your account. Please delete them first, before you delete your account.",
+	"ORA_USER_ERROR_NOT_LOGGED_IN": "You need to be logged in to a user account to use this function. If you are logged in, please log out and in again."
 }
