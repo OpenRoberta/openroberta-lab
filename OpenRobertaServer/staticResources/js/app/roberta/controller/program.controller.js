@@ -1,5 +1,5 @@
-define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'robot.controller', 'program.model', 'progCode.controller', 'blocks', 'jquery',
-        'jquery-validate', 'blocks-msg' ], function(exports, COMM, MSG, LOG, UTIL, GUISTATE_C, ROBOT_C, PROGRAM, PROGCODE_C, Blockly, $) {
+define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'robot.controller', 'program.model', 'configuration.controller', 'progCode.controller', 'blocks', 'jquery',
+        'jquery-validate', 'blocks-msg' ], function(exports, COMM, MSG, LOG, UTIL, GUISTATE_C, ROBOT_C, PROGRAM, CONFIGURATION_C, PROGCODE_C, Blockly, $) {
 
     var $formSingleModal;
 
@@ -228,6 +228,7 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'ro
                     }
                     $('#tabProgram').one('shown.bs.tab', function(e) {
                         reloadProgram();
+                        CONFIGURATION_C.reloadConf();
                     });
                     $('#tabProgram').trigger('click');
                 }
