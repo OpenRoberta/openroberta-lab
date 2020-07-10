@@ -15,7 +15,7 @@ import org.json.JSONObject;
 public class ListingResponse extends BaseResponse {
     protected String progXML;
     protected String configName;
-    protected String configXML;
+    protected String confXML;
     protected long lastChanged;
     protected boolean lastChangedDefined = false;
     
@@ -41,7 +41,7 @@ public class ListingResponse extends BaseResponse {
     /**
      * the response for the /listing request
      */
-    public static ListingResponse makeFromProperties(String cmd,String rc,String message,String cause,JSONObject parameters,String initToken,long serverTime,String serverVersion,long robotWait,String robotBattery,String robotName,String robotVersion,String robotFirmwareName,JSONObject robotSensorvalues,int robotNepoexitvalue,String robotState,String progXML,String configName,String configXML,long lastChanged) {
+    public static ListingResponse makeFromProperties(String cmd,String rc,String message,String cause,JSONObject parameters,String initToken,long serverTime,String serverVersion,long robotWait,String robotBattery,String robotName,String robotVersion,String robotFirmwareName,JSONObject robotSensorvalues,int robotNepoexitvalue,String robotState,String progXML,String configName,String confXML,long lastChanged) {
         ListingResponse entity = new ListingResponse();
         entity.setCmd(cmd);
         entity.setRc(rc);
@@ -61,7 +61,7 @@ public class ListingResponse extends BaseResponse {
         entity.setRobotState(robotState);
         entity.setProgXML(progXML);
         entity.setConfigName(configName);
-        entity.setConfigXML(configXML);
+        entity.setConfXML(confXML);
         entity.setLastChanged(lastChanged);
         entity.immutable();
         return entity;
@@ -119,8 +119,8 @@ public class ListingResponse extends BaseResponse {
                     setProgXML(jsonO.getString(key));
                 } else if ("configName".equals(key)) {
                     setConfigName(jsonO.optString(key));
-                } else if ("configXML".equals(key)) {
-                    setConfigXML(jsonO.optString(key));
+                } else if ("confXML".equals(key)) {
+                    setConfXML(jsonO.optString(key));
                 } else if ("lastChanged".equals(key)) {
                     setLastChanged(jsonO.getLong(key));
                 } else {
@@ -232,13 +232,13 @@ public class ListingResponse extends BaseResponse {
     }
     
     /**
-     * GET configXML. Object must be immutable. Never return null or an undefined/default value.
+     * GET confXML. Object must be immutable. Never return null or an undefined/default value.
      */
-    public String getConfigXML() {
+    public String getConfXML() {
         if (!this.immutable) {
-            throw new RuntimeException("no configXML from an object under construction: " + toString());
+            throw new RuntimeException("no confXML from an object under construction: " + toString());
         }
-        return this.configXML;
+        return this.confXML;
     }
     
     /**
@@ -246,18 +246,18 @@ public class ListingResponse extends BaseResponse {
      *
      * @return true if the property is defined (has been set)
      */
-    public boolean configXMLDefined() {
-        return this.configXML != null;
+    public boolean confXMLDefined() {
+        return this.confXML != null;
     }
     
     /**
-     * SET configXML. Object must be mutable.
+     * SET confXML. Object must be mutable.
      */
-    public ListingResponse setConfigXML(String configXML) {
+    public ListingResponse setConfXML(String confXML) {
         if (this.immutable) {
-            throw new RuntimeException("configXML assigned to an immutable object: " + toString());
+            throw new RuntimeException("confXML assigned to an immutable object: " + toString());
         }
-        this.configXML = configXML;
+        this.confXML = confXML;
         return this;
     }
     
@@ -338,8 +338,8 @@ public class ListingResponse extends BaseResponse {
             if (this.configName != null) {
                 jsonO.put("configName", this.configName);
             }
-            if (this.configXML != null) {
-                jsonO.put("configXML", this.configXML);
+            if (this.confXML != null) {
+                jsonO.put("confXML", this.confXML);
             }
             jsonO.put("lastChanged", this.lastChanged);
         } catch (JSONException e) {
@@ -350,7 +350,7 @@ public class ListingResponse extends BaseResponse {
     
     @Override
     public String toString() {
-        return "ListingResponse [immutable=" + this.immutable + ", cmd=" + this.cmd + ", rc=" + this.rc + ", message=" + this.message + ", cause=" + this.cause + ", parameters=" + this.parameters + ", initToken=" + this.initToken + ", serverTime=" + this.serverTime + ", serverVersion=" + this.serverVersion + ", robotWait=" + this.robotWait + ", robotBattery=" + this.robotBattery + ", robotName=" + this.robotName + ", robotVersion=" + this.robotVersion + ", robotFirmwareName=" + this.robotFirmwareName + ", robotSensorvalues=" + this.robotSensorvalues + ", robotNepoexitvalue=" + this.robotNepoexitvalue + ", robotState=" + this.robotState + ", progXML=" + this.progXML + ", configName=" + this.configName + ", configXML=" + this.configXML + ", lastChanged=" + this.lastChanged + " ]";
+        return "ListingResponse [immutable=" + this.immutable + ", cmd=" + this.cmd + ", rc=" + this.rc + ", message=" + this.message + ", cause=" + this.cause + ", parameters=" + this.parameters + ", initToken=" + this.initToken + ", serverTime=" + this.serverTime + ", serverVersion=" + this.serverVersion + ", robotWait=" + this.robotWait + ", robotBattery=" + this.robotBattery + ", robotName=" + this.robotName + ", robotVersion=" + this.robotVersion + ", robotFirmwareName=" + this.robotFirmwareName + ", robotSensorvalues=" + this.robotSensorvalues + ", robotNepoexitvalue=" + this.robotNepoexitvalue + ", robotState=" + this.robotState + ", progXML=" + this.progXML + ", configName=" + this.configName + ", confXML=" + this.confXML + ", lastChanged=" + this.lastChanged + " ]";
     }
     @Override
     public int hashCode() {

@@ -129,7 +129,7 @@
       "properties": [
          { "name": "progXML", "type": "String", "description": "the program blockly XML" },
          { "name": "configName", "type": "String", "description": "the configuration name", "required": false },
-         { "name": "configXML", "type": "String", "description": "the configuration blockly XML", "required": false },
+         { "name": "confXML", "type": "String", "description": "the configuration blockly XML", "required": false },
          { "name": "lastChanged", "type": "long", "description": "server timestamp of the last change of the program" }
 	    ]
     },

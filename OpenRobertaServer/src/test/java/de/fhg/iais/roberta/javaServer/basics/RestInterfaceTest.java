@@ -407,21 +407,21 @@ public class RestInterfaceTest {
         restProgram(this.sMinscha, "{'cmd':'loadP';'programName':'p1';'owner':'minscha';'author':'minscha'}", "ok", Key.PROGRAM_GET_ONE_SUCCESS);
         responseJson = new JSONObject((String) this.response.getEntity());
         Assert.assertEquals("c1", responseJson.getString("configName"));
-        Assert.assertTrue(responseJson.getString("configXML").contains("c1.2.conf.minscha"));
+        Assert.assertTrue(responseJson.getString("confXML").contains("c1.2.conf.minscha"));
         saveProgram(this.sMinscha, minschaId, "minscha", -1, "p2", "p2.2.1.minscha", "c1", null, "ok", Key.PROGRAM_SAVE_SUCCESS);
         restProgram(this.sMinscha, "{'cmd':'loadP';'programName':'p1';'owner':'minscha';'author':'minscha'}", "ok", Key.PROGRAM_GET_ONE_SUCCESS);
         responseJson = new JSONObject((String) this.response.getEntity());
         Assert.assertEquals("c1", responseJson.getString("configName"));
-        Assert.assertTrue(responseJson.getString("configXML").contains("c1.2.conf.minscha"));
+        Assert.assertTrue(responseJson.getString("confXML").contains("c1.2.conf.minscha"));
         saveProgram(this.sMinscha, minschaId, "minscha", -1, "p1", ".1.2.minscha", null, "p1.3.conf.minscha", "ok", Key.PROGRAM_SAVE_SUCCESS);
         restProgram(this.sMinscha, "{'cmd':'loadP';'programName':'p1';'owner':'minscha';'author':'minscha'}", "ok", Key.PROGRAM_GET_ONE_SUCCESS);
         responseJson = new JSONObject((String) this.response.getEntity());
         Assert.assertFalse(responseJson.has("configName"));
-        Assert.assertTrue(responseJson.getString("configXML").contains("p1.3.conf.minscha"));
+        Assert.assertTrue(responseJson.getString("confXML").contains("p1.3.conf.minscha"));
         restProgram(this.sMinscha, "{'cmd':'loadP';'programName':'p2';'owner':'minscha';'author':'minscha'}", "ok", Key.PROGRAM_GET_ONE_SUCCESS);
         responseJson = new JSONObject((String) this.response.getEntity());
         Assert.assertEquals("c1", responseJson.getString("configName"));
-        Assert.assertTrue(responseJson.getString("configXML").contains("c1.2.conf.minscha"));
+        Assert.assertTrue(responseJson.getString("confXML").contains("c1.2.conf.minscha"));
 
         String program = this.memoryDbSetup.getOne("select PROGRAM_TEXT from PROGRAM where OWNER_ID = " + minschaId + " and NAME = 'p2'");
         Assert.assertTrue(program.contains("p2.2.1.minscha"));

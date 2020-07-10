@@ -230,7 +230,7 @@ public class CompilerWorkflowRobotSpecificIT {
 
                 if ( false && pluginMap.get(robotName).hasSim() ) { // TODO: re-enable generation of simulation code
                     JSONObject cmdGenSim = JSONUtilForServer.mkD("{'programName':'prog','language':'de'}");
-                    cmdGenSim.getJSONObject("data").put("progXML", programText).put("configXML", configText).put("SSID", "1").put("password", "2");
+                    cmdGenSim.getJSONObject("data").put("progXML", programText).put("confXML", configText).put("SSID", "1").put("password", "2");
                     response = this.restWorkflow.getSimulationVMCode(FullRestRequest.make(cmdGenSim));
                     entity = checkEntityRc(response, expectResult, "ORA_PROGRAM_INVALID_STATEMETNS");
                     boolean resultSimCode = entity != null;

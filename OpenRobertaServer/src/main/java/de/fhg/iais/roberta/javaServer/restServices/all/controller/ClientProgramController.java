@@ -182,7 +182,7 @@ public class ClientProgramController {
                     Pair<String, String> progConfPair = transformBetweenVersions(httpSessionState.getRobotFactory(), program.getProgramText(), configText);
                     response.setProgXML(progConfPair.getFirst());
                     response.setConfigName(program.getConfigName()); // may be null, if an anonymous configuration is used
-                    response.setConfigXML(progConfPair.getSecond()); // may be null, if the default configuration is used
+                    response.setConfXML(progConfPair.getSecond()); // may be null, if the default configuration is used
                     response.setLastChanged(program.getLastChanged().getTime());
                     // count the views if the program is from the gallery!
                     if ( ownerName.equals("Gallery") ) {
