@@ -52,7 +52,7 @@
     </instance>
     <instance x="1450" y="-1263">
         <block type="robConf_rgbled" id=";cQ|F.CoTN3slLh?5KES" intask="true">
-            <field name="NAME">R_CB_LF</field>
+            <field name="NAME">CalliBot_links_vorne</field>
             <field name="PIN1">1</field>
         </block>
     </instance>
@@ -99,7 +99,7 @@
     </instance>
     <instance x="1450" y="-1208">
         <block type="robConf_rgbled" id="t#CDWP*!FvFL%jC%2j%-" intask="true">
-            <field name="NAME">R_CB_LR</field>
+            <field name="NAME">CalliBot_links_hinten</field>
             <field name="PIN1">2</field>
         </block>
     </instance>
@@ -151,7 +151,7 @@
     </instance>
     <instance x="1450" y="-1148">
         <block type="robConf_rgbled" id="{8Ouhro7CaajU/=1N0+H" intask="true">
-            <field name="NAME">R_CB_RR</field>
+            <field name="NAME">CalliBot_rechts_hinten</field>
             <field name="PIN1">3</field>
         </block>
     </instance>
@@ -198,7 +198,7 @@
     </instance>
     <instance x="1450" y="-1087">
         <block type="robConf_rgbled" id="1S:68z]6eb#U~4J.hBv^" intask="true">
-            <field name="NAME">R_CB_RF</field>
+            <field name="NAME">CalliBot_rechts_vorne</field>
             <field name="PIN1">4</field>
         </block>
     </instance>
@@ -234,13 +234,13 @@
     </instance>
     <instance x="673" y="-991">
         <block type="robConf_ultrasonic" id="=98L{9tUQ~iDKj[D]^dA" intask="true">
-            <field name="NAME">U_CB</field>
+            <field name="NAME">CalliBot</field>
             <field name="PIN1">2</field>
         </block>
     </instance>
     <instance x="1450" y="-1030">
         <block type="robConf_rgbled" id="2M=b?sJul6]Li3d4}P/J" intask="true">
-            <field name="NAME">R_CB_A</field>
+            <field name="NAME">CalliBot_alle</field>
             <field name="PIN1">5</field>
         </block>
     </instance>
@@ -282,7 +282,7 @@
     </instance>
     <instance x="1450" y="-970">
         <block type="robConf_led" id="SfkgppPMfY?JYOy49FIT" intask="true">
-            <field name="NAME">L_CB_L</field>
+            <field name="NAME">L_CalliBot_links</field>
             <field name="PIN1">1</field>
         </block>
     </instance>
@@ -318,13 +318,13 @@
     </instance>
     <instance x="673" y="-874">
         <block type="robConf_infrared" id="zVcQCV:wRFhbQ~h!Ldtj" intask="true">
-            <field name="NAME">I_CB_L</field>
+            <field name="NAME">I_CalliBot_links</field>
             <field name="PIN1">2</field>
         </block>
     </instance>
     <instance x="1450" y="-914">
         <block type="robConf_led" id="1}`%B6g|TOpPAr{6PNq;" intask="true">
-            <field name="NAME">L_CB_R</field>
+            <field name="NAME">L_CalliBot_rechts</field>
             <field name="PIN1">2</field>
         </block>
     </instance>
@@ -354,13 +354,13 @@
     </instance>
     <instance x="673" y="-820">
         <block type="robConf_infrared" id="P;;ad[t{,)`?BS,+yiwG" intask="true">
-            <field name="NAME">I_CB_R</field>
+            <field name="NAME">I_CalliBot_rechts</field>
             <field name="PIN1">1</field>
         </block>
     </instance>
     <instance x="1450" y="-857">
         <block type="robConf_led" id="gShB~1n=BTKa@SWJshe4" intask="true">
-            <field name="NAME">L_CB_B</field>
+            <field name="NAME">CalliBot_beide</field>
             <field name="PIN1">3</field>
         </block>
     </instance>
@@ -384,7 +384,7 @@
     </instance>
     <instance x="1450" y="-799">
         <block type="robConf_motor" id="%yt,n-XLcgHzTokE3a1N" intask="true">
-            <field name="NAME">M_CB_L</field>
+            <field name="NAME">CalliBot_links</field>
             <field name="PIN1">0</field>
         </block>
     </instance>
@@ -408,7 +408,7 @@
     </instance>
     <instance x="1450" y="-742">
         <block type="robConf_motor" id="ErET;@,3l9#UnYt=)[@W" intask="true">
-            <field name="NAME">M_CB_R</field>
+            <field name="NAME">CalliBot_rechts</field>
             <field name="PIN1">2</field>
         </block>
     </instance>

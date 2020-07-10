@@ -700,6 +700,11 @@ public class ClientProgramController {
     // Transform programs with old xml versions to new xml versions
     private static Pair<String, String> transformBetweenVersions(IRobotFactory robotFactory, String programText, String configText) {
         if ( robotFactory.hasWorkflow("transform") ) {
+            if (configText == null) {
+                // programs that do not have any configuration modifications are saved into the database without an associated configuration
+                // when loaded, the default configuration should be used
+                configText = robotFactory.getConfigurationDefault();
+            }
             Project project = new Project.Builder().setFactory(robotFactory).setProgramXml(programText).setConfigurationXml(configText).build();
             ProjectService.executeWorkflow("transform", project);
             if ( configText != null ) {

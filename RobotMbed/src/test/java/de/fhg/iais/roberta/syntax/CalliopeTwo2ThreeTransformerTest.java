@@ -91,34 +91,34 @@ public class CalliopeTwo2ThreeTransformerTest {
         String expectedProgramAst =
             "BlockAST[project=[[Location[x=512,y=50],MainTask[],"
                 + "LedOnAction[R,ColorConst[#ff0000]],"
-                + "LedOnAction[R_CB_LF,ColorConst[#ff0000]],"
-                + "LedOnAction[R_CB_RF,ColorConst[#ff0000]],"
-                + "LedOnAction[R_CB_LR,ColorConst[#ff0000]],"
-                + "LedOnAction[R_CB_RR,ColorConst[#ff0000]],"
-                + "LedOnAction[R_CB_A,ColorConst[#ff0000]],"
+                + "LedOnAction[CalliBot_links_vorne,ColorConst[#ff0000]],"
+                + "LedOnAction[CalliBot_rechts_vorne,ColorConst[#ff0000]],"
+                + "LedOnAction[CalliBot_links_hinten,ColorConst[#ff0000]],"
+                + "LedOnAction[CalliBot_rechts_hinten,ColorConst[#ff0000]],"
+                + "LedOnAction[CalliBot_alle,ColorConst[#ff0000]],"
                 + "LightStatusAction[R, OFF],"
-                + "LightStatusAction[R_CB_LF, OFF],"
-                + "LightStatusAction[R_CB_RF, OFF],"
-                + "LightStatusAction[R_CB_LR, OFF],"
-                + "LightStatusAction[R_CB_RR, OFF],"
-                + "LightStatusAction[R_CB_A, OFF],"
-                + "LightAction[L_CB_L,ON,DEFAULT,EmptyExpr[defVal=COLOR]],"
-                + "LightAction[L_CB_L,OFF,DEFAULT,EmptyExpr[defVal=COLOR]],"
-                + "LightAction[L_CB_R,ON,DEFAULT,EmptyExpr[defVal=COLOR]],"
-                + "LightAction[L_CB_R,OFF,DEFAULT,EmptyExpr[defVal=COLOR]],"
-                + "LightAction[L_CB_B,ON,DEFAULT,EmptyExpr[defVal=COLOR]],"
-                + "LightAction[L_CB_B,OFF,DEFAULT,EmptyExpr[defVal=COLOR]]]]]";
+                + "LightStatusAction[CalliBot_links_vorne, OFF],"
+                + "LightStatusAction[CalliBot_rechts_vorne, OFF],"
+                + "LightStatusAction[CalliBot_links_hinten, OFF],"
+                + "LightStatusAction[CalliBot_rechts_hinten, OFF],"
+                + "LightStatusAction[CalliBot_alle, OFF],"
+                + "LightAction[L_CalliBot_links,ON,DEFAULT,EmptyExpr[defVal=COLOR]],"
+                + "LightAction[L_CalliBot_links,OFF,DEFAULT,EmptyExpr[defVal=COLOR]],"
+                + "LightAction[L_CalliBot_rechts,ON,DEFAULT,EmptyExpr[defVal=COLOR]],"
+                + "LightAction[L_CalliBot_rechts,OFF,DEFAULT,EmptyExpr[defVal=COLOR]],"
+                + "LightAction[CalliBot_beide,ON,DEFAULT,EmptyExpr[defVal=COLOR]],"
+                + "LightAction[CalliBot_beide,OFF,DEFAULT,EmptyExpr[defVal=COLOR]]]]]";
         String[] expectedToBeInConfigAst =
             {
                 "ConfigurationComponent[componentType=RGBLED,isActor=true,userDefinedName=R,portName=R,componentProperties={PIN1=0}]",
-                "ConfigurationComponent[componentType=RGBLED,isActor=true,userDefinedName=R_CB_LR,portName=R_CB_LR,componentProperties={PIN1=2}]",
-                "ConfigurationComponent[componentType=LED,isActor=true,userDefinedName=L_CB_L,portName=L_CB_L,componentProperties={PIN1=1}]",
-                "ConfigurationComponent[componentType=RGBLED,isActor=true,userDefinedName=R_CB_LF,portName=R_CB_LF,componentProperties={PIN1=1}]",
-                "ConfigurationComponent[componentType=RGBLED,isActor=true,userDefinedName=R_CB_RR,portName=R_CB_RR,componentProperties={PIN1=3}]",
-                "ConfigurationComponent[componentType=RGBLED,isActor=true,userDefinedName=R_CB_A,portName=R_CB_A,componentProperties={PIN1=5}]",
-                "ConfigurationComponent[componentType=RGBLED,isActor=true,userDefinedName=R_CB_RF,portName=R_CB_RF,componentProperties={PIN1=4}]",
-                "ConfigurationComponent[componentType=LED,isActor=true,userDefinedName=L_CB_R,portName=L_CB_R,componentProperties={PIN1=2}]",
-                "ConfigurationComponent[componentType=LED,isActor=true,userDefinedName=L_CB_B,portName=L_CB_B,componentProperties={PIN1=3}]"
+                "ConfigurationComponent[componentType=RGBLED,isActor=true,userDefinedName=CalliBot_links_hinten,portName=CalliBot_links_hinten,componentProperties={PIN1=2}]",
+                "ConfigurationComponent[componentType=LED,isActor=true,userDefinedName=L_CalliBot_links,portName=L_CalliBot_links,componentProperties={PIN1=1}]",
+                "ConfigurationComponent[componentType=RGBLED,isActor=true,userDefinedName=CalliBot_links_vorne,portName=CalliBot_links_vorne,componentProperties={PIN1=1}]",
+                "ConfigurationComponent[componentType=RGBLED,isActor=true,userDefinedName=CalliBot_rechts_hinten,portName=CalliBot_rechts_hinten,componentProperties={PIN1=3}]",
+                "ConfigurationComponent[componentType=RGBLED,isActor=true,userDefinedName=CalliBot_alle,portName=CalliBot_alle,componentProperties={PIN1=5}]",
+                "ConfigurationComponent[componentType=RGBLED,isActor=true,userDefinedName=CalliBot_rechts_vorne,portName=CalliBot_rechts_vorne,componentProperties={PIN1=4}]",
+                "ConfigurationComponent[componentType=LED,isActor=true,userDefinedName=L_CalliBot_rechts,portName=L_CalliBot_rechts,componentProperties={PIN1=2}]",
+                "ConfigurationComponent[componentType=LED,isActor=true,userDefinedName=CalliBot_beide,portName=CalliBot_beide,componentProperties={PIN1=3}]"
             };
 
         Project project =
@@ -292,13 +292,13 @@ public class CalliopeTwo2ThreeTransformerTest {
         String expectedProgramAst =
             "BlockAST[project=[[Location[x=549,y=76],MainTask[],"
                 + "DebugAction[SensorExpr[UltrasonicSensor[U,DISTANCE,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[UltrasonicSensor[U_CB,DISTANCE,EMPTY_SLOT]]],"
+                + "DebugAction[SensorExpr[UltrasonicSensor[CalliBot,DISTANCE,EMPTY_SLOT]]],"
                 + "DebugAction[SensorExpr[GetSampleSensor[UltrasonicSensor[U,DISTANCE,EMPTY_SLOT]]]],"
-                + "DebugAction[SensorExpr[GetSampleSensor[UltrasonicSensor[U_CB,DISTANCE,EMPTY_SLOT]]]]]]]";
+                + "DebugAction[SensorExpr[GetSampleSensor[UltrasonicSensor[CalliBot,DISTANCE,EMPTY_SLOT]]]]]]]";
         String[] expectedToBeInConfigAst =
             {
                 "ConfigurationComponent[componentType=ULTRASONIC,isActor=true,userDefinedName=U,portName=U,componentProperties={PIN1=1}]",
-                "ConfigurationComponent[componentType=ULTRASONIC,isActor=true,userDefinedName=U_CB,portName=U_CB,componentProperties={PIN1=2}]"
+                "ConfigurationComponent[componentType=ULTRASONIC,isActor=true,userDefinedName=CalliBot,portName=CalliBot,componentProperties={PIN1=2}]"
             };
 
         Project project =
@@ -459,14 +459,14 @@ public class CalliopeTwo2ThreeTransformerTest {
     public void executeTransformer_ShouldReturnTransformedInfrared_WhenGivenOldInfrared() {
         String expectedProgramAst =
             "BlockAST[project=[[Location[x=512,y=50],MainTask[],"
-                + "DebugAction[SensorExpr[InfraredSensor[I_CB_L,LINE,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[InfraredSensor[I_CB_R,LINE,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[GetSampleSensor[InfraredSensor[I_CB_L,LINE,EMPTY_SLOT]]]],"
-                + "DebugAction[SensorExpr[GetSampleSensor[InfraredSensor[I_CB_R,LINE,EMPTY_SLOT]]]]]]]";
+                + "DebugAction[SensorExpr[InfraredSensor[I_CalliBot_links,LINE,EMPTY_SLOT]]],"
+                + "DebugAction[SensorExpr[InfraredSensor[I_CalliBot_rechts,LINE,EMPTY_SLOT]]],"
+                + "DebugAction[SensorExpr[GetSampleSensor[InfraredSensor[I_CalliBot_links,LINE,EMPTY_SLOT]]]],"
+                + "DebugAction[SensorExpr[GetSampleSensor[InfraredSensor[I_CalliBot_rechts,LINE,EMPTY_SLOT]]]]]]]";
         String[] expectedToBeInConfigAst =
             {
-                "ConfigurationComponent[componentType=INFRARED,isActor=true,userDefinedName=I_CB_L,portName=I_CB_L,componentProperties={PIN1=2}]",
-                "ConfigurationComponent[componentType=INFRARED,isActor=true,userDefinedName=I_CB_R,portName=I_CB_R,componentProperties={PIN1=1}]"
+                "ConfigurationComponent[componentType=INFRARED,isActor=true,userDefinedName=I_CalliBot_links,portName=I_CalliBot_links,componentProperties={PIN1=2}]",
+                "ConfigurationComponent[componentType=INFRARED,isActor=true,userDefinedName=I_CalliBot_rechts,portName=I_CalliBot_rechts,componentProperties={PIN1=1}]"
             };
 
         Project project =
@@ -710,13 +710,13 @@ public class CalliopeTwo2ThreeTransformerTest {
         String expectedProgramAst =
             "BlockAST[project=[[Location[x=512,y=50],MainTask[],"
                 + "BothMotorsOnAction[M_A,NumConst[30],M_B,NumConst[10]],"
-                + "BothMotorsOnAction[M_CB_L,NumConst[30],M_CB_R,NumConst[10]],"
+                + "BothMotorsOnAction[CalliBot_links,NumConst[30],CalliBot_rechts,NumConst[10]],"
                 + "SingleMotorStopAction[]]]]";
         String[] expectedToBeInConfigAst =
             {
                 "ConfigurationComponent[componentType=MOTOR,isActor=true,userDefinedName=M_B,portName=M_B,componentProperties={PIN1=B}]",
-                "ConfigurationComponent[componentType=MOTOR,isActor=true,userDefinedName=M_CB_L,portName=M_CB_L,componentProperties={PIN1=0}]",
-                "ConfigurationComponent[componentType=MOTOR,isActor=true,userDefinedName=M_CB_R,portName=M_CB_R,componentProperties={PIN1=2}]",
+                "ConfigurationComponent[componentType=MOTOR,isActor=true,userDefinedName=CalliBot_links,portName=CalliBot_links,componentProperties={PIN1=0}]",
+                "ConfigurationComponent[componentType=MOTOR,isActor=true,userDefinedName=CalliBot_rechts,portName=CalliBot_rechts,componentProperties={PIN1=2}]",
                 "ConfigurationComponent[componentType=MOTOR,isActor=true,userDefinedName=M_A,portName=M_A,componentProperties={PIN1=A}]"
             };
 
@@ -737,17 +737,17 @@ public class CalliopeTwo2ThreeTransformerTest {
             "BlockAST[project=[[Location[x=512,y=50],MainTask[],"
                 + "MotorOnAction[M_A,MotionParam[speed=NumConst[30],duration=null]],"
                 + "MotorOnAction[M_B,MotionParam[speed=NumConst[30],duration=null]],"
-                + "MotorOnAction[M_CB_L,MotionParam[speed=NumConst[30],duration=null]],"
-                + "MotorOnAction[M_CB_R,MotionParam[speed=NumConst[30],duration=null]],"
+                + "MotorOnAction[CalliBot_links,MotionParam[speed=NumConst[30],duration=null]],"
+                + "MotorOnAction[CalliBot_rechts,MotionParam[speed=NumConst[30],duration=null]],"
                 + "MotorStop[port=M_A],"
                 + "MotorStop[port=M_B],"
-                + "MotorStop[port=M_CB_L],"
-                + "MotorStop[port=M_CB_R]]]]";
+                + "MotorStop[port=CalliBot_links],"
+                + "MotorStop[port=CalliBot_rechts]]]]";
         String[] expectedToBeInConfigAst =
             {
                 "ConfigurationComponent[componentType=MOTOR,isActor=true,userDefinedName=M_B,portName=M_B,componentProperties={PIN1=B}]",
-                "ConfigurationComponent[componentType=MOTOR,isActor=true,userDefinedName=M_CB_L,portName=M_CB_L,componentProperties={PIN1=0}]",
-                "ConfigurationComponent[componentType=MOTOR,isActor=true,userDefinedName=M_CB_R,portName=M_CB_R,componentProperties={PIN1=2}]",
+                "ConfigurationComponent[componentType=MOTOR,isActor=true,userDefinedName=CalliBot_links,portName=CalliBot_links,componentProperties={PIN1=0}]",
+                "ConfigurationComponent[componentType=MOTOR,isActor=true,userDefinedName=CalliBot_rechts,portName=CalliBot_rechts,componentProperties={PIN1=2}]",
                 "ConfigurationComponent[componentType=MOTOR,isActor=true,userDefinedName=M_A,portName=M_A,componentProperties={PIN1=A}]"
             };
 
@@ -767,14 +767,14 @@ public class CalliopeTwo2ThreeTransformerTest {
         String expectedProgramAst =
             "BlockAST[project=[[Location[x=512,y=50],MainTask[],"
                 + "BothMotorsOnAction[M_A,NumConst[30],M_B,NumConst[30]],"
-                + "BothMotorsOnAction[M_CB_L,NumConst[30],M_CB_R,NumConst[30]],"
+                + "BothMotorsOnAction[CalliBot_links,NumConst[30],CalliBot_rechts,NumConst[30]],"
                 + "SingleMotorStopAction[],"
                 + "SingleMotorStopAction[]]]]";
         String[] expectedToBeInConfigAst =
             {
                 "ConfigurationComponent[componentType=MOTOR,isActor=true,userDefinedName=M_B,portName=M_B,componentProperties={PIN1=B}]",
-                "ConfigurationComponent[componentType=MOTOR,isActor=true,userDefinedName=M_CB_L,portName=M_CB_L,componentProperties={PIN1=0}]",
-                "ConfigurationComponent[componentType=MOTOR,isActor=true,userDefinedName=M_CB_R,portName=M_CB_R,componentProperties={PIN1=2}]",
+                "ConfigurationComponent[componentType=MOTOR,isActor=true,userDefinedName=CalliBot_links,portName=CalliBot_links,componentProperties={PIN1=0}]",
+                "ConfigurationComponent[componentType=MOTOR,isActor=true,userDefinedName=CalliBot_rechts,portName=CalliBot_rechts,componentProperties={PIN1=2}]",
                 "ConfigurationComponent[componentType=MOTOR,isActor=true,userDefinedName=M_A,portName=M_A,componentProperties={PIN1=A}]"
             };
 

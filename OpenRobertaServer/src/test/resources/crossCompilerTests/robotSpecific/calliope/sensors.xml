@@ -2993,7 +2993,7 @@
                                         <block type="robSensors_getSample" id="_w]q(UjlqFzZcX5mvgFw" intask="true">
                                             <mutation input="ULTRASONIC_DISTANCE"></mutation>
                                             <field name="SENSORTYPE">ULTRASONIC_DISTANCE</field>
-                                            <field name="SENSORPORT">U_CB</field>
+                                            <field name="SENSORPORT">CalliBot</field>
                                             <field name="SLOT"></field>
                                         </block>
                                     </value>
@@ -3013,7 +3013,7 @@
                                         <block type="robSensors_getSample" id="8z!j!adBi8*MqH!5gl`W" intask="true">
                                             <mutation input="INFRARED_LINE"></mutation>
                                             <field name="SENSORTYPE">INFRARED_LINE</field>
-                                            <field name="SENSORPORT">I_CB_L</field>
+                                            <field name="SENSORPORT">I_CalliBot_links</field>
                                             <field name="SLOT"></field>
                                         </block>
                                     </value>
@@ -3033,7 +3033,7 @@
                                         <block type="robSensors_getSample" id="TwMCbi!{5;JxP[)9[V!n" intask="true">
                                             <mutation input="INFRARED_LINE"></mutation>
                                             <field name="SENSORTYPE">INFRARED_LINE</field>
-                                            <field name="SENSORPORT">I_CB_R</field>
+                                            <field name="SENSORPORT">I_CalliBot_rechts</field>
                                             <field name="SLOT"></field>
                                         </block>
                                     </value>
@@ -3071,7 +3071,7 @@
             </instance>
             <instance x="-105" y="-992">
                 <block type="robConf_infrared" id="P;;ad[t{,)`?BS,+yiwG" intask="true">
-                    <field name="NAME">I_CB_R</field>
+                    <field name="NAME">I_CalliBot_rechts</field>
                     <field name="PIN1">1</field>
                 </block>
             </instance>
@@ -3100,7 +3100,7 @@
             </instance>
             <instance x="-103" y="-1057">
                 <block type="robConf_infrared" id="zVcQCV:wRFhbQ~h!Ldtj" intask="true">
-                    <field name="NAME">I_CB_L</field>
+                    <field name="NAME">I_CalliBot_links</field>
                     <field name="PIN1">2</field>
                 </block>
             </instance>
@@ -3210,7 +3210,7 @@
             </instance>
             <instance x="-104" y="-1186">
                 <block type="robConf_ultrasonic" id="=98L{9tUQ~iDKj[D]^dA" intask="true">
-                    <field name="NAME">U_CB</field>
+                    <field name="NAME">CalliBot</field>
                     <field name="PIN1">2</field>
                 </block>
             </instance>
