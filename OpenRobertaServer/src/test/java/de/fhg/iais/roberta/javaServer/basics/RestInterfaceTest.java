@@ -1,12 +1,5 @@
 package de.fhg.iais.roberta.javaServer.basics;
 
-import java.sql.Timestamp;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-
-import javax.ws.rs.core.Response;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -14,6 +7,13 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+
+import java.sql.Timestamp;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+
+import javax.ws.rs.core.Response;
 
 import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.generated.restEntities.FullRestRequest;
@@ -402,7 +402,7 @@ public class RestInterfaceTest {
 
         restProgram(this.sMinscha, "{'cmd':'loadP';'programName':'p1';'owner':'minscha';'author':'minscha'}", "ok", Key.PROGRAM_GET_ONE_SUCCESS);
         JSONObject responseJson = new JSONObject((String) this.response.getEntity());
-        Assert.assertFalse(responseJson.has("confXML"));
+        Assert.assertTrue(responseJson.has("confXML"));
         saveProgram(this.sMinscha, minschaId, "minscha", -1, "p1", ".1.1.minscha", "c1", null, "ok", Key.PROGRAM_SAVE_SUCCESS);
         restProgram(this.sMinscha, "{'cmd':'loadP';'programName':'p1';'owner':'minscha';'author':'minscha'}", "ok", Key.PROGRAM_GET_ONE_SUCCESS);
         responseJson = new JSONObject((String) this.response.getEntity());
