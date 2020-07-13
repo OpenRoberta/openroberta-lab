@@ -426,7 +426,7 @@ define([ 'exports', 'log', 'message', 'comm', 'util', 'userGroup.model', 'guiSta
                 title : "<span lkey='Blockly.Msg.MENU_USER_TOOLTIP'>" + (Blockly.Msg.MENU_USER_TOOLTIP || "User") + "</span>",
                 field: 'account',
                 formatter : function(value, row, index) {
-                    return value.substr(value.lastIndexOf('_') + 1);
+                    return value.substr(value.lastIndexOf(':') + 1);
                 },
                 sortable : true,
             }, {
