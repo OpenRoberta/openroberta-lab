@@ -339,21 +339,27 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
             $('#navbarCollapse').collapse('hide');
         });
         if (GUISTATE_C.isPublicServerVersion()) {
-            var feadbackButton = '<div href="#" id="feadbackButton" class="rightMenuButton" rel="tooltip" data-original-title="" title="">'
-                    +'<span id="" class="feadbackButton typcn typcn-thumbs-up"></span>'
+            var feedbackButton = '<div href="#" id="feedbackButton" class="rightMenuButton" rel="tooltip" data-original-title="" title="">'
+                    +'<span id="" class="feedbackButton typcn typcn-thumbs-up"></span>'
                     +'</div>'
-            $("#rightMenuDiv").append(feadbackButton);
-                window.closeFeadback = function(){
-                    $('#feadbackModal').modal('hide');
-                };                  
-                $('#feadbackButton').onWrap('click', '', function(event) {
-                $('#feadbackModal').on('shown.bs.modal', function () {
-	               $("#feadbackIframe").attr("src" ,"https://www.roberta-home.de/lab/feedback/");
-                   $("#feedbackIframe").on('load', function(){
-                       this.style.height = this.contentWindow.document.body.offsetHeight + 'px';
-                   });
+            $("#rightMenuDiv").append(feedbackButton);
+            window.onmessage = function(msg) {
+	            if (msg.data ==="closeFeedback") {
+		             $('#feedbackModal').modal("hide");
+	            } else if (msg.data.indexOf("feedbackHeight") >= 0) {
+		            var height = msg.data.split(":")[1]||400;
+                    $('#feedbackIframe').height(height);
+	            }
+            };                  
+            $('#feedbackButton').onWrap('click', '', function(event) {
+                $('#feedbackModal').on('shown.bs.modal', function () {
+	                if (GUISTATE_C.getLanguage().toLowerCase() === "de"){
+	                    $("#feedbackIframe").attr("src" ,"https://www.roberta-home.de/lab/feedback/");
+                    } else {
+	                    $("#feedbackIframe").attr("src" ,"https://www.roberta-home.de/en/lab/feedback/");
+                    }
                 });
-                $('#feadbackModal').modal({show:true});
+                $('#feedbackModal').modal({show:true});
             });
         }
 
