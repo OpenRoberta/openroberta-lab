@@ -1,5 +1,12 @@
 package de.fhg.iais.roberta.javaServer.basics;
 
+import java.sql.Timestamp;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+
+import javax.ws.rs.core.Response;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -7,13 +14,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-
-import java.sql.Timestamp;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-
-import javax.ws.rs.core.Response;
 
 import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.generated.restEntities.FullRestRequest;
@@ -389,7 +389,7 @@ public class RestInterfaceTest {
                 + " and NAME = 'c1'";
         String config = this.memoryDbSetup.getOne(getConfigSql);
         Assert.assertTrue(config.contains("c1.1.conf.minscha"));
-        saveConfig(this.sMinscha, minschaId, "c1", "c1.2.conf.minscha", "ok", Key.CONFIGURATION_SAVE_SUCCESS);
+        saveConfig(this.sMinscha, minschaId, "c1", CONF_PRE + "c1.2.conf.minscha" + CONF_POST, "ok", Key.CONFIGURATION_SAVE_SUCCESS);
         Assert.assertEquals(1, this.memoryDbSetup.getOneBigIntegerAsLong("select count(*) from CONFIGURATION where OWNER_ID = " + minschaId));
         config = this.memoryDbSetup.getOne(getConfigSql);
         Assert.assertTrue(config.contains("c1.2.conf.minscha"));
@@ -413,7 +413,17 @@ public class RestInterfaceTest {
         responseJson = new JSONObject((String) this.response.getEntity());
         Assert.assertEquals("c1", responseJson.getString("configName"));
         Assert.assertTrue(responseJson.getString("confXML").contains("c1.2.conf.minscha"));
-        saveProgram(this.sMinscha, minschaId, "minscha", -1, "p1", ".1.2.minscha", null, "p1.3.conf.minscha", "ok", Key.PROGRAM_SAVE_SUCCESS);
+        saveProgram(
+            this.sMinscha,
+            minschaId,
+            "minscha",
+            -1,
+            "p1",
+            ".1.2.minscha",
+            null,
+            CONF_PRE + "p1.3.conf.minscha" + CONF_POST,
+            "ok",
+            Key.PROGRAM_SAVE_SUCCESS);
         restProgram(this.sMinscha, "{'cmd':'loadP';'programName':'p1';'owner':'minscha';'author':'minscha'}", "ok", Key.PROGRAM_GET_ONE_SUCCESS);
         responseJson = new JSONObject((String) this.response.getEntity());
         Assert.assertFalse(responseJson.has("configName"));

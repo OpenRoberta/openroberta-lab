@@ -1,0 +1,45 @@
+<!--This is not a real program, it is just for testing the xsl transformation-->
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="calliope" xmlversion="2.0" description="" tags="">
+    <instance>
+        <block type="mbedSensors_key_isPressed" id="G,1Afdt@0BR=Wuk~H~~M" intask="true">
+            <field name="KEY">button_a</field>
+        </block>
+        <block type="mbedSensors_timer_getSample" id="-*|5yE3o;8zCMSoCg-NU" intask="true">
+            <field name="SENSORNUM">1</field>
+        </block>
+        <block type="mbedSensors_timer_reset" id="Kmlp,1c^)S[rsN|G+IZ2" intask="true">
+            <field name="SENSORNUM">1</field>
+        </block>
+        <block type="mbedSensors_pin_isTouched" id="/qS~uA|UEx;-%OHc#XST" intask="true">
+            <field name="PIN">2</field>
+        </block>
+        <block type="robSensors_timer_getSample" id="j)bs+%bXgb1|mDS*;`.b" intask="true">
+            <mutation mode="VALUE" />
+            <field name="MODE">VALUE</field>
+            <field name="SENSORPORT">1</field>
+            <field name="SLOT" />
+        </block>
+        <block type="robSensors_getSample" id="O,2NaUzm)uP78|w`7Al{" intask="true" deletable="false" movable="false">
+            <mutation input="KEY_PRESSED" />
+            <field name="SENSORTYPE">KEY_PRESSED</field>
+            <field name="SENSORPORT">A</field>
+            <field name="SLOT" />
+        </block>
+        <block type="mbedSensors_getSample" id="6wBrpMb}0LaLu2kIT7jR" intask="true" deletable="false" movable="false">
+            <mutation input="MICROPHONE" />
+            <field name="SENSORTYPE">MICROPHONE</field>
+        </block>
+        <block type="mbedSensors_gesture_isActive" id="E#H~CI4A#zW4Fn!cfJhS" intask="true">
+            <field name="GESTURE">SHAKE</field>
+        </block>
+        <block type="mbedActions_leds_off" id="@6op=+wd%BeWn*2w@uSb" intask="true" />
+        <block type="mbedActions_leds_on" id=",8m4r@D6[TYulG4fLLGH" intask="true">
+            <value name="COLOR">
+                <block type="mbedColour_picker" id="{hag|O}W^M,z5b.!vd/W" intask="true">
+                    <field name="COLOUR">#009900</field>
+                </block>
+            </value>
+        </block>
+        <block type="mbedSensors_compass_getSample" id="uDUqSoeP7zdkG|J:bp,Z" intask="true" />
+    </instance>
+</block_set>

@@ -1,0 +1,138 @@
+<!--This is not a real program, it is just for testing the xsl transformation-->
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="ev3" xmlversion="2.0" description="" tags="">
+    <instance>
+        <block type="mbedSensors_timer_getSample" id="">
+            <mutation input="TIME"></mutation>
+        </block>
+        <block type="robSensors_battery_voltage" id="">
+            <mutation input="KEYS_PRESSED"></mutation>
+        </block>
+        <block type="robSensors_key_isPressed" id="">
+            <mutation input="TEMPERATURE"></mutation>
+        </block>
+        <block type="robSensors_touch_isPressed" id="">
+            <mutation input="MICROPHONE"></mutation>
+        </block>
+        <block type="robSensors_getSample_ardu" id="">
+            <mutation input="LIGHT_LEVEL"></mutation>
+        </block>
+        <block type="bob3Sensors_ambientlight" id="">
+            <mutation input="ORIENTATION"></mutation>
+        </block>
+        <block type="bob3Sensors_temperature_getSample" id="">
+            <mutation input="ACCELERATION"></mutation>
+        </block>
+        <block type="bob3Sensors_getCode" id="">
+            <mutation input="GESTURE_ACTIVE"></mutation>
+        </block>
+        <block type="bob3Sensors_touch_getSample" id="">
+            <mutation input="PIN_PULSE_HIGH"></mutation>
+        </block>
+        <block type="bob3Sensors_getSample_bob3" id="">
+            <mutation input="PIN_PULSE_LOW"></mutation>
+        </block>
+        <block type="mbedSensors_getSample" id="">
+            <mutation input="PIN_TOUCHED"></mutation>
+        </block>
+        <block type="mbedSensors_key_isPressed" id="">
+            <mutation mode="SEEK"></mutation>
+        </block>
+        <block type="mbedSensors_pin_isTouched" id="">
+            <mutation mode="RED"></mutation>
+        </block>
+        <block type="mbedSensors_gesture_isActive" id="">
+            <mutation mode="PIN_PULSE_HIGH"></mutation>
+        </block>
+        <block type="mbedSensors_compass_getSample" id="">
+            <mutation mode="PIN_PULSE_LOW"></mutation>
+        </block>
+        <block type="mbedSensors_microphone_getSample" id="">
+            <mutation mode="PIN_TOUCHED"></mutation>
+        </block>
+        <block type="mbedSensors_timer_getSample" id="" />
+        <block type="mbedSensors_temperature_getSample" id="" />
+        <block type="mbedSensors_getRssi" id="" />
+        <block type="mbedSensors_ambientLight_getSample" id="" />
+        <block type="mbedSensors_pin_getSample" id="" />
+        <block type="mbedSensors_rotation_getSample" id="" />
+        <block type="mbedSensors_acceleration_getSample" id="" />
+        <block type="naoSensors_accelerometer" id="" />
+        <block type="robSensors_getSample" id="">
+            <field name="">TOUCH</field>
+        </block>
+        <block type="robSensors_getSample" id="">
+            <field name="">TIME</field>
+        </block>
+        <block type="robSensors_getSample" id="">
+            <field name="">KEYS_PRESSED</field>
+        </block>
+        <block type="robSensors_getSample" id="">
+            <field name="">TEMPERATURE</field>
+        </block>
+        <block type="robSensors_getSample" id="">
+            <field name="">MICROPHONE</field>
+        </block>
+        <block type="robSensors_getSample" id="">
+            <field name="">LIGHT_LEVEL</field>
+        </block>
+        <block type="robSensors_getSample" id="">
+            <field name="">ORIENTATION</field>
+        </block>
+        <block type="robSensors_getSample" id="">
+            <field name="">ACCELERATION</field>
+        </block>
+        <block type="robSensors_getSample" id="">
+            <field name="">PIN_PULSE_HIGH</field>
+        </block>
+        <block type="robSensors_getSample" id="">
+            <field name="">PIN_PULSE_LOW</field>
+        </block>
+        <block type="robSensors_getSample" id="">
+            <field name="">PIN_TOUCHED</field>
+        </block>
+        <block type="" id="">
+            <field name="">PULSE_HIGH</field>
+        </block>
+        <block type="" id="">
+            <field name="">PULSE_LOW</field>
+        </block>
+        <block type="robSensors_colour_getSample" id="">
+            <field name="">RED</field>
+        </block>
+        <block type="robSensors_light_getSample" id="">
+            <field name="">RED</field>
+        </block>
+        <block type="robSensors_infrared_getSample" id="">
+            <field name="">SEEK</field>
+        </block>
+        <block type="robSensors_gyro_getSample" id="">
+            <field name="MODE">ROLL</field>
+        </block>
+        <block type="robSensors_gyro_getSample" id="">
+            <field name="MODE">PITCH</field>
+        </block>
+        <block type="robSensors_getSample" id="">
+            <field name="ORIENTATION">ROLL</field>
+        </block>
+        <block type="robSensors_getSample" id="">
+            <field name="ORIENTATION">PITCH</field>
+        </block>
+        <block type="robControls_start" id="">
+            <field name="">TRUE</field>
+        </block>
+        <block type="robSensors_getSample" id="">
+            <field name="GESTURE">TRUE</field>
+            <field name="SENSORTYPE" />
+        </block>
+        <block type="robControls_start" id="">
+            <field name="GESTURE">TRUE</field>
+            <field name="MODE" />
+        </block>
+        <block type="robControls_start" id="">
+            <field name="SENSORPORT">button_a</field>
+        </block>
+        <block type="robControls_start" id="">
+            <field name="SENSORPORT">button_b</field>
+        </block>
+    </instance>
+</block_set>

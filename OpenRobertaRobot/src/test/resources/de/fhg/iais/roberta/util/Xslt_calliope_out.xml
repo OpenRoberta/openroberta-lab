@@ -1,0 +1,14 @@
+<!--This is not a real program, it is just for testing the xsl transformation-->
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="calliope" xmlversion="2.0" description="" tags="">
+    <instance>
+        <block type="robSensors_getSample" id="">
+            <mutation input="LIGHT_VALUE"></mutation>
+        </block>
+        <block type="robSensors_getSample" id="">
+            <field name="">LIGHT_VALUE</field>
+        </block>
+        <block type="robControls_start" id="">
+            <field name="" />
+        </block>
+    </instance>
+</block_set>

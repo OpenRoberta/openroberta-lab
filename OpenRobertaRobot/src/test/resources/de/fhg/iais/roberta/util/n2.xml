@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <export>
-	<program>
+    <program>
         <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="ev3" xmlversion="3.0" description="" tags="">
             <instance x="346" y="50">
                 <block type="robControls_start" id="juF:ap8|,Kx26/D3xKH=" intask="true" deletable="false">
@@ -49,15 +49,14 @@
                         </block>
                     </value>
                     <value name="MC">
-						<block type="robBrick_motor_big" id="_RP`dqWE]r+|X.FK4icN"
-							intask="true">
-							<field name="MOTOR_REGULATION">TRUE</field>
-							<field name="MOTOR_REVERSE">OFF</field>
-							<field name="MOTOR_DRIVE">LEFT</field>
-						</block>
-					</value>
-				</block>
-			</instance>
-		</block_set>
-	</config>
+                        <block type="robBrick_motor_big" id="_RP`dqWE]r+|X.FK4icN" intask="true">
+                            <field name="MOTOR_REGULATION">TRUE</field>
+                            <field name="MOTOR_REVERSE">OFF</field>
+                            <field name="MOTOR_DRIVE">LEFT</field>
+                        </block>
+                    </value>
+                </block>
+            </instance>
+        </block_set>
+    </config>
 </export>

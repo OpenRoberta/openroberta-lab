@@ -61,6 +61,7 @@ import de.fhg.iais.roberta.util.Statistics;
 import de.fhg.iais.roberta.util.Util;
 import de.fhg.iais.roberta.util.UtilForHtmlXml;
 import de.fhg.iais.roberta.util.UtilForREST;
+import de.fhg.iais.roberta.util.XsltTransformer;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.util.jaxb.JaxbHelper;
 
@@ -700,12 +701,18 @@ public class ClientProgramController {
     // Transform programs with old xml versions to new xml versions
     private static Pair<String, String> transformBetweenVersions(IRobotFactory robotFactory, String programText, String configText) {
         if ( robotFactory.hasWorkflow("transform") ) {
-            if (configText == null) {
+            if ( configText == null ) {
                 // programs that do not have any configuration modifications are saved into the database without an associated configuration
                 // when loaded, the default configuration should be used
                 configText = robotFactory.getConfigurationDefault();
             }
-            Project project = new Project.Builder().setFactory(robotFactory).setProgramXml(programText).setConfigurationXml(configText).build();
+            Pair<String, String> transformedXmls = XsltTransformer.getInstance().transform(programText, configText);
+            Project project =
+                new Project.Builder()
+                    .setFactory(robotFactory)
+                    .setProgramXml(transformedXmls.getFirst())
+                    .setConfigurationXml(transformedXmls.getSecond())
+                    .build();
             ProjectService.executeWorkflow("transform", project);
             if ( configText != null ) {
                 if ( project.getRobotFactory().getConfigurationType().equals("new") ) {
