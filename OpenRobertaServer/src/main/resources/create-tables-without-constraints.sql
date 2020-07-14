@@ -74,21 +74,6 @@ create cached table USER_PROGRAM_LIKE (
   COMMENT varchar(16M)
 );
 
-create table TOOLBOX (
-  ID INTEGER not null,
-  NAME varchar(255) not null,
-  OWNER_ID INTEGER,
-  ROBOT_ID INTEGER not null,
-  TOOLBOX_TEXT varchar(16M),
-  CREATED timestamp not null,
-  LAST_CHANGED timestamp not null,
-  LAST_CHECKED timestamp,
-  LAST_ERRORFREE timestamp,
-  TAGS varchar(16M), -- e.g. CAR AUTONOMOUS COOL 3WHEELS
-  ICON_NUMBER integer not null,
-  primary key (ID)
-);
-
 create cached table CONFIGURATION (
   ID INTEGER not null,
   NAME varchar(255) not null,

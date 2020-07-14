@@ -6,13 +6,13 @@ import org.hibernate.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-final class DbUpgraderUserGroups implements DbUpgraderInterface {
+final class DbUpgrader4_0_0 implements DbUpgraderInterface {
 
     private static final Logger LOG = LoggerFactory.getLogger(DbUpgrader3_1_0.class);
 
     private final SessionFactoryWrapper sessionFactoryWrapper;
 
-    DbUpgraderUserGroups(SessionFactoryWrapper sessionFactoryWrapper) {
+    DbUpgrader4_0_0(SessionFactoryWrapper sessionFactoryWrapper) {
         this.sessionFactoryWrapper = sessionFactoryWrapper;
     }
 
@@ -40,7 +40,7 @@ final class DbUpgraderUserGroups implements DbUpgraderInterface {
             .sqlFile(
                 null, //
                 null,
-                "/update-user-groups.sql");
+                "/dbUpgrade/4-0-0.sql");
 
         nativeSession.getTransaction().commit();
         nativeSession.close();

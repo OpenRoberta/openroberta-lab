@@ -14,7 +14,6 @@ import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.javaServer.restServices.all.controller.ClientAdmin;
 import de.fhg.iais.roberta.javaServer.restServices.all.controller.ClientConfiguration;
 import de.fhg.iais.roberta.javaServer.restServices.all.controller.ClientPing;
-import de.fhg.iais.roberta.javaServer.restServices.all.controller.ClientToolbox;
 import de.fhg.iais.roberta.javaServer.restServices.all.controller.ClientUser;
 import de.fhg.iais.roberta.javaServer.restServices.all.controller.RestExample;
 import de.fhg.iais.roberta.javaServer.restServices.robot.RobotCommand;
@@ -49,7 +48,6 @@ public class RobertaGuiceModule extends AbstractModule {
         // configure at least one JAX-RS resource or the server won't start.
         bind(ClientAdmin.class);
         bind(ClientConfiguration.class);
-        bind(ClientToolbox.class);
         bind(ClientUser.class);
         bind(RobotDownloadProgram.class);
         bind(RobotCommand.class);

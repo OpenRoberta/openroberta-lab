@@ -506,23 +506,6 @@
       ]
     },
     {
-      "name": "ToolboxRequest",
-      "extends": "BaseRequest",
-      "description": "the request description for the /toolbox REST request",
-      "properties": [
-        { "name": "name", "type": "String" },
-        { "name": "owner", "type": "String" }
-      ]
-    },
-    {
-      "name": "ToolboxResponse",
-      "extends": "BaseResponse",
-    	"description": "the response for the /toolbox REST request",
-      "properties": [
-        { "name": "data", "type": "String" }
-      ]
-    },
-    {
       "name": "UserGroupProgramListRequest",
       "extends": "BaseRequest",
       "description": "the request description for the /program/userGroupMembers/names REST request, response is: ListingNamesResponse",

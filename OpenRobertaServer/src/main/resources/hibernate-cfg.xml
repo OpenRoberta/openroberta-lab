@@ -25,7 +25,6 @@
 		<mapping class="de.fhg.iais.roberta.persistence.bo.Program" />
 		<mapping class="de.fhg.iais.roberta.persistence.bo.Configuration" />
 		<mapping class="de.fhg.iais.roberta.persistence.bo.ConfigurationData" />
-		<mapping class="de.fhg.iais.roberta.persistence.bo.Toolbox" />
 		<mapping class="de.fhg.iais.roberta.persistence.bo.Robot" />
 		<mapping class="de.fhg.iais.roberta.persistence.bo.User" />
 		<mapping class="de.fhg.iais.roberta.persistence.bo.UserProgramShare" />

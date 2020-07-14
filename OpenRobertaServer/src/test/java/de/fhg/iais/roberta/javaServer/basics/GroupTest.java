@@ -36,9 +36,7 @@ public class GroupTest {
 
     @BeforeClass
     public static void setup() {
-        sessionFactoryWrapper = new SessionFactoryWrapper("hibernate-cfg.xml", "jdbc:hsqldb:file:./db-3.4.1/openroberta-db");
-        // prepare logger to show result sets
-        // ((ch.qos.logback.classic.Logger) DbExecutor.LOG).setLevel(Level.DEBUG);
+        sessionFactoryWrapper = new SessionFactoryWrapper("hibernate-cfg.xml", "jdbc:hsqldb:file:./db-xxx/openroberta-db");
     }
 
     @AfterClass
@@ -48,8 +46,6 @@ public class GroupTest {
         DbExecutor dbExecutor = DbExecutor.make(session);
         dbExecutor.sqlStmt("select * from USER");
         dbExecutor.sqlStmt("select * from USERGROUP");
-        dbExecutor.sqlStmt("select * from USERGROUP_ROBOTS");
-        dbExecutor.sqlStmt("select * from ACCESSRIGHT_HISTORY");
 
         LOG.info("***** shutdown the db");
         session.createSQLQuery("shutdown").executeUpdate();

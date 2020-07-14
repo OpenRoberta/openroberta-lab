@@ -43,17 +43,26 @@ public class DbUpgrader {
                 dbUpgrader3_1_0.run();
             }
             /*
-             * 4.x.x ... ... ... copy the implementation from above. Start with a clone of the upgrader class DbUpgrader3_1_0
+             * 4.0.0 user group feature. A lot of new tables, a lot of DDL
              */
-            DbUpgraderUserGroups dbUpgraderUserGroups = new DbUpgraderUserGroups(sessionFactoryWrapper);
-            boolean upgradeDoneUserGroups = dbUpgraderUserGroups.isUpgradeDone();
-            if ( !upgradeDoneUserGroups ) {
-                dbUpgraderUserGroups.run();
+            DbUpgrader4_0_0 dbUpgrader4_0_0 = new DbUpgrader4_0_0(sessionFactoryWrapper);
+            boolean upgradeDone4_0_0 = dbUpgrader4_0_0.isUpgradeDone();
+            if ( !upgradeDone4_0_0 ) {
+                dbUpgrader4_0_0.run();
             }
 
-            boolean atLeastOneUpgrade = !upgradeDone3_1_0 || !upgradeDoneUserGroups; // OR of !upgradeDone*
+            /*
+             * x.x.x ... ... ... copy the implementation from above. Start with a clone of the upgrader class DbUpgrader3_1_0
+             */
+
+            /*
+             * check if at least one upgrade was performed
+             */
+            boolean atLeastOneUpgrade = !upgradeDone3_1_0 || !upgradeDone4_0_0; // OR of !upgradeDone*
             if ( !atLeastOneUpgrade ) {
                 LOG.info("no db upgrades needed");
+            } else {
+                LOG.info("at least one db upgrade was EXECUTED!");
             }
         } catch ( Exception e ) {
             LOG.error("Abort: database upgrade fails. System exit 2", e);
