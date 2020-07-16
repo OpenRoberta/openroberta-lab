@@ -455,7 +455,7 @@
     {
       "name": "ProjectWorkflowResetRequest",
       "extends": "BaseRequest",
-    	"description": "the request description for the /projectWorkflow/reset REST request",
+    	"description": "DEPRECATED: remove after 4.0.0 deplyoment",
       "properties": [
         { "name": "robot", "type": "String", "required": false }
       ]

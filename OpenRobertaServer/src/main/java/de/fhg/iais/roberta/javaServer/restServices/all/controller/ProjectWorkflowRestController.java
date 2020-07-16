@@ -22,7 +22,6 @@ import de.fhg.iais.roberta.generated.restEntities.ProjectNepoResponse;
 import de.fhg.iais.roberta.generated.restEntities.ProjectSourceResponse;
 import de.fhg.iais.roberta.generated.restEntities.ProjectSourceSimulationResponse;
 import de.fhg.iais.roberta.generated.restEntities.ProjectWorkflowRequest;
-import de.fhg.iais.roberta.generated.restEntities.ProjectWorkflowResetRequest;
 import de.fhg.iais.roberta.javaServer.restServices.all.service.ProjectService;
 import de.fhg.iais.roberta.mode.action.Language;
 import de.fhg.iais.roberta.persistence.util.HttpSessionState;
@@ -219,13 +218,12 @@ public class ProjectWorkflowRestController {
     public Response reset(FullRestRequest fullRequest) {
         HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, fullRequest, true);
         try {
-            ProjectWorkflowResetRequest wfRequest = ProjectWorkflowResetRequest.make(fullRequest.getData());
             ProjectNativeResponse response = ProjectNativeResponse.make();
             Project project =
                 new Project.Builder()
                     .setCompiledProgramPath(httpSessionState.getRobotFactory().getFirmwareDefaultProgramName())
                     .setToken(httpSessionState.getToken())
-                    .setRobot(wfRequest.getRobot() == null ? httpSessionState.getRobotName() : wfRequest.getRobot())
+                    .setRobot(httpSessionState.getRobotName())
                     .setFactory(httpSessionState.getRobotFactory())
                     .setRobotCommunicator(this.robotCommunicator)
                     .build();
