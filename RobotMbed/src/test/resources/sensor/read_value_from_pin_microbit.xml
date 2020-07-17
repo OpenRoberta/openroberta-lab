@@ -10,7 +10,7 @@
                 <block type="robSensors_pin_getSample" id="upcu-el7H75BFy@O(DGy" intask="true">
                     <mutation mode="ANALOG" />
                     <field name="MODE">ANALOG</field>
-                    <field name="SENSORPORT">A_1_A</field>
+                    <field name="SENSORPORT">P1</field>
                 </block>
             </value>
         </block>
@@ -20,7 +20,7 @@
                 <block type="robSensors_pin_getSample" id="upcu-el7H75BFy@O(DGy" intask="true">
                     <mutation mode="DIGITAL" />
                     <field name="MODE">DIGITAL</field>
-                    <field name="SENSORPORT">A_0_D</field>
+                    <field name="SENSORPORT">P0</field>
                 </block>
             </value>
         </block>

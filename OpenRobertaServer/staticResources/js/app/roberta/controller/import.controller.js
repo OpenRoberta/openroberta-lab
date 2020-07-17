@@ -75,8 +75,8 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'pr
                     // restore old Program
                     GUISTATE_C.setProgramXML(xmlProgOld);
                     GUISTATE_C.setConfigurationXML(xmlConfOld);
-                    PROGRAM_C.reloadProgram();
                     CONFIGURATION_C.reloadConf();
+                    PROGRAM_C.reloadProgram();
                     result.rc = "error";
                     MSG.displayInformation(result, "", Blockly.Msg.ORA_PROGRAM_IMPORT_ERROR, name);
                 }

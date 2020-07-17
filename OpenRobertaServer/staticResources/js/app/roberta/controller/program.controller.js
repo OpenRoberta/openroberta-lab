@@ -227,8 +227,8 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'ro
                         GUISTATE_C.setConfigurationXML(result.confXML);
                     }
                     $('#tabProgram').one('shown.bs.tab', function(e) {
-                        reloadProgram();
                         CONFIGURATION_C.reloadConf();
+                        reloadProgram();
                     });
                     $('#tabProgram').trigger('click');
                 }

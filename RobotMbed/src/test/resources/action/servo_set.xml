@@ -5,7 +5,7 @@
             <field name="DEBUG"></field>
         </block>
         <block type="mbedActions_servo_set" id="t!u-W2!*#3mHwtvdh0m*" intask="true">
-            <field name="PIN_PORT">S_C04</field>
+            <field name="PIN_PORT">C04</field>
             <value name="VALUE">
                 <block type="math_number" id="Zr[n951]~JG?m#BrQ%ms" intask="true">
                     <field name="NUM">90</field>

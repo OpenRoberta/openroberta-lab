@@ -7,7 +7,7 @@
         <block type="mbedActions_write_to_pin" id="CQa.D7DPKPkm(aK3;ZpY" intask="true">
             <mutation protocol="DIGITAL"></mutation>
             <field name="VALUETYPE">DIGITAL</field>
-            <field name="PIN">A_0_D</field>
+            <field name="PIN">P0</field>
             <value name="VALUE">
                 <block type="math_number" id="yQxC%c!R;]mw(J=.9SBc" intask="true">
                     <field name="NUM">1</field>

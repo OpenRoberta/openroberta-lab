@@ -66,9 +66,6 @@ define([ 'exports', 'log', 'util', 'comm', 'message', 'guiState.controller', 'bl
                 bricklyWorkspace.setVisible(false);
             }
             $(window).resize();
-            if (!seen) {
-                reloadConf();
-            }
             UTIL.clearAnnotations(bricklyWorkspace);
             if (GUISTATE_C.confAnnos !== undefined) {
                 UTIL.annotateBlocks(bricklyWorkspace, GUISTATE_C.confAnnos);

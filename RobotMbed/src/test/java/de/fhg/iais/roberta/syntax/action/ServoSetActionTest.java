@@ -12,7 +12,7 @@ public class ServoSetActionTest extends CalliopeAstTest {
         String expectedResult =
             "BlockAST [project=[[Location [x=384, y=50], "
                 + "MainTask [], "
-                + "ServoSetAction [S_C04, NumConst[90]]]]]";
+                + "ServoSetAction [C04, NumConst[90]]]]]";
 
         UnitTestHelper.checkProgramAstEquality(testFactory, expectedResult, "/action/servo_set.xml");
 

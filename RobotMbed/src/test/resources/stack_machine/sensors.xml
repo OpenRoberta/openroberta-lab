@@ -218,7 +218,7 @@
                 <block type="robSensors_pin_getSample" id="]CoNoSQ5-HCa:B3rcE10" intask="true">
                     <mutation mode="ANALOG"></mutation>
                     <field name="MODE">ANALOG</field>
-                    <field name="SENSORPORT">S_P1_A</field>
+                    <field name="SENSORPORT">P1</field>
                     <field name="SLOT"></field>
                 </block>
             </value>
@@ -229,7 +229,7 @@
                 <block type="robSensors_pin_getSample" id="ZV4jK8ETc^!nbEcWs=.D" intask="true">
                     <mutation mode="DIGITAL"></mutation>
                     <field name="MODE">DIGITAL</field>
-                    <field name="SENSORPORT">S_P0_D</field>
+                    <field name="SENSORPORT">P0</field>
                     <field name="SLOT"></field>
                 </block>
             </value>

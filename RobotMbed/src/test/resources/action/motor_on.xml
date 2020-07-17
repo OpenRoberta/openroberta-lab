@@ -4,7 +4,7 @@
             <mutation declare="false"></mutation>
         </block>
         <block type="mbedActions_motor_on" id="{3r=h0rKU:M[[V]bdEBg" intask="true">
-            <field name="MOTORPORT">M_A</field>
+            <field name="MOTORPORT">A</field>
             <value name="POWER">
                 <block type="math_number" id=".-Y5!*tf%U@Zi__(8F}^" intask="true">
                     <field name="NUM">30</field>
@@ -12,7 +12,7 @@
             </value>
         </block>
         <block type="mbedActions_motor_on" id="lgH7ZpWWIW|I9{#4gwH9" intask="true">
-            <field name="MOTORPORT">M_B</field>
+            <field name="MOTORPORT">B</field>
             <value name="POWER">
                 <block type="math_number" id="s2yge_X0|R;kQW5/Xc5T" intask="true">
                     <field name="NUM">30</field>
@@ -20,8 +20,8 @@
             </value>
         </block>
         <block type="mbedActions_motors_on" id="X^[U@F~zEGolPV(l+woq" intask="true">
-            <field name="A">M_A</field>
-            <field name="B">M_B</field>
+            <field name="A">A</field>
+            <field name="B">B</field>
             <value name="POWER_A">
                 <block type="math_number" id="kTzNk:~9lmbFZ-Yrr8Z8" intask="true">
                     <field name="NUM">30</field>

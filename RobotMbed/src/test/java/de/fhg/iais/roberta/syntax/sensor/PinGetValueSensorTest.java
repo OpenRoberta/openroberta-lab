@@ -12,7 +12,7 @@ public class PinGetValueSensorTest extends AstTest {
         String expectedResult =
             "BlockAST [project=[[Location [x=213, y=113], "
                 + "MainTask [], "
-                + "DisplayTextAction [TEXT, SensorExpr [PinGetValueSensor [S_P1_A, ANALOG, NO_SLOT]]], DisplayTextAction [TEXT, SensorExpr [PinGetValueSensor [S_P0_D, DIGITAL, NO_SLOT]]]]]]";
+                + "DisplayTextAction [TEXT, SensorExpr [PinGetValueSensor [P1, ANALOG, NO_SLOT]]], DisplayTextAction [TEXT, SensorExpr [PinGetValueSensor [P0, DIGITAL, NO_SLOT]]]]]]";
 
         UnitTestHelper.checkProgramAstEquality(testFactory, expectedResult, "/sensor/read_value_from_pin.xml");
 

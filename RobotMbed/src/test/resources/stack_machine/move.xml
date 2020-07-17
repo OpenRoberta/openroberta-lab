@@ -6,8 +6,8 @@
             <field name="DEBUG"></field>
         </block>
         <block type="mbedActions_motors_on" id="/efs`/x@@#PIe4W{GDq!" intask="true">
-            <field name="A">M_A</field>
-            <field name="B">M_B</field>
+            <field name="A">A</field>
+            <field name="B">B</field>
             <value name="POWER_A">
                 <block type="math_number" id="*x:OV=e66%UVih5r{^-6" intask="true">
                     <field name="NUM">30</field>
@@ -21,7 +21,7 @@
         </block>
         <block type="mbedActions_motors_stop" id="pnGd7Rw]Yfiy2^)502t:" intask="true"></block>
         <block type="mbedActions_motor_on" id="h%k_]:x]WKT#3+-@`o;_" intask="true">
-            <field name="MOTORPORT">M_A</field>
+            <field name="MOTORPORT">A</field>
             <value name="POWER">
                 <block type="math_number" id="n%Qqpvcu.nv{{l+9e[lT" intask="true">
                     <field name="NUM">30</field>
@@ -29,7 +29,7 @@
             </value>
         </block>
         <block type="mbedActions_motor_on" id="4}q#Hz,-5X~?|FHvy~X{" intask="true">
-            <field name="MOTORPORT">M_B</field>
+            <field name="MOTORPORT">B</field>
             <value name="POWER">
                 <block type="math_number" id="n2%wk).JqP~0F-8q=arp" intask="true">
                     <field name="NUM">30</field>
@@ -37,8 +37,8 @@
             </value>
         </block>
         <block type="mbedActions_motors_on" id=".G;Y5*=oI;;+aSA-r}=v" intask="true">
-            <field name="A">M_A</field>
-            <field name="B">M_B</field>
+            <field name="A">A</field>
+            <field name="B">B</field>
             <value name="POWER_A">
                 <block type="math_number" id="*x:OV=e66%UVih5r{^-6" intask="true">
                     <field name="NUM">30</field>
@@ -51,10 +51,10 @@
             </value>
         </block>
         <block type="mbedActions_motor_stop" id="U^`s.aL{A)t|95yuMp^p" intask="true">
-            <field name="MOTORPORT">M_A</field>
+            <field name="MOTORPORT">A</field>
         </block>
         <block type="mbedActions_motor_stop" id="}=Or24u+E34QN+u}w3kI" intask="true">
-            <field name="MOTORPORT">M_B</field>
+            <field name="MOTORPORT">B</field>
         </block>
         <block type="mbedActions_motors_stop" id="h3_Dck/L8IkIm^kUZl7j" intask="true"></block>
     </instance>

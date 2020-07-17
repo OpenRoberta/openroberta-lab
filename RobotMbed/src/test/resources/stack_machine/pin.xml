@@ -7,7 +7,7 @@
         <block type="mbedActions_write_to_pin" id="#01y;@M{,biUmNRUkr{Q" intask="true">
             <mutation protocol="ANALOG"></mutation>
             <field name="VALUETYPE">ANALOG</field>
-            <field name="PIN">P1_A</field>
+            <field name="PIN">P1</field>
             <value name="VALUE">
                 <block type="math_number" id="`85zzp86|El)6pxPC_i9" intask="true">
                     <field name="NUM">250</field>
@@ -17,7 +17,7 @@
         <block type="mbedActions_write_to_pin" id="iBT,ueyPUw:^.W!q.X6^" intask="true">
             <mutation protocol="ANALOG"></mutation>
             <field name="VALUETYPE">ANALOG</field>
-            <field name="PIN">P2_A</field>
+            <field name="PIN">P2</field>
             <value name="VALUE">
                 <block type="math_number" id="%1C+h@BMb#J0w8EeToM%" intask="true">
                     <field name="NUM">250</field>
@@ -27,7 +27,7 @@
         <block type="mbedActions_write_to_pin" id="tk:F#7d#/qF#2n:bF3JD" intask="true">
             <mutation protocol="DIGITAL"></mutation>
             <field name="VALUETYPE">DIGITAL</field>
-            <field name="PIN">P0_D</field>
+            <field name="PIN">P0</field>
             <value name="VALUE">
                 <block type="math_number" id="mCDsQ~T_H)]_bg^T4/++" intask="true">
                     <field name="NUM">250</field>
@@ -37,7 +37,7 @@
         <block type="mbedActions_write_to_pin" id="(z_kYRQ-8_WM_lZ5mu{L" intask="true">
             <mutation protocol="ANALOG"></mutation>
             <field name="VALUETYPE">DIGITAL</field>
-            <field name="PIN">P2_D</field>
+            <field name="PIN">P2_2</field>
             <value name="VALUE">
                 <block type="math_number" id="_O?M+!z46-@5S[u1_K[3" intask="true">
                     <field name="NUM">250</field>

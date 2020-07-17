@@ -12,9 +12,9 @@ public class PinSetPullActionTest extends CalliopeAstTest {
         String expectedResult =
             "BlockAST [project=[[Location [x=384, y=50], "
                 + "MainTask [], "
-                + "PinSetPullAction [UP, P0_D], "
-                + "PinSetPullAction [DOWN, P1_D], "
-                + "PinSetPullAction [NONE, P2_D]]]]";
+                + "PinSetPullAction [UP, P0], "
+                + "PinSetPullAction [DOWN, P1], "
+                + "PinSetPullAction [NONE, P2]]]]";
 
         UnitTestHelper.checkProgramAstEquality(testFactory, expectedResult, "/action/pin_set_pull.xml");
 

@@ -7,13 +7,9 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import de.fhg.iais.roberta.blockly.generated.BlockSet;
-import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.components.Project;
 import de.fhg.iais.roberta.factory.IRobotFactory;
-import de.fhg.iais.roberta.transformer.Jaxb2ConfigurationAst;
 import de.fhg.iais.roberta.util.Util;
-import de.fhg.iais.roberta.util.jaxb.JaxbHelper;
 import de.fhg.iais.roberta.util.test.UnitTestHelper;
 import de.fhg.iais.roberta.worker.MbedTwo2ThreeTransformerWorker;
 
@@ -26,22 +22,11 @@ public class MicrobitTwo2ThreeTransformerTest {
             + "    </instance>"
             + "</block_set>";
     private static IRobotFactory testFactory;
-    private static ConfigurationAst configuration;
 
     @BeforeClass
     public static void setupBefore() throws Exception {
         List<String> pluginDefines = new ArrayList<>();
-        pluginDefines.add("microbit:robot.configuration.type = old-S");
-        pluginDefines.add("microbit:robot.configuration.old.toplevelblock = mbedBrick_microbit-Brick");
         testFactory = Util.configureRobotPlugin("microbit", "", "", pluginDefines);
-        BlockSet blockSet = JaxbHelper.xml2BlockSet(OLD_CONFIGURATION_XML);
-        configuration =
-            Jaxb2ConfigurationAst
-                .blocks2OldConfig(
-                    blockSet,
-                    testFactory.getBlocklyDropdownFactory(),
-                    testFactory.optTopBlockOfOldConfiguration(),
-                    testFactory.optSensorPrefix());
     }
 
     @Test
@@ -56,7 +41,7 @@ public class MicrobitTwo2ThreeTransformerTest {
             };
 
         Project project =
-            UnitTestHelper.setupWithProgramXML(testFactory, Util.readResourceContent("/transform/old_compass.xml")).setConfigurationAst(configuration).build();
+            UnitTestHelper.setupWithConfigAndProgramXML(testFactory, Util.readResourceContent("/transform/old_compass.xml"), OLD_CONFIGURATION_XML).build();
 
         new MbedTwo2ThreeTransformerWorker().execute(project);
         UnitTestHelper.checkAstEquality(project.getProgramAst().getTree().toString(), expectedProgramAst);
@@ -78,7 +63,7 @@ public class MicrobitTwo2ThreeTransformerTest {
             };
 
         Project project =
-            UnitTestHelper.setupWithProgramXML(testFactory, Util.readResourceContent("/transform/old_key.xml")).setConfigurationAst(configuration).build();
+            UnitTestHelper.setupWithConfigAndProgramXML(testFactory, Util.readResourceContent("/transform/old_key.xml"), OLD_CONFIGURATION_XML).build();
 
         new MbedTwo2ThreeTransformerWorker().execute(project);
         UnitTestHelper.checkAstEquality(project.getProgramAst().getTree().toString(), expectedProgramAst);
@@ -97,7 +82,7 @@ public class MicrobitTwo2ThreeTransformerTest {
             };
 
         Project project =
-            UnitTestHelper.setupWithProgramXML(testFactory, Util.readResourceContent("/transform/old_light.xml")).setConfigurationAst(configuration).build();
+            UnitTestHelper.setupWithConfigAndProgramXML(testFactory, Util.readResourceContent("/transform/old_light.xml"), OLD_CONFIGURATION_XML).build();
 
         new MbedTwo2ThreeTransformerWorker().execute(project);
         UnitTestHelper.checkAstEquality(project.getProgramAst().getTree().toString(), expectedProgramAst);
@@ -108,90 +93,90 @@ public class MicrobitTwo2ThreeTransformerTest {
     public void executeTransformer_ShouldReturnTransformedPinPull_WhenGivenPinPull() {
         String expectedProgramAst =
             "BlockAST[project=[[Location[x=512,y=50],MainTask[],"
-                + "PinSetPullAction[UP,A_0_D],"
-                + "PinSetPullAction[UP,A_1_D],"
-                + "PinSetPullAction[UP,A_2_D],"
-                + "PinSetPullAction[UP,A_3_D],"
-                + "PinSetPullAction[UP,A_4_D],"
-                + "PinSetPullAction[UP,A_5_D],"
-                + "PinSetPullAction[UP,A_6_D],"
-                + "PinSetPullAction[UP,A_7_D],"
-                + "PinSetPullAction[UP,A_8_D],"
-                + "PinSetPullAction[UP,A_9_D],"
-                + "PinSetPullAction[UP,A_10_D],"
-                + "PinSetPullAction[UP,A_11_D],"
-                + "PinSetPullAction[UP,A_12_D],"
-                + "PinSetPullAction[UP,A_13_D],"
-                + "PinSetPullAction[UP,A_14_D],"
-                + "PinSetPullAction[UP,A_15_D],"
-                + "PinSetPullAction[UP,A_16_D],"
-                + "PinSetPullAction[UP,A_19_D],"
-                + "PinSetPullAction[UP,A_20_D],"
-                + "PinSetPullAction[DOWN,A_0_D],"
-                + "PinSetPullAction[DOWN,A_1_D],"
-                + "PinSetPullAction[DOWN,A_2_D],"
-                + "PinSetPullAction[DOWN,A_3_D],"
-                + "PinSetPullAction[DOWN,A_4_D],"
-                + "PinSetPullAction[DOWN,A_5_D],"
-                + "PinSetPullAction[DOWN,A_6_D],"
-                + "PinSetPullAction[DOWN,A_7_D],"
-                + "PinSetPullAction[DOWN,A_8_D],"
-                + "PinSetPullAction[DOWN,A_9_D],"
-                + "PinSetPullAction[DOWN,A_10_D],"
-                + "PinSetPullAction[DOWN,A_11_D],"
-                + "PinSetPullAction[DOWN,A_12_D],"
-                + "PinSetPullAction[DOWN,A_13_D],"
-                + "PinSetPullAction[DOWN,A_14_D],"
-                + "PinSetPullAction[DOWN,A_15_D],"
-                + "PinSetPullAction[DOWN,A_16_D],"
-                + "PinSetPullAction[DOWN,A_19_D],"
-                + "PinSetPullAction[DOWN,A_20_D],"
-                + "PinSetPullAction[NONE,A_0_D],"
-                + "PinSetPullAction[NONE,A_1_D],"
-                + "PinSetPullAction[NONE,A_2_D],"
-                + "PinSetPullAction[NONE,A_3_D],"
-                + "PinSetPullAction[NONE,A_4_D],"
-                + "PinSetPullAction[NONE,A_5_D],"
-                + "PinSetPullAction[NONE,A_6_D],"
-                + "PinSetPullAction[NONE,A_7_D],"
-                + "PinSetPullAction[NONE,A_8_D],"
-                + "PinSetPullAction[NONE,A_9_D],"
-                + "PinSetPullAction[NONE,A_10_D],"
-                + "PinSetPullAction[NONE,A_11_D],"
-                + "PinSetPullAction[NONE,A_12_D],"
-                + "PinSetPullAction[NONE,A_13_D],"
-                + "PinSetPullAction[NONE,A_14_D],"
-                + "PinSetPullAction[NONE,A_15_D],"
-                + "PinSetPullAction[NONE,A_16_D],"
-                + "PinSetPullAction[NONE,A_19_D],"
-                + "PinSetPullAction[NONE,A_20_D]]]]";
+                + "PinSetPullAction[UP,P0],"
+                + "PinSetPullAction[UP,P1],"
+                + "PinSetPullAction[UP,P2],"
+                + "PinSetPullAction[UP,P3],"
+                + "PinSetPullAction[UP,P4],"
+                + "PinSetPullAction[UP,P5],"
+                + "PinSetPullAction[UP,P6],"
+                + "PinSetPullAction[UP,P7],"
+                + "PinSetPullAction[UP,P8],"
+                + "PinSetPullAction[UP,P9],"
+                + "PinSetPullAction[UP,P10],"
+                + "PinSetPullAction[UP,P11],"
+                + "PinSetPullAction[UP,P12],"
+                + "PinSetPullAction[UP,P13],"
+                + "PinSetPullAction[UP,P14],"
+                + "PinSetPullAction[UP,P15],"
+                + "PinSetPullAction[UP,P16],"
+                + "PinSetPullAction[UP,P19],"
+                + "PinSetPullAction[UP,P20],"
+                + "PinSetPullAction[DOWN,P0],"
+                + "PinSetPullAction[DOWN,P1],"
+                + "PinSetPullAction[DOWN,P2],"
+                + "PinSetPullAction[DOWN,P3],"
+                + "PinSetPullAction[DOWN,P4],"
+                + "PinSetPullAction[DOWN,P5],"
+                + "PinSetPullAction[DOWN,P6],"
+                + "PinSetPullAction[DOWN,P7],"
+                + "PinSetPullAction[DOWN,P8],"
+                + "PinSetPullAction[DOWN,P9],"
+                + "PinSetPullAction[DOWN,P10],"
+                + "PinSetPullAction[DOWN,P11],"
+                + "PinSetPullAction[DOWN,P12],"
+                + "PinSetPullAction[DOWN,P13],"
+                + "PinSetPullAction[DOWN,P14],"
+                + "PinSetPullAction[DOWN,P15],"
+                + "PinSetPullAction[DOWN,P16],"
+                + "PinSetPullAction[DOWN,P19],"
+                + "PinSetPullAction[DOWN,P20],"
+                + "PinSetPullAction[NONE,P0],"
+                + "PinSetPullAction[NONE,P1],"
+                + "PinSetPullAction[NONE,P2],"
+                + "PinSetPullAction[NONE,P3],"
+                + "PinSetPullAction[NONE,P4],"
+                + "PinSetPullAction[NONE,P5],"
+                + "PinSetPullAction[NONE,P6],"
+                + "PinSetPullAction[NONE,P7],"
+                + "PinSetPullAction[NONE,P8],"
+                + "PinSetPullAction[NONE,P9],"
+                + "PinSetPullAction[NONE,P10],"
+                + "PinSetPullAction[NONE,P11],"
+                + "PinSetPullAction[NONE,P12],"
+                + "PinSetPullAction[NONE,P13],"
+                + "PinSetPullAction[NONE,P14],"
+                + "PinSetPullAction[NONE,P15],"
+                + "PinSetPullAction[NONE,P16],"
+                + "PinSetPullAction[NONE,P19],"
+                + "PinSetPullAction[NONE,P20]]]]";
         String[] expectedToBeInConfigAst =
             {
-                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=A_9_D,portName=A_9_D,componentProperties={PIN1=9}",
-                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=A_6_D,portName=A_6_D,componentProperties={PIN1=6}",
-                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=A_5_D,portName=A_5_D,componentProperties={PIN1=5}",
-                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=A_4_D,portName=A_4_D,componentProperties={PIN1=4}",
-                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=A_3_D,portName=A_3_D,componentProperties={PIN1=3}",
-                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=A_2_D,portName=A_2_D,componentProperties={PIN1=2}",
-                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=A_1_D,portName=A_1_D,componentProperties={PIN1=1}",
-                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=A_0_D,portName=A_0_D,componentProperties={PIN1=0}",
-                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=A_16_D,portName=A_16_D,componentProperties={PIN1=16}",
-                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=A_19_D,portName=A_19_D,componentProperties={PIN1=19}",
-                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=A_12_D,portName=A_12_D,componentProperties={PIN1=12}",
-                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=A_13_D,portName=A_13_D,componentProperties={PIN1=13}",
-                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=A_14_D,portName=A_14_D,componentProperties={PIN1=14}",
-                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=A_15_D,portName=A_15_D,componentProperties={PIN1=15}",
-                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=A_20_D,portName=A_20_D,componentProperties={PIN1=20}",
-                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=A_7_D,portName=A_7_D,componentProperties={PIN1=7}",
-                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=A_10_D,portName=A_10_D,componentProperties={PIN1=10}",
-                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=A_8_D,portName=A_8_D,componentProperties={PIN1=8}",
-                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=A_11_D,portName=A_11_D,componentProperties={PIN1=11}"
+                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=P9,portName=P9,componentProperties={PIN1=9}",
+                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=P6,portName=P6,componentProperties={PIN1=6}",
+                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=P5,portName=P5,componentProperties={PIN1=5}",
+                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=P4,portName=P4,componentProperties={PIN1=4}",
+                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=P3,portName=P3,componentProperties={PIN1=3}",
+                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=P2,portName=P2,componentProperties={PIN1=2}",
+                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=P1,portName=P1,componentProperties={PIN1=1}",
+                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=P0,portName=P0,componentProperties={PIN1=0}",
+                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=P16,portName=P16,componentProperties={PIN1=16}",
+                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=P19,portName=P19,componentProperties={PIN1=19}",
+                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=P12,portName=P12,componentProperties={PIN1=12}",
+                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=P13,portName=P13,componentProperties={PIN1=13}",
+                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=P14,portName=P14,componentProperties={PIN1=14}",
+                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=P15,portName=P15,componentProperties={PIN1=15}",
+                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=P20,portName=P20,componentProperties={PIN1=20}",
+                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=P7,portName=P7,componentProperties={PIN1=7}",
+                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=P10,portName=P10,componentProperties={PIN1=10}",
+                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=P8,portName=P8,componentProperties={PIN1=8}",
+                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=P11,portName=P11,componentProperties={PIN1=11}"
             };
 
         Project project =
             UnitTestHelper
-                .setupWithProgramXML(testFactory, Util.readResourceContent("/transform/microbit/old_pin_pull.xml"))
-                .setConfigurationAst(configuration)
+                .setupWithConfigAndProgramXML(testFactory, Util.readResourceContent("/transform/microbit/old_pin_pull.xml"), OLD_CONFIGURATION_XML)
+
                 .build();
 
         new MbedTwo2ThreeTransformerWorker().execute(project);
@@ -212,8 +197,8 @@ public class MicrobitTwo2ThreeTransformerTest {
 
         Project project =
             UnitTestHelper
-                .setupWithProgramXML(testFactory, Util.readResourceContent("/transform/old_temperature.xml"))
-                .setConfigurationAst(configuration)
+                .setupWithConfigAndProgramXML(testFactory, Util.readResourceContent("/transform/old_temperature.xml"), OLD_CONFIGURATION_XML)
+
                 .build();
 
         new MbedTwo2ThreeTransformerWorker().execute(project);
@@ -225,64 +210,64 @@ public class MicrobitTwo2ThreeTransformerTest {
     public void executeTransformer_ShouldReturnTransformedWriteToPin_WhenGivenOldWriteToPin() {
         String expectedProgramAst =
             "BlockAST[project=[[Location[x=512,y=50],MainTask[],"
-                + "PinWriteValueAction[ANALOG,A_0_A,NumConst[1]],"
-                + "PinWriteValueAction[ANALOG,A_1_A,NumConst[1]],"
-                + "PinWriteValueAction[ANALOG,A_2_A,NumConst[1]],"
-                + "PinWriteValueAction[ANALOG,A_3_A,NumConst[1]],"
-                + "PinWriteValueAction[ANALOG,A_4_A,NumConst[1]],"
-                + "PinWriteValueAction[ANALOG,A_10_A,NumConst[1]],"
-                + "PinWriteValueAction[DIGITAL,A_0_D,NumConst[1]],"
-                + "PinWriteValueAction[DIGITAL,A_1_D,NumConst[1]],"
-                + "PinWriteValueAction[DIGITAL,A_2_D,NumConst[1]],"
-                + "PinWriteValueAction[DIGITAL,A_3_D,NumConst[1]],"
-                + "PinWriteValueAction[DIGITAL,A_4_D,NumConst[1]],"
-                + "PinWriteValueAction[DIGITAL,A_5_D,NumConst[1]],"
-                + "PinWriteValueAction[DIGITAL,A_6_D,NumConst[1]],"
-                + "PinWriteValueAction[DIGITAL,A_7_D,NumConst[1]],"
-                + "PinWriteValueAction[DIGITAL,A_8_D,NumConst[1]],"
-                + "PinWriteValueAction[DIGITAL,A_9_D,NumConst[1]],"
-                + "PinWriteValueAction[DIGITAL,A_10_D,NumConst[1]],"
-                + "PinWriteValueAction[DIGITAL,A_11_D,NumConst[1]],"
-                + "PinWriteValueAction[DIGITAL,A_12_D,NumConst[1]],"
-                + "PinWriteValueAction[DIGITAL,A_13_D,NumConst[1]],"
-                + "PinWriteValueAction[DIGITAL,A_14_D,NumConst[1]],"
-                + "PinWriteValueAction[DIGITAL,A_15_D,NumConst[1]],"
-                + "PinWriteValueAction[DIGITAL,A_16_D,NumConst[1]],"
-                + "PinWriteValueAction[DIGITAL,A_19_D,NumConst[1]],"
-                + "PinWriteValueAction[DIGITAL,A_20_D,NumConst[1]]]]]";
+                + "PinWriteValueAction[ANALOG,P0,NumConst[1]],"
+                + "PinWriteValueAction[ANALOG,P1,NumConst[1]],"
+                + "PinWriteValueAction[ANALOG,P2,NumConst[1]],"
+                + "PinWriteValueAction[ANALOG,P3,NumConst[1]],"
+                + "PinWriteValueAction[ANALOG,P4,NumConst[1]],"
+                + "PinWriteValueAction[ANALOG,P10,NumConst[1]],"
+                + "PinWriteValueAction[DIGITAL,P0_2,NumConst[1]],"
+                + "PinWriteValueAction[DIGITAL,P1_2,NumConst[1]],"
+                + "PinWriteValueAction[DIGITAL,P2_2,NumConst[1]],"
+                + "PinWriteValueAction[DIGITAL,P3_2,NumConst[1]],"
+                + "PinWriteValueAction[DIGITAL,P4_2,NumConst[1]],"
+                + "PinWriteValueAction[DIGITAL,P5,NumConst[1]],"
+                + "PinWriteValueAction[DIGITAL,P6,NumConst[1]],"
+                + "PinWriteValueAction[DIGITAL,P7,NumConst[1]],"
+                + "PinWriteValueAction[DIGITAL,P8,NumConst[1]],"
+                + "PinWriteValueAction[DIGITAL,P9,NumConst[1]],"
+                + "PinWriteValueAction[DIGITAL,P10_2,NumConst[1]],"
+                + "PinWriteValueAction[DIGITAL,P11,NumConst[1]],"
+                + "PinWriteValueAction[DIGITAL,P12,NumConst[1]],"
+                + "PinWriteValueAction[DIGITAL,P13,NumConst[1]],"
+                + "PinWriteValueAction[DIGITAL,P14,NumConst[1]],"
+                + "PinWriteValueAction[DIGITAL,P15,NumConst[1]],"
+                + "PinWriteValueAction[DIGITAL,P16,NumConst[1]],"
+                + "PinWriteValueAction[DIGITAL,P19,NumConst[1]],"
+                + "PinWriteValueAction[DIGITAL,P20,NumConst[1]]]]]";
         String[] expectedToBeInConfigAst =
             {
-                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=A_9_D,portName=A_9_D,componentProperties={PIN1=9}",
-                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=A_6_D,portName=A_6_D,componentProperties={PIN1=6}",
-                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=A_5_D,portName=A_5_D,componentProperties={PIN1=5}",
-                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=A_4_D,portName=A_4_D,componentProperties={PIN1=4}",
-                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=A_3_D,portName=A_3_D,componentProperties={PIN1=3}",
-                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=A_2_D,portName=A_2_D,componentProperties={PIN1=2}",
-                "ConfigurationComponent[componentType=ANALOG_INPUT,isActor=true,userDefinedName=A_4_A,portName=A_4_A,componentProperties={PIN1=4}",
-                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=A_1_D,portName=A_1_D,componentProperties={PIN1=1}",
-                "ConfigurationComponent[componentType=ANALOG_INPUT,isActor=true,userDefinedName=A_3_A,portName=A_3_A,componentProperties={PIN1=3}",
-                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=A_0_D,portName=A_0_D,componentProperties={PIN1=0}",
-                "ConfigurationComponent[componentType=ANALOG_INPUT,isActor=true,userDefinedName=A_2_A,portName=A_2_A,componentProperties={PIN1=2}",
-                "ConfigurationComponent[componentType=ANALOG_INPUT,isActor=true,userDefinedName=A_1_A,portName=A_1_A,componentProperties={PIN1=1}",
-                "ConfigurationComponent[componentType=ANALOG_INPUT,isActor=true,userDefinedName=A_0_A,portName=A_0_A,componentProperties={PIN1=0}",
-                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=A_16_D,portName=A_16_D,componentProperties={PIN1=16}",
-                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=A_19_D,portName=A_19_D,componentProperties={PIN1=19}",
-                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=A_12_D,portName=A_12_D,componentProperties={PIN1=12}",
-                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=A_13_D,portName=A_13_D,componentProperties={PIN1=13}",
-                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=A_14_D,portName=A_14_D,componentProperties={PIN1=14}",
-                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=A_15_D,portName=A_15_D,componentProperties={PIN1=15}",
-                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=A_10_D,portName=A_10_D,componentProperties={PIN1=10}",
-                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=A_11_D,portName=A_11_D,componentProperties={PIN1=11}",
-                "ConfigurationComponent[componentType=ANALOG_INPUT,isActor=true,userDefinedName=A_10_A,portName=A_10_A,componentProperties={PIN1=10}",
-                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=A_20_D,portName=A_20_D,componentProperties={PIN1=20}",
-                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=A_7_D,portName=A_7_D,componentProperties={PIN1=7}",
-                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=A_8_D,portName=A_8_D,componentProperties={PIN1=8}"
+                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=P9,portName=P9,componentProperties={PIN1=9}",
+                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=P6,portName=P6,componentProperties={PIN1=6}",
+                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=P5,portName=P5,componentProperties={PIN1=5}",
+                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=P4_2,portName=P4_2,componentProperties={PIN1=4}",
+                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=P3_2,portName=P3_2,componentProperties={PIN1=3}",
+                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=P2_2,portName=P2_2,componentProperties={PIN1=2}",
+                "ConfigurationComponent[componentType=ANALOG_INPUT,isActor=true,userDefinedName=P4,portName=P4,componentProperties={PIN1=4}",
+                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=P1_2,portName=P1_2,componentProperties={PIN1=1}",
+                "ConfigurationComponent[componentType=ANALOG_INPUT,isActor=true,userDefinedName=P3,portName=P3,componentProperties={PIN1=3}",
+                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=P0_2,portName=P0_2,componentProperties={PIN1=0}",
+                "ConfigurationComponent[componentType=ANALOG_INPUT,isActor=true,userDefinedName=P2,portName=P2,componentProperties={PIN1=2}",
+                "ConfigurationComponent[componentType=ANALOG_INPUT,isActor=true,userDefinedName=P1,portName=P1,componentProperties={PIN1=1}",
+                "ConfigurationComponent[componentType=ANALOG_INPUT,isActor=true,userDefinedName=P0,portName=P0,componentProperties={PIN1=0}",
+                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=P16,portName=P16,componentProperties={PIN1=16}",
+                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=P19,portName=P19,componentProperties={PIN1=19}",
+                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=P12,portName=P12,componentProperties={PIN1=12}",
+                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=P13,portName=P13,componentProperties={PIN1=13}",
+                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=P14,portName=P14,componentProperties={PIN1=14}",
+                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=P15,portName=P15,componentProperties={PIN1=15}",
+                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=P10_2,portName=P10_2,componentProperties={PIN1=10}",
+                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=P11,portName=P11,componentProperties={PIN1=11}",
+                "ConfigurationComponent[componentType=ANALOG_INPUT,isActor=true,userDefinedName=P10,portName=P10,componentProperties={PIN1=10}",
+                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=P20,portName=P20,componentProperties={PIN1=20}",
+                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=P7,portName=P7,componentProperties={PIN1=7}",
+                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=P8,portName=P8,componentProperties={PIN1=8}"
             };
 
         Project project =
             UnitTestHelper
-                .setupWithProgramXML(testFactory, Util.readResourceContent("/transform/microbit/old_write_to_pin.xml"))
-                .setConfigurationAst(configuration)
+                .setupWithConfigAndProgramXML(testFactory, Util.readResourceContent("/transform/microbit/old_write_to_pin.xml"), OLD_CONFIGURATION_XML)
+
                 .build();
 
         new MbedTwo2ThreeTransformerWorker().execute(project);
@@ -309,8 +294,8 @@ public class MicrobitTwo2ThreeTransformerTest {
 
         Project project =
             UnitTestHelper
-                .setupWithProgramXML(testFactory, Util.readResourceContent("/transform/old_accelerometer.xml"))
-                .setConfigurationAst(configuration)
+                .setupWithConfigAndProgramXML(testFactory, Util.readResourceContent("/transform/old_accelerometer.xml"), OLD_CONFIGURATION_XML)
+
                 .build();
 
         new MbedTwo2ThreeTransformerWorker().execute(project);
@@ -334,7 +319,7 @@ public class MicrobitTwo2ThreeTransformerTest {
             };
 
         Project project =
-            UnitTestHelper.setupWithProgramXML(testFactory, Util.readResourceContent("/transform/old_sounds.xml")).setConfigurationAst(configuration).build();
+            UnitTestHelper.setupWithConfigAndProgramXML(testFactory, Util.readResourceContent("/transform/old_sounds.xml"), OLD_CONFIGURATION_XML).build();
 
         new MbedTwo2ThreeTransformerWorker().execute(project);
         UnitTestHelper.checkAstEquality(project.getProgramAst().getTree().toString(), expectedProgramAst);
@@ -345,102 +330,102 @@ public class MicrobitTwo2ThreeTransformerTest {
     public void executeTransformer_ShouldReturnTransformedPinsSensor_WhenGivenOldPinsSensor() {
         String expectedProgramAst =
             "BlockAST[project=[[Location[x=512,y=50],MainTask[],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[S_0_A,ANALOG,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[S_1_A,ANALOG,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[S_2_A,ANALOG,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[S_3_A,ANALOG,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[S_4_A,ANALOG,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[S_10_A,ANALOG,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[S_0_D,DIGITAL,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[S_1_D,DIGITAL,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[S_2_D,DIGITAL,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[S_3_D,DIGITAL,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[S_4_D,DIGITAL,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[S_5_D,DIGITAL,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[S_6_D,DIGITAL,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[S_7_D,DIGITAL,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[S_8_D,DIGITAL,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[S_9_D,DIGITAL,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[S_10_D,DIGITAL,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[S_11_D,DIGITAL,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[S_12_D,DIGITAL,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[S_13_D,DIGITAL,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[S_14_D,DIGITAL,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[S_15_D,DIGITAL,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[S_16_D,DIGITAL,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[S_19_D,DIGITAL,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[S_20_D,DIGITAL,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[S_0_D,PULSEHIGH,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[S_1_D,PULSEHIGH,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[S_2_D,PULSEHIGH,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[S_3_D,PULSEHIGH,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[S_4_D,PULSEHIGH,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[S_5_D,PULSEHIGH,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[S_6_D,PULSEHIGH,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[S_7_D,PULSEHIGH,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[S_8_D,PULSEHIGH,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[S_9_D,PULSEHIGH,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[S_10_D,PULSEHIGH,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[S_11_D,PULSEHIGH,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[S_12_D,PULSEHIGH,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[S_13_D,PULSEHIGH,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[S_14_D,PULSEHIGH,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[S_15_D,PULSEHIGH,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[S_16_D,PULSEHIGH,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[S_19_D,PULSEHIGH,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[S_20_D,PULSEHIGH,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[S_0_D,PULSELOW,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[S_1_D,PULSELOW,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[S_2_D,PULSELOW,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[S_3_D,PULSELOW,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[S_4_D,PULSELOW,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[S_5_D,PULSELOW,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[S_6_D,PULSELOW,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[S_7_D,PULSELOW,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[S_8_D,PULSELOW,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[S_9_D,PULSELOW,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[S_10_D,PULSELOW,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[S_11_D,PULSELOW,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[S_12_D,PULSELOW,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[S_13_D,PULSELOW,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[S_14_D,PULSELOW,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[S_15_D,PULSELOW,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[S_16_D,PULSELOW,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[S_19_D,PULSELOW,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[S_20_D,PULSELOW,EMPTY_SLOT]]]]]]";
+                + "DebugAction[SensorExpr[PinGetValueSensor[P0,ANALOG,EMPTY_SLOT]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[P1,ANALOG,EMPTY_SLOT]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[P2,ANALOG,EMPTY_SLOT]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[P3,ANALOG,EMPTY_SLOT]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[P4,ANALOG,EMPTY_SLOT]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[P10,ANALOG,EMPTY_SLOT]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[P0_2,DIGITAL,EMPTY_SLOT]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[P1_2,DIGITAL,EMPTY_SLOT]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[P2_2,DIGITAL,EMPTY_SLOT]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[P3_2,DIGITAL,EMPTY_SLOT]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[P4_2,DIGITAL,EMPTY_SLOT]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[P5,DIGITAL,EMPTY_SLOT]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[P6,DIGITAL,EMPTY_SLOT]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[P7,DIGITAL,EMPTY_SLOT]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[P8,DIGITAL,EMPTY_SLOT]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[P9,DIGITAL,EMPTY_SLOT]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[P10_2,DIGITAL,EMPTY_SLOT]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[P11,DIGITAL,EMPTY_SLOT]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[P12,DIGITAL,EMPTY_SLOT]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[P13,DIGITAL,EMPTY_SLOT]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[P14,DIGITAL,EMPTY_SLOT]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[P15,DIGITAL,EMPTY_SLOT]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[P16,DIGITAL,EMPTY_SLOT]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[P19,DIGITAL,EMPTY_SLOT]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[P20,DIGITAL,EMPTY_SLOT]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[P0_2,PULSEHIGH,EMPTY_SLOT]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[P1_2,PULSEHIGH,EMPTY_SLOT]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[P2_2,PULSEHIGH,EMPTY_SLOT]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[P3_2,PULSEHIGH,EMPTY_SLOT]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[P4_2,PULSEHIGH,EMPTY_SLOT]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[P5,PULSEHIGH,EMPTY_SLOT]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[P6,PULSEHIGH,EMPTY_SLOT]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[P7,PULSEHIGH,EMPTY_SLOT]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[P8,PULSEHIGH,EMPTY_SLOT]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[P9,PULSEHIGH,EMPTY_SLOT]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[P10_2,PULSEHIGH,EMPTY_SLOT]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[P11,PULSEHIGH,EMPTY_SLOT]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[P12,PULSEHIGH,EMPTY_SLOT]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[P13,PULSEHIGH,EMPTY_SLOT]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[P14,PULSEHIGH,EMPTY_SLOT]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[P15,PULSEHIGH,EMPTY_SLOT]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[P16,PULSEHIGH,EMPTY_SLOT]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[P19,PULSEHIGH,EMPTY_SLOT]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[P20,PULSEHIGH,EMPTY_SLOT]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[P0_2,PULSELOW,EMPTY_SLOT]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[P1_2,PULSELOW,EMPTY_SLOT]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[P2_2,PULSELOW,EMPTY_SLOT]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[P3_2,PULSELOW,EMPTY_SLOT]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[P4_2,PULSELOW,EMPTY_SLOT]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[P5,PULSELOW,EMPTY_SLOT]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[P6,PULSELOW,EMPTY_SLOT]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[P7,PULSELOW,EMPTY_SLOT]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[P8,PULSELOW,EMPTY_SLOT]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[P9,PULSELOW,EMPTY_SLOT]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[P10_2,PULSELOW,EMPTY_SLOT]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[P11,PULSELOW,EMPTY_SLOT]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[P12,PULSELOW,EMPTY_SLOT]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[P13,PULSELOW,EMPTY_SLOT]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[P14,PULSELOW,EMPTY_SLOT]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[P15,PULSELOW,EMPTY_SLOT]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[P16,PULSELOW,EMPTY_SLOT]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[P19,PULSELOW,EMPTY_SLOT]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[P20,PULSELOW,EMPTY_SLOT]]]]]]";
         String[] expectedToBeInConfigAst =
             {
-                "ConfigurationComponent[componentType=DIGITAL_PIN,isActor=true,userDefinedName=S_20_D,portName=S_20_D,componentProperties={PIN1=20}",
-                "ConfigurationComponent[componentType=DIGITAL_PIN,isActor=true,userDefinedName=S_14_D,portName=S_14_D,componentProperties={PIN1=14}",
-                "ConfigurationComponent[componentType=DIGITAL_PIN,isActor=true,userDefinedName=S_15_D,portName=S_15_D,componentProperties={PIN1=15}",
-                "ConfigurationComponent[componentType=DIGITAL_PIN,isActor=true,userDefinedName=S_11_D,portName=S_11_D,componentProperties={PIN1=11}",
-                "ConfigurationComponent[componentType=DIGITAL_PIN,isActor=true,userDefinedName=S_16_D,portName=S_16_D,componentProperties={PIN1=16}",
-                "ConfigurationComponent[componentType=DIGITAL_PIN,isActor=true,userDefinedName=S_10_D,portName=S_10_D,componentProperties={PIN1=10}",
-                "ConfigurationComponent[componentType=DIGITAL_PIN,isActor=true,userDefinedName=S_12_D,portName=S_12_D,componentProperties={PIN1=12}",
-                "ConfigurationComponent[componentType=DIGITAL_PIN,isActor=true,userDefinedName=S_13_D,portName=S_13_D,componentProperties={PIN1=13}",
-                "ConfigurationComponent[componentType=DIGITAL_PIN,isActor=true,userDefinedName=S_8_D,portName=S_8_D,componentProperties={PIN1=8}",
-                "ConfigurationComponent[componentType=DIGITAL_PIN,isActor=true,userDefinedName=S_7_D,portName=S_7_D,componentProperties={PIN1=7}",
-                "ConfigurationComponent[componentType=DIGITAL_PIN,isActor=true,userDefinedName=S_19_D,portName=S_19_D,componentProperties={PIN1=19}",
-                "ConfigurationComponent[componentType=DIGITAL_PIN,isActor=true,userDefinedName=S_9_D,portName=S_9_D,componentProperties={PIN1=9}",
-                "ConfigurationComponent[componentType=DIGITAL_PIN,isActor=true,userDefinedName=S_4_D,portName=S_4_D,componentProperties={PIN1=4}",
-                "ConfigurationComponent[componentType=DIGITAL_PIN,isActor=true,userDefinedName=S_3_D,portName=S_3_D,componentProperties={PIN1=3}",
-                "ConfigurationComponent[componentType=DIGITAL_PIN,isActor=true,userDefinedName=S_6_D,portName=S_6_D,componentProperties={PIN1=6}",
-                "ConfigurationComponent[componentType=DIGITAL_PIN,isActor=true,userDefinedName=S_5_D,portName=S_5_D,componentProperties={PIN1=5}",
-                "ConfigurationComponent[componentType=ANALOG_PIN,isActor=true,userDefinedName=S_3_A,portName=S_3_A,componentProperties={PIN1=3}",
-                "ConfigurationComponent[componentType=DIGITAL_PIN,isActor=true,userDefinedName=S_0_D,portName=S_0_D,componentProperties={PIN1=0}",
-                "ConfigurationComponent[componentType=ANALOG_PIN,isActor=true,userDefinedName=S_2_A,portName=S_2_A,componentProperties={PIN1=2}",
-                "ConfigurationComponent[componentType=DIGITAL_PIN,isActor=true,userDefinedName=S_2_D,portName=S_2_D,componentProperties={PIN1=2}",
-                "ConfigurationComponent[componentType=ANALOG_PIN,isActor=true,userDefinedName=S_4_A,portName=S_4_A,componentProperties={PIN1=4}",
-                "ConfigurationComponent[componentType=DIGITAL_PIN,isActor=true,userDefinedName=S_1_D,portName=S_1_D,componentProperties={PIN1=1}",
-                "ConfigurationComponent[componentType=ANALOG_PIN,isActor=true,userDefinedName=S_1_A,portName=S_1_A,componentProperties={PIN1=1}",
-                "ConfigurationComponent[componentType=ANALOG_PIN,isActor=true,userDefinedName=S_0_A,portName=S_0_A,componentProperties={PIN1=0}",
-                "ConfigurationComponent[componentType=ANALOG_PIN,isActor=true,userDefinedName=S_10_A,portName=S_10_A,componentProperties={PIN1=10}"
+                "ConfigurationComponent[componentType=DIGITAL_PIN,isActor=true,userDefinedName=P20,portName=P20,componentProperties={PIN1=20}",
+                "ConfigurationComponent[componentType=DIGITAL_PIN,isActor=true,userDefinedName=P14,portName=P14,componentProperties={PIN1=14}",
+                "ConfigurationComponent[componentType=DIGITAL_PIN,isActor=true,userDefinedName=P15,portName=P15,componentProperties={PIN1=15}",
+                "ConfigurationComponent[componentType=DIGITAL_PIN,isActor=true,userDefinedName=P11,portName=P11,componentProperties={PIN1=11}",
+                "ConfigurationComponent[componentType=DIGITAL_PIN,isActor=true,userDefinedName=P16,portName=P16,componentProperties={PIN1=16}",
+                "ConfigurationComponent[componentType=DIGITAL_PIN,isActor=true,userDefinedName=P10_2,portName=P10_2,componentProperties={PIN1=10}",
+                "ConfigurationComponent[componentType=DIGITAL_PIN,isActor=true,userDefinedName=P12,portName=P12,componentProperties={PIN1=12}",
+                "ConfigurationComponent[componentType=DIGITAL_PIN,isActor=true,userDefinedName=P13,portName=P13,componentProperties={PIN1=13}",
+                "ConfigurationComponent[componentType=DIGITAL_PIN,isActor=true,userDefinedName=P8,portName=P8,componentProperties={PIN1=8}",
+                "ConfigurationComponent[componentType=DIGITAL_PIN,isActor=true,userDefinedName=P7,portName=P7,componentProperties={PIN1=7}",
+                "ConfigurationComponent[componentType=DIGITAL_PIN,isActor=true,userDefinedName=P19,portName=P19,componentProperties={PIN1=19}",
+                "ConfigurationComponent[componentType=DIGITAL_PIN,isActor=true,userDefinedName=P9,portName=P9,componentProperties={PIN1=9}",
+                "ConfigurationComponent[componentType=DIGITAL_PIN,isActor=true,userDefinedName=P4_2,portName=P4_2,componentProperties={PIN1=4}",
+                "ConfigurationComponent[componentType=DIGITAL_PIN,isActor=true,userDefinedName=P3_2,portName=P3_2,componentProperties={PIN1=3}",
+                "ConfigurationComponent[componentType=DIGITAL_PIN,isActor=true,userDefinedName=P6,portName=P6,componentProperties={PIN1=6}",
+                "ConfigurationComponent[componentType=DIGITAL_PIN,isActor=true,userDefinedName=P5,portName=P5,componentProperties={PIN1=5}",
+                "ConfigurationComponent[componentType=ANALOG_PIN,isActor=true,userDefinedName=P3,portName=P3,componentProperties={PIN1=3}",
+                "ConfigurationComponent[componentType=DIGITAL_PIN,isActor=true,userDefinedName=P0_2,portName=P0_2,componentProperties={PIN1=0}",
+                "ConfigurationComponent[componentType=ANALOG_PIN,isActor=true,userDefinedName=P2,portName=P2,componentProperties={PIN1=2}",
+                "ConfigurationComponent[componentType=DIGITAL_PIN,isActor=true,userDefinedName=P2_2,portName=P2_2,componentProperties={PIN1=2}",
+                "ConfigurationComponent[componentType=ANALOG_PIN,isActor=true,userDefinedName=P4,portName=P4,componentProperties={PIN1=4}",
+                "ConfigurationComponent[componentType=DIGITAL_PIN,isActor=true,userDefinedName=P1_2,portName=P1_2,componentProperties={PIN1=1}",
+                "ConfigurationComponent[componentType=ANALOG_PIN,isActor=true,userDefinedName=P1,portName=P1,componentProperties={PIN1=1}",
+                "ConfigurationComponent[componentType=ANALOG_PIN,isActor=true,userDefinedName=P0,portName=P0,componentProperties={PIN1=0}",
+                "ConfigurationComponent[componentType=ANALOG_PIN,isActor=true,userDefinedName=P10,portName=P10,componentProperties={PIN1=10}"
             };
 
         Project project =
             UnitTestHelper
-                .setupWithProgramXML(testFactory, Util.readResourceContent("/transform/microbit/old_pins_sensor.xml"))
-                .setConfigurationAst(configuration)
+                .setupWithConfigAndProgramXML(testFactory, Util.readResourceContent("/transform/microbit/old_pins_sensor.xml"), OLD_CONFIGURATION_XML)
+
                 .build();
 
         new MbedTwo2ThreeTransformerWorker().execute(project);
@@ -455,7 +440,7 @@ public class MicrobitTwo2ThreeTransformerTest {
                 + "WaitStmt[(repeat[WAIT,SensorExpr[GetSampleSensor[GestureSensor[NO_PORT,UP,EMPTY_SLOT]]]])]]]]";
 
         Project project =
-            UnitTestHelper.setupWithProgramXML(testFactory, Util.readResourceContent("/transform/old_wait_for.xml")).setConfigurationAst(configuration).build();
+            UnitTestHelper.setupWithConfigAndProgramXML(testFactory, Util.readResourceContent("/transform/old_wait_for.xml"), OLD_CONFIGURATION_XML).build();
 
         new MbedTwo2ThreeTransformerWorker().execute(project);
         UnitTestHelper.checkAstEquality(project.getProgramAst().getTree().toString(), expectedProgramAst);

@@ -59,12 +59,13 @@ public abstract class AbstractTransformerWorker implements IWorker {
         NewUsedHardwareBean.Builder usedHardwareBeanBuilder = new NewUsedHardwareBean.Builder();
 
         // TODO usedHardwareBeanBuilder should probably be extracted into its own collect visitor, combined for now so only 1 visitor needs to run
-        ITransformerVisitor<Void> visitor = getVisitor(project, usedHardwareBeanBuilder);
+        ITransformerVisitor<Void> visitor =
+            getVisitor(project, usedHardwareBeanBuilder, project.getConfigurationAst());
 
         // Most of the time no transformation other than the version is necessary
         List<List<Phrase<Void>>> lists;
         if ( visitor != null ) {
-            lists = deepCopyAst(project.getProgramAst().getTree(), getVisitor(project, usedHardwareBeanBuilder));
+            lists = deepCopyAst(project.getProgramAst().getTree(), getVisitor(project, usedHardwareBeanBuilder, project.getConfigurationAst()));
         } else {
             lists = project.getProgramAst().getTree();
         }
@@ -96,7 +97,8 @@ public abstract class AbstractTransformerWorker implements IWorker {
      *
      * @param project the project
      * @param builder the bean for used hardware
+     * @param defaultConfiguration the defaultConfiguration
      * @return the appropriate visitor for the current robot, null if no transform is needed
      */
-    protected abstract ITransformerVisitor<Void> getVisitor(Project project, NewUsedHardwareBean.Builder builder);
+    protected abstract ITransformerVisitor<Void> getVisitor(Project project, NewUsedHardwareBean.Builder builder, ConfigurationAst defaultConfiguration);
 }

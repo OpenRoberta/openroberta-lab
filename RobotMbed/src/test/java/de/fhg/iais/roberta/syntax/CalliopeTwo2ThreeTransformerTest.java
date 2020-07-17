@@ -1,26 +1,20 @@
 package de.fhg.iais.roberta.syntax;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Collections;
 
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import de.fhg.iais.roberta.blockly.generated.BlockSet;
-import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.components.Project;
 import de.fhg.iais.roberta.factory.IRobotFactory;
-import de.fhg.iais.roberta.transformer.Jaxb2ConfigurationAst;
 import de.fhg.iais.roberta.util.Util;
-import de.fhg.iais.roberta.util.jaxb.JaxbHelper;
 import de.fhg.iais.roberta.util.test.UnitTestHelper;
 import de.fhg.iais.roberta.worker.MbedTwo2ThreeTransformerWorker;
 
 public class CalliopeTwo2ThreeTransformerTest {
 
     private static IRobotFactory testFactory;
-    private static ConfigurationAst configuration;
 
     private static final String OLD_CONFIGURATION_XML =
         "<block_set xmlns=\"http://de.fhg.iais.roberta.blockly\" robottype=\"calliope\" xmlversion=\"2.0\">"
@@ -31,18 +25,7 @@ public class CalliopeTwo2ThreeTransformerTest {
 
     @BeforeClass
     public static void setupBefore() throws Exception {
-        List<String> pluginDefines = new ArrayList<>();
-        pluginDefines.add("calliope2017NoBlue:robot.configuration.type = old-S");
-        pluginDefines.add("calliope2017NoBlue:robot.configuration.old.toplevelblock = mbedBrick_Calliope-Brick");
-        testFactory = Util.configureRobotPlugin("calliope2017NoBlue", "", "", pluginDefines);
-        BlockSet blockSet = JaxbHelper.xml2BlockSet(OLD_CONFIGURATION_XML);
-        configuration =
-            Jaxb2ConfigurationAst
-                .blocks2OldConfig(
-                    blockSet,
-                    testFactory.getBlocklyDropdownFactory(),
-                    testFactory.optTopBlockOfOldConfiguration(),
-                    testFactory.optSensorPrefix());
+        testFactory = Util.configureRobotPlugin("calliope2017NoBlue", "", "", Collections.emptyList());
     }
 
     @Test
@@ -57,7 +40,7 @@ public class CalliopeTwo2ThreeTransformerTest {
             };
 
         Project project =
-            UnitTestHelper.setupWithProgramXML(testFactory, Util.readResourceContent("/transform/old_compass.xml")).setConfigurationAst(configuration).build();
+            UnitTestHelper.setupWithConfigAndProgramXML(testFactory, Util.readResourceContent("/transform/old_compass.xml"), OLD_CONFIGURATION_XML).build();
 
         new MbedTwo2ThreeTransformerWorker().execute(project);
         UnitTestHelper.checkAstEquality(project.getProgramAst().getTree().toString(), expectedProgramAst);
@@ -79,7 +62,7 @@ public class CalliopeTwo2ThreeTransformerTest {
             };
 
         Project project =
-            UnitTestHelper.setupWithProgramXML(testFactory, Util.readResourceContent("/transform/old_key.xml")).setConfigurationAst(configuration).build();
+            UnitTestHelper.setupWithConfigAndProgramXML(testFactory, Util.readResourceContent("/transform/old_key.xml"), OLD_CONFIGURATION_XML).build();
 
         new MbedTwo2ThreeTransformerWorker().execute(project);
         UnitTestHelper.checkAstEquality(project.getProgramAst().getTree().toString(), expectedProgramAst);
@@ -102,29 +85,29 @@ public class CalliopeTwo2ThreeTransformerTest {
                 + "LightStatusAction[CalliBot_links_hinten, OFF],"
                 + "LightStatusAction[CalliBot_rechts_hinten, OFF],"
                 + "LightStatusAction[CalliBot_alle, OFF],"
-                + "LightAction[L_CalliBot_links,ON,DEFAULT,EmptyExpr[defVal=COLOR]],"
-                + "LightAction[L_CalliBot_links,OFF,DEFAULT,EmptyExpr[defVal=COLOR]],"
-                + "LightAction[L_CalliBot_rechts,ON,DEFAULT,EmptyExpr[defVal=COLOR]],"
-                + "LightAction[L_CalliBot_rechts,OFF,DEFAULT,EmptyExpr[defVal=COLOR]],"
+                + "LightAction[CalliBot_links,ON,DEFAULT,EmptyExpr[defVal=COLOR]],"
+                + "LightAction[CalliBot_links,OFF,DEFAULT,EmptyExpr[defVal=COLOR]],"
+                + "LightAction[CalliBot_rechts,ON,DEFAULT,EmptyExpr[defVal=COLOR]],"
+                + "LightAction[CalliBot_rechts,OFF,DEFAULT,EmptyExpr[defVal=COLOR]],"
                 + "LightAction[CalliBot_beide,ON,DEFAULT,EmptyExpr[defVal=COLOR]],"
                 + "LightAction[CalliBot_beide,OFF,DEFAULT,EmptyExpr[defVal=COLOR]]]]]";
         String[] expectedToBeInConfigAst =
             {
                 "ConfigurationComponent[componentType=RGBLED,isActor=true,userDefinedName=R,portName=R,componentProperties={PIN1=0}]",
                 "ConfigurationComponent[componentType=RGBLED,isActor=true,userDefinedName=CalliBot_links_hinten,portName=CalliBot_links_hinten,componentProperties={PIN1=2}]",
-                "ConfigurationComponent[componentType=LED,isActor=true,userDefinedName=L_CalliBot_links,portName=L_CalliBot_links,componentProperties={PIN1=1}]",
+                "ConfigurationComponent[componentType=LED,isActor=true,userDefinedName=CalliBot_links,portName=CalliBot_links,componentProperties={PIN1=1}]",
                 "ConfigurationComponent[componentType=RGBLED,isActor=true,userDefinedName=CalliBot_links_vorne,portName=CalliBot_links_vorne,componentProperties={PIN1=1}]",
                 "ConfigurationComponent[componentType=RGBLED,isActor=true,userDefinedName=CalliBot_rechts_hinten,portName=CalliBot_rechts_hinten,componentProperties={PIN1=3}]",
                 "ConfigurationComponent[componentType=RGBLED,isActor=true,userDefinedName=CalliBot_alle,portName=CalliBot_alle,componentProperties={PIN1=5}]",
                 "ConfigurationComponent[componentType=RGBLED,isActor=true,userDefinedName=CalliBot_rechts_vorne,portName=CalliBot_rechts_vorne,componentProperties={PIN1=4}]",
-                "ConfigurationComponent[componentType=LED,isActor=true,userDefinedName=L_CalliBot_rechts,portName=L_CalliBot_rechts,componentProperties={PIN1=2}]",
+                "ConfigurationComponent[componentType=LED,isActor=true,userDefinedName=CalliBot_rechts,portName=CalliBot_rechts,componentProperties={PIN1=2}]",
                 "ConfigurationComponent[componentType=LED,isActor=true,userDefinedName=CalliBot_beide,portName=CalliBot_beide,componentProperties={PIN1=3}]"
             };
 
         Project project =
             UnitTestHelper
-                .setupWithProgramXML(testFactory, Util.readResourceContent("/transform/old_led_rgbled.xml"))
-                .setConfigurationAst(configuration)
+                .setupWithConfigAndProgramXML(testFactory, Util.readResourceContent("/transform/old_led_rgbled.xml"), OLD_CONFIGURATION_XML)
+
                 .build();
 
         new MbedTwo2ThreeTransformerWorker().execute(project);
@@ -144,7 +127,7 @@ public class CalliopeTwo2ThreeTransformerTest {
             };
 
         Project project =
-            UnitTestHelper.setupWithProgramXML(testFactory, Util.readResourceContent("/transform/old_light.xml")).setConfigurationAst(configuration).build();
+            UnitTestHelper.setupWithConfigAndProgramXML(testFactory, Util.readResourceContent("/transform/old_light.xml"), OLD_CONFIGURATION_XML).build();
 
         new MbedTwo2ThreeTransformerWorker().execute(project);
         UnitTestHelper.checkAstEquality(project.getProgramAst().getTree().toString(), expectedProgramAst);
@@ -155,90 +138,90 @@ public class CalliopeTwo2ThreeTransformerTest {
     public void executeTransformer_ShouldReturnTransformedPinPull_WhenGivenPinPull() {
         String expectedProgramAst =
             "BlockAST[project=[[Location[x=512,y=50],MainTask[],"
-                + "PinSetPullAction[UP,P0_D],"
-                + "PinSetPullAction[UP,P1_D],"
-                + "PinSetPullAction[UP,P2_D],"
-                + "PinSetPullAction[UP,P3_D],"
-                + "PinSetPullAction[UP,A0_D],"
-                + "PinSetPullAction[UP,A1_D],"
-                + "PinSetPullAction[UP,C04_D],"
-                + "PinSetPullAction[UP,C05_D],"
-                + "PinSetPullAction[UP,C06_D],"
-                + "PinSetPullAction[UP,C07_D],"
-                + "PinSetPullAction[UP,C08_D],"
-                + "PinSetPullAction[UP,C09_D],"
-                + "PinSetPullAction[UP,C10_D],"
-                + "PinSetPullAction[UP,C11_D],"
-                + "PinSetPullAction[UP,C12_D],"
-                + "PinSetPullAction[UP,C16_D],"
-                + "PinSetPullAction[UP,C17_D],"
-                + "PinSetPullAction[UP,C18_D],"
-                + "PinSetPullAction[UP,C19_D],"
-                + "PinSetPullAction[DOWN,P0_D],"
-                + "PinSetPullAction[DOWN,P1_D],"
-                + "PinSetPullAction[DOWN,P2_D],"
-                + "PinSetPullAction[DOWN,P3_D],"
-                + "PinSetPullAction[DOWN,A0_D],"
-                + "PinSetPullAction[DOWN,A1_D],"
-                + "PinSetPullAction[DOWN,C04_D],"
-                + "PinSetPullAction[DOWN,C05_D],"
-                + "PinSetPullAction[DOWN,C06_D],"
-                + "PinSetPullAction[DOWN,C07_D],"
-                + "PinSetPullAction[DOWN,C08_D],"
-                + "PinSetPullAction[DOWN,C09_D],"
-                + "PinSetPullAction[DOWN,C10_D],"
-                + "PinSetPullAction[DOWN,C11_D],"
-                + "PinSetPullAction[DOWN,C12_D],"
-                + "PinSetPullAction[DOWN,C16_D],"
-                + "PinSetPullAction[DOWN,C17_D],"
-                + "PinSetPullAction[DOWN,C18_D],"
-                + "PinSetPullAction[DOWN,C19_D],"
-                + "PinSetPullAction[NONE,P0_D],"
-                + "PinSetPullAction[NONE,P1_D],"
-                + "PinSetPullAction[NONE,P2_D],"
-                + "PinSetPullAction[NONE,P3_D],"
-                + "PinSetPullAction[NONE,A0_D],"
-                + "PinSetPullAction[NONE,A1_D],"
-                + "PinSetPullAction[NONE,C04_D],"
-                + "PinSetPullAction[NONE,C05_D],"
-                + "PinSetPullAction[NONE,C06_D],"
-                + "PinSetPullAction[NONE,C07_D],"
-                + "PinSetPullAction[NONE,C08_D],"
-                + "PinSetPullAction[NONE,C09_D],"
-                + "PinSetPullAction[NONE,C10_D],"
-                + "PinSetPullAction[NONE,C11_D],"
-                + "PinSetPullAction[NONE,C12_D],"
-                + "PinSetPullAction[NONE,C16_D],"
-                + "PinSetPullAction[NONE,C17_D],"
-                + "PinSetPullAction[NONE,C18_D],"
-                + "PinSetPullAction[NONE,C19_D]]]]";
+                + "PinSetPullAction[UP,P0],"
+                + "PinSetPullAction[UP,P1],"
+                + "PinSetPullAction[UP,P2],"
+                + "PinSetPullAction[UP,P3],"
+                + "PinSetPullAction[UP,A0],"
+                + "PinSetPullAction[UP,A1],"
+                + "PinSetPullAction[UP,C04],"
+                + "PinSetPullAction[UP,C05],"
+                + "PinSetPullAction[UP,C06],"
+                + "PinSetPullAction[UP,C07],"
+                + "PinSetPullAction[UP,C08],"
+                + "PinSetPullAction[UP,C09],"
+                + "PinSetPullAction[UP,C10],"
+                + "PinSetPullAction[UP,C11],"
+                + "PinSetPullAction[UP,C12],"
+                + "PinSetPullAction[UP,C16],"
+                + "PinSetPullAction[UP,C17],"
+                + "PinSetPullAction[UP,C18],"
+                + "PinSetPullAction[UP,C19],"
+                + "PinSetPullAction[DOWN,P0],"
+                + "PinSetPullAction[DOWN,P1],"
+                + "PinSetPullAction[DOWN,P2],"
+                + "PinSetPullAction[DOWN,P3],"
+                + "PinSetPullAction[DOWN,A0],"
+                + "PinSetPullAction[DOWN,A1],"
+                + "PinSetPullAction[DOWN,C04],"
+                + "PinSetPullAction[DOWN,C05],"
+                + "PinSetPullAction[DOWN,C06],"
+                + "PinSetPullAction[DOWN,C07],"
+                + "PinSetPullAction[DOWN,C08],"
+                + "PinSetPullAction[DOWN,C09],"
+                + "PinSetPullAction[DOWN,C10],"
+                + "PinSetPullAction[DOWN,C11],"
+                + "PinSetPullAction[DOWN,C12],"
+                + "PinSetPullAction[DOWN,C16],"
+                + "PinSetPullAction[DOWN,C17],"
+                + "PinSetPullAction[DOWN,C18],"
+                + "PinSetPullAction[DOWN,C19],"
+                + "PinSetPullAction[NONE,P0],"
+                + "PinSetPullAction[NONE,P1],"
+                + "PinSetPullAction[NONE,P2],"
+                + "PinSetPullAction[NONE,P3],"
+                + "PinSetPullAction[NONE,A0],"
+                + "PinSetPullAction[NONE,A1],"
+                + "PinSetPullAction[NONE,C04],"
+                + "PinSetPullAction[NONE,C05],"
+                + "PinSetPullAction[NONE,C06],"
+                + "PinSetPullAction[NONE,C07],"
+                + "PinSetPullAction[NONE,C08],"
+                + "PinSetPullAction[NONE,C09],"
+                + "PinSetPullAction[NONE,C10],"
+                + "PinSetPullAction[NONE,C11],"
+                + "PinSetPullAction[NONE,C12],"
+                + "PinSetPullAction[NONE,C16],"
+                + "PinSetPullAction[NONE,C17],"
+                + "PinSetPullAction[NONE,C18],"
+                + "PinSetPullAction[NONE,C19]]]]";
         String[] expectedToBeInConfigAst =
             {
-                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=P0_D,portName=P0_D,componentProperties={PIN1=0}]",
-                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=C10_D,portName=C10_D,componentProperties={PIN1=C10}],",
-                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=P2_D,portName=P2_D,componentProperties={PIN1=2}]",
-                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=P1_D,portName=P1_D,componentProperties={PIN1=1}]",
-                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=C06_D,portName=C06_D,componentProperties={PIN1=C06}],",
-                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=C18_D,portName=C18_D,componentProperties={PIN1=C18}],",
-                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=C07_D,portName=C07_D,componentProperties={PIN1=C07}],",
-                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=C17_D,portName=C17_D,componentProperties={PIN1=C17}],",
-                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=A0_D,portName=A0_D,componentProperties={PIN1=4}]",
-                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=C04_D,portName=C04_D,componentProperties={PIN1=C04}],",
-                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=C16_D,portName=C16_D,componentProperties={PIN1=C16}],",
-                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=A1_D,portName=A1_D,componentProperties={PIN1=5}]",
-                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=C05_D,portName=C05_D,componentProperties={PIN1=C05}],",
-                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=P3_D,portName=P3_D,componentProperties={PIN1=3}]",
-                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=C12_D,portName=C12_D,componentProperties={PIN1=C12}],",
-                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=C11_D,portName=C11_D,componentProperties={PIN1=C11}],",
-                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=C08_D,portName=C08_D,componentProperties={PIN1=C08}],",
-                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=C09_D,portName=C09_D,componentProperties={PIN1=C09}],",
-                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=C19_D,portName=C19_D,componentProperties={PIN1=C19}]"
+                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=P0,portName=P0,componentProperties={PIN1=0}]",
+                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=C10,portName=C10,componentProperties={PIN1=C10}]",
+                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=P2,portName=P2,componentProperties={PIN1=2}]",
+                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=P1,portName=P1,componentProperties={PIN1=1}]",
+                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=C06,portName=C06,componentProperties={PIN1=C06}]",
+                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=C18,portName=C18,componentProperties={PIN1=C18}]",
+                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=C07,portName=C07,componentProperties={PIN1=C07}]",
+                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=C17,portName=C17,componentProperties={PIN1=C17}]",
+                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=A0,portName=A0,componentProperties={PIN1=4}]",
+                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=C04,portName=C04,componentProperties={PIN1=C04}]",
+                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=C16,portName=C16,componentProperties={PIN1=C16}]",
+                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=A1,portName=A1,componentProperties={PIN1=5}]",
+                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=C05,portName=C05,componentProperties={PIN1=C05}]",
+                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=P3,portName=P3,componentProperties={PIN1=3}]",
+                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=C12,portName=C12,componentProperties={PIN1=C12}]",
+                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=C11,portName=C11,componentProperties={PIN1=C11}]",
+                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=C08,portName=C08,componentProperties={PIN1=C08}]",
+                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=C09,portName=C09,componentProperties={PIN1=C09}]",
+                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=C19,portName=C19,componentProperties={PIN1=C19}]"
             };
 
         Project project =
             UnitTestHelper
-                .setupWithProgramXML(testFactory, Util.readResourceContent("/transform/calliope/old_pin_pull.xml"))
-                .setConfigurationAst(configuration)
+                .setupWithConfigAndProgramXML(testFactory, Util.readResourceContent("/transform/calliope/old_pin_pull.xml"), OLD_CONFIGURATION_XML)
+
                 .build();
 
         new MbedTwo2ThreeTransformerWorker().execute(project);
@@ -258,7 +241,7 @@ public class CalliopeTwo2ThreeTransformerTest {
             };
 
         Project project =
-            UnitTestHelper.setupWithProgramXML(testFactory, Util.readResourceContent("/transform/old_sound.xml")).setConfigurationAst(configuration).build();
+            UnitTestHelper.setupWithConfigAndProgramXML(testFactory, Util.readResourceContent("/transform/old_sound.xml"), OLD_CONFIGURATION_XML).build();
 
         new MbedTwo2ThreeTransformerWorker().execute(project);
         UnitTestHelper.checkAstEquality(project.getProgramAst().getTree().toString(), expectedProgramAst);
@@ -278,8 +261,8 @@ public class CalliopeTwo2ThreeTransformerTest {
 
         Project project =
             UnitTestHelper
-                .setupWithProgramXML(testFactory, Util.readResourceContent("/transform/old_temperature.xml"))
-                .setConfigurationAst(configuration)
+                .setupWithConfigAndProgramXML(testFactory, Util.readResourceContent("/transform/old_temperature.xml"), OLD_CONFIGURATION_XML)
+
                 .build();
 
         new MbedTwo2ThreeTransformerWorker().execute(project);
@@ -291,20 +274,20 @@ public class CalliopeTwo2ThreeTransformerTest {
     public void executeTransformer_ShouldReturnTransformedUltrasonic_WhenGivenOldUltrasonic() {
         String expectedProgramAst =
             "BlockAST[project=[[Location[x=549,y=76],MainTask[],"
-                + "DebugAction[SensorExpr[UltrasonicSensor[U,DISTANCE,EMPTY_SLOT]]],"
+                + "DebugAction[SensorExpr[UltrasonicSensor[A1,DISTANCE,EMPTY_SLOT]]],"
                 + "DebugAction[SensorExpr[UltrasonicSensor[CalliBot,DISTANCE,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[GetSampleSensor[UltrasonicSensor[U,DISTANCE,EMPTY_SLOT]]]],"
+                + "DebugAction[SensorExpr[GetSampleSensor[UltrasonicSensor[A1,DISTANCE,EMPTY_SLOT]]]],"
                 + "DebugAction[SensorExpr[GetSampleSensor[UltrasonicSensor[CalliBot,DISTANCE,EMPTY_SLOT]]]]]]]";
         String[] expectedToBeInConfigAst =
             {
-                "ConfigurationComponent[componentType=ULTRASONIC,isActor=true,userDefinedName=U,portName=U,componentProperties={PIN1=1}]",
+                "ConfigurationComponent[componentType=ULTRASONIC,isActor=true,userDefinedName=A1,portName=A1,componentProperties={PIN1=1}]",
                 "ConfigurationComponent[componentType=ULTRASONIC,isActor=true,userDefinedName=CalliBot,portName=CalliBot,componentProperties={PIN1=2}]"
             };
 
         Project project =
             UnitTestHelper
-                .setupWithProgramXML(testFactory, Util.readResourceContent("/transform/old_ultrasonic.xml"))
-                .setConfigurationAst(configuration)
+                .setupWithConfigAndProgramXML(testFactory, Util.readResourceContent("/transform/old_ultrasonic.xml"), OLD_CONFIGURATION_XML)
+
                 .build();
 
         new MbedTwo2ThreeTransformerWorker().execute(project);
@@ -316,68 +299,68 @@ public class CalliopeTwo2ThreeTransformerTest {
     public void executeTransformer_ShouldReturnTransformedWriteToPin_WhenGivenOldWriteToPin() {
         String expectedProgramAst =
             "BlockAST[project=[[Location[x=512,y=50],MainTask[],"
-                + "PinWriteValueAction[ANALOG,P1_A,NumConst[1]],"
-                + "PinWriteValueAction[ANALOG,P2_A,NumConst[1]],"
-                + "PinWriteValueAction[ANALOG,A1_A,NumConst[1]],"
-                + "PinWriteValueAction[ANALOG,C04_A,NumConst[1]],"
-                + "PinWriteValueAction[ANALOG,C05_A,NumConst[1]],"
-                + "PinWriteValueAction[ANALOG,C06_A,NumConst[1]],"
-                + "PinWriteValueAction[ANALOG,C16_A,NumConst[1]],"
-                + "PinWriteValueAction[ANALOG,C17_A,NumConst[1]],"
-                + "PinWriteValueAction[DIGITAL,P0_D,NumConst[1]],"
-                + "PinWriteValueAction[DIGITAL,P1_D,NumConst[1]],"
-                + "PinWriteValueAction[DIGITAL,P2_D,NumConst[1]],"
-                + "PinWriteValueAction[DIGITAL,P3_D,NumConst[1]],"
-                + "PinWriteValueAction[DIGITAL,A0_D,NumConst[1]],"
-                + "PinWriteValueAction[DIGITAL,A1_D,NumConst[1]],"
-                + "PinWriteValueAction[DIGITAL,C04_D,NumConst[1]],"
-                + "PinWriteValueAction[DIGITAL,C05_D,NumConst[1]],"
-                + "PinWriteValueAction[DIGITAL,C06_D,NumConst[1]],"
-                + "PinWriteValueAction[DIGITAL,C07_D,NumConst[1]],"
-                + "PinWriteValueAction[DIGITAL,C08_D,NumConst[1]],"
-                + "PinWriteValueAction[DIGITAL,C09_D,NumConst[1]],"
-                + "PinWriteValueAction[DIGITAL,C10_D,NumConst[1]],"
-                + "PinWriteValueAction[DIGITAL,C11_D,NumConst[1]],"
-                + "PinWriteValueAction[DIGITAL,C12_D,NumConst[1]],"
-                + "PinWriteValueAction[DIGITAL,C16_D,NumConst[1]],"
-                + "PinWriteValueAction[DIGITAL,C17_D,NumConst[1]],"
-                + "PinWriteValueAction[DIGITAL,C18_D,NumConst[1]],"
-                + "PinWriteValueAction[DIGITAL,C19_D,NumConst[1]]]]]";
+                + "PinWriteValueAction[ANALOG,P1,NumConst[1]],"
+                + "PinWriteValueAction[ANALOG,P2,NumConst[1]],"
+                + "PinWriteValueAction[ANALOG,A1,NumConst[1]],"
+                + "PinWriteValueAction[ANALOG,C04,NumConst[1]],"
+                + "PinWriteValueAction[ANALOG,C05,NumConst[1]],"
+                + "PinWriteValueAction[ANALOG,C06,NumConst[1]],"
+                + "PinWriteValueAction[ANALOG,C16,NumConst[1]],"
+                + "PinWriteValueAction[ANALOG,C17,NumConst[1]],"
+                + "PinWriteValueAction[DIGITAL,P0,NumConst[1]],"
+                + "PinWriteValueAction[DIGITAL,P1_2,NumConst[1]],"
+                + "PinWriteValueAction[DIGITAL,P2_2,NumConst[1]],"
+                + "PinWriteValueAction[DIGITAL,P3,NumConst[1]],"
+                + "PinWriteValueAction[DIGITAL,A0,NumConst[1]],"
+                + "PinWriteValueAction[DIGITAL,A1_2,NumConst[1]],"
+                + "PinWriteValueAction[DIGITAL,C04_2,NumConst[1]],"
+                + "PinWriteValueAction[DIGITAL,C05_2,NumConst[1]],"
+                + "PinWriteValueAction[DIGITAL,C06_2,NumConst[1]],"
+                + "PinWriteValueAction[DIGITAL,C07,NumConst[1]],"
+                + "PinWriteValueAction[DIGITAL,C08,NumConst[1]],"
+                + "PinWriteValueAction[DIGITAL,C09,NumConst[1]],"
+                + "PinWriteValueAction[DIGITAL,C10,NumConst[1]],"
+                + "PinWriteValueAction[DIGITAL,C11,NumConst[1]],"
+                + "PinWriteValueAction[DIGITAL,C12,NumConst[1]],"
+                + "PinWriteValueAction[DIGITAL,C16_2,NumConst[1]],"
+                + "PinWriteValueAction[DIGITAL,C17_2,NumConst[1]],"
+                + "PinWriteValueAction[DIGITAL,C18,NumConst[1]],"
+                + "PinWriteValueAction[DIGITAL,C19,NumConst[1]]]]]";
         String[] expectedToBeInConfigAst =
             {
-                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=P0_D,portName=P0_D,componentProperties={PIN1=0}]",
-                "ConfigurationComponent[componentType=ANALOG_INPUT,isActor=true,userDefinedName=P2_A,portName=P2_A,componentProperties={PIN1=2}]",
-                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=P2_D,portName=P2_D,componentProperties={PIN1=2}]",
-                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=P1_D,portName=P1_D,componentProperties={PIN1=1}]",
-                "ConfigurationComponent[componentType=ANALOG_INPUT,isActor=true,userDefinedName=P1_A,portName=P1_A,componentProperties={PIN1=1}]",
-                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=C06_D,portName=C06_D,componentProperties={PIN1=C06}],",
-                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=C07_D,portName=C07_D,componentProperties={PIN1=C07}],",
-                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=A0_D,portName=A0_D,componentProperties={PIN1=4}]",
-                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=C04_D,portName=C04_D,componentProperties={PIN1=C04}],",
-                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=A1_D,portName=A1_D,componentProperties={PIN1=5}]",
-                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=C05_D,portName=C05_D,componentProperties={PIN1=C05}],",
-                "ConfigurationComponent[componentType=ANALOG_INPUT,isActor=true,userDefinedName=A1_A,portName=A1_A,componentProperties={PIN1=5}]",
-                "ConfigurationComponent[componentType=ANALOG_INPUT,isActor=true,userDefinedName=C05_A,portName=C05_A,componentProperties={PIN1=C05}],",
-                "ConfigurationComponent[componentType=ANALOG_INPUT,isActor=true,userDefinedName=C06_A,portName=C06_A,componentProperties={PIN1=C06}],",
-                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=P3_D,portName=P3_D,componentProperties={PIN1=3}]",
-                "ConfigurationComponent[componentType=ANALOG_INPUT,isActor=true,userDefinedName=C04_A,portName=C04_A,componentProperties={PIN1=C04}],",
-                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=C08_D,portName=C08_D,componentProperties={PIN1=C08}],",
-                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=C09_D,portName=C09_D,componentProperties={PIN1=C09}],",
-                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=C10_D,portName=C10_D,componentProperties={PIN1=C10}],",
-                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=C18_D,portName=C18_D,componentProperties={PIN1=C18}],",
-                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=C17_D,portName=C17_D,componentProperties={PIN1=C17}],",
-                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=C16_D,portName=C16_D,componentProperties={PIN1=C16}],",
-                "ConfigurationComponent[componentType=ANALOG_INPUT,isActor=true,userDefinedName=C17_A,portName=C17_A,componentProperties={PIN1=C17}],",
-                "ConfigurationComponent[componentType=ANALOG_INPUT,isActor=true,userDefinedName=C16_A,portName=C16_A,componentProperties={PIN1=C16}],",
-                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=C12_D,portName=C12_D,componentProperties={PIN1=C12}],",
-                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=C11_D,portName=C11_D,componentProperties={PIN1=C11}],",
-                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=C19_D,portName=C19_D,componentProperties={PIN1=C19}]"
+                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=P0,portName=P0,componentProperties={PIN1=0}]",
+                "ConfigurationComponent[componentType=ANALOG_INPUT,isActor=true,userDefinedName=P2,portName=P2,componentProperties={PIN1=2}]",
+                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=P2_2,portName=P2_2,componentProperties={PIN1=2}]",
+                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=P1_2,portName=P1_2,componentProperties={PIN1=1}]",
+                "ConfigurationComponent[componentType=ANALOG_INPUT,isActor=true,userDefinedName=P1,portName=P1,componentProperties={PIN1=1}]",
+                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=C06_2,portName=C06_2,componentProperties={PIN1=C06}]",
+                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=C07,portName=C07,componentProperties={PIN1=C07}]",
+                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=A0,portName=A0,componentProperties={PIN1=4}]",
+                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=C04_2,portName=C04_2,componentProperties={PIN1=C04}]",
+                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=A1_2,portName=A1_2,componentProperties={PIN1=5}]",
+                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=C05_2,portName=C05_2,componentProperties={PIN1=C05}]",
+                "ConfigurationComponent[componentType=ANALOG_INPUT,isActor=true,userDefinedName=A1,portName=A1,componentProperties={PIN1=5}]",
+                "ConfigurationComponent[componentType=ANALOG_INPUT,isActor=true,userDefinedName=C05,portName=C05,componentProperties={PIN1=C05}]",
+                "ConfigurationComponent[componentType=ANALOG_INPUT,isActor=true,userDefinedName=C06,portName=C06,componentProperties={PIN1=C06}]",
+                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=P3,portName=P3,componentProperties={PIN1=3}]",
+                "ConfigurationComponent[componentType=ANALOG_INPUT,isActor=true,userDefinedName=C04,portName=C04,componentProperties={PIN1=C04}]",
+                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=C08,portName=C08,componentProperties={PIN1=C08}]",
+                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=C09,portName=C09,componentProperties={PIN1=C09}]",
+                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=C10,portName=C10,componentProperties={PIN1=C10}]",
+                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=C18,portName=C18,componentProperties={PIN1=C18}]",
+                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=C17_2,portName=C17_2,componentProperties={PIN1=C17}]",
+                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=C16_2,portName=C16_2,componentProperties={PIN1=C16}]",
+                "ConfigurationComponent[componentType=ANALOG_INPUT,isActor=true,userDefinedName=C17,portName=C17,componentProperties={PIN1=C17}]",
+                "ConfigurationComponent[componentType=ANALOG_INPUT,isActor=true,userDefinedName=C16,portName=C16,componentProperties={PIN1=C16}]",
+                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=C12,portName=C12,componentProperties={PIN1=C12}]",
+                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=C11,portName=C11,componentProperties={PIN1=C11}]",
+                "ConfigurationComponent[componentType=DIGITAL_INPUT,isActor=true,userDefinedName=C19,portName=C19,componentProperties={PIN1=C19}]"
             };
 
         Project project =
             UnitTestHelper
-                .setupWithProgramXML(testFactory, Util.readResourceContent("/transform/calliope/old_write_to_pin.xml"))
-                .setConfigurationAst(configuration)
+                .setupWithConfigAndProgramXML(testFactory, Util.readResourceContent("/transform/calliope/old_write_to_pin.xml"), OLD_CONFIGURATION_XML)
+
                 .build();
 
         new MbedTwo2ThreeTransformerWorker().execute(project);
@@ -404,8 +387,8 @@ public class CalliopeTwo2ThreeTransformerTest {
 
         Project project =
             UnitTestHelper
-                .setupWithProgramXML(testFactory, Util.readResourceContent("/transform/old_accelerometer.xml"))
-                .setConfigurationAst(configuration)
+                .setupWithConfigAndProgramXML(testFactory, Util.readResourceContent("/transform/old_accelerometer.xml"), OLD_CONFIGURATION_XML)
+
                 .build();
 
         new MbedTwo2ThreeTransformerWorker().execute(project);
@@ -427,7 +410,7 @@ public class CalliopeTwo2ThreeTransformerTest {
             };
 
         Project project =
-            UnitTestHelper.setupWithProgramXML(testFactory, Util.readResourceContent("/transform/old_gyro.xml")).setConfigurationAst(configuration).build();
+            UnitTestHelper.setupWithConfigAndProgramXML(testFactory, Util.readResourceContent("/transform/old_gyro.xml"), OLD_CONFIGURATION_XML).build();
 
         new MbedTwo2ThreeTransformerWorker().execute(project);
         UnitTestHelper.checkAstEquality(project.getProgramAst().getTree().toString(), expectedProgramAst);
@@ -438,17 +421,17 @@ public class CalliopeTwo2ThreeTransformerTest {
     public void executeTransformer_ShouldReturnTransformedHumidity_WhenGivenOldHumidity() {
         String expectedProgramAst =
             "BlockAST[project=[[Location[x=512,y=50],MainTask[],"
-                + "DebugAction[SensorExpr[HumiditySensor[H,HUMIDITY,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[HumiditySensor[H,TEMPERATURE,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[GetSampleSensor[HumiditySensor[H,HUMIDITY,EMPTY_SLOT]]]],"
-                + "DebugAction[SensorExpr[GetSampleSensor[HumiditySensor[H,TEMPERATURE,EMPTY_SLOT]]]]]]]";
+                + "DebugAction[SensorExpr[HumiditySensor[A1,HUMIDITY,EMPTY_SLOT]]],"
+                + "DebugAction[SensorExpr[HumiditySensor[A1,TEMPERATURE,EMPTY_SLOT]]],"
+                + "DebugAction[SensorExpr[GetSampleSensor[HumiditySensor[A1,HUMIDITY,EMPTY_SLOT]]]],"
+                + "DebugAction[SensorExpr[GetSampleSensor[HumiditySensor[A1,TEMPERATURE,EMPTY_SLOT]]]]]]]";
         String[] expectedToBeInConfigAst =
             {
-                "ConfigurationComponent[componentType=HUMIDITY,isActor=true,userDefinedName=H,portName=H,componentProperties={PIN1=5}]"
+                "ConfigurationComponent[componentType=HUMIDITY,isActor=true,userDefinedName=A1,portName=A1,componentProperties={PIN1=5}]"
             };
 
         Project project =
-            UnitTestHelper.setupWithProgramXML(testFactory, Util.readResourceContent("/transform/old_humidity.xml")).setConfigurationAst(configuration).build();
+            UnitTestHelper.setupWithConfigAndProgramXML(testFactory, Util.readResourceContent("/transform/old_humidity.xml"), OLD_CONFIGURATION_XML).build();
 
         new MbedTwo2ThreeTransformerWorker().execute(project);
         UnitTestHelper.checkAstEquality(project.getProgramAst().getTree().toString(), expectedProgramAst);
@@ -459,18 +442,18 @@ public class CalliopeTwo2ThreeTransformerTest {
     public void executeTransformer_ShouldReturnTransformedInfrared_WhenGivenOldInfrared() {
         String expectedProgramAst =
             "BlockAST[project=[[Location[x=512,y=50],MainTask[],"
-                + "DebugAction[SensorExpr[InfraredSensor[I_CalliBot_links,LINE,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[InfraredSensor[I_CalliBot_rechts,LINE,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[GetSampleSensor[InfraredSensor[I_CalliBot_links,LINE,EMPTY_SLOT]]]],"
-                + "DebugAction[SensorExpr[GetSampleSensor[InfraredSensor[I_CalliBot_rechts,LINE,EMPTY_SLOT]]]]]]]";
+                + "DebugAction[SensorExpr[InfraredSensor[CalliBot_links,LINE,EMPTY_SLOT]]],"
+                + "DebugAction[SensorExpr[InfraredSensor[CalliBot_rechts,LINE,EMPTY_SLOT]]],"
+                + "DebugAction[SensorExpr[GetSampleSensor[InfraredSensor[CalliBot_links,LINE,EMPTY_SLOT]]]],"
+                + "DebugAction[SensorExpr[GetSampleSensor[InfraredSensor[CalliBot_rechts,LINE,EMPTY_SLOT]]]]]]]";
         String[] expectedToBeInConfigAst =
             {
-                "ConfigurationComponent[componentType=INFRARED,isActor=true,userDefinedName=I_CalliBot_links,portName=I_CalliBot_links,componentProperties={PIN1=2}]",
-                "ConfigurationComponent[componentType=INFRARED,isActor=true,userDefinedName=I_CalliBot_rechts,portName=I_CalliBot_rechts,componentProperties={PIN1=1}]"
+                "ConfigurationComponent[componentType=INFRARED,isActor=true,userDefinedName=CalliBot_links,portName=CalliBot_links,componentProperties={PIN1=2}]",
+                "ConfigurationComponent[componentType=INFRARED,isActor=true,userDefinedName=CalliBot_rechts,portName=CalliBot_rechts,componentProperties={PIN1=1}]"
             };
 
         Project project =
-            UnitTestHelper.setupWithProgramXML(testFactory, Util.readResourceContent("/transform/old_infrared.xml")).setConfigurationAst(configuration).build();
+            UnitTestHelper.setupWithConfigAndProgramXML(testFactory, Util.readResourceContent("/transform/old_infrared.xml"), OLD_CONFIGURATION_XML).build();
 
         new MbedTwo2ThreeTransformerWorker().execute(project);
         UnitTestHelper.checkAstEquality(project.getProgramAst().getTree().toString(), expectedProgramAst);
@@ -481,28 +464,28 @@ public class CalliopeTwo2ThreeTransformerTest {
     public void executeTransformer_ShouldReturnTransformedServo_WhenGivenOldServo() {
         String expectedProgramAst =
             "BlockAST[project=[[Location[x=512,y=50],MainTask[],"
-                + "ServoSetAction[S_P1,NumConst[90]],"
-                + "ServoSetAction[S_P2,NumConst[90]],"
-                + "ServoSetAction[S_A1,NumConst[90]],"
-                + "ServoSetAction[S_C04,NumConst[90]],"
-                + "ServoSetAction[S_C05,NumConst[90]],"
-                + "ServoSetAction[S_C06,NumConst[90]],"
-                + "ServoSetAction[S_C16,NumConst[90]],"
-                + "ServoSetAction[S_C17,NumConst[90]]]]]";
+                + "ServoSetAction[P1,NumConst[90]],"
+                + "ServoSetAction[P2,NumConst[90]],"
+                + "ServoSetAction[A1,NumConst[90]],"
+                + "ServoSetAction[C04,NumConst[90]],"
+                + "ServoSetAction[C05,NumConst[90]],"
+                + "ServoSetAction[C06,NumConst[90]],"
+                + "ServoSetAction[C16,NumConst[90]],"
+                + "ServoSetAction[C17,NumConst[90]]]]]";
         String[] expectedToBeInConfigAst =
             {
-                "ConfigurationComponent[componentType=SERVOMOTOR,isActor=true,userDefinedName=S_C06,portName=S_C06,componentProperties={PIN1=C06}],",
-                "ConfigurationComponent[componentType=SERVOMOTOR,isActor=true,userDefinedName=S_C17,portName=S_C17,componentProperties={PIN1=C17}],",
-                "ConfigurationComponent[componentType=SERVOMOTOR,isActor=true,userDefinedName=S_C05,portName=S_C05,componentProperties={PIN1=C05}],",
-                "ConfigurationComponent[componentType=SERVOMOTOR,isActor=true,userDefinedName=S_C16,portName=S_C16,componentProperties={PIN1=C16}],",
-                "ConfigurationComponent[componentType=SERVOMOTOR,isActor=true,userDefinedName=S_C04,portName=S_C04,componentProperties={PIN1=C04}],",
-                "ConfigurationComponent[componentType=SERVOMOTOR,isActor=true,userDefinedName=S_P2,portName=S_P2,componentProperties={PIN1=2}]",
-                "ConfigurationComponent[componentType=SERVOMOTOR,isActor=true,userDefinedName=S_P1,portName=S_P1,componentProperties={PIN1=1}]",
-                "ConfigurationComponent[componentType=SERVOMOTOR,isActor=true,userDefinedName=S_A1,portName=S_A1,componentProperties={PIN1=5}]"
+                "ConfigurationComponent[componentType=SERVOMOTOR,isActor=true,userDefinedName=C06,portName=C06,componentProperties={PIN1=C06}]",
+                "ConfigurationComponent[componentType=SERVOMOTOR,isActor=true,userDefinedName=C17,portName=C17,componentProperties={PIN1=C17}]",
+                "ConfigurationComponent[componentType=SERVOMOTOR,isActor=true,userDefinedName=C05,portName=C05,componentProperties={PIN1=C05}]",
+                "ConfigurationComponent[componentType=SERVOMOTOR,isActor=true,userDefinedName=C16,portName=C16,componentProperties={PIN1=C16}]",
+                "ConfigurationComponent[componentType=SERVOMOTOR,isActor=true,userDefinedName=C04,portName=C04,componentProperties={PIN1=C04}]",
+                "ConfigurationComponent[componentType=SERVOMOTOR,isActor=true,userDefinedName=P2,portName=P2,componentProperties={PIN1=2}]",
+                "ConfigurationComponent[componentType=SERVOMOTOR,isActor=true,userDefinedName=P1,portName=P1,componentProperties={PIN1=1}]",
+                "ConfigurationComponent[componentType=SERVOMOTOR,isActor=true,userDefinedName=A1,portName=A1,componentProperties={PIN1=5}]"
             };
 
         Project project =
-            UnitTestHelper.setupWithProgramXML(testFactory, Util.readResourceContent("/transform/old_servo.xml")).setConfigurationAst(configuration).build();
+            UnitTestHelper.setupWithConfigAndProgramXML(testFactory, Util.readResourceContent("/transform/old_servo.xml"), OLD_CONFIGURATION_XML).build();
 
         new MbedTwo2ThreeTransformerWorker().execute(project);
         UnitTestHelper.checkAstEquality(project.getProgramAst().getTree().toString(), expectedProgramAst);
@@ -525,7 +508,7 @@ public class CalliopeTwo2ThreeTransformerTest {
             };
 
         Project project =
-            UnitTestHelper.setupWithProgramXML(testFactory, Util.readResourceContent("/transform/old_sounds.xml")).setConfigurationAst(configuration).build();
+            UnitTestHelper.setupWithConfigAndProgramXML(testFactory, Util.readResourceContent("/transform/old_sounds.xml"), OLD_CONFIGURATION_XML).build();
 
         new MbedTwo2ThreeTransformerWorker().execute(project);
         UnitTestHelper.checkAstEquality(project.getProgramAst().getTree().toString(), expectedProgramAst);
@@ -536,106 +519,106 @@ public class CalliopeTwo2ThreeTransformerTest {
     public void executeTransformer_ShouldReturnTransformedPinsSensor_WhenGivenOldPinsSensor() {
         String expectedProgramAst =
             "BlockAST[project=[[Location[x=512,y=50],MainTask[],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[S_P1_A,ANALOG,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[S_P2_A,ANALOG,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[S_A1_A,ANALOG,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[S_C04_A,ANALOG,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[S_C05_A,ANALOG,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[S_C06_A,ANALOG,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[S_C16_A,ANALOG,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[S_C17_A,ANALOG,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[S_P0_D,DIGITAL,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[S_P1_D,DIGITAL,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[S_P2_D,DIGITAL,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[S_P3_D,DIGITAL,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[S_A0_D,DIGITAL,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[S_A1_D,DIGITAL,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[S_C04_D,DIGITAL,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[S_C05_D,DIGITAL,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[S_C06_D,DIGITAL,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[S_C07_D,DIGITAL,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[S_C08_D,DIGITAL,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[S_C09_D,DIGITAL,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[S_C10_D,DIGITAL,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[S_C11_D,DIGITAL,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[S_C12_D,DIGITAL,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[S_C16_D,DIGITAL,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[S_C17_D,DIGITAL,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[S_C18_D,DIGITAL,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[S_C19_D,DIGITAL,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[S_P0_D,PULSEHIGH,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[S_P1_D,PULSEHIGH,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[S_P2_D,PULSEHIGH,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[S_P3_D,PULSEHIGH,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[S_A0_D,PULSEHIGH,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[S_A1_D,PULSEHIGH,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[S_C04_D,PULSEHIGH,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[S_C05_D,PULSEHIGH,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[S_C06_D,PULSEHIGH,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[S_C07_D,PULSEHIGH,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[S_C08_D,PULSEHIGH,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[S_C09_D,PULSEHIGH,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[S_C10_D,PULSEHIGH,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[S_C11_D,PULSEHIGH,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[S_C12_D,PULSEHIGH,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[S_C16_D,PULSEHIGH,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[S_C17_D,PULSEHIGH,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[S_C18_D,PULSEHIGH,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[S_C19_D,PULSEHIGH,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[S_P0_D,PULSELOW,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[S_P1_D,PULSELOW,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[S_P2_D,PULSELOW,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[S_P3_D,PULSELOW,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[S_A0_D,PULSELOW,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[S_A1_D,PULSELOW,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[S_C04_D,PULSELOW,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[S_C05_D,PULSELOW,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[S_C06_D,PULSELOW,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[S_C07_D,PULSELOW,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[S_C08_D,PULSELOW,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[S_C09_D,PULSELOW,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[S_C10_D,PULSELOW,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[S_C11_D,PULSELOW,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[S_C12_D,PULSELOW,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[S_C16_D,PULSELOW,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[S_C17_D,PULSELOW,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[S_C18_D,PULSELOW,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[S_C19_D,PULSELOW,EMPTY_SLOT]]]]]]";
+                + "DebugAction[SensorExpr[PinGetValueSensor[P1,ANALOG,EMPTY_SLOT]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[P2,ANALOG,EMPTY_SLOT]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[A1,ANALOG,EMPTY_SLOT]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[C04,ANALOG,EMPTY_SLOT]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[C05,ANALOG,EMPTY_SLOT]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[C06,ANALOG,EMPTY_SLOT]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[C16,ANALOG,EMPTY_SLOT]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[C17,ANALOG,EMPTY_SLOT]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[P0,DIGITAL,EMPTY_SLOT]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[P1_2,DIGITAL,EMPTY_SLOT]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[P2_2,DIGITAL,EMPTY_SLOT]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[P3,DIGITAL,EMPTY_SLOT]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[A0,DIGITAL,EMPTY_SLOT]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[A1_2,DIGITAL,EMPTY_SLOT]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[C04_2,DIGITAL,EMPTY_SLOT]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[C05_2,DIGITAL,EMPTY_SLOT]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[C06_2,DIGITAL,EMPTY_SLOT]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[C07,DIGITAL,EMPTY_SLOT]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[C08,DIGITAL,EMPTY_SLOT]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[C09,DIGITAL,EMPTY_SLOT]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[C10,DIGITAL,EMPTY_SLOT]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[C11,DIGITAL,EMPTY_SLOT]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[C12,DIGITAL,EMPTY_SLOT]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[C16_2,DIGITAL,EMPTY_SLOT]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[C17_2,DIGITAL,EMPTY_SLOT]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[C18,DIGITAL,EMPTY_SLOT]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[C19,DIGITAL,EMPTY_SLOT]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[P0,PULSEHIGH,EMPTY_SLOT]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[P1_2,PULSEHIGH,EMPTY_SLOT]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[P2_2,PULSEHIGH,EMPTY_SLOT]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[P3,PULSEHIGH,EMPTY_SLOT]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[A0,PULSEHIGH,EMPTY_SLOT]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[A1_2,PULSEHIGH,EMPTY_SLOT]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[C04_2,PULSEHIGH,EMPTY_SLOT]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[C05_2,PULSEHIGH,EMPTY_SLOT]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[C06_2,PULSEHIGH,EMPTY_SLOT]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[C07,PULSEHIGH,EMPTY_SLOT]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[C08,PULSEHIGH,EMPTY_SLOT]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[C09,PULSEHIGH,EMPTY_SLOT]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[C10,PULSEHIGH,EMPTY_SLOT]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[C11,PULSEHIGH,EMPTY_SLOT]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[C12,PULSEHIGH,EMPTY_SLOT]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[C16_2,PULSEHIGH,EMPTY_SLOT]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[C17_2,PULSEHIGH,EMPTY_SLOT]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[C18,PULSEHIGH,EMPTY_SLOT]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[C19,PULSEHIGH,EMPTY_SLOT]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[P0,PULSELOW,EMPTY_SLOT]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[P1_2,PULSELOW,EMPTY_SLOT]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[P2_2,PULSELOW,EMPTY_SLOT]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[P3,PULSELOW,EMPTY_SLOT]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[A0,PULSELOW,EMPTY_SLOT]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[A1_2,PULSELOW,EMPTY_SLOT]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[C04_2,PULSELOW,EMPTY_SLOT]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[C05_2,PULSELOW,EMPTY_SLOT]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[C06_2,PULSELOW,EMPTY_SLOT]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[C07,PULSELOW,EMPTY_SLOT]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[C08,PULSELOW,EMPTY_SLOT]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[C09,PULSELOW,EMPTY_SLOT]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[C10,PULSELOW,EMPTY_SLOT]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[C11,PULSELOW,EMPTY_SLOT]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[C12,PULSELOW,EMPTY_SLOT]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[C16_2,PULSELOW,EMPTY_SLOT]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[C17_2,PULSELOW,EMPTY_SLOT]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[C18,PULSELOW,EMPTY_SLOT]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[C19,PULSELOW,EMPTY_SLOT]]]]]]";
         String[] expectedToBeInConfigAst =
             {
-                "ConfigurationComponent[componentType=ANALOG_PIN,isActor=true,userDefinedName=S_A1_A,portName=S_A1_A,componentProperties={PIN1=5}]",
-                "ConfigurationComponent[componentType=DIGITAL_PIN,isActor=true,userDefinedName=S_C16_D,portName=S_C16_D,componentProperties={PIN1=C16}],",
-                "ConfigurationComponent[componentType=DIGITAL_PIN,isActor=true,userDefinedName=S_C17_D,portName=S_C17_D,componentProperties={PIN1=C17}],",
-                "ConfigurationComponent[componentType=DIGITAL_PIN,isActor=true,userDefinedName=S_C18_D,portName=S_C18_D,componentProperties={PIN1=C18}],",
-                "ConfigurationComponent[componentType=DIGITAL_PIN,isActor=true,userDefinedName=S_C19_D,portName=S_C19_D,componentProperties={PIN1=C19}],",
-                "ConfigurationComponent[componentType=ANALOG_PIN,isActor=true,userDefinedName=S_P1_A,portName=S_P1_A,componentProperties={PIN1=1}]",
-                "ConfigurationComponent[componentType=DIGITAL_PIN,isActor=true,userDefinedName=S_P1_D,portName=S_P1_D,componentProperties={PIN1=1}]",
-                "ConfigurationComponent[componentType=DIGITAL_PIN,isActor=true,userDefinedName=S_P2_D,portName=S_P2_D,componentProperties={PIN1=2}]",
-                "ConfigurationComponent[componentType=ANALOG_PIN,isActor=true,userDefinedName=S_P2_A,portName=S_P2_A,componentProperties={PIN1=2}]",
-                "ConfigurationComponent[componentType=DIGITAL_PIN,isActor=true,userDefinedName=S_P0_D,portName=S_P0_D,componentProperties={PIN1=0}]",
-                "ConfigurationComponent[componentType=ANALOG_PIN,isActor=true,userDefinedName=S_C04_A,portName=S_C04_A,componentProperties={PIN1=C04}],",
-                "ConfigurationComponent[componentType=ANALOG_PIN,isActor=true,userDefinedName=S_C05_A,portName=S_C05_A,componentProperties={PIN1=C05}],",
-                "ConfigurationComponent[componentType=DIGITAL_PIN,isActor=true,userDefinedName=S_P3_D,portName=S_P3_D,componentProperties={PIN1=3}]",
-                "ConfigurationComponent[componentType=ANALOG_PIN,isActor=true,userDefinedName=S_C06_A,portName=S_C06_A,componentProperties={PIN1=C06}],",
-                "ConfigurationComponent[componentType=DIGITAL_PIN,isActor=true,userDefinedName=S_C04_D,portName=S_C04_D,componentProperties={PIN1=C04}],",
-                "ConfigurationComponent[componentType=DIGITAL_PIN,isActor=true,userDefinedName=S_C05_D,portName=S_C05_D,componentProperties={PIN1=C05}],",
-                "ConfigurationComponent[componentType=DIGITAL_PIN,isActor=true,userDefinedName=S_C06_D,portName=S_C06_D,componentProperties={PIN1=C06}],",
-                "ConfigurationComponent[componentType=DIGITAL_PIN,isActor=true,userDefinedName=S_C07_D,portName=S_C07_D,componentProperties={PIN1=C07}],",
-                "ConfigurationComponent[componentType=DIGITAL_PIN,isActor=true,userDefinedName=S_C08_D,portName=S_C08_D,componentProperties={PIN1=C08}],",
-                "ConfigurationComponent[componentType=DIGITAL_PIN,isActor=true,userDefinedName=S_C09_D,portName=S_C09_D,componentProperties={PIN1=C09}],",
-                "ConfigurationComponent[componentType=DIGITAL_PIN,isActor=true,userDefinedName=S_C10_D,portName=S_C10_D,componentProperties={PIN1=C10}],",
-                "ConfigurationComponent[componentType=DIGITAL_PIN,isActor=true,userDefinedName=S_C11_D,portName=S_C11_D,componentProperties={PIN1=C11}],",
-                "ConfigurationComponent[componentType=DIGITAL_PIN,isActor=true,userDefinedName=S_C12_D,portName=S_C12_D,componentProperties={PIN1=C12}],",
-                "ConfigurationComponent[componentType=ANALOG_PIN,isActor=true,userDefinedName=S_C16_A,portName=S_C16_A,componentProperties={PIN1=C16}],",
-                "ConfigurationComponent[componentType=ANALOG_PIN,isActor=true,userDefinedName=S_C17_A,portName=S_C17_A,componentProperties={PIN1=C17}],",
-                "ConfigurationComponent[componentType=DIGITAL_PIN,isActor=true,userDefinedName=S_A1_D,portName=S_A1_D,componentProperties={PIN1=5}]",
-                "ConfigurationComponent[componentType=DIGITAL_PIN,isActor=true,userDefinedName=S_A0_D,portName=S_A0_D,componentProperties={PIN1=4}]"
+                "ConfigurationComponent[componentType=ANALOG_PIN,isActor=true,userDefinedName=A1,portName=A1,componentProperties={PIN1=5}]",
+                "ConfigurationComponent[componentType=DIGITAL_PIN,isActor=true,userDefinedName=C16_2,portName=C16_2,componentProperties={PIN1=C16}]",
+                "ConfigurationComponent[componentType=DIGITAL_PIN,isActor=true,userDefinedName=C17_2,portName=C17_2,componentProperties={PIN1=C17}]",
+                "ConfigurationComponent[componentType=DIGITAL_PIN,isActor=true,userDefinedName=C18,portName=C18,componentProperties={PIN1=C18}]",
+                "ConfigurationComponent[componentType=DIGITAL_PIN,isActor=true,userDefinedName=C19,portName=C19,componentProperties={PIN1=C19}]",
+                "ConfigurationComponent[componentType=ANALOG_PIN,isActor=true,userDefinedName=P1,portName=P1,componentProperties={PIN1=1}]",
+                "ConfigurationComponent[componentType=DIGITAL_PIN,isActor=true,userDefinedName=P1_2,portName=P1_2,componentProperties={PIN1=1}]",
+                "ConfigurationComponent[componentType=DIGITAL_PIN,isActor=true,userDefinedName=P2_2,portName=P2_2,componentProperties={PIN1=2}]",
+                "ConfigurationComponent[componentType=ANALOG_PIN,isActor=true,userDefinedName=P2,portName=P2,componentProperties={PIN1=2}]",
+                "ConfigurationComponent[componentType=DIGITAL_PIN,isActor=true,userDefinedName=P0,portName=P0,componentProperties={PIN1=0}]",
+                "ConfigurationComponent[componentType=ANALOG_PIN,isActor=true,userDefinedName=C04,portName=C04,componentProperties={PIN1=C04}]",
+                "ConfigurationComponent[componentType=ANALOG_PIN,isActor=true,userDefinedName=C05,portName=C05,componentProperties={PIN1=C05}]",
+                "ConfigurationComponent[componentType=DIGITAL_PIN,isActor=true,userDefinedName=P3,portName=P3,componentProperties={PIN1=3}]",
+                "ConfigurationComponent[componentType=ANALOG_PIN,isActor=true,userDefinedName=C06,portName=C06,componentProperties={PIN1=C06}]",
+                "ConfigurationComponent[componentType=DIGITAL_PIN,isActor=true,userDefinedName=C04_2,portName=C04_2,componentProperties={PIN1=C04}]",
+                "ConfigurationComponent[componentType=DIGITAL_PIN,isActor=true,userDefinedName=C05_2,portName=C05_2,componentProperties={PIN1=C05}]",
+                "ConfigurationComponent[componentType=DIGITAL_PIN,isActor=true,userDefinedName=C06_2,portName=C06_2,componentProperties={PIN1=C06}]",
+                "ConfigurationComponent[componentType=DIGITAL_PIN,isActor=true,userDefinedName=C07,portName=C07,componentProperties={PIN1=C07}]",
+                "ConfigurationComponent[componentType=DIGITAL_PIN,isActor=true,userDefinedName=C08,portName=C08,componentProperties={PIN1=C08}]",
+                "ConfigurationComponent[componentType=DIGITAL_PIN,isActor=true,userDefinedName=C09,portName=C09,componentProperties={PIN1=C09}]",
+                "ConfigurationComponent[componentType=DIGITAL_PIN,isActor=true,userDefinedName=C10,portName=C10,componentProperties={PIN1=C10}]",
+                "ConfigurationComponent[componentType=DIGITAL_PIN,isActor=true,userDefinedName=C11,portName=C11,componentProperties={PIN1=C11}]",
+                "ConfigurationComponent[componentType=DIGITAL_PIN,isActor=true,userDefinedName=C12,portName=C12,componentProperties={PIN1=C12}]",
+                "ConfigurationComponent[componentType=ANALOG_PIN,isActor=true,userDefinedName=C16,portName=C16,componentProperties={PIN1=C16}]",
+                "ConfigurationComponent[componentType=ANALOG_PIN,isActor=true,userDefinedName=C17,portName=C17,componentProperties={PIN1=C17}]",
+                "ConfigurationComponent[componentType=DIGITAL_PIN,isActor=true,userDefinedName=A1_2,portName=A1_2,componentProperties={PIN1=5}]",
+                "ConfigurationComponent[componentType=DIGITAL_PIN,isActor=true,userDefinedName=A0,portName=A0,componentProperties={PIN1=4}]"
             };
 
         Project project =
             UnitTestHelper
-                .setupWithProgramXML(testFactory, Util.readResourceContent("/transform/calliope/old_pins_sensor.xml"))
-                .setConfigurationAst(configuration)
+                .setupWithConfigAndProgramXML(testFactory, Util.readResourceContent("/transform/calliope/old_pins_sensor.xml"), OLD_CONFIGURATION_XML)
+
                 .build();
 
         new MbedTwo2ThreeTransformerWorker().execute(project);
@@ -648,11 +631,11 @@ public class CalliopeTwo2ThreeTransformerTest {
         String expectedProgramAst = "BlockAST[project=[[Location[x=512,y=50],MainTask[]," + "LedBarSetAction[NumConst[0],NumConst[5]]]]]";
         String[] expectedToBeInConfigAst =
             {
-                "ConfigurationComponent[componentType=LEDBAR,isActor=true,userDefinedName=LL,portName=LL,componentProperties={PIN1=5}]"
+                "ConfigurationComponent[componentType=LEDBAR,isActor=true,userDefinedName=A1,portName=A1,componentProperties={PIN1=5}]"
             };
 
         Project project =
-            UnitTestHelper.setupWithProgramXML(testFactory, Util.readResourceContent("/transform/old_ledbar.xml")).setConfigurationAst(configuration).build();
+            UnitTestHelper.setupWithConfigAndProgramXML(testFactory, Util.readResourceContent("/transform/old_ledbar.xml"), OLD_CONFIGURATION_XML).build();
 
         new MbedTwo2ThreeTransformerWorker().execute(project);
         UnitTestHelper.checkAstEquality(project.getProgramAst().getTree().toString(), expectedProgramAst);
@@ -667,13 +650,13 @@ public class CalliopeTwo2ThreeTransformerTest {
                 + "FourDigitDisplayClearAction[]]]]";
         String[] expectedToBeInConfigAst =
             {
-                "ConfigurationComponent[componentType=FOURDIGITDISPLAY,isActor=true,userDefinedName=FDD,portName=FDD,componentProperties={PIN1=5}]"
+                "ConfigurationComponent[componentType=FOURDIGITDISPLAY,isActor=true,userDefinedName=A1,portName=A1,componentProperties={PIN1=5}]"
             };
 
         Project project =
             UnitTestHelper
-                .setupWithProgramXML(testFactory, Util.readResourceContent("/transform/old_fourdigitdisplay.xml"))
-                .setConfigurationAst(configuration)
+                .setupWithConfigAndProgramXML(testFactory, Util.readResourceContent("/transform/old_fourdigitdisplay.xml"), OLD_CONFIGURATION_XML)
+
                 .build();
 
         new MbedTwo2ThreeTransformerWorker().execute(project);
@@ -685,19 +668,19 @@ public class CalliopeTwo2ThreeTransformerTest {
     public void executeTransformer_ShouldReturnTransformedMotor_WhenGivenOldSingleMotor() {
         String expectedProgramAst =
             "BlockAST[project=[[Location[x=512,y=50],MainTask[],"
-                + "MotorOnAction[M_A,MotionParam[speed=NumConst[30],duration=null]],"
-                + "MotorStop[port=M_A,mode=FLOAT],"
-                + "MotorStop[port=M_A,mode=NONFLOAT],"
-                + "MotorStop[port=M_A,mode=SLEEP]]]]";
+                + "MotorOnAction[Port_A,MotionParam[speed=NumConst[30],duration=null]],"
+                + "MotorStop[port=Port_A,mode=FLOAT],"
+                + "MotorStop[port=Port_A,mode=NONFLOAT],"
+                + "MotorStop[port=Port_A,mode=SLEEP]]]]";
         String[] expectedToBeInConfigAst =
             {
-                "ConfigurationComponent[componentType=MOTOR,isActor=true,userDefinedName=M_A,portName=M_A,componentProperties={PIN1=A}]"
+                "ConfigurationComponent[componentType=MOTOR,isActor=true,userDefinedName=Port_A,portName=Port_A,componentProperties={PIN1=A}]"
             };
 
         Project project =
             UnitTestHelper
-                .setupWithProgramXML(testFactory, Util.readResourceContent("/transform/old_single_motor_on_stop.xml"))
-                .setConfigurationAst(configuration)
+                .setupWithConfigAndProgramXML(testFactory, Util.readResourceContent("/transform/old_single_motor_on_stop.xml"), OLD_CONFIGURATION_XML)
+
                 .build();
 
         new MbedTwo2ThreeTransformerWorker().execute(project);
@@ -709,21 +692,21 @@ public class CalliopeTwo2ThreeTransformerTest {
     public void executeTransformer_ShouldReturnTransformedMotors_WhenGivenOldMotors() {
         String expectedProgramAst =
             "BlockAST[project=[[Location[x=512,y=50],MainTask[],"
-                + "BothMotorsOnAction[M_A,NumConst[30],M_B,NumConst[10]],"
+                + "BothMotorsOnAction[Port_A,NumConst[30],Port_B,NumConst[10]],"
                 + "BothMotorsOnAction[CalliBot_links,NumConst[30],CalliBot_rechts,NumConst[10]],"
                 + "SingleMotorStopAction[]]]]";
         String[] expectedToBeInConfigAst =
             {
-                "ConfigurationComponent[componentType=MOTOR,isActor=true,userDefinedName=M_B,portName=M_B,componentProperties={PIN1=B}]",
+                "ConfigurationComponent[componentType=MOTOR,isActor=true,userDefinedName=Port_B,portName=Port_B,componentProperties={PIN1=B}]",
                 "ConfigurationComponent[componentType=MOTOR,isActor=true,userDefinedName=CalliBot_links,portName=CalliBot_links,componentProperties={PIN1=0}]",
                 "ConfigurationComponent[componentType=MOTOR,isActor=true,userDefinedName=CalliBot_rechts,portName=CalliBot_rechts,componentProperties={PIN1=2}]",
-                "ConfigurationComponent[componentType=MOTOR,isActor=true,userDefinedName=M_A,portName=M_A,componentProperties={PIN1=A}]"
+                "ConfigurationComponent[componentType=MOTOR,isActor=true,userDefinedName=Port_A,portName=Port_A,componentProperties={PIN1=A}]"
             };
 
         Project project =
             UnitTestHelper
-                .setupWithProgramXML(testFactory, Util.readResourceContent("/transform/old_motors_on_stop.xml"))
-                .setConfigurationAst(configuration)
+                .setupWithConfigAndProgramXML(testFactory, Util.readResourceContent("/transform/old_motors_on_stop.xml"), OLD_CONFIGURATION_XML)
+
                 .build();
 
         new MbedTwo2ThreeTransformerWorker().execute(project);
@@ -735,26 +718,26 @@ public class CalliopeTwo2ThreeTransformerTest {
     public void executeTransformer_ShouldReturnTransformedMotorSingle_WhenGivenOldMotorSingle() {
         String expectedProgramAst =
             "BlockAST[project=[[Location[x=512,y=50],MainTask[],"
-                + "MotorOnAction[M_A,MotionParam[speed=NumConst[30],duration=null]],"
-                + "MotorOnAction[M_B,MotionParam[speed=NumConst[30],duration=null]],"
+                + "MotorOnAction[Port_A,MotionParam[speed=NumConst[30],duration=null]],"
+                + "MotorOnAction[Port_B,MotionParam[speed=NumConst[30],duration=null]],"
                 + "MotorOnAction[CalliBot_links,MotionParam[speed=NumConst[30],duration=null]],"
                 + "MotorOnAction[CalliBot_rechts,MotionParam[speed=NumConst[30],duration=null]],"
-                + "MotorStop[port=M_A],"
-                + "MotorStop[port=M_B],"
+                + "MotorStop[port=Port_A],"
+                + "MotorStop[port=Port_B],"
                 + "MotorStop[port=CalliBot_links],"
                 + "MotorStop[port=CalliBot_rechts]]]]";
         String[] expectedToBeInConfigAst =
             {
-                "ConfigurationComponent[componentType=MOTOR,isActor=true,userDefinedName=M_B,portName=M_B,componentProperties={PIN1=B}]",
+                "ConfigurationComponent[componentType=MOTOR,isActor=true,userDefinedName=Port_B,portName=Port_B,componentProperties={PIN1=B}]",
                 "ConfigurationComponent[componentType=MOTOR,isActor=true,userDefinedName=CalliBot_links,portName=CalliBot_links,componentProperties={PIN1=0}]",
                 "ConfigurationComponent[componentType=MOTOR,isActor=true,userDefinedName=CalliBot_rechts,portName=CalliBot_rechts,componentProperties={PIN1=2}]",
-                "ConfigurationComponent[componentType=MOTOR,isActor=true,userDefinedName=M_A,portName=M_A,componentProperties={PIN1=A}]"
+                "ConfigurationComponent[componentType=MOTOR,isActor=true,userDefinedName=Port_A,portName=Port_A,componentProperties={PIN1=A}]"
             };
 
         Project project =
             UnitTestHelper
-                .setupWithProgramXML(testFactory, Util.readResourceContent("/transform/old_motor_on_stop_single.xml"))
-                .setConfigurationAst(configuration)
+                .setupWithConfigAndProgramXML(testFactory, Util.readResourceContent("/transform/old_motor_on_stop_single.xml"), OLD_CONFIGURATION_XML)
+
                 .build();
 
         new MbedTwo2ThreeTransformerWorker().execute(project);
@@ -766,22 +749,22 @@ public class CalliopeTwo2ThreeTransformerTest {
     public void executeTransformer_ShouldReturnTransformedMotors_WhenGivenOldMotorDouble() {
         String expectedProgramAst =
             "BlockAST[project=[[Location[x=512,y=50],MainTask[],"
-                + "BothMotorsOnAction[M_A,NumConst[30],M_B,NumConst[30]],"
+                + "BothMotorsOnAction[Port_A,NumConst[30],Port_B,NumConst[30]],"
                 + "BothMotorsOnAction[CalliBot_links,NumConst[30],CalliBot_rechts,NumConst[30]],"
                 + "SingleMotorStopAction[],"
                 + "SingleMotorStopAction[]]]]";
         String[] expectedToBeInConfigAst =
             {
-                "ConfigurationComponent[componentType=MOTOR,isActor=true,userDefinedName=M_B,portName=M_B,componentProperties={PIN1=B}]",
+                "ConfigurationComponent[componentType=MOTOR,isActor=true,userDefinedName=Port_B,portName=Port_B,componentProperties={PIN1=B}]",
                 "ConfigurationComponent[componentType=MOTOR,isActor=true,userDefinedName=CalliBot_links,portName=CalliBot_links,componentProperties={PIN1=0}]",
                 "ConfigurationComponent[componentType=MOTOR,isActor=true,userDefinedName=CalliBot_rechts,portName=CalliBot_rechts,componentProperties={PIN1=2}]",
-                "ConfigurationComponent[componentType=MOTOR,isActor=true,userDefinedName=M_A,portName=M_A,componentProperties={PIN1=A}]"
+                "ConfigurationComponent[componentType=MOTOR,isActor=true,userDefinedName=Port_A,portName=Port_A,componentProperties={PIN1=A}]"
             };
 
         Project project =
             UnitTestHelper
-                .setupWithProgramXML(testFactory, Util.readResourceContent("/transform/old_motor_on_stop_double.xml"))
-                .setConfigurationAst(configuration)
+                .setupWithConfigAndProgramXML(testFactory, Util.readResourceContent("/transform/old_motor_on_stop_double.xml"), OLD_CONFIGURATION_XML)
+
                 .build();
 
         new MbedTwo2ThreeTransformerWorker().execute(project);
@@ -796,7 +779,7 @@ public class CalliopeTwo2ThreeTransformerTest {
                 + "WaitStmt[(repeat[WAIT,SensorExpr[GetSampleSensor[GestureSensor[NO_PORT,UP,EMPTY_SLOT]]]])]]]]";
 
         Project project =
-            UnitTestHelper.setupWithProgramXML(testFactory, Util.readResourceContent("/transform/old_wait_for.xml")).setConfigurationAst(configuration).build();
+            UnitTestHelper.setupWithConfigAndProgramXML(testFactory, Util.readResourceContent("/transform/old_wait_for.xml"), OLD_CONFIGURATION_XML).build();
 
         new MbedTwo2ThreeTransformerWorker().execute(project);
         UnitTestHelper.checkAstEquality(project.getProgramAst().getTree().toString(), expectedProgramAst);

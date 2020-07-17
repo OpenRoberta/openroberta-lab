@@ -6,15 +6,15 @@
         </block>
         <block type="mbedActions_pin_set_pull" id="(PT[nG2(v?@JZ#0(s~~_" intask="true">
             <field name="PIN_PULL">UP</field>
-            <field name="PIN_PORT">P0_D</field>
+            <field name="PIN_PORT">P0</field>
         </block>
         <block type="mbedActions_pin_set_pull" id="w[4uSy}Gabm2x(NJfeyd" intask="true">
             <field name="PIN_PULL">DOWN</field>
-            <field name="PIN_PORT">P1_D</field>
+            <field name="PIN_PORT">P1</field>
         </block>
         <block type="mbedActions_pin_set_pull" id="T(10ub|epJUGm0cLqjoC" intask="true">
             <field name="PIN_PULL">NONE</field>
-            <field name="PIN_PORT">P2_D</field>
+            <field name="PIN_PORT">P2</field>
         </block>
     </instance>
 </block_set>   

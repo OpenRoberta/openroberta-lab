@@ -36,8 +36,6 @@ public interface IRobotFactory {
 
     String getConfigurationDefault();
 
-    String getConfigurationTransformer();
-
     String getRealName();
 
     Boolean hasSim();
