@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'typicons';
-  src:  url('fonts/typicons.eot?iv4sds');
-  src:  url('fonts/typicons.eot?iv4sds#iefix') format('embedded-opentype'),
-    url('fonts/typicons.ttf?iv4sds') format('truetype'),
-    url('fonts/typicons.woff?iv4sds') format('woff'),
-    url('fonts/typicons.svg?iv4sds#typicons') format('svg');
+  src:  url('fonts/typicons.eot?l6ia6j');
+  src:  url('fonts/typicons.eot?l6ia6j#iefix') format('embedded-opentype'),
+    url('fonts/typicons.ttf?l6ia6j') format('truetype'),
+    url('fonts/typicons.woff?l6ia6j') format('woff'),
+    url('fonts/typicons.svg?l6ia6j#typicons') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -25,6 +25,9 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.typcn-feedback:before {
+  content: "\e901";
+}
 .typcn-festobionic:before {
   content: "\e900";
 }

@@ -340,7 +340,7 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
         });
         if (GUISTATE_C.isPublicServerVersion()) {
             var feedbackButton = '<div href="#" id="feedbackButton" class="rightMenuButton" rel="tooltip" data-original-title="" title="">'
-                    +'<span id="" class="feedbackButton typcn typcn-thumbs-up"></span>'
+                    +'<span id="" class="feedbackButton typcn typcn-feedback"></span>'
                     +'</div>'
             $("#rightMenuDiv").append(feedbackButton);
             window.onmessage = function(msg) {
@@ -352,13 +352,17 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
 	            }
             };                  
             $('#feedbackButton').onWrap('click', '', function(event) {
-                $('#feedbackModal').on('shown.bs.modal', function () {
-	                if (GUISTATE_C.getLanguage().toLowerCase() === "de"){
+                $('#feedbackModal').on('show.bs.modal', function () {
+	                if (GUISTATE_C.getLanguage().toLowerCase() === "de") {
 	                    $("#feedbackIframe").attr("src" ,"https://www.roberta-home.de/lab/feedback/");
                     } else {
 	                    $("#feedbackIframe").attr("src" ,"https://www.roberta-home.de/en/lab/feedback/");
                     }
                 });
+                $('#feedbackModal').on('hide.bs.modal', function () {
+                     $("#feedbackIframe").attr("src" ,"about:blank");
+                     }
+                );
                 $('#feedbackModal').modal({show:true});
             });
         }
