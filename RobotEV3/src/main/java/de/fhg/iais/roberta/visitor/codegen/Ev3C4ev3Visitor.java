@@ -213,7 +213,7 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
             case SC.COMPASS:
                 return "HTCompass";
             case SC.IRSEEKER:
-                return "HTIr";
+                return "HTIrV2";
             case SC.HT_COLOR:
                 return "HTColorV2";
             default:
@@ -301,44 +301,38 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
 
     @Override
     public Void visitColorConst(ColorConst<Void> colorConst) {
-        String colorConstant = getColorConstantByHex(colorConst.getHexValueAsString());
-        this.sb.append(colorConstant);
-        return null;
-    }
-
-    private String getColorConstantByHex(String hex) {
-        switch ( hex.toUpperCase() ) {
+        String hex = colorConst.getHexValueAsString().toUpperCase();
+        String colorConstant;
+        switch ( hex ) {
             case "#000000":
-                return "Black";
+                colorConstant = "ColorBlack";
+                break;
             case "#0057A6":
-                return "Blue";
+                colorConstant = "ColorBlue";
+                break;
             case "#00642E":
-                return "Green";
+                colorConstant = "ColorGreen";
+                break;
             case "#F7D117":
-                return "Yellow";
+                colorConstant = "ColorYellow";
+                break;
             case "#B30006":
-                return "Red";
+                colorConstant = "ColorRed";
+                break;
             case "#FFFFFF":
-                return "White";
+                colorConstant = "ColorWhite";
+                break;
             case "#532115":
-                return "Brown";
-            case "#EE82EE":
-                return "Violet";
-            case "#800080":
-                return "Purple";
-            case "#00FF00":
-                return "Lime";
-            case "#FFA500":
-                return "Orange";
-            case "#FF00FF":
-                return "Magenta";
-            case "#DC143C":
-                return "Crismon";
+                colorConstant = "ColorBrown";
+                break;
             case "#585858":
-                return "None";
+                colorConstant = "ColorNone";
+                break;
             default:
                 throw new DbcException("Invalid color constant: " + hex);
         }
+        this.sb.append(colorConstant);
+        return null;
     }
 
     // copied from AbstractCommonArduinoCppVisitor
@@ -942,7 +936,7 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
     }
 
     private void generateRealUltrasonicDistance(String port) {
-        this.sb.append("ReadEV3UltrasonicSensorDistance(").append(getPrefixedInputPort(port)).append(", CM)");
+        this.sb.append("ReadEV3UltrasonicSensorDistance(").append(getPrefixedInputPort(port)).append(", EV3_ULTRASONIC_CM)");
     }
 
     private void generateRealUltrasonicPresence(String port) {
@@ -951,7 +945,7 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
 
     @Override
     public Void visitSoundSensor(SoundSensor<Void> soundSensor) {
-        this.sb.append("ReadNXTSoundSensor(").append(getPrefixedInputPort(soundSensor.getPort())).append(", DB)");
+        this.sb.append("ReadNXTSoundSensor(").append(getPrefixedInputPort(soundSensor.getPort())).append(", NXT_SOUND_DB)");
         return null;
     }
 
@@ -972,15 +966,13 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
     }
 
     private void generateReadGyro(String port, String mode) {
-        this.sb.append("ReadEV3GyroSensor(").append(getPrefixedInputPort(port)).append(", ").append(getGyroSensorReadModeConstant(mode)).append(")");
-    }
-
-    private String getGyroSensorReadModeConstant(String mode) {
+        String functionName;
         if ( mode.equals(SC.ANGLE) ) {
-            return "EV3GyroAngle";
+            functionName = "NEPOReadEV3GyroAngle";
         } else {
-            return "EV3GyroRate";
+            functionName = "NEPOReadEV3GyroRate";
         }
+        this.sb.append(functionName).append("(").append(getPrefixedInputPort(port)).append(")");
     }
 
     @Override
@@ -989,13 +981,13 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
         String port = getPrefixedInputPort(colorSensor.getPort());
         switch ( mode ) {
             case SC.COLOUR:
-                this.sb.append("ReadEV3ColorSensor(").append(port).append(")");
+                this.sb.append("NEPOReadEV3ColorSensorColor(").append(port).append(")");
                 break;
             case SC.LIGHT:
-                this.sb.append("ReadEV3ColorSensorLight(").append(port).append(", ReflectedLight)");
+                this.sb.append("NEPOReadEV3ColorSensorReflectedLight(").append(port).append(")");
                 break;
             case SC.AMBIENTLIGHT:
-                this.sb.append("ReadEV3ColorSensorLight(").append(port).append(", AmbientLight)");
+                this.sb.append("NEPOReadEV3ColorSensorAmbientLight(").append(port).append(")");
                 break;
             case SC.RGB:
                 this.sb.append("NEPOReadEV3ColorSensorRGB(").append(port).append(")");
@@ -1092,7 +1084,7 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
     @Override
     public Void visitIRSeekerSensor(IRSeekerSensor<Void> irSeekerSensor) {
         this.sb
-            .append("ReadHTIrSensor(")
+            .append("ReadHTIrV2Sensor(")
             .append(getPrefixedInputPort(irSeekerSensor.getPort()))
             .append(", ")
             .append(getIRSeekerSensorConstantMode(irSeekerSensor.getMode()))
@@ -1111,14 +1103,6 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
         }
     }
 
-    private void generateReadSensorInMode(String port, String mode) {
-        this.sb.append("ReadSensorInMode(" + getPrefixedInputPort(port) + ", " + mode + ")");
-    }
-
-    private void generateReadSensor(String port) {
-        this.sb.append("readSensor(" + getPrefixedInputPort(port) + ")");
-    }
-
     @Override
     public Void visitKeysSensor(KeysSensor<Void> keysSensor) {
         this.sb.append("ButtonIsDown(" + getKeyConstant(keysSensor.getPort()) + ")");
@@ -1128,19 +1112,19 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
     private String getKeyConstant(String keyPort) {
         switch ( keyPort ) {
             case SC.ENTER:
-                return "BTNCENTER";
+                return "Button_Enter";
             case SC.RIGHT:
-                return "BTNRIGHT";
+                return "Button_Right";
             case SC.LEFT:
-                return "BTNLEFT";
+                return "Button_Left";
             case SC.UP:
-                return "BTNUP";
+                return "Button_Up";
             case SC.DOWN:
-                return "BTNDOWN";
+                return "Button_Down";
             case SC.ESCAPE:
-                return "BTNEXIT";
+                return "Button_Escape";
             case SC.ANY:
-                return "BTNANY";
+                return "((Button) BUTTON_ID_ALL)";
             default:
                 throw new DbcException("Unknown key port");
         }
@@ -1244,31 +1228,42 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
     }
 
     private String getLedPattern(IBrickLedColor color, ILightMode mode) {
-        return "LED_" + getLedPatternColorPrefix(color) + getLedPatternModePostfix(mode);
-    }
-
-    private String getLedPatternColorPrefix(IBrickLedColor color) {
-        return color.toString();
-    }
-
-    private String getLedPatternModePostfix(ILightMode mode) {
-        switch ( mode.toString() ) {
+        String modeName;
+        switch (mode.toString()) {
             case SC.ON:
-                return "";
+                modeName = "Steady";
+                break;
             case "FLASH":
-                return "_FLASH";
+                modeName = "Flashing";
+                break;
             case "DOUBLE_FLASH":
-                return "_PULSE";
+                modeName = "Pulsing";
+                break;
             default:
                 throw new DbcException("Unknown LightMode");
         }
+        String colorName;
+        switch (color.toString()) {
+            case "GREEN":
+                colorName = "Green";
+                break;
+            case "RED":
+                colorName = "Red";
+                break;
+            case "ORANGE":
+                colorName = "Orange";
+                break;
+            default:
+                throw new DbcException("Unknown IBrickLedColor");
+        }
+        return "LEDPattern_" + modeName + colorName;
     }
 
     @Override
     public Void visitLightStatusAction(LightStatusAction<Void> lightStatusAction) {
         switch ( lightStatusAction.getStatus() ) {
             case OFF:
-                this.sb.append("SetLedPattern(LED_BLACK);");
+                this.sb.append("SetLedPattern(LEDPattern_Off);");
                 break;
             case RESET:
                 // TODO: Implement
