@@ -11,7 +11,6 @@ require.config({
 		'bootstrap.wysiwyg': 'bootstrap/bootstrap-3.3.1-dist/dist/js/bootstrap-wysiwyg.min',
 		'enjoyHint': 'enjoyHint/enjoyhint.min',
 		'jquery': 'jquery/jquery-3.3.1.min',
-		'jquery-cookie': 'jquery/jquery.cookie-1.4.1',
 		'jquery-scrollto': 'jquery/jquery.scrollTo-2.1.2.min',
 		'jquery-validate': 'jquery/jquery.validate-1.17.0.min',
 		'jquery-hotkeys': 'jquery/jquery.hotkeys-0.2.0',
@@ -120,19 +119,16 @@ require.config({
 		'jquery-validate': {
 			deps: ['jquery']
 		},
-		'jquery-cookie': {
-			deps: ['jquery']
-		},
 	}
 });
 
-require(['require', 'wrap', 'log', 'jquery', 'jquery-cookie', 'guiState.controller', 'progList.controller', 'logList.controller', 'confList.controller',
+require(['require', 'wrap', 'log', 'jquery', 'guiState.controller', 'progList.controller', 'logList.controller', 'confList.controller',
 	'progDelete.controller', 'confDelete.controller', 'progShare.controller', 'menu.controller', 'multSim.controller', 'user.controller',
 	'robot.controller', 'program.controller', 'progSim.controller', 'progCode.controller', 'progDelete.controller', 'progHelp.controller',
 	'legal.controller', 'progInfo.controller', 'progRun.controller', 'configuration.controller', 'language.controller', 'socket.controller',
 	'progTutorial.controller', 'tutorialList.controller', 'userGroup.controller', 'volume-meter', 'user.model', 'webview.controller', 'sourceCodeEditor.controller', 'codeflask', 'stackmachineJsHelper'], function(
 		require) {
-	$ = require('jquery', 'jquery-cookie');
+	$ = require('jquery');
 	WRAP = require('wrap');
 	LOG = require('log');
 	COMM = require('comm');
@@ -205,14 +201,6 @@ function init() {
 		menuController.init();
 		tutorialController.init();
         userGroupController.init();
-
-		// immediately remove old cookies TODO remove this and jquery-cookie after 30 days
-		var cookies = $.cookie();
-		for (var cookie in cookies) {
-			if (cookies.hasOwnProperty(cookie)) {
-				$.removeCookie(cookie);
-			}
-		}
 
 		$(".cover").fadeOut(100, function() {
 			if (guiStateController.getStartWithoutPopup()) {
