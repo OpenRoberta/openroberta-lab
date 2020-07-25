@@ -346,8 +346,8 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
             window.onmessage = function(msg) {
 	            if (msg.data ==="closeFeedback") {		             
                     $('#feedbackIframe').one('load', function () {
-                        $("#feedbackIframe").attr("src" ,"about:blank");
                         setTimeout(function() { 
+	                        $("#feedbackIframe").attr("src" ,"about:blank");
 	                        $('#feedbackModal').modal("hide");
                         }, 1000);
                     });
