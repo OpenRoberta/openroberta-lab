@@ -17,6 +17,8 @@ import de.fhg.iais.roberta.util.Key;
 
 public class UserProcessor extends AbstractProcessor {
 
+    public static final String ILLEGAL_USER_NAME_CHARACTER_PATTERN = "[^a-zA-Z0-9=+!?.,%#+&^@_\\- ]";
+
     public UserProcessor(DbSession dbSession, HttpSessionState httpSessionState) {
         super(dbSession, httpSessionState.getUserId());
     }
@@ -48,7 +50,7 @@ public class UserProcessor extends AbstractProcessor {
      * @throws Exception
      */
     public User getUser(String account, String password) throws Exception {
-        Pattern p = Pattern.compile("[^a-zA-Z0-9=+!?.,%#+&^@_\\- ]", Pattern.CASE_INSENSITIVE);
+        Pattern p = Pattern.compile(ILLEGAL_USER_NAME_CHARACTER_PATTERN, Pattern.CASE_INSENSITIVE);
         Matcher acc_symbols = p.matcher(account);
 
         if ( acc_symbols.find() ) {
@@ -124,7 +126,7 @@ public class UserProcessor extends AbstractProcessor {
      * @throws Exception
      */
     public void createUser(String account, String password, String userName, String role, String email, String tags, boolean youngerThen14) throws Exception {
-        Pattern p = Pattern.compile("[^a-zA-Z0-9=+!?.,%#+&^@_\\- ]", Pattern.CASE_INSENSITIVE);
+        Pattern p = Pattern.compile(ILLEGAL_USER_NAME_CHARACTER_PATTERN, Pattern.CASE_INSENSITIVE);
         Matcher acc_symbols = p.matcher(account);
         boolean account_check = acc_symbols.find();
         Matcher userName_symbols = p.matcher(userName);

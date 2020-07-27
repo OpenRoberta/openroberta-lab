@@ -3,6 +3,7 @@ package de.fhg.iais.roberta.persistence;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import de.fhg.iais.roberta.persistence.bo.AccessRight;
@@ -117,13 +118,11 @@ public class UserGroupProcessor extends AbstractProcessor {
      *        created group might have less members than specified therefore.
      * @return The newly created user group or null, if the user group can not be created
      */
-    public UserGroup createGroup(String groupName, User groupOwner, int initialMembers) {
+    public UserGroup createGroup(String groupName, User groupOwner, List<String> initialMembers) {
         if ( groupOwner == null || groupName == null ) {
             this.setStatus(ProcessorStatus.FAILED, Key.GROUP_CREATE_ERROR, new HashMap<>());
             return null;
         }
-
-        initialMembers = Math.min(UserGroupProcessor.GROUP_STUDENT_LIMIT, Math.max(0, initialMembers));
 
         Map<String, String> processorParameters = new HashMap<>();
         processorParameters.put("USERGROUP_OWNER", groupOwner.getAccount());
@@ -150,6 +149,23 @@ public class UserGroupProcessor extends AbstractProcessor {
             return null;
         }
 
+        if ( initialMembers.size() > UserGroupProcessor.GROUP_STUDENT_LIMIT ) {
+            this.setStatus(ProcessorStatus.FAILED, Key.GROUP_ADD_MEMBER_ERROR_LIMIT_REACHED, processorParameters);
+            return null;
+        }
+
+        String accountPrefix = groupName + UserGroupProcessor.GROUP_NAME_DELIMITER;
+        Pattern p = Pattern.compile(UserProcessor.ILLEGAL_USER_NAME_CHARACTER_PATTERN, Pattern.CASE_INSENSITIVE);
+        Matcher illegalCharacterMatcher;
+
+        for ( String newMemberName : initialMembers ) {
+            illegalCharacterMatcher = p.matcher(newMemberName);
+            if ( illegalCharacterMatcher.find() ) {
+                this.setStatus(ProcessorStatus.FAILED, Key.USER_CREATE_ERROR_CONTAINS_SPECIAL_CHARACTERS, processorParameters);
+                return null;
+            }
+        }
+
         this.userGroupDao.lockTable();
 
         Pair<Key, UserGroup> createStatus = this.userGroupDao.persistGroup(groupName, groupOwner, null);
@@ -166,18 +182,19 @@ public class UserGroupProcessor extends AbstractProcessor {
             //TODO: Currently only ADMIN_READ is supported. Implement other visibilities.
             userGroup.setAccessRight(AccessRight.ADMIN_READ);
 
-            if ( initialMembers > 0 ) {
+            if ( initialMembers.size() > 0 ) {
 
-                String memberName;
-                User tmpUser;
+                String memberAccountName;
+                User member;
 
-                for ( int i = 1; i <= initialMembers; i++ ) {
-                    memberName = groupName + UserGroupProcessor.GROUP_NAME_DELIMITER + String.format("%02d", i);
+                for ( String newMemberName : initialMembers ) {
+                    memberAccountName = accountPrefix + newMemberName;
                     try {
-                        tmpUser = this.userDao.persistUser(userGroup, memberName, memberName, "STUDENT");
-                        userGroup.addMember(tmpUser);
+                        member = this.userDao.persistUser(userGroup, memberAccountName, memberAccountName, "STUDENT");
+                        userGroup.addMember(member);
                     } catch ( Exception e ) {
-                        //TODO: Log that a specific user could not be created.
+                        this.setStatus(ProcessorStatus.FAILED, Key.SERVER_ERROR, processorParameters);
+                        return null;
                     }
                 }
             }
@@ -229,6 +246,51 @@ public class UserGroupProcessor extends AbstractProcessor {
         }
 
         this.setStatus(ProcessorStatus.SUCCEEDED, Key.GROUP_DELETE_SUCCESS, processorParameters);
+    }
+
+    /**
+     * Updates the account of a member to a new value.
+     *
+     * @param member The member of a group that shall get a new account name
+     * @param newAccount The new account name, with or without the user group name prefix
+     * @throws Exception
+     */
+    public void updateMemberAccount(User member, String newAccount) throws Exception {
+        Map<String, String> processorParameters = new HashMap<>();
+
+        if ( member == null || member.getUserGroup() == null ) {
+            this.setStatus(ProcessorStatus.FAILED, Key.GROUP_GET_MEMBER_ERROR_NOT_FOUND, processorParameters);
+            return;
+        }
+
+        processorParameters.put("CURRENT_MEMBER_ACCOUNT", member.getAccount());
+
+        Pattern p = Pattern.compile(UserProcessor.ILLEGAL_USER_NAME_CHARACTER_PATTERN, Pattern.CASE_INSENSITIVE);
+        Matcher illegalCharacterMatcher = p.matcher(newAccount);
+
+        if ( illegalCharacterMatcher.find() ) {
+            this.setStatus(ProcessorStatus.FAILED, Key.USER_CREATE_ERROR_CONTAINS_SPECIAL_CHARACTERS, processorParameters);
+            return;
+        }
+
+        String newAccountFormatted = member.getUserGroup().getName() + UserGroupProcessor.GROUP_NAME_DELIMITER + newAccount;
+
+        processorParameters.put("NEW_MEMBER_ACCOUNT", newAccountFormatted);
+
+        UserDao userDao = new UserDao(this.dbSession);
+        User duplicateMember = userDao.loadUser(member.getUserGroup(), newAccountFormatted);
+
+        if ( duplicateMember != null ) {
+            this.setStatus(ProcessorStatus.FAILED, Key.GROUP_MEMBER_ERROR_ALREADY_EXISTS, processorParameters);
+            return;
+        }
+
+        if ( member.isPasswordCorrect(member.getAccount()) ) {
+            member.setPassword(newAccountFormatted);
+        }
+
+        member.setAccount(newAccountFormatted);
+        this.setStatus(ProcessorStatus.SUCCEEDED, Key.SERVER_SUCCESS, processorParameters);
     }
 
     /**
@@ -315,52 +377,63 @@ public class UserGroupProcessor extends AbstractProcessor {
      * @param userGroup The user group, for which new members shall be generated.
      * @param newMemberCount The number of members, that shall be generated.
      */
-    public void addMembersToUserGroup(UserGroup userGroup, int newMemberCount) {
+    public void addMembersToUserGroup(UserGroup userGroup, List<String> newMemberNames) {
         Assert.notNull(userGroup);
 
         Map<String, String> processorParameters = new HashMap<>();
         processorParameters.put("USERGROUP_NAME", userGroup.getName());
         processorParameters.put("USERGROUP_SIZE", String.format("%d", userGroup.getMembers().size()));
 
-        if ( newMemberCount <= 0 ) {
+        if ( newMemberNames == null || newMemberNames.size() == 0 ) {
             this.setStatus(ProcessorStatus.FAILED, Key.GROUP_ADD_MEMBER_ERROR_SMALLER_THAN_ONE, processorParameters);
             return;
         }
 
-        processorParameters.put("USERGROUP_MEMBERS_TO_ADD", String.format("%d", newMemberCount));
+        processorParameters.put("USERGROUP_MEMBERS_TO_ADD", String.format("%d", newMemberNames.size()));
 
-        if ( userGroup.getMembers().size() >= UserGroupProcessor.GROUP_STUDENT_LIMIT ) {
+        if ( userGroup.getMembers().size() + newMemberNames.size() > UserGroupProcessor.GROUP_STUDENT_LIMIT ) {
             this.setStatus(ProcessorStatus.FAILED, Key.GROUP_ADD_MEMBER_ERROR_LIMIT_REACHED, processorParameters);
             return;
         }
 
-        if ( newMemberCount + userGroup.getMembers().size() > UserGroupProcessor.GROUP_STUDENT_LIMIT ) {
-            newMemberCount = UserGroupProcessor.GROUP_STUDENT_LIMIT - userGroup.getMembers().size();
-        }
-
         String accountPrefix = userGroup.getName() + UserGroupProcessor.GROUP_NAME_DELIMITER;
+        String memberAccountName;
+        Pattern p = Pattern.compile(UserProcessor.ILLEGAL_USER_NAME_CHARACTER_PATTERN, Pattern.CASE_INSENSITIVE);
+        Matcher illegalCharacterMatcher;
+        UserDao userDao = new UserDao(this.dbSession);
+        User member;
+        for ( String newMemberName : newMemberNames ) {
+            newMemberName = newMemberName.trim();
+            if ( newMemberName.equals("") ) {
+                this.setStatus(ProcessorStatus.FAILED, Key.USER_CREATE_ERROR_MISSING_REQ_FIELDS, processorParameters);
+                return;
+            }
 
-        int offset = 0, memberIndex;
-        String memberAccount;
-        User tmpUser;
+            illegalCharacterMatcher = p.matcher(newMemberName);
+            if ( illegalCharacterMatcher.find() ) {
+                this.setStatus(ProcessorStatus.FAILED, Key.USER_CREATE_ERROR_CONTAINS_SPECIAL_CHARACTERS, processorParameters);
+                return;
+            }
 
-        for ( User member : userGroup.getMembers() ) {
-            memberAccount = member.getAccount();
-            memberIndex = Integer.parseInt(memberAccount.substring(memberAccount.lastIndexOf(UserGroupProcessor.GROUP_NAME_DELIMITER) + 1));
-            if ( memberIndex > offset ) {
-                offset = memberIndex;
+            member = userDao.loadUser(userGroup, accountPrefix + newMemberName);
+
+            if ( member != null ) {
+                this.setStatus(ProcessorStatus.FAILED, Key.GROUP_MEMBER_ERROR_ALREADY_EXISTS, processorParameters);
+                return;
             }
         }
 
-        for ( int i = offset + 1; i <= newMemberCount + offset; i++ ) {
-            memberAccount = accountPrefix + String.format("%02d", i);
+        for ( String newMemberName : newMemberNames ) {
+            newMemberName = newMemberName.trim();
+            memberAccountName = accountPrefix + newMemberName;
             try {
-                tmpUser = this.userDao.persistUser(userGroup, memberAccount, memberAccount, "STUDENT");
-                userGroup.addMember(tmpUser);
+                member = this.userDao.persistUser(userGroup, memberAccountName, memberAccountName, "STUDENT");
+                userGroup.addMember(member);
             } catch ( Exception e ) {
-                //TODO: Log that a specific user could not be created.
+                this.setStatus(ProcessorStatus.FAILED, Key.SERVER_ERROR, processorParameters);
+                return;
             }
         }
-        this.setStatus(ProcessorStatus.SUCCEEDED, Key.GROUP_ADD_MEMBER_SUCCESS, processorParameters);
+        this.setStatus(ProcessorStatus.SUCCEEDED, Key.SERVER_SUCCESS, processorParameters);
     }
 }

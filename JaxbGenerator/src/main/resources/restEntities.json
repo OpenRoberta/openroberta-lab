@@ -543,7 +543,17 @@
       "description": "the request description for the /userGroup/createUserGroup and /userGroup/addGroupMembers REST request, returns UserGroupResponse",
       "properties": [
         { "name": "groupName", "type": "String" },
-        { "name": "groupMemberCount", "type": "int" }
+        { "name": "groupMemberNames", "type": "String[]" }
+      ]
+    },
+    {
+      "name": "UpdateUserGroupMemberAccountRequest",
+      "extends": "BaseRequest",
+      "description": "the request description for the /userGroup/updateMemberAccount REST request, returns BaseResponse",
+      "properties": [
+        { "name": "groupName", "type": "String" },
+        { "name": "currentGroupMemberAccount", "type": "String" },
+        { "name": "newGroupMemberAccount", "type": "String" }
       ]
     },
     {

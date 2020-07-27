@@ -1,5 +1,6 @@
 package de.fhg.iais.roberta.javaServer.restServices.all.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
@@ -18,6 +19,7 @@ import com.google.inject.Inject;
 import de.fhg.iais.roberta.generated.restEntities.BaseResponse;
 import de.fhg.iais.roberta.generated.restEntities.ChangeUserGroupRequest;
 import de.fhg.iais.roberta.generated.restEntities.FullRestRequest;
+import de.fhg.iais.roberta.generated.restEntities.UpdateUserGroupMemberAccountRequest;
 import de.fhg.iais.roberta.generated.restEntities.UserGroupListResponse;
 import de.fhg.iais.roberta.generated.restEntities.UserGroupMembersRequest;
 import de.fhg.iais.roberta.generated.restEntities.UserGroupRequest;
@@ -52,10 +54,8 @@ public class UserGroupController {
     }
 
     /**
-     * Returns all information about a single user group. It requires a user to be logged in.
-     * The end point expects a UserGroupRequest with the fields:
-     * - groupName The name of the user group
-     * The user group is determined by the currently logged in user (either by being its owner of by being a member of it)
+     * Returns all information about a single user group. It requires a user to be logged in. The end point expects a UserGroupRequest with the fields: -
+     * groupName The name of the user group The user group is determined by the currently logged in user (either by being its owner of by being a member of it)
      * and the provided group name.
      *
      * @param dbSession The database session
@@ -107,9 +107,8 @@ public class UserGroupController {
     }
 
     /**
-     * Returns a list of all user groups of the currently logged in user. It requires a user to be logged in.
-     * The end point expects a BaseRequest with no special fields.
-     * All user groups that the currently logged in user owns are returned.
+     * Returns a list of all user groups of the currently logged in user. It requires a user to be logged in. The end point expects a BaseRequest with no
+     * special fields. All user groups that the currently logged in user owns are returned.
      *
      * @param dbSession The database session
      * @param fullRequest The request data
@@ -162,11 +161,9 @@ public class UserGroupController {
     }
 
     /**
-     * Creates a user group. It requires a user to be logged in.
-     * The end point expects a ChangeUserGroupRequest with the fields:
-     * - groupName The name the new user group shall have
-     * - groupMemberCount The number of members the user group shall initially be generated with.
-     * The newly created user group will be set with the currently logged in user as its owner.
+     * Creates a user group. It requires a user to be logged in. The end point expects a ChangeUserGroupRequest with the fields: - groupName The name the new
+     * user group shall have - groupMemberCount The number of members the user group shall initially be generated with. The newly created user group will be set
+     * with the currently logged in user as its owner.
      *
      * @param dbSession The database session
      * @param fullRequest The request data
@@ -193,7 +190,7 @@ public class UserGroupController {
             }
 
             String groupName = request.getGroupName();
-            int initialMembers = request.getGroupMemberCount();
+            List<String> initialMembers = request.getGroupMemberNames();
 
             UserGroup userGroup = userGroupProcessor.createGroup(groupName, loggedInUser, initialMembers);
             if ( !userGroupProcessor.succeeded() ) {
@@ -216,10 +213,9 @@ public class UserGroupController {
     }
 
     /**
-     * Deletes all specified user groups. It requires a user to be logged in.
-     * The end point expects a UserGroupsRequest with the fields:
-     * - groupNames A JSONArray of Strings with the names of the user groups that shall be deleted.
-     * The user groups is determined by the provided user group names and the currently logged in user, who needs to be their owner.
+     * Deletes all specified user groups. It requires a user to be logged in. The end point expects a UserGroupsRequest with the fields: - groupNames A
+     * JSONArray of Strings with the names of the user groups that shall be deleted. The user groups is determined by the provided user group names and the
+     * currently logged in user, who needs to be their owner.
      *
      * @param dbSession The database session
      * @param fullRequest The request data
@@ -265,11 +261,9 @@ public class UserGroupController {
     }
 
     /**
-     * Adds new members to a user group. It requires a user to be logged in.
-     * The end point expects a ChangeUserGroupRequest with the fields:
-     * - groupName The name the user group, for which new members shall be generated.
-     * - groupMemberCount The number of members, that shall additionally be generated.
-     * The currently logged in user must be the owner of the specified user group.
+     * Adds new members to a user group. It requires a user to be logged in. The end point expects a ChangeUserGroupRequest with the fields: - groupName The
+     * name the user group, for which new members shall be generated. - groupMemberCount The number of members, that shall additionally be generated. The
+     * currently logged in user must be the owner of the specified user group.
      *
      * @param dbSession The database session
      * @param fullRequest The request data
@@ -297,14 +291,14 @@ public class UserGroupController {
             }
 
             String groupName = request.getGroupName();
-            int newMemberCount = request.getGroupMemberCount();
+            List<String> newMemberNames = request.getGroupMemberNames();
 
             UserGroup userGroup = userGroupProcessor.getGroup(groupName, loggedInUser);
             if ( !userGroupProcessor.succeeded() ) {
                 return UtilForREST.makeBaseResponseForError(userGroupProcessor.getMessage(), httpSessionState, this.brickCommunicator);
             }
 
-            userGroupProcessor.addMembersToUserGroup(userGroup, newMemberCount);
+            userGroupProcessor.addMembersToUserGroup(userGroup, newMemberNames);
             if ( !userGroupProcessor.succeeded() ) {
                 return UtilForREST.makeBaseResponseForError(userGroupProcessor.getMessage(), httpSessionState, this.brickCommunicator);
             }
@@ -325,12 +319,68 @@ public class UserGroupController {
         }
     }
 
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/updateMemberAccount")
+    public Response updateMemberAccount(@OraData DbSession dbSession, FullRestRequest fullRequest) throws Exception {
+        LOG.info("command is updateMemberAccount");
+        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, fullRequest, true);
+
+        try {
+            BaseResponse response = BaseResponse.make();
+            UpdateUserGroupMemberAccountRequest request = UpdateUserGroupMemberAccountRequest.make(fullRequest.getData());
+
+            UserProcessor userProcessor = new UserProcessor(dbSession, httpSessionState);
+            UserGroupProcessor userGroupProcessor = new UserGroupProcessor(dbSession, httpSessionState, this.isPublicServer);
+
+            User loggedInUser = httpSessionState.isUserLoggedIn() ? userProcessor.getUser(httpSessionState.getUserId()) : null;
+            if ( loggedInUser == null ) {
+                return UtilForREST.makeBaseResponseForError(Key.USER_ERROR_NOT_LOGGED_IN, httpSessionState, this.brickCommunicator);
+            }
+
+            String groupName = request.getGroupName();
+            String memberAccount = request.getCurrentGroupMemberAccount();
+            String newMemberAccount = request.getNewGroupMemberAccount();
+
+            UserGroup userGroup = userGroupProcessor.getGroup(groupName, loggedInUser);
+            if ( userGroup == null ) {
+                return UtilForREST.makeBaseResponseForError(userGroupProcessor.getMessage(), httpSessionState, this.brickCommunicator);
+            }
+
+            if ( memberAccount.equals("") ) {
+                List<String> memberAsList = new ArrayList<String>(1);
+                memberAsList.add(newMemberAccount.trim());
+                userGroupProcessor.addMembersToUserGroup(userGroup, memberAsList);
+            } else {
+                User member = userProcessor.getMemberOfUserGroup(userGroup, memberAccount.trim());
+
+                if ( member == null ) {
+                    return UtilForREST.makeBaseResponseForError(userProcessor.getMessage(), httpSessionState, this.brickCommunicator);
+                }
+
+                userGroupProcessor.updateMemberAccount(member, newMemberAccount);
+            }
+
+            UtilForREST.addResultInfo(response, userGroupProcessor);
+            return UtilForREST.responseWithFrontendInfo(response, httpSessionState, this.brickCommunicator);
+
+        } catch ( Exception e ) {
+            dbSession.rollback();
+            String errorTicketId = Util.getErrorTicketId();
+            LOG.error("Exception. Error ticket: {}", errorTicketId, e);
+            return UtilForREST.makeBaseResponseForError(Key.SERVER_ERROR, httpSessionState, null); // TODO: redesign error ticker number and add then: append("parameters", errorTicketId);
+        } finally {
+            if ( dbSession != null ) {
+                dbSession.close();
+            }
+        }
+    }
+
     /**
-     * Deletes all specified members of the specified user group. It requires a user to be logged in.
-     * The end point expects a UserGroupMembersRequest with the fields:
-     * - groupName The name the user group, for which new members shall be deleted.
-     * - groupMemberAccounts A JSONArray of Strings with the names of the members that shall be deleted.
-     * The currently logged in user must be the owner of the specified user group.
+     * Deletes all specified members of the specified user group. It requires a user to be logged in. The end point expects a UserGroupMembersRequest with the
+     * fields: - groupName The name the user group, for which new members shall be deleted. - groupMemberAccounts A JSONArray of Strings with the names of the
+     * members that shall be deleted. The currently logged in user must be the owner of the specified user group.
      *
      * @param dbSession The database session
      * @param fullRequest The request data
@@ -383,12 +433,10 @@ public class UserGroupController {
     }
 
     /**
-     * Resets the passwords of all specified members of the specified user group to its default value, which is their account name.
-     * It requires a user to be logged in.
-     * The end point expects a UserGroupMembersRequest with the fields:
-     * - groupName The name the user group, for which's specified members the passwords shall be reseted.
-     * - groupMemberAccounts A JSONArray of Strings with the names of the members that shall get their password reseted.
-     * The currently logged in user must be the owner of the specified user group.
+     * Resets the passwords of all specified members of the specified user group to its default value, which is their account name. It requires a user to be
+     * logged in. The end point expects a UserGroupMembersRequest with the fields: - groupName The name the user group, for which's specified members the
+     * passwords shall be reseted. - groupMemberAccounts A JSONArray of Strings with the names of the members that shall get their password reseted. The
+     * currently logged in user must be the owner of the specified user group.
      *
      * @param dbSession The database session
      * @param fullRequest The request data

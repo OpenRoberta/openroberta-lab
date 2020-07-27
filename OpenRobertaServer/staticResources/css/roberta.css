@@ -1969,8 +1969,7 @@ div.galleryDescription, div.tutorialOverview {
 #progList table tbody tr:hover,
 #confList table tbody tr:hover,
 #relationsList table tbody tr:hover,
-#userGroupList table tbody tr:hover,
-#userGroupMemberList table tbody tr:hover {
+#userGroupList table tbody tr:hover {
     background-color: #BACC1E;
 }
 
@@ -2165,6 +2164,95 @@ input[type=range]:focus::-ms-fill-upper {
 #userGroupList .btn-group > .btn:not(.dropdown-toggle),
 #userGroupMemberList .btn-group > .btn:not(.dropdown-toggle) {
 	border-radius: 2px;
+}
+
+#userGroupMemberTable .member-name:not(.active),
+#userGroupMemberTable .edit-member-name:not(.active) {
+	display: none;
+}
+
+#userGroupMemberTable .btn {
+	display: inline-block;
+	font-size: 16px;
+	height: calc(1.25em + 14px);
+	vertical-align: top;
+	border: none;
+	margin-right: 0;
+}
+
+#userGroupMemberTable.table-hover > tbody > tr:hover {
+	background-color: transparent;
+}
+
+#userGroupMemberTable .btn:focus,
+#userGroupMemberTable .btn:active {
+	outline: none;
+	-webkit-box-shadow: none;
+	box-shadow: none;
+}
+
+#userGroupMemberTable .member-name-column {
+	position: relative;
+	display: inline-block;
+	padding: 8px;
+	margin: -8px;
+}
+
+#userGroupMemberTable tr.selected  .member-name-column.active {
+	background-color: rgba(255, 255, 255, .5);
+}
+
+#userGroupMemberTable .member-name {
+	display: inline-block;
+	padding: 7px 0;
+	line-height: 1.25;
+	font-size: 16px;
+	margin-left: 16px;
+}
+
+#userGroupMemberTable .edit-member-name,
+#userGroupMemberTable .edit-member-name form {
+	display: inline-block;
+}
+
+#userGroupMemberTable .edit-member-name form {
+	margin: 0;
+	padding: 0;
+}
+
+#userGroupMemberTable .edit-member-name form label.form-invalid {
+	position: absolute;
+	left: 0px;
+	right: 0px;
+	bottom: 0;
+	margin-bottom: 0px;
+	transform: translateY(100%);
+}
+
+#userGroupMemberTable .edit-member-name form label.form-invalid:after {
+	top: 0;
+	right: 25%;
+	margin-top: 0;
+	transform: translateY(-100%);
+	border-bottom-color: red;
+	border-top-color: transparent;
+}
+
+#userGroupMemberTable .edit-member-name input.form-control {
+	font-size: 16px;
+	line-height: 1.25;
+	padding: 4px 12px 4px 15px;
+	margin-bottom: 0;
+}
+
+#userGroupMemberTable .edit-member-name .btn.iais-loading-spin:before {
+	display: inline-block;
+	animation: iais-loading-spin 1.2s linear infinite;
+}
+
+@keyframes iais-loading-spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
 
 .pull-none .pull-right {

@@ -63,6 +63,8 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'message', 'progList.model
                     return '<input type="checkbox" name="btSelectItem" data-index="' + index + '">';
                 },
                 valign : 'middle',
+                halign: 'center',
+                align: 'center',
             }, {
                 events : eventsDeleteShareLoad,
                 title : titleActions,

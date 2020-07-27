@@ -4,6 +4,11 @@
  * when the maven plugin is re-executed for any reasons.
  */
 package de.fhg.iais.roberta.generated.restEntities;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -14,8 +19,7 @@ import org.json.JSONObject;
  */
 public class ChangeUserGroupRequest extends BaseRequest {
     protected String groupName;
-    protected int groupMemberCount;
-    protected boolean groupMemberCountDefined = false;
+    protected List<String> groupMemberNames;
     
     /**
      * the request description for the /userGroup/createUserGroup and /userGroup/addGroupMembers REST request, returns UserGroupResponse
@@ -39,11 +43,11 @@ public class ChangeUserGroupRequest extends BaseRequest {
     /**
      * the request description for the /userGroup/createUserGroup and /userGroup/addGroupMembers REST request, returns UserGroupResponse
      */
-    public static ChangeUserGroupRequest makeFromProperties(String cmd,String groupName,int groupMemberCount) {
+    public static ChangeUserGroupRequest makeFromProperties(String cmd,String groupName,List<String> groupMemberNames) {
         ChangeUserGroupRequest entity = new ChangeUserGroupRequest();
         entity.setCmd(cmd);
         entity.setGroupName(groupName);
-        entity.setGroupMemberCount(groupMemberCount);
+        entity.setGroupMemberNames(groupMemberNames);
         entity.immutable();
         return entity;
     }
@@ -68,8 +72,15 @@ public class ChangeUserGroupRequest extends BaseRequest {
                     setCmd(jsonO.optString(key));
                 } else if ("groupName".equals(key)) {
                     setGroupName(jsonO.getString(key));
-                } else if ("groupMemberCount".equals(key)) {
-                    setGroupMemberCount(jsonO.getInt(key));
+                } else if ("groupMemberNames".equals(key)) {
+                    JSONArray array = jsonO.optJSONArray(key);
+                    if (array != null && array.length() > 0) {
+                        for (int i = 0; i < array.length(); i++) {
+                            addGroupMemberNames(array.getString(i));
+                        }
+                    } else {
+                        setGroupMemberNames(new ArrayList<String>());
+                    }
                 } else {
                     throw new RuntimeException("JSON parse error. Found invalid key: " + key + " in " + jsonO);
                 }
@@ -90,6 +101,7 @@ public class ChangeUserGroupRequest extends BaseRequest {
             return this;
         }
         this.immutable = true;
+        this.groupMemberNames = (this.groupMemberNames != null) ? Collections.unmodifiableList(this.groupMemberNames) : null;
         return validate();
     }
     
@@ -105,8 +117,8 @@ public class ChangeUserGroupRequest extends BaseRequest {
         if ( groupName == null) {
             _message = "required property groupName of ChangeUserGroupRequest-object is not set: " + toString();
         }
-        if ( !groupMemberCountDefined) {
-            _message = "required property groupMemberCount of ChangeUserGroupRequest-object is not set: " + toString();
+        if ( groupMemberNames == null) {
+            _message = "required property groupMemberNames of ChangeUserGroupRequest-object is not set: " + toString();
         }
         if ( _message != null ) {
             this.immutable = false;
@@ -137,24 +149,54 @@ public class ChangeUserGroupRequest extends BaseRequest {
     }
     
     /**
-     * GET groupMemberCount. Object must be immutable. Never return null or an undefined/default value.
+     * GET groupMemberNames. Object must be immutable. Never return null or an undefined/default value.
      */
-    public int getGroupMemberCount() {
+    public List<String> getGroupMemberNames() {
         if (!this.immutable) {
-            throw new RuntimeException("no groupMemberCount from an object under construction: " + toString());
+            throw new RuntimeException("no groupMemberNames from an object under construction: " + toString());
         }
-        return this.groupMemberCount;
+        return this.groupMemberNames;
     }
     
     /**
-     * SET groupMemberCount. Object must be mutable.
+     * SET groupMemberNames. Object must be mutable.
      */
-    public ChangeUserGroupRequest setGroupMemberCount(int groupMemberCount) {
+    public ChangeUserGroupRequest setGroupMemberNames(List<String> groupMemberNames) {
         if (this.immutable) {
-            throw new RuntimeException("groupMemberCount assigned to an immutable object: " + toString());
+            throw new RuntimeException("groupMemberNames assigned to an immutable object: " + toString());
         }
-        this.groupMemberCount = groupMemberCount;
-        this.groupMemberCountDefined = true;
+        if ( this.groupMemberNames == null ) {
+            this.groupMemberNames = new ArrayList<String>();
+        }
+        this.groupMemberNames.addAll(groupMemberNames);
+        return this;
+    }
+    
+    /**
+     * ADD groupMemberNames. Object must be mutable.
+     */
+    public ChangeUserGroupRequest addGroupMemberNames(String groupMemberNames) {
+        if (this.immutable) {
+            throw new RuntimeException("groupMemberNames assigned to an immutable object: " + toString());
+        }
+        if ( this.groupMemberNames == null ) {
+            this.groupMemberNames = new ArrayList<String>();
+        }
+        this.groupMemberNames.add(groupMemberNames);
+        return this;
+    }
+    
+    /**
+     * ADD ALL groupMemberNames. Object must be mutable.
+     */
+    public ChangeUserGroupRequest addAllGroupMemberNames(List<String> groupMemberNames) {
+        if (this.immutable) {
+            throw new RuntimeException("groupMemberNames assigned to an immutable object: " + toString());
+        }
+        if ( this.groupMemberNames == null ) {
+            this.groupMemberNames = new ArrayList<String>();
+        }
+        this.groupMemberNames.addAll(groupMemberNames);
         return this;
     }
     
@@ -173,7 +215,13 @@ public class ChangeUserGroupRequest extends BaseRequest {
                 jsonO.put("cmd", this.cmd);
             }
             jsonO.put("groupName", this.groupName);
-            jsonO.put("groupMemberCount", this.groupMemberCount);
+            {
+                JSONArray array = new JSONArray();
+                for (String item : this.groupMemberNames) {
+                    array.put(item);
+                }
+                jsonO.put("groupMemberNames", array);
+            }
         } catch (JSONException e) {
             throw new RuntimeException("JSON unparse error when unparsing: " + this, e);
         }
@@ -182,7 +230,7 @@ public class ChangeUserGroupRequest extends BaseRequest {
     
     @Override
     public String toString() {
-        return "ChangeUserGroupRequest [immutable=" + this.immutable + ", cmd=" + this.cmd + ", groupName=" + this.groupName + ", groupMemberCount=" + this.groupMemberCount + " ]";
+        return "ChangeUserGroupRequest [immutable=" + this.immutable + ", cmd=" + this.cmd + ", groupName=" + this.groupName + ", groupMemberNames=" + this.groupMemberNames + " ]";
     }
     @Override
     public int hashCode() {

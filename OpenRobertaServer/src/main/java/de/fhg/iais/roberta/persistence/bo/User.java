@@ -15,6 +15,7 @@ import javax.persistence.Table;
 
 import de.fhg.iais.roberta.util.Encryption;
 import de.fhg.iais.roberta.util.Util;
+import de.fhg.iais.roberta.util.dbc.Assert;
 
 @Entity
 @Table(name = "USER")
@@ -74,6 +75,11 @@ public class User implements WithSurrogateId {
         this.account = account;
         this.created = Util.getNow();
         this.lastLogin = Util.getNow();
+    }
+
+    public void setAccount(String account) {
+        Assert.notNull(this.getUserGroup());
+        this.account = account;
     }
 
     public boolean isPasswordCorrect(String passwordToCheck) throws Exception {

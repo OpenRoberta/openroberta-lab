@@ -65,7 +65,7 @@ define([ 'exports', 'comm', 'guiState.model' ], function(exports, COMM, GUI) {
         COMM.json("/userGroup/createUserGroup", {
             cmd : 'createUserGroup',
             groupName : groupName,
-            groupMemberCount: initialMembers,
+            groupMemberNames: initialMembers,
         }, function (data) {successFn(data);}, 'Create usergroup "' + groupName + '" for user "' + GUI.user.accountName + '" on server.');
     }
     exports.createUserGroup = createUserGroup;
@@ -86,12 +86,12 @@ define([ 'exports', 'comm', 'guiState.model' ], function(exports, COMM, GUI) {
     }
     exports.deleteUserGroups = deleteUserGroups;
     
-    function addGroupMembers(groupName, newMemberCount, successFn) {
+    function addGroupMembers(groupName, newMemberNames, successFn) {
         COMM.json("/userGroup/addGroupMembers", {
             cmd : 'addGroupMembers',
             groupName : groupName,
-            groupMemberCount: newMemberCount,
-        }, function (data) {successFn(data);}, 'Added ' + newMemberCount + ' members to usergroup "' + groupName + '" of user "' + GUI.user.accountName + '" on server.');
+            groupMemberNames: newMemberNames,
+        }, function (data) {successFn(data);}, 'Added ' + newMemberNames.length + ' members to usergroup "' + groupName + '" of user "' + GUI.user.accountName + '" on server.');
     }
     exports.addGroupMembers = addGroupMembers;
     
@@ -131,4 +131,13 @@ define([ 'exports', 'comm', 'guiState.model' ], function(exports, COMM, GUI) {
     }
     exports.setUserGroupMemberDefaultPasswords = setUserGroupMemberDefaultPasswords;
 
+    function updateMemberAccount(account, groupName, newAccount, successFn) {
+        COMM.json("/userGroup/updateMemberAccount", {
+            cmd: 'updateMemberAccount',
+            groupName: groupName,
+            currentGroupMemberAccount: account,
+            newGroupMemberAccount: newAccount
+        }, function (data) {successFn(data);}, 'Set new account name for ' + account + ' of the group "' + groupName + '" to "' + newAccount + '" on server.');
+    }
+    exports.updateMemberAccount = updateMemberAccount;
 });

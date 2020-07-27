@@ -4,11 +4,6 @@
  * when the maven plugin is re-executed for any reasons.
  */
 package de.fhg.iais.roberta.generated.restEntities;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -17,21 +12,22 @@ import org.json.JSONObject;
  * Version: 1<br>
  * Datum: 2020-06-15
  */
-public class ChangeUserGroupRequest extends BaseRequest {
+public class UpdateUserGroupMemberAccountRequest extends BaseRequest {
     protected String groupName;
-    protected List<String> groupMemberNames;
+    protected String currentGroupMemberAccount;
+    protected String newGroupMemberAccount;
     
     /**
      * the request description for the /userGroup/createUserGroup and /userGroup/addGroupMembers REST request, returns UserGroupResponse
      */
-    public static ChangeUserGroupRequest make() {
-        return new ChangeUserGroupRequest();
+    public static UpdateUserGroupMemberAccountRequest make() {
+        return new UpdateUserGroupMemberAccountRequest();
     }
     
     /**
      * the request description for the /userGroup/createUserGroup and /userGroup/addGroupMembers REST request, returns UserGroupResponse
      */
-    public static ChangeUserGroupRequest makeFromString(String jsonS) {
+    public static UpdateUserGroupMemberAccountRequest makeFromString(String jsonS) {
         try {
             JSONObject jsonO = new JSONObject(jsonS);
             return make(jsonO);
@@ -43,11 +39,12 @@ public class ChangeUserGroupRequest extends BaseRequest {
     /**
      * the request description for the /userGroup/createUserGroup and /userGroup/addGroupMembers REST request, returns UserGroupResponse
      */
-    public static ChangeUserGroupRequest makeFromProperties(String cmd,String groupName,List<String> groupMemberNames) {
-        ChangeUserGroupRequest entity = new ChangeUserGroupRequest();
+    public static UpdateUserGroupMemberAccountRequest makeFromProperties(String cmd,String groupName,String currentGroupMemberAccount,String newGroupMemberAccount) {
+        UpdateUserGroupMemberAccountRequest entity = new UpdateUserGroupMemberAccountRequest();
         entity.setCmd(cmd);
         entity.setGroupName(groupName);
-        entity.setGroupMemberNames(groupMemberNames);
+        entity.setCurrentGroupMemberAccount(currentGroupMemberAccount);
+        entity.setNewGroupMemberAccount(newGroupMemberAccount);
         entity.immutable();
         return entity;
     }
@@ -55,7 +52,7 @@ public class ChangeUserGroupRequest extends BaseRequest {
     /**
      * the request description for the /userGroup/createUserGroup and /userGroup/addGroupMembers REST request, returns UserGroupResponse
      */
-    public static ChangeUserGroupRequest make(JSONObject jsonO) {
+    public static UpdateUserGroupMemberAccountRequest make(JSONObject jsonO) {
         return make().merge(jsonO).immutable();
     }
     
@@ -64,7 +61,7 @@ public class ChangeUserGroupRequest extends BaseRequest {
      * The keys of the JSON-Object must be valid. The bean remains "under construction".<br>
      * Throws a runtime exception if inconsistencies are detected.
      */
-    public ChangeUserGroupRequest merge(JSONObject jsonO) {
+    public UpdateUserGroupMemberAccountRequest merge(JSONObject jsonO) {
         try {
             for (String key : JSONObject.getNames(jsonO)) {
                 if ("_version".equals(key)) {
@@ -72,15 +69,10 @@ public class ChangeUserGroupRequest extends BaseRequest {
                     setCmd(jsonO.optString(key));
                 } else if ("groupName".equals(key)) {
                     setGroupName(jsonO.getString(key));
-                } else if ("groupMemberNames".equals(key)) {
-                    JSONArray array = jsonO.optJSONArray(key);
-                    if (array != null && array.length() > 0) {
-                        for (int i = 0; i < array.length(); i++) {
-                            addGroupMemberNames(array.getString(i));
-                        }
-                    } else {
-                        setGroupMemberNames(new ArrayList<String>());
-                    }
+                } else if ("currentGroupMemberAccount".equals(key)) {
+                    setCurrentGroupMemberAccount(jsonO.getString(key));
+                } else if ("newGroupMemberAccount".equals(key)) {
+                    setNewGroupMemberAccount(jsonO.getString(key));
                 } else {
                     throw new RuntimeException("JSON parse error. Found invalid key: " + key + " in " + jsonO);
                 }
@@ -96,12 +88,11 @@ public class ChangeUserGroupRequest extends BaseRequest {
      * Checks whether all required fields are set. All lists are made immutable.<br>
      * Throws a runtime exception if inconsistencies are detected.
      */
-    public ChangeUserGroupRequest immutable() {
+    public UpdateUserGroupMemberAccountRequest immutable() {
         if (this.immutable) {
             return this;
         }
         this.immutable = true;
-        this.groupMemberNames = (this.groupMemberNames != null) ? Collections.unmodifiableList(this.groupMemberNames) : null;
         return validate();
     }
     
@@ -109,16 +100,19 @@ public class ChangeUserGroupRequest extends BaseRequest {
      * Checks whether all required fields are set.<br>
      * Throws a runtime exception if inconsistencies are detected.
      */
-    private ChangeUserGroupRequest validate() {
+    private UpdateUserGroupMemberAccountRequest validate() {
         String _message = null;
         if ( !this.immutable ) {
-            _message = "ChangeUserGroupRequest-object is already immutable: " + toString();
+            _message = "UpdateUserGroupMemberAccountRequest-object is already immutable: " + toString();
         }
         if ( groupName == null) {
-            _message = "required property groupName of ChangeUserGroupRequest-object is not set: " + toString();
+            _message = "required property groupName of UpdateUserGroupMemberAccountRequest-object is not set: " + toString();
         }
-        if ( groupMemberNames == null) {
-            _message = "required property groupMemberNames of ChangeUserGroupRequest-object is not set: " + toString();
+        if ( currentGroupMemberAccount == null) {
+            _message = "required property currentGroupMemberAccount of UpdateUserGroupMemberAccountRequest-object is not set: " + toString();
+        }
+        if ( newGroupMemberAccount == null) {
+            _message = "required property newGroupMemberAccount of UpdateUserGroupMemberAccountRequest-object is not set: " + toString();
         }
         if ( _message != null ) {
             this.immutable = false;
@@ -140,7 +134,7 @@ public class ChangeUserGroupRequest extends BaseRequest {
     /**
      * SET groupName. Object must be mutable.
      */
-    public ChangeUserGroupRequest setGroupName(String groupName) {
+    public UpdateUserGroupMemberAccountRequest setGroupName(String groupName) {
         if (this.immutable) {
             throw new RuntimeException("groupName assigned to an immutable object: " + toString());
         }
@@ -149,54 +143,44 @@ public class ChangeUserGroupRequest extends BaseRequest {
     }
     
     /**
-     * GET groupMemberNames. Object must be immutable. Never return null or an undefined/default value.
+     * GET currentGroupMemberAccount. Object must be immutable. Never return null or an undefined/default value.
      */
-    public List<String> getGroupMemberNames() {
+    public String getCurrentGroupMemberAccount() {
         if (!this.immutable) {
-            throw new RuntimeException("no groupMemberNames from an object under construction: " + toString());
+            throw new RuntimeException("no currentGroupMemberAccount from an object under construction: " + toString());
         }
-        return this.groupMemberNames;
+        return this.currentGroupMemberAccount;
     }
     
     /**
-     * SET groupMemberNames. Object must be mutable.
+     * SET currentGroupMemberAccount. Object must be mutable.
      */
-    public ChangeUserGroupRequest setGroupMemberNames(List<String> groupMemberNames) {
+    public UpdateUserGroupMemberAccountRequest setCurrentGroupMemberAccount(String currentGroupMemberAccount) {
         if (this.immutable) {
-            throw new RuntimeException("groupMemberNames assigned to an immutable object: " + toString());
+            throw new RuntimeException("currentGroupMemberAccount assigned to an immutable object: " + toString());
         }
-        if ( this.groupMemberNames == null ) {
-            this.groupMemberNames = new ArrayList<String>();
-        }
-        this.groupMemberNames.addAll(groupMemberNames);
+        this.currentGroupMemberAccount = currentGroupMemberAccount;
         return this;
     }
     
     /**
-     * ADD groupMemberNames. Object must be mutable.
+     * GET newGroupMemberAccount. Object must be immutable. Never return null or an undefined/default value.
      */
-    public ChangeUserGroupRequest addGroupMemberNames(String groupMemberNames) {
-        if (this.immutable) {
-            throw new RuntimeException("groupMemberNames assigned to an immutable object: " + toString());
+    public String getNewGroupMemberAccount() {
+        if (!this.immutable) {
+            throw new RuntimeException("no newGroupMemberAccount from an object under construction: " + toString());
         }
-        if ( this.groupMemberNames == null ) {
-            this.groupMemberNames = new ArrayList<String>();
-        }
-        this.groupMemberNames.add(groupMemberNames);
-        return this;
+        return this.newGroupMemberAccount;
     }
     
     /**
-     * ADD ALL groupMemberNames. Object must be mutable.
+     * SET newGroupMemberAccount. Object must be mutable.
      */
-    public ChangeUserGroupRequest addAllGroupMemberNames(List<String> groupMemberNames) {
+    public UpdateUserGroupMemberAccountRequest setNewGroupMemberAccount(String newGroupMemberAccount) {
         if (this.immutable) {
-            throw new RuntimeException("groupMemberNames assigned to an immutable object: " + toString());
+            throw new RuntimeException("newGroupMemberAccount assigned to an immutable object: " + toString());
         }
-        if ( this.groupMemberNames == null ) {
-            this.groupMemberNames = new ArrayList<String>();
-        }
-        this.groupMemberNames.addAll(groupMemberNames);
+        this.newGroupMemberAccount = newGroupMemberAccount;
         return this;
     }
     
@@ -215,13 +199,8 @@ public class ChangeUserGroupRequest extends BaseRequest {
                 jsonO.put("cmd", this.cmd);
             }
             jsonO.put("groupName", this.groupName);
-            {
-                JSONArray array = new JSONArray();
-                for (String item : this.groupMemberNames) {
-                    array.put(item);
-                }
-                jsonO.put("groupMemberNames", array);
-            }
+            jsonO.put("currentGroupMemberAccount", this.currentGroupMemberAccount);
+            jsonO.put("newGroupMemberAccount", this.newGroupMemberAccount);
         } catch (JSONException e) {
             throw new RuntimeException("JSON unparse error when unparsing: " + this, e);
         }
@@ -230,7 +209,7 @@ public class ChangeUserGroupRequest extends BaseRequest {
     
     @Override
     public String toString() {
-        return "ChangeUserGroupRequest [immutable=" + this.immutable + ", cmd=" + this.cmd + ", groupName=" + this.groupName + ", groupMemberNames=" + this.groupMemberNames + " ]";
+        return "UpdateUserGroupMemberAccountRequest [immutable=" + this.immutable + ", cmd=" + this.cmd + ", groupName=" + this.groupName + ", currentGroupMemberAccount=" + this.currentGroupMemberAccount + ", newGroupMemberAccount=" + this.newGroupMemberAccount + " ]";
     }
     @Override
     public int hashCode() {

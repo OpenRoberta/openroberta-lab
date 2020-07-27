@@ -75,7 +75,7 @@ public class GroupWorkflow {
         for ( int i = startNumber; i < startNumber + numberOfAccounts; i++ ) {
             if ( userDao.loadUser(group, accountPrefix + i) != null ) {
                 //TODO: Also check if the given user is part of the group. If not, its not the fault of the group admin and we need to simply skip it.
-                return Key.GROUP_USER_ALREADY_EXISTS;
+                return Key.GROUP_MEMBER_ERROR_ALREADY_EXISTS;
             }
         }
         for ( int i = startNumber; i < startNumber + numberOfAccounts; i++ ) {
