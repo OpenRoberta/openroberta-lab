@@ -1,4 +1,4 @@
-define([ 'exports', 'comm', 'message', 'log', 'guiState.controller', 'program.controller', 'robot.controller', 'import.controller', 'blocks', 'jquery' ], function(
+define([ 'exports', 'comm', 'message', 'log', 'guiState.controller', 'program.controller', 'robot.controller', 'import.controller', 'blockly', 'jquery' ], function(
         exports, COMM, MSG, LOG, GUISTATE_C, PROG_C, ROBOT_C, IMPORT_C, Blockly, $) {
 
     const INITIAL_WIDTH = 0.5;

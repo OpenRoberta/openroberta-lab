@@ -6,7 +6,7 @@
  * 
  * @author Beate Jost <beate.jost@smail.inf.h-brs.de>
  */
-define([ 'require', 'exports', 'log', 'util', 'comm', 'message', 'guiState.controller', 'progList.model', 'program.model', 'program.controller', 'blocks-msg',
+define([ 'require', 'exports', 'log', 'util', 'comm', 'message', 'guiState.controller', 'progList.model', 'program.model', 'program.controller', 'blockly',
         'jquery', 'bootstrap-table', 'bootstrap-tagsinput' ], function(require, exports, LOG, UTIL, COMM, MSG, GUISTATE_C, PROGLIST, PROGRAM, PROGRAM_C,
         Blockly, $) {
 

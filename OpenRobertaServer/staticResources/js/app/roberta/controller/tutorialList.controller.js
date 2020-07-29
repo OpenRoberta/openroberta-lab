@@ -6,7 +6,7 @@
  * 
  * @author Beate Jost <beate.jost@smail.inf.h-brs.de>
  */
-define([ 'require', 'exports', 'log', 'util', 'comm', 'message', 'guiState.controller', 'progTutorial.controller', 'galleryList.controller', 'blocks-msg',
+define([ 'require', 'exports', 'log', 'util', 'comm', 'message', 'guiState.controller', 'progTutorial.controller', 'galleryList.controller', 'blockly',
         'jquery', 'bootstrap-table', 'bootstrap-tagsinput' ], function(require, exports, LOG, UTIL, COMM, MSG, GUISTATE_C, TUTORIAL_C, GALLERYLIST_C, Blockly,
         $) {
 

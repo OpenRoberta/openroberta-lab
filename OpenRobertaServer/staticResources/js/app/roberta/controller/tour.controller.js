@@ -1,4 +1,4 @@
-define(['exports', 'comm', 'message', 'log', 'blocks', 'jquery', 'jquery-scrollto', 'enjoyHint', 'blocks-msg'], function(exports, COMM, MSG, LOG, Blockly, $) {
+define(['exports', 'comm', 'message', 'log', 'blockly', 'jquery', 'jquery-scrollto', 'enjoyHint'], function(exports, COMM, MSG, LOG, Blockly, $) {
 
     var enjoyhint_instance;
     var touchEvent;

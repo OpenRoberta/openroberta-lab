@@ -1,4 +1,4 @@
-define([ 'require', 'exports', 'log', 'util', 'comm', 'confList.model', 'configuration.model', 'blocks-msg', 'jquery', 'bootstrap-table' ], function(require,
+define([ 'require', 'exports', 'log', 'util', 'comm', 'confList.model', 'configuration.model', 'blockly', 'jquery', 'bootstrap-table' ], function(require,
         exports, LOG, UTIL, COMM, CONFLIST, CONFIGURATION, Blockly, $) {
 
     /**

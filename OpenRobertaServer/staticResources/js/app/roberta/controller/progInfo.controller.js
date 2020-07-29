@@ -1,5 +1,5 @@
-define([ 'exports', 'message', 'log', 'util', 'guiState.controller', 'blocks', 'jquery', 'jquery-validate', 'jquery-hotkeys', 'bootstrap-tagsinput',
-        'bootstrap.wysiwyg', 'blocks-msg' ], function(exports, MSG, LOG, UTIL, GUISTATE_C, Blockly, $) {
+define([ 'exports', 'message', 'log', 'util', 'guiState.controller', 'blockly', 'jquery', 'jquery-validate', 'jquery-hotkeys', 'bootstrap-tagsinput',
+        'bootstrap.wysiwyg' ], function(exports, MSG, LOG, UTIL, GUISTATE_C, Blockly, $) {
 
     const INITIAL_WIDTH = 0.3;
     var blocklyWorkspace;

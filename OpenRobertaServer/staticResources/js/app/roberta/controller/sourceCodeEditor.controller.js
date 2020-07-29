@@ -1,4 +1,4 @@
-define([ 'require', 'exports', 'message', 'log', 'util', 'comm', 'guiState.controller', 'program.model', 'program.controller', 'progRun.controller','import.controller', 'blocks', 'codeflask', 'jquery', 'blocks-msg'  ],
+define([ 'require', 'exports', 'message', 'log', 'util', 'comm', 'guiState.controller', 'program.model', 'program.controller', 'progRun.controller','import.controller', 'blockly', 'codeflask', 'jquery'  ],
         function(require, exports, MSG, LOG, UTIL, COMM, GUISTATE_C, PROGRAM, PROG_C, PROGRUN_C, IMPORT_C, Blockly, CodeFlask, $) {
 
     var flask;

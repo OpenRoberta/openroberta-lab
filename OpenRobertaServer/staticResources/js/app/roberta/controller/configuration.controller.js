@@ -1,4 +1,4 @@
-define([ 'exports', 'log', 'util', 'comm', 'message', 'guiState.controller', 'blocks', 'configuration.model', 'jquery', 'jquery-validate' ], function(exports,
+define([ 'exports', 'log', 'util', 'comm', 'message', 'guiState.controller', 'blockly', 'configuration.model', 'jquery', 'jquery-validate' ], function(exports,
         LOG, UTIL, COMM, MSG, GUISTATE_C, Blockly, CONFIGURATION, $) {
 
     var $formSingleModal;

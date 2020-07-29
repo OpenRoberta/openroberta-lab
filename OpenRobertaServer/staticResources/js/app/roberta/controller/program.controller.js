@@ -1,5 +1,5 @@
-define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'robot.controller', 'program.model', 'configuration.controller', 'progCode.controller', 'blocks', 'jquery',
-        'jquery-validate', 'blocks-msg' ], function(exports, COMM, MSG, LOG, UTIL, GUISTATE_C, ROBOT_C, PROGRAM, CONFIGURATION_C, PROGCODE_C, Blockly, $) {
+define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'robot.controller', 'program.model', 'configuration.controller', 'progCode.controller', 'blockly', 'jquery',
+        'jquery-validate' ], function(exports, COMM, MSG, LOG, UTIL, GUISTATE_C, ROBOT_C, PROGRAM, CONFIGURATION_C, PROGCODE_C, Blockly, $) {
 
     var $formSingleModal;
 

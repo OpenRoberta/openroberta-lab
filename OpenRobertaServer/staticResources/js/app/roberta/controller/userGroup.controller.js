@@ -1,4 +1,4 @@
-define([ 'exports', 'log', 'message', 'comm', 'util', 'user.model', 'userGroup.model', 'guiState.controller', 'language.controller', 'jquery', 'blocks-msg', 'bootstrap-table', 'bootstrap-tagsinput', 'blocks' ], function(exports, LOG, MSG, COM, UTIL, USER, USERGROUP,
+define([ 'exports', 'log', 'message', 'comm', 'util', 'user.model', 'userGroup.model', 'guiState.controller', 'language.controller', 'jquery', 'blockly', 'bootstrap-table', 'bootstrap-tagsinput' ], function(exports, LOG, MSG, COM, UTIL, USER, USERGROUP,
         GUISTATE_C, LANG, $, Blockly) {
     
     var $userGroupTable;

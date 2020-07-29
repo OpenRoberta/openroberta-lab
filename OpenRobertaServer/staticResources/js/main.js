@@ -3,8 +3,6 @@ require.config({
 	paths: {
 		'codeflask': 'codeflask/codeflask.min',
 		'blockly': '../../blockly/blockly_compressed',
-		'blocks': '../../blockly/blocks_compressed',
-		'blocks-msg': '../../blockly/msg/js/en',
 		'bootstrap': 'bootstrap/bootstrap-3.3.1-dist/dist/js/bootstrap.min',
 		'bootstrap-table': 'bootstrap/bootstrap-3.3.1-dist/dist/js/bootstrap-table.min',
 		'bootstrap-tagsinput': 'bootstrap/bootstrap-3.3.1-dist/dist/js/bootstrap-tagsinput.min',
@@ -100,14 +98,10 @@ require.config({
 		'bootstrap': {
 			deps: ['jquery']
 		},
-		'blocks-msg': {
-			deps: ['blocks'],
+		'blockly': {
 			exports: 'Blockly'
 		},
-		'blocks': {
-			deps: ['blockly'],
-			exports: 'Blockly'
-		},
+
 		'volume-meter': {
 			exports: "Volume",
 			init: function() {

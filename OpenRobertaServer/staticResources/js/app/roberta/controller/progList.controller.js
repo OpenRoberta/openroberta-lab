@@ -1,5 +1,5 @@
 define([ 'require', 'exports', 'log', 'util', 'comm', 'message', 'progList.model', 'userGroup.model', 'program.model', 'configuration.controller', 'program.controller',
-        'guiState.controller', 'blocks-msg', 'jquery', 'bootstrap-table' ], function(require, exports, LOG, UTIL, COMM, MSG, PROGLIST, USERGROUP, PROGRAM,
+        'guiState.controller', 'blockly', 'jquery', 'bootstrap-table' ], function(require, exports, LOG, UTIL, COMM, MSG, PROGLIST, USERGROUP, PROGRAM,
         CONFIGURATION_C, PROGRAM_C, GUISTATE_C, Blockly, $) {
 
     /**

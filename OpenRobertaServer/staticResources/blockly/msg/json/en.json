@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2020-07-10 15:16:53.172988",
+		"lastupdated": "2020-07-29 13:25:00.976544",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -1652,9 +1652,12 @@
 	"ORA_GROUP_UPDATE_ERROR_NOT_FOUND": "Could not find a user group with the specified name. Please reload the current form and try again.",
 	"ORA_GROUP_UPDATE_ERROR_NOT_OWNER": "Could not update the user group. You are not the owner of that group.",
 	"ORA_GROUP_ADD_MEMBER_ERROR": "There was an error while adding new members the user group. Please reload the current form and try again. If this error should persist, please contact our support.",
-	"ORA_GROUP_ADD_MEMBER_ERROR_LIMIT_REACHED": "You reached the member limit of the user group. You can not have more than 99 members in one user group.",
-	"ORA_GROUP_ADD_MEMBER_ERROR_SMALLER_THAN_ONE": "You must enter a number that is bigger or equals 1.",
+	"ORA_GROUP_MEMBER_ERROR_ALREADY_EXISTS": "A member with the given name already exists in the user group.",
+	"ORA_GROUP_ADD_MEMBER_ERROR_LIMIT_REACHED": "You can not have more than 99 members in one user group.",
+	"ORA_GROUP_ADD_MEMBER_ERROR_SMALLER_THAN_ONE": "To add automatically generated members, you must enter an integer that is bigger or equals to 1.",
 	"ORA_GROUP_RENAME_ERROR": "There was an error while changing the name of the user group. Please reload the current form and try again. If this error should persist, please contact our support.",
+	"MENU_USERGROUP_LOG_IN": "Log in with user group ...",
+	"MENU_MANAGE_USERGROUPS": "Manage user groups ...",
 	"GROUP_CREATE_NAME_HINT": "Please keep in mind, that all members of a group have to enter the group name on each login. It should neither be complicated nor long.",
 	"SHARE_WITH_USER": "Share your program with another user ...",
 	"SHARE_WITH_USERGROUP": "Share your program with the members of one of your user groups ...",
@@ -1663,10 +1666,8 @@
 	"DATATABLE_USERGROUP_NAME": "Name of the user group",
 	"DATATABLE_USERGROUP_NAME_CREATE_HINT": "The name of the user group. Kepp in mind, that the members will have to type it in each time they log in.",
 	"DATATABLE_USERGROUP_OWNER": "Name of the owner of the user group",
-	"USERGROUP_CREATE_INITIAL_MEMBERS": "Number of initial members",
 	"USERGROUP_CREATE": "Create new user group",
 	"USERGROUP_ADD_MEMBERS": "Add members",
-	"USERGROUP_ADD_MEMBERS_COUNT": "Number of additional members",
 	"USERGROUP_CREATE_TOOLTIP": "Click here to create a new usergroup",
 	"USERGROUP_LIST_DELETE_TOOLTIP": "Click here to delete the user group.",
 	"USERGROUP_LIST_DELETE_ALL_TOOLTIP": "Click here to delete all selected user groups.",
@@ -1682,9 +1683,14 @@
 	"HINT_USERGROUP_MEMBER": "Enter the member id of your user here. It should be a two digit number.",
 	"DELETE_USERGROUP_MEMBER_WARNING": "Are you sure that you want to delete the selected member(s)?",
 	"DELETE_USERGROUP_MEMBER_AFTER_LOGIN_WARNING": "A member you want to delete did already log in and might have create own programs. Are you sure that you want to delete the selected member(s)?",
+	"SHARE_PROGRAMS_USERGROUP_HINT": "To share programs with a user group, open your program list and share a program with a user group.",
 	"ORA_USER_UPDATE_ERROR_NOT_SAVED_TO_DB": "The password could not be saved to the database. Are you sure that you entered the old password correctly?",
 	"USERGROUP_DELETE_WITH_MEMBERS_WARNING": "Are your sure that you want to delete the usergroup including all members? No member did log in so far.",
 	"ORA_PROGRAM_GET_ALL_ERROR_USER_NOT_FOUND": "Can not load the programs of the specified user. Please reload the lab and try again.",
 	"ORA_USER_DELETE_ERROR_HAS_GROUPS": "You have user groups associated with your account. Please delete them first, before you delete your account.",
-	"ORA_USER_ERROR_NOT_LOGGED_IN": "You need to be logged in to a user account to use this function. If you are logged in, please log out and in again."
+	"ORA_USER_ERROR_NOT_LOGGED_IN": "You need to be logged in to a user account to use this function. If you are logged in, please log out and in again.",
+	"DATATABLE_MEMBERS": "members",
+	"DATATABLE_SHARED_PROGRAMS": "shared programs",
+	"USERGROUP_GENERATED_MEMBERS": "Automatically generated members",
+	"USERGROUP_GENERATED_MEMBERS_TOOLTIP": "Automatically genertated members are normal members of a user group. They are generated with a number as username, which you can change afterwards."
 }

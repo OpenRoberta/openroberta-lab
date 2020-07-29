@@ -1,4 +1,4 @@
-define([ 'exports', 'log', 'message', 'util', 'user.model', 'guiState.controller', 'jquery', 'blocks', 'blocks-msg' ], function(exports, LOG, MSG, UTIL, USER,
+define([ 'exports', 'log', 'message', 'util', 'user.model', 'guiState.controller', 'jquery', 'blockly' ], function(exports, LOG, MSG, UTIL, USER,
         GUISTATE_C, $, Blockly) {
 
     var $divForms;

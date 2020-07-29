@@ -1,5 +1,5 @@
-define([ 'exports', 'log', 'jquery', 'guiState.controller', 'program.controller', 'configuration.controller', 'user.controller' ], function(exports, LOG, $,
-        GUISTATE_C, PROGRAM_C, CONFIGURATION_C, USER_C) {
+define([ 'exports', 'log', 'jquery', 'guiState.controller', 'program.controller', 'configuration.controller', 'user.controller', 'blockly' ], function(exports, LOG, $,
+        GUISTATE_C, PROGRAM_C, CONFIGURATION_C, USER_C, Blockly) {
 
     /**
      * Initialize language switching

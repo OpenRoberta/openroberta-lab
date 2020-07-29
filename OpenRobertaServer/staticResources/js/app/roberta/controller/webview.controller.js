@@ -1,4 +1,4 @@
-define( ['exports', 'guiState.controller', 'interpreter.interpreter', 'interpreter.robotWeDoBehaviour', 'util', 'log', 'message', 'blocks', 'jquery'], function( exports,
+define( ['exports', 'guiState.controller', 'interpreter.interpreter', 'interpreter.robotWeDoBehaviour', 'util', 'log', 'message', 'blockly', 'jquery'], function( exports,
     GUISTATE_C, WEDO_I, WEDO_R, UTIL, LOG, MSG, Blockly, $ ) {
 
     var ready;

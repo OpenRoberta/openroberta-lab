@@ -1,4 +1,4 @@
-define([ 'require', 'exports', 'log', 'util', 'message', 'comm', 'guiState.controller', 'language.controller', 'galleryList.controller', 'program.model', 'userGroup.model', 'blocks-msg', 'jquery',
+define([ 'require', 'exports', 'log', 'util', 'message', 'comm', 'guiState.controller', 'language.controller', 'galleryList.controller', 'program.model', 'userGroup.model', 'blockly', 'jquery',
         'bootstrap-table' ], function(require, exports, LOG, UTIL, MSG, COMM, GUISTATE_C, LANG, GALLERY_C, PROGRAM, USERGROUP, Blockly, $) {
 
     function init() {

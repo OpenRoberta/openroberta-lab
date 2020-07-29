@@ -1,5 +1,5 @@
 define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'program.controller', 'configuration.controller', 'program.model',
-        'robot.controller', 'blocks', 'jquery', 'jquery-validate', 'blocks-msg' ], function(exports, COMM, MSG, LOG, UTIL, GUISTATE_C, PROGRAM_C,
+        'robot.controller', 'blockly', 'jquery', 'jquery-validate' ], function(exports, COMM, MSG, LOG, UTIL, GUISTATE_C, PROGRAM_C,
         CONFIGURATION_C, PROGRAM, ROBOT_C, Blockly, $) {
 
     function init(callback) {
