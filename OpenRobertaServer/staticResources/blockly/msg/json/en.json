@@ -1319,7 +1319,7 @@
 	"BOB3_READNUMBER_TOOLTIP": "Returns the previously stored number.",
 	"NAO_RECOGNIZEWORD_TOOLTIP": "Returns a word from the given list when recognized by NAO",
 	"POPUP_CONFIRM_CONTINUE": "<br><br><i>Press »OK« to discard your work. Press »Cancel« to stay here and save your work first.</i>",
-	"MENU_SIM_POSE_TOOLTIP": "Move the robot back to its initial position.",
+	"MENU_SIM_POSE_TOOLTIP": "Resets the positions of all robots and obstacles then clears all drawings.",
 	"RESEND_ACTIVATION": "resend verification email",
 	"ORA_USER_ACTIVATION_INVALID_URL": "The link is not valid anymore. Please ask for resending your verification mail again",
 	"FLYOUT_VARIABLE_TEXT": "You need a variable? Please declare it first with a click on the + sign at the »start«\u00a0block.",
