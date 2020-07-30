@@ -27,11 +27,11 @@ import de.fhg.iais.roberta.visitor.IVisitor;
  */
 public class ConfigurationComponent extends Phrase<Void> {
 
-    protected final String componentType;
+    private final String componentType;
     private final boolean isActor; // TODO for the new configuration there is currently no distinction between actors and sensors, should there be one?
-    protected final String userDefinedPortName;
+    private final String userDefinedPortName;
     private final String internalPortName;
-    protected final LinkedHashMap<String, String> componentProperties;
+    private final LinkedHashMap<String, String> componentProperties;
     private final int x;
     private final int y;
 

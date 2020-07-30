@@ -1,7 +1,6 @@
 <toolbox_set id="toolbox" style="display: none">
     <category name="TOOLBOX_ACTION" svg="true">
         <block type="robConf_rgbled" />
-        <block type="robConf_led" />
         <block type="robConf_buzzer" />
         <block type="robConf_motor" />
         <block type="robConf_servo" />
@@ -9,6 +8,7 @@
         <block type="robConf_fourdigitdisplay" />
         <block type="robConf_digitalin" />
         <block type="robConf_analogin" />
+        <block type="robConf_callibot" />
     </category>
     <category name="TOOLBOX_SENSOR" svg="true">
         <block type="robConf_key" />
@@ -20,7 +20,6 @@
         <block type="robConf_sound" />
         <block type="robConf_ultrasonic" />
         <block type="robConf_humidity" />
-        <block type="robConf_infrared" />
         <block type="robConf_digitalout" />
         <block type="robConf_analogout" />
     </category>

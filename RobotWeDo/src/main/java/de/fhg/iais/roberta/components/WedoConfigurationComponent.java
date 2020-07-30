@@ -28,8 +28,8 @@ public final class WedoConfigurationComponent extends ConfigurationComponent {
     public Block astToBlock() {
         Block destination = new Block();
         Ast2JaxbHelper.setBasicProperties(this, destination);
-        Ast2JaxbHelper.addField(destination, "VAR", this.userDefinedPortName);
-        this.componentProperties.forEach((key, value) -> Ast2JaxbHelper.addField(destination, key, value));
+        Ast2JaxbHelper.addField(destination, "VAR", this.getUserDefinedPortName());
+        this.getComponentProperties().forEach((key, value) -> Ast2JaxbHelper.addField(destination, key, value));
         return destination;
     }
 }

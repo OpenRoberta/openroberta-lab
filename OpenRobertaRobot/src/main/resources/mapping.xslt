@@ -111,7 +111,12 @@
                 <xsl:text>LIGHT</xsl:text>
             </xsl:when>
             <xsl:when test=". = 'SEEK' and ancestor::b:block[1]/@type = 'robSensors_infrared_getSample'">PRESENCE</xsl:when>
-            <xsl:when test="ancestor::b:block[1]/@type = 'robSensors_getSample' or ancestor::b:block[1]/@type = 'mbedSensors_getSample'">
+            <xsl:when
+                test="ancestor::b:block[1]/@type = 'robSensors_getSample'
+                or ancestor::b:block[1]/@type = 'mbedSensors_getSample'
+                or ancestor::b:block[1]/@type = 'bob3Sensors_getSample_bob3'
+                or ancestor::b:block[1]/@type = 'robSensors_getSample_ardu'
+                or ancestor::b:block[1]/@type = 'mbedSensors_key_isPressed'">
                 <xsl:choose>
                     <xsl:when test=". = 'TOUCH'">TOUCH_PRESSED</xsl:when>
                     <xsl:when test=". = 'TIME'">TIMER_VALUE</xsl:when>
@@ -129,6 +134,8 @@
                     <xsl:when test=". = 'PIN_PULSE_HIGH'">PIN_PULSEHIGH</xsl:when>
                     <xsl:when test=". = 'PIN_PULSE_LOW'">PIN_PULSELOW</xsl:when>
                     <xsl:when test=". = 'PIN_TOUCHED'">PINTOUCH_PRESSED</xsl:when>
+                    <xsl:when test=". = 'button_a'">A</xsl:when>
+                    <xsl:when test=". = 'button_b'">B</xsl:when>
                     <xsl:otherwise>
                         <xsl:value-of select="." />
                     </xsl:otherwise>
@@ -136,7 +143,7 @@
             </xsl:when>
             <xsl:when test=". = 'PULSE_HIGH'">PULSEHIGH</xsl:when>
             <xsl:when test=". = 'PULSE_LOW'">PULSELOW</xsl:when>
-            <xsl:when test=". = 'TRUE' and ancestor::b:block[1]/@type = 'robControls_start' and ancestor::b:block_set/@robottype = 'calliope'" />
+            <xsl:when test=". = 'TRUE' and ancestor::b:block[1]/@type = 'robControls_start' and (ancestor::b:block_set/@robottype = 'calliope' or ancestor::b:block_set/@robottype = 'microbit')" />
             <xsl:when test=". = 'button_a' and (ancestor::b:field/@name = 'SENSORPORT' or ancestor::b:field/@name = 'KEY')">A</xsl:when>
             <xsl:when test=". = 'button_b' and (ancestor::b:field/@name = 'SENSORPORT' or ancestor::b:field/@name = 'KEY')">B</xsl:when>
             <xsl:otherwise>

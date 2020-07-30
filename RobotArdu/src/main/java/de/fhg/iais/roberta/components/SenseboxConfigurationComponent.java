@@ -31,10 +31,10 @@ public final class SenseboxConfigurationComponent extends ConfigurationComponent
         Block destination = new Block();
         Ast2JaxbHelper.setBasicProperties(this, destination);
         Mutation mutation = new Mutation();
-        mutation.setItems(BigInteger.valueOf((this.componentProperties.size() / 2)));
+        mutation.setItems(BigInteger.valueOf((this.getComponentProperties().size() / 2)));
         destination.setMutation(mutation);
-        Ast2JaxbHelper.addField(destination, "BOX_ID", this.userDefinedPortName);
-        this.componentProperties.forEach((key, value) -> Ast2JaxbHelper.addField(destination, key, value));
+        Ast2JaxbHelper.addField(destination, "BOX_ID", this.getUserDefinedPortName());
+        this.getComponentProperties().forEach((key, value) -> Ast2JaxbHelper.addField(destination, key, value));
         return destination;
     }
 }

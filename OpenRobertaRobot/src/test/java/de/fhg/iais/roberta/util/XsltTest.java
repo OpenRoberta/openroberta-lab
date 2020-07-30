@@ -1,7 +1,8 @@
 package de.fhg.iais.roberta.util;
 
-import com.google.common.base.Charsets;
-import com.google.common.io.Resources;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 import org.apache.commons.io.IOUtils;
 import org.custommonkey.xmlunit.Diff;
@@ -13,9 +14,8 @@ import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
+import com.google.common.base.Charsets;
+import com.google.common.io.Resources;
 
 public class XsltTest {
     // not a valid configuration according to the xsd!
@@ -68,15 +68,19 @@ public class XsltTest {
      */
     @Test
     @Ignore
-    public void transform_ShouldReturnTransformedCalliopeXML_WhenGivenOldCalliopeDbEntries() throws Exception {
+    public void transform_ShouldReturnTransformedXML_WhenGivenOldDbEntries() throws Exception {
         JSONTokener tokener =
-            new JSONTokener(Resources.toString(Resources.getResource("de/fhg/iais/roberta/util/db/database_export_calliope.json"), StandardCharsets.UTF_8));
+            new JSONTokener(Resources.toString(Resources.getResource("de/fhg/iais/roberta/util/db/database_export_calliope_2017.json"), StandardCharsets.UTF_8));
         JSONObject root = new JSONObject(tokener);
         JSONArray list = root.getJSONArray(root.keys().next());
+
+        JSONObject outputRoot = new JSONObject(root);
+        JSONArray outputList = new JSONArray();
+        outputRoot.put(root.keys().next(), outputList);
+
         for ( int i = 0; i < list.length(); i++ ) {
             // Read block set XML
             JSONObject entry = list.getJSONObject(i);
-            System.out.println(entry.getString("CREATED"));
             String input = entry.getString("PROGRAM_TEXT");
 
             // Windows has a problem with large console inputs/outputs, use a temp file for headless blockly as a workaround
@@ -92,9 +96,12 @@ public class XsltTest {
             if ( start.waitFor() != 0 ) {
                 Assert.fail(IOUtils.toString(start.getErrorStream(), Charsets.UTF_8));
             }
+            String result = IOUtils.toString(start.getInputStream(), Charsets.UTF_8);
+
+            Assert.assertFalse(result, result.isEmpty());
+            Assert.assertFalse(result, result.contains("Blockly.Xml.textToDom did not obtain a valid XML tree."));
+            Assert.assertFalse(result, result.contains("Error [AssertionError]:"));
             String expected = IOUtils.toString(ioFile.toUri(), StandardCharsets.UTF_8);
-            Assert.assertFalse(expected, expected.contains("Blockly.Xml.textToDom did not obtain a valid XML tree."));
-            Assert.assertFalse(expected, expected.contains("Error [AssertionError]:"));
 
             // Run transformer
             String transformed = XsltTransformer.getInstance().transform(input, EMPTY_CONFIG).getFirst();
@@ -102,7 +109,18 @@ public class XsltTest {
             // Compare results
             XMLUnit.setIgnoreWhitespace(true);
             Diff diff = XMLUnit.compareXML(expected, transformed);
-            Assert.assertTrue(diff.toString(), diff.identical());
+            Assert.assertTrue(diff.toString(), diff.identical() || result.contains("Connection checks failed."));
+            if (!diff.identical()) {
+                System.out.println(entry.getString("CREATED"));
+                outputList.put(entry);
+            } else {
+                System.out.println("no " + i);
+            }
         }
+
+//        PrintWriter myFile = new PrintWriter(new File("database_export_ev3_2017_out.json"), "UTF-8");
+//        myFile.println(outputRoot.toString(4));
+
+//        Assert.assertTrue(nonWorkingPrograms.isEmpty());
     }
 }

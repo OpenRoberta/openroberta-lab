@@ -77,7 +77,7 @@
                     <xsl:when test="./b:mutation/@input">
                         <xsl:value-of select="./b:mutation/@input" />
                     </xsl:when>
-                    <xsl:when test="./b:field[./@name != 'KEY' and ./@name != 'SENSORPORT' and ./@name != 'PIN']">
+                    <xsl:when test="./b:field[./@name != 'KEY' and ./@name != 'SENSORPORT' and ./@name != 'PIN' and ./@name != 'ARM' and ./@name != 'ARMPAIR' and ./@name != 'DIRECTION']">
                         <xsl:value-of select="./b:field" />
                     </xsl:when>
                     <!-- otherwise use default values -->
@@ -149,7 +149,9 @@
                     <xsl:when test="./@type = 'robSensors_sound_getSample'">SOUND</xsl:when>
                     <xsl:when test="./@type = 'robSensors_temperature_getSample'">
                         <xsl:choose>
-                            <xsl:when test="ancestor::b:block_set/@robottype = 'mbot' or ancestor::b:block_set/@robottype = 'calliope'">VALUE</xsl:when>
+                            <xsl:when test="ancestor::b:block_set/@robottype = 'mbot'
+                            or ancestor::b:block_set/@robottype = 'calliope'
+                            or ancestor::b:block_set/@robottype = 'microbit'">VALUE</xsl:when>
                             <xsl:otherwise>TEMPERATURE</xsl:otherwise>
                         </xsl:choose>
                     </xsl:when>
@@ -166,23 +168,41 @@
             <xsl:variable name="newPort">
                 <xsl:choose>
                     <xsl:when test=".. = 'ANGLE' and ancestor::b:block_set/@robottype = 'calliope'">X</xsl:when>
-                    <xsl:when test="./b:field[./@name = 'SENSORPORT' or ./@name = 'KEY' or ./@name = 'PIN']">
-                        <xsl:value-of select="./b:field[./@name = 'SENSORPORT' or ./@name = 'KEY' or ./@name = 'PIN']" />
+                    <xsl:when test="./b:field[./@name = 'SENSORPORT' or ./@name = 'KEY' or ./@name = 'PIN' or ./@name = 'ARM' or ./@name = 'DIRECTION' or ./@name = 'MOTORPORT']">
+                        <xsl:value-of select="./b:field[./@name = 'SENSORPORT' or ./@name = 'KEY' or ./@name = 'PIN' or ./@name = 'ARM' or ./@name = 'DIRECTION' or ./@name = 'MOTORPORT']" />
+                    </xsl:when>
+                    <xsl:when test="./b:field[./@name = 'SENSORTYPE'] = 'NAO_RECOGNIZEWORD' or ./b:field[./@name = 'SENSORTYPE'] = 'NAO_TOUCHSENSOR' and ancestor::b:block_set/@robottype = 'nao'">
+                        <xsl:text>HEAD</xsl:text>
+                    </xsl:when>
+                    <xsl:otherwise />
+                </xsl:choose>
+            </xsl:variable>
+            <xsl:variable name="newSlot">
+                <xsl:choose>
+                    <xsl:when test="./b:field[./@name = 'ARMPAIR'] and ancestor::b:block_set/@robottype = 'bob3'">
+                        <xsl:value-of select="./b:field[./@name = 'ARMPAIR']" />
+                    </xsl:when>
+                    <xsl:when test="(./b:field[./@name = 'SENSORTYPE'] = 'NAO_RECOGNIZEWORD' or ./b:field[./@name = 'SENSORTYPE'] = 'NAO_TOUCHSENSOR') and ancestor::b:block_set/@robottype = 'nao'">
+                        <xsl:text>FRONT</xsl:text>
                     </xsl:when>
                     <xsl:otherwise />
                 </xsl:choose>
             </xsl:variable>
             <xsl:choose>
-                <xsl:when test="./b:mutation">
+<!--                <xsl:when test="./b:mutation and (not(./b:mutation/@protocol) and (ancestor::b:block_set/@robottype = 'calliope' or ancestor::b:block_set/@robottype = 'microbit'))">-->
+                <xsl:when test="./b:mutation and not(./b:mutation/@protocol)">
                     <xsl:copy-of select="./b:mutation" />
                 </xsl:when>
                 <xsl:otherwise>
                     <xsl:element name="{'mutation'}" namespace="">
                         <xsl:attribute name="mode">
                             <xsl:choose>
-                                <!-- this is wrong output by blockly, but do the same for complete compatibility -->
+                                <!-- this is wrong output by blockly, but do the same for complete compatibility TODO remove? -->
                                 <xsl:when test="./@type = 'robSensors_gesture_getSample'">
                                     <xsl:text>UP</xsl:text>
+                                </xsl:when>
+                                <xsl:when test="./@type = 'robSensors_encoder_getSample'">
+                                    <xsl:text>DEGREE</xsl:text>
                                 </xsl:when>
                                 <xsl:otherwise>
                                     <xsl:value-of select="$newMode" />
@@ -210,10 +230,6 @@
                     <xsl:copy-of select="./b:field[./@name = 'SENSORPORT']" />
                 </xsl:when>
                 <xsl:otherwise>
-                    <xsl:message>new one</xsl:message>
-                    <xsl:message>
-                        <xsl:value-of select="$newPort" />
-                    </xsl:message>
                     <xsl:element name="{'field'}" namespace="">
                         <xsl:attribute name="name">SENSORPORT</xsl:attribute>
                         <xsl:if test="$newPort">
@@ -229,6 +245,9 @@
                 <xsl:otherwise>
                     <xsl:element name="{'field'}" namespace="">
                         <xsl:attribute name="name">SLOT</xsl:attribute>
+                        <xsl:if test="$newSlot">
+                            <xsl:value-of select="$newSlot" />
+                        </xsl:if>
                     </xsl:element>
                 </xsl:otherwise>
             </xsl:choose>
@@ -241,6 +260,14 @@
             <!-- intask attribute may be missing -->
             <xsl:if test="not(./@intask)">
                 <xsl:attribute name="intask">true</xsl:attribute>
+            </xsl:if>
+            <xsl:if test="./@type = 'robActions_write_pin'">
+                <xsl:if test="not(b:mutation)">
+                    <xsl:element name="{'mutation'}" namespace="">
+                        <xsl:attribute name="protocol">DIGITAL</xsl:attribute> <!-- TODO wrong behaviour -->
+<!--                        <xsl:attribute name="protocol"><xsl:value-of select="b:field[./@name = 'MODE']"/></xsl:attribute>-->
+                    </xsl:element>
+                </xsl:if>
             </xsl:if>
             <xsl:if test="./@type = 'mbedActions_leds_off' or ./@type = 'mbedActions_leds_on'">
                 <xsl:if test="not(b:field/@name = 'ACTORPORT')">
@@ -261,12 +288,19 @@
             <xsl:apply-templates />
         </xsl:copy>
     </xsl:template>
-    <!-- mutation datatype is always required for statements -->
-    <xsl:template match="b:mutation[./@statement]">
+    <!-- mbedCommunication blocks may need additional fields -->
+    <xsl:template match="b:block[./@type = 'mbedCommunication_sendBlock']">
         <xsl:copy>
             <xsl:apply-templates select="@*" />
-            <xsl:if test="not(./@datatype)">
-                <xsl:attribute name="datatype" />
+            <!-- intask attribute may be missing -->
+            <xsl:if test="not(./@intask)">
+                <xsl:attribute name="intask">true</xsl:attribute>
+            </xsl:if>
+            <xsl:if test="not(b:field/@name = 'POWER')">
+                <xsl:element name="{'field'}" namespace="">
+                    <xsl:attribute name="name">POWER</xsl:attribute>
+                    <xsl:text>0</xsl:text>
+                </xsl:element>
             </xsl:if>
             <xsl:apply-templates />
         </xsl:copy>
@@ -277,4 +311,29 @@
             <xsl:apply-templates select="@value" />
         </xsl:copy>
     </xsl:template>
+    <!-- mutation datatype is always required for statements -->
+    <xsl:template match="b:mutation[./@statement]">
+        <xsl:copy>
+            <xsl:apply-templates select="@*" />
+            <xsl:if test="not(./@datatype)">
+                <xsl:attribute name="datatype" />
+            </xsl:if>
+            <xsl:apply-templates />
+        </xsl:copy>
+    </xsl:template>
+    <!-- sometimes the mutations are necessary sometimes not TODO remove this -->
+    <xsl:template match="b:mutation[./@datatype and not(./@statement)
+    and not(../@type = 'mbedCommunication_receiveBlock')
+    and not(../@type = 'mbedCommunication_sendBlock')]" />
+    <!--    <xsl:template match="b:mutation[./@datatype and not(./@statement)-->
+    <!--    and not(../@type = 'mbedCommunication_receiveBlock')-->
+    <!--    and not(../@type = 'mbedCommunication_sendBlock')-->
+    <!--    and (not(../@type = 'variables_get') or (../@type = 'variables_get' and (contains(ancestor::b:block/@type, 'Procedures'))))-->
+    <!--    and (not(../@type = 'variables_set') or (../@type = 'variables_set' and (contains(ancestor::b:block/@type, 'Procedures'))))]"/>-->
+    <!-- comments should not have any attributes TODO remove this -->
+    <!--    <xsl:template match="b:comment">-->
+    <!--        <xsl:copy>-->
+    <!--            <xsl:apply-templates />-->
+    <!--        </xsl:copy>-->
+    <!--    </xsl:template>-->
 </xsl:stylesheet>

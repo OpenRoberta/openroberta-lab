@@ -1,13 +1,15 @@
 package de.fhg.iais.roberta.visitor.codegen;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
+import com.google.common.collect.ClassToInstanceMap;
 
 import org.apache.commons.text.WordUtils;
 
-import com.google.common.collect.ClassToInstanceMap;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import de.fhg.iais.roberta.bean.IProjectBean;
 import de.fhg.iais.roberta.bean.UsedHardwareBean;
@@ -105,9 +107,9 @@ import de.fhg.iais.roberta.visitor.lang.codegen.prog.AbstractCppVisitor;
  * StringBuilder. <b>This representation is correct C++ code for Calliope systems.</b> <br>
  */
 public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbedVisitor<Void> {
-    private final ConfigurationAst robotConfiguration;
-
     private static final Map<String, String> PIN_MAP = new HashMap<>(); // TODO better?
+    private static final Map<String, String> CALLIBOT_TO_PIN_MAP = new HashMap<>();
+
     static {
         PIN_MAP.put("0", "P12");
         PIN_MAP.put("1", "P0");
@@ -128,7 +130,23 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
         PIN_MAP.put("C17", "P8");
         PIN_MAP.put("C18", "P20");
         PIN_MAP.put("C19", "P19");
+
+        CALLIBOT_TO_PIN_MAP.put("MOTOR_L", "0");
+        CALLIBOT_TO_PIN_MAP.put("MOTOR_R", "2");
+        CALLIBOT_TO_PIN_MAP.put("RGBLED_LF", "1");
+        CALLIBOT_TO_PIN_MAP.put("RGBLED_RF", "4");
+        CALLIBOT_TO_PIN_MAP.put("RGBLED_LR", "2");
+        CALLIBOT_TO_PIN_MAP.put("RGBLED_RR", "3");
+        CALLIBOT_TO_PIN_MAP.put("RGBLED_A", "5");
+        CALLIBOT_TO_PIN_MAP.put("LED_L", "1");
+        CALLIBOT_TO_PIN_MAP.put("LED_R", "2");
+        CALLIBOT_TO_PIN_MAP.put("LED_B", "3");
+        CALLIBOT_TO_PIN_MAP.put("INFRARED_L", "2");
+        CALLIBOT_TO_PIN_MAP.put("INFRARED_R", "1");
+        CALLIBOT_TO_PIN_MAP.put("ULTRASONIC", "2");
     }
+
+    private final ConfigurationAst robotConfiguration;
 
     /**
      * initialize the C++ code generator visitor.
@@ -139,6 +157,19 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
     public CalliopeCppVisitor(List<List<Phrase<Void>>> programPhrases, ConfigurationAst robotConfiguration, ClassToInstanceMap<IProjectBean> beans) {
         super(programPhrases, beans);
         this.robotConfiguration = robotConfiguration;
+    }
+
+    private static String getCallibotPin(ConfigurationComponent confComp, String port) {
+        String s =
+            confComp
+                .getComponentProperties()
+                .entrySet()
+                .stream()
+                .filter(entry -> port.equals(entry.getValue()))
+                .map(Map.Entry::getKey)
+                .findFirst()
+                .orElseThrow(() -> new DbcException("Invalid port!"));
+        return CALLIBOT_TO_PIN_MAP.get(s);
     }
 
     @Override
@@ -341,8 +372,8 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
     @Override
     public Void visitLightStatusAction(LightStatusAction<Void> lightStatusAction) {
         String port = lightStatusAction.getPort();
-        ConfigurationComponent configurationComponent = this.robotConfiguration.getConfigurationComponent(port);
-        String pin1 = configurationComponent.getProperty("PIN1");
+        ConfigurationComponent confComp = this.robotConfiguration.getConfigurationComponent(port);
+        String pin1 = confComp.getComponentType().equals("CALLIBOT") ? getCallibotPin(confComp, port) : confComp.getProperty("PIN1");
         switch ( pin1 ) {
             case "0":
                 this.sb.append("_uBit.rgb.off();");
@@ -383,8 +414,8 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
     @Override
     public Void visitMotorOnAction(MotorOnAction<Void> motorOnAction) {
         String port = motorOnAction.getUserDefinedPort();
-        ConfigurationComponent configurationComponent = this.robotConfiguration.getConfigurationComponent(port);
-        String pin1 = configurationComponent.getProperty("PIN1");
+        ConfigurationComponent confComp = this.robotConfiguration.getConfigurationComponent(port);
+        String pin1 = confComp.getComponentType().equals("CALLIBOT") ? getCallibotPin(confComp, port) : confComp.getProperty("PIN1");
         switch ( pin1 ) {
             case "0":
             case "2":
@@ -421,8 +452,8 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
     @Override
     public Void visitMotorStopAction(MotorStopAction<Void> motorStopAction) {
         String port = motorStopAction.getUserDefinedPort();
-        ConfigurationComponent configurationComponent = this.robotConfiguration.getConfigurationComponent(port);
-        String pin1 = configurationComponent.getProperty("PIN1");
+        ConfigurationComponent confComp = this.robotConfiguration.getConfigurationComponent(port);
+        String pin1 = confComp.getComponentType().equals("CALLIBOT") ? getCallibotPin(confComp, port) : confComp.getProperty("PIN1");
         switch ( pin1 ) {
             case "0":
             case "2":
@@ -502,8 +533,8 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
     @Override
     public Void visitUltrasonicSensor(UltrasonicSensor<Void> ultrasonicSensor) {
         String port = ultrasonicSensor.getPort();
-        ConfigurationComponent configurationComponent = this.robotConfiguration.getConfigurationComponent(port);
-        String pin1 = configurationComponent.getProperty("PIN1");
+        ConfigurationComponent confComp = this.robotConfiguration.getConfigurationComponent(port);
+        String pin1 = confComp.getComponentType().equals("CALLIBOT") ? getCallibotPin(confComp, port) : confComp.getProperty("PIN1");
         switch ( pin1 ) {
             case "1":
                 this.sb.append("(_uBit.io.P2.readPulseHigh() * 0.017)");
@@ -520,8 +551,8 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
     @Override
     public Void visitInfraredSensor(InfraredSensor<Void> infraredSensor) {
         String port = infraredSensor.getPort();
-        ConfigurationComponent configurationComponent = this.robotConfiguration.getConfigurationComponent(port);
-        String pin1 = configurationComponent.getProperty("PIN1");
+        ConfigurationComponent confComp = this.robotConfiguration.getConfigurationComponent(port);
+        String pin1 = confComp.getComponentType().equals("CALLIBOT") ? getCallibotPin(confComp, port) : confComp.getProperty("PIN1");
         if ( pin1.equals("1") || pin1.contentEquals("2") ) {
             this.sb.append("_cbGetSampleInfrared(_buf, &_i2c, ").append(pin1).append(")");
         } else {
@@ -810,8 +841,8 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
     @Override
     public Void visitLedOnAction(LedOnAction<Void> ledOnAction) {
         String port = ledOnAction.getPort();
-        ConfigurationComponent configurationComponent = this.robotConfiguration.getConfigurationComponent(port);
-        String pin1 = configurationComponent.getProperty("PIN1");
+        ConfigurationComponent confComp = this.robotConfiguration.getConfigurationComponent(port);
+        String pin1 = confComp.getComponentType().equals("CALLIBOT") ? getCallibotPin(confComp, port) : confComp.getProperty("PIN1");
         switch ( pin1 ) {
             case "0":
                 this.sb.append("_uBit.rgb.setColour(");
@@ -836,8 +867,8 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
     @Override
     public Void visitLightAction(LightAction<Void> lightAction) {
         String port = lightAction.getPort();
-        ConfigurationComponent configurationComponent = this.robotConfiguration.getConfigurationComponent(port);
-        String pin1 = configurationComponent.getProperty("PIN1");
+        ConfigurationComponent confComp = this.robotConfiguration.getConfigurationComponent(port);
+        String pin1 = confComp.getComponentType().equals("CALLIBOT") ? getCallibotPin(confComp, port) : confComp.getProperty("PIN1");
         String mode = lightAction.getMode().getValues()[0];
         if ( mode.equals(BlocklyConstants.HIGH) ) {
             mode = "1";
@@ -1150,8 +1181,8 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
     @Override
     public Void visitBothMotorsOnAction(BothMotorsOnAction<Void> bothMotorsOnAction) {
         String port = bothMotorsOnAction.getPortA();
-        ConfigurationComponent configurationComponent = this.robotConfiguration.getConfigurationComponent(port);
-        String pin1 = configurationComponent.getProperty("PIN1");
+        ConfigurationComponent confComp = this.robotConfiguration.getConfigurationComponent(port);
+        String pin1 = confComp.getComponentType().equals("CALLIBOT") ? getCallibotPin(confComp, port) : confComp.getProperty("PIN1");
         if ( pin1.equals("A") ) {
             this.sb.append("_uBit.soundmotor.motorAOn(");
             bothMotorsOnAction.getSpeedA().accept(this);
@@ -1172,15 +1203,15 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
 
     @Override
     public Void visitBothMotorsStopAction(BothMotorsStopAction<Void> bothMotorsStopAction) {
-        List<ConfigurationComponent> motors = getMotors();
+        Set<String> motorPorts = getMotorPins();
         boolean both = false;
-        if ( motors.stream().anyMatch(motor -> motor.getProperty("PIN1").equals("A") || motor.getProperty("PIN1").equals("B")) ) { // Internal motors
+        if ( motorPorts.contains("A") || motorPorts.contains("B") ) { // Internal motors
             this.sb.append("_uBit.soundmotor.motorAOff();");
             nlIndent();
             this.sb.append("_uBit.soundmotor.motorBOff();");
             both = true;
         }
-        if ( motors.stream().anyMatch(motor -> motor.getProperty("PIN1").equals("0") || motor.getProperty("PIN1").equals("2")) ) { // Calli:bot motors
+        if ( motorPorts.contains("0") || motorPorts.contains("2") ) { // Calli:bot motors
             if ( both ) {
                 nlIndent();
             }
@@ -1388,16 +1419,25 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
         return null;
     }
 
-    private List<ConfigurationComponent> getMotors() {
-        return this.robotConfiguration
-            .getConfigurationComponentsValues()
-            .stream()
-            .filter(cc -> cc.getComponentType().equals("MOTOR"))
-            .collect(Collectors.toList());
+    private Set<String> getMotorPins() {
+        Set<String> motorPins = new HashSet<>();
+        for ( ConfigurationComponent confComp : this.robotConfiguration.getConfigurationComponentsValues() ) {
+            String componentType = confComp.getComponentType();
+            if (componentType.equals("MOTOR")) {
+                motorPins.add(confComp.getProperty("PIN1"));
+            } else if (componentType.equals("CALLIBOT")) {
+                for ( Map.Entry<String, String> entry : confComp.getComponentProperties().entrySet() ) {
+                    if (entry.getKey().startsWith("MOTOR_")) {
+                        motorPins.add(CALLIBOT_TO_PIN_MAP.get(entry.getKey()));
+                    }
+                }
+            }
+        }
+        return Collections.unmodifiableSet(motorPins);
     }
 
     private boolean isDualMode() {
-        List<ConfigurationComponent> motors = getMotors();
-        return motors.stream().filter(motor -> motor.getProperty("PIN1").equals("A") || motor.getProperty("PIN1").equals("B")).count() > 1;
+        Set<String> motorPins = getMotorPins();
+        return motorPins.stream().filter(s -> s.equals("A") || s.equals("B")).count() > 1;
     }
 }

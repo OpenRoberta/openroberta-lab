@@ -114,3 +114,4 @@ mode:
 configuration:
   LEDBAR: [robConf_ledbar]
   FOURDIGITDISPLAY: [robConf_fourdigitdisplay]
+  CALLIBOT: [robConf_callibot]

@@ -23,22 +23,17 @@ import de.fhg.iais.roberta.util.dbc.DbcException;
 public class ConfigurationAst {
     // LinkedHashMap to preserve insertion order of elements. Helps to recreate the same XML output as XML input.
     private final LinkedHashMap<String, ConfigurationComponent> configurationComponents;
-
-    private String robotName;
-
     private final List<String> componentTypes;
-
     private final String robotType;
     private final String xmlVersion;
     private final String description;
     private final String tags;
-
     private final float wheelDiameter;
     private final float trackWidth;
-
     private final String ipAddress;
     private final String userName;
     private final String password;
+    private String robotName;
 
     protected ConfigurationAst(
         Iterable<ConfigurationComponent> configurationComponents,
@@ -62,9 +57,28 @@ public class ConfigurationAst {
         this.userName = userName;
         this.password = password;
         this.componentTypes = new ArrayList<>();
-        for ( ConfigurationComponent configurationComponent : this.configurationComponents.values() ) {
-            this.componentTypes.add(configurationComponent.getComponentType());
+        for ( ConfigurationComponent confComp : this.configurationComponents.values() ) {
+            if ( isSuperBlock(confComp) ) {
+                for ( Map.Entry<String, String> entry : confComp.getComponentProperties().entrySet() ) {
+                    this.componentTypes.add(entry.getKey().split("_")[0]);
+                }
+            } else {
+                this.componentTypes.add(confComp.getComponentType());
+            }
         }
+    }
+
+    private static LinkedHashMap<String, ConfigurationComponent> buildConfigurationComponentMap(Iterable<ConfigurationComponent> configurationComponents) {
+        LinkedHashMap<String, ConfigurationComponent> map = new LinkedHashMap<>();
+        for ( ConfigurationComponent confComp : configurationComponents ) {
+            map.put(confComp.getUserDefinedPortName(), confComp);
+        }
+        return map;
+    }
+
+    // TODO add better differentiation
+    private static boolean isSuperBlock(ConfigurationComponent confComp) {
+        return confComp.getComponentType().equals("CALLIBOT");
     }
 
     public String getRobotName() {
@@ -175,9 +189,19 @@ public class ConfigurationAst {
     }
 
     public ConfigurationComponent getConfigurationComponent(String userDefinedName) {
-        ConfigurationComponent configurationComponent = this.configurationComponents.get(userDefinedName);
-        Assert.notNull(configurationComponent, "configuration component missing for user defined name " + userDefinedName);
-        return configurationComponent;
+        ConfigurationComponent confComp = this.configurationComponents.get(userDefinedName);
+        if ( confComp == null ) {
+            confComp =
+                this.configurationComponents
+                    .values()
+                    .stream()
+                    .filter(ConfigurationAst::isSuperBlock)
+                    .filter(cc -> cc.getComponentProperties().entrySet().stream().anyMatch(entry -> entry.getValue().equals(userDefinedName)))
+                    .findFirst()
+                    .orElseThrow(() -> new DbcException("configuration component missing for user defined name " + userDefinedName));
+        }
+        Assert.notNull(confComp, "configuration component missing for user defined name " + userDefinedName);
+        return confComp;
     }
 
     public ConfigurationComponent optConfigurationComponent(String userDefinedName) {
@@ -209,14 +233,6 @@ public class ConfigurationAst {
         } else {
             return getConfigurationComponent(port).getOptProperty(SC.MOTOR_REGULATION).equals(SC.TRUE);
         }
-    }
-
-    private static LinkedHashMap<String, ConfigurationComponent> buildConfigurationComponentMap(Iterable<ConfigurationComponent> configurationComponents) {
-        LinkedHashMap<String, ConfigurationComponent> map = new LinkedHashMap<>();
-        for ( ConfigurationComponent configurationComponent : configurationComponents ) {
-            map.put(configurationComponent.getUserDefinedPortName(), configurationComponent);
-        }
-        return map;
     }
 
     /**
