@@ -70,6 +70,8 @@ import de.fhg.iais.roberta.syntax.lang.functions.LengthOfIsEmptyFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.ListGetIndex;
 import de.fhg.iais.roberta.syntax.lang.functions.ListRepeat;
 import de.fhg.iais.roberta.syntax.lang.functions.ListSetIndex;
+import de.fhg.iais.roberta.syntax.lang.functions.MathCastCharFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.MathCastStringFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathConstrainFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathNumPropFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathOnListFunct;
@@ -77,8 +79,10 @@ import de.fhg.iais.roberta.syntax.lang.functions.MathPowerFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathRandomFloatFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathRandomIntFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathSingleFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.TextCharCastNumberFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.TextJoinFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.TextPrintFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.TextStringCastNumberFunct;
 import de.fhg.iais.roberta.syntax.lang.methods.Method;
 import de.fhg.iais.roberta.syntax.lang.methods.MethodCall;
 import de.fhg.iais.roberta.syntax.lang.methods.MethodIfReturn;
@@ -147,7 +151,7 @@ public interface ITransformerVisitor<V> extends ISensorVisitor<Phrase<V>>, IAllA
      * Necessary for the {@link GetSampleSensor} visit. {@link BlocklyDropdownFactory} is required by
      * {@link GetSampleSensor#make(String, String, String, boolean, BlocklyBlockProperties, BlocklyComment, BlocklyDropdownFactory)} in order to recreate
      * itself.
-     * 
+     *
      * @return the dropdown factory
      */
     BlocklyDropdownFactory getBlocklyDropdownFactory();
@@ -567,6 +571,34 @@ public interface ITransformerVisitor<V> extends ISensorVisitor<Phrase<V>>, IAllA
         List<Expr<V>> newParam = new ArrayList<>();
         mathSingleFunct.getParam().forEach(phraseExpr -> newParam.add((Expr<V>) phraseExpr.modify(this)));
         return MathSingleFunct.make(mathSingleFunct.getFunctName(), newParam, mathSingleFunct.getProperty(), mathSingleFunct.getComment());
+    }
+
+    @Override
+    default Phrase<V> visitMathCastStringFunct(MathCastStringFunct<Phrase<V>> mathCastStringFunct) {
+        List<Expr<V>> newParam = new ArrayList<>();
+        mathCastStringFunct.getParam().forEach(phraseExpr -> newParam.add((Expr<V>) phraseExpr.modify(this)));
+        return MathCastStringFunct.make(newParam, mathCastStringFunct.getProperty(), mathCastStringFunct.getComment());
+    }
+
+    @Override
+    default Phrase<V> visitMathCastCharFunct(MathCastCharFunct<Phrase<V>> mathCastCharFunct) {
+        List<Expr<V>> newParam = new ArrayList<>();
+        mathCastCharFunct.getParam().forEach(phraseExpr -> newParam.add((Expr<V>) phraseExpr.modify(this)));
+        return MathCastStringFunct.make(newParam, mathCastCharFunct.getProperty(), mathCastCharFunct.getComment());
+    }
+
+    @Override
+    default Phrase<V> visitTextStringCastNumberFunct(TextStringCastNumberFunct<Phrase<V>> textStringCastNumberFunct) {
+        List<Expr<V>> newParam = new ArrayList<>();
+        textStringCastNumberFunct.getParam().forEach(phraseExpr -> newParam.add((Expr<V>) phraseExpr.modify(this)));
+        return MathCastStringFunct.make(newParam, textStringCastNumberFunct.getProperty(), textStringCastNumberFunct.getComment());
+    }
+
+    @Override
+    default Phrase<V> visitTextCharCastNumberFunct(TextCharCastNumberFunct<Phrase<V>> textCharCastNumberFunct) {
+        List<Expr<V>> newParam = new ArrayList<>();
+        textCharCastNumberFunct.getParam().forEach(phraseExpr -> newParam.add((Expr<V>) phraseExpr.modify(this)));
+        return MathCastStringFunct.make(newParam, textCharCastNumberFunct.getProperty(), textCharCastNumberFunct.getComment());
     }
 
     @Override

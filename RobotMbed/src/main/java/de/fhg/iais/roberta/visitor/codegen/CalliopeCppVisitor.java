@@ -67,8 +67,11 @@ import de.fhg.iais.roberta.syntax.lang.expr.Var;
 import de.fhg.iais.roberta.syntax.lang.expr.VarDeclaration;
 import de.fhg.iais.roberta.syntax.lang.functions.ListGetIndex;
 import de.fhg.iais.roberta.syntax.lang.functions.ListSetIndex;
+import de.fhg.iais.roberta.syntax.lang.functions.MathCastCharFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.MathCastStringFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathConstrainFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathRandomIntFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.TextCharCastNumberFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.TextJoinFunct;
 import de.fhg.iais.roberta.syntax.lang.methods.Method;
 import de.fhg.iais.roberta.syntax.lang.stmt.AssertStmt;
@@ -405,7 +408,6 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
         return null;
     }
 
-
     @Override
     public Void visitMotorSetPowerAction(MotorSetPowerAction<Void> motorSetPowerAction) {
         return null;
@@ -668,6 +670,32 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
         this.sb.append(" + ");
         mathRandomIntFunct.getParam().get(0).accept(this);
         this.sb.append(")");
+        return null;
+    }
+
+    @Override
+    public Void visitMathCastStringFunct(MathCastStringFunct<Void> mathCastStringFunct) {
+        this.sb.append("ManagedString(");
+        mathCastStringFunct.getParam().get(0).accept(this);
+        this.sb.append(")");
+        return null;
+    }
+
+    @Override
+    public Void visitMathCastCharFunct(MathCastCharFunct<Void> mathCastCharFunct) {
+        this.sb.append("ManagedString((char)(");
+        mathCastCharFunct.getParam().get(0).accept(this);
+        this.sb.append("))");
+        return null;
+    }
+
+    @Override
+    public Void visitTextCharCastNumberFunct(TextCharCastNumberFunct<Void> textCharCastNumberFunct) {
+        this.sb.append("(int)(");
+        textCharCastNumberFunct.getParam().get(0).accept(this);
+        this.sb.append(".charAt(");
+        textCharCastNumberFunct.getParam().get(1).accept(this);
+        this.sb.append("))");
         return null;
     }
 
@@ -1153,8 +1181,9 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
             both = true;
         }
         if ( motors.stream().anyMatch(motor -> motor.getProperty("PIN1").equals("0") || motor.getProperty("PIN1").equals("2")) ) { // Calli:bot motors
-            if ( both )
+            if ( both ) {
                 nlIndent();
+            }
             this.sb.append("_cbSetMotors(_buf, &_i2c, 0, 0);");
         }
         return null;

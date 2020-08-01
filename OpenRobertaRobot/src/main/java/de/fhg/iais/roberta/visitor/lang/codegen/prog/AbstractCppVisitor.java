@@ -36,13 +36,17 @@ import de.fhg.iais.roberta.syntax.lang.functions.LengthOfIsEmptyFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.ListGetIndex;
 import de.fhg.iais.roberta.syntax.lang.functions.ListRepeat;
 import de.fhg.iais.roberta.syntax.lang.functions.ListSetIndex;
+import de.fhg.iais.roberta.syntax.lang.functions.MathCastCharFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.MathCastStringFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathConstrainFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathNumPropFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathOnListFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathPowerFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathRandomFloatFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathSingleFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.TextCharCastNumberFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.TextPrintFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.TextStringCastNumberFunct;
 import de.fhg.iais.roberta.syntax.lang.methods.Method;
 import de.fhg.iais.roberta.syntax.lang.methods.MethodCall;
 import de.fhg.iais.roberta.syntax.lang.methods.MethodIfReturn;
@@ -600,6 +604,42 @@ public abstract class AbstractCppVisitor extends AbstractLanguageVisitor {
     @Override
     public Void visitMathRandomFloatFunct(MathRandomFloatFunct<Void> mathRandomFloatFunct) {
         this.sb.append("((double) rand() / (RAND_MAX))");
+        return null;
+    }
+
+    @Override
+    public Void visitMathCastStringFunct(MathCastStringFunct<Void> mathCastStringFunct) {
+        // TODO check why this is not working for Arduinos!
+        this.sb.append("(std::to_string(");
+        mathCastStringFunct.getParam().get(0).accept(this);
+        this.sb.append("))");
+        return null;
+    }
+
+    @Override
+    public Void visitMathCastCharFunct(MathCastCharFunct<Void> mathCastCharFunct) {
+        this.sb.append("(char)(int)(");
+        mathCastCharFunct.getParam().get(0).accept(this);
+        this.sb.append(")");
+        return null;
+    }
+
+    @Override
+    public Void visitTextStringCastNumberFunct(TextStringCastNumberFunct<Void> textStringCastNumberFunct) {
+        this.sb.append("std::stof(");
+        textStringCastNumberFunct.getParam().get(0).accept(this);
+        this.sb.append(")");
+        return null;
+    }
+
+    @Override
+    public Void visitTextCharCastNumberFunct(TextCharCastNumberFunct<Void> textCharCastNumberFunct) {
+        this.sb.append("(int)(");
+        this.sb.append("(");
+        textCharCastNumberFunct.getParam().get(0).accept(this);
+        this.sb.append(")[");
+        textCharCastNumberFunct.getParam().get(1).accept(this);
+        this.sb.append("])");
         return null;
     }
 

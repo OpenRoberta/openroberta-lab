@@ -53,6 +53,10 @@ import de.fhg.iais.roberta.syntax.lang.expr.ColorConst;
 import de.fhg.iais.roberta.syntax.lang.expr.ConnectConst;
 import de.fhg.iais.roberta.syntax.lang.expr.RgbColor;
 import de.fhg.iais.roberta.syntax.lang.expr.VarDeclaration;
+import de.fhg.iais.roberta.syntax.lang.functions.MathCastCharFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.MathCastStringFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.TextCharCastNumberFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.TextStringCastNumberFunct;
 import de.fhg.iais.roberta.syntax.lang.stmt.ExprStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.Stmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtList;
@@ -1140,4 +1144,23 @@ public final class NaoPythonVisitor extends AbstractPythonVisitor implements INa
         throw new DbcException("Not supported!");
     }
 
+    @Override
+    public Void visitMathCastStringFunct(MathCastStringFunct<Void> mathCastStringFunct) {
+        throw new DbcException("Not supported!");
+    }
+
+    @Override
+    public Void visitMathCastCharFunct(MathCastCharFunct<Void> mathCastCharFunct) {
+        throw new DbcException("Not supported!");
+    }
+
+    @Override
+    public Void visitTextStringCastNumberFunct(TextStringCastNumberFunct<Void> textStringCastNumberFunct) {
+        throw new DbcException("Not supported!");
+    }
+
+    @Override
+    public Void visitTextCharCastNumberFunct(TextCharCastNumberFunct<Void> textCharCastNumberFunct) {
+        throw new DbcException("Not supported!");
+    }
 }

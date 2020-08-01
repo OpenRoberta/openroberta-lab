@@ -511,5 +511,4 @@ public final class MicrobitPythonVisitor extends AbstractPythonVisitor implement
     public Void visitMotorStopAction(MotorStopAction<Void> motorStopAction) {
         throw new DbcException("Not supported!");
     }
-
 }

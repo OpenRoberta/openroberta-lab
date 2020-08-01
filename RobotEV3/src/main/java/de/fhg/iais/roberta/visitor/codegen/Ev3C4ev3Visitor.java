@@ -66,17 +66,18 @@ import de.fhg.iais.roberta.syntax.lang.expr.StringConst;
 import de.fhg.iais.roberta.syntax.lang.functions.IndexOfFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.ListGetIndex;
 import de.fhg.iais.roberta.syntax.lang.functions.ListSetIndex;
+import de.fhg.iais.roberta.syntax.lang.functions.MathCastStringFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathRandomIntFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.TextJoinFunct;
 import de.fhg.iais.roberta.syntax.lang.stmt.DebugAction;
 import de.fhg.iais.roberta.syntax.lang.stmt.RepeatStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
-import de.fhg.iais.roberta.syntax.sensor.generic.HTColorSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.HTColorSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.IRSeekerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.KeysSensor;
@@ -129,7 +130,7 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
 
     @Override
     protected void generateProgramPrefix(boolean withWrapping) {
-        if (!withWrapping) {
+        if ( !withWrapping ) {
             return;
         }
 
@@ -291,7 +292,7 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
 
     @Override
     public Void visitMathConst(MathConst<Void> mathConst) {
-        if (mathConst.getMathConst() == MathConst.Const.INFINITY) {
+        if ( mathConst.getMathConst() == MathConst.Const.INFINITY ) {
             this.sb.append("HUGE_VAL");
             return null;
         } else {
@@ -583,6 +584,15 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
         this.sb.append(")) + ");
         min.accept(this);
         this.sb.append(")");
+        return null;
+    }
+
+    @Override
+    public Void visitMathCastStringFunct(MathCastStringFunct<Void> mathCastStringFunct) {
+        // TODO check why this is not working for Arduinos!
+        this.sb.append("(ToString(");
+        mathCastStringFunct.getParam().get(0).accept(this);
+        this.sb.append("))");
         return null;
     }
 

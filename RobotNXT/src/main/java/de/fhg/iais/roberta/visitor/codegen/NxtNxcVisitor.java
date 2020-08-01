@@ -53,6 +53,8 @@ import de.fhg.iais.roberta.syntax.lang.functions.IndexOfFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.LengthOfIsEmptyFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.ListGetIndex;
 import de.fhg.iais.roberta.syntax.lang.functions.ListSetIndex;
+import de.fhg.iais.roberta.syntax.lang.functions.MathCastCharFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.MathCastStringFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathConstrainFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathNumPropFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathOnListFunct;
@@ -60,7 +62,9 @@ import de.fhg.iais.roberta.syntax.lang.functions.MathPowerFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathRandomFloatFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathRandomIntFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathSingleFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.TextCharCastNumberFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.TextJoinFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.TextStringCastNumberFunct;
 import de.fhg.iais.roberta.syntax.lang.stmt.AssertStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.DebugAction;
 import de.fhg.iais.roberta.syntax.lang.stmt.RepeatStmt;
@@ -97,10 +101,7 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
      * @param brickConfiguration hardware configuration of the brick
      * @param programPhrases to generate the code from
      */
-    public NxtNxcVisitor(
-        List<List<Phrase<Void>>> programPhrases,
-        ConfigurationAst brickConfiguration,
-        ClassToInstanceMap<IProjectBean> beans) {
+    public NxtNxcVisitor(List<List<Phrase<Void>>> programPhrases, ConfigurationAst brickConfiguration, ClassToInstanceMap<IProjectBean> beans) {
         super(programPhrases, beans);
         this.brickConfiguration = brickConfiguration;
     }
@@ -1351,5 +1352,25 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
     @Override
     public Void visitDebugAction(DebugAction<Void> debugAction) {
         return null;
+    }
+
+    @Override
+    public Void visitMathCastStringFunct(MathCastStringFunct<Void> mathCastStringFunct) {
+        throw new DbcException("Not supported!");
+    }
+
+    @Override
+    public Void visitMathCastCharFunct(MathCastCharFunct<Void> mathCastCharFunct) {
+        throw new DbcException("Not supported!");
+    }
+
+    @Override
+    public Void visitTextStringCastNumberFunct(TextStringCastNumberFunct<Void> textStringCastNumberFunct) {
+        throw new DbcException("Not supported!");
+    }
+
+    @Override
+    public Void visitTextCharCastNumberFunct(TextCharCastNumberFunct<Void> textCharCastNumberFunct) {
+        throw new DbcException("Not supported!");
     }
 }

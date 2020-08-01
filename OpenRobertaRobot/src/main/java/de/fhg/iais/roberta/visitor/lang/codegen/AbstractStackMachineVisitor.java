@@ -50,6 +50,8 @@ import de.fhg.iais.roberta.syntax.lang.functions.LengthOfIsEmptyFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.ListGetIndex;
 import de.fhg.iais.roberta.syntax.lang.functions.ListRepeat;
 import de.fhg.iais.roberta.syntax.lang.functions.ListSetIndex;
+import de.fhg.iais.roberta.syntax.lang.functions.MathCastCharFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.MathCastStringFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathConstrainFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathNumPropFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathOnListFunct;
@@ -57,8 +59,10 @@ import de.fhg.iais.roberta.syntax.lang.functions.MathPowerFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathRandomFloatFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathRandomIntFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathSingleFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.TextCharCastNumberFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.TextJoinFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.TextPrintFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.TextStringCastNumberFunct;
 import de.fhg.iais.roberta.syntax.lang.methods.MethodCall;
 import de.fhg.iais.roberta.syntax.lang.methods.MethodIfReturn;
 import de.fhg.iais.roberta.syntax.lang.methods.MethodReturn;
@@ -660,6 +664,35 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
     public V visitMathSingleFunct(MathSingleFunct<V> mathSingleFunct) {
         mathSingleFunct.getParam().get(0).accept(this);
         JSONObject o = mk(C.EXPR).put(C.EXPR, C.SINGLE_FUNCTION).put(C.OP, mathSingleFunct.getFunctName());
+        return app(o);
+    }
+
+    @Override
+    public V visitMathCastStringFunct(MathCastStringFunct<V> mathCastStringFunct) {
+        mathCastStringFunct.getParam().get(0).accept(this);
+        JSONObject o = mk(C.EXPR).put(C.EXPR, C.CAST_STRING);
+        return app(o);
+    }
+
+    @Override
+    public V visitMathCastCharFunct(MathCastCharFunct<V> mathCastCharFunct) {
+        mathCastCharFunct.getParam().get(0).accept(this);
+        JSONObject o = mk(C.EXPR).put(C.EXPR, C.CAST_CHAR);
+        return app(o);
+    }
+
+    @Override
+    public V visitTextStringCastNumberFunct(TextStringCastNumberFunct<V> textStringCastNumberFunct) {
+        textStringCastNumberFunct.getParam().get(0).accept(this);
+        JSONObject o = mk(C.EXPR).put(C.EXPR, C.CAST_STRING_NUMBER);
+        return app(o);
+    }
+
+    @Override
+    public V visitTextCharCastNumberFunct(TextCharCastNumberFunct<V> textCharCastNumberFunct) {
+        textCharCastNumberFunct.getParam().get(0).accept(this);
+        textCharCastNumberFunct.getParam().get(1).accept(this);
+        JSONObject o = mk(C.EXPR).put(C.EXPR, C.CAST_CHAR_NUMBER);
         return app(o);
     }
 

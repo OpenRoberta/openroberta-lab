@@ -325,12 +325,16 @@
       </value>
     </block>
     <block type="math_random_float"/>
+   	<block type="math_cast_toString"></block>
+	<block type="math_cast_toChar"></block>
   </category>
   <category name="TOOLBOX_TEXT" svg="true">
     <block type="text"/>
     <block type="text_comment"/>
     <block type="robText_join"/>
     <block type="robText_append"/>
+    <block type="text_cast_string_toNumber"></block>
+	<block type="text_cast_char_toNumber"></block>
   </category>
   <category name="TOOLBOX_LIST" svg="true"><block type="robLists_create_with"><mutation items="0" list_type="Number"/></block><block type="robLists_create_with"><mutation items="3" list_type="Number"/><value name="ADD0"><block type="math_number"/></value><value name="ADD1"><block type="math_number"/></value><value name="ADD2"><block type="math_number"/></value></block>Lists<block type="robLists_repeat"><value name="NUM"><block type="math_number"><field name="NUM">5</field></block></value></block><block type="robLists_length"/><block type="robLists_isEmpty"/><block type="robLists_indexOf"/><block type="robLists_getIndex"/><block type="robLists_setIndex"/><block type="robLists_getSublist"/></category>
   <category name="TOOLBOX_COLOUR" svg="true">

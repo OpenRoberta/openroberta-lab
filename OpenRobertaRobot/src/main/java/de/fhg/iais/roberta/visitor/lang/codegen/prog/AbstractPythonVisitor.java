@@ -44,6 +44,8 @@ import de.fhg.iais.roberta.syntax.lang.functions.LengthOfIsEmptyFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.ListGetIndex;
 import de.fhg.iais.roberta.syntax.lang.functions.ListRepeat;
 import de.fhg.iais.roberta.syntax.lang.functions.ListSetIndex;
+import de.fhg.iais.roberta.syntax.lang.functions.MathCastCharFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.MathCastStringFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathConstrainFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathNumPropFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathOnListFunct;
@@ -51,8 +53,10 @@ import de.fhg.iais.roberta.syntax.lang.functions.MathPowerFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathRandomFloatFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathRandomIntFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathSingleFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.TextCharCastNumberFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.TextJoinFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.TextPrintFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.TextStringCastNumberFunct;
 import de.fhg.iais.roberta.syntax.lang.methods.MethodIfReturn;
 import de.fhg.iais.roberta.syntax.lang.methods.MethodReturn;
 import de.fhg.iais.roberta.syntax.lang.methods.MethodVoid;
@@ -447,6 +451,40 @@ public abstract class AbstractPythonVisitor extends AbstractLanguageVisitor {
             default:
                 break;
         }
+        return null;
+    }
+
+    @Override
+    public Void visitMathCastStringFunct(MathCastStringFunct<Void> mathCastStringFunct) {
+        this.sb.append("str(");
+        mathCastStringFunct.getParam().get(0).accept(this);
+        this.sb.append(")");
+        return null;
+    }
+
+    @Override
+    public Void visitMathCastCharFunct(MathCastCharFunct<Void> mathCastCharFunct) {
+        this.sb.append("chr((int)(");
+        mathCastCharFunct.getParam().get(0).accept(this);
+        this.sb.append("))");
+        return null;
+    }
+
+    @Override
+    public Void visitTextStringCastNumberFunct(TextStringCastNumberFunct<Void> textStringCastNumberFunct) {
+        this.sb.append("float(");
+        textStringCastNumberFunct.getParam().get(0).accept(this);
+        this.sb.append(")");
+        return null;
+    }
+
+    @Override
+    public Void visitTextCharCastNumberFunct(TextCharCastNumberFunct<Void> textCharCastNumberFunct) {
+        this.sb.append("ord(");
+        textCharCastNumberFunct.getParam().get(0).accept(this);
+        this.sb.append("[");
+        textCharCastNumberFunct.getParam().get(1).accept(this);
+        this.sb.append("])");
         return null;
     }
 
@@ -948,7 +986,10 @@ public abstract class AbstractPythonVisitor extends AbstractLanguageVisitor {
     protected void generateProgramSuffix(boolean withWrapping) {
         if ( !this.getBean(CodeGeneratorSetupBean.class).getUsedMethods().isEmpty() ) {
             String helperMethodImpls =
-                this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodDefinitions(this.getBean(CodeGeneratorSetupBean.class).getUsedMethods());
+                this
+                    .getBean(CodeGeneratorSetupBean.class)
+                    .getHelperMethodGenerator()
+                    .getHelperMethodDefinitions(this.getBean(CodeGeneratorSetupBean.class).getUsedMethods());
             this.sb.append(helperMethodImpls);
         }
 

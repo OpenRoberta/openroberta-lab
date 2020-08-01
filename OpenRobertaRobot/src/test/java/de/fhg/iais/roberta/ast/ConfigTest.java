@@ -1,12 +1,12 @@
 package de.fhg.iais.roberta.ast;
 
-import org.junit.Assert;
-import org.junit.Test;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+
+import org.junit.Assert;
+import org.junit.Test;
 
 import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.components.ConfigurationComponent;
@@ -47,9 +47,9 @@ public class ConfigTest extends AstTest {
         Assert.assertEquals("testUser", config.getUserName());
         Assert.assertEquals("testPass", config.getPassword());
         Assert.assertEquals("roboto", config.getRobotType());
-        Assert.assertEquals(42.0, (double) config.getTrackWidth(), 0.0);
-        Assert.assertEquals(21.0, (double) config.getWheelDiameter(), 0.0);
-        Assert.assertEquals((long) config.getConfigurationComponents().size(), 3L);
+        Assert.assertEquals(42.0, config.getTrackWidth(), 0.0);
+        Assert.assertEquals(21.0, config.getWheelDiameter(), 0.0);
+        Assert.assertEquals(config.getConfigurationComponents().size(), 3L);
         List<ConfigurationComponent> actors = new ArrayList<>(config.getActors());
         List<ConfigurationComponent> sensors = new ArrayList<>(config.getSensors());
         Assert.assertEquals(actors.get(0), ledComp);

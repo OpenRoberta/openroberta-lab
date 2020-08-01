@@ -57,6 +57,8 @@ import de.fhg.iais.roberta.syntax.lang.functions.LengthOfIsEmptyFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.ListGetIndex;
 import de.fhg.iais.roberta.syntax.lang.functions.ListRepeat;
 import de.fhg.iais.roberta.syntax.lang.functions.ListSetIndex;
+import de.fhg.iais.roberta.syntax.lang.functions.MathCastCharFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.MathCastStringFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathConstrainFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathNumPropFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathOnListFunct;
@@ -64,8 +66,10 @@ import de.fhg.iais.roberta.syntax.lang.functions.MathPowerFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathRandomFloatFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathRandomIntFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathSingleFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.TextCharCastNumberFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.TextJoinFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.TextPrintFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.TextStringCastNumberFunct;
 import de.fhg.iais.roberta.syntax.lang.methods.MethodCall;
 import de.fhg.iais.roberta.syntax.lang.methods.MethodIfReturn;
 import de.fhg.iais.roberta.syntax.lang.methods.MethodReturn;
@@ -366,6 +370,30 @@ public interface ICollectorVisitor extends ISensorVisitor<Void>, IAllActorsVisit
     @Override
     default Void visitMathSingleFunct(MathSingleFunct<Void> mathSingleFunct) {
         mathSingleFunct.getParam().forEach(expr -> expr.accept(this));
+        return null;
+    }
+
+    @Override
+    default Void visitMathCastStringFunct(MathCastStringFunct<Void> mathCastStringFunct) {
+        mathCastStringFunct.getParam().forEach(expr -> expr.accept(this));
+        return null;
+    }
+
+    @Override
+    default Void visitMathCastCharFunct(MathCastCharFunct<Void> mathCastCharFunct) {
+        mathCastCharFunct.getParam().forEach(expr -> expr.accept(this));
+        return null;
+    }
+
+    @Override
+    default Void visitTextCharCastNumberFunct(TextCharCastNumberFunct<Void> textCharCastNumberFunct) {
+        textCharCastNumberFunct.getParam().forEach(expr -> expr.accept(this));
+        return null;
+    }
+
+    @Override
+    default Void visitTextStringCastNumberFunct(TextStringCastNumberFunct<Void> textStringCastNumberFunct) {
+        textStringCastNumberFunct.getParam().forEach(expr -> expr.accept(this));
         return null;
     }
 

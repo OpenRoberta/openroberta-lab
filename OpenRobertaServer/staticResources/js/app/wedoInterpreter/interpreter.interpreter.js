@@ -514,8 +514,8 @@ define(["require", "exports", "interpreter.state", "interpreter.constants", "int
                             s.push(!truthy);
                             break;
                         case C.NEG:
-                            var value = s.pop();
-                            s.push(-value);
+                            var value_1 = s.pop();
+                            s.push(-value_1);
                             break;
                         default:
                             U.dbcException("invalid unary expr subOp: " + subOp);
@@ -523,8 +523,8 @@ define(["require", "exports", "interpreter.state", "interpreter.constants", "int
                     break;
                 }
                 case C.MATH_CONST: {
-                    var value = expr[C.VALUE];
-                    switch (value) {
+                    var value_2 = expr[C.VALUE];
+                    switch (value_2) {
                         case 'PI':
                             s.push(Math.PI);
                             break;
@@ -550,59 +550,59 @@ define(["require", "exports", "interpreter.state", "interpreter.constants", "int
                 }
                 case C.SINGLE_FUNCTION: {
                     var subOp = expr[C.OP];
-                    var value = s.pop();
-                    U.debug('---------- ' + subOp + ' with ' + value);
+                    var value_3 = s.pop();
+                    U.debug('---------- ' + subOp + ' with ' + value_3);
                     switch (subOp) {
                         case 'SQUARE':
-                            s.push(Math.pow(value, 2));
+                            s.push(Math.pow(value_3, 2));
                             break;
                         case 'ROOT':
-                            s.push(Math.sqrt(value));
+                            s.push(Math.sqrt(value_3));
                             break;
                         case 'ABS':
-                            s.push(Math.abs(value));
+                            s.push(Math.abs(value_3));
                             break;
                         case 'LN':
-                            s.push(Math.log(value));
+                            s.push(Math.log(value_3));
                             break;
                         case 'LOG10':
-                            s.push(Math.log(value) / Math.LN10);
+                            s.push(Math.log(value_3) / Math.LN10);
                             break;
                         case 'EXP':
-                            s.push(Math.exp(value));
+                            s.push(Math.exp(value_3));
                             break;
                         case 'POW10':
-                            s.push(Math.pow(10, value));
+                            s.push(Math.pow(10, value_3));
                             break;
                         case 'SIN':
-                            s.push(Math.sin(value));
+                            s.push(Math.sin(value_3));
                             break;
                         case 'COS':
-                            s.push(Math.cos(value));
+                            s.push(Math.cos(value_3));
                             break;
                         case 'TAN':
-                            s.push(Math.tan(value));
+                            s.push(Math.tan(value_3));
                             break;
                         case 'ASIN':
-                            s.push(Math.asin(value));
+                            s.push(Math.asin(value_3));
                             break;
                         case 'ATAN':
-                            s.push(Math.atan(value));
+                            s.push(Math.atan(value_3));
                             break;
                         case 'ACOS':
-                            s.push(Math.acos(value));
+                            s.push(Math.acos(value_3));
                             break;
                         case 'ROUND':
-                            s.push(Math.round(value));
+                            s.push(Math.round(value_3));
                             break;
                         case 'ROUNDUP':
-                            s.push(Math.ceil(value));
+                            s.push(Math.ceil(value_3));
                             break;
                         case 'ROUNDDOWN':
-                            s.push(Math.floor(value));
+                            s.push(Math.floor(value_3));
                             break;
                         case C.IMAGE_INVERT_ACTION:
-                            s.push(this.invertImage(value));
+                            s.push(this.invertImage(value_3));
                             break;
                         default:
                             throw "Invalid Function Name";
@@ -612,8 +612,8 @@ define(["require", "exports", "interpreter.state", "interpreter.constants", "int
                 case C.MATH_CONSTRAIN_FUNCTION: {
                     var max_1 = s.pop();
                     var min_1 = s.pop();
-                    var value = s.pop();
-                    s.push(Math.min(Math.max(value, min_1), max_1));
+                    var value_4 = s.pop();
+                    s.push(Math.min(Math.max(value_4, min_1), max_1));
                     break;
                 }
                 case C.RANDOM_INT: {
@@ -630,29 +630,29 @@ define(["require", "exports", "interpreter.state", "interpreter.constants", "int
                     break;
                 case C.MATH_PROP_FUNCT: {
                     var subOp = expr[C.OP];
-                    var value = s.pop();
+                    var value_5 = s.pop();
                     switch (subOp) {
                         case 'EVEN':
-                            s.push(this.isWhole(value) && value % 2 === 0);
+                            s.push(this.isWhole(value_5) && value_5 % 2 === 0);
                             break;
                         case 'ODD':
-                            s.push(this.isWhole(value) && value % 2 !== 0);
+                            s.push(this.isWhole(value_5) && value_5 % 2 !== 0);
                             break;
                         case 'PRIME':
-                            s.push(this.isPrime(value));
+                            s.push(this.isPrime(value_5));
                             break;
                         case 'WHOLE':
-                            s.push(this.isWhole(value));
+                            s.push(this.isWhole(value_5));
                             break;
                         case 'POSITIVE':
-                            s.push(value >= 0);
+                            s.push(value_5 >= 0);
                             break;
                         case 'NEGATIVE':
-                            s.push(value < 0);
+                            s.push(value_5 < 0);
                             break;
                         case 'DIVISIBLE_BY':
                             var first = s.pop();
-                            s.push(first % value === 0);
+                            s.push(first % value_5 === 0);
                             break;
                         default:
                             throw "Invalid Math Property Function Name";
@@ -661,32 +661,53 @@ define(["require", "exports", "interpreter.state", "interpreter.constants", "int
                 }
                 case C.MATH_ON_LIST: {
                     var subOp = expr[C.OP];
-                    var value = s.pop();
+                    var value_6 = s.pop();
                     switch (subOp) {
                         case C.SUM:
-                            s.push(this.sum(value));
+                            s.push(this.sum(value_6));
                             break;
                         case C.MIN:
-                            s.push(this.min(value));
+                            s.push(this.min(value_6));
                             break;
                         case C.MAX:
-                            s.push(this.max(value));
+                            s.push(this.max(value_6));
                             break;
                         case C.AVERAGE:
-                            s.push(this.mean(value));
+                            s.push(this.mean(value_6));
                             break;
                         case C.MEDIAN:
-                            s.push(this.median(value));
+                            s.push(this.median(value_6));
                             break;
                         case C.STD_DEV:
-                            s.push(this.std(value));
+                            s.push(this.std(value_6));
                             break;
                         case C.RANDOM:
-                            s.push(value[this.getRandomInt(value.length)]);
+                            s.push(value_6[this.getRandomInt(value_6.length)]);
                             break;
                         default:
                             throw "Invalid Math on List Function Name";
                     }
+                    break;
+                }
+                case C.CAST_STRING: {
+                    var num = s.pop();
+                    s.push(num.toString());
+                    break;
+                }
+                case C.CAST_CHAR: {
+                    var num = s.pop();
+                    s.push(String.fromCharCode(num));
+                    break;
+                }
+                case C.CAST_STRING_NUMBER: {
+                    var value = s.pop();
+                    s.push(parseFloat(value));
+                    break;
+                }
+                case C.CAST_CHAR_NUMBER: {
+                    var index = s.pop();
+                    var value = s.pop();
+                    s.push(value.charCodeAt(index));
                     break;
                 }
                 case C.LIST_OPERATION: {
