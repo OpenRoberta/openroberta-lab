@@ -1,0 +1,811 @@
+<head><title></title><meta http-equiv="content-type" content="text/html; charset=utf-8"></head><body><div id="helpContent"><div id="robControls_start" 
+class="help beginner"><h3 id="ProgrammierBlöckeNXT-»Programmstart«"><span style="color: rgb(0,0,0);">»Programmstart«</span><span style="color: 
+rgb(0,0,0);"> </span></h3><p>Jedes Programm beginnt mit dem »Programmstart-Block« und kann nicht gelöscht werden. Den ersten Block, den man verwenden 
+möchte, verbindet man direkt mit der  »Sequenzverbindung« am Programmstart-Block. Sequenzverbindung bezeichnet das kleine Dreieck am unteren Ende des 
+Blocks. Dieses Dreieck wird gelb markiert, sobald ein geeigneter Block in seiner Nähe ist.</p><p>Einstellmöglichkeiten:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-plus">Erzeuge eine neue globale Variable.</li><li class="typcn typcn-minus"><span>Entferne die globale Variable.</span></li><li 
+class="typcn typcn-input-checked">Zeige Sensordaten - während des Programmablaufs werden im Display die Werte der angeschlossenen Sensoren gezeigt.</li>
+</ul>Wenn globale Variablen erzeugt wurden:<ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-pen">Text, Name der Variablen.</li><li class="typcn typcn-arrow-sorted-down">Typ der Variablen.</li><li class="typcn 
+typcn-arrow-left">Wert, Anfangswert der Variablen.</li>
+</ul><br></div><div id="robActions_motor_on" class="help expert"><h3 id="ProgrammierBlöckeNXT-»MotorPort...anTempo...«[Experten-Block]"><span 
+style="color: rgb(0,0,0);">»Motor Port ... an Tempo  ... « </span><span class="typcn typcn-star"></span></h3><p>Mit dem Block »Motor Port ... an« 
+programmierst du das Tempo (Geschwindigkeit) eines Motors. Dein Roboter startet den gewählten Motor, bis er gestoppt wird oder ein anderer Block zum 
+Fahren verwendet wird.</p><p>Einstellmöglichkeiten und EIngabewert:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-sorted-down">Motor Port, wähle den Motor Port aus, an dem der Motor angeschlossen ist.</li><li class="typcn 
+typcn-arrow-left">Tempo, Wert zwischen -100 und 100. Wenn die Zahl negativ ist, dreht sich der Motor rückwärts.</li>
+</ul><br></div><div id="robActions_motor_on_for" class="help expert"><h3 
+id="ProgrammierBlöckeNXT-»MotorPort...anTempo...fürUmdrehungen/Grad...«[Experten-Block]"><span style="color: rgb(0,0,255);"><span style="color: 
+rgb(0,0,0);">»Motor Port ... an  Tempo ... für Umdrehungen/Grad ... « <span class="typcn typcn-star"></span></span><br></span></h3><p>Mit dem Block 
+»Motor Port ... an Tempo ... Umdrehungen/Grad« stellst du das Tempo (Geschwindigkeit) eines Motors ein. Dein Roboter startet den gewählten Motor, bis 
+er die eingestellte Anzahl Umdrehungen bzw. Winkelgrade gemacht hat.</p><p>Einstellmöglichkeiten und Eingabewerte:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-sorted-down">Motor Port, wähle den Motorport aus, an dem der Motor angeschlossen ist.</li><li class="typcn 
+typcn-arrow-left">Tempo,  Wert zwischen -100 und 100. Wenn die Zahl negativ ist, dreht sich der Motor rückwärts.</li><li class="typcn 
+typcn-arrow-sorted-down">Umdrehungen oder Grad. 1 Umdrehung entspricht 360 Grad.</li><li class="typcn typcn-arrow-left">Zahl, Anzahl der Umdrehungen 
+bzw. Winkelgrade. Es sind nur positive Zahlen zugelassen.</li>
+</ul><br></div><div id="robActions_motor_getPower" class="help expert"><h3 id="ProgrammierBlöckeNXT-»GibTempoMotorPort...«[Experten-Block]"><span 
+style="color: rgb(0,0,255);"><span style="color: rgb(0,0,0);">»Gib Tempo Motor Port ...« <span class="typcn 
+typcn-star"></span></span><br></span></h3><p>Der Block »<span style="color: rgb(0,0,255);"><span style="color: rgb(0,0,0);">Gib Tempo Motor 
+Port</span></span>« liest das Tempo (Geschwindigkeit) eines Motors aus.</p><p>Einstellmöglichkeiten:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-sorted-down">Motor, wähle den Motor Port aus, dessen Tempo gelesen werden soll.</li>
+</ul><br><p>Rückgabewert:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right">Zahl; Geschwindigkeit , die am ausgewählten Motor Port eingestellt ist.</li>
+</ul><br></div><div id="robActions_motor_setPower" class="help expert"><h3 id="ProgrammierBlöckeNXT-»SetzeMotorPort...Tempo...«[Experten-Block]"><span 
+style="color: rgb(0,0,255);"><span style="color: rgb(0,0,0);">»Setze Motor Port ... <span style="color: rgb(0,0,255);"><span style="color: 
+rgb(0,0,0);">Tempo ...</span></span>« <span class="typcn typcn-star"></span></span><br></span></h3><p>Der Block »<span style="color: 
+rgb(0,0,255);"><span style="color: rgb(0,0,0);">Setze Motor Port <span style="color: rgb(0,0,255);"><span style="color: rgb(0,0,0);">... 
+Tempo</span></span></span></span><span style="color: rgb(0,0,255);"><span style="color: rgb(0,0,0);"><span> </span><span> </span>« setzt 
+</span></span>das Tempo (Geschwindigkeit) eines Motors auf einen neuen Wert.</p><p>Einstellmöglichkeiten und Eingabewert:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-sorted-down">Motor, wähle den Motor Port aus, für den dasTempo eingestellt werden soll.</li><li class="typcn 
+typcn-arrow-left">Zahl, Wert zwischen -100 und 100. Wenn die Zahl negativ ist, dreht sich der Motor rückwärts.</li>
+</ul><br></div><div id="robActions_motor_stop" class="help expert"><h3 id="ProgrammierBlöckeNXT-»StoppeMotorPort...«[Experten-Block]"><span 
+style="color: rgb(0,0,255);"> <span style="color: rgb(0,0,0);">»Stoppe Motor Port ... « <span class="typcn 
+typcn-star"></span></span><br></span></h3><p>Mit dem Block »<span style="color: rgb(0,0,255);"><span style="color: rgb(0,0,0);">Stoppe Motor 
+Port</span></span><span style="color: rgb(0,0,255);"><span style="color: rgb(0,0,0);"><span> </span>« schaltet den </span></span>Motor an einem 
+ausgewählten Motor-Port aus. Du kannst einstellen, ob der Motor langsam ausläuft oder gebremst wird.</p><p>Einstellmöglichkeiten:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-sorted-down">Motor, wähle den Motorport aus, der ausgeschaltet werden soll.</li><li class="typcn 
+typcn-arrow-sorted-down">Option; »auslaufen<span style="color: rgb(0,0,255);"><span style="color: rgb(0,0,0);">«</span></span> sorgt dafür, dass der 
+Motor langsam ausläuft; »bremsen<span style="color: rgb(0,0,255);"><span style="color: rgb(0,0,0);">«</span></span> sorgt dafür, dass der Motor abrupt 
+abgebremst wird.</li>
+</ul><br></div><div id="robActions_motorDiff_on" class="help beginner"><h3 id="ProgrammierBlöckeNXT-»Fahre...Tempo...«">»Fahre ... Tempo 
+...«</h3><p>Mit dem Block »Fahre ... Tempo« kannst du die Richtung und das Tempo (Geschwindigkeit) deines Roboters programmieren. Dein Roboter fährt so 
+lange vorwärts oder rückwärts, bis er gestoppt wird oder ein anderer Block zum Fahren verwendet wird.</p><p>»Fahre« steuert beide Motoren des Roboters 
+gleichzeitig.</p><p>Einstellmöglichkeiten und Eingabewert:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-sorted-down">Option, wähle die gewünschte Fahrrichtung aus.</li><li class="typcn typcn-arrow-left">Zahl, Wert zwischen 
+-100 und 100. Wenn die Zahl negativ ist, drehen sich die Motoren rückwärts.</li>
+</ul><br></div><div id="robActions_motorDiff_on_for" class="help beginner"><h3 id="ProgrammierBlöckeNXT-»Fahre...Tempo...Strecke...«">»Fahre ... Tempo 
+... Strecke ...«</h3><p>Mit dem Block »Fahre ... Tempo Strecke« kannst du zusätzlich zu Richtung und Tempo auch die Fahrstrecke des Roboters 
+programmieren. Dein Roboter fährt so lange, bis die eingestellte Strecke gefahren ist. Die Geschwindigkeit kannst du im Feld Tempo einstellen. Wenn 
+dieser Block »zu Ende« ist, stoppen die Motoren automatisch.</p><p>»Fahre« steuert beide Motoren des Roboters gleichzeitig.</p><p>Wenn die 
+eingestellten Werte der Aktionen mit der Programmausführung nicht übereinstimmen, prüfe die Roboter-Konfiguration, insbesondere den 
+Raddurchmesser.</p><p>Einstellmöglichkeiten und Eingabewerte:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-sorted-down">Option, wähle die gewünschte Fahrtrichtung.</li><li class="typcn typcn-arrow-left">Zahl, Wert zwischen -100 
+und 100. Wenn die Zahl negativ ist, drehen sich die Motoren rückwärts.</li><li class="typcn typcn-arrow-left">Zahl, Länge für die Strecke in cm.</li>
+</ul><br></div><div id="robActions_motorDiff_stop" class="help beginner"><h3 id="ProgrammierBlöckeNXT-»Stoppe«">»Stoppe«</h3><p>Mit dem Block »Stoppe« 
+werden die Motoren deines Roboters gestoppt. Das bedeutet, dein Roboter hält an.</p></div><div id="robActions_motorDiff_turn" class="help beginner"><h3 
+id="ProgrammierBlöckeNXT-»Drehe...Tempo...«">»Drehe ... Tempo ... «</h3><p>Mit dem Block »Drehe ...  Tempo... « kannst du die Richtung (rechts/links), 
+in der sich der Roboter drehen soll, programmieren. Dein Roboter dreht sich so lange auf der Stelle, bis er gestoppt wird oder ein anderer Block zum 
+Fahren verwendet wird. Die Geschwindigkeit kannst Du im Feld »Tempo« einstellen. »Drehe« steuert beide Motoren des Roboters gleichzeitig in 
+entgegengesetzten Richtungen, dadurch dreht sich der Roboter auf der Stelle.</p><p>Wenn die eingestellten Werte der Aktionen mit der Programmausführung 
+nicht übereinstimmen, prüfe die Roboter-Konfiguration, insbesondere den Raddurchmesser und die Spurbreite.</p><p>Einstellmöglichkeiten und Eingabewert:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-sorted-down">Option, wähle die gewünschte Drehrichtung aus.</li><li class="typcn typcn-arrow-left">Zahl, Wert zwischen 
+-100 und 100. Wenn die Zahl negativ ist, drehen sich die Motoren rückwärts.</li>
+</ul><br><div class="confluence-information-macro confluence-information-macro-note"><div class="confluence-information-macro-body"><p>Falls sich dein 
+Roboter in die falsche Richtung dreht, sind die Motoren an die falschen Ports angeschlossen. Es genügt dann, die Ports zu tauschen, damit der Roboter 
+in die richtige Richtung dreht.</p></div></div></div><div id="robActions_motorDiff_turn_for" class="help beginner"><h3 
+id="ProgrammierBlöckeNXT-»Drehe...Tempo...Grad...«">»Drehe ... Tempo ... Grad ...«</h3><p>Mit dem Block »Drehe ... Tempo ... Grad« kannst du die 
+Richtung (rechts/links), in der sich der Roboter um die eigene Achse drehen soll, programmieren. Zusätzlich zur Richtung kann noch im Feld »Grad« 
+angegeben werden, um wie viel Grad sich dein Roboter (um die eigene Achse) drehen soll. Dies bedeutet, dass du beispielsweise mit der Einstellung 360 
+Grad deinen Roboter einmal um die eigene Achse drehen lassen kannst. Der Block »Drehe ... Tempo ... Grad« steuert beide Motoren des Roboters, damit 
+sich der Roboter um die eigene Achse dreht.</p><p>Wenn die eingestellten Werte der Aktionen mit der Programmausführung nicht übereinstimmen, prüfe die 
+Roboter-Konfiguration, insbesondere den Raddurchmesser und die Spurbreite.</p><p>Einstellmöglichkeiten und Eingabewerte:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-sorted-down">Option, wähle die gewünschte Drehrichtung aus.</li><li class="typcn typcn-arrow-left">Zahl, Wert zwischen 
+-100 und 100. Wenn die Zahl negativ ist, drehen sich die Motoren rückwärts.</li><li class="typcn typcn-arrow-left">Zahl, Gradzahl um die der Roboter 
+sich drehen soll. Negative Zahlen sind nicht zugelassen.</li>
+</ul><br></div><div id="robActions_motorDiff_curve" class="help beginner"><h3 id="ProgrammierBlöckeNXT-»Steure...Tempolinks...Temporechts...«">»Steure 
+... Tempo links ... Tempo rechts ...«</h3><p>Mit dem Block »Steure ... Tempo links ... Tempo rechts ...« kannst du den Roboter so programmieren, dass 
+er eine Kurve fährt, indem du das Tempo für den linken und den rechten Motor auf unterschiedliche Werte setzt. Die Roboterkonfiguration beeinflusst den 
+Radius der Kurve in Abhängigkeit von Radabstand und Raddurchmesser. Mit der Drehrichtung legst du die Fahrtrichtung fest.</p><p>Einstellmöglichkeiten 
+und Eingabewerte:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-sorted-down">Drehrichtung, wähle die gewünschte Drehrichtung aus.</li><li class="typcn typcn-arrow-left">Zahl, Wert 
+zwischen -100 und 100 für den linken Motor. Wenn die Zahl negativ ist, dreht sich der Motor rückwärts.</li><li class="typcn typcn-arrow-left">Zahl, 
+Wert zwischen -100 und 100 für den link rechten Motor. Wenn die Zahl negativ ist, dreht sich der Motor rückwärts.</li>
+</ul><br></div><div id="robActions_motorDiff_curve_for" class="help beginner"><h3 
+id="ProgrammierBlöckeNXT-»Steure...Tempolinks...Temporechts...Strecke...«">»Steure ... Tempo links ... Tempo rechts ... Strecke ...«</h3><p>Mit dem 
+Block »Steure ... Tempo links ... Tempo rechts ... Strecke ...« kannst du den Roboter so programmieren, dass er eine vorgegebene Strecke als Kurve 
+fährt, indem du das Tempo für den linken und den rechten Motor auf unterschiedliche Werte setzt. Die Strecke bezieht sich auf die Mitte zwischen beiden 
+Rädern. Die Roboterkonfiguration beeinflusst den Radius der Kurve in Abhängigkeit von Radabstand und Raddurchmesser. Mit der Richtung legst du die 
+Fahrtrichtung fest.</p><p>Einstellmöglichkeiten und Eingabewerte:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-sorted-down">Richtung, wähle die gewünschte Fahrtrichtung aus.</li><li class="typcn typcn-arrow-left">Zahl, Wert zwischen 
+-100 und 100 für den linken Motor. Wenn die Zahl negativ ist, dreht sich der Motor rückwärts.</li><li class="typcn typcn-arrow-left">Zahl, Wert 
+zwischen -100 und 100 für den rechten Motor. Wenn die Zahl negativ ist, dreht sich der Motor rückwärts.</li><li class="typcn typcn-arrow-left">Zahl, 
+Strecke in Zentimetern, die zurückgelegt werden soll.</li>
+</ul><br></div><div id="robActions_display_text" class="help beginner"><h3 id="ProgrammierBlöckeNXT-»ZeigeText«">»Zeige Text«</h3><p>Mit dem Block 
+»Zeige Text« kannst du Text und Zahlen auf dem Display deines Roboters anzeigen lassen. Dabei kannst du zusätzlich noch bestimmen, in welcher Spalte 
+und in welcher Zeile der Text auf dem NXT-Bildschirm erscheinen soll.</p><p>Das Display eines NXT ist für Texte in 8 Zeilen (Zeilennummern 1 bis 8) und 
+16 Spalten (Spaltennummern 0 bis 15) eingeteilt.</p><p>Wenn zuvor schon etwas auf dem Display angezeigt war, werden nur die Stellen überschrieben, in 
+die der Text geschrieben wird.</p><p>Eingabewerte:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-left">Text, der im Display erscheinen soll.</li><li class="typcn typcn-arrow-left">Zahl, Spaltenummer, in der der Text 
+beginnen soll.</li><li class="typcn typcn-arrow-left">Zahl, Zeilennummer, in der der Text beginnen soll.</li>
+</ul><br></div><div id="robActions_display_clear" class="help beginner"><h3 id="ProgrammierBlöckeNXT-»LöscheBildschirm«">»Lösche Bildschirm«</h3><p>Mit 
+dem Block »Lösche Bildschirm« kannst du Text und Zahlen auf dem Display deines Roboters löschen. Das Display ist anschließend leer.</p></div><div 
+id="robActions_play_tone" class="help beginner"><h3 id="ProgrammierBlöckeNXT-»SpieleFrequenz...Dauer...«">»Spiele Frequenz ... Dauer ...«</h3><p>Mit 
+dem Block »Spiele Frequenz ... Dauer« kannst du die Frequenz (Höhe eines Tons) und die Zeit (wie lange der Ton gespielt wird) programmieren. Der Ton 
+wird über den eingebauten Lautsprecher deines LEGO MINDSTORMS Steins abgespielt, bis die eingestellte Dauer erreicht ist.</p><div 
+class="confluence-information-macro confluence-information-macro-information"><div class="confluence-information-macro-body"><p>Bitte beachte, dass das 
+menschliche Gehör Frequenzen zwischen ca. 30 Hz bis ca. 15.000 Hz (15 kHz) wahrnehmen kann - je nach Mensch und Alter kann dies unterschiedlich 
+sein.</p></div></div><p>Eingabewerte:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-left">Zahl, gewünschte Frequenz in Hz (Hertz) eingeben.</li><li class="typcn typcn-arrow-left"> Zahl, gewünschte Dauer des 
+Tons in Millisekunden (ms) eingeben.</li>
+</ul><br></div>
+<div id="mbedActions_play_note" class="help beginner"><h3 id="ProgrammierBlöckeNXT-»SpieleNote...«">»Spiele ... Note ... «</h3><p>Mit diesem Block kann dein Roboter eine Note anspielen. Du kannst dabei sowohl die 
+Note selbst, als auch die Länge der Note wählen.</p><p>Optionen:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-sorted-down">Option, wähle die Dauer der Note aus,</li><li class="typcn typcn-arrow-sorted-down">Option, wähle die Note, 
+die du abspielen möchtest.</li>
+</ul><br></div><div id="robActions_play_setVolume" class="help beginner"><h3 id="ProgrammierBlöckeNXT-»SetzeLautstärke...«">»Setze Lautstärke 
+...«</h3><p>Mit dem Block »Setze Lautstärke« kannst du die Lautstärke eines Tons programmieren. Die Lautstärke kann von 0 (kein Ton) bis 100 (volle 
+Lautstärke) eingestellt werden. Die Lautstärke bleibt so lange eingestellt, bis du sie mit einem anderen Block »Setze Lautstärke« neu 
+programmierst.</p><p>Eingabewert:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-left">Zahl für die Lautstärke.</li>
+</ul><br></div><div id="robActions_play_getVolume" class="help expert"><h3 id="ProgrammierBlöckeNXT-»GibLautstärke«[Experten-Block]">»Gib Lautstärke« 
+<span class="typcn typcn-star"></span></h3><p>Mit dem Block »Gib Lautstärke« kannst du die aktuell eingestellte Lautstärke auslesen. 0 = kein Ton, 100 
+= maximale Lautstärke.</p><p>Rückgabewert:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right">Zahl, aktuell eingestellter Lautstärkewert.</li>
+</ul><br></div><div id="robActions_sensorLight_on" class="help expert"><h3 id="ProgrammierBlöckeNXT-»SetzeFarbsensor«[Experten-Block]">»Setze 
+Farbsensor« <span class="typcn typcn-star"></span></h3><p>Mit dem Block »Setze Farbsensor« in der Kategorie »Statusleuchte« kannst du den Farbsensor in 
+einer der drei Farben rot, grün oder blau leuchten lassen.</p><p>Einstellmöglichkeiten:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-sorted-down">Farbe, wähle eine Farbe aus.</li><li class="typcn typcn-arrow-sorted-down">Option, wähle, ob das Licht an- 
+oder ausgeschaltet sein soll..</li><li class="typcn typcn-arrow-sorted-down">Option, wähle den Port, an dem der Farbsensor angeschlossen ist.</li>
+</ul><br></div><div id="robSensors_touch_getSample" class="help beginner"> <h3 
+id="ProgrammierBlöckeNXT-»Berührungssensor«">»Berührungssensor«</h3><p>Mit dem Block »Berührungssensor« kannst du einem anderen Block »mitteilen«,  ob 
+der Berührungssensor gedrückt wurde oder nicht. Dieser Block gibt die logischen Werte <em>wahr = gedrückt</em> oder <em>falsch = nicht gedrückt</em> 
+zurück.</p><p>Einstellmöglichkeiten:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-sorted-down">Port, wähle den Sensorport aus, an dem dein Berührungssensor angeschlossen ist.</li>
+</ul>Rückgabewert:<ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right">Logischer Wert: »wahr«, wenn der Berührungssensor gedrückt ist, sonst »falsch«.</li>
+</ul><br> </div><div id="robSensors_sound_getSample" class="help beginner"> <h3 id="ProgrammierBlöckeNXT-»GibWertGeräuschsensor«">»Gib Wert 
+Geräuschsensor«</h3><p>Mit dem Block »Gib Wert Geräuschsensor« kannst du einem anderen Block »mitteilen«, welche Lautstärke der Geräuschsensor misst. 
+Der Wert liegt zwischen 0 und 100.</p><br><p>Einstellmöglichkeiten:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-sorted-down">Port, wähle den Sensorport aus, an dem dein Geräuschsensor angeschlossen ist.</li>
+</ul>Rückgabewert:<ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right">Zahl, Wert zwischen 0 und 100.</li>
+</ul><br> </div><div id="robSensors_light_getSample" class="help beginner"> <h3 id="ProgrammierBlöckeNXT-»Gib...LichtsensorPort...«">»Gib ... 
+Lichtsensor Port ...«</h3><p>Mit dem Block »Gib Licht« kannst du einem anderen Block »mitteilen«, welchen Lichtwert der Lichtsensor misst.</p><p>Im 
+Modus »Licht« sendet der Lichtsensor eigenes Licht aus und misst das reflektierte Licht.</p><p>Im Modus »Umgebungslicht« misst der Lichtsensor die 
+Helligkeit des Umgebunglichts. Die Werte liegen zwischen 0 und 100.</p><p>Einstellmöglichkeiten:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-sorted-down">Option, wähle aus, was gemessen werden soll: (reflektiertes) Licht oder Umgebungslicht</li><li class="typcn 
+typcn-arrow-sorted-down"> Port, wähle den Sensorport aus, an dem dein Lichtsensor/Farbsensor angeschlossen ist.</li>
+</ul>Rückgabewert:<ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right">Zahl, Lichtwert zwischen 0 und 100.</li>
+</ul><br> </div><div id="robSensors_colour_getSample" class="help beginner"> <h3 id="ProgrammierBlöckeNXT-»Gib...FarbsensorPort...«">»Gib ... 
+Farbsensor Port ...«</h3><p>Mit dem Block »Gib Farbe« kannst du einem anderen Block »mitteilen«, welche Farbe der Farbsensor misst. Die Farbe wird als 
+Datentyp »Farbe« übermittelt. Zudem kann dieser Block im Auswahlmenü auf »Licht« und »Umgebungslicht« gestellt werden. Diese zusätzlichen Typen 
+übermitteln jeweils den Datentyp »Zahl«. Die Zahlenwerte liegen je nach gewählter Messmethode zwischen 0 und 255. Mit diesen verschiedenen Einstellung 
+kann dieser Block je nach Anforderung eingestellt werden.</p><p>Im Modus »Farbe« sendet der Farbsensor Licht aus und erkennt, welche Grundfarbe unter 
+dem Sensor erkannt wurde. Die Grundfarbwerte sind BLACK, WHITE, RED, GREEN, BLUE, YELLOW.</p><p>Im Modus »Licht« sendet der Farbsensor mittels seiner 
+roten LED Licht aus und misst die reflektierte Lichtstärke auf einer Skala von 0 bis 100.</p><p>Im Modus »Umgebungslicht« wird dieselbe Skala (0-100) 
+wie im Modus Licht verwendet. Dabei wird das ins Sensorfenster einfallende Umgebungslicht gemessen.</p><p>Einstellmöglichkeiten:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-sorted-down">Option, wähle aus, was gemessen werden soll.</li><li class="typcn typcn-arrow-sorted-down"> Port, wähle den 
+Sensorport aus, an dem dein Lichtsensor/Farbsensor angeschlossen ist.</li>
+</ul>Rückgabewert:<ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right">Je nach gewählter Messmethode werden die zugehörigen Werte ausgegeben.</li>
+</ul><br> </div><div id="robSensors_ultrasonic_getSample" class="help beginner"> <h3 id="ProgrammierBlöckeNXT-»GibAbstand«Ultraschallsensor">»Gib 
+Abstand« Ultraschallsensor</h3><p>Mit dem Block »Gib Abstand« für den Ultraschallsensor kannst du einem anderen Block »mitteilen«, welchen Abstand der 
+Ultraschallsensor misst.</p><p>Im Modus »Abstand« wird der Abstand in Zentimetern gemessen. Der Maximalwert ist 255. Der Wert 255 kann auch bedeuten, 
+dass der Abstand größer als 255 cm ist.</p><p>Einstellmöglichkeiten:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-sorted-down">Port, wähle aus, an welchem Port der Infrarotsensor angeschlossen ist.</li>
+</ul>Rückgabewert:<ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right">Zahl, Abstand in Zentimetern; maximal 255.</li>
+</ul><br> </div><div id="robSensors_encoder_reset" class="help beginner"> <h3 id="ProgrammierBlöckeNXT-»SetzeDrehsensorzurück«">»Setze Drehsensor 
+zurück«</h3><p>Mit dem Block »Setze Drehsensor zurück« kann der interne Sensor (Motor-Encoder) eines Motors auf den Wert 0 zurückgesetzt 
+werden.</p><p>Einstellmöglichkeiten:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-sorted-down">Port, wähle aus, an welchem Port der Drehsensor/Motor angeschlossen ist.</li>
+</ul><br> </div><div id="robSensors_encoder_getSample" class="help beginner"> <h3 
+id="ProgrammierBlöckeNXT-»GibUmdrehungen/Grad/Abstand«Drehsensor">»Gib Umdrehungen/Grad/Abstand« Drehsensor</h3><p>Mit dem Block »Gib 
+Umdrehungen/Grad/Abstand« kannst du einem anderen Block die Motorumdrehungen »mitteilen«.</p><p>Wenn »Umdrehungen« eingestellt wurde, wird die Zahl der 
+Umdrehungen ausgegeben.</p><p>Wenn »Grad« eingestellt wurde, wird die Gradzahl aller Umdrehungen ausgegeben, wobei eine volle Umdrehung genau 360 Grad 
+entspricht.</p><p>Wenn »Abstand« eingestellt wurde, wird berechnet, welche Strecke das Rad des Motors zurückgelegt hat. Das ist natürlich abhängig 
+davon, wie groß das Rad in der Roboterkonfiguration eingestellt ist.</p><p>Einstellmöglichkeiten:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-sorted-down">Messmethode, stelle ein, wie gemessen werden soll.</li><li class="typcn typcn-arrow-sorted-down">Port, stelle 
+ein, an welchem Port der Drehsensor bzw. Motor angeschlossen ist.</li>
+</ul>Rückgabewert:<ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right">Zahl, die je nach eingestellter Messmethode entweder die Umdrehungszahl, die Gradzahl oder die zurückgelegte 
+Strecke darstellt.</li>
+</ul><br> </div><div id="robSensors_key_getSample" class="help beginner">  <h3 id="ProgrammierBlöckeNXT-»Taste«NXT-Tasten">»Taste« 
+NXT-Tasten</h3><p>Mit dem Block »Taste« kannst du einem anderen Block "mitteilen" , ob die ausgewählte Taste gedrückt wurde oder nicht. Dieser Block 
+gibt die logischen Werte <em>true = gedrückt</em> oder <em>false = nicht gedrückt</em> zurück. Auswahl aus »Mitte« / »Rechts« / 
+»Links«.</p><p>Einstellmöglichkeiten:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-sorted-down">Option, wähle die Taste, die du überprüfen möchtest.</li>
+</ul><br>Rückgabewert:<ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right">Logischer Wert, »true«, wenn die gewählte Taste gedrückt ist, sonst »false«.</li>
+</ul><br> </div><div id="robSensors_timer_getSample" class="help beginner"><h3 id="ProgrammierBlöckeNXT-»GibWert«Zeitgeber">»Gib Wert« 
+Zeitgeber</h3><p>Mit dem Block »Gib Wert« kannst du einem anderen Block den aktuellen Stand des internen Zeitgebers in Millisekunden "mitteilen". Der 
+Zeitgeber wird automatisch mit dem Beginn eines Programms gestartet. Es steht 1 Zeitgeber zur Verfügung.</p><p><span style="letter-spacing: 
+0.0px;">Rückgabewert:</span>
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right">Zahl, Anzahl Millisekunden, die seit dem Programmstart oder dem letzten Zurücksetzen des Zeitgebers vergangen 
+sind.</li>
+</ul><br></div><div id="robSensors_timer_reset" class="help beginner"><h3 id="ProgrammierBlöckeNXT-»SetzeZeitgeber«">»Setze Zeitgeber«</h3><p>Mit dem 
+Block »Setze Zeitgeber« kann der interne Zeitgeber auf den Wert 0 zurückgesetzt werden.</p></div><div id="robSensors_htcolour_getSample" class="help 
+expert"><h3 class="auto-cursor-target" id="ProgrammierBlöckeNXT-»Gib...HTFarbsensorPort...«[Expert-Block]">»Gib ... HT Farbsensor Port ... « <span 
+class="typcn typcn-star"></span></h3><p>Mit diesem Block kannst du den HT Farbsensor deines Roboters abfragen. Dieser Sensor kann die Farbe des 
+Untergrunds, die Helligkeit des Lichts und der Umgebung und die Aufteilung der gemessenen Farbe in die Grundfarben Rot,Grün und Blau messen. Der 
+Rückgabewert dieses Blocks hängt von der gemessenen Eigenschaft ab.</p><p>Optionen:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-sorted-down">Option, wähle welche Eigenschaft gemessen werden soll.</li><li class="typcn typcn-arrow-sorted-down">Option, 
+wähle an welchem Port der Sensor angeschlossen ist.</li>
+</ul><p class="auto-cursor-target">Rückgabewert:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right">Farbe, die Farbe des Untergrunds.</li><li class="typcn typcn-arrow-right">Zahl, Helligkeit des Lichts oder der 
+Umgebung in Prozent. Zahl zwischen 0 und 100.</li><li class="typcn typcn-arrow-right">Liste, Aufspaltung der gemessenen Farbe in Rot, Grün und Blau.</li>
+</ul></div><div id="robControls_if" class="help beginner"><h3 style="text-align: left;" id="ProgrammierBlöckeNXT-»Wennmache«">»Wenn mache«</h3><p 
+style="text-align: left;">Mit dem Block »Wenn mache« kannst du gezielt Aktionen auslösen, die von einer Bedingung abhängen. Der »Wenn mache«-Block 
+benötigt einen logischen Wert als Eingabewert. Falls die Bedingung in »Wenn« erfüllt (wahr) ist, wird der eingefügte Block (oder die Blöcke) 
+ausgeführt. Bei einem verschachtelten »Wenn mache« Block, also wenn eine weitere Unterscheidung eingefügt wurde, wird zuerst die erste »Wenn« Bedingung 
+abgefragt und, falls diese nicht erfüllt ist (Bedingung = falsch), wird die zweite »oder wenn« Bedingung geprüft. Auch diese zweite Bedingung benötigt 
+wieder einen logischen Wert als Eingabewert.</p><p style="text-align: left;">Die Bedingungen können beliebig durch Anklicken des »+« Plus-Symbols 
+erweitert und durch das »-« Minus-Symbol wieder bis auf eine einzige Bedingung reduziert werden.</p><p style="text-align: left;">Einstellmöglichkeiten 
+und Eingabewerte:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-plus">Eine weitere Bedingung am Ende anfügen.</li><li class="typcn typcn-minus">Die letzte Bedingung löschen.</li><li 
+class="typcn typcn-arrow-left">Logischer Wert, »wahr« oder »falsch«.</li><li class="typcn typcn-arrow-left">Blöcke, die nur dann ausgeführt werden, 
+wenn die zugehörige Bedingung »wahr« ist.</li>
+</ul></div><div id="robControls_ifElse" class="help beginner"><h3 style="text-align: left;" id="ProgrammierBlöckeNXT-»Wennmachesonst«">»Wenn mache 
+sonst«</h3><p style="text-align: left;">Mit dem Block »Wenn mache sonst« kannst du gezielt Aktionen auslösen, die von einer Bedingung abhängen. Der 
+»Wenn mache sonst«-Block benötigt hierfür einen logischen Wert als Eingabewert. Falls die Bedingung  erfüllt (wahr) ist, wird der dort eingefügte Block 
+(oder die Blöcke) ausgeführt, ansonsten (Bedingung nicht erfüllt = falsch) wird der Block (bzw. die Blöcke), der bei »sonst« eingefügt wurde, 
+ausgeführt. Bei einem verschachtelten »Wenn mache sonst« Block, also wenn eine weitere Unterscheidung dazugefügt wurde, wird zuerst die erste »Wenn« 
+Bedingung abgefragt und, falls diese nicht erfüllt ist, wird die zweite »oder wenn« Bedingung geprüft. Auch diese zweite Bedingung benötigt wieder 
+einen logischen Wert als Eingabewert. Nur wenn beide Bedingungen nicht erfüllt sind, wird der Block ausgeführt, der bei »sonst« eingefügt wurde.</p><p 
+style="text-align: left;">Die Bedingungen können beliebig durch anklicken des »+« Plus-Symbols erweitert und durch das »-« Minus-Symbol wieder bis auf 
+eine einzige Bedingung reduziert werden.</p><p style="text-align: left;">Einstellmöglichkeiten und Eingabewerte:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-plus">Eine weitere Bedingung am Ende anfügen.</li><li class="typcn typcn-minus">Die letzte Bedingung löschen.</li><li 
+class="typcn typcn-arrow-left">Logischer Wert, »wahr« oder »falsch«.</li><li class="typcn typcn-arrow-left">Blöcke, die nur dann ausgeführt werden, 
+wenn die zugehörige Bedingung »wahr« ist.</li><li class="typcn typcn-arrow-left">Blöcke, die nur dann ausgeführt werden, wenn die zugehörige Bedingung 
+»falsch« ist.</li>
+</ul></div><div id="robControls_loopForever" class="help beginner notWedo"><h3 style="text-align: left;" 
+id="ProgrammierBlöckeNXT-»Wiederholeunendlichoft«">»Wiederhole unendlich oft«</h3><p style="text-align: left;">Mit dem Block »Wiederhole unendlich oft« 
+kannst du Blöcke endlos von deinem Roboter ausführen lassen. Alle Blöcke, die sich im »Wiederhole unendlich oft«-Block befinden, werden immer wieder 
+ausgeführt. Die Blöcke werden dabei von oben nach unten ausgeführt. Sobald der letzte Block ausgeführt wurde, beginnt das Programm wieder mit dem 
+ersten Block. Deshalb wird dieser Block auch »Endlosschleife« genannt.</p><p style="text-align: left;">Eingaben:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-left">Blöcke, die wiederholt ausgeführt werden.</li>
+</ul></div><div id="controls_repeat_ext" class="help beginner"><h3 style="text-align: left;" id="ProgrammierBlöckeNXT-»Wiederholenmal«">»Wiederhole n 
+mal«</h3><p style="text-align: left;">Mit dem Block »Wiederhole n mal« kannst du andere Blöcke beliebig oft von deinem Roboter ausführen lassen. Alle 
+Blöcke, die sich im Block »Wiederhole n mal« befinden, werden so oft ausgeführt, wie im Eingabefeld eingestellt ist. Die Blöcke werden dabei von oben 
+nach unten ausgeführt. Sobald der letzte Block ausgeführt wurde, beginnt das Programm wieder mit dem ersten Block, bis die eingestellte 
+Wiederholungszahl erreicht ist. Deshalb wird dieser Block auch »Schleife« genannt.</p><div class="confluence-information-macro 
+confluence-information-macro-information"><div class="confluence-information-macro-body"><p>Nur ganzzahlige Werte können eingegeben 
+werden.</p></div></div><p style="text-align: left;">Einstellmöglichkeiten und Eingabewerte:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-left">Zahl, wie oft die enthaltenen Blöcke wiederholt werden sollen.</li><li class="typcn typcn-arrow-left">Blöcke, die 
+wiederholt ausgeführt werden.</li>
+</ul></div><div id="controls_whileUntil" class="help expert"><h3 style="text-align: left;" 
+id="ProgrammierBlöckeNXT-»Wiederholesolange/bis«[Experten-Block]">»Wiederhole solange/bis« <span class="typcn typcn-star"></span></h3><p 
+style="text-align: left;">Mit dem Block »Wiederhole solange/bis« kannst du andere Blöcke beliebig oft von deinem Roboter ausführen lassen. Alle Blöcke, 
+die sich im Block »Wiederhole solange/bis« befinden, werden immer wieder ausgeführt, solange bzw. bis die Bedingung im Eingabefeld erfüllt ist. Die 
+Blöcke werden dabei von oben nach unten ausgeführt. Sobald der letzte Block ausgeführt wurde, beginnt das Programm wieder mit dem ersten Block, solange 
+bzw. bis die Bedingung im Eingabefeld erfüllt ist. Deshalb wird dieser Block auch »bedingte Schleife« genannt.</p><p style="text-align: 
+left;">Einstellmöglichkeiten und Eingabewerte:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-sorted-down">»solange« oder »bis«, um den Typ der bedingten Wiederholung zu bestimmen.</li><li class="typcn 
+typcn-arrow-left">Logischer Wert, »wahr« oder »falsch«.</li><li class="typcn typcn-arrow-left">Blöcke, die wiederholt ausgeführt werden.</li>
+</ul></div><div id="robControls_forEach" class="help expert notWedo notBob3"><h3 style="text-align: left;" 
+id="ProgrammierBlöckeNXT-»FürWertausderListe«[Experten-Block]">»Für Wert aus der Liste« <span class="typcn typcn-star"></span></h3><p 
+style="text-align: left;">Mit dem Block »Für Wert aus der Liste« werden nacheinander alle Werte einer Liste an eine Variable übergeben und können dann 
+in der so genannten Schleife verarbeitet werden. Mit jedem Schleifendurchlauf wird das nächste Element aus der Liste geholt, bis die Liste vollständig 
+abgearbeitet ist. Der Wert des Listenelements wird an die Variable Element gebunden und kann in den enthaltenen Blöcken verwendet werden.</p><p 
+style="text-align: left;">Einstellmöglichkeiten und Eingabewerte:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-sorted-down">Typ der Listenelemente, »Zahl«, »Zeichenkette«, »logischer Wert«, »Farbe«, »Verbindung«</li><li class="typcn 
+typcn-pen">Variable, frei wählbarer Name, an den nacheinander die Listenelemente übergeben werden.</li><li class="typcn typcn-arrow-left">Liste, die 
+Elemente des festgelegten Typs enthält. Wenn die Listenelemente nicht den richtigen Typ haben, kann die Liste nicht als Eingabewert verwendet 
+werden.</li><li class="typcn typcn-arrow-left">Blöcke, die wiederholt ausgeführt werden.</li>
+</ul></div><div id="robControls_for" class="help expert"><h3 style="text-align: left;" id="ProgrammierBlöckeNXT-»Zählevonbis«[Experten-Block]">»Zähle 
+von bis« <span class="typcn typcn-star"></span></h3><p style="text-align: left;">Mit dem Block »Zähle von bis« kannst du andere Blöcke mehrfach von 
+deinem Roboter ausführen lassen. Alle Blöcke, die sich im Block »Zähle von bis« befinden, werden so oft ausgeführt, bis die Zählung im Eingabefeld 
+abgearbeitet ist. Die Blöcke werden dabei von oben nach unten ausgeführt. Sobald der letzte Block ausgeführt wurde, beginnt das Programm wieder mit dem 
+ersten Block, solange die Zählbedingung im Eingabefeld erfüllt ist, d.h. der Endwert der Zählung noch nicht erreicht ist. Die Werte der Zählung werden 
+jeweils an die Zählvariable gebunden, deren Name frei eingestellt werden kann. Der Wert der Zählvariablen kann in den Blöcken der Schleife verwendet 
+werden. Der letzte Eingabewert gibt an, in welcher Schrittweite gezählt wird.</p><p style="text-align: left;">Einstellmöglichkeiten und Eingabewerte:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-pen">Variable, frei wählbarer Name für die Zählvariable.</li><li class="typcn typcn-arrow-left">Zahl, Anfangswert der 
+Zählschleife.</li><li class="typcn typcn-arrow-left">Zahl, Endwert der Zählschleife.</li><li class="typcn typcn-arrow-left">Zahl, Schrittweite für die 
+Zählschleife.</li><li class="typcn typcn-arrow-left">Blöcke, die wiederholt ausgeführt werden.</li>
+</ul></div><div id="controls_flow_statements" class="help expert"><h3 style="text-align: left;" 
+id="ProgrammierBlöckeNXT-»DieSchleifeabbrechen/mitdernächstenIterationderSchleifefortfahren«[Experten-Block]">»Die Schleife abbrechen/mit der nächsten 
+Iteration der Schleife fortfahren« <span class="typcn typcn-star"></span></h3><p style="text-align: left;">Mit dem Block »Die Schleife abbrechen/mit 
+der nächsten Iteration der Schleife fortfahren« kann eine Schleife vorzeitig beendet bzw. wieder zum Anfang der Schleife gesprungen werden. Sobald 
+dieser Block in einer Reihe von Blöcken erscheint, werden alle nachfolgenden Blöcke bis zum Ende der Schleife ignoriert.</p><p style="text-align: 
+left;">Einstellmöglichkeiten:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-sorted-down">Abbruchverhalten, »Die Schleife abbrechen« oder »mit der nächsten Iteration der Schleife fortfahren«.</li>
+</ul></div><div id="robControls_wait" class="help beginner"><h3 class="auto-cursor-target" id="ProgrammierBlöckeNXT-»Wartebis...«">»Warte bis ... 
+«</h3><p style="text-align: left;">Mit dem Block »Warte bis« kannst du dein Programm an der Stelle »anhalten«, an der du den »Warte bis«-Block 
+eingefügt hast. Dein Programm wartet dann so lange, bis die Bedingung erfüllt (wahr) ist. Den »Warte bis«-Block kannst du mit dem »+«-Zeichen um 
+zusätzliche Bedingungen erweitern. Dein Programm wartet dann solange, bis (mindestens) eine der Bedingungen deines »Warte bis«-Blocks erfüllt 
+ist.</p><p style="text-align: left;">Einstelmöglichkeiten und Eingabewert:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-plus">Eine weitere Wartebedingung am Ende anfügen.</li><li class="typcn typcn-minus">Die letzte Wartebedingung löschen.</li><li 
+class="typcn typcn-arrow-left">Logischer Wert, »wahr« oder »falsch«.</li>
+</ul></div><div id="robControls_wait_time" class="help beginner"><h3 style="text-align: left;" id="ProgrammierBlöckeNXT-»Wartems...«">»Warte ms ... 
+«</h3><p style="text-align: left;">Mit dem Block »Warte« kannst du dein Programm an der Stelle "anhalten", an der du den Block eingefügt hast. Dein 
+Programm bleibt dann für die angegebene Dauer an dieser Stelle stehen. Nach Ablauf der angegebenen Zeit wird dann der nachfolgende Block ausgeführt. 
+Beispielsweise kannst du dadurch einen Text in dem Display deines Roboters exakt für diese Zeit anzeigen lassen.</p><p style="text-align: 
+left;">Einstellmöglichkeiten:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-left">Zahl, Wartezeit in Millisekunden.</li>
+</ul></div><div id="robControls_wait_for" class="help beginner"><h3 style="text-align: left;" id="ProgrammierBlöckeNXT-»Wartebis...«.1">»Warte bis ... 
+«</h3><p style="text-align: left;">Mit dem Block »Warte bis« kannst du dein Programm an der Stelle »anhalten«, an der du den »Warte bis«-Block 
+eingefügt hast. Dein Programm wartet dann so lange, bis die Bedingung erfüllt (wahr) ist. Den »Warte bis«-Block kannst du mit dem »+«-Zeichen um 
+zusätzliche Bedingungen erweitern. Dein Programm wartet dann solange, bis (mindestens) eine der Bedingungen deines »Warte bis«-Blocks erfüllt 
+ist.</p><p style="text-align: left;">Einstelmöglichkeiten und Eingabewert:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-plus">Eine weitere Wartebedingung am Ende anfügen.</li><li class="typcn typcn-minus">Die letzte Wartebedingung löschen.</li><li 
+class="typcn typcn-arrow-left">Logischer Wert, »wahr« oder »falsch«.</li>
+</ul></div><div id="logic_compare" class="help beginner"><h3 style="text-align: left;" id="ProgrammierBlöckeNXT-»Vergleiche«">»Vergleiche«</h3><p 
+style="text-align: left;">Mit dem Block »Vergleiche« kannst du verschiedene Eingabewerte (Zahl, Farbe, logischer Wert, Text) gleichen Typs miteinander 
+vergleichen. Stimmt der Vergleich, wird der logische Wert »wahr« zurückgegeben, sonst »falsch«.</p><p style="text-align: left;">Einstellmöglichkeiten 
+und Eingabewerte:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-left">Linker Eingabewert für den Vergleich.</li><li class="typcn typcn-arrow-sorted-down">Vergleich, wähle aus, wie 
+verglichen werden soll.</li><li class="typcn typcn-arrow-left">Rechter Eingabewert für den Vergleich.</li>
+</ul><p>Rückgabewert:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right">Logischer Wert, »wahr« oder »falsch«.</li>
+</ul><br></div><div id="logic_operation" class="help beginner"><h3 style="text-align: left;" id="ProgrammierBlöckeNXT-»und/oder«">»und/oder«</h3><p 
+style="text-align: left;">Mit dem Block »und/oder« kannst du logische Werte zueinander in Beziehung setzen. Der »und/oder« Block liefert bei der 
+Einstellung »und« nur dann den logischen Wert »wahr«, wenn beide Eingabewerte des Blocks gleichzeitig »wahr« sind. Bei der Einstellung »oder« genügt 
+es, wenn einer der beiden Eingabewerte »wahr« ist, damit der »und/oder« Block als logischen Wert »wahr« liefert.</p><p style="text-align: 
+left;">Einstellmöglichkeiten und Eingabewerte:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-left">Logischer Wert für die Verknüpfung.</li><li class="typcn typcn-arrow-sorted-down">Wähle die logische Verknüpfung.</li>
+</ul><p>Rückgabewert:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right">Logischer Wert, »wahr« oder »falsch«.</li>
+</ul><br></div><div id="logic_negate" class="help expert"><h3 style="text-align: left;" id="ProgrammierBlöckeNXT-»nicht«[Experten-Block]">»nicht« <span 
+class="typcn typcn-star"></span></h3><p style="text-align: left;">Mit dem Block »nicht« kannst du einen logischen Wert umkehren. Der logische Wert 
+ergibt sich aus der logischen Umkehrung des Eingabewertes, aus »wahr« wird »falsch« und umgekehrt.</p><p style="text-align: left;">Eingabewert:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-left">Logischer Wert für die Umkehrung.</li>
+</ul><p>Rückgabewert:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right">Logischer Wert, Ergebnis der Umkehrung.</li>
+</ul><br></div><div id="logic_boolean" class="help beginner"><h3 style="text-align: left;" id="ProgrammierBlöckeNXT-»wahr/falsch«">»wahr/falsch«</h3><p 
+style="text-align: left;">Mit dem Block »wahr/falsch« kannst du entweder den logischen Wert »wahr« oder »falsch« an einen anderen Block 
+übermitteln.</p><p style="text-align: left;"> Einstellmöglichkeiten:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-sorted-down">Logischer Wert, wähle den Wert, der ausgegeben werden soll.</li>
+</ul><p>Rückgabewert:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right">Logischer Wert.</li>
+</ul><br></div><div id="logic_null" class="help expert"><h3 style="text-align: left;" id="ProgrammierBlöckeNXT-»null«[Experten-Block]">»null« <span 
+class="typcn typcn-star"></span></h3><p style="text-align: left;">Der Block »null« ist ein Platzhalter für eine Eingabe, die noch unbestimmt ist. Wenn 
+z.B. eine neue Verbindungsvariable für die Kommunikation erzeugt wird und noch nicht belegt ist, wird der Anfangswert auf »null« gesetzt.</p><p 
+style="text-align: left;">Rückgabewert:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right">Logischer Wert, »null«.</li>
+</ul></div><div id="logic_ternary" class="help expert notWedo"><h3 style="text-align: left;" id="ProgrammierBlöckeNXT-»teste«[Experten-Block]">»teste« 
+<span class="typcn typcn-star"></span></h3><p style="text-align: left;">Mit dem Block »teste« kannst du einen Test durchführen und je nach Ergebnis 
+unterschiedliche Ergebnisse zurückgeben.</p><p style="text-align: left;">Eingabewerte:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-left">Logischer Wert für den Test; wenn kein Block angegeben wird, wird "wahr" angenommen.</li><li class="typcn 
+typcn-arrow-left">Beliebiger Wert, der mit einem Block bestimmt werden kann.</li><li class="typcn typcn-arrow-left">Beliebiger Wert, der mit einem 
+Block bestimmt werden kann.</li>
+</ul><p>Rückgabewert:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right">Wert von beliebigem Typ.</li>
+</ul><br></div><div id="math_number" class="help beginner"><h3 style="text-align: left;" id="ProgrammierBlöckeNXT-»Wert«">»Wert«</h3><p 
+style="text-align: left;">Mit dem Block »Wert« kannst du Zahlen an einen anderen Block übermitteln.</p><p style="text-align: left;"> Eingabewert:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-pen">Zahl</li>
+</ul><p>Rückgabewert:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right"> Zahl</li>
+</ul><br></div><div id="math_arithmetic" class="help beginner"><h3 style="text-align: left;" id="ProgrammierBlöckeNXT-»Rechnen«">»Rechnen«</h3><p 
+style="text-align: left;">Mit dem Block »Rechnen« kannst du Zahlen addieren, subtrahieren, multiplizieren, dividieren oder potenzieren. Dieser Block 
+ist nur in Verbindung mit einem anderen Block nutzbar, der eine Zahl als Eingabewert benötigt.</p><p style="text-align: left;"> Einstellmöglichkeiten 
+und Eingabewerte:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-left"> Zahl</li><li class="typcn typcn-arrow-sorted-down"> Berechnung, wähle einen Operator aus.</li><li class="typcn 
+typcn-arrow-left">Zahl</li>
+</ul><p>Rückgabewert:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right"> Zahl, das Ergebnis der Berechnung.</li>
+</ul><br></div><div id="math_single" class="help expert"><h3 style="text-align: left;" 
+id="ProgrammierBlöckeNXT-»MathematischeFunktionen«[Experten-Block]">»Mathematische Funktionen« <span class="typcn typcn-star"></span></h3><p 
+style="text-align: left;">Mit dem Block »Mathematische Funktionen« können einige elementare mathematische Funktionen berechnet werden.</p><p 
+style="text-align: left;">Einstellmöglichkeiten und Eingabewert:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-sorted-down">Mathematische Funktion, Quadratwurzel, Absolutwert, Invertieren, ln (natürlicher Logarithmus), log10 
+(dekadischer Logarithmus), e^ (Exponentialfunktion) 10^ (Zehner-Exponent)</li><li class="typcn typcn-arrow-left">Zahl, auf die die mathematische 
+Funktion angewandt wird.</li>
+</ul><p>Rückgabewert:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right"> Zahl, das Ergebnis der Funktion.</li>
+</ul><br></div><div id="math_trig" class="help expert"><h3 style="text-align: left;" 
+id="ProgrammierBlöckeNXT-»TrigonometrischeFunktionen«[Experten-Block]">»Trigonometrische Funktionen« <span class="typcn typcn-star"></span></h3><p 
+style="text-align: left;">Mit dem Block »Trigonometrische Funktionen« können Sinus, Cosinus, Tangens und die zugehörigen Umkehrfunktionen berechnet 
+werden. Die Eingabewerte werden im Bogenmaß erwartet (siehe Hinweis oben).</p><p style="text-align: left;">Einstellmöglichkeiten und Eingabewert:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-sorted-down">Trigonometrische Funktion, wähle eine Funktion aus.</li><li class="typcn typcn-arrow-left">Zahl, im 
+Bogenmaß</li>
+</ul><p>Rückgabewert:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right"> Zahl, das Ergebnis der trigonometrischen Berechnung.</li>
+</ul><br></div><div id="math_constant" class="help expert"><h3 style="text-align: left;" 
+id="ProgrammierBlöckeNXT-»Konstanten«[Experten-Block]">»Konstanten« <span class="typcn typcn-star"></span></h3><p style="text-align: left;">Der Block 
+»Konstanten« stellt einige mathematische Konstanten bereit. »π« (3,1415...), »e« (2,718...), »φ« (1,618...), »sqrt(2)« (1,414...), »sqrt(½)« 
+(0,7071...), »∞«.</p><p style="text-align: left;">Einstellmöglichkeiten:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-sorted-down">Mathematische Konstanten, wähle eine Konstante aus.</li>
+</ul><p>Rückgabewert:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right"> Zahl, Wert der mathematischen Konstante. Der Wert von Unendlich ist »infinity«.</li>
+</ul><br></div><div id="math_number_property" class="help expert"><h3 style="text-align: left;" 
+id="ProgrammierBlöckeNXT-»Zahleneigenschaft«[Experten-Block]">»Zahleneigenschaft« <span class="typcn typcn-star"></span></h3><p style="text-align: 
+left;">Mit dem Block »Zahleneigenschaft« wird geprüft, ob eine eingegebene Zahl eine bestimmte Eigenschaft aufweist. »gerade«, »ungerade«, »ist 
+Primzahl«, »ganze Zahl«, »positiv«, »negativ«, »teilbar durch«.</p><p style="text-align: left;">Einstellmöglichkeiten und Eingabewert:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-left">Zahl, die mit einem Block geprüft wird.</li><li class="typcn typcn-arrow-sorted-down">Zahleneigenschaft, wähle, was 
+geprüft werden soll.</li><li class="typcn typcn-arrow-left">Zahl; ein zweiter Eingabewert ist nur bei der Wahl von »ist teilbar durch« erforderlich.</li>
+</ul><p>Rückgabewert:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right">Logischer Wert, »wahr« oder »falsch«, je nachdem, ob die geprüfte Zahl die untersuchte Eigenschaft hat.</li>
+</ul><br></div><div id="robMath_change" class="help expert"><h3 style="text-align: left;" id="ProgrammierBlöckeNXT-»Erhöheumx«[Experten-Block]">»Erhöhe 
+um x« <span class="typcn typcn-star"></span></h3><p style="text-align: left;">Mit dem Block »Erhöhe um x« wird der Wert einer numerischen Variable um 
+einen Betrag erhöht.</p><p style="text-align: left;">Eingabewerte:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-sorted-down">Variable, deren Wert verändert werden soll.</li><li class="typcn typcn-arrow-left">Zahl.</li>
+</ul></div><div id="math_round" class="help expert"><h3 style="text-align: left;" id="ProgrammierBlöckeNXT-»runden«[Experten-Block]">»runden« <span 
+class="typcn typcn-star"></span></h3><p style="text-align: left;">Mit dem Block »runden« können Werte gerundet werden. Beim Runden werden die 
+Nachkommastellen auf 0 gesetzt. Es wird je nach Größe der Nachkommastellen automatisch auf- oder abgerundet. Man kann jedoch auch einstellen, dass 
+stets auf- bzw. stets abgerundet werden soll.</p><p style="text-align: left;">Einstellmöglichkeiten und Eingabewert:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-sorted-down">Art der Rundung, wähle, wie gerundet werden soll.</li><li class="typcn typcn-arrow-left">Zahl</li>
+</ul><p>Rückgabewert:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right">Zahl, gerundete Ganzzahl</li>
+</ul><br></div><div id="math_on_list" class="help expert notWedo notBob3"><h3 style="text-align: left;" 
+id="ProgrammierBlöckeNXT-»Listeauswerten«[Experten-Block]">»Liste auswerten« <span class="typcn typcn-star"></span></h3><p style="text-align: 
+left;">Mit dem Block »Liste auswerten« können verschiedene Analysen einer Liste vorgenommen werden:</p><ul style="text-align: left;"><li>Summe - alle 
+Werte der Liste werden zusammengezählt</li><li>Minimalwert - der kleinste Wert der Liste wird ausgegeben</li><li>Maximalwert - der größte Wert der 
+Liste wird ausgegeben</li><li>Mittelwert - aus den Werten der Liste wird der Mittelwert bestimmt</li><li>Median - der Median (Zentralwert) einer Liste 
+wird ausgegeben</li><li>Standardabweichung - die Standardabweichung (Varianz) der Listenwerte wird ausgegeben</li><li>Zufallswert - einer der 
+Listenwerte wird per Zufall gewählt und ausgegeben</li></ul><p style="text-align: left;">Einstellmöglichkeiten und Eingabewert:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-sorted-down">Art der Listenauswertung</li><li class="typcn typcn-arrow-left">Liste mit Zahlen</li>
+</ul><p>Rückgabewert:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right">Zahl, Ergebnis der eingestellten Listenauswertung.</li>
+</ul><br></div><div id="math_modulo" class="help expert"><h3 style="text-align: left;" id="ProgrammierBlöckeNXT-»Restvon«[Experten-Block]">»Rest von« 
+<span class="typcn typcn-star"></span></h3><p style="text-align: left;">Der Block »Rest von« führt eine Division durch und liefert den Rest der 
+Division, der nicht mehr durch den Divisor geteilt werden konnte.</p><p style="text-align: left;">Eingabewerte:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-left">Zahl, die geteilt wird (Dividend)</li><li class="typcn typcn-arrow-left">Zahl, durch die geteilt wird (Divisor bzw. 
+Teiler)</li>
+</ul><p>Rückgabewert:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right">Zahl, Rest der Division</li>
+</ul><br></div><div id="math_constrain" class="help expert"><h3 style="text-align: left;" 
+id="ProgrammierBlöckeNXT-»Begrenze«[Experten-Block]">»Begrenze« <span class="typcn typcn-star"></span></h3><p style="text-align: left;">Der Block 
+»Begrenze« sorgt dafür, dass Grenzwerte nicht überschritten werden. Er erfordert drei Eingabewerte:</p><ol style="text-align: left;"><li>zu prüfender 
+Wert</li><li>untere Grenze</li><li>obere Grenze</li></ol><p style="text-align: left;">Der Rückgabewert ist</p><ul style="text-align: left;"><li>der zu 
+prüfende Wert, wenn gilt: untere Grenze ≤ zu prüfender Wert ≤ obere Grenze</li><li>untere Grenze, wenn zu prüfender Wert &lt; untere 
+Grenze</li><li>obere Grenze, wenn zu prüfender Wert &gt; obere Grenze</li></ul><p style="text-align: left;">Eingabewerte:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-left">Zahl, die begrenzt wird.</li><li class="typcn typcn-arrow-left">Zahl, untere Grenze.</li><li class="typcn 
+typcn-arrow-left">Zahl, obere Grenze.</li>
+</ul><p>Rückgabewert:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right">Zahl, die innerhalb der eingestellten Grenzen liegt.</li>
+</ul><br></div><div id="math_random_int" class="help expert"><h3 style="text-align: left;" 
+id="ProgrammierBlöckeNXT-»GanzzahligeZufallswerte«[Experten-Block]">»Ganzzahlige Zufallswerte« <span class="typcn typcn-star"></span></h3><p 
+style="text-align: left;">Mit dem Block »Ganzzahlige Zufallswerte« können ganzzahlige Zufallswerte innerhalb selbst gewählter Grenzen erzeugt 
+werden.</p><p style="text-align: left;">Eingabewerte:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-left">Zahl, untere Grenze</li><li class="typcn typcn-arrow-left">Zahl, obere Grenze</li>
+</ul><p>Rückgabewert:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right">Zahl, eine ganzzahlige Zufallszahl, die innerhalb der eingestellten Grenzen liegt</li>
+</ul><br></div><div id="math_random_float" class="help expert"><h3 style="text-align: left;" 
+id="ProgrammierBlöckeNXT-»Zufallszahl«[Experten-Block]">»Zufallszahl« <span class="typcn typcn-star"></span></h3><p style="text-align: left;">Mit dem 
+Block »Zufallszahl« wird eine Zufallszahl zwischen 0,0 und 1,0 bestimmt.</p><p style="text-align: left;">Rückgabewert:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right">Zahl, eine positive Zufallszahl kleiner oder gleich 1.</li>
+</ul></div><div id="text" class="help beginner notBob3"><h3 style="text-align: left;" id="ProgrammierBlöckeNXT-»Text«">»Text«</h3><p style="text-align: 
+left;">Mit dem einfachen »Text«-Block wird ein Stück Text bereitgestellt.</p><p style="text-align: left;">Eingabewert:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-pen">Zeichenkette, bestehend aus beliebigen Zeichen</li>
+</ul><p>Rückgabewert:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right">Text, bestehend aus beliebigen Zeichen</li>
+</ul><br></div><div id="text_comment" class="help beginner"><h3 style="text-align: left;" id="ProgrammierBlöckeNXT-»Kommentar«">»Kommentar«</h3><p 
+style="text-align: left;">Dokumentiere dein Programm mit diesem Block, damit du und andere es später leichter haben, dein Programm zu verstehen. Dieser 
+Kommentar wird auch im generierten Source Code zu sehen sein.  </p><p style="text-align: left;">Eingabewert:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-pen">Zeichenkette, bestehend aus beliebigen Zeichen</li>
+</ul></div><div id="robText_join" class="help expert notBob3 notFestobionic"><h3 style="text-align: left;" 
+id="ProgrammierBlöckeNXT-»ErstelleText«[Experten-Block]">»Erstelle Text« <span class="typcn typcn-star"></span></h3><p style="text-align: left;">Mit 
+dem »Erstelle Text«-Block wird ein Stück Text aus verschiedenen Eingabewerten zusammengesetzt. Mit dem +-Zeichen können weitere Eingabemöglichkeiten 
+geschaffen werden. Alle Eingaben werden zu einer kontinuierlichen Zeichenkette zusammengefügt. </p><p style="text-align: left;">Eingabewerte:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-plus">Weitere Eingabemöglichkeiten bereitstellen.</li><li class="typcn typcn-minus">Letzte Eingabemöglichkeit entfernen (bei 
+mehr als 2 Eingabemöglichkeiten).</li><li class="typcn typcn-arrow-left">Beliebiger Wert, Zahl, Text, logischer Wert, Farbe.</li>
+</ul><p>Rückgabewert:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right">Zeichenkette, bestehend aus beliebigen Zeichen.</li>
+</ul><br></div><div id="robText_append" class="help expert notWedo notBob3"><h3 style="text-align: left;" 
+id="ProgrammierBlöckeNXT-»Textanhängen«[Experten-Block]">»Text anhängen« <span class="typcn typcn-star"></span></h3><p style="text-align: left;">Mit 
+dem »Text anhängen«-Block können Zeichenketten erweitert werden, z.B. indem an empfangene Nachrichten eine Signatur angehängt wird.</p><p 
+style="text-align: left;">Eingabemöglichkeiten:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-left">Text, Zeichenkette, an die Text angehängt werden soll</li><li class="typcn typcn-arrow-left">Text, Zeichenkette, die 
+an einen Text angehängt werden soll</li>
+</ul></div><div id="robLists_create_with" class="help expert notWedo notBob3"><h3 id="ProgrammierBlöckeNXT-»ErzeugeListe«[Experten-Block]">»Erzeuge 
+Liste« <span class="typcn typcn-star"></span></h3><p>Der Block »Erzeuge eine leere Liste« erzeugt eine Liste ohne Inhalt. Der Block »Liste« erzeugt 
+eine Liste mit einigen voreingestellten Werten. Mit + und - können weitere Listenelemente am Ende hinzugefügt bzw. entfernt werden. Wenn das letzte 
+Element einer Liste entfernt wurde, liegt eine leere Liste vor.</p><p>Einstellmöglichkeiten:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-sorted-down">Typ, »Zahl«, »logischer Wert«, »Zeichenkette«, »Farbe« oder »Verbindung«.</li><li class="typcn 
+typcn-plus">Erzeuge ein weiteres Listenelement am Ende der bestehenden Liste.</li><li class="typcn typcn-minus"> Lösche das Listenelement am Ende der 
+bestehenden Liste.</li><li class="typcn typcn-arrow-left">Werte, die dem Listentyp entsprechen. Hiermit können Anfangswerte gesetzt werden.</li>
+</ul><br><p>Rückgabewert:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right">Leere Liste oder eine Liste mit Elementen gleichen Typs.</li>
+</ul><br></div><div id="robLists_repeat" class="help expert notWedo notBob3"><h3 
+id="ProgrammierBlöckeNXT-»WiederholeElementinListe«[Experten-Block]">»Wiederhole Element in Liste« <span class="typcn typcn-star"></span></h3><p>Der 
+Block »Wiederhole Element in Liste« erzeugt eine Liste mit gleichen Elementen.  </p><p>Einstellmöglichkeiten:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-sorted-down">Typ, »Zahl«, »logischer Wert«, »Zeichenkette«, »Farbe« oder »Verbindung«.</li><li class="typcn 
+typcn-arrow-left">Listenelement, das mit dem eingestellten Listentyp übereinstimmt. Dieser Wert wird in der Liste wiederholt.</li><li class="typcn 
+typcn-arrow-left"> Zahl, die angibt, wie oft der eingestellte Wert wiederholt werden soll.</li>
+</ul><br><p>Rückgabewert:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right">Eine Liste des spezifizierten Typs mit der eingestellten Anzahl von gleichen Elementen.</li>
+</ul><br></div><div id="robLists_length" class="help expert notWedo notBob3"><h3 id="ProgrammierBlöckeNXT-»Länge«[Experten-Block]">»Länge« <span 
+class="typcn typcn-star"></span></h3><p>Der Block »Länge« gibt als Wert die Länge einer Liste zurück, die als Eingabewert angegeben wird. Eine leere 
+Liste hat die Länge 0.</p><p>Eingabewert
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-left">Liste</li>
+</ul><br><p>Rückgabewert:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right">Zahl, Anzahl der Listenelemente</li>
+</ul><br></div><div id="robLists_isEmpty" class="help expert notWedo notBob3"><h3 id="ProgrammierBlöckeNXT-»istleer?«[Experten-Block]">»ist leer?« 
+<span class="typcn typcn-star"></span></h3><p>Eine als Eingabewert gegebene Liste wird geprüft, ob sie leer ist.</p><p>Eingabewert
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-left">Liste.</li>
+</ul><br><p>Rückgabewert:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right">Logischer Wert, entweder »wahr« oder »falsch«</li>
+</ul><br></div><div id="robLists_indexOf" class="help expert notWedo notBob3"><h3 id="ProgrammierBlöckeNXT-»SucheinderListe«[Experten-Block]">»Suche in 
+der Liste« <span class="typcn typcn-star"></span></h3><p>Eine Liste wird durchsucht, ob ein Element darin enthalten ist. Wenn das Element enthalten 
+ist, wird die Listenposition zurückgegeben. Wenn das Element nicht enthalten ist, ist das Ergebnis -1.</p><p>Einstellmöglichkeiten:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-left">Liste, die untersucht werden soll.</li><li class="typcn typcn-arrow-sorted-down">Position für den Treffer, entweder 
+»ersten« oder »letzten« Treffer suchen.</li><li class="typcn typcn-arrow-left">Wert, der mit den Listentyp übereinstimmt.</li>
+</ul><br><p>Rückgabewert:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right"><p>Zahl, die Position, an der das Element in der Liste steht.</p><p>Beachte: Die Zählung der Listenpositionen 
+beginnt bei 0.</p></li>
+</ul><br></div><div id="robLists_getIndex" class="help expert notWedo notBob3"><h3 id="ProgrammierBlöckeNXT-»NimmListenelement«[Experten-Block]">»Nimm 
+Listenelement« <span class="typcn typcn-star"></span></h3><p>Mit diesem Block wird auf ein Element einer Liste zugegriffen. Das Element wird 
+gegebenenfalls verändert.</p><p>Es wird eine Liste als Eingabe übergeben. Danach wird per Drop-Down-Liste spezifiziert, was mit dem Listenelement 
+geschehen soll. Anschließend wird angegeben, in welcher Richtung die Liste durchsucht werden soll, ob von vorn (links), von hinten (rechts) oder 
+zufällig.</p><p>Einstellmöglichkeiten und Eingabewerte
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-left">Liste, die bearbeitet werden soll.</li><li class="typcn typcn-arrow-sorted-down">Aktion für das gefundene Element: 
+»nimm« liest das Element und lässt es unverändert, »nimm und entferne« liest das Element und entfernt es aus der Liste, »entferne« entfernt das Element 
+aus der Liste.</li><li class="typcn typcn-arrow-sorted-down">Positionsbestimmung für das gefundene Element: »#te«, »#te von hinten«, »erste«, »letzte« 
+oder »zufälliges« .</li><li class="typcn typcn-arrow-left"><p>Zahl, Listenposition. Dieser Eingabewert entfällt, wenn zuvor »erste«, »letzte« oder 
+»zufälliges« als Position bestimmt wurde.</p><p>Beachte: Die Zählung der Listenpositionen beginnt bei 0.</p></li>
+</ul><br><p>Rückgabewert:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right">Das spezifizierte Listenelement, das an der angegebenen Listenposition gefunden wurde. »undefined« (undefiniert), 
+wenn die Listenposition nicht existiert. <br>Bei »entferne« wird kein Wert zurückgegeben; die bearbeitete Liste ist dann um dieses Listenelement 
+reduziert.</li>
+</ul><br></div><div id="robLists_setIndex" class="help expert notWedo notBob3"><h3 
+id="ProgrammierBlöckeNXT-»SetzeListenelement«[Experten-Block]">»Setze Listenelement« <span class="typcn typcn-star"></span></h3><p>In einer als 
+Eingabewert übergebenen Liste wird ein näher spezifiziertes Element durch einen neuen Wert ersetzt bzw. es wird ein Wert 
+eingefügt.</p><p>Einstellmöglichkeiten und Eingabewerte:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-left">Liste, die bearbeitet werden soll.</li><li class="typcn typcn-arrow-sorted-down">Aktion für das gefundene Element: 
+»setze« verändert das Element, »füge« fügt ein neues Element in die Liste ein.</li><li class="typcn typcn-arrow-sorted-down">Positionsbestimmung für 
+das gefundene Element: »#te«, »#te von hinten«, »erste«, »letzte« oder »zufälliges« .</li><li class="typcn typcn-arrow-left">Zahl, Listenposition. 
+Dieser Eingabewert entfällt, wenn zuvor »erste«, »letzte« oder »zufälliges« als Position bestimmt wurde.<br>Beachte: Die Zählung der Listenpositionen 
+beginnt bei 0.</li><li class="typcn typcn-arrow-left">Listenelement, das an der zuvor bestimmten Listenposition gesetzt oder eingefügt wird.</li>
+</ul><br></div><div id="robLists_getSublist" class="help expert  notWedo notBob3"><h3 
+id="ProgrammierBlöckeNXT-»ErhalteUnterliste«[Experten-Block]">»Erhalte Unterliste« <span class="typcn typcn-star"></span></h3><p>Aus einer als 
+Eingabewert übergebenen Liste wird eine Unterliste erzeugt. In der Unterliste sind alle Elemente enthalten, die den weiteren Spezifikationen dieses 
+Blocks entsprechen.</p><p>Einstellmöglichkeiten und Eingabewerte:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-left">Liste, die bearbeitet werden soll.</li><li class="typcn typcn-arrow-sorted-down">Position, Anfang der Unterliste: 
+»von #«, »von # von hinten« oder »vom Anfang«.</li><li class="typcn typcn-arrow-left">Zahl, Listenposition. Dieser Eingabewert entfällt, wenn zuvor 
+»vom Anfang« als Position bestimmt wurde.<br>Beachte: Die Zählung der Listenpositionen beginnt bei 0.</li><li class="typcn 
+typcn-arrow-sorted-down">Position, Ende der Unterliste: »zu #«, »zu # von hinten« oder »zum Ende«.</li><li class="typcn typcn-arrow-left">Zahl, 
+Listenposition. Dieser Eingabewert entfällt, wenn zuvor »zum Ende« als Position bestimmt wurde.<br>Beachte: Die Zählung der Listenpositionen beginnt 
+bei 0.</li>
+</ul><br><p>Rückgabewert:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right">Liste, Unterliste gleichen Typs wie die als Eingabewert übergebene Liste.</li>
+</ul><br></div><div id="mbedColour_picker" class="help beginner notWedo notEv3 notNxt notMicrobit notBotnroll notNao notBob3 notArduino notSensebox 
+notMbot notFestobionic notEdison"><h3 id="ProgrammierBlöckeNXT-»Farbwahl«">»Farbwahl «</h3><p>Mit diesem Block kannst du eine Farbe aus einer Auswahl 
+von vordefinierten Farben auswählen.</p><p>Option:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-sorted-down">Option, wähle die Farbeaus, die du verwenden möchtest.</li>
+</ul><p class="auto-cursor-target">Rückgabewert:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right">Farbe, die  ausgewählte Farbe.</li>
+</ul></div><div id="robColour_picker" class="help beginner notMicrobit notNao notFestobionic notEdison notCalliope"><h3 
+id="ProgrammierBlöckeNXT-»Farbwahl«.1">»Farbwahl «</h3><p>Mit diesem Block kannst du eine Farbe aus einer Auswahl von vordefinierten Farben 
+auswählen.</p><p>Option:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-sorted-down">Option, wähle die Farbeaus, die du verwenden möchtest.</li>
+</ul><p class="auto-cursor-target">Rückgabewert:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right">Farbe, die  ausgewählte Farbe.</li>
+</ul></div><div id="naoColour_picker" class="help beginner notWedo notEv3 notNxt notMicrobit notBotnroll notBob3 notArduino notSensebox notMbot 
+notFestobionic notMicrobit notCalliope"><h3 id="ProgrammierBlöckeNXT-»Farbwahl«.2">»Farbwahl «</h3><p>Mit diesem Block kannst du eine Farbe aus einer 
+Auswahl von vordefinierten Farben auswählen.</p><p>Option:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-sorted-down">Option, wähle die Farbeaus, die du verwenden möchtest.</li>
+</ul><p class="auto-cursor-target">Rückgabewert:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right">Farbe, die  ausgewählte Farbe.</li>
+</ul></div><div id="mbedColour_rgb" class="help expert notWedo notEv3 notNxt notMicrobit notBotnroll notNao notBob3 notArduino notSensebox notMbot 
+notFestobionic notEdison"><h3 class="auto-cursor-target" id="ProgrammierBlöckeNXT-»FarbemitRot...Grün...Blau...Weiß...«[Experten-Block]">»Farbe mit Rot 
+... Grün ... Blau ... Weiß ... « <span class="typcn typcn-star"></span></h3><p>Mit diesem Block kannst du dir eine eigene Farbe erstellen, indem du 
+deine Farbe aus Rot, Grün und Blau mischst.</p><p>Eingabewerte:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-left">Zahl, der Rot-Anteil in deine Farbe. Wert zwischen 0 und 255.</li><li class="typcn typcn-arrow-left">Zahl, der 
+Grün-Anteil deiner Farbe. Wert zwischen 0 und 255.</li><li class="typcn typcn-arrow-left">Zahl, der Blau-Anteil deiner Farbe. Wert zwischen 0 und 
+255.</li><li class="typcn typcn-arrow-left">Zahl, die  Helligkeit deiner Farbe. Wert zwischen 0 und 255.</li>
+</ul><br><p>Rückgabewert:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right">Farbe, die von dir erstellte Farbe.</li>
+</ul><br></div><div id="robColour_rgb" class="help expert notWedo notEv3 notNxt notMicrobit notBotnroll notNao notBob3 notArduino notSensebox 
+notCalliope notFestobionic notEdison"><h3 class="auto-cursor-target" id="ProgrammierBlöckeNXT-»FarbemitRot...Grün...Blau...«[Experten-Block]">»Farbe 
+mit Rot ... Grün ... Blau ... « <span class="typcn typcn-star"></span></h3><p>Mit diesem Block kannst du dir eine eigene Farbe erstellen, indem du 
+deine Farbe aus Rot, Grün und Blau mischst.</p><p>Eingabewerte:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-left">Zahl, der Rot-Anteil in deine Farbe. Wert zwischen 0 und 255.</li><li class="typcn typcn-arrow-left">Zahl, der 
+Grün-Anteil deiner Farbe. Wert zwischen 0 und 255.</li><li class="typcn typcn-arrow-left">Zahl, der Blau-Anteil deiner Farbe. Wert zwischen 0 und 
+255.</li>
+</ul><br><p>Rückgabewert:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right">Farbe, die von dir erstellte Farbe.</li>
+</ul><br></div><div id="naoColour_rgb" class="help expert notWedo notEv3 notNxt notMicrobit notBob3 notBotnroll notMbot notFestobionic notEdison 
+notCalliope"><h3 class="auto-cursor-target" id="ProgrammierBlöckeNXT-»FarbemitRot...Grün...Blau...«[Experten-Block].1">»Farbe mit Rot ... Grün ... Blau 
+... « <span class="typcn typcn-star"></span></h3><p>Mit diesem Block kannst du dir eine eigene Farbe erstellen, indem du deine Farbe aus Rot, Grün und 
+Blau mischst.</p><p>Eingabewerte:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-left">Zahl, der Rot-Anteil in deine Farbe. Wert zwischen 0 und 255.</li><li class="typcn typcn-arrow-left">Zahl, der 
+Grün-Anteil deiner Farbe. Wert zwischen 0 und 255.</li><li class="typcn typcn-arrow-left">Zahl, der Blau-Anteil deiner Farbe. Wert zwischen 0 und 
+255.</li>
+</ul><br><p>Rückgabewert:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right">Farbe, die von dir erstellte Farbe.</li>
+</ul><br></div><div id="variables_set" class="help beginner"><h3 id="ProgrammierBlöckeNXT-»SchreibeVariable«">»Schreibe Variable«</h3><p>Mit dem Block 
+»Schreibe Variable« kannst du den Wert einer Variablen verändern. Je nach Typ der Variablen (Zahl, Zeichenkette, logischer Wert, Liste, Farbe, 
+Verbindung) kann der Variablen ein passender Wert übergeben werden.</p><p>Einstellmöglichkeit und Eingabewert:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-sorted-down">Variable, deren Wert verändert werden soll.</li><li class="typcn typcn-arrow-left">Wert, auf den die Variable 
+gesetzt werden soll.</li>
+</ul><br></div><div id="variables_get" class="help beginner"><h3 id="ProgrammierBlöckeNXT-»LiesVariable«">»Lies Variable«</h3><p>Mit dem Block »lies 
+Variable« kannst du den Wert einer Variablen an einen anderen Block übergeben. Der Typ des Ausgabewertes entspricht immer dem Typ, mit dem die 
+Variablen im Block »Start« initialisiert wurde.</p><p>Einstellmöglichkeit:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-sorted-down">Variable, deren Wert gelesen werden soll.</li>
+</ul><br><p>Rückgabewert:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right">Wert, der in der Variablen gespeichert ist.</li>
+</ul><br></div><div id="robProcedures_defnoreturn" class="help expert"><h3 
+id="ProgrammierBlöckeNXT-Funktionsblockohne/mitEingabe-undohneRückgabewert[Experten-Block]">Funktionsblock ohne/mit Eingabe- und ohne Rückgabewert 
+<span class="typcn typcn-star"></span></h3><p>In einem Funktionsblock ohne/mit Eingabe- und Rückgabewert wird eine Folge von Anweisungen 
+zusammengefasst. Die Eingabewerte werden durch die lokalen Variablen im Funktionsblock festgelegt. Mit dem »+«-Zeichen können lokale Variablen als 
+Eingabewerte für den Funktionsblock erzeugt werden. Lokale Variablen werden nicht initialisiert.</p><p>Falls in einen Funktionsblock eine Wenn-Abfrage 
+(siehe unten) eingebaut wird, kann es zu einem vorzeitigen Abbruch der Funktion kommen.</p><p>Der Funktionsblock steht nach seiner Definition als 
+zusätzlicher Block in der Kategorie »Funktion« zur Verfügung. Auf diese Weise kann die Lesbarkeit komplexer Programme wesentlich vereinfacht 
+werden.</p><p>Einstellmöglichkeiten:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-pen">Funktionsname, ohne Leer- und Sonderzeichen</li><li class="typcn typcn-plus">Erzeuge eine lokale Variable, der über den 
+Funktionsaufruf ein Wert zugewiesen wird.</li><li class="typcn typcn-minus">Lösche eine lokale Variable.</li>
+</ul><br><div class="confluence-information-macro confluence-information-macro-note"><div class="confluence-information-macro-body"><ul><li>Der Name 
+eines Funktionsblocks muss mit einem Kleinbuchstaben beginnen. Sonderzeichen im Funktionsnamen sind nicht erlaubt.</li><li>Wenn in einem Funktionsblock 
+Eingabewerte (lokale Variablen) definiert werden, müssen alle diese Werte beim Funktionsaufruf belegt werden.</li></ul></div></div></div><div 
+id="robProcedures_defreturn" class="help expert"><h3 
+id="ProgrammierBlöckeNXT-Funktionsblockohne/mitEingabe-undmitRückgabewerten[Experten-Block]">Funktionsblock ohne/mit Eingabe- und mit Rückgabewerten 
+<span class="typcn typcn-star"></span></h3><p>In einem Funktionsblock ohne/mit Eingabe- und mit Rückgabewert wird eine Folge von Anweisungen 
+zusammengefasst. Mit dem »+«-Zeichen können lokale Variablen als Eingabewerte für den Funktionsblock erzeugt werden. Nachdem alle Anweisungen 
+durchlaufen wurden, wird abschließend ein Wert als Funktionswert zurückgegeben.</p><p>Falls in einen Funktionsblock eine Wenn-Abfrage eingebaut wird, 
+kann es zu einem vorzeitigen Abbruch der Funktion kommen, und es kann ein alternativer Funktionswert zurückgegeben werden.</p><p>Der Funktionsblock 
+steht nach seiner Definition als zusätzlicher Block in der Kategorie »Funktion« zur Verfügung. Auf diese Weise kann die Lesbarkeit komplexer Programme 
+wesentlich vereinfacht werden.</p><p>Einstellmöglichkeiten:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-pen">Funktionsname, ohne Leer- und Sonderzeichen</li><li class="typcn typcn-plus">Erzeuge eine lokale Variable, der über den 
+Funktionsaufruf ein Wert zugewiesen wird.</li><li class="typcn typcn-minus">Lösche eine lokale Variable.</li><li class="typcn 
+typcn-arrow-sorted-down">Datentyp für den Rückgabewert. »Zahl«, »logischer Wert«, »Zeichenkette«, »Farbe«, »Verbindung«, »Liste Zahl«, »Liste logischer 
+Wert«, »Liste Zeichenkette«, »Liste Verbindung«.</li><li class="typcn typcn-arrow-left">Wert, der dem eingestellten Datentyp des Rückgabewertes 
+entspricht.</li>
+</ul><br><p>Rückgabewert:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right">Wert, der im Rückgabeblock berechnet wurde.</li>
+</ul> <div class="confluence-information-macro confluence-information-macro-note"><div class="confluence-information-macro-body"><ul><li>Der Name eines 
+Funktionsblocks muss mit einem Kleinbuchstaben beginnen. Sonderzeichen im Funktionsnamen sind nicht erlaubt.</li><li>Wenn in einem Funktionsblock 
+Eingabewerte (lokale Variablen) definiert werden, müssen alle Werte beim Funktionsaufruf belegt werden.</li></ul></div></div></div><div 
+id="robProcedures_ifreturn" class="help expert"><h3 id="ProgrammierBlöckeNXT-Wenn-AbfrageinnerhalbeinerFunktion[Experten-Block]">Wenn-Abfrage innerhalb 
+einer Funktion <span class="typcn typcn-star"></span></h3><p>Die Wenn-Abfrage innerhalb einer Funktion ist von besonderer Bedeutung. Sobald der 
+Funktionsablauf auf eine Wenn-Abfrage trifft, wird die Gültigkeit der Bedingung geprüft.</p><h4 
+id="ProgrammierBlöckeNXT-Wenn-AbfrageinnerhalbeinerFunktionmitRückgabewert:">Wenn-Abfrage innerhalb einer Funktion mit Rückgabewert:</h4><ul><li>Wenn 
+die Bedingung erfüllt ist, wird der weitere Funktionsablauf ignoriert und die Funktion wird beendet. Der zweite übergebene Wert wird als Funktionswert 
+zurückgegeben. Ein eventuell mit der Funktion definierter Rückgabewert wird nicht weiter berücksichtig. Der Rückgabewert-Typ wird durch den Typ des 
+Rückgabewerts der umgebenden Funktion festgelegt.</li><li>Wenn die Bedingung nicht erfüllt ist, wird der Funktionsablauf fortgesetzt. Ein eventuell mit 
+der Funktion definierter Rückgabewert wird als Funktionswert zurückgegeben, wenn der Funktionsablauf das Funktionsende erreicht.</li></ul><h4 
+id="ProgrammierBlöckeNXT-Wenn-AbfrageinnerhalbeinerFunktionohneRückgabewert:">Wenn-Abfrage innerhalb einer Funktion ohne Rückgabewert:</h4><ul><li>Eine 
+Wenn-Abfrage innerhalb einer Funktion ohne Rückgabewert hat nur die Bedingung als Eingabewert.</li><li>Wenn die Bedingung erfüllt ist, wird der weitere 
+Funktionsablauf ignoriert und die Funktion wird beendet.</li><li>Wenn die Bedingung nicht erfüllt ist, wird der Funktionsablauf 
+fortgesetzt.</li></ul><p>Einstellgabewerte:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-left">Logischer Wert, der aus einer Bedingung bestimmt wird.</li><li class="typcn typcn-arrow-left"><span>Wert, dessen Typ 
+am Ende des Funktionsblock eingestellt ist.</span></li>
+</ul><br><p>Rückgabewert:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right">Wert, dessen Typ am Ende des Funktionsblock eingestellt ist.</li>
+</ul><br></div><div id="robProcedures_callnoreturn" class="help expert"><h3 
+id="ProgrammierBlöckeNXT-»FunktionsaufrufohneRückgabewert«[Experten-Block]">»Funktionsaufruf ohne Rückgabewert « <span class="typcn 
+typcn-star"></span></h3><p>Mit diesem Block kannst du eine vorher definierte Funktion aufrufen. Diese Funktion gibt dabei keinen Wert 
+zurück.</p><p>Eingabewerte:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-left">Wert, abhängig von den Eingabewerte der vorher definierten Funktion.</li>
+</ul></div><div id="robProcedures_callreturn" class="help expert"><h3 class="auto-cursor-target" 
+id="ProgrammierBlöckeNXT-»FunktionsaufrufmitRückgabewert«">»Funktionsaufruf mit Rückgabewert «</h3><p>Mit diesem Block kannst du eine vorher definierte 
+Funktion aufrufen und den Rückgabewerte abrufen.</p><p>Eingabewerte:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-left">Wert, abhängig von den Eingabewerten der vorher definierten Funktion.</li>
+</ul><br><p>Rückgabewerte:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right">Wert, abhängig von dem Rückgabewert der definierten Funktion.</li>
+</ul><br></div><div id="robCommunication_connection" class="help expert"><h3 
+id="ProgrammierBlöckeNXT-Verbindungsblock[Experten-Block]">Verbindungsblock <span class="typcn typcn-star"></span></h3><p>Der Verbindungsaufbau wird 
+von einem NXT-Roboter initiiert, wie z.B. ein Telefonanruf von einem Anrufer. Im Display des NXT ist jeweils an der Kommunikationsnummer erkennbar, 
+über welche Verbindung die Kommunikation läuft.</p><p>Eingabewert:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-sorted-down">Verbindungsname, wähle einen der 4 angebotenen Namen aus.</li>
+</ul>Rückgabewert:<ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right">Verbindungsobjekt.</li>
+</ul><br></div><div id="robCommunication_sendBlock" class="help expert"><h3 
+id="ProgrammierBlöckeNXT-SendeNachrichtüberVerbindung[Experten-Block]">Sende Nachricht über Verbindung <span class="typcn 
+typcn-star"></span></h3><p>Eine Nachricht wird an den ausgewählten Roboter übermittelt. Die Nachricht wird über einen Block eingegeben, der dem 
+Nachrichtentyp entspricht (Zahl, logischer Wert oder Zeichenkette).</p><p>Einstellmöglichkeiten und Eingabewerte:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-sorted-down">Nachrichtentyp, »Zahl«, »logischer Wert« oder »Zeichenkette«.</li><li class="typcn 
+typcn-arrow-left">Nachricht, die übermittelt werden soll.</li><li class="typcn typcn-arrow-sorted-down">Verbindungsmedium, »Bluetooth«.</li><li 
+class="typcn typcn-arrow-sorted-down">Kanal, über den die Kommunikation laufen soll.</li><li class="typcn typcn-arrow-left">Verbindung, über die die 
+Kommunikation erfolgt.</li>
+</ul><br></div><div id="robCommunication_receiveBlock" class="help expert"><h3 
+id="ProgrammierBlöckeNXT-EmpfangeNachrichtüberVerbindung[Experten-Block]">Empfange Nachricht über Verbindung <span class="typcn 
+typcn-star"></span></h3><p>Eine Nachricht wird über eine Verbindung übermittelt. Die Nachricht wird an einen Block übergeben, z.B. an eine 
+Variable.</p><p>Einstellmöglichkeiten und Eingabewert:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-sorted-down">Nachrichtentyp, »Zahl«, »logischer Wert« oder »Zeichenkette«.</li><li class="typcn 
+typcn-arrow-sorted-down">Verbindungsmedium, »Bluetooth«.</li><li class="typcn typcn-arrow-sorted-down">Kanal, über den die Kommunikation laufen 
+soll.</li><li class="typcn typcn-arrow-left">Verbindung, über die die Kommunikation erfolgt.</li>
+</ul>Rückgabewert:<ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right">Nachricht, Inhalt der empfangenen Nachricht.</li>
+</ul><br></div><div id="robCommunication_checkConnection" class="help expert"><h3 
+id="ProgrammierBlöckeNXT-»connectiontorobot«-PrüfeVerbindung[Experten-Block]">»connection to robot« - Prüfe Verbindung <span class="typcn 
+typcn-star"></span></h3><p>Die Verbindung zwischen zwei NXT-Robotern erfolgt über eine Verbingungsnummer. Der Block »connection to robot« prüft, ob 
+eine Verbindung »steht«.</p><p>Einstellmöglichkeit:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-left">Verbindung, über die die Kommunikation erfolgt.</li>
+</ul>Rückgabewert:<ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right">Logischer Wert, »true« wenn eine Verbindung besteht, »false« sonst.</li>
+</ul><br></div></div></body>

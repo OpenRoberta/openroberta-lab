@@ -1,4 +1,4 @@
-<head><title></title><meta http-equiv="content-type" content="text/html; charset=utf-8"></head><body><div id="helpContent"><div id="robControls_start" class="help beginner"><h3 id="BlockbeschreibungsenseBox-»Programmstart«"><span style="color: rgb(0,0,0);">»Programmstart«</span><span style="color: rgb(0,0,0);"> </span></h3><p>Jedes Programm beginnt mit dem »Programmstart-Block«, welcher nicht gelöscht werden kann. Den ersten Block, den man verwenden möchte, verbindet man direkt mit der  »Sequenzverbindung« am Programmstart-Block. </p><p>Einstellmöglichkeiten:
+<head><title></title><meta http-equiv="content-type" content="text/html; charset=utf-8"></head><body><div id="helpContent"><div id="robControls_start_ardu" class="help beginner"><h3 id="BlockbeschreibungsenseBox-»Programmstart«"><span style="color: rgb(0,0,0);">»Programmstart«</span><span style="color: rgb(0,0,0);"> </span></h3><p>Jedes Programm beginnt mit dem »Programmstart-Block«, welcher nicht gelöscht werden kann. Den ersten Block, den man verwenden möchte, verbindet man direkt mit der  »Sequenzverbindung« am Programmstart-Block. </p><p>Einstellmöglichkeiten:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-plus">Erzeuge eine neue globale Variable.</li><li class="typcn typcn-minus"><span>Entferne die globale Variable.</span></li>
 </ul><br><p>Wenn globale Variablen erzeugt wurden:
@@ -10,34 +10,43 @@
 </ul></div><div id="robActions_display_text_i2c" class="help beginner"><h3 class="auto-cursor-target" id="BlockbeschreibungsenseBox-»OLEDBildschirmI²C...ZeigeText...inSpalte...Zeile...«">»OLED Bildschirm I²C ... Zeige Text ... in Spalte ... Zeile ... «</h3><p>Mit diesem Block kannst du einen Text auf dem OLED-Display darstellen. Das OLED-Display musst du an einen der »I²C-Ports« deiner senseBox anschließen.</p><p>Eingabewerte:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-left">Zeichenkette, Text, den du auf dem Display darstellen möchtest.</li><li class="typcn typcn-arrow-left">Zahl, Spalte in der der Text dargestellt werden soll. Zahl zwischen 0 und 100.</li><li class="typcn typcn-arrow-left">Zahl, Zeile in der der Text dargestellt werden soll. Zahl zwischen 0 und 50.</li>
-</ul></div><div id="robActions_display_clear_i2c" class="help beginner"><h3 class="auto-cursor-target" id="BlockbeschreibungsenseBox-»LöscheBildschirmLCD1602I²C«">»Lösche Bildschirm LCD 1602 I²C «</h3><p>Mit diesem Block kannst das angeschlossene Display löschen, also zurücksetzen.</p></div><div id="robActions_brickLight_on" class="help beginner"><h3 class="auto-cursor-target" id="BlockbeschreibungsenseBox-»SchalteLEDan...«">»Schalte LED an ... «</h3><p>Mit diesem Block kannst du eine LED deiner senseBox oder eine LED, die an deiner senseBox angeschlossen ist, steuern.</p><p>Einstellungen:
-</p><ul style="margin-top: 0; margin-bottom: 10px">
-<li class="typcn typcn-arrow-sorted-down">Option, Name der LED, die du steuern möchtest.</li><li class="typcn typcn-arrow-sorted-down">Option, Status der LED, an oder aus.</li>
-</ul></div><div id="robActions_play_tone" class="help beginner"><h3 class="auto-cursor-target" id="BlockbeschreibungsenseBox-»SpieleFrequenzHz...Dauerms...«">»Spiele Frequenz Hz ... Dauer ms ... «</h3><p>Mit diesem Block kann deine senseBox einen Ton für eine gewisse Zeit wiedergeben.</p><p>Eingabewerte:
+</ul></div><div id="robActions_display_clear_i2c" class="help beginner"><h3 class="auto-cursor-target" id="BlockbeschreibungsenseBox-»LöscheBildschirmLCD1602I²C«">»Lösche Bildschirm LCD 1602 I²C «</h3><p>Mit diesem Block kannst das angeschlossene Display löschen, also zurücksetzen.</p></div><div id="robActions_play_tone" class="help beginner"><h3 class="auto-cursor-target" id="BlockbeschreibungsenseBox-»SpieleFrequenzHz...Dauerms...«">»Spiele Frequenz Hz ... Dauer ms ... «</h3><p>Mit diesem Block kann deine senseBox einen Ton für eine gewisse Zeit wiedergeben.</p><p>Eingabewerte:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-left">Zahl, Frequenz des Tons, der gespielt werden soll. Nur Töne zwischen 20 und 20000 Hertz sind für das menschliche Gehör hörbar.</li><li class="typcn typcn-arrow-left">Zahl, Dauer für die der Ton gespielt werden soll in Millisekunden.</li>
-</ul></div><div id="robActions_sendData" class="help beginner"><h3 class="auto-cursor-target" id="BlockbeschreibungsenseBox-»SendeDatenan...Phänomen...«">»Sende Daten an ... Phänomen ... «</h3><p>Mit diesem Block kannst du deine Daten entweder per W-LAN an »OpenSenseMap« oder an deine SD-Karte senden, um diese Daten zu dokumentieren.</p><p>Einstellungen und Eingabewerte:
+</ul></div><div id="robActions_brickLight_on" class="help beginner"><h3 class="auto-cursor-target" id="BlockbeschreibungsenseBox-»SchalteLEDan...«">»Schalte LED an ... «</h3><p>Mit diesem Block kannst du eine LED deiner senseBox oder eine LED, die an deiner senseBox angeschlossen ist, steuern.</p><p>Einstellungen:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
-<li class="typcn typcn-arrow-sorted-down">Option, Ziel deiner Daten, entweder OpenSenseMap oder deine lokale SD-Karte</li><li class="typcn typcn-arrow-left">Zahl, Daten die du speichern bzw. weitergeben möchtest.</li>
+<li class="typcn typcn-arrow-sorted-down">Option, Name der LED, die du steuern möchtest.</li><li class="typcn typcn-arrow-sorted-down">Option, Status der LED, an oder aus.</li>
 </ul></div><div id="robActions_led_on" class="help expert"><h3 class="auto-cursor-target" id="BlockbeschreibungsenseBox-»SchalteLEDan...Farbe...«[Experten-Block]">»Schalte LED an ... Farbe ... « <span class="typcn typcn-star"></span></h3><p>Mit diesem Block kannst du eine Farb-LED steuern, die du an deine senseBox angeschlossen hast.</p><p>Einstellungen und Eingabewert:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-sorted-down">Option, Port bzw. Name der LED, die du steuern möchtest.</li><li class="typcn typcn-arrow-left">Farbe, Farbe in der deine LED leuchten soll.</li>
 </ul></div><div id="robActions_led_off" class="help expert"><h3 class="auto-cursor-target" id="BlockbeschreibungsenseBox-»SchalteLEDaus«[Experten-Block]">»Schalte LED aus « <span class="typcn typcn-star"></span></h3><p>Mit diesem Block kannst du eine Farb-LED, die du an deine senseBox angeschlossen hast, ausschalten.</p><p>Einstellungen:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-sorted-down">Option, Port bzw. Name der LED, die du ausschalten möchtest.</li>
-</ul></div><div id="robActions_plot_point" class="help expert"><h3 class="auto-cursor-target" id="BlockbeschreibungsenseBox-»PlotapointonDisplayWert...attickmark...«[Experten-Block]">»Plot a point on Display Wert ... at tickmark ... « <span class="typcn typcn-star"></span></h3><p>Mit diesem Block kannst du einen Punkt eines Graphen zeichnen. Dabei ist »tickmark« die x-Koordinate und der Wert die y-Koordinate.</p><p>Einstellungen und Eingabewerte:
+</ul></div><div id="robActions_sendData" class="help beginner"><h3 class="auto-cursor-target" id="BlockbeschreibungsenseBox-»SendeDatenan...Phänomen...«">»Sende Daten an ... Phänomen ... «</h3><p>Mit diesem Block kannst du deine Daten entweder per W-LAN an »OpenSenseMap« oder an deine SD-Karte senden, um diese Daten zu dokumentieren.</p><p>Einstellungen und Eingabewerte:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
-<li class="typcn typcn-arrow-sorted-down">Option, Display auf dem der Punkt dargestellt werden soll.</li><li class="typcn typcn-arrow-left">Zahl, Wert der dargestellt werden soll. Dies entspricht der y-Koordinate des Punkts.</li><li class="typcn typcn-arrow-left">Zahl, x-Koordinate des Punkts, der dargestellt werden soll.</li>
-</ul></div><div id="robActions_plot_clear" class="help expert"><h3 class="auto-cursor-target" id="BlockbeschreibungsenseBox-»Cleartheplot...«[Experten-Block]">»Clear the plot ... « <span class="typcn typcn-star"></span></h3><p>Mit diesem Block kannst du den Graphen auf einem Display zurücksetzen.</p><p>Einstellungen:
+<li class="typcn typcn-arrow-sorted-down">Option, Ziel deiner Daten, entweder OpenSenseMap oder deine lokale SD-Karte</li><li class="typcn typcn-arrow-left">Zahl, Daten die du speichern bzw. weitergeben möchtest.</li>
+</ul></div><div id="robActions_plot_clear" class="help expert"><h3 class="auto-cursor-target" id="BlockbeschreibungsenseBox-»LöschedasDiagramm...«[Experten-Block]">»Lösche das Diagramm ... « <span class="typcn typcn-star"></span></h3><p>Mit diesem Block kannst du den Graphen auf einem Display zurücksetzen.</p><p>Einstellungen:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-sorted-down">Option, Display, dass zurückgesetzt werden soll.</li>
+</ul></div><div id="robActions_plot_point" class="help expert"><h3 class="auto-cursor-target" id="BlockbeschreibungsenseBox-»ZeichneeinenPunktan...Wert...andenTeilstrich...«[Experten-Block]">»Zeichne einen Punkt an ... Wert ... an den Teilstrich ... « <span class="typcn typcn-star"></span></h3><p>Mit diesem Block kannst du einen Punkt eines Graphen zeichnen. Dabei ist »tickmark« die x-Koordinate und der Wert die y-Koordinate.</p><p>Einstellungen und Eingabewerte:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-sorted-down">Option, Display auf dem der Punkt dargestellt werden soll.</li><li class="typcn typcn-arrow-left">Zahl, Wert der dargestellt werden soll. Dies entspricht der y-Koordinate des Punkts.</li><li class="typcn typcn-arrow-left">Zahl, x-Koordinate des Punkts, der dargestellt werden soll.</li>
+</ul></div><div id="robActions_write_pin" class="help expert"><h3 id="BlockbeschreibungsenseBox-»Schreibe...WertAktor...«[Experten-Block]">»Schreibe ... Wert Aktor ... « <span class="typcn typcn-star"></span></h3><p>Mit diesem Block kannst du einen einzelnen Pin deiner senseBox steuern und entweder einen digitalen oder analogen Wert an diesen Pin anlegen. Wenn du digital auswählst, liegt entweder eine Spannung von 3,3V oder 0V an dem Pin an, bei analog kann jeder Wert zwischen 0V und 3,3V anliegen.</p><p>Optionen und Eingabewerte:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-sorted-down">Option, wähle ob du einen analogen oder digitalen Wert anlegen möchtest.</li><li class="typcn typcn-arrow-sorted-down">Option, wähle den Aktor aus, an dem du die Spannung anlegen möchtest.</li><li class="typcn typcn-arrow-left">Zahl, wähle die Spannung, die du anlegen möchtest. Wenn du digital ausgewählt hast entweder 0 oder 1, bei einem analogen Wert eine Zahl zwischen 0 und 1023.</li>
+</ul></div><div id="robSensors_out_getSample" class="help expert"><h3 id="BlockbeschreibungsenseBox-»Gib...WertSensor...«[Experten-Block]">»Gib ... Wert Sensor ... « <span class="typcn typcn-star"></span></h3><p><span style="letter-spacing: -0.006em;">Mit diesem Block kannst du den Wert eines angeschlossenen Sensors abfragen. Dabei kannst du zwischen analogen und digitalen Sensoren unterscheiden. Bei analogen Sensoren misst der Roboter die Spannung an dem eingestellten Anschluss. Bei einem digitalen Sensor misst der Roboter ob eine Grenzspannung am Anschluss überschritten ist oder nicht.</span></p><p><span style="letter-spacing: -0.006em;">Optionen:</span>
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-sorted-down">Option, wähle ob du einen digitalen oder analogen Sensor abfragen möchtest.</li><li class="typcn typcn-arrow-sorted-down">Option, wähle den Sensor, den du abfragen möchtest.</li>
+</ul><br><p><span class="auto-cursor-target" style="letter-spacing: -0.006em;">Rückgabewert:</span>
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right">Zahl, entweder eine 0 oder 1 bei einem, digitalen Wert oder eine Zahl zwischen 0 und 1023 bei einem analogen Wert.</li>
 </ul></div><div id="robSensors_key_getSample" class="help beginner"><h3 id="BlockbeschreibungsenseBox-»Taste...gedrückt?«">»Taste ... gedrückt?«</h3><p>Mit diesem Block kannst du den Zustand einer Taste deiner senseBox abfragen.</p><p>Einstellungen:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-sorted-down">Option, Name bzw. Port des Tasters.</li>
 </ul>Rückgabewert:
 <ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-right">logischer Wert, »wahr«, wenn der Taster gedrückt ist, sonst »falsch«.</li>
-</ul><br></div><div id="robSensors_sound_getSample" class="help beginner"><h3 id="BlockbeschreibungsenseBox-»GibLicht%Lichtsensor...«">»Gib Licht % Lichtsensor ... «</h3><p>Mit diesem Block kannst du den eingebauten Lichtsensor deiner senseBox abfragen. Dieser Sensor misst die Helligkeit des einfallenden Lichts.</p><p>Einstellungen:
+</ul><br></div><div id="robSensors_light_getSample" class="help beginner"><h3 id="BlockbeschreibungsenseBox-»GibLicht%Lichtsensor...«">»Gib Licht % Lichtsensor ... «</h3><p>Mit diesem Block kannst du den eingebauten Lichtsensor deiner senseBox abfragen. Dieser Sensor misst die Helligkeit des einfallenden Lichts.</p><p>Einstellungen:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-sorted-down">Option, Name bzw. Port des Lichtsensors.</li>
 </ul>Rückgabewert:
@@ -88,19 +97,19 @@ Option, Name bzw. Port des angeschlossenen Sensors.
 </ul>Rückgabewert:
 <ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-right">Zahl, Wert der Beschleunigung in die gewählte Richtung verglichen mit der Standard-Erdbeschleunigung.</li>
-</ul><br></div><div id="robSensors_gyro_getSample" class="help beginner"><h3 id="BlockbeschreibungsenseBox-»Gib...°Kreiselsensor...«">»Gib ... ° Kreiselsensor ... «</h3><p>Mit diesem Block kannst du den eingebauten Kreiselsensor deiner senseBox abfragen.</p><p>Einstellungen:
+</ul><br></div><div id="robSensors_particle_getSample" class="help beginner"><h3 id="BlockbeschreibungsenseBox-»Gib...KonzentrationSDS011Feinstaubsensor«">»Gib ... Konzentration SDS011 Feinstaubsensor«</h3><p>Mit diesem Block kannst du den Feinstaubsensor deiner senseBox abfragen. Der Feinstaubsensor kann entweder Partikel mit einem Durchmesser von 2,5 Mikrometer oder 10 Mikrometer messen.</p><p>Einstellungen:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
-<li class="typcn typcn-arrow-sorted-down">Option, Achse bzw. Richtung die gemessen werden soll.</li><li class="typcn typcn-arrow-sorted-down">Option, Name bzw. Port des Kreiselsensors.</li>
+<li class="typcn typcn-arrow-sorted-down">Option, Größe der Partikel, die du messen möchtest.</li><li class="typcn typcn-arrow-sorted-down">Option, Name bzw. Port des Feinstaubsensors..</li>
 </ul>Rückgabewert:
 <ul style="margin-top: 0; margin-bottom: 10px">
-<li class="typcn typcn-arrow-right">Zahl, Wert des Kreiselsensors in die gewählte Richtung.</li>
-</ul><br></div><div id="robSensors_compass_getSample" class="help beginner"><h3 id="BlockbeschreibungsenseBox-»Gib...Kompasssensor...«">»Gib ... Kompasssensor ... «</h3><p>Mit diesem Block kannst du den eingebauten Kompasssensor deiner senseBox abfragen.</p><p>Einstellungen:
+<li class="typcn typcn-arrow-right">Zahl, Konzentration der gewählten Partikel in Mikrogramm/m^3.</li>
+</ul><br></div><div id="robSensors_gps_getSample" class="help expert"><h3 id="BlockbeschreibungsenseBox-»Gib...GPS-Empfänger...«[Experten-Block]">»Gib ... GPS-Empfänger ... « <span class="typcn typcn-star"></span></h3><p>Mit diesem Block kannst du einen angeschlossenen GPS-Empfänger abfragen. Der GPS-Empfänger kann verschiedene Werte wie Position, Geschwindigkeit und Höhe des Empfängers messen.</p><p>Einstellungen:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
-<li class="typcn typcn-arrow-sorted-down">Option, Achse die abgefragt werden soll.</li><li class="typcn typcn-arrow-sorted-down">Option, Name bzw. Port des Kompasssensors.</li>
-</ul>Rückgabewert:
-<ul style="margin-top: 0; margin-bottom: 10px">
-<li class="typcn typcn-arrow-right">Zahl, Wert des Kompasssensors in die ausgewählte Richtung.</li>
-</ul><br></div><div id="robSensors_timer_get_Sample" class="help beginner"><h3 id="BlockbeschreibungsenseBox-»GibWertmsZeitgeber...«">»Gib Wert ms Zeitgeber ... «</h3><p>Mit diesem Block kannst du den momentanen Wert eines Zeitgebers abfragen.</p><p>Einstellungen:
+<li class="typcn typcn-arrow-sorted-down">Option, Eigenschaft die gemessen werden soll. Zur Auswahl stehen Breiten- und Längengrad, Höhe, Geschwindigkeit, Datum und Zeit.</li><li class="typcn typcn-arrow-sorted-down">Option, Name bzw. Port des GPS-Empfängers.</li>
+</ul><br><p>Rückgabewert:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right">Zahl, Wert der ausgewählten Eigenschaft.</li>
+</ul><br></div><div id="robSensors_timer_getSample" class="help beginner"><h3 id="BlockbeschreibungsenseBox-»GibWertmsZeitgeber...«">»Gib Wert ms Zeitgeber ... «</h3><p>Mit diesem Block kannst du den momentanen Wert eines Zeitgebers abfragen.</p><p>Einstellungen:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-sorted-down">Option, Nummer des Zeitgebers, den du abfragen möchtest.</li>
 </ul>Rückgabewert:
@@ -133,10 +142,13 @@ Option, Name bzw. Port des angeschlossenen Sensors.
 </ul></div><div id="controls_flow_statements" class="help expert"><h3 style="text-align: left;" id="BlockbeschreibungsenseBox-»DieSchleifeabbrechen/mitdernächstenIterationderSchleifefortfahren«[Experten-Block]">»Die Schleife abbrechen/mit der nächsten Iteration der Schleife fortfahren« <span class="typcn typcn-star"></span></h3><p style="text-align: left;">Mit dem Block »Die Schleife abbrechen/mit der nächsten Iteration der Schleife fortfahren« kann eine Schleife vorzeitig beendet bzw. wieder zum Anfang der Schleife gesprungen werden. Sobald dieser Block in einer Reihe von Blöcken erscheint, werden alle nachfolgenden Blöcke bis zum Ende der Schleife ignoriert.</p><p style="text-align: left;">Einstellmöglichkeiten:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-sorted-down">Abbruchverhalten, »Die Schleife abbrechen« oder »mit der nächsten Iteration der Schleife fortfahren«.</li>
-</ul></div><div id="robControls_wait_time" class="help beginner"><h3 style="text-align: left;" id="BlockbeschreibungsenseBox-»Warte«">»Warte«</h3><p style="text-align: left;">Mit dem Block »Warte« kannst du dein Programm an der Stelle "anhalten", an der du den Block eingefügt hast. Dein Programm bleibt dann für die angegebene Dauer an dieser Stelle stehen. Nach Ablauf der angegebenen Zeit wird dann der nachfolgende Block ausgeführt. Beispielsweise kannst du dadurch einen Text in dem Display deines Roboters exakt für diese Zeit anzeigen lassen.</p><p style="text-align: left;">Einstellmöglichkeiten:
+</ul></div><div id="robControls_wait" class="help beginner"><h3 class="auto-cursor-target" id="BlockbeschreibungsenseBox-»Wartebis...«">»Warte bis ... «</h3><p style="text-align: left;">Mit dem Block »Warte bis« kannst du dein Programm an der Stelle »anhalten«, an der du den »Warte bis«-Block eingefügt hast. Dein Programm wartet dann so lange, bis die Bedingung erfüllt (wahr) ist. Den »Warte bis«-Block kannst du mit dem »+«-Zeichen um zusätzliche Bedingungen erweitern. Dein Programm wartet dann solange, bis (mindestens) eine der Bedingungen deines »Warte bis«-Blocks erfüllt ist.</p><p style="text-align: left;">Einstelmöglichkeiten und Eingabewert:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-plus">Eine weitere Wartebedingung am Ende anfügen.</li><li class="typcn typcn-minus">Die letzte Wartebedingung löschen.</li><li class="typcn typcn-arrow-left">Logischer Wert, »wahr« oder »falsch«.</li>
+</ul></div><div id="robControls_wait_time" class="help beginner"><h3 style="text-align: left;" id="BlockbeschreibungsenseBox-»Wartems...«">»Warte ms ... «</h3><p style="text-align: left;">Mit dem Block »Warte« kannst du dein Programm an der Stelle "anhalten", an der du den Block eingefügt hast. Dein Programm bleibt dann für die angegebene Dauer an dieser Stelle stehen. Nach Ablauf der angegebenen Zeit wird dann der nachfolgende Block ausgeführt. Beispielsweise kannst du dadurch einen Text in dem Display deines Roboters exakt für diese Zeit anzeigen lassen.</p><p style="text-align: left;">Einstellmöglichkeiten:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-left">Zahl, Wartezeit in Millisekunden.</li>
-</ul></div><div id="robControls_wait_for" class="help beginner"><h3 style="text-align: left;" id="BlockbeschreibungsenseBox-»Wartebis«">»Warte bis«</h3><p style="text-align: left;">Mit dem Block »Warte bis« kannst du dein Programm an der Stelle »anhalten«, an der du den »Warte bis«-Block eingefügt hast. Dein Programm wartet dann so lange, bis die Bedingung erfüllt (wahr) ist. Den »Warte bis«-Block kannst du mit dem »+«-Zeichen um zusätzliche Bedingungen erweitern. Dein Programm wartet dann solange, bis (mindestens) eine der Bedingungen deines »Warte bis«-Blocks erfüllt ist.</p><p style="text-align: left;">Einstelmöglichkeiten und Eingabewert:
+</ul></div><div id="robControls_wait_for" class="help beginner"><h3 style="text-align: left;" id="BlockbeschreibungsenseBox-»Wartebis...«.1">»Warte bis ... «</h3><p style="text-align: left;">Mit dem Block »Warte bis« kannst du dein Programm an der Stelle »anhalten«, an der du den »Warte bis«-Block eingefügt hast. Dein Programm wartet dann so lange, bis die Bedingung erfüllt (wahr) ist. Den »Warte bis«-Block kannst du mit dem »+«-Zeichen um zusätzliche Bedingungen erweitern. Dein Programm wartet dann solange, bis (mindestens) eine der Bedingungen deines »Warte bis«-Blocks erfüllt ist.</p><p style="text-align: left;">Einstelmöglichkeiten und Eingabewert:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-plus">Eine weitere Wartebedingung am Ende anfügen.</li><li class="typcn typcn-minus">Die letzte Wartebedingung löschen.</li><li class="typcn typcn-arrow-left">Logischer Wert, »wahr« oder »falsch«.</li>
 </ul></div><div id="logic_compare" class="help beginner"><h3 style="text-align: left;" id="BlockbeschreibungsenseBox-»Vergleiche«">»Vergleiche«</h3><p style="text-align: left;">Mit dem Block »Vergleiche« kannst du verschiedene Eingabewerte (Zahl, Farbe, logischer Wert, Text) gleichen Typs miteinander vergleichen. Stimmt der Vergleich, wird der logische Wert »wahr« zurückgegeben, sonst »falsch«.</p><p style="text-align: left;">Einstellmöglichkeiten und Eingabewerte:
@@ -253,7 +265,7 @@ Option, Name bzw. Port des angeschlossenen Sensors.
 </ul><br></div><div id="text_comment" class="help beginner"><h3 style="text-align: left;" id="BlockbeschreibungsenseBox-»Kommentar«">»Kommentar«</h3><p style="text-align: left;">Dokumentiere dein Programm mit diesem Block, damit du und andere es später leichter haben, dein Programm zu verstehen. Dieser Kommentar wird auch im generierten Source Code zu sehen sein.  </p><p style="text-align: left;">Eingabewert:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-pen">Zeichenkette, bestehend aus beliebigen Zeichen</li>
-</ul></div><div id="robText_join" class="help expert notBob3"><h3 style="text-align: left;" id="BlockbeschreibungsenseBox-»ErstelleText«[Experten-Block]">»Erstelle Text« <span class="typcn typcn-star"></span></h3><p style="text-align: left;">Mit dem »Erstelle Text«-Block wird ein Stück Text aus verschiedenen Eingabewerten zusammengesetzt. Mit dem +-Zeichen können weitere Eingabemöglichkeiten geschaffen werden. Alle Eingaben werden zu einer kontinuierlichen Zeichenkette zusammengefügt. </p><p style="text-align: left;">Eingabewerte:
+</ul></div><div id="robText_join" class="help expert notBob3 notFestobionic"><h3 style="text-align: left;" id="BlockbeschreibungsenseBox-»ErstelleText«[Experten-Block]">»Erstelle Text« <span class="typcn typcn-star"></span></h3><p style="text-align: left;">Mit dem »Erstelle Text«-Block wird ein Stück Text aus verschiedenen Eingabewerten zusammengesetzt. Mit dem +-Zeichen können weitere Eingabemöglichkeiten geschaffen werden. Alle Eingaben werden zu einer kontinuierlichen Zeichenkette zusammengefügt. </p><p style="text-align: left;">Eingabewerte:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-plus">Weitere Eingabemöglichkeiten bereitstellen.</li><li class="typcn typcn-minus">Letzte Eingabemöglichkeit entfernen (bei mehr als 2 Eingabemöglichkeiten).</li><li class="typcn typcn-arrow-left">Beliebiger Wert, Zahl, Text, logischer Wert, Farbe.</li>
 </ul><p>Rückgabewert:
@@ -262,16 +274,7 @@ Option, Name bzw. Port des angeschlossenen Sensors.
 </ul><br></div><div id="robText_append" class="help expert notWedo notBob3"><h3 style="text-align: left;" id="BlockbeschreibungsenseBox-»Textanhängen«[Experten-Block]">»Text anhängen« <span class="typcn typcn-star"></span></h3><p style="text-align: left;">Mit dem »Text anhängen«-Block können Zeichenketten erweitert werden, z.B. indem an empfangene Nachrichten eine Signatur angehängt wird.</p><p style="text-align: left;">Eingabemöglichkeiten:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-left">Text, Zeichenkette, an die Text angehängt werden soll</li><li class="typcn typcn-arrow-left">Text, Zeichenkette, die an einen Text angehängt werden soll</li>
-</ul></div><div id="variables_set" class="help beginner"><h3 id="BlockbeschreibungsenseBox-»SchreibeVariable«">»Schreibe Variable«</h3><p>Mit dem Block »Schreibe Variable« kannst du den Wert einer Variablen verändern. Je nach Typ der Variablen (Zahl, Zeichenkette, logischer Wert, Liste, Farbe, Verbindung) kann der Variablen ein passender Wert übergeben werden.</p><p>Einstellmöglichkeit und Eingabewert:
-</p><ul style="margin-top: 0; margin-bottom: 10px">
-<li class="typcn typcn-arrow-sorted-down">Variable, deren Wert verändert werden soll.</li><li class="typcn typcn-arrow-left">Wert, auf den die Variable gesetzt werden soll.</li>
-</ul><br></div><div id="variables_get" class="help beginner"><h3 id="BlockbeschreibungsenseBox-»LiesVariable«">»Lies Variable«</h3><p>Mit dem Block »lies Variable« kannst du den Wert einer Variablen an einen anderen Block übergeben. Der Typ des Ausgabewertes entspricht immer dem Typ, mit dem die Variablen im Block »Start« initialisiert wurde.</p><p>Einstellmöglichkeit:
-</p><ul style="margin-top: 0; margin-bottom: 10px">
-<li class="typcn typcn-arrow-sorted-down">Variable, deren Wert gelesen werden soll.</li>
-</ul><br><p>Rückgabewert:
-</p><ul style="margin-top: 0; margin-bottom: 10px">
-<li class="typcn typcn-arrow-right">Wert, der in der Variablen gespeichert ist.</li>
-</ul> </div><div id="robLists_create_with" class="help expert notWedo notBob3"><h3 id="BlockbeschreibungsenseBox-»ErzeugeListe«[Experten-Block]">»Erzeuge Liste« <span class="typcn typcn-star"></span></h3><p>Der Block »Erzeuge eine leere Liste« erzeugt eine Liste ohne Inhalt. Der Block »Liste« erzeugt eine Liste mit einigen voreingestellten Werten. Mit + und - können weitere Listenelemente am Ende hinzugefügt bzw. entfernt werden. Wenn das letzte Element einer Liste entfernt wurde, liegt eine leere Liste vor.</p><p>Einstellmöglichkeiten:
+</ul></div><div id="robLists_create_with" class="help expert notWedo notBob3"><h3 id="BlockbeschreibungsenseBox-»ErzeugeListe«[Experten-Block]">»Erzeuge Liste« <span class="typcn typcn-star"></span></h3><p>Der Block »Erzeuge eine leere Liste« erzeugt eine Liste ohne Inhalt. Der Block »Liste« erzeugt eine Liste mit einigen voreingestellten Werten. Mit + und - können weitere Listenelemente am Ende hinzugefügt bzw. entfernt werden. Wenn das letzte Element einer Liste entfernt wurde, liegt eine leere Liste vor.</p><p>Einstellmöglichkeiten:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-sorted-down">Typ, »Zahl«, »logischer Wert«, »Zeichenkette«, »Farbe« oder »Verbindung«.</li><li class="typcn typcn-plus">Erzeuge ein weiteres Listenelement am Ende der bestehenden Liste.</li><li class="typcn typcn-minus"> Lösche das Listenelement am Ende der bestehenden Liste.</li><li class="typcn typcn-arrow-left">Werte, die dem Listentyp entsprechen. Hiermit können Anfangswerte gesetzt werden.</li>
 </ul><br><p>Rückgabewert:
@@ -316,6 +319,51 @@ Option, Name bzw. Port des angeschlossenen Sensors.
 </ul><br><p>Rückgabewert:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-right">Liste, Unterliste gleichen Typs wie die als Eingabewert übergebene Liste.</li>
+</ul><br></div><div id="mbedColour_picker" class="help beginner notWedo notEv3 notNxt notMicrobit notBotnroll notNao notBob3 notArduino notSensebox notMbot notFestobionic notEdison"><h3 id="BlockbeschreibungsenseBox-»Farbwahl«">»Farbwahl «</h3><p>Mit diesem Block kannst du eine Farbe aus einer Auswahl von vordefinierten Farben auswählen.</p><p>Option:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-sorted-down">Option, wähle die Farbeaus, die du verwenden möchtest.</li>
+</ul><p class="auto-cursor-target">Rückgabewert:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right">Farbe, die  ausgewählte Farbe.</li>
+</ul></div><div id="robColour_picker" class="help beginner notMicrobit notNao notFestobionic notEdison notCalliope"><h3 id="BlockbeschreibungsenseBox-»Farbwahl«.1">»Farbwahl «</h3><p>Mit diesem Block kannst du eine Farbe aus einer Auswahl von vordefinierten Farben auswählen.</p><p>Option:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-sorted-down">Option, wähle die Farbeaus, die du verwenden möchtest.</li>
+</ul><p class="auto-cursor-target">Rückgabewert:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right">Farbe, die  ausgewählte Farbe.</li>
+</ul></div><div id="naoColour_picker" class="help beginner notWedo notEv3 notNxt notMicrobit notBotnroll notBob3 notArduino notSensebox notMbot notFestobionic notMicrobit notCalliope"><h3 id="BlockbeschreibungsenseBox-»Farbwahl«.2">»Farbwahl «</h3><p>Mit diesem Block kannst du eine Farbe aus einer Auswahl von vordefinierten Farben auswählen.</p><p>Option:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-sorted-down">Option, wähle die Farbeaus, die du verwenden möchtest.</li>
+</ul><p class="auto-cursor-target">Rückgabewert:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right">Farbe, die  ausgewählte Farbe.</li>
+</ul></div><div id="mbedColour_rgb" class="help expert notWedo notEv3 notNxt notMicrobit notBotnroll notNao notBob3 notArduino notSensebox notMbot notFestobionic notEdison"><h3 class="auto-cursor-target" id="BlockbeschreibungsenseBox-»FarbemitRot...Grün...Blau...Weiß...«[Experten-Block]">»Farbe mit Rot ... Grün ... Blau ... Weiß ... « <span class="typcn typcn-star"></span></h3><p>Mit diesem Block kannst du dir eine eigene Farbe erstellen, indem du deine Farbe aus Rot, Grün und Blau mischst.</p><p>Eingabewerte:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-left">Zahl, der Rot-Anteil in deine Farbe. Wert zwischen 0 und 255.</li><li class="typcn typcn-arrow-left">Zahl, der Grün-Anteil deiner Farbe. Wert zwischen 0 und 255.</li><li class="typcn typcn-arrow-left">Zahl, der Blau-Anteil deiner Farbe. Wert zwischen 0 und 255.</li><li class="typcn typcn-arrow-left">Zahl, die  Helligkeit deiner Farbe. Wert zwischen 0 und 255.</li>
+</ul><br><p>Rückgabewert:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right">Farbe, die von dir erstellte Farbe.</li>
+</ul><br></div><div id="robColour_rgb" class="help expert notWedo notEv3 notNxt notMicrobit notBotnroll notNao notBob3 notArduino notSensebox notCalliope notFestobionic notEdison"><h3 class="auto-cursor-target" id="BlockbeschreibungsenseBox-»FarbemitRot...Grün...Blau...«[Experten-Block]">»Farbe mit Rot ... Grün ... Blau ... « <span class="typcn typcn-star"></span></h3><p>Mit diesem Block kannst du dir eine eigene Farbe erstellen, indem du deine Farbe aus Rot, Grün und Blau mischst.</p><p>Eingabewerte:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-left">Zahl, der Rot-Anteil in deine Farbe. Wert zwischen 0 und 255.</li><li class="typcn typcn-arrow-left">Zahl, der Grün-Anteil deiner Farbe. Wert zwischen 0 und 255.</li><li class="typcn typcn-arrow-left">Zahl, der Blau-Anteil deiner Farbe. Wert zwischen 0 und 255.</li>
+</ul><br><p>Rückgabewert:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right">Farbe, die von dir erstellte Farbe.</li>
+</ul><br></div><div id="naoColour_rgb" class="help expert notWedo notEv3 notNxt notMicrobit notBob3 notBotnroll notMbot notFestobionic notEdison notCalliope"><h3 class="auto-cursor-target" id="BlockbeschreibungsenseBox-»FarbemitRot...Grün...Blau...«[Experten-Block].1">»Farbe mit Rot ... Grün ... Blau ... « <span class="typcn typcn-star"></span></h3><p>Mit diesem Block kannst du dir eine eigene Farbe erstellen, indem du deine Farbe aus Rot, Grün und Blau mischst.</p><p>Eingabewerte:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-left">Zahl, der Rot-Anteil in deine Farbe. Wert zwischen 0 und 255.</li><li class="typcn typcn-arrow-left">Zahl, der Grün-Anteil deiner Farbe. Wert zwischen 0 und 255.</li><li class="typcn typcn-arrow-left">Zahl, der Blau-Anteil deiner Farbe. Wert zwischen 0 und 255.</li>
+</ul><br><p>Rückgabewert:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right">Farbe, die von dir erstellte Farbe.</li>
+</ul><br></div><div id="variables_set" class="help beginner"><h3 id="BlockbeschreibungsenseBox-»SchreibeVariable«">»Schreibe Variable«</h3><p>Mit dem Block »Schreibe Variable« kannst du den Wert einer Variablen verändern. Je nach Typ der Variablen (Zahl, Zeichenkette, logischer Wert, Liste, Farbe, Verbindung) kann der Variablen ein passender Wert übergeben werden.</p><p>Einstellmöglichkeit und Eingabewert:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-sorted-down">Variable, deren Wert verändert werden soll.</li><li class="typcn typcn-arrow-left">Wert, auf den die Variable gesetzt werden soll.</li>
+</ul><br></div><div id="variables_get" class="help beginner"><h3 id="BlockbeschreibungsenseBox-»LiesVariable«">»Lies Variable«</h3><p>Mit dem Block »lies Variable« kannst du den Wert einer Variablen an einen anderen Block übergeben. Der Typ des Ausgabewertes entspricht immer dem Typ, mit dem die Variablen im Block »Start« initialisiert wurde.</p><p>Einstellmöglichkeit:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-sorted-down">Variable, deren Wert gelesen werden soll.</li>
+</ul><br><p>Rückgabewert:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right">Wert, der in der Variablen gespeichert ist.</li>
 </ul><br></div><div id="robProcedures_defnoreturn" class="help expert"><h3 id="BlockbeschreibungsenseBox-Funktionsblockohne/mitEingabe-undohneRückgabewert[Experten-Block]">Funktionsblock ohne/mit Eingabe- und ohne Rückgabewert <span class="typcn typcn-star"></span></h3><p>In einem Funktionsblock ohne/mit Eingabe- und Rückgabewert wird eine Folge von Anweisungen zusammengefasst. Die Eingabewerte werden durch die lokalen Variablen im Funktionsblock festgelegt. Mit dem »+«-Zeichen können lokale Variablen als Eingabewerte für den Funktionsblock erzeugt werden. Lokale Variablen werden nicht initialisiert.</p><p>Falls in einen Funktionsblock eine Wenn-Abfrage (siehe unten) eingebaut wird, kann es zu einem vorzeitigen Abbruch der Funktion kommen.</p><p>Der Funktionsblock steht nach seiner Definition als zusätzlicher Block in der Kategorie »Funktion« zur Verfügung. Auf diese Weise kann die Lesbarkeit komplexer Programme wesentlich vereinfacht werden.</p><p>Einstellmöglichkeiten:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-pen">Funktionsname, ohne Leer- und Sonderzeichen</li><li class="typcn typcn-plus">Erzeuge eine lokale Variable, der über den Funktionsaufruf ein Wert zugewiesen wird.</li><li class="typcn typcn-minus">Lösche eine lokale Variable.</li>
@@ -331,4 +379,13 @@ Option, Name bzw. Port des angeschlossenen Sensors.
 </ul><br><p>Rückgabewert:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-right">Wert, dessen Typ am Ende des Funktionsblock eingestellt ist.</li>
+</ul><br></div><div id="robProcedures_callnoreturn" class="help expert"><h3 id="BlockbeschreibungsenseBox-»FunktionsaufrufohneRückgabewert«[Experten-Block]">»Funktionsaufruf ohne Rückgabewert « <span class="typcn typcn-star"></span></h3><p>Mit diesem Block kannst du eine vorher definierte Funktion aufrufen. Diese Funktion gibt dabei keinen Wert zurück.</p><p>Eingabewerte:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-left">Wert, abhängig von den Eingabewerte der vorher definierten Funktion.</li>
+</ul></div><div id="robProcedures_callreturn" class="help expert"><h3 class="auto-cursor-target" id="BlockbeschreibungsenseBox-»FunktionsaufrufmitRückgabewert«">»Funktionsaufruf mit Rückgabewert «</h3><p>Mit diesem Block kannst du eine vorher definierte Funktion aufrufen und den Rückgabewerte abrufen.</p><p>Eingabewerte:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-left">Wert, abhängig von den Eingabewerten der vorher definierten Funktion.</li>
+</ul><br><p>Rückgabewerte:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right">Wert, abhängig von dem Rückgabewert der definierten Funktion.</li>
 </ul><br></div></div></body>
