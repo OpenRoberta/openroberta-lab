@@ -100,6 +100,7 @@ export class RobotWeDoBehaviourTest extends ARobotBehaviour {
     public displaySetBrightnessAction(_value: number): number {
         return 0;
     }
+
     public displaySetPixelAction(_x: number, _y: number, _brightness: number): number {
         return 0;
     }
@@ -116,7 +117,7 @@ export class RobotWeDoBehaviourTest extends ARobotBehaviour {
         throw new Error("Method not implemented.");
     }
 
-    public lightAction(_mode: string, _color: string): void {
+    public lightAction(_mode: string, _color: string, _port: string): void {
         throw new Error("Method not implemented.");
     }
 
@@ -179,13 +180,16 @@ export class RobotWeDoBehaviourTest extends ARobotBehaviour {
     public setVolumeAction(_volume: number): void {
         throw new Error("Method not implemented.");
     }
+
     public getVolumeAction(_s: State): void {
         throw new Error("Method not implemented.");
     }
+
     public debugAction(_value: any): void {
         const robotText = "> " + _value;
         U.info(' debug action ' + robotText);
     }
+
     public assertAction(_msg: string, _left: any, _op: string, _right: any, _value: any): void {
         const robotText = "> Assertion failed: " + _msg + " " + _left + " " + _op + " " + _right;
         U.info(' assert action ' + robotText);

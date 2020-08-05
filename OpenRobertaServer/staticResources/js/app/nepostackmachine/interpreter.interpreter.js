@@ -8,7 +8,6 @@ define(["require", "exports", "./interpreter.state", "./interpreter.constants", 
          * . @param generatedCode argument contains the operations and the function definitions
          * . @param r implementation of the ARobotBehaviour class
          * . @param cbOnTermination is called when the program has terminated
-         * . @param simBreakpoints is an array containing the breakpoints
         */
         function Interpreter(generatedCode, r, cbOnTermination, simBreakpoints) {
             this.terminated = false;
@@ -258,8 +257,8 @@ define(["require", "exports", "./interpreter.state", "./interpreter.constants", 
                         }
                         break;
                     case C.LED_ON_ACTION: {
-                        var color = s.pop();
-                        n.ledOnAction(stmt[C.NAME], stmt[C.PORT], color);
+                        var color_1 = s.pop();
+                        n.ledOnAction(stmt[C.NAME], stmt[C.PORT], color_1);
                         break;
                     }
                     case C.METHOD_CALL_VOID:
@@ -293,30 +292,60 @@ define(["require", "exports", "./interpreter.state", "./interpreter.constants", 
                     }
                     case C.DRIVE_ACTION: {
                         var speedOnly = stmt[C.SPEED_ONLY];
-                        var distance = speedOnly ? undefined : s.pop();
-                        var speed = s.pop();
+                        var setTime = stmt[C.SET_TIME];
                         var name_3 = stmt[C.NAME];
+                        var time = void 0;
+                        var distance = void 0;
+                        if (setTime) {
+                            distance = undefined;
+                            time = setTime ? s.pop() : undefined;
+                        }
+                        else {
+                            time = undefined;
+                            distance = speedOnly ? undefined : s.pop();
+                        }
+                        var speed = s.pop();
                         var direction = stmt[C.DRIVE_DIRECTION];
-                        var duration = n.driveAction(name_3, direction, speed, distance);
+                        var duration = n.driveAction(name_3, direction, speed, distance, time);
                         return [duration, true];
                     }
                     case C.TURN_ACTION: {
                         var speedOnly = stmt[C.SPEED_ONLY];
-                        var angle = speedOnly ? undefined : s.pop();
+                        var setTime = stmt[C.SET_TIME];
+                        var time = void 0;
+                        var angle = void 0;
+                        if (setTime) {
+                            angle = undefined;
+                            time = setTime ? s.pop() : undefined;
+                        }
+                        else {
+                            time = undefined;
+                            angle = speedOnly ? undefined : s.pop();
+                        }
                         var speed = s.pop();
                         var name_4 = stmt[C.NAME];
                         var direction = stmt[C.TURN_DIRECTION];
-                        var duration = n.turnAction(name_4, direction, speed, angle);
+                        var duration = n.turnAction(name_4, direction, speed, angle, time);
                         return [duration, true];
                     }
                     case C.CURVE_ACTION: {
                         var speedOnly = stmt[C.SPEED_ONLY];
-                        var distance = speedOnly ? undefined : s.pop();
+                        var setTime = stmt[C.SET_TIME];
+                        var time = void 0;
+                        var distance = void 0;
+                        if (setTime) {
+                            distance = undefined;
+                            time = setTime ? s.pop() : undefined;
+                        }
+                        else {
+                            time = undefined;
+                            distance = speedOnly ? undefined : s.pop();
+                        }
                         var speedR = s.pop();
                         var speedL = s.pop();
                         var name_5 = stmt[C.NAME];
                         var direction = stmt[C.DRIVE_DIRECTION];
-                        var duration = n.curveAction(name_5, direction, speedL, speedR, distance);
+                        var duration = n.curveAction(name_5, direction, speedL, speedR, distance, time);
                         return [duration, true];
                     }
                     case C.STOP_DRIVE:
@@ -430,7 +459,15 @@ define(["require", "exports", "./interpreter.state", "./interpreter.constants", 
                         break;
                     }
                     case C.LIGHT_ACTION:
-                        n.lightAction(stmt[C.MODE], stmt[C.COLOR]);
+                        var color = void 0;
+                        if (stmt[C.NAME] === "mbot") {
+                            var rgb = s.pop();
+                            color = "rgb(" + rgb[0] + "," + rgb[1] + "," + rgb[2] + ")";
+                        }
+                        else {
+                            color = stmt[C.COLOR];
+                        }
+                        n.lightAction(stmt[C.MODE], color, stmt[C.PORT]);
                         return [0, true];
                     case C.STATUS_LIGHT_ACTION:
                         n.statusLightOffAction(stmt[C.NAME], stmt[C.PORT]);
@@ -1000,6 +1037,7 @@ define(["require", "exports", "./interpreter.state", "./interpreter.constants", 
             var cont = contl[0];
             switch (mode) {
                 case C.FOREVER:
+                case C.FOREVER_ARDU:
                 case C.UNTIL:
                 case C.WHILE:
                     s.pushOps(contl);

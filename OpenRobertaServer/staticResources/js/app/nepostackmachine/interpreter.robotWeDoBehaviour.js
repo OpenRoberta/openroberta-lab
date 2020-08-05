@@ -266,7 +266,7 @@ define(["require", "exports", "./interpreter.aRobotBehaviour", "./interpreter.co
         RobotWeDoBehaviour.prototype.gyroReset = function (_port) {
             throw new Error("Method not implemented.");
         };
-        RobotWeDoBehaviour.prototype.lightAction = function (_mode, _color) {
+        RobotWeDoBehaviour.prototype.lightAction = function (_mode, _color, _port) {
             throw new Error("Method not implemented.");
         };
         RobotWeDoBehaviour.prototype.playFileAction = function (_file) {
