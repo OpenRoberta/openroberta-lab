@@ -17,11 +17,16 @@ export class RobotMbedBehaviour extends ARobotBehaviour {
 		U.debug(robotText + ' getsample from ' + sensor);
 		var sensorName = sensor;
 
+
 		if (sensorName == C.TIMER) {
 			s.push(this.timerGet(port));
 		} else if (sensorName == C.ENCODER_SENSOR_SAMPLE) {
 			s.push(this.getEncoderValue(mode, port));
 		} else {
+			//workaround due to mbots sensor names
+			if (name == "mbot"){
+				port = "ORT_" + port;
+			}
 			s.push(this.getSensorValue(sensorName, port, mode));
 		}
 
@@ -131,9 +136,18 @@ export class RobotMbedBehaviour extends ARobotBehaviour {
 	public statusLightOffAction(name: string, port: number) {
 		const robotText = 'robot: ' + name + ', port: ' + port;
 		U.debug(robotText + ' led off');
-		this.hardwareState.actions.led = {};
-		this.hardwareState.actions.led.mode = C.OFF;
 
+		if (name === "mbot"){
+			if (!this.hardwareState.actions.leds){
+				this.hardwareState.actions.leds = {};
+			}
+			this.hardwareState.actions.leds[port] = {};
+			this.hardwareState.actions.leds[port].mode = C.OFF;
+		}
+		else{
+			this.hardwareState.actions.led = {};
+			this.hardwareState.actions.led.mode = C.OFF;
+		}
 	}
 
 	public toneAction(name: string, frequency: number, duration: number): number {
@@ -210,7 +224,7 @@ export class RobotMbedBehaviour extends ARobotBehaviour {
 
 	}
 
-	public driveAction(name: string, direction: string, speed: number, distance: number): number {
+	public driveAction(name: string, direction: string, speed: number, distance: number, time: number ): number {
 		const robotText = 'robot: ' + name + ', direction: ' + direction;
 		const durText = distance === undefined ? ' w.o. duration' : (' for ' + distance + ' msec');
 		U.debug(robotText + ' motor speed ' + speed + durText);
@@ -229,6 +243,10 @@ export class RobotMbedBehaviour extends ARobotBehaviour {
 		this.hardwareState.actions.motors[C.MOTOR_RIGHT] = speed;
 		this.hardwareState.motors[C.MOTOR_LEFT] = speed;
 		this.hardwareState.motors[C.MOTOR_RIGHT] = speed;
+
+		if (time !== undefined){
+			return time;
+		}
 		const rotationPerSecond = C.MAX_ROTATION * Math.abs(speed) / 100.0;
 		if (rotationPerSecond == 0.0 || distance === undefined) {
 			return 0;
@@ -238,7 +256,7 @@ export class RobotMbedBehaviour extends ARobotBehaviour {
 		}
 	}
 
-	public curveAction(name: string, direction: string, speedL: number, speedR: number, distance: number): number {
+	public curveAction(name: string, direction: string, speedL: number, speedR: number, distance: number, time: number ): number {
 		const robotText = 'robot: ' + name + ', direction: ' + direction;
 		const durText = distance === undefined ? ' w.o. duration' : (' for ' + distance + ' msec');
 		U.debug(robotText + ' left motor speed ' + speedL + ' right motor speed ' + speedR + durText);
@@ -260,6 +278,10 @@ export class RobotMbedBehaviour extends ARobotBehaviour {
 		this.hardwareState.motors[C.MOTOR_LEFT] = speedL;
 		this.hardwareState.motors[C.MOTOR_RIGHT] = speedR;
 		const avgSpeed = 0.5 * (Math.abs(speedL) + Math.abs(speedR))
+
+		if (time !== undefined){
+			return time;
+		}
 		const rotationPerSecond = C.MAX_ROTATION * avgSpeed / 100.0;
 		if (rotationPerSecond == 0.0 || distance === undefined) {
 			return 0;
@@ -269,14 +291,14 @@ export class RobotMbedBehaviour extends ARobotBehaviour {
 		}
 	}
 
-	public turnAction(name: string, direction: string, speed: number, angle: number): number {
+	public turnAction(name: string, direction: string, speed: number, angle: number, time: number ): number {
 		const robotText = 'robot: ' + name + ', direction: ' + direction;
 		const durText = angle === undefined ? ' w.o. duration' : (' for ' + angle + ' msec');
 		U.debug(robotText + ' motor speed ' + speed + durText);
 		if (this.hardwareState.actions.motors == undefined) {
 			this.hardwareState.actions.motors = {};
 		}
-		// This is to handle negative values entered in the degree parameter in the turn block 
+		// This is to handle negative values entered in the degree parameter in the turn block
 		if ((direction == C.LEFT && angle < 0) || (direction == C.RIGHT && angle < 0)) {
 			speed *= -1;
 		}
@@ -285,6 +307,10 @@ export class RobotMbedBehaviour extends ARobotBehaviour {
 			speed = 0;
 		}
 		this.setTurnSpeed(speed, direction);
+
+		if (time !== undefined){
+			return time;
+		}
 		const rotationPerSecond = C.MAX_ROTATION * Math.abs(speed) / 100.0;
 		if (rotationPerSecond == 0.0 || angle === undefined) {
 			return 0;
@@ -371,11 +397,23 @@ export class RobotMbedBehaviour extends ARobotBehaviour {
 		return 0;
 	}
 
-	public lightAction(mode: string, color: string): void {
+	public lightAction(mode: string, color: string, port: string): void {
 		U.debug('***** light action mode= "' + mode + ' color=' + color + '" *****');
-		this.hardwareState.actions.led = {};
-		this.hardwareState.actions.led[C.MODE] = mode;
-		this.hardwareState.actions.led[C.COLOR] = color;
+
+		if (port !== undefined){
+			if (!this.hardwareState.actions.leds){
+				this.hardwareState.actions.leds = {};
+			}
+			this.hardwareState.actions.leds[port] = {};
+			this.hardwareState.actions.leds[port][C.MODE] = mode;
+			this.hardwareState.actions.leds[port][C.COLOR] = color;
+		}
+		else{
+			this.hardwareState.actions.led = {};
+			this.hardwareState.actions.led[C.MODE] = mode;
+			this.hardwareState.actions.led[C.COLOR] = color;
+		}
+
 	}
 
 	public displaySetPixelBrightnessAction(x: number, y: number, brightness: number): number {

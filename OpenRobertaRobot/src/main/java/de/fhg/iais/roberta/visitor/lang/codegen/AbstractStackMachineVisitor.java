@@ -403,13 +403,13 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
         }
 
         // The "real" repeat cases
-        if ( mode == Mode.FOREVER || mode == Mode.TIMES || mode == Mode.FOR || mode == Mode.FOR_EACH ) {
+        if ( mode == Mode.FOREVER || mode == Mode.TIMES || mode == Mode.FOR || mode == Mode.FOR_EACH || mode == Mode.FOREVER_ARDU) {
             pushOpArray();
             repeatStmt.getList().accept(this);
             List<JSONObject> repeatBody = popOpArray();
             JSONObject cont = mk(C.REPEAT_STMT_CONTINUATION, repeatStmt).put(C.MODE, mode).put(C.STMT_LIST, repeatBody);
             JSONObject repeat = mk(C.REPEAT_STMT, repeatStmt).put(C.MODE, mode).put(C.STMT_LIST, Arrays.asList(cont));
-            if ( mode == Mode.FOREVER ) {
+            if ( mode == Mode.FOREVER || mode == Mode.FOREVER_ARDU) {
                 return app(repeat);
             } else if ( mode == Mode.FOR_EACH ) {
                 pushOpArray();

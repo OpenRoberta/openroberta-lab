@@ -1077,7 +1077,7 @@ div.rightMenuButton:hover,
     display: inline-block;
     float: left;
     clear: left;
-    width: 100px;
+    width: 150px;
     text-align: right;
     margin-right: 6px;
 }

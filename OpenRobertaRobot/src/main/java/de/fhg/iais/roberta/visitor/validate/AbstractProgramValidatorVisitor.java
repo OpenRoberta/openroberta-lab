@@ -410,7 +410,7 @@ public abstract class AbstractProgramValidatorVisitor extends AbstractCollectorV
         return null;
     }
 
-    private void checkDiffDrive(Phrase<Void> driveAction) {
+    protected void checkDiffDrive(Phrase<Void> driveAction) {
         checkLeftRightMotorPort(driveAction);
     }
 
@@ -456,7 +456,7 @@ public abstract class AbstractProgramValidatorVisitor extends AbstractCollectorV
         }
     }
 
-    private boolean validNumberOfMotors(Phrase<Void> driveAction) {
+    protected boolean validNumberOfMotors(Phrase<Void> driveAction) {
         if ( this.robotConfiguration.getMotors(SC.RIGHT).size() > 1 ) {
             driveAction.addInfo(NepoInfo.error("CONFIGURATION_ERROR_MULTIPLE_RIGHT_MOTORS"));
             this.errorCount++;

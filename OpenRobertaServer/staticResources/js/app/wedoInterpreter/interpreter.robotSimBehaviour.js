@@ -11,10 +11,21 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-define(["require", "exports", "interpreter.aRobotBehaviour", "interpreter.constants", "interpreter.util"], function (require, exports, interpreter_aRobotBehaviour_1, C, U) {
+(function (factory) {
+    if (typeof module === "object" && typeof module.exports === "object") {
+        var v = factory(require, exports);
+        if (v !== undefined) module.exports = v;
+    }
+    else if (typeof define === "function" && define.amd) {
+        define(["require", "exports", "interpreter.aRobotBehaviour", "interpreter.constants", "interpreter.util"], factory);
+    }
+})(function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.RobotMbedBehaviour = void 0;
+    var interpreter_aRobotBehaviour_1 = require("interpreter.aRobotBehaviour");
+    var C = require("interpreter.constants");
+    var U = require("interpreter.util");
     var RobotMbedBehaviour = /** @class */ (function (_super) {
         __extends(RobotMbedBehaviour, _super);
         function RobotMbedBehaviour() {
@@ -34,6 +45,10 @@ define(["require", "exports", "interpreter.aRobotBehaviour", "interpreter.consta
                 s.push(this.getEncoderValue(mode, port));
             }
             else {
+                //workaround due to mbots sensor names
+                if (name == "mbot") {
+                    port = "ORT_" + port;
+                }
                 s.push(this.getSensorValue(sensorName, port, mode));
             }
         };
@@ -139,8 +154,17 @@ define(["require", "exports", "interpreter.aRobotBehaviour", "interpreter.consta
         RobotMbedBehaviour.prototype.statusLightOffAction = function (name, port) {
             var robotText = 'robot: ' + name + ', port: ' + port;
             U.debug(robotText + ' led off');
-            this.hardwareState.actions.led = {};
-            this.hardwareState.actions.led.mode = C.OFF;
+            if (name === "mbot") {
+                if (!this.hardwareState.actions.leds) {
+                    this.hardwareState.actions.leds = {};
+                }
+                this.hardwareState.actions.leds[port] = {};
+                this.hardwareState.actions.leds[port].mode = C.OFF;
+            }
+            else {
+                this.hardwareState.actions.led = {};
+                this.hardwareState.actions.led.mode = C.OFF;
+            }
         };
         RobotMbedBehaviour.prototype.toneAction = function (name, frequency, duration) {
             U.debug(name + ' piezo: ' + ', frequency: ' + frequency + ', duration: ' + duration);
@@ -206,7 +230,7 @@ define(["require", "exports", "interpreter.aRobotBehaviour", "interpreter.consta
             U.debug(robotText + ' motor stop');
             this.motorOnAction(name, port, 0, 0);
         };
-        RobotMbedBehaviour.prototype.driveAction = function (name, direction, speed, distance) {
+        RobotMbedBehaviour.prototype.driveAction = function (name, direction, speed, distance, time) {
             var robotText = 'robot: ' + name + ', direction: ' + direction;
             var durText = distance === undefined ? ' w.o. duration' : (' for ' + distance + ' msec');
             U.debug(robotText + ' motor speed ' + speed + durText);
@@ -225,6 +249,9 @@ define(["require", "exports", "interpreter.aRobotBehaviour", "interpreter.consta
             this.hardwareState.actions.motors[C.MOTOR_RIGHT] = speed;
             this.hardwareState.motors[C.MOTOR_LEFT] = speed;
             this.hardwareState.motors[C.MOTOR_RIGHT] = speed;
+            if (time !== undefined) {
+                return time;
+            }
             var rotationPerSecond = C.MAX_ROTATION * Math.abs(speed) / 100.0;
             if (rotationPerSecond == 0.0 || distance === undefined) {
                 return 0;
@@ -234,7 +261,7 @@ define(["require", "exports", "interpreter.aRobotBehaviour", "interpreter.consta
                 return rotations / rotationPerSecond * 1000;
             }
         };
-        RobotMbedBehaviour.prototype.curveAction = function (name, direction, speedL, speedR, distance) {
+        RobotMbedBehaviour.prototype.curveAction = function (name, direction, speedL, speedR, distance, time) {
             var robotText = 'robot: ' + name + ', direction: ' + direction;
             var durText = distance === undefined ? ' w.o. duration' : (' for ' + distance + ' msec');
             U.debug(robotText + ' left motor speed ' + speedL + ' right motor speed ' + speedR + durText);
@@ -256,6 +283,9 @@ define(["require", "exports", "interpreter.aRobotBehaviour", "interpreter.consta
             this.hardwareState.motors[C.MOTOR_LEFT] = speedL;
             this.hardwareState.motors[C.MOTOR_RIGHT] = speedR;
             var avgSpeed = 0.5 * (Math.abs(speedL) + Math.abs(speedR));
+            if (time !== undefined) {
+                return time;
+            }
             var rotationPerSecond = C.MAX_ROTATION * avgSpeed / 100.0;
             if (rotationPerSecond == 0.0 || distance === undefined) {
                 return 0;
@@ -265,14 +295,14 @@ define(["require", "exports", "interpreter.aRobotBehaviour", "interpreter.consta
                 return rotations / rotationPerSecond * 1000;
             }
         };
-        RobotMbedBehaviour.prototype.turnAction = function (name, direction, speed, angle) {
+        RobotMbedBehaviour.prototype.turnAction = function (name, direction, speed, angle, time) {
             var robotText = 'robot: ' + name + ', direction: ' + direction;
             var durText = angle === undefined ? ' w.o. duration' : (' for ' + angle + ' msec');
             U.debug(robotText + ' motor speed ' + speed + durText);
             if (this.hardwareState.actions.motors == undefined) {
                 this.hardwareState.actions.motors = {};
             }
-            // This is to handle negative values entered in the degree parameter in the turn block 
+            // This is to handle negative values entered in the degree parameter in the turn block
             if ((direction == C.LEFT && angle < 0) || (direction == C.RIGHT && angle < 0)) {
                 speed *= -1;
             }
@@ -281,6 +311,9 @@ define(["require", "exports", "interpreter.aRobotBehaviour", "interpreter.consta
                 speed = 0;
             }
             this.setTurnSpeed(speed, direction);
+            if (time !== undefined) {
+                return time;
+            }
             var rotationPerSecond = C.MAX_ROTATION * Math.abs(speed) / 100.0;
             if (rotationPerSecond == 0.0 || angle === undefined) {
                 return 0;
@@ -360,11 +393,21 @@ define(["require", "exports", "interpreter.aRobotBehaviour", "interpreter.consta
             this.hardwareState.actions.display[C.BRIGHTNESS] = value;
             return 0;
         };
-        RobotMbedBehaviour.prototype.lightAction = function (mode, color) {
+        RobotMbedBehaviour.prototype.lightAction = function (mode, color, port) {
             U.debug('***** light action mode= "' + mode + ' color=' + color + '" *****');
-            this.hardwareState.actions.led = {};
-            this.hardwareState.actions.led[C.MODE] = mode;
-            this.hardwareState.actions.led[C.COLOR] = color;
+            if (port !== undefined) {
+                if (!this.hardwareState.actions.leds) {
+                    this.hardwareState.actions.leds = {};
+                }
+                this.hardwareState.actions.leds[port] = {};
+                this.hardwareState.actions.leds[port][C.MODE] = mode;
+                this.hardwareState.actions.leds[port][C.COLOR] = color;
+            }
+            else {
+                this.hardwareState.actions.led = {};
+                this.hardwareState.actions.led[C.MODE] = mode;
+                this.hardwareState.actions.led[C.COLOR] = color;
+            }
         };
         RobotMbedBehaviour.prototype.displaySetPixelBrightnessAction = function (x, y, brightness) {
             U.debug('***** set pixel x="' + x + ", y=" + y + ", brightness=" + brightness + '" *****');

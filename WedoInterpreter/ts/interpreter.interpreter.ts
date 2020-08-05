@@ -23,7 +23,6 @@ export class Interpreter {
      * . @param generatedCode argument contains the operations and the function definitions
      * . @param r implementation of the ARobotBehaviour class
      * . @param cbOnTermination is called when the program has terminated
-     * . @param simBreakpoints is an array containing the breakpoints
     */
 
     constructor(generatedCode: any, r: ARobotBehaviour, cbOnTermination: () => void, simBreakpoints: any[]) {
@@ -322,30 +321,61 @@ export class Interpreter {
                 }
                 case C.DRIVE_ACTION: {
                     const speedOnly = stmt[C.SPEED_ONLY];
-                    const distance = speedOnly ? undefined : s.pop();
-                    const speed = s.pop();
+                    const setTime = stmt[C.SET_TIME];
                     const name = stmt[C.NAME];
+                    let time;
+                    let distance;
+
+                    if (setTime) {
+                        distance = undefined;
+                        time = setTime ? s.pop() : undefined;
+                    } else {
+                        time = undefined;
+                        distance = speedOnly ? undefined : s.pop();
+                    }
+                    const speed = s.pop();
                     const direction = stmt[C.DRIVE_DIRECTION];
-                    const duration = n.driveAction(name, direction, speed, distance);
+                    const duration = n.driveAction(name, direction, speed, distance, time);
                     return [duration, true];
                 }
                 case C.TURN_ACTION: {
                     const speedOnly = stmt[C.SPEED_ONLY];
-                    const angle = speedOnly ? undefined : s.pop();
+                    const setTime = stmt[C.SET_TIME];
+
+                    let time;
+                    let angle;
+
+                    if (setTime) {
+                        angle = undefined;
+                        time = setTime ? s.pop() : undefined;
+                    } else {
+                        time = undefined;
+                        angle = speedOnly ? undefined : s.pop();
+                    }
                     const speed = s.pop();
                     const name = stmt[C.NAME];
                     const direction = stmt[C.TURN_DIRECTION];
-                    const duration = n.turnAction(name, direction, speed, angle);
+                    const duration = n.turnAction(name, direction, speed, angle, time);
                     return [duration, true];
                 }
                 case C.CURVE_ACTION: {
                     const speedOnly = stmt[C.SPEED_ONLY];
-                    const distance = speedOnly ? undefined : s.pop();
+                    const setTime = stmt[C.SET_TIME];
+                    let time;
+                    let distance;
+
+                    if (setTime) {
+                        distance = undefined;
+                        time = setTime ? s.pop() : undefined;
+                    } else {
+                        time = undefined;
+                        distance = speedOnly ? undefined : s.pop();
+                    }
                     const speedR = s.pop();
                     const speedL = s.pop();
                     const name = stmt[C.NAME];
                     const direction = stmt[C.DRIVE_DIRECTION];
-                    const duration = n.curveAction(name, direction, speedL, speedR, distance);
+                    const duration = n.curveAction(name, direction, speedL, speedR, distance, time);
                     return [duration, true];
                 }
                 case C.STOP_DRIVE:
@@ -458,7 +488,14 @@ export class Interpreter {
                     break;
                 }
                 case C.LIGHT_ACTION:
-                    n.lightAction(stmt[C.MODE], stmt[C.COLOR]);
+                    let color;
+                    if (stmt[C.NAME] === "mbot") {
+                        const rgb = s.pop()
+                        color = "rgb(" + rgb[0] + "," + rgb[1] + "," + rgb[2] + ")";
+                    } else {
+                        color = stmt[C.COLOR]
+                    }
+                    n.lightAction(stmt[C.MODE], color, stmt[C.PORT]);
                     return [0, true];
                 case C.STATUS_LIGHT_ACTION:
                     n.statusLightOffAction(stmt[C.NAME], stmt[C.PORT])
@@ -1024,6 +1061,7 @@ export class Interpreter {
         const cont = contl[0];
         switch (mode) {
             case C.FOREVER:
+            case C.FOREVER_ARDU:
             case C.UNTIL:
             case C.WHILE:
                 s.pushOps(contl);

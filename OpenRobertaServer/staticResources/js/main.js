@@ -74,6 +74,7 @@ require.config({
 		'simulation.robot.simple': '../app/simulation/simulationLogic/robot.simple',
 		'simulation.robot.ev3': '../app/simulation/simulationLogic/robot.ev3',
 		'simulation.robot.nxt': '../app/simulation/simulationLogic/robot.nxt',
+		'simulation.robot.mbot':'../app/simulation/simulationLogic/robot.mbot',
 		'simulation.scene': '../app/simulation/simulationLogic/scene',
 		'simulation.simulation': '../app/simulation/simulationLogic/simulation',
 

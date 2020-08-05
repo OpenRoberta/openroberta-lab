@@ -11,10 +11,21 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-define(["require", "exports", "interpreter.aRobotBehaviour", "interpreter.constants", "interpreter.util"], function (require, exports, interpreter_aRobotBehaviour_1, C, U) {
+(function (factory) {
+    if (typeof module === "object" && typeof module.exports === "object") {
+        var v = factory(require, exports);
+        if (v !== undefined) module.exports = v;
+    }
+    else if (typeof define === "function" && define.amd) {
+        define(["require", "exports", "interpreter.aRobotBehaviour", "interpreter.constants", "interpreter.util"], factory);
+    }
+})(function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.RobotWeDoBehaviourTest = void 0;
+    var interpreter_aRobotBehaviour_1 = require("interpreter.aRobotBehaviour");
+    var C = require("interpreter.constants");
+    var U = require("interpreter.util");
     var RobotWeDoBehaviourTest = /** @class */ (function (_super) {
         __extends(RobotWeDoBehaviourTest, _super);
         function RobotWeDoBehaviourTest(opLog, debug) {
@@ -110,7 +121,7 @@ define(["require", "exports", "interpreter.aRobotBehaviour", "interpreter.consta
         RobotWeDoBehaviourTest.prototype.gyroReset = function (_port) {
             throw new Error("Method not implemented.");
         };
-        RobotWeDoBehaviourTest.prototype.lightAction = function (_mode, _color) {
+        RobotWeDoBehaviourTest.prototype.lightAction = function (_mode, _color, _port) {
             throw new Error("Method not implemented.");
         };
         RobotWeDoBehaviourTest.prototype.playFileAction = function (_file) {

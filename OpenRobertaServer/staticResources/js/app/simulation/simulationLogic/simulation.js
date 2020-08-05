@@ -268,10 +268,12 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
             robots[i].reset();
         }
         reloadProgram();
-        for (var i = 0; i < numRobots; i++) {
-            interpreters[i].removeHighlights();
-        }
 
+        if (debugMode) {
+            for (var i = 0; i < numRobots; i++) {
+                interpreters[i].removeHighlights();
+            }
+        }
         setTimeout(function () {
             init(userPrograms, false, simRobotType);
             addMouseEvents();
@@ -351,6 +353,8 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
         } else if (robotType === 'microbit') {
             $('.dropdown.sim, .simScene, #simImport, #simResetPose, #simButtonsHead').hide();
             currentBackground = 1;
+        } else if (robotType === 'mbot') {
+            $('#simRobot').hide();
         } else if (currentBackground === 0 || currentBackground == 1) {
             currentBackground = 2;
         }
@@ -1236,6 +1240,7 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
         }
         updateBreakpointEvent();
     }
+
     exports.updateDebugMode = updateDebugMode;
 
     /** removes breakpoint block */
@@ -1251,6 +1256,7 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
             }
         }
     }
+
     /** adds an event to the interpreters */
     function interpreterAddEvent(mode) {
         updateBreakpointEvent();

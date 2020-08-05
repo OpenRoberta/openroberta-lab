@@ -278,7 +278,7 @@ export class RobotWeDoBehaviour extends ARobotBehaviour {
         throw new Error( "Method not implemented." );
     }
 
-    public lightAction( _mode: string, _color: string ): void {
+    public lightAction( _mode: string, _color: string,_port: string ): void {
         throw new Error( "Method not implemented." );
     }
 

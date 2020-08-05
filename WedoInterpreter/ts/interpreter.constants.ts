@@ -84,6 +84,7 @@ export const FLASH: string = "flash";
 export const FLOW_CONTROL: string = "flowControl";
 export const FOR: string = "FOR";
 export const FOREVER: string = "FOREVER";
+export const FOREVER_ARDU: string = "FOREVER_ARDU";
 export const FOREWARD: string = "FOREWARD";
 export const FOR_EACH: string = "FOR_EACH";
 export const FREEFALL: string = "freefall";
@@ -240,6 +241,7 @@ export const SERIAL_WRITE_ACTION: string = "serialWriteAction";
 
 export const SET: string = "set";
 export const SET_LANGUAGE_ACTION: string = "SetLanguageAction";
+export const SET_TIME: string = "SetTime";
 export const SET_VOLUME_ACTION: string = "SetVolumeAction";
 export const SHAKE: string = "shake";
 export const SHOW_IMAGE_ACTION: string = "ShowImageAction";
