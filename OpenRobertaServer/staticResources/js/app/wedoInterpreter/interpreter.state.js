@@ -278,7 +278,7 @@
             }
             if (stmt.hasOwnProperty(C.BLOCK_ID)) {
                 var block = stackmachineJsHelper.getBlockById(stmt[C.BLOCK_ID]);
-                if (!this.currentBlocks.hasOwnProperty(stmt[C.BLOCK_ID])) {
+                if (!this.currentBlocks.hasOwnProperty(stmt[C.BLOCK_ID]) && block !== null) {
                     if (this.debugMode) {
                         if (stackmachineJsHelper.getJqueryObject(block.svgPath_).hasClass("breakpoint")) {
                             stackmachineJsHelper.getJqueryObject(block.svgPath_).removeClass("breakpoint").addClass("selectedBreakpoint");
@@ -313,7 +313,9 @@
             }
             breakPoints.forEach(function (id) {
                 var block = stackmachineJsHelper.getBlockById(id);
-                stackmachineJsHelper.getJqueryObject(block.svgPath_).addClass("breakpoint");
+                if (block !== null) {
+                    stackmachineJsHelper.getJqueryObject(block.svgPath_).addClass("breakpoint");
+                }
             });
         };
         /** Will remove highlights from all currently blocks being currently executed and all given Breakpoints
@@ -328,7 +330,9 @@
             }
             breakPoints.forEach(function (id) {
                 var block = stackmachineJsHelper.getBlockById(id);
-                stackmachineJsHelper.getJqueryObject(block.svgPath_).removeClass("breakpoint").removeClass("selectedBreakpoint");
+                if (block !== null) {
+                    stackmachineJsHelper.getJqueryObject(block.svgPath_).removeClass("breakpoint").removeClass("selectedBreakpoint");
+                }
             });
         };
         return State;
