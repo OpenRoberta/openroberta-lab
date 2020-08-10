@@ -448,7 +448,25 @@ define([ 'exports', 'log', 'message', 'comm', 'util', 'user.model', 'userGroup.m
         var $memberPasswordResetTemplate = $userGroupMemberTable.find('.reset-password-template'),
             $memberActionItemsTemplate = $userGroupMemberTable.find('.action-items-template'),
             $memberActionItemsHeaderTemplate = $userGroupMemberTable.find('.action-items-header-template'),
-            $memberNameTemplate = $userGroupMemberTable.find('.edit-member-template');
+            $memberNameTemplate = $userGroupMemberTable.find('.edit-member-template'),
+            nameChangeValidateOptions = {
+                rules : {
+                    name: {
+                        maxlength : 25,
+                        loginRegex : true
+                    },
+                },
+                errorClass : "form-invalid",
+                errorPlacement : function(label, element) {
+                    label.insertBefore(element);
+                },
+                messages : {
+                    name: {
+                        maxlength: Blockly.Msg["VALIDATION_MAX_LENGTH"],
+                        loginRegex: Blockly.Msg['VALIDATION_CONTAINS_SPECIAL_CHARACTERS'],
+                    }
+                }
+            };
         
         $memberPasswordResetTemplate.remove();
         $memberActionItemsTemplate.remove();
@@ -509,24 +527,7 @@ define([ 'exports', 'log', 'message', 'comm', 'util', 'user.model', 'userGroup.m
                             newName = $self.find('input').first().val();
                         
                         if (typeof memberNameValidators[index] === 'undefined') {
-                            memberNameValidators[index] = $self.find('form').first().validate({
-                                rules : {
-                                    name: {
-                                        maxlength : 25,
-                                        loginRegex : true
-                                    },
-                                },
-                                errorClass : "form-invalid",
-                                errorPlacement : function(label, element) {
-                                    label.insertBefore(element);
-                                },
-                                messages : {
-                                    name: {
-                                        maxlength: Blockly.Msg["VALIDATION_MAX_LENGTH"],
-                                        loginRegex: Blockly.Msg['VALIDATION_CONTAINS_SPECIAL_CHARACTERS'],
-                                    }
-                                }
-                            });
+                            memberNameValidators[index] = $self.find('form').first().validate(nameChangeValidateOptions);
                         }
                         
                         if ($self.find('.member-name').hasClass('active')) {
@@ -569,24 +570,7 @@ define([ 'exports', 'log', 'message', 'comm', 'util', 'user.model', 'userGroup.m
                             newName = $input.val();
                         
                         if (typeof memberNameValidators[index] === 'undefined') {
-                            memberNameValidators[index] = $self.find('form').first().validate({
-                                rules : {
-                                    name: {
-                                        maxlength : 25,
-                                        loginRegex : true
-                                    },
-                                },
-                                errorClass : "form-invalid",
-                                errorPlacement : function(label, element) {
-                                    label.insertBefore(element);
-                                },
-                                messages : {
-                                    name: {
-                                        maxlength: Blockly.Msg["VALIDATION_MAX_LENGTH"],
-                                        loginRegex: Blockly.Msg['VALIDATION_CONTAINS_SPECIAL_CHARACTERS'],
-                                    }
-                                }
-                            });
+                            memberNameValidators[index] = $self.find('form').first().validate(nameChangeValidateOptions);
                         }
                         
                         if (!$self.find('form').valid()) {
@@ -612,6 +596,8 @@ define([ 'exports', 'log', 'message', 'comm', 'util', 'user.model', 'userGroup.m
                                     //clone the current row data
                                     var rowData = JSON.parse(JSON.stringify(row));
                                     rowData.account = $('#userGroupMemberListHeader').text() + ':' + newName;
+                                    
+                                    delete memberNameValidators[index];
                                     
                                     $userGroupMemberTable.bootstrapTable('updateRow', {
                                         index: index,
@@ -808,6 +794,7 @@ define([ 'exports', 'log', 'message', 'comm', 'util', 'user.model', 'userGroup.m
                         hasDefaultPassword: false
                     });
                     $userGroupMemberTable.bootstrapTable('load', data.userGroup.members);
+                    memberNameValidators = {};
                 } else {
                     $userGroupMemberTable.bootstrapTable('removeAll');
                     MSG.displayInformation(data, data.cause, data.cause);
@@ -1081,6 +1068,7 @@ define([ 'exports', 'log', 'message', 'comm', 'util', 'user.model', 'userGroup.m
         $userGroupMemberTable.bootstrapTable('showLoading');
         $userGroupMemberTable.bootstrapTable('removeAll');
         $userGroupMemberTable.bootstrapTable('load', members);
+        memberNameValidators = {};
 
         setTimeout(function() {
             //The fronted can not calculate the height of the table if it tries to directly after the table is filled.
