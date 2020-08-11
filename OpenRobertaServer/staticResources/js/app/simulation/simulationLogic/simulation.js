@@ -9,8 +9,8 @@
 
 define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 'simulation.constants', 'util', 'program.controller',
     'interpreter.interpreter', 'interpreter.robotSimBehaviour', 'volume-meter', 'simulation.constants', 'message', 'jquery'
-], function(exports, Scene, SIMATH, ROBERTA_PROGRAM, CONST, UTIL, PROGRAM_C,
-    SIM_I, MBED_R, Volume, C, MSG, $) {
+], function (exports, Scene, SIMATH, ROBERTA_PROGRAM, CONST, UTIL, PROGRAM_C,
+             SIM_I, MBED_R, Volume, C, MSG, $) {
 
     var interpreters;
     var scene;
@@ -77,7 +77,10 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
                 try {
                     JSON.parse(customBackground);
                 } catch (e) {
-                    localStorage.setItem("customBackground", JSON.stringify({image:customBackground, timestamp:new Date().getTime()}));
+                    localStorage.setItem("customBackground", JSON.stringify({
+                        image: customBackground,
+                        timestamp: new Date().getTime()
+                    }));
                     customBackground = localStorage.getItem("customBackground");
                 }
 
@@ -94,8 +97,9 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
                     customBackgroundLoaded = true;
                 }
             }
-        }       
+        }
     }
+
     preloadImages();
 
     var currentBackground = 2;
@@ -123,14 +127,17 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
             }
             if (currentBackground == (imgObjectList.length - 1) && customBackgroundLoaded && UTIL.isLocalStorageAvailable()) {
                 // update timestamp of custom background
-                localStorage.setItem("customBackground", JSON.stringify({image: JSON.parse(localStorage.getItem("customBackground")).image, timestamp: new Date().getTime()}));
+                localStorage.setItem("customBackground", JSON.stringify({
+                    image: JSON.parse(localStorage.getItem("customBackground")).image,
+                    timestamp: new Date().getTime()
+                }));
             }
         } else {
             currentBackground = num;
         }
-        var debug = robots[0].debug;       
+        var debug = robots[0].debug;
         var moduleName = 'simulation.robot.' + simRobotType;
-        require([moduleName], function(ROBOT) {
+        require([moduleName], function (ROBOT) {
             createRobots(ROBOT, numRobots);
             for (var i = 0; i < robots.length; i++) {
                 robots[i].debug = debug;
@@ -139,11 +146,13 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
             callback();
         });
     }
+
     exports.setBackground = setBackground;
 
     function getBackground() {
         return currentBackground;
     }
+
     exports.getBackground = getBackground;
 
     function initMicrophone(robot) {
@@ -155,26 +164,27 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
         try {
             // ask for an audio input
             navigator.mediaDevices.getUserMedia({
-                "audio" : {
-                    "mandatory" : {
-                        "googEchoCancellation" : "false",
-                        "googAutoGainControl" : "false",
-                        "googNoiseSuppression" : "false",
-                        "googHighpassFilter" : "false"
+                "audio": {
+                    "mandatory": {
+                        "googEchoCancellation": "false",
+                        "googAutoGainControl": "false",
+                        "googNoiseSuppression": "false",
+                        "googHighpassFilter": "false"
                     },
-                    "optional" : []
+                    "optional": []
                 },
-            }).then(function(stream) {
+            }).then(function (stream) {
                 var mediaStreamSource = robot.webAudio.context.createMediaStreamSource(stream);
                 robot.sound = Volume.createAudioMeter(robot.webAudio.context);
                 mediaStreamSource.connect(robot.sound);
-            }, function() {
+            }, function () {
                 console.log("Sorry, but there is no microphone available on your system");
             });
-        } catch ( e ) {
+        } catch (e) {
             console.log("Sorry, but there is no microphone available on your system");
         }
     }
+
     exports.initMicrophone = initMicrophone;
 
     var time;
@@ -185,13 +195,14 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
     function getDt() {
         return dt;
     }
+
     exports.getDt = getDt;
 
     var pause = false;
 
     function setPause(value) {
         if (!value && readyRobots.indexOf(false) > -1) {
-            setTimeout(function() {
+            setTimeout(function () {
                 setPause(false);
             }, 100);
         } else {
@@ -213,6 +224,7 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
             }
         }
     }
+
     exports.setPause = setPause;
 
     var stepCounter;
@@ -222,6 +234,7 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
         stepCounter = -50;
         setPause(false);
     }
+
     exports.setStep = setStep;
 
     var info;
@@ -233,6 +246,7 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
             info = true;
         }
     }
+
     exports.setInfo = setInfo;
 
     function resetPose() {
@@ -245,6 +259,7 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
             }
         }
     }
+
     exports.resetPose = resetPose;
 
     function stopProgram() {
@@ -257,13 +272,14 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
             interpreters[i].removeHighlights();
         }
 
-        setTimeout(function() {
+        setTimeout(function () {
             init(userPrograms, false, simRobotType);
             addMouseEvents();
         }, 205);
 
 
     }
+
     exports.stopProgram = stopProgram;
 
     // obstacles
@@ -308,7 +324,7 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
     var mouseOnRobotIndex = 0;
     var simRobotType;
     var numRobots = 0;
-    exports.getNumRobots = function() {
+    exports.getNumRobots = function () {
         return numRobots;
     };
     var ROBOT;
@@ -343,16 +359,16 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
                 $('.dropdown.sim, .simScene').show();
                 $('#simImport').hide();
             } else {
-                $('.dropdown.sim, .simScene, #simImport, #simResetPose').show();                
+                $('.dropdown.sim, .simScene, #simImport, #simResetPose').show();
             }
             if ($('#device-size').find('div:visible').first().attr('id')) {
                 $('#simButtonsHead').show();
             }
         }
-        interpreters = programs.map(function(x) {
+        interpreters = programs.map(function (x) {
             var src = JSON.parse(x.javaScriptProgram);
             configurations.push(x.javaScriptConfiguration);
-            return new SIM_I.Interpreter(src, new MBED_R.RobotMbedBehaviour(), callbackOnTermination,breakpoints);
+            return new SIM_I.Interpreter(src, new MBED_R.RobotMbedBehaviour(), callbackOnTermination, breakpoints);
         });
         updateDebugMode(debugMode);
 
@@ -361,11 +377,11 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
             isDownRobots.push(false);
         }
         if (refresh) {
-            robotIndex = 0;            
+            robotIndex = 0;
             robots = [];
             readyRobots = [];
             isDownRobots = [];
-            require(['simulation.robot.' + simRobotType], function(reqRobot) {
+            require(['simulation.robot.' + simRobotType], function (reqRobot) {
                 createRobots(reqRobot, numRobots);
                 for (var i = 0; i < numRobots; i++) {
                     robots[i].reset();
@@ -397,22 +413,26 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
         }
 
     }
+
     exports.init = init;
 
     function run(refresh, robotType) {
         init(storedPrograms, refresh, robotType);
     }
+
     exports.run = run;
 
     function getRobotIndex() {
         return robotIndex;
     }
+
     exports.getRobotIndex = getRobotIndex;
 
     function cancel() {
         canceled = true;
         removeMouseEvents();
     }
+
     exports.cancel = cancel;
 
     var reset = false;
@@ -444,7 +464,7 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
         globalID = requestAnimationFrame(render);
         var now = new Date().getTime();
         var dtSim = now - (time || now);
-        var dtRobot = Math.min(15,(dtSim - renderTime) / numRobots);
+        var dtRobot = Math.min(15, (dtSim - renderTime) / numRobots);
         var dtRobot = Math.abs(dtRobot);
         dt = dtSim / 1000;
         time = now;
@@ -468,13 +488,13 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
                     scene.drawVariables();
 
                     // some time to cancel all timeouts
-                    setTimeout(function() {
+                    setTimeout(function () {
                         init(userPrograms, false, simRobotType);
                         addMouseEvents();
                     }, 205);
 
-                    if (!(interpreters[i].isTerminated() && !robots[i].endless)){
-                        setTimeout(function() {
+                    if (!(interpreters[i].isTerminated() && !robots[i].endless)) {
+                        setTimeout(function () {
                             //delete robot.button.Reset;
                             setPause(false);
                             for (var i = 0; i < robots.length; i++) {
@@ -497,13 +517,14 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
             }
             return true;
         }
+
         if (allPause()) {
             setPause(true);
             for (var i = 0; i < robots.length; i++) {
                 robots[i].pause = false;
             }
         }
-        
+
         reset = robots[0].buttons.Reset;
         scene.updateSensorValues(!pause);
         scene.drawRobots();
@@ -632,7 +653,7 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
                 robots[robotIndex].pose.theta += Math.PI / 180;
                 break;
             default:
-                // nothing to do so far
+            // nothing to do so far
         }
     }
 
@@ -842,45 +863,45 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
     }
 
     function addMouseEvents() {
-        $("#robotLayer").on('mousedown touchstart', function(e) {
+        $("#robotLayer").on('mousedown touchstart', function (e) {
             if (robots[robotIndex].handleMouseDown) {
                 robots[robotIndex].handleMouseDown(e, offsetX, offsetY, scale, scene.playground.w / 2, scene.playground.h / 2);
             } else {
                 handleMouseDown(e);
             }
         });
-        $("#robotLayer").on('mousemove touchmove', function(e) {
+        $("#robotLayer").on('mousemove touchmove', function (e) {
             if (robots[robotIndex].handleMouseMove) {
                 robots[robotIndex].handleMouseMove(e, offsetX, offsetY, scale, scene.playground.w / 2, scene.playground.h / 2);
             } else {
                 handleMouseMove(e);
             }
         });
-        $("#robotLayer").mouseup(function(e) {
+        $("#robotLayer").mouseup(function (e) {
             if (robots[robotIndex].handleMouseUp) {
                 robots[robotIndex].handleMouseUp(e, offsetX, offsetY, scale, scene.playground.w / 2, scene.playground.h / 2);
             } else {
                 handleMouseUp(e);
             }
         });
-        $("#robotLayer").on('mouseout touchcancel', function(e) {
+        $("#robotLayer").on('mouseout touchcancel', function (e) {
             if (robots[robotIndex].handleMouseOut) {
                 robots[robotIndex].handleMouseOut(e, offsetX, offsetY, scene.playground.w / 2, scene.playground.h / 2);
             } else {
                 handleMouseOut(e);
             }
         });
-        $("#simDiv").on('wheel mousewheel touchmove', function(e) {
+        $("#simDiv").on('wheel mousewheel touchmove', function (e) {
             handleMouseWheel(e);
         });
         $("#canvasDiv").draggable();
-        $("#robotLayer").on("dblclick", function(e) {
+        $("#robotLayer").on("dblclick", function (e) {
             handleDoubleMouseClick(e);
         });
-        $(document).on('keydown', function(e) {
+        $(document).on('keydown', function (e) {
             handleKeyEvent(e);
         });
-        $("#robotIndex").change(function(e) {
+        $("#robotIndex").change(function (e) {
             $("#brick" + robotIndex).hide();
             robotIndex = e.target.selectedIndex;
             $("#brick" + robotIndex).show();
@@ -916,11 +937,13 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
     function getScale() {
         return scale;
     }
+
     exports.getScale = getScale;
 
     function getInfo() {
         return info;
     }
+
     exports.getInfo = getInfo;
 
     function isIE() {
@@ -944,12 +967,12 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
         $('#backgroundFileSelector').val(null);
         $('#backgroundFileSelector').attr("accept", ".png, .jpg, .jpeg, .svg");
         $('#backgroundFileSelector').trigger('click'); // opening dialog
-        $('#backgroundFileSelector').change(function(event) {
+        $('#backgroundFileSelector').change(function (event) {
             var file = event.target.files[0];
             var reader = new FileReader();
-            reader.onload = function(event) {
+            reader.onload = function (event) {
                 var img = new Image();
-                img.onload = function() {
+                img.onload = function () {
                     var canvas = document.createElement("canvas");
                     var scaleX = 1;
                     var scaleY = 1;
@@ -969,7 +992,7 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
                     var dataURL = canvas.toDataURL("image/png");
                     var image = new Image(canvas.width, canvas.height);
                     image.src = dataURL;
-                    image.onload = function() {
+                    image.onload = function () {
                         if (customBackgroundLoaded) {
                             // replace previous image
                             imgObjectList[imgObjectList.length - 1] = image;
@@ -981,14 +1004,17 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
                     }
 
                     if (UTIL.isLocalStorageAvailable()) {
-                        $('#show-message-confirm').one('shown.bs.modal', function(e) {
+                        $('#show-message-confirm').one('shown.bs.modal', function (e) {
                             $('#confirm').off();
-                            $('#confirm').on('click', function(e) {
+                            $('#confirm').on('click', function (e) {
                                 e.preventDefault();
-                                localStorage.setItem("customBackground", JSON.stringify({image: dataURL.replace(/^data:image\/(png|jpg);base64,/, ""), timestamp: new Date().getTime()}));
+                                localStorage.setItem("customBackground", JSON.stringify({
+                                    image: dataURL.replace(/^data:image\/(png|jpg);base64,/, ""),
+                                    timestamp: new Date().getTime()
+                                }));
                             });
                             $('#confirmCancel').off();
-                            $('#confirmCancel').on('click', function(e) {
+                            $('#confirmCancel').on('click', function (e) {
                                 e.preventDefault();
                             });
                         });
@@ -1001,6 +1027,7 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
             return false;
         });
     }
+
     exports.importImage = importImage;
 
     function arrToRgb(values) {
@@ -1027,7 +1054,7 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
                 tempRobot.touchSensor.color = tempcolor;
                 robots[i] = tempRobot;
                 if (robots[i].brick) {
-                    $("#simRobotContent").append(robots[i].brick); 
+                    $("#simRobotContent").append(robots[i].brick);
                     $("#brick" + i).hide();
                 }
             }
@@ -1065,10 +1092,10 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
             robot.drawColor = "#000000";
             robot.drawWidth = 10;
         } else if (currentBackground == 4) {
-        	var robotY = 104 + yOffset;
-        	if (num >= 2) {
-        		robotY = 104 + 60 * (num-1);
-        	}
+            var robotY = 104 + yOffset;
+            if (num >= 2) {
+                robotY = 104 + 60 * (num - 1);
+            }
             robot = new reqRobot({
                 x: 70,
                 y: robotY,
@@ -1091,10 +1118,10 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
             }, configuration, num, robotBehaviour);
             robot.canDraw = false;
         } else if (currentBackground == 6) {
-        	var robotY = 440 + yOffset;
-        	if (num > 2) {
-        		robotY = 440 - 60 * (num-1);
-        	}
+            var robotY = 440 + yOffset;
+            if (num > 2) {
+                robotY = 440 - 60 * (num - 1);
+            }
             robot = new reqRobot({
                 x: 800,
                 y: robotY,
@@ -1136,7 +1163,7 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
         }
         return robot;
     }
-    
+
     function getWebAudio() {
         if (!this.webAudio) {
             this.webAudio = {};
@@ -1151,6 +1178,7 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
         }
         return this.webAudio;
     }
+
     exports.getWebAudio = getWebAudio;
 
     function updateBreakpointEvent() {
@@ -1167,23 +1195,17 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
                             if ($(block.svgGroup_).hasClass('blocklyDisabled')) {
                                 removeBreakPoint(block);
                                 $(block.svgPath_).removeClass('breakpoint').removeClass('selectedBreakpoint');
-                            }
-                            else{
+                            } else {
                                 if ($(block.svgGroup_).hasClass('blocklySelected')) {
                                     if ($(block.svgPath_).hasClass('breakpoint')) {
                                         removeBreakPoint(block);
                                         $(block.svgPath_).removeClass('breakpoint');
                                     } else if ($(block.svgPath_).hasClass('selectedBreakpoint')) {
                                         removeBreakPoint(block);
-                                        $(block.svgPath_).removeClass('selectedBreakpoint').addClass('highlight');
+                                        $(block.svgPath_).removeClass('selectedBreakpoint').stop(true, true).animate({'fill-opacity': '1'}, 0);
                                     } else {
                                         addBreakPoint(block);
-                                        if ($(block.svgPath_).hasClass('highlight')){
-                                            $(block.svgPath_).addClass('selectedBreakpoint')
-                                        }
-                                        else{
-                                            $(block.svgPath_).addClass('breakpoint');
-                                        }
+                                        $(block.svgPath_).addClass('breakpoint');
                                     }
                                 }
                             }
@@ -1281,7 +1303,7 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
 //http://my.opera.com/emoller/blog/2011/12/20/requestanimationframe-for-smart-er-animating
 //requestAnimationFrame polyfill by Erik Möller
 //fixes from Paul Irish and Tino Zijdel
-(function() {
+(function () {
     var lastTime = 0;
     var vendors = ['ms', 'moz', 'webkit', 'o'];
     for (var x = 0; x < vendors.length && !window.requestAnimationFrame; ++x) {
@@ -1290,10 +1312,10 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
     }
 
     if (!window.requestAnimationFrame) {
-        window.requestAnimationFrame = function(callback, element) {
+        window.requestAnimationFrame = function (callback, element) {
             var currTime = new Date().getTime();
             var timeToCall = Math.max(0, frameRateMs - (currTime - lastTime));
-            var id = window.setTimeout(function() {
+            var id = window.setTimeout(function () {
                 callback();
             }, timeToCall);
             lastTime = currTime + timeToCall;
@@ -1302,7 +1324,7 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
     }
 
     if (!window.cancelAnimationFrame) {
-        window.cancelAnimationFrame = function(id) {
+        window.cancelAnimationFrame = function (id) {
             clearTimeout(id);
         };
     }
