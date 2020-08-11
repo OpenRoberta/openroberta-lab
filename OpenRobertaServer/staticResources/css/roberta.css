@@ -3042,11 +3042,8 @@ pre code {
     }
 }
 
-#blockly.debug path.blocklyPath.breakpoint {
-    stroke-opacity: 1;
-    transition: none;
-    stroke: red;
-    stroke-width: 2px;
+#blockly.debug path.blocklyPath {
+    fill-opacity: 0.3;
 }
 
 #blockly.debug path.blocklyPath.selectedBreakpoint {
@@ -3056,12 +3053,12 @@ pre code {
     stroke-width: 2px;
 }
 
-#blockly.debug path.blocklyPath {
-    fill-opacity: 0.3;
-    transition: fill-opacity 0.25s linear;
+#blockly.debug path.blocklyPath.breakpoint {
+    stroke-opacity: 1;
+    transition: none;
+    stroke: red;
+    stroke-width: 2px;
 }
 
-#blockly.debug path.blocklyPath.highlight {
-    fill-opacity: 1;
-    transition: none;
-}
+
+
