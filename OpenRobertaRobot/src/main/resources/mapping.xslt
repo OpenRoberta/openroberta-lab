@@ -93,6 +93,8 @@
                 <xsl:when test=". = 'RED'">LIGHT</xsl:when>
                 <xsl:when test=". = 'PIN_PULSE_HIGH'">PIN_PULSEHIGH</xsl:when>
                 <xsl:when test=". = 'PIN_PULSE_LOW'">PIN_PULSELOW</xsl:when>
+                <xsl:when test=". = 'PULSE_HIGH'">PULSEHIGH</xsl:when>
+                <xsl:when test=". = 'PULSE_LOW'">PULSELOW</xsl:when>
                 <xsl:when test=". = 'PIN_TOUCHED'">PINTOUCH_PRESSED</xsl:when>
                 <xsl:otherwise>
                     <xsl:value-of select="." />

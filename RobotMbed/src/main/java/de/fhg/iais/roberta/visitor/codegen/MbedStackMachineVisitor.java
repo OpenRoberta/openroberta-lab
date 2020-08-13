@@ -176,8 +176,8 @@ public class MbedStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> i
         app(mk(C.EXPR).put(C.EXPR, C.NUM_CONST).put(C.VALUE, 0));
 
         String port = motorOnAction.getUserDefinedPort();
-        ConfigurationComponent configurationComponent = this.configuration.getConfigurationComponent(port);
-        String pin1 = configurationComponent.getProperty("PIN1");
+        ConfigurationComponent confComp = this.configuration.getConfigurationComponent(port);
+        String pin1 = confComp.getComponentType().equals("CALLIBOT") ? "" : confComp.getProperty("PIN1");
 
         JSONObject o = mk(C.MOTOR_ON_ACTION, motorOnAction).put(C.PORT, pin1.toLowerCase()).put(C.NAME, pin1.toLowerCase());
         return app(o);
@@ -191,8 +191,8 @@ public class MbedStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> i
     @Override
     public V visitMotorStopAction(MotorStopAction<V> motorStopAction) {
         String port = motorStopAction.getUserDefinedPort();
-        ConfigurationComponent configurationComponent = this.configuration.getConfigurationComponent(port);
-        String pin1 = configurationComponent.getProperty("PIN1");
+        ConfigurationComponent confComp = this.configuration.getConfigurationComponent(port);
+        String pin1 = confComp.getComponentType().equals("CALLIBOT") ? "" : confComp.getProperty("PIN1");
 
         JSONObject o = mk(C.MOTOR_STOP, motorStopAction).put(C.PORT, pin1.toLowerCase());
         return app(o);
@@ -368,11 +368,11 @@ public class MbedStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> i
         app(mk(C.EXPR).put(C.EXPR, C.NUM_CONST).put(C.VALUE, 0));
 
         String portA = bothMotorsOnAction.getPortA();
-        ConfigurationComponent configurationComponentA = this.configuration.getConfigurationComponent(portA);
-        String pin1A = configurationComponentA.getProperty("PIN1");
+        ConfigurationComponent confCompA = this.configuration.getConfigurationComponent(portA);
+        String pin1A = confCompA.getComponentType().equals("CALLIBOT") ? "" : confCompA.getProperty("PIN1");
         String portB = bothMotorsOnAction.getPortB();
-        ConfigurationComponent configurationComponentB = this.configuration.getConfigurationComponent(portB);
-        String pin1B = configurationComponentB.getProperty("PIN1");
+        ConfigurationComponent confCompB = this.configuration.getConfigurationComponent(portB);
+        String pin1B = confCompB.getComponentType().equals("CALLIBOT") ? "" : confCompB.getProperty("PIN1");
 
         JSONObject o = mk(C.BOTH_MOTORS_ON_ACTION, bothMotorsOnAction).put(C.PORT_A, pin1A.toLowerCase()).put(C.PORT_B, pin1B.toLowerCase());
 

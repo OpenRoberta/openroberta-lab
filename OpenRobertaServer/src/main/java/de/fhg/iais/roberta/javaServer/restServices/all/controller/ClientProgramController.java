@@ -180,7 +180,8 @@ public class ClientProgramController {
                     return UtilForREST.makeBaseResponseForError(programProcessor.getMessage(), httpSessionState, null);
                 } else {
                     String configText = programProcessor.getProgramsConfig(program);
-                    Pair<String, String> progConfPair = transformBetweenVersions(httpSessionState.getRobotFactory(), program.getProgramText(), configText);
+                    String transformedXml = XsltTransformer.getInstance().transform(program.getProgramText()); // TODO check whether XSLT needs to be applied to configuration as well
+                    Pair<String, String> progConfPair = transformBetweenVersions(httpSessionState.getRobotFactory(), transformedXml, configText);
                     response.setProgXML(progConfPair.getFirst());
                     response.setConfigName(program.getConfigName()); // may be null, if an anonymous configuration is used
                     response.setConfXML(progConfPair.getSecond()); // may be null, if the default configuration is used
@@ -391,9 +392,10 @@ public class ClientProgramController {
             if ( !Util.isValidJavaIdentifier(programName) ) {
                 programName = "NEPOprog";
             }
+            String transformedXml = XsltTransformer.getInstance().transform(xmlText);
             Export jaxbImportExport;
             try {
-                jaxbImportExport = JaxbHelper.xml2Element(xmlText, Export.class);
+                jaxbImportExport = JaxbHelper.xml2Element(transformedXml, Export.class);
             } catch ( UnmarshalException e ) {
                 jaxbImportExport = null;
             }
@@ -706,12 +708,11 @@ public class ClientProgramController {
                 // when loaded, the default configuration should be used
                 configText = robotFactory.getConfigurationDefault();
             }
-            Pair<String, String> transformedXmls = XsltTransformer.getInstance().transform(programText, configText);
             Project project =
                 new Project.Builder()
                     .setFactory(robotFactory)
-                    .setProgramXml(transformedXmls.getFirst())
-                    .setConfigurationXml(transformedXmls.getSecond())
+                    .setProgramXml(programText)
+                    .setConfigurationXml(configText)
                     .build();
             ProjectService.executeWorkflow("transform", project);
             if ( configText != null ) {

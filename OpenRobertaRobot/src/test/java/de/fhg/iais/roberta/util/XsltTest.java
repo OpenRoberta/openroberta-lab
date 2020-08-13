@@ -1,5 +1,7 @@
 package de.fhg.iais.roberta.util;
 
+import java.io.File;
+import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -8,6 +10,7 @@ import org.apache.commons.io.IOUtils;
 import org.custommonkey.xmlunit.Diff;
 import org.custommonkey.xmlunit.XMLUnit;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 import org.junit.Assert;
@@ -18,16 +21,13 @@ import com.google.common.base.Charsets;
 import com.google.common.io.Resources;
 
 public class XsltTest {
-    // not a valid configuration according to the xsd!
-    private static final String EMPTY_CONFIG = "<block_set/>";
 
     @Test
-    @Ignore
     public void transform_ShouldReturnTransformedXML_WhenGivenOldXML() throws Exception {
         String input = Resources.toString(Resources.getResource("de/fhg/iais/roberta/util/Xslt_in.xml"), Charsets.UTF_8);
         String expected = Resources.toString(Resources.getResource("de/fhg/iais/roberta/util/Xslt_out.xml"), Charsets.UTF_8);
 
-        String transformed = XsltTransformer.getInstance().transform(input, EMPTY_CONFIG).getFirst();
+        String transformed = XsltTransformer.getInstance().transform(input);
 
         XMLUnit.setIgnoreWhitespace(true);
         Diff diff = XMLUnit.compareXML(expected, transformed);
@@ -35,25 +35,11 @@ public class XsltTest {
     }
 
     @Test
-    @Ignore
     public void transform_ShouldReturnTransformedCalliopeXML_WhenGivenOldCalliopeXML() throws Exception {
         String input = Resources.toString(Resources.getResource("de/fhg/iais/roberta/util/Xslt_calliope_in.xml"), Charsets.UTF_8);
         String expected = Resources.toString(Resources.getResource("de/fhg/iais/roberta/util/Xslt_calliope_out.xml"), Charsets.UTF_8);
 
-        String transformed = XsltTransformer.getInstance().transform(input, EMPTY_CONFIG).getFirst();
-
-        XMLUnit.setIgnoreWhitespace(true);
-        Diff diff = XMLUnit.compareXML(expected, transformed);
-        Assert.assertTrue(diff.toString(), diff.identical());
-    }
-
-    @Test
-    @Ignore
-    public void transform_ShouldReturnTransformedCalliope2XML_WhenGivenOldCalliope2XML() throws Exception {
-        String input = Resources.toString(Resources.getResource("de/fhg/iais/roberta/util/Xslt_calliope2_in.xml"), Charsets.UTF_8);
-        String expected = Resources.toString(Resources.getResource("de/fhg/iais/roberta/util/Xslt_calliope2_out.xml"), Charsets.UTF_8);
-
-        String transformed = XsltTransformer.getInstance().transform(input, EMPTY_CONFIG).getFirst();
+        String transformed = XsltTransformer.getInstance().transform(input);
 
         XMLUnit.setIgnoreWhitespace(true);
         Diff diff = XMLUnit.compareXML(expected, transformed);
@@ -69,8 +55,10 @@ public class XsltTest {
     @Test
     @Ignore
     public void transform_ShouldReturnTransformedXML_WhenGivenOldDbEntries() throws Exception {
+        boolean SAVE_FAULTY_PROGRAMS = true;
+
         JSONTokener tokener =
-            new JSONTokener(Resources.toString(Resources.getResource("de/fhg/iais/roberta/util/db/database_export_calliope_2017.json"), StandardCharsets.UTF_8));
+            new JSONTokener(Resources.toString(Resources.getResource("de/fhg/iais/roberta/util/db/database_export_ev3_2017.json"), StandardCharsets.UTF_8));
         JSONObject root = new JSONObject(tokener);
         JSONArray list = root.getJSONArray(root.keys().next());
 
@@ -81,7 +69,14 @@ public class XsltTest {
         for ( int i = 0; i < list.length(); i++ ) {
             // Read block set XML
             JSONObject entry = list.getJSONObject(i);
-            String input = entry.getString("PROGRAM_TEXT");
+            String input;
+            try {
+                input = entry.getString("PROGRAM_TEXT");
+            } catch ( JSONException e ) {
+                System.out.println(e.getMessage());
+                outputList.put(entry);
+                continue;
+            }
 
             // Windows has a problem with large console inputs/outputs, use a temp file for headless blockly as a workaround
             Path ioFile = Files.createTempFile("", ".xml");
@@ -98,19 +93,21 @@ public class XsltTest {
             }
             String result = IOUtils.toString(start.getInputStream(), Charsets.UTF_8);
 
-            Assert.assertFalse(result, result.isEmpty());
-            Assert.assertFalse(result, result.contains("Blockly.Xml.textToDom did not obtain a valid XML tree."));
-            Assert.assertFalse(result, result.contains("Error [AssertionError]:"));
+            //            Assert.assertFalse(result, result.isEmpty());
+            //            Assert.assertFalse(result, result.contains("Blockly.Xml.textToDom did not obtain a valid XML tree."));
+            //            Assert.assertFalse(result, result.contains("Error [AssertionError]:"));
             String expected = IOUtils.toString(ioFile.toUri(), StandardCharsets.UTF_8);
 
             // Run transformer
-            String transformed = XsltTransformer.getInstance().transform(input, EMPTY_CONFIG).getFirst();
+            String transformed = XsltTransformer.getInstance().transform(input);
 
             // Compare results
             XMLUnit.setIgnoreWhitespace(true);
             Diff diff = XMLUnit.compareXML(expected, transformed);
-            Assert.assertTrue(diff.toString(), diff.identical() || result.contains("Connection checks failed."));
-            if (!diff.identical()) {
+            if ( !SAVE_FAULTY_PROGRAMS ) {
+                Assert.assertTrue(diff.toString(), diff.identical() || result.contains("Connection checks failed."));
+            }
+            if ( !(diff.identical() || result.contains("Connection checks failed.")) ) {
                 System.out.println(entry.getString("CREATED"));
                 outputList.put(entry);
             } else {
@@ -118,9 +115,9 @@ public class XsltTest {
             }
         }
 
-//        PrintWriter myFile = new PrintWriter(new File("database_export_ev3_2017_out.json"), "UTF-8");
-//        myFile.println(outputRoot.toString(4));
-
-//        Assert.assertTrue(nonWorkingPrograms.isEmpty());
+        if ( SAVE_FAULTY_PROGRAMS ) {
+            PrintWriter myFile = new PrintWriter(new File("database_export_calliope_2017_out.json"), "UTF-8");
+            myFile.println(outputRoot.toString(4));
+        }
     }
 }

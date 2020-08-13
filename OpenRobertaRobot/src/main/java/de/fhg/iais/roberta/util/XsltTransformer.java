@@ -1,9 +1,5 @@
 package de.fhg.iais.roberta.util;
 
-import com.google.common.base.Charsets;
-
-import org.apache.commons.io.output.ByteArrayOutputStream;
-
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -17,6 +13,10 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
+
+import org.apache.commons.io.output.ByteArrayOutputStream;
+
+import com.google.common.base.Charsets;
 
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
@@ -43,13 +43,13 @@ public final class XsltTransformer {
         return InstanceHolder.instance;
     }
 
-    public Pair<String, String> transform(String programXml, String configXml) {
+    public String transform(String xml) {
         // Sometimes the namespace is missing, it needs to be appended, otherwise the XSLT does not detect anything
-        if ( !programXml.contains("xmlns=\"http://de.fhg.iais.roberta.blockly\"") ) {
-            programXml = NAMESPACE_CHECK.matcher(programXml).replaceAll(Matcher.quoteReplacement("<block_set xmlns=\"http://de.fhg.iais.roberta.blockly\" "));
+        if ( !xml.contains("xmlns=\"http://de.fhg.iais.roberta.blockly\"") ) {
+            xml = NAMESPACE_CHECK.matcher(xml).replaceAll(Matcher.quoteReplacement("<block_set xmlns=\"http://de.fhg.iais.roberta.blockly\" "));
         }
         try (ByteArrayOutputStream output = new ByteArrayOutputStream()) {
-            Source mappingInput = new StreamSource(new ByteArrayInputStream(programXml.getBytes(Charsets.UTF_8)));
+            Source mappingInput = new StreamSource(new ByteArrayInputStream(xml.getBytes(Charsets.UTF_8)));
             this.mappingTransformer.transform(mappingInput, new StreamResult(output));
             String mappingOutput = output.toString(Charsets.UTF_8);
 
@@ -58,9 +58,7 @@ public final class XsltTransformer {
             this.expansionTransformer.transform(expansionInput, new StreamResult(output));
             String expansionOutput = output.toString(Charsets.UTF_8);
 
-            // TODO check if it needs to be applied to the configuration as well
-
-            return Pair.of(expansionOutput, configXml);
+            return expansionOutput;
         } catch ( TransformerException | IOException e ) {
             throw new DbcException("Could not transform program or configuration!", e);
         }
