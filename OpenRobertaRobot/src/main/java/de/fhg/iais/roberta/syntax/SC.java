@@ -123,4 +123,5 @@ public interface SC {
     String BOTH = "BOTH";
     String MUSIC = "MUSIC";
     String ENVIRONMENTAL = "ENVIRONMENTAL";
+    String COLOURTCS3472 = "COLOURTCS3472";
 }

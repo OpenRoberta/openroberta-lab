@@ -1,15 +1,15 @@
 package de.fhg.iais.roberta.visitor.codegen;
 
-import com.google.common.collect.ClassToInstanceMap;
-
-import org.apache.commons.text.WordUtils;
-
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import org.apache.commons.text.WordUtils;
+
+import com.google.common.collect.ClassToInstanceMap;
 
 import de.fhg.iais.roberta.bean.IProjectBean;
 import de.fhg.iais.roberta.bean.UsedHardwareBean;
@@ -82,6 +82,7 @@ import de.fhg.iais.roberta.syntax.lang.stmt.RepeatStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
 import de.fhg.iais.roberta.syntax.sensor.generic.AccelerometerSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GestureSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
@@ -663,8 +664,28 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
             nlIndent();
             this.sb.append("_cbInit(_buf, &_i2c, &_uBit);");
         }
+        if ( this.getBean(UsedHardwareBean.class).isSensorUsed(SC.COLOR) ) {
+            String integrationTime = "2_4MS";
+            String gain = "1X";
+            for ( ConfigurationComponent usedConfigurationBlock : this.robotConfiguration.getConfigurationComponentsValues() ) {
+                if ( usedConfigurationBlock.getComponentType().equals(SC.COLOUR) ) {
+                    integrationTime = usedConfigurationBlock.getProperty("I_TIME");
+                    gain = usedConfigurationBlock.getProperty("GAIN");
+                    break;
+                }
+            }
+            nlIndent();
+            this.sb.append("_TCS3472_init(_buf, &_i2c, TCS3472_INTEGRATIONTIME_").append(integrationTime).append(", TCS3472_GAIN_").append(gain).append(");");
+            nlIndent();
+            this.sb.append("_TCS3472_init(_buf, &_i2c, TCS3472_INTEGRATIONTIME_").append(integrationTime).append(", TCS3472_GAIN_").append(gain).append(");");
+            nlIndent();
+            this.sb.append("_TCS3472_time = TCS3472_INTEGRATIONTIME_").append(integrationTime).append(";");
+        }
+
         generateUsedVars();
+
         nlIndent();
+
         if ( this.getBean(UsedHardwareBean.class).isActorUsed(SC.DISPLAY_GRAYSCALE) ) {
             this.sb.append("_uBit.display.setDisplayMode(DISPLAY_MODE_GREYSCALE);");
         }
@@ -1164,6 +1185,17 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
             nlIndent();
             this.sb.append("uint8_t _cbLedState = 0x00;");
         }
+        if ( this.getBean(UsedHardwareBean.class).isSensorUsed(SC.COLOR) ) {
+            this.sb.append("MicroBitI2C _i2c(MICROBIT_PIN_P20, MICROBIT_PIN_P19);");
+            nlIndent();
+            this.sb.append("char _buf[8] = { 0, 0, 0, 0, 0, 0, 0, 0 };");
+            nlIndent();
+            this.sb.append("std::list<double> _TCS3472_rgb;");
+            nlIndent();
+            this.sb.append("MicroBitColor _TCS3472_color;");
+            nlIndent();
+            this.sb.append("char _TCS3472_time = 0xff;");
+        }
     }
 
     @Override
@@ -1419,15 +1451,34 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
         return null;
     }
 
+    @Override
+    public Void visitColorSensor(ColorSensor<Void> colorSensor) {
+
+        switch ( colorSensor.getMode() ) {
+            case SC.COLOUR:
+                this.sb.append("_TCS3472_getColor(_buf, _TCS3472_color, &_i2c, &_uBit, _TCS3472_time)");
+                break;
+            case SC.LIGHT:
+                this.sb.append("_TCS3472_getLight(_buf, &_i2c, &_uBit, _TCS3472_time)");
+                break;
+            case SC.RGB:
+                this.sb.append("_TCS3472_getRGB(_buf, _TCS3472_rgb, &_i2c, &_uBit, _TCS3472_time)");
+                break;
+            default:
+                throw new UnsupportedOperationException("Mode " + colorSensor.getMode() + " not supported!");
+        }
+        return null;
+    }
+
     private Set<String> getMotorPins() {
         Set<String> motorPins = new HashSet<>();
         for ( ConfigurationComponent confComp : this.robotConfiguration.getConfigurationComponentsValues() ) {
             String componentType = confComp.getComponentType();
-            if (componentType.equals("MOTOR")) {
+            if ( componentType.equals("MOTOR") ) {
                 motorPins.add(confComp.getProperty("PIN1"));
-            } else if (componentType.equals("CALLIBOT")) {
+            } else if ( componentType.equals("CALLIBOT") ) {
                 for ( Map.Entry<String, String> entry : confComp.getComponentProperties().entrySet() ) {
-                    if (entry.getKey().startsWith("MOTOR_")) {
+                    if ( entry.getKey().startsWith("MOTOR_") ) {
                         motorPins.add(CALLIBOT_TO_PIN_MAP.get(entry.getKey()));
                     }
                 }

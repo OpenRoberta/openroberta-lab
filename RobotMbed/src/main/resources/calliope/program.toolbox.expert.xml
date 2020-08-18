@@ -187,6 +187,7 @@
 		<block type="robSensors_humidity_getSample" />
 		<block type="robSensors_ultrasonic_getSample" />
 		<block type="robSensors_infrared_getSample" />
+		<block type="robSensors_colourtcs3472_getSample" />
 	</category>
 	<category name="TOOLBOX_CONTROL" svg="true">
 		<category name="TOOLBOX_DECISION" svg="true">

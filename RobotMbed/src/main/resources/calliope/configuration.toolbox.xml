@@ -37,5 +37,6 @@
         <block type="robConf_humidity" />
         <block type="robConf_digitalout" />
         <block type="robConf_analogout" />
+        <block type="robConf_colourtcs3472" />
     </category>
 </toolbox_set>

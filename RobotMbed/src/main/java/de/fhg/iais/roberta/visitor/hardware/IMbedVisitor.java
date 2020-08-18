@@ -183,7 +183,7 @@ public interface IMbedVisitor<V>
 
     /**
      * visit a {@link SingleMotorOnAction}.
-     * 
+     *
      * @deprecated should only be used by {@link MbedTwo2ThreeTransformerVisitor} to generate a MotorOnAction
      * @param singleMotorOnAction phrase to be visited
      */
@@ -194,7 +194,7 @@ public interface IMbedVisitor<V>
 
     /**
      * visit a {@link SingleMotorStopAction}.
-     * 
+     *
      * @deprecated should only be used by {@link MbedTwo2ThreeTransformerVisitor} to generate a MotorStopAction
      * @param singleMotorStopAction phrase to be visited
      */
