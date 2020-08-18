@@ -10,6 +10,7 @@ import de.fhg.iais.roberta.syntax.actors.arduino.RelayAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.sensebox.PlotClearAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.sensebox.PlotPointAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.sensebox.SendDataAction;
+import de.fhg.iais.roberta.syntax.sensors.arduino.sensebox.EnvironmentalSensor;
 import de.fhg.iais.roberta.syntax.sensors.arduino.sensebox.GpsSensor;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.visitor.hardware.actor.IDisplayVisitor;
@@ -40,6 +41,10 @@ public interface IArduinoVisitor<V>
     }
 
     default V visitGpsSensor(GpsSensor<V> gpsSensor) {
+        throw new DbcException("Block is not implemented!");
+    }
+
+    default V visitEnvironmentalSensor(EnvironmentalSensor<V> environmentalSensor) {
         throw new DbcException("Block is not implemented!");
     }
 

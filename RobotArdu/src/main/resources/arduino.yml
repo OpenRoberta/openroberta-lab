@@ -74,6 +74,10 @@ block:
       category: SENSOR
       implementor: de.fhg.iais.roberta.syntax.sensors.arduino.sensebox.GpsSensor
       type: [robSensors_gps_getSample]
+  ENVIRONMENTAL:
+      category: SENSOR
+      implementor: de.fhg.iais.roberta.syntax.sensors.arduino.sensebox.EnvironmentalSensor
+      type: [robSensors_environmental_getSample]
   LED_MATRIX_IMAGE_ACTION:
       category: ACTOR
       implementor: de.fhg.iais.roberta.syntax.actors.arduino.LEDMatrixImageAction
@@ -104,9 +108,11 @@ configuration:
   SENSEBOX_SDCARD: [robConf_sdcard]
   SENSEBOX_PLOTTING: [robConf_plotting]
   GPS: [robConf_gps]
+  ENVIRONMENTAL: [robConf_environmental]
 
 mode:
   GPS: [LATITUDE, LONGITUDE, ALTITUDE, SPEED, DATE, TIME]
+  ENVIRONMENTAL: [TEMPERATURE, HUMIDITY, PRESSURE, IAQ, CALIBRATION, CO2EQUIVALENT, VOCEQUIVALENT]
 
 wait:
   GPS_LATITUDE:
@@ -133,3 +139,31 @@ wait:
         implementor: de.fhg.iais.roberta.syntax.sensors.arduino.sensebox.GpsSensor
         sensor: GPS
         mode: TIME
+  ENVIRONMENTAL_TEMPERATURE:
+        implementor: de.fhg.iais.roberta.syntax.sensors.arduino.sensebox.EnvironmentalSensor
+        sensor: ENVIRONMENTAL
+        mode: TEMPERATURE
+  ENVIRONMENTAL_HUMIDITY:
+        implementor: de.fhg.iais.roberta.syntax.sensors.arduino.sensebox.EnvironmentalSensor
+        sensor: ENVIRONMENTAL
+        mode: HUMIDITY
+  ENVIRONMENTAL_PRESSURE:
+        implementor: de.fhg.iais.roberta.syntax.sensors.arduino.sensebox.EnvironmentalSensor
+        sensor: ENVIRONMENTAL
+        mode: PRESSURE
+  ENVIRONMENTAL_IAQ:
+        implementor: de.fhg.iais.roberta.syntax.sensors.arduino.sensebox.EnvironmentalSensor
+        sensor: ENVIRONMENTAL
+        mode: IAQ
+  ENVIRONMENTAL_CALIBRATION:
+        implementor: de.fhg.iais.roberta.syntax.sensors.arduino.sensebox.EnvironmentalSensor
+        sensor: ENVIRONMENTAL
+        mode: CALIBRATION
+  ENVIRONMENTAL_CO2EQUIVALENT:
+        implementor: de.fhg.iais.roberta.syntax.sensors.arduino.sensebox.EnvironmentalSensor
+        sensor: ENVIRONMENTAL
+        mode: CO2EQUIVALENT
+  ENVIRONMENTAL_VOCEQUIVALENT:
+        implementor: de.fhg.iais.roberta.syntax.sensors.arduino.sensebox.EnvironmentalSensor
+        sensor: ENVIRONMENTAL
+        mode: VOCEQUIVALENT

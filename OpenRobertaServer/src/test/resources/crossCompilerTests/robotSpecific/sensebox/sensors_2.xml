@@ -175,6 +175,76 @@
                                 </block>
                             </value>
                         </block>
+                        <block type="robActions_serial_print" id=",z~W4:8;,PVLRLU*Bf{3" intask="true">
+                            <value name="OUT">
+                                <block type="robSensors_environmental_getSample" id="n)Rt8tC)64SG%1xv^stv" intask="true">
+                                    <mutation mode="TEMPERATURE"></mutation>
+                                    <field name="MODE">TEMPERATURE</field>
+                                    <field name="SENSORPORT">E</field>
+                                    <field name="SLOT"></field>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="robActions_serial_print" id="vmaV1D;w^Deq/yORApmU" intask="true">
+                            <value name="OUT">
+                                <block type="robSensors_environmental_getSample" id="@HtTEOa_J*I^)t++?N,M" intask="true">
+                                    <mutation mode="HUMIDITY"></mutation>
+                                    <field name="MODE">HUMIDITY</field>
+                                    <field name="SENSORPORT">E</field>
+                                    <field name="SLOT"></field>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="robActions_serial_print" id="|ot@3F}?txaI4kyQq?E8" intask="true">
+                            <value name="OUT">
+                                <block type="robSensors_environmental_getSample" id="NQ}3T2Vvf)#5RStYbUiT" intask="true">
+                                    <mutation mode="PRESSURE"></mutation>
+                                    <field name="MODE">PRESSURE</field>
+                                    <field name="SENSORPORT">E</field>
+                                    <field name="SLOT"></field>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="robActions_serial_print" id="POmUl|8E.s2_h+5XuZPl" intask="true">
+                            <value name="OUT">
+                                <block type="robSensors_environmental_getSample" id="G62p#GD9fV~-!1.ae!Hl" intask="true">
+                                    <mutation mode="IAQ"></mutation>
+                                    <field name="MODE">IAQ</field>
+                                    <field name="SENSORPORT">E</field>
+                                    <field name="SLOT"></field>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="robActions_serial_print" id="uPE!8OJr8p7Bcl8mq;SK" intask="true">
+                            <value name="OUT">
+                                <block type="robSensors_environmental_getSample" id="MRm~%~nB/f/nf%o2uofR" intask="true">
+                                    <mutation mode="CALIBRATION"></mutation>
+                                    <field name="MODE">CALIBRATION</field>
+                                    <field name="SENSORPORT">E</field>
+                                    <field name="SLOT"></field>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="robActions_serial_print" id="Q07y0wQ!tWfT7NGEhlL0" intask="true">
+                            <value name="OUT">
+                                <block type="robSensors_environmental_getSample" id="Jo|)=EXBU?5pZ-vD=.=a" intask="true">
+                                    <mutation mode="CO2EQUIVALENT"></mutation>
+                                    <field name="MODE">CO2EQUIVALENT</field>
+                                    <field name="SENSORPORT">E</field>
+                                    <field name="SLOT"></field>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="robActions_serial_print" id="=_~TZmfh@=~Ji,6P;8Yv" intask="true">
+                            <value name="OUT">
+                                <block type="robSensors_environmental_getSample" id="~NwD`;wEZ(J-Our`|W^{" intask="true">
+                                    <mutation mode="VOCEQUIVALENT"></mutation>
+                                    <field name="MODE">VOCEQUIVALENT</field>
+                                    <field name="SENSORPORT">E</field>
+                                    <field name="SLOT"></field>
+                                </block>
+                            </value>
+                        </block>
                     </statement>
                 </block>
             </instance>
@@ -212,6 +282,12 @@
             <instance x="-1228" y="617">
                 <block type="robConf_accelerometer" id="9L:HO||CjNS(,!YiSk[P" intask="true" deletable="false">
                     <field name="NAME">B</field>
+                </block>
+            </instance>
+            <instance x="-1503" y="662">
+                <block type="robConf_environmental" id="7_j*tgTj6.!4)Ua[rjG:" intask="true">
+                    <field name="NAME">E</field>
+                    <field name="I2C">I2C</field>
                 </block>
             </instance>
         </block_set>

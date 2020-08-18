@@ -33,6 +33,7 @@ import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.VemlLightSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.VoltageSensor;
+import de.fhg.iais.roberta.syntax.sensors.arduino.sensebox.EnvironmentalSensor;
 import de.fhg.iais.roberta.syntax.sensors.arduino.sensebox.GpsSensor;
 import de.fhg.iais.roberta.typecheck.NepoInfo;
 import de.fhg.iais.roberta.util.Pair;
@@ -245,6 +246,15 @@ public class SenseboxBrickValidatorVisitor extends AbstractBrickValidatorVisitor
     public Void visitGpsSensor(GpsSensor<Void> gpsSensor) {
         if ( !this.robotConfiguration.isComponentTypePresent(SC.GPS) ) {
             gpsSensor.addInfo(NepoInfo.error("CONFIGURATION_ERROR_SENSOR_MISSING"));
+            this.errorCount++;
+        }
+        return null;
+    }
+
+    @Override
+    public Void visitEnvironmentalSensor(EnvironmentalSensor<Void> environmentalSensor) {
+        if ( !this.robotConfiguration.isComponentTypePresent(SC.ENVIRONMENTAL) ) {
+            environmentalSensor.addInfo(NepoInfo.error("CONFIGURATION_ERROR_SENSOR_MISSING"));
             this.errorCount++;
         }
         return null;

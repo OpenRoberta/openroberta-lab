@@ -122,4 +122,5 @@ public interface SC {
     String BACKWARD = "BACKWARD";
     String BOTH = "BOTH";
     String MUSIC = "MUSIC";
+    String ENVIRONMENTAL = "ENVIRONMENTAL";
 }

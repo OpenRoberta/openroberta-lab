@@ -2,6 +2,7 @@ package de.fhg.iais.roberta.visitor.codegen;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -48,6 +49,7 @@ import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.VemlLightSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.VoltageSensor;
+import de.fhg.iais.roberta.syntax.sensors.arduino.sensebox.EnvironmentalSensor;
 import de.fhg.iais.roberta.syntax.sensors.arduino.sensebox.GpsSensor;
 import de.fhg.iais.roberta.util.Pair;
 import de.fhg.iais.roberta.util.dbc.DbcException;
@@ -129,9 +131,25 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
         if ( this.getBean(UsedHardwareBean.class).isListsUsed() ) {
             this.sb.append("\n#include <stdlib.h>");
         }
+        if ( this.configuration.optConfigurationComponentByType(SC.ENVIRONMENTAL) != null ) {
+            this.sb.append("\n#include <bsec.h>");
+            this.sb.append("\n#include <Wire.h>");
+        }
         nlIndent();
         nlIndent();
+
         super.generateProgramPrefix(withWrapping);
+    }
+
+    @Override
+    protected void loopPrefix() {
+        ConfigurationComponent envSensor = this.configuration.optConfigurationComponentByType(SC.ENVIRONMENTAL);
+        incrIndentation();
+        if (envSensor != null) {
+            nlIndent();
+            this.sb.append("_iaqSensor_").append(envSensor.getUserDefinedPortName()).append(".run();");
+        }
+        decrIndentation();
     }
 
     @Override
@@ -552,6 +570,33 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
         return null;
     }
 
+    @Override
+    public Void visitEnvironmentalSensor(EnvironmentalSensor<Void> environmentalSensor) {
+        ConfigurationComponent cc = this.configuration.optConfigurationComponent(environmentalSensor.getPort());
+
+        String mode;
+        switch ( environmentalSensor.getMode() ) {
+            case "CALIBRATION":
+                mode = "iaqAccuracy";
+                break;
+            case "CO2EQUIVALENT":
+                mode = "co2Equivalent";
+                break;
+            case "VOCEQUIVALENT":
+                mode = "breathVocEquivalent";
+                break;
+            default:
+                mode = environmentalSensor.getMode().toLowerCase(Locale.ENGLISH);
+        }
+
+        this.sb
+            .append("_iaqSensor_")
+            .append(cc.getUserDefinedPortName())
+            .append('.')
+            .append(mode);
+        return null;
+    }
+
     private void generateConfigurationSetup() {
         String bmx55PortName;
         for ( ConfigurationComponent usedConfigurationBlock : this.configuration.getConfigurationComponentsValues() ) {
@@ -753,6 +798,43 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
                     this.sb.append("_gps_" + usedConfigurationBlock.getUserDefinedPortName() + ".begin();");
                     nlIndent();
                     break;
+                case SC.ENVIRONMENTAL:
+                    this.sb.append("Wire.begin();");
+                    nlIndent();
+                    this.sb.append("_iaqSensor_").append(usedConfigurationBlock.getUserDefinedPortName()).append(".begin(BME680_I2C_ADDR_PRIMARY, Wire);");
+                    nlIndent();
+                    this.sb.append("bsec_virtual_sensor_t _sensorList[10] = {");
+                    incrIndentation();
+                    nlIndent();
+                    this.sb.append("BSEC_OUTPUT_RAW_TEMPERATURE,");
+                    nlIndent();
+                    this.sb.append("BSEC_OUTPUT_RAW_PRESSURE,");
+                    nlIndent();
+                    this.sb.append("BSEC_OUTPUT_RAW_HUMIDITY,");
+                    nlIndent();
+                    this.sb.append("BSEC_OUTPUT_RAW_GAS,");
+                    nlIndent();
+                    this.sb.append("BSEC_OUTPUT_IAQ,");
+                    nlIndent();
+                    this.sb.append("BSEC_OUTPUT_STATIC_IAQ,");
+                    nlIndent();
+                    this.sb.append("BSEC_OUTPUT_CO2_EQUIVALENT,");
+                    nlIndent();
+                    this.sb.append("BSEC_OUTPUT_BREATH_VOC_EQUIVALENT,");
+                    nlIndent();
+                    this.sb.append("BSEC_OUTPUT_SENSOR_HEAT_COMPENSATED_TEMPERATURE,");
+                    nlIndent();
+                    this.sb.append("BSEC_OUTPUT_SENSOR_HEAT_COMPENSATED_HUMIDITY,");
+                    decrIndentation();
+                    nlIndent();
+                    this.sb.append("};");
+                    nlIndent();
+                    this.sb
+                        .append("_iaqSensor_")
+                        .append(usedConfigurationBlock.getUserDefinedPortName())
+                        .append(".updateSubscription(_sensorList, 10, BSEC_SAMPLE_RATE_LP);");
+                    nlIndent();
+                    break;
                 // no additional configuration needed:
                 case SC.ULTRASONIC:
                 case SC.POTENTIOMETER:
@@ -935,6 +1017,10 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
                             break;
                         }
                     }
+                    break;
+                case SC.ENVIRONMENTAL:
+                    this.sb.append("Bsec _iaqSensor_").append(cc.getUserDefinedPortName()).append(';');
+                    nlIndent();
                     break;
                 default:
                     throw new DbcException("Configuration block is not supported: " + cc.getComponentType());

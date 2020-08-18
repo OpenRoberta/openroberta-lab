@@ -269,4 +269,16 @@ public class SenseboxConfigCompTest extends AstTest {
     public void wireless_astToBlock_XMLtoJAXBtoASTtoXML_ReturnsSameXML() throws Exception {
         UnitTestHelper.checkConfigReverseTransformation(testFactory, "/ast/config/sensebox/robConf_wireless.xml");
     }
+
+    @Test
+    public void environmental_make_ByDefault_ReturnInstanceOfConfigurationComponentClass() {
+        String expectedResult =
+            "BlockAST[project=[ConfigurationComponent[componentType=ENVIRONMENTAL,isActor=true,userDefinedName=E,portName=E,componentProperties={I2C=I2C}]]]";
+        UnitTestHelper.checkConfigAstEquality(testFactory, expectedResult, "/ast/config/sensebox/robConf_environmental.xml");
+    }
+
+    @Test
+    public void environmental_astToBlock_XMLtoJAXBtoASTtoXML_ReturnsSameXML() throws Exception {
+        UnitTestHelper.checkConfigReverseTransformation(testFactory, "/ast/config/sensebox/robConf_environmental.xml");
+    }
 }

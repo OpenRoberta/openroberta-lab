@@ -24,6 +24,7 @@ import de.fhg.iais.roberta.syntax.sensor.generic.ParticleSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.PinGetValueSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.VemlLightSensor;
+import de.fhg.iais.roberta.syntax.sensors.arduino.sensebox.EnvironmentalSensor;
 import de.fhg.iais.roberta.syntax.sensors.arduino.sensebox.GpsSensor;
 import de.fhg.iais.roberta.visitor.hardware.IArduinoVisitor;
 
@@ -125,6 +126,14 @@ public final class SenseboxUsedHardwareCollectorVisitor extends AbstractUsedHard
     public Void visitSerialWriteAction(SerialWriteAction<Void> serialWriteAction) {
         serialWriteAction.getValue().accept(this);
         this.getBuilder(UsedHardwareBean.Builder.class).addUsedActor(new UsedActor(SC.SERIAL, SC.SERIAL));
+        return null;
+    }
+
+    @Override
+    public Void visitEnvironmentalSensor(EnvironmentalSensor<Void> environmentalSensor) {
+        this
+            .getBuilder(UsedHardwareBean.Builder.class)
+            .addUsedSensor(new UsedSensor(environmentalSensor.getPort(), SC.ENVIRONMENTAL, environmentalSensor.getMode()));
         return null;
     }
 }

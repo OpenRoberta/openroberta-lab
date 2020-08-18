@@ -113,6 +113,13 @@ public abstract class AbstractCommonArduinoCppVisitor extends AbstractCppVisitor
         }
     }
 
+    /**
+     * May be used to prefix some lines of code in the Arduino loop statement.
+     */
+    protected void loopPrefix() {
+        // nothing
+    }
+
     @Override
     public Void visitRepeatStmt(RepeatStmt<Void> repeatStmt) {
         boolean isWaitStmt = repeatStmt.getMode() == RepeatStmt.Mode.WAIT;
@@ -141,6 +148,7 @@ public abstract class AbstractCommonArduinoCppVisitor extends AbstractCppVisitor
                 this.sb.append("void loop()");
                 nlIndent();
                 this.sb.append("{");
+                loopPrefix();
                 break;
             default:
                 break;

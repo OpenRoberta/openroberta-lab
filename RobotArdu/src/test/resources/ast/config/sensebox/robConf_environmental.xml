@@ -1,0 +1,8 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" description="" robottype="sensebox" tags="" xmlversion="3.0">
+    <instance x="159" y="551">
+        <block id="}sgM86FL-eld2nn?P*#," intask="true" type="robConf_environmental">
+            <field name="NAME">E</field>
+            <field name="I2C">I2C</field>
+        </block>
+    </instance>
+</block_set>
