@@ -19,6 +19,7 @@
          * . @param generatedCode argument contains the operations and the function definitions
          * . @param r implementation of the ARobotBehaviour class
          * . @param cbOnTermination is called when the program has terminated
+         * . @param simBreakpoints is an array containing the breakpoints
         */
         function Interpreter(generatedCode, r, cbOnTermination, simBreakpoints) {
             this.terminated = false;
