@@ -1181,6 +1181,7 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
 
     exports.getWebAudio = getWebAudio;
 
+    /** adds/removes the ability for a block to be a breakpoint to a block */
     function updateBreakpointEvent() {
         if (debugMode) {
             Blockly.getMainWorkspace().getAllBlocks().forEach(function (block) {
@@ -1204,7 +1205,7 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
                                         removeBreakPoint(block);
                                         $(block.svgPath_).removeClass('selectedBreakpoint').stop(true, true).animate({'fill-opacity': '1'}, 0);
                                     } else {
-                                        addBreakPoint(block);
+                                        breakpoints.push(block.id);
                                         $(block.svgPath_).addClass('breakpoint');
                                     }
                                 }
@@ -1213,7 +1214,6 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
                     });
                     observers[block.id] = observer;
                     observer.observe(block.svgGroup_, {attributes: true});
-
                 }
             });
         } else {
@@ -1226,6 +1226,7 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
         }
     }
 
+    /** updates the debug mode for all interpreters */
     function updateDebugMode(mode) {
         debugMode = mode;
         if (interpreters !== null) {
@@ -1234,35 +1235,23 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
             }
         }
         updateBreakpointEvent();
-
-
     }
-
     exports.updateDebugMode = updateDebugMode;
 
-    function addBreakPoint(block) {
-        breakpoints.push(block.id);
-    }
-
-    exports.addBreakPoint = addBreakPoint;
-
+    /** removes breakpoint block */
     function removeBreakPoint(block) {
         for (var i = 0; i < breakpoints.length; i++) {
             if (breakpoints[i] === block.id) {
                 breakpoints.splice(i, 1);
             }
         }
-        if (!breakpoints.length > 0) {
-            if (interpreters !== null) {
-                for (var i = 0; i < numRobots; i++) {
-                    interpreters[i].removeEvent(CONST.DEBUG_BREAKPOINT);
-                }
+        if (!breakpoints.length > 0 && interpreters !== null) {
+            for (var i = 0; i < numRobots; i++) {
+                interpreters[i].removeEvent(CONST.DEBUG_BREAKPOINT);
             }
         }
     }
-
-    exports.removeBreakPoint = removeBreakPoint;
-
+    /** adds an event to the interpreters */
     function interpreterAddEvent(mode) {
         updateBreakpointEvent();
         if (interpreters !== null) {
@@ -1274,6 +1263,7 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
 
     exports.interpreterAddEvent = interpreterAddEvent;
 
+    /** called to signify debugging is finished in simulation */
     function endDebugging() {
         if (interpreters !== null) {
             for (var i = 0; i < numRobots; i++) {
@@ -1281,6 +1271,9 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
                 interpreters[i].breakPoints = [];
             }
         }
+        Blockly.getMainWorkspace().getAllBlocks().forEach(function (block) {
+            $(block.svgPath_).stop(true, true).animate({'fill-opacity': '1'}, 0);
+        });
         breakpoints = [];
         debugMode = false;
         updateBreakpointEvent();
@@ -1288,6 +1281,7 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
 
     exports.endDebugging = endDebugging;
 
+    /** returns the simulations variables */
     function getSimVariables() {
         if (interpreters !== null) {
             return interpreters[0].getVariables();
