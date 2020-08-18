@@ -859,7 +859,7 @@ define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constan
     function addVariableValue(name, value) {
         switch (typeof value) {
             case "number": {
-                $("#variableValue").append('<div><label>' + name + ' :  </label><span> ' + UTIL.round(value, 0) + '</span></div>');
+                $("#variableValue").append('<div><label>' + name + ' :  </label><span> ' + UTIL.round(value, 2) + '</span></div>');
                 break;
             }
             case "string": {

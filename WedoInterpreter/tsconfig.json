@@ -14,7 +14,7 @@
 		"./ts/interpreter.aRobotBehaviour.ts",
 		"./ts/interpreter.constants.ts",
 		"./ts/interpreter.interpreter.ts",
-		"./ts/interpreter.robotMbedBehaviour.ts",
+		"./ts/interpreter.robotSimBehaviour.ts",
 		"./ts/interpreter.robotWeDoBehaviour.ts",
 		"./ts/interpreter.robotWeDoBehaviourTest.ts",
 		"./ts/interpreter.runStackMachineJson.ts",
