@@ -386,7 +386,7 @@
                             </value>
                         </block>
                         <block type="mbedActions_leds_on" id="ch3jv.yOA(q/8{EZ}ZNz" intask="true">
-                            <field name="ACTORPORT">CalliBot_links_vorne</field>
+                            <field name="ACTORPORT">R_LF</field>
                             <value name="COLOR">
                                 <block type="variables_get" id=":^zh?niU5xXGi]RZpe9m" intask="true">
                                     <mutation datatype="Colour"></mutation>
@@ -395,7 +395,7 @@
                             </value>
                         </block>
                         <block type="mbedActions_leds_on" id=":}}E+}%yX?XF^j|`znIt" intask="true">
-                            <field name="ACTORPORT">CalliBot_rechts_vorne</field>
+                            <field name="ACTORPORT">R_RF</field>
                             <value name="COLOR">
                                 <block type="variables_get" id="In+ccJaI5YiqK:mS}z(Z" intask="true">
                                     <mutation datatype="Colour"></mutation>
@@ -404,7 +404,7 @@
                             </value>
                         </block>
                         <block type="mbedActions_leds_on" id="h{A2,Om|#thp5k!)g.{b" intask="true">
-                            <field name="ACTORPORT">CalliBot_links_hinten</field>
+                            <field name="ACTORPORT">R_LR</field>
                             <value name="COLOR">
                                 <block type="variables_get" id="3h+-_UqX8G2ZVGLoA?_*" intask="true">
                                     <mutation datatype="Colour"></mutation>
@@ -413,7 +413,7 @@
                             </value>
                         </block>
                         <block type="mbedActions_leds_on" id="8.@5nw+s=+_zlkbS4t6H" intask="true">
-                            <field name="ACTORPORT">CalliBot_rechts_hinten</field>
+                            <field name="ACTORPORT">R_RR</field>
                             <value name="COLOR">
                                 <block type="variables_get" id="2vT]/5(WrA%U;_cK4Y+X" intask="true">
                                     <mutation datatype="Colour"></mutation>
@@ -422,7 +422,7 @@
                             </value>
                         </block>
                         <block type="mbedActions_leds_on" id="/9K?D.-iqX(SFCaaz7zg" intask="true">
-                            <field name="ACTORPORT">CalliBot_alle</field>
+                            <field name="ACTORPORT">R_A</field>
                             <value name="COLOR">
                                 <block type="variables_get" id="5+l)pFc0?Jci}os+*~6R" intask="true">
                                     <mutation datatype="Colour"></mutation>
@@ -434,19 +434,19 @@
                             <field name="ACTORPORT">R</field>
                         </block>
                         <block type="mbedActions_leds_off" id="1_hY?xE^gqSOoMB`mT?{" intask="true">
-                            <field name="ACTORPORT">CalliBot_links_vorne</field>
+                            <field name="ACTORPORT">R_LF</field>
                         </block>
                         <block type="mbedActions_leds_off" id="BJFeKtIEA5CJG(61U;El" intask="true">
-                            <field name="ACTORPORT">CalliBot_rechts_vorne</field>
+                            <field name="ACTORPORT">R_RF</field>
                         </block>
                         <block type="mbedActions_leds_off" id="`3MS;_Ksn)exl`id[hdQ" intask="true">
-                            <field name="ACTORPORT">CalliBot_links_hinten</field>
+                            <field name="ACTORPORT">R_LR</field>
                         </block>
                         <block type="mbedActions_leds_off" id="0}]_##=taS^s0HJ[%|zH" intask="true">
-                            <field name="ACTORPORT">CalliBot_rechts_hinten</field>
+                            <field name="ACTORPORT">R_RR</field>
                         </block>
                         <block type="mbedActions_leds_off" id="jTL-AG0jx#8kOPZr5:(W" intask="true">
-                            <field name="ACTORPORT">CalliBot_alle</field>
+                            <field name="ACTORPORT">R_A</field>
                         </block>
                         <block type="mbedActions_ledBar_set" id="s3u8]S].)eWAN-X|mlt}" intask="true">
                             <value name="X">
@@ -463,27 +463,27 @@
                             </value>
                         </block>
                         <block type="robActions_brickLight_on" id="fenC3~gkJ6veW%%pTcWz" intask="true">
-                            <field name="ACTORPORT">L_CalliBot_links</field>
+                            <field name="ACTORPORT">L_L</field>
                             <field name="SWITCH_BLINK">ON</field>
                         </block>
                         <block type="robActions_brickLight_on" id="R=;TyYIN2zSP-(,envE4" intask="true">
-                            <field name="ACTORPORT">L_CalliBot_links</field>
+                            <field name="ACTORPORT">L_L</field>
                             <field name="SWITCH_BLINK">OFF</field>
                         </block>
                         <block type="robActions_brickLight_on" id="pi/=E%HU!%q;6;J#Hr*r" intask="true">
-                            <field name="ACTORPORT">L_CalliBot_rechts</field>
+                            <field name="ACTORPORT">L_R</field>
                             <field name="SWITCH_BLINK">ON</field>
                         </block>
                         <block type="robActions_brickLight_on" id="5.J@eE*kIz-[r|Ka9(6," intask="true">
-                            <field name="ACTORPORT">L_CalliBot_rechts</field>
+                            <field name="ACTORPORT">L_R</field>
                             <field name="SWITCH_BLINK">OFF</field>
                         </block>
                         <block type="robActions_brickLight_on" id="!+~N1*E=m4hY25h{sPCh" intask="true">
-                            <field name="ACTORPORT">CalliBot_beide</field>
+                            <field name="ACTORPORT">L_B</field>
                             <field name="SWITCH_BLINK">ON</field>
                         </block>
                         <block type="robActions_brickLight_on" id="zQv9)DlUlQPIPm5o^u+T" intask="true">
-                            <field name="ACTORPORT">CalliBot_beide</field>
+                            <field name="ACTORPORT">L_B</field>
                             <field name="SWITCH_BLINK">OFF</field>
                         </block>
                     </statement>
@@ -511,8 +511,8 @@
                             </value>
                         </block>
                         <block type="mbedActions_motors_on" id=":E-?*V7%-W;?MeONfaHK" intask="true">
-                            <field name="A">CalliBot_links</field>
-                            <field name="B">CalliBot_rechts</field>
+                            <field name="A">M_L</field>
+                            <field name="B">M_R</field>
                             <value name="POWER_A">
                                 <block type="variables_get" id="M^Dk,i;L#m!4`qCc6g##" intask="true">
                                     <mutation datatype="Number"></mutation>
@@ -561,7 +561,7 @@
                             </value>
                         </block>
                         <block type="mbedActions_motor_on" id="#xA1TB9I!S)CH5|`!E}S" intask="true">
-                            <field name="MOTORPORT">CalliBot_links</field>
+                            <field name="MOTORPORT">M_L</field>
                             <value name="POWER">
                                 <block type="variables_get" id="CW~T?h.JRtxX/yx0myd+" intask="true">
                                     <mutation datatype="Number"></mutation>
@@ -570,7 +570,7 @@
                             </value>
                         </block>
                         <block type="mbedActions_motor_on" id="IzMct@|{O%mn^zm?QW6p" intask="true">
-                            <field name="MOTORPORT">CalliBot_rechts</field>
+                            <field name="MOTORPORT">M_R</field>
                             <value name="POWER">
                                 <block type="variables_get" id=".ZAaBZ9+x|J[geeih/gz" intask="true">
                                     <mutation datatype="Number"></mutation>
@@ -579,8 +579,8 @@
                             </value>
                         </block>
                         <block type="mbedActions_motors_on" id="QG/iSB5GuC36?tG4Vp[Q" intask="true">
-                            <field name="A">CalliBot_links</field>
-                            <field name="B">CalliBot_rechts</field>
+                            <field name="A">M_L</field>
+                            <field name="B">M_R</field>
                             <value name="POWER_A">
                                 <block type="variables_get" id="+C}JxOe_.x_A@x9vxxC#" intask="true">
                                     <mutation datatype="Number"></mutation>
@@ -604,11 +604,11 @@
                         </block>
                         <block type="mbedActions_motors_stop" id="Wqt+.C~^~fst-axHOP[5" intask="true"></block>
                         <block type="mbedActions_motor_stop" id="/Eku/I1}Y@1)wc7T30jD" intask="true">
-                            <field name="MOTORPORT">CalliBot_links</field>
+                            <field name="MOTORPORT">M_L</field>
                             <field name="MODE">FLOAT</field>
                         </block>
                         <block type="mbedActions_motor_stop" id="_jd#d8yE%+4PrGvW)cb~" intask="true">
-                            <field name="MOTORPORT">CalliBot_rechts</field>
+                            <field name="MOTORPORT">M_R</field>
                             <field name="MODE">FLOAT</field>
                         </block>
                         <block type="mbedActions_motors_stop" id="afK-F`qA`uCg+eUbr3X}" intask="true"></block>
@@ -1329,12 +1329,6 @@
                     <field name="PIN1">2</field>
                 </block>
             </instance>
-            <instance x="1483" y="-1257">
-                <block type="robConf_rgbled" id=";cQ|F.CoTN3slLh?5KES" intask="true">
-                    <field name="NAME">CalliBot_links_vorne</field>
-                    <field name="PIN1">1</field>
-                </block>
-            </instance>
             <instance x="1088" y="-674">
                 <block type="robConf_digitalin" id="O_6RIIQvInoSFKevFC;9" intask="true">
                     <field name="NAME">C07_D</field>
@@ -1359,28 +1353,10 @@
                     <field name="PIN1">C05</field>
                 </block>
             </instance>
-            <instance x="1481" y="-872">
-                <block type="robConf_led" id="1}`%B6g|TOpPAr{6PNq;" intask="true">
-                    <field name="NAME">L_CalliBot_rechts</field>
-                    <field name="PIN1">2</field>
-                </block>
-            </instance>
-            <instance x="1482" y="-1192">
-                <block type="robConf_rgbled" id="t#CDWP*!FvFL%jC%2j%-" intask="true">
-                    <field name="NAME">CalliBot_links_hinten</field>
-                    <field name="PIN1">2</field>
-                </block>
-            </instance>
             <instance x="1086" y="-544">
                 <block type="robConf_digitalin" id="7R[g?+y6oH0tJ?4TZ`~*" intask="true">
                     <field name="NAME">C09_D</field>
                     <field name="PIN1">C09</field>
-                </block>
-            </instance>
-            <instance x="1480" y="-665">
-                <block type="robConf_motor" id="ErET;@,3l9#UnYt=)[@W" intask="true">
-                    <field name="NAME">CalliBot_rechts</field>
-                    <field name="PIN1">2</field>
                 </block>
             </instance>
             <instance x="1730" y="-928">
@@ -1393,12 +1369,6 @@
                 <block type="robConf_digitalin" id="cZc/-U?`zKX.^~9LUsNl" intask="true">
                     <field name="NAME">C10_D</field>
                     <field name="PIN1">C10</field>
-                </block>
-            </instance>
-            <instance x="1478" y="-736">
-                <block type="robConf_motor" id="%yt,n-XLcgHzTokE3a1N" intask="true">
-                    <field name="NAME">CalliBot_links</field>
-                    <field name="PIN1">0</field>
                 </block>
             </instance>
             <instance x="1730" y="-993">
@@ -1506,12 +1476,6 @@
                     <field name="NAME">L</field>
                 </block>
             </instance>
-            <instance x="1479" y="-1060">
-                <block type="robConf_rgbled" id="1S:68z]6eb#U~4J.hBv^" intask="true">
-                    <field name="NAME">CalliBot_rechts_vorne</field>
-                    <field name="PIN1">4</field>
-                </block>
-            </instance>
             <instance x="1278" y="-937">
                 <block type="robConf_analogin" id="bUHR0h-S*fCM%]SJ?yXP" intask="true">
                     <field name="NAME">C06_A</field>
@@ -1564,12 +1528,6 @@
                     <field name="NAME">BZ</field>
                 </block>
             </instance>
-            <instance x="1480" y="-1124">
-                <block type="robConf_rgbled" id="{8Ouhro7CaajU/=1N0+H" intask="true">
-                    <field name="NAME">CalliBot_rechts_hinten</field>
-                    <field name="PIN1">3</field>
-                </block>
-            </instance>
             <instance x="1734" y="-1120">
                 <block type="robConf_servo" id="B2}tgpdByF7k%[U^W*~I" intask="true">
                     <field name="NAME">S_A1</field>
@@ -1579,12 +1537,6 @@
             <instance x="1136" y="-1065">
                 <block type="robConf_accelerometer" id="#(ufvG,s^FcqI,aFn/A{" intask="true">
                     <field name="NAME">Acc</field>
-                </block>
-            </instance>
-            <instance x="1482" y="-996">
-                <block type="robConf_rgbled" id="2M=b?sJul6]Li3d4}P/J" intask="true">
-                    <field name="NAME">CalliBot_alle</field>
-                    <field name="PIN1">5</field>
                 </block>
             </instance>
             <instance x="1734" y="-1187">
@@ -1617,12 +1569,6 @@
                     <field name="PIN1">C11</field>
                 </block>
             </instance>
-            <instance x="1483" y="-936">
-                <block type="robConf_led" id="SfkgppPMfY?JYOy49FIT" intask="true">
-                    <field name="NAME">L_CalliBot_links</field>
-                    <field name="PIN1">1</field>
-                </block>
-            </instance>
             <instance x="1091" y="-98">
                 <block type="robConf_digitalin" id="_f8/X1SggkAc]!t/e/S6" intask="true">
                     <field name="NAME">C19_D</field>
@@ -1634,10 +1580,22 @@
                     <field name="NAME">TM</field>
                 </block>
             </instance>
-            <instance x="1478" y="-806">
-                <block type="robConf_led" id="gShB~1n=BTKa@SWJshe4" intask="true">
-                    <field name="NAME">CalliBot_beide</field>
-                    <field name="PIN1">3</field>
+            <instance y="-821" x="1490">
+                <block intask="true" id="4v[,Qb/|:mxTs:XBT(4u" type="robConf_callibot">
+                    <field name="NAME">CalliBot</field>
+                    <field name="MOTOR_L">M_L</field>
+                    <field name="MOTOR_R">M_R</field>
+                    <field name="RGBLED_LF">R_LF</field>
+                    <field name="RGBLED_RF">R_RF</field>
+                    <field name="RGBLED_LR">R_LR</field>
+                    <field name="RGBLED_RR">R_RR</field>
+                    <field name="RGBLED_A">R_A</field>
+                    <field name="LED_L">L_L</field>
+                    <field name="LED_R">L_R</field>
+                    <field name="LED_B">L_B</field>
+                    <field name="INFRARED_L">I_L</field>
+                    <field name="INFRARED_R">I_R</field>
+                    <field name="ULTRASONIC">U</field>
                 </block>
             </instance>
         </block_set>

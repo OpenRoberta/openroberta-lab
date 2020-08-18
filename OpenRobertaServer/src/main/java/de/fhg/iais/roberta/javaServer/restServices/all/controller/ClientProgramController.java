@@ -40,6 +40,7 @@ import de.fhg.iais.roberta.generated.restEntities.ShareRequest;
 import de.fhg.iais.roberta.generated.restEntities.ShareResponse;
 import de.fhg.iais.roberta.generated.restEntities.UserGroupProgramListRequest;
 import de.fhg.iais.roberta.javaServer.provider.OraData;
+import de.fhg.iais.roberta.javaServer.provider.XsltTrans;
 import de.fhg.iais.roberta.javaServer.restServices.all.service.ProjectService;
 import de.fhg.iais.roberta.persistence.ConfigurationProcessor;
 import de.fhg.iais.roberta.persistence.LikeProcessor;
@@ -160,7 +161,7 @@ public class ClientProgramController {
     @Path("/listing")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getProgram(@OraData DbSession dbSession, FullRestRequest request) {
+    public Response getProgram(@OraData DbSession dbSession, @XsltTrans XsltTransformer xsltTransformer, FullRestRequest request) {
         HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, request, true);
         try {
             ListingResponse response = ListingResponse.make();
@@ -180,7 +181,7 @@ public class ClientProgramController {
                     return UtilForREST.makeBaseResponseForError(programProcessor.getMessage(), httpSessionState, null);
                 } else {
                     String configText = programProcessor.getProgramsConfig(program);
-                    String transformedXml = XsltTransformer.getInstance().transform(program.getProgramText()); // TODO check whether XSLT needs to be applied to configuration as well
+                    String transformedXml = xsltTransformer.transform(program.getProgramText());
                     Pair<String, String> progConfPair = transformBetweenVersions(httpSessionState.getRobotFactory(), transformedXml, configText);
                     response.setProgXML(progConfPair.getFirst());
                     response.setConfigName(program.getConfigName()); // may be null, if an anonymous configuration is used
@@ -376,7 +377,7 @@ public class ClientProgramController {
     @Path("/import")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response importProgram(FullRestRequest request) {
+    public Response importProgram(@XsltTrans XsltTransformer xsltTransformer, FullRestRequest request) {
         HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, request, true);
         ImportRequest importRequest = ImportRequest.make(request.getData());
         ImportResponse response = ImportResponse.make();
@@ -392,7 +393,7 @@ public class ClientProgramController {
             if ( !Util.isValidJavaIdentifier(programName) ) {
                 programName = "NEPOprog";
             }
-            String transformedXml = XsltTransformer.getInstance().transform(xmlText);
+            String transformedXml = xsltTransformer.transform(xmlText);
             Export jaxbImportExport;
             try {
                 jaxbImportExport = JaxbHelper.xml2Element(transformedXml, Export.class);

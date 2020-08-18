@@ -47,6 +47,7 @@ import de.fhg.iais.roberta.testutil.SeleniumHelper;
 import de.fhg.iais.roberta.util.Key;
 import de.fhg.iais.roberta.util.ServerProperties;
 import de.fhg.iais.roberta.util.Util;
+import de.fhg.iais.roberta.util.XsltTransformer;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.util.testsetup.IntegrationTest;
 
@@ -81,6 +82,7 @@ public class RoundTripIT {
     private static SessionFactoryWrapper sessionFactoryWrapper;
     private static DbSetup memoryDbSetup;
     private static RobotCommunicator brickCommunicator;
+    private static XsltTransformer xsltTransformer;
 
     private static ClientUser restUser;
     private static ClientProgramController restProject;
@@ -97,6 +99,7 @@ public class RoundTripIT {
         ServerProperties serverProperties = new ServerProperties(Util.loadProperties("classpath:/openRoberta.properties"));
         browserVisibility = Boolean.parseBoolean(serverProperties.getStringProperty("browser.visibility"));
         brickCommunicator = new RobotCommunicator();
+        xsltTransformer = new XsltTransformer();
 
         TestConfiguration tc = TestConfiguration.setup();
         sessionFactoryWrapper = tc.getSessionFactoryWrapper();
@@ -254,7 +257,7 @@ public class RoundTripIT {
         WebElement userProgramSaveAsElement = (new WebDriverWait(driver, 10)).until(ExpectedConditions.elementToBeClickable(By.id("menuSaveProg")));
         userProgramSaveAsElement.click();
 
-        response = restProject.importProgram(mkCmd("{'cmd':'loadP';'name':'" + programName + "';'owner':'orA'}"));
+        response = restProject.importProgram(xsltTransformer, mkCmd("{'cmd':'loadP';'name':'" + programName + "';'owner':'orA'}"));
         String resultProgram = ((JSONObject) response.getEntity()).getString("data");
         return resultProgram;
     }

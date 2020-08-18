@@ -45,6 +45,15 @@
                 <xsl:when test=". = 'naoActions_sayText'">robActions_sayText</xsl:when>
                 <xsl:when test=". = 'naoControls_wait_for'">robControls_wait_for</xsl:when>
                 <xsl:when test=". = 'naoSensors_getSample'">robSensors_getSample</xsl:when>
+                <xsl:when test=". = 'sim_getSample'">robSensors_getSample</xsl:when>
+                <xsl:when test=". = 'sim_LED_on'">robActions_brickLight_on</xsl:when>
+                <xsl:when test=". = 'sim_LED_off'">robActions_brickLight_off</xsl:when>
+                <xsl:when test=". = 'sim_ultrasonic_getSample'">robSensors_ultrasonic_getSample</xsl:when>
+                <xsl:when test=". = 'sim_touch_isPressed'">robSensors_touch_getSample</xsl:when>
+                <xsl:when test=". = 'sim_motor_on'">robActions_motor_on</xsl:when>
+                <xsl:when test=". = 'sim_motor_stop'">robActions_motor_stop</xsl:when>
+                <xsl:when test=". = 'robActions_write_to_pin'">robActions_write_pin</xsl:when>
+                <xsl:when test=". = 'robSensors_pin_getSample' and ancestor::b:block_set/@robottype = 'arduino'">robSensors_out_getSample</xsl:when>
                 <xsl:otherwise>
                     <xsl:value-of select="." />
                 </xsl:otherwise>
@@ -156,6 +165,18 @@
     <!-- some field blocks may need adapted attributes and contents -->
     <xsl:template match="b:field">
         <xsl:choose>
+            <xsl:when test="./@name = 'VALUETYPE' and ../@type = 'robActions_write_pin'">
+                <xsl:copy>
+                    <xsl:attribute name="name">MODE</xsl:attribute>
+                    <xsl:value-of select="." />
+                </xsl:copy>
+            </xsl:when>
+            <xsl:when test="./@name = 'PIN' and ../@type = 'robActions_write_pin'">
+                <xsl:copy>
+                    <xsl:attribute name="name">ACTORPORT</xsl:attribute>
+                    <xsl:value-of select="." />
+                </xsl:copy>
+            </xsl:when>
             <xsl:when test="./@name = 'GESTURE' and ../@type = 'robSensors_getSample'">
                 <xsl:copy>
                     <xsl:attribute name="name">GESTURE</xsl:attribute>GESTURE_<xsl:value-of select="." />
@@ -173,7 +194,7 @@
                 </xsl:copy>
             </xsl:when>
             <xsl:when test="./@name = 'MODE' and ./text() = 'PITCH'">ANGLE</xsl:when>
-            <xsl:when test="./@name = 'SENSORNUM'">
+            <xsl:when test="./@name = 'SENSORNUM' or (./@name = 'MOTORPORT' and ancestor::b:block/@type = 'robSensors_encoder_reset')">
                 <xsl:copy>
                     <xsl:attribute name="name">SENSORPORT</xsl:attribute>
                     <xsl:value-of select="." />
@@ -183,6 +204,18 @@
                 <xsl:copy>
                     <xsl:apply-templates select="@* | node()" />
                 </xsl:copy>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:template>
+    <xsl:template match="b:mutation/@datatype">
+        <xsl:choose>
+            <xsl:when test=". = 'Array_number'">
+                <xsl:attribute name="datatype">
+                    <xsl:text>Array_Number</xsl:text>
+                </xsl:attribute>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:copy-of select="." />
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>

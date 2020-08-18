@@ -128,7 +128,7 @@
             <field name="SLOT" />
         </block>
         <block type="robSensors_gyro_getSample" id="" intask="true">
-            <mutation mode="" />
+            <mutation mode="ANGLE" />
             <field name="MODE">ANGLE</field>
             <field name="SENSORPORT" />
             <field name="SLOT" />
@@ -236,13 +236,13 @@
             <field name="SLOT" />
         </block>
         <block type="robSensors_gyro_getSample" id="" intask="true">
-            <mutation mode="" />
+            <mutation mode="ANGLE" />
             <field name="MODE">ANGLE</field>
             <field name="SENSORPORT" />
             <field name="SLOT" />
         </block>
         <block type="robSensors_gyro_getSample" id="" intask="true">
-            <mutation mode="" />
+            <mutation mode="ANGLE" />
             <field name="MODE">ANGLE</field>
             <field name="SENSORPORT" />
             <field name="SLOT" />
@@ -260,32 +260,31 @@
             <field name="SLOT" />
         </block>
         <block intask="true" type="robControls_start" id="">
-            <field name="">TRUE</field>
-            <field name="DEBUG">FALSE</field>
             <mutation declare="false" />
+            <field name="DEBUG">FALSE</field>
+            <field name="">TRUE</field>
         </block>
         <block type="robSensors_getSample" id="" intask="true">
             <mutation mode="GESTURE_TRUE" />
-            <field name="MODE">GESTURE_TRUE</field>
             <field name="SENSORTYPE">GESTURE_TRUE</field>
             <field name="SENSORPORT" />
             <field name="SLOT" />
         </block>
         <block intask="true" type="robControls_start" id="">
+            <mutation declare="false" />
+            <field name="DEBUG">FALSE</field>
             <field name="GESTURE">TRUE</field>
             <field name="MODE">TRUE</field>
-            <field name="DEBUG">FALSE</field>
-            <mutation declare="false" />
         </block>
         <block intask="true" type="robControls_start" id="">
+            <mutation declare="false" />
+            <field name="DEBUG">FALSE</field>
             <field name="SENSORPORT">A</field>
-            <field name="DEBUG">FALSE</field>
-            <mutation declare="false" />
         </block>
         <block intask="true" type="robControls_start" id="">
-            <field name="SENSORPORT">B</field>
-            <field name="DEBUG">FALSE</field>
             <mutation declare="false" />
+            <field name="DEBUG">FALSE</field>
+            <field name="SENSORPORT">B</field>
         </block>
     </instance>
 </block_set>

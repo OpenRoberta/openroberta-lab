@@ -1,14 +1,14 @@
 package de.fhg.iais.roberta.guice;
 
-import java.util.Map;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.google.inject.AbstractModule;
 import com.google.inject.Singleton;
 import com.google.inject.TypeLiteral;
 import com.google.inject.name.Names;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.Map;
 
 import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.javaServer.restServices.all.controller.ClientAdmin;
@@ -24,6 +24,7 @@ import de.fhg.iais.roberta.main.MailManagement;
 import de.fhg.iais.roberta.persistence.util.SessionFactoryWrapper;
 import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
 import de.fhg.iais.roberta.util.ServerProperties;
+import de.fhg.iais.roberta.util.XsltTransformer;
 
 public class RobertaGuiceModule extends AbstractModule {
     private static final Logger LOG = LoggerFactory.getLogger(RobertaGuiceModule.class);
@@ -60,6 +61,7 @@ public class RobertaGuiceModule extends AbstractModule {
         bind(RobotCommunicator.class).toInstance(this.robotCommunicator);
         bind(MailManagement.class).in(Singleton.class);
         bind(IIpToCountry.class).toInstance(this.ipToCountry);
+        bind(XsltTransformer.class).in(Singleton.class);
 
         bind(new TypeLiteral<Map<String, IRobotFactory>>() {
         }).annotatedWith(Names.named("robotPluginMap")).toInstance(this.robotPluginMap);

@@ -1212,10 +1212,13 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
 
     @Override
     public Void visitBothMotorsOnAction(BothMotorsOnAction<Void> bothMotorsOnAction) {
-        String port = bothMotorsOnAction.getPortA();
-        ConfigurationComponent confComp = this.robotConfiguration.getConfigurationComponent(port);
-        String pin1 = confComp.getComponentType().equals("CALLIBOT") ? getCallibotPin(confComp, port) : confComp.getProperty("PIN1");
-        if ( pin1.equals("A") ) {
+        String portA = bothMotorsOnAction.getPortA();
+        String portB = bothMotorsOnAction.getPortB();
+        ConfigurationComponent confCompA = this.robotConfiguration.getConfigurationComponent(portA);
+        ConfigurationComponent confCompB = this.robotConfiguration.getConfigurationComponent(portB);
+        String pin1A = confCompA.getComponentType().equals("CALLIBOT") ? getCallibotPin(confCompA, portA) : confCompA.getProperty("PIN1");
+        String pin1B = confCompB.getComponentType().equals("CALLIBOT") ? getCallibotPin(confCompB, portB) : confCompB.getProperty("PIN1");
+        if ( pin1A.equals("A") && pin1B.equals("B") ) {
             this.sb.append("_uBit.soundmotor.motorAOn(");
             bothMotorsOnAction.getSpeedA().accept(this);
             this.sb.append(");");
@@ -1223,13 +1226,23 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
             this.sb.append("_uBit.soundmotor.motorBOn(");
             bothMotorsOnAction.getSpeedB().accept(this);
             this.sb.append(");");
-        } else if ( pin1.equals("0") ) {
+        } else if ( pin1A.equals("B") && pin1B.equals("A") ) {
+            this.sb.append("_uBit.soundmotor.motorBOn(");
+            bothMotorsOnAction.getSpeedA().accept(this);
+            this.sb.append(");");
+            nlIndent();
+            this.sb.append("_uBit.soundmotor.motorAOn(");
+            bothMotorsOnAction.getSpeedB().accept(this);
+            this.sb.append(");");
+        }
+        if ( pin1A.equals("0") ) {
             this.sb.append("_cbSetMotors(_buf, &_i2c, ");
             bothMotorsOnAction.getSpeedA().accept(this);
             this.sb.append(", ");
             bothMotorsOnAction.getSpeedB().accept(this);
             this.sb.append(");");
         }
+
         return null;
     }
 

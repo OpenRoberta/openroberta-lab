@@ -6,7 +6,12 @@
         <block type="mbedActions_display_text" id="MYwC;^kO,_t1HKz6?ifj" intask="true">
             <field name="TYPE">TEXT</field>
             <value name="OUT">
-                <block type="robSensors_light_getSample" id="fY0DW{*)/Tu+-,}3/.#Y" intask="true"></block>
+                <block type="robSensors_light_getSample" id="fY0DW{*)/Tu+-,}3/.#Y" intask="true">
+                    <mutation mode="VALUE" />
+                    <field name="MODE">VALUE</field>
+                    <field name="SENSORPORT">L</field>
+                    <field name="SLOT" />
+                </block>
             </value>
         </block>
     </instance>

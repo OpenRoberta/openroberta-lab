@@ -56,7 +56,7 @@
             <field name="SLOT" />
         </block>
         <block type="robSensors_gesture_getSample" id="E#H~CI4A#zW4Fn!cfJhS" intask="true">
-            <mutation mode="UP" />
+            <mutation mode="SHAKE" />
             <field name="MODE">SHAKE</field>
             <field name="SENSORPORT" />
             <field name="SLOT" />
@@ -263,6 +263,56 @@
                     </statement>
                 </block>
             </statement>
+        </block>
+    </instance>
+    <instance x="515" y="616">
+        <block type="mbedActions_motor_stop" id="/Eku/I1}Y@1)wc7T30jD" intask="true">
+            <field name="MOTORPORT">M_L</field>
+            <field name="MODE">FLOAT</field>
+        </block>
+    </instance>
+    <instance x="5155" y="6116">
+        <block type="mbedCommunication_sendBlock" id="09s{(Mp!:]*,a}hgs6H-" intask="true">
+            <mutation datatype="String" />
+            <field name="TYPE">String</field>
+            <field name="POWER">7</field>
+            <value name="sendData">
+                <block type="text" id="]^/)04e1PuE0B9mU`3Uy" intask="true">
+                    <field name="TEXT">B</field>
+                </block>
+            </value>
+        </block>
+    </instance>
+    <instance x="2155" y="3116">
+        <block type="mbedActions_motors_on" id="enOVDT3FVAO6@_8#{P%]" intask="true">
+            <field name="A">A</field>
+            <field name="B">B</field>
+            <value name="POWER_A">
+                <block type="math_number" id="PxX]]Q9ze-d7I`q=0|!0" intask="true">
+                    <field name="NUM">50</field>
+                </block>
+            </value>
+            <value name="POWER_B">
+                <block type="math_number" id="?TX7MRub:QZlTeyN)^=(" intask="true">
+                    <field name="NUM">50</field>
+                </block>
+            </value>
+        </block>
+    </instance>
+    <instance x="2155" y="3116">
+        <block type="mbedActions_motors_on" id="bab@_8#{P%]" intask="true">
+            <field name="A">BIP</field>
+            <field name="B">BUP</field>
+            <value name="POWER_A">
+                <block type="math_number" id="PxX]]Q9ze-d7I`q=0|!0" intask="true">
+                    <field name="NUM">50</field>
+                </block>
+            </value>
+            <value name="POWER_B">
+                <block type="math_number" id="?TX7MRub:QZlTeyN)^=(" intask="true">
+                    <field name="NUM">50</field>
+                </block>
+            </value>
         </block>
     </instance>
 </block_set>

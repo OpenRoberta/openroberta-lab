@@ -30,6 +30,7 @@ import de.fhg.iais.roberta.testutil.JSONUtilForServer;
 import de.fhg.iais.roberta.util.Key;
 import de.fhg.iais.roberta.util.ServerProperties;
 import de.fhg.iais.roberta.util.Util;
+import de.fhg.iais.roberta.util.XsltTransformer;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
 /**
@@ -84,6 +85,7 @@ public class RestInterfaceTest {
             + "</block></instance></block_set>";
 
     private SessionFactoryWrapper sessionFactoryWrapper; // used by REST services to retrieve data base sessions
+    private XsltTransformer xsltTransformer;
     private DbSetup memoryDbSetup; // use to query the test data base, etc.
 
     private Response response; // store a REST response here
@@ -115,6 +117,7 @@ public class RestInterfaceTest {
 
         TestConfiguration tc = TestConfiguration.setup();
         this.sessionFactoryWrapper = tc.getSessionFactoryWrapper();
+        this.xsltTransformer = new XsltTransformer();
         this.memoryDbSetup = tc.getMemoryDbSetup();
 
         this.restProject = new ClientProgramController(this.serverProperties);
@@ -797,7 +800,7 @@ public class RestInterfaceTest {
      */
     private void restProgram(HttpSessionState httpSession, String jsonAsString, String result, Key msgOpt) throws JSONException, Exception {
         if ( jsonAsString.contains("loadP") ) {
-            this.response = this.restProject.getProgram(newDbSession(), mkFRR(httpSession.getInitToken(), jsonAsString));
+            this.response = this.restProject.getProgram(newDbSession(), this.xsltTransformer, mkFRR(httpSession.getInitToken(), jsonAsString));
         } else if ( jsonAsString.contains("shareP") ) {
             this.response = this.restProject.shareProgram(newDbSession(), mkFRR(httpSession.getInitToken(), jsonAsString));
         } else if ( jsonAsString.contains("deleteP") ) {

@@ -8,22 +8,7 @@
         <block type="robConf_fourdigitdisplay" />
         <block type="robConf_digitalin" />
         <block type="robConf_analogin" />
-        <block type="robConf_callibot">
-            <field name="NAME">CalliBot</field>
-            <field name="MOTOR_L">M_L</field>
-            <field name="MOTOR_R">M_R</field>
-            <field name="RGBLED_LF">R_LF</field>
-            <field name="RGBLED_RF">R_RF</field>
-            <field name="RGBLED_LR">R_LR</field>
-            <field name="RGBLED_RR">R_RR</field>
-            <field name="RGBLED_A">R_A</field>
-            <field name="LED_L">L_L</field>
-            <field name="LED_R">L_R</field>
-            <field name="LED_B">L_B</field>
-            <field name="INFRARED_L">I_L</field>
-            <field name="INFRARED_R">I_R</field>
-            <field name="ULTRASONIC">U</field>
-        </block>
+        <block type="robConf_callibot" />
     </category>
     <category name="TOOLBOX_SENSOR" svg="true">
         <block type="robConf_key" />

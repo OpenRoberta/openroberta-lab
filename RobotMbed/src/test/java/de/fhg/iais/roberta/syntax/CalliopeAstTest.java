@@ -1,10 +1,10 @@
 package de.fhg.iais.roberta.syntax;
 
+import org.junit.BeforeClass;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-
-import org.junit.BeforeClass;
 
 import de.fhg.iais.roberta.ast.AstTest;
 import de.fhg.iais.roberta.blockly.generated.BlockSet;
@@ -36,6 +36,9 @@ public class CalliopeAstTest extends AstTest {
         additionalComps.add(new ConfigurationComponent("SERVO", true, "C04", "C04", Collections.singletonMap("PIN1", "C04")));
         additionalComps.add(new ConfigurationComponent("MOTOR", true, "Port_A", "Port_A", Collections.singletonMap("PIN1", "A")));
         additionalComps.add(new ConfigurationComponent("MOTOR", true, "Port_B", "Port_B", Collections.singletonMap("PIN1", "B")));
+        additionalComps.add(new ConfigurationComponent("HUMIDITY", false, "H", "H", Collections.singletonMap("PIN1", "5")));
+        additionalComps.add(new ConfigurationComponent("LEDBAR", true, "LEDBAR", "LEDBAR", Collections.emptyMap()));
+        additionalComps.add(new ConfigurationComponent("FOURDIGITDISPLAY", true, "F", "F", Collections.emptyMap()));
         builder.addComponents(additionalComps);
         configuration = builder.build();
     }

@@ -4,8 +4,11 @@ import com.google.common.collect.ClassToInstanceMap;
 
 import de.fhg.iais.roberta.bean.IProjectBean;
 import de.fhg.iais.roberta.components.ConfigurationAst;
+import de.fhg.iais.roberta.components.ConfigurationComponent;
 import de.fhg.iais.roberta.syntax.SC;
 import de.fhg.iais.roberta.syntax.action.generic.PinWriteValueAction;
+import de.fhg.iais.roberta.syntax.action.light.LightAction;
+import de.fhg.iais.roberta.syntax.action.light.LightStatusAction;
 import de.fhg.iais.roberta.syntax.action.mbed.BothMotorsOnAction;
 import de.fhg.iais.roberta.syntax.action.mbed.BothMotorsStopAction;
 import de.fhg.iais.roberta.syntax.action.mbed.DisplayGetBrightnessAction;
@@ -28,6 +31,8 @@ import de.fhg.iais.roberta.syntax.action.mbed.ServoSetAction;
 import de.fhg.iais.roberta.syntax.action.mbed.SwitchLedMatrixAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorStopAction;
+import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
+import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
 import de.fhg.iais.roberta.syntax.expr.mbed.Image;
 import de.fhg.iais.roberta.syntax.expr.mbed.PredefinedImage;
 import de.fhg.iais.roberta.syntax.functions.mbed.ImageInvertFunction;
@@ -35,15 +40,15 @@ import de.fhg.iais.roberta.syntax.functions.mbed.ImageShiftFunction;
 import de.fhg.iais.roberta.syntax.lang.expr.ColorConst;
 import de.fhg.iais.roberta.syntax.lang.expr.RgbColor;
 import de.fhg.iais.roberta.syntax.sensor.generic.AccelerometerSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GestureSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.HumiditySensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.KeysSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.PinGetValueSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.PinTouchSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.SoundSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.RadioRssiSensor;
@@ -98,6 +103,7 @@ public final class CalliopeSimValidatorVisitor extends AbstractSimValidatorVisit
 
     @Override
     public Void visitTemperatureSensor(TemperatureSensor<Void> temperatureSensor) {
+        checkSensorPort(temperatureSensor);
         return null;
     }
 
@@ -120,7 +126,26 @@ public final class CalliopeSimValidatorVisitor extends AbstractSimValidatorVisit
 
     @Override
     public Void visitLedOnAction(LedOnAction<Void> ledOnAction) {
+        ConfigurationComponent usedActor = this.robotConfiguration.optConfigurationComponent(ledOnAction.getPort());
+        if ( usedActor == null ) {
+            ledOnAction.addInfo(NepoInfo.warning("CONFIGURATION_ERROR_ACTOR_MISSING"));
+        }
         ledOnAction.getLedColor().accept(this);
+        return null;
+    }
+
+    @Override
+    public Void visitLightStatusAction(LightStatusAction<Void> lightStatusAction) {
+        ConfigurationComponent usedActor = this.robotConfiguration.optConfigurationComponent(lightStatusAction.getPort());
+        if ( usedActor == null ) {
+            lightStatusAction.addInfo(NepoInfo.warning("CONFIGURATION_ERROR_ACTOR_MISSING"));
+        }
+        return null;
+    }
+
+    @Override
+    public Void visitLightAction(LightAction<Void> lightAction) {
+        lightAction.addInfo(NepoInfo.warning("SIM_BLOCK_NOT_SUPPORTED"));
         return null;
     }
 
@@ -153,6 +178,7 @@ public final class CalliopeSimValidatorVisitor extends AbstractSimValidatorVisit
 
     @Override
     public Void visitPinGetValueSensor(PinGetValueSensor<Void> pinValueSensor) {
+        checkSensorPort(pinValueSensor);
         if ( pinValueSensor.getMode().equals(SC.PULSEHIGH) || pinValueSensor.getMode().equals(SC.PULSELOW) || pinValueSensor.getMode().equals(SC.PULSE) ) {
             pinValueSensor.addInfo(NepoInfo.warning("SIM_BLOCK_NOT_SUPPORTED"));
         }
@@ -160,8 +186,36 @@ public final class CalliopeSimValidatorVisitor extends AbstractSimValidatorVisit
     }
 
     @Override
+    public Void visitColorSensor(ColorSensor<Void> colorSensor) {
+        colorSensor.addInfo(NepoInfo.warning("SIM_BLOCK_NOT_SUPPORTED"));
+        return null;
+    }
+
+    @Override
     public Void visitPinWriteValueAction(PinWriteValueAction<Void> pinWriteValueAction) {
+        ConfigurationComponent usedActor = this.robotConfiguration.optConfigurationComponent(pinWriteValueAction.getPort());
+        if ( usedActor == null ) {
+            pinWriteValueAction.addInfo(NepoInfo.warning("CONFIGURATION_ERROR_ACTOR_MISSING"));
+        }
         pinWriteValueAction.getValue().accept(this);
+        return null;
+    }
+
+    @Override
+    public Void visitToneAction(ToneAction<Void> toneAction) {
+        ConfigurationComponent usedActor = this.robotConfiguration.optConfigurationComponent(toneAction.getPort());
+        if ( usedActor == null ) {
+            toneAction.addInfo(NepoInfo.warning("CONFIGURATION_ERROR_ACTOR_MISSING"));
+        }
+        return super.visitToneAction(toneAction);
+    }
+
+    @Override
+    public Void visitPlayNoteAction(PlayNoteAction<Void> playNoteAction) {
+        ConfigurationComponent usedActor = this.robotConfiguration.optConfigurationComponent(playNoteAction.getPort());
+        if ( usedActor == null ) {
+            playNoteAction.addInfo(NepoInfo.warning("CONFIGURATION_ERROR_ACTOR_MISSING"));
+        }
         return null;
     }
 
@@ -211,34 +265,39 @@ public final class CalliopeSimValidatorVisitor extends AbstractSimValidatorVisit
     }
 
     @Override
+    public Void visitKeysSensor(KeysSensor<Void> keysSensor) {
+        checkSensorPort(keysSensor);
+        return null;
+    }
+
+    @Override
     public Void visitGyroSensor(GyroSensor<Void> gyroSensor) {
         gyroSensor.addInfo(NepoInfo.warning("SIM_BLOCK_NOT_SUPPORTED"));
         return null;
     }
 
     @Override
-    public Void visitCompassSensor(CompassSensor<Void> compassSensor) {
-        return null;
-    }
-
-    @Override
     public Void visitLightSensor(LightSensor<Void> lightSensor) {
-        return null;
-    }
-
-    @Override
-    public Void visitSoundSensor(SoundSensor<Void> soundSensor) {
+        checkSensorPort(lightSensor);
         return null;
     }
 
     @Override
     public Void visitMotorOnAction(MotorOnAction<Void> motorOnAction) {
+        ConfigurationComponent usedActor = this.robotConfiguration.optConfigurationComponent(motorOnAction.getUserDefinedPort());
+        if ( usedActor == null ) {
+            motorOnAction.addInfo(NepoInfo.warning("CONFIGURATION_ERROR_ACTOR_MISSING"));
+        }
         motorOnAction.getParam().getSpeed().accept(this);
         return null;
     }
 
     @Override
     public Void visitMotorStopAction(MotorStopAction<Void> motorStopAction) {
+        ConfigurationComponent usedActor = this.robotConfiguration.optConfigurationComponent(motorStopAction.getUserDefinedPort());
+        if ( usedActor == null ) {
+            motorStopAction.addInfo(NepoInfo.warning("CONFIGURATION_ERROR_ACTOR_MISSING"));
+        }
         return null;
     }
 
@@ -268,6 +327,10 @@ public final class CalliopeSimValidatorVisitor extends AbstractSimValidatorVisit
 
     @Override
     public Void visitBothMotorsOnAction(BothMotorsOnAction<Void> bothMotorsOnAction) {
+        ConfigurationComponent usedActor = this.robotConfiguration.optConfigurationComponent(bothMotorsOnAction.getPortA());
+        if ( usedActor == null ) {
+            bothMotorsOnAction.addInfo(NepoInfo.warning("CONFIGURATION_ERROR_ACTOR_MISSING"));
+        }
         bothMotorsOnAction.getSpeedA().accept(this);
         bothMotorsOnAction.getSpeedB().accept(this);
         return null;

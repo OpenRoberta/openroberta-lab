@@ -205,7 +205,18 @@ public class ConfigurationAst {
     }
 
     public ConfigurationComponent optConfigurationComponent(String userDefinedName) {
-        return this.configurationComponents.get(userDefinedName);
+        ConfigurationComponent confComp = this.configurationComponents.get(userDefinedName);
+        if ( confComp == null ) {
+            confComp =
+                this.configurationComponents
+                    .values()
+                    .stream()
+                    .filter(ConfigurationAst::isSuperBlock)
+                    .filter(cc -> cc.getComponentProperties().entrySet().stream().anyMatch(entry -> entry.getValue().equals(userDefinedName)))
+                    .findFirst()
+                    .orElse(null);
+        }
+        return confComp;
     }
 
     public String getFirstMotorPort(String side) {

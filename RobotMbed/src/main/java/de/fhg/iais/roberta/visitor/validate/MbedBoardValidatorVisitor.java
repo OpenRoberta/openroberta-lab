@@ -4,8 +4,11 @@ import com.google.common.collect.ClassToInstanceMap;
 
 import de.fhg.iais.roberta.bean.IProjectBean;
 import de.fhg.iais.roberta.components.ConfigurationAst;
+import de.fhg.iais.roberta.components.ConfigurationComponent;
 import de.fhg.iais.roberta.mode.action.mbed.DisplayImageMode;
 import de.fhg.iais.roberta.syntax.action.generic.PinWriteValueAction;
+import de.fhg.iais.roberta.syntax.action.light.LightAction;
+import de.fhg.iais.roberta.syntax.action.light.LightStatusAction;
 import de.fhg.iais.roberta.syntax.action.mbed.BothMotorsOnAction;
 import de.fhg.iais.roberta.syntax.action.mbed.BothMotorsStopAction;
 import de.fhg.iais.roberta.syntax.action.mbed.DisplayGetBrightnessAction;
@@ -26,17 +29,20 @@ import de.fhg.iais.roberta.syntax.action.mbed.RadioSendAction;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioSetChannelAction;
 import de.fhg.iais.roberta.syntax.action.mbed.ServoSetAction;
 import de.fhg.iais.roberta.syntax.action.mbed.SwitchLedMatrixAction;
+import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
+import de.fhg.iais.roberta.syntax.action.motor.MotorStopAction;
+import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
+import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
 import de.fhg.iais.roberta.syntax.expr.mbed.Image;
 import de.fhg.iais.roberta.syntax.expr.mbed.PredefinedImage;
 import de.fhg.iais.roberta.syntax.functions.mbed.ImageInvertFunction;
 import de.fhg.iais.roberta.syntax.functions.mbed.ImageShiftFunction;
-import de.fhg.iais.roberta.syntax.lang.expr.ColorConst;
 import de.fhg.iais.roberta.syntax.lang.expr.EmptyExpr;
 import de.fhg.iais.roberta.syntax.lang.expr.RgbColor;
-import de.fhg.iais.roberta.syntax.sensor.generic.AccelerometerSensor;
+import de.fhg.iais.roberta.syntax.sensor.ExternalSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GestureSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.HumiditySensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.KeysSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.PinGetValueSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.RadioRssiSensor;
@@ -47,6 +53,69 @@ public class MbedBoardValidatorVisitor extends AbstractBoardValidatorVisitor imp
 
     public MbedBoardValidatorVisitor(ConfigurationAst brickConfiguration, ClassToInstanceMap<IProjectBean.IBuilder<?>> beanBuilders) {
         super(brickConfiguration, beanBuilders);
+    }
+
+    @Override
+    protected void checkSensorPort(ExternalSensor<Void> sensor) {
+        ConfigurationComponent usedSensor = this.robotConfiguration.optConfigurationComponent(sensor.getPort());
+        if ( usedSensor == null ) {
+            sensor.addInfo(NepoInfo.error("CONFIGURATION_ERROR_SENSOR_MISSING"));
+            this.errorCount++;
+        } else {
+            String type = usedSensor.getComponentType();
+            switch ( sensor.getKind().getName() ) {
+                case "COLOR_SENSING":
+                    if ( !type.equals("COLOR") ) {
+                        sensor.addInfo(NepoInfo.error("CONFIGURATION_ERROR_SENSOR_WRONG"));
+                        this.errorCount++;
+                    }
+                    break;
+                case "ULTRASONIC_SENSING":
+                    if ( !(type.equals("ULTRASONIC") || type.equals("CALLIBOT")) ) {
+                        sensor.addInfo(NepoInfo.error("CONFIGURATION_ERROR_SENSOR_WRONG"));
+                        this.errorCount++;
+                    }
+                    break;
+                case "INFRARED_SENSING":
+                    if ( !(type.equals("INFRARED") || type.equals("CALLIBOT")) ) {
+                        sensor.addInfo(NepoInfo.error("CONFIGURATION_ERROR_SENSOR_WRONG"));
+                        this.errorCount++;
+                    }
+                    break;
+                case "GYRO_SENSING":
+                    if ( !type.equals("GYRO") ) {
+                        sensor.addInfo(NepoInfo.error("CONFIGURATION_ERROR_SENSOR_WRONG"));
+                        this.errorCount++;
+                    }
+                    break;
+                case "SOUND_SENSING":
+                    if ( !type.equals("SOUND") ) {
+                        sensor.addInfo(NepoInfo.error("CONFIGURATION_ERROR_SENSOR_WRONG"));
+                        this.errorCount++;
+                    }
+                    break;
+                case "LIGHT_SENSING":
+                    if ( !type.equals("LIGHT") ) {
+                        sensor.addInfo(NepoInfo.error("CONFIGURATION_ERROR_SENSOR_WRONG"));
+                        this.errorCount++;
+                    }
+                    break;
+                case "COMPASS_SENSING":
+                    if ( !type.equals("COMPASS") ) {
+                        sensor.addInfo(NepoInfo.error("CONFIGURATION_ERROR_SENSOR_WRONG"));
+                        this.errorCount++;
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+
+    @Override
+    public Void visitKeysSensor(KeysSensor<Void> keysSensor) {
+        checkSensorPort(keysSensor);
+        return null;
     }
 
     @Override
@@ -95,23 +164,79 @@ public class MbedBoardValidatorVisitor extends AbstractBoardValidatorVisitor imp
 
     @Override
     public Void visitTemperatureSensor(TemperatureSensor<Void> temperatureSensor) {
-        return null;
-    }
-
-    @Override
-    public Void visitLightSensor(LightSensor<Void> lightSensor) {
-        return null;
-    }
-
-    @Override
-    public Void visitColorConst(ColorConst<Void> colorConst) {
+        checkSensorPort(temperatureSensor);
         return null;
     }
 
     @Override
     public Void visitLedOnAction(LedOnAction<Void> ledOnAction) {
+        ConfigurationComponent usedActor = this.robotConfiguration.optConfigurationComponent(ledOnAction.getPort());
+        if ( usedActor == null ) {
+            ledOnAction.addInfo(NepoInfo.error("CONFIGURATION_ERROR_ACTOR_MISSING"));
+            this.errorCount++;
+        }
         ledOnAction.getLedColor().accept(this);
         return null;
+    }
+
+    @Override
+    public Void visitLightStatusAction(LightStatusAction<Void> lightStatusAction) {
+        ConfigurationComponent usedActor = this.robotConfiguration.optConfigurationComponent(lightStatusAction.getPort());
+        if ( usedActor == null ) {
+            lightStatusAction.addInfo(NepoInfo.error("CONFIGURATION_ERROR_ACTOR_MISSING"));
+            this.errorCount++;
+        }
+        return super.visitLightStatusAction(lightStatusAction);
+    }
+
+    @Override
+    public Void visitMotorOnAction(MotorOnAction<Void> motorOnAction) {
+        ConfigurationComponent usedActor = this.robotConfiguration.optConfigurationComponent(motorOnAction.getUserDefinedPort());
+        if ( usedActor == null ) {
+            motorOnAction.addInfo(NepoInfo.error("CONFIGURATION_ERROR_ACTOR_MISSING"));
+            this.errorCount++;
+        }
+        return super.visitMotorOnAction(motorOnAction);
+    }
+
+    @Override
+    public Void visitPlayNoteAction(PlayNoteAction<Void> playNoteAction) {
+        ConfigurationComponent usedActor = this.robotConfiguration.optConfigurationComponentByType("BUZZER");
+        if ( usedActor == null ) {
+            playNoteAction.addInfo(NepoInfo.error("CONFIGURATION_ERROR_ACTOR_MISSING"));
+            this.errorCount++;
+        }
+        return super.visitPlayNoteAction(playNoteAction);
+    }
+
+    @Override
+    public Void visitLightAction(LightAction<Void> lightAction) {
+        ConfigurationComponent usedActor = this.robotConfiguration.optConfigurationComponent(lightAction.getPort());
+        if ( usedActor == null ) {
+            lightAction.addInfo(NepoInfo.error("CONFIGURATION_ERROR_ACTOR_MISSING"));
+            this.errorCount++;
+        }
+        return super.visitLightAction(lightAction);
+    }
+
+    @Override
+    public Void visitToneAction(ToneAction<Void> toneAction) {
+        ConfigurationComponent usedActor = this.robotConfiguration.optConfigurationComponentByType("BUZZER");
+        if ( usedActor == null ) {
+            toneAction.addInfo(NepoInfo.error("CONFIGURATION_ERROR_ACTOR_MISSING"));
+            this.errorCount++;
+        }
+        return super.visitToneAction(toneAction);
+    }
+
+    @Override
+    public Void visitMotorStopAction(MotorStopAction<Void> motorStopAction) {
+        ConfigurationComponent usedActor = this.robotConfiguration.optConfigurationComponent(motorStopAction.getUserDefinedPort());
+        if ( usedActor == null ) {
+            motorStopAction.addInfo(NepoInfo.error("CONFIGURATION_ERROR_ACTOR_MISSING"));
+            this.errorCount++;
+        }
+        return super.visitMotorStopAction(motorStopAction);
     }
 
     @Override
@@ -136,11 +261,17 @@ public class MbedBoardValidatorVisitor extends AbstractBoardValidatorVisitor imp
 
     @Override
     public Void visitPinGetValueSensor(PinGetValueSensor<Void> pinValueSensor) {
+        checkSensorPort(pinValueSensor);
         return null;
     }
 
     @Override
     public Void visitPinWriteValueAction(PinWriteValueAction<Void> pinWriteValueAction) {
+        ConfigurationComponent usedActor = this.robotConfiguration.optConfigurationComponent(pinWriteValueAction.getPort());
+        if ( usedActor == null ) {
+            pinWriteValueAction.addInfo(NepoInfo.error("CONFIGURATION_ERROR_ACTOR_MISSING"));
+            this.errorCount++;
+        }
         pinWriteValueAction.getValue().accept(this);
         return null;
     }
@@ -183,12 +314,12 @@ public class MbedBoardValidatorVisitor extends AbstractBoardValidatorVisitor imp
     }
 
     @Override
-    public Void visitAccelerometer(AccelerometerSensor<Void> accelerometerSensor) {
-        return null;
-    }
-
-    @Override
     public Void visitFourDigitDisplayShowAction(FourDigitDisplayShowAction<Void> fourDigitDisplayShowAction) {
+        ConfigurationComponent usedActor = this.robotConfiguration.optConfigurationComponentByType("FOURDIGITDISPLAY");
+        if ( usedActor == null ) {
+            fourDigitDisplayShowAction.addInfo(NepoInfo.error("CONFIGURATION_ERROR_ACTOR_MISSING"));
+            this.errorCount++;
+        }
         fourDigitDisplayShowAction.getValue().accept(this);
         fourDigitDisplayShowAction.getPosition().accept(this);
         fourDigitDisplayShowAction.getColon().accept(this);
@@ -197,11 +328,21 @@ public class MbedBoardValidatorVisitor extends AbstractBoardValidatorVisitor imp
 
     @Override
     public Void visitFourDigitDisplayClearAction(FourDigitDisplayClearAction<Void> fourDigitDisplayClearAction) {
+        ConfigurationComponent usedActor = this.robotConfiguration.optConfigurationComponentByType("FOURDIGITDISPLAY");
+        if ( usedActor == null ) {
+            fourDigitDisplayClearAction.addInfo(NepoInfo.error("CONFIGURATION_ERROR_ACTOR_MISSING"));
+            this.errorCount++;
+        }
         return null;
     }
 
     @Override
     public Void visitLedBarSetAction(LedBarSetAction<Void> ledBarSetAction) {
+        ConfigurationComponent usedActor = this.robotConfiguration.optConfigurationComponentByType("LEDBAR");
+        if ( usedActor == null ) {
+            ledBarSetAction.addInfo(NepoInfo.error("CONFIGURATION_ERROR_ACTOR_MISSING"));
+            this.errorCount++;
+        }
         ledBarSetAction.getX().accept(this);
         ledBarSetAction.getBrightness().accept(this);
         return null;
@@ -209,11 +350,24 @@ public class MbedBoardValidatorVisitor extends AbstractBoardValidatorVisitor imp
 
     @Override
     public Void visitPinSetPullAction(PinSetPullAction<Void> pinSetPull) {
+        ConfigurationComponent usedActor = this.robotConfiguration.optConfigurationComponent(pinSetPull.getPort());
+        if ( usedActor == null ) {
+            pinSetPull.addInfo(NepoInfo.error("CONFIGURATION_ERROR_ACTOR_MISSING"));
+            this.errorCount++;
+        }
         return null;
     }
 
     @Override
     public Void visitBothMotorsOnAction(BothMotorsOnAction<Void> bothMotorsOnAction) {
+        ConfigurationComponent usedActorA = this.robotConfiguration.optConfigurationComponent(bothMotorsOnAction.getPortA());
+        ConfigurationComponent usedActorB = this.robotConfiguration.optConfigurationComponent(bothMotorsOnAction.getPortB());
+        if ( (usedActorA == null) || (usedActorB == null) ) {
+            bothMotorsOnAction.addInfo(NepoInfo.error("CONFIGURATION_ERROR_ACTOR_MISSING"));
+            this.errorCount++;
+        } else if ( (!usedActorA.getComponentType().equals("CALLIBOT")) && usedActorA.equals(usedActorB) ) {
+            bothMotorsOnAction.addInfo(NepoInfo.warning("BLOCK_NOT_EXECUTED"));
+        }
         return null;
     }
 
@@ -224,6 +378,7 @@ public class MbedBoardValidatorVisitor extends AbstractBoardValidatorVisitor imp
 
     @Override
     public Void visitHumiditySensor(HumiditySensor<Void> humiditySensor) {
+        checkSensorPort(humiditySensor);
         return null;
     }
 
@@ -234,6 +389,11 @@ public class MbedBoardValidatorVisitor extends AbstractBoardValidatorVisitor imp
 
     @Override
     public Void visitServoSetAction(ServoSetAction<Void> servoSetAction) {
+        ConfigurationComponent usedSensor = this.robotConfiguration.optConfigurationComponent(servoSetAction.getPort());
+        if ( usedSensor == null ) {
+            servoSetAction.addInfo(NepoInfo.error("CONFIGURATION_ERROR_ACTOR_MISSING"));
+            this.errorCount++;
+        }
         return null;
     }
 

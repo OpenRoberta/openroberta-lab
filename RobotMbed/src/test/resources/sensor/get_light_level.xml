@@ -7,7 +7,12 @@
         <block type="mbedActions_display_text" id="*LwIvqT%Dy^Y(Iv?EofB" intask="true">
             <field name="TYPE">TEXT</field>
             <value name="OUT">
-                <block type="robSensors_light_getSample" id="4Pvz:R=D6!5_fIZkVM.n" intask="true"></block>
+                <block type="robSensors_light_getSample" id="4Pvz:R=D6!5_fIZkVM.n" intask="true">
+                    <mutation mode="VALUE" />
+                    <field name="MODE">VALUE</field>
+                    <field name="SENSORPORT">L</field>
+                    <field name="SLOT" />
+                </block>
             </value>
         </block>
     </instance>
