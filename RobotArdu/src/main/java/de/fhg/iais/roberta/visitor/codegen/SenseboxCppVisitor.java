@@ -133,23 +133,13 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
         }
         if ( this.configuration.optConfigurationComponentByType(SC.ENVIRONMENTAL) != null ) {
             this.sb.append("\n#include <bsec.h>");
+            this.sb.append("\n#define _readIaq(X, Y) ((X.run()) ? Y : Y)");
             this.sb.append("\n#include <Wire.h>");
         }
         nlIndent();
         nlIndent();
 
         super.generateProgramPrefix(withWrapping);
-    }
-
-    @Override
-    protected void loopPrefix() {
-        ConfigurationComponent envSensor = this.configuration.optConfigurationComponentByType(SC.ENVIRONMENTAL);
-        incrIndentation();
-        if (envSensor != null) {
-            nlIndent();
-            this.sb.append("_iaqSensor_").append(envSensor.getUserDefinedPortName()).append(".run();");
-        }
-        decrIndentation();
     }
 
     @Override
@@ -590,10 +580,13 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
         }
 
         this.sb
-            .append("_iaqSensor_")
+            .append("_readIaq(_iaqSensor_")
             .append(cc.getUserDefinedPortName())
-            .append('.')
-            .append(mode);
+            .append(", _iaqSensor_")
+            .append(cc.getUserDefinedPortName())
+            .append(".")
+            .append(mode)
+            .append(")");
         return null;
     }
 
