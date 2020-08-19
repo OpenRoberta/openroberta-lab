@@ -6,6 +6,7 @@
 #include <NEPODefs.h>
 
 #include <bsec.h>
+#define _readIaq(X, Y) ((X.run()) ? Y : Y)
 #include <Wire.h>
 
 
@@ -35,12 +36,11 @@ void setup()
 
 void loop()
 {
-    _iaqSensor_E.run();
-    Serial.println(_iaqSensor_E.temperature);
-    Serial.println(_iaqSensor_E.humidity);
-    Serial.println(_iaqSensor_E.pressure);
-    Serial.println(_iaqSensor_E.iaq);
-    Serial.println(_iaqSensor_E.iaqAccuracy);
-    Serial.println(_iaqSensor_E.co2Equivalent);
-    Serial.println(_iaqSensor_E.breathVocEquivalent);
+    Serial.println(_readIaq(_iaqSensor_E,_iaqSensor_E.temperature));
+    Serial.println(_readIaq(_iaqSensor_E,_iaqSensor_E.humidity));
+    Serial.println(_readIaq(_iaqSensor_E,_iaqSensor_E.pressure));
+    Serial.println(_readIaq(_iaqSensor_E,_iaqSensor_E.iaq));
+    Serial.println(_readIaq(_iaqSensor_E,_iaqSensor_E.iaqAccuracy));
+    Serial.println(_readIaq(_iaqSensor_E,_iaqSensor_E.co2Equivalent));
+    Serial.println(_readIaq(_iaqSensor_E,_iaqSensor_E.breathVocEquivalent));
 }
