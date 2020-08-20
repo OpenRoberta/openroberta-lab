@@ -69,7 +69,7 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.controller', 'guiState.m
 
         $('#wlan-form').removeData('validator');
         $.validator.addMethod("wlanRegex", function(value, element) {
-            return this.optional(element) || /^[a-zA-Z0-9$ *\(\)\{\}\[\]><~`\'\\\/|=+!?.,%#+&^@_\-]+$/gi.test(value);
+            return this.optional(element) || /^[a-zA-Z0-9$ *\(\)\{\}\[\]><~`\'\\\/|=+!?.,%#+&^@_\-äöüÄÖÜß]+$/gi.test(value);
         }, "This field contains nonvalid symbols.");
         $('#wlan-form').validate({
             rules : {
