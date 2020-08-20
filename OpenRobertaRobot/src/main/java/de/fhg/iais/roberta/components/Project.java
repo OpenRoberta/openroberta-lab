@@ -1,5 +1,12 @@
 package de.fhg.iais.roberta.components;
 
+import com.google.common.collect.ClassToInstanceMap;
+import com.google.common.collect.MutableClassToInstanceMap;
+
+import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.StringWriter;
 import java.util.Collections;
 import java.util.HashMap;
@@ -9,13 +16,6 @@ import java.util.Map;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
-
-import org.json.JSONObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.google.common.collect.ClassToInstanceMap;
-import com.google.common.collect.MutableClassToInstanceMap;
 
 import de.fhg.iais.roberta.bean.IProjectBean;
 import de.fhg.iais.roberta.blockly.generated.BlockSet;
@@ -57,7 +57,7 @@ public final class Project {
     private ProgramAst<Void> program = null;
     private ConfigurationAst configuration = null;
     private StringBuilder sourceCodeBuilder = new StringBuilder();
-    private JSONObject simSensorConfigurationJSON;
+    private JSONObject simSensorConfigurationJSON = new JSONObject();
     private String compiledHex = "";
     private Key result = Key.COMPILERWORKFLOW_PROJECT_BUILD_SUCCESS;
     private int errorCounter = 0;

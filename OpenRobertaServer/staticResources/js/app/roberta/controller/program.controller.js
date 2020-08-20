@@ -394,6 +394,7 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'ro
     }
 
     function reloadProgram(opt_result, opt_fromShowSource) {
+        var program;
         if (opt_result) {
             program = opt_result.progXML;
             if (!$.isEmptyObject(opt_result.confAnnos)) {
@@ -461,6 +462,9 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'ro
     }
 
     function programToBlocklyWorkspace(xml, opt_fromShowSource) {
+        if (!xml) {
+            return;
+        }
         listenToBlocklyEvents = false;
         Blockly.hideChaff();
         blocklyWorkspace.clear();
