@@ -295,7 +295,7 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
         this.sb
             .append("_rgbled_")
             .append(lightStatusAction.getPort())
-            .append(".setPixelColor(0, rgbled_")
+            .append(".setPixelColor(0, _rgbled_")
             .append(lightStatusAction.getPort())
             .append(".Color(0,0,0));");
         this.nlIndent();

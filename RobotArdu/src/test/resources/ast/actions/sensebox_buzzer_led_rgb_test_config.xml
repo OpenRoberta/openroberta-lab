@@ -28,9 +28,7 @@
     <instance x="304" y="337">
     <block type="robConf_rgbled" id="5eg=bG8k|V57|2x1(M1c" intask="true">
         <field name="NAME">R</field>
-        <field name="RED">1</field>
-        <field name="GREEN">2</field>
-        <field name="BLUE">3</field>
+        <field name="INPUT">1</field>
     </block>
     </instance>
     <instance x="508" y="342">
