@@ -3,6 +3,7 @@ require.config({
 	paths: {
 		'codeflask': 'libs/codeflask/codeflask.min',
 		'blockly': '../blockly/blockly_compressed',
+		'blockly.confvis': '../../blockly/plugins/circuit_visualization',
 		'bootstrap': 'libs/bootstrap/bootstrap-3.3.1-dist/dist/js/bootstrap.min',
 		'bootstrap-table': 'libs/bootstrap/bootstrap-3.3.1-dist/dist/js/bootstrap-table.min',
 		'bootstrap-tagsinput': 'libs/bootstrap/bootstrap-3.3.1-dist/dist/js/bootstrap-tagsinput.min',
@@ -17,7 +18,7 @@ require.config({
 		'volume-meter': 'libs/sound/volume-meter',
 		'neuralnetwork-lib': 'libs/neuralnetwork/lib',
 		'd3': 'libs/neuralnetwork/d3.min',
-		
+
 		'confDelete.controller': 'app/roberta/controller/confDelete.controller',
 		'configuration.controller': 'app/roberta/controller/configuration.controller',
 		'configuration.model': 'app/roberta/models/configuration.model',
@@ -96,7 +97,7 @@ require.config({
 		'interpreter.state': 'app/nepostackmachine/interpreter.state',
 		'interpreter.util': 'app/nepostackmachine/interpreter.util',
 		'interpreter.jsHelper': 'app/nepostackmachine/interpreter.jsHelper',
-		
+
 	    'neuralnetwork.nn': 'app/neuralnetwork/neuralnetwork.nn',
 	    'neuralnetwork.state': 'app/neuralnetwork/neuralnetwork.state',
 	    'neuralnetwork.playground': 'app/neuralnetwork/neuralnetwork.playground'
@@ -107,6 +108,10 @@ require.config({
 		},
 		'blockly': {
 			exports: 'Blockly'
+		},
+		'blockly.confvis' : {
+			deps : [ 'blockly' ],
+			exports : 'CircuitVisualization'
 		},
 
 		'volume-meter': {
@@ -206,7 +211,7 @@ function init() {
 		menuController.init();
 		tutorialController.init();
         userGroupController.init();
-        nnController.init();            
+        nnController.init();
 
 		$(".cover").fadeOut(100, function() {
 			if (guiStateController.getStartWithoutPopup()) {
