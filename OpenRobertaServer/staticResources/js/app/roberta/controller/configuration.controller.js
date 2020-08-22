@@ -1,9 +1,10 @@
-define([ 'exports', 'log', 'util', 'comm', 'message', 'guiState.controller', 'blockly', 'configuration.model', 'jquery', 'jquery-validate' ], function(exports,
+define([ 'exports', 'log', 'util', 'comm', 'message', 'guiState.controller', 'blockly', 'configuration.model', 'jquery', 'jquery-validate', 'blockly.confvis' ], function(exports,
         LOG, UTIL, COMM, MSG, GUISTATE_C, Blockly, CONFIGURATION, $) {
 
     var $formSingleModal;
 
     var bricklyWorkspace;
+    var confVis;
     var listenToBricklyEvents = true;
     seen = false;
 
@@ -71,6 +72,7 @@ define([ 'exports', 'log', 'util', 'comm', 'message', 'guiState.controller', 'bl
                 UTIL.annotateBlocks(bricklyWorkspace, GUISTATE_C.confAnnos);
                 delete GUISTATE_C.confAnnos;
             }
+            confVis.refresh();
         }, 'tabConfiguration clicked');
 
         $('#tabConfiguration').on('hide.bs.tab', function(e) {
@@ -340,7 +342,20 @@ define([ 'exports', 'log', 'util', 'comm', 'message', 'guiState.controller', 'bl
     }
     exports.reloadView = reloadView;
 
+    function changeArduinoRobot(){
+        bricklyWorkspace.setDevice({
+            group : GUISTATE_C.getRobotGroup(),
+            robot : GUISTATE_C.getRobot()
+        });
+        confVis.resetRobot();
+    }
+    exports.changeArduinoRobot = changeArduinoRobot;
+
     function resetView() {
+        if(confVis){
+            confVis.dispose();
+            confVis = null;
+        }
         bricklyWorkspace.setDevice({
             group : GUISTATE_C.getRobotGroup(),
             robot : GUISTATE_C.getRobot()
@@ -362,7 +377,11 @@ define([ 'exports', 'log', 'util', 'comm', 'message', 'guiState.controller', 'bl
         bricklyWorkspace.clear();
         Blockly.svgResize(bricklyWorkspace);
         var dom = Blockly.Xml.textToDom(xml, bricklyWorkspace);
-        Blockly.Xml.domToWorkspace(dom, bricklyWorkspace);
+        if(bricklyWorkspace.device === 'arduino'){
+            confVis = CircuitVisualization.domToWorkspace(dom, bricklyWorkspace);
+        } else {
+            Blockly.Xml.domToWorkspace(dom, bricklyWorkspace);
+        }
         bricklyWorkspace.setVersion(dom.getAttribute('xmlversion'));
         var name = xml == GUISTATE_C.getConfigurationConf() ? GUISTATE_C.getRobotGroup().toUpperCase() + "basis" : '';
         GUISTATE_C.setConfigurationName(name);

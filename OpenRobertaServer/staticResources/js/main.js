@@ -3,6 +3,7 @@ require.config({
 	paths: {
 		'codeflask': 'codeflask/codeflask.min',
 		'blockly': '../../blockly/blockly_compressed',
+		'blockly.confvis': '../../blockly/plugins/circuit_visualization',
 		'bootstrap': 'bootstrap/bootstrap-3.3.1-dist/dist/js/bootstrap.min',
 		'bootstrap-table': 'bootstrap/bootstrap-3.3.1-dist/dist/js/bootstrap-table.min',
 		'bootstrap-tagsinput': 'bootstrap/bootstrap-3.3.1-dist/dist/js/bootstrap-tagsinput.min',
@@ -100,6 +101,10 @@ require.config({
 		},
 		'blockly': {
 			exports: 'Blockly'
+		},
+		'blockly.confvis' : {
+			deps : [ 'blockly' ],
+			exports : 'CircuitVisualization'
 		},
 
 		'volume-meter': {
