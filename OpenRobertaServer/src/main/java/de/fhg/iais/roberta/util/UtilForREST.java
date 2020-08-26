@@ -115,6 +115,9 @@ public class UtilForREST {
     public static Response makeBaseResponseForError(Key key, HttpSessionState httpSessionState, RobotCommunicator brickCommunicator) throws JSONException {
         BaseResponse errorResponse = BaseResponse.make();
         UtilForREST.addResultInfo(errorResponse, "error", key);
+        if ( key == Key.INIT_FAIL_PING_ERROR ) {
+            errorResponse.setInitToken("invalid-token");
+        }
         UtilForREST.addFrontendInfo(errorResponse, httpSessionState, brickCommunicator);
         return UtilForREST.responseWithFrontendInfo(errorResponse, httpSessionState, brickCommunicator);
     }
