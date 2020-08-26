@@ -877,7 +877,7 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
                                 .append("Adafruit_NeoPixel _rgbled_")
                                 .append(blockName)
                                 .append(" = Adafruit_NeoPixel(1, ")
-                                .append(cc.getProperty("INPUT"))
+                                .append(cc.getOptProperty("INPUT") == null ? cc.getProperty("RED") : cc.getProperty("INPUT"))
                                 .append(", NEO_RGB + NEO_KHZ800);");
                             this.nlIndent();
                             break;
