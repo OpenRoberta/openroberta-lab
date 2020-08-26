@@ -34,6 +34,7 @@ import de.fhg.iais.roberta.syntax.lang.stmt.ActionStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.AssignStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.IfStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.MethodStmt;
+import de.fhg.iais.roberta.syntax.lang.stmt.NNStepStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtList;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtTextComment;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
@@ -246,6 +247,11 @@ public abstract class AbstractLanguageVisitor implements ILanguageVisitor<Void> 
             generateCodeFromIfElse(ifStmt);
             generateCodeFromElse(ifStmt);
         }
+        return null;
+    }
+
+    @Override
+    public Void visitNNStepStmt(NNStepStmt<Void> nnStepStmt) {
         return null;
     }
 

@@ -171,6 +171,10 @@ block:
       category: STMT
       implementor: de.fhg.iais.roberta.syntax.lang.stmt.IfStmt
       type: [logic_ternary,controls_if,robControls_if,robControls_ifElse]
+  NNSTEP_STMT:
+      category: STMT
+      implementor: de.fhg.iais.roberta.syntax.lang.stmt.NNStepStmt
+      type: [robactions_nnstep]
   REPEAT_STMT:
       category: STMT
       implementor: de.fhg.iais.roberta.syntax.lang.stmt.RepeatStmt

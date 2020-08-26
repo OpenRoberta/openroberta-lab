@@ -1,17 +1,7 @@
-(function (factory) {
-    if (typeof module === "object" && typeof module.exports === "object") {
-        var v = factory(require, exports);
-        if (v !== undefined) module.exports = v;
-    }
-    else if (typeof define === "function" && define.amd) {
-        define(["require", "exports", "interpreter.constants", "interpreter.util"], factory);
-    }
-})(function (require, exports) {
+define(["require", "exports", "interpreter.constants", "interpreter.util"], function (require, exports, C, U) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.State = void 0;
-    var C = require("interpreter.constants");
-    var U = require("interpreter.util");
     var State = /** @class */ (function () {
         /**
          * initialization of the state.

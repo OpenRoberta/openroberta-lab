@@ -183,6 +183,7 @@ public class C {
     public static final String NAMES = "names";
     public static final String NEG = "NEG";
     public static final String NEQ = "NEQ";
+    public static final String NNSTEP_STMT = "nnStepStmt";
     public static final String NOOP_STMT = "createNoopStmt";
     public static final String NOT = "NOT";
     public static final String NO = "NO";

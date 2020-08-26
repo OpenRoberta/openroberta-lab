@@ -52,6 +52,7 @@ import de.fhg.iais.roberta.syntax.lang.stmt.AssignStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.DebugAction;
 import de.fhg.iais.roberta.syntax.lang.stmt.IfStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.MethodStmt;
+import de.fhg.iais.roberta.syntax.lang.stmt.NNStepStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.RepeatStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtFlowCon;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtList;
@@ -198,6 +199,11 @@ public abstract class AbstractCollectorVisitor implements ILanguageVisitor<Void>
             ifStmt.getThenList().get(i).accept(this);
         }
         ifStmt.getElseList().accept(this);
+        return null;
+    }
+
+    @Override
+    public Void visitNNStepStmt(NNStepStmt<Void> nnStepStmt) {
         return null;
     }
 

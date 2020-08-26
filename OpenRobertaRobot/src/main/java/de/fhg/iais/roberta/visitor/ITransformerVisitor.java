@@ -96,6 +96,7 @@ import de.fhg.iais.roberta.syntax.lang.stmt.ExprStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.FunctionStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.IfStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.MethodStmt;
+import de.fhg.iais.roberta.syntax.lang.stmt.NNStepStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.RepeatStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.SensorStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.Stmt;
@@ -140,15 +141,14 @@ import de.fhg.iais.roberta.visitor.hardware.sensor.ISensorVisitor;
 import de.fhg.iais.roberta.visitor.lang.ILanguageVisitor;
 
 /**
- * A visitor to be used to potentially modify all phrases in the AST.
- * Every visit implementation should return a new phrase using the static make method of the individual phrase, or even other phrases.
- * All subphrases should be called with {@link Phrase#modify(ITransformerVisitor)} )} to ensure all leaves are visited.
+ * A visitor to be used to potentially modify all phrases in the AST. Every visit implementation should return a new phrase using the static make method of the
+ * individual phrase, or even other phrases. All subphrases should be called with {@link Phrase#modify(ITransformerVisitor)} )} to ensure all leaves are
+ * visited.
  */
 public interface ITransformerVisitor<V> extends ISensorVisitor<Phrase<V>>, IAllActorsVisitor<Phrase<V>>, ILanguageVisitor<Phrase<V>> {
 
     /**
-     * Returns the dropdown factory.
-     * Necessary for the {@link GetSampleSensor} visit. {@link BlocklyDropdownFactory} is required by
+     * Returns the dropdown factory. Necessary for the {@link GetSampleSensor} visit. {@link BlocklyDropdownFactory} is required by
      * {@link GetSampleSensor#make(String, String, String, boolean, BlocklyBlockProperties, BlocklyComment, BlocklyDropdownFactory)} in order to recreate
      * itself.
      *
@@ -430,6 +430,19 @@ public interface ITransformerVisitor<V> extends ISensorVisitor<Phrase<V>>, IAllA
         StmtList<V> newElseList = (StmtList<V>) ifStmt.getElseList().modify(this);
 
         return IfStmt.make(newExpr, newThenList, newElseList, ifStmt.getProperty(), ifStmt.getComment(), ifStmt.get_else(), ifStmt.get_elseIf());
+    }
+
+    @Override
+    default Phrase<V> visitNNStepStmt(NNStepStmt<Phrase<V>> nnStepStmt) {
+        List<Expr<V>> newIl = new ArrayList<>();
+        for ( Expr<Phrase<V>> e : nnStepStmt.getIl() ) {
+            newIl.add((Expr<V>) e.modify(this));
+        }
+        List<Var<V>> newOl = new ArrayList<>();
+        for ( Var<Phrase<V>> e : nnStepStmt.getOl() ) {
+            newOl.add((Var<V>) e.modify(this));
+        }
+        return NNStepStmt.make(newIl, newOl, nnStepStmt.getProperty(), nnStepStmt.getComment());
     }
 
     @Override
