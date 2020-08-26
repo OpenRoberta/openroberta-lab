@@ -823,6 +823,13 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
                 expr.setInTask(false);
                 return false;
             }
+            if ((e.metaKey || e.ctrlKey) && (String.fromCharCode(e.which) === '7')) {
+                var expr = GUISTATE_C.getBlocklyWorkspace().newBlock('robActions_nnstep');
+                expr.initSvg();
+                expr.render();
+                expr.setInTask(false);
+                return false;
+            }
         });
     }
 });
