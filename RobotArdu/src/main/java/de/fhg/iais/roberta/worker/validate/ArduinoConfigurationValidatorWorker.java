@@ -77,7 +77,7 @@ public class ArduinoConfigurationValidatorWorker extends AbstractValidatorWorker
             if ( OVERLAPPING_PINS.contains(k) ) {
                 if ( currentFreePins.contains(v) ) {
                     blockPins.add(v);
-                    currentFreePins.removeIf(s -> s.equals(v));
+                    currentFreePins.removeIf(s -> s.equals(v) && !v.equals("LED_BUILTIN")); // built in LED cannot overlap
                 } else {
                     project.addToErrorCounter(1);
                     project.setResult(Key.PROGRAM_INVALID_STATEMETNS);

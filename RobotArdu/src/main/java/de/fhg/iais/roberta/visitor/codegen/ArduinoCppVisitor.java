@@ -1,6 +1,6 @@
 package de.fhg.iais.roberta.visitor.codegen;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -27,7 +27,6 @@ import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.RelayAction;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
 import de.fhg.iais.roberta.syntax.lang.expr.ColorConst;
-import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.syntax.lang.expr.RgbColor;
 import de.fhg.iais.roberta.syntax.lang.expr.Var;
 import de.fhg.iais.roberta.syntax.sensor.generic.AccelerometerSensor;
@@ -89,51 +88,43 @@ public final class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor imp
         if ( !lightAction.getMode().toString().equals(BlocklyConstants.DEFAULT) ) {
             this.sb.append("digitalWrite(_led_" + lightAction.getPort() + ", " + lightAction.getMode().getValues()[0] + ");");
         } else {
+            Map<String, Object> channels = new LinkedHashMap<>();
+            String redName;
+            String greenName;
+            String blueName;
+            if ( this.configuration.getRobotName().equals("unowifirev2")
+                && isInternalRgbLed(this.configuration.getConfigurationComponent(lightAction.getPort())) ) {
+                redName = "WiFiDrv::analogWrite(25";
+                greenName = "WiFiDrv::analogWrite(26";
+                blueName = "WiFiDrv::analogWrite(27";
+            } else {
+                redName = "analogWrite(_led_red_" + lightAction.getPort();
+                greenName = "analogWrite(_led_green_" + lightAction.getPort();
+                blueName = "analogWrite(_led_blue_" + lightAction.getPort();
+            }
             if ( lightAction.getRgbLedColor().getClass().equals(ColorConst.class) ) {
                 String hexValue = ((ColorConst<Void>) lightAction.getRgbLedColor()).getHexValueAsString();
                 hexValue = hexValue.split("#")[1];
-                int R = Integer.decode("0x" + hexValue.substring(0, 2));
-                int G = Integer.decode("0x" + hexValue.substring(2, 4));
-                int B = Integer.decode("0x" + hexValue.substring(4, 6));
-                Map<String, Integer> colorConstChannels = new HashMap<>();
-                colorConstChannels.put("red", R);
-                colorConstChannels.put("green", G);
-                colorConstChannels.put("blue", B);
-                colorConstChannels.forEach((k, v) -> {
-                    this.sb.append("analogWrite(_led_");
-                    this.sb.append(k);
-                    this.sb.append("_");
-                    this.sb.append(lightAction.getPort());
-                    this.sb.append(", ");
-                    this.sb.append(v);
-                    this.sb.append(");");
-                    nlIndent();
-                });
-                return null;
-            }
-            if ( lightAction.getRgbLedColor().getClass().equals(Var.class) ) {
+                channels.put(redName, String.valueOf(Integer.decode("0x" + hexValue.substring(0, 2))));
+                channels.put(greenName, String.valueOf(Integer.decode("0x" + hexValue.substring(2, 4))));
+                channels.put(blueName, String.valueOf(Integer.decode("0x" + hexValue.substring(4, 6))));
+            } else if ( lightAction.getRgbLedColor().getClass().equals(Var.class) ) {
                 String tempVarName = "___" + ((Var<Void>) lightAction.getRgbLedColor()).getValue();
-                this.sb.append("analogWrite(_led_red_" + lightAction.getPort() + ", RCHANNEL(");
-                this.sb.append(tempVarName);
-                this.sb.append("));");
-                nlIndent();
-                this.sb.append("analogWrite(_led_green_" + lightAction.getPort() + ", GCHANNEL(");
-                this.sb.append(tempVarName);
-                this.sb.append("));");
-                nlIndent();
-                this.sb.append("analogWrite(_led_blue_" + lightAction.getPort() + ", BCHANNEL(");
-                this.sb.append(tempVarName);
-                this.sb.append("));");
-                nlIndent();
-                return null;
+                channels.put(redName, "RCHANNEL(" + tempVarName + ")");
+                channels.put(greenName, "GCHANNEL(" + tempVarName + ")");
+                channels.put(blueName, "BCHANNEL(" + tempVarName + ")");
+            } else {
+                channels.put(redName, ((RgbColor<Void>) lightAction.getRgbLedColor()).getR());
+                channels.put(greenName, ((RgbColor<Void>) lightAction.getRgbLedColor()).getG());
+                channels.put(blueName, ((RgbColor<Void>) lightAction.getRgbLedColor()).getB());
             }
-            Map<String, Expr<Void>> Channels = new HashMap<>();
-            Channels.put("red", ((RgbColor<Void>) lightAction.getRgbLedColor()).getR());
-            Channels.put("green", ((RgbColor<Void>) lightAction.getRgbLedColor()).getG());
-            Channels.put("blue", ((RgbColor<Void>) lightAction.getRgbLedColor()).getB());
-            Channels.forEach((k, v) -> {
-                this.sb.append("analogWrite(_led_" + k + "_" + lightAction.getPort() + ", ");
-                v.accept(this);
+            channels.forEach((name, v) -> {
+                this.sb.append(name).append(", ");
+                if ( v instanceof Phrase ) {
+                    ((Phrase<Void>) v).accept(this);
+                } else {
+                    this.sb.append(v);
+                }
                 this.sb.append(");");
                 nlIndent();
             });
@@ -537,6 +528,12 @@ public final class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor imp
                 case SC.ACCELEROMETER:
                     headerFiles.add("#include <SparkFun_LSM6DS3_Breakout/src/SparkFunLSM6DS3.h>");
                     break;
+                case SC.RGBLED:
+                    if ( this.configuration.getRobotName().equals("unowifirev2") && isInternalRgbLed(usedConfigurationBlock) ) {
+                        headerFiles.add("#include <WiFiNINA.h>");
+                        headerFiles.add("#include <utility/wifi_drv.h>");
+                    }
+                    break;
                 case SC.ULTRASONIC:
                 case SC.MOTION:
                 case SC.MOISTURE:
@@ -547,7 +544,6 @@ public final class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor imp
                 case SC.DROP:
                 case SC.PULSE:
                 case SC.LED:
-                case SC.RGBLED:
                 case SC.BUZZER:
                 case SC.RELAY:
                 case SC.DIGITAL_INPUT:
@@ -628,12 +624,21 @@ public final class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor imp
                     nlIndent();
                     break;
                 case SC.RGBLED:
-                    this.sb.append("pinMode(_led_red_" + usedConfigurationBlock.getUserDefinedPortName() + ", OUTPUT);");
-                    nlIndent();
-                    this.sb.append("pinMode(_led_green_" + usedConfigurationBlock.getUserDefinedPortName() + ", OUTPUT);");
-                    nlIndent();
-                    this.sb.append("pinMode(_led_blue_" + usedConfigurationBlock.getUserDefinedPortName() + ", OUTPUT);");
-                    nlIndent();
+                    if ( this.configuration.getRobotName().equals("unowifirev2") && isInternalRgbLed(usedConfigurationBlock) ) {
+                        this.sb.append("WiFiDrv::pinMode(25, OUTPUT);");
+                        nlIndent();
+                        this.sb.append("WiFiDrv::pinMode(26, OUTPUT);");
+                        nlIndent();
+                        this.sb.append("WiFiDrv::pinMode(27, OUTPUT);");
+                        nlIndent();
+                    } else {
+                        this.sb.append("pinMode(_led_red_" + usedConfigurationBlock.getUserDefinedPortName() + ", OUTPUT);");
+                        nlIndent();
+                        this.sb.append("pinMode(_led_green_" + usedConfigurationBlock.getUserDefinedPortName() + ", OUTPUT);");
+                        nlIndent();
+                        this.sb.append("pinMode(_led_blue_" + usedConfigurationBlock.getUserDefinedPortName() + ", OUTPUT);");
+                        nlIndent();
+                    }
                     break;
                 case SC.BUZZER:
                     break;
@@ -853,4 +858,7 @@ public final class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor imp
         return null;
     }
 
+    private static boolean isInternalRgbLed(ConfigurationComponent cc) {
+        return cc.getProperty("RED").equals("LED_BUILTIN") || cc.getProperty("GREEN").equals("LED_BUILTIN") || cc.getProperty("BLUE").equals("LED_BUILTIN");
+    }
 }
