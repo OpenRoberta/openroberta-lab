@@ -402,17 +402,15 @@ public final class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor imp
 
     @Override
     public Void visitInfraredSensor(InfraredSensor<Void> infraredSensor) {
-        if ( !this.configuration.getRobotName().equals("unowifirev2") ) { // TODO remove once infrared library is supported for unowifirev2
-            switch ( infraredSensor.getMode() ) {
-                case SC.PRESENCE:
-                    this.sb.append("_getIRPresence(_irrecv_").append(infraredSensor.getPort()).append(")");
-                    break;
-                case SC.VALUE:
-                    this.sb.append("_getIRValue(_irrecv_").append(infraredSensor.getPort()).append(")");
-                    break;
-                default:
-                    throw new DbcException(infraredSensor.getKind().getName() + " mode is not supported: " + infraredSensor.getMode());
-            }
+        switch ( infraredSensor.getMode() ) {
+            case SC.PRESENCE:
+                this.sb.append("_getIRPresence(_irrecv_").append(infraredSensor.getPort()).append(")");
+                break;
+            case SC.VALUE:
+                this.sb.append("_getIRValue(_irrecv_").append(infraredSensor.getPort()).append(")");
+                break;
+            default:
+                throw new DbcException(infraredSensor.getKind().getName() + " mode is not supported: " + infraredSensor.getMode());
         }
         return null;
     }
@@ -451,7 +449,7 @@ public final class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor imp
             nlIndent();
         }
         for ( UsedSensor usedSensor : this.getBean(UsedHardwareBean.class).getUsedSensors() ) {
-            if ( usedSensor.getType().equals(SC.INFRARED) && !this.configuration.getRobotName().equals("unowifirev2") ) { // TODO remove once infrared library is supported for unowifirev2
+            if ( usedSensor.getType().equals(SC.INFRARED) ) {
                 nlIndent();
                 createMeasureIRSensor();
                 nlIndent();
@@ -515,9 +513,7 @@ public final class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor imp
                     headerFiles.add("#include <DHT_sensor_library/DHT.h>");
                     break;
                 case SC.INFRARED:
-                    if ( !this.configuration.getRobotName().equals("unowifirev2") ) { // TODO remove once infrared library is supported for unowifirev2
-                        headerFiles.add("#include <IRremote/IRremote.h>");
-                    }
+                    headerFiles.add("#include <IRremote/src/IRremote.h>");
                     break;
                 case SC.RFID:
                     if ( !this.configuration.getRobotName().equals("unowifirev2") ) { // TODO remove once rfid library is supported for unowifirev2
@@ -593,12 +589,10 @@ public final class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor imp
                 case SC.MOISTURE:
                     break;
                 case SC.INFRARED:
-                    if ( !this.configuration.getRobotName().equals("unowifirev2") ) { // TODO remove once infrared library is supported for unowifirev2
-                        this.sb.append("pinMode(13, OUTPUT);");
-                        nlIndent();
-                        this.sb.append("_irrecv_" + usedConfigurationBlock.getUserDefinedPortName() + ".enableIRIn();");
-                        nlIndent();
-                    }
+                    this.sb.append("pinMode(13, OUTPUT);");
+                    nlIndent();
+                    this.sb.append("_irrecv_" + usedConfigurationBlock.getUserDefinedPortName() + ".enableIRIn();");
+                    nlIndent();
                     break;
                 case SC.KEY:
                     this.sb.append("pinMode(_taster_" + usedConfigurationBlock.getUserDefinedPortName() + ", INPUT);");
@@ -698,10 +692,8 @@ public final class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor imp
                     nlIndent();
                     break;
                 case SC.INFRARED:
-                    if ( !this.configuration.getRobotName().equals("unowifirev2") ) { // TODO remove once infrared library is supported for unowifirev2
-                        this.sb.append("IRrecv _irrecv_").append(blockName).append("(").append(cc.getProperty("OUTPUT")).append(");");
-                        nlIndent();
-                    }
+                    this.sb.append("IRrecv _irrecv_").append(blockName).append("(").append(cc.getProperty("OUTPUT")).append(");");
+                    nlIndent();
                     break;
                 case SC.LIGHT:
                     this.sb.append("int _output_" + blockName + " = ").append(cc.getProperty("OUTPUT")).append(";");
