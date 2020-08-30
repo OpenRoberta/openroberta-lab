@@ -18,7 +18,6 @@ import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.IVisitor;
-import de.fhg.iais.roberta.visitor.hardware.IArduinoVisitor;
 import de.fhg.iais.roberta.visitor.hardware.IMbotVisitor;
 
 /**
@@ -74,7 +73,7 @@ public class LEDMatrixImageInvertFunction<V> extends Function<V> {
 
     @Override
     protected V acceptImpl(IVisitor<V> visitor) {
-        return ((IMbotVisitor<V>) visitor).visitLEDMatrixImageInvertFunction((LEDMatrixImageInvertFunction<Void>) this);
+        return ((IMbotVisitor<V>) visitor).visitLEDMatrixImageInvertFunction(this);
 
     }
 
@@ -91,9 +90,10 @@ public class LEDMatrixImageInvertFunction<V> extends Function<V> {
      * @return corresponding AST object
      */
     public static <V> Phrase<V> jaxbToAst(Block block, AbstractJaxb2Ast<V> helper) {
-        List<Value> values = helper.extractValues(block, (short) 1);
+        List<Value> values = AbstractJaxb2Ast.extractValues(block, (short) 1);
         Phrase<V> image = helper.extractValue(values, new ExprParam(BlocklyConstants.VAR, BlocklyType.PREDEFINED_IMAGE));
-        return LEDMatrixImageInvertFunction.make(helper.convertPhraseToExpr(image), helper.extractBlockProperties(block), helper.extractComment(block));
+        return LEDMatrixImageInvertFunction
+            .make(helper.convertPhraseToExpr(image), AbstractJaxb2Ast.extractBlockProperties(block), AbstractJaxb2Ast.extractComment(block));
     }
 
     @Override

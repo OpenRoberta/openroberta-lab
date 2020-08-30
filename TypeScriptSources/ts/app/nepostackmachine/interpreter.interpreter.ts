@@ -1,5 +1,5 @@
-import {ARobotBehaviour} from "./interpreter.aRobotBehaviour";
-import {State} from "./interpreter.state";
+import { ARobotBehaviour } from "./interpreter.aRobotBehaviour";
+import { State } from "./interpreter.state";
 import * as C from "./interpreter.constants";
 import * as U from "./interpreter.util";
 import * as PG from "./neuralnetwork.playground";
@@ -474,7 +474,11 @@ export class Interpreter {
                 case C.IMAGE_SHIFT_ACTION: {
                     const nShift = s.pop();
                     const image = s.pop();
-                    s.push(this.shiftImageAction(image, stmt[C.DIRECTION], nShift));
+                    if (stmt[C.NAME] === "mbot") {
+                        s.push(this.shiftImageActionMbot(image, stmt[C.DIRECTION], nShift));
+                    } else {
+                        s.push(this.shiftImageAction(image, stmt[C.DIRECTION], nShift));
+                    }
                     break;
                 }
 
@@ -1245,6 +1249,48 @@ export class Interpreter {
                 });
             },
             left: function() {
+                image.forEach(function(array: number[]) {
+                    array.shift();
+                    array.push(0);
+                });
+            }
+        };
+        if (nShift < 0) {
+            nShift *= -1;
+            if (direction === "up") {
+                direction = "down";
+            } else if (direction === "down") {
+                direction = "up";
+            } else if (direction === "left") {
+                direction = "right";
+            } else if (direction === "right") {
+                direction = "left";
+            }
+        }
+        for (var i = 0; i < nShift; i++) {
+            shift[direction]();
+        }
+        return image;
+    }
+
+    private shiftImageActionMbot(image: number[][], direction: string, nShift: number): number[][] {
+        nShift = Math.round(nShift);
+        var shift = {
+            left: function() {
+                image.pop();
+                image.unshift([0, 0, 0, 0, 0, 0, 0, 0]);
+            },
+            right: function() {
+                image.shift();
+                image.push([0, 0, 0, 0, 0, 0, 0, 0]);
+            },
+            up: function() {
+                image.forEach(function(array: number[]) {
+                    array.pop();
+                    array.unshift(0);
+                });
+            },
+            down: function() {
                 image.forEach(function(array: number[]) {
                     array.shift();
                     array.push(0);

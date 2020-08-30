@@ -1,7 +1,15 @@
 package de.fhg.iais.roberta.visitor.codegen;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.inter.mode.action.ITurnDirection;
+import de.fhg.iais.roberta.inter.mode.general.IDirection;
 import de.fhg.iais.roberta.mode.action.DriveDirection;
 import de.fhg.iais.roberta.syntax.MotorDuration;
 import de.fhg.iais.roberta.syntax.Phrase;
@@ -18,11 +26,9 @@ import de.fhg.iais.roberta.syntax.action.motor.differential.DriveAction;
 import de.fhg.iais.roberta.syntax.action.motor.differential.MotorDriveStopAction;
 import de.fhg.iais.roberta.syntax.action.motor.differential.TurnAction;
 import de.fhg.iais.roberta.syntax.action.serial.SerialWriteAction;
-
 import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.LEDMatrixImageAction;
-import de.fhg.iais.roberta.syntax.actors.arduino.LEDMatrixSetBrightnessAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.LEDMatrixTextAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.mbot.ReceiveIRAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.mbot.SendIRAction;
@@ -30,17 +36,16 @@ import de.fhg.iais.roberta.syntax.expressions.arduino.LEDMatrixImage;
 import de.fhg.iais.roberta.syntax.functions.arduino.LEDMatrixImageInvertFunction;
 import de.fhg.iais.roberta.syntax.functions.arduino.LEDMatrixImageShiftFunction;
 import de.fhg.iais.roberta.syntax.lang.expr.ColorConst;
-import de.fhg.iais.roberta.syntax.sensor.generic.*;
+import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.KeysSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
 import de.fhg.iais.roberta.typecheck.NepoInfo;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.C;
 import de.fhg.iais.roberta.visitor.hardware.IMbotVisitor;
 import de.fhg.iais.roberta.visitor.lang.codegen.AbstractStackMachineVisitor;
-import org.json.JSONArray;
-import org.json.JSONObject;
-
-import java.util.Arrays;
-import java.util.List;
 
 public class MbotCppStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> implements IMbotVisitor<V> {
 
@@ -51,8 +56,7 @@ public class MbotCppStackMachineVisitor<V> extends AbstractStackMachineVisitor<V
 
     @Override
     public V visitKeysSensor(KeysSensor<V> keysSensor) {
-        String mode = keysSensor.getPort().toLowerCase();
-        JSONObject o = mk(C.GET_SAMPLE, keysSensor).put(C.GET_SAMPLE, C.BUTTONS).put(C.MODE, mode).put(C.NAME, "mbot");
+        JSONObject o = mk(C.GET_SAMPLE, keysSensor).put(C.GET_SAMPLE, C.BUTTONS).put(C.MODE, "center");
         return app(o);
     }
 
@@ -68,6 +72,7 @@ public class MbotCppStackMachineVisitor<V> extends AbstractStackMachineVisitor<V
         return app(o);
     }
 
+    @Override
     public V visitUltrasonicSensor(UltrasonicSensor<V> ultrasonicSensor) {
         String mode = ultrasonicSensor.getMode();
         String port = ultrasonicSensor.getPort();
@@ -77,9 +82,13 @@ public class MbotCppStackMachineVisitor<V> extends AbstractStackMachineVisitor<V
 
     @Override
     public V visitInfraredSensor(InfraredSensor<V> infraredSensor) {
-        String mode = infraredSensor.getMode();
         String port = infraredSensor.getPort();
         String slot = infraredSensor.getSlot();
+        if ( slot.equals("1") ) {
+            slot = C.LEFT;
+        } else if ( slot.equals("2") ) {
+            slot = C.RIGHT;
+        }
         JSONObject o = mk(C.GET_SAMPLE, infraredSensor).put(C.GET_SAMPLE, C.INFRARED).put(C.PORT, port).put(C.MODE, slot).put(C.NAME, "mbot");
         return app(o);
     }
@@ -252,44 +261,60 @@ public class MbotCppStackMachineVisitor<V> extends AbstractStackMachineVisitor<V
 
     @Override
     public V visitClearDisplayAction(ClearDisplayAction<V> clearDisplayAction) {
-        clearDisplayAction.addInfo(NepoInfo.warning("SIM_BLOCK_NOT_SUPPORTED"));
-        return null;
+        JSONObject o = mk(C.CLEAR_DISPLAY_ACTION, clearDisplayAction);
+
+        return app(o);
     }
 
     @Override
     public V visitLEDMatrixImageAction(LEDMatrixImageAction<V> ledMatrixImageAction) {
-        ledMatrixImageAction.addInfo(NepoInfo.warning("SIM_BLOCK_NOT_SUPPORTED"));
-        return null;
+        ledMatrixImageAction.getValuesToDisplay().accept(this);
+        JSONObject o = mk(C.SHOW_IMAGE_ACTION, ledMatrixImageAction).put(C.MODE, ledMatrixImageAction.getDisplayImageMode().toString().toLowerCase());
+        return app(o);
     }
 
     @Override
     public V visitLEDMatrixTextAction(LEDMatrixTextAction<V> ledMatrixTextAction) {
-        ledMatrixTextAction.addInfo(NepoInfo.warning("SIM_BLOCK_NOT_SUPPORTED"));
-        return null;
+        ledMatrixTextAction.getMsg().accept(this);
+        JSONObject o = mk(C.SHOW_TEXT_ACTION, ledMatrixTextAction).put(C.MODE, C.TEXT);
+        return app(o);
     }
 
     @Override
-    public V visitLEDMatrixImage(LEDMatrixImage<Void> ledMatrixImage) {
-        ledMatrixImage.addInfo(NepoInfo.warning("SIM_BLOCK_NOT_SUPPORTED"));
-        return null;
+    public V visitLEDMatrixImage(LEDMatrixImage<V> ledMatrixImage) {
+        JSONArray jsonImage = new JSONArray();
+        for ( int i = 0; i < 16; i++ ) {
+            ArrayList<Integer> a = new ArrayList<>();
+            for ( int j = 0; j < 8; j++ ) {
+                String pixel = ledMatrixImage.getImage()[i][7 - j].trim();
+                if ( pixel.equals("#") ) {
+                    pixel = "9";
+                } else if ( pixel.equals("") ) {
+                    pixel = "0";
+                }
+                a.add(map(Integer.parseInt(pixel), 0, 9, 0, 255));
+            }
+            jsonImage.put(new JSONArray(a));
+        }
+        JSONObject o = mk(C.EXPR, ledMatrixImage).put(C.EXPR, C.IMAGE);
+        o.put(C.VALUE, jsonImage);
+        return app(o);
     }
 
     @Override
-    public V visitLEDMatrixSetBrightnessAction(LEDMatrixSetBrightnessAction<V> ledMatrixSetBrightnessAction) {
-        ledMatrixSetBrightnessAction.addInfo(NepoInfo.warning("SIM_BLOCK_NOT_SUPPORTED"));
-        return null;
+    public V visitLEDMatrixImageShiftFunction(LEDMatrixImageShiftFunction<V> ledMatrixImageShiftFunction) {
+        ledMatrixImageShiftFunction.getImage().accept(this);
+        ledMatrixImageShiftFunction.getPositions().accept(this);
+        IDirection direction = ledMatrixImageShiftFunction.getShiftDirection();
+        JSONObject o = mk(C.IMAGE_SHIFT_ACTION, ledMatrixImageShiftFunction).put(C.DIRECTION, direction.toString().toLowerCase()).put(C.NAME, "mbot");
+        return app(o);
     }
 
     @Override
-    public V visitLEDMatrixImageShiftFunction(LEDMatrixImageShiftFunction<Void> ledMatrixImageShiftFunction) {
-        ledMatrixImageShiftFunction.addInfo(NepoInfo.warning("SIM_BLOCK_NOT_SUPPORTED"));
-        return null;
-    }
-
-    @Override
-    public V visitLEDMatrixImageInvertFunction(LEDMatrixImageInvertFunction<Void> ledMatrixImageInverFunction) {
-        ledMatrixImageInverFunction.addInfo(NepoInfo.warning("SIM_BLOCK_NOT_SUPPORTED"));
-        return null;
+    public V visitLEDMatrixImageInvertFunction(LEDMatrixImageInvertFunction<V> ledMatrixImageInverFunction) {
+        ledMatrixImageInverFunction.getImage().accept(this);
+        JSONObject o = mk(C.EXPR, ledMatrixImageInverFunction).put(C.EXPR, C.SINGLE_FUNCTION).put(C.OP, C.IMAGE_INVERT_ACTION);
+        return app(o);
     }
 
     @Override

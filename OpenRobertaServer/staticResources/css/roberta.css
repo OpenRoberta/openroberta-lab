@@ -295,6 +295,10 @@ body.blocklyMinimalBody * {
     top: 0;
 }
 
+canvas.border {
+	border: 2px solid grey;
+}
+
 #canvasDiv {
     position: absolute;
     left: 0;

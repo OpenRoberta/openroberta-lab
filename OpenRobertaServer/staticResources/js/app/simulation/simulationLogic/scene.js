@@ -2,8 +2,8 @@
  * @fileOverview Scene for a robot simulation
  * @author Beate Jost <beate.jost@iais.fraunhofer.de>
  */
-define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constants', 'simulation.constants', 'program.controller', 'jquery'], function (SIM,
-                                                                                                                                                        SIMATH, UTIL, IC, C, PROGRAM_C, $) {
+define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constants', 'simulation.constants', 'program.controller', 'jquery'], function(SIM,
+    SIMATH, UTIL, IC, C, PROGRAM_C, $) {
 
     /**
      * Creates a new Scene.
@@ -45,12 +45,12 @@ define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constan
         }
     }
 
-    Scene.prototype.updateBackgrounds = function () {
+    Scene.prototype.updateBackgrounds = function() {
         this.drawBackground(1, this.uCtx);
         this.drawBackground();
     };
 
-    Scene.prototype.drawBackground = function (option_scale, option_context) {
+    Scene.prototype.drawBackground = function(option_scale, option_context) {
         var ctx = option_context || this.bCtx;
         var sc = option_scale || SIM.getScale();
         var left = (this.playground.w - (this.backgroundImg.width + 20) * sc) / 2.0;
@@ -61,7 +61,7 @@ define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constan
             $('#unitBackgroundLayer').get(0).width = w;
             $('#unitBackgroundLayer').get(0).height = h;
         }
-        $('.canvasSim').each(function () {
+        $('.canvasSim').each(function() {
             $(this).get(0).width = w;
             $(this).get(0).height = h;
 
@@ -88,7 +88,7 @@ define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constan
         }
     };
 
-    Scene.prototype.drawRuler = function () {
+    Scene.prototype.drawRuler = function() {
         this.mCtx.clearRect(this.ruler.xOld - 20, this.ruler.yOld - 20, this.ruler.wOld + 40, this.ruler.hOld + 40);
         this.mCtx.restore();
         this.mCtx.save();
@@ -102,7 +102,7 @@ define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constan
         }
     };
 
-    Scene.prototype.drawObjects = function () {
+    Scene.prototype.drawObjects = function() {
         this.oCtx.clearRect(this.obstacle.xOld - 20, this.obstacle.yOld - 20, this.obstacle.wOld + 40, this.obstacle.hOld + 40);
         this.obstacle.xOld = this.obstacle.x;
         this.obstacle.yOld = this.obstacle.y;
@@ -121,7 +121,7 @@ define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constan
         }
     };
 
-    Scene.prototype.drawVariables = function () {
+    Scene.prototype.drawVariables = function() {
         $("#variableValue").html("");
         var variables = SIM.getSimVariables()
         if (Object.keys(variables).length > 0) {
@@ -134,7 +134,7 @@ define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constan
         }
     }
 
-    Scene.prototype.drawMbed = function () {
+    Scene.prototype.drawMbed = function() {
         this.rCtx.clearRect(0, 0, C.MAX_WIDTH, C.MAX_HEIGHT);
         this.rCtx.restore();
         this.rCtx.save();
@@ -177,7 +177,7 @@ define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constan
         this.rCtx.restore();
     };
 
-    Scene.prototype.drawRobots = function () {
+    Scene.prototype.drawRobots = function() {
         if (this.robots[0].idle) {
             this.drawMbed();
             return;
@@ -212,26 +212,26 @@ define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constan
                 $("#notConstantValue").append('<div><label>Motor right</label><span>' + UTIL.round(this.robots[r].encoder.right * C.ENC, 0) + '°</span></div>');
                 if (Array.isArray(this.robots[r].touchSensor)) {
                     for (var s in this.robots[r].touchSensor) {
-                        $("#notConstantValue").append('<div><label>Touch Sensor ' + s + '</label><span>' + UTIL.round(this.robots[r].touchSensor[s].value, 0) + '</span></div>');
+                        $("#notConstantValue").append('<div><label>Touch Sensor ' + s.replace("ORT_", "") + '</label><span>' + UTIL.round(this.robots[r].touchSensor[s].value, 0) + '</span></div>');
                         break;
                     }
                 }
                 for (var s in this.robots[r].colorSensor) {
-                    $("#notConstantValue").append('<div><label>Light Sensor ' + s + '</label><span>' + UTIL.round(this.robots[r].colorSensor[s].lightValue, 0) + '%</span></div>');
+                    $("#notConstantValue").append('<div><label>Light Sensor ' + s.replace("ORT_", "") + '</label><span>' + UTIL.round(this.robots[r].colorSensor[s].lightValue, 0) + '%</span></div>');
                 }
                 for (var s in this.robots[r].ultraSensor) {
-                    $("#notConstantValue").append('<div><label>Ultra Sensor ' + s + '</label><span>' + UTIL.roundUltraSound(this.robots[r].ultraSensor[s].distance / 3.0, 0) + 'cm</span></div>');
+                    $("#notConstantValue").append('<div><label>Ultra Sensor ' + s.replace("ORT_", "") + '</label><span>' + UTIL.roundUltraSound(this.robots[r].ultraSensor[s].distance / 3.0, 0) + 'cm</span></div>');
                 }
                 if (this.robots[r].sound) {
                     $("#notConstantValue").append('<div><label>Sound Sensor </label><span>' + UTIL.round(this.robots[r].sound.volume * 100, 0) + '%</span></div>');
                 }
                 for (var s in this.robots[r].colorSensor) {
-                    $("#notConstantValue").append('<div><label>Color Sensor ' + s + '</label><span style="margin-left:6px; width: 20px; background-color:' + this.robots[r].colorSensor[s].color + '">&nbsp;</span></div>');
+                    $("#notConstantValue").append('<div><label>Color Sensor ' + s.replace("ORT_", "") + '</label><span style="margin-left:6px; width: 20px; background-color:' + this.robots[r].colorSensor[s].color + '">&nbsp;</span></div>');
                 }
 
                 for (var s in this.robots[r].infraredSensors) {
                     for (var side in this.robots[r].infraredSensors[s]) {
-                        $("#notConstantValue").append('<div><label>Infrared Sensor ' + s + ' ' + side + '</label><span>' + this.robots[r].infraredSensors[s][side].value + '</span></div>');
+                        $("#notConstantValue").append('<div><label>Infrared Sensor ' + s.replace("ORT_", "") + ' ' + side + '</label><span>' + this.robots[r].infraredSensors[s][side].value + '</span></div>');
 
                     }
                 }
@@ -249,23 +249,29 @@ define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constan
             this.rCtx.lineTo(this.robots[r].geom.x + this.robots[r].geom.w + 5, 0);
             this.rCtx.stroke();
             //back wheel
-            this.rCtx.fillStyle = this.robots[r].wheelBack.color;
-            this.rCtx.fillRect(this.robots[r].wheelBack.x, this.robots[r].wheelBack.y, this.robots[r].wheelBack.w, this.robots[r].wheelBack.h);
-            this.rCtx.shadowBlur = 0;
-            this.rCtx.shadowOffsetX = 0;
-            this.rCtx.fillStyle = "black";
-            this.rCtx.fillRect(this.robots[r].frontRight.x + 12.5, this.robots[r].frontRight.y, 20, 10);
-
-            this.rCtx.shadowBlur = 0;
-            this.rCtx.shadowOffsetX = 0;
-            this.rCtx.fillStyle = this.robots[r].touchSensor.color;
-            this.rCtx.fillRect(this.robots[r].frontRight.x + 12.5, this.robots[r].frontRight.y, 20, 10);
-            if (this.robots[r].led && !this.robots[r].leds) {
-                this.rCtx.fillStyle = this.robots[r].led.color;
-                var grd = this.rCtx.createRadialGradient(this.robots[r].led.x, this.robots[r].led.y, 1, this.robots[r].led.x, this.robots[r].led.y, 15);
-                grd.addColorStop(0, this.robots[r].led.color);
-                grd.addColorStop(0.5, this.robots[r].geom.color);
-                this.rCtx.fillStyle = grd;
+            if (this.robots[r].wheelBack) {
+                this.rCtx.fillStyle = this.robots[r].wheelBack.color;
+                this.rCtx.fillRect(this.robots[r].wheelBack.x, this.robots[r].wheelBack.y, this.robots[r].wheelBack.w, this.robots[r].wheelBack.h);
+                this.rCtx.shadowBlur = 0;
+                this.rCtx.shadowOffsetX = 0;
+                //this.rCtx.fillStyle = "black";
+                //this.rCtx.fillRect(this.robots[r].frontRight.x + 12.5, this.robots[r].frontRight.y, 20, 10);
+            }
+            //bumper
+            if (this.robots[r].touchSensor) {
+                this.rCtx.shadowBlur = 0;
+                this.rCtx.shadowOffsetX = 0;
+                this.rCtx.fillStyle = this.robots[r].touchSensor.color;
+                this.rCtx.fillRect(this.robots[r].frontRight.x + 12.5, this.robots[r].frontRight.y, 20, 10);
+                if (this.robots[r].led && !this.robots[r].leds) {
+                    this.rCtx.fillStyle = this.robots[r].led.color;
+                    var grd = this.rCtx.createRadialGradient(this.robots[r].led.x, this.robots[r].led.y, 1, this.robots[r].led.x, this.robots[r].led.y, 15);
+                    grd.addColorStop(0, this.robots[r].led.color);
+                    grd.addColorStop(0.5, this.robots[r].geom.color);
+                    this.rCtx.fillStyle = grd;
+                } else {
+                    this.rCtx.fillStyle = this.robots[r].geom.color;
+                }
             } else {
                 this.rCtx.fillStyle = this.robots[r].geom.color;
             }
@@ -273,15 +279,16 @@ define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constan
             this.rCtx.shadowBlur = 5;
             this.rCtx.shadowColor = "black";
             this.rCtx.beginPath();
-            this.rCtx.moveTo(this.robots[r].geom.x + 2.5, this.robots[r].geom.y);
-            this.rCtx.lineTo(this.robots[r].geom.x + this.robots[r].geom.w - 2.5, this.robots[r].geom.y);
-            this.rCtx.quadraticCurveTo(this.robots[r].geom.x + this.robots[r].geom.w, this.robots[r].geom.y, this.robots[r].geom.x + this.robots[r].geom.w, this.robots[r].geom.y + 2.5);
-            this.rCtx.lineTo(this.robots[r].geom.x + this.robots[r].geom.w, this.robots[r].geom.y + this.robots[r].geom.h - 2.5);
-            this.rCtx.quadraticCurveTo(this.robots[r].geom.x + this.robots[r].geom.w, this.robots[r].geom.y + this.robots[r].geom.h, this.robots[r].geom.x + this.robots[r].geom.w - 2.5, this.robots[r].geom.y + this.robots[r].geom.h);
-            this.rCtx.lineTo(this.robots[r].geom.x + 2.5, this.robots[r].geom.y + this.robots[r].geom.h);
-            this.rCtx.quadraticCurveTo(this.robots[r].geom.x, this.robots[r].geom.y + this.robots[r].geom.h, this.robots[r].geom.x, this.robots[r].geom.y + this.robots[r].geom.h - 2.5);
-            this.rCtx.lineTo(this.robots[r].geom.x, this.robots[r].geom.y + 2.5);
-            this.rCtx.quadraticCurveTo(this.robots[r].geom.x, this.robots[r].geom.y, this.robots[r].geom.x + 2.5, this.robots[r].geom.y);
+            var radius = this.robots[r].geom.radius;
+            this.rCtx.moveTo(this.robots[r].geom.x + radius, this.robots[r].geom.y);
+            this.rCtx.lineTo(this.robots[r].geom.x + this.robots[r].geom.w - radius, this.robots[r].geom.y);
+            this.rCtx.quadraticCurveTo(this.robots[r].geom.x + this.robots[r].geom.w, this.robots[r].geom.y, this.robots[r].geom.x + this.robots[r].geom.w, this.robots[r].geom.y + radius);
+            this.rCtx.lineTo(this.robots[r].geom.x + this.robots[r].geom.w, this.robots[r].geom.y + this.robots[r].geom.h - radius);
+            this.rCtx.quadraticCurveTo(this.robots[r].geom.x + this.robots[r].geom.w, this.robots[r].geom.y + this.robots[r].geom.h, this.robots[r].geom.x + this.robots[r].geom.w - radius, this.robots[r].geom.y + this.robots[r].geom.h);
+            this.rCtx.lineTo(this.robots[r].geom.x + radius, this.robots[r].geom.y + this.robots[r].geom.h);
+            this.rCtx.quadraticCurveTo(this.robots[r].geom.x, this.robots[r].geom.y + this.robots[r].geom.h, this.robots[r].geom.x, this.robots[r].geom.y + this.robots[r].geom.h - radius);
+            this.rCtx.lineTo(this.robots[r].geom.x, this.robots[r].geom.y + radius);
+            this.rCtx.quadraticCurveTo(this.robots[r].geom.x, this.robots[r].geom.y, this.robots[r].geom.x + radius, this.robots[r].geom.y);
             this.rCtx.closePath();
             this.rCtx.fill();
             this.rCtx.shadowBlur = 0;
@@ -320,7 +327,7 @@ define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constan
             if (touch && touchSensor.value === 1) {
                 this.rCtx.fillStyle = 'red';
                 this.rCtx.fillRect(this.robots[r].frontRight.x, this.robots[r].frontRight.y, this.robots[r].frontLeft.x - this.robots[r].frontRight.x, 3.5);
-            } else {
+            } else if (touchSensor) {
                 this.rCtx.fillStyle = touchSensor.color;
                 this.rCtx.fillRect(this.robots[r].frontRight.x, this.robots[r].frontRight.y, this.robots[r].frontLeft.x - this.robots[r].frontRight.x, 3.5);
             }
@@ -352,6 +359,27 @@ define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constan
                     this.rCtx.scale(-1, 1);
                     this.rCtx.translate(-colorSensors[s].x, -colorSensors[s].y);
                 }
+            }
+            // infrared sensors (mBot)
+            var infraredSensors = this.robots[r].infraredSensors;
+            for (var s in infraredSensors) {
+                // here we always have a left (1) and right (2) side
+                this.rCtx.beginPath();
+                this.rCtx.lineWidth = "0.1";
+                this.rCtx.arc(infraredSensors[s]["left"].x, infraredSensors[s]["left"].y, infraredSensors[s]["left"].r, 0, Math.PI * 2);
+                this.rCtx.fillStyle = infraredSensors[s]["left"].value ? "black" : "white";
+                this.rCtx.fill();
+                this.rCtx.strokeStyle = "black";
+                this.rCtx.stroke();
+                this.rCtx.lineWidth = "0.5";
+                this.rCtx.beginPath();
+                this.rCtx.lineWidth = "0.1";
+                this.rCtx.arc(infraredSensors[s]["right"].x, infraredSensors[s]["right"].y, infraredSensors[s]["right"].r, 0, Math.PI * 2);
+                this.rCtx.fillStyle = infraredSensors[s]["right"].value ? "black" : "white";
+                this.rCtx.fill();
+                this.rCtx.strokeStyle = "black";
+                this.rCtx.stroke();
+                this.rCtx.lineWidth = "0.5";
             }
 
             //ledSensor
@@ -395,6 +423,10 @@ define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constan
                     this.rCtx.translate(-ultraSensors[s].rx, -ultraSensors[s].ry);
                 }
             }
+            // mBot only (so far)
+            if (this.robots[r].display && this.robots[r].display.draw) {
+                this.robots[r].display.draw(this.robots[r].ctx);
+            }
 
             //this.rCtx.stroke();
             this.rCtx.lineDashOffset = 0;
@@ -420,7 +452,7 @@ define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constan
         }
     };
 
-    Scene.prototype.updateSensorValues = function (running) {
+    Scene.prototype.updateSensorValues = function(running) {
         for (var r = 0; r < this.numprogs; r++) {
             var personalObstacleList = SIM.obstacleList.slice();
             var values = this.robots[r].robotBehaviour.hardwareState.sensors;
@@ -438,7 +470,7 @@ define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constan
                     personalObstacleList.push(tempobstacle);
                 }
             }
-            if (this.robots[r].touchSensor) {
+            if (this.robots[r].touchSensor || this.robots[r].ultraSensor) { // check only if it is a moving robot
                 var touchSensor;
                 if (Array.isArray(this.robots[r].touchSensor)) {
                     for (var s in this.robots[r].touchSensor) {
@@ -446,7 +478,7 @@ define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constan
                         break;
                     }
                 } else {
-                    touchSensor = this.robots[r].touchSensor;
+                    touchSensor = this.robots[r].touchSensor || {};
                 }
                 touchSensor.value = 0;
                 this.robots[r].frontLeft.bumped = false;
@@ -577,12 +609,12 @@ define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constan
                                         x: touchSensor.rx,
                                         y: touchSensor.ry
                                     }, {
-                                        x: obstacleLines[k].x1,
-                                        y: obstacleLines[k].y1
-                                    }, {
-                                        x: obstacleLines[k].x2,
-                                        y: obstacleLines[k].y2
-                                    });
+                                            x: obstacleLines[k].x1,
+                                            y: obstacleLines[k].y1
+                                        }, {
+                                            x: obstacleLines[k].x2,
+                                            y: obstacleLines[k].y2
+                                        });
                                     if (SIMATH.sqr(touchSensor.rx - p.x) + SIMATH.sqr(touchSensor.ry - p.y) < SIM.getDt() * Math.max(Math.abs(this.robots[r].right), Math.abs(this.robots[r].left))) {
                                         this.robots[r].frontLeft.bumped = true;
                                         this.robots[r].frontRight.bumped = true;
@@ -605,12 +637,12 @@ define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constan
                                                 x: touchSensor.rx,
                                                 y: touchSensor.ry
                                             }, {
-                                                x: obstacleLines[k].x1,
-                                                y: obstacleLines[k].y1
-                                            }, {
-                                                x: obstacleLines[k].x2,
-                                                y: obstacleLines[k].y2
-                                            });
+                                                    x: obstacleLines[k].x1,
+                                                    y: obstacleLines[k].y1
+                                                }, {
+                                                    x: obstacleLines[k].x2,
+                                                    y: obstacleLines[k].y2
+                                                });
                                             if (SIMATH.sqr(this.robots[r].backMiddle.rx - p.x) + SIMATH.sqr(this.robots[r].backMiddle.ry - p.y) < SIM.getDt() * Math.max(Math.abs(this.robots[r].right), Math.abs(this.robots[r].left))) {
                                                 this.robots[r].backLeft.bumped = true;
                                                 this.robots[r].backRight.bumped = true;
@@ -773,8 +805,6 @@ define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constan
                 for (var s in infraredSensors) {
                     values.infrared[s] = {};
                     for (var side in infraredSensors[s]) {
-
-
                         var red = 0;
                         var green = 0;
                         var blue = 0;
@@ -861,8 +891,8 @@ define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constan
                     values.display.pixel = this.robots[r].display.leds;
                 } else {
                     values.display.brightness = Math.round((this.robots[r].display.brightness * 9.0) / 255.0, 0);
-                    values.display.pixel = this.robots[r].display.leds.map(function (x) {
-                        return x.map(function (y) {
+                    values.display.pixel = this.robots[r].display.leds.map(function(x) {
+                        return x.map(function(y) {
                             return y / IC.BRIGHTNESS_MULTIPLIER;
                         });
                     });

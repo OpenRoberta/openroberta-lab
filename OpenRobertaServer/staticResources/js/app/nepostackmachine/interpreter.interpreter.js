@@ -443,7 +443,12 @@ define(["require", "exports", "./interpreter.state", "./interpreter.constants", 
                     case C.IMAGE_SHIFT_ACTION: {
                         var nShift = s.pop();
                         var image = s.pop();
-                        s.push(this.shiftImageAction(image, stmt[C.DIRECTION], nShift));
+                        if (stmt[C.NAME] === "mbot") {
+                            s.push(this.shiftImageActionMbot(image, stmt[C.DIRECTION], nShift));
+                        }
+                        else {
+                            s.push(this.shiftImageAction(image, stmt[C.DIRECTION], nShift));
+                        }
                         break;
                     }
                     case C.DISPLAY_SET_PIXEL_BRIGHTNESS_ACTION: {
@@ -1206,6 +1211,50 @@ define(["require", "exports", "./interpreter.state", "./interpreter.constants", 
                     });
                 },
                 left: function () {
+                    image.forEach(function (array) {
+                        array.shift();
+                        array.push(0);
+                    });
+                }
+            };
+            if (nShift < 0) {
+                nShift *= -1;
+                if (direction === "up") {
+                    direction = "down";
+                }
+                else if (direction === "down") {
+                    direction = "up";
+                }
+                else if (direction === "left") {
+                    direction = "right";
+                }
+                else if (direction === "right") {
+                    direction = "left";
+                }
+            }
+            for (var i = 0; i < nShift; i++) {
+                shift[direction]();
+            }
+            return image;
+        };
+        Interpreter.prototype.shiftImageActionMbot = function (image, direction, nShift) {
+            nShift = Math.round(nShift);
+            var shift = {
+                left: function () {
+                    image.pop();
+                    image.unshift([0, 0, 0, 0, 0, 0, 0, 0]);
+                },
+                right: function () {
+                    image.shift();
+                    image.push([0, 0, 0, 0, 0, 0, 0, 0]);
+                },
+                up: function () {
+                    image.forEach(function (array) {
+                        array.pop();
+                        array.unshift(0);
+                    });
+                },
+                down: function () {
                     image.forEach(function (array) {
                         array.shift();
                         array.push(0);

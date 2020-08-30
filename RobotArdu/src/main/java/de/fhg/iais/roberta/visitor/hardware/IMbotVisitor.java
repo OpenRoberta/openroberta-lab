@@ -41,15 +41,15 @@ public interface IMbotVisitor<V> extends IActors4AutonomousDriveRobots<V>, ISens
         throw new DbcException("Block is not implemented!");
     }
 
-    default V visitLEDMatrixImage(LEDMatrixImage<Void> ledMatrixImage) {
+    default V visitLEDMatrixImage(LEDMatrixImage<V> ledMatrixImage) {
         throw new DbcException("Block is not implemented!");
     }
 
-    default V visitLEDMatrixImageShiftFunction(LEDMatrixImageShiftFunction<Void> ledMatrixImageShiftFunction) {
+    default V visitLEDMatrixImageShiftFunction(LEDMatrixImageShiftFunction<V> ledMatrixImageShiftFunction) {
         throw new DbcException("Block is not implemented!");
     }
 
-    default V visitLEDMatrixImageInvertFunction(LEDMatrixImageInvertFunction<Void> ledMatrixImageInverFunction) {
+    default V visitLEDMatrixImageInvertFunction(LEDMatrixImageInvertFunction<V> ledMatrixImageInverFunction) {
         throw new DbcException("Block is not implemented!");
     }
 

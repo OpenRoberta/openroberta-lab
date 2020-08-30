@@ -1,5 +1,6 @@
 package de.fhg.iais.roberta.syntax.functions.arduino;
 
+import java.awt.Image;
 import java.util.List;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
@@ -22,7 +23,6 @@ import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.IVisitor;
-import de.fhg.iais.roberta.visitor.hardware.IArduinoVisitor;
 import de.fhg.iais.roberta.visitor.hardware.IMbotVisitor;
 
 /**
@@ -36,7 +36,12 @@ public class LEDMatrixImageShiftFunction<V> extends Function<V> {
     private final Expr<V> positions;
     private final IDirection shiftDirection;
 
-    private LEDMatrixImageShiftFunction(Expr<V> image, Expr<V> positions, IDirection shiftDirection, BlocklyBlockProperties properties, BlocklyComment comment) {
+    private LEDMatrixImageShiftFunction(
+        Expr<V> image,
+        Expr<V> positions,
+        IDirection shiftDirection,
+        BlocklyBlockProperties properties,
+        BlocklyComment comment) {
         super(BlockTypeContainer.getByName("LED_MATRIX_IMAGE_SHIFT"), properties, comment);
         Assert.notNull(image);
         Assert.notNull(positions);
@@ -101,7 +106,7 @@ public class LEDMatrixImageShiftFunction<V> extends Function<V> {
 
     @Override
     protected V acceptImpl(IVisitor<V> visitor) {
-        return ((IMbotVisitor<V>) visitor).visitLEDMatrixImageShiftFunction((LEDMatrixImageShiftFunction<Void>) this);
+        return ((IMbotVisitor<V>) visitor).visitLEDMatrixImageShiftFunction(this);
 
     }
 
@@ -119,9 +124,9 @@ public class LEDMatrixImageShiftFunction<V> extends Function<V> {
      */
     public static <V> Phrase<V> jaxbToAst(Block block, AbstractJaxb2Ast<V> helper) {
         BlocklyDropdownFactory factory = helper.getDropdownFactory();
-        List<Field> fields = helper.extractFields(block, (short) 1);
-        List<Value> values = helper.extractValues(block, (short) 2);
-        IDirection shiftingDirection = factory.getDirection(helper.extractField(fields, BlocklyConstants.OP));
+        List<Field> fields = AbstractJaxb2Ast.extractFields(block, (short) 1);
+        List<Value> values = AbstractJaxb2Ast.extractValues(block, (short) 2);
+        IDirection shiftingDirection = factory.getDirection(AbstractJaxb2Ast.extractField(fields, BlocklyConstants.OP));
         Phrase<V> image = helper.extractValue(values, new ExprParam(BlocklyConstants.A, BlocklyType.PREDEFINED_IMAGE));
         Phrase<V> numberOfPositions = helper.extractValue(values, new ExprParam(BlocklyConstants.B, BlocklyType.NUMBER_INT));
         return LEDMatrixImageShiftFunction
@@ -129,8 +134,8 @@ public class LEDMatrixImageShiftFunction<V> extends Function<V> {
                 helper.convertPhraseToExpr(image),
                 helper.convertPhraseToExpr(numberOfPositions),
                 shiftingDirection,
-                helper.extractBlockProperties(block),
-                helper.extractComment(block));
+                AbstractJaxb2Ast.extractBlockProperties(block),
+                AbstractJaxb2Ast.extractComment(block));
     }
 
     @Override

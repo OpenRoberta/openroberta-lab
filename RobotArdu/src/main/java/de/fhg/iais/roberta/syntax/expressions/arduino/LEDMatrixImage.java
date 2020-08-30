@@ -26,7 +26,7 @@ import de.fhg.iais.roberta.visitor.hardware.IMbotVisitor;
  */
 public class LEDMatrixImage<V> extends Expr<V> {
     private final static int X = 16;
-    private final static int Y = 8; 
+    private final static int Y = 8;
     private final String[][] image;
 
     private LEDMatrixImage(String[][] image, BlocklyBlockProperties properties, BlocklyComment comment) {
@@ -83,7 +83,7 @@ public class LEDMatrixImage<V> extends Expr<V> {
 
     @Override
     protected V acceptImpl(IVisitor<V> visitor) {
-        return ((IMbotVisitor<V>) visitor).visitLEDMatrixImage((LEDMatrixImage<Void>) this);
+        return ((IMbotVisitor<V>) visitor).visitLEDMatrixImage(this);
 
     }
 
@@ -111,7 +111,7 @@ public class LEDMatrixImage<V> extends Expr<V> {
         Ast2JaxbHelper.setBasicProperties(this, jaxbDestination);
         for ( int i = 0; i < X; i++ ) {
             for ( int j = 0; j < Y; j++ ) {
-                Ast2JaxbHelper.addField(jaxbDestination, "P" + i + (Y-1-j), this.image[i][j]);
+                Ast2JaxbHelper.addField(jaxbDestination, "P" + i + (Y - 1 - j), this.image[i][j]);
             }
         }
         return jaxbDestination;
