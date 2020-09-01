@@ -677,8 +677,6 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
             nlIndent();
             this.sb.append("_TCS3472_init(_buf, &_i2c, TCS3472_INTEGRATIONTIME_").append(integrationTime).append(", TCS3472_GAIN_").append(gain).append(");");
             nlIndent();
-            this.sb.append("_TCS3472_init(_buf, &_i2c, TCS3472_INTEGRATIONTIME_").append(integrationTime).append(", TCS3472_GAIN_").append(gain).append(");");
-            nlIndent();
             this.sb.append("_TCS3472_time = TCS3472_INTEGRATIONTIME_").append(integrationTime).append(";");
         }
 
