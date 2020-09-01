@@ -144,6 +144,7 @@ Blockly.Msg.CONFIGURATION_ERROR_MOTOR_RIGHT_MISSING = "Oikea moottori puuttuu ko
 Blockly.Msg.CONFIGURATION_ERROR_MOTOR_RIGHT_UNREGULATED = "Oikeaa moottoria ei säännellä!";
 Blockly.Msg.CONFIGURATION_ERROR_MULTIPLE_LEFT_MOTORS = "Konfiguraatiossa on useita vasemmanpuoleisia moottoreita.";
 Blockly.Msg.CONFIGURATION_ERROR_MULTIPLE_RIGHT_MOTORS = "Konfiguraatiossa on useita oikeanpuoleisia moottoreita.";
+Blockly.Msg.CONFIGURATION_ERROR_NO_BUILTIN_RGBLED = "This board does not have a built in RGB LED!";  // untranslated
 Blockly.Msg.CONFIGURATION_ERROR_OTHER_NOT_SUPPORTED = "Other power consumer does not support this type of block!";  // untranslated
 Blockly.Msg.CONFIGURATION_ERROR_OVERLAPPING_PORTS = "Another component is already using the same port!";  // untranslated
 Blockly.Msg.CONFIGURATION_ERROR_SENSOR_MISSING = "Sensoria ei ole asetettu porttiin!";

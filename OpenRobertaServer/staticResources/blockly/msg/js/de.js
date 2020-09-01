@@ -144,6 +144,7 @@ Blockly.Msg.CONFIGURATION_ERROR_MOTOR_RIGHT_MISSING = "In der Roboterkonfigurati
 Blockly.Msg.CONFIGURATION_ERROR_MOTOR_RIGHT_UNREGULATED = "Beim rechten Motor ist die Regulierung ausgestellt!";
 Blockly.Msg.CONFIGURATION_ERROR_MULTIPLE_LEFT_MOTORS = "Es kann nur ein linker Motor in der Roboterkonfiguration sein!";
 Blockly.Msg.CONFIGURATION_ERROR_MULTIPLE_RIGHT_MOTORS = "Es kann nur ein rechter Motor in der Roboterkonfiguration sein!";
+Blockly.Msg.CONFIGURATION_ERROR_NO_BUILTIN_RGBLED = "Dieses Board hat keine interne RGB LED!";
 Blockly.Msg.CONFIGURATION_ERROR_OTHER_NOT_SUPPORTED = "Anderer Stromverbraucher unterstützt diese Art von Block nicht!";
 Blockly.Msg.CONFIGURATION_ERROR_OVERLAPPING_PORTS = "Eine andere Komponente benutzt bereits den gleichen Port!";
 Blockly.Msg.CONFIGURATION_ERROR_SENSOR_MISSING = "In der Roboterkonfiguration ist dieser Sensor nicht mit einem Sensorport verbunden!";

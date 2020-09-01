@@ -1,11 +1,11 @@
 package de.fhg.iais.roberta.visitor.codegen;
 
+import com.google.common.collect.ClassToInstanceMap;
+
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
-
-import com.google.common.collect.ClassToInstanceMap;
 
 import de.fhg.iais.roberta.bean.IProjectBean;
 import de.fhg.iais.roberta.bean.UsedHardwareBean;
@@ -769,11 +769,11 @@ public final class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor imp
                     nlIndent();
                     break;
                 case SC.RGBLED:
-                    this.sb.append("int _led_red_" + blockName + " = ").append(cc.getProperty("RED")).append(";");
+                    this.sb.append("int _led_red_" + blockName + " = ").append(cc.getProperty(SC.RED)).append(";");
                     nlIndent();
-                    this.sb.append("int _led_green_" + blockName + " = ").append(cc.getProperty("GREEN")).append(";");
+                    this.sb.append("int _led_green_" + blockName + " = ").append(cc.getProperty(SC.GREEN)).append(";");
                     nlIndent();
-                    this.sb.append("int _led_blue_" + blockName + " = ").append(cc.getProperty("BLUE")).append(";");
+                    this.sb.append("int _led_blue_" + blockName + " = ").append(cc.getProperty(SC.BLUE)).append(";");
                     nlIndent();
                     break;
                 case SC.BUZZER:
@@ -859,6 +859,6 @@ public final class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor imp
     }
 
     private static boolean isInternalRgbLed(ConfigurationComponent cc) {
-        return cc.getProperty("RED").equals("LED_BUILTIN") || cc.getProperty("GREEN").equals("LED_BUILTIN") || cc.getProperty("BLUE").equals("LED_BUILTIN");
+        return cc.getProperty(SC.RED).equals(SC.LED_BUILTIN) || cc.getProperty(SC.GREEN).equals(SC.LED_BUILTIN) || cc.getProperty(SC.BLUE).equals(SC.LED_BUILTIN);
     }
 }

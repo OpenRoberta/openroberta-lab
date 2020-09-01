@@ -144,6 +144,7 @@ Blockly.Msg.CONFIGURATION_ERROR_MOTOR_RIGHT_MISSING = "Højre motor mangler i ko
 Blockly.Msg.CONFIGURATION_ERROR_MOTOR_RIGHT_UNREGULATED = "Right motor is not regulated!";  // untranslated
 Blockly.Msg.CONFIGURATION_ERROR_MULTIPLE_LEFT_MOTORS = "You have multiple left motors assigned to your configuration!";  // untranslated
 Blockly.Msg.CONFIGURATION_ERROR_MULTIPLE_RIGHT_MOTORS = "You have multiple right motors assigned to your configuration!";  // untranslated
+Blockly.Msg.CONFIGURATION_ERROR_NO_BUILTIN_RGBLED = "This board does not have a built in RGB LED!";  // untranslated
 Blockly.Msg.CONFIGURATION_ERROR_OTHER_NOT_SUPPORTED = "Other power consumer does not support this type of block!";  // untranslated
 Blockly.Msg.CONFIGURATION_ERROR_OVERLAPPING_PORTS = "Another component is already using the same port!";  // untranslated
 Blockly.Msg.CONFIGURATION_ERROR_SENSOR_MISSING = "Sensor mangler på den angivne port!";

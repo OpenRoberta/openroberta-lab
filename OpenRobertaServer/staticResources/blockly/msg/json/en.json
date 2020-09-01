@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2020-08-19 16:39:34.142491",
+		"lastupdated": "2020-09-01 17:20:13.715572",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -850,6 +850,7 @@
 	"CONFIGURATION_ERROR_MOTOR_RIGHT_UNREGULATED": "Right motor is not regulated!",
 	"CONFIGURATION_ERROR_OTHER_NOT_SUPPORTED": "Other power consumer does not support this type of block!",
 	"CONFIGURATION_ERROR_OVERLAPPING_PORTS": "Another component is already using the same port!",
+	"CONFIGURATION_ERROR_NO_BUILTIN_RGBLED": "This board does not have a built in RGB LED!",
 	"DATATABLE_PROGRAM_NAME": "Program name",
 	"DATATABLE_CREATED_BY": "Creator",
 	"DATATABLE_SHARED": "Shared",

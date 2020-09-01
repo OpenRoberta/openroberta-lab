@@ -144,6 +144,7 @@ Blockly.Msg.CONFIGURATION_ERROR_MOTOR_RIGHT_MISSING = "Eskuineko motorra falta d
 Blockly.Msg.CONFIGURATION_ERROR_MOTOR_RIGHT_UNREGULATED = "Eskuineko motorra ez dago erregulatuta!";
 Blockly.Msg.CONFIGURATION_ERROR_MULTIPLE_LEFT_MOTORS = "Ezkerreko motor ugari dituzu konfigurazioan ezarrita!";
 Blockly.Msg.CONFIGURATION_ERROR_MULTIPLE_RIGHT_MOTORS = "Eskuineko motor ugari dituzu konfigurazioan ezarrita!";
+Blockly.Msg.CONFIGURATION_ERROR_NO_BUILTIN_RGBLED = "This board does not have a built in RGB LED!";  // untranslated
 Blockly.Msg.CONFIGURATION_ERROR_OTHER_NOT_SUPPORTED = "Other power consumer does not support this type of block!";  // untranslated
 Blockly.Msg.CONFIGURATION_ERROR_OVERLAPPING_PORTS = "Another component is already using the same port!";  // untranslated
 Blockly.Msg.CONFIGURATION_ERROR_SENSOR_MISSING = "Sentsore hau ez dago portura konektatuta!";

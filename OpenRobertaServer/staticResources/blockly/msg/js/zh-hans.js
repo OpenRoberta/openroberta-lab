@@ -144,6 +144,7 @@ Blockly.Msg.CONFIGURATION_ERROR_MOTOR_RIGHT_MISSING = "右电机缺少配置!";
 Blockly.Msg.CONFIGURATION_ERROR_MOTOR_RIGHT_UNREGULATED = "右电机不受调节!";
 Blockly.Msg.CONFIGURATION_ERROR_MULTIPLE_LEFT_MOTORS = "您有多个左电机分配到您的配置!";
 Blockly.Msg.CONFIGURATION_ERROR_MULTIPLE_RIGHT_MOTORS = "您有多个右电机分配给您的配置!";
+Blockly.Msg.CONFIGURATION_ERROR_NO_BUILTIN_RGBLED = "This board does not have a built in RGB LED!";  // untranslated
 Blockly.Msg.CONFIGURATION_ERROR_OTHER_NOT_SUPPORTED = "其他电源使用者不支持这种类型的方块!";
 Blockly.Msg.CONFIGURATION_ERROR_OVERLAPPING_PORTS = "Another component is already using the same port!";  // untranslated
 Blockly.Msg.CONFIGURATION_ERROR_SENSOR_MISSING = "此传感器未设置为端口!";
