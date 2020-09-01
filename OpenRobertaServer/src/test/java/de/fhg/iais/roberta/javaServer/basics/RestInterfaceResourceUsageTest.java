@@ -7,9 +7,6 @@
 //
 //import javax.ws.rs.core.Response;
 //
-//import org.codehaus.jettison.json.JSONArray;
-//import org.codehaus.jettison.json.JSONException;
-//import org.codehaus.jettison.json.JSONObject;
 //import org.hibernate.Session;
 //import org.junit.Assert;
 //import org.junit.Before;
@@ -387,17 +384,17 @@
 //        restProgram(this.sPid, "{'cmd':'loadP';'programName':'p1';'owner':'minscha';'author':'minscha'}", "ok", Key.PROGRAM_GET_ONE_SUCCESS);
 //        JSONObject responseJson = (JSONObject) this.response.getEntity();
 //        Assert.assertFalse(responseJson.has("configName"));
-//        Assert.assertFalse(responseJson.has("configText"));
+//        Assert.assertFalse(responseJson.has("confXML"));
 //        saveProgram(this.sMinscha, minschaId, -1, "p1", "<program>p1.1.1.minscha</program>", "c1", null, "ok", Key.PROGRAM_SAVE_SUCCESS);
 //        restProgram(this.sPid, "{'cmd':'loadP';'programName':'p1';'owner':'minscha';'author':'minscha'}", "ok", Key.PROGRAM_GET_ONE_SUCCESS);
 //        responseJson = (JSONObject) this.response.getEntity();
 //        Assert.assertEquals("c1", responseJson.getString("configName"));
-//        Assert.assertTrue(responseJson.getString("configText").contains("c1.2.conf.minscha"));
+//        Assert.assertTrue(responseJson.getString("confXML").contains("c1.2.conf.minscha"));
 //        saveProgram(this.sMinscha, minschaId, -1, "p2", "<program>p2.2.1.minscha</program>", "c1", null, "ok", Key.PROGRAM_SAVE_SUCCESS);
 //        restProgram(this.sPid, "{'cmd':'loadP';'programName':'p1';'owner':'minscha';'author':'minscha'}", "ok", Key.PROGRAM_GET_ONE_SUCCESS);
 //        responseJson = (JSONObject) this.response.getEntity();
 //        Assert.assertEquals("c1", responseJson.getString("configName"));
-//        Assert.assertTrue(responseJson.getString("configText").contains("c1.2.conf.minscha"));
+//        Assert.assertTrue(responseJson.getString("confXML").contains("c1.2.conf.minscha"));
 //        saveProgram(
 //            this.sMinscha,
 //            minschaId,
@@ -411,11 +408,11 @@
 //        restProgram(this.sPid, "{'cmd':'loadP';'programName':'p1';'owner':'minscha';'author':'minscha'}", "ok", Key.PROGRAM_GET_ONE_SUCCESS);
 //        responseJson = (JSONObject) this.response.getEntity();
 //        Assert.assertFalse(responseJson.has("configName"));
-//        Assert.assertTrue(responseJson.getString("configText").contains("p1.3.conf.minscha"));
+//        Assert.assertTrue(responseJson.getString("confXML").contains("p1.3.conf.minscha"));
 //        restProgram(this.sPid, "{'cmd':'loadP';'programName':'p2';'owner':'minscha';'author':'minscha'}", "ok", Key.PROGRAM_GET_ONE_SUCCESS);
 //        responseJson = (JSONObject) this.response.getEntity();
 //        Assert.assertEquals("c1", responseJson.getString("configName"));
-//        Assert.assertTrue(responseJson.getString("configText").contains("c1.2.conf.minscha"));
+//        Assert.assertTrue(responseJson.getString("confXML").contains("c1.2.conf.minscha"));
 //
 //        String program = this.memoryDbSetup.getOne("select PROGRAM_TEXT from PROGRAM where OWNER_ID = " + minschaId + " and NAME = 'p2'");
 //        Assert.assertTrue(program.contains("p2.2.1.minscha"));

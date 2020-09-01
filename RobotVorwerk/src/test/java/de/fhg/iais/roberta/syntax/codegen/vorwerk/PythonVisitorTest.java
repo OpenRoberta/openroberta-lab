@@ -3,6 +3,7 @@ package de.fhg.iais.roberta.syntax.codegen.vorwerk;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.components.vorwerk.VorwerkConfiguration;
 import de.fhg.iais.roberta.syntax.VorwerkAstTest;
 import de.fhg.iais.roberta.util.test.UnitTestHelper;
@@ -32,7 +33,7 @@ public class PythonVisitorTest extends VorwerkAstTest {
             + "\n"
             + "if __name__ == \"__main__\":\n"
             + "    main()";
-    private static VorwerkConfiguration brickConfiguration;
+    private static ConfigurationAst brickConfiguration;
 
     @BeforeClass
     public static void setupConfigurationForAllTests() {

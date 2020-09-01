@@ -9,8 +9,6 @@
 #include <Adafruit_SSD1306.h>
 #include <Plot.h>
 
-unsigned long _time = millis();
-
 double ___datum;
 File _dataFile;
 char* _expression = "111111111111111111111112";

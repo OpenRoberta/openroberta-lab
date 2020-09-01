@@ -1,4 +1,4 @@
-define([ 'exports', 'message', 'log', 'util', 'guiState.controller', 'program.controller', 'program.model', 'blocks', 'codeflask', 'jquery', 'blocks-msg' ], function(
+define([ 'exports', 'message', 'log', 'util', 'guiState.controller', 'program.controller', 'program.model', 'blockly', 'codeflask', 'jquery' ], function(
         exports, MSG, LOG, UTIL, GUISTATE_C, PROG_C, PROGRAM, Blockly, CodeFlask, $) {
 
     const INITIAL_WIDTH = 0.5;

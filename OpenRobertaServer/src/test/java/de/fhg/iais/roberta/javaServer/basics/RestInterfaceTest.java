@@ -7,15 +7,16 @@ import java.util.Map;
 
 import javax.ws.rs.core.Response;
 
-import org.codehaus.jettison.json.JSONArray;
-import org.codehaus.jettison.json.JSONException;
-import org.codehaus.jettison.json.JSONObject;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import de.fhg.iais.roberta.factory.IRobotFactory;
+import de.fhg.iais.roberta.generated.restEntities.FullRestRequest;
 import de.fhg.iais.roberta.javaServer.restServices.all.controller.ClientConfiguration;
 import de.fhg.iais.roberta.javaServer.restServices.all.controller.ClientProgramController;
 import de.fhg.iais.roberta.javaServer.restServices.all.controller.ClientUser;
@@ -29,6 +30,7 @@ import de.fhg.iais.roberta.testutil.JSONUtilForServer;
 import de.fhg.iais.roberta.util.Key;
 import de.fhg.iais.roberta.util.ServerProperties;
 import de.fhg.iais.roberta.util.Util;
+import de.fhg.iais.roberta.util.XsltTransformer;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
 /**
@@ -64,7 +66,26 @@ import de.fhg.iais.roberta.util.dbc.DbcException;
 public class RestInterfaceTest {
     private static final List<String> EMPTY_STRING_LIST = Collections.emptyList();
 
+    private static final String PROG_PRE =
+        "<block_set xmlns=\\\"http://de.fhg.iais.roberta.blockly\\\" robottype=\\\"ev3\\\" xmlversion=\\\"2.0\\\" description=\\\"\\\" tags=\\\"\\\">"
+            + "<instance x=\\\"512\\\" y=\\\"50\\\">"
+            + "<block type=\\\"robControls_start\\\" id=\\\"RDF[XZ?y7bn;Z{?V}Q)(\\\" intask=\\\"true\\\" deletable=\\\"false\\\">"
+            + "<mutation declare=\\\"false\\\"></mutation>"
+            + "<field name=\\\"DEBUG\\\">FALSE</field>"
+            + "<comment w=\\\"0\\\" h=\\\"0\\\" pinned=\\\"false\\\">";
+    private static final String PROG_POST = "</comment>" + "</block></instance></block_set>";
+    private static final String CONF_PRE =
+        "<block_set xmlns=\\\"http://de.fhg.iais.roberta.blockly\\\" robottype=\\\"ev3\\\" xmlversion=\\\"2.0\\\" description=\\\"\\\" tags=\\\"\\\">"
+            + "<instance x=\\\"213\\\" y=\\\"213\\\">"
+            + "<block type=\\\"robBrick_EV3-Brick\\\" id=\\\"1\\\" intask=\\\"true\\\" deletable=\\\"false\\\">"
+            + "<comment w=\\\"0\\\" h=\\\"0\\\" pinned=\\\"false\\\">";
+    private static final String CONF_POST =
+        "</comment>"
+            + "<value name=\\\"S1\\\"><block type=\\\"robBrick_touch\\\" id=\\\"2\\\" intask=\\\"true\\\"></block></value>"
+            + "</block></instance></block_set>";
+
     private SessionFactoryWrapper sessionFactoryWrapper; // used by REST services to retrieve data base sessions
+    private XsltTransformer xsltTransformer;
     private DbSetup memoryDbSetup; // use to query the test data base, etc.
 
     private Response response; // store a REST response here
@@ -96,6 +117,7 @@ public class RestInterfaceTest {
 
         TestConfiguration tc = TestConfiguration.setup();
         this.sessionFactoryWrapper = tc.getSessionFactoryWrapper();
+        this.xsltTransformer = new XsltTransformer();
         this.memoryDbSetup = tc.getMemoryDbSetup();
 
         this.restProject = new ClientProgramController(this.serverProperties);
@@ -144,19 +166,19 @@ public class RestInterfaceTest {
             Assert.assertEquals(0, this.memoryDbSetup.getOneBigIntegerAsLong("select count(*) from USER"));
             restUser(
                 this.sPid,
-                "{'cmd':'createUser';'accountName':'pid';'userName':'cavy';'password':'dip';'userEmail':'cavy1@home';'role':'STUDENT', 'isYoungerThen14': 1, 'language': 'de'}",
+                "{'cmd':'createUser';'accountName':'pid';'userName':'cavy';'password':'dip';'userEmail':'cavy1@home';'role':'STUDENT', 'isYoungerThen14': false, 'language': 'de'}",
                 "error",
                 Key.USER_ACTIVATION_SENT_MAIL_FAIL);
             Assert.assertEquals(1, this.memoryDbSetup.getOneBigIntegerAsLong("select count(*) from USER"));
             restUser(
                 this.sPid,
-                "{'cmd':'createUser';'accountName':'pid';'userName':'secondTry';'password':'dip';'userEmail':'cavy1@home';'role':'STUDENT', 'isYoungerThen14': 'false', 'language': 'de'}",
+                "{'cmd':'createUser';'accountName':'pid';'userName':'secondTry';'password':'dip';'userEmail':'cavy1@home';'role':'STUDENT', 'isYoungerThen14': false, 'language': 'de'}",
                 "error",
                 Key.USER_CREATE_ERROR_NOT_SAVED_TO_DB);
             Assert.assertEquals(1, this.memoryDbSetup.getOneBigIntegerAsLong("select count(*) from USER"));
             restUser(
                 this.sPid,
-                "{'cmd':'createUser';'accountName':'minscha';'userName':'cavy';'password':'12';'userEmail':'';'role':'STUDENT', 'isYoungerThen14': 'true', 'language': 'de'}",
+                "{'cmd':'createUser';'accountName':'minscha';'userName':'cavy';'password':'12';'userEmail':'';'role':'STUDENT', 'isYoungerThen14': true, 'language': 'de'}",
                 "ok",
                 Key.USER_CREATE_SUCCESS);
             Assert.assertEquals(2, this.memoryDbSetup.getOneBigIntegerAsLong("select count(*) from USER"));
@@ -177,7 +199,7 @@ public class RestInterfaceTest {
         Assert.assertEquals(1, this.memoryDbSetup.getOneBigIntegerAsLong("select count(*) from PENDING_EMAIL_CONFIRMATIONS"));
 
         String url = this.memoryDbSetup.getOne("select URL_POSTFIX from PENDING_EMAIL_CONFIRMATIONS").toString();
-        restUser(this.sPid, "{'cmd':'activateUser';'accountName':'pid'; 'userActivationLink': '" + url + "';}", "ok", Key.USER_ACTIVATION_SUCCESS);
+        restUser(this.sPid, "{'cmd':'activateUser'; 'userActivationLink': '" + url + "';}", "ok", Key.USER_ACTIVATION_SUCCESS);
         Assert.assertEquals(0, this.memoryDbSetup.getOneBigIntegerAsLong("select count(*) from PENDING_EMAIL_CONFIRMATIONS"));
     }
 
@@ -201,9 +223,9 @@ public class RestInterfaceTest {
             this.sMinscha,
             "{'cmd':'updateUser';'accountName':'minscha';'userName':'cavy1231';'userEmail':'cavy@home';'role':'STUDENT', 'isYoungerThen14': false, 'language': 'de'}",
             "error",
-            Key.USER_UPDATE_ERROR_NOT_SAVED_TO_DB);
+            Key.USER_ERROR_NOT_LOGGED_IN);
 
-        restUser(this.sMinscha, "{'cmd':'login';'accountName':'minscha';'password':'12', 'isYoungerThen14': false}", "ok", Key.USER_GET_ONE_SUCCESS);
+        restUser(this.sMinscha, "{'cmd':'login';'accountName':'minscha';'password':'12' }", "ok", Key.USER_GET_ONE_SUCCESS);
         Assert.assertTrue(!this.sPid.isUserLoggedIn() && this.sMinscha.isUserLoggedIn());
 
         restUser(
@@ -313,16 +335,16 @@ public class RestInterfaceTest {
         Assert.assertEquals(0, this.memoryDbSetup.getOneBigIntegerAsLong("select count(*) from PROGRAM"));
         Assert.assertEquals(0, this.memoryDbSetup.getOneBigIntegerAsLong("select count(*) from PROGRAM where OWNER_ID = " + pidId));
 
-        // store (saveAs) 4 programs and check the count in the db
-        saveProgramAs(this.sPid, pidId, "p1", "<program>.1.pid</program>", null, null, "ok", Key.PROGRAM_SAVE_SUCCESS);
-        saveProgramAs(this.sPid, pidId, "p2", "<program>.2.pid</program>", null, null, "ok", Key.PROGRAM_SAVE_SUCCESS);
-        saveProgramAs(this.sPid, pidId, "p3", "<program>.3.pid</program>", null, null, "ok", Key.PROGRAM_SAVE_SUCCESS);
-        saveProgramAs(this.sPid, pidId, "p4", "<program>.4.pid</program>", null, null, "ok", Key.PROGRAM_SAVE_SUCCESS);
+        // saveAs 4 programs and check the count in the db
+        saveProgramAs(this.sPid, "pid", "pid", "p1", ".1.pid", null, null, "ok", Key.PROGRAM_SAVE_SUCCESS);
+        saveProgramAs(this.sPid, "pid", "pid", "p2", ".2.pid", null, null, "ok", Key.PROGRAM_SAVE_SUCCESS);
+        saveProgramAs(this.sPid, "pid", "pid", "p3", ".3.pid", null, null, "ok", Key.PROGRAM_SAVE_SUCCESS);
+        saveProgramAs(this.sPid, "pid", "pid", "p4", ".4.pid", null, null, "ok", Key.PROGRAM_SAVE_SUCCESS);
         Assert.assertEquals(4, this.memoryDbSetup.getOneBigIntegerAsLong("select count(*) from PROGRAM where OWNER_ID = " + pidId));
         Assert.assertEquals(4, this.memoryDbSetup.getOneBigIntegerAsLong("select count(*) from PROGRAM"));
 
         // update (save) program 2 and check the effect in the data base
-        saveProgram(this.sPid, pidId, -1, "p2", "<program>.2.pid.updated</program>", null, null, "ok", Key.PROGRAM_SAVE_SUCCESS);
+        saveProgram(this.sPid, pidId, "pid", -1, "p2", ".2.pid.updated", null, null, "ok", Key.PROGRAM_SAVE_SUCCESS);
         Assert.assertEquals(4, this.memoryDbSetup.getOneBigIntegerAsLong("select count(*) from PROGRAM where OWNER_ID = " + pidId));
         Assert.assertEquals(4, this.memoryDbSetup.getOneBigIntegerAsLong("select count(*) from PROGRAM"));
         String program = this.memoryDbSetup.getOne("select PROGRAM_TEXT from PROGRAM where OWNER_ID = " + pidId + " and NAME = 'p2'");
@@ -333,8 +355,8 @@ public class RestInterfaceTest {
         Assert.assertTrue(this.sPid.isUserLoggedIn() && this.sMinscha.isUserLoggedIn());
 
         // check correct server behavior: (1) the program to save exists (2) the program in saveAs doesn't exist
-        saveProgramAs(this.sPid, pidId, "p4", "<program>.4.pid</program>", null, null, "error", Key.PROGRAM_SAVE_AS_ERROR_PROGRAM_EXISTS);
-        saveProgram(this.sPid, pidId, 0, "p5", "<program>.5.pid</program>", null, null, "error", Key.PROGRAM_SAVE_ERROR_PROGRAM_TO_UPDATE_NOT_FOUND);
+        saveProgramAs(this.sPid, "pid", "pid", "p4", ".4.pid", null, null, "error", Key.PROGRAM_SAVE_AS_ERROR_PROGRAM_EXISTS);
+        saveProgram(this.sPid, pidId, "pid", 0, "p5", ".5.pid", null, null, "error", Key.PROGRAM_SAVE_ERROR_PROGRAM_TO_UPDATE_NOT_FOUND);
 
         // POST
         Assert.assertEquals(4, this.memoryDbSetup.getOneBigIntegerAsLong("select count(*) from PROGRAM where OWNER_ID = " + pidId));
@@ -362,63 +384,57 @@ public class RestInterfaceTest {
         Assert.assertEquals(0, this.memoryDbSetup.getOneBigIntegerAsLong("select count(*) from CONFIGURATION where OWNER_ID = " + minschaId));
         Assert.assertEquals(4, this.memoryDbSetup.getOneBigIntegerAsLong("select count(*) from PROGRAM where OWNER_ID = " + pidId));
 
-        saveConfigAs(this.sMinscha, minschaId, "c1", "<conf>c1.1.conf.minscha</conf>", "ok", Key.CONFIGURATION_SAVE_SUCCESS);
+        saveConfigAs(this.sMinscha, minschaId, "c1", "c1.1.conf.minscha", "ok", Key.CONFIGURATION_SAVE_SUCCESS);
         Assert.assertEquals(1, this.memoryDbSetup.getOneBigIntegerAsLong("select count(*) from CONFIGURATION where OWNER_ID = " + minschaId));
-        String config =
-            this.memoryDbSetup
-                .getOne(
-                    "select d.CONFIGURATION_TEXT from CONFIGURATION c, CONFIGURATION_DATA d where c.CONFIGURATION_HASH = d.CONFIGURATION_HASH and OWNER_ID = "
-                        + minschaId
-                        + " and NAME = 'c1'");
+        String getConfigSql =
+            "select d.CONFIGURATION_TEXT from CONFIGURATION c, CONFIGURATION_DATA d where c.CONFIGURATION_HASH = d.CONFIGURATION_HASH and OWNER_ID = "
+                + minschaId
+                + " and NAME = 'c1'";
+        String config = this.memoryDbSetup.getOne(getConfigSql);
         Assert.assertTrue(config.contains("c1.1.conf.minscha"));
-        saveConfig(this.sMinscha, minschaId, "c1", "<conf>c1.2.conf.minscha</conf>", "ok", Key.CONFIGURATION_SAVE_SUCCESS);
+        saveConfig(this.sMinscha, minschaId, "c1", CONF_PRE + "c1.2.conf.minscha" + CONF_POST, "ok", Key.CONFIGURATION_SAVE_SUCCESS);
         Assert.assertEquals(1, this.memoryDbSetup.getOneBigIntegerAsLong("select count(*) from CONFIGURATION where OWNER_ID = " + minschaId));
-        config =
-            this.memoryDbSetup
-                .getOne(
-                    "select d.CONFIGURATION_TEXT from CONFIGURATION c, CONFIGURATION_DATA d where c.CONFIGURATION_HASH = d.CONFIGURATION_HASH and OWNER_ID = "
-                        + minschaId
-                        + " and NAME = 'c1'");
+        config = this.memoryDbSetup.getOne(getConfigSql);
         Assert.assertTrue(config.contains("c1.2.conf.minscha"));
 
-        saveProgramAs(this.sMinscha, minschaId, "p1", "<program>.1.minscha</program>", null, null, "ok", Key.PROGRAM_SAVE_SUCCESS);
-        saveProgramAs(this.sMinscha, minschaId, "p2", "<program>.2.minscha</program>", null, null, "ok", Key.PROGRAM_SAVE_SUCCESS);
+        saveProgramAs(this.sMinscha, "minscha", "minscha", "p1", ".1.minscha", null, null, "ok", Key.PROGRAM_SAVE_SUCCESS);
+        saveProgramAs(this.sMinscha, "minscha", "minscha", "p2", ".2.minscha", null, null, "ok", Key.PROGRAM_SAVE_SUCCESS);
         Assert.assertEquals(2, this.memoryDbSetup.getOneBigIntegerAsLong("select count(*) from PROGRAM where OWNER_ID = " + minschaId));
         Assert.assertEquals(4, this.memoryDbSetup.getOneBigIntegerAsLong("select count(*) from PROGRAM where OWNER_ID = " + pidId));
         Assert.assertEquals(6, this.memoryDbSetup.getOneBigIntegerAsLong("select count(*) from PROGRAM"));
 
-        restProgram(this.sPid, "{'cmd':'loadP';'programName':'p1';'owner':'minscha';'author':'minscha'}", "ok", Key.PROGRAM_GET_ONE_SUCCESS);
-        JSONObject responseJson = (JSONObject) this.response.getEntity();
-        Assert.assertFalse(responseJson.has("configName"));
-        Assert.assertFalse(responseJson.has("configText"));
-        saveProgram(this.sMinscha, minschaId, -1, "p1", "<program>p1.1.1.minscha</program>", "c1", null, "ok", Key.PROGRAM_SAVE_SUCCESS);
-        restProgram(this.sPid, "{'cmd':'loadP';'programName':'p1';'owner':'minscha';'author':'minscha'}", "ok", Key.PROGRAM_GET_ONE_SUCCESS);
-        responseJson = (JSONObject) this.response.getEntity();
+        restProgram(this.sMinscha, "{'cmd':'loadP';'programName':'p1';'owner':'minscha';'author':'minscha'}", "ok", Key.PROGRAM_GET_ONE_SUCCESS);
+        JSONObject responseJson = new JSONObject((String) this.response.getEntity());
+        Assert.assertTrue(responseJson.has("confXML"));
+        saveProgram(this.sMinscha, minschaId, "minscha", -1, "p1", ".1.1.minscha", "c1", null, "ok", Key.PROGRAM_SAVE_SUCCESS);
+        restProgram(this.sMinscha, "{'cmd':'loadP';'programName':'p1';'owner':'minscha';'author':'minscha'}", "ok", Key.PROGRAM_GET_ONE_SUCCESS);
+        responseJson = new JSONObject((String) this.response.getEntity());
         Assert.assertEquals("c1", responseJson.getString("configName"));
-        Assert.assertTrue(responseJson.getString("configText").contains("c1.2.conf.minscha"));
-        saveProgram(this.sMinscha, minschaId, -1, "p2", "<program>p2.2.1.minscha</program>", "c1", null, "ok", Key.PROGRAM_SAVE_SUCCESS);
-        restProgram(this.sPid, "{'cmd':'loadP';'programName':'p1';'owner':'minscha';'author':'minscha'}", "ok", Key.PROGRAM_GET_ONE_SUCCESS);
-        responseJson = (JSONObject) this.response.getEntity();
+        Assert.assertTrue(responseJson.getString("confXML").contains("c1.2.conf.minscha"));
+        saveProgram(this.sMinscha, minschaId, "minscha", -1, "p2", "p2.2.1.minscha", "c1", null, "ok", Key.PROGRAM_SAVE_SUCCESS);
+        restProgram(this.sMinscha, "{'cmd':'loadP';'programName':'p1';'owner':'minscha';'author':'minscha'}", "ok", Key.PROGRAM_GET_ONE_SUCCESS);
+        responseJson = new JSONObject((String) this.response.getEntity());
         Assert.assertEquals("c1", responseJson.getString("configName"));
-        Assert.assertTrue(responseJson.getString("configText").contains("c1.2.conf.minscha"));
+        Assert.assertTrue(responseJson.getString("confXML").contains("c1.2.conf.minscha"));
         saveProgram(
             this.sMinscha,
             minschaId,
+            "minscha",
             -1,
             "p1",
-            "<program>.1.2.minscha</program>",
+            ".1.2.minscha",
             null,
-            "<conf>p1.3.conf.minscha</conf>",
+            CONF_PRE + "p1.3.conf.minscha" + CONF_POST,
             "ok",
             Key.PROGRAM_SAVE_SUCCESS);
-        restProgram(this.sPid, "{'cmd':'loadP';'programName':'p1';'owner':'minscha';'author':'minscha'}", "ok", Key.PROGRAM_GET_ONE_SUCCESS);
-        responseJson = (JSONObject) this.response.getEntity();
+        restProgram(this.sMinscha, "{'cmd':'loadP';'programName':'p1';'owner':'minscha';'author':'minscha'}", "ok", Key.PROGRAM_GET_ONE_SUCCESS);
+        responseJson = new JSONObject((String) this.response.getEntity());
         Assert.assertFalse(responseJson.has("configName"));
-        Assert.assertTrue(responseJson.getString("configText").contains("p1.3.conf.minscha"));
-        restProgram(this.sPid, "{'cmd':'loadP';'programName':'p2';'owner':'minscha';'author':'minscha'}", "ok", Key.PROGRAM_GET_ONE_SUCCESS);
-        responseJson = (JSONObject) this.response.getEntity();
+        Assert.assertTrue(responseJson.getString("confXML").contains("p1.3.conf.minscha"));
+        restProgram(this.sMinscha, "{'cmd':'loadP';'programName':'p2';'owner':'minscha';'author':'minscha'}", "ok", Key.PROGRAM_GET_ONE_SUCCESS);
+        responseJson = new JSONObject((String) this.response.getEntity());
         Assert.assertEquals("c1", responseJson.getString("configName"));
-        Assert.assertTrue(responseJson.getString("configText").contains("c1.2.conf.minscha"));
+        Assert.assertTrue(responseJson.getString("confXML").contains("c1.2.conf.minscha"));
 
         String program = this.memoryDbSetup.getOne("select PROGRAM_TEXT from PROGRAM where OWNER_ID = " + minschaId + " and NAME = 'p2'");
         Assert.assertTrue(program.contains("p2.2.1.minscha"));
@@ -443,8 +459,8 @@ public class RestInterfaceTest {
         Assert.assertEquals(0, this.memoryDbSetup.getOneBigIntegerAsLong("select count(*) from PROGRAM where OWNER_ID = " + minschaId));
         Assert.assertEquals(4, this.memoryDbSetup.getOneBigIntegerAsLong("select count(*) from PROGRAM where OWNER_ID = " + pidId));
 
-        saveProgramAs(this.sMinscha, minschaId, "p1", "<program>.1.minscha</program>", null, null, "ok", Key.PROGRAM_SAVE_SUCCESS);
-        saveProgramAs(this.sMinscha, minschaId, "p2", "<program>.2.minscha</program>", null, null, "ok", Key.PROGRAM_SAVE_SUCCESS);
+        saveProgramAs(this.sMinscha, "minscha", "minscha", "p1", ".1.minscha", null, null, "ok", Key.PROGRAM_SAVE_SUCCESS);
+        saveProgramAs(this.sMinscha, "minscha", "minscha", "p2", ".2.minscha", null, null, "ok", Key.PROGRAM_SAVE_SUCCESS);
         Assert.assertEquals(2, this.memoryDbSetup.getOneBigIntegerAsLong("select count(*) from PROGRAM where OWNER_ID = " + minschaId));
         Assert.assertEquals(4, this.memoryDbSetup.getOneBigIntegerAsLong("select count(*) from PROGRAM where OWNER_ID = " + pidId));
         Assert.assertEquals(6, this.memoryDbSetup.getOneBigIntegerAsLong("select count(*) from PROGRAM"));
@@ -472,8 +488,10 @@ public class RestInterfaceTest {
         assertProgramListingAsExpected(this.sMinscha, "['p1','p2']");
         Assert.assertEquals(0, this.memoryDbSetup.getOneBigIntegerAsLong("select count(*) from USER_PROGRAM"));
 
-        restProgram(this.sPid, "{'cmd':'shareP';'programName':'p2';'userToShare':'minscha';'right':'READ'}", "ok", Key.ACCESS_RIGHT_CHANGED);
-        restProgram(this.sPid, "{'cmd':'shareP';'programName':'p3';'userToShare':'minscha';'right':'WRITE'}", "ok", Key.ACCESS_RIGHT_CHANGED);
+        String shareRead = "{'type':'User';'label':'minscha';'right':'READ'}";
+        restProgram(this.sPid, "{'cmd':'shareP';'programName':'p2';'shareData':" + shareRead + "}", "ok", Key.ACCESS_RIGHT_CHANGED);
+        String shareWrite = "{'type':'User';'label':'minscha';'right':'WRITE'}";
+        restProgram(this.sPid, "{'cmd':'shareP';'programName':'p3';'shareData':" + shareWrite + "}", "ok", Key.ACCESS_RIGHT_CHANGED);
         Assert.assertEquals(2, this.memoryDbSetup.getOneBigIntegerAsLong("select count(*) from USER_PROGRAM where USER_ID = '" + minschaId + "'"));
         JSONArray programListing = assertProgramListingAsExpected(this.sMinscha, "['p1','p2', 'p2', 'p3']");
         boolean ownershipOk = false;
@@ -496,10 +514,10 @@ public class RestInterfaceTest {
         restProgram(this.sMinscha, "{'cmd':'loadP';'programName':'p3';'owner':'pid';'author':'pid'}", "ok", Key.PROGRAM_GET_ONE_SUCCESS);
         Assert.assertTrue(this.response.getEntity().toString().contains(".3.pid"));
 
-        saveProgram(this.sMinscha, pidId, -1, "p2", "<program>.2.minscha.update</program>", null, null, "error", Key.PROGRAM_SAVE_ERROR_NO_WRITE_PERMISSION);
+        saveProgram(this.sMinscha, pidId, "pid", -1, "p2", ".2.minscha.update", null, null, "error", Key.PROGRAM_SAVE_ERROR_NO_WRITE_PERMISSION);
         String p2Text = this.memoryDbSetup.getOne("select PROGRAM_TEXT from PROGRAM where OWNER_ID = " + pidId + " and NAME = 'p2'");
         Assert.assertTrue(p2Text.contains(".2.pid.updated"));
-        saveProgram(this.sMinscha, pidId, -1, "p3", "<program>.3.minscha.update</program>", null, null, "ok", Key.PROGRAM_SAVE_SUCCESS);
+        saveProgram(this.sMinscha, pidId, "pid", -1, "p3", ".3.minscha.update", null, null, "ok", Key.PROGRAM_SAVE_SUCCESS);
         String p3Text = this.memoryDbSetup.getOne("select PROGRAM_TEXT from PROGRAM where OWNER_ID = " + pidId + " and NAME = 'p3'");
         Assert.assertTrue(p3Text.contains(".3.minscha.update"));
 
@@ -574,7 +592,8 @@ public class RestInterfaceTest {
             assertProgramListingAsExpected(this.sPid, "['p1','p4']");
             assertProgramListingAsExpected(this.sMinscha, "['p1']");
 
-            restProgram(this.sPid, "{'cmd':'shareP';'programName':'p4';'userToShare':'minscha';'right':'WRITE'}", "ok", Key.ACCESS_RIGHT_CHANGED);
+            String shareWrite = "{'type':'User';'label':'minscha';'right':'WRITE'}";
+            restProgram(this.sPid, "{'cmd':'shareP';'programName':'p4';'shareData':" + shareWrite + "}", "ok", Key.ACCESS_RIGHT_CHANGED);
             assertProgramListingAsExpected(this.sMinscha, "['p1','p4']");
 
             Assert.assertEquals(1, this.memoryDbSetup.getOneBigIntegerAsLong("select count(*) from USER_PROGRAM where USER_ID = '" + minschaId + "'"));
@@ -582,14 +601,14 @@ public class RestInterfaceTest {
             Assert.assertTrue(p4Text.contains(".4.pid"));
             restProgram(this.sMinscha, "{'cmd':'loadP';'programName':'p4';'owner':'pid';'author':'pid'}", "ok", Key.PROGRAM_GET_ONE_SUCCESS);
             Assert.assertTrue(this.response.getEntity().toString().contains(".4.pid"));
-            saveProgram(this.sMinscha, pidId, -1, "p4", "<program>.4.minscha.update</program>", null, null, "ok", Key.PROGRAM_SAVE_SUCCESS);
+            saveProgram(this.sMinscha, pidId, "pid", -1, "p4", ".4.minscha.update", null, null, "ok", Key.PROGRAM_SAVE_SUCCESS);
             String p4TextUpd1 = this.memoryDbSetup.getOne("select PROGRAM_TEXT from PROGRAM where OWNER_ID = " + pidId + " and NAME = 'p4'");
             Assert.assertTrue(p4TextUpd1.contains(".4.minscha.update"));
             restProgram(this.sPid, "{'cmd':'loadP';'programName':'p4';'owner':'pid';'author':'pid'}", "ok", Key.PROGRAM_GET_ONE_SUCCESS);
             Assert.assertTrue(this.response.getEntity().toString().contains(".4.minscha.update"));
 
             restProgram(this.sMinscha, "{'cmd':'shareDelete';'programName':'p4';'owner':'pid';'author':'pid'}", "ok", Key.ACCESS_RIGHT_DELETED);
-            saveProgram(this.sMinscha, pidId, -1, "p4", "<program>.5.minscha.fail</program>", null, null, "error", Key.PROGRAM_SAVE_ERROR_NO_WRITE_PERMISSION);
+            saveProgram(this.sMinscha, pidId, "pid", -1, "p4", ".5.minscha.fail", null, null, "error", Key.PROGRAM_SAVE_ERROR_NO_WRITE_PERMISSION);
             restProgram(this.sPid, "{'cmd':'loadP';'programName':'p4';'owner':'pid';'author':'pid'}", "ok", Key.PROGRAM_GET_ONE_SUCCESS);
             Assert.assertTrue(this.response.getEntity().toString().contains(".4.minscha.update"));
             assertProgramListingAsExpected(this.sMinscha, "['p1']");
@@ -618,8 +637,10 @@ public class RestInterfaceTest {
         assertProgramListingAsExpected(this.sMinscha, "['p1']");
 
         restProgram(this.sPid, "{'cmd':'loadP';'programName':'p4';'owner':'pid';'author':'pid'}", "ok", Key.PROGRAM_GET_ONE_SUCCESS);
-        saveProgram(this.sPid, pidId, -1, "p4", "<program>.4.pId</program>", null, null, "ok", Key.PROGRAM_SAVE_SUCCESS);
-        restProgram(this.sPid, "{'cmd':'shareP';'programName':'p4';'userToShare':'minscha';'right':'WRITE'}", "ok", Key.ACCESS_RIGHT_CHANGED);
+        saveProgram(this.sPid, pidId, "pid", -1, "p4", ".4.pId", null, null, "ok", Key.PROGRAM_SAVE_SUCCESS);
+        String shareWrite = "{'type':'User';'label':'minscha';'right':'WRITE'}";
+        restProgram(this.sPid, "{'cmd':'shareP';'programName':'p4';'shareData':" + shareWrite + "}", "ok", Key.ACCESS_RIGHT_CHANGED);
+
         assertProgramListingAsExpected(this.sPid, "['p1','p4']");
         assertProgramListingAsExpected(this.sMinscha, "['p1','p4']");
 
@@ -634,28 +655,28 @@ public class RestInterfaceTest {
             Thread.sleep(500); // REST-call should be executed sequentially. The sleep is NO guaranty ... Otherwise see below!
             restProgram(this.sMinscha, "{'cmd':'loadP';'programName':'p4';'owner':'pid';'author':'pid'}", "ok", Key.PROGRAM_GET_ONE_SUCCESS);
             Assert.assertTrue(this.response.getEntity().toString().contains(".4.pId"));
-            long lastChanged1 = ((JSONObject) this.response.getEntity()).getLong("lastChanged");
-            saveProgram(this.sMinscha, pidId, lastChanged1, "p4", "<program>.4.minscha.update</program>", null, null, "ok", Key.PROGRAM_SAVE_SUCCESS);
+            long lastChanged1 = new JSONObject((String) this.response.getEntity()).getLong("lastChanged");
+            saveProgram(this.sMinscha, pidId, "pid", lastChanged1, "p4", ".4.minscha.update", null, null, "ok", Key.PROGRAM_SAVE_SUCCESS);
             String p4TextUpd1 = this.memoryDbSetup.getOne("select PROGRAM_TEXT from PROGRAM where OWNER_ID = " + pidId + " and NAME = 'p4'");
             Assert.assertTrue(p4TextUpd1.contains(".4.minscha.update"));
             Thread.sleep(500); // REST-call should be executed sequentially. The sleep is NO guaranty ... Otherwise see below!
             restProgram(this.sMinscha, "{'cmd':'loadP';'programName':'p4';'owner':'pid';'author':'pid'}", "ok", Key.PROGRAM_GET_ONE_SUCCESS);
             Assert.assertTrue(this.response.getEntity().toString().contains(".4.minscha.update"));
-            long lastChanged2 = ((JSONObject) this.response.getEntity()).getLong("lastChanged");
+            long lastChanged2 = new JSONObject((String) this.response.getEntity()).getLong("lastChanged");
             Assert.assertTrue("causality violated: changed2 must be later than changed1", lastChanged2 > lastChanged1); // here sometimes a time race occurs. This may generate a test error.
         }
         final Key LOCK_ERROR = Key.PROGRAM_SAVE_ERROR_OPTIMISTIC_TIMESTAMP_LOCKING;
         // scenario 2: minscha reads pid's p4, then pid reads her p4; pid stores her program, but minscha can't (his timestamp is outdated)
         {
             restProgram(this.sMinscha, "{'cmd':'loadP';'programName':'p4';'owner':'pid';'author':'pid'}", "ok", Key.PROGRAM_GET_ONE_SUCCESS);
-            long minschaReadTimestamp = ((JSONObject) this.response.getEntity()).getLong("lastChanged");
+            long minschaReadTimestamp = new JSONObject((String) this.response.getEntity()).getLong("lastChanged");
             restProgram(this.sPid, "{'cmd':'loadP';'programName':'p4';'owner':'pid';'author':'pid'}", "ok", Key.PROGRAM_GET_ONE_SUCCESS);
-            long pidReadTimestamp = ((JSONObject) this.response.getEntity()).getLong("lastChanged");
+            long pidReadTimestamp = new JSONObject((String) this.response.getEntity()).getLong("lastChanged");
             Thread.sleep(2); // both timestamps are probably the same, sleeping to get a different 'last update timestamp'
-            saveProgram(this.sPid, pidId, pidReadTimestamp, "p4", "<program>.4.pid.concurrentOk</program>", null, null, "ok", Key.PROGRAM_SAVE_SUCCESS);
+            saveProgram(this.sPid, pidId, "pid", pidReadTimestamp, "p4", ".4.pid.concurrentOk", null, null, "ok", Key.PROGRAM_SAVE_SUCCESS);
             restProgram(this.sPid, "{'cmd':'loadP';'programName':'p4';'owner':'pid';'author':'pid'}", "ok", Key.PROGRAM_GET_ONE_SUCCESS);
             Assert.assertTrue(this.response.getEntity().toString().contains(".4.pid.concurrentOk"));
-            saveProgram(this.sMinscha, pidId, minschaReadTimestamp, "p4", "<program>.4.minscha.concurrentFail</program>", null, null, "error", LOCK_ERROR);
+            saveProgram(this.sMinscha, pidId, "pid", minschaReadTimestamp, "p4", ".4.minscha.concurrentFail", null, null, "error", LOCK_ERROR);
             restProgram(this.sPid, "{'cmd':'loadP';'programName':'p4';'owner':'pid';'author':'pid'}", "ok", Key.PROGRAM_GET_ONE_SUCCESS);
             Assert.assertTrue(this.response.getEntity().toString().contains(".4.pid.concurrentOk"));
             String program = this.memoryDbSetup.getOne("select PROGRAM_TEXT from PROGRAM where OWNER_ID = " + pidId + " and NAME = 'p4'");
@@ -664,23 +685,14 @@ public class RestInterfaceTest {
         // scenario 3: minscha reads pid's p4, then pid reads her p4; minscha stores the shared program, but pid can't (her timestamp is outdated)
         {
             restProgram(this.sMinscha, "{'cmd':'loadP';'programName':'p4';'owner':'pid';'author':'pid'}", "ok", Key.PROGRAM_GET_ONE_SUCCESS);
-            long minschaReadTimestamp = ((JSONObject) this.response.getEntity()).getLong("lastChanged");
+            long minschaReadTimestamp = new JSONObject((String) this.response.getEntity()).getLong("lastChanged");
             restProgram(this.sPid, "{'cmd':'loadP';'programName':'p4';'owner':'pid';'author':'pid'}", "ok", Key.PROGRAM_GET_ONE_SUCCESS);
-            long pidReadTimestamp = ((JSONObject) this.response.getEntity()).getLong("lastChanged");
+            long pidReadTimestamp = new JSONObject((String) this.response.getEntity()).getLong("lastChanged");
             Thread.sleep(2); // both timestamps are probably the same, sleeping to get a different 'last update timestamp'
-            saveProgram(
-                this.sMinscha,
-                pidId,
-                minschaReadTimestamp,
-                "p4",
-                "<program>.4.minscha.concurrentOk</program>",
-                null,
-                null,
-                "ok",
-                Key.PROGRAM_SAVE_SUCCESS);
+            saveProgram(this.sMinscha, pidId, "pid", minschaReadTimestamp, "p4", ".4.minscha.concurrentOk", null, null, "ok", Key.PROGRAM_SAVE_SUCCESS);
             restProgram(this.sMinscha, "{'cmd':'loadP';'programName':'p4';'owner':'pid';'author':'pid'}", "ok", Key.PROGRAM_GET_ONE_SUCCESS);
             Assert.assertTrue(this.response.getEntity().toString().contains(".4.minscha.concurrentOk"));
-            saveProgram(this.sPid, pidId, pidReadTimestamp, "p4", "<program>.4.pid.concurrentFail</program>", null, null, "error", LOCK_ERROR);
+            saveProgram(this.sPid, pidId, "pid", pidReadTimestamp, "p4", ".4.pid.concurrentFail", null, null, "error", LOCK_ERROR);
             restProgram(this.sPid, "{'cmd':'loadP';'programName':'p4';'owner':'pid';'author':'pid'}", "ok", Key.PROGRAM_GET_ONE_SUCCESS);
             Assert.assertTrue(this.response.getEntity().toString().contains(".4.minscha.concurrentOk"));
             String program = this.memoryDbSetup.getOne("select PROGRAM_TEXT from PROGRAM where OWNER_ID = " + pidId + " and NAME = 'p4'");
@@ -698,29 +710,21 @@ public class RestInterfaceTest {
         int minschaId = this.sMinscha.getUserId();
 
         {
-            saveConfigAs(this.sMinscha, minschaId, "mc1", "<conf>mc1.1.conf.minscha</conf>", "ok", Key.CONFIGURATION_SAVE_SUCCESS);
-            saveConfigAs(this.sMinscha, minschaId, null, "<conf>mc1.1.conf.minscha</conf>", "error", Key.SERVER_ERROR);
+            saveConfigAs(this.sMinscha, minschaId, "mc1", "mc1.1.conf.minscha", "ok", Key.CONFIGURATION_SAVE_SUCCESS);
+            saveConfigAs(this.sMinscha, minschaId, null, "mc1.1.conf.minscha", "error", Key.SERVER_ERROR);
             saveConfigAs(this.sMinscha, minschaId, "mc2", null, "error", Key.SERVER_ERROR);
-            saveConfigAs(this.sMinscha, minschaId, "mc1", "<conf>mc1.2.conf.minscha</conf>", "error", Key.CONFIGURATION_SAVE_ERROR);
+            saveConfigAs(this.sMinscha, minschaId, "mc1", "mc1.2.conf.minscha", "error", Key.CONFIGURATION_SAVE_ERROR);
             Assert.assertEquals(1, this.memoryDbSetup.getOneBigIntegerAsLong("select count(*) from CONFIGURATION where NAME like 'mc%'"));
             String confHash = this.memoryDbSetup.getOne("select CONFIGURATION_HASH from CONFIGURATION where NAME = 'mc1'");
             String confText = this.memoryDbSetup.getOne("select CONFIGURATION_TEXT from CONFIGURATION_DATA where CONFIGURATION_HASH = '" + confHash + "'");
-            Assert.assertTrue(confText.contains("<conf>mc1.1.conf.minscha</conf>"));
+            Assert.assertTrue(confText.contains("mc1.1.conf.minscha"));
         }
 
         {
-            saveProgramAs(this.sMinscha, minschaId, "mp1", "<program>mp1.minscha</program>", null, null, "ok", Key.PROGRAM_SAVE_SUCCESS);
-            saveProgramAs(
-                this.sMinscha,
-                minschaId,
-                "mp2",
-                "<program>mp2.minscha</program>",
-                null,
-                "<conf>mp2.conf.minscha</conf>",
-                "ok",
-                Key.PROGRAM_SAVE_SUCCESS);
-            saveProgramAs(this.sMinscha, minschaId, "mp3", "<program>mp3.minscha</program>", "mc1", null, "ok", Key.PROGRAM_SAVE_SUCCESS);
-            saveProgramAs(this.sMinscha, minschaId, "mp4", "<program>mp3.minscha</program>", "mc1", "<conf>mp2.conf.minscha</conf>", "error", Key.SERVER_ERROR);
+            saveProgramAs(this.sMinscha, "minscha", "minscha", "mp1", "mp1.minscha", null, null, "ok", Key.PROGRAM_SAVE_SUCCESS);
+            saveProgramAs(this.sMinscha, "minscha", "minscha", "mp2", "mp2.minscha", null, "mp2.conf.minscha", "ok", Key.PROGRAM_SAVE_SUCCESS);
+            saveProgramAs(this.sMinscha, "minscha", "minscha", "mp3", "mp3.minscha", "mc1", null, "ok", Key.PROGRAM_SAVE_SUCCESS);
+            saveProgramAs(this.sMinscha, "minscha", "minscha", "mp4", "mp3.minscha", "mc1", "mp2.conf.minscha", "error", Key.SERVER_ERROR);
             Assert.assertEquals(3, this.memoryDbSetup.getOneBigIntegerAsLong("select count(*) from PROGRAM where NAME like 'mp%'"));
             String cnMp1 = this.memoryDbSetup.getOne("select CONFIG_NAME from PROGRAM where NAME = 'mp1'");
             String chMp1 = this.memoryDbSetup.getOne("select CONFIG_HASH from PROGRAM where NAME = 'mp1'");
@@ -735,7 +739,7 @@ public class RestInterfaceTest {
             Assert.assertTrue(cnMp3 != null && chMp3 == null);
             String chMc1 = this.memoryDbSetup.getOne("select CONFIGURATION_HASH from CONFIGURATION where NAME = 'mc1'");
             String ctMc1 = this.memoryDbSetup.getOne("select CONFIGURATION_TEXT from CONFIGURATION_DATA where CONFIGURATION_HASH = '" + chMc1 + "'");
-            Assert.assertTrue(ctMc1.contains("<conf>mc1.1.conf.minscha</conf>"));
+            Assert.assertTrue(ctMc1.contains("mc1.1.conf.minscha"));
         }
     }
 
@@ -755,27 +759,28 @@ public class RestInterfaceTest {
      */
     private void restUser(HttpSessionState httpSession, String jsonAsString, String result, Key msgOpt) throws Exception {
         JSONObject jsonCmd = JSONUtilForServer.mkD(httpSession.getInitToken(), jsonAsString);
+        FullRestRequest cmd = FullRestRequest.make(jsonCmd);
         switch ( jsonCmd.getJSONObject("data").getString("cmd") ) {
             case "activateUser":
-                this.response = this.restUser.activateUser(newDbSession(), jsonCmd);
+                this.response = this.restUser.activateUser(newDbSession(), cmd);
                 break;
             case "changePassword":
-                this.response = this.restUser.changePassword(newDbSession(), jsonCmd);
+                this.response = this.restUser.changePassword(newDbSession(), cmd);
                 break;
             case "login":
-                this.response = this.restUser.login(newDbSession(), jsonCmd);
+                this.response = this.restUser.login(newDbSession(), cmd);
                 break;
             case "logout":
-                this.response = this.restUser.logout(jsonCmd);
+                this.response = this.restUser.logout(cmd);
                 break;
             case "createUser":
-                this.response = this.restUser.createUser(newDbSession(), jsonCmd);
+                this.response = this.restUser.createUser(newDbSession(), cmd);
                 break;
             case "updateUser":
-                this.response = this.restUser.updateUser(newDbSession(), jsonCmd);
+                this.response = this.restUser.updateUser(newDbSession(), cmd);
                 break;
             case "getUser":
-                this.response = this.restUser.getUser(newDbSession(), jsonCmd);
+                this.response = this.restUser.getUser(newDbSession(), cmd);
                 break;
             default:
                 throw new DbcException("Unexpected JSON command");
@@ -795,17 +800,22 @@ public class RestInterfaceTest {
      */
     private void restProgram(HttpSessionState httpSession, String jsonAsString, String result, Key msgOpt) throws JSONException, Exception {
         if ( jsonAsString.contains("loadP") ) {
-            this.response = this.restProject.getProgram(newDbSession(), JSONUtilForServer.mkD(httpSession.getInitToken(), jsonAsString));
+            this.response = this.restProject.getProgram(newDbSession(), this.xsltTransformer, mkFRR(httpSession.getInitToken(), jsonAsString));
         } else if ( jsonAsString.contains("shareP") ) {
-            this.response = this.restProject.shareProgram(newDbSession(), JSONUtilForServer.mkD(httpSession.getInitToken(), jsonAsString));
+            this.response = this.restProject.shareProgram(newDbSession(), mkFRR(httpSession.getInitToken(), jsonAsString));
         } else if ( jsonAsString.contains("deleteP") ) {
-            this.response = this.restProject.deleteProgram(newDbSession(), JSONUtilForServer.mkD(httpSession.getInitToken(), jsonAsString));
+            this.response = this.restProject.deleteProgram(newDbSession(), mkFRR(httpSession.getInitToken(), jsonAsString));
         } else if ( jsonAsString.contains("shareDelete") ) {
-            this.response = this.restProject.deleteSharedProgram(newDbSession(), JSONUtilForServer.mkD(httpSession.getInitToken(), jsonAsString));
+            this.response = this.restProject.deleteSharedProgram(newDbSession(), mkFRR(httpSession.getInitToken(), jsonAsString));
         } else {
             throw new DbcException("Unexpected JSON command");
         }
         JSONUtilForServer.assertEntityRc(this.response, result, msgOpt);
+    }
+
+    private FullRestRequest mkFRR(String initToken, String jsonAsString) {
+        JSONObject cmdAsJson = JSONUtilForServer.mkD(initToken, jsonAsString);
+        return FullRestRequest.make(cmdAsJson);
     }
 
     /**
@@ -813,8 +823,8 @@ public class RestInterfaceTest {
      *
      * @param httpSession the session on which behalf the call is executed
      * @param owner the id of the owner of the program
-     * @param name the name of the program
-     * @param program the program text
+     * @param progName the name of the program
+     * @param progXml the program text
      * @param confName the name of the configuration; null, if an anonymous configuration is used
      * @param confText the configuration text (XML); null, if the default configuration is used
      * @param result the expected result is either "ok" or "error"
@@ -822,24 +832,25 @@ public class RestInterfaceTest {
      */
     private void saveProgramAs(
         HttpSessionState httpSession,
-        int owner,
-        String name,
-        String program,
+        String ownerAccount,
+        String authorAccount,
+        String progName,
+        String progXml,
         String confName,
         String confText,
         String result,
         Key msgOpt)
         throws Exception //
     {
-        String jsonAsString = "{'cmd':'saveAsP';'programName':'" + name + "';'programText':'" + program + "'";
+        String jsonAsString = "{'cmd':'saveAsP';'programName':'" + progName + "';'progXML':'" + PROG_PRE + progXml + PROG_POST + "'";
         if ( confName != null ) {
             jsonAsString += ";'configName':'" + confName + "'";
         }
         if ( confText != null ) {
-            jsonAsString += ";'configText':'" + confText + "'";
+            jsonAsString += ";'confXML':'" + confText + "'";
         }
-        jsonAsString += ";}";
-        this.response = this.restProject.saveProgram(newDbSession(), JSONUtilForServer.mkD(httpSession.getInitToken(), jsonAsString));
+        jsonAsString += ";'ownerAccount':'" + ownerAccount + "'}";
+        this.response = this.restProject.saveProgram(newDbSession(), mkFRR(httpSession.getInitToken(), jsonAsString));
         JSONUtilForServer.assertEntityRc(this.response, result, msgOpt);
     }
 
@@ -847,44 +858,45 @@ public class RestInterfaceTest {
      * call the REST service responsible for UPDATING programs in the data base (save). The program may be shared ... .
      *
      * @param httpSession the session on which behalf the call is executed
-     * @param owner the id of the owner of the program
+     * @param ownerId the id of the user logged in
+     * @param ownerAccount the account of the owner of the program, maybe the logged in user, maybe a sharer
      * @param timestamp the last changed timestamp. If the timestamp is -1, for convenience, it is read from the database.
-     * @param name the name of the program
-     * @param program the program text (XML)
+     * @param progName the name of the program
+     * @param progXml the program text (XML)
      * @param confName the name of the configuration; null, if an anonymous configuration is used
-     * @param confText the configuration text (XML); null, if the default configuration is used
+     * @param confXml the configuration text (XML); null, if the default configuration is used
      * @param result the expected result is either "ok" or "error"
      * @param msgOpt optional key for the message; maybe null
      * @throws Exception
      */
     private void saveProgram(
         HttpSessionState httpSession,
-        int owner,
+        int ownerId,
+        String ownerAccount,
         long timestamp,
-        String name,
-        String program,
+        String progName,
+        String progXml,
         String confName,
-        String confText,
+        String confXml,
         String result,
         Key msgOpt)
         throws Exception //
     {
-        boolean shared = httpSession.getUserId() != owner;
         if ( timestamp == -1 ) {
             // for update, first the timestamp is retrieved as it has to be shown to the persister (optimistic locking :-)
-            Timestamp changed = this.memoryDbSetup.getOne("select LAST_CHANGED from PROGRAM where OWNER_ID = " + owner + " and NAME = '" + name + "'");
+            Timestamp changed = this.memoryDbSetup.getOne("select LAST_CHANGED from PROGRAM where OWNER_ID = " + ownerId + " and NAME = '" + progName + "'");
             timestamp = changed.getTime();
         }
-        String jsonAsString =
-            "{'cmd':'save';'shared':" + shared + ";'programName':'" + name + "';'timestamp':" + timestamp + ";'programText':'" + program + "'";
+        String jsonAsString = "{'cmd':'save';'ownerAccount':'" + ownerAccount + "';";
+        jsonAsString += "'programName':'" + progName + "';'timestamp':" + timestamp + ";'progXML':'" + PROG_PRE + progXml + PROG_POST + "'";
         if ( confName != null ) {
             jsonAsString += ";'configName':'" + confName + "'";
         }
-        if ( confText != null ) {
-            jsonAsString += ";'configText':'" + confText + "'";
+        if ( confXml != null ) {
+            jsonAsString += ";'confXML':'" + confXml + "'";
         }
         jsonAsString += ";}";
-        this.response = this.restProject.saveProgram(newDbSession(), JSONUtilForServer.mkD(httpSession.getInitToken(), jsonAsString));
+        this.response = this.restProject.saveProgram(newDbSession(), mkFRR(httpSession.getInitToken(), jsonAsString));
         JSONUtilForServer.assertEntityRc(this.response, result, msgOpt);
     }
 
@@ -906,10 +918,10 @@ public class RestInterfaceTest {
             jsonAsString += ";'name':'" + configName + "'";
         }
         if ( configText != null ) {
-            jsonAsString += ";'configuration':'" + configText + "'";
+            jsonAsString += ";'configuration':'" + CONF_PRE + configText + CONF_POST + "'";
         }
         jsonAsString += ";}";
-        this.response = this.restConfiguration.saveAsConfig(newDbSession(), JSONUtilForServer.mkD(httpSession.getInitToken(), jsonAsString));
+        this.response = this.restConfiguration.saveAsConfig(newDbSession(), mkFRR(httpSession.getInitToken(), jsonAsString));
         JSONUtilForServer.assertEntityRc(this.response, result, msgOpt);
     }
 
@@ -924,18 +936,17 @@ public class RestInterfaceTest {
      * @param msgOpt optional key for the message; maybe null
      * @throws Exception
      */
-    private void saveConfig(HttpSessionState httpSession, int owner, String name, String conf, String result, Key msgOpt) throws Exception //
+    private void saveConfig(HttpSessionState httpSession, int owner, String name, String configuration, String result, Key msgOpt) throws Exception //
     {
-        String jsonAsString = "{'cmd':'saveC';'name':'" + name + "';'configuration':'" + conf + "';}";
-        this.response = this.restConfiguration.saveConfig(newDbSession(), JSONUtilForServer.mkD(httpSession.getInitToken(), jsonAsString));
+        String jsonAsString = "{'cmd':'saveC';'name':'" + name + "';'configuration':'" + configuration + "';}";
+        this.response = this.restConfiguration.saveConfig(newDbSession(), mkFRR(httpSession.getInitToken(), jsonAsString));
         JSONUtilForServer.assertEntityRc(this.response, result, msgOpt);
     }
 
     private JSONArray assertProgramListingAsExpected(HttpSessionState httpSession, String expectedProgramNamesAsJson) throws Exception, JSONException {
-        this.response =
-            this.restProject.getInfosOfProgramsOfLoggedInUser(newDbSession(), JSONUtilForServer.mkD(httpSession.getInitToken(), "{'cmd':'loadPN'}"));
+        this.response = this.restProject.getInfosOfProgramsOfLoggedInUser(newDbSession(), mkFRR(httpSession.getInitToken(), "{'cmd':'loadPN'}"));
         JSONUtilForServer.assertEntityRc(this.response, "ok", Key.PROGRAM_GET_ALL_SUCCESS);
-        JSONArray programListing = ((JSONObject) this.response.getEntity()).getJSONArray("programNames");
+        JSONArray programListing = new JSONObject((String) this.response.getEntity()).getJSONArray("programNames");
         JSONArray programNames = new JSONArray();
         for ( int i = 0; i < programListing.length(); i++ ) {
             programNames.put(programListing.getJSONArray(i).get(0));

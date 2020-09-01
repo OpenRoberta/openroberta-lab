@@ -77,6 +77,7 @@ define([ 'simulation.simulation', 'interpreter.constants', 'util', 'simulation.r
         this.timer = {
             timer1 : false
         };
+        this.tone = {};       
     }
 
     Mbed.prototype = Object.create(Robot.prototype);
@@ -103,12 +104,25 @@ define([ 'simulation.simulation', 'interpreter.constants', 'util', 'simulation.r
         $('#slider').on("mousedown touchstart", function(e) {
             e.stopPropagation();
         });
-        $('#slider').change(function(e) {
+       
+        $('#slider').on("input change", function(e) {
             e.preventDefault();
-            $('#range').html($('#slider').val());
+            $('#range').val($('#slider').val());
             that.compass.degree = $('#slider').val();
             e.stopPropagation();
         });
+
+        $('#range').on("change", function(e) {
+            e.preventDefault();
+            var sval = $('#range').val();
+            if(isNaN(sval)) $('#range').val(180);
+            if(parseInt(sval) < 0) $('#range').val(0);
+            if(parseInt(sval) > 360) $('#range').val(360);
+            $('#slider').val($('#range').val());
+            e.stopPropagation();
+        });
+
+
         for (var i = 0; i < 4; i++) {
             if (this['pin' + i]) {
                 delete this['pin' + i].analogIn;
@@ -285,6 +299,32 @@ define([ 'simulation.simulation', 'interpreter.constants', 'util', 'simulation.r
                 }
             }
         }
+        // update tone
+        var volume = this.robotBehaviour.getActionState("volume", true);
+        if ((volume || volume === 0) && this.webAudio.context) {
+            this.webAudio.volume = volume / 100.0;
+        }
+        var tone = this.robotBehaviour.getActionState("tone", true);
+        if (tone && this.webAudio.context) {
+            var cT = this.webAudio.context.currentTime;
+            if (tone.frequency && tone.duration > 0) {
+                var oscillator = this.webAudio.context.createOscillator();
+                oscillator.type = 'square';
+                oscillator.connect(this.webAudio.context.destination);
+                var that = this;
+                function oscillatorFinish() {
+                    that.tone.finished = true;
+                    oscillator.disconnect(that.webAudio.context.destination);
+                    delete oscillator;
+                }
+                oscillator.onended = function(e) {
+                    oscillatorFinish();                    
+                }
+                oscillator.frequency.value = tone.frequency;
+                oscillator.start(cT);
+                oscillator.stop(cT + tone.duration / 1000.0);               
+            }
+        }
     };
     var generateText = function(text) {
         var string = [];
@@ -457,7 +497,7 @@ define([ 'simulation.simulation', 'interpreter.constants', 'util', 'simulation.r
         '<label class="btn simbtn"><input type="radio" id="shake" name="options" autocomplete="off" >' + Blockly.Msg.SENSOR_GESTURE_SHAKE + '</label>' + //
         '<label class="btn simbtn"><input type="radio" id="freefall" name="options" autocomplete="off" >' + Blockly.Msg.SENSOR_GESTURE_FREEFALL + '</label>' + //
         '<label style="margin: 8px;margin-top: 12px; margin-left: 0">' + Blockly.Msg.SENSOR_COMPASS
-                + '</label><span style="margin-bottom: 8px;margin-top: 12px; min-width: 25px; width: 25px; display: inline-block" id="range">0</span>'
+                + '</label><input type="text" value="0" style="margin-bottom: 8px;margin-top: 12px; min-width: 45px; width: 45px; display: inline-block; border: 1px solid #333; border-radius: 2px; text-align: right;" id="range" />'
                 + '<div style="margin:8px 0; "><input id="slider" type="range" min="0" max="360" value="0" step="5" /></div>' + //
                 '<label style="width:100%;margin: 8px;margin-top: 12px; margin-left: 0"><select class="customDropdown" id="pin"><option id="0">'
                 + Blockly.Msg.SENSOR_PIN + ' 0</option><option id="1">' + Blockly.Msg.SENSOR_PIN + ' 1</option><option id="2">' + Blockly.Msg.SENSOR_PIN

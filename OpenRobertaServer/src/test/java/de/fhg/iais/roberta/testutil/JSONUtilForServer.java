@@ -2,14 +2,15 @@ package de.fhg.iais.roberta.testutil;
 
 import javax.ws.rs.core.Response;
 
-import org.codehaus.jettison.json.JSONArray;
-import org.codehaus.jettison.json.JSONException;
-import org.codehaus.jettison.json.JSONObject;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.junit.Assert;
 import org.skyscreamer.jsonassert.JSONAssert;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import de.fhg.iais.roberta.generated.restEntities.FullRestRequest;
 import de.fhg.iais.roberta.javaServer.restServices.all.controller.ClientAdmin;
 import de.fhg.iais.roberta.javaServer.restServices.robot.RobotCommand;
 import de.fhg.iais.roberta.persistence.util.DbSession;
@@ -61,6 +62,17 @@ public class JSONUtilForServer {
     }
 
     /**
+     * transform a String object first to a JSON object (after replacing all ' by "), and that to a FullRestRequest object
+     *
+     * @param s the String to be transformed
+     * @return the FullRestRequest bean for the client-server communication, never null
+     * @throws JSONException
+     */
+    public static FullRestRequest mkFRR(String s) throws JSONException {
+        return FullRestRequest.make(mkD(s));
+    }
+
+    /**
      * transform a String to a JSON object. Put this JSON object into a wrapper JSON object as used for the client-server communication. Before transforming
      * replace all ' by "
      *
@@ -73,7 +85,8 @@ public class JSONUtilForServer {
     }
 
     public static JSONObject mkD(String initToken, String s) throws JSONException {
-        return JSONUtilForServer.mk("{'data':" + s + ",'log':[], 'initToken':'" + initToken + "'}");
+        final JSONObject jsonFullRestRequest = JSONUtilForServer.mk("{'data':" + s + ",'log':[], 'initToken':'" + initToken + "'}");
+        return jsonFullRestRequest; // FullRestRequest.make(jsonFullRestRequest);
     }
 
     /**
@@ -98,9 +111,8 @@ public class JSONUtilForServer {
      * @param strict true if properties must match 1:1 (no extension) and sequence matters; false otherwise
      * @throws Exception
      */
-    public static void assertJsonEquals(String expected, JSONObject actual, boolean strict) throws Exception {
-        org.json.JSONObject expectedJson = JSONUtilForServer.j2j(JSONUtilForServer.mk(expected));
-        org.json.JSONObject actualJson = JSONUtilForServer.j2j(actual);
+    public static void assertJsonEquals(String expected, JSONObject actualJson, boolean strict) throws Exception {
+        JSONObject expectedJson = JSONUtilForServer.mk(expected);
         JSONAssert.assertEquals(expectedJson, actualJson, strict);
     }
 
@@ -112,9 +124,8 @@ public class JSONUtilForServer {
      * @param strict true if properties must match 1:1 (no extension) and sequence matters; false otherwise
      * @throws Exception
      */
-    public static void assertJsonEquals(String expected, JSONArray actual, boolean strict) throws Exception {
-        org.json.JSONArray expectedJson = JSONUtilForServer.j2j(JSONUtilForServer.mkA(expected));
-        org.json.JSONArray actualJson = JSONUtilForServer.j2j(actual);
+    public static void assertJsonEquals(String expected, JSONArray actualJson, boolean strict) throws Exception {
+        JSONArray expectedJson = JSONUtilForServer.mkA(expected);
         JSONAssert.assertEquals(expectedJson, actualJson, strict);
     }
 
@@ -127,7 +138,7 @@ public class JSONUtilForServer {
      * @throws JSONException
      */
     public static void assertEntityRc(Response response, String rc, Key message) throws JSONException {
-        JSONObject entity = (JSONObject) response.getEntity();
+        JSONObject entity = new JSONObject((String) response.getEntity());
         assertEntityRc(entity, rc, message);
     }
 
@@ -163,30 +174,6 @@ public class JSONUtilForServer {
         }
     }
 
-    /**
-     * transform a org.json.JSONObject into a org.codehaus.jettison.json.JSONObject :-)<br>
-     * Use this method for calling methods of class JSONAssert! JSONAssert expects org.json objects and not org.codehaus.jettison.json objects
-     *
-     * @param json of type org.codehaus.jettison.json.JSONObject
-     * @return json of type org.json.JSONObject
-     * @throws Exception
-     */
-    private static org.json.JSONObject j2j(org.codehaus.jettison.json.JSONObject json) throws Exception {
-        return new org.json.JSONObject(json.toString());
-    }
-
-    /**
-     * transform a org.json.JSONArray into a org.codehaus.jettison.json.JSONArray :-)<br>
-     * use only in JSONAssert methods! be careful! JSONAssert expects org.json objects and not org.codehaus.jettison.json objects
-     *
-     * @param json of type org.codehaus.jettison.json.JSONArray
-     * @return json of type org.json.JSONArray
-     * @throws Exception
-     */
-    private static org.json.JSONArray j2j(org.codehaus.jettison.json.JSONArray json) throws Exception {
-        return new org.json.JSONArray(json.toString());
-    }
-
     public static void registerToken(
         final RobotCommand brickCommand,
         final ClientAdmin restBlocks,
@@ -205,7 +192,7 @@ public class JSONUtilForServer {
         ThreadedFunction theUser = new ThreadedFunction() {
             @Override
             public boolean apply() throws Exception {
-                Response response = restBlocks.setToken(JSONUtilForServer.mkD("{'cmd':'setToken';'token':'" + token + "'}"));
+                Response response = restBlocks.setToken(JSONUtilForServer.mkFRR("{'cmd':'setToken';'token':'" + token + "'}"));
                 return ((JSONObject) response.getEntity()).getString("rc").equals("ok");
             }
         };

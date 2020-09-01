@@ -1,0 +1,20 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="calliope" xmlversion="2.0" description="" tags="">
+    <instance x="512" y="50">
+        <block type="robControls_start" id="9T9,HaI3oP%{Xv]%-HN?" intask="true" deletable="false">
+            <mutation declare="false"></mutation>
+            <field name="DEBUG"></field>
+        </block>
+        <block type="mbedActions_ledBar_set" id="i2]~3QTf1ZUq%@-!Gr5x" intask="true">
+            <value name="X">
+                <block type="math_number" id="YbE*T_kPVq9^7y/FFchK" intask="true">
+                    <field name="NUM">0</field>
+                </block>
+            </value>
+            <value name="BRIGHTNESS">
+                <block type="math_number" id="J/4h}?cl.LFTRtV.HdMM" intask="true">
+                    <field name="NUM">5</field>
+                </block>
+            </value>
+        </block>
+    </instance>
+</block_set>

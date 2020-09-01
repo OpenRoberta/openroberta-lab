@@ -34,7 +34,7 @@ public class DisplayGetBrightnessAction<V> extends Action<V> {
      * @param comment added from the user,
      * @return read only object of class {@link DisplayGetBrightnessAction}
      */
-    private static <V> DisplayGetBrightnessAction<V> make(BlocklyBlockProperties properties, BlocklyComment comment) {
+    public static <V> DisplayGetBrightnessAction<V> make(BlocklyBlockProperties properties, BlocklyComment comment) {
         return new DisplayGetBrightnessAction<>(properties, comment);
     }
 

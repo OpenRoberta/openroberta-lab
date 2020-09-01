@@ -9,10 +9,13 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import de.fhg.iais.roberta.util.Encryption;
 import de.fhg.iais.roberta.util.Util;
+import de.fhg.iais.roberta.util.dbc.Assert;
 
 @Entity
 @Table(name = "USER")
@@ -21,6 +24,10 @@ public class User implements WithSurrogateId {
     @Column(name = "ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
+    @ManyToOne
+    @JoinColumn(name = "USERGROUP_ID")
+    private UserGroup userGroup;
 
     @Column(name = "ACCOUNT")
     private String account;
@@ -58,14 +65,21 @@ public class User implements WithSurrogateId {
     }
 
     /**
-     * create a new program
+     * create a new user. The pair (group,account) must be unique
      *
-     * @param account the system wide unique account of a new user
+     * @param userGroup the user group the (new) user belongs to. Null, if the user is a global user
+     * @param account the account of a (new) user
      */
-    public User(String account) {
+    public User(UserGroup userGroup, String account) {
+        this.userGroup = userGroup;
         this.account = account;
         this.created = Util.getNow();
         this.lastLogin = Util.getNow();
+    }
+
+    public void setAccount(String account) {
+        Assert.notNull(this.getUserGroup());
+        this.account = account;
     }
 
     public boolean isPasswordCorrect(String passwordToCheck) throws Exception {
@@ -88,6 +102,13 @@ public class User implements WithSurrogateId {
      */
     public void setUserName(String userName) {
         this.userName = userName;
+    }
+
+    /**
+     * @return the group this user belongs to (this is not a group, which this user can own)
+     */
+    public UserGroup getUserGroup() {
+        return this.userGroup;
     }
 
     public String getEmail() {
@@ -153,7 +174,7 @@ public class User implements WithSurrogateId {
 
     @Override
     public String toString() {
-        return "User [id=" + this.id + ", account=" + this.account + ", userName=" + this.userName + "]";
+        return "User [id=" + this.id + ", group=" + this.userGroup + ", account=" + this.account + ", userName=" + this.userName + "]";
     }
 
 }

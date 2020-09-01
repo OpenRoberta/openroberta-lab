@@ -1,6 +1,5 @@
 package de.fhg.iais.roberta.visitor.codegen;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.google.common.collect.ClassToInstanceMap;
@@ -23,6 +22,10 @@ import de.fhg.iais.roberta.syntax.action.vorwerk.VacuumOff;
 import de.fhg.iais.roberta.syntax.action.vorwerk.VacuumOn;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
 import de.fhg.iais.roberta.syntax.lang.expr.ConnectConst;
+import de.fhg.iais.roberta.syntax.lang.functions.MathCastCharFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.MathCastStringFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.TextCharCastNumberFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.TextStringCastNumberFunct;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtList;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
@@ -51,11 +54,7 @@ public final class VorwerkPythonVisitor extends AbstractPythonVisitor implements
      * @param brickConfiguration hardware configuration of the brick
      * @param programPhrases to generate the code from
      */
-    public VorwerkPythonVisitor(
-        List<ArrayList<Phrase<Void>>> programPhrases,
-        ConfigurationAst brickConfiguration,
-        ClassToInstanceMap<IProjectBean> beans
-        ) {
+    public VorwerkPythonVisitor(List<List<Phrase<Void>>> programPhrases, ConfigurationAst brickConfiguration, ClassToInstanceMap<IProjectBean> beans) {
         super(programPhrases, beans);
 
         this.brickConfiguration = brickConfiguration;
@@ -89,7 +88,7 @@ public final class VorwerkPythonVisitor extends AbstractPythonVisitor implements
     @Override
     public Void visitMotorOnAction(MotorOnAction<Void> motorOnAction) {
         String userDefinedPort = motorOnAction.getUserDefinedPort();
-        String port = this.brickConfiguration.getConfigurationComponent(userDefinedPort).getPortName();
+        String port = this.brickConfiguration.getConfigurationComponent(userDefinedPort).getInternalPortName();
         this.sb.append("hal." + port + "_motor_on(");
         motorOnAction.getParam().getSpeed().accept(this);
         this.sb.append(", ");
@@ -101,7 +100,7 @@ public final class VorwerkPythonVisitor extends AbstractPythonVisitor implements
     @Override
     public Void visitMotorStopAction(MotorStopAction<Void> motorStopAction) {
         String userDefinedPort = motorStopAction.getUserDefinedPort();
-        String port = this.brickConfiguration.getConfigurationComponent(userDefinedPort).getPortName();
+        String port = this.brickConfiguration.getConfigurationComponent(userDefinedPort).getInternalPortName();
         this.sb.append("hal." + port + "_motor_stop()");
         return null;
     }
@@ -229,7 +228,7 @@ public final class VorwerkPythonVisitor extends AbstractPythonVisitor implements
 
     private String getDevicePortName(ExternalSensor<Void> sensor) {
         String userDefinedPort = sensor.getPort();
-        String port = this.brickConfiguration.getConfigurationComponent(userDefinedPort).getPortName();
+        String port = this.brickConfiguration.getConfigurationComponent(userDefinedPort).getInternalPortName();
         return "'" + port + "'";
     }
 
@@ -320,4 +319,23 @@ public final class VorwerkPythonVisitor extends AbstractPythonVisitor implements
         return "'" + value.toLowerCase() + "'";
     }
 
+    @Override
+    public Void visitMathCastStringFunct(MathCastStringFunct<Void> mathCastStringFunct) {
+        throw new DbcException("Not supported!");
+    }
+
+    @Override
+    public Void visitMathCastCharFunct(MathCastCharFunct<Void> mathCastCharFunct) {
+        throw new DbcException("Not supported!");
+    }
+
+    @Override
+    public Void visitTextStringCastNumberFunct(TextStringCastNumberFunct<Void> textStringCastNumberFunct) {
+        throw new DbcException("Not supported!");
+    }
+
+    @Override
+    public Void visitTextCharCastNumberFunct(TextCharCastNumberFunct<Void> textCharCastNumberFunct) {
+        throw new DbcException("Not supported!");
+    }
 }

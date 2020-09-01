@@ -1,14 +1,14 @@
-<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="ev3" xmlversion="" description="" tags="">
-  <instance x="1" y="7">
-    <block type="robControls_start" id="34" intask="true" deletable="false">
-      <mutation declare="false"></mutation>
-    </block>
-    <block type="robActions_display_text" id="36" inline="false" intask="true">
-      <value name="OUT">
-        <block type="text" id="37" intask="true">
-          <field name="TEXT">Hallo</field>
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="ev3" xmlversion="3.0" description="" tags="">
+    <instance x="1" y="7">
+        <block type="robControls_start" id="34" intask="true" deletable="false">
+            <mutation declare="false"></mutation>
         </block>
-      </value>
+        <block type="robActions_display_text" id="36" inline="false" intask="true">
+            <value name="OUT">
+                <block type="text" id="37" intask="true">
+                    <field name="TEXT">Hallo</field>
+                </block>
+            </value>
       <value name="COL">
         <block type="math_number" id="38" intask="true">
           <field name="NUM">0</field>

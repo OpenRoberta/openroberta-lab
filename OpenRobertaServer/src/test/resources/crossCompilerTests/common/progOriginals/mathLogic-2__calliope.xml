@@ -1,0 +1,440 @@
+<export xmlns="http://de.fhg.iais.roberta.blockly">
+    <program>
+        <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="calliope" xmlversion="2.0" description="" tags="">
+            <instance x="226" y="-392">
+                <block type="robControls_start" id="6~]Y[D;IJ#4,*HgX2}a]" intask="true" deletable="false">
+                    <mutation declare="true"></mutation>
+                    <field name="DEBUG"></field>
+                    <statement name="ST">
+                        <block type="robGlobalVariables_declare" id="8m4AeemL9A}w*4kMZuQ%" intask="true" deletable="false" movable="false">
+                            <mutation next="true" declaration_type="Number"></mutation>
+                            <field name="VAR">r1</field>
+                            <field name="TYPE">Number</field>
+                            <value name="VALUE">
+                                <block type="math_number" id="htq9iKW_CtEKmG-z5@dU" intask="true">
+                                    <field name="NUM">0</field>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="robGlobalVariables_declare" id="EM!Yt+?9y0@nT,R|F*a0" intask="true" deletable="false" movable="false">
+                            <mutation next="true" declaration_type="Number"></mutation>
+                            <field name="VAR">r2</field>
+                            <field name="TYPE">Number</field>
+                            <value name="VALUE">
+                                <block type="math_number" id="T?zl?qW4vH~!_;mXub.S" intask="true">
+                                    <field name="NUM">0</field>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="robGlobalVariables_declare" id="Z4FaJtbSzsWtdMw.ZSIY" intask="true" deletable="false" movable="false">
+                            <mutation next="true" declaration_type="Boolean"></mutation>
+                            <field name="VAR">b1</field>
+                            <field name="TYPE">Boolean</field>
+                            <value name="VALUE">
+                                <block type="logic_boolean" id="3BnFl4f_8Uh=f`tmBF.%" intask="true">
+                                    <field name="BOOL">TRUE</field>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="robGlobalVariables_declare" id="+R/NnB|N1r#_OFj*Dopa" intask="true" deletable="false" movable="false">
+                            <mutation next="true" declaration_type="Number"></mutation>
+                            <field name="VAR">r3</field>
+                            <field name="TYPE">Number</field>
+                            <value name="VALUE">
+                                <block type="math_number" id="2)3~tWuqBB6bndk{SO(3" intask="true">
+                                    <field name="NUM">0</field>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="robGlobalVariables_declare" id="E60CIX%VWi:Eo}-@ZX+n" intask="true" deletable="false" movable="false">
+                            <mutation next="false" declaration_type="Boolean"></mutation>
+                            <field name="VAR">sim</field>
+                            <field name="TYPE">Boolean</field>
+                            <value name="VALUE">
+                                <block type="logic_boolean" id="Bc!WHTgtHfj%xHw;UFyN" intask="true">
+                                    <field name="BOOL">TRUE</field>
+                                </block>
+                            </value>
+                        </block>
+                    </statement>
+                </block>
+                <block type="variables_set" id="v4NgYk3qB.n6An@mKFtQ" intask="true">
+                    <mutation datatype="Number"></mutation>
+                    <field name="VAR">r3</field>
+                    <value name="VALUE">
+                        <block type="logic_ternary" id="/[)g;rM~|=Pn/xO10l!f" intask="true">
+                            <value name="IF">
+                                <block type="variables_get" id="m.E94`h`1(O8}gID~.1A" intask="true">
+                                    <mutation datatype="Boolean"></mutation>
+                                    <field name="VAR">sim</field>
+                                </block>
+                            </value>
+                            <value name="THEN">
+                                <block type="math_arithmetic" id="[,RM0IfD_+Yym{BA1%zJ" intask="true">
+                                    <field name="OP">DIVIDE</field>
+                                    <value name="A">
+                                        <block type="math_constant" id="eb!%kkm,[NdMc@GkwPcw" intask="true">
+                                            <field name="CONSTANT">PI</field>
+                                        </block>
+                                    </value>
+                                    <value name="B">
+                                        <block type="math_number" id="Da2H_5dm,zsomNn{[ctn" intask="true">
+                                            <field name="NUM">2</field>
+                                        </block>
+                                    </value>
+                                </block>
+                            </value>
+                            <value name="ELSE">
+                                <block type="math_number" id="Y?27UHaTyhsTMZ`i;6kK" intask="true">
+                                    <field name="NUM">90</field>
+                                </block>
+                            </value>
+                        </block>
+                    </value>
+                </block>
+                <block type="variables_set" id="SV*e?x,p;@WlRpudgX?3" intask="true">
+                    <mutation datatype="Boolean"></mutation>
+                    <field name="VAR">b1</field>
+                    <value name="VALUE">
+                        <block type="logic_operation" id="[QRPII;hMFF?@F!Dr2^g" intask="true">
+                            <field name="OP">AND</field>
+                            <value name="A">
+                                <block type="variables_get" id="xvht1UoE~3R}C%Fs:!%/" intask="true">
+                                    <mutation datatype="Boolean"></mutation>
+                                    <field name="VAR">b1</field>
+                                </block>
+                            </value>
+                            <value name="B">
+                                <block type="logic_compare" id="uY9LQ{2B-|Y.QZA:UDlR" intask="true">
+                                    <field name="OP">EQ</field>
+                                    <value name="A">
+                                        <block type="math_trig" id="WCrg)L?(yam=}@(f6h0^" intask="true">
+                                            <field name="OP">SIN</field>
+                                            <value name="NUM">
+                                                <block type="variables_get" id="H=7UL=djVNuJgAs86?9J" intask="true">
+                                                    <mutation datatype="Number"></mutation>
+                                                    <field name="VAR">r3</field>
+                                                </block>
+                                            </value>
+                                        </block>
+                                    </value>
+                                    <value name="B">
+                                        <block type="math_number" id="0%9+Wn0o[?QtQh|cD7Or" intask="true">
+                                            <field name="NUM">1</field>
+                                        </block>
+                                    </value>
+                                </block>
+                            </value>
+                        </block>
+                    </value>
+                </block>
+                <block type="variables_set" id="Zi8!KvP7`1aZr!+opPf?" intask="true">
+                    <mutation datatype="Boolean"></mutation>
+                    <field name="VAR">b1</field>
+                    <value name="VALUE">
+                        <block type="logic_operation" id="BC{Pp]VpES/!{cDPoB@V" intask="true">
+                            <field name="OP">AND</field>
+                            <value name="A">
+                                <block type="variables_get" id="3g(cn|i=a/f8`WEEwE)g" intask="true">
+                                    <mutation datatype="Boolean"></mutation>
+                                    <field name="VAR">b1</field>
+                                </block>
+                            </value>
+                            <value name="B">
+                                <block type="logic_compare" id="#TY`Ddy8g`GbVo3)*dD-" intask="true">
+                                    <field name="OP">EQ</field>
+                                    <value name="A">
+                                        <block type="math_trig" id="cdA?J8}yBK,hUoN1CQmR" intask="true">
+                                            <field name="OP">COS</field>
+                                            <value name="NUM">
+                                                <block type="math_number" id=";@QDC]X-EUt9!AH(}3Q%" intask="true">
+                                                    <field name="NUM">0</field>
+                                                </block>
+                                            </value>
+                                        </block>
+                                    </value>
+                                    <value name="B">
+                                        <block type="math_number" id="V4y=s#.:1+vtfZ9Uzw!]" intask="true">
+                                            <field name="NUM">1</field>
+                                        </block>
+                                    </value>
+                                </block>
+                            </value>
+                        </block>
+                    </value>
+                </block>
+                <block type="variables_set" id="!6,6f4d!ig#C[.bBp3wx" intask="true">
+                    <mutation datatype="Boolean"></mutation>
+                    <field name="VAR">b1</field>
+                    <value name="VALUE">
+                        <block type="logic_operation" id="N{w+TQddcy6v:5sS(/gZ" intask="true">
+                            <field name="OP">AND</field>
+                            <value name="A">
+                                <block type="variables_get" id="r:cB|2Kt4SSPHt{LMdba" intask="true">
+                                    <mutation datatype="Boolean"></mutation>
+                                    <field name="VAR">b1</field>
+                                </block>
+                            </value>
+                            <value name="B">
+                                <block type="logic_compare" id="lY7gS;m5?j%v{E4=LU?D" intask="true">
+                                    <field name="OP">EQ</field>
+                                    <value name="A">
+                                        <block type="math_trig" id="Ai0l=J]xb[^[!WxZFLEm" intask="true">
+                                            <field name="OP">TAN</field>
+                                            <value name="NUM">
+                                                <block type="math_number" id="siqq@T/cc/911ZG*A`S3" intask="true">
+                                                    <field name="NUM">0</field>
+                                                </block>
+                                            </value>
+                                        </block>
+                                    </value>
+                                    <value name="B">
+                                        <block type="math_number" id="I)qn~y[l2HtPCC6slLM4" intask="true">
+                                            <field name="NUM">0</field>
+                                        </block>
+                                    </value>
+                                </block>
+                            </value>
+                        </block>
+                    </value>
+                </block>
+                <block type="variables_set" id="J2a3|@^Ytt.({c-5AeK=" intask="true">
+                    <mutation datatype="Boolean"></mutation>
+                    <field name="VAR">b1</field>
+                    <value name="VALUE">
+                        <block type="logic_operation" id="q_Lq^(@Nh)sPIW9=NKnn" intask="true">
+                            <field name="OP">AND</field>
+                            <value name="A">
+                                <block type="variables_get" id="zTc-Ze2VlS.AWM-8VFuP" intask="true">
+                                    <mutation datatype="Boolean"></mutation>
+                                    <field name="VAR">b1</field>
+                                </block>
+                            </value>
+                            <value name="B">
+                                <block type="logic_compare" id="2]7:~d7Xi:p^PclJL+v1" intask="true">
+                                    <field name="OP">EQ</field>
+                                    <value name="A">
+                                        <block type="math_trig" id="@XV2l8LOg~KyC|9g)oNO" intask="true">
+                                            <field name="OP">ASIN</field>
+                                            <value name="NUM">
+                                                <block type="math_number" id="GX!wLp,PGnUYcd[^bzE|" intask="true">
+                                                    <field name="NUM">1</field>
+                                                </block>
+                                            </value>
+                                        </block>
+                                    </value>
+                                    <value name="B">
+                                        <block type="variables_get" id="gAN^t-?_@MtbT.[F5-93" intask="true">
+                                            <mutation datatype="Number"></mutation>
+                                            <field name="VAR">r3</field>
+                                        </block>
+                                    </value>
+                                </block>
+                            </value>
+                        </block>
+                    </value>
+                </block>
+                <block type="variables_set" id="?Y:cZn9.*-N](GncWtCY" intask="true">
+                    <mutation datatype="Boolean"></mutation>
+                    <field name="VAR">b1</field>
+                    <value name="VALUE">
+                        <block type="logic_operation" id="h=;?C#4pLI,]k4*vcogm" intask="true">
+                            <field name="OP">AND</field>
+                            <value name="A">
+                                <block type="variables_get" id="4E)T=grj,Qk^_6~h]@6M" intask="true">
+                                    <mutation datatype="Boolean"></mutation>
+                                    <field name="VAR">b1</field>
+                                </block>
+                            </value>
+                            <value name="B">
+                                <block type="logic_compare" id="9p!A1W!OyH5Ob53QoV^+" intask="true">
+                                    <field name="OP">EQ</field>
+                                    <value name="A">
+                                        <block type="math_trig" id="|E=dnSEusVK)ks-qO|]c" intask="true">
+                                            <field name="OP">ACOS</field>
+                                            <value name="NUM">
+                                                <block type="math_number" id="9X{^l#Ckdj!x**5_bE^t" intask="true">
+                                                    <field name="NUM">1</field>
+                                                </block>
+                                            </value>
+                                        </block>
+                                    </value>
+                                    <value name="B">
+                                        <block type="math_number" id="7bgX?1/%KH]vrXE#5`Ek" intask="true">
+                                            <field name="NUM">0</field>
+                                        </block>
+                                    </value>
+                                </block>
+                            </value>
+                        </block>
+                    </value>
+                </block>
+                <block type="variables_set" id="Tu[Q7^wb`h*bv,wna+o]" intask="true">
+                    <mutation datatype="Boolean"></mutation>
+                    <field name="VAR">b1</field>
+                    <value name="VALUE">
+                        <block type="logic_operation" id="aD}6%#%(,*iVykxb^5bt" intask="true">
+                            <field name="OP">AND</field>
+                            <value name="A">
+                                <block type="variables_get" id="@nu=7|Ag3^zp6WVY.icC" intask="true">
+                                    <mutation datatype="Boolean"></mutation>
+                                    <field name="VAR">b1</field>
+                                </block>
+                            </value>
+                            <value name="B">
+                                <block type="logic_compare" id="}A/T7{GCEI^U*5)p#as@" intask="true">
+                                    <field name="OP">EQ</field>
+                                    <value name="A">
+                                        <block type="math_trig" id="N-*l7DRagcFA{-ox~ajg" intask="true">
+                                            <field name="OP">ATAN</field>
+                                            <value name="NUM">
+                                                <block type="math_number" id="KwEWPZNupH?b?8xXjuTI" intask="true">
+                                                    <field name="NUM">0</field>
+                                                </block>
+                                            </value>
+                                        </block>
+                                    </value>
+                                    <value name="B">
+                                        <block type="math_number" id="!vu[k#Nv|?eRy!i/K=QC" intask="true">
+                                            <field name="NUM">0</field>
+                                        </block>
+                                    </value>
+                                </block>
+                            </value>
+                        </block>
+                    </value>
+                </block>
+                <block type="variables_set" id="fTLU]w^`V^vTX=Xa]j0." intask="true">
+                    <mutation datatype="Boolean"></mutation>
+                    <field name="VAR">b1</field>
+                    <value name="VALUE">
+                        <block type="logic_operation" id=")=zbxEv^7!3G%1%bGV71" intask="true">
+                            <field name="OP">AND</field>
+                            <value name="A">
+                                <block type="variables_get" id="gRfCsBXbU;T3at#~Evt?" intask="true">
+                                    <mutation datatype="Boolean"></mutation>
+                                    <field name="VAR">b1</field>
+                                </block>
+                            </value>
+                            <value name="B">
+                                <block type="logic_operation" id="p*a1DzyB:J%nf4fTB3)h" intask="true">
+                                    <field name="OP">AND</field>
+                                    <value name="A">
+                                        <block type="logic_compare" id="62xO7GLqXK3V6@p|fvxl" intask="true">
+                                            <field name="OP">GT</field>
+                                            <value name="A">
+                                                <block type="math_constant" id="n_n/3:;kl{WSJI5df|{_" intask="true">
+                                                    <field name="CONSTANT">E</field>
+                                                </block>
+                                            </value>
+                                            <value name="B">
+                                                <block type="math_number" id="`:mxla3(H.0Tv,qd:[Yv" intask="true">
+                                                    <field name="NUM">2.6</field>
+                                                </block>
+                                            </value>
+                                        </block>
+                                    </value>
+                                    <value name="B">
+                                        <block type="logic_compare" id="|urw=(;j|J0B9**HEP?r" intask="true">
+                                            <field name="OP">LT</field>
+                                            <value name="A">
+                                                <block type="math_constant" id="7;f~//.A{4zrPXFVy%i6" intask="true">
+                                                    <field name="CONSTANT">E</field>
+                                                </block>
+                                            </value>
+                                            <value name="B">
+                                                <block type="math_number" id="B(f4h.0=LwmE21((9br9" intask="true">
+                                                    <field name="NUM">2.8</field>
+                                                </block>
+                                            </value>
+                                        </block>
+                                    </value>
+                                </block>
+                            </value>
+                        </block>
+                    </value>
+                </block>
+                <block type="variables_set" id="]|bJYNO^ZnXEs-`7xw0j" intask="true">
+                    <mutation datatype="Boolean"></mutation>
+                    <field name="VAR">b1</field>
+                    <value name="VALUE">
+                        <block type="logic_operation" id="j@Rra/*L3z)`oR03^JT:" intask="true">
+                            <field name="OP">AND</field>
+                            <value name="A">
+                                <block type="variables_get" id=",/@qUbfJm]amc#3@Mfi^" intask="true">
+                                    <mutation datatype="Boolean"></mutation>
+                                    <field name="VAR">b1</field>
+                                </block>
+                            </value>
+                            <value name="B">
+                                <block type="logic_operation" id="5?LId)Fy[/lx4we)74)v" intask="true">
+                                    <field name="OP">AND</field>
+                                    <value name="A">
+                                        <block type="logic_compare" id="%Ck3BKaT?:CM!Gi{tf.P" intask="true">
+                                            <field name="OP">GTE</field>
+                                            <value name="A">
+                                                <block type="math_arithmetic" id="69E[Ug?{RHSoup+)a:c[" intask="true">
+                                                    <field name="OP">MULTIPLY</field>
+                                                    <value name="A">
+                                                        <block type="math_constant" id="f!xsU6/[x.2*kk^rybJ7" intask="true">
+                                                            <field name="CONSTANT">SQRT2</field>
+                                                        </block>
+                                                    </value>
+                                                    <value name="B">
+                                                        <block type="math_constant" id="qU#cuD*R+*+eJ9FM.buy" intask="true">
+                                                            <field name="CONSTANT">SQRT1_2</field>
+                                                        </block>
+                                                    </value>
+                                                </block>
+                                            </value>
+                                            <value name="B">
+                                                <block type="math_number" id="TDblVmd)!j8MWk{*)A*7" intask="true">
+                                                    <field name="NUM">0.999</field>
+                                                </block>
+                                            </value>
+                                        </block>
+                                    </value>
+                                    <value name="B">
+                                        <block type="logic_compare" id="Gw~Wk6}xOIpK*E;c83/o" intask="true">
+                                            <field name="OP">LTE</field>
+                                            <value name="A">
+                                                <block type="math_arithmetic" id="Wb5OqEBr`dL-fjv3|J~R" intask="true">
+                                                    <field name="OP">MULTIPLY</field>
+                                                    <value name="A">
+                                                        <block type="math_constant" id="S^/DD(Bus;,pRrQab#Lz" intask="true">
+                                                            <field name="CONSTANT">SQRT2</field>
+                                                        </block>
+                                                    </value>
+                                                    <value name="B">
+                                                        <block type="math_constant" id="W*JQ-/UB%Q|_]+Ovp7z!" intask="true">
+                                                            <field name="CONSTANT">SQRT1_2</field>
+                                                        </block>
+                                                    </value>
+                                                </block>
+                                            </value>
+                                            <value name="B">
+                                                <block type="math_number" id="JE|Wh5C7u^l8CjkLdk%x" intask="true">
+                                                    <field name="NUM">1.001</field>
+                                                </block>
+                                            </value>
+                                        </block>
+                                    </value>
+                                </block>
+                            </value>
+                        </block>
+                    </value>
+                </block>
+                <block type="text_comment" id="yfzBOqQ[()ZLB`@HzEww" intask="true">
+                    <field name="TEXT">if b1 is true, the test succeeded, otherwise it failed</field>
+                </block>
+            </instance>
+        </block_set>
+    </program>
+    <config>
+        <block_set robottype="calliope" xmlversion="2.0" description="" tags="" xmlns="http://de.fhg.iais.roberta.blockly">
+            <instance x="138" y="88">
+                <block type="mbedBrick_Calliope-Brick" id="1" intask="true" />
+            </instance>
+        </block_set>
+    </config>
+</export>

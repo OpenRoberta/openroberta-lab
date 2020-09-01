@@ -11,6 +11,7 @@ import de.fhg.iais.roberta.syntax.actors.arduino.RelayAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.sensebox.PlotClearAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.sensebox.PlotPointAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.sensebox.SendDataAction;
+import de.fhg.iais.roberta.syntax.sensors.arduino.sensebox.EnvironmentalSensor;
 import de.fhg.iais.roberta.syntax.sensors.arduino.sensebox.GpsSensor;
 import de.fhg.iais.roberta.visitor.hardware.IArduinoVisitor;
 
@@ -54,6 +55,11 @@ public interface IArduinoCollectorVisitor extends ICollectorVisitor, IArduinoVis
 
     @Override
     default Void visitGpsSensor(GpsSensor<Void> gpsSensor) {
+        return null;
+    }
+
+    @Override
+    default Void visitEnvironmentalSensor(EnvironmentalSensor<Void> environmentalSensor) {
         return null;
     }
 

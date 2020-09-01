@@ -1,59 +1,41 @@
-<block type="robGlobalVariables_declare" id="Z-;qom#^A|JE6(QMER?T"
-	intask="true" deletable="false" movable="false">
-	<mutation next="true" declaration_type="Number"></mutation>
-	<field name="VAR">number</field>
-	<field name="TYPE">Number</field>
-	<value name="VALUE">
-		<block type="math_number" id="|P+ydDEb,Yl,iv7SGjO7"
-			intask="true">
-			<field name="NUM">0</field>
-		</block>
-	</value>
+
+<block type="robGlobalVariables_declare" id="Z-;qom#^A|JE6(QMER?T" intask="true" deletable="false" movable="false">
+    <mutation next="true" declaration_type="Number"></mutation>
+    <field name="VAR">n1</field>
+    <field name="TYPE">Number</field>
+    <value name="VALUE">
+        <block type="math_number" id="|P+ydDEb,Yl,iv7SGjO7" intask="true">
+            <field name="NUM">0</field>
+        </block>
+    </value>
 </block>
-<block type="robGlobalVariables_declare" id="5*d#(%EH[J.xNdEaMUN]"
-	intask="true" deletable="false" movable="false">
-	<mutation next="true" declaration_type="String"></mutation>
-	<field name="VAR">string</field>
-	<field name="TYPE">String</field>
-	<value name="VALUE">
-		<block type="text" id=")Zjf|~eN,s!EHcE[Y+ca" intask="true">
-			<field name="TEXT"></field>
-		</block>
-	</value>
+<block type="robGlobalVariables_declare" id="Q?9Xk1*Dk?bn~Yl*i)^P" intask="true" deletable="false" movable="false">
+    <mutation next="true" declaration_type="Boolean"></mutation>
+    <field name="VAR">b</field>
+    <field name="TYPE">Boolean</field>
+    <value name="VALUE">
+        <block type="logic_boolean" id="Z]ok0K17skw(r|cl;Ta(" intask="true">
+            <field name="BOOL">FALSE</field>
+        </block>
+    </value>
 </block>
-<block type="robGlobalVariables_declare" id="Q?9Xk1*Dk?bn~Yl*i)^P"
-	intask="true" deletable="false" movable="false">
-	<mutation next="true" declaration_type="Boolean"></mutation>
-	<field name="VAR">bool</field>
-	<field name="TYPE">Boolean</field>
-	<value name="VALUE">
-		<block type="logic_boolean" id="Z]ok0K17skw(r|cl;Ta("
-			intask="true">
-			<field name="BOOL">FALSE</field>
-		</block>
-	</value>
+<block type="robGlobalVariables_declare" id="P.YdhBL+2Nq{Hihjl-%@" intask="true" deletable="false" movable="false">
+    <mutation next="true" declaration_type="Number"></mutation>
+    <field name="VAR">n2</field>
+    <field name="TYPE">Number</field>
+    <value name="VALUE">
+        <block type="math_number" id="O-Y-;F(#6^%W=riHRHBx" intask="true">
+            <field name="NUM">1</field>
+        </block>
+    </value>
 </block>
-<block type="robGlobalVariables_declare" id="P.YdhBL+2Nq{Hihjl-%@"
-	intask="true" deletable="false" movable="false">
-	<mutation next="true" declaration_type="Number"></mutation>
-	<field name="VAR">number1</field>
-	<field name="TYPE">Number</field>
-	<value name="VALUE">
-		<block type="math_number" id="O-Y-;F(#6^%W=riHRHBx"
-			intask="true">
-			<field name="NUM">1</field>
-		</block>
-	</value>
-</block>
-<block type="robGlobalVariables_declare" id="EhW#%0?OX{kZA3rRhiD0"
-	intask="true" deletable="false" movable="false">
-	<mutation next="false" declaration_type="Number"></mutation>
-	<field name="VAR">number2</field>
-	<field name="TYPE">Number</field>
-	<value name="VALUE">
-		<block type="math_number" id="Lv.CphX;O^#^!Rf|}W+Z"
-			intask="true">
-			<field name="NUM">4</field>
-		</block>
-	</value>
+<block type="robGlobalVariables_declare" id="EhW#%0?OX{kZA3rRhiD0" intask="true" deletable="false" movable="false">
+    <mutation next="false" declaration_type="Number"></mutation>
+    <field name="VAR">n3</field>
+    <field name="TYPE">Number</field>
+    <value name="VALUE">
+        <block type="math_number" id="Lv.CphX;O^#^!Rf|}W+Z" intask="true">
+            <field name="NUM">4</field>
+        </block>
+    </value>
 </block>

@@ -1,6 +1,5 @@
 package de.fhg.iais.roberta.visitor.lang.codegen.prog;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Iterator;
@@ -37,13 +36,17 @@ import de.fhg.iais.roberta.syntax.lang.functions.LengthOfIsEmptyFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.ListGetIndex;
 import de.fhg.iais.roberta.syntax.lang.functions.ListRepeat;
 import de.fhg.iais.roberta.syntax.lang.functions.ListSetIndex;
+import de.fhg.iais.roberta.syntax.lang.functions.MathCastCharFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.MathCastStringFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathConstrainFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathNumPropFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathOnListFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathPowerFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathRandomFloatFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathSingleFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.TextCharCastNumberFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.TextPrintFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.TextStringCastNumberFunct;
 import de.fhg.iais.roberta.syntax.lang.methods.Method;
 import de.fhg.iais.roberta.syntax.lang.methods.MethodCall;
 import de.fhg.iais.roberta.syntax.lang.methods.MethodIfReturn;
@@ -57,6 +60,7 @@ import de.fhg.iais.roberta.syntax.lang.stmt.FunctionStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.IfStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.MethodStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtFlowCon;
+import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.VisitorException;
 import de.fhg.iais.roberta.visitor.IVisitor;
@@ -70,7 +74,7 @@ public abstract class AbstractCppVisitor extends AbstractLanguageVisitor {
     /**
      * initialize the cpp code generator visitor.
      */
-    protected AbstractCppVisitor(List<ArrayList<Phrase<Void>>> programPhrases, ClassToInstanceMap<IProjectBean> beans) {
+    protected AbstractCppVisitor(List<List<Phrase<Void>>> programPhrases, ClassToInstanceMap<IProjectBean> beans) {
         super(programPhrases, beans);
     }
 
@@ -604,6 +608,42 @@ public abstract class AbstractCppVisitor extends AbstractLanguageVisitor {
     }
 
     @Override
+    public Void visitMathCastStringFunct(MathCastStringFunct<Void> mathCastStringFunct) {
+        // TODO check why this is not working for Arduinos!
+        this.sb.append("(std::to_string(");
+        mathCastStringFunct.getParam().get(0).accept(this);
+        this.sb.append("))");
+        return null;
+    }
+
+    @Override
+    public Void visitMathCastCharFunct(MathCastCharFunct<Void> mathCastCharFunct) {
+        this.sb.append("(char)(int)(");
+        mathCastCharFunct.getParam().get(0).accept(this);
+        this.sb.append(")");
+        return null;
+    }
+
+    @Override
+    public Void visitTextStringCastNumberFunct(TextStringCastNumberFunct<Void> textStringCastNumberFunct) {
+        this.sb.append("std::stof(");
+        textStringCastNumberFunct.getParam().get(0).accept(this);
+        this.sb.append(")");
+        return null;
+    }
+
+    @Override
+    public Void visitTextCharCastNumberFunct(TextCharCastNumberFunct<Void> textCharCastNumberFunct) {
+        this.sb.append("(int)(");
+        this.sb.append("(");
+        textCharCastNumberFunct.getParam().get(0).accept(this);
+        this.sb.append(")[");
+        textCharCastNumberFunct.getParam().get(1).accept(this);
+        this.sb.append("])");
+        return null;
+    }
+
+    @Override
     public Void visitMethodVoid(MethodVoid<Void> methodVoid) {
         nlIndent();
         this.sb.append("void ");
@@ -691,6 +731,11 @@ public abstract class AbstractCppVisitor extends AbstractLanguageVisitor {
 
     @Override
     public Void visitDebugAction(DebugAction<Void> debugAction) {
+        throw new UnsupportedOperationException("should be overriden in a robot-specific class");
+    }
+
+    @Override
+    public Void visitTimerSensor(TimerSensor<Void> timerSensor) {
         throw new UnsupportedOperationException("should be overriden in a robot-specific class");
     }
 
@@ -801,11 +846,15 @@ public abstract class AbstractCppVisitor extends AbstractLanguageVisitor {
 
     @Override
     protected void generateProgramPrefix(boolean withWrapping) {
-        if (withWrapping) {
+        if ( withWrapping ) {
             generateSignaturesOfUserDefinedMethods();
-            if (!this.getBean(CodeGeneratorSetupBean.class).getUsedMethods().isEmpty()) {
+            if ( !this.getBean(CodeGeneratorSetupBean.class).getUsedMethods().isEmpty() ) {
+                nlIndent();
                 String helperMethodImpls =
-                    this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodDeclarations(this.getBean(CodeGeneratorSetupBean.class).getUsedMethods());
+                    this
+                        .getBean(CodeGeneratorSetupBean.class)
+                        .getHelperMethodGenerator()
+                        .getHelperMethodDeclarations(this.getBean(CodeGeneratorSetupBean.class).getUsedMethods());
                 Iterator<String> it = Arrays.stream(helperMethodImpls.split("\n")).iterator();
                 while ( it.hasNext() ) {
                     this.sb.append(it.next());
@@ -813,7 +862,6 @@ public abstract class AbstractCppVisitor extends AbstractLanguageVisitor {
                         nlIndent();
                     }
                 }
-                nlIndent();
             }
         }
     }
@@ -823,7 +871,10 @@ public abstract class AbstractCppVisitor extends AbstractLanguageVisitor {
         if ( withWrapping ) {
             if ( !this.getBean(CodeGeneratorSetupBean.class).getUsedMethods().isEmpty() ) {
                 String helperMethodImpls =
-                    this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodDefinitions(this.getBean(CodeGeneratorSetupBean.class).getUsedMethods());
+                    this
+                        .getBean(CodeGeneratorSetupBean.class)
+                        .getHelperMethodGenerator()
+                        .getHelperMethodDefinitions(this.getBean(CodeGeneratorSetupBean.class).getUsedMethods());
                 Iterator<String> it = Arrays.stream(helperMethodImpls.split("\n")).iterator();
                 while ( it.hasNext() ) {
                     this.sb.append(it.next());
@@ -838,11 +889,11 @@ public abstract class AbstractCppVisitor extends AbstractLanguageVisitor {
 
     protected void generateSignaturesOfUserDefinedMethods() {
         for ( Method<Void> phrase : this.getBean(UsedHardwareBean.class).getUserDefinedMethods() ) {
+            nlIndent();
             this.sb.append(getLanguageVarTypeFromBlocklyType(phrase.getReturnType()) + " ");
             this.sb.append(phrase.getMethodName() + "(");
             phrase.getParameters().accept(this);
             this.sb.append(");");
-            nlIndent();
         }
     }
 

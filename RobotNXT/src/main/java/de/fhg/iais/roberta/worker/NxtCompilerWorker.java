@@ -8,7 +8,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import de.fhg.iais.roberta.bean.CompilerSetupBean;
-import de.fhg.iais.roberta.codegen.AbstractCompilerWorkflow;
 import de.fhg.iais.roberta.components.Project;
 import de.fhg.iais.roberta.util.Key;
 import de.fhg.iais.roberta.util.Pair;
@@ -38,18 +37,13 @@ public class NxtCompilerWorker implements IWorker {
      * @return a pair of Key.COMPILERWORKFLOW_SUCCESS or Key.COMPILERWORKFLOW_ERROR_PROGRAM_COMPILE_FAILED and the cross compiler output
      */
     private Pair<Key, String> runBuild(Project project) {
-        String token = project.getToken();
-        String mainFile = project.getProgramName();
-        CompilerSetupBean compilerWorkflowBean = project.getWorkerResult(CompilerSetupBean.class);
-        String compilerResourcesDir = compilerWorkflowBean.getCompilerResourcesDir();
-        String tempDir = compilerWorkflowBean.getTempDir();
-        Util
-            .storeGeneratedProgram(
-                tempDir,
-                project.getSourceCode().toString(),
-                project.getToken(),
-                project.getProgramName(),
-                "." + project.getSourceCodeFileExtension());
+        final String token = project.getToken();
+        final String mainFile = project.getProgramName();
+        final CompilerSetupBean compilerWorkflowBean = project.getWorkerResult(CompilerSetupBean.class);
+        final String compilerResourcesDir = compilerWorkflowBean.getCompilerResourcesDir();
+        final String tempDir = compilerWorkflowBean.getTempDir();
+        final String crosscompilerSource = project.getSourceCode().toString();
+        Util.storeGeneratedProgram(tempDir, crosscompilerSource, project.getToken(), project.getProgramName(), "." + project.getSourceCodeFileExtension());
 
         Path path = Paths.get(compilerResourcesDir);
         Path base = Paths.get("");
@@ -70,7 +64,7 @@ public class NxtCompilerWorker implements IWorker {
                 "-O=" + tempDir + token + "/" + mainFile + "/target/" + mainFile + "." + project.getBinaryFileExtension(),
                 "-I=" + base.resolve(path).toAbsolutePath().normalize()
             };
-        Pair<Boolean, String> result = AbstractCompilerWorkflow.runCrossCompiler(executableWithParameters);
+        Pair<Boolean, String> result = Util.runCrossCompiler(executableWithParameters, crosscompilerSource);
         Key resultKey = result.getFirst() ? Key.COMPILERWORKFLOW_SUCCESS : Key.COMPILERWORKFLOW_ERROR_PROGRAM_COMPILE_FAILED;
         return Pair.of(resultKey, result.getSecond());
     }

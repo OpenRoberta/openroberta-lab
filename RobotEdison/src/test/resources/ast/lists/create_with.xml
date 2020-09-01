@@ -1,4 +1,4 @@
-<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="edison" xmlversion="2.0" description="" tags="">
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="edison" xmlversion="3.0" description="" tags="">
     <instance x="376" y="207">
         <block type="robLists_create_with" id=")tMmIH6gd3Z8eAM257,}" intask="false">
             <mutation items="3" list_type="Number"></mutation>

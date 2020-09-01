@@ -44,7 +44,7 @@ public class MotorStopAction<V> extends MoveAction<V> {
      * @param comment added from the user,
      * @return read only object of class {@link MotorStopAction}
      */
-    private static <V> MotorStopAction<V> make(String port, IMotorStopMode mode, BlocklyBlockProperties properties, BlocklyComment comment) {
+    public static <V> MotorStopAction<V> make(String port, IMotorStopMode mode, BlocklyBlockProperties properties, BlocklyComment comment) {
         return new MotorStopAction<V>(port, mode, properties, comment);
     }
 

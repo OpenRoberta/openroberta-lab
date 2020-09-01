@@ -1,6 +1,6 @@
 package de.fhg.iais.roberta.ast.action;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -20,7 +20,7 @@ public class PlayFileActionTest extends AstTest {
 
     @Test
     public void getFileName() throws Exception {
-        ArrayList<ArrayList<Phrase<Void>>> forest = UnitTestHelper.getAst(testFactory, "/ast/actions/action_PlayFile.xml");
+        List<List<Phrase<Void>>> forest = UnitTestHelper.getProgramAst(testFactory, "/ast/actions/action_PlayFile.xml");
         PlayFileAction<Void> pfa = (PlayFileAction<Void>) forest.get(0).get(1);
         Assert.assertEquals("1", pfa.getFileName());
     }

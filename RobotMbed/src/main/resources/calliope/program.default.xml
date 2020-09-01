@@ -1,4 +1,4 @@
-<block_set xmlns='http://www.w3.org/1999/xhtml'>
+<block_set xmlns='http://www.w3.org/1999/xhtml' xmlversion="3.0">
     <instance>
         <block type='robControls_start'>
             <field name='DEBUG'>TRUE</field>

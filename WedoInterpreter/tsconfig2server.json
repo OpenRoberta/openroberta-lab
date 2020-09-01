@@ -10,8 +10,11 @@
         "baseUrl": "./ts",
         "paths": {
             "interpreter.*": ["*"]
-        }
+        },
+		"noUnusedParameters": true,
+		"allowJs": true
     },
+    "include": ["ts/**/*"],
     "exclude": [
         "**/node_modules",
         "**/interpreter.runStackMachineJson.ts"

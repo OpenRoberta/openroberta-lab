@@ -1,17 +1,17 @@
-<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="sensebox" xmlversion="2.0" description="" tags="">
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="sensebox" xmlversion="3.0" description="" tags="">
     <instance x="766" y="171">
-    <block type="robBrick_senseBox-Brick" id="DC@kFZs8?McKYe+9Bl3y" intask="true" deletable="false">
-        <mutation items="1"/>
-        <field name="BOX_ID"/>
-        <field name="NAME1">ID1</field>
-        <field name="ID1"/>
-    </block>
+        <block type="robBrick_senseBox-Brick" id="DC@kFZs8?McKYe+9Bl3y" intask="true" deletable="false">
+            <mutation items="1" />
+            <field name="BOX_ID" />
+            <field name="NAME1">ID1</field>
+            <field name="ID1" />
+        </block>
     </instance>
     <instance x="766" y="277">
-    <block type="robConf_led" id="Tris)a2:6F0Y.;)LAiy|" intask="true" deletable="false">
-        <field name="NAME">R</field>
-        <field name="INPUT">7</field>
-    </block>
+        <block type="robConf_led" id="Tris)a2:6F0Y.;)LAiy|" intask="true" deletable="false">
+            <field name="NAME">R</field>
+            <field name="INPUT">7</field>
+        </block>
     </instance>
     <instance x="1061" y="330">
     <block type="robConf_lcdi2c" id="Z{(g6hoFSARVHzZIg!o%" intask="true">

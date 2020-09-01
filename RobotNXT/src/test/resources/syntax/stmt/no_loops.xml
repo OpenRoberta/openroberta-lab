@@ -1,8 +1,6 @@
-<block_set xmlns="http://de.fhg.iais.roberta.blockly"
-	robottype="nxt" xmlversion="2.0" description="" tags="">
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="nxt" xmlversion="3.0" description="" tags="">
 	<instance x="376" y="50">
-		<block type="robControls_start" id="@vdJc~w=wNX]WrSXorOT"
-			intask="true" deletable="false">
+		<block type="robControls_start" id="@vdJc~w=wNX]WrSXorOT" intask="true" deletable="false">
 			<mutation declare="false"></mutation>
 			<field name="DEBUG">TRUE</field>
 		</block>
@@ -23,11 +21,9 @@
 				</block>
 			</value>
 			<statement name="DO0">
-				<block type="robControls_wait_for" id="%}lH{v|qN@xZ|o1/EXT)"
-					intask="true">
+				<block type="robControls_wait_for" id="%}lH{v|qN@xZ|o1/EXT)" intask="true">
 					<value name="WAIT0">
-						<block type="logic_compare" id="egc^7~@)Nkk7:e+6NHEe"
-							intask="true">
+						<block type="logic_compare" id="egc^7~@)Nkk7:e+6NHEe" intask="true">
 							<field name="OP">EQ</field>
 							<value name="A">
 								<block type="robSensors_getSample" id="(2lak@[yH*8U1wza,|.+"

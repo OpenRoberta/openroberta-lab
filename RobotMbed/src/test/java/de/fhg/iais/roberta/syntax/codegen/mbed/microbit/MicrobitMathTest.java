@@ -13,7 +13,8 @@ public class MicrobitMathTest extends MicrobitAstTest {
             .checkGeneratedSourceEqualityWithProgramXml(
                 testFactory,
                 "/function/microbit_math_constants_and_functions_test.py",
-                "/function/microbit_math_constants_and_functions_test.xml");
+                "/function/microbit_math_constants_and_functions_test.xml",
+                configuration);
     }
 
     @Test
@@ -22,7 +23,8 @@ public class MicrobitMathTest extends MicrobitAstTest {
             .checkGeneratedSourceEqualityWithProgramXml(
                 testFactory,
                 "/function/microbit_math_operations_test.py",
-                "/function/microbit_math_operations_test.xml");
+                "/function/microbit_math_operations_test.xml",
+                configuration);
     }
 
 }

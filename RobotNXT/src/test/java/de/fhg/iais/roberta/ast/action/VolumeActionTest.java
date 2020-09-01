@@ -1,6 +1,6 @@
 package de.fhg.iais.roberta.ast.action;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -20,14 +20,14 @@ public class VolumeActionTest extends NxtAstTest {
 
     @Test
     public void getVolume() throws Exception {
-        ArrayList<ArrayList<Phrase<Void>>> forest = UnitTestHelper.getAst(testFactory, "/ast/actions/action_SetVolume.xml");
+        List<List<Phrase<Void>>> forest = UnitTestHelper.getProgramAst(testFactory, "/ast/actions/action_SetVolume.xml");
         VolumeAction<Void> va = (VolumeAction<Void>) forest.get(0).get(1);
         Assert.assertEquals("NumConst [50]", va.getVolume().toString());
     }
 
     @Test
     public void getMode() throws Exception {
-        ArrayList<ArrayList<Phrase<Void>>> forest = UnitTestHelper.getAst(testFactory, "/ast/actions/action_SetVolume.xml");
+        List<List<Phrase<Void>>> forest = UnitTestHelper.getProgramAst(testFactory, "/ast/actions/action_SetVolume.xml");
         VolumeAction<Void> va = (VolumeAction<Void>) forest.get(0).get(1);
         Assert.assertEquals(VolumeAction.Mode.SET, va.getMode());
     }

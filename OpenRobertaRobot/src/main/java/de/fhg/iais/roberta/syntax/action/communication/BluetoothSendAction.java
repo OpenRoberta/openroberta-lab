@@ -80,6 +80,10 @@ public class BluetoothSendAction<V> extends Action<V> {
         return new BluetoothSendAction<>(dataValue, connection, msg, properties, comment);
     }
 
+    public String getDataValue() {
+        return this.dataValue;
+    }
+
     public Expr<V> getConnection() {
         return this._connection;
     }

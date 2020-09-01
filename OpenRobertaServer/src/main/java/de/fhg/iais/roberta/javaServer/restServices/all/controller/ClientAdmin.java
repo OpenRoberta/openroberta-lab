@@ -7,14 +7,20 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import org.codehaus.jettison.json.JSONException;
-import org.codehaus.jettison.json.JSONObject;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.inject.Inject;
 
 import de.fhg.iais.roberta.factory.IRobotFactory;
+import de.fhg.iais.roberta.generated.restEntities.BaseResponse;
+import de.fhg.iais.roberta.generated.restEntities.FullRestRequest;
+import de.fhg.iais.roberta.generated.restEntities.SetRobotRequest;
+import de.fhg.iais.roberta.generated.restEntities.SetRobotResponse;
+import de.fhg.iais.roberta.generated.restEntities.SetTokenRequest;
+import de.fhg.iais.roberta.generated.restEntities.SetTokenResponse;
 import de.fhg.iais.roberta.persistence.util.HttpSessionState;
 import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
 import de.fhg.iais.roberta.util.Key;
@@ -50,21 +56,21 @@ public class ClientAdmin {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/setToken")
-    public Response setToken(JSONObject fullRequest) throws Exception //
+    public Response setToken(FullRestRequest fullRequest) throws Exception //
     {
-        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, fullRequest);
-        JSONObject response = new JSONObject();
+        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, fullRequest, true);
         try {
-            JSONObject request = fullRequest.getJSONObject("data");
+            SetTokenResponse setTokenResponse = SetTokenResponse.make();
+            SetTokenRequest request = SetTokenRequest.make(fullRequest.getData());
             String cmd = "setToken";
             LOG.info("command is: " + cmd);
-            response.put("cmd", cmd);
-            String token = request.getString("token");
+            setTokenResponse.setCmd(cmd);
+            String token = request.getToken();
             if ( NO_CONNECT != null && NO_CONNECT.equals(token) ) {
-                LOG.info("debug token is presented by a user. Download to robots is disabled for this user. Debugging feature and not risky.");
+                LOG.info("debug token is presented by a user. Download to robots is disabled for this user. This is a debugging feature and not risky.");
                 httpSessionState.setToken(token);
-                addRobotUpdateInfo(response, null, null);
-                UtilForREST.addSuccessInfo(response, Key.TOKEN_SET_SUCCESS);
+                addRobotUpdateInfo(setTokenResponse, null, null);
+                UtilForREST.addSuccessInfo(setTokenResponse, Key.TOKEN_SET_SUCCESS);
                 LOG.info("success: debug token is registered in the session");
                 Statistics.info("ConnectRobot", "success", true);
             } else {
@@ -75,87 +81,86 @@ public class ClientAdmin {
                         httpSessionState.setToken(token);
                         String robotMenuVersion = this.brickCommunicator.getState(token).getMenuVersion();
                         String serverMenuVersion = httpSessionState.getRobotFactory().getMenuVersion();
-                        addRobotUpdateInfo(response, robotMenuVersion, serverMenuVersion);
-                        UtilForREST.addSuccessInfo(response, Key.TOKEN_SET_SUCCESS);
+                        addRobotUpdateInfo(setTokenResponse, robotMenuVersion, serverMenuVersion);
+                        UtilForREST.addSuccessInfo(setTokenResponse, Key.TOKEN_SET_SUCCESS);
                         LOG.info("success: token " + token + " is registered in the session");
                         Statistics.info("ConnectRobot", "success", true);
                         break;
                     case TOKEN_SET_ERROR_WRONG_ROBOTTYPE:
-                        UtilForREST.addErrorInfo(response, Key.TOKEN_SET_ERROR_WRONG_ROBOTTYPE);
+                        UtilForREST.addErrorInfo(setTokenResponse, Key.TOKEN_SET_ERROR_WRONG_ROBOTTYPE);
                         LOG.info("error: token " + token + " not registered in the session, wrong robot type");
                         Statistics.info("ConnectRobot", "success", false);
                         break;
                     case TOKEN_SET_ERROR_NO_ROBOT_WAITING:
-                        UtilForREST.addErrorInfo(response, Key.TOKEN_SET_ERROR_NO_ROBOT_WAITING);
+                        UtilForREST.addErrorInfo(setTokenResponse, Key.TOKEN_SET_ERROR_NO_ROBOT_WAITING);
                         LOG.info("error: token " + token + " not registered in the session");
                         Statistics.info("ConnectRobot", "success", false);
                         break;
                     default:
                         LOG.error("invalid response for token agreement: " + tokenAgreement);
-                        UtilForREST.addErrorInfo(response, Key.SERVER_ERROR);
+                        UtilForREST.addErrorInfo(setTokenResponse, Key.SERVER_ERROR);
                         Statistics.info("ConnectRobot", "success", false);
                         break;
                 }
             }
+            return UtilForREST.responseWithFrontendInfo(setTokenResponse, httpSessionState, this.brickCommunicator);
         } catch ( Exception e ) {
             String errorTicketId = Util.getErrorTicketId();
             LOG.error("Exception. Error ticket: " + errorTicketId, e);
-            UtilForREST.addErrorInfo(response, Key.SERVER_ERROR, errorTicketId);
+            return UtilForREST.makeBaseResponseForError(Key.SERVER_ERROR, httpSessionState, null); // TODO: redesign error ticker number and add then: append("parameters", errorTicketId);
         }
-        return UtilForREST.responseWithFrontendInfo(response, httpSessionState, this.brickCommunicator);
     }
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/updateFirmware")
-    public Response updateFirmware(JSONObject fullRequest) throws Exception //
+    public Response updateFirmware(FullRestRequest fullRequest) throws Exception //
     {
         // TODO: This should be moved to an update server
-        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, fullRequest);
-        JSONObject response = new JSONObject();
+        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, fullRequest, true);
         try {
+            BaseResponse response = BaseResponse.make();
             String cmd = "updateFirmware";
             LOG.info("command is: " + cmd);
 
-            response.put("cmd", cmd);
+            response.setCmd(cmd);
             String token = httpSessionState.getToken();
             if ( token != null ) {
                 // everything is fine
                 boolean isPossible = this.brickCommunicator.firmwareUpdateRequested(token);
                 if ( isPossible ) {
                     UtilForREST.addSuccessInfo(response, Key.ROBOT_FIRMWAREUPDATE_POSSIBLE);
+                    return UtilForREST.responseWithFrontendInfo(response, httpSessionState, this.brickCommunicator);
                 } else {
-                    UtilForREST.addErrorInfo(response, Key.ROBOT_FIRMWAREUPDATE_IMPOSSIBLE);
+                    return UtilForREST.makeBaseResponseForError(Key.ROBOT_FIRMWAREUPDATE_IMPOSSIBLE, httpSessionState, null);
                 }
             } else {
-                UtilForREST.addErrorInfo(response, Key.ROBOT_NOT_CONNECTED);
+                return UtilForREST.makeBaseResponseForError(Key.ROBOT_NOT_CONNECTED, httpSessionState, null);
             }
         } catch ( Exception e ) {
             String errorTicketId = Util.getErrorTicketId();
             LOG.error("Exception. Error ticket: " + errorTicketId, e);
-            UtilForREST.addErrorInfo(response, Key.SERVER_ERROR, errorTicketId);
+            return UtilForREST.makeBaseResponseForError(Key.SERVER_ERROR, httpSessionState, null);
         }
-        return UtilForREST.responseWithFrontendInfo(response, httpSessionState, this.brickCommunicator);
     }
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/setRobot")
-    public Response setRobot(JSONObject fullRequest) throws Exception //
+    public Response setRobot(FullRestRequest fullRequest) throws Exception //
     {
-        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, fullRequest);
-        JSONObject response = new JSONObject();
+        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, fullRequest, true);
         try {
-            JSONObject request = fullRequest.getJSONObject("data");
+            SetRobotResponse response = SetRobotResponse.make();
+            SetRobotRequest request = SetRobotRequest.make(fullRequest.getData());
             String cmd = "setRobot";
             LOG.info("command is: " + cmd);
 
-            response.put("cmd", cmd);
-            String robot = request.getString("robot");
+            response.setCmd(cmd);
+            String robot = request.getRobot();
             if ( robot != null && this.serverProperties.getRobotWhitelist().contains(robot) ) {
-                UtilForREST.addSuccessInfo(response, Key.ROBOT_SET_SUCCESS);
                 if ( httpSessionState.getRobotName() != robot ) {
                     // disconnect previous robot
                     // TODO consider keeping it so that we can switch between robot and simulation
@@ -169,83 +174,56 @@ public class ClientAdmin {
                     }
                     httpSessionState.setRobotName(robot);
                     IRobotFactory robotFactory = httpSessionState.getRobotFactory();
-                    response.put("robot", robot);
-                    JSONObject program;
-                    JSONObject configuration;
-                    JSONObject toolbox;
-                    program = new JSONObject();
-                    configuration = new JSONObject();
-                    toolbox = new JSONObject();
+                    response.setRobot(robot);
+
+                    JSONObject program = new JSONObject();
+                    JSONObject toolbox = new JSONObject();
                     toolbox.put("beginner", robotFactory.getProgramToolboxBeginner());
                     toolbox.put("expert", robotFactory.getProgramToolboxExpert());
                     program.put("toolbox", toolbox);
                     program.put("prog", robotFactory.getProgramDefault());
-                    response.put("program", program);
+                    response.setProgram(program);
+                    JSONObject configuration = new JSONObject();
                     configuration.put("toolbox", robotFactory.getConfigurationToolbox());
                     configuration.put("conf", robotFactory.getConfigurationDefault());
-                    response.put("configuration", configuration);
-                    response.put("sim", robotFactory.hasSim());
-                    response.put("multipleSim", robotFactory.hasMultipleSim());
-                    response.put("connection", robotFactory.getConnectionType());
-                    response.put("vendor", robotFactory.getVendorId());
-                    response.put("configurationUsed", robotFactory.hasConfiguration());
-                    response.put("commandLine", robotFactory.getCommandline());
-                    response.put("signature", robotFactory.getSignature());
-                    response.put("sourceCodeFileExtension", robotFactory.getSourceCodeFileExtension());
-                    response.put("binaryFileExtension", robotFactory.getBinaryFileExtension());
-                    response.put("hasWlan", robotFactory.hasWlanCredentials());
-                    response.put("firmwareDefault", robotFactory.getFirmwareDefaultProgramName());
+                    response.setConfiguration(configuration);
+                    response.setSim(robotFactory.hasSim());
+                    response.setMultipleSim(robotFactory.hasMultipleSim());
+                    response.setConnection(robotFactory.getConnectionType());
+                    response.setVendor(robotFactory.getVendorId());
+                    response.setConfigurationUsed(robotFactory.hasConfiguration());
+                    response.setCommandLine(robotFactory.getCommandline());
+                    response.setSignature(robotFactory.getSignature());
+                    response.setSourceCodeFileExtension(robotFactory.getSourceCodeFileExtension());
+                    response.setBinaryFileExtension(robotFactory.getBinaryFileExtension());
+                    response.setHasWlan(robotFactory.hasWlanCredentials());
+                    response.setFirmwareDefault(robotFactory.getFirmwareDefaultProgramName());
                     LOG.info("set robot to {}", robot);
                     Statistics.info("ChangeRobot", "success", true);
                 } else {
                     LOG.info("set Robot: robot {} was already set", robot);
-                    Statistics.info("ChangeRobot", "success", false);
+                    Statistics.info("ChangeRobot", "success", true);
                 }
+                UtilForREST.addSuccessInfo(response, Key.ROBOT_SET_SUCCESS);
+                return UtilForREST.responseWithFrontendInfo(response, httpSessionState, this.brickCommunicator);
             } else {
                 LOG.error("Invalid command: " + cmd + " setting robot name to " + robot);
-                UtilForREST.addErrorInfo(response, Key.ROBOT_DOES_NOT_EXIST);
+                return UtilForREST.makeBaseResponseForError(Key.ROBOT_DOES_NOT_EXIST, httpSessionState, null);
             }
         } catch ( Exception e ) {
             String errorTicketId = Util.getErrorTicketId();
             LOG.error("Exception. Error ticket: " + errorTicketId, e);
-            UtilForREST.addErrorInfo(response, Key.SERVER_ERROR, errorTicketId);
+            return UtilForREST.makeBaseResponseForError(Key.SERVER_ERROR, httpSessionState, null); // TODO: redesign error ticker number and add then: append("parameters", errorTicketId);
         }
-        return UtilForREST.responseWithFrontendInfo(response, httpSessionState, this.brickCommunicator);
     }
 
-    private static void addRobotUpdateInfo(JSONObject response, String robotMenuVersion, String serverMenuVersion) throws JSONException {
+    private static void addRobotUpdateInfo(SetTokenResponse response, String robotMenuVersion, String serverMenuVersion) throws JSONException {
         if ( robotMenuVersion != null && serverMenuVersion != null ) {
-            response.put("robot.update", ClientAdmin.versionCompare(robotMenuVersion, serverMenuVersion));
-            response.put("robot.serverVersion", serverMenuVersion);
+            response.setUpdate(Util.versionCompare(robotMenuVersion, serverMenuVersion));
+            response.setServerVersion(serverMenuVersion);
         } else {
-            response.put("robot.update", 0);
-            response.put("robot.serverVersion", 0);
+            response.setUpdate(0);
+            response.setServerVersion("0");
         }
-    }
-
-    /**
-     * Compares two version strings.
-     *
-     * @note It does not work if "1.10" is supposed to be equal to "1.10.0".
-     * @param str1 a string of ordinal numbers separated by decimal points.
-     * @param str2 a string of ordinal numbers separated by decimal points.
-     * @return The result is a negative integer if str1 is _numerically_ less than str2. The result is a positive integer if str1 is _numerically_ greater than
-     *         str2. The result is zero if the strings are _numerically_ equal.
-     */
-    private static int versionCompare(String str1, String str2) {
-        String[] vals1 = str1.split("\\.");
-        String[] vals2 = str2.split("\\.");
-        int i = 0;
-
-        while ( i < vals1.length && i < vals2.length && vals1[i].equals(vals2[i]) ) {
-            i++;
-        }
-
-        if ( i < vals1.length && i < vals2.length ) {
-            int diff = Integer.valueOf(vals1[i]).compareTo(Integer.valueOf(vals2[i]));
-            return Integer.signum(diff);
-        }
-
-        return Integer.signum(vals1.length - vals2.length);
     }
 }

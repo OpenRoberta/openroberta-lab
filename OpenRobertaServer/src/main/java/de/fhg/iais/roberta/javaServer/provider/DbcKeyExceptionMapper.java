@@ -6,10 +6,11 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 
-import org.codehaus.jettison.json.JSONObject;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import de.fhg.iais.roberta.generated.restEntities.BaseResponse;
 import de.fhg.iais.roberta.util.Key;
 import de.fhg.iais.roberta.util.UtilForREST;
 import de.fhg.iais.roberta.util.dbc.DbcKeyException;
@@ -24,15 +25,15 @@ public class DbcKeyExceptionMapper implements ExceptionMapper<DbcKeyException> {
     @Override
     public Response toResponse(DbcKeyException e) {
         final String errorKey = e.getKey().getKey();
+        final BaseResponse response = BaseResponse.make();
         if ( errorKey.startsWith("ORA_INIT_FAIL") ) {
-            LOG.error("init exception was caught at system border: " + e.getMessage());
+            LOG.error("init DbcKeyException was caught at system border: " + e.getMessage() + ". No stack trace!");
+            response.setInitToken("invalid-token");
         } else {
-            LOG.error("exception was caught at system border", e);
+            LOG.error("DbcKeyException was caught at system border", e);
         }
         try {
-            final JSONObject response = new JSONObject();
-            response.put("rc", "error");
-            response.put("message", errorKey).put("cause", errorKey).put("parameters", e.getParameter());
+            response.setRc("error").setMessage(errorKey).setCause(errorKey).setParameters(new JSONObject(e.getParameter()));
             return UtilForREST.responseWithFrontendInfo(response, null, null);
         } catch ( Exception eInE ) {
             LOG.error("server error - exception in exception processor", eInE);

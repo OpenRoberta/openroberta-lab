@@ -84,6 +84,10 @@ public class PinWriteValueAction<V> extends Action<V> {
         return this.value;
     }
 
+    public boolean isActorPortAndMode() {
+        return this.actorPortAndMode;
+    }
+
     @Override
     public String toString() {
         return "PinWriteValueAction [" + this.pinValue + ", " + this.port + ", " + this.value + "]";

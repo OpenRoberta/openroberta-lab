@@ -20,6 +20,14 @@
         </encoder>
     </appender>
 
+    <appender name="CROSSCOMPILER_ERROR_FILE" class="ch.qos.logback.core.FileAppender">
+        <file>${ADMINISTRATION_DIR}/logging/cc-errors.log</file>
+        <append>true</append>
+        <encoder>
+            <pattern>${PATTERN_LOG}</pattern>
+        </encoder>
+    </appender>
+
     <appender name="STATISTICS_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <fileNamePattern>${ADMINISTRATION_DIR}/logging/statistics-%d{yyyy/MM}.log.zip</fileNamePattern>
@@ -35,6 +43,10 @@
 
     <logger name="statistics" level="INFO" additivity="false">
         <appender-ref ref="STATISTICS_FILE" />
+    </logger>
+
+    <logger name="crosscompiler_error" level="INFO" additivity="false">
+        <appender-ref ref="CROSSCOMPILER_ERROR_FILE" />
     </logger>
 
     <logger name="org.hibernate" level="WARN" />

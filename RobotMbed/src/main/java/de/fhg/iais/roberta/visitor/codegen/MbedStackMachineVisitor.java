@@ -2,11 +2,13 @@ package de.fhg.iais.roberta.visitor.codegen;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import de.fhg.iais.roberta.components.ConfigurationAst;
+import de.fhg.iais.roberta.components.ConfigurationComponent;
 import de.fhg.iais.roberta.inter.mode.general.IDirection;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.SC;
@@ -33,8 +35,6 @@ import de.fhg.iais.roberta.syntax.action.mbed.RadioReceiveAction;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioSendAction;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioSetChannelAction;
 import de.fhg.iais.roberta.syntax.action.mbed.ServoSetAction;
-import de.fhg.iais.roberta.syntax.action.mbed.SingleMotorOnAction;
-import de.fhg.iais.roberta.syntax.action.mbed.SingleMotorStopAction;
 import de.fhg.iais.roberta.syntax.action.mbed.SwitchLedMatrixAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorGetPowerAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
@@ -49,6 +49,7 @@ import de.fhg.iais.roberta.syntax.functions.mbed.ImageInvertFunction;
 import de.fhg.iais.roberta.syntax.functions.mbed.ImageShiftFunction;
 import de.fhg.iais.roberta.syntax.lang.expr.ColorConst;
 import de.fhg.iais.roberta.syntax.sensor.generic.AccelerometerSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GestureSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
@@ -70,7 +71,7 @@ import de.fhg.iais.roberta.visitor.lang.codegen.AbstractStackMachineVisitor;
 
 public class MbedStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> implements IMbedVisitor<V> {
 
-    public MbedStackMachineVisitor(ConfigurationAst configuration, ArrayList<ArrayList<Phrase<Void>>> phrases) {
+    public MbedStackMachineVisitor(ConfigurationAst configuration, List<List<Phrase<Void>>> phrases) {
         super(configuration);
         Assert.isTrue(!phrases.isEmpty());
 
@@ -82,13 +83,13 @@ public class MbedStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> i
         int g = colorConst.getGreenChannelInt();
         int b = colorConst.getBlueChannelInt();
 
-        JSONObject o = mk(C.EXPR).put(C.EXPR, "COLOR_CONST").put(C.VALUE, new JSONArray(Arrays.asList(r, g, b)));
+        JSONObject o = mk(C.EXPR, colorConst).put(C.EXPR, "COLOR_CONST").put(C.VALUE, new JSONArray(Arrays.asList(r, g, b)));
         return app(o);
     }
 
     @Override
     public V visitClearDisplayAction(ClearDisplayAction<V> clearDisplayAction) {
-        JSONObject o = mk(C.CLEAR_DISPLAY_ACTION);
+        JSONObject o = mk(C.CLEAR_DISPLAY_ACTION, clearDisplayAction);
 
         return app(o);
     }
@@ -96,7 +97,7 @@ public class MbedStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> i
     @Override
     public V visitDisplayTextAction(DisplayTextAction<V> displayTextAction) {
         displayTextAction.getMsg().accept(this);
-        JSONObject o = mk(C.SHOW_TEXT_ACTION).put(C.MODE, displayTextAction.getMode().toString().toLowerCase());
+        JSONObject o = mk(C.SHOW_TEXT_ACTION, displayTextAction).put(C.MODE, displayTextAction.getMode().toString().toLowerCase());
 
         return app(o);
     }
@@ -117,7 +118,7 @@ public class MbedStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> i
             }
             jsonImage.put(new JSONArray(a));
         }
-        JSONObject o = mk(C.EXPR).put(C.EXPR, image.getKind().getName().toLowerCase());
+        JSONObject o = mk(C.EXPR, image).put(C.EXPR, image.getKind().getName().toLowerCase());
         o.put(C.VALUE, jsonImage);
         return app(o);
     }
@@ -129,7 +130,7 @@ public class MbedStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> i
             new JSONArray(
                 Arrays.stream(image.split("\\\\n")).map(x -> new JSONArray(Arrays.stream(x.split(",")).mapToInt(Integer::parseInt).toArray())).toArray());
 
-        JSONObject o = mk(C.EXPR).put(C.EXPR, C.IMAGE).put(C.VALUE, a);
+        JSONObject o = mk(C.EXPR, predefinedImage).put(C.EXPR, C.IMAGE).put(C.VALUE, a);
         return app(o);
 
     }
@@ -137,13 +138,13 @@ public class MbedStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> i
     @Override
     public V visitDisplayImageAction(DisplayImageAction<V> displayImageAction) {
         displayImageAction.getValuesToDisplay().accept(this);
-        JSONObject o = mk(C.SHOW_IMAGE_ACTION).put(C.MODE, displayImageAction.getDisplayImageMode().toString().toLowerCase());
+        JSONObject o = mk(C.SHOW_IMAGE_ACTION, displayImageAction).put(C.MODE, displayImageAction.getDisplayImageMode().toString().toLowerCase());
         return app(o);
     }
 
     @Override
     public V visitLightStatusAction(LightStatusAction<V> lightStatusAction) {
-        JSONObject o = mk(C.STATUS_LIGHT_ACTION).put(C.NAME, "calliope").put(C.PORT, "internal");
+        JSONObject o = mk(C.STATUS_LIGHT_ACTION, lightStatusAction).put(C.NAME, "calliope").put(C.PORT, "internal");
         return app(o);
     }
 
@@ -151,7 +152,7 @@ public class MbedStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> i
     public V visitToneAction(ToneAction<V> toneAction) {
         toneAction.getFrequency().accept(this);
         toneAction.getDuration().accept(this);
-        JSONObject o = mk(C.TONE_ACTION);
+        JSONObject o = mk(C.TONE_ACTION, toneAction);
         return app(o);
     }
 
@@ -161,7 +162,7 @@ public class MbedStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> i
         String duration = playNoteAction.getDuration();
         app(mk(C.EXPR).put(C.EXPR, C.NUM_CONST).put(C.VALUE, freq));
         app(mk(C.EXPR).put(C.EXPR, C.NUM_CONST).put(C.VALUE, duration));
-        JSONObject o = mk(C.TONE_ACTION);
+        JSONObject o = mk(C.TONE_ACTION, playNoteAction);
         return app(o);
     }
 
@@ -174,9 +175,12 @@ public class MbedStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> i
     public V visitMotorOnAction(MotorOnAction<V> motorOnAction) {
         motorOnAction.getParam().getSpeed().accept(this);
         app(mk(C.EXPR).put(C.EXPR, C.NUM_CONST).put(C.VALUE, 0));
-        String port = motorOnAction.getUserDefinedPort();
 
-        JSONObject o = mk(C.MOTOR_ON_ACTION).put(C.PORT, port.toLowerCase()).put(C.NAME, port.toLowerCase());
+        String port = motorOnAction.getUserDefinedPort();
+        ConfigurationComponent cc = this.configuration.optConfigurationComponent(port);
+        String pin1 = ((cc == null) || cc.getComponentType().equals("CALLIBOT")) ? "0" : cc.getProperty("PIN1");
+
+        JSONObject o = mk(C.MOTOR_ON_ACTION, motorOnAction).put(C.PORT, pin1.toLowerCase()).put(C.NAME, pin1.toLowerCase());
         return app(o);
     }
 
@@ -188,23 +192,29 @@ public class MbedStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> i
     @Override
     public V visitMotorStopAction(MotorStopAction<V> motorStopAction) {
         String port = motorStopAction.getUserDefinedPort();
-        JSONObject o = mk(C.MOTOR_STOP).put(C.PORT, port.toLowerCase());
+        ConfigurationComponent cc = this.configuration.optConfigurationComponent(port);
+        String pin1 = ((cc == null) || cc.getComponentType().equals("CALLIBOT")) ? "0" : cc.getProperty("PIN1");
+
+        JSONObject o = mk(C.MOTOR_STOP, motorStopAction).put(C.PORT, pin1.toLowerCase());
         return app(o);
     }
 
     @Override
     public V visitSerialWriteAction(SerialWriteAction<V> serialWriteAction) {
         serialWriteAction.getValue().accept(this);
-        JSONObject o = mk(C.SERIAL_WRITE_ACTION);
+        JSONObject o = mk(C.SERIAL_WRITE_ACTION, serialWriteAction);
         return app(o);
     }
 
     @Override
     public V visitPinWriteValueAction(PinWriteValueAction<V> pinWriteValueAction) {
         pinWriteValueAction.getValue().accept(this);
-        String pin = pinWriteValueAction.getPort();
+        String port = pinWriteValueAction.getPort();
+        ConfigurationComponent cc = this.configuration.optConfigurationComponent(port);
+        String pin1 = (cc == null) ? "0" : cc.getProperty("PIN1");
+
         String mode = pinWriteValueAction.getMode();
-        JSONObject o = mk(C.WRITE_PIN_ACTION).put(C.PIN, pin).put(C.MODE, mode.toLowerCase());
+        JSONObject o = mk(C.WRITE_PIN_ACTION, pinWriteValueAction).put(C.PIN, pin1).put(C.MODE, mode.toLowerCase());
         return app(o);
     }
 
@@ -213,41 +223,44 @@ public class MbedStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> i
         imageShiftFunction.getImage().accept(this);
         imageShiftFunction.getPositions().accept(this);
         IDirection direction = imageShiftFunction.getShiftDirection();
-        JSONObject o = mk(C.IMAGE_SHIFT_ACTION).put(C.DIRECTION, direction.toString().toLowerCase());
+        JSONObject o = mk(C.IMAGE_SHIFT_ACTION, imageShiftFunction).put(C.DIRECTION, direction.toString().toLowerCase());
         return app(o);
     }
 
     @Override
     public V visitImageInvertFunction(ImageInvertFunction<V> imageInvertFunction) {
         imageInvertFunction.getImage().accept(this);
-        JSONObject o = mk(C.EXPR).put(C.EXPR, C.SINGLE_FUNCTION).put(C.OP, C.IMAGE_INVERT_ACTION);
+        JSONObject o = mk(C.EXPR, imageInvertFunction).put(C.EXPR, C.SINGLE_FUNCTION).put(C.OP, C.IMAGE_INVERT_ACTION);
         return app(o);
     }
 
     @Override
     public V visitGestureSensor(GestureSensor<V> gestureSensor) {
         String mode = gestureSensor.getMode();
-        JSONObject o = mk(C.GET_SAMPLE).put(C.GET_SAMPLE, C.GESTURE).put(C.MODE, mode.toLowerCase()).put(C.NAME, "calliope");
+        JSONObject o = mk(C.GET_SAMPLE, gestureSensor).put(C.GET_SAMPLE, C.GESTURE).put(C.MODE, mode.toLowerCase()).put(C.NAME, "calliope");
         return app(o);
     }
 
     @Override
     public V visitTemperatureSensor(TemperatureSensor<V> temperatureSensor) {
         String mode = temperatureSensor.getMode();
-        JSONObject o = mk(C.GET_SAMPLE).put(C.GET_SAMPLE, C.TEMPERATURE).put(C.MODE, mode.toLowerCase()).put(C.NAME, "calliope");
+        JSONObject o = mk(C.GET_SAMPLE, temperatureSensor).put(C.GET_SAMPLE, C.TEMPERATURE).put(C.MODE, mode.toLowerCase()).put(C.NAME, "calliope");
         return app(o);
     }
 
     @Override
     public V visitKeysSensor(KeysSensor<V> keysSensor) {
         String port = keysSensor.getPort();
-        JSONObject o = mk(C.GET_SAMPLE).put(C.GET_SAMPLE, C.BUTTONS).put(C.MODE, port).put(C.NAME, "calliope");
+        ConfigurationComponent cc = this.configuration.optConfigurationComponent(port);
+        String pin1 = (cc == null) ? "0" : cc.getProperty("PIN1");
+
+        JSONObject o = mk(C.GET_SAMPLE, keysSensor).put(C.GET_SAMPLE, C.BUTTONS).put(C.MODE, pin1).put(C.NAME, "calliope");
         return app(o);
     }
 
     @Override
     public V visitLightSensor(LightSensor<V> lightSensor) {
-        JSONObject o = mk(C.GET_SAMPLE).put(C.GET_SAMPLE, C.LIGHT).put(C.MODE, C.AMBIENTLIGHT).put(C.NAME, "calliope");
+        JSONObject o = mk(C.GET_SAMPLE, lightSensor).put(C.GET_SAMPLE, C.LIGHT).put(C.MODE, C.AMBIENTLIGHT).put(C.NAME, "calliope");
         return app(o);
     }
 
@@ -256,9 +269,9 @@ public class MbedStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> i
         String port = timerSensor.getPort();
         JSONObject o;
         if ( timerSensor.getMode().equals(SC.DEFAULT) || timerSensor.getMode().equals(SC.VALUE) ) {
-            o = mk(C.GET_SAMPLE).put(C.GET_SAMPLE, C.TIMER).put(C.PORT, port).put(C.NAME, "calliope");
+            o = mk(C.GET_SAMPLE, timerSensor).put(C.GET_SAMPLE, C.TIMER).put(C.PORT, port).put(C.NAME, "calliope");
         } else {
-            o = mk(C.TIMER_SENSOR_RESET).put(C.PORT, port).put(C.NAME, "calliope");
+            o = mk(C.TIMER_SENSOR_RESET, timerSensor).put(C.PORT, port).put(C.NAME, "calliope");
         }
         return app(o);
     }
@@ -268,36 +281,38 @@ public class MbedStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> i
         String port = sensorGetSample.getPort();
         String mode = sensorGetSample.getMode();
 
-        JSONObject o = mk(C.GET_SAMPLE).put(C.GET_SAMPLE, C.PIN + port).put(C.MODE, mode.toLowerCase()).put(C.NAME, "calliope");
+        JSONObject o = mk(C.GET_SAMPLE, sensorGetSample).put(C.GET_SAMPLE, C.PIN + port).put(C.MODE, mode.toLowerCase()).put(C.NAME, "calliope");
         return app(o);
     }
 
     @Override
     public V visitSoundSensor(SoundSensor<V> soundSensor) {
-        JSONObject o = mk(C.GET_SAMPLE).put(C.GET_SAMPLE, C.SOUND).put(C.MODE, C.VOLUME).put(C.NAME, "calliope");
+        JSONObject o = mk(C.GET_SAMPLE, soundSensor).put(C.GET_SAMPLE, C.SOUND).put(C.MODE, C.VOLUME).put(C.NAME, "calliope");
         return app(o);
     }
 
     @Override
     public V visitCompassSensor(CompassSensor<V> compassSensor) {
         String mode = compassSensor.getMode();
-        JSONObject o = mk(C.GET_SAMPLE).put(C.GET_SAMPLE, C.COMPASS).put(C.MODE, mode.toLowerCase()).put(C.NAME, "calliope");
+        JSONObject o = mk(C.GET_SAMPLE, compassSensor).put(C.GET_SAMPLE, C.COMPASS).put(C.MODE, mode.toLowerCase()).put(C.NAME, "calliope");
         return app(o);
     }
 
     @Override
     public V visitLedOnAction(LedOnAction<V> ledOnAction) {
         ledOnAction.getLedColor().accept(this);
-        JSONObject o = mk(C.LED_ON_ACTION);
+        JSONObject o = mk(C.LED_ON_ACTION, ledOnAction);
         return app(o);
     }
 
     @Override
     public V visitPinGetValueSensor(PinGetValueSensor<V> pinValueSensor) {
         String port = pinValueSensor.getPort();
+        ConfigurationComponent cc = this.configuration.optConfigurationComponent(port);
+        String pin1 = (cc == null) ? "0" : cc.getProperty("PIN1");
         String mode = pinValueSensor.getMode();
 
-        JSONObject o = mk(C.GET_SAMPLE).put(C.GET_SAMPLE, C.PIN + port).put(C.MODE, mode.toLowerCase()).put(C.NAME, "calliope");
+        JSONObject o = mk(C.GET_SAMPLE, pinValueSensor).put(C.GET_SAMPLE, C.PIN + pin1).put(C.MODE, mode.toLowerCase()).put(C.NAME, "calliope");
 
         return app(o);
     }
@@ -310,13 +325,13 @@ public class MbedStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> i
     @Override
     public V visitDisplaySetBrightnessAction(DisplaySetBrightnessAction<V> displaySetBrightnessAction) {
         displaySetBrightnessAction.getBrightness().accept(this);
-        JSONObject o = mk(C.DISPLAY_SET_BRIGHTNESS_ACTION);
+        JSONObject o = mk(C.DISPLAY_SET_BRIGHTNESS_ACTION, displaySetBrightnessAction);
         return app(o);
     }
 
     @Override
     public V visitDisplayGetBrightnessAction(DisplayGetBrightnessAction<V> displayGetBrightnessAction) {
-        JSONObject o = mk(C.GET_SAMPLE).put(C.GET_SAMPLE, C.DISPLAY).put(C.MODE, C.BRIGHTNESS).put(C.NAME, "calliope");
+        JSONObject o = mk(C.GET_SAMPLE, displayGetBrightnessAction).put(C.GET_SAMPLE, C.DISPLAY).put(C.MODE, C.BRIGHTNESS).put(C.NAME, "calliope");
         return app(o);
     }
 
@@ -325,7 +340,7 @@ public class MbedStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> i
         displaySetPixelAction.getX().accept(this);
         displaySetPixelAction.getY().accept(this);
         displaySetPixelAction.getBrightness().accept(this);
-        JSONObject o = mk(C.DISPLAY_SET_PIXEL_BRIGHTNESS_ACTION);
+        JSONObject o = mk(C.DISPLAY_SET_PIXEL_BRIGHTNESS_ACTION, displaySetPixelAction);
         return app(o);
     }
 
@@ -333,20 +348,8 @@ public class MbedStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> i
     public V visitDisplayGetPixelAction(DisplayGetPixelAction<V> displayGetPixelAction) {
         displayGetPixelAction.getX().accept(this);
         displayGetPixelAction.getY().accept(this);
-        JSONObject o = mk(C.DISPLAY_GET_PIXEL_BRIGHTNESS_ACTION);
+        JSONObject o = mk(C.DISPLAY_GET_PIXEL_BRIGHTNESS_ACTION, displayGetPixelAction);
         return app(o);
-    }
-
-    @Override
-    public V visitSingleMotorOnAction(SingleMotorOnAction<V> singleMotorOnAction) {
-
-        return null;
-    }
-
-    @Override
-    public V visitSingleMotorStopAction(SingleMotorStopAction<V> singleMotorStopAction) {
-
-        return null;
     }
 
     @Override
@@ -364,15 +367,22 @@ public class MbedStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> i
         bothMotorsOnAction.getSpeedA().accept(this);
         bothMotorsOnAction.getSpeedB().accept(this);
         app(mk(C.EXPR).put(C.EXPR, C.NUM_CONST).put(C.VALUE, 0));
-        JSONObject o =
-            mk(C.BOTH_MOTORS_ON_ACTION).put(C.PORT_A, bothMotorsOnAction.getPortA().toLowerCase()).put(C.PORT_B, bothMotorsOnAction.getPortB().toLowerCase());
+
+        String portA = bothMotorsOnAction.getPortA();
+        ConfigurationComponent ccA = this.configuration.optConfigurationComponent(portA);
+        String pin1A = ((ccA == null) || ccA.getComponentType().equals("CALLIBOT")) ? "0" : ccA.getProperty("PIN1");
+        String portB = bothMotorsOnAction.getPortB();
+        ConfigurationComponent ccB = this.configuration.optConfigurationComponent(portB);
+        String pin1B = ((ccB == null) || ccB.getComponentType().equals("CALLIBOT")) ? "0" : ccB.getProperty("PIN1");
+
+        JSONObject o = mk(C.BOTH_MOTORS_ON_ACTION, bothMotorsOnAction).put(C.PORT_A, pin1A.toLowerCase()).put(C.PORT_B, pin1B.toLowerCase());
 
         return app(o);
     }
 
     @Override
     public V visitBothMotorsStopAction(BothMotorsStopAction<V> bothMotorsStopAction) {
-        JSONObject o = mk(C.MOTOR_STOP).put(C.PORT, "ab");
+        JSONObject o = mk(C.MOTOR_STOP, bothMotorsStopAction).put(C.PORT, "ab");
         return app(o);
     }
 
@@ -422,6 +432,11 @@ public class MbedStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> i
 
     @Override
     public V visitUltrasonicSensor(UltrasonicSensor<V> ultrasonicSensor) {
+        return null;
+    }
+
+    @Override
+    public V visitColorSensor(ColorSensor<V> colorSensor) {
         return null;
     }
 

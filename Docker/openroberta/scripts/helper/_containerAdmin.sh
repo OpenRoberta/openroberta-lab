@@ -1,16 +1,16 @@
 #!/bin/bash
 
-isServerNameValid $SERVER_NAME
+isServerNameValid ${SERVER_NAME}
 
-CONTAINER="${INAME}-$SERVER_NAME"
-CMD="./admin.sh -q $ADMIN_CMD"
+CONTAINER="server-${SERVER_NAME}"
+CMD="./admin.sh -q ${ADMIN_CMD}"
 
-echo "executing in $CONTAINER the sh command $CMD"
-docker exec ${CONTAINER} /bin/bash -c "$CMD"
+echo "executing in ${CONTAINER} the sh command ${CMD}"
+docker exec ${CONTAINER} /bin/bash -c "${CMD}"
 RC=$?
-if [ $RC -ne 0 ]
+if [ ${RC} -ne 0 ]
 then
-  echo "admin signals error by return code $RC"
+  echo "admin signals error by return code ${RC}"
 else
-  echo "success in $CONTAINER for $CMD"
+  echo "success in ${CONTAINER} for ${CMD}"
 fi

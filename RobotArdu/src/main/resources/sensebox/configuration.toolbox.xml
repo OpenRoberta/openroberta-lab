@@ -25,5 +25,6 @@
     <block type="robConf_lightveml" />
     <block type="robConf_particle" />
     <block type="robConf_gps" />
+    <block type="robConf_environmental" />
   </category>
 </toolbox_set>

@@ -1,10 +1,9 @@
-define([ 'require', 'exports', 'log', 'util', 'message', 'comm', 'guiState.controller', 'galleryList.controller', 'program.model', 'blocks-msg', 'jquery',
-        'bootstrap-table' ], function(require, exports, LOG, UTIL, MSG, COMM, GUISTATE_C, GALLERY_C, PROGRAM, Blockly, $) {
+define([ 'require', 'exports', 'log', 'util', 'message', 'comm', 'guiState.controller', 'language.controller', 'galleryList.controller', 'program.model', 'userGroup.model', 'blockly', 'jquery',
+        'bootstrap-table' ], function(require, exports, LOG, UTIL, MSG, COMM, GUISTATE_C, LANG, GALLERY_C, PROGRAM, USERGROUP, Blockly, $) {
 
     function init() {
         initView();
         initEvents();
-        LOG.info('init program sharing view');
     }
     exports.init = init;
 
@@ -103,11 +102,7 @@ define([ 'require', 'exports', 'log', 'util', 'message', 'comm', 'guiState.contr
 
         // click on the ok button from modal
         $('#shareProgram').onWrap('click', function(e) {
-            var data = $('#relationsTable').bootstrapTable('getData');
-            var row = data[0];
-            if (updateShareWithUser(row)) {
-                updateSharedWithUsers();
-            }
+            updateSharedWithUsers();
         });
         // click on the ok button from modal
         $('#shareWithGallery').onWrap('click', function(e) {
@@ -133,7 +128,7 @@ define([ 'require', 'exports', 'log', 'util', 'message', 'comm', 'guiState.contr
 
     function showShareWithUser(data) {
         var progName = data[0];
-        var shared = '';
+        var shared = null;
         if (!$.isEmptyObject(data[2])) {
             shared = data[2];
         }
@@ -141,30 +136,47 @@ define([ 'require', 'exports', 'log', 'util', 'message', 'comm', 'guiState.contr
         // $('#show-relations').find('.modal-header>h3').text(Blockly.Msg.BUTTON_DO_SHARE + ' »' + progName + '«').end();
         $('#relationsTable').bootstrapTable('removeAll');
         if (shared) {
-            $.each(shared.sharedWith, function(i, obj) {
-                $.each(obj, function(user, right) {
-                    if (user !== 'Gallery') {
-                        $('#relationsTable').bootstrapTable('insertRow', {
-                            index : -1,
-                            row : {
-                                name : data[0],
-                                owner : data[1],
-                                sharedWith : user,
-                                read : right,
-                                write : right,
-                            }
-                        });
-                    }
-                });
+            $.each(shared.sharedWith, function(i, shareObj) {
+                if (shareObj.type !== 'User' || shareObj.label !== 'Gallery') {
+                    $('#relationsTable').bootstrapTable('insertRow', {
+                        index : -1,
+                        row : {
+                            name : data[0],
+                            owner : data[1],
+                            sharedWith : shareObj,
+                            read : shareObj.right,
+                            write : shareObj.right,
+                        }
+                    });
+                }
             });
         }
+        // add input row for new user group to share with
+        $('#relationsTable').bootstrapTable('insertRow', {
+            index : 0,
+            row : {
+                name : data[0],
+                owner : data[1],
+                sharedWith : {
+                    label: null,
+                    type: 'UserGroup',
+                    right: 'NONE'
+                },
+                read : 'READ',
+                write : '',
+            }
+        });
         // add input row for new user to share with
         $('#relationsTable').bootstrapTable('insertRow', {
             index : 0,
             row : {
                 name : data[0],
                 owner : data[1],
-                sharedWith : 'no input',
+                sharedWith : {
+                    label: null,
+                    type: 'User',
+                    right: 'NONE'
+                },
                 read : 'READ',
                 write : '',
             }
@@ -212,32 +224,103 @@ define([ 'require', 'exports', 'log', 'util', 'message', 'comm', 'guiState.contr
      * Update rights for all users with which this program is shared, no
      * selected right will remove sharing
      */
-    function updateSharedWithUsers() {
+    function updateSharedWithUsers(rowIndex) {
         var data = $('#relationsTable').bootstrapTable('getData');
-        // start from second row, first is already handled in updateShareWithUser()
-        for (var i = 1; i < data.length; i++) {
-            var progName = data[i].name;
-            var sharedWith = data[i].sharedWith;
-            var rightOld = data[i].read; //or .write
-            var changed = true;
-            var right = 'NONE';
-            if ($("#checkRead" + i).is(':checked')) {
+        
+        for (var i = 0; i < data.length; i++) {
+            if (!isNaN(rowIndex) && i != parseInt(rowIndex)) {
+                continue;
+            }
+
+            var sharedWith = JSON.parse(JSON.stringify(data[i].sharedWith)),
+                $shareLabelInput = false
+                updateRowIndex = -1,
+                right = 'NONE';
+            
+            if ($("#checkRead" + i).is(':checked') && (sharedWith.type !== 'User' || !GUISTATE_C.isUserMemberOfUserGroup() || sharedWith.label !== GUISTATE_C.getUserUserGroupOwner())) {
                 right = 'READ';
             }
             if ($("#checkWrite" + i).is(':checked')) {
                 right = 'WRITE';
             }
-            if (right !== rightOld) {
-                PROGRAM.shareProgram(progName, sharedWith, right, function(result) {
-                    if (result.rc === 'ok') {
-                        MSG.displayMessage(result.message, "TOAST", sharedWith);
-                        LOG.info("share program " + progName + " with '" + sharedWith + " having right '" + right + "'");                      
-                        $('#progList').find('button[name="refresh"]').trigger('click');                    
+            
+            if (sharedWith.label === null) {
+                var $shareLabelInput = $('#relationsTable tr[data-index="' + i + '"] .shareLabelInput'),
+                    shareLabel = $shareLabelInput.val();
+                
+                if (!shareLabel) {
+                    continue;
+                }
+                
+                if (sharedWith.type === 'User') {
+                    // new user and owner are the same?
+                    if (shareLabel === data[i].owner) {
+                        if (!isNaN(rowIndex)) {
+                            UTIL.showMsgOnTop("ORA_USER_TO_SHARE_SAME_AS_LOGIN_USER");
+                            return;
+                        }
+                        continue;
                     }
-                });
+                    
+                    updateRowIndex = data.map(function(row) {
+                        return row.sharedWith !== null ? row.sharedWith.label : '';
+                    }).indexOf(shareLabel);
+                    
+                    if (updateRowIndex >= 0) {
+                        sharedWith = JSON.parse(JSON.stringify(data[updateRowIndex].sharedWith));
+                    }
+                }
+                
+                sharedWith.label = shareLabel;
+            }
+            
+            if (right !== sharedWith.right) {
+                sharedWith.right = right;
+                (function (row, shareObj, $shareLabelInput, updateRowIndex) {
+                    PROGRAM.shareProgram(row.name, shareObj, function(result) {
+                        if (result.rc === 'ok') {
+                            if ($shareLabelInput) {
+                                $shareLabelInput.val('');
+                                if (shareObj.type === 'UserGroup') {
+                                    $shareLabelInput.find('option[value="' + shareObj.label + '"]').remove();
+                                }
+                                if (updateRowIndex < 0) {
+                                    $('#relationsTable').bootstrapTable('insertRow', {
+                                        index : 2,
+                                        row : {
+                                            name : row.name,
+                                            owner : row.owner,
+                                            sharedWith : shareObj,
+                                            read : shareObj.right,
+                                            write : shareObj.right,
+                                        }
+                                    });
+                                } else {
+                                    $('#relationsTable').bootstrapTable('updateRow', {
+                                        index : updateRowIndex,
+                                        row : {
+                                            name : row.name,
+                                            owner : row.owner,
+                                            sharedWith : shareObj,
+                                            read : shareObj.right,
+                                            write : shareObj.right,
+                                        }
+                                    });
+                                }
+                            }
+                            MSG.displayMessage(result.message, "TOAST", shareObj.label);
+                            LOG.info("share program " + row.name + " with '" + shareObj.label + "'(" + shareObj.type + ") having right '" + shareObj.right + "'");                      
+                            $('#progList').find('button[name="refresh"]').trigger('click');                    
+                        } else {
+                            UTIL.showMsgOnTop(result.message);
+                        }
+                    });
+                })(data[i], sharedWith, $shareLabelInput, updateRowIndex);
             }
         }
-        $('#show-relations').modal("hide");
+        if (isNaN(rowIndex)) {
+            $('#show-relations').modal("hide");
+        }
     }
 
     /**
@@ -256,91 +339,6 @@ define([ 'require', 'exports', 'log', 'util', 'message', 'comm', 'guiState.contr
         $('#share-with-gallery').modal("hide");
     }
 
-    /**
-     * Share program with another user.
-     * 
-     * @param row
-     *            {Array} - input row
-     * @returns {Bool} - false, if user to share with does not exist or user is
-     *          identical with owner
-     * 
-     */
-
-    function updateShareWithUser(row) {
-        var data = $('#relationsTable').bootstrapTable('getData');
-        var $inputs = $('#relationsTable input');
-        var values = {};
-        $inputs.each(function() {
-            values[this.name] = $(this).val();
-        });
-        // user is empty, ignore input
-        if (values.shareWithInput === '') {
-            return true;
-        }
-        // new user and owner are the same?
-        if (values.shareWithInput === row.owner) {
-            UTIL.showMsgOnTop("ORA_USER_TO_SHARE_SAME_AS_LOGIN_USER");
-            return false;
-        }
-        // already shared with this user?
-        var updateShareWith = false;
-        for (var i = 0; i < data.length; i++) {
-            if (data[i].sharedWith === values.shareWithInput) {
-                updateShareWith = i;
-            }
-        }
-        var returnValue = true;
-        var right = '';
-        if ($("#checkRead0").is(':checked'))
-            right = 'READ';
-        if ($("#checkWrite0").is(':checked'))
-            right = 'WRITE';
-        if (right) { // should not be empty
-            PROGRAM.shareProgram(row.name, values.shareWithInput, right, function(result) {
-                if (result.rc === 'ok') {
-                    if (updateShareWith) {
-                        if (right === 'NONE') {
-                            $('#relationsTable').bootstrapTable('removeRow', {
-                                index : updateShareWith,
-                            });
-                        } else {
-                            $('#relationsTable').bootstrapTable('updateRow', {
-                                index : updateShareWith,
-                                row : {
-                                    name : row.name,
-                                    owner : row.owner,
-                                    sharedWith : values.shareWithInput,
-                                    read : right,
-                                    write : right,
-                                }
-                            });
-                        }
-                    } else {
-                        $('#relationsTable').bootstrapTable('insertRow', {
-                            index : 1,
-                            row : {
-                                name : row.name,
-                                owner : row.owner,
-                                sharedWith : values.shareWithInput,
-                                read : right,
-                                write : right,
-                            }
-                        });
-                    }
-                    MSG.displayMessage(result.message, "TOAST", values.shareWithInput);
-                    LOG.info("share program " + row.name + " with '" + values.shareWithInput + " having right '" + right + "'");
-                    $('#progList').find('button[name="refresh"]').trigger('click');
-                } else {
-                    UTIL.showMsgOnTop(result.message);
-                    returnValue = false;
-                }
-            });
-        } else {
-            return false;
-        }
-        return returnValue;
-    }
-
     var rowStyle = function(row, index) {
         return {
             classes : 'typcn typcn-' + row[2] // the robot typicon as background image
@@ -348,8 +346,8 @@ define([ 'require', 'exports', 'log', 'util', 'message', 'comm', 'guiState.contr
     }
 
     var eventAddShare = {
-        'click #addShare' : function(e, value, row, index) {
-            updateShareWithUser(row);
+        'click .addShare' : function(e, value, row, index) {
+            updateSharedWithUsers(index);
         }
     };
 
@@ -370,6 +368,9 @@ define([ 'require', 'exports', 'log', 'util', 'message', 'comm', 'guiState.contr
     };
 
     var formatRead = function(value, row, index) {
+        if (row.sharedWith.label === null && row.sharedWith.type === 'UserGroup' || row.sharedWith.type === 'User' && GUISTATE_C.isUserMemberOfUserGroup() && GUISTATE_C.getUserUserGroupOwner() === row.sharedWith.label) {
+            return '<input type="checkbox" id="checkRead' + index + '" checked disabled>';
+        }
         if (value === 'READ') {
             return '<input type="checkbox" id="checkRead' + index + '" checked>';
         }
@@ -377,6 +378,9 @@ define([ 'require', 'exports', 'log', 'util', 'message', 'comm', 'guiState.contr
     }
 
     var formatWrite = function(value, row, index) {
+        if (row.sharedWith.type === 'UserGroup') {
+            return '<input type="checkbox" id="checkWrite' + index + '" disabled>';
+        }
         if (value === 'WRITE') {
             return '<input type="checkbox" id="checkWrite' + index + '" checked>';
         }
@@ -384,10 +388,94 @@ define([ 'require', 'exports', 'log', 'util', 'message', 'comm', 'guiState.contr
     }
 
     var formatSharedWith = function(value, row, index) {
-        if (value === 'no input') {
-            return '<div class="input-group"><span class="input-group-btn">' + '<button id="addShare" type="button" style="height:34px" class="btn">'
-                    + '<i class="typcn typcn-plus"></i></button></span>' + '<input type="text" name="shareWithInput" class="form-control"/></div>';
+        if (value === null || typeof value !== 'object') {
+            error.log('unknown share format "' + (typeof value) + '"');
+            
+            return '';
         }
-        return value;
+        if (value.label === null) {
+            var typeLabel = '';
+            if (value.type === 'User') {
+                var $html = $('<div class="input-group">' 
+                        + '<label class="input-group-btn" for="shareWithUserInput">' 
+                            + '<button type="button" style="height:34px" class="btn disabled editor">' 
+                                + '<i class="typcn typcn-user"></i>' 
+                            + '</button>' 
+                        + '</label>' 
+                        + '<span class="input-group-btn">' 
+                            + '<button class="addShare btn" type="button" style="height: 34px">'
+                                + '<i class="typcn typcn-plus"></i>' 
+                            + '</button>' 
+                        + '</span>' 
+                        + '<input class="shareLabelInput form-control" type="text" name="user.account" lkey="Blockly.Msg.SHARE_WITH_USER" data-translation-targets="placeholder"/>' 
+                    + '</div>');
+                LANG.translate($html);
+                return $('<div></div>').append($html).html();
+            }
+            if (value.type === 'UserGroup') {
+                if (!GUISTATE_C.isUserMemberOfUserGroup()) {
+                    USERGROUP.loadUserGroupList(function(data) {
+                        if (data.rc == 'ok' && data.userGroups && data.userGroups.length > 0) {
+                            var existingUserGroupNames = $('#relationsTable').bootstrapTable('getData').filter(function(dataEntry) {
+                                    return dataEntry.sharedWith && dataEntry.sharedWith.type === 'UserGroup';
+                                }).map(function(dataEntry) {
+                                    return dataEntry.sharedWith.label;
+                                }),
+                                $td = $('#relationsTable tr[data-index="' + index + '"] script').parent(),
+                                html;
+                            
+                            html = '<div class="input-group" title="" data-original-title lkey="Blockly.Msg.SHARE_WITH_USERGROUP" data-translation-targets="title data-original-title">' 
+                                    + '<label class="input-group-btn" for="shareWithUserGroupInput">' 
+                                        + '<button type="button" style="height:34px" class="btn disabled editor">' 
+                                            + '<i class="typcn typcn-group"></i>' 
+                                        + '</button>' 
+                                    + '</label>' 
+                                    + '<span class="input-group-btn">' 
+                                        + '<button class="addShare btn" type="button" style="height: 34px">'
+                                            + '<i class="typcn typcn-plus"></i>' 
+                                        + '</button>' 
+                                    + '</span>' 
+                                    + '<select class="shareLabelInput form-control" name="userGroup.name">'
+                                        + '<option value="" lkey="Blockly.Msg.SHARE_WITH_USERGROUP" data-translation-targets="html"></option>'
+                                        + data.userGroups.filter(function(userGroup) {
+                                            return existingUserGroupNames.indexOf(userGroup.name) === -1;
+                                        }).reduce(function(carry, userGroup) {
+                                            return carry + '<option value="' + userGroup.name + '">' + userGroup.name + '</option>';
+                                        }, '')
+                                    + '</select>'
+                                + '</div>';
+                            
+                            $td.html(html);
+                            LANG.translate($td);
+                            Object.keys(eventAddShare).forEach(function (eventKey) {
+                                if (!eventAddShare.hasOwnProperty(eventKey)) {
+                                    return;
+                                }
+                                
+                                var eventInformation = eventKey.split(' ', 2);
+                                $td.find(eventInformation[1]).on(eventInformation[0], function(e) {
+                                    eventAddShare[eventKey](e, value, row, index);
+                                });
+                            });
+                            $td.parent().show();
+                        }
+                    });
+                }
+                return '<script>$(\'#relationsTable\').find(\'tr[data-index="' + index + '"]\').hide();</script>';
+            }
+            
+            error.log('unknown share type');
+            return '';
+        }
+        
+        var typeIconClass = 'warning-outline';
+        
+        if (value.type === 'User') {
+            typeIconClass = 'user';
+        } else if (value.type === 'UserGroup') {
+            typeIconClass = 'group';
+        }
+        
+        return '<span class="typcn typcn-' + typeIconClass + '"></span> <span class="value">' + value.label + '</span>';
     }
 });

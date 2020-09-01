@@ -1,5 +1,4 @@
-<block_set xmlns="http://de.fhg.iais.roberta.blockly"
-	robottype="ev3" xmlversion="" description="" tags="">
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="ev3" xmlversion="3.0" description="" tags="">
 	<instance x="-517" y="190">
 		<block type="controls_for" id="442" inline="true">
 			<field name="VAR">i</field>

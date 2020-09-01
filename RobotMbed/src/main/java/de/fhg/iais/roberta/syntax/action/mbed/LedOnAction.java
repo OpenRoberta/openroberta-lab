@@ -50,7 +50,7 @@ public class LedOnAction<V> extends Action<V> {
      * @param comment added from the user,
      * @return read only object of class {@link LedOnAction}
      */
-    private static <V> LedOnAction<V> make(String port, Expr<V> ledColor, BlocklyBlockProperties properties, BlocklyComment comment) {
+    public static <V> LedOnAction<V> make(String port, Expr<V> ledColor, BlocklyBlockProperties properties, BlocklyComment comment) {
         return new LedOnAction<>(port, ledColor, properties, comment);
     }
 

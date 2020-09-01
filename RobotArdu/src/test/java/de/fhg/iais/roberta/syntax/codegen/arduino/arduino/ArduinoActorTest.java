@@ -18,7 +18,7 @@ public class ArduinoActorTest extends ArduinoAstTest {
         Map<String, String> relayPins = Util.createMap("IN", "6");
         ConfigurationComponent relay = new ConfigurationComponent("RELAY", true, "relay", "R", relayPins);
         ConfigurationAst.Builder builder = new ConfigurationAst.Builder();
-        builder.setTrackWidth(17f).setWheelDiameter(5.6f).addComponents(Arrays.asList(relay));
+        builder.addComponents(Arrays.asList(relay));
         UnitTestHelper
             .checkGeneratedSourceEqualityWithProgramXml(
                 testFactory,
@@ -32,7 +32,7 @@ public class ArduinoActorTest extends ArduinoAstTest {
         Map<String, String> stepperMotorPins = Util.createMap("IN1", "6", "IN2", "5", "IN3", "4", "IN4", "3");
         ConfigurationComponent stepperMotor = new ConfigurationComponent("STEPMOTOR", true, "step", "S2", stepperMotorPins);
         ConfigurationAst.Builder builder = new ConfigurationAst.Builder();
-        builder.setTrackWidth(17f).setWheelDiameter(5.6f).addComponents(Arrays.asList(stepperMotor));
+        builder.addComponents(Arrays.asList(stepperMotor));
         UnitTestHelper
             .checkGeneratedSourceEqualityWithProgramXml(
                 testFactory,
@@ -46,7 +46,7 @@ public class ArduinoActorTest extends ArduinoAstTest {
         Map<String, String> stepperMotorPins = Util.createMap("IN1", "6", "IN2", "5", "IN3", "4", "IN4", "3");
         ConfigurationComponent stepperMotor = new ConfigurationComponent("STEPMOTOR", true, "step", "S2", stepperMotorPins);
         ConfigurationAst.Builder builder = new ConfigurationAst.Builder();
-        builder.setTrackWidth(17f).setWheelDiameter(5.6f).addComponents(Arrays.asList(stepperMotor));
+        builder.addComponents(Arrays.asList(stepperMotor));
         UnitTestHelper
             .checkGeneratedSourceEqualityWithProgramXml(
                 testFactory,
@@ -60,7 +60,7 @@ public class ArduinoActorTest extends ArduinoAstTest {
         Map<String, String> servoMotorPins = Util.createMap("PULSE", "8");
         ConfigurationComponent servoMotor = new ConfigurationComponent("SERVOMOTOR", true, "servo", "S", servoMotorPins);
         ConfigurationAst.Builder builder = new ConfigurationAst.Builder();
-        builder.setTrackWidth(17f).setWheelDiameter(5.6f).addComponents(Arrays.asList(servoMotor));
+        builder.addComponents(Arrays.asList(servoMotor));
         UnitTestHelper
             .checkGeneratedSourceEqualityWithProgramXml(
                 testFactory,
@@ -74,7 +74,7 @@ public class ArduinoActorTest extends ArduinoAstTest {
         Map<String, String> ledPins = Util.createMap("INPUT", "13");
         ConfigurationComponent led = new ConfigurationComponent("LED", true, "LED", "L", ledPins);
         ConfigurationAst.Builder builder = new ConfigurationAst.Builder();
-        builder.setTrackWidth(17f).setWheelDiameter(5.6f).addComponents(Arrays.asList(led));
+        builder.addComponents(Arrays.asList(led));
         UnitTestHelper
             .checkGeneratedSourceEqualityWithProgramXml(
                 testFactory,
@@ -88,7 +88,7 @@ public class ArduinoActorTest extends ArduinoAstTest {
         Map<String, String> screenPins = Util.createMap("RS", "12", "E", "11", "D4", "5", "D5", "4", "D6", "3", "D7", "2");
         ConfigurationComponent screen = new ConfigurationComponent("LCD", true, "L", "L2", screenPins);
         ConfigurationAst.Builder builder = new ConfigurationAst.Builder();
-        builder.setTrackWidth(17f).setWheelDiameter(5.6f).addComponents(Arrays.asList(screen));
+        builder.addComponents(Arrays.asList(screen));
         UnitTestHelper
             .checkGeneratedSourceEqualityWithProgramXml(
                 testFactory,
@@ -102,7 +102,7 @@ public class ArduinoActorTest extends ArduinoAstTest {
         Map<String, String> screenPins = Util.createMap();
         ConfigurationComponent screen = new ConfigurationComponent("LCDI2C", true, "L", "L", screenPins);
         ConfigurationAst.Builder builder = new ConfigurationAst.Builder();
-        builder.setTrackWidth(17f).setWheelDiameter(5.6f).addComponents(Arrays.asList(screen));
+        builder.addComponents(Arrays.asList(screen));
         UnitTestHelper
             .checkGeneratedSourceEqualityWithProgramXml(
                 testFactory,
@@ -116,7 +116,7 @@ public class ArduinoActorTest extends ArduinoAstTest {
         Map<String, String> buzzerPins = Util.createMap("+", "5");
         ConfigurationComponent buzzer = new ConfigurationComponent("BUZZER", true, "buzzer", "B", buzzerPins);
         ConfigurationAst.Builder builder = new ConfigurationAst.Builder();
-        builder.setTrackWidth(17f).setWheelDiameter(5.6f).addComponents(Arrays.asList(buzzer));
+        builder.addComponents(Arrays.asList(buzzer));
         UnitTestHelper
             .checkGeneratedSourceEqualityWithProgramXml(
                 testFactory,
@@ -130,7 +130,7 @@ public class ArduinoActorTest extends ArduinoAstTest {
         Map<String, String> ledPins = Util.createMap("INPUT", "13");
         ConfigurationComponent led = new ConfigurationComponent("LED", true, "LED", "L", ledPins);
         ConfigurationAst.Builder builder = new ConfigurationAst.Builder();
-        builder.setTrackWidth(17f).setWheelDiameter(5.6f).addComponents(Arrays.asList(led));
+        builder.addComponents(Arrays.asList(led));
         UnitTestHelper
             .checkGeneratedSourceEqualityWithProgramXml(testFactory, "/ast/actions/arduino_led_test.ino", "/ast/actions/arduino_led_test.xml", builder.build());
     }
@@ -140,13 +140,15 @@ public class ArduinoActorTest extends ArduinoAstTest {
         Map<String, String> rgbLedPins = Util.createMap("RED", "5", "GREEN", "6", "BLUE", "3");
         ConfigurationComponent rgbLed = new ConfigurationComponent("RGBLED", true, "RGBLED", "R", rgbLedPins);
         ConfigurationAst.Builder builder = new ConfigurationAst.Builder();
-        builder.setTrackWidth(17f).setWheelDiameter(5.6f).addComponents(Arrays.asList(rgbLed));
+        builder.addComponents(Arrays.asList(rgbLed));
+        ConfigurationAst config = builder.build();
+        config.setRobotName("nano");
         UnitTestHelper
             .checkGeneratedSourceEqualityWithProgramXml(
                 testFactory,
                 "/ast/actions/arduino_rgb_led_test.ino",
                 "/ast/actions/arduino_rgb_led_test.xml",
-                builder.build());
+                config);
     }
 
     @Test
@@ -156,7 +158,7 @@ public class ArduinoActorTest extends ArduinoAstTest {
         ConfigurationComponent analogOutput = new ConfigurationComponent("ANALOG_INPUT", true, "ANALOG_INPUT", "A2", analogOuputPins);
         ConfigurationComponent digitalOutput = new ConfigurationComponent("DIGITAL_INPUT", true, "DIGITAL_INPUT", "A", digitalOuputPins);
         ConfigurationAst.Builder builder = new ConfigurationAst.Builder();
-        builder.setTrackWidth(17f).setWheelDiameter(5.6f).addComponents(Arrays.asList(digitalOutput, analogOutput));
+        builder.addComponents(Arrays.asList(digitalOutput, analogOutput));
         ConfigurationAst configurationAst = builder.build();
         configurationAst.setRobotName("nano"); // TODO remove once rfid library is supported for unowifirev2
         UnitTestHelper
@@ -169,41 +171,41 @@ public class ArduinoActorTest extends ArduinoAstTest {
 
     @Test
     public void multiIncludeTest() throws Exception {
-        Map<String, String> servoMotorPins = Util.createMap("PULSE", "8");
-        ConfigurationComponent servoMotor1 = new ConfigurationComponent("SERVOMOTOR", true, "servo", "S", servoMotorPins);
-        ConfigurationComponent servoMotor2 = new ConfigurationComponent("SERVOMOTOR", true, "servo", "S2", servoMotorPins);
-        Map<String, String> rfidPins = Util.createMap("RST", "9", "SDA", "10", "SCK", "13", "MOSI", "11", "MISO", "12");
-        ConfigurationComponent rfid1 = new ConfigurationComponent("RFID", true, "rfid", "R6", rfidPins);
-        ConfigurationComponent rfid2 = new ConfigurationComponent("RFID", true, "rfid", "R7", rfidPins);
+        Map<String, String> servoMotorPins1 = Util.createMap("PULSE", "7");
+        Map<String, String> servoMotorPins2 = Util.createMap("PULSE", "8");
+        ConfigurationComponent servoMotor1 = new ConfigurationComponent("SERVOMOTOR", true, "servo", "S", servoMotorPins1);
+        ConfigurationComponent servoMotor2 = new ConfigurationComponent("SERVOMOTOR", true, "servo", "S2", servoMotorPins2);
+        Map<String, String> rfidPins1 = Util.createMap("RST", "2", "SDA", "3", "SCK", "4", "MOSI", "5", "MISO", "6");
+        Map<String, String> rfidPins2 = Util.createMap("RST", "9", "SDA", "10", "SCK", "13", "MOSI", "11", "MISO", "12");
+        ConfigurationComponent rfid1 = new ConfigurationComponent("RFID", true, "rfid", "R6", rfidPins1);
+        ConfigurationComponent rfid2 = new ConfigurationComponent("RFID", true, "rfid", "R7", rfidPins2);
         ConfigurationAst.Builder builder = new ConfigurationAst.Builder();
-        builder.setTrackWidth(17f).setWheelDiameter(5.6f).addComponents(Arrays.asList(rfid1, rfid2, servoMotor1, servoMotor2));
+        builder.addComponents(Arrays.asList(rfid1, rfid2, servoMotor1, servoMotor2));
         ConfigurationAst configurationAst = builder.build();
         configurationAst.setRobotName("nano"); // TODO remove once rfid library is supported for unowifirev2
         UnitTestHelper
             .checkGeneratedSourceEqualityWithProgramXml(
-                testFactory,
-                "/ast/brickConfiguration/arduino_multi_include_test.ino",
-                "/ast/brickConfiguration/arduino_multi_include_test.xml",
+                testFactory, "/ast/config/arduino_multi_include_test.ino", "/ast/config/arduino_multi_include_test.xml",
                 configurationAst);
     }
 
     @Test(expected = DbcException.class)
     public void negativeIncludeTest() throws Exception {
-        Map<String, String> servoMotorPins = Util.createMap("PULSE", "8");
-        ConfigurationComponent servoMotor1 = new ConfigurationComponent("NON-EXISTING-COMPONENT", true, "servo", "S", servoMotorPins);
-        ConfigurationComponent servoMotor2 = new ConfigurationComponent("NON-EXISTING-COMPONENT2", true, "servo", "S2", servoMotorPins);
-        Map<String, String> rfidPins = Util.createMap("RST", "9", "SDA", "10", "SCK", "13", "MOSI", "11", "MISO", "12");
-        ConfigurationComponent rfid1 = new ConfigurationComponent("NON-EXISTING-COMPONENT", true, "rfid", "R6", rfidPins);
-        ConfigurationComponent rfid2 = new ConfigurationComponent("NON-EXISTING-COMPONENT2", true, "rfid", "R7", rfidPins);
+        Map<String, String> servoMotorPins1 = Util.createMap("PULSE", "7");
+        Map<String, String> servoMotorPins2 = Util.createMap("PULSE", "8");
+        ConfigurationComponent servoMotor1 = new ConfigurationComponent("NON-EXISTING-COMPONENT", true, "servo", "S", servoMotorPins1);
+        ConfigurationComponent servoMotor2 = new ConfigurationComponent("NON-EXISTING-COMPONENT2", true, "servo", "S2", servoMotorPins2);
+        Map<String, String> rfidPins1 = Util.createMap("RST", "2", "SDA", "3", "SCK", "4", "MOSI", "5", "MISO", "6");
+        Map<String, String> rfidPins2 = Util.createMap("RST", "9", "SDA", "10", "SCK", "13", "MOSI", "11", "MISO", "12");
+        ConfigurationComponent rfid1 = new ConfigurationComponent("NON-EXISTING-COMPONENT", true, "rfid", "R6", rfidPins1);
+        ConfigurationComponent rfid2 = new ConfigurationComponent("NON-EXISTING-COMPONENT2", true, "rfid", "R7", rfidPins2);
         ConfigurationAst.Builder builder = new ConfigurationAst.Builder();
-        builder.setTrackWidth(17f).setWheelDiameter(5.6f).addComponents(Arrays.asList(rfid1, rfid2, servoMotor1, servoMotor2));
+        builder.addComponents(Arrays.asList(rfid1, rfid2, servoMotor1, servoMotor2));
         ConfigurationAst configurationAst = builder.build();
         configurationAst.setRobotName("nano"); // TODO remove once rfid library is supported for unowifirev2
         UnitTestHelper
             .checkGeneratedSourceEqualityWithProgramXml(
-                testFactory,
-                "/ast/brickConfiguration/arduino_multi_include_test.ino",
-                "/ast/brickConfiguration/arduino_multi_include_test.xml",
+                testFactory, "/ast/config/arduino_multi_include_test.ino", "/ast/config/arduino_multi_include_test.xml",
                 configurationAst);
     }
 }

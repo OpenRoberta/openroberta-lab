@@ -1,13 +1,10 @@
-<block_set xmlns="http://de.fhg.iais.roberta.blockly"
-	robottype="nibo" xmlversion="2.0" description="" tags="">
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="nibo" xmlversion="3.0" description="" tags="">
 	<instance x="254" y="34">
-		<block type="robControls_start_ardu" id="9gQ`lvA-06F0GogyKtF*"
-			intask="true" deletable="false">
+		<block type="robControls_start_ardu" id="9gQ`lvA-06F0GogyKtF*" intask="true" deletable="false">
 			<mutation declare="true"></mutation>
 			<field name="DEBUG">FALSE</field>
 			<statement name="ST">
-				<block type="robGlobalVariables_declare" id="6.e2Ao~!F;Iq1cp|=~;4"
-					intask="true" deletable="false" movable="false">
+				<block type="robGlobalVariables_declare" id="6.e2Ao~!F;Iq1cp|=~;4" intask="true" deletable="false" movable="false">
 					<mutation next="false" declaration_type="Number"></mutation>
 					<field name="VAR">item</field>
 					<field name="TYPE">Number</field>

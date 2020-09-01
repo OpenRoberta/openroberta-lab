@@ -1,5 +1,27 @@
 <toolbox_set id="toolbox" style="display: none">
-    <category name='Brick'>
-        <block type='mbedBrick_Calliope-Brick'></block>
+    <category name="TOOLBOX_ACTION" svg="true">
+        <block type="robConf_rgbled" />
+        <block type="robConf_buzzer" />
+        <block type="robConf_motor" />
+        <block type="robConf_servo" />
+        <block type="robConf_ledbar" />
+        <block type="robConf_fourdigitdisplay" />
+        <block type="robConf_digitalin" />
+        <block type="robConf_analogin" />
+        <block type="robConf_callibot" />
+    </category>
+    <category name="TOOLBOX_SENSOR" svg="true">
+        <block type="robConf_key" />
+        <block type="robConf_light" />
+        <block type="robConf_compass" />
+        <block type="robConf_accelerometer" />
+        <block type="robConf_gyro" />
+        <block type="robConf_temperature" />
+        <block type="robConf_sound" />
+        <block type="robConf_ultrasonic" />
+        <block type="robConf_humidity" />
+        <block type="robConf_digitalout" />
+        <block type="robConf_analogout" />
+        <block type="robConf_colourtcs3472" />
     </category>
 </toolbox_set>

@@ -51,6 +51,7 @@
     <block type="robSensors_lightveml_getSample"/>
     <block type="robSensors_accelerometer_getSample"/>
     <block type="robSensors_particle_getSample"/>
+    <block type="robSensors_environmental_getSample" />
     <block type="robSensors_timer_getSample"/>
     <block type="robSensors_timer_reset"/>
   </category>

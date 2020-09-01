@@ -40,7 +40,7 @@ define([ 'exports', 'jquery', 'wrap', 'log' ], function(exports, $, WRAP, LOG) {
 
     /**
      * URL-encode a JSON object, issue a GET and expect a JSON object as
-     * response. No init token!
+     * response. No init token! DEPRECATED. Only used in a test.
      */
     function get(url, data, successFn, message) {
         return $.ajax({
@@ -109,8 +109,15 @@ define([ 'exports', 'jquery', 'wrap', 'log' ], function(exports, $, WRAP, LOG) {
         if (!frontendSessionValid) {
             return;
         } else {
-            return json('/ping', {}, successFn === undefined ? function() {
-            } : successFn);
+            var successFnWrapper = function(result) {
+                if (result !== undefined && result.rc === 'error' && result.cause === 'ORA_INIT_FAIL_PING_ERROR' && result.initToken === 'invalid-token') {
+                    frontendSessionValid = false;
+                }
+                if (successFn !== undefined) {
+                    successFn(result);
+                }
+            }
+            return json('/ping', {}, successFnWrapper);
         }
     }
     exports.ping = ping;
@@ -182,7 +189,7 @@ define([ 'exports', 'jquery', 'wrap', 'log' ], function(exports, $, WRAP, LOG) {
         var message;
         switch (type) {
         case "INIT_TOKEN_DE":
-            message = "Dieser Browsertab ist nicht mehr gültig weil Deine Browser-Session abgelaufen ist oder der Openroberta-Server neu gestartet wurde.\n\nDu kannst dein Programm zwar noch verändern oder exportieren, aber nicht mehr übersetzen oder auf dein Gerät übertragen. Bitte lade diese Seite neu indem du auf »Aktualisieren« ↻ klickst!";
+            message = "Dieser Browsertab ist nicht mehr gültig, weil Deine Browser-Session abgelaufen ist oder der Openroberta-Server neu gestartet wurde.\n\nDu kannst dein Programm zwar noch verändern oder exportieren, aber nicht mehr übersetzen oder auf dein Gerät übertragen. Bitte lade diese Seite neu indem du auf »Aktualisieren« ↻ klickst!";
             break;
         case "INIT_TOKEN_EN":
             message = "This browser tab is not valid anymore, because your browser session expired or the openroberta server was restarted.\n\nYou may edit or export your program, but it is impossible to compile or send it to your device. Please click on the »Refresh« ↻ button!";
@@ -194,10 +201,10 @@ define([ 'exports', 'jquery', 'wrap', 'log' ], function(exports, $, WRAP, LOG) {
             message = "Your connection to the Open Roberta Server is slow or broken. To avoid data loss you may export your program.";
             break;
         case "FRONTEND_DE":
-            message = "Dein Browser hat ein ungültiges Kommando geschickt. Bitte lösche den Browser-Cache!";
+            message = "Dein Browser hat ein ungültiges Kommando geschickt. Eventuell ist auch der Openroberta-Server neu gestartet worden. \n\nDu kannst dein Programm zwar noch verändern oder exportieren, aber nicht mehr übersetzen oder auf dein Gerät übertragen.\n\nBitte lösche vorsichtshalber den Browser-Cache!";
             break;
         case "FRONTEND_EN":
-            message = "Your browser has sent an invalid command, please clear your browser cache!";
+            message = "Your browser has sent an invalid command. Maybe that the openroberta server was restarted.\n\nYou may edit or export your program, but it is impossible to compile or send it to your device.\n\nAs a precaution please clear your browser cache!";
             break;
         default:
             message = "Connection error! Please clear your browser cache!"

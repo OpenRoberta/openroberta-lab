@@ -4,11 +4,12 @@
 #include <NEPODefs.h>
 
 
-int _spiele_B = 5;
+int _buzzer_B = 5;
 void setup()
 {}
 
 void loop()
 {
-    tone(_spiele_B,300, 100);
+    tone(_buzzer_B,300, 100);
+    delay(100);
 }

@@ -33,6 +33,8 @@ import de.fhg.iais.roberta.syntax.lang.functions.LengthOfIsEmptyFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.ListGetIndex;
 import de.fhg.iais.roberta.syntax.lang.functions.ListRepeat;
 import de.fhg.iais.roberta.syntax.lang.functions.ListSetIndex;
+import de.fhg.iais.roberta.syntax.lang.functions.MathCastCharFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.MathCastStringFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathConstrainFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathNumPropFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathOnListFunct;
@@ -40,8 +42,10 @@ import de.fhg.iais.roberta.syntax.lang.functions.MathPowerFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathRandomFloatFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathRandomIntFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathSingleFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.TextCharCastNumberFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.TextJoinFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.TextPrintFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.TextStringCastNumberFunct;
 import de.fhg.iais.roberta.syntax.lang.methods.MethodCall;
 import de.fhg.iais.roberta.syntax.lang.methods.MethodIfReturn;
 import de.fhg.iais.roberta.syntax.lang.methods.MethodReturn;
@@ -61,6 +65,7 @@ import de.fhg.iais.roberta.syntax.lang.stmt.StmtList;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtTextComment;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
+import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.visitor.IVisitor;
 
 public interface ILanguageVisitor<V> extends IVisitor<V> {
@@ -339,6 +344,34 @@ public interface ILanguageVisitor<V> extends IVisitor<V> {
     V visitMathSingleFunct(MathSingleFunct<V> mathSingleFunct);
 
     /**
+     * visit a {@link MathCastStringFunct}.
+     *
+     * @param mathCastStringFunct to be visited
+     */
+    V visitMathCastStringFunct(MathCastStringFunct<V> mathCastStringFunct);
+
+    /**
+     * visit a {@link MathCastCharFunct}.
+     *
+     * @param mathCastCharFunct to be visited
+     */
+    V visitMathCastCharFunct(MathCastCharFunct<V> mathCastCharFunct);
+
+    /**
+     * visit a {@link TextCharCastNumberFunct}.
+     *
+     * @param textCharCastNumberFunct to be visited
+     */
+    V visitTextCharCastNumberFunct(TextCharCastNumberFunct<V> textCharCastNumberFunct);
+
+    /**
+     * visit a {@link TextStringCastNumberFunct}.
+     *
+     * @param textStringCastNumberFunct to be visited
+     */
+    V visitTextStringCastNumberFunct(TextStringCastNumberFunct<V> textStringCastNumberFunct);
+
+    /**
      * visit a {@link TextJoinFunct}.
      *
      * @param textJoinFunct to be visited
@@ -464,6 +497,8 @@ public interface ILanguageVisitor<V> extends IVisitor<V> {
         }
         return null;
     }
+
+    V visitTimerSensor(TimerSensor<V> timerSensor);
 
     V visitAssertStmt(AssertStmt<V> assertStmt);
 

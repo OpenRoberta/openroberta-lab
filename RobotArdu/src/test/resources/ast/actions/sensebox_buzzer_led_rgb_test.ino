@@ -4,25 +4,20 @@
 #undef max
 #undef min
 #include <NEPODefs.h>
-
-unsigned long _time = millis();
+#include <Adafruit_NeoPixel.h>
 
 unsigned int ___item;
 unsigned int ___item2;
 int _led_R2 = 8;
 int _buzzer_B = 5;
-int _led_red_R = 1;
-int _led_green_R = 2;
-int _led_blue_R = 3;
+Adafruit_NeoPixel _rgbled_R = Adafruit_NeoPixel(1, 1, NEO_RGB + NEO_KHZ800);
 int _led_L = 4;
 int _led_R1 = 7;
 
 void setup()
 {
     pinMode(_led_R2, OUTPUT);
-    pinMode(_led_red_R, OUTPUT);
-    pinMode(_led_green_R, OUTPUT);
-    pinMode(_led_blue_R, OUTPUT);
+    _rgbled_R.begin();
     pinMode(_led_L, OUTPUT);
     pinMode(_led_R1, OUTPUT);
     ___item = RGB(0xFF, 0xFF, 0xFF);
@@ -37,28 +32,16 @@ void loop()
     digitalWrite(_led_R1, HIGH);
     digitalWrite(_led_R2, HIGH);
     digitalWrite(_led_L, HIGH);
-    analogWrite(_led_red_R, 0xcc);
-    analogWrite(_led_green_R, 0x00);
-    analogWrite(_led_blue_R, 0x00);
-    
-    analogWrite(_led_red_R, 120);
-    analogWrite(_led_green_R, 120);
-    analogWrite(_led_blue_R, 120);
-    
-    analogWrite(_led_red_R, RCHANNEL(___item));
-    analogWrite(_led_green_R, GCHANNEL(___item));
-    analogWrite(_led_blue_R, BCHANNEL(___item));
-    
-    analogWrite(_led_red_R, RCHANNEL(___item2));
-    analogWrite(_led_green_R, GCHANNEL(___item2));
-    analogWrite(_led_blue_R, BCHANNEL(___item2));
-    
-    analogWrite(_led_red_R, 0);
-    analogWrite(_led_green_R, 0);
-    analogWrite(_led_blue_R, 0);
-    
-    analogWrite(_led_red_R, 0);
-    analogWrite(_led_green_R, 0);
-    analogWrite(_led_blue_R, 0);
-    
+    _rgbled_R.setPixelColor(0, _rgbled_R.Color(204, 0, 0));
+    _rgbled_R.show();
+    _rgbled_R.setPixelColor(0, _rgbled_R.Color(120, 120, 120));
+    _rgbled_R.show();
+    _rgbled_R.setPixelColor(0, _rgbled_R.Color(RCHANNEL(___item), GCHANNEL(___item), BCHANNEL(___item)));
+    _rgbled_R.show();
+    _rgbled_R.setPixelColor(0, _rgbled_R.Color(RCHANNEL(___item2), GCHANNEL(___item2), BCHANNEL(___item2)));
+    _rgbled_R.show();
+    _rgbled_R.setPixelColor(0, _rgbled_R.Color(0, 0, 0));
+    _rgbled_R.show();
+    _rgbled_R.setPixelColor(0, _rgbled_R.Color(0, 0, 0));
+    _rgbled_R.show();
 }

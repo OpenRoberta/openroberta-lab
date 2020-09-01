@@ -1,0 +1,28 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="calliope" xmlversion="2.0" description="" tags="">
+    <instance x="549" y="76">
+        <block type="robControls_start" id="h!uwE~+!/nQb@;OTzXds" intask="true" deletable="false">
+            <mutation declare="false"></mutation>
+            <field name="DEBUG"></field>
+        </block>
+        <block type="robActions_debug" id="-@C]*/^0)}92m~c%,bg/" intask="true">
+            <value name="OUT">
+                <block type="robSensors_compass_getSample" id="@nAx~0hC|L_aN}S]}LaW" intask="true">
+                    <mutation mode="ANGLE"></mutation>
+                    <field name="MODE">ANGLE</field>
+                    <field name="SENSORPORT"></field>
+                    <field name="SLOT"></field>
+                </block>
+            </value>
+        </block>
+        <block type="robActions_debug" id="IOkPe#]m#.|87`~+UYTk" intask="true">
+            <value name="OUT">
+                <block type="robSensors_getSample" id=")yYpolbCy-eYN[*I)``}" intask="true">
+                    <mutation input="COMPASS_ANGLE"></mutation>
+                    <field name="SENSORTYPE">COMPASS_ANGLE</field>
+                    <field name="SENSORPORT"></field>
+                    <field name="SLOT"></field>
+                </block>
+            </value>
+        </block>
+    </instance>
+</block_set>

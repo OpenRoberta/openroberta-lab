@@ -3,7 +3,9 @@ package de.fhg.iais.roberta.persistence.util;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 
 import org.hibernate.Query;
@@ -25,16 +27,18 @@ import de.fhg.iais.roberta.util.dbc.Assert;
  */
 public class DbSession {
     private static final Logger LOG = LoggerFactory.getLogger(DbSession.class);
-    private static final long DURATION_TIMEOUT_MSEC = 5000;
+    private static final long DURATION_TIMEOUT_MSEC_FOR_LOGGING = TimeUnit.SECONDS.toMillis(5);
+    private static final long DURATION_TIMEOUT_MSEC_FOR_CLEANUP = TimeUnit.HOURS.toMillis(2);
     private static final int NUMBER_OF_SESSIONS_TO_SHOW = 50;
 
     private Session session;
 
     // data for analyzing db session usage. Global storage, access MUST be atomically/synchronized
     private static final AtomicLong currentOpenSessionCounter = new AtomicLong(0);
+    private static final AtomicLong cleanedSessionCounter = new AtomicLong(0);
     private static final AtomicLong unusedSessionCounter = new AtomicLong(0);
     private static final AtomicLong sessionIdGenerator = new AtomicLong(0);
-    private static final Map<Long, DbSession> debugSessionMap = new ConcurrentHashMap<>(); // potentially dangerous resource usage!
+    private static final Map<Long, DbSession> sessionMap = new ConcurrentHashMap<>(); // potentially dangerous resource usage!
 
     // data for analyzing db session usage.
     private final long sessionId;
@@ -43,7 +47,8 @@ public class DbSession {
     private long numberOfActions = 0;
 
     /**
-     * wrap a hibernate session. Package visible: may only be called from {@link SessionFactoryWrapper}
+     * wrap a hibernate session.<br>
+     * <b><i>Be very careful:</i> may only be called from {@link SessionFactoryWrapper} and the upgrader of the database</b>
      *
      * @param session the hibernate session to be wrapped
      */
@@ -56,7 +61,7 @@ public class DbSession {
         currentOpenSessionCounter.incrementAndGet();
         sessionId = sessionIdGenerator.incrementAndGet();
         creationTime = new Date().getTime();
-        debugSessionMap.put(sessionId, this);
+        sessionMap.put(sessionId, this);
     }
 
     /**
@@ -104,14 +109,14 @@ public class DbSession {
 
         // for analyzing db session usage.
         long sessionAge = new Date().getTime() - creationTime;
-        if ( new Date().getTime() - creationTime > DURATION_TIMEOUT_MSEC ) {
+        if ( new Date().getTime() - creationTime > DURATION_TIMEOUT_MSEC_FOR_LOGGING ) {
             LOG.error("db session " + sessionId + " too old: " + sessionAge + "msec\n" + getFullInfo());
         }
         currentOpenSessionCounter.decrementAndGet();
         if ( this.numberOfActions == 0 ) {
             unusedSessionCounter.getAndIncrement();
         }
-        if ( debugSessionMap.remove(this.sessionId) == null ) {
+        if ( sessionMap.remove(this.sessionId) == null ) {
             LOG.error("FATAL: could not remove db session " + this.sessionId);
         }
     }
@@ -219,10 +224,43 @@ public class DbSession {
     }
 
     /**
+     * remove (cleanup) all those db sessions, that are outdated. This is a VERY dangerous operation!
+     */
+    public static void cleanupSessions() {
+        final long now = new Date().getTime();
+        long sessionIdToRemove = 0;
+        boolean somethingExpired = false;
+        for ( Entry<Long, DbSession> entry : sessionMap.entrySet() ) {
+            try {
+                sessionIdToRemove = entry.getKey();
+                DbSession sessionToCheck = entry.getValue();
+                if ( now - sessionToCheck.creationTime > DURATION_TIMEOUT_MSEC_FOR_CLEANUP ) {
+                    LOG.error("rollback and remove of the expired database session " + sessionIdToRemove);
+                    sessionToCheck.rollback();
+                    sessionMap.remove(sessionIdToRemove);
+                    currentOpenSessionCounter.decrementAndGet();
+                    cleanedSessionCounter.incrementAndGet();
+                    somethingExpired = true;
+                }
+            } catch ( Exception e ) {
+                LOG.error("rollback and remove of the expired database session " + sessionIdToRemove + " FAILED", e);
+                somethingExpired = true;
+            }
+        }
+        if ( !somethingExpired ) {
+            LOG.info("no expired database session");
+        }
+    }
+
+    /**
      * @return the number of open db sessions. Should be 0 or very close to zero, if no deadlock has occured.
      */
-    public static long getDebugSessionCounter() {
+    public static long getOpenSessionCounter() {
         return currentOpenSessionCounter.get();
+    }
+
+    public static long getCleanedSessionCounter() {
+        return cleanedSessionCounter.get();
     }
 
     /**
@@ -238,36 +276,13 @@ public class DbSession {
     public static String getFullInfo() {
         StringBuilder sb = new StringBuilder();
         sb.append("number of db sessions created: ").append(sessionIdGenerator).append("\n");
-        sb.append("number of db sessions created but not used: ").append(unusedSessionCounter).append("\n");
+        sb.append("number of db sessions created but not used (should be 0): ").append(unusedSessionCounter).append("\n");
         sb.append("number of db sessions currently in use: ").append(currentOpenSessionCounter).append("\n");
-        for ( DbSession dbSession : debugSessionMap.values() ) {
+        sb.append("number of db sessions closed by the db cleanup thread: ").append(cleanedSessionCounter).append("\n");
+        for ( DbSession dbSession : sessionMap.values() ) {
             sb.append("***** ").append(dbSession.sessionId).append(":\n").append(dbSession.actions);
         }
         return sb.toString();
     }
 
-    /**
-     * info about the state of open db sessions. Limited to:<br>
-     * - NUMBER_OF_SESSIONS_TO_SHOW many sessions<br>
-     * - sessions that have been created DURATION_TIMEOUT_MSEC or earlier
-     *
-     * @return the info. May be a LONG String!
-     */
-    public static String getInfo() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("number of db sessions created: ").append(sessionIdGenerator).append("\n");
-        sb.append("number of db sessions created but not used: ").append(unusedSessionCounter).append("\n");
-        sb.append("number of db sessions currently in use: ").append(currentOpenSessionCounter).append("\n");
-        final long now = new Date().getTime();
-        int numberOfSessions = 0;
-        for ( DbSession dbSession : debugSessionMap.values() ) {
-            if ( numberOfSessions++ > NUMBER_OF_SESSIONS_TO_SHOW ) {
-                break;
-            }
-            if ( now - dbSession.creationTime > DURATION_TIMEOUT_MSEC ) {
-                sb.append("***** ").append(dbSession.sessionId).append(":\n").append(dbSession.actions);
-            }
-        }
-        return sb.toString();
-    }
 }

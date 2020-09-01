@@ -1,6 +1,6 @@
 package de.fhg.iais.roberta.ast.action;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -21,14 +21,14 @@ public class MotorOnActionTest extends AstTest {
 
     @Test
     public void getParam() throws Exception {
-        ArrayList<ArrayList<Phrase<Void>>> forest = UnitTestHelper.getAst(testFactory, "/ast/actions/action_MotorOnFor.xml");
+        List<List<Phrase<Void>>> forest = UnitTestHelper.getProgramAst(testFactory, "/ast/actions/action_MotorOnFor.xml");
         MotorOnAction<Void> mo = (MotorOnAction<Void>) forest.get(0).get(1);
         Assert.assertEquals("MotionParam [speed=NumConst [30], duration=null]", mo.getParam().toString());
     }
 
     @Test
     public void getPort() throws Exception {
-        ArrayList<ArrayList<Phrase<Void>>> forest = UnitTestHelper.getAst(testFactory, "/ast/actions/action_MotorOnFor.xml");
+        List<List<Phrase<Void>>> forest = UnitTestHelper.getProgramAst(testFactory, "/ast/actions/action_MotorOnFor.xml");
         MotorOnAction<Void> mo = (MotorOnAction<Void>) forest.get(0).get(1);
         Assert.assertEquals("A", mo.getUserDefinedPort());
     }

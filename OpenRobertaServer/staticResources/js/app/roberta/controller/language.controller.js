@@ -1,5 +1,5 @@
-define([ 'exports', 'log', 'jquery', 'guiState.controller', 'program.controller', 'configuration.controller', 'user.controller' ], function(exports, LOG, $,
-        GUISTATE_C, PROGRAM_C, CONFIGURATION_C, USER_C) {
+define([ 'exports', 'log', 'jquery', 'guiState.controller', 'program.controller', 'configuration.controller', 'user.controller', 'blockly' ], function(exports, LOG, $,
+        GUISTATE_C, PROGRAM_C, CONFIGURATION_C, USER_C, Blockly) {
 
     /**
      * Initialize language switching
@@ -107,8 +107,12 @@ define([ 'exports', 'log', 'jquery', 'guiState.controller', 'program.controller'
     /**
      * Translate the web page
      */
-    function translate() {
-        $("[lkey]").each(function(index) {
+    function translate($domElement) {
+        if (!$domElement || typeof $domElement !== 'object' || !$domElement.length) {
+            $domElement = $(document.body);
+        }
+        
+        $domElement.find("[lkey]").each(function(index) {
             var lkey = $(this).attr('lkey');
             var key = lkey.replace("Blockly.Msg.", "");
             var value = Blockly.Msg[key];
@@ -164,6 +168,16 @@ define([ 'exports', 'log', 'jquery', 'guiState.controller', 'program.controller'
                 $('#simImport').attr('data-original-title', value);
             } else if (lkey == 'Blockly.Msg.MENU_SIM_POSE_TOOLTIP') {
                 $('#simResetPose').attr('data-original-title', value);
+            } else if (lkey == 'Blockly.Msg.MENU_DEBUG_START_TOOLTIP') {
+                $('#debugMode').attr('data-original-title', value);
+            }else if (lkey == 'Blockly.Msg.MENU_DEBUG_STEP_BREAKPOINT_TOOLTIP'){
+                $('#simControlBreakPoint').attr('data-original-title', value);
+            }else if (lkey == 'Blockly.Msg.MENU_DEBUG_STEP_INTO_TOOLTIP'){
+                $('#simControlStepInto').attr('data-original-title', value);
+            }else if (lkey == 'Blockly.Msg.MENU_DEBUG_STEP_OVER_TOOLTIP'){
+                $('#simControlStepOver').attr('data-original-title', value);
+            }else if (lkey == 'Blockly.Msg.MENU_SIM_VARIABLES_TOOLTIP'){
+                $('#simVariables').attr('data-original-title', value);
             } else if (lkey == 'Blockly.Msg.MENU_CODE_DOWNLOAD_TOOLTIP') {
                 $('#codeDownload').attr('data-original-title', value);
                 $('#downloadSourceCodeEditor').attr('data-original-title', value);
@@ -195,12 +209,22 @@ define([ 'exports', 'log', 'jquery', 'guiState.controller', 'program.controller'
                 $('#confNameTable').find('.load').attr('data-original-title', value);
             } else if (lkey == 'Blockly.Msg.OLDER_THEN_14' || lkey == 'Blockly.Msg.YOUNGER_THEN_14') {
                 $(this).html(value);
+            } else if ($(this).data('translationTargets')) {
+                var attributeTargets = $(this).data('translationTargets').split(' ');
+                for(var key in attributeTargets) {
+                    if (attributeTargets[key] === 'text' || attributeTargets[key] === 'html') {
+                        $(this)[attributeTargets[key]](value);
+                    } else {
+                        $(this).attr(attributeTargets[key], value);
+                    }
+                };
             } else {
                 $(this).html(value);
                 $(this).attr('value', value);
             }
         });
     }
+    exports.translate = translate;
 
     /**
      * $.getScript() will append a timestamped query parameter to the url to

@@ -1,4 +1,4 @@
-define([ 'exports', 'message', 'log', 'util', 'guiState.controller', 'blocks', 'jquery', 'jquery-validate', 'blocks-msg' ], function(exports, MSG, LOG, UTIL,
+define([ 'exports', 'message', 'log', 'util', 'guiState.controller', 'blockly', 'jquery', 'jquery-validate' ], function(exports, MSG, LOG, UTIL,
         GUISTATE_C, Blockly, $) {
 
     const INITIAL_WIDTH = 0.5;

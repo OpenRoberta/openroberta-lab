@@ -1,6 +1,7 @@
 package de.fhg.iais.roberta.syntax.expr;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -25,7 +26,7 @@ public class Expr1add2Test extends AstTest {
      */
     @Test
     public void test1add2xml() throws Exception {
-        ArrayList<ArrayList<Phrase<Void>>> ast = UnitTestHelper.getAst(testFactory, "/expressionblock/expr_1add2.xml");
+        List<List<Phrase<Void>>> ast = UnitTestHelper.getProgramAst(testFactory, "/expressionblock/expr_1add2.xml");
         LOG.info("" + ast);
         //        TypecheckVisitor typechecker = TypecheckVisitor.makeVisitorAndTypecheck(ast);
         //        Assert.assertEquals(0, typechecker.getErrorCount());

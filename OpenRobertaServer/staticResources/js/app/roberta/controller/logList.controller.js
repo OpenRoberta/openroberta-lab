@@ -8,7 +8,6 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'guiState.controller', 'lo
 
         initLogList();
         initLogListEvents();
-        LOG.info('init log list view');
     }
     exports.init = init;
 

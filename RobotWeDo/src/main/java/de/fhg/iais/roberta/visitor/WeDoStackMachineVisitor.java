@@ -1,6 +1,6 @@
 package de.fhg.iais.roberta.visitor;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import org.json.JSONObject;
 
@@ -17,6 +17,10 @@ import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorStopAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
+import de.fhg.iais.roberta.syntax.lang.functions.MathCastCharFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.MathCastStringFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.TextCharCastNumberFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.TextStringCastNumberFunct;
 import de.fhg.iais.roberta.syntax.lang.stmt.AssertStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.DebugAction;
 import de.fhg.iais.roberta.syntax.sensor.generic.GetSampleSensor;
@@ -30,8 +34,19 @@ import de.fhg.iais.roberta.visitor.lang.codegen.AbstractStackMachineVisitor;
 
 public final class WeDoStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> implements IWeDoVisitor<V> {
 
-    public WeDoStackMachineVisitor(UsedHardwareBean usedHardwareBean, ConfigurationAst configuration, ArrayList<ArrayList<Phrase<Void>>> phrases) {
+    public WeDoStackMachineVisitor(UsedHardwareBean usedHardwareBean, ConfigurationAst configuration, List<List<Phrase<Void>>> phrases) {
         super(configuration);
+    }
+
+    @Override
+    protected V app(JSONObject o) {
+        this.getOpArray().add(o);
+        return null;
+    }
+
+    @Override
+    protected JSONObject mk(String opCode, Phrase<V> phrase) {
+        return super.mk(opCode);
     }
 
     @Override
@@ -210,5 +225,25 @@ public final class WeDoStackMachineVisitor<V> extends AbstractStackMachineVisito
     public V visitDebugAction(DebugAction<V> debugAction) {
         // TODO Auto-generated method stub
         return null;
+    }
+
+    @Override
+    public V visitMathCastStringFunct(MathCastStringFunct<V> mathCastStringFunct) {
+        throw new DbcException("Not supported!");
+    }
+
+    @Override
+    public V visitMathCastCharFunct(MathCastCharFunct<V> mathCastCharFunct) {
+        throw new DbcException("Not supported!");
+    }
+
+    @Override
+    public V visitTextStringCastNumberFunct(TextStringCastNumberFunct<V> textStringCastNumberFunct) {
+        throw new DbcException("Not supported!");
+    }
+
+    @Override
+    public V visitTextCharCastNumberFunct(TextCharCastNumberFunct<V> textCharCastNumberFunct) {
+        throw new DbcException("Not supported!");
     }
 }

@@ -125,7 +125,6 @@ public class DatabaseCopier {
 
             copyTable(statementFrom, dbConnectionTo, "USER_PROGRAM", 4);
             copyTable(statementFrom, dbConnectionTo, "USER_PROGRAM_LIKE", 6);
-            copyTable(statementFrom, dbConnectionTo, "TOOLBOX", 11);
             copyTable(statementFrom, dbConnectionTo, "CONFIGURATION", 11);
             copyTable(statementFrom, dbConnectionTo, "CONFIGURATION_DATA", 2);
         } catch ( Exception e ) {

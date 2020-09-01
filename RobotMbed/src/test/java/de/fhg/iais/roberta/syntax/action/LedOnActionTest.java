@@ -12,9 +12,9 @@ public class LedOnActionTest extends CalliopeAstTest {
         String expectedResult =
             "BlockAST [project=[[Location [x=138, y=37], "
                 + "MainTask [], "
-                + "LedOnAction [ 0, ColorConst [#ff0000] ], "
-                + "LedOnAction [ 0, ColorConst [#009900] ], "
-                + "LedOnAction [ 0, ColorConst [#9999ff] ]]]]";
+                + "LedOnAction [ R, ColorConst [#ff0000] ], "
+                + "LedOnAction [ R, ColorConst [#009900] ], "
+                + "LedOnAction [ R, ColorConst [#9999ff] ]]]]";
 
         UnitTestHelper.checkProgramAstEquality(testFactory, expectedResult, "/action/led_on_three_colors.xml");
 
@@ -22,7 +22,7 @@ public class LedOnActionTest extends CalliopeAstTest {
 
     @Test
     public void make_MissingColor_InstanceOfLedOnActionClassWithMissingLedClor() throws Exception {
-        String expectedResult = "BlockAST [project=[[Location [x=163, y=62], MainTask [], LedOnAction [ 0, EmptyExpr [defVal=COLOR] ]]]]";
+        String expectedResult = "BlockAST [project=[[Location [x=163, y=62], MainTask [], LedOnAction [ R, EmptyExpr [defVal=COLOR] ]]]]";
 
         UnitTestHelper.checkProgramAstEquality(testFactory, expectedResult, "/action/led_on_missing_color.xml");
 

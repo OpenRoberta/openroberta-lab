@@ -1,5 +1,5 @@
 define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'program.controller', 'configuration.controller', 'program.model',
-        'robot.controller', 'blocks', 'jquery', 'jquery-validate', 'blocks-msg' ], function(exports, COMM, MSG, LOG, UTIL, GUISTATE_C, PROGRAM_C,
+        'robot.controller', 'blockly', 'jquery', 'jquery-validate' ], function(exports, COMM, MSG, LOG, UTIL, GUISTATE_C, PROGRAM_C,
         CONFIGURATION_C, PROGRAM, ROBOT_C, Blockly, $) {
 
     function init(callback) {
@@ -65,18 +65,18 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'pr
                 result.programShared = false;
                 result.programTimestamp = '';
                 try {
-                    CONFIGURATION_C.configurationToBricklyWorkspace(result.configText);
-                    GUISTATE_C.setConfigurationXML(result.configText);
-                    PROGRAM_C.programToBlocklyWorkspace(result.programText);
+                    CONFIGURATION_C.configurationToBricklyWorkspace(result.confXML);
+                    GUISTATE_C.setConfigurationXML(result.confXML);
+                    PROGRAM_C.programToBlocklyWorkspace(result.progXML);
                     GUISTATE_C.setProgram(result);
-                    GUISTATE_C.setProgramXML(result.programText);
+                    GUISTATE_C.setProgramXML(result.progXML);
                     LOG.info('show program ' + GUISTATE_C.getProgramName());
                 } catch (e) {
                     // restore old Program
                     GUISTATE_C.setProgramXML(xmlProgOld);
                     GUISTATE_C.setConfigurationXML(xmlConfOld);
-                    PROGRAM_C.reloadProgram();
                     CONFIGURATION_C.reloadConf();
+                    PROGRAM_C.reloadProgram();
                     result.rc = "error";
                     MSG.displayInformation(result, "", Blockly.Msg.ORA_PROGRAM_IMPORT_ERROR, name);
                 }

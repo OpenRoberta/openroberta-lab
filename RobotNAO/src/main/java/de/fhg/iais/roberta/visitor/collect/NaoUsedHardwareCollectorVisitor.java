@@ -1,6 +1,6 @@
 package de.fhg.iais.roberta.visitor.collect;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import com.google.common.collect.ClassToInstanceMap;
 
@@ -57,7 +57,10 @@ import de.fhg.iais.roberta.visitor.hardware.INaoVisitor;
  */
 public final class NaoUsedHardwareCollectorVisitor extends AbstractUsedHardwareCollectorVisitor implements INaoVisitor<Void> {
 
-    public NaoUsedHardwareCollectorVisitor(ArrayList<ArrayList<Phrase<Void>>> phrasesSet, ConfigurationAst configuration, ClassToInstanceMap<IProjectBean.IBuilder<?>> beanBuilders) {
+    public NaoUsedHardwareCollectorVisitor(
+        List<List<Phrase<Void>>> phrasesSet,
+        ConfigurationAst configuration,
+        ClassToInstanceMap<IProjectBean.IBuilder<?>> beanBuilders) {
         super(configuration, beanBuilders);
     }
 

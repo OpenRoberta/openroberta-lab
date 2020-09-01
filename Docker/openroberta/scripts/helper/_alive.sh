@@ -18,48 +18,48 @@ isDefined REPORT_ALWAYS
 isDefined REPORT_MESSAGE
 
 function generate_output {
-  echo "helo $ALIVE_MAIL_SMTP_SERVER"
-  $SLEEP
+  echo "helo ${ALIVE_MAIL_SMTP_SERVER}"
+  ${SLEEP}
   
   echo "mail from: ${ALIVE_MAIL_SENDER}"
-  $SLEEP
+  ${SLEEP}
   for mailadress in "${ALIVE_MAIL_RECEIVER[@]}"
   do
     echo "rcpt to: ${mailadress}"
-    $SLEEP
+    ${SLEEP}
   done
   echo "data"
-  $SLEEP
+  ${SLEEP}
   echo "From: ${ALIVE_MAIL_SENDER}"
-  $SLEEP
+  ${SLEEP}
   ASSEMBLE_TO=''
   for mailadress in "${ALIVE_MAIL_RECEIVER[@]}"
   do
-    ASSEMBLE_TO="$ASSEMBLE_TO$mailadress,"
+    ASSEMBLE_TO="${ASSEMBLE_TO}${mailadress},"
   done
   echo "To: ${ASSEMBLE_TO}"
-  $SLEEP
-  if [ "$ALIVE" = true ]
+  ${SLEEP}
+  if [ "${ALIVE}" = true ]
   then
-    echo "Subject: Server $LAB_URL $REPORT_MESSAGE >>> Server ok <<<"
+    echo "Subject: Server ${LAB_URL} ${REPORT_MESSAGE} >>> Server ok <<<"
   else
-    echo "Subject: Server $LAB_URL $REPORT_MESSAGE >>> Problem!!! <<<"
-    echo "Please check $LAB_URL !!!"
+    echo "Subject: Server ${LAB_URL} ${REPORT_MESSAGE} >>> Problem!!! <<<"
+    echo "Please check ${LAB_URL} !!!"
     echo " "
   fi
   echo " "
-  echo "File system status of host '$HOSTNAME'"
+  echo "File system status of host '${HOSTNAME}'"
   echo " "
-  echo "$OUTPUT"
+  echo "${OUTPUT}"
   echo " "
-  $SLEEP
+  ${SLEEP}
   echo "."
-  $SLEEP
+  ${SLEEP}
   echo "quit"
 }
 
 # check if server is alive
-url=$(curl $LAB_URL/alive)
+url=$(curl ${LAB_URL}/alive)
 if [ $? -eq 0 ]
 then
     ALIVE=true
@@ -70,9 +70,9 @@ fi
 OUTPUT="$(df -h)"
 HOSTNAME="$(hostname)"
 
-echo '******************** '"$DATE: checking liveness of $LAB_URL, host $HOSTNAME with result alive==$ALIVE"' ********************'
+echo '******************** '"${DATE}: checking liveness of ${LAB_URL}, host ${HOSTNAME} with result alive==${ALIVE}"' ********************'
 
-if [[ "$ALIVE" = false || "$REPORT_ALWAYS" = true ]]
+if [[ "${ALIVE}" = false || "${REPORT_ALWAYS}" = true ]]
 then
-    generate_output | sudo nc $ALIVE_MAIL_SMTP_SERVER $ALIVE_MAIL_SMTP_PORT >/tmp/smtpOutputForDebugging
+    generate_output | sudo nc ${ALIVE_MAIL_SMTP_SERVER} ${ALIVE_MAIL_SMTP_PORT} >/tmp/smtpOutputForDebugging
 fi

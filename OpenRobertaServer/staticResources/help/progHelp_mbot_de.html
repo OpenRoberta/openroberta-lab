@@ -1,4 +1,4 @@
-<head><title></title><meta http-equiv="content-type" content="text/html; charset=utf-8"></head><body><div id="helpContent"><div id="robControls_start" class="help beginner"><br><h3 id="BlockbeschreibungmBot-»Programmstart«">»Programmstart«</h3><p>Jedes Programm beginnt mit dem »Programmstart-Block«, welcher nicht gelöscht werden kann. Den ersten Block, den man verwenden möchte, verbindet man direkt mit der  »Sequenzverbindung« am Programmstart-Block. </p><p>Einstellmöglichkeiten:
+<head><title></title><meta http-equiv="content-type" content="text/html; charset=utf-8"></head><body><div id="helpContent"><div id="robControls_start_ardu" class="help beginner"><br><h3 id="BlockbeschreibungmBot-»Programmstart«">»Programmstart«</h3><p>Jedes Programm beginnt mit dem »Programmstart-Block«, welcher nicht gelöscht werden kann. Den ersten Block, den man verwenden möchte, verbindet man direkt mit der  »Sequenzverbindung« am Programmstart-Block. </p><p>Einstellmöglichkeiten:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-plus">Erzeuge eine neue globale Variable.</li><li class="typcn typcn-minus"><span>Entferne die globale Variable.</span></li>
 </ul><br><p>Wenn globale Variablen erzeugt wurden:
@@ -34,6 +34,18 @@
 </ul></div><div id="robActions_serial_print" class="help beginner"><h3 id="BlockbeschreibungmBot-»ZeigeaufSerialMonitor«">»Zeige auf Serial Monitor «</h3><p>Mit diesem Block kann dein Roboter eine Zeichenkette über den Serial Bus ausgeben. Um diese Nachrichten empfangen zu können, musst du deinen Roboter per USB mit deinem Computer verbinden.</p><p>Einstellmöglichkeiten und Eingabewert:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-sorted-down">Zeichenkette, Nachricht, die auf dem Serial Monitor ausgegeben werden soll.</li>
+</ul></div><div id="mBotActions_display_text" class="help beginner"><h3 id="BlockbeschreibungmBot-»ZeigeTextLEDMatrixPort...«">»Zeige Text LED Matrix Port ... «</h3><p>Mit diesem Block kannst du einen Text deiner Wahl auf der LED Matrix anzeigen lassen. Der Text wird dabei als Lauftext auf der LED Matrix dargestellt und läuft einmal durch.</p><p>Optionen und Eingabewerte:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-sorted-down">Option, wähle den Port aus, an dem die LED Matrix angeschlossen ist.</li><li class="typcn typcn-arrow-left">Zeichenkette, der Text den du anzeigen möchtest.</li>
+</ul></div><div id="mBotActions_display_image" class="help beginner"><h3 id="BlockbeschreibungmBot-»Zeige...LEDMatrixPort...«">»Zeige ... LED Matrix Port ... «</h3><p>Mit diesem Block kannst du entweder ein einzelnes Bild oder eine Abfolge von Bildern auf deiner LED Matrix anzeigen lassen. </p><p>Optionen und Eingabewerte:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-sorted-down">Option, wähle ob du ein einzelnes Bild oder eine Abfolge von Bilder anzeigen möchtest.</li><li class="typcn typcn-arrow-sorted-down">Option, wähle den Port an dem die LED Matrix angeschlossen ist.</li><li class="typcn typcn-arrow-left">Bild oder Liste von Bildern, das Bild oder die Abfolge von Bildern die du anzeigen möchtest.</li>
+</ul></div><div id="mBotActions_display_clear" class="help beginner"><h3 id="BlockbeschreibungmBot-»LöscheLEDMatrixPort...«">»Lösche LED Matrix Port ... «</h3><p>Mit diesem Block kannst du die LED Matrix zurücksetzen, dabei werden alle LEDs ausgeschaltet.</p><p>Optionen:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-sorted-down">Option, Port an dem die LED Matrix angeschlossen ist.</li>
+</ul></div><div id="mBotActions_display_setBrightness" class="help expert"><h3 id="BlockbeschreibungmBot-»SetzeHelligkeitLEDMatrixPort...«[Experten-Block]">»Setze Helligkeit LED Matrix Port ... « <span class="typcn typcn-star"></span></h3><p>Mit diesem Block kannst du die Helligkeit der LED Matrix steuern. </p><p>Optionen und Eingabewerte:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-sorted-down">Option, Port an dem die LED Matrix angeschlossen ist.</li><li class="typcn typcn-arrow-left">Zahl, Helligkeit der LED Matrix, Zahl zwischen 0 und 9, wobei 0 aus bedeutet und 9 die maximale Helligkeit ist.</li>
 </ul></div><div id="robActions_play_tone" class="help expert"><h3 id="BlockbeschreibungmBot-»SpieleFrequenzHz...Dauerms...«[Experten-Block]">»Spiele Frequenz Hz ... Dauer ms ... « <span class="typcn typcn-star"></span></h3><p>Mit diesem Roboter kannst du deinen Roboter dazu bringen, einen Ton aus seinem Lautsprecher abzuspielen. Dabei kannst du die Frequenz und die Dauer des Tons steuern.</p><p>Einstellmöglichkeiten und Eingabewert:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-sorted-down">Zahl, Frequenz des Tons, Töne sind nur hörbar zwischen 20 und 20000 Hz.</li><li class="typcn typcn-arrow-sorted-down">Zahl, Dauer, für die der Ton gespielt werden soll.</li>
@@ -43,7 +55,7 @@
 </ul></div><div id="robActions_led_off" class="help beginner"><h3 id="BlockbeschreibungmBot-»SchalteLEDaus...«">»Schalte LED aus ...«</h3><p>Mit diesem Block kannst du eine der LEDs deines Roboters ausschalten.</p><p>Einstellmöglichkeiten und Eingabewert:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-sorted-down">Option, Position der LED, die du ausschalten möchtest.</li>
-</ul></div><div id="robSensors_key_getSample" class="help beginner"><h3 id="BlockbeschreibungmBot-»Tastegedrückt?«">»Taste gedrückt? «</h3><p>Mit diesem Block kannst du den Status der Taste deines mBots abfragen.</p><p>Rückgabewert:
+</ul></div><div id="robSensors_key_getSample" class="help beginner"><h3 id="BlockbeschreibungmBot-»Tastegedrückt?«">»Taste gedrückt? «</h3><p>Mit diesem Block kannst du den Status der Taste deines mBots abfragen.</p><p><span style="letter-spacing: 0.0px;">Rückgabewert:</span>
 </p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-right">Logischer Wert, »wahr«, wenn die Taste gedrückt ist, sonst »falsch«.</li>
 </ul></div><div id="robSensors_ultrasonic_getSample" class="help beginner"><h3 id="BlockbeschreibungmBot-»GibAbstandcmUltraschallsensorPort...«">»Gib Abstand cm Ultraschallsensor Port ... «</h3><p>Mit diesem Block kannst du deinen Abstandsensor abfragen. Dieser misst den Abstand zum nächsten Hindernis vor dem Roboter, indem er Ultraschallwellen aussendet und misst, wie lange diese brauchen, um zurückzukehren.</p><p>Einstellmöglichkeiten und Eingabewert:
@@ -57,13 +69,13 @@
 <li class="typcn typcn-arrow-sorted-down">Option, Port, an dem der Sensor angeschlossen ist.</li><li class="typcn typcn-arrow-sorted-down">Option, Position des Sensors, der abgefragt werden soll.</li>
 </ul><br><p>Rückgabewert:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
-<li class="typcn typcn-arrow-sorted-down">Logischer Wert, »wahr«, wenn der Untergrund dunkel ist, sonst »falsch«.</li>
+<li class="typcn typcn-arrow-right">Logischer Wert, »wahr«, wenn der Untergrund dunkel ist, sonst »falsch«.</li>
 </ul></div><div id="robSensors_light_getSample" class="help beginner"><h3 id="BlockbeschreibungmBot-»GibLicht%LichtsensorPort...«">»Gib Licht % Lichtsensor Port ... «</h3><p>Mit diesem Block kannst du den Zustand des Lichtsensors abfragen. Dieser Sensor kann die Helligkeit der Umgebung messen.</p><p>Einstellmöglichkeiten und Eingabewert:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-sorted-down">Option, Port, an dem der Lichtsensor angeschlossen ist.</li>
 </ul><p class="auto-cursor-target">Rückgabewert:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
-<li class="typcn typcn-arrow-sorted-down">Zahl, Helligkeit des Umgebungslicht, zwischen 1 und 100, wobei 1 dunkel und 100 hell ist.</li>
+<li class="typcn typcn-arrow-right">Zahl, Helligkeit des Umgebungslicht, zwischen 1 und 100, wobei 1 dunkel und 100 hell ist.</li>
 </ul></div><div id="robSensors_timer_getSample" class="help beginner"><h3 id="BlockbeschreibungmBot-»GibWertmsZeitgeber...«">»Gib Wert ms Zeitgeber ... «</h3><p>Mit diesem Block kannst du den Wert eines Zeitgebers ausgeben.</p><p>Einstellmöglichkeiten und Eingabewert:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-sorted-down">Option, Nummer des Zeitnehmers, den du abfragen möchtest</li>
@@ -97,10 +109,13 @@
 </ul></div><div id="controls_flow_statements" class="help expert"><h3 style="text-align: left;" id="BlockbeschreibungmBot-»DieSchleifeabbrechen/mitdernächstenIterationderSchleifefortfahren«[Experten-Block]">»Die Schleife abbrechen/mit der nächsten Iteration der Schleife fortfahren« <span class="typcn typcn-star"></span></h3><p style="text-align: left;">Mit dem Block »Die Schleife abbrechen/mit der nächsten Iteration der Schleife fortfahren« kann eine Schleife vorzeitig beendet bzw. wieder zum Anfang der Schleife gesprungen werden. Sobald dieser Block in einer Reihe von Blöcken erscheint, werden alle nachfolgenden Blöcke bis zum Ende der Schleife ignoriert.</p><p style="text-align: left;">Einstellmöglichkeiten:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-sorted-down">Abbruchverhalten, »Die Schleife abbrechen« oder »mit der nächsten Iteration der Schleife fortfahren«.</li>
-</ul></div><div id="robControls_wait_time" class="help beginner"><h3 style="text-align: left;" id="BlockbeschreibungmBot-»Warte«">»Warte«</h3><p style="text-align: left;">Mit dem Block »Warte« kannst du dein Programm an der Stelle "anhalten", an der du den Block eingefügt hast. Dein Programm bleibt dann für die angegebene Dauer an dieser Stelle stehen. Nach Ablauf der angegebenen Zeit wird dann der nachfolgende Block ausgeführt. Beispielsweise kannst du dadurch einen Text in dem Display deines Roboters exakt für diese Zeit anzeigen lassen.</p><p style="text-align: left;">Einstellmöglichkeiten:
+</ul></div><div id="robControls_wait" class="help beginner"><h3 class="auto-cursor-target" id="BlockbeschreibungmBot-»Wartebis...«">»Warte bis ... «</h3><p style="text-align: left;">Mit dem Block »Warte bis« kannst du dein Programm an der Stelle »anhalten«, an der du den »Warte bis«-Block eingefügt hast. Dein Programm wartet dann so lange, bis die Bedingung erfüllt (wahr) ist. Den »Warte bis«-Block kannst du mit dem »+«-Zeichen um zusätzliche Bedingungen erweitern. Dein Programm wartet dann solange, bis (mindestens) eine der Bedingungen deines »Warte bis«-Blocks erfüllt ist.</p><p style="text-align: left;">Einstelmöglichkeiten und Eingabewert:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-plus">Eine weitere Wartebedingung am Ende anfügen.</li><li class="typcn typcn-minus">Die letzte Wartebedingung löschen.</li><li class="typcn typcn-arrow-left">Logischer Wert, »wahr« oder »falsch«.</li>
+</ul></div><div id="robControls_wait_time" class="help beginner"><h3 style="text-align: left;" id="BlockbeschreibungmBot-»Wartems...«">»Warte ms ... «</h3><p style="text-align: left;">Mit dem Block »Warte« kannst du dein Programm an der Stelle "anhalten", an der du den Block eingefügt hast. Dein Programm bleibt dann für die angegebene Dauer an dieser Stelle stehen. Nach Ablauf der angegebenen Zeit wird dann der nachfolgende Block ausgeführt. Beispielsweise kannst du dadurch einen Text in dem Display deines Roboters exakt für diese Zeit anzeigen lassen.</p><p style="text-align: left;">Einstellmöglichkeiten:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-left">Zahl, Wartezeit in Millisekunden.</li>
-</ul></div><div id="robControls_wait_for" class="help beginner"><h3 style="text-align: left;" id="BlockbeschreibungmBot-»Wartebis«">»Warte bis«</h3><p style="text-align: left;">Mit dem Block »Warte bis« kannst du dein Programm an der Stelle »anhalten«, an der du den »Warte bis«-Block eingefügt hast. Dein Programm wartet dann so lange, bis die Bedingung erfüllt (wahr) ist. Den »Warte bis«-Block kannst du mit dem »+«-Zeichen um zusätzliche Bedingungen erweitern. Dein Programm wartet dann solange, bis (mindestens) eine der Bedingungen deines »Warte bis«-Blocks erfüllt ist.</p><p style="text-align: left;">Einstelmöglichkeiten und Eingabewert:
+</ul></div><div id="robControls_wait_for" class="help beginner"><h3 style="text-align: left;" id="BlockbeschreibungmBot-»Wartebis...«.1">»Warte bis ... «</h3><p style="text-align: left;">Mit dem Block »Warte bis« kannst du dein Programm an der Stelle »anhalten«, an der du den »Warte bis«-Block eingefügt hast. Dein Programm wartet dann so lange, bis die Bedingung erfüllt (wahr) ist. Den »Warte bis«-Block kannst du mit dem »+«-Zeichen um zusätzliche Bedingungen erweitern. Dein Programm wartet dann solange, bis (mindestens) eine der Bedingungen deines »Warte bis«-Blocks erfüllt ist.</p><p style="text-align: left;">Einstelmöglichkeiten und Eingabewert:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-plus">Eine weitere Wartebedingung am Ende anfügen.</li><li class="typcn typcn-minus">Die letzte Wartebedingung löschen.</li><li class="typcn typcn-arrow-left">Logischer Wert, »wahr« oder »falsch«.</li>
 </ul></div><div id="logic_compare" class="help beginner"><h3 style="text-align: left;" id="BlockbeschreibungmBot-»Vergleiche«">»Vergleiche«</h3><p style="text-align: left;">Mit dem Block »Vergleiche« kannst du verschiedene Eingabewerte (Zahl, Farbe, logischer Wert, Text) gleichen Typs miteinander vergleichen. Stimmt der Vergleich, wird der logische Wert »wahr« zurückgegeben, sonst »falsch«.</p><p style="text-align: left;">Einstellmöglichkeiten und Eingabewerte:
@@ -226,16 +241,7 @@
 </ul><br></div><div id="robText_append" class="help expert notWedo notBob3"><h3 style="text-align: left;" id="BlockbeschreibungmBot-»Textanhängen«[Experten-Block]">»Text anhängen« <span class="typcn typcn-star"></span></h3><p style="text-align: left;">Mit dem »Text anhängen«-Block können Zeichenketten erweitert werden, z.B. indem an empfangene Nachrichten eine Signatur angehängt wird.</p><p style="text-align: left;">Eingabemöglichkeiten:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-left">Text, Zeichenkette, an die Text angehängt werden soll</li><li class="typcn typcn-arrow-left">Text, Zeichenkette, die an einen Text angehängt werden soll</li>
-</ul></div><div id="variables_set" class="help beginner"><h3 id="BlockbeschreibungmBot-»SchreibeVariable«">»Schreibe Variable«</h3><p>Mit dem Block »Schreibe Variable« kannst du den Wert einer Variablen verändern. Je nach Typ der Variablen (Zahl, Zeichenkette, logischer Wert, Liste, Farbe, Verbindung) kann der Variablen ein passender Wert übergeben werden.</p><p>Einstellmöglichkeit und Eingabewert:
-</p><ul style="margin-top: 0; margin-bottom: 10px">
-<li class="typcn typcn-arrow-sorted-down">Variable, deren Wert verändert werden soll.</li><li class="typcn typcn-arrow-left">Wert, auf den die Variable gesetzt werden soll.</li>
-</ul><br></div><div id="variables_get" class="help beginner"><h3 id="BlockbeschreibungmBot-»LiesVariable«">»Lies Variable«</h3><p>Mit dem Block »lies Variable« kannst du den Wert einer Variablen an einen anderen Block übergeben. Der Typ des Ausgabewertes entspricht immer dem Typ, mit dem die Variablen im Block »Start« initialisiert wurde.</p><p>Einstellmöglichkeit:
-</p><ul style="margin-top: 0; margin-bottom: 10px">
-<li class="typcn typcn-arrow-sorted-down">Variable, deren Wert gelesen werden soll.</li>
-</ul><br><p>Rückgabewert:
-</p><ul style="margin-top: 0; margin-bottom: 10px">
-<li class="typcn typcn-arrow-right">Wert, der in der Variablen gespeichert ist.</li>
-</ul> </div><div id="robLists_create_with" class="help expert notWedo notBob3"><h3 id="BlockbeschreibungmBot-»ErzeugeListe«[Experten-Block]">»Erzeuge Liste« <span class="typcn typcn-star"></span></h3><p>Der Block »Erzeuge eine leere Liste« erzeugt eine Liste ohne Inhalt. Der Block »Liste« erzeugt eine Liste mit einigen voreingestellten Werten. Mit + und - können weitere Listenelemente am Ende hinzugefügt bzw. entfernt werden. Wenn das letzte Element einer Liste entfernt wurde, liegt eine leere Liste vor.</p><p>Einstellmöglichkeiten:
+</ul></div><div id="robLists_create_with" class="help expert notWedo notBob3"><h3 id="BlockbeschreibungmBot-»ErzeugeListe«[Experten-Block]">»Erzeuge Liste« <span class="typcn typcn-star"></span></h3><p>Der Block »Erzeuge eine leere Liste« erzeugt eine Liste ohne Inhalt. Der Block »Liste« erzeugt eine Liste mit einigen voreingestellten Werten. Mit + und - können weitere Listenelemente am Ende hinzugefügt bzw. entfernt werden. Wenn das letzte Element einer Liste entfernt wurde, liegt eine leere Liste vor.</p><p>Einstellmöglichkeiten:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-sorted-down">Typ, »Zahl«, »logischer Wert«, »Zeichenkette«, »Farbe« oder »Verbindung«.</li><li class="typcn typcn-plus">Erzeuge ein weiteres Listenelement am Ende der bestehenden Liste.</li><li class="typcn typcn-minus"> Lösche das Listenelement am Ende der bestehenden Liste.</li><li class="typcn typcn-arrow-left">Werte, die dem Listentyp entsprechen. Hiermit können Anfangswerte gesetzt werden.</li>
 </ul><br><p>Rückgabewert:
@@ -280,6 +286,51 @@
 </ul><br><p>Rückgabewert:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-right">Liste, Unterliste gleichen Typs wie die als Eingabewert übergebene Liste.</li>
+</ul><br></div><div id="mbedColour_picker" class="help beginner notWedo notEv3 notNxt notMicrobit notBotnroll notNao notBob3 notArduino notSensebox notMbot notFestobionic notEdison"><h3 id="BlockbeschreibungmBot-»Farbwahl«">»Farbwahl «</h3><p>Mit diesem Block kannst du eine Farbe aus einer Auswahl von vordefinierten Farben auswählen.</p><p>Option:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-sorted-down">Option, wähle die Farbeaus, die du verwenden möchtest.</li>
+</ul><p class="auto-cursor-target">Rückgabewert:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right">Farbe, die  ausgewählte Farbe.</li>
+</ul></div><div id="robColour_picker" class="help beginner notMicrobit notNao notFestobionic notEdison notCalliope"><h3 id="BlockbeschreibungmBot-»Farbwahl«.1">»Farbwahl «</h3><p>Mit diesem Block kannst du eine Farbe aus einer Auswahl von vordefinierten Farben auswählen.</p><p>Option:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-sorted-down">Option, wähle die Farbeaus, die du verwenden möchtest.</li>
+</ul><p class="auto-cursor-target">Rückgabewert:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right">Farbe, die  ausgewählte Farbe.</li>
+</ul></div><div id="naoColour_picker" class="help beginner notWedo notEv3 notNxt notMicrobit notBotnroll notBob3 notArduino notSensebox notMbot notFestobionic notMicrobit notCalliope"><h3 id="BlockbeschreibungmBot-»Farbwahl«.2">»Farbwahl «</h3><p>Mit diesem Block kannst du eine Farbe aus einer Auswahl von vordefinierten Farben auswählen.</p><p>Option:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-sorted-down">Option, wähle die Farbeaus, die du verwenden möchtest.</li>
+</ul><p class="auto-cursor-target">Rückgabewert:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right">Farbe, die  ausgewählte Farbe.</li>
+</ul></div><div id="mbedColour_rgb" class="help expert notWedo notEv3 notNxt notMicrobit notBotnroll notNao notBob3 notArduino notSensebox notMbot notFestobionic notEdison"><h3 class="auto-cursor-target" id="BlockbeschreibungmBot-»FarbemitRot...Grün...Blau...Weiß...«[Experten-Block]">»Farbe mit Rot ... Grün ... Blau ... Weiß ... « <span class="typcn typcn-star"></span></h3><p>Mit diesem Block kannst du dir eine eigene Farbe erstellen, indem du deine Farbe aus Rot, Grün und Blau mischst.</p><p>Eingabewerte:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-left">Zahl, der Rot-Anteil in deine Farbe. Wert zwischen 0 und 255.</li><li class="typcn typcn-arrow-left">Zahl, der Grün-Anteil deiner Farbe. Wert zwischen 0 und 255.</li><li class="typcn typcn-arrow-left">Zahl, der Blau-Anteil deiner Farbe. Wert zwischen 0 und 255.</li><li class="typcn typcn-arrow-left">Zahl, die  Helligkeit deiner Farbe. Wert zwischen 0 und 255.</li>
+</ul><br><p>Rückgabewert:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right">Farbe, die von dir erstellte Farbe.</li>
+</ul><br></div><div id="robColour_rgb" class="help expert notWedo notEv3 notNxt notMicrobit notBotnroll notNao notBob3 notArduino notSensebox notCalliope notFestobionic notEdison"><h3 class="auto-cursor-target" id="BlockbeschreibungmBot-»FarbemitRot...Grün...Blau...«[Experten-Block]">»Farbe mit Rot ... Grün ... Blau ... « <span class="typcn typcn-star"></span></h3><p>Mit diesem Block kannst du dir eine eigene Farbe erstellen, indem du deine Farbe aus Rot, Grün und Blau mischst.</p><p>Eingabewerte:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-left">Zahl, der Rot-Anteil in deine Farbe. Wert zwischen 0 und 255.</li><li class="typcn typcn-arrow-left">Zahl, der Grün-Anteil deiner Farbe. Wert zwischen 0 und 255.</li><li class="typcn typcn-arrow-left">Zahl, der Blau-Anteil deiner Farbe. Wert zwischen 0 und 255.</li>
+</ul><br><p>Rückgabewert:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right">Farbe, die von dir erstellte Farbe.</li>
+</ul><br></div><div id="naoColour_rgb" class="help expert notWedo notEv3 notNxt notMicrobit notBob3 notBotnroll notMbot notFestobionic notEdison notCalliope"><h3 class="auto-cursor-target" id="BlockbeschreibungmBot-»FarbemitRot...Grün...Blau...«[Experten-Block].1">»Farbe mit Rot ... Grün ... Blau ... « <span class="typcn typcn-star"></span></h3><p>Mit diesem Block kannst du dir eine eigene Farbe erstellen, indem du deine Farbe aus Rot, Grün und Blau mischst.</p><p>Eingabewerte:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-left">Zahl, der Rot-Anteil in deine Farbe. Wert zwischen 0 und 255.</li><li class="typcn typcn-arrow-left">Zahl, der Grün-Anteil deiner Farbe. Wert zwischen 0 und 255.</li><li class="typcn typcn-arrow-left">Zahl, der Blau-Anteil deiner Farbe. Wert zwischen 0 und 255.</li>
+</ul><br><p>Rückgabewert:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right">Farbe, die von dir erstellte Farbe.</li>
+</ul><br></div><div id="variables_set" class="help beginner"><h3 id="BlockbeschreibungmBot-»SchreibeVariable«">»Schreibe Variable«</h3><p>Mit dem Block »Schreibe Variable« kannst du den Wert einer Variablen verändern. Je nach Typ der Variablen (Zahl, Zeichenkette, logischer Wert, Liste, Farbe, Verbindung) kann der Variablen ein passender Wert übergeben werden.</p><p>Einstellmöglichkeit und Eingabewert:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-sorted-down">Variable, deren Wert verändert werden soll.</li><li class="typcn typcn-arrow-left">Wert, auf den die Variable gesetzt werden soll.</li>
+</ul><br></div><div id="variables_get" class="help beginner"><h3 id="BlockbeschreibungmBot-»LiesVariable«">»Lies Variable«</h3><p>Mit dem Block »lies Variable« kannst du den Wert einer Variablen an einen anderen Block übergeben. Der Typ des Ausgabewertes entspricht immer dem Typ, mit dem die Variablen im Block »Start« initialisiert wurde.</p><p>Einstellmöglichkeit:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-sorted-down">Variable, deren Wert gelesen werden soll.</li>
+</ul><br><p>Rückgabewert:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right">Wert, der in der Variablen gespeichert ist.</li>
 </ul><br></div><div id="robProcedures_defnoreturn" class="help expert"><h3 id="BlockbeschreibungmBot-Funktionsblockohne/mitEingabe-undohneRückgabewert[Experten-Block]">Funktionsblock ohne/mit Eingabe- und ohne Rückgabewert <span class="typcn typcn-star"></span></h3><p>In einem Funktionsblock ohne/mit Eingabe- und Rückgabewert wird eine Folge von Anweisungen zusammengefasst. Die Eingabewerte werden durch die lokalen Variablen im Funktionsblock festgelegt. Mit dem »+«-Zeichen können lokale Variablen als Eingabewerte für den Funktionsblock erzeugt werden. Lokale Variablen werden nicht initialisiert.</p><p>Falls in einen Funktionsblock eine Wenn-Abfrage (siehe unten) eingebaut wird, kann es zu einem vorzeitigen Abbruch der Funktion kommen.</p><p>Der Funktionsblock steht nach seiner Definition als zusätzlicher Block in der Kategorie »Funktion« zur Verfügung. Auf diese Weise kann die Lesbarkeit komplexer Programme wesentlich vereinfacht werden.</p><p>Einstellmöglichkeiten:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-pen">Funktionsname, ohne Leer- und Sonderzeichen</li><li class="typcn typcn-plus">Erzeuge eine lokale Variable, der über den Funktionsaufruf ein Wert zugewiesen wird.</li><li class="typcn typcn-minus">Lösche eine lokale Variable.</li>
@@ -295,10 +346,19 @@
 </ul><br><p>Rückgabewert:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-right">Wert, dessen Typ am Ende des Funktionsblock eingestellt ist.</li>
-</ul><br></div><div id="robCommunications_ir_sendBlock" class="help expert"><h3 id="BlockbeschreibungmBot-»SendeNachricht...«">»Sende Nachricht ... «</h3><p>Mit diesem Block kann dein mBot eine Nachricht an alle anderen mBots in der Nähe verschicken.</p><p>Eingabeoption:
+</ul><br></div><div id="robProcedures_callnoreturn" class="help expert"><h3 id="BlockbeschreibungmBot-»FunktionsaufrufohneRückgabewert«[Experten-Block]">»Funktionsaufruf ohne Rückgabewert « <span class="typcn typcn-star"></span></h3><p>Mit diesem Block kannst du eine vorher definierte Funktion aufrufen. Diese Funktion gibt dabei keinen Wert zurück.</p><p>Eingabewerte:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-left">Wert, abhängig von den Eingabewerte der vorher definierten Funktion.</li>
+</ul></div><div id="robProcedures_callreturn" class="help expert"><h3 class="auto-cursor-target" id="BlockbeschreibungmBot-»FunktionsaufrufmitRückgabewert«">»Funktionsaufruf mit Rückgabewert «</h3><p>Mit diesem Block kannst du eine vorher definierte Funktion aufrufen und den Rückgabewerte abrufen.</p><p>Eingabewerte:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-left">Wert, abhängig von den Eingabewerten der vorher definierten Funktion.</li>
+</ul><br><p>Rückgabewerte:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right">Wert, abhängig von dem Rückgabewert der definierten Funktion.</li>
+</ul><br></div><div id="robCommunication_ir_sendBlock" class="help expert"><h3 id="BlockbeschreibungmBot-»SendeNachricht...«">»Sende Nachricht ... «</h3><p>Mit diesem Block kann dein mBot eine Nachricht an alle anderen mBots in der Nähe verschicken.</p><p>Eingabeoption:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-left">Zeichenkette, Nachricht, die du versenden möchtest.</li>
-</ul></div><div id="robCommunications_ir_receiveBlock" class="help expert"><h3 id="BlockbeschreibungmBot-»EmpfangeNachricht«">»Empfange Nachricht «</h3><p>Mit diesem Block kann dein mBot Nachrichten von anderen mBots in der Umgebung empfangen.</p><p>Rückgabewert:
+</ul></div><div id="robCommunication_ir_receiveBlock" class="help expert"><h3 id="BlockbeschreibungmBot-»EmpfangeNachricht«">»Empfange Nachricht «</h3><p>Mit diesem Block kann dein mBot Nachrichten von anderen mBots in der Umgebung empfangen.</p><p>Rückgabewert:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-sorted-down">Zeichenkette, empfangene Nachricht von anderen mBots in der Umgebung.</li>
 </ul></div></div></body>

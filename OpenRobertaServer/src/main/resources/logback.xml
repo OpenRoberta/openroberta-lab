@@ -25,6 +25,11 @@
     <logger name="statistics" level="INFO" additivity="false">
         <appender-ref ref="STATISTICS" />
     </logger>
+    
+    <logger name="crosscompiler_error" level="INFO" additivity="false">
+        <appender-ref ref="LOG" />
+    </logger>
+    
 
     <logger name="org.hibernate" level="WARN" />
 

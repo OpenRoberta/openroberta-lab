@@ -14,9 +14,9 @@ import java.util.concurrent.Future;
 
 import javax.ws.rs.core.Response;
 
-import org.codehaus.jettison.json.JSONArray;
-import org.codehaus.jettison.json.JSONException;
-import org.codehaus.jettison.json.JSONObject;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -30,6 +30,7 @@ import com.google.common.base.Charsets;
 import com.google.common.io.Resources;
 
 import de.fhg.iais.roberta.factory.IRobotFactory;
+import de.fhg.iais.roberta.generated.restEntities.FullRestRequest;
 import de.fhg.iais.roberta.javaServer.basics.TestConfiguration;
 import de.fhg.iais.roberta.javaServer.restServices.all.controller.ClientAdmin;
 import de.fhg.iais.roberta.javaServer.restServices.all.controller.ClientProgramController;
@@ -172,28 +173,28 @@ public class PerformanceUserIT {
         String iTkn = "initToken-" + userNumber;
         HttpSessionState s = HttpSessionState.initOnlyLegalForDebugging(iTkn, this.robotPlugins, serverProperties, 1);
         Assert.assertTrue(!s.isUserLoggedIn());
-        JSONObject request; // re-used to create various REST requests
+        FullRestRequest request; // re-used to create various REST requests
 
         // create user "pid-*"
 
         String requestString =
             "{'cmd':'createUser';'accountName':'pid-acc-" + userNumber + "';'userName':'pid-user-" + userNumber + "';'password':'dip-" + userNumber + //
                 "';'isYoungerThen14':0;'userEmail':'cavy-" + userNumber + "@home';'role':'STUDENT'}";
-        request = mkCmd(iTkn, requestString);
+        request = mkFRR(iTkn, requestString);
         Response response = this.restUser.createUser(newDbSession(), request);
         JSONUtilForServer.assertEntityRc(response, "ok", Key.USER_CREATE_SUCCESS);
 
         // login with user "pid-*" and create 2 programs
 
         thinkTimeInMillisec += think(random, 1, 4);
-        request = mkCmd(iTkn, "{'cmd':'login';'accountName':'pid-acc-" + userNumber + "';'password':'dip-" + userNumber + "'}");
+        request = mkFRR(iTkn, "{'cmd':'login';'accountName':'pid-acc-" + userNumber + "';'password':'dip-" + userNumber + "'}");
         response = this.restUser.login(newDbSession(), request);
         JSONUtilForServer.assertEntityRc(response, "ok", Key.USER_GET_ONE_SUCCESS);
         Assert.assertTrue(s.isUserLoggedIn());
         int sId = s.getUserId();
-        response = this.restProject.saveProgram(newDbSession(), mkCmd(iTkn, "{'cmd':'saveAsP';'programName':'p1';'programText':'<program>...</program>'}"));
+        response = this.restProject.saveProgram(newDbSession(), mkFRR(iTkn, "{'cmd':'saveAsP';'programName':'p1';'programText':'<program>...</program>'}"));
         JSONUtilForServer.assertEntityRc(response, "ok", Key.PROGRAM_SAVE_SUCCESS);
-        response = this.restProject.saveProgram(newDbSession(), mkCmd(iTkn, "{'cmd':'saveAsP';'programName':'p2';'programText':'<program>...</program>'}"));
+        response = this.restProject.saveProgram(newDbSession(), mkFRR(iTkn, "{'cmd':'saveAsP';'programName':'p2';'programText':'<program>...</program>'}"));
         JSONUtilForServer.assertEntityRc(response, "ok", Key.PROGRAM_SAVE_SUCCESS);
         Assert.assertEquals(2, this.memoryDbSetup.getOneBigIntegerAsLong("select count(*) from PROGRAM where OWNER_ID = " + sId));
 
@@ -201,12 +202,13 @@ public class PerformanceUserIT {
 
         thinkTimeInMillisec += think(random, 0, 6);
         Timestamp lastChanged = this.memoryDbSetup.getOne("select LAST_CHANGED from PROGRAM where OWNER_ID = " + sId + " and name = 'p2'");
-        request = mkCmd(iTkn, "{'cmd':'save';'programName':'p2'}");
-        request.getJSONObject("data").put("programText", this.theProgramOfAllUserLol).put("timestamp", lastChanged.getTime());
+        JSONObject requestAsJson = JSONUtilForServer.mkD(iTkn, "{'cmd':'save';'programName':'p2'}");
+        requestAsJson.getJSONObject("data").put("progXML", this.theProgramOfAllUserLol).put("timestamp", lastChanged.getTime());
+        request = FullRestRequest.make(requestAsJson);
         response = this.restProject.saveProgram(newDbSession(), request);
         JSONUtilForServer.assertEntityRc(response, "ok", Key.PROGRAM_SAVE_SUCCESS);
         Assert.assertEquals(2, this.memoryDbSetup.getOneBigIntegerAsLong("select count(*) from PROGRAM where OWNER_ID = " + sId));
-        response = this.restProject.getInfosOfProgramsOfLoggedInUser(newDbSession(), mkCmd(iTkn, "{'cmd':'loadPN'}"));
+        response = this.restProject.getInfosOfProgramsOfLoggedInUser(newDbSession(), mkFRR(iTkn, "{'cmd':'loadPN'}"));
         JSONUtilForServer.assertEntityRc(response, "ok", Key.PROGRAM_GET_ALL_SUCCESS);
         JSONArray programListing = ((JSONObject) response.getEntity()).getJSONArray("programNames");
         JSONArray programNames = new JSONArray();
@@ -260,7 +262,7 @@ public class PerformanceUserIT {
         return this.sessionFactoryWrapper.getSession();
     }
 
-    private static JSONObject mkCmd(String initTokenString, String cmdAsString) throws JSONException {
-        return JSONUtilForServer.mkD(initTokenString, cmdAsString);
+    private static FullRestRequest mkFRR(String initTokenString, String cmdAsString) throws JSONException {
+        return FullRestRequest.make(JSONUtilForServer.mkD(initTokenString, cmdAsString));
     }
 }

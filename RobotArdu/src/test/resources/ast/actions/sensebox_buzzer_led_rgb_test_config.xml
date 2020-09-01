@@ -1,17 +1,17 @@
-<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="sensebox" xmlversion="2.0" description="" tags="">
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="sensebox" xmlversion="3.0" description="" tags="">
     <instance x="508" y="128">
-    <block type="robBrick_senseBox-Brick" id="DC@kFZs8?McKYe+9Bl3y" intask="true" deletable="false">
-        <mutation items="1"/>
-        <field name="BOX_ID"/>
-        <field name="NAME1">ID1</field>
-        <field name="ID1"/>
-    </block>
+        <block type="robBrick_senseBox-Brick" id="DC@kFZs8?McKYe+9Bl3y" intask="true" deletable="false">
+            <mutation items="1" />
+            <field name="BOX_ID" />
+            <field name="NAME1">ID1</field>
+            <field name="ID1" />
+        </block>
     </instance>
     <instance x="229" y="225">
-    <block type="robConf_buzzer" id="5L_-5)U]/Z(wWq:yYjuZ" intask="true">
-        <field name="NAME">B</field>
-        <field name="+">5</field>
-    </block>
+        <block type="robConf_buzzer" id="5L_-5)U]/Z(wWq:yYjuZ" intask="true">
+            <field name="NAME">B</field>
+            <field name="+">5</field>
+        </block>
     </instance>
     <instance x="370" y="228">
     <block type="robConf_led" id="wY(azfTN,6[Ka=[3{6X#" intask="true">
@@ -28,9 +28,7 @@
     <instance x="304" y="337">
     <block type="robConf_rgbled" id="5eg=bG8k|V57|2x1(M1c" intask="true">
         <field name="NAME">R</field>
-        <field name="RED">1</field>
-        <field name="GREEN">2</field>
-        <field name="BLUE">3</field>
+        <field name="INPUT">1</field>
     </block>
     </instance>
     <instance x="508" y="342">

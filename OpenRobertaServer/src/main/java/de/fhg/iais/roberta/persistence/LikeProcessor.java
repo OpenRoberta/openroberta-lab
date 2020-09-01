@@ -27,8 +27,8 @@ public class LikeProcessor extends AbstractProcessor {
             RobotDao robotDao = new RobotDao(this.dbSession);
             LikeDao likeDao = new LikeDao(this.dbSession);
 
-            User gallery = userDao.loadUser("Gallery");
-            User author = userDao.loadUser(authorName);
+            User gallery = userDao.loadUser(null, "Gallery");
+            User author = userDao.loadUser(null, authorName);
             User userWhoLikes = userDao.loadUser(getIdOfLoggedInUser());
 
             Robot robot = robotDao.loadRobot(robotName);
@@ -62,8 +62,8 @@ public class LikeProcessor extends AbstractProcessor {
         RobotDao robotDao = new RobotDao(this.dbSession);
         LikeDao likeDao = new LikeDao(this.dbSession);
 
-        User gallery = userDao.loadUser("Gallery");
-        User author = userDao.loadUser(authorName);
+        User gallery = userDao.loadUser(null, "Gallery");
+        User author = userDao.loadUser(null, authorName);
         User userWhoLike = userDao.loadUser(getIdOfLoggedInUser());
 
         Robot robot = robotDao.loadRobot(robotName);

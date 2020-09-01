@@ -127,16 +127,7 @@
 				</value>
 			</block>
 			<block type="mbedActions_motor_stop" />
-			<block type="mbedActions_single_motor_on">
-				<value name="POWER">
-					<block type="math_number">
-						<field name="NUM">30</field>
-					</block>
-				</value>
-			</block>
-			<block type="mbedActions_single_motor_stop" />
 			<block type="mbedActions_servo_set">
-				<field name="PIN_PORT">C04</field>
 				<value name="VALUE">
 					<block type="math_number">
 						<field name="NUM">90</field>
@@ -196,6 +187,7 @@
 		<block type="robSensors_humidity_getSample" />
 		<block type="robSensors_ultrasonic_getSample" />
 		<block type="robSensors_infrared_getSample" />
+		<block type="robSensors_colourtcs3472_getSample" />
 	</category>
 	<category name="TOOLBOX_CONTROL" svg="true">
 		<category name="TOOLBOX_DECISION" svg="true">
@@ -241,7 +233,7 @@
 					</block>
 				</value>
 			</block>
-			<block type="mbedControls_wait_for">
+			<block type="robControls_wait_for">
 				<value name="WAIT0">
 					<block type="logic_compare">
 						<value name="A">
@@ -305,12 +297,16 @@
 			</value>
 		</block>
 		<block type="math_random_float" />
+		<block type="math_cast_toString"></block>
+		<block type="math_cast_toChar"></block>
 	</category>
 	<category name="TOOLBOX_TEXT" svg="true">
 		<block type="text" />
 		<block type="text_comment" />
 		<block type="robText_join" />
 		<block type="robText_append" />
+		<block type="text_cast_string_toNumber"></block>
+		<block type="text_cast_char_toNumber"></block>
 	</category>
 	<category name="TOOLBOX_LIST" svg="true">
 		<block type="robLists_create_with">

@@ -1,13 +1,14 @@
 package de.fhg.iais.roberta.visitor.codegen;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.google.common.collect.ClassToInstanceMap;
 
 import de.fhg.iais.roberta.bean.IProjectBean;
 import de.fhg.iais.roberta.bean.UsedHardwareBean;
 import de.fhg.iais.roberta.components.ConfigurationAst;
+import de.fhg.iais.roberta.components.UsedSensor;
 import de.fhg.iais.roberta.mode.general.IndexLocation;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.SC;
@@ -19,9 +20,13 @@ import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.syntax.lang.expr.StringConst;
 import de.fhg.iais.roberta.syntax.lang.expr.VarDeclaration;
 import de.fhg.iais.roberta.syntax.lang.functions.IndexOfFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.MathCastCharFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.MathCastStringFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathRandomIntFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.TextCharCastNumberFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.TextJoinFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.TextPrintFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.TextStringCastNumberFunct;
 import de.fhg.iais.roberta.syntax.lang.stmt.DebugAction;
 import de.fhg.iais.roberta.syntax.lang.stmt.RepeatStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
@@ -34,7 +39,7 @@ public abstract class AbstractCommonArduinoCppVisitor extends AbstractCppVisitor
 
     protected ConfigurationAst configuration;
 
-    protected AbstractCommonArduinoCppVisitor(List<ArrayList<Phrase<Void>>> programPhrases, ConfigurationAst configuration, ClassToInstanceMap<IProjectBean> beans) {
+    protected AbstractCommonArduinoCppVisitor(List<List<Phrase<Void>>> programPhrases, ConfigurationAst configuration, ClassToInstanceMap<IProjectBean> beans) {
         super(programPhrases, beans);
         this.configuration = configuration;
     }
@@ -217,15 +222,16 @@ public abstract class AbstractCommonArduinoCppVisitor extends AbstractCppVisitor
         return null;
     }
 
-    //@Override
+    @Override
     public Void visitTimerSensor(TimerSensor<Void> timerSensor) {
+        String timerNumber = timerSensor.getPort();
         switch ( timerSensor.getMode() ) {
             case SC.DEFAULT:
             case SC.VALUE:
-                this.sb.append("(int) (millis() - __time)");
+                this.sb.append("(int) (millis() - __time_").append(timerNumber).append(")");
                 break;
             case SC.RESET:
-                this.sb.append("__time = millis();");
+                this.sb.append("__time_").append(timerNumber).append(" = millis();");
                 break;
             default:
                 throw new DbcException("Invalid Time Mode!");
@@ -260,5 +266,40 @@ public abstract class AbstractCommonArduinoCppVisitor extends AbstractCppVisitor
         this.sb.append("Serial.println(");
         valueToWrite.accept(this);
         this.sb.append(");");
+    }
+
+    protected void generateTimerVariables() {
+        this
+            .getBean(UsedHardwareBean.class)
+            .getUsedSensors()
+            .stream()
+            .filter(usedSensor -> usedSensor.getType().equals(SC.TIMER))
+            .collect(Collectors.groupingBy(UsedSensor::getPort))
+            .keySet()
+            .stream()
+            .forEach(port -> {
+                this.sb.append("unsigned long __time_").append(port).append(" = millis();");
+                nlIndent();
+            });
+    }
+
+    @Override
+    public Void visitMathCastStringFunct(MathCastStringFunct<Void> mathCastStringFunct) {
+        throw new DbcException("Not supported!");
+    }
+
+    @Override
+    public Void visitMathCastCharFunct(MathCastCharFunct<Void> mathCastCharFunct) {
+        throw new DbcException("Not supported!");
+    }
+
+    @Override
+    public Void visitTextStringCastNumberFunct(TextStringCastNumberFunct<Void> textStringCastNumberFunct) {
+        throw new DbcException("Not supported!");
+    }
+
+    @Override
+    public Void visitTextCharCastNumberFunct(TextCharCastNumberFunct<Void> textCharCastNumberFunct) {
+        throw new DbcException("Not supported!");
     }
 }

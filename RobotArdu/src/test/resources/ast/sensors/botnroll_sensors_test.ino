@@ -16,7 +16,7 @@ bool ___item2;
 unsigned int ___item3;
 std::list<double> ___item4;
 
-unsigned long __time = millis();
+unsigned long __time_1 = millis();
 void setup()
 {
     Wire.begin();
@@ -74,7 +74,7 @@ void loop()
     ___item2 = bnr.buttonIsPressed(2);
     ___item2 = bnr.buttonIsPressed(3);
     ___item2 = bnr.buttonIsPressed(123);
-    ___item = (int) (millis() - __time);
-    __time = millis();
+    ___item = (int) (millis() - __time_1);
+    __time_1 = millis();
     ___item = one.readBattery();
 }

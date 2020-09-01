@@ -1,14 +1,14 @@
-<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="nxt" xmlversion="" description="" tags="">
-	<instance x="49" y="12">
-		<block type="robControls_start" id="138" deletable="false">
-			<mutation declare="true"></mutation>
-			<field name="DEBUG">FALSE</field>
-			<statement name="ST">
-				<block type="robGlobalvariables_declare" id="140" inline="true" deletable="false" movable="false">
-					<mutation next="false" declaration_type="Array_Colour"></mutation>
-					<field name="VAR">variablenName</field>
-					<field name="TYPE">Array_Colour</field>
-					<value name="VALUE">
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="nxt" xmlversion="3.0" description="" tags="">
+    <instance x="49" y="12">
+        <block type="robControls_start" id="138" deletable="false">
+            <mutation declare="true"></mutation>
+            <field name="DEBUG">FALSE</field>
+            <statement name="ST">
+                <block type="robGlobalvariables_declare" id="140" inline="true" deletable="false" movable="false">
+                    <mutation next="false" declaration_type="Array_Colour"></mutation>
+                    <field name="VAR">variablenName</field>
+                    <field name="TYPE">Array_Colour</field>
+                    <value name="VALUE">
 						<block type="robLists_create_with" id="314" inline="false">
 							<mutation items="3" list_type="Colour"></mutation>
 							<field name="LIST_TYPE">Colour</field>

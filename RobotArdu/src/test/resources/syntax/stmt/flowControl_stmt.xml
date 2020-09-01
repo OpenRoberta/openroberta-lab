@@ -1,14 +1,14 @@
-<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="ev3" xmlversion="" description="" tags="">
-      <instance x="-38" y="98">
-    <block type="controls_whileUntil" id="151" inline="false">
-      <field name="MODE">WHILE</field>
-      <value name="BOOL">
-        <block type="logic_compare" id="152" inline="true">
-          <field name="OP">EQ</field>
-          <value name="A">
-            <block type="math_number" id="153">
-              <field name="NUM">0</field>
-            </block>
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="ev3" xmlversion="3.0" description="" tags="">
+    <instance x="-38" y="98">
+        <block type="controls_whileUntil" id="151" inline="false">
+            <field name="MODE">WHILE</field>
+            <value name="BOOL">
+                <block type="logic_compare" id="152" inline="true">
+                    <field name="OP">EQ</field>
+                    <value name="A">
+                        <block type="math_number" id="153">
+                            <field name="NUM">0</field>
+                        </block>
           </value>
           <value name="B">
             <block type="math_number" id="154">

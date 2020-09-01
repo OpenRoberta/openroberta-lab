@@ -1,4 +1,4 @@
-define([ 'exports', 'comm', 'message', 'log', 'guiState.controller', 'program.controller', 'robot.controller', 'import.controller', 'blocks', 'jquery' ], function(
+define([ 'exports', 'comm', 'message', 'log', 'guiState.controller', 'program.controller', 'robot.controller', 'import.controller', 'blockly', 'jquery' ], function(
         exports, COMM, MSG, LOG, GUISTATE_C, PROG_C, ROBOT_C, IMPORT_C, Blockly, $) {
 
     const INITIAL_WIDTH = 0.5;
@@ -271,10 +271,9 @@ define([ 'exports', 'comm', 'message', 'log', 'guiState.controller', 'program.co
                 }
                 var thumbs = Math.round((percent - 50) / 17) + 1;
                 var $quizFooter = $('<div>').attr('class', 'quiz footer').attr('id', 'quizFooter').append(finalCredits + ' von ' + finalMaxCredits
-                        + ' Antworten oder ' + percent + '% sind richtig!<br>');
+                        + ' Antworten oder ' + percent + '% sind richtig! ');
                 $quizFooter.insertBefore($('.quiz.continue'));
-                $('#quizFooter').append($('<div>', {
-                    'style' : 'text-align:center; font-size:30px; margin-top:32px',
+                $('#quizFooter').append($('<span>', {
                     'id' : 'quizResult'
                 }));
                 if (percent > 0) {
@@ -298,7 +297,7 @@ define([ 'exports', 'comm', 'message', 'log', 'guiState.controller', 'program.co
                 } else if (percent > 60) {
                     $('#quizResult').append(' Gut gemacht!');
                 } else if (percent == 0) {
-                    $('#quizResult').append(' Du kannst die Quizzfragen jederzeit wiederholen, wenn du möchtest!');
+                    $('#quizResult').append(' Du kannst die Quizfragen jederzeit wiederholen, wenn du möchtest!');
                 } else {
                     $('#quizResult').append(' Das ist ok!');
                 }
@@ -413,6 +412,7 @@ define([ 'exports', 'comm', 'message', 'log', 'guiState.controller', 'program.co
         $('#tutorialButton').fadeOut();
         $('.blocklyToolboxDiv>.levelTabs').removeClass('invisible');
         PROG_C.loadExternalToolbox(GUISTATE_C.getProgramToolbox());
+        Blockly.mainWorkspace.options.maxBlocks = undefined;
         $('#tabTutorialList').trigger('click');
     }
 });

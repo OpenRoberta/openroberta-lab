@@ -1,0 +1,289 @@
+<head><title></title><meta http-equiv="content-type" content="text/html; charset=utf-8"></head><body><div id="helpContent"><div id="robControls_start_ardu" class="help beginner"><h3 id="BlockdescriptionBionics4Education-»Programstart«">»Program start «</h3><p>Each program starts with the »Program start block«, which cannot be deleted. The first block to be used is connected directly to the »Sequence connection« on the program start block.</p><p>Settings:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-plus">Create a new global variable.</li><li class="typcn typcn-minus">Remove the global variable.</li>
+</ul>If global variables have been created:
+<ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-pen">Text, name of the variable.</li><li class="typcn typcn-arrow-sorted-down">Type of the variable.</li><li class="typcn typcn-arrow-left">Value, initial value of the variable.</li>
+</ul><br></div><div id="robActions_serial_print" class="help beginner"><h3 id="BlockdescriptionBionics4Education-»showonSerialMonitor...«">»show on Serial Monitor ... «</h3><p>With this block you can transfer a text via the serial interface to your computer and read it out with a serial monitor. For this you can use the built-in serial monitor of the Open Roberta Connector.</p><p>Input values:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-left">String, text you want to transfer to your computer.</li>
+</ul><br></div><div id="robActions_motor_on_for_ardu" class="help beginner"><h3 id="BlockdescriptionBionics4Education-»setservomotor...to°...«">»set servo motor ... to ° ... «</h3><p>With this block you can control the connected servo motor and adjust its position. The position is described as an angle, where 360° is a full rotation.</p><p>Options and input values:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-sorted-down">Option, choose the connected servo motor that you want to control.</li><li class="typcn typcn-arrow-left">Number, the new angle for the servo motor.</li>
+</ul><br></div><div id="robActions_brickLight_on" class="help beginner"><h3 id="BlockdescriptionBionics4Education-»turnLEDon...«">»turn LED on ... «</h3><p>With this block you can either switch a connected LED on or off.</p><p>Options:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-sorted-down">Option, choose which LED to control.</li><li class="typcn typcn-arrow-sorted-down">Option, choose whether to turn the LED on or off.</li>
+</ul><br></div><div id="robSensors_timer_getSample" class="help beginner"><h3 id="BlockdescriptionBionics4Education-»getvaluemstimer...«">»get value ms timer ...« </h3><p>With this block you can query the value of one of the build-in timers of your robot. The first timer is automatically started at program start and all other timers can be started by the »reset timer ... « block.</p><p>Options:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-sorted-down">Option, choose the timer which value want to query.</li>
+</ul><br><p><span style="letter-spacing: 0.0px;">Return value:</span>
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right">Number, time since program start or last reset in milliseconds.</li>
+</ul><br></div><div id="robSensors_timer_reset" class="help beginner"><h3 id="BlockdescriptionBionics4Education-»resettimer...«">»reset timer ... «</h3><p>With this block you can reset the value of one of the build-in timers of your robot. The first timer is automatically started at program start and all other timers can be started by this block.</p><p>Options:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-sorted-down">Option, choose the timer which you want to reset.</li>
+</ul><br></div><div id="robControls_if" class="help beginner"><h3 id="BlockdescriptionBionics4Education-»ifdo«">»if do«<strong><br></strong></h3><p>With the block »if do« you can selectively trigger actions to be executed by your robot. The »if do« block therefore requires a logical value as an input parameter, the condition. Only if the condition of the »if« statement is true, the inserted block will be executed. In a nested »if do« block, if a further distinction was added, the first »if« condition is queried. If it is not fulfilled (condition = false), the second »else if« condition will be checked. Also this second condition requires a logical value as an input parameter.</p><p>The conditions may arbitrarily be expanded by clicking the "+" plus symbol. The "-" minus symbol reduces the block.</p><p>Settings and input values:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-plus">Insert an additional condition.</li><li class="typcn typcn-minus">Delete the last condition.</li><li class="typcn typcn-arrow-left">Boolean value, »true« or »false«.</li><li class="typcn typcn-arrow-left">Blocks that will be executed</li>
+</ul></div><div id="robControls_ifElse" class="help beginner"><h3 id="BlockdescriptionBionics4Education-»ifdoelse«">»if do else«</h3><p>With the block »if do else« you can selectively trigger actions which are executed by your robot. The »if do then« block therefore requires a logical value as an input parameter. If the condition in »if« is true the  inserted block will be executed, otherwise (condition is not fulfilled = false) the block connected to the »else« statement will be executed. In a nested »if do else« block with further distinctions added, the first  »if« condition is queried. If it is not true, the second condition »else if«  is checked. Also the second condition requires a logical value as an input parameter. Only when both conditions are not true, the block which is inserted at the »else« statement will be executed.</p><p>The conditions may arbitrarily be expanded by clicking the "+" plus symbol. The "-" minus symbol reduces the block.</p><p>Settings:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-plus">Insert an additional if-do-else condition.</li><li class="typcn typcn-minus">Delete the last if-do-else condition.</li><li class="typcn typcn-arrow-left">Boolean value, »true« or »false«.</li><li class="typcn typcn-arrow-left">Do blocks that will be executed if the according condition evaluates to »true«.</li><li class="typcn typcn-arrow-left">Else blocks that will be executed if the according condition evaluates to »false«.</li>
+</ul></div><div id="robControls_loopForever" class="help beginner  notWedo"><h3 id="BlockdescriptionBionics4Education-»repeatindefinitely«">»repeat indefinitely«</h3><p>With the block »repeat indefinitely« you can endlessly run the blocks on your robot. All blocks which are within the »repeat indefinitely« block will be executed endlessly. The blocks are applied sequentially from top to bottom. Once the last block has been executed, the program repeats with the first block again. Therefore, this block is also called »loop«.</p><p>Input:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-left">Blocks to be repeated indefinitely.</li>
+</ul><br></div><div id="controls_repeat_ext" class="help beginner"><h3 id="BlockdescriptionBionics4Education-»repeatntimes«">»repeat n times«</h3><p>With the block »repeat« you can run other block as many times as you like. All blocks in the »repeat« block will be executed as often as defined in the entry field. The blocks are applied sequentially from top to bottom. Once the last block has been executed, the program repeats with the first block again. Therefore, this block is also called »loop«.</p><div class="confluence-information-macro confluence-information-macro-information"><div class="confluence-information-macro-body"><p>Only integer values can be entered.</p></div></div><p>Settings and input:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-left">Number that indicates how often the contained blocks will be repeated.</li><li class="typcn typcn-arrow-left">Blocks to be repeated as often as defined.</li>
+</ul><br></div><div id="robControls_wait_time" class="help beginner"><h3 id="BlockdescriptionBionics4Education-»wait«">»wait«</h3><p>With the block »wait« you can "pause" your program at the point where you inserted the »wait« block. Your program will then remain for the specified duration at this point. After the specified time the next block will be executed. For example you can display text in the screen of your robot for exactly the time you specified in the »wait« block.</p><p>Settings and input values:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-sorted-down">Number, waiting time in milliseconds.</li>
+</ul></div><div id="robControls_wait" class="help beginner"><h3 id="BlockdescriptionBionics4Education-»waituntil...«">»wait until ...«</h3><p>With the block »wait until« you can "stop" your program at the point you insert the »wait until« block. Your program then waits until the condition is true. The »wait until« block you can extended by click on "+" symbol. Your program then waits until (at least) one of the condition of your »wait until« block is true.</p><p>Settings:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-plus">Add a new condition.</li><li class="typcn typcn-pen">Delete the last condition.</li><li class="typcn typcn-arrow-left">Boolean value, »true« or »false«.</li>
+</ul></div><div id="robControls_wait_for" class="help beginner"><h3 id="BlockdescriptionBionics4Education-»waituntil...«.1">»wait until ... «</h3><p>With the block »wait until« you can "stop" your program at the point you insert the »wait until« block. Your program then waits until the condition is true. The »wait until« block you can extended by click on "+" symbol. Your program then waits until (at least) one of the condition of your »wait until« block is true.</p><p>Settings:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-plus">Add a new condition.</li><li class="typcn typcn-pen">Delete the last condition.</li><li class="typcn typcn-arrow-left">Boolean value, »true« or »false«.</li>
+</ul></div><div id="controls_flow_statements" class="help expert"><h3 id="BlockdescriptionBionics4Education-»breakout/continuewithnextiterationofloop«[Expert-block]">»break out/continue with next iteration of loop« <span class="typcn typcn-star"></span></h3><p>With the block »break out/continue with next iteration of loop« a loop can be terminated ahead of schedule. As soon as the block is entered within a sequence of blocks, all further blocks up to the end of the loop will be ignored.</p><p>Settings:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-sorted-down">Type of breaking behavior, »break out« or »continue with next iteration«.</li>
+</ul></div><div id="robControls_for" class="help expert"><h3 id="BlockdescriptionBionics4Education-»countwithfromto«[Expert-block]">»count with from to« <span class="typcn typcn-star"></span></h3><p>With the block »count with from to« you can run other block as many times as you like. All blocks in the »count with from to« block will be executed as long as the counting is in progress. The blocks are applied sequentially from top to bottom. Once the last block has been executed, the program repeats with the first block again if the counting is in progress. The last parameter declares the step width for counting.</p><p>Settings:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-pen">Variable, name of free choice; numbers of the counter will be delivered one after the other to the variable. </li><li class="typcn typcn-arrow-left">Number, initial value of the counter.</li><li class="typcn typcn-arrow-left">Number, final value of the counter. As the counter exceeds this value the loop ends.</li><li class="typcn typcn-arrow-left">Number, defining the increment. The variable value will increase by this amount after every loop cycle.</li><li class="typcn typcn-arrow-left">Blocks that will be executed in every loop cycle.</li>
+</ul></div><div id="robControls_forEach" class="help expert  notWedo notBob3"><h3 id="BlockdescriptionBionics4Education-»foreachiteminlist«[Expert-block]">»for each item in list« <span class="typcn typcn-star"></span></h3><p>With the block »for each item in list« all list items will successively be bound to a variable. The variable can be used within the loop. With each loop cycle the next item of the list will be bound until all list elements have been processed.</p><p>Settings and input value:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-sorted-down">Type of list elements, »Number«, »String«, »Boolean«, »Colour«, »Connection«</li><li class="typcn typcn-pen">Variable, name of free choice; list elements will be delivered one after the other to the variable.</li><li class="typcn typcn-arrow-left">List  that contains elements of the desired type. If the list elements are not of the correct type then the list will not fit to the input slot.</li><li class="typcn typcn-arrow-left">Blocks which will be executed as often as there are elements in the list.</li>
+</ul></div><div id="controls_whileUntil" class="help expert"><h3 id="BlockdescriptionBionics4Education-»repeatwhile/until«[Expert-block]">»repeat while/until« <span class="typcn typcn-star"></span></h3><p>With the block »repeat while/until« you can run other block as many times as you like. All blocks in the »repeat while/until« block will be executed as long as the condition in the entry field is true. The blocks are applied sequentially from top to bottom. Once the last block has been executed, the program repeats with the first block again if the condition is still true. Therefore, this block is also called »conditional loop«.</p><p>Settings and input values:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-sorted-down">Option, »while« or »until«, defining the type of the conditional repetition.</li><li class="typcn typcn-arrow-left">Boolean value, »true« or »false«.</li><li class="typcn typcn-arrow-left">Blocks that will be repeated while/until the condition evaluates to »true«. </li>
+</ul></div><div id="logic_compare" class="help beginner"><h3 id="BlockdescriptionBionics4Education-»comparison«">»comparison«</h3><p>With the block »comparison« you can compare different parameters of the same type (number, color, logical value, text). This block can only be used in conjunction with another block which requires a logical value as an input parameter.</p><p>Settings and input values:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-left">Value for the left hand side.</li><li class="typcn typcn-arrow-sorted-down">Comparison, select one of =, ≠, &lt;, ≤, &gt;, ≥</li><li class="typcn typcn-arrow-left">Value for the right hand side.</li>
+</ul><p style="text-align: left;">Return value:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right">Boolean value, »true« or »false«.</li>
+</ul></div><div id="logic_operation" class="help beginner"><h3 id="BlockdescriptionBionics4Education-»and/or«">»and/or«</h3><p>With the block »and/or« you can interrelate logical values with each other. The »and/or« block with the setting "and" will be true only if both logical parameters are "'true"'. If the block has the setting »or« it is sufficient if one of the two parameters is "true", so that the »and/or« block will return true.</p><p>Settings:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-left">Boolean value on the left hand side.</li><li class="typcn typcn-arrow-sorted-down">Boolean function, »and« or »or«.</li><li class="typcn typcn-arrow-left">Boolean value on the right hand side.</li>
+</ul><br><p>Return value:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right">Boolean value »true« or»false«.</li>
+</ul></div><div id="logic_boolean" class="help beginner"><h3 id="BlockdescriptionBionics4Education-»true/false«">»true/false«</h3><p>With the block »true/false« you can return either the logical value »true« or »false« to another block.</p><p>Settings:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-sorted-down">Boolean value, make your choice.</li>
+</ul><br><p>Return value:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right">Boolean value, »true« or »false«.</li>
+</ul></div><div id="logic_negate" class="help expert"><h3 id="BlockdescriptionBionics4Education-»not«[Expert-block]">»not« <span class="typcn typcn-star"></span></h3><p>Using the »not« lets you invert a logical value and pass this value to another block.</p><p>Input value:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-left">Boolean value, to be inverted.</li>
+</ul><br><p>Return value:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right">Boolean value, »true« or »false«; result of inverting.</li>
+</ul></div><div id="logic_ternary" class="help expert notWedo"><h3 id="BlockdescriptionBionics4Education-»test«[Expert-block]">»test« <span class="typcn typcn-star"></span></h3><p>Using the »test« block will perform a test and returns a value which depends on the test result.</p><p>Input values:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-left">Boolean value for the test; if no input value is given "true" will be assumed.</li><li class="typcn typcn-arrow-left">Arbitrary value, evaluated by a block.</li><li class="typcn typcn-arrow-left">Arbitrary value, evaluated by a block.</li>
+</ul><br><p>Return value:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right">Value of arbitrary type.</li>
+</ul></div><div id="logic_null" class="help expert"><h3 id="BlockdescriptionBionics4Education-»null«[Expert-block]">»null« <span class="typcn typcn-star"></span></h3><p style="text-align: left;">The block »null« is a place holder for an input value that is not yet specified. If for instance a new connection variable has been created and is not yet bound, the initial value of this connection will be set to »null«.</p><p style="text-align: left;">Return value::
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-sorted-down">Boolean value, »null«.</li>
+</ul></div><div id="math_number" class="help beginner"><h3 id="BlockdescriptionBionics4Education-»parameter«">»parameter«</h3><p>With the block »parameter« you can send numbers to another block.</p><p>  Settings and input values:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-left">Number</li>
+</ul><p style="text-align: left;">Return value:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right"> Number</li>
+</ul><br></div><div id="math_arithmetic" class="help beginner"><h3 id="BlockdescriptionBionics4Education-»calculating«">»calculating«</h3><p>With the block »calculating« you can sum up, subtract, multiply, and divide numbers. This block can only be used in conjunction with another block which requires a number as an input parameter.</p><p>Settings and input values:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-left"> Number, first number on the left you want to calculate with.</li><li class="typcn typcn-arrow-sorted-down">Option, mathematical operator, choose one of +, −, ×, ÷, ^.</li><li class="typcn typcn-arrow-left">Number, second number on the right you want to calculate with.</li>
+</ul><br><p>Return value:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-sorted-down">Number, result of the calculation.</li>
+</ul></div><div id="math_single" class="help expert"><h3 id="BlockdescriptionBionics4Education-»mathematicalfunction«[Expert-block]">»mathematical function« <span class="typcn typcn-star"></span></h3><p>With the block »mathematical function« some elementary mathematical functions may be calculated. Available functions are »square root«, »absolute«, »invert« (multiply by -1), »ln« (natural logarithm), »log10« (decadic logarithm), »e^« (exponential function), »10^« (base 10 exponent)</p><p>Settings and input value:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-sorted-down">Option, mathematical function, choose one.</li><li class="typcn typcn-arrow-left">Number to apply the function to.</li>
+</ul><br><p>Return value:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right"> Number, result of the function application.</li>
+</ul></div><div id="math_trig" class="help expert"><h3 id="BlockdescriptionBionics4Education-»trigonometricfunctions«[Expert-block]">»trigonometric functions« <span class="typcn typcn-star"></span></h3><p>With the block »trigonometric function« sine, cosine, tangent and their respective revers functions can be calculated. Input values are expected in radian measure(see hint above).</p><p>Settings and input value:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-sorted-down">Option, trigonometric function to choose from.</li><li class="typcn typcn-arrow-left">Number, in radian measure.</li>
+</ul><br><p>Return value:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right">Number, result of the trigonometric calculation.</li>
+</ul></div><div id="math_constant" class="help expert"><h3 id="BlockdescriptionBionics4Education-»constant«[Expert-block]">»constant« <span class="typcn typcn-star"></span></h3><p>With the »constant« block some mathematical constant values are available: »π« (3,1415...), »e« (2,718...), »φ« (1,618...), »sqrt(2)« (1,414...), »sqrt(½)« (0,7071...), »∞«</p><p>Settings:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-sorted-down">Option, mathematical constants, choose one.</li>
+</ul><br><p>Return value:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right"> Number, value of the selected mathematical constant. Infinity will return »infinity«.</li>
+</ul></div><div id="math_number_property" class="help expert"><h3 id="BlockdescriptionBionics4Education-»numberproperty«[Expert-block]">»number property« <span class="typcn typcn-star"></span></h3><p>With the block »number property« you check whether a given number has a specific property: »even«, »odd«, »prime«, »whole«, »positive«, »negative«, »divisible by«.</p><p>Settings and input values:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-left">Number, the property of this input value will be checked.</li><li class="typcn typcn-arrow-sorted-down">Option, number property, choose one.</li><li class="typcn typcn-arrow-left">Number, evaluated from a block. The second input value is only required for the property »divisible by«.</li>
+</ul><br><p>Return value:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right">Boolean value, »true« or »false«, depending on the selected property.</li>
+</ul></div><div id="robMath_change" class="help expert"><h3 id="BlockdescriptionBionics4Education-»changeby...«[Expert-block]">»change by ... « <span class="typcn typcn-star"></span></h3><p>The block »change by ... « increments a numerical variable by a defined value.</p><p>Settings and input values:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-left">Variable name, which value is to be changed. Choose the variable to be changed.</li><li class="typcn typcn-arrow-left">Number, given by a block.</li>
+</ul></div><div id="math_round" class="help expert"><h3 id="BlockdescriptionBionics4Education-»round«[Expert-block]">»round« <span class="typcn typcn-star"></span></h3><p>With the block »round« values may be rounded. Rounding will set the decimal places to 0. It depends on the value of the decimal places whether the block rounds up or down. You may also decide by settings to always round up or down.</p><p>Settings and input value:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-sorted-down">Type of rounding, choose a round mode.</li><li class="typcn typcn-arrow-left">Number you want to round.</li>
+</ul><br><p>Return value:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right">Number, rounded whole number, according to the round mode.</li>
+</ul></div><div id="math_on_list" class="help expert notWedo notBob3"><h3 id="BlockdescriptionBionics4Education-»listevaluation«[Expert-block]">»list evaluation« <span class="typcn typcn-star"></span></h3><p>With the block »list evaluation« you may analyse a list.</p><p>Modes for list evaluation:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-sorted-down">sum - addition of all list values</li><li class="typcn typcn-arrow-sorted-down">min - smallest value in the list</li><li class="typcn typcn-arrow-sorted-down">max - largest value in the list</li><li class="typcn typcn-arrow-sorted-down">average - average of all list values</li><li class="typcn typcn-arrow-sorted-down">median - median of all list values</li><li class="typcn typcn-arrow-sorted-down">standard deviation - standard deviation of all list values</li><li class="typcn typcn-arrow-sorted-down">random item - one list value randomly selected</li>
+</ul><br><p>Settings and input value:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-sorted-down">Mode of list evaluation, choose one mode.</li><li class="typcn typcn-arrow-left">List of numbers</li>
+</ul><br><p>Return value:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right">Number, calculated according to the selected list evaluation mode.</li>
+</ul></div><div id="math_modulo" class="help expert"><h3 id="BlockdescriptionBionics4Education-»remainderof«[Expert-block]">»remainder of« <span class="typcn typcn-star"></span></h3><p>The block »remainder of« calculates a divison and returns the remainder of the division.</p><p>Input values:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-left">Number to be divided (dividend).</li><li class="typcn typcn-arrow-left">Number, divisor.</li>
+</ul><br><p>Return value:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right">Number, rest of the division.</li>
+</ul></div><div id="math_constrain" class="help expert"><h3 id="BlockdescriptionBionics4Education-»constrain«[Expert-block]">»constrain« <span class="typcn typcn-star"></span></h3><p>The block »constrain« ensures that given boundaries will not be exceeded.</p><p>Input values:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-left">Number, that will be constrained.</li><li class="typcn typcn-arrow-left">Number, lower bound.</li><li class="typcn typcn-arrow-left">Number, upper bound.</li>
+</ul><br><p>Return value:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right">Number, constrained by the lower and the upper bound.</li>
+</ul></div><div id="math_random_int" class="help expert"><h3 id="BlockdescriptionBionics4Education-»randominteger«[Expert-block]">»random integer« <span class="typcn typcn-star"></span></h3><p>With the block »random integer« you may generate random integer numbers within defined limits</p><p>Input values:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-left">Number, lower bound</li><li class="typcn typcn-arrow-left">Number, upper bound</li>
+</ul><br><p>Return value:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right">Number, a whole random number from within the upper and lower bounds.</li>
+</ul></div><div id="math_random_float" class="help expert"><h3 id="BlockdescriptionBionics4Education-»randomfraction«[Expert-block]">»random fraction« <span class="typcn typcn-star"></span></h3><p>With the block »random fraction« a random value between 0.0 and 1.0 is calculated.</p><p>Return value:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right">Number, positive random value between 0.0 and 1.0.</li>
+</ul></div><div id="text" class="help beginner notBob3"><h3 id="BlockdescriptionBionics4Education-»Text«">»Text«</h3><p>The simple »Text« block creates a little text.</p><p>Input value:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-left">String, containing arbitrary characters.</li>
+</ul><br><p>Return value:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right">String, containing arbitrary characters.</li>
+</ul></div><div id="text_comment" class="help beginner"><h3 class="auto-cursor-target" id="BlockdescriptionBionics4Education-»comment«">»comment«</h3><p>Document your program with this block, so that you and others will find it easier to understand your program later. This comment will also be visible in the generated source code.  </p><p>Input value:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-left">String, containing arbitrary characters.</li>
+</ul></div><div id="robText_join" class="help expert notBob3 notFestobionic"><h3 id="BlockdescriptionBionics4Education-»createText«[Expert-block]">»create Text« <span class="typcn typcn-star"></span></h3><p>The »create text« block compiles a text from different input parameters. Using the + sign will insert further input slots. All input parameters will be connected one after the other. Essentially the »create text« block converts an arbitrary input value into a text string.</p><p>Input values:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-left">Arbitrary values [numbers, text, logical values, colours)</li>
+</ul><br><p>Return value:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right">String, containing arbitrary characters, compiled sequentially from all input values.</li>
+</ul></div><div id="robtext_append" class="help expert notWedo notBob3"><h3 id="BlockdescriptionBionics4Education-»appendText«[Expert-block]">»append Text« <span class="typcn typcn-star"></span></h3><p>The »append text« block will append some string to a given string, for instance to extend a message with a signature.</p><p>Input values:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-left">String, to which some other text will be appended.</li><li class="typcn typcn-arrow-left">String, that shall be appended.</li>
+</ul></div><div id="robLists_create_with" class="help expert notWedo notBob3"><h3 id="BlockdescriptionBionics4Education-»createlist«">»create list«</h3><p>The block »empty list« creates a list with no content.The block »list« generates a list with some predefined values.</p><p>This block may only be used in the context of a »set variable« block.</p><p>Using »+« or »−« enables you to extend or reduce the list at its end.</p><p>Settings and input values:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-sorted-down">List type, »Number«, »String«, »Boolean«, »Colour«, »Connection«.</li><li class="typcn typcn-plus">Create further list element, append to the end of the list.</li><li class="typcn typcn-minus">Delete list element at the end of the list.</li><li class="typcn typcn-arrow-left">Values, according to the list type. Here the input of initial values is possible.</li>
+</ul><br><p>Return value:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right">Empty list or list, containing elements of the specified list type.</li>
+</ul></div><div id="robLists_repeat" class="help expert notWedo notBob3"><h3 id="BlockdescriptionBionics4Education-»repeatelementinlist«">»repeat element in list«</h3><p>The »repeat element in list« block generates a list of equal elements.  </p><p>Settings and input values:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-sorted-down">List type, »Number«, »Boolean«, »String«, »Colour« or »Connection«.</li><li class="typcn typcn-arrow-sorted-down">List element, according to the selected list type. This value will be repeated in the list.</li><li class="typcn typcn-arrow-left">Number, defining how often the list element will be repeated.</li>
+</ul><br><p>Return value:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right">List of the specified list type, containing the specified number of equal elements.</li>
+</ul></div><div id="robLists_length" class="help expert notWedo notBob3"><h3 id="BlockdescriptionBionics4Education-»lengthof«">»length of«</h3><p>The »length of« block returns a value which is the length of the list given as parameter. An empty list has a length of 0.</p><p>Input value:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-left">List, evaluated by an appropriate block.</li>
+</ul><br><p>Return value:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right">Number, number of list elements.</li>
+</ul><br></div><div id="robLists_isEmpty" class="help expert notWedo notBob3"><h3 id="BlockdescriptionBionics4Education-»isempty?«">»is empty?«</h3><p>A list given as parameter will be checked whether it is empty.</p><p>Input value:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-left">List, evaluated by an appropriate block.</li>
+</ul><br><p>Return value:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right">Boolean, either »true« or »false«.</li>
+</ul></div><div id="roblists_indexOf" class="help expert notWedo notBob3"><h3 id="BlockdescriptionBionics4Education-»findinlist«">»find in list«</h3><p>A list is searched for an item. If the item is in the list, the list position will be returned. If the item is not in the list the result is -1.</p><p>Settings and input values:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-left">List, that will be examined.</li><li class="typcn typcn-arrow-sorted-down">Position of the occurrence, either »first« or »last«.</li><li class="typcn typcn-arrow-left">Value, list item to be found.</li>
+</ul><br><p>Return value:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right"><p>Number, indicating the position where the element was found in the list.</p><p>Note: Counting list positions will start with 0.</p></li>
+</ul></div><div id="robLists_getIndex" class="help expert notWedo notBob3"><h3 id="BlockdescriptionBionics4Education-»getlistelement«">»get list element«</h3><p>This block accesses an item of a list. Depending on the settings this item may be altered.</p><p>A list is given as parameter. Then a drop-down-list specifies what will happen to the list item under consideration.</p><p>Settings:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-left">List, that is under consideration.</li><li class="typcn typcn-arrow-sorted-down">Option, action for the element found: »get« reads the element and leaves it unchanged, »get and remove« reads the element and removes it from the list, »remove« just removes the element from the list.</li><li class="typcn typcn-arrow-sorted-down">Option, position of the element found: »#«, »# from end«, »first«, »last« or »random« .</li><li class="typcn typcn-arrow-left"><p>Number, indicating the list position. This input value is not required if »first«, »last« or »random« was selected as position.</p><p>Note: Counting of list positions starts with 0.</p></li>
+</ul><br><p>Return value:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right"><p>List element that has been found at the specified list position; »undefined«, if the list position does not exist.</p><p>With selection of »remove« there is no return value; instead the list will be shortened by this list element.</p></li>
+</ul></div><div id="robLists_setIndex" class="help expert notWedo notBob3"><h3 id="BlockdescriptionBionics4Education-»setlistelement«">»set list element«</h3><p>In a list given as input parameter one specified element will be replaced by a new value.</p><p>Settings and input values:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-left">List, that will be changed.</li><li class="typcn typcn-arrow-sorted-down">Option, action for the element found; »set« changes the element, »insert at« inserts a new element into the list.</li><li class="typcn typcn-arrow-sorted-down">Option, position for the element to be changed: »#«, »# from end«, »first«, »last« or »random« .</li><li class="typcn typcn-arrow-left">Number, indicating the list position. This input value is not required if »first«, »last« or »random« was selected.<br>Note: Counting of list positions begins with 0.</li><li class="typcn typcn-arrow-left">List element, that will be set or inserted at the selected list position.</li>
+</ul></div><div id="robLists_getSublist" class="help expert notWedo notBob3"><h3 id="BlockdescriptionBionics4Education-»getsublist«">»get sublist«</h3><p>From a list given as parameter a sublist will be created. The sublist contains all those elements that match the further specifications of the block.</p><p>Settings and input values:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-left">List to be examined.</li><li class="typcn typcn-arrow-sorted-down">Position, start of the sublist: »#«, »# from end« or »first«.</li><li class="typcn typcn-arrow-left"><p>Number, indicating the list position. This input value is not required if »first« has been selected.</p><p>Note: Counting of list positions starts with 0.</p></li><li class="typcn typcn-arrow-left">Position, end of the sublist: »#«, »# from end« or »last«.</li><li class="typcn typcn-arrow-left"><p>Number, indicating the list position. This input value is not required if »last« has been selected.</p><p>Note: Counting of list positions starts with 0.</p></li>
+</ul><br><p>Return value:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right">List, a sublist of the same type as the given list.</li>
+</ul></div><div id="mbedColour_picker" class="help beginner notWedo notEv3 notNxt notMicrobit notBotnroll notNao notBob3 notArduino notSensebox notMbot notFestobionic notEdison"><h3 id="BlockdescriptionBionics4Education-»Colourpicker«">»Colour picker «</h3><p>With this block you can choose from a pool of predefined colours for your robot.</p><p>options:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-sorted-down">option, choose the colour you want to use.</li>
+</ul><br><p>return value:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right">colour, your selected colour.</li>
+</ul><br></div><div id="robColour_picker" class="help beginner notMicrobit notNao notFestobionic notEdison notCalliope"><h3 id="BlockdescriptionBionics4Education-»Colourpicker«.1">»Colour picker «</h3><p>With this block you can choose from a pool of predefined colours for your robot.</p><p>options:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-sorted-down">option, choose the colour you want to use.</li>
+</ul><br><p>return value:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right">colour, your selected colour.</li>
+</ul><br></div><div id="naoColour_picker" class="help beginner notWedo notEv3 notNxt notMicrobit notBotnroll notBob3 notArduino notSensebox notMbot notFestobionic notMicrobit notCalliope"><h3 id="BlockdescriptionBionics4Education-»Colourpicker«.2">»Colour picker «</h3><p>With this block you can choose from a pool of predefined colours for your robot.</p><p>options:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-sorted-down">option, choose the colour you want to use.</li>
+</ul><br><p>return value:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right">colour, your selected colour.</li>
+</ul><br></div><div id="mbedColour_rgb" class="help expert notWedo notEv3 notNxt notMicrobit notBotnroll notNao notBob3 notArduino notSensebox notMbot notFestobionic notEdison"><h3 id="BlockdescriptionBionics4Education-»Colourwithred...green...blue...white...«[ExpertBlock]">»Colour with red ... green ... blue  ... white ... « <span class="typcn typcn-star"></span></h3><p>With this block you can create your own colour by mixing red, green and blue.</p><p>input values:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-left">number, the red part in your color. Value between 0 and 255.</li><li class="typcn typcn-arrow-left">number, the green part in your color. Value between 0 and 255.</li><li class="typcn typcn-arrow-left">number, the blue part in your color. Value between 0 and 255.</li><li class="typcn typcn-arrow-left">number, the brightness of your color. Value between 0 and 255.</li>
+</ul><br></div><div id="robColour_rgb" class="help expert notWedo notEv3 notNxt notMicrobit notBotnroll notNao notBob3 notArduino notSensebox notCalliope notFestobionic notEdison"><h3 id="BlockdescriptionBionics4Education-»Colourwithred...green...blue...«[ExpertBlock]">»Colour with red ... green ... blue  ... « <span class="typcn typcn-star"></span></h3><p>With this block you can create your own colour by mixing red, green and blue.</p><p>input values:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-left">number, the red part in your color. Value between 0 and 255.</li><li class="typcn typcn-arrow-left">number, the green part in your color. Value between 0 and 255.</li><li class="typcn typcn-arrow-left">number, the blue part in your color. Value between 0 and 255.</li>
+</ul><br></div><div id="naoColour_rgb" class="help expert notWedo notEv3 notNxt notMicrobit notBob3 notBotnroll notMbot notFestobionic notEdison notCalliope"><h3 id="BlockdescriptionBionics4Education-»Colourwithred...green...blue...«[ExpertBlock].1">»Colour with red ... green ... blue  ... « <span class="typcn typcn-star"></span></h3><p>With this block you can create your own colour by mixing red, green and blue.</p><p>input values:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-left">number, the red part in your color. Value between 0 and 255.</li><li class="typcn typcn-arrow-left">number, the green part in your color. Value between 0 and 255.</li><li class="typcn typcn-arrow-left">number, the blue part in your color. Value between 0 and 255.</li>
+</ul><br></div><div id="variables_set" class="help beginner"><h3 id="BlockdescriptionBionics4Education-»setvariable«">»set variable«</h3><p>Using the block »set variable« will assign a value to a variable. Depending on the variable type the value may be assigned by an input connector.</p><p>Settings and input value:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-sorted-down">Variable, which value is to be changed.</li><li class="typcn typcn-arrow-left">Value, new value for the variable, evaluated from a suitable block.</li>
+</ul></div><div id="variables_get" class="help beginner"><h3 id="BlockdescriptionBionics4Education-»getvariable«">»get variable«</h3><p>Using the block »get variable« returns the value of a variable to another block.The type of the output parameter is equal to the type that has been assigned to the variable in the »start« block.</p><p><span>Settings:<br></span>
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-sorted-down">Variable, that will be read. The value will not be changed by reading.</li>
+</ul><br><p><span>Return value:<br></span>
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right">Value, stored in the variable.</li>
+</ul><span class="auto-cursor-target"><br></span></div><div id="robProcedures_defnoreturn" class="help expert"><h3 id="BlockdescriptionBionics4Education-»Functionblockswith/withoutinputparametersandnoreturnstatement«">»Function blocks with/without input parameters and no return statement«</h3><p>In a function block with/without input parameter and without return parameter a sequence of program statements will be condensed. The input parameters will be determined by the local variables of the function block. Local variables may be generated by using the »+« sign of the function block. Local variables will not be initialized.</p><p>If a function block contains an if-block the function may be terminated before reaching it's end.</p><p>The function block is available in the »Functions« category immediately after its definition. Using function blocks improves the readability of complex programs.</p><p>Settings:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-pen">Function name, no special characters and white spaces allowed.</li><li class="typcn typcn-plus">Generate new local variables, that will be assigned with the function call.</li><li class="typcn typcn-minus">Delete the associated local variable.</li>
+</ul><br><div class="confluence-information-macro confluence-information-macro-warning"><div class="confluence-information-macro-body"><ul><li><p>The name of a function block has to start with a lower case letter. Special characters are not allowed in a function block name.</p></li><li><p>If the function block defines input parameters (local variables), all the parameter slots have to be occupied when calling the function.</p></li></ul></div></div></div><div id="robProcedures_defreturn" class="help expert"><h3 id="BlockdescriptionBionics4Education-»Functionblockswith/withoutinputparameterswithreturnstatements«">»Function blocks with/without input parameters with return statements«</h3><p>In a function block with/without input parameter and with return parameter a sequence of program statements will be condensed. The input parameters will be determined by the local variables of the function block. Local variables may be generated by using the »+« sign of the function block. Local variables will not be initialized. After running through all the blocks of the function a value will be returned.</p><p>If a function block contains an if-block the function may be terminated before reaching it's end. An alternative value may be returned by the if-block.</p><p>The function block is available in the »Functions« category immediately after its definition. Using function blocks improves the readability of complex programs.</p><p>Settings:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-pen">Function name, no special characters and white spaces allowed.</li><li class="typcn typcn-plus">Generate new local variables, that will be assigned with the function call.</li><li class="typcn typcn-minus">Delete the associated local variable.</li><li class="typcn typcn-arrow-sorted-down">Data type for the return value; choose one data type.</li><li class="typcn typcn-arrow-sorted-down">Block, that returns a value of the defined data type.</li>
+</ul><br><p>Return value:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right">Value of the defined data type, evaluated in an appropriate block.</li>
+</ul><br><div class="confluence-information-macro confluence-information-macro-warning"><div class="confluence-information-macro-body"><ul><li>The name of a function block has to start with a lower case letter. Special characters are not allowed in a function block name.</li><li>If the function block defines input parameters (local variables), all the parameter slots have to be occupied when calling the function.</li></ul></div></div></div><div id="robProcedures_ifreturn" class="help expert"><h3 id="BlockdescriptionBionics4Education-»ifblocktobeusedwithinafunction«">»if block to be used within a function«</h3><p>The if statement within a function is of special importance. As the function sequence meets an if statement the validity of the condition will be checked.</p><h4 id="BlockdescriptionBionics4Education-Ifstatementwithinafunctionwithreturnvalue:">If statement within a function with return value:</h4><ul><li>If the condition evaluates to »true« the rest of the function will be ignored and the function terminates. The second input value of the if statement will be returned. A possibly defined return value of the function will be ignored. The return value data type is determined by the return data type of the function definition.</li><li>If the condition evaluates to »false« the sequence of the function blocks will be continued. The return value of the function will be returned after reaching the end of the function.</li></ul><h4 id="BlockdescriptionBionics4Education-Ifstatementwithinafunctionwithnoreturnvalue:">If statement within a function with no return value:</h4><ul><li>An if statement within a function without return value has just the if statement as input parameter.</li><li>If the condition evaluates to »true« the rest of the function will be ignored and the function terminates.</li><li>If the condition evaluates to »false« the sequence of the function blocks will be continued.</li></ul><p>Settings and input values:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-left">Boolean value, possibly evaluated by a condition.</li><li class="typcn typcn-arrow-right">Value of the specified data type.</li>
+</ul><br><p>Return value:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right">Value of the specified data type.</li>
+</ul><br><br></div><div id="robProcedures_callnoreturn" class="help expert"><h3 id="BlockdescriptionBionics4Education-»functioncallwithoutreturnvalue«">»function call without return value «</h3><p>With this block you can call a previous defined function in your program.</p><p>input values:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-left">element, depending of the required input value of the function.</li>
+</ul></div><div id="robProcedures_callreturn" class="help expert"><h3 class="auto-cursor-target" id="BlockdescriptionBionics4Education-»functioncallwithreturnvalue«">»function call with return value «</h3><p>With this block you can call a previous defined function in your program.</p><p>input values:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-left">element, depending on the required input value of the function.</li>
+</ul><p class="auto-cursor-target">return value:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right">element,  depending on the  return value of the function.</li>
+</ul></div></div></body>

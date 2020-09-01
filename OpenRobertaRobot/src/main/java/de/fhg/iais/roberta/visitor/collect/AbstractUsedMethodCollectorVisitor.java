@@ -7,12 +7,16 @@ import de.fhg.iais.roberta.syntax.lang.functions.FunctionNames;
 import de.fhg.iais.roberta.syntax.lang.functions.ListGetIndex;
 import de.fhg.iais.roberta.syntax.lang.functions.ListRepeat;
 import de.fhg.iais.roberta.syntax.lang.functions.ListSetIndex;
+import de.fhg.iais.roberta.syntax.lang.functions.MathCastCharFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.MathCastStringFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathNumPropFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathOnListFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathPowerFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathRandomFloatFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathRandomIntFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathSingleFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.TextCharCastNumberFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.TextStringCastNumberFunct;
 
 /**
  * A visitor that keeps track of all methods visited at any point in the AST, that need an additional helper method definition.
@@ -72,9 +76,33 @@ public abstract class AbstractUsedMethodCollectorVisitor implements ICollectorVi
     }
 
     @Override
+    public Void visitMathCastStringFunct(MathCastStringFunct<Void> mathCastStringFunct) {
+        this.builder.addUsedMethod(FunctionNames.CAST);
+        return ICollectorVisitor.super.visitMathCastStringFunct(mathCastStringFunct);
+    }
+
+    @Override
+    public Void visitMathCastCharFunct(MathCastCharFunct<Void> mathCastCharFunct) {
+        this.builder.addUsedMethod(FunctionNames.CAST);
+        return ICollectorVisitor.super.visitMathCastCharFunct(mathCastCharFunct);
+    }
+
+    @Override
+    public Void visitTextCharCastNumberFunct(TextCharCastNumberFunct<Void> textCharCastNumberFunct) {
+        this.builder.addUsedMethod(FunctionNames.CAST);
+        return ICollectorVisitor.super.visitTextCharCastNumberFunct(textCharCastNumberFunct);
+    }
+
+    @Override
+    public Void visitTextStringCastNumberFunct(TextStringCastNumberFunct<Void> textStringCastNumberFunct) {
+        this.builder.addUsedMethod(FunctionNames.CAST);
+        return ICollectorVisitor.super.visitTextStringCastNumberFunct(textStringCastNumberFunct);
+    }
+
+    @Override
     public Void visitListGetIndex(ListGetIndex<Void> listGetIndex) {
         IListElementOperations iOp = listGetIndex.getElementOperation();
-        if (iOp instanceof ListElementOperations) {
+        if ( iOp instanceof ListElementOperations ) {
             ListElementOperations op = (ListElementOperations) iOp;
             this.builder.addUsedMethod(op);
         }
@@ -84,7 +112,7 @@ public abstract class AbstractUsedMethodCollectorVisitor implements ICollectorVi
     @Override
     public Void visitListSetIndex(ListSetIndex<Void> listSetIndex) {
         IListElementOperations iOp = listSetIndex.getElementOperation();
-        if (iOp instanceof ListElementOperations) {
+        if ( iOp instanceof ListElementOperations ) {
             ListElementOperations op = (ListElementOperations) iOp;
             this.builder.addUsedMethod(op);
         }

@@ -1,7 +1,7 @@
-define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socket.controller', 'user.controller', 'user.model', 'guiState.controller',
+define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socket.controller', 'user.controller', 'user.model', 'userGroup.controller' ,'guiState.controller',
         'program.controller', 'program.model', 'multSim.controller', 'progRun.controller', 'configuration.controller', 'import.controller', 'enjoyHint',
-        'tour.controller', 'simulation.simulation', 'progList.model', 'jquery', 'blocks', 'slick' ], function(exports, LOG, UTIL, MSG, COMM, ROBOT_C, SOCKET_C,
-        USER_C, USER, GUISTATE_C, PROGRAM_C, PROGRAM_M, MULT_SIM, RUN_C, CONFIGURATION_C, IMPORT_C, EnjoyHint, TOUR_C, SIM, PROGLIST, $, Blockly) {
+        'tour.controller', 'simulation.simulation', 'progList.model', 'jquery', 'blockly', 'slick' ], function(exports, LOG, UTIL, MSG, COMM, ROBOT_C, SOCKET_C,
+        USER_C, USER, USERGROUP_C, GUISTATE_C, PROGRAM_C, PROGRAM_M, MULT_SIM, RUN_C, CONFIGURATION_C, IMPORT_C, EnjoyHint, TOUR_C, SIM, PROGLIST, $, Blockly) {
 
     var n = 0;
 
@@ -45,6 +45,9 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
         } else if (target[0] === "#gallery") {
             GUISTATE_C.setStartWithoutPopup();
             $('#tabGalleryList').click();
+        } else if (target[0] === "#tutorial") {
+            GUISTATE_C.setStartWithoutPopup();
+            $('#tabTutorialList').click();
         } else if (target[0] === "#loadSystem" && target.length >= 2) {
             GUISTATE_C.setStartWithoutPopup();
             ROBOT_C.switchRobot(target[1], true);
@@ -77,7 +80,6 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
             }, 1000);
         }
         pingServer();
-        LOG.info('init menu view');
 
         handleQuery();
         cleanUri();
@@ -176,9 +178,31 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
             return groupsDict[key];
         }
 
+        /**
+         * This method either changes or removes the info link for further
+         * information to the buttons in the carousel/group member view
+         */
         var addInfoLink = function(clone, robotName) {
-            if (GUISTATE_C.getRobotInfo(robotName) != 'Info not found') {
-                clone.find('a').attr('onclick', 'window.open("' + GUISTATE_C.getRobotInfo(robotName) + '");return false;');
+            var robotInfoDE = GUISTATE_C.getRobotInfoDE(robotName);
+            var robotInfoEN = GUISTATE_C.getRobotInfoEN(robotName);
+            if (robotInfoDE !== "#" || robotInfoEN !== "#") {
+                var $de = clone.find('a');
+                var $en = $de.clone();
+                if (robotInfoDE === "#") {
+                    robotInfoDE = robotInfoEN;
+                }
+                if (robotInfoEN === "#") {
+                    robotInfoEN = robotInfoDE;
+                }
+                $de.attr({
+                    'onclick' : 'window.open("' + robotInfoDE + '");return false;',
+                    'class' : 'DE'
+                });
+                $en.attr({
+                    'onclick' : 'window.open("' + robotInfoEN + '");return false;',
+                    'class' : 'EN'
+                });
+                $en.appendTo(clone);
             } else {
                 clone.find('a').remove();
             }
@@ -198,17 +222,16 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
                 if (groupsDict[key].length == 1 || key === "calliope") { //this means that a robot has no subgroup
 
                     var robotName = key; // robot name is the same as robot group
-                    var robotRName = key;
-                    if (key === "calliope") {
-                        robotRName = "calliope2017NoBlue";
-                    }
                     var clone = proto.clone().prop('id', 'menu-' + robotName);
-                    clone.attr('data-type', robotRName);
                     clone.find('span:eq( 0 )').removeClass('typcn-open');
                     clone.find('span:eq( 0 )').addClass('typcn-' + robotName);
-                    clone.find('span:eq( 1 )').html(GUISTATE_C.getMenuRobotRealName(robotRName));
+                    if (key === "calliope") {
+                        robotName = "calliope2017NoBlue";
+                    }
+                    clone.find('span:eq( 1 )').html(GUISTATE_C.getMenuRobotRealName(robotName));
+                    clone.attr('data-type', robotName);
                     addInfoLink(clone, robotName);
-                    if (!GUISTATE_C.getIsRobotBeta(robotRName)) {
+                    if (!GUISTATE_C.getIsRobotBeta(robotName)) {
                         clone.find('img.img-beta').css('visibility', 'hidden');
                     }
                     $("#popup-robot-main").append(clone);
@@ -248,19 +271,25 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
                 }
             }
         }
+
         proto.find('.img-beta').css('visibility', 'hidden');
         proto.find('a[href]').css('visibility', 'hidden');
         $('#show-startup-message>.modal-body').append('<input type="button" class="btn backButton hidden" data-dismiss="modal" lkey="Blockly.Msg.POPUP_CANCEL"></input>');
         USER.getStatusText(function(result) {
             if (result.statustext[0] !== "" && result.statustext[1] !== "") {
-//                $('#statustext-en').html("<span class='typcn typcn-info-large'></span> " + result.statustext[0]);
-//                $('#statustext-de').html("<span class='typcn typcn-info-large'></span> " + result.statustext[1]);
                 $('#statustext-en').html(result.statustext[0]);
                 $('#statustext-de').html(result.statustext[1]);
                 $('#modal-statustext-text-en').html(result.statustext[0]);
                 $('#modal-statustext-text-de').html(result.statustext[1]);
             }
         })
+        if (GUISTATE_C.getLanguage() === 'de') {
+            $('.popup-robot .EN').css('display', 'none');
+            $('.popup-robot .DE').css('display', 'inline');
+        } else {
+            $('.popup-robot .DE').css('display', 'none');
+            $('.popup-robot .EN').css('display', 'inline');
+        }
         GUISTATE_C.setInitialState();
     }
 
@@ -309,6 +338,35 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
         $('#simButtonsHead').onWrap('click', '', function(event) {
             $('#navbarCollapse').collapse('hide');
         });
+        if (GUISTATE_C.isPublicServerVersion()) {
+            var feedbackButton = '<div href="#" id="feedbackButton" class="rightMenuButton" rel="tooltip" data-original-title="" title="">'
+                    +'<span id="" class="feedbackButton typcn typcn-feedback"></span>'
+                    +'</div>'
+            $("#rightMenuDiv").append(feedbackButton);
+            window.onmessage = function(msg) {
+	            if (msg.data ==="closeFeedback") {		             
+                    $('#feedbackIframe').one('load', function () {
+                        setTimeout(function() { 
+	                        $("#feedbackIframe").attr("src" ,"about:blank");
+	                        $('#feedbackModal').modal("hide");
+                        }, 1000);
+                    });
+	            } else if (msg.data.indexOf("feedbackHeight") >= 0) {
+		            var height = msg.data.split(":")[1]||400;
+                    $('#feedbackIframe').height(height);
+	            }
+            };                  
+            $('#feedbackButton').onWrap('click', '', function(event) {
+                $('#feedbackModal').on('show.bs.modal', function () {
+	                if (GUISTATE_C.getLanguage().toLowerCase() === "de") {
+	                    $("#feedbackIframe").attr("src" ,"https://www.roberta-home.de/lab/feedback/");
+                    } else {
+	                    $("#feedbackIframe").attr("src" ,"https://www.roberta-home.de/en/lab/feedback/");
+                    }
+                });
+                $('#feedbackModal').modal({show:true});
+            });
+        }
 
         // EDIT Menu
         $('#head-navigation-program-edit').onWrap('click', '.dropdown-menu li:not(.disabled) a', function(event) {
@@ -452,8 +510,14 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
             case 'menuLogin':
                 USER_C.showLoginForm();
                 break;
+            case 'menuUserGroupLogin':	
+                USER_C.showUserGroupLoginForm();	
+                break;
             case 'menuLogout':
                 USER_C.logout();
+                break;
+            case 'menuGroupPanel':	
+                USERGROUP_C.showPanel();	
                 break;
             case 'menuChangeUser':
                 USER_C.showUserDataForm();
@@ -754,6 +818,13 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
                 expr.render();
                 expr.setInTask(false);
                 var expr = GUISTATE_C.getBlocklyWorkspace().newBlock('robSensors_gyro_getSample');
+                expr.initSvg();
+                expr.render();
+                expr.setInTask(false);
+                return false;
+            }
+            if ((e.metaKey || e.ctrlKey) && (String.fromCharCode(e.which) === '7')) {
+                var expr = GUISTATE_C.getBlocklyWorkspace().newBlock('robActions_nnstep');
                 expr.initSvg();
                 expr.render();
                 expr.setInTask(false);

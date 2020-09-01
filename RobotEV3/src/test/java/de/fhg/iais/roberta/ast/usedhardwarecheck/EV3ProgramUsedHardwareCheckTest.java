@@ -1,6 +1,6 @@
 package de.fhg.iais.roberta.ast.usedhardwarecheck;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -17,11 +17,11 @@ import de.fhg.iais.roberta.visitor.collect.Ev3UsedHardwareCollectorVisitor;
 public class EV3ProgramUsedHardwareCheckTest extends Ev3LejosAstTest {
 
     private void runTest(String pathToXml, String sensorResult, String actorResult) throws Exception {
-        ArrayList<ArrayList<Phrase<Void>>> phrasesOfPhrases = UnitTestHelper.getAst(testFactory, pathToXml);
+        List<List<Phrase<Void>>> phrasesOfPhrases = UnitTestHelper.getProgramAst(testFactory, pathToXml);
         UsedHardwareBean.Builder builder = new Builder();
         Ev3UsedHardwareCollectorVisitor checkVisitor =
             new Ev3UsedHardwareCollectorVisitor(makeLargeLargeMediumTouchGyroColorUltrasonic(), ImmutableClassToInstanceMap.of(UsedHardwareBean.Builder.class, builder));
-        for ( ArrayList<Phrase<Void>> phrases : phrasesOfPhrases ) {
+        for ( List<Phrase<Void>> phrases : phrasesOfPhrases ) {
             for ( Phrase<Void> phrase : phrases ) {
                 phrase.accept(checkVisitor);
             }

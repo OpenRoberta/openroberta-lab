@@ -1,24 +1,24 @@
-<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="sensebox" xmlversion="2.0" description="" tags="">
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="sensebox" xmlversion="3.0" description="" tags="">
     <instance x="384" y="50">
-    <block type="robControls_start_ardu" id="[B2%0%*`@^Bx2z+[{%Vw" intask="true" deletable="false">
-        <mutation declare="true"/>
-        <field name="DEBUG"/>
-        <statement name="ST">
-        <block type="robGlobalVariables_declare" id="E6V4Q)z~IE%e6?!1@tPr" intask="true" deletable="false" movable="false">
-            <mutation next="true" declaration_type="Colour"/>
-            <field name="VAR">item</field>
-            <field name="TYPE">Colour</field>
-            <value name="VALUE">
-            <block type="robColour_picker" id="9Hj_HW]6D0|@pw8FAF2c" intask="true">
-                <field name="COLOUR">#FFFFFF</field>
-            </block>
-            </value>
-        </block>
-        <block type="robGlobalVariables_declare" id=")@phf(YuG+,wxt(l2)?C" intask="true" deletable="false" movable="false">
-            <mutation next="false" declaration_type="Colour"/>
-            <field name="VAR">item2</field>
-            <field name="TYPE">Colour</field>
-            <value name="VALUE">
+        <block type="robControls_start_ardu" id="[B2%0%*`@^Bx2z+[{%Vw" intask="true" deletable="false">
+            <mutation declare="true" />
+            <field name="DEBUG" />
+            <statement name="ST">
+                <block type="robGlobalVariables_declare" id="E6V4Q)z~IE%e6?!1@tPr" intask="true" deletable="false" movable="false">
+                    <mutation next="true" declaration_type="Colour" />
+                    <field name="VAR">item</field>
+                    <field name="TYPE">Colour</field>
+                    <value name="VALUE">
+                        <block type="robColour_picker" id="9Hj_HW]6D0|@pw8FAF2c" intask="true">
+                            <field name="COLOUR">#FFFFFF</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="robGlobalVariables_declare" id=")@phf(YuG+,wxt(l2)?C" intask="true" deletable="false" movable="false">
+                    <mutation next="false" declaration_type="Colour" />
+                    <field name="VAR">item2</field>
+                    <field name="TYPE">Colour</field>
+                    <value name="VALUE">
             <block type="naoColour_rgb" id="QcGtWN5a|GQ:Vj2Q)ist" intask="true">
                 <value name="RED">
                 <block type="math_number" id="ixGaa+z6c7:8ZDEJe[p," intask="true">

@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import de.fhg.iais.roberta.bean.CompilerSetupBean;
 import de.fhg.iais.roberta.components.Project;
 import de.fhg.iais.roberta.util.Key;
+import de.fhg.iais.roberta.util.Util;
 
 public class MicrobitCompilerWorker implements IWorker {
 
@@ -30,15 +31,17 @@ public class MicrobitCompilerWorker implements IWorker {
 
         String scriptName = compilerResourcesDir + "/compile.py";
 
-        String[] executableWithParameters = {
-            compilerBinDir + "python",
-            scriptName,
-            sourceCode
-        };
+        String[] executableWithParameters =
+            {
+                compilerBinDir + "python",
+                scriptName,
+                sourceCode
+            };
         project.setCompiledHex(this.getBinaryFromCrossCompiler(executableWithParameters));
         if ( project.getCompiledHex() != null ) {
             return Key.COMPILERWORKFLOW_SUCCESS;
         } else {
+            Util.logCrosscompilerError(LOG, "no binary returned", sourceCode);
             return Key.COMPILERWORKFLOW_ERROR_PROGRAM_COMPILE_FAILED;
         }
     }

@@ -72,6 +72,8 @@ public class ServerStarter {
     private static final String ADMIN_DIR_KEY = "server.admin.dir=";
     private static final String LOG_LEVEL_KEY = "server.log.level=";
 
+    private static final long INTERVAL_TO_CHECK_EXPIRATIONS_SEC = TimeUnit.HOURS.toSeconds(3);
+
     private final ServerProperties serverProperties; // for the startup
     private Injector injector;
 
@@ -160,6 +162,7 @@ public class ServerStarter {
         // setup services and threads to run the services
         IIpToCountry ipToCountry = configureIpToCountryDb();
         configureHttpSessionStateCleanup();
+        configureDbSessionCleanup();
 
         RobertaGuiceServletConfig robertaGuiceServletConfig =
             new RobertaGuiceServletConfig(this.serverProperties, robotPluginMap, robotCommunicator, ipToCountry);
@@ -183,7 +186,7 @@ public class ServerStarter {
         defaultHandler.setSessionHandler(new SessionHandler());
         // see /rest endpoint, this will cover this: restHttpHandler.getSessionHandler().addEventListener(mkSessionListener(" for / static resources, no REST endpoint"));
 
-        // 3.1 REST API without prefix (deprecated, used by very old ev3 robots)
+        // 3.1 REST API without prefix (deprecated, used by very old ev3 robots. Initializes the guice injector and implicitly the db session wrapper a SECOND TIME)
         defaultHandler.addEventListener(robertaGuiceServletConfig);
         defaultHandler.addFilter(GuiceFilter.class, "/pushcmd/*", null);
         defaultHandler.addFilter(GuiceFilter.class, "/download/*", null);
@@ -345,7 +348,6 @@ public class ServerStarter {
      * configure a thread, that runs every 3 hours a service, that will remove expired HttpSessionState objects
      */
     private void configureHttpSessionStateCleanup() {
-        final long intervalToRunRemoveExpired = TimeUnit.HOURS.toSeconds(3);
         ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
         Runnable cleanupHttpSessionState = new Runnable() {
             @Override
@@ -353,7 +355,21 @@ public class ServerStarter {
                 HttpSessionState.removeExpired();
             }
         };
-        scheduler.scheduleAtFixedRate(cleanupHttpSessionState, intervalToRunRemoveExpired, intervalToRunRemoveExpired, TimeUnit.SECONDS);
+        scheduler.scheduleAtFixedRate(cleanupHttpSessionState, INTERVAL_TO_CHECK_EXPIRATIONS_SEC + 1, INTERVAL_TO_CHECK_EXPIRATIONS_SEC, TimeUnit.SECONDS);
+    }
+
+    /**
+     * configure a thread, that runs every 3 hours a service, that will remove expired database sessions (sessions older than 2 hours)
+     */
+    private void configureDbSessionCleanup() {
+        ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+        Runnable cleanupDbSession = new Runnable() {
+            @Override
+            public void run() {
+                DbSession.cleanupSessions();
+            }
+        };
+        scheduler.scheduleAtFixedRate(cleanupDbSession, INTERVAL_TO_CHECK_EXPIRATIONS_SEC + 2, INTERVAL_TO_CHECK_EXPIRATIONS_SEC, TimeUnit.SECONDS);
     }
 
     /**
@@ -363,14 +379,13 @@ public class ServerStarter {
      * @param properties for configuring OpenRoberta, merged from property file and runtime arguments.
      */
     private void setupPropertyForDatabaseConnection(Properties properties) {
-        String serverVersionForDbDirectory = properties.getProperty("openRobertaServer.version").replace("-SNAPSHOT", "");
         String databaseParentDir = properties.getProperty("database.parentdir");
         String databaseUri = properties.getProperty("database.uri");
         String databaseName = properties.getProperty("database.name");
         String databaseMode = properties.getProperty("database.mode");
         String dbUrl;
         if ( "embedded".equals(databaseMode) ) {
-            dbUrl = "jdbc:hsqldb:file:" + databaseParentDir + "/db-" + serverVersionForDbDirectory + "/" + databaseName + ";ifexists=true;hsqldb.tx=mvcc";
+            dbUrl = "jdbc:hsqldb:file:" + databaseParentDir + "/" + databaseName + ";ifexists=true;hsqldb.tx=mvcc";
         } else if ( "server".equals(databaseMode) ) {
             dbUrl = "jdbc:hsqldb:hsql://" + databaseUri + "/" + databaseName + ";hsqldb.tx=mvcc";
         } else {

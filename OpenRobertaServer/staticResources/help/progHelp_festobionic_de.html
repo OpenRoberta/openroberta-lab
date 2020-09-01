@@ -1,0 +1,295 @@
+<head><title></title><meta http-equiv="content-type" content="text/html; charset=utf-8"></head><body><div id="helpContent"><div id="robControls_start_ardu" class="help beginner"><h3 id="BlockbeschreibungBionics4Education-»Programmstart«"><span style="color: rgb(0,0,0);">»Programmstart«</span><span style="color: rgb(0,0,0);"> </span></h3><p>Jedes Programm beginnt mit dem »Programmstart-Block«, welcher nicht gelöscht werden kann. Den ersten Block, den man verwenden möchte, verbindet man direkt mit der  »Sequenzverbindung« am Programmstart-Block. </p><p>Einstellmöglichkeiten:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-plus">Erzeuge eine neue globale Variable.</li><li class="typcn typcn-minus"><span>Entferne die globale Variable.</span></li>
+</ul><br><p>Wenn globale Variablen erzeugt wurden:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-pen">Text, Name der Variablen.</li><li class="typcn typcn-arrow-sorted-down">Typ der Variablen.</li><li class="typcn typcn-arrow-left">Wert, Anfangswert der Variablen.</li>
+</ul></div><div id="robActions_serial_print" class="help beginner"><h3 id="BlockbeschreibungBionics4Education-»ZeigeaufSerialMonitor...«">»Zeige auf Serial Monitor ...«</h3><p>Mit diesem Block kannst du einen Text über die serielle Schnittstelle an deinen Computer übertragen und dort mit einem seriellen Monitor auslesen. Dazu kannst du den eingebauten Seriellen Monitor des Open Roberta Connectors verwenden.</p><p>Eingabewerte:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-left">Text, den text den du auf deinen Computer übertragen möchtest.</li>
+</ul></div><div id="robActions_motor_on_for_ardu" class="help beginner"><h3 id="BlockbeschreibungBionics4Education-»SetzeServomotor...auf°...«">»Setze Servomotor ... auf ° ... «</h3><p>Mit diesem Block kannst du den angeschlossenen Servomotor steuern und seine Postion einstellen. Die Position wird als Winke beschrieben, wobei 360° eine ganze Umdrehung ist.</p><p>Optionen und Eingabewerte:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-sorted-down">Option, wähle den Servomotor aus, den du angeschlossen hat.</li><li class="typcn typcn-arrow-right">Zahl, neue Position für den Servomotor, </li>
+</ul></div><div id="robActions_brickLight_on" class="help beginner"><h3 id="BlockbeschreibungBionics4Education-»SchalteLEDan/aus«">»Schalte LED an/aus «</h3><p>Mit diesem Block kannst du eine angeschlossene LED steuern und an- bzw. ausschalten.</p><p>Optionen:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-sorted-down">Option, wähle die LED aus, die du steuern möchtest.</li><li class="typcn typcn-arrow-sorted-down">Option,  wähle  ob du die LED an- oder ausschalten möchtest.</li>
+</ul></div><div id="robSensors_timer_getSample" class="help beginner"><h3 id="BlockbeschreibungBionics4Education-»GibWertZeitgeber...zurück«">»Gib Wert Zeitgeber ... zurück«</h3><p>Mit diesem Block  kannst du den Wert eines Zeitgebers abfragen. Diese geben die Zeit seit dem Start in Millisekunden zurück.</p><p>Optionen:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-sorted-down">Option, Wähle den Zeitgeber zurück, den du abfragen möchtest. Zeitgeber 1 wird bei Start des Programms automatisch gestartet, alle anderen müssen zunächst durch den Block »Setze Zeitgeber  ... zurück« gestartet werden,</li>
+</ul><br><p>Rückgabewerte:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right">Zahl, Zeit seit des Starts oder dem letzten Zurücksetzen in Millisekunden.</li>
+</ul><br></div><div id="robSensors_timer_reset" class="help beginner"><h3 id="BlockbeschreibungBionics4Education-»SetzeZeitgeber...zurück«">»Setze Zeitgeber ... zurück«</h3><p>Mit diesem Block kannst du einen der eingebauten Zeitgeber auf Null zurücksetzen. Zudem kannst du einen neuen Zeitgeber starten.
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-sorted-down">Option, wähle den Zeitgeber den du zurücksetzen oder  starten möchtest. Es stehen 5 Zeitgeber zur Verfügung.</li>
+</ul></div><div id="robControls_if" class="help beginner"><h3 style="text-align: left;" id="BlockbeschreibungBionics4Education-»Wennmache«">»Wenn mache«</h3><p style="text-align: left;">Mit dem Block »Wenn mache« kannst du gezielt Aktionen auslösen, die von einer Bedingung abhängen. Der »Wenn mache«-Block benötigt einen logischen Wert als Eingabewert. Falls die Bedingung in »Wenn« erfüllt (wahr) ist, wird der eingefügte Block (oder die Blöcke) ausgeführt. Bei einem verschachtelten »Wenn mache« Block, also wenn eine weitere Unterscheidung eingefügt wurde, wird zuerst die erste »Wenn« Bedingung abgefragt und, falls diese nicht erfüllt ist (Bedingung = falsch), wird die zweite »oder wenn« Bedingung geprüft. Auch diese zweite Bedingung benötigt wieder einen logischen Wert als Eingabewert.</p><p style="text-align: left;">Die Bedingungen können beliebig durch Anklicken des »+« Plus-Symbols erweitert und durch das »-« Minus-Symbol wieder bis auf eine einzige Bedingung reduziert werden.</p><p style="text-align: left;">Einstellmöglichkeiten und Eingabewerte:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-plus">Eine weitere Bedingung am Ende anfügen.</li><li class="typcn typcn-minus">Die letzte Bedingung löschen.</li><li class="typcn typcn-arrow-left">Logischer Wert, »wahr« oder »falsch«.</li><li class="typcn typcn-arrow-left">Blöcke, die nur dann ausgeführt werden, wenn die zugehörige Bedingung »wahr« ist.</li>
+</ul></div><div id="robControls_ifElse" class="help beginner"><h3 style="text-align: left;" id="BlockbeschreibungBionics4Education-»Wennmachesonst«">»Wenn mache sonst«</h3><p style="text-align: left;">Mit dem Block »Wenn mache sonst« kannst du gezielt Aktionen auslösen, die von einer Bedingung abhängen. Der »Wenn mache sonst«-Block benötigt hierfür einen logischen Wert als Eingabewert. Falls die Bedingung  erfüllt (wahr) ist, wird der dort eingefügte Block (oder die Blöcke) ausgeführt, ansonsten (Bedingung nicht erfüllt = falsch) wird der Block (bzw. die Blöcke), der bei »sonst« eingefügt wurde, ausgeführt. Bei einem verschachtelten »Wenn mache sonst« Block, also wenn eine weitere Unterscheidung dazugefügt wurde, wird zuerst die erste »Wenn« Bedingung abgefragt und, falls diese nicht erfüllt ist, wird die zweite »oder wenn« Bedingung geprüft. Auch diese zweite Bedingung benötigt wieder einen logischen Wert als Eingabewert. Nur wenn beide Bedingungen nicht erfüllt sind, wird der Block ausgeführt, der bei »sonst« eingefügt wurde.</p><p style="text-align: left;">Die Bedingungen können beliebig durch anklicken des »+« Plus-Symbols erweitert und durch das »-« Minus-Symbol wieder bis auf eine einzige Bedingung reduziert werden.</p><p style="text-align: left;">Einstellmöglichkeiten und Eingabewerte:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-plus">Eine weitere Bedingung am Ende anfügen.</li><li class="typcn typcn-minus">Die letzte Bedingung löschen.</li><li class="typcn typcn-arrow-left">Logischer Wert, »wahr« oder »falsch«.</li><li class="typcn typcn-arrow-left">Blöcke, die nur dann ausgeführt werden, wenn die zugehörige Bedingung »wahr« ist.</li><li class="typcn typcn-arrow-left">Blöcke, die nur dann ausgeführt werden, wenn die zugehörige Bedingung »falsch« ist.</li>
+</ul></div><div id="robControls_loopForever" class="help beginner notWedo"><h3 style="text-align: left;" id="BlockbeschreibungBionics4Education-»Wiederholeunendlichoft«">»Wiederhole unendlich oft«</h3><p style="text-align: left;">Mit dem Block »Wiederhole unendlich oft« kannst du Blöcke endlos von deinem Roboter ausführen lassen. Alle Blöcke, die sich im »Wiederhole unendlich oft«-Block befinden, werden immer wieder ausgeführt. Die Blöcke werden dabei von oben nach unten ausgeführt. Sobald der letzte Block ausgeführt wurde, beginnt das Programm wieder mit dem ersten Block. Deshalb wird dieser Block auch »Endlosschleife« genannt.</p><p style="text-align: left;">Eingaben:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-left">Blöcke, die wiederholt ausgeführt werden.</li>
+</ul></div><div id="controls_repeat_ext" class="help beginner"><h3 style="text-align: left;" id="BlockbeschreibungBionics4Education-»Wiederholenmal«">»Wiederhole n mal«</h3><p style="text-align: left;">Mit dem Block »Wiederhole n mal« kannst du andere Blöcke beliebig oft von deinem Roboter ausführen lassen. Alle Blöcke, die sich im Block »Wiederhole n mal« befinden, werden so oft ausgeführt, wie im Eingabefeld eingestellt ist. Die Blöcke werden dabei von oben nach unten ausgeführt. Sobald der letzte Block ausgeführt wurde, beginnt das Programm wieder mit dem ersten Block, bis die eingestellte Wiederholungszahl erreicht ist. Deshalb wird dieser Block auch »Schleife« genannt.</p><div class="confluence-information-macro confluence-information-macro-information"><div class="confluence-information-macro-body"><p>Nur ganzzahlige Werte können eingegeben werden.</p></div></div><p style="text-align: left;">Einstellmöglichkeiten und Eingabewerte:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-left">Zahl, wie oft die enthaltenen Blöcke wiederholt werden sollen.</li><li class="typcn typcn-arrow-left">Blöcke, die wiederholt ausgeführt werden.</li>
+</ul></div><div id="controls_whileUntil" class="help expert"><h3 style="text-align: left;" id="BlockbeschreibungBionics4Education-»Wiederholesolange/bis«[Experten-Block]">»Wiederhole solange/bis« <span class="typcn typcn-star"></span></h3><p style="text-align: left;">Mit dem Block »Wiederhole solange/bis« kannst du andere Blöcke beliebig oft von deinem Roboter ausführen lassen. Alle Blöcke, die sich im Block »Wiederhole solange/bis« befinden, werden immer wieder ausgeführt, solange bzw. bis die Bedingung im Eingabefeld erfüllt ist. Die Blöcke werden dabei von oben nach unten ausgeführt. Sobald der letzte Block ausgeführt wurde, beginnt das Programm wieder mit dem ersten Block, solange bzw. bis die Bedingung im Eingabefeld erfüllt ist. Deshalb wird dieser Block auch »bedingte Schleife« genannt.</p><p style="text-align: left;">Einstellmöglichkeiten und Eingabewerte:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-sorted-down">»solange« oder »bis«, um den Typ der bedingten Wiederholung zu bestimmen.</li><li class="typcn typcn-arrow-left">Logischer Wert, »wahr« oder »falsch«.</li><li class="typcn typcn-arrow-left">Blöcke, die wiederholt ausgeführt werden.</li>
+</ul></div><div id="robControls_forEach" class="help expert notWedo notBob3"><h3 style="text-align: left;" id="BlockbeschreibungBionics4Education-»FürWertausderListe«[Experten-Block]">»Für Wert aus der Liste« <span class="typcn typcn-star"></span></h3><p style="text-align: left;">Mit dem Block »Für Wert aus der Liste« werden nacheinander alle Werte einer Liste an eine Variable übergeben und können dann in der so genannten Schleife verarbeitet werden. Mit jedem Schleifendurchlauf wird das nächste Element aus der Liste geholt, bis die Liste vollständig abgearbeitet ist. Der Wert des Listenelements wird an die Variable Element gebunden und kann in den enthaltenen Blöcken verwendet werden.</p><p style="text-align: left;">Einstellmöglichkeiten und Eingabewerte:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-sorted-down">Typ der Listenelemente, »Zahl«, »Zeichenkette«, »logischer Wert«, »Farbe«, »Verbindung«</li><li class="typcn typcn-pen">Variable, frei wählbarer Name, an den nacheinander die Listenelemente übergeben werden.</li><li class="typcn typcn-arrow-left">Liste, die Elemente des festgelegten Typs enthält. Wenn die Listenelemente nicht den richtigen Typ haben, kann die Liste nicht als Eingabewert verwendet werden.</li><li class="typcn typcn-arrow-left">Blöcke, die wiederholt ausgeführt werden.</li>
+</ul></div><div id="robControls_for" class="help expert"><h3 style="text-align: left;" id="BlockbeschreibungBionics4Education-»Zählevonbis«[Experten-Block]">»Zähle von bis« <span class="typcn typcn-star"></span></h3><p style="text-align: left;">Mit dem Block »Zähle von bis« kannst du andere Blöcke mehrfach von deinem Roboter ausführen lassen. Alle Blöcke, die sich im Block »Zähle von bis« befinden, werden so oft ausgeführt, bis die Zählung im Eingabefeld abgearbeitet ist. Die Blöcke werden dabei von oben nach unten ausgeführt. Sobald der letzte Block ausgeführt wurde, beginnt das Programm wieder mit dem ersten Block, solange die Zählbedingung im Eingabefeld erfüllt ist, d.h. der Endwert der Zählung noch nicht erreicht ist. Die Werte der Zählung werden jeweils an die Zählvariable gebunden, deren Name frei eingestellt werden kann. Der Wert der Zählvariablen kann in den Blöcken der Schleife verwendet werden. Der letzte Eingabewert gibt an, in welcher Schrittweite gezählt wird.</p><p style="text-align: left;">Einstellmöglichkeiten und Eingabewerte:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-pen">Variable, frei wählbarer Name für die Zählvariable.</li><li class="typcn typcn-arrow-left">Zahl, Anfangswert der Zählschleife.</li><li class="typcn typcn-arrow-left">Zahl, Endwert der Zählschleife.</li><li class="typcn typcn-arrow-left">Zahl, Schrittweite für die Zählschleife.</li><li class="typcn typcn-arrow-left">Blöcke, die wiederholt ausgeführt werden.</li>
+</ul></div><div id="controls_flow_statements" class="help expert"><h3 style="text-align: left;" id="BlockbeschreibungBionics4Education-»DieSchleifeabbrechen/mitdernächstenIterationderSchleifefortfahren«[Experten-Block]">»Die Schleife abbrechen/mit der nächsten Iteration der Schleife fortfahren« <span class="typcn typcn-star"></span></h3><p style="text-align: left;">Mit dem Block »Die Schleife abbrechen/mit der nächsten Iteration der Schleife fortfahren« kann eine Schleife vorzeitig beendet bzw. wieder zum Anfang der Schleife gesprungen werden. Sobald dieser Block in einer Reihe von Blöcken erscheint, werden alle nachfolgenden Blöcke bis zum Ende der Schleife ignoriert.</p><p style="text-align: left;">Einstellmöglichkeiten:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-sorted-down">Abbruchverhalten, »Die Schleife abbrechen« oder »mit der nächsten Iteration der Schleife fortfahren«.</li>
+</ul></div><div id="robControls_wait" class="help beginner"><h3 class="auto-cursor-target" id="BlockbeschreibungBionics4Education-»Wartebis...«">»Warte bis ... «</h3><p style="text-align: left;">Mit dem Block »Warte bis« kannst du dein Programm an der Stelle »anhalten«, an der du den »Warte bis«-Block eingefügt hast. Dein Programm wartet dann so lange, bis die Bedingung erfüllt (wahr) ist. Den »Warte bis«-Block kannst du mit dem »+«-Zeichen um zusätzliche Bedingungen erweitern. Dein Programm wartet dann solange, bis (mindestens) eine der Bedingungen deines »Warte bis«-Blocks erfüllt ist.</p><p style="text-align: left;">Einstelmöglichkeiten und Eingabewert:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-plus">Eine weitere Wartebedingung am Ende anfügen.</li><li class="typcn typcn-minus">Die letzte Wartebedingung löschen.</li><li class="typcn typcn-arrow-left">Logischer Wert, »wahr« oder »falsch«.</li>
+</ul></div><div id="robControls_wait_time" class="help beginner"><h3 style="text-align: left;" id="BlockbeschreibungBionics4Education-»Wartems...«">»Warte ms ... «</h3><p style="text-align: left;">Mit dem Block »Warte« kannst du dein Programm an der Stelle "anhalten", an der du den Block eingefügt hast. Dein Programm bleibt dann für die angegebene Dauer an dieser Stelle stehen. Nach Ablauf der angegebenen Zeit wird dann der nachfolgende Block ausgeführt. Beispielsweise kannst du dadurch einen Text in dem Display deines Roboters exakt für diese Zeit anzeigen lassen.</p><p style="text-align: left;">Einstellmöglichkeiten:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-left">Zahl, Wartezeit in Millisekunden.</li>
+</ul></div><div id="robControls_wait_for" class="help beginner"><h3 style="text-align: left;" id="BlockbeschreibungBionics4Education-»Wartebis...«.1">»Warte bis ... «</h3><p style="text-align: left;">Mit dem Block »Warte bis« kannst du dein Programm an der Stelle »anhalten«, an der du den »Warte bis«-Block eingefügt hast. Dein Programm wartet dann so lange, bis die Bedingung erfüllt (wahr) ist. Den »Warte bis«-Block kannst du mit dem »+«-Zeichen um zusätzliche Bedingungen erweitern. Dein Programm wartet dann solange, bis (mindestens) eine der Bedingungen deines »Warte bis«-Blocks erfüllt ist.</p><p style="text-align: left;">Einstelmöglichkeiten und Eingabewert:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-plus">Eine weitere Wartebedingung am Ende anfügen.</li><li class="typcn typcn-minus">Die letzte Wartebedingung löschen.</li><li class="typcn typcn-arrow-left">Logischer Wert, »wahr« oder »falsch«.</li>
+</ul></div><div id="logic_compare" class="help beginner"><h3 style="text-align: left;" id="BlockbeschreibungBionics4Education-»Vergleiche«">»Vergleiche«</h3><p style="text-align: left;">Mit dem Block »Vergleiche« kannst du verschiedene Eingabewerte (Zahl, Farbe, logischer Wert, Text) gleichen Typs miteinander vergleichen. Stimmt der Vergleich, wird der logische Wert »wahr« zurückgegeben, sonst »falsch«.</p><p style="text-align: left;">Einstellmöglichkeiten und Eingabewerte:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-left">Linker Eingabewert für den Vergleich.</li><li class="typcn typcn-arrow-sorted-down">Vergleich, wähle aus, wie verglichen werden soll.</li><li class="typcn typcn-arrow-left">Rechter Eingabewert für den Vergleich.</li>
+</ul><p>Rückgabewert:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right">Logischer Wert, »wahr« oder »falsch«.</li>
+</ul><br></div><div id="logic_operation" class="help beginner"><h3 style="text-align: left;" id="BlockbeschreibungBionics4Education-»und/oder«">»und/oder«</h3><p style="text-align: left;">Mit dem Block »und/oder« kannst du logische Werte zueinander in Beziehung setzen. Der »und/oder« Block liefert bei der Einstellung »und« nur dann den logischen Wert »wahr«, wenn beide Eingabewerte des Blocks gleichzeitig »wahr« sind. Bei der Einstellung »oder« genügt es, wenn einer der beiden Eingabewerte »wahr« ist, damit der »und/oder« Block als logischen Wert »wahr« liefert.</p><p style="text-align: left;">Einstellmöglichkeiten und Eingabewerte:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-left">Logischer Wert für die Verknüpfung.</li><li class="typcn typcn-arrow-sorted-down">Wähle die logische Verknüpfung.</li>
+</ul><p>Rückgabewert:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right">Logischer Wert, »wahr« oder »falsch«.</li>
+</ul><br></div><div id="logic_negate" class="help expert"><h3 style="text-align: left;" id="BlockbeschreibungBionics4Education-»nicht«[Experten-Block]">»nicht« <span class="typcn typcn-star"></span></h3><p style="text-align: left;">Mit dem Block »nicht« kannst du einen logischen Wert umkehren. Der logische Wert ergibt sich aus der logischen Umkehrung des Eingabewertes, aus »wahr« wird »falsch« und umgekehrt.</p><p style="text-align: left;">Eingabewert:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-left">Logischer Wert für die Umkehrung.</li>
+</ul><p>Rückgabewert:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right">Logischer Wert, Ergebnis der Umkehrung.</li>
+</ul><br></div><div id="logic_boolean" class="help beginner"><h3 style="text-align: left;" id="BlockbeschreibungBionics4Education-»wahr/falsch«">»wahr/falsch«</h3><p style="text-align: left;">Mit dem Block »wahr/falsch« kannst du entweder den logischen Wert »wahr« oder »falsch« an einen anderen Block übermitteln.</p><p style="text-align: left;"> Einstellmöglichkeiten:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-sorted-down">Logischer Wert, wähle den Wert, der ausgegeben werden soll.</li>
+</ul><p>Rückgabewert:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right">Logischer Wert.</li>
+</ul><br></div><div id="logic_null" class="help expert"><h3 style="text-align: left;" id="BlockbeschreibungBionics4Education-»null«[Experten-Block]">»null« <span class="typcn typcn-star"></span></h3><p style="text-align: left;">Der Block »null« ist ein Platzhalter für eine Eingabe, die noch unbestimmt ist. Wenn z.B. eine neue Verbindungsvariable für die Kommunikation erzeugt wird und noch nicht belegt ist, wird der Anfangswert auf »null« gesetzt.</p><p style="text-align: left;">Rückgabewert:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right">Logischer Wert, »null«.</li>
+</ul></div><div id="logic_ternary" class="help expert notWedo"><h3 style="text-align: left;" id="BlockbeschreibungBionics4Education-»teste«[Experten-Block]">»teste« <span class="typcn typcn-star"></span></h3><p style="text-align: left;">Mit dem Block »teste« kannst du einen Test durchführen und je nach Ergebnis unterschiedliche Ergebnisse zurückgeben.</p><p style="text-align: left;">Eingabewerte:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-left">Logischer Wert für den Test; wenn kein Block angegeben wird, wird "wahr" angenommen.</li><li class="typcn typcn-arrow-left">Beliebiger Wert, der mit einem Block bestimmt werden kann.</li><li class="typcn typcn-arrow-left">Beliebiger Wert, der mit einem Block bestimmt werden kann.</li>
+</ul><p>Rückgabewert:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right">Wert von beliebigem Typ.</li>
+</ul><br></div><div id="math_number" class="help beginner"><h3 style="text-align: left;" id="BlockbeschreibungBionics4Education-»Wert«">»Wert«</h3><p style="text-align: left;">Mit dem Block »Wert« kannst du Zahlen an einen anderen Block übermitteln.</p><p style="text-align: left;"> Eingabewert:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-pen">Zahl</li>
+</ul><p>Rückgabewert:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right"> Zahl</li>
+</ul><br></div><div id="math_arithmetic" class="help beginner"><h3 style="text-align: left;" id="BlockbeschreibungBionics4Education-»Rechnen«">»Rechnen«</h3><p style="text-align: left;">Mit dem Block »Rechnen« kannst du Zahlen addieren, subtrahieren, multiplizieren, dividieren oder potenzieren. Dieser Block ist nur in Verbindung mit einem anderen Block nutzbar, der eine Zahl als Eingabewert benötigt.</p><p style="text-align: left;"> Einstellmöglichkeiten und Eingabewerte:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-left"> Zahl</li><li class="typcn typcn-arrow-sorted-down"> Berechnung, wähle einen Operator aus.</li><li class="typcn typcn-arrow-left">Zahl</li>
+</ul><p>Rückgabewert:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right"> Zahl, das Ergebnis der Berechnung.</li>
+</ul><br></div><div id="math_single" class="help expert"><h3 style="text-align: left;" id="BlockbeschreibungBionics4Education-»MathematischeFunktionen«[Experten-Block]">»Mathematische Funktionen« <span class="typcn typcn-star"></span></h3><p style="text-align: left;">Mit dem Block »Mathematische Funktionen« können einige elementare mathematische Funktionen berechnet werden.</p><p style="text-align: left;">Einstellmöglichkeiten und Eingabewert:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-sorted-down">Mathematische Funktion, Quadratwurzel, Absolutwert, Invertieren, ln (natürlicher Logarithmus), log10 (dekadischer Logarithmus), e^ (Exponentialfunktion) 10^ (Zehner-Exponent)</li><li class="typcn typcn-arrow-left">Zahl, auf die die mathematische Funktion angewandt wird.</li>
+</ul><p>Rückgabewert:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right"> Zahl, das Ergebnis der Funktion.</li>
+</ul><br></div><div id="math_trig" class="help expert"><h3 style="text-align: left;" id="BlockbeschreibungBionics4Education-»TrigonometrischeFunktionen«[Experten-Block]">»Trigonometrische Funktionen« <span class="typcn typcn-star"></span></h3><p style="text-align: left;">Mit dem Block »Trigonometrische Funktionen« können Sinus, Cosinus, Tangens und die zugehörigen Umkehrfunktionen berechnet werden. Die Eingabewerte werden im Bogenmaß erwartet (siehe Hinweis oben).</p><p style="text-align: left;">Einstellmöglichkeiten und Eingabewert:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-sorted-down">Trigonometrische Funktion, wähle eine Funktion aus.</li><li class="typcn typcn-arrow-left">Zahl, im Bogenmaß</li>
+</ul><p>Rückgabewert:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right"> Zahl, das Ergebnis der trigonometrischen Berechnung.</li>
+</ul><br></div><div id="math_constant" class="help expert"><h3 style="text-align: left;" id="BlockbeschreibungBionics4Education-»Konstanten«[Experten-Block]">»Konstanten« <span class="typcn typcn-star"></span></h3><p style="text-align: left;">Der Block »Konstanten« stellt einige mathematische Konstanten bereit. »π« (3,1415...), »e« (2,718...), »φ« (1,618...), »sqrt(2)« (1,414...), »sqrt(½)« (0,7071...), »∞«.</p><p style="text-align: left;">Einstellmöglichkeiten:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-sorted-down">Mathematische Konstanten, wähle eine Konstante aus.</li>
+</ul><p>Rückgabewert:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right"> Zahl, Wert der mathematischen Konstante. Der Wert von Unendlich ist »infinity«.</li>
+</ul><br></div><div id="math_number_property" class="help expert"><h3 style="text-align: left;" id="BlockbeschreibungBionics4Education-»Zahleneigenschaft«[Experten-Block]">»Zahleneigenschaft« <span class="typcn typcn-star"></span></h3><p style="text-align: left;">Mit dem Block »Zahleneigenschaft« wird geprüft, ob eine eingegebene Zahl eine bestimmte Eigenschaft aufweist. »gerade«, »ungerade«, »ist Primzahl«, »ganze Zahl«, »positiv«, »negativ«, »teilbar durch«.</p><p style="text-align: left;">Einstellmöglichkeiten und Eingabewert:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-left">Zahl, die mit einem Block geprüft wird.</li><li class="typcn typcn-arrow-sorted-down">Zahleneigenschaft, wähle, was geprüft werden soll.</li><li class="typcn typcn-arrow-left">Zahl; ein zweiter Eingabewert ist nur bei der Wahl von »ist teilbar durch« erforderlich.</li>
+</ul><p>Rückgabewert:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right">Logischer Wert, »wahr« oder »falsch«, je nachdem, ob die geprüfte Zahl die untersuchte Eigenschaft hat.</li>
+</ul><br></div><div id="robMath_change" class="help expert"><h3 style="text-align: left;" id="BlockbeschreibungBionics4Education-»Erhöheumx«[Experten-Block]">»Erhöhe um x« <span class="typcn typcn-star"></span></h3><p style="text-align: left;">Mit dem Block »Erhöhe um x« wird der Wert einer numerischen Variable um einen Betrag erhöht.</p><p style="text-align: left;">Eingabewerte:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-sorted-down">Variable, deren Wert verändert werden soll.</li><li class="typcn typcn-arrow-left">Zahl.</li>
+</ul></div><div id="math_round" class="help expert"><h3 style="text-align: left;" id="BlockbeschreibungBionics4Education-»runden«[Experten-Block]">»runden« <span class="typcn typcn-star"></span></h3><p style="text-align: left;">Mit dem Block »runden« können Werte gerundet werden. Beim Runden werden die Nachkommastellen auf 0 gesetzt. Es wird je nach Größe der Nachkommastellen automatisch auf- oder abgerundet. Man kann jedoch auch einstellen, dass stets auf- bzw. stets abgerundet werden soll.</p><p style="text-align: left;">Einstellmöglichkeiten und Eingabewert:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-sorted-down">Art der Rundung, wähle, wie gerundet werden soll.</li><li class="typcn typcn-arrow-left">Zahl</li>
+</ul><p>Rückgabewert:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right">Zahl, gerundete Ganzzahl</li>
+</ul><br></div><div id="math_on_list" class="help expert notWedo notBob3"><h3 style="text-align: left;" id="BlockbeschreibungBionics4Education-»Listeauswerten«[Experten-Block]">»Liste auswerten« <span class="typcn typcn-star"></span></h3><p style="text-align: left;">Mit dem Block »Liste auswerten« können verschiedene Analysen einer Liste vorgenommen werden:</p><ul style="text-align: left;"><li>Summe - alle Werte der Liste werden zusammengezählt</li><li>Minimalwert - der kleinste Wert der Liste wird ausgegeben</li><li>Maximalwert - der größte Wert der Liste wird ausgegeben</li><li>Mittelwert - aus den Werten der Liste wird der Mittelwert bestimmt</li><li>Median - der Median (Zentralwert) einer Liste wird ausgegeben</li><li>Standardabweichung - die Standardabweichung (Varianz) der Listenwerte wird ausgegeben</li><li>Zufallswert - einer der Listenwerte wird per Zufall gewählt und ausgegeben</li></ul><p style="text-align: left;">Einstellmöglichkeiten und Eingabewert:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-sorted-down">Art der Listenauswertung</li><li class="typcn typcn-arrow-left">Liste mit Zahlen</li>
+</ul><p>Rückgabewert:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right">Zahl, Ergebnis der eingestellten Listenauswertung.</li>
+</ul><br></div><div id="math_modulo" class="help expert"><h3 style="text-align: left;" id="BlockbeschreibungBionics4Education-»Restvon«[Experten-Block]">»Rest von« <span class="typcn typcn-star"></span></h3><p style="text-align: left;">Der Block »Rest von« führt eine Division durch und liefert den Rest der Division, der nicht mehr durch den Divisor geteilt werden konnte.</p><p style="text-align: left;">Eingabewerte:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-left">Zahl, die geteilt wird (Dividend)</li><li class="typcn typcn-arrow-left">Zahl, durch die geteilt wird (Divisor bzw. Teiler)</li>
+</ul><p>Rückgabewert:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right">Zahl, Rest der Division</li>
+</ul><br></div><div id="math_constrain" class="help expert"><h3 style="text-align: left;" id="BlockbeschreibungBionics4Education-»Begrenze«[Experten-Block]">»Begrenze« <span class="typcn typcn-star"></span></h3><p style="text-align: left;">Der Block »Begrenze« sorgt dafür, dass Grenzwerte nicht überschritten werden. Er erfordert drei Eingabewerte:</p><ol style="text-align: left;"><li>zu prüfender Wert</li><li>untere Grenze</li><li>obere Grenze</li></ol><p style="text-align: left;">Der Rückgabewert ist</p><ul style="text-align: left;"><li>der zu prüfende Wert, wenn gilt: untere Grenze ≤ zu prüfender Wert ≤ obere Grenze</li><li>untere Grenze, wenn zu prüfender Wert &lt; untere Grenze</li><li>obere Grenze, wenn zu prüfender Wert &gt; obere Grenze</li></ul><p style="text-align: left;">Eingabewerte:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-left">Zahl, die begrenzt wird.</li><li class="typcn typcn-arrow-left">Zahl, untere Grenze.</li><li class="typcn typcn-arrow-left">Zahl, obere Grenze.</li>
+</ul><p>Rückgabewert:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right">Zahl, die innerhalb der eingestellten Grenzen liegt.</li>
+</ul><br></div><div id="math_random_int" class="help expert"><h3 style="text-align: left;" id="BlockbeschreibungBionics4Education-»GanzzahligeZufallswerte«[Experten-Block]">»Ganzzahlige Zufallswerte« <span class="typcn typcn-star"></span></h3><p style="text-align: left;">Mit dem Block »Ganzzahlige Zufallswerte« können ganzzahlige Zufallswerte innerhalb selbst gewählter Grenzen erzeugt werden.</p><p style="text-align: left;">Eingabewerte:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-left">Zahl, untere Grenze</li><li class="typcn typcn-arrow-left">Zahl, obere Grenze</li>
+</ul><p>Rückgabewert:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right">Zahl, eine ganzzahlige Zufallszahl, die innerhalb der eingestellten Grenzen liegt</li>
+</ul><br></div><div id="math_random_float" class="help expert"><h3 style="text-align: left;" id="BlockbeschreibungBionics4Education-»Zufallszahl«[Experten-Block]">»Zufallszahl« <span class="typcn typcn-star"></span></h3><p style="text-align: left;">Mit dem Block »Zufallszahl« wird eine Zufallszahl zwischen 0,0 und 1,0 bestimmt.</p><p style="text-align: left;">Rückgabewert:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right">Zahl, eine positive Zufallszahl kleiner oder gleich 1.</li>
+</ul></div><div id="text" class="help beginner notBob3"><h3 style="text-align: left;" id="BlockbeschreibungBionics4Education-»Text«">»Text«</h3><p style="text-align: left;">Mit dem einfachen »Text«-Block wird ein Stück Text bereitgestellt.</p><p style="text-align: left;">Eingabewert:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-pen">Zeichenkette, bestehend aus beliebigen Zeichen</li>
+</ul><p>Rückgabewert:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right">Text, bestehend aus beliebigen Zeichen</li>
+</ul><br></div><div id="text_comment" class="help beginner"><h3 style="text-align: left;" id="BlockbeschreibungBionics4Education-»Kommentar«">»Kommentar«</h3><p style="text-align: left;">Dokumentiere dein Programm mit diesem Block, damit du und andere es später leichter haben, dein Programm zu verstehen. Dieser Kommentar wird auch im generierten Source Code zu sehen sein.  </p><p style="text-align: left;">Eingabewert:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-pen">Zeichenkette, bestehend aus beliebigen Zeichen</li>
+</ul></div><div id="robText_join" class="help expert notBob3 notFestobionic"><h3 style="text-align: left;" id="BlockbeschreibungBionics4Education-»ErstelleText«[Experten-Block]">»Erstelle Text« <span class="typcn typcn-star"></span></h3><p style="text-align: left;">Mit dem »Erstelle Text«-Block wird ein Stück Text aus verschiedenen Eingabewerten zusammengesetzt. Mit dem +-Zeichen können weitere Eingabemöglichkeiten geschaffen werden. Alle Eingaben werden zu einer kontinuierlichen Zeichenkette zusammengefügt. </p><p style="text-align: left;">Eingabewerte:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-plus">Weitere Eingabemöglichkeiten bereitstellen.</li><li class="typcn typcn-minus">Letzte Eingabemöglichkeit entfernen (bei mehr als 2 Eingabemöglichkeiten).</li><li class="typcn typcn-arrow-left">Beliebiger Wert, Zahl, Text, logischer Wert, Farbe.</li>
+</ul><p>Rückgabewert:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right">Zeichenkette, bestehend aus beliebigen Zeichen.</li>
+</ul><br></div><div id="robText_append" class="help expert notWedo notBob3"><h3 style="text-align: left;" id="BlockbeschreibungBionics4Education-»Textanhängen«[Experten-Block]">»Text anhängen« <span class="typcn typcn-star"></span></h3><p style="text-align: left;">Mit dem »Text anhängen«-Block können Zeichenketten erweitert werden, z.B. indem an empfangene Nachrichten eine Signatur angehängt wird.</p><p style="text-align: left;">Eingabemöglichkeiten:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-left">Text, Zeichenkette, an die Text angehängt werden soll</li><li class="typcn typcn-arrow-left">Text, Zeichenkette, die an einen Text angehängt werden soll</li>
+</ul></div><div id="robLists_create_with" class="help expert notWedo notBob3"><h3 id="BlockbeschreibungBionics4Education-»ErzeugeListe«[Experten-Block]">»Erzeuge Liste« <span class="typcn typcn-star"></span></h3><p>Der Block »Erzeuge eine leere Liste« erzeugt eine Liste ohne Inhalt. Der Block »Liste« erzeugt eine Liste mit einigen voreingestellten Werten. Mit + und - können weitere Listenelemente am Ende hinzugefügt bzw. entfernt werden. Wenn das letzte Element einer Liste entfernt wurde, liegt eine leere Liste vor.</p><p>Einstellmöglichkeiten:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-sorted-down">Typ, »Zahl«, »logischer Wert«, »Zeichenkette«, »Farbe« oder »Verbindung«.</li><li class="typcn typcn-plus">Erzeuge ein weiteres Listenelement am Ende der bestehenden Liste.</li><li class="typcn typcn-minus"> Lösche das Listenelement am Ende der bestehenden Liste.</li><li class="typcn typcn-arrow-left">Werte, die dem Listentyp entsprechen. Hiermit können Anfangswerte gesetzt werden.</li>
+</ul><br><p>Rückgabewert:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right">Leere Liste oder eine Liste mit Elementen gleichen Typs.</li>
+</ul><br></div><div id="robLists_repeat" class="help expert notWedo notBob3"><h3 id="BlockbeschreibungBionics4Education-»WiederholeElementinListe«[Experten-Block]">»Wiederhole Element in Liste« <span class="typcn typcn-star"></span></h3><p>Der Block »Wiederhole Element in Liste« erzeugt eine Liste mit gleichen Elementen.  </p><p>Einstellmöglichkeiten:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-sorted-down">Typ, »Zahl«, »logischer Wert«, »Zeichenkette«, »Farbe« oder »Verbindung«.</li><li class="typcn typcn-arrow-left">Listenelement, das mit dem eingestellten Listentyp übereinstimmt. Dieser Wert wird in der Liste wiederholt.</li><li class="typcn typcn-arrow-left"> Zahl, die angibt, wie oft der eingestellte Wert wiederholt werden soll.</li>
+</ul><br><p>Rückgabewert:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right">Eine Liste des spezifizierten Typs mit der eingestellten Anzahl von gleichen Elementen.</li>
+</ul><br></div><div id="robLists_length" class="help expert notWedo notBob3"><h3 id="BlockbeschreibungBionics4Education-»Länge«[Experten-Block]">»Länge« <span class="typcn typcn-star"></span></h3><p>Der Block »Länge« gibt als Wert die Länge einer Liste zurück, die als Eingabewert angegeben wird. Eine leere Liste hat die Länge 0.</p><p>Eingabewert
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-left">Liste</li>
+</ul><br><p>Rückgabewert:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right">Zahl, Anzahl der Listenelemente</li>
+</ul><br></div><div id="robLists_isEmpty" class="help expert notWedo notBob3"><h3 id="BlockbeschreibungBionics4Education-»istleer?«[Experten-Block]">»ist leer?« <span class="typcn typcn-star"></span></h3><p>Eine als Eingabewert gegebene Liste wird geprüft, ob sie leer ist.</p><p>Eingabewert
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-left">Liste.</li>
+</ul><br><p>Rückgabewert:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right">Logischer Wert, entweder »wahr« oder »falsch«</li>
+</ul><br></div><div id="robLists_indexOf" class="help expert notWedo notBob3"><h3 id="BlockbeschreibungBionics4Education-»SucheinderListe«[Experten-Block]">»Suche in der Liste« <span class="typcn typcn-star"></span></h3><p>Eine Liste wird durchsucht, ob ein Element darin enthalten ist. Wenn das Element enthalten ist, wird die Listenposition zurückgegeben. Wenn das Element nicht enthalten ist, ist das Ergebnis -1.</p><p>Einstellmöglichkeiten:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-left">Liste, die untersucht werden soll.</li><li class="typcn typcn-arrow-sorted-down">Position für den Treffer, entweder »ersten« oder »letzten« Treffer suchen.</li><li class="typcn typcn-arrow-left">Wert, der mit den Listentyp übereinstimmt.</li>
+</ul><br><p>Rückgabewert:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right"><p>Zahl, die Position, an der das Element in der Liste steht.</p><p>Beachte: Die Zählung der Listenpositionen beginnt bei 0.</p></li>
+</ul><br></div><div id="robLists_getIndex" class="help expert notWedo notBob3"><h3 id="BlockbeschreibungBionics4Education-»NimmListenelement«[Experten-Block]">»Nimm Listenelement« <span class="typcn typcn-star"></span></h3><p>Mit diesem Block wird auf ein Element einer Liste zugegriffen. Das Element wird gegebenenfalls verändert.</p><p>Es wird eine Liste als Eingabe übergeben. Danach wird per Drop-Down-Liste spezifiziert, was mit dem Listenelement geschehen soll. Anschließend wird angegeben, in welcher Richtung die Liste durchsucht werden soll, ob von vorn (links), von hinten (rechts) oder zufällig.</p><p>Einstellmöglichkeiten und Eingabewerte
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-left">Liste, die bearbeitet werden soll.</li><li class="typcn typcn-arrow-sorted-down">Aktion für das gefundene Element: »nimm« liest das Element und lässt es unverändert, »nimm und entferne« liest das Element und entfernt es aus der Liste, »entferne« entfernt das Element aus der Liste.</li><li class="typcn typcn-arrow-sorted-down">Positionsbestimmung für das gefundene Element: »#te«, »#te von hinten«, »erste«, »letzte« oder »zufälliges« .</li><li class="typcn typcn-arrow-left"><p>Zahl, Listenposition. Dieser Eingabewert entfällt, wenn zuvor »erste«, »letzte« oder »zufälliges« als Position bestimmt wurde.</p><p>Beachte: Die Zählung der Listenpositionen beginnt bei 0.</p></li>
+</ul><br><p>Rückgabewert:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right">Das spezifizierte Listenelement, das an der angegebenen Listenposition gefunden wurde. »undefined« (undefiniert), wenn die Listenposition nicht existiert. <br>Bei »entferne« wird kein Wert zurückgegeben; die bearbeitete Liste ist dann um dieses Listenelement reduziert.</li>
+</ul><br></div><div id="robLists_setIndex" class="help expert notWedo notBob3"><h3 id="BlockbeschreibungBionics4Education-»SetzeListenelement«[Experten-Block]">»Setze Listenelement« <span class="typcn typcn-star"></span></h3><p>In einer als Eingabewert übergebenen Liste wird ein näher spezifiziertes Element durch einen neuen Wert ersetzt bzw. es wird ein Wert eingefügt.</p><p>Einstellmöglichkeiten und Eingabewerte:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-left">Liste, die bearbeitet werden soll.</li><li class="typcn typcn-arrow-sorted-down">Aktion für das gefundene Element: »setze« verändert das Element, »füge« fügt ein neues Element in die Liste ein.</li><li class="typcn typcn-arrow-sorted-down">Positionsbestimmung für das gefundene Element: »#te«, »#te von hinten«, »erste«, »letzte« oder »zufälliges« .</li><li class="typcn typcn-arrow-left">Zahl, Listenposition. Dieser Eingabewert entfällt, wenn zuvor »erste«, »letzte« oder »zufälliges« als Position bestimmt wurde.<br>Beachte: Die Zählung der Listenpositionen beginnt bei 0.</li><li class="typcn typcn-arrow-left">Listenelement, das an der zuvor bestimmten Listenposition gesetzt oder eingefügt wird.</li>
+</ul><br></div><div id="robLists_getSublist" class="help expert  notWedo notBob3"><h3 id="BlockbeschreibungBionics4Education-»ErhalteUnterliste«[Experten-Block]">»Erhalte Unterliste« <span class="typcn typcn-star"></span></h3><p>Aus einer als Eingabewert übergebenen Liste wird eine Unterliste erzeugt. In der Unterliste sind alle Elemente enthalten, die den weiteren Spezifikationen dieses Blocks entsprechen.</p><p>Einstellmöglichkeiten und Eingabewerte:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-left">Liste, die bearbeitet werden soll.</li><li class="typcn typcn-arrow-sorted-down">Position, Anfang der Unterliste: »von #«, »von # von hinten« oder »vom Anfang«.</li><li class="typcn typcn-arrow-left">Zahl, Listenposition. Dieser Eingabewert entfällt, wenn zuvor »vom Anfang« als Position bestimmt wurde.<br>Beachte: Die Zählung der Listenpositionen beginnt bei 0.</li><li class="typcn typcn-arrow-sorted-down">Position, Ende der Unterliste: »zu #«, »zu # von hinten« oder »zum Ende«.</li><li class="typcn typcn-arrow-left">Zahl, Listenposition. Dieser Eingabewert entfällt, wenn zuvor »zum Ende« als Position bestimmt wurde.<br>Beachte: Die Zählung der Listenpositionen beginnt bei 0.</li>
+</ul><br><p>Rückgabewert:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right">Liste, Unterliste gleichen Typs wie die als Eingabewert übergebene Liste.</li>
+</ul><br></div><div id="mbedColour_picker" class="help beginner notWedo notEv3 notNxt notMicrobit notBotnroll notNao notBob3 notArduino notSensebox notMbot notFestobionic notEdison"><h3 id="BlockbeschreibungBionics4Education-»Farbwahl«">»Farbwahl «</h3><p>Mit diesem Block kannst du eine Farbe aus einer Auswahl von vordefinierten Farben auswählen.</p><p>Option:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-sorted-down">Option, wähle die Farbeaus, die du verwenden möchtest.</li>
+</ul><p class="auto-cursor-target">Rückgabewert:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right">Farbe, die  ausgewählte Farbe.</li>
+</ul></div><div id="robColour_picker" class="help beginner notMicrobit notNao notFestobionic notEdison notCalliope"><h3 id="BlockbeschreibungBionics4Education-»Farbwahl«.1">»Farbwahl «</h3><p>Mit diesem Block kannst du eine Farbe aus einer Auswahl von vordefinierten Farben auswählen.</p><p>Option:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-sorted-down">Option, wähle die Farbeaus, die du verwenden möchtest.</li>
+</ul><p class="auto-cursor-target">Rückgabewert:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right">Farbe, die  ausgewählte Farbe.</li>
+</ul></div><div id="naoColour_picker" class="help beginner notWedo notEv3 notNxt notMicrobit notBotnroll notBob3 notArduino notSensebox notMbot notFestobionic notMicrobit notCalliope"><h3 id="BlockbeschreibungBionics4Education-»Farbwahl«.2">»Farbwahl «</h3><p>Mit diesem Block kannst du eine Farbe aus einer Auswahl von vordefinierten Farben auswählen.</p><p>Option:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-sorted-down">Option, wähle die Farbeaus, die du verwenden möchtest.</li>
+</ul><p class="auto-cursor-target">Rückgabewert:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right">Farbe, die  ausgewählte Farbe.</li>
+</ul></div><div id="mbedColour_rgb" class="help expert notWedo notEv3 notNxt notMicrobit notBotnroll notNao notBob3 notArduino notSensebox notMbot notFestobionic notEdison"><h3 class="auto-cursor-target" id="BlockbeschreibungBionics4Education-»FarbemitRot...Grün...Blau...Weiß...«[Experten-Block]">»Farbe mit Rot ... Grün ... Blau ... Weiß ... « <span class="typcn typcn-star"></span></h3><p>Mit diesem Block kannst du dir eine eigene Farbe erstellen, indem du deine Farbe aus Rot, Grün und Blau mischst.</p><p>Eingabewerte:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-left">Zahl, der Rot-Anteil in deine Farbe. Wert zwischen 0 und 255.</li><li class="typcn typcn-arrow-left">Zahl, der Grün-Anteil deiner Farbe. Wert zwischen 0 und 255.</li><li class="typcn typcn-arrow-left">Zahl, der Blau-Anteil deiner Farbe. Wert zwischen 0 und 255.</li><li class="typcn typcn-arrow-left">Zahl, die  Helligkeit deiner Farbe. Wert zwischen 0 und 255.</li>
+</ul><br><p>Rückgabewert:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right">Farbe, die von dir erstellte Farbe.</li>
+</ul><br></div><div id="robColour_rgb" class="help expert notWedo notEv3 notNxt notMicrobit notBotnroll notNao notBob3 notArduino notSensebox notCalliope notFestobionic notEdison"><h3 class="auto-cursor-target" id="BlockbeschreibungBionics4Education-»FarbemitRot...Grün...Blau...«[Experten-Block]">»Farbe mit Rot ... Grün ... Blau ... « <span class="typcn typcn-star"></span></h3><p>Mit diesem Block kannst du dir eine eigene Farbe erstellen, indem du deine Farbe aus Rot, Grün und Blau mischst.</p><p>Eingabewerte:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-left">Zahl, der Rot-Anteil in deine Farbe. Wert zwischen 0 und 255.</li><li class="typcn typcn-arrow-left">Zahl, der Grün-Anteil deiner Farbe. Wert zwischen 0 und 255.</li><li class="typcn typcn-arrow-left">Zahl, der Blau-Anteil deiner Farbe. Wert zwischen 0 und 255.</li>
+</ul><br><p>Rückgabewert:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right">Farbe, die von dir erstellte Farbe.</li>
+</ul><br></div><div id="naoColour_rgb" class="help expert notWedo notEv3 notNxt notMicrobit notBob3 notBotnroll notMbot notFestobionic notEdison notCalliope"><h3 class="auto-cursor-target" id="BlockbeschreibungBionics4Education-»FarbemitRot...Grün...Blau...«[Experten-Block].1">»Farbe mit Rot ... Grün ... Blau ... « <span class="typcn typcn-star"></span></h3><p>Mit diesem Block kannst du dir eine eigene Farbe erstellen, indem du deine Farbe aus Rot, Grün und Blau mischst.</p><p>Eingabewerte:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-left">Zahl, der Rot-Anteil in deine Farbe. Wert zwischen 0 und 255.</li><li class="typcn typcn-arrow-left">Zahl, der Grün-Anteil deiner Farbe. Wert zwischen 0 und 255.</li><li class="typcn typcn-arrow-left">Zahl, der Blau-Anteil deiner Farbe. Wert zwischen 0 und 255.</li>
+</ul><br><p>Rückgabewert:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right">Farbe, die von dir erstellte Farbe.</li>
+</ul><br></div><div id="variables_set" class="help beginner"><h3 id="BlockbeschreibungBionics4Education-»SchreibeVariable«">»Schreibe Variable«</h3><p>Mit dem Block »Schreibe Variable« kannst du den Wert einer Variablen verändern. Je nach Typ der Variablen (Zahl, Zeichenkette, logischer Wert, Liste, Farbe, Verbindung) kann der Variablen ein passender Wert übergeben werden.</p><p>Einstellmöglichkeit und Eingabewert:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-sorted-down">Variable, deren Wert verändert werden soll.</li><li class="typcn typcn-arrow-left">Wert, auf den die Variable gesetzt werden soll.</li>
+</ul><br></div><div id="variables_get" class="help beginner"><h3 id="BlockbeschreibungBionics4Education-»LiesVariable«">»Lies Variable«</h3><p>Mit dem Block »lies Variable« kannst du den Wert einer Variablen an einen anderen Block übergeben. Der Typ des Ausgabewertes entspricht immer dem Typ, mit dem die Variablen im Block »Start« initialisiert wurde.</p><p>Einstellmöglichkeit:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-sorted-down">Variable, deren Wert gelesen werden soll.</li>
+</ul><br><p>Rückgabewert:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right">Wert, der in der Variablen gespeichert ist.</li>
+</ul><br></div><div id="robProcedures_defnoreturn" class="help expert"><h3 id="BlockbeschreibungBionics4Education-Funktionsblockohne/mitEingabe-undohneRückgabewert[Experten-Block]">Funktionsblock ohne/mit Eingabe- und ohne Rückgabewert <span class="typcn typcn-star"></span></h3><p>In einem Funktionsblock ohne/mit Eingabe- und Rückgabewert wird eine Folge von Anweisungen zusammengefasst. Die Eingabewerte werden durch die lokalen Variablen im Funktionsblock festgelegt. Mit dem »+«-Zeichen können lokale Variablen als Eingabewerte für den Funktionsblock erzeugt werden. Lokale Variablen werden nicht initialisiert.</p><p>Falls in einen Funktionsblock eine Wenn-Abfrage (siehe unten) eingebaut wird, kann es zu einem vorzeitigen Abbruch der Funktion kommen.</p><p>Der Funktionsblock steht nach seiner Definition als zusätzlicher Block in der Kategorie »Funktion« zur Verfügung. Auf diese Weise kann die Lesbarkeit komplexer Programme wesentlich vereinfacht werden.</p><p>Einstellmöglichkeiten:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-pen">Funktionsname, ohne Leer- und Sonderzeichen</li><li class="typcn typcn-plus">Erzeuge eine lokale Variable, der über den Funktionsaufruf ein Wert zugewiesen wird.</li><li class="typcn typcn-minus">Lösche eine lokale Variable.</li>
+</ul><br><div class="confluence-information-macro confluence-information-macro-note"><div class="confluence-information-macro-body"><ul><li>Der Name eines Funktionsblocks muss mit einem Kleinbuchstaben beginnen. Sonderzeichen im Funktionsnamen sind nicht erlaubt.</li><li>Wenn in einem Funktionsblock Eingabewerte (lokale Variablen) definiert werden, müssen alle diese Werte beim Funktionsaufruf belegt werden.</li></ul></div></div></div><div id="robProcedures_defreturn" class="help expert"><h3 id="BlockbeschreibungBionics4Education-Funktionsblockohne/mitEingabe-undmitRückgabewerten[Experten-Block]">Funktionsblock ohne/mit Eingabe- und mit Rückgabewerten <span class="typcn typcn-star"></span></h3><p>In einem Funktionsblock ohne/mit Eingabe- und mit Rückgabewert wird eine Folge von Anweisungen zusammengefasst. Mit dem »+«-Zeichen können lokale Variablen als Eingabewerte für den Funktionsblock erzeugt werden. Nachdem alle Anweisungen durchlaufen wurden, wird abschließend ein Wert als Funktionswert zurückgegeben.</p><p>Falls in einen Funktionsblock eine Wenn-Abfrage eingebaut wird, kann es zu einem vorzeitigen Abbruch der Funktion kommen, und es kann ein alternativer Funktionswert zurückgegeben werden.</p><p>Der Funktionsblock steht nach seiner Definition als zusätzlicher Block in der Kategorie »Funktion« zur Verfügung. Auf diese Weise kann die Lesbarkeit komplexer Programme wesentlich vereinfacht werden.</p><p>Einstellmöglichkeiten:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-pen">Funktionsname, ohne Leer- und Sonderzeichen</li><li class="typcn typcn-plus">Erzeuge eine lokale Variable, der über den Funktionsaufruf ein Wert zugewiesen wird.</li><li class="typcn typcn-minus">Lösche eine lokale Variable.</li><li class="typcn typcn-arrow-sorted-down">Datentyp für den Rückgabewert. »Zahl«, »logischer Wert«, »Zeichenkette«, »Farbe«, »Verbindung«, »Liste Zahl«, »Liste logischer Wert«, »Liste Zeichenkette«, »Liste Verbindung«.</li><li class="typcn typcn-arrow-left">Wert, der dem eingestellten Datentyp des Rückgabewertes entspricht.</li>
+</ul><br><p>Rückgabewert:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right">Wert, der im Rückgabeblock berechnet wurde.</li>
+</ul> <div class="confluence-information-macro confluence-information-macro-note"><div class="confluence-information-macro-body"><ul><li>Der Name eines Funktionsblocks muss mit einem Kleinbuchstaben beginnen. Sonderzeichen im Funktionsnamen sind nicht erlaubt.</li><li>Wenn in einem Funktionsblock Eingabewerte (lokale Variablen) definiert werden, müssen alle Werte beim Funktionsaufruf belegt werden.</li></ul></div></div></div><div id="robProcedures_ifreturn" class="help expert"><h3 id="BlockbeschreibungBionics4Education-Wenn-AbfrageinnerhalbeinerFunktion[Experten-Block]">Wenn-Abfrage innerhalb einer Funktion <span class="typcn typcn-star"></span></h3><p>Die Wenn-Abfrage innerhalb einer Funktion ist von besonderer Bedeutung. Sobald der Funktionsablauf auf eine Wenn-Abfrage trifft, wird die Gültigkeit der Bedingung geprüft.</p><h4 id="BlockbeschreibungBionics4Education-Wenn-AbfrageinnerhalbeinerFunktionmitRückgabewert:">Wenn-Abfrage innerhalb einer Funktion mit Rückgabewert:</h4><ul><li>Wenn die Bedingung erfüllt ist, wird der weitere Funktionsablauf ignoriert und die Funktion wird beendet. Der zweite übergebene Wert wird als Funktionswert zurückgegeben. Ein eventuell mit der Funktion definierter Rückgabewert wird nicht weiter berücksichtig. Der Rückgabewert-Typ wird durch den Typ des Rückgabewerts der umgebenden Funktion festgelegt.</li><li>Wenn die Bedingung nicht erfüllt ist, wird der Funktionsablauf fortgesetzt. Ein eventuell mit der Funktion definierter Rückgabewert wird als Funktionswert zurückgegeben, wenn der Funktionsablauf das Funktionsende erreicht.</li></ul><h4 id="BlockbeschreibungBionics4Education-Wenn-AbfrageinnerhalbeinerFunktionohneRückgabewert:">Wenn-Abfrage innerhalb einer Funktion ohne Rückgabewert:</h4><ul><li>Eine Wenn-Abfrage innerhalb einer Funktion ohne Rückgabewert hat nur die Bedingung als Eingabewert.</li><li>Wenn die Bedingung erfüllt ist, wird der weitere Funktionsablauf ignoriert und die Funktion wird beendet.</li><li>Wenn die Bedingung nicht erfüllt ist, wird der Funktionsablauf fortgesetzt.</li></ul><p>Einstellgabewerte:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-left">Logischer Wert, der aus einer Bedingung bestimmt wird.</li><li class="typcn typcn-arrow-left"><span>Wert, dessen Typ am Ende des Funktionsblock eingestellt ist.</span></li>
+</ul><br><p>Rückgabewert:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right">Wert, dessen Typ am Ende des Funktionsblock eingestellt ist.</li>
+</ul><br></div><div id="robProcedures_callnoreturn" class="help expert"><h3 id="BlockbeschreibungBionics4Education-»FunktionsaufrufohneRückgabewert«[Experten-Block]">»Funktionsaufruf ohne Rückgabewert « <span class="typcn typcn-star"></span></h3><p>Mit diesem Block kannst du eine vorher definierte Funktion aufrufen. Diese Funktion gibt dabei keinen Wert zurück.</p><p>Eingabewerte:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-left">Wert, abhängig von den Eingabewerte der vorher definierten Funktion.</li>
+</ul></div><div id="robProcedures_callreturn" class="help expert"><h3 class="auto-cursor-target" id="BlockbeschreibungBionics4Education-»FunktionsaufrufmitRückgabewert«">»Funktionsaufruf mit Rückgabewert «</h3><p>Mit diesem Block kannst du eine vorher definierte Funktion aufrufen und den Rückgabewerte abrufen.</p><p>Eingabewerte:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-left">Wert, abhängig von den Eingabewerten der vorher definierten Funktion.</li>
+</ul><br><p>Rückgabewerte:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right">Wert, abhängig von dem Rückgabewert der definierten Funktion.</li>
+</ul><br></div></div></body>

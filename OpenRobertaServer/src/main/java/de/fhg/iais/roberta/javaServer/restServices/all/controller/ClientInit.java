@@ -19,8 +19,8 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.apache.commons.io.FileUtils;
-import org.codehaus.jettison.json.JSONException;
-import org.codehaus.jettison.json.JSONObject;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
@@ -29,6 +29,8 @@ import com.google.inject.Inject;
 import com.google.inject.name.Named;
 
 import de.fhg.iais.roberta.factory.IRobotFactory;
+import de.fhg.iais.roberta.generated.restEntities.InitRequest;
+import de.fhg.iais.roberta.generated.restEntities.InitResponse;
 import de.fhg.iais.roberta.main.IIpToCountry;
 import de.fhg.iais.roberta.persistence.util.HttpSessionState;
 import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
@@ -67,23 +69,22 @@ public class ClientInit {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response command(JSONObject fullRequest, @Context HttpServletRequest httpRequest) throws JSONException //
+    public Response command(InitRequest fullRequest, @Context HttpServletRequest httpRequest) throws JSONException //
     {
-        JSONObject response = new JSONObject();
+        HttpSessionState httpSessionState = null;
         try {
+            InitResponse response = InitResponse.make();
+            response.setCmd("init");
             AliveData.rememberClientCall();
-            new ClientLogger().log(ClientInit.LOG, fullRequest);
-            JSONObject request = fullRequest.getJSONObject("data");
+            new ClientLogger().log(ClientInit.LOG, fullRequest.getLog());
             ClientInit.LOG.info("INIT command. Trying to build a new HttpSessionState");
-            response.put("cmd", "init");
-            HttpSessionState httpSessionState =
-                HttpSessionState.init(this.robotPluginMap, this.serverProperties, getCountryCode(httpRequest, this.ipToCountry));
+            httpSessionState = HttpSessionState.init(this.robotPluginMap, this.serverProperties, getCountryCode(httpRequest, this.ipToCountry));
             MDC.put("sessionId", String.valueOf(httpSessionState.getSessionNumber()));
             MDC.put("userId", String.valueOf(httpSessionState.getUserId()));
             MDC.put("robotName", String.valueOf(httpSessionState.getRobotName()));
             String userAgentString = httpRequest.getHeader("User-Agent");
             UserAgent userAgent = UserAgent.parseUserAgentString(userAgentString);
-            Statistics.infoUserAgent("Initialization", userAgent, httpSessionState.getCountryCode(), request);
+            Statistics.infoUserAgent("Initialization", userAgent, httpSessionState.getCountryCode(), fullRequest.getData());
 
             JSONObject server = new JSONObject();
             server.put("defaultRobot", this.serverProperties.getDefaultRobot());
@@ -95,7 +96,10 @@ public class ClientInit {
                 robotDescription.put("name", robot);
                 if ( !ServerProperties.NAME_OF_SIM.equals(robot) ) {
                     robotDescription.put("realName", httpSessionState.getRobotFactory(robot).getRealName());
-                    robotDescription.put("info", httpSessionState.getRobotFactory(robot).getInfo());
+                    String robotInfoDE = httpSessionState.getRobotFactory(robot).getInfoDE();
+                    String robotInfoEN = httpSessionState.getRobotFactory(robot).getInfoEN();
+                    robotDescription.put("infoDE", robotInfoDE);
+                    robotDescription.put("infoEN", robotInfoEN);
                     robotDescription.put("beta", httpSessionState.getRobotFactory(robot).isBeta());
                     robotDescription.put("group", httpSessionState.getRobotFactory(robot).getGroup());
                 }
@@ -122,14 +126,12 @@ public class ClientInit {
             server.put("help", help);
             String theme = this.serverProperties.getStringProperty("server.theme");
             server.put("theme", theme);
-            response.put("server", server);
+            response.setServer(server);
             UtilForREST.addSuccessInfo(response, Key.INIT_SUCCESS);
-            UtilForREST.addFrontendInfo(response, httpSessionState, this.brickCommunicator);
+            return UtilForREST.responseWithFrontendInfo(response, httpSessionState, brickCommunicator);
         } catch ( Exception e ) {
-            UtilForREST.addErrorInfo(response, Key.SERVER_ERROR);
+            return UtilForREST.makeBaseResponseForError(Key.SERVER_ERROR, httpSessionState, null); // TODO: redesign error ticker number and add then: append("parameters", errorTicketId);
         }
-        MDC.clear();
-        return Response.ok(response).build();
     }
 
     private static String getCountryCode(HttpServletRequest servletRequest, IIpToCountry ipToCountry) {

@@ -1,5 +1,6 @@
 create cached table USER (
   ID INTEGER not null,
+  USERGROUP_ID INTEGER,
   ACCOUNT varchar(255) not null,
   PASSWORD  varchar(255) not null,
   EMAIL varchar(255),
@@ -73,21 +74,6 @@ create cached table USER_PROGRAM_LIKE (
   COMMENT varchar(16M)
 );
 
-create table TOOLBOX (
-  ID INTEGER not null,
-  NAME varchar(255) not null,
-  OWNER_ID INTEGER,
-  ROBOT_ID INTEGER not null,
-  TOOLBOX_TEXT varchar(16M),
-  CREATED timestamp not null,
-  LAST_CHANGED timestamp not null,
-  LAST_CHECKED timestamp,
-  LAST_ERRORFREE timestamp,
-  TAGS varchar(16M), -- e.g. CAR AUTONOMOUS COOL 3WHEELS
-  ICON_NUMBER integer not null,
-  primary key (ID)
-);
-
 create cached table CONFIGURATION (
   ID INTEGER not null,
   NAME varchar(255) not null,
@@ -107,6 +93,23 @@ create cached table CONFIGURATION_DATA (
   CONFIGURATION_HASH varchar(255) not null,
   CONFIGURATION_TEXT varchar(16M) not null,
   primary key (CONFIGURATION_HASH)
+);
+
+create cached table USERGROUP (
+  ID INTEGER not null,
+  NAME varchar(255) not null,
+  OWNER_ID INTEGER not null,
+  ACCESS_RIGHT varchar(32) not null,
+  CREATED timestamp not null,
+  primary key (ID)
+);
+
+create cached table USERGROUP_PROGRAM (
+  ID INTEGER not null,
+  USERGROUP_ID INTEGER not null,
+  PROGRAM_ID INTEGER not null,
+  RELATION varchar(32) not null, -- [READ | WRITE]
+  primary key (ID)
 );
 
 commit;

@@ -31,6 +31,7 @@ import de.fhg.iais.roberta.syntax.functions.mbed.ImageInvertFunction;
 import de.fhg.iais.roberta.syntax.functions.mbed.ImageShiftFunction;
 import de.fhg.iais.roberta.syntax.sensor.mbed.RadioRssiSensor;
 import de.fhg.iais.roberta.util.dbc.DbcException;
+import de.fhg.iais.roberta.visitor.MbedTwo2ThreeTransformerVisitor;
 import de.fhg.iais.roberta.visitor.hardware.actor.IDisplayVisitor;
 import de.fhg.iais.roberta.visitor.hardware.actor.ILightVisitor;
 import de.fhg.iais.roberta.visitor.hardware.actor.IMotorVisitor;
@@ -183,19 +184,23 @@ public interface IMbedVisitor<V>
     /**
      * visit a {@link SingleMotorOnAction}.
      *
+     * @deprecated should only be used by {@link MbedTwo2ThreeTransformerVisitor} to generate a MotorOnAction
      * @param singleMotorOnAction phrase to be visited
      */
+    @Deprecated
     default V visitSingleMotorOnAction(SingleMotorOnAction<V> singleMotorOnAction) {
-        throw new DbcException("Block is not implemented!");
+        throw new DbcException("Block is no longer supported and should not be used!");
     }
 
     /**
      * visit a {@link SingleMotorStopAction}.
      *
+     * @deprecated should only be used by {@link MbedTwo2ThreeTransformerVisitor} to generate a MotorStopAction
      * @param singleMotorStopAction phrase to be visited
      */
+    @Deprecated
     default V visitSingleMotorStopAction(SingleMotorStopAction<V> singleMotorStopAction) {
-        throw new DbcException("Block is not implemented!");
+        throw new DbcException("Block is no longer supported and should not be used!");
     }
 
     /**
@@ -295,11 +300,12 @@ public interface IMbedVisitor<V>
 
     @Override
     default V visitVolumeAction(VolumeAction<V> volumeAction) {
-        throw new DbcException("Not supported!");
+        throw new DbcException("Block is not implemented!");
     }
 
     @Override
     default V visitPlayFileAction(PlayFileAction<V> playFileAction) {
-        throw new DbcException("Not supported!");
+        throw new DbcException("Block is not implemented!");
     }
+
 }

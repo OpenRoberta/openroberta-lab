@@ -1,0 +1,993 @@
+<export xmlns="http://de.fhg.iais.roberta.blockly">
+    <program>
+        <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="nao" xmlversion="3.0" description="" tags="">
+            <instance x="537" y="62">
+                <block type="robControls_start" id="1%arEfSwQ_+58,@nH2uV" intask="true" deletable="false">
+                    <mutation declare="true"></mutation>
+                    <field name="DEBUG">TRUE</field>
+                    <statement name="ST">
+                        <block type="robGlobalVariables_declare" id="F`XXM=t3%c_xqyCrGju/" intask="true" deletable="false" movable="false">
+                            <mutation next="true" declaration_type="Number"></mutation>
+                            <field name="VAR">numberVar</field>
+                            <field name="TYPE">Number</field>
+                            <value name="VALUE">
+                                <block type="math_number" id="/AT_/{9?)jeOeky~n!:=" intask="true">
+                                    <field name="NUM">0</field>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="robGlobalVariables_declare" id="53DXrd6J~?HLb(N@~,Pw" intask="true" deletable="false" movable="false">
+                            <mutation next="true" declaration_type="Boolean"></mutation>
+                            <field name="VAR">booleanVar</field>
+                            <field name="TYPE">Boolean</field>
+                            <value name="VALUE">
+                                <block type="logic_boolean" id="@9SGpBefNu@}KWq}n{jf" intask="true">
+                                    <field name="BOOL">TRUE</field>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="robGlobalVariables_declare" id="^lV7cLWw]XGS+t}%SotP" intask="true" deletable="false" movable="false">
+                            <mutation next="true" declaration_type="String"></mutation>
+                            <field name="VAR">stringVar</field>
+                            <field name="TYPE">String</field>
+                            <value name="VALUE">
+                                <block type="text" id="Q6LFM2e6Qj]U4iOJOO49" intask="true">
+                                    <field name="TEXT"></field>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="robGlobalVariables_declare" id="M(q,r+_b?TH:{IDS_9V]" intask="true" deletable="false" movable="false">
+                            <mutation next="true" declaration_type="Colour"></mutation>
+                            <field name="VAR">colourVar</field>
+                            <field name="TYPE">Colour</field>
+                            <value name="VALUE">
+                                <block type="naoColour_picker" id="nKq[tr/|xR;vus*[nGTp" intask="true">
+                                    <field name="COLOUR">#ff0000</field>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="robGlobalVariables_declare" id="N#d.(iGY=c1J-N9:(m:L" intask="true" deletable="false" movable="false">
+                            <mutation next="true" declaration_type="Array_Number"></mutation>
+                            <field name="VAR">numberList</field>
+                            <field name="TYPE">Array_Number</field>
+                            <value name="VALUE">
+                                <block type="robLists_create_with" id="PYu{d2/ItU5NGmSg@TOy" intask="true">
+                                    <mutation items="2" list_type="Number"></mutation>
+                                    <field name="LIST_TYPE">Number</field>
+                                    <value name="ADD0">
+                                        <block type="math_number" id="uZ_to=r;AEtDl2;yep2!" intask="true">
+                                            <field name="NUM">0</field>
+                                        </block>
+                                    </value>
+                                    <value name="ADD1">
+                                        <block type="math_number" id="srz~`a(2W^`mlIy;roBX" intask="true">
+                                            <field name="NUM">0</field>
+                                        </block>
+                                    </value>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="robGlobalVariables_declare" id="UaGQwmmrW@vM)*es}fRi" intask="true" deletable="false" movable="false">
+                            <mutation next="true" declaration_type="Array_Boolean"></mutation>
+                            <field name="VAR">booleanList</field>
+                            <field name="TYPE">Array_Boolean</field>
+                            <value name="VALUE">
+                                <block type="robLists_create_with" id="=jUXv5ZM~vOOZ|Yz.%Ec" intask="true">
+                                    <mutation items="2" list_type="Boolean"></mutation>
+                                    <field name="LIST_TYPE">Boolean</field>
+                                    <value name="ADD0">
+                                        <block type="logic_boolean" id="]c.qFExX(,wRa/yjUCX#" intask="true">
+                                            <field name="BOOL">TRUE</field>
+                                        </block>
+                                    </value>
+                                    <value name="ADD1">
+                                        <block type="logic_boolean" id="Sbt~5C/G{|l;h}5k:BQ+" intask="true">
+                                            <field name="BOOL">TRUE</field>
+                                        </block>
+                                    </value>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="robGlobalVariables_declare" id="?{X_myFAtW/8?A9w=IEg" intask="true" deletable="false" movable="false">
+                            <mutation next="true" declaration_type="Array_String"></mutation>
+                            <field name="VAR">stringList</field>
+                            <field name="TYPE">Array_String</field>
+                            <value name="VALUE">
+                                <block type="robLists_create_with" id="iQs5?K#xa+1V`F)vJ|JI" intask="true">
+                                    <mutation items="2" list_type="String"></mutation>
+                                    <field name="LIST_TYPE">String</field>
+                                    <value name="ADD0">
+                                        <block type="text" id="1S6.^i;?n/.PZRUy]c0b" intask="true">
+                                            <field name="TEXT"></field>
+                                        </block>
+                                    </value>
+                                    <value name="ADD1">
+                                        <block type="text" id="qz1)h=87t/A8D5OU6?u[" intask="true">
+                                            <field name="TEXT"></field>
+                                        </block>
+                                    </value>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="robGlobalVariables_declare" id="nXY:_,`5HK_iZrOm|8Z." intask="true" deletable="false" movable="false">
+                            <mutation next="false" declaration_type="Array_Colour"></mutation>
+                            <field name="VAR">colourList</field>
+                            <field name="TYPE">Array_Colour</field>
+                            <value name="VALUE">
+                                <block type="robLists_create_with" id="qyCX_eIsk;fL`j.sK(.n" intask="true">
+                                    <mutation items="2" list_type="Colour"></mutation>
+                                    <field name="LIST_TYPE">Colour</field>
+                                    <value name="ADD0">
+                                        <block type="naoColour_picker" id="|3h,#y*1ei[:MI_aBU=6" intask="true">
+                                            <field name="COLOUR">#ff0000</field>
+                                        </block>
+                                    </value>
+                                    <value name="ADD1">
+                                        <block type="naoColour_picker" id="AfATdSa/bl44zQ,]9J1L" intask="true">
+                                            <field name="COLOUR">#ff0000</field>
+                                        </block>
+                                    </value>
+                                </block>
+                            </value>
+                        </block>
+                    </statement>
+                </block>
+                <block type="robProcedures_callnoreturn" id="_q+6tRjOC?(-K;H5#c?q" intask="true">
+                    <mutation name="text"></mutation>
+                </block>
+                <block type="robProcedures_callnoreturn" id=":Io5d~xJ5%xRY|+vN6TO" intask="true">
+                    <mutation name="colours"></mutation>
+                </block>
+                <block type="robProcedures_callnoreturn" id="KHSp.hX8uGn0Eq3,{^K1" intask="true">
+                    <mutation name="function_parameters">
+                        <arg name="x" type="Number"></arg>
+                        <arg name="x2" type="Boolean"></arg>
+                        <arg name="x3" type="String"></arg>
+                        <arg name="x4" type="Colour"></arg>
+                        <arg name="x5" type="Array_Number"></arg>
+                        <arg name="x6" type="Array_Boolean"></arg>
+                        <arg name="x7" type="Array_String"></arg>
+                        <arg name="x8" type="Array_Colour"></arg>
+                    </mutation>
+                    <value name="ARG0">
+                        <block type="variables_get" id=")qJ|9*d9u:X+RM!Htr8V" intask="true">
+                            <mutation datatype="Number"></mutation>
+                            <field name="VAR">numberVar</field>
+                        </block>
+                    </value>
+                    <value name="ARG1">
+                        <block type="variables_get" id="5y=(=f=%q`{G#mu(,7!f" intask="true">
+                            <mutation datatype="Boolean"></mutation>
+                            <field name="VAR">booleanVar</field>
+                        </block>
+                    </value>
+                    <value name="ARG2">
+                        <block type="variables_get" id="YA*Ljtmt!@uLdhCnb`wn" intask="true">
+                            <mutation datatype="String"></mutation>
+                            <field name="VAR">stringVar</field>
+                        </block>
+                    </value>
+                    <value name="ARG3">
+                        <block type="variables_get" id="o,?WRoaapZ^9sBl{X|:j" intask="true">
+                            <mutation datatype="Colour"></mutation>
+                            <field name="VAR">colourVar</field>
+                        </block>
+                    </value>
+                    <value name="ARG4">
+                        <block type="variables_get" id="vx;o}-t!n{xN[!UkCUo=" intask="true">
+                            <mutation datatype="Array_Number"></mutation>
+                            <field name="VAR">numberList</field>
+                        </block>
+                    </value>
+                    <value name="ARG5">
+                        <block type="variables_get" id="m*z%;_}Ge}y~.J)D7=uM" intask="true">
+                            <mutation datatype="Array_Boolean"></mutation>
+                            <field name="VAR">booleanList</field>
+                        </block>
+                    </value>
+                    <value name="ARG6">
+                        <block type="variables_get" id=",g`f-%XNhLP~/`2b-@`7" intask="true">
+                            <mutation datatype="Array_String"></mutation>
+                            <field name="VAR">stringList</field>
+                        </block>
+                    </value>
+                    <value name="ARG7">
+                        <block type="variables_get" id="o=e8gvfMu`g5L90lw?0t" intask="true">
+                            <mutation datatype="Array_Colour"></mutation>
+                            <field name="VAR">colourList</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="robActions_sayText" id="[4qXxyt%(f2QPhV~SG;G" intask="true">
+                    <value name="OUT">
+                        <block type="robProcedures_callreturn" id="IhS%-E,[Od%|)5rWBN6K" intask="true">
+                            <mutation name="function_return_numberVar" output_type="Number"></mutation>
+                        </block>
+                    </value>
+                </block>
+                <block type="robActions_sayText" id="J~,lI_l;A0s|jok/2pov" intask="true">
+                    <value name="OUT">
+                        <block type="robProcedures_callreturn" id="I()1JH*Cys~~Wgce+cz8" intask="true">
+                            <mutation name="function_return_booleanVar" output_type="Boolean"></mutation>
+                        </block>
+                    </value>
+                </block>
+                <block type="robActions_sayText" id="!)?#vs#jaJhyGR0zs5,7" intask="true">
+                    <value name="OUT">
+                        <block type="robProcedures_callreturn" id="(]MCr!*KECfB+QGd7PDx" intask="true">
+                            <mutation name="function_return_stringVar" output_type="String"></mutation>
+                        </block>
+                    </value>
+                </block>
+                <block type="robActions_sayText" id="hjNLRVy54ow3^r5d*/x7" intask="true">
+                    <value name="OUT">
+                        <block type="robProcedures_callreturn" id="!RaSJ2O[V47Zih#96_kA" intask="true">
+                            <mutation name="function_return_colourVar" output_type="Colour"></mutation>
+                        </block>
+                    </value>
+                </block>
+                <block type="robActions_sayText" id=":L99t/2fa/TFQ,PFv}@/" intask="true">
+                    <value name="OUT">
+                        <block type="robProcedures_callreturn" id="eQ8//vK6`#58k(jWkLwu" intask="true">
+                            <mutation name="function_return_numberList" output_type="Array_Number"></mutation>
+                        </block>
+                    </value>
+                </block>
+                <block type="robActions_sayText" id="4cI4-^Z5+F`ljmVLb6]P" intask="true">
+                    <value name="OUT">
+                        <block type="robProcedures_callreturn" id="fw}O(u{%2FyRXj|[M3[u" intask="true">
+                            <mutation name="function_return_booleanList" output_type="Array_Boolean"></mutation>
+                        </block>
+                    </value>
+                </block>
+                <block type="robActions_sayText" id="-05TJ|S@-|epqdadhsbQ" intask="true">
+                    <value name="OUT">
+                        <block type="robProcedures_callreturn" id="]i^x9`X]JmbJ-4sRJ[w-" intask="true">
+                            <mutation name="function_return_stringList" output_type="Array_String"></mutation>
+                        </block>
+                    </value>
+                </block>
+                <block type="robActions_sayText" id="Ea?*AD?hXbm[w)wde~EY" intask="true">
+                    <value name="OUT">
+                        <block type="robProcedures_callreturn" id="EvM2]zWuhq}3S{+9,pf:" intask="true">
+                            <mutation name="function_return_colourList" output_type="Array_Colour"></mutation>
+                        </block>
+                    </value>
+                </block>
+            </instance>
+            <instance x="1501" y="53">
+                <block type="robProcedures_defnoreturn" id="`/rfPKqnQUu0x*3S(12*" intask="true">
+                    <mutation declare="false"></mutation>
+                    <field name="NAME">text</field>
+                    <statement name="STACK">
+                        <block type="robActions_sayText" id="p!0]ME=U*(wHvBw,^nXU" intask="true">
+                            <value name="OUT">
+                                <block type="text" id="Ozh5t21p5!~k!R/S(Jjw" intask="true">
+                                    <field name="TEXT"></field>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="text_comment" id="TjT%ZXtc6M+/w^].8pH," intask="true">
+                            <field name="TEXT"></field>
+                        </block>
+                        <block type="robActions_sayText" id="9e1P4B_6ubHyxO1NJY2a" intask="true">
+                            <value name="OUT">
+                                <block type="robText_join" id="d4jy5uMrsCQQOPbG03)t" intask="true">
+                                    <mutation items="2"></mutation>
+                                    <value name="ADD0">
+                                        <block type="variables_get" id="{c,-%Q{``_A9Lkp9*g`x" intask="true">
+                                            <mutation datatype="String"></mutation>
+                                            <field name="VAR">stringVar</field>
+                                        </block>
+                                    </value>
+                                    <value name="ADD1">
+                                        <block type="variables_get" id="]zc|8]!]313y/?We~k3x" intask="true">
+                                            <mutation datatype="String"></mutation>
+                                            <field name="VAR">stringVar</field>
+                                        </block>
+                                    </value>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="robText_append" id="!@1Ja,GH*mZ?g[phQmhv" intask="true">
+                            <value name="VAR">
+                                <block type="variables_get" id="6OM^R4sXFvSg=@_aI(6Y" intask="true">
+                                    <mutation datatype="String"></mutation>
+                                    <field name="VAR">stringVar</field>
+                                </block>
+                            </value>
+                            <value name="TEXT">
+                                <block type="variables_get" id="@u.z6!uT*S|+9[?F;T9W" intask="true">
+                                    <mutation datatype="String"></mutation>
+                                    <field name="VAR">stringVar</field>
+                                </block>
+                            </value>
+                        </block>
+                    </statement>
+                </block>
+            </instance>
+            <instance x="1978" y="58">
+                <block type="robProcedures_defnoreturn" id="XuNi[6~A0cjK!Vz7;!U;" intask="true">
+                    <mutation declare="false"></mutation>
+                    <field name="NAME">colours</field>
+                    <statement name="STACK">
+                        <block type="robActions_sayText" id="cfMgQNoMJYK/Ghh*CZyc" intask="true">
+                            <value name="OUT">
+                                <block type="naoColour_picker" id="W8Cf^*KQHJl/Sc7Efb*a" intask="true">
+                                    <field name="COLOUR">#ffffff</field>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="robActions_sayText" id="I`z05=F_XV:UPhdAh/2m" intask="true">
+                            <value name="OUT">
+                                <block type="naoColour_picker" id="/j/8tG!Tfyk)}GbRVyp*" intask="true">
+                                    <field name="COLOUR">#cccccc</field>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="robActions_sayText" id=",LZla@{vg8vdCSD4fuQV" intask="true">
+                            <value name="OUT">
+                                <block type="naoColour_picker" id="EJAx+Jb39.4eH6y9W^=r" intask="true">
+                                    <field name="COLOUR">#c0c0c0</field>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="robActions_sayText" id=";i~*+zEsALD)^vb?9,+g" intask="true">
+                            <value name="OUT">
+                                <block type="naoColour_picker" id="PWl(=3_W!ED3N2@?BqK_" intask="true">
+                                    <field name="COLOUR">#999999</field>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="robActions_sayText" id="+gBJcJl^@G9SbL]pLTRI" intask="true">
+                            <value name="OUT">
+                                <block type="naoColour_picker" id="2kOr#Zg`PwY+a##R_vUH" intask="true">
+                                    <field name="COLOUR">#666666</field>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="robActions_sayText" id="9I5,6[fYak/{Pko8`ZbH" intask="true">
+                            <value name="OUT">
+                                <block type="naoColour_picker" id="|Kk;C*)CTon`lAf)P/6|" intask="true">
+                                    <field name="COLOUR">#333333</field>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="robActions_sayText" id="^zOmU13*DWIa#@m/DUtC" intask="true">
+                            <value name="OUT">
+                                <block type="naoColour_picker" id="%?zzebyE(Kw68Dr#61ge" intask="true">
+                                    <field name="COLOUR">#000000</field>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="robActions_sayText" id="M|G?KsY0sa,DaUL.EPxk" intask="true">
+                            <value name="OUT">
+                                <block type="naoColour_picker" id="EH/`Ha_Na7#.ATGpJgop" intask="true">
+                                    <field name="COLOUR">#ffcccc</field>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="robActions_sayText" id="cxc{tQF%pUu1SFjUi1VU" intask="true">
+                            <value name="OUT">
+                                <block type="naoColour_picker" id="vGGef*j9x.CU41v`RjW!" intask="true">
+                                    <field name="COLOUR">#ff6666</field>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="robActions_sayText" id="T1zjgr}WQK}%!G}bjWmh" intask="true">
+                            <value name="OUT">
+                                <block type="naoColour_picker" id="vSpRVQOXI2Jf,jsf?::L" intask="true">
+                                    <field name="COLOUR">#ff0000</field>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="robActions_sayText" id=",CE*.vg)S_u:CDo9iTSy" intask="true">
+                            <value name="OUT">
+                                <block type="naoColour_picker" id="le!]x,*=PZ#LudTHJus`" intask="true">
+                                    <field name="COLOUR">#cc0000</field>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="robActions_sayText" id="]Se|Uzb?6|yY*Wt2X)M8" intask="true">
+                            <value name="OUT">
+                                <block type="naoColour_picker" id="5OEOT{lh}d.|::q-9f[K" intask="true">
+                                    <field name="COLOUR">#990000</field>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="robActions_sayText" id="Ci%-Yj)TKXJE%fnUiq@H" intask="true">
+                            <value name="OUT">
+                                <block type="naoColour_picker" id="NgPgKt+1oz@g2IH87B^9" intask="true">
+                                    <field name="COLOUR">#660000</field>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="robActions_sayText" id="dbI)e:f;wUsEj;U*!dV:" intask="true">
+                            <value name="OUT">
+                                <block type="naoColour_picker" id="q8c5}l0#8|+%v.i2Joct" intask="true">
+                                    <field name="COLOUR">#330000</field>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="robActions_sayText" id="DAg!EGTH9YEUja(}@6)U" intask="true">
+                            <value name="OUT">
+                                <block type="naoColour_picker" id="U_A^(Lzrp3Y1BbMh5.,}" intask="true">
+                                    <field name="COLOUR">#ffcc99</field>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="robActions_sayText" id="0Lr|,)ncosdi3n`i!+N_" intask="true">
+                            <value name="OUT">
+                                <block type="naoColour_picker" id="+bDHbgL,{(@M)K8M**Y~" intask="true">
+                                    <field name="COLOUR">#ff9966</field>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="robActions_sayText" id="xR%OB5f=FDi8}jeXOfoH" intask="true">
+                            <value name="OUT">
+                                <block type="naoColour_picker" id="TT_svJR~c(k2C66`{uRQ" intask="true">
+                                    <field name="COLOUR">#ff9900</field>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="robActions_sayText" id="R3!GqQczOmp^v}Y(s.x%" intask="true">
+                            <value name="OUT">
+                                <block type="naoColour_picker" id="R=L()fHEVZN_k;Y]J7^t" intask="true">
+                                    <field name="COLOUR">#cc6600</field>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="robActions_sayText" id=";~@cR=botE=41DgSr7Lj" intask="true">
+                            <value name="OUT">
+                                <block type="naoColour_picker" id="_UrDxC]_PI@i454w6Ep," intask="true">
+                                    <field name="COLOUR">#993300</field>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="robActions_sayText" id="jwjn5m/Z^kM;d1tQA(NG" intask="true">
+                            <value name="OUT">
+                                <block type="naoColour_picker" id="dh@{Tf|txrn%w!;ih_f@" intask="true">
+                                    <field name="COLOUR">#663300</field>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="robActions_sayText" id="{:@aY8Yqw6EX,6(a%4JX" intask="true">
+                            <value name="OUT">
+                                <block type="naoColour_picker" id="2t^NJ,jw`JJm|/xr?iUV" intask="true">
+                                    <field name="COLOUR">#ffff99</field>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="robActions_sayText" id="j;4O@]pk7q(1O/hh3}l?" intask="true">
+                            <value name="OUT">
+                                <block type="naoColour_picker" id="8V_QkAC}:6~z*6Saw-lY" intask="true">
+                                    <field name="COLOUR">#ffff66</field>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="robActions_sayText" id="4c(U+=DfDrgE)G_lBY_u" intask="true">
+                            <value name="OUT">
+                                <block type="naoColour_picker" id="vH.sD;w-=?!xeU8EHbo9" intask="true">
+                                    <field name="COLOUR">#ffcc66</field>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="robActions_sayText" id="he}9/a3t[#k9VuDa4-4V" intask="true">
+                            <value name="OUT">
+                                <block type="naoColour_picker" id="ppE~Ei;w8z+8S91tGXBG" intask="true">
+                                    <field name="COLOUR">#ffcc33</field>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="robActions_sayText" id="k*ap?@LNj}cXG6cffh=K" intask="true">
+                            <value name="OUT">
+                                <block type="naoColour_picker" id="ErjY5f7d[_K4i1~nYw@h" intask="true">
+                                    <field name="COLOUR">#cc9933</field>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="robActions_sayText" id="gI5cS;^,}cqIWqr6FTDk" intask="true">
+                            <value name="OUT">
+                                <block type="naoColour_picker" id="AOECrF?=UwMC?a1KJA|%" intask="true">
+                                    <field name="COLOUR">#996633</field>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="robActions_sayText" id="v{B2Zty,);MF`B={Jjsk" intask="true">
+                            <value name="OUT">
+                                <block type="naoColour_picker" id="|#,eR:bj?%)[+C!,{Xf#" intask="true">
+                                    <field name="COLOUR">#663333</field>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="robActions_sayText" id="/RB/0W*beEzSHF|Wa~l#" intask="true">
+                            <value name="OUT">
+                                <block type="naoColour_picker" id="+lwUq|6;]SxX]yD+QWbq" intask="true">
+                                    <field name="COLOUR">#ffffcc</field>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="robActions_sayText" id="t}Y+kjAf|T4oTK6n4?6@" intask="true">
+                            <value name="OUT">
+                                <block type="naoColour_picker" id="H:Yt*;LuY!y8~Gc-}?E~" intask="true">
+                                    <field name="COLOUR">#ffff33</field>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="robActions_sayText" id="aIi|{7|NdT3163XE=OnN" intask="true">
+                            <value name="OUT">
+                                <block type="naoColour_picker" id="`LA8Z03lI1w8IiBv^voC" intask="true">
+                                    <field name="COLOUR">#ffff00</field>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="robActions_sayText" id="jupvsn%Xj0G/bK9ZCXx]" intask="true">
+                            <value name="OUT">
+                                <block type="naoColour_picker" id="2x8;;Liky#@wGLTgGtAb" intask="true">
+                                    <field name="COLOUR">#ffcc00</field>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="robActions_sayText" id="P.}i/THmU-%xNRMg+cSB" intask="true">
+                            <value name="OUT">
+                                <block type="naoColour_picker" id="!-kDJR7WZ3i~+HZ5r1{U" intask="true">
+                                    <field name="COLOUR">#999900</field>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="robActions_sayText" id="T4}6!R6SJ:r#jMJB2Z;?" intask="true">
+                            <value name="OUT">
+                                <block type="naoColour_picker" id="A5{}+)Bt*|eYEBezaY4#" intask="true">
+                                    <field name="COLOUR">#666600</field>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="robActions_sayText" id="MH9yYyupz`Bp)34WmG@q" intask="true">
+                            <value name="OUT">
+                                <block type="naoColour_picker" id="{EM3@9vV}c13zd8d!a_!" intask="true">
+                                    <field name="COLOUR">#333300</field>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="robActions_sayText" id="0iz+STqG=6Y86HymZX-_" intask="true">
+                            <value name="OUT">
+                                <block type="naoColour_picker" id="P}_6W.M;43rB.k{TM!5y" intask="true">
+                                    <field name="COLOUR">#99ff99</field>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="robActions_sayText" id="?DODE,H1A.R{xSI4cy.{" intask="true">
+                            <value name="OUT">
+                                <block type="naoColour_picker" id="HRe[s}96ES`a67meq.nw" intask="true">
+                                    <field name="COLOUR">#66ff99</field>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="robActions_sayText" id="fcgu`eiKdb0sSet_:@hN" intask="true">
+                            <value name="OUT">
+                                <block type="naoColour_picker" id="med78t%6])C+*=nmkTnn" intask="true">
+                                    <field name="COLOUR">#33ff33</field>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="robActions_sayText" id="Z_CQl{3c*jDpv1,cGTL*" intask="true">
+                            <value name="OUT">
+                                <block type="naoColour_picker" id="^7SR#x6;tjyz1j^;2mVk" intask="true">
+                                    <field name="COLOUR">#33cc00</field>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="robActions_sayText" id="AJsrLlr^~/~C}cvfyI,z" intask="true">
+                            <value name="OUT">
+                                <block type="naoColour_picker" id="sZod1X:c2DE.2{et)|@]" intask="true">
+                                    <field name="COLOUR">#009900</field>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="robActions_sayText" id="Q}w2-*)u8G5T_=DMvy/f" intask="true">
+                            <value name="OUT">
+                                <block type="naoColour_picker" id="=-fy7_J7S8Yj_JM1C{)o" intask="true">
+                                    <field name="COLOUR">#006600</field>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="robActions_sayText" id="b}f#tD+[1z3XExf%S,b`" intask="true">
+                            <value name="OUT">
+                                <block type="naoColour_picker" id="Zu/Ta5P|%1IJYrqJ*Zb/" intask="true">
+                                    <field name="COLOUR">#003300</field>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="robActions_sayText" id="ODcx@ONd?ym.0NV]UXV!" intask="true">
+                            <value name="OUT">
+                                <block type="naoColour_picker" id="~vxBqCTkWYaD6,CvD2l9" intask="true">
+                                    <field name="COLOUR">#99ffff</field>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="robActions_sayText" id="mXH;4YHmMQ#udCUbVP=3" intask="true">
+                            <value name="OUT">
+                                <block type="naoColour_picker" id="ERFJFhM`C;T#U.6Aogl]" intask="true">
+                                    <field name="COLOUR">#33ffff</field>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="robActions_sayText" id="NxXDsra3AC9lWyTt~kdq" intask="true">
+                            <value name="OUT">
+                                <block type="naoColour_picker" id="t+Z;6DXbNNim]JD+a1a6" intask="true">
+                                    <field name="COLOUR">#66cccc</field>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="robActions_sayText" id="ZN17qzwkk7I=C;o_rAGB" intask="true">
+                            <value name="OUT">
+                                <block type="naoColour_picker" id="+7_5=]PQ8Q1!m*%UwWt}" intask="true">
+                                    <field name="COLOUR">#00cccc</field>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="robActions_sayText" id="3)BsW=XK2+XhKCOI^sY_" intask="true">
+                            <value name="OUT">
+                                <block type="naoColour_picker" id="Jxzc[z[-L8aM@5A(rL10" intask="true">
+                                    <field name="COLOUR">#339999</field>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="robActions_sayText" id="Za?p}{U3hRIwAq,%#^gT" intask="true">
+                            <value name="OUT">
+                                <block type="naoColour_picker" id="7Yv-l[x~=u3lw@/96E(z" intask="true">
+                                    <field name="COLOUR">#336666</field>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="robActions_sayText" id="yDyNp+~!wa:1l5sj6tZI" intask="true">
+                            <value name="OUT">
+                                <block type="naoColour_picker" id="KR[rcEMT)iGtMb|t9.At" intask="true">
+                                    <field name="COLOUR">#003333</field>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="robActions_sayText" id="/uaEK:Z{D8{HJK]FUx)}" intask="true">
+                            <value name="OUT">
+                                <block type="naoColour_picker" id="np+M+S?PrMu+0g3(m9?u" intask="true">
+                                    <field name="COLOUR">#ccffff</field>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="robActions_sayText" id="m2u^siDYFelMnu~sy*NH" intask="true">
+                            <value name="OUT">
+                                <block type="naoColour_picker" id="R/.sRgg=|R0bn~z4).`D" intask="true">
+                                    <field name="COLOUR">#66ffff</field>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="robActions_sayText" id="O2,q%b6QwWa^BX)2HcBY" intask="true">
+                            <value name="OUT">
+                                <block type="naoColour_picker" id="]N9JW[NROK9n5Q_ihJ48" intask="true">
+                                    <field name="COLOUR">#33ccff</field>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="robActions_sayText" id="3sw,_nvSX.DC([0}{W{s" intask="true">
+                            <value name="OUT">
+                                <block type="naoColour_picker" id="U^t[:p[CWU+cbwX+T2v`" intask="true">
+                                    <field name="COLOUR">#3366ff</field>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="robActions_sayText" id="MyElyS(!p,dg_5PfJ(HH" intask="true">
+                            <value name="OUT">
+                                <block type="naoColour_picker" id="hxL2*tFH^H5}@)yGLQY7" intask="true">
+                                    <field name="COLOUR">#3333ff</field>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="robActions_sayText" id="~tM)##fs=JRg2-O@F^Ay" intask="true">
+                            <value name="OUT">
+                                <block type="naoColour_picker" id="V0%MMMy}NDNqaYKW79Q8" intask="true">
+                                    <field name="COLOUR">#000099</field>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="robActions_sayText" id="FoY1%8@eRNRn57KhUlzY" intask="true">
+                            <value name="OUT">
+                                <block type="naoColour_picker" id="I[fs3rddQftrR!=?ciEn" intask="true">
+                                    <field name="COLOUR">#000066</field>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="robActions_sayText" id="3)QpwNfOs}rGM!o`Kly}" intask="true">
+                            <value name="OUT">
+                                <block type="naoColour_picker" id="WL/|5ht]K4(eSV!l/%nZ" intask="true">
+                                    <field name="COLOUR">#ccccff</field>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="robActions_sayText" id="cfh6e^0qCNRTVD,_Vy%_" intask="true">
+                            <value name="OUT">
+                                <block type="naoColour_picker" id=")]`m19dp_gk~vojI]+8!" intask="true">
+                                    <field name="COLOUR">#9999ff</field>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="robActions_sayText" id="wclruBe,Hc-o0HTR{^e+" intask="true">
+                            <value name="OUT">
+                                <block type="naoColour_picker" id="o}0@0#RZZWhj@WhWm87?" intask="true">
+                                    <field name="COLOUR">#6666cc</field>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="robActions_sayText" id="%%*?fI,A*~)l3JD4BSH1" intask="true">
+                            <value name="OUT">
+                                <block type="naoColour_picker" id="H+^zCMG6}xhgGg]5sYr9" intask="true">
+                                    <field name="COLOUR">#cc33cc</field>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="robActions_sayText" id="(nC/l:[B{)VD?tZExuKp" intask="true">
+                            <value name="OUT">
+                                <block type="naoColour_picker" id="cIi^pP-*kySjVaOyj(yb" intask="true">
+                                    <field name="COLOUR">#6600cc</field>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="robActions_sayText" id="Bp7CGyFdr1r85_fL*.K=" intask="true">
+                            <value name="OUT">
+                                <block type="naoColour_picker" id="9U,ifCp;B!Y]U*Ruinv8" intask="true">
+                                    <field name="COLOUR">#333399</field>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="robActions_sayText" id="m*5f6z?^R9:#YdI[^P|;" intask="true">
+                            <value name="OUT">
+                                <block type="naoColour_picker" id="[z|;nG.U{}L/Qrhy%ea0" intask="true">
+                                    <field name="COLOUR">#330099</field>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="robActions_sayText" id=")QaDYspm}DB},V=c#G.J" intask="true">
+                            <value name="OUT">
+                                <block type="naoColour_picker" id="B^|Z3]{quN?0K~ej1n4I" intask="true">
+                                    <field name="COLOUR">#ffccff</field>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="robActions_sayText" id="J1Ih4thOJ)K!2l~fp5a3" intask="true">
+                            <value name="OUT">
+                                <block type="naoColour_picker" id="[f`pp?K=`dESFd+D{:]|" intask="true">
+                                    <field name="COLOUR">#ff99ff</field>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="robActions_sayText" id="(*Om+[b7!qpyW%czRM`}" intask="true">
+                            <value name="OUT">
+                                <block type="naoColour_picker" id="Id||i/IT`uK@3e+5uz`+" intask="true">
+                                    <field name="COLOUR">#cc66cc</field>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="robActions_sayText" id="bZ7X%n=1*76!XwV*PjWp" intask="true">
+                            <value name="OUT">
+                                <block type="naoColour_picker" id="b95h5Aj@C4Fb|%nMYGi9" intask="true">
+                                    <field name="COLOUR">#cc33cc</field>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="robActions_sayText" id="0#m=LlK]qBko,iV);)8p" intask="true">
+                            <value name="OUT">
+                                <block type="naoColour_picker" id="kY`Xa:@K[btLm?Tu6N`z" intask="true">
+                                    <field name="COLOUR">#993399</field>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="robActions_sayText" id="boD,U(DZS/e8eA8O)RfC" intask="true">
+                            <value name="OUT">
+                                <block type="naoColour_picker" id="S7AL5YJmVa8]rlO1{M?E" intask="true">
+                                    <field name="COLOUR">#663366</field>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="robActions_sayText" id="0X#_M7Y^Mj,K,n^_KsQF" intask="true">
+                            <value name="OUT">
+                                <block type="naoColour_picker" id="*n7eAE7mDeSv,{Je2k=`" intask="true">
+                                    <field name="COLOUR">#330033</field>
+                                </block>
+                            </value>
+                        </block>
+                    </statement>
+                </block>
+            </instance>
+            <instance x="137" y="391">
+                <block type="robProcedures_defnoreturn" id="EKfw,kK**NU4G3oyJLFj" intask="true">
+                    <mutation declare="true"></mutation>
+                    <field name="NAME">function_parameters</field>
+                    <statement name="ST">
+                        <block type="robLocalVariables_declare" id="{kLo(ra5dFlLzw8.u:bO" intask="true" deletable="false" movable="false">
+                            <mutation next="true" declaration_type="Number"></mutation>
+                            <field name="VAR">x</field>
+                            <field name="TYPE">Number</field>
+                        </block>
+                        <block type="robLocalVariables_declare" id="31K.;89P^Eh3frh}*V50" intask="true" deletable="false" movable="false">
+                            <mutation next="true" declaration_type="Boolean"></mutation>
+                            <field name="VAR">x2</field>
+                            <field name="TYPE">Boolean</field>
+                        </block>
+                        <block type="robLocalVariables_declare" id="JM{1UCY=)Qqt2P)UOya5" intask="true" deletable="false" movable="false">
+                            <mutation next="true" declaration_type="String"></mutation>
+                            <field name="VAR">x3</field>
+                            <field name="TYPE">String</field>
+                        </block>
+                        <block type="robLocalVariables_declare" id="e~*-c`/7b9dfUr~y:eXj" intask="true" deletable="false" movable="false">
+                            <mutation next="true" declaration_type="Colour"></mutation>
+                            <field name="VAR">x4</field>
+                            <field name="TYPE">Colour</field>
+                        </block>
+                        <block type="robLocalVariables_declare" id="}1@^OZ]D],zIP0Vs2`|n" intask="true" deletable="false" movable="false">
+                            <mutation next="true" declaration_type="Array_Number"></mutation>
+                            <field name="VAR">x5</field>
+                            <field name="TYPE">Array_Number</field>
+                        </block>
+                        <block type="robLocalVariables_declare" id="XWj1I2k3@O%kJ+=agvo^" intask="true" deletable="false" movable="false">
+                            <mutation next="true" declaration_type="Array_Boolean"></mutation>
+                            <field name="VAR">x6</field>
+                            <field name="TYPE">Array_Boolean</field>
+                        </block>
+                        <block type="robLocalVariables_declare" id="COj;;Ld4{=RCn.y]wm)O" intask="true" deletable="false" movable="false">
+                            <mutation next="true" declaration_type="Array_String"></mutation>
+                            <field name="VAR">x7</field>
+                            <field name="TYPE">Array_String</field>
+                        </block>
+                        <block type="robLocalVariables_declare" id="Pp9C=9XZ`i?a4~t:ps@4" intask="true" deletable="false" movable="false">
+                            <mutation next="false" declaration_type="Array_Colour"></mutation>
+                            <field name="VAR">x8</field>
+                            <field name="TYPE">Array_Colour</field>
+                        </block>
+                    </statement>
+                    <statement name="STACK">
+                        <block type="robProcedures_ifreturn" id="D|A:tChRjKU8`!T{q_}|" intask="true">
+                            <mutation value="0"></mutation>
+                            <value name="CONDITION">
+                                <block type="variables_get" id="@syKK%P0v`q`,D{qMxih" intask="true">
+                                    <mutation datatype="Boolean"></mutation>
+                                    <field name="VAR">booleanVar</field>
+                                </block>
+                            </value>
+                        </block>
+                    </statement>
+                </block>
+            </instance>
+            <instance x="136" y="702">
+                <block type="robProcedures_defreturn" id="K`bs{R@tl%o:EqZHYVc." intask="true">
+                    <mutation declare="false" return_type="Number"></mutation>
+                    <field name="NAME">function_return_numberVar</field>
+                    <field name="TYPE">Number</field>
+                    <repetitions>
+                        <value name="RETURN">
+                            <block type="variables_get" id="(TU}opS7ZV0]eROAr7L4" intask="true">
+                                <mutation datatype="Number"></mutation>
+                                <field name="VAR">numberVar</field>
+                            </block>
+                        </value>
+                    </repetitions>
+                </block>
+            </instance>
+            <instance x="133" y="795">
+                <block type="robProcedures_defreturn" id="G7HstU6z8]`@5A_+QO9b" intask="true">
+                    <mutation declare="false" return_type="Boolean"></mutation>
+                    <field name="NAME">function_return_booleanVar</field>
+                    <field name="TYPE">Boolean</field>
+                    <repetitions>
+                        <value name="RETURN">
+                            <block type="variables_get" id=":L{Rxtkm~/bSbP~XjK{?" intask="true">
+                                <mutation datatype="Boolean"></mutation>
+                                <field name="VAR">booleanVar</field>
+                            </block>
+                        </value>
+                    </repetitions>
+                </block>
+            </instance>
+            <instance x="138" y="894">
+                <block type="robProcedures_defreturn" id="^YQCyj?ZSafu]K%%Om^%" intask="true">
+                    <mutation declare="false" return_type="String"></mutation>
+                    <field name="NAME">function_return_stringVar</field>
+                    <field name="TYPE">String</field>
+                    <repetitions>
+                        <value name="RETURN">
+                            <block type="variables_get" id="fkyT~ndBUrA%2)_J2/o/" intask="true">
+                                <mutation datatype="String"></mutation>
+                                <field name="VAR">stringVar</field>
+                            </block>
+                        </value>
+                    </repetitions>
+                </block>
+            </instance>
+            <instance x="139" y="991">
+                <block type="robProcedures_defreturn" id="h=e%Y4M|=G9:pMWf*yxD" intask="true">
+                    <mutation declare="false" return_type="Colour"></mutation>
+                    <field name="NAME">function_return_colourVar</field>
+                    <field name="TYPE">Colour</field>
+                    <repetitions>
+                        <value name="RETURN">
+                            <block type="variables_get" id="OX,0VgLr8a_@qIr}Xo{C" intask="true">
+                                <mutation datatype="Colour"></mutation>
+                                <field name="VAR">colourVar</field>
+                            </block>
+                        </value>
+                    </repetitions>
+                </block>
+            </instance>
+            <instance x="140" y="1095">
+                <block type="robProcedures_defreturn" id="3rCxHvT?=HW-!5}#YeFn" intask="true">
+                    <mutation declare="false" return_type="Array_Number"></mutation>
+                    <field name="NAME">function_return_numberList</field>
+                    <field name="TYPE">Array_Number</field>
+                    <repetitions>
+                        <value name="RETURN">
+                            <block type="variables_get" id="ciRPopo^;6xg6[a^i@gS" intask="true">
+                                <mutation datatype="Array_Number"></mutation>
+                                <field name="VAR">numberList</field>
+                            </block>
+                        </value>
+                    </repetitions>
+                </block>
+            </instance>
+            <instance x="141" y="1202">
+                <block type="robProcedures_defreturn" id="THg0I}/ls*YP==k6tXBK" intask="true">
+                    <mutation declare="false" return_type="Array_Boolean"></mutation>
+                    <field name="NAME">function_return_booleanList</field>
+                    <field name="TYPE">Array_Boolean</field>
+                    <repetitions>
+                        <value name="RETURN">
+                            <block type="variables_get" id="h9iOU3xK@7H[yLp%i}#E" intask="true">
+                                <mutation datatype="Array_Boolean"></mutation>
+                                <field name="VAR">booleanList</field>
+                            </block>
+                        </value>
+                    </repetitions>
+                </block>
+            </instance>
+            <instance x="141" y="1297">
+                <block type="robProcedures_defreturn" id="X`;AJDr4hf,Bjl-~dlL#" intask="true">
+                    <mutation declare="false" return_type="Array_String"></mutation>
+                    <field name="NAME">function_return_stringList</field>
+                    <field name="TYPE">Array_String</field>
+                    <repetitions>
+                        <value name="RETURN">
+                            <block type="variables_get" id="Xt/p/I5a%Q}Ye#;-AffF" intask="true">
+                                <mutation datatype="Array_String"></mutation>
+                                <field name="VAR">stringList</field>
+                            </block>
+                        </value>
+                    </repetitions>
+                </block>
+            </instance>
+            <instance x="141" y="1385">
+                <block type="robProcedures_defreturn" id="9P}mUQOqM1uP/C.,S8/a" intask="true">
+                    <mutation declare="false" return_type="Array_Colour"></mutation>
+                    <field name="NAME">function_return_colourList</field>
+                    <field name="TYPE">Array_Colour</field>
+                    <repetitions>
+                        <value name="RETURN">
+                            <block type="variables_get" id="(H`^H8}2LL_*Q=#mpVr5" intask="true">
+                                <mutation datatype="Array_Colour"></mutation>
+                                <field name="VAR">colourList</field>
+                            </block>
+                        </value>
+                    </repetitions>
+                </block>
+            </instance>
+        </block_set>
+    </program>
+    <config>
+        <block_set robottype="nao" xmlversion="3.0" xmlns="http://de.fhg.iais.roberta.blockly">
+            <instance x="138" y="88">
+                <block type="naoBrick_NAO-Brick" id="1">
+                    <field name="IP_ADDRESS">0.0.0.0</field>
+                    <field name="PORT">22</field>
+                    <field name="USERNAME">nao</field>
+                    <field name="PASSWORD">nao</field>
+                </block>
+            </instance>
+        </block_set>
+    </config>
+</export>

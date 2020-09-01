@@ -1,6 +1,13 @@
 package de.fhg.iais.roberta.visitor.codegen;
 
-import java.util.ArrayList;
+import static de.fhg.iais.roberta.mode.general.IndexLocation.FROM_END;
+import static de.fhg.iais.roberta.mode.general.IndexLocation.FROM_START;
+import static de.fhg.iais.roberta.mode.general.ListElementOperations.GET;
+import static de.fhg.iais.roberta.mode.general.ListElementOperations.GET_REMOVE;
+import static de.fhg.iais.roberta.mode.general.ListElementOperations.INSERT;
+import static de.fhg.iais.roberta.mode.general.ListElementOperations.REMOVE;
+import static de.fhg.iais.roberta.mode.general.ListElementOperations.SET;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -79,13 +86,6 @@ import de.fhg.iais.roberta.visitor.IVisitor;
 import de.fhg.iais.roberta.visitor.codegen.utilities.TTSLanguageMapper;
 import de.fhg.iais.roberta.visitor.hardware.IEv3Visitor;
 import de.fhg.iais.roberta.visitor.lang.codegen.prog.AbstractJavaVisitor;
-import static de.fhg.iais.roberta.mode.general.IndexLocation.FROM_END;
-import static de.fhg.iais.roberta.mode.general.IndexLocation.FROM_START;
-import static de.fhg.iais.roberta.mode.general.ListElementOperations.GET;
-import static de.fhg.iais.roberta.mode.general.ListElementOperations.GET_REMOVE;
-import static de.fhg.iais.roberta.mode.general.ListElementOperations.INSERT;
-import static de.fhg.iais.roberta.mode.general.ListElementOperations.REMOVE;
-import static de.fhg.iais.roberta.mode.general.ListElementOperations.SET;
 
 /**
  * This class is implementing {@link IVisitor}. All methods are implemented and they append a human-readable JAVA code representation of a phrase to a
@@ -107,7 +107,7 @@ public final class Ev3JavaVisitor extends AbstractJavaVisitor implements IEv3Vis
      * @param brickConfiguration hardware configuration of the brick
      */
     public Ev3JavaVisitor(
-        List<ArrayList<Phrase<Void>>> programPhrases,
+        List<List<Phrase<Void>>> programPhrases,
         ConfigurationAst brickConfiguration,
         String programName,
         ILanguage language,
@@ -979,9 +979,9 @@ public final class Ev3JavaVisitor extends AbstractJavaVisitor implements IEv3Vis
         this.sb.append(" brickConfiguration = new EV3Configuration.Builder()");
         incrIndentation();
         nlIndent();
-        this.sb.append(".setWheelDiameter(").append(this.brickConfiguration.getWheelDiameterCM()).append(")");
+        this.sb.append(".setWheelDiameter(").append(this.brickConfiguration.getWheelDiameter()).append(")");
         nlIndent();
-        this.sb.append(".setTrackWidth(").append(this.brickConfiguration.getTrackWidthCM()).append(")");
+        this.sb.append(".setTrackWidth(").append(this.brickConfiguration.getTrackWidth()).append(")");
         nlIndent();
         appendActors();
         appendSensors();

@@ -46,6 +46,9 @@ limitations under the License.
     >
 
     </script>-->
+<link rel="manifest" href="manifest.webapp.json"></link>
+<link rel="SHORTCUT ICON" href="../css/img/NEPO.ico" type="image/vnd.microsoft.icon"></link>
+<link rel="apple-touch-icon" sizes="144x144" href="/css/img/Nepo_N.png" />
 <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0" />
 <meta name="mobile-web-app-capable" content="yes" />
 <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -174,11 +177,12 @@ limitations under the License.
                     </a>
                         <ul class="dropdown-menu" id="head-navigation-user-dropdown">
                             <li class="logout"><a href="#" id="menuLogin" class="typcn typcn-user" lkey="Blockly.Msg.MENU_LOG_IN">anmelden ...</a></li>
+                            <li class="logout"><a href="#" id="menuUserGroupLogin" class="typcn typcn-group-outline" lkey="Blockly.Msg.MENU_USERGROUP_LOG_IN">bei Gruppe anmelden...</a></li>
                             <li class="login"><a href="#" id="menuLogout" class="typcn typcn-user-outline" lkey="Blockly.Msg.MENU_LOG_OUT">abmelden</a></li>
+                            <li class="login"><a href="#" id="menuGroupPanel" class="typcn typcn-group" lkey="Blockly.Msg.MENU_MANAGE_USERGROUPS">Gruppen verwalten</a></li>
                             <!-- <li><a href="#" id="menuNewUser" class="typcn typcn-user-add" lkey="Blockly.Msg.MENU_NEW">neu ...</a></li> -->
                             <li class="login"><a href="#" id="menuChangeUser" class="typcn typcn-lock-closed" lkey="Blockly.Msg.MENU_CHANGE">ändern ...</a></li>
-                            <li class="login"><a href="#" id="menuDeleteUser" class="typcn typcn-user-delete" lkey="Blockly.Msg.MENU_DELETE_USER">Benutzer
-                                    löschen ...</a></li>
+                            <li class="login"><a href="#" id="menuDeleteUser" class="typcn typcn-user-delete" lkey="Blockly.Msg.MENU_DELETE_USER">Benutzer löschen ...</a></li>
                             <li><a href="#" id="menuStateInfo" class="typcn typcn-input-checked" lkey="Blockly.Msg.MENU_STATE_INFO">Statusinformationen</a></li>
                             <li class="hidden" id="menuAddStatusTextWrap"><a href="#" id="menuAddStatusText" class="typcn typcn-edit">Add a status text</a></li>
                         </ul></li>
@@ -284,6 +288,8 @@ limitations under the License.
                 <li class="hidden"><a data-toggle="tab" id="tabSourceCodeEditor" href="#sourceCodeEditorPane">Source code editor</a></li>
                 <li class="hidden"><a data-toggle="tab" id="tabGalleryList" href="#galleryList">Galery</a></li>
                 <li class="hidden"><a data-toggle="tab" id="tabTutorialList" href="#tutorialList">Tutorial</a></li>
+                <li class="hidden"><a data-toggle="tab" id="tabUserGroupList" href="#userGroupList">UserGroup List</a></li>
+                <li class="hidden"><a data-toggle="tab" id="tabUserGroupMemberList" href="#userGroupMemberList">UserGroup Member List</a></li>
             </ul>
         </div>
     </nav>
@@ -343,6 +349,17 @@ limitations under the License.
                         rel="tooltip" data-original-title="" title=""></button>
                     <button id="simImport" type="button" class="simRobot blbtn typcn typcn-upload" lkey="Blockly.Msg.MENU_SIM_IMPORT_TOOLTIP" rel="tooltip"
                         data-original-title="" title=""></button>
+                    <button id="debugMode" type="button" class="blbtn typcn typcn-spanner-outline" lkey="Blockly.Msg.MENU_DEBUG_START_TOOLTIP" rel="tooltip"
+                            data-original-title="" title=""></button>
+                    <button id="simControlBreakPoint" type="button" class="blbtn typcn typcn-database" lkey="Blockly.Msg.MENU_DEBUG_STEP_BREAKPOINT_TOOLTIP" rel="tooltip"
+                            data-original-title="" title=""></button>
+                    <button id="simControlStepOver" type="button" class="blbtn typcn typcn-arrow-forward-outline" lkey="Blockly.Msg.MENU_DEBUG_STEP_OVER_TOOLTIP" rel="tooltip"
+                            data-original-title="" title=""></button>
+                    <button id="simControlStepInto" type="button" class="blbtn typcn typcn-arrow-down-outline" lkey="Blockly.Msg.MENU_DEBUG_STEP_INTO_TOOLTIP" rel="tooltip"
+                            data-original-title="" title=""></button>
+                    <button id="simVariables" type="button" class="simVariables blbtn typcn typcn-variable" lkey="Blockly.Msg.MENU_SIM_VARIABLES_TOOLTIP" rel="tooltip"
+                            data-original-title="" title=""></button>
+
                 </div>
             </div>
             <div id="tutorialDiv" class="fromRight">
@@ -424,12 +441,17 @@ limitations under the License.
                 </div>
             </div>
         </div>
-
         <div id="progList" class="tab-pane fade">
             <div id="progListToolbar">
-                <button id="backProgList" class="btn backList" lkey="Blockly.Msg.LIST_BACK_TOOLTIP" rel="tooltip" data-original-title="Back to previous view.">
-                    <i class="typcn typcn-arrow-left"></i>
-                </button>
+	             <div class="bars pull-left">
+	             	<button id="backProgList" class="btn backList" lkey="Blockly.Msg.LIST_BACK_TOOLTIP" rel="tooltip" data-original-title="Back to previous view.">
+	                    <i class="typcn typcn-arrow-left"></i>
+	                </button>
+                	<select id="progListScopeSelect" class="form-control">
+                		<option value="userProgram" lkey="Blockly.Msg.MENU_LIST_PROG" data-translation-targets="html">meine Programme &hellip;</option>
+	                	<optGroup id="progListUserGroupScope" label="Gruppen" lkey="Blockly.Msg.DATATABLE_USERGROUPS" data-translation-targets="label"></optGroup>
+	                </select>
+                </div>
             </div>
             <table id="programNameTable">
             </table>
@@ -484,6 +506,24 @@ limitations under the License.
                 <button id="backGalleryList" class="btn">
                     <i class="typcn typcn-arrow-left"></i>
                 </button>
+                <div class="filters search form-inline">
+                    <select id="filterRobot" class="form-control"></select>
+                    <input id="galleryListSearch" placeholder="Search" name="search" class="form-control">
+                    <div class="form-group">
+                        <label>Order by:</label>
+                        <select id="fieldOrderBy" class="form-control">
+                            <option value="4:desc" selected>Newest</option>
+                            <option value="4:asc">Oldest</option>
+                            <option value="1:asc">Program name</option>
+                            <option value="0:asc">Robot</option>
+                        </select>
+                    </div>
+                    <!-- TODO reactivate this once the table-view is improved
+                    <button id="toogleView" class="btn">
+                        <i class="typcn typcn-th-list"></i>
+                    </button> -->
+                </div>
+
             </div>
             <table id="galleryTable" class="galleryTable">
             </table>
@@ -495,6 +535,121 @@ limitations under the License.
                 </button>
             </div>
             <table id="tutorialTable" class="galleryTable">
+            </table>
+        </div>
+        <div id="userGroupList" class="tab-pane fade">
+            <div id="userGroupListToolbar">
+                <div class="bars pull-left">
+	                <button id="backUserGroupList" 
+	                		class="btn backList typcn typcn-arrow-left" 
+	                		lkey="Blockly.Msg.LIST_BACK_TOOLTIP"
+	                		data-translation-targets="title"
+	                		data-toggle="tooltip"
+	                		data-container="body"
+	                		data-placement="right"
+	                		title="Back to previous view."></button>
+                </div>
+                <div class="bars pull-right">
+	                <button id="showCreateUserGroupPopup" 
+	                		class="btn typcn typcn-plus" 
+	                		lkey="Blockly.Msg.USERGROUP_CREATE_TOOLTIP"
+	                		data-translation-targets="title"
+	                		data-toggle="tooltip"
+	                		data-container="body"
+	                		data-placement="top"
+	                		title="Create new user group"></button>
+                </div>
+            </div>
+            <table id="userGroupTable">
+            	<tr class="action-items-template">
+            		<td>
+            			<a href="#" class="delete typcn typcn-delete" lkey="Blockly.Msg.USERGROUP_LIST_DELETE_TOOLTIP" data-translation-targets="data-original-title title" data-original-title="" title=""></a>
+            		</td>
+            	</tr>
+            </table>
+        </div>
+        <div id="userGroupMemberList" class="tab-pane fade">
+            <div id="userGroupMemberListToolbar">
+                <div class="bars pull-left">
+	                <button id="backUserGroupMemberList" 
+	                		class="btn backList typcn typcn-arrow-left" 
+	                		lkey="Blockly.Msg.LIST_BACK_TOOLTIP"
+	                		data-translation-targets="title"
+	                		data-toggle="tooltip"
+	                		data-container="body"
+	                		data-placement="top"
+	                		title="Back to previous view."></button>
+	                <span>
+	                	<strong class="menuTab" lkey="Blockly.Msg.DATATABLE_USERGROUP_NAME">Name der Gruppe</strong>
+	                	<span id="userGroupMemberListHeader"></span>
+                	</span>
+                </div>
+                <div class="bars pull-right">
+	                <button id="showAddMembersPopup" 
+	                		class="btn typcn typcn-user-add" 
+	                		lkey="Blockly.Msg.USERGROUP_MEMBER_CREATE_TOOLTIP"
+	                		data-translation-targets="title"
+	                		data-toggle="tooltip"
+	                		data-container="body"
+	                		data-placement="top"
+	                		title="Click here to add members to your usergroup"></button>
+                </div>
+            </div>
+            <table id="userGroupMemberTable">
+            	<tr class="action-items-template">
+            		<td>
+            			<a href="#"
+            				class="delete typcn typcn-delete" 
+            				lkey="Blockly.Msg.USERGROUP_MEMBER_LIST_DELETE_TOOLTIP"
+							data-translation-targets="title" 
+	                		data-toggle="tooltip"
+	                		data-container="body"
+	                		data-placement="top"
+	                		title=""></a>
+            			<a href="#"
+            				class="reset-password typcn typcn-refresh" 
+            				lkey="Blockly.Msg.USERGROUP_MEMBER_LIST_RESET_PASSWORD_TOOLTIP"
+							data-translation-targets="title" 
+	                		data-toggle="tooltip"
+	                		data-container="body"
+	                		data-placement="top"
+	                		title="Resets the password to the default value."></a>
+            		</td>
+            	</tr>
+            	<tr class="action-items-header-template">
+            		<td>
+            			<a href="#" 
+            			   class="deleteSome typcn typcn-delete disabled" 
+            			   lkey="Blockly.Msg.USERGROUP_MEMBER_LIST_DELETE_ALL_TOOLTIP"
+						   data-translation-targets="title" 
+	                	   data-toggle="tooltip"
+	                	   data-container="body"
+	                	   data-placement="top"
+            			   title="Delete all selected members."></a>
+            			<a href="#" 
+            			   class="resetPasswords typcn typcn-refresh disabled" 
+            			   lkey="USERGROUP_MEMBER_LIST_RESET_ALL_PASSWORDS_TOOLTIP"
+						   data-translation-targets="title" 
+	                	   data-toggle="tooltip"
+	                	   data-container="body"
+	                	   data-placement="top"
+            			   title="Resets the password to the default value for all selected members."></a>
+            		</td>
+            	</tr>
+            	<tr class="edit-member-template">
+            		<td>
+            			<div class="member-name-column">
+	            			<button type="button" class="member-name-toggle-button btn btn-gray editor typcn typcn-pencil" ></button>
+	            			<span class="member-name"></span>
+	            			<div class="edit-member-name">
+            					<form>
+            						<input class="form-control" value="" name="name" />
+            					</form>
+		            			<button type="button" class="member-name-edit-button btn typcn typcn-tick"></button>
+	            			</div>
+            			</div>
+            		</td>
+            	</tr>
             </table>
         </div>
         <div id="configuration" class="tab-pane fade">
@@ -680,6 +835,9 @@ limitations under the License.
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                     <h3 class="modal-title" lkey="Blockly.Msg.POPUP_CHANGE_PASSWORD">Change User Password</h3>
+	                <span id="userGroupMemberDefaultPasswordHint" class="hidden" lkey="Blockly.Msg.USERGROUP_MEMBER_DEFAULT_PASSWORD_HINT">
+	                	Das Passwort für dein Benutzerkonto ist noch nicht wirklich sicher. Ändere es am besten direkt, damit nur du auf dein Benutzerkonto zugreifen kannst.
+	                </span>
                 </div>
                 <form id="change-user-password-form">
                     <div class="modal-body">
@@ -710,6 +868,74 @@ limitations under the License.
                         <input type="button" class="btn backButton" data-dismiss="modal" lkey="Blockly.Msg.POPUP_CANCEL">
                     </div>
                 </form>
+            </div>
+        </div>
+    </div>
+    <!-- Popup group login -->
+    <div class="modal fade" id="usergroupLoginPopup" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false" aria-labelledby="myModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h3 class="modal-title" id="loginUsergroupLoginTitle" lkey="Blockly.Msg.MENU_USERGROUP_LOG_IN">bei Gruppe anmelden ...</h3>
+                    <h3 class="modal-title hidden" id="lostPasswordUsergroupLoginTitle" lkey="Blockly.Msg.POPUP_PASSWORD_RECOVERY">Lost Password?</h3>
+                </div>
+                <div>
+                    <form id="loginUsergroupLoginForm">
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label for="usergroupLoginOwner" lkey="Blockly.Msg.DATATABLE_USERGROUP_OWNER">Name des Gruppeneigentümers</label>
+                                <div class="input-group">
+                                    <span class="input-group-addon typcn input-typcn typcn-mortar-board"></span>
+                                    <input type="text" class="form-control" id="usergroupLoginOwner" name="userGroupOwner" autofocus />
+                                </div>
+                                <div class="hint" style="display: none" lkey="Blockly.Msg.HINT_USERGROUP_OWNER">Hier kommt <strong>nicht</strong> der echten Name von dem/der Gruppen-Eigentümer*in hin, sondern der <strong>Benutzername</strong>.</div>
+                            </div>
+                            <div class="form-group">
+                                <label for="usergroupLoginUserGroup" lkey="Blockly.Msg.DATATABLE_USERGROUP_NAME">Name der Gruppe</label>
+                                <div class="input-group">
+                                    <span class="input-group-addon typcn input-typcn typcn-group"></span>
+                                    <input type="text" class="form-control" id="usergroupLoginUserGroup" name="userGroupName" />
+                                </div>
+                                <div class="hint" style="display: none" lkey="Blockly.Msg.USERGROUP_NAME_HINT">Die Gruppe bei der du dich anmeldest hat einen Namen. Dieser Name kommt hier hin.</div>
+                            </div>
+                            <div class="form-group">
+                                <label for="usergroupLoginAccount" lkey="Blockly.Msg.POPUP_USERNAME"></label>
+                                <div class="input-group">
+                                    <span class="input-group-addon typcn input-typcn typcn-user"></span>
+                                    <input type="text" class="form-control" id="usergroupLoginAccount" name="accountName" />
+                                </div>
+                                <div class="hint" style="display: none" lkey="Blockly.Msg.HINT_USERGROUP_MEMBER">Hier kommt die Kennung für deinen eigenen Benutzer hin. Dabei handelt es sich in der Regel um eine zweistellige Nummer.</div>
+                            </div>
+                            <div class="form-group">
+                                <label for="usergroupLoginPassword" lkey="Blockly.Msg.POPUP_PASSWORD"></label>
+                                <div class="input-group">
+                                    <span class="input-group-addon typcn input-typcn typcn-lock-closed"></span>
+                                    <input type="password" class="form-control" id="usergroupLoginPassword" name="password" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-primary" id="loginUsergroupLoginSubmit">OK</button>
+                            <div>
+                                <button type="button" id="lostPasswordUsergroupLogin" class="btn-link" lkey="Blockly.Msg.POPUP_PASSWORD_RECOVERY">Lost Password?</button>
+                            </div>
+                        </div>
+                    </form>
+                    <!-- Begin | Lost Password Form -->
+                    <article id="lostPasswordUsergroupLoginArticle">
+                    	<p class="modal-body" lkey="Blockly.Msg.USERGROUP_LOGIN_LOST_PASSWORD_HINT">
+                    		Wenn du dein Passwort vergessen hast, kannst du den/die Eigentümer*in der Gruppe bitten, dein Passwort auf das Passwort zurückzusetzen, das vor dem ersten Login eingestellt war.
+                   		</p>
+                        <hr />
+                        <div class="modal-footer">
+                            <div>
+                                <button type="button" id="loginUsergroupLogin" class="btn-link" lkey="Blockly.Msg.MENU_USERGROUP_LOG_IN">bei Gruppe anmelden ...</button>
+                            </div>
+                        </div>
+                    </article>
+                </div>
             </div>
         </div>
     </div>
@@ -1172,6 +1398,20 @@ limitations under the License.
             </div>
         </div>
     </div>
+    <!-- Popup for simulation variable data -->
+    <div id="simVariablesModal" class="modal fade simRobotModal" data-backdrop="false">
+        <div class="modal-dialog">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            </div>
+            <div id="simVariablesContent">
+                <div id="variablesContent">
+                    <div id="variableValue"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!--  Popup to show downloads for mbed -->
     <div id="save-client-compiled-program" class="modal fade">
         <div class="modal-dialog">
@@ -1199,6 +1439,95 @@ limitations under the License.
             </div>
         </div>
     </div>
+    <!--  Popup to show create form for new user-group -->
+    <div id="create-user-group" class="modal fade">
+        <div class="modal-dialog modal-md">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h3 id="#headCreateUserGroup" class="modal-title" lkey="Blockly.Msg.USERGROUP_CREATE">Create new user group</h3>
+                </div>
+                <div class="modal-body">
+                     <form id="user-group-form" name="userGroup">
+                        <div class="modal-body" style="width: 'auto'; height:'auto'; max-height:'100%">
+                            <div class="form-group">
+                                <label for="createAccountName" lkey="Blockly.Msg.DATATABLE_USERGROUP_NAME">Group name</label>
+                                <div class="input-group">
+                                    <span class="input-group-addon typcn input-typcn typcn-tag"></span>
+                                    <input type="text" class="form-control" id="userGroupNameInput" name="name" lkey="Blockly.Msg.DATATABLE_USERGROUP_NAME_CREATE_HINT" data-translation-targets="title"/>
+                                </div>
+                                <div class="hint" style="display: none"></div>
+                            </div>
+                            <div class="form-group">
+                                <label for="initialMembersInput" lkey="Blockly.Msg.USERGROUP_GENERATED_MEMBERS">Automatically generated members</label>
+                                <div class="input-group">
+                                    <span class="input-group-addon typcn input-typcn typcn-user-add"></span>
+                                    <input type="number" value="0" class="form-control" id="initialMembersInput" name="initialMembers" />
+                                </div>
+                                <div class="hint"
+                            		 lkey="Blockly.Msg.USERGROUP_GENERATED_MEMBERS_TOOLTIP" 
+	                				 data-translation-targets="html"></div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary accept-button" lkey="Blockly.Msg.USERGROUP_CREATE">Create usergroup</button>
+                    <button type="button" class="btn backButton close-button" lkey="Blockly.Msg.POPUP_CANCEL"></button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--  Popup to add members to user-group -->
+    <div id="user-group-add-members" class="modal fade">
+        <div class="modal-dialog modal-md">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h3 id="#headAddMembersToUserGroup" class="modal-title" lkey="Blockly.Msg.USERGROUP_ADD_MEMBERS">Add members</h3>
+                </div>
+                <div class="modal-body">
+                     <form id="user-group-add-members-form">
+                        <div class="modal-body" style="width: 'auto'; height:'auto'; max-height:'100%">
+                            <div class="form-group">
+                                <label for="additionalMembersInput" lkey="Blockly.Msg.USERGROUP_GENERATED_MEMBERS">Automatically generated members</label>
+                                <div class="input-group">
+                                    <span class="input-group-addon typcn input-typcn typcn-user-add"></span>
+                                    <input type="number" value="" class="form-control" id="additionalMembersInput" name="additionalMembers" />
+                                </div>
+                                <div class="hint"
+                            		 lkey="Blockly.Msg.USERGROUP_GENERATED_MEMBERS_TOOLTIP" 
+	                				 data-translation-targets="html"></div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary accept-button" lkey="Blockly.Msg.USERGROUP_ADD_MEMBERS">Add members</button>
+                    <button type="button" class="btn backButton close-button" lkey="Blockly.Msg.POPUP_CANCEL"></button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--  Popup to share programs with usergroup -->
+    <div id="show-share-program-with-usergroup" class="modal fade in">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h3 id="#headShare" class="modal-title">Share</h3>
+                </div>
+                <div class="modal-body">
+                    <table id="relationsTable">
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="shareProgram">OK</button>
+                    <input type="button" class="btn backButton" data-dismiss="modal" lkey="Blockly.Msg.POPUP_CANCEL"></input>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="modal fade" id="tutorialOverview" data-backdrop="static" data-keyboard="false">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
@@ -1210,7 +1539,7 @@ limitations under the License.
                     <span id="tutorialOverviewText">Message to show</span>
                 </div>
                 <div class="modal-footer">
-                    <button id="tutorialContinue" type="button" data-dismiss="modal" class="btn"  autofocus>OK</button>
+                    <button id="tutorialContinue" type="button" data-dismiss="modal" class="btn" autofocus>OK</button>
                     <div id="tutorialRoberta"></div>
                 </div>
             </div>

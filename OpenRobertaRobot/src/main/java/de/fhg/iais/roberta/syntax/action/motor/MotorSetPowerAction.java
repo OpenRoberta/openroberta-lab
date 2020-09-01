@@ -46,7 +46,7 @@ public class MotorSetPowerAction<V> extends MoveAction<V> {
      * @param comment added from the user,
      * @return read only object of class {@link MotorSetPowerAction}
      */
-    private static <V> MotorSetPowerAction<V> make(String port, Expr<V> power, BlocklyBlockProperties properties, BlocklyComment comment) {
+    public static <V> MotorSetPowerAction<V> make(String port, Expr<V> power, BlocklyBlockProperties properties, BlocklyComment comment) {
         return new MotorSetPowerAction<V>(port, power, properties, comment);
     }
 

@@ -1,10 +1,9 @@
-define([ 'require', 'exports', 'log', 'util', 'message', 'comm', 'program.model', 'blocks-msg', 'jquery', 'bootstrap-table' ], function(require, exports, LOG,
+define([ 'require', 'exports', 'log', 'util', 'message', 'comm', 'program.model', 'blockly', 'jquery', 'bootstrap-table' ], function(require, exports, LOG,
         UTIL, MSG, COMM, PROGRAM, Blockly, $) {
 
     function init() {
 //        initView();
         initEvents();
-        LOG.info('init program delete');
     }
     exports.init = init;
 
@@ -29,7 +28,7 @@ define([ 'require', 'exports', 'log', 'util', 'message', 'comm', 'program.model'
                         UTIL.response(result);
                         if (result.rc === 'ok') {
                             MSG.displayInformation(result, "MESSAGE_PROGRAM_DELETED", result.message, progName);
-                            $('.bootstrap-table').find('button[name="refresh"]').trigger('click');
+                            $('#progList').find('button[name="refresh"]').trigger('click');
                             LOG.info('remove shared program "' + progName + '"form List');
                         }
                     });
@@ -38,7 +37,7 @@ define([ 'require', 'exports', 'log', 'util', 'message', 'comm', 'program.model'
                         UTIL.response(result);
                         if (result.rc === 'ok') {
                             MSG.displayInformation(result, "MESSAGE_PROGRAM_DELETED", result.message, progName);
-                            $('.bootstrap-table').find('button[name="refresh"]').trigger('click');
+                            $('#progList').find('button[name="refresh"]').trigger('click');
                             LOG.info('delete program "' + progName);
                         }
                     });

@@ -1,0 +1,290 @@
+<!--This is not a real program, it is just for testing the xsl transformation-->
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="ev3" xmlversion="2.0" description="" tags="">
+    <instance>
+        <block type="robSensors_timer_getSample" id="" intask="true">
+            <mutation input="TIMER_VALUE" />
+            <field name="MODE">TIMER_VALUE</field>
+            <field name="SENSORPORT" />
+            <field name="SLOT" />
+        </block>
+        <block type="robSensors_battery_getSample" id="" intask="true">
+            <mutation input="KEY_PRESSED" />
+            <field name="MODE">KEY_PRESSED</field>
+            <field name="SENSORPORT" />
+            <field name="SLOT" />
+        </block>
+        <block type="robSensors_key_getSample" id="" intask="true">
+            <mutation input="TEMPERATURE_VALUE" />
+            <field name="MODE">TEMPERATURE_VALUE</field>
+            <field name="SENSORPORT" />
+            <field name="SLOT" />
+        </block>
+        <block type="robSensors_touch_getSample" id="" intask="true">
+            <mutation input="SOUND_SOUND" />
+            <field name="MODE">SOUND_SOUND</field>
+            <field name="SENSORPORT" />
+            <field name="SLOT" />
+        </block>
+        <block type="robSensors_getSample" id="" intask="true">
+            <mutation input="INFRARED_AMBIENTLIGHT" />
+            <field name="MODE">INFRARED_AMBIENTLIGHT</field>
+            <field name="SENSORPORT" />
+            <field name="SLOT" />
+        </block>
+        <block type="robSensors_infrared_getSample" id="" intask="true">
+            <mutation input="GYRO_ANGLE" />
+            <field name="MODE">GYRO_ANGLE</field>
+            <field name="SENSORPORT" />
+            <field name="SLOT" />
+        </block>
+        <block type="robSensors_temperature_getSample" id="" intask="true">
+            <mutation input="ACCELEROMETER_VALUE" />
+            <field name="MODE">ACCELEROMETER_VALUE</field>
+            <field name="SENSORPORT" />
+            <field name="SLOT" />
+        </block>
+        <block type="robSensors_code_getSample" id="" intask="true">
+            <mutation input="GESTURE_" />
+            <field name="MODE">GESTURE_</field>
+            <field name="SENSORPORT" />
+            <field name="SLOT" />
+        </block>
+        <block type="robSensors_pintouch_getSample" id="" intask="true">
+            <mutation input="PIN_PULSEHIGH" />
+            <field name="MODE">PIN_PULSEHIGH</field>
+            <field name="SENSORPORT" />
+            <field name="SLOT" />
+        </block>
+        <block type="robSensors_getSample" id="" intask="true">
+            <mutation input="PIN_PULSELOW" />
+            <field name="MODE">PIN_PULSELOW</field>
+            <field name="SENSORPORT" />
+            <field name="SLOT" />
+        </block>
+        <block type="robSensors_getSample" id="" intask="true">
+            <mutation input="PINTOUCH_PRESSED" />
+            <field name="MODE">PINTOUCH_PRESSED</field>
+            <field name="SENSORPORT" />
+            <field name="SLOT" />
+        </block>
+        <block type="robSensors_key_getSample" id="" intask="true">
+            <mutation mode="PRESENCE" />
+            <field name="MODE">PRESSED</field>
+            <field name="SENSORPORT" />
+            <field name="SLOT" />
+        </block>
+        <block type="robSensors_pintouch_getSample" id="" intask="true">
+            <mutation mode="LIGHT" />
+            <field name="MODE">PRESSED</field>
+            <field name="SENSORPORT" />
+            <field name="SLOT" />
+        </block>
+        <block type="robSensors_gesture_getSample" id="" intask="true">
+            <mutation mode="PIN_PULSEHIGH" />
+            <field name="MODE">UP</field>
+            <field name="SENSORPORT" />
+            <field name="SLOT" />
+        </block>
+        <block type="robSensors_compass_getSample" id="" intask="true">
+            <mutation mode="PIN_PULSELOW" />
+            <field name="MODE">ANGLE</field>
+            <field name="SENSORPORT" />
+            <field name="SLOT" />
+        </block>
+        <block type="robSensors_sound_getSample" id="" intask="true">
+            <mutation mode="PINTOUCH_PRESSED" />
+            <field name="MODE">SOUND</field>
+            <field name="SENSORPORT" />
+            <field name="SLOT" />
+        </block>
+        <block type="robSensors_timer_getSample" id="" intask="true">
+            <mutation mode="VALUE" />
+            <field name="MODE">VALUE</field>
+            <field name="SENSORPORT" />
+            <field name="SLOT" />
+        </block>
+        <block type="robSensors_temperature_getSample" id="" intask="true">
+            <mutation mode="TEMPERATURE" />
+            <field name="MODE">TEMPERATURE</field>
+            <field name="SENSORPORT" />
+            <field name="SLOT" />
+        </block>
+        <block type="robSensors_rssi_getSample" id="" intask="true">
+            <mutation mode="VALUE" />
+            <field name="MODE">VALUE</field>
+            <field name="SENSORPORT" />
+            <field name="SLOT" />
+        </block>
+        <block type="robSensors_light_getSample" id="" intask="true">
+            <mutation mode="LIGHT" />
+            <field name="MODE">LIGHT</field>
+            <field name="SENSORPORT" />
+            <field name="SLOT" />
+        </block>
+        <block type="robSensors_pin_getSample" id="" intask="true">
+            <mutation mode="ANALOG" />
+            <field name="MODE">ANALOG</field>
+            <field name="SENSORPORT" />
+            <field name="SLOT" />
+        </block>
+        <block type="robSensors_gyro_getSample" id="" intask="true">
+            <mutation mode="ANGLE" />
+            <field name="MODE">ANGLE</field>
+            <field name="SENSORPORT" />
+            <field name="SLOT" />
+        </block>
+        <block type="robSensors_accelerometer_getSample" id="" intask="true">
+            <mutation mode="VALUE" />
+            <field name="MODE">VALUE</field>
+            <field name="SENSORPORT" />
+            <field name="SLOT" />
+        </block>
+        <block type="robSensors_accelerometer_getSample" id="" intask="true">
+            <mutation mode="VALUE" />
+            <field name="MODE">VALUE</field>
+            <field name="SENSORPORT" />
+            <field name="SLOT" />
+        </block>
+        <block type="robSensors_getSample" id="" intask="true">
+            <mutation mode="TOUCH_PRESSED" />
+            <field name="MODE">TOUCH_PRESSED</field>
+            <field name="SENSORPORT" />
+            <field name="SLOT" />
+        </block>
+        <block type="robSensors_getSample" id="" intask="true">
+            <mutation mode="TIMER_VALUE" />
+            <field name="MODE">TIMER_VALUE</field>
+            <field name="SENSORPORT" />
+            <field name="SLOT" />
+        </block>
+        <block type="robSensors_getSample" id="" intask="true">
+            <mutation mode="KEY_PRESSED" />
+            <field name="MODE">KEY_PRESSED</field>
+            <field name="SENSORPORT" />
+            <field name="SLOT" />
+        </block>
+        <block type="robSensors_getSample" id="" intask="true">
+            <mutation mode="TEMPERATURE_VALUE" />
+            <field name="MODE">TEMPERATURE_VALUE</field>
+            <field name="SENSORPORT" />
+            <field name="SLOT" />
+        </block>
+        <block type="robSensors_getSample" id="" intask="true">
+            <mutation mode="SOUND_SOUND" />
+            <field name="MODE">SOUND_SOUND</field>
+            <field name="SENSORPORT" />
+            <field name="SLOT" />
+        </block>
+        <block type="robSensors_getSample" id="" intask="true">
+            <mutation mode="INFRARED_AMBIENTLIGHT" />
+            <field name="MODE">INFRARED_AMBIENTLIGHT</field>
+            <field name="SENSORPORT" />
+            <field name="SLOT" />
+        </block>
+        <block type="robSensors_getSample" id="" intask="true">
+            <mutation mode="GYRO_ANGLE" />
+            <field name="MODE">GYRO_ANGLE</field>
+            <field name="SENSORPORT" />
+            <field name="SLOT" />
+        </block>
+        <block type="robSensors_getSample" id="" intask="true">
+            <mutation mode="ACCELEROMETER_VALUE" />
+            <field name="MODE">ACCELEROMETER_VALUE</field>
+            <field name="SENSORPORT" />
+            <field name="SLOT" />
+        </block>
+        <block type="robSensors_getSample" id="" intask="true">
+            <mutation mode="PIN_PULSEHIGH" />
+            <field name="MODE">PIN_PULSEHIGH</field>
+            <field name="SENSORPORT" />
+            <field name="SLOT" />
+        </block>
+        <block type="robSensors_getSample" id="" intask="true">
+            <mutation mode="PIN_PULSELOW" />
+            <field name="MODE">PIN_PULSELOW</field>
+            <field name="SENSORPORT" />
+            <field name="SLOT" />
+        </block>
+        <block type="robSensors_getSample" id="" intask="true">
+            <mutation mode="PINTOUCH_PRESSED" />
+            <field name="MODE">PINTOUCH_PRESSED</field>
+            <field name="SENSORPORT" />
+            <field name="SLOT" />
+        </block>
+        <block type="" id="" intask="true">
+            <field name="">PULSEHIGH</field>
+        </block>
+        <block type="" id="" intask="true">
+            <field name="">PULSELOW</field>
+        </block>
+        <block type="robSensors_colour_getSample" id="" intask="true">
+            <mutation mode="LIGHT" />
+            <field name="MODE">LIGHT</field>
+            <field name="SENSORPORT" />
+            <field name="SLOT" />
+        </block>
+        <block type="robSensors_light_getSample" id="" intask="true">
+            <mutation mode="LIGHT" />
+            <field name="MODE">LIGHT</field>
+            <field name="SENSORPORT" />
+            <field name="SLOT" />
+        </block>
+        <block type="robSensors_infrared_getSample" id="" intask="true">
+            <mutation mode="PRESENCE" />
+            <field name="MODE">PRESENCE</field>
+            <field name="SENSORPORT" />
+            <field name="SLOT" />
+        </block>
+        <block type="robSensors_gyro_getSample" id="" intask="true">
+            <mutation mode="ANGLE" />
+            <field name="MODE">ANGLE</field>
+            <field name="SENSORPORT" />
+            <field name="SLOT" />
+        </block>
+        <block type="robSensors_gyro_getSample" id="" intask="true">
+            <mutation mode="ANGLE" />
+            <field name="MODE">ANGLE</field>
+            <field name="SENSORPORT" />
+            <field name="SLOT" />
+        </block>
+        <block type="robSensors_getSample" id="" intask="true">
+            <mutation mode="ROLL" />
+            <field name="MODE">ROLL</field>
+            <field name="SENSORPORT" />
+            <field name="SLOT" />
+        </block>
+        <block type="robSensors_getSample" id="" intask="true">
+            <mutation mode="PITCH" />
+            <field name="MODE">PITCH</field>
+            <field name="SENSORPORT" />
+            <field name="SLOT" />
+        </block>
+        <block intask="true" type="robControls_start" id="">
+            <mutation declare="false" />
+            <field name="DEBUG">FALSE</field>
+            <field name="">TRUE</field>
+        </block>
+        <block type="robSensors_getSample" id="" intask="true">
+            <mutation mode="GESTURE_TRUE" />
+            <field name="SENSORTYPE">GESTURE_TRUE</field>
+            <field name="SENSORPORT" />
+            <field name="SLOT" />
+        </block>
+        <block intask="true" type="robControls_start" id="">
+            <mutation declare="false" />
+            <field name="DEBUG">FALSE</field>
+            <field name="GESTURE">TRUE</field>
+            <field name="MODE">TRUE</field>
+        </block>
+        <block intask="true" type="robControls_start" id="">
+            <mutation declare="false" />
+            <field name="DEBUG">FALSE</field>
+            <field name="SENSORPORT">A</field>
+        </block>
+        <block intask="true" type="robControls_start" id="">
+            <mutation declare="false" />
+            <field name="DEBUG">FALSE</field>
+            <field name="SENSORPORT">B</field>
+        </block>
+    </instance>
+</block_set>

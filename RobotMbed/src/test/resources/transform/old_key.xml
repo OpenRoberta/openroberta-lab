@@ -1,0 +1,48 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="calliope" xmlversion="2.0" description="" tags="">
+    <instance x="549" y="76">
+        <block type="robControls_start" id="h!uwE~+!/nQb@;OTzXds" intask="true" deletable="false">
+            <mutation declare="false"></mutation>
+            <field name="DEBUG"></field>
+        </block>
+        <block type="robActions_debug" id="_Db._btzI3a0A%5`WPje" intask="true">
+            <value name="OUT">
+                <block type="robSensors_key_getSample" id="^TQu95A.5upNsmbC%Plk" intask="true">
+                    <mutation mode="PRESSED"></mutation>
+                    <field name="MODE">PRESSED</field>
+                    <field name="SENSORPORT">A</field>
+                    <field name="SLOT"></field>
+                </block>
+            </value>
+        </block>
+        <block type="robActions_debug" id="z}Wr78oft*:sJLk,L!P0" intask="true">
+            <value name="OUT">
+                <block type="robSensors_key_getSample" id="?DrEYDMyh;Vt?bnR,vl," intask="true">
+                    <mutation mode="PRESSED"></mutation>
+                    <field name="MODE">PRESSED</field>
+                    <field name="SENSORPORT">B</field>
+                    <field name="SLOT"></field>
+                </block>
+            </value>
+        </block>
+        <block type="robActions_debug" id="IOkPe#]m#.|87`~+UYTk" intask="true">
+            <value name="OUT">
+                <block type="robSensors_getSample" id=")yYpolbCy-eYN[*I)``}" intask="true">
+                    <mutation input="KEY_PRESSED"></mutation>
+                    <field name="SENSORTYPE">KEY_PRESSED</field>
+                    <field name="SENSORPORT">A</field>
+                    <field name="SLOT"></field>
+                </block>
+            </value>
+        </block>
+        <block type="robActions_debug" id="~a_C(*?KdU8tB+r^gB+J" intask="true">
+            <value name="OUT">
+                <block type="robSensors_getSample" id="mHLjZq[5@f6HQxsFW^73" intask="true">
+                    <mutation input="KEY_PRESSED"></mutation>
+                    <field name="SENSORTYPE">KEY_PRESSED</field>
+                    <field name="SENSORPORT">B</field>
+                    <field name="SLOT"></field>
+                </block>
+            </value>
+        </block>
+    </instance>
+</block_set>

@@ -99,6 +99,10 @@ public class GetSampleSensor<V> extends Sensor<V> {
         return this.sensorTypeAndMode;
     }
 
+    public boolean isPortInMutation() {
+        return this.isPortInMutation;
+    }
+
     @Override
     public String toString() {
         return "GetSampleSensor [" + this.sensor + "]";

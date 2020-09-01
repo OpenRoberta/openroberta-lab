@@ -6,8 +6,6 @@
 #undef min
 #include <NEPODefs.h>
 
-unsigned long _time = millis();
-
 bool ___item;
 double ___item2;
 int _potentiometer_P = 3;
@@ -39,6 +37,7 @@ int _button_B = 2;
 int _mic_S = 4;
 Ultrasonic _hcsr04_U(5, 6);
 int _output_L = 1;
+unsigned long __time_1 = millis();
 
 void setup()
 { 
@@ -57,8 +56,8 @@ void loop()
     ___item2 = ((double)analogRead(_potentiometer_P))*5/1024;
     ___item2 = get_microphone_volume(_mic_S);
     ___item2 = _hcsr04_U.getDistance();
-    ___item2 = (int) (millis() - _time);
-    _time = millis();
+    ___item2 = (int) (millis() - __time_1);
+    __time_1 = millis();
     ___item2 = _bmx055_A.getAccelerationX();
     ___item2 = _bmx055_A.getAccelerationY();
     ___item2 = _bmx055_A.getAccelerationZ();

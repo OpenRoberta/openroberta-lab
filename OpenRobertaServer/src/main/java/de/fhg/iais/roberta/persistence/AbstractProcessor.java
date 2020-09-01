@@ -2,7 +2,7 @@ package de.fhg.iais.roberta.persistence;
 
 import java.util.Map;
 
-import org.codehaus.jettison.json.JSONObject;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

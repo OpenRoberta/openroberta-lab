@@ -1,16 +1,12 @@
-<block_set xmlns="http://de.fhg.iais.roberta.blockly"
-	robottype="ev3" xmlversion="2.0" description="" tags="">
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="ev3" xmlversion="3.0" description="" tags="">
 	<instance x="683" y="59">
-		<block type="robControls_start" id="ht7;UpapMC=|;X[Hs^+Q"
-			intask="true" deletable="false">
+		<block type="robControls_start" id="ht7;UpapMC=|;X[Hs^+Q" intask="true" deletable="false">
 			<mutation declare="false"></mutation>
 			<field name="DEBUG">TRUE</field>
 		</block>
-		<block type="robActions_display_text" id="VmbU5W8vKR]JGs;tL/_*"
-			intask="true">
+		<block type="robActions_display_text" id="VmbU5W8vKR]JGs;tL/_*" intask="true">
 			<value name="OUT">
-				<block type="robSensors_gyro_getSample" id="^v[FI,q#bPj5w]Ff|+on"
-					intask="true">
+				<block type="robSensors_gyro_getSample" id="^v[FI,q#bPj5w]Ff|+on" intask="true">
 					<field name="MODE">ANGLE</field>
 					<field name="SENSORPORT">3</field>
 				</block>
@@ -26,8 +22,7 @@
 				</block>
 			</value>
 		</block>
-		<block type="robActions_display_text" id="^bi@_v]~;~^uXU6s3SSp"
-			intask="true">
+		<block type="robActions_display_text" id="^bi@_v]~;~^uXU6s3SSp" intask="true">
 			<value name="OUT">
 				<block type="robSensors_encoder_getSample" id="I%@xuf;uE!:+KBSB4eFG"
 					intask="true">

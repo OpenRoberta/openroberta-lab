@@ -1,0 +1,20 @@
+ARG BASE_VERSION
+FROM openroberta/base-x86:$BASE_VERSION
+
+WORKDIR /opt
+
+RUN apt-get update -yq \
+    && apt-get install curl gnupg -yq \
+    && curl -sL https://deb.nodesource.com/setup_8.x | bash \
+    && apt-get install nodejs -yq \
+    && npm install html-entities
+
+# clone the repo. Run mvn once to install most all the artifacts needed in /root/.m2 to speed up later builds
+RUN git clone https://github.com/OpenRoberta/openroberta-lab.git
+WORKDIR /opt/openroberta-lab
+RUN git checkout develop && \
+    ( mvn clean install -PrunIT || echo '!!!!!!!!!! runIT crashed. Should NOT happen !!!!!!!!!!' )
+
+# prepare the entry point
+WORKDIR /opt/openroberta-lab
+ENTRYPOINT ["/bin/bash"]

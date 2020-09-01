@@ -12,7 +12,7 @@ public class PinWriteValueActionTest extends CalliopeAstTest {
         String expectedResult =
             "BlockAST [project=[[Location [x=384, y=50], "
                 + "MainTask [], "
-                + "PinWriteValueAction [ANALOG, 2, NumConst [1]], PinWriteValueAction [DIGITAL, 4, NumConst [1]]]]]";
+                + "PinWriteValueAction [ANALOG, P2, NumConst [1]], PinWriteValueAction [DIGITAL, A0, NumConst [1]]]]]";
 
         UnitTestHelper.checkProgramAstEquality(testFactory, expectedResult, "/action/write_value_to_pin.xml");
 

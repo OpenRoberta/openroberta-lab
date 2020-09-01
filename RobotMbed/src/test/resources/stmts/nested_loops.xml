@@ -1,48 +1,40 @@
-<block_set xmlns="http://de.fhg.iais.roberta.blockly"
-	robottype="calliope2016" xmlversion="2.0" description="" tags="">
-	<instance x="213" y="51">
-		<block type="robControls_start" id="@vdJc~w=wNX]WrSXorOT"
-			intask="true" deletable="false">
-			<mutation declare="false"></mutation>
-			<field name="DEBUG">TRUE</field>
-		</block>
-		<block type="robControls_loopForever" id="k1tN/jf%=#km;HT8/EfB"
-			intask="true">
-			<statement name="DO">
-				<block type="robControls_if" id="wm/!h,R1zwuB76@AqBXt" intask="true">
-					<value name="IF0">
-						<block type="logic_compare" id="mKlXt5ct5)D/buX`kdG["
-							intask="true">
-							<field name="OP">EQ</field>
-							<value name="A">
-								<block type="math_number" id="rGh_w@93[wX}Q_2|aq*I"
-									intask="true">
-									<field name="NUM">30</field>
-								</block>
-							</value>
-							<value name="B">
-								<block type="math_number" id="D`TDsLxrKbj,XFKzCgN:"
-									intask="true">
-									<field name="NUM">20</field>
-								</block>
-							</value>
-						</block>
-					</value>
-					<statement name="DO0">
-						<block type="mbedControls_wait_for" id="Hx{*:C#hIN*rwCV^)aH+"
-							intask="true">
-							<value name="WAIT0">
-								<block type="logic_compare" id="l9|Sdy;uWR,#dCKTy8P."
-									intask="true">
-									<field name="OP">EQ</field>
-									<value name="A">
-										<block type="mbedSensors_getSample" id="Zp~-a7bVlkZ_Zvpc}x0;"
-											intask="true" deletable="false" movable="false">
-											<mutation input="KEY_PRESSED"></mutation>
-											<field name="SENSORTYPE">KEY_PRESSED</field>
-											<field name="SENSORPORT">A</field><field name="SLOT" />
-											<data>microbit</data>
-										</block>
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="calliope2016" xmlversion="3.0" description="" tags="">
+    <instance x="213" y="51">
+        <block type="robControls_start" id="@vdJc~w=wNX]WrSXorOT" intask="true" deletable="false">
+            <mutation declare="false"></mutation>
+            <field name="DEBUG">TRUE</field>
+        </block>
+        <block type="robControls_loopForever" id="k1tN/jf%=#km;HT8/EfB" intask="true">
+            <statement name="DO">
+                <block type="robControls_if" id="wm/!h,R1zwuB76@AqBXt" intask="true">
+                    <value name="IF0">
+                        <block type="logic_compare" id="mKlXt5ct5)D/buX`kdG[" intask="true">
+                            <field name="OP">EQ</field>
+                            <value name="A">
+                                <block type="math_number" id="rGh_w@93[wX}Q_2|aq*I" intask="true">
+                                    <field name="NUM">30</field>
+                                </block>
+                            </value>
+                            <value name="B">
+                                <block type="math_number" id="D`TDsLxrKbj,XFKzCgN:" intask="true">
+                                    <field name="NUM">20</field>
+                                </block>
+                            </value>
+                        </block>
+                    </value>
+                    <statement name="DO0">
+                        <block type="robControls_wait_for" id="Hx{*:C#hIN*rwCV^)aH+" intask="true">
+                            <value name="WAIT0">
+                                <block type="logic_compare" id="l9|Sdy;uWR,#dCKTy8P." intask="true">
+                                    <field name="OP">EQ</field>
+                                    <value name="A">
+                                        <block type="mbedSensors_getSample" id="Zp~-a7bVlkZ_Zvpc}x0;" intask="true" deletable="false" movable="false">
+                                            <mutation input="KEY_PRESSED"></mutation>
+                                            <field name="SENSORTYPE">KEY_PRESSED</field>
+                                            <field name="SENSORPORT">A</field>
+                                            <field name="SLOT" />
+                                            <data>microbit</data>
+                                        </block>
 									</value>
 									<value name="B">
 										<block type="logic_boolean" id="[[qVAvX=HsvE:xaQW7Fi"

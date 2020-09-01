@@ -1,14 +1,14 @@
-<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="ev3" xmlversion="" description="" tags="">
-  <instance x="113" y="-37">
-    <block type="robControls_start" id="^4h{ubCV#a%6W[T4(TgH" intask="true" deletable="false">
-      <mutation declare="true"></mutation>
-      <field name="DEBUG">FALSE</field>
-      <statement name="ST">
-        <block type="robGlobalVariables_declare" id="T=.y+3Pml}Iv1D|uqv0)" intask="true" deletable="false" movable="false">
-          <mutation next="true" declaration_type="Boolean"></mutation>
-          <field name="VAR">Element</field>
-          <field name="TYPE">Boolean</field>
-          <value name="VALUE">
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="ev3" xmlversion="3.0" description="" tags="">
+    <instance x="113" y="-37">
+        <block type="robControls_start" id="^4h{ubCV#a%6W[T4(TgH" intask="true" deletable="false">
+            <mutation declare="true"></mutation>
+            <field name="DEBUG">FALSE</field>
+            <statement name="ST">
+                <block type="robGlobalVariables_declare" id="T=.y+3Pml}Iv1D|uqv0)" intask="true" deletable="false" movable="false">
+                    <mutation next="true" declaration_type="Boolean"></mutation>
+                    <field name="VAR">Element</field>
+                    <field name="TYPE">Boolean</field>
+                    <value name="VALUE">
             <block type="math_number_property" id="Cghp`aVg#E-tqOZjsnE?" intask="true">
               <mutation divisor_input="false"></mutation>
               <field name="PROPERTY">PRIME</field>

@@ -131,7 +131,7 @@ define([ 'exports', 'util', 'log', 'message', 'program.controller', 'program.mod
         GUISTATE_C.setState(result);
         if (result.rc == "ok") {
             var filename = (result.programName || GUISTATE_C.getProgramName()) + "." + GUISTATE_C.getBinaryFileExtension();
-            if (GUISTATE_C.getBinaryFileExtension() === "ino.bin" || GUISTATE_C.getBinaryFileExtension() === "uf2") {
+            if (GUISTATE_C.getBinaryFileExtension() === "bin" || GUISTATE_C.getBinaryFileExtension() === "uf2") {
                 result.compiledCode = UTIL.base64decode(result.compiledCode);
             }
             if (GUISTATE_C.isProgramToDownload() || navigator.userAgent.toLowerCase().match(/iPad|iPhone|android/i) !== null) {

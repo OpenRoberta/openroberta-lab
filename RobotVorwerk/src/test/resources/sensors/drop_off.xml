@@ -1,20 +1,15 @@
-<block_set xmlns="http://de.fhg.iais.roberta.blockly"
-	robottype="vorwerk" xmlversion="" description="" tags="">
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="vorwerk" xmlversion="3.0" description="" tags="">
 	<instance x="349" y="50">
-		<block type="robControls_start" id="mZ3N*~`.-1K#_n5XCAL4"
-			intask="true" deletable="false">
+		<block type="robControls_start" id="mZ3N*~`.-1K#_n5XCAL4" intask="true" deletable="false">
 			<mutation declare="true" />
 			<field name="DEBUG">FALSE</field>
 			<statement name="ST">
-				<block type="robGlobalVariables_declare"
-					id="ut/o]LoAsKuI^PQ2%72h" intask="true" deletable="false"
-					movable="false">
+				<block type="robGlobalVariables_declare" id="ut/o]LoAsKuI^PQ2%72h" intask="true" deletable="false" movable="false">
 					<mutation next="false" declaration_type="Number" />
 					<field name="VAR">item</field>
 					<field name="TYPE">Number</field>
 					<value name="VALUE">
-						<block type="math_number" id="%m2H4-.2hKk=xn3n]uQj"
-							intask="true">
+						<block type="math_number" id="%m2H4-.2hKk=xn3n]uQj" intask="true">
 							<field name="NUM">0</field>
 						</block>
 					</value>

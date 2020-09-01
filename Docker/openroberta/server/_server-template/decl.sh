@@ -1,6 +1,4 @@
-DATE_SETUP='2019-04-19 14:10:00'
-
-BASE_VERSION='4'           # the version of the docker base image, FROM which this server image is derived
+BASE_VERSION=''           # the version of the docker base image, FROM which this server image is derived. Be careful to define the RIGHT number
 
 PORT=''                    # port the jetty server will listen to, very often 1999
 LOG_LEVEL=''               # the logging level of the root logger. From DEBUG to ERROR

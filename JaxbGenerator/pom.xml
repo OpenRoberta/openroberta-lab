@@ -33,6 +33,11 @@
             <artifactId>jaxb-api</artifactId>
             <version>2.3.1</version>
         </dependency>
+        <dependency>
+            <groupId>org.json</groupId>
+            <artifactId>json</artifactId>
+            <version>20180130</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -57,9 +62,42 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <groupId>de.fhg.iais.tools</groupId>
+                <artifactId>TransportGenerator</artifactId>
+                <version>16.0.0</version>
+                <configuration>
+                    <transportConfigFiles>
+                        <file>src/main/resources/restEntities.json</file>
+                    </transportConfigFiles>
+                    <transportBeanOutputDir>src/main/java</transportBeanOutputDir>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>default-cli</id>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
-
+    
+    <pluginRepositories>
+        <pluginRepository>
+            <id>openroberta-release</id>
+            <name>repository for the OpenRoberta OSS</name>
+            <url>http://maven.iais.fraunhofer.de/artifactory/openroberta-release</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </pluginRepository>
+    </pluginRepositories>
+  
     <licenses>
         <license>
             <name>Licensed under the Apache License, Version 2.0 (the "License")</name>

@@ -8,8 +8,6 @@
 #include <Adafruit_SSD1306.h>
 #include <Plot.h>
 
-unsigned long _time = millis();
-
 
 BMX055 _bmx055_B;
 int _getValueFromBmx(int axis, int mode) {

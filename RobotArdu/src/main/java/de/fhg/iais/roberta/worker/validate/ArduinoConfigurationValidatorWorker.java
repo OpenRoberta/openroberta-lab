@@ -2,8 +2,12 @@ package de.fhg.iais.roberta.worker.validate;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import com.google.common.collect.ClassToInstanceMap;
 
@@ -18,12 +22,37 @@ import de.fhg.iais.roberta.worker.AbstractValidatorWorker;
 
 public class ArduinoConfigurationValidatorWorker extends AbstractValidatorWorker {
 
+    private static final Set<String> OVERLAPPING_PINS =
+        Stream
+            .of(
+                "INPUT",
+                "OUTPUT",
+                "+",
+                "S",
+                "PULSE",
+                "TRIG",
+                "ECHO",
+                "RED",
+                "GREEN",
+                "BLUE",
+                "RST",
+                "IN",
+                "SDA",
+                "RS",
+                "E",
+                "D4",
+                "D5",
+                "D6",
+                "D7",
+                "PIN1",
+                "IN1",
+                "IN2",
+                "IN3",
+                "IN4",
+                "OUT")
+            .collect(Collectors.toCollection(HashSet::new));
+
     private final List<String> freePins;
-    private List<String> currentFreePins;
-    private String incorrectPin;
-    private String failingBlock;
-    private Key resultKey;
-    private int errorCount;
 
     public ArduinoConfigurationValidatorWorker(List<String> freePins) {
         this.freePins = Collections.unmodifiableList(freePins);
@@ -31,19 +60,8 @@ public class ArduinoConfigurationValidatorWorker extends AbstractValidatorWorker
 
     @Override
     public void execute(Project project) {
-        this.currentFreePins = new ArrayList<>(this.freePins);
-        this.incorrectPin = null;
-        this.failingBlock = null;
-        this.resultKey = null;
-        this.errorCount = 0;
-        project.getConfigurationAst().getConfigurationComponents().forEach((k, v) -> checkConfigurationBlock(v));
-
-        if ( this.resultKey != null ) {
-            project.setResult(this.resultKey);
-            project.addResultParam("BLOCK", this.failingBlock);
-            project.addResultParam("PIN", this.incorrectPin);
-            project.addToErrorCounter(this.errorCount);
-        }
+        List<String> currentFreePins = new ArrayList<>(this.freePins);
+        project.getConfigurationAst().getConfigurationComponents().forEach((k, v) -> checkConfigurationBlock(v, project, currentFreePins));
         super.execute(project);
     }
 
@@ -52,29 +70,27 @@ public class ArduinoConfigurationValidatorWorker extends AbstractValidatorWorker
         return new ArduinoBrickValidatorVisitor(project.getConfigurationAst(), beanBuilders);
     }
 
-    private void checkConfigurationBlock(ConfigurationComponent configurationComponent) {
+    private static void checkConfigurationBlock(ConfigurationComponent configurationComponent, Project project, List<String> currentFreePins) {
         Map<String, String> componentProperties = configurationComponent.getComponentProperties();
-        String blockType = configurationComponent.getComponentType();
         List<String> blockPins = new ArrayList<>();
         componentProperties.forEach((k, v) -> {
-            if ( k.equals("INPUT") || k.equals("OUTPUT") ) {
-                if ( !this.currentFreePins.contains(v) ) {
-                    this.errorCount++;
-                    this.incorrectPin = v;
-                    this.failingBlock = blockType;
-                    this.resultKey = Key.COMPILERWORKFLOW_ERROR_PROGRAM_GENERATION_FAILED_WITH_PARAMETERS;
-                    configurationComponent.addInfo(NepoInfo.error("CONFIGURATION_ERROR_ACTOR_MISSING"));
-                } else {
+            if ( OVERLAPPING_PINS.contains(k) ) {
+                if ( currentFreePins.contains(v) ) {
                     blockPins.add(v);
-                    this.currentFreePins.removeIf(s -> s.equals(v));
+                    currentFreePins.removeIf(s -> s.equals(v) && !v.equals("LED_BUILTIN")); // built in LED cannot overlap
+                } else {
+                    project.addToErrorCounter(1);
+                    project.setResult(Key.PROGRAM_INVALID_STATEMETNS);
+                    String blockId = configurationComponent.getProperty().getBlocklyId();
+                    project.addToConfAnnotationList(blockId, NepoInfo.error("CONFIGURATION_ERROR_OVERLAPPING_PORTS"));
                 }
             }
         });
         if ( blockPins.stream().distinct().count() != blockPins.size() ) {
-            this.errorCount++;
-            this.incorrectPin = "NON_UNIQUE";
-            this.resultKey = Key.COMPILERWORKFLOW_ERROR_PROGRAM_GENERATION_FAILED_WITH_PARAMETERS;
-            configurationComponent.addInfo(NepoInfo.error("CONFIGURATION_ERROR_ACTOR_MISSING"));
+            project.addToErrorCounter(1);
+            project.setResult(Key.PROGRAM_INVALID_STATEMETNS);
+            String blockId = configurationComponent.getProperty().getBlocklyId();
+            project.addToConfAnnotationList(blockId, NepoInfo.error("CONFIGURATION_ERROR_OVERLAPPING_PORTS"));
         }
     }
 }

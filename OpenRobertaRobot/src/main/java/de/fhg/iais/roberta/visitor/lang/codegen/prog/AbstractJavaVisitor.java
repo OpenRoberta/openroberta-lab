@@ -1,6 +1,5 @@
 package de.fhg.iais.roberta.visitor.lang.codegen.prog;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Iterator;
@@ -36,6 +35,8 @@ import de.fhg.iais.roberta.syntax.lang.expr.Unary;
 import de.fhg.iais.roberta.syntax.lang.expr.Var;
 import de.fhg.iais.roberta.syntax.lang.functions.FunctionNames;
 import de.fhg.iais.roberta.syntax.lang.functions.ListRepeat;
+import de.fhg.iais.roberta.syntax.lang.functions.MathCastCharFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.MathCastStringFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathConstrainFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathNumPropFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathOnListFunct;
@@ -43,8 +44,10 @@ import de.fhg.iais.roberta.syntax.lang.functions.MathPowerFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathRandomFloatFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathRandomIntFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathSingleFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.TextCharCastNumberFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.TextJoinFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.TextPrintFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.TextStringCastNumberFunct;
 import de.fhg.iais.roberta.syntax.lang.methods.MethodCall;
 import de.fhg.iais.roberta.syntax.lang.methods.MethodIfReturn;
 import de.fhg.iais.roberta.syntax.lang.methods.MethodReturn;
@@ -76,7 +79,7 @@ public abstract class AbstractJavaVisitor extends AbstractLanguageVisitor {
      * @param programPhrases to generate the code from
      * @param programName name of the program
      */
-    protected AbstractJavaVisitor(List<ArrayList<Phrase<Void>>> programPhrases, String programName, ClassToInstanceMap<IProjectBean> beans) {
+    protected AbstractJavaVisitor(List<List<Phrase<Void>>> programPhrases, String programName, ClassToInstanceMap<IProjectBean> beans) {
         super(programPhrases, beans);
         this.programName = programName;
     }
@@ -297,10 +300,10 @@ public abstract class AbstractJavaVisitor extends AbstractLanguageVisitor {
     public Void visitMathSingleFunct(MathSingleFunct<Void> mathSingleFunct) {
         switch ( mathSingleFunct.getFunctName() ) {
             case SQUARE:
-            	this.sb.append("(float) Math.pow(");
-            	mathSingleFunct.getParam().get(0).accept(this);
-            	this.sb.append(", 2)");
-            	return null;
+                this.sb.append("(float) Math.pow(");
+                mathSingleFunct.getParam().get(0).accept(this);
+                this.sb.append(", 2)");
+                return null;
             case ROOT:
                 this.sb.append("(float) Math.sqrt(");
                 break;
@@ -402,7 +405,9 @@ public abstract class AbstractJavaVisitor extends AbstractLanguageVisitor {
                 this.sb.append(".get(0"); // TODO remove? implement?
                 break;
             default:
-                this.sb.append(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(mathOnListFunct.getFunctName())).append("(");
+                this.sb
+                    .append(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(mathOnListFunct.getFunctName()))
+                    .append("(");
                 mathOnListFunct.getParam().get(0).accept(this);
                 break;
         }
@@ -431,6 +436,40 @@ public abstract class AbstractJavaVisitor extends AbstractLanguageVisitor {
     public Void visitMathPowerFunct(MathPowerFunct<Void> mathPowerFunct) {
         this.sb.append("(float) Math.pow(");
         super.visitMathPowerFunct(mathPowerFunct);
+        return null;
+    }
+
+    @Override
+    public Void visitMathCastStringFunct(MathCastStringFunct<Void> mathCastStringFunct) {
+        this.sb.append("(String.valueOf(");
+        mathCastStringFunct.getParam().get(0).accept(this);
+        this.sb.append("))");
+        return null;
+    }
+
+    @Override
+    public Void visitMathCastCharFunct(MathCastCharFunct<Void> mathCastCharFunct) {
+        this.sb.append("String.valueOf((char)(int)(");
+        mathCastCharFunct.getParam().get(0).accept(this);
+        this.sb.append("))");
+        return null;
+    }
+
+    @Override
+    public Void visitTextStringCastNumberFunct(TextStringCastNumberFunct<Void> textStringCastNumberFunct) {
+        this.sb.append("Float.parseFloat(");
+        textStringCastNumberFunct.getParam().get(0).accept(this);
+        this.sb.append(")");
+        return null;
+    }
+
+    @Override
+    public Void visitTextCharCastNumberFunct(TextCharCastNumberFunct<Void> textCharCastNumberFunct) {
+        this.sb.append("(int)(");
+        textCharCastNumberFunct.getParam().get(0).accept(this);
+        this.sb.append(".charAt(");
+        textCharCastNumberFunct.getParam().get(1).accept(this);
+        this.sb.append("))");
         return null;
     }
 
@@ -723,7 +762,10 @@ public abstract class AbstractJavaVisitor extends AbstractLanguageVisitor {
             if ( !this.getBean(CodeGeneratorSetupBean.class).getUsedMethods().isEmpty() ) {
                 incrIndentation();
                 String helperMethodImpls =
-                    this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodDefinitions(this.getBean(CodeGeneratorSetupBean.class).getUsedMethods());
+                    this
+                        .getBean(CodeGeneratorSetupBean.class)
+                        .getHelperMethodGenerator()
+                        .getHelperMethodDefinitions(this.getBean(CodeGeneratorSetupBean.class).getUsedMethods());
                 Iterator<String> it = Arrays.stream(helperMethodImpls.split("\n")).iterator();
                 while ( it.hasNext() ) {
                     this.sb.append(it.next());

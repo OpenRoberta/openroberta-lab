@@ -34,7 +34,7 @@ public class FourDigitDisplayClearAction<V> extends Action<V> {
      * @param comment added from the user,
      * @return read only object of class {@link FourDigitDisplayClearAction}
      */
-    private static <V> FourDigitDisplayClearAction<V> make(BlocklyBlockProperties properties, BlocklyComment comment) {
+    public static <V> FourDigitDisplayClearAction<V> make(BlocklyBlockProperties properties, BlocklyComment comment) {
         return new FourDigitDisplayClearAction<>(properties, comment);
     }
 

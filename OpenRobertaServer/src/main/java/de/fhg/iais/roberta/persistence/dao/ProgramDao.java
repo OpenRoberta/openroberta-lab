@@ -5,17 +5,18 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import org.codehaus.jettison.json.JSONArray;
 import org.hibernate.Query;
 import org.hibernate.SQLQuery;
+import org.json.JSONArray;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import de.fhg.iais.roberta.persistence.bo.AccessRight;
 import de.fhg.iais.roberta.persistence.bo.Program;
 import de.fhg.iais.roberta.persistence.bo.Relation;
 import de.fhg.iais.roberta.persistence.bo.Robot;
 import de.fhg.iais.roberta.persistence.bo.User;
+import de.fhg.iais.roberta.persistence.bo.UserGroupProgramShare;
+import de.fhg.iais.roberta.persistence.bo.UserProgramShare;
 import de.fhg.iais.roberta.persistence.util.DbSession;
 import de.fhg.iais.roberta.util.Key;
 import de.fhg.iais.roberta.util.Pair;
@@ -109,14 +110,14 @@ public class ProgramDao extends AbstractDao<Program> {
         String programText,
         String configName,
         String configHash,
-        User user,
+        User owner,
         Robot robot,
         User author,
+        User sharedUser,
         Timestamp timestamp) //
     {
-        checkProgramValidity(name, user, robot, author, programText);
-
-        Program program = loadSharedForUpdate(name, user, robot, author);
+        checkProgramValidity(name, owner, robot, author, programText);
+        Program program = loadSharedForUpdate(name, sharedUser, robot, owner, author);
         if ( program == null ) {
             ProgramDao.LOG.error("update was requested, but no shared program was found");
             return Pair.of(Key.PROGRAM_SAVE_ERROR_NO_WRITE_PERMISSION, null);
@@ -161,21 +162,43 @@ public class ProgramDao extends AbstractDao<Program> {
      * @param robot
      * @return the program, null if the program is not found
      */
-    private Program loadSharedForUpdate(String name, User user, Robot robot, User author) {
+    private Program loadSharedForUpdate(String name, User user, Robot robot, User owner, User author) {
         checkProgramValidity(name, user, robot, author, null);
-        Query hql = this.session.createQuery("from AccessRight where user=:user and program.name=:name and program.robot=:robot");
+        Query hql =
+            this.session
+                .createQuery(
+                    "from UserProgramShare where user=:user and program.name=:name and program.robot=:robot and program.owner=:owner and program.author=:author and relation IN (:relation)");
         hql.setString("name", name);
         hql.setEntity("user", user);
         hql.setEntity("robot", robot);
+        hql.setEntity("owner", owner);
+        hql.setEntity("author", author);
+        hql.setParameterList("relation", Arrays.asList(Relation.WRITE, Relation.X_WRITE));
         @SuppressWarnings("unchecked")
-        List<AccessRight> il = hql.list();
+        List<UserProgramShare> il = hql.list();
         Assert.isTrue(il.size() <= 1);
         if ( il.size() == 1 ) {
-            AccessRight accessRight = il.get(0);
-            if ( accessRight.getRelation() == Relation.WRITE || accessRight.getRelation() == Relation.X_WRITE ) {
-                return accessRight.getProgram();
+            return il.get(0).getProgram();
+        }
+
+        if ( user.getUserGroup() != null && user.getUserGroup().getOwner().equals(owner) ) {
+            hql =
+                this.session
+                    .createQuery(
+                        "from UserGroupProgramShare where userGroup=:userGroup and program.name=:name and program.robot=:robot and program.owner=:owner and relation IN (:relation)");
+            hql.setEntity("userGroup", user.getUserGroup());
+            hql.setString("name", name);
+            hql.setEntity("robot", robot);
+            hql.setEntity("owner", owner);
+            hql.setParameterList("relation", Arrays.asList(Relation.WRITE, Relation.X_WRITE));
+            @SuppressWarnings("unchecked")
+            List<UserGroupProgramShare> ugList = hql.list();
+            Assert.isTrue(ugList.size() <= 1);
+            if ( ugList.size() == 1 ) {
+                return ugList.get(0).getProgram();
             }
         }
+
         return null; // .. because the right dowsn't exist, it's no write access :-)
     }
 
@@ -241,7 +264,7 @@ public class ProgramDao extends AbstractDao<Program> {
         return Collections.unmodifiableList(il);
     }
 
-    public JSONArray loadGallery(int galleryId, int userId) {
+    public JSONArray loadGallery(int galleryId, int userId, String robotGroup) {
         String galleryProgramSql = "" + //
             "select r.NAME as rname, p.NAME as pname, p.PROGRAM_TEXT as ptext, u.ACCOUNT as owner, p.CREATED as created, p.VIEWED as views," + //
             "       (select count(l1.ID) from USER_PROGRAM_LIKE l1 where l1.PROGRAM_ID=p.ID) as likes," + //
@@ -253,9 +276,18 @@ public class ProgramDao extends AbstractDao<Program> {
             "where p.OWNER_ID = :galleryId " + //
             "  and p.ROBOT_ID = r.ID " + //
             "  and p.AUTHOR_ID = u.ID ";
+
+        if ( !robotGroup.isEmpty() ) {
+            galleryProgramSql = galleryProgramSql + "" + //
+                " and r.NAME = :robotGroup ";
+        }
+
         SQLQuery query = session.createSqlQuery(galleryProgramSql);
         query.setInteger("userId", userId);
         query.setInteger("galleryId", galleryId);
+        if ( !robotGroup.isEmpty() ) {
+            query.setString("robotGroup", robotGroup);
+        }
 
         @SuppressWarnings("unchecked")
         List<Object[]> galleryList = query.list();

@@ -78,20 +78,20 @@ public class GyroSensor<V> extends ExternalSensor<V> {
         Ast2JaxbHelper.setBasicProperties(this, jaxbDestination);
         //TODO: move reset to another block and delete astToBlock() method from here
         String fieldValue = getPort();
-        if ( getMode().toString().equals("ANGLE")
-            || getMode().toString().equals("RATE")
-            || getMode().toString().equals("X")
-            || getMode().toString().equals("Y")
-            || getMode().toString().equals("Z") ) {
+        if ( getMode().equals("ANGLE") || getMode().equals("RATE") || getMode().equals("X") || getMode().equals("Y") || getMode().equals("Z") ) {
             Mutation mutation = new Mutation();
-            mutation.setMode(getMode().toString());
+            mutation.setMode(getMode());
             jaxbDestination.setMutation(mutation);
-            Ast2JaxbHelper.addField(jaxbDestination, BlocklyConstants.MODE, getMode().toString());
-        } else if ( getMode().toString().equals("TILTED") ) {
-            String fieldSlot = getSlot().toString();
+            Ast2JaxbHelper.addField(jaxbDestination, BlocklyConstants.MODE, getMode());
+            Ast2JaxbHelper.addField(jaxbDestination, BlocklyConstants.SENSORPORT, fieldValue);
+            Ast2JaxbHelper.addField(jaxbDestination, BlocklyConstants.SLOT, getSlot());
+        } else if ( getMode().equals("TILTED") ) {
+            String fieldSlot = getSlot();
             Ast2JaxbHelper.addField(jaxbDestination, BlocklyConstants.SLOT, fieldSlot);
+            Ast2JaxbHelper.addField(jaxbDestination, BlocklyConstants.SENSORPORT, fieldValue);
+        } else {
+            Ast2JaxbHelper.addField(jaxbDestination, BlocklyConstants.SENSORPORT, fieldValue);
         }
-        Ast2JaxbHelper.addField(jaxbDestination, BlocklyConstants.SENSORPORT, fieldValue);
         return jaxbDestination;
     }
 

@@ -1,4 +1,4 @@
-<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="bob3" xmlversion="" description="" tags="">
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="bob3" xmlversion="3.0" description="" tags="">
     <instance x="213" y="213">
         <block type="robControls_loopForever_ardu" id="1" />
     </instance>

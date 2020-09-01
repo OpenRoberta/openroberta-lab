@@ -8,7 +8,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import org.codehaus.jettison.json.JSONObject;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,6 +32,6 @@ public class Alive {
         if ( logAlive ) {
             LOG.info("the response to the the " + EVERY_REQUEST + ". /alive request is: " + answer.toString());
         }
-        return Response.ok(answer).build();
+        return Response.ok(answer.toString()).build();
     }
 }

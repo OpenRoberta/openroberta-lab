@@ -1,14 +1,14 @@
-<block_set  xmlns="http://de.fhg.iais.roberta.blockly" robottype="ev3" xmlversion="" description="" tags="">
-  <instance x="1" y="132">
-    <block type="robText_join" id="49" inline="false" >
-      <mutation items="6"></mutation>
-      <value name="ADD0">
-        <block type="math_number" id="65" >
-          <field name="NUM">0</field>
-        </block>
-      </value>
-      <value name="ADD1">
-        <block type="math_number" id="84" >
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="ev3" xmlversion="3.0" description="" tags="">
+    <instance x="1" y="132">
+        <block type="robText_join" id="49" inline="false">
+            <mutation items="6"></mutation>
+            <value name="ADD0">
+                <block type="math_number" id="65">
+                    <field name="NUM">0</field>
+                </block>
+            </value>
+            <value name="ADD1">
+                <block type="math_number" id="84">
           <field name="NUM">0</field>
         </block>
       </value>

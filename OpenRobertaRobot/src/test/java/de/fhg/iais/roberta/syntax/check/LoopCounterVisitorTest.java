@@ -1,6 +1,6 @@
 package de.fhg.iais.roberta.syntax.check;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -31,7 +31,7 @@ public class LoopCounterVisitorTest extends AstTest {
 
     private class TestUsedHardware extends AbstractUsedHardwareCollectorVisitor {
         //TODO create fake for this class
-        public TestUsedHardware(ArrayList<ArrayList<Phrase<Void>>> phrases, ClassToInstanceMap<IProjectBean.IBuilder<?>> beanBuilders) {
+        public TestUsedHardware(List<List<Phrase<Void>>> phrases, ClassToInstanceMap<IProjectBean.IBuilder<?>> beanBuilders) {
             super(null, beanBuilders);
         }
 

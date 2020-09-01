@@ -17,14 +17,14 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
      *            {String} - that represents the program
      * 
      */
-    function saveAsProgramToServer(programName, xmlProgramText, configName, xmlConfigText, timestamp, successFn) {
+    function saveAsProgramToServer(programName, ownerAccount, xmlProgramText, configName, xmlConfigText, timestamp, successFn) {
         COMM.json("/program/save", {
             "cmd" : "saveAs",
             "programName" : programName,
-            "programText" : xmlProgramText,
+            "ownerAccount": ownerAccount,
+            "progXML" : xmlProgramText,
             "configName" : configName,
-            "configText" : xmlConfigText,
-            "shared" : false,
+            "confXML" : xmlConfigText,
             "timestamp" : timestamp
         }, successFn, "save program to server with new name '" + programName + "'");
     }
@@ -45,14 +45,14 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
      * 
      * 
      */
-    function saveProgramToServer(programName, xmlProgramText, configName, xmlConfigText, programShared, timestamp, successFn) {
+    function saveProgramToServer(programName, ownerAccount, xmlProgramText, configName, xmlConfigText, timestamp, successFn) {
         COMM.json("/program/save", {
             "cmd" : "save",
             "programName" : programName,
-            "programText" : xmlProgramText,
+            "ownerAccount": ownerAccount,
+            "progXML" : xmlProgramText,
             "configName" : configName,
-            "configText" : xmlConfigText,
-            "shared" : programShared,
+            "confXML" : xmlConfigText,
             "timestamp" : timestamp
         }, successFn, "save program '" + programName + "' to server");
     }
@@ -70,7 +70,7 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
     function loadProgramFromXML(programName, xmlText, successFn) {
         COMM.json("/program/import", {
             "programName" : programName,
-            "programBlockSet" : xmlText
+            "progXML" : xmlText
         }, successFn, "open program '" + programName + "' from XML");
     }
 
@@ -87,13 +87,12 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
      *            {String} - administration rights of the user
      * 
      */
-    function shareProgram(programName, shareWith, right, successFn) {
+    function shareProgram(programName, shareObj, successFn) {
         COMM.json("/program/share", {
             "cmd" : "shareP",
             "programName" : programName,
-            "userToShare" : shareWith,
-            "right" : right
-        }, successFn, "share program '" + programName + "' with user '" + shareWith + "' having right '" + right + "'");
+            "shareData" : shareObj
+        }, successFn, "share program '" + programName + "' with '" + shareObj.label + "'(" + shareObj.type + ") having right '" + shareObj.right + "'");
     }
 
     exports.shareProgram = shareProgram;
@@ -213,8 +212,8 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
         COMM.json("/projectWorkflow/source", {
             "programName" : programName,
             "configurationName" : configName,
-            "programBlockSet" : xmlTextProgram,
-            "configurationBlockSet" : xmlTextConfig,
+            "progXML" : xmlTextProgram,
+            "confXML" : xmlTextConfig,
             "SSID" : SSID,
             "password" : password,
             "language" : language
@@ -243,8 +242,8 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
         COMM.json("/projectWorkflow/run", {
             "programName" : programName,
             "configurationName" : configName,
-            "programBlockSet" : xmlTextProgram,
-            "configurationBlockSet" : xmlTextConfig,
+            "progXML" : xmlTextProgram,
+            "confXML" : xmlTextConfig,
             "SSID" : SSID,
             "password" : password,
             "language" : language
@@ -269,8 +268,8 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
         COMM.json("/projectWorkflow/sourceSimulation", {
             "programName" : programName,
             "configurationName" : configName,
-            "programBlockSet" : xmlTextProgram,
-            "configurationBlockSet" : xmlTextConfig,
+            "progXML" : xmlTextProgram,
+            "confXML" : xmlTextConfig,
             "language" : language
         }, successFn, "run program '" + programName + "' with configuration '" + configName + "'");
     }
@@ -289,7 +288,7 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
     function runNative(programName, programText, language, successFn) {
         COMM.json("/projectWorkflow/runNative", {
             "programName" : programName,
-            "programText" : programText,
+            "progXML" : programText,
             "language" : language
         }, successFn, "run program '" + programName + "'");
     }
@@ -308,7 +307,7 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
     function compileN(programName, programText, language, successFn) {
         COMM.json("/projectWorkflow/compileNative", {
             "programName" : programName,
-            "programText" : programText,
+            "progXML" : programText,
             "language" : language
         }, successFn, "compile program '" + programName + "'");
     }
@@ -328,7 +327,7 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
         COMM.json("/projectWorkflow/compileProgram", {
             "cmd" : "compileP",
             "programName" : programName,
-            "programBlockSet" : programText,
+            "progXML" : programText,
             "language" : language
         }, successFn, "compile program '" + programName + "'");
     }
@@ -352,8 +351,8 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
             "cmd" : "checkP",
             "programName" : programName,
             "configuration" : configName,
-            "programText" : xmlTextProgram,
-            "configurationText" : xmlTextConfig
+            "progXML" : xmlTextProgram,
+            "confXML" : xmlTextConfig
         }, successFn, "check program '" + programName + "' with configuration '" + configName + "'");
     }
 

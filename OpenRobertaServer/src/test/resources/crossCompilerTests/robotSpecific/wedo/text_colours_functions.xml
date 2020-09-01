@@ -1,0 +1,402 @@
+<export xmlns="http://de.fhg.iais.roberta.blockly">
+    <program>
+        <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="wedo" xmlversion="3.0" description="" tags="">
+            <instance x="307" y="50">
+                <block type="robControls_start" id="7j6KlqXpK.hCWV}AVg+-" intask="true" deletable="false">
+                    <mutation declare="true"></mutation>
+                    <field name="DEBUG">FALSE</field>
+                    <statement name="ST">
+                        <block type="robGlobalVariables_declare" id="Y=}+1?Z{f9|Ur+*7A(Kd" intask="true" deletable="false" movable="false">
+                            <mutation next="true" declaration_type="Number"></mutation>
+                            <field name="VAR">numVar</field>
+                            <field name="TYPE">Number</field>
+                            <value name="VALUE">
+                                <block type="math_number" id="15}23v.t|HNcG?j5E^^f" intask="true">
+                                    <field name="NUM">0</field>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="robGlobalVariables_declare" id="J0E4+p:0Kxk.JRjUVvkT" intask="true" deletable="false" movable="false">
+                            <mutation next="true" declaration_type="Boolean"></mutation>
+                            <field name="VAR">boolVar</field>
+                            <field name="TYPE">Boolean</field>
+                            <value name="VALUE">
+                                <block type="logic_boolean" id="Qz=F-@6UmV{3a)Le,Ipk" intask="true">
+                                    <field name="BOOL">TRUE</field>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="robGlobalVariables_declare" id="NSNE1h%yhuu6?`4Zq!~P" intask="true" deletable="false" movable="false">
+                            <mutation next="true" declaration_type="String"></mutation>
+                            <field name="VAR">stringVar</field>
+                            <field name="TYPE">String</field>
+                            <value name="VALUE">
+                                <block type="text" id="JZ`sR2-e013BY5%spQwt" intask="true">
+                                    <field name="TEXT"></field>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="robGlobalVariables_declare" id="aXJ~T@faN/x*ePENkq8J" intask="true" deletable="false" movable="false">
+                            <mutation next="false" declaration_type="Colour"></mutation>
+                            <field name="VAR">colourVar</field>
+                            <field name="TYPE">Colour</field>
+                            <value name="VALUE">
+                                <block type="robColour_picker" id="#9JHSRZ`N7zK5XA8L:0r" intask="true">
+                                    <field name="COLOUR">#FFFFFE</field>
+                                </block>
+                            </value>
+                        </block>
+                    </statement>
+                </block>
+                <block type="robProcedures_callnoreturn" id="sjHjc~6uinfHSp,B]e0x" intask="true">
+                    <mutation name="text"></mutation>
+                </block>
+                <block type="robProcedures_callnoreturn" id="NS2TBC10%tE]Ou*YaROD" intask="true">
+                    <mutation name="colour"></mutation>
+                </block>
+                <block type="robProcedures_callnoreturn" id="fPE?*2A6Kbo9.xty9,#!" intask="true">
+                    <mutation name="parameters">
+                        <arg name="x" type="Number"></arg>
+                        <arg name="x2" type="Boolean"></arg>
+                        <arg name="x3" type="String"></arg>
+                        <arg name="x4" type="Colour"></arg>
+                    </mutation>
+                    <value name="ARG0">
+                        <block type="variables_get" id="i}%,Zae*HJl?2FsLy5(#" intask="true">
+                            <mutation datatype="Number"></mutation>
+                            <field name="VAR">numVar</field>
+                        </block>
+                    </value>
+                    <value name="ARG1">
+                        <block type="variables_get" id="A)5+b7Jkj}Mcez`J*t_j" intask="true">
+                            <mutation datatype="Boolean"></mutation>
+                            <field name="VAR">boolVar</field>
+                        </block>
+                    </value>
+                    <value name="ARG2">
+                        <block type="variables_get" id="BkL6}pofIuxh/|]+6BXN" intask="true">
+                            <mutation datatype="String"></mutation>
+                            <field name="VAR">stringVar</field>
+                        </block>
+                    </value>
+                    <value name="ARG3">
+                        <block type="variables_get" id="zvgcH@tUvM[8m%t4%MK)" intask="true">
+                            <mutation datatype="Colour"></mutation>
+                            <field name="VAR">colourVar</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="robActions_display_text" id="tg}M24:91H%n09O/4Yfu" intask="true">
+                    <value name="OUT">
+                        <block type="robProcedures_callreturn" id="SD-13xEwW1YmruRv~jrl" intask="true">
+                            <mutation name="function_return_numberVar" output_type="Number"></mutation>
+                        </block>
+                    </value>
+                </block>
+                <block type="robActions_display_text" id="S.x`_NA5V2l55H03S:`A" intask="true">
+                    <value name="OUT">
+                        <block type="robProcedures_callreturn" id="1FaV*4nDBRrOu~o|Q~Rh" intask="true">
+                            <mutation name="function_return_booleanVar" output_type="Boolean"></mutation>
+                        </block>
+                    </value>
+                </block>
+                <block type="robActions_display_text" id="6JbAZAcKB;6lNxj%.^nb" intask="true">
+                    <value name="OUT">
+                        <block type="robProcedures_callreturn" id="L^oQ=123hCwb=B6Znfpn" intask="true">
+                            <mutation name="function_return_stringVar" output_type="String"></mutation>
+                        </block>
+                    </value>
+                </block>
+                <block type="robActions_display_text" id="|R`@h)EZfuiQYdLAoewJ" intask="true">
+                    <value name="OUT">
+                        <block type="robProcedures_callreturn" id="vq`;5=wEb~N!06UTUDq," intask="true">
+                            <mutation name="function_return_colourVar" output_type="Colour"></mutation>
+                        </block>
+                    </value>
+                </block>
+            </instance>
+            <instance x="790" y="52">
+                <block type="robProcedures_defnoreturn" id="`.jDf#+D8K=]5XYs9Gl~" intask="true">
+                    <mutation declare="false"></mutation>
+                    <field name="NAME">text</field>
+                    <statement name="STACK">
+                        <block type="robActions_display_text" id="mD9pXJ8#Y@TeHsfXDmm_" intask="true">
+                            <value name="OUT">
+                                <block type="text" id="C;a##Y+=M?A@=L*VYtFA" intask="true">
+                                    <field name="TEXT"></field>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="text_comment" id="o^}([+-;}l_ZrabcY=Z+" intask="true">
+                            <field name="TEXT"></field>
+                        </block>
+                        <block type="robActions_display_text" id="oLwum1;)_Zn/V9;Oa/~q" intask="true">
+                            <value name="OUT">
+                                <block type="robText_join" id="jS*w2%.fK3?-={|.PmS1" intask="true">
+                                    <mutation items="2"></mutation>
+                                    <value name="ADD0">
+                                        <block type="variables_get" id=".Sv]Np[TGPF~Dxc]E{LF" intask="true">
+                                            <mutation datatype="String"></mutation>
+                                            <field name="VAR">stringVar</field>
+                                        </block>
+                                    </value>
+                                    <value name="ADD1">
+                                        <block type="variables_get" id="tBS{Vs%Q,LPrl]S}?aM(" intask="true">
+                                            <mutation datatype="String"></mutation>
+                                            <field name="VAR">stringVar</field>
+                                        </block>
+                                    </value>
+                                </block>
+                            </value>
+                        </block>
+                    </statement>
+                </block>
+            </instance>
+            <instance x="1240" y="69">
+                <block type="robProcedures_defnoreturn" id="RJNSu7|JJr1Op2Z]}|~N" intask="true">
+                    <mutation declare="false"></mutation>
+                    <field name="NAME">colour</field>
+                    <statement name="STACK">
+                        <block type="variables_set" id="o8Hzc0O+)Pp-,L5q|fks" intask="true">
+                            <mutation datatype="Colour"></mutation>
+                            <field name="VAR">colourVar</field>
+                            <value name="VALUE">
+                                <block type="robColour_picker" id="Gq~p|s,Xw]vx.F;UpWz:" intask="true">
+                                    <field name="COLOUR">#FF1493</field>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="variables_set" id="BD18aF)VZ/So@E(jMP]2" intask="true">
+                            <mutation datatype="Colour"></mutation>
+                            <field name="VAR">colourVar</field>
+                            <value name="VALUE">
+                                <block type="robColour_picker" id="Fb4G#L,/2;9Z#V@bTB+O" intask="true">
+                                    <field name="COLOUR">#800080</field>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="variables_set" id="gLoE836FVOJ:gxLfG1Y%" intask="true">
+                            <mutation datatype="Colour"></mutation>
+                            <field name="VAR">colourVar</field>
+                            <value name="VALUE">
+                                <block type="robColour_picker" id="[^e*[1zqOjo~bYiF=`_t" intask="true">
+                                    <field name="COLOUR">#4876ff</field>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="variables_set" id="hvxNPT.Z~h9LY]k!F~OV" intask="true">
+                            <mutation datatype="Colour"></mutation>
+                            <field name="VAR">colourVar</field>
+                            <value name="VALUE">
+                                <block type="robColour_picker" id="ZkZyhb9GSD7WfA6G-=K2" intask="true">
+                                    <field name="COLOUR">#00ffff</field>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="variables_set" id="(007WNU@_u~T9v2*+R%s" intask="true">
+                            <mutation datatype="Colour"></mutation>
+                            <field name="VAR">colourVar</field>
+                            <value name="VALUE">
+                                <block type="robColour_picker" id="UeDn;G:pI1N}gs+E^y0;" intask="true">
+                                    <field name="COLOUR">#90ee90</field>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="variables_set" id=")o!K)T9)ic}wYz+DzZ,B" intask="true">
+                            <mutation datatype="Colour"></mutation>
+                            <field name="VAR">colourVar</field>
+                            <value name="VALUE">
+                                <block type="robColour_picker" id="o~WtsT,=ZagKM57?Lz]_" intask="true">
+                                    <field name="COLOUR">#008000</field>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="variables_set" id="biQ({Q(yXmNwzAe(B:V|" intask="true">
+                            <mutation datatype="Colour"></mutation>
+                            <field name="VAR">colourVar</field>
+                            <value name="VALUE">
+                                <block type="robColour_picker" id="d^7`)m@LITDd}g.s3@8i" intask="true">
+                                    <field name="COLOUR">#ffff00</field>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="variables_set" id="SUicr2p:FI9Z6Lts`7Hc" intask="true">
+                            <mutation datatype="Colour"></mutation>
+                            <field name="VAR">colourVar</field>
+                            <value name="VALUE">
+                                <block type="robColour_picker" id="7U9Tac-byN`QB~Xz,V+W" intask="true">
+                                    <field name="COLOUR">#ffa500</field>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="variables_set" id="F?3oYMHMoX|O3ziKMV^J" intask="true">
+                            <mutation datatype="Colour"></mutation>
+                            <field name="VAR">colourVar</field>
+                            <value name="VALUE">
+                                <block type="robColour_picker" id="?KQEFn;Vx~S[v%{mH`J_" intask="true">
+                                    <field name="COLOUR">#ff0000</field>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="variables_set" id="8relE7(A1;1y?vcUrKhb" intask="true">
+                            <mutation datatype="Colour"></mutation>
+                            <field name="VAR">colourVar</field>
+                            <value name="VALUE">
+                                <block type="robColour_picker" id="Qn2LU(_]0!t`,UEJTlJk" intask="true">
+                                    <field name="COLOUR">#fffffe</field>
+                                </block>
+                            </value>
+                        </block>
+                    </statement>
+                </block>
+            </instance>
+            <instance x="-145" y="274">
+                <block type="robProcedures_defnoreturn" id="Vp]If!7NaH@!myjmNJJm" intask="true">
+                    <mutation declare="true"></mutation>
+                    <field name="NAME">parameters</field>
+                    <statement name="ST">
+                        <block type="robLocalVariables_declare" id="bZNTLsk6{(gl#CO_G_v-" intask="true" deletable="false" movable="false">
+                            <mutation next="true" declaration_type="Number"></mutation>
+                            <field name="VAR">x</field>
+                            <field name="TYPE">Number</field>
+                        </block>
+                        <block type="robLocalVariables_declare" id="E:!83dB4#]L:EI~kx=/h" intask="true" deletable="false" movable="false">
+                            <mutation next="true" declaration_type="Boolean"></mutation>
+                            <field name="VAR">x2</field>
+                            <field name="TYPE">Boolean</field>
+                        </block>
+                        <block type="robLocalVariables_declare" id="r0(m=w7;Vt|}(){w-n/N" intask="true" deletable="false" movable="false">
+                            <mutation next="true" declaration_type="String"></mutation>
+                            <field name="VAR">x3</field>
+                            <field name="TYPE">String</field>
+                        </block>
+                        <block type="robLocalVariables_declare" id="Z5-8NM*D7?w~Kow~}mO(" intask="true" deletable="false" movable="false">
+                            <mutation next="false" declaration_type="Colour"></mutation>
+                            <field name="VAR">x4</field>
+                            <field name="TYPE">Colour</field>
+                        </block>
+                    </statement>
+                    <statement name="STACK">
+                        <block type="robProcedures_ifreturn" id=".3,!qrKhMPZ(M3i8YAo%" intask="true">
+                            <mutation value="0"></mutation>
+                            <value name="CONDITION">
+                                <block type="variables_get" id="Q`ht,{yNU!d;Vj*aJwgO" intask="true">
+                                    <mutation datatype="Boolean"></mutation>
+                                    <field name="VAR">boolVar</field>
+                                </block>
+                            </value>
+                        </block>
+                    </statement>
+                </block>
+            </instance>
+            <instance x="-144" y="488">
+                <block type="robProcedures_defreturn" id=":a%7[g#Plthq]?l62~O1" intask="true">
+                    <mutation declare="false" return_type="Number"></mutation>
+                    <field name="NAME">function_return_numberVar</field>
+                    <field name="TYPE">Number</field>
+                    <repetitions>
+                        <value name="RETURN">
+                            <block type="variables_get" id="*Zw;/Mc6p9XrwFbnaf,*" intask="true">
+                                <mutation datatype="Number"></mutation>
+                                <field name="VAR">numVar</field>
+                            </block>
+                        </value>
+                    </repetitions>
+                </block>
+            </instance>
+            <instance x="-145" y="584">
+                <block type="robProcedures_defreturn" id="{/!zgI}|W4P!XWeB+2OB" intask="true">
+                    <mutation declare="false" return_type="Boolean"></mutation>
+                    <field name="NAME">function_return_booleanVar</field>
+                    <field name="TYPE">Boolean</field>
+                    <repetitions>
+                        <value name="RETURN">
+                            <block type="variables_get" id="l,vP2pTtQ}E*k0i,lgd3" intask="true">
+                                <mutation datatype="Boolean"></mutation>
+                                <field name="VAR">boolVar</field>
+                            </block>
+                        </value>
+                    </repetitions>
+                </block>
+            </instance>
+            <instance x="-149" y="687">
+                <block type="robProcedures_defreturn" id="W{Vj=6#g3MEC%1%{-i.`" intask="true">
+                    <mutation declare="false" return_type="String"></mutation>
+                    <field name="NAME">function_return_stringVar</field>
+                    <field name="TYPE">String</field>
+                    <repetitions>
+                        <value name="RETURN">
+                            <block type="variables_get" id="-LwmzI8gFJkzx-Ls(,;=" intask="true">
+                                <mutation datatype="String"></mutation>
+                                <field name="VAR">stringVar</field>
+                            </block>
+                        </value>
+                    </repetitions>
+                </block>
+            </instance>
+            <instance x="-152" y="785">
+                <block type="robProcedures_defreturn" id="e=Rz8Fj?)!r(W%3y9RiO" intask="true">
+                    <mutation declare="false" return_type="Colour"></mutation>
+                    <field name="NAME">function_return_colourVar</field>
+                    <field name="TYPE">Colour</field>
+                    <repetitions>
+                        <value name="RETURN">
+                            <block type="variables_get" id="POn~O(qM)1W#AgzxEbH}" intask="true">
+                                <mutation datatype="Colour"></mutation>
+                                <field name="VAR">colourVar</field>
+                            </block>
+                        </value>
+                    </repetitions>
+                </block>
+            </instance>
+        </block_set>
+    </program>
+    <config>
+        <block_set robottype="wedo" xmlversion="3.0" description="" tags="" xmlns="http://de.fhg.iais.roberta.blockly">
+            <instance x="223" y="53">
+                <block type="robBrick_WeDo-Brick" id="1" intask="true" deletable="false">
+                    <field name="VAR">W</field>
+                </block>
+            </instance>
+            <instance x="221" y="125">
+                <block type="robConf_motor" id="2" intask="true">
+                    <field name="NAME">M</field>
+                    <field name="VAR">W</field>
+                    <field name="CONNECTOR">1</field>
+                </block>
+            </instance>
+            <instance x="372" y="131">
+                <block type="robConf_gyro" id="f+fi:U5b8C-LJ-96G8r7" intask="true">
+                    <field name="NAME">T2</field>
+                    <field name="VAR">W</field>
+                    <field name="CONNECTOR">1</field>
+                </block>
+            </instance>
+            <instance x="219" y="225">
+                <block type="robConf_buzzer" id="3" intask="true">
+                    <field name="NAME">S</field>
+                    <field name="VAR">W</field>
+                </block>
+            </instance>
+            <instance x="224" y="300">
+                <block type="robConf_led" id="4" intask="true">
+                    <field name="NAME">L</field>
+                    <field name="VAR">W</field>
+                </block>
+            </instance>
+            <instance x="226" y="370">
+                <block type="robConf_key" id="5" intask="true">
+                    <field name="NAME">T</field>
+                    <field name="VAR">W</field>
+                </block>
+            </instance>
+            <instance x="207" y="445">
+                <block type="robConf_infrared" id="6" intask="true">
+                    <field name="NAME">I</field>
+                    <field name="VAR">W</field>
+                    <field name="CONNECTOR">2</field>
+                </block>
+            </instance>
+        </block_set>
+    </config>
+</export>

@@ -1,0 +1,25 @@
+<configuration>
+    <property name="PATTERN_LOG"
+        value='%d %-1level %logger{36} - %msg%n' />
+
+    <appender name="LOG" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>${PATTERN_LOG}</pattern>
+        </encoder>
+    </appender>
+
+    <root level="INFO">
+        <appender-ref ref="LOG" />
+    </root>
+    
+    <logger name="COMMON-IT" level="INFO" additivity="false">
+        <appender-ref ref="LOG" />
+    </logger>
+    <logger name="statistics" level="ERROR" additivity="false">
+        <appender-ref ref="LOG" />
+    </logger>
+    <logger name="crosscompiler_error" level="INFO" additivity="false">
+        <appender-ref ref="LOG" />
+    </logger>
+   
+</configuration>

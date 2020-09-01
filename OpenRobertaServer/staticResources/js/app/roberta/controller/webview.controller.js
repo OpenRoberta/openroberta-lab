@@ -1,4 +1,4 @@
-define( ['exports', 'guiState.controller', 'interpreter.interpreter', 'interpreter.robotWeDoBehaviour', 'util', 'log', 'message', 'blocks', 'jquery'], function( exports,
+define( ['exports', 'guiState.controller', 'interpreter.interpreter', 'interpreter.robotWeDoBehaviour', 'util', 'log', 'message', 'blockly', 'jquery'], function( exports,
     GUISTATE_C, WEDO_I, WEDO_R, UTIL, LOG, MSG, Blockly, $ ) {
 
     var ready;
@@ -102,7 +102,7 @@ define( ['exports', 'guiState.controller', 'interpreter.interpreter', 'interpret
     }
 
     function getInterpreter( program ) {
-        interpreter = new WEDO_I.Interpreter( program, wedo, callbackOnTermination );
+        interpreter = new WEDO_I.Interpreter( program, wedo, callbackOnTermination ,[]);
         return interpreter;
     }
     exports.getInterpreter = getInterpreter;
@@ -132,7 +132,6 @@ define( ['exports', 'guiState.controller', 'interpreter.interpreter', 'interpret
             OpenRoberta.jsToAppInterface( JSON.stringify( data ) );
             return true;
         } catch ( error ) {
-            LOG.error( "no Android Webview: " + error );
             return false;
         }
     }
@@ -142,7 +141,6 @@ define( ['exports', 'guiState.controller', 'interpreter.interpreter', 'interpret
             window.webkit.messageHandlers.OpenRoberta.postMessage( JSON.stringify( data ) );
             return true;
         } catch ( error ) {
-            LOG.error( "no IOS Webview: " + error );
             return false;
         }
     }

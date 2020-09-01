@@ -1,0 +1,282 @@
+<!--This is not a real program, it is just for testing the xsl transformation-->
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="calliope" xmlversion="2.0" description="" tags="">
+    <instance>
+        <block type="robSensors_getSample_ardu" id="">
+            <mutation input="LIGHT_LEVEL"></mutation>
+        </block>
+        <block type="robSensors_getSample" id="">
+            <field name="">LIGHT_LEVEL</field>
+        </block>
+        <block type="robControls_start" id="">
+            <field name="">TRUE</field>
+        </block>
+        <block type="mbedSensors_key_isPressed" id="G,1Afdt@0BR=Wuk~H~~M" intask="true">
+            <field name="KEY">button_a</field>
+        </block>
+        <block type="mbedSensors_timer_getSample" id="-*|5yE3o;8zCMSoCg-NU" intask="true">
+            <field name="SENSORNUM">1</field>
+        </block>
+        <block type="mbedSensors_timer_reset" id="Kmlp,1c^)S[rsN|G+IZ2" intask="true">
+            <field name="SENSORNUM">1</field>
+        </block>
+        <block type="mbedSensors_pin_isTouched" id="/qS~uA|UEx;-%OHc#XST" intask="true">
+            <field name="PIN">2</field>
+        </block>
+        <block type="robSensors_timer_getSample" id="j)bs+%bXgb1|mDS*;`.b" intask="true">
+            <mutation mode="VALUE" />
+            <field name="MODE">VALUE</field>
+            <field name="SENSORPORT">1</field>
+            <field name="SLOT" />
+        </block>
+        <block type="robSensors_getSample" id="O,2NaUzm)uP78|w`7Al{" intask="true" deletable="false" movable="false">
+            <mutation input="KEY_PRESSED" />
+            <field name="SENSORTYPE">KEY_PRESSED</field>
+            <field name="SENSORPORT">A</field>
+            <field name="SLOT" />
+        </block>
+        <block type="mbedSensors_getSample" id="6wBrpMb}0LaLu2kIT7jR" intask="true" deletable="false" movable="false">
+            <mutation input="MICROPHONE" />
+            <field name="SENSORTYPE">MICROPHONE</field>
+        </block>
+        <block type="mbedSensors_gesture_isActive" id="E#H~CI4A#zW4Fn!cfJhS" intask="true">
+            <field name="GESTURE">SHAKE</field>
+        </block>
+        <block type="mbedActions_leds_off" id="@6op=+wd%BeWn*2w@uSb" intask="true" />
+        <block type="mbedActions_leds_on" id=",8m4r@D6[TYulG4fLLGH" intask="true">
+            <value name="COLOR">
+                <block type="mbedColour_picker" id="{hag|O}W^M,z5b.!vd/W" intask="true">
+                    <field name="COLOUR">#009900</field>
+                </block>
+            </value>
+        </block>
+        <block type="mbedSensors_compass_getSample" id="uDUqSoeP7zdkG|J:bp,Z" intask="true" />
+    </instance>
+    <instance x="14" y="535">
+        <block type="robProcedures_defnoreturn" id="9n-N2hl0ME3{P_)2pxh4" intask="true">
+            <mutation declare="true"></mutation>
+            <field name="NAME">blink</field>
+            <statement name="ST">
+                <block type="robLocalVariables_declare" id="W^~k~wAvk+i[AJ1H/G58" intask="true" deletable="false" movable="false">
+                    <mutation next="true" declaration_type="Number"></mutation>
+                    <field name="VAR">x3</field>
+                    <field name="TYPE">Number</field>
+                </block>
+                <block type="robLocalVariables_declare" id="C[3ua4j1e6WGC%`D+EZ9" intask="true" deletable="false" movable="false">
+                    <mutation next="false" declaration_type="Number"></mutation>
+                    <field name="VAR">y3</field>
+                    <field name="TYPE">Number</field>
+                </block>
+            </statement>
+            <statement name="STACK">
+                <block type="robControls_if" id="/2|=m;FwW[feGN7;z8p," intask="true">
+                    <value name="IF0">
+                        <block type="logic_compare" id="}FjvP-I5]=/`TSv|;p=G" intask="true">
+                            <field name="OP">LT</field>
+                            <value name="A">
+                                <block type="math_arithmetic" id="phkf:~3y_g2bp==jk@EN" intask="true">
+                                    <field name="OP">ADD</field>
+                                    <value name="A">
+                                        <block type="robLists_getIndex" id="n``0-Ot21pF.qP;Ys8Z9" intask="true">
+                                            <mutation statement="false" at="true"></mutation>
+                                            <field name="MODE">GET</field>
+                                            <field name="WHERE">FROM_START</field>
+                                            <value name="VALUE">
+                                                <block type="variables_get" id="9-skVI3drI+vKAs9yMvK" intask="true">
+                                                    <mutation datatype="Array_Number"></mutation>
+                                                    <field name="VAR">frequenz</field>
+                                                </block>
+                                            </value>
+                                            <value name="AT">
+                                                <block type="math_arithmetic" id="e?p0umF|YWN_(o%RhiAy" intask="true">
+                                                    <field name="OP">ADD</field>
+                                                    <value name="A">
+                                                        <block type="math_arithmetic" id="p;4bdHa#4Lf#Al679N.g" intask="true">
+                                                            <field name="OP">MULTIPLY</field>
+                                                            <value name="A">
+                                                                <block type="variables_get" id="J2|Zcaos(DS8aU`#LmYe" intask="true">
+                                                                    <mutation datatype="Number"></mutation>
+                                                                    <field name="VAR">x3</field>
+                                                                </block>
+                                                            </value>
+                                                            <value name="B">
+                                                                <block type="math_number" id="Q-xE}NIzVFCuANN}m15`" intask="true">
+                                                                    <field name="NUM">5</field>
+                                                                </block>
+                                                            </value>
+                                                        </block>
+                                                    </value>
+                                                    <value name="B">
+                                                        <block type="variables_get" id="VmYLD[/U}od*1JEW_r{q" intask="true">
+                                                            <mutation datatype="Number"></mutation>
+                                                            <field name="VAR">y3</field>
+                                                        </block>
+                                                    </value>
+                                                </block>
+                                            </value>
+                                        </block>
+                                    </value>
+                                    <value name="B">
+                                        <block type="robLists_getIndex" id="Nc|+jI~~=LL%YS/;}jA6" intask="true">
+                                            <mutation statement="false" at="true"></mutation>
+                                            <field name="MODE">GET</field>
+                                            <field name="WHERE">FROM_START</field>
+                                            <value name="VALUE">
+                                                <block type="variables_get" id="YZwxmQmPq/2^ms!-tt)E" intask="true">
+                                                    <mutation datatype="Array_Number"></mutation>
+                                                    <field name="VAR">elapsed</field>
+                                                </block>
+                                            </value>
+                                            <value name="AT">
+                                                <block type="math_arithmetic" id="pP#aH?:(JsV.*yJ,K|`E" intask="true">
+                                                    <field name="OP">ADD</field>
+                                                    <value name="A">
+                                                        <block type="math_arithmetic" id="^jn^6aY^fo-e@/MMaY=1" intask="true">
+                                                            <field name="OP">MULTIPLY</field>
+                                                            <value name="A">
+                                                                <block type="variables_get" id="+,R0n^VC]*73P^#]DW{," intask="true">
+                                                                    <mutation datatype="Number"></mutation>
+                                                                    <field name="VAR">x3</field>
+                                                                </block>
+                                                            </value>
+                                                            <value name="B">
+                                                                <block type="math_number" id="M*e,2Lk.qRxFSy0Hdu~7" intask="true">
+                                                                    <field name="NUM">5</field>
+                                                                </block>
+                                                            </value>
+                                                        </block>
+                                                    </value>
+                                                    <value name="B">
+                                                        <block type="variables_get" id="*4i#t{RG#0)~im,YI3x)" intask="true">
+                                                            <mutation datatype="Number"></mutation>
+                                                            <field name="VAR">y3</field>
+                                                        </block>
+                                                    </value>
+                                                </block>
+                                            </value>
+                                        </block>
+                                    </value>
+                                </block>
+                            </value>
+                            <value name="B">
+                                <block type="mbedSensors_timer_getSample" id="3{7A/XFn.67}@!(AzeFJ" intask="true">
+                                    <field name="SENSORNUM">1</field>
+                                </block>
+                            </value>
+                        </block>
+                    </value>
+                    <statement name="DO0">
+                        <block type="robLists_setIndex" id="s=RDlC89]Y#t6;WBQKre" intask="true">
+                            <mutation at="true"></mutation>
+                            <field name="MODE">SET</field>
+                            <field name="WHERE">FROM_START</field>
+                            <value name="LIST">
+                                <block type="variables_get" id="U[X-)S~I6fwBs!GA}0Pb" intask="true">
+                                    <mutation datatype="Array_Number"></mutation>
+                                    <field name="VAR">elapsed</field>
+                                </block>
+                            </value>
+                            <value name="AT">
+                                <block type="math_arithmetic" id="NcbXTl.NK%nCdqyTLsI," intask="true">
+                                    <field name="OP">ADD</field>
+                                    <value name="A">
+                                        <block type="math_arithmetic" id="6TiCMqUMF#VA][NiU_|+" intask="true">
+                                            <field name="OP">MULTIPLY</field>
+                                            <value name="A">
+                                                <block type="variables_get" id=",aWXoLbq23v8,lWtHSGn" intask="true">
+                                                    <mutation datatype="Number"></mutation>
+                                                    <field name="VAR">x3</field>
+                                                </block>
+                                            </value>
+                                            <value name="B">
+                                                <block type="math_number" id="_RJQOT1UEa#Q2ikG:yE:" intask="true">
+                                                    <field name="NUM">5</field>
+                                                </block>
+                                            </value>
+                                        </block>
+                                    </value>
+                                    <value name="B">
+                                        <block type="variables_get" id="oy=m.@gz?qUez7iSVE@a" intask="true">
+                                            <mutation datatype="Number"></mutation>
+                                            <field name="VAR">y3</field>
+                                        </block>
+                                    </value>
+                                </block>
+                            </value>
+                            <value name="TO">
+                                <block type="mbedSensors_timer_getSample" id="b]3D5Q)o+Y?VvsE_)DFm" intask="true">
+                                    <field name="SENSORNUM">1</field>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="robProcedures_callnoreturn" id="p{d{PHVOjlk?FJhcToi~" intask="true">
+                            <mutation name="umschalten">
+                                <arg name="x" type="Number"></arg>
+                                <arg name="y" type="Number"></arg>
+                            </mutation>
+                            <value name="ARG0">
+                                <block type="variables_get" id="dPM,F;V](ON]w|d/9?vD" intask="true">
+                                    <mutation datatype="Number"></mutation>
+                                    <field name="VAR">x3</field>
+                                </block>
+                            </value>
+                            <value name="ARG1">
+                                <block type="variables_get" id="ks(E`pUYK~157~UGfXdW" intask="true">
+                                    <mutation datatype="Number"></mutation>
+                                    <field name="VAR">y3</field>
+                                </block>
+                            </value>
+                        </block>
+                    </statement>
+                </block>
+            </statement>
+        </block>
+    </instance>
+    <instance x="515" y="616">
+        <block type="mbedActions_motor_stop" id="/Eku/I1}Y@1)wc7T30jD" intask="true">
+            <field name="MOTORPORT">M_L</field>
+            <field name="MODE">FLOAT</field>
+        </block>
+    </instance>
+    <instance x="5155" y="6116">
+        <block type="mbedCommunication_sendBlock" id="09s{(Mp!:]*,a}hgs6H-" intask="true">
+            <mutation datatype="String"></mutation>
+            <field name="TYPE">String</field>
+            <field name="POWER">7</field>
+            <value name="sendData">
+                <block type="text" id="]^/)04e1PuE0B9mU`3Uy" intask="true">
+                    <field name="TEXT">B</field>
+                </block>
+            </value>
+        </block>
+    </instance>
+    <instance x="2155" y="3116">
+        <block type="mbedActions_motors_on" id="enOVDT3FVAO6@_8#{P%]" intask="true">
+            <value name="POWER_A">
+                <block type="math_number" id="PxX]]Q9ze-d7I`q=0|!0" intask="true">
+                    <field name="NUM">50</field>
+                </block>
+            </value>
+            <value name="POWER_B">
+                <block type="math_number" id="?TX7MRub:QZlTeyN)^=(" intask="true">
+                    <field name="NUM">50</field>
+                </block>
+            </value>
+        </block>
+    </instance>
+    <instance x="2155" y="3116">
+        <block type="mbedActions_motors_on" id="bab@_8#{P%]" intask="true">
+            <field name="A">BIP</field>
+            <field name="B">BUP</field>
+            <value name="POWER_A">
+                <block type="math_number" id="PxX]]Q9ze-d7I`q=0|!0" intask="true">
+                    <field name="NUM">50</field>
+                </block>
+            </value>
+            <value name="POWER_B">
+                <block type="math_number" id="?TX7MRub:QZlTeyN)^=(" intask="true">
+                    <field name="NUM">50</field>
+                </block>
+            </value>
+        </block>
+    </instance>
+</block_set>

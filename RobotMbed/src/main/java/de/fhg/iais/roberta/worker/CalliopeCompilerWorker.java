@@ -12,7 +12,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import de.fhg.iais.roberta.bean.CompilerSetupBean;
-import de.fhg.iais.roberta.codegen.AbstractCompilerWorkflow;
 import de.fhg.iais.roberta.components.Project;
 import de.fhg.iais.roberta.util.Key;
 import de.fhg.iais.roberta.util.Pair;
@@ -43,17 +42,12 @@ public class CalliopeCompilerWorker implements IWorker {
      * @return a pair of Key.COMPILERWORKFLOW_SUCCESS or Key.COMPILERWORKFLOW_ERROR_PROGRAM_COMPILE_FAILED and the cross compiler output
      */
     private Pair<Key, String> runBuild(Project project) {
-        CompilerSetupBean compilerWorkflowBean = project.getWorkerResult(CompilerSetupBean.class);
-        String compilerBinDir = compilerWorkflowBean.getCompilerBinDir();
-        String compilerResourcesDir = compilerWorkflowBean.getCompilerResourcesDir();
-        String tempDir = compilerWorkflowBean.getTempDir();
-        Util
-            .storeGeneratedProgram(
-                tempDir,
-                project.getSourceCode().toString(),
-                project.getToken(),
-                project.getProgramName(),
-                "." + project.getSourceCodeFileExtension());
+        final CompilerSetupBean compilerWorkflowBean = project.getWorkerResult(CompilerSetupBean.class);
+        final String compilerBinDir = compilerWorkflowBean.getCompilerBinDir();
+        final String compilerResourcesDir = compilerWorkflowBean.getCompilerResourcesDir();
+        final String tempDir = compilerWorkflowBean.getTempDir();
+        final String crosscompilerSource = project.getSourceCode().toString();
+        Util.storeGeneratedProgram(tempDir, crosscompilerSource, project.getToken(), project.getProgramName(), "." + project.getSourceCodeFileExtension());
         String scriptName = compilerResourcesDir + "../compile." + (SystemUtils.IS_OS_WINDOWS ? "bat" : "sh");
         Boolean bluetooth = project.getRobot().equals("calliope2017");
         String bluetoothParam = bluetooth ? "-b" : "";
@@ -69,7 +63,7 @@ public class CalliopeCompilerWorker implements IWorker {
                 bluetoothParam
             };
 
-        Pair<Boolean, String> result = AbstractCompilerWorkflow.runCrossCompiler(executableWithParameters);
+        Pair<Boolean, String> result = Util.runCrossCompiler(executableWithParameters, crosscompilerSource);
         Key resultKey = result.getFirst() ? Key.COMPILERWORKFLOW_SUCCESS : Key.COMPILERWORKFLOW_ERROR_PROGRAM_COMPILE_FAILED;
         if ( result.getFirst() ) {
             try {

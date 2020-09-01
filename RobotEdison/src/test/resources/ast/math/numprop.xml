@@ -1,4 +1,4 @@
-<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="edison" xmlversion="2.0" description="" tags="">
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="edison" xmlversion="3.0" description="" tags="">
     <instance x="485" y="182">
         <block type="math_number_property" id="NgODg*||fx}K#?m1mQG}" intask="false">
             <mutation divisor_input="false"></mutation>

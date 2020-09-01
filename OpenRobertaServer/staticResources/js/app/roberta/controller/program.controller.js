@@ -1,5 +1,5 @@
-define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'robot.controller', 'program.model', 'progCode.controller', 'blocks', 'jquery',
-        'jquery-validate', 'blocks-msg' ], function(exports, COMM, MSG, LOG, UTIL, GUISTATE_C, ROBOT_C, PROGRAM, PROGCODE_C, Blockly, $) {
+define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'robot.controller', 'program.model', 'configuration.controller', 'progCode.controller', 'blockly', 'jquery',
+        'jquery-validate' ], function(exports, COMM, MSG, LOG, UTIL, GUISTATE_C, ROBOT_C, PROGRAM, CONFIGURATION_C, PROGCODE_C, Blockly, $) {
 
     var $formSingleModal;
 
@@ -14,7 +14,6 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'ro
         initProgramEnvironment();
         initEvents();
         initProgramForms();
-        LOG.info('init program view');
         exports.SSID = '';
         exports.password = '';
     }
@@ -46,8 +45,6 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'ro
             group : GUISTATE_C.getRobotGroup(),
             robot : GUISTATE_C.getRobot()
         });
-        //TODO: add the version information in the Parent POM!.
-        blocklyWorkspace.setVersion('2.0');
         GUISTATE_C.setBlocklyWorkspace(blocklyWorkspace);
         blocklyWorkspace.robControls.disable('saveProgram');
         blocklyWorkspace.robControls.refreshTooltips(GUISTATE_C.getRobotRealName());
@@ -94,7 +91,7 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'ro
         $('#tabProgram').on('shown.bs.tab', function(e) {
             blocklyWorkspace.markFocused();
             blocklyWorkspace.setVisible(true);
-            if (!seen) {
+            if (!seen) { // TODO may need to be removed if program tab can recieve changes while in background
                 reloadView();
             }
             $(window).resize();
@@ -153,7 +150,7 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'ro
         var configName = isNamedConfig ? GUISTATE_C.getConfigurationName() : undefined;
         var xmlConfigText = GUISTATE_C.isConfigurationAnonymous() ? GUISTATE_C.getConfigurationXML() : undefined;
 
-        PROGRAM.saveProgramToServer(GUISTATE_C.getProgramName(), xmlProgramText, configName, xmlConfigText, GUISTATE_C.getProgramShared() ? true : false, GUISTATE_C.getProgramTimestamp(), function(
+        PROGRAM.saveProgramToServer(GUISTATE_C.getProgramName(), GUISTATE_C.getProgramOwnerName(), xmlProgramText, configName, xmlConfigText, GUISTATE_C.getProgramTimestamp(), function(
                 result) {
             if (result.rc === 'ok') {
                 GUISTATE_C.setProgramTimestamp(result.lastChanged);
@@ -179,14 +176,15 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'ro
             var isNamedConfig = !GUISTATE_C.isConfigurationStandard() && !GUISTATE_C.isConfigurationAnonymous();
             var configName = isNamedConfig ? GUISTATE_C.getConfigurationName() : undefined;
             var xmlConfigText = GUISTATE_C.isConfigurationAnonymous() ? GUISTATE_C.getConfigurationXML() : undefined;
+            var userAccountName = GUISTATE_C.getUserAccountName();
 
             LOG.info('saveAs program ' + GUISTATE_C.getProgramName());
-            PROGRAM.saveAsProgramToServer(progName, xmlProgramText, configName, xmlConfigText, GUISTATE_C.getProgramTimestamp(), function(result) {
+            PROGRAM.saveAsProgramToServer(progName, userAccountName, xmlProgramText, configName, xmlConfigText, GUISTATE_C.getProgramTimestamp(), function(result) {
                 UTIL.response(result);
                 if (result.rc === 'ok') {
                     result.name = progName;
                     result.programShared = false;
-                    GUISTATE_C.setProgram(result);
+                    GUISTATE_C.setProgram(result, userAccountName, userAccountName);
                     MSG.displayInformation(result, "MESSAGE_EDIT_SAVE_PROGRAM_AS", result.message, GUISTATE_C.getProgramName());
                 }
             });
@@ -213,22 +211,23 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'ro
                     result.programShared = 'READ';
                     result.name = programName;
                     GUISTATE_C.setProgram(result, owner, user);
-                    GUISTATE_C.setProgramXML(result.programText);
+                    GUISTATE_C.setProgramXML(result.progXML);
 //                    GUISTATE_C.setConfigurationName('');
-//                    GUISTATE_C.setConfigurationXML(result.configText);
+//                    GUISTATE_C.setConfigurationXML(result.confXML);
                     if (result.configName === undefined) {
-                        if (result.configText === undefined) {
+                        if (result.confXML === undefined) {
                             GUISTATE_C.setConfigurationNameDefault();
                             GUISTATE_C.setConfigurationXML(GUISTATE_C.getConfigurationConf());
                         } else {
                             GUISTATE_C.setConfigurationName('');
-                            GUISTATE_C.setConfigurationXML(result.configText);
+                            GUISTATE_C.setConfigurationXML(result.confXML);
                         }
                     } else {
                         GUISTATE_C.setConfigurationName(result.configName);
-                        GUISTATE_C.setConfigurationXML(result.configText);
+                        GUISTATE_C.setConfigurationXML(result.confXML);
                     }
                     $('#tabProgram').one('shown.bs.tab', function(e) {
+                        CONFIGURATION_C.reloadConf();
                         reloadProgram();
                     });
                     $('#tabProgram').trigger('click');
@@ -395,8 +394,13 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'ro
     }
 
     function reloadProgram(opt_result, opt_fromShowSource) {
+        var program;
         if (opt_result) {
-            program = opt_result.data;
+            program = opt_result.progXML;
+            if (!$.isEmptyObject(opt_result.confAnnos)) {
+                GUISTATE_C.confAnnos = opt_result.confAnnos;
+                UTIL.alertTab('tabConfiguration');
+            }
         } else {
             program = GUISTATE_C.getProgramXML();
         }
@@ -424,8 +428,6 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'ro
             group : GUISTATE_C.getRobotGroup(),
             robot : GUISTATE_C.getRobot()
         });
-        //TODO: add the version information in the Parent POM!.
-        blocklyWorkspace.setVersion('2.0');
         initProgramEnvironment();
         var toolbox = GUISTATE_C.getProgramToolbox();
         blocklyWorkspace.updateToolbox(toolbox);
@@ -460,11 +462,15 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'ro
     }
 
     function programToBlocklyWorkspace(xml, opt_fromShowSource) {
+        if (!xml) {
+            return;
+        }
         listenToBlocklyEvents = false;
         Blockly.hideChaff();
         blocklyWorkspace.clear();
         var dom = Blockly.Xml.textToDom(xml, blocklyWorkspace);
         Blockly.Xml.domToWorkspace(dom, blocklyWorkspace);
+        blocklyWorkspace.setVersion(dom.getAttribute('xmlversion'));
         $('#infoContent').html(blocklyWorkspace.description);
         if (typeof blocklyWorkspace.description === 'string' && blocklyWorkspace.description.length) {
             $('#infoButton').addClass('notEmpty');

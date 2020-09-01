@@ -6,12 +6,12 @@
 
 
 int _SPU_S2 = 2048;
-Stepper Motor_S2(_SPU_S2, 6, 5, 4, 3);
+Stepper _stepper_S2(_SPU_S2, 6, 4, 5, 3);
 void setup()
 {}
 
 void loop()
 {
-    Motor_S2.setSpeed(10);
-    Motor_S2.step(_SPU_S2*(5)/360);
+    _stepper_S2.setSpeed(10);
+    _stepper_S2.step(_SPU_S2*(5)/360);
 }

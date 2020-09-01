@@ -1,15 +1,13 @@
-define([ 'require', 'exports', 'log', 'util', 'comm', 'message', 'progList.model', 'program.model', 'configuration.controller', 'program.controller',
-        'guiState.controller', 'blocks-msg', 'jquery', 'bootstrap-table' ], function(require, exports, LOG, UTIL, COMM, MSG, PROGLIST, PROGRAM,
+define([ 'require', 'exports', 'log', 'util', 'comm', 'message', 'progList.model', 'userGroup.model', 'program.model', 'configuration.controller', 'program.controller',
+        'guiState.controller', 'blockly', 'jquery', 'bootstrap-table' ], function(require, exports, LOG, UTIL, COMM, MSG, PROGLIST, USERGROUP, PROGRAM,
         CONFIGURATION_C, PROGRAM_C, GUISTATE_C, Blockly, $) {
 
     /**
      * Initialize table of programs
      */
     function init() {
-
         initProgList();
         initProgListEvents();
-        LOG.info('init program list view');
     }
     exports.init = init;
 
@@ -18,6 +16,7 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'message', 'progList.model
             height : UTIL.calcDataTableHeight(),
             pageList : '[ 10, 25, All ]',
             toolbar : '#progListToolbar',
+            toolbarAlign: 'none',
             showRefresh : 'true',
             sortName : 4,
             sortOrder : 'desc',
@@ -56,8 +55,16 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'message', 'progList.model
                 sortable : true,
                 formatter : UTIL.formatDate
             }, {
-                checkbox : true,
+                title: '<input name="btSelectAll" type="checkbox">',
+                formatter: function(value, row, index) {
+                    if (GUISTATE_C.isUserMemberOfUserGroup() && row[1] === GUISTATE_C.getUserUserGroupOwner()) {
+                        return '<input type="checkbox" name="btSelectItem" data-index="' + index + '" disabled>';
+                    }
+                    return '<input type="checkbox" name="btSelectItem" data-index="' + index + '">';
+                },
                 valign : 'middle',
+                halign: 'center',
+                align: 'center',
             }, {
                 events : eventsDeleteShareLoad,
                 title : titleActions,
@@ -71,70 +78,106 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'message', 'progList.model
     }
 
     function initProgListEvents() {
+        var $tabProgList = $('#tabProgList'),
+            $progList = $('#progList'),
+            $programNameTable = $('#programNameTable'),
+            $userGroupOptGroup = $('#progListUserGroupScope'),
+            $userGroupSelect = $userGroupOptGroup.closest('select');
+        
+        $userGroupSelect.detach();
+        $progList.find('button[name="refresh"]').parent().prepend($userGroupSelect);
 
         $(window).resize(function() {
-            $('#programNameTable').bootstrapTable('resetView', {
+            $programNameTable.bootstrapTable('resetView', {
                 height : UTIL.calcDataTableHeight()
             });
         });
-        $('#tabProgList').on('show.bs.tab', function(e) {
+        $tabProgList.on('show.bs.tab', function(e) {
             guiStateController.setView('tabProgList');
-
-        });
-
-        $('#tabProgList').on('shown.bs.tab', function(e) {
-            if ($('#tabProgList').data('type') === 'userProgram') {
-                PROGLIST.loadProgList(update);
-            } else {
-                PROGLIST.loadExampleList(updateExamplePrograms);
+            $programNameTable.bootstrapTable("load", []);
+            $userGroupSelect.hide();
+            if ($tabProgList.data('type') === 'userProgram') {
+                $userGroupOptGroup.closest('select').val('userProgram');
+                $userGroupOptGroup.find('option').remove();
+                if (!GUISTATE_C.isUserMemberOfUserGroup()) {
+                    USERGROUP.loadUserGroupList(function(data) {
+                        if (data.rc == 'ok' && data.userGroups.length > 0) {
+                            data.userGroups.forEach(function(userGroup) {
+                                $userGroupOptGroup.append('<option value="' + userGroup.name + '">' + userGroup.name + '</option>');
+                            });
+                            $userGroupSelect.show();
+                        }
+                    });
+                }
             }
         });
 
-        $('#progList').find('button[name="refresh"]').onWrap('click', function() {
-            if ($('#tabProgList').data('type') === 'userProgram') {
-                PROGLIST.loadProgList(update);
-            } else {
-                PROGLIST.loadExampleList(updateExamplePrograms);
+        $tabProgList.on('shown.bs.tab', function(e) {
+            switch ($tabProgList.data('type')) {
+                case 'userProgram':
+                    PROGLIST.loadProgList(update);
+                    break;
+                case 'exampleProgram':
+                default:
+                    PROGLIST.loadExampleList(updateExamplePrograms);
+            }
+        });
+
+        $progList.find('button[name="refresh"]').onWrap('click', function() {
+            switch ($tabProgList.data('type')) {
+                case 'userProgram':
+                    $userGroupSelect.change();
+                    break;
+                case 'userGroupMemberProgram':
+                case 'exampleProgram':
+                default:
+                    PROGLIST.loadExampleList(updateExamplePrograms);
             }
             return false;
         }, "refresh program list clicked");
+        
+        $userGroupSelect.change(function(evt) {
+            if ($tabProgList.data('type') !== 'userProgram') {
+                return;
+            }
+            var selectVal = $userGroupSelect.val();
+            
+            if (selectVal === 'userProgram') {
+                PROGLIST.loadProgList(update);
+            } else {
+                PROGLIST.loadProgListFromUserGroupMembers(selectVal, update);
+            }
+        });
 
-        $('#programNameTable').onWrap('click-row.bs.table', function($element, row) {
+        $programNameTable.onWrap('click-row.bs.table', function($element, row) {
             loadFromListing(row);
         }, "Load program from listing clicked");
 
-        $('#programNameTable').onWrap('check-all.bs.table', function($element, rows) {
-            $('.deleteSomeProg').removeClass('disabled');
-            $('#shareSome').removeClass('disabled');
-            $('.delete').addClass('disabled');
-            $('.share').addClass('disabled');
-            $('.load').addClass('disabled');
+        $programNameTable.onWrap('check-all.bs.table', function($element, rows) {
+            $programNameTable.find('.deleteSomeProg').removeClass('disabled');
+            $programNameTable.find('#shareSome').removeClass('disabled');
+            $programNameTable.find('.delete, .share, .gallery, .load').addClass('disabled');
         }, 'check all programs');
 
-        $('#programNameTable').onWrap('check.bs.table', function($element, row) {
-            $('.deleteSomeProg').removeClass('disabled');
-            $('#shareSome').removeClass('disabled');
-            $('.delete').addClass('disabled');
-            $('.share').addClass('disabled');
-            $('.load').addClass('disabled');
+        $programNameTable.onWrap('check.bs.table', function(e, row, $element) {
+            $programNameTable.find('.deleteSomeProg').removeClass('disabled');
+            $programNameTable.find('#shareSome').removeClass('disabled');
+            $programNameTable.find('.delete, .share, .gallery, .load').addClass('disabled');
+            
         }, 'check one program');
 
-        $('#programNameTable').onWrap('uncheck-all.bs.table', function($element, rows) {
-            $('.deleteSomeProg').addClass('disabled');
-            $('#shareSome').addClass('disabled');
-            $('.delete').removeClass('disabled');
-            $('.share').removeClass('disabled');
-            $('.load').removeClass('disabled');
+        $programNameTable.onWrap('uncheck-all.bs.table', function($element, rows) {
+            $programNameTable.find('.deleteSomeProg').addClass('disabled');
+            $programNameTable.find('#shareSome').addClass('disabled');
+            $programNameTable.find('.delete, .share, .gallery, .load').filter(':not([data-status="disabled"])').removeClass('disabled');
         }, 'uncheck all programs');
 
-        $('#programNameTable').onWrap('uncheck.bs.table', function($element, row) {
-            var selectedRows = $('#programNameTable').bootstrapTable('getSelections');
-            if (selectedRows.length <= 0 || selectedRows == null) {
-                $('.deleteSomeProg').addClass('disabled');
-                $('#shareSome').addClass('disabled');
-                $('.delete').removeClass('disabled');
-                $('.share').removeClass('disabled');
-                $('.load').removeClass('disabled');
+        $programNameTable.onWrap('uncheck.bs.table', function(e, row, $element) {
+            var selectedRows = $programNameTable.bootstrapTable('getSelections');
+            if (!selectedRows || selectedRows.length === 0) {
+                $programNameTable.find('.deleteSomeProg').addClass('disabled');
+                $programNameTable.find('#shareSome').addClass('disabled');
+                $programNameTable.find('.delete, .share, .gallery, .load').filter(':not([data-status="disabled"])').removeClass('disabled');
             }
         }, 'uncheck one program');
 
@@ -144,7 +187,7 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'message', 'progList.model
         }, "back to program view")
 
         $(document).onWrap('click', '.deleteSomeProg', function() {
-            var programs = $('#programNameTable').bootstrapTable('getSelections', {});
+            var programs = $programNameTable.bootstrapTable('getSelections', {});
             var names = '<br>';
             for (var i = 0; i < programs.length; i++) {
                 names += programs[i][0];
@@ -159,8 +202,8 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'message', 'progList.model
             return false;
         }, "delete programs");
 
-        $('#programNameTable').on('shown.bs.collapse hidden.bs.collapse', function(e) {
-            $('#programNameTable').bootstrapTable('resetWidth');
+        $programNameTable.on('shown.bs.collapse hidden.bs.collapse', function(e) {
+            $programNameTable.bootstrapTable('resetWidth');
         });
 
         function update(result) {
@@ -174,7 +217,7 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'message', 'progList.model
                 }
             }
 
-            $('#deleteSomeProg').attr('data-original-title', Blockly.Msg.PROGLIST_DELETE_ALL_TOOLTIP || "Click here to delete all selected programs.");
+            $('.deleteSomeProg').attr('data-original-title', Blockly.Msg.PROGLIST_DELETE_ALL_TOOLTIP || "Click here to delete all selected programs.");
             $('#programNameTable').find('.delete').attr('data-original-title', Blockly.Msg.PROGLIST_DELETE_TOOLTIP || 'Click here to delete your program.');
             $('#programNameTable').find('.share').attr('data-original-title', Blockly.Msg.PROGLIST_SHARE_TOOLTIP
                     || "Click here to share your program with a friend.");
@@ -239,7 +282,7 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'message', 'progList.model
         },
         'click .gallery' : function(e, value, row, index) {
             e.stopPropagation();
-            if (!row[2].sharedFrom) {
+            if (!row[2].sharedFrom && !GUISTATE_C.isUserMemberOfUserGroup()) {
                 $('#share-with-gallery').trigger('updateAndShow', [ row ]);
             }
             return false;
@@ -263,39 +306,53 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'message', 'progList.model
         if (value.sharedFrom === 'X_WRITE') {
             return '<span class="typcn typcn-key"></span>';
         }
-        if (value.sharedWith && Object.keys(value.sharedWith).length == 1) {
+        if (value.sharedWith && value.sharedWith.length == 1) {
             var result = '';
             $.each(value.sharedWith, function(i, obj) {
-                $.each(obj, function(user, right) {
-                    result += '<span>';
-                    if (user === 'Roberta') {
-                        // should not happen
-                    } else if (right === 'READ') {
-                        result += '<span class="typcn typcn-eye"></span>';
-                    } else if (right === 'X_WRITE') {
-                        result += '<span class="typcn typcn-key"></span>';
-                    } else if (right === 'WRITE') {
-                        result += '<span class="typcn typcn-pencil"></span>';
-                    }
-                    result += '&nbsp;';
-                    result += user;
-                    result += '</span>';
-                });
+                result += '<span>';
+                if (obj.type === 'User' && obj.label === 'Roberta') {
+                    // should not happen
+                } else if (obj.right === 'READ') {
+                    result += '<span class="typcn typcn-eye"></span>';
+                } else if (obj.right === 'X_WRITE') {
+                    result += '<span class="typcn typcn-key"></span>';
+                } else if (obj.right === 'WRITE') {
+                    result += '<span class="typcn typcn-pencil"></span>';
+                }
+                
+                if (obj.type === 'User') {
+                    result += '&nbsp;<span class="typcn typcn-user"></span>';
+                } else if (obj.type === 'UserGroup') {
+                    result += '&nbsp;<span class="typcn typcn-group"></span>';
+                }
+                
+                result += '&nbsp;';
+
+                result += '<span class="value">';
+                result += obj.label;
+                result += '</span>';
+                result += '</span>';
             });
             return result;
         }
         if (value.sharedWith && Object.keys(value.sharedWith).length > 1) {
             var result = [];
             $.each(value.sharedWith, function(i, obj) {
-                $.each(obj, function(user, right) {
-                    if (user === 'Roberta') {
-                        return true;
-                    } else if (right === 'READ') {
-                        result.push('<span class="typcn typcn-eye"></span>&nbsp;' + user);
-                    } else {
-                        result.push('<span class="typcn typcn-pencil"></span>&nbsp;' + user);
-                    }
-                });
+                var typeLabel = "";
+                
+                if (obj.type === 'User') {
+                    typeLabel = '&nbsp;<span class="typcn typcn-user"></span>';
+                } else if (obj.type === 'UserGroup') {
+                    typeLabel = '&nbsp;<span class="typcn typcn-group"></span>';
+                }
+                
+                if (obj.type === 'User' && obj.label === 'Roberta') {
+                    //Do nothing
+                } else if (obj.right === 'READ') {
+                    result.push('<span class="typcn typcn-eye"></span>' + typeLabel + '&nbsp;<span class="value">' + obj.label + '</span>');
+                } else if (obj.right === 'WRITE') {
+                    result.push('<span class="typcn typcn-pencil"></span>' + typeLabel + '&nbsp;<span class="value">' + obj.label + '</span>');
+                }
             });
             var resultString = '<div style="white-space:nowrap;"><span style="float:left;">';
             resultString += result[0];
@@ -314,13 +371,21 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'message', 'progList.model
         // TODO check here and on the server, if this user is allowed to share programs
         var result = '';
         if ($('#tabProgList').data('type') === 'userProgram') {
-            result += '<a href="#" class="delete" rel="tooltip" lkey="Blockly.Msg.PROGLIST_DELETE_TOOLTIP" data-original-title="" title=""><span class="typcn typcn-delete"></span></a>';
+            if (!GUISTATE_C.isUserMemberOfUserGroup() || GUISTATE_C.getUserUserGroupOwner() !== row[1]) {
+                result += '<a href="#" class="delete" rel="tooltip" lkey="Blockly.Msg.PROGLIST_DELETE_TOOLTIP" data-original-title="" title=""><span class="typcn typcn-delete"></span></a>';
+            } else {
+                result += '<a href="#" class="delete disabled" data-status="disabled"><span class="typcn typcn-delete"></span></a>';
+            }
             if (row[2].sharedFrom) {
-                result += '<a href="#" class="share disabled"><span class="typcn typcn-flow-merge"></span></a>';
-                result += '<a href="#" class="gallery disabled"><span class="typcn typcn-th-large-outline"></span></a>';
+                result += '<a href="#" class="share disabled" data-status="disabled"><span class="typcn typcn-flow-merge"></span></a>';
+                if (!GUISTATE_C.isUserMemberOfUserGroup()) {
+                    result += '<a href="#" class="gallery disabled" data-status="disabled"><span class="typcn typcn-th-large-outline"></span></a>';
+                }
             } else {
                 result += '<a href="#" class="share" rel="tooltip" lkey="Blockly.Msg.PROGLIST_SHARE_TOOLTIP" data-original-title="" title=""><span class="typcn typcn-flow-merge"></span></a>';
-                result += '<a href="#" class="gallery" rel="tooltip" lkey="Blockly.Msg.PROGLIST_SHARE_WITH_GALLERY_TOOLTIP" data-original-title="" title=""><span class="typcn typcn-th-large-outline"></span></a>';
+                if (!GUISTATE_C.isUserMemberOfUserGroup()) {
+                    result += '<a href="#" class="gallery" rel="tooltip" lkey="Blockly.Msg.PROGLIST_SHARE_WITH_GALLERY_TOOLTIP" data-original-title="" title=""><span class="typcn typcn-th-large-outline"></span></a>';
+                }
             }
         }
         result += '<a href="#" class="load" rel="tooltip" lkey="Blockly.Msg.PROGLIST_LOAD_TOOLTIP" data-original-title="" title=""><span class="typcn typcn-document"></span></a>';
@@ -340,21 +405,10 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'message', 'progList.model
                 return -1;
         }
         if (a.sharedWith && b.sharedWith) {
-            var value = {};
-            $.each(a.sharedWith, function(i, obj) {
-                $.each(obj, function(user, right) {
-                    value.a = right;
-                    return false;
-                });
-                return false;
-            });
-            $.each(b.sharedWith, function(i, obj) {
-                $.each(obj, function(user, right) {
-                    value.b = right;
-                    return false;
-                });
-                return false;
-            });
+            var value = {
+                    a: a.sharedWith[0].right,
+                    b: b.sharedWith[0].right
+            };
             if (value.a === value.b)
                 return 0;
             if (value.a === 'WRITE')
@@ -395,19 +449,19 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'message', 'progList.model
                 }
                 result.name = program[0];
                 GUISTATE_C.setProgram(result, alien);
-                GUISTATE_C.setProgramXML(result.programText);
+                GUISTATE_C.setProgramXML(result.progXML);
 
                 if (result.configName === undefined) {
-                    if (result.configText === undefined) {
+                    if (result.confXML === undefined) {
                         GUISTATE_C.setConfigurationNameDefault();
                         GUISTATE_C.setConfigurationXML(GUISTATE_C.getConfigurationConf());
                     } else {
                         GUISTATE_C.setConfigurationName('');
-                        GUISTATE_C.setConfigurationXML(result.configText);
+                        GUISTATE_C.setConfigurationXML(result.confXML);
                     }
                 } else {
                     GUISTATE_C.setConfigurationName(result.configName);
-                    GUISTATE_C.setConfigurationXML(result.configText);
+                    GUISTATE_C.setConfigurationXML(result.confXML);
                 }
                 $('#tabProgram').one('shown.bs.tab', function(e) {
                     CONFIGURATION_C.reloadConf();

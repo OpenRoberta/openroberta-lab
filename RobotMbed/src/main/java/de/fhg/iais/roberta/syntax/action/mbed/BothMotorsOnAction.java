@@ -53,7 +53,7 @@ public final class BothMotorsOnAction<V> extends Action<V> {
      * @param comment added from the user,
      * @return read only object of class {@link BothMotorsOnAction}
      */
-    private static <V> BothMotorsOnAction<V> make(
+    public static <V> BothMotorsOnAction<V> make(
         String portA,
         String portB,
         Expr<V> speedA,

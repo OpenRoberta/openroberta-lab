@@ -12,9 +12,9 @@ import java.util.concurrent.TimeUnit;
 
 import javax.ws.rs.core.Response;
 
-import org.codehaus.jettison.json.JSONException;
-import org.codehaus.jettison.json.JSONObject;
 import org.eclipse.jetty.server.Server;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -32,6 +32,7 @@ import com.google.common.base.Charsets;
 import com.google.common.io.Resources;
 
 import de.fhg.iais.roberta.factory.IRobotFactory;
+import de.fhg.iais.roberta.generated.restEntities.FullRestRequest;
 import de.fhg.iais.roberta.javaServer.basics.TestConfiguration;
 import de.fhg.iais.roberta.javaServer.restServices.all.controller.ClientProgramController;
 import de.fhg.iais.roberta.javaServer.restServices.all.controller.ClientUser;
@@ -46,6 +47,7 @@ import de.fhg.iais.roberta.testutil.SeleniumHelper;
 import de.fhg.iais.roberta.util.Key;
 import de.fhg.iais.roberta.util.ServerProperties;
 import de.fhg.iais.roberta.util.Util;
+import de.fhg.iais.roberta.util.XsltTransformer;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.util.testsetup.IntegrationTest;
 
@@ -80,6 +82,7 @@ public class RoundTripIT {
     private static SessionFactoryWrapper sessionFactoryWrapper;
     private static DbSetup memoryDbSetup;
     private static RobotCommunicator brickCommunicator;
+    private static XsltTransformer xsltTransformer;
 
     private static ClientUser restUser;
     private static ClientProgramController restProject;
@@ -96,6 +99,7 @@ public class RoundTripIT {
         ServerProperties serverProperties = new ServerProperties(Util.loadProperties("classpath:/openRoberta.properties"));
         browserVisibility = Boolean.parseBoolean(serverProperties.getStringProperty("browser.visibility"));
         brickCommunicator = new RobotCommunicator();
+        xsltTransformer = new XsltTransformer();
 
         TestConfiguration tc = TestConfiguration.setup();
         sessionFactoryWrapper = tc.getSessionFactoryWrapper();
@@ -210,7 +214,7 @@ public class RoundTripIT {
             blocklyProgram = Resources.toString(PerformanceUserIT.class.getResource(resourcePath + program + ".xml"), Charsets.UTF_8);
             JSONObject fullRequest = new JSONObject("{\"log\":[];\"data\":{\"cmd\":\"saveAsP\";\"name\":\"" + program + "\";\"timestamp\":0}}");
             fullRequest.getJSONObject("data").put("program", blocklyProgram);
-            response = restProject.saveProgram(newDbSession(), fullRequest);
+            response = restProject.saveProgram(newDbSession(), FullRestRequest.make(fullRequest));
             JSONUtilForServer.assertEntityRc(response, "ok", Key.PROGRAM_SAVE_SUCCESS);
         }
     }
@@ -253,7 +257,7 @@ public class RoundTripIT {
         WebElement userProgramSaveAsElement = (new WebDriverWait(driver, 10)).until(ExpectedConditions.elementToBeClickable(By.id("menuSaveProg")));
         userProgramSaveAsElement.click();
 
-        response = restProject.importProgram(JSONUtilForServer.mkD("{'cmd':'loadP';'name':'" + programName + "';'owner':'orA'}"));
+        response = restProject.importProgram(xsltTransformer, mkCmd("{'cmd':'loadP';'name':'" + programName + "';'owner':'orA'}"));
         String resultProgram = ((JSONObject) response.getEntity()).getString("data");
         return resultProgram;
     }
@@ -316,7 +320,7 @@ public class RoundTripIT {
         return sessionFactoryWrapper.getSession();
     }
 
-    private static JSONObject mkCmd(String cmdAsString) throws JSONException {
-        return JSONUtilForServer.mkD(cmdAsString);
+    private static FullRestRequest mkCmd(String cmdAsString) throws JSONException {
+        return JSONUtilForServer.mkFRR(cmdAsString);
     }
 }

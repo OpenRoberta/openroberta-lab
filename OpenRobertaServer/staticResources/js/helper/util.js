@@ -300,13 +300,13 @@ define([ 'exports', 'message', 'log', 'jquery', 'jquery-validate', 'bootstrap' ]
     /**
      * Rounds a number to required decimal and clips value to the range [0, 255]
      * (Range of UltraSound sensor)
-     *
+     * 
      * @param value
      *            {Number} - to be rounded
      * @param decimals
      *            {Number} - number of decimals after rounding
      * @return {Number} rounded and clipped number
-     *
+     * 
      */
     function roundUltraSound(value, decimals) {
         var ultraReading = round(value, decimals);
@@ -409,11 +409,25 @@ define([ 'exports', 'message', 'log', 'jquery', 'jquery-validate', 'bootstrap' ]
             localStorage.setItem("test", "test");
             localStorage.removeItem("test");
             return true;
-        } catch(e) {
+        } catch (e) {
             return false;
         }
     }
     exports.isLocalStorageAvailable = isLocalStorageAvailable;
+
+    function alertTab(tabIdentifier) {
+        clearTabAlert(tabIdentifier);
+        $('#' + tabIdentifier).width(); // trigger a reflow to sync animations
+        $('#' + tabIdentifier).prepend('<span class="typcn typcn-warning-outline"></span>') // add alert typicon
+        $('#' + tabIdentifier).addClass('blinking');
+    }
+    exports.alertTab = alertTab;
+
+    function clearTabAlert(tabIdentifier) {
+        $('#' + tabIdentifier).children().remove('.typcn') // remove alert typicon
+        $('#' + tabIdentifier).removeClass('blinking');
+    }
+    exports.clearTabAlert = clearTabAlert;
 
     var __entityMap = {
         "&" : "&amp;",
@@ -515,6 +529,7 @@ define([ 'exports', 'message', 'log', 'jquery', 'jquery-validate', 'bootstrap' ]
             duration : ANIMATION_DURATION,
             start : function() {
                 $(".modal").modal("hide");
+                $('.rightMenuButton.rightActive').removeClass('rightActive');
             },
             step : function(now) {
                 that.width($('#main-section').outerWidth() - now);
@@ -530,7 +545,6 @@ define([ 'exports', 'message', 'log', 'jquery', 'jquery-validate', 'bootstrap' ]
                 $('.fromRight').width(0);
                 that.removeClass('rightActive');
                 $('.fromRight.rightActive').removeClass('rightActive');
-                $('.rightMenuButton.rightActive').removeClass('rightActive');
                 $('#sliderDiv').hide();
                 $(window).resize();
                 if (typeof opt_callBack == 'function') {
@@ -638,5 +652,65 @@ define([ 'exports', 'message', 'log', 'jquery', 'jquery-validate', 'bootstrap' ]
             Blockly.svgResize(workspace);
         }
     });
+
+    /**
+     * Remove error and warning annotation from all blocks located in this
+     * workspace. Usually this is done with a reload of all blocks, but here we
+     * only want to remove the annotations.
+     * 
+     * @param {workspacee}
+     *            workspace
+     */
+    function clearAnnotations(workspace) {
+        if (workspace && workspace instanceof Blockly.Workspace) {
+            var allBlocks = workspace.getAllBlocks();
+            for (var i = 0; i < allBlocks.length; i++) {
+                var icons = allBlocks[i].getIcons();
+                for (var k = 0; k < icons.length; k++) {
+                    var block = icons[k].block_;
+                    if (block.error) {
+                        block.error.dispose();
+                        block.render();
+                    } else if (block.warning) {
+                        block.warning.dispose();
+                        block.render();
+                    }
+                }
+            }
+        }
+    }
+    exports.clearAnnotations = clearAnnotations;
+
+    /**
+     * Annotate the visible configuration blocks with warnings and errors
+     * generated server side.
+     * 
+     * @param {object}
+     *            confAnnos - {block id, {type of annotation, message key}}
+     */
+    function annotateBlocks(workspace, annotations) {
+        for ( var annoId in annotations) {
+            var block = workspace.getBlockById(annoId);
+            if (block) {
+                var anno = annotations[annoId];
+                for ( var annoType in anno) {
+                    var annoMsg = Blockly.Msg[anno[annoType]] || anno[annoType] || "unknown error";
+                    switch (annoType) {
+                    case "ERROR":
+                        block.setErrorText(annoMsg);
+                        block.error.setVisible(true);
+                        break;
+                    case "WARNING":
+                        block.setWarningText(annoMsg);
+                        block.warning.setVisible(true);
+                        break;
+                    default:
+                        console.warn("Unsupported annotation: " + annoType);
+                    }
+                }
+            }
+        }
+    }
+    exports.annotateBlocks = annotateBlocks;
 
 });

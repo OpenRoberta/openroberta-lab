@@ -1,6 +1,6 @@
 package de.fhg.iais.roberta.ast.action;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -20,14 +20,14 @@ public class ToneActionTest extends AstTest {
 
     @Test
     public void getFrequency() throws Exception {
-        ArrayList<ArrayList<Phrase<Void>>> forest = UnitTestHelper.getAst(testFactory, "/ast/actions/action_PlaySound.xml");
+        List<List<Phrase<Void>>> forest = UnitTestHelper.getProgramAst(testFactory, "/ast/actions/action_PlaySound.xml");
         ToneAction<Void> ta = (ToneAction<Void>) forest.get(0).get(1);
         Assert.assertEquals("NumConst [300]", ta.getFrequency().toString());
     }
 
     @Test
     public void getDuration() throws Exception {
-        ArrayList<ArrayList<Phrase<Void>>> forest = UnitTestHelper.getAst(testFactory, "/ast/actions/action_PlaySound.xml");
+        List<List<Phrase<Void>>> forest = UnitTestHelper.getProgramAst(testFactory, "/ast/actions/action_PlaySound.xml");
         ToneAction<Void> ta = (ToneAction<Void>) forest.get(0).get(1);
         Assert.assertEquals("NumConst [100]", ta.getDuration().toString());
     }

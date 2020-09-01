@@ -1,4 +1,4 @@
-<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="edison" xmlversion="2.0" description="" tags="">
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="edison" xmlversion="3.0" description="" tags="">
     <instance x="349" y="133">
         <block type="robMath_change" id="K~yBXW{(!K^H+IZv{mrU" intask="false">
             <value name="DELTA">

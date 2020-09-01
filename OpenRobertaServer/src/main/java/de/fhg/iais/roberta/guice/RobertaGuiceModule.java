@@ -1,20 +1,19 @@
 package de.fhg.iais.roberta.guice;
 
-import java.util.Map;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.google.inject.AbstractModule;
 import com.google.inject.Singleton;
 import com.google.inject.TypeLiteral;
 import com.google.inject.name.Names;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.Map;
+
 import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.javaServer.restServices.all.controller.ClientAdmin;
 import de.fhg.iais.roberta.javaServer.restServices.all.controller.ClientConfiguration;
 import de.fhg.iais.roberta.javaServer.restServices.all.controller.ClientPing;
-import de.fhg.iais.roberta.javaServer.restServices.all.controller.ClientToolbox;
 import de.fhg.iais.roberta.javaServer.restServices.all.controller.ClientUser;
 import de.fhg.iais.roberta.javaServer.restServices.all.controller.RestExample;
 import de.fhg.iais.roberta.javaServer.restServices.robot.RobotCommand;
@@ -25,6 +24,7 @@ import de.fhg.iais.roberta.main.MailManagement;
 import de.fhg.iais.roberta.persistence.util.SessionFactoryWrapper;
 import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
 import de.fhg.iais.roberta.util.ServerProperties;
+import de.fhg.iais.roberta.util.XsltTransformer;
 
 public class RobertaGuiceModule extends AbstractModule {
     private static final Logger LOG = LoggerFactory.getLogger(RobertaGuiceModule.class);
@@ -49,7 +49,6 @@ public class RobertaGuiceModule extends AbstractModule {
         // configure at least one JAX-RS resource or the server won't start.
         bind(ClientAdmin.class);
         bind(ClientConfiguration.class);
-        bind(ClientToolbox.class);
         bind(ClientUser.class);
         bind(RobotDownloadProgram.class);
         bind(RobotCommand.class);
@@ -62,6 +61,7 @@ public class RobertaGuiceModule extends AbstractModule {
         bind(RobotCommunicator.class).toInstance(this.robotCommunicator);
         bind(MailManagement.class).in(Singleton.class);
         bind(IIpToCountry.class).toInstance(this.ipToCountry);
+        bind(XsltTransformer.class).in(Singleton.class);
 
         bind(new TypeLiteral<Map<String, IRobotFactory>>() {
         }).annotatedWith(Names.named("robotPluginMap")).toInstance(this.robotPluginMap);

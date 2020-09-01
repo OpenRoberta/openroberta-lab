@@ -47,7 +47,7 @@ public class SayTextAction<V> extends Action<V> {
      * @param comment added from the user,
      * @return read only object of class {@link SayTextAction}
      */
-    private static <V> SayTextAction<V> make(Expr<V> msg, Expr<V> speed, Expr<V> pitch, BlocklyBlockProperties properties, BlocklyComment comment) {
+    public static <V> SayTextAction<V> make(Expr<V> msg, Expr<V> speed, Expr<V> pitch, BlocklyBlockProperties properties, BlocklyComment comment) {
         return new SayTextAction<>(msg, speed, pitch, properties, comment);
     }
 

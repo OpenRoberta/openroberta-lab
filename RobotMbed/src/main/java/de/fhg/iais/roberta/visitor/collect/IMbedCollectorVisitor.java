@@ -21,8 +21,6 @@ import de.fhg.iais.roberta.syntax.action.mbed.RadioReceiveAction;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioSendAction;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioSetChannelAction;
 import de.fhg.iais.roberta.syntax.action.mbed.ServoSetAction;
-import de.fhg.iais.roberta.syntax.action.mbed.SingleMotorOnAction;
-import de.fhg.iais.roberta.syntax.action.mbed.SingleMotorStopAction;
 import de.fhg.iais.roberta.syntax.action.mbed.SwitchLedMatrixAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayFileAction;
 import de.fhg.iais.roberta.syntax.action.sound.VolumeAction;
@@ -126,17 +124,6 @@ public interface IMbedCollectorVisitor extends ICollectorVisitor, IMbedVisitor<V
     @Override
     default Void visitRadioSetChannelAction(RadioSetChannelAction<Void> radioSetChannelAction) {
         radioSetChannelAction.getChannel().accept(this);
-        return null;
-    }
-
-    @Override
-    default Void visitSingleMotorOnAction(SingleMotorOnAction<Void> singleMotorOnAction) {
-        singleMotorOnAction.getSpeed().accept(this);
-        return null;
-    }
-
-    @Override
-    default Void visitSingleMotorStopAction(SingleMotorStopAction<Void> singleMotorStopAction) {
         return null;
     }
 

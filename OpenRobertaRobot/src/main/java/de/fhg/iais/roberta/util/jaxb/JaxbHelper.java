@@ -7,6 +7,7 @@ import java.nio.charset.StandardCharsets;
 
 import javax.xml.XMLConstants;
 import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.transform.stream.StreamSource;
@@ -19,8 +20,6 @@ import org.slf4j.LoggerFactory;
 import org.xml.sax.InputSource;
 
 import de.fhg.iais.roberta.blockly.generated.BlockSet;
-import de.fhg.iais.roberta.factory.IRobotFactory;
-import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 
 public class JaxbHelper {
     private static final Logger LOG = LoggerFactory.getLogger(JaxbHelper.class);
@@ -50,7 +49,7 @@ public class JaxbHelper {
      * @param blocklyXml the blockly XML as String
      * @return the BlockSet instance corresponding to the XML
      */
-    public static BlockSet xml2BlockSet(String blocklyXml) throws Exception {
+    public static BlockSet xml2BlockSet(String blocklyXml) throws JAXBException {
         Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
         jaxbUnmarshaller.setSchema(blockSetSchema);
 
@@ -68,7 +67,7 @@ public class JaxbHelper {
      * @return the element instance corresponding to the XML
      */
     @SuppressWarnings("unchecked")
-    public static <T> T xml2Element(String xml, Class<T> clazz) throws Exception {
+    public static <T> T xml2Element(String xml, Class<T> clazz) throws JAXBException {
         JAXBContext jaxbContext = JAXBContext.newInstance(clazz);
         Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
         jaxbUnmarshaller.setSchema(blockSetSchema);
@@ -101,19 +100,4 @@ public class JaxbHelper {
     public static BlockSet path2BlockSet(String pathToblocklyXml) throws Exception {
         return xml2BlockSet(IOUtils.toString(JaxbHelper.class.getResourceAsStream(pathToblocklyXml), "UTF-8"));
     }
-
-    /**
-     * return the jaxb transformer for a given XML program text.
-     *
-     * @param blocklyXml the program XML as String
-     * @return jaxb the transformer
-     * @throws Exception
-     */
-    public static Jaxb2ProgramAst<Void> generateProgramTransformer(IRobotFactory factory, String blocklyXml) throws Exception {
-        BlockSet project = JaxbHelper.xml2BlockSet(blocklyXml);
-        Jaxb2ProgramAst<Void> transformer = new Jaxb2ProgramAst<>(factory);
-        transformer.transform(project);
-        return transformer;
-    }
-
 }

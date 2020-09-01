@@ -49,7 +49,7 @@ public class LedBarSetAction<V> extends Action<V> {
      * @param comment added from the user,
      * @return read only object of class {@link LedBarSetAction}
      */
-    private static <V> LedBarSetAction<V> make(Expr<V> x, Expr<V> brightness, BlocklyBlockProperties properties, BlocklyComment comment) {
+    public static <V> LedBarSetAction<V> make(Expr<V> x, Expr<V> brightness, BlocklyBlockProperties properties, BlocklyComment comment) {
         return new LedBarSetAction<>(x, brightness, properties, comment);
     }
 

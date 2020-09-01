@@ -1,10 +1,9 @@
-define([ 'require', 'exports', 'log', 'util', 'message', 'comm', 'configuration.model', 'blocks-msg', 'jquery', 'bootstrap-table' ], function(require, exports,
+define([ 'require', 'exports', 'log', 'util', 'message', 'comm', 'configuration.model', 'blockly', 'jquery', 'bootstrap-table' ], function(require, exports,
         LOG, UTIL, MSG, COMM, CONFIGURATION, Blockly, $) {
 
     function init() {
 //        initView();
         initEvents();
-        LOG.info('init configuration delete');
     }
     exports.init = init;
 
@@ -25,7 +24,7 @@ define([ 'require', 'exports', 'log', 'util', 'message', 'comm', 'configuration.
                     UTIL.response(result);
                     if (result.rc === 'ok') {
                         MSG.displayInformation(result, "MESSAGE_CONFIGURATION_DELETED", result.message, confName);
-                        $('.bootstrap-table').find('button[name="refresh"]').trigger('click');
+                        $('#confList').find('button[name="refresh"]').trigger('click');
                         LOG.info('delete configuration "' + confName);
                     }
                 });

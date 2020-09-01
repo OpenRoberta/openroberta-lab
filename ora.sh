@@ -9,74 +9,6 @@ function _mkAndCheckDir {
   fi
 }
 
-function _aliveFn {
-  case "$1" in
-    '-q') quiet=result; shift ;;
-    '-Q') quiet=down; shift ;;
-    *)    quiet=false ;;
-  esac
-  serverUrl="$1"
-  shift
-  every="${1:-60}"
-  timeout="${2:-30}"
-
-  while :; do
-    if [[ "$quiet" == 'false' ]]
-    then
-       curl --max-time $timeout "$serverUrl/rest/alive"
-       rc=$?
-       if [[ $rc == 0 ]]
-       then
-          echo "curl ok at `date`"
-       fi
-    else
-       curl --max-time $timeout "$serverUrl/rest/alive" >/dev/null 2>&1
-       rc=$?
-    fi
-    if [[ $rc != 0 ]]
-    then
-       echo "***** server seems to be down at `date` ******"
-    elif [[ "$quiet" != 'down' ]]
-    then
-       echo "ok at `date`"
-    fi
-    sleep $every
-  done
-}
-
-# check, whether java and javac are on the PATH. Check for the java version.
-# variable checkJava contains debug information
-function _checkJava {
-  checkJava=''
-  if [[ "$JAVA_HOME" == '' ]]
-  then
-     checkJava=${checkJava}$'JAVA_HOME is undefined.\n'
-  fi
-  which java 2>/dev/null 1>/dev/null
-  if [[ $? != 0 ]]
-  then
-     checkJava=${checkJava}$'java was NOT found on the PATH.\n'
-  fi
-  which javac 2>/dev/null 1>/dev/null
-  if [[ $? != 0 ]]
-  then
-     checkJava=${checkJava}$'javac was NOT found on the PATH.\n'
-  fi
-  javaversion=$(java -d64 -version 2>&1)
-  case "$javaversion" in
-    *not\ support*) checkJava=${checkJava}$'This may be a 32 bit java version. A 64 bit jdk is recommended.\n' ;;
-    *)              : ;;
-  esac
-  javaversion=$(java -version 2>&1)
-  case "$javaversion" in
-    *1\.8\.*) : ;;
-    *)        checkJava=${checkJava}$'This may be a java version less than 1.8.*. A version 8 is recommended.' ;;
-  esac
-  echo 'you are using the following java runtime:'
-  echo "$javaversion"
-  echo "$checkJava"
-}
-
 function _export {
   exportpath="$1"
   case "$2" in
@@ -95,8 +27,7 @@ function _export {
   _mkAndCheckDir "$exportpath"
   exportpath=$(cd "$exportpath"; pwd)
   serverVersion=$(java -cp OpenRobertaServer/target/resources/\* de.fhg.iais.roberta.main.Administration version)
-  serverVersionForDb=$(java -cp OpenRobertaServer/target/resources/\* de.fhg.iais.roberta.main.Administration version-for-db)
-  echo "server version: ${serverVersion} - db: ${serverVersionForDb}"
+  echo "server version: ${serverVersion}"
   
   echo "copying all jars"
   _mkAndCheckDir "${exportpath}/lib"
@@ -105,7 +36,7 @@ function _export {
   echo 'copying the staticResources'
   cp -r OpenRobertaServer/staticResources ${exportpath}/staticResources
   case "$gzip" in
-    'n') echo 'staticResources are NOT gzip-ped. This increases load times when the internet connection is slow' ;;
+    'n') echo 'staticResources are NOT gzip-ped. This increases load times when the internet connection is slow. Use for debug only.' ;;
     'y') numberGzFiles=$(find ${exportpath}/staticResources -type f | egrep '\.gz$' | wc -l)
          if [[ $numberGzFiles != 0 ]]
          then
@@ -122,7 +53,7 @@ function _export {
   cp admin.sh ${exportpath}
   chmod ugo+rx admin.sh
   
-  echo "NOTE: You are responsible to supply a usable database in directory db-${serverVersionForDb}"
+  echo "NOTE: You are responsible to supply a usable database and set the corresponding -d parameter for server startup. SEE THE README.md"
 }
 
 # ---------------------------------------- begin of the script ----------------------------------------------------
@@ -132,7 +63,41 @@ then
   exit 12
 fi
 
-JAVA_LIBS="OpenRobertaServer/target/resources" # done by mvn install ...
+# the following settings fit for 'export' and 'start-from-git' 
+DB_PARENTDIR=./OpenRobertaServer/db-embedded
+DB_NAME=openroberta-db
+JAVA_LIB_DIR='OpenRobertaServer/target/resources' # created by mvn install ...
+ADMIN_DIR='./admin'
+CC_RESOURCE_DIR='../ora-cc-rsc'
+QUIET='no'
+XMX=''
+RDBG=''
+ 
+while true
+do
+  case "$1" in
+    -dbParentdir)  DB_PARENTDIR=$2
+                   shift; shift ;;
+    -dbName)       DB_NAME=$2
+                   shift; shift ;;
+    -java-lib-dir) JAVA_LIB_DIR=$2
+                   shift; shift ;;
+    -admin-dir)    ADMIN_DIR=$2
+                   shift; shift ;;
+    -oraccrsc)     CC_RESOURCE_DIR=$2
+                   shift; shift ;;
+    -Xmx*)         XMX=$1
+                   shift ;;
+    -rdbg|-rdg)    RDBG='-agentlib:jdwp=transport=dt_socket,server=y,address=8000,suspend=y' # -rdg was a typo, kept for compatibility
+                   shift ;;
+    -q)            QUIET='yes'
+                   shift ;;
+    *)             break ;;
+  esac
+done
+
+DB_URI="jdbc:hsqldb:hsql://localhost/$DB_NAME"
+ADMIN_CLASS='de.fhg.iais.roberta.main.Administration'
 
 cmd="$1"
 shift
@@ -140,83 +105,22 @@ shift
 case "$cmd" in
 export) _export $* ;;
 
-start-from-git) echo 'the script expects, that a mvn build was successful; if the start fails or the system is frozen, make sure that a database exists and NO *.lck file exists'
-                echo '1. step: make an optional upgrade of the db 2. step: start the server'
-                case "$1" in
-                  '-REMOTE_DBG') REMOTE_DBG='-agentlib:jdwp=transport=dt_socket,server=y,address=8000,suspend=y'
-                                 shift ;;
-                  *)             REMOTE_DBG='' ;;
-                esac
-                case "$1" in
-                  '') CC_RESOURCE_DIR='.' ;;
-                  *)  CC_RESOURCE_DIR="$1"
-                      shift ;;
-                esac
-                java -cp ${JAVA_LIBS}/\* de.fhg.iais.roberta.main.Administration upgrade OpenRobertaServer
-                RC=$?;
-                if [ $RC != 0 ]
-                then
-                  echo 'database upgrade failed. Server NOT started. Exit 12'
-                  exit 12
-                fi
-                java $RDBG -cp ${JAVA_LIBS}/\* de.fhg.iais.roberta.main.ServerStarter \
+start-from-git) echo 'the script expects, that a mvn build was successful; if the start fails or the system is frozen, make sure that a database exists and is not locked by another process'
+                java $RDBG -cp ${JAVA_LIB_DIR}/\* de.fhg.iais.roberta.main.ServerStarter \
                      -d database.mode=embedded \
-                     -d database.parentdir=OpenRobertaServer \
+                     -d database.parentdir=$DB_PARENTDIR \
+                     -d database.name=$DB_NAME \
                      -d server.staticresources.dir=OpenRobertaServer/staticResources \
                      -d robot.crosscompiler.resourcebase="$CC_RESOURCE_DIR" \
                      $* ;;
 
 ''|help|-h)     cat ora-help.txt ;;
 
-java)           _checkJava ;;
+create-empty-db) databaseurl="jdbc:hsqldb:file:$DB_PARENTDIR/$DB_NAME"
+                echo "creating an empty db using the url $databaseurl - an existing db is NOT overwritten"
+                java -cp ${JAVA_LIB_DIR}/\* "$ADMIN_CLASS" create-empty-db "$databaseurl" ;;
 
-create-empty-db) serverVersionForDb="$1"
-                if [[ "$serverVersionForDb" == '' ]]
-                then
-                  serverVersionForDb=$(java -cp ./${JAVA_LIBS}/\* de.fhg.iais.roberta.main.Administration version-for-db)
-                fi
-                databaseurl="jdbc:hsqldb:file:OpenRobertaServer/db-$serverVersionForDb/openroberta-db"
-                echo -n "do you really want to create the db for version \"$serverVersionForDb\"? If it exists, it will NOT be damaged. 'y', 'n') "
-                read ANSWER
-                case "$ANSWER" in
-                  y) : ;;
-                  *) echo "nothing done. Exit 0"
-                     exit 0 ;;
-                esac
-                echo "creating an empty db using the url $databaseurl"
-                main='de.fhg.iais.roberta.main.Administration'
-                java -cp ${JAVA_LIBS}/\* "${main}" create-empty-db "$databaseurl" ;;
-
-check-xss)      serverVersionForDb="$1"
-                if [[ "$serverVersionForDb" == '' ]]
-                then
-                  serverVersionForDb=$(java -cp ./${JAVA_LIBS}/\* de.fhg.iais.roberta.main.Administration version-for-db)
-                fi
-                databaseurl="jdbc:hsqldb:file:OpenRobertaServer/db-$serverVersionForDb/openroberta-db"
-                main='de.fhg.iais.roberta.main.Administration'
-                java -cp ${JAVA_LIBS}/\* "${main}" check-xss "$databaseurl" ;;
-                  
-renameRobot)    serverVersionForDb="$1"
-                if [[ "$serverVersionForDb" == '' ]]
-                then
-                  serverVersionForDb=$(java -cp ./${JAVA_LIBS}/\* de.fhg.iais.roberta.main.Administration version-for-db)
-                fi
-                databaseurl="jdbc:hsqldb:file:OpenRobertaServer/db-$serverVersionForDb/openroberta-db"
-                main='de.fhg.iais.roberta.main.Administration'
-                java -cp ${JAVA_LIBS}/\* "${main}" rename "$databaseurl" $2 $3;;
-                  
-configurationCleanUp) serverVersionForDb="$1"
-                if [[ "$serverVersionForDb" == '' ]]
-                then
-                  serverVersionForDb=$(java -cp ./${JAVA_LIBS}/\* de.fhg.iais.roberta.main.Administration version-for-db)
-                fi
-                databaseurl="jdbc:hsqldb:file:OpenRobertaServer/db-$serverVersionForDb/openroberta-db"
-                main='de.fhg.iais.roberta.main.Administration'
-                java -cp ${JAVA_LIBS}/\* "${main}" configuration-clean-up "$databaseurl" ;;
-
-alive)          _aliveFn $* ;;
-
-new-test-setup) base_dir="$1"
+new-docker-setup) base_dir="$1"
                 if [[ -d $base_dir ]]
                 then
                   echo "basedir '$base_dir' exists. Exit 12"
@@ -224,13 +128,15 @@ new-test-setup) base_dir="$1"
                 fi
                 cp -r Docker/openroberta $base_dir
                 cp Docker/_README.md $base_dir
-                echo "new test server setup created in $base_dir. Edit 'decl.sh' and setup db and servers now" ;;
-new-server-in-test-setup)
+                echo "New docker setup created in $base_dir. Edit 'decl.sh' and setup databases and servers now."
+                echo "Please read the first paragraph in `Docker/_README.md` !" ;;
+
+new-server-in-docker-setup)
                 base_dir="$1"
                 server_name="$2"
                 if [[ ! -d $base_dir || ! -f $base_dir/decl.sh ]]
                 then
-                  echo "basedir '$base_dir' no valid dir for test server setup. Exit 12"
+                  echo "basedir '$base_dir' is no valid dir for docker setup. Exit 12"
                   exit 12
                 fi
                 server_dir="$base_dir/server/$server_name"
@@ -241,13 +147,15 @@ new-server-in-test-setup)
                   exit 12
                 fi
                 cp -r Docker/openroberta/server/_server-template $server_dir
-                cp -r Docker/openroberta/db/_empty-db-template $db_dir
-                echo "new db and new server $server_name created in ${base_dir}. Edit '$base_dir/decl.sh' and '$server_dir/decl.sh'" ;;
-update-test-setup)
+                echo "New server $server_name created. Edit '$base_dir/decl.sh' and '$server_dir/decl.sh'"
+                echo "Copy an existing database or create an empty database after 'mvn clean install -DskipTests'"
+                echo "by calling './ora.sh -dbParentdir $base_dir/db/$server_name create-empty-db'" ;;
+
+update-docker-setup)
                 base_dir="$1"
                 if [[ ! -d $base_dir || ! -f $base_dir/decl.sh ]]
                 then
-                  echo "basedir '$base_dir' no valid dir for test server setup. Exit 12"
+                  echo "basedir '$base_dir' no valid dir for docker setup. Exit 12"
                   exit 12
                 fi
                 rm -rf $base_dir/conf $base_dir/scripts
@@ -255,6 +163,21 @@ update-test-setup)
                 cp -r Docker/openroberta/scripts $base_dir/scripts
                 cp Docker/_README.md $base_dir
                 echo "configuration data copied to $base_dir/conf and $base_dir/scripts" ;;
+
+check-xss)      # unused
+                exit 12
+                databaseurl="jdbc:hsqldb:file:$DB_PARENTDIR/$DB_NAME"
+                java -cp ${JAVA_LIB_DIR}/\* "$ADMIN_CLASS" check-xss "$databaseurl" ;;
+                  
+renameRobot)    # unused
+                exit 12
+                databaseurl="jdbc:hsqldb:file:$DB_PARENTDIR/$DB_NAME"
+                java -cp ${JAVA_LIB_DIR}/\* "$ADMIN_CLASS" rename "$databaseurl" $2 $3;;
+                  
+configurationCleanUp) #unused
+                exit 12
+                databaseurl="jdbc:hsqldb:file:$DB_PARENTDIR/$DB_NAME"
+                java -cp ${JAVA_LIB_DIR}/\* "$ADMIN_CLASS" configuration-clean-up "$databaseurl" ;;
 
 *)              echo "invalid command: $cmd - exit 1"
                 exit 1 ;;

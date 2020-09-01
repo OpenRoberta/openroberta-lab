@@ -1,4 +1,4 @@
-<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="edison" xmlversion="2.0" description="" tags="">
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="edison" xmlversion="3.0" description="" tags="">
     <instance x="370" y="204">
         <block type="mbedActions_play_note" id="/g-s=BsLCfYQs_[A)`*/" intask="false">
             <field name="DURATION">2000</field>

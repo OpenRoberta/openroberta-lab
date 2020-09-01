@@ -1,24 +1,24 @@
-<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="arduino" xmlversion="2.0" description="" tags="">
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="arduino" xmlversion="3.0" description="" tags="">
     <instance x="308" y="-85">
-    <block type="robControls_start_ardu" id="dMm5AIKEZfmh-diB4,8a" intask="true" deletable="false">
-        <mutation declare="true"/>
-        <field name="DEBUG"/>
-        <statement name="ST">
-        <block type="robGlobalVariables_declare" id="7JOuJ#z^(FRO*b;Ty*8?" intask="true" deletable="false" movable="false">
-            <mutation next="true" declaration_type="Array_Number"/>
-            <field name="VAR">item</field>
-            <field name="TYPE">Array_Number</field>
-            <value name="VALUE">
-            <block type="robLists_repeat" id="^ao8%hYJ]np|d7oD~sGH" intask="true">
-                <mutation list_type="Number"/>
-                <field name="LIST_TYPE">Number</field>
-                <value name="ITEM">
-                <block type="math_number" id="JVBOLok5,ME=fqBHlcAU" intask="true">
-                    <field name="NUM">5</field>
-                </block>
-                </value>
-                <value name="NUM">
-                <block type="math_number" id="ZP[g]qgLJmFk@{H3Py-9" intask="true">
+        <block type="robControls_start_ardu" id="dMm5AIKEZfmh-diB4,8a" intask="true" deletable="false">
+            <mutation declare="true" />
+            <field name="DEBUG" />
+            <statement name="ST">
+                <block type="robGlobalVariables_declare" id="7JOuJ#z^(FRO*b;Ty*8?" intask="true" deletable="false" movable="false">
+                    <mutation next="true" declaration_type="Array_Number" />
+                    <field name="VAR">item</field>
+                    <field name="TYPE">Array_Number</field>
+                    <value name="VALUE">
+                        <block type="robLists_repeat" id="^ao8%hYJ]np|d7oD~sGH" intask="true">
+                            <mutation list_type="Number" />
+                            <field name="LIST_TYPE">Number</field>
+                            <value name="ITEM">
+                                <block type="math_number" id="JVBOLok5,ME=fqBHlcAU" intask="true">
+                                    <field name="NUM">5</field>
+                                </block>
+                            </value>
+                            <value name="NUM">
+                                <block type="math_number" id="ZP[g]qgLJmFk@{H3Py-9" intask="true">
                     <field name="NUM">5</field>
                 </block>
                 </value>

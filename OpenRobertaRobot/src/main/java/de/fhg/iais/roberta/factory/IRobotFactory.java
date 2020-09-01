@@ -11,7 +11,7 @@ public interface IRobotFactory {
     BlocklyDropdownFactory getBlocklyDropdownFactory();
 
     /**
-     * Get the file extension of the specific language for this robot. This is used 
+     * Get the file extension of the specific language for this robot. This is used
      * when we want to download locally the source code into a file.
      *
      * @return file extension
@@ -19,7 +19,7 @@ public interface IRobotFactory {
     String getSourceCodeFileExtension();
 
     /**
-     * Get the file extension of the specific executable binary for this robot. This 
+     * Get the file extension of the specific executable binary for this robot. This
      * is used when the binary is send back to the client.
      *
      * @return file extension
@@ -42,7 +42,9 @@ public interface IRobotFactory {
 
     Boolean hasMultipleSim();
 
-    String getInfo();
+    String getInfoDE();
+
+    String getInfoEN();
 
     Boolean isBeta();
 
@@ -64,9 +66,19 @@ public interface IRobotFactory {
 
     String getConfigurationType();
 
-    String getSensorPrefix();
+    /**
+     * Returns the sensor prefix if the robot has on an old configuration, null otherwise.
+     * 
+     * @return the sensor prefix, may be null
+     */
+    String optSensorPrefix();
 
-    String getTopBlockOfOldConfiguration();
+    /**
+     * Returns the top block if the robot has on an old configuration, null otherwise.
+     * 
+     * @return the top block, may be null
+     */
+    String optTopBlockOfOldConfiguration();
 
     String getGroup();
 
@@ -77,11 +89,11 @@ public interface IRobotFactory {
     PluginProperties getPluginProperties();
 
     Boolean hasWlanCredentials();
-    
+
     /**
      * Returns the name of the factory default program. Used to get the compiled program from the
      * crosscompiler resources.
-     * 
+     *
      * @return the name of the factory default program
      */
     String getFirmwareDefaultProgramName();
@@ -90,7 +102,10 @@ public interface IRobotFactory {
 
     /**
      * Returns all workflows this robot has registered in the properties.
+     *
      * @return unmodifiable string set of workflows
      */
     Set<String> getWorkflows();
+
+    boolean hasWorkflow(String workflow);
 }

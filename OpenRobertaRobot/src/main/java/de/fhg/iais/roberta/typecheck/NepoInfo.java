@@ -1,5 +1,10 @@
 package de.fhg.iais.roberta.typecheck;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * describes either an error or a problem w.r.t. a phrase of the AST. Collections of objects of this class are stored in the mutable part of the phrase (within
  * a phrase the tree structure is immutable, but the attachment of problems is (more) dynamic.
@@ -7,6 +12,8 @@ package de.fhg.iais.roberta.typecheck;
  * @author rbudde
  */
 public class NepoInfo {
+    private static final Logger LOG = LoggerFactory.getLogger(NepoInfo.class);
+
     private final Severity severity;
     private final String message;
 
@@ -29,6 +36,16 @@ public class NepoInfo {
 
     public String getMessage() {
         return this.message;
+    }
+
+    public JSONObject getAsJson() {
+        JSONObject nepoInfoJSON = new JSONObject();
+        try {
+            nepoInfoJSON.put(this.getSeverity().toString(), this.message);
+        } catch ( JSONException e ) {
+            LOG.error("NepoInfo to JSON failed", e);
+        }
+        return nepoInfoJSON;
     }
 
     @Override

@@ -1,0 +1,28 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="calliope" xmlversion="2.0" description="" tags="">
+    <instance x="549" y="76">
+        <block type="robControls_start" id="h!uwE~+!/nQb@;OTzXds" intask="true" deletable="false">
+            <mutation declare="false"></mutation>
+            <field name="DEBUG"></field>
+        </block>
+        <block type="robActions_debug" id="-@C]*/^0)}92m~c%,bg/" intask="true">
+            <value name="OUT">
+                <block type="robSensors_light_getSample" id="fJ^qUi)0|,uNrujSFX92" intask="true">
+                    <mutation mode="VALUE"></mutation>
+                    <field name="MODE">VALUE</field>
+                    <field name="SENSORPORT"></field>
+                    <field name="SLOT"></field>
+                </block>
+            </value>
+        </block>
+        <block type="robActions_debug" id="IOkPe#]m#.|87`~+UYTk" intask="true">
+            <value name="OUT">
+                <block type="robSensors_getSample" id=")yYpolbCy-eYN[*I)``}" intask="true">
+                    <mutation input="LIGHT_VALUE"></mutation>
+                    <field name="SENSORTYPE">LIGHT_VALUE</field>
+                    <field name="SENSORPORT"></field>
+                    <field name="SLOT"></field>
+                </block>
+            </value>
+        </block>
+    </instance>
+</block_set>

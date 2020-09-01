@@ -1,65 +1,120 @@
-# Operating Instructions for the Test and Prod Server using DOCKER container (2019-07-16 17:00:00)
+# Instructions to setup and run the test and prod server using DOCKER container (2020-06-08)
 
-At least to read:
+This text describes the docker-related scripts, that are used to setup a docker network, create docker images and run docker container of the OpenRoberta lab. Exactly these
+scripts are used to run OpenRoberta's prod and test servers. On every Linux-based machine it should be easy to run our setup. To create an instance of our docker installation,
+clone the openroberta-lab git and run `./ora.sh new-docker-setup <BASEDIR_MUST_NOT_EXIST>`. Follow the instructions
+from the script. From this point use the the administration script `<BASEDIR>/scripts/run.sh` (abbreviated as `RUN`). Execute `RUN` without parameters to get a message
+explaining all commands available. You have to
 
-* section "(re-)create base container": how to build the base image of everything else.
-* section "Operating Instructions for the Test and Prod Server", especially "Scripting": how to use docker to run the server(s)
+* clone the openroberta-lab repository into `<BASEDIR>/git`, update the server's `decl.sh appropriately` (set the repo, select the branch, ...)
+* create a new docker bridge network (`RUN gen-net`). The name is defined in the global `decl.sh`.
+* create the databases needed in directory `db`. Server names are test, dev, dev1...dev9 and must not exist. For each server one database with exactly the server's name is needed.
+  You can create empty databases by
+  * either calling `./ora.sh -dbParentdir <non-existing-directory-of-your-choice> create-empty-database` after a `mvn clean install -DskipTests`
+  * or by using the already created empty database at `db/dbEmpty`
+  and copy them to the desired location. Put the database names into the global `decl.sh`.
+* generate a database server image and start the database container (`RUN gen-dbc` and `RUN start-dbc`). Check the result with `docker ps`. Inspect the log file in `BASEDIR/db/dbAdmin/`
+* create the servers for which you prepared databases (see above) by calling `./ora.sh new-server-in-docker-setup BASEDIR SERVER`. For each server in `BASEDIR/server/SERVER`
+  update the `decl.sh (set the repo, select the branch, ...). Note, that `test, dev, dev1...dev9` are the only names accepted as server names.
+* deploy the server ((`RUN deploy SERVER`). Check result with `docker ps`. Inspect the log file in `BASEDIR/server/SERVER/admin/logging/...`
+
+Looks more complicated as it is :-). Details of the file system structure used and the more functionality supported (database backup, alice checking, autorestart) are described later.
+I tried to make all scripts as robust as possible. Please send any problems, improvements, ideas to reinhard.budde at iais.fraunhofer.de
+
+We generate docker images for different architectures. Currently we support
+
+* `x64` - the standard architecture. Our prod server, your laptop, ... use this architecture
+* `arm32v7` - the architecture used by Raspberry pi's 3 and 4, for example. These "small" devices can run a docker demon, a database container and a
+  jetty-based rest-server without performance problems. We support these devices to enable to run local servers: for privacy reasons, bad iternet connectivity,
+  rules that don't allow internet connections at a school, ... .
+  
+In the following the shell variable `ARCH` refers to either `x64` or `arm32v7`. The architecture is auto-detected by the `RUN` script.
+
+Docker must be installed. Google for it, usually the job is done by executing
+
+```bash
+curl -sSL get.docker.com | sh
+```
 
 # (re-)create the base image (done from time to time)
 
 ## generate the "base" IMAGE. This image contains the crosscompiler and the crosscompiler resources (header files, ...).
 
-The docker image "base" is used as basis for further images. It contains all software needed by the crosscompilers, i.e.
+The docker "base" image is used as basis for further images. It contains all software needed by the lab to create binaries for all the robots, i.e.
 
-* the crosscompiler binaries itself. They are installed by calling `apt`
-* header etc. to use together with the cross compiler. They are copied from a clone of the git repository `ora-cc-rsc`.
-* openroberta helper libraries for lejos, nao and raspberryPi.
+* the crosscompiler binaries itself. They are installed by calling `apt`, `wget`, ... .
+* header etc. to be used together with the cross compiler. They are copied from our git repository `ora-cc-rsc`.
 
-_Note:_ If the git repository `ora-cc-rsc` is changed, the base image and all images built upon the base image must be rebuilt. This doesn't
-occur often. But better do not forget. The version of the base image (a simple number) should match a tag in the git repository `ora-cc-rsc`.
-This is to express, that the data from the tag is the data in the base image. The variable `BASE_VERSION` contains the number, which is both a tag name
-in git and a version number in docker.
+This done in two steps. Because the crosscompiler binaries dont't change often, an image `openroberta/ccbin-${ARCH}` is build first. From this image
+the `openroberta/base-${ARCH}` image is derived. This occurs much more often. Both images have an independant version numbering.
+
+### step 1: image with crosscompiler binaries (usually not needed, because the crosscompiler binaries are stable)
 
 ```bash
 BASE_DIR=/data/openroberta-lab
-BASE_VERSION=13
+ARCH=x64 # either x64 or arm32v7
+CCBIN_VERSION=1
+
+cd ${BASE_DIR}/conf/${ARCH}/docker-for-meta-1-cc-binaries
+docker build --no-cache -t openroberta/ccbin-${ARCH}:${CCBIN_VERSION} .
+docker push openroberta/ccbin-${ARCH}:${CCBIN_VERSION}
+```
+
+_NOTE:_ If `openroberta/ccbin-${ARCH}` is rebuild with new or updated crosscompiler binaries, its version number `CCBIN_VERSION` has to be increased.
+Do _not_ forget, to increase the version numer in the next section, too.
+
+### step 2: image with crosscompiler resources (more often needed, because our add-ons, e.g. header files, libs, ... change more frequently)
+
+```bash
+BASE_DIR=/data/openroberta-lab
+ARCH=x64 # either x64 or arm32v7
+CCBIN_VERSION=1 # this is needed in the dockerfile!
+BASE_VERSION=19
 CC_RESOURCES=/data/openroberta-lab/git/ora-cc-rsc
 cd $CC_RESOURCES
 
 git checkout develop; git pull; git checkout master; git pull
-git checkout tags/$BASE_VERSION
+git checkout tags/${BASE_VERSION}
 
-mvn clean install # necessary to create the update resources for ev3 lejos-based systems
-docker build --no-cache -t openroberta/base:$BASE_VERSION -f $BASE_DIR/conf/docker-for-meta/DockerfileBase_ubuntu_18_04 .
-docker push openroberta/base:$BASE_VERSION
+mvn clean install # necessary to create the update resources for ev3- and arduino-based systems
+docker build --no-cache -t openroberta/base-${ARCH}:${BASE_VERSION} \
+       --build-arg CCBIN_VERSION=${CCBIN_VERSION} \
+       -f $BASE_DIR/conf/${ARCH}/docker-for-meta-2-cc-resources/Dockerfile .
+docker push openroberta/base-${ARCH}:${BASE_VERSION}
 ```
 
-## generate the image for INTEGRATION TEST.
+_Note:_ If the git repository `ora-cc-rsc` is changed, the `openroberta/base-${ARCH}` image and all images built upon it must be rebuilt. This is fast,
+but better do not forget! The version of the `openroberta/base-${ARCH}` image (a simple number) should match a tag in the git repository `ora-cc-rsc`.
+This reminds you, that the data from that tag is the data stored in the base image. The variable `BASE_VERSION` contains this number, which is both a tag name
+in git and a version number in docker.
 
-Using the configuration file DockerfileIT_* you create an image, built upon the "base" image, that has executed a git clone of the
+### step 3 image for the integration tests (x64 only)
+
+It would be easy to build this image for the `arm32v7` architecture. But our `bamboo` server used for automated integration tests run on `x64` machines.
+Thus there is no need for this image. This may change in the future.
+
+This step creates an image, built upon the "base" image, that has executed a git clone of the
 main git repository `openroberta-lab` and has executed a `mvn clean install`. This is done to fill the
 (mvn) cache and speeds up later builds considerably. The entry point is defined as the bash script "runIT.sh".
-If called, it will checkout a branch and runs both the tests and the integration tests.
+If called, it will checkout a branch given as parameter and runs both the tests and the integration tests.
 
 ```bash
 BASE_DIR=/data/openroberta-lab
-BASE_VERSION=13
+ARCH=x64
+BASE_VERSION=19
 BRANCH=develop
-cd $BASE_DIR/conf/docker-for-test
-docker build --no-cache --build-arg BASE_VERSION=$BASE_VERSION --build-arg BRANCH=$BRANCH \
-       -t openroberta/it:$BASE_VERSION -f DockerfileIT_ubuntu_18_04 .
-docker push openroberta/it:$BASE_VERSION
+cd ${BASE_DIR}/conf/${ARCH}/docker-for-test
+docker build --no-cache --build-arg BASE_VERSION=${BASE_VERSION} --build-arg BRANCH=${BRANCH} \
+       -t openroberta/it-${ARCH}:${BASE_VERSION} .
+docker push openroberta/it-${ARCH}:${BASE_VERSION}
 ```
-## Run the integration tests
 
-The integration test container (generated by the instructions above) clones a branch, executes all tests, including the integration tests and
-in case of success it returns 0, in case of errors/failures it returns 16. This takes about 15 minutes and should be executed w.t.h. of a
-CI system (jenkins, travis, gitlab, bamboo, ...). To run it, execute:
+To run the integration tests on your local machine (usually a build server as `bamboo` will do this), execute:
 
 ```bash
-BASE_VERSION=13
+BASE_VERSION=19
 export BRANCH='develop'
-docker run openroberta/it:$BASE_VERSION $BRANCH x.x.x # x.x.x is the db version and unused for tests
+docker run openroberta/it-${ARCH}:${BASE_VERSION} ${BRANCH} x.x.x # x.x.x is the db version and unused for tests
 ```
 
 # Operating Instructions for the Test and Prod Server
@@ -71,8 +126,8 @@ They are setup in the same way. The following text describes the test server set
 
 The template for this framework is contained in directory `Docker/openroberta`. It contains the directories
 
-* conf - contains an example of an nginx and an apache2 configuration and two directories `docker-*`, used to generate docker images for the db and the jetty server
-* scripts - contains shell scripts to administrate the framework. The main script id `run.sh`. Call it without parameters to get help.
+* conf - contains an example of an nginx and an apache2 configuration and four directories used to generate docker images for the db and the jetty server
+* scripts - contains shell scripts to administrate the framework. The main script is `run.sh`. Call it without parameters to get help.
   the directory `helper` contains scripts, that are sourced from `run.sh` and do the "real" work.
 * git - here one or more git repos, used to generate the openroberta server instances, are contained. At least one git repo is needed, usually a clone
   from https://github.com/OpenRoberta/openroberta-lab.git
@@ -82,8 +137,8 @@ The template for this framework is contained in directory `Docker/openroberta`. 
   Each server has an associated docker image (and usually a running container), whose name is essentially the server's name.
 * db - contains the databases. Each database has a name (one of master,test,dev,dev1...dev9) matching the name of the jetty server who needs this data.
   the name of the database is the name of a directory, which in turn contains all database files. All databases are served by one Hsqldb server instance.
-  Directory `dbAdmin` stores logging data and all database backups.
-  There is one docker image `openroberta/db_server` and usually a running container, whose name is essentially `db-server`.
+  Directory `dbAdmin` stores logging data and database backups.
+  There is one docker image `openroberta/db_server` and usually a running container, whose name is usually `db-server`.
 
 ## Overview
 
@@ -99,7 +154,7 @@ For instance, if you want to deploy the `develop` branch on server `dev4`, do th
 * be sure, that in `$DATABASE_DIR/dev4` a valid database is available. Check whether `decl.sh` contains `dev4` in variable `DATABASES`. It not,
   add it and restart the database server by `$SCRIPT_DIR/run.sh start-dbc`
 
-All container of an openroberta test instance use a bridge network with (unique!) name `$DOCKER_NETWORK_NAME`.
+All container of an openroberta docker installation use a bridge network with (the unique!) name `$DOCKER_NETWORK_NAME`.
 Assuming that the network is created, the database container is running, then you may (re-)deploy `dev4` by executing
 
 ```bash
@@ -115,7 +170,7 @@ accessible port on the host machine (this maybe 1999 again, or 1998, ... or any 
 
 * `container:1999` is mapped to
 * `host:8080` and
-* the web server map that to the offical addresses `lab.open-roberta.org.443` and `lab.open-roberta.org.80`
+* the web server maps that to the offical addresses `lab.open-roberta.org.443` and `lab.open-roberta.org.80`
 
 The nginx configuration examples are in the directory `z-nginx`. The configuration directory on the host machine is `/etc/nginx/`.
 In the example file `nginx.conf` see the ssl-, -server and include-section in the example file for the global configuration. The example file `lab.open-roberta`
@@ -134,9 +189,9 @@ SERVER_DIR=$BASE_DIR/server
 DATABASE_DIR=$BASE_DIR/db
 ```
 
-The whole setup has a unique name `$INAME`, defined in `$BASE_DIR/decl.sh`.
-## The openroberta lab server for test (the prod server is simpler :-)s
-The ports `1999` to `1989` are used by up to 11 openroberta testserver. Each of these servers is based on an embedded jetty.
+## Description of a typical setup of a docker installation for many openroberta lab server
+
+The ports `1999` to `1989` are used by up to 11 openroberta server. Each of these servers is based on an embedded jetty.
 The names of the servers are (b.t.w.: this matches the virtual host names of the web server configuration):
 
 * test: configuration is in `$SERVER_DIR/test/decl.sh` (usually port 1999)
@@ -153,20 +208,20 @@ The names of the servers are (b.t.w.: this matches the virtual host names of the
 
 The name of the docker images and the name of the running containers are:
 
-* test: image is `openroberta/server_${INAME}_test:$BASE_VERSION` and the running container has name `${INAME}-test`
-* dev: image is `openroberta/server_${INAME}_dev:$BASE_VERSION` and the running container has name `${INAME}-dev`
-* dev1 up to dev9: images are `openroberta/server_${INAME}_dev1:$BASE_VERSION` to `openroberta/server_${INAME}_dev9:$BASE_VERSION` and
-  the running container have names `${INAME}-dev1` to `${INAME}-dev9`
+* test: image is `openroberta/server_test:$BASE_VERSION` and the running container has name `test`
+* dev: image is `openroberta/server_dev:$BASE_VERSION` and the running container has name `dev`
+* dev1 up to dev9: images are `openroberta/server__dev1:$BASE_VERSION` to `openroberta/server_dev9:$BASE_VERSION` and
+  the running container have names `dev1` to `dev9`
 
 Generating the images is done by using the data from `decl.sh` from the server directory. Generation will:
 
-* pull actual data into a Git repo and checkout the branch/commit as declared (you can suppress this step by setting `GIT_PULL_BEFORE_BUILD to false`)
+* pull actual data into a Git repo as declared and checkout the branch/commit as declared
 * run `mvn clean install -DskipTests`
 * export the server into the export directory
 * create the docker image from that directory
 
 Note: by using `flock` the generation of images is done sequentially. A new request for image generation is blocked as long as another
-generation is running. So it is safe, that many test server share one git repository. This increases the performance of server generation a lot. If the branch `master` is deployed, we advise to use one git repo exclusively for this (the most relevant :-) branch
+generation is running. So it is safe, that many test server share one git repository. This increases the performance of server generation a lot.
 
 ## database server
 
@@ -182,30 +237,13 @@ These databases are served by one database server. The database files are locate
 * `$DATABASE_DIR/dev`
 * `$DATABASE_DIR/dev1` to `$BASE/db/dev9`
 
-The database server is deployed in a docker container with name `ora-${INAME}-db-server` created from the docker image `rbudde/openroberta-${INAME}-db-server:2.4.0`.
+The database server is deployed in a docker container with name `ora-db-server` created from the docker image `rbudde/openroberta--db-server:2.4.0`.
 The database server is listening to the port `$DATABASE_SERVER_PORT` as defined in the global `decl.sh`. This is often the
 Hsqldb default `9001`.
 
-## Scripting
+## Automatic deploy, database backup, removing temporary files, automatic restart
 
-Everything is done with the help of the shell script `$SCRIPT_DIR/run.sh`. I tried to make these scripts as robust as possible. Please send any
-problems, improvements, ideas to reinhard.budde at iais.fraunhofer.de
-
-The main commands of the script can be seen if you run `$SCRIPT_DIR/run.sh` without parameters. The following sequence of commands is advised:
-* clone the openroberta-lab repository into directory `git`.
-* generate the bridge network for this instance of the framework (the name is defined in the global `decl.sh`).
-* create the databases needed in directory `db` and put their names into the global `decl.sh`.
-* start the database server. Have a look at the log (`docker ps; docker logs <name-of-container>`) to check for errors.
-* setup your servers in the local `server/<server-name>/decl.sh` and put their names into the global `decl.sh`.
-  Note, that `test, dev, dev1...dev9` are the only names accepted as server names.
-* generate and start your servers `$SCRIPT_DIR/run.sh deploy <server-name>`. Have a look at the log (`docker ps; docker logs <name-of-container>`)
-  to check for errors.
-* enable autodeploy (see below).
-* add init functionality for server (re-)boots (see below).
-
-## Automatic deploy, database backup, removing temporary files
-
-The shell script `$SCRIPT_DIR/run.sh` has commands, that are used to administrate the framework.
+The shell script `$SCRIPT_DIR/run.sh` has commands, that are used for operating purposes.
  
 * `auto-deploy`: usually called from cron. It takes server names from the variable `AUTODEPLOY` from the glocal `decl.sh` and re-deploys each server, if the git
   repository connected to this server has got new commits. Use `crontab -e` to add the following line to the crontab to look for commits every 5 minutes:
@@ -230,7 +268,15 @@ The shell script `$SCRIPT_DIR/run.sh` has commands, that are used to administrat
 20 2 * * * bash <SCRIPT_DIR>/run.sh -q admin <server-name> cleanup-temp-user-dirs >><BASE_DIR>/logs/cronlog.txt
 ```
 
-* `alive`: usually called from cron. It takes a server URL and checks whether the server is alive. It sends by default mail to admins (TODO: configure that).
+* `auto-restart`: this command spawns a process, that will not terminate by itself. It checks the availablity of the server (using the server-url)
+  and, if the server is not available when tried to access twice, it will restart the server. Logging info is written to `<BASE_DIR>/logs/autorestart.txt`.
+  the pid of the auto-restart process is logged. The process may be terminated at any time. The process can be initiated explicitly by executing:
+  
+```bash
+bash <SCRIPT_DIR>/run.sh -q auto-restart <server-name> <server-url>
+```
+
+* `alive`: usually called from cron. It takes a server URL and checks whether the server is alive. It sends by default mail to admins.
   Use `crontab -e` to add the following line to the crontab. call <SCRIPT_DIR>/run.sh -help to learn about other parameters of the call:
   
 ```bash
@@ -253,7 +299,7 @@ The shell script `$SCRIPT_DIR/run.sh` has commands, that are used to administrat
 # Description:       Start, stop and restart the database server and the openroberta server declared in server/servers.txt
 ### END INIT INFO
 
-# Author: Reinhard
+# Author: rbudde
 
 BASE_DIR=<BASE_DIR>
 SCRIPTS=$BASE_DIR/scripts
@@ -323,10 +369,21 @@ The global properties needed for the openrobertalab server are found in resource
 by an arbitrary number of command line arguments like `-d KEY=VALUE`. The final list of these `-d` arguments is build as follows:
 
 * script `start.sh`: the shell script `start.sh` is inside the openrobertalab server container and starts the JVM with main class `ServerStarter`.
-  It contains some `-d` arguments, that are the
-  same for _all_ openrobertalab server container and adds more `-d` arguments (passed by the script that starts the container) by a trailing `$*`
+  It contains some `-d` arguments, that are the same for _all_ openrobertalab server container and adds more `-d` arguments (passed by the script that starts
+  the container) by a trailing `$*`
 * script `_start.sh`: the docker container is started (via the main script `run.sh`) by the bash statements found in `_start.sh`. Here more `-d` statements are added,
   that refer to the OpenRoberta server instance (master, test, dev). They add database names, network names, logging level, logging configuration and mount points.
 * variable `START_ARGS`: every OpenRoberta server has a configuration file `decl.sh`. Here the shell variable `START_ARGS` can define more `-d` arguments.
-  *NOTE:* this is the place for the last deployer-defined additions: decle the list of robot plugins to use, whether this is the public server or not, and so on.
+  *NOTE:* this is the place for the last deployer-defined additions: declare the list of robot plugins to use, whether this is the public server or not, and so on.
   It is possible, but _not_ adviced to overwrite properties already defined at the two other places described above
+  
+## Can be ignored, TODO: to be integrated somewhere else
+
+> Since the fix needed to compile c4ev3 programs on raspberry hasn't been published yet, the Dockerfile
+> contains 3 lines that references 3 folders/files that need to be in this folder before creating the image.
+> The files are:
+> - recent version of ora-cc-rsc
+> - recent version of RobotEV3.jar
+> - C4EV3.Toolchain-2019.08.0-rpi.tar.gz
+
+

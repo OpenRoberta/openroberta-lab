@@ -12,6 +12,8 @@ public class MicrobitPythonGeneratorWorker extends AbstractLanguageGeneratorWork
     @Override
     protected AbstractLanguageVisitor getVisitor(Project project, ClassToInstanceMap<IProjectBean> beans) {
         return new MicrobitPythonVisitor(
-            project.getProgramAst().getTree(), beans);
+            project.getProgramAst().getTree(),
+            project.getConfigurationAst(),
+            beans);
     }
 }

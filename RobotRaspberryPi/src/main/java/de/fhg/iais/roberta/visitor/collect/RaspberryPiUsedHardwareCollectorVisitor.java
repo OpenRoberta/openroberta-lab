@@ -1,6 +1,6 @@
 package de.fhg.iais.roberta.visitor.collect;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import com.google.common.collect.ClassToInstanceMap;
 
@@ -22,7 +22,7 @@ import de.fhg.iais.roberta.visitor.hardware.IRaspberryPiVisitor;
 public final class RaspberryPiUsedHardwareCollectorVisitor extends AbstractUsedHardwareCollectorVisitor implements IRaspberryPiVisitor<Void> {
 
     public RaspberryPiUsedHardwareCollectorVisitor(
-        ArrayList<ArrayList<Phrase<Void>>> phrasesSet,
+        List<List<Phrase<Void>>> phrasesSet,
         ConfigurationAst brickConfiguration,
         ClassToInstanceMap<IProjectBean.IBuilder<?>> beanBuilders) {
         super(brickConfiguration, beanBuilders);

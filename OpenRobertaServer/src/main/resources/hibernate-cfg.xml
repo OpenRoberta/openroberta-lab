@@ -25,12 +25,13 @@
 		<mapping class="de.fhg.iais.roberta.persistence.bo.Program" />
 		<mapping class="de.fhg.iais.roberta.persistence.bo.Configuration" />
 		<mapping class="de.fhg.iais.roberta.persistence.bo.ConfigurationData" />
-		<mapping class="de.fhg.iais.roberta.persistence.bo.Toolbox" />
 		<mapping class="de.fhg.iais.roberta.persistence.bo.Robot" />
 		<mapping class="de.fhg.iais.roberta.persistence.bo.User" />
-		<mapping class="de.fhg.iais.roberta.persistence.bo.AccessRight" />
+		<mapping class="de.fhg.iais.roberta.persistence.bo.UserProgramShare" />
 		<mapping class="de.fhg.iais.roberta.persistence.bo.LostPassword" />
 		<mapping class="de.fhg.iais.roberta.persistence.bo.PendingEmailConfirmations" />
 		<mapping class="de.fhg.iais.roberta.persistence.bo.Like" />
+		<mapping class="de.fhg.iais.roberta.persistence.bo.UserGroup" />
+		<mapping class="de.fhg.iais.roberta.persistence.bo.UserGroupProgramShare" />
 	</session-factory>
 </hibernate-configuration>

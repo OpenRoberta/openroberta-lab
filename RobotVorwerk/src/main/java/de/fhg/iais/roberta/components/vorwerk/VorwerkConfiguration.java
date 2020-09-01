@@ -1,42 +1,169 @@
 package de.fhg.iais.roberta.components.vorwerk;
 
-import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.google.common.collect.Lists;
 
 import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.components.ConfigurationComponent;
+import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
+import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.SC;
 
 public class VorwerkConfiguration extends ConfigurationAst {
-    private static ArrayList<ConfigurationComponent> components;
-    private final String ipAddress;
-    private final String portNumber;
-    private final String userName;
-    private final String password;
+    private static List<ConfigurationComponent> components;
     static {
-        Map<String, String> motorAproperties = createMap("MOTOR_REGULATION", "TRUE", "MOTOR_REVERSE", "OFF", "MOTOR_DRIVE", "LEFT");
-        ConfigurationComponent motorA = new ConfigurationComponent(SC.LARGE, true, "left", "LEFT", motorAproperties);
+        Map<String, String> motorAproperties = createMap(SC.MOTOR_REGULATION, SC.TRUE, SC.MOTOR_REVERSE, SC.OFF, SC.MOTOR_DRIVE, SC.LEFT);
+        ConfigurationComponent motorA =
+            new ConfigurationComponent(
+                SC.LARGE,
+                true,
+                "left",
+                "LEFT",
+                motorAproperties,
+                BlocklyBlockProperties.make(SC.LARGE, "this-will-be-regenerated-anyway"),
+                BlocklyComment.make("", false, "0", "0"),
+                0,
+                0);
 
-        Map<String, String> motorBproperties = createMap("MOTOR_REGULATION", "TRUE", "MOTOR_REVERSE", "OFF", "MOTOR_DRIVE", "RIGHT");
-        ConfigurationComponent motorB = new ConfigurationComponent(SC.LARGE, true, "right", "RIGHT", motorBproperties);
+        Map<String, String> motorBproperties = createMap(SC.MOTOR_REGULATION, SC.TRUE, SC.MOTOR_REVERSE, SC.OFF, SC.MOTOR_DRIVE, SC.RIGHT);
+        ConfigurationComponent motorB =
+            new ConfigurationComponent(
+                SC.LARGE,
+                true,
+                "right",
+                "RIGHT",
+                motorBproperties,
+                BlocklyBlockProperties.make(SC.LARGE, "this-will-be-regenerated-anyway"),
+                BlocklyComment.make("", false, "0", "0"),
+                0,
+                0);
 
-        ConfigurationComponent leftUltrasonic = new ConfigurationComponent(SC.ULTRASONIC, false, "left_ultrasonic", "LEFT_ULTRASONIC", Collections.emptyMap());
+        ConfigurationComponent leftUltrasonic =
+            new ConfigurationComponent(
+                SC.ULTRASONIC,
+                false,
+                "left_ultrasonic",
+                "LEFT_ULTRASONIC",
+                Collections.emptyMap(),
+                BlocklyBlockProperties.make(SC.ULTRASONIC, "this-will-be-regenerated-anyway"),
+                BlocklyComment.make("", false, "0", "0"),
+                0,
+                0);
         ConfigurationComponent centerUltrasonic =
-            new ConfigurationComponent(SC.ULTRASONIC, false, "center_ultrasonic", "CENTER_ULTRASONIC", Collections.emptyMap());
+            new ConfigurationComponent(
+                SC.ULTRASONIC,
+                false,
+                "center_ultrasonic",
+                "CENTER_ULTRASONIC",
+                Collections.emptyMap(),
+                BlocklyBlockProperties.make(SC.ULTRASONIC, "this-will-be-regenerated-anyway"),
+                BlocklyComment.make("", false, "0", "0"),
+                0,
+                0);
         ConfigurationComponent rightUltrasonic =
-            new ConfigurationComponent(SC.ULTRASONIC, false, "right_ultrasonic", "RIGHT_ULTRASONIC", Collections.emptyMap());
-        ConfigurationComponent leftTouch = new ConfigurationComponent(SC.TOUCH, false, "left", "LEFT_TOUCH", Collections.emptyMap());
-        ConfigurationComponent rightTouch = new ConfigurationComponent(SC.TOUCH, false, "right", "RIGHT_TOUCH", Collections.emptyMap());
-        ConfigurationComponent leftDropoff = new ConfigurationComponent(SC.TOUCH, false, "left", "LEFT_DROPOFF", Collections.emptyMap());
-        ConfigurationComponent rightDropoff = new ConfigurationComponent(SC.TOUCH, false, "right", "RIGHT_DROPOFF", Collections.emptyMap());
-        ConfigurationComponent x = new ConfigurationComponent(SC.ACCELEROMETER, false, "x", "X", Collections.emptyMap());
-        ConfigurationComponent y = new ConfigurationComponent(SC.ACCELEROMETER, false, "y", "Y", Collections.emptyMap());
-        ConfigurationComponent z = new ConfigurationComponent(SC.ACCELEROMETER, false, "z", "Z", Collections.emptyMap());
-        ConfigurationComponent strength = new ConfigurationComponent(SC.ACCELEROMETER, false, "strength", "STRENGTH", Collections.emptyMap());
+            new ConfigurationComponent(
+                SC.ULTRASONIC,
+                false,
+                "right_ultrasonic",
+                "RIGHT_ULTRASONIC",
+                Collections.emptyMap(),
+                BlocklyBlockProperties.make(SC.ULTRASONIC, "this-will-be-regenerated-anyway"),
+                BlocklyComment.make("", false, "0", "0"),
+                0,
+                0);
+        ConfigurationComponent leftTouch =
+            new ConfigurationComponent(
+                SC.TOUCH,
+                false,
+                "left",
+                "LEFT_TOUCH",
+                Collections.emptyMap(),
+                BlocklyBlockProperties.make(SC.TOUCH, "this-will-be-regenerated-anyway"),
+                BlocklyComment.make("", false, "0", "0"),
+                0,
+                0);
+        ConfigurationComponent rightTouch =
+            new ConfigurationComponent(
+                SC.TOUCH,
+                false,
+                "right",
+                "RIGHT_TOUCH",
+                Collections.emptyMap(),
+                BlocklyBlockProperties.make(SC.TOUCH, "this-will-be-regenerated-anyway"),
+                BlocklyComment.make("", false, "0", "0"),
+                0,
+                0);
+        ConfigurationComponent leftDropoff =
+            new ConfigurationComponent(
+                SC.TOUCH,
+                false,
+                "left",
+                "LEFT_DROPOFF",
+                Collections.emptyMap(),
+                BlocklyBlockProperties.make(SC.TOUCH, "this-will-be-regenerated-anyway"),
+                BlocklyComment.make("", false, "0", "0"),
+                0,
+                0);
+        ConfigurationComponent rightDropoff =
+            new ConfigurationComponent(
+                SC.TOUCH,
+                false,
+                "right",
+                "RIGHT_DROPOFF",
+                Collections.emptyMap(),
+                BlocklyBlockProperties.make(SC.TOUCH, "this-will-be-regenerated-anyway"),
+                BlocklyComment.make("", false, "0", "0"),
+                0,
+                0);
+        ConfigurationComponent x =
+            new ConfigurationComponent(
+                SC.ACCELEROMETER,
+                false,
+                "x",
+                "X",
+                Collections.emptyMap(),
+                BlocklyBlockProperties.make(SC.ACCELEROMETER, "this-will-be-regenerated-anyway"),
+                BlocklyComment.make("", false, "0", "0"),
+                0,
+                0);
+        ConfigurationComponent y =
+            new ConfigurationComponent(
+                SC.ACCELEROMETER,
+                false,
+                "y",
+                "Y",
+                Collections.emptyMap(),
+                BlocklyBlockProperties.make(SC.ACCELEROMETER, "this-will-be-regenerated-anyway"),
+                BlocklyComment.make("", false, "0", "0"),
+                0,
+                0);
+        ConfigurationComponent z =
+            new ConfigurationComponent(
+                SC.ACCELEROMETER,
+                false,
+                "z",
+                "Z",
+                Collections.emptyMap(),
+                BlocklyBlockProperties.make(SC.ACCELEROMETER, "this-will-be-regenerated-anyway"),
+                BlocklyComment.make("", false, "0", "0"),
+                0,
+                0);
+        ConfigurationComponent strength =
+            new ConfigurationComponent(
+                SC.ACCELEROMETER,
+                false,
+                "strength",
+                "STRENGTH",
+                Collections.emptyMap(),
+                BlocklyBlockProperties.make(SC.ACCELEROMETER, "this-will-be-regenerated-anyway"),
+                BlocklyComment.make("", false, "0", "0"),
+                0,
+                0);
 
         components =
             Lists
@@ -56,29 +183,18 @@ public class VorwerkConfiguration extends ConfigurationAst {
                     rightDropoff);
     }
 
-    public VorwerkConfiguration(String ipAddress, String portNumber, String userName, String password) {
-        super(components, 0.0f, 0.0f);
-
-        this.ipAddress = ipAddress;
-        this.portNumber = portNumber;
-        this.userName = userName;
-        this.password = password;
-    }
-
-    public String getIpAddress() {
-        return this.ipAddress;
-    }
-
-    public String getPortNumber() {
-        return this.portNumber;
-    }
-
-    public String getUserName() {
-        return this.userName;
-    }
-
-    public String getPassword() {
-        return this.password;
+    private VorwerkConfiguration(
+        Collection<ConfigurationComponent> configurationComponents,
+        String robottype,
+        String xmlversion,
+        String description,
+        String tags,
+        float wheelDiameter,
+        float trackWidth,
+        String ipAddress,
+        String userName,
+        String password) {
+        super(components, robottype, xmlversion, description, tags, wheelDiameter, trackWidth, ipAddress, userName, password);
     }
 
     private static Map<String, String> createMap(String... args) {
@@ -88,49 +204,4 @@ public class VorwerkConfiguration extends ConfigurationAst {
         }
         return m;
     }
-
-    /**
-     * @return text which defines the brick configuration
-     */
-    @Override
-    public String generateText(String name) {
-        return "";
-    }
-
-    /**
-     * This class is a builder of {@link ConfigurationAst}
-     */
-    public static class Builder extends ConfigurationAst.Builder {
-        private String ipAddress;
-        private String portNumber;
-        private String userName;
-        private String password;
-
-        public Builder setIpAddres(String ipAddress) {
-            this.ipAddress = ipAddress;
-            return this;
-        }
-
-        public Builder setPortNumber(String portNumber) {
-            this.portNumber = portNumber;
-            return this;
-        }
-
-        public Builder setUserName(String userName) {
-            this.userName = userName;
-            return this;
-        }
-
-        public Builder setPassword(String password) {
-            this.password = password;
-            return this;
-        }
-
-        @Override
-        public VorwerkConfiguration build() {
-            return new VorwerkConfiguration(this.ipAddress, this.portNumber, this.userName, this.password);
-        }
-
-    }
-
 }

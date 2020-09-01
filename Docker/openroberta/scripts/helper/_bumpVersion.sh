@@ -9,15 +9,15 @@ VERSION="$2"
 MESSAGE="$3"
 
 CWD=$(pwd)
-cd "$PARENT"
-mvn versions:set -DnewVersion="$VERSION"
+cd "${PARENT}"
+mvn versions:set -DnewVersion="${VERSION}"
 mvn versions:commit
-cd "$CWD"
+cd "${CWD}"
 
-if [ -z "$MESSAGE" ]
+if [ -z "${MESSAGE}" ]
 then
-	echo "version set to $VERSION. Not committed!"
+	echo "version set to ${VERSION}. Not committed!"
 else
 	git add --all
-	git commit -m "$MESSAGE"
+	git commit -m "${MESSAGE}"
 fi

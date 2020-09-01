@@ -1,34 +1,34 @@
-<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="nxt" xmlversion="2.0" description="" tags="">
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="nxt" xmlversion="3.0" description="" tags="">
     <instance x="313" y="4">
-    <block type="robControls_start" id="Mz`Bvb@I%)[%=Tv@BmOy" intask="true" deletable="false">
-        <mutation declare="true"/>
-        <field name="DEBUG">TRUE</field>
-        <statement name="ST">
-        <block type="robGlobalVariables_declare" id="zY+G/7pdNwYE7zMa27g." intask="true" deletable="false" movable="false">
-            <mutation next="true" declaration_type="Number"/>
-            <field name="VAR">item2</field>
-            <field name="TYPE">Number</field>
-            <value name="VALUE">
-            <block type="math_number" id="9zztb)bZBoxs+3{OhI]i" intask="true">
-                <field name="NUM">0</field>
-            </block>
-            </value>
-        </block>
-        <block type="robGlobalVariables_declare" id=")nrro_iLM!e3Qz4tgRpq" intask="true" deletable="false" movable="false">
-            <mutation next="true" declaration_type="Array_Number"/>
-            <field name="VAR">item</field>
-            <field name="TYPE">Array_Number</field>
-            <value name="VALUE">
-            <block type="robLists_create_with" id="T-W+Y_WqhyB};PGUz]J-" intask="true">
-                <mutation items="3" list_type="Number"/>
-                <field name="LIST_TYPE">Number</field>
-                <value name="ADD0">
-                <block type="math_number" id=".6SLNy#Sc8_O?JOHMKBD" intask="true">
-                    <field name="NUM">0</field>
+        <block type="robControls_start" id="Mz`Bvb@I%)[%=Tv@BmOy" intask="true" deletable="false">
+            <mutation declare="true" />
+            <field name="DEBUG">TRUE</field>
+            <statement name="ST">
+                <block type="robGlobalVariables_declare" id="zY+G/7pdNwYE7zMa27g." intask="true" deletable="false" movable="false">
+                    <mutation next="true" declaration_type="Number" />
+                    <field name="VAR">item2</field>
+                    <field name="TYPE">Number</field>
+                    <value name="VALUE">
+                        <block type="math_number" id="9zztb)bZBoxs+3{OhI]i" intask="true">
+                            <field name="NUM">0</field>
+                        </block>
+                    </value>
                 </block>
-                </value>
-                <value name="ADD1">
-                <block type="math_number" id="?8#N#H`mHTt|k*S2y[Y3" intask="true">
+                <block type="robGlobalVariables_declare" id=")nrro_iLM!e3Qz4tgRpq" intask="true" deletable="false" movable="false">
+                    <mutation next="true" declaration_type="Array_Number" />
+                    <field name="VAR">item</field>
+                    <field name="TYPE">Array_Number</field>
+                    <value name="VALUE">
+                        <block type="robLists_create_with" id="T-W+Y_WqhyB};PGUz]J-" intask="true">
+                            <mutation items="3" list_type="Number" />
+                            <field name="LIST_TYPE">Number</field>
+                            <value name="ADD0">
+                                <block type="math_number" id=".6SLNy#Sc8_O?JOHMKBD" intask="true">
+                                    <field name="NUM">0</field>
+                                </block>
+                            </value>
+                            <value name="ADD1">
+                                <block type="math_number" id="?8#N#H`mHTt|k*S2y[Y3" intask="true">
                     <field name="NUM">0</field>
                 </block>
                 </value>

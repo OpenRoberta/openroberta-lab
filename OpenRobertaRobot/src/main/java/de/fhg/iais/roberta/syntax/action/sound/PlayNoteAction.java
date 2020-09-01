@@ -48,7 +48,7 @@ public class PlayNoteAction<V> extends Action<V> {
      * @param comment added from the user,
      * @return read only object of class {@link PlayNoteAction}
      */
-    private static <V> PlayNoteAction<V> make(String port, String duration, String frequency, BlocklyBlockProperties properties, BlocklyComment comment) {
+    public static <V> PlayNoteAction<V> make(String port, String duration, String frequency, BlocklyBlockProperties properties, BlocklyComment comment) {
         return new PlayNoteAction<>(port, duration, frequency, properties, comment);
     }
 

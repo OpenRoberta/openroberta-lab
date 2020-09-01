@@ -1,4 +1,4 @@
-define([ 'exports', 'log', 'util', 'comm', 'message', 'guiState.controller', 'blocks', 'configuration.model', 'jquery', 'jquery-validate' ], function(exports,
+define([ 'exports', 'log', 'util', 'comm', 'message', 'guiState.controller', 'blockly', 'configuration.model', 'jquery', 'jquery-validate' ], function(exports,
         LOG, UTIL, COMM, MSG, GUISTATE_C, Blockly, CONFIGURATION, $) {
 
     var $formSingleModal;
@@ -12,7 +12,6 @@ define([ 'exports', 'log', 'util', 'comm', 'message', 'guiState.controller', 'bl
         initEvents();
         initConfigurationForms();
         initConfigurationEnvironment();
-        LOG.info('init configuration view');
     }
 
     exports.init = init;
@@ -48,7 +47,6 @@ define([ 'exports', 'log', 'util', 'comm', 'message', 'guiState.controller', 'bl
             group : GUISTATE_C.getRobotGroup(),
             robot : GUISTATE_C.getRobot()
         });
-        bricklyWorkspace.setVersion('2.0');
         // Configurations can't be executed
         bricklyWorkspace.robControls.runOnBrick.setAttribute("style", "display : none");
         GUISTATE_C.setBricklyWorkspace(bricklyWorkspace);
@@ -68,8 +66,10 @@ define([ 'exports', 'log', 'util', 'comm', 'message', 'guiState.controller', 'bl
                 bricklyWorkspace.setVisible(false);
             }
             $(window).resize();
-            if (!seen) {
-                reloadConf();
+            UTIL.clearAnnotations(bricklyWorkspace);
+            if (GUISTATE_C.confAnnos !== undefined) {
+                UTIL.annotateBlocks(bricklyWorkspace, GUISTATE_C.confAnnos);
+                delete GUISTATE_C.confAnnos;
             }
         }, 'tabConfiguration clicked');
 
@@ -286,7 +286,7 @@ define([ 'exports', 'log', 'util', 'comm', 'message', 'guiState.controller', 'bl
      */
     function showConfiguration(result) {
         if (result.rc == 'ok') {
-            configurationToBricklyWorkspace(result.data);
+            configurationToBricklyWorkspace(result.confXML);
             GUISTATE_C.setConfiguration(result);
             LOG.info('show configuration ' + GUISTATE_C.getConfigurationName());
         }
@@ -301,7 +301,7 @@ define([ 'exports', 'log', 'util', 'comm', 'message', 'guiState.controller', 'bl
     function reloadConf(opt_result) {
         var conf;
         if (opt_result) {
-            conf = opt_result.data;
+            conf = opt_result.confXML;
         } else {
             conf = GUISTATE_C.getConfigurationXML();
         }
@@ -345,7 +345,6 @@ define([ 'exports', 'log', 'util', 'comm', 'message', 'guiState.controller', 'bl
             group : GUISTATE_C.getRobotGroup(),
             robot : GUISTATE_C.getRobot()
         });
-        bricklyWorkspace.setVersion('2.0');
         initConfigurationEnvironment();
         var toolbox = GUISTATE_C.getConfigurationToolbox();
         bricklyWorkspace.updateToolbox(toolbox);
@@ -364,6 +363,7 @@ define([ 'exports', 'log', 'util', 'comm', 'message', 'guiState.controller', 'bl
         Blockly.svgResize(bricklyWorkspace);
         var dom = Blockly.Xml.textToDom(xml, bricklyWorkspace);
         Blockly.Xml.domToWorkspace(dom, bricklyWorkspace);
+        bricklyWorkspace.setVersion(dom.getAttribute('xmlversion'));
         var name = xml == GUISTATE_C.getConfigurationConf() ? GUISTATE_C.getRobotGroup().toUpperCase() + "basis" : '';
         GUISTATE_C.setConfigurationName(name);
         GUISTATE_C.setConfigurationSaved(true);
@@ -383,4 +383,5 @@ define([ 'exports', 'log', 'util', 'comm', 'message', 'guiState.controller', 'bl
         }
     }
     exports.configurationToBricklyWorkspace = configurationToBricklyWorkspace;
+
 });

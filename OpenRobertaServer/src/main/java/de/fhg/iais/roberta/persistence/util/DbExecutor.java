@@ -128,7 +128,11 @@ public class DbExecutor {
     }
 
     public static boolean isDDL(String sqlStmt) {
-        return DbExecutor.sW(sqlStmt, "drop ") || DbExecutor.sW(sqlStmt, "create ") || DbExecutor.sW(sqlStmt, "alter ") || DbExecutor.sW(sqlStmt, "backup ");
+        return DbExecutor.sW(sqlStmt, "drop ")
+            || DbExecutor.sW(sqlStmt, "create ")
+            || DbExecutor.sW(sqlStmt, "alter ")
+            || DbExecutor.sW(sqlStmt, "backup ")
+            || DbExecutor.sW(sqlStmt, "set ");
     }
 
     private static boolean sW(String testString, String expected) {

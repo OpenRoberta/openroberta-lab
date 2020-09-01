@@ -92,21 +92,28 @@ block:
       category: ACTOR
       implementor: de.fhg.iais.roberta.syntax.action.mbed.PinSetPullAction
       type: [mbedActions_pin_set_pull]
-  SWITCH_LED_MATRIX :
-      category: ACTOR
-      implementor: de.fhg.iais.roberta.syntax.action.mbed.SwitchLedMatrixAction
-      type: [mbedActions_switch_led_matrix]
-  SERVO_SET_ACTION :
-      category: ACTOR
-      implementor: de.fhg.iais.roberta.syntax.action.mbed.ServoSetAction
-      type: [mbedActions_servo_set]
-  MOTIONKIT_SINGLE_SET_ACTION :
-      category: ACTOR
-      implementor: de.fhg.iais.roberta.syntax.action.mbed.MotionKitSingleSetAction
-      type: [mbedActions_motionkit_single_set]
-  MOTIONKIT_DUAL_SET_ACTION :
-      category: ACTOR
-      implementor: de.fhg.iais.roberta.syntax.action.mbed.MotionKitDualSetAction
-      type: [mbedActions_motionkit_dual_set]
+  SWITCH_LED_MATRIX:
+    category: ACTOR
+    implementor: de.fhg.iais.roberta.syntax.action.mbed.SwitchLedMatrixAction
+    type: [mbedActions_switch_led_matrix]
+  SERVO_SET_ACTION:
+    category: ACTOR
+    implementor: de.fhg.iais.roberta.syntax.action.mbed.ServoSetAction
+    type: [mbedActions_servo_set]
+  MOTIONKIT_SINGLE_SET_ACTION:
+    category: ACTOR
+    implementor: de.fhg.iais.roberta.syntax.action.mbed.MotionKitSingleSetAction
+    type: [mbedActions_motionkit_single_set]
+  MOTIONKIT_DUAL_SET_ACTION:
+    category: ACTOR
+    implementor: de.fhg.iais.roberta.syntax.action.mbed.MotionKitDualSetAction
+    type: [mbedActions_motionkit_dual_set]
 mode:
   motionkit: [FOREWARD, BACKWARD, 'OFF']
+
+configuration:
+  LEDBAR: [robConf_ledbar]
+  FOURDIGITDISPLAY: [robConf_fourdigitdisplay]
+  CALLIBOT: [robConf_callibot]
+  COLOUR: [robConf_colourtcs3472]
+

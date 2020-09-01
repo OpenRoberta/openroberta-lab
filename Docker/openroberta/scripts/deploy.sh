@@ -27,33 +27,32 @@ echo '
 # remember script directory, working directory and directory with (parent) pom.
 SCRIPT="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 CWD=$(pwd)
-PARENT="$CWD"
+PARENT="${CWD}"
 
-echo "script directory is $SCRIPT, working directory is $CWD, parent pom in $PARENT"
-source $SCRIPT/helper/__githelper.sh
+echo "script directory is ${SCRIPT}, working directory is ${CWD}, parent pom in ${PARENT}"
+source ${SCRIPT}/helper/__githelper.sh
 
 # ACK PRECONDITIONS:
-question 'is the element <openRobertaServer.history> in the parent pom ok?'
-question 'if a database upgrade is needed: is class Upgrader.java and the SQL script "create-tables.sql" uptodate?'
+question 'if a database upgrade is needed: is class DbUpgrader.java and the SQL script "create-tables.sql" uptodate?'
 question 'are the versions for the EV3 update process in RobotEV3/pom.xml (e.g. <ev3runtime.v0.version>) ok?' 
 
 # CONSISTENCY CHECKS:
 mavenOnPath                                   # 1. mvn is on the path.
-checkMavenBuildDir $PARENT                    # 2. pom.xml is found for maven builds.
+checkMavenBuildDir ${PARENT}                    # 2. pom.xml is found for maven builds.
 checkGitProjectDir                            # 3. is a git project.
 checkBranch develop                           # 4. we are in branch develop.
 checkBranchClean master                       # 5. develop and master are clean.
 checkBranchClean develop
 parent2child master develop                   # 6. develop is an descendant of master.
 thisVersion=$1                                # 7. the version parameter are set and valid
-versionStringIsValid "$thisVersion" "deploy"
+versionStringIsValid "${thisVersion}" "deploy"
 nextVersion=$2
-versionStringIsValid "$nextVersion" "next"
-nextVersionSnapshot="$nextVersion-SNAPSHOT"
+versionStringIsValid "${nextVersion}" "next"
+nextVersionSnapshot="${nextVersion}-SNAPSHOT"
 
 # the workflow: this version -> develop; merge develop into master; next version-snapshot to develop
 git checkout develop
-$SCRIPT/helper/_bumpVersion.sh "$PARENT" "$thisVersion" "deployment of version $thisVersion"
+${SCRIPT}/helper/_bumpVersion.sh "${PARENT}" "${thisVersion}" "deployment of version ${thisVersion}"
 git checkout master
 git merge develop
 if [ $? -ne 0 ]
@@ -62,9 +61,9 @@ then
 	git merge --abort
 	exit 12
 fi
-git tag "ORA-$thisVersion" -m "ORA-$thisVersion"
+git tag "ORA-${thisVersion}" -m "ORA-${thisVersion}"
 git checkout develop
-$SCRIPT/helper/_bumpVersion.sh "$PARENT" "$nextVersionSnapshot" "next version is planned to be $nextVersion"
+${SCRIPT}/helper/_bumpVersion.sh "${PARENT}" "${nextVersionSnapshot}" "next version is planned to be ${nextVersion}"
 
 echo 'everything looks fine. You are in branch develop and should push both develop and master'
-echo "you may run $SCRIPT/helper/_pushMasterAndDevelop.sh"
+echo "you may run ${SCRIPT}/helper/_pushMasterAndDevelop.sh"

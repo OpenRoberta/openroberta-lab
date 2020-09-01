@@ -11,8 +11,8 @@ public class HumiditySensorTest extends AstTest {
         String expectedResult =
             "BlockAST [project=[[Location [x=384, y=50], "
                 + "MainTask [], "
-                + "DisplayTextAction [TEXT, SensorExpr [HumiditySensor [5, HUMIDITY, EMPTY_SLOT]]], "
-                + "DisplayTextAction [TEXT, SensorExpr [HumiditySensor [5, TEMPERATURE, EMPTY_SLOT]]]]]]";
+                + "DisplayTextAction [TEXT, SensorExpr [HumiditySensor [H, HUMIDITY, EMPTY_SLOT]]], "
+                + "DisplayTextAction [TEXT, SensorExpr [HumiditySensor [H, TEMPERATURE, EMPTY_SLOT]]]]]]";
 
         UnitTestHelper.checkProgramAstEquality(testFactory, expectedResult, "/sensor/humidity_sensor.xml");
 

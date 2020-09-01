@@ -1,14 +1,14 @@
-<block_set  xmlns="http://de.fhg.iais.roberta.blockly" robottype="ev3" xmlversion="" description="" tags="">
-      <instance x="-61" y="180">
-    <block type="logic_ternary" id="243" inline="false">
-      <value name="IF">
-        <block type="logic_compare" id="262" inline="true">
-          <field name="OP">EQ</field>
-          <value name="A">
-            <block type="math_number" id="281">
-              <field name="NUM">0</field>
-            </block>
-          </value>
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="ev3" xmlversion="3.0" description="" tags="">
+    <instance x="-61" y="180">
+        <block type="logic_ternary" id="243" inline="false">
+            <value name="IF">
+                <block type="logic_compare" id="262" inline="true">
+                    <field name="OP">EQ</field>
+                    <value name="A">
+                        <block type="math_number" id="281">
+                            <field name="NUM">0</field>
+                        </block>
+                    </value>
           <value name="B">
             <block type="math_number" id="282">
               <field name="NUM">0</field>

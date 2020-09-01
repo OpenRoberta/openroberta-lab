@@ -1,43 +1,37 @@
-<block_set xmlns="http://de.fhg.iais.roberta.blockly"
-	robottype="calliope" xmlversion="2.0" description="" tags="">
-	<instance x="384" y="50">
-		<block type="robControls_start" id="|Tl8pd-Px{fUhIh;y}(J"
-			intask="true" deletable="false">
-			<mutation declare="false"></mutation>
-			<field name="DEBUG"></field>
-		</block>
-		<block type="mbedActions_display_text" id="0^:kDm4(0UK.pX5KEyO`"
-			intask="true">
-			<field name="TYPE">TEXT</field>
-			<value name="OUT">
-				<block type="text" id="IkA%-Fgyp:F1jBYj0G|I" intask="true">
-					<field name="TEXT">Hallo</field>
-				</block>
-			</value>
-		</block>
-		<block type="mbedActions_display_text" id=":~%d5uXZpcXV{6{a)o?@"
-			intask="true">
-			<field name="TYPE">CHARACTER</field>
-			<value name="OUT">
-				<block type="text" id="wp`H?Ek#6PM]Uh:Bg(Wv" intask="true">
-					<field name="TEXT">Hallo</field>
-				</block>
-			</value>
-		</block>
-		<block type="mbedActions_display_image"
-			id="K^-}wvyzL.=og4z`?h/o" intask="true">
-			<mutation type="IMAGE"></mutation>
-			<field name="TYPE">IMAGE</field>
-			<value name="VALUE">
-				<block type="mbedImage_image" id="JuUbA%_2}OOV:eFN^psD"
-					intask="true">
-					<field name="P00"></field>
-					<field name="P10"></field>
-					<field name="P20"></field>
-					<field name="P30"></field>
-					<field name="P40"></field>
-					<field name="P01"></field>
-					<field name="P11"></field>
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="calliope" xmlversion="3.0" description="" tags="">
+    <instance x="384" y="50">
+        <block type="robControls_start" id="|Tl8pd-Px{fUhIh;y}(J" intask="true" deletable="false">
+            <mutation declare="false"></mutation>
+            <field name="DEBUG"></field>
+        </block>
+        <block type="mbedActions_display_text" id="0^:kDm4(0UK.pX5KEyO`" intask="true">
+            <field name="TYPE">TEXT</field>
+            <value name="OUT">
+                <block type="text" id="IkA%-Fgyp:F1jBYj0G|I" intask="true">
+                    <field name="TEXT">Hallo</field>
+                </block>
+            </value>
+        </block>
+        <block type="mbedActions_display_text" id=":~%d5uXZpcXV{6{a)o?@" intask="true">
+            <field name="TYPE">CHARACTER</field>
+            <value name="OUT">
+                <block type="text" id="wp`H?Ek#6PM]Uh:Bg(Wv" intask="true">
+                    <field name="TEXT">Hallo</field>
+                </block>
+            </value>
+        </block>
+        <block type="mbedActions_display_image" id="K^-}wvyzL.=og4z`?h/o" intask="true">
+            <mutation type="IMAGE"></mutation>
+            <field name="TYPE">IMAGE</field>
+            <value name="VALUE">
+                <block type="mbedImage_image" id="JuUbA%_2}OOV:eFN^psD" intask="true">
+                    <field name="P00"></field>
+                    <field name="P10"></field>
+                    <field name="P20"></field>
+                    <field name="P30"></field>
+                    <field name="P40"></field>
+                    <field name="P01"></field>
+                    <field name="P11"></field>
 					<field name="P21"></field>
 					<field name="P31"></field>
 					<field name="P41"></field>

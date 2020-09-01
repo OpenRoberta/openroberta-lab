@@ -9,7 +9,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import org.codehaus.jettison.json.JSONObject;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -43,7 +43,7 @@ public class ServerData {
         if ( logAlive ) {
             LOG.info("the response to the the " + EVERY_REQUEST + ". /alive request is: " + answer.toString());
         }
-        return Response.ok(answer).build();
+        return Response.ok(answer.toString()).build();
     }
 
     @Path("/robot/summary")
@@ -75,10 +75,11 @@ public class ServerData {
     @Produces(MediaType.APPLICATION_JSON)
     public Response tellUsageOfHttpAndDatabaseSessions() throws Exception {
         JSONObject answer = new JSONObject();
-        answer.put("dbSessions", DbSession.getDebugSessionCounter());
+        answer.put("dbSessions", DbSession.getOpenSessionCounter());
         answer.put("unusedDbSessions", DbSession.getUnusedSessionCounter());
+        answer.put("cleanedDbSessions", DbSession.getCleanedSessionCounter());
         answer.put("httpSessions", HttpSessionState.getNumberOfHttpSessionStates());
-        return Response.ok(answer).build();
+        return Response.ok(answer.toString()).build();
     }
 
     @Path("/server/dbsessions")

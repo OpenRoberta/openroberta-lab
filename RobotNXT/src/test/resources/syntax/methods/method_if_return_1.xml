@@ -1,14 +1,14 @@
-<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="nxt" xmlversion="" description="" tags="">
-  <instance x="93" y="21">
-    <block type="robControls_start" id="34" deletable="false">
-      <mutation declare="false"></mutation>
-      <field name="DEBUG">FALSE</field>
-    </block>
-    <block type="robProcedures_callnoreturn" id="85" inline="false">
-      <mutation name="test">
-        <arg name="x" type="Boolean"></arg>
-      </mutation>
-      <value name="ARG0">
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="nxt" xmlversion="3.0" description="" tags="">
+    <instance x="93" y="21">
+        <block type="robControls_start" id="34" deletable="false">
+            <mutation declare="false"></mutation>
+            <field name="DEBUG">FALSE</field>
+        </block>
+        <block type="robProcedures_callnoreturn" id="85" inline="false">
+            <mutation name="test">
+                <arg name="x" type="Boolean"></arg>
+            </mutation>
+            <value name="ARG0">
         <block type="logic_boolean" id="100">
           <field name="BOOL">TRUE</field>
         </block>

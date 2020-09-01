@@ -1,16 +1,13 @@
-General Remarks For Using OpenRoberta From The Command Line.
-
-The OpenRoberta sources are contained in a git repository. First generate the software artifacts by calling 'mvn clean install -DskipTests'.
+Please read the README.md
 
 Top level in the git repository is a script 'ora.sh' to be used from the command line to configure the OpenRoberta application.
 Remarks about the database:
-The database may be run in 'embedded' mode. This is for local test/debug and small servers as the RaspBerryPI:
-- the DATABASEURL is "jdbc:hsqldb:file:<some-basedir>/db-<serverversion>/openroberta-db;ifexists=true"
+The database may be run in 'embedded' mode. This is for local test/debug:
+- the DATABASEURL is "jdbc:hsqldb:file:$DB_PARENTDIR/$DB_NAME;ifexists=true"
 - the database is locked by the process accessing the database. Thus no concurrent access (with a sql client) is possible.
-The database may be run in 'server' mode. This is for the test and prod server
-- the DATABASEURL is "jdbc:hsqldb:hsql://localhost/openroberta-db" or "jdbc:hsqldb:hsql://localhost/openroberta-db-<DB-RESPECTIVE-SERVER-NAME>"
-  on a test server the suffix <DB-RESPECTIVE-SERVER-NAME> is a test instance name as test, develop, dev1,...,dev9
-- you can get access to the database used by the server concurrently with a sql client. Be careful NOT to block the server
+The database may be run in 'server' mode. This is for the test and prod server, including small systems as the RaspberryPi
+- the DATABASEURL is "jdbc:hsqldb:hsql://localhost/$DB_NAME". On a test server the database name usually is db-ora-SERVER-NAME (server name is e.g. test, develop, dev1,...,dev9
+- you can get access to the database used by the server concurrently with a sql client. Be careful NOT to block the server by your sql
 
 Commands of the ora.sh script:
   help      get help (this text)
@@ -22,33 +19,25 @@ Commands of the ora.sh script:
               a server with embedded database. The script detects a database from an earlier versions and upgrades them to the actual version. If NO database
               at all is found, a  empty database is created. Run './admin.sh help' for more administration commands.
 
-  create-empty-db [{VERSION}] create an empty database at path "OpenRobertaServer/db-VERSION". If the parameter VERSION is missing, the VERSION is got from
-              the installation. In this case, "mvn install" must have run. An existing datatbase is NOT overwritten.
+  create-empty-db create an empty database at path $DB_PARENTDIR/$DB_NAME, usually ./OpenRobertaServer/db-embedded. An existing datatbase is NOT overwritten.
+              
   start-from-git [-rdbg] [{path-to-crosscompiler-resources}]
               if a developer wants to start the server from a Git working tree in embedded mode (that is fine for tests), use this command.
               Note, that running the server from an IDE as eclipse is EASIER. You need a valid database. Command 'createEmptydb' creates it.
 							if '-rdbg' is used, a remote debug session (e.g. from an IDE as Eclipse) can be attached to the server (on port 8000).
 							Only if you want to test crosscompiler calls, you need the path to the crosscompiler resources directory.
 
-The following commands are used rarely:
+The following commands are used by admins of the test and prod server. These systems are running as docker instances. See Docker/README.md for details.
+the base-dir of the docker setup is usually '/data/openroberta-lab'
   
-  new-test-setup {base-dir}
+  new-docker-setup {base-dir}
              creates a new test server setup in {base-dir}. {base-dir} must not exist. Afterwards you have to edit '{base-dir}/config.sh' CAREFULLY.
              Needs root privileges. Must be executed on a test machine from an UP-TO-DATE git repository. 
-  new-server-in-test-setup {base-dir} {server-name}
+  new-server-in-docker-setup {base-dir} {server-name}
              creates a server in the existing test server setup '{base-dir}'. The dirs '{base-dir}/server/{server-name}' and '{base-dir}/db/{server-name}' must not exist.
              Afterwards you have to edit '{base-dir}/server/{server-name}/decl.sh' CAREFULLY and to think about whether an empty database is ok or not.
              In '{base-dir}/config.sh' {server-name} can be added to the variables SERVERS, AUTODEPLOY and DATABASES.
              Needs root privileges. Must be executed on a test machine from an UP-TO-DATE git repository. 
-  update-test-setup [{base-dir}]
+  update-docker-setup [{base-dir}]
              expects the test server setup in {base-dir}. Copies all resources from the git-dir 'Docker/openroberta/conf'
              into {base-dir}/conf. Needs root privileges. Must be executed on a test machine from an UP-TO-DATE git repository. 
-
-  java       check whether java and javac are on the path and the JDK version is ok
-
-The following command is used very rarely (better use frameworks like nagios, ...):
-
-  alive {-q/-Q} {SERVERURL} {EVERY} {TIMEOUT}
-             check after EVERY sec (default: 60) if the server is alive.
-             The server is assumed to have crashed, if it does not answer within TIMEOUT sec (default: 10).
-             -q shows every result, but not the curl-call, -Q reports crashes only. Example: ./ora.sh alive http://localhost:1999 -q 120 5

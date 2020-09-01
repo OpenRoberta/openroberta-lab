@@ -38,6 +38,32 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
     exports.login = login;
 
     /**
+     * Login user of user-group
+     * 
+     * @param userGroupOwner
+     *            {String} - name of the account of the user that owns the user-group
+     * @param userGroupName
+     *            {String} - name of the user-group
+     * @param accountName
+     *            {String} - name of the account of the user
+     * @param passwd
+     *            {String} - password for the account
+     * 
+     * 
+     */
+    function loginUserGroup(userGroupOwner, userGroupName, accountName, passwd, successFn) {
+        COMM.json("/user/login", {
+            "cmd" : "login",
+            "accountName" : accountName,
+            "password" : passwd,
+            "userGroupOwner" : userGroupOwner,
+            "userGroupName" : userGroupName
+        }, successFn, "login user '" + accountName + "' of group '" + userGroupOwner + "." + userGroupName + "'.");
+    }
+
+    exports.loginUserGroup = loginUserGroup;
+
+    /**
      * Logout user
      * 
      * @memberof USER
@@ -87,7 +113,7 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
             "userEmail" : userEmail,
             "password" : passwd,
             "role" : 'TEACHER',
-            "isYoungerThen14" : isYoungerThen14,
+            "isYoungerThen14" : isYoungerThen14 === "1" ? true : false,
             "language" : language
         }, successFn, "save user '" + accountName + "' to server");
     }
@@ -111,7 +137,7 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
             "accountName" : accountName,
             "userName" : userName,
             "userEmail" : userEmail,
-            "isYoungerThen14" : isYoungerThen14,
+            "isYoungerThen14" : isYoungerThen14 === "1" ? true : false,
             "language" : language,
             "role" : 'TEACHER'
         }, successFn, "update user '" + accountName + "' to server");

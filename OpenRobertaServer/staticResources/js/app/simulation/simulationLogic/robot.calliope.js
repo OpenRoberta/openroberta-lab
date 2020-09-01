@@ -227,7 +227,6 @@ define([ 'simulation.simulation', 'simulation.robot.mbed' ], function(SIM, Mbed)
             touched : false,
             draw : that.pin0.draw
         };
-        this.tone = {};
         SIM.initMicrophone(this);
     }
 
@@ -264,32 +263,7 @@ define([ 'simulation.simulation', 'simulation.robot.mbed' ], function(SIM, Mbed)
                     this.led.color = 'grey';
             }
         }
-        // update tone
-        var volume = this.robotBehaviour.getActionState("volume", true);
-        if ((volume || volume === 0) && this.webAudio.context) {
-            this.webAudio.volume = volume / 100.0;
-        }
-        var tone = this.robotBehaviour.getActionState("tone", true);
-        if (tone && this.webAudio.context) {
-            var cT = this.webAudio.context.currentTime;
-            if (tone.frequency && tone.duration > 0) {
-                var oscillator = this.webAudio.context.createOscillator();
-                oscillator.type = 'square';
-                oscillator.connect(this.webAudio.context.destination);
-                var that = this;
-                function oscillatorFinish() {
-                    that.tone.finished = true;
-                    oscillator.disconnect(that.webAudio.context.destination);
-                    delete oscillator;
-                }
-                oscillator.onended = function(e) {
-                    oscillatorFinish();                    
-                }
-                oscillator.frequency.value = tone.frequency;
-                oscillator.start(cT);
-                oscillator.stop(cT + tone.duration / 1000.0);               
-            }
-        }
+        
         // update motors
         var motors = this.robotBehaviour.getActionState("motors", true);
         if (motors) {
@@ -406,7 +380,7 @@ define([ 'simulation.simulation', 'simulation.robot.mbed' ], function(SIM, Mbed)
         '<label class="btn simbtn"><input type="radio" id="shake" name="options" autocomplete="off" >' + Blockly.Msg.SENSOR_GESTURE_SHAKE + '</label>' + //
         '<label class="btn simbtn"><input type="radio" id="freefall" name="options" autocomplete="off" >' + Blockly.Msg.SENSOR_GESTURE_FREEFALL + '</label>' + //
         '<label style="margin: 8px;margin-top: 12px; margin-left: 0">' + Blockly.Msg.SENSOR_COMPASS
-                + '</label><span style="margin-bottom: 8px;margin-top: 12px; min-width: 25px; width: 25px; display: inline-block" id="range">0</span>'
+                + '</label><input type="text" value="0" style="margin-bottom: 8px;margin-top: 12px; min-width: 45px; width: 45px; display: inline-block; border: 1px solid #333; border-radius: 2px; text-align: right;" id="range" />'
                 + '<div style="margin:8px 0; "><input id="slider" type="range" min="0" max="360" value="0" step="5" /></div>' + //
                 '<label style="width:100%;margin: 8px;margin-top: 12px; margin-left: 0"><select class="customDropdown" id="pin"><option id="0">'
                 + Blockly.Msg.SENSOR_PIN + ' 0</option><option id="1">' + Blockly.Msg.SENSOR_PIN + ' 1</option><option id="2">' + Blockly.Msg.SENSOR_PIN

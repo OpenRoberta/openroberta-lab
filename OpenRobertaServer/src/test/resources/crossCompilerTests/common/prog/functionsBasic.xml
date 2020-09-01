@@ -1,0 +1,66 @@
+
+<block type="text_comment" id="?/;Knn|oaZR36aGo:ci_" intask="true">
+    <field name="TEXT">Basic Functions START</field>
+</block>
+<block type="robProcedures_callnoreturn" id="Ze_P9Jz#qTm9n(!rOPWV" intask="true">
+    <mutation name="number"></mutation>
+</block>
+<block type="robProcedures_callnoreturn" id="qMHm.DA.d^N%EoE%Ys#t" intask="true">
+    <mutation name="breakFunct"></mutation>
+</block>
+<block type="robActions_assert" id="yAYobFibCl?)8+MApj6w" intask="true">
+    <field name="TEXT">pos-1</field>
+    <value name="OUT">
+        <block type="logic_compare" id="xn+3(y(:Xr,-DL.u/IIz" intask="true" deletable="false" movable="false">
+            <field name="OP">EQ</field>
+            <value name="A">
+                <block type="math_number" id="CZ|9^zV6yy.d8e(IfUbC" intask="true">
+                    <field name="NUM">5</field>
+                </block>
+            </value>
+            <value name="B">
+                <block type="variables_get" id=";szEIWZQwuEEn-i[.AI3" intask="true">
+                    <mutation datatype="Number"></mutation>
+                    <field name="VAR">n1</field>
+                </block>
+            </value>
+        </block>
+    </value>
+</block>
+<block type="variables_set" id="okM37Q-nsDtLb=XrAPX`" intask="true">
+    <mutation datatype="Number"></mutation>
+    <field name="VAR">n1</field>
+    <value name="VALUE">
+        <block type="robProcedures_callreturn" id="Vn^B|A1*o5vNa9uy7}5;" intask="true">
+            <mutation name="retNumber" output_type="Number"></mutation>
+        </block>
+    </value>
+</block>
+<block type="variables_set" id="6HL4AHl4TZ`|EdKAk!|1" intask="true">
+    <mutation datatype="Boolean"></mutation>
+    <field name="VAR">b</field>
+    <value name="VALUE">
+        <block type="robProcedures_callreturn" id="l{`x;38#peOpR;#xC{Yx" intask="true">
+            <mutation name="retBool" output_type="Boolean"></mutation>
+        </block>
+    </value>
+</block>
+<block type="variables_set" id="r{7kKn.O{*/yJd|Q%u4D" intask="true">
+    <mutation datatype="Number"></mutation>
+    <field name="VAR">n1</field>
+    <value name="VALUE">
+        <block type="robProcedures_callreturn" id="R-!w~FQ1?QMnA8~hNFos" intask="true">
+            <mutation name="retNumber2" output_type="Number">
+                <arg name="x" type="Number"></arg>
+            </mutation>
+            <value name="ARG0">
+                <block type="math_number" id="G:I,,92EdK.zw-|[*;]R" intask="true">
+                    <field name="NUM">10</field>
+                </block>
+            </value>
+        </block>
+    </value>
+</block>
+<block type="text_comment" id="HEs[1q%~w{%Z8v7zOwpn" intask="true">
+    <field name="TEXT">Basic Functions END</field>
+</block>

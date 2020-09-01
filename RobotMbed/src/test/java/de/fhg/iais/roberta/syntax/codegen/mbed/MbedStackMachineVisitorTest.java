@@ -6,6 +6,7 @@ import de.fhg.iais.roberta.syntax.CalliopeAstTest;
 import de.fhg.iais.roberta.util.Util;
 import de.fhg.iais.roberta.util.test.UnitTestHelper;
 import de.fhg.iais.roberta.worker.MbedStackMachineGeneratorWorker;
+import de.fhg.iais.roberta.worker.MbedTwo2ThreeTransformerWorker;
 import de.fhg.iais.roberta.worker.MbedUsedHardwareCollectorWorker;
 
 public class MbedStackMachineVisitorTest extends CalliopeAstTest {
@@ -30,6 +31,7 @@ public class MbedStackMachineVisitorTest extends CalliopeAstTest {
                 configuration,
                 Util.readResourceContent("/stack_machine/light.json"),
                 "/stack_machine/light.xml",
+                new MbedTwo2ThreeTransformerWorker(),
                 new MbedUsedHardwareCollectorWorker(),
                 new MbedStackMachineGeneratorWorker());
     }
@@ -42,6 +44,7 @@ public class MbedStackMachineVisitorTest extends CalliopeAstTest {
                 configuration,
                 Util.readResourceContent("/stack_machine/move.json"),
                 "/stack_machine/move.xml",
+                new MbedTwo2ThreeTransformerWorker(),
                 new MbedUsedHardwareCollectorWorker(),
                 new MbedStackMachineGeneratorWorker());
     }
@@ -66,6 +69,7 @@ public class MbedStackMachineVisitorTest extends CalliopeAstTest {
                 configuration,
                 Util.readResourceContent("/stack_machine/pin.json"),
                 "/stack_machine/pin.xml",
+                new MbedTwo2ThreeTransformerWorker(),
                 new MbedUsedHardwareCollectorWorker(),
                 new MbedStackMachineGeneratorWorker());
     }
@@ -78,6 +82,7 @@ public class MbedStackMachineVisitorTest extends CalliopeAstTest {
                 configuration,
                 Util.readResourceContent("/stack_machine/sensors.json"),
                 "/stack_machine/sensors.xml",
+                new MbedTwo2ThreeTransformerWorker(),
                 new MbedUsedHardwareCollectorWorker(),
                 new MbedStackMachineGeneratorWorker());
     }

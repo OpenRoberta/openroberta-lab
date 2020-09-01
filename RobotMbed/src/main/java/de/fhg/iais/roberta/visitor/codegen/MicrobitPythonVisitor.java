@@ -1,12 +1,14 @@
 package de.fhg.iais.roberta.visitor.codegen;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import com.google.common.collect.ClassToInstanceMap;
 
 import de.fhg.iais.roberta.bean.IProjectBean;
 import de.fhg.iais.roberta.bean.UsedHardwareBean;
+import de.fhg.iais.roberta.components.ConfigurationAst;
+import de.fhg.iais.roberta.components.ConfigurationComponent;
 import de.fhg.iais.roberta.inter.mode.general.IMode;
 import de.fhg.iais.roberta.mode.action.mbed.DisplayTextMode;
 import de.fhg.iais.roberta.syntax.Phrase;
@@ -60,14 +62,16 @@ import de.fhg.iais.roberta.visitor.lang.codegen.prog.AbstractPythonVisitor;
  * StringBuilder. <b>This representation is correct Python code.</b> <br>
  */
 public final class MicrobitPythonVisitor extends AbstractPythonVisitor implements IMbedVisitor<Void> {
+    private final ConfigurationAst robotConfiguration;
 
     /**
      * initialize the Python code generator visitor.
      *
      * @param programPhrases to generate the code from
      */
-    public MicrobitPythonVisitor(List<ArrayList<Phrase<Void>>> programPhrases, ClassToInstanceMap<IProjectBean> beans) {
+    public MicrobitPythonVisitor(List<List<Phrase<Void>>> programPhrases, ConfigurationAst robotConfiguration, ClassToInstanceMap<IProjectBean> beans) {
         super(programPhrases, beans);
+        this.robotConfiguration = robotConfiguration;
     }
 
     @Override
@@ -177,8 +181,10 @@ public final class MicrobitPythonVisitor extends AbstractPythonVisitor implement
 
     @Override
     public Void visitKeysSensor(KeysSensor<Void> keysSensor) {
-        String userDefined = keysSensor.getPort();
-        this.sb.append("microbit.button_").append(userDefined.toLowerCase()).append(".is_pressed()");
+        String port = keysSensor.getPort();
+        ConfigurationComponent configurationComponent = this.robotConfiguration.getConfigurationComponent(port);
+        String pin1 = configurationComponent.getProperty("PIN1");
+        this.sb.append("microbit.button_").append(pin1.toLowerCase(Locale.ENGLISH)).append(".is_pressed()");
         return null;
     }
 
@@ -208,11 +214,10 @@ public final class MicrobitPythonVisitor extends AbstractPythonVisitor implement
 
     @Override
     public Void visitAccelerometer(AccelerometerSensor<Void> accelerometerSensor) {
-        String userDefined = accelerometerSensor.getPort();
-        if ( userDefined.equals(SC.STRENGTH) ) {
+        if ( accelerometerSensor.getSlot().equals(SC.STRENGTH) ) {
             this.sb.append("math.sqrt(microbit.accelerometer.get_x()**2 + microbit.accelerometer.get_y()**2 + microbit.accelerometer.get_z()**2)");
         } else {
-            this.sb.append("microbit.accelerometer.get_").append(userDefined.toLowerCase()).append("()");
+            this.sb.append("microbit.accelerometer.get_").append(accelerometerSensor.getSlot().toLowerCase(Locale.ENGLISH)).append("()");
         }
         return null;
     }
@@ -225,9 +230,12 @@ public final class MicrobitPythonVisitor extends AbstractPythonVisitor implement
 
     @Override
     public Void visitPinGetValueSensor(PinGetValueSensor<Void> pinValueSensor) {
-        final String valueType = pinValueSensor.getMode().toString().toLowerCase();
+        String port = pinValueSensor.getPort();
+        ConfigurationComponent configurationComponent = this.robotConfiguration.getConfigurationComponent(port);
+        String pin1 = configurationComponent.getProperty("PIN1");
+        String valueType = pinValueSensor.getMode().toLowerCase(Locale.ENGLISH);
         this.sb.append("microbit.pin");
-        this.sb.append(pinValueSensor.getPort());
+        this.sb.append(pin1);
         this.sb.append(".read_");
         this.sb.append(valueType);
         this.sb.append("()");
@@ -344,7 +352,10 @@ public final class MicrobitPythonVisitor extends AbstractPythonVisitor implement
 
     @Override
     public Void visitPinWriteValueAction(PinWriteValueAction<Void> pinWriteValueAction) {
-        this.sb.append("microbit.pin" + pinWriteValueAction.getPort());
+        String port = pinWriteValueAction.getPort();
+        ConfigurationComponent configurationComponent = this.robotConfiguration.getConfigurationComponent(port);
+        String pin1 = configurationComponent.getProperty("PIN1");
+        this.sb.append("microbit.pin" + pin1);
         String valueType = pinWriteValueAction.getMode().equals(SC.DIGITAL) ? "digital(" : "analog(";
         this.sb.append(".write_").append(valueType);
         pinWriteValueAction.getValue().accept(this);
@@ -409,6 +420,10 @@ public final class MicrobitPythonVisitor extends AbstractPythonVisitor implement
             this.sb.append("import radio");
             nlIndent();
         }
+        if ( this.getBean(UsedHardwareBean.class).isActorUsed(SC.MUSIC) ) {
+            this.sb.append("import music");
+            nlIndent();
+        }
         nlIndent();
         this.sb.append("class BreakOutOfALoop(Exception): pass");
         nlIndent();
@@ -438,6 +453,27 @@ public final class MicrobitPythonVisitor extends AbstractPythonVisitor implement
         this.sb.append("print(");
         serialWriteAction.getValue().accept(this);
         this.sb.append(")");
+        return null;
+    }
+
+    @Override
+    public Void visitToneAction(ToneAction<Void> toneAction) {
+        this.sb.append("music.pitch(");
+        toneAction.getFrequency().accept(this);
+        this.sb.append(", ");
+        toneAction.getDuration().accept(this);
+        this.sb.append(")");
+        return null;
+    }
+
+    @Override
+    public Void visitPlayNoteAction(PlayNoteAction<Void> playNoteAction) {
+        this.sb
+            .append("music.pitch(")
+            .append(Integer.parseInt(playNoteAction.getFrequency().split("\\.")[0]))
+            .append(", ")
+            .append(playNoteAction.getDuration())
+            .append(")");
         return null;
     }
 
@@ -473,16 +509,6 @@ public final class MicrobitPythonVisitor extends AbstractPythonVisitor implement
 
     @Override
     public Void visitMotorStopAction(MotorStopAction<Void> motorStopAction) {
-        throw new DbcException("Not supported!");
-    }
-
-    @Override
-    public Void visitToneAction(ToneAction<Void> toneAction) {
-        throw new DbcException("Not supported!");
-    }
-
-    @Override
-    public Void visitPlayNoteAction(PlayNoteAction<Void> playNoteAction) {
         throw new DbcException("Not supported!");
     }
 }

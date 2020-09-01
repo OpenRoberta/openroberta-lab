@@ -2,7 +2,7 @@ block:
   COLOR_SENSING:
       category: SENSOR
       implementor: de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor
-      type: [robSensors_colour_getSample,sim_colour_getSample]
+      type: [robSensors_colour_getSample,sim_colour_getSample,robsensors_colourtcs3472_getsample]
   LIGHT_SENSING:
       category: SENSOR
       implementor: de.fhg.iais.roberta.syntax.sensor.generic.LightSensor
@@ -307,6 +307,14 @@ block:
       category: FUNCTION
       implementor: de.fhg.iais.roberta.syntax.lang.functions.MathNumPropFunct
       type: [math_number_property]
+  MATH_CAST_STRING_FUNCT:
+      category: FUNCTION
+      implementor: de.fhg.iais.roberta.syntax.lang.functions.MathCastStringFunct
+      type: [math_cast_toString]
+  MATH_CAST_CHAR_FUNCT:
+      category: FUNCTION
+      implementor: de.fhg.iais.roberta.syntax.lang.functions.MathCastCharFunct
+      type: [math_cast_toChar]
   LENGTH_OF_IS_EMPTY_FUNCT:
       category: FUNCTION
       implementor: de.fhg.iais.roberta.syntax.lang.functions.LengthOfIsEmptyFunct
@@ -323,6 +331,14 @@ block:
       category: STMT
       implementor: de.fhg.iais.roberta.syntax.lang.stmt.StmtTextComment
       type: [text_comment]
+  TEXT_STRING_CAST_NUMBER_FUNCT:
+      category: FUNCTION
+      implementor: de.fhg.iais.roberta.syntax.lang.functions.TextStringCastNumberFunct
+      type: [text_cast_string_tonumber]
+  TEXT_CHAR_CAST_NUMBER_FUNCT:
+      category: FUNCTION
+      implementor: de.fhg.iais.roberta.syntax.lang.functions.TextCharCastNumberFunct
+      type: [text_cast_char_tonumber]
   LIST_REPEAT_FUNCT:
       category: FUNCTION
       implementor: de.fhg.iais.roberta.syntax.lang.functions.ListRepeat

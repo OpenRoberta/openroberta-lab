@@ -1,12 +1,12 @@
 package de.fhg.iais.roberta.javaServer.websocket;
 
-import org.codehaus.jettison.json.JSONObject;
 import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketClose;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketConnect;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketError;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketMessage;
 import org.eclipse.jetty.websocket.api.annotations.WebSocket;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,8 +39,7 @@ public class Ev3SensorLoggingWS {
     }
 
     @OnWebSocketMessage
-    public void handleMessage(String requestString) throws Exception {
-        JSONObject request = new JSONObject(requestString);
+    public void handleMessage(JSONObject request) {
         String token = (String) request.remove("token");
         LOG.info("@OnWebSocketMessage: " + token + " " + request);
         RobotCommunicator communicator = guiceInjector.getInstance(RobotCommunicator.class);

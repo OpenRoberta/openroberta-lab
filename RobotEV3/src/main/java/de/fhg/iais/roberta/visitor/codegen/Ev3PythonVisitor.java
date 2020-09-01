@@ -1,6 +1,5 @@
 package de.fhg.iais.roberta.visitor.codegen;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -53,11 +52,11 @@ import de.fhg.iais.roberta.syntax.lang.functions.MathRandomIntFunct;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtList;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
-import de.fhg.iais.roberta.syntax.sensor.generic.HTColorSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.HTColorSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.IRSeekerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.KeysSensor;
@@ -88,7 +87,7 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
      * @param programPhrases to generate the code from
      */
     public Ev3PythonVisitor(
-        List<ArrayList<Phrase<Void>>> programPhrases,
+        List<List<Phrase<Void>>> programPhrases,
         ConfigurationAst brickConfiguration,
         ILanguage language,
         ClassToInstanceMap<IProjectBean> beans) {
@@ -750,8 +749,8 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
     private String generateRegenerateConfiguration() {
         StringBuilder sb = new StringBuilder();
         sb.append("_brickConfiguration = {\n");
-        sb.append("    'wheel-diameter': " + this.brickConfiguration.getWheelDiameterCM() + ",\n");
-        sb.append("    'track-width': " + this.brickConfiguration.getTrackWidthCM() + ",\n");
+        sb.append("    'wheel-diameter': " + this.brickConfiguration.getWheelDiameter() + ",\n");
+        sb.append("    'track-width': " + this.brickConfiguration.getTrackWidth() + ",\n");
         appendActors(sb);
         appendSensors(sb);
         sb.append("}");
@@ -760,7 +759,7 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
 
     private boolean isActorUsed(ConfigurationComponent actor, String port) {
         for ( UsedActor usedActor : this.getBean(UsedHardwareBean.class).getUsedActors() ) {
-            if (!usedActor.getType().equals(SC.VOICE)) { // TODO workaround for the internal voice actor, should be removed once the new configuration is used
+            if ( !usedActor.getType().equals(SC.VOICE) ) { // TODO workaround for the internal voice actor, should be removed once the new configuration is used
                 String usedActorComponentType = this.brickConfiguration.getConfigurationComponent(usedActor.getPort()).getComponentType();
                 if ( port.equals(usedActor.getPort()) && actor.getComponentType().equals(usedActorComponentType) ) {
                     return true;
@@ -939,5 +938,4 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
         this.sb.append("'" + color.toLowerCase() + "'");
         return null;
     }
-
 }

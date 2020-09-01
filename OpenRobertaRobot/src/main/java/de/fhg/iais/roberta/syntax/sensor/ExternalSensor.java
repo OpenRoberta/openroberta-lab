@@ -59,6 +59,10 @@ public abstract class ExternalSensor<V> extends Sensor<V> {
         return this.slot;
     }
 
+    public boolean isPortInMutation() {
+        return this.isPortInMutation;
+    }
+
     @Override
     public String toString() {
         return this.getClass().getSimpleName() + " [" + this.getPort() + ", " + this.getMode() + ", " + this.getSlot() + "]";

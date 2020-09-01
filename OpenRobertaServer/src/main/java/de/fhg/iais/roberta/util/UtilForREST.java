@@ -1,32 +1,34 @@
 package de.fhg.iais.roberta.util;
 
+import java.io.InputStream;
 import java.util.Date;
+import java.util.Scanner;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentHashMap.KeySetView;
 import java.util.concurrent.atomic.AtomicLong;
 
 import javax.ws.rs.core.Response;
 
-import org.codehaus.jettison.json.JSONException;
-import org.codehaus.jettison.json.JSONObject;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
 
+import de.fhg.iais.roberta.generated.restEntities.BaseResponse;
+import de.fhg.iais.roberta.generated.restEntities.FullRestRequest;
 import de.fhg.iais.roberta.javaServer.restServices.all.controller.ClientAdmin;
-import de.fhg.iais.roberta.javaServer.restServices.all.controller.ClientInit;
 import de.fhg.iais.roberta.persistence.AbstractProcessor;
 import de.fhg.iais.roberta.persistence.util.HttpSessionState;
 import de.fhg.iais.roberta.robotCommunication.RobotCommunicationData;
 import de.fhg.iais.roberta.robotCommunication.RobotCommunicationData.State;
 import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
-import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.util.dbc.DbcKeyException;
 
 public class UtilForREST {
     private static final Logger LOG = LoggerFactory.getLogger(UtilForREST.class);
     private static final long INVALID_INIT_TOKEN_REPORT_LIMIT = 100;
-    private static String serverVersion;
+    private static String serverVersion = "undefined";
     private static final AtomicLong invalidInitTokenCounter = new AtomicLong(0);
     private static final KeySetView<String, Boolean> invalidTokenThatAccess = ConcurrentHashMap.newKeySet();
 
@@ -44,24 +46,24 @@ public class UtilForREST {
     }
 
     /**
-     * all REST services, excluded is only the /init and the /ping request, have to call this method. It processes the init-token, which protects user and
-     * server against<br>
-     * - multiple frontend sessions connected to one backend session (see class {@link ClientInit})<br>
-     * - a frontend session not backed by a backend session (occurs when the server is restarted)<br>
+     * all REST services, excluded is only the /init request, have to call this method. It processes the init-token, which protects user and server against a
+     * frontend session not backed up by a backend session (occurs only when the server is restarted)<br>
      *
-     * @param httpSessionState
      * @param loggerForRequest
      * @param fullRequest
+     * @param rememberTheCall if true, count the request as a real call (a login, e.g.); otherwise don't increase the call counter (a ping, e.g.)
      * @return
      */
-    public static HttpSessionState handleRequestInit(Logger loggerForRequest, JSONObject fullRequest) {
-        AliveData.rememberClientCall();
-        String initToken = fullRequest.optString("initToken");
+    public static HttpSessionState handleRequestInit(Logger loggerForRequest, FullRestRequest fullRequest, boolean rememberTheCall) {
+        if ( rememberTheCall ) {
+            AliveData.rememberClientCall();
+        }
+        String initToken = fullRequest.getInitToken();
         HttpSessionState httpSessionState = validateInitToken(initToken);
         MDC.put("sessionId", String.valueOf(httpSessionState.getSessionNumber()));
         MDC.put("userId", String.valueOf(httpSessionState.getUserId()));
         MDC.put("robotName", String.valueOf(httpSessionState.getRobotName()));
-        new ClientLogger().log(loggerForRequest, fullRequest);
+        new ClientLogger().log(loggerForRequest, fullRequest.getLog());
         return httpSessionState;
     }
 
@@ -96,40 +98,40 @@ public class UtilForREST {
         }
     }
 
-    public static JSONObject extractDataPart(JSONObject request) {
-        JSONObject dataPart;
-        try {
-            dataPart = request.getJSONObject("data");
-        } catch ( JSONException e1 ) {
-            throw new DbcException("Invalid JSON object: data not found", e1);
-        }
-        return dataPart;
-    }
-
-    public static void addResultInfo(JSONObject response, AbstractProcessor processor) throws JSONException {
+    public static <T extends BaseResponse> void addResultInfo(T response, AbstractProcessor processor) throws JSONException {
         String realKey = processor.getMessage().getKey();
         String responseCode = processor.succeeded() ? "ok" : "error";
-        response.put("rc", responseCode);
-        response.put("message", realKey);
-        response.put("cause", realKey);
-        response.put("parameters", processor.getParameters());
+        response.setRc(responseCode);
+        response.setMessage(realKey);
+        response.setCause(realKey);
+        response.setParameters(processor.getParameters());
     }
 
-    public static JSONObject addSuccessInfo(JSONObject response, Key key) throws JSONException {
+    public static <T extends BaseResponse> T addSuccessInfo(T response, Key key) throws JSONException {
         UtilForREST.addResultInfo(response, "ok", key);
         return response;
     }
 
-    public static JSONObject addErrorInfo(JSONObject response, Key key) throws JSONException {
+    public static Response makeBaseResponseForError(Key key, HttpSessionState httpSessionState, RobotCommunicator brickCommunicator) throws JSONException {
+        BaseResponse errorResponse = BaseResponse.make();
+        UtilForREST.addResultInfo(errorResponse, "error", key);
+        if ( key == Key.INIT_FAIL_PING_ERROR ) {
+            errorResponse.setInitToken("invalid-token");
+        }
+        UtilForREST.addFrontendInfo(errorResponse, httpSessionState, brickCommunicator);
+        return UtilForREST.responseWithFrontendInfo(errorResponse, httpSessionState, brickCommunicator);
+    }
+
+    public static <T extends BaseResponse> T addErrorInfo(T response, Key key) throws JSONException {
         UtilForREST.addResultInfo(response, "error", key);
         return response;
     }
 
-    public static void addErrorInfo(JSONObject response, Key key, String compilerResponse) throws JSONException {
+    public static <T extends BaseResponse> void addErrorInfo(T response, Key key, String compilerResponse) throws JSONException {
         UtilForREST.addResultInfo(response, "error", key);
         JSONObject parameters = new JSONObject();
         parameters.put("MESSAGE", compilerResponse);
-        response.put("parameters", parameters);
+        response.setParameters(parameters);
     }
 
     /**
@@ -140,10 +142,11 @@ public class UtilForREST {
      * @param brickCommunicator
      * @return
      */
-    public static Response responseWithFrontendInfo(JSONObject response, HttpSessionState httpSessionState, RobotCommunicator brickCommunicator) {
+    public static <T extends BaseResponse> Response responseWithFrontendInfo(T response, HttpSessionState httpSessionState, RobotCommunicator brickCommunicator) //
+    {
         UtilForREST.addFrontendInfo(response, httpSessionState, brickCommunicator);
         MDC.clear();
-        return Response.ok(response).build();
+        return Response.ok(response.immutable().toJson().toString()).build();
     }
 
     /**
@@ -154,25 +157,25 @@ public class UtilForREST {
      * @param httpSessionState needed to access the token
      * @param brickCommunicator needed to access the robot's state
      */
-    public static void addFrontendInfo(JSONObject response, HttpSessionState httpSessionState, RobotCommunicator brickCommunicator) {
+    public static <T extends BaseResponse> void addFrontendInfo(T response, HttpSessionState httpSessionState, RobotCommunicator brickCommunicator) {
         try {
-            response.put("serverTime", new Date());
-            response.put("server.version", UtilForREST.serverVersion);
+            response.setServerTime(new Date().getTime());
+            response.setServerVersion(UtilForREST.serverVersion);
             if ( httpSessionState != null ) {
                 String token = httpSessionState.getToken();
                 if ( token != null ) {
                     if ( token.equals(ClientAdmin.NO_CONNECT) ) {
-                        response.put("robot.state", "wait");
+                        response.setRobotState("wait");
                     } else if ( brickCommunicator != null ) {
                         RobotCommunicationData state = brickCommunicator.getState(token);
                         if ( state != null ) {
-                            response.put("robot.wait", state.getElapsedMsecOfStartApproval());
-                            response.put("robot.battery", state.getBattery());
-                            response.put("robot.name", state.getRobotName());
-                            response.put("robot.version", state.getMenuVersion());
-                            response.put("robot.firmwareName", state.getFirmwareName());
-                            response.put("robot.sensorvalues", state.getSensorValues());
-                            response.put("robot.nepoexitvalue", state.getNepoExitValue());
+                            response.setRobotWait(state.getElapsedMsecOfStartApproval());
+                            response.setRobotBattery(state.getBattery());
+                            response.setRobotName(state.getRobotName());
+                            response.setRobotVersion(state.getMenuVersion());
+                            response.setRobotFirmwareName(state.getFirmwareName());
+                            response.setRobotSensorvalues(state.getSensorValues());
+                            response.setRobotNepoexitvalue(state.getNepoExitValue());
                             State communicationState = state.getState();
                             String infoAboutState;
                             if ( httpSessionState.isProcessing() || communicationState == State.ROBOT_IS_BUSY ) {
@@ -182,21 +185,34 @@ public class UtilForREST {
                             } else {
                                 infoAboutState = "wait"; // is there a need to distinguish the communication state more detailed?
                             }
-                            response.put("robot.state", infoAboutState);
+                            response.setRobotState(infoAboutState);
                         }
                     }
                 }
-                response.put("initToken", httpSessionState.getInitToken());
+                response.setInitToken(httpSessionState.getInitToken());
             }
         } catch ( Exception e ) {
             UtilForREST.LOG.error("when adding info for the client, an unexpected exception occurred. Some info for the client may be missing", e);
         }
     }
 
-    private static void addResultInfo(JSONObject response, String restCallResultOkOrError, Key key) throws JSONException {
+    /**
+     * read an input stream until it is exhausted and return it as a String
+     *
+     * @param is the input stream to be read
+     * @return the data of the input stream as String or "" if no data was found
+     */
+    public static String convertStreamToString(InputStream is) {
+        try (Scanner s = new Scanner(is)) {
+            s.useDelimiter("\\A");
+            return s.hasNext() ? s.next() : "";
+        }
+    }
+
+    private static void addResultInfo(BaseResponse response, String restCallResultOkOrError, Key key) throws JSONException {
         String realKey = key.getKey();
-        response.put("rc", restCallResultOkOrError);
-        response.put("message", realKey);
-        response.put("cause", realKey);
+        response.setRc(restCallResultOkOrError);
+        response.setMessage(realKey);
+        response.setCause(realKey);
     }
 }

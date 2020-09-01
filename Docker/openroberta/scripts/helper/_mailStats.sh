@@ -37,29 +37,29 @@ function generateStats {
 
 function generateMail {
   echo "helo localhost"
-  $SLEEP
+  ${SLEEP}
   echo "mail from: ${SENDER}"
-  $SLEEP
+  ${SLEEP}
   for mailadress in "${RECEIVER[@]}"
   do
     echo "rcpt to: ${mailadress}"
-    $SLEEP
+    ${SLEEP}
   done
   echo "data"
-  $SLEEP
+  ${SLEEP}
   echo "From: ${SENDER}"
-  $SLEEP
+  ${SLEEP}
   for mailadress in "${RECEIVER[@]}"
   do
-    var=$var$mailadress,
+    var=${var}${mailadress},
   done
   echo "To: ${var}"
-  $SLEEP
+  ${SLEEP}
   echo "Subject: Statistics of the OpenRoberta Lab from month ${MONTH} ${YEAR}"
   echo " "
   generateStats
   echo "."
-  $SLEEP
+  ${SLEEP}
   echo "quit"
 }
 
@@ -67,8 +67,8 @@ function generateStats {
   STATS_USER='$(./admin.sh --sql "SELECT count(*) FROM user WHERE year(created)=${YEAR} AND month(created)=${MONTH}" 2>/dev/null | sed -n -e "s/^.*>>> //p")'
   echo "Number of new accounts: ${STATS_USER}"
 
-case "$OUTPUT" in
-   mail)      generateMail | sudo nc $SMTP $PORT ;;
+case "${OUTPUT}" in
+   mail)      generateMail | sudo nc ${SMTP} ${PORT} ;;
    console)   generateStats ;;
 esac
 
