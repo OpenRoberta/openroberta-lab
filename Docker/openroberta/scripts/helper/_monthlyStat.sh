@@ -3,11 +3,15 @@
 isServerNameValid ${SERVER_NAME}
 if [[ "${MONTH}" == '' ]]
 then
-    MONTH=$(($(date +'%m')-1))
+    MONTH=$(date +'%m')
+    MONTH=$((10#$MONTH))
+    MONTH=$(($MONTH-1))
     if [[ ${MONTH} < 1 ]]
     then
         MONTH=12
     fi
+else
+    MONTH=$((10#$MONTH))
 fi
 MONTH=$(printf "%02d" ${MONTH})
 echo "generating the monthly statistics for month ${MONTH}"

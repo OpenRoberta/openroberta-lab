@@ -69,7 +69,7 @@ Do _not_ forget, to increase the version numer in the next section, too.
 BASE_DIR=/data/openroberta-lab
 ARCH=x64 # either x64 or arm32v7
 CCBIN_VERSION=1 # this is needed in the dockerfile!
-BASE_VERSION=20
+BASE_VERSION=21
 CC_RESOURCES=/data/openroberta-lab/git/ora-cc-rsc
 cd $CC_RESOURCES
 
@@ -101,7 +101,7 @@ If called, it will checkout a branch given as parameter and runs both the tests 
 ```bash
 BASE_DIR=/data/openroberta-lab
 ARCH=x64
-BASE_VERSION=20
+BASE_VERSION=21
 BRANCH=develop
 cd ${BASE_DIR}/conf/${ARCH}/docker-for-test
 docker build --no-cache --build-arg BASE_VERSION=${BASE_VERSION} --build-arg BRANCH=${BRANCH} \
@@ -112,7 +112,7 @@ docker push openroberta/it-${ARCH}:${BASE_VERSION}
 To run the integration tests on your local machine (usually a build server as `bamboo` will do this), execute:
 
 ```bash
-BASE_VERSION=20
+BASE_VERSION=21
 export BRANCH='develop'
 docker run openroberta/it-${ARCH}:${BASE_VERSION} ${BRANCH} x.x.x # x.x.x is the db version and unused for tests
 ```
