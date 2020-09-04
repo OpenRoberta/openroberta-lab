@@ -23,7 +23,9 @@ public class RuntimeExceptionMapper implements ExceptionMapper<RuntimeException>
     @Override
     public Response toResponse(RuntimeException e) {
         try {
-            LOG.error("server error - exception: " + e.getMessage().substring(0, 60), e);
+            String errorMessage = e.getMessage();
+            errorMessage = (errorMessage == null) ? "-no error message in exception-" : errorMessage.substring(0, 60);
+            LOG.error("server error - exception: " + errorMessage, e);
             final BaseResponse response = BaseResponse.make();
             String keyAsString = Key.SERVER_ERROR.toString();
             response.setRc("error").setMessage(keyAsString).setCause(keyAsString);

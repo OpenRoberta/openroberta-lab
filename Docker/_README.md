@@ -275,6 +275,11 @@ The shell script `$SCRIPT_DIR/run.sh` has commands, that are used for operating 
 ```bash
 bash <SCRIPT_DIR>/run.sh -q auto-restart <server-name> <server-url>
 ```
+The command used for initiating 'auto-restart' for the prod server and looking up the pid (if not found in the log-file) are:
+```bash
+/bin/bash /data/openroberta-lab/scripts/run.sh -q auto-restart master http://me-roblab-prod:8080
+ps -AfL | fgrep auto-restart
+```
 
 * `alive`: usually called from cron. It takes a server URL and checks whether the server is alive. It sends by default mail to admins.
   Use `crontab -e` to add the following line to the crontab. call <SCRIPT_DIR>/run.sh -help to learn about other parameters of the call:
@@ -296,7 +301,7 @@ bash <SCRIPT_DIR>/run.sh -q auto-restart <server-name> <server-url>
 # Default-Start:     2 3 4 5
 # Default-Stop:      0 1 6
 # Short-Description: openrobertalab service
-# Description:       Start, stop and restart the database server and the openroberta server declared in server/servers.txt
+# Description:       Start, stop and restart the database server and the openroberta server
 ### END INIT INFO
 
 # Author: rbudde
