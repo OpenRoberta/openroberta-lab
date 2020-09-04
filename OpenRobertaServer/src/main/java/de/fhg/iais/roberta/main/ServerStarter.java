@@ -72,7 +72,8 @@ public class ServerStarter {
     private static final String ADMIN_DIR_KEY = "server.admin.dir=";
     private static final String LOG_LEVEL_KEY = "server.log.level=";
 
-    private static final long INTERVAL_TO_CHECK_EXPIRATIONS_SEC = TimeUnit.HOURS.toSeconds(3);
+    private static final long INTERVAL_HTTPSESSION_EXPIRE_SEC = TimeUnit.HOURS.toSeconds(3);
+    private static final long INTERVAL_DB_SESSION_EXPIRE_SEC = TimeUnit.MINUTES.toSeconds(30);
 
     private final ServerProperties serverProperties; // for the startup
     private Injector injector;
@@ -345,7 +346,7 @@ public class ServerStarter {
     }
 
     /**
-     * configure a thread, that runs every 3 hours a service, that will remove expired HttpSessionState objects
+     * configure a thread, that runs periodically a service, that will remove expired HttpSessionState objects
      */
     private void configureHttpSessionStateCleanup() {
         ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
@@ -355,11 +356,11 @@ public class ServerStarter {
                 HttpSessionState.removeExpired();
             }
         };
-        scheduler.scheduleAtFixedRate(cleanupHttpSessionState, INTERVAL_TO_CHECK_EXPIRATIONS_SEC + 1, INTERVAL_TO_CHECK_EXPIRATIONS_SEC, TimeUnit.SECONDS);
+        scheduler.scheduleAtFixedRate(cleanupHttpSessionState, INTERVAL_HTTPSESSION_EXPIRE_SEC + 1, INTERVAL_HTTPSESSION_EXPIRE_SEC, TimeUnit.SECONDS);
     }
 
     /**
-     * configure a thread, that runs every 3 hours a service, that will remove expired database sessions (sessions older than 2 hours)
+     * configure a thread, that runs periodically a service, that will remove expired database sessions
      */
     private void configureDbSessionCleanup() {
         ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
@@ -369,7 +370,7 @@ public class ServerStarter {
                 DbSession.cleanupSessions();
             }
         };
-        scheduler.scheduleAtFixedRate(cleanupDbSession, INTERVAL_TO_CHECK_EXPIRATIONS_SEC + 2, INTERVAL_TO_CHECK_EXPIRATIONS_SEC, TimeUnit.SECONDS);
+        scheduler.scheduleAtFixedRate(cleanupDbSession, INTERVAL_DB_SESSION_EXPIRE_SEC + 2, INTERVAL_DB_SESSION_EXPIRE_SEC, TimeUnit.SECONDS);
     }
 
     /**
