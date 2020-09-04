@@ -14,7 +14,7 @@
 		<property name="connection.autocommit">false</property>
 
     <property name="hibernate.c3p0.min_size">5</property>
-    <property name="hibernate.c3p0.max_size">100</property>
+    <property name="hibernate.c3p0.max_size">200</property>
     <property name="hibernate.c3p0.timeout">700</property>
     <property name="hibernate.c3p0.idle_test_period">300</property>
     <property name="hibernate.c3p0.max_statements">100</property>
