@@ -2506,6 +2506,10 @@ img.img-responsive {
     g.blocklyBlockCanvas {
         transform: translate(-200px, -50px);
     }
+
+    div#releaseInfo {
+        display: none;
+    }
 }
 
 /***** Overwrite prettify-CSS *****/
@@ -3060,5 +3064,33 @@ pre code {
     stroke-width: 2px;
 }
 
+#releaseInfo {
+    position: fixed;
+    left: 70%;
+    right: 8px;
+    bottom: 60px;
+    z-index: 2999;
+    padding: 16px;
+    background-color: #FBDE00;
+    border: 1px solid #d8d8d8;
+}
 
+#releaseInfo > span {
+    display: inline-block !important;
+    vertical-align: middle;
+    padding-right: 16px;
+}
 
+#releaseInfo > .no-button {
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 0 6px;
+    font-size: 48px;
+}
+
+@media (max-width: 60em), (max-width: 800px) {
+    #releaseInfo {
+        left: 40%;
+    }
+}

@@ -56,7 +56,7 @@ require.config({
 		'socket.controller': '../app/roberta/controller/socket.controller',
 		'webview.controller': '../app/roberta/controller/webview.controller',
 		'wedo.model': '../app/roberta/models/wedo.model',
-
+		'releaseInfo.controller' : '../app/roberta/controller/releaseInfo.controller',
 		'sourceCodeEditor.controller': '../app/roberta/controller/sourceCodeEditor.controller',
 
 		'simulation.constants': '../app/simulation/simulationLogic/constants',
@@ -120,7 +120,8 @@ require(['require', 'wrap', 'log', 'jquery', 'guiState.controller', 'progList.co
 	'progDelete.controller', 'confDelete.controller', 'progShare.controller', 'menu.controller', 'multSim.controller', 'user.controller',
 	'robot.controller', 'program.controller', 'progSim.controller', 'progCode.controller', 'progDelete.controller', 'progHelp.controller',
 	'legal.controller', 'progInfo.controller', 'progRun.controller', 'configuration.controller', 'language.controller', 'socket.controller',
-	'progTutorial.controller', 'tutorialList.controller', 'userGroup.controller', 'volume-meter', 'user.model', 'webview.controller', 'sourceCodeEditor.controller', 'codeflask', 'stackmachineJsHelper'], function(
+	'progTutorial.controller', 'tutorialList.controller', 'userGroup.controller', 'volume-meter', 'user.model', 'webview.controller',
+	'releaseInfo.controller', 'sourceCodeEditor.controller', 'codeflask', 'stackmachineJsHelper'], function(
 		require) {
 	$ = require('jquery');
 	WRAP = require('wrap');
@@ -154,6 +155,7 @@ require(['require', 'wrap', 'log', 'jquery', 'guiState.controller', 'progList.co
 	tutorialListController = require('tutorialList.controller');
 	userGroupController = require('userGroup.controller');
     webviewController = require('webview.controller');
+    releaseInfoController = require('releaseInfo.controller');
 	sourceCodeEditorController = require('sourceCodeEditor.controller');
 	codeflask = require('codeflask');
 	stackmachineJsHelper = require('stackmachineJsHelper');
@@ -171,6 +173,7 @@ function init() {
 	}).then(function(language, opt_data) {
 		return guiStateController.init(language, opt_data);
 	}).then(function() {
+	    releaseInfoController.init();
 		return robotController.init();
 	}).then(function() {
 		return userController.init();
