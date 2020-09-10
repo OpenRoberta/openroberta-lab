@@ -763,11 +763,15 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
                 IMPORT_C.importSourceCodeToCompile();
                 return false;
             }
-            if ((e.metaKey || e.ctrlKey) && (String.fromCharCode(e.which) === '2')) {
+            if ((e.metaKey || e.ctrlKey) && event.which == 73) {
                 IMPORT_C.importNepoCodeToCompile();
                 return false;
             }
-            if ((e.metaKey || e.ctrlKey) && (String.fromCharCode(e.which) === '3')) {
+			if ((e.metaKey || e.ctrlKey) && event.which == 69) {
+                PROGRAM_C.exportXml();
+                return false;
+            }
+            if ((e.metaKey || e.ctrlKey) && (String.fromCharCode(e.which) === '2')) {
                 var debug = GUISTATE_C.getBlocklyWorkspace().newBlock('robActions_debug');
                 debug.initSvg();
                 debug.render();
@@ -775,7 +779,7 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
 
                 return false;
             }
-            if ((e.metaKey || e.ctrlKey) && (String.fromCharCode(e.which) === '4')) {
+            if ((e.metaKey || e.ctrlKey) && (String.fromCharCode(e.which) === '3')) {
                 var assert = GUISTATE_C.getBlocklyWorkspace().newBlock('robActions_assert');
                 assert.initSvg();
                 assert.setInTask(false);
@@ -791,7 +795,7 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
                 parentConnection.connect(childConnection);
                 return false;
             }
-            if ((e.metaKey || e.ctrlKey) && (String.fromCharCode(e.which) === '5')) {
+            if ((e.metaKey || e.ctrlKey) && (String.fromCharCode(e.which) === '4')) {
                 var expr = GUISTATE_C.getBlocklyWorkspace().newBlock('robActions_eval_expr');
                 expr.initSvg();
                 expr.render();
@@ -799,7 +803,7 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
                 return false;
             }
             // for IMU sensors of Arduino Uno Wifi Rev2, go to config first to create brickly workspace
-            if ((e.metaKey || e.ctrlKey) && (String.fromCharCode(e.which) === '6')) {
+            if ((e.metaKey || e.ctrlKey) && (String.fromCharCode(e.which) === '5')) {
                 var expr = GUISTATE_C.getBricklyWorkspace().newBlock('robConf_accelerometer');
                 expr.initSvg();
                 expr.render();
