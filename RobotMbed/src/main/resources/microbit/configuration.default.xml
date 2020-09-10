@@ -10,11 +10,6 @@
             <field name="NAME">L</field>
         </block>
     </instance>
-    <instance x="636" y="213">
-        <block type="robConf_buzzer" id="}%d2_68IJd*7Oy{qrMR," intask="true" deletable="false">
-            <field name="NAME">BZ</field>
-        </block>
-    </instance>
     <instance x="396" y="255">
         <block type="robConf_temperature" id="0y].dnS)P)~Jjzeu3/0C" intask="true" deletable="false">
             <field name="NAME">TM</field>
