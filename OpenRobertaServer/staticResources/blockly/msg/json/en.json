@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2020-09-01 17:20:13.715572",
+		"lastupdated": "2020-09-11 11:10:34.539729",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -1726,6 +1726,8 @@
 	"BOTH_LED": "LED both",
 	"LEFT_INFRARED_SENSOR": "infraredsensor left",
 	"RIGHT_INFRARED_SENSOR": "infraredsensor right",
+	"SERVO_S1": "servo motor S1",
+	"SERVO_S2": "servo motor S2",
 	"SENSOR_ENVIRONMENTAL": "environmental sensor",
 	"SENSOR_ENVIRONMENTAL_GETSAMPLE_TOOLTIP": "Returns values from the environmental sensor.",
 	"ENVIRONMENTAL_TOOLTIP": "Represents an environmental sensor.",
