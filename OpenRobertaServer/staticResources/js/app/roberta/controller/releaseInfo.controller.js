@@ -15,10 +15,10 @@ define(['exports', 'jquery', 'guiState.controller'], function(exports, $, GUISTA
     exports.init = init;
 
     function initMessages() {
-        var enCalliopeMessage = 'Hey, we have made some changes to Calliope! Check out how the new configuration works <a href="https://jira.iais.fraunhofer.de/wiki/display/ORInfo/Configuration+Calliope+mini">here</a>!';
-        var enMicrobitMessage = 'Hey, we have made some changes to micro:bit! Check out how the new configuration works <a href="https://jira.iais.fraunhofer.de/wiki/display/ORInfo/Configuration">here</a>!';
-        var deCalliopeMessage = 'Hey, wir haben einige Änderungen bei Calliope durchgeführt! Schau dir <a href="https://jira.iais.fraunhofer.de/wiki/display/ORInfo/Konfiguration+Calliope+Mini">hier</a> an wie die neue Konfiguration funktioniert!';
-        var deMicrobitMessage = 'Hey, wir haben einige Änderungen bei micro:bit durchgeführt! Schau dir <a href="https://jira.iais.fraunhofer.de/wiki/display/ORInfo/Konfiguration">hier</a> an wie die neue Konfiguration funktioniert!';
+        var enCalliopeMessage = 'Hey, we have made some changes to Calliope! Check out how the new configuration works <a target="_blank" rel="noopener noreferrer" href="https://jira.iais.fraunhofer.de/wiki/display/ORInfo/Configuration+Calliope+mini">here</a>!';
+        var enMicrobitMessage = 'Hey, we have made some changes to micro:bit! Check out how the new configuration works <a target="_blank" rel="noopener noreferrer" href="https://jira.iais.fraunhofer.de/wiki/display/ORInfo/Configuration">here</a>!';
+        var deCalliopeMessage = 'Hey, wir haben einige Änderungen bei Calliope durchgeführt! Schau dir <a target="_blank" rel="noopener noreferrer" href="https://jira.iais.fraunhofer.de/wiki/display/ORInfo/Konfiguration+Calliope+Mini">hier</a> an wie die neue Konfiguration funktioniert!';
+        var deMicrobitMessage = 'Hey, wir haben einige Änderungen bei micro:bit durchgeführt! Schau dir <a target="_blank" rel="noopener noreferrer" href="https://jira.iais.fraunhofer.de/wiki/display/ORInfo/Konfiguration">hier</a> an wie die neue Konfiguration funktioniert!';
 
         initMessagesForLang('en', new Map([
             ['calliope', enCalliopeMessage],
