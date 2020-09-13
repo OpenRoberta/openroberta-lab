@@ -14,12 +14,15 @@ License information is available in the **docs** folder.
 
 Things you need on your computer:
 
-* Java >= 1.8
+* Java JDK >= 1.8 (e.g. `openjdk-11-jdk` on Ubuntu)
 * Maven >= 3.2
 * Git
 * Web browser
 
 If you would like your local server to compile code for the different systems, you need to install additional software (crosscompilers, libraries, ...):
+
+To "install" directly downloaded compilers on Linux systems, extract them to a folder of your choice (e.g. `/opt/compilers/`) and add the `bin` folder to 
+your `PATH`, e.g. with `echo export PATH="$PATH:<path-to-the-compiler-folder>/bin" >> ~/.profile`.
 
 on Ubuntu:
 * Arduino based robots
@@ -76,9 +79,8 @@ Might take some time. The last lines of a successful build looks like:
     [INFO] ------------------------------------------------------------------------
     [INFO] BUILD SUCCESS
     [INFO] ------------------------------------------------------------------------
-    [INFO] Total time: 02:16 min
-    [INFO] Finished at: 2018-01-07T13:05:00+02:00
-    [INFO] Final Memory: 60M/540M
+    [INFO] Total time:  03:24 min
+    [INFO] Finished at: 2020-09-08T14:13:10+02:00
     [INFO] ------------------------------------------------------------------------
     
 #### Step 2: Make sure you have a database

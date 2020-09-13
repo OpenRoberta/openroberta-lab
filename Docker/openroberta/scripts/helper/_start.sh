@@ -8,16 +8,16 @@ cd ${SERVER_DIR_OF_ONE_SERVER}
 source ./decl.sh
 isDeclShValid
 
-echo "trying to start server ${SERVER_NAME}"
 case "${SERVER_NAME}" in
-    master) question 'do you really want to deploy master (that would be a PROD deployment)?'
-            case "${OPTIONAL_VERSION}" in
-                "") IMAGE_VERSION="${BASE_VERSION}" ;;
-                *)  IMAGE_VERSION="${OPTIONAL_VERSION}"
-                    question "do you really want to deploy version ${IMAGE_VERSION} of the master image (this is unusual)?" ;;
-            esac ;;
-     *)     IMAGE_VERSION="${BASE_VERSION}" ;;
+    master) question 'do you really want to deploy master (that would be a PROD deployment)?' ;;
+     *)     : ;;
 esac
+case "${TAG_VERSION}" in
+    "") IMAGE_VERSION="${BASE_VERSION}" ;;
+    *)  IMAGE_VERSION="${TAG_VERSION}"
+        question "do you really want to deploy version ${IMAGE_VERSION} of the server ${SERVER_NAME} (this is VERY unusual)?" ;;
+esac
+echo "starting server ${SERVER_NAME} based on ora-cc-rsc-version ${BASE_VERSION} with tag ${IMAGE_VERSION}"
 
 IMAGE="openroberta/server_${SERVER_NAME}_${ARCH}:${IMAGE_VERSION}"
 CONTAINER="server-${SERVER_NAME}"

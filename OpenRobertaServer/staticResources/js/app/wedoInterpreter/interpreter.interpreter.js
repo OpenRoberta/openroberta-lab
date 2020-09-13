@@ -1,18 +1,7 @@
-(function (factory) {
-    if (typeof module === "object" && typeof module.exports === "object") {
-        var v = factory(require, exports);
-        if (v !== undefined) module.exports = v;
-    }
-    else if (typeof define === "function" && define.amd) {
-        define(["require", "exports", "interpreter.state", "interpreter.constants", "interpreter.util"], factory);
-    }
-})(function (require, exports) {
+define(["require", "exports", "interpreter.state", "interpreter.constants", "interpreter.util"], function (require, exports, interpreter_state_1, C, U) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Interpreter = void 0;
-    var interpreter_state_1 = require("interpreter.state");
-    var C = require("interpreter.constants");
-    var U = require("interpreter.util");
     var Interpreter = /** @class */ (function () {
         /*
          *
@@ -254,6 +243,9 @@
                     }
                     case C.IF_STMT:
                         s.pushOps(stmt[C.STMT_LIST]);
+                        break;
+                    case C.NNSTEP_STMT:
+                        this.evalNNStep();
                         break;
                     case C.IF_TRUE_STMT:
                         if (s.pop()) {
@@ -1058,6 +1050,35 @@
                 default:
                     U.dbcException("invalid repeat mode: " + mode);
             }
+        };
+        Interpreter.prototype.evalNNStep = function () {
+            console.log('NNStep encountered');
+            var s = this.s;
+            var i2 = s.pop();
+            var i1 = s.pop();
+            var i0 = s.pop();
+            var o0 = 0;
+            var o1 = 0;
+            var o2 = 0;
+            if (i0 === 0) {
+                o0 = i1 - i2;
+                if (o0 < 0) {
+                    o1 = 1;
+                    o2 = 0;
+                }
+                else {
+                    o1 = 0;
+                    o2 = 1;
+                }
+            }
+            else {
+                o0 = i1;
+                o1 = i2;
+                o2 = i1 + i2;
+            }
+            s.push(o2);
+            s.push(o1);
+            s.push(o0);
         };
         /**
          * return true if the parameter is prime

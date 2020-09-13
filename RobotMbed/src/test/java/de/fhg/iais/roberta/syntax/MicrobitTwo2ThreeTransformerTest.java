@@ -1,11 +1,11 @@
 package de.fhg.iais.roberta.syntax;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import de.fhg.iais.roberta.components.Project;
 import de.fhg.iais.roberta.factory.IRobotFactory;
@@ -315,7 +315,7 @@ public class MicrobitTwo2ThreeTransformerTest {
                 + "PlayNoteAction[duration=125,frequency=261.626]]]]";
         String[] expectedToBeInConfigAst =
             {
-                "ConfigurationComponent[componentType=BUZZER,isActor=true,userDefinedName=BZ,portName=BZ,componentProperties={}]"
+                "ConfigurationComponent[componentType=BUZZER,isActor=true,userDefinedName=BZ,portName=BZ,componentProperties={PIN1=NO_PORT}]"
             };
 
         Project project =

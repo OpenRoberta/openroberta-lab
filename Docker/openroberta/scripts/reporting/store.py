@@ -61,8 +61,17 @@ class Store:
             self.totalKeyCounter += 1
             self.openKeyCounter += 1
         item.put(None) # only count
-        
-    __groupTimePrefix = {
+    
+    # time structure is: e.g. 2020-08-01 00:00:09,188
+    __groupStartIndex = {
+        'm': 0,
+        'd': 0,
+        'h': 11,
+        'm': 14,
+        's': 17
+    }
+
+    __groupEndIndex = {
         'm': 7,
         'd': 10,
         'h': 13,
@@ -71,8 +80,9 @@ class Store:
     }
 
     def __getPrefix(self, granularity, time):
-        prefix = self.__groupTimePrefix.get(granularity, 10)
-        return time[:prefix]
+        startIndex = self.__groupStartIndex.get(granularity, 0)
+        endIndex = self.__groupEndIndex.get(granularity, 10)
+        return time[startIndex:endIndex]
 
     def has(self, key):
         item = self.data.get(key,None)

@@ -1,8 +1,8 @@
 package de.fhg.iais.roberta.visitor.validate;
 
-import java.util.ArrayList;
-
 import com.google.common.collect.ClassToInstanceMap;
+
+import java.util.ArrayList;
 
 import de.fhg.iais.roberta.bean.IProjectBean;
 import de.fhg.iais.roberta.bean.UsedHardwareBean;
@@ -57,6 +57,7 @@ import de.fhg.iais.roberta.syntax.lang.functions.ListSetIndex;
 import de.fhg.iais.roberta.syntax.lang.functions.MathOnListFunct;
 import de.fhg.iais.roberta.syntax.lang.methods.MethodCall;
 import de.fhg.iais.roberta.syntax.lang.methods.MethodReturn;
+import de.fhg.iais.roberta.syntax.lang.stmt.DebugAction;
 import de.fhg.iais.roberta.syntax.lang.stmt.ExprStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.IfStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.RepeatStmt;
@@ -399,6 +400,7 @@ public abstract class AbstractProgramValidatorVisitor extends AbstractCollectorV
 
     @Override
     public Void visitIfStmt(IfStmt<Void> ifStmt) {
+        super.visitIfStmt(ifStmt);
         if ( ifStmt.isTernary() ) {
             if ( ifStmt.getExpr().get(0) instanceof EmptyExpr
                 || ((ExprStmt) ifStmt.getElseList().get().get(0)).getExpr() instanceof EmptyExpr
@@ -701,5 +703,15 @@ public abstract class AbstractProgramValidatorVisitor extends AbstractCollectorV
     public void addError(String messageKey, Phrase<Void> destination) {
         destination.addInfo(NepoInfo.error(messageKey));
         this.errorCount++;
+    }
+
+    @Override
+    public Void visitDebugAction(DebugAction<Void> debugAction) {
+        super.visitDebugAction(debugAction);
+        if ( debugAction.getValue() instanceof EmptyExpr ) {
+            debugAction.addInfo(NepoInfo.error("ERROR_MISSING_PARAMETER"));
+            this.errorCount++;
+        }
+        return null;
     }
 }

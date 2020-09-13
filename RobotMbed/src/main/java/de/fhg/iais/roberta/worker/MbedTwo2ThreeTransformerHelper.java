@@ -473,9 +473,13 @@ public final class MbedTwo2ThreeTransformerHelper {
      */
     private String getName(String port, String confBlocklyName) {
         String modifiedPort;
-        // Old microbit programs can only have pins as additionally necessary configuration blocks
+        // Old microbit programs can only have pins and the buzzer as additionally necessary configuration blocks
         if ( this.robotName.equals("microbit") ) {
-            modifiedPort = 'P' + port;
+            if ( confBlocklyName.equals("robConf_buzzer") ) {
+                modifiedPort = "BZ";
+            } else {
+                modifiedPort = 'P' + port;
+            }
         } else if ( this.robotName.equals("calliope") && CALLIOPE_XML_NAME_TO_FRONTEND_NAME.containsKey(Pair.of(confBlocklyName, port)) ) {
             modifiedPort = CALLIOPE_XML_NAME_TO_FRONTEND_NAME.get(Pair.of(confBlocklyName, port));
         } else {

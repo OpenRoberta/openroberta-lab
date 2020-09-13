@@ -69,7 +69,7 @@ Do _not_ forget, to increase the version numer in the next section, too.
 BASE_DIR=/data/openroberta-lab
 ARCH=x64 # either x64 or arm32v7
 CCBIN_VERSION=1 # this is needed in the dockerfile!
-BASE_VERSION=19
+BASE_VERSION=22
 CC_RESOURCES=/data/openroberta-lab/git/ora-cc-rsc
 cd $CC_RESOURCES
 
@@ -101,7 +101,7 @@ If called, it will checkout a branch given as parameter and runs both the tests 
 ```bash
 BASE_DIR=/data/openroberta-lab
 ARCH=x64
-BASE_VERSION=19
+BASE_VERSION=22
 BRANCH=develop
 cd ${BASE_DIR}/conf/${ARCH}/docker-for-test
 docker build --no-cache --build-arg BASE_VERSION=${BASE_VERSION} --build-arg BRANCH=${BRANCH} \
@@ -109,10 +109,10 @@ docker build --no-cache --build-arg BASE_VERSION=${BASE_VERSION} --build-arg BRA
 docker push openroberta/it-${ARCH}:${BASE_VERSION}
 ```
 
-To run the integration tests on your local machine (usually a build server as `bamboo` will do this), execute:
+To run the integration tests on your local machine (usually a build server like `bamboo` will do this), execute:
 
 ```bash
-BASE_VERSION=19
+BASE_VERSION=22
 export BRANCH='develop'
 docker run openroberta/it-${ARCH}:${BASE_VERSION} ${BRANCH} x.x.x # x.x.x is the db version and unused for tests
 ```
@@ -275,6 +275,11 @@ The shell script `$SCRIPT_DIR/run.sh` has commands, that are used for operating 
 ```bash
 bash <SCRIPT_DIR>/run.sh -q auto-restart <server-name> <server-url>
 ```
+The command used for initiating 'auto-restart' for the prod server and looking up the pid (if not found in the log-file) are:
+```bash
+/bin/bash /data/openroberta-lab/scripts/run.sh -q auto-restart master http://me-roblab-prod:8080
+ps -AfL | fgrep auto-restart
+```
 
 * `alive`: usually called from cron. It takes a server URL and checks whether the server is alive. It sends by default mail to admins.
   Use `crontab -e` to add the following line to the crontab. call <SCRIPT_DIR>/run.sh -help to learn about other parameters of the call:
@@ -296,7 +301,7 @@ bash <SCRIPT_DIR>/run.sh -q auto-restart <server-name> <server-url>
 # Default-Start:     2 3 4 5
 # Default-Stop:      0 1 6
 # Short-Description: openrobertalab service
-# Description:       Start, stop and restart the database server and the openroberta server declared in server/servers.txt
+# Description:       Start, stop and restart the database server and the openroberta server
 ### END INIT INFO
 
 # Author: rbudde

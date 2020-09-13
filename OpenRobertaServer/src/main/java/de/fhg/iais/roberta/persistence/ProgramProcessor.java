@@ -144,10 +144,14 @@ public class ProgramProcessor extends AbstractProcessor {
             UserProgramShare userProgramShare = userProgramShareDao.loadUserProgramShare(loggedInUser, program);
             readRight = userProgramShare != null;
 
-            if ( !readRight && loggedInUser.getUserGroup() != null && owner.equals(loggedInUser.getUserGroup().getOwner()) ) {
-                UserGroupProgramShareDao userGroupProgramShareDao = new UserGroupProgramShareDao(this.dbSession);
-                UserGroupProgramShare userGroupProgramShare = userGroupProgramShareDao.loadUserGroupProgramShare(loggedInUser.getUserGroup(), program);
-                readRight = userGroupProgramShare != null;
+            if ( !readRight ) {
+                if ( owner.getUserGroup() != null && owner.getUserGroup().getOwner().equals(loggedInUser) ) {
+                    readRight = !owner.getUserGroup().getAccessRight().equals(AccessRight.NO_OTHER_READ);
+                } else if ( loggedInUser.getUserGroup() != null && loggedInUser.getUserGroup().getOwner().equals(owner) ) {
+                    UserGroupProgramShareDao userGroupProgramShareDao = new UserGroupProgramShareDao(this.dbSession);
+                    UserGroupProgramShare userGroupProgramShare = userGroupProgramShareDao.loadUserGroupProgramShare(loggedInUser.getUserGroup(), program);
+                    readRight = userGroupProgramShare != null;
+                }
             }
         }
 

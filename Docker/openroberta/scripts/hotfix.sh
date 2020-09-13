@@ -6,7 +6,7 @@ echo '
 # For deployments, two parameters are mandatory (both WITHOUT SNAPSHOT)                                                 #
 # 1. the version number of the hotfix to be deployed at master (likely the version from develop without -SNAPSHOT)      #
 # 2. the next version to be set in develop (the script suffixes this with "-SNAPSHOT" internally)                       #
-# E.g. ./hotfix.sh 2.4.1 2.5.0                                                                                          #
+# E.g. ./hotfix.sh 4.0.2 4.0.3                                                                                          #
 #                                                                                                                       #
 # ASSUMPTIONS:                                                                                                          #
 # - maven project, may be hierarchical (parent + modules). mvn is used and on the PATH!                                 #

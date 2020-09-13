@@ -181,6 +181,7 @@ export const NAME: string = "name";
 export const NAMES: string = "names";
 export const NEG: string = "NEG";
 export const NEQ: string = "NEQ";
+export const NNSTEP_STMT: string = "nnStepStmt";
 export const NOOP_STMT: string = "createNoopStmt";
 export const NOT: string = "NOT";
 export const NO: string = "NO";

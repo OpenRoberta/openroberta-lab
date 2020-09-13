@@ -67,17 +67,19 @@ esac
     docker build --no-cache --build-arg FROM=${FROM} -f ${CONF_DIR}/y-docker-for-lab/Dockerfile -t ${IMAGE} ${SERVER_DIR_OF_ONE_SERVER}/export
     
     case "${BRANCH}" in
-        rbTest) MVN_VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout) # for testing, replace later by master
-                IMAGE_FOR_PUSH="openroberta/server_${ARCH}:${MVN_VERSION}"
-                DOCKERRM=$(docker rmi ${IMAGE_FOR_PUSH} 2>/dev/null)
+        master) MVN_VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
+                TAG_WITH_VERSION="openroberta/server_${SERVER_NAME}_${ARCH}:${MVN_VERSION}"
+                DOCKERRM=$(docker image inspect ${TAG_WITH_VERSION} 2>/dev/null)
                 case "${DOCKERRM}" in
-                    '') echo "found no docker image '${IMAGE_FOR_PUSH}' to remove. That is ok." ;;
-                    * ) echo "removed docker image '${IMAGE_FOR_PUSH}'"
+                    '[]') : ;;
+                    *   ) echo "found docker image '${TAG_WITH_VERSION}'. This should not happen, because master images are NEVER overwritten."
+                          echo 'you have to remove it MANUALLY. Exit 12'
+                          exit 12 ;;
                 esac
 
-                docker tag ${IMAGE} ${IMAGE_FOR_PUSH}
-                # docker push ${IMAGE_FOR_PUSH}
-                echo "image ${IMAGE_FOR_PUSH} is NOT pushed, maybe activated later" ;;
+                docker tag ${IMAGE} ${TAG_WITH_VERSION}
+                # docker push ${TAG_WITH_VERSION}
+                echo "image ${TAG_WITH_VERSION} is NOT pushed to dockerhub, it stays local" ;;
         *)      ;;
     esac
     

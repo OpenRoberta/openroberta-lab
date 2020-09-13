@@ -47,7 +47,7 @@ then
                 [ "${DEBUG}" = 'true' ] && echo "${UPDATED_SERVERS} server(s) have been updated. Removing stale docker data now"
                 ${SCRIPT_MAIN}/run.sh -q prune
             fi ;; 
-        *) echo "${DATE}: '${GIT_DIR}/lockfile' was LOCKED. Trying again later" ;;
+        *) echo "${DATE}: '${GIT_DIR}/lockfile' was LOCKED. Nothing done. Autodeploy will be rescheduled later and then try again." ;;
     esac
 else
     [ "${DEBUG}" = 'true' ] && echo "${DATE}: no server in variable AUTODEPLY found. Nothing to do"

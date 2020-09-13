@@ -56,7 +56,6 @@ case "${CMD}" in
                   source ${SCRIPT_HELPER}/_fromHub.sh
                   headerMessage "pulling the image for server ${SERVER_NAME} from a hub finished. YOU have to start the server!" ;;
     start)        SERVER_NAME=$1; shift
-                  OPTIONAL_VERSION=$1; shift
                   source ${SCRIPT_HELPER}/_stop.sh
                   source ${SCRIPT_HELPER}/_start.sh ;;
     start-export) SERVER_NAME=$1; shift
