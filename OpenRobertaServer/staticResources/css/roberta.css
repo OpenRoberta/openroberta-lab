@@ -63,7 +63,6 @@ body {
     left: 0;
     right: 0;
     bottom: 0;
-    height: 12rem;
     line-height: 12rem;
     font-size: 2rem;
     color: transparent;
@@ -177,7 +176,6 @@ body.blocklyMinimalBody * {
     height: 65px;
     padding: 0;
     margin: 4px 16px 0px 0;
-    width: 210px;
 }
 
 .logo {
@@ -242,7 +240,6 @@ body.blocklyMinimalBody * {
     padding: 8px 2px 0 8px;
     cursor: pointer;
     background-color: #fff;
-    padding: 8px 2px 0 28px;
     float: left;
 }
 
@@ -797,8 +794,6 @@ div.rightMenuButton:hover,
     margin: 0;
     padding: 0;
     border: 0;
-    overflow: hidden;
-    padding: 0;
 }
 
 .nav#head-navigation-tabs > li > a {
@@ -876,7 +871,7 @@ div.rightMenuButton:hover,
 .navbar-fixed-bottom {
     border: 0;
     padding: 16px 68px;
-    margin-bottom: 20;
+    margin-bottom: 20px;
 }
 
 .head-navi-title {
@@ -1129,7 +1124,7 @@ div.rightMenuButton:hover,
 
 .simRobotModal .modal-header {
     position: fixed;
-    right: 16;
+    right: 16px;
 }
 
 .simRobotModal .modal-dialog {
@@ -1239,7 +1234,6 @@ div.rightMenuButton:hover,
     -webkit-box-shadow: none;
     box-shadow: none;
     outline: none;
-    box-shadow: none;
 }
 
 .btn:not(.editor) {
@@ -1253,7 +1247,6 @@ div.rightMenuButton:hover,
     -webkit-box-shadow: none;
     box-shadow: none;
     cursor: pointer;
-    box-shadow: none;
 }
 
 .simbtn.btn:hover,
@@ -1283,7 +1276,6 @@ div.rightMenuButton:hover,
     -webkit-box-shadow: none;
     box-shadow: none;
     cursor: pointer;
-    box-shadow: none;
 }
 
 .fixed-table-toolbar .btn:hover {
@@ -1344,7 +1336,6 @@ table [data-toggle="collapse"].collapsed:after {
     -webkit-box-shadow: none;
     box-shadow: none;
     cursor: pointer;
-    box-shadow: none;
 }
 
 .blbtn:hover {
@@ -1380,9 +1371,8 @@ table [data-toggle="collapse"].collapsed:after {
 }
 
 .robot-container {
-    border: 1px solid;
     border-radius: 4px;
-    border-color: #ddd;
+    border: 1px solid #ddd;
     width: 140px;
     height: 88px;
     display: inline-block;
@@ -1567,15 +1557,13 @@ label.form-invalid {
 
 label.form-invalid:after {
     right: 10%;
-    border: solid transparent;
     content: " ";
     height: 0;
     width: 0;
     position: absolute;
     pointer-events: none;
-    border-color: transparent;
+    border: 6px solid transparent;
     border-top-color: #E2001A;
-    border-width: 6px;
     margin-top: 28px;
     z-index: 20;
 }
@@ -2303,7 +2291,7 @@ input[type=range]:focus::-ms-fill-upper {
     }
 
     .logo {
-        top: 11;
+        top: 11px;
     }
 
     .img-nepo {
