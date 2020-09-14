@@ -1,32 +1,32 @@
 <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="microbit" xmlversion="3.0" description="" tags="">
-    <instance x="269" y="213">
+    <instance x="111" y="259">
         <block type="robConf_key" id="Kbp:=x@gw@n.b~NH|1|e" intask="true" deletable="false">
             <field name="NAME">A</field>
             <field name="PIN1">A</field>
         </block>
     </instance>
-    <instance x="396" y="213">
+    <instance x="141" y="170">
         <block type="robConf_light" id="9Ktt(7_4+XmKC0]5Zha?" intask="true" deletable="false">
             <field name="NAME">L</field>
         </block>
     </instance>
-    <instance x="396" y="255">
+    <instance x="273" y="76">
         <block type="robConf_temperature" id="0y].dnS)P)~Jjzeu3/0C" intask="true" deletable="false">
             <field name="NAME">TM</field>
         </block>
     </instance>
-    <instance x="269" y="277">
+    <instance x="111" y="203">
         <block type="robConf_key" id="~wk*JZQvB.fj=I`N#NWp" intask="true" deletable="false">
             <field name="NAME">B</field>
             <field name="PIN1">B</field>
         </block>
     </instance>
-    <instance x="396" y="297">
+    <instance x="254" y="137">
         <block type="robConf_compass" id="O%Oi0Tq`hGEvrgHGPYY=" intask="true" deletable="false">
             <field name="NAME">C</field>
         </block>
     </instance>
-    <instance x="396" y="373">
+    <instance x="254" y="108">
         <block type="robConf_accelerometer" id="#(ufvG,s^FcqI,aFn/A{" intask="true" deletable="false">
             <field name="NAME">Acc</field>
         </block>

@@ -84,7 +84,7 @@ define([ 'exports', 'log', 'util', 'comm', 'message', 'guiState.controller', 'bl
         });
 
         $('#tabConfiguration').on('hidden.bs.tab', function(e) {
-            var dom = Blockly.Xml.workspaceToDom(bricklyWorkspace);
+            var dom = (confVis) ? confVis.getXml() : Blockly.Xml.workspaceToDom(bricklyWorkspace);
             var xml = Blockly.Xml.domToText(dom);
             GUISTATE_C.setConfigurationXML(xml);
             bricklyWorkspace.setVisible(false);
@@ -126,7 +126,7 @@ define([ 'exports', 'log', 'util', 'comm', 'message', 'guiState.controller', 'bl
             LOG.error('saveToServer may only be called with an explicit config name');
             return;
         }
-        var dom = Blockly.Xml.workspaceToDom(bricklyWorkspace);
+        var dom = (confVis) ? confVis.getXml() : Blockly.Xml.workspaceToDom(bricklyWorkspace);
         var xmlText = Blockly.Xml.domToText(dom);
         CONFIGURATION.saveConfigurationToServer(GUISTATE_C.getConfigurationName(), xmlText, function(result) {
             if (result.rc === 'ok') {
@@ -150,7 +150,7 @@ define([ 'exports', 'log', 'util', 'comm', 'message', 'guiState.controller', 'bl
                 LOG.error('saveAsToServer may NOT use the config standard name');
                 return;
             }
-            var dom = Blockly.Xml.workspaceToDom(bricklyWorkspace);
+            var dom = (confVis) ? confVis.getXml() : Blockly.Xml.workspaceToDom(bricklyWorkspace);
             var xmlText = Blockly.Xml.domToText(dom);
             CONFIGURATION.saveAsConfigurationToServer(confName, xmlText, function(result) {
                 if (result.rc === 'ok') {
@@ -205,7 +205,7 @@ define([ 'exports', 'log', 'util', 'comm', 'message', 'guiState.controller', 'bl
             seen = false;
             bricklyWorkspace.setVisible(false);
         }
-        var dom = Blockly.Xml.workspaceToDom(bricklyWorkspace);
+        var dom = (confVis) ? confVis.getXml() : Blockly.Xml.workspaceToDom(bricklyWorkspace);
         var xml = Blockly.Xml.domToText(dom);
         GUISTATE_C.setConfigurationXML(xml);
     }
@@ -331,7 +331,7 @@ define([ 'exports', 'log', 'util', 'comm', 'message', 'guiState.controller', 'bl
 
     function reloadView() {
         if (isVisible()) {
-            var dom = Blockly.Xml.workspaceToDom(bricklyWorkspace);
+            var dom = (confVis) ? confVis.getXml() : Blockly.Xml.workspaceToDom(bricklyWorkspace);
             var xml = Blockly.Xml.domToText(dom);
             configurationToBricklyWorkspace(xml);
         } else {
@@ -342,20 +342,18 @@ define([ 'exports', 'log', 'util', 'comm', 'message', 'guiState.controller', 'bl
     }
     exports.reloadView = reloadView;
 
-    function changeArduinoRobot(){
-        bricklyWorkspace.setDevice({
-            group : GUISTATE_C.getRobotGroup(),
-            robot : GUISTATE_C.getRobot()
-        });
-        confVis.resetRobot();
+    function changeRobotSvg(){
+        if (CircuitVisualization.isRobotVisualized(GUISTATE_C.getRobotGroup() + '_' + GUISTATE_C.getRobot())) {
+            bricklyWorkspace.setDevice({
+                group : GUISTATE_C.getRobotGroup(),
+                robot : GUISTATE_C.getRobot()
+            });
+            confVis.resetRobot();
+        }
     }
-    exports.changeArduinoRobot = changeArduinoRobot;
+    exports.changeRobotSvg = changeRobotSvg;
 
     function resetView() {
-        if(confVis){
-            confVis.dispose();
-            confVis = null;
-        }
         bricklyWorkspace.setDevice({
             group : GUISTATE_C.getRobotGroup(),
             robot : GUISTATE_C.getRobot()
@@ -370,6 +368,13 @@ define([ 'exports', 'log', 'util', 'comm', 'message', 'guiState.controller', 'bl
         return GUISTATE_C.getView() == 'tabConfiguration';
     }
 
+    function resetConfVisIfAvailable() {
+        if(confVis){
+            confVis.dispose();
+            confVis = null;
+        }
+    }
+
     function configurationToBricklyWorkspace(xml) {
         // removing changelistener in blockly doesn't work, so no other way
         listenToBricklyEvents = false;
@@ -377,7 +382,8 @@ define([ 'exports', 'log', 'util', 'comm', 'message', 'guiState.controller', 'bl
         bricklyWorkspace.clear();
         Blockly.svgResize(bricklyWorkspace);
         var dom = Blockly.Xml.textToDom(xml, bricklyWorkspace);
-        if(bricklyWorkspace.device === 'arduino'){
+        resetConfVisIfAvailable();
+        if (CircuitVisualization.isRobotVisualized(GUISTATE_C.getRobotGroup() + '_' + GUISTATE_C.getRobot())) {
             confVis = CircuitVisualization.domToWorkspace(dom, bricklyWorkspace);
         } else {
             Blockly.Xml.domToWorkspace(dom, bricklyWorkspace);

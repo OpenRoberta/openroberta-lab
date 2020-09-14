@@ -6,7 +6,7 @@
 * @copyright Silas Ribeiro <santorsilas@gmail.com>
 * @license ISC
 *
-* BUILT: Sat Aug 22 2020 02:02:09 GMT-0300 (Brasilia Standard Time)
+* BUILT: Thu Oct 08 2020 16:54:06 GMT+0200 (Central European Summer Time)
 */;
 var CircuitVisualization = (function () {
 	'use strict';
@@ -1927,6 +1927,399 @@ var CircuitVisualization = (function () {
 
 	var filter$2 = filter$1;
 
+	var freezing = !fails(function () {
+	  return Object.isExtensible(Object.preventExtensions({}));
+	});
+
+	var internalMetadata = createCommonjsModule(function (module) {
+	var defineProperty = objectDefineProperty.f;
+
+
+
+	var METADATA = uid('meta');
+	var id = 0;
+
+	var isExtensible = Object.isExtensible || function () {
+	  return true;
+	};
+
+	var setMetadata = function (it) {
+	  defineProperty(it, METADATA, { value: {
+	    objectID: 'O' + ++id, // object ID
+	    weakData: {}          // weak collections IDs
+	  } });
+	};
+
+	var fastKey = function (it, create) {
+	  // return a primitive with prefix
+	  if (!isObject(it)) return typeof it == 'symbol' ? it : (typeof it == 'string' ? 'S' : 'P') + it;
+	  if (!has(it, METADATA)) {
+	    // can't set metadata to uncaught frozen object
+	    if (!isExtensible(it)) return 'F';
+	    // not necessary to add metadata
+	    if (!create) return 'E';
+	    // add missing metadata
+	    setMetadata(it);
+	  // return object ID
+	  } return it[METADATA].objectID;
+	};
+
+	var getWeakData = function (it, create) {
+	  if (!has(it, METADATA)) {
+	    // can't set metadata to uncaught frozen object
+	    if (!isExtensible(it)) return true;
+	    // not necessary to add metadata
+	    if (!create) return false;
+	    // add missing metadata
+	    setMetadata(it);
+	  // return the store of weak collections IDs
+	  } return it[METADATA].weakData;
+	};
+
+	// add metadata on freeze-family methods calling
+	var onFreeze = function (it) {
+	  if (freezing && meta.REQUIRED && isExtensible(it) && !has(it, METADATA)) setMetadata(it);
+	  return it;
+	};
+
+	var meta = module.exports = {
+	  REQUIRED: false,
+	  fastKey: fastKey,
+	  getWeakData: getWeakData,
+	  onFreeze: onFreeze
+	};
+
+	hiddenKeys[METADATA] = true;
+	});
+
+	var iterate_1 = createCommonjsModule(function (module) {
+	var Result = function (stopped, result) {
+	  this.stopped = stopped;
+	  this.result = result;
+	};
+
+	var iterate = module.exports = function (iterable, fn, that, AS_ENTRIES, IS_ITERATOR) {
+	  var boundFunction = functionBindContext(fn, that, AS_ENTRIES ? 2 : 1);
+	  var iterator, iterFn, index, length, result, next, step;
+
+	  if (IS_ITERATOR) {
+	    iterator = iterable;
+	  } else {
+	    iterFn = getIteratorMethod(iterable);
+	    if (typeof iterFn != 'function') throw TypeError('Target is not iterable');
+	    // optimisation for array iterators
+	    if (isArrayIteratorMethod(iterFn)) {
+	      for (index = 0, length = toLength(iterable.length); length > index; index++) {
+	        result = AS_ENTRIES
+	          ? boundFunction(anObject(step = iterable[index])[0], step[1])
+	          : boundFunction(iterable[index]);
+	        if (result && result instanceof Result) return result;
+	      } return new Result(false);
+	    }
+	    iterator = iterFn.call(iterable);
+	  }
+
+	  next = iterator.next;
+	  while (!(step = next.call(iterator)).done) {
+	    result = callWithSafeIterationClosing(iterator, boundFunction, step.value, AS_ENTRIES);
+	    if (typeof result == 'object' && result && result instanceof Result) return result;
+	  } return new Result(false);
+	};
+
+	iterate.stop = function (result) {
+	  return new Result(true, result);
+	};
+	});
+
+	var anInstance = function (it, Constructor, name) {
+	  if (!(it instanceof Constructor)) {
+	    throw TypeError('Incorrect ' + (name ? name + ' ' : '') + 'invocation');
+	  } return it;
+	};
+
+	var defineProperty$3 = objectDefineProperty.f;
+	var forEach = arrayIteration.forEach;
+
+
+
+	var setInternalState$3 = internalState.set;
+	var internalStateGetterFor = internalState.getterFor;
+
+	var collection = function (CONSTRUCTOR_NAME, wrapper, common) {
+	  var IS_MAP = CONSTRUCTOR_NAME.indexOf('Map') !== -1;
+	  var IS_WEAK = CONSTRUCTOR_NAME.indexOf('Weak') !== -1;
+	  var ADDER = IS_MAP ? 'set' : 'add';
+	  var NativeConstructor = global_1[CONSTRUCTOR_NAME];
+	  var NativePrototype = NativeConstructor && NativeConstructor.prototype;
+	  var exported = {};
+	  var Constructor;
+
+	  if (!descriptors || typeof NativeConstructor != 'function'
+	    || !(IS_WEAK || NativePrototype.forEach && !fails(function () { new NativeConstructor().entries().next(); }))
+	  ) {
+	    // create collection constructor
+	    Constructor = common.getConstructor(wrapper, CONSTRUCTOR_NAME, IS_MAP, ADDER);
+	    internalMetadata.REQUIRED = true;
+	  } else {
+	    Constructor = wrapper(function (target, iterable) {
+	      setInternalState$3(anInstance(target, Constructor, CONSTRUCTOR_NAME), {
+	        type: CONSTRUCTOR_NAME,
+	        collection: new NativeConstructor()
+	      });
+	      if (iterable != undefined) iterate_1(iterable, target[ADDER], target, IS_MAP);
+	    });
+
+	    var getInternalState = internalStateGetterFor(CONSTRUCTOR_NAME);
+
+	    forEach(['add', 'clear', 'delete', 'forEach', 'get', 'has', 'set', 'keys', 'values', 'entries'], function (KEY) {
+	      var IS_ADDER = KEY == 'add' || KEY == 'set';
+	      if (KEY in NativePrototype && !(IS_WEAK && KEY == 'clear')) {
+	        createNonEnumerableProperty(Constructor.prototype, KEY, function (a, b) {
+	          var collection = getInternalState(this).collection;
+	          if (!IS_ADDER && IS_WEAK && !isObject(a)) return KEY == 'get' ? undefined : false;
+	          var result = collection[KEY](a === 0 ? 0 : a, b);
+	          return IS_ADDER ? this : result;
+	        });
+	      }
+	    });
+
+	    IS_WEAK || defineProperty$3(Constructor.prototype, 'size', {
+	      configurable: true,
+	      get: function () {
+	        return getInternalState(this).collection.size;
+	      }
+	    });
+	  }
+
+	  setToStringTag(Constructor, CONSTRUCTOR_NAME, false, true);
+
+	  exported[CONSTRUCTOR_NAME] = Constructor;
+	  _export({ global: true, forced: true }, exported);
+
+	  if (!IS_WEAK) common.setStrong(Constructor, CONSTRUCTOR_NAME, IS_MAP);
+
+	  return Constructor;
+	};
+
+	var redefineAll = function (target, src, options) {
+	  for (var key in src) {
+	    if (options && options.unsafe && target[key]) target[key] = src[key];
+	    else redefine(target, key, src[key], options);
+	  } return target;
+	};
+
+	var SPECIES$3 = wellKnownSymbol('species');
+
+	var setSpecies = function (CONSTRUCTOR_NAME) {
+	  var Constructor = getBuiltIn(CONSTRUCTOR_NAME);
+	  var defineProperty = objectDefineProperty.f;
+
+	  if (descriptors && Constructor && !Constructor[SPECIES$3]) {
+	    defineProperty(Constructor, SPECIES$3, {
+	      configurable: true,
+	      get: function () { return this; }
+	    });
+	  }
+	};
+
+	var defineProperty$4 = objectDefineProperty.f;
+
+
+
+
+
+
+
+
+	var fastKey = internalMetadata.fastKey;
+
+
+	var setInternalState$4 = internalState.set;
+	var internalStateGetterFor$1 = internalState.getterFor;
+
+	var collectionStrong = {
+	  getConstructor: function (wrapper, CONSTRUCTOR_NAME, IS_MAP, ADDER) {
+	    var C = wrapper(function (that, iterable) {
+	      anInstance(that, C, CONSTRUCTOR_NAME);
+	      setInternalState$4(that, {
+	        type: CONSTRUCTOR_NAME,
+	        index: objectCreate(null),
+	        first: undefined,
+	        last: undefined,
+	        size: 0
+	      });
+	      if (!descriptors) that.size = 0;
+	      if (iterable != undefined) iterate_1(iterable, that[ADDER], that, IS_MAP);
+	    });
+
+	    var getInternalState = internalStateGetterFor$1(CONSTRUCTOR_NAME);
+
+	    var define = function (that, key, value) {
+	      var state = getInternalState(that);
+	      var entry = getEntry(that, key);
+	      var previous, index;
+	      // change existing entry
+	      if (entry) {
+	        entry.value = value;
+	      // create new entry
+	      } else {
+	        state.last = entry = {
+	          index: index = fastKey(key, true),
+	          key: key,
+	          value: value,
+	          previous: previous = state.last,
+	          next: undefined,
+	          removed: false
+	        };
+	        if (!state.first) state.first = entry;
+	        if (previous) previous.next = entry;
+	        if (descriptors) state.size++;
+	        else that.size++;
+	        // add to index
+	        if (index !== 'F') state.index[index] = entry;
+	      } return that;
+	    };
+
+	    var getEntry = function (that, key) {
+	      var state = getInternalState(that);
+	      // fast case
+	      var index = fastKey(key);
+	      var entry;
+	      if (index !== 'F') return state.index[index];
+	      // frozen object case
+	      for (entry = state.first; entry; entry = entry.next) {
+	        if (entry.key == key) return entry;
+	      }
+	    };
+
+	    redefineAll(C.prototype, {
+	      // 23.1.3.1 Map.prototype.clear()
+	      // 23.2.3.2 Set.prototype.clear()
+	      clear: function clear() {
+	        var that = this;
+	        var state = getInternalState(that);
+	        var data = state.index;
+	        var entry = state.first;
+	        while (entry) {
+	          entry.removed = true;
+	          if (entry.previous) entry.previous = entry.previous.next = undefined;
+	          delete data[entry.index];
+	          entry = entry.next;
+	        }
+	        state.first = state.last = undefined;
+	        if (descriptors) state.size = 0;
+	        else that.size = 0;
+	      },
+	      // 23.1.3.3 Map.prototype.delete(key)
+	      // 23.2.3.4 Set.prototype.delete(value)
+	      'delete': function (key) {
+	        var that = this;
+	        var state = getInternalState(that);
+	        var entry = getEntry(that, key);
+	        if (entry) {
+	          var next = entry.next;
+	          var prev = entry.previous;
+	          delete state.index[entry.index];
+	          entry.removed = true;
+	          if (prev) prev.next = next;
+	          if (next) next.previous = prev;
+	          if (state.first == entry) state.first = next;
+	          if (state.last == entry) state.last = prev;
+	          if (descriptors) state.size--;
+	          else that.size--;
+	        } return !!entry;
+	      },
+	      // 23.2.3.6 Set.prototype.forEach(callbackfn, thisArg = undefined)
+	      // 23.1.3.5 Map.prototype.forEach(callbackfn, thisArg = undefined)
+	      forEach: function forEach(callbackfn /* , that = undefined */) {
+	        var state = getInternalState(this);
+	        var boundFunction = functionBindContext(callbackfn, arguments.length > 1 ? arguments[1] : undefined, 3);
+	        var entry;
+	        while (entry = entry ? entry.next : state.first) {
+	          boundFunction(entry.value, entry.key, this);
+	          // revert to the last existing entry
+	          while (entry && entry.removed) entry = entry.previous;
+	        }
+	      },
+	      // 23.1.3.7 Map.prototype.has(key)
+	      // 23.2.3.7 Set.prototype.has(value)
+	      has: function has(key) {
+	        return !!getEntry(this, key);
+	      }
+	    });
+
+	    redefineAll(C.prototype, IS_MAP ? {
+	      // 23.1.3.6 Map.prototype.get(key)
+	      get: function get(key) {
+	        var entry = getEntry(this, key);
+	        return entry && entry.value;
+	      },
+	      // 23.1.3.9 Map.prototype.set(key, value)
+	      set: function set(key, value) {
+	        return define(this, key === 0 ? 0 : key, value);
+	      }
+	    } : {
+	      // 23.2.3.1 Set.prototype.add(value)
+	      add: function add(value) {
+	        return define(this, value = value === 0 ? 0 : value, value);
+	      }
+	    });
+	    if (descriptors) defineProperty$4(C.prototype, 'size', {
+	      get: function () {
+	        return getInternalState(this).size;
+	      }
+	    });
+	    return C;
+	  },
+	  setStrong: function (C, CONSTRUCTOR_NAME, IS_MAP) {
+	    var ITERATOR_NAME = CONSTRUCTOR_NAME + ' Iterator';
+	    var getInternalCollectionState = internalStateGetterFor$1(CONSTRUCTOR_NAME);
+	    var getInternalIteratorState = internalStateGetterFor$1(ITERATOR_NAME);
+	    // add .keys, .values, .entries, [@@iterator]
+	    // 23.1.3.4, 23.1.3.8, 23.1.3.11, 23.1.3.12, 23.2.3.5, 23.2.3.8, 23.2.3.10, 23.2.3.11
+	    defineIterator(C, CONSTRUCTOR_NAME, function (iterated, kind) {
+	      setInternalState$4(this, {
+	        type: ITERATOR_NAME,
+	        target: iterated,
+	        state: getInternalCollectionState(iterated),
+	        kind: kind,
+	        last: undefined
+	      });
+	    }, function () {
+	      var state = getInternalIteratorState(this);
+	      var kind = state.kind;
+	      var entry = state.last;
+	      // revert to the last existing entry
+	      while (entry && entry.removed) entry = entry.previous;
+	      // get next entry
+	      if (!state.target || !(state.last = entry = entry ? entry.next : state.state.first)) {
+	        // or finish the iteration
+	        state.target = undefined;
+	        return { value: undefined, done: true };
+	      }
+	      // return step by kind
+	      if (kind == 'keys') return { value: entry.key, done: false };
+	      if (kind == 'values') return { value: entry.value, done: false };
+	      return { value: [entry.key, entry.value], done: false };
+	    }, IS_MAP ? 'entries' : 'values', !IS_MAP, true);
+
+	    // add [@@species], 23.1.2.2, 23.2.2.2
+	    setSpecies(CONSTRUCTOR_NAME);
+	  }
+	};
+
+	// `Set` constructor
+	// https://tc39.github.io/ecma262/#sec-set-objects
+	var es_set = collection('Set', function (init) {
+	  return function Set() { return init(this, arguments.length ? arguments[0] : undefined); };
+	}, collectionStrong);
+
+	var set$1 = path.Set;
+
+	var set$2 = set$1;
+
+	var set$3 = set$2;
+
 	var arrayMethodIsStrict = function (METHOD_NAME, argument) {
 	  var method = [][METHOD_NAME];
 	  return !!method && fails(function () {
@@ -2073,9 +2466,9 @@ var CircuitVisualization = (function () {
 	if (Object.defineProperty.sham) defineProperty.sham = true;
 	});
 
-	var defineProperty$3 = defineProperty_1;
+	var defineProperty$5 = defineProperty_1;
 
-	var defineProperty$4 = defineProperty$3;
+	var defineProperty$6 = defineProperty$5;
 
 	// `Object.defineProperties` method
 	// https://tc39.github.io/ecma262/#sec-object.defineproperties
@@ -2147,9 +2540,9 @@ var CircuitVisualization = (function () {
 	  forEach: arrayForEach
 	});
 
-	var forEach = entryVirtual('Array').forEach;
+	var forEach$1 = entryVirtual('Array').forEach;
 
-	var forEach$1 = forEach;
+	var forEach$2 = forEach$1;
 
 	var ArrayPrototype$6 = Array.prototype;
 
@@ -2162,12 +2555,12 @@ var CircuitVisualization = (function () {
 	  var own = it.forEach;
 	  return it === ArrayPrototype$6 || (it instanceof Array && own === ArrayPrototype$6.forEach)
 	    // eslint-disable-next-line no-prototype-builtins
-	    || DOMIterables.hasOwnProperty(classof(it)) ? forEach$1 : own;
+	    || DOMIterables.hasOwnProperty(classof(it)) ? forEach$2 : own;
 	};
 
-	var forEach$2 = forEach_1;
+	var forEach$3 = forEach_1;
 
-	var forEach$3 = forEach$2;
+	var forEach$4 = forEach$3;
 
 	var nativeGetOwnPropertyDescriptor$2 = objectGetOwnPropertyDescriptor.f;
 
@@ -2203,7 +2596,7 @@ var CircuitVisualization = (function () {
 
 	function _defineProperty(obj, key, value) {
 	  if (key in obj) {
-	    defineProperty$4(obj, key, {
+	    defineProperty$6(obj, key, {
 	      value: value,
 	      enumerable: true,
 	      configurable: true,
@@ -2238,7 +2631,7 @@ var CircuitVisualization = (function () {
 	    if (i % 2) {
 	      var _context;
 
-	      forEach$3(_context = ownKeys$1(Object(source), true)).call(_context, function (key) {
+	      forEach$4(_context = ownKeys$1(Object(source), true)).call(_context, function (key) {
 	        _defineProperty(target, key, source[key]);
 	      });
 	    } else if (getOwnPropertyDescriptors$2) {
@@ -2246,8 +2639,8 @@ var CircuitVisualization = (function () {
 	    } else {
 	      var _context2;
 
-	      forEach$3(_context2 = ownKeys$1(Object(source))).call(_context2, function (key) {
-	        defineProperty$4(target, key, getOwnPropertyDescriptor$3(source, key));
+	      forEach$4(_context2 = ownKeys$1(Object(source))).call(_context2, function (key) {
+	        defineProperty$6(target, key, getOwnPropertyDescriptor$3(source, key));
 	      });
 	    }
 	  }
@@ -2255,7 +2648,7 @@ var CircuitVisualization = (function () {
 	  return target;
 	}
 
-	var forEach$4 = forEach_1;
+	var forEach$5 = forEach_1;
 
 	var slice$3 = [].slice;
 	var factories = {};
@@ -2313,7 +2706,7 @@ var CircuitVisualization = (function () {
 	    descriptor.configurable = true;
 	    if ("value" in descriptor) descriptor.writable = true;
 
-	    defineProperty$4(target, descriptor.key, descriptor);
+	    defineProperty$6(target, descriptor.key, descriptor);
 	  }
 	}
 
@@ -5462,9 +5855,12 @@ var CircuitVisualization = (function () {
 	      'transform': concat$2(_context = "translate(".concat(position.x, ", ")).call(_context, position.y, ")"),
 	      'r': 3
 	    }, parent);
-	    tippy(this.element_, {
-	      content: name
-	    });
+
+	    if (name) {
+	      tippy(this.element_, {
+	        content: name
+	      });
+	    }
 	  }
 
 	  _createClass(Port, [{
@@ -6248,6 +6644,222 @@ var CircuitVisualization = (function () {
 	    y: 9.5
 	  }
 	}, {
+	  name: '5V',
+	  position: {
+	    x: 462.4,
+	    y: 9.5
+	  }
+	}, {
+	  name: '5V',
+	  position: {
+	    x: 474.2,
+	    y: 9.5
+	  }
+	}, {
+	  name: '22',
+	  position: {
+	    x: 462.4,
+	    y: 21.3
+	  }
+	}, {
+	  name: '24',
+	  position: {
+	    x: 462.4,
+	    y: 33
+	  }
+	}, {
+	  name: '26',
+	  position: {
+	    x: 462.4,
+	    y: 44.8
+	  }
+	}, {
+	  name: '28',
+	  position: {
+	    x: 462.4,
+	    y: 56.6
+	  }
+	}, {
+	  name: '30',
+	  position: {
+	    x: 462.4,
+	    y: 68.3
+	  }
+	}, {
+	  name: '32',
+	  position: {
+	    x: 462.4,
+	    y: 80.1
+	  }
+	}, {
+	  name: '34',
+	  position: {
+	    x: 462.4,
+	    y: 91.9
+	  }
+	}, {
+	  name: '36',
+	  position: {
+	    x: 462.4,
+	    y: 103.6
+	  }
+	}, {
+	  name: '38',
+	  position: {
+	    x: 462.4,
+	    y: 115.4
+	  }
+	}, {
+	  name: '40',
+	  position: {
+	    x: 462.4,
+	    y: 127.2
+	  }
+	}, {
+	  name: '42',
+	  position: {
+	    x: 462.4,
+	    y: 138.9
+	  }
+	}, {
+	  name: '44',
+	  position: {
+	    x: 462.4,
+	    y: 150.7
+	  }
+	}, {
+	  name: '46',
+	  position: {
+	    x: 462.4,
+	    y: 162.5
+	  }
+	}, {
+	  name: '48',
+	  position: {
+	    x: 462.4,
+	    y: 174.2
+	  }
+	}, {
+	  name: '50',
+	  position: {
+	    x: 462.4,
+	    y: 186
+	  }
+	}, {
+	  name: '53',
+	  position: {
+	    x: 462.4,
+	    y: 197.8
+	  }
+	}, {
+	  name: '23',
+	  position: {
+	    x: 474.2,
+	    y: 21.3
+	  }
+	}, {
+	  name: '25',
+	  position: {
+	    x: 474.2,
+	    y: 33
+	  }
+	}, {
+	  name: '27',
+	  position: {
+	    x: 474.2,
+	    y: 44.8
+	  }
+	}, {
+	  name: '29',
+	  position: {
+	    x: 474.2,
+	    y: 56.6
+	  }
+	}, {
+	  name: '31',
+	  position: {
+	    x: 474.2,
+	    y: 68.3
+	  }
+	}, {
+	  name: '33',
+	  position: {
+	    x: 474.2,
+	    y: 80.1
+	  }
+	}, {
+	  name: '35',
+	  position: {
+	    x: 474.2,
+	    y: 91.9
+	  }
+	}, {
+	  name: '37',
+	  position: {
+	    x: 474.2,
+	    y: 103.6
+	  }
+	}, {
+	  name: '39',
+	  position: {
+	    x: 474.2,
+	    y: 115.4
+	  }
+	}, {
+	  name: '41',
+	  position: {
+	    x: 474.2,
+	    y: 127.2
+	  }
+	}, {
+	  name: '43',
+	  position: {
+	    x: 474.2,
+	    y: 138.9
+	  }
+	}, {
+	  name: '45',
+	  position: {
+	    x: 474.2,
+	    y: 150.7
+	  }
+	}, {
+	  name: '47',
+	  position: {
+	    x: 474.2,
+	    y: 162.5
+	  }
+	}, {
+	  name: '49',
+	  position: {
+	    x: 474.2,
+	    y: 174.2
+	  }
+	}, {
+	  name: '51',
+	  position: {
+	    x: 474.2,
+	    y: 186
+	  }
+	}, {
+	  name: '53',
+	  position: {
+	    x: 474.2,
+	    y: 197.8
+	  }
+	}, {
+	  name: 'GND',
+	  position: {
+	    x: 462.4,
+	    y: 209.5
+	  }
+	}, {
+	  name: 'GND',
+	  position: {
+	    x: 474.2,
+	    y: 209.5
+	  }
+	}, {
 	  name: 'NOTUSER',
 	  position: {
 	    x: 156.5,
@@ -6587,11 +7199,410 @@ var CircuitVisualization = (function () {
 	  }
 	}];
 
+	var microbit = [// Adressable pins
+	{
+	  name: '0',
+	  position: {
+	    x: 15,
+	    y: 167
+	  }
+	}, {
+	  name: '1',
+	  position: {
+	    x: 57.3,
+	    y: 167
+	  }
+	}, {
+	  name: '2',
+	  position: {
+	    x: 103.7,
+	    y: 167
+	  }
+	}, {
+	  name: '3',
+	  position: {
+	    x: 1.5,
+	    y: 167
+	  }
+	}, {
+	  name: '4',
+	  position: {
+	    x: 27.9,
+	    y: 167
+	  }
+	}, {
+	  name: '5',
+	  position: {
+	    x: 33.1,
+	    y: 167
+	  }
+	}, {
+	  name: '6',
+	  position: {
+	    x: 38.3,
+	    y: 167
+	  }
+	}, {
+	  name: '7',
+	  position: {
+	    x: 43.5,
+	    y: 167
+	  }
+	}, {
+	  name: '8',
+	  position: {
+	    x: 69.5,
+	    y: 167
+	  }
+	}, {
+	  name: '9',
+	  position: {
+	    x: 74.7,
+	    y: 167
+	  }
+	}, {
+	  name: '10',
+	  position: {
+	    x: 79.9,
+	    y: 167
+	  }
+	}, {
+	  name: '11',
+	  position: {
+	    x: 85.1,
+	    y: 167
+	  }
+	}, {
+	  name: '12',
+	  position: {
+	    x: 90.3,
+	    y: 167
+	  }
+	}, {
+	  name: '13',
+	  position: {
+	    x: 116.2,
+	    y: 167
+	  }
+	}, {
+	  name: '14',
+	  position: {
+	    x: 121.4,
+	    y: 167
+	  }
+	}, {
+	  name: '15',
+	  position: {
+	    x: 126.6,
+	    y: 167
+	  }
+	}, {
+	  name: '16',
+	  position: {
+	    x: 131.8,
+	    y: 167
+	  }
+	}, {
+	  name: '19',
+	  position: {
+	    x: 168.0,
+	    y: 167
+	  }
+	}, {
+	  name: '20',
+	  position: {
+	    x: 173.2,
+	    y: 167
+	  }
+	}, // Power pins
+	{
+	  name: '3V',
+	  position: {
+	    x: 150.0,
+	    y: 167
+	  }
+	}, {
+	  name: 'GND',
+	  position: {
+	    x: 191.8,
+	    y: 167
+	  }
+	}, // Inbuilts
+	{
+	  name: 'A',
+	  position: {
+	    x: 20.8,
+	    y: 86.7
+	  }
+	}, {
+	  name: 'B',
+	  position: {
+	    x: 187.7,
+	    y: 86.7
+	  }
+	}, {
+	  name: 'light',
+	  position: {
+	    x: 103.7,
+	    y: 90
+	  }
+	}, {
+	  name: 'temperature',
+	  position: {
+	    x: 262,
+	    y: 48.2
+	  }
+	}, {
+	  name: 'accelerometer',
+	  position: {
+	    x: 238.2,
+	    y: 99.5
+	  }
+	}, {
+	  name: 'compass',
+	  position: {
+	    x: 238.2,
+	    y: 104.7
+	  }
+	}];
+
+	var calliope = [// Exceptions for weird XML names
+	{
+	  name: 'motor A',
+	  position: {
+	    x: 153.8,
+	    y: 210
+	  }
+	}, {
+	  name: 'motor B',
+	  position: {
+	    x: 145,
+	    y: 209
+	  }
+	}, {
+	  name: 'ultrasonic 1',
+	  position: {
+	    x: 245.7,
+	    y: 79.5
+	  }
+	}, {
+	  name: 'callibot',
+	  position: {
+	    x: 245.7,
+	    y: 79.5
+	  }
+	}, // Adressable pins
+	{
+	  name: '0',
+	  position: {
+	    x: 16.5,
+	    y: 139.2
+	  }
+	}, {
+	  name: '1',
+	  position: {
+	    x: 88,
+	    y: 262
+	  }
+	}, {
+	  name: '2',
+	  position: {
+	    x: 229.5,
+	    y: 262
+	  }
+	}, {
+	  name: '3',
+	  position: {
+	    x: 301,
+	    y: 139.2
+	  }
+	}, {
+	  name: '4',
+	  position: {
+	    x: 73.0,
+	    y: 79.5
+	  }
+	}, {
+	  name: 'A0',
+	  position: {
+	    x: 73.0,
+	    y: 79.5
+	  }
+	}, {
+	  name: '5',
+	  position: {
+	    x: 245.7,
+	    y: 79.5
+	  }
+	}, {
+	  name: 'A1',
+	  position: {
+	    x: 245.7,
+	    y: 79.5
+	  }
+	}, {
+	  name: 'C04',
+	  position: {
+	    x: 130.8,
+	    y: 237
+	  }
+	}, {
+	  name: 'C05',
+	  position: {
+	    x: 130.8,
+	    y: 227.3
+	  }
+	}, {
+	  name: 'C06',
+	  position: {
+	    x: 140.5,
+	    y: 237
+	  }
+	}, {
+	  name: 'C07',
+	  position: {
+	    x: 140.5,
+	    y: 227.3
+	  }
+	}, {
+	  name: 'C08',
+	  position: {
+	    x: 150,
+	    y: 237
+	  }
+	}, {
+	  name: 'C09',
+	  position: {
+	    x: 150,
+	    y: 227.3
+	  }
+	}, {
+	  name: 'C10',
+	  position: {
+	    x: 169.5,
+	    y: 237
+	  }
+	}, {
+	  name: 'C11',
+	  position: {
+	    x: 169.5,
+	    y: 227.3
+	  }
+	}, {
+	  name: 'C12',
+	  position: {
+	    x: 179,
+	    y: 237
+	  }
+	}, {
+	  name: 'C16',
+	  position: {
+	    x: 198.5,
+	    y: 237
+	  }
+	}, {
+	  name: 'C17',
+	  position: {
+	    x: 198.5,
+	    y: 227.3
+	  }
+	}, {
+	  name: 'C18',
+	  position: {
+	    x: 208,
+	    y: 237
+	  }
+	}, {
+	  name: 'C19',
+	  position: {
+	    x: 208,
+	    y: 227.3
+	  }
+	}, // Power pins
+	{
+	  name: '3V',
+	  position: {
+	    x: 88,
+	    y: 16
+	  }
+	}, {
+	  name: 'GND',
+	  position: {
+	    x: 229.5,
+	    y: 16
+	  }
+	}, // Inbuilts
+	{
+	  name: 'A',
+	  position: {
+	    x: 57.5,
+	    y: 114.3
+	  }
+	}, {
+	  name: 'B',
+	  position: {
+	    x: 260.5,
+	    y: 114.3
+	  }
+	}, {
+	  name: 'buzzer',
+	  position: {
+	    x: 253.7,
+	    y: 155
+	  }
+	}, {
+	  name: 'rgbled',
+	  position: {
+	    x: 159.5,
+	    y: 172
+	  }
+	}, {
+	  name: 'light',
+	  position: {
+	    x: 158.5,
+	    y: 102.7
+	  }
+	}, {
+	  name: 'temperature',
+	  position: {
+	    x: 116.5,
+	    y: 178.5
+	  }
+	}, {
+	  name: 'accelerometer',
+	  position: {
+	    x: 86,
+	    y: 130.3
+	  }
+	}, {
+	  name: 'compass',
+	  position: {
+	    x: 91.5,
+	    y: 130.3
+	  }
+	}, {
+	  name: 'gyro',
+	  position: {
+	    x: 97,
+	    y: 130.3
+	  }
+	}, {
+	  name: 'sound',
+	  position: {
+	    x: 214.0,
+	    y: 90.2
+	  }
+	}];
+
 	var robotMapper = {
 	  'arduino_nano': arduinoNano,
 	  'arduino_uno': arduinoUno,
 	  'arduino_mega': arduinoMega,
-	  'arduino_unowifirev2': arduinoWifi
+	  'arduino_unowifirev2': arduinoWifi,
+	  'microbit_microbit': microbit,
+	  'calliope_calliope2017NoBlue': calliope,
+	  'calliope_calliope2017': calliope,
+	  'calliope_calliope2016': calliope
 	};
 
 	var RobotViewField = /*#__PURE__*/function (_Blockly$Field) {
@@ -6599,13 +7610,13 @@ var CircuitVisualization = (function () {
 
 	  var _super = _createSuper(RobotViewField);
 
-	  function RobotViewField(opt_robot) {
+	  function RobotViewField(robot) {
 	    var _this;
 
 	    _classCallCheck(this, RobotViewField);
 
 	    _this = _super.call(this);
-	    _this.robot = opt_robot || 'arduino';
+	    _this.robot = robot;
 	    _this.height_ = Number(200);
 	    _this.width_ = Number(300);
 	    _this.size_ = new goog.math.Size(_this.width_, _this.height_ + 2 * Blockly.BlockSvg.INLINE_PADDING_Y);
@@ -6633,19 +7644,29 @@ var CircuitVisualization = (function () {
 	  }, {
 	    key: "initBoardView_",
 	    value: function initBoardView_() {
-	      var _context;
+	      var _context, _context2, _context3, _context4;
 
 	      var workspace = Blockly.getMainWorkspace();
 	      this.board_ = Blockly.createSvgElement('image', {}, this.element_);
-	      this.board_.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', concat$2(_context = "".concat(workspace.options.pathToMedia, "robots/")).call(_context, this.robot, ".svg"));
+
+	      var robotSrc = concat$2(_context = concat$2(_context2 = "".concat(workspace.options.pathToMedia, "robots/")).call(_context2, this.robot.group, "_")).call(_context, this.robot.name, ".svg");
+
+	      var groupSrc = concat$2(_context3 = concat$2(_context4 = "".concat(workspace.options.pathToMedia, "robots/")).call(_context4, this.robot.group, "_")).call(_context3, this.robot.group, ".svg");
+
+	      var board = this.board_;
+	      urlExists(robotSrc, function () {
+	        board.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', robotSrc);
+	      }, function () {
+	        board.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', groupSrc);
+	      });
 	    }
 	  }, {
 	    key: "initPorts_",
 	    value: function initPorts_() {
-	      var _context2;
+	      var _context5;
 
 	      var portsGroupSvg = Blockly.createSvgElement('g', {}, this.element_);
-	      this.ports_ = map$2(_context2 = robotMapper[this.robot]).call(_context2, function (props) {
+	      this.ports_ = map$2(_context5 = robotMapper[this.robot.group + '_' + this.robot.name]).call(_context5, function (props) {
 	        var name = props.name,
 	            position = props.position;
 	        var port = new Port(portsGroupSvg, name, position);
@@ -6657,9 +7678,9 @@ var CircuitVisualization = (function () {
 	  }, {
 	    key: "getPortByName",
 	    value: function getPortByName(portName) {
-	      var _context3;
+	      var _context6;
 
-	      var index = findIndex$2(_context3 = this.ports_).call(_context3, function (port) {
+	      var index = findIndex$2(_context6 = this.ports_).call(_context6, function (port) {
 	        return port.name === portName;
 	      });
 
@@ -6679,14 +7700,14 @@ var CircuitVisualization = (function () {
 
 	RobotViewField.EDITABLE = false;
 	RobotViewField.rectElement_ = null;
-	function createRobotBlock(robotName) {
+	function createRobotBlock(robotIdentifier) {
 	  return {
 	    init: function init() {
 	      var _this2 = this;
 
 	      this.type_ = 'robot';
 	      this.svgPath_.remove();
-	      this.robot_ = new RobotViewField(robotName);
+	      this.robot_ = new RobotViewField(identifierToRobot(robotIdentifier));
 	      this.appendDummyInput().setAlign(Blockly.ALIGN_CENTRE).appendField(this.robot_, 'ROBOT');
 
 	      this.getPortByName = function (portName) {
@@ -6694,6 +7715,32 @@ var CircuitVisualization = (function () {
 	      };
 	    }
 	  };
+	}
+	function isRobotVisualized(robotIdentifier) {
+	  return robotMapper[robotIdentifier] !== undefined;
+	}
+
+	function identifierToRobot(robotIdentifier) {
+	  var splits = robotIdentifier.split('_');
+	  var robot = {};
+	  robot.group = splits[0];
+	  robot.name = splits[1];
+	  return robot;
+	}
+
+	function urlExists(url, posCallback, negCallback) {
+	  var client = new XMLHttpRequest();
+
+	  client.onload = function () {
+	    if (this.status === 200) {
+	      posCallback();
+	    } else {
+	      negCallback();
+	    }
+	  };
+
+	  client.open("HEAD", url, true);
+	  client.send();
 	}
 
 	var lodash = createCommonjsModule(function (module, exports) {
@@ -23931,13 +24978,130 @@ var CircuitVisualization = (function () {
 	  return (_ports$portValue = ports[portValue]) !== null && _ports$portValue !== void 0 ? _ports$portValue : portValue;
 	}
 
+	// `Map` constructor
+	// https://tc39.github.io/ecma262/#sec-map-objects
+	var es_map = collection('Map', function (init) {
+	  return function Map() { return init(this, arguments.length ? arguments[0] : undefined); };
+	}, collectionStrong);
+
+	var map$3 = path.Map;
+
+	var map$4 = map$3;
+
+	var map$5 = map$4;
+
+	var slice$4 = slice_1;
+
+	var slice$5 = slice$4;
+
+	// a string of all valid unicode whitespaces
+	// eslint-disable-next-line max-len
+	var whitespaces = '\u0009\u000A\u000B\u000C\u000D\u0020\u00A0\u1680\u2000\u2001\u2002\u2003\u2004\u2005\u2006\u2007\u2008\u2009\u200A\u202F\u205F\u3000\u2028\u2029\uFEFF';
+
+	var whitespace = '[' + whitespaces + ']';
+	var ltrim = RegExp('^' + whitespace + whitespace + '*');
+	var rtrim = RegExp(whitespace + whitespace + '*$');
+
+	// `String.prototype.{ trim, trimStart, trimEnd, trimLeft, trimRight }` methods implementation
+	var createMethod$3 = function (TYPE) {
+	  return function ($this) {
+	    var string = String(requireObjectCoercible($this));
+	    if (TYPE & 1) string = string.replace(ltrim, '');
+	    if (TYPE & 2) string = string.replace(rtrim, '');
+	    return string;
+	  };
+	};
+
+	var stringTrim = {
+	  // `String.prototype.{ trimLeft, trimStart }` methods
+	  // https://tc39.github.io/ecma262/#sec-string.prototype.trimstart
+	  start: createMethod$3(1),
+	  // `String.prototype.{ trimRight, trimEnd }` methods
+	  // https://tc39.github.io/ecma262/#sec-string.prototype.trimend
+	  end: createMethod$3(2),
+	  // `String.prototype.trim` method
+	  // https://tc39.github.io/ecma262/#sec-string.prototype.trim
+	  trim: createMethod$3(3)
+	};
+
+	var trim = stringTrim.trim;
+
+
+	var $parseInt = global_1.parseInt;
+	var hex = /^[+-]?0[Xx]/;
+	var FORCED$3 = $parseInt(whitespaces + '08') !== 8 || $parseInt(whitespaces + '0x16') !== 22;
+
+	// `parseInt` method
+	// https://tc39.github.io/ecma262/#sec-parseint-string-radix
+	var numberParseInt = FORCED$3 ? function parseInt(string, radix) {
+	  var S = trim(String(string));
+	  return $parseInt(S, (radix >>> 0) || (hex.test(S) ? 16 : 10));
+	} : $parseInt;
+
+	// `parseInt` method
+	// https://tc39.github.io/ecma262/#sec-parseint-string-radix
+	_export({ global: true, forced: parseInt != numberParseInt }, {
+	  parseInt: numberParseInt
+	});
+
+	var _parseInt = path.parseInt;
+
+	var _parseInt$1 = _parseInt;
+
+	var _parseInt$2 = _parseInt$1;
+
+	var Color = function Color(r, g, b) {
+	  var _this = this;
+
+	  _classCallCheck(this, Color);
+
+	  this.asHex = function () {
+	    return Color.rgbToHex_(_this.r_, _this.g_, _this.b_);
+	  };
+
+	  this.darken = function (amount) {
+	    _this.r_ -= amount;
+	    _this.r_ = Math.min(Math.max(_this.r_, 0), 255);
+	    _this.g_ -= amount;
+	    _this.g_ = Math.min(Math.max(_this.g_, 0), 255);
+	    _this.b_ -= amount;
+	    _this.b_ = Math.min(Math.max(_this.b_, 0), 255);
+	    return _this;
+	  };
+
+	  this.r_ = r;
+	  this.g_ = g;
+	  this.b_ = b;
+	};
+
+	Color.fromHex = function (hex) {
+	  var rgb = Color.hexToRgb_(hex);
+	  return new Color(rgb.r, rgb.g, rgb.b);
+	};
+
+	Color.hexToRgb_ = function (hex) {
+	  var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+	  return result ? {
+	    r: _parseInt$2(result[1], 16),
+	    g: _parseInt$2(result[2], 16),
+	    b: _parseInt$2(result[3], 16)
+	  } : null;
+	};
+
+	Color.rgbToHex_ = function (r, g, b) {
+	  var _context;
+
+	  return "#" + slice$5(_context = ((1 << 24) + (r << 16) + (g << 8) + b).toString(16)).call(_context, 1);
+	};
+	var DEFAULT_COLORS = new map$5([['5V', new Color(240, 20, 20)], ['GND', new Color(20, 20, 20)]]);
+
 	var CircuitVisualization = /*#__PURE__*/function () {
 	  _createClass(CircuitVisualization, null, [{
 	    key: "domToWorkspace",
 	    value: function domToWorkspace(dom, workspace) {
-	      var _context, _context2, _context3;
+	      var _context, _context2, _context3, _context4;
 
-	      if (workspace.device !== 'arduino') {
+	      if (workspace.device !== 'arduino' && workspace.device !== 'microbit' && workspace.device !== 'calliope') {
 	        throw Error('Not device suported');
 	      }
 
@@ -23946,14 +25110,20 @@ var CircuitVisualization = (function () {
 	      return {
 	        dispose: bind$2(_context = confVis.dispose).call(_context, confVis),
 	        refresh: bind$2(_context2 = confVis.refresh).call(_context2, confVis),
-	        resetRobot: bind$2(_context3 = confVis.reset).call(_context3, confVis)
+	        resetRobot: bind$2(_context3 = confVis.reset).call(_context3, confVis),
+	        getXml: bind$2(_context4 = confVis.getXml).call(_context4, confVis)
 	      };
+	    }
+	  }, {
+	    key: "isRobotVisualized",
+	    value: function isRobotVisualized$1(robotIdentifier) {
+	      return isRobotVisualized(robotIdentifier);
 	    }
 	  }]);
 
 	  function CircuitVisualization(workspace, dom) {
 	    var _this = this,
-	        _context14;
+	        _context15;
 
 	    _classCallCheck(this, CircuitVisualization);
 
@@ -23990,10 +25160,10 @@ var CircuitVisualization = (function () {
 	        case Blockly.Events.DELETE:
 	          _this.deleteConnections_(event.blockId);
 
-	          if (block.ports) {
-	            var _context4;
+	          if (block && block.ports) {
+	            var _context5;
 
-	            forEach$4(_context4 = block.ports).call(_context4, function (port) {
+	            forEach$5(_context5 = block.ports).call(_context5, function (port) {
 	              return port.element.remove();
 	            });
 	          }
@@ -24003,7 +25173,7 @@ var CircuitVisualization = (function () {
 	    };
 
 	    this.renderConnections_ = function () {
-	      var _context5;
+	      var _context6;
 
 	      if (_this.connections_.length === 0) return;
 
@@ -24012,7 +25182,7 @@ var CircuitVisualization = (function () {
 	      var _this$workspace_$getC = _this.workspace_.getCanvas().transform.baseVal.getItem(0),
 	          matrix = _this$workspace_$getC.matrix;
 
-	      forEach$4(_context5 = _this.connections_).call(_context5, function (_ref) {
+	      forEach$5(_context6 = _this.connections_).call(_context6, function (_ref) {
 	        var blockId = _ref.blockId,
 	            position = _ref.position,
 	            connectedTo = _ref.connectedTo,
@@ -24040,18 +25210,18 @@ var CircuitVisualization = (function () {
 	    };
 
 	    this.updateBlockPorts_ = function (block) {
-	      var _context6, _context7;
+	      var _context7, _context8;
 
 	      var positionX = block.width + 4;
 
-	      forEach$4(_context6 = block.ports).call(_context6, function (port) {
+	      forEach$5(_context7 = block.ports).call(_context7, function (port) {
 	        var position = port.position;
 	        port.moveTo(_objectSpread2(_objectSpread2({}, position), {}, {
 	          x: positionX
 	        }));
 	      });
 
-	      _this.connections_ = map$2(_context7 = _this.connections_).call(_context7, function (_ref2) {
+	      _this.connections_ = map$2(_context8 = _this.connections_).call(_context8, function (_ref2) {
 	        var position = _ref2.position,
 	            others = _objectWithoutProperties(_ref2, ["position"]);
 
@@ -24070,62 +25240,74 @@ var CircuitVisualization = (function () {
 	    };
 
 	    this.createBlockPorts_ = function (block) {
-	      var _context8;
+	      var _context9;
 
-	      var positionX = block.width + 4;
-	      var ports = [];
+	      var invalidPorts = new set$3(['MOTOR_L', 'MOTOR_R', 'RGBLED_LF', 'RGBLED_RF', 'RGBLED_LR', 'RGBLED_RR', 'RGBLED_A', 'LED_L', 'LED_R', 'LED_B', 'INFRARED_L', 'INFRARED_R', 'ULTRASONIC', 'SERVO_S1', 'SERVO_S2', 'GAIN', 'I_TIME']);
+	      block.ports = [];
 
-	      forEach$4(_context8 = block.inputList).call(_context8, function (input, index) {
-	        var _context9;
-
-	        if (index === 0) return;
-
-	        forEach$4(_context9 = input.fieldRow).call(_context9, function (_ref3) {
-	          var _name;
-
-	          var fieldGroup_ = _ref3.fieldGroup_,
-	              name = _ref3.name,
-	              value_ = _ref3.value_;
-	          name = (_name = name) !== null && _name !== void 0 ? _name : value_;
-
-	          if (name) {
-	            var _block$getFieldValue;
-
-	            var _fieldGroup_$transfor = fieldGroup_.transform.baseVal.getItem(0),
-	                matrix = _fieldGroup_$transfor.matrix;
-
-	            var position = {
-	              x: positionX,
-	              y: matrix.f + 6
-	            };
-	            var port = new Port(block.getSvgRoot(), name, position);
-	            ports.push(port);
-	            var wireSvg = Blockly.createSvgElement('path', {
-	              'fill': 'none',
-	              'stroke': '#40B942',
-	              'stroke-width': 1.8,
-	              'stroke-linecap': 'round',
-	              'stroke-linejoin': 'round'
-	            }, _this.wireGroup_);
-
-	            _this.connections_.push({
-	              blockId: block.id,
-	              connectedTo: fixPortValue((_block$getFieldValue = block.getFieldValue(name)) !== null && _block$getFieldValue !== void 0 ? _block$getFieldValue : value_),
-	              name: name,
-	              position: position,
-	              wireSvg: wireSvg
-	            });
+	      forEach$5(_context9 = block.inputList).call(_context9, function (input, index) {
+	        if (index === 0) {
+	          if (_this.robot_.getPortByName(block.confBlock)) {
+	            _this.appendPortAndConnection_(block, input.fieldRow[0].textElement_, name, block.confBlock);
 	          }
-	        });
-	      });
+	        } else {
+	          var _context10;
 
-	      block.ports = ports;
+	          forEach$5(_context10 = input.fieldRow).call(_context10, function (_ref3) {
+	            var _name;
+
+	            var fieldGroup_ = _ref3.fieldGroup_,
+	                name = _ref3.name,
+	                value_ = _ref3.value_;
+	            name = (_name = name) !== null && _name !== void 0 ? _name : value_;
+
+	            if (name && !invalidPorts.has(name)) {
+	              var _block$getFieldValue;
+
+	              var connectedTo = fixPortValue(_this.robot_.getPortByName(block.confBlock + " " + value_) ? block.confBlock + " " + value_ : (_block$getFieldValue = block.getFieldValue(name)) !== null && _block$getFieldValue !== void 0 ? _block$getFieldValue : value_);
+
+	              _this.appendPortAndConnection_(block, fieldGroup_, name, connectedTo);
+	            }
+	          });
+	        }
+	      });
+	    };
+
+	    this.appendPortAndConnection_ = function (block, svgElement, name, connectedTo) {
+	      var _DEFAULT_COLORS$get;
+
+	      var _svgElement$transform = svgElement.transform.baseVal.getItem(0),
+	          matrix = _svgElement$transform.matrix;
+
+	      var position = {
+	        x: block.width + 4,
+	        y: matrix.f + 6
+	      };
+	      var port = new Port(block.getSvgRoot(), name, position);
+	      block.ports.push(port);
+	      var blockColor = Color.fromHex(block.colour_);
+	      var wireColor = (_DEFAULT_COLORS$get = DEFAULT_COLORS.get(name)) !== null && _DEFAULT_COLORS$get !== void 0 ? _DEFAULT_COLORS$get : blockColor.darken(50);
+	      var wireSvg = Blockly.createSvgElement('path', {
+	        'fill': 'none',
+	        'stroke': wireColor.asHex(),
+	        'stroke-width': 1.8,
+	        'stroke-linecap': 'round',
+	        'stroke-linejoin': 'round'
+	      }, _this.wireGroup_);
+
+	      _this.connections_.push({
+	        blockId: block.id,
+	        connectedTo: connectedTo,
+	        name: name,
+	        position: position,
+	        wireSvg: wireSvg
+	      });
 	    };
 
 	    this.updateConnections_ = function (block) {
-	      var _context10, _context11, _context12;
+	      var _context11, _context12, _context13;
 
-	      var connections = filter$2(_context10 = _this.connections_).call(_context10, function (connection) {
+	      var connections = filter$2(_context11 = _this.connections_).call(_context11, function (connection) {
 	        return connection.blockId === block.id;
 	      });
 
@@ -24138,21 +25320,21 @@ var CircuitVisualization = (function () {
 	        return _objectSpread2(_objectSpread2({
 	          name: name
 	        }, others), {}, {
-	          connectedTo: fixPortValue((_block$getFieldValue2 = block.getFieldValue(name)) !== null && _block$getFieldValue2 !== void 0 ? _block$getFieldValue2 : others.connectedTo)
+	          connectedTo: fixPortValue(_this.robot_.getPortByName(block.confBlock + " " + block.getFieldValue(name)) ? block.confBlock + " " + block.getFieldValue(name) : (_block$getFieldValue2 = block.getFieldValue(name)) !== null && _block$getFieldValue2 !== void 0 ? _block$getFieldValue2 : others.connectedTo)
 	        });
 	      });
-	      _this.connections_ = filter$2(_context11 = _this.connections_).call(_context11, function (connection) {
+	      _this.connections_ = filter$2(_context12 = _this.connections_).call(_context12, function (connection) {
 	        return connection.blockId !== block.id;
 	      });
-	      _this.connections_ = concat$2(_context12 = []).call(_context12, _toConsumableArray(_this.connections_), _toConsumableArray(connections));
+	      _this.connections_ = concat$2(_context13 = []).call(_context13, _toConsumableArray(_this.connections_), _toConsumableArray(connections));
 
 	      _this.renderConnections_();
 	    };
 
 	    this.deleteConnections_ = function (blockId) {
-	      var _context13;
+	      var _context14;
 
-	      _this.connections_ = filter$2(_context13 = _this.connections_).call(_context13, function (connection) {
+	      _this.connections_ = filter$2(_context14 = _this.connections_).call(_context14, function (connection) {
 	        if (connection.blockId === blockId) {
 	          connection.wireSvg.remove();
 	          return false;
@@ -24178,7 +25360,7 @@ var CircuitVisualization = (function () {
 	    this.connections_ = [];
 	    this.workspace_ = workspace;
 	    this.dom_ = dom;
-	    this.currentRobot_ = concat$2(_context14 = "".concat(this.workspace_.device, "_")).call(_context14, this.workspace_.subDevice);
+	    this.currentRobot_ = concat$2(_context15 = "".concat(this.workspace_.device, "_")).call(_context15, this.workspace_.subDevice);
 	    this.injectRobotBoard_();
 	    this.workspace_.addChangeListener(this.onChangeListener_);
 	    this.wireGroup_ = Blockly.createSvgElement('g', {}, this.workspace_.svgGroup_);
@@ -24192,12 +25374,13 @@ var CircuitVisualization = (function () {
 	  _createClass(CircuitVisualization, [{
 	    key: "reset",
 	    value: function reset() {
-	      var _context15;
+	      var _context16;
 
-	      var currentRobot = concat$2(_context15 = "".concat(this.workspace_.device, "_")).call(_context15, this.workspace_.subDevice);
+	      var currentRobot = concat$2(_context16 = "".concat(this.workspace_.device, "_")).call(_context16, this.workspace_.subDevice);
 
 	      if (currentRobot !== this.currentRobot_) {
 	        this.currentRobot_ = currentRobot;
+	        this.dom_ = this.getXml();
 	        this.clear_();
 	        this.injectRobotBoard_();
 	      }
@@ -24205,10 +25388,10 @@ var CircuitVisualization = (function () {
 	  }, {
 	    key: "refresh",
 	    value: function refresh() {
-	      var _context16,
+	      var _context17,
 	          _this2 = this;
 
-	      forEach$4(_context16 = this.workspace_.getAllBlocks()).call(_context16, function (block) {
+	      forEach$5(_context17 = this.workspace_.getAllBlocks()).call(_context17, function (block) {
 	        _this2.renderBlockBackground_(block);
 
 	        _this2.updateBlockPorts_(block);
@@ -24221,6 +25404,13 @@ var CircuitVisualization = (function () {
 	    value: function dispose() {
 	      this.workspace_.removeChangeListener(this.onChangeListener_);
 	      this.wireGroup_.remove();
+	    }
+	  }, {
+	    key: "getXml",
+	    value: function getXml() {
+	      var xml = Blockly.Xml.workspaceToDom(this.workspace_);
+	      xml.querySelector('block[type=robot]').parentNode.remove();
+	      return xml;
 	    }
 	  }, {
 	    key: "injectRobotBoard_",

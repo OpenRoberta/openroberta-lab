@@ -335,8 +335,8 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.controller', 'guiState.m
                         PROGRAM_C.resetView();
                     } else {
                         GUISTATE_C.setRobot(robot, result);
-                        if(GUISTATE_C.findGroup(robot) === 'arduino') CONFIGURATION_C.changeArduinoRobot();
                     }
+                    CONFIGURATION_C.changeRobotSvg();
                     if (GUISTATE_C.getView() == 'tabConfList') {
                         $('#confList>.bootstrap-table').find('button[name="refresh"]').trigger('click');
                     }
