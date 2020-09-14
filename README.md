@@ -35,12 +35,13 @@ on Ubuntu:
   * `sudo apt-get install srecord libssl-dev`
   * install the latest [gcc-arm-none-eabi](https://developer.arm.com/tools-and-software/open-source-software/developer-tools/gnu-toolchain/gnu-rm/downloads)
 * micro:bit
-  * `pip install uflash` (to install pip run `sudo apt install python-pip`)
+  * `pip install uflash` (to install pip run `sudo apt install` with `python-pip` on Ubuntu 18.04 and `python3-pip` on 20.04)
 * EV3 c4ev3
   * `sudo apt-get install g++-arm-linux-gnueabi`
 * Edison
-  * `sudo apt-get python` (Python 2 is needed, it is called `python` for Ubuntu 18.04)
+  * `sudo apt-get python` (Python 2 is needed, it is called `python` for Ubuntu 18.04 and `python2` for 20.04)
 * Bionics4Education
+  * `sudo apt-get python-serial` (`python3-serial` for Ubuntu 20.04)
   * install [xtensa-esp32-elf](https://dl.espressif.com/dl/xtensa-esp32-elf-linux64-1.22.0-61-gab8375a-5.2.0.tar.gz)
  
 on Windows:
