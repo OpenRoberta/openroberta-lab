@@ -1057,28 +1057,12 @@ define(["require", "exports", "interpreter.state", "interpreter.constants", "int
             var i2 = s.pop();
             var i1 = s.pop();
             var i0 = s.pop();
-            var o0 = 0;
-            var o1 = 0;
-            var o2 = 0;
-            if (i0 === 0) {
-                o0 = i1 - i2;
-                if (o0 < 0) {
-                    o1 = 1;
-                    o2 = 0;
-                }
-                else {
-                    o1 = 0;
-                    o2 = 1;
-                }
+            var inputData = [i0, i1, i2];
+            var pg = require("playground");
+            var outputData = pg.oneStep(inputData);
+            for (var i = outputData.length - 1; i >= 0; i--) {
+                s.push(outputData[i]);
             }
-            else {
-                o0 = i1;
-                o1 = i2;
-                o2 = i1 + i2;
-            }
-            s.push(o2);
-            s.push(o1);
-            s.push(o0);
         };
         /**
          * return true if the parameter is prime

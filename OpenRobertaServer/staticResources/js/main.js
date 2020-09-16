@@ -15,7 +15,9 @@ require.config({
 		'slick': 'slick/slick.min',
 		'socket.io': 'socket.io/socket.io',
 		'volume-meter': 'sound/volume-meter',
-
+		'neuralnetwork-lib': 'neuralnetwork/lib',
+		'd3': 'neuralnetwork/d3.min',
+		
 		'confDelete.controller': '../app/roberta/controller/confDelete.controller',
 		'configuration.controller': '../app/roberta/controller/configuration.controller',
 		'configuration.model': '../app/roberta/models/configuration.model',
@@ -32,6 +34,7 @@ require.config({
 		'logList.model': '../app/roberta/models/logList.model',
 		'menu.controller': '../app/roberta/controller/menu.controller',
 		'multSim.controller': '../app/roberta/controller/multSim.controller',
+		'nn.controller': '../app/roberta/controller/nn.controller',
 		'progCode.controller': '../app/roberta/controller/progCode.controller',
 		'progDelete.controller': '../app/roberta/controller/progDelete.controller',
 		'progHelp.controller': '../app/roberta/controller/progHelp.controller',
@@ -91,8 +94,11 @@ require.config({
 		'interpreter.robotSimBehaviour': '../app/wedoInterpreter/interpreter.robotSimBehaviour',
 		'interpreter.state': '../app/wedoInterpreter/interpreter.state',
 		'interpreter.util': '../app/wedoInterpreter/interpreter.util',
-		'stackmachineJsHelper': '../app/wedoInterpreter/interpreter.jsHelper'
-
+		'stackmachineJsHelper': '../app/wedoInterpreter/interpreter.jsHelper',
+		
+	    'nn': '../app/neuralnetwork/nn',
+	    'state': '../app/neuralnetwork/state',
+	    'playground': '../app/neuralnetwork/playground'
 	},
 	shim: {
 		'bootstrap': {
@@ -112,12 +118,12 @@ require.config({
 		},
 		'jquery-validate': {
 			deps: ['jquery']
-		},
+		}
 	}
 });
 
 require(['require', 'wrap', 'log', 'jquery', 'guiState.controller', 'progList.controller', 'logList.controller', 'confList.controller',
-	'progDelete.controller', 'confDelete.controller', 'progShare.controller', 'menu.controller', 'multSim.controller', 'user.controller',
+	'progDelete.controller', 'confDelete.controller', 'progShare.controller', 'menu.controller', 'multSim.controller', 'user.controller', 'nn.controller',
 	'robot.controller', 'program.controller', 'progSim.controller', 'progCode.controller', 'progDelete.controller', 'progHelp.controller',
 	'legal.controller', 'progInfo.controller', 'progRun.controller', 'configuration.controller', 'language.controller', 'socket.controller',
 	'progTutorial.controller', 'tutorialList.controller', 'userGroup.controller', 'volume-meter', 'user.model', 'webview.controller',
@@ -149,6 +155,7 @@ require(['require', 'wrap', 'log', 'jquery', 'guiState.controller', 'progList.co
 	progShareController = require('progShare.controller');
 	robotController = require('robot.controller');
 	userController = require('user.controller');
+	nnController = require('nn.controller');
 	userModel = require('user.model');
 	socketController = require('socket.controller');
 	tutorialController = require('progTutorial.controller');
@@ -198,6 +205,7 @@ function init() {
 		menuController.init();
 		tutorialController.init();
         userGroupController.init();
+        nnController.init();
 
 		$(".cover").fadeOut(100, function() {
 			if (guiStateController.getStartWithoutPopup()) {

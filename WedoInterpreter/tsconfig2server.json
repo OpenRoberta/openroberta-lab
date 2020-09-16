@@ -1,18 +1,12 @@
 {
     "compilerOptions": {
-        "outDir": "../OpenRobertaServer/staticResources/js/app/wedoInterpreter",
+        "outDir": "../OpenRobertaServer/staticResources/js",
         "target": "es5",
         "rootDir": "./ts",
         "typeRoots" : ["./node_modules/@types"],
-        "noUnusedLocals": true,
-        
         "module": "amd",
-        "baseUrl": "./ts",
-        "paths": {
-            "interpreter.*": ["*"]
-        },
-		"noUnusedParameters": true,
-		"allowJs": true
+		    "noUnusedParameters": false,
+		    "allowJs": true
     },
     "include": ["ts/**/*"],
     "exclude": [
