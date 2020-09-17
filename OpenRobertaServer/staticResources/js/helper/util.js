@@ -518,6 +518,21 @@ define([ 'exports', 'message', 'log', 'jquery', 'jquery-validate', 'bootstrap' ]
         return this;
     };
 
+
+    const originalAddClass = $.fn.addClass;
+    $.fn.addClass = function() {
+        let result = originalAddClass.apply(this, arguments);
+        $(this).trigger("classChange");
+        return result;
+    }
+
+    const originalRemoveClass = $.fn.removeClass;
+    $.fn.removeClass = function() {
+        let result = originalRemoveClass.apply(this, arguments);
+        $(this).trigger("classChange");
+        return result;
+    }
+
     $.fn.closeRightView = function(opt_callBack) {
         Blockly.hideChaff();
         $('.fromRight.rightActive').addClass('shifting');

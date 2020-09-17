@@ -17,7 +17,7 @@ require.config({
 		'volume-meter': 'libs/sound/volume-meter',
 		'neuralnetwork-lib': 'libs/neuralnetwork/lib',
 		'd3': 'libs/neuralnetwork/d3.min',
-		
+
 		'confDelete.controller': 'app/roberta/controller/confDelete.controller',
 		'configuration.controller': 'app/roberta/controller/configuration.controller',
 		'configuration.model': 'app/roberta/models/configuration.model',
@@ -34,6 +34,7 @@ require.config({
 		'logList.model': 'app/roberta/models/logList.model',
 		'menu.controller': 'app/roberta/controller/menu.controller',
 		'multSim.controller': 'app/roberta/controller/multSim.controller',
+		'notification.controller': 'app/roberta/controller/notification.controller',
 		'nn.controller': 'app/roberta/controller/nn.controller',
 		'progCode.controller': 'app/roberta/controller/progCode.controller',
 		'progDelete.controller': 'app/roberta/controller/progDelete.controller',
@@ -59,7 +60,6 @@ require.config({
 		'socket.controller': 'app/roberta/controller/socket.controller',
 		'webview.controller': 'app/roberta/controller/webview.controller',
 		'wedo.model': 'app/roberta/models/wedo.model',
-		'releaseInfo.controller' : 'app/roberta/controller/releaseInfo.controller',
 		'sourceCodeEditor.controller': 'app/roberta/controller/sourceCodeEditor.controller',
 
 		'simulation.constants': 'app/simulation/simulationLogic/constants',
@@ -96,7 +96,7 @@ require.config({
 		'interpreter.state': 'app/nepostackmachine/interpreter.state',
 		'interpreter.util': 'app/nepostackmachine/interpreter.util',
 		'interpreter.jsHelper': 'app/nepostackmachine/interpreter.jsHelper',
-		
+
 	    'neuralnetwork.nn': 'app/neuralnetwork/neuralnetwork.nn',
 	    'neuralnetwork.state': 'app/neuralnetwork/neuralnetwork.state',
 	    'neuralnetwork.playground': 'app/neuralnetwork/neuralnetwork.playground'
@@ -125,10 +125,10 @@ require.config({
 
 require(['require', 'wrap', 'log', 'jquery', 'guiState.controller', 'progList.controller', 'logList.controller', 'confList.controller',
 	'progDelete.controller', 'confDelete.controller', 'progShare.controller', 'menu.controller', 'multSim.controller', 'user.controller', 'nn.controller',
-	'robot.controller', 'program.controller', 'progSim.controller', 'progCode.controller', 'progDelete.controller', 'progHelp.controller',
+	'robot.controller', 'program.controller', 'progSim.controller','notification.controller', 'progCode.controller', 'progDelete.controller', 'progHelp.controller',
 	'legal.controller', 'progInfo.controller', 'progRun.controller', 'configuration.controller', 'language.controller', 'socket.controller',
 	'progTutorial.controller', 'tutorialList.controller', 'userGroup.controller', 'volume-meter', 'user.model', 'webview.controller',
-	'releaseInfo.controller', 'sourceCodeEditor.controller', 'codeflask', 'interpreter.jsHelper'], function(
+	'sourceCodeEditor.controller', 'codeflask', 'interpreter.jsHelper'], function(
 		require) {
 	$ = require('jquery');
 	WRAP = require('wrap');
@@ -150,6 +150,7 @@ require(['require', 'wrap', 'log', 'jquery', 'guiState.controller', 'progList.co
 	programController = require('program.controller');
 	progHelpController = require('progHelp.controller');
 	progInfoController = require('progInfo.controller');
+	notificationController = require('notification.controller');
 	progCodeController = require('progCode.controller');
 	progSimController = require('progSim.controller');
 	progRunController = require('progRun.controller');
@@ -162,8 +163,7 @@ require(['require', 'wrap', 'log', 'jquery', 'guiState.controller', 'progList.co
 	tutorialController = require('progTutorial.controller');
 	tutorialListController = require('tutorialList.controller');
 	userGroupController = require('userGroup.controller');
-    webviewController = require('webview.controller');
-    releaseInfoController = require('releaseInfo.controller');
+	webviewController = require('webview.controller');
 	sourceCodeEditorController = require('sourceCodeEditor.controller');
 	codeflask = require('codeflask');
 	stackmachineJsHelper = require('interpreter.jsHelper');
@@ -180,8 +180,7 @@ function init() {
 		return webviewController.init(language);
 	}).then(function(language, opt_data) {
 		return guiStateController.init(language, opt_data);
-	}).then(function() {
-	    releaseInfoController.init();
+	}).then(function () {
 		return robotController.init();
 	}).then(function() {
 		return userController.init();
@@ -205,8 +204,9 @@ function init() {
 		progRunController.init();
 		menuController.init();
 		tutorialController.init();
-        userGroupController.init();
-        nnController.init();            
+		userGroupController.init();
+		notificationController.init();
+        nnController.init();
 
 		$(".cover").fadeOut(100, function() {
 			if (guiStateController.getStartWithoutPopup()) {
@@ -230,7 +230,7 @@ function init() {
 ALLOWED_PING_NUM = 5
 
 function handleServerErrors(jqXHR) {
-	// TODO more?  
+	// TODO more?
 	LOG.error("Client connection issue: " + jqXHR.status);
 	if (this.url === "/rest/ping") {
 		COMM.errorNum += 1;
