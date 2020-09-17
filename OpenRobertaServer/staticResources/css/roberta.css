@@ -3068,6 +3068,10 @@ pre code {
     stroke-width: 2px;
 }
 
+.badge-primary {
+    background-color: #F29400;
+}
+
 #releaseInfo {
     position: fixed;
     left: 70%;
