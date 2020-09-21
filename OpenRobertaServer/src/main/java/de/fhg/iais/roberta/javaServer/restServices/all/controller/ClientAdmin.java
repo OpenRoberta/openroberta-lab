@@ -87,16 +87,19 @@ public class ClientAdmin {
                         Statistics.info("ConnectRobot", "success", true);
                         break;
                     case TOKEN_SET_ERROR_WRONG_ROBOTTYPE:
+                        addRobotUpdateInfo(setTokenResponse, null, null);
                         UtilForREST.addErrorInfo(setTokenResponse, Key.TOKEN_SET_ERROR_WRONG_ROBOTTYPE);
                         LOG.info("error: token " + token + " not registered in the session, wrong robot type");
                         Statistics.info("ConnectRobot", "success", false);
                         break;
                     case TOKEN_SET_ERROR_NO_ROBOT_WAITING:
+                        addRobotUpdateInfo(setTokenResponse, null, null);
                         UtilForREST.addErrorInfo(setTokenResponse, Key.TOKEN_SET_ERROR_NO_ROBOT_WAITING);
                         LOG.info("error: token " + token + " not registered in the session");
                         Statistics.info("ConnectRobot", "success", false);
                         break;
                     default:
+                        addRobotUpdateInfo(setTokenResponse, null, null);
                         LOG.error("invalid response for token agreement: " + tokenAgreement);
                         UtilForREST.addErrorInfo(setTokenResponse, Key.SERVER_ERROR);
                         Statistics.info("ConnectRobot", "success", false);
