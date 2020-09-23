@@ -258,6 +258,7 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'progHelp.contro
         GUISTATE.gui.configuration = result.configuration;
         GUISTATE.gui.sim = result.sim;
         GUISTATE.gui.multipleSim = result.multipleSim;
+        GUISTATE.gui.neuralNetwork = result.neuralNetwork === undefined ? false : result.neuralNetwork;
         GUISTATE.gui.connection = result.connection;
         GUISTATE.gui.vendor = result.vendor;
         GUISTATE.gui.signature = result.signature;

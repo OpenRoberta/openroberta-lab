@@ -205,7 +205,7 @@ function init() {
 		menuController.init();
 		tutorialController.init();
         userGroupController.init();
-        nnController.init();
+        nnController.init();            
 
 		$(".cover").fadeOut(100, function() {
 			if (guiStateController.getStartWithoutPopup()) {

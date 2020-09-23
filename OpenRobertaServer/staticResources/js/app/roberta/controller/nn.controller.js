@@ -7,7 +7,7 @@ define([ 'exports', 'log', 'util', 'comm', 'message', 'guiState.controller',  'n
         initView();
         initEvents();
         initNNForms();
-        initNNEnvironment();
+        initNNEnvironment();            
     }
 
     exports.init = init;
