@@ -116,7 +116,7 @@
                     <javaSrcDir>./src/main/java</javaSrcDir>
                     <javaPackageName>de.fhg.iais.roberta.visitor</javaPackageName>
                     <javaClassName>C</javaClassName>
-                    <typescriptOutFile>../WedoInterpreter/ts/interpreter.constants.ts</typescriptOutFile>
+                    <typescriptOutFile>../TypeScriptSources/ts/app/nepostackmachine/interpreter.constants.ts</typescriptOutFile>
                 </configuration>
                 <executions>
                     <execution>

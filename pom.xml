@@ -51,8 +51,7 @@
         <module>RobotEdison</module>
         <module>RobotRaspberryPi</module>
         <module>OpenRobertaServer</module>
-        <module>WedoInterpreter</module>
-        <module>NNprocessor</module>
+        <module>TypeScriptSources</module>
     </modules>
     <repositories>
         <repository>
@@ -146,7 +145,7 @@
             </dependency>
             <dependency>
                 <groupId>de.fhg.iais.openroberta</groupId>
-                <artifactId>WedoInterpreter</artifactId>
+                <artifactId>TypeScriptSources</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
