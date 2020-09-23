@@ -1,4 +1,4 @@
-define(["require", "exports", "interpreter.constants", "interpreter.util"], function (require, exports, C, U) {
+define(["require", "exports", "./interpreter.constants", "./interpreter.util"], function (require, exports, C, U) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.State = void 0;

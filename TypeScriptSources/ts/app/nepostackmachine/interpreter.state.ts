@@ -1,5 +1,5 @@
-import * as C from 'interpreter.constants';
-import * as U from 'interpreter.util';
+import * as C from './interpreter.constants';
+import * as U from './interpreter.util';
 
 declare var stackmachineJsHelper;
 
@@ -314,7 +314,7 @@ export class State {
                     }
                     this.highlightBlock(block)
                 }
-                this.currentBlocks[stmt[C.BLOCK_ID]] = {"block": block, "terminate": false};
+                this.currentBlocks[stmt[C.BLOCK_ID]] = { "block": block, "terminate": false };
             }
         }
     }
@@ -338,7 +338,7 @@ export class State {
     }
 
     private highlightBlock(block) {
-        stackmachineJsHelper.getJqueryObject(block.svgPath_).stop(true, true).animate({'fill-opacity': '1'}, 0);
+        stackmachineJsHelper.getJqueryObject(block.svgPath_).stop(true, true).animate({ 'fill-opacity': '1' }, 0);
         var start = new Date().getTime();
         var end = start;
         while (end < start + 1) {
@@ -347,7 +347,7 @@ export class State {
     }
 
     private removeBlockHighlight(block) {
-        stackmachineJsHelper.getJqueryObject(block.svgPath_).stop(true, true).animate({'fill-opacity': '0.3'}, 50);
+        stackmachineJsHelper.getJqueryObject(block.svgPath_).stop(true, true).animate({ 'fill-opacity': '0.3' }, 50);
         var start = new Date().getTime();
         var end = start;
         while (end < start + 1) {
@@ -362,7 +362,7 @@ export class State {
             this.highlightBlock(this.currentBlocks[id].block);
         }
         let currentBlocks = this.currentBlocks;
-        breakPoints.forEach(function (id) {
+        breakPoints.forEach(function(id) {
             let block = stackmachineJsHelper.getBlockById(id)
             if (block !== null) {
                 if (currentBlocks.hasOwnProperty(id)) {
@@ -386,7 +386,7 @@ export class State {
             }
             this.removeBlockHighlight(block);
         }
-        breakPoints.forEach(function (id) {
+        breakPoints.forEach(function(id) {
             let block = stackmachineJsHelper.getBlockById(id)
             if (block !== null) {
                 stackmachineJsHelper.getJqueryObject(block.svgPath_).removeClass("breakpoint").removeClass("selectedBreakpoint");

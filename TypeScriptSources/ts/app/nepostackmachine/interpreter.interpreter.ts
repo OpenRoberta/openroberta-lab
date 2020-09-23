@@ -1,7 +1,8 @@
-import { ARobotBehaviour } from "interpreter.aRobotBehaviour";
-import { State } from "interpreter.state";
-import * as C from "interpreter.constants";
-import * as U from "interpreter.util";
+import { ARobotBehaviour } from "./interpreter.aRobotBehaviour";
+import { State } from "./interpreter.state";
+import * as C from "./interpreter.constants";
+import * as U from "./interpreter.util";
+import * as PG from "./neuralnetwork.playground";
 
 declare var stackmachineJsHelper;
 
@@ -1085,8 +1086,7 @@ export class Interpreter {
         let i1 = s.pop();
         let i0 = s.pop();
         let inputData = [i0, i1, i2];
-        let pg = require("playground");
-        let outputData = pg.oneStep(inputData);
+        let outputData = PG.oneStep(inputData);
         for (let i = outputData.length - 1; i >= 0; i--) {
             s.push(outputData[i]);
         }

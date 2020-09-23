@@ -1,4 +1,4 @@
-define(["require", "exports", "interpreter.state", "interpreter.constants", "interpreter.util"], function (require, exports, interpreter_state_1, C, U) {
+define(["require", "exports", "./interpreter.state", "./interpreter.constants", "./interpreter.util", "./neuralnetwork.playground"], function (require, exports, interpreter_state_1, C, U, PG) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Interpreter = void 0;
@@ -1058,8 +1058,7 @@ define(["require", "exports", "interpreter.state", "interpreter.constants", "int
             var i1 = s.pop();
             var i0 = s.pop();
             var inputData = [i0, i1, i2];
-            var pg = require("playground");
-            var outputData = pg.oneStep(inputData);
+            var outputData = PG.oneStep(inputData);
             for (var i = outputData.length - 1; i >= 0; i--) {
                 s.push(outputData[i]);
             }

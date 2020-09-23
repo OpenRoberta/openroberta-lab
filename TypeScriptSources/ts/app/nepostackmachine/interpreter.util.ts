@@ -1,29 +1,29 @@
-import * as C from 'interpreter.constants';
+import * as C from './interpreter.constants';
 
-export function dbc( expected, actual ) {
-    if ( expected !== actual ) {
+export function dbc(expected, actual) {
+    if (expected !== actual) {
         var msg = 'DBC. Expected: ' + expected + ' but got: ' + actual;
-        console.trace( msg );
+        console.trace(msg);
         throw msg;
     }
 }
 
-export function dbcException( s: string ) {
-    console.trace( s );
+export function dbcException(s: string) {
+    console.trace(s);
     throw s;
 }
 
-export function expectExc( fct, cause?: string ) {
+export function expectExc(fct, cause?: string) {
     try {
         fct();
         var msg = 'DBC. Expected exception was not thrown';
-        console.trace( msg );
+        console.trace(msg);
         throw msg;
-    } catch ( e ) {
-        if ( cause === undefined ) {
-            console.log( 'expected exception suppressed' );
+    } catch (e) {
+        if (cause === undefined) {
+            console.log('expected exception suppressed');
         } else {
-            dbc( cause, e );
+            dbc(cause, e);
         }
     }
 }
@@ -33,7 +33,7 @@ var debugEnabled = true;
 
 var infoResult = '';
 
-export function loggingEnabled( _opLogEnabled: boolean, _debugEnabled: boolean ) {
+export function loggingEnabled(_opLogEnabled: boolean, _debugEnabled: boolean) {
     opLogEnabled = _opLogEnabled;
     debugEnabled = _debugEnabled;
     infoResult = '';
@@ -45,35 +45,35 @@ export function loggingEnabled( _opLogEnabled: boolean, _debugEnabled: boolean )
  * . @param operations the array of all operations to be executed
  * . @param pc the program counter
  */
-export function opLog( msg: string, operations: any[], pc: number ) {
-    if ( !opLogEnabled ) {
+export function opLog(msg: string, operations: any[], pc: number) {
+    if (!opLogEnabled) {
         return;
     }
     var opl = '';
     var counter = 0;
-    for ( let op of operations ) {
+    for (let op of operations) {
         var opc = op[C.OPCODE];
-        if ( op[C.OPCODE] === C.EXPR ) {
+        if (op[C.OPCODE] === C.EXPR) {
             opc = opc + '[' + op[C.EXPR];
-            if ( op[C.EXPR] === C.BINARY ) {
+            if (op[C.EXPR] === C.BINARY) {
                 opc = opc + '-' + op[C.OP];
             }
             opc = opc + ']';
         }
-        opl = opl + ( counter++ == pc ? '*' : '' ) + opc + ' '
+        opl = opl + (counter++ == pc ? '*' : '') + opc + ' '
     }
-    debug( msg + ' pc:' + pc + ' ' + opl );
+    debug(msg + ' pc:' + pc + ' ' + opl);
 }
 
-export function debug( s: any ) {
-    if ( !debugEnabled ) {
+export function debug(s: any) {
+    if (!debugEnabled) {
         return;
     }
-    console.log( s );
+    console.log(s);
 }
 
-export function info( s: any ) {
-    console.log( s );
+export function info(s: any) {
+    console.log(s);
     infoResult = infoResult + s + '\n';
 }
 

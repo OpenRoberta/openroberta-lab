@@ -2,27 +2,16 @@
 	"compilerOptions": {
 		"outDir": "./jsGenerated/node_modules",
 		"target": "es5",
-		"rootDir": "./ts",
-		
+		"rootDir": "ts",
+		"rootDirs": ["ts/app/nepostackmachine"],
 		"module": "umd",
 		"moduleResolution": "node",
-		"baseUrl": "./ts",
-		"noUnusedLocals": true,
-		"noUnusedParameters": true
+		"rootDir": "ts",
+        "rootDirs": ["ts/app/nepostackmachine", "ts/app/neuralnetwork"],
+		"noUnusedLocals": false,
+		"noUnusedParameters": false
 	},
-	"files": [
-		"./ts/interpreter.aRobotBehaviour.ts",
-		"./ts/interpreter.constants.ts",
-		"./ts/interpreter.interpreter.ts",
-		"./ts/interpreter.robotSimBehaviour.ts",
-		"./ts/interpreter.robotWeDoBehaviour.ts",
-		"./ts/interpreter.robotWeDoBehaviourTest.ts",
-		"./ts/interpreter.runStackMachineJson.ts",
-		"./ts/interpreter.state.ts",
-		"./ts/interpreter.util.ts",
-		"./ts/webview.controller.d.ts",
-		"./ts/wedo.model.d.ts"
-	],
+	"include": ["ts/app/nepostackmachine/*"],
 	"compileOnSave": true,
 	"buildOnSave": true
 }

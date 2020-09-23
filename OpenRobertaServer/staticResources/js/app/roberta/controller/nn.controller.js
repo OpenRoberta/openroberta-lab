@@ -1,4 +1,4 @@
-define([ 'exports', 'log', 'util', 'comm', 'message', 'guiState.controller',  'neuralnetwork-lib','d3','playground', 'jquery', 'jquery-validate' ], function(exports,
+define([ 'exports', 'log', 'util', 'comm', 'message', 'guiState.controller',  'neuralnetwork-lib','d3','neuralnetwork.playground', 'jquery', 'jquery-validate' ], function(exports,
         LOG, UTIL, COMM, MSG, GUISTATE_C, LIB, d3, PG, $) {
 
     var $formSingleModal;

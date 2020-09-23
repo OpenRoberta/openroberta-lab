@@ -4,7 +4,7 @@
  * The Open Roberta Lab is open source and uses the Apache 2.0 License, see https://www.apache.org/licenses/LICENSE-2.0
  */
 
-import * as nn from "./nn";
+import * as nn from "./neuralnetwork.nn";
 
 /** Suffix added to the state when storing if a control is hidden or not. */
 const HIDE_STATE_SUFFIX = "_hide";
@@ -24,24 +24,24 @@ export let regularizations: { [key: string]: nn.RegularizationFunction } = {
     "L2": nn.RegularizationFunction.L2
 };
 
-export function getKeyFromValue( obj: any, value: any ): string {
-    for ( let key in obj ) {
-        if ( obj[key] === value ) {
+export function getKeyFromValue(obj: any, value: any): string {
+    for (let key in obj) {
+        if (obj[key] === value) {
             return key;
         }
     }
     return undefined;
 }
 
-function endsWith( s: string, suffix: string ): boolean {
-    return s.substr( -suffix.length ) === suffix;
+function endsWith(s: string, suffix: string): boolean {
+    return s.substr(-suffix.length) === suffix;
 }
 
-function getHideProps( obj: any ): string[] {
+function getHideProps(obj: any): string[] {
     let result: string[] = [];
-    for ( let prop in obj ) {
-        if ( endsWith( prop, HIDE_STATE_SUFFIX ) ) {
-            result.push( prop );
+    for (let prop in obj) {
+        if (endsWith(prop, HIDE_STATE_SUFFIX)) {
+            result.push(prop);
         }
     }
     return result;

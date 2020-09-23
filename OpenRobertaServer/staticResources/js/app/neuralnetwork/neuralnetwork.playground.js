@@ -3,7 +3,7 @@
  * Our work is heavily based on the tensorflow playground, see https://github.com/tensorflow/playground.
  * The Open Roberta Lab is open source and uses the Apache 2.0 License, see https://www.apache.org/licenses/LICENSE-2.0
  */
-define(["require", "exports", "./nn", "./state", "d3"], function (require, exports, nn, state_1, d3) {
+define(["require", "exports", "./neuralnetwork.nn", "./neuralnetwork.state", "d3"], function (require, exports, nn, neuralnetwork_state_1, d3) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.oneStep = exports.runPlayground = void 0;
@@ -28,7 +28,7 @@ define(["require", "exports", "./nn", "./state", "d3"], function (require, expor
         "i2": "I_2",
         "i3": "I_3",
     };
-    var state = new state_1.State();
+    var state = new neuralnetwork_state_1.State();
     var linkWidthScale = d3.scale.linear()
         .domain([0, 5])
         .range([1, 10])
@@ -59,11 +59,11 @@ define(["require", "exports", "./nn", "./state", "d3"], function (require, expor
             reset();
         });
         var activationDropdown = d3.select("#activations").on("change", function () {
-            state.activation = state_1.activations[this.value];
+            state.activation = neuralnetwork_state_1.activations[this.value];
             parametersChanged = true;
             reset();
         });
-        activationDropdown.property("value", state_1.getKeyFromValue(state_1.activations, state.activation));
+        activationDropdown.property("value", neuralnetwork_state_1.getKeyFromValue(neuralnetwork_state_1.activations, state.activation));
         // Listen for css-responsive changes and redraw the svg network.
         window.addEventListener("resize", function () {
             var newWidth = document.querySelector("#main-part")
