@@ -6,9 +6,6 @@
 
 import * as nn from "./neuralnetwork.nn";
 
-/** Suffix added to the state when storing if a control is hidden or not. */
-const HIDE_STATE_SUFFIX = "_hide";
-
 /** A map between names and activation functions. */
 export let activations: { [key: string]: nn.ActivationFunction } = {
     "relu": nn.Activations.RELU,
@@ -31,20 +28,6 @@ export function getKeyFromValue(obj: any, value: any): string {
         }
     }
     return undefined;
-}
-
-function endsWith(s: string, suffix: string): boolean {
-    return s.substr(-suffix.length) === suffix;
-}
-
-function getHideProps(obj: any): string[] {
-    let result: string[] = [];
-    for (let prop in obj) {
-        if (endsWith(prop, HIDE_STATE_SUFFIX)) {
-            result.push(prop);
-        }
-    }
-    return result;
 }
 
 /**
@@ -72,19 +55,23 @@ export class State {
     [key: string]: any;
     learningRate = 0.03;
     regularizationRate = 0;
-    showTestData = false;
     noise = 0;
     batchSize = 10;
     discretize = false;
-    tutorial: string = null;
     percTrainData = 50;
-    activation = nn.Activations.LINEAR; // was: TANH;
+    activationKey = "linear";
+    activation = nn.Activations[this.activationKey];
     regularization: nn.RegularizationFunction = null;
     initZero = false;
-    hideText = false;
     collectStats = false;
     numHiddenLayers = 1;
-    hiddenLayerControls: any[] = [];
     networkShape: number[] = [3];
+    numInputs = 3;
+    inputs = {
+        "i1": "I_1",
+        "i2": "I_2",
+        "i3": "I_3",
+    };
+    numOutputs = 3;
     seed: string;
 }

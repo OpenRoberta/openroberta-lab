@@ -7,8 +7,6 @@ define(["require", "exports", "./neuralnetwork.nn"], function (require, exports,
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.State = exports.Type = exports.getKeyFromValue = exports.regularizations = exports.activations = void 0;
-    /** Suffix added to the state when storing if a control is hidden or not. */
-    var HIDE_STATE_SUFFIX = "_hide";
     /** A map between names and activation functions. */
     exports.activations = {
         "relu": nn.Activations.RELU,
@@ -31,18 +29,6 @@ define(["require", "exports", "./neuralnetwork.nn"], function (require, exports,
         return undefined;
     }
     exports.getKeyFromValue = getKeyFromValue;
-    function endsWith(s, suffix) {
-        return s.substr(-suffix.length) === suffix;
-    }
-    function getHideProps(obj) {
-        var result = [];
-        for (var prop in obj) {
-            if (endsWith(prop, HIDE_STATE_SUFFIX)) {
-                result.push(prop);
-            }
-        }
-        return result;
-    }
     /**
      * The data type of a state variable. Used for determining the
      * (de)serialization method.
@@ -62,20 +48,24 @@ define(["require", "exports", "./neuralnetwork.nn"], function (require, exports,
         function State() {
             this.learningRate = 0.03;
             this.regularizationRate = 0;
-            this.showTestData = false;
             this.noise = 0;
             this.batchSize = 10;
             this.discretize = false;
-            this.tutorial = null;
             this.percTrainData = 50;
-            this.activation = nn.Activations.LINEAR; // was: TANH;
+            this.activationKey = "linear";
+            this.activation = nn.Activations[this.activationKey];
             this.regularization = null;
             this.initZero = false;
-            this.hideText = false;
             this.collectStats = false;
             this.numHiddenLayers = 1;
-            this.hiddenLayerControls = [];
             this.networkShape = [3];
+            this.numInputs = 3;
+            this.inputs = {
+                "i1": "I_1",
+                "i2": "I_2",
+                "i3": "I_3",
+            };
+            this.numOutputs = 3;
         }
         return State;
     }());

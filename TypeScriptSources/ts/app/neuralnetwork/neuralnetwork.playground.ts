@@ -16,9 +16,8 @@ import * as d3 from 'd3';
 let mainWidth;
 
 const RECT_SIZE = 30;
+const SPACE_BETWEEN_NODES = 90;
 const BIAS_SIZE = 5;
-const NUM_SAMPLES_CLASSIFY = 500;
-const DENSITY = 100;
 
 enum HoverType {
     BIAS, WEIGHT
@@ -27,12 +26,6 @@ enum HoverType {
 enum NodeType {
     INPUT, HIDDEN, OUTPUT
 }
-
-let INPUTS = {
-    "i1": "I_1",
-    "i2": "I_2",
-    "i3": "I_3",
-};
 
 let state = new State();
 
@@ -55,7 +48,6 @@ function makeGUI() {
         }
         state.networkShape[state.numHiddenLayers] = 2;
         state.numHiddenLayers++;
-        parametersChanged = true;
         reset();
     });
 
@@ -65,13 +57,12 @@ function makeGUI() {
         }
         state.numHiddenLayers--;
         state.networkShape.splice(state.numHiddenLayers);
-        parametersChanged = true;
         reset();
     });
 
     let activationDropdown = d3.select("#activations").on("change", function() {
+        state.activationKey = this.value;
         state.activation = activations[this.value];
-        parametersChanged = true;
         reset();
     });
     activationDropdown.property("value",
@@ -137,8 +128,7 @@ function drawNode(cx: number, cy: number, nodeId: string, nodeType: NodeType,
         });
     let activeOrNotClass = state[nodeId] ? "active" : "inactive";
     if (nodeType === NodeType.INPUT) {
-        let label = INPUTS[nodeId] != null ?
-            INPUTS[nodeId] : nodeId;
+        let label = state.inputs[nodeId];
         // Draw the input label.
         let text = nodeGroup.append("text").attr({
             class: "main-label",
@@ -229,7 +219,7 @@ function drawNetwork(network: nn.Node[][]): void {
     let layerScale = d3.scale.ordinal<number, number>()
         .domain(d3.range(1, numLayers - 1))
         .rangePoints([featureWidth, width - featureWidth - RECT_SIZE], 0.7);
-    let nodeIndexScale = (nodeIndex: number) => nodeIndex * (RECT_SIZE + 25);
+    let nodeIndexScale = (nodeIndex: number) => nodeIndex * (RECT_SIZE + SPACE_BETWEEN_NODES);
 
     let calloutThumb = d3.select(".callout.thumbnail").style("display", "none");
     let calloutWeights = d3.select(".callout.weights").style("display", "none");
@@ -238,7 +228,7 @@ function drawNetwork(network: nn.Node[][]): void {
 
     // Draw the input layer separately.
     let cx = RECT_SIZE / 2 + 50;
-    let nodeIds = Object.keys(INPUTS);
+    let nodeIds = Object.keys(state.inputs);
     let maxY = nodeIndexScale(nodeIds.length);
     nodeIds.forEach((nodeId, i) => {
         let cy = nodeIndexScale(i) + RECT_SIZE / 2;
@@ -318,11 +308,10 @@ function drawNetwork(network: nn.Node[][]): void {
         }
     }
     // Adjust the height of the svg.
-    svg.attr("height", maxY);
+    svg.attr("height", Math.max(maxY, nodeIndexScale(6)));
 
     // Adjust the height of the features column.
     let height = Math.max(
-        getRelativeHeight(calloutThumb),
         getRelativeHeight(calloutWeights),
         getRelativeHeight(d3.select("#network"))
     );
@@ -345,11 +334,10 @@ function addPlusMinusControl(x: number, layerIdx: number) {
         .attr("class", "mdl-button mdl-js-button mdl-button--icon")
         .on("click", () => {
             let numNeurons = state.networkShape[i];
-            if (numNeurons >= 8) {
+            if (numNeurons >= 6) {
                 return;
             }
             state.networkShape[i]++;
-            parametersChanged = true;
             reset();
         })
         .append("i")
@@ -364,7 +352,6 @@ function addPlusMinusControl(x: number, layerIdx: number) {
                 return;
             }
             state.networkShape[i]--;
-            parametersChanged = true;
             reset();
         })
         .append("i")
@@ -484,21 +471,20 @@ function updateUI(firstStep = false) {
 
 function constructInputIds(): string[] {
     let result: string[] = [];
-    for (let inputName in INPUTS) {
+    for (let inputName in state.inputs) {
         result.push(inputName);
     }
     return result;
 }
 
-function reset(onStartup = false) {
+function reset() {
 
     let suffix = state.numHiddenLayers !== 1 ? "s" : "";
     d3.select("#layers-label").text("Hidden layer" + suffix);
     d3.select("#num-layers").text(state.numHiddenLayers);
 
     // Make a simple network.
-    let numInputs = 3;
-    let shape = [numInputs].concat(state.networkShape).concat([3]);
+    let shape = [state.numInputs].concat(state.networkShape).concat([state.numOutputs]);
     let outputActivation = nn.Activations.LINEAR; // was: TANH;
     let oldWeights: number[][][] = extractWeights(network);
     network = nn.buildNetwork(shape, state.activation, outputActivation,
@@ -553,15 +539,9 @@ function replaceWeights(network: nn.Node[][], weightsAllLayers: number[][][]): v
     }
 }
 
-let parametersChanged = false;
-
-function simulationStarted() {
-    parametersChanged = false;
-}
-
 export function runPlayground() {
     makeGUI();
-    reset(true);
+    reset();
 }
 
 export function oneStep(inputData: number[]): number[] {

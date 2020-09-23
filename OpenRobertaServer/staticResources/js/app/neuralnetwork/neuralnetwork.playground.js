@@ -9,9 +9,8 @@ define(["require", "exports", "./neuralnetwork.nn", "./neuralnetwork.state", "d3
     exports.oneStep = exports.runPlayground = void 0;
     var mainWidth;
     var RECT_SIZE = 30;
+    var SPACE_BETWEEN_NODES = 90;
     var BIAS_SIZE = 5;
-    var NUM_SAMPLES_CLASSIFY = 500;
-    var DENSITY = 100;
     var HoverType;
     (function (HoverType) {
         HoverType[HoverType["BIAS"] = 0] = "BIAS";
@@ -23,11 +22,6 @@ define(["require", "exports", "./neuralnetwork.nn", "./neuralnetwork.state", "d3
         NodeType[NodeType["HIDDEN"] = 1] = "HIDDEN";
         NodeType[NodeType["OUTPUT"] = 2] = "OUTPUT";
     })(NodeType || (NodeType = {}));
-    var INPUTS = {
-        "i1": "I_1",
-        "i2": "I_2",
-        "i3": "I_3",
-    };
     var state = new neuralnetwork_state_1.State();
     var linkWidthScale = d3.scale.linear()
         .domain([0, 5])
@@ -46,7 +40,6 @@ define(["require", "exports", "./neuralnetwork.nn", "./neuralnetwork.state", "d3
             }
             state.networkShape[state.numHiddenLayers] = 2;
             state.numHiddenLayers++;
-            parametersChanged = true;
             reset();
         });
         d3.select("#remove-layers").on("click", function () {
@@ -55,12 +48,11 @@ define(["require", "exports", "./neuralnetwork.nn", "./neuralnetwork.state", "d3
             }
             state.numHiddenLayers--;
             state.networkShape.splice(state.numHiddenLayers);
-            parametersChanged = true;
             reset();
         });
         var activationDropdown = d3.select("#activations").on("change", function () {
+            state.activationKey = this.value;
             state.activation = neuralnetwork_state_1.activations[this.value];
-            parametersChanged = true;
             reset();
         });
         activationDropdown.property("value", neuralnetwork_state_1.getKeyFromValue(neuralnetwork_state_1.activations, state.activation));
@@ -119,8 +111,7 @@ define(["require", "exports", "./neuralnetwork.nn", "./neuralnetwork.state", "d3
         });
         var activeOrNotClass = state[nodeId] ? "active" : "inactive";
         if (nodeType === NodeType.INPUT) {
-            var label = INPUTS[nodeId] != null ?
-                INPUTS[nodeId] : nodeId;
+            var label = state.inputs[nodeId];
             // Draw the input label.
             var text = nodeGroup.append("text").attr({
                 class: "main-label",
@@ -208,14 +199,14 @@ define(["require", "exports", "./neuralnetwork.nn", "./neuralnetwork.state", "d3
         var layerScale = d3.scale.ordinal()
             .domain(d3.range(1, numLayers - 1))
             .rangePoints([featureWidth, width - featureWidth - RECT_SIZE], 0.7);
-        var nodeIndexScale = function (nodeIndex) { return nodeIndex * (RECT_SIZE + 25); };
+        var nodeIndexScale = function (nodeIndex) { return nodeIndex * (RECT_SIZE + SPACE_BETWEEN_NODES); };
         var calloutThumb = d3.select(".callout.thumbnail").style("display", "none");
         var calloutWeights = d3.select(".callout.weights").style("display", "none");
         var idWithCallout = null;
         var targetIdWithCallout = null;
         // Draw the input layer separately.
         var cx = RECT_SIZE / 2 + 50;
-        var nodeIds = Object.keys(INPUTS);
+        var nodeIds = Object.keys(state.inputs);
         var maxY = nodeIndexScale(nodeIds.length);
         nodeIds.forEach(function (nodeId, i) {
             var cy = nodeIndexScale(i) + RECT_SIZE / 2;
@@ -289,9 +280,9 @@ define(["require", "exports", "./neuralnetwork.nn", "./neuralnetwork.state", "d3
             }
         }
         // Adjust the height of the svg.
-        svg.attr("height", maxY);
+        svg.attr("height", Math.max(maxY, nodeIndexScale(6)));
         // Adjust the height of the features column.
-        var height = Math.max(getRelativeHeight(calloutThumb), getRelativeHeight(calloutWeights), getRelativeHeight(d3.select("#network")));
+        var height = Math.max(getRelativeHeight(calloutWeights), getRelativeHeight(d3.select("#network")));
         d3.select(".column.features").style("height", height + "px");
     }
     function getRelativeHeight(selection) {
@@ -308,11 +299,10 @@ define(["require", "exports", "./neuralnetwork.nn", "./neuralnetwork.state", "d3
             .attr("class", "mdl-button mdl-js-button mdl-button--icon")
             .on("click", function () {
             var numNeurons = state.networkShape[i];
-            if (numNeurons >= 8) {
+            if (numNeurons >= 6) {
                 return;
             }
             state.networkShape[i]++;
-            parametersChanged = true;
             reset();
         })
             .append("i")
@@ -326,7 +316,6 @@ define(["require", "exports", "./neuralnetwork.nn", "./neuralnetwork.state", "d3
                 return;
             }
             state.networkShape[i]--;
-            parametersChanged = true;
             reset();
         })
             .append("i")
@@ -433,19 +422,17 @@ define(["require", "exports", "./neuralnetwork.nn", "./neuralnetwork.state", "d3
     }
     function constructInputIds() {
         var result = [];
-        for (var inputName in INPUTS) {
+        for (var inputName in state.inputs) {
             result.push(inputName);
         }
         return result;
     }
-    function reset(onStartup) {
-        if (onStartup === void 0) { onStartup = false; }
+    function reset() {
         var suffix = state.numHiddenLayers !== 1 ? "s" : "";
         d3.select("#layers-label").text("Hidden layer" + suffix);
         d3.select("#num-layers").text(state.numHiddenLayers);
         // Make a simple network.
-        var numInputs = 3;
-        var shape = [numInputs].concat(state.networkShape).concat([3]);
+        var shape = [state.numInputs].concat(state.networkShape).concat([state.numOutputs]);
         var outputActivation = nn.Activations.LINEAR; // was: TANH;
         var oldWeights = extractWeights(network);
         network = nn.buildNetwork(shape, state.activation, outputActivation, state.regularization, constructInputIds(), state.initZero);
@@ -500,13 +487,9 @@ define(["require", "exports", "./neuralnetwork.nn", "./neuralnetwork.state", "d3
             }
         }
     }
-    var parametersChanged = false;
-    function simulationStarted() {
-        parametersChanged = false;
-    }
     function runPlayground() {
         makeGUI();
-        reset(true);
+        reset();
     }
     exports.runPlayground = runPlayground;
     function oneStep(inputData) {
