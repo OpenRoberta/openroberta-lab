@@ -43,7 +43,7 @@ public class GetUserResponse extends BaseResponse {
     /**
      * the response for the /getUser REST request
      */
-    public static GetUserResponse makeFromProperties(String cmd,String rc,String message,String cause,JSONObject parameters,String initToken,long serverTime,String serverVersion,long robotWait,String robotBattery,String robotName,String robotVersion,String robotFirmwareName,JSONObject robotSensorvalues,int robotNepoexitvalue,String robotState,int userId,String userAccountName,String userName,String userEmail,boolean isYoungerThen14) {
+    public static GetUserResponse makeFromProperties(String cmd,String rc,String message,String cause,JSONObject parameters,String initToken,long serverTime,String serverVersion,long robotWait,String robotBattery,String robotName,String robotVersion,String robotFirmwareName,JSONObject robotSensorvalues,int robotNepoexitvalue,String robotState,boolean notificationsAvailable,int userId,String userAccountName,String userName,String userEmail,boolean isYoungerThen14) {
         GetUserResponse entity = new GetUserResponse();
         entity.setCmd(cmd);
         entity.setRc(rc);
@@ -61,6 +61,7 @@ public class GetUserResponse extends BaseResponse {
         entity.setRobotSensorvalues(robotSensorvalues);
         entity.setRobotNepoexitvalue(robotNepoexitvalue);
         entity.setRobotState(robotState);
+        entity.setNotificationsAvailable(notificationsAvailable);
         entity.setUserId(userId);
         entity.setUserAccountName(userAccountName);
         entity.setUserName(userName);
@@ -118,6 +119,8 @@ public class GetUserResponse extends BaseResponse {
                     setRobotNepoexitvalue(jsonO.optInt(key));
                 } else if ("robot.state".equals(key)) {
                     setRobotState(jsonO.optString(key));
+                } else if ("notifications.available".equals(key)) {
+                    setNotificationsAvailable(jsonO.optBoolean(key));
                 } else if ("userId".equals(key)) {
                     setUserId(jsonO.getInt(key));
                 } else if ("userAccountName".equals(key)) {
@@ -358,6 +361,9 @@ public class GetUserResponse extends BaseResponse {
             if (this.robotState != null) {
                 jsonO.put("robot.state", this.robotState);
             }
+            if (this.notificationsAvailableDefined) {
+                jsonO.put("notifications.available", this.notificationsAvailable);
+            }
             jsonO.put("userId", this.userId);
             jsonO.put("userAccountName", this.userAccountName);
             if (this.userName != null) {
@@ -373,7 +379,7 @@ public class GetUserResponse extends BaseResponse {
     
     @Override
     public String toString() {
-        return "GetUserResponse [immutable=" + this.immutable + ", cmd=" + this.cmd + ", rc=" + this.rc + ", message=" + this.message + ", cause=" + this.cause + ", parameters=" + this.parameters + ", initToken=" + this.initToken + ", serverTime=" + this.serverTime + ", serverVersion=" + this.serverVersion + ", robotWait=" + this.robotWait + ", robotBattery=" + this.robotBattery + ", robotName=" + this.robotName + ", robotVersion=" + this.robotVersion + ", robotFirmwareName=" + this.robotFirmwareName + ", robotSensorvalues=" + this.robotSensorvalues + ", robotNepoexitvalue=" + this.robotNepoexitvalue + ", robotState=" + this.robotState + ", userId=" + this.userId + ", userAccountName=" + this.userAccountName + ", userName=" + this.userName + ", userEmail=" + this.userEmail + ", isYoungerThen14=" + this.isYoungerThen14 + " ]";
+        return "GetUserResponse [immutable=" + this.immutable + ", cmd=" + this.cmd + ", rc=" + this.rc + ", message=" + this.message + ", cause=" + this.cause + ", parameters=" + this.parameters + ", initToken=" + this.initToken + ", serverTime=" + this.serverTime + ", serverVersion=" + this.serverVersion + ", robotWait=" + this.robotWait + ", robotBattery=" + this.robotBattery + ", robotName=" + this.robotName + ", robotVersion=" + this.robotVersion + ", robotFirmwareName=" + this.robotFirmwareName + ", robotSensorvalues=" + this.robotSensorvalues + ", robotNepoexitvalue=" + this.robotNepoexitvalue + ", robotState=" + this.robotState + ", notificationsAvailable=" + this.notificationsAvailable + ", userId=" + this.userId + ", userAccountName=" + this.userAccountName + ", userName=" + this.userName + ", userEmail=" + this.userEmail + ", isYoungerThen14=" + this.isYoungerThen14 + " ]";
     }
     @Override
     public int hashCode() {

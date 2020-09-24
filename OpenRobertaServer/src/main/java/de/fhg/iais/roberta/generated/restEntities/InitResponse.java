@@ -37,7 +37,7 @@ public class InitResponse extends BaseResponse {
     /**
      * response for the /init REST request
      */
-    public static InitResponse makeFromProperties(String cmd,String rc,String message,String cause,JSONObject parameters,String initToken,long serverTime,String serverVersion,long robotWait,String robotBattery,String robotName,String robotVersion,String robotFirmwareName,JSONObject robotSensorvalues,int robotNepoexitvalue,String robotState,JSONObject server) {
+    public static InitResponse makeFromProperties(String cmd,String rc,String message,String cause,JSONObject parameters,String initToken,long serverTime,String serverVersion,long robotWait,String robotBattery,String robotName,String robotVersion,String robotFirmwareName,JSONObject robotSensorvalues,int robotNepoexitvalue,String robotState,boolean notificationsAvailable,JSONObject server) {
         InitResponse entity = new InitResponse();
         entity.setCmd(cmd);
         entity.setRc(rc);
@@ -55,6 +55,7 @@ public class InitResponse extends BaseResponse {
         entity.setRobotSensorvalues(robotSensorvalues);
         entity.setRobotNepoexitvalue(robotNepoexitvalue);
         entity.setRobotState(robotState);
+        entity.setNotificationsAvailable(notificationsAvailable);
         entity.setServer(server);
         entity.immutable();
         return entity;
@@ -108,6 +109,8 @@ public class InitResponse extends BaseResponse {
                     setRobotNepoexitvalue(jsonO.optInt(key));
                 } else if ("robot.state".equals(key)) {
                     setRobotState(jsonO.optString(key));
+                } else if ("notifications.available".equals(key)) {
+                    setNotificationsAvailable(jsonO.optBoolean(key));
                 } else if ("server".equals(key)) {
                     setServer(jsonO.getJSONObject(key));
                 } else {
@@ -236,6 +239,9 @@ public class InitResponse extends BaseResponse {
             if (this.robotState != null) {
                 jsonO.put("robot.state", this.robotState);
             }
+            if (this.notificationsAvailableDefined) {
+                jsonO.put("notifications.available", this.notificationsAvailable);
+            }
             jsonO.put("server", this.server);
         } catch (JSONException e) {
             throw new RuntimeException("JSON unparse error when unparsing: " + this, e);
@@ -245,7 +251,7 @@ public class InitResponse extends BaseResponse {
     
     @Override
     public String toString() {
-        return "InitResponse [immutable=" + this.immutable + ", cmd=" + this.cmd + ", rc=" + this.rc + ", message=" + this.message + ", cause=" + this.cause + ", parameters=" + this.parameters + ", initToken=" + this.initToken + ", serverTime=" + this.serverTime + ", serverVersion=" + this.serverVersion + ", robotWait=" + this.robotWait + ", robotBattery=" + this.robotBattery + ", robotName=" + this.robotName + ", robotVersion=" + this.robotVersion + ", robotFirmwareName=" + this.robotFirmwareName + ", robotSensorvalues=" + this.robotSensorvalues + ", robotNepoexitvalue=" + this.robotNepoexitvalue + ", robotState=" + this.robotState + ", server=" + this.server + " ]";
+        return "InitResponse [immutable=" + this.immutable + ", cmd=" + this.cmd + ", rc=" + this.rc + ", message=" + this.message + ", cause=" + this.cause + ", parameters=" + this.parameters + ", initToken=" + this.initToken + ", serverTime=" + this.serverTime + ", serverVersion=" + this.serverVersion + ", robotWait=" + this.robotWait + ", robotBattery=" + this.robotBattery + ", robotName=" + this.robotName + ", robotVersion=" + this.robotVersion + ", robotFirmwareName=" + this.robotFirmwareName + ", robotSensorvalues=" + this.robotSensorvalues + ", robotNepoexitvalue=" + this.robotNepoexitvalue + ", robotState=" + this.robotState + ", notificationsAvailable=" + this.notificationsAvailable + ", server=" + this.server + " ]";
     }
     @Override
     public int hashCode() {

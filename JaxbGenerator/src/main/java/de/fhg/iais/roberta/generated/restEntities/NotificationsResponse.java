@@ -4,29 +4,30 @@
  * when the maven plugin is re-executed for any reasons.
  */
 package de.fhg.iais.roberta.generated.restEntities;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
- * the response for the /program/entity request<br><br>
+ * the response for the /notifications/getNotifications REST request<br><br>
  * Version: 1<br>
  * Datum: 2020-06-15
  */
-public class EntityResponse extends BaseResponse {
-    protected JSONArray program;
+public class NotificationsResponse extends BaseResponse {
+    protected JSONArray notifications;
     
     /**
-     * the response for the /program/entity request
+     * the response for the /notifications/getNotifications REST request
      */
-    public static EntityResponse make() {
-        return new EntityResponse();
+    public static NotificationsResponse make() {
+        return new NotificationsResponse();
     }
     
     /**
-     * the response for the /program/entity request
+     * the response for the /notifications/getNotifications REST request
      */
-    public static EntityResponse makeFromString(String jsonS) {
+    public static NotificationsResponse makeFromString(String jsonS) {
         try {
             JSONObject jsonO = new JSONObject(jsonS);
             return make(jsonO);
@@ -36,10 +37,10 @@ public class EntityResponse extends BaseResponse {
     }
     
     /**
-     * the response for the /program/entity request
+     * the response for the /notifications/getNotifications REST request
      */
-    public static EntityResponse makeFromProperties(String cmd,String rc,String message,String cause,JSONObject parameters,String initToken,long serverTime,String serverVersion,long robotWait,String robotBattery,String robotName,String robotVersion,String robotFirmwareName,JSONObject robotSensorvalues,int robotNepoexitvalue,String robotState,boolean notificationsAvailable,JSONArray program) {
-        EntityResponse entity = new EntityResponse();
+    public static NotificationsResponse makeFromProperties(String cmd,String rc,String message,String cause,JSONObject parameters,String initToken,long serverTime,String serverVersion,long robotWait,String robotBattery,String robotName,String robotVersion,String robotFirmwareName,JSONObject robotSensorvalues,int robotNepoexitvalue,String robotState,boolean notificationsAvailable,JSONArray notifications) {
+        NotificationsResponse entity = new NotificationsResponse();
         entity.setCmd(cmd);
         entity.setRc(rc);
         entity.setMessage(message);
@@ -57,15 +58,15 @@ public class EntityResponse extends BaseResponse {
         entity.setRobotNepoexitvalue(robotNepoexitvalue);
         entity.setRobotState(robotState);
         entity.setNotificationsAvailable(notificationsAvailable);
-        entity.setProgram(program);
+        entity.setNotifications(notifications);
         entity.immutable();
         return entity;
     }
     
     /**
-     * the response for the /program/entity request
+     * the response for the /notifications/getNotifications REST request
      */
-    public static EntityResponse make(JSONObject jsonO) {
+    public static NotificationsResponse make(JSONObject jsonO) {
         return make().merge(jsonO).immutable();
     }
     
@@ -74,7 +75,7 @@ public class EntityResponse extends BaseResponse {
      * The keys of the JSON-Object must be valid. The bean remains "under construction".<br>
      * Throws a runtime exception if inconsistencies are detected.
      */
-    public EntityResponse merge(JSONObject jsonO) {
+    public NotificationsResponse merge(JSONObject jsonO) {
         try {
             for (String key : JSONObject.getNames(jsonO)) {
                 if ("_version".equals(key)) {
@@ -112,8 +113,8 @@ public class EntityResponse extends BaseResponse {
                     setRobotState(jsonO.optString(key));
                 } else if ("notifications.available".equals(key)) {
                     setNotificationsAvailable(jsonO.optBoolean(key));
-                } else if ("program".equals(key)) {
-                    setProgram(jsonO.getJSONArray(key));
+                } else if ("notifications".equals(key)) {
+                    setNotifications(jsonO.getJSONArray(key));
                 } else {
                     throw new RuntimeException("JSON parse error. Found invalid key: " + key + " in " + jsonO);
                 }
@@ -129,7 +130,7 @@ public class EntityResponse extends BaseResponse {
      * Checks whether all required fields are set. All lists are made immutable.<br>
      * Throws a runtime exception if inconsistencies are detected.
      */
-    public EntityResponse immutable() {
+    public NotificationsResponse immutable() {
         if (this.immutable) {
             return this;
         }
@@ -141,25 +142,25 @@ public class EntityResponse extends BaseResponse {
      * Checks whether all required fields are set.<br>
      * Throws a runtime exception if inconsistencies are detected.
      */
-    private EntityResponse validate() {
+    private NotificationsResponse validate() {
         String _message = null;
         if ( !this.immutable ) {
-            _message = "EntityResponse-object is already immutable: " + toString();
+            _message = "NotificationsResponse-object is already immutable: " + toString();
         }
         if ( rc == null) {
-            _message = "required property rc of EntityResponse-object is not set: " + toString();
+            _message = "required property rc of NotificationsResponse-object is not set: " + toString();
         }
         if ( initToken == null) {
-            _message = "required property initToken of EntityResponse-object is not set: " + toString();
+            _message = "required property initToken of NotificationsResponse-object is not set: " + toString();
         }
         if ( !serverTimeDefined) {
-            _message = "required property serverTime of EntityResponse-object is not set: " + toString();
+            _message = "required property serverTime of NotificationsResponse-object is not set: " + toString();
         }
         if ( serverVersion == null) {
-            _message = "required property serverVersion of EntityResponse-object is not set: " + toString();
+            _message = "required property serverVersion of NotificationsResponse-object is not set: " + toString();
         }
-        if ( program == null) {
-            _message = "required property program of EntityResponse-object is not set: " + toString();
+        if ( notifications == null) {
+            _message = "required property notifications of NotificationsResponse-object is not set: " + toString();
         }
         if ( _message != null ) {
             this.immutable = false;
@@ -169,23 +170,23 @@ public class EntityResponse extends BaseResponse {
     }
     
     /**
-     * GET program. Object must be immutable. Never return null or an undefined/default value.
+     * GET notifications. Object must be immutable. Never return null or an undefined/default value.
      */
-    public JSONArray getProgram() {
+    public JSONArray getNotifications() {
         if (!this.immutable) {
-            throw new RuntimeException("no program from an object under construction: " + toString());
+            throw new RuntimeException("no notifications from an object under construction: " + toString());
         }
-        return this.program;
+        return this.notifications;
     }
     
     /**
-     * SET program. Object must be mutable.
+     * SET notifications. Object must be mutable.
      */
-    public EntityResponse setProgram(JSONArray program) {
+    public NotificationsResponse setNotifications(JSONArray notifications) {
         if (this.immutable) {
-            throw new RuntimeException("program assigned to an immutable object: " + toString());
+            throw new RuntimeException("notifications assigned to an immutable object: " + toString());
         }
-        this.program = program;
+        this.notifications = notifications;
         return this;
     }
     
@@ -243,7 +244,7 @@ public class EntityResponse extends BaseResponse {
             if (this.notificationsAvailableDefined) {
                 jsonO.put("notifications.available", this.notificationsAvailable);
             }
-            jsonO.put("program", this.program);
+            jsonO.put("notifications", this.notifications);
         } catch (JSONException e) {
             throw new RuntimeException("JSON unparse error when unparsing: " + this, e);
         }
@@ -252,7 +253,7 @@ public class EntityResponse extends BaseResponse {
     
     @Override
     public String toString() {
-        return "EntityResponse [immutable=" + this.immutable + ", cmd=" + this.cmd + ", rc=" + this.rc + ", message=" + this.message + ", cause=" + this.cause + ", parameters=" + this.parameters + ", initToken=" + this.initToken + ", serverTime=" + this.serverTime + ", serverVersion=" + this.serverVersion + ", robotWait=" + this.robotWait + ", robotBattery=" + this.robotBattery + ", robotName=" + this.robotName + ", robotVersion=" + this.robotVersion + ", robotFirmwareName=" + this.robotFirmwareName + ", robotSensorvalues=" + this.robotSensorvalues + ", robotNepoexitvalue=" + this.robotNepoexitvalue + ", robotState=" + this.robotState + ", notificationsAvailable=" + this.notificationsAvailable + ", program=" + this.program + " ]";
+        return "NotificationsResponse [immutable=" + this.immutable + ", cmd=" + this.cmd + ", rc=" + this.rc + ", message=" + this.message + ", cause=" + this.cause + ", parameters=" + this.parameters + ", initToken=" + this.initToken + ", serverTime=" + this.serverTime + ", serverVersion=" + this.serverVersion + ", robotWait=" + this.robotWait + ", robotBattery=" + this.robotBattery + ", robotName=" + this.robotName + ", robotVersion=" + this.robotVersion + ", robotFirmwareName=" + this.robotFirmwareName + ", robotSensorvalues=" + this.robotSensorvalues + ", robotNepoexitvalue=" + this.robotNepoexitvalue + ", robotState=" + this.robotState + ", notificationsAvailable=" + this.notificationsAvailable + ", notifications=" + this.notifications + " ]";
     }
     @Override
     public int hashCode() {
