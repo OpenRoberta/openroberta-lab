@@ -44,7 +44,7 @@ public class ProjectSourceResponse extends BaseResponse {
     /**
      * the response for the /projectWorkflow/source REST request
      */
-    public static ProjectSourceResponse makeFromProperties(String cmd,String rc,String message,String cause,JSONObject parameters,String initToken,long serverTime,String serverVersion,long robotWait,String robotBattery,String robotName,String robotVersion,String robotFirmwareName,JSONObject robotSensorvalues,int robotNepoexitvalue,String robotState,String sourceCode,String progXML,Map<String,JSONObject> confAnnos) {
+    public static ProjectSourceResponse makeFromProperties(String cmd,String rc,String message,String cause,JSONObject parameters,String initToken,long serverTime,String serverVersion,long robotWait,String robotBattery,String robotName,String robotVersion,String robotFirmwareName,JSONObject robotSensorvalues,int robotNepoexitvalue,String robotState,boolean notificationsAvailable,String sourceCode,String progXML,Map<String,JSONObject> confAnnos) {
         ProjectSourceResponse entity = new ProjectSourceResponse();
         entity.setCmd(cmd);
         entity.setRc(rc);
@@ -62,6 +62,7 @@ public class ProjectSourceResponse extends BaseResponse {
         entity.setRobotSensorvalues(robotSensorvalues);
         entity.setRobotNepoexitvalue(robotNepoexitvalue);
         entity.setRobotState(robotState);
+        entity.setNotificationsAvailable(notificationsAvailable);
         entity.setSourceCode(sourceCode);
         entity.setProgXML(progXML);
         entity.setConfAnnos(confAnnos);
@@ -117,6 +118,8 @@ public class ProjectSourceResponse extends BaseResponse {
                     setRobotNepoexitvalue(jsonO.optInt(key));
                 } else if ("robot.state".equals(key)) {
                     setRobotState(jsonO.optString(key));
+                } else if ("notifications.available".equals(key)) {
+                    setNotificationsAvailable(jsonO.optBoolean(key));
                 } else if ("sourceCode".equals(key)) {
                     setSourceCode(jsonO.getString(key));
                 } else if ("progXML".equals(key)) {
@@ -325,6 +328,9 @@ public class ProjectSourceResponse extends BaseResponse {
             if (this.robotState != null) {
                 jsonO.put("robot.state", this.robotState);
             }
+            if (this.notificationsAvailableDefined) {
+                jsonO.put("notifications.available", this.notificationsAvailable);
+            }
             jsonO.put("sourceCode", this.sourceCode);
             jsonO.put("progXML", this.progXML);
             {
@@ -342,7 +348,7 @@ public class ProjectSourceResponse extends BaseResponse {
     
     @Override
     public String toString() {
-        return "ProjectSourceResponse [immutable=" + this.immutable + ", cmd=" + this.cmd + ", rc=" + this.rc + ", message=" + this.message + ", cause=" + this.cause + ", parameters=" + this.parameters + ", initToken=" + this.initToken + ", serverTime=" + this.serverTime + ", serverVersion=" + this.serverVersion + ", robotWait=" + this.robotWait + ", robotBattery=" + this.robotBattery + ", robotName=" + this.robotName + ", robotVersion=" + this.robotVersion + ", robotFirmwareName=" + this.robotFirmwareName + ", robotSensorvalues=" + this.robotSensorvalues + ", robotNepoexitvalue=" + this.robotNepoexitvalue + ", robotState=" + this.robotState + ", sourceCode=" + this.sourceCode + ", progXML=" + this.progXML + ", confAnnos=" + this.confAnnos + " ]";
+        return "ProjectSourceResponse [immutable=" + this.immutable + ", cmd=" + this.cmd + ", rc=" + this.rc + ", message=" + this.message + ", cause=" + this.cause + ", parameters=" + this.parameters + ", initToken=" + this.initToken + ", serverTime=" + this.serverTime + ", serverVersion=" + this.serverVersion + ", robotWait=" + this.robotWait + ", robotBattery=" + this.robotBattery + ", robotName=" + this.robotName + ", robotVersion=" + this.robotVersion + ", robotFirmwareName=" + this.robotFirmwareName + ", robotSensorvalues=" + this.robotSensorvalues + ", robotNepoexitvalue=" + this.robotNepoexitvalue + ", robotState=" + this.robotState + ", notificationsAvailable=" + this.notificationsAvailable + ", sourceCode=" + this.sourceCode + ", progXML=" + this.progXML + ", confAnnos=" + this.confAnnos + " ]";
     }
     @Override
     public int hashCode() {
