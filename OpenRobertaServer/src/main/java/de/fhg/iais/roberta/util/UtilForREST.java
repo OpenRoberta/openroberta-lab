@@ -9,6 +9,7 @@ import java.util.concurrent.atomic.AtomicLong;
 
 import javax.ws.rs.core.Response;
 
+import com.google.inject.Inject;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -31,6 +32,13 @@ public class UtilForREST {
     private static String serverVersion = "undefined";
     private static final AtomicLong invalidInitTokenCounter = new AtomicLong(0);
     private static final KeySetView<String, Boolean> invalidTokenThatAccess = ConcurrentHashMap.newKeySet();
+
+    private static NotificationService notificationService;
+
+    @Inject
+    public static void setNotificationService(NotificationService notificationService) {
+        UtilForREST.notificationService = notificationService;
+    }
 
     private UtilForREST() {
         // no objects
@@ -162,6 +170,10 @@ public class UtilForREST {
             response.setServerTime(new Date().getTime());
             response.setServerVersion(UtilForREST.serverVersion);
             if ( httpSessionState != null ) {
+
+                boolean notificationsComplete = notificationService.areNotificationsComplete(httpSessionState.getReceivedNotifications());
+                response.setNotificationsAvailable(!notificationsComplete);
+
                 String token = httpSessionState.getToken();
                 if ( token != null ) {
                     if ( token.equals(ClientAdmin.NO_CONNECT) ) {

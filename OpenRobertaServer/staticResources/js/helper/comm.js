@@ -7,6 +7,15 @@ define([ 'exports', 'jquery', 'wrap', 'log' ], function(exports, $, WRAP, LOG) {
     var frontendSessionValid = true;
 
     /**
+     * Callback function, gets called when new notifications are available
+     */
+    var onNotificationsAvailable;
+
+    exports.onNotificationsAvailableCallback = function (callback) {
+        onNotificationsAvailable = callback;
+    }
+
+    /**
      * the default error fn. Should be replaced by an own implementation. Not
      * public.
      */
@@ -115,6 +124,9 @@ define([ 'exports', 'jquery', 'wrap', 'log' ], function(exports, $, WRAP, LOG) {
                 }
                 if (successFn !== undefined) {
                     successFn(result);
+                    if (onNotificationsAvailable && result["notifications.available"]) {
+                        onNotificationsAvailable();
+                    }
                 }
             }
             return json('/ping', {}, successFnWrapper);
