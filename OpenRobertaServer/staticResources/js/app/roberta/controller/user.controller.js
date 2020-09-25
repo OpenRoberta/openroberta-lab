@@ -804,7 +804,7 @@ define([ 'exports', 'log', 'message', 'util', 'user.model', 'guiState.controller
 
     function showResetPassword(target) {
         USER.checkTargetRecovery(target, function(result) {
-            if (result.rc !== 'ok') {
+            if (result.rc === 'ok') {
                 $('#passOld').val(target);
                 $('#resetPassLink').val(target);
                 $('#grOldPassword').hide();

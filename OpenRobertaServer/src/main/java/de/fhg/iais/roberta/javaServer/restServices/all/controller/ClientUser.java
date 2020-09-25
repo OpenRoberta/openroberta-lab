@@ -391,85 +391,12 @@ public class ClientUser {
         }
     }
 
-    @POST
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    @Path("/resetPassword")
-    public Response resetPassword(@OraData DbSession dbSession, FullRestRequest fullRequest) throws Exception {
-        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, fullRequest, true);
-        try {
-            BaseResponse response = BaseResponse.make();
-            ResetPasswordRequest request = ResetPasswordRequest.make(fullRequest.getData());
-            String cmd = "resetPassword";
-            ClientUser.LOG.info("command is: " + cmd);
-            response.setCmd(cmd);
-            UserProcessor up = new UserProcessor(dbSession, httpSessionState);
-            LostPasswordProcessor lostPasswordProcessor = new LostPasswordProcessor(dbSession, httpSessionState);
-
-            String resetPasswordLink = request.getResetPasswordLink();
-            String newPassword = request.getNewPassword();
-            LostPassword lostPassword = lostPasswordProcessor.loadLostPassword(resetPasswordLink);
-            if ( lostPassword != null ) {
-                up.resetPassword(lostPassword.getUserID(), newPassword);
-            }
-            if ( up.getMessage() == Key.USER_UPDATE_SUCCESS ) {
-                lostPasswordProcessor.deleteLostPassword(resetPasswordLink);
-            }
-            UtilForREST.addResultInfo(response, up);
-            return UtilForREST.responseWithFrontendInfo(response, httpSessionState, this.brickCommunicator);
-        } catch ( Exception e ) {
-            dbSession.rollback();
-            String errorTicketId = Util.getErrorTicketId();
-            ClientUser.LOG.error("Exception. Error ticket: " + errorTicketId, e);
-            return UtilForREST.makeBaseResponseForError(Key.SERVER_ERROR, httpSessionState, this.brickCommunicator); // TODO: refactor error ticket .append("parameters", errorTicketId);
-        } finally {
-            if ( dbSession != null ) {
-                dbSession.close();
-            }
-        }
-    }
-
-    @POST
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    @Path("/isResetPasswordLinkExpired")
-    public Response isResetPasswordLinkExpired(@OraData DbSession dbSession, FullRestRequest fullRequest) throws Exception {
-        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, fullRequest, true);
-        try {
-            IsResetPasswordLinkExpiredResponse response = IsResetPasswordLinkExpiredResponse.make();
-            Map<String, String> responseParameters = new HashMap<>();
-            ResetPasswordRequest request = ResetPasswordRequest.make(fullRequest.getData());
-            String cmd = "isResetPasswordLinkExpired";
-            ClientUser.LOG.info("command is: " + cmd);
-            response.setCmd(cmd);
-            UserProcessor up = new UserProcessor(dbSession, httpSessionState);
-            LostPasswordProcessor lostPasswordProcessor = new LostPasswordProcessor(dbSession, httpSessionState);
-
-            String resetPasswordLink = request.getResetPasswordLink();
-            LostPassword lostPassword = lostPasswordProcessor.loadLostPassword(resetPasswordLink);
-            boolean isExpired = true;
-            if ( lostPassword != null ) {
-                Date currentTime = new Date();
-                isExpired = (currentTime.getTime() - lostPassword.getCreated().getTime()) / 3600000.0 > 24;
-            }
-            if ( isExpired ) {
-                up.setStatus(ProcessorStatus.SUCCEEDED, Key.USER_PASSWORD_RECOVERY_EXPIRED_URL, responseParameters);
-            }
-            response.setResetPasswordLinkExpired(isExpired);
-            UtilForREST.addResultInfo(response, up);
-            return UtilForREST.responseWithFrontendInfo(response, httpSessionState, this.brickCommunicator);
-        } catch ( Exception e ) {
-            dbSession.rollback();
-            String errorTicketId = Util.getErrorTicketId();
-            ClientUser.LOG.error("Exception. Error ticket: " + errorTicketId, e);
-            return UtilForREST.makeBaseResponseForError(Key.SERVER_ERROR, httpSessionState, this.brickCommunicator); // TODO: refactor error ticket .append("parameters", errorTicketId);
-        } finally {
-            if ( dbSession != null ) {
-                dbSession.close();
-            }
-        }
-    }
-
+    /**
+     * if the user forgot his/her password, he/she is asked for the mail address for password recovery. The REST-service <b>passwordRecovery</b> is responsible
+     * to store the user request for recovery in the database and send mail to the user. If the user follows the link there, the REST-service
+     * <b>isResetPasswordLinkExpired</b> is called. It either allows the user to type a new password or rejects the attempt, if the link is expired. The new
+     * password is given to the backend by calling the REST-service <b>resetPassword</b> <b>This is the first REST-service passwordRecovery</b>
+     */
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
@@ -504,6 +431,101 @@ public class ClientUser {
                 } catch ( MessagingException e ) {
                     up.setStatus(ProcessorStatus.FAILED, Key.USER_PASSWORD_RECOVERY_SENT_MAIL_FAIL, responseParameters);
                 }
+            }
+            UtilForREST.addResultInfo(response, up);
+            return UtilForREST.responseWithFrontendInfo(response, httpSessionState, this.brickCommunicator);
+        } catch ( Exception e ) {
+            dbSession.rollback();
+            String errorTicketId = Util.getErrorTicketId();
+            ClientUser.LOG.error("Exception. Error ticket: " + errorTicketId, e);
+            return UtilForREST.makeBaseResponseForError(Key.SERVER_ERROR, httpSessionState, this.brickCommunicator); // TODO: refactor error ticket .append("parameters", errorTicketId);
+        } finally {
+            if ( dbSession != null ) {
+                dbSession.close();
+            }
+        }
+    }
+
+    /**
+     * if the user forgot his/her password, he/she is asked for the mail address for password recovery. The REST-service <b>passwordRecovery</b> is responsible
+     * to store the user request for recovery in the database and send mail to the user. If the user follows the link there, the REST-service
+     * <b>isResetPasswordLinkExpired</b> is called. It either allows the user to type a new password or rejects the attempt, if the link is expired. The new
+     * password is given to the backend by calling the REST-service <b>resetPassword</b> <b>This is the second REST-service isResetPasswordLinkExpired</b>
+     */
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/isResetPasswordLinkExpired")
+    public Response isResetPasswordLinkExpired(@OraData DbSession dbSession, FullRestRequest fullRequest) throws Exception {
+        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, fullRequest, true);
+        try {
+            IsResetPasswordLinkExpiredResponse response = IsResetPasswordLinkExpiredResponse.make();
+            Map<String, String> responseParameters = new HashMap<>();
+            ResetPasswordRequest request = ResetPasswordRequest.make(fullRequest.getData());
+            String cmd = "isResetPasswordLinkExpired";
+            ClientUser.LOG.info("command is: " + cmd);
+            response.setCmd(cmd);
+            UserProcessor up = new UserProcessor(dbSession, httpSessionState);
+            LostPasswordProcessor lostPasswordProcessor = new LostPasswordProcessor(dbSession, httpSessionState);
+
+            String resetPasswordLink = request.getResetPasswordLink();
+            LostPassword lostPassword = lostPasswordProcessor.loadLostPassword(resetPasswordLink);
+            boolean recoverySuccessful;
+            if ( lostPassword != null ) {
+                // check for expiration of the lost-password-link
+                Date currentTime = new Date();
+                recoverySuccessful = (currentTime.getTime() - lostPassword.getCreated().getTime()) / 3600000.0 <= 24;
+            } else {
+                recoverySuccessful = false;
+            }
+            Key statusKey = recoverySuccessful ? Key.SERVER_SUCCESS : Key.USER_PASSWORD_RECOVERY_EXPIRED_URL;
+            up.setStatus(ProcessorStatus.SUCCEEDED, statusKey, responseParameters);
+            if ( recoverySuccessful ) {
+            }
+            response.setResetPasswordLinkExpired(recoverySuccessful);
+            UtilForREST.addResultInfo(response, up);
+            return UtilForREST.responseWithFrontendInfo(response, httpSessionState, this.brickCommunicator);
+        } catch ( Exception e ) {
+            dbSession.rollback();
+            String errorTicketId = Util.getErrorTicketId();
+            ClientUser.LOG.error("Exception. Error ticket: " + errorTicketId, e);
+            return UtilForREST.makeBaseResponseForError(Key.SERVER_ERROR, httpSessionState, this.brickCommunicator); // TODO: refactor error ticket .append("parameters", errorTicketId);
+        } finally {
+            if ( dbSession != null ) {
+                dbSession.close();
+            }
+        }
+    }
+
+    /**
+     * if the user forgot his/her password, he/she is asked for the mail address for password recovery. The REST-service <b>passwordRecovery</b> is responsible
+     * to store the user request for recovery in the database and send mail to the user. If the user follows the link there, the REST-service
+     * <b>isResetPasswordLinkExpired</b> is called. It either allows the user to type a new password or rejects the attempt, if the link is expired. The new
+     * password is given to the backend by calling the REST-service <b>resetPassword</b> <b>This is the third REST-service resetPassword</b>
+     */
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/resetPassword")
+    public Response resetPassword(@OraData DbSession dbSession, FullRestRequest fullRequest) throws Exception {
+        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, fullRequest, true);
+        try {
+            BaseResponse response = BaseResponse.make();
+            ResetPasswordRequest request = ResetPasswordRequest.make(fullRequest.getData());
+            String cmd = "resetPassword";
+            ClientUser.LOG.info("command is: " + cmd);
+            response.setCmd(cmd);
+            UserProcessor up = new UserProcessor(dbSession, httpSessionState);
+            LostPasswordProcessor lostPasswordProcessor = new LostPasswordProcessor(dbSession, httpSessionState);
+
+            String resetPasswordLink = request.getResetPasswordLink();
+            String newPassword = request.getNewPassword();
+            LostPassword lostPassword = lostPasswordProcessor.loadLostPassword(resetPasswordLink);
+            if ( lostPassword != null ) {
+                up.resetPassword(lostPassword.getUserID(), newPassword);
+            }
+            if ( up.getMessage() == Key.USER_UPDATE_SUCCESS ) {
+                lostPasswordProcessor.deleteLostPassword(resetPasswordLink);
             }
             UtilForREST.addResultInfo(response, up);
             return UtilForREST.responseWithFrontendInfo(response, httpSessionState, this.brickCommunicator);
