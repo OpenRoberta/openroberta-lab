@@ -1,10 +1,7 @@
 package de.fhg.iais.roberta.persistence.util;
 
 import java.io.Serializable;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
@@ -55,6 +52,7 @@ public class HttpSessionState implements Serializable {
     private String toolboxName;
     private String toolbox;
     private boolean processing;
+    private Set<String> receivedNotifications = new HashSet<>();
 
     private HttpSessionState(
         String initToken,
@@ -284,5 +282,9 @@ public class HttpSessionState implements Serializable {
         if ( !somethingExpired ) {
             LOG.info("no sessions expired");
         }
+    }
+
+    public Set<String> getReceivedNotifications() {
+        return receivedNotifications;
     }
 }

@@ -5,6 +5,8 @@ import com.google.inject.Singleton;
 import com.google.inject.TypeLiteral;
 import com.google.inject.name.Names;
 
+import de.fhg.iais.roberta.util.NotificationService;
+import de.fhg.iais.roberta.util.UtilForREST;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -56,12 +58,16 @@ public class RobertaGuiceModule extends AbstractModule {
         bind(RestExample.class);
         bind(ClientPing.class);
 
+
         bind(ServerProperties.class).toInstance(this.serverProperties);
+        bind(NotificationService.class).in(Singleton.class);
         bind(SessionFactoryWrapper.class).in(Singleton.class);
         bind(RobotCommunicator.class).toInstance(this.robotCommunicator);
         bind(MailManagement.class).in(Singleton.class);
         bind(IIpToCountry.class).toInstance(this.ipToCountry);
         bind(XsltTransformer.class).in(Singleton.class);
+
+        requestStaticInjection(UtilForREST.class);
 
         bind(new TypeLiteral<Map<String, IRobotFactory>>() {
         }).annotatedWith(Names.named("robotPluginMap")).toInstance(this.robotPluginMap);
