@@ -71,6 +71,7 @@ define(["simulation.simulation", "interpreter.constants", "simulation.robot.ev3"
             cy: 0,
             color: "#FF69B4"
         };
+        this.colorSensor = null;
         var tempInfrared = this.infraredSensors;
         var tempUltra = this.ultraSensor;
         this.infraredSensors = {};
@@ -99,20 +100,28 @@ define(["simulation.simulation", "interpreter.constants", "simulation.robot.ev3"
                 $("#" + that.brick.id).css("cursor", "grabbing");
             }
         });
-        this.brick.addEventListener("mousedown", function(e) {
-            const rect = that.brick.getBoundingClientRect()
-            const x = e.clientX - rect.left
-            const y = e.clientY - rect.top
+        var mouseDown = function(e) {
+            const rect = that.brick.getBoundingClientRect();
+            const x = e.clientX|e.changedTouches[0].clientX - rect.left;
+            const y = e.clientY|e.changedTouches[0].clientY - rect.top;          
             const pixel = that.ctx.getImageData(x, y, 1, 1).data;
             const color = pixel[0] + pixel[1] + pixel[2];
-
             if (color === 0) {
                 that.buttons.center = true;
             } else {
                 that.buttons.center = false;
             }
+        }
+        this.brick.addEventListener("mousedown", function(e) {
+            mouseDown(e);
+        });
+        this.brick.addEventListener("touchstart", function(e) {
+            mouseDown(e);
         });
         this.brick.addEventListener("mouseup", function(e) {
+            that.buttons.center = false;
+        });
+        this.brick.addEventListener("touchend", function(e) {
             that.buttons.center = false;
         });
         this.display = {
