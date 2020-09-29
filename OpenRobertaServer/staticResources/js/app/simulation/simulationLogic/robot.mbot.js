@@ -102,8 +102,8 @@ define(["simulation.simulation", "interpreter.constants", "simulation.robot.ev3"
         });
         var mouseDown = function(e) {
             const rect = that.brick.getBoundingClientRect();
-            const x = e.clientX|e.changedTouches[0].clientX - rect.left;
-            const y = e.clientY|e.changedTouches[0].clientY - rect.top;          
+            const x = e.clientX || e.changedTouches[0].clientX - rect.left;
+            const y = e.clientY || e.changedTouches[0].clientY - rect.top;
             const pixel = that.ctx.getImageData(x, y, 1, 1).data;
             const color = pixel[0] + pixel[1] + pixel[2];
             if (color === 0) {
