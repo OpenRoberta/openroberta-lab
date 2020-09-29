@@ -502,7 +502,7 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
             case 'menuLogin':
                 USER_C.showLoginForm();
                 break;
-            case 'menuUserGroupLogin':	
+            case 'menuUserGroupLogin':
                 USER_C.showUserGroupLoginForm();	
                 break;
             case 'menuLogout':
@@ -602,6 +602,9 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
             window.open("https://jira.iais.fraunhofer.de/wiki/display/ORInfo");
         }, 'head navigation menu item clicked');
         $('.menuFaq').onWrap('click', function(event) {
+            window.open("https://jira.iais.fraunhofer.de/wiki/display/ORInfo/FAQ");
+        }, 'head navigation menu item clicked');
+		$('.shortcut').onWrap('click', function(event) {
             window.open("https://jira.iais.fraunhofer.de/wiki/display/ORInfo/FAQ");
         }, 'head navigation menu item clicked');
         $('.menuAboutProject').onWrap('click', function(event) {
@@ -820,6 +823,84 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
                 expr.initSvg();
                 expr.render();
                 expr.setInTask(false);
+                return false;
+            }
+			//Overriding the Ctrl + Shift + S when not logged in
+            if ((e.metaKey || e.ctrlKey) && (e.shiftKey) && event.which == 83 && !GUISTATE_C.isUserLoggedIn()) {
+                e.preventDefault();
+            }
+            //Overriding the Ctrl + Shift + S for saving program with new name in the server
+            if ((e.metaKey || e.shiftKey) && (e.shiftKey) && event.which == 83 && GUISTATE_C.isUserLoggedIn()) {
+                e.preventDefault();
+				PROGRAM_C.showSaveAsModal();
+            }
+			//Overriding the Ctrl + S when not logged in
+            if ((e.metaKey || e.ctrlKey) && event.which == 83 && !GUISTATE_C.isUserLoggedIn()) {
+                e.preventDefault();
+            }
+			//Overriding the Ctrl + S for saving the program in the database on the server
+            if ((e.metaKey || e.ctrlKey) && event.which == 83 && GUISTATE_C.isUserLoggedIn()) {
+                e.preventDefault();
+				if(GUISTATE_C.getProgramName() === "NEPOprog") {
+					PROGRAM_C.showSaveAsModal();
+				}
+				else {
+					PROGRAM_C.saveToServer();
+				}
+				return false;	
+			}     
+			//Overriding the Ctrl + R for running the program
+            if ((e.metaKey || e.ctrlKey) && event.which == 82) {
+                e.preventDefault();
+                RUN_C.runOnBrick();
+				return false;	
+			}
+			//Overriding the Ctrl + Z for showing the source code
+            if ((e.metaKey || e.ctrlKey) && event.which == 90 && !(e.shiftKey)) {
+                e.preventDefault();
+                $('#codeButton').trigger("click");
+				return false;
+			}
+			//Overriding the Ctrl + Shift + Z for showing the source code editor
+            if ((e.metaKey || e.ctrlKey) && (e.shiftKey) && event.which == 90) {
+                e.preventDefault();
+				$('#tabSourceCodeEditor').trigger("click");
+				return false;
+			}
+			//Overriding the Ctrl + Shift + G when not logged in
+            if ((e.metaKey || e.ctrlKey) && (e.shiftKey) && event.which == 71 && !GUISTATE_C.isUserLoggedIn()) {
+                e.preventDefault();
+            }
+			//Overriding the Ctrl + Shift + G for multiple robot simulation
+            if ((e.metaKey || e.ctrlKey) && (e.shiftKey) && event.which == 71 && GUISTATE_C.isUserLoggedIn()) {
+                e.preventDefault();
+				MULT_SIM.showListProg();
+				return false;
+			}	
+			//Overriding the Ctrl + M when not logged in
+            if ((e.metaKey || e.ctrlKey) && event.which == 77 && !GUISTATE_C.isUserLoggedIn()) {
+                e.preventDefault();
+            }
+			//Overriding the Ctrl + M for viewing all programs
+            if ((e.metaKey || e.ctrlKey) && event.which == 77 && GUISTATE_C.isUserLoggedIn()) {
+                e.preventDefault();
+				$('#tabProgList').click();
+				return false;     
+			}	
+			//Overriding the Ctrl + G for viewing the simulation window
+            if ((e.metaKey || e.ctrlKey) && event.which == 71 && !(e.shiftKey)) {
+                e.preventDefault();
+				$('#simButton').trigger('click');
+				return false;
+			}
+			//Overriding the Ctrl + I for importing NEPO code to compile
+			if ((e.metaKey || e.ctrlKey) && event.which == 73) {
+                IMPORT_C.importNepoCodeToCompile();
+                return false;
+            }
+			//Overriding the Ctrl + E for exporting the NEPO code
+			if ((e.metaKey || e.ctrlKey) && event.which == 69) {
+                PROGRAM_C.exportXml();
                 return false;
             }
         });
