@@ -1121,10 +1121,6 @@ div.rightMenuButton:hover,
     color: #333;
 }
 
-#modal-addStatusText .modal-content {
-    padding-top: 20px;
-}
-
 .bigNumber {
     color: #8fa402;
     font-size: large;

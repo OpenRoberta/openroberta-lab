@@ -35,6 +35,7 @@ require.config({
 		'menu.controller': 'app/roberta/controller/menu.controller',
 		'multSim.controller': 'app/roberta/controller/multSim.controller',
 		'notification.controller': 'app/roberta/controller/notification.controller',
+		'notification.model': 'app/roberta/models/notification.model',
 		'nn.controller': 'app/roberta/controller/nn.controller',
 		'progCode.controller': 'app/roberta/controller/progCode.controller',
 		'progDelete.controller': 'app/roberta/controller/progDelete.controller',

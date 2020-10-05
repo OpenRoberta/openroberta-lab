@@ -175,7 +175,7 @@ limitations under the License.
                             <li class="login"><a href="#" id="menuChangeUser" class="typcn typcn-lock-closed" lkey="Blockly.Msg.MENU_CHANGE">ändern ...</a></li>
                             <li class="login"><a href="#" id="menuDeleteUser" class="typcn typcn-user-delete" lkey="Blockly.Msg.MENU_DELETE_USER">Benutzer löschen ...</a></li>
                             <li><a href="#" id="menuStateInfo" class="typcn typcn-input-checked" lkey="Blockly.Msg.MENU_STATE_INFO">Statusinformationen</a></li>
-                            <li class="hidden" id="menuAddStatusTextWrap"><a href="#" id="menuAddStatusText" class="typcn typcn-edit">Add a status text</a></li>
+                            <li class="hidden" id="menuNotificationWrap"><a href="#" id="menuNotification" class="typcn typcn-edit">Add or mody notifications</a></li>
                         </ul></li>
                     <li id="head-navigation-tutorial" class="hidden-xs"><a href="#" id="head-navi-tooltip-tutorials"
                         lkey="Blockly.Msg.MENU_TUTORIAL_TOOLTIP" rel="tooltip" data-original-title="" title=""> <span id="head-navi-icon-tutorial"
@@ -1037,45 +1037,44 @@ limitations under the License.
             </div>
         </div>
     </div>
-    <!--Add Status Text-->
-    <div class="modal fade" id="modal-addStatusText" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-sm">
+    <!--Notifications Modal-->
+    <div class="modal fade" id="modal-notifications" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog modal-lg">
             <div class="modal-content">
-                <form id="fg-addStatusText">
-                    <div class="modal-body">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h3 class="modal-title" >Notification Overview</h3>
+                </div>
+                <div class="modal-body">
+                    <form id="notificationForm">
                         <div class="form-group">
-                            <label for="statusTextEnglish">English text</label>
-                            <div class="input-group">
-                                <span class="input-group-addon typcn input-typcn typcn-document-text"></span> <input class="form-control" id="statusTextEnglish"
-                                    name="statusTextEnglish" />
-                            </div>
+                            <label for="notificationName">Name</label>
+                            <input type="text" class="form-control" id="notificationName">
                         </div>
                         <div class="form-group">
-                            <label for="statusTextGerman">German text</label>
-                            <div class="input-group">
-                                <span class="input-group-addon typcn input-typcn typcn-document-text"></span> <input class="form-control" id="statusTextGerman"
-                                    name="statusTextEnglish" />
-                            </div>
+                            <input type="file" class="form-control-file" id="notificationFileUpload">
+                            <label class="custom-file-label" for="notificationFileUpload">Choose notification file</label>
                         </div>
-                        <div class="form-group">
-                            <label for="statusTextDate">Expire Date</label>
-                            <div class="input-group">
-                                <span class="input-group-addon typcn input-typcn typcn-watch"></span> <input id="statusTextDate" type="date"
-                                    class="form-control" />
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="statusTextTime">Expire Time</label>
-                            <div class="input-group">
-                                <span class="input-group-addon typcn input-typcn typcn-watch"></span> <input id="statusTextTime" type="time"
-                                    class="form-control" />
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="submit" class="btn btn-primary" id="addStatusText">OK</button>
-                    </div>
-                </form>
+                        <button type="submit" class="btn btn-default">Submit</button>
+                    </form>
+                    <hr/>
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th scope="col">ID</th>
+                            <th scope="col">Name</th>
+                            <th scope="col"></th>
+                            <th scope="col"></th>
+                        </tr>
+                        </thead>
+                        <tbody id="notificationsTableBody">
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
             </div>
         </div>
     </div>
@@ -1387,8 +1386,7 @@ limitations under the License.
                     <hr style="border: 2px solid #33B8CA; margin: 10px 0">
                     <div class="modal-footer left-inner-addon popup-checkbox">
                         <div id="startup-message-statustext">
-                            <h4 id="statustext-en" class="EN"></h4>
-                            <h4 id="statustext-de" class="DE"></h4>
+                            
                         </div>
                         <input type="checkbox" name="checkbox" id="checkbox_id" value="value" /> <label for="checkbox_id" style="color: #333;"
                             lkey="Blockly.Msg.POPUP_STARTUP_HIDE"> Okay, don't show this again. </label>

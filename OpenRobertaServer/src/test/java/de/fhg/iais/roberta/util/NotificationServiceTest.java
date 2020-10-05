@@ -12,6 +12,8 @@ import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -30,7 +32,6 @@ public class NotificationServiceTest {
     public final JUnitSoftAssertions softly = new JUnitSoftAssertions();
     private NotificationService notificationService;
     private File adminDir;
-
 
     @Before
     public void setUp() throws Exception {
@@ -84,7 +85,6 @@ public class NotificationServiceTest {
         firstNotification.remove("id");
         secondNotification.remove("id");
 
-
         assertThat(firstNotification.similar(notificationToSave)).isTrue();
         assertThat(secondNotification.similar(notificationToSave)).isTrue();
     }
@@ -98,15 +98,18 @@ public class NotificationServiceTest {
     }
 
     @Test
-    public void areNotificationsCompleteShouldDependOnFilesystem() throws IOException {
+    public void areNotificationSynchronizedShouldDependOnFilesystem() throws IOException {
         setupNotifications();
-        softly.assertThat(notificationService.areNotificationsComplete(Collections.emptySet())).isTrue();
+        softly.assertThat(notificationService.areNotificationsSynchronized(Collections.emptySet())).isTrue();
 
         setupNotifications("notification1", "notification2");
-        softly.assertThat(notificationService.areNotificationsComplete(Collections.emptySet())).isFalse();
+        softly.assertThat(notificationService.areNotificationsSynchronized(Collections.emptySet())).isFalse();
 
-        HashSet<String> expectedNotifications = new HashSet<>(Arrays.asList("notification1", "notification2"));
-        softly.assertThat(notificationService.areNotificationsComplete(expectedNotifications)).isTrue();
+        HashSet<String> comparableNotifications = new HashSet<>(Arrays.asList("notification1", "notification2"));
+        softly.assertThat(notificationService.areNotificationsSynchronized(comparableNotifications)).isTrue();
+
+        setupNotifications("notification1");
+        softly.assertThat(notificationService.areNotificationsSynchronized(comparableNotifications)).isFalse();
     }
 
     @Test
@@ -125,8 +128,8 @@ public class NotificationServiceTest {
     @Test
     public void deleteNotificationShouldThrowFileNotFound() {
         assertThatThrownBy(() -> notificationService.deleteNotification("notification1"))
-                .isInstanceOf(FileNotFoundException.class)
-                .hasMessageContainingAll("The notification does not exist", "notifications\\notification1.json");
+            .isInstanceOf(FileNotFoundException.class)
+            .hasMessageContainingAll("The notification does not exist", "notifications\\notification1.json");
     }
 
     private File setupNotifications(String... ids) throws IOException {
@@ -145,11 +148,12 @@ public class NotificationServiceTest {
     private File setupNotifications(boolean notify, Map<String, String> notifications) throws IOException {
         File notificationsDir = new File(adminDir, "notifications");
 
-        if (!notificationsDir.exists()) notificationsDir.mkdirs();
+        if ( !notificationsDir.exists() )
+            notificationsDir.mkdirs();
 
         pasteNotificationsToDir(notificationsDir, notifications);
 
-        if (notify) {
+        if ( notify ) {
             notificationService.updateNotificationIds();
         }
         return notificationsDir;
@@ -160,6 +164,8 @@ public class NotificationServiceTest {
         if ( !notificationsDir.exists() || !notificationsDir.isDirectory() ) {
             return;
         }
+
+        Files.list(notificationsDir.toPath()).map(Path::toFile).forEach(File::delete);
 
         for ( Map.Entry<String, String> entry : notifications.entrySet() ) {
             String notificationId = entry.getKey();
