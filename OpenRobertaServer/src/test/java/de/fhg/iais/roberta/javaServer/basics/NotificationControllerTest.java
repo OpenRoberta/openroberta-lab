@@ -130,8 +130,8 @@ public class NotificationControllerTest {
         NotificationsResponse baseResponse = NotificationsResponse.makeFromString(((String) response.getEntity()));
 
         assertThat(baseResponse.getRc()).isEqualTo("error");
-        assertThat(baseResponse.getMessage()).isEqualTo("ORA_COMMAND_INVALID");
-        assertThat(baseResponse.getCause()).isEqualTo("ORA_COMMAND_INVALID");
+        assertThat(baseResponse.getMessage()).isEqualTo("ORA_NOTIFICATION_ERROR_INVALID_PERMISSION");
+        assertThat(baseResponse.getCause()).isEqualTo("ORA_NOTIFICATION_ERROR_INVALID_PERMISSION");
     }
 
     @Test
@@ -157,7 +157,7 @@ public class NotificationControllerTest {
         List<JSONObject> jsonObjects = parseNotificationObjects(notificationsResponse.getNotifications());
 
         assertThat(notificationsResponse.getRc()).isEqualTo("ok");
-        assertThat(notificationsResponse.getMessage()).isEqualTo("ORA_SERVER_SUCCESS");
+        assertThat(notificationsResponse.getMessage()).isEqualTo("ORA_NOTIFICATION_SUCCESS");
 
         assertThat(jsonObjects).singleElement().satisfies(jsonResponse -> {
             assertThat(jsonResponse.getString("id")).isEqualTo("notification1");
@@ -180,7 +180,7 @@ public class NotificationControllerTest {
 
         NotificationsResponse notificationsResponse = parseNotificationResponse(response);
         assertThat(notificationsResponse.getRc()).isEqualTo("error");
-        assertThat(notificationsResponse.getMessage()).isEqualTo("ORA_COMMAND_INVALID");
+        assertThat(notificationsResponse.getMessage()).isEqualTo("ORA_NOTIFICATION_ERROR_INVALID_PERMISSION");
     }
 
     @Test
@@ -199,7 +199,7 @@ public class NotificationControllerTest {
 
         NotificationsResponse notificationsResponse = parseNotificationResponse(response);
         assertThat(notificationsResponse.getRc()).isEqualTo("ok");
-        assertThat(notificationsResponse.getMessage()).isEqualTo("ORA_SERVER_SUCCESS");
+        assertThat(notificationsResponse.getMessage()).isEqualTo("ORA_NOTIFICATION_SUCCESS");
 
         List<JSONObject> notifications = parseNotificationObjects(notificationsResponse.getNotifications());
         assertThat(notifications).singleElement().satisfies(deletedNotification -> {
@@ -223,11 +223,11 @@ public class NotificationControllerTest {
 
         NotificationsResponse notificationsResponse = parseNotificationResponse(response);
         assertThat(notificationsResponse.getRc()).isEqualTo("error");
-        assertThat(notificationsResponse.getMessage()).isEqualTo("ORA_COMMAND_INVALID");
+        assertThat(notificationsResponse.getMessage()).isEqualTo("ORA_NOTIFICATION_ERROR_NOT_FOUND");
     }
 
     private void mockNotificationsComplete(boolean notificationsComplete) {
-        doReturn(notificationsComplete).when(notificationService).areNotificationsComplete(any());
+        doReturn(notificationsComplete).when(notificationService).areNotificationsSynchronized(any());
     }
 
     private BaseResponse baseResponsePing(ClientPing clientPing, FullRestRequest fullRestRequest) throws Exception {

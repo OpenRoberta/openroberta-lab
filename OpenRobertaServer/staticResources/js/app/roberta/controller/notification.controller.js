@@ -1,8 +1,9 @@
 define(
-	["require", "exports", "guiState.model", "guiState.controller", "comm"],
+	["require", "exports", "guiState.model", "guiState.controller", "notification.model", "comm"],
 	function (require, exports) {
 		const guiStateModel = require("guiState.model");
 		const guiStateController = require("guiState.controller");
+		const notificationModel = require("notification.model");
 		const comm = require("comm");
 
 		let notifications = []
@@ -14,38 +15,119 @@ define(
 		const notificationElementTitle = notificationElement.children('#releaseInfoTitle');
 		const notificationElementDescription = notificationElement.children('#releaseInfoContent');
 
+		const $notificationForm = $("#notificationForm");
+		const $notificationFileUpload = $('#notificationFileUpload');
+		const $notificationName = $("#notificationName");
+
 		exports.init = function () {
-			fetchNotifications()
-				.then(function () {
-					initEvents();
-				});
+			initNotificationModal();
+
+			notificationModel.getNotifications(function (result) {
+				initNotification(result.notifications);
+			});
 
 			comm.onNotificationsAvailableCallback(function () {
 				console.log("New notifications are available")
 				removeActiveEventListeners();
 				console.log("Removed active events", activeNotifications);
-				fetchNotifications()
-					.then(function () {
-						console.log("Fetched new ones");
-						initEvents();
-					})
+
+				notificationModel.getNotifications(function (result) {
+					initNotification(result.notifications);
+				});
 			});
 		};
+
+		exports.showNotificationModal = function () {
+			updateTable(function () {
+				$('#modal-notifications').modal("show");
+			});
+		};
+
+		function initNotificationModal() {
+			$notificationForm.on('submit', function (e) {
+				e.preventDefault();
+
+				let notificationName = $notificationName.val();
+				let uploadedFiles = $notificationFileUpload.prop("files");
+
+				if (uploadedFiles.length > 0) {
+					const fileReader = new FileReader();
+					fileReader.onload = function () {
+						const json = JSON.parse(fileReader.result);
+						if (notificationName.trim() !== "") {
+							json.name = notificationName;
+						}
+						notificationModel.postNotification(json, function (result) {
+							if (result.rc === "ok" && result.message === "ORA_NOTIFICATION_SUCCESS" && result.notifications.length >= 0) {
+								addNotificationToTable(result.notifications[0], $('#notificationsTableBody'));
+								$notificationForm[0].reset();
+							}
+						});
+					};
+					fileReader.readAsText(uploadedFiles[0])
+				}
+			});
+
+			$notificationFileUpload.on("change", function (e) {
+				const fileReader = new FileReader();
+				fileReader.onload = function () {
+					const json = JSON.parse(fileReader.result);
+					if (json.name) {
+						$notificationName.val(json.name);
+					}
+				};
+				fileReader.readAsText($notificationFileUpload.prop("files")[0])
+			});
+		}
+
+		function updateTable(successFn) {
+			notificationModel.getNotifications(function (result) {
+				addNotificationsToTable(result.notifications);
+				if (successFn) successFn(result);
+			});
+		}
+
+		function addNotificationToTable(notification, $notificationsTableBody) {
+			let $tableRow = $("<tr></tr>");
+			$tableRow.append('<td>' + notification.id + '</td>');
+			$tableRow.append('<td>' + notification.name + '</td>');
+
+			const data = "text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(notification, null, "\t"));
+			const filename = notification.id + ".json";
+
+			let $downloadButtonElement = $('<td><a class="btn btn-default"><span class="typcn typcn-download"></span></a></td>');
+			let $deleteButtonElement = $('<td><button class="btn btn-default"><span class="typcn typcn-trash"></span></button></td>');
+
+			$downloadButtonElement.find("a")
+				.attr("href", "data:" + data)
+				.attr("download", filename);
+
+			$deleteButtonElement.find("button").on("click", function () {
+				notificationModel.deleteNotification(notification.id, function () {
+					$tableRow.remove();
+				});
+			});
+
+			$tableRow.append($downloadButtonElement);
+			$tableRow.append($deleteButtonElement);
+
+			$notificationsTableBody.append($tableRow);
+		}
+
+		function addNotificationsToTable(notifications) {
+			let $notificationsTableBody = $('#notificationsTableBody');
+			$notificationsTableBody.empty();
+
+			for (const notification of notifications) {
+				addNotificationToTable(notification, $notificationsTableBody);
+			}
+		}
 
 		function removeActiveEventListeners() {
 			for (const notification of activeNotifications) {
 				notification.removeActiveEvents();
 			}
 			activeNotifications = [];
-		}
-
-		function fetchNotifications() {
-			return comm.json("/notifications/getNotifications", {}, function (result) {
-				console.log("fetched notifications", result)
-				if (result.rc === "ok") {
-					notifications = result.notifications;
-				}
-			}, "Fetch notifications from server");
 		}
 
 		function registerEventListener(selector, event, eventHandler, notificationState) {
@@ -78,7 +160,7 @@ define(
 			}
 		}
 
-		function initEvents() {
+		function initNotification(notifications) {
 			for (const notification of notifications) {
 				const notificationState = {
 					id: notification.id,
@@ -93,7 +175,7 @@ define(
 					notificationState.activeEvents = [];
 				}
 
-				function showNotificationsIfConditions(e, specificConditions) {
+				function showNotificationsIfConditions(specificConditions) {
 					const genericConditions = notification.conditions;
 
 					let specificConditionsFulfilled = !specificConditions || specificConditions.every(cond => evaluateCondition(cond));
@@ -105,36 +187,41 @@ define(
 					}
 				}
 
-				for (const trigger of notification.triggers) {
-					const event = trigger.event;
-					const addClass = trigger.addClass;
-					const removeClass = trigger.removeClass;
+				if (notification.triggers && notification.triggers.length > 0) {
+					for (const trigger of notification.triggers) {
+						const event = trigger.event;
+						const addClass = trigger.addClass;
+						const removeClass = trigger.removeClass;
 
-					let selector = parseSelector(trigger);
+						let selector = parseSelector(trigger);
 
-					if (!selector) {
-						console.error("The trigger doesn't have a selector set", trigger);
-						continue;
+						if (!selector) {
+							console.error("The trigger doesn't have a selector set", trigger);
+							continue;
+						}
+
+						// "Normal" event listeners
+						if (event) {
+							registerEventListener(selector, event, function (e) {
+								showNotificationsIfConditions(trigger.conditions);
+							}, notificationState);
+						}
+
+						// Class changed event listeners
+						if (addClass || removeClass) {
+							registerEventListener(selector, "classChange", function (e) {
+								if (addClass && $(selector).hasClass(addClass)) {
+									showNotificationsIfConditions(trigger.conditions);
+								}
+								if (removeClass && !$(selector).hasClass(removeClass)) {
+									showNotificationsIfConditions(trigger.conditions);
+								}
+							}, notificationState)
+						}
 					}
-
-					// "Normal" event listeners
-					if (event) {
-						registerEventListener(selector, event, function (e) {
-							showNotificationsIfConditions(e, trigger.conditions);
-						}, notificationState);
-					}
-
-					// Class changed event listeners
-					if (addClass || removeClass) {
-						registerEventListener(selector, "classChange", function (e) {
-							if (addClass && $(selector).hasClass(addClass)) {
-								showNotificationsIfConditions(e, trigger.conditions);
-							}
-							if (removeClass && !$(selector).hasClass(removeClass)) {
-								showNotificationsIfConditions(e, trigger.conditions);
-							}
-						}, notificationState)
-					}
+				} else {
+					// Run directly
+					showNotificationsIfConditions();
 				}
 
 				activeNotifications.push(notificationState);
@@ -155,6 +242,16 @@ define(
 					return $(condition.domElement).hasClass(condition.hasClass);
 				}
 			}
+			if (condition.endTime) {
+				let endTime = new Date(condition.endTime);
+				let now = new Date(Date.now());
+				return endTime >= now;
+			}
+			if (condition.startTime) {
+				let startTime = new Date(condition.startTime);
+				let now = new Date(Date.now());
+				return startTime <= now;
+			}
 			return true
 		}
 
@@ -164,7 +261,7 @@ define(
 
 		function parseLocalized(object) {
 			let localizedDescription = object[guiStateController.getLanguage()];
-			return localizedDescription || object;
+			return localizedDescription || object["en"];
 		}
 
 		function showNotifications(handlers) {
@@ -183,10 +280,16 @@ define(
 					const $element = $(parseSelector(elementMarker));
 					if ($element.length) {
 						const content = parseLocalized(elementMarker.content)
-						const time = elementMarker.time
-						showBadgeOnElementForTime($element, content);
+						const time = elementMarker.time || 5 * 60 * 1000;
+						showBadgeOnElementForTime($element, content, time);
 					}
 				}
+				if (handler.startScreen) {
+					const startScreen = handler.startScreen;
+					const content = parseLocalized(startScreen.content);
+					showStartScreenNotification(content, startScreen.time);
+				}
+
 			}
 		}
 
@@ -197,8 +300,26 @@ define(
 				.delay(time)
 				.fadeOut()
 				.queue(function () {
-					$(this).remove();
-				})
+					this.remove();
+				});
+		}
+
+		function showStartScreenNotification(content, time) {
+			const $startupMessage = $("#startup-message-statustext");
+			const $element = $('<h4 style="display: none">' + content + '</h4>')
+
+			$element
+				.appendTo($startupMessage)
+				.fadeIn();
+
+			if (time) {
+				$element
+					.delay(time)
+					.fadeOut()
+					.queue(function () {
+						$(this).remove();
+					})
+			}
 		}
 
 		/**

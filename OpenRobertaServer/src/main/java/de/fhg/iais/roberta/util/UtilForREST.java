@@ -171,7 +171,7 @@ public class UtilForREST {
             response.setServerVersion(UtilForREST.serverVersion);
             if ( httpSessionState != null ) {
 
-                boolean notificationsComplete = notificationService.areNotificationsComplete(httpSessionState.getReceivedNotifications());
+                boolean notificationsComplete = notificationService.areNotificationsSynchronized(httpSessionState.getReceivedNotifications());
                 response.setNotificationsAvailable(!notificationsComplete);
 
                 String token = httpSessionState.getToken();

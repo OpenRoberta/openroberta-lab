@@ -287,4 +287,8 @@ public class HttpSessionState implements Serializable {
     public Set<String> getReceivedNotifications() {
         return receivedNotifications;
     }
+
+    public void setReceivedNotifications(Collection<String> receivedNotifications) {
+        this.receivedNotifications = new HashSet<>(receivedNotifications);
+    }
 }

@@ -27,7 +27,7 @@ public class NotificationService {
     private static final String NOTIFICATION_EXTENSION = "json";
     private final ServerProperties serverProperties;
 
-    private final Set<String> allNotificationIds = new HashSet<>();
+    private Set<String> allNotificationIds = new HashSet<>();
 
     @Inject
     public NotificationService(ServerProperties serverProperties) {
@@ -39,8 +39,8 @@ public class NotificationService {
         return allNotificationIds;
     }
 
-    public boolean areNotificationsComplete(Set<String> receivedNotifications) {
-        return receivedNotifications == null || receivedNotifications.equals(getAllNotificationIds());
+    public boolean areNotificationsSynchronized(Set<String> receivedNotifications) {
+        return receivedNotifications == null || receivedNotifications.equals(allNotificationIds);
     }
 
     public List<JSONObject> getAllNotifications() {
@@ -88,7 +88,7 @@ public class NotificationService {
     }
 
     void updateNotificationIds() {
-        allNotificationIds.addAll(readNotificationIds());
+        allNotificationIds = new HashSet<>(readNotificationIds());
     }
 
     private String getFilename(String id) {

@@ -44,7 +44,7 @@ public class NotificationController {
 
         List<JSONObject> allNotifications = notificationService.getAllNotifications();
 
-        httpSessionState.getReceivedNotifications().addAll(notificationService.getAllNotificationIds());
+        httpSessionState.setReceivedNotifications(notificationService.getAllNotificationIds());
         JSONArray jsonArray = new JSONArray(allNotifications);
         notificationsResponse.setNotifications(jsonArray);
 
@@ -65,10 +65,10 @@ public class NotificationController {
         if ( isRobertaUser(httpSessionState) ) {
             JSONObject notification = notificationService.saveNotification(fullRestRequest.getData());
             notificationsResponse.setNotifications(new JSONArray(Collections.singletonList(notification)));
-            UtilForREST.addSuccessInfo(notificationsResponse, Key.SERVER_SUCCESS);
+            UtilForREST.addSuccessInfo(notificationsResponse, Key.NOTIFICATION_SUCCESS);
         } else {
             LOG.warn("A unprivileged user with id {} tried to save a notification", httpSessionState.getUserId());
-            UtilForREST.addErrorInfo(notificationsResponse, Key.COMMAND_INVALID);
+            UtilForREST.addErrorInfo(notificationsResponse, Key.NOTIFICATION_ERROR_INVALID_PERMISSION);
         }
 
         return UtilForREST.responseWithFrontendInfo(notificationsResponse, httpSessionState, null);
@@ -89,14 +89,14 @@ public class NotificationController {
             try {
                 JSONObject notification = notificationService.deleteNotification(data.getString("id"));
                 notificationsResponse.setNotifications(new JSONArray(Collections.singletonList(notification)));
-                UtilForREST.addSuccessInfo(notificationsResponse, Key.SERVER_SUCCESS);
+                UtilForREST.addSuccessInfo(notificationsResponse, Key.NOTIFICATION_SUCCESS);
             } catch ( FileNotFoundException e ) {
                 LOG.warn("Requested to delete not existing notification", e);
-                UtilForREST.addErrorInfo(notificationsResponse, Key.COMMAND_INVALID);
+                UtilForREST.addErrorInfo(notificationsResponse, Key.NOTIFICATION_ERROR_NOT_FOUND);
             }
         } else {
             LOG.warn("A unprivileged user with id {} tried to delete a notification", httpSessionState.getUserId());
-            UtilForREST.addErrorInfo(notificationsResponse, Key.COMMAND_INVALID);
+            UtilForREST.addErrorInfo(notificationsResponse, Key.NOTIFICATION_ERROR_INVALID_PERMISSION);
         }
 
         return UtilForREST.responseWithFrontendInfo(notificationsResponse, httpSessionState, null);
