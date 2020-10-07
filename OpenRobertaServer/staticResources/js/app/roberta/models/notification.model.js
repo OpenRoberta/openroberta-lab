@@ -13,8 +13,10 @@ define(['exports', 'comm'], function (exports, COMM) {
 		});
 	};
 
-	exports.postNotification = function (notificationJson, successFn) {
-		COMM.json("/notifications/postNotification", notificationJson, successFn);
+	exports.postNotifications = function (notifications, successFn) {
+		COMM.json("/notifications/postNotifications", {
+			notifications
+		}, successFn);
 	};
 
 	exports.deleteNotification = function (id, successFn) {

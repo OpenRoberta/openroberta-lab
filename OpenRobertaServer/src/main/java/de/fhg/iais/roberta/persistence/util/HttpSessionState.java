@@ -53,6 +53,7 @@ public class HttpSessionState implements Serializable {
     private String toolbox;
     private boolean processing;
     private Set<String> receivedNotifications = new HashSet<>();
+    private String receivedNotificationsDigest;
 
     private HttpSessionState(
         String initToken,
@@ -290,5 +291,13 @@ public class HttpSessionState implements Serializable {
 
     public void setReceivedNotifications(Collection<String> receivedNotifications) {
         this.receivedNotifications = new HashSet<>(receivedNotifications);
+    }
+
+    public String getReceivedNotificationsDigest() {
+        return receivedNotificationsDigest;
+    }
+
+    public void setReceivedNotificationsDigest(String receivedNotificationsDigest) {
+        this.receivedNotificationsDigest = receivedNotificationsDigest;
     }
 }

@@ -20,25 +20,20 @@ import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.ws.rs.core.Response;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.not;
-import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class NotificationControllerTest {
     public static final int ADMIN_USER_ID = 1;
     public static final int NOT_ADMIN_USER_ID = 2;
-    private final Logger LOG = LoggerFactory.getLogger(NotificationControllerTest.class);
 
     @Rule
     public TemporaryFolder temporaryFolder = new TemporaryFolder();
@@ -52,82 +47,70 @@ public class NotificationControllerTest {
     private NotificationController notificationController;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         notificationController = new NotificationController(notificationService);
         UtilForREST.setNotificationService(notificationService);
-
-        setupNotifications();
+        mockGetCurrentDigest("HASH");
     }
 
     @Test
-    public void getNotificationsAndSaveSeenNotificationsToSession() throws IOException {
-        setupNotificationIds("notification1", "notification2");
+    public void getNotifications() {
+        JSONObject firstNotification = new JSONObject("{\n" + "  \"triggers\": [],\n" + "  \"name\": \"notification1\"\n" + "}");
+        JSONObject secondNotification = new JSONObject("{\n" + "  \"conditions\": [" + "],\n" + "  \"name\": \"notification2\"\n" + "}");
 
-        HttpSessionState httpSession = createEmptyHttpSession();
-        FullRestRequest fullRestRequest = createFullRequestFromSession(httpSession);
-
-        notificationController.getNotifications(fullRestRequest);
-        assertThat(httpSession.getReceivedNotifications()).containsExactly("notification1", "notification2");
-    }
-
-    @Test
-    public void getNotificationsInCorrectStructure() throws IOException {
-        setupNotifications(
-            "{\n" + "  \"triggers\": [],\n" + "  \"id\": \"notification1\"\n" + "}",
-            "{\n" + "  \"conditions\": [" + "],\n" + "  \"id\": \"notification2\"\n" + "}");
+        mockGetNotifications(firstNotification, secondNotification);
+        mockGetCurrentDigest("HASH");
 
         HttpSessionState httpSession = createEmptyHttpSession();
         FullRestRequest fullRestRequest = createFullRequestFromSession(httpSession);
 
         Response response = notificationController.getNotifications(fullRestRequest);
-        List<JSONObject> notificationList = parseNotificationsFromResponse(response);
+        NotificationsResponse notificationsResponse = parseNotificationResponse(response);
+        List<JSONObject> notificationList = parseNotificationObjects(notificationsResponse.getNotifications());
 
-        assertThat(httpSession.getReceivedNotifications()).containsExactly("notification1", "notification2");
-        assertThat(notificationList).anySatisfy(json -> {
-            assertThat(json.getString("id")).isEqualTo("notification1");
+        assertThat(httpSession.getReceivedNotificationsDigest()).isEqualTo("HASH");
+        assertThat(notificationList).hasSize(2).anySatisfy(json -> {
+            assertThat(json.getString("name")).isEqualTo("notification1");
             assertThat(json.getJSONArray("triggers")).isEmpty();
         }).anySatisfy(json -> {
-            assertThat(json.getString("id")).isEqualTo("notification2");
+            assertThat(json.getString("name")).isEqualTo("notification2");
             assertThat(json.getJSONArray("conditions")).isEmpty();
         });
-
+        
+        assertThat(notificationsResponse.getNotificationsAvailable()).isEqualTo(false);
     }
 
     @Test
     public void getNotificationsAndNotificationsAvailableFlag() throws Exception {
         ClientPing clientPing = new ClientPing("", null);
 
-        setupNotificationIds("notifications1", "notification2");
-
         HttpSessionState httpSession = createEmptyHttpSession();
         FullRestRequest fullRestRequest = createFullRequestFromSession(httpSession);
 
-        Response response = notificationController.getNotifications(fullRestRequest);
+        mockGetCurrentDigest("HASH");
+        notificationController.getNotifications(fullRestRequest);
 
-        mockNotificationsComplete(true);
         BaseResponse firstBaseResponse = baseResponsePing(clientPing, fullRestRequest);
         assertThat(firstBaseResponse.getNotificationsAvailable()).isEqualTo(false);
 
-        setupNotificationIds("notifications1", "notification2", "notification3");
-
-        mockNotificationsComplete(false);
+        mockGetCurrentDigest("DIFFERENT_HASH");
         BaseResponse secondBaseResponse = baseResponsePing(clientPing, fullRestRequest);
         assertThat(secondBaseResponse.getNotificationsAvailable()).isEqualTo(true);
     }
 
     @Test
-    public void postNotificationNotAsAdmin() {
-        JSONObject notification = new JSONObject("{\n" + "  \"triggers\": []\n" + "}");
+    public void postNotificationsNotAsAdmin() {
+        JSONArray notifications = new JSONArray("[\n" + "  {\n" + "    \"triggers\": []\n" + "  " + "}\n" + "]");
 
         HttpSessionState session = createEmptyHttpSession();
         session.setUserClearDataKeepTokenAndRobotId(NOT_ADMIN_USER_ID);
-        FullRestRequest fullRestRequest = createFullRequestFromSession(session, notification);
+        FullRestRequest fullRestRequest = createFullRequestFromSession(session, notifications.toString());
 
-        Response response = notificationController.postNotification(fullRestRequest);
+        Response response = notificationController.postNotifications(fullRestRequest);
 
-        verify(notificationService, never()).saveNotification(any(JSONObject.class));
+        verify(notificationService, never()).saveNotifications(anyString());
 
-        NotificationsResponse baseResponse = NotificationsResponse.makeFromString(((String) response.getEntity()));
+        BaseResponse baseResponse = BaseResponse.makeFromString(((String) response.getEntity()));
 
         assertThat(baseResponse.getRc()).isEqualTo("error");
         assertThat(baseResponse.getMessage()).isEqualTo("ORA_NOTIFICATION_ERROR_INVALID_PERMISSION");
@@ -135,109 +118,39 @@ public class NotificationControllerTest {
     }
 
     @Test
-    public void postNotificationAsAdmin() {
-        JSONObject notification = new JSONObject("{\n" + "  \"triggers\": []\n" + "}");
+    public void postNotificationsAsAdmin() {
+        JSONArray notifications = new JSONArray("[\n" + "  {\n" + "    \"triggers\": []\n" + "  " + "}\n" + "]");
 
         HttpSessionState session = createEmptyHttpSession();
         session.setUserClearDataKeepTokenAndRobotId(ADMIN_USER_ID);
-        FullRestRequest fullRestRequest = createFullRequestFromSession(session, notification);
+        FullRestRequest fullRestRequest = createFullRequestFromSession(session, notifications.toString());
 
-        doAnswer(invocation -> invocation.getArgumentAt(0, JSONObject.class).put("id", "notification1"))
-            .when(notificationService)
-            .saveNotification(any(JSONObject.class));
+        doAnswer(invocation -> new JSONArray(invocation.getArgumentAt(0, String.class))).when(notificationService).saveNotifications(anyString());
 
-        Response response = notificationController.postNotification(fullRestRequest);
+        Response response = notificationController.postNotifications(fullRestRequest);
 
-        ArgumentCaptor<JSONObject> argumentCaptor = ArgumentCaptor.forClass(JSONObject.class);
-        verify(notificationService).saveNotification(argumentCaptor.capture());
+        ArgumentCaptor<String> argumentCaptor = ArgumentCaptor.forClass(String.class);
+        verify(notificationService).saveNotifications(argumentCaptor.capture());
 
-        assertThat(argumentCaptor.getValue()).isEqualTo(notification);
+        String notificationsJson = argumentCaptor.getValue();
+        assertThat(notificationsJson).isEqualTo(notifications.toString());
 
-        NotificationsResponse notificationsResponse = parseNotificationResponse(response);
-        List<JSONObject> jsonObjects = parseNotificationObjects(notificationsResponse.getNotifications());
-
-        assertThat(notificationsResponse.getRc()).isEqualTo("ok");
-        assertThat(notificationsResponse.getMessage()).isEqualTo("ORA_NOTIFICATION_SUCCESS");
-
-        assertThat(jsonObjects).singleElement().satisfies(jsonResponse -> {
-            assertThat(jsonResponse.getString("id")).isEqualTo("notification1");
-            assertThat(jsonResponse.getJSONArray("triggers")).isEmpty();
-        });
-
+        BaseResponse baseResponse = BaseResponse.makeFromString(((String) response.getEntity()));
+        assertThat(baseResponse.getRc()).isEqualTo("ok");
+        assertThat(baseResponse.getMessage()).isEqualTo("ORA_NOTIFICATION_SUCCESS");
     }
 
-    @Test
-    public void deleteNotificationNotAsAdmin() throws FileNotFoundException {
-        String notificationId = "notification1";
-        JSONObject data = new JSONObject("{\n" + "  \"id\": \"" + notificationId + "\"\n" + "}");
-
-        HttpSessionState session = createEmptyHttpSession();
-        session.setUserClearDataKeepTokenAndRobotId(NOT_ADMIN_USER_ID);
-        FullRestRequest fullRestRequest = createFullRequestFromSession(session, data);
-
-        Response response = notificationController.deleteNotification(fullRestRequest);
-        verify(notificationService, never()).deleteNotification(notificationId);
-
-        NotificationsResponse notificationsResponse = parseNotificationResponse(response);
-        assertThat(notificationsResponse.getRc()).isEqualTo("error");
-        assertThat(notificationsResponse.getMessage()).isEqualTo("ORA_NOTIFICATION_ERROR_INVALID_PERMISSION");
+    private void mockGetNotifications(JSONObject... toBeReturned) {
+        doReturn(Arrays.asList(toBeReturned)).when(notificationService).getNotifications();
     }
 
-    @Test
-    public void deleteNotificationAsAdmin() throws FileNotFoundException {
-        String notificationId = "notification1";
-        JSONObject data = new JSONObject("{\n" + "  \"id\": \"" + notificationId + "\"\n" + "}");
-
-        HttpSessionState session = createEmptyHttpSession();
-        session.setUserClearDataKeepTokenAndRobotId(ADMIN_USER_ID);
-        FullRestRequest fullRestRequest = createFullRequestFromSession(session, data);
-
-        JSONObject notification = new JSONObject("{\n" + "  \"id\": \"" + notificationId + "\",\n" + "  \"triggers\": []\n" + "}");
-        doReturn(notification).when(notificationService).deleteNotification(notificationId);
-        Response response = notificationController.deleteNotification(fullRestRequest);
-        verify(notificationService).deleteNotification(notificationId);
-
-        NotificationsResponse notificationsResponse = parseNotificationResponse(response);
-        assertThat(notificationsResponse.getRc()).isEqualTo("ok");
-        assertThat(notificationsResponse.getMessage()).isEqualTo("ORA_NOTIFICATION_SUCCESS");
-
-        List<JSONObject> notifications = parseNotificationObjects(notificationsResponse.getNotifications());
-        assertThat(notifications).singleElement().satisfies(deletedNotification -> {
-            assertThat(deletedNotification.getString("id")).isEqualTo(notificationId);
-            assertThat(deletedNotification.getJSONArray("triggers")).isEmpty();
-        });
-    }
-
-    @Test
-    public void deleteNotificationAsAdminNotExistingNotification() throws FileNotFoundException {
-        String notificationId = "notification1";
-        JSONObject data = new JSONObject("{\n" + "  \"id\": \"" + notificationId + "\"\n" + "}");
-
-        HttpSessionState session = createEmptyHttpSession();
-        session.setUserClearDataKeepTokenAndRobotId(ADMIN_USER_ID);
-        FullRestRequest fullRestRequest = createFullRequestFromSession(session, data);
-
-        doThrow(new FileNotFoundException("The notification could not be found")).when(notificationService).deleteNotification(notificationId);
-        Response response = notificationController.deleteNotification(fullRestRequest);
-        verify(notificationService).deleteNotification(notificationId);
-
-        NotificationsResponse notificationsResponse = parseNotificationResponse(response);
-        assertThat(notificationsResponse.getRc()).isEqualTo("error");
-        assertThat(notificationsResponse.getMessage()).isEqualTo("ORA_NOTIFICATION_ERROR_NOT_FOUND");
-    }
-
-    private void mockNotificationsComplete(boolean notificationsComplete) {
-        doReturn(notificationsComplete).when(notificationService).areNotificationsSynchronized(any());
+    private void mockGetCurrentDigest(String digest) {
+        when(notificationService.getCurrentDigest()).thenReturn(digest);
     }
 
     private BaseResponse baseResponsePing(ClientPing clientPing, FullRestRequest fullRestRequest) throws Exception {
         Response pingResponse = clientPing.command(fullRestRequest);
         return PingResponse.makeFromString(((String) pingResponse.getEntity()));
-    }
-
-    private List<JSONObject> parseNotificationsFromResponse(Response response) {
-        NotificationsResponse notificationsResponse = parseNotificationResponse(response);
-        return parseNotificationObjects(notificationsResponse.getNotifications());
     }
 
     private List<JSONObject> parseNotificationObjects(JSONArray notificationsOutput) {
@@ -248,30 +161,15 @@ public class NotificationControllerTest {
 
     private NotificationsResponse parseNotificationResponse(Response response) {
         assertThat(response.getEntity()).isInstanceOf(String.class);
-        NotificationsResponse notificationsResponse = NotificationsResponse.makeFromString(((String) response.getEntity()));
-        return notificationsResponse;
-    }
-
-    private void setupNotifications(String... notifications) throws IOException {
-        List<JSONObject> jsonObjects = Arrays.stream(notifications).map(JSONObject::new).collect(Collectors.toList());
-        List<String> ids = jsonObjects.stream().map(json -> json.getString("id")).collect(Collectors.toList());
-
-        doReturn(jsonObjects).when(notificationService).getAllNotifications();
-        doReturn(new HashSet<>(ids)).when(notificationService).getAllNotificationIds();
-    }
-
-    private void setupNotificationIds(String... ids) throws IOException {
-        String[] notifications = Arrays.stream(ids).map(id -> new JSONObject().put("id", id)).map(JSONObject::toString).toArray(String[]::new);
-
-        setupNotifications(notifications);
+        return NotificationsResponse.makeFromString(((String) response.getEntity()));
     }
 
     private FullRestRequest createFullRequestFromSession(HttpSessionState httpSession) {
-        return createFullRequestFromSession(httpSession, new JSONObject());
+        return createFullRequestFromSession(httpSession, "");
     }
 
-    private FullRestRequest createFullRequestFromSession(HttpSessionState httpSession, JSONObject data) {
-        return FullRestRequest.make().setInitToken(httpSession.getInitToken()).setData(data).setLog(Collections.emptyList()).immutable();
+    private FullRestRequest createFullRequestFromSession(HttpSessionState httpSession, String notifications) {
+        return FullRestRequest.make().setInitToken(httpSession.getInitToken()).setData(new JSONObject().put("notifications", notifications)).setLog(Collections.emptyList()).immutable();
     }
 
     private HttpSessionState createEmptyHttpSession() {

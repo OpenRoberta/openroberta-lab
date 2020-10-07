@@ -1,6 +1,11 @@
 package de.fhg.iais.roberta.util;
 
+import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.assertj.core.api.JUnitSoftAssertions;
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Rule;
@@ -11,13 +16,15 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import java.io.*;
-import java.nio.file.Files;
+import java.io.File;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.Arrays;
+import java.util.List;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @RunWith(MockitoJUnitRunner.class)
 public class NotificationServiceTest {
@@ -30,152 +37,77 @@ public class NotificationServiceTest {
 
     @Rule
     public final JUnitSoftAssertions softly = new JUnitSoftAssertions();
+
     private NotificationService notificationService;
     private File adminDir;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         adminDir = new File(temporaryFolder.getRoot(), "adminDir");
         Mockito.doReturn(adminDir.toString()).when(serverProperties).getStringProperty("server.admin.dir");
         notificationService = new NotificationService(serverProperties);
     }
 
     @Test
-    public void getAllNotificationsShouldReturnAllNotifications() throws IOException {
-        Map<String, String> notificationsInput = new HashMap<>();
-
+    public void getNotifications() throws IOException {
         JSONObject notification1 = new JSONObject("{\n" + "  \"triggers\": [],\n" + "  \"conditions\": [],\n" + "  \"once\": true\n" + "}");
-
-        notificationsInput.put("notification1", notification1.toString());
-
         JSONObject notification2 = new JSONObject("{\n" + "  \"handlers\": []\n" + "}");
-        notificationsInput.put("notification2", notification2.toString());
 
-        setupNotifications(notificationsInput);
+        JSONArray jsonArray = new JSONArray(Arrays.asList(notification1, notification2));
+        writeNotifications(jsonArray.toString());
 
-        List<JSONObject> notificationsResult = notificationService.getAllNotifications();
-        assertThat(notificationsResult).hasSize(2).anySatisfy(result -> {
-            assertThat(result.similar(notification1.put("id", "notification1"))).isTrue();
-        }).anySatisfy(result -> {
-            assertThat(result.similar(notification2.put("id", "notification2"))).isTrue();
-        });
+        List<JSONObject> notificationsResult = notificationService.getNotifications();
+        assertThat(notificationsResult)
+            .hasSize(2)
+            .anySatisfy(result -> assertThat(result.similar(notification1)).isTrue())
+            .anySatisfy(result -> assertThat(result.similar(notification2)).isTrue());
     }
 
     @Test
-    public void saveNotificationShouldSaveNotificationToFileSystem() throws IOException {
-        File notificationDirectory = new File(adminDir, "notifications");
+    public void saveNotifications() {
+        JSONArray notifications = new JSONArray("[{\"once\": true, \"name\": \"Calliope\"}]");
+        notificationService.saveNotifications(notifications.toString());
 
-        JSONObject notificationToSave =
-            new JSONObject("{\n" + "  \"triggers\": [],\n" + "  \"conditions\": [],\n" + "  \"handlers\": [],\n" + "  \"once\": true\n" + "}");
-
-        JSONObject firstNotification = notificationService.saveNotification(notificationToSave);
-        JSONObject secondNotification = notificationService.saveNotification(notificationToSave);
-
-        assertThat(notificationDirectory.listFiles()).hasSize(2).allSatisfy(file -> {
-            assertThat(file).hasContent(notificationToSave.toString());
-        });
-
-        assertThat(firstNotification.getString("id")).isNotEqualTo(secondNotification.getString("id"));
-
-        assertThat(firstNotification.getString("id")).matches("notification(-.*){5}");
-        assertThat(secondNotification.getString("id")).matches("notification(-.*){5}");
-
-        assertThat(notificationService.getAllNotificationIds()).contains(firstNotification.getString("id"), secondNotification.getString("id"));
-
-        firstNotification.remove("id");
-        secondNotification.remove("id");
-
-        assertThat(firstNotification.similar(notificationToSave)).isTrue();
-        assertThat(secondNotification.similar(notificationToSave)).isTrue();
+        Path notificationFile = adminDir.toPath().resolve("notifications.json");
+        assertThat(notificationFile)
+                .exists()
+                .hasContent(notifications.toString());
     }
 
     @Test
-    public void notificationsShouldBeUpdatedOnInitialization() throws IOException {
-        setupNotifications(false, "notification1", "notification2");
-
-        notificationService = new NotificationService(serverProperties);
-        assertThat(notificationService.getAllNotificationIds()).containsExactly("notification1", "notification2");
+    public void saveNotifications_invalidJsonFormat() {
+        assertThatThrownBy(() -> notificationService.saveNotifications("[{\n" + "  \"triggers\": []\n" + "]"))
+                .isInstanceOf(JSONException.class)
+                .hasMessageContaining("}");
     }
 
     @Test
-    public void areNotificationSynchronizedShouldDependOnFilesystem() throws IOException {
-        setupNotifications();
-        softly.assertThat(notificationService.areNotificationsSynchronized(Collections.emptySet())).isTrue();
+    public void getCurrentDigest() throws IOException {
+        JSONArray notifications = new JSONArray("[{\"once\": true, \"name\": \"Calliope\"}]");
 
-        setupNotifications("notification1", "notification2");
-        softly.assertThat(notificationService.areNotificationsSynchronized(Collections.emptySet())).isFalse();
+        notificationService.saveNotifications(notifications.toString());
+        String currentDigest = notificationService.getCurrentDigest();
 
-        HashSet<String> comparableNotifications = new HashSet<>(Arrays.asList("notification1", "notification2"));
-        softly.assertThat(notificationService.areNotificationsSynchronized(comparableNotifications)).isTrue();
+        Path notificationFile = adminDir.toPath().resolve("notifications.json");
 
-        setupNotifications("notification1");
-        softly.assertThat(notificationService.areNotificationsSynchronized(comparableNotifications)).isFalse();
+        assertThat(currentDigest)
+                .isEqualTo(NotificationService.digestOfFile(notificationFile));
     }
 
     @Test
-    public void deleteNotificationShouldDeleteNotificationOnFilesystem() throws IOException {
-        File notificationDir = setupNotifications("notification1");
-        assertThat(notificationDir).isDirectoryContaining(file -> file.getName().equals("notification1.json"));
-        assertThat(notificationService.getAllNotificationIds()).contains("notification1");
+    public void digestOfFile() throws IOException {
+        String randomString = RandomStringUtils.random(30);
 
-        JSONObject deletedNotification = notificationService.deleteNotification("notification1");
-        assertThat(notificationDir).isDirectoryNotContaining(file -> file.getName().equals("notification1.json"));
-        assertThat(notificationService.getAllNotificationIds()).doesNotContain("notification1");
+        File file = temporaryFolder.newFile();
+        FileUtils.writeStringToFile(file, randomString, StandardCharsets.UTF_8);
 
-        assertThat(deletedNotification.getString("id")).isEqualTo("notification1");
+        String expected = DigestUtils.md5Hex(randomString).toUpperCase();
+        assertThat(NotificationService.digestOfFile(file.toPath())).isEqualTo(expected);
     }
 
-    @Test
-    public void deleteNotificationShouldThrowFileNotFound() {
-        assertThatThrownBy(() -> notificationService.deleteNotification("notification1"))
-            .isInstanceOf(FileNotFoundException.class)
-            .hasMessageContainingAll("The notification does not exist", "notifications\\notification1.json");
+    private void writeNotifications(String json) throws IOException {
+        Path notificationFile = adminDir.toPath().resolve("notifications.json");
+        FileUtils.writeStringToFile(notificationFile.toFile(), json, StandardCharsets.UTF_8);
     }
 
-    private File setupNotifications(String... ids) throws IOException {
-        return setupNotifications(true, ids);
-    }
-
-    private File setupNotifications(boolean notify, String... ids) throws IOException {
-        Map<String, String> notifications = Arrays.stream(ids).collect(Collectors.toMap(id -> id, id -> "{}"));
-        return setupNotifications(notify, notifications);
-    }
-
-    private File setupNotifications(Map<String, String> notifications) throws IOException {
-        return setupNotifications(true, notifications);
-    }
-
-    private File setupNotifications(boolean notify, Map<String, String> notifications) throws IOException {
-        File notificationsDir = new File(adminDir, "notifications");
-
-        if ( !notificationsDir.exists() )
-            notificationsDir.mkdirs();
-
-        pasteNotificationsToDir(notificationsDir, notifications);
-
-        if ( notify ) {
-            notificationService.updateNotificationIds();
-        }
-        return notificationsDir;
-    }
-
-    private void pasteNotificationsToDir(File notificationsDir, Map<String, String> notifications) throws IOException {
-        final String extension = "json";
-        if ( !notificationsDir.exists() || !notificationsDir.isDirectory() ) {
-            return;
-        }
-
-        Files.list(notificationsDir.toPath()).map(Path::toFile).forEach(File::delete);
-
-        for ( Map.Entry<String, String> entry : notifications.entrySet() ) {
-            String notificationId = entry.getKey();
-
-            String filename = String.format("%s.%s", notificationId, extension);
-            File notificationFile = new File(notificationsDir, filename);
-            try (FileWriter fileWriter = new FileWriter(notificationFile); BufferedWriter bufferedWriter = new BufferedWriter(fileWriter)) {
-                String content = entry.getValue();
-                bufferedWriter.write(content);
-            }
-        }
-    }
 }

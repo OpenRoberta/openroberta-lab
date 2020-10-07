@@ -1,133 +1,111 @@
 package de.fhg.iais.roberta.util;
 
+import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.FilenameUtils;
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.*;
+import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
-import static java.nio.file.Files.exists;
+import java.util.stream.IntStream;
 
 public class NotificationService {
 
-    private static final Logger LOG = LoggerFactory.getLogger(NotificationService.class);
-
-    private static final String NOTIFICATION_EXTENSION = "json";
+    public static final String FILENAME = "notifications.json";
     private final ServerProperties serverProperties;
 
-    private Set<String> allNotificationIds = new HashSet<>();
+    private String currentDigest;
 
     @Inject
     public NotificationService(ServerProperties serverProperties) {
         this.serverProperties = serverProperties;
-        updateNotificationIds();
+        updateDigest();
     }
 
-    public Set<String> getAllNotificationIds() {
-        return allNotificationIds;
+    /**
+     * Parse all notifications from notification json file saved on filesystem
+     * @return a list of json objects each representing one notification
+     */
+    public List<JSONObject> getNotifications() {
+        Path notificationFile = getNotificationsFilePath();
+
+        createNotificationsFileIfNotExist(notificationFile);
+
+        String fileContent = Util.readFileContent(notificationFile.toString());
+
+        JSONArray notificationArray = new JSONArray(fileContent);
+        return IntStream.range(0, notificationArray.length())
+                .mapToObj(notificationArray::getJSONObject)
+                .collect(Collectors.toList());
     }
 
-    public boolean areNotificationsSynchronized(Set<String> receivedNotifications) {
-        return receivedNotifications == null || receivedNotifications.equals(allNotificationIds);
+    private void createNotificationsFileIfNotExist(Path notificationFile) {
+        if (!Files.exists(notificationFile)) {
+            try {
+                FileUtils.writeStringToFile(notificationFile.toFile(), new JSONArray().toString(), StandardCharsets.UTF_8);
+            } catch (IOException e) {
+                throw new RuntimeException("Could not write notification file " + notificationFile.toString(), e);
+            }
+        }
     }
 
-    public List<JSONObject> getAllNotifications() {
-        return readNotifications();
-    }
-
-    public JSONObject saveNotification(JSONObject notification) {
-        String jsonString = notification.toString();
-
-        String notificationId = generateUniqueId();
-        String filename = getFilename(notificationId);
-
-        Path notificationDirectory = getNotificationDirectory();
-        Path notificationFile = notificationDirectory.resolve(filename);
-
+    /**
+     * Validates notifications and saves notification to the filesystem if everything is valid
+     * Also updates the digest field, see {@link #getCurrentDigest()}
+     * @param notifications JSON Array as String
+     * @throws JSONException if the json format is invalid
+     */
+    public void saveNotifications(String notifications) throws JSONException {
+        Path notificationFile = getNotificationsFilePath();
         try {
-            FileUtils.writeStringToFile(notificationFile.toFile(), jsonString, StandardCharsets.UTF_8);
-
-            allNotificationIds.add(notificationId);
-
-            return new JSONObject(jsonString).put("id", notificationId);
-        } catch ( IOException e ) {
+            JSONArray jsonArray = new JSONArray(notifications);
+            FileUtils.writeStringToFile(notificationFile.toFile(), jsonArray.toString(), StandardCharsets.UTF_8);
+            currentDigest = digestOfFile(notificationFile);
+        } catch (IOException e) {
             throw new RuntimeException("Could not write notification file " + notificationFile.toString(), e);
         }
     }
 
-    public JSONObject deleteNotification(String notificationId) throws FileNotFoundException {
-        String filename = getFilename(notificationId);
+    /**
+     * Get the current digest for the notifications
+     * @return the current digest
+     */
+    public String getCurrentDigest() {
+        return currentDigest;
+    }
 
-        Path notificationFile = getNotificationDirectory().resolve(filename);
-        if (!exists(notificationFile)) {
-            throw new FileNotFoundException("The notification does not exist " + notificationFile);
-        }
-
+    void updateDigest() {
         try {
-            JSONObject notification = readJsonFile(notificationFile.toFile());
-
-            Files.delete(notificationFile);
-            allNotificationIds.remove(notificationId);
-
-            return notification;
-        } catch ( IOException e ) {
-            throw new RuntimeException("Could not delete notification file " + notificationFile, e);
+            currentDigest = digestOfFile(getNotificationsFilePath());
+        } catch (IOException e) {
+            throw new RuntimeException("Could not hash notifications file", e);
         }
     }
 
-    void updateNotificationIds() {
-        allNotificationIds = new HashSet<>(readNotificationIds());
-    }
+    /**
+     * Hashes a file and returns the digest
+     * @param file the file which shall be hashed
+     * @return a hash of an empty string if the file does not exists
+     */
+    static String digestOfFile(Path file) throws IOException {
+        if (!Files.exists(file)) {
+            return DigestUtils.md5Hex("").toUpperCase();
+        }
 
-    private String getFilename(String id) {
-        return String.format("%s.%s", id, NOTIFICATION_EXTENSION);
-    }
-
-    private String generateUniqueId() {
-        String uuid = UUID.randomUUID().toString();
-        return String.format("notification-%s", uuid);
-    }
-
-    private List<String> readNotificationIds() {
-        return giveAllNotificationFilePaths().map(this::filenameWithoutExtension).collect(Collectors.toList());
-    }
-
-    private List<JSONObject> readNotifications() {
-        return giveAllNotificationFilePaths().map(Path::toFile).map(this::readJsonFile).collect(Collectors.toList());
-    }
-
-    private Stream<Path> giveAllNotificationFilePaths() {
-        Path notificationDirectory = getNotificationDirectory();
-        try {
-            return exists(notificationDirectory)
-                ? Files.list(notificationDirectory).filter(path -> path.toString().endsWith(NOTIFICATION_EXTENSION))
-                : Stream.empty();
-        } catch ( IOException e ) {
-            throw new RuntimeException("Could not read the notification directory" + notificationDirectory, e);
+        try (InputStream inputStream = Files.newInputStream(file)) {
+            return DigestUtils.md5Hex(inputStream).toUpperCase();
         }
     }
 
-    private Path getNotificationDirectory() {
-        return Paths.get(serverProperties.getStringProperty("server.admin.dir")).resolve("notifications");
-    }
-
-    private JSONObject readJsonFile(File file) {
-        return new JSONObject(Util.readFileContent(file.getAbsolutePath())).put("id", filenameWithoutExtension(file.toPath()));
-    }
-
-    private String filenameWithoutExtension(Path file) {
-        return FilenameUtils.removeExtension(file.getFileName().toString());
+    private Path getNotificationsFilePath() {
+        return Paths.get(serverProperties.getStringProperty("server.admin.dir")).resolve(FILENAME);
     }
 }
