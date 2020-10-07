@@ -1040,40 +1040,35 @@ limitations under the License.
     <!--Notifications Modal-->
     <div class="modal fade" id="modal-notifications" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
          aria-hidden="true">
-        <div class="modal-dialog modal-lg">
+        <div class="modal-dialog modal-sm">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h3 class="modal-title" >Notification Overview</h3>
+                    <h3 class="modal-title">Notifications</h3>
                 </div>
                 <div class="modal-body">
                     <form id="notificationForm">
-                        <div class="form-group">
-                            <label for="notificationName">Name</label>
-                            <input type="text" class="form-control" id="notificationName">
+                        <h4>Upload</h4>
+                        <div id="notification-modal-alert" class="alert" role="alert" style="display: none">
                         </div>
-                        <div class="form-group">
-                            <input type="file" class="form-control-file" id="notificationFileUpload">
-                            <label class="custom-file-label" for="notificationFileUpload">Choose notification file</label>
-                        </div>
-                        <button type="submit" class="btn btn-default">Submit</button>
+
+                        <label class="btn btn-default" for="notificationFileUpload">
+                            <span class="typcn typcn-upload"></span>
+                            <input type="file" class="hidden" id="notificationFileUpload"/>
+                        </label>
+
+                        <button type="submit" class="btn btn-default">Send</button>
+
+                        <hr>
+
+                        <h4>Download</h4>
+                        <a id="notificationFileDownload" href="" download="notifications.json" class="btn btn-default">
+                            <span class="typcn typcn-download"></span>
+                        </a>
                     </form>
-                    <hr/>
-                    <table class="table">
-                        <thead>
-                        <tr>
-                            <th scope="col">ID</th>
-                            <th scope="col">Name</th>
-                            <th scope="col"></th>
-                            <th scope="col"></th>
-                        </tr>
-                        </thead>
-                        <tbody id="notificationsTableBody">
-                        </tbody>
-                    </table>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+
                 </div>
             </div>
         </div>

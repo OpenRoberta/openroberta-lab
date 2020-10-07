@@ -1,5 +1,6 @@
 package de.fhg.iais.roberta.javaServer.restServices.all.controller;
 
+import de.fhg.iais.roberta.generated.restEntities.BaseResponse;
 import de.fhg.iais.roberta.generated.restEntities.FullRestRequest;
 import de.fhg.iais.roberta.generated.restEntities.NotificationsResponse;
 import de.fhg.iais.roberta.persistence.util.HttpSessionState;
@@ -7,6 +8,7 @@ import de.fhg.iais.roberta.util.Key;
 import de.fhg.iais.roberta.util.NotificationService;
 import de.fhg.iais.roberta.util.UtilForREST;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,8 +20,6 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.io.FileNotFoundException;
-import java.util.Collections;
 import java.util.List;
 
 @Path("/notifications")
@@ -39,67 +39,41 @@ public class NotificationController {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getNotifications(FullRestRequest fullRequest) {
         HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, fullRequest, false);
-
         NotificationsResponse notificationsResponse = NotificationsResponse.make();
 
-        List<JSONObject> allNotifications = notificationService.getAllNotifications();
+        List<JSONObject> notifications = notificationService.getNotifications();
 
-        httpSessionState.setReceivedNotifications(notificationService.getAllNotificationIds());
-        JSONArray jsonArray = new JSONArray(allNotifications);
+        JSONArray jsonArray = new JSONArray(notifications);
         notificationsResponse.setNotifications(jsonArray);
+        httpSessionState.setReceivedNotificationsDigest(notificationService.getCurrentDigest());
 
         UtilForREST.addSuccessInfo(notificationsResponse, Key.SERVER_SUCCESS);
         return UtilForREST.responseWithFrontendInfo(notificationsResponse, httpSessionState, null);
     }
 
     @POST
-    @Path("/postNotification")
+    @Path("/postNotifications")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response postNotification(FullRestRequest fullRestRequest) {
+    public Response postNotifications(FullRestRequest fullRestRequest) {
         HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, fullRestRequest, true);
-
-        NotificationsResponse notificationsResponse = NotificationsResponse.make();
-        notificationsResponse.setNotifications(new JSONArray());
+        BaseResponse response = BaseResponse.make();
 
         if ( isRobertaUser(httpSessionState) ) {
-            JSONObject notification = notificationService.saveNotification(fullRestRequest.getData());
-            notificationsResponse.setNotifications(new JSONArray(Collections.singletonList(notification)));
-            UtilForREST.addSuccessInfo(notificationsResponse, Key.NOTIFICATION_SUCCESS);
-        } else {
-            LOG.warn("A unprivileged user with id {} tried to save a notification", httpSessionState.getUserId());
-            UtilForREST.addErrorInfo(notificationsResponse, Key.NOTIFICATION_ERROR_INVALID_PERMISSION);
-        }
-
-        return UtilForREST.responseWithFrontendInfo(notificationsResponse, httpSessionState, null);
-    }
-
-    @POST
-    @Path("/deleteNotification")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response deleteNotification(FullRestRequest fullRestRequest) {
-        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, fullRestRequest, true);
-
-        NotificationsResponse notificationsResponse = NotificationsResponse.make();
-        notificationsResponse.setNotifications(new JSONArray());
-
-        if ( isRobertaUser(httpSessionState) ) {
-            JSONObject data = fullRestRequest.getData();
             try {
-                JSONObject notification = notificationService.deleteNotification(data.getString("id"));
-                notificationsResponse.setNotifications(new JSONArray(Collections.singletonList(notification)));
-                UtilForREST.addSuccessInfo(notificationsResponse, Key.NOTIFICATION_SUCCESS);
-            } catch ( FileNotFoundException e ) {
-                LOG.warn("Requested to delete not existing notification", e);
-                UtilForREST.addErrorInfo(notificationsResponse, Key.NOTIFICATION_ERROR_NOT_FOUND);
+                String notificationsJSON = fullRestRequest.getData().getString("notifications");
+                notificationService.saveNotifications(notificationsJSON);
+                UtilForREST.addSuccessInfo(response, Key.NOTIFICATION_SUCCESS);
+            } catch (JSONException e) {
+                UtilForREST.addErrorInfo(response, Key.NOTIFICATION_ERROR_INVALID_SYNTAX);
+                LOG.warn("An error occurred while parsing JSON", e);
             }
         } else {
-            LOG.warn("A unprivileged user with id {} tried to delete a notification", httpSessionState.getUserId());
-            UtilForREST.addErrorInfo(notificationsResponse, Key.NOTIFICATION_ERROR_INVALID_PERMISSION);
+            LOG.warn("A unprivileged user with id {} tried to save a notification", httpSessionState.getUserId());
+            UtilForREST.addErrorInfo(response, Key.NOTIFICATION_ERROR_INVALID_PERMISSION);
         }
 
-        return UtilForREST.responseWithFrontendInfo(notificationsResponse, httpSessionState, null);
+        return UtilForREST.responseWithFrontendInfo(response, httpSessionState, null);
     }
 
     private boolean isRobertaUser(HttpSessionState httpSessionState) {

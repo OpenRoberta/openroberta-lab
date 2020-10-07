@@ -6,7 +6,6 @@ define(
 		const notificationModel = require("notification.model");
 		const comm = require("comm");
 
-		let notifications = []
 		let activeNotifications = []
 
 		const fadingDuration = 400;
@@ -17,7 +16,7 @@ define(
 
 		const $notificationForm = $("#notificationForm");
 		const $notificationFileUpload = $('#notificationFileUpload');
-		const $notificationName = $("#notificationName");
+		const $notificationFileDownload = $('#notificationFileDownload');
 
 		exports.init = function () {
 			initNotificationModal();
@@ -38,89 +37,51 @@ define(
 		};
 
 		exports.showNotificationModal = function () {
-			updateTable(function () {
+			notificationModel.getNotifications(function (result) {
+				setDownloadContent(result.notifications);
 				$('#modal-notifications').modal("show");
 			});
 		};
 
+		function showModalAlert(context, content) {
+			const $alert = $('#notification-modal-alert');
+			$alert
+				.html(content)
+				.removeClass()
+				.addClass("alert")
+				.addClass("alert-" + context)
+				.slideDown()
+				.delay(6000)
+				.slideUp();
+		}
+
 		function initNotificationModal() {
 			$notificationForm.on('submit', function (e) {
 				e.preventDefault();
-
-				let notificationName = $notificationName.val();
 				let uploadedFiles = $notificationFileUpload.prop("files");
 
 				if (uploadedFiles.length > 0) {
 					const fileReader = new FileReader();
 					fileReader.onload = function () {
-						const json = JSON.parse(fileReader.result);
-						if (notificationName.trim() !== "") {
-							json.name = notificationName;
-						}
-						notificationModel.postNotification(json, function (result) {
-							if (result.rc === "ok" && result.message === "ORA_NOTIFICATION_SUCCESS" && result.notifications.length >= 0) {
-								addNotificationToTable(result.notifications[0], $('#notificationsTableBody'));
+						notificationModel.postNotifications(fileReader.result, function (result) {
+							if (result.rc === "ok" && result.message === "ORA_NOTIFICATION_SUCCESS") {
 								$notificationForm[0].reset();
+								showModalAlert("success", "The notifications were transmitted successfully");
+								setDownloadContent(JSON.parse(fileReader.result));
+							} else {
+								showModalAlert("danger", result.message);
 							}
 						});
 					};
 					fileReader.readAsText(uploadedFiles[0])
 				}
 			});
-
-			$notificationFileUpload.on("change", function (e) {
-				const fileReader = new FileReader();
-				fileReader.onload = function () {
-					const json = JSON.parse(fileReader.result);
-					if (json.name) {
-						$notificationName.val(json.name);
-					}
-				};
-				fileReader.readAsText($notificationFileUpload.prop("files")[0])
-			});
 		}
 
-		function updateTable(successFn) {
-			notificationModel.getNotifications(function (result) {
-				addNotificationsToTable(result.notifications);
-				if (successFn) successFn(result);
-			});
-		}
-
-		function addNotificationToTable(notification, $notificationsTableBody) {
-			let $tableRow = $("<tr></tr>");
-			$tableRow.append('<td>' + notification.id + '</td>');
-			$tableRow.append('<td>' + notification.name + '</td>');
-
-			const data = "text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(notification, null, "\t"));
-			const filename = notification.id + ".json";
-
-			let $downloadButtonElement = $('<td><a class="btn btn-default"><span class="typcn typcn-download"></span></a></td>');
-			let $deleteButtonElement = $('<td><button class="btn btn-default"><span class="typcn typcn-trash"></span></button></td>');
-
-			$downloadButtonElement.find("a")
+		function setDownloadContent(jsonContent) {
+			const data = "text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(jsonContent, null, "\t"));
+			$notificationFileDownload
 				.attr("href", "data:" + data)
-				.attr("download", filename);
-
-			$deleteButtonElement.find("button").on("click", function () {
-				notificationModel.deleteNotification(notification.id, function () {
-					$tableRow.remove();
-				});
-			});
-
-			$tableRow.append($downloadButtonElement);
-			$tableRow.append($deleteButtonElement);
-
-			$notificationsTableBody.append($tableRow);
-		}
-
-		function addNotificationsToTable(notifications) {
-			let $notificationsTableBody = $('#notificationsTableBody');
-			$notificationsTableBody.empty();
-
-			for (const notification of notifications) {
-				addNotificationToTable(notification, $notificationsTableBody);
-			}
 		}
 
 		function removeActiveEventListeners() {
