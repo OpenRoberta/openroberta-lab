@@ -1,6 +1,6 @@
 <export xmlns="http://de.fhg.iais.roberta.blockly">
     <program>
-        <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="bob3" xmlversion="3.0" description="" tags="">
+        <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="bob3" xmlversion="3.1" description="" tags="">
             <instance x="-38" y="-156">
                 <block type="robControls_start_ardu" id="CpxhNR9DA?(g}VTc5..{" intask="true" deletable="false">
                     <mutation declare="true"></mutation>
@@ -193,7 +193,7 @@
         </block_set>
     </program>
     <config>
-        <block_set robottype="bob3" xmlversion="3.0" description="" tags="" xmlns="http://de.fhg.iais.roberta.blockly">
+        <block_set robottype="bob3" xmlversion="3.1" description="" tags="" xmlns="http://de.fhg.iais.roberta.blockly">
             <instance x="591" y="256">
                 <block type="robControls_loopForever_ardu" id="1" intask="true" deletable="false" movable="false" />
             </instance>

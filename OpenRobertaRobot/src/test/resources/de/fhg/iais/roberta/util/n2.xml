@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <export>
     <program>
-        <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="ev3" xmlversion="3.0" description="" tags="">
+        <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="ev3" xmlversion="3.1" description="" tags="">
             <instance x="346" y="50">
                 <block type="robControls_start" id="juF:ap8|,Kx26/D3xKH=" intask="true" deletable="false">
                     <mutation declare="false" />
@@ -24,7 +24,7 @@
         </block_set>
     </program>
     <config>
-        <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="ev3" xmlversion="3.0" description="" tags="">
+        <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="ev3" xmlversion="3.1" description="" tags="">
             <instance x="0" y="0">
                 <block type="robBrick_EV3-Brick" id="T}p*L*7u-:^6uBh0ZB/`" intask="true" deletable="false">
                     <field name="WHEEL_DIAMETER">5.6</field>

@@ -1,4 +1,4 @@
-<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="ev3" xmlversion="3.0" description="" tags="">
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="ev3" xmlversion="3.1" description="" tags="">
     <instance x="-58" y="49">
         <block type="text_join" id="827" inline="false">
             <mutation items="2"></mutation>

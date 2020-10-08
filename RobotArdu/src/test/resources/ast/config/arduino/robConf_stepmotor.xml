@@ -1,4 +1,4 @@
-<block_set xmlns="http://de.fhg.iais.roberta.blockly" description="" robottype="arduino" tags="" xmlversion="3.0">
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" description="" robottype="arduino" tags="" xmlversion="3.1">
     <instance x="358" y="399">
         <block id="ASKwV+EkzlS.ey/UZSie" intask="true" type="robConf_stepmotor">
             <field name="NAME">S2</field>

@@ -1,4 +1,4 @@
-<block_set xmlns="http://de.fhg.iais.roberta.blockly" description="" robottype="festobionic" tags="" xmlversion="3.0">
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" description="" robottype="festobionic" tags="" xmlversion="3.1">
     <instance x="423" y="255">
         <block id="A+uOd.:p1TnQDQ0;WC#r" intask="true" type="robConf_servo">
             <field name="NAME">S</field>

@@ -1,4 +1,4 @@
-<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="nxt" xmlversion="3.0" description="" tags="">
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="nxt" xmlversion="3.1" description="" tags="">
     <instance x="-197" y="106">
         <block type="math_arithmetic" id="489" inline="true">
             <field name="OP">ADD</field>

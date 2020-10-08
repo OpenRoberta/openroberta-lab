@@ -1,6 +1,6 @@
 <export xmlns="http://de.fhg.iais.roberta.blockly">
     <program>
-        <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="botnroll" xmlversion="3.0" description="" tags="">
+        <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="botnroll" xmlversion="3.1" description="" tags="">
             <instance x="297" y="76">
                 <block type="robControls_start_ardu" id="Hp^XLD!q*]!MeJS7v{Iu" intask="true" deletable="false">
                     <mutation declare="true"></mutation>
@@ -639,7 +639,7 @@
         </block_set>
     </program>
     <config>
-        <block_set robottype="botnroll" xmlversion="3.0" description="" tags="" xmlns="http://de.fhg.iais.roberta.blockly">
+        <block_set robottype="botnroll" xmlversion="3.1" description="" tags="" xmlns="http://de.fhg.iais.roberta.blockly">
             <instance x="138" y="88">
                 <block type="robBrick_ardu-Brick" id="1" intask="true" deletable="false">
                     <value name="S1">

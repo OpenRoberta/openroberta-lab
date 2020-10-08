@@ -1,4 +1,4 @@
-<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="ev3" xmlversion="3.0" description="" tags="">
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="ev3" xmlversion="3.1" description="" tags="">
     <instance x="1" y="57">
         <block type="robSensors_ultrasonic_getSample" id="40">
             <mutation mode="DISTANCE"></mutation>

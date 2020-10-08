@@ -1,4 +1,4 @@
-<block_set robottype="wedo" xmlversion="3.0" description="" tags="" xmlns="http://de.fhg.iais.roberta.blockly">
+<block_set robottype="wedo" xmlversion="3.1" description="" tags="" xmlns="http://de.fhg.iais.roberta.blockly">
     <instance x="157" y="31">
         <block type="robControls_start" id="]tK0c1?wEw7qH#H-_o9q" intask="true" deletable="false">
             <mutation declare="true" />

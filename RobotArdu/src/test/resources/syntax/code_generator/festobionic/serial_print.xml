@@ -1,6 +1,6 @@
 <export xmlns="http://de.fhg.iais.roberta.blockly">
     <program>
-        <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="festobionic" xmlversion="3.0" description="" tags="">
+        <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="festobionic" xmlversion="3.1" description="" tags="">
             <instance x="388" y="43">
                 <block type="robControls_start_ardu" id="F-MyjcdfEnF:|~|d[OE8" intask="true" deletable="false">
                     <mutation declare="false"></mutation>
@@ -28,7 +28,7 @@
         </block_set>
     </program>
     <config>
-        <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="festobionic" xmlversion="3.0" description="" tags="">
+        <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="festobionic" xmlversion="3.1" description="" tags="">
             <instance x="138" y="88">
                 <block type="robConf_led" id="1" intask="true">
                     <field name="NAME">L</field>

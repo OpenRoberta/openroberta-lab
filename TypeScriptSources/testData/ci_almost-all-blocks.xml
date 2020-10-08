@@ -1,4 +1,4 @@
-<block_set robottype="wedo" xmlversion="3.0"
+<block_set robottype="wedo" xmlversion="3.1"
     description="ROBOT &lt;div&gt;WeDo &lt;/div&gt;&lt;div&gt;START-RESULT &lt;/div&gt;&lt;div&gt;robot: W, port: 1 motor speed 30 for 1000 msec &lt;/div&gt;&lt;div&gt;robot: W, port: 1 motor stop &lt;/div&gt;&lt;div&gt;robot: W, port: 1 motor speed 30 w.o. duration &lt;/div&gt;&lt;div&gt;robot: W, port: 1 motor stop &lt;/div&gt;&lt;div&gt;robot: W piezo: , frequency: 261.626, duration: 2000 &lt;/div&gt;&lt;div&gt;robot: W piezo: , frequency: 300, duration: 100 &lt;/div&gt;&lt;div&gt;robot: W, port: undefined led on color 9 &lt;/div&gt;&lt;div&gt;robot: W, port: undefined led off &lt;/div&gt;&lt;div&gt;show &quot;s enthält s&quot; &lt;/div&gt;&lt;div&gt;END-RESULT&lt;/div&gt;"
     tags="" xmlns="http://de.fhg.iais.roberta.blockly">
     <instance x="10" y="75">

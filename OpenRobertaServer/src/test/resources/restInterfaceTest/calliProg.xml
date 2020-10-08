@@ -1,6 +1,6 @@
 <export xmlns="http://de.fhg.iais.roberta.blockly">
     <program>
-        <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="calliope" xmlversion="3.0" description="" tags="">
+        <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="calliope" xmlversion="3.1" description="" tags="">
             <instance x="73" y="20">
                 <block type="robControls_start" id="]iEx8lcTWa0dZr%+jIB(" intask="true" deletable="false">
                     <mutation declare="false"></mutation>
@@ -41,7 +41,7 @@
         </block_set>
     </program>
     <config>
-        <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="calliope" xmlversion="3.0" description="" tags="">
+        <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="calliope" xmlversion="3.1" description="" tags="">
             <instance x="138" y="88">
                 <block type="mbedBrick_Calliope-Brick" id="1" intask="true"></block>
             </instance>

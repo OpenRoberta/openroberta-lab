@@ -1,6 +1,6 @@
 <export xmlns="http://de.fhg.iais.roberta.blockly">
     <program>
-        <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="wedo" xmlversion="3.0"
+        <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="wedo" xmlversion="3.1"
             description="ROBOT&#13;&lt;div&gt;wedo&#13;&lt;/div&gt;&lt;div&gt;START-RESULT&lt;div&gt;show &quot;0&quot;&lt;div&gt;show &quot;1&quot;&lt;/div&gt;&lt;div&gt;show &quot;2&quot;&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp;&amp;nbsp;&lt;/div&gt;&lt;div&gt;show &quot;3&quot;&lt;/div&gt;&lt;div&gt;show &quot;3&quot;&lt;/div&gt;&lt;div&gt;show &quot;3&quot;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;show &quot;4&quot;&lt;/div&gt;&lt;div&gt;show &quot;4&quot;&lt;/div&gt;&lt;div&gt;show &quot;4&quot;&lt;/div&gt;&lt;div&gt;show &quot;4&quot;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;show &quot;0&quot;&lt;/div&gt;&lt;div&gt;show &quot;1&quot;&lt;/div&gt;&lt;div&gt;show &quot;2&quot;&lt;/div&gt;&lt;div&gt;show &quot;3&quot;&lt;/div&gt;&lt;div&gt;show &quot;4&quot;&lt;/div&gt;&lt;div&gt;show &quot;5&quot;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;show &quot;9&quot;&lt;/div&gt;&lt;/div&gt;&lt;div&gt;END-RESULT&lt;/div&gt;&lt;/div&gt;"
             tags="">
             <instance x="86" y="9">
@@ -235,7 +235,7 @@
         </block_set>
     </program>
     <config>
-        <block_set robottype="wedo" xmlversion="3.0" description="" tags="" xmlns="http://de.fhg.iais.roberta.blockly">
+        <block_set robottype="wedo" xmlversion="3.1" description="" tags="" xmlns="http://de.fhg.iais.roberta.blockly">
             <instance x="300" y="50">
                 <block type="robBrick_WeDo-Brick" id="1" intask="true">
                     <field name="VAR">Brick1</field>

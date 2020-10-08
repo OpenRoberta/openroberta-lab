@@ -1,6 +1,6 @@
 <export xmlns="http://de.fhg.iais.roberta.blockly">
     <program>
-        <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="arduino" xmlversion="3.0" description="" tags="">
+        <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="arduino" xmlversion="3.1" description="" tags="">
             <instance x="384" y="50">
                 <block type="robControls_start_ardu" id="+.FRj]4=.9aB(Q3RduL!" intask="true" deletable="false">
                     <mutation declare="true"></mutation>
@@ -122,7 +122,7 @@
         </block_set>
     </program>
     <config>
-        <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="arduino" xmlversion="3.0" description="" tags="">
+        <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="arduino" xmlversion="3.1" description="" tags="">
             <instance x="138" y="88">
                 <block type="robConf_led" id="1" intask="true">
                     <field name="NAME">L</field>

@@ -1,4 +1,4 @@
-<block_set xmlns="http://de.fhg.iais.roberta.blockly" description="" robottype="arduino" tags="" xmlversion="3.0">
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" description="" robottype="arduino" tags="" xmlversion="3.1">
     <instance x="322" y="75">
         <block id="(S8E^pG8Sh}CrIE.gB*/" intask="true" type="robConf_digitalin">
             <field name="NAME">A</field>

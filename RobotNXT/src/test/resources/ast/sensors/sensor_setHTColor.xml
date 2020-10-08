@@ -1,4 +1,4 @@
-<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="nxt" xmlversion="3.0" description="" tags="">
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="nxt" xmlversion="3.1" description="" tags="">
     <instance x="-15" y="107">
         <block type="robSensors_htcolour_getSample" id="65">
             <mutation mode="COLOUR"></mutation>

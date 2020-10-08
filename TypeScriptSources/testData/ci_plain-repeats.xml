@@ -1,4 +1,4 @@
-<block_set robottype="wedo" xmlversion="3.0"
+<block_set robottype="wedo" xmlversion="3.1"
     description="ROBOT&lt;div&gt;wedo&lt;/div&gt;&lt;div&gt;START-RESULT&lt;div&gt;show &quot;0&quot;&lt;div&gt;show &quot;1&quot;&lt;/div&gt;&lt;div&gt;show &quot;2&quot;&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp;&amp;nbsp;&lt;/div&gt;&lt;div&gt;show &quot;3&quot;&lt;/div&gt;&lt;div&gt;show &quot;3&quot;&lt;/div&gt;&lt;div&gt;show &quot;3&quot;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;show &quot;4&quot;&lt;/div&gt;&lt;div&gt;show &quot;4&quot;&lt;/div&gt;&lt;div&gt;show &quot;4&quot;&lt;/div&gt;&lt;div&gt;show &quot;4&quot;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;show &quot;0&quot;&lt;/div&gt;&lt;div&gt;show &quot;1&quot;&lt;/div&gt;&lt;div&gt;show &quot;2&quot;&lt;/div&gt;&lt;div&gt;show &quot;3&quot;&lt;/div&gt;&lt;div&gt;show &quot;4&quot;&lt;/div&gt;&lt;div&gt;show &quot;5&quot;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;show &quot;9&quot;&lt;/div&gt;&lt;/div&gt;&lt;div&gt;END-RESULT&lt;/div&gt;&lt;/div&gt;"
     tags="" xmlns="http://de.fhg.iais.roberta.blockly">
     <instance x="86" y="9">

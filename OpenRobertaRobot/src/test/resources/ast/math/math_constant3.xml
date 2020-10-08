@@ -1,4 +1,4 @@
-<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="ev3" xmlversion="3.0" description="" tags="">
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="ev3" xmlversion="3.1" description="" tags="">
     <instance x="67" y="197">
         <block type="math_constant" id="76" collapsed="true" disabled="true">
             <field name="CONSTANT">GOLDEN_RATIO</field>

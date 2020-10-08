@@ -1,6 +1,6 @@
 <export xmlns="http://de.fhg.iais.roberta.blockly">
     <program>
-        <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="nxt" xmlversion="3.0" description="" tags="">
+        <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="nxt" xmlversion="3.1" description="" tags="">
             <instance x="410" y="50">
                 <block type="robControls_start" id="Q/dY*v6GG?;6bSVxoWm2" intask="true" deletable="false">
                     <mutation declare="true"></mutation>
@@ -458,7 +458,7 @@
         </block_set>
     </program>
     <config>
-        <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="nxt" xmlversion="3.0" description="" tags="">
+        <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="nxt" xmlversion="3.1" description="" tags="">
             <instance x="474" y="86">
                 <block type="robBrick_EV3-Brick" id="1" intask="true" deletable="false">
                     <field name="WHEEL_DIAMETER">5.6</field>

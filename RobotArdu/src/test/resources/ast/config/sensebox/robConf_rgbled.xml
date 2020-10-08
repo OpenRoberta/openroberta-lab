@@ -1,4 +1,4 @@
-<block_set xmlns="http://de.fhg.iais.roberta.blockly" description="" robottype="sensebox" tags="" xmlversion="3.0">
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" description="" robottype="sensebox" tags="" xmlversion="3.1">
     <instance x="140" y="307">
         <block id="@uAE`{)BJ+T}MlQvKfq@" intask="true" type="robConf_rgbled">
             <field name="NAME">R2</field>

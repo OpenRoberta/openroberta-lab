@@ -1,4 +1,4 @@
-<block_set robottype="wedo" xmlversion="3.0"
+<block_set robottype="wedo" xmlversion="3.1"
     description="ROBOT&lt;div&gt;wedo&lt;/div&gt;&lt;div&gt;START-RESULT&lt;/div&gt;&lt;div&gt;show &quot;720&quot;&lt;/div&gt;&lt;div&gt;show &quot;0&quot;&lt;/div&gt;&lt;div&gt;END-RESULT&lt;/div&gt;"
     tags="" xmlns="http://de.fhg.iais.roberta.blockly">
     <instance x="68" y="43">

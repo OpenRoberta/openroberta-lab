@@ -1,4 +1,4 @@
-<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="vorwerk" xmlversion="3.0" description="" tags="">
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="vorwerk" xmlversion="3.1" description="" tags="">
     <instance x="384" y="50">
         <block type="robControls_start" id="..T~,KI.I*?g8NNti[bQ" intask="true" deletable="false">
             <mutation declare="false" />
@@ -7,8 +7,7 @@
         <block type="vorwerkActions_side_brush" id="LqF},n;JBiZpEAUD(pn8" intask="true">
             <field name="BRUSH_STATE">ON</field>
         </block>
-		<block type="vorwerkActions_side_brush"
-			id="gpT/8Q~@F)l_/GEsq4O(" intask="true">
+        <block type="vorwerkActions_side_brush" id="gpT/8Q~@F)l_/GEsq4O(" intask="true">
 			<field name="BRUSH_STATE">OFF</field>
 		</block>
 	</instance>

@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <export xmlns="http://de.fhg.iais.roberta.blockly">
   <program>
-      <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="arduino" xmlversion="3.0" description="" tags="">
+      <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="arduino" xmlversion="3.1" description="" tags="">
           <instance x="44" y="36">
               <block type="robControls_start_ardu" id="G,46O9cuMw.R#(t?zXN^" intask="true" deletable="false">
                   <mutation declare="false" />
@@ -43,7 +43,7 @@
       </block_set>
   </program>
     <config>
-        <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="arduino" xmlversion="3.0" description="" tags="">
+        <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="arduino" xmlversion="3.1" description="" tags="">
             <instance x="-1414" y="-525">
                 <block type="robConf_led" id="1" intask="true">
                     <field name="NAME">L</field>

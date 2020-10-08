@@ -1,4 +1,4 @@
-<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="vorwerk" xmlversion="3.0" description="" tags="">
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="vorwerk" xmlversion="3.1" description="" tags="">
     <instance x="155" y="124">
         <block type="robControls_start" id="L#E;6cZpke5uD}4#h[O5" intask="true" deletable="false">
             <mutation declare="true" />
@@ -6,9 +6,9 @@
             <statement name="ST">
                 <block type="robGlobalVariables_declare" id="X.lz/=-;25z{^_!|qQy1" intask="true" deletable="false" movable="false">
                     <mutation next="false" declaration_type="Number" />
-					<field name="VAR">item</field>
-					<field name="TYPE">Number</field>
-					<value name="VALUE">
+                    <field name="VAR">item</field>
+                    <field name="TYPE">Number</field>
+                    <value name="VALUE">
 						<block type="math_number" id="LSgADqrnj_Us=.`_cY(X"
 							intask="true">
 							<field name="NUM">0</field>

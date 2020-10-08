@@ -1,4 +1,4 @@
-<block_set xmlns="http://de.fhg.iais.roberta.blockly" description="" robottype="arduino" tags="" xmlversion="3.0">
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" description="" robottype="arduino" tags="" xmlversion="3.1">
     <instance x="584" y="198">
         <block id="Me~!e%6?)Zn*qhWL6oF0" intask="true" type="robConf_lcd">
             <field name="NAME">L2</field>

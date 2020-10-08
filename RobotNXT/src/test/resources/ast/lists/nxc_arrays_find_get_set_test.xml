@@ -1,4 +1,4 @@
-<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="nxt" xmlversion="3.0" description="" tags="">
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="nxt" xmlversion="3.1" description="" tags="">
     <instance x="313" y="4">
         <block type="robControls_start" id="Mz`Bvb@I%)[%=Tv@BmOy" intask="true" deletable="false">
             <mutation declare="true" />

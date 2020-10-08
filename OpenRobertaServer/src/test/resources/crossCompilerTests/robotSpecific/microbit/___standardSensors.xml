@@ -1,6 +1,6 @@
 <export xmlns="http://de.fhg.iais.roberta.blockly">
     <program>
-        <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="microbit" xmlversion="3.0"
+        <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="microbit" xmlversion="3.1"
             description="Test of all microbit sensors as veriables and prints&lt;br&gt;" tags="">
             <instance x="330" y="-110">
                 <block type="robControls_start" id=".DeG4),|GYFE.59~a]Rl" intask="true" deletable="false">
@@ -208,7 +208,7 @@
         </block_set>
     </program>
     <config>
-        <block_set robottype="microbit" xmlversion="3.0" description="" tags="" xmlns="http://de.fhg.iais.roberta.blockly">
+        <block_set robottype="microbit" xmlversion="3.1" description="" tags="" xmlns="http://de.fhg.iais.roberta.blockly">
             <instance x="1136" y="-1065">
                 <block type="robConf_accelerometer" id="#(ufvG,s^FcqI,aFn/A{" intask="true">
                     <field name="NAME">Acc</field>

@@ -1,4 +1,4 @@
-<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="ev3" xmlversion="3.0" description="" tags="">
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="ev3" xmlversion="3.1" description="" tags="">
     <instance x="376" y="50">
         <block type="robControls_start" id="@vdJc~w=wNX]WrSXorOT" intask="true" deletable="false">
             <mutation declare="false"></mutation>
@@ -7,8 +7,7 @@
         <block type="robActions_motorDiff_on_for" id="7S}u;{i.8^!:%MbEo^Su" intask="true">
             <field name="DIRECTION">FOREWARD</field>
             <value name="POWER">
-				<block type="math_number" id="9Q?(`jYC#-K0rv,ysc%Z"
-					intask="true">
+                <block type="math_number" id="9Q?(`jYC#-K0rv,ysc%Z" intask="true">
 					<field name="NUM">30</field>
 				</block>
 			</value>

@@ -1,6 +1,6 @@
 <export xmlns="http://de.fhg.iais.roberta.blockly">
     <program>
-        <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="calliope" xmlversion="3.0"
+        <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="calliope" xmlversion="3.1"
             description="1. Block (aktionKontrolle) &lt;div&gt;&amp;nbsp;show picture &lt;/div&gt;&lt;div&gt;&amp;nbsp;write and read single matrix-LED. In row 2 and 3 a w-like picture shows up &lt;/div&gt;&lt;div&gt;&amp;nbsp;set LED red and green &lt;/div&gt;&lt;div&gt;&amp;nbsp;play tones &lt;/div&gt;&lt;div&gt;&amp;nbsp;No interaction is required &lt;/div&gt;&lt;div&gt; &lt;/div&gt;&lt;div&gt;2. Block (tastenKontrolle) &lt;/div&gt;&lt;div&gt;&amp;nbsp;LED red &lt;/div&gt;&lt;div&gt;&amp;nbsp;press A =&amp;gt; LED green &lt;/div&gt;&lt;div&gt;&amp;nbsp;release A =&amp;gt; LED red &lt;/div&gt;&lt;div&gt;&amp;nbsp;repeat this at will &lt;/div&gt;&lt;div&gt;&amp;nbsp;press B within 1 sec after releasing A =&amp;gt; LED off and loop terminates &lt;/div&gt;&lt;div&gt;&amp;nbsp;release B =&amp;gt; LED red &lt;/div&gt;&lt;div&gt;&amp;nbsp;...&lt;/div&gt;"
             tags="">
             <instance x="-454" y="-411">
@@ -1109,7 +1109,7 @@
         </block_set>
     </program>
     <config>
-        <block_set robottype="calliope" xmlversion="3.0" description="" tags="" xmlns="http://de.fhg.iais.roberta.blockly">
+        <block_set robottype="calliope" xmlversion="3.1" description="" tags="" xmlns="http://de.fhg.iais.roberta.blockly">
             <instance x="1136" y="-1065">
                 <block type="robConf_accelerometer" id="#(ufvG,s^FcqI,aFn/A{" intask="true">
                     <field name="NAME">Acc</field>
