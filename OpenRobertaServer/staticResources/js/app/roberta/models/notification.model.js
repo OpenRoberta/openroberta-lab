@@ -18,11 +18,4 @@ define(['exports', 'comm'], function (exports, COMM) {
 			notifications
 		}, successFn);
 	};
-
-	exports.deleteNotification = function (id, successFn) {
-		COMM.json("/notifications/deleteNotification", {
-			id
-		}, successFn);
-	};
-
 });

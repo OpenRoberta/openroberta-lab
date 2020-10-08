@@ -11,6 +11,7 @@ import de.fhg.iais.roberta.util.NotificationService;
 import de.fhg.iais.roberta.util.ServerProperties;
 import de.fhg.iais.roberta.util.UtilForREST;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Rule;
@@ -81,7 +82,7 @@ public class NotificationControllerTest {
     }
 
     @Test
-    public void getNotificationsAndNotificationsAvailableFlag() throws Exception {
+    public void notificationsAvailableFlag() throws Exception {
         ClientPing clientPing = new ClientPing("", null);
 
         HttpSessionState httpSession = createEmptyHttpSession();
@@ -99,7 +100,7 @@ public class NotificationControllerTest {
     }
 
     @Test
-    public void postNotificationsNotAsAdmin() {
+    public void postNotifications_NotAsAdmin() {
         JSONArray notifications = new JSONArray("[\n" + "  {\n" + "    \"triggers\": []\n" + "  " + "}\n" + "]");
 
         HttpSessionState session = createEmptyHttpSession();
@@ -118,7 +119,31 @@ public class NotificationControllerTest {
     }
 
     @Test
-    public void postNotificationsAsAdmin() {
+    public void postNotifications_asAdminJSONError() {
+        JSONArray notifications = new JSONArray("[\n" + "  {\n" + "    \"triggers\": []\n" + "  " + "}\n" + "]");
+
+        HttpSessionState session = createEmptyHttpSession();
+        session.setUserClearDataKeepTokenAndRobotId(ADMIN_USER_ID);
+        FullRestRequest fullRestRequest = createFullRequestFromSession(session, notifications.toString());
+
+        doThrow(new JSONException("A JSONArray text must start with '[' at 1 [character 2 line 1]")).when(notificationService).saveNotifications(anyString());
+
+        Response response = notificationController.postNotifications(fullRestRequest);
+
+        ArgumentCaptor<String> argumentCaptor = ArgumentCaptor.forClass(String.class);
+        verify(notificationService).saveNotifications(argumentCaptor.capture());
+
+        String notificationsJson = argumentCaptor.getValue();
+        assertThat(notificationsJson).isEqualTo(notifications.toString());
+
+        BaseResponse baseResponse = BaseResponse.makeFromString(((String) response.getEntity()));
+        assertThat(baseResponse.getRc()).isEqualTo("error");
+        assertThat(baseResponse.getMessage()).isEqualTo("ORA_NOTIFICATION_ERROR_INVALID_SYNTAX");
+        assertThat(baseResponse.getParameters().getString("MESSAGE")).isEqualTo("A JSONArray text must start with '[' at 1 [character 2 line 1]");
+    }
+
+    @Test
+    public void postNotifications_AsAdmin() {
         JSONArray notifications = new JSONArray("[\n" + "  {\n" + "    \"triggers\": []\n" + "  " + "}\n" + "]");
 
         HttpSessionState session = createEmptyHttpSession();

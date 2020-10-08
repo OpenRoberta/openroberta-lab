@@ -65,7 +65,7 @@ public class NotificationController {
                 notificationService.saveNotifications(notificationsJSON);
                 UtilForREST.addSuccessInfo(response, Key.NOTIFICATION_SUCCESS);
             } catch (JSONException e) {
-                UtilForREST.addErrorInfo(response, Key.NOTIFICATION_ERROR_INVALID_SYNTAX);
+                UtilForREST.addErrorInfo(response, Key.NOTIFICATION_ERROR_INVALID_SYNTAX, e.getMessage());
                 LOG.warn("An error occurred while parsing JSON", e);
             }
         } else {
