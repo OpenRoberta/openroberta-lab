@@ -52,7 +52,6 @@ public class HttpSessionState implements Serializable {
     private String toolboxName;
     private String toolbox;
     private boolean processing;
-    private Set<String> receivedNotifications = new HashSet<>();
     private String receivedNotificationsDigest;
 
     private HttpSessionState(
@@ -283,14 +282,6 @@ public class HttpSessionState implements Serializable {
         if ( !somethingExpired ) {
             LOG.info("no sessions expired");
         }
-    }
-
-    public Set<String> getReceivedNotifications() {
-        return receivedNotifications;
-    }
-
-    public void setReceivedNotifications(Collection<String> receivedNotifications) {
-        this.receivedNotifications = new HashSet<>(receivedNotifications);
     }
 
     public String getReceivedNotificationsDigest() {
