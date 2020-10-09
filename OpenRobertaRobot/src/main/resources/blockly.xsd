@@ -61,11 +61,12 @@
 				type="warning" />
 			<xs:element name="data" minOccurs="0" maxOccurs="1"
 				type="data" />
+			<xs:element name="hide" minOccurs="0"
+				maxOccurs="unbounded" type="hide"/>
 			<xs:element name="value" minOccurs="0"
 				maxOccurs="unbounded" type="value" />
 			<xs:element name="statement" minOccurs="0"
 				maxOccurs="unbounded" type="statement" />
-
 
 		</xs:sequence>
 		<xs:attribute name="x" type="xs:string" use="optional" />
@@ -221,5 +222,8 @@
 		<xs:attribute name="intask" type="xs:boolean"
 			use="optional" />
 	</xs:complexType>
-
+	<xs:complexType name="hide">
+		<xs:attribute name="name" type="xs:string" use="required"/>
+		<xs:attribute name="value" type="xs:string" use="required"/>
+	</xs:complexType>
 </xs:schema>

@@ -1,10 +1,10 @@
 package de.fhg.iais.roberta.syntax;
 
-import java.util.Collections;
-
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
+
+import java.util.Collections;
 
 import de.fhg.iais.roberta.components.Project;
 import de.fhg.iais.roberta.factory.IRobotFactory;
@@ -40,7 +40,7 @@ public class CalliopeTwo2ThreeTransformerTest {
             };
 
         Project project =
-            UnitTestHelper.setupWithConfigAndProgramXML(testFactory, Util.readResourceContent("/transform/old_compass.xml"), OLD_CONFIGURATION_XML).build();
+            UnitTestHelper.setupWithConfigAndProgramXML(testFactory, Util.readResourceContent("/transform/two2three/old_compass.xml"), OLD_CONFIGURATION_XML).build();
 
         new MbedTwo2ThreeTransformerWorker().execute(project);
         UnitTestHelper.checkAstEquality(project.getProgramAst().getTree().toString(), expectedProgramAst);
@@ -62,7 +62,7 @@ public class CalliopeTwo2ThreeTransformerTest {
             };
 
         Project project =
-            UnitTestHelper.setupWithConfigAndProgramXML(testFactory, Util.readResourceContent("/transform/old_key.xml"), OLD_CONFIGURATION_XML).build();
+            UnitTestHelper.setupWithConfigAndProgramXML(testFactory, Util.readResourceContent("/transform/two2three/old_key.xml"), OLD_CONFIGURATION_XML).build();
 
         new MbedTwo2ThreeTransformerWorker().execute(project);
         UnitTestHelper.checkAstEquality(project.getProgramAst().getTree().toString(), expectedProgramAst);
@@ -103,7 +103,7 @@ public class CalliopeTwo2ThreeTransformerTest {
 
         Project project =
             UnitTestHelper
-                .setupWithConfigAndProgramXML(testFactory, Util.readResourceContent("/transform/old_led_rgbled.xml"), OLD_CONFIGURATION_XML)
+                .setupWithConfigAndProgramXML(testFactory, Util.readResourceContent("/transform/two2three/old_led_rgbled.xml"), OLD_CONFIGURATION_XML)
 
                 .build();
 
@@ -124,7 +124,7 @@ public class CalliopeTwo2ThreeTransformerTest {
             };
 
         Project project =
-            UnitTestHelper.setupWithConfigAndProgramXML(testFactory, Util.readResourceContent("/transform/old_light.xml"), OLD_CONFIGURATION_XML).build();
+            UnitTestHelper.setupWithConfigAndProgramXML(testFactory, Util.readResourceContent("/transform/two2three/old_light.xml"), OLD_CONFIGURATION_XML).build();
 
         new MbedTwo2ThreeTransformerWorker().execute(project);
         UnitTestHelper.checkAstEquality(project.getProgramAst().getTree().toString(), expectedProgramAst);
@@ -217,7 +217,7 @@ public class CalliopeTwo2ThreeTransformerTest {
 
         Project project =
             UnitTestHelper
-                .setupWithConfigAndProgramXML(testFactory, Util.readResourceContent("/transform/calliope/old_pin_pull.xml"), OLD_CONFIGURATION_XML)
+                .setupWithConfigAndProgramXML(testFactory, Util.readResourceContent("/transform/two2three/calliope/old_pin_pull.xml"), OLD_CONFIGURATION_XML)
 
                 .build();
 
@@ -238,7 +238,7 @@ public class CalliopeTwo2ThreeTransformerTest {
             };
 
         Project project =
-            UnitTestHelper.setupWithConfigAndProgramXML(testFactory, Util.readResourceContent("/transform/old_sound.xml"), OLD_CONFIGURATION_XML).build();
+            UnitTestHelper.setupWithConfigAndProgramXML(testFactory, Util.readResourceContent("/transform/two2three/old_sound.xml"), OLD_CONFIGURATION_XML).build();
 
         new MbedTwo2ThreeTransformerWorker().execute(project);
         UnitTestHelper.checkAstEquality(project.getProgramAst().getTree().toString(), expectedProgramAst);
@@ -258,7 +258,7 @@ public class CalliopeTwo2ThreeTransformerTest {
 
         Project project =
             UnitTestHelper
-                .setupWithConfigAndProgramXML(testFactory, Util.readResourceContent("/transform/old_temperature.xml"), OLD_CONFIGURATION_XML)
+                .setupWithConfigAndProgramXML(testFactory, Util.readResourceContent("/transform/two2three/old_temperature.xml"), OLD_CONFIGURATION_XML)
 
                 .build();
 
@@ -287,7 +287,7 @@ public class CalliopeTwo2ThreeTransformerTest {
 
         Project project =
             UnitTestHelper
-                .setupWithConfigAndProgramXML(testFactory, Util.readResourceContent("/transform/old_ultrasonic.xml"), OLD_CONFIGURATION_XML)
+                .setupWithConfigAndProgramXML(testFactory, Util.readResourceContent("/transform/two2three/old_ultrasonic.xml"), OLD_CONFIGURATION_XML)
 
                 .build();
 
@@ -360,7 +360,7 @@ public class CalliopeTwo2ThreeTransformerTest {
 
         Project project =
             UnitTestHelper
-                .setupWithConfigAndProgramXML(testFactory, Util.readResourceContent("/transform/calliope/old_write_to_pin.xml"), OLD_CONFIGURATION_XML)
+                .setupWithConfigAndProgramXML(testFactory, Util.readResourceContent("/transform/two2three/calliope/old_write_to_pin.xml"), OLD_CONFIGURATION_XML)
 
                 .build();
 
@@ -388,7 +388,7 @@ public class CalliopeTwo2ThreeTransformerTest {
 
         Project project =
             UnitTestHelper
-                .setupWithConfigAndProgramXML(testFactory, Util.readResourceContent("/transform/old_accelerometer.xml"), OLD_CONFIGURATION_XML)
+                .setupWithConfigAndProgramXML(testFactory, Util.readResourceContent("/transform/two2three/old_accelerometer.xml"), OLD_CONFIGURATION_XML)
 
                 .build();
 
@@ -411,7 +411,7 @@ public class CalliopeTwo2ThreeTransformerTest {
             };
 
         Project project =
-            UnitTestHelper.setupWithConfigAndProgramXML(testFactory, Util.readResourceContent("/transform/old_gyro.xml"), OLD_CONFIGURATION_XML).build();
+            UnitTestHelper.setupWithConfigAndProgramXML(testFactory, Util.readResourceContent("/transform/two2three/old_gyro.xml"), OLD_CONFIGURATION_XML).build();
 
         new MbedTwo2ThreeTransformerWorker().execute(project);
         UnitTestHelper.checkAstEquality(project.getProgramAst().getTree().toString(), expectedProgramAst);
@@ -432,7 +432,7 @@ public class CalliopeTwo2ThreeTransformerTest {
             };
 
         Project project =
-            UnitTestHelper.setupWithConfigAndProgramXML(testFactory, Util.readResourceContent("/transform/old_humidity.xml"), OLD_CONFIGURATION_XML).build();
+            UnitTestHelper.setupWithConfigAndProgramXML(testFactory, Util.readResourceContent("/transform/two2three/old_humidity.xml"), OLD_CONFIGURATION_XML).build();
 
         new MbedTwo2ThreeTransformerWorker().execute(project);
         UnitTestHelper.checkAstEquality(project.getProgramAst().getTree().toString(), expectedProgramAst);
@@ -457,7 +457,7 @@ public class CalliopeTwo2ThreeTransformerTest {
             };
 
         Project project =
-            UnitTestHelper.setupWithConfigAndProgramXML(testFactory, Util.readResourceContent("/transform/old_infrared.xml"), OLD_CONFIGURATION_XML).build();
+            UnitTestHelper.setupWithConfigAndProgramXML(testFactory, Util.readResourceContent("/transform/two2three/old_infrared.xml"), OLD_CONFIGURATION_XML).build();
 
         new MbedTwo2ThreeTransformerWorker().execute(project);
         UnitTestHelper.checkAstEquality(project.getProgramAst().getTree().toString(), expectedProgramAst);
@@ -489,7 +489,7 @@ public class CalliopeTwo2ThreeTransformerTest {
             };
 
         Project project =
-            UnitTestHelper.setupWithConfigAndProgramXML(testFactory, Util.readResourceContent("/transform/old_servo.xml"), OLD_CONFIGURATION_XML).build();
+            UnitTestHelper.setupWithConfigAndProgramXML(testFactory, Util.readResourceContent("/transform/two2three/old_servo.xml"), OLD_CONFIGURATION_XML).build();
 
         new MbedTwo2ThreeTransformerWorker().execute(project);
         UnitTestHelper.checkAstEquality(project.getProgramAst().getTree().toString(), expectedProgramAst);
@@ -512,7 +512,7 @@ public class CalliopeTwo2ThreeTransformerTest {
             };
 
         Project project =
-            UnitTestHelper.setupWithConfigAndProgramXML(testFactory, Util.readResourceContent("/transform/old_sounds.xml"), OLD_CONFIGURATION_XML).build();
+            UnitTestHelper.setupWithConfigAndProgramXML(testFactory, Util.readResourceContent("/transform/two2three/old_sounds.xml"), OLD_CONFIGURATION_XML).build();
 
         new MbedTwo2ThreeTransformerWorker().execute(project);
         UnitTestHelper.checkAstEquality(project.getProgramAst().getTree().toString(), expectedProgramAst);
@@ -621,7 +621,7 @@ public class CalliopeTwo2ThreeTransformerTest {
 
         Project project =
             UnitTestHelper
-                .setupWithConfigAndProgramXML(testFactory, Util.readResourceContent("/transform/calliope/old_pins_sensor.xml"), OLD_CONFIGURATION_XML)
+                .setupWithConfigAndProgramXML(testFactory, Util.readResourceContent("/transform/two2three/calliope/old_pins_sensor.xml"), OLD_CONFIGURATION_XML)
 
                 .build();
 
@@ -639,7 +639,7 @@ public class CalliopeTwo2ThreeTransformerTest {
             };
 
         Project project =
-            UnitTestHelper.setupWithConfigAndProgramXML(testFactory, Util.readResourceContent("/transform/old_ledbar.xml"), OLD_CONFIGURATION_XML).build();
+            UnitTestHelper.setupWithConfigAndProgramXML(testFactory, Util.readResourceContent("/transform/two2three/old_ledbar.xml"), OLD_CONFIGURATION_XML).build();
 
         new MbedTwo2ThreeTransformerWorker().execute(project);
         UnitTestHelper.checkAstEquality(project.getProgramAst().getTree().toString(), expectedProgramAst);
@@ -659,7 +659,7 @@ public class CalliopeTwo2ThreeTransformerTest {
 
         Project project =
             UnitTestHelper
-                .setupWithConfigAndProgramXML(testFactory, Util.readResourceContent("/transform/old_fourdigitdisplay.xml"), OLD_CONFIGURATION_XML)
+                .setupWithConfigAndProgramXML(testFactory, Util.readResourceContent("/transform/two2three/old_fourdigitdisplay.xml"), OLD_CONFIGURATION_XML)
 
                 .build();
 
@@ -683,7 +683,7 @@ public class CalliopeTwo2ThreeTransformerTest {
 
         Project project =
             UnitTestHelper
-                .setupWithConfigAndProgramXML(testFactory, Util.readResourceContent("/transform/old_single_motor_on_stop.xml"), OLD_CONFIGURATION_XML)
+                .setupWithConfigAndProgramXML(testFactory, Util.readResourceContent("/transform/two2three/old_single_motor_on_stop.xml"), OLD_CONFIGURATION_XML)
 
                 .build();
 
@@ -712,7 +712,7 @@ public class CalliopeTwo2ThreeTransformerTest {
 
         Project project =
             UnitTestHelper
-                .setupWithConfigAndProgramXML(testFactory, Util.readResourceContent("/transform/old_motors_on_stop.xml"), OLD_CONFIGURATION_XML)
+                .setupWithConfigAndProgramXML(testFactory, Util.readResourceContent("/transform/two2three/old_motors_on_stop.xml"), OLD_CONFIGURATION_XML)
 
                 .build();
 
@@ -746,7 +746,7 @@ public class CalliopeTwo2ThreeTransformerTest {
 
         Project project =
             UnitTestHelper
-                .setupWithConfigAndProgramXML(testFactory, Util.readResourceContent("/transform/old_motor_on_stop_single.xml"), OLD_CONFIGURATION_XML)
+                .setupWithConfigAndProgramXML(testFactory, Util.readResourceContent("/transform/two2three/old_motor_on_stop_single.xml"), OLD_CONFIGURATION_XML)
 
                 .build();
 
@@ -776,7 +776,7 @@ public class CalliopeTwo2ThreeTransformerTest {
 
         Project project =
             UnitTestHelper
-                .setupWithConfigAndProgramXML(testFactory, Util.readResourceContent("/transform/old_motor_on_stop_double.xml"), OLD_CONFIGURATION_XML)
+                .setupWithConfigAndProgramXML(testFactory, Util.readResourceContent("/transform/two2three/old_motor_on_stop_double.xml"), OLD_CONFIGURATION_XML)
 
                 .build();
 
@@ -792,7 +792,7 @@ public class CalliopeTwo2ThreeTransformerTest {
                 + "WaitStmt[(repeat[WAIT,SensorExpr[GetSampleSensor[GestureSensor[NO_PORT,UP,EMPTY_SLOT]]]])]]]]";
 
         Project project =
-            UnitTestHelper.setupWithConfigAndProgramXML(testFactory, Util.readResourceContent("/transform/old_wait_for.xml"), OLD_CONFIGURATION_XML).build();
+            UnitTestHelper.setupWithConfigAndProgramXML(testFactory, Util.readResourceContent("/transform/two2three/old_wait_for.xml"), OLD_CONFIGURATION_XML).build();
 
         new MbedTwo2ThreeTransformerWorker().execute(project);
         UnitTestHelper.checkAstEquality(project.getProgramAst().getTree().toString(), expectedProgramAst);
