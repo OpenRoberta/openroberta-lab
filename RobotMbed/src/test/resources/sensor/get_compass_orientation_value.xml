@@ -10,7 +10,7 @@
                 <block type="robSensors_compass_getSample" id="4Pvz:R=D6!5_fIZkVM.n" intask="true">
                     <mutation mode="ANGLE" />
                     <field name="MODE">ANGLE</field>
-                    <field name="SENSORPORT">C</field>
+                    <field name="SENSORPORT">_C</field>
                     <field name="SLOT" />
                 </block>
             </value>

@@ -10,7 +10,7 @@
                 <block type="robSensors_gyro_getSample" id="pgdvV6d,B#D(zW,X(R5U" intask="true">
                     <mutation mode="ANGLE" />
                     <field name="MODE">ANGLE</field>
-                    <field name="SENSORPORT">G</field>
+                    <field name="SENSORPORT">_G</field>
                     <field name="SLOT">X</field>
                 </block>
             </value>
@@ -21,7 +21,7 @@
                 <block type="robSensors_gyro_getSample" id="ny65tLUsH}x:Y*0;v+h)" intask="true">
                     <mutation mode="ANGLE" />
                     <field name="MODE">ANGLE</field>
-                    <field name="SENSORPORT">G</field>
+                    <field name="SENSORPORT">_G</field>
                     <field name="SLOT">Y</field>
                 </block>
             </value>

@@ -40,7 +40,7 @@
                         <block type="robSensors_getSample" id="bn~*=GhQHkop^sS;X)E3" intask="true">
                             <mutation input="GYRO_ANGLE"></mutation>
                             <field name="SENSORTYPE">GYRO_ANGLE</field>
-                            <field name="SENSORPORT">G</field>
+                            <field name="SENSORPORT">_G</field>
                             <field name="SLOT">X</field>
                         </block>
                     </value>

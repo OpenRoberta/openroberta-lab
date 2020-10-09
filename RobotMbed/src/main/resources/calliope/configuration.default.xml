@@ -7,22 +7,22 @@
     </instance>
     <instance x="197" y="190">
         <block type="robConf_light" id="9Ktt(7_4+XmKC0]5Zha?" intask="true" deletable="false">
-            <field name="NAME">L</field>
+            <field name="NAME">_L</field>
         </block>
     </instance>
     <instance x="-34" y="450">
         <block type="robConf_buzzer" id="}%d2_68IJd*7Oy{qrMR," intask="true" deletable="false">
-            <field name="NAME">BZ</field>
+            <field name="NAME">_B</field>
         </block>
     </instance>
     <instance x="80" y="378">
         <block type="robConf_temperature" id="0y].dnS)P)~Jjzeu3/0C" intask="true" deletable="false">
-            <field name="NAME">TM</field>
+            <field name="NAME">_T</field>
         </block>
     </instance>
     <instance x="-34" y="422">
         <block type="robConf_rgbled" id="lgi%C3,J!smR:eP0aal_" intask="true" deletable="false">
-            <field name="NAME">R</field>
+            <field name="NAME">_R</field>
         </block>
     </instance>
     <instance x="-34" y="120">
@@ -33,22 +33,22 @@
     </instance>
     <instance x="80" y="211">
         <block type="robConf_gyro" id="lIT?C5y|(7FWCQIUn~pc" intask="true" deletable="false">
-            <field name="NAME">G</field>
+            <field name="NAME">_G</field>
         </block>
     </instance>
     <instance x="80" y="239">
         <block type="robConf_compass" id="O%Oi0Tq`hGEvrgHGPYY=" intask="true" deletable="false">
-            <field name="NAME">C</field>
+            <field name="NAME">_C</field>
         </block>
     </instance>
     <instance x="80" y="268">
         <block type="robConf_accelerometer" id="#(ufvG,s^FcqI,aFn/A{" intask="true" deletable="false">
-            <field name="NAME">Acc</field>
+            <field name="NAME">_A</field>
         </block>
     </instance>
     <instance x="197" y="162">
         <block type="robConf_sound" id="e:4V0FcDx%9,.7xO,Ns@" intask="true" deletable="false">
-            <field name="NAME">M</field>
+            <field name="NAME">_S</field>
         </block>
     </instance>
 </block_set>

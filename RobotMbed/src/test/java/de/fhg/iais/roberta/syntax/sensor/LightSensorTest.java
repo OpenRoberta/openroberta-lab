@@ -12,7 +12,7 @@ public class LightSensorTest extends AstTest {
         String expectedResult =
             "BlockAST [project=[[Location [x=13, y=63], "
                 + "MainTask [], "
-                + "DisplayTextAction [TEXT, SensorExpr [LightSensor [L, VALUE, EMPTY_SLOT]]]]]]";
+                + "DisplayTextAction [TEXT, SensorExpr [LightSensor [_L, VALUE, EMPTY_SLOT]]]]]]";
 
         UnitTestHelper.checkProgramAstEquality(testFactory, expectedResult, "/sensor/get_light_level.xml");
 

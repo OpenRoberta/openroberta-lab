@@ -32,11 +32,11 @@ public class CalliopeTwo2ThreeTransformerTest {
     public void executeTransformer_ShouldReturnTransformedCompass_WhenGivenOldCompass() {
         String expectedProgramAst =
             "BlockAST[project=[[Location[x=549,y=76],MainTask[],"
-                + "DebugAction[SensorExpr[CompassSensor[C,ANGLE,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[GetSampleSensor[CompassSensor[C,ANGLE,EMPTY_SLOT]]]]]]]";
+                + "DebugAction[SensorExpr[CompassSensor[_C,ANGLE,EMPTY_SLOT]]],"
+                + "DebugAction[SensorExpr[GetSampleSensor[CompassSensor[_C,ANGLE,EMPTY_SLOT]]]]]]]";
         String[] expectedToBeInConfigAst =
             {
-                "ConfigurationComponent[componentType=COMPASS,isActor=true,userDefinedName=C,portName=C,componentProperties={}]"
+                "ConfigurationComponent[componentType=COMPASS,isActor=true,userDefinedName=_C,portName=_C,componentProperties={}]"
             };
 
         Project project =
@@ -73,13 +73,13 @@ public class CalliopeTwo2ThreeTransformerTest {
     public void executeTransformer_ShouldReturnTransformedLedRgbled_WhenGivenOldLedRgbled() {
         String expectedProgramAst =
             "BlockAST[project=[[Location[x=512,y=50],MainTask[],"
-                + "LedOnAction[R,ColorConst[#ff0000]],"
+                + "LedOnAction[_R,ColorConst[#ff0000]],"
                 + "LedOnAction[CalliBot_links_vorne,ColorConst[#ff0000]],"
                 + "LedOnAction[CalliBot_rechts_vorne,ColorConst[#ff0000]],"
                 + "LedOnAction[CalliBot_links_hinten,ColorConst[#ff0000]],"
                 + "LedOnAction[CalliBot_rechts_hinten,ColorConst[#ff0000]],"
                 + "LedOnAction[CalliBot_alle,ColorConst[#ff0000]],"
-                + "LightStatusAction[R, OFF],"
+                + "LightStatusAction[_R, OFF],"
                 + "LightStatusAction[CalliBot_links_vorne, OFF],"
                 + "LightStatusAction[CalliBot_rechts_vorne, OFF],"
                 + "LightStatusAction[CalliBot_links_hinten, OFF],"
@@ -93,7 +93,7 @@ public class CalliopeTwo2ThreeTransformerTest {
                 + "LightAction[L_CalliBot_beide,OFF,DEFAULT,EmptyExpr[defVal=COLOR]]]]]";
         String[] expectedToBeInConfigAst =
             {
-                "ConfigurationComponent[componentType=RGBLED,isActor=true,userDefinedName=R,portName=R,componentProperties={PIN1=0}]",
+                "ConfigurationComponent[componentType=RGBLED,isActor=true,userDefinedName=_R,portName=_R,componentProperties={}]",
                 "ConfigurationComponent[componentType=CALLIBOT, isActor=true, userDefinedName=CalliBot, portName=CalliBot,"
                     + "componentProperties={LED_B=L_CalliBot_beide, RGBLED_RF=CalliBot_rechts_vorne, INFRARED_L=I_CalliBot_links,"
                     + "RGBLED_A=CalliBot_alle, RGBLED_LF=CalliBot_links_vorne, RGBLED_LR=CalliBot_links_hinten, MOTOR_L=CalliBot_links,"
@@ -116,11 +116,11 @@ public class CalliopeTwo2ThreeTransformerTest {
     public void executeTransformer_ShouldReturnTransformedLight_WhenGivenOldLight() {
         String expectedProgramAst =
             "BlockAST[project=[[Location[x=549,y=76],MainTask[],"
-                + "DebugAction[SensorExpr[LightSensor[L,VALUE,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[GetSampleSensor[LightSensor[L,LIGHT_VALUE,EMPTY_SLOT]]]]]]]";
+                + "DebugAction[SensorExpr[LightSensor[_L,VALUE,EMPTY_SLOT]]],"
+                + "DebugAction[SensorExpr[GetSampleSensor[LightSensor[_L,LIGHT_VALUE,EMPTY_SLOT]]]]]]]";
         String[] expectedToBeInConfigAst =
             {
-                "ConfigurationComponent[componentType=LIGHT,isActor=true,userDefinedName=L,portName=L,componentProperties={}]"
+                "ConfigurationComponent[componentType=LIGHT,isActor=true,userDefinedName=_L,portName=_L,componentProperties={}]"
             };
 
         Project project =
@@ -230,11 +230,11 @@ public class CalliopeTwo2ThreeTransformerTest {
     public void executeTransformer_ShouldReturnTransformedSound_WhenGivenOldSound() {
         String expectedProgramAst =
             "BlockAST[project=[[Location[x=549,y=76],MainTask[],"
-                + "DebugAction[SensorExpr[SoundSensor[M,SOUND,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[GetSampleSensor[SoundSensor[M,SOUND,EMPTY_SLOT]]]]]]]";
+                + "DebugAction[SensorExpr[SoundSensor[_S,SOUND,EMPTY_SLOT]]],"
+                + "DebugAction[SensorExpr[GetSampleSensor[SoundSensor[_S,SOUND,EMPTY_SLOT]]]]]]]";
         String[] expectedToBeInConfigAst =
             {
-                "ConfigurationComponent[componentType=SOUND,isActor=true,userDefinedName=M,portName=M,componentProperties={}]"
+                "ConfigurationComponent[componentType=SOUND,isActor=true,userDefinedName=_S,portName=_S,componentProperties={}]"
             };
 
         Project project =
@@ -249,11 +249,11 @@ public class CalliopeTwo2ThreeTransformerTest {
     public void executeTransformer_ShouldReturnTransformedTemperature_WhenGivenOldTemperature() {
         String expectedProgramAst =
             "BlockAST[project=[[Location[x=549,y=76],MainTask[],"
-                + "DebugAction[SensorExpr[TemperatureSensor[TM,VALUE,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[GetSampleSensor[TemperatureSensor[TM,TEMPERATURE,EMPTY_SLOT]]]]]]]";
+                + "DebugAction[SensorExpr[TemperatureSensor[_T,VALUE,EMPTY_SLOT]]],"
+                + "DebugAction[SensorExpr[GetSampleSensor[TemperatureSensor[_T,TEMPERATURE,EMPTY_SLOT]]]]]]]";
         String[] expectedToBeInConfigAst =
             {
-                "ConfigurationComponent[componentType=TEMPERATURE,isActor=true,userDefinedName=TM,portName=TM,componentProperties={}]"
+                "ConfigurationComponent[componentType=TEMPERATURE,isActor=true,userDefinedName=_T,portName=_T,componentProperties={}]"
             };
 
         Project project =
@@ -373,17 +373,17 @@ public class CalliopeTwo2ThreeTransformerTest {
     public void executeTransformer_ShouldReturnTransformedAccelerometer_WhenGivenOldAccelerometer() {
         String expectedProgramAst =
             "BlockAST[project=[[Location[x=512,y=50],MainTask[],"
-                + "DebugAction[SensorExpr[AccelerometerSensor[Acc,VALUE,X]]],"
-                + "DebugAction[SensorExpr[AccelerometerSensor[Acc,VALUE,Y]]],"
-                + "DebugAction[SensorExpr[AccelerometerSensor[Acc,VALUE,Z]]],"
-                + "DebugAction[SensorExpr[AccelerometerSensor[Acc,VALUE,STRENGTH]]],"
-                + "DebugAction[SensorExpr[GetSampleSensor[AccelerometerSensor[Acc,DEFAULT,X]]]],"
-                + "DebugAction[SensorExpr[GetSampleSensor[AccelerometerSensor[Acc,DEFAULT,Y]]]],"
-                + "DebugAction[SensorExpr[GetSampleSensor[AccelerometerSensor[Acc,DEFAULT,Z]]]],"
-                + "DebugAction[SensorExpr[GetSampleSensor[AccelerometerSensor[Acc,DEFAULT,STRENGTH]]]]]]]";
+                + "DebugAction[SensorExpr[AccelerometerSensor[_A,VALUE,X]]],"
+                + "DebugAction[SensorExpr[AccelerometerSensor[_A,VALUE,Y]]],"
+                + "DebugAction[SensorExpr[AccelerometerSensor[_A,VALUE,Z]]],"
+                + "DebugAction[SensorExpr[AccelerometerSensor[_A,VALUE,STRENGTH]]],"
+                + "DebugAction[SensorExpr[GetSampleSensor[AccelerometerSensor[_A,DEFAULT,X]]]],"
+                + "DebugAction[SensorExpr[GetSampleSensor[AccelerometerSensor[_A,DEFAULT,Y]]]],"
+                + "DebugAction[SensorExpr[GetSampleSensor[AccelerometerSensor[_A,DEFAULT,Z]]]],"
+                + "DebugAction[SensorExpr[GetSampleSensor[AccelerometerSensor[_A,DEFAULT,STRENGTH]]]]]]]";
         String[] expectedToBeInConfigAst =
             {
-                "ConfigurationComponent[componentType=ACCELEROMETER,isActor=true,userDefinedName=Acc,portName=Acc,componentProperties={}]"
+                "ConfigurationComponent[componentType=ACCELEROMETER,isActor=true,userDefinedName=_A,portName=_A,componentProperties={}]"
             };
 
         Project project =
@@ -401,13 +401,13 @@ public class CalliopeTwo2ThreeTransformerTest {
     public void executeTransformer_ShouldReturnTransformedGyro_WhenGivenOldGyro() {
         String expectedProgramAst =
             "BlockAST[project=[[Location[x=512,y=50],MainTask[],"
-                + "DebugAction[SensorExpr[GyroSensor[G,ANGLE,X]]],"
-                + "DebugAction[SensorExpr[GyroSensor[G,ANGLE,Y]]],"
-                + "DebugAction[SensorExpr[GetSampleSensor[GyroSensor[G,ANGLE,X]]]],"
-                + "DebugAction[SensorExpr[GetSampleSensor[GyroSensor[G,ANGLE,Y]]]]]]]";
+                + "DebugAction[SensorExpr[GyroSensor[_G,ANGLE,X]]],"
+                + "DebugAction[SensorExpr[GyroSensor[_G,ANGLE,Y]]],"
+                + "DebugAction[SensorExpr[GetSampleSensor[GyroSensor[_G,ANGLE,X]]]],"
+                + "DebugAction[SensorExpr[GetSampleSensor[GyroSensor[_G,ANGLE,Y]]]]]]]";
         String[] expectedToBeInConfigAst =
             {
-                "ConfigurationComponent[componentType=GYRO,isActor=true,userDefinedName=G,portName=G,componentProperties={}]"
+                "ConfigurationComponent[componentType=GYRO,isActor=true,userDefinedName=_G,portName=_G,componentProperties={}]"
             };
 
         Project project =
@@ -508,7 +508,7 @@ public class CalliopeTwo2ThreeTransformerTest {
                 + "PlayNoteAction[duration=125,frequency=261.626]]]]";
         String[] expectedToBeInConfigAst =
             {
-                "ConfigurationComponent[componentType=BUZZER,isActor=true,userDefinedName=BZ,portName=BZ,componentProperties={}]"
+                "ConfigurationComponent[componentType=BUZZER,isActor=true,userDefinedName=_B,portName=_B,componentProperties={}]"
             };
 
         Project project =

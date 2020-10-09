@@ -10,7 +10,7 @@
                 <block type="robSensors_temperature_getSample" id="xn^wVahMu8IhkjA30:|2" intask="true">
                     <mutation mode="VALUE" />
                     <field name="MODE">VALUE</field>
-                    <field name="SENSORPORT">TM</field>
+                    <field name="SENSORPORT">_T</field>
                     <field name="SLOT" />
                 </block>
             </value>

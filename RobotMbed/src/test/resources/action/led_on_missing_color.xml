@@ -4,7 +4,7 @@
             <mutation declare="false"></mutation>
         </block>
         <block type="mbedActions_leds_on" id="^zNUKOHjyD0prD(6q.~q" intask="true">
-            <field name="ACTORPORT">R</field>
+            <field name="ACTORPORT">_R</field>
         </block>
     </instance>
 </block_set>

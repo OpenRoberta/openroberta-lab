@@ -9,7 +9,7 @@
                 <block type="robSensors_light_getSample" id="fY0DW{*)/Tu+-,}3/.#Y" intask="true">
                     <mutation mode="VALUE" />
                     <field name="MODE">VALUE</field>
-                    <field name="SENSORPORT">L</field>
+                    <field name="SENSORPORT">_L</field>
                     <field name="SLOT" />
                 </block>
             </value>
