@@ -226,24 +226,6 @@ define([ 'exports', 'log', 'message', 'util', 'user.model', 'guiState.controller
             });
         }
     }
-
-    /**
-     * Add status text on server
-     */
-    function addStatusText() {
-        $("#fg-addStatusText").validate();
-        if ($("#fg-addStatusText").valid()) {
-            var dateInput = $('#statusTextDate').val(), timeInput = $('#statusTextTime').val(), timeParts = timeInput.split(':'), dateParts = dateInput.split('-'), date;
-
-            date = new Date(dateParts[0], parseInt(dateParts[1], 10) - 1, dateParts[2], timeParts[0], timeParts[1]);
-            USER.setStatusText($("#statusTextEnglish").val(), $('#statusTextGerman').val(), date.getTime() / 1000, function(result) {
-                if (result.rc === "ok") {
-                    $('#modal-notifications').modal("hide");
-                }
-            });
-        }
-    }
-
     function validateLoginUser() {
         $formLogin.removeData('validator')
         $.validator.addMethod("loginRegex", function(value, element) {

@@ -326,8 +326,6 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.controller', 'guiState.m
                 typeof opt_callback === "function" && opt_callback();
                 return;
             }
-
-
             ROBOT.setRobot(robot, function(result) {
                 if (result.rc === "ok") {
                     if (GUISTATE_C.findGroup(robot) != GUISTATE_C.getRobotGroup()) {

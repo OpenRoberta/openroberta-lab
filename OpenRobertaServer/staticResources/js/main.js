@@ -54,9 +54,9 @@ require.config({
 		'robot.model': 'app/roberta/models/robot.model',
 		'tour.controller': 'app/roberta/controller/tour.controller',
 		'user.controller': 'app/roberta/controller/user.controller',
-		'userGroup.controller' : 'app/roberta/controller/userGroup.controller',
-        'userGroup.model' : 'app/roberta/models/userGroup.model',
-        'user.model': 'app/roberta/models/user.model',
+		'userGroup.controller': 'app/roberta/controller/userGroup.controller',
+		'userGroup.model': 'app/roberta/models/userGroup.model',
+		'user.model': 'app/roberta/models/user.model',
 		'rest.robot': 'app/roberta/rest/robot',
 		'socket.controller': 'app/roberta/controller/socket.controller',
 		'webview.controller': 'app/roberta/controller/webview.controller',
@@ -71,7 +71,7 @@ require.config({
 		'simulation.robot.calliope': 'app/simulation/simulationLogic/robot.calliope',
 		'simulation.robot.calliope2016': 'app/simulation/simulationLogic/robot.calliope2016',
 		'simulation.robot.calliope2017': 'app/simulation/simulationLogic/robot.calliope2017',
-		'simulation.robot.mbot':'app/simulation/simulationLogic/robot.mbot',
+		'simulation.robot.mbot': 'app/simulation/simulationLogic/robot.mbot',
 		'simulation.robot.microbit': 'app/simulation/simulationLogic/robot.microbit',
 		'simulation.robot.math': 'app/simulation/simulationLogic/robot.math',
 		'simulation.robot.rescue': 'app/simulation/simulationLogic/robot.rescue',
@@ -98,9 +98,9 @@ require.config({
 		'interpreter.util': 'app/nepostackmachine/interpreter.util',
 		'interpreter.jsHelper': 'app/nepostackmachine/interpreter.jsHelper',
 
-	    'neuralnetwork.nn': 'app/neuralnetwork/neuralnetwork.nn',
-	    'neuralnetwork.state': 'app/neuralnetwork/neuralnetwork.state',
-	    'neuralnetwork.playground': 'app/neuralnetwork/neuralnetwork.playground'
+		'neuralnetwork.nn': 'app/neuralnetwork/neuralnetwork.nn',
+		'neuralnetwork.state': 'app/neuralnetwork/neuralnetwork.state',
+		'neuralnetwork.playground': 'app/neuralnetwork/neuralnetwork.playground'
 	},
 	shim: {
 		'bootstrap': {
@@ -126,11 +126,11 @@ require.config({
 
 require(['require', 'wrap', 'log', 'jquery', 'guiState.controller', 'progList.controller', 'logList.controller', 'confList.controller',
 	'progDelete.controller', 'confDelete.controller', 'progShare.controller', 'menu.controller', 'multSim.controller', 'user.controller', 'nn.controller',
-	'robot.controller', 'program.controller', 'progSim.controller','notification.controller', 'progCode.controller', 'progDelete.controller', 'progHelp.controller',
+	'robot.controller', 'program.controller', 'progSim.controller', 'notification.controller', 'progCode.controller', 'progDelete.controller', 'progHelp.controller',
 	'legal.controller', 'progInfo.controller', 'progRun.controller', 'configuration.controller', 'language.controller', 'socket.controller',
 	'progTutorial.controller', 'tutorialList.controller', 'userGroup.controller', 'volume-meter', 'user.model', 'webview.controller',
 	'sourceCodeEditor.controller', 'codeflask', 'interpreter.jsHelper'], function(
-		require) {
+	require) {
 	$ = require('jquery');
 	WRAP = require('wrap');
 	LOG = require('log');
@@ -181,7 +181,7 @@ function init() {
 		return webviewController.init(language);
 	}).then(function(language, opt_data) {
 		return guiStateController.init(language, opt_data);
-	}).then(function () {
+	}).then(function() {
 		return robotController.init();
 	}).then(function() {
 		return userController.init();
@@ -207,7 +207,7 @@ function init() {
 		tutorialController.init();
 		userGroupController.init();
 		notificationController.init();
-        nnController.init();
+		nnController.init();
 
 		$(".cover").fadeOut(100, function() {
 			if (guiStateController.getStartWithoutPopup()) {
