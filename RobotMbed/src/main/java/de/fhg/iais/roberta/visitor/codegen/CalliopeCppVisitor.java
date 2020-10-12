@@ -1,15 +1,15 @@
 package de.fhg.iais.roberta.visitor.codegen;
 
+import com.google.common.collect.ClassToInstanceMap;
+
+import org.apache.commons.text.WordUtils;
+
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
-import org.apache.commons.text.WordUtils;
-
-import com.google.common.collect.ClassToInstanceMap;
 
 import de.fhg.iais.roberta.bean.IProjectBean;
 import de.fhg.iais.roberta.bean.UsedHardwareBean;
@@ -145,6 +145,8 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
         CALLIBOT_TO_PIN_MAP.put("INFRARED_L", "2");
         CALLIBOT_TO_PIN_MAP.put("INFRARED_R", "1");
         CALLIBOT_TO_PIN_MAP.put("ULTRASONIC", "2");
+        CALLIBOT_TO_PIN_MAP.put("SERVO_S1", "0x14");
+        CALLIBOT_TO_PIN_MAP.put("SERVO_S2", "0x15");
     }
 
     private final ConfigurationAst robotConfiguration;
@@ -374,7 +376,7 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
     public Void visitLightStatusAction(LightStatusAction<Void> lightStatusAction) {
         String port = lightStatusAction.getPort();
         ConfigurationComponent confComp = this.robotConfiguration.getConfigurationComponent(port);
-        String pin1 = confComp.getComponentType().equals("CALLIBOT") ? getCallibotPin(confComp, port) : confComp.getProperty("PIN1");
+        String pin1 = confComp.getComponentType().equals("CALLIBOT") ? getCallibotPin(confComp, port) : "0";
         switch ( pin1 ) {
             case "0":
                 this.sb.append("_uBit.rgb.off();");
@@ -677,8 +679,6 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
             nlIndent();
             this.sb.append("_TCS3472_init(_buf, &_i2c, TCS3472_INTEGRATIONTIME_").append(integrationTime).append(", TCS3472_GAIN_").append(gain).append(");");
             nlIndent();
-            this.sb.append("_TCS3472_init(_buf, &_i2c, TCS3472_INTEGRATIONTIME_").append(integrationTime).append(", TCS3472_GAIN_").append(gain).append(");");
-            nlIndent();
             this.sb.append("_TCS3472_time = TCS3472_INTEGRATIONTIME_").append(integrationTime).append(";");
         }
 
@@ -863,7 +863,7 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
     public Void visitLedOnAction(LedOnAction<Void> ledOnAction) {
         String port = ledOnAction.getPort();
         ConfigurationComponent confComp = this.robotConfiguration.getConfigurationComponent(port);
-        String pin1 = confComp.getComponentType().equals("CALLIBOT") ? getCallibotPin(confComp, port) : confComp.getProperty("PIN1");
+        String pin1 = confComp.getComponentType().equals("CALLIBOT") ? getCallibotPin(confComp, port) : "0";
         switch ( pin1 ) {
             case "0":
                 this.sb.append("_uBit.rgb.setColour(");
@@ -1368,9 +1368,15 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
     @Override
     public Void visitServoSetAction(ServoSetAction<Void> servoSetAction) {
         String port = servoSetAction.getPort();
-        ConfigurationComponent configurationComponent = this.robotConfiguration.getConfigurationComponent(port);
-        String pin1 = configurationComponent.getProperty("PIN1");
-        this.sb.append("_uBit.io.").append(PIN_MAP.get(pin1)).append(".setServoValue(");
+        ConfigurationComponent confComp = this.robotConfiguration.getConfigurationComponent(port);
+        String pin1 = confComp.getComponentType().equals("CALLIBOT") ? getCallibotPin(confComp, port) : confComp.getProperty("PIN1");
+        if (pin1.equals("0x14") || pin1.equals("0x15")) {
+            this.sb.append("_cbSetServo(_buf, &_i2c, ");
+            this.sb.append(pin1);
+            this.sb.append(", ");
+        } else {
+            this.sb.append("_uBit.io.").append(PIN_MAP.get(pin1)).append(".setServoValue(");
+        }
         servoSetAction.getValue().accept(this);
         this.sb.append(");");
 

@@ -1,4 +1,4 @@
-<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="nao" xmlversion="3.0" description="" tags="">
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="nao" xmlversion="3.1" description="" tags="">
     <instance x="138" y="138">
         <block type="naoActions_sayText" id="=2?#^?FoMo_|*P75M}tS" intask="true">
             <value name="OUT">

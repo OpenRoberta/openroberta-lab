@@ -14,30 +14,39 @@ License information is available in the **docs** folder.
 
 Things you need on your computer:
 
-* Java >= 1.8
+* Java JDK >= 1.8 (e.g. `openjdk-11-jdk` on Ubuntu)
 * Maven >= 3.2
 * Git
 * Web browser
 
 If you would like your local server to compile code for the different systems, you need to install additional software (crosscompilers, libraries, ...):
 
+To "install" directly downloaded compilers on Linux systems, extract them to a folder of your choice (e.g. `/opt/compilers/`) and add the `bin` folder to 
+your `PATH`, e.g. with `echo export PATH="$PATH:<path-to-the-compiler-folder>/bin" >> ~/.profile`.
+
 on Ubuntu:
 * Arduino based robots
   * `sudo apt-get install libusb-0.1-4`
   * `sudo apt-get install binutils-avr gdb-avr avrdude`
   * install [avr-gcc](http://downloads.arduino.cc/tools/avr-gcc-7.3.0-atmel3.6.1-arduino5-x86_64-pc-linux-gnu.tar.bz2)
+  * after downloading move to the avr folder from the terminal.
+  * type `avr` in the terminal and press tab twice (do not hit enter). You should be able to see all the tools installed for you including avrdude. 
+  * type the command `sudo apt-get install avrdude` and you are good to go.
 * NXT
   * `sudo apt-get install nbc`
 * Calliope
   * `sudo apt-get install srecord libssl-dev`
   * install the latest [gcc-arm-none-eabi](https://developer.arm.com/tools-and-software/open-source-software/developer-tools/gnu-toolchain/gnu-rm/downloads)
+  * after downloading move to the project folder which contains this downloaded folder along with openroberta-lab folder. 
+  * type `sudo apt-get install -y gcc-arm-none-eabi` and you are good to go.
 * micro:bit
-  * `pip install uflash` (to install pip run `sudo apt install python-pip`)
+  * `pip install uflash` (to install pip run `sudo apt install` with `python-pip` on Ubuntu 18.04 and `python3-pip` on 20.04)
 * EV3 c4ev3
   * `sudo apt-get install g++-arm-linux-gnueabi`
 * Edison
-  * `sudo apt-get python` (Python 2 is needed, it is called `python` for Ubuntu 18.04)
+  * `sudo apt-get python` (Python 2 is needed, it is called `python` for Ubuntu 18.04 and `python2` for 20.04)
 * Bionics4Education
+  * `sudo apt-get python-serial` (`python3-serial` for Ubuntu 20.04)
   * install [xtensa-esp32-elf](https://dl.espressif.com/dl/xtensa-esp32-elf-linux64-1.22.0-61-gab8375a-5.2.0.tar.gz)
  
 on Windows:
@@ -76,10 +85,20 @@ Might take some time. The last lines of a successful build looks like:
     [INFO] ------------------------------------------------------------------------
     [INFO] BUILD SUCCESS
     [INFO] ------------------------------------------------------------------------
-    [INFO] Total time: 02:16 min
-    [INFO] Finished at: 2018-01-07T13:05:00+02:00
-    [INFO] Final Memory: 60M/540M
+    [INFO] Total time:  03:24 min
+    [INFO] Finished at: 2020-09-08T14:13:10+02:00
     [INFO] ------------------------------------------------------------------------
+
+If the installation process fails, then follow the steps mentioned below.
+
+Solution: Make sure your JAVA_HOME path is pointing towards jdk instead of jre. If not then run the following commads:
+
+    export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64           # set JDK to JAVA HOME
+    echo $JAVA_HOME						 # check the path
+    export PATH=$PATH:$JAVA_HOME/bin                             # add JAVA bin directory to the PATH variable
+    echo $PATH                                            	 # check the path
+
+* Then run the installation process as mentioned ealier in this step and it should succeed.
     
 #### Step 2: Make sure you have a database
 If you have a fresh clone of the server, make sure that the OpenRobertaServer folder has a subfolder **db-embedded** with the database inside. If you don't have a database, you can create an empty database with
@@ -90,7 +109,7 @@ If you try to create a new database, but one exists, the old one is *not* change
 
 #### Step 3: Starting your own server instance using a Unix-like shell (on either lin* or win*).
 
-    ./ora.sh [-oraccrsc <optional-path-to-crosscompiler-resources, defaults-to '../ora-cc-rsc'>] start-from-git
+    ./ora.sh start-from-git [-oraccrsc <optional-path-to-crosscompiler-resources, defaults-to '../ora-cc-rsc'>]
 
 #### Step 4: Accessing your openroberta installation
 

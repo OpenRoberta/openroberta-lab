@@ -1,6 +1,6 @@
 <export xmlns="http://de.fhg.iais.roberta.blockly">
     <program>
-        <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="sensebox" xmlversion="3.0" description="" tags="">
+        <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="sensebox" xmlversion="3.1" description="" tags="">
             <instance x="307" y="50">
                 <block type="robControls_start_ardu" id="jp!zke5Y_7Ll7/a|d:av" intask="true" deletable="false">
                     <mutation declare="true"></mutation>
@@ -414,7 +414,7 @@
         </block_set>
     </program>
     <config>
-        <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="sensebox" xmlversion="3.0" description="" tags="">
+        <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="sensebox" xmlversion="3.1" description="" tags="">
             <instance x="-799" y="184">
                 <block type="robConf_analogout" id="!L0|Xg[KCq11Wx-~swU:" intask="true">
                     <field name="NAME">S3</field>

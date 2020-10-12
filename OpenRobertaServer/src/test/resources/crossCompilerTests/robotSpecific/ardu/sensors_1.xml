@@ -1,6 +1,6 @@
 <export xmlns="http://de.fhg.iais.roberta.blockly">
     <program>
-        <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="arduino" xmlversion="3.0" description="" tags="">
+        <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="arduino" xmlversion="3.1" description="" tags="">
             <instance x="-2172" y="-664">
                 <block type="robControls_start_ardu" id="D})/z!#B6yD@Yfz-dXMy" intask="true" deletable="false">
                     <mutation declare="true"></mutation>
@@ -645,7 +645,7 @@
         </block_set>
     </program>
     <config>
-        <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="arduino" xmlversion="3.0" description="" tags="">
+        <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="arduino" xmlversion="3.1" description="" tags="">
             <instance x="1355" y="-163">
                 <block type="robConf_rfid" id="q;7DU/T:SiobW}35ldFL" intask="true">
                     <field name="NAME">R</field>

@@ -1,14 +1,14 @@
-<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="calliope" xmlversion="3.0" description="" tags="">
-  <instance x="13" y="87">
-    <block type="robControls_start" id="_L04t=PYMdinZITDv2Av" intask="true" deletable="false">
-      <mutation declare="false"></mutation>
-      <field name="DEBUG">FALSE</field>
-    </block>
-    <block type="robControls_wait_for" id="UK}GaV`uoP4(tnNZ*^M0" intask="true">
-      <value name="WAIT0">
-        <block type="logic_compare" id="k;8DxT{2imKkvsmX~S(P" intask="true">
-          <field name="OP">EQ</field>
-          <value name="A">
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="calliope" xmlversion="3.1" description="" tags="">
+    <instance x="13" y="87">
+        <block type="robControls_start" id="_L04t=PYMdinZITDv2Av" intask="true" deletable="false">
+            <mutation declare="false"></mutation>
+            <field name="DEBUG">FALSE</field>
+        </block>
+        <block type="robControls_wait_for" id="UK}GaV`uoP4(tnNZ*^M0" intask="true">
+            <value name="WAIT0">
+                <block type="logic_compare" id="k;8DxT{2imKkvsmX~S(P" intask="true">
+                    <field name="OP">EQ</field>
+                    <value name="A">
             <block type="mbedSensors_getSample" id="f2:7=_#{oXzjNG57DO7N" intask="true" deletable="false" movable="false">
               <mutation input="KEY_PRESSED"></mutation>
               <field name="SENSORTYPE">KEY_PRESSED</field>

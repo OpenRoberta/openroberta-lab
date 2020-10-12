@@ -453,33 +453,36 @@ public class ClientProgramController {
                 return UtilForREST.makeBaseResponseForError(Key.USER_ERROR_NOT_LOGGED_IN, httpSessionState, null);
             } else {
                 User user = userProcessor.getUser(userId);
-                if ( !this.isPublicServer || ((user != null) && user.isActivated()) ) {
-                    String programName = shareRequest.getProgramName();
-                    JSONObject shareData = shareRequest.getShareData();
-                    String entityLabel = shareData.getString("label");
-                    String entityType = shareData.getString("type");
-                    String right = shareData.getString("right");
-
-                    Set<ProgramShare> shares = programShareProcessor.shareToEntity(userId, robot, programName, entityLabel, entityType, right);
-
-                    JSONArray jsonShares = new JSONArray();
-                    JSONObject tmpJsonObj;
-                    for ( ProgramShare share : shares ) {
-                        tmpJsonObj = new JSONObject();
-                        tmpJsonObj.put("type", share.getEntityType());
-                        tmpJsonObj.put("label", share.getEntityLabel());
-                        tmpJsonObj.put("right", share.getRelation().toString());
-                        jsonShares.put(tmpJsonObj);
+                if ( this.isPublicServer ) {
+                    if ( user == null ) {
+                        return UtilForREST.makeBaseResponseForError(Key.ACCOUNT_NOT_ACTIVATED_TO_SHARE, httpSessionState, null);
+                    } else if ( !user.isActivated() && user.getUserGroup() == null ) {
+                        return UtilForREST.makeBaseResponseForError(Key.ACCOUNT_NOT_ACTIVATED_TO_SHARE, httpSessionState, null);
                     }
-
-                    response.setSharedWith(jsonShares);
-
-                    UtilForREST.addResultInfo(response, programShareProcessor);
-                    Statistics.info("ProgramShare", "success", programShareProcessor.succeeded());
-                    return UtilForREST.responseWithFrontendInfo(response, httpSessionState, null);
-                } else {
-                    return UtilForREST.makeBaseResponseForError(Key.ACCOUNT_NOT_ACTIVATED_TO_SHARE, httpSessionState, null);
                 }
+                String programName = shareRequest.getProgramName();
+                JSONObject shareData = shareRequest.getShareData();
+                String entityLabel = shareData.getString("label");
+                String entityType = shareData.getString("type");
+                String right = shareData.getString("right");
+
+                Set<ProgramShare> shares = programShareProcessor.shareToEntity(userId, robot, programName, entityLabel, entityType, right);
+
+                JSONArray jsonShares = new JSONArray();
+                JSONObject tmpJsonObj;
+                for ( ProgramShare share : shares ) {
+                    tmpJsonObj = new JSONObject();
+                    tmpJsonObj.put("type", share.getEntityType());
+                    tmpJsonObj.put("label", share.getEntityLabel());
+                    tmpJsonObj.put("right", share.getRelation().toString());
+                    jsonShares.put(tmpJsonObj);
+                }
+
+                response.setSharedWith(jsonShares);
+
+                UtilForREST.addResultInfo(response, programShareProcessor);
+                Statistics.info("ProgramShare", "success", programShareProcessor.succeeded());
+                return UtilForREST.responseWithFrontendInfo(response, httpSessionState, null);
             }
         } catch ( Exception e ) { // UserProcessor throws Exception
             dbSession.rollback();
@@ -709,12 +712,7 @@ public class ClientProgramController {
                 // when loaded, the default configuration should be used
                 configText = robotFactory.getConfigurationDefault();
             }
-            Project project =
-                new Project.Builder()
-                    .setFactory(robotFactory)
-                    .setProgramXml(programText)
-                    .setConfigurationXml(configText)
-                    .build();
+            Project project = new Project.Builder().setFactory(robotFactory).setProgramXml(programText).setConfigurationXml(configText).build();
             ProjectService.executeWorkflow("transform", project);
             if ( configText != null ) {
                 if ( project.getRobotFactory().getConfigurationType().equals("new") ) {

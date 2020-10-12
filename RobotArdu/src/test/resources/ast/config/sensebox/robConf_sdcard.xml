@@ -1,4 +1,4 @@
-<block_set xmlns="http://de.fhg.iais.roberta.blockly" description="" robottype="sensebox" tags="" xmlversion="3.0">
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" description="" robottype="sensebox" tags="" xmlversion="3.1">
     <instance x="163" y="621">
         <block id="sj4=9*zu2t)W_;I%)oV+" intask="true" type="robConf_sdcard">
             <field name="NAME">S2</field>

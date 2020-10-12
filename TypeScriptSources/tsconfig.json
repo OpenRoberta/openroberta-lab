@@ -1,0 +1,20 @@
+{
+    "compilerOptions": {
+        "outDir": "../OpenRobertaServer/staticResources/js",
+        "target": "es5",
+        "rootDir": "ts",
+        "rootDirs": ["ts/app/nepostackmachine", "ts/app/neuralnetwork"],
+        "typeRoots" : ["./node_modules/@types"],
+        "module": "amd",
+        "noUnusedLocals": false,
+		    "noUnusedParameters": false,
+		    "allowJs": true
+    },
+    "include": ["ts/**/*"],
+    "exclude": [
+        "**/node_modules",
+        "**/interpreter.runStackMachineJson.ts"
+    ],
+    "compileOnSave": false,
+    "buildOnSave": false
+}

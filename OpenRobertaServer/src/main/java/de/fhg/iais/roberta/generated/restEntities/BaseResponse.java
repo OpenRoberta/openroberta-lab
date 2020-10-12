@@ -8,7 +8,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
- * basic response with too many properties :-<, also used to return errors<br><br>
+ * basic response with too many properties :-<, also used to return errors<br>
+ * <br>
  * Version: 1<br>
  * Datum: 2020-06-15
  */
@@ -33,7 +34,9 @@ public class BaseResponse {
     protected int robotNepoexitvalue;
     protected boolean robotNepoexitvalueDefined = false;
     protected String robotState;
-    
+    protected boolean notificationsAvailable;
+    protected boolean notificationsAvailableDefined = false;
+
     /**
      * basic response with too many properties :-<, also used to return errors
      */
@@ -56,7 +59,24 @@ public class BaseResponse {
     /**
      * basic response with too many properties :-<, also used to return errors
      */
-    public static BaseResponse makeFromProperties(String cmd,String rc,String message,String cause,JSONObject parameters,String initToken,long serverTime,String serverVersion,long robotWait,String robotBattery,String robotName,String robotVersion,String robotFirmwareName,JSONObject robotSensorvalues,int robotNepoexitvalue,String robotState) {
+    public static BaseResponse makeFromProperties(
+        String cmd,
+        String rc,
+        String message,
+        String cause,
+        JSONObject parameters,
+        String initToken,
+        long serverTime,
+        String serverVersion,
+        long robotWait,
+        String robotBattery,
+        String robotName,
+        String robotVersion,
+        String robotFirmwareName,
+        JSONObject robotSensorvalues,
+        int robotNepoexitvalue,
+        String robotState,
+        boolean notificationsAvailable) {
         BaseResponse entity = new BaseResponse();
         entity.setCmd(cmd);
         entity.setRc(rc);
@@ -74,6 +94,7 @@ public class BaseResponse {
         entity.setRobotSensorvalues(robotSensorvalues);
         entity.setRobotNepoexitvalue(robotNepoexitvalue);
         entity.setRobotState(robotState);
+        entity.setNotificationsAvailable(notificationsAvailable);
         entity.immutable();
         return entity;
     }
@@ -126,6 +147,8 @@ public class BaseResponse {
                     setRobotNepoexitvalue(jsonO.optInt(key));
                 } else if ("robot.state".equals(key)) {
                     setRobotState(jsonO.optString(key));
+                } else if ("notifications.available".equals(key)) {
+                    setNotificationsAvailable(jsonO.optBoolean(key));
                 } else {
                     throw new RuntimeException("JSON parse error. Found invalid key: " + key + " in " + jsonO);
                 }
@@ -625,6 +648,37 @@ public class BaseResponse {
     }
     
     /**
+     * GET notificationsAvailable. Object must be immutable. Never return null or an undefined/default value.
+     */
+    public boolean getNotificationsAvailable() {
+        if (!this.immutable) {
+            throw new RuntimeException("no notificationsAvailable from an object under construction: " + toString());
+        }
+        return this.notificationsAvailable;
+    }
+    
+    /**
+     * is the property defined? The property maybe undefined as it is not a required property
+     *
+     * @return true if the property is defined (has been set)
+     */
+    public boolean notificationsAvailableDefined() {
+        return this.notificationsAvailableDefined;
+    }
+    
+    /**
+     * SET notificationsAvailable. Object must be mutable.
+     */
+    public BaseResponse setNotificationsAvailable(boolean notificationsAvailable) {
+        if (this.immutable) {
+            throw new RuntimeException("notificationsAvailable assigned to an immutable object: " + toString());
+        }
+        this.notificationsAvailable = notificationsAvailable;
+        this.notificationsAvailableDefined = true;
+        return this;
+    }
+    
+    /**
      * generates a JSON-object from an immutable bean.<br>
      * Throws a runtime exception if inconsistencies are detected.
      */
@@ -675,6 +729,9 @@ public class BaseResponse {
             if (this.robotState != null) {
                 jsonO.put("robot.state", this.robotState);
             }
+            if (this.notificationsAvailableDefined) {
+                jsonO.put("notifications.available", this.notificationsAvailable);
+            }
         } catch (JSONException e) {
             throw new RuntimeException("JSON unparse error when unparsing: " + this, e);
         }
@@ -683,7 +740,43 @@ public class BaseResponse {
     
     @Override
     public String toString() {
-        return "BaseResponse [immutable=" + this.immutable + ", cmd=" + this.cmd + ", rc=" + this.rc + ", message=" + this.message + ", cause=" + this.cause + ", parameters=" + this.parameters + ", initToken=" + this.initToken + ", serverTime=" + this.serverTime + ", serverVersion=" + this.serverVersion + ", robotWait=" + this.robotWait + ", robotBattery=" + this.robotBattery + ", robotName=" + this.robotName + ", robotVersion=" + this.robotVersion + ", robotFirmwareName=" + this.robotFirmwareName + ", robotSensorvalues=" + this.robotSensorvalues + ", robotNepoexitvalue=" + this.robotNepoexitvalue + ", robotState=" + this.robotState + " ]";
+        return "BaseResponse [immutable="
+            + this.immutable
+            + ", cmd="
+            + this.cmd
+            + ", rc="
+            + this.rc
+            + ", message="
+            + this.message
+            + ", cause="
+            + this.cause
+            + ", parameters="
+            + this.parameters
+            + ", initToken="
+            + this.initToken
+            + ", serverTime="
+            + this.serverTime
+            + ", serverVersion="
+            + this.serverVersion
+            + ", robotWait="
+            + this.robotWait
+            + ", robotBattery="
+            + this.robotBattery
+            + ", robotName="
+            + this.robotName
+            + ", robotVersion="
+            + this.robotVersion
+            + ", robotFirmwareName="
+            + this.robotFirmwareName
+            + ", robotSensorvalues="
+            + this.robotSensorvalues
+            + ", robotNepoexitvalue="
+            + this.robotNepoexitvalue
+            + ", robotState="
+            + this.robotState
+            + ", notificationsAvailable="
+            + this.notificationsAvailable
+            + " ]";
     }
     @Override
     public int hashCode() {

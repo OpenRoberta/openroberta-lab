@@ -1,4 +1,4 @@
-<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="bob3" xmlversion="3.0" description="" tags="">
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="bob3" xmlversion="3.1" description="" tags="">
     <instance x="516" y="20">
         <block type="robControls_start_ardu" id="xM1,zp:(0qnzNbdFu}s:" intask="true" deletable="false">
             <mutation declare="true" />

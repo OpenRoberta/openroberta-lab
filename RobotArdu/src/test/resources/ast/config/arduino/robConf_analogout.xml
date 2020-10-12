@@ -1,4 +1,4 @@
-<block_set xmlns="http://de.fhg.iais.roberta.blockly" description="" robottype="arduino" tags="" xmlversion="3.0">
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" description="" robottype="arduino" tags="" xmlversion="3.1">
     <instance x="1132" y="209">
         <block id="X|aa:]jDY2wOvUGE]nd1" intask="true" type="robConf_analogout">
             <field name="NAME">S5</field>

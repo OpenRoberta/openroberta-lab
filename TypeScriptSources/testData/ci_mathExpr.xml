@@ -1,0 +1,99 @@
+<block_set robottype="wedo" xmlversion="3.1"
+    description="ROBOT&lt;div&gt;WeDo&lt;/div&gt;&lt;div&gt;START-RESULT&lt;/div&gt;&lt;div&gt;show &quot;erwartet: 23, erhalten:23&quot;&lt;/div&gt;&lt;div&gt;END-RESULT&lt;/div&gt;"
+    tags="" xmlns="http://de.fhg.iais.roberta.blockly">
+    <instance x="93" y="48">
+        <block type="robControls_start" id="@.*As2dFC,VdUC}Z|0[K" intask="true" deletable="false">
+            <mutation declare="true" />
+            <field name="DEBUG">FALSE</field>
+            <statement name="ST">
+                <block type="robGlobalVariables_declare" id="Ms[^@-=UW+P1Wnu1Z_0x" intask="true" deletable="false" movable="false">
+                    <mutation next="false" declaration_type="Number" />
+                    <field name="VAR">x</field>
+                    <field name="TYPE">Number</field>
+                    <value name="VALUE">
+                        <block type="math_number" id="Kah7]WH:UL298)zgQ=9}" intask="true">
+                            <field name="NUM">0</field>
+                        </block>
+                    </value>
+                </block>
+            </statement>
+        </block>
+        <block type="variables_set" id="CgI|En03XmNK-VJE6|2G" intask="true">
+            <mutation datatype="Number" />
+            <field name="VAR">x</field>
+            <value name="VALUE">
+                <block type="math_arithmetic" id="-kHrQ)5t{nX_u#-GAbzH" intask="true">
+                    <field name="OP">ADD</field>
+                    <value name="A">
+                        <block type="math_arithmetic" id="FJJoels2Q|:Qbsc}P6c?" intask="true">
+                            <field name="OP">MINUS</field>
+                            <value name="A">
+                                <block type="math_arithmetic" id="#pPDTwMvadL7h~U-hDh6" intask="true">
+                                    <field name="OP">MULTIPLY</field>
+                                    <value name="A">
+                                        <block type="math_arithmetic" id="1hbk`=uAyTd9y}Ivy!}f" intask="true">
+                                            <field name="OP">DIVIDE</field>
+                                            <value name="A">
+                                                <block type="math_arithmetic" id="yD8SK^q%9%!NZmNQ2eOd" intask="true">
+                                                    <field name="OP">POWER</field>
+                                                    <value name="A">
+                                                        <block type="math_number" id="|Fnc/!|s.%C+zMau3d|W" intask="true">
+                                                            <field name="NUM">2</field>
+                                                        </block>
+                                                    </value>
+                                                    <value name="B">
+                                                        <block type="math_number" id="/zU])O*Z4o9)l[C}hW1q" intask="true">
+                                                            <field name="NUM">5</field>
+                                                        </block>
+                                                    </value>
+                                                </block>
+                                            </value>
+                                            <value name="B">
+                                                <block type="math_number" id="#nN(:%+4?}%yN=0P~[J|" intask="true">
+                                                    <field name="NUM">4</field>
+                                                </block>
+                                            </value>
+                                        </block>
+                                    </value>
+                                    <value name="B">
+                                        <block type="math_number" id="cBYB41[H+yGXgW.K5iF+" intask="true">
+                                            <field name="NUM">3</field>
+                                        </block>
+                                    </value>
+                                </block>
+                            </value>
+                            <value name="B">
+                                <block type="math_number" id="3*MOba|)[!?D@eP^~hjg" intask="true">
+                                    <field name="NUM">2</field>
+                                </block>
+                            </value>
+                        </block>
+                    </value>
+                    <value name="B">
+                        <block type="math_number" id="k}u,mEZ`=+Vm=sZPs!v4" intask="true">
+                            <field name="NUM">1</field>
+                        </block>
+                    </value>
+                </block>
+            </value>
+        </block>
+        <block type="robActions_display_text" id="hq(:aiqBJoY:r)|S%VQd" intask="true">
+            <value name="OUT">
+                <block type="robText_join" id="ARvdS5(92h9c4fCwju.%" intask="true">
+                    <mutation items="2" />
+                    <value name="ADD0">
+                        <block type="text" id="!9Afw`NR!M.UAU39Q2;g" intask="true">
+                            <field name="TEXT">erwartet: 23, erhalten:</field>
+                        </block>
+                    </value>
+                    <value name="ADD1">
+                        <block type="variables_get" id="*25aF1%iv}xjKqMuGRnL" intask="true">
+                            <mutation datatype="Number" />
+                            <field name="VAR">x</field>
+                        </block>
+                    </value>
+                </block>
+            </value>
+        </block>
+    </instance>
+</block_set>

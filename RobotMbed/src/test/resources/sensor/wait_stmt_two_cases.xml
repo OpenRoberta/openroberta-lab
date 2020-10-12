@@ -1,4 +1,4 @@
-<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="calliope" xmlversion="3.0" description="" tags="">
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="calliope" xmlversion="3.1" description="" tags="">
     <instance x="80" y="92">
         <block type="robControls_start" id="Jy2A[^-[efBW*5`{8{T^" intask="true" deletable="false">
             <mutation declare="false"></mutation>
@@ -40,7 +40,7 @@
                         <block type="robSensors_getSample" id="bn~*=GhQHkop^sS;X)E3" intask="true">
                             <mutation input="GYRO_ANGLE"></mutation>
                             <field name="SENSORTYPE">GYRO_ANGLE</field>
-                            <field name="SENSORPORT">G</field>
+                            <field name="SENSORPORT">_G</field>
                             <field name="SLOT">X</field>
                         </block>
                     </value>

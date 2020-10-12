@@ -2,7 +2,7 @@
 
 isServerNameValid ${DATABASE_NAME}
 
-CONTAINER="db-server"
+CONTAINER="server-${DATABASE_NAME}" # e.g. if you backup db "master", container "server-master" must be running, because the container triggers the sql backup command
 DB_URI="jdbc:hsqldb:hsql://db-server/openroberta-db-${DATABASE_NAME}"
 mkdir -p ${DB_ADMIN_DIR}/dbBackup/${DATABASE_NAME} # optional create of the backup dir for the database
 

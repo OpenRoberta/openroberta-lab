@@ -1,4 +1,4 @@
-<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="nao" xmlversion="3.0" description="" tags="">
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="nao" xmlversion="3.1" description="" tags="">
     <instance x="138" y="163">
         <block type="naoActions_rgbLeds" id="kgi647^Cby;~W.Wk2Yix" intask="false">
             <field name="LED">EYES</field>

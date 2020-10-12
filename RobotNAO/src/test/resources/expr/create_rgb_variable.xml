@@ -1,4 +1,4 @@
-<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="nao" xmlversion="3.0" description="" tags="">
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="nao" xmlversion="3.1" description="" tags="">
     <instance x="63" y="63">
         <block type="robControls_start" id="6r~c(|gC;wz*r;?m4#[8" intask="true" deletable="false">
             <mutation declare="true" />
@@ -6,9 +6,9 @@
             <statement name="ST">
                 <block type="robGlobalVariables_declare" id="nY;;X]#)60rqqB3;v-yz" intask="true" deletable="false" movable="false">
                     <mutation next="false" declaration_type="Colour" />
-					<field name="VAR">item</field>
-					<field name="TYPE">Colour</field>
-					<value name="VALUE">
+                    <field name="VAR">item</field>
+                    <field name="TYPE">Colour</field>
+                    <value name="VALUE">
 						<block type="naoColour_rgb" id="r]!f8^dq^]%ny-kG4k0)"
 							intask="true">
 							<value name="RED">

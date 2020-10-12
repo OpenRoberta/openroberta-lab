@@ -12,7 +12,7 @@ public class TemperatureSensorTest extends AstTest {
         String expectedResult =
             "BlockAST [project=[[Location [x=187, y=38], "
                 + "MainTask [], "
-                + "DisplayTextAction [TEXT, SensorExpr [TemperatureSensor [TM, VALUE, EMPTY_SLOT]]]]]]";
+                + "DisplayTextAction [TEXT, SensorExpr [TemperatureSensor [_T, VALUE, EMPTY_SLOT]]]]]]";
 
         UnitTestHelper.checkProgramAstEquality(testFactory, expectedResult, "/sensor/get_temperature.xml");
 

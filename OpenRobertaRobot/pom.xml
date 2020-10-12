@@ -14,7 +14,7 @@
     <parent>
         <groupId>de.fhg.iais.openroberta</groupId>
         <artifactId>OpenRobertaParent</artifactId>
-        <version>4.0.0</version>
+        <version>4.0.5-SNAPSHOT</version>
     </parent>
     <artifactId>OpenRobertaRobot</artifactId>
     <name>OpenRobertaRobot</name>
@@ -116,7 +116,7 @@
                     <javaSrcDir>./src/main/java</javaSrcDir>
                     <javaPackageName>de.fhg.iais.roberta.visitor</javaPackageName>
                     <javaClassName>C</javaClassName>
-                    <typescriptOutFile>../WedoInterpreter/ts/interpreter.constants.ts</typescriptOutFile>
+                    <typescriptOutFile>../TypeScriptSources/ts/app/nepostackmachine/interpreter.constants.ts</typescriptOutFile>
                 </configuration>
                 <executions>
                     <execution>

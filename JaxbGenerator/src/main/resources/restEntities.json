@@ -48,7 +48,8 @@
         { "name": "robot.firmwareName", "type": "String", "description": "robot's firmware name", "required": false },
         { "name": "robot.sensorvalues", "type": "JSONObject", "description": "map with sensor values", "required": false },
         { "name": "robot.nepoexitvalue", "type": "int", "description": "exit value if robot program has terminated", "required": false },
-        { "name": "robot.state", "type": "String", "description": "state: busy, disconnected or wait", "required": false }
+        { "name": "robot.state", "type": "String", "description": "state: busy, disconnected or wait", "required": false },
+        { "name": "notifications.available", "type": "boolean", "description": "if new notifications are available", "required": false }
 	    ]
     },
     {
@@ -258,6 +259,7 @@
         { "name": "configuration", "type": "JSONObject" },
         { "name": "sim", "type": "boolean" },
         { "name": "multipleSim", "type": "boolean" },
+        { "name": "neuralNetwork", "type": "boolean", "required": false },
         { "name": "connection", "type": "String" },
         { "name": "vendor", "type": "String" },
         { "name": "configurationUsed", "type": "boolean" },
@@ -571,6 +573,14 @@
       "properties": [
         { "name": "groupName", "type": "String" },
         { "name": "groupMemberAccounts", "type": "String[]" }
+      ]
+    },
+    {
+      "name": "NotificationsResponse",
+      "extends": "BaseResponse",
+      "description": "the response for the /notifications/getNotifications REST request",
+      "properties": [
+        { "name": "notifications", "type": "JSONArray"}
       ]
     }
   ]

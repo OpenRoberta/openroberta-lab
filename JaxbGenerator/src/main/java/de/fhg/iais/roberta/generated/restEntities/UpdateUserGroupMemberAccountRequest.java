@@ -8,7 +8,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
- * the request description for the /userGroup/createUserGroup and /userGroup/addGroupMembers REST request, returns UserGroupResponse<br><br>
+ * the request description for the /userGroup/updateMemberAccount REST request, returns BaseResponse<br><br>
  * Version: 1<br>
  * Datum: 2020-06-15
  */
@@ -18,14 +18,14 @@ public class UpdateUserGroupMemberAccountRequest extends BaseRequest {
     protected String newGroupMemberAccount;
     
     /**
-     * the request description for the /userGroup/createUserGroup and /userGroup/addGroupMembers REST request, returns UserGroupResponse
+     * the request description for the /userGroup/updateMemberAccount REST request, returns BaseResponse
      */
     public static UpdateUserGroupMemberAccountRequest make() {
         return new UpdateUserGroupMemberAccountRequest();
     }
     
     /**
-     * the request description for the /userGroup/createUserGroup and /userGroup/addGroupMembers REST request, returns UserGroupResponse
+     * the request description for the /userGroup/updateMemberAccount REST request, returns BaseResponse
      */
     public static UpdateUserGroupMemberAccountRequest makeFromString(String jsonS) {
         try {
@@ -37,7 +37,7 @@ public class UpdateUserGroupMemberAccountRequest extends BaseRequest {
     }
     
     /**
-     * the request description for the /userGroup/createUserGroup and /userGroup/addGroupMembers REST request, returns UserGroupResponse
+     * the request description for the /userGroup/updateMemberAccount REST request, returns BaseResponse
      */
     public static UpdateUserGroupMemberAccountRequest makeFromProperties(String cmd,String groupName,String currentGroupMemberAccount,String newGroupMemberAccount) {
         UpdateUserGroupMemberAccountRequest entity = new UpdateUserGroupMemberAccountRequest();
@@ -50,7 +50,7 @@ public class UpdateUserGroupMemberAccountRequest extends BaseRequest {
     }
     
     /**
-     * the request description for the /userGroup/createUserGroup and /userGroup/addGroupMembers REST request, returns UserGroupResponse
+     * the request description for the /userGroup/updateMemberAccount REST request, returns BaseResponse
      */
     public static UpdateUserGroupMemberAccountRequest make(JSONObject jsonO) {
         return make().merge(jsonO).immutable();

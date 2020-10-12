@@ -18,14 +18,14 @@ def groupEntriesByTime(fromTime, untilTime, grouper, baseDir, fileName, matchKey
     for line in getReader(baseDir, fileName):
         fromFct(line).after(fromTime).before(untilTime).filterVal(matchKey, *matchStrings).groupStore(timeGroup)
     timeGroup.show(fmt='{:26s} {:8.0f}')
-    timeGroup.showBar(title='entries per ' + grouper,file='D:/downloads/entriesByTime.png',type='plot',legend=None,xAxisNbins=20)
+    timeGroup.showBar(title='entries per ' + grouper,file='D:/tmp/entriesByTime.png',type='bar',legend=None,xAxisNbins=20)
     
 def groupStatActionsByTime(fromTime, untilTime, grouper, baseDir, fileName, *actions):
     timeGroup = Store(groupBy=grouper)
     for line in getReader(baseDir, fileName):
         fromStat(line).after(fromTime).before(untilTime).mapKey('message').filterVal('action',*actions).groupStore(timeGroup)
     timeGroup.show(fmt='{:26s} {:8.0f}')
-    timeGroup.showBar(title=str(actions),file='D:/downloads/actions.png')
+    timeGroup.showBar(title=str(actions),file='D:/tmp/actions.png',type='bar')
     
 def groupStatSessionInitsByTime(fromTime, untilTime, baseDir, fileName):
     grouper='m'

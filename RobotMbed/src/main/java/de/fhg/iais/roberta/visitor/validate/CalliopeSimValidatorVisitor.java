@@ -203,7 +203,7 @@ public final class CalliopeSimValidatorVisitor extends AbstractSimValidatorVisit
 
     @Override
     public Void visitToneAction(ToneAction<Void> toneAction) {
-        ConfigurationComponent usedActor = this.robotConfiguration.optConfigurationComponent(toneAction.getPort());
+        ConfigurationComponent usedActor = this.robotConfiguration.optConfigurationComponentByType("BUZZER");
         if ( usedActor == null ) {
             toneAction.addInfo(NepoInfo.warning("CONFIGURATION_ERROR_ACTOR_MISSING"));
         }
@@ -212,7 +212,7 @@ public final class CalliopeSimValidatorVisitor extends AbstractSimValidatorVisit
 
     @Override
     public Void visitPlayNoteAction(PlayNoteAction<Void> playNoteAction) {
-        ConfigurationComponent usedActor = this.robotConfiguration.optConfigurationComponent(playNoteAction.getPort());
+        ConfigurationComponent usedActor = this.robotConfiguration.optConfigurationComponentByType("BUZZER");
         if ( usedActor == null ) {
             playNoteAction.addInfo(NepoInfo.warning("CONFIGURATION_ERROR_ACTOR_MISSING"));
         }

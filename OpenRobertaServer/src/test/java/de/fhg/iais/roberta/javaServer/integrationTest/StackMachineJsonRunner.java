@@ -36,12 +36,12 @@ import de.fhg.iais.roberta.util.dbc.Assert;
  * <li>the byte code will be stored here into file <code>./target/generatedStackmachinePrograms/PROGRAM.json</code>.
  * <li>the source code will be stored here into file <code>./target/generatedStackmachinePrograms/PROGRAM.xml</code>.
  * </ul>
- * Then the JavaScript found in <code>WedoInterpreter/jsGenerated/runStackMachineJson.js</code> is executed with <code>node</code> (must be on the path!). This
- * runs the interpreter for "StackMachineJson" and compares the results with the results expected. The expected result is found in the source XML (see
+ * Then the JavaScript found in <code>TypeScriptSources/jsGenerated/runStackMachineJson.js</code> is executed with <code>node</code> (must be on the path!).
+ * This runs the interpreter for "StackMachineJson" and compares the results with the results expected. The expected result is found in the source XML (see
  * above!)<br>
  * <br>
- * <i>Note:</i> all sources used for this interpretation are found in project "WedoInterpreter" directory "ts". They are written in TypeScript, transpiled to
- * JavaScript and saved into the directory "WedoInterpreter/jsGenerated". From this directory they are used by "node".
+ * <i>Note:</i> all sources used for this interpretation are found in project "TypeScriptSources" directory "ts/app/nepostackmachine". They are written in
+ * TypeScript, transpiled to JavaScript and saved into the directory "TypeScriptSources/jsGenerated". From this directory they are used by "node".
  */
 public class StackMachineJsonRunner {
     private static final Logger LOG = LoggerFactory.getLogger(StackMachineJsonRunner.class);
@@ -66,7 +66,7 @@ public class StackMachineJsonRunner {
         final String utf8Charset = StandardCharsets.UTF_8.displayName();
         FileUtils.writeStringToFile(new File(generatedStackmachineProgramsDir + programName + ".json"), stackmachineCode, utf8Charset);
         FileUtils.writeStringToFile(new File(generatedStackmachineProgramsDir + programName + ".xml"), programTextInclResultSpec, utf8Charset);
-        resultsOfInterpretation = runCommand("node", "../WedoInterpreter/jsGenerated/_main.js", generatedStackmachineProgramsDir, programName);
+        resultsOfInterpretation = runCommand("node", "../TypeScriptSources/jsGenerated/_main.js", generatedStackmachineProgramsDir, programName);
         return showAndEvaluateResult();
     }
 

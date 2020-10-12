@@ -158,6 +158,9 @@ public enum Key {
     GROUP_ADD_ACCOUNT_PARTIAL( false ), // TODO validate
     GROUP_ADD_ACCOUNT_OK( true ),
     GROUP_DELETE_USER_OK( true ),
+    NOTIFICATION_SUCCESS(true),
+    NOTIFICATION_ERROR_INVALID_PERMISSION( false ),
+    NOTIFICATION_ERROR_INVALID_SYNTAX( false ),
     ACCESS_RIGHT_UNCHANGED( true );
     /**
      * Creates a new Key and adds the needed ORA_ prefix for the blockly message.

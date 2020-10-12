@@ -1,0 +1,120 @@
+<block_set robottype="wedo" xmlversion="3.1"
+    description="&lt;div&gt;ROBOT &lt;/div&gt;&lt;div&gt;&amp;nbsp;wedo &lt;/div&gt;&lt;div&gt;&amp;nbsp;START-RESULT &lt;/div&gt;&lt;div&gt;show &quot;0&quot;&lt;/div&gt;&lt;div&gt;show &quot;1&quot; &lt;/div&gt;&lt;div&gt; show &quot;2&quot; &lt;/div&gt;&lt;div&gt;show &quot;3&quot;&lt;/div&gt;&lt;div&gt;&amp;nbsp;END-RESULT&lt;/div&gt;"
+    tags="" xmlns="http://de.fhg.iais.roberta.blockly">
+    <instance x="99" y="49">
+        <block type="robControls_start" id="s@u6[`O|T%^sZs82Gsb3" intask="true" deletable="false">
+            <mutation declare="true" />
+            <field name="DEBUG">FALSE</field>
+            <statement name="ST">
+                <block type="robGlobalVariables_declare" id="L/FVa/(P@UTEg/b9m?L0" intask="true" deletable="false" movable="false">
+                    <mutation next="false" declaration_type="Number" />
+                    <field name="VAR">x</field>
+                    <field name="TYPE">Number</field>
+                    <value name="VALUE">
+                        <block type="math_number" id="rxF}i@u3oz_CZY/h1eb8" intask="true">
+                            <field name="NUM">0</field>
+                        </block>
+                    </value>
+                </block>
+            </statement>
+        </block>
+        <block type="controls_whileUntil" id="8yYS@CwG-E#{OEi=FR1k" intask="true">
+            <field name="MODE">WHILE</field>
+            <value name="BOOL">
+                <block type="logic_compare" id="rSAm~-6=8ai#pIm;w*xh" intask="true">
+                    <field name="OP">LT</field>
+                    <value name="A">
+                        <block type="variables_get" id="+}:-)kz{2hOf/e/t-/E}" intask="true">
+                            <mutation datatype="Number" />
+                            <field name="VAR">x</field>
+                        </block>
+                    </value>
+                    <value name="B">
+                        <block type="math_number" id="#qf%[@-U)u1#/:U7!/3I" intask="true">
+                            <field name="NUM">2</field>
+                        </block>
+                    </value>
+                </block>
+            </value>
+            <statement name="DO">
+                <block type="robActions_display_text" id="T^*x`1BC:Q2rrd`0tHl0" intask="true">
+                    <value name="OUT">
+                        <block type="variables_get" id="T_11AYKx2v{~pm5[LG~U" intask="true">
+                            <mutation datatype="Number" />
+                            <field name="VAR">x</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="variables_set" id="{?Z_RgVN0;]?l;AYKFze" intask="true">
+                    <mutation datatype="Number" />
+                    <field name="VAR">x</field>
+                    <value name="VALUE">
+                        <block type="math_arithmetic" id=")hYoQ}cFJHl?kw4S(b.U" intask="true">
+                            <field name="OP">ADD</field>
+                            <value name="A">
+                                <block type="variables_get" id="gXN5~B*=,fS!8I);|N2F" intask="true">
+                                    <mutation datatype="Number" />
+                                    <field name="VAR">x</field>
+                                </block>
+                            </value>
+                            <value name="B">
+                                <block type="math_number" id="G?7y8](FLn(o;v7D!b;^" intask="true">
+                                    <field name="NUM">1</field>
+                                </block>
+                            </value>
+                        </block>
+                    </value>
+                </block>
+            </statement>
+        </block>
+        <block type="controls_whileUntil" id="jLo4fW`z2.e%m`dI7A/Z" intask="true">
+            <field name="MODE">UNTIL</field>
+            <value name="BOOL">
+                <block type="logic_compare" id="rzib`Q9u}]z9i=d.;CP6" intask="true">
+                    <field name="OP">GT</field>
+                    <value name="A">
+                        <block type="variables_get" id="6b]vPokqER3t(G,tBX2y" intask="true">
+                            <mutation datatype="Number" />
+                            <field name="VAR">x</field>
+                        </block>
+                    </value>
+                    <value name="B">
+                        <block type="math_number" id="[T%_=Og]],I[.=v_dlV!" intask="true">
+                            <field name="NUM">3</field>
+                        </block>
+                    </value>
+                </block>
+            </value>
+            <statement name="DO">
+                <block type="robActions_display_text" id="*uKZqt9hJZs0xq+7z{L@" intask="true">
+                    <value name="OUT">
+                        <block type="variables_get" id="CR/zN#q5V}l[1ukF;v{c" intask="true">
+                            <mutation datatype="Number" />
+                            <field name="VAR">x</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="variables_set" id="zH8+uFNv0w-8j4UfTHy;" intask="true">
+                    <mutation datatype="Number" />
+                    <field name="VAR">x</field>
+                    <value name="VALUE">
+                        <block type="math_arithmetic" id="^1P#[{!z11FKtf=O2/qD" intask="true">
+                            <field name="OP">ADD</field>
+                            <value name="A">
+                                <block type="variables_get" id="K:2BQy/91?]-sUt~P?Ol" intask="true">
+                                    <mutation datatype="Number" />
+                                    <field name="VAR">x</field>
+                                </block>
+                            </value>
+                            <value name="B">
+                                <block type="math_number" id="WyE{B^0khGZ]rIxc3h.O" intask="true">
+                                    <field name="NUM">1</field>
+                                </block>
+                            </value>
+                        </block>
+                    </value>
+                </block>
+            </statement>
+        </block>
+    </instance>
+</block_set>

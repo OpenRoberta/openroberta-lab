@@ -11,8 +11,8 @@ public class GyroSensorTest extends AstTest {
         String expectedResult =
             "BlockAST [project=[[Location [x=88, y=38], "
                 + "MainTask [], "
-                + "DisplayTextAction [TEXT, SensorExpr [GyroSensor [G, ANGLE, X]]], "
-                + "DisplayTextAction [TEXT, SensorExpr [GyroSensor [G, ANGLE, Y]]]]]]";
+                + "DisplayTextAction [TEXT, SensorExpr [GyroSensor [_G, ANGLE, X]]], "
+                + "DisplayTextAction [TEXT, SensorExpr [GyroSensor [_G, ANGLE, Y]]]]]]";
 
         UnitTestHelper.checkProgramAstEquality(testFactory, expectedResult, "/sensor/gyro_sensor.xml");
 

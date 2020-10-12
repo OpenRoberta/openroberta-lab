@@ -27,7 +27,6 @@ import de.fhg.iais.roberta.syntax.sensor.generic.DropSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GetSampleSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.HumiditySensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.KeysSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.MoistureSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.MotionSensor;
@@ -49,21 +48,11 @@ public final class ArduinoBrickValidatorVisitor extends AbstractBrickValidatorVi
     @Override
     public Void visitGetSampleSensor(GetSampleSensor<Void> sensorGetSample) {
         Sensor<Void> sensor = sensorGetSample.getSensor();
-        // TODO remove once infrared & rfid libraries are supported for unowifirev2
-        if (sensor.getKind().hasName("INFRARED_SENSING") || sensor.getKind().hasName("RFID_SENSING")) {
+        // TODO remove once rfid library is supported for unowifirev2
+        if ( sensor.getKind().hasName("RFID_SENSING") ) {
             sensorGetSample.addInfo(NepoInfo.warning("BLOCK_NOT_SUPPORTED"));
         }
         return super.visitGetSampleSensor(sensorGetSample);
-    }
-
-    @Override
-    public Void visitInfraredSensor(InfraredSensor<Void> infraredSensor) {
-        if (!robotConfiguration.getRobotName().equals("unowifirev2")) { // TODO remove once infrared library is supported for unowifirev2
-            checkSensorPort(infraredSensor);
-        } else {
-            infraredSensor.addInfo(NepoInfo.warning("BLOCK_NOT_SUPPORTED"));
-        }
-        return null;
     }
 
     @Override

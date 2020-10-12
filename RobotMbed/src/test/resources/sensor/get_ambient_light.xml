@@ -1,4 +1,4 @@
-<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="calliope" xmlversion="3.0" description="" tags="">
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="calliope" xmlversion="3.1" description="" tags="">
     <instance x="163" y="62">
         <block type="mbedControls_start" id="Q2XU]%wFv#A0o1dp+*K0" intask="true" deletable="false">
             <mutation declare="false"></mutation>
@@ -9,7 +9,7 @@
                 <block type="robSensors_light_getSample" id="fY0DW{*)/Tu+-,}3/.#Y" intask="true">
                     <mutation mode="VALUE" />
                     <field name="MODE">VALUE</field>
-                    <field name="SENSORPORT">L</field>
+                    <field name="SENSORPORT">_L</field>
                     <field name="SLOT" />
                 </block>
             </value>

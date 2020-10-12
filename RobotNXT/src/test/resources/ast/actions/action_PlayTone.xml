@@ -1,4 +1,4 @@
-<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="nxt" xmlversion="3.0" description="" tags="">
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="nxt" xmlversion="3.1" description="" tags="">
     <instance x="163" y="62">
         <block type="mbedActions_play_tone" id="MP,aB/)!C!i|aw;hI=0Q" intask="true">
             <value name="FREQUENCE">

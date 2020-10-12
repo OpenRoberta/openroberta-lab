@@ -1,0 +1,17 @@
+{
+	"compilerOptions": {
+		"outDir": "./jsGenerated/node_modules",
+		"target": "es5",
+		"rootDir": "ts",
+		"rootDirs": ["ts/app/nepostackmachine"],
+		"module": "umd",
+		"moduleResolution": "node",
+		"rootDir": "ts",
+        "rootDirs": ["ts/app/nepostackmachine", "ts/app/neuralnetwork"],
+		"noUnusedLocals": false,
+		"noUnusedParameters": false
+	},
+	"include": ["ts/app/nepostackmachine/*"],
+	"compileOnSave": true,
+	"buildOnSave": true
+}

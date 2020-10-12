@@ -11,13 +11,13 @@ define([ 'exports', 'log', 'message', 'util', 'user.model', 'guiState.controller
     var $h3Login;
     var $h3Register;
     var $h3Lost;
-    
+
     var $formUserGroupLogin;
     var $articleLostUserGroupPassword;
-    
+
     var $h3LoginUserGroupLogin;
     var $h3LostPasswordUsergroupLogin;
-    
+
     var $modalAnimateTime = 300;
     var $msgAnimateTime = 150;
     var $msgShowTime = 2000;
@@ -48,7 +48,7 @@ define([ 'exports', 'log', 'message', 'util', 'user.model', 'guiState.controller
             $("#login-user").modal('hide');
             return;
         }
-        
+
         $formRegister.validate();
         if ($formRegister.valid()) {
             USER.updateUserToServer(GUISTATE_C.getUserAccountName(), $('#registerUserName').val(), $("#registerUserEmail").val(), $('#registerUserAge').val(), GUISTATE_C.getLanguage(), function(
@@ -141,7 +141,7 @@ define([ 'exports', 'log', 'message', 'util', 'user.model', 'guiState.controller
                 if (result.rc === "ok") {
                     GUISTATE_C.setLogin(result);
                     if (result.userId === 1) {
-                        $('#menuAddStatusTextWrap').removeClass('hidden');
+                        $('#menuNotificationWrap').removeClass('hidden');
                     }
                 }
                 MSG.displayInformation(result, "MESSAGE_USER_LOGIN", result.message, GUISTATE_C.getUserName());
@@ -156,10 +156,10 @@ define([ 'exports', 'log', 'message', 'util', 'user.model', 'guiState.controller
     function loginToUserGroup() {
         $formUserGroupLogin.validate();
         if ($formUserGroupLogin.valid()) {
-            
+
             var values = $formUserGroupLogin.serializeArray(),
                 valuesObj = {};
-            
+
             for (var i = 0; i < values.length; i++) {
                 if (typeof values[i].name === 'undefined' || typeof values[i].value === 'undefined') {
                     continue;
@@ -227,24 +227,6 @@ define([ 'exports', 'log', 'message', 'util', 'user.model', 'guiState.controller
             });
         }
     }
-
-    /**
-     * Add status text on server
-     */
-    function addStatusText() {
-        $("#fg-addStatusText").validate();
-        if ($("#fg-addStatusText").valid()) {
-            var dateInput = $('#statusTextDate').val(), timeInput = $('#statusTextTime').val(), timeParts = timeInput.split(':'), dateParts = dateInput.split('-'), date;
-
-            date = new Date(dateParts[0], parseInt(dateParts[1], 10) - 1, dateParts[2], timeParts[0], timeParts[1]);
-            USER.setStatusText($("#statusTextEnglish").val(), $('#statusTextGerman').val(), date.getTime() / 1000, function(result) {
-                if (result.rc === "ok") {
-                    $('#modal-addStatusText').modal("hide");
-                }
-            });
-        }
-    }
-
     function validateLoginUser() {
         $formLogin.removeData('validator')
         $.validator.addMethod("loginRegex", function(value, element) {
@@ -592,7 +574,7 @@ define([ 'exports', 'log', 'message', 'util', 'user.model', 'guiState.controller
             e.preventDefault();
             loginToUserGroup();
         });
-        
+
         $formUserGroupLogin.find('input, select').focus(function(e) {
             var $hint = $(this).parent().next('.hint');
             $formUserGroupLogin.find('.hint').not($hint).slideUp($msgAnimateTime);
@@ -613,17 +595,6 @@ define([ 'exports', 'log', 'message', 'util', 'user.model', 'guiState.controller
         });
 
         validateLoginUserGroupMember();
-    }
-
-    function initStatusTextModal() {
-        $("#fg-addStatusText").onWrap("submit", function(event) {
-            event.preventDefault();
-            addStatusText();
-        })
-        $('#close-modal-statustext').on('click', function(event) {
-            event.preventDefault();
-            $('#modal-statustext').modal('hide');
-        })
     }
 
     function initUserPasswordChangeModal() {
@@ -682,7 +653,6 @@ define([ 'exports', 'log', 'message', 'util', 'user.model', 'guiState.controller
 
             initLoginModal();
             initUserGroupLoginModal();
-            initStatusTextModal();
             initUserPasswordChangeModal();
             ready.resolve();
         });
@@ -790,22 +760,9 @@ define([ 'exports', 'log', 'message', 'util', 'user.model', 'guiState.controller
     }
     exports.showUserInfo = showUserInfo;
 
-    /**
-     * Show the add statustext modal
-     */
-    function showStatusTextModal() {
-        USER.getStatusText(function(result) {
-            $('#fg-addStatusText').trigger("reset");
-            $('#statusTextEnglish').val(result.statustext[0]);
-            $('#statusTextGerman').val(result.statustext[1]);
-            $('#modal-addStatusText').modal("show");
-        })
-    }
-    exports.showStatusTextModal = showStatusTextModal;
-
     function showResetPassword(target) {
         USER.checkTargetRecovery(target, function(result) {
-            if (result.rc !== 'ok') {
+            if (result.rc === 'ok') {
                 $('#passOld').val(target);
                 $('#resetPassLink').val(target);
                 $('#grOldPassword').hide();

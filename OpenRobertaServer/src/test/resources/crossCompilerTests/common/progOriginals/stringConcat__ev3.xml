@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <export xmlns="http://de.fhg.iais.roberta.blockly">
 	<program>
-		<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="ev3" xmlversion="3.0" description="" tags="">
-			<instance x="-64" y="-153">
-				<block type="robControls_start" id="0qD_|wXM+C}vE`Iv`JH." intask="true" deletable="false">
-					<mutation declare="true"></mutation>
-					<field name="DEBUG">FALSE</field>
-					<statement name="ST">
-						<block type="robGlobalVariables_declare" id="guZrGw3AA(^o?MC*]+55" intask="true" deletable="false" movable="false">
-							<mutation next="true" declaration_type="String"></mutation>
-							<field name="VAR">text</field>
-							<field name="TYPE">String</field>
-							<value name="VALUE">
+        <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="ev3" xmlversion="3.1" description="" tags="">
+            <instance x="-64" y="-153">
+                <block type="robControls_start" id="0qD_|wXM+C}vE`Iv`JH." intask="true" deletable="false">
+                    <mutation declare="true"></mutation>
+                    <field name="DEBUG">FALSE</field>
+                    <statement name="ST">
+                        <block type="robGlobalVariables_declare" id="guZrGw3AA(^o?MC*]+55" intask="true" deletable="false" movable="false">
+                            <mutation next="true" declaration_type="String"></mutation>
+                            <field name="VAR">text</field>
+                            <field name="TYPE">String</field>
+                            <value name="VALUE">
 								<block type="text" id="j_wvuh6{w:O|a]hJBe/}" intask="true">
 									<field name="TEXT">start:</field>
 								</block>
@@ -391,18 +391,18 @@
 			</instance>
 		</block_set>
 	</program>
-	<config>
-		<block_set robottype="ev3" xmlversion="3.0" description="" tags="" xmlns="http://de.fhg.iais.roberta.blockly">
-			<instance x="213" y="213">
-				<block type="robBrick_EV3-Brick" id="1" intask="true" deletable="false">
-					<field name="WHEEL_DIAMETER">5.6</field>
-					<field name="TRACK_WIDTH">18</field>
-					<value name="S1">
-						<block type="robBrick_touch" id="2" intask="true" />
-					</value>
-					<value name="S2">
-						<block type="robBrick_gyro" id="3" intask="true" />
-					</value>
+    <config>
+        <block_set robottype="ev3" xmlversion="3.1" description="" tags="" xmlns="http://de.fhg.iais.roberta.blockly">
+            <instance x="213" y="213">
+                <block type="robBrick_EV3-Brick" id="1" intask="true" deletable="false">
+                    <field name="WHEEL_DIAMETER">5.6</field>
+                    <field name="TRACK_WIDTH">18</field>
+                    <value name="S1">
+                        <block type="robBrick_touch" id="2" intask="true" />
+                    </value>
+                    <value name="S2">
+                        <block type="robBrick_gyro" id="3" intask="true" />
+                    </value>
 					<value name="S3">
 						<block type="robBrick_colour" id="4" intask="true" />
 					</value>

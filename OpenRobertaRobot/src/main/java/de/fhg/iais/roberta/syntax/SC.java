@@ -124,4 +124,7 @@ public interface SC {
     String MUSIC = "MUSIC";
     String ENVIRONMENTAL = "ENVIRONMENTAL";
     String COLOURTCS3472 = "COLOURTCS3472";
+    String LED_BUILTIN = "LED_BUILTIN";
+    String GREEN = "GREEN";
+    String BLUE = "BLUE";
 }

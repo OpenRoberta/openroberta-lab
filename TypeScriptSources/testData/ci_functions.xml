@@ -1,0 +1,279 @@
+<block_set robottype="wedo" xmlversion="3.1"
+    description="ROBOT&lt;div&gt;wedo&lt;/div&gt;&lt;div&gt;START-RESULT&lt;div&gt;show &quot;ok&quot;&lt;/div&gt;&lt;div&gt;END-RESULT&lt;/div&gt;&lt;/div&gt;"
+    tags="" xmlns="http://de.fhg.iais.roberta.blockly">
+    <instance x="52" y="30">
+        <block type="robControls_start" id="zzO`PD3{8/?km}T5c`CU" intask="true" deletable="false">
+            <mutation declare="true" />
+            <field name="DEBUG">FALSE</field>
+            <statement name="ST">
+                <block type="robGlobalVariables_declare" id="fHT);)}?I64-~b1)V;a8" intask="true" deletable="false" movable="false">
+                    <mutation next="true" declaration_type="Number" />
+                    <field name="VAR">sum</field>
+                    <field name="TYPE">Number</field>
+                    <value name="VALUE">
+                        <block type="math_number" id="oiajlXkOgJoj+j9/`-I8" intask="true">
+                            <field name="NUM">0</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="robGlobalVariables_declare" id=")VdZ/7;;O.z(NGLLXmMy" intask="true" deletable="false" movable="false">
+                    <mutation next="true" declaration_type="Number" />
+                    <field name="VAR">result</field>
+                    <field name="TYPE">Number</field>
+                    <value name="VALUE">
+                        <block type="math_number" id="}?..BL=qo5@Ku*0K*ZY2" intask="true">
+                            <field name="NUM">0</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="robGlobalVariables_declare" id="ZQyU^5W!N_xIKjmPdza@" intask="true" deletable="false" movable="false">
+                    <mutation next="false" declaration_type="Number" />
+                    <field name="VAR">whole</field>
+                    <field name="TYPE">Number</field>
+                    <value name="VALUE">
+                        <block type="math_number" id="*nx.gCk7S/sbT0U}4_BH" intask="true">
+                            <field name="NUM">0</field>
+                        </block>
+                    </value>
+                </block>
+            </statement>
+        </block>
+        <block type="robProcedures_callnoreturn" id=";~v,??2zOD0Ta,Nh{tGE" intask="true">
+            <mutation name="repX">
+                <arg name="x1" type="Number" />
+            </mutation>
+            <value name="ARG0">
+                <block type="math_number" id="fGJp|_~u[OvIeZs;eSbe" intask="true">
+                    <field name="NUM">10</field>
+                </block>
+            </value>
+        </block>
+        <block type="variables_set" id="+bz1`]icbD5YM#(Q=r#c" intask="true">
+            <mutation datatype="Number" />
+            <field name="VAR">result</field>
+            <value name="VALUE">
+                <block type="robProcedures_callreturn" id="^1BM+IxhwK`4JQW3G1qI" intask="true">
+                    <mutation name="retX" output_type="Number">
+                        <arg name="x2" type="Number" />
+                    </mutation>
+                    <value name="ARG0">
+                        <block type="math_number" id="x-)^GefR+rx?2.#BPA.~" intask="true">
+                            <field name="NUM">9</field>
+                        </block>
+                    </value>
+                </block>
+            </value>
+        </block>
+        <block type="variables_set" id="XCLnepAqUX7~eQhMxQ[m" intask="true">
+            <mutation datatype="Number" />
+            <field name="VAR">whole</field>
+            <value name="VALUE">
+                <block type="math_arithmetic" id="?aKB!`o%#*XnNFe~}Hp9" intask="true">
+                    <field name="OP">ADD</field>
+                    <value name="A">
+                        <block type="variables_get" id="*nN;;x*KriC-XIz=zg4k" intask="true">
+                            <mutation datatype="Number" />
+                            <field name="VAR">sum</field>
+                        </block>
+                    </value>
+                    <value name="B">
+                        <block type="variables_get" id="z5Vzx(WF~5xc#tPxJ:e0" intask="true">
+                            <mutation datatype="Number" />
+                            <field name="VAR">result</field>
+                        </block>
+                    </value>
+                </block>
+            </value>
+        </block>
+        <block type="text_comment" id="HM/B9X{i*Vo||6,pZ~m?" intask="true">
+            <field name="TEXT">whole sollte 30 sein</field>
+        </block>
+        <block type="robControls_ifElse" id="[j^o8XvS/c:UMGK3[Z-2" intask="true">
+            <mutation else="1" />
+            <repetitions>
+                <value name="IF0">
+                    <block type="logic_compare" id="~#oKd^f=_eb-ETNQgFhv" intask="true">
+                        <field name="OP">EQ</field>
+                        <value name="A">
+                            <block type="variables_get" id=";*SZCSZ7R!YCjT3,%CAF" intask="true">
+                                <mutation datatype="Number" />
+                                <field name="VAR">whole</field>
+                            </block>
+                        </value>
+                        <value name="B">
+                            <block type="math_number" id="J|P9mHUmAr1HO3,bVop3" intask="true">
+                                <field name="NUM">30</field>
+                            </block>
+                        </value>
+                    </block>
+                </value>
+                <statement name="DO0">
+                    <block type="robActions_display_text" id="a%vt#nd],F@bGeY/!bNK" intask="true">
+                        <value name="OUT">
+                            <block type="text" id="0nE2cm}5*Jo:^#{@mBl/" intask="true">
+                                <field name="TEXT">ok</field>
+                            </block>
+                        </value>
+                    </block>
+                </statement>
+                <statement name="ELSE">
+                    <block type="robActions_display_text" id="GBFtDQ{+VEj{S2Xa#wA?" intask="true">
+                        <value name="OUT">
+                            <block type="robText_join" id="c1-hP~w}rgzdNeq:J|BL" intask="true">
+                                <mutation items="2" />
+                                <value name="ADD0">
+                                    <block type="text" id="gBCeEDR^Q5u7oCI*T%x}" intask="true">
+                                        <field name="TEXT">***** error ***** expected 30 got</field>
+                                    </block>
+                                </value>
+                                <value name="ADD1">
+                                    <block type="variables_get" id="u`Qb;!uLrO;F30Z%-P`W" intask="true">
+                                        <mutation datatype="Number" />
+                                        <field name="VAR">whole</field>
+                                    </block>
+                                </value>
+                            </block>
+                        </value>
+                    </block>
+                </statement>
+            </repetitions>
+        </block>
+    </instance>
+    <instance x="721" y="16">
+        <block type="robProcedures_defnoreturn" id="cNbJ7VI9`-j!}KNKlM-%" intask="true">
+            <mutation declare="true" />
+            <field name="NAME">repX</field>
+            <statement name="ST">
+                <block type="robLocalVariables_declare" id="%gi:5tE-jeZJc|qR`!vw" intask="true" deletable="false" movable="false">
+                    <mutation next="false" declaration_type="Number" />
+                    <field name="VAR">x1</field>
+                    <field name="TYPE">Number</field>
+                </block>
+            </statement>
+            <statement name="STACK">
+                <block type="robControls_for" id="(xyZ|=1lan3}2a0cPLwC" intask="true">
+                    <field name="VAR">i</field>
+                    <value name="FROM">
+                        <block type="math_number" id="_67H*ns.u~v5LvK9VVMP" intask="true">
+                            <field name="NUM">0</field>
+                        </block>
+                    </value>
+                    <value name="TO">
+                        <block type="variables_get" id="1afGtrx}/[DnA|;}TWoH" intask="true">
+                            <mutation datatype="Number" />
+                            <field name="VAR">x1</field>
+                        </block>
+                    </value>
+                    <value name="BY">
+                        <block type="math_number" id="@/yLBjDuV*MtH0S01*0s" intask="true">
+                            <field name="NUM">2</field>
+                        </block>
+                    </value>
+                    <statement name="DO">
+                        <block type="variables_set" id="@n6bd-%-XBC];eU__K:z" intask="true">
+                            <mutation datatype="Number" />
+                            <field name="VAR">sum</field>
+                            <value name="VALUE">
+                                <block type="math_arithmetic" id="_N8-6=h~LdGDwZ2MuL)(" intask="true">
+                                    <field name="OP">ADD</field>
+                                    <value name="A">
+                                        <block type="variables_get" id="cA^bMlugE(+NrYJPMSKa" intask="true">
+                                            <mutation datatype="Number" />
+                                            <field name="VAR">sum</field>
+                                        </block>
+                                    </value>
+                                    <value name="B">
+                                        <block type="math_number" id="cP%oh}3UN1KaPZ=D]ZrB" intask="true">
+                                            <field name="NUM">1</field>
+                                        </block>
+                                    </value>
+                                </block>
+                            </value>
+                        </block>
+                    </statement>
+                </block>
+                <block type="text_comment" id=",-@)wuigMYAGSUZ;]~SY" intask="true">
+                    <field name="TEXT">sum sollte 5 sein</field>
+                </block>
+            </statement>
+        </block>
+    </instance>
+    <instance x="717" y="223">
+        <block type="robProcedures_defreturn" id="FH}(A7Q7#)^,{9[C_ohz" intask="true">
+            <mutation declare="true" return_type="Number" />
+            <field name="NAME">retX</field>
+            <field name="TYPE">Number</field>
+            <repetitions>
+                <statement name="ST">
+                    <block type="robLocalVariables_declare" id="(G`1iKd7ru6uRi;!mBKj" intask="true" deletable="false" movable="false">
+                        <mutation next="false" declaration_type="Number" />
+                        <field name="VAR">x2</field>
+                        <field name="TYPE">Number</field>
+                    </block>
+                </statement>
+                <statement name="STACK">
+                    <block type="robControls_for" id=";nr=mPTZ3{T=yq#RYR.9" intask="true">
+                        <field name="VAR">j</field>
+                        <value name="FROM">
+                            <block type="math_number" id="3%_(RDGQ`Xe,%|OlHbi," intask="true">
+                                <field name="NUM">0</field>
+                            </block>
+                        </value>
+                        <value name="TO">
+                            <block type="variables_get" id="7x;fKw[H2atEVbj^TsCe" intask="true">
+                                <mutation datatype="Number" />
+                                <field name="VAR">x2</field>
+                            </block>
+                        </value>
+                        <value name="BY">
+                            <block type="math_number" id="aA)h`S8qT45rE!VT(y:*" intask="true">
+                                <field name="NUM">2</field>
+                            </block>
+                        </value>
+                        <statement name="DO">
+                            <block type="variables_set" id="wKvPhJ!A+H%e0e^SC`%K" intask="true">
+                                <mutation datatype="Number" />
+                                <field name="VAR">sum</field>
+                                <value name="VALUE">
+                                    <block type="math_arithmetic" id="|}D]gQ0lS6NP1f[Lc5O)" intask="true">
+                                        <field name="OP">ADD</field>
+                                        <value name="A">
+                                            <block type="variables_get" id="j4!7tV=u6WPdu6RROix|" intask="true">
+                                                <mutation datatype="Number" />
+                                                <field name="VAR">sum</field>
+                                            </block>
+                                        </value>
+                                        <value name="B">
+                                            <block type="math_number" id="?/.?R1Sp?VDgFLX1Bg];" intask="true">
+                                                <field name="NUM">1</field>
+                                            </block>
+                                        </value>
+                                    </block>
+                                </value>
+                            </block>
+                        </statement>
+                    </block>
+                    <block type="text_comment" id="(Igi%DfrTwoF4x%[udNb" intask="true">
+                        <field name="TEXT">sum sollte 10 sein, *2 ergibt 20 als return</field>
+                    </block>
+                </statement>
+                <value name="RETURN">
+                    <block type="math_arithmetic" id="@f.%h?1K/n=^l-.;ikbW" intask="true">
+                        <field name="OP">MULTIPLY</field>
+                        <value name="A">
+                            <block type="variables_get" id="*~sx6i~+]nz]0AQ[mx,K" intask="true">
+                                <mutation datatype="Number" />
+                                <field name="VAR">sum</field>
+                            </block>
+                        </value>
+                        <value name="B">
+                            <block type="math_number" id="xBBgc]*9nc:b7(s4;kDg" intask="true">
+                                <field name="NUM">2</field>
+                            </block>
+                        </value>
+                    </block>
+                </value>
+            </repetitions>
+        </block>
+    </instance>
+</block_set>

@@ -1,6 +1,6 @@
 <export xmlns="http://de.fhg.iais.roberta.blockly">
 	<program>
-        <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="nxt" xmlversion="3.0" description="" tags="">
+        <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="nxt" xmlversion="3.1" description="" tags="">
             <instance x="384" y="50">
                 <block type="robControls_start" id="gs/X7L/cTzZWY:k?c@Ks" intask="true" deletable="false">
                     <mutation declare="true" />

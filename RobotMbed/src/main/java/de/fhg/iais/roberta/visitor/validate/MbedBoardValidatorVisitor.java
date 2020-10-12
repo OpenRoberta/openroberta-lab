@@ -65,7 +65,7 @@ public class MbedBoardValidatorVisitor extends AbstractBoardValidatorVisitor imp
             String type = usedSensor.getComponentType();
             switch ( sensor.getKind().getName() ) {
                 case "COLOR_SENSING":
-                    if ( !type.equals("COLOR") ) {
+                    if ( !type.equals("COLOUR") ) { // Mbed has COLOUR instead of COLOR
                         sensor.addInfo(NepoInfo.error("CONFIGURATION_ERROR_SENSOR_WRONG"));
                         this.errorCount++;
                     }

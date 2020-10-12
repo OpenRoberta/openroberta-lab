@@ -38,7 +38,7 @@ public class IsResetPasswordLinkExpiredResponse extends BaseResponse {
     /**
      * the response for the /isResetPasswordLinkExpired REST request
      */
-    public static IsResetPasswordLinkExpiredResponse makeFromProperties(String cmd,String rc,String message,String cause,JSONObject parameters,String initToken,long serverTime,String serverVersion,long robotWait,String robotBattery,String robotName,String robotVersion,String robotFirmwareName,JSONObject robotSensorvalues,int robotNepoexitvalue,String robotState,boolean resetPasswordLinkExpired) {
+    public static IsResetPasswordLinkExpiredResponse makeFromProperties(String cmd,String rc,String message,String cause,JSONObject parameters,String initToken,long serverTime,String serverVersion,long robotWait,String robotBattery,String robotName,String robotVersion,String robotFirmwareName,JSONObject robotSensorvalues,int robotNepoexitvalue,String robotState,boolean notificationsAvailable,boolean resetPasswordLinkExpired) {
         IsResetPasswordLinkExpiredResponse entity = new IsResetPasswordLinkExpiredResponse();
         entity.setCmd(cmd);
         entity.setRc(rc);
@@ -56,6 +56,7 @@ public class IsResetPasswordLinkExpiredResponse extends BaseResponse {
         entity.setRobotSensorvalues(robotSensorvalues);
         entity.setRobotNepoexitvalue(robotNepoexitvalue);
         entity.setRobotState(robotState);
+        entity.setNotificationsAvailable(notificationsAvailable);
         entity.setResetPasswordLinkExpired(resetPasswordLinkExpired);
         entity.immutable();
         return entity;
@@ -109,6 +110,8 @@ public class IsResetPasswordLinkExpiredResponse extends BaseResponse {
                     setRobotNepoexitvalue(jsonO.optInt(key));
                 } else if ("robot.state".equals(key)) {
                     setRobotState(jsonO.optString(key));
+                } else if ("notifications.available".equals(key)) {
+                    setNotificationsAvailable(jsonO.optBoolean(key));
                 } else if ("resetPasswordLinkExpired".equals(key)) {
                     setResetPasswordLinkExpired(jsonO.getBoolean(key));
                 } else {
@@ -238,6 +241,9 @@ public class IsResetPasswordLinkExpiredResponse extends BaseResponse {
             if (this.robotState != null) {
                 jsonO.put("robot.state", this.robotState);
             }
+            if (this.notificationsAvailableDefined) {
+                jsonO.put("notifications.available", this.notificationsAvailable);
+            }
             jsonO.put("resetPasswordLinkExpired", this.resetPasswordLinkExpired);
         } catch (JSONException e) {
             throw new RuntimeException("JSON unparse error when unparsing: " + this, e);
@@ -247,7 +253,7 @@ public class IsResetPasswordLinkExpiredResponse extends BaseResponse {
     
     @Override
     public String toString() {
-        return "IsResetPasswordLinkExpiredResponse [immutable=" + this.immutable + ", cmd=" + this.cmd + ", rc=" + this.rc + ", message=" + this.message + ", cause=" + this.cause + ", parameters=" + this.parameters + ", initToken=" + this.initToken + ", serverTime=" + this.serverTime + ", serverVersion=" + this.serverVersion + ", robotWait=" + this.robotWait + ", robotBattery=" + this.robotBattery + ", robotName=" + this.robotName + ", robotVersion=" + this.robotVersion + ", robotFirmwareName=" + this.robotFirmwareName + ", robotSensorvalues=" + this.robotSensorvalues + ", robotNepoexitvalue=" + this.robotNepoexitvalue + ", robotState=" + this.robotState + ", resetPasswordLinkExpired=" + this.resetPasswordLinkExpired + " ]";
+        return "IsResetPasswordLinkExpiredResponse [immutable=" + this.immutable + ", cmd=" + this.cmd + ", rc=" + this.rc + ", message=" + this.message + ", cause=" + this.cause + ", parameters=" + this.parameters + ", initToken=" + this.initToken + ", serverTime=" + this.serverTime + ", serverVersion=" + this.serverVersion + ", robotWait=" + this.robotWait + ", robotBattery=" + this.robotBattery + ", robotName=" + this.robotName + ", robotVersion=" + this.robotVersion + ", robotFirmwareName=" + this.robotFirmwareName + ", robotSensorvalues=" + this.robotSensorvalues + ", robotNepoexitvalue=" + this.robotNepoexitvalue + ", robotState=" + this.robotState + ", notificationsAvailable=" + this.notificationsAvailable + ", resetPasswordLinkExpired=" + this.resetPasswordLinkExpired + " ]";
     }
     @Override
     public int hashCode() {

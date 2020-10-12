@@ -86,6 +86,7 @@ public class C {
     public static final String FLOW_CONTROL = "flowControl";
     public static final String FOR = "FOR";
     public static final String FOREVER = "FOREVER";
+    public static final String FOREVER_ARDU = "FOREVER_ARDU";
     public static final String FOREWARD = "FOREWARD";
     public static final String FOR_EACH = "FOR_EACH";
     public static final String FREEFALL = "freefall";
@@ -183,6 +184,7 @@ public class C {
     public static final String NAMES = "names";
     public static final String NEG = "NEG";
     public static final String NEQ = "NEQ";
+    public static final String NNSTEP_STMT = "nnStepStmt";
     public static final String NOOP_STMT = "createNoopStmt";
     public static final String NOT = "NOT";
     public static final String NO = "NO";
@@ -242,6 +244,7 @@ public class C {
 
     public static final String SET = "set";
     public static final String SET_LANGUAGE_ACTION = "SetLanguageAction";
+    public static final String SET_TIME = "SetTime";
     public static final String SET_VOLUME_ACTION = "SetVolumeAction";
     public static final String SHAKE = "shake";
     public static final String SHOW_IMAGE_ACTION = "ShowImageAction";

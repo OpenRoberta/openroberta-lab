@@ -8,6 +8,7 @@
 **/.settings
 **/.pydevproject
 **/.vscode
+**/node_modules
 OpenRobertaServer/db-*
 .DS_Store
 .idea

@@ -8,7 +8,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
- * the request description for the /projectWorkflow/reset REST request<br><br>
+ * DEPRECATED: remove after 4.0.0 deplyoment<br><br>
  * Version: 1<br>
  * Datum: 2020-06-15
  */
@@ -16,14 +16,14 @@ public class ProjectWorkflowResetRequest extends BaseRequest {
     protected String robot;
     
     /**
-     * the request description for the /projectWorkflow/reset REST request
+     * DEPRECATED: remove after 4.0.0 deplyoment
      */
     public static ProjectWorkflowResetRequest make() {
         return new ProjectWorkflowResetRequest();
     }
     
     /**
-     * the request description for the /projectWorkflow/reset REST request
+     * DEPRECATED: remove after 4.0.0 deplyoment
      */
     public static ProjectWorkflowResetRequest makeFromString(String jsonS) {
         try {
@@ -35,7 +35,7 @@ public class ProjectWorkflowResetRequest extends BaseRequest {
     }
     
     /**
-     * the request description for the /projectWorkflow/reset REST request
+     * DEPRECATED: remove after 4.0.0 deplyoment
      */
     public static ProjectWorkflowResetRequest makeFromProperties(String cmd,String robot) {
         ProjectWorkflowResetRequest entity = new ProjectWorkflowResetRequest();
@@ -46,7 +46,7 @@ public class ProjectWorkflowResetRequest extends BaseRequest {
     }
     
     /**
-     * the request description for the /projectWorkflow/reset REST request
+     * DEPRECATED: remove after 4.0.0 deplyoment
      */
     public static ProjectWorkflowResetRequest make(JSONObject jsonO) {
         return make().merge(jsonO).immutable();

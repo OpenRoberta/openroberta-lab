@@ -1,8 +1,8 @@
 package de.fhg.iais.roberta.visitor.collect;
 
-import java.util.List;
-
 import com.google.common.collect.ClassToInstanceMap;
+
+import java.util.List;
 
 import de.fhg.iais.roberta.bean.IProjectBean;
 import de.fhg.iais.roberta.bean.UsedHardwareBean;
@@ -371,6 +371,12 @@ public final class MbedUsedHardwareCollectorVisitor extends AbstractUsedHardware
 
     @Override
     public Void visitServoSetAction(ServoSetAction<Void> servoSetAction) {
+        servoSetAction.getValue().accept(this);
+        String port = servoSetAction.getPort();
+        ConfigurationComponent cc = this.robotConfiguration.optConfigurationComponent(port);
+        if ( (cc != null) && cc.getComponentType().equals("CALLIBOT") ) {
+            this.getBuilder(UsedHardwareBean.Builder.class).addUsedActor(new UsedActor("", SC.CALLIBOT));
+        }
         return null;
     }
 

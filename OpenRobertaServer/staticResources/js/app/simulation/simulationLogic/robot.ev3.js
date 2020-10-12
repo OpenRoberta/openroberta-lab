@@ -22,6 +22,7 @@ define(['simulation.simulation', 'interpreter.constants', 'simulation.robot', 'g
             y: -20,
             w: 40,
             h: 50,
+            radius: 2.5,
             color: '#FCCC00'
         };
         this.wheelLeft = {

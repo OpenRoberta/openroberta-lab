@@ -1,6 +1,6 @@
 <export xmlns="http://de.fhg.iais.roberta.blockly">
     <program>
-        <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="wedo" xmlversion="3.0"
+        <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="wedo" xmlversion="3.1"
             description="ROBOT &lt;div&gt;WeDo &lt;/div&gt;&lt;div&gt;START-RESULT &lt;/div&gt;&lt;div&gt;robot: w1, port: undefined led on color 9 &lt;/div&gt;&lt;div&gt;END-RESULT&lt;/div&gt;"
             tags="">
             <instance x="13" y="74">
@@ -40,7 +40,7 @@
         </block_set>
     </program>
     <config>
-        <block_set robottype="wedo" xmlversion="3.0" description="" tags="" xmlns="http://de.fhg.iais.roberta.blockly">
+        <block_set robottype="wedo" xmlversion="3.1" description="" tags="" xmlns="http://de.fhg.iais.roberta.blockly">
             <instance x="246" y="54">
                 <block type="robBrick_WeDo-Brick" id="1" intask="true" deletable="false">
                     <field name="VAR">w1</field>

@@ -33,6 +33,7 @@ limitations under the License.
 <link rel="stylesheet" type="text/css" href="/css/bootstrap-tagsinput.css"></link>
 <link rel="stylesheet" type="text/css" href="/css/enjoyhint.css"></link>
 <link rel="stylesheet" type="text/css" href="/css/prettify.css"></link>
+
 <link rel="stylesheet" type="text/css" href="/css/roberta.css"></link>
 <!-- Make sure css files are loaded before js files -->
 <script data-main="js/main" src="js/require.js"></script>
@@ -175,7 +176,7 @@ limitations under the License.
                             <li class="login"><a href="#" id="menuChangeUser" class="typcn typcn-lock-closed" lkey="Blockly.Msg.MENU_CHANGE">ändern ...</a></li>
                             <li class="login"><a href="#" id="menuDeleteUser" class="typcn typcn-user-delete" lkey="Blockly.Msg.MENU_DELETE_USER">Benutzer löschen ...</a></li>
                             <li><a href="#" id="menuStateInfo" class="typcn typcn-input-checked" lkey="Blockly.Msg.MENU_STATE_INFO">Statusinformationen</a></li>
-                            <li class="hidden" id="menuAddStatusTextWrap"><a href="#" id="menuAddStatusText" class="typcn typcn-edit">Add a status text</a></li>
+                            <li class="hidden" id="menuNotificationWrap"><a href="#" id="menuNotification" class="typcn typcn-edit">Add or mody notifications</a></li>
                         </ul></li>
                     <li id="head-navigation-tutorial" class="hidden-xs"><a href="#" id="head-navi-tooltip-tutorials"
                         lkey="Blockly.Msg.MENU_TUTORIAL_TOOLTIP" rel="tooltip" data-original-title="" title=""> <span id="head-navi-icon-tutorial"
@@ -218,6 +219,7 @@ limitations under the License.
                     <li class="divider visible-xs"></li>
                     <li><a href="#" class="visible-xs" id="menuTabProgram" lkey="Blockly.Msg.TAB_PROGRAM">Program</a></li>
                     <li><a href="#" class="visible-xs" id="menuTabConfiguration" lkey="Blockly.Msg.TAB_CONFIGURATION">Configuration</a></li>
+                    <li style="display: none;"><a href="#" class="visible-xs" id="menuTabNN" lkey="Blockly.Msg.TAB_NN">Neural Network</a></li>
                     <!--  only if simulation is active -->
                     <li class="dropdown sim hide hidden-xs sim-nav" id="head-navigation-sim-control"><a href="#" data-toggle="dropdown"
                         class="dropdown-toggle" id="head-navi-tooltip-program" lkey="Blockly.Msg.MENU_EDIT_TOOLTIP" rel="tooltip" data-original-title=""
@@ -272,6 +274,9 @@ limitations under the License.
                 </a></li>
                 <li><a data-toggle="tab" id="tabConfiguration" href="#configuration"> <span lkey="Blockly.Msg.TAB_CONFIGURATION" class="menuTab">Configuration</span>&nbsp;<span
                         id="tabConfigurationName"></span>
+                </a></li>
+                <li style="display: none;"><a data-toggle="tab" id="tabNN" href="#nn"> <span lkey="Blockly.Msg.TAB_NN" class="menuTab">Neural Network</span>&nbsp;<span
+                        id="tabNnName">NEPOnn</span>
                 </a></li>
                 <li class="hidden"><a data-toggle="tab" id="tabProgList" href="#progList">Listing of programs</a></li>
                 <li class="hidden"><a data-toggle="tab" id="tabConfList" href="#confList">Listing of configurations</a></li>
@@ -648,6 +653,109 @@ limitations under the License.
                 <div id="bricklyDiv"></div>
             </div>
         </div>
+        
+        <!-- NEURAL NETWORK START -->
+        <div id="nn" class="tab-pane fade">
+        <!-- Top Controls -->
+        <div id="top-controls">
+          <div class="container l--page">
+            <div class="control ui-activation">
+              <label for="activations">Activation</label>
+              <div class="select">
+                <select id="activations">
+                  <option value="relu">ReLU</option>
+                  <option value="tanh">Tanh</option>
+                  <option value="sigmoid">Sigmoid</option>
+                  <option value="linear">Linear</option>
+                </select>
+              </div>
+            </div>
+            <div class="control ui-regularization">
+              <label for="regularizations">Regularization</label>
+              <div class="select">
+                <select id="regularizations">
+                  <option value="none">None</option>
+                  <option value="L1">L1</option>
+                  <option value="L2">L2</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Main Part -->
+        <div id="main-part" class="l--page">
+          <!-- Features Column -->
+          <div class="column features">
+            <h4>Inputs</h4>
+            <div id="network">
+              <svg id="svg" width="510" height="450">
+                <defs>
+                  <marker id="markerArrow" markerWidth="7" markerHeight="13" refX="1" refY="6" orient="auto" markerUnits="userSpaceOnUse">
+                    <path d="M2,11 L7,6 L2,2" />
+                  </marker>
+                </defs>
+              </svg>
+              <!-- Hover card -->
+              <div id="hovercard">
+                <div style="font-size:10px">Click anywhere to edit.</div>
+                <div><span class="type">Weight/Bias</span> is <span class="value">0.2</span><span><input type="number"/></span>.</div>
+              </div>
+              <div class="callout thumbnail">
+                <svg viewBox="0 0 30 30">
+                  <defs>
+                    <marker id="arrow" markerWidth="5" markerHeight="5" refx="5" refy="2.5" orient="auto" markerUnits="userSpaceOnUse">
+                      <path d="M0,0 L5,2.5 L0,5 z"/>
+                    </marker>
+                  </defs>
+                  <path d="M12,30C5,20 2,15 12,0" marker-end="url(#arrow)">
+                </svg>
+                <div class="label">
+                  This is the output from one <b>neuron</b>. Hover to see it larger.
+                </div>
+              </div>
+              <div class="callout weights">
+                <svg viewBox="0 0 30 30">
+                  <defs>
+                    <marker id="arrow" markerWidth="5" markerHeight="5" refx="5" refy="2.5" orient="auto" markerUnits="userSpaceOnUse">
+                      <path d="M0,0 L5,2.5 L0,5 z"/>
+                    </marker>
+                  </defs>
+                  <path d="M12,30C5,20 2,15 12,0" marker-end="url(#arrow)">
+                </svg>
+                <div class="label">
+                  The outputs are mixed with varying <b>weights</b>, shown by the thickness of the lines.
+                </div>
+              </div>
+            </div>
+          </div>
+      
+          <!-- Hidden Layers Column -->
+          <div class="column hidden-layers">
+            <h4>
+              <div class="ui-numHiddenLayers">
+                <button id="add-layers" class="mdl-button mdl-js-button mdl-button--icon">
+                  <i class="material-icons">add</i>
+                </button>
+                <button id="remove-layers" class="mdl-button mdl-js-button mdl-button--icon">
+                  <i class="material-icons">remove</i>
+                </button>
+              </div>
+              <span id="num-layers"></span>
+              <span id="layers-label"></span>
+            </h4>
+          </div>
+      
+          <!-- Output Column -->
+          <div class="column output">
+            <h4>Outputs</h4>
+          </div>
+          <div class="column right">
+          </div>
+        </div>
+       </div>
+        
+        
     </div>
     <!--  ################## END TABS ################## -->
     <!-- ################## POPUPS ################## -->
@@ -930,45 +1038,39 @@ limitations under the License.
             </div>
         </div>
     </div>
-    <!--Add Status Text-->
-    <div class="modal fade" id="modal-addStatusText" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-sm">
+    <!--Notifications Modal-->
+    <div class="modal fade" id="modal-notifications" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog modal-md">
             <div class="modal-content">
-                <form id="fg-addStatusText">
-                    <div class="modal-body">
-                        <div class="form-group">
-                            <label for="statusTextEnglish">English text</label>
-                            <div class="input-group">
-                                <span class="input-group-addon typcn input-typcn typcn-document-text"></span> <input class="form-control" id="statusTextEnglish"
-                                    name="statusTextEnglish" />
-                            </div>
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h3 class="modal-title">Notifications</h3>
+                </div>
+                <div class="modal-body">
+                    <form id="notificationForm">
+                        <h4>Upload</h4>
+                        <div id="notification-modal-alert" class="alert" role="alert" style="display: none">
                         </div>
-                        <div class="form-group">
-                            <label for="statusTextGerman">German text</label>
-                            <div class="input-group">
-                                <span class="input-group-addon typcn input-typcn typcn-document-text"></span> <input class="form-control" id="statusTextGerman"
-                                    name="statusTextEnglish" />
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="statusTextDate">Expire Date</label>
-                            <div class="input-group">
-                                <span class="input-group-addon typcn input-typcn typcn-watch"></span> <input id="statusTextDate" type="date"
-                                    class="form-control" />
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="statusTextTime">Expire Time</label>
-                            <div class="input-group">
-                                <span class="input-group-addon typcn input-typcn typcn-watch"></span> <input id="statusTextTime" type="time"
-                                    class="form-control" />
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="submit" class="btn btn-primary" id="addStatusText">OK</button>
-                    </div>
-                </form>
+
+                        <label class="btn btn-default" for="notificationFileUpload">
+                            <span class="typcn typcn-upload"></span>
+                            <input type="file" class="hidden" id="notificationFileUpload"/>
+                        </label>
+
+                        <button type="submit" class="btn btn-default">Send</button>
+
+                        <hr>
+
+                        <h4>Download</h4>
+                        <a id="notificationFileDownload" href="" download="notifications.json" class="btn btn-default">
+                            <span class="typcn typcn-download"></span>
+                        </a>
+                    </form>
+                </div>
+                <div class="modal-footer">
+
+                </div>
             </div>
         </div>
     </div>
@@ -1308,8 +1410,7 @@ limitations under the License.
                     <hr style="border: 2px solid #33B8CA; margin: 10px 0">
                     <div class="modal-footer left-inner-addon popup-checkbox">
                         <div id="startup-message-statustext">
-                            <h4 id="statustext-en" class="EN"></h4>
-                            <h4 id="statustext-de" class="DE"></h4>
+                            
                         </div>
                         <input type="checkbox" name="checkbox" id="checkbox_id" value="value" /> <label for="checkbox_id" style="color: #333;"
                             lkey="Blockly.Msg.POPUP_STARTUP_HIDE"> Okay, don't show this again. </label>
@@ -1589,11 +1690,16 @@ limitations under the License.
                 </div>
                 <div class="modal-body">
                     <div class="">
-                        <iframe id="feedbackIframe" style="width:100%; height:300px; border:none;" scrolling="no" ></iframe>
+                        <iframe id="feedbackIframe" style="width:100%; height:300px; border:none;" scrolling="no"></iframe>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
+    <div id="releaseInfo" style="display: none;">
+        <h4 id="releaseInfoTitle">Release info</h4>
+        <span id="releaseInfoContent">There are some changes for your robot!</span>
+        <button class="close no-button" type="button" aria-hidden="true">×</button>
     </div>
     <div id="device-size">
         <div id="xs" class="visible-xs"></div>

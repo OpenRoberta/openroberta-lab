@@ -1,14 +1,14 @@
-<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="ev3" xmlversion="3.0" description="" tags="">
-  <instance x="54" y="-141">
-    <block type="robControls_if" id="46" inline="false">
-      <value name="IF0">
-        <block type="logic_boolean" id="47">
-          <field name="BOOL">TRUE</field>
-        </block>
-      </value>
-      <statement name="DO0">
-        <block type="robControls_if" id="48" inline="false">
-          <value name="IF0">
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="ev3" xmlversion="3.1" description="" tags="">
+    <instance x="54" y="-141">
+        <block type="robControls_if" id="46" inline="false">
+            <value name="IF0">
+                <block type="logic_boolean" id="47">
+                    <field name="BOOL">TRUE</field>
+                </block>
+            </value>
+            <statement name="DO0">
+                <block type="robControls_if" id="48" inline="false">
+                    <value name="IF0">
             <block type="logic_boolean" id="49">
               <field name="BOOL">FALSE</field>
             </block>

@@ -27,9 +27,14 @@ import de.fhg.iais.roberta.util.dbc.Assert;
  */
 public class DbSession {
     private static final Logger LOG = LoggerFactory.getLogger(DbSession.class);
+    /**
+     * if a db session is older than this value, it will be logged as a potential resource misuse
+     */
     private static final long DURATION_TIMEOUT_MSEC_FOR_LOGGING = TimeUnit.SECONDS.toMillis(5);
-    private static final long DURATION_TIMEOUT_MSEC_FOR_CLEANUP = TimeUnit.HOURS.toMillis(2);
-    private static final int NUMBER_OF_SESSIONS_TO_SHOW = 50;
+    /**
+     * if a db session is older than this value, it will be closed and removed to avoid a resource leak
+     */
+    private static final long DURATION_TIMEOUT_MSEC_FOR_CLEANUP = TimeUnit.MINUTES.toMillis(5);
 
     private Session session;
 
@@ -68,13 +73,17 @@ public class DbSession {
      * rollback the current transaction
      */
     public void rollback() {
-        LOG.info("rollback");
         addTransaction("rollback"); // for analyzing db session usage.
+        if ( this.session != null ) {
+            LOG.info("rollback");
+            Transaction transaction = this.session.getTransaction();
+            transaction.rollback();
+            this.session.close();
+            this.session = null;
+        } else {
+            LOG.info("rollback attempt - session was removed already");
+        }
 
-        Transaction transaction = this.session.getTransaction();
-        transaction.rollback();
-        this.session.close();
-        this.session = null;
     }
 
     /**
@@ -112,12 +121,13 @@ public class DbSession {
         if ( new Date().getTime() - creationTime > DURATION_TIMEOUT_MSEC_FOR_LOGGING ) {
             LOG.error("db session " + sessionId + " too old: " + sessionAge + "msec\n" + getFullInfo());
         }
-        currentOpenSessionCounter.decrementAndGet();
         if ( this.numberOfActions == 0 ) {
             unusedSessionCounter.getAndIncrement();
         }
         if ( sessionMap.remove(this.sessionId) == null ) {
             LOG.error("FATAL: could not remove db session " + this.sessionId);
+        } else {
+            currentOpenSessionCounter.decrementAndGet();
         }
     }
 
@@ -224,7 +234,7 @@ public class DbSession {
     }
 
     /**
-     * remove (cleanup) all those db sessions, that are outdated. This is a VERY dangerous operation!
+     * rollback and remove all those db sessions, that are outdated (older than {@link #DURATION_TIMEOUT_MSEC_FOR_CLEANUP}). This is a VERY dangerous operation!
      */
     public static void cleanupSessions() {
         final long now = new Date().getTime();
@@ -248,7 +258,7 @@ public class DbSession {
             }
         }
         if ( !somethingExpired ) {
-            LOG.info("no expired database session");
+            LOG.info("no sessions expired");
         }
     }
 

@@ -58,6 +58,7 @@ import de.fhg.iais.roberta.syntax.lang.stmt.ExprStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.FunctionStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.IfStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.MethodStmt;
+import de.fhg.iais.roberta.syntax.lang.stmt.NNStepStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.RepeatStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.SensorStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtFlowCon;
@@ -202,6 +203,13 @@ public interface ILanguageVisitor<V> extends IVisitor<V> {
      * @param ifStmt to be visited
      */
     V visitIfStmt(IfStmt<V> ifStmt);
+
+    /**
+     * visit a {@link NNStepStmt}.
+     *
+     * @param nnStepStmt to be visited
+     */
+    V visitNNStepStmt(NNStepStmt<V> nnStepStmt);
 
     /**
      * visit a {@link RepeatStmt}.
@@ -428,11 +436,6 @@ public interface ILanguageVisitor<V> extends IVisitor<V> {
         return null;
     }
 
-    /**
-     * visit a {@link ActionExpr}.
-     *
-     * @param actionExpr to be visited
-     */
     default V visitActionExpr(ActionExpr<V> actionExpr) {
         actionExpr.getAction().accept(this);
         return null;
@@ -462,11 +465,6 @@ public interface ILanguageVisitor<V> extends IVisitor<V> {
         return null;
     }
 
-    /**
-     * visit a {@link ActivityTask}.
-     *
-     * @param activityTask to be visited
-     */
     default V visitActivityTask(ActivityTask<V> activityTask) {
         return null;
     }

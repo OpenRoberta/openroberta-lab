@@ -1,11 +1,11 @@
 package de.fhg.iais.roberta.syntax;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import de.fhg.iais.roberta.components.Project;
 import de.fhg.iais.roberta.factory.IRobotFactory;
@@ -33,15 +33,15 @@ public class MicrobitTwo2ThreeTransformerTest {
     public void executeTransformer_ShouldReturnTransformedCompass_WhenGivenOldCompass() {
         String expectedProgramAst =
             "BlockAST[project=[[Location[x=549,y=76],MainTask[],"
-                + "DebugAction[SensorExpr[CompassSensor[C,ANGLE,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[GetSampleSensor[CompassSensor[C,ANGLE,EMPTY_SLOT]]]]]]]";
+                + "DebugAction[SensorExpr[CompassSensor[_C,ANGLE,EMPTY_SLOT]]],"
+                + "DebugAction[SensorExpr[GetSampleSensor[CompassSensor[_C,ANGLE,EMPTY_SLOT]]]]]]]";
         String[] expectedToBeInConfigAst =
             {
-                "ConfigurationComponent[componentType=COMPASS,isActor=true,userDefinedName=C,portName=C,componentProperties={}]"
+                "ConfigurationComponent[componentType=COMPASS,isActor=true,userDefinedName=_C,portName=_C,componentProperties={}]"
             };
 
         Project project =
-            UnitTestHelper.setupWithConfigAndProgramXML(testFactory, Util.readResourceContent("/transform/old_compass.xml"), OLD_CONFIGURATION_XML).build();
+            UnitTestHelper.setupWithConfigAndProgramXML(testFactory, Util.readResourceContent("/transform/two2three/old_compass.xml"), OLD_CONFIGURATION_XML).build();
 
         new MbedTwo2ThreeTransformerWorker().execute(project);
         UnitTestHelper.checkAstEquality(project.getProgramAst().getTree().toString(), expectedProgramAst);
@@ -63,7 +63,7 @@ public class MicrobitTwo2ThreeTransformerTest {
             };
 
         Project project =
-            UnitTestHelper.setupWithConfigAndProgramXML(testFactory, Util.readResourceContent("/transform/old_key.xml"), OLD_CONFIGURATION_XML).build();
+            UnitTestHelper.setupWithConfigAndProgramXML(testFactory, Util.readResourceContent("/transform/two2three/old_key.xml"), OLD_CONFIGURATION_XML).build();
 
         new MbedTwo2ThreeTransformerWorker().execute(project);
         UnitTestHelper.checkAstEquality(project.getProgramAst().getTree().toString(), expectedProgramAst);
@@ -74,15 +74,15 @@ public class MicrobitTwo2ThreeTransformerTest {
     public void executeTransformer_ShouldReturnTransformedLight_WhenGivenOldLight() {
         String expectedProgramAst =
             "BlockAST[project=[[Location[x=549,y=76],MainTask[],"
-                + "DebugAction[SensorExpr[LightSensor[L,VALUE,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[GetSampleSensor[LightSensor[L,LIGHT_VALUE,EMPTY_SLOT]]]]]]]";
+                + "DebugAction[SensorExpr[LightSensor[_L,VALUE,EMPTY_SLOT]]],"
+                + "DebugAction[SensorExpr[GetSampleSensor[LightSensor[_L,LIGHT_VALUE,EMPTY_SLOT]]]]]]]";
         String[] expectedToBeInConfigAst =
             {
-                "ConfigurationComponent[componentType=LIGHT,isActor=true,userDefinedName=L,portName=L,componentProperties={}]"
+                "ConfigurationComponent[componentType=LIGHT,isActor=true,userDefinedName=_L,portName=_L,componentProperties={}]"
             };
 
         Project project =
-            UnitTestHelper.setupWithConfigAndProgramXML(testFactory, Util.readResourceContent("/transform/old_light.xml"), OLD_CONFIGURATION_XML).build();
+            UnitTestHelper.setupWithConfigAndProgramXML(testFactory, Util.readResourceContent("/transform/two2three/old_light.xml"), OLD_CONFIGURATION_XML).build();
 
         new MbedTwo2ThreeTransformerWorker().execute(project);
         UnitTestHelper.checkAstEquality(project.getProgramAst().getTree().toString(), expectedProgramAst);
@@ -175,7 +175,7 @@ public class MicrobitTwo2ThreeTransformerTest {
 
         Project project =
             UnitTestHelper
-                .setupWithConfigAndProgramXML(testFactory, Util.readResourceContent("/transform/microbit/old_pin_pull.xml"), OLD_CONFIGURATION_XML)
+                .setupWithConfigAndProgramXML(testFactory, Util.readResourceContent("/transform/two2three/microbit/old_pin_pull.xml"), OLD_CONFIGURATION_XML)
 
                 .build();
 
@@ -188,16 +188,16 @@ public class MicrobitTwo2ThreeTransformerTest {
     public void executeTransformer_ShouldReturnTransformedTemperature_WhenGivenOldTemperature() {
         String expectedProgramAst =
             "BlockAST[project=[[Location[x=549,y=76],MainTask[],"
-                + "DebugAction[SensorExpr[TemperatureSensor[TM,VALUE,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[GetSampleSensor[TemperatureSensor[TM,TEMPERATURE,EMPTY_SLOT]]]]]]]";
+                + "DebugAction[SensorExpr[TemperatureSensor[_T,VALUE,EMPTY_SLOT]]],"
+                + "DebugAction[SensorExpr[GetSampleSensor[TemperatureSensor[_T,TEMPERATURE,EMPTY_SLOT]]]]]]]";
         String[] expectedToBeInConfigAst =
             {
-                "ConfigurationComponent[componentType=TEMPERATURE,isActor=true,userDefinedName=TM,portName=TM,componentProperties={}]"
+                "ConfigurationComponent[componentType=TEMPERATURE,isActor=true,userDefinedName=_T,portName=_T,componentProperties={}]"
             };
 
         Project project =
             UnitTestHelper
-                .setupWithConfigAndProgramXML(testFactory, Util.readResourceContent("/transform/old_temperature.xml"), OLD_CONFIGURATION_XML)
+                .setupWithConfigAndProgramXML(testFactory, Util.readResourceContent("/transform/two2three/old_temperature.xml"), OLD_CONFIGURATION_XML)
 
                 .build();
 
@@ -266,7 +266,7 @@ public class MicrobitTwo2ThreeTransformerTest {
 
         Project project =
             UnitTestHelper
-                .setupWithConfigAndProgramXML(testFactory, Util.readResourceContent("/transform/microbit/old_write_to_pin.xml"), OLD_CONFIGURATION_XML)
+                .setupWithConfigAndProgramXML(testFactory, Util.readResourceContent("/transform/two2three/microbit/old_write_to_pin.xml"), OLD_CONFIGURATION_XML)
 
                 .build();
 
@@ -279,22 +279,22 @@ public class MicrobitTwo2ThreeTransformerTest {
     public void executeTransformer_ShouldReturnTransformedAccelerometer_WhenGivenOldAccelerometer() {
         String expectedProgramAst =
             "BlockAST[project=[[Location[x=512,y=50],MainTask[],"
-                + "DebugAction[SensorExpr[AccelerometerSensor[Acc,VALUE,X]]],"
-                + "DebugAction[SensorExpr[AccelerometerSensor[Acc,VALUE,Y]]],"
-                + "DebugAction[SensorExpr[AccelerometerSensor[Acc,VALUE,Z]]],"
-                + "DebugAction[SensorExpr[AccelerometerSensor[Acc,VALUE,STRENGTH]]],"
-                + "DebugAction[SensorExpr[GetSampleSensor[AccelerometerSensor[Acc,DEFAULT,X]]]],"
-                + "DebugAction[SensorExpr[GetSampleSensor[AccelerometerSensor[Acc,DEFAULT,Y]]]],"
-                + "DebugAction[SensorExpr[GetSampleSensor[AccelerometerSensor[Acc,DEFAULT,Z]]]],"
-                + "DebugAction[SensorExpr[GetSampleSensor[AccelerometerSensor[Acc,DEFAULT,STRENGTH]]]]]]]";
+                + "DebugAction[SensorExpr[AccelerometerSensor[_A,VALUE,X]]],"
+                + "DebugAction[SensorExpr[AccelerometerSensor[_A,VALUE,Y]]],"
+                + "DebugAction[SensorExpr[AccelerometerSensor[_A,VALUE,Z]]],"
+                + "DebugAction[SensorExpr[AccelerometerSensor[_A,VALUE,STRENGTH]]],"
+                + "DebugAction[SensorExpr[GetSampleSensor[AccelerometerSensor[_A,DEFAULT,X]]]],"
+                + "DebugAction[SensorExpr[GetSampleSensor[AccelerometerSensor[_A,DEFAULT,Y]]]],"
+                + "DebugAction[SensorExpr[GetSampleSensor[AccelerometerSensor[_A,DEFAULT,Z]]]],"
+                + "DebugAction[SensorExpr[GetSampleSensor[AccelerometerSensor[_A,DEFAULT,STRENGTH]]]]]]]";
         String[] expectedToBeInConfigAst =
             {
-                "ConfigurationComponent[componentType=ACCELEROMETER,isActor=true,userDefinedName=Acc,portName=Acc,componentProperties={}]"
+                "ConfigurationComponent[componentType=ACCELEROMETER,isActor=true,userDefinedName=_A,portName=_A,componentProperties={}]"
             };
 
         Project project =
             UnitTestHelper
-                .setupWithConfigAndProgramXML(testFactory, Util.readResourceContent("/transform/old_accelerometer.xml"), OLD_CONFIGURATION_XML)
+                .setupWithConfigAndProgramXML(testFactory, Util.readResourceContent("/transform/two2three/old_accelerometer.xml"), OLD_CONFIGURATION_XML)
 
                 .build();
 
@@ -315,11 +315,11 @@ public class MicrobitTwo2ThreeTransformerTest {
                 + "PlayNoteAction[duration=125,frequency=261.626]]]]";
         String[] expectedToBeInConfigAst =
             {
-                "ConfigurationComponent[componentType=BUZZER,isActor=true,userDefinedName=BZ,portName=BZ,componentProperties={}]"
+                "ConfigurationComponent[componentType=BUZZER,isActor=true,userDefinedName=BZ,portName=BZ,componentProperties={PIN1=NO_PORT}]"
             };
 
         Project project =
-            UnitTestHelper.setupWithConfigAndProgramXML(testFactory, Util.readResourceContent("/transform/old_sounds.xml"), OLD_CONFIGURATION_XML).build();
+            UnitTestHelper.setupWithConfigAndProgramXML(testFactory, Util.readResourceContent("/transform/two2three/old_sounds.xml"), OLD_CONFIGURATION_XML).build();
 
         new MbedTwo2ThreeTransformerWorker().execute(project);
         UnitTestHelper.checkAstEquality(project.getProgramAst().getTree().toString(), expectedProgramAst);
@@ -424,7 +424,7 @@ public class MicrobitTwo2ThreeTransformerTest {
 
         Project project =
             UnitTestHelper
-                .setupWithConfigAndProgramXML(testFactory, Util.readResourceContent("/transform/microbit/old_pins_sensor.xml"), OLD_CONFIGURATION_XML)
+                .setupWithConfigAndProgramXML(testFactory, Util.readResourceContent("/transform/two2three/microbit/old_pins_sensor.xml"), OLD_CONFIGURATION_XML)
 
                 .build();
 
@@ -440,7 +440,7 @@ public class MicrobitTwo2ThreeTransformerTest {
                 + "WaitStmt[(repeat[WAIT,SensorExpr[GetSampleSensor[GestureSensor[NO_PORT,UP,EMPTY_SLOT]]]])]]]]";
 
         Project project =
-            UnitTestHelper.setupWithConfigAndProgramXML(testFactory, Util.readResourceContent("/transform/old_wait_for.xml"), OLD_CONFIGURATION_XML).build();
+            UnitTestHelper.setupWithConfigAndProgramXML(testFactory, Util.readResourceContent("/transform/two2three/old_wait_for.xml"), OLD_CONFIGURATION_XML).build();
 
         new MbedTwo2ThreeTransformerWorker().execute(project);
         UnitTestHelper.checkAstEquality(project.getProgramAst().getTree().toString(), expectedProgramAst);

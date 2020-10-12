@@ -1,6 +1,6 @@
 <export xmlns="http://de.fhg.iais.roberta.blockly">
   <program>
-      <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="wedo" xmlversion="3.0" description="" tags="">
+      <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="wedo" xmlversion="3.1" description="" tags="">
           <instance x="384" y="50">
               <block type="robControls_start" id="s1@(~ECy[JeARCQ}tZPY" intask="true" deletable="false">
                   <mutation declare="false" />
@@ -23,7 +23,7 @@
       </block_set>
   </program>
     <config>
-        <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="wedo" xmlversion="3.0" description="" tags="">
+        <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="wedo" xmlversion="3.1" description="" tags="">
             <instance x="42" y="10">
                 <block type="robBrick_WeDo-Brick" id="1" intask="true" deletable="false">
                     <field name="VAR">W</field>

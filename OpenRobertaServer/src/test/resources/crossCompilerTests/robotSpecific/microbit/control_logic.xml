@@ -1,6 +1,6 @@
 <export xmlns="http://de.fhg.iais.roberta.blockly">
     <program>
-        <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="microbit" xmlversion="3.0" description="" tags="">
+        <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="microbit" xmlversion="3.1" description="" tags="">
             <instance x="541" y="54">
                 <block type="robControls_start" id="C_v_MM?4EfAv7Y|0Rlg`" intask="true" deletable="false">
                     <mutation declare="true"></mutation>
@@ -545,7 +545,7 @@
         </block_set>
     </program>
     <config>
-        <block_set robottype="microbit" xmlversion="3.0" description="" tags="" xmlns="http://de.fhg.iais.roberta.blockly">
+        <block_set robottype="microbit" xmlversion="3.1" description="" tags="" xmlns="http://de.fhg.iais.roberta.blockly">
             <instance x="1136" y="-1065">
                 <block type="robConf_accelerometer" id="#(ufvG,s^FcqI,aFn/A{" intask="true">
                     <field name="NAME">Acc</field>

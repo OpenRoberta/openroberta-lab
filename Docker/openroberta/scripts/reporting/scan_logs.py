@@ -9,8 +9,8 @@ from util import *
 from entry import *
 from workflows import *
 
-baseDir = 'D:/ProjekteArbeit/OPEN-ROBERTA/log'
-lfile = 'l12.log'
+baseDir = 'D:/data/openroberta-lab/server/master/admin/logging/statistics-2020'
+lfile = '08.log'
 sfile = 's12.log'
 zfile = 's09.log.zip'
 ofile = 's10.log'
@@ -31,7 +31,7 @@ if __name__ == "__main__":
     #processRobotUsage(fromTime,untilTime,sfile,baseDir)
     #processSessions('2019-10-08 03:00:00','9999',ofile,baseDir)
     #sessionsAfterLastServerRestart(fromTime,untilTime,sfile)
-    groupEntriesByTime("2019-12-12 06",untilTime,'m',baseDir,sfile,None)
+    groupEntriesByTime(fromTime,untilTime,'h',baseDir,lfile,None)
     
     end = time.time()
     print("run for {:.3f} sec".format(end - start))

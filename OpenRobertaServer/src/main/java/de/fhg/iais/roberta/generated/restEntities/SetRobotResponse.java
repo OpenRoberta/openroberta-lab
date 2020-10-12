@@ -20,6 +20,8 @@ public class SetRobotResponse extends BaseResponse {
     protected boolean simDefined = false;
     protected boolean multipleSim;
     protected boolean multipleSimDefined = false;
+    protected boolean neuralNetwork;
+    protected boolean neuralNetworkDefined = false;
     protected String connection;
     protected String vendor;
     protected boolean configurationUsed;
@@ -54,7 +56,7 @@ public class SetRobotResponse extends BaseResponse {
     /**
      * the response for the /setRobot REST request
      */
-    public static SetRobotResponse makeFromProperties(String cmd,String rc,String message,String cause,JSONObject parameters,String initToken,long serverTime,String serverVersion,long robotWait,String robotBattery,String robotName,String robotVersion,String robotFirmwareName,JSONObject robotSensorvalues,int robotNepoexitvalue,String robotState,String robot,JSONObject program,JSONObject configuration,boolean sim,boolean multipleSim,String connection,String vendor,boolean configurationUsed,String commandLine,String signature,String sourceCodeFileExtension,String binaryFileExtension,boolean hasWlan,String firmwareDefault) {
+    public static SetRobotResponse makeFromProperties(String cmd,String rc,String message,String cause,JSONObject parameters,String initToken,long serverTime,String serverVersion,long robotWait,String robotBattery,String robotName,String robotVersion,String robotFirmwareName,JSONObject robotSensorvalues,int robotNepoexitvalue,String robotState,boolean notificationsAvailable,String robot,JSONObject program,JSONObject configuration,boolean sim,boolean multipleSim,boolean neuralNetwork,String connection,String vendor,boolean configurationUsed,String commandLine,String signature,String sourceCodeFileExtension,String binaryFileExtension,boolean hasWlan,String firmwareDefault) {
         SetRobotResponse entity = new SetRobotResponse();
         entity.setCmd(cmd);
         entity.setRc(rc);
@@ -72,11 +74,13 @@ public class SetRobotResponse extends BaseResponse {
         entity.setRobotSensorvalues(robotSensorvalues);
         entity.setRobotNepoexitvalue(robotNepoexitvalue);
         entity.setRobotState(robotState);
+        entity.setNotificationsAvailable(notificationsAvailable);
         entity.setRobot(robot);
         entity.setProgram(program);
         entity.setConfiguration(configuration);
         entity.setSim(sim);
         entity.setMultipleSim(multipleSim);
+        entity.setNeuralNetwork(neuralNetwork);
         entity.setConnection(connection);
         entity.setVendor(vendor);
         entity.setConfigurationUsed(configurationUsed);
@@ -138,6 +142,8 @@ public class SetRobotResponse extends BaseResponse {
                     setRobotNepoexitvalue(jsonO.optInt(key));
                 } else if ("robot.state".equals(key)) {
                     setRobotState(jsonO.optString(key));
+                } else if ("notifications.available".equals(key)) {
+                    setNotificationsAvailable(jsonO.optBoolean(key));
                 } else if ("robot".equals(key)) {
                     setRobot(jsonO.getString(key));
                 } else if ("program".equals(key)) {
@@ -148,6 +154,8 @@ public class SetRobotResponse extends BaseResponse {
                     setSim(jsonO.getBoolean(key));
                 } else if ("multipleSim".equals(key)) {
                     setMultipleSim(jsonO.getBoolean(key));
+                } else if ("neuralNetwork".equals(key)) {
+                    setNeuralNetwork(jsonO.optBoolean(key));
                 } else if ("connection".equals(key)) {
                     setConnection(jsonO.getString(key));
                 } else if ("vendor".equals(key)) {
@@ -357,6 +365,37 @@ public class SetRobotResponse extends BaseResponse {
         return this;
     }
     
+    /**
+     * GET neuralNetwork. Object must be immutable. Never return null or an undefined/default value.
+     */
+    public boolean getNeuralNetwork() {
+        if (!this.immutable) {
+            throw new RuntimeException("no neuralNetwork from an object under construction: " + toString());
+        }
+        return this.neuralNetwork;
+    }
+
+    /**
+     * is the property defined? The property maybe undefined as it is not a required property
+     *
+     * @return true if the property is defined (has been set)
+     */
+    public boolean neuralNetworkDefined() {
+        return this.neuralNetworkDefined;
+    }
+
+    /**
+     * SET neuralNetwork. Object must be mutable.
+     */
+    public SetRobotResponse setNeuralNetwork(boolean neuralNetwork) {
+        if (this.immutable) {
+            throw new RuntimeException("neuralNetwork assigned to an immutable object: " + toString());
+        }
+        this.neuralNetwork = neuralNetwork;
+        this.neuralNetworkDefined = true;
+        return this;
+    }
+
     /**
      * GET connection. Object must be immutable. Never return null or an undefined/default value.
      */
@@ -626,11 +665,17 @@ public class SetRobotResponse extends BaseResponse {
             if (this.robotState != null) {
                 jsonO.put("robot.state", this.robotState);
             }
+            if (this.notificationsAvailableDefined) {
+                jsonO.put("notifications.available", this.notificationsAvailable);
+            }
             jsonO.put("robot", this.robot);
             jsonO.put("program", this.program);
             jsonO.put("configuration", this.configuration);
             jsonO.put("sim", this.sim);
             jsonO.put("multipleSim", this.multipleSim);
+            if (this.neuralNetworkDefined) {
+                jsonO.put("neuralNetwork", this.neuralNetwork);
+            }
             jsonO.put("connection", this.connection);
             jsonO.put("vendor", this.vendor);
             jsonO.put("configurationUsed", this.configurationUsed);
@@ -654,7 +699,7 @@ public class SetRobotResponse extends BaseResponse {
     
     @Override
     public String toString() {
-        return "SetRobotResponse [immutable=" + this.immutable + ", cmd=" + this.cmd + ", rc=" + this.rc + ", message=" + this.message + ", cause=" + this.cause + ", parameters=" + this.parameters + ", initToken=" + this.initToken + ", serverTime=" + this.serverTime + ", serverVersion=" + this.serverVersion + ", robotWait=" + this.robotWait + ", robotBattery=" + this.robotBattery + ", robotName=" + this.robotName + ", robotVersion=" + this.robotVersion + ", robotFirmwareName=" + this.robotFirmwareName + ", robotSensorvalues=" + this.robotSensorvalues + ", robotNepoexitvalue=" + this.robotNepoexitvalue + ", robotState=" + this.robotState + ", robot=" + this.robot + ", program=" + this.program + ", configuration=" + this.configuration + ", sim=" + this.sim + ", multipleSim=" + this.multipleSim + ", connection=" + this.connection + ", vendor=" + this.vendor + ", configurationUsed=" + this.configurationUsed + ", commandLine=" + this.commandLine + ", signature=" + this.signature + ", sourceCodeFileExtension=" + this.sourceCodeFileExtension + ", binaryFileExtension=" + this.binaryFileExtension + ", hasWlan=" + this.hasWlan + ", firmwareDefault=" + this.firmwareDefault + " ]";
+        return "SetRobotResponse [immutable=" + this.immutable + ", cmd=" + this.cmd + ", rc=" + this.rc + ", message=" + this.message + ", cause=" + this.cause + ", parameters=" + this.parameters + ", initToken=" + this.initToken + ", serverTime=" + this.serverTime + ", serverVersion=" + this.serverVersion + ", robotWait=" + this.robotWait + ", robotBattery=" + this.robotBattery + ", robotName=" + this.robotName + ", robotVersion=" + this.robotVersion + ", robotFirmwareName=" + this.robotFirmwareName + ", robotSensorvalues=" + this.robotSensorvalues + ", robotNepoexitvalue=" + this.robotNepoexitvalue + ", robotState=" + this.robotState + ", notificationsAvailable=" + this.notificationsAvailable + ", robot=" + this.robot + ", program=" + this.program + ", configuration=" + this.configuration + ", sim=" + this.sim + ", multipleSim=" + this.multipleSim + ", neuralNetwork=" + this.neuralNetwork + ", connection=" + this.connection + ", vendor=" + this.vendor + ", configurationUsed=" + this.configurationUsed + ", commandLine=" + this.commandLine + ", signature=" + this.signature + ", sourceCodeFileExtension=" + this.sourceCodeFileExtension + ", binaryFileExtension=" + this.binaryFileExtension + ", hasWlan=" + this.hasWlan + ", firmwareDefault=" + this.firmwareDefault + " ]";
     }
     @Override
     public int hashCode() {

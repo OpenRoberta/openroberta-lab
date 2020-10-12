@@ -88,6 +88,7 @@ import de.fhg.iais.roberta.syntax.lang.stmt.ExprStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.FunctionStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.IfStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.MethodStmt;
+import de.fhg.iais.roberta.syntax.lang.stmt.NNStepStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.RepeatStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.SensorStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtFlowCon;
@@ -117,8 +118,7 @@ import de.fhg.iais.roberta.visitor.lang.ILanguageVisitor;
 /**
  * A helper class for unit tests to validate that all ASTs built from blockly XML are using compatible types.
  * <p>
- * This helper can be used in tests to validate the constraints on blockly toolboxes (generic ones and robot specific
- * ones).
+ * This helper can be used in tests to validate the constraints on blockly toolboxes (generic ones and robot specific ones).
  * </p>
  */
 public class TypecheckVisitor implements ILanguageVisitor<BlocklyType>, ISensorVisitor<BlocklyType>, IAllActorsVisitor<BlocklyType> {
@@ -299,6 +299,11 @@ public class TypecheckVisitor implements ILanguageVisitor<BlocklyType>, ISensorV
 
     @Override
     public BlocklyType visitIfStmt(IfStmt<BlocklyType> ifStmt) {
+        return null;
+    }
+
+    @Override
+    public BlocklyType visitNNStepStmt(NNStepStmt<BlocklyType> nnStepStmt) {
         return null;
     }
 

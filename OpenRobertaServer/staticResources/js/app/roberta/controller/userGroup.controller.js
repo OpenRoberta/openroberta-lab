@@ -45,8 +45,6 @@ define([ 'exports', 'log', 'message', 'comm', 'util', 'user.model', 'userGroup.m
         initUserGroupMemberListTable();
         initUserGroupMemberEvents();
         initAddMembersToGroupEvents();
-        
-        LOG.info('UserGroup list-view initialized.');
     }
     exports.init = init;
     

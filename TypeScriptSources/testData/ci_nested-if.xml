@@ -1,0 +1,157 @@
+<block_set robottype="wedo" xmlversion="3.1"
+    description="ROBOT&lt;div&gt;WeDo&lt;/div&gt;&lt;div&gt;START-RESULT&lt;/div&gt;&lt;div&gt;show &quot;1&quot;&lt;/div&gt;&lt;div&gt;END-RESULT&lt;/div&gt;"
+    tags="" xmlns="http://de.fhg.iais.roberta.blockly">
+    <instance x="187" y="64">
+        <block type="robControls_start" id="BU!ekEC{V:dah/IAHF-W" intask="true" deletable="false">
+            <mutation declare="true" />
+            <field name="DEBUG">FALSE</field>
+            <statement name="ST">
+                <block type="robGlobalVariables_declare" id="djrC7p]G1;o#(yqr7t1A" intask="true" deletable="false" movable="false">
+                    <mutation next="false" declaration_type="Number" />
+                    <field name="VAR">x</field>
+                    <field name="TYPE">Number</field>
+                    <value name="VALUE">
+                        <block type="math_number" id="`nW3`_OY!0l:@2p0P%ai" intask="true">
+                            <field name="NUM">0</field>
+                        </block>
+                    </value>
+                </block>
+            </statement>
+        </block>
+        <block type="robControls_ifElse" id="#{BHXno0*A=aS9bu]wsM" intask="true">
+            <mutation elseif="1" else="1" />
+            <repetitions>
+                <value name="IF0">
+                    <block type="logic_compare" id="QTNwj4rP1;ojKh;IK_1A" intask="true">
+                        <field name="OP">EQ</field>
+                        <value name="A">
+                            <block type="math_number" id="MjAT*9l}XYNWTv.O:`2k" intask="true">
+                                <field name="NUM">1</field>
+                            </block>
+                        </value>
+                        <value name="B">
+                            <block type="math_number" id="~_yIIBq=Sla(ai7oFa.N" intask="true">
+                                <field name="NUM">0</field>
+                            </block>
+                        </value>
+                    </block>
+                </value>
+                <statement name="DO0">
+                    <block type="variables_set" id="mcX4agNuT8//PvM6eD/]" intask="true">
+                        <mutation datatype="Number" />
+                        <field name="VAR">x</field>
+                        <value name="VALUE">
+                            <block type="math_number" id="WE26q%KD!6YS;oXt=+SI" intask="true">
+                                <field name="NUM">-1</field>
+                            </block>
+                        </value>
+                    </block>
+                </statement>
+                <value name="IF1">
+                    <block type="logic_compare" id="vk3Qf0yvd;QG|u*xhcBS" intask="true">
+                        <field name="OP">EQ</field>
+                        <value name="A">
+                            <block type="math_number" id="_8MBxUb5-1#OcOYT-/8~" intask="true">
+                                <field name="NUM">0</field>
+                            </block>
+                        </value>
+                        <value name="B">
+                            <block type="math_number" id="cjV7:S0WUx[M2GM(].d5" intask="true">
+                                <field name="NUM">0</field>
+                            </block>
+                        </value>
+                    </block>
+                </value>
+                <statement name="DO1">
+                    <block type="robControls_ifElse" id="Hu8gn^BAB?@va{8:EiT6" intask="true">
+                        <mutation elseif="1" else="1" />
+                        <repetitions>
+                            <value name="IF0">
+                                <block type="logic_compare" id=".w34i];^-A]M;}xDx`t8" intask="true">
+                                    <field name="OP">EQ</field>
+                                    <value name="A">
+                                        <block type="math_number" id="q4R:8Qv/a#MK7jPxuHpa" intask="true">
+                                            <field name="NUM">1</field>
+                                        </block>
+                                    </value>
+                                    <value name="B">
+                                        <block type="math_number" id="^)WuBqx:I@Q#+6?(ifmB" intask="true">
+                                            <field name="NUM">0</field>
+                                        </block>
+                                    </value>
+                                </block>
+                            </value>
+                            <statement name="DO0">
+                                <block type="variables_set" id="mD8sFOjuwwgofXBX5zK_" intask="true">
+                                    <mutation datatype="Number" />
+                                    <field name="VAR">x</field>
+                                    <value name="VALUE">
+                                        <block type="math_number" id="Q3Zos^0~]v3(_o}LmffI" intask="true">
+                                            <field name="NUM">-1</field>
+                                        </block>
+                                    </value>
+                                </block>
+                            </statement>
+                            <value name="IF1">
+                                <block type="logic_compare" id="I%/OyH3C3pqY(ke+eZ.T" intask="true">
+                                    <field name="OP">EQ</field>
+                                    <value name="A">
+                                        <block type="math_number" id="J9PQ[b9H}!ECduDfE=pu" intask="true">
+                                            <field name="NUM">0</field>
+                                        </block>
+                                    </value>
+                                    <value name="B">
+                                        <block type="math_number" id="FmXI5CGKAHiYec2Lq16h" intask="true">
+                                            <field name="NUM">0</field>
+                                        </block>
+                                    </value>
+                                </block>
+                            </value>
+                            <statement name="DO1">
+                                <block type="variables_set" id="G!%I(dT6xO5c|OH=~V0@" intask="true">
+                                    <mutation datatype="Number" />
+                                    <field name="VAR">x</field>
+                                    <value name="VALUE">
+                                        <block type="math_number" id="lI.qr3`R8df}4exfY634" intask="true">
+                                            <field name="NUM">1</field>
+                                        </block>
+                                    </value>
+                                </block>
+                            </statement>
+                            <statement name="ELSE">
+                                <block type="variables_set" id="#B_qn,ft={q0,%ARyL?N" intask="true">
+                                    <mutation datatype="Number" />
+                                    <field name="VAR">x</field>
+                                    <value name="VALUE">
+                                        <block type="math_number" id="u#BC0drRNy1pvQpRj_1)" intask="true">
+                                            <field name="NUM">-1</field>
+                                        </block>
+                                    </value>
+                                </block>
+                            </statement>
+                        </repetitions>
+                    </block>
+                </statement>
+                <statement name="ELSE">
+                    <block type="variables_set" id="?R*uQny([n:@d4n:mMAe" intask="true">
+                        <mutation datatype="Number" />
+                        <field name="VAR">x</field>
+                        <value name="VALUE">
+                            <block type="math_number" id="(*}uQ,ew1slyYJBS`wyc" intask="true">
+                                <field name="NUM">-1</field>
+                            </block>
+                        </value>
+                    </block>
+                </statement>
+            </repetitions>
+        </block>
+        <block type="robActions_display_text" id="wme]W}7XbeE5UF2Tq{X*" intask="true">
+            <value name="OUT">
+                <block type="variables_get" id="8B4@7a8(l7dE?-P1VWi:" intask="true">
+                    <mutation datatype="Number" />
+                    <field name="VAR">x</field>
+                </block>
+            </value>
+        </block>
+    </instance>
+</block_set>

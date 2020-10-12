@@ -79,6 +79,7 @@ import de.fhg.iais.roberta.syntax.lang.stmt.AssignStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.DebugAction;
 import de.fhg.iais.roberta.syntax.lang.stmt.IfStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.MethodStmt;
+import de.fhg.iais.roberta.syntax.lang.stmt.NNStepStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.RepeatStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtFlowCon;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtList;
@@ -118,16 +119,14 @@ import de.fhg.iais.roberta.visitor.hardware.sensor.ISensorVisitor;
 import de.fhg.iais.roberta.visitor.lang.ILanguageVisitor;
 
 /**
- * General interface for collectors. Collectors collect different language or hardware aspects needed in the code generation.
- * By default, visits all language and hardware expressions and their children.
- * TODO use this to split {@link de.fhg.iais.roberta.visitor.validate.AbstractCollectorVisitor} and {@link AbstractUsedHardwareCollectorVisitor} into
- * TODO multiple individual visitors instead of the current one in all solution
+ * General interface for collectors. Collectors collect different language or hardware aspects needed in the code generation. By default, visits all language
+ * and hardware expressions and their children. TODO use this to split {@link de.fhg.iais.roberta.visitor.validate.AbstractCollectorVisitor} and
+ * {@link AbstractUsedHardwareCollectorVisitor} into TODO multiple individual visitors instead of the current one in all solution
  */
 public interface ICollectorVisitor extends ISensorVisitor<Void>, IAllActorsVisitor<Void>, ILanguageVisitor<Void> {
 
     /**
-     * Collection method which should be run over the program in the collector visitor's constructor.
-     * Should effectively be final.
+     * Collection method which should be run over the program in the collector visitor's constructor. Should effectively be final.
      *
      * @param phrasesSet the phrases of the program
      */
@@ -246,6 +245,11 @@ public interface ICollectorVisitor extends ISensorVisitor<Void>, IAllActorsVisit
 
         // TODO is this needed?
         //ifStmt.getElseList().get().forEach(expr -> expr.visit(this));
+        return null;
+    }
+
+    @Override
+    default Void visitNNStepStmt(NNStepStmt<Void> nnStepStmt) {
         return null;
     }
 

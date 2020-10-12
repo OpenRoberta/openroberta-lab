@@ -60,7 +60,7 @@ public class DebugAction<V> extends Stmt<V> {
     public Block astToBlock() {
         Block jaxbDestination = new Block();
         Ast2JaxbHelper.setBasicProperties(this, jaxbDestination);
-        Ast2JaxbHelper.addValue(jaxbDestination, BlocklyConstants.OUT, this.value);
+        Ast2JaxbHelper.addValue(jaxbDestination, BlocklyConstants.OUT, value);
         return jaxbDestination;
     }
 

@@ -1,4 +1,4 @@
-<block_set xmlns="http://de.fhg.iais.roberta.blockly" description="" robottype="sensebox" tags="" xmlversion="3.0">
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" description="" robottype="sensebox" tags="" xmlversion="3.1">
     <instance x="506" y="1342">
         <block deletable="false" id="9L:HO||CjNS(,!YiSk[P" intask="true" type="robConf_accelerometer">
             <field name="NAME">B</field>

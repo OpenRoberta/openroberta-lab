@@ -1,0 +1,201 @@
+<block_set robottype="wedo" xmlversion="3.1"
+    description="ROBOT &lt;div&gt;WeDo &lt;/div&gt;&lt;div&gt;START-RESULT &lt;/div&gt;&lt;div&gt;robot: W, port: 1 motor speed 30 for 1000 msec &lt;/div&gt;&lt;div&gt;robot: W, port: 1 motor stop &lt;/div&gt;&lt;div&gt;robot: W, port: 1 motor speed 30 w.o. duration &lt;/div&gt;&lt;div&gt;robot: W, port: 1 motor stop &lt;/div&gt;&lt;div&gt;robot: W piezo: , frequency: 261.626, duration: 2000 &lt;/div&gt;&lt;div&gt;robot: W piezo: , frequency: 300, duration: 100 &lt;/div&gt;&lt;div&gt;robot: W, port: undefined led on color 9 &lt;/div&gt;&lt;div&gt;robot: W, port: undefined led off &lt;/div&gt;&lt;div&gt;show &quot;s enthält s&quot; &lt;/div&gt;&lt;div&gt;END-RESULT&lt;/div&gt;"
+    tags="" xmlns="http://de.fhg.iais.roberta.blockly">
+    <instance x="10" y="75">
+        <block type="robControls_start" id="aR0!L0j7-ZXQB0|F;!xO" intask="true" deletable="false">
+            <mutation declare="true" />
+            <field name="DEBUG">FALSE</field>
+            <statement name="ST">
+                <block type="robGlobalVariables_declare" id="mtidEAsTuOxDFx20r5U." intask="true" deletable="false" movable="false">
+                    <mutation next="true" declaration_type="Number" />
+                    <field name="VAR">x</field>
+                    <field name="TYPE">Number</field>
+                    <value name="VALUE">
+                        <block type="math_number" id="Q9T,1ga}_oNEGSd{S#ps" intask="true">
+                            <field name="NUM">0</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="robGlobalVariables_declare" id="#2bX,Ra|h8x;^a^.!f|-" intask="true" deletable="false" movable="false">
+                    <mutation next="false" declaration_type="String" />
+                    <field name="VAR">s</field>
+                    <field name="TYPE">String</field>
+                    <value name="VALUE">
+                        <block type="text" id="}ZM|.iC6;[8FiVL}A=]1" intask="true">
+                            <field name="TEXT">s</field>
+                        </block>
+                    </value>
+                </block>
+            </statement>
+        </block>
+        <block type="robActions_motor_on_for" id="-[6]}00{.vn.Zy!/3^k;" intask="true">
+            <field name="MOTORPORT">M</field>
+            <value name="POWER">
+                <block type="math_number" id="CL98u4qVl760Juo.oS`4" intask="true">
+                    <field name="NUM">30</field>
+                </block>
+            </value>
+            <value name="VALUE">
+                <block type="math_number" id="#qi!QJhwbXSsU=S*rO6p" intask="true">
+                    <field name="NUM">1000</field>
+                </block>
+            </value>
+        </block>
+        <block type="robActions_motor_on" id="6N[zyEa@YlFGJ6#uoM-=" intask="true">
+            <field name="MOTORPORT">M</field>
+            <value name="POWER">
+                <block type="math_number" id="_ULP#vB?gmEW_Cp`hv|k" intask="true">
+                    <field name="NUM">30</field>
+                </block>
+            </value>
+        </block>
+        <block type="robControls_wait_time" id="o0tJv2#UN5t,tL8y2B7#" intask="true">
+            <value name="WAIT">
+                <block type="math_number" id="=?dVJ)B!zs|d|wC3(!Tw" intask="true">
+                    <field name="NUM">500</field>
+                </block>
+            </value>
+        </block>
+        <block type="robActions_motor_stop" id="%k#0G,Y_/THkVLq7|Y!b" intask="true">
+            <field name="MOTORPORT">M</field>
+        </block>
+        <block type="robActions_display_clear" id="dfQIzGlqC5Cr(C?+KgT3" intask="true" />
+        <block type="mbedActions_play_note" id="qaHf%9K]mv#5`%AL+88s" intask="true">
+            <field name="ACTORPORT">SUM</field>
+            <field name="DURATION">2000</field>
+            <field name="FREQUENCE">261.626</field>
+        </block>
+        <block type="robActions_play_tone" id="1)Pw!MUMt2#LKZj^ytS5" intask="true">
+            <field name="ACTORPORT">SUM</field>
+            <value name="FREQUENCE">
+                <block type="math_number" id="DFACdxKpr2vr9E3!=)Nw" intask="true">
+                    <field name="NUM">300</field>
+                </block>
+            </value>
+            <value name="DURATION">
+                <block type="math_number" id="B5}Y7XNy[t_sH/*ktHWq" intask="true">
+                    <field name="NUM">100</field>
+                </block>
+            </value>
+        </block>
+        <block type="robActions_led_on" id="?YZ:j%;b,-c^s`uNaEeC" intask="true">
+            <field name="ACTORPORT">LED</field>
+            <value name="COLOR">
+                <block type="robColour_picker" id="GoD~*}cot7JS3!u1w)V+" intask="true">
+                    <field name="COLOUR">#ff0000</field>
+                </block>
+            </value>
+        </block>
+        <block type="robControls_wait_time" id="Bb/#mrKucCho,QN!L1f8" intask="true">
+            <value name="WAIT">
+                <block type="math_number" id="aYlN+Wfm2;_{(H@j*`GH" intask="true">
+                    <field name="NUM">500</field>
+                </block>
+            </value>
+        </block>
+        <block type="robActions_led_off" id="F+!)w]?zVv]{~apRC[l," intask="true">
+            <field name="ACTORPORT">LED</field>
+        </block>
+        <block type="robSensors_timer_reset" id="xEI:.!_D=0uA{f{t`3`g" intask="true">
+            <field name="SENSORPORT">1</field>
+        </block>
+        <block type="robControls_wait_time" id="*BdbSz@R?|])B0jc2=@r" intask="true">
+            <value name="WAIT">
+                <block type="math_number" id="6eo^9]3pR:(*o#[l~cY!" intask="true">
+                    <field name="NUM">500</field>
+                </block>
+            </value>
+        </block>
+        <block type="robControls_wait_for" id="tC*QrhpGMWoBw7}Hm^XW" intask="true">
+            <value name="WAIT0">
+                <block type="logic_compare" id="*6}P:dEI=sJMDt0XKGNw" intask="true">
+                    <field name="OP">LT</field>
+                    <value name="A">
+                        <block type="robSensors_getSample" id="*pe#LSokk4?O%2zcIk_l" intask="true">
+                            <mutation input="INFRARED_DISTANCE" />
+                            <field name="SENSORTYPE">INFRARED_DISTANCE</field>
+                            <field name="SENSORPORT">IRS</field>
+                            <field name="SLOT"></field>
+                        </block>
+                    </value>
+                    <value name="B">
+                        <block type="math_number" id="B?cLG[QK@KoA92uAk.^]" intask="true">
+                            <field name="NUM">10</field>
+                        </block>
+                    </value>
+                </block>
+            </value>
+        </block>
+        <block type="robControls_wait_for" id="=MW~^G5pJ?4]g!Pj%dbd" intask="true">
+            <value name="WAIT0">
+                <block type="logic_compare" id="S@C57BIk]rzLo~PM8Cu8" intask="true">
+                    <field name="OP">GT</field>
+                    <value name="A">
+                        <block type="robSensors_getSample" id="m=x7.?];k6wWgW%xskg8" intask="true">
+                            <mutation input="TIMER_VALUE" />
+                            <field name="SENSORTYPE">TIMER_VALUE</field>
+                            <field name="SENSORPORT">1</field>
+                            <field name="SLOT"></field>
+                        </block>
+                    </value>
+                    <value name="B">
+                        <block type="math_number" id="@c.OPDs5v%u+c,LwLdh|" intask="true">
+                            <field name="NUM">500</field>
+                        </block>
+                    </value>
+                </block>
+            </value>
+        </block>
+        <block type="robControls_wait" id="|4g~0]xuo2_797#1{#Gc" intask="true">
+            <value name="WAIT0">
+                <block type="robSensors_gyro_getSample" id=")hM%sa4O-GhHaA37|{tM" intask="true">
+                    <mutation mode="TILTED" />
+                    <field name="MODE">TILTED</field>
+                    <field name="SENSORPORT">KR</field>
+                    <field name="SLOT">UP</field>
+                </block>
+            </value>
+        </block>
+        <block type="robControls_wait" id="wX]-%kr#gQI~vBTwlj59" intask="true">
+            <value name="WAIT0">
+                <block type="robSensors_key_getSample" id="@DMrqMKY6%sxB!PUM]f," intask="true">
+                    <mutation mode="PRESSED" />
+                    <field name="MODE">PRESSED</field>
+                    <field name="SENSORPORT">B</field>
+                    <field name="SLOT"></field>
+                </block>
+            </value>
+        </block>
+        <block type="text_comment" id="tts4G,vd,(M~JwGG)+zP" intask="true">
+            <field name="TEXT">conditionals and loops are covered elsewhere</field>
+        </block>
+        <block type="variables_set" id="W711Dc!!H{f.p.q5[{g;" intask="true">
+            <mutation datatype="String" />
+            <field name="VAR">s</field>
+            <value name="VALUE">
+                <block type="robText_join" id="G877yBxcyxl_eSDQ;Dz`" intask="true">
+                    <mutation items="2" />
+                    <value name="ADD0">
+                        <block type="text" id="/aF7+F|:{B,h|lyC`](q" intask="true">
+                            <field name="TEXT">s enthält</field>
+                        </block>
+                    </value>
+                    <value name="ADD1">
+                        <block type="variables_get" id="Pu(5,9k~C3(9FOGvpUCb" intask="true">
+                            <mutation datatype="String" />
+                            <field name="VAR">s</field>
+                        </block>
+                    </value>
+                </block>
+            </value>
+        </block>
+        <block type="robActions_display_text" id="2?BUiOHTV~}*IR(LquP7" intask="true">
+            <value name="OUT">
+                <block type="variables_get" id="Wiv`p3tGo?E0HQ/Rm;!c" intask="true">
+                    <mutation datatype="String" />
+                    <field name="VAR">s</field>
+                </block>
+            </value>
+        </block>
+    </instance>
+</block_set>

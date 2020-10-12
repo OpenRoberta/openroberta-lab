@@ -1,0 +1,233 @@
+<block_set robottype="wedo" xmlversion="3.1"
+    description="ROBOT&lt;div&gt;wedo&lt;/div&gt;&lt;div&gt;START-RESULT&lt;div&gt;show &quot;0&quot;&lt;div&gt;show &quot;1&quot;&lt;/div&gt;&lt;div&gt;show &quot;2&quot;&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp;&amp;nbsp;&lt;/div&gt;&lt;div&gt;show &quot;3&quot;&lt;/div&gt;&lt;div&gt;show &quot;3&quot;&lt;/div&gt;&lt;div&gt;show &quot;3&quot;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;show &quot;4&quot;&lt;/div&gt;&lt;div&gt;show &quot;4&quot;&lt;/div&gt;&lt;div&gt;show &quot;4&quot;&lt;/div&gt;&lt;div&gt;show &quot;4&quot;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;show &quot;0&quot;&lt;/div&gt;&lt;div&gt;show &quot;1&quot;&lt;/div&gt;&lt;div&gt;show &quot;2&quot;&lt;/div&gt;&lt;div&gt;show &quot;3&quot;&lt;/div&gt;&lt;div&gt;show &quot;4&quot;&lt;/div&gt;&lt;div&gt;show &quot;5&quot;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;show &quot;9&quot;&lt;/div&gt;&lt;/div&gt;&lt;div&gt;END-RESULT&lt;/div&gt;&lt;/div&gt;"
+    tags="" xmlns="http://de.fhg.iais.roberta.blockly">
+    <instance x="86" y="9">
+        <block type="robControls_start" id="@.*As2dFC,VdUC}Z|0[K" intask="true" deletable="false">
+            <mutation declare="false" />
+            <field name="DEBUG">FALSE</field>
+        </block>
+        <block type="robControls_loopForever" id="+aqdCZ,.CV;xFBmg~YCb" intask="true">
+            <statement name="DO">
+                <block type="robActions_display_text" id="+1RKr4~Zd20IdroJNZr{" intask="true">
+                    <value name="OUT">
+                        <block type="math_number" id=":9R4oQvv.B[G+~U1mK_t" intask="true">
+                            <field name="NUM">0</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="controls_flow_statements" id="j#3{8b6Jirw*tn0/q!h9" intask="true">
+                    <field name="FLOW">BREAK</field>
+                </block>
+            </statement>
+        </block>
+        <block type="controls_whileUntil" id="q6*TBxRl6z)eJd`N;AA[" intask="true">
+            <field name="MODE">UNTIL</field>
+            <value name="BOOL">
+                <block type="logic_compare" id="d@TRd=6!_hi6jA!+M6W]" intask="true">
+                    <field name="OP">NEQ</field>
+                    <value name="A">
+                        <block type="math_number" id="=?yOKE9o#,wR{%Q^X%KG" intask="true">
+                            <field name="NUM">0</field>
+                        </block>
+                    </value>
+                    <value name="B">
+                        <block type="math_number" id="n%[3^NdURbN#DA:f4lkm" intask="true">
+                            <field name="NUM">0</field>
+                        </block>
+                    </value>
+                </block>
+            </value>
+            <statement name="DO">
+                <block type="robActions_display_text" id="*}#Wh,q7}UgkaAqJkq/!" intask="true">
+                    <value name="OUT">
+                        <block type="math_number" id="z~]bvvw?l%Jn{xasPej6" intask="true">
+                            <field name="NUM">1</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="controls_flow_statements" id="cop9iyT[ub)#5K_J`fI," intask="true">
+                    <field name="FLOW">BREAK</field>
+                </block>
+            </statement>
+        </block>
+        <block type="controls_whileUntil" id="fh)Ge:1|gvp[e}mKRODU" intask="true">
+            <field name="MODE">WHILE</field>
+            <value name="BOOL">
+                <block type="logic_compare" id="Q)iaH+rot9Q[^RqYoMG?" intask="true">
+                    <field name="OP">EQ</field>
+                    <value name="A">
+                        <block type="math_number" id="7.tpciy8h1+6LH*TYcPY" intask="true">
+                            <field name="NUM">0</field>
+                        </block>
+                    </value>
+                    <value name="B">
+                        <block type="math_number" id="*P*;v5+=?8ZDd)1=sn_%" intask="true">
+                            <field name="NUM">0</field>
+                        </block>
+                    </value>
+                </block>
+            </value>
+            <statement name="DO">
+                <block type="robActions_display_text" id="jq0fu@]imN}9TaHQQX9_" intask="true">
+                    <value name="OUT">
+                        <block type="math_number" id="/8Wj}ot*{D:62[;).,d`" intask="true">
+                            <field name="NUM">2</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="controls_flow_statements" id="C-|*]8G{oNmreFKKYxcX" intask="true">
+                    <field name="FLOW">BREAK</field>
+                </block>
+            </statement>
+        </block>
+        <block type="controls_repeat_ext" id="{(qJzsJ?Y0stroncvpVO" intask="true">
+            <value name="TIMES">
+                <block type="math_number" id="{w|c3vJcXQ@2g!=f*aM~" intask="true">
+                    <field name="NUM">3</field>
+                </block>
+            </value>
+            <statement name="DO">
+                <block type="robActions_display_text" id="nbKjFrbxD=0*uC@~y2A*" intask="true">
+                    <value name="OUT">
+                        <block type="math_number" id="Y`A_6?r`J7E^ZOVj^^*]" intask="true">
+                            <field name="NUM">3</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="controls_flow_statements" id="sA{681__WcFamBKW/bQ]" intask="true">
+                    <field name="FLOW">CONTINUE</field>
+                </block>
+            </statement>
+        </block>
+        <block type="controls_repeat_ext" id=".GkV5(t_@tpqgG*Fy+=Q" intask="true">
+            <value name="TIMES">
+                <block type="math_number" id="+t3W-`D:DOO1d}C:oe]o" intask="true">
+                    <field name="NUM">4</field>
+                </block>
+            </value>
+            <statement name="DO">
+                <block type="robActions_display_text" id="PsExbh*Epijf]z`*pH:P" intask="true">
+                    <value name="OUT">
+                        <block type="math_number" id="#}{A;`J!sAnb:_Ene|i@" intask="true">
+                            <field name="NUM">4</field>
+                        </block>
+                    </value>
+                </block>
+            </statement>
+        </block>
+        <block type="robControls_for" id="#vbiMqMR#k{-%UTmHi%q" intask="true">
+            <field name="VAR">i</field>
+            <value name="FROM">
+                <block type="math_arithmetic" id="siOqcs0u;(DI)])=;m}2" intask="true">
+                    <field name="OP">ADD</field>
+                    <value name="A">
+                        <block type="math_number" id="Y4+/Wn#MbN;7=HBxasPK" intask="true">
+                            <field name="NUM">0</field>
+                        </block>
+                    </value>
+                    <value name="B">
+                        <block type="math_number" id="qP7O.h91;7)a];NrUr)w" intask="true">
+                            <field name="NUM">0</field>
+                        </block>
+                    </value>
+                </block>
+            </value>
+            <value name="TO">
+                <block type="math_arithmetic" id=",0=uC/Zb1ujp*1-3Xmm=" intask="true">
+                    <field name="OP">ADD</field>
+                    <value name="A">
+                        <block type="math_number" id="LVo;~sO@0;yWf2*=8qON" intask="true">
+                            <field name="NUM">4</field>
+                        </block>
+                    </value>
+                    <value name="B">
+                        <block type="math_number" id="i,^p?]QS-DU8P~MQW`2P" intask="true">
+                            <field name="NUM">2</field>
+                        </block>
+                    </value>
+                </block>
+            </value>
+            <value name="BY">
+                <block type="math_arithmetic" id="=t)2EvS(Lgv9QS*EG67e" intask="true">
+                    <field name="OP">ADD</field>
+                    <value name="A">
+                        <block type="math_number" id="CD``LE`UE(`IF#K`5Uf)" intask="true">
+                            <field name="NUM">1</field>
+                        </block>
+                    </value>
+                    <value name="B">
+                        <block type="math_number" id="1A%?YFm/0yfF?zjGeph[" intask="true">
+                            <field name="NUM">0</field>
+                        </block>
+                    </value>
+                </block>
+            </value>
+            <statement name="DO">
+                <block type="robActions_display_text" id="f:bu7mR*XYyVEp^_`=;[" intask="true">
+                    <value name="OUT">
+                        <block type="variables_get" id="bG*ew-9VCBpWZOpDVQuI" intask="true">
+                            <mutation datatype="Number" />
+                            <field name="VAR">i</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="controls_flow_statements" id="3k~P@c{%|OnCu(VI6lBx" intask="true">
+                    <field name="FLOW">CONTINUE</field>
+                </block>
+            </statement>
+        </block>
+        <block type="robControls_wait_for" id="EYeEx#aSf(jD.}JUcDDO" intask="true">
+            <mutation wait="1" />
+            <repetitions>
+                <value name="WAIT0">
+                    <block type="logic_compare" id="Ro8K-1{Q@V)HipS/-Lv?" intask="true">
+                        <field name="OP">EQ</field>
+                        <value name="A">
+                            <block type="math_number" id="]G`SlwEl=d+?_2smB_%s" intask="true">
+                                <field name="NUM">8</field>
+                            </block>
+                        </value>
+                        <value name="B">
+                            <block type="math_number" id="fQetq04j(!xPt,(h81.%" intask="true">
+                                <field name="NUM">0</field>
+                            </block>
+                        </value>
+                    </block>
+                </value>
+                <statement name="DO0">
+                    <block type="robActions_display_text" id="UxvFluLW.s`T1?{ib6%v" intask="true">
+                        <value name="OUT">
+                            <block type="math_number" id="R]%s*Df;zJa7tXA=iz/D" intask="true">
+                                <field name="NUM">8</field>
+                            </block>
+                        </value>
+                    </block>
+                </statement>
+                <value name="WAIT1">
+                    <block type="logic_compare" id="LF|L}wUO?g),YFWV=uy@" intask="true">
+                        <field name="OP">EQ</field>
+                        <value name="A">
+                            <block type="math_number" id="fflKq{=f4Q9]G`{/L%:t" intask="true">
+                                <field name="NUM">9</field>
+                            </block>
+                        </value>
+                        <value name="B">
+                            <block type="math_number" id="GO}kKf)IrOHuc4ynXg4I" intask="true">
+                                <field name="NUM">9</field>
+                            </block>
+                        </value>
+                    </block>
+                </value>
+                <statement name="DO1">
+                    <block type="robActions_display_text" id="+#B%A;z@:5`@,DtM]q4K" intask="true">
+                        <value name="OUT">
+                            <block type="math_number" id="%l=J8Y|cf[gXVx/%?*t_" intask="true">
+                                <field name="NUM">9</field>
+                            </block>
+                        </value>
+                    </block>
+                </statement>
+            </repetitions>
+        </block>
+    </instance>
+</block_set>

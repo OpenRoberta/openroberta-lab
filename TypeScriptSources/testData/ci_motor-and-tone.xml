@@ -1,0 +1,73 @@
+<block_set robottype="wedo" xmlversion="3.1"
+    description="ROBOT &lt;div&gt;WeDo &lt;/div&gt;&lt;div&gt;START-RESULT &lt;/div&gt;&lt;div&gt;robot: w, port: 1 motor speed 30 for 180 msec &lt;/div&gt;&lt;div&gt;robot: w, port: 1 motor stop &lt;/div&gt;&lt;div&gt;robot: w, port: 1 motor speed 30 w.o. duration &lt;/div&gt;&lt;div&gt;robot: w, port: 1 motor stop &lt;/div&gt;&lt;div&gt;robot: w piezo: , frequency: 300, duration: 200&lt;/div&gt;&lt;div&gt;robot: w piezo: , frequency: 261.626, duration: 2000 &lt;/div&gt;&lt;div&gt;show &quot;done&quot; &lt;/div&gt;&lt;div&gt;END-RESULT&lt;/div&gt;"
+    tags="" xmlns="http://de.fhg.iais.roberta.blockly">
+    <instance x="99" y="53">
+        <block type="robControls_start" id="BU!ekEC{V:dah/IAHF-W" intask="true" deletable="false">
+            <mutation declare="false" />
+            <field name="DEBUG">FALSE</field>
+        </block>
+        <block type="robActions_motor_on_for" id="t%V{P`HDKMCgVAXKb]q9" intask="true">
+            <field name="MOTORPORT">m</field>
+            <value name="POWER">
+                <block type="math_number" id="S/1?%4Tw6,TFwh,!@Z6s" intask="true">
+                    <field name="NUM">30</field>
+                </block>
+            </value>
+            <value name="VALUE">
+                <block type="math_number" id="4RhC:VIn~E(M:s-=L.Mf" intask="true">
+                    <field name="NUM">180</field>
+                </block>
+            </value>
+        </block>
+        <block type="robActions_motor_on" id=",u?(,%%Xc67[fE~C.rVT" intask="true">
+            <field name="MOTORPORT">m</field>
+            <value name="POWER">
+                <block type="math_number" id="R%Cgo_4`]yrvPJX}#.fP" intask="true">
+                    <field name="NUM">30</field>
+                </block>
+            </value>
+        </block>
+        <block type="robControls_wait_time" id="!*;X1z_E2G5mFO6nujon" intask="true">
+            <value name="WAIT">
+                <block type="math_number" id="xS.k*s.CmdkE+oC+#p:r" intask="true">
+                    <field name="NUM">70</field>
+                </block>
+            </value>
+        </block>
+        <block type="robActions_motor_stop" id="P^Xz;EZe6b4=[mh5avH(" intask="true">
+            <field name="MOTORPORT">m</field>
+        </block>
+        <block type="robActions_play_tone" id="RQNza8=Fh|D(7{wU7nTG" intask="true">
+            <field name="ACTORPORT">s</field>
+            <value name="FREQUENCE">
+                <block type="math_number" id="9jcwk1CO`c%eko%6=)O-" intask="true">
+                    <field name="NUM">300</field>
+                </block>
+            </value>
+            <value name="DURATION">
+                <block type="math_number" id="G1z8y_ixXc`-c;9Ab^up" intask="true">
+                    <field name="NUM">200</field>
+                </block>
+            </value>
+        </block>
+        <block type="mbedActions_play_note" id="u{fUSE.mIFdH2-a@x~C6" intask="true">
+            <field name="ACTORPORT">s</field>
+            <field name="DURATION">2000</field>
+            <field name="FREQUENCE">261.626</field>
+        </block>
+        <block type="robControls_wait_time" id=")rJzFY4r,|cyLs46{,!`" intask="true">
+            <value name="WAIT">
+                <block type="math_number" id="xZkE2lSZxjMBbpOK[h*y" intask="true">
+                    <field name="NUM">70</field>
+                </block>
+            </value>
+        </block>
+        <block type="robActions_display_text" id="YVZW#2DtViC8er8a=GIJ" intask="true">
+            <value name="OUT">
+                <block type="text" id="rE7@MvY./[8o57^4!1oB" intask="true">
+                    <field name="TEXT">done</field>
+                </block>
+            </value>
+        </block>
+    </instance>
+</block_set>

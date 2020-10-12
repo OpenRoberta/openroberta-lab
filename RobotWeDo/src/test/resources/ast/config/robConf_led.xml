@@ -1,4 +1,4 @@
-<block_set xmlns="http://de.fhg.iais.roberta.blockly" description="" robottype="wedo" tags="" xmlversion="3.0">
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" description="" robottype="wedo" tags="" xmlversion="3.1">
     <instance x="280" y="300">
         <block id="4" intask="true" type="robConf_led">
             <field name="NAME">L</field>

@@ -5,11 +5,6 @@
         <block type="robConf_analogin" />
     </category>
     <category name="TOOLBOX_SENSOR" svg="true">
-        <block type="robConf_key" />
-        <block type="robConf_light" />
-        <block type="robConf_compass" />
-        <block type="robConf_accelerometer" />
-        <block type="robConf_temperature" />
         <block type="robConf_digitalout" />
         <block type="robConf_analogout" />
     </category>

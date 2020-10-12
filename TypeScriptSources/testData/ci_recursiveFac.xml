@@ -1,0 +1,140 @@
+<block_set robottype="wedo" xmlversion="3.1"
+    description="ROBOT&lt;div&gt;wedo&lt;/div&gt;&lt;div&gt;START-RESULT&lt;/div&gt;&lt;div&gt;show &quot;720&quot;&lt;/div&gt;&lt;div&gt;show &quot;0&quot;&lt;/div&gt;&lt;div&gt;END-RESULT&lt;/div&gt;"
+    tags="" xmlns="http://de.fhg.iais.roberta.blockly">
+    <instance x="68" y="43">
+        <block type="robControls_start" id="/O;%BZQvNHXTq)5%|5=`" intask="true" deletable="false">
+            <mutation declare="true" />
+            <field name="DEBUG">FALSE</field>
+            <statement name="ST">
+                <block type="robGlobalVariables_declare" id="OTB^6P8RUn-#KC)^MX^g" intask="true" deletable="false" movable="false">
+                    <mutation next="false" declaration_type="Number" />
+                    <field name="VAR">fuenf</field>
+                    <field name="TYPE">Number</field>
+                    <value name="VALUE">
+                        <block type="math_number" id="9rN)(kVvuDB!Cn1))d5I" intask="true">
+                            <field name="NUM">5</field>
+                        </block>
+                    </value>
+                </block>
+            </statement>
+        </block>
+        <block type="robActions_display_text" id="[f5#mrVhwbS%6%ore^?}" intask="true">
+            <value name="OUT">
+                <block type="robProcedures_callreturn" id="*|V8t.c]S^CC9NvzlHa;" intask="true">
+                    <mutation name="fac" output_type="Number">
+                        <arg name="n" type="Number" />
+                    </mutation>
+                    <value name="ARG0">
+                        <block type="math_arithmetic" id="c;{gHA#YJLT~[)6jCC7]" intask="true">
+                            <field name="OP">ADD</field>
+                            <value name="A">
+                                <block type="variables_get" id="I#BJAd.5B)vg^2s~`m]X" intask="true">
+                                    <mutation datatype="Number" />
+                                    <field name="VAR">fuenf</field>
+                                </block>
+                            </value>
+                            <value name="B">
+                                <block type="math_number" id="!(q@o*V=]wRQ|;q]]|Km" intask="true">
+                                    <field name="NUM">1</field>
+                                </block>
+                            </value>
+                        </block>
+                    </value>
+                </block>
+            </value>
+        </block>
+        <block type="robActions_display_text" id="=O5@C[-n_.0!FgNFj%7P" intask="true">
+            <value name="OUT">
+                <block type="variables_get" id="6u|~Z=mpHn{t`.InM`6E" intask="true">
+                    <mutation datatype="Number" />
+                    <field name="VAR">fuenf</field>
+                </block>
+            </value>
+        </block>
+    </instance>
+    <instance x="443" y="58">
+        <block type="robProcedures_defreturn" id="(7_xH0SPPfJnITpDn:;." intask="true">
+            <mutation declare="true" return_type="Number" />
+            <field name="NAME">fac</field>
+            <field name="TYPE">Number</field>
+            <repetitions>
+                <statement name="ST">
+                    <block type="robLocalVariables_declare" id="eahwxJV^b?Og=@3Bj%EE" intask="true" deletable="false" movable="false">
+                        <mutation next="false" declaration_type="Number" />
+                        <field name="VAR">n</field>
+                        <field name="TYPE">Number</field>
+                    </block>
+                </statement>
+                <statement name="STACK">
+                    <block type="robProcedures_ifreturn" id="pBwl:[dDp{QyY;0AALMw" intask="true">
+                        <mutation value="1" return_type="Number" />
+                        <value name="CONDITION">
+                            <block type="logic_compare" id="U+]BQ6Q@EjPJ9|.cAd?2" intask="true">
+                                <field name="OP">LTE</field>
+                                <value name="A">
+                                    <block type="variables_get" id="^^aC*!?jJCn}TUCn+P`R" intask="true">
+                                        <mutation datatype="Number" />
+                                        <field name="VAR">n</field>
+                                    </block>
+                                </value>
+                                <value name="B">
+                                    <block type="math_number" id="3!V=@nU%h56a7Q3:|EWP" intask="true">
+                                        <field name="NUM">1</field>
+                                    </block>
+                                </value>
+                            </block>
+                        </value>
+                        <value name="VALUE">
+                            <block type="math_number" id="@HZpFTW#lRUGaWO|Qc3A" intask="true">
+                                <field name="NUM">1</field>
+                            </block>
+                        </value>
+                    </block>
+                    <block type="variables_set" id="eb|UcSiX@i6p9K#;g7Pc" intask="true">
+                        <mutation datatype="Number" />
+                        <field name="VAR">fuenf</field>
+                        <value name="VALUE">
+                            <block type="math_number" id="}Fz2vZ+%pd/I;ps(D0!u" intask="true">
+                                <field name="NUM">0</field>
+                            </block>
+                        </value>
+                    </block>
+                </statement>
+                <value name="RETURN">
+                    <block type="math_arithmetic" id="mVF01-Dh(QSqVa-JKMy)" intask="true">
+                        <field name="OP">MULTIPLY</field>
+                        <value name="A">
+                            <block type="variables_get" id="a6H8A-ATeCNX16:b{]!c" intask="true">
+                                <mutation datatype="Number" />
+                                <field name="VAR">n</field>
+                            </block>
+                        </value>
+                        <value name="B">
+                            <block type="robProcedures_callreturn" id="w2Xy3X:=d{X`OQd-Fq[9" intask="true">
+                                <mutation name="fac" output_type="Number">
+                                    <arg name="n" type="Number" />
+                                </mutation>
+                                <value name="ARG0">
+                                    <block type="math_arithmetic" id="]w4a`S=_5ZGFRCGzzNUi" intask="true">
+                                        <field name="OP">MINUS</field>
+                                        <value name="A">
+                                            <block type="variables_get" id="j6:65`~a%(LT6x0NXafb" intask="true">
+                                                <mutation datatype="Number" />
+                                                <field name="VAR">n</field>
+                                            </block>
+                                        </value>
+                                        <value name="B">
+                                            <block type="math_number" id="cA_p(Xow#bVp[+:/t/08" intask="true">
+                                                <field name="NUM">1</field>
+                                            </block>
+                                        </value>
+                                    </block>
+                                </value>
+                            </block>
+                        </value>
+                    </block>
+                </value>
+            </repetitions>
+        </block>
+    </instance>
+</block_set>

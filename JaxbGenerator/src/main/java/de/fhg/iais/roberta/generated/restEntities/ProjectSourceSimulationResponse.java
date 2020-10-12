@@ -46,7 +46,7 @@ public class ProjectSourceSimulationResponse extends BaseResponse {
     /**
      * the response for the /projectWorkflow/sourceSimulation REST request
      */
-    public static ProjectSourceSimulationResponse makeFromProperties(String cmd,String rc,String message,String cause,JSONObject parameters,String initToken,long serverTime,String serverVersion,long robotWait,String robotBattery,String robotName,String robotVersion,String robotFirmwareName,JSONObject robotSensorvalues,int robotNepoexitvalue,String robotState,String javaScriptProgram,String fileExtension,String progXML,Map<String,JSONObject> confAnnos,JSONObject javaScriptConfiguration) {
+    public static ProjectSourceSimulationResponse makeFromProperties(String cmd,String rc,String message,String cause,JSONObject parameters,String initToken,long serverTime,String serverVersion,long robotWait,String robotBattery,String robotName,String robotVersion,String robotFirmwareName,JSONObject robotSensorvalues,int robotNepoexitvalue,String robotState,boolean notificationsAvailable,String javaScriptProgram,String fileExtension,String progXML,Map<String,JSONObject> confAnnos,JSONObject javaScriptConfiguration) {
         ProjectSourceSimulationResponse entity = new ProjectSourceSimulationResponse();
         entity.setCmd(cmd);
         entity.setRc(rc);
@@ -64,6 +64,7 @@ public class ProjectSourceSimulationResponse extends BaseResponse {
         entity.setRobotSensorvalues(robotSensorvalues);
         entity.setRobotNepoexitvalue(robotNepoexitvalue);
         entity.setRobotState(robotState);
+        entity.setNotificationsAvailable(notificationsAvailable);
         entity.setJavaScriptProgram(javaScriptProgram);
         entity.setFileExtension(fileExtension);
         entity.setProgXML(progXML);
@@ -121,6 +122,8 @@ public class ProjectSourceSimulationResponse extends BaseResponse {
                     setRobotNepoexitvalue(jsonO.optInt(key));
                 } else if ("robot.state".equals(key)) {
                     setRobotState(jsonO.optString(key));
+                } else if ("notifications.available".equals(key)) {
+                    setNotificationsAvailable(jsonO.optBoolean(key));
                 } else if ("javaScriptProgram".equals(key)) {
                     setJavaScriptProgram(jsonO.getString(key));
                 } else if ("fileExtension".equals(key)) {
@@ -381,6 +384,9 @@ public class ProjectSourceSimulationResponse extends BaseResponse {
             if (this.robotState != null) {
                 jsonO.put("robot.state", this.robotState);
             }
+            if (this.notificationsAvailableDefined) {
+                jsonO.put("notifications.available", this.notificationsAvailable);
+            }
             jsonO.put("javaScriptProgram", this.javaScriptProgram);
             jsonO.put("fileExtension", this.fileExtension);
             jsonO.put("progXML", this.progXML);
@@ -400,7 +406,7 @@ public class ProjectSourceSimulationResponse extends BaseResponse {
     
     @Override
     public String toString() {
-        return "ProjectSourceSimulationResponse [immutable=" + this.immutable + ", cmd=" + this.cmd + ", rc=" + this.rc + ", message=" + this.message + ", cause=" + this.cause + ", parameters=" + this.parameters + ", initToken=" + this.initToken + ", serverTime=" + this.serverTime + ", serverVersion=" + this.serverVersion + ", robotWait=" + this.robotWait + ", robotBattery=" + this.robotBattery + ", robotName=" + this.robotName + ", robotVersion=" + this.robotVersion + ", robotFirmwareName=" + this.robotFirmwareName + ", robotSensorvalues=" + this.robotSensorvalues + ", robotNepoexitvalue=" + this.robotNepoexitvalue + ", robotState=" + this.robotState + ", javaScriptProgram=" + this.javaScriptProgram + ", fileExtension=" + this.fileExtension + ", progXML=" + this.progXML + ", confAnnos=" + this.confAnnos + ", javaScriptConfiguration=" + this.javaScriptConfiguration + " ]";
+        return "ProjectSourceSimulationResponse [immutable=" + this.immutable + ", cmd=" + this.cmd + ", rc=" + this.rc + ", message=" + this.message + ", cause=" + this.cause + ", parameters=" + this.parameters + ", initToken=" + this.initToken + ", serverTime=" + this.serverTime + ", serverVersion=" + this.serverVersion + ", robotWait=" + this.robotWait + ", robotBattery=" + this.robotBattery + ", robotName=" + this.robotName + ", robotVersion=" + this.robotVersion + ", robotFirmwareName=" + this.robotFirmwareName + ", robotSensorvalues=" + this.robotSensorvalues + ", robotNepoexitvalue=" + this.robotNepoexitvalue + ", robotState=" + this.robotState + ", notificationsAvailable=" + this.notificationsAvailable + ", javaScriptProgram=" + this.javaScriptProgram + ", fileExtension=" + this.fileExtension + ", progXML=" + this.progXML + ", confAnnos=" + this.confAnnos + ", javaScriptConfiguration=" + this.javaScriptConfiguration + " ]";
     }
     @Override
     public int hashCode() {

@@ -1,6 +1,6 @@
 <export xmlns="http://de.fhg.iais.roberta.blockly">
     <program>
-        <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="calliope" xmlversion="3.0" description="" tags="">
+        <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="calliope" xmlversion="3.1" description="" tags="">
             <instance x="-487" y="-46">
                 <block type="robControls_start" id="SRhyqr`97V.~KiRhwz2?" intask="true" deletable="false">
                     <mutation declare="true"></mutation>
@@ -1292,7 +1292,7 @@
         </block_set>
     </program>
     <config>
-        <block_set robottype="calliope" xmlversion="3.0" description="" tags="" xmlns="http://de.fhg.iais.roberta.blockly">
+        <block_set robottype="calliope" xmlversion="3.1" description="" tags="" xmlns="http://de.fhg.iais.roberta.blockly">
             <instance x="1920" y="-1256">
                 <block type="robConf_ledbar" id="#{6(x,P0A(Y^cW?2@D;#" intask="true">
                     <field name="NAME">LL</field>

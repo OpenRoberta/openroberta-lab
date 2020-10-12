@@ -1,6 +1,6 @@
 <export xmlns="http://de.fhg.iais.roberta.blockly">
     <program>
-        <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="wedo" xmlversion="3.0"
+        <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="wedo" xmlversion="3.1"
             description="ROBOT &lt;div&gt;WeDo &lt;/div&gt;&lt;div&gt;START-RESULT &lt;/div&gt;&lt;div&gt;robot: w, port: 1 motor speed 30 for 180 msec &lt;/div&gt;&lt;div&gt;robot: w, port: 1 motor stop &lt;/div&gt;&lt;div&gt;robot: w, port: 1 motor speed 30 w.o. duration &lt;/div&gt;&lt;div&gt;robot: w, port: 1 motor stop &lt;/div&gt;&lt;div&gt;robot: w piezo: , frequency: 300, duration: 200&lt;/div&gt;&lt;div&gt;robot: w piezo: , frequency: 261.626, duration: 2000 &lt;/div&gt;&lt;div&gt;show &quot;done&quot; &lt;/div&gt;&lt;div&gt;END-RESULT&lt;/div&gt;"
             tags="">
             <instance x="99" y="53">
@@ -75,7 +75,7 @@
         </block_set>
     </program>
     <config>
-        <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="wedo" xmlversion="3.0" description="" tags="">
+        <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="wedo" xmlversion="3.1" description="" tags="">
             <instance x="356" y="82">
                 <block type="robBrick_WeDo-Brick" id="1" intask="true" deletable="false">
                     <field name="VAR">w</field>

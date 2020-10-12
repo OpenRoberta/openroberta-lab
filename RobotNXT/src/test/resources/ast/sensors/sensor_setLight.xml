@@ -1,4 +1,4 @@
-<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="nxt" xmlversion="3.0" description="" tags="">
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="nxt" xmlversion="3.1" description="" tags="">
     <instance x="162" y="238">
         <block type="robSensors_light_getSample" id=")7O)P{Q=4;b~E;6,Yd2`" intask="false">
             <mutation mode="LIGHT" />
