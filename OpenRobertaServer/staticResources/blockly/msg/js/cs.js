@@ -694,7 +694,6 @@ Blockly.Msg.MENU_RUN_MULT_SIM = "multiple robot simulation ...";  // untranslate
 Blockly.Msg.MENU_SAVE = "uložit";
 Blockly.Msg.MENU_SAVE_AS = "uložit jako...";
 Blockly.Msg.MENU_SHORTCUT = "Keyboard Shortcuts";  // untranslated
-<<<<<<< HEAD
 Blockly.Msg.MENU_SHORTCUT_EDITOR = "Ctrl + Shift + Z: Open source code editor";  // untranslated
 Blockly.Msg.MENU_SHORTCUT_EXPORT = "Ctrl + E: Export Program";  // untranslated
 Blockly.Msg.MENU_SHORTCUT_IMPORT = "Ctrl + I: Import Program";  // untranslated
