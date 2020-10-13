@@ -1,0 +1,28 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="calliope" xmlversion="3.0" description="" tags="">
+    <instance x="549" y="76">
+        <block type="robControls_start" id="h!uwE~+!/nQb@;OTzXds" intask="true" deletable="false">
+            <mutation declare="false"></mutation>
+            <field name="DEBUG"></field>
+        </block>
+        <block type="robActions_debug" id="-@C]*/^0)}92m~c%,bg/" intask="true">
+            <value name="OUT">
+                <block type="robSensors_sound_getSample" id="W,abQN:aeKS9u_U#46f[" intask="true">
+                    <mutation mode="SOUND"></mutation>
+                    <field name="MODE">SOUND</field>
+                    <field name="SENSORPORT">M</field>
+                    <field name="SLOT"></field>
+                </block>
+            </value>
+        </block>
+        <block type="robActions_debug" id="IOkPe#]m#.|87`~+UYTk" intask="true">
+            <value name="OUT">
+                <block type="robSensors_getSample" id=")yYpolbCy-eYN[*I)``}" intask="true">
+                    <mutation input="SOUND_SOUND"></mutation>
+                    <field name="SENSORTYPE">SOUND_SOUND</field>
+                    <field name="SENSORPORT">M</field>
+                    <field name="SLOT"></field>
+                </block>
+            </value>
+        </block>
+    </instance>
+</block_set>

@@ -73,6 +73,7 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'pr
                     LOG.info('show program ' + GUISTATE_C.getProgramName());
                 } catch (e) {
                     // restore old Program
+                    LOG.error(e.message);
                     GUISTATE_C.setProgramXML(xmlProgOld);
                     GUISTATE_C.setConfigurationXML(xmlConfOld);
                     CONFIGURATION_C.reloadConf();

@@ -1,0 +1,48 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="calliope" xmlversion="3.0" description="" tags="">
+    <instance x="549" y="76">
+        <block type="robControls_start" id="h!uwE~+!/nQb@;OTzXds" intask="true" deletable="false">
+            <mutation declare="false"></mutation>
+            <field name="DEBUG"></field>
+        </block>
+        <block type="robActions_debug" id="-@C]*/^0)}92m~c%,bg/" intask="true">
+            <value name="OUT">
+                <block type="robSensors_ultrasonic_getSample" id="-Ra=QG0eSM~;i4*V%fLr" intask="true">
+                    <mutation mode="DISTANCE"></mutation>
+                    <field name="MODE">DISTANCE</field>
+                    <field name="SENSORPORT">A1</field>
+                    <field name="SLOT"></field>
+                </block>
+            </value>
+        </block>
+        <block type="robActions_debug" id="d=:%=IM*yNkLEB1F2RLO" intask="true">
+            <value name="OUT">
+                <block type="robSensors_ultrasonic_getSample" id="W7zz`H8LvKg4q}r@^uWc" intask="true">
+                    <mutation mode="DISTANCE"></mutation>
+                    <field name="MODE">DISTANCE</field>
+                    <field name="SENSORPORT">CalliBot_vorne</field>
+                    <field name="SLOT"></field>
+                </block>
+            </value>
+        </block>
+        <block type="robActions_debug" id="IOkPe#]m#.|87`~+UYTk" intask="true">
+            <value name="OUT">
+                <block type="robSensors_getSample" id=")yYpolbCy-eYN[*I)``}" intask="true">
+                    <mutation input="ULTRASONIC_DISTANCE"></mutation>
+                    <field name="SENSORTYPE">ULTRASONIC_DISTANCE</field>
+                    <field name="SENSORPORT">A1</field>
+                    <field name="SLOT"></field>
+                </block>
+            </value>
+        </block>
+        <block type="robActions_debug" id="ml8AHDVFbO1eyf!!ur0[" intask="true">
+            <value name="OUT">
+                <block type="robSensors_getSample" id="kj0!P0P;#`P!9_*G,k[[" intask="true">
+                    <mutation input="ULTRASONIC_DISTANCE"></mutation>
+                    <field name="SENSORTYPE">ULTRASONIC_DISTANCE</field>
+                    <field name="SENSORPORT">CalliBot_vorne</field>
+                    <field name="SLOT"></field>
+                </block>
+            </value>
+        </block>
+    </instance>
+</block_set>

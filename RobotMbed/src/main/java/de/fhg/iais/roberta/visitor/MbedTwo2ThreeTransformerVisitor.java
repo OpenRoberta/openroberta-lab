@@ -1,6 +1,7 @@
 package de.fhg.iais.roberta.visitor;
 
 import de.fhg.iais.roberta.bean.NewUsedHardwareBean;
+import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.components.ConfigurationComponent;
 import de.fhg.iais.roberta.factory.BlocklyDropdownFactory;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
@@ -57,10 +58,16 @@ public class MbedTwo2ThreeTransformerVisitor implements IMbedTransformerVisitor<
     public MbedTwo2ThreeTransformerVisitor(
         MbedTwo2ThreeTransformerHelper helper,
         NewUsedHardwareBean.Builder builder,
-        BlocklyDropdownFactory blocklyDropdownFactory) {
+        BlocklyDropdownFactory blocklyDropdownFactory,
+        ConfigurationAst configuration) {
         this.helper = helper;
         this.builder = builder;
         this.blocklyDropdownFactory = blocklyDropdownFactory;
+
+        // Add the default configuration onto the used configuration components
+        for ( ConfigurationComponent cc : configuration.getConfigurationComponentsValues() ) {
+            this.builder.addUsedConfigurationComponent(cc);
+        }
     }
 
     @Override

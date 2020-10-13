@@ -236,7 +236,7 @@ public class TransformerTest extends AstTest {
         }
 
         @Override
-        protected ITransformerVisitor<Void> getVisitor(Project project, NewUsedHardwareBean.Builder builder, ConfigurationAst defaultConfiguration) {
+        protected ITransformerVisitor<Void> getVisitor(Project project, NewUsedHardwareBean.Builder builder, ConfigurationAst configuration) {
             return new TestTransformerVisitor(project.getRobotFactory().getBlocklyDropdownFactory());
         }
     }

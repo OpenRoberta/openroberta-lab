@@ -85,7 +85,6 @@ public abstract class AbstractTransformerWorker implements IWorker {
             confBuilder.setRobotType(project.getConfigurationAst().getRobotType());
             confBuilder.setDescription(project.getConfigurationAst().getDescription());
             confBuilder.addComponents(usedHardwareBeanBuilder.build().getUsedConfigurationComponents());
-            confBuilder.addComponents(project.getConfigurationAst().getConfigurationComponentsValues()); // add the components from the default configuration
             project.setConfigurationAst(confBuilder.build());
         }
     }
@@ -97,8 +96,8 @@ public abstract class AbstractTransformerWorker implements IWorker {
      *
      * @param project the project
      * @param builder the bean for used hardware
-     * @param defaultConfiguration the defaultConfiguration
+     * @param configuration the configuration
      * @return the appropriate visitor for the current robot, null if no transform is needed
      */
-    protected abstract ITransformerVisitor<Void> getVisitor(Project project, NewUsedHardwareBean.Builder builder, ConfigurationAst defaultConfiguration);
+    protected abstract ITransformerVisitor<Void> getVisitor(Project project, NewUsedHardwareBean.Builder builder, ConfigurationAst configuration);
 }

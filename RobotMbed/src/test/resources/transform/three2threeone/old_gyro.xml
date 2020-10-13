@@ -1,0 +1,48 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="calliope" xmlversion="3.0" description="" tags="">
+    <instance x="512" y="50">
+        <block type="robControls_start" id="9T9,HaI3oP%{Xv]%-HN?" intask="true" deletable="false">
+            <mutation declare="false"></mutation>
+            <field name="DEBUG"></field>
+        </block>
+        <block type="robActions_debug" id="yq*-kreO0k=2+4,8a@.|" intask="true">
+            <value name="OUT">
+                <block type="robSensors_gyro_getSample" id=";M2r{aKTiP4^7x?^}t4b" intask="true">
+                    <mutation mode="ANGLE"></mutation>
+                    <field name="MODE">ANGLE</field>
+                    <field name="SENSORPORT">G</field>
+                    <field name="SLOT">X</field>
+                </block>
+            </value>
+        </block>
+        <block type="robActions_debug" id="[ohG2F@.v]fmy=FP6Oq[" intask="true">
+            <value name="OUT">
+                <block type="robSensors_gyro_getSample" id="CsUq1[~Zh+@C@=yrpwrt" intask="true">
+                    <mutation mode="ANGLE"></mutation>
+                    <field name="MODE">ANGLE</field>
+                    <field name="SENSORPORT">G</field>
+                    <field name="SLOT">Y</field>
+                </block>
+            </value>
+        </block>
+        <block type="robActions_debug" id="S8i|XB67(B_z5tVcWu^," intask="true">
+            <value name="OUT">
+                <block type="robSensors_getSample" id="d3T~UC:UAf[UvLpjbog/" intask="true">
+                    <mutation input="GYRO_ANGLE"></mutation>
+                    <field name="SENSORTYPE">GYRO_ANGLE</field>
+                    <field name="SENSORPORT">G</field>
+                    <field name="SLOT">X</field>
+                </block>
+            </value>
+        </block>
+        <block type="robActions_debug" id=")~Dw?rmn{J/z*8.AH3@w" intask="true">
+            <value name="OUT">
+                <block type="robSensors_getSample" id="+GHg#ULh^aGkbtoKKnzQ" intask="true">
+                    <mutation input="GYRO_ANGLE"></mutation>
+                    <field name="SENSORTYPE">GYRO_ANGLE</field>
+                    <field name="SENSORPORT">G</field>
+                    <field name="SLOT">Y</field>
+                </block>
+            </value>
+        </block>
+    </instance>
+</block_set>
