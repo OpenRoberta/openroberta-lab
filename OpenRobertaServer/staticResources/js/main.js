@@ -3,7 +3,6 @@ require.config({
     paths: {
         'codeflask': 'libs/codeflask/codeflask.min',
         'blockly': '../blockly/blockly_compressed',
-        'blockly.confvis': '../../blockly/plugins/circuit_visualization',
         'bootstrap': 'libs/bootstrap/bootstrap-3.3.1-dist/dist/js/bootstrap.min',
         'bootstrap-table': 'libs/bootstrap/bootstrap-3.3.1-dist/dist/js/bootstrap-table.min',
         'bootstrap-tagsinput': 'libs/bootstrap/bootstrap-3.3.1-dist/dist/js/bootstrap-tagsinput.min',
@@ -101,7 +100,15 @@ require.config({
 
         'neuralnetwork.nn': 'app/neuralnetwork/neuralnetwork.nn',
         'neuralnetwork.state': 'app/neuralnetwork/neuralnetwork.state',
-        'neuralnetwork.playground': 'app/neuralnetwork/neuralnetwork.playground'
+        'neuralnetwork.playground': 'app/neuralnetwork/neuralnetwork.playground',
+        
+        'conf_visualization': 'app/ConfigVisualization/circuit_visualization',
+        'const.robots': 'app/ConfigVisualization/const.robots',
+        'fix_port_value': 'app/ConfigVisualization/fix_port_value',
+        'port': 'app/ConfigVisualization/port',
+        'robot_block': 'app/ConfigVisualization/robot_block',
+        'wires': 'app/ConfigVisualization/wires',
+
     },
     shim: {
         'bootstrap': {
@@ -109,10 +116,6 @@ require.config({
         },
         'blockly': {
             exports: 'Blockly'
-        },
-        'blockly.confvis': {
-            deps: ['blockly'],
-            exports: 'CircuitVisualization'
         },
 
         'volume-meter': {

@@ -1,12 +1,12 @@
-define([ 'exports', 'log', 'util', 'comm', 'message', 'guiState.controller', 'blockly', 'configuration.model', 'jquery', 'jquery-validate', 'blockly.confvis' ], function(exports,
-        LOG, UTIL, COMM, MSG, GUISTATE_C, Blockly, CONFIGURATION, $) {
+define(['exports', 'log', 'util', 'comm', 'message', 'guiState.controller', 'blockly', 'configuration.model', 'conf_visualization', 'jquery', 'jquery-validate'], function(exports,
+    LOG, UTIL, COMM, MSG, GUISTATE_C, Blockly, CONFIGURATION, CV, $) {
 
     var $formSingleModal;
 
     var bricklyWorkspace;
     var confVis;
     var listenToBricklyEvents = true;
-    seen = false;
+    var seen = false;
 
     function init() {
         initView();
@@ -26,27 +26,27 @@ define([ 'exports', 'log', 'util', 'comm', 'message', 'guiState.controller', 'bl
     function initView() {
         var toolbox = GUISTATE_C.getConfigurationToolbox();
         bricklyWorkspace = Blockly.inject(document.getElementById('bricklyDiv'), {
-            path : '/blockly/',
-            toolbox : toolbox,
-            trashcan : true,
-            scrollbars : true,
-            media : '../blockly/media/',
-            zoom : {
-                controls : true,
-                wheel : false,
-                startScale : 1.0,
-                maxScale : 4,
-                minScale : .25,
-                scaleSpeed : 1.1
+            path: '/blockly/',
+            toolbox: toolbox,
+            trashcan: true,
+            scrollbars: true,
+            media: '../blockly/media/',
+            zoom: {
+                controls: true,
+                wheel: false,
+                startScale: 1.0,
+                maxScale: 4,
+                minScale: .25,
+                scaleSpeed: 1.1
             },
-            checkInTask : [ '-Brick', 'robConf' ],
-            variableDeclaration : true,
-            robControls : true,
-            theme : GUISTATE_C.getTheme()
+            checkInTask: ['-Brick', 'robConf'],
+            variableDeclaration: true,
+            robControls: true,
+            theme: GUISTATE_C.getTheme()
         });
         bricklyWorkspace.setDevice({
-            group : GUISTATE_C.getRobotGroup(),
-            robot : GUISTATE_C.getRobot()
+            group: GUISTATE_C.getRobotGroup(),
+            robot: GUISTATE_C.getRobot()
         });
         // Configurations can't be executed
         bricklyWorkspace.robControls.runOnBrick.setAttribute("style", "display : none");
@@ -77,11 +77,7 @@ define([ 'exports', 'log', 'util', 'comm', 'message', 'guiState.controller', 'bl
 
         $('#tabConfiguration').on('hide.bs.tab', function(e) {
             Blockly.hideChaff(false);
-        });
-
-        $('#tabConfiguration').on('hide.bs.tab', function(e) {
-            Blockly.hideChaff();
-        });
+        });;
 
         $('#tabConfiguration').on('hidden.bs.tab', function(e) {
             var dom = (confVis) ? confVis.getXml() : Blockly.Xml.workspaceToDom(bricklyWorkspace);
@@ -225,23 +221,23 @@ define([ 'exports', 'log', 'util', 'comm', 'message', 'guiState.controller', 'bl
         }, saveAsToServer, function() {
 
         }, {
-            rules : {
-                singleModalInput : {
-                    required : true,
-                    regex : regexString
+                rules: {
+                    singleModalInput: {
+                        required: true,
+                        regex: regexString
+                    }
+                },
+                errorClass: "form-invalid",
+                errorPlacement: function(label, element) {
+                    label.insertAfter(element);
+                },
+                messages: {
+                    singleModalInput: {
+                        required: jQuery.validator.format(Blockly.Msg["VALIDATION_FIELD_REQUIRED"]),
+                        regex: jQuery.validator.format(Blockly.Msg["MESSAGE_INVALID_CONF_NAME"])
+                    }
                 }
-            },
-            errorClass : "form-invalid",
-            errorPlacement : function(label, element) {
-                label.insertAfter(element);
-            },
-            messages : {
-                singleModalInput : {
-                    required : jQuery.validator.format(Blockly.Msg["VALIDATION_FIELD_REQUIRED"]),
-                    regex : jQuery.validator.format(Blockly.Msg["MESSAGE_INVALID_CONF_NAME"])
-                }
-            }
-        });
+            });
     }
     exports.showSaveAsModal = showSaveAsModal;
 
@@ -342,11 +338,11 @@ define([ 'exports', 'log', 'util', 'comm', 'message', 'guiState.controller', 'bl
     }
     exports.reloadView = reloadView;
 
-    function changeRobotSvg(){
-        if (CircuitVisualization.isRobotVisualized(GUISTATE_C.getRobotGroup() + '_' + GUISTATE_C.getRobot())) {
+    function changeRobotSvg() {
+        if (CV.CircuitVisualization.isRobotVisualized(GUISTATE_C.getRobotGroup() + '_' + GUISTATE_C.getRobot())) {
             bricklyWorkspace.setDevice({
-                group : GUISTATE_C.getRobotGroup(),
-                robot : GUISTATE_C.getRobot()
+                group: GUISTATE_C.getRobotGroup(),
+                robot: GUISTATE_C.getRobot()
             });
             confVis.resetRobot();
         }
@@ -355,8 +351,8 @@ define([ 'exports', 'log', 'util', 'comm', 'message', 'guiState.controller', 'bl
 
     function resetView() {
         bricklyWorkspace.setDevice({
-            group : GUISTATE_C.getRobotGroup(),
-            robot : GUISTATE_C.getRobot()
+            group: GUISTATE_C.getRobotGroup(),
+            robot: GUISTATE_C.getRobot()
         });
         initConfigurationEnvironment();
         var toolbox = GUISTATE_C.getConfigurationToolbox();
@@ -369,7 +365,7 @@ define([ 'exports', 'log', 'util', 'comm', 'message', 'guiState.controller', 'bl
     }
 
     function resetConfVisIfAvailable() {
-        if(confVis){
+        if (confVis) {
             confVis.dispose();
             confVis = null;
         }
@@ -383,8 +379,8 @@ define([ 'exports', 'log', 'util', 'comm', 'message', 'guiState.controller', 'bl
         Blockly.svgResize(bricklyWorkspace);
         var dom = Blockly.Xml.textToDom(xml, bricklyWorkspace);
         resetConfVisIfAvailable();
-        if (CircuitVisualization.isRobotVisualized(GUISTATE_C.getRobotGroup() + '_' + GUISTATE_C.getRobot())) {
-            confVis = CircuitVisualization.domToWorkspace(dom, bricklyWorkspace);
+        if (CV.CircuitVisualization.isRobotVisualized(GUISTATE_C.getRobotGroup(), GUISTATE_C.getRobot())) {
+            confVis = CV.CircuitVisualization.domToWorkspace(dom, bricklyWorkspace);
         } else {
             Blockly.Xml.domToWorkspace(dom, bricklyWorkspace);
         }
