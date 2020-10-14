@@ -9,12 +9,13 @@ import java.util.concurrent.atomic.AtomicLong;
 
 import javax.ws.rs.core.Response;
 
-import com.google.inject.Inject;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
+
+import com.google.inject.Inject;
 
 import de.fhg.iais.roberta.generated.restEntities.BaseResponse;
 import de.fhg.iais.roberta.generated.restEntities.FullRestRequest;
@@ -171,9 +172,12 @@ public class UtilForREST {
             response.setServerVersion(UtilForREST.serverVersion);
             if ( httpSessionState != null ) {
 
-                boolean notificationsComplete = notificationService.getCurrentDigest().equals(httpSessionState.getReceivedNotificationsDigest());
-                response.setNotificationsAvailable(!notificationsComplete);
-
+                if ( notificationService != null ) {
+                    boolean newNotifications = !notificationService.getCurrentDigest().equals(httpSessionState.getReceivedNotificationsDigest());
+                    response.setNotificationsAvailable(newNotifications);
+                } else {
+                    response.setNotificationsAvailable(false);
+                }
                 String token = httpSessionState.getToken();
                 if ( token != null ) {
                     if ( token.equals(ClientAdmin.NO_CONNECT) ) {
