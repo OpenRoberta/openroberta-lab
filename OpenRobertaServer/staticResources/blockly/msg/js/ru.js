@@ -78,6 +78,7 @@ Blockly.Msg.BRICKLIGHT_ON_TOOLTIP = "Включить подсветку про�
 Blockly.Msg.BRICKLIGHT_ORANGE = "оранжевый";
 Blockly.Msg.BRICKLIGHT_RED = "красный";
 Blockly.Msg.BRICKLIGHT_RESET_TOOLTIP = "Сбрасывает подсветку программного блока: зеленый и мигание.";
+Blockly.Msg.BRICKNAME_ORB = "ORB";  // untranslated
 Blockly.Msg.BRICKNAME_WEDO = "WeDo";  // untranslated
 Blockly.Msg.BRICK_IPADDRESS = "ip address";  // untranslated
 Blockly.Msg.BRICK_PASSWORD = "password";  // untranslated

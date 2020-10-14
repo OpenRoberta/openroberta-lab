@@ -78,6 +78,7 @@ Blockly.Msg.BRICKLIGHT_ON_TOOLTIP = "Уключыць падсветку пра�
 Blockly.Msg.BRICKLIGHT_ORANGE = "памаранчавы";
 Blockly.Msg.BRICKLIGHT_RED = "чырвоны";
 Blockly.Msg.BRICKLIGHT_RESET_TOOLTIP = "Скідае падсветку праграмнага блоку: зялёны і міганне.";
+Blockly.Msg.BRICKNAME_ORB = "ORB";  // untranslated
 Blockly.Msg.BRICKNAME_WEDO = "WeDo";
 Blockly.Msg.BRICK_IPADDRESS = "IP-адрас";
 Blockly.Msg.BRICK_PASSWORD = "пароль";

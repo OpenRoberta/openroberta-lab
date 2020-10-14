@@ -1552,6 +1552,7 @@
 	"SLOT_TILTED_ANY": "any",
 	"CONNECTOR": "hub",
 	"BRICKNAME_WEDO": "WeDo",
+	"BRICKNAME_ORB": "ORB",
 	"STEPS_PER_REVOLUTION": "steps per revolution",
 	"ROTATIONS_PER_MINUTE": "rpm",
 	"ACTION_SERIAL_PRINT": "show on Serial Monitor",

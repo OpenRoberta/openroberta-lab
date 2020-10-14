@@ -78,6 +78,7 @@ Blockly.Msg.BRICKLIGHT_ON_TOOLTIP = "打开积木灯";
 Blockly.Msg.BRICKLIGHT_ORANGE = "橘色";
 Blockly.Msg.BRICKLIGHT_RED = "红色";
 Blockly.Msg.BRICKLIGHT_RESET_TOOLTIP = "重置积木灯。设置预设积木灯：绿色闪烁";
+Blockly.Msg.BRICKNAME_ORB = "ORB";  // untranslated
 Blockly.Msg.BRICKNAME_WEDO = "WeDo";
 Blockly.Msg.BRICK_IPADDRESS = "ip 地址";
 Blockly.Msg.BRICK_PASSWORD = "密码";

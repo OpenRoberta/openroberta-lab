@@ -78,6 +78,7 @@ Blockly.Msg.BRICKLIGHT_ON_TOOLTIP = "Aprinde lumina.";
 Blockly.Msg.BRICKLIGHT_ORANGE = "portocaliu";
 Blockly.Msg.BRICKLIGHT_RED = "rosu";
 Blockly.Msg.BRICKLIGHT_RESET_TOOLTIP = "Resetează lumina: verde clipitor.";
+Blockly.Msg.BRICKNAME_ORB = "ORB";  // untranslated
 Blockly.Msg.BRICKNAME_WEDO = "WeDo";
 Blockly.Msg.BRICK_IPADDRESS = "adresa ip";
 Blockly.Msg.BRICK_PASSWORD = "parola";

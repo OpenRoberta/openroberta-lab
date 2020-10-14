@@ -78,6 +78,7 @@ Blockly.Msg.BRICKLIGHT_ON_TOOLTIP = "Turns bricklight on.";  // untranslated
 Blockly.Msg.BRICKLIGHT_ORANGE = "orange";  // untranslated
 Blockly.Msg.BRICKLIGHT_RED = "red";  // untranslated
 Blockly.Msg.BRICKLIGHT_RESET_TOOLTIP = "Resets bricklight. Sets the default bricklight: green and blinking.";  // untranslated
+Blockly.Msg.BRICKNAME_ORB = "ORB";  // untranslated
 Blockly.Msg.BRICKNAME_WEDO = "WeDo";  // untranslated
 Blockly.Msg.BRICK_IPADDRESS = "ip address";  // untranslated
 Blockly.Msg.BRICK_PASSWORD = "password";  // untranslated

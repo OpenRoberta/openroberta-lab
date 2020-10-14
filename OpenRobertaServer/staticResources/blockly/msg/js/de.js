@@ -78,6 +78,7 @@ Blockly.Msg.BRICKLIGHT_ON_TOOLTIP = "Schaltet die Statusleuchte ein.";
 Blockly.Msg.BRICKLIGHT_ORANGE = "orange";
 Blockly.Msg.BRICKLIGHT_RED = "rot";
 Blockly.Msg.BRICKLIGHT_RESET_TOOLTIP = "Setzt die Statusleuchte zurück auf grün und blinkend.";
+Blockly.Msg.BRICKNAME_ORB = "ORB";
 Blockly.Msg.BRICKNAME_WEDO = "WeDo";
 Blockly.Msg.BRICK_IPADDRESS = "IP-Adresse";
 Blockly.Msg.BRICK_PASSWORD = "Passwort";
