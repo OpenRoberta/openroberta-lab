@@ -102,12 +102,11 @@ require.config({
         'neuralnetwork.state': 'app/neuralnetwork/neuralnetwork.state',
         'neuralnetwork.playground': 'app/neuralnetwork/neuralnetwork.playground',
         
-        'conf_visualization': 'app/ConfigVisualization/circuit_visualization',
-        'const.robots': 'app/ConfigVisualization/const.robots',
-        'fix_port_value': 'app/ConfigVisualization/fix_port_value',
-        'port': 'app/ConfigVisualization/port',
-        'robot_block': 'app/ConfigVisualization/robot_block',
-        'wires': 'app/ConfigVisualization/wires',
+        'confVisualization': 'app/configVisualization/confVisualization',
+        'const.robots': 'app/configVisualization/const.robots',
+        'port': 'app/configVisualization/port',
+        'robotBlock': 'app/configVisualization/robotBlock',
+        'wires': 'app/configVisualization/wires',
 
     },
     shim: {
@@ -132,17 +131,18 @@ require.config({
     }
 });
 
-require(['require', 'wrap', 'log', 'jquery', 'guiState.controller', 'progList.controller', 'logList.controller', 'confList.controller',
+require(['require', 'wrap', 'log', 'jquery', 'blockly', 'guiState.controller', 'progList.controller', 'logList.controller', 'confList.controller',
     'progDelete.controller', 'confDelete.controller', 'progShare.controller', 'menu.controller', 'multSim.controller', 'user.controller', 'nn.controller',
     'robot.controller', 'program.controller', 'progSim.controller', 'notification.controller', 'progCode.controller', 'progDelete.controller', 'progHelp.controller',
     'legal.controller', 'progInfo.controller', 'progRun.controller', 'configuration.controller', 'language.controller', 'socket.controller',
     'progTutorial.controller', 'tutorialList.controller', 'userGroup.controller', 'volume-meter', 'user.model', 'webview.controller',
-    'sourceCodeEditor.controller', 'codeflask', 'interpreter.jsHelper'], function(
+    'sourceCodeEditor.controller', 'codeflask', 'interpreter.jsHelper', 'confVisualization', 'robotBlock'], function(
         require) {
         $ = require('jquery');
         WRAP = require('wrap');
         LOG = require('log');
         COMM = require('comm');
+        Blockly = require('blockly');
         confDeleteController = require('confDelete.controller');
         configurationController = require('configuration.controller');
         confListController = require('confList.controller');
@@ -176,6 +176,8 @@ require(['require', 'wrap', 'log', 'jquery', 'guiState.controller', 'progList.co
         sourceCodeEditorController = require('sourceCodeEditor.controller');
         codeflask = require('codeflask');
         stackmachineJsHelper = require('interpreter.jsHelper');
+        confVisualization = require('confVisualization');
+        robotBlock = require('robotBlock');
 
         $(document).ready(WRAP.fn3(init, 'page init'));
     });
@@ -236,7 +238,7 @@ function init() {
 /**
  * Handle server errors
  */
-ALLOWED_PING_NUM = 5
+ALLOWED_PING_NUM = 5;
 
 function handleServerErrors(jqXHR) {
     // TODO more?

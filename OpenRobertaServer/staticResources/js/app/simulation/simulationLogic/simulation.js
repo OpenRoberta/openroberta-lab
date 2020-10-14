@@ -1194,7 +1194,7 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
                         }
 
                         var observer = new MutationObserver(function(mutations) {
-                            mutations.forEach((mutation) => {
+                            mutations.forEach(function(mutation) {
                                 if ($(block.svgGroup_).hasClass('blocklyDisabled')) {
                                     removeBreakPoint(block);
                                     $(block.svgPath_).removeClass('breakpoint').removeClass('selectedBreakpoint');

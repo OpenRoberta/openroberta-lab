@@ -27,7 +27,7 @@ var __spreadArrays = (this && this.__spreadArrays) || function () {
             r[k] = a[j];
     return r;
 };
-define(["require", "exports", "./wires", "./const.robots", "./robot_block", "./port"], function (require, exports, wires_1, const_robots_1, robot_block_1, port_1) {
+define(["require", "exports", "./wires", "./const.robots", "./robotBlock", "./port"], function (require, exports, wires_1, const_robots_1, robotBlock_1, port_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.CircuitVisualization = void 0;
@@ -217,8 +217,10 @@ define(["require", "exports", "./wires", "./const.robots", "./robot_block", "./p
             return xml;
         };
         CircuitVisualization.prototype.injectRobotBoard = function () {
-            delete this.robotXml;
-            window.Blockly.Blocks['robot'] = robot_block_1.createRobotBlock(this.currentRobot);
+            if (this.robotXml) {
+                this.robotXml.remove();
+            }
+            window.Blockly.Blocks['robot'] = robotBlock_1.createRobotBlock(this.currentRobot);
             var robotXml = "<instance x=\"250\" y=\"250\"><block type=\"robot\" id=\"robot\"></block></instance>";
             var oParser = new DOMParser();
             this.robotXml = oParser.parseFromString(robotXml, 'text/xml').firstChild;

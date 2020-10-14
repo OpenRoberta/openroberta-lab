@@ -15,6 +15,10 @@ define(["require", "exports"], function (require, exports) {
                 'transform': "translate(" + position.x + ", " + position.y + ")",
                 'r': 3,
             }, parent);
+            if (name) {
+                this.element_.tooltip = name;
+                window.Blockly.Tooltip.bindMouseEvents(parent);
+            }
         }
         Port.prototype.moveTo = function (position) {
             this.position_ = position;

@@ -46,7 +46,8 @@ define(
             });
         };
 
-        function showAlertInNotificationModal(context, content, time = 6 * 1000) {
+        function showAlertInNotificationModal(context, content, time) {
+            time = time || 6 * 1000;
             const $alert = $('#notification-modal-alert');
             $alert
                 .html(content)
@@ -69,7 +70,7 @@ define(
                             setFileDownloadContent(JSON.parse(fileContent));
                         } else {
                             const errorCode = restResponse.cause;
-                            const exceptionMessage = restResponse.parameters?.MESSAGE ? `: ${restResponse.parameters.MESSAGE}` : ""
+                            const exceptionMessage = restResponse.parameters&& restResponse.parameters.MESSAGE ? `: ${restResponse.parameters.MESSAGE}` : ""
                             const content = `${errorCode}${exceptionMessage}`
 
                             showAlertInNotificationModal("danger", content, 60 * 1000);

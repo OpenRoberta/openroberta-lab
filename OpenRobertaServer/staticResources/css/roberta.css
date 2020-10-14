@@ -3098,3 +3098,7 @@ pre code {
         left: 40%;
     }
 }
+
+.port {
+    cursor: default !important;
+}

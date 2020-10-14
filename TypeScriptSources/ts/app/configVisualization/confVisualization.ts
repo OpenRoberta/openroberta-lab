@@ -1,6 +1,6 @@
 import WireDrawer from './wires';
 import { ROBOTS } from "./const.robots";
-import { createRobotBlock } from "./robot_block";
+import { createRobotBlock } from "./robotBlock";
 import { Port } from "./port";
 
 const SEP = 2.5;
@@ -90,7 +90,9 @@ export class CircuitVisualization {
     }
 
     injectRobotBoard(): void {
-        delete this.robotXml;
+        if (this.robotXml) {
+            (this.robotXml as any).remove();
+        }
         (<any>window).Blockly.Blocks['robot'] = createRobotBlock(this.currentRobot);
         const robotXml = `<instance x="250" y="250"><block type="robot" id="robot"></block></instance>`;
         const oParser = new DOMParser();
