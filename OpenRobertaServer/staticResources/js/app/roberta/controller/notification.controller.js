@@ -70,8 +70,8 @@ define(
                             setFileDownloadContent(JSON.parse(fileContent));
                         } else {
                             const errorCode = restResponse.cause;
-                            const exceptionMessage = restResponse.parameters&& restResponse.parameters.MESSAGE ? `: ${restResponse.parameters.MESSAGE}` : ""
-                            const content = `${errorCode}${exceptionMessage}`
+                            const exceptionMessage = restResponse.parameters&& restResponse.parameters.MESSAGE ? ":" + restResponse.parameters.MESSAGE : ""
+                            const content = errorCode + exceptionMessage
 
                             showAlertInNotificationModal("danger", content, 60 * 1000);
                         }
@@ -106,7 +106,8 @@ define(
         /*----------- NOTIFICATION HANDLING -----------*/
 
         function removeActiveEventListeners() {
-            for (const notification of activeNotifications) {
+            for (var notificationI in activeNotifications) {
+                const notification = activeNotifications[notificationI];
                 notification.removeEventHandlers();
             }
             activeNotifications = [];
@@ -115,12 +116,14 @@ define(
         function initNotifications(notificationSpecifications) {
             const notificationStates = [];
 
-            for (const notificationSpecification of notificationSpecifications) {
+            for (var notificationSpecificationI in notificationSpecifications) {
+                const notificationSpecification = notificationSpecifications[notificationSpecificationI];
                 const notificationHandlers = [];
                 let activeEventHandlers = [];
 
                 function initNotificationHandlers() {
-                    for (const handler of notificationSpecification.handlers) {
+                    for (var handlerI in notificationSpecification.handlers) {
+                        const handler = notificationSpecification.handlers[handlerI];
                         if (handler.popupNotification) {
                             const popup = makePopupNotification(handler.popupNotification);
                             notificationHandlers.push(popup);
@@ -142,13 +145,15 @@ define(
                         removeEventHandlers()
                     }
 
-                    for (const notification of notificationHandlers) {
+                    for (var notificationI in notificationHandlers) {
+                        const notification = notificationHandlers[notificationI];
                         notification.show();
                     }
                 }
 
                 function hideNotification() {
-                    for (const notification of notificationHandlers) {
+                    for (var notificationI in notificationHandlers) {
+                    const notification = notificationHandlers[notificationI];
                         notification.hide();
                     }
                 }
@@ -196,7 +201,7 @@ define(
                         }
                     }
 
-                    activeEventHandlers.push({remove});
+                    activeEventHandlers.push({remove : remove});
                 }
 
                 function addEventHandlers() {
@@ -206,7 +211,8 @@ define(
                         return;
                     }
 
-                    for (const trigger of notificationSpecification.triggers) {
+                    for (var triggerI in notificationSpecification.triggers) {
+                        const trigger = notificationSpecification.triggers[triggerI];
                         const event = trigger.event;
                         const addClass = trigger.addClass;
                         const removeClass = trigger.removeClass;
@@ -239,7 +245,8 @@ define(
                 }
 
                 function removeEventHandlers() {
-                    for (const activeEventHandler of activeEventHandlers) {
+                    for (var activeEventHandlerI in activeEventHandlers) {
+                        const activeEventHandler = activeEventHandlers[activeEventHandlerI];
                         activeEventHandler.remove();
                     }
 
@@ -310,8 +317,8 @@ define(
                 addEventHandlers();
 
                 notificationStates.push({
-                    hideNotification,
-                    removeEventHandlers
+                    hideNotification : hideNotification,
+                    removeEventHandlers : removeEventHandlers
                 })
             }
 
@@ -361,8 +368,8 @@ define(
             }
 
             return {
-                show,
-                hide
+                show : show,
+                hide : hide
             };
         }
 

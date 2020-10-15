@@ -15,7 +15,7 @@ define(['exports', 'comm'], function (exports, COMM) {
 
     exports.postNotifications = function (notifications, successFn) {
         COMM.json("/notifications/postNotifications", {
-            notifications
+            notifications : notifications
         }, successFn);
     };
 });
