@@ -1,10 +1,12 @@
 package de.fhg.iais.roberta.worker;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import de.fhg.iais.roberta.bean.NewUsedHardwareBean;
 import de.fhg.iais.roberta.components.ConfigurationAst;
+import de.fhg.iais.roberta.components.ConfigurationComponent;
 import de.fhg.iais.roberta.components.ProgramAst;
 import de.fhg.iais.roberta.components.Project;
 import de.fhg.iais.roberta.syntax.Phrase;
@@ -22,6 +24,8 @@ public abstract class AbstractTransformerWorker implements IWorker {
     private final String minXmlVersion;
     private final String maxXmlVersion;
     private final String newXmlVersion;
+
+    private boolean wasTransformed = false;
 
     /**
      * Creates a new TransformerWorker.
@@ -59,17 +63,24 @@ public abstract class AbstractTransformerWorker implements IWorker {
         NewUsedHardwareBean.Builder usedHardwareBeanBuilder = new NewUsedHardwareBean.Builder();
 
         // TODO usedHardwareBeanBuilder should probably be extracted into its own collect visitor, combined for now so only 1 visitor needs to run
-        ITransformerVisitor<Void> visitor =
-            getVisitor(project, usedHardwareBeanBuilder, project.getConfigurationAst());
+        ITransformerVisitor<Void> visitor = getVisitor(project, usedHardwareBeanBuilder, project.getConfigurationAst());
 
         // Most of the time no transformation other than the version is necessary
         List<List<Phrase<Void>>> lists;
         if ( visitor != null ) {
-            lists = deepCopyAst(project.getProgramAst().getTree(), getVisitor(project, usedHardwareBeanBuilder, project.getConfigurationAst()));
+            lists = deepCopyAst(project.getProgramAst().getTree(), visitor);
+            this.wasTransformed = true;
         } else {
             lists = project.getProgramAst().getTree();
         }
+        updateProgram(project, lists);
 
+        if ( project.getConfigurationAst() != null ) {
+            updateConfiguration(project, usedHardwareBeanBuilder);
+        }
+    }
+
+    private void updateProgram(Project project, List<List<Phrase<Void>>> lists) {
         ProgramAst.Builder<Void> progBuilder = new ProgramAst.Builder<>();
         progBuilder.setXmlVersion(this.newXmlVersion);
         progBuilder.setTags(project.getProgramAst().getTags());
@@ -77,15 +88,25 @@ public abstract class AbstractTransformerWorker implements IWorker {
         progBuilder.setDescription(project.getProgramAst().getDescription());
         progBuilder.addTree(lists);
         project.setProgramAst(progBuilder.build());
+    }
 
-        if ( project.getConfigurationAst() != null ) {
-            ConfigurationAst.Builder confBuilder = new ConfigurationAst.Builder();
-            confBuilder.setXmlVersion(this.newXmlVersion);
-            confBuilder.setTags(project.getConfigurationAst().getTags());
-            confBuilder.setRobotType(project.getConfigurationAst().getRobotType());
-            confBuilder.setDescription(project.getConfigurationAst().getDescription());
-            confBuilder.addComponents(usedHardwareBeanBuilder.build().getUsedConfigurationComponents());
-            project.setConfigurationAst(confBuilder.build());
+    private void updateConfiguration(Project project, NewUsedHardwareBean.Builder usedHardwareBeanBuilder) {
+        ConfigurationAst.Builder confBuilder = new ConfigurationAst.Builder();
+        confBuilder.setXmlVersion(this.newXmlVersion);
+        confBuilder.setTags(project.getConfigurationAst().getTags());
+        confBuilder.setRobotType(project.getConfigurationAst().getRobotType());
+        confBuilder.setDescription(project.getConfigurationAst().getDescription());
+        if ( !this.wasTransformed ) {
+            fillHardwareBeanWithOldConf(usedHardwareBeanBuilder, project.getConfigurationAst().getConfigurationComponentsValues());
+        }
+        confBuilder.addComponents(usedHardwareBeanBuilder.build().getUsedConfigurationComponents());
+        project.setConfigurationAst(confBuilder.build());
+    }
+
+    private static void fillHardwareBeanWithOldConf(
+        NewUsedHardwareBean.Builder usedHardwareBeanBuilder, Collection<ConfigurationComponent> confComps) {
+        for ( ConfigurationComponent cc : confComps ) {
+            usedHardwareBeanBuilder.addUsedConfigurationComponent(cc);
         }
     }
 

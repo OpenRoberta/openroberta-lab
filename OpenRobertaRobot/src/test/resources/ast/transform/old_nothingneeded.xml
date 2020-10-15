@@ -1,0 +1,45 @@
+<export xmlns="http://de.fhg.iais.roberta.blockly">
+    <program>
+        <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="arduino" xmlversion="3.0" description="" tags="">
+            <instance x="512" y="50">
+                <block type="robControls_start_ardu" id="zilAbdEF(uT)/;zKxJxA" intask="true" deletable="false">
+                    <mutation declare="false"></mutation>
+                    <field name="DEBUG"></field>
+                </block>
+                <block type="robControls_loopForever_ardu" id="u)BvQk~*Fx^z({CJk4Q[" intask="true" deletable="false" movable="false">
+                    <statement name="DO">
+                        <block type="robActions_serial_print" id="u}hE#KVkm%=2]ZF*2};2" intask="true">
+                            <value name="OUT">
+                                <block type="text" id=":l47qnBI/oY;il8=]kQ:" intask="true">
+                                    <field name="TEXT">Hallo</field>
+                                </block>
+                            </value>
+                        </block>
+                    </statement>
+                </block>
+            </instance>
+        </block_set>
+    </program>
+    <config>
+        <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="arduino" xmlversion="3.0" description="" tags="">
+            <instance x="138" y="88">
+                <block type="robConf_led" id="1" intask="true">
+                    <field name="NAME">L</field>
+                    <field name="INPUT">LED_BUILTIN</field>
+                </block>
+            </instance>
+            <instance x="457" y="115">
+                <block type="robConf_analogin" id="TLqUAY;b~y}574g7,8Na" intask="true">
+                    <field name="NAME">A</field>
+                    <field name="INPUT">3</field>
+                </block>
+            </instance>
+            <instance x="385" y="339">
+                <block type="robConf_servo" id="/fdwoYk=M6EN{Z6`^_h2" intask="true">
+                    <field name="NAME">S</field>
+                    <field name="PULSE">1</field>
+                </block>
+            </instance>
+        </block_set>
+    </config>
+</export>

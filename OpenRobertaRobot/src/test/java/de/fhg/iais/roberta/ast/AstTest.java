@@ -1,16 +1,18 @@
 package de.fhg.iais.roberta.ast;
 
+import org.junit.BeforeClass;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import org.junit.BeforeClass;
 
 import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.util.Util;
 
 public abstract class AstTest {
     private static final List<String> pluginDefines = new ArrayList<>();
+    private static final List<String> pluginDefinesNewConf = new ArrayList<>();
     protected static IRobotFactory testFactory;
+    protected static IRobotFactory testFactoryNewConf;
 
     @BeforeClass
     public static void setup() {
@@ -20,6 +22,7 @@ public abstract class AstTest {
             robotName = "test";
             pluginDefines.add("test:robot.configuration.type = old-S");
             pluginDefines.add("test:robot.configuration.old.toplevelblock = robBrick_EV3-Brick");
+            pluginDefinesNewConf.add("test:robot.configuration.type = new");
         } else if ( pwd.contains("RobotArdu") ) {
             robotName = "nano";
         } else if ( pwd.contains("RobotEdison") ) {
@@ -40,5 +43,6 @@ public abstract class AstTest {
             robotName = "wedo";
         }
         testFactory = Util.configureRobotPlugin(robotName, "", "", pluginDefines);
+        testFactoryNewConf = Util.configureRobotPlugin(robotName, "", "", pluginDefinesNewConf);
     }
 }
