@@ -116,7 +116,15 @@ require.config({
         'blockly': {
             exports: 'Blockly'
         },
-
+        'confVisualization': {
+            deps: ['blockly']
+        },
+        'robotBlock': {
+            deps: ['blockly']
+        },
+        'port': {
+            deps: ['blockly']
+        },
         'volume-meter': {
             exports: "Volume",
             init: function() {

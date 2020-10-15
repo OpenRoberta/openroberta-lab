@@ -6,6 +6,15 @@ import { Port } from "./port";
 const SEP = 2.5;
 const STROKE = 1.8;
 
+// fix for IE which does not have the remove function
+if (!('remove' in Element.prototype)) {
+    (Element.prototype as any).remove = function() {
+        if (this.parentNode) {
+            this.parentNode.removeChild(this);
+        }
+    };
+}
+
 export class CircuitVisualization {
     components: {};
     connections: any;
@@ -91,7 +100,8 @@ export class CircuitVisualization {
 
     injectRobotBoard(): void {
         if (this.robotXml) {
-            (this.robotXml as any).remove();
+                (this.robotXml as any).remove();
+
         }
         (<any>window).Blockly.Blocks['robot'] = createRobotBlock(this.currentRobot);
         const robotXml = `<instance x="250" y="250"><block type="robot" id="robot"></block></instance>`;

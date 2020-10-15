@@ -33,6 +33,14 @@ define(["require", "exports", "./wires", "./const.robots", "./robotBlock", "./po
     exports.CircuitVisualization = void 0;
     var SEP = 2.5;
     var STROKE = 1.8;
+    // fix for IE which does not have the remove function
+    if (!('remove' in Element.prototype)) {
+        Element.prototype.remove = function () {
+            if (this.parentNode) {
+                this.parentNode.removeChild(this);
+            }
+        };
+    }
     var CircuitVisualization = /** @class */ (function () {
         function CircuitVisualization(workspace, dom) {
             var _this = this;
