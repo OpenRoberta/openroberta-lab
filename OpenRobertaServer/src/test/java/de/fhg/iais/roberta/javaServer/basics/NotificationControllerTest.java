@@ -1,15 +1,20 @@
 package de.fhg.iais.roberta.javaServer.basics;
 
-import de.fhg.iais.roberta.generated.restEntities.BaseResponse;
-import de.fhg.iais.roberta.generated.restEntities.FullRestRequest;
-import de.fhg.iais.roberta.generated.restEntities.NotificationsResponse;
-import de.fhg.iais.roberta.generated.restEntities.PingResponse;
-import de.fhg.iais.roberta.javaServer.restServices.all.controller.ClientPing;
-import de.fhg.iais.roberta.javaServer.restServices.all.controller.NotificationController;
-import de.fhg.iais.roberta.persistence.util.HttpSessionState;
-import de.fhg.iais.roberta.util.NotificationService;
-import de.fhg.iais.roberta.util.ServerProperties;
-import de.fhg.iais.roberta.util.UtilForREST;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+import javax.ws.rs.core.Response;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -22,14 +27,16 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import javax.ws.rs.core.Response;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.*;
+import de.fhg.iais.roberta.generated.restEntities.BaseResponse;
+import de.fhg.iais.roberta.generated.restEntities.FullRestRequest;
+import de.fhg.iais.roberta.generated.restEntities.NotificationsResponse;
+import de.fhg.iais.roberta.generated.restEntities.PingResponse;
+import de.fhg.iais.roberta.javaServer.restServices.all.controller.ClientPing;
+import de.fhg.iais.roberta.javaServer.restServices.all.controller.NotificationController;
+import de.fhg.iais.roberta.persistence.util.HttpSessionState;
+import de.fhg.iais.roberta.util.NotificationService;
+import de.fhg.iais.roberta.util.ServerProperties;
+import de.fhg.iais.roberta.util.UtilForREST;
 
 @RunWith(MockitoJUnitRunner.class)
 public class NotificationControllerTest {
@@ -55,7 +62,7 @@ public class NotificationControllerTest {
     }
 
     @Test
-    public void getNotifications() {
+    public void testGetNotifications() {
         JSONObject firstNotification = new JSONObject("{\n" + "  \"triggers\": [],\n" + "  \"name\": \"notification1\"\n" + "}");
         JSONObject secondNotification = new JSONObject("{\n" + "  \"conditions\": [" + "],\n" + "  \"name\": \"notification2\"\n" + "}");
 
@@ -77,18 +84,19 @@ public class NotificationControllerTest {
             assertThat(json.getString("name")).isEqualTo("notification2");
             assertThat(json.getJSONArray("conditions")).isEmpty();
         });
-        
+
         assertThat(notificationsResponse.getNotificationsAvailable()).isEqualTo(false);
     }
 
     @Test
-    public void notificationsAvailableFlag() throws Exception {
+    public void testNotificationsAvailableFlag() throws Exception {
         ClientPing clientPing = new ClientPing("", null);
 
         HttpSessionState httpSession = createEmptyHttpSession();
         FullRestRequest fullRestRequest = createFullRequestFromSession(httpSession);
 
         mockGetCurrentDigest("HASH");
+        mockGetNotifications();
         notificationController.getNotifications(fullRestRequest);
 
         BaseResponse firstBaseResponse = baseResponsePing(clientPing, fullRestRequest);
@@ -100,8 +108,8 @@ public class NotificationControllerTest {
     }
 
     @Test
-    public void postNotifications_NotAsAdmin() {
-        JSONArray notifications = new JSONArray("[\n" + "  {\n" + "    \"triggers\": []\n" + "  " + "}\n" + "]");
+    public void testPostNotificationsNotAsAdmin() {
+        JSONArray notifications = new JSONArray("[{\"triggers\": [] }]");
 
         HttpSessionState session = createEmptyHttpSession();
         session.setUserClearDataKeepTokenAndRobotId(NOT_ADMIN_USER_ID);
@@ -119,7 +127,7 @@ public class NotificationControllerTest {
     }
 
     @Test
-    public void postNotifications_asAdminJSONError() {
+    public void testPostNotificationsAsAdminJSONError() {
         JSONArray notifications = new JSONArray("[\n" + "  {\n" + "    \"triggers\": []\n" + "  " + "}\n" + "]");
 
         HttpSessionState session = createEmptyHttpSession();
@@ -143,7 +151,7 @@ public class NotificationControllerTest {
     }
 
     @Test
-    public void postNotifications_AsAdmin() {
+    public void testPostNotificationsAsAdmin() {
         JSONArray notifications = new JSONArray("[\n" + "  {\n" + "    \"triggers\": []\n" + "  " + "}\n" + "]");
 
         HttpSessionState session = createEmptyHttpSession();
@@ -166,7 +174,7 @@ public class NotificationControllerTest {
     }
 
     private void mockGetNotifications(JSONObject... toBeReturned) {
-        doReturn(Arrays.asList(toBeReturned)).when(notificationService).getNotifications();
+        doReturn(new JSONArray(toBeReturned)).when(notificationService).getNotifications();
     }
 
     private void mockGetCurrentDigest(String digest) {
@@ -190,11 +198,16 @@ public class NotificationControllerTest {
     }
 
     private FullRestRequest createFullRequestFromSession(HttpSessionState httpSession) {
-        return createFullRequestFromSession(httpSession, "");
+        return createFullRequestFromSession(httpSession, "[]");
     }
 
     private FullRestRequest createFullRequestFromSession(HttpSessionState httpSession, String notifications) {
-        return FullRestRequest.make().setInitToken(httpSession.getInitToken()).setData(new JSONObject().put("notifications", notifications)).setLog(Collections.emptyList()).immutable();
+        return FullRestRequest
+            .make()
+            .setInitToken(httpSession.getInitToken())
+            .setData(new JSONObject().put("notifications", notifications))
+            .setLog(Collections.emptyList())
+            .immutable();
     }
 
     private HttpSessionState createEmptyHttpSession() {

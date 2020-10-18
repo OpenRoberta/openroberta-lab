@@ -18,17 +18,18 @@ import de.fhg.iais.roberta.util.UtilForREST;
 public class RuntimeExceptionMapper implements ExceptionMapper<RuntimeException> {
     private static final Logger LOG = LoggerFactory.getLogger(RuntimeExceptionMapper.class);
     private static final String SERVER_ERROR = Key.SERVER_ERROR.getKey();
-    static final String ERROR_IN_ERROR = "{\"rc\":\"error\",\"message\":\"" + SERVER_ERROR + "\",\"rc\":\"" + SERVER_ERROR + "\",}";
+    static final String ERROR_IN_ERROR = "{\"rc\":\"error\",\"message\":\"" + SERVER_ERROR + "\",\"rc\":\"" + SERVER_ERROR + "\",\"initToken\":\"error\"}";
 
     @Override
     public Response toResponse(RuntimeException e) {
         try {
             String errorMessage = e.getMessage();
-            errorMessage = (errorMessage == null) ? "-no error message in exception-" : errorMessage.substring(0, 60);
+            errorMessage =
+                (errorMessage == null) ? "-no error message in exception-" : errorMessage.length() <= 60 ? errorMessage : errorMessage.substring(0, 60);
             LOG.error("server error - exception: " + errorMessage, e);
             final BaseResponse response = BaseResponse.make();
             String keyAsString = Key.SERVER_ERROR.toString();
-            response.setRc("error").setMessage(keyAsString).setCause(keyAsString);
+            response.setRc("error").setMessage(keyAsString).setCause(keyAsString).setInitToken("error");
             return UtilForREST.responseWithFrontendInfo(response, null, null);
         } catch ( Exception eInE ) {
             LOG.error("server error - exception in exception processor", eInE);

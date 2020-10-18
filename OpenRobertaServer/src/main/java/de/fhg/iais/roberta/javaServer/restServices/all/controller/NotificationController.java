@@ -1,18 +1,5 @@
 package de.fhg.iais.roberta.javaServer.restServices.all.controller;
 
-import de.fhg.iais.roberta.generated.restEntities.BaseResponse;
-import de.fhg.iais.roberta.generated.restEntities.FullRestRequest;
-import de.fhg.iais.roberta.generated.restEntities.NotificationsResponse;
-import de.fhg.iais.roberta.persistence.util.HttpSessionState;
-import de.fhg.iais.roberta.util.Key;
-import de.fhg.iais.roberta.util.NotificationService;
-import de.fhg.iais.roberta.util.UtilForREST;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
@@ -20,7 +7,17 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import de.fhg.iais.roberta.generated.restEntities.BaseResponse;
+import de.fhg.iais.roberta.generated.restEntities.FullRestRequest;
+import de.fhg.iais.roberta.generated.restEntities.NotificationsResponse;
+import de.fhg.iais.roberta.persistence.util.HttpSessionState;
+import de.fhg.iais.roberta.util.Key;
+import de.fhg.iais.roberta.util.NotificationService;
+import de.fhg.iais.roberta.util.UtilForREST;
 
 @Path("/notifications")
 public class NotificationController {
@@ -40,11 +37,7 @@ public class NotificationController {
     public Response getNotifications(FullRestRequest fullRequest) {
         HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, fullRequest, false);
         NotificationsResponse notificationsResponse = NotificationsResponse.make();
-
-        List<JSONObject> notifications = notificationService.getNotifications();
-
-        JSONArray jsonArray = new JSONArray(notifications);
-        notificationsResponse.setNotifications(jsonArray);
+        notificationsResponse.setNotifications(notificationService.getNotifications());
         httpSessionState.setReceivedNotificationsDigest(notificationService.getCurrentDigest());
 
         UtilForREST.addSuccessInfo(notificationsResponse, Key.SERVER_SUCCESS);
@@ -63,13 +56,14 @@ public class NotificationController {
             try {
                 String notificationsJSON = fullRestRequest.getData().getString("notifications");
                 notificationService.saveNotifications(notificationsJSON);
+                LOG.info("new notifications are in effect");
                 UtilForREST.addSuccessInfo(response, Key.NOTIFICATION_SUCCESS);
-            } catch (JSONException e) {
+            } catch ( Exception e ) {
                 UtilForREST.addErrorInfo(response, Key.NOTIFICATION_ERROR_INVALID_SYNTAX, e.getMessage());
                 LOG.warn("An error occurred while parsing JSON", e);
             }
         } else {
-            LOG.warn("A unprivileged user with id {} tried to save a notification", httpSessionState.getUserId());
+            LOG.warn("A unprivileged user with id {} tried to change notifications", httpSessionState.getUserId());
             UtilForREST.addErrorInfo(response, Key.NOTIFICATION_ERROR_INVALID_PERMISSION);
         }
 
