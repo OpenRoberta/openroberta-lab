@@ -26,6 +26,7 @@ import de.fhg.iais.roberta.persistence.dao.ConfigurationDao;
 import de.fhg.iais.roberta.persistence.dao.ProgramDao;
 import de.fhg.iais.roberta.persistence.dao.RobotDao;
 import de.fhg.iais.roberta.persistence.dao.UserDao;
+import de.fhg.iais.roberta.persistence.dao.UserGroupDao;
 import de.fhg.iais.roberta.persistence.dao.UserGroupProgramShareDao;
 import de.fhg.iais.roberta.persistence.dao.UserProgramShareDao;
 import de.fhg.iais.roberta.persistence.util.DbSession;
@@ -232,7 +233,8 @@ public class ProgramProcessor extends AbstractProcessor {
     }
 
     /**
-     * Get information about all the programs owned by a user and those that are shared with him/her
+     * Get information about all the programs owned by a user and those that are shared with him/her including the programs of group members of those groups,
+     * that are owned by the user
      *
      * @param ownerId the owner of the program
      * @param robotName the program must be written for this robot
@@ -243,6 +245,7 @@ public class ProgramProcessor extends AbstractProcessor {
         ProgramDao programDao = new ProgramDao(this.dbSession);
         UserProgramShareDao userProgramShareDao = new UserProgramShareDao(this.dbSession);
         UserGroupProgramShareDao userGroupProgramShareDao = new UserGroupProgramShareDao(this.dbSession);
+        UserGroupDao userGroupDao = new UserGroupDao(this.dbSession);
         User owner = userDao.get(ownerId);
         Robot robot = robotDao.loadRobot(robotName);
 
@@ -250,129 +253,151 @@ public class ProgramProcessor extends AbstractProcessor {
             setStatus(ProcessorStatus.FAILED, Key.PROGRAM_GET_ALL_ERROR_USER_NOT_FOUND, new HashMap<>());
             return null;
         }
+        Map<Integer, JSONArray> programInfos = new HashMap<>();
 
         // First we obtain all programs owned by the user
-        List<Program> programs = programDao.loadAll(owner, robot);
+        {
+            List<Program> programs = programDao.loadAll(owner, robot);
 
-        JSONArray programInfos = new JSONArray();
-        for ( Program program : programs ) {
-            JSONArray programInfo = new JSONArray();
-            programInfo.put(program.getName());
-            programInfo.put(program.getOwner().getAccount());
-            List<UserProgramShare> userProgramShares = userProgramShareDao.loadUserProgramSharesByProgram(program);
-            List<UserGroupProgramShare> userGroupProgramShares = userGroupProgramShareDao.loadUserGroupProgramSharesByProgram(program);
-            JSONObject sharedWith = new JSONObject(), sharedWithTmp;
-            try {
-                if ( !userProgramShares.isEmpty()
-                    || !userGroupProgramShares.isEmpty()
-                    || owner.getUserGroup() != null && !owner.getUserGroup().getAccessRight().equals(AccessRight.NO_OTHER_READ) ) {
-                    JSONArray sharedWithArray = new JSONArray();
-                    UserGroup ownerGroup = owner.getUserGroup();
-                    User ownerGroupOwner = null;
+            UserGroup ownersGroup = owner.getUserGroup();
+            User ownersGroupOwner = ownersGroup == null ? null : ownersGroup.getOwner();
 
-                    if ( ownerGroup != null && !ownerGroup.getAccessRight().equals(AccessRight.NO_OTHER_READ) ) {
-                        ownerGroupOwner = ownerGroup.getOwner();
-                        sharedWithTmp = new JSONObject();
-                        sharedWithTmp.put("type", User.class.getSimpleName());
-                        sharedWithTmp.put("label", ownerGroupOwner.getAccount());
-                        Relation relation = Relation.READ;
-                        for ( UserProgramShare userProgramShare : userProgramShares ) {
-                            if ( userProgramShare.getUser().equals(ownerGroupOwner) ) {
-                                relation = userProgramShare.getRelation();
-                                break;
-                            }
-                        }
-                        sharedWithTmp.put("right", relation.toString());
-                        sharedWithArray.put(sharedWithTmp);
-                    }
-
-                    for ( UserGroupProgramShare userGroupProgramShare : userGroupProgramShares ) {
-                        sharedWithTmp = new JSONObject();
-                        sharedWithTmp.put("type", userGroupProgramShare.getEntityType());
-                        sharedWithTmp.put("label", userGroupProgramShare.getEntityLabel());
-                        sharedWithTmp.put("right", userGroupProgramShare.getRelation().toString());
-                        sharedWithArray.put(sharedWithTmp);
-                    }
-                    for ( UserProgramShare userProgramShare : userProgramShares ) {
-                        if ( ownerGroupOwner != null && userProgramShare.getUser().equals(ownerGroupOwner) ) {
-                            continue;
-                        }
-                        sharedWithTmp = new JSONObject();
-                        sharedWithTmp.put("type", userProgramShare.getEntityType());
-                        sharedWithTmp.put("label", userProgramShare.getEntityLabel());
-                        sharedWithTmp.put("right", userProgramShare.getRelation().toString());
-                        sharedWithArray.put(sharedWithTmp);
-                    }
-                    sharedWith.put("sharedWith", sharedWithArray);
-                }
-            } catch ( JSONException e ) {
-            }
-            programInfo.put(sharedWith);
-            programInfo.put(program.getAuthor().getAccount());
-            programInfo.put(program.getCreated().getTime());
-            programInfo.put(program.getLastChanged().getTime());
-            programInfos.put(programInfo);
-        }
-
-        // Now we find all the programs which are not owned by the user but have been shared to him/her
-        List<UserProgramShare> sharedPrograms = userProgramShareDao.loadUserProgramsSharedWithUser(owner, robot);
-
-        // Now, if the user is part of a user group, show all programs that the owner of the group provided for it
-        if ( owner.getUserGroup() != null ) {
-            List<UserGroupProgramShare> sharedProgramsForUserGroup = userGroupProgramShareDao.loadProgramSharesForUserGroup(owner.getUserGroup(), robot);
-            Program tmpProgram;
-            for ( UserGroupProgramShare sharedUserGroupProgram : sharedProgramsForUserGroup ) {
-                tmpProgram = sharedUserGroupProgram.getProgram();
-                boolean directlyShared = false;
-                for ( UserProgramShare sharedProgram : sharedPrograms ) {
-                    if ( sharedProgram.getProgram().equals(sharedUserGroupProgram.getProgram()) ) {
-                        directlyShared = true;
-                        break;
-                    }
-                }
-                if ( directlyShared ) {
-                    continue;
-                }
-                if ( tmpProgram != null ) {
-                    JSONArray programInfo = new JSONArray();
-                    programInfo.put(tmpProgram.getName());
-                    programInfo.put(tmpProgram.getOwner().getAccount());
-                    JSONObject sharedFrom = new JSONObject();
-                    try {
-                        sharedFrom.put("sharedFrom", sharedUserGroupProgram.getRelation().toString());
-                    } catch ( JSONException e ) {
-                    }
-                    programInfo.put(sharedFrom);
-                    programInfo.put(tmpProgram.getAuthor().getAccount());
-                    programInfo.put(tmpProgram.getCreated().getTime());
-                    programInfo.put(tmpProgram.getLastChanged().getTime());
-                    programInfos.put(programInfo);
-                }
-            }
-        }
-        for ( UserProgramShare sharedProgram : sharedPrograms ) {
-            Program program = sharedProgram.getProgram();
-            if ( program != null ) {
+            for ( Program program : programs ) {
                 JSONArray programInfo = new JSONArray();
                 programInfo.put(program.getName());
                 programInfo.put(program.getOwner().getAccount());
-                JSONObject sharedFrom = new JSONObject();
+                List<UserProgramShare> shares = userProgramShareDao.loadUserProgramSharesByProgram(program);
+                List<UserGroupProgramShare> groupShares = userGroupProgramShareDao.loadUserGroupProgramSharesByProgram(program);
+                JSONObject sharedWith = new JSONObject();
                 try {
-                    sharedFrom.put("sharedFrom", sharedProgram.getRelation().toString());
+                    if ( !shares.isEmpty() || !groupShares.isEmpty() || ownersGroup != null && !ownersGroup.getAccessRight().equals(AccessRight.NO_OTHER_READ) ) //
+                    {
+                        JSONArray shareArray = new JSONArray();
+
+                        if ( ownersGroup != null && !ownersGroup.getAccessRight().equals(AccessRight.NO_OTHER_READ) ) {
+                            JSONObject sharedEntry = new JSONObject();
+                            sharedEntry.put("type", User.class.getSimpleName());
+                            sharedEntry.put("label", ownersGroupOwner.getAccount());
+                            Relation relation = Relation.READ;
+                            for ( UserProgramShare userProgramShare : shares ) {
+                                if ( userProgramShare.getUser().equals(ownersGroupOwner) ) {
+                                    relation = userProgramShare.getRelation();
+                                    break;
+                                }
+                            }
+                            sharedEntry.put("right", relation.toString());
+                            shareArray.put(sharedEntry);
+                        }
+
+                        for ( UserGroupProgramShare groupShare : groupShares ) {
+                            JSONObject sharedEntry = new JSONObject();
+                            sharedEntry.put("type", groupShare.getEntityType());
+                            sharedEntry.put("label", groupShare.getEntityLabel());
+                            sharedEntry.put("right", groupShare.getRelation().toString());
+                            shareArray.put(sharedEntry);
+                        }
+                        for ( UserProgramShare share : shares ) {
+                            if ( share.getUser().equals(ownersGroupOwner) ) {
+                                continue;
+                            }
+                            JSONObject sharedEntry = new JSONObject();
+                            sharedEntry.put("type", share.getEntityType()).put("label", share.getEntityLabel()).put("right", share.getRelation().toString());
+                            shareArray.put(sharedEntry);
+                        }
+                        sharedWith.put("sharedWith", shareArray);
+                    }
                 } catch ( JSONException e ) {
                 }
-                programInfo.put(sharedFrom);
+                programInfo.put(sharedWith);
                 programInfo.put(program.getAuthor().getAccount());
                 programInfo.put(program.getCreated().getTime());
                 programInfo.put(program.getLastChanged().getTime());
-                programInfos.put(programInfo);
+                programInfos.put(program.getId(), programInfo);
+            }
+        }
+
+        // Now we find all the programs which are not owned by the user but have been shared to him/her
+        {
+            List<UserProgramShare> sharedPrograms = userProgramShareDao.loadUserProgramsSharedWithUser(owner, robot);
+            for ( UserProgramShare sharedProgram : sharedPrograms ) {
+                Program program = sharedProgram.getProgram();
+                if ( program != null ) {
+                    if ( programInfos.get(program.getId()) == null ) {
+                        JSONArray programInfo = new JSONArray();
+                        programInfo.put(program.getName());
+                        programInfo.put(program.getOwner().getAccount());
+                        JSONObject sharedFrom = new JSONObject();
+                        try {
+                            sharedFrom.put("sharedFrom", sharedProgram.getRelation().toString());
+                        } catch ( JSONException e ) {
+                        }
+                        programInfo.put(sharedFrom);
+                        programInfo.put(program.getAuthor().getAccount());
+                        programInfo.put(program.getCreated().getTime());
+                        programInfo.put(program.getLastChanged().getTime());
+                        programInfos.put(program.getId(), programInfo);
+                    }
+                }
+            }
+        }
+
+        // Now, if the user is part of a user group, show all programs that the owner of the group provided for it
+        {
+            if ( owner.getUserGroup() != null ) {
+                List<UserGroupProgramShare> sharedProgramsForUserGroup = userGroupProgramShareDao.loadProgramSharesForUserGroup(owner.getUserGroup(), robot);
+                for ( UserGroupProgramShare sharedUserGroupProgram : sharedProgramsForUserGroup ) {
+                    Program sharedProgram = sharedUserGroupProgram.getProgram();
+                    if ( sharedProgram != null && programInfos.get(sharedProgram.getId()) == null ) { // right part of condition: already directly shares
+                        JSONArray programInfo = new JSONArray();
+                        programInfo.put(sharedProgram.getName());
+                        programInfo.put(sharedProgram.getOwner().getAccount());
+                        JSONObject sharedFrom = new JSONObject();
+                        try {
+                            sharedFrom.put("sharedFrom", sharedUserGroupProgram.getRelation().toString());
+                        } catch ( JSONException e ) {
+                        }
+                        programInfo.put(sharedFrom);
+                        programInfo.put(sharedProgram.getAuthor().getAccount());
+                        programInfo.put(sharedProgram.getCreated().getTime());
+                        programInfo.put(sharedProgram.getLastChanged().getTime());
+                        programInfos.put(sharedProgram.getId(), programInfo);
+                    }
+                }
+            }
+        }
+        //Now, if the user is owner of user groups, show all programs that belong to these groups
+        {
+            List<UserGroup> ownersGroups = userGroupDao.loadAll(owner);
+            for ( UserGroup userGroup : ownersGroups ) {
+                for ( User member : userGroup.getMembers() ) {
+                    List<Program> programs = programDao.loadAll(member, robot);
+                    for ( Program program : programs ) {
+                        if ( programInfos.get(program.getId()) == null ) { // right part of condition: already directly shares
+                            JSONArray programInfo = new JSONArray();
+                            programInfo.put(program.getName());
+                            programInfo.put(program.getOwner().getAccount());
+                            JSONObject sharedFrom = new JSONObject();
+                            try {
+                                sharedFrom.put("sharedFrom", "READ");
+                            } catch ( JSONException e ) {
+                            }
+                            programInfo.put(sharedFrom);
+                            programInfo.put(program.getAuthor().getAccount());
+                            programInfo.put(program.getCreated().getTime());
+                            programInfo.put(program.getLastChanged().getTime());
+                            programInfos.put(program.getId(), programInfo);
+                        }
+                    }
+
+                }
+
             }
         }
 
         Map<String, String> processorParameters = new HashMap<>();
-        processorParameters.put("PROGRAM_LENGTH", "" + programInfos.length());
+        processorParameters.put("PROGRAM_LENGTH", "" + programInfos.size());
         setStatus(ProcessorStatus.SUCCEEDED, Key.PROGRAM_GET_ALL_SUCCESS, processorParameters);
-        return programInfos;
+        return new JSONArray(programInfos.values());
     }
 
     /**
