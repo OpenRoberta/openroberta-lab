@@ -87,6 +87,10 @@ public class RobotDownloadProgram {
                 case "edison":
                     fileName = programName + ".wav";
                     break;
+                case "nano33ble":
+                    fileName = programName + ".bin";
+                    filePath = this.pathToCrosscompilerBaseDir + token + "/" + programName + "/target";
+                    break;
                 default:
                     LOG.error("unsupported firmware name " + state.getFirmwareName());
                     return Response.serverError().build();

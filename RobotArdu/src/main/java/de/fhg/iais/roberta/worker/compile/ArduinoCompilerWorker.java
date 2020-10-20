@@ -1,16 +1,16 @@
 package de.fhg.iais.roberta.worker.compile;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import com.google.common.base.Charsets;
 
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.base.Charsets;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import de.fhg.iais.roberta.bean.CompilerSetupBean;
 import de.fhg.iais.roberta.components.Project;
@@ -91,6 +91,12 @@ public class ArduinoCompilerWorker implements IWorker {
                 arduinoVariant = "ARDUINO_ESP32_DEV";
                 scriptName = compilerResourcesDir + "arduino-resources/build_project_festobionic.sh";
                 arduinoArch = "esp32";
+                break;
+            case "nano33ble":
+                boardVariant = "nano_33_iot";
+                arduinoVariant = "ARDUINO_ARDUINO_NANO33BLE";
+                scriptName = compilerResourcesDir + "arduino-resources/build_project_nano33ble.sh";
+                arduinoArch = "mbed";
                 break;
             default:
                 throw new DbcException("Unsupported Arduino type: " + project.getRobot());
