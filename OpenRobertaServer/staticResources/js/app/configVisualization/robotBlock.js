@@ -25,16 +25,22 @@ var __assign = (this && this.__assign) || function () {
 define(["require", "exports", "./port", "./const.robots"], function (require, exports, port_1, const_robots_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.isRobotVisualized = exports.createRobotBlock = void 0;
+    exports.createRobotBlock = void 0;
     var RobotViewField = /** @class */ (function (_super) {
         __extends(RobotViewField, _super);
         function RobotViewField(robot) {
             var _this = _super.call(this) || this;
             _this.robot = robot;
-            _this.height_ = Number(200);
-            _this.width_ = Number(300);
-            _this.size_ = new window.goog.math.Size(_this.width_, _this.height_ + 2 * window.Blockly.BlockSvg.INLINE_PADDING_Y);
-            _this.ports_ = [];
+            _this.robotImageSrc = const_robots_1.ROBOTS[_this.robot.group + '_' + _this.robot.name] ? (_this.robot.group + '_' + _this.robot.name) : const_robots_1.ROBOTS[_this.robot.group] ? _this.robot.group : null;
+            if (_this.robotImageSrc) {
+                _this.width = const_robots_1.ROBOTS[_this.robotImageSrc]["width"];
+                _this.height = const_robots_1.ROBOTS[_this.robotImageSrc]["height"];
+                _this.size = new window.goog.math.Size(_this.width, _this.height + 2 * window.Blockly.BlockSvg.INLINE_PADDING_Y);
+                _this.ports_ = [];
+            }
+            else {
+                console.error('robot image invalid!');
+            }
             return _this;
         }
         RobotViewField.prototype.init = function () {
@@ -52,19 +58,18 @@ define(["require", "exports", "./port", "./const.robots"], function (require, ex
         RobotViewField.prototype.initBoardView_ = function () {
             var workspace = window.Blockly.getMainWorkspace();
             this.board_ = window.Blockly.createSvgElement('image', {}, this.element_);
-            var robotSrc = workspace.options.pathToMedia + "robots/" + this.robot.group + "_" + this.robot.name + ".svg";
-            var groupSrc = workspace.options.pathToMedia + "robots/" + this.robot.group + ".svg";
+            var robotSrc = workspace.options.pathToMedia + "robots/" + this.robotImageSrc + ".svg";
             var board = this.board_;
-            urlExists(robotSrc, function () {
-                board.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', robotSrc);
-            }, function () {
-                board.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', groupSrc);
-            });
+            board.setAttribute('href', robotSrc);
+            board.setAttribute('x', 0);
+            board.setAttribute('y', 0);
+            board.setAttribute('width', this.width);
+            board.setAttribute('height', this.height);
         };
         RobotViewField.prototype.initPorts_ = function () {
             var portsGroupSvg = window.Blockly.createSvgElement('g', {}, this.element_);
-            var robots = const_robots_1.ROBOTS[this.robot.group + '_' + this.robot.name] || const_robots_1.ROBOTS[this.robot.group];
-            this.ports_ = robots.map(function (props) {
+            var robot = const_robots_1.ROBOTS[this.robot.group + '_' + this.robot.name] || const_robots_1.ROBOTS[this.robot.group];
+            this.ports_ = robot["ports"].map(function (props) {
                 var name = props.name, position = props.position;
                 var port = new port_1.Port(portsGroupSvg, name, position);
                 return __assign({ portSvg: port.element }, props);
@@ -100,28 +105,11 @@ define(["require", "exports", "./port", "./const.robots"], function (require, ex
         };
     }
     exports.createRobotBlock = createRobotBlock;
-    function isRobotVisualized(robotIdentifier) {
-        return const_robots_1.ROBOTS[robotIdentifier] !== undefined;
-    }
-    exports.isRobotVisualized = isRobotVisualized;
     function identifierToRobot(robotIdentifier) {
         var splits = robotIdentifier.split('_');
         var robot = {};
         robot["group"] = splits[0];
         robot["name"] = splits[1];
         return robot;
-    }
-    function urlExists(url, posCallback, negCallback) {
-        var client = new XMLHttpRequest();
-        client.onload = function () {
-            if (this.status === 200) {
-                posCallback();
-            }
-            else {
-                negCallback();
-            }
-        };
-        client.open("HEAD", url, true);
-        client.send();
     }
 });

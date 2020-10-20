@@ -193,7 +193,7 @@ define(["require", "exports", "./wires", "./const.robots", "./robotBlock", "./po
             };
         };
         CircuitVisualization.isRobotVisualized = function (robotGroup, robot) {
-            return const_robots_1.ROBOTS[robotGroup] || const_robots_1.ROBOTS[robotGroup + "_" + robot] !== undefined;
+            return const_robots_1.ROBOTS[robotGroup + "_" + robot] || const_robots_1.ROBOTS[robotGroup] !== undefined;
         };
         CircuitVisualization.prototype.reset = function () {
             var currentRobot = this.workspace.device + "_" + this.workspace.subDevice;

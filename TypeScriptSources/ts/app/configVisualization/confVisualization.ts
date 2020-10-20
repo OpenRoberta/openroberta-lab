@@ -63,7 +63,7 @@ export class CircuitVisualization {
     }
 
     public static isRobotVisualized(robotGroup: string, robot: string): boolean {
-        return ROBOTS[robotGroup] || ROBOTS[robotGroup + "_" + robot] !== undefined;
+        return ROBOTS[robotGroup + "_" + robot] || ROBOTS[robotGroup] !== undefined;
     }
 
     reset(): void {
@@ -100,8 +100,7 @@ export class CircuitVisualization {
 
     injectRobotBoard(): void {
         if (this.robotXml) {
-                (this.robotXml as any).remove();
-
+            (this.robotXml as any).remove();
         }
         (<any>window).Blockly.Blocks['robot'] = createRobotBlock(this.currentRobot);
         const robotXml = `<instance x="250" y="250"><block type="robot" id="robot"></block></instance>`;
@@ -173,6 +172,7 @@ export class CircuitVisualization {
             wireSvg.setAttribute('stroke-width', STROKE * this.workspace.scale);
         });
     }
+    
     updateBlockPorts = (block) => {
         const positionX = block.width + 4;
         block.ports.forEach(port => {

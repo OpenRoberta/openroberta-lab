@@ -7,9 +7,9 @@ class RobotViewField extends ((<any>window).Blockly.Field as { new(): any; }) {
     visible_: any;
     element_: any;
     ports_: any[];
-    size_: any;
-    width_: number;
-    height_: number;
+    size: any;
+    width: number;
+    height: number;
     robot: any;
     static EDITABLE = false;
 
@@ -18,10 +18,15 @@ class RobotViewField extends ((<any>window).Blockly.Field as { new(): any; }) {
     constructor(robot) {
         super();
         this.robot = robot;
-        this.height_ = Number(200);
-        this.width_ = Number(300);
-        this.size_ = new (<any>window).goog.math.Size(this.width_, this.height_ + 2 * (<any>window).Blockly.BlockSvg.INLINE_PADDING_Y);
-        this.ports_ = [];
+        this.robotImageSrc = ROBOTS[this.robot.group + '_' + this.robot.name] ? (this.robot.group + '_' + this.robot.name) : ROBOTS[this.robot.group] ? this.robot.group : null;
+        if (this.robotImageSrc) {
+            this.width = ROBOTS[this.robotImageSrc]["width"];
+            this.height = ROBOTS[this.robotImageSrc]["height"];
+            this.size = new (<any>window).goog.math.Size(this.width, this.height + 2 * (<any>window).Blockly.BlockSvg.INLINE_PADDING_Y);
+            this.ports_ = [];
+        } else {
+            console.error('robot image invalid!');
+        }
     }
 
     init() {
@@ -42,33 +47,20 @@ class RobotViewField extends ((<any>window).Blockly.Field as { new(): any; }) {
 
     initBoardView_() {
         const workspace = (<any>window).Blockly.getMainWorkspace();
-
         this.board_ = (<any>window).Blockly.createSvgElement('image', {}, this.element_);
-
-        var robotSrc = workspace.options.pathToMedia + "robots/" + this.robot.group + "_" + this.robot.name + ".svg";
-        var groupSrc = workspace.options.pathToMedia + "robots/" + this.robot.group + ".svg";
-
+        let robotSrc = workspace.options.pathToMedia + "robots/" + this.robotImageSrc + ".svg";
         const board = this.board_;
-
-        urlExists(robotSrc, function() {
-            board.setAttributeNS(
-                'http://www.w3.org/1999/xlink',
-                'xlink:href',
-                robotSrc
-            );
-        }, function() {
-            board.setAttributeNS(
-                'http://www.w3.org/1999/xlink',
-                'xlink:href',
-                groupSrc
-            );
-        });
+        board.setAttribute('href', robotSrc);
+        board.setAttribute('x', 0);
+        board.setAttribute('y', 0);
+        board.setAttribute('width', this.width);
+        board.setAttribute('height', this.height);
     }
 
     initPorts_() {
         const portsGroupSvg = (<any>window).Blockly.createSvgElement('g', {}, this.element_);
-        let robots = ROBOTS[this.robot.group + '_' + this.robot.name] || ROBOTS[this.robot.group];
-        this.ports_ = robots.map((props) => {
+        let robot = ROBOTS[this.robot.group + '_' + this.robot.name] || ROBOTS[this.robot.group];
+        this.ports_ = robot["ports"].map((props) => {
             const { name, position } = props;
             const port = new Port(portsGroupSvg, name, position);
             return { portSvg: port.element, ...props };
@@ -96,16 +88,11 @@ export function createRobotBlock(robotIdentifier) {
             this.appendDummyInput()
                 .setAlign((<any>window).Blockly.ALIGN_CENTRE)
                 .appendField(this.robot_, 'ROBOT');
-
             this.getPortByName = (portName) => {
                 return this.robot_.getPortByName(portName);
             }
         },
     }
-}
-
-export function isRobotVisualized(robotIdentifier) {
-    return ROBOTS[robotIdentifier] !== undefined;
 }
 
 function identifierToRobot(robotIdentifier) {
@@ -114,17 +101,4 @@ function identifierToRobot(robotIdentifier) {
     robot["group"] = splits[0];
     robot["name"] = splits[1];
     return robot;
-}
-
-function urlExists(url, posCallback, negCallback) {
-    var client = new XMLHttpRequest();
-    client.onload = function() {
-        if ((this as any).status === 200) {
-            posCallback();
-        } else {
-            negCallback();
-        }
-    }
-    client.open("HEAD", url, true);
-    client.send();
 }
