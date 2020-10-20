@@ -100,7 +100,7 @@ public class PersistUserProgramTest {
         Assert.assertTrue(userProgramList.size() == 50);
         for ( int userNumber = 1; userNumber < PersistUserProgramTest.TOTAL_USERS; userNumber += 2 ) {
             User user = userDao.loadUser(null, "account-" + userNumber);
-            List<UserProgramShare> userProgramList2 = userProgramDao.loadUserProgramSharesForUser(user, robot);
+            List<UserProgramShare> userProgramList2 = userProgramDao.loadUserProgramsSharedWithUser(user, robot);
             Assert.assertTrue(userProgramList2.size() == 1);
         }
     }

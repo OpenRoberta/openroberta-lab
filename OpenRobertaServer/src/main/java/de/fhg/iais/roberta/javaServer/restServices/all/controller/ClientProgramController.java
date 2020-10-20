@@ -264,7 +264,7 @@ public class ClientProgramController {
                 return UtilForREST.makeBaseResponseForError(Key.USER_ERROR_NOT_LOGGED_IN, httpSessionState, null);
             } else {
                 int userId = httpSessionState.getUserId();
-                JSONArray programInfo = programProcessor.getProgramInfo(userId, robot, userId);
+                JSONArray programInfo = programProcessor.getProgramInfoOfProgramsOwnedByOrSharedWithUser(userId, robot);
 
                 if ( !programProcessor.succeeded() ) {
                     if ( programProcessor.getMessage().equals(Key.PROGRAM_GET_ALL_ERROR_USER_NOT_FOUND) ) {
@@ -294,7 +294,7 @@ public class ClientProgramController {
     @Path("/userGroupMembers/names")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getInfosOfProgramsOfUserGroupMembers(@OraData DbSession dbSession, FullRestRequest fullRequest) {
+    public Response getProgramInfoOfProgramsOwnedByUserGroupMembers(@OraData DbSession dbSession, FullRestRequest fullRequest) {
         HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, fullRequest, true);
         try {
             ListingNamesResponse response = ListingNamesResponse.make();
@@ -317,7 +317,7 @@ public class ClientProgramController {
                 return UtilForREST.makeBaseResponseForError(userGroupProcessor.getMessage(), httpSessionState, null);
             }
 
-            JSONArray programInfo = programProcessor.getProgramInfoForUserGroupMembers(userGroup, robot);
+            JSONArray programInfo = programProcessor.getProgramInfoOfProgramsOwnedByUserGroupMembers(userGroup, robot);
             if ( programInfo == null ) {
                 return UtilForREST.makeBaseResponseForError(programProcessor.getMessage(), httpSessionState, null);
             }
@@ -357,7 +357,7 @@ public class ClientProgramController {
             ProgramProcessor programProcessor = new ProgramProcessor(dbSession, httpSessionState);
             String robot = getRobot(httpSessionState);
             int userId = 1;
-            JSONArray programInfo = programProcessor.getProgramInfo(userId, robot, userId);
+            JSONArray programInfo = programProcessor.getProgramInfoOfProgramsOwnedByOrSharedWithUser(userId, robot);
             response.setProgramNames(programInfo);
             UtilForREST.addResultInfo(response, programProcessor);
             return UtilForREST.responseWithFrontendInfo(response, httpSessionState, null);

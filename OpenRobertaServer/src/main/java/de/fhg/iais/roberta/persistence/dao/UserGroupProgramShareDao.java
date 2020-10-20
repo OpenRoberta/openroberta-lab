@@ -14,25 +14,17 @@ import de.fhg.iais.roberta.persistence.util.DbSession;
 import de.fhg.iais.roberta.util.dbc.Assert;
 
 public class UserGroupProgramShareDao extends AbstractDao<UserGroupProgramShare> {
-    /**
-     * Create a new DAO for share objects of programs to user groups. This creation is cheap.
-     *
-     * @param session the session used to access the database.
-     */
     public UserGroupProgramShareDao(DbSession session) {
         super(UserGroupProgramShare.class, session);
     }
 
     /**
-     * Persist a share object of a program to a user group in the database. If the program is already shared to the user group,
-     * its relation will be updated. Otherwise, a new one will be created.<br/>
-     * Asserts, that the userGroup is not null.<br/>
-     * Asserts, that the program is not null.<br/>
-     * Asserts, that the relation is not null.
+     * Persist a share object of a program to a user group. If the program is already shared to the user group, its relation will be updated. Otherwise, a new
+     * one will be created.
      *
-     * @param userGroup the user group whose access rights have to be changed
-     * @param program the program affected
-     * @param relation the access right of the user group for the program
+     * @param userGroup the user group whose access rights have to be changed, not null
+     * @param program the program affected, not null
+     * @param relation the access right of the user group for the program, not null
      * @return the share object for the user group and program with the specified relation
      */
     public UserGroupProgramShare persistUserProgramShare(UserGroup userGroup, Program program, Relation relation) {
@@ -52,7 +44,7 @@ public class UserGroupProgramShareDao extends AbstractDao<UserGroupProgramShare>
     }
 
     /**
-     * Delete a share object of a program to a user group in the database.
+     * Delete a share object of a program to a user group
      *
      * @param userGroup the user group for which the program shall no longer be shared
      * @param program the program
@@ -66,12 +58,10 @@ public class UserGroupProgramShareDao extends AbstractDao<UserGroupProgramShare>
     }
 
     /**
-     * Loads a share object for a user group and a program from the database<br/>
-     * Asserts, that the userGroup is not null.<br/>
-     * Asserts, that the program is not null.
+     * Loads a share object for a user group and a program
      *
-     * @param userGroup The user group for which the share object shall be loaded
-     * @param program The program for which the share object shall be loaded
+     * @param userGroup The user group for which the share object shall be loaded, not null
+     * @param program The program for which the share object shall be loaded, not null
      * @return A share object for the user group and program or null, if no such share object exists.
      */
     public UserGroupProgramShare loadUserGroupProgramShare(UserGroup userGroup, Program program) {
@@ -88,10 +78,9 @@ public class UserGroupProgramShareDao extends AbstractDao<UserGroupProgramShare>
     }
 
     /**
-     * Load all user group to program share objects persisted in the database for a given program<br/>
-     * Asserts, that the program is not null.
+     * Load for a given program all share objects for all user groups
      *
-     * @param program The program for which all shares with user groups shall be returned
+     * @param program The program for which all shares with user groups shall be returned, not null
      * @return The list of all share objects for a user group and a program. May be an empty list, but never will be null.
      */
     public List<UserGroupProgramShare> loadUserGroupProgramSharesByProgram(Program program) {
@@ -106,15 +95,13 @@ public class UserGroupProgramShareDao extends AbstractDao<UserGroupProgramShare>
     }
 
     /**
-     * Load all share objects for user groups with programs for a given user group<br/>
-     * Asserts, that the user group is not null.
+     * Load for a given user group load all share objects
      *
-     * @param userGroup the user group for which all share objects with programs shall be returned
-     * @param robot Optionally a robot system, to only return those shares with programs for the given
-     *        user group, that are written for the robot
-     * @return A list of share objects for user groups and programs. May be an empty list, but never null
+     * @param userGroup the user group for which all share objects shall be returned, not null
+     * @param robot Optionally a robot system to filter those shares
+     * @return A list of share objects. May be empty, but never null
      */
-    public List<UserGroupProgramShare> loadUserGroupProgramSharesForUserGroup(UserGroup userGroup, Robot robot) {
+    public List<UserGroupProgramShare> loadProgramSharesForUserGroup(UserGroup userGroup, Robot robot) {
         Assert.notNull(userGroup);
         Query hql;
 

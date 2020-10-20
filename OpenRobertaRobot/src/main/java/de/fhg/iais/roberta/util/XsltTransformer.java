@@ -9,16 +9,16 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.inject.Inject;
 import javax.xml.transform.Source;
 import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
 import org.apache.commons.io.output.ByteArrayOutputStream;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Charsets;
 
@@ -26,21 +26,24 @@ import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
 public final class XsltTransformer {
+    private static final Logger LOG = LoggerFactory.getLogger(XsltTransformer.class);
     private static final Pattern NAMESPACE_CHECK = Pattern.compile("<block_set", Pattern.LITERAL);
 
-    private static final List<String> TRANSFORMER_SOURCES = Arrays.asList("classpath:/mapping.xslt", "classpath:/expansion.xslt");
+    private static final TransformerFactory factory = TransformerFactory.newInstance();
+    private static final List<String> TRANSFORMER_SOURCES =
+        Arrays.asList(Util.readResourceContent("/mapping.xslt"), Util.readResourceContent("/expansion.xslt"));
 
     private final ArrayList<Transformer> transformers = new ArrayList<>();
 
-    @Inject
     public XsltTransformer() {
+        // TransformerFactory factory = TransformerFactory.newInstance();
         for ( String transformerSource : TRANSFORMER_SOURCES ) {
-            try (InputStream stream = Util.getInputStream(false, transformerSource)) {
-                TransformerFactory factory = TransformerFactory.newInstance();
-
-                Source source = new StreamSource(stream);
-                this.transformers.add(factory.newTransformer(source));
-            } catch ( TransformerConfigurationException | IOException e ) {
+            try {
+                InputStream inputStream = new ByteArrayInputStream(transformerSource.getBytes());
+                Source source = new StreamSource(inputStream);
+                final Transformer transformer = factory.newTransformer(source);
+                this.transformers.add(transformer);
+            } catch ( Exception e ) {
                 throw new DbcException("Could not create XSLT transformer!", e);
             }
         }

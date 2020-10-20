@@ -48,13 +48,12 @@ public class ProgramProcessor extends AbstractProcessor {
     }
 
     /**
-     * load a program from the data base. Either the program is owned by the user with the id given
-     * or the program is shared by the user given to the user requesting the program
+     * load a program from the data base. Either the program is owned by 'ownerName' or the program is shared by 'ownerName' to the user requesting the program
      *
      * @param programName the name of the program to load
      * @param ownerName the account name of the owner. Either the logged in user, or an owner, who shared the program R/W with the logged in user
      * @param robotName the name of the robot the program was written for
-     * @param authorName in case the program is from the gallery or an example program, this is the name of the actual author. Ignored otherwise.
+     * @param authorName in case the program is from the gallery or is an example program, this is the name of the original author. Ignored otherwise.
      * @return the program; null, if no program was found
      */
     public Program getProgram(String programName, String ownerName, String robotName, String authorName) {
@@ -74,8 +73,7 @@ public class ProgramProcessor extends AbstractProcessor {
         }
 
         if ( !UserGroupProcessor.isGroupMember(ownerName) ) {
-            //The owner of the program is a global user
-
+            //The owner of the program is not a group member (~a global user)
             if ( loggedInUser != null && loggedInUser.getAccount().equals(ownerName) ) {
                 //The logged in user is loading one of his own programs.
                 owner = loggedInUser;
@@ -164,6 +162,9 @@ public class ProgramProcessor extends AbstractProcessor {
         }
     }
 
+    /**
+     * TODO: get a program from the gallery. Refactoring and documentation!
+     */
     public JSONArray getProgramEntity(String programName, int ownerId, String robotName, int authorId) {
         if ( isUserLoggedIn() ) {
             UserDao userDao = new UserDao(this.dbSession);
@@ -231,11 +232,12 @@ public class ProgramProcessor extends AbstractProcessor {
     }
 
     /**
-     * Get information about all the programs owned by a user and with whom they are shared
+     * Get information about all the programs owned by a user and those that are shared with him/her
      *
      * @param ownerId the owner of the program
+     * @param robotName the program must be written for this robot
      */
-    public JSONArray getProgramInfo(int ownerId, String robotName, int authorId) {
+    public JSONArray getProgramInfoOfProgramsOwnedByOrSharedWithUser(int ownerId, String robotName) {
         UserDao userDao = new UserDao(this.dbSession);
         RobotDao robotDao = new RobotDao(this.dbSession);
         ProgramDao programDao = new ProgramDao(this.dbSession);
@@ -312,13 +314,12 @@ public class ProgramProcessor extends AbstractProcessor {
             programInfos.put(programInfo);
         }
 
-        // Now we find all the programs which are not owned by the user but have been shared to him
-        List<UserProgramShare> sharedPrograms = userProgramShareDao.loadUserProgramSharesForUser(owner, robot);
+        // Now we find all the programs which are not owned by the user but have been shared to him/her
+        List<UserProgramShare> sharedPrograms = userProgramShareDao.loadUserProgramsSharedWithUser(owner, robot);
 
-        //Now, if the user is part of a user group, show all programs that the owner of the group provided for it
+        // Now, if the user is part of a user group, show all programs that the owner of the group provided for it
         if ( owner.getUserGroup() != null ) {
-            List<UserGroupProgramShare> sharedProgramsForUserGroup =
-                userGroupProgramShareDao.loadUserGroupProgramSharesForUserGroup(owner.getUserGroup(), robot);
+            List<UserGroupProgramShare> sharedProgramsForUserGroup = userGroupProgramShareDao.loadProgramSharesForUserGroup(owner.getUserGroup(), robot);
             Program tmpProgram;
             for ( UserGroupProgramShare sharedUserGroupProgram : sharedProgramsForUserGroup ) {
                 tmpProgram = sharedUserGroupProgram.getProgram();
@@ -350,7 +351,6 @@ public class ProgramProcessor extends AbstractProcessor {
             }
         }
         for ( UserProgramShare sharedProgram : sharedPrograms ) {
-            // Don't return programs with wrong robot type
             Program program = sharedProgram.getProgram();
             if ( program != null ) {
                 JSONArray programInfo = new JSONArray();
@@ -375,7 +375,14 @@ public class ProgramProcessor extends AbstractProcessor {
         return programInfos;
     }
 
-    public JSONArray getProgramInfoForUserGroupMembers(UserGroup userGroup, String robotName) {
+    /**
+     * return the program info for all programs that are owned by member of a group given, restricted to a robot given
+     *
+     * @param userGroup the user group, whose members are looked up for programs they own
+     * @param robotName the robot, for which programs are searched for
+     * @return the program infos
+     */
+    public JSONArray getProgramInfoOfProgramsOwnedByUserGroupMembers(UserGroup userGroup, String robotName) {
         if ( userGroup == null || userGroup.getAccessRight().equals(AccessRight.NO_OTHER_READ) ) {
             return new JSONArray();
         }
@@ -435,7 +442,7 @@ public class ProgramProcessor extends AbstractProcessor {
         Program program;
         JSONObject sharedWith;
 
-        List<UserGroupProgramShare> programShares = userGroupProgramShareDao.loadUserGroupProgramSharesForUserGroup(userGroup, robot);
+        List<UserGroupProgramShare> programShares = userGroupProgramShareDao.loadProgramSharesForUserGroup(userGroup, robot);
 
         for ( UserGroupProgramShare programShare : programShares ) {
             programInfo = new JSONArray();
@@ -513,29 +520,10 @@ public class ProgramProcessor extends AbstractProcessor {
     }
 
     /**
-     * Test if a given user has write or read access rights for a given program that was created by another user
-     *
-     * @param programName the name of the program
-     * @param ownerId the owner of the program
-     */
-    private Program getProgramWithAccessRight(String programName, int ownerId, String authorName) {
-        UserProgramShareDao accessRightDao = new UserProgramShareDao(this.dbSession);
-
-        // Find whether a program has been shared to the user logged in
-        UserProgramShare accessRight = accessRightDao.loadUserProgramShareForUser(this.getIdOfLoggedInUser(), programName, ownerId, authorName);
-        if ( accessRight == null ) {
-            return null;
-        } else {
-            return accessRight.getProgram();
-        }
-    }
-
-    /**
      * Get information about all the programs owned by the gallery
      *
      * @param galleryId the gallery user
      */
-
     public JSONArray getProgramGallery(int userId, String robotGroup) {
         UserDao userDao = new UserDao(this.dbSession);
         ProgramDao programDao = new ProgramDao(this.dbSession);

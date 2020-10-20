@@ -1,16 +1,14 @@
 package de.fhg.iais.roberta.guice;
 
+import java.util.Map;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.inject.AbstractModule;
 import com.google.inject.Singleton;
 import com.google.inject.TypeLiteral;
 import com.google.inject.name.Names;
-
-import de.fhg.iais.roberta.util.NotificationService;
-import de.fhg.iais.roberta.util.UtilForREST;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.util.Map;
 
 import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.javaServer.restServices.all.controller.ClientAdmin;
@@ -25,8 +23,9 @@ import de.fhg.iais.roberta.main.IIpToCountry;
 import de.fhg.iais.roberta.main.MailManagement;
 import de.fhg.iais.roberta.persistence.util.SessionFactoryWrapper;
 import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
+import de.fhg.iais.roberta.util.NotificationService;
 import de.fhg.iais.roberta.util.ServerProperties;
-import de.fhg.iais.roberta.util.XsltTransformer;
+import de.fhg.iais.roberta.util.UtilForREST;
 
 public class RobertaGuiceModule extends AbstractModule {
     private static final Logger LOG = LoggerFactory.getLogger(RobertaGuiceModule.class);
@@ -58,14 +57,12 @@ public class RobertaGuiceModule extends AbstractModule {
         bind(RestExample.class);
         bind(ClientPing.class);
 
-
         bind(ServerProperties.class).toInstance(this.serverProperties);
         bind(NotificationService.class).in(Singleton.class);
         bind(SessionFactoryWrapper.class).in(Singleton.class);
         bind(RobotCommunicator.class).toInstance(this.robotCommunicator);
         bind(MailManagement.class).in(Singleton.class);
         bind(IIpToCountry.class).toInstance(this.ipToCountry);
-        bind(XsltTransformer.class).in(Singleton.class);
 
         requestStaticInjection(UtilForREST.class);
 

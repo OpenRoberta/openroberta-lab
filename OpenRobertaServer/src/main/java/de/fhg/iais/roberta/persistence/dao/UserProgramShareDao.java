@@ -108,7 +108,7 @@ public class UserProgramShareDao extends AbstractDao<UserProgramShare> {
      *
      * @return the list of all share objects, may be an empty list, but never null
      */
-    public List<UserProgramShare> loadUserProgramSharesForUser(User user, Robot robot) {
+    public List<UserProgramShare> loadUserProgramsSharedWithUser(User user, Robot robot) {
         Assert.notNull(user);
         Assert.notNull(robot);
 
