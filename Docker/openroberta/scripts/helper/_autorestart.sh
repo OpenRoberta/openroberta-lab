@@ -56,6 +56,8 @@ fi
 ) &
 PID=$!
 
-(echo;echo "the auto restart uses the child pid ${PID}, which is disowned";echo) >>${BASE_DIR}/logs/autorestart.txt 2>&1
-echo "the auto restart uses the child pid ${PID}, which is disowned now"
+(echo;echo "auto restart activated for server ${SERVER_NAME} at url ${SERVER_URL}";echo "it is checked every ${SLEEP_BETWEEN_CHECKS} sec whether the server is alive";\
+ echo "if not answering, after ${SLEEP_TO_AVOID_FALSE_POSITIVES} sec the check is re-done to avoid false positives";\
+ echo "the auto restart uses the pid ${PID}, which is disowned";echo) >>${BASE_DIR}/logs/autorestart.txt 2>&1
+echo "the auto restart uses the pid ${PID}, which is disowned now"
 disown ${PID}
