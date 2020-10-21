@@ -494,6 +494,7 @@ public class Nano33bleCppVisitor extends AbstractCommonArduinoCppVisitor impleme
         nlIndent();
         nlIndent();
         this.sb.append("#define _ARDUINO_STL_NOT_NEEDED");
+        nlIndent();
         this.sb.append("#include <Arduino.h>");
         nlIndent();
         nlIndent();

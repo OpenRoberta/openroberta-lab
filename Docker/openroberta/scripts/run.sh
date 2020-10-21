@@ -72,7 +72,7 @@ case "${CMD}" in
     admin)        SERVER_NAME=$1; shift
                   ADMIN_CMD=$1; shift
                   source ${SCRIPT_HELPER}/_containerAdmin.sh ;;
-    auto-restart) SERVER_NAME=$1; shift; SERVER_URL=$1; shift
+    auto-restart) SERVER_NAME=$1; shift; SERVER_URL=$1; shift; SLEEP_BETWEEN_CHECKS=$1; shift; SLEEP_TO_AVOID_FALSE_POSITIVES=$1; shift
                   source ${SCRIPT_HELPER}/_autorestart.sh ;;
     auto-deploy)  source ${SCRIPT_HELPER}/_autodeploy.sh ;;
     start-all)    echo 'start database container and all server container'

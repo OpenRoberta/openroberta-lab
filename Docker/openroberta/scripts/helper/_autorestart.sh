@@ -1,15 +1,22 @@
 #!/bin/bash
 
 TIMEOUT_CURL=50
-SLEEP_BETWEEN_CHECKS=60
-SLEEP_TO_AVOID_FALSE_POSITIVES=30
 SLEEP_BETWEEN_RESTARTS=3600
+
+case "${SLEEP_BETWEEN_CHECKS}" in
+  ''|'-') SLEEP_BETWEEN_CHECKS="60" ;;
+  *)      : ;;
+esac
+case "${SLEEP_TO_AVOID_FALSE_POSITIVES}" in
+  ''|'-') SLEEP_TO_AVOID_FALSE_POSITIVES="30" ;;
+  *)      : ;;
+esac
 
 isServerNameValid ${SERVER_NAME}
 echo "if '${SERVER_URL}' is not responding within ${TIMEOUT_CURL} seconds, then restart the container '${SERVER_NAME}'"
 question 'do you really want such an potentially DANGEROUS automatic restart?'
 
-function isServerAvailableAccessRestAlive { 
+function isServerAvailable { 
     START=$(($(date +%s%N)/1000000000))
     HTTPCODE=$(curl -o /dev/null -m ${TIMEOUT_CURL} -w '%{http_code}' -s ${SERVER_URL}/rest/alive)
     STOP=$(($(date +%s%N)/1000000000))
@@ -20,16 +27,6 @@ function isServerAvailableAccessRestAlive {
     else
         echo "true"
     fi
-}
-
-function isServerAvailable110Response {
-    # return false, if in the last 5 minutes there are more than 20 110-er messages in nginx error log
-    echo "true"
-}
-
-
-function isServerAvailable {
-    isServerAvailableAccessRestAlive
 }
 
 if [ $(isServerAvailable) == 'false' ]

@@ -21,6 +21,7 @@ echo "       show-activity-once <server> [<file> [ <url>]]                 show 
 echo ""
 echo "dangerous commands:"
 echo "       prune                                                         rm as much unused data from docker as possible"
-echo "       auto-restart <server> <url>                                   restart a container if <url>/rest/alive doesn't respond within 50 sec (url ~ https://dns:port)"
+echo "       auto-restart <server> <url> [<secBetween>] [<secRetry>]       restart a container if <url>/rest/alive doesn't respond. Check every <secBetween> sec (default: 60)"
+echo "                                                                     to avoid false positives, check again after <secRetry> sec (default 30). Url is like https://dns:port"
 echo "       gen-net                                                       generate the docker network ${DOCKER_NETWORK_NAME}"
 echo "       start-export <server>                                         start a server from the export dir outside of docker"
