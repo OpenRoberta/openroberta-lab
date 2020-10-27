@@ -20,3 +20,4 @@ OpenRobertaServer/db-*
 **/*.py~
 **/*.csv
 dbIptoCountry/
+**/notifications.json

@@ -1,6 +1,6 @@
 define(
     ["require", "exports", "guiState.model", "guiState.controller", "notification.model", "comm"],
-    function (require, exports) {
+    function(require, exports) {
         const guiStateModel = require("guiState.model");
         const guiStateController = require("guiState.controller");
         const notificationModel = require("notification.model");
@@ -22,25 +22,28 @@ define(
         const defaultPopupTime = 20 * 1000;
         const defaultStartScreenTime = undefined;
 
-        exports.init = function () {
+        exports.init = function() {
             initNotificationModal();
 
-            notificationModel.getNotifications(function (result) {
+            notificationModel.getNotifications(function(result) {
                 activeNotifications = initNotifications(result.notifications);
             });
 
-            comm.onNotificationsAvailableCallback(function () {
-                removeActiveEventListeners();
-                notificationModel.getNotifications(function (result) {
-                    activeNotifications = initNotifications(result.notifications);
-                });
+            comm.onNotificationsAvailableCallback(reloadNotifications);
+        }
+
+        function reloadNotifications() {
+            removeActiveEventListeners();
+            notificationModel.getNotifications(function(result) {
+                activeNotifications = initNotifications(result.notifications);
             });
-        };
+        }
+        exports.reloadNotifications = reloadNotifications;
 
         /*----------- NOTIFICATION MODAL -----------*/
 
-        exports.showNotificationModal = function () {
-            notificationModel.getNotifications(function (result) {
+        exports.showNotificationModal = function() {
+            notificationModel.getNotifications(function(result) {
                 setFileDownloadContent(result.notifications);
                 $('#modal-notifications').modal("show");
             });
@@ -60,17 +63,17 @@ define(
         }
 
         function initNotificationModal() {
-            $notificationForm.on('submit', function (e) {
+            $notificationForm.on('submit', function(e) {
                 e.preventDefault();
-                readFileInputField(function (fileContent) {
-                    notificationModel.postNotifications(fileContent, function (restResponse) {
+                readFileInputField(function(fileContent) {
+                    notificationModel.postNotifications(fileContent, function(restResponse) {
                         if (restResponse.rc === "ok" && restResponse.message === "ORA_NOTIFICATION_SUCCESS") {
                             $notificationForm[0].reset();
                             showAlertInNotificationModal("success", "The notifications were transmitted successfully");
                             setFileDownloadContent(JSON.parse(fileContent));
                         } else {
                             const errorCode = restResponse.cause;
-                            const exceptionMessage = restResponse.parameters&& restResponse.parameters.MESSAGE ? ":" + restResponse.parameters.MESSAGE : ""
+                            const exceptionMessage = restResponse.parameters && restResponse.parameters.MESSAGE ? ":" + restResponse.parameters.MESSAGE : ""
                             const content = errorCode + exceptionMessage
 
                             showAlertInNotificationModal("danger", content, 60 * 1000);
@@ -90,7 +93,7 @@ define(
 
         function readFile(file, readyFn) {
             const fileReader = new FileReader();
-            fileReader.onload = function () {
+            fileReader.onload = function() {
                 readyFn(fileReader.result);
             }
             fileReader.readAsText(file);
@@ -109,6 +112,7 @@ define(
             for (var notificationI in activeNotifications) {
                 const notification = activeNotifications[notificationI];
                 notification.removeEventHandlers();
+                notification.hideNotification();
             }
             activeNotifications = [];
         }
@@ -153,7 +157,7 @@ define(
 
                 function hideNotification() {
                     for (var notificationI in notificationHandlers) {
-                    const notification = notificationHandlers[notificationI];
+                        const notification = notificationHandlers[notificationI];
                         notification.hide();
                     }
                 }
@@ -189,19 +193,19 @@ define(
                         // Use direct event handler if element is present
                         $element.on(event, fn);
 
-                        remove = function () {
+                        remove = function() {
                             $element.off(event, fn);
                         }
                     } else {
                         // Use delegate event handler if element is not yet present
                         $(document).on(event, selector, fn);
 
-                        remove = function () {
+                        remove = function() {
                             $element.off(event, selector, fn)
                         }
                     }
 
-                    activeEventHandlers.push({remove : remove});
+                    activeEventHandlers.push({ remove: remove });
                 }
 
                 function addEventHandlers() {
@@ -225,14 +229,14 @@ define(
 
                         // "Normal" event listeners
                         if (event) {
-                            addEventHandler(selector, event, function (e) {
+                            addEventHandler(selector, event, function(e) {
                                 showNotificationsIfConditionsMet(trigger.conditions);
                             });
                         }
 
                         // Class changed event listeners
                         if (addClass || removeClass) {
-                            addEventHandler(selector, "classChange", function (e) {
+                            addEventHandler(selector, "classChange", function(e) {
                                 if (addClass && $(selector).hasClass(addClass)) {
                                     showNotificationsIfConditionsMet(trigger.conditions);
                                 }
@@ -268,11 +272,11 @@ define(
                         return true;
                     }
 
-                    return conditions.every(function (condition) {
+                    return conditions.every(function(condition) {
                         if (condition.guiModel) {
                             const element = guiStateModel.gui[condition.guiModel];
                             if (condition.anyOf && Array.isArray(condition.anyOf)) {
-                                return condition.anyOf.some(function (s) {
+                                return condition.anyOf.some(function(s) {
                                     return element === s;
                                 })
                             }
@@ -284,7 +288,7 @@ define(
                                     return element !== condition.notEquals;
                                 }
 
-                                return condition.notEquals.every(function (s) {
+                                return condition.notEquals.every(function(s) {
                                     return element !== s;
                                 })
                             }
@@ -317,8 +321,8 @@ define(
                 addEventHandlers();
 
                 notificationStates.push({
-                    hideNotification : hideNotification,
-                    removeEventHandlers : removeEventHandlers
+                    hideNotification: hideNotification,
+                    removeEventHandlers: removeEventHandlers
                 })
             }
 
@@ -368,8 +372,8 @@ define(
             }
 
             return {
-                show : show,
-                hide : hide
+                show: show,
+                hide: hide
             };
         }
 
@@ -424,7 +428,7 @@ define(
                 if ($element.length) {
                     $badge
                         .fadeOut(fadingDuration)
-                        .queue(function () {
+                        .queue(function() {
                             $(this).remove();
                         })
                 }
@@ -454,7 +458,7 @@ define(
             function hide() {
                 $element
                     .slideUp(fadingDuration)
-                    .queue(function () {
+                    .queue(function() {
                         $(this).remove();
                     })
             }

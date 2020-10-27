@@ -1,5 +1,5 @@
-define([ 'exports', 'log', 'jquery', 'guiState.controller', 'program.controller', 'configuration.controller', 'user.controller', 'blockly' ], function(exports, LOG, $,
-        GUISTATE_C, PROGRAM_C, CONFIGURATION_C, USER_C, Blockly) {
+define([ 'exports', 'log', 'jquery', 'guiState.controller', 'program.controller', 'configuration.controller', 'user.controller', 'notification.controller', 'blockly' ], function(exports, LOG, $,
+        GUISTATE_C, PROGRAM_C, CONFIGURATION_C, USER_C, NOTIFICATION_C, Blockly) {
 
     /**
      * Initialize language switching
@@ -92,6 +92,7 @@ define([ 'exports', 'log', 'jquery', 'guiState.controller', 'program.controller'
             PROGRAM_C.reloadView();
             CONFIGURATION_C.reloadView();
             USER_C.initValidationMessages();
+            NOTIFICATION_C.reloadNotifications();
             var value = Blockly.Msg.MENU_START_BRICK;
             if (value.indexOf("$") >= 0) {
                 value = value.replace("$", GUISTATE_C.getRobotRealName());
