@@ -638,22 +638,25 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
         }
 
         function handleKeyEvent(e) {
-            e.preventDefault();
             var keyName = e.key;
             switch (keyName) {
                 case "ArrowUp":
                     robots[robotIndex].pose.x += Math.cos(robots[robotIndex].pose.theta);
                     robots[robotIndex].pose.y += Math.sin(robots[robotIndex].pose.theta);
+                    e.preventDefault();
                     break;
                 case "ArrowLeft":
                     robots[robotIndex].pose.theta -= Math.PI / 180;
+                    e.preventDefault();
                     break;
                 case "ArrowDown":
                     robots[robotIndex].pose.x -= Math.cos(robots[robotIndex].pose.theta);
                     robots[robotIndex].pose.y -= Math.sin(robots[robotIndex].pose.theta);
+                    e.preventDefault();
                     break;
                 case "ArrowRight":
                     robots[robotIndex].pose.theta += Math.PI / 180;
+                    e.preventDefault();
                     break;
                 default:
                 // nothing to do so far
