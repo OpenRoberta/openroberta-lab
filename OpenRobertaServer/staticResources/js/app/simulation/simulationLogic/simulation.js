@@ -638,6 +638,7 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
         }
 
         function handleKeyEvent(e) {
+            e.preventDefault();
             var keyName = e.key;
             switch (keyName) {
                 case "ArrowUp":
@@ -900,23 +901,21 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
             $("#robotLayer").on("dblclick", function(e) {
                 handleDoubleMouseClick(e);
             });
-            $(document).on('keydown', function(e) {
-                handleKeyEvent(e);
-            });
-            $("#robotIndex").change(function(e) {
+            $(document).on('keydown', handleKeyEvent);
+            $("#robotIndex").on('change', function(e) {
                 $("#brick" + robotIndex).hide();
                 robotIndex = e.target.selectedIndex;
                 $("#brick" + robotIndex).show();
-            }).change();
+            });
         }
 
         function removeMouseEvents() {
             $("#robotLayer").off();
             $("#simDiv").off();
             $("#canvasDiv").off();
-            $(document).unbind('keydown', handleKeyEvent);
             $("#simRobotModal").off();
-            $("#robotIndex").unbind('change');
+            $("#robotIndex").off();
+            $(document).off('keydown', handleKeyEvent);
         }
 
         function initScene() {
