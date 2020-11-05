@@ -52,6 +52,32 @@ public class GyroSensor<V> extends ExternalSensor<V> {
     }
 
     /**
+     * Transformation from JAXB object to corresponding AST object. Special version to fix issue #924 with Calliope/Microbit <hide> problem
+     *
+     * @param block for transformation
+     * @param helper class for making the transformation
+     * @return corresponding AST object
+     */
+    public static <V> SensorMetaDataBean extractPortAndModeAndSlotForGyro(Block block, AbstractJaxb2Ast<V> helper) {
+        List<Field> fields = AbstractJaxb2Ast.extractFields(block, (short) 3);
+        BlocklyDropdownFactory factory = helper.getDropdownFactory();
+        String portName = AbstractJaxb2Ast.extractField(fields, BlocklyConstants.SENSORPORT, BlocklyConstants.NO_PORT);
+        String modeName = AbstractJaxb2Ast.extractField(fields, BlocklyConstants.MODE, BlocklyConstants.DEFAULT);
+
+        String robotGroup = helper.getRobotFactory().getGroup();
+        boolean calliopeOrMicrobit = "calliope".equals(robotGroup) || "microbit".equals(robotGroup);
+        String slotName;
+        if ( calliopeOrMicrobit ) {
+            slotName = AbstractJaxb2Ast.extractNonEmptyField(fields, BlocklyConstants.SLOT, BlocklyConstants.X);
+        } else {
+            slotName = AbstractJaxb2Ast.extractField(fields, BlocklyConstants.SLOT, BlocklyConstants.NO_SLOT);
+        }
+
+        boolean isPortInMutation = block.getMutation() != null && block.getMutation().getPort() != null;
+        return new SensorMetaDataBean(factory.sanitizePort(portName), factory.getMode(modeName), factory.sanitizeSlot(slotName), isPortInMutation);
+    }
+
+    /**
      * Transformation from JAXB object to corresponding AST object.
      *
      * @param block for transformation
@@ -62,14 +88,15 @@ public class GyroSensor<V> extends ExternalSensor<V> {
         BlocklyDropdownFactory factory = helper.getDropdownFactory();
         SensorMetaDataBean sensorMetaDataBean;
         if ( block.getType().equals(BlocklyConstants.ROB_SENSORS_GYRO_RESET) ) {
-            List<Field> fields = helper.extractFields(block, (short) 1);
-            String portName = helper.extractField(fields, BlocklyConstants.SENSORPORT);
+            List<Field> fields = AbstractJaxb2Ast.extractFields(block, (short) 1);
+            String portName = AbstractJaxb2Ast.extractField(fields, BlocklyConstants.SENSORPORT);
             sensorMetaDataBean =
                 new SensorMetaDataBean(factory.sanitizePort(portName), factory.getMode("RESET"), factory.sanitizeSlot(BlocklyConstants.NO_SLOT), false);
-            return GyroSensor.make(sensorMetaDataBean, helper.extractBlockProperties(block), helper.extractComment(block));
+            return GyroSensor.make(sensorMetaDataBean, AbstractJaxb2Ast.extractBlockProperties(block), AbstractJaxb2Ast.extractComment(block));
+        } else {
+            sensorMetaDataBean = extractPortAndModeAndSlotForGyro(block, helper);
+            return GyroSensor.make(sensorMetaDataBean, AbstractJaxb2Ast.extractBlockProperties(block), AbstractJaxb2Ast.extractComment(block));
         }
-        sensorMetaDataBean = extractPortAndModeAndSlot(block, helper);
-        return GyroSensor.make(sensorMetaDataBean, helper.extractBlockProperties(block), helper.extractComment(block));
     }
 
     @Override

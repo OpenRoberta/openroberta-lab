@@ -91,21 +91,19 @@ public class PlayNoteAction<V> extends Action<V> {
      * @return corresponding AST object
      */
     public static <V> Phrase<V> jaxbToAst(Block block, AbstractJaxb2Ast<V> helper) {
-        List<Field> fields = helper.extractFields(block, (short) 3);
+        List<Field> fields = AbstractJaxb2Ast.extractFields(block, (short) 3);
         BlocklyDropdownFactory factory = helper.getDropdownFactory();
-        String duration = helper.extractField(fields, BlocklyConstants.DURATION);
-        String port = helper.extractField(fields, BlocklyConstants.ACTORPORT, BlocklyConstants.NO_PORT);
-        String frequency = helper.extractField(fields, BlocklyConstants.FREQUENCE);
-        return PlayNoteAction.make(factory.sanitizePort(port), duration, frequency, helper.extractBlockProperties(block), helper.extractComment(block));
+        String port = AbstractJaxb2Ast.extractField(fields, BlocklyConstants.ACTORPORT, BlocklyConstants.NO_PORT);
+        String duration = AbstractJaxb2Ast.extractField(fields, BlocklyConstants.DURATION, "2000");
+        String frequency = AbstractJaxb2Ast.extractField(fields, BlocklyConstants.FREQUENCE, "261.626");
+        return PlayNoteAction
+            .make(factory.sanitizePort(port), duration, frequency, AbstractJaxb2Ast.extractBlockProperties(block), AbstractJaxb2Ast.extractComment(block));
     }
 
     @Override
     public Block astToBlock() {
         Block jaxbDestination = new Block();
         Ast2JaxbHelper.setBasicProperties(this, jaxbDestination);
-        //        if ( !this.port.toString().equals(BlocklyConstants.NO_PORT) ) {
-        //            JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.ACTORPORT, getPort().toString());
-        //        }
         Ast2JaxbHelper.addField(jaxbDestination, BlocklyConstants.DURATION, this.duration);
         Ast2JaxbHelper.addField(jaxbDestination, BlocklyConstants.FREQUENCE, this.frequency);
 

@@ -119,7 +119,7 @@ abstract public class AbstractJaxb2Ast<V> {
         Phrase<V> left = extractValue(values, leftExpr);
         Phrase<V> right = extractValue(values, rightExpr);
         String operationRange = "";
-        if ( (block.getMutation() != null) && (block.getMutation().getOperatorRange() != null) ) {
+        if ( block.getMutation() != null && block.getMutation().getOperatorRange() != null ) {
             operationRange = block.getMutation().getOperatorRange();
         }
         return Binary
@@ -169,17 +169,17 @@ abstract public class AbstractJaxb2Ast<V> {
         List<Value> values = new ArrayList<>();
         List<Statement> statements = new ArrayList<>();
 
-        if ( (_else + _elseIf) != 0 ) {
+        if ( _else + _elseIf != 0 ) {
             List<Object> valAndStmt = block.getRepetitions().getValueAndStatement();
-            Assert.isTrue(valAndStmt.size() <= ((2 * _elseIf) + 2 + _else));
+            Assert.isTrue(valAndStmt.size() <= 2 * _elseIf + 2 + _else);
             convertStmtValList(values, statements, valAndStmt);
         } else {
             values = extractValues(block, (short) 1);
             statements = extractStatements(block, (short) 1);
         }
 
-        for ( int i = 0; i < (_elseIf + _else + 1); i++ ) {
-            if ( (_else != 0) && (i == (_elseIf + _else)) ) {
+        for ( int i = 0; i < _elseIf + _else + 1; i++ ) {
+            if ( _else != 0 && i == _elseIf + _else ) {
                 elseList = extractStatement(statements, BlocklyConstants.ELSE);
             } else {
                 Phrase<V> p = extractValue(values, new ExprParam(BlocklyConstants.IF + i, BlocklyType.BOOLEAN));
@@ -501,6 +501,31 @@ abstract public class AbstractJaxb2Ast<V> {
     }
 
     /**
+     * Extract field from list of {@link Field}. If the field with the given name is not found or it is empty, it returns the default {@link Value}.<br>
+     * <br>
+     * Throws {@link DbcException} if the field is not found and the defaultValue is set to <b>null</b>.
+     *
+     * @param fields as a source
+     * @param name of the field to be extracted
+     * @param defaultValue if the field is not existent
+     * @return value containing the field
+     */
+    public static String extractNonEmptyField(List<Field> fields, String name, String defaultValue) {
+        Assert.notNull(defaultValue);
+        for ( Field field : fields ) {
+            if ( field.getName().equals(name) ) {
+                String value = field.getValue();
+                if ( value.trim().equals("") ) {
+                    return defaultValue;
+                } else {
+                    return value;
+                }
+            }
+        }
+        return defaultValue;
+    }
+
+    /**
      * Extract field from list of {@link Field}. <br>
      * <br>
      * Throws {@link DbcException} if the field is not found
@@ -574,14 +599,14 @@ abstract public class AbstractJaxb2Ast<V> {
     }
 
     public static int getElseIf(Mutation mutation) {
-        if ( (mutation != null) && (mutation.getElseif() != null) ) {
+        if ( mutation != null && mutation.getElseif() != null ) {
             return mutation.getElseif().intValue();
         }
         return 0;
     }
 
     public static int getElse(Mutation mutation) {
-        if ( (mutation != null) && (mutation.getElse() != null) ) {
+        if ( mutation != null && mutation.getElse() != null ) {
             return mutation.getElse().intValue();
         }
         return 0;

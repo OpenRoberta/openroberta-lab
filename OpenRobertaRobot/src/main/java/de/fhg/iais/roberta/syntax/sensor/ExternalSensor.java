@@ -76,11 +76,11 @@ public abstract class ExternalSensor<V> extends Sensor<V> {
      * @return corresponding AST object
      */
     public static <V> SensorMetaDataBean extractPortAndModeAndSlot(Block block, AbstractJaxb2Ast<V> helper) {
-        List<Field> fields = helper.extractFields(block, (short) 3);
+        List<Field> fields = AbstractJaxb2Ast.extractFields(block, (short) 3);
         BlocklyDropdownFactory factory = helper.getDropdownFactory();
-        String portName = helper.extractField(fields, BlocklyConstants.SENSORPORT, BlocklyConstants.NO_PORT);
-        String modeName = helper.extractField(fields, BlocklyConstants.MODE, BlocklyConstants.DEFAULT);
-        String slotName = helper.extractField(fields, BlocklyConstants.SLOT, BlocklyConstants.NO_SLOT);
+        String portName = AbstractJaxb2Ast.extractField(fields, BlocklyConstants.SENSORPORT, BlocklyConstants.NO_PORT);
+        String modeName = AbstractJaxb2Ast.extractField(fields, BlocklyConstants.MODE, BlocklyConstants.DEFAULT);
+        String slotName = AbstractJaxb2Ast.extractField(fields, BlocklyConstants.SLOT, BlocklyConstants.NO_SLOT);
         boolean isPortInMutation = (block.getMutation() != null) && (block.getMutation().getPort() != null);
         return new SensorMetaDataBean(factory.sanitizePort(portName), factory.getMode(modeName), factory.sanitizeSlot(slotName), isPortInMutation);
     }
@@ -127,7 +127,7 @@ public abstract class ExternalSensor<V> extends Sensor<V> {
      */
     public static <V> Phrase<V> jaxbToAst(Block block, AbstractJaxb2Ast<V> helper) {
         SensorMetaDataBean sensorData = extractPortAndModeAndSlot(block, helper);
-        return InfraredSensor.make(sensorData, helper.extractBlockProperties(block), helper.extractComment(block));
+        return InfraredSensor.make(sensorData, AbstractJaxb2Ast.extractBlockProperties(block), AbstractJaxb2Ast.extractComment(block));
     }
 
 }
