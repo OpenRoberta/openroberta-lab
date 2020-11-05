@@ -139,7 +139,7 @@
                     <xsl:when test="./@type = 'robSensors_key_getSample'">PRESSED</xsl:when>
                     <xsl:when test="./@type = 'robSensors_light_getSample'">
                         <xsl:choose>
-                            <xsl:when test="ancestor::b:block_set/@robottype = 'calliope'">VALUE</xsl:when>
+                            <xsl:when test="ancestor::b:block_set/@robottype = 'calliope' or ancestor::b:block_set/@robottype = 'microbit'">VALUE</xsl:when>
                             <xsl:otherwise>LIGHT</xsl:otherwise>
                         </xsl:choose>
                     </xsl:when>
