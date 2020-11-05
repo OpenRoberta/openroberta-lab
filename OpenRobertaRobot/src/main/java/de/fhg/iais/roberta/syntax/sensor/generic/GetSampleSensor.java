@@ -121,13 +121,29 @@ public class GetSampleSensor<V> extends Sensor<V> {
      * @return corresponding AST object
      */
     public static <V> Phrase<V> jaxbToAst(Block block, AbstractJaxb2Ast<V> helper) {
-        List<Field> fields = helper.extractFields(block, (short) 3);
-        String modeName = helper.extractField(fields, BlocklyConstants.SENSORTYPE);
-        String portName = helper.extractField(fields, BlocklyConstants.SENSORPORT);
-        String slot = helper.extractField(fields, BlocklyConstants.SLOT, BlocklyConstants.NO_SLOT);
+        List<Field> fields = AbstractJaxb2Ast.extractFields(block, (short) 3);
+        String mutationInput = block.getMutation().getInput();
+        String modeName = AbstractJaxb2Ast.extractField(fields, BlocklyConstants.SENSORTYPE, mutationInput);
+        String portName = AbstractJaxb2Ast.extractField(fields, BlocklyConstants.SENSORPORT, BlocklyConstants.NO_PORT);
+        String robotGroup = helper.getRobotFactory().getGroup();
+        boolean calliopeOrMicrobit = "calliope".equals(robotGroup) || "microbit".equals(robotGroup);
+        boolean gyroOrAcc = mutationInput.equals("ACCELEROMETER_VALUE") || mutationInput.equals("GYRO_ANGLE");
+        String slotName;
+        if ( calliopeOrMicrobit && gyroOrAcc ) {
+            slotName = AbstractJaxb2Ast.extractNonEmptyField(fields, BlocklyConstants.SLOT, BlocklyConstants.X);
+        } else {
+            slotName = AbstractJaxb2Ast.extractField(fields, BlocklyConstants.SLOT, BlocklyConstants.NO_SLOT);
+        }
         boolean isPortInMutation = block.getMutation().getPort() != null;
         return GetSampleSensor
-            .make(modeName, portName, slot, isPortInMutation, helper.extractBlockProperties(block), helper.extractComment(block), helper.getDropdownFactory());
+            .make(
+                modeName,
+                portName,
+                slotName,
+                isPortInMutation,
+                AbstractJaxb2Ast.extractBlockProperties(block),
+                AbstractJaxb2Ast.extractComment(block),
+                helper.getDropdownFactory());
     }
 
     @Override

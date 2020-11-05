@@ -466,6 +466,9 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'message', 'progList.model
                 $('#tabProgram').one('shown.bs.tab', function(e) {
                     CONFIGURATION_C.reloadConf();
                     PROGRAM_C.reloadProgram();
+                    // this is a temporary function to  inform users about possible data loss from bug issue #924
+                    // TODO review this in 4 weeks and remove it if possible                         
+                    checkMissingInformaton(result);
                 });
                 $('#tabProgram').trigger('click');
 
@@ -473,4 +476,42 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'message', 'progList.model
             MSG.displayInformation(result, "", result.message);
         });
     }
-});
+    
+    /**
+     * this is a temporary function to  inform users about possible data loss from bug issue #924
+     * TODO review this in 4 weeks and remove it if possible      
+     */
+    function checkMissingInformaton(result) {
+        if (GUISTATE_C.getRobotGroup() === "calliope" || GUISTATE_C.getRobotGroup() === "microbit") {
+            var begin = new Date("2020-10-28 03:00:00").getTime();
+            var end = new Date("2020-11-04 03:00:00").getTime();
+            var setWarning = function(block) {
+                if (GUISTATE_C.getLanguage().toLowerCase() === "de") {
+                    block.setWarningText("Hier sind beim letzten Speichern Information verloren gegangen,\nbitte überprüfe die Parameter und sichere das Programm! :-)");
+                } else {
+                    block.setWarningText("Information was lost during the last save,\nplease check the parameters and store the program! :-)");
+                }
+                block.warning.setVisible(true);
+            }
+            if (result.lastChanged && result.lastChanged > begin && result.lastChanged < end) {
+                var blocks = Blockly.getMainWorkspace() && Blockly.getMainWorkspace().getAllBlocks();
+                blocks.forEach(function(block) {
+                    switch (block.type) {
+                        case "mbedActions_play_note":
+                        case "robSensors_accelerometer_getSample":
+                        case "robSensors_gyro_getSample":
+                            setWarning(block);
+                            break;
+                        case "robSensors_getSample":
+                            if (block.sensorType_ && (block.sensorType_ === "ACCELEROMETER_VALUE" || block.sensorType_ === "GYRO_ANGLE")) {
+                                setWarning(block);
+                            }
+                            break;
+                        default:
+                            break;
+                    }
+                });
+            }
+        }
+    }
+    });
