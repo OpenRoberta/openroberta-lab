@@ -708,16 +708,16 @@ define(['exports', 'util', 'log', 'message', 'guiState.model', 'progHelp.control
 
     function setProgramSaved(save) {
         if (save) {
-            $('#menuSaveProg').parent().removeClass('disabled');
-            $('#menuSaveProg').parent().addClass('disabled');
+            $('#menuSaveProg').parent().parent().removeClass('disabled');
+            $('#menuSaveProg').parent().parent().addClass('disabled');
             getBlocklyWorkspace().robControls.disable('saveProgram');
         } else {
             if (isUserLoggedIn() && !isProgramStandard() && isProgramWritable()) {
-                $('#menuSaveProg').parent().removeClass('disabled');
+                $('#menuSaveProg').parent().parent().removeClass('disabled');
                 getBlocklyWorkspace().robControls.enable('saveProgram');
             } else {
-                $('#menuSaveProg').parent().removeClass('disabled');
-                $('#menuSaveProg').parent().addClass('disabled');
+                $('#menuSaveProg').parent().parent().removeClass('disabled');
+                $('#menuSaveProg').parent().parent().addClass('disabled');
                 getBlocklyWorkspace().robControls.disable('saveProgram');
             }
         }
@@ -1127,25 +1127,35 @@ define(['exports', 'util', 'log', 'message', 'guiState.model', 'progHelp.control
 
     function checkSim() {
         if (GUISTATE.gui.sim == true) {
-            $('#menuRunSim').parent().removeClass('disabled');
+            $('#menuRunSim').parent().parent().removeClass('disabled');
             $('#simButton').show();
         } else {
-            $('#menuRunSim').parent().addClass('disabled');
+            $('#menuRunSim').parent().parent().addClass('disabled');
             $('#simButton').hide();
         }
         if (GUISTATE.gui.multipleSim == true) {
-            $('#menuRunMulipleSim').parent().removeClass('unavailable');
-            $('#menuRunMulipleSim').parent().addClass('available');
+            $('#menuRunMulipleSim').parent().parent().removeClass('unavailable');
+            $('#menuRunMulipleSim').parent().parent().addClass('available');
             if (isUserLoggedIn()) {
-                $('#menuRunMulipleSim').parent().removeClass('disabled');
+                $('#menuRunMulipleSim').parent().parent().removeClass('disabled');
             }
         } else {
-            $('#menuRunMulipleSim').parent().addClass('unavailable');
-            $('#menuRunMulipleSim').parent().removeClass('available');
-            $('#menuRunMulipleSim').parent().addClass('disabled');
+            $('#menuRunMulipleSim').parent().parent().addClass('unavailable');
+            $('#menuRunMulipleSim').parent().parent().removeClass('available');
+            $('#menuRunMulipleSim').parent().parent().addClass('disabled');
         }
     }
     exports.checkSim = checkSim;
+
+    function hasSim() {
+		return GUISTATE.gui.sim;
+    }
+    exports.hasSim = hasSim;
+
+    function hasMultiSim() {
+		return GUISTATE.gui.multipleSim;
+    }
+    exports.hasMultiSim = hasMultiSim;
 
     function getListOfTutorials() {
         return GUISTATE.server.tutorial;

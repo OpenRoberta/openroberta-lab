@@ -914,8 +914,17 @@ div.rightMenuButton:hover,
     }
 }
 
+.dropdown-menu > li > a > span.kbd {
+    position: absolute;
+    right: 20px;
+    top: 3px;
+    font-size: 12px;
+    float: right;
+}
+
 .dropdown-menu > li > a {
-    padding: 6px 12px;
+	position: relative;
+    padding-right: 90px;
 }
 
 .dropdown-menu > li:not(.disabled) > a:hover,
