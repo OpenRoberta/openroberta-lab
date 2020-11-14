@@ -279,7 +279,7 @@ define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constan
             this.rCtx.shadowBlur = 5;
             this.rCtx.shadowColor = "black";
             this.rCtx.beginPath();
-            var radius = this.robots[r].geom.radius;
+            var radius = this.robots[r].geom.radius || 0;
             this.rCtx.moveTo(this.robots[r].geom.x + radius, this.robots[r].geom.y);
             this.rCtx.lineTo(this.robots[r].geom.x + this.robots[r].geom.w - radius, this.robots[r].geom.y);
             this.rCtx.quadraticCurveTo(this.robots[r].geom.x + this.robots[r].geom.w, this.robots[r].geom.y, this.robots[r].geom.x + this.robots[r].geom.w, this.robots[r].geom.y + radius);
@@ -609,12 +609,12 @@ define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constan
                                         x: touchSensor.rx,
                                         y: touchSensor.ry
                                     }, {
-                                            x: obstacleLines[k].x1,
-                                            y: obstacleLines[k].y1
-                                        }, {
-                                            x: obstacleLines[k].x2,
-                                            y: obstacleLines[k].y2
-                                        });
+                                        x: obstacleLines[k].x1,
+                                        y: obstacleLines[k].y1
+                                    }, {
+                                        x: obstacleLines[k].x2,
+                                        y: obstacleLines[k].y2
+                                    });
                                     if (SIMATH.sqr(touchSensor.rx - p.x) + SIMATH.sqr(touchSensor.ry - p.y) < SIM.getDt() * Math.max(Math.abs(this.robots[r].right), Math.abs(this.robots[r].left))) {
                                         this.robots[r].frontLeft.bumped = true;
                                         this.robots[r].frontRight.bumped = true;
@@ -637,12 +637,12 @@ define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constan
                                                 x: touchSensor.rx,
                                                 y: touchSensor.ry
                                             }, {
-                                                    x: obstacleLines[k].x1,
-                                                    y: obstacleLines[k].y1
-                                                }, {
-                                                    x: obstacleLines[k].x2,
-                                                    y: obstacleLines[k].y2
-                                                });
+                                                x: obstacleLines[k].x1,
+                                                y: obstacleLines[k].y1
+                                            }, {
+                                                x: obstacleLines[k].x2,
+                                                y: obstacleLines[k].y2
+                                            });
                                             if (SIMATH.sqr(this.robots[r].backMiddle.rx - p.x) + SIMATH.sqr(this.robots[r].backMiddle.ry - p.y) < SIM.getDt() * Math.max(Math.abs(this.robots[r].right), Math.abs(this.robots[r].left))) {
                                                 this.robots[r].backLeft.bumped = true;
                                                 this.robots[r].backRight.bumped = true;
