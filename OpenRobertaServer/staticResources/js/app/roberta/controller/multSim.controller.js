@@ -5,8 +5,8 @@
 /**
  * Controller for multiple simulation part of the project
  */
-define([ 'exports', 'message', 'util', 'progList.model', 'program.controller', 'program.model', 'guiState.controller', 'simulation.simulation', 'jquery' ], function(
-        exports, MSG, UTIL, PROGLIST, PROG_C, PROGRAM_M, GUISTATE_C, SIM, $) {
+define(['exports', 'message', 'util', 'progList.model', 'program.controller', 'program.model', 'guiState.controller', 'simulation.simulation', 'jquery'], function(
+    exports, MSG, UTIL, PROGLIST, PROG_C, PROGRAM_M, GUISTATE_C, SIM, $) {
 
     function showListProg() {
         PROGLIST.loadProgList(function(result) {
@@ -16,45 +16,45 @@ define([ 'exports', 'message', 'util', 'progList.model', 'program.controller', '
                 var robottype = GUISTATE_C.getRobot();
                 result.programNames.forEach(function(item, i, oriarray) {
                     dataarr.push({
-                        name : item[0],
-                        robot : robottype,
-                        creator : item[1],
-                        date : item[4]
+                        name: item[0],
+                        robot: robottype,
+                        creator: item[1],
+                        date: item[4]
                     });
                 });
                 $('#multipleRobotsTable').bootstrapTable({
-                    height : 400,
-                    sortName : "name",
-                    toggle : "multipleRobotsTable",
-                    iconsPrefix : 'typcn',
-                    search : true,
-                    icons : {
-                        paginationSwitchDown : 'typcn-document-text',
-                        paginationSwitchUp : 'typcn-book',
-                        refresh : 'typcn-refresh',
+                    height: 400,
+                    sortName: "name",
+                    toggle: "multipleRobotsTable",
+                    iconsPrefix: 'typcn',
+                    search: true,
+                    icons: {
+                        paginationSwitchDown: 'typcn-document-text',
+                        paginationSwitchUp: 'typcn-book',
+                        refresh: 'typcn-refresh',
                     },
-                    pagination : 'true',
-                    buttonsAlign : 'right',
-                    resizable : 'true',
+                    pagination: 'true',
+                    buttonsAlign: 'right',
+                    resizable: 'true',
 
-                    columns : [ {
-                        field : 'name',
-                        title : "<span lkey='Blockly.Msg.DATATABLE_PROGRAM_NAME'>" + (Blockly.Msg.DATATABLE_PROGRAM_NAME || "Name des Programms") + "</span>",
-                        sortable : true
+                    columns: [{
+                        field: 'name',
+                        title: "<span lkey='Blockly.Msg.DATATABLE_PROGRAM_NAME'>" + (Blockly.Msg.DATATABLE_PROGRAM_NAME || "Name des Programms") + "</span>",
+                        sortable: true
                     }, {
-                        field : 'creator',
-                        title : "<span lkey='Blockly.Msg.DATATABLE_CREATED_BY'>" + (Blockly.Msg.DATATABLE_CREATED_BY || "Erzeugt von") + "</span>",
-                        sortable : true
+                        field: 'creator',
+                        title: "<span lkey='Blockly.Msg.DATATABLE_CREATED_BY'>" + (Blockly.Msg.DATATABLE_CREATED_BY || "Erzeugt von") + "</span>",
+                        sortable: true
                     }, {
-                        field : 'date',
-                        title : "<span lkey='Blockly.Msg.DATATABLE_CREATED_ON'>" + (Blockly.Msg.DATATABLE_CREATED_ON || "Erzeugt am") + "</span>",
-                        sortable : true,
-                        formatter : UTIL.formatDate
+                        field: 'date',
+                        title: "<span lkey='Blockly.Msg.DATATABLE_CREATED_ON'>" + (Blockly.Msg.DATATABLE_CREATED_ON || "Erzeugt am") + "</span>",
+                        sortable: true,
+                        formatter: UTIL.formatDate
                     }, {
-                        checkbox : true,
-                        valign : 'middle',
-                    } ],
-                    data : dataarr
+                        checkbox: true,
+                        valign: 'middle',
+                    }],
+                    data: dataarr
                 });
                 $("#loadMultipleSimPrograms").off();
                 $("#loadMultipleSimPrograms").on("click", function() {
@@ -96,7 +96,7 @@ define([ 'exports', 'message', 'util', 'progList.model', 'program.controller', '
                             PROGRAM_M.runInSim(dat.savedName, configName, xmlTextProgram, xmlConfigText, language, function(result) {
                                 numberOfPrograms++;
                                 if (result.rc === "ok") {
-                                    for ( var resultProp in result)
+                                    for (var resultProp in result)
                                         extractedprograms[i][resultProp] = result[resultProp];
                                 } else {
                                     MSG.displayInformation(result, "", result.message, "");
@@ -127,9 +127,10 @@ define([ 'exports', 'message', 'util', 'progList.model', 'program.controller', '
         $("#showMultipleSimPrograms").modal('hide');
         const INITIAL_WIDTH = 0.5;
         SIM.init(programs, true, GUISTATE_C.getRobotGroup());
+        $('#debugMode, #simControlBreakPoint, #simControlStepOver, #simControlStepInto, #simVariables').hide();
         $(".sim").removeClass('hide');
         $('#simButtonsCollapse').collapse({
-            'toggle' : false
+            'toggle': false
         });
         if ($("#blockly").hasClass("rightActive") && !$("#simDiv").hasClass("rightActive")) {
             $('#blockly').closeRightView(function() {
