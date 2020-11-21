@@ -465,7 +465,8 @@ define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constan
                         backLeft: this.robots[i].backLeft,
                         backRight: this.robots[i].backRight,
                         frontLeft: this.robots[i].frontLeft,
-                        frontRight: this.robots[i].frontRight
+                        frontRight: this.robots[i].frontRight,
+                        tolerance: Math.max(Math.abs(this.robots[i].right), Math.abs(this.robots[i].left) || 0)
                     };
                     personalObstacleList.push(tempobstacle);
                 }
@@ -615,7 +616,9 @@ define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constan
                                         x: obstacleLines[k].x2,
                                         y: obstacleLines[k].y2
                                     });
-                                    if (SIMATH.sqr(touchSensor.rx - p.x) + SIMATH.sqr(touchSensor.ry - p.y) < SIM.getDt() * Math.max(Math.abs(this.robots[r].right), Math.abs(this.robots[r].left))) {
+                                    var thisTolerance = Math.max(Math.abs(this.robots[r].right), Math.abs(this.robots[r].left));
+                                    if (SIMATH.sqr(touchSensor.rx - p.x) + SIMATH.sqr(touchSensor.ry - p.y) <
+                                        SIM.getDt() * (personalObstacleList[i].tolerance + thisTolerance)) {
                                         this.robots[r].frontLeft.bumped = true;
                                         this.robots[r].frontRight.bumped = true;
                                         touchSensor.value = 1;
@@ -643,7 +646,8 @@ define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constan
                                                 x: obstacleLines[k].x2,
                                                 y: obstacleLines[k].y2
                                             });
-                                            if (SIMATH.sqr(this.robots[r].backMiddle.rx - p.x) + SIMATH.sqr(this.robots[r].backMiddle.ry - p.y) < SIM.getDt() * Math.max(Math.abs(this.robots[r].right), Math.abs(this.robots[r].left))) {
+                                            if (SIMATH.sqr(this.robots[r].backMiddle.rx - p.x) + SIMATH.sqr(this.robots[r].backMiddle.ry - p.y) <
+                                                SIM.getDt() * (personalObstacleList[i].tolerance + thisTolerance)) {
                                                 this.robots[r].backLeft.bumped = true;
                                                 this.robots[r].backRight.bumped = true;
                                             }
