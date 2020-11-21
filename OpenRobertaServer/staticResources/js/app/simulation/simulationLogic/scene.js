@@ -261,7 +261,7 @@ define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constan
             if (this.robots[r].touchSensor) {
                 this.rCtx.shadowBlur = 0;
                 this.rCtx.shadowOffsetX = 0;
-                this.rCtx.fillStyle = this.robots[r].touchSensor.color;
+                this.rCtx.fillStyle = this.robots[r].geom.color;
                 this.rCtx.fillRect(this.robots[r].frontRight.x + 12.5, this.robots[r].frontRight.y, 20, 10);
                 if (this.robots[r].led && !this.robots[r].leds) {
                     this.rCtx.fillStyle = this.robots[r].led.color;
@@ -328,7 +328,7 @@ define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constan
                 this.rCtx.fillStyle = 'red';
                 this.rCtx.fillRect(this.robots[r].frontRight.x, this.robots[r].frontRight.y, this.robots[r].frontLeft.x - this.robots[r].frontRight.x, 3.5);
             } else if (touchSensor) {
-                this.rCtx.fillStyle = touchSensor.color;
+                this.rCtx.fillStyle = this.robots[r].geom.color;
                 this.rCtx.fillRect(this.robots[r].frontRight.x, this.robots[r].frontRight.y, this.robots[r].frontLeft.x - this.robots[r].frontRight.x, 3.5);
             }
             this.rCtx.shadowBlur = 0;

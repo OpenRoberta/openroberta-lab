@@ -480,12 +480,14 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
                             var nowNext = new Date().getTime();
                             runRenderUntil[i] = nowNext + delayMs;
                         }
-                    } else if (reset || interpreters[i].isTerminated() && !robots[i].endless) {
+                    } else if (reset || allInterpretersTerminated() && !robots[i].endless) {
                         reset = false;
-                        robots[i].buttons.Reset = false;
-                        removeMouseEvents();
-                        robots[i].pause = true;
-                        robots[i].reset();
+                        for (var j = 0; j < robots.length; j++) {
+                            robots[j].buttons.Reset = false;
+                            robots[j].pause = true;
+                            robots[j].reset();
+                        }           
+                        removeMouseEvents();        
                         scene.drawRobots();
                         scene.drawVariables();
 
@@ -495,12 +497,12 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
                             addMouseEvents();
                         }, 205);
 
-                        if (!(interpreters[i].isTerminated() && !robots[i].endless)) {
+                        if (!(allInterpretersTerminated() && !robots[i].endless)) {
                             setTimeout(function() {
                                 //delete robot.button.Reset;
                                 setPause(false);
-                                for (var i = 0; i < robots.length; i++) {
-                                    robots[i].pause = false;
+                                for (var j = 0; j < robots.length; j++) {
+                                    robots[j].pause = false;
                                 }
                             }, 1000);
                         }
@@ -510,6 +512,15 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
                 updateBreakpointEvent();
             }
             var renderTimeStart = new Date().getTime();
+            
+            function allInterpretersTerminated() {
+                for (var i = 0; i < interpreters.length; i++) {
+                    if (!interpreters[i].isTerminated()){
+                        return false;
+                    }
+                }
+                return true;
+            }
 
             function allPause() {
                 for (var i = 0; i < robots.length; i++) {
