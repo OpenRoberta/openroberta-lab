@@ -1,0 +1,43 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="arduino" xmlversion="3.1" description="" tags="">
+    <instance x="371" y="50">
+        <block type="robControls_start_ardu" id="8`PnP!^|YxdB{Amu)?P%" intask="true" deletable="false">
+            <mutation declare="true"/>
+            <field name="DEBUG"/>
+            <statement name="ST">
+                <block type="robGlobalVariables_declare" id="`QE0fpm7*wJs!zke6j;O" intask="true" deletable="false" movable="false">
+                    <mutation next="false" declaration_type="Number"/>
+                    <field name="VAR">i</field>
+                    <field name="TYPE">Number</field>
+                    <value name="VALUE">
+                        <block type="robSensors_out_getSample" id="!Po.0%7rOxf(=.Q?oLW`" intask="true">
+                            <mutation mode="DIGITAL"/>
+                            <field name="MODE">DIGITAL</field>
+                            <field name="SENSORPORT">S</field>
+                            <field name="SLOT"/>
+                        </block>
+                    </value>
+                </block>
+            </statement>
+        </block>
+        <block type="robControls_loopForever_ardu" id="N}=q_|rIw_I[V92.(GDp" intask="true" deletable="false" movable="false">
+            <statement name="DO">
+                <block type="robControls_loopForever" id="5%O^.h[wOzoT9oJ@|dyH" intask="true">
+                    <statement name="DO">
+                        <block type="variables_set" id="?.51Bhp_*?tZ7U7+-0Cu" intask="true">
+                            <mutation datatype="Number"/>
+                            <field name="VAR">i</field>
+                            <value name="VALUE">
+                                <block type="robSensors_out_getSample" id="BWZDN6/;fuI40}L;i/]C" intask="true">
+                                    <mutation mode="DIGITAL"/>
+                                    <field name="MODE">DIGITAL</field>
+                                    <field name="SENSORPORT">S2</field>
+                                    <field name="SLOT"/>
+                                </block>
+                            </value>
+                        </block>
+                    </statement>
+                </block>
+            </statement>
+        </block>
+    </instance>
+</block_set>

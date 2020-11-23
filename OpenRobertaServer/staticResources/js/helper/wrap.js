@@ -18,11 +18,12 @@ define([ 'exports', 'comm', 'log', 'jquery' ], function(exports, COMM, LOG, $) {
                     LOG.text(elapsed + " msec: " + message, markerTIMER);
                 }
             } catch (e) {
+                var err = new Error();
                 if (message !== undefined) {
                     var elapsed = new Date() - start;
-                    LOG.error(markerTIMER + elapsed + " msec: " + message + ", then EXCEPTION: " + e);
+                    LOG.error(markerTIMER + elapsed + " msec: " + message + ", then EXCEPTION: " + e + " with stacktrace: " + err.stack);
                 } else {
-                    LOG.error("fn3 caught an EXCEPTION: " + e);
+                    LOG.error("fn3 caught an EXCEPTION: " + e + " with stacktrace: " + err.stack);
                 }
                 COMM.ping(); // transfer data to the server
             }

@@ -128,4 +128,10 @@ public interface SC {
     String LED_BUILTIN = "LED_BUILTIN";
     String GREEN = "GREEN";
     String BLUE = "BLUE";
+
+    String LSM9DS1 = "LSM9DS1";
+    String APDS9960 = "APDS9960";
+    String LPS22HB = "LPS22HB";
+    String HTS221 = "HTS221";
+
 }

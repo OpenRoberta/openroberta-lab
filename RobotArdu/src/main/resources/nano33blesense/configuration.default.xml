@@ -1,0 +1,34 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="nano33ble" xmlversion="3.1" description="" tags="">
+    <instance x="100" y="80">
+        <block type="robConf_led" id="1" intask="true" deletable="false">
+            <field name="NAME">L</field>
+            <field name="INPUT">LED_BUILTIN</field>
+        </block>
+    </instance>
+    <instance x="100" y="220">
+        <block type="robConf_lsm9ds1" id="2" intask="true" deletable="false">
+            <field name="NAME">_LSM9DS1</field>
+        </block>
+    </instance>
+    <instance x="100" y="300">
+        <block type="robConf_apds9960" id="3" intask="true" deletable="false">
+            <field name="NAME">_APDS9960</field>
+        </block>
+    </instance>
+    <instance x="100" y="380">
+        <block type="robConf_lps22hb" id="4" intask="true" deletable="false">
+            <field name="NAME">_LPS22HB</field>
+        </block>
+    </instance>
+    <instance x="100" y="460">
+        <block type="robConf_hts221" id="5" intask="true" deletable="false">
+            <field name="NAME">_HTS221</field>
+        </block>
+    </instance>
+
+    <instance x="250" y="250">
+        <block type="robConf_robot" id="robot" intask="false" deletable="false">
+            <field name="ROBOT">undefined</field>
+        </block>
+    </instance>
+</block_set>

@@ -43,6 +43,7 @@ import de.fhg.iais.roberta.syntax.lang.stmt.StmtList;
 import de.fhg.iais.roberta.syntax.sensor.Sensor;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
+import de.fhg.iais.roberta.util.dbc.DbcException;
 
 abstract public class AbstractJaxb2Ast<V> {
     private final IRobotFactory robotFactory;
@@ -352,17 +353,29 @@ abstract public class AbstractJaxb2Ast<V> {
         return exprList;
     }
 
+    /**
+     * get from a value list (a XML substructure) the phrase matching<br>
+     * - a variable - a given name
+     *
+     * @param values
+     * @param name
+     * @param blocklyType TODO
+     * @return the Var<V> phrase; throw exception, if not found
+     */
+    public Var<V> getVar(List<Value> values, String name) {
+        Phrase<V> p = extractValue(values, new ExprParam(name, BlocklyType.NUMBER));
+        if ( p instanceof Var ) {
+            return (Var<V>) p;
+        } else {
+            throw new DbcException("only variables allowed for field " + name);
+        }
+    }
+
     private Phrase<V> extractBlock(Value value) {
         Shadow shadow = value.getShadow();
         Block block = value.getBlock();
         if ( shadow != null ) {
-            Block block1 = new Block();
-            block1.setId(shadow.getId());
-            block1.setType(shadow.getType());
-            block1.setIntask(shadow.isIntask());
-            block1.getField().add(shadow.getField());
-            block1.setShadow(true);
-            Block shadowBlock = block1;
+            Block shadowBlock = AbstractJaxb2Ast.shadow2block(shadow);
             if ( block != null ) {
                 return ShadowExpr.make(convertPhraseToExpr(blockToAST(shadowBlock)), convertPhraseToExpr(blockToAST(block)));
             }
@@ -370,7 +383,6 @@ abstract public class AbstractJaxb2Ast<V> {
         } else {
             return blockToAST(block);
         }
-
     }
 
     private StmtList<V> blocksToStmtList(List<Block> statementBolcks) {
@@ -422,5 +434,15 @@ abstract public class AbstractJaxb2Ast<V> {
         StmtList<V> stmtList = extractStatement(statements, location);
         return RepeatStmt
             .make(RepeatStmt.Mode.get(mode), convertPhraseToExpr(expr), stmtList, Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
+    }
+
+    private static Block shadow2block(Shadow shadow) {
+        Block block = new Block();
+        block.setId(shadow.getId());
+        block.setType(shadow.getType());
+        block.setIntask(shadow.isIntask());
+        block.getField().add(shadow.getField());
+        block.setShadow(true);
+        return block;
     }
 }

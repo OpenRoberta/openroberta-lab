@@ -46,6 +46,8 @@ public final class BlocklyConstants {
     public static final String NOT = "NOT";
     public static final String BOOL = "BOOL";
     public static final String OP = "OP";
+    public static final String R = "R";
+    public static final String G = "G";
     public static final String B = "B";
     public static final String A = "A";
     public static final String SENSORTYPE = "SENSORTYPE";
@@ -299,6 +301,15 @@ public final class BlocklyConstants {
     public static final String X = "X";
     public static final String Y = "Y";
     public static final String Z = "Z";
+
+    public static final String VARIABLE_X = "VARIABLE_X";
+    public static final String VARIABLE_Y = "VARIABLE_Y";
+    public static final String VARIABLE_Z = "VARIABLE_Z";
+    public static final String VARIABLE_R = "VARIABLE_R";
+    public static final String VARIABLE_G = "VARIABLE_G";
+    public static final String VARIABLE_B = "VARIABLE_B";
+    public static final String VARIABLE_VALUE = "VARIABLE_VALUE";
+
     public static final String SPEED = "Speed";
     public static final String THETA = "Theta";
     public static final String INTENSITY = "INTENSITY";

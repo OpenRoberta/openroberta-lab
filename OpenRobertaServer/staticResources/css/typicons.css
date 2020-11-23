@@ -688,6 +688,9 @@
 .typcn-arduino:before {
   content: "\e9d9";
 }
+.typcn-nano33ble:before {
+  content: "\e9d9";
+}
 .typcn-infinity-outline:before {
   content: "\e9da";
 }

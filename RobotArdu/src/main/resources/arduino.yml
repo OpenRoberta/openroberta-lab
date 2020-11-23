@@ -102,6 +102,66 @@ block:
       category: FUNCTION
       implementor: de.fhg.iais.roberta.syntax.functions.arduino.LEDMatrixImageInvertFunction
       type: [mBotImage_invert]
+  LSM9DS1_ACCELERATION:
+      category: SENSOR
+      implementor: de.fhg.iais.roberta.syntax.sensors.arduino.nano33blesense.Lsm9ds1AccSensor
+      type: [robsensors_lsm9ds1_acceleration_getDataAvailableSample]
+  LSM9DS1_GYRO:
+      category: SENSOR
+      implementor: de.fhg.iais.roberta.syntax.sensors.arduino.nano33blesense.Lsm9ds1GyroSensor
+      type: [robsensors_lsm9ds1_gyro_getDataAvailableSample]
+  LSM9DS1_MAGNETICFIELD:
+      category: SENSOR
+      implementor: de.fhg.iais.roberta.syntax.sensors.arduino.nano33blesense.Lsm9ds1MagneticFieldSensor
+      type: [robsensors_lsm9ds1_magneticfield_getDataAvailableSample]
+  APDS9960_DISTANCE:
+      category: SENSOR
+      implementor: de.fhg.iais.roberta.syntax.sensors.arduino.nano33blesense.Apds9960DistanceSensor
+      type: [robsensors_apds9960_distance_getDataAvailableSample]
+  APDS9960_GESTURE:
+      category: SENSOR
+      implementor: de.fhg.iais.roberta.syntax.sensors.arduino.nano33blesense.Apds9960GestureSensor
+      type: [robsensors_apds9960_gesture_getDataAvailableSample]
+  APDS9960_COLOR:
+      category: SENSOR
+      implementor: de.fhg.iais.roberta.syntax.sensors.arduino.nano33blesense.Apds9960ColorSensor
+      type: [robsensors_apds9960_color_getDataAvailableSample]
+  LPS22HB_PRESSURE:
+      category: SENSOR
+      implementor: de.fhg.iais.roberta.syntax.sensors.arduino.nano33blesense.Lps22hbPressureSensor
+      type: [robsensors_lps22hb_pressure_getDataAvailableSample]
+  HTS221_TEMPERATURE:
+      category: SENSOR
+      implementor: de.fhg.iais.roberta.syntax.sensors.arduino.nano33blesense.Hts221TemperatureSensor
+      type: [robsensors_hts221_temperature_getDataAvailableSample]
+  HTS221_HUMIDITY:
+      category: SENSOR
+      implementor: de.fhg.iais.roberta.syntax.sensors.arduino.nano33blesense.Hts221HumiditySensor
+      type: [robsensors_hts221_humidity_getDataAvailableSample]
+  NEURAL_NETWORK_SETUP:
+      category: STMT
+      implementor: de.fhg.iais.roberta.syntax.neuralnetwork.NeuralNetworkSetup
+      type: [robActions_aifes_setupneuralnet]
+  NEURAL_NETWORK_INIT_RAWDATA:
+      category: STMT
+      implementor: de.fhg.iais.roberta.syntax.neuralnetwork.NeuralNetworkInitRawData
+      type: [robActions_aifes_initrawdata]
+  NEURAL_NETWORK_ADD_RAWDATA:
+      category: STMT
+      implementor: de.fhg.iais.roberta.syntax.neuralnetwork.NeuralNetworkAddRawData
+      type: [robActions_aifes_addrawdata]
+  NEURAL_NETWORK_ADD_TRAININGSDATA:
+      category: STMT
+      implementor: de.fhg.iais.roberta.syntax.neuralnetwork.NeuralNetworkAddTrainingsData
+      type: [robActions_aifes_addtrainingsdata]
+  NEURAL_NETWORK_TRAIN:
+      category: STMT
+      implementor: de.fhg.iais.roberta.syntax.neuralnetwork.NeuralNetworkTrain
+      type: [robActions_aifes_train]
+  NEURAL_NETWORK_CLASSIFY:
+      category: STMT
+      implementor: de.fhg.iais.roberta.syntax.neuralnetwork.NeuralNetworkClassify
+      type: [robActions_aifes_classify]
 
 configuration:
   SENSEBOX: [robBrick_senseBox-Brick]
@@ -110,6 +170,10 @@ configuration:
   GPS: [robConf_gps]
   ENVIRONMENTAL: [robConf_environmental]
   ROBOT: [robConf_robot]
+  LSM9DS1: [robConf_lsm9ds1]
+  APDS9960: [robConf_apds9960]
+  LPS22HB:  [robConf_lps22hb]
+  HTS221: [robConf_hts221]
 
 mode:
   GPS: [LATITUDE, LONGITUDE, ALTITUDE, SPEED, DATE, TIME]

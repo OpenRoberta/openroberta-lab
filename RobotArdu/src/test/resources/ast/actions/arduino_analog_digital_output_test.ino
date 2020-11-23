@@ -3,13 +3,12 @@
 #include <Arduino.h>
 #include <NEPODefs.h>
 
-
-int _output_A = 0;
 int _output_A2 = 3;
+int _output_A = 0;
 void setup()
 {
-    pinMode(_output_A, OUTPUT);
     pinMode(_output_A2, OUTPUT);
+    pinMode(_output_A, OUTPUT);
 }
 
 void loop()

@@ -93,7 +93,7 @@ public class BlocklyDropdownFactoryHelper {
                 String[] blocklyNames = jsonArray2stringArray(blocklyBlocks);
                 BlockTypeContainer.add(block, Category.valueOf(value.getString("category")), implementor, blocklyNames);
             } catch ( Exception e ) {
-                throw new DbcException("Invalide definition for block type " + block);
+                throw new DbcException("Invalid definition for block type " + block);
             }
         }
     }

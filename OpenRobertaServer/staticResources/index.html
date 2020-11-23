@@ -219,7 +219,6 @@ limitations under the License.
                     <li class="divider visible-xs"></li>
                     <li><a href="#" class="visible-xs" id="menuTabProgram" lkey="Blockly.Msg.TAB_PROGRAM">Program</a></li>
                     <li><a href="#" class="visible-xs" id="menuTabConfiguration" lkey="Blockly.Msg.TAB_CONFIGURATION">Configuration</a></li>
-                    <li style="display: none;"><a href="#" class="visible-xs" id="menuTabNN" lkey="Blockly.Msg.TAB_NN">Neural Network</a></li>
                     <!--  only if simulation is active -->
                     <li class="dropdown sim hide hidden-xs sim-nav" id="head-navigation-sim-control"><a href="#" data-toggle="dropdown"
                         class="dropdown-toggle" id="head-navi-tooltip-program" lkey="Blockly.Msg.MENU_EDIT_TOOLTIP" rel="tooltip" data-original-title=""
@@ -274,9 +273,6 @@ limitations under the License.
                 </a></li>
                 <li><a data-toggle="tab" id="tabConfiguration" href="#configuration"> <span lkey="Blockly.Msg.TAB_CONFIGURATION" class="menuTab">Configuration</span>&nbsp;<span
                         id="tabConfigurationName"></span>
-                </a></li>
-                <li style="display: none;"><a data-toggle="tab" id="tabNN" href="#nn"> <span lkey="Blockly.Msg.TAB_NN" class="menuTab">Neural Network</span>&nbsp;<span
-                        id="tabNnName">NEPOnn</span>
                 </a></li>
                 <li class="hidden"><a data-toggle="tab" id="tabProgList" href="#progList">Listing of programs</a></li>
                 <li class="hidden"><a data-toggle="tab" id="tabConfList" href="#confList">Listing of configurations</a></li>
@@ -653,110 +649,6 @@ limitations under the License.
                 <div id="bricklyDiv"></div>
             </div>
         </div>
-        
-        <!-- NEURAL NETWORK START -->
-        <div id="nn" class="tab-pane fade">
-        <!-- Top Controls -->
-        <div id="top-controls">
-          <div class="container l--page">
-            <div class="control ui-activation">
-              <label for="activations">Activation</label>
-              <div class="select">
-                <select id="activations">
-                  <option value="relu">ReLU</option>
-                  <option value="tanh">Tanh</option>
-                  <option value="sigmoid">Sigmoid</option>
-                  <option value="linear">Linear</option>
-                </select>
-              </div>
-            </div>
-            <div class="control ui-regularization">
-              <label for="regularizations">Regularization</label>
-              <div class="select">
-                <select id="regularizations">
-                  <option value="none">None</option>
-                  <option value="L1">L1</option>
-                  <option value="L2">L2</option>
-                </select>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Main Part -->
-        <div id="main-part" class="l--page">
-          <!-- Features Column -->
-          <div class="column features">
-            <h4>Inputs</h4>
-            <div id="network">
-              <svg id="svg" width="510" height="450">
-                <defs>
-                  <marker id="markerArrow" markerWidth="7" markerHeight="13" refX="1" refY="6" orient="auto" markerUnits="userSpaceOnUse">
-                    <path d="M2,11 L7,6 L2,2" />
-                  </marker>
-                </defs>
-              </svg>
-              <!-- Hover card -->
-              <div id="hovercard">
-                <div style="font-size:10px">Click anywhere to edit.</div>
-                <div><span class="type">Weight/Bias</span> is <span class="value">0.2</span><span><input type="number"/></span>.</div>
-              </div>
-              <div class="callout thumbnail">
-                <svg viewBox="0 0 30 30">
-                  <defs>
-                    <marker id="arrow" markerWidth="5" markerHeight="5" refx="5" refy="2.5" orient="auto" markerUnits="userSpaceOnUse">
-                      <path d="M0,0 L5,2.5 L0,5 z"/>
-                    </marker>
-                  </defs>
-                  <path d="M12,30C5,20 2,15 12,0" marker-end="url(#arrow)">
-                </svg>
-                <div class="label">
-                  This is the output from one <b>neuron</b>. Hover to see it larger.
-                </div>
-              </div>
-              <div class="callout weights">
-                <svg viewBox="0 0 30 30">
-                  <defs>
-                    <marker id="arrow" markerWidth="5" markerHeight="5" refx="5" refy="2.5" orient="auto" markerUnits="userSpaceOnUse">
-                      <path d="M0,0 L5,2.5 L0,5 z"/>
-                    </marker>
-                  </defs>
-                  <path d="M12,30C5,20 2,15 12,0" marker-end="url(#arrow)">
-                </svg>
-                <div class="label">
-                  The outputs are mixed with varying <b>weights</b>, shown by the thickness of the lines.
-                </div>
-              </div>
-            </div>
-          </div>
-      
-          <!-- Hidden Layers Column -->
-          <div class="column hidden-layers">
-            <h4>
-              <div class="ui-numHiddenLayers">
-                <button id="add-layers" class="mdl-button mdl-js-button mdl-button--icon">
-                  <i class="material-icons">add</i>
-                </button>
-                <button id="remove-layers" class="mdl-button mdl-js-button mdl-button--icon">
-                  <i class="material-icons">remove</i>
-                </button>
-              </div>
-              <span id="num-layers"></span>
-              <span id="layers-label"></span>
-            </h4>
-          </div>
-      
-          <!-- Output Column -->
-          <div class="column output">
-            <h4>Outputs</h4>
-          </div>
-          <div class="column right">
-          </div>
-        </div>
-       </div>
-        
-        
-    </div>
     <!--  ################## END TABS ################## -->
     <!-- ################## POPUPS ################## -->
 

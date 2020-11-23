@@ -1,0 +1,30 @@
+<toolbox_set id="toolbox" style="display: none">
+    <category name="TOOLBOX_ACTION" svg="true">
+        <block type="robConf_digitalin" />
+        <block type="robConf_analogin" />
+        <block type="robConf_servo" />
+        <block type="robConf_stepmotor" />
+        <block type="robConf_relay" />
+        <block type="robConf_lcd" />
+        <block type="robConf_lcdi2c" />
+        <block type="robConf_led" />
+        <block type="robConf_rgbled" />
+        <block type="robConf_buzzer" />
+    </category>
+    <category name="TOOLBOX_SENSOR" svg="true">
+        <block type="robConf_digitalout" />
+        <block type="robConf_analogout" />
+        <block type="robConf_key" />
+        <block type="robConf_motion" />
+        <block type="robConf_light" />
+        <block type="robConf_infrared" />
+        <block type="robConf_temperature" />
+        <block type="robConf_humidity" />
+        <block type="robConf_drop" />
+        <block type="robConf_pulse" />
+        <block type="robConf_potentiometer" />
+        <block type="robConf_moisture" />
+        <block type="robConf_ultrasonic" />
+        <block type="robConf_rfid" />
+    </category>
+</toolbox_set>
