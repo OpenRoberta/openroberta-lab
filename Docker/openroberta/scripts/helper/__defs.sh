@@ -77,6 +77,24 @@ function isDeclShValid {
     fi
 }
 
+function getOS {
+    OS=${OSTYPE//[0-9.-]*/}
+    case "$OS" in
+      linux)  echo "linux" ;;
+      darwin) echo "macos" ;;
+      msys)   echo "win" ;;
+      *)      echo "UNKNOWN" ;;
+    esac
+}
+
+function isWin {
+    [ $(getOS) == 'win' ]
+}
+
+function isLinux {
+    [ $(getOS) == 'linux' ]
+}
+
 isDirectoryValid "${BASE_DIR}"
 isDirectoryValid "${SCRIPT_HELPER}" # defined in "run.sh", must be valid (otherwise this check couldn't be executed)
 isFileValid "${BASE_DIR}/decl.sh"
