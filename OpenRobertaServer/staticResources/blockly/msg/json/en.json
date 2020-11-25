@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2020-09-11 11:10:34.539729",
+		"lastupdated": "2020-11-25 21:42:50.802413",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -546,6 +546,10 @@
 	"SENSOR_ENCODER": "encoder",
 	"SENSOR_GYRO": "gyroscope",
 	"SENSOR_GYRO_WEDO": "tilt sensor",
+	"SENSOR_LSM9DS1": "LSM9DS1",
+	"SENSOR_APDS9960": "APDS9960",
+	"SENSOR_LPS22HB": "LPS22HB",
+	"SENSOR_HTS221": "HTS221",
 	"SENSOR_FLAME": "flame sensor",
 	"SENSOR_BATTERY": "battery charge",
 	"SENSOR_KEY": "button",
@@ -601,6 +605,7 @@
 	"MODE_HUMIDITY": "humidity",
 	"MODE_TEMPERATURE": "temperature",
 	"MODE_PRESSURE": "pressure",
+	"MODE_GYRO": "gyroscope",
 	"MODE_X": "X-value",
 	"MODE_Y": "Y-value",
 	"MODE_Z": "Z-value",
@@ -608,6 +613,9 @@
 	"MODE_SENSOR2": "Light Sensor2",
 	"MODE_PM25": "PM2.5",
 	"MODE_PM10": "PM10",
+	"MODE_MAGNETICFIELD": "mag field",
+	"MODE_GESTURE": "gesture",
+	"MODE_COLOR": "color",
 	"LOOP": "repeat until",
 	"LOOP_FOREVER": "repeat indefinitely",
 	"CONNECTION_SEND_DATA": "send message",
@@ -1746,5 +1754,6 @@
 	"MODE_IAQ": "Indoor Air Quality (IAQ)",
 	"MODE_CALIBRATION": "Calibration Value",
 	"MODE_CO2EQUIVALENT": "CO2 Equivalent",
-	"MODE_VOCEQUIVALENT": "Breathe VOC Equivalent"
+	"MODE_VOCEQUIVALENT": "Breathe VOC Equivalent",
+	"SENSOR_DATA_READY": "ready?"
 }

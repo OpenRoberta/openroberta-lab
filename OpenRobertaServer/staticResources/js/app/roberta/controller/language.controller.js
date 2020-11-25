@@ -1,5 +1,5 @@
-define([ 'exports', 'log', 'jquery', 'guiState.controller', 'program.controller', 'configuration.controller', 'user.controller', 'notification.controller', 'blockly' ], function(exports, LOG, $,
-        GUISTATE_C, PROGRAM_C, CONFIGURATION_C, USER_C, NOTIFICATION_C, Blockly) {
+define(['exports', 'log', 'jquery', 'guiState.controller', 'program.controller', 'configuration.controller', 'user.controller', 'notification.controller', 'blockly'], function(exports, LOG, $,
+    GUISTATE_C, PROGRAM_C, CONFIGURATION_C, USER_C, NOTIFICATION_C, Blockly) {
 
     /**
      * Initialize language switching
@@ -45,6 +45,8 @@ define([ 'exports', 'log', 'jquery', 'guiState.controller', 'program.controller'
             language = 'ro';
         } else if (navigator.language.indexOf("eu") > -1) {
             language = 'eu';
+        } else if (navigator.language.indexOf("uk") > -1) {
+            language = 'uk';
         } else {
             language = 'en';
         }
@@ -112,7 +114,7 @@ define([ 'exports', 'log', 'jquery', 'guiState.controller', 'program.controller'
         if (!$domElement || typeof $domElement !== 'object' || !$domElement.length) {
             $domElement = $(document.body);
         }
-        
+
         $domElement.find("[lkey]").each(function(index) {
             var lkey = $(this).attr('lkey');
             var key = lkey.replace("Blockly.Msg.", "");
@@ -171,13 +173,13 @@ define([ 'exports', 'log', 'jquery', 'guiState.controller', 'program.controller'
                 $('#simResetPose').attr('data-original-title', value);
             } else if (lkey == 'Blockly.Msg.MENU_DEBUG_START_TOOLTIP') {
                 $('#debugMode').attr('data-original-title', value);
-            }else if (lkey == 'Blockly.Msg.MENU_DEBUG_STEP_BREAKPOINT_TOOLTIP'){
+            } else if (lkey == 'Blockly.Msg.MENU_DEBUG_STEP_BREAKPOINT_TOOLTIP') {
                 $('#simControlBreakPoint').attr('data-original-title', value);
-            }else if (lkey == 'Blockly.Msg.MENU_DEBUG_STEP_INTO_TOOLTIP'){
+            } else if (lkey == 'Blockly.Msg.MENU_DEBUG_STEP_INTO_TOOLTIP') {
                 $('#simControlStepInto').attr('data-original-title', value);
-            }else if (lkey == 'Blockly.Msg.MENU_DEBUG_STEP_OVER_TOOLTIP'){
+            } else if (lkey == 'Blockly.Msg.MENU_DEBUG_STEP_OVER_TOOLTIP') {
                 $('#simControlStepOver').attr('data-original-title', value);
-            }else if (lkey == 'Blockly.Msg.MENU_SIM_VARIABLES_TOOLTIP'){
+            } else if (lkey == 'Blockly.Msg.MENU_SIM_VARIABLES_TOOLTIP') {
                 $('#simVariables').attr('data-original-title', value);
             } else if (lkey == 'Blockly.Msg.MENU_CODE_DOWNLOAD_TOOLTIP') {
                 $('#codeDownload').attr('data-original-title', value);
@@ -212,7 +214,7 @@ define([ 'exports', 'log', 'jquery', 'guiState.controller', 'program.controller'
                 $(this).html(value);
             } else if ($(this).data('translationTargets')) {
                 var attributeTargets = $(this).data('translationTargets').split(' ');
-                for(var key in attributeTargets) {
+                for (var key in attributeTargets) {
                     if (attributeTargets[key] === 'text' || attributeTargets[key] === 'html') {
                         $(this)[attributeTargets[key]](value);
                     } else {
@@ -235,9 +237,9 @@ define([ 'exports', 'log', 'jquery', 'guiState.controller', 'program.controller'
     function getCachedScript(url, options) {
         // Allow user to set any option except for dataType, cache, and url
         options = $.extend(options || {}, {
-            dataType : "script",
-            cache : true,
-            url : url
+            dataType: "script",
+            cache: true,
+            url: url
         });
 
         // Use $.ajax() since it is more flexible than $.getScript
