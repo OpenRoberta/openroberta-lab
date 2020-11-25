@@ -1,0 +1,132 @@
+antlr:antlr:2.7.7	BSD License
+aopalliance:aopalliance:1.0	Public Domain
+bootstrap:v3.3.1	The MIT License
+bootstrap-table:v1.10.1	The MIT License
+bootstrap-tagsinput:0.8.0	The MIT License
+bootstrap-wysiwyg:v2.0.1	The MIT License
+ch.qos.logback:logback-classic:1.2.3	Eclipse Public License - v 1.0 GNU Lesser General Public License
+ch.qos.logback:logback-core:1.2.3	Eclipse Public License - v 1.0 GNU Lesser General Public License
+CodeFlask	The MIT License
+com.google.code.findbugs:annotations:3.0.1	GNU Lesser Public License
+com.google.code.findbugs:jsr305:3.0.2	The Apache Software License, Version 2.0
+com.google.code.gson:gson:2.8.2	Apache 2.0
+com.google.errorprone:error_prone_annotations:2.3.2	Apache 2.0
+com.google.guava:failureaccess:1.0.1	The Apache Software License, Version 2.0
+com.google.guava:guava:28.0-jre	Apache License, Version 2.0
+com.google.guava:listenablefuture:9999.0-empty-to-avoid-conflict-with-guava	The Apache Software License, Version 2.0
+com.google.inject.extensions:guice-servlet:4.2.0	The Apache Software License, Version 2.0
+com.google.inject:guice:4.2.0	The Apache Software License, Version 2.0
+com.google.j2objc:j2objc-annotations:1.3	The Apache Software License, Version 2.0
+com.googlecode.owasp-java-html-sanitizer:owasp-java-html-sanitizer:20180219.1	Apache License, Version 2.0
+com.ibm.icu:icu4j:61.1	Unicode/ICU License
+com.jcraft:jsch:0.1.54	Revised BSD
+com.mchange:c3p0:0.9.2.1	Eclipse Public License, Version 1.0 GNU Lesser General Public License, Version 2.1
+com.mchange:mchange-commons-java:0.2.3.4	Eclipse Public License, Version 1.0 GNU Lesser General Public License, Version 2.1
+com.squareup.okhttp3:okhttp:3.9.1	Apache 2.0
+com.squareup.okio:okio:1.13.0	Apache 2.0
+com.sun.jersey.contribs:jersey-guice:1.19.4	CDDL 1.1 GPL2 w/ CPE
+com.sun.jersey:jersey-core:1.19.4	CDDL 1.1 GPL2 w/ CPE
+com.sun.jersey:jersey-json:1.19.4	CDDL 1.1 GPL2 w/ CPE
+com.sun.jersey:jersey-server:1.19.4	CDDL 1.1 GPL2 w/ CPE
+com.sun.jersey:jersey-servlet:1.19.4	CDDL 1.1 GPL2 w/ CPE
+com.sun.mail:javax.mail:1.6.0	CDDL/GPLv2+CE
+com.sun.xml.bind:jaxb-impl:2.2.3-1	CDDL 1.1 GPL2 w/ CPE
+com.vaadin.external.google:android-json:0.0.20131108.vaadin1	Apache License 2.0
+commons-codec:commons-codec:1.11	Apache License, Version 2.0
+commons-io:commons-io:2.6	Apache License, Version 2.0
+commons-logging:commons-logging:1.2	The Apache Software License, Version 2.0
+de.fhg.iais.openroberta:OpenRobertaRobot:4.0.8-SNAPSHOT	Licensed under the Apache License, Version 2.0 (the "License")
+de.fhg.iais.openroberta:RobotArdu:4.0.8-SNAPSHOT	Licensed under the Apache License, Version 2.0 (the "License")
+de.fhg.iais.openroberta:RobotEdison:4.0.8-SNAPSHOT	Licensed under the Apache License, Version 2.0 (the "License")
+de.fhg.iais.openroberta:RobotEV3:4.0.8-SNAPSHOT	Licensed under the Apache License, Version 2.0 (the "License")
+de.fhg.iais.openroberta:RobotMbed:4.0.8-SNAPSHOT	Licensed under the Apache License, Version 2.0 (the "License")
+de.fhg.iais.openroberta:RobotNAO:4.0.8-SNAPSHOT	Licensed under the Apache License, Version 2.0 (the "License")
+de.fhg.iais.openroberta:RobotNXT:4.0.8-SNAPSHOT	Licensed under the Apache License, Version 2.0 (the "License")
+de.fhg.iais.openroberta:RobotVorwerk:4.0.8-SNAPSHOT	Licensed under the Apache License, Version 2.0 (the "License")
+de.fhg.iais.openroberta:RobotWeDo:4.0.8-SNAPSHOT	Licensed under the Apache License, Version 2.0 (the "License")
+dom4j:dom4j:1.6.1	BSD License
+enjoyhint:3.1.0 	The MIT License
+eu.bitwalker:UserAgentUtils:1.21	New BSD License
+font:Caveat	SIL Open Font License 1.1
+font:font-awesome	"	The MIT License"
+font:Roboto	"	Apache License, version 2.0"
+javax.activation:activation:1.1	Common Development and Distribution License (CDDL) v1.0
+javax.inject:javax.inject:1	The Apache Software License, Version 2.0
+javax.mail:javax.mail-api:1.6.0	CDDL/GPLv2+CE
+javax.servlet:javax.servlet-api:3.1.0	CDDL + GPLv2 with classpath exception
+javax.ws.rs:jsr311-api:1.1.1	CDDL License
+javax.xml.bind:jaxb-api:2.2.2	CDDL 1.1 GPL2 w/ CPE
+javax.xml.stream:stax-api:1.0-2	COMMON DEVELOPMENT AND DISTRIBUTION LICENSE (CDDL) Version 1.0 GNU General Public Library
+jquery.hotkeys:0.2.0	The MIT License/gpl-2.0
+jquery.scrollTo:2.1.2	The MIT License 
+jquery.validate:1.17.0	The MIT License 
+jquery:3.3.1	The MIT License
+junit:junit:4.13.1	Eclipse Public License 1.0
+net.bytebuddy:byte-buddy:1.7.9	The Apache Software License, Version 2.0
+net.jcip:jcip-annotations:1.0	Apache License, Version 2.0
+net.sf.jopt-simple:jopt-simple:5.0.4	The MIT License
+org.abego.treelayout:org.abego.treelayout.core:1.0.3	BSD 3-Clause "New" or "Revised" License (BSD-3-Clause)
+org.antlr:antlr4:4.7.2	The BSD License
+org.antlr:antlr4-runtime:4.7.2	The BSD License
+org.antlr:antlr-runtime:3.5.2	BSD licence
+org.antlr:ST4:4.1	BSD licence
+org.apache.commons:commons-exec:1.3	Apache License, Version 2.0
+org.apache.commons:commons-lang3:3.7	Apache License, Version 2.0
+org.apache.commons:commons-text:1.4	Apache License, Version 2.0
+org.apache.httpcomponents:httpclient:4.5.5	Apache License, Version 2.0
+org.apache.httpcomponents:httpcore:4.4.6	Apache License, Version 2.0
+org.assertj:assertj-core:3.17.2	Apache License, Version 2.0
+org.checkerframework:checker-qual:2.8.1	The MIT License
+org.codehaus.jackson:jackson-core-asl:1.9.2	The Apache Software License, Version 2.0
+org.codehaus.jackson:jackson-jaxrs:1.9.2	GNU Lesser General Public License (LGPL), Version 2.1 The Apache Software License, Version 2.0
+org.codehaus.jackson:jackson-mapper-asl:1.9.2	The Apache Software License, Version 2.0
+org.codehaus.jackson:jackson-xc:1.9.2	GNU Lesser General Public License (LGPL), Version 2.1 The Apache Software License, Version 2.0
+org.codehaus.jettison:jettison:1.1	Apache License, Version 2.0
+org.codehaus.mojo:animal-sniffer-annotations:1.17	MIT license
+org.eclipse.jetty.websocket:websocket-api:9.4.15.v20190215	Apache Software License - Version 2.0 Eclipse Public License - Version 1.0
+org.eclipse.jetty.websocket:websocket-client:9.4.15.v20190215	Apache Software License - Version 2.0 Eclipse Public License - Version 1.0
+org.eclipse.jetty.websocket:websocket-common:9.4.15.v20190215	Apache Software License - Version 2.0 Eclipse Public License - Version 1.0
+org.eclipse.jetty.websocket:websocket-server:9.4.15.v20190215	Apache Software License - Version 2.0 Eclipse Public License - Version 1.0
+org.eclipse.jetty.websocket:websocket-servlet:9.4.15.v20190215	Apache Software License - Version 2.0 Eclipse Public License - Version 1.0
+org.eclipse.jetty:jetty-client:9.4.15.v20190215	Apache Software License - Version 2.0 Eclipse Public License - Version 1.0
+org.eclipse.jetty:jetty-http:9.4.15.v20190215	Apache Software License - Version 2.0 Eclipse Public License - Version 1.0
+org.eclipse.jetty:jetty-io:9.4.15.v20190215	Apache Software License - Version 2.0 Eclipse Public License - Version 1.0
+org.eclipse.jetty:jetty-security:9.4.15.v20190215	Apache Software License - Version 2.0 Eclipse Public License - Version 1.0
+org.eclipse.jetty:jetty-server:9.4.15.v20190215	Apache Software License - Version 2.0 Eclipse Public License - Version 1.0
+org.eclipse.jetty:jetty-servlet:9.4.15.v20190215	Apache Software License - Version 2.0 Eclipse Public License - Version 1.0
+org.eclipse.jetty:jetty-util:9.4.15.v20190215	Apache Software License - Version 2.0 Eclipse Public License - Version 1.0
+org.eclipse.jetty:jetty-xml:9.4.15.v20190215	Apache Software License - Version 2.0 Eclipse Public License - Version 1.0
+org.glassfish:javax.json:1.0.4	Dual license consisting of the CDDL v1.1 and GPL v2
+org.hamcrest:hamcrest-core:1.3	New BSD License
+org.hibernate.common:hibernate-commons-annotations:4.0.5.Final	GNU Lesser General Public License
+org.hibernate.javax.persistence:hibernate-jpa-2.1-api:1.0.0.Final	Eclipse Distribution License (EDL), Version 1.0 Eclipse Public License (EPL), Version 1.0
+org.hibernate:hibernate-c3p0:4.3.11.Final	GNU Lesser General Public License
+org.hibernate:hibernate-core:4.3.11.Final	GNU Lesser General Public License
+org.hsqldb:hsqldb:2.4.0	HSQLDB License, a BSD open source license
+org.javassist:javassist:3.18.1-GA	Apache License 2.0 LGPL 2.1 MPL 1.1
+org.jboss.logging:jboss-logging:3.1.3.GA	Apache License, version 2.0
+org.jboss.logging:jboss-logging-annotations:1.2.0.Beta1	Public Domain
+org.jboss.spec.javax.transaction:jboss-transaction-api_1.2_spec:1.0.0.Final	Common Development and Distribution License GNU General Public License, Version 2 with the Classpath Exception
+org.jboss:jandex:1.1.0.Final	AL 2.0
+org.json:json:20180130	The JSON License
+org.mockito:mockito-all:1.10.19	The MIT License
+org.seleniumhq.selenium:selenium-api:3.11.0	The Apache Software License, Version 2.0
+org.seleniumhq.selenium:selenium-chrome-driver:3.11.0	The Apache Software License, Version 2.0
+org.seleniumhq.selenium:selenium-edge-driver:3.11.0	The Apache Software License, Version 2.0
+org.seleniumhq.selenium:selenium-firefox-driver:3.11.0	The Apache Software License, Version 2.0
+org.seleniumhq.selenium:selenium-ie-driver:3.11.0	The Apache Software License, Version 2.0
+org.seleniumhq.selenium:selenium-java:3.11.0	The Apache Software License, Version 2.0
+org.seleniumhq.selenium:selenium-java:3.11.0	The Apache Software License, Version 2.0
+org.seleniumhq.selenium:selenium-opera-driver:3.11.0	The Apache Software License, Version 2.0
+org.seleniumhq.selenium:selenium-remote-driver:3.11.0	The Apache Software License, Version 2.0
+org.seleniumhq.selenium:selenium-safari-driver:3.11.0	The Apache Software License, Version 2.0
+org.seleniumhq.selenium:selenium-support:3.11.0	The Apache Software License, Version 2.0
+org.skyscreamer:jsonassert:1.5.0	The Apache Software License, Version 2.0
+org.slf4j:slf4j-api:1.7.25	MIT License
+org.yaml:snakeyaml:1.23	Apache License, Version 2.0
+requirejs	BSD License / The MIT License
+socketio:socket.io	The MIT License
+tensorflow:playground	Apache License, version 2.0
+volume-meter.js	The MIT License
+xml-apis:xml-apis:1.0.b2	The Apache Software License, Version 2.0
+xmlunit:xmlunit:1.6	BSD License
