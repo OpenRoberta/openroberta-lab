@@ -58,8 +58,6 @@ case "${CMD}" in
     start)        SERVER_NAME=$1; shift
                   source ${SCRIPT_HELPER}/_stop.sh
                   source ${SCRIPT_HELPER}/_start.sh ;;
-    start-export) SERVER_NAME=$1; shift
-                  source ${SCRIPT_HELPER}/_startExport.sh ;;
     stop)         SERVER_NAME=$1
                   source ${SCRIPT_HELPER}/_stop.sh ;;
     deploy)       SERVER_NAME=$1; shift

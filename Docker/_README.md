@@ -9,24 +9,21 @@ explaining all commands available. You have to
 * clone the openroberta-lab repository into `<BASEDIR>/git`, update the server's `decl.sh appropriately` (set the repo, select the branch, ...)
 * create a new docker bridge network (`RUN gen-net`). The name is defined in the global `decl.sh`.
 * create the databases needed in directory `db`. Server names are test, dev, dev1...dev9 and must not exist. For each server one database with exactly the server's name is needed.
-  You can create empty databases by
-  * either calling `./ora.sh -dbParentdir <non-existing-directory-of-your-choice> create-empty-database` after a `mvn clean install -DskipTests`
-  * or by using the already created empty database at `db/dbEmpty`
-  and copy them to the desired location. Put the database names into the global `decl.sh`.
+  You can create empty databases by calling `./admin.sh -dbParentdir <non-existing-directory-of-your-choice> create-empty-database` after a `mvn clean install -DskipTests`
+  and copy them to the desired locations. Put the database names into the global `decl.sh`.
 * generate a database server image and start the database container (`RUN gen-dbc` and `RUN start-dbc`). Check the result with `docker ps`. Inspect the log file in `BASEDIR/db/dbAdmin/`
-* create the servers for which you prepared databases (see above) by calling `./ora.sh new-server-in-docker-setup BASEDIR SERVER`. For each server in `BASEDIR/server/SERVER`
+* create the servers for which you have databases (see above) by calling `./ora.sh new-server-in-docker-setup BASEDIR SERVER`. For each server in `BASEDIR/server/SERVER`
   update the `decl.sh (set the repo, select the branch, ...). Note, that `test, dev, dev1...dev9` are the only names accepted as server names.
-* deploy the server ((`RUN deploy SERVER`). Check result with `docker ps`. Inspect the log file in `BASEDIR/server/SERVER/admin/logging/...`
+* deploy the server ((`RUN deploy SERVER`). Check the result with `docker ps`. Inspect the log file in `BASEDIR/server/SERVER/admin/logging/...`
 
 Looks more complicated as it is :-). Details of the file system structure used and the more functionality supported (database backup, alice checking, autorestart) are described later.
-I tried to make all scripts as robust as possible. Please send any problems, improvements, ideas to reinhard.budde at iais.fraunhofer.de
+I tried to make all scripts as robust as possible. Please mail any problems, improvements, ideas to reinhard.budde at iais.fraunhofer.de
 
 We generate docker images for different architectures. Currently we support
 
 * `x64` - the standard architecture. Our prod server, your laptop, ... use this architecture
 * `arm32v7` - the architecture used by Raspberry pi's 3 and 4, for example. These "small" devices can run a docker demon, a database container and a
-  jetty-based rest-server without performance problems. We support these devices to enable to run local servers: for privacy reasons, bad iternet connectivity,
-  rules that don't allow internet connections at a school, ... .
+  jetty-based rest-server without performance problems. We support these devices to run local servers: for privacy reasons, bad iternet connectivity, ... .
   
 In the following the shell variable `ARCH` refers to either `x64` or `arm32v7`. The architecture is auto-detected by the `RUN` script.
 

@@ -15,6 +15,10 @@ case "${DOCKERRM}" in
 esac
 
 echo "starting the database image '${IMAGE}' as '${CONTAINER}' for the database/s ${DATABASES}"
+if $(isWin)
+then
+    export MSYS_NO_PATHCONV=1
+fi
 DOCKERID=$(docker run -d --name=${CONTAINER} \
                   --network ${DOCKER_NETWORK_NAME} \
                   -v ${DATABASE_DIR}:/opt/db \

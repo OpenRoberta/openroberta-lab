@@ -19,6 +19,14 @@ case "${BRANCH}" in
      *)     : ;;
 esac
 
+if $(isWin)
+then
+    function flock {
+        echo '******************************************************************************************************'
+        echo "no flock for windows. Make sure, that during this build no other process uses the git repo ${GIT_REPO}"
+        echo '******************************************************************************************************'
+    }
+fi
 # ----- AQUIRE A FILE LOCK. Checkout, build binaries, export, build container -----
 ( flock -w 1200 9 || (echo "deployment of ${SERVER_NAME} was delayed for more than 20 minutes. Exit 12"; exit 12) 
     [ "${DEBUG}" = 'true' ] && echo "got the lock for file '${GIT_DIR}/lockfile'"

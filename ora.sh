@@ -49,11 +49,9 @@ function _export {
          ;;
   esac
   
-  echo 'script for start of the server/db are copied'
-  cp admin.sh ${exportpath}
+  echo 'script for starting the server is copied'
+  cp admin.sh admin-help.txt ${exportpath}
   chmod ugo+rx admin.sh
-  
-  echo "NOTE: You are responsible to supply a usable database and set the corresponding -d parameter for server startup. SEE THE README.md"
 }
 
 # ---------------------------------------- begin of the script ----------------------------------------------------
@@ -105,7 +103,12 @@ shift
 case "$cmd" in
 export) _export $* ;;
 
-start-from-git) echo 'the script expects, that a mvn build was successful; if the start fails or the system is frozen, make sure that a database exists and is not locked by another process'
+''|help|-h)     cat ora-help.txt ;;
+
+start-from-git) if [[ ! -d $DB_PARENTDIR ]]; then 
+                   echo "No database found. An empty database will be created."
+                   java -cp ${JAVA_LIB_DIR}/\* de.fhg.iais.roberta.main.Administration create-empty-db jdbc:hsqldb:file:$DB_PARENTDIR/$DB_NAME
+                fi
                 java $RDBG -cp ${JAVA_LIB_DIR}/\* de.fhg.iais.roberta.main.ServerStarter \
                      -d database.mode=embedded \
                      -d database.parentdir=$DB_PARENTDIR \
@@ -113,12 +116,6 @@ start-from-git) echo 'the script expects, that a mvn build was successful; if th
                      -d server.staticresources.dir=OpenRobertaServer/staticResources \
                      -d robot.crosscompiler.resourcebase="$CC_RESOURCE_DIR" \
                      $* ;;
-
-''|help|-h)     cat ora-help.txt ;;
-
-create-empty-db) databaseurl="jdbc:hsqldb:file:$DB_PARENTDIR/$DB_NAME"
-                echo "creating an empty db using the url $databaseurl - an existing db is NOT overwritten"
-                java -cp ${JAVA_LIB_DIR}/\* "$ADMIN_CLASS" create-empty-db "$databaseurl" ;;
 
 new-docker-setup) base_dir="$1"
                 if [[ -d $base_dir ]]
@@ -149,7 +146,7 @@ new-server-in-docker-setup)
                 cp -r Docker/openroberta/server/_server-template $server_dir
                 echo "New server $server_name created. Edit '$base_dir/decl.sh' and '$server_dir/decl.sh'"
                 echo "Copy an existing database or create an empty database after 'mvn clean install -DskipTests'"
-                echo "by calling './ora.sh -dbParentdir $base_dir/db/$server_name create-empty-db'" ;;
+                echo "by calling from this repo './admin.sh -dbParentdir $base_dir/db/$server_name create-empty-db' " ;;
 
 update-docker-setup)
                 base_dir="$1"
