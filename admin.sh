@@ -124,7 +124,7 @@ case "$CMD" in
                         -d database.parentdir=$DB_PARENTDIR \
                         -d database.name=$DB_NAME \
                         -d server.admin.dir=$ADMIN_DIR \
-                        $* >>$SERVER_LOG_FILE 2>&1 &
+                        $* >>$SERVER_LOG_FILE 2>&1
                    ;;
 # ----------------------------------------------------------------------------------------------------------------------------------------------
   *)                 echo "*** invalid command ignored: '$CMD' ***"

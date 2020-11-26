@@ -22,3 +22,4 @@ command:
   start-server            start the database server and the jetty server with a data base in embedded mode. mvn must have run!
                           Use -d <key>=<value> to define any number of parameters for the server,
                           e.g. -d robot.crosscompiler.resourcebase=... for crosscompiler resources
+                          the command terminates when the server terminates. Maybe you have to suffix the command with `&` :-)
