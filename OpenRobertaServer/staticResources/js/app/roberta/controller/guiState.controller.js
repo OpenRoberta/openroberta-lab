@@ -1,5 +1,5 @@
-define(['exports', 'util', 'log', 'message', 'guiState.model', 'progHelp.controller', 'legal.controller', 'webview.controller', 'confVisualization', 'socket.controller', 'jquery'], function(
-    exports, UTIL, LOG, MSG, GUISTATE, HELP_C, LEGAL_C, WEBVIEW_C, CV, SOCKET_C, $) {
+define(['exports', 'util', 'message', 'guiState.model', 'progHelp.controller', 'legal.controller', 'webview.controller', 'confVisualization', 'socket.controller', 'jquery'], function(
+    exports, UTIL, MSG, GUISTATE, HELP_C, LEGAL_C, WEBVIEW_C, CV, SOCKET_C, $) {
 
     var LONG = 300000; // Ping time 5min
     var SHORT = 3000; // Ping time 3sec
@@ -397,6 +397,7 @@ define(['exports', 'util', 'log', 'message', 'guiState.model', 'progHelp.control
         if (groupSwitched) {
             HELP_C.initView();
             if (inWebview()) {
+                WEBVIEW_C.setRobotBehaviour();
                 WEBVIEW_C.jsToAppInterface({
                     'target': 'internal',
                     'type': 'setRobot',
@@ -568,7 +569,7 @@ define(['exports', 'util', 'log', 'message', 'guiState.model', 'progHelp.control
         if (GUISTATE.gui.connection === GUISTATE.gui.connectionType.AGENTORTOKEN) {
             return true;
         }
-        if (GUISTATE.gui.connection === GUISTATE.gui.connectionType.WEBVIEW && WEBVIEW_C.getWeDo().getConnectedBricks().length > 0) {
+        if (GUISTATE.gui.connection === GUISTATE.gui.connectionType.WEBVIEW && WEBVIEW_C.isRobotConnected()) {
             return true;
         }
         return false;
@@ -1148,12 +1149,12 @@ define(['exports', 'util', 'log', 'message', 'guiState.model', 'progHelp.control
     exports.checkSim = checkSim;
 
     function hasSim() {
-		return GUISTATE.gui.sim;
+        return GUISTATE.gui.sim;
     }
     exports.hasSim = hasSim;
 
     function hasMultiSim() {
-		return GUISTATE.gui.multipleSim;
+        return GUISTATE.gui.multipleSim;
     }
     exports.hasMultiSim = hasMultiSim;
 

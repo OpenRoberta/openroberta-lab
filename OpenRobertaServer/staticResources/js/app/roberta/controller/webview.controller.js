@@ -1,163 +1,173 @@
-define( ['exports', 'guiState.controller', 'interpreter.interpreter', 'interpreter.robotWeDoBehaviour', 'util', 'log', 'message', 'blockly', 'jquery'], function( exports,
-    GUISTATE_C, WEDO_I, WEDO_R, UTIL, LOG, MSG, Blockly, $ ) {
+define(['exports', 'guiState.controller', 'interpreter.interpreter', 'interpreter.robotWeDoBehaviour', 'log', 'blockly', 'jquery'], function(exports,
+    GUISTATE_C, INTERPRETER, WEDO_B, LOG, Blockly, $) {
 
     var ready;
     var aLanguage;
     var webViewType;
     var interpreter;
-    wedo = new WEDO_R.RobotWeDoBehaviour(jsToAppInterface, jsToDisplay);
-    
+    var theRobotBehaviour;
+
     /**
      * Init webview
      */
-    function init( language ) {
+    function init(language) {
         aLanguage = language;
         ready = $.Deferred();
         var a = {};
         a.target = 'internal';
         a.type = 'identify';
-        if ( tryAndroid( a ) ) {
+        if (tryAndroid(a)) {
             webViewType = "Android";
-        } else if ( tryIOS( a ) ) {
+        } else if (tryIOS(a)) {
             webViewType = "IOS";
         } else {
             // Obviously not in an Open Roberta webview
-            ready.resolve( language );
+            ready.resolve(language);
         }
         return ready.promise();
     }
     exports.init = init;
 
-    function appToJsInterface( jsonData ) {
-        console.log( jsonData );
+    function appToJsInterface(jsonData) {
         try {
-            var data = JSON.parse( jsonData );
-            if ( !data.target || !data.type ) {
+            var data = JSON.parse(jsonData);
+            if (!data.target || !data.type) {
                 throw "invalid arguments";
             }
-            if ( data.target == "internal" ) {
-                if ( data.type == "identify" ) {
-                    ready.resolve( aLanguage, data.name );
+            if (data.target == "internal") {
+                if (data.type == "identify") {
+                    ready.resolve(aLanguage, data.name);
                 } else {
                     throw "invalid arguments";
                 }
-            } else if ( data.target == "wedo" && GUISTATE_C.getRobot() == "wedo" ) {
-                if ( data.type == "scan" && data.state == "appeared" ) {
-                    $( '#show-available-connections' ).trigger( 'add', data );
-                } else if ( data.type == "scan" && data.state == "error" ) {
-                    $( '#show-available-connections' ).modal( 'hide' );
-                } else if ( data.type == "scan" && data.state == "disappeared" ) {
-                    console.log( data );
-                } else if ( data.type == "connect" && data.state == "connected" ) {
-                    $( '#show-available-connections' ).trigger( 'connect', data );
-                    wedo.update( data );
-                    GUISTATE_C.setConnectionState( "wait" );
+            } else if (data.target === GUISTATE_C.getRobot()) {
+                if (data.type == "scan" && data.state == "appeared") {
+                    $('#show-available-connections').trigger('add', data);
+                } else if (data.type == "scan" && data.state == "error") {
+                    $('#show-available-connections').modal('hide');
+                } else if (data.type == "scan" && data.state == "disappeared") {
+                    console.log(data);
+                } else if (data.type == "connect" && data.state == "connected") {
+                    $('#show-available-connections').trigger('connect', data);
+                    theRobotBehaviour.update(data);
+                    GUISTATE_C.setConnectionState("wait");
                     var bricklyWorkspace = GUISTATE_C.getBricklyWorkspace();
                     var blocks = bricklyWorkspace.getAllBlocks();
-                    for ( var i = 0; i < blocks.length; i++ ) {
-                        if ( blocks[i].type === "robBrick_WeDo-Brick" ) {
-                            var field = blocks[i].getField( "VAR" );
-                            field.setValue( data.brickname.replace( /\s/g, '' ) );
+                    for (var i = 0; i < blocks.length; i++) {
+                        if (blocks[i].type === "robBrick_WeDo-Brick") {
+                            var field = blocks[i].getField("VAR");
+                            field.setValue(data.brickname.replace(/\s/g, ''));
                             blocks[i].render();
-                            var dom = Blockly.Xml.workspaceToDom( bricklyWorkspace );
-                            var xml = Blockly.Xml.domToText( dom );
-                            GUISTATE_C.setConfigurationXML( xml );
+                            var dom = Blockly.Xml.workspaceToDom(bricklyWorkspace);
+                            var xml = Blockly.Xml.domToText(dom);
+                            GUISTATE_C.setConfigurationXML(xml);
                             break;
                         }
                     }
-                } else if ( data.type == "connect" && data.state == "disconnected" ) {
-                    wedo.update( data );
-                    if ( interpreter != undefined ) {
+                } else if (data.type === "connect" && data.state === "disconnected") {
+                    theRobotBehaviour.update(data);
+                    if (interpreter != undefined) {
                         interpreter.terminate();
                     }
                     var bricklyWorkspace = GUISTATE_C.getBricklyWorkspace();
                     var blocks = bricklyWorkspace.getAllBlocks();
-                    for ( var i = 0; i < blocks.length; i++ ) {
-                        if ( blocks[i].type === "robBrick_WeDo-Brick" ) {
-                            var field = blocks[i].getField( "VAR" );
-                            field.setValue( Blockly.Msg.ROBOT_DEFAULT_NAME_WEDO || Blockly.Msg.ROBOT_DEFAULT_NAME || "Brick1" );
+                    for (var i = 0; i < blocks.length; i++) {
+                        if (blocks[i].type === "robBrick_WeDo-Brick") {
+                            var field = blocks[i].getField("VAR");
+                            field.setValue(Blockly.Msg.ROBOT_DEFAULT_NAME_WEDO || Blockly.Msg.ROBOT_DEFAULT_NAME || "Brick1");
                             blocks[i].render();
-                            var dom = Blockly.Xml.workspaceToDom( bricklyWorkspace );
-                            var xml = Blockly.Xml.domToText( dom );
-                            GUISTATE_C.setConfigurationXML( xml );
+                            var dom = Blockly.Xml.workspaceToDom(bricklyWorkspace);
+                            var xml = Blockly.Xml.domToText(dom);
+                            GUISTATE_C.setConfigurationXML(xml);
                             break;
                         }
                     }
-                    GUISTATE_C.setConnectionState( "error" );
+                    GUISTATE_C.setConnectionState("error");
                 } else {
-                    wedo.update( data );
+                    theRobotBehaviour.update(data);
                 }
             } else {
                 throw "invalid arguments";
             }
-        } catch ( error ) {
-            LOG.error( "appToJsInterface >" + error + " caused by: " + jsonData );
+        } catch (error) {
+            LOG.error("appToJsInterface >" + error + " caused by: " + jsonData);
         }
     }
     exports.appToJsInterface = appToJsInterface;
 
     function callbackOnTermination() {
-        GUISTATE_C.setConnectionState( "wait" );
+        GUISTATE_C.setConnectionState("wait");
         GUISTATE_C.getBlocklyWorkspace().robControls.switchToStart();
     }
 
-    function getInterpreter( program ) {
-        interpreter = new WEDO_I.Interpreter( program, wedo, callbackOnTermination ,[]);
+    function getInterpreter(program) {
+        interpreter = new INTERPRETER.Interpreter(program, theRobotBehaviour, callbackOnTermination, []);
         return interpreter;
     }
     exports.getInterpreter = getInterpreter;
 
-    function getWeDo() {
-        return wedo;
+    function isRobotConnected() {
+        return theRobotBehaviour && theRobotBehaviour.getConnectedBricks().length > 0;
     }
-    exports.getWeDo = getWeDo;
+    exports.isRobotConnected = isRobotConnected;
 
-    function jsToAppInterface( jsonData ) {
+    function setRobotBehaviour() {
+        switch (GUISTATE_C.getRobot()) {
+            case "wedo":
+                theRobotBehaviour = new WEDO_B.RobotWeDoBehaviour(jsToAppInterface, jsToDisplay);
+            // TODO: introduce here new robots and behaviours and add them to the dependencies on top of the file
+            default:
+                LOG.error("Webview: no robot behaviour for " + GUISTATE_C.getRobot() + " available!");
+        }
+    }
+    exports.setRobotBehaviour = setRobotBehaviour;
+
+    function jsToAppInterface(jsonData) {
         try {
-            if ( webViewType === "Android" ) {
-                OpenRoberta.jsToAppInterface( JSON.stringify( jsonData ) );
-            } else if ( webViewType === "IOS" ) {
-                window.webkit.messageHandlers.OpenRoberta.postMessage( JSON.stringify( jsonData ) );
+            if (webViewType === "Android") {
+                OpenRoberta.jsToAppInterface(JSON.stringify(jsonData));
+            } else if (webViewType === "IOS") {
+                window.webkit.messageHandlers.OpenRoberta.postMessage(JSON.stringify(jsonData));
             } else {
                 throw "invalid webview type";
             }
-        } catch ( error ) {
-            LOG.error( "jsToAppInterface >" + error + " caused by: " + jsonData );
+        } catch (error) {
+            LOG.error("jsToAppInterface >" + error + " caused by: " + jsonData);
         }
     }
     exports.jsToAppInterface = jsToAppInterface;
 
-    function tryAndroid( data ) {
+    function tryAndroid(data) {
         try {
-            OpenRoberta.jsToAppInterface( JSON.stringify( data ) );
+            OpenRoberta.jsToAppInterface(JSON.stringify(data));
             return true;
-        } catch ( error ) {
+        } catch (error) {
             return false;
         }
     }
 
-    function tryIOS( data ) {
+    function tryIOS(data) {
         try {
-            window.webkit.messageHandlers.OpenRoberta.postMessage( JSON.stringify( data ) );
+            window.webkit.messageHandlers.OpenRoberta.postMessage(JSON.stringify(data));
             return true;
-        } catch ( error ) {
+        } catch (error) {
             return false;
         }
     }
 
-    function jsToDisplay( action ) {
-        if ( action.show !== undefined ) {
-            $( "#showDisplayText" ).append( "<div>" + action.show + "</div>" );
-            if ( !$( '#showDisplayText' ).is( ':visible' ) ) {
-                $( '#showDisplay' ).one( 'hidden.bs.modal', function() {
-                    $( "#showDisplayText" ).empty();
-                } )
-                $( "#showDisplay" ).modal( "show" );
+    function jsToDisplay(action) {
+        if (action.show !== undefined) {
+            $("#showDisplayText").append("<div>" + action.show + "</div>");
+            if (!$('#showDisplayText').is(':visible')) {
+                $('#showDisplay').one('hidden.bs.modal', function() {
+                    $("#showDisplayText").empty();
+                })
+                $("#showDisplay").modal("show");
             }
-            $( '#showDisplayText' ).scrollTop( $( '#showDisplayText' ).prop( "scrollHeight" ) );
-        } else if ( action.clear !== undefined ) {
-            $( "#showDisplayText" ).empty();
+            $('#showDisplayText').scrollTop($('#showDisplayText').prop("scrollHeight"));
+        } else if (action.clear !== undefined) {
+            $("#showDisplayText").empty();
         }
     }
     exports.jsToDisplay = jsToDisplay;
-} );
+});

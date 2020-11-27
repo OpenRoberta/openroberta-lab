@@ -60,7 +60,6 @@ require.config({
         'rest.robot': 'app/roberta/rest/robot',
         'socket.controller': 'app/roberta/controller/socket.controller',
         'webview.controller': 'app/roberta/controller/webview.controller',
-        'wedo.model': 'app/roberta/models/wedo.model',
         'sourceCodeEditor.controller': 'app/roberta/controller/sourceCodeEditor.controller',
 
         'simulation.constants': 'app/simulation/simulationLogic/constants',
@@ -92,7 +91,6 @@ require.config({
         'interpreter.interpreter': 'app/nepostackmachine/interpreter.interpreter',
         'interpreter.aRobotBehaviour': 'app/nepostackmachine/interpreter.aRobotBehaviour',
         'interpreter.robotWeDoBehaviour': 'app/nepostackmachine/interpreter.robotWeDoBehaviour',
-        'interpreter.robotWeDoBehaviourTest': 'app/nepostackmachine/interpreter.robotWeDoBehaviourTest',
         'interpreter.robotSimBehaviour': 'app/nepostackmachine/interpreter.robotSimBehaviour',
         'interpreter.state': 'app/nepostackmachine/interpreter.state',
         'interpreter.util': 'app/nepostackmachine/interpreter.util',
@@ -101,7 +99,7 @@ require.config({
         'neuralnetwork.nn': 'app/neuralnetwork/neuralnetwork.nn',
         'neuralnetwork.state': 'app/neuralnetwork/neuralnetwork.state',
         'neuralnetwork.playground': 'app/neuralnetwork/neuralnetwork.playground',
-        
+
         'confVisualization': 'app/configVisualization/confVisualization',
         'const.robots': 'app/configVisualization/const.robots',
         'port': 'app/configVisualization/port',
@@ -146,49 +144,49 @@ require(['require', 'wrap', 'log', 'jquery', 'blockly', 'guiState.controller', '
     'progTutorial.controller', 'tutorialList.controller', 'userGroup.controller', 'volume-meter', 'user.model', 'webview.controller',
     'sourceCodeEditor.controller', 'codeflask', 'interpreter.jsHelper', 'confVisualization', 'robotBlock'], function(
         require) {
-        $ = require('jquery');
-        WRAP = require('wrap');
-        LOG = require('log');
-        COMM = require('comm');
-        Blockly = require('blockly');
-        confDeleteController = require('confDelete.controller');
-        configurationController = require('configuration.controller');
-        confListController = require('confList.controller');
-        guiStateController = require('guiState.controller');
-        languageController = require('language.controller');
-        logListController = require('logList.controller');
-        menuController = require('menu.controller');
-        multSimController = require('multSim.controller');
-        progDeleteController = require('progDelete.controller');
-        progListController = require('progList.controller');
-        galleryListController = require('galleryList.controller');
-        tutorialListController = require('tutorialList.controller');
-        legalController = require('legal.controller');
-        programController = require('program.controller');
-        progHelpController = require('progHelp.controller');
-        progInfoController = require('progInfo.controller');
-        notificationController = require('notification.controller');
-        progCodeController = require('progCode.controller');
-        progSimController = require('progSim.controller');
-        progRunController = require('progRun.controller');
-        progShareController = require('progShare.controller');
-        robotController = require('robot.controller');
-        userController = require('user.controller');
-        nnController = require('nn.controller');
-        userModel = require('user.model');
-        socketController = require('socket.controller');
-        tutorialController = require('progTutorial.controller');
-        tutorialListController = require('tutorialList.controller');
-        userGroupController = require('userGroup.controller');
-        webviewController = require('webview.controller');
-        sourceCodeEditorController = require('sourceCodeEditor.controller');
-        codeflask = require('codeflask');
-        stackmachineJsHelper = require('interpreter.jsHelper');
-        confVisualization = require('confVisualization');
-        robotBlock = require('robotBlock');
+    $ = require('jquery');
+    WRAP = require('wrap');
+    LOG = require('log');
+    COMM = require('comm');
+    Blockly = require('blockly');
+    confDeleteController = require('confDelete.controller');
+    configurationController = require('configuration.controller');
+    confListController = require('confList.controller');
+    guiStateController = require('guiState.controller');
+    languageController = require('language.controller');
+    logListController = require('logList.controller');
+    menuController = require('menu.controller');
+    multSimController = require('multSim.controller');
+    progDeleteController = require('progDelete.controller');
+    progListController = require('progList.controller');
+    galleryListController = require('galleryList.controller');
+    tutorialListController = require('tutorialList.controller');
+    legalController = require('legal.controller');
+    programController = require('program.controller');
+    progHelpController = require('progHelp.controller');
+    progInfoController = require('progInfo.controller');
+    notificationController = require('notification.controller');
+    progCodeController = require('progCode.controller');
+    progSimController = require('progSim.controller');
+    progRunController = require('progRun.controller');
+    progShareController = require('progShare.controller');
+    robotController = require('robot.controller');
+    userController = require('user.controller');
+    nnController = require('nn.controller');
+    userModel = require('user.model');
+    socketController = require('socket.controller');
+    tutorialController = require('progTutorial.controller');
+    tutorialListController = require('tutorialList.controller');
+    userGroupController = require('userGroup.controller');
+    webviewController = require('webview.controller');
+    sourceCodeEditorController = require('sourceCodeEditor.controller');
+    codeflask = require('codeflask');
+    stackmachineJsHelper = require('interpreter.jsHelper');
+    confVisualization = require('confVisualization');
+    robotBlock = require('robotBlock');
 
-        $(document).ready(WRAP.fn3(init, 'page init'));
-    });
+    $(document).ready(WRAP.fn3(init, 'page init'));
+});
 
 /**
  * Initializations

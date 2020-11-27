@@ -1,5 +1,5 @@
-define([ 'exports', 'util', 'log', 'message', 'program.controller', 'program.model', 'socket.controller', 'guiState.controller', 'webview.controller', 'jquery' ], function(
-        exports, UTIL, LOG, MSG, PROG_C, PROGRAM, SOCKET_C, GUISTATE_C, WEBVIEW_C, $) {
+define(['exports', 'util', 'log', 'message', 'program.controller', 'program.model', 'socket.controller', 'guiState.controller', 'webview.controller', 'jquery'], function(
+    exports, UTIL, LOG, MSG, PROG_C, PROGRAM, SOCKET_C, GUISTATE_C, WEBVIEW_C, $) {
 
     var blocklyWorkspace;
     var interpreter;
@@ -154,7 +154,7 @@ define([ 'exports', 'util', 'log', 'message', 'program.controller', 'program.mod
                 for (var i = 1; Blockly.Msg['POPUP_DOWNLOAD_STEP_' + i]; i++) {
                     var step = $('<li class="typcn typcn-roberta">');
                     var a = Blockly.Msg['POPUP_DOWNLOAD_STEP_' + i + '_' + GUISTATE_C.getRobotGroup().toUpperCase()] || Blockly.Msg['POPUP_DOWNLOAD_STEP_' + i]
-                            || 'POPUP_DOWNLOAD_STEP_' + i;
+                        || 'POPUP_DOWNLOAD_STEP_' + i;
                     step.html('<span class="download-message">' + a + '</span>');
                     step.css('opacity', '0');
                     $('#download-instructions').append(step);
@@ -171,7 +171,7 @@ define([ 'exports', 'util', 'log', 'message', 'program.controller', 'program.mod
                 $("#save-client-compiled-program").one("shown.bs.modal", function(e) {
                     $('#download-instructions li').each(function(index) {
                         $(this).delay(750 * index).animate({
-                            opacity : 1
+                            opacity: 1
                         }, 1000);
                     });
                 });
@@ -226,8 +226,8 @@ define([ 'exports', 'util', 'log', 'message', 'program.controller', 'program.mod
             } else {
                 //All non-IE browsers can play WAV files in the browser, see: https://www.w3schools.com/html/html5_audio.asp
                 $('#OKButtonModalFooter').addClass('hidden');
-                var contentAsBlob = new Blob([ wavFileContent ], {
-                    type : 'audio/wav'
+                var contentAsBlob = new Blob([wavFileContent], {
+                    type: 'audio/wav'
                 });
                 audio = new Audio(window.URL.createObjectURL(contentAsBlob));
                 createPlayButton(audio);
@@ -238,7 +238,7 @@ define([ 'exports', 'util', 'log', 'message', 'program.controller', 'program.mod
             for (var i = 1; Blockly.Msg['POPUP_DOWNLOAD_STEP_' + i]; i++) {
                 var step = $('<li class="typcn typcn-roberta">');
                 var a = Blockly.Msg['POPUP_DOWNLOAD_STEP_' + i + '_' + GUISTATE_C.getRobotGroup().toUpperCase()] || Blockly.Msg['POPUP_DOWNLOAD_STEP_' + i]
-                        || 'POPUP_DOWNLOAD_STEP_' + i;
+                    || 'POPUP_DOWNLOAD_STEP_' + i;
                 step.html('<span class="download-message">' + a + '</span>');
                 step.css('opacity', '0');
                 $('#download-instructions').append(step);
@@ -247,7 +247,7 @@ define([ 'exports', 'util', 'log', 'message', 'program.controller', 'program.mod
             $("#save-client-compiled-program").one("shown.bs.modal", function(e) {
                 $('#download-instructions li').each(function(index) {
                     $(this).delay(750 * index).animate({
-                        opacity : 1
+                        opacity: 1
                     }, 1000);
                 });
             });
@@ -311,34 +311,29 @@ define([ 'exports', 'util', 'log', 'message', 'program.controller', 'program.mod
         if (result.rc === "ok") {
             var programSrc = result.compiledCode;
             var program = JSON.parse(programSrc);
-            switch (GUISTATE_C.getRobot()) {
-            case "wedo":
-                interpreter = WEBVIEW_C.getInterpreter(program);
-                if (interpreter !== null) {
-                    GUISTATE_C.setConnectionState("busy");
-                    blocklyWorkspace.robControls.switchToStop();
-                    try {
-                        runStepWedo();
-                    } catch (error) {
-                        interpreter.terminate();
-                        interpreter = null;
-                        alert(error);
-                    }
+            interpreter = WEBVIEW_C.getInterpreter(program);
+            if (interpreter !== null) {
+                GUISTATE_C.setConnectionState("busy");
+                blocklyWorkspace.robControls.switchToStop();
+                try {
+                    runStepInterpreter();
+                } catch (error) {
+                    interpreter.terminate();
+                    interpreter = null;
+                    alert(error);
                 }
-                break;
-            default:
-                // TODO
             }
+            // TODO
         }
     }
 
-    function runStepWedo() {
+    function runStepInterpreter() {
         while (!interpreter.isTerminated() && !reset) {
             var maxRunTime = new Date().getTime() + 100;
             var waitTime = interpreter.run(maxRunTime);
 
             if (waitTime > 0) {
-                timeout(runStepWedo, waitTime);
+                timeout(runStepInterpreter, waitTime);
                 return;
             }
         }
@@ -391,8 +386,8 @@ define([ 'exports', 'util', 'log', 'message', 'program.controller', 'program.mod
         }
         var downloadLink;
         if ('Blob' in window) {
-            var contentAsBlob = new Blob([ content ], {
-                type : 'application/octet-stream'
+            var contentAsBlob = new Blob([content], {
+                type: 'application/octet-stream'
             });
             if ('msSaveOrOpenBlob' in navigator) {
                 navigator.msSaveOrOpenBlob(contentAsBlob, fileName);
@@ -495,7 +490,7 @@ define([ 'exports', 'util', 'log', 'message', 'program.controller', 'program.mod
             }
         } else {
             MSG.displayInformation({
-                rc : "error"
+                rc: "error"
             }, "", "should not happen!");
         }
     }
