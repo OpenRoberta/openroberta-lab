@@ -14,7 +14,7 @@ License information is available in the **docs** folder.
 
 Things you need on your computer:
 
-* Java JDK >= 1.8 (e.g. `openjdk-11-jdk` on Ubuntu)
+* Java JDK >= 1.8 (e.g. `openjdk-11-jdk` on Ubuntu) and JAVA JDK <= 13.0.2
 * Maven >= 3.2
 * Git
 * Web browser
