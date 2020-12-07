@@ -1,4 +1,16 @@
-### typescript support for the OpenRoberta lab (Eclipse)
+### Typescript support for the OpenRoberta lab
+
+#### Getting Started
+
+**Requirements**
+* Have node and npm installed globally
+
+**Installing & Developing**
+1. Install the dependencies using `npm i`
+2. To let typescript compile using `npm run build` or `npx tsc`
+3. Use typescript in watch mode using `npm run watch` or `npx tsc --watch`
+
+### Typescript support for the OpenRoberta lab (Eclipse)
 
 we plan to change the way, we work with typescript. Thus, this may be outdated soon.
 
@@ -27,7 +39,27 @@ Pitfalls:
 
 PERSONAL REMARK: I have activated 'codelens'. It is EXPERIMENTAL. It gives reference counts of components and a used-by functionality when clicking on the
     references (small italic font).
-   
+
+
+### Typescript support for the OpenRoberta lab (Intellij Ultimate / Webstorm)
+IntelliJ Ultimate supports typescript without third-party plugins.
+But make sure the JavaScript and TypeScript bundled plugin is enabled on the **Settings/Preferences | Plugins page**
+
+**Setup**
+1. Start with [Getting Started](#getting-started)
+2. Install the IntelliJ formatter from `Resources/formatter/openRobertaIdea.xml`
+2. Go to **Settings/Preferences | Language & Frameworks | Typescript | Select Typescript Compiler (./node_modules/typescript)**
+
+**Developing**
+Our typescript compiler is configured to compile to `OpenRobertaServer/staticResources`. 
+
+1. Start open Roberta Server (either `./ora.sh start-from-git` or use the IDE Starter)
+2. To compile with typescript click the Typescript Widget in the status bar choose **Compile | Compile All**
+3. To compile everytime on change go to **Settings/Preferences | Language & Frameworks | Typescript** and select **Recompile on changes**
+4. Everytime you changed a typescript file reload the page, since we don't have a live reloader
+
+You can find additional information on [Jetbrain's own Typescript Manual](https://www.jetbrains.com/help/idea/compiling-typescript-to-javascript.html#ts_compiler_compile_code)
+
 ### Structure of the project
 
 1. the ts sources are in directory `ts`. Each "component"/"framework", we have written, should be assembled in a directory below the directory `app`. This is necessary
