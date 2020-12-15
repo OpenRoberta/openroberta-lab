@@ -313,7 +313,6 @@
                   "opc": "GetSample",
                   "port": "1",
                   "name": "W"
-                  
                 },
                 {
                   "opc": "IfTrueStatement",
@@ -669,69 +668,91 @@
       "opc": "WaitStmt",
       "stmtList": [
         {
-          "opc": "expr",
-          "expr": "NUM_CONST",
-          "value": "0"
-        },
-        {
-          "opc": "expr",
-          "expr": "createMathConstant",
-          "value": "PI"
-        },
-        {
-          "op": "ROOT",
-          "opc": "expr",
-          "expr": "SingleFunction"
-        },
-        {
-          "opc": "expr",
-          "expr": "NUM_CONST",
-          "value": "1"
-        },
-        {
-          "opc": "expr",
-          "expr": "NUM_CONST",
-          "value": "2"
-        },
-        {
-          "op": "MOD",
-          "opc": "expr",
-          "expr": "Binary"
-        },
-        {
-          "op": "ROUND",
-          "opc": "expr",
-          "expr": "SingleFunction"
-        },
-        {
-          "op": "SIN",
-          "opc": "expr",
-          "expr": "SingleFunction"
-        },
-        {
-          "op": "ADD",
-          "opc": "expr",
-          "expr": "Binary"
-        },
-        {
-          "op": "EQ",
-          "opc": "expr",
-          "expr": "Binary"
-        },
-        {
-          "opc": "expr",
-          "expr": "BOOL_CONST",
-          "value": true
-        },
-        {
-          "op": "NOT",
-          "opc": "expr",
-          "expr": "Unary"
-        },
-        {
-          "op": "AND",
-          "opc": "expr",
-          "expr": "Binary"
+          "opc": "IfStatement",
+          "stmtList": [
+            {
+              "opc": "expr",
+              "expr": "NUM_CONST",
+              "value": "0"
+            },
+            {
+              "opc": "expr",
+              "expr": "createMathConstant",
+              "value": "PI"
+            },
+            {
+              "op": "ROOT",
+              "opc": "expr",
+              "expr": "SingleFunction"
+            },
+            {
+              "opc": "expr",
+              "expr": "NUM_CONST",
+              "value": "1"
+            },
+            {
+              "opc": "expr",
+              "expr": "NUM_CONST",
+              "value": "2"
+            },
+            {
+              "op": "MOD",
+              "opc": "expr",
+              "expr": "Binary"
+            },
+            {
+              "op": "ROUND",
+              "opc": "expr",
+              "expr": "SingleFunction"
+            },
+            {
+              "op": "SIN",
+              "opc": "expr",
+              "expr": "SingleFunction"
+            },
+            {
+              "op": "ADD",
+              "opc": "expr",
+              "expr": "Binary"
+            },
+            {
+              "op": "EQ",
+              "opc": "expr",
+              "expr": "Binary"
+            },
+            {
+              "opc": "IfTrueStatement",
+              "stmtList": [
+                {
+                  "opc": "expr",
+                  "expr": "BOOL_CONST",
+                  "value": true
+                },
+                {
+                  "op": "NOT",
+                  "opc": "expr",
+                  "expr": "Unary"
+                },
+                {
+                  "opc": "flowControl",
+                  "conditional": false,
+                  "break": true,
+                  "kind": "IfStatement"
+                }
+              ]
+            },
+            {
+              "opc": "expr",
+              "expr": "BOOL_CONST",
+              "value": false
+            },
+            {
+              "opc": "flowControl",
+              "conditional": false,
+              "break": true,
+              "kind": "IfStatement"
+            }
+          ]
         },
         {
           "opc": "IfTrueStatement",
@@ -1345,38 +1366,82 @@
       "name": "item3"
     },
     {
-      "opc": "expr",
-      "expr": "BOOL_CONST",
-      "value": true
-    },
-    {
-      "opc": "expr",
-      "expr": "BOOL_CONST",
-      "value": false
-    },
-    {
-      "op": "AND",
-      "opc": "expr",
-      "expr": "Binary"
+      "opc": "IfStatement",
+      "stmtList": [
+        {
+          "opc": "expr",
+          "expr": "BOOL_CONST",
+          "value": true
+        },
+        {
+          "opc": "IfTrueStatement",
+          "stmtList": [
+            {
+              "opc": "expr",
+              "expr": "BOOL_CONST",
+              "value": false
+            },
+            {
+              "opc": "flowControl",
+              "conditional": false,
+              "break": true,
+              "kind": "IfStatement"
+            }
+          ]
+        },
+        {
+          "opc": "expr",
+          "expr": "BOOL_CONST",
+          "value": false
+        },
+        {
+          "opc": "flowControl",
+          "conditional": false,
+          "break": true,
+          "kind": "IfStatement"
+        }
+      ]
     },
     {
       "opc": "AssignStmt",
       "name": "item3"
     },
     {
-      "opc": "expr",
-      "expr": "BOOL_CONST",
-      "value": true
-    },
-    {
-      "opc": "expr",
-      "expr": "BOOL_CONST",
-      "value": false
-    },
-    {
-      "op": "OR",
-      "opc": "expr",
-      "expr": "Binary"
+      "opc": "IfStatement",
+      "stmtList": [
+        {
+          "opc": "expr",
+          "expr": "BOOL_CONST",
+          "value": true
+        },
+        {
+          "opc": "IfTrueStatement",
+          "stmtList": [
+            {
+              "opc": "expr",
+              "expr": "BOOL_CONST",
+              "value": true
+            },
+            {
+              "opc": "flowControl",
+              "conditional": false,
+              "break": true,
+              "kind": "IfStatement"
+            }
+          ]
+        },
+        {
+          "opc": "expr",
+          "expr": "BOOL_CONST",
+          "value": false
+        },
+        {
+          "opc": "flowControl",
+          "conditional": false,
+          "break": true,
+          "kind": "IfStatement"
+        }
+      ]
     },
     {
       "opc": "AssignStmt",
@@ -1535,19 +1600,41 @@
           "name": "W"
         },
         {
-          "opc": "expr",
-          "expr": "BOOL_CONST",
-          "value": true
-        },
-        {
-          "opc": "expr",
-          "expr": "BOOL_CONST",
-          "value": true
-        },
-        {
-          "op": "AND",
-          "opc": "expr",
-          "expr": "Binary"
+          "opc": "IfStatement",
+          "stmtList": [
+            {
+              "opc": "expr",
+              "expr": "BOOL_CONST",
+              "value": true
+            },
+            {
+              "opc": "IfTrueStatement",
+              "stmtList": [
+                {
+                  "opc": "expr",
+                  "expr": "BOOL_CONST",
+                  "value": true
+                },
+                {
+                  "opc": "flowControl",
+                  "conditional": false,
+                  "break": true,
+                  "kind": "IfStatement"
+                }
+              ]
+            },
+            {
+              "opc": "expr",
+              "expr": "BOOL_CONST",
+              "value": false
+            },
+            {
+              "opc": "flowControl",
+              "conditional": false,
+              "break": true,
+              "kind": "IfStatement"
+            }
+          ]
         },
         {
           "opc": "createMethodIfReturn",
@@ -1577,19 +1664,41 @@
       "name": "doSomething2",
       "statements": [
         {
-          "opc": "expr",
-          "expr": "BOOL_CONST",
-          "value": true
-        },
-        {
-          "opc": "expr",
-          "expr": "BOOL_CONST",
-          "value": true
-        },
-        {
-          "op": "AND",
-          "opc": "expr",
-          "expr": "Binary"
+          "opc": "IfStatement",
+          "stmtList": [
+            {
+              "opc": "expr",
+              "expr": "BOOL_CONST",
+              "value": true
+            },
+            {
+              "opc": "IfTrueStatement",
+              "stmtList": [
+                {
+                  "opc": "expr",
+                  "expr": "BOOL_CONST",
+                  "value": true
+                },
+                {
+                  "opc": "flowControl",
+                  "conditional": false,
+                  "break": true,
+                  "kind": "IfStatement"
+                }
+              ]
+            },
+            {
+              "opc": "expr",
+              "expr": "BOOL_CONST",
+              "value": false
+            },
+            {
+              "opc": "flowControl",
+              "conditional": false,
+              "break": true,
+              "kind": "IfStatement"
+            }
+          ]
         },
         {
           "opc": "createMethodIfReturn",

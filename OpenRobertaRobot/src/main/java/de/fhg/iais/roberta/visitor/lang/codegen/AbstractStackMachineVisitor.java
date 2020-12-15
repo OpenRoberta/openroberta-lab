@@ -22,6 +22,7 @@ import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.StartActivityTask;
 import de.fhg.iais.roberta.syntax.lang.expr.ActionExpr;
 import de.fhg.iais.roberta.syntax.lang.expr.Binary;
+import de.fhg.iais.roberta.syntax.lang.expr.Binary.Op;
 import de.fhg.iais.roberta.syntax.lang.expr.BoolConst;
 import de.fhg.iais.roberta.syntax.lang.expr.ColorConst;
 import de.fhg.iais.roberta.syntax.lang.expr.ConnectConst;
@@ -228,22 +229,55 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
 
     @Override
     public final V visitBinary(Binary<V> binary) {
-        binary.getLeft().accept(this);
-        binary.getRight().accept(this);
-        JSONObject o;
-        // FIXME: The math change should be removed from the binary expression since it is a statement
         switch ( binary.getOp() ) {
-            case MATH_CHANGE:
-                o = mk(C.MATH_CHANGE, binary).put(C.NAME, ((Var<V>) binary.getLeft()).getValue());
-                break;
-            case TEXT_APPEND:
-                o = mk(C.TEXT_APPEND, binary).put(C.NAME, ((Var<V>) binary.getLeft()).getValue());
-                break;
+            case AND:
+            case OR:
+                JSONObject stmtListEnd = mk(C.FLOW_CONTROL, binary).put(C.KIND, C.IF_STMT).put(C.CONDITIONAL, false).put(C.BREAK, true);
+                JSONObject t = mk(C.EXPR, binary).put(C.EXPR, "BOOL_CONST").put(C.VALUE, true);
+                JSONObject f = mk(C.EXPR, binary).put(C.EXPR, "BOOL_CONST").put(C.VALUE, false);
+                pushOpArray();
+                binary.getLeft().accept(this);
+                pushOpArray();
+                if ( binary.getOp() == Op.AND ) {
+                    binary.getRight().accept(this);
+                } else {
+                    this.getOpArray().add(t);
+                }
+                this.getOpArray().add(stmtListEnd);
+                List<JSONObject> thenStmts = popOpArray();
+                JSONObject ifTrue = mk(C.IF_TRUE_STMT, binary).put(C.STMT_LIST, thenStmts);
+                this.getOpArray().add(ifTrue);
+                if ( binary.getOp() == Op.AND ) {
+                    this.getOpArray().add(f);
+                } else {
+                    binary.getRight().accept(this);
+                }
+                this.getOpArray().add(stmtListEnd);
+                List<JSONObject> ifThenElseOps = popOpArray();
+                JSONObject lazyAndOr = mk(C.IF_STMT, binary).put(C.STMT_LIST, ifThenElseOps);
+                return app(lazyAndOr);
+
             default:
-                o = mk(C.EXPR, binary).put(C.EXPR, C.BINARY).put(C.OP, binary.getOp());
-                break;
+                binary.getLeft().accept(this);
+                binary.getRight().accept(this);
+                JSONObject o;
+                // FIXME: The math change should be removed from the binary expression since it is a statement
+                switch ( binary.getOp() ) {
+                    case MATH_CHANGE:
+                        o = mk(C.MATH_CHANGE, binary).put(C.NAME, ((Var<V>) binary.getLeft()).getValue());
+                        break;
+                    case TEXT_APPEND:
+                        o = mk(C.TEXT_APPEND, binary).put(C.NAME, ((Var<V>) binary.getLeft()).getValue());
+                        break;
+
+                    default:
+                        o = mk(C.EXPR, binary).put(C.EXPR, C.BINARY).put(C.OP, binary.getOp());
+                        break;
+                }
+                return app(o);
+
         }
-        return app(o);
+
     }
 
     @Override
