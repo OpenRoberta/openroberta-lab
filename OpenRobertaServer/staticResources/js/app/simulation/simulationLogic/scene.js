@@ -897,7 +897,7 @@ define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constan
                     values.display.brightness = Math.round((this.robots[r].display.brightness * 9.0) / 255.0, 0);
                     values.display.pixel = this.robots[r].display.leds.map(function(x) {
                         return x.map(function(y) {
-                            return y / IC.BRIGHTNESS_MULTIPLIER;
+                            return Math.round(y / IC.BRIGHTNESS_MULTIPLIER);
                         });
                     });
                 }
