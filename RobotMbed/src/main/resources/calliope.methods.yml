@@ -1,0 +1,11 @@
+include: "classpath:/common.methods.yml"
+
+IS_GESTURE_SHAKE:
+  C: |
+    bool isGestureShake() {
+        return (( _uBit.accelerometer.getGesture() == MICROBIT_ACCELEROMETER_EVT_SHAKE) 
+            || ( _uBit.accelerometer.getX() > 1800 ) 
+            || ( _uBit.accelerometer.getY() > 1800 ) 
+            || ( _uBit.accelerometer.getZ() > 1800 ));            
+    }
+

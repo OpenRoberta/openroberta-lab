@@ -1,9 +1,5 @@
 package de.fhg.iais.roberta.visitor.codegen;
 
-import com.google.common.collect.ClassToInstanceMap;
-
-import org.apache.commons.text.WordUtils;
-
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -11,6 +7,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.text.WordUtils;
+
+import com.google.common.collect.ClassToInstanceMap;
+
+import de.fhg.iais.roberta.bean.CodeGeneratorSetupBean;
 import de.fhg.iais.roberta.bean.IProjectBean;
 import de.fhg.iais.roberta.bean.UsedHardwareBean;
 import de.fhg.iais.roberta.components.ConfigurationAst;
@@ -100,6 +101,7 @@ import de.fhg.iais.roberta.syntax.sensor.mbed.RadioRssiSensor;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.visitor.IVisitor;
+import de.fhg.iais.roberta.visitor.collect.CalliopeMethods;
 import de.fhg.iais.roberta.visitor.hardware.IMbedVisitor;
 import de.fhg.iais.roberta.visitor.lang.codegen.prog.AbstractCppVisitor;
 
@@ -506,12 +508,17 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
 
     @Override
     public Void visitGestureSensor(GestureSensor<Void> gestureSensor) {
-        this.sb.append("(_uBit.accelerometer.getGesture() == MICROBIT_ACCELEROMETER_EVT_");
         String mode = gestureSensor.getMode();
-        if ( mode.equals(SC.UP) || mode.equals(SC.DOWN) || mode.equals(SC.LEFT) || mode.equals(SC.RIGHT) ) {
-            this.sb.append("TILT_");
+        if ( mode.equals("SHAKE") ) {
+            this.sb.append(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(CalliopeMethods.IS_GESTURE_SHAKE));
+            this.sb.append("()");
+        } else {
+            this.sb.append("(_uBit.accelerometer.getGesture() == MICROBIT_ACCELEROMETER_EVT_");
+            if ( mode.equals(SC.UP) || mode.equals(SC.DOWN) || mode.equals(SC.LEFT) || mode.equals(SC.RIGHT) ) {
+                this.sb.append("TILT_");
+            }
+            this.sb.append(mode + ")");
         }
-        this.sb.append(mode + ")");
         return null;
     }
 
@@ -1074,6 +1081,7 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
             nlIndent();
             generateUserDefinedMethods();
         }
+
         super.generateProgramSuffix(withWrapping);
     }
 
@@ -1370,7 +1378,7 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
         String port = servoSetAction.getPort();
         ConfigurationComponent confComp = this.robotConfiguration.getConfigurationComponent(port);
         String pin1 = confComp.getComponentType().equals("CALLIBOT") ? getCallibotPin(confComp, port) : confComp.getProperty("PIN1");
-        if (pin1.equals("0x14") || pin1.equals("0x15")) {
+        if ( pin1.equals("0x14") || pin1.equals("0x15") ) {
             this.sb.append("_cbSetServo(_buf, &_i2c, ");
             this.sb.append(pin1);
             this.sb.append(", ");
