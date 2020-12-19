@@ -120,8 +120,8 @@ public class Ast2C4ev3VisitorTest extends Ev3C4ev3AstTest {
                 + CONSTANTS_AND_IMPORTS__WITH_SMALLER_TRACK_WIDTH
                 + BEGIN_MAIN__TOUCH_NULL_COLOR_NULL
                 + "if ( ReadEV3TouchSensor(IN_1) ) {\n"
-                + "    SetLedPattern(LED_GREEN);\n"
-                + "} else if ( Red == ReadEV3ColorSensor(IN_3) ) {\n"
+                + "    SetLedPattern(LEDPattern_SteadyGreen);\n"
+                + "} else if ( ColorRed == NEPOReadEV3ColorSensorColor(IN_3) ) {\n"
                 + "    while ( true ) {\n"
                 + "        LcdPicture(LCD_COLOR_BLACK, 0, 0, EYESOPEN);\n"
                 + "        OnFwdReg(OUT_B, Speed(30));\n"
@@ -149,14 +149,14 @@ public class Ast2C4ev3VisitorTest extends Ev3C4ev3AstTest {
                 + CONSTANTS_AND_IMPORTS__WITH_SMALLER_TRACK_WIDTH
                 + BEGIN_MAIN__TOUCH_NULL_NULL_ULTRASONIC
                 + "if ( ReadEV3TouchSensor(IN_1) ) {\n"
-                + "    SetLedPattern(LED_GREEN);\n"
+                + "    SetLedPattern(LEDPattern_SteadyGreen);\n"
                 + "} else {\n"
                 + "    if ( ReadEV3TouchSensor(IN_1) ) {\n"
-                + "        SetLedPattern(LED_GREEN);\n"
-                + "    } else if ( 0 == ReadEV3UltrasonicSensorDistance(IN_4, CM) ) {\n"
+                + "        SetLedPattern(LEDPattern_SteadyGreen);\n"
+                + "    } else if ( 0 == ReadEV3UltrasonicSensorDistance(IN_4, EV3_ULTRASONIC_CM) ) {\n"
                 + "        LcdPicture(LCD_COLOR_BLACK, 0, 0, FLOWERS);\n"
                 + "    } else {\n"
-                + "        while ( !ButtonIsDown(BTNUP) ) {\n"
+                + "        while ( !ButtonIsDown(Button_Up) ) {\n"
                 + "            OnFwdReg(OUT_B, Speed(30));\n"
                 + "        }\n"
                 + "    }\n"
@@ -182,15 +182,15 @@ public class Ast2C4ev3VisitorTest extends Ev3C4ev3AstTest {
                 + "    RotateMotorForAngle(OUT_B, Speed(30), 360 * 1);\n"
                 + "    OnFwdSyncEx(OUT_AB, Speed(50), 200, RESET_NONE);"
                 + "}\n"
-                + "if ( ((MotorRotationCount(OUT_A) / 360.0) + ReadEV3IrSensorProximity(IN_3)) == ReadEV3UltrasonicSensorDistance(IN_4, CM) ) {\n"
-                + "    SetLedPattern(LED_BLACK);\n"
+                + "if ( ((MotorRotationCount(OUT_A) / 360.0) + ReadEV3IrSensorProximity(IN_3)) == ReadEV3UltrasonicSensorDistance(IN_4, EV3_ULTRASONIC_CM) ) {\n"
+                + "    SetLedPattern(LEDPattern_Off);\n"
                 + "} else {\n"
                 + "    NEPOResetEV3GyroSensor(IN_2);\n"
                 + "    while ( ReadEV3TouchSensor(IN_1) ) {\n"
                 + "        LcdPicture(LCD_COLOR_BLACK, 0, 0, OLDGLASSES);\n"
                 + "        LcdClean();\n"
                 + "    }\n"
-                + "    SetLedPattern(LED_GREEN);\n"
+                + "    SetLedPattern(LEDPattern_SteadyGreen);\n"
                 + "}\n"
                 + END_MAIN;
         UnitTestHelper
@@ -317,8 +317,8 @@ public class Ast2C4ev3VisitorTest extends Ev3C4ev3AstTest {
                 + "std::list<double> ___item4 = ((std::list<double>){1, 2, 3});\n"
                 + "std::list<std::string> ___item5 = ((std::list<std::string>){\"a\", \"b\"});\n"
                 + "std::list<bool> ___item6 = ((std::list<bool>){true, false});\n"
-                + "std::list<Color> ___item7 = ((std::list<Color>){Red, Black, None});\n"
-                + "Color ___item8 = None;\n"
+                + "std::list<Color> ___item7 = ((std::list<Color>){ColorRed, ColorBlack, ColorNone});\n"
+                + "Color ___item8 = ColorNone;\n"
                 + "BluetoothConnectionHandle ___item9 = NEPOWaitConnection();\n"
                 + "std::list<BluetoothConnectionHandle> ___item10 = ((std::list<BluetoothConnectionHandle>){NEPOWaitConnection()});\n"
                 + BEGIN_MAIN__NULLSORS
@@ -369,7 +369,7 @@ public class Ast2C4ev3VisitorTest extends Ev3C4ev3AstTest {
                 + CONSTANTS_AND_IMPORTS
                 + "voidtest();\n"
                 + "void test() {\n"
-                + "    SetLedPattern(LED_GREEN);\n"
+                + "    SetLedPattern(LEDPattern_SteadyGreen);\n"
                 + "}\n"
                 + BEGIN_MAIN__NULLSORS
                 + "test();\n"
@@ -386,7 +386,7 @@ public class Ast2C4ev3VisitorTest extends Ev3C4ev3AstTest {
                 + "voidtest(bool___x);\n"
                 + "void test(bool ___x) {\n"
                 + "    if (___x) return;"
-                + "    SetLedPattern(LED_GREEN);\n"
+                + "    SetLedPattern(LEDPattern_SteadyGreen);\n"
                 + "}\n"
                 + BEGIN_MAIN__NULLSORS
                 + "test(true);\n"
@@ -414,7 +414,7 @@ public class Ast2C4ev3VisitorTest extends Ev3C4ev3AstTest {
                 + "}\n"
                 + "void test2 () {\n"
                 + "    if (___variablenName2) return;\n"
-                + "    SetLedPattern(LED_GREEN);\n"
+                + "    SetLedPattern(LEDPattern_SteadyGreen);\n"
                 + "}\n"
                 + BEGIN_MAIN__NULLSORS
                 + "test1(0, 0);\n"
@@ -456,7 +456,7 @@ public class Ast2C4ev3VisitorTest extends Ev3C4ev3AstTest {
                 + "std::list<std::string> ___variablenName = ((std::list<std::string>){\"a\", \"b\", \"c\"});\n"
                 + "Color test() {\n"
                 + "    DrawString(ToString(___variablenName), 0, 0);"
-                + "    return None;\n"
+                + "    return ColorNone;\n"
                 + "}\n"
                 + BEGIN_MAIN__NULLSORS
                 + "DrawString(ToString(test()), 0, 0);\n"
@@ -478,9 +478,9 @@ public class Ast2C4ev3VisitorTest extends Ev3C4ev3AstTest {
                 + "Colortest();\n"
                 + "std::list<std::string> ___variablenName = ((std::list<std::string>){\"a\", \"b\", \"c\"});\n"
                 + "Color test() {\n"
-                + "    if (true) return Red;\n"
+                + "    if (true) return ColorRed;\n"
                 + "    DrawString(ToString(___variablenName), 0, 0);"
-                + "    return None;\n"
+                + "    return ColorNone;\n"
                 + "}\n"
                 + BEGIN_MAIN__NULLSORS
                 + "DrawString(ToString(test()), 0, 0);\n"
@@ -532,13 +532,13 @@ public class Ast2C4ev3VisitorTest extends Ev3C4ev3AstTest {
         String expectedCode =
             "" //
                 + CONSTANTS_AND_IMPORTS
-                + "Color ___color = White;\n"
+                + "Color ___color = ColorWhite;\n"
                 + "double ___light = 0;\n"
                 + "std::list<double> ___rgb = ((std::list<double>){0, 0, 0});\n"
                 + BEGIN_MAIN__NULL_NULL_COLOR_NULL
-                + "___color = ReadEV3ColorSensor(IN_3);\n"
-                + "___light = ReadEV3ColorSensorLight(IN_3, ReflectedLight);\n"
-                + "___light = ReadEV3ColorSensorLight(IN_3, AmbientLight);\n"
+                + "___color = NEPOReadEV3ColorSensorColor(IN_3);\n"
+                + "___light = NEPOReadEV3ColorSensorReflectedLight(IN_3);\n"
+                + "___light = NEPOReadEV3ColorSensorAmbientLight(IN_3);\n"
                 + "___rgb = NEPOReadEV3ColorSensorRGB(IN_3);\n"
                 + END_MAIN;
         UnitTestHelper
@@ -556,7 +556,7 @@ public class Ast2C4ev3VisitorTest extends Ev3C4ev3AstTest {
         String expectedCode =
             "" //
                 + CONSTANTS_AND_IMPORTS__WITH_SMALLER_TRACK_WIDTH
-                + "Color ___color = White;\n"
+                + "Color ___color = ColorWhite;\n"
                 + "double ___light = 0;\n"
                 + "std::list<double> ___rgb = ((std::list<double>){0, 0, 0});\n"
                 + BEGIN_MAIN__NULL_NULL_HTCOLORV2_NULL
