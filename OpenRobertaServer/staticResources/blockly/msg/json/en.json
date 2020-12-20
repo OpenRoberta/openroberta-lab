@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2020-12-26 15:47:26.612170",
+		"lastupdated": "2020-12-13 11:50:28.844137",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -1758,12 +1758,6 @@
 	"MODE_CO2EQUIVALENT": "CO2 Equivalent",
 	"MODE_VOCEQUIVALENT": "Breathe VOC Equivalent",
 	"SENSOR_DATA_READY": "ready?",
-	"MIN_ANGLE": "Minimum angle",
-	"MAX_ANGLE": "Maximum angle",
-	"MIN_PULSE_WIDTH": "Minimum pulse width",
-	"MAX_PULSE_WIDTH": "Maximum pulse width",
-	"FRAME_WIDTH": "Frame width",
-	"LIGHT_LDR": "Light (LDR)",
 	"SLOT_BACK": "back",
 	"SENSOR_POSITION": "sensor position"
 }
