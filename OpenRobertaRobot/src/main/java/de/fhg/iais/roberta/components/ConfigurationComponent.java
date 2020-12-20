@@ -119,6 +119,21 @@ public class ConfigurationComponent extends Phrase<Void> {
         }
     }
 
+    public String getPosition(String block) {
+        switch ( getProperty(block) ) {
+            case SC.FRONT:
+                return SC.FRONT;
+            case SC.LEFT:
+                return SC.LEFT;
+            case SC.RIGHT:
+                return SC.RIGHT;
+            case SC.BACK:
+                return SC.BACK;
+            default:
+                return SC.FRONT;
+        }
+    }
+
     public String getInternalPortName() {
         return this.internalPortName;
     }

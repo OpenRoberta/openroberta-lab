@@ -25,8 +25,6 @@ public class ProjectSourceSimulationResponse extends BaseResponse {
     protected String progXML;
     protected Map<String, JSONObject> confAnnos;
     protected JSONObject javaScriptConfiguration;
-    protected JSONObject javaScriptPositionConfiguration;
-    protected JSONObject javaScriptAlignmentConfiguration;
 
     /**
      * the response for the /projectWorkflow/sourceSimulation REST request
@@ -362,28 +360,6 @@ public class ProjectSourceSimulationResponse extends BaseResponse {
     }
 
     /**
-     * SET javaScriptConfiguration. Object must be mutable.
-     */
-    public ProjectSourceSimulationResponse setJavaScriptPositionConfiguration(JSONObject javaScriptPositionConfiguration) {
-        if (this.immutable) {
-            throw new RuntimeException("javaScriptConfiguration assigned to an immutable object: " + toString());
-        }
-        this.javaScriptPositionConfiguration = javaScriptPositionConfiguration;
-        return this;
-    }
-
-    /**
-     * SET javaScriptAlignmentConfiguration. Object must be mutable.
-     */
-    public ProjectSourceSimulationResponse setJavaScriptAlignmentConfiguration(JSONObject javaScriptAlignmentConfiguration) {
-        if (this.immutable) {
-            throw new RuntimeException("javaScriptAlignmentConfiguration assigned to an immutable object: " + toString());
-        }
-        this.javaScriptAlignmentConfiguration = javaScriptAlignmentConfiguration;
-        return this;
-    }
-    
-    /**
      * generates a JSON-object from an immutable bean.<br>
      * Throws a runtime exception if inconsistencies are detected.
      */
@@ -449,14 +425,12 @@ public class ProjectSourceSimulationResponse extends BaseResponse {
                 jsonO.put("confAnnos", map);
             }
             jsonO.put("javaScriptConfiguration", this.javaScriptConfiguration);
-            jsonO.put("javaScriptPositionConfiguration", this.javaScriptPositionConfiguration);
-            jsonO.put("javaScriptAlignmentConfiguration", this.javaScriptAlignmentConfiguration);
-        } catch (JSONException e) {
+        } catch ( JSONException e ) {
             throw new RuntimeException("JSON unparse error when unparsing: " + this, e);
         }
         return jsonO;
     }
-    
+
     @Override
     public String toString() {
         return "ProjectSourceSimulationResponse [immutable="
