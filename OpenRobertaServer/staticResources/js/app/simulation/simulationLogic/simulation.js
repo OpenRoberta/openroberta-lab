@@ -16,6 +16,7 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
     var scene;
     var userPrograms;
     var configurations = [];
+    var positionConfigurations = [];
     var canvasOffset;
     var offsetX;
     var offsetY;
@@ -351,6 +352,7 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
         userPrograms = programs;
         runRenderUntil = [];
         configurations = [];
+        positionConfigurations = [];
         for (i = 0; i < programs.length; i++) {
             runRenderUntil[i] = 0;
         }
@@ -377,6 +379,7 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
         interpreters = programs.map(function(x) {
             var src = JSON.parse(x.javaScriptProgram);
             configurations.push(x.javaScriptConfiguration);
+            positionConfigurations.push(x.javaScriptPositionConfiguration);
             return new SIM_I.Interpreter(src, new MBED_R.RobotMbedBehaviour(), callbackOnTermination, breakpoints);
         });
         updateDebugMode(debugMode);
@@ -1062,7 +1065,7 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
         $("#simRobotModal").modal("hide");
         robots = [];
         if (numRobots >= 1) {
-            var tempRobot = createRobot(reqRobot, configurations[0], 0, 0, interpreters[0].getRobotBehaviour());
+            var tempRobot = createRobot(reqRobot, configurations[0],  positionConfigurations[0],0, 0, interpreters[0].getRobotBehaviour());
             tempRobot.savedName = userPrograms[0].savedName;
             robots[0] = tempRobot;
             if (robots[0].brick) {
@@ -1070,7 +1073,7 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
             }
             for (var i = 1; i < numRobots; i++) {
                 var yOffset = 60 * (Math.floor((i + 1) / 2)) * (Math.pow((-1), i));
-                tempRobot = createRobot(reqRobot, configurations[i], i, yOffset, interpreters[i].getRobotBehaviour());
+                tempRobot = createRobot(reqRobot, configurations[i],  positionConfigurations[i], i, yOffset, interpreters[i].getRobotBehaviour());
                 tempRobot.savedName = userPrograms[i].savedName;
                 var tempcolor = arrToRgb(colorsAdmissible[((i - 1) % (colorsAdmissible.length))]);
                 tempRobot.geom.color = tempcolor;
@@ -1086,7 +1089,7 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
         }
     }
 
-    function createRobot(reqRobot, configuration, num, optYOffset, robotBehaviour) {
+    function createRobot(reqRobot, configuration, positionConfiguration, num, optYOffset, robotBehaviour) {
         var yOffset = optYOffset || 0;
         var robot;
         if (currentBackground == 2) {
@@ -1098,7 +1101,7 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
                 yOld: 200 + yOffset,
                 transX: 0,
                 transY: 0
-            }, configuration, num, robotBehaviour);
+            }, configuration, positionConfiguration, num, robotBehaviour);
             robot.canDraw = false;
         } else if (currentBackground == 3) {
             robot = new reqRobot({
