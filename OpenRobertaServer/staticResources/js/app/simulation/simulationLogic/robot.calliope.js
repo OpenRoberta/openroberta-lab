@@ -8,7 +8,7 @@ define([ 'simulation.simulation', 'simulation.robot.mbed' ], function(SIM, Mbed)
      *
      * @class
      */
-    function Calliope(pose, configuration, num, robotBehaviour) {
+    function Calliope(pose, configuration, positionConfiguration, num, robotBehaviour) {
         Mbed.call(this, pose, num, robotBehaviour);
         var that = this;
         this.led = {
