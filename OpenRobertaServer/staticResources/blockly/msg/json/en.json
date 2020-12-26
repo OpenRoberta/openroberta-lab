@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2020-12-13 11:50:28.844137",
+		"lastupdated": "2020-11-25 21:42:50.802413",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -639,11 +639,9 @@
 	"TOOLBOX_COMMUNICATION": "Messages",
 	"TOOLBOX_PIN": "Pin",
 	"TOOLBOX_SENSOR": "Sensors",
-	"TOOLBOX_INTEGRATED_SENSOR": "Integrated Sensors",
 	"TOOLBOX_CONTROL": "Control",
 	"TOOLBOX_LOGIC": "Logic",
 	"TOOLBOX_MATH": "Math",
-	"TOOLBOX_NEURAL_NETWORK": "Neural Network",
 	"TOOLBOX_TEXT": "Text",
 	"TOOLBOX_LIST": "Lists",
 	"TOOLBOX_COLOUR": "Colours",
@@ -1757,7 +1755,5 @@
 	"MODE_CALIBRATION": "Calibration Value",
 	"MODE_CO2EQUIVALENT": "CO2 Equivalent",
 	"MODE_VOCEQUIVALENT": "Breathe VOC Equivalent",
-	"SENSOR_DATA_READY": "ready?",
-	"SLOT_BACK": "back",
-	"SENSOR_POSITION": "sensor position"
+	"SENSOR_DATA_READY": "ready?"
 }
