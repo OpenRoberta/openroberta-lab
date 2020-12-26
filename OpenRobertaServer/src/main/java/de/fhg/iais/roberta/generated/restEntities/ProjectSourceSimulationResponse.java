@@ -374,11 +374,11 @@ public class ProjectSourceSimulationResponse extends BaseResponse {
     }
 
     /**
-     * SET javaScriptConfiguration. Object must be mutable.
+     * SET javaScriptPositionConfiguration. Object must be mutable.
      */
     public ProjectSourceSimulationResponse setJavaScriptPositionConfiguration(JSONObject javaScriptPositionConfiguration) {
         if (this.immutable) {
-            throw new RuntimeException("javaScriptConfiguration assigned to an immutable object: " + toString());
+            throw new RuntimeException("javaScriptPositionConfiguration assigned to an immutable object: " + toString());
         }
         this.javaScriptPositionConfiguration = javaScriptPositionConfiguration;
         return this;
