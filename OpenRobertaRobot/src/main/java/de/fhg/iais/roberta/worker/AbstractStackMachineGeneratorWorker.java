@@ -28,6 +28,7 @@ public abstract class AbstractStackMachineGeneratorWorker implements IWorker {
         project.setCompiledHex(generatedCode.toString(2));
         JSONObject simSensorConfigurationJSON = new JSONObject();
         JSONObject simSensorPositionConfigurationJSON = new JSONObject();
+        JSONObject simSensorAlignmentConfigurationJSON = new JSONObject();
         System.out.println("DEBUG CONFIG: " + project.getConfigurationAst());
         for ( ConfigurationComponent sensor : project.getConfigurationAst().getSensors() ) {
             try {
@@ -36,6 +37,11 @@ public abstract class AbstractStackMachineGeneratorWorker implements IWorker {
                     System.out.println(sensor.getComponentType() + "-sensor on port " + sensor.getUserDefinedPortName() + " having property position set to " + sensor.getProperty(SC.SENSOR_POSITION));
                     simSensorPositionConfigurationJSON.put(sensor.getUserDefinedPortName(), sensor.getProperty(SC.SENSOR_POSITION));
                 }
+                if (sensor.hasProperty(SC.SENSOR_ALIGNMENT)) {
+                    // TODO: REMOVE THIS DEBUG-STATEMENT
+                    System.out.println(sensor.getComponentType() + "-sensor on port " + sensor.getUserDefinedPortName() + " having property alignment set to " + sensor.getProperty(SC.SENSOR_ALIGNMENT));
+                    simSensorAlignmentConfigurationJSON.put(sensor.getUserDefinedPortName(), sensor.getProperty(SC.SENSOR_ALIGNMENT));
+                }
                 simSensorConfigurationJSON.put(sensor.getUserDefinedPortName(), sensor.getComponentType());
             } catch ( JSONException e ) {
                 throw new DbcException("exception when generating the simulation configuration ", e);
@@ -43,6 +49,7 @@ public abstract class AbstractStackMachineGeneratorWorker implements IWorker {
         }
         project.setSimSensorConfigurationJSON(simSensorConfigurationJSON);
         project.setSimSensorPositionConfigurationJSON(simSensorPositionConfigurationJSON);
+        project.setSimSensorAlignmentConfigurationJSON(simSensorAlignmentConfigurationJSON);
         project.setResult(Key.COMPILERWORKFLOW_PROGRAM_GENERATION_SUCCESS);
     }
 
