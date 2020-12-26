@@ -10,7 +10,7 @@ define(['simulation.simulation', 'interpreter.constants', 'simulation.robot', 'g
      * 
      * @class
      */
-    function Ev3(pose, configuration, positionConfiguration, num, robotBehaviour) {
+    function Ev3(pose, configuration, num, robotBehaviour) {
         Robot.call(this, pose, robotBehaviour);
         var that = this;
         this.id = num || 0;
@@ -141,26 +141,7 @@ define(['simulation.simulation', 'interpreter.constants', 'simulation.robot', 'g
                             tmpSensor[prop] = colorSensorProto[prop];
                         }
                     }
-                    // TODO: FIX POSITIONS FOR MULTIPLE SENSORS
-                    switch (positionConfiguration[c]) {
-                        case("RIGHT"):
-                            tmpSensor.x = -15
-                            tmpSensor.y = -order * 10 + (5 * (countColor - 1));
-                            break;
-                        case("LEFT"):
-                            tmpSensor.x = 15
-                            tmpSensor.y = -order * 10 + (5 * (countColor - 1));
-                            break;
-                        case("BACK"):
-                            tmpSensor.x = -order * 10 + (5 * (countColor - 1));
-                            tmpSensor.y = 20
-                            break;
-                        default: // FRONT
-                            tmpSensor.x = -order * 10 + (5 * (countColor - 1));
-                            break;
-                    }
-                    console.log("position of " + configuration[c] + "-sensor -> " + positionConfiguration[c]);
-                    console.log("sensor positions: ", tmpSensor);
+                    tmpSensor.x = -order * 10 + (5 * (countColor - 1));
                     this.colorSensor[c] = tmpSensor;
                     break;
                 case ("ULTRASONIC"):
