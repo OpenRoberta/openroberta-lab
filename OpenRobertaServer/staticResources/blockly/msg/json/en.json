@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2020-12-26 15:47:26.612170",
+		"lastupdated": "2020-12-26 16:13:18.609184",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -1765,5 +1765,8 @@
 	"FRAME_WIDTH": "Frame width",
 	"LIGHT_LDR": "Light (LDR)",
 	"SLOT_BACK": "back",
-	"SENSOR_POSITION": "sensor position"
+	"SENSOR_POSITION": "sensor position",
+	"ALIGNMENT_DOWN": "down",
+	"ALIGNMENT_HORIZONTAL": "horizontal",
+	"SENSOR_ALIGNMENT": "sensor alignment"
 }
