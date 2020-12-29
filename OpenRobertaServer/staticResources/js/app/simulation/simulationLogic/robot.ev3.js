@@ -1,5 +1,4 @@
 define(['simulation.simulation', 'interpreter.constants', 'simulation.robot', 'guiState.controller'], function(SIM, C, Robot, GUISTATE_C) {
-
     /**
      * Creates a new Ev3 for a simulation.
      * 
@@ -95,6 +94,8 @@ define(['simulation.simulation', 'interpreter.constants', 'simulation.robot', 'g
         };
         var countTouch, countGyro, countColor, countUltra;
         countTouch = countGyro = countColor = countUltra = 0;
+        countColorR = countColorL = countColorB = countColorF = 0; // Anzahl der rechten/linken/vorderen/hinteren Sensoren
+        cColorR = cColorL = cColorB = cColorF = 0; // Der wievielte rechte/linke/vordere/hintere es ist Sensor
         for (var c in configuration) {
             switch (configuration[c]) {
                 case "TOUCH":
@@ -105,6 +106,22 @@ define(['simulation.simulation', 'interpreter.constants', 'simulation.robot', 'g
                     break;
                 case "COLOR":
                 case "LIGHT":
+                    // Hier beginnt das Zählen der Positionen
+                    switch (positionConfiguration[c]) {
+                        case("RIGHT"):
+                            countColorR++;
+                            break;
+                        case("LEFT"):
+                            countColorL++;
+                            break;
+                        case("BACK"):
+                            countColorB++;
+                            break;
+                        default:
+                            countColorF++;
+                            break;
+                    }
+                    // Hier endet das Zählen der Positionen
                     countColor++;
                     break;
                 case "ULTRASONIC":
@@ -141,22 +158,26 @@ define(['simulation.simulation', 'interpreter.constants', 'simulation.robot', 'g
                             tmpSensor[prop] = colorSensorProto[prop];
                         }
                     }
-                    // TODO: FIX POSITIONS FOR MULTIPLE SENSORS
+                    console.log("positionConfiguration: ", positionConfiguration);
                     switch (positionConfiguration[c]) {
                         case("RIGHT"):
+                            cColorR++;
                             tmpSensor.x = -15
-                            tmpSensor.y = -order * 10 + (5 * (countColor - 1));
+                            tmpSensor.y = -cColorR * 10 + (5 * (countColorR - 1))+10;
                             break;
                         case("LEFT"):
+                            cColorL++;
                             tmpSensor.x = 15
-                            tmpSensor.y = -order * 10 + (5 * (countColor - 1));
+                            tmpSensor.y = -cColorL * 10 + (5 * (countColorL - 1))+10;
                             break;
                         case("BACK"):
-                            tmpSensor.x = -order * 10 + (5 * (countColor - 1));
-                            tmpSensor.y = 20
+                            cColorB++;
+                            tmpSensor.x = -cColorB * 10 + (5 * (countColorB - 1))+10;
+                            tmpSensor.y = 25
                             break;
                         default: // FRONT
-                            tmpSensor.x = -order * 10 + (5 * (countColor - 1));
+                            cColorF++;
+                            tmpSensor.x = -cColorF * 10 + (5 * (countColorF - 1))+10;
                             break;
                     }
                     console.log("position of " + configuration[c] + "-sensor -> " + positionConfiguration[c]);
