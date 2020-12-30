@@ -43,6 +43,10 @@ define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constan
             robotIndexColour += "</select>";
             $("#constantValue").append('<div><label>Robot</label><span style="width:auto">' + robotIndexColour + '</span></div>');
         }
+
+        for (var r = 0; r < this.numprogs; r++) {
+            console.log(this.robots[r].colorSensor);
+        }
     }
 
     Scene.prototype.updateBackgrounds = function() {
@@ -342,6 +346,7 @@ define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constan
             //color
             var colorSensors = this.robots[r].colorSensor;
             for (var s in colorSensors) {
+                console.log("moving robot", colorSensors[s].alignment, colorSensors[s].position, colorSensors[s].color);
                 this.rCtx.beginPath();
                 this.rCtx.arc(colorSensors[s].x, colorSensors[s].y, colorSensors[s].r, 0, Math.PI * 2);
                 this.rCtx.fillStyle = colorSensors[s].color;
@@ -675,21 +680,25 @@ define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constan
                     var red = 0;
                     var green = 0;
                     var blue = 0;
-                    var colors = this.uCtx.getImageData(Math.round(colorSensors[s].rx - 3), Math.round(colorSensors[s].ry - 3), 6, 6);
-                    var out = [0, 4, 16, 20, 24, 44, 92, 116, 120, 124, 136, 140]; // outside the circle
-                    for (var j = 0; j < colors.data.length; j += 24) {
-                        for (var i = j; i < j + 24; i += 4) {
-                            if (out.indexOf(i) < 0) {
-                                red += colors.data[i + 0];
-                                green += colors.data[i + 1];
-                                blue += colors.data[i + 2];
+                    if (colorSensors[s].alignment != "HORIZONTAL") {
+                        var colors = this.uCtx.getImageData(Math.round(colorSensors[s].rx - 3), Math.round(colorSensors[s].ry - 3), 6, 6);
+                        var out = [0, 4, 16, 20, 24, 44, 92, 116, 120, 124, 136, 140]; // outside the circle
+                        for (var j = 0; j < colors.data.length; j += 24) {
+                            for (var i = j; i < j + 24; i += 4) {
+                                if (out.indexOf(i) < 0) {
+                                    red += colors.data[i + 0];
+                                    green += colors.data[i + 1];
+                                    blue += colors.data[i + 2];
+                                }
                             }
                         }
+                        var num = colors.data.length / 4 - 12; // 12 are outside
+                        red = red / num;
+                        green = green / num;
+                        blue = blue / num;
+                    } else { // alignment facing DOWN or is UNDEFINED
+                        red, green, blue = 0;
                     }
-                    var num = colors.data.length / 4 - 12; // 12 are outside
-                    red = red / num;
-                    green = green / num;
-                    blue = blue / num;
                     values.color[s] = {};
                     values.light[s] = {};
                     colorSensors[s].colorValue = SIMATH.getColor(SIMATH.rgbToHsv(red, green, blue));
@@ -719,6 +728,16 @@ define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constan
                     values.color[s].ambientlight = 0;
                     values.light[s].light = colorSensors[s].lightValue;
                     values.light[s].ambientlight = 0;
+
+                    for (var i = 1; i < personalObstacleList.length; i++) {
+                        var obstacleLines = (SIMATH.getLinesFromRect(personalObstacleList[i]));
+                        // TODO: 1) UNDERSTAND IMAGINABLE LINES
+                        //      2) POSITION COLOR SENSOR + 2 PX (INCLUDE POSITON: RIGHT --> RIGHT SIDE OF THE ROBOT, ...)
+                        //      3) CHECK IF COLOR SENSOR POSITION IS IN OBSTACLE
+                        //      4) GET COLOR OF OBSTACLE
+                        console.log("obstacle", personalObstacleList[i]);
+                        console.log("obstacle lines", obstacleLines);
+                    }
                 }
             }
 

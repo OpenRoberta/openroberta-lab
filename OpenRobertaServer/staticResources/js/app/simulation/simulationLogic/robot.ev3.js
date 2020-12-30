@@ -9,7 +9,7 @@ define(['simulation.simulation', 'interpreter.constants', 'simulation.robot', 'g
      * 
      * @class
      */
-    function Ev3(pose, configuration, positionConfiguration, num, robotBehaviour) {
+    function Ev3(pose, configuration, sensorSettings, num, robotBehaviour) {
         Robot.call(this, pose, robotBehaviour);
         var that = this;
         this.id = num || 0;
@@ -77,7 +77,9 @@ define(['simulation.simulation', 'interpreter.constants', 'simulation.robot', 'g
             r: 5,
             colorValue: 0,
             lightValue: 0,
-            color: 'grey'
+            color: 'grey',
+            position: 'FRONT',
+            alignment: 'DOWN'
         };
         this.touchSensor = {
             x: 0,
@@ -158,8 +160,10 @@ define(['simulation.simulation', 'interpreter.constants', 'simulation.robot', 'g
                             tmpSensor[prop] = colorSensorProto[prop];
                         }
                     }
-                    console.log("positionConfiguration: ", positionConfiguration);
-                    switch (positionConfiguration[c]) {
+                    tmpSensor.position = sensorSettings["positionConfiguration"][c];
+                    tmpSensor.alignment = sensorSettings["alignmentConfiguration"][c];
+                    // TODO: FIX POSITIONS FOR MULTIPLE SENSORS
+                    switch (sensorSettings["positionConfiguration"][c]) {
                         case("RIGHT"):
                             cColorR++;
                             tmpSensor.x = -15
