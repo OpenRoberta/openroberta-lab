@@ -17,6 +17,7 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
     var userPrograms;
     var configurations = [];
     var positionConfigurations = [];
+    var alignmentConfigurations = [];
     var canvasOffset;
     var offsetX;
     var offsetY;
@@ -353,6 +354,7 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
         runRenderUntil = [];
         configurations = [];
         positionConfigurations = [];
+        alignmentConfigurations = [];
         for (i = 0; i < programs.length; i++) {
             runRenderUntil[i] = 0;
         }
@@ -380,6 +382,7 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
             var src = JSON.parse(x.javaScriptProgram);
             configurations.push(x.javaScriptConfiguration);
             positionConfigurations.push(x.javaScriptPositionConfiguration);
+            alignmentConfigurations.push(x.javaScriptAlignmentConfiguration);
             return new SIM_I.Interpreter(src, new MBED_R.RobotMbedBehaviour(), callbackOnTermination, breakpoints);
         });
         updateDebugMode(debugMode);
@@ -1065,15 +1068,17 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
         $("#simRobotModal").modal("hide");
         robots = [];
         if (numRobots >= 1) {
-            var tempRobot = createRobot(reqRobot, configurations[0],  positionConfigurations[0],0, 0, interpreters[0].getRobotBehaviour());
+            var sensorSettings = {"positionConfiguration": positionConfigurations[0], "alignmentConfiguration": alignmentConfigurations[0]};
+            var tempRobot = createRobot(reqRobot, configurations[0],  sensorSettings, 0, 0, interpreters[0].getRobotBehaviour());
             tempRobot.savedName = userPrograms[0].savedName;
             robots[0] = tempRobot;
             if (robots[0].brick) {
                 $("#simRobotContent").append(robots[0].brick);
             }
             for (var i = 1; i < numRobots; i++) {
+                sensorSettings = {"positionConfiguration": positionConfigurations[i], "alignmentConfiguration": alignmentConfigurations[i]};
                 var yOffset = 60 * (Math.floor((i + 1) / 2)) * (Math.pow((-1), i));
-                tempRobot = createRobot(reqRobot, configurations[i],  positionConfigurations[i], i, yOffset, interpreters[i].getRobotBehaviour());
+                tempRobot = createRobot(reqRobot, configurations[i], sensorSettings, i, yOffset, interpreters[i].getRobotBehaviour());
                 tempRobot.savedName = userPrograms[i].savedName;
                 var tempcolor = arrToRgb(colorsAdmissible[((i - 1) % (colorsAdmissible.length))]);
                 tempRobot.geom.color = tempcolor;
