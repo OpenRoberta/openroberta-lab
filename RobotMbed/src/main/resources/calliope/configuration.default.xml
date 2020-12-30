@@ -51,4 +51,9 @@
             <field name="NAME">_S</field>
         </block>
     </instance>
+    <instance x="250" y="250">
+        <block type="robConf_robot" id="robot" intask="false" deletable="false">
+            <field name="ROBOT">undefined</field>
+        </block>
+    </instance>
 </block_set>

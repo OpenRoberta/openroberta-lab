@@ -116,4 +116,5 @@ configuration:
   FOURDIGITDISPLAY: [robConf_fourdigitdisplay]
   CALLIBOT: [robConf_callibot]
   COLOUR: [robConf_colourtcs3472]
+  ROBOT: [robConf_robot]
 
