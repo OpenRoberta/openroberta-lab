@@ -1,6 +1,7 @@
 package de.fhg.iais.roberta.syntax;
 
 public interface SC {
+    String ROBOT = "ROBOT";
     String MOTOR_REGULATION = "MOTOR_REGULATION";
     String MOTOR_REVERSE = "MOTOR_REVERSE";
     String MOTOR_DRIVE = "MOTOR_DRIVE";

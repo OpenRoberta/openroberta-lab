@@ -551,6 +551,7 @@ public final class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor imp
                 case SC.ANALOG_INPUT:
                 case SC.DIGITAL_PIN:
                 case SC.ANALOG_PIN:
+                case SC.ROBOT:
                     break;
                 default:
                     throw new DbcException("Sensor is not supported: " + usedConfigurationBlock.getComponentType());
@@ -569,6 +570,8 @@ public final class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor imp
     private void generateConfigurationSetup() {
         for ( ConfigurationComponent usedConfigurationBlock : this.configuration.getConfigurationComponentsValues() ) {
             switch ( usedConfigurationBlock.getComponentType() ) {
+                case SC.ROBOT:
+                    break;
                 case SC.HUMIDITY:
                     this.sb.append("_dht_" + usedConfigurationBlock.getUserDefinedPortName() + ".begin();");
                     nlIndent();
@@ -679,6 +682,8 @@ public final class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor imp
         for ( ConfigurationComponent cc : this.configuration.getConfigurationComponentsValues() ) {
             String blockName = cc.getUserDefinedPortName();
             switch ( cc.getComponentType() ) {
+                case SC.ROBOT:
+                    break;
                 case SC.HUMIDITY:
                     this.sb.append("#define DHTPIN" + blockName + " ").append(cc.getProperty("OUTPUT"));
                     nlIndent();

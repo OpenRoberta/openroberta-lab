@@ -109,6 +109,7 @@ configuration:
   SENSEBOX_PLOTTING: [robConf_plotting]
   GPS: [robConf_gps]
   ENVIRONMENTAL: [robConf_environmental]
+  ROBOT: [robConf_robot]
 
 mode:
   GPS: [LATITUDE, LONGITUDE, ALTITUDE, SPEED, DATE, TIME]
