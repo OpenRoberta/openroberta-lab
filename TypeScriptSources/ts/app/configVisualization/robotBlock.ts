@@ -82,7 +82,7 @@ class RobotViewField extends ((<any>window).Blockly.Field as { new(): any; }) {
 export function createRobotBlock(robotIdentifier) {
     return {
         init() {
-            this.type_ = 'robot';
+            this.type_ = 'robConf_robot';
             this.svgPath_.remove();
             this.robot_ = new RobotViewField(identifierToRobot(robotIdentifier));
             this.appendDummyInput()

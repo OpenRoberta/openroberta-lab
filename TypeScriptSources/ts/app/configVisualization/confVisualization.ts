@@ -42,6 +42,7 @@ export class CircuitVisualization {
         document.getElementById("bricklyDiv").addEventListener('click', this.handler);
         document.getElementById("bricklyDiv").addEventListener('touchmove', this.handler);
     }
+
     handler = (function(event) {
         if ((<any>window).Blockly.dragMode_ == (<any>window).Blockly.DRAG_FREE || this.workspace.isScrolling) {
             this.renderConnections();
@@ -93,20 +94,19 @@ export class CircuitVisualization {
     }
 
     getXml(): string {
-        const xml = (<any>window).Blockly.Xml.workspaceToDom(this.workspace);
-        xml.querySelector('block[type=robot]').parentNode.remove();
-        return xml;
+        return (<any>window).Blockly.Xml.workspaceToDom(this.workspace);
     }
 
     injectRobotBoard(): void {
-        if (this.robotXml) {
-            (this.robotXml as any).remove();
+        (<any>window).Blockly.Blocks['robConf_robot'] = createRobotBlock(this.currentRobot);
+
+        if (!this.dom.querySelector("block[type=robConf_robot]")) {
+            const robotXml = `<instance x="250" y="250"><block type="robConf_robot" id="robot"></block></instance>`;
+            const oParser = new DOMParser();
+            const robotElement = oParser.parseFromString(robotXml, 'text/xml').firstChild;
+            this.dom.appendChild(robotElement);
         }
-        (<any>window).Blockly.Blocks['robot'] = createRobotBlock(this.currentRobot);
-        const robotXml = `<instance x="250" y="250"><block type="robot" id="robot"></block></instance>`;
-        const oParser = new DOMParser();
-        this.robotXml = oParser.parseFromString(robotXml, 'text/xml').firstChild;
-        this.dom.appendChild(this.robotXml);
+
         (<any>window).Blockly.Xml.domToWorkspace(this.dom, this.workspace);
         this.robot = this.workspace.getBlockById('robot');
     }
@@ -172,7 +172,7 @@ export class CircuitVisualization {
             wireSvg.setAttribute('stroke-width', STROKE * this.workspace.scale);
         });
     }
-    
+
     updateBlockPorts = (block) => {
         const positionX = block.width + 4;
         block.ports.forEach(port => {

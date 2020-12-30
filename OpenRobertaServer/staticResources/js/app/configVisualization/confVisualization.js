@@ -220,19 +220,16 @@ define(["require", "exports", "./wires", "./const.robots", "./robotBlock", "./po
             this.wireGroup.remove();
         };
         CircuitVisualization.prototype.getXml = function () {
-            var xml = window.Blockly.Xml.workspaceToDom(this.workspace);
-            xml.querySelector('block[type=robot]').parentNode.remove();
-            return xml;
+            return window.Blockly.Xml.workspaceToDom(this.workspace);
         };
         CircuitVisualization.prototype.injectRobotBoard = function () {
-            if (this.robotXml) {
-                this.robotXml.remove();
+            window.Blockly.Blocks['robConf_robot'] = robotBlock_1.createRobotBlock(this.currentRobot);
+            if (!this.dom.querySelector("block[type=robConf_robot]")) {
+                var robotXml = "<instance x=\"250\" y=\"250\"><block type=\"robConf_robot\" id=\"robot\"></block></instance>";
+                var oParser = new DOMParser();
+                var robotElement = oParser.parseFromString(robotXml, 'text/xml').firstChild;
+                this.dom.appendChild(robotElement);
             }
-            window.Blockly.Blocks['robot'] = robotBlock_1.createRobotBlock(this.currentRobot);
-            var robotXml = "<instance x=\"250\" y=\"250\"><block type=\"robot\" id=\"robot\"></block></instance>";
-            var oParser = new DOMParser();
-            this.robotXml = oParser.parseFromString(robotXml, 'text/xml').firstChild;
-            this.dom.appendChild(this.robotXml);
             window.Blockly.Xml.domToWorkspace(this.dom, this.workspace);
             this.robot = this.workspace.getBlockById('robot');
         };

@@ -92,7 +92,7 @@ define(["require", "exports", "./port", "./const.robots"], function (require, ex
         return {
             init: function () {
                 var _this = this;
-                this.type_ = 'robot';
+                this.type_ = 'robConf_robot';
                 this.svgPath_.remove();
                 this.robot_ = new RobotViewField(identifierToRobot(robotIdentifier));
                 this.appendDummyInput()
