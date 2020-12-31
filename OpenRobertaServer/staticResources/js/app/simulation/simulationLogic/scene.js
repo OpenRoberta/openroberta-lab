@@ -359,7 +359,6 @@ define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constan
                     this.rCtx.rotate(-Math.PI / 2);
                     this.rCtx.beginPath();
                     this.rCtx.fillStyle = "#555555";
-                    console.log(colorSensors[s].position);
                     switch(colorSensors[s].position){
                         case "BACK":
                             this.rCtx.fillText(s, 6, 4);
