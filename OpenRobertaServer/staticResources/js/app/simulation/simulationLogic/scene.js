@@ -119,29 +119,6 @@ define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constan
             this.oCtx.shadowColor = "black";
             this.oCtx.fillRect(this.obstacle.x, this.obstacle.y, this.obstacle.w, this.obstacle.h);
         }
-        //console.log("size", this.oCtx.canvas.width, this.oCtx.canvas.height);
-        //console.log("obstacle colors at 580, 290", this.oCtx.getImageData(580, 290, 1, 1).data);
-
-        /*
-        console.log("obstacle", this.obstacle.x, this.obstacle.y);
-
-        this.oCtx.beginPath();
-        this.oCtx.arc(580, 290, 3, 0, 2 * Math.PI);
-        this.oCtx.fillStyle = "red";
-        this.oCtx.fill();
-        this.oCtx.beginPath();
-        this.oCtx.arc(680, 290, 3, 0, 2 * Math.PI);
-        this.oCtx.fillStyle = "red";
-        this.oCtx.fill();
-        this.oCtx.beginPath();
-        this.oCtx.arc(580, 390, 3, 0, 2 * Math.PI);
-        this.oCtx.fillStyle = "red";
-        this.oCtx.fill();
-        this.oCtx.beginPath();
-        this.oCtx.arc(680, 390, 3, 0, 2 * Math.PI);
-        this.oCtx.fillStyle = "red";
-        this.oCtx.fill();
-         */
     };
 
     Scene.prototype.drawVariables = function() {
