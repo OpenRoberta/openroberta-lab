@@ -4,7 +4,14 @@
  */
 define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constants', 'simulation.constants', 'program.controller', 'jquery'], function(SIM,
     SIMATH, UTIL, IC, C, PROGRAM_C, $) {
-
+    function hexToRgb(hex) {
+        var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+        return result ? {
+            r: parseInt(result[1], 16),
+            g: parseInt(result[2], 16),
+            b: parseInt(result[3], 16)
+        } : null;
+    }
     /**
      * Creates a new Scene.
      *
@@ -42,6 +49,10 @@ define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constan
             }
             robotIndexColour += "</select>";
             $("#constantValue").append('<div><label>Robot</label><span style="width:auto">' + robotIndexColour + '</span></div>');
+        }
+
+        for (var r = 0; r < this.numprogs; r++) {
+            console.log(this.robots[r].colorSensor);
         }
     }
 
@@ -342,6 +353,7 @@ define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constan
             //color
             var colorSensors = this.robots[r].colorSensor;
             for (var s in colorSensors) {
+                console.log("moving robot", colorSensors[s].alignment, colorSensors[s].position, colorSensors[s].color);
                 this.rCtx.beginPath();
                 this.rCtx.arc(colorSensors[s].x, colorSensors[s].y, colorSensors[s].r, 0, Math.PI * 2);
                 this.rCtx.fillStyle = colorSensors[s].color;
@@ -675,21 +687,134 @@ define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constan
                     var red = 0;
                     var green = 0;
                     var blue = 0;
-                    var colors = this.uCtx.getImageData(Math.round(colorSensors[s].rx - 3), Math.round(colorSensors[s].ry - 3), 6, 6);
-                    var out = [0, 4, 16, 20, 24, 44, 92, 116, 120, 124, 136, 140]; // outside the circle
-                    for (var j = 0; j < colors.data.length; j += 24) {
-                        for (var i = j; i < j + 24; i += 4) {
-                            if (out.indexOf(i) < 0) {
-                                red += colors.data[i + 0];
-                                green += colors.data[i + 1];
-                                blue += colors.data[i + 2];
+                    if (colorSensors[s].alignment != "HORIZONTAL") {
+                        var colors = this.uCtx.getImageData(Math.round(colorSensors[s].rx - 3), Math.round(colorSensors[s].ry - 3), 6, 6);
+                        var out = [0, 4, 16, 20, 24, 44, 92, 116, 120, 124, 136, 140]; // outside the circle
+                        for (var j = 0; j < colors.data.length; j += 24) {
+                            for (var i = j; i < j + 24; i += 4) {
+                                if (out.indexOf(i) < 0) {
+                                    red += colors.data[i + 0];
+                                    green += colors.data[i + 1];
+                                    blue += colors.data[i + 2];
+                                }
                             }
                         }
+                        var num = colors.data.length / 4 - 12; // 12 are outside
+                        red = red / num;
+                        green = green / num;
+                        blue = blue / num;
+                    } else { // alignment is HORIZONTAL or is UNDEFINED
+                        red, green, blue = 255;
+
+                        for (var i = 1; i < personalObstacleList.length; i++) {
+                            var p = personalObstacleList[i];
+                            console.log("obstacle", p);
+                            console.log("robot color sensors position: ", + colorSensors[s].rx + "; y -> " + colorSensors[s].ry );
+                            console.log("robot color sensors position TO CHECK: ", + colorSensors[s].rx + 1 + "; y -> " + colorSensors[s].ry);
+
+                            var color_sensor_before_obstacle = false;
+
+                            if (p.isParallelToAxis) {
+                                var x, px, y, py, offset_x, offset_y;
+                                x = p.rx;
+                                y = p.ry;
+                                px = py = offset_x = offset_y = 0;
+
+                                console.log(colorSensors[s].position)
+                                if (colorSensors[s].position === C.POSITION_ENUM.FRONT) {
+                                    offset_x = 20;
+                                    offset_y = 0;
+                                } else if (colorSensors[s].position === C.POSITION_ENUM.BACK) {
+                                    offset_x = -20;
+                                    offset_y = 0;
+                                } else if (colorSensors[s].position === C.POSITION_ENUM.LEFT) {
+                                    offset_x = 0;
+                                    offset_y = 20;
+                                } else if (colorSensors[s].position === C.POSITION_ENUM.RIGHT) {
+                                    offset_x = 0;
+                                    offset_y = -20;
+                                }
+
+                                px = x + offset_x;
+                                py = y + offset_y;
+
+                                console.log(px, (x + offset_x), py, (y + offset_y), offset_x, offset_y)
+
+                                if ((px >= p.x) && (px <= (p.x + p.w)) && (py >= p.y) && (py <= (p.y + p.h))) {
+                                    color_sensor_before_obstacle = true;
+                                }
+                            } else {
+                                var rectobj = {
+                                    p1: {
+                                        x: p.x,
+                                        y: p.y
+                                    },
+                                    p2: {
+                                        x: p.x + p.w,
+                                        y: p.y
+                                    },
+                                    p3: {
+                                        x: p.x,
+                                        y: p.y + p.h
+                                    },
+                                    p4: {
+                                        x: p.x + p.w,
+                                        y: p.y + p.h
+                                    }
+                                };
+
+                                color_sensor_before_obstacle = (SIMATH.isPointInsideRectangle( {
+                                    x: (colorSensors[s].rx + 20),
+                                    y: (colorSensors[s].ry)
+                                }, rectobj));
+                            }
+
+
+                            var rgb = {
+                                'r': 0,
+                                'g': 0,
+                                'b': 0
+                            };
+                            if (color_sensor_before_obstacle) {
+                                rgb = hexToRgb(p.color);
+                                red = rgb.r;
+                                green = rgb.g;
+                                blue = rgb.b;
+                            }
+                            values.color[s] = {};
+                            values.light[s] = {};
+                            console.log(p.color, rgb, SIMATH.rgbToHsv(rgb.r, rgb.g, rgb.b), SIMATH.getColor(SIMATH.rgbToHsv(rgb.r, rgb.g, rgb.b)));
+                            colorSensors[s].colorValue = SIMATH.getColor(SIMATH.rgbToHsv(red, green, blue));
+                            values.color[s].colorValue = colorSensors[s].colorValue;
+                            values.color[s].colour = colorSensors[s].colorValue;
+                            if (colorSensors[s].colorValue === C.COLOR_ENUM.NONE) {
+                                colorSensors[s].color = 'grey';
+                            } else if (colorSensors[s].colorValue === C.COLOR_ENUM.BLACK) {
+                                colorSensors[s].color = 'black';
+                            } else if (colorSensors[s].colorValue === C.COLOR_ENUM.WHITE) {
+                                colorSensors[s].color = 'white';
+                            } else if (colorSensors[s].colorValue === C.COLOR_ENUM.YELLOW) {
+                                colorSensors[s].color = 'yellow';
+                            } else if (colorSensors[s].colorValue === C.COLOR_ENUM.BROWN) {
+                                colorSensors[s].color = 'brown';
+                            } else if (colorSensors[s].colorValue === C.COLOR_ENUM.RED) {
+                                colorSensors[s].color = 'red';
+                            } else if (colorSensors[s].colorValue === C.COLOR_ENUM.BLUE) {
+                                colorSensors[s].color = 'blue';
+                            } else if (colorSensors[s].colorValue === C.COLOR_ENUM.GREEN) {
+                                colorSensors[s].color = 'lime';
+                            }else if (colorSensors[s].colorValue === C.COLOR_ENUM.TURQUOISE) {
+                                colorSensors[s].color = 'turquoise';
+                            }
+                            colorSensors[s].lightValue = ((red + green + blue) / 3 / 2.55);
+
+                            values.color[s].light = colorSensors[s].lightValue;
+                            values.color[s].rgb = [UTIL.round(red, 0), UTIL.round(green, 0), UTIL.round(blue, 0)];
+                            values.color[s].ambientlight = 0;
+                            values.light[s].light = colorSensors[s].lightValue;
+                            values.light[s].ambientlight = 0;
+                        }
                     }
-                    var num = colors.data.length / 4 - 12; // 12 are outside
-                    red = red / num;
-                    green = green / num;
-                    blue = blue / num;
                     values.color[s] = {};
                     values.light[s] = {};
                     colorSensors[s].colorValue = SIMATH.getColor(SIMATH.rgbToHsv(red, green, blue));

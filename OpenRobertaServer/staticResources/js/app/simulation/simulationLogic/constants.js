@@ -504,7 +504,8 @@ define({
         YELLOW: "YELLOW",
         RED: "RED",
         WHITE: "WHITE",
-        BROWN: "BROWN"
+        BROWN: "BROWN",
+        TURQUOISE: "TURQUOISE"
     },
 
     TIMER: "timer",
@@ -533,5 +534,12 @@ define({
 
     DEBUG_STEP_INTO: "DebugStepInto",
 
-    DEBUG_STEP_OVER: "DebugStepOver"
+    DEBUG_STEP_OVER: "DebugStepOver",
+
+    POSITION_ENUM: {
+        FRONT: "FRONT",
+        BACK: "BACK",
+        LEFT: "LEFT",
+        RIGHT: "RIGHT"
+    }
 });
