@@ -283,6 +283,9 @@ define([ 'exports', 'simulation.constants' ], function(exports, CONSTANTS) {
         if (hsv[0] > 200 && hsv[0] < 250 && hsv[1] > 90 && hsv[2] > 50) {
             return CONSTANTS.COLOR_ENUM.BLUE;
         }
+        if (hsv[0] == 187 && hsv[1] == 74 && hsv[2] == 79) {
+            return CONSTANTS.COLOR_ENUM.TURQUOISE;
+        }
         return CONSTANTS.COLOR_ENUM.NONE;
     }
 
