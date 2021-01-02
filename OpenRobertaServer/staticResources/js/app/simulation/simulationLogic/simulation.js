@@ -17,6 +17,7 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
     var userPrograms;
     var configurations = [];
     var positionConfigurations = [];
+    var alignmentConfigurations = [];
     var canvasOffset;
     var offsetX;
     var offsetY;
@@ -353,6 +354,7 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
         runRenderUntil = [];
         configurations = [];
         positionConfigurations = [];
+        alignmentConfigurations = [];
         for (i = 0; i < programs.length; i++) {
             runRenderUntil[i] = 0;
         }
@@ -380,6 +382,7 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
             var src = JSON.parse(x.javaScriptProgram);
             configurations.push(x.javaScriptConfiguration);
             positionConfigurations.push(x.javaScriptPositionConfiguration);
+            alignmentConfigurations.push(x.javaScriptAlignmentConfiguration);
             return new SIM_I.Interpreter(src, new MBED_R.RobotMbedBehaviour(), callbackOnTermination, breakpoints);
         });
         updateDebugMode(debugMode);
@@ -1065,15 +1068,17 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
         $("#simRobotModal").modal("hide");
         robots = [];
         if (numRobots >= 1) {
-            var tempRobot = createRobot(reqRobot, configurations[0], positionConfigurations[0],0, 0, interpreters[0].getRobotBehaviour());
+            var sensorSettings = {"positionConfiguration": positionConfigurations[0], "alignmentConfiguration": alignmentConfigurations[0]};
+            var tempRobot = createRobot(reqRobot, configurations[0],  sensorSettings, 0, 0, interpreters[0].getRobotBehaviour());
             tempRobot.savedName = userPrograms[0].savedName;
             robots[0] = tempRobot;
             if (robots[0].brick) {
                 $("#simRobotContent").append(robots[0].brick);
             }
             for (var i = 1; i < numRobots; i++) {
+                sensorSettings = {"positionConfiguration": positionConfigurations[i], "alignmentConfiguration": alignmentConfigurations[i]};
                 var yOffset = 60 * (Math.floor((i + 1) / 2)) * (Math.pow((-1), i));
-                tempRobot = createRobot(reqRobot, configurations[i],  positionConfigurations[i], i, yOffset, interpreters[i].getRobotBehaviour());
+                tempRobot = createRobot(reqRobot, configurations[i], sensorSettings, i, yOffset, interpreters[i].getRobotBehaviour());
                 tempRobot.savedName = userPrograms[i].savedName;
                 var tempcolor = arrToRgb(colorsAdmissible[((i - 1) % (colorsAdmissible.length))]);
                 tempRobot.geom.color = tempcolor;
@@ -1089,7 +1094,7 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
         }
     }
 
-    function createRobot(reqRobot, configuration, positionConfiguration, num, optYOffset, robotBehaviour) {
+    function createRobot(reqRobot, configuration, sensorSettings, num, optYOffset, robotBehaviour) {
         var yOffset = optYOffset || 0;
         var robot;
         if (currentBackground == 2) {
@@ -1101,7 +1106,7 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
                 yOld: 200 + yOffset,
                 transX: 0,
                 transY: 0
-            }, configuration, positionConfiguration, num, robotBehaviour);
+            }, configuration, sensorSettings, num, robotBehaviour);
             robot.canDraw = false;
         } else if (currentBackground == 3) {
             robot = new reqRobot({
@@ -1112,7 +1117,7 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
                 yOld: 200 + yOffset,
                 transX: 0,
                 transY: 0
-            }, configuration, positionConfiguration, num, robotBehaviour);
+            }, configuration, sensorSettings, num, robotBehaviour);
             robot.canDraw = true;
             robot.drawColor = "#000000";
             robot.drawWidth = 10;
@@ -1129,7 +1134,7 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
                 yOld: 104 + yOffset,
                 transX: 0,
                 transY: 0
-            }, configuration, positionConfiguration, num, robotBehaviour);
+            }, configuration, sensorSettings, num, robotBehaviour);
             robot.canDraw = false;
         } else if (currentBackground == 5) {
             robot = new reqRobot({
@@ -1140,7 +1145,7 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
                 yOld: 50 + yOffset,
                 transX: 0,
                 transY: 0
-            }, configuration, positionConfiguration, num, robotBehaviour);
+            }, configuration, sensorSettings, num, robotBehaviour);
             robot.canDraw = false;
         } else if (currentBackground == 6) {
             var robotY = 440 + yOffset;
@@ -1155,7 +1160,7 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
                 yOld: 440 + yOffset,
                 transX: 0,
                 transY: 0
-            }, configuration, positionConfiguration, num, robotBehaviour);
+            }, configuration, sensorSettings, num, robotBehaviour);
             robot.canDraw = false;
         } else if (currentBackground == 7) {
             var cx = imgObjectList[currentBackground].width / 2.0 + 10;
@@ -1168,7 +1173,7 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
                 yOld: cy + yOffset,
                 transX: -cx,
                 transY: -cy
-            }, configuration, positionConfiguration, num, robotBehaviour);
+            }, configuration, sensorSettings, num, robotBehaviour);
             robot.canDraw = true;
             robot.drawColor = "#ffffff";
             robot.drawWidth = 1;
@@ -1183,7 +1188,7 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
                 yOld: cy + yOffset,
                 transX: 0,
                 transY: 0
-            }, configuration, positionConfiguration, num, robotBehaviour);
+            }, configuration, sensorSettings, num, robotBehaviour);
             robot.canDraw = false;
         }
         return robot;
