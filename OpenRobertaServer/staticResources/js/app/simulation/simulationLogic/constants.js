@@ -541,5 +541,10 @@ define({
         BACK: "BACK",
         LEFT: "LEFT",
         RIGHT: "RIGHT"
+    },
+
+    ALIGNMENT_ENUM: {
+        DOWN: "DOWN",
+        HORIZONTAL: "HORIZONTAL"
     }
 });

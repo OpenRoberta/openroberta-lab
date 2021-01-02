@@ -4,14 +4,7 @@
  */
 define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constants', 'simulation.constants', 'program.controller', 'jquery'], function(SIM,
     SIMATH, UTIL, IC, C, PROGRAM_C, $) {
-    function hexToRgb(hex) {
-        var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-        return result ? {
-            r: parseInt(result[1], 16),
-            g: parseInt(result[2], 16),
-            b: parseInt(result[3], 16)
-        } : null;
-    }
+
     /**
      * Creates a new Scene.
      *
@@ -687,7 +680,7 @@ define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constan
                     var red = 0;
                     var green = 0;
                     var blue = 0;
-                    if (colorSensors[s].alignment != "HORIZONTAL") {
+                    if (colorSensors[s].alignment !== C.ALIGNMENT_ENUM.HORIZONTAL) {
                         var colors = this.uCtx.getImageData(Math.round(colorSensors[s].rx - 3), Math.round(colorSensors[s].ry - 3), 6, 6);
                         var out = [0, 4, 16, 20, 24, 44, 92, 116, 120, 124, 136, 140]; // outside the circle
                         for (var j = 0; j < colors.data.length; j += 24) {
@@ -703,24 +696,21 @@ define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constan
                         red = red / num;
                         green = green / num;
                         blue = blue / num;
-                    } else { // alignment is HORIZONTAL or is UNDEFINED
-                        red, green, blue = 255;
+                    } else { // alignment is HORIZONTAL or is UNDEFINED / not set
+                        red = green = blue = 255;
+
+                        console.log(this.robots[r]);
 
                         for (var i = 1; i < personalObstacleList.length; i++) {
                             var p = personalObstacleList[i];
-                            console.log("obstacle", p);
-                            console.log("robot color sensors position: ", + colorSensors[s].rx + "; y -> " + colorSensors[s].ry );
-                            console.log("robot color sensors position TO CHECK: ", + colorSensors[s].rx + 1 + "; y -> " + colorSensors[s].ry);
-
                             var color_sensor_before_obstacle = false;
 
                             if (p.isParallelToAxis) {
                                 var x, px, y, py, offset_x, offset_y;
-                                x = p.rx;
-                                y = p.ry;
-                                px = py = offset_x = offset_y = 0;
+                                x = y = px = py = offset_x = offset_y = 0;
+                                x = colorSensors[s].rx;
+                                y = colorSensors[s].ry;
 
-                                console.log(colorSensors[s].position)
                                 if (colorSensors[s].position === C.POSITION_ENUM.FRONT) {
                                     offset_x = 20;
                                     offset_y = 0;
@@ -729,18 +719,16 @@ define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constan
                                     offset_y = 0;
                                 } else if (colorSensors[s].position === C.POSITION_ENUM.LEFT) {
                                     offset_x = 0;
-                                    offset_y = 20;
+                                    offset_y = -20;
                                 } else if (colorSensors[s].position === C.POSITION_ENUM.RIGHT) {
                                     offset_x = 0;
-                                    offset_y = -20;
+                                    offset_y = 20;
                                 }
 
                                 px = x + offset_x;
                                 py = y + offset_y;
 
-                                console.log(px, (x + offset_x), py, (y + offset_y), offset_x, offset_y)
-
-                                if ((px >= p.x) && (px <= (p.x + p.w)) && (py >= p.y) && (py <= (p.y + p.h))) {
+                                if ((px >= p.x) && (px <= (p.x + p.w + offset_x)) && (py >= p.y) && (py <= (p.y + p.h + offset_y))) {
                                     color_sensor_before_obstacle = true;
                                 }
                             } else {
@@ -763,9 +751,22 @@ define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constan
                                     }
                                 };
 
+                                if (colorSensors[s].position === C.POSITION_ENUM.FRONT) {
+                                    offset_x = 20;
+                                    offset_y = 0;
+                                } else if (colorSensors[s].position === C.POSITION_ENUM.BACK) {
+                                    offset_x = -20;
+                                    offset_y = 0;
+                                } else if (colorSensors[s].position === C.POSITION_ENUM.LEFT) {
+                                    offset_x = 0;
+                                    offset_y = -20;
+                                } else if (colorSensors[s].position === C.POSITION_ENUM.RIGHT) {
+                                    offset_x = 0;
+                                    offset_y = 20;
+                                }
                                 color_sensor_before_obstacle = (SIMATH.isPointInsideRectangle( {
-                                    x: (colorSensors[s].rx + 20),
-                                    y: (colorSensors[s].ry)
+                                    x: (colorSensors[s].rx + offset_x),
+                                    y: (colorSensors[s].ry + offset_y)
                                 }, rectobj));
                             }
 
@@ -776,14 +777,13 @@ define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constan
                                 'b': 0
                             };
                             if (color_sensor_before_obstacle) {
-                                rgb = hexToRgb(p.color);
+                                rgb = SIMATH.hexToRgb(p.color);
                                 red = rgb.r;
                                 green = rgb.g;
                                 blue = rgb.b;
                             }
                             values.color[s] = {};
                             values.light[s] = {};
-                            console.log(p.color, rgb, SIMATH.rgbToHsv(rgb.r, rgb.g, rgb.b), SIMATH.getColor(SIMATH.rgbToHsv(rgb.r, rgb.g, rgb.b)));
                             colorSensors[s].colorValue = SIMATH.getColor(SIMATH.rgbToHsv(red, green, blue));
                             values.color[s].colorValue = colorSensors[s].colorValue;
                             values.color[s].colour = colorSensors[s].colorValue;
