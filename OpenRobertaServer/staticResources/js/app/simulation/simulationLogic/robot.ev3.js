@@ -1,4 +1,5 @@
 define(['simulation.simulation', 'interpreter.constants', 'simulation.robot', 'guiState.controller'], function(SIM, C, Robot, GUISTATE_C) {
+
     /**
      * Creates a new Ev3 for a simulation.
      * 
@@ -110,7 +111,6 @@ define(['simulation.simulation', 'interpreter.constants', 'simulation.robot', 'g
                     break;
                 case "COLOR":
                 case "LIGHT":
-                    // Hier beginnt das Zählen der Positionen
                     switch (positionConfiguration[c]) {
                         case("RIGHT"):
                             countColorR++;
@@ -125,7 +125,6 @@ define(['simulation.simulation', 'interpreter.constants', 'simulation.robot', 'g
                             countColorF++;
                             break;
                     }
-                    // Hier endet das Zählen der Positionen
                     countColor++;
                     break;
                 case "ULTRASONIC":
@@ -164,7 +163,6 @@ define(['simulation.simulation', 'interpreter.constants', 'simulation.robot', 'g
                     }
                     tmpSensor.position = sensorSettings["positionConfiguration"][c];
                     tmpSensor.alignment = sensorSettings["alignmentConfiguration"][c];
-                    // TODO: FIX POSITIONS FOR MULTIPLE SENSORS
                     switch (sensorSettings["positionConfiguration"][c]) {
                         case("RIGHT"):
                             orderColorR++;
