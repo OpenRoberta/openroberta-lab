@@ -29,12 +29,9 @@ public abstract class AbstractStackMachineGeneratorWorker implements IWorker {
         JSONObject simSensorConfigurationJSON = new JSONObject();
         JSONObject simSensorPositionConfigurationJSON = new JSONObject();
         JSONObject simSensorAlignmentConfigurationJSON = new JSONObject();
-        System.out.println("DEBUG CONFIG: " + project.getConfigurationAst());
         for ( ConfigurationComponent sensor : project.getConfigurationAst().getSensors() ) {
             try {
                 if (sensor.hasProperty(SC.SENSOR_POSITION)) {
-                    // TODO: REMOVE THIS DEBUG-STATEMENT
-                    System.out.println(sensor.getComponentType() + "-sensor on port " + sensor.getUserDefinedPortName() + " having property position set to " + sensor.getProperty(SC.SENSOR_POSITION));
                     simSensorPositionConfigurationJSON.put(sensor.getUserDefinedPortName(), sensor.getProperty(SC.SENSOR_POSITION));
                 }
                 if (sensor.hasProperty(SC.SENSOR_ALIGNMENT)) {
