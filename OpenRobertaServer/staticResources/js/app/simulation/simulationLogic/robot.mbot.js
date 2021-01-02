@@ -10,8 +10,8 @@ define(["simulation.simulation", "interpreter.constants", "simulation.robot.ev3"
      *
      * @class
      */
-    function Mbot(pose, configuration, sensorSettings, num, robotBehaviour) {
-        Ev3.call(this, pose, configuration, sensorSettings, num, robotBehaviour);
+    function Mbot(pose, configuration, positionConfiguration, num, robotBehaviour) {
+        Ev3.call(this, pose, configuration, positionConfiguration, num, robotBehaviour);
         this.trackwidth = 25;
         this.name = "mbot";
         this.geom = {
