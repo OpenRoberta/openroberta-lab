@@ -546,5 +546,7 @@ define({
     ALIGNMENT_ENUM: {
         DOWN: "DOWN",
         HORIZONTAL: "HORIZONTAL"
-    }
+    },
+
+    COLOR_SENSOR_HORIZONTAL_DISTANCE: 25
 });

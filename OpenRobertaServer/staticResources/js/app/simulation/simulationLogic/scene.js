@@ -43,10 +43,6 @@ define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constan
             robotIndexColour += "</select>";
             $("#constantValue").append('<div><label>Robot</label><span style="width:auto">' + robotIndexColour + '</span></div>');
         }
-
-        for (var r = 0; r < this.numprogs; r++) {
-            console.log(this.robots[r].colorSensor);
-        }
     }
 
     Scene.prototype.updateBackgrounds = function() {
@@ -346,7 +342,6 @@ define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constan
             //color
             var colorSensors = this.robots[r].colorSensor;
             for (var s in colorSensors) {
-                console.log("moving robot", colorSensors[s].alignment, colorSensors[s].position, colorSensors[s].color);
                 this.rCtx.beginPath();
                 this.rCtx.arc(colorSensors[s].x, colorSensors[s].y, colorSensors[s].r, 0, Math.PI * 2);
                 this.rCtx.fillStyle = colorSensors[s].color;
@@ -699,121 +694,41 @@ define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constan
                     } else { // alignment is HORIZONTAL or is UNDEFINED / not set
                         red = green = blue = 255;
 
-                        console.log(this.robots[r]);
-
-                        for (var i = 1; i < personalObstacleList.length; i++) {
-                            var p = personalObstacleList[i];
-                            var color_sensor_before_obstacle = false;
-
-                            if (p.isParallelToAxis) {
-                                var x, px, y, py, offset_x, offset_y;
-                                x = y = px = py = offset_x = offset_y = 0;
-                                x = colorSensors[s].rx;
-                                y = colorSensors[s].ry;
-
-                                if (colorSensors[s].position === C.POSITION_ENUM.FRONT) {
-                                    offset_x = 20;
-                                    offset_y = 0;
-                                } else if (colorSensors[s].position === C.POSITION_ENUM.BACK) {
-                                    offset_x = -20;
-                                    offset_y = 0;
-                                } else if (colorSensors[s].position === C.POSITION_ENUM.LEFT) {
-                                    offset_x = 0;
-                                    offset_y = -20;
-                                } else if (colorSensors[s].position === C.POSITION_ENUM.RIGHT) {
-                                    offset_x = 0;
-                                    offset_y = 20;
-                                }
-
-                                px = x + offset_x;
-                                py = y + offset_y;
-
-                                if ((px >= p.x) && (px <= (p.x + p.w + offset_x)) && (py >= p.y) && (py <= (p.y + p.h + offset_y))) {
-                                    color_sensor_before_obstacle = true;
-                                }
-                            } else {
-                                var rectobj = {
-                                    p1: {
-                                        x: p.x,
-                                        y: p.y
-                                    },
-                                    p2: {
-                                        x: p.x + p.w,
-                                        y: p.y
-                                    },
-                                    p3: {
-                                        x: p.x,
-                                        y: p.y + p.h
-                                    },
-                                    p4: {
-                                        x: p.x + p.w,
-                                        y: p.y + p.h
-                                    }
-                                };
-
-                                if (colorSensors[s].position === C.POSITION_ENUM.FRONT) {
-                                    offset_x = 20;
-                                    offset_y = 0;
-                                } else if (colorSensors[s].position === C.POSITION_ENUM.BACK) {
-                                    offset_x = -20;
-                                    offset_y = 0;
-                                } else if (colorSensors[s].position === C.POSITION_ENUM.LEFT) {
-                                    offset_x = 0;
-                                    offset_y = -20;
-                                } else if (colorSensors[s].position === C.POSITION_ENUM.RIGHT) {
-                                    offset_x = 0;
-                                    offset_y = 20;
-                                }
-                                color_sensor_before_obstacle = (SIMATH.isPointInsideRectangle( {
-                                    x: (colorSensors[s].rx + offset_x),
-                                    y: (colorSensors[s].ry + offset_y)
-                                }, rectobj));
-                            }
-
-
-                            var rgb = {
-                                'r': 0,
-                                'g': 0,
-                                'b': 0
-                            };
-                            if (color_sensor_before_obstacle) {
-                                rgb = SIMATH.hexToRgb(p.color);
-                                red = rgb.r;
-                                green = rgb.g;
-                                blue = rgb.b;
-                            }
-                            values.color[s] = {};
-                            values.light[s] = {};
-                            colorSensors[s].colorValue = SIMATH.getColor(SIMATH.rgbToHsv(red, green, blue));
-                            values.color[s].colorValue = colorSensors[s].colorValue;
-                            values.color[s].colour = colorSensors[s].colorValue;
-                            if (colorSensors[s].colorValue === C.COLOR_ENUM.NONE) {
-                                colorSensors[s].color = 'grey';
-                            } else if (colorSensors[s].colorValue === C.COLOR_ENUM.BLACK) {
-                                colorSensors[s].color = 'black';
-                            } else if (colorSensors[s].colorValue === C.COLOR_ENUM.WHITE) {
-                                colorSensors[s].color = 'white';
-                            } else if (colorSensors[s].colorValue === C.COLOR_ENUM.YELLOW) {
-                                colorSensors[s].color = 'yellow';
-                            } else if (colorSensors[s].colorValue === C.COLOR_ENUM.BROWN) {
-                                colorSensors[s].color = 'brown';
-                            } else if (colorSensors[s].colorValue === C.COLOR_ENUM.RED) {
-                                colorSensors[s].color = 'red';
-                            } else if (colorSensors[s].colorValue === C.COLOR_ENUM.BLUE) {
-                                colorSensors[s].color = 'blue';
-                            } else if (colorSensors[s].colorValue === C.COLOR_ENUM.GREEN) {
-                                colorSensors[s].color = 'lime';
-                            }else if (colorSensors[s].colorValue === C.COLOR_ENUM.TURQUOISE) {
-                                colorSensors[s].color = 'turquoise';
-                            }
-                            colorSensors[s].lightValue = ((red + green + blue) / 3 / 2.55);
-
-                            values.color[s].light = colorSensors[s].lightValue;
-                            values.color[s].rgb = [UTIL.round(red, 0), UTIL.round(green, 0), UTIL.round(blue, 0)];
-                            values.color[s].ambientlight = 0;
-                            values.light[s].light = colorSensors[s].lightValue;
-                            values.light[s].ambientlight = 0;
+                        var colorSensorTheta = 0;
+                        switch (colorSensors[s].position) {
+                            case (C.POSITION_ENUM.RIGHT):
+                                colorSensorTheta = Math.PI / 180 * 90;
+                                break;
+                            case (C.POSITION_ENUM.BACK):
+                                colorSensorTheta = Math.PI;
+                                break;
+                            case (C.POSITION_ENUM.LEFT):
+                                colorSensorTheta = Math.PI / 180 * 270;
+                                break;
+                            default:
+                                colorSensorTheta = 0;
                         }
+
+                        var l = {
+                            x1: colorSensors[s].rx,
+                            y1: colorSensors[s].ry,
+                            x2: colorSensors[s].rx - C.COLOR_SENSOR_HORIZONTAL_DISTANCE * Math.cos(this.robots[r].pose.theta + Math.PI + colorSensorTheta),
+                            y2: colorSensors[s].ry - C.COLOR_SENSOR_HORIZONTAL_DISTANCE * Math.sin(this.robots[r].pose.theta + Math.PI + colorSensorTheta)
+                        };
+
+                        for (var i = 0; i < personalObstacleList.length; i++) {
+                            var obstacleLines = (SIMATH.getLinesFromRect(personalObstacleList[i]));
+                            for (var k = 0; k < obstacleLines.length; k++) {
+                                var interPoint = SIMATH.getIntersectionPoint(l, obstacleLines[k]);
+                                if (interPoint) {
+                                    var rgb = SIMATH.hexToRgb(personalObstacleList[i].color);
+                                    red = rgb.r;
+                                    green = rgb.g;
+                                    blue = rgb.b;
+                                }
+                            }
+                        }
+
                     }
                     values.color[s] = {};
                     values.light[s] = {};
@@ -836,6 +751,8 @@ define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constan
                         colorSensors[s].color = 'blue';
                     } else if (colorSensors[s].colorValue === C.COLOR_ENUM.GREEN) {
                         colorSensors[s].color = 'lime';
+                    } else if (colorSensors[s].colorValue === C.COLOR_ENUM.TURQUOISE) {
+                        colorSensors[s].color = 'turquoise';
                     }
                     colorSensors[s].lightValue = ((red + green + blue) / 3 / 2.55);
 
