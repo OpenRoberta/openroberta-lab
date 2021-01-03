@@ -280,10 +280,10 @@ define([ 'exports', 'simulation.constants' ], function(exports, CONSTANTS) {
         if (hsv[0] > 70 && hsv[0] < 160 && hsv[1] > 80) {
             return CONSTANTS.COLOR_ENUM.GREEN;
         }
-        if (hsv[0] > 200 && hsv[0] < 250 && hsv[1] > 90 && hsv[2] > 50) {
+        if (hsv[0] > 194 && hsv[0] < 250 && hsv[1] > 90 && hsv[2] > 50) {
             return CONSTANTS.COLOR_ENUM.BLUE;
         }
-        if (hsv[0] == 187 && hsv[1] == 74 && hsv[2] == 79) {
+        if (hsv[0] > 180 && hsv[0] < 195 && hsv[1] > 70 && hsv[1] < 75 && hsv[2] > 75 && hsv[2] < 80) {
             return CONSTANTS.COLOR_ENUM.TURQUOISE;
         }
         return CONSTANTS.COLOR_ENUM.NONE;
