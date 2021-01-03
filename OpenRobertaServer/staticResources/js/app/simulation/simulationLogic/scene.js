@@ -43,10 +43,6 @@ define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constan
             robotIndexColour += "</select>";
             $("#constantValue").append('<div><label>Robot</label><span style="width:auto">' + robotIndexColour + '</span></div>');
         }
-
-        for (var r = 0; r < this.numprogs; r++) {
-            console.log(this.robots[r].colorSensor);
-        }
     }
 
     Scene.prototype.updateBackgrounds = function() {
@@ -738,9 +734,7 @@ define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constan
                             default:
                                 colorSensorTheta = 0;
                         }
-                        // TODO: CLEANUP
-                        // clear points
-                        this.drawObjects();
+
                         var l = {
                             x1: colorSensors[s].rx,
                             y1: colorSensors[s].ry,
@@ -759,36 +753,10 @@ define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constan
                             for (var k = 0; k < obstacleLines.length; k++) {
                                 var interPoint = SIMATH.getIntersectionPoint(l, obstacleLines[k]);
                                 if (interPoint) {
-                                    if (i === 0) { // obstacle is simulation border
-                                        red = green = blue = 255;
-                                    } else {
-                                        // TODO: CLEANUP
-                                        var obstacleCorners = [
-                                                {x: Math.round(personalObstacleList[i].x), y: Math.round(personalObstacleList[i].y)},
-                                                {x: (Math.round(personalObstacleList[i].x) + personalObstacleList[i].w), y: Math.round(personalObstacleList[i].y)},
-                                                {x: (Math.round(personalObstacleList[i].x)), y: (Math.round(personalObstacleList[i].y) + personalObstacleList[i].h)},
-                                                {x: (Math.round(personalObstacleList[i].x) + personalObstacleList[i].w),  y: (Math.round(personalObstacleList[i].y) + personalObstacleList[i].h)}
-                                            ]
-                                        colors = [
-                                            "green", "yellow", "orange", "purple"
-                                        ]
-                                         for (let c in obstacleCorners) {
-                                            this.oCtx.beginPath();
-                                            this.oCtx.arc(obstacleCorners[c].x, obstacleCorners[c].y, 3, 0, 2 * Math.PI);
-                                            this.oCtx.fillStyle = colors[c];
-                                            this.oCtx.fill();
-                                        }
-                                        //interpoint
-                                        this.oCtx.beginPath();
-                                        this.oCtx.arc(interPoint.x, interPoint.y, 3, 0, 2 * Math.PI);
-                                        this.oCtx.fillStyle = "pink";
-                                        this.oCtx.fill();
-                                        //scan point
-                                        this.oCtx.beginPath();
-                                        this.oCtx.arc(l.x2, l.y2, 3, 0, 2 * Math.PI);
-                                        this.oCtx.fillStyle = "red";
-                                        this.oCtx.fill();
-                                   }
+                                    var rgb = SIMATH.hexToRgb(personalObstacleList[i].color);
+                                    red = rgb.r;
+                                    green = rgb.g;
+                                    blue = rgb.b;
                                 }
                             }
                         }
@@ -815,6 +783,8 @@ define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constan
                         colorSensors[s].color = 'blue';
                     } else if (colorSensors[s].colorValue === C.COLOR_ENUM.GREEN) {
                         colorSensors[s].color = 'lime';
+                    } else if (colorSensors[s].colorValue === C.COLOR_ENUM.TURQUOISE) {
+                        colorSensors[s].color = 'turquoise';
                     }
                     colorSensors[s].lightValue = ((red + green + blue) / 3 / 2.55);
 
