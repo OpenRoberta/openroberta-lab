@@ -14,7 +14,7 @@ echo "       backup-save <dbBackup@<remote-host>:<from-path> <to-path>     save 
 echo "       alive <url> [mail={always|error}] [msg=<msg>]                 is the server alive? When to send mail (default: always). Set an additional mail header"
 echo "       docker-info | network | logs | test-info                      container state, network and some log from running containers; info about deployed servers"
 echo ""
-echo "       monthly-stat <server> [month]                                 run the monthly stats for a server. Optionally supply the month (e.g. '05' or '12')"
+echo "       monthly-stat <server> [month] [year]                          monthly stats. Optionally month (e.g. '05', default: last month) and year (e.g. '2021', default: this year)"
 echo "       show-server                                                   some data about processes with many open file descriptors (FD)"
 echo "       show-resources <server> [<file> [<lower> [<upper> [ <url> [<hours> [<pid>]]]]] show resource usage. Parameter description is in file helper/_showResources.sh"
 echo "       show-activity-once <server> [<file> [ <url>]]                 show accumulated user activity. Parameter description is in file helper/_showActivityOnce.shs"

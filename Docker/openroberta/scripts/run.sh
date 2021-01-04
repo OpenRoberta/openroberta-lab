@@ -121,7 +121,7 @@ case "${CMD}" in
                   docker volume rm $(docker volume ls -q -f dangling=true)
                   headerMessage "remove unused containers, networks, images"
                   docker system prune --force ;;
-    monthly-stat) SERVER_NAME=$1; shift; MONTH=$1; shift
+    monthly-stat) SERVER_NAME=$1; shift; MONTH=$1; shift; YEAR=$1; shift
                   source ${SCRIPT_HELPER}/_monthlyStat.sh ;;
     alive)        case ${ALIVE_ACTIVE} in
                       true) : ;;

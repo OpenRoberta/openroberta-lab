@@ -15,7 +15,11 @@ else
 fi
 MONTH=$(printf "%02d" ${MONTH})
 echo "generating the monthly statistics for month ${MONTH}"
-YEAR=$(date +'%Y')
+
+if [[ "${YEAR}" == '' ]]
+then
+    YEAR=$(date +'%Y')
+fi
 STATISTICS_DIR=${SERVER_DIR}/${SERVER_NAME}/admin/logging/statistics-${YEAR}
 isDirectoryValid ${STATISTICS_DIR}
 REPORT_DIR=${SERVER_DIR}/${SERVER_NAME}/admin/reports-${YEAR}
