@@ -257,7 +257,7 @@ export const ROBOTS = {
             { name: 'compass', position: { x: 91.5, y: 130.3 } },
             { name: 'gyro', position: { x: 97, y: 130.3 } },
             { name: 'sound', position: { x: 214.0, y: 90.2 } },
-        ], "width": "322", "height": "283"
+        ], "width": "322px", "height": "283px"
     },
     "microbit": {
         "ports":

@@ -1,7 +1,9 @@
 export class Port {
     element_: any;
     position_: any;
-    constructor(parent, name, position) {
+    connectedTo: any;
+
+    constructor(parent, name, position, connectedTo?:any) {
         this.position_ = position;
         this.element_ = (<any>window).Blockly.createSvgElement('rect', {
             'class': 'port',
@@ -13,6 +15,7 @@ export class Port {
             'transform': `translate(${position.x}, ${position.y})`,
             'r': 3,
         }, parent);
+        this.connectedTo = connectedTo;
         if (name) {
             this.element_.tooltip = name;
             (<any>window).Blockly.Tooltip.bindMouseEvents(parent);

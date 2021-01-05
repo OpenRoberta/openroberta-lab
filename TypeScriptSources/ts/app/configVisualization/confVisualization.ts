@@ -79,7 +79,6 @@ export class CircuitVisualization {
 
     refresh(): void {
         this.workspace.getAllBlocks().forEach(block => {
-            this.renderBlockBackground(block);
             this.updateBlockPorts(block);
             this.renderConnections();
         });
@@ -124,8 +123,6 @@ export class CircuitVisualization {
         }
         const block = this.workspace.getBlockById(event.blockId);
 
-        if (event.type !== (<any>window).Blockly.Events.UI)
-            this.renderBlockBackground(block);
         switch (event.type) {
             case (<any>window).Blockly.Events.CREATE:
                 this.createBlockPorts(block);
@@ -154,6 +151,9 @@ export class CircuitVisualization {
             if (!block) {
                 return;
             }
+            if (this.needToUpdateBlockPorts(block,position,connectedTo)) {
+                this.updateBlockPorts(block);
+            }
             const blockPosition = block.getRelativeToSurfaceXY();
             const origin = {
                 x: matrix.e + this.workspace.scale * (blockPosition.x + position.x + SEP),
@@ -173,22 +173,37 @@ export class CircuitVisualization {
         });
     }
 
+    private needToUpdateBlockPorts(block: any, portPosition: any, connectedTo: any): boolean {
+        if (connectedTo) {
+            return portPosition.x !== this.calculatePortPosition(block, connectedTo);
+        }
+    }
     updateBlockPorts = (block) => {
-        const positionX = block.width + 4;
         block.ports.forEach(port => {
             const position = port.position;
-            port.moveTo({ ...position, x: positionX });
+            port.moveTo({ ...position, x: this.calculatePortPosition(block, port.connectedTo) });
         });
 
-        this.connections = this.connections.map(({ position, ...others }) => {
+        this.connections = this.connections.map(({ position, connectedTo, ...others }) => {
             if (others.blockId !== block.id) {
-                return { position, ...others };
+                return { position, connectedTo, ...others };
             }
             return {
-                position: { ...position, x: positionX },
+                position: { ...position, x: this.calculatePortPosition(block, connectedTo) },
+                connectedTo,
                 ...others,
             };
         });
+    }
+
+    private calculatePortPosition(block, connectedTo) {
+        const blockPosition = (block.getRelativeToSurfaceXY().x) + (block.width / 2);
+        const robotPortPosition = (this.robot.getRelativeToSurfaceXY().x) + (this.robot.getPortByName(connectedTo).position.x);
+
+        if (blockPosition < robotPortPosition)
+            return block.width - SEP;
+        else
+            return -SEP;
     }
 
     createBlockPorts = (block) => {
@@ -214,8 +229,11 @@ export class CircuitVisualization {
 
     appendPortAndConnection = (block, svgElement, name, connectedTo) => {
         const { matrix } = svgElement.transform.baseVal.getItem(0);
-        const position = { x: block.width + 4, y: matrix.f + 6 };
-        const port = new Port(block.getSvgRoot(), name, position);
+        const position = {
+            x: this.calculatePortPosition(block, connectedTo),
+            y: matrix.f + 6
+        };
+        const port = new Port(block.getSvgRoot(), name, position, connectedTo);
         block.ports.push(port);
         const wireColor = WireDrawer.getColor(block, name);
         const wireSvg = (<any>window).Blockly.createSvgElement('path', {
@@ -255,15 +273,5 @@ export class CircuitVisualization {
             }
             return true;
         });
-    }
-
-    renderBlockBackground = (block) => {
-        if (!block) {
-            return;
-        }
-        const newWidth = block.width + 16;
-        let path = block.svgPath_.getAttribute('d');
-        path = path.replace(block.width.toString(), newWidth.toString());
-        block.svgPath_.setAttribute('d', path);
     }
 }

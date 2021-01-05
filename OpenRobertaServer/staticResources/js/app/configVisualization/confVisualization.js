@@ -65,8 +65,6 @@ define(["require", "exports", "./wires", "./const.robots", "./robotBlock", "./po
                     return;
                 }
                 var block = _this.workspace.getBlockById(event.blockId);
-                if (event.type !== window.Blockly.Events.UI)
-                    _this.renderBlockBackground(block);
                 switch (event.type) {
                     case window.Blockly.Events.CREATE:
                         _this.createBlockPorts(block);
@@ -84,17 +82,16 @@ define(["require", "exports", "./wires", "./const.robots", "./robotBlock", "./po
                 }
             };
             this.updateBlockPorts = function (block) {
-                var positionX = block.width + 4;
                 block.ports.forEach(function (port) {
                     var position = port.position;
-                    port.moveTo(__assign(__assign({}, position), { x: positionX }));
+                    port.moveTo(__assign(__assign({}, position), { x: _this.calculatePortPosition(block, port.connectedTo) }));
                 });
                 _this.connections = _this.connections.map(function (_a) {
-                    var position = _a.position, others = __rest(_a, ["position"]);
+                    var position = _a.position, connectedTo = _a.connectedTo, others = __rest(_a, ["position", "connectedTo"]);
                     if (others.blockId !== block.id) {
-                        return __assign({ position: position }, others);
+                        return __assign({ position: position, connectedTo: connectedTo }, others);
                     }
-                    return __assign({ position: __assign(__assign({}, position), { x: positionX }) }, others);
+                    return __assign({ position: __assign(__assign({}, position), { x: _this.calculatePortPosition(block, connectedTo) }), connectedTo: connectedTo }, others);
                 });
             };
             this.createBlockPorts = function (block) {
@@ -121,8 +118,11 @@ define(["require", "exports", "./wires", "./const.robots", "./robotBlock", "./po
             };
             this.appendPortAndConnection = function (block, svgElement, name, connectedTo) {
                 var matrix = svgElement.transform.baseVal.getItem(0).matrix;
-                var position = { x: block.width + 4, y: matrix.f + 6 };
-                var port = new port_1.Port(block.getSvgRoot(), name, position);
+                var position = {
+                    x: _this.calculatePortPosition(block, connectedTo),
+                    y: matrix.f + 6
+                };
+                var port = new port_1.Port(block.getSvgRoot(), name, position, connectedTo);
                 block.ports.push(port);
                 var wireColor = wires_1.default.getColor(block, name);
                 var wireSvg = window.Blockly.createSvgElement('path', {
@@ -158,15 +158,6 @@ define(["require", "exports", "./wires", "./const.robots", "./robotBlock", "./po
                     }
                     return true;
                 });
-            };
-            this.renderBlockBackground = function (block) {
-                if (!block) {
-                    return;
-                }
-                var newWidth = block.width + 16;
-                var path = block.svgPath_.getAttribute('d');
-                path = path.replace(block.width.toString(), newWidth.toString());
-                block.svgPath_.setAttribute('d', path);
             };
             this.dom = dom;
             this.workspace = workspace;
@@ -207,7 +198,6 @@ define(["require", "exports", "./wires", "./const.robots", "./robotBlock", "./po
         CircuitVisualization.prototype.refresh = function () {
             var _this = this;
             this.workspace.getAllBlocks().forEach(function (block) {
-                _this.renderBlockBackground(block);
                 _this.updateBlockPorts(block);
                 _this.renderConnections();
             });
@@ -246,6 +236,9 @@ define(["require", "exports", "./wires", "./const.robots", "./robotBlock", "./po
                 if (!block) {
                     return;
                 }
+                if (_this.needToUpdateBlockPorts(block, position, connectedTo)) {
+                    _this.updateBlockPorts(block);
+                }
                 var blockPosition = block.getRelativeToSurfaceXY();
                 var origin = {
                     x: matrix.e + _this.workspace.scale * (blockPosition.x + position.x + SEP),
@@ -263,6 +256,19 @@ define(["require", "exports", "./wires", "./const.robots", "./robotBlock", "./po
                 wireSvg.setAttribute('d', drawer.path);
                 wireSvg.setAttribute('stroke-width', STROKE * _this.workspace.scale);
             });
+        };
+        CircuitVisualization.prototype.needToUpdateBlockPorts = function (block, portPosition, connectedTo) {
+            if (connectedTo) {
+                return portPosition.x !== this.calculatePortPosition(block, connectedTo);
+            }
+        };
+        CircuitVisualization.prototype.calculatePortPosition = function (block, connectedTo) {
+            var blockPosition = (block.getRelativeToSurfaceXY().x) + (block.width / 2);
+            var robotPortPosition = (this.robot.getRelativeToSurfaceXY().x) + (this.robot.getPortByName(connectedTo).position.x);
+            if (blockPosition < robotPortPosition)
+                return block.width - SEP;
+            else
+                return -SEP;
         };
         return CircuitVisualization;
     }());
