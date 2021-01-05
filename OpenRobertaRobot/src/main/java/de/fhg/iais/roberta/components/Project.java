@@ -59,6 +59,7 @@ public final class Project {
     private StringBuilder sourceCodeBuilder = new StringBuilder();
     private JSONObject simSensorConfigurationJSON = new JSONObject();
     private JSONObject simSensorPositionConfigurationJSON = new JSONObject();
+    private JSONObject simSensorAlignmentConfigurationJSON = new JSONObject();
     private String compiledHex = "";
     private Key result = Key.COMPILERWORKFLOW_PROJECT_BUILD_SUCCESS;
     private int errorCounter = 0;
@@ -297,6 +298,14 @@ public final class Project {
 
     public void setSimSensorPositionConfigurationJSON(JSONObject simSensorPositionConfigurationJSON) {
         this.simSensorPositionConfigurationJSON = simSensorPositionConfigurationJSON;
+    }
+
+    public JSONObject getSimSensorAlignmentConfigurationJSON() {
+        return this.simSensorAlignmentConfigurationJSON;
+    }
+
+    public void setSimSensorAlignmentConfigurationJSON(JSONObject simSensorAlignmentConfigurationJSON) {
+        this.simSensorAlignmentConfigurationJSON = simSensorAlignmentConfigurationJSON;
     }
 
     public static class Builder {
