@@ -342,22 +342,43 @@ define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constan
             //color
             var colorSensors = this.robots[r].colorSensor;
             for (var s in colorSensors) {
-                this.rCtx.beginPath();
-                this.rCtx.arc(colorSensors[s].x, colorSensors[s].y, colorSensors[s].r, 0, Math.PI * 2);
-                this.rCtx.fillStyle = colorSensors[s].color;
-                this.rCtx.fill();
-                this.rCtx.strokeStyle = "black";
-                this.rCtx.stroke();
-                if (s !== 0) {
-                    this.rCtx.translate(colorSensors[s].x, colorSensors[s].y);
-                    this.rCtx.scale(-1, 1);
-                    this.rCtx.rotate(-Math.PI / 2);
+                if (colorSensors[s].alignment !== C.ALIGNMENT_ENUM.HORIZONTAL) {
                     this.rCtx.beginPath();
-                    this.rCtx.fillStyle = "#555555";
-                    this.rCtx.fillText(s, -12, 4);
-                    this.rCtx.rotate(Math.PI / 2);
-                    this.rCtx.scale(-1, 1);
-                    this.rCtx.translate(-colorSensors[s].x, -colorSensors[s].y);
+                    this.rCtx.arc(colorSensors[s].x, colorSensors[s].y, colorSensors[s].r, 0, Math.PI * 2);
+                    this.rCtx.fillStyle = colorSensors[s].color;
+                    this.rCtx.fill();
+                    this.rCtx.strokeStyle = "black";
+                    this.rCtx.stroke();
+                    if (s !== 0) {
+                        this.rCtx.translate(colorSensors[s].x, colorSensors[s].y);
+                        this.rCtx.scale(-1, 1);
+                        this.rCtx.rotate(-Math.PI / 2);
+                        this.rCtx.beginPath();
+                        this.rCtx.fillStyle = "#555555";
+                        this.rCtx.fillText(s, -12, 4);
+                        this.rCtx.rotate(Math.PI / 2);
+                        this.rCtx.scale(-1, 1);
+                        this.rCtx.translate(-colorSensors[s].x, -colorSensors[s].y);
+                    }
+                } else {
+                    this.rCtx.beginPath();
+                    this.rCtx.arc(colorSensors[s].x, colorSensors[s].y, colorSensors[s].r, 0, Math.PI);
+                    this.rCtx.fillStyle = colorSensors[s].color;
+                    this.rCtx.fill();
+                    this.rCtx.strokeStyle = "black";
+                    this.rCtx.stroke();
+                    if (s !== 0) {
+                        this.rCtx.translate(colorSensors[s].x, colorSensors[s].y);
+                        this.rCtx.scale(-1, 1);
+                        this.rCtx.rotate(-Math.PI / 2);
+                        this.rCtx.beginPath();
+                        this.rCtx.fillStyle = "#555555";
+                        this.rCtx.fillText(s, -12, 4);
+                        this.rCtx.rotate(Math.PI / 2);
+                        this.rCtx.scale(-1, 1);
+                        this.rCtx.translate(-colorSensors[s].x, -colorSensors[s].y);
+                    }
+                    // TODO: ROTATE ARC
                 }
             }
             // infrared sensors (mBot)
@@ -727,20 +748,22 @@ define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constan
                                 var interPoint = SIMATH.getIntersectionPoint(l, obstacleLines[k]);
                                 if (interPoint) {
                                     if (i === 0) { // obstacle is simulation border
-                                        red = green = blue = 80;
+                                        red = green = blue = 255;
                                     } else {
-                                        if (personalObstacleList[i].img) { // obstacle with img
-                                            var colors = this.oCtx.getImageData(Math.round(l.x2), Math.round(l.y1), 1, 1);
-                                            rgb = getObstacleColor(colors);
-                                        } else if (personalObstacleList[i].color) { // obstacle with color
-                                            rgb = SIMATH.hexToRgb(personalObstacleList[i].color);
-                                        } else { // is other robot
-                                            var colors = this.rCtx.getImageData(Math.round(l.x2), Math.round(l.y1), 1, 1);
-                                            rgb = getObstacleColor(colors);
-                                        }
-                                        red = rgb.r;
-                                        green = rgb.g;
-                                        blue = rgb.b;
+                                        //this.oCtx.beginPath();
+                                        //this.oCtx.arc(Math.round(l.x2), Math.round(l.y2), 3, 0, 2 * Math.PI);
+                                        //this.oCtx.fillStyle = "red";
+                                        //this.oCtx.fill();
+                                        console.log(Math.round(colorSensors[s].rx), Math.round(colorSensors[s].ry), Math.round(l.x2), Math.round(l.y2));
+                                        console.log("1:", Math.round(personalObstacleList[i].x), Math.round(personalObstacleList[i].y), "2:", (Math.round(personalObstacleList[i].x) + personalObstacleList[i].w), Math.round(personalObstacleList[i].y), "3:", (Math.round(personalObstacleList[i].x)), (Math.round(personalObstacleList[i].y) + personalObstacleList[i].h), "4:", (Math.round(personalObstacleList[i].x) + personalObstacleList[i].w), (Math.round(personalObstacleList[i].y) + personalObstacleList[i].h));
+                                        var colors = this.oCtx.getImageData(Math.round(l.x2), Math.round(l.y2), 6, 6);
+                                        rgb = getObstacleColor(colors);
+                                        red = rgb[0];
+                                        green = rgb[1];
+                                        blue = rgb[2];
+                                        console.log("rgb", rgb);
+                                        console.log(SIMATH.rgbToHsv(red, green, blue));
+                                        console.log(SIMATH.getColor(SIMATH.rgbToHsv(red, green, blue)));
                                     }
                                 }
                             }
@@ -1006,6 +1029,24 @@ define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constan
     function getObstacleColor(colors) {
         var red, green, blue;
         red = green = blue = 0;
+        var out = [0, 4, 16, 20, 24, 44, 92, 116, 120, 124, 136, 140]; // outside the circle
+        for (var j = 0; j < colors.data.length; j += 24) {
+            for (var i = j; i < j + 24; i += 4) {
+                if (out.indexOf(i) < 0) {
+                    red += colors.data[i + 0];
+                    green += colors.data[i + 1];
+                    blue += colors.data[i + 2];
+                }
+            }
+        }
+        var num = colors.data.length / 4 - 12; // 12 are outside
+        red = red / num;
+        green = green / num;
+        blue = blue / num;
+        return [red, green, blue];
+        /*
+        var red, green, blue;
+        red = green = blue = 0;
 
         var out = [0, 4, 16, 20, 24, 44, 92, 116, 120, 124, 136, 140]; // outside the circle
         for (var j = 0; j < colors.data.length; j += 24) {
@@ -1018,13 +1059,17 @@ define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constan
             }
         }
         var num = colors.data.length / 4 - 12; // 12 are outside
+        console.log(num, (red / num), (green / num), (blue / num))
         var rgb = {
-            r: red / num,
-            g:  green / num,
-            b: blue / num
+            r: (red / num),
+            g:  (green / num),
+            b: (blue / num)
         };
 
+        console.log(rgb);
+
         return rgb;
+         */
     }
 
     function getFnName(fn) {
