@@ -134,6 +134,15 @@ public class ConfigurationComponent extends Phrase<Void> {
         }
     }
 
+    public String getColourAlignment(String block) {
+        switch ( getProperty(block) ) {
+            case SC.HORIZONTAL:
+                return SC.HORIZONTAL;
+            default:
+                return SC.DOWN;
+        }
+    }
+
     public String getInternalPortName() {
         return this.internalPortName;
     }
