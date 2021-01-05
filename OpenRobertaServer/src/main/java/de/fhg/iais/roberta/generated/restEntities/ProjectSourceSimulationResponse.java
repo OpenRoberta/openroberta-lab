@@ -73,7 +73,8 @@ public class ProjectSourceSimulationResponse extends BaseResponse {
             String progXML,
             Map<String, JSONObject> confAnnos,
             JSONObject javaScriptConfiguration,
-            JSONObject javaScriptPositionConfiguration) {
+            JSONObject javaScriptPositionConfiguration,
+            JSONObject javaScriptAlignmentConfiguration) {
         ProjectSourceSimulationResponse entity = new ProjectSourceSimulationResponse();
         entity.setCmd(cmd);
         entity.setRc(rc);
@@ -98,6 +99,7 @@ public class ProjectSourceSimulationResponse extends BaseResponse {
         entity.setConfAnnos(confAnnos);
         entity.setJavaScriptConfiguration(javaScriptConfiguration);
         entity.setJavaScriptPositionConfiguration(javaScriptPositionConfiguration);
+        entity.setJavaScriptAlignmentConfiguration(javaScriptAlignmentConfiguration);
         entity.immutable();
         return entity;
     }
@@ -464,7 +466,6 @@ public class ProjectSourceSimulationResponse extends BaseResponse {
             jsonO.put("javaScriptPositionConfiguration", this.javaScriptPositionConfiguration);
             jsonO.put("javaScriptAlignmentConfiguration", this.javaScriptAlignmentConfiguration);
         } catch (JSONException e) {
-        } catch ( JSONException e ) {
             throw new RuntimeException("JSON unparse error when unparsing: " + this, e);
         }
         return jsonO;
