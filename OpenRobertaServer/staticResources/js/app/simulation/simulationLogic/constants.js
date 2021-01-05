@@ -504,8 +504,7 @@ define({
         YELLOW: "YELLOW",
         RED: "RED",
         WHITE: "WHITE",
-        BROWN: "BROWN",
-        TURQUOISE: "TURQUOISE"
+        BROWN: "BROWN"
     },
 
     TIMER: "timer",
@@ -548,5 +547,5 @@ define({
         HORIZONTAL: "HORIZONTAL"
     },
 
-    COLOR_SENSOR_HORIZONTAL_DISTANCE: 25
+    COLOR_SENSOR_HORIZONTAL_DISTANCE: 20
 });

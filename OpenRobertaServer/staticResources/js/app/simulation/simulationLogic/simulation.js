@@ -571,14 +571,14 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
             obstacle.w = 100;
             obstacle.h = 100;
             obstacle.img = null;
-            obstacle.color = "#33B8CA";
+            obstacle.color = "#0000ff";
         } else if (currentBackground == 2) {
             obstacle.x = 580;
             obstacle.y = 290;
             obstacle.w = 100;
             obstacle.h = 100;
             obstacle.img = null;
-            obstacle.color = "#33B8CA";
+            obstacle.color = "#0000ff";
         } else if (currentBackground == 4) {
             obstacle.x = 500;
             obstacle.y = 260;
@@ -611,14 +611,14 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
             obstacle.y = 405;
             obstacle.w = 20;
             obstacle.h = 20;
-            obstacle.color = "#33B8CA";
+            obstacle.color = "#0000ff";
             obstacle.img = null;
         } else if (currentBackground == 6) {
             obstacle.x = 425;
             obstacle.y = 254;
             obstacle.w = 50;
             obstacle.h = 50;
-            obstacle.color = "#009EE3";
+            obstacle.color = "#0000ff";
             obstacle.img = null;
         } else {
             var x = imgObjectList[currentBackground].width - 50;
@@ -627,7 +627,7 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
             obstacle.y = y;
             obstacle.w = 50;
             obstacle.h = 50;
-            obstacle.color = "#33B8CA";
+            obstacle.color = "#0000ff";
             obstacle.img = null;
         }
         obstacle.xStart = obstacle.x;
