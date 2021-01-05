@@ -753,10 +753,22 @@ define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constan
                             for (var k = 0; k < obstacleLines.length; k++) {
                                 var interPoint = SIMATH.getIntersectionPoint(l, obstacleLines[k]);
                                 if (interPoint) {
-                                    var rgb = SIMATH.hexToRgb(personalObstacleList[i].color);
-                                    red = rgb.r;
-                                    green = rgb.g;
-                                    blue = rgb.b;
+                                    if (i === 0) { // obstacle is simulation border
+                                        red = green = blue = 80;
+                                    } else {
+                                        if (personalObstacleList[i].img) { // obstacle with img
+                                            var colors = this.oCtx.getImageData(Math.round(l.x2), Math.round(l.y1), 1, 1);
+                                            rgb = getObstacleColor(colors);
+                                        } else if (personalObstacleList[i].color) { // obstacle with color
+                                            rgb = SIMATH.hexToRgb(personalObstacleList[i].color);
+                                        } else { // is other robot
+                                            var colors = this.rCtx.getImageData(Math.round(l.x2), Math.round(l.y1), 1, 1);
+                                            rgb = getObstacleColor(colors);
+                                        }
+                                        red = rgb.r;
+                                        green = rgb.g;
+                                        blue = rgb.b;
+                                    }
                                 }
                             }
                         }
@@ -1062,6 +1074,7 @@ define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constan
         /*
         var red, green, blue;
         red = green = blue = 0;
+
         var out = [0, 4, 16, 20, 24, 44, 92, 116, 120, 124, 136, 140]; // outside the circle
         for (var j = 0; j < colors.data.length; j += 24) {
             for (var i = j; i < j + 24; i += 4) {
@@ -1073,12 +1086,16 @@ define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constan
             }
         }
         var num = colors.data.length / 4 - 12; // 12 are outside
-        red = red / num;
-        green = green / num;
-        blue = blue / num;
-        return [red, green, blue];
-        var red, green, blue;
-        red = green = blue = 0;
+        console.log(num, (red / num), (green / num), (blue / num))
+        var rgb = {
+            r: (red / num),
+            g:  (green / num),
+            b: (blue / num)
+        };
+
+        console.log(rgb);
+
+        return rgb;
          */
     }
 
