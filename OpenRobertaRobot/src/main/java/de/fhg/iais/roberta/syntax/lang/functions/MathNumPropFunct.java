@@ -13,8 +13,9 @@ import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.lang.expr.Assoc;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
-import de.fhg.iais.roberta.transformer.Ast2JaxbHelper;
+import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.ExprParam;
+import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.IVisitor;
@@ -100,7 +101,7 @@ public class MathNumPropFunct<V> extends Function<V> {
      */
     public static <V> Phrase<V> jaxbToAst(Block block, AbstractJaxb2Ast<V> helper) {
         boolean divisorInput = block.getMutation().isDivisorInput();
-        String op = helper.extractOperation(block, BlocklyConstants.PROPERTY);
+        String op = Jaxb2Ast.extractOperation(block, BlocklyConstants.PROPERTY);
         List<ExprParam> exprParams = new ArrayList<ExprParam>();
         exprParams.add(new ExprParam(BlocklyConstants.NUMBER_TO_CHECK, BlocklyType.NUMBER_INT));
 
@@ -109,20 +110,20 @@ public class MathNumPropFunct<V> extends Function<V> {
             exprParams.add(new ExprParam(BlocklyConstants.DIVISOR, BlocklyType.NUMBER_INT));
         }
         List<Expr<V>> params = helper.extractExprParameters(block, exprParams);
-        return MathNumPropFunct.make(FunctionNames.get(op), params, helper.extractBlockProperties(block), helper.extractComment(block));
+        return MathNumPropFunct.make(FunctionNames.get(op), params, Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
     }
 
     @Override
     public Block astToBlock() {
         Block jaxbDestination = new Block();
-        Ast2JaxbHelper.setBasicProperties(this, jaxbDestination);
+        Ast2Jaxb.setBasicProperties(this, jaxbDestination);
 
         Mutation mutation = new Mutation();
         mutation.setDivisorInput(false);
-        Ast2JaxbHelper.addField(jaxbDestination, BlocklyConstants.PROPERTY, getFunctName().name());
-        Ast2JaxbHelper.addValue(jaxbDestination, BlocklyConstants.NUMBER_TO_CHECK, getParam().get(0));
+        Ast2Jaxb.addField(jaxbDestination, BlocklyConstants.PROPERTY, getFunctName().name());
+        Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.NUMBER_TO_CHECK, getParam().get(0));
         if ( getFunctName() == FunctionNames.DIVISIBLE_BY ) {
-            Ast2JaxbHelper.addValue(jaxbDestination, BlocklyConstants.DIVISOR, getParam().get(1));
+            Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.DIVISOR, getParam().get(1));
             mutation.setDivisorInput(true);
         }
         jaxbDestination.setMutation(mutation);

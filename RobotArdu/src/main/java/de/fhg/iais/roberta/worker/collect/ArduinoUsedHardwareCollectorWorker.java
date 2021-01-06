@@ -10,8 +10,7 @@ import de.fhg.iais.roberta.worker.AbstractUsedHardwareCollectorWorker;
 
 public final class ArduinoUsedHardwareCollectorWorker extends AbstractUsedHardwareCollectorWorker {
     @Override
-    protected AbstractCollectorVisitor getVisitor(
-        Project project, ClassToInstanceMap<IProjectBean.IBuilder<?>> beanBuilders) {
+    protected AbstractCollectorVisitor getVisitor(Project project, ClassToInstanceMap<IProjectBean.IBuilder<?>> beanBuilders) {
         return new ArduinoUsedHardwareCollectorVisitor(project.getProgramAst().getTree(), project.getConfigurationAst(), beanBuilders);
     }
 }

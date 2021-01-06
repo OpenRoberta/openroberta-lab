@@ -13,6 +13,7 @@ public class SoundSensorTest extends Ev3LejosAstTest {
     public void getSampleSound() throws Exception {
         String a = "\nhal.getSoundLevel(SensorPort.S1)}";
 
-        UnitTestHelper.checkWorkers(testFactory, a, "/syntax/sensors/sensor_getSampleSound.xml", new Ev3UsedHardwareCollectorWorker(), new Ev3JavaGeneratorWorker());
+        UnitTestHelper
+            .checkWorkers(testFactory, a, "/syntax/sensors/sensor_getSampleSound.xml", new Ev3UsedHardwareCollectorWorker(), new Ev3JavaGeneratorWorker());
     }
 }

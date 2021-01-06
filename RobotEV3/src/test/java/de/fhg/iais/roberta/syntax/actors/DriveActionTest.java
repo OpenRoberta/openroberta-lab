@@ -14,7 +14,14 @@ public class DriveActionTest extends Ev3LejosAstTest {
     public void drive() throws Exception {
         String a = "\nhal.regulatedDrive(DriveDirection.FOREWARD, 50);}";
 
-        UnitTestHelper.checkWorkers(testFactory, a, "/syntax/actions/action_MotorDiffOn.xml", new Ev3UsedHardwareCollectorWorker(), new Ev3UsedMethodCollectorWorker(), new Ev3JavaGeneratorWorker());
+        UnitTestHelper
+            .checkWorkers(
+                testFactory,
+                a,
+                "/syntax/actions/action_MotorDiffOn.xml",
+                new Ev3UsedHardwareCollectorWorker(),
+                new Ev3UsedMethodCollectorWorker(),
+                new Ev3JavaGeneratorWorker());
     }
 
     @Test
@@ -22,6 +29,12 @@ public class DriveActionTest extends Ev3LejosAstTest {
         String a = "\nhal.driveDistance(DriveDirection.FOREWARD, 50, 20);}";
 
         UnitTestHelper
-            .checkWorkers(testFactory, a, "/syntax/actions/action_MotorDiffOnFor.xml", new Ev3UsedHardwareCollectorWorker(), new Ev3UsedMethodCollectorWorker(), new Ev3JavaGeneratorWorker());
+            .checkWorkers(
+                testFactory,
+                a,
+                "/syntax/actions/action_MotorDiffOnFor.xml",
+                new Ev3UsedHardwareCollectorWorker(),
+                new Ev3UsedMethodCollectorWorker(),
+                new Ev3JavaGeneratorWorker());
     }
 }

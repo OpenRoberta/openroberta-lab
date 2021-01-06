@@ -55,17 +55,16 @@ import de.fhg.iais.roberta.visitor.hardware.IEdisonVisitor;
 import de.fhg.iais.roberta.visitor.lang.codegen.prog.AbstractPythonVisitor;
 
 /**
- * This class visits the Blockly blocks for the Edison robot and translates them into EdPy Python2 code (https://github.com/Bdanilko/EdPy)
- * Many methods are not supported (N O P) because the Edison robot does not allow the import of any Python module (f.e. math).
- * Also the edison robot only supports integers and has no suport for nested statements. (f.e. "if (a and b):" with a,b being booleans)
+ * This class visits the Blockly blocks for the Edison robot and translates them into EdPy Python2 code (https://github.com/Bdanilko/EdPy) Many methods are not
+ * supported (N O P) because the Edison robot does not allow the import of any Python module (f.e. math). Also the edison robot only supports integers and has
+ * no suport for nested statements. (f.e. "if (a and b):" with a,b being booleans)
  */
 public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdisonVisitor<Void> {
 
     /**
-     * initialize the Python code generator visitor.
-     * The UsedHardwareCollector will provide the Python code generator with the used methods, used sensors/actors and used variables.
-     * The used sensors/actors are disregarded in the edison robot, since all sensors/actors are fixed.
-     * The used methods are collected by the UsedHardwareCollector and then saved as a Set, so that they can be appended in the suffix
+     * initialize the Python code generator visitor. The UsedHardwareCollector will provide the Python code generator with the used methods, used sensors/actors
+     * and used variables. The used sensors/actors are disregarded in the edison robot, since all sensors/actors are fixed. The used methods are collected by
+     * the UsedHardwareCollector and then saved as a Set, so that they can be appended in the suffix
      *
      * @param programPhrases to generate the code from
      */
@@ -104,8 +103,8 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
     }
 
     /**
-     * Generates the program suffix, i.e. everything that will be appended to the very end of the source .py file
-     * In the suffix are NEPO helper methods for things like sum, round, min, max, etc
+     * Generates the program suffix, i.e. everything that will be appended to the very end of the source .py file In the suffix are NEPO helper methods for
+     * things like sum, round, min, max, etc
      *
      * @param withWrapping if the source code should be wrapped by prefix/suffix
      */
@@ -147,8 +146,7 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
     }
 
     /**
-     * Function to get readings from the obstacle detector.
-     * visit a {@link InfraredSensor} for the block "robSensors_infrared_getSample"
+     * Function to get readings from the obstacle detector. visit a {@link InfraredSensor} for the block "robSensors_infrared_getSample"
      *
      * @param infraredSensor to be visited
      */
@@ -174,9 +172,7 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
     }
 
     /**
-     * Function to receive IR data
-     * Needs a helper method
-     * visit a {@link InfraredSensor} for the block "robSensors_irseeker_getSample"
+     * Function to receive IR data Needs a helper method visit a {@link InfraredSensor} for the block "robSensors_irseeker_getSample"
      *
      * @param irSeekerSensor
      */
@@ -195,11 +191,9 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
     }
 
     /**
-     * Function to get the light level from a phototransistor/light sensor
-     * The light level reported from Edison is between 0 and 32767, but the return value is in percent.
-     * That's why it is divided by 10.
-     * The line tracker can also report if the robot is on a line, but for this to work the robot has to be placed on a white surface when the program starts.
-     * visit a {@link LightSensor} for the block "robSensors_light_getSample"
+     * Function to get the light level from a phototransistor/light sensor The light level reported from Edison is between 0 and 32767, but the return value is
+     * in percent. That's why it is divided by 10. The line tracker can also report if the robot is on a line, but for this to work the robot has to be placed
+     * on a white surface when the program starts. visit a {@link LightSensor} for the block "robSensors_light_getSample"
      *
      * @param lightSensor
      */
@@ -224,8 +218,7 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
     }
 
     /**
-     * Function to detect claps from the sound sensor
-     * visit a {@link SoundSensor} for the block "robSensors_sound_getSample"
+     * Function to detect claps from the sound sensor visit a {@link SoundSensor} for the block "robSensors_sound_getSample"
      *
      * @param soundSensor
      */
@@ -236,8 +229,7 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
     }
 
     /**
-     * Function to send data via infrared
-     * visit a {@link SendIRAction} for the block "edisonCommunication_ir_sendBlock"
+     * Function to send data via infrared visit a {@link SendIRAction} for the block "edisonCommunication_ir_sendBlock"
      *
      * @param sendIRAction
      * @return
@@ -252,8 +244,7 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
     }
 
     /**
-     * Function to receive data via infrared
-     * visit a {@link SendIRAction} for the block "edisonCommunication_ir_receiveBlock"
+     * Function to receive data via infrared visit a {@link SendIRAction} for the block "edisonCommunication_ir_receiveBlock"
      *
      * @param receiveIRAction
      * @return
@@ -266,8 +257,8 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
     }
 
     /**
-     * Function to drive straight forward/backward with given power % and time/distance
-     * visit a {@link DriveAction} for the block "robActions_motorDiff_on" and "robActions_motorDiff_on_for"
+     * Function to drive straight forward/backward with given power % and time/distance visit a {@link DriveAction} for the block "robActions_motorDiff_on" and
+     * "robActions_motorDiff_on_for"
      *
      * @param driveAction to be visited
      */
@@ -298,8 +289,7 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
     }
 
     /**
-     * Function to perform mathematics on a list (sum/average/min/max/...)
-     * Visit a {@link MathOnListFunct} for the block "math_on_list"
+     * Function to perform mathematics on a list (sum/average/min/max/...) Visit a {@link MathOnListFunct} for the block "math_on_list"
      *
      * @param mathOnListFunct to be visited
      */
@@ -322,8 +312,8 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
     }
 
     /**
-     * All Math blocks (Integers and Fractions) are checked here. If the number constant is not an integer an exception will be thrown
-     * Only blocks of type "math_integer" should be used with the Edison robot
+     * All Math blocks (Integers and Fractions) are checked here. If the number constant is not an integer an exception will be thrown Only blocks of type
+     * "math_integer" should be used with the Edison robot
      *
      * @param numConst
      * @return
@@ -339,8 +329,8 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
     }
 
     /**
-     * Visits the programs main task, i.e. the Blockly-blocks that are (indirectly) connected to the red "robControls_start"-block.
-     * In this method, user-generated Blockly-methods are appended also
+     * Visits the programs main task, i.e. the Blockly-blocks that are (indirectly) connected to the red "robControls_start"-block. In this method,
+     * user-generated Blockly-methods are appended also
      *
      * @param mainTask the main task class to be visited
      * @return null
@@ -357,8 +347,7 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
     }
 
     /**
-     * Function to create a list
-     * visit a {@link ListCreate} for the block "robLists_create_with"
+     * Function to create a list visit a {@link ListCreate} for the block "robLists_create_with"
      *
      * @param listCreate to be visited
      */
@@ -385,8 +374,7 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
     }
 
     /**
-     * Function to execute code when a key is pressed
-     * visit a {@link KeysSensor} for the block "robSensors_key_getSample"
+     * Function to execute code when a key is pressed visit a {@link KeysSensor} for the block "robSensors_key_getSample"
      *
      * @param keysSensor to be visited
      */
@@ -406,8 +394,7 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
     }
 
     /**
-     * Function to drive a curve forward/backward.
-     * This is still very buggy when used together with sensors (e.g. drive a curve until an obstacle is detected).
+     * Function to drive a curve forward/backward. This is still very buggy when used together with sensors (e.g. drive a curve until an obstacle is detected).
      * visit a {@link CurveAction} for the block "robActions_motorDiff_curve_for" and "robActions_motorDiff_curve"
      *
      * @param curveAction to visit
@@ -445,8 +432,7 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
     }
 
     /**
-     * Function to turn the robot
-     * visit a {@link TurnAction} for the block "robActions_motorDiff_turn_for" and "robActions_motorDiff_turn"
+     * Function to turn the robot visit a {@link TurnAction} for the block "robActions_motorDiff_turn_for" and "robActions_motorDiff_turn"
      *
      * @param turnAction to be visited
      */
@@ -467,8 +453,7 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
     }
 
     /**
-     * Function to set the motors to a specific power-%
-     * visit a {@link MotorOnAction} for the block "robActions_motor_on" and "robActions_motor_on_for"
+     * Function to set the motors to a specific power-% visit a {@link MotorOnAction} for the block "robActions_motor_on" and "robActions_motor_on_for"
      *
      * @param motorOnAction
      */
@@ -500,8 +485,7 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
     }
 
     /**
-     * Function to stop individual motors
-     * visit a {@link MotorStopAction} for the block "robActions_motor_stop"
+     * Function to stop individual motors visit a {@link MotorStopAction} for the block "robActions_motor_stop"
      *
      * @param motorStopAction
      */
@@ -535,8 +519,7 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
     }
 
     /**
-     * Function to stop driving (stop both motors)
-     * visit a {@link MotorDriveStopAction} for the block "robActions_motorDiff_stop"
+     * Function to stop driving (stop both motors) visit a {@link MotorDriveStopAction} for the block "robActions_motorDiff_stop"
      *
      * @param stopAction
      */
@@ -629,8 +612,7 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
     }
 
     /**
-     * Function to turn on the LEDs
-     * visit a {@link LightAction} for the block "robActions_led_on"
+     * Function to turn on the LEDs visit a {@link LightAction} for the block "robActions_led_on"
      *
      * @param lightAction to be visited
      */
@@ -651,8 +633,7 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
     }
 
     /**
-     * Function to turn off the LEDs
-     * visit a {@link LightStatusAction} for the block "robActions_led_off"
+     * Function to turn off the LEDs visit a {@link LightStatusAction} for the block "robActions_led_off"
      *
      * @param lightStatusAction to be visited
      */
@@ -677,8 +658,7 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
     }
 
     /**
-     * Function to play a tone
-     * visit a {@link ToneAction} for the block "robActions_play_tone"
+     * Function to play a tone visit a {@link ToneAction} for the block "robActions_play_tone"
      *
      * @param toneAction to be visited
      */
@@ -697,8 +677,7 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
     }
 
     /**
-     * Function to play a note
-     * visit a {@link PlayNoteAction} for the block "mbedActions_play_note"
+     * Function to play a note visit a {@link PlayNoteAction} for the block "mbedActions_play_note"
      *
      * @param playNoteAction
      */
@@ -714,8 +693,7 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
     }
 
     /**
-     * Function to play a sound file/note file
-     * visit a {@link PlayFileAction} for the block "robActions_play_file"
+     * Function to play a sound file/note file visit a {@link PlayFileAction} for the block "robActions_play_file"
      *
      * @param playFileAction
      */
@@ -764,8 +742,7 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
     }
 
     /**
-     * Function to reset the sensors
-     * visit a {@link ResetSensor} for the block "edisonSensors_sensor_reset"
+     * Function to reset the sensors visit a {@link ResetSensor} for the block "edisonSensors_sensor_reset"
      *
      * @param resetSensor
      * @return
@@ -796,8 +773,7 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
     }
 
     /**
-     * visit a {@link GetSampleSensor}
-     * Needs to override parent method to add parenthesis.
+     * visit a {@link GetSampleSensor} Needs to override parent method to add parenthesis.
      *
      * @param sensorGetSample to be visited
      */

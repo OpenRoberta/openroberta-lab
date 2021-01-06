@@ -9,8 +9,7 @@ import de.fhg.iais.roberta.visitor.validate.AbstractCollectorVisitor;
 
 public final class MbedUsedHardwareCollectorWorker extends AbstractUsedHardwareCollectorWorker {
     @Override
-    protected AbstractCollectorVisitor getVisitor(
-        Project project, ClassToInstanceMap<IProjectBean.IBuilder<?>> beanBuilders) {
+    protected AbstractCollectorVisitor getVisitor(Project project, ClassToInstanceMap<IProjectBean.IBuilder<?>> beanBuilders) {
         return new MbedUsedHardwareCollectorVisitor(project.getProgramAst().getTree(), project.getConfigurationAst(), beanBuilders);
     }
 }

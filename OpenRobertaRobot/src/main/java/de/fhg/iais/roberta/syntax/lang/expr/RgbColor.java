@@ -10,8 +10,9 @@ import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
-import de.fhg.iais.roberta.transformer.Ast2JaxbHelper;
+import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.ExprParam;
+import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.visitor.IVisitor;
 import de.fhg.iais.roberta.visitor.lang.ILanguageVisitor;
@@ -101,7 +102,7 @@ public class RgbColor<V> extends Expr<V> {
      */
     public static <V> Phrase<V> jaxbToAst(Block block, AbstractJaxb2Ast<V> helper) {
         List<Value> values;
-        values = helper.extractValues(block, (short) 4);
+        values = Jaxb2Ast.extractValues(block, (short) 4);
 
         Phrase<V> red = helper.extractValue(values, new ExprParam(BlocklyConstants.RED, BlocklyType.NUMBER_INT));
         Phrase<V> green = helper.extractValue(values, new ExprParam(BlocklyConstants.GREEN, BlocklyType.NUMBER_INT));
@@ -113,18 +114,18 @@ public class RgbColor<V> extends Expr<V> {
                 helper.convertPhraseToExpr(green),
                 helper.convertPhraseToExpr(blue),
                 helper.convertPhraseToExpr(alpha),
-                helper.extractBlockProperties(block),
-                helper.extractComment(block));
+                Jaxb2Ast.extractBlockProperties(block),
+                Jaxb2Ast.extractComment(block));
     }
 
     @Override
     public Block astToBlock() {
         Block jaxbDestination = new Block();
-        Ast2JaxbHelper.setBasicProperties(this, jaxbDestination);
-        Ast2JaxbHelper.addValue(jaxbDestination, BlocklyConstants.RED, this.R);
-        Ast2JaxbHelper.addValue(jaxbDestination, BlocklyConstants.GREEN, this.G);
-        Ast2JaxbHelper.addValue(jaxbDestination, BlocklyConstants.BLUE, this.B);
-        Ast2JaxbHelper.addValue(jaxbDestination, BlocklyConstants.ALPHA, this.A);
+        Ast2Jaxb.setBasicProperties(this, jaxbDestination);
+        Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.RED, this.R);
+        Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.GREEN, this.G);
+        Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.BLUE, this.B);
+        Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.ALPHA, this.A);
 
         return jaxbDestination;
     }

@@ -15,9 +15,8 @@ import de.fhg.iais.roberta.visitor.collect.AbstractUsedHardwareCollectorVisitor;
 import de.fhg.iais.roberta.visitor.validate.AbstractCollectorVisitor;
 
 /**
- * Uses the {@link AbstractUsedHardwareCollectorVisitor} to visit the current AST and collect all used hardware.
- * Data collected is stored in the {@link UsedHardwareBean}.
- * Currently does more than just collect the used hardware, e.g. also handles global variables.
+ * Uses the {@link AbstractUsedHardwareCollectorVisitor} to visit the current AST and collect all used hardware. Data collected is stored in the
+ * {@link UsedHardwareBean}. Currently does more than just collect the used hardware, e.g. also handles global variables.
  */
 public abstract class AbstractUsedHardwareCollectorWorker implements IWorker {
 
@@ -48,8 +47,8 @@ public abstract class AbstractUsedHardwareCollectorWorker implements IWorker {
     }
 
     /**
-     * Returns the appropriate visitor for this worker. Used by subclasses to keep the execute method generic.
-     * Could be removed in the future, when visitors are specified in the properties as well, or inferred from the worker name.
+     * Returns the appropriate visitor for this worker. Used by subclasses to keep the execute method generic. Could be removed in the future, when visitors are
+     * specified in the properties as well, or inferred from the worker name.
      *
      * @param project the project
      * @param beanBuilders a map of available bean builders, may be empty

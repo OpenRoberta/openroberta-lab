@@ -14,8 +14,8 @@ import de.fhg.iais.roberta.visitor.IVisitor;
 import de.fhg.iais.roberta.visitor.validate.AbstractProgramValidatorVisitor;
 
 /**
- * Uses the {@link AbstractProgramValidatorVisitor} to visit the current AST and validate the hardware.
- * May also annotate the AST to add information about inconsistencies in it.
+ * Uses the {@link AbstractProgramValidatorVisitor} to visit the current AST and validate the hardware. May also annotate the AST to add information about
+ * inconsistencies in it.
  */
 public abstract class AbstractValidatorWorker implements IWorker {
 
@@ -42,8 +42,8 @@ public abstract class AbstractValidatorWorker implements IWorker {
     }
 
     /**
-     * Returns the appropriate visitor for this worker. Used by subclasses to keep the execute method generic.
-     * Could be removed in the future, when visitors are specified in the properties as well, or inferred from the worker name.
+     * Returns the appropriate visitor for this worker. Used by subclasses to keep the execute method generic. Could be removed in the future, when visitors are
+     * specified in the properties as well, or inferred from the worker name.
      *
      * @param project the project
      * @param beanBuilders a map of available bean builders, may be empty

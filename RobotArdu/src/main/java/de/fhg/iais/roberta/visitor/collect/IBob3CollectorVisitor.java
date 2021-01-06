@@ -11,9 +11,8 @@ import de.fhg.iais.roberta.syntax.sensors.arduino.bob3.CodePadSensor;
 import de.fhg.iais.roberta.visitor.hardware.IBob3Visitor;
 
 /**
- * Collector for the Bob3.
- * Adds the blocks missing from the defaults of {@link ICollectorVisitor}.
- * Defines the specific parent implementation to use (the one of the collector) due to unrelated defaults.
+ * Collector for the Bob3. Adds the blocks missing from the defaults of {@link ICollectorVisitor}. Defines the specific parent implementation to use (the one of
+ * the collector) due to unrelated defaults.
  */
 public interface IBob3CollectorVisitor extends ICollectorVisitor, IBob3Visitor<Void> {
     @Override

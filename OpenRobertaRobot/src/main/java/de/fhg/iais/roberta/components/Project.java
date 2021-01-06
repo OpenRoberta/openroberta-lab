@@ -1,12 +1,5 @@
 package de.fhg.iais.roberta.components;
 
-import com.google.common.collect.ClassToInstanceMap;
-import com.google.common.collect.MutableClassToInstanceMap;
-
-import org.json.JSONObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.io.StringWriter;
 import java.util.Collections;
 import java.util.HashMap;
@@ -16,6 +9,13 @@ import java.util.Map;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
+
+import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.google.common.collect.ClassToInstanceMap;
+import com.google.common.collect.MutableClassToInstanceMap;
 
 import de.fhg.iais.roberta.bean.IProjectBean;
 import de.fhg.iais.roberta.blockly.generated.BlockSet;
@@ -439,12 +439,7 @@ public final class Project {
                             throw new DbcException("A top block and a sensor prefix are required for an old configuration!");
                         }
                         this.project.configuration =
-                            Jaxb2ConfigurationAst
-                                .blocks2OldConfig(
-                                    blockSet,
-                                    this.project.robotFactory.getBlocklyDropdownFactory(),
-                                    topBlock,
-                                    sensorPrefix);
+                            Jaxb2ConfigurationAst.blocks2OldConfig(blockSet, this.project.robotFactory.getBlocklyDropdownFactory(), topBlock, sensorPrefix);
                     }
                     this.project.configuration.setRobotName(this.project.getRobot()); // TODO remove dependencies on robot name to remove this
                 } catch ( JAXBException e ) {

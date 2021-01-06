@@ -37,8 +37,8 @@ public class HelperMethodGenerator {
     private final Map<? super Enum, String> helperMethods = new HashMap<>();
 
     /**
-     * Constructs a generator from the loaded JSON of the method definition YAML file.
-     * By default, it adds {@link FunctionNames} to the list of Enums which can be loaded from the YAML file.
+     * Constructs a generator from the loaded JSON of the method definition YAML file. By default, it adds {@link FunctionNames} to the list of Enums which can
+     * be loaded from the YAML file.
      *
      * @param jsonHelperMethods the loaded JSON of the YAML file
      * @param baseProgLanguage the base programming language
@@ -70,8 +70,7 @@ public class HelperMethodGenerator {
     }
 
     /**
-     * Adds an additional enum to the list of enums loaded from the YAML file.
-     * Reloads the contents from the YAML file.
+     * Adds an additional enum to the list of enums loaded from the YAML file. Reloads the contents from the YAML file.
      *
      * @param anEnum the additional enum to be loaded
      */
@@ -104,9 +103,8 @@ public class HelperMethodGenerator {
         List<? extends Enum<?>> usedMethodsList = new ArrayList<>(usedMethods);
 
         // sort indices based on the string representation of the enums
-        int[] sortedIndices = IntStream.range(0, usedMethodsList.size())
-            .boxed().sorted(Comparator.comparing(i -> usedMethodsList.get(i).toString()))
-            .mapToInt(e -> e).toArray();
+        int[] sortedIndices =
+            IntStream.range(0, usedMethodsList.size()).boxed().sorted(Comparator.comparing(i -> usedMethodsList.get(i).toString())).mapToInt(e -> e).toArray();
 
         for ( int sortedIndex : sortedIndices ) {
             String implementation = this.helperMethods.get(usedMethodsList.get(sortedIndex));
@@ -145,9 +143,8 @@ public class HelperMethodGenerator {
         List<? extends Enum<?>> usedMethodsList = new ArrayList<>(usedMethods);
 
         // sort indices based on the string representation of the enums
-        int[] sortedIndices = IntStream.range(0, usedMethodsList.size())
-                                       .boxed().sorted(Comparator.comparing(i -> usedMethodsList.get(i).toString()))
-                                       .mapToInt(e -> e).toArray();
+        int[] sortedIndices =
+            IntStream.range(0, usedMethodsList.size()).boxed().sorted(Comparator.comparing(i -> usedMethodsList.get(i).toString())).mapToInt(e -> e).toArray();
 
         for ( int sortedIndex : sortedIndices ) {
             String implementation = this.helperMethods.get(usedMethodsList.get(sortedIndex));

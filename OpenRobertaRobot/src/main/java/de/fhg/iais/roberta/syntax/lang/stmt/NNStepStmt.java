@@ -12,8 +12,9 @@ import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.syntax.lang.expr.Var;
 import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
-import de.fhg.iais.roberta.transformer.Ast2JaxbHelper;
+import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.ExprParam;
+import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.IVisitor;
@@ -44,11 +45,11 @@ public class NNStepStmt<V> extends Stmt<V> {
     }
 
     public List<Expr<V>> getIl() {
-        return il;
+        return this.il;
     }
 
     public List<Var<V>> getOl() {
-        return ol;
+        return this.ol;
     }
 
     @Override
@@ -70,7 +71,7 @@ public class NNStepStmt<V> extends Stmt<V> {
      */
     public static <V> Phrase<V> jaxbToAst(Block block, AbstractJaxb2Ast<V> helper) {
         helper.getDropdownFactory();
-        List<Value> values = AbstractJaxb2Ast.extractValues(block, (short) 6);
+        List<Value> values = Jaxb2Ast.extractValues(block, (short) 6);
         Phrase<V> i0 = helper.extractValue(values, new ExprParam("INPUT0", BlocklyType.NUMBER_INT));
         Phrase<V> i1 = helper.extractValue(values, new ExprParam("INPUT1", BlocklyType.NUMBER_INT));
         Phrase<V> i2 = helper.extractValue(values, new ExprParam("INPUT2", BlocklyType.NUMBER_INT));
@@ -83,19 +84,19 @@ public class NNStepStmt<V> extends Stmt<V> {
         final Var<V> v1 = (Var<V>) helper.convertPhraseToExpr(o1);
         final Var<V> v2 = (Var<V>) helper.convertPhraseToExpr(o2);
         List<Var<V>> ol = Arrays.asList(v0, v1, v2);
-        return NNStepStmt.make(il, ol, AbstractJaxb2Ast.extractBlockProperties(block), AbstractJaxb2Ast.extractComment(block));
+        return NNStepStmt.make(il, ol, Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
     }
 
     @Override
     public Block astToBlock() {
         Block jaxbDestination = new Block();
-        Ast2JaxbHelper.addValue(jaxbDestination, "INPUT0", il.get(0));
-        Ast2JaxbHelper.addValue(jaxbDestination, "INPUT1", il.get(1));
-        Ast2JaxbHelper.addValue(jaxbDestination, "INPUT2", il.get(2));
-        Ast2JaxbHelper.addValue(jaxbDestination, "OUTPUT0", ol.get(0));
-        Ast2JaxbHelper.addValue(jaxbDestination, "OUTPUT1", ol.get(1));
-        Ast2JaxbHelper.addValue(jaxbDestination, "OUTPUT2", ol.get(2));
-        Ast2JaxbHelper.setBasicProperties(this, jaxbDestination);
+        Ast2Jaxb.addValue(jaxbDestination, "INPUT0", this.il.get(0));
+        Ast2Jaxb.addValue(jaxbDestination, "INPUT1", this.il.get(1));
+        Ast2Jaxb.addValue(jaxbDestination, "INPUT2", this.il.get(2));
+        Ast2Jaxb.addValue(jaxbDestination, "OUTPUT0", this.ol.get(0));
+        Ast2Jaxb.addValue(jaxbDestination, "OUTPUT1", this.ol.get(1));
+        Ast2Jaxb.addValue(jaxbDestination, "OUTPUT2", this.ol.get(2));
+        Ast2Jaxb.setBasicProperties(this, jaxbDestination);
         return jaxbDestination;
     }
 

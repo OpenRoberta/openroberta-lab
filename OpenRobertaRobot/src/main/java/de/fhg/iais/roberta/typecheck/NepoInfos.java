@@ -8,7 +8,7 @@ import de.fhg.iais.roberta.typecheck.NepoInfo.Severity;
 /**
  * the summary of all errors or problems of a phrase of the AST. Is stored in the mutable part of the phrase (within a phrase the tree structure is immutable,
  * but attaching infos must be possible at any time, of course.
- * 
+ *
  * @author rbudde
  */
 public class NepoInfos {
@@ -25,7 +25,7 @@ public class NepoInfos {
 
     /**
      * add an info to the list of all info.
-     * 
+     *
      * @param info to be added
      */
     public void addInfo(NepoInfo info) {

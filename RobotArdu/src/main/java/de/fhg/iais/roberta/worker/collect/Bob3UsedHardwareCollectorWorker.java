@@ -10,8 +10,7 @@ import de.fhg.iais.roberta.worker.AbstractUsedHardwareCollectorWorker;
 
 public final class Bob3UsedHardwareCollectorWorker extends AbstractUsedHardwareCollectorWorker {
     @Override
-    protected AbstractCollectorVisitor getVisitor(
-        Project project, ClassToInstanceMap<IProjectBean.IBuilder<?>> beanBuilders) {
+    protected AbstractCollectorVisitor getVisitor(Project project, ClassToInstanceMap<IProjectBean.IBuilder<?>> beanBuilders) {
         return new Bob3UsedHardwareCollectorVisitor(project.getProgramAst().getTree(), beanBuilders);
     }
 }

@@ -294,8 +294,7 @@ public class UserGroupProcessor extends AbstractProcessor {
     }
 
     /**
-     * Checks for a given user if he can own a user group.
-     * Includes a null check.<br/>
+     * Checks for a given user if he can own a user group. Includes a null check.<br/>
      * A user can own a group, if:<br/>
      * - he is not a member of another group <br/>
      * - is associated with a validated email address.
@@ -308,8 +307,7 @@ public class UserGroupProcessor extends AbstractProcessor {
     }
 
     /**
-     * Checks if a given string is a valid name for a user group.
-     * Includes a null check.<br/>
+     * Checks if a given string is a valid name for a user group. Includes a null check.<br/>
      * A valid group name can <b>not</b>:<br/>
      * - be empty, <br/>
      * - start or end with a space <br/>
@@ -326,9 +324,8 @@ public class UserGroupProcessor extends AbstractProcessor {
     }
 
     /**
-     * Checks whether or not the given string is a valid name of any user group member.
-     * Includes a null check.
-     * A string is a valid name of any user group member, if it contains a colon ":", which is otherwise an illegal character for a user name.<br/>
+     * Checks whether or not the given string is a valid name of any user group member. Includes a null check. A string is a valid name of any user group
+     * member, if it contains a colon ":", which is otherwise an illegal character for a user name.<br/>
      * Does <strong>not</strong> check if a user group member with the given name exists or not!
      *
      * @param userAccount The string that shall be checked.

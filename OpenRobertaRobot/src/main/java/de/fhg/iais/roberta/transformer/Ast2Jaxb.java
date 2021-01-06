@@ -27,7 +27,7 @@ import de.fhg.iais.roberta.util.dbc.Assert;
  *
  * @author kcvejoski
  */
-public final class Ast2JaxbHelper {
+public final class Ast2Jaxb {
 
     /**
      * Sets the basic properties(<i>comments and visual state</i>) of a Blockly block. <br>

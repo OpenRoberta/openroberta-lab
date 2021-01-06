@@ -82,6 +82,7 @@ public class Nano33bleCppVisitor extends AbstractCommonArduinoCppVisitor impleme
         return null;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public Void visitLightAction(LightAction<Void> lightAction) {
         if ( !lightAction.getMode().toString().equals(BlocklyConstants.DEFAULT) ) {
@@ -92,7 +93,7 @@ public class Nano33bleCppVisitor extends AbstractCommonArduinoCppVisitor impleme
             String greenName;
             String blueName;
             if ( this.configuration.getRobotName().equals("unowifirev2")
-                && isInternalRgbLed(this.configuration.getConfigurationComponent(lightAction.getPort())) ) {
+                && Nano33bleCppVisitor.isInternalRgbLed(this.configuration.getConfigurationComponent(lightAction.getPort())) ) {
                 redName = "WiFiDrv::analogWrite(25";
                 greenName = "WiFiDrv::analogWrite(26";
                 blueName = "WiFiDrv::analogWrite(27";
@@ -530,7 +531,7 @@ public class Nano33bleCppVisitor extends AbstractCommonArduinoCppVisitor impleme
                     headerFiles.add("#include <SparkFun_LSM6DS3_Breakout/src/SparkFunLSM6DS3.h>");
                     break;
                 case SC.RGBLED:
-                    if ( this.configuration.getRobotName().equals("unowifirev2") && isInternalRgbLed(usedConfigurationBlock) ) {
+                    if ( this.configuration.getRobotName().equals("unowifirev2") && Nano33bleCppVisitor.isInternalRgbLed(usedConfigurationBlock) ) {
                         headerFiles.add("#include <WiFiNINA.h>");
                         headerFiles.add("#include <utility/wifi_drv.h>");
                     }
@@ -625,7 +626,7 @@ public class Nano33bleCppVisitor extends AbstractCommonArduinoCppVisitor impleme
                     nlIndent();
                     break;
                 case SC.RGBLED:
-                    if ( this.configuration.getRobotName().equals("unowifirev2") && isInternalRgbLed(usedConfigurationBlock) ) {
+                    if ( this.configuration.getRobotName().equals("unowifirev2") && Nano33bleCppVisitor.isInternalRgbLed(usedConfigurationBlock) ) {
                         this.sb.append("WiFiDrv::pinMode(25, OUTPUT);");
                         nlIndent();
                         this.sb.append("WiFiDrv::pinMode(26, OUTPUT);");

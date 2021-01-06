@@ -24,7 +24,6 @@ import de.fhg.iais.roberta.syntax.action.communication.BluetoothWaitForConnectio
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
 import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
 import de.fhg.iais.roberta.syntax.action.ev3.ShowPictureAction;
-import de.fhg.iais.roberta.syntax.action.ev3.ShowPictureAction;
 import de.fhg.iais.roberta.syntax.action.light.LightAction;
 import de.fhg.iais.roberta.syntax.action.light.LightStatusAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorGetPowerAction;
@@ -213,7 +212,8 @@ public class Ev3StackMachineVisitor<V> extends AbstractStackMachineVisitor<V> im
         if ( leftMotorRotationDirection != DriveDirection.FOREWARD ) {
             driveDirection = getDriveDirection(driveAction.getDirection() == DriveDirection.FOREWARD);
         }
-        JSONObject o = mk(C.DRIVE_ACTION, driveAction).put(C.DRIVE_DIRECTION, driveDirection).put(C.NAME, "ev3").put(C.SPEED_ONLY, speedOnly).put(C.SET_TIME, false);
+        JSONObject o =
+            mk(C.DRIVE_ACTION, driveAction).put(C.DRIVE_DIRECTION, driveDirection).put(C.NAME, "ev3").put(C.SPEED_ONLY, speedOnly).put(C.SET_TIME, false);
         if ( speedOnly ) {
             return app(o);
         } else {
@@ -232,7 +232,12 @@ public class Ev3StackMachineVisitor<V> extends AbstractStackMachineVisitor<V> im
         if ( leftMotorRotationDirection != DriveDirection.FOREWARD ) {
             turnDirection = getTurnDirection(turnAction.getDirection() == TurnDirection.LEFT);
         }
-        JSONObject o = mk(C.TURN_ACTION, turnAction).put(C.TURN_DIRECTION, turnDirection.toString().toLowerCase()).put(C.NAME, "ev3").put(C.SPEED_ONLY, speedOnly).put(C.SET_TIME, false);
+        JSONObject o =
+            mk(C.TURN_ACTION, turnAction)
+                .put(C.TURN_DIRECTION, turnDirection.toString().toLowerCase())
+                .put(C.NAME, "ev3")
+                .put(C.SPEED_ONLY, speedOnly)
+                .put(C.SET_TIME, false);
         if ( speedOnly ) {
             return app(o);
         } else {
@@ -252,7 +257,8 @@ public class Ev3StackMachineVisitor<V> extends AbstractStackMachineVisitor<V> im
         if ( leftMotorRotationDirection != DriveDirection.FOREWARD ) {
             driveDirection = getDriveDirection(curveAction.getDirection() == DriveDirection.FOREWARD);
         }
-        JSONObject o = mk(C.CURVE_ACTION, curveAction).put(C.DRIVE_DIRECTION, driveDirection).put(C.NAME, "ev3").put(C.SPEED_ONLY, speedOnly).put(C.SET_TIME, false);
+        JSONObject o =
+            mk(C.CURVE_ACTION, curveAction).put(C.DRIVE_DIRECTION, driveDirection).put(C.NAME, "ev3").put(C.SPEED_ONLY, speedOnly).put(C.SET_TIME, false);
         if ( speedOnly ) {
             return app(o);
         } else {

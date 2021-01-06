@@ -389,7 +389,7 @@ public final class MbedTwo2ThreeTransformerHelper {
         CALLIBOT.put(Pair.of("MOTOR_ON_ACTION", "2"), "CalliBot_rechts");
         CALLIBOT.put(Pair.of("MOTOR_STOP_ACTION", "0"), "CalliBot_links");
         CALLIBOT.put(Pair.of("MOTOR_STOP_ACTION", "2"), "CalliBot_rechts");
-//        CALLIBOT.put(Pair.of("MOTOR_STOP_ACTION", "3"), "robConf_callibot");
+        //        CALLIBOT.put(Pair.of("MOTOR_STOP_ACTION", "3"), "robConf_callibot");
         CALLIBOT.put(Pair.of("ULTRASONIC_SENSING", "2"), "CalliBot_vorne");
     }
 
@@ -426,9 +426,9 @@ public final class MbedTwo2ThreeTransformerHelper {
     }
 
     /**
-     * Generates a {@link ConfigurationComponent} based on the supplied program block information.
-     * Generated components are cached in createdComponents and may be reused if multiple program blocks access the same configuration block.
-     * The type of the configuration block is based on the type of the program block as well as the mode.
+     * Generates a {@link ConfigurationComponent} based on the supplied program block information. Generated components are cached in createdComponents and may
+     * be reused if multiple program blocks access the same configuration block. The type of the configuration block is based on the type of the program block
+     * as well as the mode.
      *
      * @param progBlockType the type of the program block
      * @param mode the mode of the program block
@@ -438,7 +438,10 @@ public final class MbedTwo2ThreeTransformerHelper {
     public Pair<ConfigurationComponent, String> getComponentAndName(String progBlockType, String mode, String port) {
         // Reuse an existing component if able
         String confBlocklyName = PROG_BLOCK_TO_CONF_BLOCKLY_NAME.get(Triple.of(progBlockType, mode, port));
-        Assert.notNull(confBlocklyName, progBlockType + " with mode " + mode + " and port " + port + " does not have an an associated configuration blockly name!");
+        Assert
+            .notNull(
+                confBlocklyName,
+                progBlockType + " with mode " + mode + " and port " + port + " does not have an an associated configuration blockly name!");
         // First check whether the component exists in the default configuration
         ConfigurationComponent confComp = this.createdComps.get(Pair.of(confBlocklyName, "default"));
         // Otherwise check if it has already been generated
@@ -446,7 +449,7 @@ public final class MbedTwo2ThreeTransformerHelper {
 
         if ( confComp == null ) { // Otherwise generate a new one
             confComp = createComponent(confBlocklyName, port);
-            if (confComp.getComponentType().equals("CALLIBOT")) {
+            if ( confComp.getComponentType().equals("CALLIBOT") ) {
                 // Register Callibot as a default component, as it should be found regardless of the port
                 this.createdComps.put(Pair.of(confBlocklyName, "default"), confComp);
             } else {
@@ -454,7 +457,7 @@ public final class MbedTwo2ThreeTransformerHelper {
             }
         }
         String name;
-        if (confComp.getComponentType().equals("CALLIBOT")) {
+        if ( confComp.getComponentType().equals("CALLIBOT") ) {
             name = CALLIBOT.get(Pair.of(progBlockType, port));
         } else {
             name = confComp.getUserDefinedPortName();
@@ -463,9 +466,8 @@ public final class MbedTwo2ThreeTransformerHelper {
     }
 
     /**
-     * Creates an appropriate name based on the port. By default returns the port name itself as the name.
-     * Ports are tracked individually in portNames, multiple usages of a port return a name with a suffix.
-     * Some robot specific name changes are applied for calliope and microbit respectively.
+     * Creates an appropriate name based on the port. By default returns the port name itself as the name. Ports are tracked individually in portNames, multiple
+     * usages of a port return a name with a suffix. Some robot specific name changes are applied for calliope and microbit respectively.
      *
      * @param port the port to generate a name for
      * @param confBlocklyName the associated configuration block name
@@ -503,7 +505,7 @@ public final class MbedTwo2ThreeTransformerHelper {
         String confType = this.dropdownFactory.getConfigurationComponentTypeByBlocklyName(confBlocklyName);
         String name;
         Map<String, String> properties = new HashMap<>();
-        if (confType.equals("CALLIBOT")) {
+        if ( confType.equals("CALLIBOT") ) {
             name = "CalliBot";
             properties.put("MOTOR_L", "CalliBot_links");
             properties.put("MOTOR_R", "CalliBot_rechts");

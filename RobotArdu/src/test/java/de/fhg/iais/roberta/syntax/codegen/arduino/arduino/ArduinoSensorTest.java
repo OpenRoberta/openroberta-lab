@@ -226,7 +226,8 @@ public class ArduinoSensorTest extends ArduinoAstTest {
             .checkGeneratedSourceEqualityWithProgramXml(
                 testFactory,
                 "/ast/sensors/arduino_rfid_test.ino",
-                "/ast/sensors/arduino_rfid_test.xml", configurationAst);
+                "/ast/sensors/arduino_rfid_test.xml",
+                configurationAst);
     }
 
     @Test

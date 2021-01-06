@@ -66,10 +66,10 @@ public class DbcKeyException extends DbcException {
     }
 
     public Key getKey() {
-        return key;
+        return this.key;
     }
 
     public Map<String, Object> getParameter() {
-        return parameter;
+        return this.parameter;
     }
 }

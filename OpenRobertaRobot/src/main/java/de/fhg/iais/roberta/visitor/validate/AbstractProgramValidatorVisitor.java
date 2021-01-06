@@ -1,8 +1,8 @@
 package de.fhg.iais.roberta.visitor.validate;
 
-import com.google.common.collect.ClassToInstanceMap;
-
 import java.util.ArrayList;
+
+import com.google.common.collect.ClassToInstanceMap;
 
 import de.fhg.iais.roberta.bean.IProjectBean;
 import de.fhg.iais.roberta.bean.UsedHardwareBean;
@@ -286,9 +286,9 @@ public abstract class AbstractProgramValidatorVisitor extends AbstractCollectorV
     public Void visitToneAction(ToneAction<Void> toneAction) {
         toneAction.getDuration().accept(this);
         toneAction.getFrequency().accept(this);
-        if (toneAction.getDuration().getKind().hasName("NUM_CONST")) {
+        if ( toneAction.getDuration().getKind().hasName("NUM_CONST") ) {
             Double toneActionConst = Double.valueOf(((NumConst<Void>) toneAction.getDuration()).getValue());
-            if (toneActionConst <= 0) {
+            if ( toneActionConst <= 0 ) {
                 toneAction.addInfo(NepoInfo.warning("BLOCK_NOT_EXECUTED"));
                 this.warningCount++;
             }
@@ -403,8 +403,8 @@ public abstract class AbstractProgramValidatorVisitor extends AbstractCollectorV
         super.visitIfStmt(ifStmt);
         if ( ifStmt.isTernary() ) {
             if ( ifStmt.getExpr().get(0) instanceof EmptyExpr
-                || ((ExprStmt) ifStmt.getElseList().get().get(0)).getExpr() instanceof EmptyExpr
-                || ((ExprStmt) ifStmt.getThenList().get(0).get().get(0)).getExpr() instanceof EmptyExpr ) {
+                || ((ExprStmt<?>) ifStmt.getElseList().get().get(0)).getExpr() instanceof EmptyExpr
+                || ((ExprStmt<?>) ifStmt.getThenList().get(0).get().get(0)).getExpr() instanceof EmptyExpr ) {
                 ifStmt.addInfo(NepoInfo.error("ERROR_MISSING_PARAMETER"));
                 this.errorCount++;
             }

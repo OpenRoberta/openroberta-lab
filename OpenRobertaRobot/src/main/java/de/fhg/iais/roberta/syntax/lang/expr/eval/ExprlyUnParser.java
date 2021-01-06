@@ -12,7 +12,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Stack;
 
-import org.antlr.v4.runtime.ANTLRInputStream;
+import org.antlr.v4.runtime.CharStream;
+import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 
 import de.fhg.iais.roberta.exprly.generated.ExprlyLexer;
@@ -136,7 +137,7 @@ public class ExprlyUnParser<T> {
         }
         for ( ArrayList<Integer> p : pairs ) {
             String test = red.substring(0, p.get(0)) + " " + red.substring(p.get(0) + 1, p.get(1)) + " " + red.substring(p.get(1) + 1, red.length());
-            ExprlyParser parser = mkParser(test);
+            ExprlyParser parser = ExprlyUnParser.mkParser(test);
             parser.removeErrorListeners();
             ExprlyVisitor<T> eval = new ExprlyVisitor<>();
             ExpressionContext expression = parser.expression();
@@ -648,7 +649,7 @@ public class ExprlyUnParser<T> {
      */
     private static ExprlyParser mkParser(String expr) throws UnsupportedEncodingException, IOException {
         InputStream inputStream = new ByteArrayInputStream(expr.getBytes("UTF-8"));
-        ANTLRInputStream input = new ANTLRInputStream(inputStream);
+        CharStream input = CharStreams.fromStream(inputStream);
         ExprlyLexer lexer = new ExprlyLexer(input);
         CommonTokenStream tokens = new CommonTokenStream(lexer);
         ExprlyParser parser = new ExprlyParser(tokens);

@@ -58,8 +58,7 @@ public class ProgramConfigurationCompatabilityTest extends Ev3LejosAstTest {
         builder.setTrackWidth(17f).setWheelDiameter(5.6f).addComponents(Arrays.asList(motorA, motorB, touchSensor, colorSensor, gyroSensor, ultrasonicSensor));
 
         Project.Builder builder1 =
-            UnitTestHelper
-                .setupWithProgramXML(testFactory, Util.readResourceContent("/visitors" + "/program_config_compatibility_gyro_touch_ultra_color.xml"));
+            UnitTestHelper.setupWithProgramXML(testFactory, Util.readResourceContent("/visitors" + "/program_config_compatibility_gyro_touch_ultra_color.xml"));
         builder1.setConfigurationAst(builder.build());
         Ev3BrickValidatorWorker worker = new Ev3BrickValidatorWorker();
         Project project = builder1.build();

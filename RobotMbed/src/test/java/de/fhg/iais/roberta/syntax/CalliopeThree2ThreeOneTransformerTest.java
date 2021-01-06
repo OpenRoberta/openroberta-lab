@@ -1,9 +1,9 @@
 package de.fhg.iais.roberta.syntax;
 
+import java.util.Collections;
+
 import org.junit.BeforeClass;
 import org.junit.Test;
-
-import java.util.Collections;
 
 import de.fhg.iais.roberta.components.Project;
 import de.fhg.iais.roberta.factory.IRobotFactory;

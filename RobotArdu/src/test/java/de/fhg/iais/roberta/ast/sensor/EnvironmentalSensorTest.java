@@ -9,15 +9,16 @@ public class EnvironmentalSensorTest extends AstTest {
 
     @Test
     public void environmentalSensorJaxbToAstTransformation() throws Exception {
-        String a = "BlockAST[project=[[Location[x=38,y=238],"
-                   + "EnvironmentalSensor[E,TEMPERATURE,EMPTY_SLOT],"
-                   + "EnvironmentalSensor[E,HUMIDITY,EMPTY_SLOT],"
-                   + "EnvironmentalSensor[E,PRESSURE,EMPTY_SLOT],"
-                   + "EnvironmentalSensor[E,IAQ,EMPTY_SLOT],"
-                   + "EnvironmentalSensor[E,CALIBRATION,EMPTY_SLOT],"
-                   + "EnvironmentalSensor[E,CO2EQUIVALENT,EMPTY_SLOT],"
-                   + "EnvironmentalSensor[E,VOCEQUIVALENT,EMPTY_SLOT]"
-                   + "]]]";
+        String a =
+            "BlockAST[project=[[Location[x=38,y=238],"
+                + "EnvironmentalSensor[E,TEMPERATURE,EMPTY_SLOT],"
+                + "EnvironmentalSensor[E,HUMIDITY,EMPTY_SLOT],"
+                + "EnvironmentalSensor[E,PRESSURE,EMPTY_SLOT],"
+                + "EnvironmentalSensor[E,IAQ,EMPTY_SLOT],"
+                + "EnvironmentalSensor[E,CALIBRATION,EMPTY_SLOT],"
+                + "EnvironmentalSensor[E,CO2EQUIVALENT,EMPTY_SLOT],"
+                + "EnvironmentalSensor[E,VOCEQUIVALENT,EMPTY_SLOT]"
+                + "]]]";
 
         UnitTestHelper.checkProgramAstEquality(testFactory, a, "/ast/sensors/sensor_environmental.xml");
     }

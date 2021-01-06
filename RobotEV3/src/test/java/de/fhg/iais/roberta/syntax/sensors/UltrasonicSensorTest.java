@@ -13,6 +13,7 @@ public class UltrasonicSensorTest extends Ev3LejosAstTest {
     public void setUltrasonic() throws Exception {
         String a = "\nhal.getUltraSonicSensorDistance(SensorPort.S4)" + "hal.getUltraSonicSensorPresence(SensorPort.S2)}";
 
-        UnitTestHelper.checkWorkers(testFactory, a, "/syntax/sensors/sensor_setUltrasonic.xml", new Ev3UsedHardwareCollectorWorker(), new Ev3JavaGeneratorWorker());
+        UnitTestHelper
+            .checkWorkers(testFactory, a, "/syntax/sensors/sensor_setUltrasonic.xml", new Ev3UsedHardwareCollectorWorker(), new Ev3JavaGeneratorWorker());
     }
 }

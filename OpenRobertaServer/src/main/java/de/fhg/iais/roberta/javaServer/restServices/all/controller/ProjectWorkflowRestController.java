@@ -52,7 +52,7 @@ public class ProjectWorkflowRestController {
         ProjectSourceResponse response = ProjectSourceResponse.make();
         try {
             response.setProgXML(wfRequest.getProgXML()); // always return the program, even if the workflow fails
-            Project project = request2project(wfRequest, httpSessionState, robotCommunicator, true, false);
+            Project project = request2project(wfRequest, httpSessionState, this.robotCommunicator, true, false);
             ProjectService.executeWorkflow("showsource", project);
             // To make this compatible with old frontend we will have to use the old names...
             response.setCmd("showSourceP");
@@ -79,7 +79,7 @@ public class ProjectWorkflowRestController {
             ProjectWorkflowRequest wfRequest = ProjectWorkflowRequest.make(fullRequest.getData());
             ProjectSourceSimulationResponse response = ProjectSourceSimulationResponse.make();
             response.setProgXML(wfRequest.getProgXML()); // always return the program, even if the workflow fails
-            Project project = request2project(wfRequest, httpSessionState, robotCommunicator, true, false);
+            Project project = request2project(wfRequest, httpSessionState, this.robotCommunicator, true, false);
             ProjectService.executeWorkflow("getsimulationcode", project);
             // To make this compatible with old frontend we will have to use the old names...
             response.setCmd("runPSim");
@@ -108,7 +108,7 @@ public class ProjectWorkflowRestController {
             ProjectWorkflowRequest wfRequest = ProjectWorkflowRequest.make(fullRequest.getData());
             ProjectNepoResponse response = ProjectNepoResponse.make();
             response.setProgXML(wfRequest.getProgXML()); // always return the program, even if the workflow fails
-            Project project = request2project(wfRequest, httpSessionState, robotCommunicator, true, false);
+            Project project = request2project(wfRequest, httpSessionState, this.robotCommunicator, true, false);
             ProjectService.executeWorkflow("run", project);
             response.setCmd("runPBack");
             response.setConfAnnos(project.getConfAnnotationList());
@@ -146,7 +146,7 @@ public class ProjectWorkflowRestController {
             ProjectWorkflowRequest wfRequest = ProjectWorkflowRequest.make(fullRequest.getData());
             ProjectNepoResponse response = ProjectNepoResponse.make();
             response.setProgXML(wfRequest.getProgXML()); // always return the program, even if the workflow fails
-            Project project = request2project(wfRequest, httpSessionState, robotCommunicator, true, true);
+            Project project = request2project(wfRequest, httpSessionState, this.robotCommunicator, true, true);
             ProjectService.executeWorkflow("compile", project);
             response.setCmd("compileP");
             response.setProgXML(project.getAnnotatedProgramAsXml());
@@ -172,7 +172,7 @@ public class ProjectWorkflowRestController {
         try {
             ProjectWorkflowRequest wfRequest = ProjectWorkflowRequest.make(fullRequest.getData());
             ProjectNativeResponse response = ProjectNativeResponse.make();
-            Project project = request2project(wfRequest, httpSessionState, robotCommunicator, false, false);
+            Project project = request2project(wfRequest, httpSessionState, this.robotCommunicator, false, false);
             ProjectService.executeWorkflow("runnative", project);
             response.setCmd("runNative");
             response.setErrorCounter(project.getErrorCounter());
@@ -196,7 +196,7 @@ public class ProjectWorkflowRestController {
         try {
             ProjectWorkflowRequest wfRequest = ProjectWorkflowRequest.make(fullRequest.getData());
             ProjectNativeResponse response = ProjectNativeResponse.make();
-            Project project = request2project(wfRequest, httpSessionState, robotCommunicator, false, false);
+            Project project = request2project(wfRequest, httpSessionState, this.robotCommunicator, false, false);
             ProjectService.executeWorkflow("compilenative", project);
             response.setCmd("runNative");
             response.setErrorCounter(project.getErrorCounter());

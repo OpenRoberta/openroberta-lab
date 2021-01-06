@@ -10,8 +10,7 @@ import de.fhg.iais.roberta.worker.AbstractUsedHardwareCollectorWorker;
 
 public final class SenseboxUsedHardwareCollectorWorker extends AbstractUsedHardwareCollectorWorker {
     @Override
-    protected AbstractCollectorVisitor getVisitor(
-        Project project, ClassToInstanceMap<IProjectBean.IBuilder<?>> beanBuilders) {
+    protected AbstractCollectorVisitor getVisitor(Project project, ClassToInstanceMap<IProjectBean.IBuilder<?>> beanBuilders) {
         return new SenseboxUsedHardwareCollectorVisitor(project.getProgramAst().getTree(), beanBuilders);
     }
 }

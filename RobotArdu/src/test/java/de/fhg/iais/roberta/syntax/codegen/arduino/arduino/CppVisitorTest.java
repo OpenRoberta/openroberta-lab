@@ -8,9 +8,7 @@ import de.fhg.iais.roberta.util.test.UnitTestHelper;
 @Ignore //REFACTORING CONFIGURATION MISSING
 public class CppVisitorTest extends ArduinoAstTest {
 
-    private static final String BASIC_INCLUDE =
-        "//ThisfileisautomaticallygeneratedbytheOpenRobertaLab.\n"
-            + "#include<NEPODefs.h>";
+    private static final String BASIC_INCLUDE = "//ThisfileisautomaticallygeneratedbytheOpenRobertaLab.\n" + "#include<NEPODefs.h>";
     private static final String INCLUDE =
         ""
             + "//ThisfileisautomaticallygeneratedbytheOpenRobertaLab.\n"

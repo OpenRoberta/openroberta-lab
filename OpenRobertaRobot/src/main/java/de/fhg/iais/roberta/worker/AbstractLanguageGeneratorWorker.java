@@ -41,8 +41,8 @@ public abstract class AbstractLanguageGeneratorWorker implements IWorker {
     }
 
     /**
-     * Returns the appropriate visitor for this worker. Used by subclasses to keep the execute method generic.
-     * Could be removed in the future, when visitors are specified in the properties as well, or inferred from the worker name.
+     * Returns the appropriate visitor for this worker. Used by subclasses to keep the execute method generic. Could be removed in the future, when visitors are
+     * specified in the properties as well, or inferred from the worker name.
      *
      * @param project the project
      * @param beans a map of available beans, may be empty

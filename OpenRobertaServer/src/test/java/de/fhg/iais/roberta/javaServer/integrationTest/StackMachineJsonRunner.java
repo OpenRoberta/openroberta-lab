@@ -64,9 +64,9 @@ public class StackMachineJsonRunner {
      */
     public boolean run(String programName, String programTextInclResultSpec, String stackmachineCode) throws Exception {
         final String utf8Charset = StandardCharsets.UTF_8.displayName();
-        FileUtils.writeStringToFile(new File(generatedStackmachineProgramsDir + programName + ".json"), stackmachineCode, utf8Charset);
-        FileUtils.writeStringToFile(new File(generatedStackmachineProgramsDir + programName + ".xml"), programTextInclResultSpec, utf8Charset);
-        resultsOfInterpretation = runCommand("node", "../TypeScriptSources/jsGenerated/_main.js", generatedStackmachineProgramsDir, programName);
+        FileUtils.writeStringToFile(new File(this.generatedStackmachineProgramsDir + programName + ".json"), stackmachineCode, utf8Charset);
+        FileUtils.writeStringToFile(new File(this.generatedStackmachineProgramsDir + programName + ".xml"), programTextInclResultSpec, utf8Charset);
+        this.resultsOfInterpretation = runCommand("node", "../TypeScriptSources/jsGenerated/_main.js", this.generatedStackmachineProgramsDir, programName);
         return showAndEvaluateResult();
     }
 
@@ -84,10 +84,10 @@ public class StackMachineJsonRunner {
 
     private boolean showAndEvaluateResult() {
         boolean successForInterpretation = false;
-        if ( resultsOfInterpretation.size() == 0 ) {
+        if ( this.resultsOfInterpretation.size() == 0 ) {
             LOG.error("the node evaluation didn't return result lines: error");
         } else {
-            for ( String line : resultsOfInterpretation ) {
+            for ( String line : this.resultsOfInterpretation ) {
                 if ( line.equals("********** result of interpretation: success **********") ) {
                     successForInterpretation = true;
                 }

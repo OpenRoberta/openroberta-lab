@@ -37,9 +37,9 @@ public class NotificationServiceTest {
 
     @Before
     public void setUp() {
-        adminDir = new File(temporaryFolder.getRoot(), "adminDir");
-        Mockito.doReturn(adminDir.toString()).when(serverProperties).getStringProperty("server.admin.dir");
-        notificationService = new NotificationService(serverProperties);
+        this.adminDir = new File(this.temporaryFolder.getRoot(), "adminDir");
+        Mockito.doReturn(this.adminDir.toString()).when(this.serverProperties).getStringProperty("server.admin.dir");
+        this.notificationService = new NotificationService(this.serverProperties);
     }
 
     @Test
@@ -48,8 +48,8 @@ public class NotificationServiceTest {
         JSONObject notification1 = new JSONObject("{\n" + "  \"handlers\": []\n" + "}");
 
         JSONArray jsonArray = new JSONArray(Arrays.asList(notification0, notification1));
-        notificationService.saveNotifications(jsonArray.toString());
-        JSONArray notificationsArray = notificationService.getNotifications();
+        this.notificationService.saveNotifications(jsonArray.toString());
+        JSONArray notificationsArray = this.notificationService.getNotifications();
         assertThat(notificationsArray).hasSize(2);
         assertThat(notificationsArray.getJSONObject(0)).satisfies(result -> assertThat(result.similar(notification0)).isTrue());
         assertThat(notificationsArray.getJSONObject(1)).satisfies(result -> assertThat(result.similar(notification1)).isTrue());
@@ -58,15 +58,15 @@ public class NotificationServiceTest {
     @Test
     public void testSaveNotifications() {
         JSONArray notifications = new JSONArray("[{\"once\": true, \"name\": \"Calliope\"}]");
-        notificationService.saveNotifications(notifications.toString());
+        this.notificationService.saveNotifications(notifications.toString());
 
-        Path notificationFile = adminDir.toPath().resolve("notifications.json");
+        Path notificationFile = this.adminDir.toPath().resolve("notifications.json");
         assertThat(notificationFile).exists().hasContent(notifications.toString());
     }
 
     @Test
     public void testSaveNotificationsInvalidJsonFormat() {
-        assertThatThrownBy(() -> notificationService.saveNotifications("[{\n" + "  \"triggers\": []\n" + "]"))
+        assertThatThrownBy(() -> this.notificationService.saveNotifications("[{\n" + "  \"triggers\": []\n" + "]"))
             .isInstanceOf(RuntimeException.class)
             .hasMessageContaining("Could not store notifications and update hashed data.");
     }
@@ -74,8 +74,8 @@ public class NotificationServiceTest {
     @Test
     public void testCurrentDigest() throws IOException {
         JSONArray notifications = new JSONArray("[{\"once\": true, \"name\": \"Calliope\"}]");
-        notificationService.saveNotifications(notifications.toString());
-        String currentDigest = notificationService.getCurrentDigest();
+        this.notificationService.saveNotifications(notifications.toString());
+        String currentDigest = this.notificationService.getCurrentDigest();
         assertThat(currentDigest).isEqualTo(NotificationService.digestOfString(notifications.toString()));
     }
 }

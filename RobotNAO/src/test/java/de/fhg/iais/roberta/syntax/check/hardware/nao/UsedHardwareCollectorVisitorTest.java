@@ -25,7 +25,8 @@ public class UsedHardwareCollectorVisitorTest extends NaoAstTest {
         List<List<Phrase<Void>>> phrases = UnitTestHelper.getProgramAst(testFactory, "/hardwarecheck/learnface.xml");
         UsedHardwareBean.Builder builder = new UsedHardwareBean.Builder();
 
-        NaoUsedHardwareCollectorVisitor checkVisitor = new NaoUsedHardwareCollectorVisitor(phrases, makeConfiguration(), ImmutableClassToInstanceMap.of(UsedHardwareBean.Builder.class, builder));
+        NaoUsedHardwareCollectorVisitor checkVisitor =
+            new NaoUsedHardwareCollectorVisitor(phrases, makeConfiguration(), ImmutableClassToInstanceMap.of(UsedHardwareBean.Builder.class, builder));
         for ( List<Phrase<Void>> tree : phrases ) {
             for ( Phrase<Void> phrase : tree ) {
                 phrase.accept(checkVisitor);
@@ -41,7 +42,8 @@ public class UsedHardwareCollectorVisitorTest extends NaoAstTest {
         List<List<Phrase<Void>>> phrases = UnitTestHelper.getProgramAst(testFactory, "/hardwarecheck/forgetface.xml");
         UsedHardwareBean.Builder builder = new UsedHardwareBean.Builder();
 
-        NaoUsedHardwareCollectorVisitor checkVisitor = new NaoUsedHardwareCollectorVisitor(phrases, makeConfiguration(), ImmutableClassToInstanceMap.of(UsedHardwareBean.Builder.class, builder));
+        NaoUsedHardwareCollectorVisitor checkVisitor =
+            new NaoUsedHardwareCollectorVisitor(phrases, makeConfiguration(), ImmutableClassToInstanceMap.of(UsedHardwareBean.Builder.class, builder));
         for ( List<Phrase<Void>> tree : phrases ) {
             for ( Phrase<Void> phrase : tree ) {
                 phrase.accept(checkVisitor);
@@ -57,7 +59,8 @@ public class UsedHardwareCollectorVisitorTest extends NaoAstTest {
         List<List<Phrase<Void>>> phrases = UnitTestHelper.getProgramAst(testFactory, "/hardwarecheck/getnaomarkinfo.xml");
         UsedHardwareBean.Builder builder = new UsedHardwareBean.Builder();
 
-        NaoUsedHardwareCollectorVisitor checkVisitor = new NaoUsedHardwareCollectorVisitor(phrases, makeConfiguration(), ImmutableClassToInstanceMap.of(UsedHardwareBean.Builder.class, builder));
+        NaoUsedHardwareCollectorVisitor checkVisitor =
+            new NaoUsedHardwareCollectorVisitor(phrases, makeConfiguration(), ImmutableClassToInstanceMap.of(UsedHardwareBean.Builder.class, builder));
         for ( List<Phrase<Void>> tree : phrases ) {
             for ( Phrase<Void> phrase : tree ) {
                 phrase.accept(checkVisitor);
@@ -72,7 +75,8 @@ public class UsedHardwareCollectorVisitorTest extends NaoAstTest {
         List<List<Phrase<Void>>> phrases = UnitTestHelper.getProgramAst(testFactory, "/hardwarecheck/detectnaomark.xml");
         UsedHardwareBean.Builder builder = new UsedHardwareBean.Builder();
 
-        NaoUsedHardwareCollectorVisitor checkVisitor = new NaoUsedHardwareCollectorVisitor(phrases, makeConfiguration(), ImmutableClassToInstanceMap.of(UsedHardwareBean.Builder.class, builder));
+        NaoUsedHardwareCollectorVisitor checkVisitor =
+            new NaoUsedHardwareCollectorVisitor(phrases, makeConfiguration(), ImmutableClassToInstanceMap.of(UsedHardwareBean.Builder.class, builder));
         for ( List<Phrase<Void>> tree : phrases ) {
             for ( Phrase<Void> phrase : tree ) {
                 phrase.accept(checkVisitor);
@@ -87,7 +91,8 @@ public class UsedHardwareCollectorVisitorTest extends NaoAstTest {
         List<List<Phrase<Void>>> phrases = UnitTestHelper.getProgramAst(testFactory, "/hardwarecheck/getrecognizedwordfromlist.xml");
         UsedHardwareBean.Builder builder = new UsedHardwareBean.Builder();
 
-        NaoUsedHardwareCollectorVisitor checkVisitor = new NaoUsedHardwareCollectorVisitor(phrases, makeConfiguration(), ImmutableClassToInstanceMap.of(UsedHardwareBean.Builder.class, builder));
+        NaoUsedHardwareCollectorVisitor checkVisitor =
+            new NaoUsedHardwareCollectorVisitor(phrases, makeConfiguration(), ImmutableClassToInstanceMap.of(UsedHardwareBean.Builder.class, builder));
         for ( List<Phrase<Void>> tree : phrases ) {
             for ( Phrase<Void> phrase : tree ) {
                 phrase.accept(checkVisitor);
@@ -102,7 +107,8 @@ public class UsedHardwareCollectorVisitorTest extends NaoAstTest {
         List<List<Phrase<Void>>> phrases = UnitTestHelper.getProgramAst(testFactory, "/hardwarecheck/moveblocks.xml");
         UsedHardwareBean.Builder builder = new UsedHardwareBean.Builder();
 
-        NaoUsedHardwareCollectorVisitor checkVisitor = new NaoUsedHardwareCollectorVisitor(phrases, makeConfiguration(), ImmutableClassToInstanceMap.of(UsedHardwareBean.Builder.class, builder));
+        NaoUsedHardwareCollectorVisitor checkVisitor =
+            new NaoUsedHardwareCollectorVisitor(phrases, makeConfiguration(), ImmutableClassToInstanceMap.of(UsedHardwareBean.Builder.class, builder));
         for ( List<Phrase<Void>> tree : phrases ) {
             for ( Phrase<Void> phrase : tree ) {
                 phrase.accept(checkVisitor);
@@ -117,7 +123,8 @@ public class UsedHardwareCollectorVisitorTest extends NaoAstTest {
         List<List<Phrase<Void>>> phrases = UnitTestHelper.getProgramAst(testFactory, "/hardwarecheck/walkdistance.xml");
         UsedHardwareBean.Builder builder = new UsedHardwareBean.Builder();
 
-        NaoUsedHardwareCollectorVisitor checkVisitor = new NaoUsedHardwareCollectorVisitor(phrases, makeConfiguration(), ImmutableClassToInstanceMap.of(UsedHardwareBean.Builder.class, builder));
+        NaoUsedHardwareCollectorVisitor checkVisitor =
+            new NaoUsedHardwareCollectorVisitor(phrases, makeConfiguration(), ImmutableClassToInstanceMap.of(UsedHardwareBean.Builder.class, builder));
         for ( List<Phrase<Void>> tree : phrases ) {
             for ( Phrase<Void> phrase : tree ) {
                 phrase.accept(checkVisitor);
@@ -132,7 +139,8 @@ public class UsedHardwareCollectorVisitorTest extends NaoAstTest {
         List<List<Phrase<Void>>> phrases = UnitTestHelper.getProgramAst(testFactory, "/hardwarecheck/turnaction.xml");
         UsedHardwareBean.Builder builder = new UsedHardwareBean.Builder();
 
-        NaoUsedHardwareCollectorVisitor checkVisitor = new NaoUsedHardwareCollectorVisitor(phrases, makeConfiguration(), ImmutableClassToInstanceMap.of(UsedHardwareBean.Builder.class, builder));
+        NaoUsedHardwareCollectorVisitor checkVisitor =
+            new NaoUsedHardwareCollectorVisitor(phrases, makeConfiguration(), ImmutableClassToInstanceMap.of(UsedHardwareBean.Builder.class, builder));
         for ( List<Phrase<Void>> tree : phrases ) {
             for ( Phrase<Void> phrase : tree ) {
                 phrase.accept(checkVisitor);
@@ -147,7 +155,8 @@ public class UsedHardwareCollectorVisitorTest extends NaoAstTest {
         List<List<Phrase<Void>>> phrases = UnitTestHelper.getProgramAst(testFactory, "/hardwarecheck/walktoXYTheta1.xml");
         UsedHardwareBean.Builder builder = new UsedHardwareBean.Builder();
 
-        NaoUsedHardwareCollectorVisitor checkVisitor = new NaoUsedHardwareCollectorVisitor(phrases, makeConfiguration(), ImmutableClassToInstanceMap.of(UsedHardwareBean.Builder.class, builder));
+        NaoUsedHardwareCollectorVisitor checkVisitor =
+            new NaoUsedHardwareCollectorVisitor(phrases, makeConfiguration(), ImmutableClassToInstanceMap.of(UsedHardwareBean.Builder.class, builder));
         for ( List<Phrase<Void>> tree : phrases ) {
             for ( Phrase<Void> phrase : tree ) {
                 phrase.accept(checkVisitor);
@@ -162,7 +171,8 @@ public class UsedHardwareCollectorVisitorTest extends NaoAstTest {
         List<List<Phrase<Void>>> phrases = UnitTestHelper.getProgramAst(testFactory, "/hardwarecheck/walktoXYTheta2.xml");
         UsedHardwareBean.Builder builder = new UsedHardwareBean.Builder();
 
-        NaoUsedHardwareCollectorVisitor checkVisitor = new NaoUsedHardwareCollectorVisitor(phrases, makeConfiguration(), ImmutableClassToInstanceMap.of(UsedHardwareBean.Builder.class, builder));
+        NaoUsedHardwareCollectorVisitor checkVisitor =
+            new NaoUsedHardwareCollectorVisitor(phrases, makeConfiguration(), ImmutableClassToInstanceMap.of(UsedHardwareBean.Builder.class, builder));
 
         for ( List<Phrase<Void>> tree : phrases ) {
             for ( Phrase<Void> phrase : tree ) {
@@ -178,7 +188,8 @@ public class UsedHardwareCollectorVisitorTest extends NaoAstTest {
         List<List<Phrase<Void>>> phrases = UnitTestHelper.getProgramAst(testFactory, "/hardwarecheck/walktoXYTheta3.xml");
         UsedHardwareBean.Builder builder = new UsedHardwareBean.Builder();
 
-        NaoUsedHardwareCollectorVisitor checkVisitor = new NaoUsedHardwareCollectorVisitor(phrases, makeConfiguration(), ImmutableClassToInstanceMap.of(UsedHardwareBean.Builder.class, builder));
+        NaoUsedHardwareCollectorVisitor checkVisitor =
+            new NaoUsedHardwareCollectorVisitor(phrases, makeConfiguration(), ImmutableClassToInstanceMap.of(UsedHardwareBean.Builder.class, builder));
         for ( List<Phrase<Void>> tree : phrases ) {
             for ( Phrase<Void> phrase : tree ) {
                 phrase.accept(checkVisitor);

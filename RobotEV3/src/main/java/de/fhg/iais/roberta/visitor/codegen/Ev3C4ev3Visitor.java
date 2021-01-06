@@ -237,7 +237,7 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
         if ( ports.length() == 0 ) {
             return "0"; // TODO: Create unit test case
         }
-        return getMotorPortConstant(ports);
+        return Ev3C4ev3Visitor.getMotorPortConstant(ports);
     }
 
     private void generateTTSInitialization() {
@@ -418,6 +418,9 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
                 break;
             case FOR_EACH:
                 generateForEachPrefix(condition);
+                break;
+            case FOREVER_ARDU:
+                throw new DbcException("FOREVER_ARDU is invalid with ev3");
         }
         incrIndentation();
         repeatStmt.getList().accept(this);
@@ -627,7 +630,7 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
     }
 
     private void generateRotateMotorForDuration(String port, Expr<Void> speedExpression, IMotorMoveMode durationMode, Expr<Void> durationExpression) {
-        this.sb.append("RotateMotorForAngle(" + getPrefixedOutputPort(port) + ", ");
+        this.sb.append("RotateMotorForAngle(" + Ev3C4ev3Visitor.getPrefixedOutputPort(port) + ", ");
         visitSpeedExpression(speedExpression);
         this.sb.append(", ");
         if ( durationMode == MotorMoveMode.ROTATIONS ) {
@@ -639,7 +642,7 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
 
     private void generateTurnOnMotor(String port, Expr<Void> speedExpression, boolean isRegulated) {
         String functionName = isRegulated ? "OnFwdReg" : "OnFwdEx";
-        this.sb.append(functionName + "(" + getPrefixedOutputPort(port) + ", ");
+        this.sb.append(functionName + "(" + Ev3C4ev3Visitor.getPrefixedOutputPort(port) + ", ");
         visitSpeedExpression(speedExpression);
         if ( !isRegulated ) {
             this.sb.append(", RESET_NONE");
@@ -693,7 +696,7 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
     @Override
     public Void visitMotorSetPowerAction(MotorSetPowerAction<Void> motorSetPowerAction) {
         String port = motorSetPowerAction.getUserDefinedPort();
-        this.sb.append("SetPower(" + getPrefixedOutputPort(port) + ", ");
+        this.sb.append("SetPower(" + Ev3C4ev3Visitor.getPrefixedOutputPort(port) + ", ");
         visitSpeedExpression(motorSetPowerAction.getPower(), isMotorReverse(port));
         this.sb.append(");");
         return null;
@@ -703,9 +706,9 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
     public Void visitMotorStopAction(MotorStopAction<Void> motorStopAction) {
         String port = motorStopAction.getUserDefinedPort();
         if ( motorStopAction.getMode() == MotorStopMode.FLOAT ) {
-            this.sb.append("Float(" + getPrefixedOutputPort(port) + ");");
+            this.sb.append("Float(" + Ev3C4ev3Visitor.getPrefixedOutputPort(port) + ");");
         } else {
-            this.sb.append("Off(" + getPrefixedOutputPort(port) + ");");
+            this.sb.append("Off(" + Ev3C4ev3Visitor.getPrefixedOutputPort(port) + ");");
         }
         return null;
     }
@@ -747,9 +750,8 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
     }
 
     /**
-     * Returns whether the port order of the left and right motors needs to be reversed.
-     * This happens in {@link #getDriveMotorPortsConstant()} as the c4ev3 API only accepts the ports via ordered constants.
-     * This method is then used to check whether the order of the left and right (e.g C B - > B C) is reversed.
+     * Returns whether the port order of the left and right motors needs to be reversed. This happens in {@link #getDriveMotorPortsConstant()} as the c4ev3 API
+     * only accepts the ports via ordered constants. This method is then used to check whether the order of the left and right (e.g C B - > B C) is reversed.
      *
      * @return whether the order of the left and right motors is reversed
      */
@@ -763,10 +765,8 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
 
     private int getTurn(TurnAction<Void> turnAction) {
         /**
-         * Turn is from -200 to 200
-         * O: motor run at the same power
-         * 100: one motor run at the specified power the other doesn't
-         * 200: one motor run at the specified power and the other at negative power
+         * Turn is from -200 to 200 O: motor run at the same power 100: one motor run at the specified power the other doesn't 200: one motor run at the
+         * specified power and the other at negative power
          */
         int turn = 200;
         if ( isAnyDriveMotorReverse() ) {
@@ -838,7 +838,7 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
 
     private String getDriveMotorPortsConstant() {
         Pair<String, String> driveMotorPorts = getDriveMotorPorts();
-        return getMotorPortConstant(driveMotorPorts.getFirst() + driveMotorPorts.getSecond());
+        return Ev3C4ev3Visitor.getMotorPortConstant(driveMotorPorts.getFirst() + driveMotorPorts.getSecond());
     }
 
     private static String getMotorPortConstant(String ports) {
@@ -848,11 +848,11 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
     }
 
     private String getLeftDriveMotorPort() {
-        return getPrefixedOutputPort(this.brickConfiguration.getFirstMotor(SC.LEFT).getUserDefinedPortName());
+        return Ev3C4ev3Visitor.getPrefixedOutputPort(this.brickConfiguration.getFirstMotor(SC.LEFT).getUserDefinedPortName());
     }
 
     private String getRightDriveMotorPort() {
-        return getPrefixedOutputPort(this.brickConfiguration.getFirstMotor(SC.RIGHT).getUserDefinedPortName());
+        return Ev3C4ev3Visitor.getPrefixedOutputPort(this.brickConfiguration.getFirstMotor(SC.RIGHT).getUserDefinedPortName());
     }
 
     private boolean isReverseGivenBrickConfigurationAndAction(IDriveDirection direction) {
@@ -890,7 +890,7 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
     }
 
     private void generateGetEncoderInDegrees(String port) {
-        this.sb.append("MotorRotationCount(" + getPrefixedOutputPort(port) + ")");
+        this.sb.append("MotorRotationCount(" + Ev3C4ev3Visitor.getPrefixedOutputPort(port) + ")");
     }
 
     private void generateGetEncoderInRotations(String port) {
@@ -906,7 +906,7 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
     }
 
     private void generateResetEncoder(String port) {
-        this.sb.append("ResetRotationCount(" + getPrefixedOutputPort(port) + ");");
+        this.sb.append("ResetRotationCount(" + Ev3C4ev3Visitor.getPrefixedOutputPort(port) + ");");
     }
 
     @Override
@@ -936,7 +936,7 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
 
     @Override
     public Void visitTouchSensor(TouchSensor<Void> touchSensor) {
-        this.sb.append("ReadEV3TouchSensor(").append(getPrefixedInputPort(touchSensor.getPort())).append(")");
+        this.sb.append("ReadEV3TouchSensor(").append(Ev3C4ev3Visitor.getPrefixedInputPort(touchSensor.getPort())).append(")");
         return null;
     }
 
@@ -952,16 +952,16 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
     }
 
     private void generateRealUltrasonicDistance(String port) {
-        this.sb.append("ReadEV3UltrasonicSensorDistance(").append(getPrefixedInputPort(port)).append(", CM)");
+        this.sb.append("ReadEV3UltrasonicSensorDistance(").append(Ev3C4ev3Visitor.getPrefixedInputPort(port)).append(", CM)");
     }
 
     private void generateRealUltrasonicPresence(String port) {
-        this.sb.append("ReadEV3UltrasonicSensorListen(").append(getPrefixedInputPort(port)).append(")");
+        this.sb.append("ReadEV3UltrasonicSensorListen(").append(Ev3C4ev3Visitor.getPrefixedInputPort(port)).append(")");
     }
 
     @Override
     public Void visitSoundSensor(SoundSensor<Void> soundSensor) {
-        this.sb.append("ReadNXTSoundSensor(").append(getPrefixedInputPort(soundSensor.getPort())).append(", DB)");
+        this.sb.append("ReadNXTSoundSensor(").append(Ev3C4ev3Visitor.getPrefixedInputPort(soundSensor.getPort())).append(", DB)");
         return null;
     }
 
@@ -978,11 +978,16 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
     }
 
     private void generateResetGyroSensor(String port) {
-        this.sb.append("NEPOResetEV3GyroSensor(" + getPrefixedInputPort(port) + ");");
+        this.sb.append("NEPOResetEV3GyroSensor(" + Ev3C4ev3Visitor.getPrefixedInputPort(port) + ");");
     }
 
     private void generateReadGyro(String port, String mode) {
-        this.sb.append("ReadEV3GyroSensor(").append(getPrefixedInputPort(port)).append(", ").append(getGyroSensorReadModeConstant(mode)).append(")");
+        this.sb
+            .append("ReadEV3GyroSensor(")
+            .append(Ev3C4ev3Visitor.getPrefixedInputPort(port))
+            .append(", ")
+            .append(getGyroSensorReadModeConstant(mode))
+            .append(")");
     }
 
     private String getGyroSensorReadModeConstant(String mode) {
@@ -996,7 +1001,7 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
     @Override
     public Void visitColorSensor(ColorSensor<Void> colorSensor) {
         String mode = colorSensor.getMode();
-        String port = getPrefixedInputPort(colorSensor.getPort());
+        String port = Ev3C4ev3Visitor.getPrefixedInputPort(colorSensor.getPort());
         switch ( mode ) {
             case SC.COLOUR:
                 this.sb.append("ReadEV3ColorSensor(").append(port).append(")");
@@ -1017,7 +1022,7 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
     @Override
     public Void visitHTColorSensor(HTColorSensor<Void> htColorSensor) {
         String mode = htColorSensor.getMode();
-        String port = getPrefixedInputPort(htColorSensor.getPort());
+        String port = Ev3C4ev3Visitor.getPrefixedInputPort(htColorSensor.getPort());
         String functionName;
         switch ( mode ) {
             case SC.COLOUR:
@@ -1056,11 +1061,11 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
     }
 
     private void generateEV3IRDistance(String port) {
-        this.sb.append("ReadEV3IrSensorProximity(").append(getPrefixedInputPort(port)).append(")");
+        this.sb.append("ReadEV3IrSensorProximity(").append(Ev3C4ev3Visitor.getPrefixedInputPort(port)).append(")");
     }
 
     private void generateEV3IRSeeker(String port) {
-        this.sb.append("_ReadIRSeekAllChannels(" + getPrefixedInputPort(port) + ")");
+        this.sb.append("_ReadIRSeekAllChannels(" + Ev3C4ev3Visitor.getPrefixedInputPort(port) + ")");
     }
 
     @Override
@@ -1075,7 +1080,7 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
     }
 
     private void visitCalibrateCompass(CompassSensor<Void> compassSensor) {
-        String port = getPrefixedInputPort(compassSensor.getPort());
+        String port = Ev3C4ev3Visitor.getPrefixedInputPort(compassSensor.getPort());
         nlIndent();
         this.sb.append("StartHTCompassCalibration(" + port + ");");
         this.sb.append("Wait(40000);");
@@ -1085,7 +1090,7 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
 
     private void visitReadCompass(CompassSensor<Void> compassSensor) {
         String mode = getCompassSensorReadModeConstant(compassSensor.getMode());
-        this.sb.append("ReadHTCompassSensor(" + getPrefixedInputPort(compassSensor.getPort()) + ", " + mode + ")");
+        this.sb.append("ReadHTCompassSensor(" + Ev3C4ev3Visitor.getPrefixedInputPort(compassSensor.getPort()) + ", " + mode + ")");
     }
 
     private String getCompassSensorReadModeConstant(String mode) {
@@ -1103,7 +1108,7 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
     public Void visitIRSeekerSensor(IRSeekerSensor<Void> irSeekerSensor) {
         this.sb
             .append("ReadHTIrSensor(")
-            .append(getPrefixedInputPort(irSeekerSensor.getPort()))
+            .append(Ev3C4ev3Visitor.getPrefixedInputPort(irSeekerSensor.getPort()))
             .append(", ")
             .append(getIRSeekerSensorConstantMode(irSeekerSensor.getMode()))
             .append(")");
@@ -1122,11 +1127,11 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
     }
 
     private void generateReadSensorInMode(String port, String mode) {
-        this.sb.append("ReadSensorInMode(" + getPrefixedInputPort(port) + ", " + mode + ")");
+        this.sb.append("ReadSensorInMode(" + Ev3C4ev3Visitor.getPrefixedInputPort(port) + ", " + mode + ")");
     }
 
     private void generateReadSensor(String port) {
-        this.sb.append("readSensor(" + getPrefixedInputPort(port) + ")");
+        this.sb.append("readSensor(" + Ev3C4ev3Visitor.getPrefixedInputPort(port) + ")");
     }
 
     @Override

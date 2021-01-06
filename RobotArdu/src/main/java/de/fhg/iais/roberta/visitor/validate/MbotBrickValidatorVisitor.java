@@ -105,7 +105,7 @@ public final class MbotBrickValidatorVisitor extends AbstractBrickValidatorVisit
 
     @Override
     public Void visitFlameSensor(FlameSensor<Void> flameSensor) {
-        // TODO checkSensorPort(flameSensor);       
+        // TODO checkSensorPort(flameSensor);
         return null;
     }
 

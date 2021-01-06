@@ -13,7 +13,8 @@ import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.Action;
 import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
-import de.fhg.iais.roberta.transformer.Ast2JaxbHelper;
+import de.fhg.iais.roberta.transformer.Ast2Jaxb;
+import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.IVisitor;
 import de.fhg.iais.roberta.visitor.hardware.INaoVisitor;
@@ -71,12 +72,12 @@ public final class SetStiffness<V> extends Action<V> {
      * @return corresponding AST object
      */
     public static <V> Phrase<V> jaxbToAst(Block block, AbstractJaxb2Ast<V> helper) {
-        List<Field> fields = helper.extractFields(block, (short) 2);
+        List<Field> fields = Jaxb2Ast.extractFields(block, (short) 2);
 
-        String bodyPart = helper.extractField(fields, BlocklyConstants.PART);
-        String onOff = helper.extractField(fields, BlocklyConstants.MODE);
+        String bodyPart = Jaxb2Ast.extractField(fields, BlocklyConstants.PART);
+        String onOff = Jaxb2Ast.extractField(fields, BlocklyConstants.MODE);
 
-        return SetStiffness.make(BodyPart.get(bodyPart), WorkingState.get(onOff), helper.extractBlockProperties(block), helper.extractComment(block));
+        return SetStiffness.make(BodyPart.get(bodyPart), WorkingState.get(onOff), Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
     }
 
     @Override
@@ -87,10 +88,10 @@ public final class SetStiffness<V> extends Action<V> {
     @Override
     public Block astToBlock() {
         Block jaxbDestination = new Block();
-        Ast2JaxbHelper.setBasicProperties(this, jaxbDestination);
+        Ast2Jaxb.setBasicProperties(this, jaxbDestination);
 
-        Ast2JaxbHelper.addField(jaxbDestination, BlocklyConstants.PART, this.bodyPart.toString());
-        Ast2JaxbHelper.addField(jaxbDestination, BlocklyConstants.MODE, this.onOff.toString());
+        Ast2Jaxb.addField(jaxbDestination, BlocklyConstants.PART, this.bodyPart.toString());
+        Ast2Jaxb.addField(jaxbDestination, BlocklyConstants.MODE, this.onOff.toString());
 
         return jaxbDestination;
     }

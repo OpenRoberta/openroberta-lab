@@ -112,9 +112,9 @@ public class PluginProperties {
     private String getOs() {
         if ( SystemUtils.IS_OS_WINDOWS ) {
             return "windows";
-        } else if(SystemUtils.IS_OS_LINUX) {
+        } else if ( SystemUtils.IS_OS_LINUX ) {
             return "linux";
-        } else if(SystemUtils.IS_OS_MAC_OSX) {
+        } else if ( SystemUtils.IS_OS_MAC_OSX ) {
             return "osx";
         } else {
             throw new DbcException("OS not supported/implemented!");

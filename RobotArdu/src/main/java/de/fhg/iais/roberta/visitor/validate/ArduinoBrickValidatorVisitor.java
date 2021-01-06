@@ -81,7 +81,7 @@ public final class ArduinoBrickValidatorVisitor extends AbstractBrickValidatorVi
 
     @Override
     public Void visitRfidSensor(RfidSensor<Void> rfidSensor) {
-        if (!robotConfiguration.getRobotName().equals("unowifirev2")) { // TODO remove once rfid library is supported for unowifirev2
+        if ( !this.robotConfiguration.getRobotName().equals("unowifirev2") ) { // TODO remove once rfid library is supported for unowifirev2
             checkSensorPort(rfidSensor);
         } else {
             rfidSensor.addInfo(NepoInfo.warning("BLOCK_NOT_SUPPORTED"));

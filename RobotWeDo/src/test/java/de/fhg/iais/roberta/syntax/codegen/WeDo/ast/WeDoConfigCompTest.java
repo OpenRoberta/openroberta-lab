@@ -1,4 +1,5 @@
 package de.fhg.iais.roberta.syntax.codegen.WeDo.ast;
+
 import org.junit.Test;
 
 import de.fhg.iais.roberta.ast.AstTest;
@@ -7,7 +8,8 @@ import de.fhg.iais.roberta.util.test.UnitTestHelper;
 public class WeDoConfigCompTest extends AstTest {
     @Test
     public void WeDoBrick_make_ByDefault_ReturnInstanceOfConfigurationComponentClass() {
-        String expectedResult = "BlockAST [project=[ConfigurationComponent[componentType=WEDO,isActor=true,userDefinedName=W,portName=null,componentProperties={}]]]";
+        String expectedResult =
+            "BlockAST [project=[ConfigurationComponent[componentType=WEDO,isActor=true,userDefinedName=W,portName=null,componentProperties={}]]]";
         UnitTestHelper.checkConfigAstEquality(testFactory, expectedResult, "/ast/config/robBrick_WeDo-Brick.xml");
     }
 

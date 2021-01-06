@@ -11,6 +11,7 @@ public class ColorSensorTest extends NxtAstTest {
     public void setColor() throws Exception {
         String a = "SensorColor(S3,\"COLOUR\")SensorColor(S1,\"LIGHT\")SensorColor(S4,\"AMBIENTLIGHT\")";
 
-        UnitTestHelper.checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, a, "/ast/sensors/sensor_setColor.xml", brickConfigurationC1C3C4, false);
+        UnitTestHelper
+            .checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, a, "/ast/sensors/sensor_setColor.xml", brickConfigurationC1C3C4, false);
     }
 }

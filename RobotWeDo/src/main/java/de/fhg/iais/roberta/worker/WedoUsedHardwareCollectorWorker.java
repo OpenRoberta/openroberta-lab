@@ -9,8 +9,7 @@ import de.fhg.iais.roberta.visitor.validate.AbstractCollectorVisitor;
 
 public final class WedoUsedHardwareCollectorWorker extends AbstractUsedHardwareCollectorWorker {
     @Override
-    protected AbstractCollectorVisitor getVisitor(
-        Project project, ClassToInstanceMap<IProjectBean.IBuilder<?>> beanBuilders) {
+    protected AbstractCollectorVisitor getVisitor(Project project, ClassToInstanceMap<IProjectBean.IBuilder<?>> beanBuilders) {
         return new WedoUsedHardwareCollectorVisitor(project.getConfigurationAst(), beanBuilders);
     }
 }

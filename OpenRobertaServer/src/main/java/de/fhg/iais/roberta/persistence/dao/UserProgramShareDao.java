@@ -14,8 +14,8 @@ import de.fhg.iais.roberta.persistence.util.DbSession;
 import de.fhg.iais.roberta.util.dbc.Assert;
 
 /**
- * DAO class to load and store share information between users and programs. A DAO object is always bound to a session.
- * This session defines the transactional context, in which the database access takes place.
+ * DAO class to load and store share information between users and programs. A DAO object is always bound to a session. This session defines the transactional
+ * context, in which the database access takes place.
  */
 public class UserProgramShareDao extends AbstractDao<UserProgramShare> {
     /**
@@ -67,8 +67,7 @@ public class UserProgramShareDao extends AbstractDao<UserProgramShare> {
 
     /**
      * Load a share object of program with a user from the database, identified by user and program. It is always assumed, that only one share object is allowed
-     * for every pair
-     * user/program
+     * for every pair user/program
      *
      * @param user the user whose access rights are loaded
      * @param program the program affected

@@ -15,13 +15,15 @@ public class CompassSensorTest extends Ev3LejosAstTest {
             "hal.drawText(String.valueOf(hal.getHiTecCompassAngle(SensorPort.S1)), 0, 0);"
                 + "hal.drawText(String.valueOf(hal.getHiTecCompassCompass(SensorPort.S1)), 0, 0);}";
 
-        UnitTestHelper.checkWorkers(testFactory, a, "/syntax/sensors/sensor_getCompass.xml", new Ev3UsedHardwareCollectorWorker(), new Ev3JavaGeneratorWorker());
+        UnitTestHelper
+            .checkWorkers(testFactory, a, "/syntax/sensors/sensor_getCompass.xml", new Ev3UsedHardwareCollectorWorker(), new Ev3JavaGeneratorWorker());
     }
 
     @Test
     public void calibrateCompass() throws Exception {
         String a = "hal.hiTecCompassStartCalibration(SensorPort.S1);" + "hal.waitFor(40000);" + "hal.hiTecCompassStopCalibration(SensorPort.S1);}";
 
-        UnitTestHelper.checkWorkers(testFactory, a, "/syntax/sensors/sensor_calibrateCompass.xml", new Ev3UsedHardwareCollectorWorker(), new Ev3JavaGeneratorWorker());
+        UnitTestHelper
+            .checkWorkers(testFactory, a, "/syntax/sensors/sensor_calibrateCompass.xml", new Ev3UsedHardwareCollectorWorker(), new Ev3JavaGeneratorWorker());
     }
 }

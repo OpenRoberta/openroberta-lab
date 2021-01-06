@@ -10,7 +10,7 @@ import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.lang.expr.Assoc;
 import de.fhg.iais.roberta.syntax.lang.expr.Binary;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
-import de.fhg.iais.roberta.transformer.Ast2JaxbHelper;
+import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.IVisitor;
@@ -90,11 +90,11 @@ public class MathPowerFunct<V> extends Expr<V> {
     @Override
     public Block astToBlock() {
         Block jaxbDestination = new Block();
-        Ast2JaxbHelper.setBasicProperties(this, jaxbDestination);
+        Ast2Jaxb.setBasicProperties(this, jaxbDestination);
 
-        Ast2JaxbHelper.addField(jaxbDestination, BlocklyConstants.OP, getFunctName().name());
-        Ast2JaxbHelper.addValue(jaxbDestination, BlocklyConstants.A, getParam().get(0));
-        Ast2JaxbHelper.addValue(jaxbDestination, BlocklyConstants.B, getParam().get(1));
+        Ast2Jaxb.addField(jaxbDestination, BlocklyConstants.OP, getFunctName().name());
+        Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.A, getParam().get(0));
+        Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.B, getParam().get(1));
         return jaxbDestination;
     }
 }

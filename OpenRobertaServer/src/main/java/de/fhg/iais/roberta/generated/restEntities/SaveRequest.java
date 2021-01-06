@@ -4,11 +4,13 @@
  * when the maven plugin is re-executed for any reasons.
  */
 package de.fhg.iais.roberta.generated.restEntities;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
- * the request description for the /save REST request<br><br>
+ * the request description for the /save REST request<br>
+ * <br>
  * Version: 1<br>
  * Datum: 2020-06-15
  */
@@ -19,14 +21,14 @@ public class SaveRequest extends BaseRequest {
     protected String configName;
     protected String confXML;
     protected String ownerAccount;
-    
+
     /**
      * the request description for the /save REST request
      */
     public static SaveRequest make() {
         return new SaveRequest();
     }
-    
+
     /**
      * the request description for the /save REST request
      */
@@ -34,15 +36,22 @@ public class SaveRequest extends BaseRequest {
         try {
             JSONObject jsonO = new JSONObject(jsonS);
             return make(jsonO);
-        } catch (JSONException e) {
+        } catch ( JSONException e ) {
             throw new RuntimeException("JSON parse error when parsing: " + jsonS, e);
         }
     }
-    
+
     /**
      * the request description for the /save REST request
      */
-    public static SaveRequest makeFromProperties(String cmd,Long timestamp,String programName,String progXML,String configName,String confXML,String ownerAccount) {
+    public static SaveRequest makeFromProperties(
+        String cmd,
+        Long timestamp,
+        String programName,
+        String progXML,
+        String configName,
+        String confXML,
+        String ownerAccount) {
         SaveRequest entity = new SaveRequest();
         entity.setCmd(cmd);
         entity.setTimestamp(timestamp);
@@ -54,60 +63,62 @@ public class SaveRequest extends BaseRequest {
         entity.immutable();
         return entity;
     }
-    
+
     /**
      * the request description for the /save REST request
      */
     public static SaveRequest make(JSONObject jsonO) {
         return make().merge(jsonO).immutable();
     }
-    
+
     /**
-     * merge the properties of a JSON-object into this bean. The bean must be "under construction".
-     * The keys of the JSON-Object must be valid. The bean remains "under construction".<br>
+     * merge the properties of a JSON-object into this bean. The bean must be "under construction". The keys of the JSON-Object must be valid. The bean remains
+     * "under construction".<br>
      * Throws a runtime exception if inconsistencies are detected.
      */
+    @Override
     public SaveRequest merge(JSONObject jsonO) {
         try {
-            for (String key : JSONObject.getNames(jsonO)) {
-                if ("_version".equals(key)) {
-                } else if ("cmd".equals(key)) {
+            for ( String key : JSONObject.getNames(jsonO) ) {
+                if ( "_version".equals(key) ) {
+                } else if ( "cmd".equals(key) ) {
                     setCmd(jsonO.optString(key));
-                } else if ("timestamp".equals(key)) {
+                } else if ( "timestamp".equals(key) ) {
                     setTimestamp(jsonO.optLong(key));
-                } else if ("programName".equals(key)) {
+                } else if ( "programName".equals(key) ) {
                     setProgramName(jsonO.getString(key));
-                } else if ("progXML".equals(key)) {
+                } else if ( "progXML".equals(key) ) {
                     setProgXML(jsonO.getString(key));
-                } else if ("configName".equals(key)) {
+                } else if ( "configName".equals(key) ) {
                     setConfigName(jsonO.optString(key));
-                } else if ("confXML".equals(key)) {
+                } else if ( "confXML".equals(key) ) {
                     setConfXML(jsonO.optString(key));
-                } else if ("ownerAccount".equals(key)) {
+                } else if ( "ownerAccount".equals(key) ) {
                     setOwnerAccount(jsonO.optString(key));
                 } else {
                     throw new RuntimeException("JSON parse error. Found invalid key: " + key + " in " + jsonO);
                 }
             }
             return this;
-        } catch (Exception e) {
+        } catch ( Exception e ) {
             throw new RuntimeException("JSON parse / casting error when parsing: " + jsonO, e);
         }
     }
-    
+
     /**
      * moves a bean from state "under construction" to state "immutable".<br>
      * Checks whether all required fields are set. All lists are made immutable.<br>
      * Throws a runtime exception if inconsistencies are detected.
      */
+    @Override
     public SaveRequest immutable() {
-        if (this.immutable) {
+        if ( this.immutable ) {
             return this;
         }
         this.immutable = true;
         return validate();
     }
-    
+
     /**
      * Checks whether all required fields are set.<br>
      * Throws a runtime exception if inconsistencies are detected.
@@ -117,10 +128,10 @@ public class SaveRequest extends BaseRequest {
         if ( !this.immutable ) {
             _message = "SaveRequest-object is already immutable: " + toString();
         }
-        if ( programName == null) {
+        if ( this.programName == null ) {
             _message = "required property programName of SaveRequest-object is not set: " + toString();
         }
-        if ( progXML == null) {
+        if ( this.progXML == null ) {
             _message = "required property progXML of SaveRequest-object is not set: " + toString();
         }
         if ( _message != null ) {
@@ -129,17 +140,17 @@ public class SaveRequest extends BaseRequest {
         }
         return this;
     }
-    
+
     /**
      * GET timestamp. Object must be immutable. Never return null or an undefined/default value.
      */
     public Long getTimestamp() {
-        if (!this.immutable) {
+        if ( !this.immutable ) {
             throw new RuntimeException("no timestamp from an object under construction: " + toString());
         }
         return this.timestamp;
     }
-    
+
     /**
      * is the property defined? The property maybe undefined as it is not a required property
      *
@@ -148,70 +159,70 @@ public class SaveRequest extends BaseRequest {
     public boolean timestampDefined() {
         return this.timestamp != null;
     }
-    
+
     /**
      * SET timestamp. Object must be mutable.
      */
     public SaveRequest setTimestamp(Long timestamp) {
-        if (this.immutable) {
+        if ( this.immutable ) {
             throw new RuntimeException("timestamp assigned to an immutable object: " + toString());
         }
         this.timestamp = timestamp;
         return this;
     }
-    
+
     /**
      * GET programName. Object must be immutable. Never return null or an undefined/default value.
      */
     public String getProgramName() {
-        if (!this.immutable) {
+        if ( !this.immutable ) {
             throw new RuntimeException("no programName from an object under construction: " + toString());
         }
         return this.programName;
     }
-    
+
     /**
      * SET programName. Object must be mutable.
      */
     public SaveRequest setProgramName(String programName) {
-        if (this.immutable) {
+        if ( this.immutable ) {
             throw new RuntimeException("programName assigned to an immutable object: " + toString());
         }
         this.programName = programName;
         return this;
     }
-    
+
     /**
      * GET progXML. Object must be immutable. Never return null or an undefined/default value.
      */
     public String getProgXML() {
-        if (!this.immutable) {
+        if ( !this.immutable ) {
             throw new RuntimeException("no progXML from an object under construction: " + toString());
         }
         return this.progXML;
     }
-    
+
     /**
      * SET progXML. Object must be mutable.
      */
     public SaveRequest setProgXML(String progXML) {
-        if (this.immutable) {
+        if ( this.immutable ) {
             throw new RuntimeException("progXML assigned to an immutable object: " + toString());
         }
         this.progXML = progXML;
         return this;
     }
-    
+
     /**
      * GET configName. Object must be immutable. Never return null or an undefined/default value.
      */
     public String getConfigName() {
-        if (!this.immutable) {
+        if ( !this.immutable ) {
             throw new RuntimeException("no configName from an object under construction: " + toString());
         }
         return this.configName;
     }
-    
+
     /**
      * is the property defined? The property maybe undefined as it is not a required property
      *
@@ -220,28 +231,28 @@ public class SaveRequest extends BaseRequest {
     public boolean configNameDefined() {
         return this.configName != null;
     }
-    
+
     /**
      * SET configName. Object must be mutable.
      */
     public SaveRequest setConfigName(String configName) {
-        if (this.immutable) {
+        if ( this.immutable ) {
             throw new RuntimeException("configName assigned to an immutable object: " + toString());
         }
         this.configName = configName;
         return this;
     }
-    
+
     /**
      * GET confXML. Object must be immutable. Never return null or an undefined/default value.
      */
     public String getConfXML() {
-        if (!this.immutable) {
+        if ( !this.immutable ) {
             throw new RuntimeException("no confXML from an object under construction: " + toString());
         }
         return this.confXML;
     }
-    
+
     /**
      * is the property defined? The property maybe undefined as it is not a required property
      *
@@ -250,28 +261,28 @@ public class SaveRequest extends BaseRequest {
     public boolean confXMLDefined() {
         return this.confXML != null;
     }
-    
+
     /**
      * SET confXML. Object must be mutable.
      */
     public SaveRequest setConfXML(String confXML) {
-        if (this.immutable) {
+        if ( this.immutable ) {
             throw new RuntimeException("confXML assigned to an immutable object: " + toString());
         }
         this.confXML = confXML;
         return this;
     }
-    
+
     /**
      * GET ownerAccount. Object must be immutable. Never return null or an undefined/default value.
      */
     public String getOwnerAccount() {
-        if (!this.immutable) {
+        if ( !this.immutable ) {
             throw new RuntimeException("no ownerAccount from an object under construction: " + toString());
         }
         return this.ownerAccount;
     }
-    
+
     /**
      * is the property defined? The property maybe undefined as it is not a required property
      *
@@ -280,64 +291,82 @@ public class SaveRequest extends BaseRequest {
     public boolean ownerAccountDefined() {
         return this.ownerAccount != null;
     }
-    
+
     /**
      * SET ownerAccount. Object must be mutable.
      */
     public SaveRequest setOwnerAccount(String ownerAccount) {
-        if (this.immutable) {
+        if ( this.immutable ) {
             throw new RuntimeException("ownerAccount assigned to an immutable object: " + toString());
         }
         this.ownerAccount = ownerAccount;
         return this;
     }
-    
+
     /**
      * generates a JSON-object from an immutable bean.<br>
      * Throws a runtime exception if inconsistencies are detected.
      */
+    @Override
     public JSONObject toJson() {
-        if (!this.immutable) {
+        if ( !this.immutable ) {
             throw new RuntimeException("no JSON from an object under construction: " + toString());
         }
         JSONObject jsonO = new JSONObject();
         try {
             jsonO.put("_version", "1");
-            if (this.cmd != null) {
+            if ( this.cmd != null ) {
                 jsonO.put("cmd", this.cmd);
             }
-            if (this.timestamp != null) {
+            if ( this.timestamp != null ) {
                 jsonO.put("timestamp", this.timestamp);
             }
             jsonO.put("programName", this.programName);
             jsonO.put("progXML", this.progXML);
-            if (this.configName != null) {
+            if ( this.configName != null ) {
                 jsonO.put("configName", this.configName);
             }
-            if (this.confXML != null) {
+            if ( this.confXML != null ) {
                 jsonO.put("confXML", this.confXML);
             }
-            if (this.ownerAccount != null) {
+            if ( this.ownerAccount != null ) {
                 jsonO.put("ownerAccount", this.ownerAccount);
             }
-        } catch (JSONException e) {
+        } catch ( JSONException e ) {
             throw new RuntimeException("JSON unparse error when unparsing: " + this, e);
         }
         return jsonO;
     }
-    
+
     @Override
     public String toString() {
-        return "SaveRequest [immutable=" + this.immutable + ", cmd=" + this.cmd + ", timestamp=" + this.timestamp + ", programName=" + this.programName + ", progXML=" + this.progXML + ", configName=" + this.configName + ", confXML=" + this.confXML + ", ownerAccount=" + this.ownerAccount + " ]";
+        return "SaveRequest [immutable="
+            + this.immutable
+            + ", cmd="
+            + this.cmd
+            + ", timestamp="
+            + this.timestamp
+            + ", programName="
+            + this.programName
+            + ", progXML="
+            + this.progXML
+            + ", configName="
+            + this.configName
+            + ", confXML="
+            + this.confXML
+            + ", ownerAccount="
+            + this.ownerAccount
+            + " ]";
     }
+
     @Override
     public int hashCode() {
         throw new RuntimeException("no hashCode from transport beans!");
     }
-    
+
     @Override
     public boolean equals(Object obj) {
         throw new RuntimeException("no equals from transport beans!");
     }
-    
+
 }

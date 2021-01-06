@@ -53,16 +53,18 @@ public class MbedThree2ThreeOneTransformerVisitor implements IMbedTransformerVis
         // Rewrite previous configuration with updated names
         for ( ConfigurationComponent cc : configuration.getConfigurationComponentsValues() ) {
             if ( NEW_NAMES.containsKey(cc.getComponentType()) ) {
-                builder.addUsedConfigurationComponent(new ConfigurationComponent(
-                    cc.getComponentType(),
-                    cc.isActor(),
-                    NEW_NAMES.get(cc.getComponentType()),
-                    NEW_NAMES.get(cc.getComponentType()),
-                    cc.getComponentProperties(),
-                    cc.getProperty(),
-                    cc.getComment(),
-                    cc.getX(),
-                    cc.getY()));
+                builder
+                    .addUsedConfigurationComponent(
+                        new ConfigurationComponent(
+                            cc.getComponentType(),
+                            cc.isActor(),
+                            NEW_NAMES.get(cc.getComponentType()),
+                            NEW_NAMES.get(cc.getComponentType()),
+                            cc.getComponentProperties(),
+                            cc.getProperty(),
+                            cc.getComment(),
+                            cc.getX(),
+                            cc.getY()));
             } else {
                 builder.addUsedConfigurationComponent(cc);
             }
@@ -174,9 +176,9 @@ public class MbedThree2ThreeOneTransformerVisitor implements IMbedTransformerVis
 
     private String getNewName(String port) {
         ConfigurationComponent confComp = this.configuration.optConfigurationComponent(port);
-        if (confComp != null) {
+        if ( confComp != null ) {
             String newName = NEW_NAMES.get(confComp.getComponentType());
-            if (newName != null) {
+            if ( newName != null ) {
                 return newName;
             } else {
                 return port;

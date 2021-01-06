@@ -29,7 +29,7 @@ public class MethodExpr<V> extends Expr<V> {
      * @return expression with wrapped function inside
      */
     public static <V> MethodExpr<V> make(Method<V> method) {
-        return new MethodExpr<V>(method);
+        return new MethodExpr<>(method);
     }
 
     /**

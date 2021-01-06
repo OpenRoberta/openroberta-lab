@@ -20,9 +20,9 @@ Copyright 2010 Samuel Marshall.
 */
 
 /*
-This class is simplified for the use in the Open Roberta Lab project by Beate Jost. 
-Mainly the whole download implementation is removed due to the fact that an updated 
-IpToCountry.cvs can be supposed. For this an external script (likely a cronjob) is 
+This class is simplified for the use in the Open Roberta Lab project by Beate Jost.
+Mainly the whole download implementation is removed due to the fact that an updated
+IpToCountry.cvs can be supposed. For this an external script (likely a cronjob) is
 taking care of updating the database once a month or maybe more often.
  */
 import java.io.BufferedReader;
@@ -51,26 +51,19 @@ import com.google.inject.Inject;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
 /**
- * Converts IP addresses to country codes using the database available from
- * http://software77.net/geo-ip/
+ * Converts IP addresses to country codes using the database available from http://software77.net/geo-ip/
  * <p>
- * This class loads the database into memory, where it is stored in an efficient
- * format for instant lookups. It is capable of automatically updating the
+ * This class loads the database into memory, where it is stored in an efficient format for instant lookups. It is capable of automatically updating the
  * database on a given time schedule.
  * <p>
- * A disk folder is required to store the latest database version so that it can
- * be loaded initially without requesting it over HTTP. This is important
- * because the list maintainers restrict the number of requests permitted.
+ * A disk folder is required to store the latest database version so that it can be loaded initially without requesting it over HTTP. This is important because
+ * the list maintainers restrict the number of requests permitted.
  * <p>
- * Currently the database has about 100,000 entries. The in-memory
- * representation in this class uses three arrays to store two longs and a
- * pointer to a (reused) string for each entry, so typical memory consumption is
- * about 2MB. It would be possible to nearly halve this by using ints instead of
- * longs to store the numbers, but I haven't bothered as 2MB seems a reasonable
- * overhead for most servers.
+ * Currently the database has about 100,000 entries. The in-memory representation in this class uses three arrays to store two longs and a pointer to a (reused)
+ * string for each entry, so typical memory consumption is about 2MB. It would be possible to nearly halve this by using ints instead of longs to store the
+ * numbers, but I haven't bothered as 2MB seems a reasonable overhead for most servers.
  * <p>
- * For obvious reasons, the memory requirement temporarily doubles while loading
- * a new database version.
+ * For obvious reasons, the memory requirement temporarily doubles while loading a new database version.
  * <p>
  * At present, this class only supports the IP4 database.
  */
@@ -104,20 +97,19 @@ public class IpToCountry implements IIpToCountry {
     }
 
     /**
-     * Interface for use to receive information about IpToCountry processing, such
-     * as errors when downloading the file.
+     * Interface for use to receive information about IpToCountry processing, such as errors when downloading the file.
      */
     public interface Informer {
         /**
          * Called if the file downloads successfully, but cannot be loaded.
-         * 
+         *
          * @param t Exception
          */
         public void loadFailed(Throwable t);
 
         /**
          * Called if a line in the file is not understood.
-         * 
+         *
          * @param errorIndex 0 for first error line, etc
          * @param line Text of line
          */
@@ -125,7 +117,7 @@ public class IpToCountry implements IIpToCountry {
 
         /**
          * Called once a file has been successfully loaded.
-         * 
+         *
          * @param entries Number of entries processed
          * @param milliseconds Time it took to load the file (does not include download)
          * @param lineErrors Number of lines which caused errors
@@ -160,17 +152,17 @@ public class IpToCountry implements IIpToCountry {
 
         @Override
         public void run() {
-            long modified = file.lastModified();
-            if ( fileLastModified < modified ) {
+            long modified = IpToCountry.this.file.lastModified();
+            if ( IpToCountry.this.fileLastModified < modified ) {
                 // although loading might fail, next attempt should not be before normal delay of the scheduler
-                fileLastModified = modified;
+                IpToCountry.this.fileLastModified = modified;
                 try {
-                    loadFile(file);
+                    loadFile(IpToCountry.this.file);
                 } catch ( IOException e ) {
                     LOG.error("IpToCountry: Loaded data file failed: " + e);
                 }
             } else {
-                Date date = new Date(fileLastModified);
+                Date date = new Date(IpToCountry.this.fileLastModified);
                 SimpleDateFormat formatter = new SimpleDateFormat("HH:mm:ss yyyy-MM-dd");
                 formatter.setTimeZone(TimeZone.getTimeZone("Europe/Berlin"));
                 LOG.info("IpToCountry: no update available, db last modified " + formatter.format(date));
@@ -179,12 +171,10 @@ public class IpToCountry implements IIpToCountry {
     }
 
     /**
-     * Initialises the database. The database will be loaded from a stored file in
-     * the given folder. If there is no database present the server will not start.
+     * Initialises the database. The database will be loaded from a stored file in the given folder. If there is no database present the server will not start.
      * <p>
-     * This constructor returns immediately after loading the file from disk (if
-     * present); any update will happen in another thread.
-     * 
+     * This constructor returns immediately after loading the file from disk (if present); any update will happen in another thread.
+     *
      * @param folder Folder for database storage (must be writable)
      * @throws IOException If there is any problem loading the file
      */
@@ -192,9 +182,9 @@ public class IpToCountry implements IIpToCountry {
     public IpToCountry(String folder) throws IOException {
         this.file = new File(folder, FILE_NAME);
         this.informer = new DefaultInformer();
-        this.fileLastModified = file.lastModified();
-        if ( file.exists() && file.canRead() ) {
-            loadFile(file);
+        this.fileLastModified = this.file.lastModified();
+        if ( this.file.exists() && this.file.canRead() ) {
+            loadFile(this.file);
         } else {
             throw new DbcException("IpToCountry.cs could not be found or is not readable. Server does NOT start");
         }
@@ -210,8 +200,7 @@ public class IpToCountry implements IIpToCountry {
     /**
      * Gets the country code for an IP address.
      * <p>
-     * Based on the list documentation, this is the ISO 3166 2-letter code of the
-     * organisation to which the allocation or assignment was made, with the
+     * Based on the list documentation, this is the ISO 3166 2-letter code of the organisation to which the allocation or assignment was made, with the
      * following differences or unusual cases:
      * <ul>
      * <li>AP - non-specific Asia-Pacific location</li>
@@ -224,11 +213,10 @@ public class IpToCountry implements IIpToCountry {
      * <li>ZZ - IETF RESERVED address space.</li>
      * <li>.. - Unmatched address (specific to this system, not in list)</li>
      * </ul>
-     * 
+     *
      * @param address Internet address
      * @return Country code
-     * @throws IllegalArgumentException If the address is an IPv6 address that can't
-     *         be expressed in 4 bytes, or something else
+     * @throws IllegalArgumentException If the address is an IPv6 address that can't be expressed in 4 bytes, or something else
      * @throws IOException
      */
     @Override
@@ -240,7 +228,7 @@ public class IpToCountry implements IIpToCountry {
     /**
      * Get a country code given the arrays which hold the details.
      * <p>
-     * 
+     *
      * @param addressLong Address as long
      * @return Corresponding country code, or .. if not known
      */
@@ -278,12 +266,10 @@ public class IpToCountry implements IIpToCountry {
     }
 
     /**
-     * Given an internet address in network byte order, converts it into an unsigned
-     * long.
+     * Given an internet address in network byte order, converts it into an unsigned long.
      * <p>
-     * This is a separate method with default access so it can be used in unit
-     * testing.
-     * 
+     * This is a separate method with default access so it can be used in unit testing.
+     *
      * @param bytes Bytes
      * @return Long value
      * @throws IllegalArgumentException If there aren't 4 bytes of address
@@ -292,20 +278,18 @@ public class IpToCountry implements IIpToCountry {
         if ( bytes.length != 4 ) {
             throw new IllegalArgumentException("Input must be 4 bytes");
         }
-        int i0 = (int) bytes[0] & 0xff, i1 = (int) bytes[1] & 0xff, i2 = (int) bytes[2] & 0xff, i3 = (int) bytes[3] & 0xff;
-        return (((long) i0) << 24) | (((long) i1) << 16) | (((long) i2) << 8) | ((long) i3);
+        int i0 = bytes[0] & 0xff, i1 = bytes[1] & 0xff, i2 = bytes[2] & 0xff, i3 = bytes[3] & 0xff;
+        return (((long) i0) << 24) | (((long) i1) << 16) | (((long) i2) << 8) | (i3);
     }
 
     /**
      * Converts an {@link InetAddress} into a 4-byte address.
      * <p>
-     * This is a separate method with default access so it can be used in unit
-     * testing.
-     * 
+     * This is a separate method with default access so it can be used in unit testing.
+     *
      * @param address Address
      * @return 4 bytes in network byte order
-     * @throws IllegalArgumentException If the address is an IPv6 address that can't
-     *         be expressed in 4 bytes, or something else
+     * @throws IllegalArgumentException If the address is an IPv6 address that can't be expressed in 4 bytes, or something else
      */
     static byte[] get4ByteAddress(InetAddress address) throws IllegalArgumentException {
         byte[] actual = address.getAddress();
@@ -330,9 +314,8 @@ public class IpToCountry implements IIpToCountry {
     /**
      * Loads the existing file from disk into memory.
      * <p>
-     * This is a separate method with default access so it can be used in unit
-     * testing.
-     * 
+     * This is a separate method with default access so it can be used in unit testing.
+     *
      * @param file File to load
      * @return
      * @throws IOException Any problem loading file
@@ -371,7 +354,7 @@ public class IpToCountry implements IIpToCountry {
                 Matcher m = CSV_LINE.matcher(line);
                 if ( !m.find() ) {
                     // Non-matching line; report as warning, the first time
-                    informer.lineError(lineErrors++, line);
+                    this.informer.lineError(lineErrors++, line);
                     continue;
                 }
 
@@ -419,7 +402,7 @@ public class IpToCountry implements IIpToCountry {
             DBCountry newDBCountry = new DBCountry(newEntryFrom, newEntryTo, newEntryCode);
             this.atomicDBCountry.set(newDBCountry);
             // Tell informer
-            informer.fileLoaded(entries, (int) (getCurrentTime() - start), lineErrors);
+            this.informer.fileLoaded(entries, (int) (getCurrentTime() - start), lineErrors);
         } finally {
             if ( reader != null ) {
                 reader.close();
@@ -430,9 +413,8 @@ public class IpToCountry implements IIpToCountry {
     /**
      * Obtains current time.
      * <p>
-     * This is a separate method with default access so it can be used in unit
-     * testing.
-     * 
+     * This is a separate method with default access so it can be used in unit testing.
+     *
      * @return Current time in milliseconds
      */
     long getCurrentTime() {

@@ -32,9 +32,8 @@ import de.fhg.iais.roberta.syntax.sensor.mbed.RadioRssiSensor;
 import de.fhg.iais.roberta.visitor.hardware.IMbedVisitor;
 
 /**
- * Collector for the Mbed robots.
- * Adds the blocks missing from the defaults of {@link ICollectorVisitor}.
- * Defines the specific parent implementation to use (the one of the collector) due to unrelated defaults.
+ * Collector for the Mbed robots. Adds the blocks missing from the defaults of {@link ICollectorVisitor}. Defines the specific parent implementation to use (the
+ * one of the collector) due to unrelated defaults.
  */
 public interface IMbedCollectorVisitor extends ICollectorVisitor, IMbedVisitor<Void> {
 

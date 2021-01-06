@@ -15,10 +15,9 @@ import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
 /**
- * An AST representation of the old/new configurations.
- * Contains an insertion ordered Map of {@link ConfigurationComponent}s.
- * May have subclasses with hardcoded configurations which can reuse the {@link Builder} using the generic {@link Builder#build(Class)}.
- * TODO this subclassing should be removed and the class declared final once the hardcoded vorwerk configuration is removed
+ * An AST representation of the old/new configurations. Contains an insertion ordered Map of {@link ConfigurationComponent}s. May have subclasses with hardcoded
+ * configurations which can reuse the {@link Builder} using the generic {@link Builder#build(Class)}. TODO this subclassing should be removed and the class
+ * declared final once the hardcoded vorwerk configuration is removed
  */
 public class ConfigurationAst {
     // LinkedHashMap to preserve insertion order of elements. Helps to recreate the same XML output as XML input.
@@ -132,9 +131,8 @@ public class ConfigurationAst {
     }
 
     /**
-     * Returns the configuration component map.
-     * While insertion order is preserved internally, it is unnecessary for code generation and similar tasks.
-     * Here, the insertion ordered {@link LinkedHashMap} is wrapped in a {@link HashMap} to ensure a reproducible order.
+     * Returns the configuration component map. While insertion order is preserved internally, it is unnecessary for code generation and similar tasks. Here,
+     * the insertion ordered {@link LinkedHashMap} is wrapped in a {@link HashMap} to ensure a reproducible order.
      *
      * @return the configuration component map
      */
@@ -147,9 +145,8 @@ public class ConfigurationAst {
     }
 
     /**
-     * Returns the values of the configuration component map.
-     * While insertion order is preserved internally, it is unnecessary for code generation and similar tasks.
-     * Here, the insertion ordered {@link LinkedHashMap} is wrapped in a {@link HashMap} to ensure a reproducible order.
+     * Returns the values of the configuration component map. While insertion order is preserved internally, it is unnecessary for code generation and similar
+     * tasks. Here, the insertion ordered {@link LinkedHashMap} is wrapped in a {@link HashMap} to ensure a reproducible order.
      *
      * @return the values of the configuration component map
      */
@@ -167,9 +164,8 @@ public class ConfigurationAst {
     }
 
     /**
-     * Returns all actors in the configuration component map.
-     * While insertion order is preserved internally, it is unnecessary for code generation and similar tasks.
-     * Here, the insertion ordered {@link LinkedHashMap} is wrapped in a {@link HashMap} to ensure a reproducible order.
+     * Returns all actors in the configuration component map. While insertion order is preserved internally, it is unnecessary for code generation and similar
+     * tasks. Here, the insertion ordered {@link LinkedHashMap} is wrapped in a {@link HashMap} to ensure a reproducible order.
      *
      * @return all actors in the configuration component map
      */
@@ -178,9 +174,8 @@ public class ConfigurationAst {
     }
 
     /**
-     * Returns all sensors in the configuration component map.
-     * While insertion order is preserved internally, it is unnecessary for code generation and similar tasks.
-     * Here, the insertion ordered {@link LinkedHashMap} is wrapped in a {@link HashMap} to ensure a reproducible order.
+     * Returns all sensors in the configuration component map. While insertion order is preserved internally, it is unnecessary for code generation and similar
+     * tasks. Here, the insertion ordered {@link LinkedHashMap} is wrapped in a {@link HashMap} to ensure a reproducible order.
      *
      * @return all sensors in the configuration component map
      */
@@ -349,9 +344,9 @@ public class ConfigurationAst {
         }
 
         /**
-         * Builds the configuration for a potential hardcoded subclass of {@link ConfigurationAst}.
-         * Subclasses of {@link ConfigurationAst} should provide a private constructor matching the constructor arguments of {@link ConfigurationAst}.
-         * TODO should be removed once the hardcoded vorwerk configuration is removed
+         * Builds the configuration for a potential hardcoded subclass of {@link ConfigurationAst}. Subclasses of {@link ConfigurationAst} should provide a
+         * private constructor matching the constructor arguments of {@link ConfigurationAst}. TODO should be removed once the hardcoded vorwerk configuration
+         * is removed
          *
          * @param configAstClass the class of {@link ConfigurationAst} to be built
          * @param <C> the built subtype of {@link ConfigurationAst}

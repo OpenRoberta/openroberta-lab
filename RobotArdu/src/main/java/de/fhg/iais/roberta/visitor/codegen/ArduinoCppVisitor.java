@@ -83,6 +83,7 @@ public final class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor imp
         return null;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public Void visitLightAction(LightAction<Void> lightAction) {
         if ( !lightAction.getMode().toString().equals(BlocklyConstants.DEFAULT) ) {
@@ -93,7 +94,7 @@ public final class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor imp
             String greenName;
             String blueName;
             if ( this.configuration.getRobotName().equals("unowifirev2")
-                && isInternalRgbLed(this.configuration.getConfigurationComponent(lightAction.getPort())) ) {
+                && ArduinoCppVisitor.isInternalRgbLed(this.configuration.getConfigurationComponent(lightAction.getPort())) ) {
                 redName = "WiFiDrv::analogWrite(25";
                 greenName = "WiFiDrv::analogWrite(26";
                 blueName = "WiFiDrv::analogWrite(27";
@@ -120,7 +121,7 @@ public final class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor imp
             }
             channels.forEach((name, v) -> {
                 this.sb.append(name).append(", ");
-                if ( v instanceof Phrase ) {
+                if ( v instanceof Phrase<?> ) {
                     ((Phrase<Void>) v).accept(this);
                 } else {
                     this.sb.append(v);
@@ -529,7 +530,7 @@ public final class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor imp
                     headerFiles.add("#include <SparkFun_LSM6DS3_Breakout/src/SparkFunLSM6DS3.h>");
                     break;
                 case SC.RGBLED:
-                    if ( this.configuration.getRobotName().equals("unowifirev2") && isInternalRgbLed(usedConfigurationBlock) ) {
+                    if ( this.configuration.getRobotName().equals("unowifirev2") && ArduinoCppVisitor.isInternalRgbLed(usedConfigurationBlock) ) {
                         headerFiles.add("#include <WiFiNINA.h>");
                         headerFiles.add("#include <utility/wifi_drv.h>");
                     }
@@ -624,7 +625,7 @@ public final class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor imp
                     nlIndent();
                     break;
                 case SC.RGBLED:
-                    if ( this.configuration.getRobotName().equals("unowifirev2") && isInternalRgbLed(usedConfigurationBlock) ) {
+                    if ( this.configuration.getRobotName().equals("unowifirev2") && ArduinoCppVisitor.isInternalRgbLed(usedConfigurationBlock) ) {
                         this.sb.append("WiFiDrv::pinMode(25, OUTPUT);");
                         nlIndent();
                         this.sb.append("WiFiDrv::pinMode(26, OUTPUT);");

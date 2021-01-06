@@ -5,8 +5,8 @@ import com.google.common.collect.ClassToInstanceMap;
 import de.fhg.iais.roberta.bean.IProjectBean;
 import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.syntax.action.ev3.ShowPictureAction;
-import de.fhg.iais.roberta.syntax.sensor.generic.HTColorSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.HTColorSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.IRSeekerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.SoundSensor;
 import de.fhg.iais.roberta.typecheck.NepoInfo;
@@ -30,7 +30,7 @@ public final class Ev3SimValidatorVisitor extends AbstractSimValidatorVisitor im
         compassSensor.addInfo(NepoInfo.warning("SIM_BLOCK_NOT_SUPPORTED"));
         return null;
     }
-    
+
     @Override
     public Void visitSoundSensor(SoundSensor<Void> soundSensor) {
         soundSensor.addInfo(NepoInfo.warning("SIM_BLOCK_NOT_SUPPORTED"));

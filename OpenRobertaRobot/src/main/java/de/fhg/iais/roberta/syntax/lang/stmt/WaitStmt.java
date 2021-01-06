@@ -16,8 +16,9 @@ import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.lang.stmt.RepeatStmt.Mode;
 import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
-import de.fhg.iais.roberta.transformer.Ast2JaxbHelper;
+import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.ExprParam;
+import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.IVisitor;
@@ -82,13 +83,13 @@ public class WaitStmt<V> extends Stmt<V> {
         int mutat = block.getMutation() == null ? 0 : block.getMutation().getWait().intValue();
         List<Statement> statementss;
         if ( mutat == 0 ) {
-            values = helper.extractValues(block, (short) (mutat + 1));
-            statementss = helper.extractStatements(block, (short) (mutat + 1));
+            values = Jaxb2Ast.extractValues(block, (short) (mutat + 1));
+            statementss = Jaxb2Ast.extractStatements(block, (short) (mutat + 1));
         } else {
             List<Object> valAndStmt = block.getRepetitions().getValueAndStatement();
             values = new ArrayList<>();
             statementss = new ArrayList<>();
-            helper.convertStmtValList(values, statementss, valAndStmt);
+            Jaxb2Ast.convertStmtValList(values, statementss, valAndStmt);
         }
         for ( int i = 0; i <= mutat; i++ ) {
             Phrase<V> expr = helper.extractValue(values, new ExprParam(BlocklyConstants.WAIT + i, BlocklyType.BOOLEAN));
@@ -96,23 +97,23 @@ public class WaitStmt<V> extends Stmt<V> {
             list
                 .addStmt(
                     RepeatStmt
-                        .make(Mode.WAIT, helper.convertPhraseToExpr(expr), statement, helper.extractBlockProperties(block), helper.extractComment(block)));
+                        .make(Mode.WAIT, helper.convertPhraseToExpr(expr), statement, Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block)));
         }
         list.setReadOnly();
-        return WaitStmt.make(list, helper.extractBlockProperties(block), helper.extractComment(block));
+        return WaitStmt.make(list, Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
     }
 
     @Override
     public Block astToBlock() {
         Block jaxbDestination = new Block();
         Mutation mutation;
-        Ast2JaxbHelper.setBasicProperties(this, jaxbDestination);
+        Ast2Jaxb.setBasicProperties(this, jaxbDestination);
 
         StmtList<?> waitStmtList = getStatements();
         int numOfWait = waitStmtList.get().size();
         if ( numOfWait == 1 ) {
-            Ast2JaxbHelper.addValue(jaxbDestination, BlocklyConstants.WAIT + "0", ((RepeatStmt<?>) waitStmtList.get().get(0)).getExpr());
-            Ast2JaxbHelper.addStatement(jaxbDestination, BlocklyConstants.DO + "0", ((RepeatStmt<?>) waitStmtList.get().get(0)).getList());
+            Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.WAIT + "0", ((RepeatStmt<?>) waitStmtList.get().get(0)).getExpr());
+            Ast2Jaxb.addStatement(jaxbDestination, BlocklyConstants.DO + "0", ((RepeatStmt<?>) waitStmtList.get().get(0)).getList());
             return jaxbDestination;
         }
         mutation = new Mutation();
@@ -120,8 +121,8 @@ public class WaitStmt<V> extends Stmt<V> {
         jaxbDestination.setMutation(mutation);
         Repetitions repetitions = new Repetitions();
         for ( int i = 0; i < numOfWait; i++ ) {
-            Ast2JaxbHelper.addValue(repetitions, BlocklyConstants.WAIT + i, ((RepeatStmt<?>) waitStmtList.get().get(i)).getExpr());
-            Ast2JaxbHelper.addStatement(repetitions, BlocklyConstants.DO + i, ((RepeatStmt<?>) waitStmtList.get().get(i)).getList());
+            Ast2Jaxb.addValue(repetitions, BlocklyConstants.WAIT + i, ((RepeatStmt<?>) waitStmtList.get().get(i)).getExpr());
+            Ast2Jaxb.addStatement(repetitions, BlocklyConstants.DO + i, ((RepeatStmt<?>) waitStmtList.get().get(i)).getList());
         }
         jaxbDestination.setRepetitions(repetitions);
         return jaxbDestination;

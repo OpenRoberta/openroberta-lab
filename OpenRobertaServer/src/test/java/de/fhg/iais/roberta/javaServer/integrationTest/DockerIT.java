@@ -54,7 +54,7 @@ public class DockerIT {
     public void setup() throws Exception {
         this.calliProg = Resources.toString(DockerIT.class.getResource("/restInterfaceTest/calliProg.xml"), Charsets.UTF_8);
         this.executorService = Executors.newFixedThreadPool(DockerIT.MAX_CONCURRENT_USERS + 10);
-        random = new Random();
+        this.random = new Random();
         LOG.info("max parallel users: " + DockerIT.MAX_CONCURRENT_USERS + "; total users: " + DockerIT.MAX_TOTAL_USERS);
         LOG.info("");
     }
@@ -154,7 +154,7 @@ public class DockerIT {
     {
         String response = hw.post(SERVER_URL + restEndpoint, "application/json", request.toString(2), "application/json");
         JSONUtilForServer.assertEntityRc(response, "ok", responseKey);
-        return think(random, lowerBoundForThinking, upperBoundForThinking);
+        return think(this.random, lowerBoundForThinking, upperBoundForThinking);
     }
 
     /**
@@ -183,7 +183,7 @@ public class DockerIT {
     private String getAlphaNumericString(int n) {
         StringBuilder sb = new StringBuilder(n);
         for ( int i = 0; i < n; i++ ) {
-            sb.append(CHARSET_FOR_RANDOM_STRING.charAt(random.nextInt(CHARSET_FOR_RANDOM_STRING_LENGTH)));
+            sb.append(CHARSET_FOR_RANDOM_STRING.charAt(this.random.nextInt(CHARSET_FOR_RANDOM_STRING_LENGTH)));
         }
         return sb.toString();
     }

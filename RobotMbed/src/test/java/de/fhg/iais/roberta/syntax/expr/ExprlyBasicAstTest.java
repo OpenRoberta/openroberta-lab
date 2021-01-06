@@ -7,7 +7,8 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.antlr.v4.runtime.ANTLRInputStream;
+import org.antlr.v4.runtime.CharStream;
+import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.junit.Assert;
 import org.junit.Test;
@@ -413,12 +414,18 @@ public class ExprlyBasicAstTest extends AstTest {
         UsedHardwareBean usedHardwareBean = new UsedHardwareBean.Builder().build();
         CodeGeneratorSetupBean codeGeneratorSetupBeanCpp = new CodeGeneratorSetupBean.Builder().setHelperMethodFile(helperFile).setFileExtension("cpp").build();
         CodeGeneratorSetupBean codeGeneratorSetupBeanPy = new CodeGeneratorSetupBean.Builder().setHelperMethodFile(helperFile).setFileExtension("py").build();
-        ImmutableClassToInstanceMap<IProjectBean> beansCpp = ImmutableClassToInstanceMap.<IProjectBean>builder().put(UsedHardwareBean.class, usedHardwareBean).put(
-            CodeGeneratorSetupBean.class,
-            codeGeneratorSetupBeanCpp).build();
-        ImmutableClassToInstanceMap<IProjectBean> beansPy = ImmutableClassToInstanceMap.<IProjectBean>builder().put(UsedHardwareBean.class, usedHardwareBean).put(
-            CodeGeneratorSetupBean.class,
-            codeGeneratorSetupBeanPy).build();
+        ImmutableClassToInstanceMap<IProjectBean> beansCpp =
+            ImmutableClassToInstanceMap
+                .<IProjectBean> builder()
+                .put(UsedHardwareBean.class, usedHardwareBean)
+                .put(CodeGeneratorSetupBean.class, codeGeneratorSetupBeanCpp)
+                .build();
+        ImmutableClassToInstanceMap<IProjectBean> beansPy =
+            ImmutableClassToInstanceMap
+                .<IProjectBean> builder()
+                .put(UsedHardwareBean.class, usedHardwareBean)
+                .put(CodeGeneratorSetupBean.class, codeGeneratorSetupBeanPy)
+                .build();
         List<Phrase<Void>> addInList = new ArrayList<>();
         addInList.add(expr);
         List<List<Phrase<Void>>> addInListInList = new ArrayList<>();
@@ -448,7 +455,7 @@ public class ExprlyBasicAstTest extends AstTest {
      */
     private ExprlyParser mkParser(String expr) throws UnsupportedEncodingException, IOException {
         InputStream inputStream = new ByteArrayInputStream(expr.getBytes("UTF-8"));
-        ANTLRInputStream input = new ANTLRInputStream(inputStream);
+        CharStream input = CharStreams.fromStream(inputStream);
         ExprlyLexer lexer = new ExprlyLexer(input);
         CommonTokenStream tokens = new CommonTokenStream(lexer);
         ExprlyParser parser = new ExprlyParser(tokens);

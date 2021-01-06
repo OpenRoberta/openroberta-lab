@@ -37,8 +37,8 @@ public class NotificationController {
     public Response getNotifications(FullRestRequest fullRequest) {
         HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, fullRequest, false);
         NotificationsResponse notificationsResponse = NotificationsResponse.make();
-        notificationsResponse.setNotifications(notificationService.getNotifications());
-        httpSessionState.setReceivedNotificationsDigest(notificationService.getCurrentDigest());
+        notificationsResponse.setNotifications(this.notificationService.getNotifications());
+        httpSessionState.setReceivedNotificationsDigest(this.notificationService.getCurrentDigest());
 
         UtilForREST.addSuccessInfo(notificationsResponse, Key.SERVER_SUCCESS);
         return UtilForREST.responseWithFrontendInfo(notificationsResponse, httpSessionState, null);
@@ -55,7 +55,7 @@ public class NotificationController {
         if ( isRobertaUser(httpSessionState) ) {
             try {
                 String notificationsJSON = fullRestRequest.getData().getString("notifications");
-                notificationService.saveNotifications(notificationsJSON);
+                this.notificationService.saveNotifications(notificationsJSON);
                 LOG.info("new notifications are in effect");
                 UtilForREST.addSuccessInfo(response, Key.NOTIFICATION_SUCCESS);
             } catch ( Exception e ) {

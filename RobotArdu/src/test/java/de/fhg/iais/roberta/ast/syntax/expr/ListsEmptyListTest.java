@@ -13,7 +13,8 @@ public class ListsEmptyListTest extends ArduinoAstTest {
     public void Test() throws Exception {
         String a = "";
 
-        UnitTestHelper.checkWorkers(testFactory, a, "/syntax/lists/lists_empty_list.xml", new ArduinoUsedHardwareCollectorWorker(), new ArduinoCxxGeneratorWorker());
+        UnitTestHelper
+            .checkWorkers(testFactory, a, "/syntax/lists/lists_empty_list.xml", new ArduinoUsedHardwareCollectorWorker(), new ArduinoCxxGeneratorWorker());
     }
 
 }

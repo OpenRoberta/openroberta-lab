@@ -16,9 +16,8 @@ import de.fhg.iais.roberta.syntax.sensors.arduino.sensebox.GpsSensor;
 import de.fhg.iais.roberta.visitor.hardware.IArduinoVisitor;
 
 /**
- * Collector for the Arduino.
- * Adds the blocks missing from the defaults of {@link ICollectorVisitor}.
- * Defines the specific parent implementation to use (the one of the collector) due to unrelated defaults.
+ * Collector for the Arduino. Adds the blocks missing from the defaults of {@link ICollectorVisitor}. Defines the specific parent implementation to use (the one
+ * of the collector) due to unrelated defaults.
  */
 public interface IArduinoCollectorVisitor extends ICollectorVisitor, IArduinoVisitor<Void> {
 

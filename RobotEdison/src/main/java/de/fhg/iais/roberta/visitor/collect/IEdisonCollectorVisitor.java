@@ -29,9 +29,8 @@ import de.fhg.iais.roberta.syntax.sensors.edison.ResetSensor;
 import de.fhg.iais.roberta.visitor.hardware.IEdisonVisitor;
 
 /**
- * Collector for the Edison.
- * Adds the blocks missing from the defaults of {@link ICollectorVisitor}.
- * Defines the specific parent implementation to use (the one of the collector) due to unrelated defaults.
+ * Collector for the Edison. Adds the blocks missing from the defaults of {@link ICollectorVisitor}. Defines the specific parent implementation to use (the one
+ * of the collector) due to unrelated defaults.
  */
 public interface IEdisonCollectorVisitor extends ICollectorVisitor, IEdisonVisitor<Void> {
 

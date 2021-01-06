@@ -125,10 +125,10 @@ public class SearchMsgKeyRedundancies {
 
             @Override
             public void accept(String message, Set<String> keys) {
-                if ( robMsgPairs.get(message) != null ) {
+                if ( SearchMsgKeyRedundancies.this.robMsgPairs.get(message) != null ) {
                     printf("The message \"%s\" is redinfed in both files:\n", message);
                     print("Roberta keys: ");
-                    robMsgPairs.get(message).forEach(key -> System.out.printf("%s, ", key));
+                    SearchMsgKeyRedundancies.this.robMsgPairs.get(message).forEach(key -> System.out.printf("%s, ", key));
                     println();
                     print("Blockly keys: ");
                     keys.forEach(key -> System.out.printf("%s, ", key));

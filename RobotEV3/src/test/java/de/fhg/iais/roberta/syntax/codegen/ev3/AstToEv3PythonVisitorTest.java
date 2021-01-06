@@ -290,30 +290,29 @@ public class AstToEv3PythonVisitorTest extends Ev3DevAstTest {
                 makeLargeLargeTouchGyroInfraredUltrasonic(),
                 true);
     }
-    
+
     @Test
     public void testTimer() throws Exception {
         String a =
             "" //
-            + IMPORTS
-            + make_globals("", CFG_TOUCH_SENSOR)
-            + "def run():\n"
-            + "    hal.resetTimer(1)\n"
-            + "    hal.drawText(str(hal.getTimerValue(1)), 0, 0)\n"
-            + MAIN_METHOD;
+                + IMPORTS
+                + make_globals("", CFG_TOUCH_SENSOR)
+                + "def run():\n"
+                + "    hal.resetTimer(1)\n"
+                + "    hal.drawText(str(hal.getTimerValue(1)), 0, 0)\n"
+                + MAIN_METHOD;
 
         UnitTestHelper
-        .checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(
-            testFactory,
-            a,
-            "/syntax/code_generator/java/java_code_generator12.xml",
-            makeStandardConfigurationNonRegulated(),
-            true);
+            .checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(
+                testFactory,
+                a,
+                "/syntax/code_generator/java/java_code_generator12.xml",
+                makeStandardConfigurationNonRegulated(),
+                true);
     }
-    
+
     // Skip "{6,7}.xml" since they only test various different statements
 
-    
     @Test
     public void testVariables() throws Exception {
         String a =

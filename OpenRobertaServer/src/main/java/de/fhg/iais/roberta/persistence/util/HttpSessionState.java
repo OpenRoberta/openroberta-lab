@@ -1,7 +1,10 @@
 package de.fhg.iais.roberta.persistence.util;
 
 import java.io.Serializable;
-import java.util.*;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
@@ -70,7 +73,7 @@ public class HttpSessionState implements Serializable {
         this.lastAccessTime = 0;
 
         this.userId = HttpSessionState.NO_USER;
-        this.robotName = defaultRobotName;
+        this.robotName = this.defaultRobotName;
         this.token = RandomUrlPostfix.generate(12, 12, 3, 3, 3);
         this.programName = null;
         this.program = null;
@@ -169,8 +172,8 @@ public class HttpSessionState implements Serializable {
     }
 
     public String getInitToken() {
-        Assert.notNull(initToken, "init token not initialized. This is a SEVERE error");
-        return initToken;
+        Assert.notNull(this.initToken, "init token not initialized. This is a SEVERE error");
+        return this.initToken;
     }
 
     public String getToken() {
@@ -224,12 +227,12 @@ public class HttpSessionState implements Serializable {
      * @return the list of group member factories
      */
     public List<IRobotFactory> getRobotFactoriesOfGroup(String group) {
-        List<IRobotFactory> groupMembers = robotPluginMap.values().stream().filter(factory -> {
+        List<IRobotFactory> groupMembers = this.robotPluginMap.values().stream().filter(factory -> {
             String propertyGroup = factory.getPluginProperties().getStringProperty("robot.plugin.group");
             return (propertyGroup != null) && propertyGroup.equals(group);
         }).collect(Collectors.toList());
         if ( groupMembers.isEmpty() ) {
-            if ( !robotPluginMap.containsKey(group) ) {
+            if ( !this.robotPluginMap.containsKey(group) ) {
                 LOG.warn("No robot plugin associated with this group or robot name.");
                 return Collections.emptyList();
             } else {
@@ -245,7 +248,7 @@ public class HttpSessionState implements Serializable {
     }
 
     public boolean isProcessing() {
-        return processing;
+        return this.processing;
     }
 
     public void setProcessing(boolean processing) {
@@ -285,7 +288,7 @@ public class HttpSessionState implements Serializable {
     }
 
     public String getReceivedNotificationsDigest() {
-        return receivedNotificationsDigest;
+        return this.receivedNotificationsDigest;
     }
 
     public void setReceivedNotificationsDigest(String receivedNotificationsDigest) {

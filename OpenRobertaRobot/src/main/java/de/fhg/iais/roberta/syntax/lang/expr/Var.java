@@ -8,7 +8,7 @@ import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
-import de.fhg.iais.roberta.transformer.Ast2JaxbHelper;
+import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.IVisitor;
@@ -98,13 +98,13 @@ public class Var<V> extends Expr<V> {
     public Block astToBlock() {
 
         Block jaxbDestination = new Block();
-        Ast2JaxbHelper.setBasicProperties(this, jaxbDestination);
+        Ast2Jaxb.setBasicProperties(this, jaxbDestination);
 
         Mutation mutation = new Mutation();
         mutation.setDatatype(getVarType().getBlocklyName());
         jaxbDestination.setMutation(mutation);
 
-        Ast2JaxbHelper.addField(jaxbDestination, BlocklyConstants.VAR, getValue());
+        Ast2Jaxb.addField(jaxbDestination, BlocklyConstants.VAR, getValue());
         return jaxbDestination;
     }
 }

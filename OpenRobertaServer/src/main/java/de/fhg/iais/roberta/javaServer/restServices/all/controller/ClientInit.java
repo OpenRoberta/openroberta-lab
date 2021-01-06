@@ -128,7 +128,7 @@ public class ClientInit {
             server.put("theme", theme);
             response.setServer(server);
             UtilForREST.addSuccessInfo(response, Key.INIT_SUCCESS);
-            return UtilForREST.responseWithFrontendInfo(response, httpSessionState, brickCommunicator);
+            return UtilForREST.responseWithFrontendInfo(response, httpSessionState, this.brickCommunicator);
         } catch ( Exception e ) {
             return UtilForREST.makeBaseResponseForError(Key.SERVER_ERROR, httpSessionState, null); // TODO: redesign error ticker number and add then: append("parameters", errorTicketId);
         }

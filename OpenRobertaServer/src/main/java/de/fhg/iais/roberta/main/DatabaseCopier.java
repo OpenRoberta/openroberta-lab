@@ -284,7 +284,7 @@ public class DatabaseCopier {
         }
 
         try {
-            dbConnection = DriverManager.getConnection(dbUri, dbUser, dbPassword);
+            dbConnection = DriverManager.getConnection(dbUri, this.dbUser, this.dbPassword);
             return dbConnection;
         } catch ( SQLException e ) {
             p("db connection failed", e);

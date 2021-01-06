@@ -10,9 +10,7 @@ public class AmbientLightSensorTest extends AstTest {
     @Test
     public void make_ByDefault_ReturnInstanceOfLightSensorClass() throws Exception {
         String expectedResult =
-            "BlockAST [project=[[Location [x=163, y=62], "
-                + "MainTask [], "
-                + "DisplayTextAction [TEXT, SensorExpr [LightSensor [_L, VALUE, EMPTY_SLOT]]]]]]";
+            "BlockAST [project=[[Location [x=163, y=62], " + "MainTask [], " + "DisplayTextAction [TEXT, SensorExpr [LightSensor [_L, VALUE, EMPTY_SLOT]]]]]]";
 
         UnitTestHelper.checkProgramAstEquality(testFactory, expectedResult, "/sensor/get_ambient_light.xml");
 

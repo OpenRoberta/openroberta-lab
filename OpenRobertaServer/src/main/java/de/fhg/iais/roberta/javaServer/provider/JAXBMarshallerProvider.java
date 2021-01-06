@@ -7,7 +7,7 @@ import javax.xml.bind.Marshaller;
 /**
  * Extension of the extension interface {@link ContextResolver}. Provides a marshaller to resource classes. Uses the singleton class {@link JAXBProviderFactory}
  * to create this context.
- * 
+ *
  * @author rbudde
  */
 @Provider

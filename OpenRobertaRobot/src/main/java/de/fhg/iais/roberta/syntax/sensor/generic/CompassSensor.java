@@ -13,7 +13,8 @@ import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.sensor.ExternalSensor;
 import de.fhg.iais.roberta.syntax.sensor.SensorMetaDataBean;
 import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
-import de.fhg.iais.roberta.transformer.Ast2JaxbHelper;
+import de.fhg.iais.roberta.transformer.Ast2Jaxb;
+import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.visitor.IVisitor;
 import de.fhg.iais.roberta.visitor.hardware.sensor.ISensorVisitor;
 
@@ -61,14 +62,14 @@ public class CompassSensor<V> extends ExternalSensor<V> {
         BlocklyDropdownFactory factory = helper.getDropdownFactory();
         SensorMetaDataBean sensorMetaDataBean;
         if ( block.getType().equals(BlocklyConstants.ROB_SENSORS_COMPASS_CALIBRATE) ) {
-            List<Field> fields = helper.extractFields(block, (short) 1);
-            String portName = helper.extractField(fields, BlocklyConstants.SENSORPORT);
+            List<Field> fields = Jaxb2Ast.extractFields(block, (short) 1);
+            String portName = Jaxb2Ast.extractField(fields, BlocklyConstants.SENSORPORT);
             sensorMetaDataBean =
                 new SensorMetaDataBean(factory.sanitizePort(portName), factory.getMode("CALIBRATE"), factory.sanitizeSlot(BlocklyConstants.NO_SLOT), false);
-            return CompassSensor.make(sensorMetaDataBean, helper.extractBlockProperties(block), helper.extractComment(block));
+            return CompassSensor.make(sensorMetaDataBean, Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
         }
         SensorMetaDataBean sensorData = extractPortAndModeAndSlot(block, helper);
-        return CompassSensor.make(sensorData, helper.extractBlockProperties(block), helper.extractComment(block));
+        return CompassSensor.make(sensorData, Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
     }
 
     @Override
@@ -76,8 +77,8 @@ public class CompassSensor<V> extends ExternalSensor<V> {
         Block jaxbDestination = super.astToBlock();
         if ( getMode().toString().equals("CALIBRATE") ) {
             jaxbDestination = new Block();
-            Ast2JaxbHelper.setBasicProperties(this, jaxbDestination);
-            Ast2JaxbHelper.addField(jaxbDestination, BlocklyConstants.SENSORPORT, getPort());
+            Ast2Jaxb.setBasicProperties(this, jaxbDestination);
+            Ast2Jaxb.addField(jaxbDestination, BlocklyConstants.SENSORPORT, getPort());
         }
         return jaxbDestination;
     }

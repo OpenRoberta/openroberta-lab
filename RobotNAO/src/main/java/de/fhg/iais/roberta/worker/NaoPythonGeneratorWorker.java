@@ -11,9 +11,6 @@ public final class NaoPythonGeneratorWorker extends AbstractLanguageGeneratorWor
 
     @Override
     protected AbstractLanguageVisitor getVisitor(Project project, ClassToInstanceMap<IProjectBean> beans) {
-        return new NaoPythonVisitor(
-            project.getProgramAst().getTree(),
-            project.getLanguage(),
-            beans);
+        return new NaoPythonVisitor(project.getProgramAst().getTree(), project.getLanguage(), beans);
     }
 }

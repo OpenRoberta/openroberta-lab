@@ -9,12 +9,7 @@ import de.fhg.iais.roberta.util.test.UnitTestHelper;
 public class CppVisitorTest extends MbotAstTest {
 
     private static final String MAIN_METHOD1 =
-        ""
-            + "#include <MeMCore.h> \n"
-            + "#include <Wire.h>\n"
-            + "#include <SoftwareSerial.h>\n"
-            + "#include <NEPODefs.h>"
-            + "#include \"MeDrive.h\"\n\n";
+        "" + "#include <MeMCore.h> \n" + "#include <Wire.h>\n" + "#include <SoftwareSerial.h>\n" + "#include <NEPODefs.h>" + "#include \"MeDrive.h\"\n\n";
 
     private static final String MAIN_METHOD2 = "" + "void setup(){" + "Serial.begin(9600);";
 

@@ -7,10 +7,8 @@ import org.json.JSONObject;
 import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.components.ConfigurationComponent;
 import de.fhg.iais.roberta.inter.mode.action.IDriveDirection;
-import de.fhg.iais.roberta.inter.mode.action.ILanguage;
 import de.fhg.iais.roberta.inter.mode.action.ITurnDirection;
 import de.fhg.iais.roberta.mode.action.DriveDirection;
-import de.fhg.iais.roberta.mode.action.Language;
 import de.fhg.iais.roberta.mode.action.TurnDirection;
 import de.fhg.iais.roberta.syntax.MotorDuration;
 import de.fhg.iais.roberta.syntax.Phrase;
@@ -186,7 +184,8 @@ public class NxtStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> im
         if ( leftMotorRotationDirection != DriveDirection.FOREWARD ) {
             driveDirection = getDriveDirection(driveAction.getDirection() == DriveDirection.FOREWARD);
         }
-        JSONObject o = mk(C.DRIVE_ACTION, driveAction).put(C.DRIVE_DIRECTION, driveDirection).put(C.NAME, "ev3").put(C.SPEED_ONLY, speedOnly).put(C.SET_TIME, false);
+        JSONObject o =
+            mk(C.DRIVE_ACTION, driveAction).put(C.DRIVE_DIRECTION, driveDirection).put(C.NAME, "ev3").put(C.SPEED_ONLY, speedOnly).put(C.SET_TIME, false);
         if ( speedOnly ) {
             return app(o);
         } else {
@@ -206,7 +205,11 @@ public class NxtStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> im
             turnDirection = getTurnDirection(turnAction.getDirection() == TurnDirection.LEFT);
         }
         JSONObject o =
-            mk(C.TURN_ACTION, turnAction).put(C.TURN_DIRECTION, turnDirection.toString().toLowerCase()).put(C.NAME, "ev3").put(C.SPEED_ONLY, speedOnly).put(C.SET_TIME, false);
+            mk(C.TURN_ACTION, turnAction)
+                .put(C.TURN_DIRECTION, turnDirection.toString().toLowerCase())
+                .put(C.NAME, "ev3")
+                .put(C.SPEED_ONLY, speedOnly)
+                .put(C.SET_TIME, false);
         if ( speedOnly ) {
             return app(o);
         } else {
@@ -226,7 +229,8 @@ public class NxtStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> im
         if ( leftMotorRotationDirection != DriveDirection.FOREWARD ) {
             driveDirection = getDriveDirection(curveAction.getDirection() == DriveDirection.FOREWARD);
         }
-        JSONObject o = mk(C.CURVE_ACTION, curveAction).put(C.DRIVE_DIRECTION, driveDirection).put(C.NAME, "ev3").put(C.SPEED_ONLY, speedOnly).put(C.SET_TIME, false);
+        JSONObject o =
+            mk(C.CURVE_ACTION, curveAction).put(C.DRIVE_DIRECTION, driveDirection).put(C.NAME, "ev3").put(C.SPEED_ONLY, speedOnly).put(C.SET_TIME, false);
         if ( speedOnly ) {
             return app(o);
         } else {
@@ -410,35 +414,6 @@ public class NxtStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> im
         String port = ultrasonicSensor.getPort();
         JSONObject o = mk(C.GET_SAMPLE, ultrasonicSensor).put(C.GET_SAMPLE, C.ULTRASONIC).put(C.MODE, mode.toLowerCase()).put(C.PORT, port).put(C.NAME, "ev3");
         return app(o);
-    }
-
-    private String getLanguageString(ILanguage language) {
-        switch ( (Language) language ) {
-            case GERMAN:
-                return "de-DE";
-            case ENGLISH:
-                return "en-US";
-            case FRENCH:
-                return "fr-FR";
-            case SPANISH:
-                return "es-ES";
-            case ITALIAN:
-                return "it-IT";
-            case DUTCH:
-                return "nl-NL";
-            case POLISH:
-                return "pl-PL";
-            case RUSSIAN:
-                return "ru-RU";
-            case PORTUGUESE:
-                return "pt-BR";
-            case JAPANESE:
-                return "ja-JP";
-            case CHINESE:
-                return "zh-CN";
-            default:
-                return "";
-        }
     }
 
     @Override

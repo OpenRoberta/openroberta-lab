@@ -37,9 +37,8 @@ import de.fhg.iais.roberta.syntax.sensor.nao.RecognizeWord;
 import de.fhg.iais.roberta.visitor.hardware.INaoVisitor;
 
 /**
- * Collector for the NAO.
- * Adds the blocks missing from the defaults of {@link ICollectorVisitor}.
- * Defines the specific parent implementation to use (the one of the collector) due to unrelated defaults.
+ * Collector for the NAO. Adds the blocks missing from the defaults of {@link ICollectorVisitor}. Defines the specific parent implementation to use (the one of
+ * the collector) due to unrelated defaults.
  */
 public interface INaoCollectorVisitor extends ICollectorVisitor, INaoVisitor<Void> {
 

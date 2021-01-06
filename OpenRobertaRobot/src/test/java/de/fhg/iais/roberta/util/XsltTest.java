@@ -55,9 +55,8 @@ public class XsltTest {
     }
 
     /**
-     * This is an optional test, used for additional validation of converted programs.
-     * It requires a specifically formatted JSON file, e.g. an export from the database.
-     * It should contain one root node with a list of program entries. Each entry should at least contain a PROGRAM_TEXT field with the program XML
+     * This is an optional test, used for additional validation of converted programs. It requires a specifically formatted JSON file, e.g. an export from the
+     * database. It should contain one root node with a list of program entries. Each entry should at least contain a PROGRAM_TEXT field with the program XML
      * Also requires blockly (with the calliconf-headless branch) being on the same level as the lab repository.
      */
     @Test

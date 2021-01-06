@@ -12,7 +12,8 @@ import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.Action;
 import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
-import de.fhg.iais.roberta.transformer.Ast2JaxbHelper;
+import de.fhg.iais.roberta.transformer.Ast2Jaxb;
+import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.IVisitor;
 import de.fhg.iais.roberta.visitor.hardware.INaoVisitor;
@@ -61,11 +62,11 @@ public final class Autonomous<V> extends Action<V> {
      * @return corresponding AST object
      */
     public static <V> Phrase<V> jaxbToAst(Block block, AbstractJaxb2Ast<V> helper) {
-        List<Field> fields = helper.extractFields(block, (short) 1);
+        List<Field> fields = Jaxb2Ast.extractFields(block, (short) 1);
 
-        String onOff = helper.extractField(fields, BlocklyConstants.MODE);
+        String onOff = Jaxb2Ast.extractField(fields, BlocklyConstants.MODE);
 
-        return Autonomous.make(WorkingState.get(onOff), helper.extractBlockProperties(block), helper.extractComment(block));
+        return Autonomous.make(WorkingState.get(onOff), Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
     }
 
     @Override
@@ -76,9 +77,9 @@ public final class Autonomous<V> extends Action<V> {
     @Override
     public Block astToBlock() {
         Block jaxbDestination = new Block();
-        Ast2JaxbHelper.setBasicProperties(this, jaxbDestination);
+        Ast2Jaxb.setBasicProperties(this, jaxbDestination);
 
-        Ast2JaxbHelper.addField(jaxbDestination, BlocklyConstants.MODE, this.onOff.toString());
+        Ast2Jaxb.addField(jaxbDestination, BlocklyConstants.MODE, this.onOff.toString());
 
         return jaxbDestination;
     }

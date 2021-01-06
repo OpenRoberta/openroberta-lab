@@ -13,18 +13,15 @@ import java.util.List;
 import org.apache.commons.io.FileUtils;
 
 /**
- * Represent a UF2 file in 'file container' mode.
- * Specifications of this file format can be found here: https://github.com/Microsoft/uf2
+ * Represent a UF2 file in 'file container' mode. Specifications of this file format can be found here: https://github.com/Microsoft/uf2
  */
 public class Uf2FileContainer {
 
     private static final int UF2_BLOCK_SIZE = 512;
     /**
-     * The default payload length is 256, but the EV3 seems to support also other values.
-     * The bigger the payload, the lower the number of blocks => smaller UF2 file.
-     * The advantage of a smalled UF2 is a shorter upload time to the robot using USB (which is slow, ~10 sec for 1MB file).
-     * the payload max length is 476, but we have to put the file name at the end.
-     * A payload of 400 bytes seems reasonable to have a smaller file and still allowing long file names.
+     * The default payload length is 256, but the EV3 seems to support also other values. The bigger the payload, the lower the number of blocks => smaller UF2
+     * file. The advantage of a smalled UF2 is a shorter upload time to the robot using USB (which is slow, ~10 sec for 1MB file). the payload max length is
+     * 476, but we have to put the file name at the end. A payload of 400 bytes seems reasonable to have a smaller file and still allowing long file names.
      */
     //private static final int UF2_BLOCK_PAYLOAD_SIZE = 256;
     private static final int UF2_BLOCK_PAYLOAD_SIZE = 400;
@@ -70,7 +67,7 @@ public class Uf2FileContainer {
     }
 
     private static List<byte[]> splitByteArrayIntoUf2BlockPayloads(byte[] content) {
-        int blocksCount = (int) Math.ceil((double) (content.length / UF2_BLOCK_PAYLOAD_SIZE));
+        int blocksCount = (int) Math.ceil(content.length / UF2_BLOCK_PAYLOAD_SIZE);
         List<byte[]> payloads = new ArrayList<>(blocksCount);
         for ( int from = 0; from < content.length; from += UF2_BLOCK_PAYLOAD_SIZE ) {
             byte[] payload = new byte[UF2_BLOCK_PAYLOAD_SIZE];

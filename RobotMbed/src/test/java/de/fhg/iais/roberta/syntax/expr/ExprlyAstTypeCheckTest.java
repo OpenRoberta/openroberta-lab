@@ -7,7 +7,8 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.antlr.v4.runtime.ANTLRInputStream;
+import org.antlr.v4.runtime.CharStream;
+import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -143,7 +144,7 @@ public class ExprlyAstTypeCheckTest extends AstTest {
      */
     private ExprlyParser mkParser(String expr) throws UnsupportedEncodingException, IOException {
         InputStream inputStream = new ByteArrayInputStream(expr.getBytes("UTF-8"));
-        ANTLRInputStream input = new ANTLRInputStream(inputStream);
+        CharStream input = CharStreams.fromStream(inputStream);
         ExprlyLexer lexer = new ExprlyLexer(input);
         CommonTokenStream tokens = new CommonTokenStream(lexer);
         ExprlyParser parser = new ExprlyParser(tokens);

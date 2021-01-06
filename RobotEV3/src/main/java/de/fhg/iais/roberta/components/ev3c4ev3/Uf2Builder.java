@@ -5,14 +5,10 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
 /**
- * Creates a UF2FileContainer containing all the needed files to install and run a NEPO program.
- * When the program starts the first time (when it is copied to the robot) the C program will move the program from the BrkProg_SAVE folder
- * to a folder with the same name as the program. This is done to allow the user to delete the program, which otherwise is not possible.
- * The files included in the built UF2 are:
- * - binary file (compiled C program)
- * - RBF to launch the program the first time
- * - RBF to launch the program once the binary has been moved to the subfolder
- * - Flag to indicate that the program has just been copied
+ * Creates a UF2FileContainer containing all the needed files to install and run a NEPO program. When the program starts the first time (when it is copied to
+ * the robot) the C program will move the program from the BrkProg_SAVE folder to a folder with the same name as the program. This is done to allow the user to
+ * delete the program, which otherwise is not possible. The files included in the built UF2 are: - binary file (compiled C program) - RBF to launch the program
+ * the first time - RBF to launch the program once the binary has been moved to the subfolder - Flag to indicate that the program has just been copied
  */
 public class Uf2Builder {
 
@@ -25,7 +21,7 @@ public class Uf2Builder {
     private final RbfBuilder rbfBuilder;
 
     public Uf2Builder(String compilerResourceDir) {
-        rbfBuilder = new RbfBuilder(compilerResourceDir);
+        this.rbfBuilder = new RbfBuilder(compilerResourceDir);
     }
 
     public Uf2FileContainer createUf2File(String programName, String binaryFileName) throws IOException {
@@ -42,12 +38,12 @@ public class Uf2Builder {
     }
 
     private void addRbfFirstTimeLauncherToUf2(Uf2FileContainer uf2, String programName) {
-        byte[] firstTimeLauncher = rbfBuilder.build(getBinaryNameInEv3(programName));
+        byte[] firstTimeLauncher = this.rbfBuilder.build(getBinaryNameInEv3(programName));
         uf2.add(firstTimeLauncher, getRbfFirstTimeLauncherNameInEv3(programName));
     }
 
     private void addRbfToUf2(Uf2FileContainer uf2, String programName) {
-        byte[] launcher = rbfBuilder.build(getMovedBinaryNameInEv3(programName));
+        byte[] launcher = this.rbfBuilder.build(getMovedBinaryNameInEv3(programName));
         uf2.add(launcher, getRbfNameInEv3(programName));
     }
 

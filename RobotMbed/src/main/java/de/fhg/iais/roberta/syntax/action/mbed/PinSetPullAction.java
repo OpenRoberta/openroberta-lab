@@ -12,7 +12,8 @@ import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.Action;
 import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
-import de.fhg.iais.roberta.transformer.Ast2JaxbHelper;
+import de.fhg.iais.roberta.transformer.Ast2Jaxb;
+import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.IVisitor;
 import de.fhg.iais.roberta.visitor.hardware.IMbedVisitor;
@@ -77,19 +78,20 @@ public class PinSetPullAction<V> extends Action<V> {
      */
     public static <V> Phrase<V> jaxbToAst(Block block, AbstractJaxb2Ast<V> helper) {
         BlocklyDropdownFactory factory = helper.getDropdownFactory();
-        List<Field> fields = helper.extractFields(block, (short) 2);
-        String port = helper.extractField(fields, BlocklyConstants.PIN_PORT);
-        String pinPull = helper.extractField(fields, BlocklyConstants.PIN_PULL);
-        return PinSetPullAction.make(factory.getMode(pinPull), factory.sanitizePort(port), helper.extractBlockProperties(block), helper.extractComment(block));
+        List<Field> fields = Jaxb2Ast.extractFields(block, (short) 2);
+        String port = Jaxb2Ast.extractField(fields, BlocklyConstants.PIN_PORT);
+        String pinPull = Jaxb2Ast.extractField(fields, BlocklyConstants.PIN_PULL);
+        return PinSetPullAction
+            .make(factory.getMode(pinPull), factory.sanitizePort(port), Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
     }
 
     @Override
     public Block astToBlock() {
         Block jaxbDestination = new Block();
 
-        Ast2JaxbHelper.setBasicProperties(this, jaxbDestination);
-        Ast2JaxbHelper.addField(jaxbDestination, BlocklyConstants.PIN_PULL, this.pinPull.toString());
-        Ast2JaxbHelper.addField(jaxbDestination, BlocklyConstants.PIN_PORT, this.port);
+        Ast2Jaxb.setBasicProperties(this, jaxbDestination);
+        Ast2Jaxb.addField(jaxbDestination, BlocklyConstants.PIN_PULL, this.pinPull.toString());
+        Ast2Jaxb.addField(jaxbDestination, BlocklyConstants.PIN_PORT, this.port);
 
         return jaxbDestination;
     }

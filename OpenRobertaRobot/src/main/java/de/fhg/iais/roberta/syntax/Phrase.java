@@ -1,8 +1,5 @@
 package de.fhg.iais.roberta.syntax;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.typecheck.NepoInfo;
 import de.fhg.iais.roberta.typecheck.NepoInfos;
@@ -23,8 +20,6 @@ import de.fhg.iais.roberta.visitor.IVisitor;
  * - {@link #getAs(Class)}<br>
  */
 abstract public class Phrase<V> {
-    private static final Logger LOG = LoggerFactory.getLogger(Phrase.class);
-
     private boolean readOnly = false;
 
     private final BlocklyBlockProperties property;

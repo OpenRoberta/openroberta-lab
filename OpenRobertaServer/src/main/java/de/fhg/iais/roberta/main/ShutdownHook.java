@@ -21,7 +21,7 @@ public class ShutdownHook extends Thread {
 
     @Override
     public void run() {
-        if ( embeddedDb ) {
+        if ( this.embeddedDb ) {
             SessionFactoryWrapper sessionFactoryWrapper = this.injector.getInstance(SessionFactoryWrapper.class);
             Session nativeSession = sessionFactoryWrapper.getNativeSession();
             DbExecutor dbExecutor = DbExecutor.make(nativeSession);

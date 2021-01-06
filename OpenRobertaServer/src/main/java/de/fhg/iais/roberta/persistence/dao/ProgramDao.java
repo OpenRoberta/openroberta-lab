@@ -269,7 +269,7 @@ public class ProgramDao extends AbstractDao<Program> {
                 " and r.NAME = :robotGroup ";
         }
 
-        SQLQuery query = session.createSqlQuery(galleryProgramSql);
+        SQLQuery query = this.session.createSqlQuery(galleryProgramSql);
         query.setInteger("userId", userId);
         query.setInteger("galleryId", galleryId);
         if ( !robotGroup.isEmpty() ) {

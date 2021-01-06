@@ -92,9 +92,6 @@ public class RestInterfaceTest {
     private HttpSessionState sPid; // reference user 1 is "pid"
     private HttpSessionState sMinscha; // reference user 2 is "minscha"
 
-    // objects for specialized user stories
-    private String connectionUrl;
-
     private RobotCommunicator robotCommunicator;
 
     private ServerProperties serverProperties;
@@ -113,7 +110,7 @@ public class RestInterfaceTest {
         this.serverProperties.getserverProperties().put("server.public", "true"); // not dangerous! For this.restUser the mail management is set to null
 
         this.robotCommunicator = new RobotCommunicator();
-        this.restUser = new ClientUser(this.robotCommunicator, serverProperties, null);
+        this.restUser = new ClientUser(this.robotCommunicator, this.serverProperties, null);
 
         TestConfiguration tc = TestConfiguration.setup();
         this.sessionFactoryWrapper = tc.getSessionFactoryWrapper();
@@ -122,9 +119,9 @@ public class RestInterfaceTest {
 
         this.restProject = new ClientProgramController(this.serverProperties);
         this.restConfiguration = new ClientConfiguration(this.robotCommunicator);
-        Map<String, IRobotFactory> robotPlugins = ServerStarter.configureRobotPlugins(robotCommunicator, serverProperties, EMPTY_STRING_LIST);
-        this.sPid = HttpSessionState.initOnlyLegalForDebugging("pid", robotPlugins, serverProperties, 1);
-        this.sMinscha = HttpSessionState.initOnlyLegalForDebugging("minscha", robotPlugins, serverProperties, 2);
+        Map<String, IRobotFactory> robotPlugins = ServerStarter.configureRobotPlugins(this.robotCommunicator, this.serverProperties, EMPTY_STRING_LIST);
+        this.sPid = HttpSessionState.initOnlyLegalForDebugging("pid", robotPlugins, this.serverProperties, 1);
+        this.sMinscha = HttpSessionState.initOnlyLegalForDebugging("minscha", robotPlugins, this.serverProperties, 2);
     }
 
     /**
@@ -439,34 +436,6 @@ public class RestInterfaceTest {
         String program = this.memoryDbSetup.getOne("select PROGRAM_TEXT from PROGRAM where OWNER_ID = " + minschaId + " and NAME = 'p2'");
         Assert.assertTrue(program.contains("p2.2.1.minscha"));
 
-        Assert.assertTrue(this.sPid.isUserLoggedIn() && this.sMinscha.isUserLoggedIn());
-    }
-
-    /**
-     * activate user account<br>
-     * <b>INVARIANT:</b> two user exist, both user have logged in, "pid" owns four programs<br>
-     * <b>PRE:</b> "minscha" owns no programs<br>
-     * <b>POST:</b> "minscha" owns two programs
-     * <ul>
-     * <li>store 2 programs and check the count in the db
-     * <li>check the content of program 'p2' in the db
-     * </ul>
-     */
-    private void activateUserAccount() throws Exception {
-        int pidId = this.sPid.getUserId();
-        int minschaId = this.sMinscha.getUserId();
-        Assert.assertTrue(this.sPid.isUserLoggedIn() && this.sMinscha.isUserLoggedIn());
-        Assert.assertEquals(0, this.memoryDbSetup.getOneBigIntegerAsLong("select count(*) from PROGRAM where OWNER_ID = " + minschaId));
-        Assert.assertEquals(4, this.memoryDbSetup.getOneBigIntegerAsLong("select count(*) from PROGRAM where OWNER_ID = " + pidId));
-
-        saveProgramAs(this.sMinscha, "minscha", "minscha", "p1", ".1.minscha", null, null, "ok", Key.PROGRAM_SAVE_SUCCESS);
-        saveProgramAs(this.sMinscha, "minscha", "minscha", "p2", ".2.minscha", null, null, "ok", Key.PROGRAM_SAVE_SUCCESS);
-        Assert.assertEquals(2, this.memoryDbSetup.getOneBigIntegerAsLong("select count(*) from PROGRAM where OWNER_ID = " + minschaId));
-        Assert.assertEquals(4, this.memoryDbSetup.getOneBigIntegerAsLong("select count(*) from PROGRAM where OWNER_ID = " + pidId));
-        Assert.assertEquals(6, this.memoryDbSetup.getOneBigIntegerAsLong("select count(*) from PROGRAM"));
-
-        String program = this.memoryDbSetup.getOne("select PROGRAM_TEXT from PROGRAM where OWNER_ID = " + minschaId + " and NAME = 'p2'");
-        Assert.assertTrue(program.contains(".2.minscha"));
         Assert.assertTrue(this.sPid.isUserLoggedIn() && this.sMinscha.isUserLoggedIn());
     }
 

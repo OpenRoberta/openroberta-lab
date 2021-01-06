@@ -942,8 +942,7 @@ public class CppVisitorTest extends CalliopeAstTest {
                 + MAIN
                 + "_uBit.io.P3.setServoValue(90);\n"
                 + END;
-        UnitTestHelper
-            .checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, expectedResult, "/action/servo_set.xml", configuration, true);
+        UnitTestHelper.checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, expectedResult, "/action/servo_set.xml", configuration, true);
         ;
     }
 

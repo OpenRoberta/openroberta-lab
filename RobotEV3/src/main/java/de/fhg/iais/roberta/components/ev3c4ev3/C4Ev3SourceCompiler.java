@@ -1,17 +1,12 @@
 package de.fhg.iais.roberta.components.ev3c4ev3;
 
 import org.apache.commons.lang3.SystemUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import de.fhg.iais.roberta.util.Pair;
 import de.fhg.iais.roberta.util.Util;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
 public class C4Ev3SourceCompiler {
-
-    private static final Logger LOG = LoggerFactory.getLogger(C4Ev3SourceCompiler.class);
-
     private final String compilerResourcesDir;
     private final String compilerExecutableFileName;
     private final String staticLibraryFolderName;
@@ -38,7 +33,7 @@ public class C4Ev3SourceCompiler {
     }
 
     private String getStaticLibraryFolderName() {
-        if ( compilerExecutableFileName.contains("uclibc") ) {
+        if ( this.compilerExecutableFileName.contains("uclibc") ) {
             /*
              * Since we use a compiler built against uclibc on raspberry, we also need to use a different static library
              * of c4ev3, one built with a uclibc compiler
@@ -49,7 +44,7 @@ public class C4Ev3SourceCompiler {
     }
 
     public Pair<Boolean, String> compile(String sourceCodeFileName, String binaryOutputFile, String crosscompilerSourceForDebuggingOnly) {
-        String[] compilerArguments = getCompilerArguments(compilerExecutableFileName, sourceCodeFileName, binaryOutputFile);
+        String[] compilerArguments = getCompilerArguments(this.compilerExecutableFileName, sourceCodeFileName, binaryOutputFile);
         return Util.runCrossCompiler(compilerArguments, crosscompilerSourceForDebuggingOnly);
     }
 
@@ -60,11 +55,11 @@ public class C4Ev3SourceCompiler {
             "-o",
             binaryOutputFile,
             "-I",
-            compilerResourcesDir + "c4ev3/include/NEPO",
+            this.compilerResourcesDir + "c4ev3/include/NEPO",
             "-I",
-            compilerResourcesDir + "c4ev3/include/c4ev3",
+            this.compilerResourcesDir + "c4ev3/include/c4ev3",
             "-L",
-            compilerResourcesDir + "c4ev3/" + staticLibraryFolderName,
+            this.compilerResourcesDir + "c4ev3/" + this.staticLibraryFolderName,
             "-l",
             "ev3api",
             "-static-libstdc++",

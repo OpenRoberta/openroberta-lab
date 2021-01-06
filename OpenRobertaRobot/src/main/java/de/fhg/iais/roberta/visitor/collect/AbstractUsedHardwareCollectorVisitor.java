@@ -64,8 +64,7 @@ public abstract class AbstractUsedHardwareCollectorVisitor extends AbstractColle
 
     protected final ConfigurationAst robotConfiguration;
 
-    public AbstractUsedHardwareCollectorVisitor(
-        ConfigurationAst configurationAst, ClassToInstanceMap<IProjectBean.IBuilder<?>> beanBuilders) {
+    public AbstractUsedHardwareCollectorVisitor(ConfigurationAst configurationAst, ClassToInstanceMap<IProjectBean.IBuilder<?>> beanBuilders) {
         super(beanBuilders);
         this.robotConfiguration = configurationAst;
     }
@@ -174,7 +173,9 @@ public abstract class AbstractUsedHardwareCollectorVisitor extends AbstractColle
 
     @Override
     public Void visitAccelerometer(AccelerometerSensor<Void> accelerometerSensor) {
-        this.getBuilder(UsedHardwareBean.Builder.class).addUsedSensor(new UsedSensor(accelerometerSensor.getPort(), SC.ACCELEROMETER, accelerometerSensor.getMode()));
+        this
+            .getBuilder(UsedHardwareBean.Builder.class)
+            .addUsedSensor(new UsedSensor(accelerometerSensor.getPort(), SC.ACCELEROMETER, accelerometerSensor.getMode()));
         return null;
     }
 

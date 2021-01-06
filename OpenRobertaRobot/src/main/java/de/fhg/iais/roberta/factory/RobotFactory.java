@@ -214,10 +214,10 @@ public class RobotFactory implements IRobotFactory {
                     workerClassName = workerClassName.trim();
                     LOG.trace("Loading worker {}", workerClassName);
                     try {
-                        IWorker newWorker = (IWorker) Class.forName(workerClassName).newInstance();
+                        IWorker newWorker = (IWorker) Class.forName(workerClassName).getDeclaredConstructor().newInstance();
                         Assert.isNull(this.workers.put(workersType, newWorker));
-                    } catch ( InstantiationException | IllegalAccessException | ClassNotFoundException | IllegalArgumentException | SecurityException e ) {
-                        throw new DbcException("Provided worker class:" + workerClassName + " is invalid", e);
+                    } catch ( Exception e ) {
+                        throw new DbcException("Worker class:" + workerClassName + " is invalid", e);
                     }
                 });
             }

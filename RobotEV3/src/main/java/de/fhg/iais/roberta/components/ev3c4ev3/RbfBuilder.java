@@ -15,12 +15,9 @@ import org.slf4j.LoggerFactory;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
 /**
- * Builder to create rbf files, used by the EV3 to show a program in the menu.
- * An rbf file is an executable file that contains EV3 VM instructions. This builder
- * patches an existing rbf file (contained in the cross compiler resources folder)
- * that starts a program given the executable file name.
- * The rbf file to patch contains a placeholder that this builder replaces with the
- * name of the executable to run.
+ * Builder to create rbf files, used by the EV3 to show a program in the menu. An rbf file is an executable file that contains EV3 VM instructions. This builder
+ * patches an existing rbf file (contained in the cross compiler resources folder) that starts a program given the executable file name. The rbf file to patch
+ * contains a placeholder that this builder replaces with the name of the executable to run.
  */
 public class RbfBuilder {
 
@@ -51,7 +48,7 @@ public class RbfBuilder {
 
     private byte[] loadRbfToPatch() {
         try {
-            return FileUtils.readFileToByteArray(new File(compilerResourceDir + "c4ev3/launcher/launcher.rbf"));
+            return FileUtils.readFileToByteArray(new File(this.compilerResourceDir + "c4ev3/launcher/launcher.rbf"));
         } catch ( IOException e ) {
             LOG.error("cannot load rbf file to patch: {}", e);
             throw new DbcException("cannot load rbf file to patch", e);
@@ -60,7 +57,7 @@ public class RbfBuilder {
 
     /**
      * Return a new array that contains the same bytes of the rbfToPatch parameter except the 4 bytes of the size and the placeholder
-     * 
+     *
      * @param rbfToPatch
      * @param executableFileName
      * @return

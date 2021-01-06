@@ -14,42 +14,48 @@ public class MathOnListsTest extends ArduinoAstTest {
     public void mathOnListSum() throws Exception {
         final String a = "_getListSum({5,3,2})";
 
-        UnitTestHelper.checkWorkers(testFactory, a, "/syntax/math/math_on_list_sum.xml", new ArduinoUsedHardwareCollectorWorker(), new ArduinoCxxGeneratorWorker());
+        UnitTestHelper
+            .checkWorkers(testFactory, a, "/syntax/math/math_on_list_sum.xml", new ArduinoUsedHardwareCollectorWorker(), new ArduinoCxxGeneratorWorker());
     }
 
     @Test
     public void mathOnListMin() throws Exception {
         final String a = "_getListMin({5,3,2})";
 
-        UnitTestHelper.checkWorkers(testFactory, a, "/syntax/math/math_on_list_min.xml", new ArduinoUsedHardwareCollectorWorker(), new ArduinoCxxGeneratorWorker());
+        UnitTestHelper
+            .checkWorkers(testFactory, a, "/syntax/math/math_on_list_min.xml", new ArduinoUsedHardwareCollectorWorker(), new ArduinoCxxGeneratorWorker());
     }
 
     @Test
     public void mathOnListMax() throws Exception {
         final String a = "_getListMax({5,3,2})";
 
-        UnitTestHelper.checkWorkers(testFactory, a, "/syntax/math/math_on_list_max.xml", new ArduinoUsedHardwareCollectorWorker(), new ArduinoCxxGeneratorWorker());
+        UnitTestHelper
+            .checkWorkers(testFactory, a, "/syntax/math/math_on_list_max.xml", new ArduinoUsedHardwareCollectorWorker(), new ArduinoCxxGeneratorWorker());
     }
 
     @Test
     public void mathOnListAverage() throws Exception {
         final String a = "_getListAverage({5,3,2})";
 
-        UnitTestHelper.checkWorkers(testFactory, a, "/syntax/math/math_on_list_average.xml", new ArduinoUsedHardwareCollectorWorker(), new ArduinoCxxGeneratorWorker());
+        UnitTestHelper
+            .checkWorkers(testFactory, a, "/syntax/math/math_on_list_average.xml", new ArduinoUsedHardwareCollectorWorker(), new ArduinoCxxGeneratorWorker());
     }
 
     @Test
     public void mathOnListMedian() throws Exception {
         final String a = "_getListMedian({5,3,2})";
 
-        UnitTestHelper.checkWorkers(testFactory, a, "/syntax/math/math_on_list_median.xml", new ArduinoUsedHardwareCollectorWorker(), new ArduinoCxxGeneratorWorker());
+        UnitTestHelper
+            .checkWorkers(testFactory, a, "/syntax/math/math_on_list_median.xml", new ArduinoUsedHardwareCollectorWorker(), new ArduinoCxxGeneratorWorker());
     }
 
     @Test
     public void mathOnListStandardDeviation() throws Exception {
         final String a = "_getListStandardDeviation({5,3,2})";
 
-        UnitTestHelper.checkWorkers(testFactory, a, "/syntax/math/math_on_list_std_dev.xml", new ArduinoUsedHardwareCollectorWorker(), new ArduinoCxxGeneratorWorker());
+        UnitTestHelper
+            .checkWorkers(testFactory, a, "/syntax/math/math_on_list_std_dev.xml", new ArduinoUsedHardwareCollectorWorker(), new ArduinoCxxGeneratorWorker());
     }
 
     @Test

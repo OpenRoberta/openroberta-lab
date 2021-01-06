@@ -3,9 +3,8 @@ package de.fhg.iais.roberta.syntax.codegen.arduino.arduino;
 import java.util.Arrays;
 import java.util.Map;
 
-import org.junit.Rule;
+import org.junit.Assert;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 
 import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.components.ConfigurationComponent;
@@ -80,14 +79,13 @@ public class ArduinoListsTest extends ArduinoAstTest {
                 builder.build());
     }
 
-    @Rule
-    public ExpectedException exceptionRule = ExpectedException.none();
-
     @Test
     public void showSource_failsWithError_whenListOpsAreUsedWithListCreate() {
-        this.exceptionRule.expect(AssertionError.class);
-        this.exceptionRule.expectMessage("ValidatorWorker failed with 6 errors");
-        UnitTestHelper.checkWorkflow(testFactory, "showsource", "/syntax/lists/lists_ops_used_with_create.xml");
+        Assert
+            .assertThrows(
+                "ValidatorWorker failed with 6 errors",
+                AssertionError.class,
+                () -> UnitTestHelper.checkWorkflow(testFactory, "showsource", "/syntax/lists/lists_ops_used_with_create.xml"));
     }
 
 }

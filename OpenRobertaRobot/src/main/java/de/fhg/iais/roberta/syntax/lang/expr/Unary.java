@@ -9,7 +9,7 @@ import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
-import de.fhg.iais.roberta.transformer.Ast2JaxbHelper;
+import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
@@ -164,12 +164,12 @@ public class Unary<V> extends Expr<V> {
     @Override
     public Block astToBlock() {
         Block jaxbDestination = new Block();
-        Ast2JaxbHelper.setBasicProperties(this, jaxbDestination);
+        Ast2Jaxb.setBasicProperties(this, jaxbDestination);
         if ( getProperty().getBlockType().equals(BlocklyConstants.MATH_SINGLE) ) {
-            Ast2JaxbHelper.addField(jaxbDestination, BlocklyConstants.OP, getOp().name());
-            Ast2JaxbHelper.addValue(jaxbDestination, BlocklyConstants.NUM, getExpr());
+            Ast2Jaxb.addField(jaxbDestination, BlocklyConstants.OP, getOp().name());
+            Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.NUM, getExpr());
         } else {
-            Ast2JaxbHelper.addValue(jaxbDestination, BlocklyConstants.BOOL, getExpr());
+            Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.BOOL, getExpr());
         }
         return jaxbDestination;
     }

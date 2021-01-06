@@ -121,7 +121,7 @@ public final class SenseboxUsedHardwareCollectorVisitor extends AbstractUsedHard
         this.getBuilder(UsedHardwareBean.Builder.class).addUsedSensor(new UsedSensor(gpsSensor.getPort(), SC.GPS, gpsSensor.getMode()));
         return null;
     }
-    
+
     @Override
     public Void visitSerialWriteAction(SerialWriteAction<Void> serialWriteAction) {
         serialWriteAction.getValue().accept(this);

@@ -13,10 +13,10 @@ import de.fhg.iais.roberta.persistence.bo.Robot;
 import de.fhg.iais.roberta.persistence.bo.Role;
 import de.fhg.iais.roberta.persistence.bo.User;
 import de.fhg.iais.roberta.persistence.bo.UserProgramShare;
-import de.fhg.iais.roberta.persistence.dao.UserProgramShareDao;
 import de.fhg.iais.roberta.persistence.dao.ProgramDao;
 import de.fhg.iais.roberta.persistence.dao.RobotDao;
 import de.fhg.iais.roberta.persistence.dao.UserDao;
+import de.fhg.iais.roberta.persistence.dao.UserProgramShareDao;
 import de.fhg.iais.roberta.persistence.util.DbSession;
 import de.fhg.iais.roberta.persistence.util.DbSetup;
 import de.fhg.iais.roberta.persistence.util.SessionFactoryWrapper;
@@ -61,7 +61,7 @@ public class PersistUserProgramTest {
                 hSession.commit();
             }
         }
-        List<User> userList = userDao.loadUserList("created", 0, "rwth");
+        List<User> userList = userDao.loadUserList("rwth", "created", 0, 10);
         Assert.assertTrue(userList.size() == 10);
 
         //Create one program per user

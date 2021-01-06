@@ -271,12 +271,7 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
                     .append(tempVarName)
                     .append(")));");
             } else {
-                this.sb
-                    .append("_rgbled_")
-                    .append(lightAction.getPort())
-                    .append(".setPixelColor(0, _rgbled_")
-                    .append(lightAction.getPort())
-                    .append(".Color(");
+                this.sb.append("_rgbled_").append(lightAction.getPort()).append(".setPixelColor(0, _rgbled_").append(lightAction.getPort()).append(".Color(");
                 ((RgbColor<Void>) lightAction.getRgbLedColor()).getR().accept(this);
                 this.sb.append(", ");
                 ((RgbColor<Void>) lightAction.getRgbLedColor()).getG().accept(this);

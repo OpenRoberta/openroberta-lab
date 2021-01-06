@@ -12,8 +12,9 @@ import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
-import de.fhg.iais.roberta.transformer.Ast2JaxbHelper;
+import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.ExprParam;
+import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.IVisitor;
@@ -146,29 +147,36 @@ public class VarDeclaration<V> extends Expr<V> {
      */
     public static <V> Phrase<V> jaxbToAst(Block block, AbstractJaxb2Ast<V> helper) {
         boolean isGlobalVariable = block.getType().equals(BlocklyConstants.ROB_LOCAL_VARIABLES_DECLARE) ? false : true;
-        List<Field> fields = helper.extractFields(block, (short) 2);
-        List<Value> values = helper.extractValues(block, (short) 1);
-        BlocklyType typeVar = BlocklyType.get(helper.extractField(fields, BlocklyConstants.TYPE));
-        String name = helper.extractField(fields, BlocklyConstants.VAR);
+        List<Field> fields = Jaxb2Ast.extractFields(block, (short) 2);
+        List<Value> values = Jaxb2Ast.extractValues(block, (short) 1);
+        BlocklyType typeVar = BlocklyType.get(Jaxb2Ast.extractField(fields, BlocklyConstants.TYPE));
+        String name = Jaxb2Ast.extractField(fields, BlocklyConstants.VAR);
         Phrase<V> expr = helper.extractValue(values, new ExprParam(BlocklyConstants.VALUE, typeVar));
         boolean next = block.getMutation().isNext();
 
         return VarDeclaration
-            .make(typeVar, name, helper.convertPhraseToExpr(expr), next, isGlobalVariable, helper.extractBlockProperties(block), helper.extractComment(block));
+            .make(
+                typeVar,
+                name,
+                helper.convertPhraseToExpr(expr),
+                next,
+                isGlobalVariable,
+                Jaxb2Ast.extractBlockProperties(block),
+                Jaxb2Ast.extractComment(block));
     }
 
     @Override
     public Block astToBlock() {
 
         Block jaxbDestination = new Block();
-        Ast2JaxbHelper.setBasicProperties(this, jaxbDestination);
+        Ast2Jaxb.setBasicProperties(this, jaxbDestination);
         Mutation mutation = new Mutation();
         mutation.setNext(this.next);
         mutation.setDeclarationType(getTypeVar().getBlocklyName());
         jaxbDestination.setMutation(mutation);
-        Ast2JaxbHelper.addField(jaxbDestination, BlocklyConstants.VAR, getName());
-        Ast2JaxbHelper.addField(jaxbDestination, BlocklyConstants.TYPE, getTypeVar().getBlocklyName());
-        Ast2JaxbHelper.addValue(jaxbDestination, BlocklyConstants.VALUE, this.value);
+        Ast2Jaxb.addField(jaxbDestination, BlocklyConstants.VAR, getName());
+        Ast2Jaxb.addField(jaxbDestination, BlocklyConstants.TYPE, getTypeVar().getBlocklyName());
+        Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.VALUE, this.value);
 
         return jaxbDestination;
     }

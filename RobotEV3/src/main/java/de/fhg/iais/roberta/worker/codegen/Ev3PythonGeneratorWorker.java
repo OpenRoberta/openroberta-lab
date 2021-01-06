@@ -12,10 +12,6 @@ public final class Ev3PythonGeneratorWorker extends AbstractLanguageGeneratorWor
 
     @Override
     protected AbstractLanguageVisitor getVisitor(Project project, ClassToInstanceMap<IProjectBean> beans) {
-        return new Ev3PythonVisitor(
-            project.getProgramAst().getTree(),
-            project.getConfigurationAst(),
-            project.getLanguage(),
-            beans);
+        return new Ev3PythonVisitor(project.getProgramAst().getTree(), project.getConfigurationAst(), project.getLanguage(), beans);
     }
 }

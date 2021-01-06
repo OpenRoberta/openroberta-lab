@@ -1,10 +1,10 @@
 package de.fhg.iais.roberta.syntax;
 
-import org.junit.BeforeClass;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+
+import org.junit.BeforeClass;
 
 import de.fhg.iais.roberta.ast.AstTest;
 import de.fhg.iais.roberta.blockly.generated.BlockSet;

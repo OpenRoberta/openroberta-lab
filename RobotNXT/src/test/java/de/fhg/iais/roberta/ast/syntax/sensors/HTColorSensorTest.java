@@ -11,6 +11,12 @@ public class HTColorSensorTest extends NxtAstTest {
     public void setColor() throws Exception {
         String a = "SensorHtColor(S3,\"COLOUR\")SensorHtColor(S1,\"LIGHT\")SensorHtColor(S4,\"AMBIENTLIGHT\")SensorHtColor(S2,\"RGB\")";
 
-        UnitTestHelper.checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, a, "/ast/sensors/sensor_setHTColor.xml", brickConfigurationHTC1HTC2HTC3HTC4, false);
+        UnitTestHelper
+            .checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(
+                testFactory,
+                a,
+                "/ast/sensors/sensor_setHTColor.xml",
+                brickConfigurationHTC1HTC2HTC3HTC4,
+                false);
     }
 }

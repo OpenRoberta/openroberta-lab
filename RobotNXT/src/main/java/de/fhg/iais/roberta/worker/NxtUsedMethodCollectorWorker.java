@@ -12,6 +12,7 @@ public class NxtUsedMethodCollectorWorker extends AbstractUsedMethodCollectorWor
 
     /**
      * NXT has additional methods that need to be generated.
+     *
      * @return the additional methods
      */
     @Override

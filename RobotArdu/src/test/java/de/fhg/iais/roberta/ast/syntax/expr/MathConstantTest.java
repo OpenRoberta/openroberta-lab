@@ -16,7 +16,8 @@ public class MathConstantTest extends ArduinoAstTest {
         String a = "M_PIM_EM_GOLDEN_RATIOM_SQRT2M_SQRT1_2M_INFINITY";
         //"Float.POSITIVE_INFINITY";
 
-        UnitTestHelper.checkWorkers(testFactory, a, "/syntax/math/math_constant.xml", new ArduinoUsedHardwareCollectorWorker(), new ArduinoCxxGeneratorWorker());
+        UnitTestHelper
+            .checkWorkers(testFactory, a, "/syntax/math/math_constant.xml", new ArduinoUsedHardwareCollectorWorker(), new ArduinoCxxGeneratorWorker());
     }
 
     @Ignore

@@ -16,7 +16,8 @@ import de.fhg.iais.roberta.syntax.action.Action;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.syntax.lang.expr.ExprList;
 import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
-import de.fhg.iais.roberta.transformer.Ast2JaxbHelper;
+import de.fhg.iais.roberta.transformer.Ast2Jaxb;
+import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.Pair;
 import de.fhg.iais.roberta.visitor.IVisitor;
@@ -60,11 +61,11 @@ public class SendDataAction<V> extends Action<V> {
     }
 
     public List<Pair<String, Expr<V>>> getId2Phenomena() {
-        return id2Phenomena;
+        return this.id2Phenomena;
     }
 
     public String getDestination() {
-        return destination;
+        return this.destination;
     }
 
     /**
@@ -76,29 +77,29 @@ public class SendDataAction<V> extends Action<V> {
      */
     public static <V> Phrase<V> jaxbToAst(Block block, AbstractJaxb2Ast<V> helper) {
         ExprList<V> exprList = helper.blockToExprList(block, BlocklyType.NUMBER);
-        List<Field> fields = helper.extractFields(block, (short) 999);
+        List<Field> fields = Jaxb2Ast.extractFields(block, (short) 999);
         List<Pair<String, Expr<V>>> id2Phenomena = new ArrayList<>();
         String destination = fields.get(0).getValue();
         for ( int i = 0; i < exprList.get().size(); i++ ) {
             id2Phenomena.add(Pair.of(fields.get(i + 1).getValue(), exprList.get().get(i)));
         }
-        return SendDataAction.make(destination, id2Phenomena, helper.extractBlockProperties(block), helper.extractComment(block));
+        return SendDataAction.make(destination, id2Phenomena, Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
 
     }
 
     @Override
     public Block astToBlock() {
         Block jaxbDestination = new Block();
-        Ast2JaxbHelper.setBasicProperties(this, jaxbDestination);
+        Ast2Jaxb.setBasicProperties(this, jaxbDestination);
         int numOfStrings = getId2Phenomena().size();
         Mutation mutation = new Mutation();
         mutation.setItems(BigInteger.valueOf(numOfStrings));
         jaxbDestination.setMutation(mutation);
-        Ast2JaxbHelper.addField(jaxbDestination, "DESTINATION", this.destination);
+        Ast2Jaxb.addField(jaxbDestination, "DESTINATION", this.destination);
         int i = 0;
         for ( Pair<String, Expr<V>> kv : getId2Phenomena() ) {
-            Ast2JaxbHelper.addField(jaxbDestination, BlocklyConstants.PHEN + i, kv.getFirst());
-            Ast2JaxbHelper.addValue(jaxbDestination, BlocklyConstants.ADD + i, kv.getSecond());
+            Ast2Jaxb.addField(jaxbDestination, BlocklyConstants.PHEN + i, kv.getFirst());
+            Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.ADD + i, kv.getSecond());
             i++;
         }
         return jaxbDestination;

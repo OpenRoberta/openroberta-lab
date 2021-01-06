@@ -302,7 +302,7 @@ public class ClientProgramController {
 
             ProgramProcessor programProcessor = new ProgramProcessor(dbSession, httpSessionState);
             UserProcessor userProcessor = new UserProcessor(dbSession, httpSessionState);
-            UserGroupProcessor userGroupProcessor = new UserGroupProcessor(dbSession, httpSessionState, isPublicServer);
+            UserGroupProcessor userGroupProcessor = new UserGroupProcessor(dbSession, httpSessionState, this.isPublicServer);
             String robot = getRobot(httpSessionState);
 
             User user = httpSessionState.isUserLoggedIn() ? userProcessor.getUser(httpSessionState.getUserId()) : null;

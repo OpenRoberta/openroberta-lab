@@ -68,11 +68,11 @@ import de.fhg.iais.roberta.syntax.lang.functions.ListGetIndex;
 import de.fhg.iais.roberta.syntax.lang.functions.ListSetIndex;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
-import de.fhg.iais.roberta.syntax.sensor.generic.HTColorSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.HTColorSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.IRSeekerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.KeysSensor;
@@ -711,6 +711,8 @@ public final class Ev3JavaVisitor extends AbstractJavaVisitor implements IEv3Vis
                 this.sb.append("(int) ");
                 getSubFunct.getParam().get(1).accept(this);
                 break;
+            case RANDOM:
+                throw new DbcException("RANDOM is invalid (has been removed)");
         }
 
         this.sb.append(", ");
@@ -742,6 +744,8 @@ public final class Ev3JavaVisitor extends AbstractJavaVisitor implements IEv3Vis
                     getSubFunct.getParam().get(1).accept(this);
                 }
                 break;
+            case RANDOM:
+                throw new DbcException("RANDOM is invalid (has been removed)");
         }
         this.sb.append("))");
         return null;
@@ -1049,7 +1053,7 @@ public final class Ev3JavaVisitor extends AbstractJavaVisitor implements IEv3Vis
         for ( ConfigurationComponent sensor : this.brickConfiguration.getSensors() ) {
             boolean isUsed = false;
             for ( UsedSensor usedSensor : this.getBean(UsedHardwareBean.class).getUsedSensors() ) {
-                if (sensor.getComponentType().contains(usedSensor.getType()) && usedSensor.getPort().equals(sensor.getUserDefinedPortName())) {
+                if ( sensor.getComponentType().contains(usedSensor.getType()) && usedSensor.getPort().equals(sensor.getUserDefinedPortName()) ) {
                     isUsed = true;
                 }
             }
@@ -1067,7 +1071,7 @@ public final class Ev3JavaVisitor extends AbstractJavaVisitor implements IEv3Vis
         for ( ConfigurationComponent actor : this.brickConfiguration.getActors() ) {
             boolean isUsed = false;
             for ( UsedActor usedActor : this.getBean(UsedHardwareBean.class).getUsedActors() ) {
-                if (usedActor.getType().equals(actor.getComponentType()) && usedActor.getPort().equals(actor.getUserDefinedPortName())) {
+                if ( usedActor.getType().equals(actor.getComponentType()) && usedActor.getPort().equals(actor.getUserDefinedPortName()) ) {
                     isUsed = true;
                 }
             }
@@ -1085,7 +1089,7 @@ public final class Ev3JavaVisitor extends AbstractJavaVisitor implements IEv3Vis
         StringBuilder sb = new StringBuilder();
         String arrayOfSensors = "";
         for ( UsedSensor usedSensor : this.getBean(UsedHardwareBean.class).getUsedSensors() ) {
-            if (!usedSensor.getType().equals(SC.TIMER)) { // TODO this should be handled differently
+            if ( !usedSensor.getType().equals(SC.TIMER) ) { // TODO this should be handled differently
                 arrayOfSensors += generateRegenerateUsedSensor(usedSensor);
                 arrayOfSensors += ", ";
             }
@@ -1093,7 +1097,7 @@ public final class Ev3JavaVisitor extends AbstractJavaVisitor implements IEv3Vis
 
         sb.append("private Set<UsedSensor> usedSensors = " + "new LinkedHashSet<UsedSensor>(");
         if ( !this.getBean(UsedHardwareBean.class).getUsedSensors().isEmpty() ) {
-            if(arrayOfSensors.length() >= 2) {
+            if ( arrayOfSensors.length() >= 2 ) {
                 sb.append("Arrays.asList(").append(arrayOfSensors, 0, arrayOfSensors.length() - 2).append(")");
             }
         }

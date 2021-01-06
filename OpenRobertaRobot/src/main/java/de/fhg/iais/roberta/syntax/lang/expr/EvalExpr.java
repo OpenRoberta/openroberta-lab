@@ -7,7 +7,8 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.antlr.v4.runtime.ANTLRInputStream;
+import org.antlr.v4.runtime.CharStream;
+import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,7 +26,8 @@ import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.lang.expr.eval.EvalExprErrorListener;
 import de.fhg.iais.roberta.syntax.lang.expr.eval.ExprlyVisitor;
 import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
-import de.fhg.iais.roberta.transformer.Ast2JaxbHelper;
+import de.fhg.iais.roberta.transformer.Ast2Jaxb;
+import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.typecheck.NepoInfo;
 import de.fhg.iais.roberta.visitor.IVisitor;
@@ -79,7 +81,7 @@ public class EvalExpr<V> extends Expr<V> {
      */
     public static <V> EvalExpr<V> make(String expr, String type, BlocklyBlockProperties properties, BlocklyComment comment) throws Exception {
         final List<NepoInfo> annotations = new ArrayList<>();
-        Expr<V> astOfExpr = expr2AST(expr, annotations);
+        Expr<V> astOfExpr = EvalExpr.expr2AST(expr, annotations);
         astOfExpr.setReadOnly();
         EvalExpr<V> evalExpr = new EvalExpr<>(expr, astOfExpr, type, properties, comment);
         for ( NepoInfo nepoInfo : annotations ) {
@@ -147,9 +149,9 @@ public class EvalExpr<V> extends Expr<V> {
         Block jaxbDestination = new Block();
         Mutation mutation = new Mutation();
         mutation.setType(this.getType());
-        Ast2JaxbHelper.setBasicProperties(this, jaxbDestination);
-        Ast2JaxbHelper.addField(jaxbDestination, BlocklyConstants.TYPE, this.getType());
-        Ast2JaxbHelper.addField(jaxbDestination, BlocklyConstants.EXPRESSION, this.getExprStr());
+        Ast2Jaxb.setBasicProperties(this, jaxbDestination);
+        Ast2Jaxb.addField(jaxbDestination, BlocklyConstants.TYPE, this.getType());
+        Ast2Jaxb.addField(jaxbDestination, BlocklyConstants.EXPRESSION, this.getExprStr());
         jaxbDestination.setMutation(mutation);
         return jaxbDestination;
     }
@@ -164,10 +166,10 @@ public class EvalExpr<V> extends Expr<V> {
      */
     @SuppressWarnings("unchecked")
     public static <V> Phrase<V> jaxbToAst(Block block, AbstractJaxb2Ast<V> helper) throws Exception {
-        List<Field> fields = helper.extractFields(block, (short) 2);
-        String expr = helper.extractField(fields, "EXPRESSION");
-        String type = helper.extractField(fields, "TYPE");
-        return (Phrase<V>) EvalExpr.make(expr, type, helper.extractBlockProperties(block), helper.extractComment(block));
+        List<Field> fields = Jaxb2Ast.extractFields(block, (short) 2);
+        String expr = Jaxb2Ast.extractField(fields, "EXPRESSION");
+        String type = Jaxb2Ast.extractField(fields, "TYPE");
+        return (Phrase<V>) EvalExpr.make(expr, type, Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
 
     }
 
@@ -175,7 +177,7 @@ public class EvalExpr<V> extends Expr<V> {
      * Function to create an abstract syntax tree from an expression, that has been submitted as a string
      */
     private static <V> Expr<V> expr2AST(String expr, List<NepoInfo> annotations) throws Exception {
-        ExprlyParser parser = mkParser(expr);
+        ExprlyParser parser = EvalExpr.mkParser(expr);
         EvalExprErrorListener err = new EvalExprErrorListener();
         parser.removeErrorListeners();
         parser.addErrorListener(err);
@@ -199,7 +201,7 @@ public class EvalExpr<V> extends Expr<V> {
      */
     private static ExprlyParser mkParser(String expr) throws UnsupportedEncodingException, IOException {
         InputStream inputStream = new ByteArrayInputStream(expr.getBytes("UTF-8"));
-        ANTLRInputStream input = new ANTLRInputStream(inputStream);
+        CharStream input = CharStreams.fromStream(inputStream);
         ExprlyLexer lexer = new ExprlyLexer(input);
         CommonTokenStream tokens = new CommonTokenStream(lexer);
         ExprlyParser parser = new ExprlyParser(tokens);

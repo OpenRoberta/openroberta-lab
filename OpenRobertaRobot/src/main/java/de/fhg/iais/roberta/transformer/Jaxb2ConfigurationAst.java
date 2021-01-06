@@ -1,11 +1,5 @@
 package de.fhg.iais.roberta.transformer;
 
-import static de.fhg.iais.roberta.transformer.AbstractJaxb2Ast.extractBlockProperties;
-import static de.fhg.iais.roberta.transformer.AbstractJaxb2Ast.extractComment;
-import static de.fhg.iais.roberta.transformer.AbstractJaxb2Ast.extractFields;
-import static de.fhg.iais.roberta.transformer.AbstractJaxb2Ast.extractValues;
-import static de.fhg.iais.roberta.transformer.AbstractJaxb2Ast.optField;
-
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -58,21 +52,21 @@ public final class Jaxb2ConfigurationAst {
 
     public static ConfigurationAst blocks2OldConfig(BlockSet set, BlocklyDropdownFactory factory, String topBlockName, String sensorsPrefix) {
         ConfigurationAst.Builder builder = new ConfigurationAst.Builder();
-        Block topBlock = getTopBlock(set, topBlockName);
-        List<Field> fields = extractFields(topBlock, (short) 255);
-        setWithOptField(fields, "WHEEL_DIAMETER", wd -> builder.setWheelDiameter(Float.parseFloat(wd)));
-        setWithOptField(fields, "TRACK_WIDTH", wd -> builder.setTrackWidth(Float.parseFloat(wd)));
-        setWithOptField(fields, "IP_ADDRESS", builder::setIpAddress);
-        setWithOptField(fields, "USERNAME", builder::setUserName);
-        setWithOptField(fields, "PASSWORD", builder::setPassword);
+        Block topBlock = Jaxb2ConfigurationAst.getTopBlock(set, topBlockName);
+        List<Field> fields = Jaxb2Ast.extractFields(topBlock, (short) 255);
+        Jaxb2ConfigurationAst.setWithOptField(fields, "WHEEL_DIAMETER", wd -> builder.setWheelDiameter(Float.parseFloat(wd)));
+        Jaxb2ConfigurationAst.setWithOptField(fields, "TRACK_WIDTH", wd -> builder.setTrackWidth(Float.parseFloat(wd)));
+        Jaxb2ConfigurationAst.setWithOptField(fields, "IP_ADDRESS", builder::setIpAddress);
+        Jaxb2ConfigurationAst.setWithOptField(fields, "USERNAME", builder::setUserName);
+        Jaxb2ConfigurationAst.setWithOptField(fields, "PASSWORD", builder::setPassword);
 
-        List<ConfigurationComponent> allComponents = extractOldConfigurationComponent(topBlock, factory, sensorsPrefix);
+        List<ConfigurationComponent> allComponents = Jaxb2ConfigurationAst.extractOldConfigurationComponent(topBlock, factory, sensorsPrefix);
 
         return builder.addComponents(allComponents).build();
     }
 
     private static void setWithOptField(List<Field> fields, String name, Callback<? super String> callback) {
-        String val = optField(fields, name);
+        String val = Jaxb2Ast.optField(fields, name);
         if ( val != null ) {
             callback.call(val);
         }
@@ -80,12 +74,12 @@ public final class Jaxb2ConfigurationAst {
 
     private static List<ConfigurationComponent> extractOldConfigurationComponent(Block topBlock, BlocklyDropdownFactory factory, String sensorsPrefix) {
         List<ConfigurationComponent> allComponents = new ArrayList<>();
-        for ( Value value : extractValues(topBlock, (short) 255) ) {
+        for ( Value value : Jaxb2Ast.extractValues(topBlock, (short) 255) ) {
             String portName = value.getName();
             String userDefinedName = portName.substring(1);
             boolean isActor = !portName.startsWith(sensorsPrefix);
             String blocklyName = value.getBlock().getType();
-            List<Field> fields = extractFields(value.getBlock(), (short) 255);
+            List<Field> fields = Jaxb2Ast.extractFields(value.getBlock(), (short) 255);
             Map<String, String> properties = new HashMap<>();
             for ( Field field : fields ) {
                 String fKey = field.getName();
@@ -99,8 +93,8 @@ public final class Jaxb2ConfigurationAst {
                     portName,
                     userDefinedName,
                     properties,
-                    extractBlockProperties(topBlock),
-                    extractComment(topBlock),
+                    Jaxb2Ast.extractBlockProperties(topBlock),
+                    Jaxb2Ast.extractComment(topBlock),
                     0,
                     0);
             allComponents.add(configComp);
@@ -112,7 +106,7 @@ public final class Jaxb2ConfigurationAst {
         List<Instance> instances = set.getInstance();
         List<ConfigurationComponent> allComponents = new ArrayList<>();
         for ( Instance instance : instances ) {
-            allComponents.add(instance2NewConfigComp(instance, factory));
+            allComponents.add(Jaxb2ConfigurationAst.instance2NewConfigComp(instance, factory));
         }
 
         return new ConfigurationAst.Builder()
@@ -137,7 +131,11 @@ public final class Jaxb2ConfigurationAst {
         // TODO this is workaround for the robot specific "robBrick_*-Brick" blocks, which have varying names for the "userDefinedPortName" from robot to robot
         // TODO this this should be removed if possible
         if ( BRICK_BLOCK_PATTERN.matcher(firstBlock.getType()).find() ) {
-            String className = ConfigurationComponent.class.getPackage().getName() + '.' + StringUtils.capitalize(componentType.toLowerCase(Locale.ENGLISH)) + "ConfigurationComponent";
+            String className =
+                ConfigurationComponent.class.getPackage().getName()
+                    + '.'
+                    + StringUtils.capitalize(componentType.toLowerCase(Locale.ENGLISH))
+                    + "ConfigurationComponent";
             try {
                 Constructor<ConfigurationComponent> constructor =
                     (Constructor<ConfigurationComponent>) Class
@@ -160,8 +158,8 @@ public final class Jaxb2ConfigurationAst {
                         null,
                         userDefinedName,
                         map,
-                        extractBlockProperties(firstBlock),
-                        extractComment(firstBlock),
+                        Jaxb2Ast.extractBlockProperties(firstBlock),
+                        Jaxb2Ast.extractComment(firstBlock),
                         Integer.parseInt(instance.getX()),
                         Integer.parseInt(instance.getY()));
             } catch ( ClassNotFoundException | NoSuchMethodException | IllegalAccessException | InstantiationException | InvocationTargetException e ) {
@@ -174,8 +172,8 @@ public final class Jaxb2ConfigurationAst {
                 userDefinedName,
                 userDefinedName,
                 map,
-                extractBlockProperties(firstBlock),
-                extractComment(firstBlock),
+                Jaxb2Ast.extractBlockProperties(firstBlock),
+                Jaxb2Ast.extractComment(firstBlock),
                 Integer.parseInt(instance.getX()),
                 Integer.parseInt(instance.getY()));
         }

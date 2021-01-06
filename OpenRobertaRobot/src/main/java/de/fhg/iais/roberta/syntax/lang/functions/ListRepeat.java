@@ -14,8 +14,9 @@ import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.lang.expr.Assoc;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
-import de.fhg.iais.roberta.transformer.Ast2JaxbHelper;
+import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.ExprParam;
+import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.IVisitor;
@@ -113,26 +114,26 @@ public class ListRepeat<V> extends Function<V> {
      * @return corresponding AST object
      */
     public static <V> Phrase<V> jaxbToAst(Block block, AbstractJaxb2Ast<V> helper) {
-        List<Field> fields = helper.extractFields(block, (short) 1);
-        String filename = helper.extractField(fields, BlocklyConstants.LIST_TYPE);
+        List<Field> fields = Jaxb2Ast.extractFields(block, (short) 1);
+        String filename = Jaxb2Ast.extractField(fields, BlocklyConstants.LIST_TYPE);
         List<ExprParam> exprParams = new ArrayList<ExprParam>();
         exprParams.add(new ExprParam(BlocklyConstants.ITEM, BlocklyType.ARRAY));
         exprParams.add(new ExprParam(BlocklyConstants.NUM, BlocklyType.NUMBER_INT));
         List<Expr<V>> params = helper.extractExprParameters(block, exprParams);
-        return ListRepeat.make(BlocklyType.get(filename), params, helper.extractBlockProperties(block), helper.extractComment(block));
+        return ListRepeat.make(BlocklyType.get(filename), params, Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
     }
 
     @Override
     public Block astToBlock() {
         Block jaxbDestination = new Block();
 
-        Ast2JaxbHelper.setBasicProperties(this, jaxbDestination);
+        Ast2Jaxb.setBasicProperties(this, jaxbDestination);
         Mutation mutation = new Mutation();
         mutation.setListType(this.typeVar.getBlocklyName());
         jaxbDestination.setMutation(mutation);
-        Ast2JaxbHelper.addField(jaxbDestination, BlocklyConstants.LIST_TYPE, this.typeVar.getBlocklyName());
-        Ast2JaxbHelper.addValue(jaxbDestination, BlocklyConstants.ITEM, getParam().get(0));
-        Ast2JaxbHelper.addValue(jaxbDestination, BlocklyConstants.NUM, getParam().get(1));
+        Ast2Jaxb.addField(jaxbDestination, BlocklyConstants.LIST_TYPE, this.typeVar.getBlocklyName());
+        Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.ITEM, getParam().get(0));
+        Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.NUM, getParam().get(1));
         return jaxbDestination;
     }
 }

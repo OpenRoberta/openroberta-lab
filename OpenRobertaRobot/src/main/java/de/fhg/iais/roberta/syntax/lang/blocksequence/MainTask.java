@@ -14,7 +14,8 @@ import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.lang.expr.Assoc;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtList;
 import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
-import de.fhg.iais.roberta.transformer.Ast2JaxbHelper;
+import de.fhg.iais.roberta.transformer.Ast2Jaxb;
+import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.IVisitor;
 import de.fhg.iais.roberta.visitor.lang.ILanguageVisitor;
@@ -88,16 +89,16 @@ public class MainTask<V> extends Task<V> {
         String debug = null;
         List<Field> fields = block.getField();
         if ( !fields.isEmpty() ) {
-            debug = helper.extractField(fields, "DEBUG");
+            debug = Jaxb2Ast.extractField(fields, "DEBUG");
         }
         if ( block.getMutation().isDeclare() == true ) {
-            List<Statement> statements = helper.extractStatements(block, (short) 1);
+            List<Statement> statements = Jaxb2Ast.extractStatements(block, (short) 1);
             StmtList<V> statement = helper.extractStatement(statements, BlocklyConstants.ST);
-            return MainTask.make(statement, debug, helper.extractBlockProperties(block), helper.extractComment(block));
+            return MainTask.make(statement, debug, Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
         }
         StmtList<V> listOfVariables = StmtList.make();
         listOfVariables.setReadOnly();
-        return MainTask.make(listOfVariables, debug, helper.extractBlockProperties(block), helper.extractComment(block));
+        return MainTask.make(listOfVariables, debug, Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
     }
 
     @Override
@@ -105,14 +106,14 @@ public class MainTask<V> extends Task<V> {
         boolean declare = !this.variables.get().isEmpty();
 
         Block jaxbDestination = new Block();
-        Ast2JaxbHelper.setBasicProperties(this, jaxbDestination);
+        Ast2Jaxb.setBasicProperties(this, jaxbDestination);
         Mutation mutation = new Mutation();
         mutation.setDeclare(declare);
         jaxbDestination.setMutation(mutation);
         if ( getDebug() != null ) {
-            Ast2JaxbHelper.addField(jaxbDestination, "DEBUG", getDebug());
+            Ast2Jaxb.addField(jaxbDestination, "DEBUG", getDebug());
         }
-        Ast2JaxbHelper.addStatement(jaxbDestination, BlocklyConstants.ST, this.variables);
+        Ast2Jaxb.addStatement(jaxbDestination, BlocklyConstants.ST, this.variables);
         return jaxbDestination;
     }
 

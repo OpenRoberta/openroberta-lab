@@ -155,7 +155,7 @@ public class RobotCommunicator {
     }
 
     public int getRobotCommunicationDataSize() {
-        return allStates.size();
+        return this.allStates.size();
     }
 
     /**
@@ -169,14 +169,14 @@ public class RobotCommunicator {
                 rcdMap.put(s, 0);
             }
             long robotLongestWaitingTime = 0;
-            for ( RobotCommunicationData rcd : allStates.values() ) {
+            for ( RobotCommunicationData rcd : this.allStates.values() ) {
                 final State state = rcd.getState();
                 robotLongestWaitingTime = Math.max(robotLongestWaitingTime, rcd.getElapsedMsecOfStartOfLastRequest());
                 int old = rcdMap.getOrDefault(state, 0);
                 rcdMap.put(state, old + 1);
             }
             StringBuilder sb = new StringBuilder();
-            sb.append("number of robots connected: ").append(allStates.size()).append("\nmax time a robot is waiting: ");
+            sb.append("number of robots connected: ").append(this.allStates.size()).append("\nmax time a robot is waiting: ");
             sb.append(robotLongestWaitingTime).append("\nstate distribution:\n");
             for ( Entry<State, Integer> entry : rcdMap.entrySet() ) {
                 sb.append(String.format("%-40s : %d\n", entry.getKey(), entry.getValue()));
@@ -196,7 +196,7 @@ public class RobotCommunicator {
     public String getDetailsOfRobotConnections() {
         try {
             List<String> connectionDetails = new ArrayList<>();
-            for ( RobotCommunicationData rcd : allStates.values() ) {
+            for ( RobotCommunicationData rcd : this.allStates.values() ) {
                 String token = sanitize(rcd.getToken());
                 long waitTime = sanitize(rcd.getElapsedMsecOfStartOfLastRequest());
                 long approvalTime = sanitize(rcd.getElapsedMsecOfStartApproval());

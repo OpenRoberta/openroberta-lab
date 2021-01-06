@@ -57,7 +57,7 @@ public class PersistLostPasswordTest {
 
     @Test
     public void createUrls() throws Exception {
-        List<User> userList = this.userDao.loadUserList("created", 0, "rwth");
+        List<User> userList = this.userDao.loadUserList("rwth", "created", 0, 10);
         Assert.isTrue(userList.size() == 5);
 
         for ( int userNumber = 0; userNumber < PersistLostPasswordTest.TOTAL_USERS; userNumber++ ) {

@@ -16,8 +16,9 @@ import de.fhg.iais.roberta.syntax.lang.functions.FunctionNames;
 import de.fhg.iais.roberta.syntax.lang.functions.MathPowerFunct;
 import de.fhg.iais.roberta.syntax.lang.stmt.ExprStmt;
 import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
-import de.fhg.iais.roberta.transformer.Ast2JaxbHelper;
+import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.ExprParam;
+import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.typecheck.Sig;
 import de.fhg.iais.roberta.util.dbc.Assert;
@@ -227,7 +228,7 @@ public final class Binary<V> extends Expr<V> {
         Phrase<V> rightt;
         switch ( block.getType() ) {
             case BlocklyConstants.TEXT_APPEND:
-                values = helper.extractValues(block, (short) 2);
+                values = Jaxb2Ast.extractValues(block, (short) 2);
                 leftt = helper.extractValue(values, new ExprParam(BlocklyConstants.VAR, BlocklyType.STRING));
                 rightt = helper.extractValue(values, new ExprParam(BlocklyConstants.TEXT, BlocklyType.STRING));
                 return ExprStmt
@@ -238,11 +239,11 @@ public final class Binary<V> extends Expr<V> {
                                 helper.convertPhraseToExpr(leftt),
                                 helper.convertPhraseToExpr(rightt),
                                 "",
-                                helper.extractBlockProperties(block),
-                                helper.extractComment(block)));
+                                Jaxb2Ast.extractBlockProperties(block),
+                                Jaxb2Ast.extractComment(block)));
             case BlocklyConstants.ROB_MATH_CHANGE:
             case BlocklyConstants.MATH_CHANGE:
-                values = helper.extractValues(block, (short) 2);
+                values = Jaxb2Ast.extractValues(block, (short) 2);
                 leftt = helper.extractValue(values, new ExprParam(BlocklyConstants.VAR, BlocklyType.STRING));
                 rightt = helper.extractValue(values, new ExprParam(BlocklyConstants.DELTA, BlocklyType.NUMBER_INT));
                 return ExprStmt
@@ -253,8 +254,8 @@ public final class Binary<V> extends Expr<V> {
                                 helper.convertPhraseToExpr(leftt),
                                 helper.convertPhraseToExpr(rightt),
                                 "",
-                                helper.extractBlockProperties(block),
-                                helper.extractComment(block)));
+                                Jaxb2Ast.extractBlockProperties(block),
+                                Jaxb2Ast.extractComment(block)));
 
             case BlocklyConstants.MATH_MODULO:
                 return helper
@@ -265,13 +266,13 @@ public final class Binary<V> extends Expr<V> {
                         BlocklyConstants.MOD);
 
             case BlocklyConstants.MATH_ARITHMETIC:
-                String opp = helper.extractOperation(block, BlocklyConstants.OP);
+                String opp = Jaxb2Ast.extractOperation(block, BlocklyConstants.OP);
                 if ( opp.equals(BlocklyConstants.POWER) ) {
                     ArrayList<ExprParam> exprParams = new ArrayList<>();
                     exprParams.add(new ExprParam(BlocklyConstants.A, BlocklyType.NUMBER_INT));
                     exprParams.add(new ExprParam(BlocklyConstants.B, BlocklyType.NUMBER_INT));
                     List<Expr<V>> params = helper.extractExprParameters(block, exprParams);
-                    return MathPowerFunct.make(FunctionNames.POWER, params, helper.extractBlockProperties(block), helper.extractComment(block));
+                    return MathPowerFunct.make(FunctionNames.POWER, params, Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
                 }
             default:
                 return helper
@@ -287,7 +288,7 @@ public final class Binary<V> extends Expr<V> {
     @Override
     public Block astToBlock() {
         Block jaxbDestination = new Block();
-        Ast2JaxbHelper.setBasicProperties(this, jaxbDestination);
+        Ast2Jaxb.setBasicProperties(this, jaxbDestination);
         if ( !this.operationRange.equals("") ) {
             Mutation mutation = new Mutation();
             mutation.setOperatorRange(this.operationRange);
@@ -296,23 +297,23 @@ public final class Binary<V> extends Expr<V> {
         switch ( getOp() ) {
 
             case MATH_CHANGE:
-                Ast2JaxbHelper.addValue(jaxbDestination, BlocklyConstants.VAR, getLeft());
-                Ast2JaxbHelper.addValue(jaxbDestination, BlocklyConstants.DELTA, getRight());
+                Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.VAR, getLeft());
+                Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.DELTA, getRight());
                 return jaxbDestination;
             case TEXT_APPEND:
-                Ast2JaxbHelper.addValue(jaxbDestination, BlocklyConstants.VAR, getLeft());
-                Ast2JaxbHelper.addValue(jaxbDestination, BlocklyConstants.TEXT, getRight());
+                Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.VAR, getLeft());
+                Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.TEXT, getRight());
                 return jaxbDestination;
 
             case MOD:
-                Ast2JaxbHelper.addValue(jaxbDestination, BlocklyConstants.DIVIDEND, getLeft());
-                Ast2JaxbHelper.addValue(jaxbDestination, BlocklyConstants.DIVISOR, getRight());
+                Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.DIVIDEND, getLeft());
+                Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.DIVISOR, getRight());
                 return jaxbDestination;
 
             default:
-                Ast2JaxbHelper.addField(jaxbDestination, BlocklyConstants.OP, getOp().name());
-                Ast2JaxbHelper.addValue(jaxbDestination, BlocklyConstants.A, getLeft());
-                Ast2JaxbHelper.addValue(jaxbDestination, BlocklyConstants.B, getRight());
+                Ast2Jaxb.addField(jaxbDestination, BlocklyConstants.OP, getOp().name());
+                Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.A, getLeft());
+                Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.B, getRight());
                 return jaxbDestination;
         }
     }

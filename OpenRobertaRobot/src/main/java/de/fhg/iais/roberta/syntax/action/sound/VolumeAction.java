@@ -13,8 +13,9 @@ import de.fhg.iais.roberta.syntax.action.Action;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.syntax.lang.expr.NullConst;
 import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
-import de.fhg.iais.roberta.transformer.Ast2JaxbHelper;
+import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.ExprParam;
+import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.IVisitor;
@@ -84,22 +85,23 @@ public class VolumeAction<V> extends Action<V> {
      */
     public static <V> Phrase<V> jaxbToAst(Block block, AbstractJaxb2Ast<V> helper) {
         if ( block.getType().equals(BlocklyConstants.ROB_ACTIONS_PLAY_SET_VOLUME) ) {
-            List<Value> values = helper.extractValues(block, (short) 1);
+            List<Value> values = Jaxb2Ast.extractValues(block, (short) 1);
             Phrase<V> expr = helper.extractValue(values, new ExprParam(BlocklyConstants.VOLUME, BlocklyType.NUMBER_INT));
             return VolumeAction
-                .make(VolumeAction.Mode.SET, helper.convertPhraseToExpr(expr), helper.extractBlockProperties(block), helper.extractComment(block));
+                .make(VolumeAction.Mode.SET, helper.convertPhraseToExpr(expr), Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
         }
-        NullConst<V> expr = NullConst.make(helper.extractBlockProperties(block), helper.extractComment(block));
-        return VolumeAction.make(VolumeAction.Mode.GET, helper.convertPhraseToExpr(expr), helper.extractBlockProperties(block), helper.extractComment(block));
+        NullConst<V> expr = NullConst.make(Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
+        return VolumeAction
+            .make(VolumeAction.Mode.GET, helper.convertPhraseToExpr(expr), Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
     }
 
     @Override
     public Block astToBlock() {
         Block jaxbDestination = new Block();
-        Ast2JaxbHelper.setBasicProperties(this, jaxbDestination);
+        Ast2Jaxb.setBasicProperties(this, jaxbDestination);
 
         if ( getMode() == VolumeAction.Mode.SET ) {
-            Ast2JaxbHelper.addValue(jaxbDestination, BlocklyConstants.VOLUME, getVolume());
+            Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.VOLUME, getVolume());
         }
 
         return jaxbDestination;

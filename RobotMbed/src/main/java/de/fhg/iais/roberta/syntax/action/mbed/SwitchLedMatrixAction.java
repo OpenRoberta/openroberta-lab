@@ -12,7 +12,8 @@ import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.SC;
 import de.fhg.iais.roberta.syntax.action.Action;
 import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
-import de.fhg.iais.roberta.transformer.Ast2JaxbHelper;
+import de.fhg.iais.roberta.transformer.Ast2Jaxb;
+import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.visitor.IVisitor;
 import de.fhg.iais.roberta.visitor.hardware.IMbedVisitor;
 
@@ -66,17 +67,17 @@ public class SwitchLedMatrixAction<V> extends Action<V> {
      * @return corresponding AST object
      */
     public static <V> Phrase<V> jaxbToAst(Block block, AbstractJaxb2Ast<V> helper) {
-        List<Field> fields = helper.extractFields(block, (short) 1);
+        List<Field> fields = Jaxb2Ast.extractFields(block, (short) 1);
 
-        boolean activated = helper.extractField(fields, BlocklyConstants.STATE).equals("ON");
-        return SwitchLedMatrixAction.make(activated, helper.extractBlockProperties(block), helper.extractComment(block));
+        boolean activated = Jaxb2Ast.extractField(fields, BlocklyConstants.STATE).equals("ON");
+        return SwitchLedMatrixAction.make(activated, Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
     }
 
     @Override
     public Block astToBlock() {
         Block jaxbDestination = new Block();
-        Ast2JaxbHelper.setBasicProperties(this, jaxbDestination);
-        Ast2JaxbHelper.addField(jaxbDestination, BlocklyConstants.STATE, (this.activated) ? SC.ON : SC.OFF);
+        Ast2Jaxb.setBasicProperties(this, jaxbDestination);
+        Ast2Jaxb.addField(jaxbDestination, BlocklyConstants.STATE, (this.activated) ? SC.ON : SC.OFF);
 
         return jaxbDestination;
     }

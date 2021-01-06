@@ -14,7 +14,8 @@ import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.Action;
 import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
-import de.fhg.iais.roberta.transformer.Ast2JaxbHelper;
+import de.fhg.iais.roberta.transformer.Ast2Jaxb;
+import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.IVisitor;
 import de.fhg.iais.roberta.visitor.hardware.actor.ISoundVisitor;
@@ -91,21 +92,20 @@ public class PlayNoteAction<V> extends Action<V> {
      * @return corresponding AST object
      */
     public static <V> Phrase<V> jaxbToAst(Block block, AbstractJaxb2Ast<V> helper) {
-        List<Field> fields = AbstractJaxb2Ast.extractFields(block, (short) 3);
+        List<Field> fields = Jaxb2Ast.extractFields(block, (short) 3);
         BlocklyDropdownFactory factory = helper.getDropdownFactory();
-        String port = AbstractJaxb2Ast.extractField(fields, BlocklyConstants.ACTORPORT, BlocklyConstants.NO_PORT);
-        String duration = AbstractJaxb2Ast.extractField(fields, BlocklyConstants.DURATION, "2000");
-        String frequency = AbstractJaxb2Ast.extractField(fields, BlocklyConstants.FREQUENCE, "261.626");
-        return PlayNoteAction
-            .make(factory.sanitizePort(port), duration, frequency, AbstractJaxb2Ast.extractBlockProperties(block), AbstractJaxb2Ast.extractComment(block));
+        String port = Jaxb2Ast.extractField(fields, BlocklyConstants.ACTORPORT, BlocklyConstants.NO_PORT);
+        String duration = Jaxb2Ast.extractField(fields, BlocklyConstants.DURATION, "2000");
+        String frequency = Jaxb2Ast.extractField(fields, BlocklyConstants.FREQUENCE, "261.626");
+        return PlayNoteAction.make(factory.sanitizePort(port), duration, frequency, Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
     }
 
     @Override
     public Block astToBlock() {
         Block jaxbDestination = new Block();
-        Ast2JaxbHelper.setBasicProperties(this, jaxbDestination);
-        Ast2JaxbHelper.addField(jaxbDestination, BlocklyConstants.DURATION, this.duration);
-        Ast2JaxbHelper.addField(jaxbDestination, BlocklyConstants.FREQUENCE, this.frequency);
+        Ast2Jaxb.setBasicProperties(this, jaxbDestination);
+        Ast2Jaxb.addField(jaxbDestination, BlocklyConstants.DURATION, this.duration);
+        Ast2Jaxb.addField(jaxbDestination, BlocklyConstants.FREQUENCE, this.frequency);
 
         return jaxbDestination;
     }

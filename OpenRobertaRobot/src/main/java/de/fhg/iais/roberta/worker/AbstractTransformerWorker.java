@@ -15,9 +15,8 @@ import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.ITransformerVisitor;
 
 /**
- * Used to transform ASTs between different versions.
- * Uses a {@link ITransformerVisitor} to generate a deep copy of the input AST(s) and replaces them in the project.
- * It is only applied up to a specific version range of the AST, the version of the new AST can also be determined.
+ * Used to transform ASTs between different versions. Uses a {@link ITransformerVisitor} to generate a deep copy of the input AST(s) and replaces them in the
+ * project. It is only applied up to a specific version range of the AST, the version of the new AST can also be determined.
  */
 public abstract class AbstractTransformerWorker implements IWorker {
 
@@ -29,7 +28,7 @@ public abstract class AbstractTransformerWorker implements IWorker {
 
     /**
      * Creates a new TransformerWorker.
-     * 
+     *
      * @param maxXmlVersion the maximum XML version of AST this transformer should apply to
      * @param newXmlVersion the new XML version of the output
      */
@@ -103,17 +102,16 @@ public abstract class AbstractTransformerWorker implements IWorker {
         project.setConfigurationAst(confBuilder.build());
     }
 
-    private static void fillHardwareBeanWithOldConf(
-        NewUsedHardwareBean.Builder usedHardwareBeanBuilder, Collection<ConfigurationComponent> confComps) {
+    private static void fillHardwareBeanWithOldConf(NewUsedHardwareBean.Builder usedHardwareBeanBuilder, Collection<ConfigurationComponent> confComps) {
         for ( ConfigurationComponent cc : confComps ) {
             usedHardwareBeanBuilder.addUsedConfigurationComponent(cc);
         }
     }
 
     /**
-     * Returns the appropriate visitor for this worker. Used by subclasses to keep the execute method generic.
-     * The returned visitor may be null if no transformation other than the version is necessary.
-     * Could be removed in the future, when visitors are specified in the properties as well, or inferred from the worker name.
+     * Returns the appropriate visitor for this worker. Used by subclasses to keep the execute method generic. The returned visitor may be null if no
+     * transformation other than the version is necessary. Could be removed in the future, when visitors are specified in the properties as well, or inferred
+     * from the worker name.
      *
      * @param project the project
      * @param builder the bean for used hardware

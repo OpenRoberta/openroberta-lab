@@ -40,9 +40,8 @@ public class UserProcessor extends AbstractProcessor {
     }
 
     /**
-     * Returns a user with the given account name and password.
-     * This can not be used to get group members, because you need to know who the
-     * user group owner is, in order to clearly identify a user group and therefore its members.
+     * Returns a user with the given account name and password. This can not be used to get group members, because you need to know who the user group owner is,
+     * in order to clearly identify a user group and therefore its members.
      *
      * @param account
      * @param password
@@ -113,8 +112,7 @@ public class UserProcessor extends AbstractProcessor {
     }
 
     /**
-     * Creates a new user.
-     * Is not used to create user group members. Take a look in the UserGroupProcessor for that.
+     * Creates a new user. Is not used to create user group members. Take a look in the UserGroupProcessor for that.
      *
      * @param account
      * @param password
@@ -225,8 +223,7 @@ public class UserProcessor extends AbstractProcessor {
     }
 
     /**
-     * Updates the information of a user.
-     * Is not used to update user group members, since they are not able to update their accounts.
+     * Updates the information of a user. Is not used to update user group members, since they are not able to update their accounts.
      *
      * @param account
      * @param userName

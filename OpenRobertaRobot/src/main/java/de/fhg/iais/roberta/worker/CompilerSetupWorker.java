@@ -7,8 +7,8 @@ import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.util.PluginProperties;
 
 /**
- * Sets up all paths and necessary information for the following compiler workers.
- * Data read from the robot's properties is stored in the {@link CompilerSetupBean}.
+ * Sets up all paths and necessary information for the following compiler workers. Data read from the robot's properties is stored in the
+ * {@link CompilerSetupBean}.
  */
 public class CompilerSetupWorker implements IWorker {
 

@@ -12,15 +12,14 @@ import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.Action;
-import de.fhg.iais.roberta.syntax.expressions.arduino.LEDMatrixImage;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
-import de.fhg.iais.roberta.transformer.Ast2JaxbHelper;
+import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.ExprParam;
+import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.IVisitor;
-import de.fhg.iais.roberta.visitor.hardware.IArduinoVisitor;
 import de.fhg.iais.roberta.visitor.hardware.IMbotVisitor;
 
 /**
@@ -100,25 +99,25 @@ public class LEDMatrixImageAction<V> extends Action<V> {
      * @return corresponding AST object
      */
     public static <V> Phrase<V> jaxbToAst(Block block, AbstractJaxb2Ast<V> helper) {
-        List<Field> fields = helper.extractFields(block, (short) 2);
-        List<Value> values = helper.extractValues(block, (short) 1);
-        final String port = helper.extractField(fields, BlocklyConstants.ACTORPORT);
-        String mode = helper.extractField(fields, BlocklyConstants.TYPE);
+        List<Field> fields = Jaxb2Ast.extractFields(block, (short) 2);
+        List<Value> values = Jaxb2Ast.extractValues(block, (short) 1);
+        final String port = Jaxb2Ast.extractField(fields, BlocklyConstants.ACTORPORT);
+        String mode = Jaxb2Ast.extractField(fields, BlocklyConstants.TYPE);
         Phrase<V> image = helper.extractValue(values, new ExprParam(BlocklyConstants.VALUE, BlocklyType.STRING));
-        return LEDMatrixImageAction.make(port, mode, helper.convertPhraseToExpr(image), helper.extractBlockProperties(block), helper.extractComment(block));
+        return LEDMatrixImageAction.make(port, mode, helper.convertPhraseToExpr(image), Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
     }
 
     @Override
     public Block astToBlock() {
         Block jaxbDestination = new Block();
-        Ast2JaxbHelper.setBasicProperties(this, jaxbDestination);
+        Ast2Jaxb.setBasicProperties(this, jaxbDestination);
 
         Mutation mutation = new Mutation();
         mutation.setType(this.displayImageMode);
         jaxbDestination.setMutation(mutation);
-        Ast2JaxbHelper.addField(jaxbDestination, BlocklyConstants.ACTORPORT, this.port);
-        Ast2JaxbHelper.addField(jaxbDestination, BlocklyConstants.TYPE, this.displayImageMode);
-        Ast2JaxbHelper.addValue(jaxbDestination, BlocklyConstants.VALUE, this.valuesToDisplay);
+        Ast2Jaxb.addField(jaxbDestination, BlocklyConstants.ACTORPORT, this.port);
+        Ast2Jaxb.addField(jaxbDestination, BlocklyConstants.TYPE, this.displayImageMode);
+        Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.VALUE, this.valuesToDisplay);
 
         return jaxbDestination;
     }

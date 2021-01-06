@@ -13,6 +13,7 @@ public class InfraredSensorTest extends Ev3LejosAstTest {
     public void setInfrared() throws Exception {
         String a = "\nhal.getInfraredSensorDistance(SensorPort.S4)" + "hal.getInfraredSensorSeek(SensorPort.S3)}";
 
-        UnitTestHelper.checkWorkers(testFactory, a, "/syntax/sensors/sensor_setInfrared.xml", new Ev3UsedHardwareCollectorWorker(), new Ev3JavaGeneratorWorker());
+        UnitTestHelper
+            .checkWorkers(testFactory, a, "/syntax/sensors/sensor_setInfrared.xml", new Ev3UsedHardwareCollectorWorker(), new Ev3JavaGeneratorWorker());
     }
 }

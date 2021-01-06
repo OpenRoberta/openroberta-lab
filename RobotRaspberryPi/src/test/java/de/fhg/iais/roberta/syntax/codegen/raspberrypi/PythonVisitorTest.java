@@ -33,6 +33,7 @@ public class PythonVisitorTest extends RaspberryPiAstTest {
             + "        print(e)\n"
             + "if __name__ == \"__main__\":\n"
             + "    main()";
+
     private static ConfigurationAst brickConfiguration;
 
     @BeforeClass

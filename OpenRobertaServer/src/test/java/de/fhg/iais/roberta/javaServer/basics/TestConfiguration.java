@@ -19,11 +19,11 @@ public class TestConfiguration {
     }
 
     public SessionFactoryWrapper getSessionFactoryWrapper() {
-        return sessionFactoryWrapper;
+        return this.sessionFactoryWrapper;
     }
 
     public DbSetup getMemoryDbSetup() {
-        return memoryDbSetup;
+        return this.memoryDbSetup;
     }
 
     public static TestConfiguration setup() {

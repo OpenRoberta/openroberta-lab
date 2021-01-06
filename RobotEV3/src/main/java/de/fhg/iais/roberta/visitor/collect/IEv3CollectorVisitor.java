@@ -21,9 +21,8 @@ import de.fhg.iais.roberta.syntax.sensor.generic.HTColorSensor;
 import de.fhg.iais.roberta.visitor.hardware.IEv3Visitor;
 
 /**
- * Collector for the EV3.
- * Adds the blocks missing from the defaults of {@link ICollectorVisitor}.
- * Defines the specific parent implementation to use (the one of the collector) due to unrelated defaults.
+ * Collector for the EV3. Adds the blocks missing from the defaults of {@link ICollectorVisitor}. Defines the specific parent implementation to use (the one of
+ * the collector) due to unrelated defaults.
  */
 public interface IEv3CollectorVisitor extends ICollectorVisitor, IEv3Visitor<Void> {
 

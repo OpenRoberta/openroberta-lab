@@ -45,7 +45,11 @@ public class SenseboxBrickValidatorVisitor extends AbstractBrickValidatorVisitor
     private final String SSID;
     private final String password;
 
-    public SenseboxBrickValidatorVisitor(ConfigurationAst brickConfiguration, ClassToInstanceMap<IProjectBean.IBuilder<?>> beanBuilders, String SSID, String password) {
+    public SenseboxBrickValidatorVisitor(
+        ConfigurationAst brickConfiguration,
+        ClassToInstanceMap<IProjectBean.IBuilder<?>> beanBuilders,
+        String SSID,
+        String password) {
         super(brickConfiguration, beanBuilders);
         this.SSID = SSID;
         this.password = password;
@@ -82,7 +86,7 @@ public class SenseboxBrickValidatorVisitor extends AbstractBrickValidatorVisitor
 
     @Override
     public Void visitDataSendAction(SendDataAction<Void> sendDataAction) {
-        if ( SSID.equals("") || password.equals("") ) {
+        if ( this.SSID.equals("") || this.password.equals("") ) {
             sendDataAction.addInfo(NepoInfo.error("CONFIGURATION_ERROR_WLAN_CREDENTIALS_MISSING"));
             this.errorCount++;
             return null;

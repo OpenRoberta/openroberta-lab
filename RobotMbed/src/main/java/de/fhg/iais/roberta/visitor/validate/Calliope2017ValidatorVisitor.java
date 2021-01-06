@@ -46,5 +46,4 @@ public final class Calliope2017ValidatorVisitor extends CalliopeValidatorVisitor
         return null;
     }
 
-
 }

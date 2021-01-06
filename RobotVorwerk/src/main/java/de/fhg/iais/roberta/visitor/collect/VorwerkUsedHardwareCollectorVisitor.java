@@ -20,9 +20,7 @@ import de.fhg.iais.roberta.visitor.hardware.IVorwerkVisitor;
  */
 public final class VorwerkUsedHardwareCollectorVisitor extends AbstractUsedHardwareCollectorVisitor implements IVorwerkVisitor<Void> {
 
-    public VorwerkUsedHardwareCollectorVisitor(
-        ConfigurationAst brickConfiguration,
-        ClassToInstanceMap<IProjectBean.IBuilder<?>> beanBuilders) {
+    public VorwerkUsedHardwareCollectorVisitor(ConfigurationAst brickConfiguration, ClassToInstanceMap<IProjectBean.IBuilder<?>> beanBuilders) {
         super(brickConfiguration, beanBuilders);
     }
 

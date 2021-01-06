@@ -19,8 +19,9 @@ import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.lang.expr.Assoc;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
-import de.fhg.iais.roberta.transformer.Ast2JaxbHelper;
+import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.ExprParam;
+import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.IVisitor;
@@ -132,9 +133,9 @@ public class ListGetIndex<V> extends Function<V> {
      */
     public static <V> Phrase<V> jaxbToAst(Block block, AbstractJaxb2Ast<V> helper) {
         BlocklyDropdownFactory factory = helper.getDropdownFactory();
-        List<Field> fields = helper.extractFields(block, (short) 2);
+        List<Field> fields = Jaxb2Ast.extractFields(block, (short) 2);
         List<ExprParam> exprParams = new ArrayList<>();
-        String op = helper.extractField(fields, BlocklyConstants.MODE);
+        String op = Jaxb2Ast.extractField(fields, BlocklyConstants.MODE);
         exprParams.add(new ExprParam(BlocklyConstants.VALUE, BlocklyType.STRING));
         if ( block.getMutation().isAt() ) {
             exprParams.add(new ExprParam(BlocklyConstants.AT, BlocklyType.NUMBER_INT));
@@ -144,27 +145,27 @@ public class ListGetIndex<V> extends Function<V> {
         return ListGetIndex
             .make(
                 factory.getListElementOpertaion(op),
-                factory.getIndexLocation(helper.extractField(fields, BlocklyConstants.WHERE)),
+                factory.getIndexLocation(Jaxb2Ast.extractField(fields, BlocklyConstants.WHERE)),
                 params,
                 dataType,
-                helper.extractBlockProperties(block),
-                helper.extractComment(block));
+                Jaxb2Ast.extractBlockProperties(block),
+                Jaxb2Ast.extractComment(block));
     }
 
     @Override
     public Block astToBlock() {
         Block jaxbDestination = new Block();
-        Ast2JaxbHelper.setBasicProperties(this, jaxbDestination);
+        Ast2Jaxb.setBasicProperties(this, jaxbDestination);
 
         Mutation mutation = new Mutation();
         mutation.setAt(false);
         mutation.setStatement(getElementOperation().isStatment());
         mutation.setDatatype(this.dataType);
-        Ast2JaxbHelper.addField(jaxbDestination, BlocklyConstants.MODE, getElementOperation().toString());
-        Ast2JaxbHelper.addField(jaxbDestination, BlocklyConstants.WHERE, getLocation().toString());
-        Ast2JaxbHelper.addValue(jaxbDestination, BlocklyConstants.VALUE, getParam().get(0));
+        Ast2Jaxb.addField(jaxbDestination, BlocklyConstants.MODE, getElementOperation().toString());
+        Ast2Jaxb.addField(jaxbDestination, BlocklyConstants.WHERE, getLocation().toString());
+        Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.VALUE, getParam().get(0));
         if ( getParam().size() > 1 ) {
-            Ast2JaxbHelper.addValue(jaxbDestination, BlocklyConstants.AT, getParam().get(1));
+            Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.AT, getParam().get(1));
             mutation.setAt(true);
         }
         jaxbDestination.setMutation(mutation);

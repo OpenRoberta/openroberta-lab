@@ -12,11 +12,6 @@ public final class Ev3JavaGeneratorWorker extends AbstractLanguageGeneratorWorke
 
     @Override
     protected AbstractLanguageVisitor getVisitor(Project project, ClassToInstanceMap<IProjectBean> beans) {
-        return new Ev3JavaVisitor(
-            project.getProgramAst().getTree(),
-            project.getConfigurationAst(),
-            project.getProgramName(),
-            project.getLanguage(),
-            beans);
+        return new Ev3JavaVisitor(project.getProgramAst().getTree(), project.getConfigurationAst(), project.getProgramName(), project.getLanguage(), beans);
     }
 }

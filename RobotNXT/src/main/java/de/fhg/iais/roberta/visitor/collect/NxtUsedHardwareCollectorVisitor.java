@@ -22,9 +22,7 @@ import de.fhg.iais.roberta.visitor.hardware.INxtVisitor;
  */
 public final class NxtUsedHardwareCollectorVisitor extends AbstractUsedHardwareCollectorVisitor implements INxtVisitor<Void> {
 
-    public NxtUsedHardwareCollectorVisitor(
-        ConfigurationAst robotConfiguration,
-        ClassToInstanceMap<IProjectBean.IBuilder<?>> beanBuilders) {
+    public NxtUsedHardwareCollectorVisitor(ConfigurationAst robotConfiguration, ClassToInstanceMap<IProjectBean.IBuilder<?>> beanBuilders) {
         super(robotConfiguration, beanBuilders);
     }
 

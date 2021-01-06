@@ -3,13 +3,8 @@ package de.fhg.iais.roberta.persistence.util;
 import java.math.BigInteger;
 
 import org.hibernate.Session;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 final class DbUpgrader4_0_0 implements DbUpgraderInterface {
-
-    private static final Logger LOG = LoggerFactory.getLogger(DbUpgrader3_1_0.class);
-
     private final SessionFactoryWrapper sessionFactoryWrapper;
 
     DbUpgrader4_0_0(SessionFactoryWrapper sessionFactoryWrapper) {
@@ -32,16 +27,13 @@ final class DbUpgrader4_0_0 implements DbUpgraderInterface {
     @Override
     public void run() {
         Session nativeSession = this.sessionFactoryWrapper.getNativeSession();
-
         nativeSession.beginTransaction();
-
         DbSetup dbSetup = new DbSetup(nativeSession);
         dbSetup
             .sqlFile(
                 null, //
                 null,
                 "/dbUpgrade/4-0-0.sql");
-
         nativeSession.getTransaction().commit();
         nativeSession.close();
 

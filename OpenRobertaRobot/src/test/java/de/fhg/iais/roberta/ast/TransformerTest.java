@@ -181,17 +181,15 @@ public class TransformerTest extends AstTest {
 
     @Test
     public void executeTransformer_ShouldReturnSameProgramAndConf_WhenNothingNeedsToBeTransformed() {
-        String expectedProgramAst = "BlockAST[project=[[Location[x=512,y=50],MainTask[],(repeat[FOREVER_ARDU,BoolConst[true]]AktionStmt[PinWriteValueSensor[StringConst[Hallo]]])]]]"; // simple sensor usage
+        String expectedProgramAst =
+            "BlockAST[project=[[Location[x=512,y=50],MainTask[],(repeat[FOREVER_ARDU,BoolConst[true]]AktionStmt[PinWriteValueSensor[StringConst[Hallo]]])]]]"; // simple sensor usage
         String[] expectedToBeInConfigAst =
             {
                 "ConfigurationComponent [componentType=ANALOG_INPUT, isActor=true, userDefinedName=A, portName=A, componentProperties={INPUT=3}]",
                 "ConfigurationComponent [componentType=SERVOMOTOR, isActor=true, userDefinedName=S, portName=S, componentProperties={PULSE=1}]",
                 "ConfigurationComponent [componentType=LED, isActor=true, userDefinedName=L, portName=L, componentProperties={INPUT=LED_BUILTIN}]"
             };
-        Project project =
-            UnitTestHelper
-                .setupWithExportXML(testFactoryNewConf, Util.readResourceContent("/ast/transform/old_nothingneeded.xml"))
-                .build();
+        Project project = UnitTestHelper.setupWithExportXML(testFactoryNewConf, Util.readResourceContent("/ast/transform/old_nothingneeded.xml")).build();
         new TestTransformerWorker().execute(project);
         UnitTestHelper.checkAstEquality(project.getProgramAst().getTree().toString(), expectedProgramAst);
         UnitTestHelper.checkAstContains(project.getConfigurationAst().getConfigurationComponentsValues().toString(), expectedToBeInConfigAst);

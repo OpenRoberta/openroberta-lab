@@ -145,6 +145,7 @@ import de.fhg.iais.roberta.visitor.lang.ILanguageVisitor;
  * individual phrase, or even other phrases. All subphrases should be called with {@link Phrase#modify(ITransformerVisitor)} )} to ensure all leaves are
  * visited.
  */
+@SuppressWarnings("unchecked")
 public interface ITransformerVisitor<V> extends ISensorVisitor<Phrase<V>>, IAllActorsVisitor<Phrase<V>>, ILanguageVisitor<Phrase<V>> {
 
     /**

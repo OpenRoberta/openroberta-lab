@@ -30,18 +30,18 @@ import org.junit.Assert;
 class SearchMsgKeyOccurrences {
     private final List<String> robKeyList, blocklyKeyList, unusedKeys, unknownKeys;
     private final String keyPattern = "([A-Z0-9]+(?:_[A-Z0-9]+)*[a-z]?)(?!\\w|\\d)";
-    private final Pattern keyRegexp = Pattern.compile("[^\"]Key\\." + keyPattern + "(?:[^\\w\"]|$)"),
-        nepoInfoRegExp = Pattern.compile("NepoInfo\\.\\w+\\((?:Serverity\\.[A-Z]+\\s*,)?\\s*\"" + keyPattern + "\"\\)"),
-        checkMotorRegExp = Pattern.compile("checkIfMotorRegulated\\(.+?,\\s*\"" + keyPattern + "\"\\)"),
-        directRegExp = Pattern.compile("Blockly\\.Msg(?:\\.|\\[[\"'])" + keyPattern + "(?:[^\\w]|$)"),
+    private final Pattern keyRegexp = Pattern.compile("[^\"]Key\\." + this.keyPattern + "(?:[^\\w\"]|$)"),
+        nepoInfoRegExp = Pattern.compile("NepoInfo\\.\\w+\\((?:Serverity\\.[A-Z]+\\s*,)?\\s*\"" + this.keyPattern + "\"\\)"),
+        checkMotorRegExp = Pattern.compile("checkIfMotorRegulated\\(.+?,\\s*\"" + this.keyPattern + "\"\\)"),
+        directRegExp = Pattern.compile("Blockly\\.Msg(?:\\.|\\[[\"'])" + this.keyPattern + "(?:[^\\w]|$)"),
         helperRegExp =
             Pattern
                 .compile(
                     "\\.(?:showMsgOnTop\\(|display(?:(?:Popup)?Message\\(|Information\\(\\s*(?:\\{\\s*[\"']?\\w+?[\"']?\\s*:\\s*[\"']\\w+[\"']\\s*\\}|\\w+)\\s*,))\\s*[\"']"
-                        + keyPattern
+                        + this.keyPattern
                         + "[\"']"),
-        createButtonRegExp = Pattern.compile("\\.createButton\\_\\(.+?,\\-?\\d+,\\-?\\d+,[\"']" + keyPattern + "[\"']\\)"),
-        categoryNameRegExp = Pattern.compile("\\<category(?:\\s+\\w+\\=(?:[\"][^\"]+[\"]|['][^']+[']))*\\s+name\\=[\"']" + keyPattern + "[\"']");
+        createButtonRegExp = Pattern.compile("\\.createButton\\_\\(.+?,\\-?\\d+,\\-?\\d+,[\"']" + this.keyPattern + "[\"']\\)"),
+        categoryNameRegExp = Pattern.compile("\\<category(?:\\s+\\w+\\=(?:[\"][^\"]+[\"]|['][^']+[']))*\\s+name\\=[\"']" + this.keyPattern + "[\"']");
 
     /**
      * @param robKeyFile A file that contains a set of message keys and the corresponding messages
@@ -184,9 +184,9 @@ class SearchMsgKeyOccurrences {
 
                     usedPatterns = new ArrayList<>(4);
                     while ( matcher != null && matcher.find() || (matcher = this.matchLine(line, fileEnding, usedPatterns)) != null ) {
-                        key = matcher.pattern().equals(keyRegexp) ? "ORA_" + matcher.group(1) : matcher.group(1);
+                        key = matcher.pattern().equals(this.keyRegexp) ? "ORA_" + matcher.group(1) : matcher.group(1);
 
-                        if ( robKeyList.contains(key) ) {
+                        if ( this.robKeyList.contains(key) ) {
                             this.unusedKeys.remove(key);
                             keyCounter.addRobertaKey();
                         } else if ( this.blocklyKeyList.contains(key) && filePath.contains("blockly") ) {

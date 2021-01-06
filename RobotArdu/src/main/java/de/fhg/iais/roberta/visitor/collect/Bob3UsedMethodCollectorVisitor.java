@@ -1,4 +1,5 @@
 package de.fhg.iais.roberta.visitor.collect;
+
 import de.fhg.iais.roberta.bean.UsedMethodBean;
 
 public class Bob3UsedMethodCollectorVisitor extends AbstractUsedMethodCollectorVisitor implements IBob3CollectorVisitor {

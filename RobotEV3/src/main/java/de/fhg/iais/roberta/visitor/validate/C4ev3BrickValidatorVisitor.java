@@ -12,7 +12,7 @@ import de.fhg.iais.roberta.syntax.lang.functions.ListSetIndex;
 import de.fhg.iais.roberta.syntax.lang.functions.MathOnListFunct;
 import de.fhg.iais.roberta.typecheck.NepoInfo;
 
-public final class C4ev3BrickValidatorVisitor extends Ev3BrickValidatorVisitor  {
+public final class C4ev3BrickValidatorVisitor extends Ev3BrickValidatorVisitor {
 
     public C4ev3BrickValidatorVisitor(ConfigurationAst brickConfiguration, ClassToInstanceMap<IProjectBean.IBuilder<?>> beanBuilders) {
         super(brickConfiguration, beanBuilders);

@@ -12,11 +12,6 @@ public class SenseboxCxxGeneratorWorker extends AbstractLanguageGeneratorWorker 
 
     @Override
     protected AbstractLanguageVisitor getVisitor(Project project, ClassToInstanceMap<IProjectBean> beans) {
-        return new SenseboxCppVisitor(
-            project.getProgramAst().getTree(),
-            project.getConfigurationAst(),
-            project.getSSID(),
-            project.getPassword(),
-            beans);
+        return new SenseboxCppVisitor(project.getProgramAst().getTree(), project.getConfigurationAst(), project.getSSID(), project.getPassword(), beans);
     }
 }

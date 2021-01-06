@@ -17,8 +17,9 @@ import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.MoveAction;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
-import de.fhg.iais.roberta.transformer.Ast2JaxbHelper;
+import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.ExprParam;
+import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.IVisitor;
@@ -72,27 +73,27 @@ public final class MotorOnAction<V> extends MoveAction<V> {
             || block.getType().equals(BlocklyConstants.SIM_MOTOR_ON)
             || block.getType().equals(BlocklyConstants.ROB_ACTIONS_MOTOR_ON_FOR_ARDU)
             || block.getType().equals(BlocklyConstants.ROB_ACTIONS_MOTOR_ON_FOR_MBED) ) {
-            fields = helper.extractFields(block, (short) 1);
-            values = helper.extractValues(block, (short) 1);
-            port = helper.extractField(fields, BlocklyConstants.MOTORPORT);
+            fields = Jaxb2Ast.extractFields(block, (short) 1);
+            values = Jaxb2Ast.extractValues(block, (short) 1);
+            port = Jaxb2Ast.extractField(fields, BlocklyConstants.MOTORPORT);
             Phrase<V> expr = helper.extractValue(values, new ExprParam(BlocklyConstants.POWER, BlocklyType.NUMBER_INT));
             mp = new MotionParam.Builder<V>().speed(helper.convertPhraseToExpr(expr)).build();
         } else {
-            fields = helper.extractFields(block, (short) 2);
-            values = helper.extractValues(block, (short) 2);
-            port = helper.extractField(fields, BlocklyConstants.MOTORPORT);
+            fields = Jaxb2Ast.extractFields(block, (short) 2);
+            values = Jaxb2Ast.extractValues(block, (short) 2);
+            port = Jaxb2Ast.extractField(fields, BlocklyConstants.MOTORPORT);
             Phrase<V> left = helper.extractValue(values, new ExprParam(BlocklyConstants.POWER, BlocklyType.NUMBER_INT));
             Phrase<V> right = helper.extractValue(values, new ExprParam(BlocklyConstants.VALUE, BlocklyType.NUMBER_INT));
             MotorDuration<V> md;
             if ( fields.size() == 1 ) {
                 md = new MotorDuration<>(null, helper.convertPhraseToExpr(right));
             } else {
-                String mode = helper.extractField(fields, BlocklyConstants.MOTORROTATION);
+                String mode = Jaxb2Ast.extractField(fields, BlocklyConstants.MOTORROTATION);
                 md = new MotorDuration<>(factory.getMotorMoveMode(mode), helper.convertPhraseToExpr(right));
             }
             mp = new MotionParam.Builder<V>().speed(helper.convertPhraseToExpr(left)).duration(md).build();
         }
-        return MotorOnAction.make(port, mp, helper.extractBlockProperties(block), helper.extractComment(block));
+        return MotorOnAction.make(port, mp, Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
     }
 
     /**
@@ -133,15 +134,15 @@ public final class MotorOnAction<V> extends MoveAction<V> {
     @Override
     public Block astToBlock() {
         Block jaxbDestination = new Block();
-        Ast2JaxbHelper.setBasicProperties(this, jaxbDestination);
+        Ast2Jaxb.setBasicProperties(this, jaxbDestination);
 
-        Ast2JaxbHelper.addField(jaxbDestination, BlocklyConstants.MOTORPORT, getUserDefinedPort().toString());
-        Ast2JaxbHelper.addValue(jaxbDestination, BlocklyConstants.POWER, getParam().getSpeed());
+        Ast2Jaxb.addField(jaxbDestination, BlocklyConstants.MOTORPORT, getUserDefinedPort().toString());
+        Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.POWER, getParam().getSpeed());
         if ( getParam().getDuration() != null ) {
             if ( getDurationMode() != null ) {
-                Ast2JaxbHelper.addField(jaxbDestination, BlocklyConstants.MOTORROTATION, getDurationMode().toString());
+                Ast2Jaxb.addField(jaxbDestination, BlocklyConstants.MOTORROTATION, getDurationMode().toString());
             }
-            Ast2JaxbHelper.addValue(jaxbDestination, BlocklyConstants.VALUE, getDurationValue());
+            Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.VALUE, getDurationValue());
         }
 
         return jaxbDestination;

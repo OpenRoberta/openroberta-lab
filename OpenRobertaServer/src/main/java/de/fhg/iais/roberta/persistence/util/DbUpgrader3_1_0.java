@@ -27,7 +27,7 @@ public class DbUpgrader3_1_0 implements DbUpgraderInterface {
      */
     @Override
     public boolean isUpgradeDone() {
-        Session nativeSession = sessionFactoryWrapper.getNativeSession();
+        Session nativeSession = this.sessionFactoryWrapper.getNativeSession();
         DbExecutor dbExecutor = DbExecutor.make(nativeSession);
         try {
             int ardus = ((BigInteger) dbExecutor.oneValueSelect("select count(*) from ROBOT where NAME = 'ardu'")).intValue();
@@ -52,7 +52,7 @@ public class DbUpgrader3_1_0 implements DbUpgraderInterface {
     @Override
     public void run() {
         LOG.info("upgrade of the database starts");
-        Session nativeSession = sessionFactoryWrapper.getNativeSession();
+        Session nativeSession = this.sessionFactoryWrapper.getNativeSession();
         nativeSession.beginTransaction();
         DbExecutor dbExecutor = DbExecutor.make(nativeSession);
         LOG.info("inserting 'botnroll' into the ROBOT table");

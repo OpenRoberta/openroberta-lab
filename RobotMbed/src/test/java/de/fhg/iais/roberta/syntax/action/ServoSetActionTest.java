@@ -9,10 +9,7 @@ public class ServoSetActionTest extends CalliopeAstTest {
 
     @Test
     public void make_ByDefault_ReturnInstanceOfServoSetActionClass() throws Exception {
-        String expectedResult =
-            "BlockAST [project=[[Location [x=384, y=50], "
-                + "MainTask [], "
-                + "ServoSetAction [C04, NumConst[90]]]]]";
+        String expectedResult = "BlockAST [project=[[Location [x=384, y=50], " + "MainTask [], " + "ServoSetAction [C04, NumConst[90]]]]]";
 
         UnitTestHelper.checkProgramAstEquality(testFactory, expectedResult, "/action/servo_set.xml");
 

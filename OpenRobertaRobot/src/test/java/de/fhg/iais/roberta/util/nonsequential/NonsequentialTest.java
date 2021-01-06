@@ -32,7 +32,7 @@ public class NonsequentialTest {
                 System.out.println("the button has not been pressed yet");
                 waitMillisec(1000);
                 System.out.println("now the button is pressed. This will set run to false");
-                run = false;
+                NonsequentialTest.this.run = false;
                 System.out.println("button thread has done its job and terminates");
             }
         };
@@ -40,7 +40,7 @@ public class NonsequentialTest {
             @Override
             public void run() {
                 System.out.println("working thread started");
-                while ( run ) {
+                while ( NonsequentialTest.this.run ) {
                     // do something: look at the color sensor, if a new color is detected, put it into a list of already visited colors
                 }
                 System.out.println("working thread terminated");

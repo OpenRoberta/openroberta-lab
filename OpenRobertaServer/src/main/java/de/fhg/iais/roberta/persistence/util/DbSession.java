@@ -64,9 +64,9 @@ public class DbSession {
 
         // for analyzing db session usage.
         currentOpenSessionCounter.incrementAndGet();
-        sessionId = sessionIdGenerator.incrementAndGet();
-        creationTime = new Date().getTime();
-        sessionMap.put(sessionId, this);
+        this.sessionId = sessionIdGenerator.incrementAndGet();
+        this.creationTime = new Date().getTime();
+        sessionMap.put(this.sessionId, this);
     }
 
     /**
@@ -117,9 +117,9 @@ public class DbSession {
         }
 
         // for analyzing db session usage.
-        long sessionAge = new Date().getTime() - creationTime;
-        if ( new Date().getTime() - creationTime > DURATION_TIMEOUT_MSEC_FOR_LOGGING ) {
-            LOG.error("db session " + sessionId + " too old: " + sessionAge + "msec\n" + getFullInfo());
+        long sessionAge = new Date().getTime() - this.creationTime;
+        if ( new Date().getTime() - this.creationTime > DURATION_TIMEOUT_MSEC_FOR_LOGGING ) {
+            LOG.error("db session " + this.sessionId + " too old: " + sessionAge + "msec\n" + getFullInfo());
         }
         if ( this.numberOfActions == 0 ) {
             unusedSessionCounter.getAndIncrement();
@@ -141,7 +141,7 @@ public class DbSession {
      * @return the database object, never null
      */
     public <T> T load(Class<T> type, int id) {
-        actions.append("load of " + type.getSimpleName() + " with id " + id + "\n"); // for analyzing db session usage.
+        this.actions.append("load of " + type.getSimpleName() + " with id " + id + "\n"); // for analyzing db session usage.
         Object entityMayNotExist = this.session.load(type, id);
         ((WithSurrogateId) entityMayNotExist).getId();
         @SuppressWarnings("unchecked")
@@ -157,7 +157,7 @@ public class DbSession {
      * @return the database object, always initialized; null, if not found in the db
      */
     public <T> T get(Class<T> type, int id) {
-        actions.append("get of " + type.getSimpleName() + " with id " + id + "\n"); // for analyzing db session usage.
+        this.actions.append("get of " + type.getSimpleName() + " with id " + id + "\n"); // for analyzing db session usage.
         @SuppressWarnings("unchecked")
         T entity = (T) this.session.get(type, id);
         return entity;
@@ -168,7 +168,7 @@ public class DbSession {
      */
     public Session getSession() {
         Assert.notNull(this.session);
-        actions.append("getSession() - try to avoid that!\n"); // for analyzing db session usage.
+        this.actions.append("getSession() - try to avoid that!\n"); // for analyzing db session usage.
         return this.session;
     }
 
@@ -221,8 +221,8 @@ public class DbSession {
     // helper for analyzing db session usage.
 
     public void addToLog(String cmd, String query) {
-        actions.append(cmd).append(": ").append(query).append("\n");
-        numberOfActions++;
+        this.actions.append(cmd).append(": ").append(query).append("\n");
+        this.numberOfActions++;
     }
 
     private void addTransaction(String kind) {

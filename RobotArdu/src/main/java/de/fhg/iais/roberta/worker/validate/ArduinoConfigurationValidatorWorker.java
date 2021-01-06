@@ -1,7 +1,5 @@
 package de.fhg.iais.roberta.worker.validate;
 
-import com.google.common.collect.ClassToInstanceMap;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -10,6 +8,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import com.google.common.collect.ClassToInstanceMap;
 
 import de.fhg.iais.roberta.bean.IProjectBean;
 import de.fhg.iais.roberta.components.ConfigurationComponent;
@@ -98,13 +98,14 @@ public class ArduinoConfigurationValidatorWorker extends AbstractValidatorWorker
 
     // TODO restructure validator worker for more generic usage patterns
     private static void checkRgbInternalUse(ConfigurationComponent configurationComponent, Project project) {
-        if (configurationComponent.getComponentType().equals(SC.RGBLED)) {
+        if ( configurationComponent.getComponentType().equals(SC.RGBLED) ) {
             Map<String, String> componentProperties = configurationComponent.getComponentProperties();
             componentProperties.forEach((k, v) -> {
-                if (v.equals(SC.LED_BUILTIN) && !project.getRobot().equals("unowifirev2")) {
+                if ( v.equals(SC.LED_BUILTIN) && !project.getRobot().equals("unowifirev2") ) {
                     project.addToErrorCounter(1);
                     project.setResult(Key.PROGRAM_INVALID_STATEMETNS);
-                    project.addToConfAnnotationList(configurationComponent.getProperty().getBlocklyId(), NepoInfo.error("CONFIGURATION_ERROR_NO_BUILTIN_RGBLED"));
+                    project
+                        .addToConfAnnotationList(configurationComponent.getProperty().getBlocklyId(), NepoInfo.error("CONFIGURATION_ERROR_NO_BUILTIN_RGBLED"));
                 }
             });
         }

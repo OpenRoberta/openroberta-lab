@@ -14,8 +14,8 @@ import de.fhg.iais.roberta.syntax.lang.expr.VarDeclaration;
 import de.fhg.iais.roberta.syntax.lang.methods.Method;
 
 /**
- * Container for all used hardware related information, used in for example code generation.
- * Currently used for more than just used hardware, should be split up into multiple separate beans in the future.
+ * Container for all used hardware related information, used in for example code generation. Currently used for more than just used hardware, should be split up
+ * into multiple separate beans in the future.
  */
 //TODO move unrelated data to specific beans. Refactor fields from Mbed into usedActors/Sensors
 public class UsedHardwareBean implements IProjectBean {
@@ -66,7 +66,7 @@ public class UsedHardwareBean implements IProjectBean {
     public Set<String> getUsedImages() {
         return this.usedImages;
     }
-    
+
     public Map<String, String[][]> getUsedIDImages() {
         return this.usedIDImages;
     }
@@ -80,7 +80,7 @@ public class UsedHardwareBean implements IProjectBean {
     }
 
     public Map<Integer, Boolean> getLoopsLabelContainer() {
-        return loopsLabelContainer;
+        return this.loopsLabelContainer;
     }
 
     public static class Builder implements IBuilder<UsedHardwareBean> {
@@ -135,7 +135,7 @@ public class UsedHardwareBean implements IProjectBean {
             this.usedHardwareBean.usedImages.add(usedImage);
             return this;
         }
-        
+
         public Builder addUsedIDImage(String id, String[][] usedImage) {
             this.usedHardwareBean.usedIDImages.put(id, usedImage);
             return this;
@@ -156,6 +156,7 @@ public class UsedHardwareBean implements IProjectBean {
             return this.usedHardwareBean.declaredVariables.contains(variableName);
         }
 
+        @Override
         public UsedHardwareBean build() {
             return this.usedHardwareBean;
         }

@@ -93,16 +93,16 @@ public class PerformanceUserIT {
         this.sessionFactoryWrapper = tc.getSessionFactoryWrapper();
         this.memoryDbSetup = tc.getMemoryDbSetup();
 
-        this.restUser = new ClientUser(this.robotCommunicator, serverProperties, null);
+        this.restUser = new ClientUser(this.robotCommunicator, this.serverProperties, null);
         this.restProject = new ClientProgramController(this.serverProperties);
-        this.restBlocks = new ClientAdmin(this.robotCommunicator, serverProperties);
-        this.downloadJar = new RobotDownloadProgram(this.robotCommunicator, serverProperties);
+        this.restBlocks = new ClientAdmin(this.robotCommunicator, this.serverProperties);
+        this.downloadJar = new RobotDownloadProgram(this.robotCommunicator, this.serverProperties);
         this.brickCommand = new RobotCommand(this.robotCommunicator);
         this.theProgramOfAllUserLol = Resources.toString(PerformanceUserIT.class.getResource("/restInterfaceTest/action_BrickLight.xml"), Charsets.UTF_8);
         this.executorService = Executors.newFixedThreadPool(PerformanceUserIT.MAX_PARALLEL_USERS + 10);
 
         ServerStarter.initLoggingBeforeFirstUse(EMPTY_STRING_LIST.toArray(new String[0]));
-        this.robotPlugins = ServerStarter.configureRobotPlugins(robotCommunicator, serverProperties, EMPTY_STRING_LIST);
+        this.robotPlugins = ServerStarter.configureRobotPlugins(this.robotCommunicator, this.serverProperties, EMPTY_STRING_LIST);
     }
 
     @After
@@ -171,7 +171,7 @@ public class PerformanceUserIT {
         Random random = new Random(userNumber);
 
         String iTkn = "initToken-" + userNumber;
-        HttpSessionState s = HttpSessionState.initOnlyLegalForDebugging(iTkn, this.robotPlugins, serverProperties, 1);
+        HttpSessionState s = HttpSessionState.initOnlyLegalForDebugging(iTkn, this.robotPlugins, this.serverProperties, 1);
         Assert.assertTrue(!s.isUserLoggedIn());
         FullRestRequest request; // re-used to create various REST requests
 

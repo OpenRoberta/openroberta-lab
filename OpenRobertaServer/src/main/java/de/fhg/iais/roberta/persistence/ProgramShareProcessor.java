@@ -35,9 +35,9 @@ public class ProgramShareProcessor extends AbstractProcessor {
     }
 
     /**
-     * A program, which is identified by the quadruple (ownerId, robotId, programName, authorId) has to be shared with another user.
-     * The right on the shared program may be either "WRITE", "X_WRITE" or "READ".
-     * Used to show a program in the gallery. Not used to share programs with user groups or members of user groups
+     * A program, which is identified by the quadruple (ownerId, robotId, programName, authorId) has to be shared with another user. The right on the shared
+     * program may be either "WRITE", "X_WRITE" or "READ". Used to show a program in the gallery. Not used to share programs with user groups or members of user
+     * groups
      *
      * @param ownerId the owner, that is the actor on which behalf this request is executed, or the gallery user, in which case the actor is the author
      * @param robotId
@@ -54,9 +54,8 @@ public class ProgramShareProcessor extends AbstractProcessor {
     }
 
     /**
-     * A program, which is identified by the quadruple (ownerId, robotId, programName, authorId) has to be shared with another user.
-     * The right on the shared program may be either "WRITE", "X_WRITE" or "READ".
-     * Used to share a program with all type of users and user groups
+     * A program, which is identified by the quadruple (ownerId, robotId, programName, authorId) has to be shared with another user. The right on the shared
+     * program may be either "WRITE", "X_WRITE" or "READ". Used to share a program with all type of users and user groups
      *
      * @param ownerId the owner (that is the actor on which behalf this request is executed)
      * @param robotId

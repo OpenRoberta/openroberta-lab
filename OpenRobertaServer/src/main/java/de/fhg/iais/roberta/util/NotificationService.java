@@ -33,18 +33,18 @@ public class NotificationService {
     @Inject
     public NotificationService(ServerProperties serverProperties) {
         try {
-            notificationFilePath = Paths.get(serverProperties.getStringProperty("server.admin.dir")).resolve(FILENAME);
+            this.notificationFilePath = Paths.get(serverProperties.getStringProperty("server.admin.dir")).resolve(FILENAME);
             String notificationsToBeUsed;
-            if ( !Files.exists(notificationFilePath) ) {
+            if ( !Files.exists(this.notificationFilePath) ) {
                 notificationsToBeUsed = NO_NOTIFICATIONS.toString();
             } else {
-                notificationsToBeUsed = Util.readFileContent(notificationFilePath.toString());
+                notificationsToBeUsed = Util.readFileContent(this.notificationFilePath.toString());
             }
             saveNotifications(notificationsToBeUsed); // check for right to overwrite notifications file
             LOG.info("NotificationsService started");
         } catch ( Exception e ) {
-            currentDigest = null;
-            currentNotifications = NO_NOTIFICATIONS;
+            this.currentDigest = null;
+            this.currentNotifications = NO_NOTIFICATIONS;
             LOG.error("NotificationService could not be established. NO notifications!", e);
         }
     }
@@ -59,9 +59,9 @@ public class NotificationService {
         try {
             JSONArray jsonArray = new JSONArray(notificationsString); // TODO: check schema, consistency-checks missing!
             String jsonArrayAsString = jsonArray.toString();
-            FileUtils.writeStringToFile(notificationFilePath.toFile(), jsonArrayAsString, StandardCharsets.UTF_8);
-            currentDigest = digestOfString(jsonArrayAsString); // change both or none!
-            currentNotifications = jsonArray;
+            FileUtils.writeStringToFile(this.notificationFilePath.toFile(), jsonArrayAsString, StandardCharsets.UTF_8);
+            this.currentDigest = digestOfString(jsonArrayAsString); // change both or none!
+            this.currentNotifications = jsonArray;
         } catch ( Exception e ) {
             LOG.error("notificationsString is invalid or could not be stored. Old notifications remain in use", e); // a bit redundant :-)
             throw new RuntimeException("Could not store notifications and update hashed data. Old notifications remain in use", e);
@@ -73,14 +73,14 @@ public class NotificationService {
      * @return the array of all currently used notifications
      */
     public JSONArray getNotifications() {
-        return currentNotifications;
+        return this.currentNotifications;
     }
 
     /**
      * @return the current digest for the notifications
      */
     public String getCurrentDigest() {
-        return currentDigest;
+        return this.currentDigest;
     }
 
     /**

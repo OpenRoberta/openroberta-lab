@@ -426,13 +426,13 @@ public class ExprlyTypechecker<T> {
                     t = tList.get(k);
                 }
             }
-            for ( int k = 0; k < tList.size(); k++ ) {
-                if ( tList.get(k).equals(BlocklyType.NOTHING) ) {
+            for ( BlocklyType element : tList ) {
+                if ( element.equals(BlocklyType.NOTHING) ) {
                     addError(TcErrorMsg.UNEXPECTED_METHOD);
                     // variable errors are detected previously
-                } else if ( !tList.get(k).equals(BlocklyType.VOID) ) {
+                } else if ( !element.equals(BlocklyType.VOID) ) {
                     // If the types are different it's considered an error
-                    if ( !tList.get(k).equals(t) && correct ) {
+                    if ( !element.equals(t) && correct ) {
                         addError(TcErrorMsg.INVALID_TYPE_FOR_LIST_ELEMENT);
                         correct = false;
                     }

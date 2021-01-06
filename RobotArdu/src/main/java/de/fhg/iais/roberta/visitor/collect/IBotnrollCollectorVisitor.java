@@ -19,9 +19,8 @@ import de.fhg.iais.roberta.syntax.action.sound.VolumeAction;
 import de.fhg.iais.roberta.visitor.hardware.IBotnrollVisitor;
 
 /**
- * Collector for the Bot'n Roll.
- * Adds the blocks missing from the defaults of {@link ICollectorVisitor}.
- * Defines the specific parent implementation to use (the one of the collector) due to unrelated defaults.
+ * Collector for the Bot'n Roll. Adds the blocks missing from the defaults of {@link ICollectorVisitor}. Defines the specific parent implementation to use (the
+ * one of the collector) due to unrelated defaults.
  */
 public interface IBotnrollCollectorVisitor extends ICollectorVisitor, IBotnrollVisitor<Void> {
 

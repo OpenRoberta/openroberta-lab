@@ -70,7 +70,7 @@ public class C {
     public static final String DURATION = "duration";
     public static final String EACH_COUNTER = "eachcounter";
     public static final String ELSE_STMTS = "elseStmts";
-    public static final double ENC = 360.0 / ( 3.0 * Math.PI * 5.6 );
+    public static final double ENC = 360.0 / (3.0 * Math.PI * 5.6);
     public static final String ENCODER_SENSOR_RESET = "encoderSensorReset";
     public static final String ENCODER_SENSOR_SAMPLE = "encoder";
     public static final String ENTER = "enter";
@@ -284,7 +284,7 @@ public class C {
     public static final String TURN_ACTION = "TurnAction";
     public static final String TURN_DIRECTION = "turnDirection";
     public static final String TURN_LIGHT = "turnLight";
-    public static final double TURN_RATIO = ( 40 / 3. ) / 2.8;
+    public static final double TURN_RATIO = (40 / 3.) / 2.8;
     public static final String TYPE = "type";
     public static final String ULTRASONIC = "ultrasonic";
     public static final String UNARY = "Unary";

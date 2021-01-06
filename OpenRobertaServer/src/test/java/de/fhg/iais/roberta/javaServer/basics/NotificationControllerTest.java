@@ -56,8 +56,8 @@ public class NotificationControllerTest {
 
     @Before
     public void setUp() {
-        notificationController = new NotificationController(notificationService);
-        UtilForREST.setNotificationService(notificationService);
+        this.notificationController = new NotificationController(this.notificationService);
+        UtilForREST.setNotificationService(this.notificationService);
         mockGetCurrentDigest("HASH");
     }
 
@@ -72,7 +72,7 @@ public class NotificationControllerTest {
         HttpSessionState httpSession = createEmptyHttpSession();
         FullRestRequest fullRestRequest = createFullRequestFromSession(httpSession);
 
-        Response response = notificationController.getNotifications(fullRestRequest);
+        Response response = this.notificationController.getNotifications(fullRestRequest);
         NotificationsResponse notificationsResponse = parseNotificationResponse(response);
         List<JSONObject> notificationList = parseNotificationObjects(notificationsResponse.getNotifications());
 
@@ -97,7 +97,7 @@ public class NotificationControllerTest {
 
         mockGetCurrentDigest("HASH");
         mockGetNotifications();
-        notificationController.getNotifications(fullRestRequest);
+        this.notificationController.getNotifications(fullRestRequest);
 
         BaseResponse firstBaseResponse = baseResponsePing(clientPing, fullRestRequest);
         assertThat(firstBaseResponse.getNotificationsAvailable()).isEqualTo(false);
@@ -115,9 +115,9 @@ public class NotificationControllerTest {
         session.setUserClearDataKeepTokenAndRobotId(NOT_ADMIN_USER_ID);
         FullRestRequest fullRestRequest = createFullRequestFromSession(session, notifications.toString());
 
-        Response response = notificationController.postNotifications(fullRestRequest);
+        Response response = this.notificationController.postNotifications(fullRestRequest);
 
-        verify(notificationService, never()).saveNotifications(anyString());
+        verify(this.notificationService, never()).saveNotifications(anyString());
 
         BaseResponse baseResponse = BaseResponse.makeFromString(((String) response.getEntity()));
 
@@ -134,12 +134,14 @@ public class NotificationControllerTest {
         session.setUserClearDataKeepTokenAndRobotId(ADMIN_USER_ID);
         FullRestRequest fullRestRequest = createFullRequestFromSession(session, notifications.toString());
 
-        doThrow(new JSONException("A JSONArray text must start with '[' at 1 [character 2 line 1]")).when(notificationService).saveNotifications(anyString());
+        doThrow(new JSONException("A JSONArray text must start with '[' at 1 [character 2 line 1]"))
+            .when(this.notificationService)
+            .saveNotifications(anyString());
 
-        Response response = notificationController.postNotifications(fullRestRequest);
+        Response response = this.notificationController.postNotifications(fullRestRequest);
 
         ArgumentCaptor<String> argumentCaptor = ArgumentCaptor.forClass(String.class);
-        verify(notificationService).saveNotifications(argumentCaptor.capture());
+        verify(this.notificationService).saveNotifications(argumentCaptor.capture());
 
         String notificationsJson = argumentCaptor.getValue();
         assertThat(notificationsJson).isEqualTo(notifications.toString());
@@ -158,12 +160,12 @@ public class NotificationControllerTest {
         session.setUserClearDataKeepTokenAndRobotId(ADMIN_USER_ID);
         FullRestRequest fullRestRequest = createFullRequestFromSession(session, notifications.toString());
 
-        doAnswer(invocation -> new JSONArray(invocation.getArgumentAt(0, String.class))).when(notificationService).saveNotifications(anyString());
+        doAnswer(invocation -> new JSONArray(invocation.getArgumentAt(0, String.class))).when(this.notificationService).saveNotifications(anyString());
 
-        Response response = notificationController.postNotifications(fullRestRequest);
+        Response response = this.notificationController.postNotifications(fullRestRequest);
 
         ArgumentCaptor<String> argumentCaptor = ArgumentCaptor.forClass(String.class);
-        verify(notificationService).saveNotifications(argumentCaptor.capture());
+        verify(this.notificationService).saveNotifications(argumentCaptor.capture());
 
         String notificationsJson = argumentCaptor.getValue();
         assertThat(notificationsJson).isEqualTo(notifications.toString());
@@ -174,11 +176,11 @@ public class NotificationControllerTest {
     }
 
     private void mockGetNotifications(JSONObject... toBeReturned) {
-        doReturn(new JSONArray(toBeReturned)).when(notificationService).getNotifications();
+        doReturn(new JSONArray(toBeReturned)).when(this.notificationService).getNotifications();
     }
 
     private void mockGetCurrentDigest(String digest) {
-        when(notificationService.getCurrentDigest()).thenReturn(digest);
+        when(this.notificationService.getCurrentDigest()).thenReturn(digest);
     }
 
     private BaseResponse baseResponsePing(ClientPing clientPing, FullRestRequest fullRestRequest) throws Exception {
@@ -211,6 +213,6 @@ public class NotificationControllerTest {
     }
 
     private HttpSessionState createEmptyHttpSession() {
-        return HttpSessionState.init(Collections.emptyMap(), serverProperties, "");
+        return HttpSessionState.init(Collections.emptyMap(), this.serverProperties, "");
     }
 }

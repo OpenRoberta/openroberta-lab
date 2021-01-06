@@ -13,8 +13,9 @@ import de.fhg.iais.roberta.syntax.action.Action;
 import de.fhg.iais.roberta.syntax.lang.expr.ColorConst;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
-import de.fhg.iais.roberta.transformer.Ast2JaxbHelper;
+import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.ExprParam;
+import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.IVisitor;
@@ -85,22 +86,26 @@ public class LedBarSetAction<V> extends Action<V> {
      * @return corresponding AST object
      */
     public static <V> Phrase<V> jaxbToAst(Block block, AbstractJaxb2Ast<V> helper) {
-        List<Value> values = helper.extractValues(block, (short) 2);
+        List<Value> values = Jaxb2Ast.extractValues(block, (short) 2);
 
         Phrase<V> brightness = helper.extractValue(values, new ExprParam(BlocklyConstants.BRIGHTNESS, BlocklyType.NUMBER_INT));
         Phrase<V> x = helper.extractValue(values, new ExprParam(BlocklyConstants.X, BlocklyType.NUMBER_INT));
         return LedBarSetAction
-            .make(helper.convertPhraseToExpr(x), helper.convertPhraseToExpr(brightness), helper.extractBlockProperties(block), helper.extractComment(block));
+            .make(
+                helper.convertPhraseToExpr(x),
+                helper.convertPhraseToExpr(brightness),
+                Jaxb2Ast.extractBlockProperties(block),
+                Jaxb2Ast.extractComment(block));
 
     }
 
     @Override
     public Block astToBlock() {
         Block jaxbDestination = new Block();
-        Ast2JaxbHelper.setBasicProperties(this, jaxbDestination);
+        Ast2Jaxb.setBasicProperties(this, jaxbDestination);
 
-        Ast2JaxbHelper.addValue(jaxbDestination, BlocklyConstants.X, this.x);
-        Ast2JaxbHelper.addValue(jaxbDestination, BlocklyConstants.BRIGHTNESS, this.brightness);
+        Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.X, this.x);
+        Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.BRIGHTNESS, this.brightness);
 
         return jaxbDestination;
 

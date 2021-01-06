@@ -14,7 +14,8 @@ import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
 import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
-import de.fhg.iais.roberta.transformer.Ast2JaxbHelper;
+import de.fhg.iais.roberta.transformer.Ast2Jaxb;
+import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.util.dbc.Assert;
 
 public abstract class ExternalSensor<V> extends Sensor<V> {
@@ -76,11 +77,11 @@ public abstract class ExternalSensor<V> extends Sensor<V> {
      * @return corresponding AST object
      */
     public static <V> SensorMetaDataBean extractPortAndModeAndSlot(Block block, AbstractJaxb2Ast<V> helper) {
-        List<Field> fields = AbstractJaxb2Ast.extractFields(block, (short) 3);
+        List<Field> fields = Jaxb2Ast.extractFields(block, (short) 3);
         BlocklyDropdownFactory factory = helper.getDropdownFactory();
-        String portName = AbstractJaxb2Ast.extractField(fields, BlocklyConstants.SENSORPORT, BlocklyConstants.NO_PORT);
-        String modeName = AbstractJaxb2Ast.extractField(fields, BlocklyConstants.MODE, BlocklyConstants.DEFAULT);
-        String slotName = AbstractJaxb2Ast.extractField(fields, BlocklyConstants.SLOT, BlocklyConstants.NO_SLOT);
+        String portName = Jaxb2Ast.extractField(fields, BlocklyConstants.SENSORPORT, BlocklyConstants.NO_PORT);
+        String modeName = Jaxb2Ast.extractField(fields, BlocklyConstants.MODE, BlocklyConstants.DEFAULT);
+        String slotName = Jaxb2Ast.extractField(fields, BlocklyConstants.SLOT, BlocklyConstants.NO_SLOT);
         boolean isPortInMutation = (block.getMutation() != null) && (block.getMutation().getPort() != null);
         return new SensorMetaDataBean(factory.sanitizePort(portName), factory.getMode(modeName), factory.sanitizeSlot(slotName), isPortInMutation);
     }
@@ -88,20 +89,20 @@ public abstract class ExternalSensor<V> extends Sensor<V> {
     @Override
     public Block astToBlock() {
         Block jaxbDestination = new Block();
-        Ast2JaxbHelper.setBasicProperties(this, jaxbDestination);
+        Ast2Jaxb.setBasicProperties(this, jaxbDestination);
         boolean addMutation = false;
         Mutation mutation = new Mutation();
         if ( !this.mode.toString().equals(BlocklyConstants.DEFAULT) ) {
             mutation.setMode(this.getMode().toString());
             addMutation = true;
-            Ast2JaxbHelper.addField(jaxbDestination, BlocklyConstants.MODE, this.getMode().toString());
+            Ast2Jaxb.addField(jaxbDestination, BlocklyConstants.MODE, this.getMode().toString());
             if ( this.isPortInMutation ) {
                 mutation.setPort(this.getPort().toString());
             }
         }
         if ( !this.getPort().toString().equals(BlocklyConstants.NO_PORT) ) {
             String fieldValue = this.getPort();
-            Ast2JaxbHelper.addField(jaxbDestination, BlocklyConstants.SENSORPORT, fieldValue);
+            Ast2Jaxb.addField(jaxbDestination, BlocklyConstants.SENSORPORT, fieldValue);
         }
         if ( !this.getSlot().toString().equals(BlocklyConstants.NO_SLOT) ) {
             String fieldValue = this.getSlot();
@@ -110,7 +111,7 @@ public abstract class ExternalSensor<V> extends Sensor<V> {
             if ( fieldValue.equals(BlocklyConstants.EMPTY_SLOT) ) {
                 fieldValue = "";
             }
-            Ast2JaxbHelper.addField(jaxbDestination, BlocklyConstants.SLOT, fieldValue);
+            Ast2Jaxb.addField(jaxbDestination, BlocklyConstants.SLOT, fieldValue);
         }
         if ( addMutation ) {
             jaxbDestination.setMutation(mutation);
@@ -127,7 +128,7 @@ public abstract class ExternalSensor<V> extends Sensor<V> {
      */
     public static <V> Phrase<V> jaxbToAst(Block block, AbstractJaxb2Ast<V> helper) {
         SensorMetaDataBean sensorData = extractPortAndModeAndSlot(block, helper);
-        return InfraredSensor.make(sensorData, AbstractJaxb2Ast.extractBlockProperties(block), AbstractJaxb2Ast.extractComment(block));
+        return InfraredSensor.make(sensorData, Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
     }
 
 }

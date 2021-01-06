@@ -6,7 +6,6 @@ import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.blockly.generated.Value;
 import de.fhg.iais.roberta.factory.EV3Factory;
-import de.fhg.iais.roberta.factory.BlocklyDropdownFactory;
 import de.fhg.iais.roberta.inter.mode.action.IShowPicture;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
@@ -16,8 +15,9 @@ import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.Action;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
-import de.fhg.iais.roberta.transformer.Ast2JaxbHelper;
+import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.ExprParam;
+import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.IVisitor;
@@ -54,7 +54,7 @@ public class ShowPictureAction<V> extends Action<V> {
      * @return read only object of class {@link ShowPictureAction}
      */
     private static <V> ShowPictureAction<V> make(IShowPicture pic, Expr<V> x, Expr<V> y, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new ShowPictureAction<V>(pic, x, y, properties, comment);
+        return new ShowPictureAction<>(pic, x, y, properties, comment);
     }
 
     /**
@@ -96,10 +96,9 @@ public class ShowPictureAction<V> extends Action<V> {
      * @return corresponding AST object
      */
     public static <V> Phrase<V> jaxbToAst(Block block, AbstractJaxb2Ast<V> helper) {
-        BlocklyDropdownFactory factory = helper.getDropdownFactory();
-        List<Field> fields = helper.extractFields(block, (short) 1);
-        List<Value> values = helper.extractValues(block, (short) 2);
-        String pic = helper.extractField(fields, BlocklyConstants.PICTURE);
+        List<Field> fields = Jaxb2Ast.extractFields(block, (short) 1);
+        List<Value> values = Jaxb2Ast.extractValues(block, (short) 2);
+        String pic = Jaxb2Ast.extractField(fields, BlocklyConstants.PICTURE);
         Phrase<V> x = helper.extractValue(values, new ExprParam(BlocklyConstants.X, BlocklyType.NUMBER_INT));
         Phrase<V> y = helper.extractValue(values, new ExprParam(BlocklyConstants.Y, BlocklyType.NUMBER_INT));
         return ShowPictureAction
@@ -107,18 +106,18 @@ public class ShowPictureAction<V> extends Action<V> {
                 ((EV3Factory) helper.getRobotFactory()).getShowPicture(pic),
                 helper.convertPhraseToExpr(x),
                 helper.convertPhraseToExpr(y),
-                helper.extractBlockProperties(block),
-                helper.extractComment(block));
+                Jaxb2Ast.extractBlockProperties(block),
+                Jaxb2Ast.extractComment(block));
     }
 
     @Override
     public Block astToBlock() {
         Block jaxbDestination = new Block();
-        Ast2JaxbHelper.setBasicProperties(this, jaxbDestination);
+        Ast2Jaxb.setBasicProperties(this, jaxbDestination);
         String fieldValue = getPicture().toString();
-        Ast2JaxbHelper.addField(jaxbDestination, BlocklyConstants.PICTURE, fieldValue);
-        Ast2JaxbHelper.addValue(jaxbDestination, BlocklyConstants.X, getX());
-        Ast2JaxbHelper.addValue(jaxbDestination, BlocklyConstants.Y, getY());
+        Ast2Jaxb.addField(jaxbDestination, BlocklyConstants.PICTURE, fieldValue);
+        Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.X, getX());
+        Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.Y, getY());
 
         return jaxbDestination;
 

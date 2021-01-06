@@ -17,8 +17,6 @@ import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
 import org.apache.commons.io.output.ByteArrayOutputStream;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Charsets;
 
@@ -26,7 +24,6 @@ import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
 public final class XsltTransformer {
-    private static final Logger LOG = LoggerFactory.getLogger(XsltTransformer.class);
     private static final Pattern NAMESPACE_CHECK = Pattern.compile("<block_set", Pattern.LITERAL);
 
     private static final TransformerFactory factory = TransformerFactory.newInstance();

@@ -17,7 +17,7 @@ public class TypeTransformations {
 
     /**
      * get the signature. The caller has to check for <code>null</code>!
-     * 
+     *
      * @param functionName whose signature is requested
      * @return the signature; if not found, return <code>null</code>
      */
@@ -27,7 +27,7 @@ public class TypeTransformations {
 
     /**
      * get the type. The caller has to check for <code>null</code>!
-     * 
+     *
      * @param constantName whose type is requested
      * @return the type; if not found, return <code>null</code>
      */

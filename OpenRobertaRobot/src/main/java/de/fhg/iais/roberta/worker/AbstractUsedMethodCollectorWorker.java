@@ -10,8 +10,8 @@ import de.fhg.iais.roberta.visitor.collect.AbstractUsedMethodCollectorVisitor;
 import de.fhg.iais.roberta.visitor.collect.ICollectorVisitor;
 
 /**
- * Uses the {@link AbstractUsedMethodCollectorVisitor} to visit the current AST and collect all used methods.
- * Data collected is stored in the {@link UsedMethodBean}.
+ * Uses the {@link AbstractUsedMethodCollectorVisitor} to visit the current AST and collect all used methods. Data collected is stored in the
+ * {@link UsedMethodBean}.
  */
 public abstract class AbstractUsedMethodCollectorWorker implements IWorker {
 
@@ -31,8 +31,8 @@ public abstract class AbstractUsedMethodCollectorWorker implements IWorker {
     }
 
     /**
-     * Returns the appropriate visitor for this worker. Used by subclasses to keep the execute method generic.
-     * Could be removed in the future, when visitors are specified in the properties as well, or inferred from the worker name.
+     * Returns the appropriate visitor for this worker. Used by subclasses to keep the execute method generic. Could be removed in the future, when visitors are
+     * specified in the properties as well, or inferred from the worker name.
      *
      * @param builder the used hardware bean builder
      * @return the appropriate visitor for the current robot

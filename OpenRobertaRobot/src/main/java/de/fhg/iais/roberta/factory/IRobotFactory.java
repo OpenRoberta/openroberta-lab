@@ -11,16 +11,14 @@ public interface IRobotFactory {
     BlocklyDropdownFactory getBlocklyDropdownFactory();
 
     /**
-     * Get the file extension of the specific language for this robot. This is used
-     * when we want to download locally the source code into a file.
+     * Get the file extension of the specific language for this robot. This is used when we want to download locally the source code into a file.
      *
      * @return file extension
      */
     String getSourceCodeFileExtension();
 
     /**
-     * Get the file extension of the specific executable binary for this robot. This
-     * is used when the binary is send back to the client.
+     * Get the file extension of the specific executable binary for this robot. This is used when the binary is send back to the client.
      *
      * @return file extension
      */
@@ -68,14 +66,14 @@ public interface IRobotFactory {
 
     /**
      * Returns the sensor prefix if the robot has on an old configuration, null otherwise.
-     * 
+     *
      * @return the sensor prefix, may be null
      */
     String optSensorPrefix();
 
     /**
      * Returns the top block if the robot has on an old configuration, null otherwise.
-     * 
+     *
      * @return the top block, may be null
      */
     String optTopBlockOfOldConfiguration();
@@ -91,8 +89,7 @@ public interface IRobotFactory {
     Boolean hasWlanCredentials();
 
     /**
-     * Returns the name of the factory default program. Used to get the compiled program from the
-     * crosscompiler resources.
+     * Returns the name of the factory default program. Used to get the compiled program from the crosscompiler resources.
      *
      * @return the name of the factory default program
      */

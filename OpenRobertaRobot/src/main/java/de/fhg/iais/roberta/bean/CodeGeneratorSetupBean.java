@@ -9,13 +9,14 @@ import java.util.Set;
 import org.json.JSONObject;
 
 import de.fhg.iais.roberta.util.HelperMethodGenerator;
+import de.fhg.iais.roberta.util.HelperMethodGenerator.Language;
 import de.fhg.iais.roberta.util.Util;
 import de.fhg.iais.roberta.util.dbc.Assert;
+import de.fhg.iais.roberta.util.dbc.DbcException;
 
 /**
- * Container for code generation related information and functionality.
- * Creates the HelperMethodGenerator for use in the code generation visitors.
- * TODO should include more general information like global variables etc.
+ * Container for code generation related information and functionality. Creates the HelperMethodGenerator for use in the code generation visitors. TODO should
+ * include more general information like global variables etc.
  */
 public class CodeGeneratorSetupBean implements IProjectBean {
 
@@ -58,21 +59,39 @@ public class CodeGeneratorSetupBean implements IProjectBean {
         }
 
         /**
-         * Builds a bean from the provided information.
-         * Creates a {@link HelperMethodGenerator} from the provided helper method file and file extension.
+         * Builds a bean from the provided information. Creates a {@link HelperMethodGenerator} from the provided helper method file and file extension.
+         *
          * @return the finished bean
          */
+        @Override
         public CodeGeneratorSetupBean build() {
             Assert.notNull(this.helperMethodFile, "Helper method file has to be set");
             Assert.notNull(this.fileExtension, "File extension has to be set");
 
             JSONObject helperMethods = new JSONObject();
             Util.loadYAMLRecursive("", helperMethods, this.helperMethodFile, true);
-            this.codeGeneratorBean.helperMethodGenerator = new HelperMethodGenerator(helperMethods, HelperMethodGenerator.getLanguageFromFileExtension(this.fileExtension));
+            this.codeGeneratorBean.helperMethodGenerator = new HelperMethodGenerator(helperMethods, getLanguageFromFileExtension(this.fileExtension));
             for ( Class<? extends Enum<?>> additionalEnum : this.additionalEnums ) {
                 this.codeGeneratorBean.helperMethodGenerator.addAdditionalEnum(additionalEnum);
             }
             return this.codeGeneratorBean;
+        }
+    }
+
+    private static Language getLanguageFromFileExtension(String ext) {
+        switch ( ext ) {
+            case "java":
+                return Language.JAVA;
+            case "py":
+                return Language.PYTHON;
+            case "cpp":
+            case "ino":
+            case "nxc":
+                return Language.C;
+            case "json":
+                return Language.JSON;
+            default:
+                throw new DbcException("File extension not implemented!");
         }
     }
 }

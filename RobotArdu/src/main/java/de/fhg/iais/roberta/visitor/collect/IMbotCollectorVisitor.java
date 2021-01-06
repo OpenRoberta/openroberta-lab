@@ -29,9 +29,8 @@ import de.fhg.iais.roberta.syntax.sensors.arduino.mbot.Joystick;
 import de.fhg.iais.roberta.visitor.hardware.IMbotVisitor;
 
 /**
- * Collector for the MBot.
- * Adds the blocks missing from the defaults of {@link ICollectorVisitor}.
- * Defines the specific parent implementation to use (the one of the collector) due to unrelated defaults.
+ * Collector for the MBot. Adds the blocks missing from the defaults of {@link ICollectorVisitor}. Defines the specific parent implementation to use (the one of
+ * the collector) due to unrelated defaults.
  */
 public interface IMbotCollectorVisitor extends ICollectorVisitor, IMbotVisitor<Void> {
 

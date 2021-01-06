@@ -23,8 +23,7 @@ public class LoopCounterVisitorTest extends AstTest {
 
     private class TestUsedHardwareWorker extends AbstractUsedHardwareCollectorWorker {
         @Override
-        protected AbstractCollectorVisitor getVisitor(
-            Project project, ClassToInstanceMap<IProjectBean.IBuilder<?>> beanBuilders) {
+        protected AbstractCollectorVisitor getVisitor(Project project, ClassToInstanceMap<IProjectBean.IBuilder<?>> beanBuilders) {
             return new TestUsedHardware(project.getProgramAst().getTree(), beanBuilders);
         }
     }
@@ -108,8 +107,7 @@ public class LoopCounterVisitorTest extends AstTest {
     @Test
     public void check_twoNestedloopsFirstWithBreakAndContinueInWaitSecondNot_returnsMapWithTwoElementsFirsTrueSecondFalse() throws Exception {
         Project.Builder builder =
-            UnitTestHelper
-                .setupWithProgramXML(testFactory, Util.readResourceContent("/loop_counter/two_nested_loops_first_with_break_in_wait_second_not.xml"));
+            UnitTestHelper.setupWithProgramXML(testFactory, Util.readResourceContent("/loop_counter/two_nested_loops_first_with_break_in_wait_second_not.xml"));
         Project project = builder.build();
 
         TestUsedHardwareWorker worker = new TestUsedHardwareWorker();

@@ -41,8 +41,7 @@ public class UserGroupDao extends AbstractDao<UserGroup> {
      *
      * @param groupName the name of the group, never null
      * @param groupOwner the user who owns this group, never null
-     * @param timestamp timestamp of the last change of the group (if this call is an update of the group);
-     *        <code>null</code> if a new group is saved
+     * @param timestamp timestamp of the last change of the group (if this call is an update of the group); <code>null</code> if a new group is saved
      * @return a pair of (message-key, group). If the group is persisted successfully, the group is NOT null.
      */
     public Pair<Key, UserGroup> persistGroup(String groupName, User groupOwner, Timestamp timestamp) //

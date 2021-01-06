@@ -6,16 +6,9 @@ import de.fhg.iais.roberta.util.test.UnitTestHelper;
 
 public class CppVisitorTest extends FestiobionicAstTest {
 
-    private static final String INCLUDE =
-        ""
-            + "#define _ARDUINO_STL_NOT_NEEDED"
-            + "#define LED_BUILTIN 13"
-            + "#include <Arduino.h>"
-            + "#include <NEPODefs.h>";
+    private static final String INCLUDE = "" + "#define _ARDUINO_STL_NOT_NEEDED" + "#define LED_BUILTIN 13" + "#include <Arduino.h>" + "#include <NEPODefs.h>";
 
-    private static final String DEFINES =
-        ""
-            + "int_led_L=LED_BUILTIN;";
+    private static final String DEFINES = "" + "int_led_L=LED_BUILTIN;";
 
     @Test
     public void visitLightActionLedTest() throws Exception {
@@ -52,7 +45,7 @@ public class CppVisitorTest extends FestiobionicAstTest {
                 + "}"
                 + "void loop() {"
                 + "_servo_S.write(90);"
-                + "_servo_S.write(30);" 
+                + "_servo_S.write(30);"
                 + "_servo_S2.write(90);"
                 + "}";
 

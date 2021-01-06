@@ -9,9 +9,7 @@ public class MotorDriveStopActionTest extends NxtAstTest {
 
     @Test
     public void stop() throws Exception {
-        final String a =
-            DEFINES_INCLUDES
-                + "\nOff(OUT_BC);}";
+        final String a = DEFINES_INCLUDES + "\nOff(OUT_BC);}";
 
         UnitTestHelper.checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(testFactory, a, "/ast/actions/action_Stop.xml", brickConfigurationBC, true);
     }

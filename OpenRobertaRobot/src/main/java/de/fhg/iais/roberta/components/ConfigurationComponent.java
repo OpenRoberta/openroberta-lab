@@ -12,18 +12,17 @@ import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.SC;
-import de.fhg.iais.roberta.transformer.Ast2JaxbHelper;
+import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.Jaxb2ConfigurationAst;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.visitor.IVisitor;
 
 /**
- * Representation of old/new configuration blocks in the AST.
- * May have subclasses which override {@link ConfigurationComponent#astToBlock()} in order to implement changed behaviour,
- * these must follow the naming structure defined in {@link Jaxb2ConfigurationAst#BRICK_BLOCK_PATTERN} as implemented over in
- * {@link Jaxb2ConfigurationAst#instance2NewConfigComp(Instance, BlocklyDropdownFactory)}
- * TODO this subclassing should be removed and the class declared final if possible
+ * Representation of old/new configuration blocks in the AST. May have subclasses which override {@link ConfigurationComponent#astToBlock()} in order to
+ * implement changed behaviour, these must follow the naming structure defined in {@link Jaxb2ConfigurationAst#BRICK_BLOCK_PATTERN} as implemented over in
+ * {@link Jaxb2ConfigurationAst#instance2NewConfigComp(Instance, BlocklyDropdownFactory)} TODO this subclassing should be removed and the class declared final
+ * if possible
  */
 public class ConfigurationComponent extends Phrase<Void> {
 
@@ -36,8 +35,7 @@ public class ConfigurationComponent extends Phrase<Void> {
     private final int y;
 
     /**
-     * Should only be used by tests!
-     * TODO remove this if possible
+     * Should only be used by tests! TODO remove this if possible
      */
     public ConfigurationComponent(
         String componentType,
@@ -177,19 +175,18 @@ public class ConfigurationComponent extends Phrase<Void> {
     }
 
     /**
-     * Creates a block from the AST representation.
-     * Can be overridden by creating a subclass named according to {@link Jaxb2ConfigurationAst#BRICK_BLOCK_PATTERN} this method is then called via reflection
-     * in {@link Jaxb2ConfigurationAst#instance2NewConfigComp(Instance, BlocklyDropdownFactory)}
-     * TODO this subclassing should be removed if possible
+     * Creates a block from the AST representation. Can be overridden by creating a subclass named according to
+     * {@link Jaxb2ConfigurationAst#BRICK_BLOCK_PATTERN} this method is then called via reflection in
+     * {@link Jaxb2ConfigurationAst#instance2NewConfigComp(Instance, BlocklyDropdownFactory)} TODO this subclassing should be removed if possible
      *
      * @return the generated block
      */
     @Override
     public Block astToBlock() {
         Block destination = new Block();
-        Ast2JaxbHelper.setBasicProperties(this, destination);
-        Ast2JaxbHelper.addField(destination, "NAME", this.userDefinedPortName);
-        this.componentProperties.forEach((key, value) -> Ast2JaxbHelper.addField(destination, key, value));
+        Ast2Jaxb.setBasicProperties(this, destination);
+        Ast2Jaxb.addField(destination, "NAME", this.userDefinedPortName);
+        this.componentProperties.forEach((key, value) -> Ast2Jaxb.addField(destination, key, value));
         return destination;
     }
 

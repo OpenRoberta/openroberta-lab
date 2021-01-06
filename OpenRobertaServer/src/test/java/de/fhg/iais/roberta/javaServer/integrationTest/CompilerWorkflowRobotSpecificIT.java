@@ -66,6 +66,7 @@ import de.fhg.iais.roberta.util.testsetup.IntegrationTest;
 @RunWith(MockitoJUnitRunner.class)
 public class CompilerWorkflowRobotSpecificIT {
     private static final Logger LOG = LoggerFactory.getLogger("SPECIFIC_IT");
+    private static final boolean ENABLE_SIMULATOR_TESTS = false; // TODO: re-enable generation of simulation code
 
     private static final List<String> EMPTY_STRING_LIST = Collections.emptyList();
     private static final String ORA_CC_RSC_ENVVAR = ServerProperties.CROSSCOMPILER_RESOURCE_BASE.replace('.', '_');
@@ -228,13 +229,17 @@ public class CompilerWorkflowRobotSpecificIT {
                 String programText = JaxbHelper.blockSet2xml(jaxbImportExport.getProgram().getBlockSet());
                 String configText = JaxbHelper.blockSet2xml(jaxbImportExport.getConfig().getBlockSet());
 
-                if ( false && pluginMap.get(robotName).hasSim() ) { // TODO: re-enable generation of simulation code
-                    JSONObject cmdGenSim = JSONUtilForServer.mkD("{'programName':'prog','language':'de'}");
-                    cmdGenSim.getJSONObject("data").put("progXML", programText).put("confXML", configText).put("SSID", "1").put("password", "2");
-                    response = this.restWorkflow.getSimulationVMCode(FullRestRequest.make(cmdGenSim));
-                    entity = checkEntityRc(response, expectResult, "ORA_PROGRAM_INVALID_STATEMETNS");
-                    boolean resultSimCode = entity != null;
-                    result = resultCompile && resultSimCode;
+                if ( ENABLE_SIMULATOR_TESTS ) {
+                    if ( pluginMap.get(robotName).hasSim() ) {
+                        JSONObject cmdGenSim = JSONUtilForServer.mkD("{'programName':'prog','language':'de'}");
+                        cmdGenSim.getJSONObject("data").put("progXML", programText).put("confXML", configText).put("SSID", "1").put("password", "2");
+                        response = this.restWorkflow.getSimulationVMCode(FullRestRequest.make(cmdGenSim));
+                        entity = checkEntityRc(response, expectResult, "ORA_PROGRAM_INVALID_STATEMETNS");
+                        boolean resultSimCode = entity != null;
+                        result = resultCompile && resultSimCode;
+                    } else {
+                        result = resultCompile;
+                    }
                 } else {
                     result = resultCompile;
                 }

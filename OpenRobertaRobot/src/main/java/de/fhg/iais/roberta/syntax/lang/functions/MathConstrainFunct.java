@@ -12,8 +12,9 @@ import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.lang.expr.Assoc;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
-import de.fhg.iais.roberta.transformer.Ast2JaxbHelper;
+import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.ExprParam;
+import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.IVisitor;
@@ -93,17 +94,17 @@ public class MathConstrainFunct<V> extends Function<V> {
         exprParams.add(new ExprParam(BlocklyConstants.LOW, BlocklyType.NUMBER_INT));
         exprParams.add(new ExprParam(BlocklyConstants.HIGH, BlocklyType.NUMBER_INT));
         List<Expr<V>> params = helper.extractExprParameters(block, exprParams);
-        return MathConstrainFunct.make(params, helper.extractBlockProperties(block), helper.extractComment(block));
+        return MathConstrainFunct.make(params, Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
     }
 
     @Override
     public Block astToBlock() {
         Block jaxbDestination = new Block();
-        Ast2JaxbHelper.setBasicProperties(this, jaxbDestination);
+        Ast2Jaxb.setBasicProperties(this, jaxbDestination);
 
-        Ast2JaxbHelper.addValue(jaxbDestination, BlocklyConstants.VALUE, getParam().get(0));
-        Ast2JaxbHelper.addValue(jaxbDestination, BlocklyConstants.LOW, getParam().get(1));
-        Ast2JaxbHelper.addValue(jaxbDestination, BlocklyConstants.HIGH, getParam().get(2));
+        Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.VALUE, getParam().get(0));
+        Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.LOW, getParam().get(1));
+        Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.HIGH, getParam().get(2));
         return jaxbDestination;
     }
 

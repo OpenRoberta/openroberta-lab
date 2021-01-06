@@ -276,6 +276,9 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
                 this.sb.append(((Var<Void>) ((Binary<Void>) repeatStmt.getExpr()).getRight()).getValue());
                 this.sb.append("[___i];");
                 decrIndentation();
+                break;
+            case FOREVER_ARDU:
+                throw new DbcException("FOREVER_ARDU is invalid with nxt");
         }
         incrIndentation();
         repeatStmt.getList().accept(this);
@@ -315,7 +318,7 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
 
     @Override
     public Void visitShowTextAction(ShowTextAction<Void> showTextAction) {
-        this.sb.append(getMethodForShowText(showTextAction));
+        this.sb.append(NxtNxcVisitor.getMethodForShowText(showTextAction));
         this.sb.append("(");
         showTextAction.getX().accept(this);
         this.sb.append(", (MAXLINES - ");

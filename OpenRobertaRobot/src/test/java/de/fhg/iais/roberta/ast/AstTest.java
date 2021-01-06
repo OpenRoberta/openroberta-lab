@@ -1,9 +1,9 @@
 package de.fhg.iais.roberta.ast;
 
-import org.junit.BeforeClass;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import org.junit.BeforeClass;
 
 import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.util.Util;

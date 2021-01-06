@@ -10,7 +10,8 @@ import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
-import de.fhg.iais.roberta.transformer.Ast2JaxbHelper;
+import de.fhg.iais.roberta.transformer.Ast2Jaxb;
+import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.IVisitor;
 import de.fhg.iais.roberta.visitor.lang.ILanguageVisitor;
@@ -47,6 +48,7 @@ public class StmtTextComment<V> extends Stmt<V> {
         return this.textComment;
     }
 
+    @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
         appendNewLine(sb, 0, "StmtTextComment [" + this.textComment + "]");
@@ -66,16 +68,16 @@ public class StmtTextComment<V> extends Stmt<V> {
      * @return corresponding AST object
      */
     public static <V> Phrase<V> jaxbToAst(Block block, AbstractJaxb2Ast<V> helper) {
-        List<Field> fields = helper.extractFields(block, (short) 1);
-        String comment = helper.extractField(fields, BlocklyConstants.TEXT);
-        return StmtTextComment.make(comment, helper.extractBlockProperties(block), helper.extractComment(block));
+        List<Field> fields = Jaxb2Ast.extractFields(block, (short) 1);
+        String comment = Jaxb2Ast.extractField(fields, BlocklyConstants.TEXT);
+        return StmtTextComment.make(comment, Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
     }
 
     @Override
     public Block astToBlock() {
         Block jaxbDestination = new Block();
-        Ast2JaxbHelper.setBasicProperties(this, jaxbDestination);
-        Ast2JaxbHelper.addField(jaxbDestination, BlocklyConstants.TEXT, this.textComment);
+        Ast2Jaxb.setBasicProperties(this, jaxbDestination);
+        Ast2Jaxb.addField(jaxbDestination, BlocklyConstants.TEXT, this.textComment);
         return jaxbDestination;
     }
 }

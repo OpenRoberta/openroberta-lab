@@ -20,13 +20,7 @@ public class ResetFirmwareWorker implements IWorker {
         IRobotFactory factory = project.getRobotFactory();
         PluginProperties properties = factory.getPluginProperties();
         final File source = new File(properties.getCompilerResourceDir() + "/" + project.getCompiledProgramPath() + "." + project.getBinaryFileExtension());
-        final File dest =
-            new File(
-                properties.getTempDir()
-                    + project.getToken()
-                    + "/"
-                    + project.getProgramName()
-                    + "/target");
+        final File dest = new File(properties.getTempDir() + project.getToken() + "/" + project.getProgramName() + "/target");
         Key resultKey;
         try {
             FileUtils.copyFileToDirectory(source, dest);

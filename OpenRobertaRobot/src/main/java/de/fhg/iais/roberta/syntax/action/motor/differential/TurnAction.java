@@ -17,8 +17,9 @@ import de.fhg.iais.roberta.syntax.MotorDuration;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.Action;
 import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
-import de.fhg.iais.roberta.transformer.Ast2JaxbHelper;
+import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.ExprParam;
+import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.IVisitor;
@@ -93,33 +94,33 @@ public class TurnAction<V> extends Action<V> {
         List<Value> values;
         MotionParam<V> mp;
         BlocklyDropdownFactory factory = helper.getDropdownFactory();
-        fields = helper.extractFields(block, (short) 1);
-        mode = helper.extractField(fields, BlocklyConstants.DIRECTION);
+        fields = Jaxb2Ast.extractFields(block, (short) 1);
+        mode = Jaxb2Ast.extractField(fields, BlocklyConstants.DIRECTION);
 
         if ( block.getType().equals(BlocklyConstants.ROB_ACTIONS_MOTOR_DIFF_TURN) ) {
-            values = helper.extractValues(block, (short) 1);
+            values = Jaxb2Ast.extractValues(block, (short) 1);
             Phrase<V> expr = helper.extractValue(values, new ExprParam(BlocklyConstants.POWER, BlocklyType.NUMBER_INT));
             mp = new MotionParam.Builder<V>().speed(helper.convertPhraseToExpr(expr)).build();
         } else {
-            values = helper.extractValues(block, (short) 2);
+            values = Jaxb2Ast.extractValues(block, (short) 2);
             Phrase<V> left = helper.extractValue(values, new ExprParam(BlocklyConstants.POWER, BlocklyType.NUMBER_INT));
             Phrase<V> right = helper.extractValue(values, new ExprParam(BlocklyConstants.DEGREE, BlocklyType.NUMBER_INT));
             MotorDuration<V> md = new MotorDuration<V>(factory.getMotorMoveMode("DEGREE"), helper.convertPhraseToExpr(right));
             mp = new MotionParam.Builder<V>().speed(helper.convertPhraseToExpr(left)).duration(md).build();
         }
-        return TurnAction.make(factory.getTurnDirection(mode), mp, helper.extractBlockProperties(block), helper.extractComment(block));
+        return TurnAction.make(factory.getTurnDirection(mode), mp, Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
     }
 
     @Override
     public Block astToBlock() {
         Block jaxbDestination = new Block();
-        Ast2JaxbHelper.setBasicProperties(this, jaxbDestination);
+        Ast2Jaxb.setBasicProperties(this, jaxbDestination);
 
-        Ast2JaxbHelper.addField(jaxbDestination, BlocklyConstants.DIRECTION, getDirection().toString());
-        Ast2JaxbHelper.addValue(jaxbDestination, BlocklyConstants.POWER, getParam().getSpeed());
+        Ast2Jaxb.addField(jaxbDestination, BlocklyConstants.DIRECTION, getDirection().toString());
+        Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.POWER, getParam().getSpeed());
 
         if ( getParam().getDuration() != null ) {
-            Ast2JaxbHelper.addValue(jaxbDestination, getParam().getDuration().getType().toString(), getParam().getDuration().getValue());
+            Ast2Jaxb.addValue(jaxbDestination, getParam().getDuration().getType().toString(), getParam().getDuration().getValue());
         }
 
         return jaxbDestination;

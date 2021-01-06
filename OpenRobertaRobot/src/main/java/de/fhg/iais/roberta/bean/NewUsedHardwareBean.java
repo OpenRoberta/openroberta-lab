@@ -21,6 +21,7 @@ public class NewUsedHardwareBean implements IProjectBean {
             return this;
         }
 
+        @Override
         public NewUsedHardwareBean build() {
             return this.usedHardwareBean;
         }

@@ -15,7 +15,8 @@ import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.syntax.lang.expr.ExprList;
 import de.fhg.iais.roberta.syntax.lang.expr.Var;
 import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
-import de.fhg.iais.roberta.transformer.Ast2JaxbHelper;
+import de.fhg.iais.roberta.transformer.Ast2Jaxb;
+import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.IVisitor;
@@ -121,19 +122,19 @@ public class MethodCall<V> extends Method<V> {
         String methodName = block.getMutation().getName();
         List<Arg> arguments = block.getMutation().getArg();
         ExprList<V> parameters = helper.argumentsToExprList(arguments);
-        BlocklyType[] types = helper.argumentsToParametersType(arguments);
+        BlocklyType[] types = Jaxb2Ast.argumentsToParametersType(arguments);
         int numberOfArguments = arguments.size();
-        List<Value> values = helper.extractValues(block, (short) numberOfArguments);
+        List<Value> values = Jaxb2Ast.extractValues(block, (short) numberOfArguments);
 
         ExprList<V> parametersValues = helper.valuesToExprList(values, types, numberOfArguments, BlocklyConstants.ARG);
 
-        return MethodCall.make(methodName, parameters, parametersValues, outputType, helper.extractBlockProperties(block), helper.extractComment(block));
+        return MethodCall.make(methodName, parameters, parametersValues, outputType, Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
     }
 
     @Override
     public Block astToBlock() {
         Block jaxbDestination = new Block();
-        Ast2JaxbHelper.setBasicProperties(this, jaxbDestination);
+        Ast2Jaxb.setBasicProperties(this, jaxbDestination);
         Mutation mutation = new Mutation();
         mutation.setName(getMethodName());
         if ( this.oraReturnType != BlocklyType.VOID ) {
@@ -150,7 +151,7 @@ public class MethodCall<V> extends Method<V> {
         jaxbDestination.setMutation(mutation);
         int counter = 0;
         for ( Expr<V> parameterValue : this.oraParametersValues.get() ) {
-            Ast2JaxbHelper.addValue(jaxbDestination, BlocklyConstants.ARG + counter, parameterValue);
+            Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.ARG + counter, parameterValue);
             counter++;
         }
 

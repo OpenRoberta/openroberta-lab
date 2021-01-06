@@ -1,8 +1,8 @@
 package de.fhg.iais.roberta.visitor.collect;
 
-import com.google.common.collect.ClassToInstanceMap;
-
 import java.util.List;
+
+import com.google.common.collect.ClassToInstanceMap;
 
 import de.fhg.iais.roberta.bean.IProjectBean;
 import de.fhg.iais.roberta.bean.UsedHardwareBean;

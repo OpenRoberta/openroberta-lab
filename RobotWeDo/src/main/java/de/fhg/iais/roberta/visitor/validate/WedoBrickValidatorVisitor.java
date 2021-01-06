@@ -16,7 +16,7 @@ import de.fhg.iais.roberta.syntax.sensor.ExternalSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.KeysSensor;
 import de.fhg.iais.roberta.typecheck.NepoInfo;
 
-public final class WedoBrickValidatorVisitor<V> extends AbstractBrickValidatorVisitor {
+public final class WedoBrickValidatorVisitor extends AbstractBrickValidatorVisitor {
 
     public WedoBrickValidatorVisitor(ConfigurationAst brickConfiguration, ClassToInstanceMap<IProjectBean.IBuilder<?>> beanBuilders) {
         super(brickConfiguration, beanBuilders);

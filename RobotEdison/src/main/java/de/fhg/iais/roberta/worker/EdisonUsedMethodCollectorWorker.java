@@ -16,6 +16,7 @@ public class EdisonUsedMethodCollectorWorker extends AbstractUsedMethodCollector
 
     /**
      * Edison has additional methods that need to be generated.
+     *
      * @return the additional methods
      */
     @Override

@@ -17,8 +17,9 @@ import de.fhg.iais.roberta.syntax.lang.expr.Assoc;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.syntax.lang.functions.Function;
 import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
-import de.fhg.iais.roberta.transformer.Ast2JaxbHelper;
+import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.ExprParam;
+import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.IVisitor;
@@ -118,9 +119,9 @@ public class ImageShiftFunction<V> extends Function<V> {
      */
     public static <V> Phrase<V> jaxbToAst(Block block, AbstractJaxb2Ast<V> helper) {
         BlocklyDropdownFactory factory = helper.getDropdownFactory();
-        List<Field> fields = helper.extractFields(block, (short) 1);
-        List<Value> values = helper.extractValues(block, (short) 2);
-        IDirection shiftingDirection = factory.getDirection(helper.extractField(fields, BlocklyConstants.OP));
+        List<Field> fields = Jaxb2Ast.extractFields(block, (short) 1);
+        List<Value> values = Jaxb2Ast.extractValues(block, (short) 2);
+        IDirection shiftingDirection = factory.getDirection(Jaxb2Ast.extractField(fields, BlocklyConstants.OP));
         Phrase<V> image = helper.extractValue(values, new ExprParam(BlocklyConstants.A, BlocklyType.PREDEFINED_IMAGE));
         Phrase<V> numberOfPositions = helper.extractValue(values, new ExprParam(BlocklyConstants.B, BlocklyType.NUMBER_INT));
         return ImageShiftFunction
@@ -128,17 +129,17 @@ public class ImageShiftFunction<V> extends Function<V> {
                 helper.convertPhraseToExpr(image),
                 helper.convertPhraseToExpr(numberOfPositions),
                 shiftingDirection,
-                helper.extractBlockProperties(block),
-                helper.extractComment(block));
+                Jaxb2Ast.extractBlockProperties(block),
+                Jaxb2Ast.extractComment(block));
     }
 
     @Override
     public Block astToBlock() {
         Block jaxbDestination = new Block();
-        Ast2JaxbHelper.setBasicProperties(this, jaxbDestination);
-        Ast2JaxbHelper.addField(jaxbDestination, BlocklyConstants.OP, this.shiftDirection.toString());
-        Ast2JaxbHelper.addValue(jaxbDestination, BlocklyConstants.A, this.image);
-        Ast2JaxbHelper.addValue(jaxbDestination, BlocklyConstants.B, this.positions);
+        Ast2Jaxb.setBasicProperties(this, jaxbDestination);
+        Ast2Jaxb.addField(jaxbDestination, BlocklyConstants.OP, this.shiftDirection.toString());
+        Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.A, this.image);
+        Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.B, this.positions);
 
         return jaxbDestination;
     }
