@@ -135,6 +135,7 @@ define(["require", "exports", "./wires", "./const.robots", "./robotBlock", "./po
                 _this.connections.push({
                     blockId: block.id,
                     connectedTo: connectedTo,
+                    blockPort: port,
                     name: name,
                     position: position,
                     wireSvg: wireSvg,
@@ -230,7 +231,7 @@ define(["require", "exports", "./wires", "./const.robots", "./robotBlock", "./po
             }
             var robotPosition = this.robot.getRelativeToSurfaceXY();
             this.connections.forEach(function (_a) {
-                var blockId = _a.blockId, position = _a.position, connectedTo = _a.connectedTo, wireSvg = _a.wireSvg;
+                var blockId = _a.blockId, position = _a.position, connectedTo = _a.connectedTo, wireSvg = _a.wireSvg, blockPort = _a.blockPort;
                 var block = _this.workspace.getBlockById(blockId);
                 if (!block) {
                     return;
@@ -251,10 +252,15 @@ define(["require", "exports", "./wires", "./const.robots", "./robotBlock", "./po
                     x: robotPosition.x + robotConnection.position.x + SEP,
                     y: robotPosition.y + robotConnection.position.y + SEP
                 });
-                var drawer = new wires_1.default(origin, destination, _this.calculateAbsoluteBlockCorners(block));
+                var wireShouldWrap = _this.shouldWireWrap(block, destination);
+                var drawer = new wires_1.default(origin, destination, block.ports.indexOf(blockPort), wireShouldWrap ? _this.calculateAbsoluteBlockCorners(block) : undefined);
                 wireSvg.setAttribute('d', drawer.path);
                 wireSvg.setAttribute('stroke-width', STROKE * _this.workspace.scale);
             });
+        };
+        CircuitVisualization.prototype.shouldWireWrap = function (block, destination) {
+            var _a = this.calculateAbsoluteBlockCorners(block), _b = _a.lowerRight, rightEdge = _b.x, lowerEdge = _b.y, _c = _a.upperLeft, leftEdge = _c.x, upperEdge = _c.y;
+            return (leftEdge - wires_1.default.SEPARATOR) <= destination.x && destination.x <= (rightEdge + wires_1.default.SEPARATOR);
         };
         CircuitVisualization.prototype.calculateAbsoluteBlockCorners = function (block) {
             var relativeUpperLeft = block.getRelativeToSurfaceXY();

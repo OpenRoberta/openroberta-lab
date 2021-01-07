@@ -26,8 +26,6 @@ class WirePoint {
     }
 }
 
-const SEPARATOR = 6;
-
 function distance(first: number, second: number) {
     return Math.abs(first - second);
 }
@@ -45,14 +43,21 @@ function chooseByDistance(selectBetween: [number, number], comparisonPoint: numb
 
 export default class WireDrawer {
 
-    head: WirePoint;
+    public static readonly SEPARATOR = 6
+
+    private head: WirePoint;
     private readonly blockCorners: {
         upperLeft: Point,
         lowerRight: Point
     };
+    private readonly portIndex: number;
+    private readonly left: boolean;
 
-    constructor(origin, destination, blockCorners) {
+    constructor(origin, destination, portIndex, blockCorners?) {
         this.blockCorners = blockCorners;
+        if (blockCorners) this.left = this.blockCorners.upperLeft.x === origin.x;
+
+        this.portIndex = portIndex;
         this.head = new WirePoint(origin);
         this.head.next = new WirePoint(destination);
         this.toOrthoLines_();
@@ -74,7 +79,7 @@ export default class WireDrawer {
         let x = originX < destinationX ? Math.max(originX, destinationX) : Math.min(originX, destinationX);
         let y = originY < destinationY ? Math.min(originY, destinationY) : Math.max(originY, destinationY);
 
-        if (!this.collidesWithBlock({ x, y })) {
+        if (!this.blockCorners) {
             this.addPoint_(this.head, { x, y });
             return
         }
@@ -83,8 +88,9 @@ export default class WireDrawer {
 
         const { lowerRight, upperLeft } = this.blockCorners;
 
-        y = chooseByDistance([lowerRight.y + SEPARATOR, upperLeft.y - SEPARATOR], destinationY, (x, y) => x < y);
-        const xExtra = chooseByDistance([originX + SEPARATOR, originX - SEPARATOR], destinationX, (x, y) => x > y);
+        const separatorByPortIndex = (this.portIndex + 1) * WireDrawer.SEPARATOR;
+        y = chooseByDistance([lowerRight.y + separatorByPortIndex, upperLeft.y - separatorByPortIndex], destinationY, (x, y) => x < y);
+        const xExtra = this.left ? originX - separatorByPortIndex : originX + separatorByPortIndex;
 
         this.addPoint_(this.head, { x, y });
 
@@ -97,13 +103,6 @@ export default class WireDrawer {
             x: xExtra,
             y: originY
         });
-    }
-
-    private collidesWithBlock(position: Point) {
-        const { lowerRight, upperLeft } = this.blockCorners
-
-        return upperLeft.x <= position.x && position.x <= lowerRight.x
-            && upperLeft.y <= position.y && position.y <= lowerRight.y;
     }
 
     get path() {

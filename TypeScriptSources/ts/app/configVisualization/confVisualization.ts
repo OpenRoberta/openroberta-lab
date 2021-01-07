@@ -145,7 +145,7 @@ export class CircuitVisualization {
             return;
         }
         const robotPosition = this.robot.getRelativeToSurfaceXY();
-        this.connections.forEach(({ blockId, position, connectedTo, wireSvg }) => {
+        this.connections.forEach(({ blockId, position, connectedTo, wireSvg, blockPort }) => {
             const block = this.workspace.getBlockById(blockId);
             if (!block) {
                 return;
@@ -166,10 +166,19 @@ export class CircuitVisualization {
                 x: robotPosition.x + robotConnection.position.x + SEP,
                 y: robotPosition.y + robotConnection.position.y + SEP
             });
-            const drawer = new WireDrawer(origin, destination, this.calculateAbsoluteBlockCorners(block));
+
+            const wireShouldWrap = this.shouldWireWrap(block, destination);
+            const drawer = new WireDrawer(origin, destination, block.ports.indexOf(blockPort), wireShouldWrap ? this.calculateAbsoluteBlockCorners(block) : undefined);
+
             wireSvg.setAttribute('d', drawer.path);
             wireSvg.setAttribute('stroke-width', STROKE * this.workspace.scale);
         });
+    }
+
+    private shouldWireWrap(block, destination) {
+        const { lowerRight: { x: rightEdge, y: lowerEdge }, upperLeft: { x: leftEdge, y: upperEdge } } = this.calculateAbsoluteBlockCorners(block)
+
+        return (leftEdge - WireDrawer.SEPARATOR) <= destination.x && destination.x <= (rightEdge + WireDrawer.SEPARATOR);
     }
 
     private calculateAbsoluteBlockCorners(block) {
@@ -265,6 +274,7 @@ export class CircuitVisualization {
         this.connections.push({
             blockId: block.id,
             connectedTo: connectedTo,
+            blockPort: port,
             name,
             position,
             wireSvg,
