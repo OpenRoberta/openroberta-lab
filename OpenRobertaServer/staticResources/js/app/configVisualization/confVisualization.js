@@ -229,7 +229,6 @@ define(["require", "exports", "./wires", "./const.robots", "./robotBlock", "./po
                 return;
             }
             var robotPosition = this.robot.getRelativeToSurfaceXY();
-            var matrix = this.workspace.getCanvas().transform.baseVal.getItem(0).matrix;
             this.connections.forEach(function (_a) {
                 var blockId = _a.blockId, position = _a.position, connectedTo = _a.connectedTo, wireSvg = _a.wireSvg;
                 var block = _this.workspace.getBlockById(blockId);
@@ -240,22 +239,39 @@ define(["require", "exports", "./wires", "./const.robots", "./robotBlock", "./po
                     _this.updateBlockPorts(block);
                 }
                 var blockPosition = block.getRelativeToSurfaceXY();
-                var origin = {
-                    x: matrix.e + _this.workspace.scale * (blockPosition.x + position.x + SEP),
-                    y: matrix.f + _this.workspace.scale * (blockPosition.y + position.y + SEP),
-                };
+                var origin = _this.calculateAbsolutePosition({
+                    x: blockPosition.x + position.x + SEP,
+                    y: blockPosition.y + position.y + SEP,
+                });
                 var robotConnection = _this.robot.getPortByName(connectedTo);
                 if (!robotConnection) {
                     return;
                 }
-                var destination = {
-                    x: matrix.e + _this.workspace.scale * (robotPosition.x + robotConnection.position.x + SEP),
-                    y: matrix.f + _this.workspace.scale * (robotPosition.y + robotConnection.position.y + SEP),
-                };
-                var drawer = new wires_1.default(origin, destination);
+                var destination = _this.calculateAbsolutePosition({
+                    x: robotPosition.x + robotConnection.position.x + SEP,
+                    y: robotPosition.y + robotConnection.position.y + SEP
+                });
+                var drawer = new wires_1.default(origin, destination, _this.calculateAbsoluteBlockCorners(block));
                 wireSvg.setAttribute('d', drawer.path);
                 wireSvg.setAttribute('stroke-width', STROKE * _this.workspace.scale);
             });
+        };
+        CircuitVisualization.prototype.calculateAbsoluteBlockCorners = function (block) {
+            var relativeUpperLeft = block.getRelativeToSurfaceXY();
+            return {
+                upperLeft: this.calculateAbsolutePosition(relativeUpperLeft),
+                lowerRight: this.calculateAbsolutePosition({
+                    x: relativeUpperLeft.x + block.width,
+                    y: relativeUpperLeft.y + block.height
+                })
+            };
+        };
+        CircuitVisualization.prototype.calculateAbsolutePosition = function (pos) {
+            var matrix = this.workspace.getCanvas().transform.baseVal.getItem(0).matrix;
+            return {
+                x: matrix.e + this.workspace.scale * pos.x,
+                y: matrix.f + this.workspace.scale * pos.y
+            };
         };
         CircuitVisualization.prototype.needToUpdateBlockPorts = function (block, portPosition, connectedTo) {
             if (connectedTo) {

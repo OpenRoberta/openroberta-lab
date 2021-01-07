@@ -145,32 +145,50 @@ export class CircuitVisualization {
             return;
         }
         const robotPosition = this.robot.getRelativeToSurfaceXY();
-        const { matrix } = this.workspace.getCanvas().transform.baseVal.getItem(0);
         this.connections.forEach(({ blockId, position, connectedTo, wireSvg }) => {
             const block = this.workspace.getBlockById(blockId);
             if (!block) {
                 return;
             }
-            if (this.needToUpdateBlockPorts(block,position,connectedTo)) {
+            if (this.needToUpdateBlockPorts(block, position, connectedTo)) {
                 this.updateBlockPorts(block);
             }
             const blockPosition = block.getRelativeToSurfaceXY();
-            const origin = {
-                x: matrix.e + this.workspace.scale * (blockPosition.x + position.x + SEP),
-                y: matrix.f + this.workspace.scale * (blockPosition.y + position.y + SEP),
-            }
+            const origin = this.calculateAbsolutePosition({
+                x: blockPosition.x + position.x + SEP,
+                y: blockPosition.y + position.y + SEP,
+            });
             const robotConnection = this.robot.getPortByName(connectedTo)
             if (!robotConnection) {
                 return;
             }
-            const destination = {
-                x: matrix.e + this.workspace.scale * (robotPosition.x + robotConnection.position.x + SEP),
-                y: matrix.f + this.workspace.scale * (robotPosition.y + robotConnection.position.y + SEP),
-            }
-            const drawer = new WireDrawer(origin, destination);
+            const destination = this.calculateAbsolutePosition({
+                x: robotPosition.x + robotConnection.position.x + SEP,
+                y: robotPosition.y + robotConnection.position.y + SEP
+            });
+            const drawer = new WireDrawer(origin, destination, this.calculateAbsoluteBlockCorners(block));
             wireSvg.setAttribute('d', drawer.path);
             wireSvg.setAttribute('stroke-width', STROKE * this.workspace.scale);
         });
+    }
+
+    private calculateAbsoluteBlockCorners(block) {
+        const relativeUpperLeft = block.getRelativeToSurfaceXY();
+        return {
+            upperLeft: this.calculateAbsolutePosition(relativeUpperLeft),
+            lowerRight: this.calculateAbsolutePosition({
+                x: relativeUpperLeft.x + block.width,
+                y: relativeUpperLeft.y + block.height
+            })
+        };
+    }
+
+    private calculateAbsolutePosition(pos: { x, y }) {
+        const { matrix } = this.workspace.getCanvas().transform.baseVal.getItem(0);
+        return {
+            x: matrix.e + this.workspace.scale * pos.x,
+            y: matrix.f + this.workspace.scale * pos.y
+        };
     }
 
     private needToUpdateBlockPorts(block: any, portPosition: any, connectedTo: any): boolean {

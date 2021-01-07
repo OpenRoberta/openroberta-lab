@@ -26,11 +26,33 @@ class WirePoint {
     }
 }
 
+const SEPARATOR = 6;
+
+function distance(first: number, second: number) {
+    return Math.abs(first - second);
+}
+
+function chooseByDistance(selectBetween: [number, number], comparisonPoint: number,
+    comparator: (x1: number, x2: number) => boolean = (x1, x2) => x1 > x2): number {
+
+    const comparison = comparator(distance(selectBetween[0], comparisonPoint), distance(selectBetween[1], comparisonPoint));
+    if (comparison) {
+        return selectBetween[0];
+    }
+    return selectBetween[1];
+}
+
+
 export default class WireDrawer {
 
     head: WirePoint;
+    private readonly blockCorners: {
+        upperLeft: Point,
+        lowerRight: Point
+    };
 
-    constructor(origin, destination) {
+    constructor(origin, destination, blockCorners) {
+        this.blockCorners = blockCorners;
         this.head = new WirePoint(origin);
         this.head.next = new WirePoint(destination);
         this.toOrthoLines_();
@@ -43,16 +65,45 @@ export default class WireDrawer {
     }
 
     toOrthoLines_() {
-        const { x: x1, y: y1 } = this.head.pos;
-        const { x: x2, y: y2 } = this.head.next.pos;
+        const { x: originX, y: originY } = this.head.pos;
+        const { x: destinationX, y: destinationY } = this.head.next.pos;
 
-        if (x1 === x2 || y1 === y2)
+        if (originX === destinationX || originY === destinationY)
             return;
 
-        const x = x1 < x2 ? Math.max(x1, x2) : Math.min(x1, x2);
-        const y = y1 < y2 ? Math.min(y1, y2) : Math.max(y1, y2);
+        let x = originX < destinationX ? Math.max(originX, destinationX) : Math.min(originX, destinationX);
+        let y = originY < destinationY ? Math.min(originY, destinationY) : Math.max(originY, destinationY);
+
+        if (!this.collidesWithBlock({ x, y })) {
+            this.addPoint_(this.head, { x, y });
+            return
+        }
+
+        // Adjust path around block
+
+        const { lowerRight, upperLeft } = this.blockCorners;
+
+        y = chooseByDistance([lowerRight.y + SEPARATOR, upperLeft.y - SEPARATOR], destinationY, (x, y) => x < y);
+        const xExtra = chooseByDistance([originX + SEPARATOR, originX - SEPARATOR], destinationX, (x, y) => x > y);
 
         this.addPoint_(this.head, { x, y });
+
+        this.addPoint_(this.head, {
+            x: xExtra,
+            y: y
+        });
+
+        this.addPoint_(this.head, {
+            x: xExtra,
+            y: originY
+        });
+    }
+
+    private collidesWithBlock(position: Point) {
+        const { lowerRight, upperLeft } = this.blockCorners
+
+        return upperLeft.x <= position.x && position.x <= lowerRight.x
+            && upperLeft.y <= position.y && position.y <= lowerRight.y;
     }
 
     get path() {
