@@ -76,6 +76,7 @@ import de.fhg.iais.roberta.syntax.lang.functions.MathConstrainFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathRandomIntFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.TextCharCastNumberFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.TextJoinFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.TextStringCastNumberFunct;
 import de.fhg.iais.roberta.syntax.lang.methods.Method;
 import de.fhg.iais.roberta.syntax.lang.stmt.AssertStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.DebugAction;
@@ -745,6 +746,14 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
         this.sb.append("ManagedString((char)(");
         mathCastCharFunct.getParam().get(0).accept(this);
         this.sb.append("))");
+        return null;
+    }
+
+    @Override
+    public Void visitTextStringCastNumberFunct(TextStringCastNumberFunct<Void> textStringCastNumberFunct) {
+        this.sb.append("std::atof((");
+        textStringCastNumberFunct.getParam().get(0).accept(this);
+        this.sb.append(").toCharArray())");
         return null;
     }
 
