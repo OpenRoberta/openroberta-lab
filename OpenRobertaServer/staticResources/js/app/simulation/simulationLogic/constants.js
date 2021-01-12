@@ -504,8 +504,7 @@ define({
         YELLOW: "YELLOW",
         RED: "RED",
         WHITE: "WHITE",
-        BROWN: "BROWN",
-        TURQUOISE: "TURQUOISE"
+        BROWN: "BROWN"
     },
 
     TIMER: "timer",
