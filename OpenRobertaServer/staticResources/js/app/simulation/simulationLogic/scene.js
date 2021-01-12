@@ -119,6 +119,29 @@ define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constan
             this.oCtx.shadowColor = "black";
             this.oCtx.fillRect(this.obstacle.x, this.obstacle.y, this.obstacle.w, this.obstacle.h);
         }
+        //console.log("size", this.oCtx.canvas.width, this.oCtx.canvas.height);
+        //console.log("obstacle colors at 580, 290", this.oCtx.getImageData(580, 290, 1, 1).data);
+
+        /*
+        console.log("obstacle", this.obstacle.x, this.obstacle.y);
+
+        this.oCtx.beginPath();
+        this.oCtx.arc(580, 290, 3, 0, 2 * Math.PI);
+        this.oCtx.fillStyle = "red";
+        this.oCtx.fill();
+        this.oCtx.beginPath();
+        this.oCtx.arc(680, 290, 3, 0, 2 * Math.PI);
+        this.oCtx.fillStyle = "red";
+        this.oCtx.fill();
+        this.oCtx.beginPath();
+        this.oCtx.arc(580, 390, 3, 0, 2 * Math.PI);
+        this.oCtx.fillStyle = "red";
+        this.oCtx.fill();
+        this.oCtx.beginPath();
+        this.oCtx.arc(680, 390, 3, 0, 2 * Math.PI);
+        this.oCtx.fillStyle = "red";
+        this.oCtx.fill();
+         */
     };
 
     Scene.prototype.drawVariables = function() {
@@ -735,13 +758,51 @@ define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constan
                                 colorSensorTheta = 0;
                         }
 
+                        var scanSquareSize = 2;
+                        var scanCoordinates = {
+                            x: (colorSensors[s].rx - C.COLOR_SENSOR_HORIZONTAL_DISTANCE * Math.cos(this.robots[r].pose.theta + Math.PI + colorSensorTheta))+scanSquareSize/2,
+                            y: (colorSensors[s].ry - C.COLOR_SENSOR_HORIZONTAL_DISTANCE * Math.sin(this.robots[r].pose.theta + Math.PI + colorSensorTheta))-scanSquareSize/2
+                        }
+                        var scanSquareCoords = [
+                            {x: Math.round(scanCoordinates.x), y: Math.round(scanCoordinates.y)},
+                            {x: Math.round(scanCoordinates.x), y: Math.round(scanCoordinates.y)+scanSquareSize},
+                            {x: Math.round(scanCoordinates.x) + scanSquareSize, y: Math.round(scanCoordinates.y)},
+                            {x: Math.round(scanCoordinates.x) + scanSquareSize, y: Math.round(scanCoordinates.y)+scanSquareSize},
+                        ]
+                        // clear points
+                        this.drawObjects();
+                        //for (let c in scanSquareCoords) {
+                        //    this.oCtx.beginPath();
+                        //    this.oCtx.arc(scanSquareCoords[c].x, scanSquareCoords[c].y, 2, 0, 2 * Math.PI);
+                        //    this.oCtx.fillStyle = "red";
+                        //    this.oCtx.fill();
+                        //}
+                        //console.log("robot", Math.round(colorSensors[s].rx), Math.round(colorSensors[s].ry));
+                        //console.log("scan", Math.round(scanCoordinates.x), Math.round(scanCoordinates.y));
                         var l = {
                             x1: colorSensors[s].rx,
                             y1: colorSensors[s].ry,
                             x2: colorSensors[s].rx - C.COLOR_SENSOR_HORIZONTAL_DISTANCE * Math.cos(this.robots[r].pose.theta + Math.PI + colorSensorTheta),
                             y2: colorSensors[s].ry - C.COLOR_SENSOR_HORIZONTAL_DISTANCE * Math.sin(this.robots[r].pose.theta + Math.PI + colorSensorTheta)
                         };
-
+                        var colors = this.oCtx.getImageData(Math.round(l.x2), Math.round(l.y2), 8, 8);
+                        //console.log("should scan", Math.round(l.x2), Math.round(l.y2), "scanned", xNew, yNew);
+                        rgb = getObstacleColor(colors);
+                        red = rgb[0];
+                        green = rgb[1];
+                        blue = rgb[2];
+                        console.log("oCtx: rgb", rgb, "hsv", SIMATH.rgbToHsv(red, green, blue), "color", SIMATH.getColor(SIMATH.rgbToHsv(red, green, blue)));
+                        console.log("pointer", Math.round(l.x2), Math.round(l.y2));
+                        for (var i = 1; i < personalObstacleList.length; i++) {
+                            var colors = this.oCtx.getImageData(Math.round(personalObstacleList[i].x), Math.round(personalObstacleList[i].y), 8, 8);
+                            //console.log("should scan", Math.round(l.x2), Math.round(l.y2), "scanned", xNew, yNew);
+                            var rgb2 = getObstacleColor(colors);
+                            var red2 = rgb2[0];
+                            var green2 = rgb2[1];
+                            var blue2 = rgb2[2];
+                            console.log("DIRECT ACCESS USING COORDINATES on oCtx: rgb", rgb2, "hsv", SIMATH.rgbToHsv(red2, green2, blue2), "color", SIMATH.getColor(SIMATH.rgbToHsv(red2, green2, blue2)));
+                            console.log("obstacle", Math.round(personalObstacleList[i].x), Math.round(personalObstacleList[i].y));
+                        }
                         for (var i = 0; i < personalObstacleList.length; i++) {
                             var obstacleLines = (SIMATH.getLinesFromRect(personalObstacleList[i]));
                             for (var k = 0; k < obstacleLines.length; k++) {
@@ -754,17 +815,37 @@ define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constan
                                         //this.oCtx.arc(Math.round(l.x2), Math.round(l.y2), 3, 0, 2 * Math.PI);
                                         //this.oCtx.fillStyle = "red";
                                         //this.oCtx.fill();
-                                        console.log(Math.round(colorSensors[s].rx), Math.round(colorSensors[s].ry), Math.round(l.x2), Math.round(l.y2));
-                                        console.log("1:", Math.round(personalObstacleList[i].x), Math.round(personalObstacleList[i].y), "2:", (Math.round(personalObstacleList[i].x) + personalObstacleList[i].w), Math.round(personalObstacleList[i].y), "3:", (Math.round(personalObstacleList[i].x)), (Math.round(personalObstacleList[i].y) + personalObstacleList[i].h), "4:", (Math.round(personalObstacleList[i].x) + personalObstacleList[i].w), (Math.round(personalObstacleList[i].y) + personalObstacleList[i].h));
-                                        var colors = this.oCtx.getImageData(Math.round(l.x2), Math.round(l.y2), 6, 6);
-                                        rgb = getObstacleColor(colors);
-                                        red = rgb[0];
-                                        green = rgb[1];
-                                        blue = rgb[2];
-                                        console.log("rgb", rgb);
-                                        console.log(SIMATH.rgbToHsv(red, green, blue));
-                                        console.log(SIMATH.getColor(SIMATH.rgbToHsv(red, green, blue)));
-                                    }
+                                        //console.log("Color Sensor", Math.round(colorSensors[s].rx), Math.round(colorSensors[s].ry), "Calculated Coordinates", Math.round(l.x2), Math.round(l.y2));
+                                        var obstacleCorners = [
+                                                {x: Math.round(personalObstacleList[i].x), y: Math.round(personalObstacleList[i].y)},
+                                                {x: (Math.round(personalObstacleList[i].x) + personalObstacleList[i].w), y: Math.round(personalObstacleList[i].y)},
+                                                {x: (Math.round(personalObstacleList[i].x)), y: (Math.round(personalObstacleList[i].y) + personalObstacleList[i].h)},
+                                                {x: (Math.round(personalObstacleList[i].x) + personalObstacleList[i].w),  y: (Math.round(personalObstacleList[i].y) + personalObstacleList[i].h)}
+                                            ]
+                                        colors = [
+                                            "green", "red", "blue", "black"
+                                        ]
+                                        //console.log("obstacle corners 1:", Math.round(personalObstacleList[i].x), Math.round(personalObstacleList[i].y), "2:", (Math.round(personalObstacleList[i].x) + personalObstacleList[i].w), Math.round(personalObstacleList[i].y), "3:", (Math.round(personalObstacleList[i].x)), (Math.round(personalObstacleList[i].y) + personalObstacleList[i].h), "4:", (Math.round(personalObstacleList[i].x) + personalObstacleList[i].w), (Math.round(personalObstacleList[i].y) + personalObstacleList[i].h));
+
+                                        for (let c in obstacleCorners) {
+                                            this.oCtx.beginPath();
+                                            this.oCtx.arc(obstacleCorners[c].x, obstacleCorners[c].y, 3, 0, 2 * Math.PI);
+                                            this.oCtx.fillStyle = colors[c];
+                                            this.oCtx.fill();
+                                        }
+
+                                        //interpoint
+                                        this.oCtx.beginPath();
+                                        this.oCtx.arc(interPoint.x, interPoint.y, 3, 0, 2 * Math.PI);
+                                        this.oCtx.fillStyle = "pink";
+                                        this.oCtx.fill();
+                                        //scan point
+                                        this.oCtx.beginPath();
+                                        this.oCtx.arc(l.x2, l.y2, 3, 0, 2 * Math.PI);
+                                        this.oCtx.fillStyle = "red";
+                                        this.oCtx.fill();
+                                        //console.log("color corners 1:", Math.round(coords.x), Math.round(coords.y), "2:", (coords.x) + 6), Math.round(coords.y), "3:", (Math.round(coords.x), (Math.round(coords.y) + 3), "4:", (Math.round(coords.x) + 6), (Math.round(coords.y) + 6));
+                                   }
                                 }
                             }
                         }
@@ -791,8 +872,6 @@ define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constan
                         colorSensors[s].color = 'blue';
                     } else if (colorSensors[s].colorValue === C.COLOR_ENUM.GREEN) {
                         colorSensors[s].color = 'lime';
-                    } else if (colorSensors[s].colorValue === C.COLOR_ENUM.TURQUOISE) {
-                        colorSensors[s].color = 'turquoise';
                     }
                     colorSensors[s].lightValue = ((red + green + blue) / 3 / 2.55);
 
@@ -1027,6 +1106,47 @@ define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constan
     };
 
     function getObstacleColor(colors) {
+        // SOLUTION COPIED FROM https://stackoverflow.com/questions/44556692/javascript-get-average-color-from-a-certain-area-of-an-image/44557266#44557266
+        var R, G, B, A, wR, wG, wB, wTotal;
+        R = G = B = A = wR = wG = wB = wTotal = 0;
+        var data = colors.data;
+        var components = data.length;
+        for (let i = 0; i < components; i += 4) {
+            // A single pixel (R, G, B, A) will take 4 positions in the array:
+            var r = data[i];
+            var g = data[i + 1];
+            var b = data[i + 2];
+            var a = data[i + 3];
+            // switch 0 to 255 as empty layer is black with full transparency
+            if (r == 0 && g == 0 && b == 0 && a == 0) {
+                r = g = b = 255;
+                a = 255;
+            }
+            R += r;
+            G += g;
+            B += b;
+            A += a;
+
+            const w = a / 255;
+            wR += r * w;
+            wG += g * w;
+            wB += b * w;
+            wTotal += w;
+        }
+
+        const pixelsPerChannel = components / 4;
+
+        // The | operator is used here to perform an integer division:
+        R = R / pixelsPerChannel | 0;
+        G = G / pixelsPerChannel | 0;
+        B = B / pixelsPerChannel | 0;
+        wR = wR / wTotal | 0;
+        wG = wG / wTotal | 0;
+        wB = wB / wTotal | 0;
+
+        return [wR, wG, wB];
+
+        /*
         var red, green, blue;
         red = green = blue = 0;
         var out = [0, 4, 16, 20, 24, 44, 92, 116, 120, 124, 136, 140]; // outside the circle
@@ -1044,31 +1164,8 @@ define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constan
         green = green / num;
         blue = blue / num;
         return [red, green, blue];
-        /*
         var red, green, blue;
         red = green = blue = 0;
-
-        var out = [0, 4, 16, 20, 24, 44, 92, 116, 120, 124, 136, 140]; // outside the circle
-        for (var j = 0; j < colors.data.length; j += 24) {
-            for (var i = j; i < j + 24; i += 4) {
-                if (out.indexOf(i) < 0) {
-                    red += colors.data[i + 0];
-                    green += colors.data[i + 1];
-                    blue += colors.data[i + 2];
-                }
-            }
-        }
-        var num = colors.data.length / 4 - 12; // 12 are outside
-        console.log(num, (red / num), (green / num), (blue / num))
-        var rgb = {
-            r: (red / num),
-            g:  (green / num),
-            b: (blue / num)
-        };
-
-        console.log(rgb);
-
-        return rgb;
          */
     }
 
