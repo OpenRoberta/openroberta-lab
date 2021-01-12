@@ -1,7 +1,7 @@
-define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socket.controller', 'user.controller', 'user.model', 'notification.controller','userGroup.controller' ,'guiState.controller',
-        'program.controller', 'program.model', 'multSim.controller', 'progRun.controller', 'configuration.controller', 'import.controller', 'enjoyHint',
-        'tour.controller', 'simulation.simulation', 'progList.model', 'jquery', 'blockly', 'slick' ], function(exports, LOG, UTIL, MSG, COMM, ROBOT_C, SOCKET_C,
-        USER_C, USER,NOTIFICATION_C, USERGROUP_C, GUISTATE_C, PROGRAM_C, PROGRAM_M, MULT_SIM, RUN_C, CONFIGURATION_C, IMPORT_C, EnjoyHint, TOUR_C, SIM, PROGLIST, $, Blockly) {
+define(['exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socket.controller', 'user.controller', 'user.model', 'notification.controller', 'userGroup.controller', 'guiState.controller',
+    'program.controller', 'program.model', 'multSim.controller', 'progRun.controller', 'configuration.controller', 'import.controller', 'enjoyHint',
+    'tour.controller', 'simulation.simulation', 'progList.model', 'jquery', 'blockly', 'slick'], function(exports, LOG, UTIL, MSG, COMM, ROBOT_C, SOCKET_C,
+        USER_C, USER, NOTIFICATION_C, USERGROUP_C, GUISTATE_C, PROGRAM_C, PROGRAM_M, MULT_SIM, RUN_C, CONFIGURATION_C, IMPORT_C, EnjoyHint, TOUR_C, SIM, PROGLIST, $, Blockly) {
 
     var n = 0;
 
@@ -108,25 +108,25 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
                     });
                     // ******************
                     $('#popup-robot-main').slick({
-                        centerMode : true,
-                        dots : true,
-                        infinite : true,
-                        centerPadding : '60px',
-                        slidesToShow : 3,
-                        index : 2,
-                        swipeToSlide : true,
-                        setPosition : true,
-                        prevArrow : "<button type='button' class='slick-prev slick-arrow typcn typcn-arrow-left-outline'></button>",
-                        nextArrow : "<button type='button' class='slick-next slick-arrow typcn typcn-arrow-right-outline'></button>",
-                        responsive : [ {
-                            breakpoint : 992,
-                            settings : {
-                                centerPadding : '5px',
-                                slidesToShow : 1,
-                                swipeToSlide : true,
-                                variableWidth : true
+                        centerMode: true,
+                        dots: true,
+                        infinite: true,
+                        centerPadding: '60px',
+                        slidesToShow: 3,
+                        index: 2,
+                        swipeToSlide: true,
+                        setPosition: true,
+                        prevArrow: "<button type='button' class='slick-prev slick-arrow typcn typcn-arrow-left-outline'></button>",
+                        nextArrow: "<button type='button' class='slick-next slick-arrow typcn typcn-arrow-right-outline'></button>",
+                        responsive: [{
+                            breakpoint: 992,
+                            settings: {
+                                centerPadding: '5px',
+                                slidesToShow: 1,
+                                swipeToSlide: true,
+                                variableWidth: true
                             }
-                        } ]
+                        }]
                     });
                     firsttime = false
                 } else {
@@ -170,7 +170,7 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
             if (typeof groupsDict[key] != 'undefined') {
                 groupsDict[key].push(value);
             } else {
-                groupsDict[key] = [ value ];
+                groupsDict[key] = [value];
             }
         }
 
@@ -195,12 +195,12 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
                     robotInfoEN = robotInfoDE;
                 }
                 $de.attr({
-                    'onclick' : 'window.open("' + robotInfoDE + '");return false;',
-                    'class' : 'DE'
+                    'onclick': 'window.open("' + robotInfoDE + '");return false;',
+                    'class': 'DE'
                 });
                 $en.attr({
-                    'onclick' : 'window.open("' + robotInfoEN + '");return false;',
-                    'class' : 'EN'
+                    'onclick': 'window.open("' + robotInfoEN + '");return false;',
+                    'class': 'EN'
                 });
                 $en.appendTo(clone);
             } else {
@@ -217,7 +217,7 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
             }
             addPair(robots[i].group, robots[i].name);
         }
-        for ( var key in groupsDict) {
+        for (var key in groupsDict) {
             if (groupsDict.hasOwnProperty(key)) {
                 if (groupsDict[key].length == 1 || key === "calliope") { //this means that a robot has no subgroup
 
@@ -292,12 +292,12 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
         // TODO check if this prevents iPads and iPhones to only react on double clicks
         if (!navigator.userAgent.match(/iPad/i) && !(navigator.userAgent.match(/iPhone/i))) {
             $('[rel="tooltip"]').not('.rightMenuButton').tooltip({
-                container : 'body',
-                placement : "right"
+                container: 'body',
+                placement: "right"
             });
             $('[rel="tooltip"].rightMenuButton').tooltip({
-                container : 'body',
-                placement : "left"
+                container: 'body',
+                placement: "left"
             });
         }
         // prevent Safari 10. from zooming
@@ -311,7 +311,7 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
         });
 
         $('#navbarCollapse').collapse({
-            'toggle' : false
+            'toggle': false
         });
 
         $('#navbarCollapse').onWrap('click', '.dropdown-menu a,.visible-xs', function(event) {
@@ -332,91 +332,91 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
         });
         if (GUISTATE_C.isPublicServerVersion()) {
             var feedbackButton = '<div href="#" id="feedbackButton" class="rightMenuButton" rel="tooltip" data-original-title="" title="">'
-                    +'<span id="" class="feedbackButton typcn typcn-feedback"></span>'
-                    +'</div>'
+                + '<span id="" class="feedbackButton typcn typcn-feedback"></span>'
+                + '</div>'
             $("#rightMenuDiv").append(feedbackButton);
             window.onmessage = function(msg) {
-	            if (msg.data ==="closeFeedback") {		             
-                    $('#feedbackIframe').one('load', function () {
-                        setTimeout(function() { 
-	                        $("#feedbackIframe").attr("src" ,"about:blank");
-	                        $('#feedbackModal').modal("hide");
+                if (msg.data === "closeFeedback") {
+                    $('#feedbackIframe').one('load', function() {
+                        setTimeout(function() {
+                            $("#feedbackIframe").attr("src", "about:blank");
+                            $('#feedbackModal').modal("hide");
                         }, 1000);
                     });
-	            } else if (msg.data.indexOf("feedbackHeight") >= 0) {
-		            var height = msg.data.split(":")[1]||400;
+                } else if (msg.data.indexOf("feedbackHeight") >= 0) {
+                    var height = msg.data.split(":")[1] || 400;
                     $('#feedbackIframe').height(height);
-	            }
-            };                  
+                }
+            };
             $('#feedbackButton').onWrap('click', '', function(event) {
-                $('#feedbackModal').on('show.bs.modal', function () {
-	                if (GUISTATE_C.getLanguage().toLowerCase() === "de") {
-	                    $("#feedbackIframe").attr("src" ,"https://www.roberta-home.de/lab/feedback/");
+                $('#feedbackModal').on('show.bs.modal', function() {
+                    if (GUISTATE_C.getLanguage().toLowerCase() === "de") {
+                        $("#feedbackIframe").attr("src", "https://www.roberta-home.de/lab/feedback/");
                     } else {
-	                    $("#feedbackIframe").attr("src" ,"https://www.roberta-home.de/en/lab/feedback/");
+                        $("#feedbackIframe").attr("src", "https://www.roberta-home.de/en/lab/feedback/");
                     }
                 });
-                $('#feedbackModal').modal({show:true});
+                $('#feedbackModal').modal({ show: true });
             });
         }
 
         // EDIT Menu
         $('#head-navigation-program-edit').onWrap('click', '.dropdown-menu li:not(.disabled) a', function(event) {
             switch (event.target.id) {
-            case 'menuRunProg':
-                RUN_C.runOnBrick();
-                break;
-            case 'menuRunSim':
-                $('#simButton').trigger('click');
-                break;
-            case 'menuCheckProg':
-                PROGRAM_C.checkProgram();
-                break;
-            case 'menuNewProg':
-                PROGRAM_C.newProgram();
-                break;
-            case 'menuListProg':
-                $('#tabProgList').data('type', 'userProgram');
-                $('#tabProgList').click();
-                break;
-            case 'menuListExamples':
-                $('#tabProgList').data('type', 'exampleProgram');
-                $('#tabProgList').click();
-                break;
-            case 'menuSaveProg':
-                PROGRAM_C.saveToServer();
-                break;
-            case 'menuSaveAsProg':
-                PROGRAM_C.showSaveAsModal();
-                break;
-            case 'menuShowCode':
-                $('#codeButton').trigger("click");
-                break;
-            case 'menuSourceCodeEditor':
-                $('#tabSourceCodeEditor').trigger("click");
-                break;
-            case 'menuImportProg':
-                IMPORT_C.importXml();
-                break;
-            case 'menuExportProg':
-                PROGRAM_C.exportXml();
-                break;
-            case 'menuLinkProg':
-                PROGRAM_C.linkProgram();
-                break;
-            case 'menuToolboxBeginner':
-                $('.levelTabs a[href="#beginner"]').tab('show');
-                break;
-            case 'menuToolboxExpert':
-                $('.levelTabs a[href="#expert"]').tab('show');
-                break;
-            case 'menuRunMulipleSim':
-                MULT_SIM.showListProg();
-                break;
-            case 'menuDefaultFirmware':
-                RUN_C.reset2DefaultFirmware();
-            default:
-                break;
+                case 'menuRunProg':
+                    RUN_C.runOnBrick();
+                    break;
+                case 'menuRunSim':
+                    $('#simButton').trigger('click');
+                    break;
+                case 'menuCheckProg':
+                    PROGRAM_C.checkProgram();
+                    break;
+                case 'menuNewProg':
+                    PROGRAM_C.newProgram();
+                    break;
+                case 'menuListProg':
+                    $('#tabProgList').data('type', 'userProgram');
+                    $('#tabProgList').click();
+                    break;
+                case 'menuListExamples':
+                    $('#tabProgList').data('type', 'exampleProgram');
+                    $('#tabProgList').click();
+                    break;
+                case 'menuSaveProg':
+                    PROGRAM_C.saveToServer();
+                    break;
+                case 'menuSaveAsProg':
+                    PROGRAM_C.showSaveAsModal();
+                    break;
+                case 'menuShowCode':
+                    $('#codeButton').trigger("click");
+                    break;
+                case 'menuSourceCodeEditor':
+                    $('#tabSourceCodeEditor').trigger("click");
+                    break;
+                case 'menuImportProg':
+                    IMPORT_C.importXml();
+                    break;
+                case 'menuExportProg':
+                    PROGRAM_C.exportXml();
+                    break;
+                case 'menuLinkProg':
+                    PROGRAM_C.linkProgram();
+                    break;
+                case 'menuToolboxBeginner':
+                    $('.levelTabs a[href="#beginner"]').tab('show');
+                    break;
+                case 'menuToolboxExpert':
+                    $('.levelTabs a[href="#expert"]').tab('show');
+                    break;
+                case 'menuRunMulipleSim':
+                    MULT_SIM.showListProg();
+                    break;
+                case 'menuDefaultFirmware':
+                    RUN_C.reset2DefaultFirmware();
+                default:
+                    break;
             }
         }, 'program edit clicked');
 
@@ -424,23 +424,23 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
         $('#head-navigation-configuration-edit').onWrap('click', '.dropdown-menu li:not(.disabled) a', function(event) {
             $('.modal').modal('hide'); // close all opened popups
             switch (event.target.id) {
-            case 'menuCheckConfig':
-                MSG.displayMessage("MESSAGE_NOT_AVAILABLE", "POPUP", "");
-                break;
-            case 'menuNewConfig':
-                CONFIGURATION_C.newConfiguration();
-                break;
-            case 'menuListConfig':
-                $('#tabConfList').click();
-                break
-            case 'menuSaveConfig':
-                CONFIGURATION_C.saveToServer();
-                break;
-            case 'menuSaveAsConfig':
-                CONFIGURATION_C.showSaveAsModal();
-                break;
-            default:
-                break;
+                case 'menuCheckConfig':
+                    MSG.displayMessage("MESSAGE_NOT_AVAILABLE", "POPUP", "");
+                    break;
+                case 'menuNewConfig':
+                    CONFIGURATION_C.newConfiguration();
+                    break;
+                case 'menuListConfig':
+                    $('#tabConfList').click();
+                    break
+                case 'menuSaveConfig':
+                    CONFIGURATION_C.saveToServer();
+                    break;
+                case 'menuSaveAsConfig':
+                    CONFIGURATION_C.showSaveAsModal();
+                    break;
+                default:
+                    break;
             }
         }, 'configuration edit clicked');
 
@@ -458,7 +458,7 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
                     //console.log(GUISTATE_C.getIsAgent());
                     //console.log(GUISTATE_C.getConnection());
                     if (GUISTATE_C.getConnection() == 'arduinoAgent'
-                            || (GUISTATE_C.getConnection() == 'arduinoAgentOrToken' && GUISTATE_C.getIsAgent() == true)) {
+                        || (GUISTATE_C.getConnection() == 'arduinoAgentOrToken' && GUISTATE_C.getIsAgent() == true)) {
                         var ports = SOCKET_C.getPortList();
                         var robots = SOCKET_C.getRobotList();
                         $('#singleModalListInput').empty();
@@ -499,32 +499,32 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
         $('#head-navigation-user').onWrap('click', '.dropdown-menu li:not(.disabled) a', function(event) {
             $('.modal').modal('hide'); // close all opened popups
             switch (event.target.id) {
-            case 'menuLogin':
-                USER_C.showLoginForm();
-                break;
-            case 'menuUserGroupLogin':
-                USER_C.showUserGroupLoginForm();	
-                break;
-            case 'menuLogout':
-                USER_C.logout();
-                break;
-            case 'menuGroupPanel':	
-                USERGROUP_C.showPanel();	
-                break;
-            case 'menuChangeUser':
-                USER_C.showUserDataForm();
-                break;
-            case 'menuDeleteUser':
-                USER_C.showDeleteUserModal();
-                break;
-            case 'menuStateInfo':
-                USER_C.showUserInfo();
-                break;
-            case 'menuNotification':
-                NOTIFICATION_C.showNotificationModal();
-                break;
-            default:
-                break;
+                case 'menuLogin':
+                    USER_C.showLoginForm();
+                    break;
+                case 'menuUserGroupLogin':
+                    USER_C.showUserGroupLoginForm();
+                    break;
+                case 'menuLogout':
+                    USER_C.logout();
+                    break;
+                case 'menuGroupPanel':
+                    USERGROUP_C.showPanel();
+                    break;
+                case 'menuChangeUser':
+                    USER_C.showUserDataForm();
+                    break;
+                case 'menuDeleteUser':
+                    USER_C.showDeleteUserModal();
+                    break;
+                case 'menuStateInfo':
+                    USER_C.showUserInfo();
+                    break;
+                case 'menuNotification':
+                    NOTIFICATION_C.showNotificationModal();
+                    break;
+                default:
+                    break;
             }
             return false;
         }, 'user clicked');
@@ -543,32 +543,32 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
             $('.menuSim').parent().removeClass('disabled'); //these two were in all cases
             $("#simButtonsCollapse").collapse('hide'); //so I extracted them here
             switch (event.target.id) {
-            case 'menuSimSimple':
-                $('.simSimple').parent().addClass('disabled');
-                SIM.setBackground(2, SIM.setBackground);
-                break;
-            case 'menuSimDraw':
-                $('.simDraw').parent().addClass('disabled');
-                SIM.setBackground(3, SIM.setBackground);
-                break;
-            case 'menuSimRoberta':
-                $('.simRoberta').parent().addClass('disabled');
-                SIM.setBackground(4, SIM.setBackground);
-                break;
-            case 'menuSimRescue':
-                $('.simRescue').parent().addClass('disabled');
-                SIM.setBackground(5, SIM.setBackground);
-                break;
-            case 'menuSimWRO':
-                $('.simWRO').parent().addClass('disabled');
-                SIM.setBackground(6, SIM.setBackground);
-                break;
-            case 'menuSimMath':
-                $('.simMath').parent().addClass('disabled');
-                SIM.setBackground(7, SIM.setBackground);
-                break;
-            default:
-                break;
+                case 'menuSimSimple':
+                    $('.simSimple').parent().addClass('disabled');
+                    SIM.setBackground(2, SIM.setBackground);
+                    break;
+                case 'menuSimDraw':
+                    $('.simDraw').parent().addClass('disabled');
+                    SIM.setBackground(3, SIM.setBackground);
+                    break;
+                case 'menuSimRoberta':
+                    $('.simRoberta').parent().addClass('disabled');
+                    SIM.setBackground(4, SIM.setBackground);
+                    break;
+                case 'menuSimRescue':
+                    $('.simRescue').parent().addClass('disabled');
+                    SIM.setBackground(5, SIM.setBackground);
+                    break;
+                case 'menuSimWRO':
+                    $('.simWRO').parent().addClass('disabled');
+                    SIM.setBackground(6, SIM.setBackground);
+                    break;
+                case 'menuSimMath':
+                    $('.simMath').parent().addClass('disabled');
+                    SIM.setBackground(7, SIM.setBackground);
+                    break;
+                default:
+                    break;
             }
         }, 'sim clicked');
 
@@ -604,7 +604,7 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
         $('.menuFaq').onWrap('click', function(event) {
             window.open("https://jira.iais.fraunhofer.de/wiki/display/ORInfo/FAQ");
         }, 'head navigation menu item clicked');
-		$('.shortcut').onWrap('click', function(event) {
+        $('.shortcut').onWrap('click', function(event) {
             window.open("https://jira.iais.fraunhofer.de/wiki/display/ORInfo/FAQ");
         }, 'head navigation menu item clicked');
         $('.menuAboutProject').onWrap('click', function(event) {
@@ -620,26 +620,26 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
             var scene = $("#simButtonsCollapse").collapse('hide');
             $('.menuSim').parent().removeClass('disabled');
             switch (scene) {
-            case 2:
-                $('.simSimple').parent().addClass('disabled');
-                break;
-            case 3:
-                $('.simDraw').parent().addClass('disabled');
-                break;
-            case 4:
-                $('.simRoberta').parent().addClass('disabled');
-                break;
-            case 5:
-                $('.simRescue').parent().addClass('disabled');
-                break;
-            case 6:
-                $('.simWRO').parent().addClass('disabled');
-                break;
-            case 7:
-                $('.simMath').parent().addClass('disabled');
-                break;
-            default:
-                break;
+                case 2:
+                    $('.simSimple').parent().addClass('disabled');
+                    break;
+                case 3:
+                    $('.simDraw').parent().addClass('disabled');
+                    break;
+                case 4:
+                    $('.simRoberta').parent().addClass('disabled');
+                    break;
+                case 5:
+                    $('.simRescue').parent().addClass('disabled');
+                    break;
+                case 6:
+                    $('.simWRO').parent().addClass('disabled');
+                    break;
+                case 7:
+                    $('.simMath').parent().addClass('disabled');
+                    break;
+                default:
+                    break;
             }
         }, 'simScene clicked');
 
@@ -699,7 +699,7 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
 
         $('#moreReleases').onWrap('click', function(event) {
             $('#oldReleases').show({
-                start : function() {
+                start: function() {
                     $('#moreReleases').addClass('hidden');
                 }
             });
@@ -740,15 +740,15 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
         $(window).on('beforeunload', function(e) {
             return Blockly.Msg.POPUP_BEFOREUNLOAD;
             // the following code doesn't work anymore, TODO check for a better solution.
-//            if (!GUISTATE_C.isProgramSaved || !GUISTATE_C.isConfigurationSaved) {
-//                if (GUISTATE_C.isUserLoggedIn()) {
-//                    // Maybe a Firefox-Problem?                alert(Blockly.Msg['POPUP_BEFOREUNLOAD_LOGGEDIN']);
-//                    return Blockly.Msg.POPUP_BEFOREUNLOAD_LOGGEDIN;
-//                } else {
-//                    // Maybe a Firefox-Problem?                alert(Blockly.Msg['POPUP_BEFOREUNLOAD']);
-//                    return Blockly.Msg.POPUP_BEFOREUNLOAD;
-//                }
-//            }
+            //            if (!GUISTATE_C.isProgramSaved || !GUISTATE_C.isConfigurationSaved) {
+            //                if (GUISTATE_C.isUserLoggedIn()) {
+            //                    // Maybe a Firefox-Problem?                alert(Blockly.Msg['POPUP_BEFOREUNLOAD_LOGGEDIN']);
+            //                    return Blockly.Msg.POPUP_BEFOREUNLOAD_LOGGEDIN;
+            //                } else {
+            //                    // Maybe a Firefox-Problem?                alert(Blockly.Msg['POPUP_BEFOREUNLOAD']);
+            //                    return Blockly.Msg.POPUP_BEFOREUNLOAD;
+            //                }
+            //            }
         });
 
         // help Bootstrap to calculate the correct size for the collapse element when the sceen height is smaller than the elements height.
@@ -763,11 +763,7 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
                 IMPORT_C.importSourceCodeToCompile();
                 return false;
             }
-            if ((e.metaKey || e.ctrlKey) && event.which == 73) {
-                IMPORT_C.importNepoCodeToCompile();
-                return false;
-            }
-			if ((e.metaKey || e.ctrlKey) && event.which == 69) {
+            if ((e.metaKey || e.ctrlKey) && event.which == 69) {
                 PROGRAM_C.exportXml();
                 return false;
             }
@@ -829,90 +825,90 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
                 expr.setInTask(false);
                 return false;
             }
-			//Overriding the Ctrl + Shift + S when not logged in
+            //Overriding the Ctrl + Shift + S when not logged in
             if ((e.metaKey || e.ctrlKey) && (e.shiftKey) && event.which == 83 && !GUISTATE_C.isUserLoggedIn()) {
                 e.preventDefault();
             }
             //Overriding the Ctrl + Shift + S for saving program with new name in the server
             if ((e.metaKey || e.ctrlKey) && (e.shiftKey) && event.which == 83 && GUISTATE_C.isUserLoggedIn()) {
                 e.preventDefault();
-				PROGRAM_C.showSaveAsModal();
+                PROGRAM_C.showSaveAsModal();
             }
-			//Overriding the Ctrl + S when not logged in
+            //Overriding the Ctrl + S when not logged in
             if ((e.metaKey || e.ctrlKey) && (!e.shiftKey) && event.which == 83 && !GUISTATE_C.isUserLoggedIn()) {
                 e.preventDefault();
             }
-			//Overriding the Ctrl + S for saving the program in the database on the server
+            //Overriding the Ctrl + S for saving the program in the database on the server
             if ((e.metaKey || e.ctrlKey) && (!e.shiftKey) && event.which == 83 && GUISTATE_C.isUserLoggedIn()) {
                 e.preventDefault();
-				if(GUISTATE_C.getProgramName() === "NEPOprog") {
-					PROGRAM_C.showSaveAsModal();
-				} else {
-					PROGRAM_C.saveToServer();
-				}
-				return false;	
-			}     
-			//Overriding the Ctrl + R for running the program
+                if (GUISTATE_C.getProgramName() === "NEPOprog") {
+                    PROGRAM_C.showSaveAsModal();
+                } else {
+                    PROGRAM_C.saveToServer();
+                }
+                return false;
+            }
+            //Overriding the Ctrl + R for running the program
             if ((e.metaKey || e.ctrlKey) && event.which == 82) {
                 e.preventDefault();
                 RUN_C.runOnBrick();
-				return false;	
-			}
-			//Overriding the Ctrl + Z for showing the source code
+                return false;
+            }
+            //Overriding the Ctrl + Z for showing the source code
             if ((e.metaKey || e.ctrlKey) && event.which == 90 && !(e.shiftKey)) {
                 e.preventDefault();
                 $('#codeButton').trigger("click");
-				return false;
-			}
-			//Overriding the Ctrl + Shift + Z for showing the source code editor
+                return false;
+            }
+            //Overriding the Ctrl + Shift + Z for showing the source code editor
             if ((e.metaKey || e.ctrlKey) && (e.shiftKey) && event.which == 90) {
                 e.preventDefault();
-				$('#tabSourceCodeEditor').trigger("click");
-				return false;
-			}
-			//Overriding the Ctrl + Shift + G when not logged in
+                $('#tabSourceCodeEditor').trigger("click");
+                return false;
+            }
+            //Overriding the Ctrl + Shift + G when not logged in
             if ((e.metaKey || e.ctrlKey) && (e.shiftKey) && event.which == 71 && !GUISTATE_C.isUserLoggedIn()) {
                 e.preventDefault();
             }
-			//Overriding the Ctrl + Shift + G for multiple robot simulation
+            //Overriding the Ctrl + Shift + G for multiple robot simulation
             if ((e.metaKey || e.ctrlKey) && (e.shiftKey) && event.which == 71 && GUISTATE_C.isUserLoggedIn()) {
-				if(GUISTATE_C.hasMultiSim()) {
-					e.preventDefault();
-					MULT_SIM.showListProg();
-					return false;	
-				} else {
-					e.preventDefault();
-					return false;
-				}
-			}	
-			//Overriding the Ctrl + M when not logged in
+                if (GUISTATE_C.hasMultiSim()) {
+                    e.preventDefault();
+                    MULT_SIM.showListProg();
+                    return false;
+                } else {
+                    e.preventDefault();
+                    return false;
+                }
+            }
+            //Overriding the Ctrl + M when not logged in
             if ((e.metaKey || e.ctrlKey) && event.which == 77 && !GUISTATE_C.isUserLoggedIn()) {
                 e.preventDefault();
             }
-			//Overriding the Ctrl + M for viewing all programs
+            //Overriding the Ctrl + M for viewing all programs
             if ((e.metaKey || e.ctrlKey) && event.which == 77 && GUISTATE_C.isUserLoggedIn()) {
                 e.preventDefault();
-				$('#tabProgList').click();
-				return false;     
-			}	
-			//Overriding the Ctrl + G for viewing the simulation window
-            if ((e.metaKey || e.ctrlKey) && event.which == 71 && !(e.shiftKey)) {
-				if(GUISTATE_C.hasSim()) {
-					e.preventDefault();
-					$('#simButton').trigger('click');
-					return false;	
-				} else {
-					e.preventDefault();
-					return false;
-				}                
-			}
-			//Overriding the Ctrl + I for importing NEPO code to compile
-			if ((e.metaKey || e.ctrlKey) && event.which == 73) {
-                IMPORT_C.importNepoCodeToCompile();
+                $('#tabProgList').click();
                 return false;
             }
-			//Overriding the Ctrl + E for exporting the NEPO code
-			if ((e.metaKey || e.ctrlKey) && event.which == 69) {
+            //Overriding the Ctrl + G for viewing the simulation window
+            if ((e.metaKey || e.ctrlKey) && event.which == 71 && !(e.shiftKey)) {
+                if (GUISTATE_C.hasSim()) {
+                    e.preventDefault();
+                    $('#simButton').trigger('click');
+                    return false;
+                } else {
+                    e.preventDefault();
+                    return false;
+                }
+            }
+            //Overriding the Ctrl + I for importing NEPO code to compile
+            if ((e.metaKey || e.ctrlKey) && event.which == 73) {
+                IMPORT_C.importXml()
+                return false;
+            }
+            //Overriding the Ctrl + E for exporting the NEPO code
+            if ((e.metaKey || e.ctrlKey) && event.which == 69) {
                 PROGRAM_C.exportXml();
                 return false;
             }
