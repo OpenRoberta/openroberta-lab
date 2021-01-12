@@ -734,52 +734,22 @@ define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constan
                             default:
                                 colorSensorTheta = 0;
                         }
-
-                        var scanSquareSize = 2;
-                        var scanCoordinates = {
-                            x: (colorSensors[s].rx - C.COLOR_SENSOR_HORIZONTAL_DISTANCE * Math.cos(this.robots[r].pose.theta + Math.PI + colorSensorTheta))+scanSquareSize/2,
-                            y: (colorSensors[s].ry - C.COLOR_SENSOR_HORIZONTAL_DISTANCE * Math.sin(this.robots[r].pose.theta + Math.PI + colorSensorTheta))-scanSquareSize/2
-                        }
-                        var scanSquareCoords = [
-                            {x: Math.round(scanCoordinates.x), y: Math.round(scanCoordinates.y)},
-                            {x: Math.round(scanCoordinates.x), y: Math.round(scanCoordinates.y)+scanSquareSize},
-                            {x: Math.round(scanCoordinates.x) + scanSquareSize, y: Math.round(scanCoordinates.y)},
-                            {x: Math.round(scanCoordinates.x) + scanSquareSize, y: Math.round(scanCoordinates.y)+scanSquareSize},
-                        ]
+                        // TODO: CLEANUP
                         // clear points
                         this.drawObjects();
-                        //for (let c in scanSquareCoords) {
-                        //    this.oCtx.beginPath();
-                        //    this.oCtx.arc(scanSquareCoords[c].x, scanSquareCoords[c].y, 2, 0, 2 * Math.PI);
-                        //    this.oCtx.fillStyle = "red";
-                        //    this.oCtx.fill();
-                        //}
-                        //console.log("robot", Math.round(colorSensors[s].rx), Math.round(colorSensors[s].ry));
-                        //console.log("scan", Math.round(scanCoordinates.x), Math.round(scanCoordinates.y));
                         var l = {
                             x1: colorSensors[s].rx,
                             y1: colorSensors[s].ry,
                             x2: colorSensors[s].rx - C.COLOR_SENSOR_HORIZONTAL_DISTANCE * Math.cos(this.robots[r].pose.theta + Math.PI + colorSensorTheta),
                             y2: colorSensors[s].ry - C.COLOR_SENSOR_HORIZONTAL_DISTANCE * Math.sin(this.robots[r].pose.theta + Math.PI + colorSensorTheta)
                         };
-                        var colors = this.oCtx.getImageData(Math.round(l.x2), Math.round(l.y2), 8, 8);
-                        //console.log("should scan", Math.round(l.x2), Math.round(l.y2), "scanned", xNew, yNew);
+                        // include scale as the image gets new ratio while the coordinates stay the same
+                        var colors = this.oCtx.getImageData(Math.round(l.x2) * SIM.getScale(), Math.round(l.y2) * SIM.getScale(), 8, 8);
                         rgb = getObstacleColor(colors);
                         red = rgb[0];
                         green = rgb[1];
                         blue = rgb[2];
-                        console.log("oCtx: rgb", rgb, "hsv", SIMATH.rgbToHsv(red, green, blue), "color", SIMATH.getColor(SIMATH.rgbToHsv(red, green, blue)));
-                        console.log("pointer", Math.round(l.x2), Math.round(l.y2));
-                        for (var i = 1; i < personalObstacleList.length; i++) {
-                            var colors = this.oCtx.getImageData(Math.round(personalObstacleList[i].x), Math.round(personalObstacleList[i].y), 8, 8);
-                            //console.log("should scan", Math.round(l.x2), Math.round(l.y2), "scanned", xNew, yNew);
-                            var rgb2 = getObstacleColor(colors);
-                            var red2 = rgb2[0];
-                            var green2 = rgb2[1];
-                            var blue2 = rgb2[2];
-                            console.log("DIRECT ACCESS USING COORDINATES on oCtx: rgb", rgb2, "hsv", SIMATH.rgbToHsv(red2, green2, blue2), "color", SIMATH.getColor(SIMATH.rgbToHsv(red2, green2, blue2)));
-                            console.log("obstacle", Math.round(personalObstacleList[i].x), Math.round(personalObstacleList[i].y));
-                        }
+
                         for (var i = 0; i < personalObstacleList.length; i++) {
                             var obstacleLines = (SIMATH.getLinesFromRect(personalObstacleList[i]));
                             for (var k = 0; k < obstacleLines.length; k++) {
@@ -788,11 +758,7 @@ define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constan
                                     if (i === 0) { // obstacle is simulation border
                                         red = green = blue = 255;
                                     } else {
-                                        //this.oCtx.beginPath();
-                                        //this.oCtx.arc(Math.round(l.x2), Math.round(l.y2), 3, 0, 2 * Math.PI);
-                                        //this.oCtx.fillStyle = "red";
-                                        //this.oCtx.fill();
-                                        //console.log("Color Sensor", Math.round(colorSensors[s].rx), Math.round(colorSensors[s].ry), "Calculated Coordinates", Math.round(l.x2), Math.round(l.y2));
+                                        // TODO: CLEANUP
                                         var obstacleCorners = [
                                                 {x: Math.round(personalObstacleList[i].x), y: Math.round(personalObstacleList[i].y)},
                                                 {x: (Math.round(personalObstacleList[i].x) + personalObstacleList[i].w), y: Math.round(personalObstacleList[i].y)},
@@ -800,17 +766,14 @@ define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constan
                                                 {x: (Math.round(personalObstacleList[i].x) + personalObstacleList[i].w),  y: (Math.round(personalObstacleList[i].y) + personalObstacleList[i].h)}
                                             ]
                                         colors = [
-                                            "green", "red", "blue", "black"
+                                            "green", "yellow", "orange", "purple"
                                         ]
-                                        //console.log("obstacle corners 1:", Math.round(personalObstacleList[i].x), Math.round(personalObstacleList[i].y), "2:", (Math.round(personalObstacleList[i].x) + personalObstacleList[i].w), Math.round(personalObstacleList[i].y), "3:", (Math.round(personalObstacleList[i].x)), (Math.round(personalObstacleList[i].y) + personalObstacleList[i].h), "4:", (Math.round(personalObstacleList[i].x) + personalObstacleList[i].w), (Math.round(personalObstacleList[i].y) + personalObstacleList[i].h));
-
-                                        for (let c in obstacleCorners) {
+                                         for (let c in obstacleCorners) {
                                             this.oCtx.beginPath();
                                             this.oCtx.arc(obstacleCorners[c].x, obstacleCorners[c].y, 3, 0, 2 * Math.PI);
                                             this.oCtx.fillStyle = colors[c];
                                             this.oCtx.fill();
                                         }
-
                                         //interpoint
                                         this.oCtx.beginPath();
                                         this.oCtx.arc(interPoint.x, interPoint.y, 3, 0, 2 * Math.PI);
@@ -821,7 +784,6 @@ define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constan
                                         this.oCtx.arc(l.x2, l.y2, 3, 0, 2 * Math.PI);
                                         this.oCtx.fillStyle = "red";
                                         this.oCtx.fill();
-                                        //console.log("color corners 1:", Math.round(coords.x), Math.round(coords.y), "2:", (coords.x) + 6), Math.round(coords.y), "3:", (Math.round(coords.x), (Math.round(coords.y) + 3), "4:", (Math.round(coords.x) + 6), (Math.round(coords.y) + 6));
                                    }
                                 }
                             }
