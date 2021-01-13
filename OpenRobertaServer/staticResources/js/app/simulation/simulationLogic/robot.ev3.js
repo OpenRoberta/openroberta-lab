@@ -163,8 +163,7 @@ define(['simulation.simulation', 'interpreter.constants', 'simulation.robot', 'g
                     }
                     tmpSensor.position = sensorSettings["positionConfiguration"][c];
                     tmpSensor.alignment = sensorSettings["alignmentConfiguration"][c];
-                    // TODO: FIX POSITIONS FOR MULTIPLE SENSORS
-                    switch (sensorSettings["positionConfiguration"][c]) {
+                    switch (tmpSensor.position[c]) {
                         case("RIGHT"):
                             orderColorR++;
                             tmpSensor.x = -15

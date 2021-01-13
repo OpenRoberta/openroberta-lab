@@ -342,69 +342,39 @@ define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constan
             //color
             var colorSensors = this.robots[r].colorSensor;
             for (var s in colorSensors) {
+                this.rCtx.beginPath();
                 if (colorSensors[s].alignment !== C.ALIGNMENT_ENUM.HORIZONTAL) {
-                    this.rCtx.beginPath();
                     this.rCtx.arc(colorSensors[s].x, colorSensors[s].y, colorSensors[s].r, 0, Math.PI * 2);
-                    this.rCtx.fillStyle = colorSensors[s].color;
-                    this.rCtx.fill();
-                    this.rCtx.strokeStyle = "black";
-                    this.rCtx.stroke();
-                    if (s !== 0) {
-                        this.rCtx.translate(colorSensors[s].x, colorSensors[s].y);
-                        this.rCtx.scale(-1, 1);
-                        this.rCtx.rotate(-Math.PI / 2);
-                        this.rCtx.beginPath();
-                        this.rCtx.fillStyle = "#555555";
-                        switch(colorSensors[s].position){
-                            case "BACK":
-                                this.rCtx.fillText(s, 6, 4);
-                                break;
-                            case "LEFT":
-                                this.rCtx.fillText(s, -3, 13);
-                                break;
-                            case "RIGHT":
-                                this.rCtx.fillText(s, -3, -6);
-                                break;
-                            default:
-                                this.rCtx.fillText(s, -11, 4);
-                                break;
-                        }
-                        this.rCtx.rotate(Math.PI / 2);
-                        this.rCtx.scale(-1, 1);
-                        this.rCtx.translate(-colorSensors[s].x, -colorSensors[s].y);
-                    }
                 } else {
-                    this.rCtx.beginPath();
                     this.rCtx.arc(colorSensors[s].x, colorSensors[s].y, colorSensors[s].r, 0, Math.PI);
-                    this.rCtx.fillStyle = colorSensors[s].color;
-                    this.rCtx.fill();
-                    this.rCtx.strokeStyle = "black";
-                    this.rCtx.stroke();
-                    if (s !== 0) {
-                        this.rCtx.translate(colorSensors[s].x, colorSensors[s].y);
-                        this.rCtx.scale(-1, 1);
-                        this.rCtx.rotate(-Math.PI / 2);
-                        this.rCtx.beginPath();
-                        this.rCtx.fillStyle = "#555555";
-                        switch(colorSensors[s].position){
-                            case "BACK":
-                                this.rCtx.fillText(s, 6, 4);
-                                break;
-                            case "LEFT":
-                                this.rCtx.fillText(s, -3, 13);
-                                break;
-                            case "RIGHT":
-                                this.rCtx.fillText(s, -3, -6);
-                                break;
-                            default:
-                                this.rCtx.fillText(s, -11, 4);
-                                break;
-                        }
-                        this.rCtx.rotate(Math.PI / 2);
-                        this.rCtx.scale(-1, 1);
-                        this.rCtx.translate(-colorSensors[s].x, -colorSensors[s].y);
+                }
+                this.rCtx.fillStyle = colorSensors[s].color;
+                this.rCtx.fill();
+                this.rCtx.strokeStyle = "black";
+                this.rCtx.stroke();
+                if (s !== 0) {
+                    this.rCtx.translate(colorSensors[s].x, colorSensors[s].y);
+                    this.rCtx.scale(-1, 1);
+                    this.rCtx.rotate(-Math.PI / 2);
+                    this.rCtx.beginPath();
+                    this.rCtx.fillStyle = "#555555";
+                    switch(colorSensors[s].position){
+                        case "BACK":
+                            this.rCtx.fillText(s, 6, 4);
+                            break;
+                        case "LEFT":
+                            this.rCtx.fillText(s, -3, 13);
+                            break;
+                        case "RIGHT":
+                            this.rCtx.fillText(s, -3, -6);
+                            break;
+                        default:
+                            this.rCtx.fillText(s, -11, 4);
+                            break;
                     }
-                    // TODO: ROTATE ARC
+                    this.rCtx.rotate(Math.PI / 2);
+                    this.rCtx.scale(-1, 1);
+                    this.rCtx.translate(-colorSensors[s].x, -colorSensors[s].y);
                 }
             }
             // infrared sensors (mBot)
