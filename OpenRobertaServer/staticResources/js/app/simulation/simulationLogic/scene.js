@@ -342,26 +342,31 @@ define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constan
             //color
             var colorSensors = this.robots[r].colorSensor;
             for (var s in colorSensors) {
-                var angle = 0;
+                var startAngle, endAngle;
+                startAngle = endAngle = 0;
                 switch(colorSensors[s].position) { // rotate half circle based on color sensor position
                     case "BACK":
-                        angle = -Math.PI;
+                        startAngle = 0;
+                        endAngle = Math.PI;
                         break;
                     case "LEFT":
-                        angle = Math.PI / 2;
+                        startAngle = 1.5*Math.PI;
+                        endAngle = 0.5*Math.PI;
                         break;
                     case "RIGHT":
-                        angle = -(Math.PI / 2);
+                        startAngle = 0.5*Math.PI;
+                        endAngle = 1.5*Math.PI;
                         break;
                     default:
-                        angle = 0;
+                        startAngle = Math.PI;
+                        endAngle = 2*Math.PI;
                         break;
                 }
                 this.rCtx.beginPath();
                 if (colorSensors[s].alignment !== C.ALIGNMENT_ENUM.HORIZONTAL) {
                     this.rCtx.arc(colorSensors[s].x, colorSensors[s].y, colorSensors[s].r, 0, Math.PI * 2);
                 } else {
-                    this.rCtx.arc(colorSensors[s].x, colorSensors[s].y, colorSensors[s].r, angle, angle + Math.PI);
+                    this.rCtx.arc(colorSensors[s].x, colorSensors[s].y, colorSensors[s].r, startAngle, endAngle, true);
                 }
                 this.rCtx.fillStyle = colorSensors[s].color;
                 this.rCtx.fill();
@@ -387,7 +392,7 @@ define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constan
                             this.rCtx.fillText(s, -11, 4);
                             break;
                     }
-                    this.rCtx.rotate(Math.PI);
+                    this.rCtx.rotate(Math.PI/2);
                     this.rCtx.scale(-1, 1);
                     this.rCtx.translate(-colorSensors[s].x, -colorSensors[s].y);
                 }
