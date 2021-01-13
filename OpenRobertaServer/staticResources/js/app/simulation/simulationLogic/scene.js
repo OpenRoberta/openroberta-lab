@@ -355,7 +355,20 @@ define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constan
                         this.rCtx.rotate(-Math.PI / 2);
                         this.rCtx.beginPath();
                         this.rCtx.fillStyle = "#555555";
-                        this.rCtx.fillText(s, -12, 4);
+                        switch(colorSensors[s].position){
+                            case "BACK":
+                                this.rCtx.fillText(s, 6, 4);
+                                break;
+                            case "LEFT":
+                                this.rCtx.fillText(s, -3, 13);
+                                break;
+                            case "RIGHT":
+                                this.rCtx.fillText(s, -3, -6);
+                                break;
+                            default:
+                                this.rCtx.fillText(s, -11, 4);
+                                break;
+                        }
                         this.rCtx.rotate(Math.PI / 2);
                         this.rCtx.scale(-1, 1);
                         this.rCtx.translate(-colorSensors[s].x, -colorSensors[s].y);
@@ -373,7 +386,20 @@ define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constan
                         this.rCtx.rotate(-Math.PI / 2);
                         this.rCtx.beginPath();
                         this.rCtx.fillStyle = "#555555";
-                        this.rCtx.fillText(s, -12, 4);
+                        switch(colorSensors[s].position){
+                            case "BACK":
+                                this.rCtx.fillText(s, 6, 4);
+                                break;
+                            case "LEFT":
+                                this.rCtx.fillText(s, -3, 13);
+                                break;
+                            case "RIGHT":
+                                this.rCtx.fillText(s, -3, -6);
+                                break;
+                            default:
+                                this.rCtx.fillText(s, -11, 4);
+                                break;
+                        }
                         this.rCtx.rotate(Math.PI / 2);
                         this.rCtx.scale(-1, 1);
                         this.rCtx.translate(-colorSensors[s].x, -colorSensors[s].y);
