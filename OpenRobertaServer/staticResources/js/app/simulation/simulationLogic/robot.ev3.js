@@ -201,7 +201,7 @@ define(['simulation.simulation', 'interpreter.constants', 'simulation.robot', 'g
                             case("BACK"):
                                 orderColorB++;
                                 tmpSensor.x = -orderColorB * 10 + (5 * (countColorB-1))+10;
-                                tmpSensor.y = 35
+                                tmpSensor.y = 30
                                 break;
                             default: // FRONT
                                 orderColorF++;
