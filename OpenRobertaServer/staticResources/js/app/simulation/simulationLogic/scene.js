@@ -342,11 +342,26 @@ define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constan
             //color
             var colorSensors = this.robots[r].colorSensor;
             for (var s in colorSensors) {
+                var angle = 0;
+                switch(colorSensors[s].position) { // rotate half circle based on color sensor position
+                    case "BACK":
+                        angle = -Math.PI;
+                        break;
+                    case "LEFT":
+                        angle = Math.PI / 2;
+                        break;
+                    case "RIGHT":
+                        angle = -(Math.PI / 2);
+                        break;
+                    default:
+                        angle = 0;
+                        break;
+                }
                 this.rCtx.beginPath();
                 if (colorSensors[s].alignment !== C.ALIGNMENT_ENUM.HORIZONTAL) {
                     this.rCtx.arc(colorSensors[s].x, colorSensors[s].y, colorSensors[s].r, 0, Math.PI * 2);
                 } else {
-                    this.rCtx.arc(colorSensors[s].x, colorSensors[s].y, colorSensors[s].r, 0, Math.PI);
+                    this.rCtx.arc(colorSensors[s].x, colorSensors[s].y, colorSensors[s].r, angle, angle + Math.PI);
                 }
                 this.rCtx.fillStyle = colorSensors[s].color;
                 this.rCtx.fill();
@@ -372,7 +387,7 @@ define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constan
                             this.rCtx.fillText(s, -11, 4);
                             break;
                     }
-                    this.rCtx.rotate(Math.PI / 2);
+                    this.rCtx.rotate(Math.PI);
                     this.rCtx.scale(-1, 1);
                     this.rCtx.translate(-colorSensors[s].x, -colorSensors[s].y);
                 }

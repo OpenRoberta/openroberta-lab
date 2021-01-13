@@ -163,7 +163,7 @@ define(['simulation.simulation', 'interpreter.constants', 'simulation.robot', 'g
                     }
                     tmpSensor.position = sensorSettings["positionConfiguration"][c];
                     tmpSensor.alignment = sensorSettings["alignmentConfiguration"][c];
-                    switch (tmpSensor.position[c]) {
+                    switch (tmpSensor.position) {
                         case("RIGHT"):
                             orderColorR++;
                             tmpSensor.x = -15
