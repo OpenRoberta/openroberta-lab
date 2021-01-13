@@ -163,26 +163,52 @@ define(['simulation.simulation', 'interpreter.constants', 'simulation.robot', 'g
                     }
                     tmpSensor.position = sensorSettings["positionConfiguration"][c];
                     tmpSensor.alignment = sensorSettings["alignmentConfiguration"][c];
-                    switch (tmpSensor.position) {
-                        case("RIGHT"):
-                            orderColorR++;
-                            tmpSensor.x = -15
-                            tmpSensor.y = -orderColorR * 10 + (5 * (countColorR-1)) + 10;
-                            break;
-                        case("LEFT"):
-                            orderColorL++;
-                            tmpSensor.x = 15
-                            tmpSensor.y = -orderColorL * 10 + (5 * (countColorL-1))+10;
-                            break;
-                        case("BACK"):
-                            orderColorB++;
-                            tmpSensor.x = -orderColorB * 10 + (5 * (countColorB-1))+10;
-                            tmpSensor.y = 25
-                            break;
-                        default: // FRONT
-                            orderColorF++;
-                            tmpSensor.x = -orderColorF * 10 + (5 * (countColorF-1))+10;
-                            break;
+                    console.log(tmpSensor)
+                    if (tmpSensor.alignment !== "HORIZONTAL") { // DEFAULT CASE
+                        switch (tmpSensor.position) {
+                            case("RIGHT"):
+                                orderColorR++;
+                                tmpSensor.x = -15
+                                tmpSensor.y = -orderColorR * 10 + (5 * (countColorR-1)) + 10;
+                                break;
+                            case("LEFT"):
+                                orderColorL++;
+                                tmpSensor.x = 15
+                                tmpSensor.y = -orderColorL * 10 + (5 * (countColorL-1))+10;
+                                break;
+                            case("BACK"):
+                                orderColorB++;
+                                tmpSensor.x = -orderColorB * 10 + (5 * (countColorB-1))+10;
+                                tmpSensor.y = 25
+                                break;
+                            default: // FRONT
+                                orderColorF++;
+                                tmpSensor.x = -orderColorF * 10 + (5 * (countColorF-1))+10;
+                                break;
+                        }
+                    } else {
+                        switch (tmpSensor.position) {
+                            case("RIGHT"):
+                                orderColorR++;
+                                tmpSensor.x = -25
+                                tmpSensor.y = -orderColorR * 10 + (5 * (countColorR-1)) + 10;
+                                break;
+                            case("LEFT"):
+                                orderColorL++;
+                                tmpSensor.x = 25
+                                tmpSensor.y = -orderColorL * 10 + (5 * (countColorL-1))+10;
+                                break;
+                            case("BACK"):
+                                orderColorB++;
+                                tmpSensor.x = -orderColorB * 10 + (5 * (countColorB-1))+10;
+                                tmpSensor.y = 35
+                                break;
+                            default: // FRONT
+                                orderColorF++;
+                                tmpSensor.x = -orderColorF * 10 + (5 * (countColorF-1))+10;
+                                tmpSensor.y = -25
+                                break;
+                        }
                     }
                     this.colorSensor[c] = tmpSensor;
                     break;
