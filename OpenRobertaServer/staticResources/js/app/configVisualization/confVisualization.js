@@ -27,7 +27,7 @@ var __spreadArrays = (this && this.__spreadArrays) || function () {
             r[k] = a[j];
     return r;
 };
-define(["require", "exports", "./wires", "./const.robots", "./robotBlock", "./port"], function (require, exports, wires_1, const_robots_1, robotBlock_1, port_1) {
+define(["require", "exports", "./wires", "./const.robots", "./robotBlock", "./port", "jquery"], function (require, exports, wires_1, const_robots_1, robotBlock_1, port_1, $) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.CircuitVisualization = void 0;
@@ -45,13 +45,13 @@ define(["require", "exports", "./wires", "./const.robots", "./robotBlock", "./po
         function CircuitVisualization(workspace, dom) {
             var _this = this;
             this.scale = 1;
+            this.observers = [];
             this.clear = function () {
                 while (_this.workspace.getAllBlocks().length) {
                     _this.workspace.getAllBlocks()[0].dispose();
                 }
             };
             this.onChangeListener = function (event) {
-                _this.renderConnections();
                 if (!event.blockId) {
                     return;
                 }
@@ -60,10 +60,12 @@ define(["require", "exports", "./wires", "./const.robots", "./robotBlock", "./po
                     case window.Blockly.Events.CREATE:
                         _this.createBlockPorts(block);
                         _this.initEventListeners(block);
+                        _this.renderBlockConnections(block);
                         break;
                     case window.Blockly.Events.CHANGE:
                         _this.updateBlockPorts(block);
                         _this.updateConnections(block);
+                        _this.renderBlockConnections(block);
                         break;
                     case window.Blockly.Events.DELETE:
                         _this.deleteConnections(event.blockId);
@@ -141,7 +143,6 @@ define(["require", "exports", "./wires", "./const.robots", "./robotBlock", "./po
                 });
                 _this.connections = _this.connections.filter(function (connection) { return connection.blockId !== block.id; });
                 _this.connections = __spreadArrays(_this.connections, connections);
-                _this.renderConnections();
             };
             this.deleteConnections = function (blockId) {
                 _this.connections = _this.connections.filter(function (connection) {
@@ -189,12 +190,14 @@ define(["require", "exports", "./wires", "./const.robots", "./robotBlock", "./po
             var _this = this;
             this.workspace.getAllBlocks().forEach(function (block) {
                 _this.updateBlockPorts(block);
-                _this.renderConnections();
+                _this.renderConnections(_this.connections);
             });
         };
         CircuitVisualization.prototype.dispose = function () {
             this.workspace.removeChangeListener(this.onChangeListener);
             this.wireGroup.remove();
+            this.observers.forEach(function (observer) { return observer.disconnect(); });
+            this.observers = [];
         };
         CircuitVisualization.prototype.getXml = function () {
             return window.Blockly.Xml.workspaceToDom(this.workspace);
@@ -212,26 +215,33 @@ define(["require", "exports", "./wires", "./const.robots", "./robotBlock", "./po
         };
         CircuitVisualization.prototype.initEventListeners = function (block) {
             var _this = this;
-            var blockMouseMoveEventListener = function (event) {
-                _this.renderBlockConnections(block);
-            };
-            block.svgGroup_.addEventListener("mousedown", function () {
-                block.svgGroup_.addEventListener("mousemove", blockMouseMoveEventListener);
+            var observer = new MutationObserver(function () {
+                return _this.renderBlockConnections(block);
             });
-            block.svgGroup_.addEventListener("mouseup", function () {
-                block.svgGroup_.removeEventListener("mousemove", blockMouseMoveEventListener);
+            observer.observe(block.svgGroup_, {
+                childList: false,
+                subtree: false,
+                attributes: true,
+                attributeFilter: ["transform"]
             });
+            this.observers.push(observer);
         };
         CircuitVisualization.prototype.renderBlockConnections = function (block) {
-            this.renderConnections();
+            if (block.id !== "robot") {
+                return this.renderConnections(this.connections.filter(function (_a) {
+                    var blockId = _a.blockId;
+                    return blockId === block.id;
+                }));
+            }
+            return this.renderConnections(this.connections);
         };
-        CircuitVisualization.prototype.renderConnections = function () {
+        CircuitVisualization.prototype.renderConnections = function (connections) {
             var _this = this;
-            if (this.connections.length === 0) {
+            if (connections.length === 0) {
                 return;
             }
             var robotPosition = this.robot.getRelativeToSurfaceXY();
-            this.connections.forEach(function (_a) {
+            connections.forEach(function (_a) {
                 var blockId = _a.blockId, position = _a.position, connectedTo = _a.connectedTo, wireSvg = _a.wireSvg, blockPort = _a.blockPort;
                 var block = _this.workspace.getBlockById(blockId);
                 if (!block) {
@@ -258,6 +268,7 @@ define(["require", "exports", "./wires", "./const.robots", "./robotBlock", "./po
                 wireSvg.setAttribute('d', drawer.path);
                 wireSvg.setAttribute('stroke-width', STROKE);
             });
+            $(this.wireGroup).remove().appendTo(this.workspace.getCanvas());
         };
         CircuitVisualization.prototype.shouldWireWrap = function (block, destination) {
             var _a = this.calculateBlockCorners(block), _b = _a.lowerRight, rightEdge = _b.x, lowerEdge = _b.y, _c = _a.upperLeft, leftEdge = _c.x, upperEdge = _c.y;
@@ -281,10 +292,10 @@ define(["require", "exports", "./wires", "./const.robots", "./robotBlock", "./po
         CircuitVisualization.prototype.calculatePortPosition = function (block, connectedTo) {
             var blockPosition = (block.getRelativeToSurfaceXY().x) + (block.width / 2);
             var robotPortPosition = (this.robot.getRelativeToSurfaceXY().x) + (this.robot.getPortByName(connectedTo).position.x);
-            if (blockPosition < robotPortPosition)
+            if (blockPosition < robotPortPosition) {
                 return block.width - SEP;
-            else
-                return -SEP;
+            }
+            return -SEP;
         };
         return CircuitVisualization;
     }());
