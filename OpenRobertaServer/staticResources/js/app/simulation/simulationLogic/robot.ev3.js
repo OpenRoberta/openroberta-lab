@@ -163,7 +163,6 @@ define(['simulation.simulation', 'interpreter.constants', 'simulation.robot', 'g
                     }
                     tmpSensor.position = sensorSettings["positionConfiguration"][c];
                     tmpSensor.alignment = sensorSettings["alignmentConfiguration"][c];
-                    console.log(tmpSensor)
                     if (tmpSensor.alignment !== "HORIZONTAL") { // DEFAULT CASE
                         switch (tmpSensor.position) {
                             case("RIGHT"):

@@ -709,9 +709,8 @@ define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constan
                 values.color = {};
                 values.light = {};
                 for (var s in colorSensors) {
-                    var red = 0;
-                    var green = 0;
-                    var blue = 0;
+                    var red, green, blue;
+                    red = green = blue = 0;
                     if (colorSensors[s].alignment !== C.ALIGNMENT_ENUM.HORIZONTAL) {
                         var colors = this.uCtx.getImageData(Math.round(colorSensors[s].rx - 3), Math.round(colorSensors[s].ry - 3), 6, 6);
                         var out = [0, 4, 16, 20, 24, 44, 92, 116, 120, 124, 136, 140]; // outside the circle
@@ -729,7 +728,6 @@ define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constan
                         green = green / num;
                         blue = blue / num;
                     } else { // alignment is HORIZONTAL or is UNDEFINED / not set
-                        red = green = blue = 255;
                         var rgb = {
                             r:0,
                             g:0,
@@ -750,9 +748,6 @@ define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constan
                             default:
                                 colorSensorTheta = 0;
                         }
-                        // TODO: CLEANUP
-                        // clear points
-                        this.drawObjects();
                         var l = {
                             x1: colorSensors[s].rx,
                             y1: colorSensors[s].ry,
@@ -771,36 +766,9 @@ define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constan
                             for (var k = 0; k < obstacleLines.length; k++) {
                                 var interPoint = SIMATH.getIntersectionPoint(l, obstacleLines[k]);
                                 if (interPoint) {
-                                    if (i === 0) { // obstacle is simulation border
-                                        red = green = blue = 255;
-                                    } else {
-                                        // TODO: CLEANUP
-                                        var obstacleCorners = [
-                                                {x: Math.round(personalObstacleList[i].x), y: Math.round(personalObstacleList[i].y)},
-                                                {x: (Math.round(personalObstacleList[i].x) + personalObstacleList[i].w), y: Math.round(personalObstacleList[i].y)},
-                                                {x: (Math.round(personalObstacleList[i].x)), y: (Math.round(personalObstacleList[i].y) + personalObstacleList[i].h)},
-                                                {x: (Math.round(personalObstacleList[i].x) + personalObstacleList[i].w),  y: (Math.round(personalObstacleList[i].y) + personalObstacleList[i].h)}
-                                            ]
-                                        colors = [
-                                            "green", "yellow", "orange", "purple"
-                                        ]
-                                         for (let c in obstacleCorners) {
-                                            this.oCtx.beginPath();
-                                            this.oCtx.arc(obstacleCorners[c].x, obstacleCorners[c].y, 3, 0, 2 * Math.PI);
-                                            this.oCtx.fillStyle = colors[c];
-                                            this.oCtx.fill();
-                                        }
-                                        //interpoint
-                                        this.oCtx.beginPath();
-                                        this.oCtx.arc(interPoint.x, interPoint.y, 3, 0, 2 * Math.PI);
-                                        this.oCtx.fillStyle = "pink";
-                                        this.oCtx.fill();
-                                        //scan point
-                                        this.oCtx.beginPath();
-                                        this.oCtx.arc(l.x2, l.y2, 3, 0, 2 * Math.PI);
-                                        this.oCtx.fillStyle = "red";
-                                        this.oCtx.fill();
-                                   }
+                                    if (i === 0) { // obstacle is simulation border should show black
+                                        red = green = blue = 0;
+                                    }
                                 }
                             }
                         }
@@ -1072,9 +1040,9 @@ define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constan
             var g = data[i + 1];
             var b = data[i + 2];
             var a = data[i + 3];
-            // switch 0 to 255 as empty layer is black with full transparency
+            // switch 0 to 128 (NONE) as empty layer is black with full transparency
             if (r == 0 && g == 0 && b == 0 && a == 0) {
-                r = g = b = 255;
+                r = g = b = 128;
                 a = 255;
             }
             R += r;
