@@ -15,9 +15,18 @@ if (!('remove' in Element.prototype)) {
     };
 }
 
+interface Connection {
+    blockId: string;
+    blockPort: Port;
+    connectedTo: string;
+    name?: string;
+    position: any;
+    wireSvg: any
+}
+
 export class CircuitVisualization {
     components: {};
-    connections: any;
+    connections: Connection[];
     robot: any;
     robotXml: Node;
     wireGroup: any;
@@ -37,21 +46,8 @@ export class CircuitVisualization {
         this.currentRobot = this.workspace.device + "_" + this.workspace.subDevice;
         this.injectRobotBoard();
         this.workspace.addChangeListener(this.onChangeListener);
-        this.wireGroup = (<any>window).Blockly.createSvgElement('g', {}, this.workspace.svgGroup_);
-        document.getElementById("bricklyDiv").addEventListener('mousemove', this.handler);
-        document.getElementById("bricklyDiv").addEventListener('click', this.handler);
-        document.getElementById("bricklyDiv").addEventListener('touchmove', this.handler);
+        this.wireGroup = (<any>window).Blockly.createSvgElement('g', {id: "wireGroup"}, this.workspace.getCanvas());
     }
-
-    handler = (function(event) {
-        if ((<any>window).Blockly.dragMode_ == (<any>window).Blockly.DRAG_FREE || this.workspace.isScrolling) {
-            this.renderConnections();
-        }
-        if (this.workspace.scale !== this.scale) {
-            this.scale = this.workspace.scale;
-            this.renderConnections();
-        }
-    }).bind(this);
 
     static domToWorkspace(dom, workspace) {
         const confVis = new CircuitVisualization(workspace, dom);
@@ -86,9 +82,6 @@ export class CircuitVisualization {
 
     dispose(): void {
         this.workspace.removeChangeListener(this.onChangeListener);
-        document.getElementById("bricklyDiv").removeEventListener('mousemove', this.handler);
-        document.getElementById("bricklyDiv").removeEventListener('touchmove', this.handler);
-        document.getElementById("bricklyDiv").removeEventListener('click', this.handler);
         this.wireGroup.remove();
     }
 
@@ -126,6 +119,7 @@ export class CircuitVisualization {
         switch (event.type) {
             case (<any>window).Blockly.Events.CREATE:
                 this.createBlockPorts(block);
+                this.initEventListeners(block);
                 break;
             case (<any>window).Blockly.Events.CHANGE:
                 this.updateBlockPorts(block);
@@ -138,6 +132,22 @@ export class CircuitVisualization {
                 }
                 break;
         }
+    }
+
+    private initEventListeners(block) {
+        const blockMouseMoveEventListener = (event) => {
+            this.renderBlockConnections(block);
+        };
+        block.svgGroup_.addEventListener("mousedown", () => {
+            block.svgGroup_.addEventListener("mousemove", blockMouseMoveEventListener);
+        });
+        block.svgGroup_.addEventListener("mouseup", () => {
+            block.svgGroup_.removeEventListener("mousemove", blockMouseMoveEventListener);
+        });
+    }
+
+    private renderBlockConnections(block: any) {
+        this.renderConnections();
     }
 
     renderConnections(): void {
@@ -154,57 +164,49 @@ export class CircuitVisualization {
                 this.updateBlockPorts(block);
             }
             const blockPosition = block.getRelativeToSurfaceXY();
-            const origin = this.calculateAbsolutePosition({
+            const origin = {
                 x: blockPosition.x + position.x + SEP,
                 y: blockPosition.y + position.y + SEP,
-            });
+            };
             const robotConnection = this.robot.getPortByName(connectedTo)
             if (!robotConnection) {
                 return;
             }
-            const destination = this.calculateAbsolutePosition({
+            const destination = {
                 x: robotPosition.x + robotConnection.position.x + SEP,
                 y: robotPosition.y + robotConnection.position.y + SEP
-            });
+            };
 
             const wireShouldWrap = this.shouldWireWrap(block, destination);
-            const drawer = new WireDrawer(origin, destination, block.ports.indexOf(blockPort), wireShouldWrap ? this.calculateAbsoluteBlockCorners(block) : undefined);
+            const drawer = new WireDrawer(origin, destination, block.ports.indexOf(blockPort), wireShouldWrap ? this.calculateBlockCorners(block) : undefined);
 
             wireSvg.setAttribute('d', drawer.path);
-            wireSvg.setAttribute('stroke-width', STROKE * this.workspace.scale);
+            wireSvg.setAttribute('stroke-width', STROKE);
         });
     }
 
     private shouldWireWrap(block, destination) {
-        const { lowerRight: { x: rightEdge, y: lowerEdge }, upperLeft: { x: leftEdge, y: upperEdge } } = this.calculateAbsoluteBlockCorners(block)
+        const { lowerRight: { x: rightEdge, y: lowerEdge }, upperLeft: { x: leftEdge, y: upperEdge } } = this.calculateBlockCorners(block)
 
         return (leftEdge - WireDrawer.SEPARATOR) <= destination.x && destination.x <= (rightEdge + WireDrawer.SEPARATOR);
     }
 
-    private calculateAbsoluteBlockCorners(block) {
+    private calculateBlockCorners(block) {
         const relativeUpperLeft = block.getRelativeToSurfaceXY();
         return {
-            upperLeft: this.calculateAbsolutePosition(relativeUpperLeft),
-            lowerRight: this.calculateAbsolutePosition({
+            upperLeft: relativeUpperLeft,
+            lowerRight: {
                 x: relativeUpperLeft.x + block.width,
                 y: relativeUpperLeft.y + block.height
-            })
+            }
         };
     }
-
-    private calculateAbsolutePosition(pos: { x, y }) {
-        const { matrix } = this.workspace.getCanvas().transform.baseVal.getItem(0);
-        return {
-            x: matrix.e + this.workspace.scale * pos.x,
-            y: matrix.f + this.workspace.scale * pos.y
-        };
-    }
-
     private needToUpdateBlockPorts(block: any, portPosition: any, connectedTo: any): boolean {
         if (connectedTo) {
             return portPosition.x !== this.calculatePortPosition(block, connectedTo);
         }
     }
+
     updateBlockPorts = (block) => {
         block.ports.forEach(port => {
             const position = port.position;
