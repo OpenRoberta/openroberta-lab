@@ -208,7 +208,7 @@ define(["require", "exports"], function (require, exports) {
                 { name: 'motor A', position: { x: 153.8, y: 210 } },
                 { name: 'motor B', position: { x: 145, y: 209 } },
                 { name: 'ultrasonic 1', position: { x: 245.7, y: 79.5 } },
-                { name: 'callibot', position: { x: 245.7, y: 79.5 } },
+                { name: 'callibot', position: { x: 73.0, y: 79.5 } },
                 // Adressable pins
                 { name: '0', position: { x: 16.5, y: 139.2 } },
                 { name: '1', position: { x: 88, y: 262 } },
