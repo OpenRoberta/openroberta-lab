@@ -730,11 +730,6 @@ define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constan
                         blue = blue / num;
                     } else { // alignment is HORIZONTAL or is UNDEFINED / not set
                         var scannedConeColors = [];
-                        var rgb = {
-                            r:0,
-                            g:0,
-                            b:0
-                        };
 
                         var colorSensorTheta = 0;
                         switch (colorSensors[s].position) {
@@ -750,18 +745,6 @@ define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constan
                             default:
                                 colorSensorTheta = 0;
                         }
-                        var l = {
-                            x1: colorSensors[s].rx,
-                            y1: colorSensors[s].ry,
-                            x2: colorSensors[s].rx - C.COLOR_SENSOR_HORIZONTAL_DISTANCE * Math.cos(this.robots[r].pose.theta + Math.PI + colorSensorTheta),
-                            y2: colorSensors[s].ry - C.COLOR_SENSOR_HORIZONTAL_DISTANCE * Math.sin(this.robots[r].pose.theta + Math.PI + colorSensorTheta)
-                        };
-                        // include scale as the image gets new ratio while the coordinates stay the same
-                        var colors = this.oCtx.getImageData(Math.round(l.x2) * SIM.getScale(), Math.round(l.y2) * SIM.getScale(), 8, 8);
-                        rgb = getObstacleColor(colors.data);
-                        red = rgb[0];
-                        green = rgb[1];
-                        blue = rgb[2];
 
                         var angles = [-(Math.PI / 16), -(Math.PI / 8), 0, (Math.PI / 8), (Math.PI / 16)];
                         var cA = [];
@@ -785,12 +768,16 @@ define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constan
                                     if (interPoint) {
                                         var dis = Math.sqrt((interPoint.x - colorSensors[s].rx) * (interPoint.x - colorSensors[s].rx) + (interPoint.y - colorSensors[s].ry) * (interPoint.y - colorSensors[s].ry));
                                         if (dis < shortestDistance) {
-                                            var x = interPoint.x + C.COLOR_SENSOR_HORIZONTAL_DISTANCE * Math.cos(this.robots[r].pose.theta + angles[i] + colorSensorTheta);
-                                            var y = interPoint.y + C.COLOR_SENSOR_HORIZONTAL_DISTANCE * Math.sin(this.robots[r].pose.theta + angles[i] + colorSensorTheta);
-                                            // scan 1x1 square
-                                            scannedPoint = this.oCtx.getImageData(Math.round(x * SIM.getScale()), Math.round(y * SIM.getScale()), 1, 1).data;
                                             // only get shortest distance
                                             shortestDistance = dis;
+                                            var x = interPoint.x + C.COLOR_SENSOR_HORIZONTAL_DISTANCE * Math.cos(this.robots[r].pose.theta + angles[i] + colorSensorTheta);
+                                            var y = interPoint.y + C.COLOR_SENSOR_HORIZONTAL_DISTANCE * Math.sin(this.robots[r].pose.theta + angles[i] + colorSensorTheta);
+                                            if (i !== 0) {
+                                                // scan 1x1 square
+                                                scannedPoint = this.oCtx.getImageData(Math.round(x * SIM.getScale()), Math.round(y * SIM.getScale()), 1, 1).data;
+                                            } else {
+                                                scannedPoint = [1, 1, 1, 0];
+                                            }
 
                                             scannedPoints = [];
                                             var stepCount = Math.floor(dis / 3.0);
@@ -806,7 +793,7 @@ define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constan
                                     }
                                 }
                             }
-                            if (scannedPoint) {
+                            if (typeof scannedPoint !== "undefined") {
                                 for (var p = 0; p < scannedPoint.length; p++) {
                                     scannedConeColors.push(scannedPoint[p]);
                                 }
@@ -815,18 +802,7 @@ define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constan
                                 }
                             }
                         }
-                        for (var i = 0; i < personalObstacleList.length; i++) {
-                            var obstacleLines = (SIMATH.getLinesFromRect(personalObstacleList[i]));
-                            for (var k = 0; k < obstacleLines.length; k++) {
-                                var interPointBorder = SIMATH.getIntersectionPoint(l, obstacleLines[k]);
-                                if (interPointBorder) {
-                                    if (i === 0) { // obstacle is simulation border should show black
-                                        red = green = blue = 0;
-                                    }
-                                }
-                            }
-                        }
-                        rgb = getObstacleColor(scannedConeColors);
+                        var rgb = getObstacleColor(scannedConeColors);
                         red = rgb[0];
                         green = rgb[1];
                         blue = rgb[2];
@@ -1126,50 +1102,6 @@ define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constan
         wB = wB / wTotal | 0;
 
         return [wR, wG, wB];
-
-        /*
-        var red, green, blue;
-        red = green = blue = 0;
-        var out = [0, 4, 16, 20, 24, 44, 92, 116, 120, 124, 136, 140]; // outside the circle
-        for (var j = 0; j < colors.data.length; j += 24) {
-            for (var i = j; i < j + 24; i += 4) {
-                if (out.indexOf(i) < 0) {
-                    red += colors.data[i + 0];
-                    green += colors.data[i + 1];
-                    blue += colors.data[i + 2];
-                }
-            }
-        }
-        var num = colors.data.length / 4 - 12; // 12 are outside
-        red = red / num;
-        green = green / num;
-        blue = blue / num;
-        return [red, green, blue];
-        var red, green, blue;
-        red = green = blue = 0;
-
-        var out = [0, 4, 16, 20, 24, 44, 92, 116, 120, 124, 136, 140]; // outside the circle
-        for (var j = 0; j < colors.data.length; j += 24) {
-            for (var i = j; i < j + 24; i += 4) {
-                if (out.indexOf(i) < 0) {
-                    red += colors.data[i + 0];
-                    green += colors.data[i + 1];
-                    blue += colors.data[i + 2];
-                }
-            }
-        }
-        var num = colors.data.length / 4 - 12; // 12 are outside
-        console.log(num, (red / num), (green / num), (blue / num))
-        var rgb = {
-            r: (red / num),
-            g:  (green / num),
-            b: (blue / num)
-        };
-
-        console.log(rgb);
-
-        return rgb;
-         */
     }
 
     function getFnName(fn) {
