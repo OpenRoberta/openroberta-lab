@@ -711,6 +711,7 @@ define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constan
                 for (var s in colorSensors) {
                     var red, green, blue;
                     red = green = blue = 0;
+
                     if (colorSensors[s].alignment !== C.ALIGNMENT_ENUM.HORIZONTAL) {
                         var colors = this.uCtx.getImageData(Math.round(colorSensors[s].rx - 3), Math.round(colorSensors[s].ry - 3), 6, 6);
                         var out = [0, 4, 16, 20, 24, 44, 92, 116, 120, 124, 136, 140]; // outside the circle
@@ -728,6 +729,7 @@ define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constan
                         green = green / num;
                         blue = blue / num;
                     } else { // alignment is HORIZONTAL or is UNDEFINED / not set
+                        var scannedConeColors = [];
                         var rgb = {
                             r:0,
                             g:0,
@@ -756,24 +758,81 @@ define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constan
                         };
                         // include scale as the image gets new ratio while the coordinates stay the same
                         var colors = this.oCtx.getImageData(Math.round(l.x2) * SIM.getScale(), Math.round(l.y2) * SIM.getScale(), 8, 8);
-                        rgb = getObstacleColor(colors);
+                        rgb = getObstacleColor(colors.data);
                         red = rgb[0];
                         green = rgb[1];
                         blue = rgb[2];
 
+                        var angles = [-(Math.PI / 16), -(Math.PI / 8), 0, (Math.PI / 8), (Math.PI / 16)];
+                        var cA = [];
+                        for (var i = 0; i < angles.length; i++) {
+                            cA[i] = {
+                                x1: colorSensors[s].rx,
+                                y1: colorSensors[s].ry,
+                                x2: colorSensors[s].rx + C.MAXDIAG * Math.cos(this.robots[r].pose.theta + angles[i] + colorSensorTheta),
+                                y2: colorSensors[s].ry + C.MAXDIAG * Math.sin(this.robots[r].pose.theta + angles[i] + colorSensorTheta)
+                            }
+                        }
+
+                        for (var j = 0; j < cA.length; j++) {
+                            var shortestDistance = C.MAXDIAG;
+                            var scannedPoint;
+                            var scannedPoints = [];
+                            for (var i = 0; i < personalObstacleList.length; i++) {
+                                var obstacleLines = (SIMATH.getLinesFromRect(personalObstacleList[i]));
+                                for (var k = 0; k < obstacleLines.length; k++) {
+                                    var interPoint = SIMATH.getIntersectionPoint(cA[j], obstacleLines[k]);
+                                    if (interPoint) {
+                                        var dis = Math.sqrt((interPoint.x - colorSensors[s].rx) * (interPoint.x - colorSensors[s].rx) + (interPoint.y - colorSensors[s].ry) * (interPoint.y - colorSensors[s].ry));
+                                        if (dis < shortestDistance) {
+                                            var x = interPoint.x + C.COLOR_SENSOR_HORIZONTAL_DISTANCE * Math.cos(this.robots[r].pose.theta + angles[i] + colorSensorTheta);
+                                            var y = interPoint.y + C.COLOR_SENSOR_HORIZONTAL_DISTANCE * Math.sin(this.robots[r].pose.theta + angles[i] + colorSensorTheta);
+                                            // scan 1x1 square
+                                            scannedPoint = this.oCtx.getImageData(Math.round(x * SIM.getScale()), Math.round(y * SIM.getScale()), 1, 1).data;
+                                            // only get shortest distance
+                                            shortestDistance = dis;
+
+                                            scannedPoints = [];
+                                            var stepCount = Math.floor(dis / 3.0);
+                                            for (var m = 1; m <= stepCount; m++) {
+                                                x = colorSensors[s].rx + (C.COLOR_SENSOR_HORIZONTAL_DISTANCE * i) * Math.cos(this.robots[r].pose.theta + angles[i] + colorSensorTheta);
+                                                y = colorSensors[s].ry + (C.COLOR_SENSOR_HORIZONTAL_DISTANCE * i) * Math.sin(this.robots[r].pose.theta + angles[i] + colorSensorTheta);
+                                                var scannedPointOnLine = this.oCtx.getImageData(Math.round(x * SIM.getScale()), Math.round(y * SIM.getScale()), 1, 1).data;
+                                                for (var p = 0; p < scannedPointOnLine.length; p++) {
+                                                    scannedPoints.push(scannedPointOnLine[p]);
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            if (scannedPoint) {
+                                for (var p = 0; p < scannedPoint.length; p++) {
+                                    scannedConeColors.push(scannedPoint[p]);
+                                }
+                                for (var t = 0; t < scannedPoints.length; t++) {
+                                    scannedConeColors.push(scannedPoints[t]);
+                                }
+                            }
+                        }
                         for (var i = 0; i < personalObstacleList.length; i++) {
                             var obstacleLines = (SIMATH.getLinesFromRect(personalObstacleList[i]));
                             for (var k = 0; k < obstacleLines.length; k++) {
-                                var interPoint = SIMATH.getIntersectionPoint(l, obstacleLines[k]);
-                                if (interPoint) {
+                                var interPointBorder = SIMATH.getIntersectionPoint(l, obstacleLines[k]);
+                                if (interPointBorder) {
                                     if (i === 0) { // obstacle is simulation border should show black
                                         red = green = blue = 0;
                                     }
                                 }
                             }
                         }
-
+                        rgb = getObstacleColor(scannedConeColors);
+                        red = rgb[0];
+                        green = rgb[1];
+                        blue = rgb[2];
                     }
+
+
                     values.color[s] = {};
                     values.light[s] = {};
                     colorSensors[s].colorValue = SIMATH.getColor(SIMATH.rgbToHsv(red, green, blue));
@@ -1028,11 +1087,10 @@ define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constan
         }
     };
 
-    function getObstacleColor(colors) {
+    function getObstacleColor(data) {
         // SOLUTION COPIED FROM https://stackoverflow.com/questions/44556692/javascript-get-average-color-from-a-certain-area-of-an-image/44557266#44557266
         var R, G, B, A, wR, wG, wB, wTotal;
         R = G = B = A = wR = wG = wB = wTotal = 0;
-        var data = colors.data;
         var components = data.length;
         for (let i = 0; i < components; i += 4) {
             // A single pixel (R, G, B, A) will take 4 positions in the array:
