@@ -249,6 +249,7 @@ define(["require", "exports", "./wires", "./const.robots", "./robotBlock", "./po
                 }
                 if (_this.needToUpdateBlockPorts(block, position, connectedTo)) {
                     _this.updateBlockPorts(block);
+                    position.x = _this.calculatePortPosition(block, connectedTo);
                 }
                 var blockPosition = block.getRelativeToSurfaceXY();
                 var origin = {

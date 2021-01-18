@@ -174,6 +174,7 @@ export class CircuitVisualization {
             }
             if (this.needToUpdateBlockPorts(block, position, connectedTo)) {
                 this.updateBlockPorts(block);
+                position.x = this.calculatePortPosition(block, connectedTo);
             }
             const blockPosition = block.getRelativeToSurfaceXY();
             const origin = {
