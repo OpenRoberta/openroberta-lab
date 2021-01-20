@@ -92,8 +92,6 @@ public class ProjectWorkflowRestController {
             response.setProgXML(project.getAnnotatedProgramAsXml());
             response.setConfAnnos(project.getConfAnnotationList());
             response.setJavaScriptConfiguration(project.getSimSensorConfigurationJSON());
-            response.setJavaScriptPositionConfiguration(project.getSimSensorPositionConfigurationJSON());
-            response.setJavaScriptAlignmentConfiguration(project.getSimSensorAlignmentConfigurationJSON());
             addProjectResultToResponse(response, project);
             Statistics.info("SimulationRun", "LoggedIn", httpSessionState.isUserLoggedIn(), "success", project.hasSucceeded());
             return UtilForREST.responseWithFrontendInfo(response, httpSessionState, this.robotCommunicator);
