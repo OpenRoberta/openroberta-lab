@@ -10,8 +10,8 @@ define(['simulation.simulation', 'interpreter.constants', 'simulation.robot.ev3'
      * 
      * @class
      */
-    function Nxt(pose, configuration, sensorSettings, num, robotBehaviour) {
-        Ev3.call(this, pose, configuration, sensorSettings, num, robotBehaviour);
+    function Nxt(pose, configuration, num, robotBehaviour) {
+        Ev3.call(this, pose, configuration, num, robotBehaviour);
 
         this.geom = {
             x: -20,
