@@ -10,7 +10,7 @@ define(['simulation.simulation', 'interpreter.constants', 'simulation.robot', 'g
      * 
      * @class
      */
-    function Ev3(pose, configuration, sensorSettings, num, robotBehaviour) {
+    function Ev3(pose, configuration, num, robotBehaviour) {
         Robot.call(this, pose, robotBehaviour);
         var that = this;
         this.id = num || 0;
@@ -102,7 +102,7 @@ define(['simulation.simulation', 'interpreter.constants', 'simulation.robot', 'g
         var orderColorR, orderColorL, orderColorB, orderColorF; // Set order for color sensors on each position
         orderColorR = orderColorL = orderColorB = orderColorF = 0;
         for (var c in configuration) {
-            switch (configuration[c]) {
+            switch (configuration[c]["TYPE"]) {
                 case "TOUCH":
                     countTouch++;
                     break;
@@ -111,7 +111,7 @@ define(['simulation.simulation', 'interpreter.constants', 'simulation.robot', 'g
                     break;
                 case "COLOR":
                 case "LIGHT":
-                    switch (sensorSettings["positionConfiguration"][c]) {
+                    switch (configuration[c]["SENSOR_ALIGNMENT"]) {
                         case("RIGHT"):
                             countColorR++;
                             break;
@@ -145,7 +145,7 @@ define(['simulation.simulation', 'interpreter.constants', 'simulation.robot', 'g
             this.touchSensor = [];
         }
         for (var c in configuration) {
-            switch (configuration[c]) {
+            switch (configuration[c]["TYPE"]) {
                 case ("TOUCH"):
                     this.touchSensor[c] = touchSensorProto;
                     break;
@@ -161,28 +161,33 @@ define(['simulation.simulation', 'interpreter.constants', 'simulation.robot', 'g
                             tmpSensor[prop] = colorSensorProto[prop];
                         }
                     }
-                    tmpSensor.position = sensorSettings["positionConfiguration"][c];
-                    tmpSensor.alignment = sensorSettings["alignmentConfiguration"][c];
+                    if (configuration[c]["SENSOR_POSITION"]) {
+                        tmpSensor.position = configuration[c]["SENSOR_POSITION"];
+                    }
+                    if (configuration[c]["SENSOR_ALIGNMENT"]) {
+                        tmpSensor.alignment = configuration[c]["SENSOR_ALIGNMENT"];
+                    }
+                    // TODO: FIX SENSOR POSITION
                     if (tmpSensor.alignment !== "HORIZONTAL") { // DEFAULT CASE
                         switch (tmpSensor.position) {
                             case("RIGHT"):
                                 orderColorR++;
                                 tmpSensor.x = -15
-                                tmpSensor.y = -orderColorR * 10 + (5 * (countColorR-1)) + 10;
+                                tmpSensor.y = -orderColorR * 10 + (5 * (countColorR-1))+15;
                                 break;
                             case("LEFT"):
                                 orderColorL++;
                                 tmpSensor.x = 15
-                                tmpSensor.y = -orderColorL * 10 + (5 * (countColorL-1))+10;
+                                tmpSensor.y = -orderColorL * 10 + (5 * (countColorL-1))+15;
                                 break;
                             case("BACK"):
                                 orderColorB++;
-                                tmpSensor.x = -orderColorB * 10 + (5 * (countColorB-1))+10;
+                                tmpSensor.x = -orderColorB * 10 + (5 * (countColorB-1))+15;
                                 tmpSensor.y = 25
                                 break;
                             default: // FRONT
                                 orderColorF++;
-                                tmpSensor.x = -orderColorF * 10 + (5 * (countColorF-1))+10;
+                                tmpSensor.x = -orderColorF * 10 + (5 * (countColorF-1))+15;
                                 break;
                         }
                     } else {
@@ -190,21 +195,21 @@ define(['simulation.simulation', 'interpreter.constants', 'simulation.robot', 'g
                             case("RIGHT"):
                                 orderColorR++;
                                 tmpSensor.x = -25
-                                tmpSensor.y = -orderColorR * 10 + (5 * (countColorR-1)) + 10;
+                                tmpSensor.y = -orderColorR * 10 + (5 * (countColorR-1))+15;
                                 break;
                             case("LEFT"):
                                 orderColorL++;
                                 tmpSensor.x = 25
-                                tmpSensor.y = -orderColorL * 10 + (5 * (countColorL-1))+10;
+                                tmpSensor.y = -orderColorL * 10 + (5 * (countColorL-1))+15;
                                 break;
                             case("BACK"):
                                 orderColorB++;
-                                tmpSensor.x = -orderColorB * 10 + (5 * (countColorB-1))+10;
+                                tmpSensor.x = -orderColorB * 10 + (5 * (countColorB-1))+15;
                                 tmpSensor.y = 30
                                 break;
                             default: // FRONT
                                 orderColorF++;
-                                tmpSensor.x = -orderColorF * 10 + (5 * (countColorF-1))+10;
+                                tmpSensor.x = -orderColorF * 10 + (5 * (countColorF-1))+15;
                                 tmpSensor.y = -25
                                 break;
                         }

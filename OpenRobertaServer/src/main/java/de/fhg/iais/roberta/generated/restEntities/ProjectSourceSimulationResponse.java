@@ -72,9 +72,7 @@ public class ProjectSourceSimulationResponse extends BaseResponse {
             String fileExtension,
             String progXML,
             Map<String, JSONObject> confAnnos,
-            JSONObject javaScriptConfiguration,
-            JSONObject javaScriptPositionConfiguration,
-            JSONObject javaScriptAlignmentConfiguration) {
+            JSONObject javaScriptConfiguration) {
         ProjectSourceSimulationResponse entity = new ProjectSourceSimulationResponse();
         entity.setCmd(cmd);
         entity.setRc(rc);
@@ -98,8 +96,6 @@ public class ProjectSourceSimulationResponse extends BaseResponse {
         entity.setProgXML(progXML);
         entity.setConfAnnos(confAnnos);
         entity.setJavaScriptConfiguration(javaScriptConfiguration);
-        entity.setJavaScriptPositionConfiguration(javaScriptPositionConfiguration);
-        entity.setJavaScriptAlignmentConfiguration(javaScriptAlignmentConfiguration);
         entity.immutable();
         return entity;
     }
@@ -172,10 +168,6 @@ public class ProjectSourceSimulationResponse extends BaseResponse {
                     }
                 } else if ( "javaScriptConfiguration".equals(key) ) {
                     setJavaScriptConfiguration(jsonO.getJSONObject(key));
-                } else if ("javaScriptPositionConfiguration".equals(key)) {
-                    setJavaScriptPositionConfiguration(jsonO.getJSONObject(key));
-                } else if ("javaScriptAlignmentConfiguration".equals(key)) {
-                    setJavaScriptAlignmentConfiguration(jsonO.getJSONObject(key));
                 } else {
                     throw new RuntimeException("JSON parse error. Found invalid key: " + key + " in " + jsonO);
                 }
@@ -235,12 +227,6 @@ public class ProjectSourceSimulationResponse extends BaseResponse {
         }
         if ( this.javaScriptConfiguration == null ) {
             _message = "required property javaScriptConfiguration of ProjectSourceSimulationResponse-object is not set: " + toString();
-        }
-        if ( javaScriptPositionConfiguration == null) {
-            _message = "required property javaScriptPositionConfiguration of ProjectSourceSimulationResponse-object is not set: " + toString();
-        }
-        if ( javaScriptAlignmentConfiguration == null) {
-            _message = "required property javaScriptAlignmentConfiguration of ProjectSourceSimulationResponse-object is not set: " + toString();
         }
         if ( _message != null ) {
             this.immutable = false;
@@ -519,10 +505,6 @@ public class ProjectSourceSimulationResponse extends BaseResponse {
             + this.confAnnos
             + ", javaScriptConfiguration="
             + this.javaScriptConfiguration
-            + ", javaScriptPositionConfiguration="
-            + this.javaScriptPositionConfiguration
-            + ", javaScriptAlignmentConfiguration="
-            + this.javaScriptAlignmentConfiguration
             + " ]";
     }
 
