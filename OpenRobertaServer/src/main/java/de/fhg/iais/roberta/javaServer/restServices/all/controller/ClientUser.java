@@ -137,7 +137,7 @@ public class ClientUser {
                         return UtilForREST.makeBaseResponseForError(Key.GROUP_GET_ONE_ERROR_NOT_FOUND, httpSessionState, this.brickCommunicator);
                     }
 
-                    userGroup = ugp.getGroup(userGroupName, userGroupOwner);
+                    userGroup = ugp.getGroup(userGroupName, userGroupOwner, true);
                     if ( userGroup == null ) {
                         return UtilForREST.makeBaseResponseForError(ugp.getMessage(), httpSessionState, this.brickCommunicator);
                     }

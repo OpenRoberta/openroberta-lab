@@ -312,7 +312,7 @@ public class ClientProgramController {
             }
 
             String groupName = request.getGroupName();
-            UserGroup userGroup = userGroupProcessor.getGroup(groupName, user);
+            UserGroup userGroup = userGroupProcessor.getGroup(groupName, user, false);
             if ( userGroup == null ) {
                 return UtilForREST.makeBaseResponseForError(userGroupProcessor.getMessage(), httpSessionState, null);
             }

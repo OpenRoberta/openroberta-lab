@@ -56,15 +56,16 @@ public class UserGroupProcessor extends AbstractProcessor {
      *
      * @param groupName The name of the user group
      * @param groupOwner The owner of the user group
+     * @param isLogin TODO
      * @return The user group, or null, if no such user group exists.
      */
-    public UserGroup getGroup(String groupName, User groupOwner) {
+    public UserGroup getGroup(String groupName, User groupOwner, boolean isLogin) {
         if ( groupOwner == null || groupName == null ) {
             this.setStatus(ProcessorStatus.FAILED, Key.GROUP_GET_ONE_ERROR, new HashMap<>());
             return null;
         }
 
-        if ( !this.canOwnGroup(groupOwner) ) {
+        if ( !this.canOwnGroup(groupOwner) && !isLogin ) {
             this.setStatus(ProcessorStatus.FAILED, Key.GROUP_ERROR_MISSING_RIGHTS_TO_BE_GROUP_OWNER, new HashMap<>());
             return null;
         }

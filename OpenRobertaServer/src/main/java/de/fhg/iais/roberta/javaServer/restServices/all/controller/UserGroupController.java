@@ -84,7 +84,7 @@ public class UserGroupController {
 
             String groupName = request.getGroupName();
 
-            UserGroup userGroup = userGroupProcessor.getGroup(groupName, loggedInUser);
+            UserGroup userGroup = userGroupProcessor.getGroup(groupName, loggedInUser, false);
 
             if ( !userGroupProcessor.succeeded() ) {
                 return UtilForREST.makeBaseResponseForError(userGroupProcessor.getMessage(), httpSessionState, this.brickCommunicator);
@@ -293,7 +293,7 @@ public class UserGroupController {
             String groupName = request.getGroupName();
             List<String> newMemberNames = request.getGroupMemberNames();
 
-            UserGroup userGroup = userGroupProcessor.getGroup(groupName, loggedInUser);
+            UserGroup userGroup = userGroupProcessor.getGroup(groupName, loggedInUser, false);
             if ( !userGroupProcessor.succeeded() ) {
                 return UtilForREST.makeBaseResponseForError(userGroupProcessor.getMessage(), httpSessionState, this.brickCommunicator);
             }
@@ -343,7 +343,7 @@ public class UserGroupController {
             String memberAccount = request.getCurrentGroupMemberAccount();
             String newMemberAccount = request.getNewGroupMemberAccount();
 
-            UserGroup userGroup = userGroupProcessor.getGroup(groupName, loggedInUser);
+            UserGroup userGroup = userGroupProcessor.getGroup(groupName, loggedInUser, false);
             if ( userGroup == null ) {
                 return UtilForREST.makeBaseResponseForError(userGroupProcessor.getMessage(), httpSessionState, this.brickCommunicator);
             }
@@ -410,7 +410,7 @@ public class UserGroupController {
             String groupName = request.getGroupName();
             List<String> groupMemberAccounts = request.getGroupMemberAccounts();
 
-            UserGroup userGroup = userGroupProcessor.getGroup(groupName, loggedInUser);
+            UserGroup userGroup = userGroupProcessor.getGroup(groupName, loggedInUser, false);
             if ( userGroup == null ) {
                 return UtilForREST.makeBaseResponseForError(userGroupProcessor.getMessage(), httpSessionState, this.brickCommunicator);
             }
@@ -466,7 +466,7 @@ public class UserGroupController {
             String groupName = request.getGroupName();
             List<String> groupMemberAccounts = request.getGroupMemberAccounts();
 
-            UserGroup userGroup = userGroupProcessor.getGroup(groupName, loggedInUser);
+            UserGroup userGroup = userGroupProcessor.getGroup(groupName, loggedInUser, false);
             if ( userGroup == null ) {
                 return UtilForREST.makeBaseResponseForError(userGroupProcessor.getMessage(), httpSessionState, this.brickCommunicator);
             }
