@@ -1065,7 +1065,6 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
                 tempRobot.savedName = userPrograms[i].savedName;
                 var tempcolor = arrToRgb(colorsAdmissible[((i - 1) % (colorsAdmissible.length))]);
                 tempRobot.geom.color = tempcolor;
-                tempRobot.touchSensor.color = tempcolor;
                 robots[i] = tempRobot;
                 if (robots[i].brick) {
                     $("#simRobotContent").append(robots[i].brick);

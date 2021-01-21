@@ -87,8 +87,7 @@ define(['simulation.simulation', 'interpreter.constants', 'simulation.robot', 'g
             y1: 0,
             x2: 0,
             y2: 0,
-            value: 0,
-            color: '#FFCC33'
+            value: 0
         };
         this.gyroSensor = {
             value: 0,
