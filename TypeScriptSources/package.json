@@ -16,6 +16,7 @@
     "d3": "^3.5.16"
   },
   "devDependencies": {
+    "@types/bootstrap": "^3.3.28",
     "typescript": "^3.9.2"
   }
 }

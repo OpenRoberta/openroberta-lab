@@ -17,7 +17,7 @@ import * as guiStateController from "guiState.controller";
 import * as notificationModel from "notification.model";
 // @ts-ignore
 import * as comm from "comm";
-// @ts-ignore
+
 import * as $ from "jquery";
 
 const fadingDuration = 400;
@@ -84,7 +84,7 @@ function initNotificationModal() {
         readFileInputField(fileContent => {
             notificationModel.postNotifications(fileContent, function(restResponse) {
                 if (restResponse.rc === "ok" && restResponse.message === "ORA_NOTIFICATION_SUCCESS") {
-                    $notificationForm[0].reset();
+                    $notificationForm.trigger("reset");
                     showAlertInNotificationModal("success", "The notifications were transmitted successfully");
                     setFileDownloadContent(JSON.parse(fileContent));
                 } else {

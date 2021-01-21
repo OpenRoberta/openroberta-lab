@@ -78,7 +78,7 @@ define(["require", "exports", "guiState.model", "guiState.controller", "notifica
             readFileInputField(function (fileContent) {
                 notificationModel.postNotifications(fileContent, function (restResponse) {
                     if (restResponse.rc === "ok" && restResponse.message === "ORA_NOTIFICATION_SUCCESS") {
-                        $notificationForm[0].reset();
+                        $notificationForm.trigger("reset");
                         showAlertInNotificationModal("success", "The notifications were transmitted successfully");
                         setFileDownloadContent(JSON.parse(fileContent));
                     }
