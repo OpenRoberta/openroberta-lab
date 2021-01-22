@@ -1,15 +1,11 @@
-package de.fhg.iais.roberta.syntax.action.raspberrypi;
+package de.fhg.iais.roberta.syntax.actors.raspberrypi;
 
 import java.util.List;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.blockly.generated.Value;
-import de.fhg.iais.roberta.syntax.BlockTypeContainer;
-import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
-import de.fhg.iais.roberta.syntax.BlocklyComment;
-import de.fhg.iais.roberta.syntax.BlocklyConstants;
-import de.fhg.iais.roberta.syntax.Phrase;
+import de.fhg.iais.roberta.syntax.*;
 import de.fhg.iais.roberta.syntax.action.Action;
 import de.fhg.iais.roberta.syntax.lang.expr.ColorConst;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
@@ -26,54 +22,38 @@ import de.fhg.iais.roberta.util.dbc.Assert;
  * <br>
  * The client must provide the {@link ColorConst} color of the led. <br>
  * <br>
- * To create an instance from this class use the method {@link #make(ColorConst, BlocklyBlockProperties, BlocklyComment)}.<br>
+ * To create an instance from this class use the method {@link #make(String, Expr, Expr, BlocklyBlockProperties, BlocklyComment)}.<br>
  */
-public class LedBlinkAction<V> extends Action<V> {
+public class LedBlinkFrequencyAction<V> extends Action<V> {
     private final String port;
     private final Expr<V> frequency;
-    private final Expr<V> duration;
+    private final Expr<V> numBlinks;
 
-    private LedBlinkAction(String port, Expr<V> frequency, Expr<V> duration, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockTypeContainer.getByName("LED_BLINK_ACTION"), properties, comment);
+    private LedBlinkFrequencyAction(String port, Expr<V> frequency, Expr<V> numBlinks, BlocklyBlockProperties properties, BlocklyComment comment) {
+        super(BlockTypeContainer.getByName("LED_BLINK_FREQ_ACTION"), properties, comment);
         Assert.notNull(port);
         Assert.notNull(frequency);
-        Assert.notNull(duration);
+        Assert.notNull(numBlinks);
         this.port = port;
         this.frequency = frequency;
-        this.duration = duration;
+        this.numBlinks = numBlinks;
         setReadOnly();
     }
 
     /**
-     * Creates instance of {@link LedBlinkAction}. This instance is read only and can not be modified.
+     * Creates instance of {@link LedBlinkFrequencyAction}. This instance is read only and can not be modified.
      *
-     * @param brightness of the display; must <b>not</b> be null,
      * @param properties of the block (see {@link BlocklyBlockProperties}),
      * @param comment added from the user,
-     * @return read only object of class {@link LedBlinkAction}
+     * @return read only object of class {@link LedBlinkFrequencyAction}
      */
-    private static <V> LedBlinkAction<V> make(String port, Expr<V> frequency, Expr<V> duration, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new LedBlinkAction<>(port, frequency, duration, properties, comment);
-    }
-
-    /**
-     * @return x of the pixel.
-     */
-    public String getPort() {
-        return this.port;
-    }
-
-    public Expr<V> getFrequency() {
-        return this.frequency;
-    }
-
-    public Expr<V> getDuration() {
-        return this.duration;
-    }
-
-    @Override
-    public String toString() {
-        return "LedSetAction [ " + this.port + ", " + this.frequency + ", " + this.duration + " ]";
+    private static <V> LedBlinkFrequencyAction<V> make(
+        String port,
+        Expr<V> frequency,
+        Expr<V> duration,
+        BlocklyBlockProperties properties,
+        BlocklyComment comment) {
+        return new LedBlinkFrequencyAction<>(port, frequency, duration, properties, comment);
     }
 
     /**
@@ -87,10 +67,10 @@ public class LedBlinkAction<V> extends Action<V> {
         List<Field> fields = Jaxb2Ast.extractFields(block, (short) 1);
         List<Value> values = Jaxb2Ast.extractValues(block, (short) 2);
 
-        Phrase<V> frequency = helper.extractValue(values, new ExprParam(BlocklyConstants.FREQUENCY, BlocklyType.NUMBER));
-        Phrase<V> duration = helper.extractValue(values, new ExprParam(BlocklyConstants.DURATION, BlocklyType.NUMBER_INT));
+        Phrase<V> frequency = helper.extractValue(values, new ExprParam(BlocklyConstants.FREQUENCE, BlocklyType.NUMBER));
+        Phrase<V> duration = helper.extractValue(values, new ExprParam(BlocklyConstants.N_TIMES, BlocklyType.NUMBER_INT));
         String port = Jaxb2Ast.extractField(fields, BlocklyConstants.ACTORPORT);
-        return LedBlinkAction
+        return LedBlinkFrequencyAction
             .make(
                 port,
                 Jaxb2Ast.convertPhraseToExpr(frequency),
@@ -100,14 +80,34 @@ public class LedBlinkAction<V> extends Action<V> {
 
     }
 
+    /**
+     * @return x of the pixel.
+     */
+    public String getPort() {
+        return this.port;
+    }
+
+    public Expr<V> getFrequency() {
+        return this.frequency;
+    }
+
+    public Expr<V> getNumBlinks() {
+        return this.numBlinks;
+    }
+
+    @Override
+    public String toString() {
+        return "LedSetAction [ " + this.port + ", " + this.frequency + ", " + this.numBlinks + " ]";
+    }
+
     @Override
     public Block astToBlock() {
         Block jaxbDestination = new Block();
         Ast2Jaxb.setBasicProperties(this, jaxbDestination);
 
         Ast2Jaxb.addField(jaxbDestination, BlocklyConstants.ACTORPORT, this.port);
-        Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.FREQUENCY, this.frequency);
-        Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.DURATION, this.duration);
+        Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.FREQUENCE, this.frequency);
+        Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.N_TIMES, this.numBlinks);
         return jaxbDestination;
 
     }

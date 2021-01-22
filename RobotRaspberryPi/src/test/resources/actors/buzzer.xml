@@ -1,0 +1,51 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="raspberrypi" xmlversion="3.1" description="" tags="">
+    <instance x="238" y="50">
+        <block type="robControls_start" id="7(8NCi8[]!-XHoC4?!d-" intask="true" deletable="false">
+            <mutation declare="false"/>
+            <field name="DEBUG">FALSE</field>
+        </block>
+        <block type="robActions_rasp_buzzer_beep" id="|Zg[K8o_aMH4lf8R*(Uc" intask="true">
+            <field name="ACTORPORT">B</field>
+            <value name="ON_TIME">
+                <block type="math_number" id="h@oXd~G-evQ8bgu5sXEi" intask="true">
+                    <field name="NUM">1</field>
+                </block>
+            </value>
+            <value name="OFF_TIME">
+                <block type="math_number" id="~Y*`!LuH[ng7%|dde364" intask="true">
+                    <field name="NUM">1</field>
+                </block>
+            </value>
+            <value name="N_TIMES">
+                <block type="math_number" id="hz3ihM?M}.}(_]VCwB%*" intask="true">
+                    <field name="NUM">5</field>
+                </block>
+            </value>
+        </block>
+        <block type="robActions_rasp_buzzer_on" id="06{(AwO;n31;Ds7.x~mM" intask="true">
+            <field name="ACTORPORT">B</field>
+            <field name="MODE">ON</field>
+        </block>
+        <block type="robActions_rasp_buzzer_on" id="F`GuhIGgqR#j4#;HTMGO" intask="true">
+            <field name="ACTORPORT">B</field>
+            <field name="MODE">TOGGLE</field>
+        </block>
+        <block type="robActions_rasp_buzzer_on" id="D3%%v5NV]jn/C7W;|~H%" intask="true">
+            <field name="ACTORPORT">B</field>
+            <field name="MODE">OFF</field>
+        </block>
+        <block type="robActions_rasp_play_tone" id="QI59e6OBngEgc50-o|Ry" intask="true">
+            <field name="ACTORPORT">T</field>
+            <value name="FREQUENCE">
+                <block type="math_number" id="fJm5H!-zV/nRqaD6,dJH" intask="true">
+                    <field name="NUM">300</field>
+                </block>
+            </value>
+            <value name="DURATION">
+                <block type="math_number" id="eD%Bf}26yEZz8WR/^5eb" intask="true">
+                    <field name="NUM">100</field>
+                </block>
+            </value>
+        </block>
+    </instance>
+</block_set>

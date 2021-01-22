@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Program and Configuration Playground</title>
+<script src="../blockly_compressed.js"></script>
+<!-- <script src="../blocks_compressed.js"></script> -->
+<script src="../msg/js/de.js"></script>
+<script src="../core/blockly.js"></script>
+<script src="../core/constants.js"></script>
+<script src="../core/css.js"></script>
+<script src="../core/inject.js"></script>
+<script src="../core/field.js"></script>
+<script src="../core/field_label.js"></script>
+<script src="../core/field_dropdown.js"></script>
+<script src="../core/field_textinput.js"></script>
+<script src="../core/workspace.js"></script>
+<script src="../core/workspace_svg.js"></script>
+<script src="../core/icon.js"></script>
+<script src="../core/block.js"></script>
+<script src="../core/block_svg.js"></script>
+<script src="../core/block_render_svg.js"></script>
+<script src="../core/toolbox.js"></script>
+<script src="../core/xml.js"></script>
+<script src="../core/variables.js"></script>
+<script src="../core/procedures.js"></script>
+<script src="../core/mutator.js"></script>
+<script src="../core/mutatorPlus.js"></script>
+<script src="../core/mutatorMinus.js"></script>
+<script src="../core/contextmenu.js"></script>
+<script src="../core/rob_controls.js"></script>
+<script src="../core/tooltip.js"></script>
+<script src="../core/connection.js"></script>
+<script src="../core/rendered_connection.js"></script>
+<script src="../core/warning.js"></script>
+<script src="../core/error.js"></script>
+<script src="../core/comment.js"></script>
+<script src="../core/bubble.js"></script>
+<script src="../core/trashcan.js"></script>
+<script src="../core/utils.js"></script>
+<script src="../core/xml.js"></script>
+<script src="../core/rob_configuration.js"></script>
+<script src="../blocks/logic.js"></script>
+<script src="../blocks/loops.js"></script>
+<script src="../blocks/math.js"></script>
+<script src="../blocks/text.js"></script>
+<script src="../blocks/lists.js"></script>
+<script src="../blocks/colour.js"></script>
+<script src="../blocks/variables.js"></script>
+<script src="../blocks/procedures.js"></script>
+<script src="../blocks/math.js"></script>
+<script src="../blocks/robActions.js"></script>
+<script src="../blocks/robColour.js"></script>
+<script src="../blocks/robControls.js"></script>
+<script src="../blocks/robSensors.js"></script>
+<script src="../blocks/robSensorDefinitions.js"></script>
+<script src="../blocks/robConfig.js"></script>
+<script src="../blocks/robConfigDefinitions.js"></script>
+<script src="../blocks/robBrick.js"></script>
+<script src="../blocks/robSensors.js"></script>
+<script src="../blocks/robSensorDefinitions.js"></script>
+<script src="../blocks/mbedActions.js"></script>
+<link rel="stylesheet" type="text/css" href="typicons.css">
+</link>
+<script>
+	'use strict';
+	var workspace = {};
+	var options = {
+		comments : true,
+		collapse : true,
+		disable : true,
+		maxBlocks : Infinity,
+		media : '../media/',
+		oneBasedIndex : true,
+		readOnly : false,
+		//rtl: false,
+		scrollbars : true,
+		trashcan : true,
+		//toolbox: null,
+		//horizontalLayout: false,
+		//toolboxPosition: 'start',
+		zoom : {
+			controls : true,
+			wheel : false,
+			startScale : 1.0,
+			maxScale : 4,
+			minScale : 0.25,
+			scaleSpeed : 1.1
+		},
+		checkInTask : [ 'start', '_def', 'robConf', 'Brick' ],
+		variableDeclaration : true,
+		robControls : true
+	};
+
+	var toolbox = {};
+	var defaultProgramXML = "<block_set xmlns='http://www.w3.org/1999/xhtml'><instance x='100' y='50'><block type='robControls_start'><field name='DEBUG'>FALSE</field></block></instance></block_set>";
+	var defaultConfXML = "<block_set xmlns='http://de.fhg.iais.roberta.blockly' robottype='wedo' xmlversion='' description='' tags=''><instance x='300' y='50'><block type='robBrick_WeDo-Brick'></block></instance><instance x='100' y='50'><block type='robConf_motor'></block></instance><instance x='100' y='150'><block type='robConf_infrared'></block></instance> </block_set>";
+	
+	function start() {
+		toolbox.Program = document.getElementById('toolboxBeginner');
+		toolbox.Configuration = document.getElementById('toolbox-Configuration');
+		startBlocklyInstance(workspace, 'blocklyDiv', false, false, 'start', toolbox.Program);
+		startBlocklyInstance(workspace, 'bricklyDiv', false, false, 'start', toolbox.Configuration);
+		
+		var blocklyArea = document.getElementById('blocklyArea');
+		var onresize = function(e) {
+		    // Compute the absolute coordinates and dimensions of blocklyArea.
+		    var element = blocklyArea;
+		    var x = 0;
+		    var y = 0;
+		    do {
+		        x += element.offsetLeft;
+		        y += element.offsetTop;
+		        element = element.offsetParent;
+		    } while (element);
+		    // Position blocklyDiv over blocklyArea.
+		    blocklyDiv.style.left = x + 'px';
+		    blocklyDiv.style.top = y + 'px';
+		    blocklyDiv.style.width = blocklyArea.offsetWidth + 'px';
+		    blocklyDiv.style.height = blocklyArea.offsetHeight + 'px';
+		    var element = bricklyArea;
+		    x = 0;
+		    y = 0;
+		    do {
+		        x += element.offsetLeft;
+		        y += element.offsetTop;
+		        element = element.offsetParent;
+		    } while (element);
+		    // Position blocklyDiv over blocklyArea.
+		    bricklyDiv.style.left = x + 'px';
+		    bricklyDiv.style.top = y + 'px';
+		    bricklyDiv.style.width = bricklyArea.offsetWidth + 'px';
+		    bricklyDiv.style.height = bricklyArea.offsetHeight + 'px';
+		  };
+		  window.addEventListener('resize', onresize, false);
+		  onresize();
+		  Blockly.svgResize(workspace.bricklyDiv);
+		  Blockly.svgResize(workspace.blocklyDiv);	
+		  var dom = Blockly.Xml.textToDom(defaultProgramXML, workspace.blocklyDiv);
+	        Blockly.Xml.domToWorkspace(dom, workspace.blocklyDiv);
+	        dom = Blockly.Xml.textToDom(defaultConfXML, workspace.bricklyDiv);
+	        Blockly.Xml.domToWorkspace(dom, workspace.bricklyDiv);
+	        
+	        document.getElementsByClassName('blocklySvg')[0].addEventListener("click", markFocusForUser);
+	        document.getElementsByClassName('blocklySvg')[1].addEventListener("click", markFocusForUser);
+
+			function markFocusForUser(e) {
+			    document.getElementsByClassName('blocklySvg')[0].style.backgroundColor='white';
+			    document.getElementsByClassName('blocklySvg')[1].style.backgroundColor='white';
+			    e.target.parentElement.parentElement.style.backgroundColor='LightYellow';
+			}
+	       
+	}
+
+	function startBlocklyInstance(workspace, suffix, rtl, horizontalLayout, position,
+		toolbox) {
+		options.rtl = rtl;
+		options.toolbox = toolbox;
+		options.horizontalLayout = horizontalLayout;
+		options.toolboxPosition = position;
+		workspace[suffix] = Blockly.inject(suffix, options);
+		workspace[suffix].setDevice({group:'wedo', robot:'wedo'});
+
+	}
+	
+	function toggleToolbox(){
+        if (toolbox.Program.id == 'toolboxExpert'){
+            toolbox.Program = document.getElementById('toolboxBeginner');
+        } else {
+            toolbox.Program = document.getElementById('toolboxExpert');
+        }
+        workspace.blocklyDiv.updateToolbox(toolbox.Program);
+    }
+</script>
+
+<style>
+body {
+	background-color: #fff;
+	font-family: sans-serif;
+}
+
+h1 {
+	font-weight: normal;
+	font-size: 140%;
+}
+
+#octaweb {
+	width: 100%;
+}
+
+#octaweb th {
+	padding-top: 1em;
+	width: 50%;
+}
+
+#octaweb td {
+	width: 50%;
+}
+
+#octaweb td>div {
+	height: 480px;
+	width: 100%;
+}
+</style>
+</head>
+<body onload="start()">
+	<h1>Blockly Multi Playground</h1>
+
+	<table id="octaweb">
+		<tr>
+			<th>Program</th>
+			<th>Configuration</th>
+		</tr>
+		<tr>
+			<td><div id="blocklyArea"></div></td>
+			<td><div id="bricklyArea"></div></td>
+		</tr>
+	</table>
+    <p>
+            <input type="button" value="Toggle toolbox" onclick="toggleToolbox()">
+        </p>
+	<div id="blocklyDiv" style="position: absolute"></div>
+	<div id="bricklyDiv" style="position: absolute"></div>
+
+
+<toolbox_set id="toolboxBeginner" style="display: none">
+    <category name="TOOLBOX_ACTION" svg="true">
+        <block type="robActions_motor_on_for">
+            <value name="POWER">
+                <block type="math_number">
+                    <field name="NUM">30</field>
+                </block>
+            </value>
+            <value name="VALUE">
+                <block type="math_number">
+                    <field name="NUM">1000</field>
+                </block>
+            </value>
+        </block>
+        <block type="robActions_display_text">
+            <value name="OUT">
+                <block type="text">
+                    <field name="TEXT">Hallo</field>
+                </block>
+            </value>
+        </block>
+        <block type="robActions_display_clear"></block>
+        <block type="mbedActions_play_note"></block>
+        <block type="robActions_led_on">
+            <value name="COLOR">
+                <block type="robColour_picker">
+                    <field name="COLOUR">#ff0000</field>
+                </block>
+            </value>
+        </block>
+        <block type="robActions_led_off"></block>
+    </category>
+    <category name="TOOLBOX_SENSOR" svg="true">
+        <block type='robSensors_key_getSample'></block>
+        <block type="robSensors_infrared_getSample"></block>
+        <block type="robSensors_gyro_getSample"></block>
+        <block type="robSensors_timer_getSample"></block>
+        <block type="robSensors_timer_reset"></block>
+    </category>
+    <category name="TOOLBOX_CONTROL" svg="true">
+        <block type="robControls_if"></block>
+        <block type="robControls_ifElse"></block>
+        <block type="robControls_loopForever"></block>
+        <block type="controls_whileUntil">
+            <value name="BOOL">
+                <block type="robSensors_key_getSample"></block>
+            </value>
+        </block>
+        <block type="robControls_wait_time">
+            <value name="WAIT">
+                <block type="math_number">
+                    <field name="NUM">500</field>
+                </block>
+            </value>
+        </block>
+        <block type='robControls_wait_for'>
+            <value name='WAIT0'>
+                <block type='logic_compare'>
+                    <value name='A'>
+                        <block type='robSensors_getSample'></block>
+                    </value>
+                    <value name='B'>
+                        <block type='logic_boolean'></block>
+                    </value>
+                </block>
+            </value>
+        </block>
+    </category>
+    <category name="TOOLBOX_LOGIC" svg="true">
+        <block type="logic_compare"></block>
+        <block type="logic_operation"></block>
+        <block type="logic_boolean"></block>
+    </category>
+    <category name="TOOLBOX_MATH" svg="true">
+        <block type="rob_math_number"></block>
+        <block type="math_number"></block>
+        <block type="math_arithmetic"></block>
+        <block type="math_random_int">
+            <value name="FROM">
+                <block type="math_number">
+                    <field name="NUM">1</field>
+                </block>
+            </value>
+            <value name="TO">
+                <block type="math_number">
+                    <field name="NUM">100</field>
+                </block>
+            </value>
+        </block>
+    </category>
+    <category name="TOOLBOX_TEXT" svg="true">
+        <block type="text"></block>
+        <block type="text_comment"></block>
+    </category>
+    <category name="TOOLBOX_COLOUR" svg="true">
+        <block type="robColour_picker">
+            <field name="COLOUR">#585858</field>
+        </block>
+        <block type="robColour_picker">
+            <field name="COLOUR">#000000</field>
+        </block>
+        <block type="robColour_picker">
+            <field name="COLOUR">#0057a6</field>
+        </block>
+        <block type="robColour_picker">
+            <field name="COLOUR">#00642e</field>
+        </block>
+        <block type="robColour_picker">
+            <field name="COLOUR">#f7d117</field>
+        </block>
+        <block type="robColour_picker">
+            <field name="COLOUR">#b30006</field>
+        </block>
+        <block type="robColour_picker">
+            <field name="COLOUR">#FFFFFF</field>
+        </block>
+        <block type="robColour_picker">
+            <field name="COLOUR">#532115</field>
+        </block>
+    </category>
+    <category name="TOOLBOX_VARIABLE" custom="VARIABLE" svg="true"></category>
+</toolbox_set>
+
+<toolbox_set id="toolboxExpert" style="display: none">
+    <category name="TOOLBOX_ACTION" svg="true">
+        <category name="TOOLBOX_MOVE" svg="true">
+            <block type="robActions_motor_on_for">
+                <value name="POWER">
+                    <block type="math_number">
+                        <field name="NUM">30</field>
+                    </block>
+                </value>
+                <value name="VALUE">
+                    <block type="math_number">
+                        <field name="NUM">1000</field>
+                    </block>
+                </value>
+            </block>
+            <block type="robActions_motor_on">
+                <value name="POWER">
+                    <block type="math_number">
+                        <field name="NUM">30</field>
+                    </block>
+                </value>
+            </block>
+            <block type="robActions_motor_stop"></block>
+        </category>
+        <category name="TOOLBOX_DISPLAY" svg="true">
+            <block type="robActions_display_text">
+                <value name="OUT">
+                    <block type="text">
+                         <field name="TEXT">Hallo</field>
+                    </block>
+                </value>
+            </block>
+            <block type="robActions_display_clear"></block>
+        </category>
+        <category name="TOOLBOX_SOUND" svg="true">
+            <block type="robActions_play_tone">
+                <value name="FREQUENCE">
+                    <block type="math_number">
+                        <field name="NUM">300</field>
+                    </block>
+                </value>
+                <value name="DURATION">
+                    <block type="math_number">
+                        <field name="NUM">100</field>
+                    </block>
+                </value>
+            </block>
+            <block type="mbedActions_play_note"></block>
+        </category>
+        <category name="TOOLBOX_LIGHT" svg="true">
+            <block type="robActions_led_on">
+                <value name="COLOR">
+                    <block type="robColour_picker">
+                        <field name="COLOUR">#ff0000</field>
+                    </block>
+                </value>
+            </block>
+            <block type="robActions_led_off"></block>
+        </category>
+    </category>
+    <category name="TOOLBOX_SENSOR" svg="true">
+        <block type='robSensors_key_getSample'></block>
+        <block type='robSensors_gyro_getSample'></block>
+        <block type='robSensors_infrared_getSample'></block>
+        <block type="robSensors_timer_getSample"></block>
+        <block type="robSensors_timer_reset"></block>
+    </category>
+    <category name="TOOLBOX_CONTROL" svg="true">
+        <category name="TOOLBOX_DECISION" svg="true">
+            <block type="robControls_if"></block>
+            <block type="robControls_ifElse"></block>
+        </category>
+        <category name="TOOLBOX_LOOP" svg="true">
+            <block type="robControls_loopForever"></block>
+            <block type="controls_whileUntil"></block>
+            <block type="controls_repeat_ext">
+                <value name="TIMES">
+                    <block type="math_number">
+                        <field name="NUM">10</field>
+                    </block>
+                </value>
+            </block>
+            <block type="robControls_for">
+                <value name="FROM">
+                    <block type="math_number">
+                        <field name="NUM">0</field>
+                    </block>
+                </value>
+                <value name="TO">
+                    <block type="math_number">
+                        <field name="NUM">5</field>
+                    </block>
+                </value>
+                <value name="BY">
+                    <block type="math_number">
+                        <field name="NUM">1</field>
+                    </block>
+                </value>
+            </block>
+            <block type="robControls_forEach"></block>
+            <block type="controls_flow_statements"></block>
+        </category>
+        <category name="TOOLBOX_WAIT" svg="true">
+            <block type="robControls_wait"></block>
+            <block type="robControls_wait_time">
+                <value name="WAIT">
+                    <block type="math_number">
+                        <field name="NUM">500</field>
+                    </block>
+                </value>
+            </block>
+            <block type="robControls_wait_for">
+                <value name="WAIT0">
+                    <block type="logic_compare">
+                        <value name="A">
+                            <block type="robSensors_getSample"></block>
+                        </value>
+                        <value name="B">
+                            <block type="logic_boolean"></block>
+                        </value>
+                    </block>
+                </value>
+            </block>
+        </category>
+    </category>
+    <category name="TOOLBOX_LOGIC" svg="true">
+        <block type="logic_compare"></block>
+        <block type="logic_operation"></block>
+        <block type="logic_negate"></block>
+        <block type="logic_boolean"></block>
+        <block type="logic_null"></block>
+    </category>
+    <category name="TOOLBOX_MATH" svg="true">
+        <block type="math_number"></block>
+        <block type="math_arithmetic"></block>
+        <block type="math_single"></block>
+        <block type="math_trig"></block>
+        <block type="math_constant"></block>
+        <block type="math_number_property"></block>
+        <block type="robMath_change">
+            <value name="DELTA">
+                <block type="math_number">
+                    <field name="NUM">1</field>
+                </block>
+            </value>
+        </block>
+        <block type="math_round"></block>
+        <block type="math_on_list"></block>
+        <block type="math_modulo"></block>
+        <block type="math_constrain">
+            <value name="LOW">
+                <block type="math_number">
+                    <field name="NUM">1</field>
+                </block>
+            </value>
+            <value name="HIGH">
+                <block type="math_number">
+                    <field name="NUM">100</field>
+                </block>
+            </value>
+        </block>
+        <block type="math_random_int">
+            <value name="FROM">
+                <block type="math_number">
+                    <field name="NUM">1</field>
+                </block>
+            </value>
+            <value name="TO">
+                <block type="math_number">
+                    <field name="NUM">100</field>
+                </block>
+            </value>
+        </block>
+        <block type="math_random_float"></block>
+    </category>
+    <category name="TOOLBOX_TEXT" svg="true">
+        <block type="text"></block>
+        <block type="text_comment"></block>
+        <block type="robText_join"></block>
+        <block type="robText_append"></block>
+    </category>
+    <category name="TOOLBOX_COLOUR" svg="true">
+        <block type="robColour_picker">
+            <field name="COLOUR">#585858</field>
+        </block>
+        <block type="robColour_picker">
+            <field name="COLOUR">#000000</field>
+        </block>
+        <block type="robColour_picker">
+            <field name="COLOUR">#0057a6</field>
+        </block>
+        <block type="robColour_picker">
+            <field name="COLOUR">#00642e</field>
+        </block>
+        <block type="robColour_picker">
+            <field name="COLOUR">#f7d117</field>
+        </block>
+        <block type="robColour_picker">
+            <field name="COLOUR">#b30006</field>
+        </block>
+        <block type="robColour_picker">
+            <field name="COLOUR">#FFFFFF</field>
+        </block>
+        <block type="robColour_picker">
+            <field name="COLOUR">#532115</field>
+        </block>
+    </category>
+    <category name="TOOLBOX_VARIABLE" custom="VARIABLE" svg="true"></category>
+    <category name="TOOLBOX_PROCEDURE" custom="PROCEDURE" svg="true"></category>
+</toolbox_set>
+
+<toolbox_set id="toolbox-Configuration" style="display: none">
+    <category name="TOOLBOX_ACTION" svg="true">
+        <block type=robConf_motor></block>
+        <block type=robConf_buzzer></block>
+        <block type=robConf_led></block>
+    </category>
+    <category name="TOOLBOX_SENSOR" svg="true">
+        <block type="robConf_infrared"></block>
+        <block type="robConf_gyro"></block>
+        <block type="robConf_key"></block>
+    </category>
+</toolbox_set>
+	</body>
+</html>

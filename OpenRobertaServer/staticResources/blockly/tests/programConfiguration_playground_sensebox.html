@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Program and Configuration Playground</title>
+<script src="../blockly_compressed.js"></script>
+<!-- <script src="../blocks_compressed.js"></script> -->
+<script src="../msg/js/de.js"></script>
+<script src="../core/blockly.js"></script>
+<script src="../core/css.js"></script>
+<script src="../core/inject.js"></script>
+<script src="../core/field.js"></script>
+<script src="../core/field_label.js"></script>
+<script src="../core/field_dropdown.js"></script>
+<script src="../core/field_textinput.js"></script>
+<script src="../core/workspace.js"></script>
+<script src="../core/workspace_svg.js"></script>
+<script src="../core/icon.js"></script>
+<script src="../core/block.js"></script>
+<script src="../core/block_svg.js"></script>
+<script src="../core/block_render_svg.js"></script>
+<script src="../core/toolbox.js"></script>
+<script src="../core/xml.js"></script>
+<script src="../core/variables.js"></script>
+<script src="../core/procedures.js"></script>
+<script src="../core/mutator.js"></script>
+<script src="../core/mutatorPlus.js"></script>
+<script src="../core/mutatorMinus.js"></script>
+<script src="../core/contextmenu.js"></script>
+<script src="../core/rob_controls.js"></script>
+<script src="../core/tooltip.js"></script>
+<script src="../core/connection.js"></script>
+<script src="../core/rendered_connection.js"></script>
+<script src="../core/warning.js"></script>
+<script src="../core/error.js"></script>
+<script src="../core/comment.js"></script>
+<script src="../core/bubble.js"></script>
+<script src="../core/trashcan.js"></script>
+<script src="../core/utils.js"></script>
+<script src="../core/xml.js"></script>
+<script src="../core/rob_configuration.js"></script>
+<script src="../blocks/logic.js"></script>
+<script src="../blocks/loops.js"></script>
+<script src="../blocks/math.js"></script>
+<script src="../blocks/text.js"></script>
+<script src="../blocks/lists.js"></script>
+<script src="../blocks/colour.js"></script>
+<script src="../blocks/variables.js"></script>
+<script src="../blocks/procedures.js"></script>
+<script src="../blocks/mbedActions.js"></script>
+<script src="../blocks/mbedColour.js"></script>
+<script src="../blocks/mbedCommunication.js"></script>
+<script src="../blocks/mbedControls.js"></script>
+<script src="../blocks/mbedImage.js"></script>
+<script src="../blocks/robControls.js"></script>
+<script src="../blocks/robSensors.js"></script>
+<script src="../blocks/robSensorDefinitions.js"></script>
+<script src="../blocks/robConfig.js"></script>
+<script src="../blocks/robConfigDefinitions.js"></script>
+<script src="../blocks/robActions.js"></script>
+<script src="../blocks/robBrick.js"></script>
+<link rel="stylesheet" type="text/css" href="typicons.css">
+</link>
+<script>
+    'use strict';
+    var workspace = {};
+    var options = {
+        comments : true,
+        collapse : true,
+        disable : true,
+        maxBlocks : Infinity,
+        media : '../media/',
+        oneBasedIndex : true,
+        readOnly : false,
+        //rtl: false,
+        scrollbars : true,
+        trashcan : true,
+        //toolbox: null,
+        //horizontalLayout: false,
+        //toolboxPosition: 'start',
+        zoom : {
+            controls : true,
+            wheel : false,
+            startScale : 1.0,
+            maxScale : 4,
+            minScale : 0.25,
+            scaleSpeed : 1.1
+        },
+        checkInTask : [ 'start', '_def', 'event', '-Brick' ],
+        variableDeclaration : true,
+        robControls : true
+    };
+
+    function start() {
+        var toolbox = {};
+        toolbox.Program = document.getElementById('toolbox-Program');
+        toolbox.Configuration = document.getElementById('toolbox-Configuration');
+        startBlocklyInstance(workspace, 'blocklyDiv', false, false, 'start', toolbox.Program);
+        startBlocklyInstance(workspace, 'bricklyDiv', false, false, 'start', toolbox.Configuration);
+
+        var blocklyArea = document.getElementById('blocklyArea');
+        var blocklyDiv = document.getElementById('blocklyDiv');
+        var workspacePlayground = Blockly.inject(blocklyDiv, {
+            toolbox : document.getElementById('toolbox')
+        });
+        var onresize = function(e) {
+            // Compute the absolute coordinates and dimensions of blocklyArea.
+            var element = blocklyArea;
+            var x = 0;
+            var y = 0;
+            do {
+                x += element.offsetLeft;
+                y += element.offsetTop;
+                element = element.offsetParent;
+            } while (element);
+            // Position blocklyDiv over blocklyArea.
+            blocklyDiv.style.left = x + 'px';
+            blocklyDiv.style.top = y + 'px';
+            blocklyDiv.style.width = blocklyArea.offsetWidth + 'px';
+            blocklyDiv.style.height = blocklyArea.offsetHeight + 'px';
+            var element = bricklyArea;
+            x = 0;
+            y = 0;
+            do {
+                x += element.offsetLeft;
+                y += element.offsetTop;
+                element = element.offsetParent;
+            } while (element);
+            // Position blocklyDiv over blocklyArea.
+            bricklyDiv.style.left = x + 'px';
+            bricklyDiv.style.top = y + 'px';
+            bricklyDiv.style.width = bricklyArea.offsetWidth + 'px';
+            bricklyDiv.style.height = bricklyArea.offsetHeight + 'px';
+        };
+        window.addEventListener('resize', onresize, false);
+        onresize();
+        Blockly.svgResize(workspace.bricklyDiv);
+        Blockly.svgResize(workspace.blocklyDiv);
+    }
+
+    function startBlocklyInstance(workspace, suffix, rtl, horizontalLayout, position, toolbox) {
+        options.rtl = rtl;
+        options.toolbox = toolbox;
+        options.horizontalLayout = horizontalLayout;
+        options.toolboxPosition = position;
+        workspace[suffix] = Blockly.inject(suffix, options);
+        workspace[suffix].setDevice({
+            group : 'sensebox',
+            robot : 'sensebox'
+        });
+
+    }
+</script>
+
+<style>
+html, body {
+	height: 100%;
+}
+
+body {
+	background-color: #fff;
+	font-family: sans-serif;
+}
+
+h1 {
+	font-weight: normal;
+	font-size: 140%;
+}
+
+#octaweb {
+	width: 100%;
+}
+
+#octaweb th {
+	padding-top: 1em;
+	width: 50%;
+}
+
+#octaweb td {
+	width: 50%;
+}
+
+#octaweb td>div {
+	height: 480px;
+	width: 100%;
+}
+</style>
+</head>
+<body onload="start()">
+    <h1>Blockly Multi Playground</h1>
+
+    <form id="options">
+        <select name="toolbox" onchange="document.forms.options.submit()">
+            <option value="categories">Categories</option>
+            <option value="simple">Simple</option>
+        </select>
+    </form>
+
+    <table id="octaweb">
+        <tr>
+            <th>Program</th>
+            <th>Configuration</th>
+        </tr>
+        <tr>
+            <td><div id="blocklyArea"></div></td>
+            <td><div id="bricklyArea"></div></td>
+        </tr>
+    </table>
+    <div id="blocklyDiv" style="position: absolute"></div>
+    <div id="bricklyDiv" style="position: absolute"></div>
+
+    <toolbox_set id="toolbox-Program" style="display: none">
+    <category name="TOOLBOX_ACTION" svg="true">
+        <block type="robActions_play_tone">
+        <value name="FREQUENCE">
+            <block type="math_number">
+            <field name="NUM">300</field>
+            </block>
+        </value>
+        <value name="DURATION">
+            <block type="math_number">
+            <field name="NUM">100</field>
+            </block>
+        </value>
+        </block>
+        <block type="robActions_plot_point"></block>
+        <block type="robActions_serial_print">
+        <value name="OUT">
+            <block type="text">
+            <field name="TEXT">Hallo</field>
+            </block>
+        </value>
+        </block>
+        <block type="robActions_brickLight_on"></block>
+        <block type="robActions_sendData"></block>
+    </category>
+    <category name="TOOLBOX_SENSOR" svg="true">
+        <block type="robSensors_key_getSample"></block>
+        <block type="robSensors_light_getSample"></block>
+        <block type="robSensors_potentiometer_getSample"></block>
+        <block type="robSensors_sound_getSample"></block>
+        <block type="robSensors_ultrasonic_getSample"></block>
+        <block type="robSensors_humidity_getSample"></block>
+        <block type="robSensors_temperature_getSample"></block>
+        <block type="robSensors_lightveml_getSample"></block>
+        <block type="robSensors_accelerometer_getSample"></block>
+        <block type="robSensors_environmental_getSample"></block>
+        <block type="robSensors_timer_getSample"></block>
+        <block type="robSensors_timer_reset"></block>
+    </category>
+    <category name="TOOLBOX_CONTROL" svg="true">
+        <block type="robControls_if"></block>
+        <block type="robControls_ifElse"></block>
+        <block type="robControls_loopForever"></block>
+        <block type="controls_repeat"></block>
+        <block type="robControls_wait_time">
+        <value name="WAIT">
+            <block type="math_number">
+            <field name="NUM">500</field>
+            </block>
+        </value>
+        </block>
+        <block type="robControls_wait_for">
+        <value name="WAIT0">
+            <block type="logic_compare">
+            <value name="A">
+                <block type="robSensors_getSample"/>
+            </value>
+            <value name="B">
+                <block type="math_number">
+                <field name="NUM">50</field>
+                </block>
+            </value>
+            </block>
+        </value>
+        </block>
+    </category>
+    <category name="TOOLBOX_LOGIC" svg="true">
+        <block type="logic_compare"></block>
+        <block type="logic_operation"></block>
+        <block type="logic_boolean"></block>
+    </category>
+    <category name="TOOLBOX_MATH" svg="true">
+        <block type="math_number"></block>
+        <block type="math_arithmetic"></block>
+    </category>
+    <category name="TOOLBOX_TEXT" svg="true">
+        <block type="text"></block>
+        <block type="text_comment"></block>
+        <block type="robText_join"></block>
+    </category>
+    <category name="TOOLBOX_VARIABLE" custom="VARIABLE" svg="true"/>
+    </toolbox_set>
+
+    <toolbox_set id="toolbox-Configuration" style="display: none">
+    <category name="TOOLBOX_ACTION" svg="true">
+        <block type="robConf_led"></block>
+        <block type="robConf_rgbled"></block>
+        <block type="robConf_buzzer"></block>
+        <block type="robConf_wireless"></block>
+        <block type="robConf_lcdi2c"></block>
+        <block type="robConf_plotting"></block>
+        <block type="robBrick_senseBox-Brick"></block>
+    </category>
+    <category name="TOOLBOX_SENSOR" svg="true">
+        <block type="robConf_key" ></block>
+        <block type="robConf_light" ></block>
+        <block type="robConf_potentiometer" ></block>
+        <block type="robConf_humidity" ></block>
+        <block type="robConf_sound" ></block>
+        <block type="robConf_lightveml" ></block>
+        <block type="robConf_accelerometer" ></block>
+        <block type="robConf_environmental" ></block>
+    </category>
+    </toolbox_set>
+</body>
+</html>

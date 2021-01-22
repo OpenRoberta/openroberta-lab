@@ -1,22 +1,71 @@
 include: "classpath:/robotCommon.yml"
 block:
-  COLOR_HEX_STRING:
-      category: EXPR
-      implementor: de.fhg.iais.roberta.syntax.lang.expr.ColorHexString
-      type: [naoColour_picker]
-  LED_SET_ACTION:
-      category: ACTOR
-      implementor: de.fhg.iais.roberta.syntax.action.raspberrypi.LedSetAction
-      type: [robActions_set_led]
+  SMOOTHED_SENSING:
+    category: SENSOR
+    implementor: de.fhg.iais.roberta.syntax.sensors.raspberrypi.SmoothedSensor
+    type: [ robSensors_smoothedout_getSample ]
+
+  LED_BLINK_FREQ_ACTION:
+    category: ACTOR
+    implementor: de.fhg.iais.roberta.syntax.actors.raspberrypi.LedBlinkFrequencyAction
+    type: [ robActions_led_blink_frequency ]
+
   LED_BLINK_ACTION:
-      category: ACTOR
-      implementor: de.fhg.iais.roberta.syntax.action.raspberrypi.LedBlinkAction
-      type: [robActions_led_blink]
-  LED_DIM_ACTION:
-      category: ACTOR
-      implementor: de.fhg.iais.roberta.syntax.action.raspberrypi.LedDimAction
-      type: [robActions_led_dim]
-  LED_GET_ACTION:
-      category: ACTOR
-      implementor: de.fhg.iais.roberta.syntax.action.raspberrypi.LedGetAction
-      type: [robActions_led_get]
+    category: ACTOR
+    implementor: de.fhg.iais.roberta.syntax.actors.raspberrypi.LedBlinkAction
+    type: [ robActions_led_blink ]
+
+  RGBLED_BLINK_ACTION:
+    category: ACTOR
+    implementor: de.fhg.iais.roberta.syntax.actors.raspberrypi.RgbLedBlinkAction
+    type: [ robActions_rgbled_blink ]
+
+  RGBLED_BLINK_FREQ_ACTION:
+    category: ACTOR
+    implementor: de.fhg.iais.roberta.syntax.actors.raspberrypi.RgbLedBlinkFrequencyAction
+    type: [ robActions_rgbled_blink_frequency ]
+
+  LED_PULSE_ACTION:
+    category: ACTOR
+    implementor: de.fhg.iais.roberta.syntax.actors.raspberrypi.LedPulseAction
+    type: [ robActions_led_pulse ]
+
+  RGBLED_PULSE_ACTION:
+    category: ACTOR
+    implementor: de.fhg.iais.roberta.syntax.actors.raspberrypi.RgbLedPulseAction
+    type: [ robActions_rgbled_pulse ]
+
+  BUZZER_BEEP_ACTION:
+    category: ACTOR
+    implementor: de.fhg.iais.roberta.syntax.actors.raspberrypi.BuzzerBeepAction
+    type: [ robActions_rasp_buzzer_beep ]
+
+  BUZZER_ACTION:
+    category: ACTOR
+    implementor: de.fhg.iais.roberta.syntax.actors.raspberrypi.BuzzerAction
+    type: [ robActions_rasp_buzzer_on ]
+
+  MOTOR_ON_ACTION_RASP:
+    category: ACTOR
+    implementor: de.fhg.iais.roberta.syntax.actors.raspberrypi.MotorRaspOnAction
+    type: [ robActions_motor_on_rasp, robActions_motor_on_for_rasp, robActions_robot_on_rasp, robActions_robot_on_for_rasp ]
+
+  MOTOR_SERVO_ACTION_RASP:
+    category: ACTOR
+    implementor: de.fhg.iais.roberta.syntax.actors.raspberrypi.ServoRaspOnAction
+    type: [ robActions_servo_motor_on_rasp, robActions_angularservo_motor_on_rasp ]
+
+  GPIO_WRITE_VALUE:
+    category: ACTOR
+    implementor: de.fhg.iais.roberta.syntax.generic.raspberrypi.WriteGpioValueAction
+    type: [ robActions_write_gpio ]
+
+mode:
+  smoothedout: [ IS_ACTIVE ]
+
+configuration:
+  PWM_INPUT: [ robConf_pwmin ]
+  SMOOTHED_OUTPUT: [ robConf_smoothedout ]
+  TONALBUZZER: [ robConf_tonalbuzzer ]
+  ROBOT: [ robConf_robot ]
+  RASPBERRYPI: [robBrick_Raspberrypi-Brick]

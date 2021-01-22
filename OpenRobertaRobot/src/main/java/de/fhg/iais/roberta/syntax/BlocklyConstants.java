@@ -4,9 +4,6 @@ package de.fhg.iais.roberta.syntax;
  * This class contains all Blockly name constants that are used in the XML representation of the block.
  */
 public final class BlocklyConstants {
-    private BlocklyConstants() {
-        // no objects :-)
-    }
 
     public static final String ADD = "ADD";
     public static final String ELSE = "ELSE";
@@ -100,9 +97,7 @@ public final class BlocklyConstants {
     public static final String JOYSTICKAXIS = "JOYSTICKAXIS";
     public static final String STATE = "STATE";
     public static final String EXPRESSION = "EXPRESSION";
-
     public static final String STRING_CONST_TEXT = "text";
-
     public static final String ROB_CONTROLS_START_ACTIVITY = "robControls_start_activity";
     public static final String ROB_ACTIONS_MOTOR_DIFF_ON = "robActions_motorDiff_on";
     public static final String ROB_ACTIONS_BRICK_LIGHT_OFF = "robActions_brickLight_off";
@@ -132,15 +127,12 @@ public final class BlocklyConstants {
     public static final String ROB_SENSOR_GET_SAMPLE_ARDU = "robSensors_getSample_ardu";
     public static final String ROB_COLOUR_PICKER = "robColour_picker";
     public static final String CONNECTION_NXT = "robCommunication_connection";
-
     public static final String MBED_SENSOR_TEMPERATURE_GET_SAMPLE = "mbedSensors_temperature_getSample";
     public static final String ROB_SENSOR_TEMPERATURE_GET_SAMPLE = "makeblockSensors_temperature_getSample";
-
     public static final String ROB_GLOBAL_VARIABLES_DECLARE = "robGlobalvariables_declare";
     public static final String ROB_LOCAL_VARIABLES_DECLARE = "robLocalVariables_declare";
     public static final String VARIABLE_SET = "variables_set";
     public static final String VARIABLE_GET = "variables_get";
-
     public static final String ROB_CONTROLS_IF = "robControls_if";
     public static final String ROB_CONTROLS_IF_ELSE = "robControls_ifElse";
     public static final String ROB_CONTROLS_LOOP_FOREVER = "robControls_loopForever";
@@ -152,14 +144,12 @@ public final class BlocklyConstants {
     public static final String ROB_CONTROLS_FOR_EACH = "robControls_forEach";
     public static final String CONTROLS_REPEAT = "controls_repeat";
     public static final String CONTROLS_REPEAT_EXT = "controls_repeat_ext";
-
     public static final String LOGIC_TERNARY = "logic_ternary";
     public static final String LOGICAL_NULL = "logic_null";
     public static final String LOGICAL_BOOLEAN = "logic_boolean";
     public static final String LOGIC_NEGATE = "logic_negate";
     public static final String LOGIC_COMPARE = "logic_compare";
     public static final String LOGIC_COPERATION = "logic_operation";
-
     public static final String MATH_ARITHMETIC = "math_arithmetic";
     public static final String ROB_MATH_CHANGE = "robMath_change";
     public static final String MATH_CHANGE = "math_change";
@@ -174,16 +164,13 @@ public final class BlocklyConstants {
     public static final String MATH_RANDOM_INT = "math_random_int";
     public static final String MATH_RANDOM_FLOAT = "math_random_float";
     public static final String MATH_NUMBER_PROPERTY = "math_number_property";
-
     public static final String TEXT_APPEND = "robText_append";
     public static final String ROB_TEXT_JOIN = "robText_join";
     public static final String TEXT_JOIN = "text_join";
     public static final String TEXT_PRINT = "text_print";
     public static final String TEXT_COMMENT = "text_comment";
-
     public static final String CONTROLS_IF = "controls_if";
     public static final String CONTROLS_FLOW_STATEMENT = "controls_flow_statements";
-
     public static final String ROB_CONTROLS_WAIT_FOR = "robControls_wait_for";
     public static final String ROB_CONTROLS_WAIT = "robControls_wait";
     public static final String ROB_CONTROLS_WAIT_TIME = "robControls_wait_time";
@@ -208,11 +195,9 @@ public final class BlocklyConstants {
     public static final String ROB_ACTIONS_PLAY_GET_VOLUME = "robActions_play_getVolume";
     public static final String ROB_ACTIONS_BRICK_LIGHT_RESET = "robActions_brickLight_reset";
     public static final String ROB_ACTIONS_MOTOR_DIFF_STOP = "robActions_motorDiff_stop";
-
     public static final String ROB_CONTROLS_START = "robControls_start";
     public static final String ROB_CONTROLS_START_ARDU = "robControls_start_ardu";
     public static final String ROB_CONTROLS_ACTIVITY = "robControls_activity";
-
     public static final String LISTS_CREATE_EMPTY = "lists_create_empty";
     public static final String LISTS_INDEX_OF = "lists_indexOf";
     public static final String ROB_LISTS_INDEX_OF = "robLists_indexOf";
@@ -230,13 +215,11 @@ public final class BlocklyConstants {
     public static final String LISTS_IS_EMPTY = "lists_isEmpty";
     public static final String ROB_LISTS_LENGTH = "robLists_length";
     public static final String ROB_LISTS_IS_EMPTY = "robLists_isEmpty";
-
     public static final String ROB_PROCEDURES_IF_RETURN = "robProcedures_ifreturn";
     public static final String ROB_PROCEDURES_NO_RETURN = "robProcedures_defnoreturn";
     public static final String ROB_PROCEDURES_CALL_NO_RETURN = "robProcedures_callnoreturn";
     public static final String ROB_PROCEDURES_CALL_RETURN = "robProcedures_callreturn";
     public static final String ROB_PROCEDURES_RETURN = "robProcedures_defreturn";
-
     public static final String COM_CHECK_CONNECTION = "robCommunication_checkConnection";
     public static final String COM_START_CONNECTION = "robCommunication_startConnection";
     public static final String COM_SEND_BLOCK = "robCommunication_sendBlock";
@@ -264,7 +247,6 @@ public final class BlocklyConstants {
     public static final String MICROPHONE = "MICROPHONE";
     public static final String ARMSIDE = "ARM";
     public static final String ARMPART = "ARMPAIR";
-
     public static final String ROB_BRICK_GYRO = "robBrick_gyro";
     public static final String ROB_BRICK_INFRARED = "robBrick_infrared";
     public static final String ROB_BRICK_ULTRASONIC = "robBrick_ultrasonic";
@@ -272,19 +254,16 @@ public final class BlocklyConstants {
     public static final String ROB_BRICK_COLOUR = "robBrick_colour";
     public static final String ROB_BRICK_LIGHT = "robBrick_light";
     public static final String ROB_BRICK_SOUND = "robBrick_sound";
-
     public static final String SIM_LED_ON = "sim_LED_on";
     public static final String SIM_LED_OFF = "sim_LED_off";
     public static final String SENSOR_LIGHT_ON = "sensorLight_on";
     public static final String SENSOR_LIGHT_OFF = "sensorLight_off";
-
     public static final String SIM_GET_SAMPLE = "sim_getSample";
     public static final String SIM_TOUCH_IS_PRESSED = "sim_touch_isPressed";
     public static final String SIM_ULTRASONIC_GET_SAMPLE = "sim_ultrasonic_getSample";
     public static final String SIM_COLOUR_GET_SAMPLE = "sim_colour_getSample";
     public static final String SIM_LIGHT_GET_SAMPLE = "sim_light_getSample";
     public static final String SIM_SOUND_GET_SAMPLE = "sim_sound_getSample";
-
     public static final String SIM_MOTOR_ON = "sim_motor_on";
     public static final String SIM_MOTOR_ON_FOR = "sim_motor_on_for";
     public static final String SIM_MOTOR_STOP = "sim_motor_stop";
@@ -297,7 +276,6 @@ public final class BlocklyConstants {
     public static final String GREEN = "GREEN";
     public static final String BLUE = "BLUE";
     public static final String ALPHA = "WHITE";
-
     public static final String X = "X";
     public static final String Y = "Y";
     public static final String Z = "Z";
@@ -324,7 +302,6 @@ public final class BlocklyConstants {
     public static final String VALUETYPE = "VALUETYPE";
     public static final String VOICEPITCH = "VOICEPITCH";
     public static final String VOICESPEED = "VOICESPEED";
-
     public static final String MODE = "MODE";
     public static final String PHRASE = "PHRASE";
     public static final String ANSWER = "ANSWER";
@@ -383,4 +360,14 @@ public final class BlocklyConstants {
     public static final String PROTOCOL = "PROTOCOL";
     public static final String TICKMARK = "TICKMARK";
     public static final String ON = "ON";
+    public static final String ON_TIME = "ON_TIME";
+    public static final String OFF_TIME = "OFF_TIME";
+    public static final String N_TIMES = "N_TIMES";
+    public static final String ON_COLOR = "ON_COLOR";
+    public static final String OFF_COLOR = "OFF_COLOR";
+    public static final String FADE_IN_TIME = "FADE_IN_TIME";
+    public static final String FADE_OUT_TIME = "FADE_OUT_TIME";
+    private BlocklyConstants() {
+        // no objects :-)
+    }
 }

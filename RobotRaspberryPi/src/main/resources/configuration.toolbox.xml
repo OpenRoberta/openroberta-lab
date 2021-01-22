@@ -1,0 +1,24 @@
+<toolbox_set id='toolbox' style='display: none'>
+    <category name="TOOLBOX_ACTION" svg="true">
+        <block type="robConf_led"></block>
+        <block type="robConf_pwmled" ></block>
+        <block type="robConf_rgbled"></block>
+        <block type="robConf_buzzer"></block>
+        <block type="robConf_tonalbuzzer"></block>
+        <block type="robConf_digitalin"></block>
+        <block type="robConf_pwmin"></block>
+        <block type="robConf_motor"></block>
+        <block type="robConf_servo"></block>
+        <block type="robConf_angularservo"></block>
+        <block type="robConf_phasemotor"></block>
+        <block type="robConf_robot"></block>
+    </category>
+    <category name="TOOLBOX_SENSOR" svg="true">
+        <block type="robConf_digitalout"></block>
+        <block type="robConf_smoothedout"></block>
+        <block type="robConf_key" ></block>
+        <block type="robConf_motion" ></block>
+        <block type="robConf_light"></block>
+        <block type="robConf_ultrasonic" ></block>
+    </category>
+</toolbox_set>

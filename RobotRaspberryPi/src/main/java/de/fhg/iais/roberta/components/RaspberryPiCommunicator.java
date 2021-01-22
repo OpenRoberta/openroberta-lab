@@ -1,11 +1,9 @@
-package de.fhg.iais.roberta.components.raspberrypi;
+package de.fhg.iais.roberta.components;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Properties;
 
 import com.jcraft.jsch.Channel;
@@ -13,93 +11,19 @@ import com.jcraft.jsch.ChannelExec;
 import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.Session;
 
-import de.fhg.iais.roberta.util.PluginProperties;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
 public class RaspberryPiCommunicator {
-    int sshPort = 22;
-    private final PluginProperties pluginProperties;
+    String ip;
+    int port;
+    String userName;
+    String password;
 
-    public RaspberryPiCommunicator(PluginProperties pluginProperties) {
-        this.pluginProperties = pluginProperties;
-    }
-
-    /**
-     * upload a file. If not successful, throw an exception
-     */
-    public void uploadFile(String path, String programName) throws Exception {
-        List<String> fileNames = new ArrayList<>();
-        fileNames.add("__init__.py");
-        fileNames.add("blockly_methods.py");
-        fileNames.add("hal.py");
-
-        Session session = null;
-        try {
-            String user = this.pluginProperties.getStringProperty("raspi.username");
-            String ip = this.pluginProperties.getStringProperty("raspi." + programName + ".ip");
-            String password = this.pluginProperties.getStringProperty("raspi.password");
-            programName += ".py";
-            session = createSession(user, ip, 22, password);
-            sshCommand(session, "rm " + programName);
-            sshCommand(session, "rm -r roberta");
-            sshCommand(session, "mkdir roberta");
-            for ( String fname : fileNames ) {
-                copyLocalToRemote(session, this.pluginProperties.getCompilerResourceDir() + "roberta", "roberta", fname);
-            }
-            copyLocalToRemote(createSession(user, ip, 22, password), path, ".", programName);
-            sshCommand(session, "python " + programName);
-            sshCommand(session, "rm " + programName);
-            sshCommand(session, "rm -r roberta");
-        } finally {
-            try {
-                if ( session != null ) {
-                    session.disconnect();
-                }
-            } catch ( Exception e ) {
-                // OK
-            }
-        }
-    }
-
-    /**
-     * create an ssh command. If not successful, throw an exception
-     */
-    private void sshCommand(Session session, String command) throws Exception {
-        Channel channel = null;
-        try {
-            channel = session.openChannel("exec");
-            ((ChannelExec) channel).setCommand(command);
-            channel.setInputStream(null);
-            ((ChannelExec) channel).setErrStream(System.err);
-            InputStream in = channel.getInputStream();
-            channel.connect();
-
-            //show messages on the ssh channel
-            byte[] tmp = new byte[1024];
-            while ( true ) {
-                while ( in.available() > 0 ) {
-                    int i = in.read(tmp, 0, 1024);
-                    if ( i < 0 ) {
-                        break;
-                    }
-                }
-                if ( channel.isClosed() ) {
-                    if ( in.available() > 0 ) {
-                        continue;
-                    }
-                    break;
-                }
-                Thread.sleep(1000);
-            }
-        } finally {
-            try {
-                if ( channel != null ) {
-                    channel.disconnect();
-                }
-            } catch ( Exception e ) {
-                // OK
-            }
-        }
+    public RaspberryPiCommunicator(String ip, int port, String userName, String password) {
+        this.ip = ip;
+        this.port = port;
+        this.userName = userName;
+        this.password = password;
     }
 
     /**
@@ -220,5 +144,72 @@ public class RaspberryPiCommunicator {
             sb.append((char) c);
         } while ( c != '\n' );
         throw new DbcException("Error. code: " + b + " msg: " + sb.toString());
+    }
+
+    /**
+     * upload a file. If not successful, throw an exception
+     */
+    public void uploadFile(String path, String programName) throws Exception {
+
+        Session session = null;
+        try {
+            programName += ".py";
+            session = createSession(this.userName, this.ip, this.port, this.password);
+            sshCommand(session, "rm " + programName);
+
+            copyLocalToRemote(session, path, ".", programName);
+            sshCommand(session, "python3 " + programName);
+            sshCommand(session, "rm " + programName);
+
+        } finally {
+            try {
+                if ( session != null ) {
+                    session.disconnect();
+                }
+            } catch ( Exception e ) {
+                // OK
+            }
+        }
+    }
+
+    /**
+     * create an ssh command. If not successful, throw an exception
+     */
+    private void sshCommand(Session session, String command) throws Exception {
+        Channel channel = null;
+        try {
+            channel = session.openChannel("exec");
+            ((ChannelExec) channel).setCommand(command);
+            channel.setInputStream(null);
+            ((ChannelExec) channel).setErrStream(System.err);
+            InputStream in = channel.getInputStream();
+            channel.connect();
+
+            //show messages on the ssh channel
+            byte[] tmp = new byte[1024];
+            while ( true ) {
+                while ( in.available() > 0 ) {
+                    int i = in.read(tmp, 0, 1024);
+                    if ( i < 0 ) {
+                        break;
+                    }
+                }
+                if ( channel.isClosed() ) {
+                    if ( in.available() > 0 ) {
+                        continue;
+                    }
+                    break;
+                }
+                Thread.sleep(1000);
+            }
+        } finally {
+            try {
+                if ( channel != null ) {
+                    channel.disconnect();
+                }
+            } catch ( Exception e ) {
+                // OK
+            }
+        }
     }
 }

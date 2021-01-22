@@ -5,21 +5,21 @@ import java.util.List;
 import com.google.common.collect.ClassToInstanceMap;
 
 import de.fhg.iais.roberta.bean.IProjectBean;
+import de.fhg.iais.roberta.bean.UsedHardwareBean;
 import de.fhg.iais.roberta.components.ConfigurationAst;
+import de.fhg.iais.roberta.components.UsedSensor;
 import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.syntax.action.raspberrypi.LedBlinkAction;
-import de.fhg.iais.roberta.syntax.action.raspberrypi.LedDimAction;
-import de.fhg.iais.roberta.syntax.action.raspberrypi.LedGetAction;
-import de.fhg.iais.roberta.syntax.action.raspberrypi.LedSetAction;
-import de.fhg.iais.roberta.syntax.lang.expr.ColorHexString;
-import de.fhg.iais.roberta.visitor.hardware.IRaspberryPiVisitor;
+import de.fhg.iais.roberta.syntax.SC;
+import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.PinGetValueSensor;
+import de.fhg.iais.roberta.syntax.sensors.raspberrypi.SmoothedSensor;
 
 /**
  * This visitor collects information for used actors and sensors in Blockly program.
  *
  * @author kcvejoski
  */
-public final class RaspberryPiUsedHardwareCollectorVisitor extends AbstractUsedHardwareCollectorVisitor implements IRaspberryPiVisitor<Void> {
+public final class RaspberryPiUsedHardwareCollectorVisitor extends AbstractUsedHardwareCollectorVisitor implements IRaspberryPiCollectorVisitor {
 
     public RaspberryPiUsedHardwareCollectorVisitor(
         List<List<Phrase<Void>>> phrasesSet,
@@ -29,28 +29,19 @@ public final class RaspberryPiUsedHardwareCollectorVisitor extends AbstractUsedH
     }
 
     @Override
-    public Void visitColorHexString(ColorHexString<Void> colorHexString) {
+    public Void visitLightSensor(LightSensor<Void> lightSensor) {
+        return super.visitLightSensor(lightSensor);
+    }
+
+    @Override
+    public Void visitSmoothedSensor(SmoothedSensor<Void> smoothedSensor) {
+        this.getBuilder(UsedHardwareBean.Builder.class).addUsedSensor(new UsedSensor(smoothedSensor.getUserDefinedPort(), SC.SMOOTHED_OUTPUT, smoothedSensor.getMode()));
         return null;
     }
 
     @Override
-    public Void visitLedSetAction(LedSetAction<Void> ledBarSetAction) {
+    public Void visitPinGetValueSensor(PinGetValueSensor<Void> pinGetValueSensor) {
+        this.getBuilder(UsedHardwareBean.Builder.class).addUsedSensor(new UsedSensor(pinGetValueSensor.getUserDefinedPort(), SC.PIN_VALUE, pinGetValueSensor.getMode()));
         return null;
     }
-
-    @Override
-    public Void visitLedBlinkAction(LedBlinkAction<Void> ledBlinkAction) {
-        return null;
-    }
-
-    @Override
-    public Void visitLedDimAction(LedDimAction<Void> ledDimAction) {
-        return null;
-    }
-
-    @Override
-    public Void visitLedGetAction(LedGetAction<Void> ledGetAction) {
-        return null;
-    }
-
 }

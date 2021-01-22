@@ -4,34 +4,18 @@ import java.lang.reflect.Method;
 import java.util.Locale;
 import java.util.Map;
 
+import de.fhg.iais.roberta.blockly.generated.Mutation;
+import de.fhg.iais.roberta.inter.mode.action.*;
+import de.fhg.iais.roberta.mode.action.*;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import de.fhg.iais.roberta.bean.WaitUntilSensorBean;
-import de.fhg.iais.roberta.blockly.generated.Mutation;
-import de.fhg.iais.roberta.inter.mode.action.IBrickLedColor;
-import de.fhg.iais.roberta.inter.mode.action.IDriveDirection;
-import de.fhg.iais.roberta.inter.mode.action.ILanguage;
-import de.fhg.iais.roberta.inter.mode.action.ILightMode;
-import de.fhg.iais.roberta.inter.mode.action.IMotorMoveMode;
-import de.fhg.iais.roberta.inter.mode.action.IMotorSide;
-import de.fhg.iais.roberta.inter.mode.action.IMotorStopMode;
-import de.fhg.iais.roberta.inter.mode.action.IRelayMode;
-import de.fhg.iais.roberta.inter.mode.action.ITurnDirection;
 import de.fhg.iais.roberta.inter.mode.general.IDirection;
 import de.fhg.iais.roberta.inter.mode.general.IIndexLocation;
 import de.fhg.iais.roberta.inter.mode.general.IListElementOperations;
 import de.fhg.iais.roberta.inter.mode.general.IWorkingState;
-import de.fhg.iais.roberta.mode.action.BrickLedColor;
-import de.fhg.iais.roberta.mode.action.DriveDirection;
-import de.fhg.iais.roberta.mode.action.Language;
-import de.fhg.iais.roberta.mode.action.LightMode;
-import de.fhg.iais.roberta.mode.action.MotorMoveMode;
-import de.fhg.iais.roberta.mode.action.MotorSide;
-import de.fhg.iais.roberta.mode.action.MotorStopMode;
-import de.fhg.iais.roberta.mode.action.RelayMode;
-import de.fhg.iais.roberta.mode.action.TurnDirection;
 import de.fhg.iais.roberta.mode.general.Direction;
 import de.fhg.iais.roberta.mode.general.IndexLocation;
 import de.fhg.iais.roberta.mode.general.ListElementOperations;
@@ -126,6 +110,17 @@ public class BlocklyDropdownFactory {
     }
 
     /**
+     * Get a {@link de.fhg.iais.roberta.inter.mode.action.IBuzzerMode} enumeration given string parameter. It is possible for one mode to have multiple string mappings. Throws exception if the mode
+     * does not exists.
+     *
+     * @param mode of the mode
+     * @return mode from the enum {@link BuzzerMode}
+     */
+    public IBuzzerMode getBuzzerMode(String mode) {
+        return BlocklyDropdownFactoryHelper.getModeValue(mode, BuzzerMode.class);
+    }
+
+    /**
      * Get a {@link IBrickLedColor} enumeration given string parameter. It is possible for one mode to have multiple string mappings. Throws exception if the
      * mode does not exists.
      *
@@ -182,6 +177,16 @@ public class BlocklyDropdownFactory {
      */
     public IMotorSide getMotorSide(String motorSide) {
         return BlocklyDropdownFactoryHelper.getModeValue(motorSide, MotorSide.class);
+    }
+    /**
+     * Get motor side from {@link IMotorSide} given string parameter. It is possible for one motor side to have multiple string mappings. Throws exception if
+     * the motor side does not exists.
+     *
+     * @param name of the motor side
+     * @return the motor side from the enum {@link IMotorSide}
+     */
+    public IMotorServoMode getMotorServoMode(String mode) {
+        return BlocklyDropdownFactoryHelper.getModeValue(mode, MotorServoMode.class);
     }
 
     /**

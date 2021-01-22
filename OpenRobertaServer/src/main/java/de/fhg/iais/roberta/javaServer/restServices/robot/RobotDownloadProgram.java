@@ -63,6 +63,7 @@ public class RobotDownloadProgram {
                     break;
                 case "Nao":
                 case "ev3dev":
+                case "RaspberryPi":
                     fileName = programName + ".py";
                     filePath = this.pathToCrosscompilerBaseDir + token + "/" + programName + "/source";
                     break;

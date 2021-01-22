@@ -218,7 +218,7 @@ block:
   TONE_ACTION:
       category: ACTOR
       implementor: de.fhg.iais.roberta.syntax.action.sound.ToneAction
-      type: [robActions_play_tone,mbedActions_play_tone]
+      type: [robActions_play_tone,mbedActions_play_tone, robActions_rasp_play_tone]
   PLAY_NOTE_ACTION:
       category: ACTOR
       implementor: de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction
@@ -234,7 +234,7 @@ block:
   MOTOR_ON_ACTION:
       category: ACTOR
       implementor: de.fhg.iais.roberta.syntax.action.motor.MotorOnAction
-      type: [robActions_motor_on,robActions_motor_on_for,sim_motor_on,sim_motor_on_for,robActions_motor_on_for_ardu,mbedActions_motor_on]
+      type: [robActions_motor_on,robActions_motor_on_for,sim_motor_on,sim_motor_on_for,robActions_motor_on_for_ardu,mbedActions_motor_on, robActions_angularservo_motor_on_for_rasp]
   MOTOR_GET_POWER_ACTION:
       category: ACTOR
       implementor: de.fhg.iais.roberta.syntax.action.motor.MotorGetPowerAction
@@ -242,11 +242,11 @@ block:
   MOTOR_SET_POWER_ACTION:
       category: ACTOR
       implementor: de.fhg.iais.roberta.syntax.action.motor.MotorSetPowerAction
-      type: [robActions_motor_setPower]
+      type: [robActions_motor_setPower, robActions_servo_motor_set_rasp]
   MOTOR_STOP_ACTION:
       category: ACTOR
       implementor: de.fhg.iais.roberta.syntax.action.motor.MotorStopAction
-      type: [robActions_motor_stop,sim_motor_stop,mbedActions_motor_stop,makeblockActions_motor_stop]
+      type: [robActions_motor_stop,sim_motor_stop,mbedActions_motor_stop,makeblockActions_motor_stop, robActions_motor_stop_rasp, robActions_robot_stop_rasp]
   PLAY_FILE_ACTION:
       category: ACTOR
       implementor: de.fhg.iais.roberta.syntax.action.sound.PlayFileAction
@@ -791,7 +791,7 @@ mode:
   temperature: [TEMPERATURE, PRESSURE]
   infrared: [AMBIENTLIGHT,DEFAULT,DISTANCE,OBSTACLE,PRESENCE,SEEK,LINE,MODULATED,UNMODULATED,VALUE,REFLEXION, RCCODE, EDISON_CODE]
   keys: [PRESSED,WAIT_FOR_PRESS,WAIT_FOR_PRESS_AND_RELEASE]
-  light: [AMBIENTLIGHT,DEFAULT,LEFT,LIGHT,LIGHT_VALUE,RED,RIGHT,VALUE]
+  light: [AMBIENTLIGHT,DEFAULT,LEFT,LIGHT,LIGHT_VALUE,RED,RIGHT,VALUE,LIGHT_DETECTED]
   lightveml: [UVLIGHT,LIGHT]
   moisture: [VALUE,PRESENCE,VALUE]
   pinpull: [DOWN,NONE,UP]
@@ -846,6 +846,8 @@ configuration:
   RFID: [robConf_rfid, robBrick_rfide]
   RGBLED: [robConf_rgbled]
   SERVOMOTOR: [robConf_servo]
+  ANGULARSERVOMOTOR: [robConf_angularservo]
+  PHASEMOTOR: [robConf_phasemotor]
   SOUND: [robBrick_sound, robConf_sound]
   STEPMOTOR: [robConf_stepmotor]
   TEMPERATURE: [robConf_temperature, robBrick_temperature]

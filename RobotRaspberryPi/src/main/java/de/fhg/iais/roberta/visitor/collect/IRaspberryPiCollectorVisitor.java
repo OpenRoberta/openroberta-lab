@@ -1,10 +1,8 @@
 package de.fhg.iais.roberta.visitor.collect;
 
-import de.fhg.iais.roberta.syntax.action.raspberrypi.LedBlinkAction;
-import de.fhg.iais.roberta.syntax.action.raspberrypi.LedDimAction;
-import de.fhg.iais.roberta.syntax.action.raspberrypi.LedGetAction;
-import de.fhg.iais.roberta.syntax.action.raspberrypi.LedSetAction;
-import de.fhg.iais.roberta.syntax.lang.expr.ColorHexString;
+import de.fhg.iais.roberta.syntax.actors.raspberrypi.*;
+import de.fhg.iais.roberta.syntax.generic.raspberrypi.WriteGpioValueAction;
+import de.fhg.iais.roberta.syntax.sensors.raspberrypi.SmoothedSensor;
 import de.fhg.iais.roberta.visitor.hardware.IRaspberryPiVisitor;
 
 /**
@@ -14,33 +12,89 @@ import de.fhg.iais.roberta.visitor.hardware.IRaspberryPiVisitor;
 public interface IRaspberryPiCollectorVisitor extends ICollectorVisitor, IRaspberryPiVisitor<Void> {
 
     @Override
-    default Void visitColorHexString(ColorHexString<Void> colorHexString) {
-        return null;
-    }
-
-    @Override
-    default Void visitLedSetAction(LedSetAction<Void> ledSetAction) {
-        ledSetAction.getBrightness().accept(this);
-        return null;
-    }
-
-    @Override
     default Void visitLedBlinkAction(LedBlinkAction<Void> ledBlinkAction) {
-        ledBlinkAction.getDuration().accept(this);
-        ledBlinkAction.getFrequency().accept(this);
+        ledBlinkAction.getNumBlinks().accept(this);
+        ledBlinkAction.getOnTime().accept(this);
+        ledBlinkAction.getOffTime().accept(this);
         return null;
     }
 
     @Override
-    default Void visitLedDimAction(LedDimAction<Void> ledDimAction) {
-        ledDimAction.getDuration().accept(this);
-        ledDimAction.getFrom().accept(this);
-        ledDimAction.getTo().accept(this);
+    default Void visitLedBlinkFrequencyAction(LedBlinkFrequencyAction<Void> ledBlinkFrequencyAction) {
+        ledBlinkFrequencyAction.getFrequency().accept(this);
+        ledBlinkFrequencyAction.getNumBlinks().accept(this);
         return null;
     }
 
     @Override
-    default Void visitLedGetAction(LedGetAction<Void> ledGetAction) {
+    default Void visitRgbLedBlinkAction(RgbLedBlinkAction<Void> rgbLedBlinkAction) {
+        rgbLedBlinkAction.getNumBlinks().accept(this);
+        rgbLedBlinkAction.getOnTime().accept(this);
+        rgbLedBlinkAction.getOffTime().accept(this);
+        rgbLedBlinkAction.getOnColor().accept(this);
+        rgbLedBlinkAction.getOffColor().accept(this);
+
+        return null;
+    }
+
+    @Override
+    default Void visitRgbLedBlinkFrequencyAction(RgbLedBlinkFrequencyAction<Void> rgbLedBlinkFrequencyAction) {
+        rgbLedBlinkFrequencyAction.getFrequency().accept(this);
+        rgbLedBlinkFrequencyAction.getOnColor().accept(this);
+        rgbLedBlinkFrequencyAction.getOffColor().accept(this);
+        rgbLedBlinkFrequencyAction.getNumBlinks().accept(this);
+
+        return null;
+    }
+
+    @Override
+    default Void visitRgbLedPulseAction(RgbLedPulseAction<Void> rgbLedPulseAction) {
+        rgbLedPulseAction.getFadeInTime().accept(this);
+        rgbLedPulseAction.getFadeOutTime().accept(this);
+        rgbLedPulseAction.getOnColor().accept(this);
+        rgbLedPulseAction.getOffColor().accept(this);
+        rgbLedPulseAction.getNumBlinks().accept(this);
+        return null;
+    }
+
+    @Override
+    default Void visitBuzzerBeepAction(BuzzerBeepAction<Void> buzzerBeepAction) {
+        buzzerBeepAction.getOnTime().accept(this);
+        buzzerBeepAction.getOffTime().accept(this);
+        buzzerBeepAction.getNumBeeps().accept(this);
+        return null;
+    }
+
+    @Override
+    default Void visitBuzzerAction(BuzzerAction<Void> buzzerAction) {
+        return null;
+    }
+
+    @Override
+    default Void visitMotorRaspOnAction(MotorRaspOnAction<Void> motorRaspOnAction) {
+        if ( motorRaspOnAction.getDurationValue() != null ) {
+            motorRaspOnAction.getDurationValue().accept(this);
+        }
+        motorRaspOnAction.getParam().getSpeed().accept(this);
+        return null;
+    }
+
+    @Override
+    default Void visitServoRaspOnAction(ServoRaspOnAction<Void> servoRaspOnAction) {
+        return null;
+    }
+
+    @Override
+    default Void visitWriteGpioValueAction(WriteGpioValueAction<Void> voidWriteGpioValueAction) {
+        return null;
+    }
+
+    @Override
+    default Void visitSmoothedSensor(SmoothedSensor<Void> smoothedSensor) {
+        return null;
+    }
+
+    default Void visitLedPulseAction(LedPulseAction<Void> ledPulseAction) {
         return null;
     }
 

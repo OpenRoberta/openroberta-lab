@@ -97,6 +97,7 @@ public interface SC {
     String RED = "RED";
     String IR_TRANSMITTER = "IR_TRANSMITTER";
     String DIGITAL_INPUT = "DIGITAL_INPUT";
+    String DIGITAL_OUTPUT = "DIGITAL_OUTPUT";
     String ANALOG_INPUT = "ANALOG_INPUT";
     String DIGITAL_PIN = "DIGITAL_PIN";
     String IDONE = "IDONE";
@@ -136,5 +137,13 @@ public interface SC {
     String HTS221 = "HTS221";
 
     String OLEDSSD1306I2C = "OLEDSSD1306I2C";
+
+    String MOTOR = "MOTOR";
+    String ANGULARSERVOMOTOR = "ANGULARSERVOMOTOR";
+    String PWM_INPUT = "PWM_INPUT";
+    String PHASEMOTOR = "PHASEMOTOR";
+    String SMOOTHED_OUTPUT = "SMOOTHED_OUTPUT";
+    String TONALBUZZER = "TONALBUZZER";
+    String RASPBERRYPI = "RASPBERRYPI";
 
 }

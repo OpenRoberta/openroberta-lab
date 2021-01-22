@@ -1,0 +1,860 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Blockly Playground</title>
+<script src="../blockly_compressed.js"></script>
+<script src="../msg/js/de.js"></script>
+<!-- <script src="../robMsg/robMessages.js"></script> -->
+<script src="../core/blockly.js"></script>
+<script src="../core/css.js"></script>
+<script src="../core/inject.js"></script>
+<script src="../core/field.js"></script>
+<script src="../core/field_label.js"></script>
+<script src="../core/field_dropdown.js"></script>
+<script src="../core/field_textinput.js"></script>
+<script src="../core/workspace.js"></script>
+<script src="../core/workspace_svg.js"></script>
+<script src="../core/icon.js"></script>
+<script src="../core/block.js"></script>
+<script src="../core/block_svg.js"></script>
+<script src="../core/block_render_svg.js"></script>
+<script src="../core/toolbox.js"></script>
+<script src="../core/xml.js"></script>
+<script src="../core/variables.js"></script>
+<script src="../core/procedures.js"></script>
+<script src="../core/mutator.js"></script>
+<script src="../core/mutatorPlus.js"></script>
+<script src="../core/mutatorMinus.js"></script>
+<script src="../core/contextmenu.js"></script>
+<script src="../core/rob_controls.js"></script>
+<script src="../core/tooltip.js"></script>
+<script src="../core/connection.js"></script>
+<script src="../core/rendered_connection.js"></script>
+<script src="../core/warning.js"></script>
+<script src="../core/error.js"></script>
+<script src="../core/comment.js"></script>
+<script src="../core/bubble.js"></script>
+<script src="../core/constants.js"></script>
+<script src="../core/trashcan.js"></script>
+<script src="../blocks/logic.js"></script>
+<script src="../blocks/loops.js"></script>
+<script src="../blocks/math.js"></script>
+<script src="../blocks/text.js"></script>
+<script src="../blocks/lists.js"></script>
+<script src="../blocks/colour.js"></script>
+<script src="../blocks/variables.js"></script>
+<script src="../blocks/procedures.js"></script>
+<script src="../blocks/naoActions.js"></script>
+<script src="../blocks/naoBrick.js"></script>
+<script src="../blocks/naoColour.js"></script>
+<script src="../blocks/robCommunication.js"></script>
+<script src="../blocks/robControls.js"></script>
+<script src="../blocks/naoSensors.js"></script>
+<script src="../blocks/robActions.js"></script>
+<script src="../blocks/robSensors.js"></script>
+<script src="../blocks/robSensorDefinitions.js"></script>
+
+<link rel="stylesheet" type="text/css" href="typicons.css"></link>
+
+<script>
+'use strict';
+// Depending on the URL argument, render as LTR or RTL.
+var rtl = (document.location.search == '?rtl');
+var workspace = null;
+var device = 'nao'
+var toolbox;
+
+function start() {
+  toolbox = document.getElementById('toolboxBeginner');
+  workspace = Blockly.inject('blocklyDiv',
+          {comments: true,
+           disable: true,
+           collapse: true,
+           grid:
+             {spacing: 25,
+              length: 3,
+              colour: '#ccc',
+              snap: true},
+           maxBlocks: Infinity,
+           media: '../media/',
+           readOnly: false,
+           rtl: rtl,
+           scrollbars: true,
+           toolbox: toolbox,
+           zoom:
+             {controls: true,
+              wheel: true,
+              startScale: 1.0,
+              maxScale: 4,
+              minScale: .25,
+              scaleSpeed: 1.1},
+           checkInTask:['start', '_def', 'event', '-Brick' ],
+           variableDeclaration: true,
+           robControls: true
+          });
+  workspace.setDevice('nao');
+  // Restore previously displayed text.
+  if (sessionStorage) {
+    var text = sessionStorage.getItem('textarea');
+    if (text) {
+      document.getElementById('importExport').value = text;
+    }
+    // Restore event logging state.
+    var state = sessionStorage.getItem('logEvents');
+    logEvents(Boolean(Number(state)));
+  } else {
+    // MSIE 11 does not support sessionStorage on file:// URLs.
+    logEvents(false);
+  }
+  taChange();
+}
+
+function toXml() {
+  var output = document.getElementById('importExport');
+  var xml = Blockly.Xml.workspaceToDom(workspace);
+  output.value = Blockly.Xml.domToPrettyText(xml);
+  output.focus();
+  output.select();
+  taChange();
+}
+
+function fromXml() {
+  var input = document.getElementById('importExport');
+  var xml = Blockly.Xml.textToDom(input.value);
+  Blockly.Xml.domToWorkspace(xml, workspace);
+  taChange();
+}
+
+function toCode(lang) {
+  var output = document.getElementById('importExport');
+  output.value = Blockly[lang].workspaceToCode(workspace);
+  taChange();
+}
+
+// Disable the "Import from XML" button if the XML is invalid.
+// Preserve text between page reloads.
+function taChange() {
+  var textarea = document.getElementById('importExport');
+  if (sessionStorage) {
+    sessionStorage.setItem('textarea', textarea.value);
+  }
+  var valid = true;
+  try {
+    Blockly.Xml.textToDom(textarea.value);
+  } catch (e) {
+    valid = false;
+  }
+  document.getElementById('import').disabled = !valid;
+}
+
+function logEvents(state) {
+  var checkbox = document.getElementById('logCheck');
+  checkbox.checked = state;
+  if (sessionStorage) {
+    sessionStorage.setItem('logEvents', Number(state));
+  }
+  if (state) {
+    workspace.addChangeListener(logger);
+  } else {
+    workspace.removeChangeListener(logger);
+  }
+}
+
+function logger(e) {
+  console.log(e);
+}
+
+function airstrike(n) {
+  var prototypes = [];
+  toolbox = document.getElementById('toolboxBeginner');
+  var blocks = toolbox.getElementsByTagName('block');
+  for (var i = 0, block; block = blocks[i]; i++) {
+    prototypes.push(block.getAttribute('type'));
+  }
+  for (var i = 0; i < n; i++) {
+    var prototype = prototypes[Math.floor(Math.random() * prototypes.length)];
+    var block = workspace.newBlock(prototype);
+    block.initSvg();
+    block.getSvgRoot().setAttribute('transform', 'translate(' +
+        Math.round(Math.random() * 450 + 40) + ', ' +
+        Math.round(Math.random() * 600 + 40) + ')');
+    block.render();
+  }
+}
+
+function spaghetti(n) {
+  var xml = spaghettiXml;
+  for(var i = 0; i < n; i++) {
+    xml = xml.replace(/(<(statement|next)( name="DO0")?>)<\//g,
+        '$1' + spaghettiXml + '</');
+  }
+  xml = '<block_set xmlns="http://www.w3.org/1999/xhtml"><instance x="9" y="3">' + xml + '</instance></block_set>';
+  var dom = Blockly.Xml.textToDom(xml);
+  console.time('Spaghetti domToWorkspace');
+  Blockly.Xml.domToWorkspace(dom, workspace);
+  console.timeEnd('Spaghetti domToWorkspace');
+}
+
+function toggleToolbox(){
+    if (toolbox.id == 'toolboxExpert'){
+        toolbox = document.getElementById('toolboxBeginner');
+    } else {
+        toolbox = document.getElementById('toolboxExpert');
+    }
+    workspace.updateToolbox(toolbox);
+}
+
+var spaghettiXml = [
+  '  <block type="robControls_if">',
+  '    <value name="IF0">',
+  '      <block type="logic_compare">',
+  '        <field name="OP">EQ</field>',
+  '        <value name="A">',
+  '          <block type="math_arithmetic">',
+  '            <field name="OP">MULTIPLY</field>',
+  '            <value name="A">',
+  '              <block type="math_number">',
+  '                <field name="NUM">6</field>',
+  '              </block>',
+  '            </value>',
+  '            <value name="B">',
+  '              <block type="math_number">',
+  '                <field name="NUM">7</field>',
+  '              </block>',
+  '            </value>',
+  '          </block>',
+  '        </value>',
+  '        <value name="B">',
+  '          <block type="math_number">',
+  '            <field name="NUM">42</field>',
+  '          </block>',
+  '        </value>',
+  '      </block>',
+  '    </value>',
+  '    <statement name="DO0"></statement>',
+  '    <next></next>',
+  '  </block>'].join('\n');
+
+</script>
+
+<style>
+html, body {
+  height: 100%;
+}
+body {
+  background-color: #fff;
+  font-family: sans-serif;
+  overflow: hidden;
+}
+h1 {
+  font-weight: normal;
+  font-size: 140%;
+}
+#blocklyDiv {
+  float: right;
+  height: 95%;
+  width: 70%;
+}
+#importExport {
+  font-family: monospace;
+}
+</style>
+</head>
+<body onload="start()">
+
+  <div id="blocklyDiv"></div>
+
+<toolbox_set id="toolboxBeginner" style="display: none">
+    <category name="TEST" svg="true">
+        <block type='robControls_start'></block>
+        <block type="robSensors_getSample"></block>
+    </category>
+   <category name="TOOLBOX_ACTION" svg="true">
+      <block type="naoActions_applyPosture"></block>
+      <block type="naoActions_walk">
+         <field name="DIRECTION">FOREWARD</field>
+         <value name="POWER">
+            <block type="math_number">
+               <field name="NUM">50</field>
+            </block>
+         </value>
+      </block>
+      <block type="naoActions_turn">
+         <field name="DIRECTION">LEFT</field>
+         <value name="POWER">
+            <block type="math_number">
+               <field name="NUM">90</field>
+            </block>
+         </value>
+      </block>
+      <block type="naoActions_animation"></block>
+       <block type="robActions_sayText">
+         <value name="OUT">
+            <block type="text">
+               <field name="TEXT">Hallo</field>
+            </block>
+         </value>
+      </block>
+      <block type="naoActions_rgbLeds">
+         <value name="COLOR">
+            <block type="naoColour_picker">
+               <field name="COLOUR">#ff0000</field>
+            </block>
+         </value>
+      </block>
+      <block type="naoActions_setIntensity">
+         <value name="INTENSITY">
+            <block type="math_number">
+               <field name="NUM">50</field>
+            </block>
+         </value>
+      </block>
+      <block type="naoActions_ledOff"></block>
+      <block type="naoActions_randomEyes">
+         <value name="DURATION">
+            <block type="math_number">
+               <field name="NUM">2000</field>
+            </block>
+         </value>
+      </block>
+      <block type="naoActions_rasta">
+         <value name="DURATION">
+            <block type="math_number">
+               <field name="NUM">2000</field>
+            </block>
+         </value>
+      </block>
+      <block type="naoActions_setVolume">
+         <value name="VOLUME">
+            <block type="math_number">
+               <field name="NUM">50</field>
+            </block>
+         </value>
+      </block>
+   </category>
+   <category name="TOOLBOX_SENSOR" svg="true">
+      <block type="robSensors_touch_getSample"></block>
+        <block type="robSensors_ultrasonic_getSample"></block>
+        <block type="robSensors_detectmark_getSample"></block>
+        <block type="naoSensors_getMarkInformation">
+            <value name="VALUE">
+                <block type="math_number">
+                    <field name="NUM">84</field>
+                </block>
+            </value>
+            </block>
+        <block type="robSensors_detectface_getSample"></block>
+         <block type="naoSensors_getFaceInformation">
+            <value name="VALUE">
+                <block type="text">
+                    <field name="TEXT">Roberta</field>
+                </block>
+            </value>
+        </block>
+        <block type="naoSensors_recognizeWord"></block>
+   </category>
+   <category name="TOOLBOX_CONTROL" svg="true">
+      <block type="robControls_if"></block>
+      <block type="robControls_ifElse"></block>
+      <block type="controls_whileUntil">
+          <field name="MODE">UNTIL</field>
+          <value name="BOOL">
+              <block type="robSensors_touch_getSample">
+              </block>
+         </value>
+     </block>
+      <block type="robControls_wait_time">
+         <value name="WAIT">
+            <block type="math_number">
+               <field name="NUM">500</field>
+            </block>
+         </value>
+      </block>
+      <block type="robControls_wait_for">
+         <value name="WAIT0">
+            <block type="logic_compare">
+               <field name="OP">EQ</field>
+               <mutation operator_range="BOOL"></mutation>
+               <value name="A">
+                  <block type="robSensors_getSample"></block>
+               </value>
+               <value name="B">
+                  <block type="logic_boolean"></block>
+               </value>
+            </block>
+         </value>
+      </block>
+   </category>
+   <category name="TOOLBOX_LOGIC" svg="true">
+      <block type="logic_compare"></block>
+      <block type="logic_operation"></block>
+      <block type="logic_boolean"></block>
+   </category>
+   <category name="TOOLBOX_MATH" svg="true">
+      <block type="math_number"></block>
+      <block type="math_arithmetic"></block>
+   </category>
+   <category name="TOOLBOX_TEXT" svg="true">
+      <block type="text"></block>
+      <block type="text_comment"></block>
+   </category>
+   <category name="TOOLBOX_COLOUR" svg="true">
+      <block type="naoColour_picker"></block>
+      <block type="naoColour_rgb"></block>
+   </category>
+   <category name="TOOLBOX_VARIABLE" custom="VARIABLE" svg="true"></category>
+</toolbox_set>
+
+<toolbox_set id="toolboxExpert" style="display: none">
+    <category name="TEST" svg="true">
+        <block type='robControls_start'></block>
+        <block type="robSensors_getSample"></block>
+    </category>
+    <category name="TOOLBOX_ACTION" svg="true">
+        <category name="TOOLBOX_MOVE" svg="true">
+            <block type="naoActions_applyPosture"></block>
+            <block type="naoActions_hand"></block>
+            <block type="naoActions_moveJoint">
+                <value name="POWER">
+                    <block type="math_number">
+                        <field name="NUM">10</field>
+                    </block>
+                </value>
+            </block>
+            <block type="naoActions_stiffness"></block>
+        </category>
+        <category name="TOOLBOX_WALK" svg="true">
+            <block type="naoActions_walk">
+                <field name="DIRECTION">FOREWARD</field>
+                <value name="POWER">
+                    <block type="math_number">
+                        <field name="NUM">50</field>
+                    </block>
+                </value>
+            </block>
+            <block type="naoActions_turn">
+                <field name="DIRECTION">LEFT</field>
+                <value name="POWER">
+                    <block type="math_number">
+                        <field name="NUM">90</field>
+                    </block>
+                </value>
+            </block>
+            <block type="naoActions_walkTo">
+                <value name="X">
+                    <block type="math_number">
+                        <field name="NUM">0</field>
+                    </block>
+                </value>
+                <value name="Y">
+                    <block type="math_number">
+                        <field name="NUM">0</field>
+                    </block>
+                </value>
+                <value name="Theta">
+                    <block type="math_number">
+                        <field name="NUM">0</field>
+                    </block>
+                </value>
+            </block>
+            <block type="naoActions_walk_async">
+                <value name="XSpeed">
+                    <block type="math_number">
+                        <field name="NUM">0</field>
+                    </block>
+                </value>
+                <value name="YSpeed">
+                    <block type="math_number">
+                        <field name="NUM">0</field>
+                    </block>
+                </value>
+                <value name="ZSpeed">
+                    <block type="math_number">
+                        <field name="NUM">0</field>
+                    </block>
+                </value>
+            </block>
+            <block type="naoActions_stop"></block>
+        </category>
+        <category name="TOOLBOX_ANIMATION" svg="true">
+            <block type="naoActions_animation"></block>
+            <block type="naoActions_autonomous"></block>
+            <block type="naoActions_pointLookAt">
+                <value name="X">
+                    <block type="math_number">
+                        <field name="NUM">0</field>
+                    </block>
+                </value>
+                <value name="Y">
+                    <block type="math_number">
+                        <field name="NUM">0</field>
+                    </block>
+                </value>
+                <value name="Z">
+                    <block type="math_number">
+                        <field name="NUM">0</field>
+                    </block>
+                </value>
+                <value name="Speed">
+                    <block type="math_number">
+                        <field name="NUM">0</field>
+                    </block>
+                </value>
+            </block>
+        </category>
+        <category name="TOOLBOX_SOUND" svg="true">
+            <block type="robActions_sayText">
+                <value name="OUT">
+                    <block type="text">
+                        <field name="TEXT">Hallo</field>
+                    </block>
+                </value>
+            </block>
+            <block type="robActions_sayText_parameters">
+                <value name="OUT">
+                    <block type="text">
+                        <field name="TEXT">Hallo</field>
+                    </block>
+                </value>
+                <value name="VOICESPEED">
+                    <block type="math_number">
+                        <field name="NUM">30</field>
+                    </block>
+                </value>
+                <value name="VOICEPITCH">
+                    <block type="math_number">
+                        <field name="NUM">30</field>
+                    </block>
+                </value>
+            </block>
+<!--             <block type="naoActions_playFile">
+                <value name="OUT">
+                    <block type="text">
+                        <field name="TEXT">Roberta</field>
+                    </block>
+                </value>
+            </block> -->
+            <block type="naoActions_getLanguage"></block>
+            <block type="robActions_setLanguage">
+                <field name="LANGUAGE">GERMAN</field>
+            </block>
+            <block type="naoActions_getVolume"></block>
+            <block type="naoActions_setVolume">
+                <value name="VOLUME">
+                    <block type="math_number">
+                        <field name="NUM">50</field>
+                    </block>
+                </value>
+            </block>
+        </category>
+        <category name="TOOLBOX_VISION" svg="true">
+            <block type="naoActions_learnFace">
+                <value name="NAME">
+                    <block type="text">
+                        <field name="TEXT">Roberta</field>
+                    </block>
+                </value>
+            </block>
+            <block type="naoActions_forgetFace">
+                <value name="NAME">
+                    <block type="text">
+                        <field name="TEXT">Roberta</field>
+                    </block>
+                </value>
+            </block>
+            <block type="naoActions_takePicture">
+                <value name="FILENAME">
+                    <block type="text">
+                        <field name="TEXT">RobertaPicture</field>
+                    </block>
+                </value>
+            </block>
+            <block type="naoActions_recordVideo">
+                <value name="DURATION">
+                    <block type="math_number">
+                        <field name="NUM">5</field>
+                    </block>
+                </value>
+                <value name="FILENAME">
+                    <block type="text">
+                        <field name="TEXT">RobertaVideo</field>
+                    </block>
+                </value>
+            </block>
+        </category>
+        <category name="TOOLBOX_LIGHT" svg="true">
+            <block type="naoActions_rgbLeds">
+                <value name="COLOR">
+                    <block type="naoColour_picker">
+                        <field name="COLOUR">#ff0000</field>
+                    </block>
+                </value>
+            </block>
+            <block type="naoActions_setIntensity">
+                <value name="INTENSITY">
+                    <block type="math_number">
+                        <field name="NUM">50</field>
+                    </block>
+                </value>
+            </block>
+            <block type="naoActions_ledOff"></block>
+            <block type="naoActions_ledReset"></block>
+            <block type="naoActions_randomEyes">
+                <value name="DURATION">
+                    <block type="math_number">
+                        <field name="NUM">2</field>
+                    </block>
+                </value>
+            </block>
+            <block type="naoActions_rasta">
+                <value name="DURATION">
+                    <block type="math_number">
+                        <field name="NUM">2</field>
+                    </block>
+                </value>
+            </block>
+        </category>
+    </category>
+    <category name="TOOLBOX_SENSOR" svg="true">
+        <block type="robSensors_touch_getSample"></block>
+        <block type="robSensors_ultrasonic_getSample"></block>
+        <block type="robSensors_detectmark_getSample"></block>
+        <block type="naoSensors_getMarkInformation">
+            <value name="VALUE">
+                <block type="math_number">
+                    <field name="NUM">84</field>
+                </block>
+            </value>
+            </block>
+        <block type="robSensors_detectface_getSample"></block>
+         <block type="naoSensors_getFaceInformation">
+            <value name="VALUE">
+                <block type="text">
+                    <field name="TEXT">Roberta</field>
+                </block>
+            </value>
+        </block>
+        <block type="naoSensors_recognizeWord"></block>
+        <block type="robSensors_gyro_getSample"></block>
+        <block type="robSensors_accelerometer_getSample"></block>
+        <block type="robSensors_fsr_getSample"></block>
+        <block type="robSensors_electriccurrent_getSample"></block>
+    </category>
+    <category name="TOOLBOX_CONTROL" svg="true">
+        <category name="TOOLBOX_DECISION" svg="true">
+            <block type="robControls_if"></block>
+            <block type="robControls_ifElse"></block>
+        </category>
+        <category name="TOOLBOX_LOOP" svg="true">
+            <block type="robControls_loopForever"></block>
+            <block type="controls_whileUntil"></block>
+            <block type="controls_repeat_ext">
+                <value name="TIMES">
+                    <block type="math_number">
+                        <field name="NUM">10</field>
+                    </block>
+                </value>
+            </block>
+
+            <block type="robControls_for">
+                <value name="FROM">
+                    <block type="math_number">
+                        <field name="NUM">1</field>
+                    </block>
+                </value>
+                <value name="TO">
+                    <block type="math_number">
+                        <field name="NUM">10</field>
+                    </block>
+                </value>
+                <value name="BY">
+                    <block type="math_number">
+                        <field name="NUM">1</field>
+                    </block>
+                </value>
+            </block>
+            <block type="robControls_forEach"></block>
+            <block type="controls_flow_statements"></block>
+        </category>
+        <category name="TOOLBOX_WAIT" svg="true">
+            <block type="robControls_wait_time">
+                <value name="WAIT">
+                    <block type="math_number">
+                        <field name="NUM">500</field>
+                    </block>
+                </value>
+            </block>
+            <block type="robControls_wait"></block>
+            <block type="robControls_wait_for">
+                <value name="WAIT0">
+                    <block type="logic_compare">
+                        <field name="OP">EQ</field>
+                        <mutation operator_range="BOOL"></mutation>
+                        <value name="A">
+                            <block type="robSensors_getSample"></block>
+                        </value>
+                        <value name="B">
+                            <block type="logic_boolean"></block>
+                        </value>
+                    </block>
+                </value>
+            </block>
+        </category>
+    </category>
+    <category name="TOOLBOX_LOGIC" svg="true">
+        <block type="logic_compare"></block>
+        <block type="logic_operation"></block>
+        <block type="logic_negate"></block>
+        <block type="logic_boolean"></block>
+        <block type="logic_null"></block>
+        <block type="logic_ternary"></block>
+    </category>
+    <category name="TOOLBOX_MATH" svg="true">
+        <block type="math_number"></block>
+        <block type="math_arithmetic"></block>
+        <block type="math_single"></block>
+        <block type="math_trig"></block>
+        <block type="math_constant"></block>
+        <block type="math_number_property"></block>
+        <block type="robMath_change">
+            <value name="DELTA">
+                <block type="math_number">
+                    <field name="NUM">1</field>
+                </block>
+            </value>
+        </block>
+        <block type="math_round"></block>
+        <block type="math_on_list"></block>
+        <block type="math_modulo"></block>
+        <block type="math_constrain">
+            <value name="LOW">
+                <block type="math_number">
+                    <field name="NUM">1</field>
+                </block>
+            </value>
+            <value name="HIGH">
+                <block type="math_number">
+                    <field name="NUM">100</field>
+                </block>
+            </value>
+        </block>
+        <block type="math_random_int">
+            <value name="FROM">
+                <block type="math_number">
+                    <field name="NUM">1</field>
+                </block>
+            </value>
+            <value name="TO">
+                <block type="math_number">
+                    <field name="NUM">100</field>
+                </block>
+            </value>
+        </block>
+        <block type="math_random_float"></block>
+    </category>
+    <category name="TOOLBOX_TEXT" svg="true">
+        <block type="text"></block>
+        <block type="text_comment"></block>
+        <block type="robText_join"></block>
+        <block type="robText_append"></block>
+    </category>
+    <category name="TOOLBOX_LIST" svg="true">
+        <block type="robLists_create_with">
+            <mutation items="0" list_type="Number"></mutation>
+        </block>
+        <block type="robLists_create_with">
+            <mutation items="3" list_type="Number"></mutation>
+            <value name="ADD0">
+                <block type="math_number"></block>
+            </value>
+            <value name="ADD1">
+                <block type="math_number"></block>
+            </value>
+            <value name="ADD2">
+                <block type="math_number"></block>
+            </value>
+        </block>
+        <block type="robLists_repeat">
+            <value name="NUM">
+                <block type="math_number">
+                    <field name="NUM">5</field>
+                </block>
+            </value>
+        </block>
+        <block type="robLists_length"></block>
+        <block type="robLists_isEmpty"></block>
+        <block type="robLists_indexOf"></block>
+        <block type="robLists_getIndex"></block>
+        <block type="robLists_setIndex"></block>
+        <block type="robLists_getSublist"></block>
+    </category>
+    <category name="TOOLBOX_COLOUR" svg="true">
+        <block type="naoColour_picker"></block>
+        <block type="naoColour_rgb">
+            <value name="RED">
+                <block type="math_number" intask="false">
+                    <field name="NUM">120</field>
+                </block>
+            </value>
+            <value name="GREEN">
+                <block type="math_number" intask="false">
+                    <field name="NUM">120</field>
+                </block>
+            </value>
+            <value name="BLUE">
+                <block type="math_number" intask="false">
+                    <field name="NUM">120</field>
+                </block>
+            </value>
+        </block>
+    </category>
+    <category name="TOOLBOX_VARIABLE" custom="VARIABLE" svg="true"></category>
+    <category name="TOOLBOX_PROCEDURE" custom="PROCEDURE" svg="true"></category>
+</toolbox_set>
+
+  <h1>Blockly Playground</h1>
+
+  <p><a href="javascript:void(workspace.setVisible(true))">Show</a>
+   - <a href="javascript:void(workspace.setVisible(false))">Hide</a></p>
+
+  <script>
+    if (rtl) {
+      document.write('[ &larr; RTL. Switch to <A HREF="?ltr">LTR</A>. ]');
+    } else {
+      document.write('[ &rarr; LTR. Switch to <A HREF="?rtl">RTL</A>. ]');
+    }
+  </script>
+
+  <p>
+    <input type="button" value="Export to XML" onclick="toXml()">
+    &nbsp;
+    <input type="button" value="Import from XML" onclick="fromXml()" id="import">
+    <br>
+    <input type="button" value="To JavaScript" onclick="toCode('JavaScript')">
+    &nbsp;
+    <input type="button" value="To Python" onclick="toCode('Python')">
+    &nbsp;
+    <input type="button" value="To PHP" onclick="toCode('PHP')">
+    &nbsp;
+    <input type="button" value="To Lua" onclick="toCode('Lua')">
+    &nbsp;
+    <input type="button" value="To Dart" onclick="toCode('Dart')">
+    <br>
+    <textarea id="importExport" style="width: 26%; height: 12em"
+      onchange="taChange();" onkeyup="taChange()"></textarea>
+  </p>
+
+  <p>
+    Stress test: &nbsp;
+    <input type="button" value="Airstrike!" onclick="airstrike(100)">
+    <input type="button" value="Spaghetti!" onclick="spaghetti(8)">
+    <input type="button" value="Toggle toolbox" onclick="toggleToolbox()">
+  </p>
+  <p>
+    Log events: &nbsp;
+    <input type="checkbox" onclick="logEvents(this.checked)" id="logCheck">
+  </p>
+
+</body>
+</html>

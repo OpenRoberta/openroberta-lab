@@ -1,4 +1,4 @@
-package de.fhg.iais.roberta.syntax.action.raspberrypi;
+package de.fhg.iais.roberta.syntax.actors.raspberrypi;
 
 import java.util.List;
 
@@ -26,67 +26,42 @@ import de.fhg.iais.roberta.util.dbc.Assert;
  * <br>
  * The client must provide the {@link ColorConst} color of the led. <br>
  * <br>
- * To create an instance from this class use the method {@link #make(ColorConst, BlocklyBlockProperties, BlocklyComment)}.<br>
+ * To create an instance from this class use the method {@link #make(String, Expr, Expr, Expr, BlocklyBlockProperties, BlocklyComment)}.<br>
  */
-public class LedDimAction<V> extends Action<V> {
+public class LedPulseAction<V> extends Action<V> {
     private final String port;
-    private final Expr<V> from;
-    private final Expr<V> to;
-    private final Expr<V> duration;
+    private final Expr<V> fadeInTime;
+    private final Expr<V> fadeOutTime;
+    private final Expr<V> numBlinks;
 
-    private LedDimAction(String port, Expr<V> from, Expr<V> to, Expr<V> duration, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockTypeContainer.getByName("LED_DIM_ACTION"), properties, comment);
+    private LedPulseAction(String port, Expr<V> fadeInTime, Expr<V> fadeOutTime, Expr<V> numBlinks, BlocklyBlockProperties properties, BlocklyComment comment) {
+        super(BlockTypeContainer.getByName("LED_PULSE_ACTION"), properties, comment);
         Assert.notNull(port);
-        Assert.notNull(from);
-        Assert.notNull(to);
-        Assert.notNull(duration);
+        Assert.notNull(fadeInTime);
+        Assert.notNull(fadeOutTime);
+        Assert.notNull(numBlinks);
         this.port = port;
-        this.from = from;
-        this.to = to;
-        this.duration = duration;
+        this.fadeInTime = fadeInTime;
+        this.fadeOutTime = fadeOutTime;
+        this.numBlinks = numBlinks;
         setReadOnly();
     }
 
     /**
-     * Creates instance of {@link LedDimAction}. This instance is read only and can not be modified.
+     * Creates instance of {@link LedPulseAction}. This instance is read only and can not be modified.
      *
-     * @param brightness of the display; must <b>not</b> be null,
      * @param properties of the block (see {@link BlocklyBlockProperties}),
      * @param comment added from the user,
-     * @return read only object of class {@link LedDimAction}
+     * @return read only object of class {@link LedPulseAction}
      */
-    private static <V> LedDimAction<V> make(
+    private static <V> LedPulseAction<V> make(
         String port,
-        Expr<V> from,
-        Expr<V> to,
-        Expr<V> duration,
+        Expr<V> onTime,
+        Expr<V> offTime,
+        Expr<V> numBlinks,
         BlocklyBlockProperties properties,
         BlocklyComment comment) {
-        return new LedDimAction<>(port, from, to, duration, properties, comment);
-    }
-
-    /**
-     * @return x of the pixel.
-     */
-    public String getPort() {
-        return this.port;
-    }
-
-    public Expr<V> getFrom() {
-        return this.from;
-    }
-
-    public Expr<V> getTo() {
-        return this.to;
-    }
-
-    public Expr<V> getDuration() {
-        return this.duration;
-    }
-
-    @Override
-    public String toString() {
-        return "LedDimAction [ " + this.port + ", " + this.from + ", " + this.to + ", " + this.duration + " ]";
+        return new LedPulseAction<>(port, onTime, offTime, numBlinks, properties, comment);
     }
 
     /**
@@ -100,19 +75,43 @@ public class LedDimAction<V> extends Action<V> {
         List<Field> fields = Jaxb2Ast.extractFields(block, (short) 1);
         List<Value> values = Jaxb2Ast.extractValues(block, (short) 3);
 
-        Phrase<V> from = helper.extractValue(values, new ExprParam(BlocklyConstants.FROM, BlocklyType.NUMBER));
-        Phrase<V> to = helper.extractValue(values, new ExprParam(BlocklyConstants.TO, BlocklyType.NUMBER));
-        Phrase<V> duration = helper.extractValue(values, new ExprParam(BlocklyConstants.DURATION, BlocklyType.NUMBER_INT));
+        Phrase<V> fadeInTime = helper.extractValue(values, new ExprParam(BlocklyConstants.FADE_IN_TIME, BlocklyType.NUMBER));
+        Phrase<V> fadeOutTime = helper.extractValue(values, new ExprParam(BlocklyConstants.FADE_OUT_TIME, BlocklyType.NUMBER));
+        Phrase<V> duration = helper.extractValue(values, new ExprParam(BlocklyConstants.N_TIMES, BlocklyType.NUMBER_INT));
         String port = Jaxb2Ast.extractField(fields, BlocklyConstants.ACTORPORT);
-        return LedDimAction
+        return LedPulseAction
             .make(
                 port,
-                Jaxb2Ast.convertPhraseToExpr(from),
-                Jaxb2Ast.convertPhraseToExpr(to),
+                Jaxb2Ast.convertPhraseToExpr(fadeInTime),
+                Jaxb2Ast.convertPhraseToExpr(fadeOutTime),
                 Jaxb2Ast.convertPhraseToExpr(duration),
                 Jaxb2Ast.extractBlockProperties(block),
                 Jaxb2Ast.extractComment(block));
 
+    }
+
+    /**
+     * @return x of the pixel.
+     */
+    public String getPort() {
+        return this.port;
+    }
+
+    public Expr<V> getFadeInTime() {
+        return this.fadeInTime;
+    }
+
+    public Expr<V> getFadeOutTime() {
+        return this.fadeOutTime;
+    }
+
+    public Expr<V> getNumBlinks() {
+        return this.numBlinks;
+    }
+
+    @Override
+    public String toString() {
+        return "LedSetAction [ " + this.port + ", " + this.fadeInTime + ", " + this.fadeOutTime + ", " + this.numBlinks + " ]";
     }
 
     @Override
@@ -121,9 +120,9 @@ public class LedDimAction<V> extends Action<V> {
         Ast2Jaxb.setBasicProperties(this, jaxbDestination);
 
         Ast2Jaxb.addField(jaxbDestination, BlocklyConstants.ACTORPORT, this.port);
-        Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.FROM, this.from);
-        Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.TO, this.to);
-        Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.DURATION, this.duration);
+        Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.FADE_IN_TIME, this.fadeInTime);
+        Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.FADE_OUT_TIME, this.fadeOutTime);
+        Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.N_TIMES, this.numBlinks);
         return jaxbDestination;
 
     }

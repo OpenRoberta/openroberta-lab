@@ -1,0 +1,97 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="raspberrypi" xmlversion="3.1" description="" tags="">
+    <instance x="384" y="50">
+        <block type="robControls_start" id="zy7t8n{`CS_GtP4^^X(Z" intask="true" deletable="false">
+            <mutation declare="false"/>
+            <field name="DEBUG">FALSE</field>
+        </block>
+        <block type="robActions_motor_on_rasp" id="PT(82ax:qtd(G][}4BH|" intask="true">
+            <field name="DIRECTION">FOREWARD</field>
+            <field name="MOTORPORT">M</field>
+            <value name="POWER">
+                <block type="math_number" id="Dy#ytr1sQ2WFyWrdDQ_!" intask="true">
+                    <field name="NUM">90</field>
+                </block>
+            </value>
+        </block>
+        <block type="robActions_motor_on_rasp" id="O?ao4j2#F1GNe=,L2fam" intask="true">
+            <field name="DIRECTION">BACKWARD</field>
+            <field name="MOTORPORT">M</field>
+            <value name="POWER">
+                <block type="math_number" id="E3f[[VBmMBSaZBEp0s)*" intask="true">
+                    <field name="NUM">90</field>
+                </block>
+            </value>
+        </block>
+        <block type="robActions_motor_on_for_rasp" id="a*I*%p_|0`T|(yDFC#v4" intask="true">
+            <field name="DIRECTION">FOREWARD</field>
+            <field name="MOTORPORT">M</field>
+            <value name="POWER">
+                <block type="math_number" id="J,@s%QX;B-e@UU0MxrYq" intask="true">
+                    <field name="NUM">90</field>
+                </block>
+            </value>
+            <value name="VALUE">
+                <block type="math_number" id="_z/OsKbh)/PVNGSh(j0r" intask="true">
+                    <field name="NUM">1</field>
+                </block>
+            </value>
+        </block>
+        <block type="robActions_motor_on_for_rasp" id="zoFr)t(0_{+xp#ZI-fXT" intask="true">
+            <field name="DIRECTION">BACKWARD</field>
+            <field name="MOTORPORT">M</field>
+            <value name="POWER">
+                <block type="math_number" id="V/5}g!Ri#LUh(,Tdi12U" intask="true">
+                    <field name="NUM">90</field>
+                </block>
+            </value>
+            <value name="VALUE">
+                <block type="math_number" id="}lT3Ml{ej8#Ds|E58bJW" intask="true">
+                    <field name="NUM">1</field>
+                </block>
+            </value>
+        </block>
+        <block type="robActions_motor_stop_rasp" id="d.zP-C0qk4syq8]9SLOl" intask="true">
+            <field name="MOTORPORT">M</field>
+        </block>
+        <block type="robActions_servo_motor_on_rasp" id="0jo}s}_*ODax,hEfri3e" intask="true">
+            <field name="POSITION">MIN</field>
+            <field name="MOTORPORT">S</field>
+        </block>
+        <block type="robActions_servo_motor_on_rasp" id="W,Y:WaJXEk9erH+pZ-71" intask="true">
+            <field name="POSITION">MID</field>
+            <field name="MOTORPORT">S</field>
+        </block>
+        <block type="robActions_servo_motor_on_rasp" id="pjJ?Y?@BZc;e#9z*IwA0" intask="true">
+            <field name="POSITION">MAX</field>
+            <field name="MOTORPORT">S</field>
+        </block>
+        <block type="robActions_servo_motor_set_rasp" id="i0w3QUJNfdz24PbSjgk|" intask="true">
+            <field name="MOTORPORT">S</field>
+            <value name="POWER">
+                <block type="math_number" id="VXhCWu;q3Nh;tZp8Z,0c" intask="true">
+                    <field name="NUM">0</field>
+                </block>
+            </value>
+        </block>
+        <block type="robActions_angularservo_motor_on_rasp" id="4S{Y3nLGX_#w4O95JaLy" intask="true">
+            <field name="POSITION">MIN</field>
+            <field name="MOTORPORT">A2</field>
+        </block>
+        <block type="robActions_angularservo_motor_on_rasp" id="M[CS}gNb|jU8a*_Gd,.;" intask="true">
+            <field name="POSITION">MID</field>
+            <field name="MOTORPORT">A2</field>
+        </block>
+        <block type="robActions_angularservo_motor_on_rasp" id="PgzKR5ETkGQq@qJ6#@OX" intask="true">
+            <field name="POSITION">MAX</field>
+            <field name="MOTORPORT">A2</field>
+        </block>
+        <block type="robActions_angularservo_motor_on_for_rasp" id="W(C.k~kiX(%0Y5+w:sHX" intask="true">
+            <field name="MOTORPORT">A2</field>
+            <value name="POWER">
+                <block type="math_number" id="z79k*#h6feAw+#W=9IYq" intask="true">
+                    <field name="NUM">90</field>
+                </block>
+            </value>
+        </block>
+    </instance>
+</block_set>

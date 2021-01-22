@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Program and Configuration Playground</title>
+<script src="../blockly_compressed.js"></script>
+<!-- <script src="../blocks_compressed.js"></script> -->
+<script src="../msg/js/de.js"></script>
+<script src="../core/blockly.js"></script>
+<script src="../core/constants.js"></script>
+<script src="../core/css.js"></script>
+<script src="../core/inject.js"></script>
+<script src="../core/field.js"></script>
+<script src="../core/field_label.js"></script>
+<script src="../core/field_dropdown.js"></script>
+<script src="../core/field_textinput.js"></script>
+<script src="../core/workspace.js"></script>
+<script src="../core/workspace_svg.js"></script>
+<script src="../core/icon.js"></script>
+<script src="../core/block.js"></script>
+<script src="../core/block_svg.js"></script>
+<script src="../core/block_render_svg.js"></script>
+<script src="../core/toolbox.js"></script>
+<script src="../core/xml.js"></script>
+<script src="../core/variables.js"></script>
+<script src="../core/procedures.js"></script>
+<script src="../core/mutator.js"></script>
+<script src="../core/mutatorPlus.js"></script>
+<script src="../core/mutatorMinus.js"></script>
+<script src="../core/contextmenu.js"></script>
+<script src="../core/rob_controls.js"></script>
+<script src="../core/tooltip.js"></script>
+<script src="../core/connection.js"></script>
+<script src="../core/rendered_connection.js"></script>
+<script src="../core/warning.js"></script>
+<script src="../core/error.js"></script>
+<script src="../core/comment.js"></script>
+<script src="../core/bubble.js"></script>
+<script src="../core/trashcan.js"></script>
+<script src="../core/utils.js"></script>
+<script src="../core/xml.js"></script>
+<script src="../core/rob_configuration.js"></script>
+<script src="../blocks/logic.js"></script>
+<script src="../blocks/loops.js"></script>
+<script src="../blocks/math.js"></script>
+<script src="../blocks/text.js"></script>
+<script src="../blocks/lists.js"></script>
+<script src="../blocks/colour.js"></script>
+<script src="../blocks/variables.js"></script>
+<script src="../blocks/procedures.js"></script>
+<script src="../blocks/math.js"></script>
+<script src="../blocks/robActions.js"></script>
+<script src="../blocks/robColour.js"></script>
+<script src="../blocks/robControls.js"></script>
+<script src="../blocks/robSensors.js"></script>
+<script src="../blocks/robSensorDefinitions.js"></script>
+<script src="../blocks/robConfig.js"></script>
+<script src="../blocks/robConfigDefinitions.js"></script>
+<script src="../blocks/robBrick.js"></script>
+<script src="../blocks/robSensors.js"></script>
+<script src="../blocks/robSensorDefinitions.js"></script>
+<script src="../blocks/mbedActions.js"></script>
+<link rel="stylesheet" type="text/css" href="typicons.css">
+</link>
+<script>
+'use strict';
+// Depending on the URL argument, render as LTR or RTL.
+var rtl = (document.location.search == '?rtl');
+var workspace = null;
+var device = 'sensebox'
+var toolbox;
+
+function start() {
+  toolbox = document.getElementById('toolboxBeginner');
+  workspace = Blockly.inject('blocklyDiv',
+          {comments: true,
+           disable: true,
+           collapse: true,
+           grid:
+             {spacing: 25,
+              length: 3,
+              colour: '#ccc',
+              snap: true},
+           maxBlocks: Infinity,
+           media: '../media/',
+           readOnly: false,
+           rtl: rtl,
+           scrollbars: true,
+           toolbox: toolbox,
+           zoom:
+             {controls: true,
+              wheel: true,
+              startScale: 1.0,
+              maxScale: 4,
+              minScale: .25,
+              scaleSpeed: 1.1},
+           checkInTask:['start', '_def', 'event', '-Brick' ],
+           variableDeclaration: true,
+           robControls: true
+          });
+  workspace.setDevice({group:device, robot:device});
+  // Restore previously displayed text.
+  if (sessionStorage) {
+    var text = sessionStorage.getItem('textarea');
+    if (text) {
+      document.getElementById('importExport').value = text;
+    }
+    // Restore event logging state.
+    var state = sessionStorage.getItem('logEvents');
+    logEvents(Boolean(Number(state)));
+  } else {
+    // MSIE 11 does not support sessionStorage on file:// URLs.
+    logEvents(false);
+  }
+  taChange();
+}
+
+function toXml() {
+  var output = document.getElementById('importExport');
+  var xml = Blockly.Xml.workspaceToDom(workspace);
+  output.value = Blockly.Xml.domToPrettyText(xml);
+  output.focus();
+  output.select();
+  taChange();
+}
+
+function fromXml() {
+  var input = document.getElementById('importExport');
+  var xml = Blockly.Xml.textToDom(input.value);
+  Blockly.Xml.domToWorkspace(xml, workspace);
+  taChange();
+}
+
+function toCode(lang) {
+  var output = document.getElementById('importExport');
+  output.value = Blockly[lang].workspaceToCode(workspace);
+  taChange();
+}
+
+// Disable the "Import from XML" button if the XML is invalid.
+// Preserve text between page reloads.
+function taChange() {
+  var textarea = document.getElementById('importExport');
+  if (sessionStorage) {
+    sessionStorage.setItem('textarea', textarea.value);
+  }
+  var valid = true;
+  try {
+    Blockly.Xml.textToDom(textarea.value);
+  } catch (e) {
+    valid = false;
+  }
+  document.getElementById('import').disabled = !valid;
+}
+
+function logEvents(state) {
+  var checkbox = document.getElementById('logCheck');
+  checkbox.checked = state;
+  if (sessionStorage) {
+    sessionStorage.setItem('logEvents', Number(state));
+  }
+  if (state) {
+    workspace.addChangeListener(logger);
+  } else {
+    workspace.removeChangeListener(logger);
+  }
+}
+
+function logger(e) {
+  console.log(e);
+}
+
+function airstrike(n) {
+  var prototypes = [];
+  toolbox = document.getElementById('toolboxBeginner');
+  var blocks = toolbox.getElementsByTagName('block');
+  for (var i = 0, block; block = blocks[i]; i++) {
+    prototypes.push(block.getAttribute('type'));
+  }
+  for (var i = 0; i < n; i++) {
+    var prototype = prototypes[Math.floor(Math.random() * prototypes.length)];
+    var block = workspace.newBlock(prototype);
+    block.initSvg();
+    block.getSvgRoot().setAttribute('transform', 'translate(' +
+        Math.round(Math.random() * 450 + 40) + ', ' +
+        Math.round(Math.random() * 600 + 40) + ')');
+    block.render();
+  }
+}
+
+function spaghetti(n) {
+  var xml = spaghettiXml;
+  for(var i = 0; i < n; i++) {
+    xml = xml.replace(/(<(statement|next)( name="DO0")?>)<\//g,
+        '$1' + spaghettiXml + '</');
+  }
+  xml = '<block_set xmlns="http://www.w3.org/1999/xhtml"><instance x="9" y="3">' + xml + '</instance></block_set>';
+  var dom = Blockly.Xml.textToDom(xml);
+  console.time('Spaghetti domToWorkspace');
+  Blockly.Xml.domToWorkspace(dom, workspace);
+  console.timeEnd('Spaghetti domToWorkspace');
+}
+
+function toggleToolbox(){
+    if (toolbox.id == 'toolboxExpert'){
+        toolbox = document.getElementById('toolboxBeginner');
+    } else {
+        toolbox = document.getElementById('toolboxExpert');
+    }
+    workspace.updateToolbox(toolbox);
+}
+
+var spaghettiXml = [
+  '  <block type="robControls_if">',
+  '    <value name="IF0">',
+  '      <block type="logic_compare">',
+  '        <field name="OP">EQ</field>',
+  '        <value name="A">',
+  '          <block type="math_arithmetic">',
+  '            <field name="OP">MULTIPLY</field>',
+  '            <value name="A">',
+  '              <block type="math_number">',
+  '                <field name="NUM">6</field>',
+  '              </block>',
+  '            </value>',
+  '            <value name="B">',
+  '              <block type="math_number">',
+  '                <field name="NUM">7</field>',
+  '              </block>',
+  '            </value>',
+  '          </block>',
+  '        </value>',
+  '        <value name="B">',
+  '          <block type="math_number">',
+  '            <field name="NUM">42</field>',
+  '          </block>',
+  '        </value>',
+  '      </block>',
+  '    </value>',
+  '    <statement name="DO0"></statement>',
+  '    <next></next>',
+  '  </block>'].join('\n');
+
+</script>
+
+<style>
+html, body {
+  height: 100%;
+}
+body {
+  background-color: #fff;
+  font-family: sans-serif;
+  overflow: hidden;
+}
+h1 {
+  font-weight: normal;
+  font-size: 140%;
+}
+#blocklyDiv {
+  float: right;
+  height: 95%;
+  width: 70%;
+}
+#importExport {
+  font-family: monospace;
+}
+</style>
+</head>
+<body onload="start()">
+
+  <div id="blocklyDiv"></div>
+
+<toolbox_set id="toolboxBeginner" style="display: none">
+    <category name="TEST" svg="true">
+        <block type='robBrick_senseBox-Brick'></block>
+        <block type='robConf_led'></block>
+        <block type="robActions_sendData"></block>
+        <block type="robConf_wireless"></block> 
+        <block type="robConf_sdcard"></block> 
+        <block type="robSensors_timer_reset"></block>
+        <block type="robSensors_lightveml_getSample"></block>
+        <block type="robActions_display_text_i2c">
+            <value name="OUT">
+                <block type="text">
+                <field name="TEXT">Hallo</field>
+                </block>
+            </value>
+            <value name="COL">
+                <block type="math_number">
+                <field name="NUM">0</field>
+                </block>
+            </value>
+            <value name="ROW">
+                <block type="math_number">
+                <field name="NUM">0</field>
+                </block>
+            </value>
+        </block>
+        <block type="robControls_wait_for">
+        <value name="WAIT0">
+          <block type="logic_compare">
+            <value name="A">
+              <block type="robSensors_getSample"/>
+            </value>
+            <value name="B">
+              <block type="logic_boolean">
+                <field name="BOOL">TRUE</field>
+              </block>
+            </value>
+          </block>
+        </value>
+      </block>
+        <block type="robActions_plot_point"><block/>    
+     </category>
+     <category name="CONFIG" svg="true">
+        <block type="robConf_particle"></block>
+        <block type="robConf_lightveml"></block>
+     </category>
+</toolbox_set>
+
+<toolbox_set id="toolboxExpert" style="display: none">
+    <category name="TEST" svg="true">
+        <block type="robActions_sendData"></block>
+    </category>
+</toolbox_set>
+
+
+  <h1>Blockly Playground</h1>
+
+  <p><a href="javascript:void(workspace.setVisible(true))">Show</a>
+   - <a href="javascript:void(workspace.setVisible(false))">Hide</a></p>
+
+  <script>
+    if (rtl) {
+      document.write('[ &larr; RTL. Switch to <A HREF="?ltr">LTR</A>. ]');
+    } else {
+      document.write('[ &rarr; LTR. Switch to <A HREF="?rtl">RTL</A>. ]');
+    }
+  </script>
+
+  <p>
+    <input type="button" value="Export to XML" onclick="toXml()">
+    &nbsp;
+    <input type="button" value="Import from XML" onclick="fromXml()" id="import">
+    <br>
+    <input type="button" value="To JavaScript" onclick="toCode('JavaScript')">
+    &nbsp;
+    <input type="button" value="To Python" onclick="toCode('Python')">
+    &nbsp;
+    <input type="button" value="To PHP" onclick="toCode('PHP')">
+    &nbsp;
+    <input type="button" value="To Lua" onclick="toCode('Lua')">
+    &nbsp;
+    <input type="button" value="To Dart" onclick="toCode('Dart')">
+    <br>
+    <textarea id="importExport" style="width: 26%; height: 12em"
+      onchange="taChange();" onkeyup="taChange()"></textarea>
+  </p>
+
+  <p>
+    Stress test: &nbsp;
+    <input type="button" value="Airstrike!" onclick="airstrike(100)">
+    <input type="button" value="Spaghetti!" onclick="spaghetti(8)">
+    <input type="button" value="Toggle toolbox" onclick="toggleToolbox()">
+  </p>
+  <p>
+    Log events: &nbsp;
+    <input type="checkbox" onclick="logEvents(this.checked)" id="logCheck">
+  </p>
+
+</body>
+</html>

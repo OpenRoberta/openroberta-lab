@@ -1,0 +1,11 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="raspberrypi" xmlversion="3.1" description="" tags="">
+    <instance x="138" y="88">
+        <block id="1" type="robBrick_Raspberrypi-Brick" intask="true" deletable="false">
+            <field name="brick_label">RASPBERRYPI</field>
+            <field name="IP_ADDRESS">192.168.0.159</field>
+            <field name="PORT">22</field>
+            <field name="USERNAME">pi</field>
+            <field name="PASSWORD">raspberry</field>
+        </block>
+    </instance>
+</block_set>
