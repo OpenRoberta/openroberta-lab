@@ -750,7 +750,7 @@ define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constan
                                 colorSensorTheta = 0;
                         }
 
-                        var angles = [-(Math.PI / 16), -(Math.PI / 8), 0, (Math.PI / 8), (Math.PI / 16)];
+                        var angles = [-(Math.PI / 26.5), -(Math.PI / 17.66666), -(Math.PI / 8.8333), 0, (Math.PI / 8.8333), (Math.PI / 17.66666), (Math.PI / 26.5)]; // SUM(53°)
                         var cA = [];
                         for (var i = 0; i < angles.length; i++) {
                             cA[i] = {
