@@ -381,8 +381,6 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
         interpreters = programs.map(function(x) {
             var src = JSON.parse(x.javaScriptProgram);
             configurations.push(x.javaScriptConfiguration);
-            positionConfigurations.push(x.javaScriptPositionConfiguration);
-            alignmentConfigurations.push(x.javaScriptAlignmentConfiguration);
             return new SIM_I.Interpreter(src, new MBED_R.RobotMbedBehaviour(), callbackOnTermination, breakpoints);
         });
         updateDebugMode(debugMode);

@@ -43,10 +43,6 @@ define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constan
             robotIndexColour += "</select>";
             $("#constantValue").append('<div><label>Robot</label><span style="width:auto">' + robotIndexColour + '</span></div>');
         }
-
-        for (var r = 0; r < this.numprogs; r++) {
-            console.log(this.robots[r].colorSensor);
-        }
     }
 
     Scene.prototype.updateBackgrounds = function() {
