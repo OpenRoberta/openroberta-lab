@@ -122,6 +122,32 @@ define([ 'simulation.simulation', 'interpreter.constants', 'util', 'simulation.r
             e.stopPropagation();
         });
 
+        var $rangeLight = $('#rangeLight');
+        var $sliderLight = $('#sliderLight');
+
+        $sliderLight.on("mousedown touchstart", function(e) {
+            e.stopPropagation();
+        });
+        $sliderLight.on("input change", function(e) {
+            e.preventDefault();
+            var lightValue = $sliderLight.val();
+            $rangeLight.val(lightValue);
+            that.display.lightLevel = lightValue;
+            e.stopPropagation();
+        });
+        $rangeLight.on("change", function(e) {
+            e.preventDefault();
+            var lightValue = $rangeLight.val();
+            if(isNaN(lightValue)) $rangeLight.val(0);
+            if(parseInt(lightValue) < 0) $rangeLight.val(0);
+            if(parseInt(lightValue) > 100) $rangeLight.val(100);
+
+            lightValue = $rangeLight.val();
+            $sliderLight.val(lightValue);
+            that.display.lightLevel = lightValue;
+            e.stopPropagation();
+        });
+
 
         for (var i = 0; i < 4; i++) {
             if (this['pin' + i]) {
@@ -499,6 +525,9 @@ define([ 'simulation.simulation', 'interpreter.constants', 'util', 'simulation.r
         '<label style="margin: 8px;margin-top: 12px; margin-left: 0">' + Blockly.Msg.SENSOR_COMPASS
                 + '</label><input type="text" value="0" style="margin-bottom: 8px;margin-top: 12px; min-width: 45px; width: 45px; display: inline-block; border: 1px solid #333; border-radius: 2px; text-align: right;" id="range" />'
                 + '<div style="margin:8px 0; "><input id="slider" type="range" min="0" max="360" value="0" step="5" /></div>' + //
+        '<label style="margin: 8px;margin-top: 12px; margin-left: 0">' + Blockly.Msg.SENSOR_LIGHT
+                + '</label><input type="text" value="0" style="margin-bottom: 8px;margin-top: 12px; min-width: 45px; width: 45px; display: inline-block; border: 1px solid #333; border-radius: 2px; text-align: right; float: right;" id="rangeLight" />'
+                + '<div style="margin:8px 0; "><input id="sliderLight" type="range" min="0" max="100" value="0" /></div>' + //
                 '<label style="width:100%;margin: 8px;margin-top: 12px; margin-left: 0"><select class="customDropdown" id="pin"><option id="0">'
                 + Blockly.Msg.SENSOR_PIN + ' 0</option><option id="1">' + Blockly.Msg.SENSOR_PIN + ' 1</option><option id="2">' + Blockly.Msg.SENSOR_PIN
                 + ' 2</option></select><select class="customDropdown" style="float: right;" id="state"><option value="off">' + Blockly.Msg.OFF

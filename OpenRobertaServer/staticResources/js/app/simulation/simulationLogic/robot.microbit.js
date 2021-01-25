@@ -162,15 +162,16 @@ define([ 'simulation.simulation', 'simulation.robot.mbed' ], function(SIM, Mbed)
         // special case, display (center: 0,0) represents light level
         var dxDisplay = startX;
         var dyDisplay = startY + 20;
-        var Display = (dxDisplay * dxDisplay + dyDisplay * dyDisplay < this.display.rLight * this.display.rLight); //   
-        this.display.lightLevel = 100;
+        var Display = (dxDisplay * dxDisplay + dyDisplay * dyDisplay < this.display.rLight * this.display.rLight); //
+        var lightSliderActive = $('#sliderLight').val() !== "0";
+        if (!lightSliderActive) this.display.lightLevel = 100;
         if (A || B || Reset || Display || Pin0 || Pin1 || Pin2) {
             if (e.type === 'mousedown') {
                 if (A) {
                     this.buttons.A = true;
                 } else if (B) {
                     this.buttons.B = true;
-                } else if (Display) {
+                } else if (Display && !lightSliderActive) {
                     this.display.lightLevel = 150;
                 } else if (Reset) {
                     this.buttons.Reset = true;
@@ -181,7 +182,7 @@ define([ 'simulation.simulation', 'simulation.robot.mbed' ], function(SIM, Mbed)
                 } else if (Pin2) {
                     this.pin2.touched = true;
                 }
-            } else if (e.type === 'mousemove' && Display) {
+            } else if (e.type === 'mousemove' && Display && !lightSliderActive) {
                 this.display.lightLevel = 50;
             } else if (e.type === 'mouseup') {
                 this.pin0.touched = false;
@@ -190,7 +191,7 @@ define([ 'simulation.simulation', 'simulation.robot.mbed' ], function(SIM, Mbed)
                 this.buttons.A = false;
                 this.buttons.B = false;
             }
-            if (Display) {
+            if (Display && !lightSliderActive) {
                 $("#robotLayer").css('cursor', 'crosshair');
             } else {
                 $("#robotLayer").css('cursor', 'pointer');

@@ -2,10 +2,10 @@ define([ 'simulation.simulation', 'simulation.robot.mbed' ], function(SIM, Mbed)
 
     /**
      * Creates a new Calliope device for a simulation.
-     * 
+     *
      * This Calliope is a simple electrical board with some basic actors and
      * sensors.
-     * 
+     *
      * @class
      */
     function Calliope(pose, configuration, num, robotBehaviour) {
@@ -245,10 +245,10 @@ define([ 'simulation.simulation', 'simulation.robot.mbed' ], function(SIM, Mbed)
 
     /**
      * Update all actions of the Calliope.
-     * 
+     *
      * @param {actions}
      *            actions from the executing program: display, led ...
-     * 
+     *
      */
     Calliope.prototype.update = function() {
         Mbed.prototype.update.apply(this);
@@ -263,7 +263,7 @@ define([ 'simulation.simulation', 'simulation.robot.mbed' ], function(SIM, Mbed)
                     this.led.color = 'grey';
             }
         }
-        
+
         // update motors
         var motors = this.robotBehaviour.getActionState("motors", true);
         if (motors) {
@@ -330,14 +330,15 @@ define([ 'simulation.simulation', 'simulation.robot.mbed' ], function(SIM, Mbed)
         var dxDisplay = startX;
         var dyDisplay = startY + 20;
         var Display = (dxDisplay * dxDisplay + dyDisplay * dyDisplay < this.display.rLight * this.display.rLight);
-        this.display.lightLevel = 100;
+        var lightSliderActive = $('#sliderLight').val() !== "0";
+        if (!lightSliderActive) this.display.lightLevel = 100;
         if (A || B || Reset || Display || Pin0 || Pin1 || Pin2 || Pin3) {
             if (e.type === 'mousedown' || e.type === 'touchstart') {
                 if (A) {
                     this.buttons.A = true;
                 } else if (B) {
                     this.buttons.B = true;
-                } else if (Display) {
+                } else if (Display && !lightSliderActive) {
                     this.display.lightLevel = 150;
                 } else if (Reset) {
                     this.buttons.Reset = true;
@@ -350,7 +351,7 @@ define([ 'simulation.simulation', 'simulation.robot.mbed' ], function(SIM, Mbed)
                 } else if (Pin3) {
                     this.pin3.touched = true;
                 }
-            } else if (e.type === 'mousemove' && Display) {
+            } else if (e.type === 'mousemove' && Display && !lightSliderActive) {
                 this.display.lightLevel = 50;
             } else if (e.type === 'mouseup') {
                 this.pin0.touched = false;
@@ -360,7 +361,7 @@ define([ 'simulation.simulation', 'simulation.robot.mbed' ], function(SIM, Mbed)
                 this.buttons.A = false;
                 this.buttons.B = false;
             }
-            if (Display) {
+            if (Display && !lightSliderActive) {
                 $("#robotLayer").css('cursor', 'crosshair');
             } else {
                 $("#robotLayer").css('cursor', 'pointer');
@@ -382,6 +383,9 @@ define([ 'simulation.simulation', 'simulation.robot.mbed' ], function(SIM, Mbed)
         '<label style="margin: 8px;margin-top: 12px; margin-left: 0">' + Blockly.Msg.SENSOR_COMPASS
                 + '</label><input type="text" value="0" style="margin-bottom: 8px;margin-top: 12px; min-width: 45px; width: 45px; display: inline-block; border: 1px solid #333; border-radius: 2px; text-align: right;" id="range" />'
                 + '<div style="margin:8px 0; "><input id="slider" type="range" min="0" max="360" value="0" step="5" /></div>' + //
+        '<label style="margin: 8px;margin-top: 12px; margin-left: 0">' + Blockly.Msg.SENSOR_LIGHT
+                + '</label><input type="text" value="0" style="margin-bottom: 8px;margin-top: 12px; min-width: 45px; width: 45px; display: inline-block; border: 1px solid #333; border-radius: 2px; text-align: right; float: right;" id="rangeLight" />'
+                + '<div style="margin:8px 0; "><input id="sliderLight" type="range" min="0" max="100" value="0" /></div>' + //
                 '<label style="width:100%;margin: 8px;margin-top: 12px; margin-left: 0"><select class="customDropdown" id="pin"><option id="0">'
                 + Blockly.Msg.SENSOR_PIN + ' 0</option><option id="1">' + Blockly.Msg.SENSOR_PIN + ' 1</option><option id="2">' + Blockly.Msg.SENSOR_PIN
                 + ' 2</option><option id="3">' + Blockly.Msg.SENSOR_PIN
