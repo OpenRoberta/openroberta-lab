@@ -28,6 +28,12 @@ QUIET='no'
 while true
 do
   case "$1" in
+    -git-mode)     DB_MODE='embedded'
+	               DB_NAME='openroberta-db'
+				   DB_PARENTDIR='./OpenRobertaServer/db-embedded'
+				   JAVA_LIB_DIR='./OpenRobertaServer/target/resources'
+				   ADMIN_DIR='./admin' # this directory is .gitignore-d
+				   shift ;;
     -db-mode)      DB_MODE=$2
                    shift; shift ;;
     -db-name)      DB_NAME=$2
@@ -102,7 +108,7 @@ case "$CMD" in
                    echo "execute the sql statement '$SQL'"
                    java $RDBG $XMX -cp $JAVA_LIB_DIR/\* de.fhg.iais.roberta.main.Administration sql-exec "$DB_URI" "$SQL"
                    RC=$? ;;
-  create-empty-db) java -cp lib/\* de.fhg.iais.roberta.main.Administration create-empty-db "$DB_URI_FILE" >>$ADMIN_LOG_FILE 2>&1
+  create-empty-db) java -cp $JAVA_LIB_DIR/\* de.fhg.iais.roberta.main.Administration create-empty-db "$DB_URI_FILE" >>$ADMIN_LOG_FILE 2>&1
                    RC=$? ;;
   version)         java -cp $JAVA_LIB_DIR/\* de.fhg.iais.roberta.main.Administration version
                    RC=$? ;;
