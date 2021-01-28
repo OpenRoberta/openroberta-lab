@@ -102,10 +102,10 @@ export const ROBOTS = {
         "ports":
         [
             { name: 'LED_BUILTIN', position: { x: 28.9, y: 91.4 } },
-            { name: 'TX1', position: { x: 228.9, y: 5.6 } },
-            { name: 'RX0', position: { x: 214.6, y: 5.6 } },
             { name: 'RESET', position: { x: 200.3, y: 5.6 } },
             { name: 'GND', position: { x: 186.1, y: 5.6 } },
+            { name: '0', position: { x: 214.6, y: 5.6 } },
+            { name: '1', position: { x: 228.9, y: 5.6 } },
             { name: '2', position: { x: 171.8, y: 5.6 } },
             { name: '3', position: { x: 157.5, y: 5.6 } },
             { name: '4', position: { x: 143.2, y: 5.6 } },
