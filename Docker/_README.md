@@ -66,7 +66,7 @@ Do _not_ forget, to increase the version numer in the next section, too.
 BASE_DIR=/data/openroberta-lab
 ARCH=x64 # either x64 or arm32v7
 CCBIN_VERSION=1 # this is needed in the dockerfile!
-BASE_VERSION=25
+BASE_VERSION=26
 CC_RESOURCES=/data/openroberta-lab/git/ora-cc-rsc
 cd $CC_RESOURCES
 
@@ -98,7 +98,7 @@ If the image is started, it will checkout a branch given as start parameter and 
 ```bash
 BASE_DIR=/data/openroberta-lab
 ARCH=x64
-BASE_VERSION=25
+BASE_VERSION=26
 GITREPO=https://github.com/OpenRoberta/openroberta-lab.git       # this is the URL of the official repo, you may use your fork
 BRANCH=develop                                                   # the branch used to fill the maven cache
 IMAGE_NAME=openroberta/it-${ARCH}-offical-gitrepo-with-develop   # change the name SUFFIX when using a forked repo
@@ -112,7 +112,7 @@ To run the integration tests on your local machine (usually a build server like 
 
 ```bash
 ARCH=x64
-BASE_VERSION=25
+BASE_VERSION=26
 IMAGE_NAME=openroberta/it-${ARCH}-offical-gitrepo-with-develop      # the name from above!
 export GITREPO='https://github.com/OpenRoberta/openroberta-lab.git' # the repo URL from above!
 export BRANCH='develop'
