@@ -25,13 +25,11 @@ import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.lang.expr.eval.EvalExprErrorListener;
 import de.fhg.iais.roberta.syntax.lang.expr.eval.ExprlyVisitor;
-import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
+import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.typecheck.NepoInfo;
-import de.fhg.iais.roberta.visitor.IVisitor;
-import de.fhg.iais.roberta.visitor.lang.ILanguageVisitor;
 
 /**
  * This class represents blockly eval_expr block in the AST<br>
@@ -107,11 +105,6 @@ public class EvalExpr<V> extends Expr<V> {
     }
 
     @Override
-    protected V acceptImpl(IVisitor<V> visitor) {
-        return ((ILanguageVisitor<V>) visitor).visitEvalExpr(this);
-    }
-
-    @Override
     public String toString() {
         return this.exprBlock.toString();
     }
@@ -165,7 +158,7 @@ public class EvalExpr<V> extends Expr<V> {
      * @throws Throwable
      */
     @SuppressWarnings("unchecked")
-    public static <V> Phrase<V> jaxbToAst(Block block, AbstractJaxb2Ast<V> helper) throws Exception {
+    public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) throws Exception {
         List<Field> fields = Jaxb2Ast.extractFields(block, (short) 2);
         String expr = Jaxb2Ast.extractField(fields, "EXPRESSION");
         String type = Jaxb2Ast.extractField(fields, "TYPE");

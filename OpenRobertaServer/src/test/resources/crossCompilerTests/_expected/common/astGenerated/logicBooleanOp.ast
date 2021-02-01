@@ -1,0 +1,115 @@
+
+StmtTextComment [Logic Boolean Operators -- Start]
+
+if Binary [AND, BoolConst [true], BoolConst [true]]
+,then
+exprStmt Binary [MATH_CHANGE, Var [x], NumConst [1]]
+
+
+if Binary [AND, BoolConst [true], BoolConst [false]]
+,then
+exprStmt Binary [MATH_CHANGE, Var [x], NumConst [1000]]
+
+
+if Binary [AND, BoolConst [false], BoolConst [true]]
+,then
+exprStmt Binary [MATH_CHANGE, Var [x], NumConst [1000]]
+
+
+if Binary [AND, BoolConst [false], BoolConst [false]]
+,then
+exprStmt Binary [MATH_CHANGE, Var [x], NumConst [1000]]
+
+AssertStmt [asserts pos-1: Binary [EQ, NumConst [1], Var [x]]]
+
+if Unary [NOT, Binary [AND, BoolConst [true], BoolConst [true]]]
+,then
+exprStmt Binary [MATH_CHANGE, Var [x], NumConst [1000]]
+
+
+if Unary [NOT, Binary [AND, BoolConst [true], BoolConst [false]]]
+,then
+exprStmt Binary [MATH_CHANGE, Var [x], NumConst [1]]
+
+
+if Unary [NOT, Binary [AND, BoolConst [false], BoolConst [true]]]
+,then
+exprStmt Binary [MATH_CHANGE, Var [x], NumConst [1]]
+
+
+if Unary [NOT, Binary [AND, BoolConst [false], BoolConst [false]]]
+,then
+exprStmt Binary [MATH_CHANGE, Var [x], NumConst [1]]
+
+AssertStmt [asserts pos-2: Binary [EQ, NumConst [4], Var [x]]]
+
+if Binary [OR, BoolConst [true], BoolConst [true]]
+,then
+exprStmt Binary [MATH_CHANGE, Var [x], NumConst [1]]
+
+
+if Binary [OR, BoolConst [true], BoolConst [false]]
+,then
+exprStmt Binary [MATH_CHANGE, Var [x], NumConst [1]]
+
+
+if Binary [OR, BoolConst [false], BoolConst [true]]
+,then
+exprStmt Binary [MATH_CHANGE, Var [x], NumConst [1]]
+
+
+if Binary [OR, BoolConst [false], BoolConst [false]]
+,then
+exprStmt Binary [MATH_CHANGE, Var [x], NumConst [1000]]
+
+AssertStmt [asserts pos-3: Binary [EQ, NumConst [7], Var [x]]]
+
+if Unary [NOT, Binary [OR, BoolConst [true], BoolConst [true]]]
+,then
+exprStmt Binary [MATH_CHANGE, Var [x], NumConst [1000]]
+
+
+if Unary [NOT, Binary [OR, BoolConst [true], BoolConst [false]]]
+,then
+exprStmt Binary [MATH_CHANGE, Var [x], NumConst [1000]]
+
+
+if Unary [NOT, Binary [OR, BoolConst [false], BoolConst [true]]]
+,then
+exprStmt Binary [MATH_CHANGE, Var [x], NumConst [1000]]
+
+
+if Unary [NOT, Binary [OR, BoolConst [false], BoolConst [false]]]
+,then
+exprStmt Binary [MATH_CHANGE, Var [x], NumConst [1]]
+
+AssertStmt [asserts pos-4: Binary [EQ, NumConst [8], Var [x]]]
+
+if Binary [AND, Binary [AND, BoolConst [true], BoolConst [true]], Binary [AND, BoolConst [true], BoolConst [true]]]
+,then
+exprStmt Binary [MATH_CHANGE, Var [x], NumConst [1]]
+
+
+if Binary [OR, Binary [AND, BoolConst [true], BoolConst [false]], Binary [AND, BoolConst [false], BoolConst [true]]]
+,then
+exprStmt Binary [MATH_CHANGE, Var [x], NumConst [1000]]
+
+
+if Binary [AND, Unary [NOT, Binary [OR, BoolConst [true], BoolConst [true]]], Unary [NOT, Binary [OR, BoolConst [true], BoolConst [true]]]]
+,then
+exprStmt Binary [MATH_CHANGE, Var [x], NumConst [1000]]
+
+
+if Binary [OR, Unary [NOT, Binary [AND, BoolConst [true], BoolConst [false]]], Unary [NOT, Binary [AND, BoolConst [true], BoolConst [false]]]]
+,then
+exprStmt Binary [MATH_CHANGE, Var [x], NumConst [1]]
+
+DebugAction [StmtExpr [
+if Binary [EQ, NumConst [10], Var [x]]
+,then
+exprStmt StringConst [Logic Boolean operators Test: success]
+,else
+exprStmt StringConst [Logic Boolean operators Test: FAIL]
+]]
+
+StmtTextComment [Logic Boolean Operators -- End]

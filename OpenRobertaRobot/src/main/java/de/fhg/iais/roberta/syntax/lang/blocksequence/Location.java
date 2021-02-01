@@ -5,8 +5,6 @@ import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.lang.expr.Assoc;
 import de.fhg.iais.roberta.util.dbc.Assert;
-import de.fhg.iais.roberta.visitor.IVisitor;
-import de.fhg.iais.roberta.visitor.lang.ILanguageVisitor;
 
 /**
  * This class stores the information of the location of the top block in a blockly program.
@@ -58,11 +56,6 @@ public class Location<V> extends Task<V> {
     @Override
     public Assoc getAssoc() {
         return null;
-    }
-
-    @Override
-    protected V acceptImpl(IVisitor<V> visitor) {
-        return ((ILanguageVisitor<V>) visitor).visitLocation(this);
     }
 
     @Override

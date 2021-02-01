@@ -1,0 +1,38 @@
+
+StmtTextComment [Basis List Operations START]
+
+if FunctionExpr [LengthOfFunct [LIST_IS_EMPTY, [Var [initialEmptyNumbers]]]]
+,then
+Var [initialEmptyNumbers] := ListCreate [NUMBER, NumConst [1], NumConst [2]]
+
+Var [item] := FunctionExpr [LengthOfFunct [LIST_LENGTH, [Var [initialEmptyNumbers]]]]
+
+Var [item] := FunctionExpr [IndexOfFunct [FIRST, [Var [initialEmptyNumbers], NumConst [1]]]]
+
+Var [item] := FunctionExpr [IndexOfFunct [FIRST, [Var [initialEmptyNumbers], NumConst [5]]]]
+FunctionStmt [ListSetIndex [SET, FIRST, [Var [initialEmptyNumbers], NumConst [2]]]]
+
+
+if FunctionExpr [LengthOfFunct [LIST_IS_EMPTY, [Var [initialEmptyBoolean]]]]
+,then
+Var [initialEmptyBoolean] := ListCreate [BOOLEAN, BoolConst [true], BoolConst [false]]
+
+Var [item] := FunctionExpr [LengthOfFunct [LIST_LENGTH, [Var [initialEmptyBoolean]]]]
+
+Var [item] := FunctionExpr [IndexOfFunct [FIRST, [Var [initialEmptyBoolean], Var [bool]]]]
+
+Var [item] := FunctionExpr [IndexOfFunct [FIRST, [Var [initialEmptyBoolean], NullConst [null]]]]
+FunctionStmt [ListSetIndex [INSERT, LAST, [Var [initialEmptyBoolean], BoolConst [true]]]]
+
+
+if FunctionExpr [LengthOfFunct [LIST_IS_EMPTY, [Var [initialEmptyStrings]]]]
+,then
+Var [initialEmptyStrings] := ListCreate [STRING, StringConst [a], StringConst [b]]
+
+Var [item] := FunctionExpr [LengthOfFunct [LIST_LENGTH, [Var [initialEmptyStrings]]]]
+
+Var [item] := FunctionExpr [IndexOfFunct [FIRST, [Var [initialEmptyStrings], StringConst [a]]]]
+FunctionStmt [ListSetIndex [SET, FROM_END, [Var [initialEmptyStrings], StringConst [c], NumConst [2]]]]FunctionStmt [ListSetIndex [INSERT, FROM_END, [Var [initialEmptyStrings], StringConst [d], NumConst [1]]]]
+
+
+StmtTextComment [Basis List Operations END]

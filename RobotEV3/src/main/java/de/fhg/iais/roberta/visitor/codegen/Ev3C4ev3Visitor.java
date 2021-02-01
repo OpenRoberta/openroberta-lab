@@ -869,7 +869,7 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
 
     @Override
     public Void visitEncoderSensor(EncoderSensor<Void> encoderSensor) {
-        String port = encoderSensor.getPort();
+        String port = encoderSensor.getUserDefinedPort();
         switch ( encoderSensor.getMode() ) {
             case SC.DEGREE:
                 generateGetEncoderInDegrees(port);
@@ -911,7 +911,7 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
 
     @Override
     public Void visitTimerSensor(TimerSensor<Void> timerSensor) {
-        String timerNumber = timerSensor.getPort();
+        String timerNumber = timerSensor.getUserDefinedPort();
         switch ( timerSensor.getMode() ) {
             case SC.DEFAULT:
             case SC.VALUE:
@@ -936,13 +936,13 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
 
     @Override
     public Void visitTouchSensor(TouchSensor<Void> touchSensor) {
-        this.sb.append("ReadEV3TouchSensor(").append(Ev3C4ev3Visitor.getPrefixedInputPort(touchSensor.getPort())).append(")");
+        this.sb.append("ReadEV3TouchSensor(").append(Ev3C4ev3Visitor.getPrefixedInputPort(touchSensor.getUserDefinedPort())).append(")");
         return null;
     }
 
     @Override
     public Void visitUltrasonicSensor(UltrasonicSensor<Void> ultrasonicSensor) {
-        String port = ultrasonicSensor.getPort();
+        String port = ultrasonicSensor.getUserDefinedPort();
         if ( ultrasonicSensor.getMode().equals(SC.DISTANCE) ) {
             generateRealUltrasonicDistance(port);
         } else {
@@ -961,13 +961,13 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
 
     @Override
     public Void visitSoundSensor(SoundSensor<Void> soundSensor) {
-        this.sb.append("ReadNXTSoundSensor(").append(Ev3C4ev3Visitor.getPrefixedInputPort(soundSensor.getPort())).append(", DB)");
+        this.sb.append("ReadNXTSoundSensor(").append(Ev3C4ev3Visitor.getPrefixedInputPort(soundSensor.getUserDefinedPort())).append(", DB)");
         return null;
     }
 
     @Override
     public Void visitGyroSensor(GyroSensor<Void> gyroSensor) {
-        String port = gyroSensor.getPort();
+        String port = gyroSensor.getUserDefinedPort();
         String mode = gyroSensor.getMode();
         if ( mode.equals(SC.RESET) ) {
             generateResetGyroSensor(port);
@@ -1001,7 +1001,7 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
     @Override
     public Void visitColorSensor(ColorSensor<Void> colorSensor) {
         String mode = colorSensor.getMode();
-        String port = Ev3C4ev3Visitor.getPrefixedInputPort(colorSensor.getPort());
+        String port = Ev3C4ev3Visitor.getPrefixedInputPort(colorSensor.getUserDefinedPort());
         switch ( mode ) {
             case SC.COLOUR:
                 this.sb.append("ReadEV3ColorSensor(").append(port).append(")");
@@ -1022,7 +1022,7 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
     @Override
     public Void visitHTColorSensor(HTColorSensor<Void> htColorSensor) {
         String mode = htColorSensor.getMode();
-        String port = Ev3C4ev3Visitor.getPrefixedInputPort(htColorSensor.getPort());
+        String port = Ev3C4ev3Visitor.getPrefixedInputPort(htColorSensor.getUserDefinedPort());
         String functionName;
         switch ( mode ) {
             case SC.COLOUR:
@@ -1046,7 +1046,7 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
 
     @Override
     public Void visitInfraredSensor(InfraredSensor<Void> infraredSensor) {
-        String port = infraredSensor.getPort();
+        String port = infraredSensor.getUserDefinedPort();
         switch ( infraredSensor.getMode() ) {
             case SC.DISTANCE:
                 generateEV3IRDistance(port);
@@ -1080,7 +1080,7 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
     }
 
     private void visitCalibrateCompass(CompassSensor<Void> compassSensor) {
-        String port = Ev3C4ev3Visitor.getPrefixedInputPort(compassSensor.getPort());
+        String port = Ev3C4ev3Visitor.getPrefixedInputPort(compassSensor.getUserDefinedPort());
         nlIndent();
         this.sb.append("StartHTCompassCalibration(" + port + ");");
         this.sb.append("Wait(40000);");
@@ -1090,7 +1090,7 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
 
     private void visitReadCompass(CompassSensor<Void> compassSensor) {
         String mode = getCompassSensorReadModeConstant(compassSensor.getMode());
-        this.sb.append("ReadHTCompassSensor(" + Ev3C4ev3Visitor.getPrefixedInputPort(compassSensor.getPort()) + ", " + mode + ")");
+        this.sb.append("ReadHTCompassSensor(" + Ev3C4ev3Visitor.getPrefixedInputPort(compassSensor.getUserDefinedPort()) + ", " + mode + ")");
     }
 
     private String getCompassSensorReadModeConstant(String mode) {
@@ -1108,7 +1108,7 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
     public Void visitIRSeekerSensor(IRSeekerSensor<Void> irSeekerSensor) {
         this.sb
             .append("ReadHTIrSensor(")
-            .append(Ev3C4ev3Visitor.getPrefixedInputPort(irSeekerSensor.getPort()))
+            .append(Ev3C4ev3Visitor.getPrefixedInputPort(irSeekerSensor.getUserDefinedPort()))
             .append(", ")
             .append(getIRSeekerSensorConstantMode(irSeekerSensor.getMode()))
             .append(")");
@@ -1136,7 +1136,7 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
 
     @Override
     public Void visitKeysSensor(KeysSensor<Void> keysSensor) {
-        this.sb.append("ButtonIsDown(" + getKeyConstant(keysSensor.getPort()) + ")");
+        this.sb.append("ButtonIsDown(" + getKeyConstant(keysSensor.getUserDefinedPort()) + ")");
         return null;
     }
 
@@ -1170,11 +1170,11 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
     @Override
     public Void visitShowTextAction(ShowTextAction<Void> showTextAction) {
         this.sb.append("DrawString(ToString(");
-        showTextAction.getMsg().accept(this);
+        showTextAction.msg.accept(this);
         this.sb.append("), ");
-        showTextAction.getX().accept(this);
+        showTextAction.x.accept(this);
         this.sb.append(", ");
-        showTextAction.getY().accept(this);
+        showTextAction.y.accept(this);
         this.sb.append(");");
         return null;
     }

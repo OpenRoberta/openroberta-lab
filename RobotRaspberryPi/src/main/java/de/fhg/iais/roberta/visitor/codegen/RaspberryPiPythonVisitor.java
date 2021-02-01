@@ -193,7 +193,7 @@ public final class RaspberryPiPythonVisitor extends AbstractPythonVisitor implem
 
     @Override
     public Void visitLightStatusAction(LightStatusAction<Void> lightStatusAction) {
-        this.sb.append("hal.light_off(").append(lightStatusAction.getPort()).append(")");
+        this.sb.append("hal.light_off(").append(lightStatusAction.getUserDefinedPort()).append(")");
         return null;
     }
 

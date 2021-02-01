@@ -171,7 +171,7 @@ public final class VorwerkPythonVisitor extends AbstractPythonVisitor implements
 
     @Override
     public Void visitTimerSensor(TimerSensor<Void> timerSensor) {
-        String timerNumber = timerSensor.getPort();
+        String timerNumber = timerSensor.getUserDefinedPort();
         switch ( timerSensor.getMode() ) {
             case SC.DEFAULT:
             case SC.VALUE:
@@ -207,7 +207,7 @@ public final class VorwerkPythonVisitor extends AbstractPythonVisitor implements
     }
 
     @Override
-    public Void visitAccelerometer(AccelerometerSensor<Void> accelerometerSensor) {
+    public Void visitAccelerometerSensor(AccelerometerSensor<Void> accelerometerSensor) {
         String port = getDevicePortName(accelerometerSensor);
         this.sb.append("hal.sample_accelerometer_sensor(").append(port).append(")");
         return null;
@@ -227,7 +227,7 @@ public final class VorwerkPythonVisitor extends AbstractPythonVisitor implements
     }
 
     private String getDevicePortName(ExternalSensor<Void> sensor) {
-        String userDefinedPort = sensor.getPort();
+        String userDefinedPort = sensor.getUserDefinedPort();
         String port = this.brickConfiguration.getConfigurationComponent(userDefinedPort).getInternalPortName();
         return "'" + port + "'";
     }

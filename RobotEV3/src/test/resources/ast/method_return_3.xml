@@ -1,0 +1,16 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="ev3" xmlversion="3.1" description="" tags="">
+    <instance x="1" y="85">
+        <block type="robProcedures_defreturn" id="21" inline="false">
+            <mutation declare="false" return_type="Boolean"></mutation>
+            <field name="NAME">test</field>
+            <field name="TYPE">Boolean</field>
+            <repetitions>
+                <value name="RETURN">
+                    <block type="logic_boolean" id="92">
+                        <field name="BOOL">TRUE</field>
+                    </block>
+                </value>
+            </repetitions>
+        </block>
+    </instance>
+</block_set>

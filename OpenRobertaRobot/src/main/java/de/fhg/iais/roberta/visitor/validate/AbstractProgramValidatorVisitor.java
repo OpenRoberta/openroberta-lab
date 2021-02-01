@@ -194,7 +194,7 @@ public abstract class AbstractProgramValidatorVisitor extends AbstractCollectorV
 
     @Override
     public Void visitEncoderSensor(EncoderSensor<Void> encoderSensor) {
-        if ( this.robotConfiguration.optConfigurationComponent(encoderSensor.getPort()) == null ) {
+        if ( this.robotConfiguration.optConfigurationComponent(encoderSensor.getUserDefinedPort()) == null ) {
             encoderSensor.addInfo(NepoInfo.error("CONFIGURATION_ERROR_MOTOR_MISSING"));
             this.errorCount++;
         }
@@ -244,7 +244,7 @@ public abstract class AbstractProgramValidatorVisitor extends AbstractCollectorV
     }
 
     @Override
-    public Void visitAccelerometer(AccelerometerSensor<Void> accelerometerSensor) {
+    public Void visitAccelerometerSensor(AccelerometerSensor<Void> accelerometerSensor) {
         checkSensorPort(accelerometerSensor);
         return null;
     }
@@ -342,9 +342,9 @@ public abstract class AbstractProgramValidatorVisitor extends AbstractCollectorV
 
     @Override
     public Void visitShowTextAction(ShowTextAction<Void> showTextAction) {
-        showTextAction.getMsg().accept(this);
-        showTextAction.getX().accept(this);
-        showTextAction.getY().accept(this);
+        showTextAction.msg.accept(this);
+        showTextAction.x.accept(this);
+        showTextAction.y.accept(this);
         return null;
     }
 
@@ -702,7 +702,17 @@ public abstract class AbstractProgramValidatorVisitor extends AbstractCollectorV
 
     public void addError(String messageKey, Phrase<Void> destination) {
         destination.addInfo(NepoInfo.error(messageKey));
-        this.errorCount++;
+        errorCount++;
+    }
+
+    protected void addErrorToPhrase(final Phrase<Void> phrase, final String message) {
+        phrase.addInfo(NepoInfo.error(message));
+        errorCount++;
+    }
+
+    protected void addWarningToPhrase(final Phrase<Void> phrase, final String message) {
+        phrase.addInfo(NepoInfo.warning(message));
+        warningCount++;
     }
 
     @Override

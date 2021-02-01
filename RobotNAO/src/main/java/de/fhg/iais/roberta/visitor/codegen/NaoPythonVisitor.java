@@ -776,7 +776,7 @@ public final class NaoPythonVisitor extends AbstractPythonVisitor implements INa
     @Override
     public Void visitTouchSensor(TouchSensor<Void> touchSensor) {
         this.sb.append("h.touchsensors(");
-        this.sb.append(getEnumCode(touchSensor.getPort()));
+        this.sb.append(getEnumCode(touchSensor.getUserDefinedPort()));
         this.sb.append(", ");
         this.sb.append(getEnumCode(touchSensor.getSlot()));
         this.sb.append(")");
@@ -792,15 +792,15 @@ public final class NaoPythonVisitor extends AbstractPythonVisitor implements INa
     @Override
     public Void visitGyroSensor(GyroSensor<Void> gyrometer) {
         this.sb.append("h.gyrometer(");
-        this.sb.append(getEnumCode(gyrometer.getPort()));
+        this.sb.append(getEnumCode(gyrometer.getUserDefinedPort()));
         this.sb.append(")");
         return null;
     }
 
     @Override
-    public Void visitAccelerometer(AccelerometerSensor<Void> accelerometer) {
+    public Void visitAccelerometerSensor(AccelerometerSensor<Void> accelerometer) {
         this.sb.append("h.accelerometer(");
-        this.sb.append(getEnumCode(accelerometer.getPort()));
+        this.sb.append(getEnumCode(accelerometer.getUserDefinedPort()));
         this.sb.append(")");
         return null;
     }
@@ -808,13 +808,13 @@ public final class NaoPythonVisitor extends AbstractPythonVisitor implements INa
     @Override
     public Void visitFsrSensor(FsrSensor<Void> fsr) {
         this.sb.append("h.fsr(");
-        this.sb.append(getEnumCode(fsr.getPort()));
+        this.sb.append(getEnumCode(fsr.getUserDefinedPort()));
         this.sb.append(")");
         return null;
     }
 
     @Override
-    public Void visitNaoMark(DetectMarkSensor<Void> detectedMark) {
+    public Void visitDetectMarkSensor(DetectMarkSensor<Void> detectedMark) {
         this.sb.append("h.getDetectedMark");
         if ( detectedMark.getMode().equals(SC.IDALL) ) {
             this.sb.append("s");
@@ -882,7 +882,7 @@ public final class NaoPythonVisitor extends AbstractPythonVisitor implements INa
     }
 
     @Override
-    public Void visitDetectFace(DetectFaceSensor<Void> detectFace) {
+    public Void visitDetectFaceSensor(DetectFaceSensor<Void> detectFace) {
         this.sb.append("faceRecognitionModule.detectFace");
         if ( detectFace.getMode().equals(SC.NAMEALL) ) {
             this.sb.append("s");
@@ -897,11 +897,11 @@ public final class NaoPythonVisitor extends AbstractPythonVisitor implements INa
     }
 
     @Override
-    public Void visitElectricCurrent(ElectricCurrentSensor<Void> electricCurrent) {
+    public Void visitElectricCurrentSensor(ElectricCurrentSensor<Void> electricCurrent) {
         String side_axis = electricCurrent.getSlot().toString().toLowerCase();
         String[] slots = side_axis.split("_");
 
-        String portType = electricCurrent.getPort();
+        String portType = electricCurrent.getUserDefinedPort();
         String port = portType.toString().toLowerCase();
         port = StringUtils.capitalize(port);
 
@@ -1112,7 +1112,7 @@ public final class NaoPythonVisitor extends AbstractPythonVisitor implements INa
     @Override
     public Void visitRecognizeWord(RecognizeWord<Void> recognizeWord) {
         this.sb.append("speechRecognitionModule.recognizeWordFromDictionary(");
-        recognizeWord.getVocabulary().accept(this);
+        recognizeWord.vocabulary.accept(this);
         this.sb.append(")");
         return null;
     }
@@ -1126,7 +1126,7 @@ public final class NaoPythonVisitor extends AbstractPythonVisitor implements INa
     }
 
     @Override
-    public Void visitDetecedFaceInformation(DetectedFaceInformation<Void> detectedFaceInformation) {
+    public Void visitDetectedFaceInformation(DetectedFaceInformation<Void> detectedFaceInformation) {
         this.sb.append("faceRecognitionModule.getFaceInformation(");
         detectedFaceInformation.getFaceName().accept(this);
         this.sb.append(")");

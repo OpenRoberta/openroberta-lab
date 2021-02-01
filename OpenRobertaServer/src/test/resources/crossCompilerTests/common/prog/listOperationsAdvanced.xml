@@ -585,19 +585,6 @@
         </block>
     </value>
 </block>
-<block type="robActions_motorDiff_on_for" id="qHZv*@CgRB_Sjl0NPDdt" intask="true">
-    <field name="DIRECTION">FOREWARD</field>
-    <value name="POWER">
-        <block type="math_number" id="%L0CBo09m*/[8^.:;7G!" intask="true">
-            <field name="NUM">30</field>
-        </block>
-    </value>
-    <value name="DISTANCE">
-        <block type="math_number" id="h_gB5nSYJ`]Z(+F~|xPw" intask="true">
-            <field name="NUM">20</field>
-        </block>
-    </value>
-</block>
 <block type="text_comment" id="q@5l{Ufiz^DSW:)_2y2W" intask="true">
     <field name="TEXT">Basis List Operations END</field>
 </block>

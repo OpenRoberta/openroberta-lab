@@ -55,11 +55,10 @@ public class ActivateUserRequest extends BaseRequest {
     }
 
     /**
-     * merge the properties of a JSON-object into this bean. The bean must be "under construction". The keys of the JSON-Object must be valid. The bean remains
-     * "under construction".<br>
+     * merge the properties of a JSON-object into this bean. The bean must be "under construction".
+     * The keys of the JSON-Object must be valid. The bean remains "under construction".<br>
      * Throws a runtime exception if inconsistencies are detected.
      */
-    @Override
     public ActivateUserRequest merge(JSONObject jsonO) {
         try {
             for ( String key : JSONObject.getNames(jsonO) ) {
@@ -83,7 +82,6 @@ public class ActivateUserRequest extends BaseRequest {
      * Checks whether all required fields are set. All lists are made immutable.<br>
      * Throws a runtime exception if inconsistencies are detected.
      */
-    @Override
     public ActivateUserRequest immutable() {
         if ( this.immutable ) {
             return this;
@@ -101,7 +99,7 @@ public class ActivateUserRequest extends BaseRequest {
         if ( !this.immutable ) {
             _message = "ActivateUserRequest-object is already immutable: " + toString();
         }
-        if ( this.userActivationLink == null ) {
+        if ( userActivationLink == null ) {
             _message = "required property userActivationLink of ActivateUserRequest-object is not set: " + toString();
         }
         if ( _message != null ) {
@@ -136,7 +134,6 @@ public class ActivateUserRequest extends BaseRequest {
      * generates a JSON-object from an immutable bean.<br>
      * Throws a runtime exception if inconsistencies are detected.
      */
-    @Override
     public JSONObject toJson() {
         if ( !this.immutable ) {
             throw new RuntimeException("no JSON from an object under construction: " + toString());

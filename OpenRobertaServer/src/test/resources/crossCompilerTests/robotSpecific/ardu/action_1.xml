@@ -160,7 +160,7 @@
                     </statement>
                 </block>
             </instance>
-            <instance x="-1406" y="-515">
+            <instance x="-1060" y="-616">
                 <block type="robProcedures_defnoreturn" id="v?lP0jz(mSIf.WyO0@CM" intask="true">
                     <mutation declare="false"></mutation>
                     <field name="NAME">display</field>
@@ -197,10 +197,34 @@
                         <block type="robActions_display_clear_i2c" id="Qd2}?y;AM~/b:,;9iD2l" intask="true">
                             <field name="ACTORPORT">L3</field>
                         </block>
+                        <block type="robActions_display_text_oledssd1306i2c" id="=D,UJZKIX/Gw/E2X*VP@" intask="true">
+                            <field name="ACTORPORT">O</field>
+                            <value name="OUT">
+                                <block type="variables_get" id=":JZ~c%xQxK]|%/Bq!|:b" intask="true">
+                                    <mutation datatype="String"></mutation>
+                                    <field name="VAR">stringVar</field>
+                                </block>
+                            </value>
+                            <value name="COL">
+                                <block type="variables_get" id="zytiD@R!4Nwxft64*kqM" intask="true">
+                                    <mutation datatype="Number"></mutation>
+                                    <field name="VAR">numberVar</field>
+                                </block>
+                            </value>
+                            <value name="ROW">
+                                <block type="variables_get" id="t#|/W^6i/1[U-AFd[geo" intask="true">
+                                    <mutation datatype="Number"></mutation>
+                                    <field name="VAR">numberVar</field>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="robActions_display_clear_oledssd1306i2c" id="3qnrDoxo5z0dZm{||ZwF" intask="true">
+                            <field name="ACTORPORT">O</field>
+                        </block>
                     </statement>
                 </block>
             </instance>
-            <instance x="-1406" y="-291">
+            <instance x="-1407" y="-275">
                 <block type="robProcedures_defnoreturn" id="d4?n)G1.Q}OPed}5_N!." intask="true">
                     <mutation declare="false"></mutation>
                     <field name="NAME">lights</field>
@@ -325,7 +349,7 @@
         </block_set>
     </program>
     <config>
-        <block_set robottype="arduino" xmlversion="3.1" description="" tags="" xmlns="http://de.fhg.iais.roberta.blockly">
+        <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="arduino" xmlversion="3.1" description="" tags="">
             <instance x="1181" y="-160">
                 <block type="robConf_digitalin" id="RI.[_oW|[D*wQ)4KMM*A" intask="true">
                     <field name="NAME">A</field>
@@ -336,15 +360,6 @@
                 <block type="robConf_led" id="1" intask="true">
                     <field name="NAME">L</field>
                     <field name="INPUT">LED_BUILTIN</field>
-                </block>
-            </instance>
-            <instance x="1466" y="-121">
-                <block type="robConf_stepmotor" id="mWf9flP^21+AIRyzl3_4" intask="true">
-                    <field name="NAME">S2</field>
-                    <field name="IN1">1</field>
-                    <field name="IN2">2</field>
-                    <field name="IN3">4</field>
-                    <field name="IN4">5</field>
                 </block>
             </instance>
             <instance x="1225" y="-106">
@@ -374,7 +389,7 @@
             <instance x="1382" y="88">
                 <block type="robConf_rgbled" id="W-Nj8Puk*fA8NAK1noh6" intask="true">
                     <field name="NAME">R2</field>
-                    <field name="RED">8</field>
+                    <field name="RED">5</field>
                     <field name="GREEN">9</field>
                     <field name="BLUE">10</field>
                 </block>
@@ -383,6 +398,26 @@
                 <block type="robConf_buzzer" id="Zbjs[:U-ceHe!8%=Qi.3" intask="true">
                     <field name="NAME">S3</field>
                     <field name="+">11</field>
+                </block>
+            </instance>
+            <instance x="250" y="250">
+                <block type="robConf_robot" id="robot" intask="true">
+                    <field name="ROBOT">undefined</field>
+                </block>
+            </instance>
+            <instance x="685" y="430">
+                <block type="robConf_oledssd1306i2c" id="z^#z6j9PnJ~0iTB-BcLx" intask="true">
+                    <field name="NAME">O</field>
+                    <field name="ADDRESS">0x3D</field>
+                </block>
+            </instance>
+            <instance x="167" y="514">
+                <block type="robConf_stepmotor" id="mWf9flP^21+AIRyzl3_4" error_attribute="true" intask="true">
+                    <field name="NAME">S2</field>
+                    <field name="IN1">1</field>
+                    <field name="IN2">2</field>
+                    <field name="IN3">4</field>
+                    <field name="IN4">12</field>
                 </block>
             </instance>
         </block_set>

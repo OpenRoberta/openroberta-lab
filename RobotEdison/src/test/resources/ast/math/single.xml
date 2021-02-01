@@ -1,7 +1,0 @@
-<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="edison" xmlversion="3.1" description="" tags="">
-    <instance x="404" y="132">
-        <block type="math_single" id="{#2QX^wT?%uaKv{=^K0^" intask="false">
-            <field name="OP">ROOT</field>
-        </block>
-    </instance>
-</block_set>

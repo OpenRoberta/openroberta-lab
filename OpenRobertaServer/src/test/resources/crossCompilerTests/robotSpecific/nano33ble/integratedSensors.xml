@@ -1,0 +1,272 @@
+<export xmlns="http://de.fhg.iais.roberta.blockly">
+    <program>
+        <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="nano33ble" xmlversion="3.1" description="" tags="">
+            <instance x="112" y="38">
+                <block type="robControls_start_ardu" id="WtW@S(03[eaNk04+Ox4^" intask="true" deletable="false">
+                    <mutation declare="true"></mutation>
+                    <field name="DEBUG"></field>
+                    <statement name="ST">
+                        <block type="robGlobalVariables_declare" id="_/ilN2K8[,5(n#s=VuX#" intask="true" deletable="false" movable="false">
+                            <mutation next="true" declaration_type="Boolean"></mutation>
+                            <field name="VAR">b</field>
+                            <field name="TYPE">Boolean</field>
+                            <value name="VALUE">
+                                <block type="logic_boolean" id="?PDoZ.lG,q%+pHuS*7QB" intask="true">
+                                    <field name="BOOL">TRUE</field>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="robGlobalVariables_declare" id="FDwRgxiI9PSJY*;[FCpl" intask="true" deletable="false" movable="false">
+                            <mutation next="true" declaration_type="Number"></mutation>
+                            <field name="VAR">v</field>
+                            <field name="TYPE">Number</field>
+                            <value name="VALUE">
+                                <block type="math_number" id="rZm+pc^t4NtY?%{Us6G(" intask="true">
+                                    <field name="NUM">0</field>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="robGlobalVariables_declare" id="{@8M5O08coLYozI5Pead" intask="true" deletable="false" movable="false">
+                            <mutation next="true" declaration_type="Number"></mutation>
+                            <field name="VAR">x</field>
+                            <field name="TYPE">Number</field>
+                            <value name="VALUE">
+                                <block type="math_number" id="l[cUwFrep,A;*yf{hvoL" intask="true">
+                                    <field name="NUM">0</field>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="robGlobalVariables_declare" id="kEo@}YN!,{+{4-6l2dR3" intask="true" deletable="false" movable="false">
+                            <mutation next="true" declaration_type="Number"></mutation>
+                            <field name="VAR">y</field>
+                            <field name="TYPE">Number</field>
+                            <value name="VALUE">
+                                <block type="math_number" id="4N02;N8:h8dL+yb%@|Ro" intask="true">
+                                    <field name="NUM">0</field>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="robGlobalVariables_declare" id="[Ra~u]~Rw19xN{}y*@P:" intask="true" deletable="false" movable="false">
+                            <mutation next="false" declaration_type="Number"></mutation>
+                            <field name="VAR">z</field>
+                            <field name="TYPE">Number</field>
+                            <value name="VALUE">
+                                <block type="math_number" id="i0ClZFC[{l~^rCr`tQqF" intask="true">
+                                    <field name="NUM">0</field>
+                                </block>
+                            </value>
+                        </block>
+                    </statement>
+                </block>
+                <block type="robControls_loopForever_ardu" id="[0^d6m~AROPA=CqBy:.S" intask="true" deletable="false" movable="false">
+                    <statement name="DO">
+                        <block type="variables_set" id="Q``PRSgUEVcR+?L195OX" intask="true">
+                            <mutation datatype="Boolean"></mutation>
+                            <field name="VAR">b</field>
+                            <value name="VALUE">
+                                <block type="robSensors_lsm9ds1_acceleration_getDataAvailableSample" id="qePFe[jj|wZZsR@vyzfO" intask="true">
+                                    <value name="VARIABLE_X">
+                                        <block type="variables_get" id="R=:[xf;rFlzaNjC}Xh@a" intask="true">
+                                            <mutation datatype="Number"></mutation>
+                                            <field name="VAR">x</field>
+                                        </block>
+                                    </value>
+                                    <value name="VARIABLE_Y">
+                                        <block type="variables_get" id="Ae(I^#Ii9@lv;{j2OpVC" intask="true">
+                                            <mutation datatype="Number"></mutation>
+                                            <field name="VAR">y</field>
+                                        </block>
+                                    </value>
+                                    <value name="VARIABLE_Z">
+                                        <block type="variables_get" id="gH[o9}}m{=ek1/2J4kTe" intask="true">
+                                            <mutation datatype="Number"></mutation>
+                                            <field name="VAR">z</field>
+                                        </block>
+                                    </value>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="variables_set" id="=40w6,L5F?m![O4:DFmu" intask="true">
+                            <mutation datatype="Boolean"></mutation>
+                            <field name="VAR">b</field>
+                            <value name="VALUE">
+                                <block type="robSensors_lsm9ds1_gyro_getDataAvailableSample" id="D|P%K|z7IY8WQI;qmN)o" intask="true">
+                                    <value name="VARIABLE_X">
+                                        <block type="variables_get" id="julV[1k7K[:X5(avy;5p" intask="true">
+                                            <mutation datatype="Number"></mutation>
+                                            <field name="VAR">x</field>
+                                        </block>
+                                    </value>
+                                    <value name="VARIABLE_Y">
+                                        <block type="variables_get" id="|RcNSZdc;m}fqya)?^PE" intask="true">
+                                            <mutation datatype="Number"></mutation>
+                                            <field name="VAR">y</field>
+                                        </block>
+                                    </value>
+                                    <value name="VARIABLE_Z">
+                                        <block type="variables_get" id="f,vfe@-idN*hiok[*33h" intask="true">
+                                            <mutation datatype="Number"></mutation>
+                                            <field name="VAR">z</field>
+                                        </block>
+                                    </value>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="variables_set" id="A-SqPS@P5f84VUj#=_tI" intask="true">
+                            <mutation datatype="Boolean"></mutation>
+                            <field name="VAR">b</field>
+                            <value name="VALUE">
+                                <block type="robSensors_lsm9ds1_magneticfield_getDataAvailableSample" id="v`NNCpT(4Rywt9ud]wr1" intask="true">
+                                    <value name="VARIABLE_X">
+                                        <block type="variables_get" id="3Z2xnoY`6B/./*b%,e{l" intask="true">
+                                            <mutation datatype="Number"></mutation>
+                                            <field name="VAR">x</field>
+                                        </block>
+                                    </value>
+                                    <value name="VARIABLE_Y">
+                                        <block type="variables_get" id="XL=lewnN!{G)bl-6I/I|" intask="true">
+                                            <mutation datatype="Number"></mutation>
+                                            <field name="VAR">y</field>
+                                        </block>
+                                    </value>
+                                    <value name="VARIABLE_Z">
+                                        <block type="variables_get" id="G%)4gBMt=rlX8+7B+x#F" intask="true">
+                                            <mutation datatype="Number"></mutation>
+                                            <field name="VAR">z</field>
+                                        </block>
+                                    </value>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="variables_set" id="O~%h5dS,ZLY{}SX=RV]1" intask="true">
+                            <mutation datatype="Boolean"></mutation>
+                            <field name="VAR">b</field>
+                            <value name="VALUE">
+                                <block type="robSensors_apds9960_distance_getDataAvailableSample" id="j2rcMQ3^6X{^+3tCi_x{" intask="true">
+                                    <value name="VARIABLE_VALUE">
+                                        <block type="variables_get" id="8jnvqLyf44C[.y@Jc4eq" intask="true">
+                                            <mutation datatype="Number"></mutation>
+                                            <field name="VAR">v</field>
+                                        </block>
+                                    </value>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="variables_set" id="VvkSZ%!#?G/U=]W-bazA" intask="true">
+                            <mutation datatype="Boolean"></mutation>
+                            <field name="VAR">b</field>
+                            <value name="VALUE">
+                                <block type="robSensors_apds9960_gesture_getDataAvailableSample" id="Fav4HQG|w|e-+P]HqJ%T" intask="true">
+                                    <value name="VARIABLE_VALUE">
+                                        <block type="variables_get" id="CWIteoRzk%1K{)lWz`fr" intask="true">
+                                            <mutation datatype="Number"></mutation>
+                                            <field name="VAR">v</field>
+                                        </block>
+                                    </value>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="variables_set" id="Vlh?V7{3`+6ctJy1Cpn}" intask="true">
+                            <mutation datatype="Boolean"></mutation>
+                            <field name="VAR">b</field>
+                            <value name="VALUE">
+                                <block type="robSensors_apds9960_color_getDataAvailableSample" id="iC]cawWaXMxnX,MEgT5]" intask="true">
+                                    <value name="VARIABLE_R">
+                                        <block type="variables_get" id="5E*5!|N*^4_%6b,DUVHr" intask="true">
+                                            <mutation datatype="Number"></mutation>
+                                            <field name="VAR">x</field>
+                                        </block>
+                                    </value>
+                                    <value name="VARIABLE_G">
+                                        <block type="variables_get" id="VARR/m0Qh!rw[fTzjjzc" intask="true">
+                                            <mutation datatype="Number"></mutation>
+                                            <field name="VAR">y</field>
+                                        </block>
+                                    </value>
+                                    <value name="VARIABLE_B">
+                                        <block type="variables_get" id="vxFB3}FzfWc)}0=1pbsy" intask="true">
+                                            <mutation datatype="Number"></mutation>
+                                            <field name="VAR">z</field>
+                                        </block>
+                                    </value>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="variables_set" id="r/K%^aF2cIZgbM)l0M+W" intask="true">
+                            <mutation datatype="Boolean"></mutation>
+                            <field name="VAR">b</field>
+                            <value name="VALUE">
+                                <block type="robSensors_lps22hb_pressure_getDataAvailableSample" id="qh~:]`Zq0!6)(wu(kx]e" intask="true">
+                                    <value name="VARIABLE_VALUE">
+                                        <block type="variables_get" id="ANc,M824uUh~iQ4jks*d" intask="true">
+                                            <mutation datatype="Number"></mutation>
+                                            <field name="VAR">v</field>
+                                        </block>
+                                    </value>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="variables_set" id="SWz!RA/`|Lz0sIm#FMlj" intask="true">
+                            <mutation datatype="Boolean"></mutation>
+                            <field name="VAR">b</field>
+                            <value name="VALUE">
+                                <block type="robSensors_hts221_temperature_getDataAvailableSample" id="u-qKzIN~AH(4[dl.uL%A" intask="true">
+                                    <value name="VARIABLE_VALUE">
+                                        <block type="variables_get" id="XREPIb!*mp%PR7Sgf+GW" intask="true">
+                                            <mutation datatype="Number"></mutation>
+                                            <field name="VAR">v</field>
+                                        </block>
+                                    </value>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="variables_set" id="=`kvivZ!crmNvV)CkjHm" intask="true">
+                            <mutation datatype="Boolean"></mutation>
+                            <field name="VAR">b</field>
+                            <value name="VALUE">
+                                <block type="robSensors_hts221_humidity_getDataAvailableSample" id="b44m{X9?R.WG#t6eWWY;" intask="true">
+                                    <value name="VARIABLE_VALUE">
+                                        <block type="variables_get" id="E=dI#piD~PwkQ:Jdh%g%" intask="true">
+                                            <mutation datatype="Number"></mutation>
+                                            <field name="VAR">v</field>
+                                        </block>
+                                    </value>
+                                </block>
+                            </value>
+                        </block>
+                    </statement>
+                </block>
+            </instance>
+        </block_set>
+    </program>
+    <config>
+        <block_set robottype="nano33ble" xmlversion="3.1" description="" tags="" xmlns="http://de.fhg.iais.roberta.blockly">
+            <instance x="100" y="460">
+                <block type="robConf_hts221" id="5" intask="true" deletable="false">
+                    <field name="NAME">_HTS221</field>
+                </block>
+            </instance>
+            <instance x="100" y="220">
+                <block type="robConf_lsm9ds1" id="2" intask="true" deletable="false">
+                    <field name="NAME">_LSM9DS1</field>
+                </block>
+            </instance>
+            <instance x="100" y="80">
+                <block type="robConf_led" id="1" intask="true" deletable="false">
+                    <field name="NAME">L</field>
+                    <field name="INPUT">LED_BUILTIN</field>
+                </block>
+            </instance>
+            <instance x="100" y="380">
+                <block type="robConf_lps22hb" id="4" intask="true" deletable="false">
+                    <field name="NAME">_LPS22HB</field>
+                </block>
+            </instance>
+            <instance x="100" y="300">
+                <block type="robConf_apds9960" id="3" intask="true" deletable="false">
+                    <field name="NAME">_APDS9960</field>
+                </block>
+            </instance>
+        </block_set>
+    </config>
+</export>

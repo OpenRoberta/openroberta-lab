@@ -1,0 +1,1044 @@
+{"ops": [
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "0"
+  },
+  {
+    "opc": "VarDeclaration",
+    "name": "r1",
+    "type": "NUMBER"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "0"
+  },
+  {
+    "opc": "VarDeclaration",
+    "name": "r2",
+    "type": "NUMBER"
+  },
+  {
+    "opc": "expr",
+    "expr": "BOOL_CONST",
+    "value": true
+  },
+  {
+    "opc": "VarDeclaration",
+    "name": "b1",
+    "type": "BOOLEAN"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "0"
+  },
+  {
+    "opc": "VarDeclaration",
+    "name": "r3",
+    "type": "NUMBER"
+  },
+  {
+    "opc": "expr",
+    "expr": "BOOL_CONST",
+    "value": true
+  },
+  {
+    "opc": "VarDeclaration",
+    "name": "sim",
+    "type": "BOOLEAN"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "20"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "2"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "4"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "2"
+  },
+  {
+    "op": "DIVIDE",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "op": "MULTIPLY",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "op": "MINUS",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "3"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "2"
+  },
+  {
+    "op": "POWER",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "op": "ADD",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "op": "ROOT",
+    "opc": "expr",
+    "expr": "SingleFunction"
+  },
+  {
+    "opc": "AssignStmt",
+    "name": "r1"
+  },
+  {
+    "opc": "expr",
+    "name": "b1",
+    "expr": "Var"
+  },
+  {
+    "opc": "jump",
+    "conditional": false,
+    "target": 29
+  },
+  {
+    "opc": "expr",
+    "name": "r1",
+    "expr": "Var"
+  },
+  {
+    "op": "EVEN",
+    "opc": "expr",
+    "expr": "MathPropFunct"
+  },
+  {
+    "op": "NOT",
+    "opc": "expr",
+    "expr": "Unary"
+  },
+  {
+    "opc": "jump",
+    "conditional": "always",
+    "target": 30
+  },
+  {
+    "opc": "expr",
+    "expr": "BOOL_CONST",
+    "value": false
+  },
+  {
+    "opc": "AssignStmt",
+    "name": "b1"
+  },
+  {
+    "opc": "expr",
+    "name": "b1",
+    "expr": "Var"
+  },
+  {
+    "opc": "jump",
+    "conditional": false,
+    "target": 36
+  },
+  {
+    "opc": "expr",
+    "name": "r1",
+    "expr": "Var"
+  },
+  {
+    "op": "ODD",
+    "opc": "expr",
+    "expr": "MathPropFunct"
+  },
+  {
+    "opc": "jump",
+    "conditional": "always",
+    "target": 37
+  },
+  {
+    "opc": "expr",
+    "expr": "BOOL_CONST",
+    "value": false
+  },
+  {
+    "opc": "AssignStmt",
+    "name": "b1"
+  },
+  {
+    "opc": "expr",
+    "name": "b1",
+    "expr": "Var"
+  },
+  {
+    "opc": "jump",
+    "conditional": false,
+    "target": 43
+  },
+  {
+    "opc": "expr",
+    "name": "r1",
+    "expr": "Var"
+  },
+  {
+    "op": "PRIME",
+    "opc": "expr",
+    "expr": "MathPropFunct"
+  },
+  {
+    "opc": "jump",
+    "conditional": "always",
+    "target": 44
+  },
+  {
+    "opc": "expr",
+    "expr": "BOOL_CONST",
+    "value": false
+  },
+  {
+    "opc": "AssignStmt",
+    "name": "b1"
+  },
+  {
+    "opc": "expr",
+    "name": "b1",
+    "expr": "Var"
+  },
+  {
+    "opc": "jump",
+    "conditional": false,
+    "target": 50
+  },
+  {
+    "opc": "expr",
+    "name": "r1",
+    "expr": "Var"
+  },
+  {
+    "op": "WHOLE",
+    "opc": "expr",
+    "expr": "MathPropFunct"
+  },
+  {
+    "opc": "jump",
+    "conditional": "always",
+    "target": 51
+  },
+  {
+    "opc": "expr",
+    "expr": "BOOL_CONST",
+    "value": false
+  },
+  {
+    "opc": "AssignStmt",
+    "name": "b1"
+  },
+  {
+    "opc": "expr",
+    "name": "b1",
+    "expr": "Var"
+  },
+  {
+    "opc": "jump",
+    "conditional": false,
+    "target": 57
+  },
+  {
+    "opc": "expr",
+    "name": "r1",
+    "expr": "Var"
+  },
+  {
+    "op": "POSITIVE",
+    "opc": "expr",
+    "expr": "MathPropFunct"
+  },
+  {
+    "opc": "jump",
+    "conditional": "always",
+    "target": 58
+  },
+  {
+    "opc": "expr",
+    "expr": "BOOL_CONST",
+    "value": false
+  },
+  {
+    "opc": "AssignStmt",
+    "name": "b1"
+  },
+  {
+    "opc": "expr",
+    "name": "b1",
+    "expr": "Var"
+  },
+  {
+    "opc": "jump",
+    "conditional": false,
+    "target": 65
+  },
+  {
+    "opc": "expr",
+    "name": "r1",
+    "expr": "Var"
+  },
+  {
+    "op": "NEGATIVE",
+    "opc": "expr",
+    "expr": "MathPropFunct"
+  },
+  {
+    "op": "NOT",
+    "opc": "expr",
+    "expr": "Unary"
+  },
+  {
+    "opc": "jump",
+    "conditional": "always",
+    "target": 66
+  },
+  {
+    "opc": "expr",
+    "expr": "BOOL_CONST",
+    "value": false
+  },
+  {
+    "opc": "AssignStmt",
+    "name": "b1"
+  },
+  {
+    "opc": "expr",
+    "name": "b1",
+    "expr": "Var"
+  },
+  {
+    "opc": "jump",
+    "conditional": false,
+    "target": 73
+  },
+  {
+    "opc": "expr",
+    "name": "r1",
+    "expr": "Var"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "5"
+  },
+  {
+    "op": "DIVISIBLE_BY",
+    "opc": "expr",
+    "expr": "MathPropFunct"
+  },
+  {
+    "opc": "jump",
+    "conditional": "always",
+    "target": 74
+  },
+  {
+    "opc": "expr",
+    "expr": "BOOL_CONST",
+    "value": false
+  },
+  {
+    "opc": "AssignStmt",
+    "name": "b1"
+  },
+  {
+    "opc": "expr",
+    "name": "b1",
+    "expr": "Var"
+  },
+  {
+    "opc": "jump",
+    "conditional": false,
+    "target": 82
+  },
+  {
+    "opc": "expr",
+    "name": "r1",
+    "expr": "Var"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "3"
+  },
+  {
+    "op": "DIVISIBLE_BY",
+    "opc": "expr",
+    "expr": "MathPropFunct"
+  },
+  {
+    "op": "NOT",
+    "opc": "expr",
+    "expr": "Unary"
+  },
+  {
+    "opc": "jump",
+    "conditional": "always",
+    "target": 83
+  },
+  {
+    "opc": "expr",
+    "expr": "BOOL_CONST",
+    "value": false
+  },
+  {
+    "opc": "AssignStmt",
+    "name": "b1"
+  },
+  {
+    "opc": "expr",
+    "name": "r1",
+    "expr": "Var"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "1"
+  },
+  {
+    "opc": "mathChange",
+    "name": "r1"
+  },
+  {
+    "opc": "expr",
+    "name": "b1",
+    "expr": "Var"
+  },
+  {
+    "opc": "jump",
+    "conditional": false,
+    "target": 92
+  },
+  {
+    "opc": "expr",
+    "name": "r1",
+    "expr": "Var"
+  },
+  {
+    "op": "EVEN",
+    "opc": "expr",
+    "expr": "MathPropFunct"
+  },
+  {
+    "opc": "jump",
+    "conditional": "always",
+    "target": 93
+  },
+  {
+    "opc": "expr",
+    "expr": "BOOL_CONST",
+    "value": false
+  },
+  {
+    "opc": "AssignStmt",
+    "name": "b1"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "20"
+  },
+  {
+    "op": "ROOT",
+    "opc": "expr",
+    "expr": "SingleFunction"
+  },
+  {
+    "opc": "AssignStmt",
+    "name": "r2"
+  },
+  {
+    "opc": "expr",
+    "name": "b1",
+    "expr": "Var"
+  },
+  {
+    "opc": "jump",
+    "conditional": false,
+    "target": 103
+  },
+  {
+    "opc": "expr",
+    "name": "r2",
+    "expr": "Var"
+  },
+  {
+    "op": "WHOLE",
+    "opc": "expr",
+    "expr": "MathPropFunct"
+  },
+  {
+    "op": "NOT",
+    "opc": "expr",
+    "expr": "Unary"
+  },
+  {
+    "opc": "jump",
+    "conditional": "always",
+    "target": 104
+  },
+  {
+    "opc": "expr",
+    "expr": "BOOL_CONST",
+    "value": false
+  },
+  {
+    "opc": "AssignStmt",
+    "name": "b1"
+  },
+  {
+    "opc": "expr",
+    "name": "b1",
+    "expr": "Var"
+  },
+  {
+    "opc": "jump",
+    "conditional": false,
+    "target": 112
+  },
+  {
+    "opc": "expr",
+    "name": "r2",
+    "expr": "Var"
+  },
+  {
+    "op": "ROUND",
+    "opc": "expr",
+    "expr": "SingleFunction"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "4"
+  },
+  {
+    "op": "EQ",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "opc": "jump",
+    "conditional": "always",
+    "target": 113
+  },
+  {
+    "opc": "expr",
+    "expr": "BOOL_CONST",
+    "value": false
+  },
+  {
+    "opc": "AssignStmt",
+    "name": "b1"
+  },
+  {
+    "opc": "expr",
+    "name": "b1",
+    "expr": "Var"
+  },
+  {
+    "opc": "jump",
+    "conditional": false,
+    "target": 121
+  },
+  {
+    "opc": "expr",
+    "name": "r2",
+    "expr": "Var"
+  },
+  {
+    "op": "ROUNDUP",
+    "opc": "expr",
+    "expr": "SingleFunction"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "5"
+  },
+  {
+    "op": "EQ",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "opc": "jump",
+    "conditional": "always",
+    "target": 122
+  },
+  {
+    "opc": "expr",
+    "expr": "BOOL_CONST",
+    "value": false
+  },
+  {
+    "opc": "AssignStmt",
+    "name": "b1"
+  },
+  {
+    "opc": "expr",
+    "name": "b1",
+    "expr": "Var"
+  },
+  {
+    "opc": "jump",
+    "conditional": false,
+    "target": 130
+  },
+  {
+    "opc": "expr",
+    "name": "r2",
+    "expr": "Var"
+  },
+  {
+    "op": "ROUNDDOWN",
+    "opc": "expr",
+    "expr": "SingleFunction"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "4"
+  },
+  {
+    "op": "EQ",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "opc": "jump",
+    "conditional": "always",
+    "target": 131
+  },
+  {
+    "opc": "expr",
+    "expr": "BOOL_CONST",
+    "value": false
+  },
+  {
+    "opc": "AssignStmt",
+    "name": "b1"
+  },
+  {
+    "opc": "expr",
+    "name": "b1",
+    "expr": "Var"
+  },
+  {
+    "opc": "jump",
+    "conditional": false,
+    "target": 138
+  },
+  {
+    "opc": "expr",
+    "name": "r1",
+    "expr": "Var"
+  },
+  {
+    "opc": "expr",
+    "name": "r2",
+    "expr": "Var"
+  },
+  {
+    "op": "GT",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "opc": "jump",
+    "conditional": "always",
+    "target": 139
+  },
+  {
+    "opc": "expr",
+    "expr": "BOOL_CONST",
+    "value": false
+  },
+  {
+    "opc": "AssignStmt",
+    "name": "b1"
+  },
+  {
+    "opc": "expr",
+    "name": "b1",
+    "expr": "Var"
+  },
+  {
+    "opc": "jump",
+    "conditional": false,
+    "target": 146
+  },
+  {
+    "opc": "expr",
+    "name": "r1",
+    "expr": "Var"
+  },
+  {
+    "opc": "expr",
+    "name": "r2",
+    "expr": "Var"
+  },
+  {
+    "op": "GTE",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "opc": "jump",
+    "conditional": "always",
+    "target": 147
+  },
+  {
+    "opc": "expr",
+    "expr": "BOOL_CONST",
+    "value": false
+  },
+  {
+    "opc": "AssignStmt",
+    "name": "b1"
+  },
+  {
+    "opc": "expr",
+    "name": "b1",
+    "expr": "Var"
+  },
+  {
+    "opc": "AssignStmt",
+    "name": "b1"
+  },
+  {
+    "opc": "expr",
+    "name": "b1",
+    "expr": "Var"
+  },
+  {
+    "opc": "jump",
+    "conditional": false,
+    "target": 156
+  },
+  {
+    "opc": "expr",
+    "name": "r2",
+    "expr": "Var"
+  },
+  {
+    "opc": "expr",
+    "name": "r1",
+    "expr": "Var"
+  },
+  {
+    "op": "LT",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "opc": "jump",
+    "conditional": "always",
+    "target": 157
+  },
+  {
+    "opc": "expr",
+    "expr": "BOOL_CONST",
+    "value": false
+  },
+  {
+    "opc": "jump",
+    "conditional": false,
+    "target": 162
+  },
+  {
+    "opc": "expr",
+    "name": "r1",
+    "expr": "Var"
+  },
+  {
+    "opc": "expr",
+    "name": "r1",
+    "expr": "Var"
+  },
+  {
+    "op": "LTE",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "opc": "jump",
+    "conditional": "always",
+    "target": 163
+  },
+  {
+    "opc": "expr",
+    "expr": "BOOL_CONST",
+    "value": false
+  },
+  {
+    "opc": "AssignStmt",
+    "name": "b1"
+  },
+  {
+    "opc": "expr",
+    "name": "b1",
+    "expr": "Var"
+  },
+  {
+    "opc": "jump",
+    "conditional": false,
+    "target": 172
+  },
+  {
+    "opc": "expr",
+    "name": "r1",
+    "expr": "Var"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "4"
+  },
+  {
+    "op": "MOD",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "2"
+  },
+  {
+    "op": "EQ",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "opc": "jump",
+    "conditional": "always",
+    "target": 173
+  },
+  {
+    "opc": "expr",
+    "expr": "BOOL_CONST",
+    "value": false
+  },
+  {
+    "opc": "AssignStmt",
+    "name": "b1"
+  },
+  {
+    "opc": "expr",
+    "name": "b1",
+    "expr": "Var"
+  },
+  {
+    "opc": "jump",
+    "conditional": false,
+    "target": 199
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "29"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "3"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "2"
+  },
+  {
+    "op": "POWER",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "1"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "20"
+  },
+  {
+    "opc": "expr",
+    "expr": "MathConstrainFunct"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "9"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "3"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "4"
+  },
+  {
+    "op": "MULTIPLY",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "18"
+  },
+  {
+    "opc": "expr",
+    "expr": "MathConstrainFunct"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "3"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "3"
+  },
+  {
+    "op": "MULTIPLY",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "5"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "8"
+  },
+  {
+    "opc": "expr",
+    "expr": "MathConstrainFunct"
+  },
+  {
+    "op": "ADD",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "op": "ADD",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "op": "EQ",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "opc": "jump",
+    "conditional": "always",
+    "target": 200
+  },
+  {
+    "opc": "expr",
+    "expr": "BOOL_CONST",
+    "value": false
+  },
+  {
+    "opc": "AssignStmt",
+    "name": "b1"
+  },
+  {
+    "opc": "expr",
+    "name": "b1",
+    "expr": "Var"
+  },
+  {
+    "opc": "jump",
+    "conditional": false,
+    "target": 211
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "11"
+  },
+  {
+    "opc": "expr",
+    "expr": "randDouble"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "1"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "10"
+  },
+  {
+    "opc": "expr",
+    "expr": "randInt"
+  },
+  {
+    "op": "MULTIPLY",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "op": "GT",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "opc": "jump",
+    "conditional": "always",
+    "target": 212
+  },
+  {
+    "opc": "expr",
+    "expr": "BOOL_CONST",
+    "value": false
+  },
+  {
+    "opc": "AssignStmt",
+    "name": "b1"
+  },
+  {
+    "opc": "comment",
+    "value": "if b1 is true, the test succeeded, otherwise it failed :-)"
+  },
+  {"opc": "stop"}
+]}

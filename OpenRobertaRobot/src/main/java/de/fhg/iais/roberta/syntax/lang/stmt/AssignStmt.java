@@ -12,14 +12,12 @@ import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.syntax.lang.expr.Var;
-import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
+import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
-import de.fhg.iais.roberta.visitor.IVisitor;
-import de.fhg.iais.roberta.visitor.lang.ILanguageVisitor;
 
 /**
  * This class represents the <b>variables_set</b> block from Blockly into the AST (abstract syntax tree). Object from this class will generate code for
@@ -76,11 +74,6 @@ public class AssignStmt<V> extends Stmt<V> {
         return sb.toString();
     }
 
-    @Override
-    protected V acceptImpl(IVisitor<V> visitor) {
-        return ((ILanguageVisitor<V>) visitor).visitAssignStmt(this);
-    }
-
     /**
      * Transformation from JAXB object to corresponding AST object.
      *
@@ -88,12 +81,12 @@ public class AssignStmt<V> extends Stmt<V> {
      * @param helper class for making the transformation
      * @return corresponding AST object
      */
-    public static <V> Phrase<V> jaxbToAst(Block block, AbstractJaxb2Ast<V> helper) {
+    public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
         List<Value> values = Jaxb2Ast.extractValues(block, (short) 1);
         Phrase<V> p = helper.extractValue(values, new ExprParam(BlocklyConstants.VALUE, BlocklyType.CAPTURED_TYPE));
-        Expr<V> exprr = helper.convertPhraseToExpr(p);
+        Expr<V> exprr = Jaxb2Ast.convertPhraseToExpr(p);
         return AssignStmt
-            .make((Var<V>) helper.extractVar(block), helper.convertPhraseToExpr(exprr), Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
+            .make((Var<V>) Jaxb2Ast.extractVar(block), Jaxb2Ast.convertPhraseToExpr(exprr), Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
     }
 
     @Override

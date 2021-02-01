@@ -1,0 +1,13 @@
+robots:
+    ev3lejosv1:
+        template: ev3
+        dir: ev3
+        suffix: ".java"
+
+
+progs:
+    assign:
+        decl: default
+        exclude:
+            edison: "not supported"
+        remark: "simple assignment. For testing the test only"

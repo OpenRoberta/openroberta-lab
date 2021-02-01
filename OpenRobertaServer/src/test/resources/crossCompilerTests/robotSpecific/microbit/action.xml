@@ -147,6 +147,9 @@
                         <block type="robProcedures_callnoreturn" id="64!opag-I!tU(UD}@pV1" intask="true">
                             <mutation name="pin"></mutation>
                         </block>
+                        <block type="robProcedures_callnoreturn" id="i!Y`NCsnlzl3aTFpbsHd" intask="true">
+                            <mutation name="play"></mutation>
+                        </block>
                     </statement>
                 </block>
             </instance>
@@ -292,6 +295,55 @@
                                     <field name="VAR">stringVar</field>
                                 </block>
                             </value>
+                        </block>
+                    </statement>
+                </block>
+            </instance>
+            <instance x="1826" y="509">
+                <block type="robProcedures_defnoreturn" id="S;S:Gho:ySFC0OV(}l,l" intask="true">
+                    <mutation declare="false"></mutation>
+                    <field name="NAME">play</field>
+                    <statement name="STACK">
+                        <block type="mbedActions_play_tone" id="byjFOH2U+YZxa)uSHbT0" intask="true">
+                            <field name="ACTORPORT">BZ</field>
+                            <value name="FREQUENCE">
+                                <block type="math_number" id="Zr%/cQ|ib@^9)WNIn;_N" intask="true">
+                                    <field name="NUM">300</field>
+                                </block>
+                            </value>
+                            <value name="DURATION">
+                                <block type="math_number" id="A{V_[-4fjHs[n~*hvN_R" intask="true">
+                                    <field name="NUM">100</field>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="mbedActions_play_tone" id="=r)31~zYjj7kvIa@}n2y" intask="true">
+                            <field name="ACTORPORT">BZ</field>
+                            <value name="FREQUENCE">
+                                <block type="math_number" id=".xS4PiVU^iF{yM85QcsF" intask="true">
+                                    <field name="NUM">400</field>
+                                </block>
+                            </value>
+                            <value name="DURATION">
+                                <block type="math_number" id="=kyB]BlV6!r%DYO7pe_@" intask="true">
+                                    <field name="NUM">50</field>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="mbedActions_play_note" id="R=ellvgeEPU=sG==}dGX" intask="true">
+                            <field name="ACTORPORT">BZ</field>
+                            <field name="DURATION">2000</field>
+                            <field name="FREQUENCE">130.813</field>
+                        </block>
+                        <block type="mbedActions_play_note" id="N@!C,:0;l?AyL?UNlgM{" intask="true">
+                            <field name="ACTORPORT">BZ</field>
+                            <field name="DURATION">1000</field>
+                            <field name="FREQUENCE">146.832</field>
+                        </block>
+                        <block type="mbedActions_play_note" id="M%w6;WMIuR*]R_e[.}K4" intask="true">
+                            <field name="ACTORPORT">BZ</field>
+                            <field name="DURATION">500</field>
+                            <field name="FREQUENCE">164.814</field>
                         </block>
                     </statement>
                 </block>

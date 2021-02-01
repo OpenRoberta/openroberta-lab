@@ -14,40 +14,9 @@ import de.fhg.iais.roberta.inter.mode.general.IMode;
 import de.fhg.iais.roberta.mode.general.IndexLocation;
 import de.fhg.iais.roberta.mode.general.ListElementOperations;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
-import de.fhg.iais.roberta.syntax.lang.expr.Binary;
-import de.fhg.iais.roberta.syntax.lang.expr.BoolConst;
-import de.fhg.iais.roberta.syntax.lang.expr.ColorConst;
-import de.fhg.iais.roberta.syntax.lang.expr.ConnectConst;
-import de.fhg.iais.roberta.syntax.lang.expr.EmptyExpr;
-import de.fhg.iais.roberta.syntax.lang.expr.Expr;
-import de.fhg.iais.roberta.syntax.lang.expr.ExprList;
-import de.fhg.iais.roberta.syntax.lang.expr.FunctionExpr;
-import de.fhg.iais.roberta.syntax.lang.expr.ListCreate;
-import de.fhg.iais.roberta.syntax.lang.expr.MathConst;
+import de.fhg.iais.roberta.syntax.lang.expr.*;
 import de.fhg.iais.roberta.syntax.lang.expr.MathConst.Const;
-import de.fhg.iais.roberta.syntax.lang.expr.NullConst;
-import de.fhg.iais.roberta.syntax.lang.expr.NumConst;
-import de.fhg.iais.roberta.syntax.lang.expr.RgbColor;
-import de.fhg.iais.roberta.syntax.lang.expr.StmtExpr;
-import de.fhg.iais.roberta.syntax.lang.expr.StringConst;
-import de.fhg.iais.roberta.syntax.lang.expr.Unary;
-import de.fhg.iais.roberta.syntax.lang.expr.Var;
-import de.fhg.iais.roberta.syntax.lang.functions.FunctionNames;
-import de.fhg.iais.roberta.syntax.lang.functions.GetSubFunct;
-import de.fhg.iais.roberta.syntax.lang.functions.IndexOfFunct;
-import de.fhg.iais.roberta.syntax.lang.functions.LengthOfIsEmptyFunct;
-import de.fhg.iais.roberta.syntax.lang.functions.ListGetIndex;
-import de.fhg.iais.roberta.syntax.lang.functions.ListRepeat;
-import de.fhg.iais.roberta.syntax.lang.functions.ListSetIndex;
-import de.fhg.iais.roberta.syntax.lang.functions.MathConstrainFunct;
-import de.fhg.iais.roberta.syntax.lang.functions.MathNumPropFunct;
-import de.fhg.iais.roberta.syntax.lang.functions.MathOnListFunct;
-import de.fhg.iais.roberta.syntax.lang.functions.MathPowerFunct;
-import de.fhg.iais.roberta.syntax.lang.functions.MathRandomFloatFunct;
-import de.fhg.iais.roberta.syntax.lang.functions.MathRandomIntFunct;
-import de.fhg.iais.roberta.syntax.lang.functions.MathSingleFunct;
-import de.fhg.iais.roberta.syntax.lang.functions.TextJoinFunct;
-import de.fhg.iais.roberta.syntax.lang.functions.TextPrintFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.*;
 import de.fhg.iais.roberta.syntax.lang.stmt.ExprStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.IfStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtList;
@@ -457,18 +426,12 @@ public class ExprlyVisitor<V> extends ExprlyBaseVisitor<Expr<V>> {
         }
         if ( f.equals("getRGB") ) {
             if ( args.size() == 3 ) {
-                return RgbColor.make(args.get(0), args.get(1), args.get(2), EmptyExpr.make(BlocklyType.NUMBER_INT), BCMAKE, null);
+                return (Expr<V>) RgbColor.make(BCMAKE, null, args.get(0), args.get(1), args.get(2), EmptyExpr.make(BlocklyType.NUMBER_INT));
             } else if ( args.size() == 4 ) {
-                return RgbColor.make(args.get(0), args.get(1), args.get(2), args.get(3), BCMAKE, null);
+                return (Expr<V>) RgbColor.make(BCMAKE, null, args.get(0), args.get(1), args.get(2), args.get(3));
             } else {
-                return RgbColor
-                    .make(
-                        EmptyExpr.make(BlocklyType.NUMBER_INT),
-                        EmptyExpr.make(BlocklyType.NUMBER_INT),
-                        EmptyExpr.make(BlocklyType.NUMBER_INT),
-                        EmptyExpr.make(BlocklyType.NUMBER_INT),
-                        BCMAKE,
-                        null);
+                Expr<V> empty = EmptyExpr.make(BlocklyType.NUMBER_INT);
+                return (Expr<V>) RgbColor.make(BCMAKE, null, empty, empty, empty, empty);
             }
         }
         try {

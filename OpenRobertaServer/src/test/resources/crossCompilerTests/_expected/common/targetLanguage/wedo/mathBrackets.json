@@ -1,0 +1,533 @@
+{"ops": [
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "0"
+  },
+  {
+    "opc": "VarDeclaration",
+    "name": "ergebnis",
+    "type": "NUMBER"
+  },
+  {
+    "opc": "comment",
+    "value": "Grundrechenarten Basics  --START--"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "2"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "3"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "4"
+  },
+  {
+    "op": "MULTIPLY",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "5"
+  },
+  {
+    "op": "DIVIDE",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "op": "ADD",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "opc": "AssignStmt",
+    "name": "ergebnis"
+  },
+  {
+    "opc": "expr",
+    "name": "ergebnis",
+    "expr": "Var"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "2"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "3"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "4"
+  },
+  {
+    "op": "ADD",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "5"
+  },
+  {
+    "op": "MULTIPLY",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "op": "MULTIPLY",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "op": "ADD",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "opc": "AssignStmt",
+    "name": "ergebnis"
+  },
+  {
+    "opc": "expr",
+    "name": "ergebnis",
+    "expr": "Var"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "2"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "3"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "4"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "5"
+  },
+  {
+    "op": "ADD",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "op": "MULTIPLY",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "op": "MULTIPLY",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "op": "ADD",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "opc": "AssignStmt",
+    "name": "ergebnis"
+  },
+  {
+    "opc": "expr",
+    "name": "ergebnis",
+    "expr": "Var"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "2"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "3"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "4"
+  },
+  {
+    "op": "MULTIPLY",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "5"
+  },
+  {
+    "op": "MINUS",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "6"
+  },
+  {
+    "op": "MULTIPLY",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "op": "ADD",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "op": "ADD",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "opc": "AssignStmt",
+    "name": "ergebnis"
+  },
+  {
+    "opc": "expr",
+    "name": "ergebnis",
+    "expr": "Var"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "2"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "3"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "4"
+  },
+  {
+    "op": "ADD",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "5"
+  },
+  {
+    "op": "MULTIPLY",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "6"
+  },
+  {
+    "op": "MULTIPLY",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "op": "MULTIPLY",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "op": "ADD",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "opc": "AssignStmt",
+    "name": "ergebnis"
+  },
+  {
+    "opc": "expr",
+    "name": "ergebnis",
+    "expr": "Var"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "2"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "6"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "3"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "4"
+  },
+  {
+    "op": "ADD",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "5"
+  },
+  {
+    "op": "MULTIPLY",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "op": "MULTIPLY",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "op": "MULTIPLY",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "op": "ADD",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "opc": "AssignStmt",
+    "name": "ergebnis"
+  },
+  {
+    "opc": "expr",
+    "name": "ergebnis",
+    "expr": "Var"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "2"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "3"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "4"
+  },
+  {
+    "op": "ADD",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "5"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "6"
+  },
+  {
+    "op": "MINUS",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "op": "DIVIDE",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "7"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "8"
+  },
+  {
+    "op": "MULTIPLY",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "9"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "10"
+  },
+  {
+    "op": "ADD",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "op": "ADD",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "op": "MINUS",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "op": "ADD",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "op": "ADD",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "opc": "AssignStmt",
+    "name": "ergebnis"
+  },
+  {
+    "opc": "expr",
+    "name": "ergebnis",
+    "expr": "Var"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "2"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "3"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "4"
+  },
+  {
+    "op": "ADD",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "5"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "6"
+  },
+  {
+    "op": "MULTIPLY",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "op": "ADD",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "7"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "8"
+  },
+  {
+    "op": "MULTIPLY",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "9"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "10"
+  },
+  {
+    "op": "MINUS",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "op": "ADD",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "op": "MULTIPLY",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "op": "MULTIPLY",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "op": "ADD",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "opc": "AssignStmt",
+    "name": "ergebnis"
+  },
+  {
+    "opc": "comment",
+    "value": "Grundrechenarten Basics  --END--"
+  },
+  {"opc": "stop"}
+]}

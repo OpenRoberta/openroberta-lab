@@ -53,10 +53,10 @@ public final class MbotBrickValidatorVisitor extends AbstractBrickValidatorVisit
 
     @Override
     protected void checkSensorPort(ExternalSensor<Void> sensor) {
-        if ( sensor.getKind().getName().equals("LIGHT_SENSING") && sensor.getPort().equals("6") ) {
+        if ( sensor.getKind().getName().equals("LIGHT_SENSING") && sensor.getUserDefinedPort().equals("6") ) {
             return;
         }
-        ConfigurationComponent usedConfigurationBlock = this.robotConfiguration.optConfigurationComponent("ORT_" + sensor.getPort());
+        ConfigurationComponent usedConfigurationBlock = this.robotConfiguration.optConfigurationComponent("ORT_" + sensor.getUserDefinedPort());
         if ( usedConfigurationBlock == null ) {
             sensor.addInfo(NepoInfo.error("CONFIGURATION_ERROR_SENSOR_MISSING"));
             this.errorCount++;
@@ -98,7 +98,7 @@ public final class MbotBrickValidatorVisitor extends AbstractBrickValidatorVisit
     }
 
     @Override
-    public Void visitAccelerometer(AccelerometerSensor<Void> accelerometer) {
+    public Void visitAccelerometerSensor(AccelerometerSensor<Void> accelerometer) {
         checkSensorPort(accelerometer);
         return null;
     }
@@ -189,7 +189,7 @@ public final class MbotBrickValidatorVisitor extends AbstractBrickValidatorVisit
 
     @Override
     public Void visitClearDisplayAction(ClearDisplayAction<Void> clearDisplayAction) {
-        checkActorPort(clearDisplayAction, clearDisplayAction.getPort());
+        checkActorPort(clearDisplayAction, clearDisplayAction.port);
         return null;
     }
 

@@ -1,0 +1,154 @@
+
+Var [result] := FunctionExpr [LengthOfFunct [LIST_LENGTH, [Var [input]]]]
+
+
+Var [result] := Binary [ADD, Var [result], FunctionExpr [LengthOfFunct [LIST_LENGTH, [Var [input2]]]]]
+
+
+if FunctionExpr [LengthOfFunct [LIST_IS_EMPTY, [Var [input]]]]
+,then
+Var [result] := Binary [ADD, Var [result], NumConst [1]]
+
+,else
+Var [result] := Binary [ADD, Var [result], NumConst [2]]
+
+
+
+if FunctionExpr [LengthOfFunct [LIST_IS_EMPTY, [Var [input2]]]]
+,then
+Var [result] := Binary [ADD, Var [result], NumConst [1]]
+
+,else
+Var [result] := Binary [ADD, Var [result], NumConst [2]]
+
+
+
+StmtTextComment [8]
+
+Var [result] := Binary [ADD, Var [result], FunctionExpr [IndexOfFunct [FIRST, [Var [input], NumConst [3]]]]]
+
+
+Var [result] := Binary [ADD, Var [result], FunctionExpr [IndexOfFunct [LAST, [Var [input], NumConst [3]]]]]
+
+
+StmtTextComment [14]
+
+Var [result] := Binary [ADD, Var [result], FunctionExpr [ListGetIndex [GET, FROM_START, [Var [input], NumConst [1]]]]]
+
+
+Var [result] := Binary [ADD, Var [result], FunctionExpr [ListGetIndex [GET, FROM_END, [Var [input], NumConst [1]]]]]
+
+
+Var [result] := Binary [ADD, Var [result], FunctionExpr [ListGetIndex [GET, FIRST, [Var [input]]]]]
+
+
+Var [result] := Binary [ADD, Var [result], FunctionExpr [ListGetIndex [GET, LAST, [Var [input]]]]]
+
+
+StmtTextComment [24]
+
+Var [result] := Binary [ADD, Var [result], FunctionExpr [ListGetIndex [GET_REMOVE, FROM_START, [Var [input], NumConst [1]]]]]
+
+
+Var [result] := Binary [ADD, Var [result], FunctionExpr [ListGetIndex [GET_REMOVE, FROM_END, [Var [input], NumConst [1]]]]]
+
+
+Var [result] := Binary [ADD, Var [result], FunctionExpr [ListGetIndex [GET_REMOVE, FIRST, [Var [input]]]]]
+
+
+Var [result] := Binary [ADD, Var [result], FunctionExpr [ListGetIndex [GET_REMOVE, LAST, [Var [input]]]]]
+
+
+Var [result] := Binary [ADD, Var [result], FunctionExpr [LengthOfFunct [LIST_LENGTH, [Var [input]]]]]
+
+
+StmtTextComment [35]
+ListSetIndex [INSERT, FROM_START, [Var [input], NumConst [1], NumConst [0]]]
+ListSetIndex [INSERT, FROM_END, [Var [input], NumConst [2], NumConst [1]]]
+ListSetIndex [INSERT, FIRST, [Var [input], NumConst [0]]]
+ListSetIndex [INSERT, LAST, [Var [input], NumConst [4]]]
+
+Var [result] := Binary [ADD, Var [result], FunctionExpr [LengthOfFunct [LIST_LENGTH, [Var [input]]]]]
+
+
+StmtTextComment [40]
+ListGetIndex [REMOVE, FROM_START, [Var [input], NumConst [1]]]
+ListGetIndex [REMOVE, FROM_END, [Var [input], NumConst [1]]]
+ListGetIndex [REMOVE, FIRST, [Var [input]]]
+ListGetIndex [REMOVE, LAST, [Var [input]]]
+
+Var [result] := Binary [ADD, Var [result], FunctionExpr [LengthOfFunct [LIST_LENGTH, [Var [input]]]]]
+
+
+Var [result] := Binary [ADD, Var [result], FunctionExpr [ListGetIndex [GET, LAST, [Var [input]]]]]
+
+
+StmtTextComment [42]
+ListSetIndex [INSERT, FROM_START, [Var [input], NumConst [1], NumConst [0]]]
+ListSetIndex [INSERT, FROM_END, [Var [input], NumConst [2], NumConst [1]]]
+ListSetIndex [INSERT, FIRST, [Var [input], NumConst [0]]]
+ListSetIndex [INSERT, LAST, [Var [input], NumConst [4]]]
+ListSetIndex [SET, FROM_START, [Var [input], NumConst [3], NumConst [2]]]
+ListSetIndex [SET, FROM_START, [Var [input], NumConst [2], NumConst [1]]]
+ListSetIndex [SET, FROM_END, [Var [input], NumConst [4], NumConst [1]]]
+ListSetIndex [SET, FIRST, [Var [input], NumConst [1]]]
+ListSetIndex [SET, LAST, [Var [input], NumConst [5]]]
+
+Var [result] := Binary [ADD, Var [result], FunctionExpr [MathOnListFunct [SUM, [Var [input]]]]]
+
+
+StmtTextComment [57]
+
+Var [result] := Binary [ADD, Var [result], FunctionExpr [MathOnListFunct [SUM, [FunctionExpr [GetSubFunct [GET_SUBLIST, [FROM_START, FROM_START], [Var [input], NumConst [1], NumConst [3]]]]]]]]
+
+
+Var [result] := Binary [ADD, Var [result], FunctionExpr [MathOnListFunct [SUM, [FunctionExpr [GetSubFunct [GET_SUBLIST, [FROM_START, FROM_END], [Var [input], NumConst [1], NumConst [1]]]]]]]]
+
+
+Var [result] := Binary [ADD, Var [result], FunctionExpr [MathOnListFunct [SUM, [FunctionExpr [GetSubFunct [GET_SUBLIST, [FROM_START, LAST], [Var [input], NumConst [1]]]]]]]]
+
+
+StmtTextComment [89]
+
+Var [result] := Binary [ADD, Var [result], FunctionExpr [MathOnListFunct [SUM, [FunctionExpr [GetSubFunct [GET_SUBLIST, [FROM_END, FROM_START], [Var [input], NumConst [3], NumConst [4]]]]]]]]
+
+
+Var [result] := Binary [ADD, Var [result], FunctionExpr [MathOnListFunct [SUM, [FunctionExpr [GetSubFunct [GET_SUBLIST, [FROM_END, FROM_END], [Var [input], NumConst [4], NumConst [3]]]]]]]]
+
+
+Var [result] := Binary [ADD, Var [result], FunctionExpr [MathOnListFunct [SUM, [FunctionExpr [GetSubFunct [GET_SUBLIST, [FROM_END, LAST], [Var [input], NumConst [3]]]]]]]]
+
+
+StmtTextComment [120]
+
+Var [result] := Binary [ADD, Var [result], FunctionExpr [MathOnListFunct [SUM, [FunctionExpr [GetSubFunct [GET_SUBLIST, [FIRST, FROM_START], [Var [input], NumConst [3]]]]]]]]
+
+
+Var [result] := Binary [ADD, Var [result], FunctionExpr [MathOnListFunct [SUM, [FunctionExpr [GetSubFunct [GET_SUBLIST, [FIRST, FROM_END], [Var [input], NumConst [3]]]]]]]]
+
+
+Var [result] := Binary [ADD, Var [result], FunctionExpr [MathOnListFunct [SUM, [FunctionExpr [GetSubFunct [GET_SUBLIST, [FIRST, LAST], [Var [input]]]]]]]]
+
+
+StmtTextComment [148]
+
+Var [result] := Binary [ADD, Var [result], FunctionExpr [MathOnListFunct [MIN, [Var [input]]]]]
+
+
+Var [result] := Binary [ADD, Var [result], FunctionExpr [MathOnListFunct [MAX, [Var [input]]]]]
+
+
+StmtTextComment [154]
+
+Var [result] := Binary [ADD, Var [result], FunctionExpr [MathOnListFunct [AVERAGE, [Var [input]]]]]
+
+
+Var [result] := Binary [ADD, Var [result], FunctionExpr [MathOnListFunct [MEDIAN, [Var [input]]]]]
+
+
+Var [result] := Binary [ADD, Var [result], FunctionExpr [MathOnListFunct [STD_DEV, [Var [input]]]]]
+
+
+StmtTextComment [161.414... ]
+
+StmtTextComment [161.414 - sim, 161.5 - board, OK]

@@ -62,11 +62,10 @@ public class LikeRequest extends BaseRequest {
     }
 
     /**
-     * merge the properties of a JSON-object into this bean. The bean must be "under construction". The keys of the JSON-Object must be valid. The bean remains
-     * "under construction".<br>
+     * merge the properties of a JSON-object into this bean. The bean must be "under construction".
+     * The keys of the JSON-Object must be valid. The bean remains "under construction".<br>
      * Throws a runtime exception if inconsistencies are detected.
      */
-    @Override
     public LikeRequest merge(JSONObject jsonO) {
         try {
             for ( String key : JSONObject.getNames(jsonO) ) {
@@ -96,7 +95,6 @@ public class LikeRequest extends BaseRequest {
      * Checks whether all required fields are set. All lists are made immutable.<br>
      * Throws a runtime exception if inconsistencies are detected.
      */
-    @Override
     public LikeRequest immutable() {
         if ( this.immutable ) {
             return this;
@@ -114,16 +112,16 @@ public class LikeRequest extends BaseRequest {
         if ( !this.immutable ) {
             _message = "LikeRequest-object is already immutable: " + toString();
         }
-        if ( this.programName == null ) {
+        if ( programName == null ) {
             _message = "required property programName of LikeRequest-object is not set: " + toString();
         }
-        if ( this.robotName == null ) {
+        if ( robotName == null ) {
             _message = "required property robotName of LikeRequest-object is not set: " + toString();
         }
-        if ( this.author == null ) {
+        if ( author == null ) {
             _message = "required property author of LikeRequest-object is not set: " + toString();
         }
-        if ( !this.likeDefined ) {
+        if ( !likeDefined ) {
             _message = "required property like of LikeRequest-object is not set: " + toString();
         }
         if ( _message != null ) {
@@ -222,7 +220,6 @@ public class LikeRequest extends BaseRequest {
      * generates a JSON-object from an immutable bean.<br>
      * Throws a runtime exception if inconsistencies are detected.
      */
-    @Override
     public JSONObject toJson() {
         if ( !this.immutable ) {
             throw new RuntimeException("no JSON from an object under construction: " + toString());

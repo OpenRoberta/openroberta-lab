@@ -1,0 +1,102 @@
+#define WHEELDIAMETER 5.6
+#define TRACKWIDTH 12.0
+#define MAXLINES 8
+#define MIN(X, Y) (((X) < (Y)) ? (X) : (Y))
+#define MAX(X, Y) (((X) > (Y)) ? (X) : (Y))
+#define M_PI PI
+#define M_E 2.718281828459045
+#define M_GOLDEN_RATIO 1.61803398875
+#define M_SQRT2 1.41421356237
+#define M_SQRT1_2 0.707106781187
+#define M_INFINITY 0x7f800000
+#include "NEPODefs.h" // contains NEPO declarations for the NXC NXT API resources
+
+
+void sensors();
+void waitUntil();
+
+float ___numberVar;
+bool ___booleanVar;
+string ___stringVar;
+int ___colourVar;
+int ___connectionVar;
+float ___numberList[3];
+bool ___booleanList[3];
+string ___stringList[3];
+int ___colourList[3];
+int ___connectionList[3];
+task main() {
+    ___numberVar = 0;
+    ___booleanVar = true;
+    ___stringVar = "";
+    ___colourVar = INPUT_WHITECOLOR;
+    ___connectionVar = NULL;
+    float _____numberList[] = {0, 0, 0};
+    ___numberList = _____numberList;
+    bool _____booleanList[] = {true, true, true};
+    ___booleanList = _____booleanList;
+    string _____stringList[] = {"", "", ""};
+    ___stringList = _____stringList;
+    int _____colourList[] = {INPUT_WHITECOLOR, INPUT_WHITECOLOR, INPUT_WHITECOLOR};
+    ___colourList = _____colourList;
+    int _____connectionList[] = {NULL, NULL, NULL};
+    ___connectionList = _____connectionList;
+    SetSensor(S3, SENSOR_COLORFULL);
+    SetSensor(S3, SENSOR_COLORFULL);
+    SetSensor(S3, SENSOR_COLORFULL);
+    SetSensor(S4, SENSOR_LOWSPEED);
+    SetSensor(S4, SENSOR_LOWSPEED);
+    SetSensor(S4, SENSOR_LOWSPEED);
+    SetSensor(S4, SENSOR_LOWSPEED);
+    sensors();
+    waitUntil();
+}
+
+void sensors() {
+    ColorOut(0, (MAXLINES - 1) * MAXLINES, SensorColor(S3, "COLOUR"));
+    ColorOut(0, (MAXLINES - 1) * MAXLINES, SensorColor(S3, "LIGHT"));
+    ColorOut(0, (MAXLINES - 1) * MAXLINES, SensorColor(S3, "AMBIENTLIGHT"));
+    ColorOut(0, (MAXLINES - 1) * MAXLINES, SensorHtColor(S4, "COLOUR"));
+    ColorOut(0, (MAXLINES - 1) * MAXLINES, SensorHtColor(S4, "LIGHT"));
+    ColorOut(0, (MAXLINES - 1) * MAXLINES, SensorHtColor(S4, "AMBIENTLIGHT"));
+    ___numberList = SensorHtColor(S4, "RGB");
+}
+
+void waitUntil() {
+    while (true) {
+        if ( SensorColor(S3, "COLOUR") == INPUT_REDCOLOR ) {
+            break;
+        }
+        Wait(15);
+    }
+    while (true) {
+        if ( SensorColor(S3, "LIGHT") < 50 ) {
+            break;
+        }
+        Wait(15);
+    }
+    while (true) {
+        if ( SensorColor(S3, "AMBIENTLIGHT") < 50 ) {
+            break;
+        }
+        Wait(15);
+    }
+    while (true) {
+        if ( SensorHtColor(S4, "COLOUR") == INPUT_REDCOLOR ) {
+            break;
+        }
+        Wait(15);
+    }
+    while (true) {
+        if ( SensorHtColor(S4, "LIGHT") < 50 ) {
+            break;
+        }
+        Wait(15);
+    }
+    while (true) {
+        if ( SensorHtColor(S4, "AMBIENTLIGHT") < 50 ) {
+            break;
+        }
+        Wait(15);
+    }
+}

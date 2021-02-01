@@ -1,9 +1,0 @@
-<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="edison" xmlversion="3.1" description="" tags="">
-    <instance x="484" y="230">
-        <block type="robLists_getIndex" id=":j-,C5ste|z|0v_D#:|w" intask="false">
-            <mutation statement="false" at="true" datatype="Number"></mutation>
-            <field name="MODE">GET</field>
-            <field name="WHERE">FROM_START</field>
-        </block>
-    </instance>
-</block_set>

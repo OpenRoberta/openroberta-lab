@@ -1,6 +1,3 @@
-crosscompilercall : true
-showsuccess: true
-
 robots:
     bob3:
         template: bob3
@@ -66,6 +63,10 @@ robots:
         template: ardu
         dir: unowifirev2
         suffix: ".ino"
+    nano33ble:
+        template: ardu
+        dir: nano33ble
+        suffix: ".ino"
     wedo:
         template: wedo
         dir: wedo
@@ -103,7 +104,6 @@ progs:
        fragment: functionWithWithoutParameter
        decl: functionWithWithoutParameter
        exclude:
-          ALL: "crashes all crosscompilers"
           edison: ""
           bob3: "LedColor is used in the program. Doesn't work here"
        remark: "functions with various return types, with and without parameters"
@@ -113,12 +113,13 @@ progs:
           edison: "Lists are implemented as an Array in edison robot and thus not expandable"
           nxt: "no extendable lists"
           bob3: "no lists"
+          wedo: "no lists"
        remark: "test of mutable lists"
     listOperationsAdvanced:
        decl: advancedListOperations
        exclude:
-          ALL: "crashes code generation or compilation"
           bob3: "no lists"
+          wedo: "no lists"
        remark: "advanced list operations"
     listOperationsBasic:
        decl: basicListOperations
@@ -136,7 +137,6 @@ progs:
        decl: logicBooleanOpTernary
        exclude:
           edison: "AND/OR blocks not supported"
-          wedo: "re-enable after simulation refactoring"
        remark: "all combinations for ternary operator"
     mathAndLists:
        decl: mathAndLists
@@ -177,8 +177,8 @@ progs:
           nxt: "Nested calls to the same function are not supported"
           edison: "Not all pow functions are supported"
        remark: "different combinations for math power of"
-    stringConcat:
-       decl: stringConcat
+    strings:
+       decl: strings
        exclude:
           uno: "Comparison of string and char not possible"
           mega: "Comparison of string and char not possible"
@@ -190,6 +190,7 @@ progs:
           bob3: "no strings"
           festobionic: "Comparison of string and char not possible"
           edison: "no strings"
+          wedo: "Comparison of string and char not possible"
        remark: "different combinations of string concatenation"
     variablesNuStBo:
        decl: variablesNuStBo

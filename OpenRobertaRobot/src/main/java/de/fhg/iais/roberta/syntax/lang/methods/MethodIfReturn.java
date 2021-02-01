@@ -12,14 +12,12 @@ import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
-import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
+import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
-import de.fhg.iais.roberta.visitor.IVisitor;
-import de.fhg.iais.roberta.visitor.lang.ILanguageVisitor;
 
 /**
  * This class represents the <b>robProcedures_ifreturn</b> block from Blockly into the AST (abstract syntax tree). Object from this class is used to create a
@@ -29,13 +27,21 @@ public class MethodIfReturn<V> extends Method<V> {
     private final Expr<V> oraCondition;
     private final BlocklyType oraReturnType;
     private final Expr<V> oraReturnValue;
+    private final BigInteger value;
 
-    private MethodIfReturn(Expr<V> oraCondition, BlocklyType oraReturnType, Expr<V> oraReturnValue, BlocklyBlockProperties properties, BlocklyComment comment) {
+    private MethodIfReturn(
+        Expr<V> oraCondition,
+        BlocklyType oraReturnType,
+        Expr<V> oraReturnValue,
+        BigInteger value,
+        BlocklyBlockProperties properties,
+        BlocklyComment comment) {
         super(BlockTypeContainer.getByName("METHOD_IF_RETURN"), properties, comment);
         Assert.isTrue(oraCondition != null && oraCondition.isReadOnly() && oraReturnType != null && oraReturnValue != null && oraReturnValue.isReadOnly());
         this.oraCondition = oraCondition;
         this.oraReturnType = oraReturnType;
         this.oraReturnValue = oraReturnValue;
+        this.value = value;
         setReadOnly();
     }
 
@@ -53,41 +59,33 @@ public class MethodIfReturn<V> extends Method<V> {
         Expr<V> condition,
         BlocklyType returnType,
         Expr<V> returnValue,
+        BigInteger value,
         BlocklyBlockProperties properties,
         BlocklyComment comment) {
-        return new MethodIfReturn<>(condition, returnType, returnValue, properties, comment);
+        return new MethodIfReturn<>(condition, returnType, returnValue, value, properties, comment);
     }
 
-    /**
-     * @return the condition
-     */
     public Expr<V> getCondition() {
         return this.oraCondition;
     }
 
-    /**
-     * @return the returnType
-     */
     @Override
     public BlocklyType getReturnType() {
         return this.oraReturnType;
     }
 
-    /**
-     * @return the returnValue
-     */
     public Expr<V> getReturnValue() {
         return this.oraReturnValue;
+    }
+
+
+    public BigInteger getValue() {
+        return this.value;
     }
 
     @Override
     public String toString() {
         return "MethodIfReturn [" + this.oraCondition + ", " + this.oraReturnType + ", " + this.oraReturnValue + "]";
-    }
-
-    @Override
-    protected V acceptImpl(IVisitor<V> visitor) {
-        return ((ILanguageVisitor<V>) visitor).visitMethodIfReturn(this);
     }
 
     /**
@@ -97,16 +95,18 @@ public class MethodIfReturn<V> extends Method<V> {
      * @param helper class for making the transformation
      * @return corresponding AST object
      */
-    public static <V> Phrase<V> jaxbToAst(Block block, AbstractJaxb2Ast<V> helper) {
+    public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
         List<Value> values = Jaxb2Ast.extractValues(block, (short) 2);
         Phrase<V> left = helper.extractValue(values, new ExprParam(BlocklyConstants.CONDITION, BlocklyType.BOOLEAN));
         Phrase<V> right = helper.extractValue(values, new ExprParam(BlocklyConstants.VALUE, BlocklyType.NULL));
-        String mode = block.getMutation().getReturnType() == null ? "void" : block.getMutation().getReturnType();
+        final Mutation mutation = block.getMutation();
+        String mode = mutation.getReturnType() == null ? "void" : mutation.getReturnType();
         return MethodIfReturn
             .make(
-                helper.convertPhraseToExpr(left),
+                Jaxb2Ast.convertPhraseToExpr(left),
                 BlocklyType.get(mode),
-                helper.convertPhraseToExpr(right),
+                Jaxb2Ast.convertPhraseToExpr(right),
+                mutation.getValue(),
                 Jaxb2Ast.extractBlockProperties(block),
                 Jaxb2Ast.extractComment(block));
     }
@@ -116,10 +116,11 @@ public class MethodIfReturn<V> extends Method<V> {
         Block jaxbDestination = new Block();
         Ast2Jaxb.setBasicProperties(this, jaxbDestination);
         Mutation mutation = new Mutation();
-        mutation.setValue(BigInteger.ONE);
-        mutation.setReturnType(this.oraReturnType.getBlocklyName());
+        mutation.setValue(this.getValue());
+        if (!this.oraReturnType.equals(BlocklyType.VOID)) {
+            mutation.setReturnType(this.oraReturnType.getBlocklyName());
+        }
         jaxbDestination.setMutation(mutation);
-
         Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.CONDITION, getCondition());
         Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.VALUE, getReturnValue());
 

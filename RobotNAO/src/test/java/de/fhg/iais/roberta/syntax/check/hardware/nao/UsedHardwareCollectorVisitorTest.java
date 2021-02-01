@@ -115,7 +115,7 @@ public class UsedHardwareCollectorVisitorTest extends NaoAstTest {
             }
         }
         UsedHardwareBean bean = builder.build();
-        Assert.assertEquals("[UsedSensor [NO_PORT, ULTRASONIC, DISTANCE]]", bean.getUsedSensors().toString());
+        Assert.assertEquals("[UsedSensor [- EMPTY_PORT -, ULTRASONIC, DISTANCE]]", bean.getUsedSensors().toString());
     }
 
     @Test
@@ -131,7 +131,7 @@ public class UsedHardwareCollectorVisitorTest extends NaoAstTest {
             }
         }
         UsedHardwareBean bean = builder.build();
-        Assert.assertEquals("[UsedSensor [NO_PORT, ULTRASONIC, DISTANCE]]", bean.getUsedSensors().toString());
+        Assert.assertEquals("[UsedSensor [- EMPTY_PORT -, ULTRASONIC, DISTANCE]]", bean.getUsedSensors().toString());
     }
 
     @Test
@@ -147,7 +147,7 @@ public class UsedHardwareCollectorVisitorTest extends NaoAstTest {
             }
         }
         UsedHardwareBean bean = builder.build();
-        Assert.assertEquals("[UsedSensor [NO_PORT, ULTRASONIC, DISTANCE]]", bean.getUsedSensors().toString());
+        Assert.assertEquals("[UsedSensor [- EMPTY_PORT -, ULTRASONIC, DISTANCE]]", bean.getUsedSensors().toString());
     }
 
     @Test
@@ -163,7 +163,7 @@ public class UsedHardwareCollectorVisitorTest extends NaoAstTest {
             }
         }
         UsedHardwareBean bean = builder.build();
-        Assert.assertEquals("[UsedSensor [NO_PORT, ULTRASONIC, DISTANCE]]", bean.getUsedSensors().toString());
+        Assert.assertEquals("[UsedSensor [- EMPTY_PORT -, ULTRASONIC, DISTANCE]]", bean.getUsedSensors().toString());
     }
 
     @Test
@@ -180,7 +180,7 @@ public class UsedHardwareCollectorVisitorTest extends NaoAstTest {
             }
         }
         UsedHardwareBean bean = builder.build();
-        Assert.assertEquals("[UsedSensor [NO_PORT, ULTRASONIC, DISTANCE]]", bean.getUsedSensors().toString());
+        Assert.assertEquals("[UsedSensor [- EMPTY_PORT -, ULTRASONIC, DISTANCE]]", bean.getUsedSensors().toString());
     }
 
     @Test
@@ -196,6 +196,6 @@ public class UsedHardwareCollectorVisitorTest extends NaoAstTest {
             }
         }
         UsedHardwareBean bean = builder.build();
-        Assert.assertEquals("[UsedSensor [NO_PORT, ULTRASONIC, DISTANCE]]", bean.getUsedSensors().toString());
+        Assert.assertEquals("[UsedSensor [- EMPTY_PORT -, ULTRASONIC, DISTANCE]]", bean.getUsedSensors().toString());
     }
 }

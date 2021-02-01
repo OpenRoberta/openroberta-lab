@@ -72,7 +72,7 @@ public class MbedTwo2ThreeTransformerVisitor implements IMbedTransformerVisitor<
 
     @Override
     public Phrase<Void> visitLedOnAction(LedOnAction<Phrase<Void>> ledOnAction) {
-        Pair<ConfigurationComponent, String> compAndName = this.helper.getComponentAndName(ledOnAction.getKind().getName(), "", ledOnAction.getPort());
+        Pair<ConfigurationComponent, String> compAndName = this.helper.getComponentAndName(ledOnAction.getKind().getName(), "", ledOnAction.getUserDefinedPort());
 
         this.builder.addUsedConfigurationComponent(compAndName.getFirst());
 
@@ -115,7 +115,7 @@ public class MbedTwo2ThreeTransformerVisitor implements IMbedTransformerVisitor<
     @Override
     public Phrase<Void> visitLightStatusAction(LightStatusAction<Phrase<Void>> lightStatusAction) {
         Pair<ConfigurationComponent, String> compAndName =
-            this.helper.getComponentAndName(lightStatusAction.getKind().getName(), lightStatusAction.getStatus().name(), lightStatusAction.getPort());
+            this.helper.getComponentAndName(lightStatusAction.getKind().getName(), lightStatusAction.getStatus().name(), lightStatusAction.getUserDefinedPort());
 
         this.builder.addUsedConfigurationComponent(compAndName.getFirst());
 
@@ -141,7 +141,7 @@ public class MbedTwo2ThreeTransformerVisitor implements IMbedTransformerVisitor<
 
     @Override
     public Phrase<Void> visitServoSetAction(ServoSetAction<Phrase<Void>> servoSetAction) {
-        Pair<ConfigurationComponent, String> compAndName = this.helper.getComponentAndName(servoSetAction.getKind().getName(), "", servoSetAction.getPort());
+        Pair<ConfigurationComponent, String> compAndName = this.helper.getComponentAndName(servoSetAction.getKind().getName(), "", servoSetAction.getUserDefinedPort());
 
         this.builder.addUsedConfigurationComponent(compAndName.getFirst());
 
@@ -202,7 +202,8 @@ public class MbedTwo2ThreeTransformerVisitor implements IMbedTransformerVisitor<
                 playNoteAction.getDuration(),
                 playNoteAction.getFrequency(),
                 playNoteAction.getProperty(),
-                playNoteAction.getComment());
+                playNoteAction.getComment(),
+                playNoteAction.getHide());
     }
 
     @Override
@@ -217,7 +218,8 @@ public class MbedTwo2ThreeTransformerVisitor implements IMbedTransformerVisitor<
                 (Expr<Void>) toneAction.getDuration().modify(this),
                 compAndName.getSecond(),
                 toneAction.getProperty(),
-                toneAction.getComment());
+                toneAction.getComment(),
+                toneAction.getHide());
     }
 
     @Override
@@ -392,9 +394,9 @@ public class MbedTwo2ThreeTransformerVisitor implements IMbedTransformerVisitor<
     }
 
     @Override
-    public Phrase<Void> visitAccelerometer(AccelerometerSensor<Phrase<Void>> accelerometerSensor) {
+    public Phrase<Void> visitAccelerometerSensor(AccelerometerSensor<Phrase<Void>> accelerometerSensor) {
         Pair<ConfigurationComponent, String> compAndName =
-            this.helper.getComponentAndName(accelerometerSensor.getKind().getName(), accelerometerSensor.getMode(), accelerometerSensor.getPort());
+            this.helper.getComponentAndName(accelerometerSensor.getKind().getName(), accelerometerSensor.getMode(), accelerometerSensor.getUserDefinedPort());
 
         this.builder.addUsedConfigurationComponent(compAndName.getFirst());
         // Previously X, Y, Z, STRENGTH were saved in the port, now the should be in the slot
@@ -402,8 +404,8 @@ public class MbedTwo2ThreeTransformerVisitor implements IMbedTransformerVisitor<
             new SensorMetaDataBean(
                 compAndName.getSecond(),
                 accelerometerSensor.getMode(),
-                accelerometerSensor.getPort(),
-                accelerometerSensor.isPortInMutation());
+                accelerometerSensor.getUserDefinedPort(),
+                accelerometerSensor.getMutation());
 
         return AccelerometerSensor.make(bean, accelerometerSensor.getProperty(), accelerometerSensor.getComment());
     }
@@ -411,11 +413,11 @@ public class MbedTwo2ThreeTransformerVisitor implements IMbedTransformerVisitor<
     @Override
     public Phrase<Void> visitGyroSensor(GyroSensor<Phrase<Void>> gyroSensor) {
         Pair<ConfigurationComponent, String> compAndName =
-            this.helper.getComponentAndName(gyroSensor.getKind().getName(), gyroSensor.getMode(), gyroSensor.getPort());
+            this.helper.getComponentAndName(gyroSensor.getKind().getName(), gyroSensor.getMode(), gyroSensor.getUserDefinedPort());
 
         this.builder.addUsedConfigurationComponent(compAndName.getFirst());
         // Previously X, Y were saved in the port, now the should be in the slot
-        SensorMetaDataBean bean = new SensorMetaDataBean(compAndName.getSecond(), gyroSensor.getMode(), gyroSensor.getPort(), gyroSensor.isPortInMutation());
+        SensorMetaDataBean bean = new SensorMetaDataBean(compAndName.getSecond(), gyroSensor.getMode(), gyroSensor.getUserDefinedPort(), gyroSensor.getMutation());
 
         return GyroSensor.make(bean, gyroSensor.getProperty(), gyroSensor.getComment());
     }
@@ -441,7 +443,7 @@ public class MbedTwo2ThreeTransformerVisitor implements IMbedTransformerVisitor<
 
         // gyro and accelerometer are handled differently, their ports are written into the slot instead
         if ( sensor.getKind().getName().equals("ACCELEROMETER_SENSING") || sensor.getKind().getName().equals("GYRO_SENSING") ) {
-            Pair<ConfigurationComponent, String> compAndName = this.helper.getComponentAndName(sensor.getKind().getName(), sensor.getMode(), sensor.getPort());
+            Pair<ConfigurationComponent, String> compAndName = this.helper.getComponentAndName(sensor.getKind().getName(), sensor.getMode(), sensor.getUserDefinedPort());
 
             this.builder.addUsedConfigurationComponent(compAndName.getFirst());
 
@@ -450,7 +452,7 @@ public class MbedTwo2ThreeTransformerVisitor implements IMbedTransformerVisitor<
                     sensorGetSample.getSensorTypeAndMode(),
                     compAndName.getSecond(),
                     sensorGetSample.getSensorPort(),
-                    sensorGetSample.isPortInMutation(),
+                    sensorGetSample.getMutation(),
                     sensorGetSample.getProperty(),
                     sensorGetSample.getComment(),
                     getBlocklyDropdownFactory());
@@ -462,7 +464,7 @@ public class MbedTwo2ThreeTransformerVisitor implements IMbedTransformerVisitor<
                     sensorGetSample.getSensorTypeAndMode(),
                     sensorGetSample.getSensorPort(),
                     sensorGetSample.getSensorPort(),
-                    sensorGetSample.isPortInMutation(),
+                    sensorGetSample.getMutation(),
                     sensorGetSample.getProperty(),
                     sensorGetSample.getComment(),
                     getBlocklyDropdownFactory());
@@ -472,7 +474,7 @@ public class MbedTwo2ThreeTransformerVisitor implements IMbedTransformerVisitor<
                     sensorGetSample.getSensorTypeAndMode(),
                     collectSensorAndGetNewBean(sensor).getPort(),
                     sensorGetSample.getSlot(),
-                    sensorGetSample.isPortInMutation(),
+                    sensorGetSample.getMutation(),
                     sensorGetSample.getProperty(),
                     sensorGetSample.getComment(),
                     getBlocklyDropdownFactory());
@@ -511,9 +513,9 @@ public class MbedTwo2ThreeTransformerVisitor implements IMbedTransformerVisitor<
      * @return a new, modified sensor bean containing the changed port
      */
     private SensorMetaDataBean collectSensorAndGetNewBean(ExternalSensor<?> sensor) {
-        Pair<ConfigurationComponent, String> compAndName = this.helper.getComponentAndName(sensor.getKind().getName(), sensor.getMode(), sensor.getPort());
+        Pair<ConfigurationComponent, String> compAndName = this.helper.getComponentAndName(sensor.getKind().getName(), sensor.getMode(), sensor.getUserDefinedPort());
 
         this.builder.addUsedConfigurationComponent(compAndName.getFirst());
-        return new SensorMetaDataBean(compAndName.getSecond(), sensor.getMode(), sensor.getSlot(), sensor.isPortInMutation());
+        return new SensorMetaDataBean(compAndName.getSecond(), sensor.getMode(), sensor.getSlot(), sensor.getMutation());
     }
 }

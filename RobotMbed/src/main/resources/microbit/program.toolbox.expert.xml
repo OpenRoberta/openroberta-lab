@@ -82,14 +82,14 @@
 		</category>
 	</category>
 	<category name="TOOLBOX_SENSOR" svg="true">
-		<block type="mbedSensors_key_isPressed" />
-		<block type="mbedSensors_gesture_isActive" />
-		<block type="mbedSensors_compass_getSample" />
-		<block type="mbedSensors_timer_getSample" />
+		<block type="robSensors_key_getSample" />
+		<block type="robSensors_gesture_getSample" />
+		<block type="robSensors_compass_getSample" />
+		<block type="robSensors_timer_getSample" />
 		<block type="mbedSensors_timer_reset" />
-		<block type="mbedSensors_temperature_getSample" />
-		<block type='mbedSensors_pin_isTouched' />
-		<block type='mbedSensors_pin_getSample' />
+		<block type="robSensors_temperature_getSample" />
+		<block type='robSensors_pintouch_getSample' />
+		<block type='robSensors_pin_getSample' />
 		<block type='robSensors_accelerometer_getSample' />
 		<block type="robSensors_light_getSample" />
 	</category>
@@ -141,7 +141,7 @@
 				<value name="WAIT0">
 					<block type="logic_compare">
 						<value name="A">
-							<block type="mbedSensors_getSample" />
+							<block type="robSensors_getSample" />
 						</value>
 						<value name="B">
 							<block type="logic_boolean" />

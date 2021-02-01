@@ -12,12 +12,10 @@ import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.Action;
-import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
+import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.util.dbc.Assert;
-import de.fhg.iais.roberta.visitor.IVisitor;
-import de.fhg.iais.roberta.visitor.hardware.IMbedVisitor;
 
 /**
  * This class represents the <b>mbedActions_motionkit_dual_set</b> block from Blockly into the AST (abstract syntax tree). Object from this class will generate
@@ -62,11 +60,6 @@ public final class MotionKitDualSetAction<V> extends Action<V> {
         return "MotionKitDualSetAction [" + this.directionLeft + ", " + this.directionRight + "]";
     }
 
-    @Override
-    protected V acceptImpl(IVisitor<V> visitor) {
-        return ((IMbedVisitor<V>) visitor).visitMotionKitDualSetAction(this);
-    }
-
     /**
      * Transformation from JAXB object to corresponding AST object.
      *
@@ -74,7 +67,7 @@ public final class MotionKitDualSetAction<V> extends Action<V> {
      * @param helper class for making the transformation
      * @return corresponding AST object
      */
-    public static <V> Phrase<V> jaxbToAst(Block block, AbstractJaxb2Ast<V> helper) {
+    public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
         BlocklyDropdownFactory factory = helper.getDropdownFactory();
         List<Field> fields = Jaxb2Ast.extractFields(block, (short) 2);
         String directionL = Jaxb2Ast.extractField(fields, BlocklyConstants.DIRECTION_LEFT);

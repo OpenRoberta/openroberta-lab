@@ -141,10 +141,10 @@
     <block type="robSensors_compass_getSample"/>
     <block type="robSensors_ultrasonic_getSample"/>
     <block type="robSensors_colour_getSample"/>
-    <block type="robSensors_key_isPressed"/>
+    <block type="robSensors_key_getSample"/>
     <block type="robSensors_timer_getSample"/>
     <block type="robSensors_timer_reset"/>
-    <block type="robSensors_battery_voltage"/>
+    <block type="robSensors_battery_getSample"/>
   </category>
   <category name="TOOLBOX_CONTROL" svg="true">
     <category name="TOOLBOX_DECISION" svg="true">
@@ -194,7 +194,7 @@
         <value name="WAIT0">
           <block type="logic_compare">
             <value name="A">
-              <block type="robSensors_getSample_ardu"/>
+              <block type="robSensors_getSample"/>
             </value>
             <value name="B">
               <block type="logic_boolean"/>

@@ -2,18 +2,24 @@ package de.fhg.iais.roberta.transformer;
 
 import java.util.List;
 
-import de.fhg.iais.roberta.blockly.generated.Arg;
-import de.fhg.iais.roberta.blockly.generated.Block;
-import de.fhg.iais.roberta.blockly.generated.Comment;
-import de.fhg.iais.roberta.blockly.generated.Field;
-import de.fhg.iais.roberta.blockly.generated.Mutation;
-import de.fhg.iais.roberta.blockly.generated.Statement;
-import de.fhg.iais.roberta.blockly.generated.Value;
+import de.fhg.iais.roberta.blockly.generated.*;
+import de.fhg.iais.roberta.components.Category;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
+import de.fhg.iais.roberta.syntax.BlocklyConstants;
+import de.fhg.iais.roberta.syntax.Phrase;
+import de.fhg.iais.roberta.syntax.action.Action;
+import de.fhg.iais.roberta.syntax.lang.expr.*;
+import de.fhg.iais.roberta.syntax.lang.functions.Function;
+import de.fhg.iais.roberta.syntax.lang.methods.Method;
+import de.fhg.iais.roberta.syntax.lang.stmt.IfStmt;
+import de.fhg.iais.roberta.syntax.lang.stmt.Stmt;
+import de.fhg.iais.roberta.syntax.sensor.Sensor;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
+
+import javax.annotation.Nonnull;
 
 public class Jaxb2Ast {
     private Jaxb2Ast() {
@@ -139,16 +145,14 @@ public class Jaxb2Ast {
     }
 
     /**
-     * Extract field from list of {@link Field}. If the field with the given name is not found or it is empty, it returns the default {@link Value}.<br>
-     * <br>
-     * Throws {@link DbcException} if the field is not found and the defaultValue is set to <b>null</b>.
-     *
-     * @param fields as a source
+     * Extract field from list of {@link Field}. If the field with the given name is not found or it is empty, it returns the default Value.<br>
+      *
+     * @param fields list as a source
      * @param name of the field to be extracted
-     * @param defaultValue if the field is not existent
-     * @return value containing the field
+     * @param defaultValue if the field does not existent
+     * @return value of the field
      */
-    public static String extractNonEmptyField(List<Field> fields, String name, String defaultValue) {
+    public static String extractNonEmptyField(List<Field> fields, String name, @Nonnull String defaultValue) {
         Assert.notNull(defaultValue);
         for ( Field field : fields ) {
             if ( field.getName().equals(name) ) {
@@ -298,5 +302,73 @@ public class Jaxb2Ast {
             return null;
         }
         return block.isErrorAttribute();
+    }
+
+    /**
+     * Converts {@link Phrase} to {@link Expr}.
+     *
+     * @param p to be converted to expression
+     */
+    public static <V> Expr<V> convertPhraseToExpr(Phrase<V> p) {
+        Expr<V> expr;
+        if ( p.getKind().getCategory() == Category.SENSOR ) {
+            expr = SensorExpr.make((Sensor<V>) p);
+        } else if ( p.getKind().getCategory() == Category.ACTOR ) {
+            expr = ActionExpr.make((Action<V>) p);
+        } else if ( p.getKind().getCategory() == Category.FUNCTION ) {
+            expr = FunctionExpr.make((Function<V>) p);
+        } else if ( p.getKind().getCategory() == Category.METHOD ) {
+            expr = MethodExpr.make((Method<V>) p);
+        } else if ( p.getKind().hasName("IF_STMT") && ((IfStmt<V>) p).isTernary() ) {
+            expr = StmtExpr.make((Stmt<V>) p);
+        } else {
+            expr = (Expr<V>) p;
+        }
+        return expr;
+    }
+
+    /**
+     * Extracts variable from a {@link Block}.
+     *
+     * @param block from which variable is extracted
+     * @return AST object representing variable
+     */
+    public static <V> Phrase<V> extractVar(Block block) {
+        String typeVar = block.getMutation() != null ? block.getMutation().getDatatype() : BlocklyConstants.NUMBER;
+        List<Field> fields = extractFields(block, (short) 1);
+        String field = extractField(fields, BlocklyConstants.VAR);
+        return Var.make(BlocklyType.get(typeVar), field, extractBlockProperties(block), extractComment(block));
+    }
+
+    public static Block shadow2block(Shadow shadow) {
+        Block block = new Block();
+        block.setId(shadow.getId());
+        block.setType(shadow.getType());
+        block.setIntask(shadow.isIntask());
+        block.getField().add(shadow.getField());
+        block.setShadow(true);
+        return block;
+    }
+
+    public static String sanitizePort(String port) {
+        if ( port == null || port.isEmpty() ) {
+            return BlocklyConstants.EMPTY_PORT;
+        }
+        return port;
+    }
+
+    /**
+     * Get a sensor port from {@link ISensorPort} given string parameter. It is possible for one sensor port to have multiple string mappings. Throws exception
+     * if the sensor port does not exists.
+     *
+     * @param name of the sensor port
+     * @return the sensor port from the enum {@link ISensorPort}
+     */
+    public static String sanitizeSlot(String slot) {
+        Assert.notNull(slot, "Null slot port!");
+        if ( slot.isEmpty() ) {
+            return BlocklyConstants.EMPTY_SLOT;
+        }
+        return slot;
     }
 }

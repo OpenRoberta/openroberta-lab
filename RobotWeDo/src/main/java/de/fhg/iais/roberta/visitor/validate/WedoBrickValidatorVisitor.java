@@ -30,7 +30,7 @@ public final class WedoBrickValidatorVisitor extends AbstractBrickValidatorVisit
 
     @Override
     protected void checkSensorPort(ExternalSensor<Void> sensor) {
-        ConfigurationComponent usedConfigurationBlock = this.robotConfiguration.optConfigurationComponent(sensor.getPort());
+        ConfigurationComponent usedConfigurationBlock = this.robotConfiguration.optConfigurationComponent(sensor.getUserDefinedPort());
         if ( usedConfigurationBlock == null ) {
             sensor.addInfo(NepoInfo.error("CONFIGURATION_ERROR_SENSOR_MISSING"));
             this.errorCount++;
@@ -108,7 +108,7 @@ public final class WedoBrickValidatorVisitor extends AbstractBrickValidatorVisit
     @Override
     public Void visitLightStatusAction(LightStatusAction<Void> lightStatusAction) {
         if ( lightStatusAction.getInfos().getErrorCount() == 0 ) {
-            ConfigurationComponent usedConfigurationBlock = this.robotConfiguration.optConfigurationComponent(lightStatusAction.getPort());
+            ConfigurationComponent usedConfigurationBlock = this.robotConfiguration.optConfigurationComponent(lightStatusAction.getUserDefinedPort());
             if ( usedConfigurationBlock == null ) {
                 lightStatusAction.addInfo(NepoInfo.error("CONFIGURATION_ERROR_ACTOR_MISSING"));
                 this.errorCount++;

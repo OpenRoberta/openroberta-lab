@@ -1,8 +1,0 @@
-<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="edison" xmlversion="3.1" description="" tags="">
-    <instance x="442" y="211">
-        <block type="robLists_create_with" id="B:3?G`x_*}o%6hB~l/Mx" intask="false">
-            <mutation items="0" list_type="Number"></mutation>
-            <field name="LIST_TYPE">Number</field>
-        </block>
-    </instance>
-</block_set>

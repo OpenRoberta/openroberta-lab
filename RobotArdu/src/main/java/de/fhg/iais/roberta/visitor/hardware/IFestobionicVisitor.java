@@ -110,7 +110,7 @@ public interface IFestobionicVisitor<V> extends IMotorVisitor<V>, ISerialVisitor
     }
 
     @Override
-    default V visitAccelerometer(AccelerometerSensor<V> accelerometerSensor) {
+    default V visitAccelerometerSensor(AccelerometerSensor<V> accelerometerSensor) {
         throw new DbcException("Not supported!");
     }
 

@@ -89,11 +89,10 @@ public class ImportErrorResponse extends BaseResponse {
     }
 
     /**
-     * merge the properties of a JSON-object into this bean. The bean must be "under construction". The keys of the JSON-Object must be valid. The bean remains
-     * "under construction".<br>
+     * merge the properties of a JSON-object into this bean. The bean must be "under construction".
+     * The keys of the JSON-Object must be valid. The bean remains "under construction".<br>
      * Throws a runtime exception if inconsistencies are detected.
      */
-    @Override
     public ImportErrorResponse merge(JSONObject jsonO) {
         try {
             for ( String key : JSONObject.getNames(jsonO) ) {
@@ -149,7 +148,6 @@ public class ImportErrorResponse extends BaseResponse {
      * Checks whether all required fields are set. All lists are made immutable.<br>
      * Throws a runtime exception if inconsistencies are detected.
      */
-    @Override
     public ImportErrorResponse immutable() {
         if ( this.immutable ) {
             return this;
@@ -167,19 +165,19 @@ public class ImportErrorResponse extends BaseResponse {
         if ( !this.immutable ) {
             _message = "ImportErrorResponse-object is already immutable: " + toString();
         }
-        if ( this.rc == null ) {
+        if ( rc == null ) {
             _message = "required property rc of ImportErrorResponse-object is not set: " + toString();
         }
-        if ( this.initToken == null ) {
+        if ( initToken == null ) {
             _message = "required property initToken of ImportErrorResponse-object is not set: " + toString();
         }
-        if ( !this.serverTimeDefined ) {
+        if ( !serverTimeDefined ) {
             _message = "required property serverTime of ImportErrorResponse-object is not set: " + toString();
         }
-        if ( this.serverVersion == null ) {
+        if ( serverVersion == null ) {
             _message = "required property serverVersion of ImportErrorResponse-object is not set: " + toString();
         }
-        if ( this.robotTypes == null ) {
+        if ( robotTypes == null ) {
             _message = "required property robotTypes of ImportErrorResponse-object is not set: " + toString();
         }
         if ( _message != null ) {
@@ -214,7 +212,6 @@ public class ImportErrorResponse extends BaseResponse {
      * generates a JSON-object from an immutable bean.<br>
      * Throws a runtime exception if inconsistencies are detected.
      */
-    @Override
     public JSONObject toJson() {
         if ( !this.immutable ) {
             throw new RuntimeException("no JSON from an object under construction: " + toString());

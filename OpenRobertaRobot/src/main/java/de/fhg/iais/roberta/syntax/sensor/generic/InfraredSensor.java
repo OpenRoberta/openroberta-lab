@@ -5,8 +5,6 @@ import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.sensor.ExternalSensor;
 import de.fhg.iais.roberta.syntax.sensor.SensorMetaDataBean;
-import de.fhg.iais.roberta.visitor.IVisitor;
-import de.fhg.iais.roberta.visitor.hardware.sensor.ISensorVisitor;
 
 /**
  * This class represents the <b>robSensors_infrared_getMode</b>, <b>robSensors_infrared_getSample</b> and <b>robSensors_infrared_setMode</b> blocks from Blockly
@@ -36,8 +34,4 @@ public class InfraredSensor<V> extends ExternalSensor<V> {
         return new InfraredSensor<V>(sensorMetaDataBean, properties, comment);
     }
 
-    @Override
-    protected V acceptImpl(IVisitor<V> visitor) {
-        return ((ISensorVisitor<V>) visitor).visitInfraredSensor(this);
-    }
 }

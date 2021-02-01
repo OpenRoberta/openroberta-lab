@@ -13,15 +13,13 @@ import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.Action;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
-import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
+import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
-import de.fhg.iais.roberta.visitor.IVisitor;
-import de.fhg.iais.roberta.visitor.hardware.IMbedVisitor;
 
 /**
  * This class represents the <b>mbedActions_display_text</b> block from Blockly into the AST (abstract syntax tree). Object from this class will generate code
@@ -70,12 +68,6 @@ public class DisplayTextAction<V> extends Action<V> {
         return "DisplayTextAction [" + this.mode + ", " + this.msg + "]";
     }
 
-    @Override
-    protected V acceptImpl(IVisitor<V> visitor) {
-        return ((IMbedVisitor<V>) visitor).visitDisplayTextAction(this);
-
-    }
-
     /**
      * Transformation from JAXB object to corresponding AST object.
      *
@@ -83,7 +75,7 @@ public class DisplayTextAction<V> extends Action<V> {
      * @param helper class for making the transformation
      * @return corresponding AST object
      */
-    public static <V> Phrase<V> jaxbToAst(Block block, AbstractJaxb2Ast<V> helper) {
+    public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
         List<Value> values = Jaxb2Ast.extractValues(block, (short) 1);
         List<Field> fields = Jaxb2Ast.extractFields(block, (short) 1);
         Phrase<V> msg = helper.extractValue(values, new ExprParam(BlocklyConstants.OUT, BlocklyType.STRING));
@@ -94,7 +86,7 @@ public class DisplayTextAction<V> extends Action<V> {
             displaMode = "TEXT";
         }
         return DisplayTextAction
-            .make(DisplayTextMode.get(displaMode), helper.convertPhraseToExpr(msg), Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
+            .make(DisplayTextMode.get(displaMode), Jaxb2Ast.convertPhraseToExpr(msg), Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
     }
 
     @Override

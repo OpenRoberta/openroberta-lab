@@ -21,8 +21,6 @@ import org.json.JSONObject;
  */
 public class ProjectNativeResponse extends BaseResponse {
     protected String programName;
-    protected int errorCounter;
-    protected boolean errorCounterDefined = false;
     protected Map<String, JSONObject> confAnnos;
     protected String compiledCode;
 
@@ -67,7 +65,6 @@ public class ProjectNativeResponse extends BaseResponse {
         String robotState,
         boolean notificationsAvailable,
         String programName,
-        int errorCounter,
         Map<String, JSONObject> confAnnos,
         String compiledCode) {
         ProjectNativeResponse entity = new ProjectNativeResponse();
@@ -89,7 +86,6 @@ public class ProjectNativeResponse extends BaseResponse {
         entity.setRobotState(robotState);
         entity.setNotificationsAvailable(notificationsAvailable);
         entity.setProgramName(programName);
-        entity.setErrorCounter(errorCounter);
         entity.setConfAnnos(confAnnos);
         entity.setCompiledCode(compiledCode);
         entity.immutable();
@@ -104,11 +100,10 @@ public class ProjectNativeResponse extends BaseResponse {
     }
 
     /**
-     * merge the properties of a JSON-object into this bean. The bean must be "under construction". The keys of the JSON-Object must be valid. The bean remains
-     * "under construction".<br>
+     * merge the properties of a JSON-object into this bean. The bean must be "under construction".
+     * The keys of the JSON-Object must be valid. The bean remains "under construction".<br>
      * Throws a runtime exception if inconsistencies are detected.
      */
-    @Override
     public ProjectNativeResponse merge(JSONObject jsonO) {
         try {
             for ( String key : JSONObject.getNames(jsonO) ) {
@@ -149,8 +144,6 @@ public class ProjectNativeResponse extends BaseResponse {
                     setNotificationsAvailable(jsonO.optBoolean(key));
                 } else if ( "programName".equals(key) ) {
                     setProgramName(jsonO.optString(key));
-                } else if ( "errorCounter".equals(key) ) {
-                    setErrorCounter(jsonO.getInt(key));
                 } else if ( "confAnnos".equals(key) ) {
                     JSONObject map = jsonO.optJSONObject(key);
                     if ( map != null ) {
@@ -177,7 +170,6 @@ public class ProjectNativeResponse extends BaseResponse {
      * Checks whether all required fields are set. All lists are made immutable.<br>
      * Throws a runtime exception if inconsistencies are detected.
      */
-    @Override
     public ProjectNativeResponse immutable() {
         if ( this.immutable ) {
             return this;
@@ -195,22 +187,19 @@ public class ProjectNativeResponse extends BaseResponse {
         if ( !this.immutable ) {
             _message = "ProjectNativeResponse-object is already immutable: " + toString();
         }
-        if ( this.rc == null ) {
+        if ( rc == null ) {
             _message = "required property rc of ProjectNativeResponse-object is not set: " + toString();
         }
-        if ( this.initToken == null ) {
+        if ( initToken == null ) {
             _message = "required property initToken of ProjectNativeResponse-object is not set: " + toString();
         }
-        if ( !this.serverTimeDefined ) {
+        if ( !serverTimeDefined ) {
             _message = "required property serverTime of ProjectNativeResponse-object is not set: " + toString();
         }
-        if ( this.serverVersion == null ) {
+        if ( serverVersion == null ) {
             _message = "required property serverVersion of ProjectNativeResponse-object is not set: " + toString();
         }
-        if ( !this.errorCounterDefined ) {
-            _message = "required property errorCounter of ProjectNativeResponse-object is not set: " + toString();
-        }
-        if ( this.compiledCode == null ) {
+        if ( compiledCode == null ) {
             _message = "required property compiledCode of ProjectNativeResponse-object is not set: " + toString();
         }
         if ( _message != null ) {
@@ -247,28 +236,6 @@ public class ProjectNativeResponse extends BaseResponse {
             throw new RuntimeException("programName assigned to an immutable object: " + toString());
         }
         this.programName = programName;
-        return this;
-    }
-
-    /**
-     * GET errorCounter. Object must be immutable. Never return null or an undefined/default value.
-     */
-    public int getErrorCounter() {
-        if ( !this.immutable ) {
-            throw new RuntimeException("no errorCounter from an object under construction: " + toString());
-        }
-        return this.errorCounter;
-    }
-
-    /**
-     * SET errorCounter. Object must be mutable.
-     */
-    public ProjectNativeResponse setErrorCounter(int errorCounter) {
-        if ( this.immutable ) {
-            throw new RuntimeException("errorCounter assigned to an immutable object: " + toString());
-        }
-        this.errorCounter = errorCounter;
-        this.errorCounterDefined = true;
         return this;
     }
 
@@ -348,7 +315,6 @@ public class ProjectNativeResponse extends BaseResponse {
      * generates a JSON-object from an immutable bean.<br>
      * Throws a runtime exception if inconsistencies are detected.
      */
-    @Override
     public JSONObject toJson() {
         if ( !this.immutable ) {
             throw new RuntimeException("no JSON from an object under construction: " + toString());
@@ -402,11 +368,10 @@ public class ProjectNativeResponse extends BaseResponse {
             if ( this.programName != null ) {
                 jsonO.put("programName", this.programName);
             }
-            jsonO.put("errorCounter", this.errorCounter);
             if ( this.confAnnos != null ) {
                 {
                     JSONObject map = new JSONObject();
-                    for ( Entry<String, JSONObject> entry : this.confAnnos.entrySet() ) {
+                    for ( Entry<String, JSONObject> entry : confAnnos.entrySet() ) {
                         map.put(entry.getKey(), entry.getValue());
                     }
                     jsonO.put("confAnnos", map);
@@ -459,8 +424,6 @@ public class ProjectNativeResponse extends BaseResponse {
             + this.notificationsAvailable
             + ", programName="
             + this.programName
-            + ", errorCounter="
-            + this.errorCounter
             + ", confAnnos="
             + this.confAnnos
             + ", compiledCode="

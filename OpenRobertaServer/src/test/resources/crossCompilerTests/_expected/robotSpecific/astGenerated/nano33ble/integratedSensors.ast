@@ -1,0 +1,21 @@
+
+(repeat [FOREVER_ARDU, BoolConst [true]]
+Var [b] := SensorExpr [Lsm9ds1AccSensor []]
+
+Var [b] := SensorExpr [Lsm9ds1GyroSensor []]
+
+Var [b] := SensorExpr [Lsm9ds1MagneticFieldSensor []]
+
+Var [b] := SensorExpr [Apds9960DistanceSensor []]
+
+Var [b] := SensorExpr [Apds9960GestureSensor []]
+
+Var [b] := SensorExpr [Apds9960ColorSensor []]
+
+Var [b] := SensorExpr [Lps22hbPressureSensor []]
+
+Var [b] := SensorExpr [Hts221TemperatureSensor []]
+
+Var [b] := SensorExpr [Hts221HumiditySensor []]
+
+)

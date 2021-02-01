@@ -1,7 +1,0 @@
-<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="edison" xmlversion="3.1" description="" tags="">
-    <instance x="444" y="218">
-        <block type="robActions_led_off" id="ewM~Ruct=jqvy!mV)!kG" intask="false">
-            <field name="ACTORPORT">LLED</field>
-        </block>
-    </instance>
-</block_set>

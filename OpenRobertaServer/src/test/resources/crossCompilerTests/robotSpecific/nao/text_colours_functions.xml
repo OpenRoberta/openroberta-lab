@@ -794,6 +794,27 @@
                                 </block>
                             </value>
                         </block>
+                        <block type="robActions_sayText" id="zVnPGx_Rx6!@[J]EjfH." intask="true">
+                            <value name="OUT">
+                                <block type="naoColour_rgb" id="_;eO=41l2IGx7+Xz/%J@" intask="true">
+                                    <value name="RED">
+                                        <block type="math_number" id="99ReVDmwi7j+nck;9TN4" intask="true">
+                                            <field name="NUM">100</field>
+                                        </block>
+                                    </value>
+                                    <value name="GREEN">
+                                        <block type="math_number" id="fc@GOG4fFg+3PUWp.I|Q" intask="true">
+                                            <field name="NUM">120</field>
+                                        </block>
+                                    </value>
+                                    <value name="BLUE">
+                                        <block type="math_number" id=",7X7P#G~W}gg;`IM=Bfb" intask="true">
+                                            <field name="NUM">140</field>
+                                        </block>
+                                    </value>
+                                </block>
+                            </value>
+                        </block>
                     </statement>
                 </block>
             </instance>
@@ -979,9 +1000,9 @@
         </block_set>
     </program>
     <config>
-        <block_set robottype="nao" xmlversion="3.1" xmlns="http://de.fhg.iais.roberta.blockly">
+        <block_set robottype="nao" xmlversion="3.1" description="" tags="" xmlns="http://de.fhg.iais.roberta.blockly">
             <instance x="138" y="88">
-                <block type="naoBrick_NAO-Brick" id="1">
+                <block type="naoBrick_NAO-Brick" id="1" intask="true">
                     <field name="IP_ADDRESS">0.0.0.0</field>
                     <field name="PORT">22</field>
                     <field name="USERNAME">nao</field>

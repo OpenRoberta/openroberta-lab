@@ -22,8 +22,6 @@ import org.json.JSONObject;
 public class ProjectNepoResponse extends BaseResponse {
     protected String programName;
     protected String progXML;
-    protected int errorCounter;
-    protected boolean errorCounterDefined = false;
     protected Map<String, JSONObject> confAnnos;
     protected String compiledCode;
     protected JSONObject configuration;
@@ -70,7 +68,6 @@ public class ProjectNepoResponse extends BaseResponse {
         boolean notificationsAvailable,
         String programName,
         String progXML,
-        int errorCounter,
         Map<String, JSONObject> confAnnos,
         String compiledCode,
         JSONObject configuration) {
@@ -94,7 +91,6 @@ public class ProjectNepoResponse extends BaseResponse {
         entity.setNotificationsAvailable(notificationsAvailable);
         entity.setProgramName(programName);
         entity.setProgXML(progXML);
-        entity.setErrorCounter(errorCounter);
         entity.setConfAnnos(confAnnos);
         entity.setCompiledCode(compiledCode);
         entity.setConfiguration(configuration);
@@ -114,7 +110,6 @@ public class ProjectNepoResponse extends BaseResponse {
      * The keys of the JSON-Object must be valid. The bean remains "under construction".<br>
      * Throws a runtime exception if inconsistencies are detected.
      */
-    @Override
     public ProjectNepoResponse merge(JSONObject jsonO) {
         try {
             for ( String key : JSONObject.getNames(jsonO) ) {
@@ -157,8 +152,6 @@ public class ProjectNepoResponse extends BaseResponse {
                     setProgramName(jsonO.optString(key));
                 } else if ( "progXML".equals(key) ) {
                     setProgXML(jsonO.optString(key));
-                } else if ( "errorCounter".equals(key) ) {
-                    setErrorCounter(jsonO.getInt(key));
                 } else if ( "confAnnos".equals(key) ) {
                     JSONObject map = jsonO.optJSONObject(key);
                     if ( map != null ) {
@@ -187,7 +180,6 @@ public class ProjectNepoResponse extends BaseResponse {
      * Checks whether all required fields are set. All lists are made immutable.<br>
      * Throws a runtime exception if inconsistencies are detected.
      */
-    @Override
     public ProjectNepoResponse immutable() {
         if ( this.immutable ) {
             return this;
@@ -205,22 +197,19 @@ public class ProjectNepoResponse extends BaseResponse {
         if ( !this.immutable ) {
             _message = "ProjectNepoResponse-object is already immutable: " + toString();
         }
-        if ( this.rc == null ) {
+        if ( rc == null ) {
             _message = "required property rc of ProjectNepoResponse-object is not set: " + toString();
         }
-        if ( this.initToken == null ) {
+        if ( initToken == null ) {
             _message = "required property initToken of ProjectNepoResponse-object is not set: " + toString();
         }
-        if ( !this.serverTimeDefined ) {
+        if ( !serverTimeDefined ) {
             _message = "required property serverTime of ProjectNepoResponse-object is not set: " + toString();
         }
-        if ( this.serverVersion == null ) {
+        if ( serverVersion == null ) {
             _message = "required property serverVersion of ProjectNepoResponse-object is not set: " + toString();
         }
-        if ( !this.errorCounterDefined ) {
-            _message = "required property errorCounter of ProjectNepoResponse-object is not set: " + toString();
-        }
-        if ( this.compiledCode == null ) {
+        if ( compiledCode == null ) {
             _message = "required property compiledCode of ProjectNepoResponse-object is not set: " + toString();
         }
         if ( _message != null ) {
@@ -287,28 +276,6 @@ public class ProjectNepoResponse extends BaseResponse {
             throw new RuntimeException("progXML assigned to an immutable object: " + toString());
         }
         this.progXML = progXML;
-        return this;
-    }
-
-    /**
-     * GET errorCounter. Object must be immutable. Never return null or an undefined/default value.
-     */
-    public int getErrorCounter() {
-        if ( !this.immutable ) {
-            throw new RuntimeException("no errorCounter from an object under construction: " + toString());
-        }
-        return this.errorCounter;
-    }
-
-    /**
-     * SET errorCounter. Object must be mutable.
-     */
-    public ProjectNepoResponse setErrorCounter(int errorCounter) {
-        if ( this.immutable ) {
-            throw new RuntimeException("errorCounter assigned to an immutable object: " + toString());
-        }
-        this.errorCounter = errorCounter;
-        this.errorCounterDefined = true;
         return this;
     }
 
@@ -418,7 +385,6 @@ public class ProjectNepoResponse extends BaseResponse {
      * generates a JSON-object from an immutable bean.<br>
      * Throws a runtime exception if inconsistencies are detected.
      */
-    @Override
     public JSONObject toJson() {
         if ( !this.immutable ) {
             throw new RuntimeException("no JSON from an object under construction: " + toString());
@@ -475,11 +441,10 @@ public class ProjectNepoResponse extends BaseResponse {
             if ( this.progXML != null ) {
                 jsonO.put("progXML", this.progXML);
             }
-            jsonO.put("errorCounter", this.errorCounter);
             if ( this.confAnnos != null ) {
                 {
                     JSONObject map = new JSONObject();
-                    for ( Entry<String, JSONObject> entry : this.confAnnos.entrySet() ) {
+                    for ( Entry<String, JSONObject> entry : confAnnos.entrySet() ) {
                         map.put(entry.getKey(), entry.getValue());
                     }
                     jsonO.put("confAnnos", map);
@@ -537,8 +502,6 @@ public class ProjectNepoResponse extends BaseResponse {
             + this.programName
             + ", progXML="
             + this.progXML
-            + ", errorCounter="
-            + this.errorCounter
             + ", confAnnos="
             + this.confAnnos
             + ", compiledCode="

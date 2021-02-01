@@ -1,0 +1,173 @@
+#define WHEELDIAMETER 5.6
+#define TRACKWIDTH 12.0
+#define MAXLINES 8
+#define MIN(X, Y) (((X) < (Y)) ? (X) : (Y))
+#define MAX(X, Y) (((X) > (Y)) ? (X) : (Y))
+#define M_PI PI
+#define M_E 2.718281828459045
+#define M_GOLDEN_RATIO 1.61803398875
+#define M_SQRT2 1.41421356237
+#define M_SQRT1_2 0.707106781187
+#define M_INFINITY 0x7f800000
+#include "NEPODefs.h" // contains NEPO declarations for the NXC NXT API resources
+
+
+void text();
+void colours();
+void messages();
+void function_variables(float ___x, bool ___x2, string ___x3, int ___x4, int ___x5, float ___x6[], bool ___x7[], string ___x8[], int ___x9[], int ___x10[]);
+float function_return_numberVar();
+bool function_return_booleanVar();
+string function_return_stringVar();
+int function_return_colourVar();
+int function_return_connectionVar();
+
+float ___numberVar;
+bool ___booleanVar;
+string ___stringVar;
+int ___colourVar;
+int ___connectionVar;
+float ___numberList[3];
+bool ___booleanList[3];
+string ___stringList[3];
+int ___colourList[3];
+int ___connectionList[3];
+task main() {
+    ___numberVar = 0;
+    ___booleanVar = true;
+    ___stringVar = "";
+    ___colourVar = INPUT_WHITECOLOR;
+    ___connectionVar = NULL;
+    float _____numberList[] = {0, 0, 0};
+    ___numberList = _____numberList;
+    bool _____booleanList[] = {true, true, true};
+    ___booleanList = _____booleanList;
+    string _____stringList[] = {"", "", ""};
+    ___stringList = _____stringList;
+    int _____colourList[] = {INPUT_WHITECOLOR, INPUT_WHITECOLOR, INPUT_WHITECOLOR};
+    ___colourList = _____colourList;
+    int _____connectionList[] = {NULL, NULL, NULL};
+    ___connectionList = _____connectionList;
+    text();
+    colours();
+    messages();
+    function_variables(___numberVar, ___booleanVar, ___stringVar, ___colourVar, ___connectionVar, ___numberList, ___booleanList, ___stringList, ___colourList, ___connectionList);
+    TextOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, function_return_stringVar());
+}
+
+void text() {
+    TextOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, "");
+    // 
+    ___stringVar += ___stringVar;
+}
+
+void colours() {
+    ColorOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, INPUT_BLACKCOLOR);
+    ColorOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, INPUT_BLUECOLOR);
+    ColorOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, INPUT_GREENCOLOR);
+    ColorOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, INPUT_LIMECOLOR);
+    ColorOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, NULL);
+    ColorOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, INPUT_PURPLECOLOR);
+    ColorOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, INPUT_REDCOLOR);
+    ColorOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, INPUT_CRIMSONCOLOR);
+    ColorOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, INPUT_VIOLETCOLOR);
+    ColorOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, INPUT_YELLOWCOLOR);
+    ColorOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, INPUT_MAGENTACOLOR);
+    ColorOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, INPUT_ORANGECOLOR);
+    ColorOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, INPUT_WHITECOLOR);
+}
+
+void messages() {
+    NumOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, 0);
+    NumOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, 1);
+    NumOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, 2);
+    NumOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, 3);
+    SendRemoteNumber(0, 0, ___numberVar);
+    SendRemoteNumber(1, 1, ___numberVar);
+    SendRemoteNumber(2, 2, ___numberVar);
+    SendRemoteNumber(3, 3, ___numberVar);
+    SendRemoteNumber(0, 4, ___numberVar);
+    SendRemoteNumber(0, 5, ___numberVar);
+    SendRemoteNumber(0, 6, ___numberVar);
+    SendRemoteNumber(0, 7, ___numberVar);
+    SendRemoteNumber(0, 8, ___numberVar);
+    SendRemoteNumber(0, 9, ___numberVar);
+    SendRemoteBool(0, 0, ___booleanVar);
+    SendRemoteBool(0, 1, ___booleanVar);
+    SendRemoteBool(0, 2, ___booleanVar);
+    SendRemoteBool(0, 3, ___booleanVar);
+    SendRemoteBool(0, 4, ___booleanVar);
+    SendRemoteBool(0, 5, ___booleanVar);
+    SendRemoteBool(0, 6, ___booleanVar);
+    SendRemoteBool(0, 7, ___booleanVar);
+    SendRemoteBool(0, 8, ___booleanVar);
+    SendRemoteBool(0, 9, ___booleanVar);
+    SendRemoteString(0, 0, ___stringVar);
+    SendRemoteString(0, 1, ___stringVar);
+    SendRemoteString(0, 2, ___stringVar);
+    SendRemoteString(0, 3, ___stringVar);
+    SendRemoteString(0, 4, ___stringVar);
+    SendRemoteString(0, 5, ___stringVar);
+    SendRemoteString(0, 6, ___stringVar);
+    SendRemoteString(0, 7, ___stringVar);
+    SendRemoteString(0, 8, ___stringVar);
+    SendRemoteString(0, 9, ___stringVar);
+    NumOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, BluetoothGetNumber(0));
+    BoolOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, BluetoothGetBoolean(0));
+    TextOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, BluetoothGetString(0));
+    NumOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, BluetoothGetNumber(1));
+    BoolOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, BluetoothGetBoolean(1));
+    TextOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, BluetoothGetString(1));
+    NumOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, BluetoothGetNumber(2));
+    BoolOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, BluetoothGetBoolean(2));
+    TextOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, BluetoothGetString(2));
+    NumOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, BluetoothGetNumber(3));
+    BoolOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, BluetoothGetBoolean(3));
+    TextOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, BluetoothGetString(3));
+    NumOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, BluetoothGetNumber(4));
+    BoolOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, BluetoothGetBoolean(4));
+    TextOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, BluetoothGetString(4));
+    NumOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, BluetoothGetNumber(5));
+    BoolOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, BluetoothGetBoolean(5));
+    TextOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, BluetoothGetString(5));
+    NumOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, BluetoothGetNumber(6));
+    BoolOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, BluetoothGetBoolean(6));
+    TextOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, BluetoothGetString(6));
+    NumOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, BluetoothGetNumber(7));
+    BoolOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, BluetoothGetBoolean(7));
+    TextOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, BluetoothGetString(7));
+    NumOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, BluetoothGetNumber(8));
+    BoolOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, BluetoothGetBoolean(8));
+    TextOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, BluetoothGetString(8));
+    NumOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, BluetoothGetNumber(9));
+    BoolOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, BluetoothGetBoolean(9));
+    TextOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, BluetoothGetString(9));
+    BoolOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, (BluetoothStatus(0)==NO_ERR));
+    BoolOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, (BluetoothStatus(1)==NO_ERR));
+    BoolOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, (BluetoothStatus(2)==NO_ERR));
+    BoolOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, (BluetoothStatus(3)==NO_ERR));
+}
+
+void function_variables(float ___x, bool ___x2, string ___x3, int ___x4, int ___x5, float ___x6[], bool ___x7[], string ___x8[], int ___x9[], int ___x10[]) {
+    if (___booleanVar) return ;
+}
+
+float function_return_numberVar() {
+    return ___numberVar;
+}
+
+bool function_return_booleanVar() {
+    return ___booleanVar;
+}
+
+string function_return_stringVar() {
+    return ___stringVar;
+}
+
+int function_return_colourVar() {
+    return ___colourVar;
+}
+
+int function_return_connectionVar() {
+    return ___connectionVar;
+}

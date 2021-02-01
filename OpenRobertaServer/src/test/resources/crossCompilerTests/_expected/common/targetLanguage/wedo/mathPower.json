@@ -1,0 +1,535 @@
+{"ops": [
+  {
+    "opc": "expr",
+    "expr": "BOOL_CONST",
+    "value": false
+  },
+  {
+    "opc": "VarDeclaration",
+    "name": "result",
+    "type": "BOOLEAN"
+  },
+  {
+    "opc": "comment",
+    "value": "Math power -- Start --"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "1"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "2"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "0"
+  },
+  {
+    "op": "POWER",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "op": "EQ",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "opc": "AssignStmt",
+    "name": "result"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "2"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "2"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "1"
+  },
+  {
+    "op": "POWER",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "op": "EQ",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "opc": "AssignStmt",
+    "name": "result"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "4"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "2"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "2"
+  },
+  {
+    "op": "POWER",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "op": "EQ",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "opc": "AssignStmt",
+    "name": "result"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "8"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "2"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "3"
+  },
+  {
+    "op": "POWER",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "op": "EQ",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "opc": "AssignStmt",
+    "name": "result"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "-4"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "2"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "2"
+  },
+  {
+    "op": "POWER",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "op": "NEG",
+    "opc": "expr",
+    "expr": "Unary"
+  },
+  {
+    "op": "EQ",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "opc": "AssignStmt",
+    "name": "result"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "4"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "-2"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "2"
+  },
+  {
+    "op": "POWER",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "op": "EQ",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "opc": "AssignStmt",
+    "name": "result"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "2"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "2"
+  },
+  {
+    "op": "POWER",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "2"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "3"
+  },
+  {
+    "op": "POWER",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "op": "MULTIPLY",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "2"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "2"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "3"
+  },
+  {
+    "op": "ADD",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "op": "POWER",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "op": "EQ",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "opc": "AssignStmt",
+    "name": "result"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "2"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "2"
+  },
+  {
+    "op": "POWER",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "3"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "2"
+  },
+  {
+    "op": "POWER",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "op": "MULTIPLY",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "2"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "3"
+  },
+  {
+    "op": "MULTIPLY",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "2"
+  },
+  {
+    "op": "POWER",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "op": "EQ",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "opc": "AssignStmt",
+    "name": "result"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "2"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "2"
+  },
+  {
+    "op": "POWER",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "3"
+  },
+  {
+    "op": "POWER",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "2"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "2"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "3"
+  },
+  {
+    "op": "MULTIPLY",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "op": "POWER",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "op": "EQ",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "opc": "AssignStmt",
+    "name": "result"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "2"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "2"
+  },
+  {
+    "op": "POWER",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "3"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "2"
+  },
+  {
+    "op": "POWER",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "op": "DIVIDE",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "2"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "3"
+  },
+  {
+    "op": "DIVIDE",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "2"
+  },
+  {
+    "op": "POWER",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "op": "EQ",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "opc": "AssignStmt",
+    "name": "result"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "2"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "2"
+  },
+  {
+    "op": "POWER",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "2"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "3"
+  },
+  {
+    "op": "POWER",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "op": "DIVIDE",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "2"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "2"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "3"
+  },
+  {
+    "op": "MINUS",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "op": "POWER",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "op": "EQ",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "opc": "AssignStmt",
+    "name": "result"
+  },
+  {
+    "opc": "comment",
+    "value": "Math power -- End --"
+  },
+  {"opc": "stop"}
+]}

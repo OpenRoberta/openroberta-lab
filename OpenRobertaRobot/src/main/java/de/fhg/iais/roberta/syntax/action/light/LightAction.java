@@ -16,14 +16,12 @@ import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.Action;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
-import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
+import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
-import de.fhg.iais.roberta.visitor.IVisitor;
-import de.fhg.iais.roberta.visitor.hardware.actor.ILightVisitor;
 
 public class LightAction<V> extends Action<V> {
     private final Expr<V> rgbLedColor;
@@ -96,11 +94,6 @@ public class LightAction<V> extends Action<V> {
         return "LightAction [" + this.port + ", " + this.mode + ", " + this.color + ", " + this.rgbLedColor + "]";
     }
 
-    @Override
-    protected V acceptImpl(IVisitor<V> visitor) {
-        return ((ILightVisitor<V>) visitor).visitLightAction(this);
-    }
-
     /**
      * Transformation from JAXB object to corresponding AST object.
      *
@@ -108,17 +101,17 @@ public class LightAction<V> extends Action<V> {
      * @param helper class for making the transformation
      * @return corresponding AST object
      */
-    public static <V> Phrase<V> jaxbToAst(Block block, AbstractJaxb2Ast<V> helper) {
+    public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
         BlocklyDropdownFactory factory = helper.getDropdownFactory();
         List<Value> values = Jaxb2Ast.extractValues(block, (short) 1);
         Phrase<V> ledColor = helper.extractValue(values, new ExprParam(BlocklyConstants.COLOR, BlocklyType.COLOR));
         fields = Jaxb2Ast.extractFields(block, (short) 3);
-        isActor = Jaxb2Ast.extractField(fields, BlocklyConstants.SENSORPORT, BlocklyConstants.NO_PORT).equals(BlocklyConstants.NO_PORT);
+        isActor = Jaxb2Ast.extractField(fields, BlocklyConstants.SENSORPORT, BlocklyConstants.EMPTY_PORT).equals(BlocklyConstants.EMPTY_PORT);
         isBlink = Jaxb2Ast.extractField(fields, BlocklyConstants.SWITCH_STATE, BlocklyConstants.DEFAULT).equals(BlocklyConstants.DEFAULT);
         String port =
             isActor
-                ? Jaxb2Ast.extractField(fields, BlocklyConstants.ACTORPORT, BlocklyConstants.NO_PORT)
-                : Jaxb2Ast.extractField(fields, BlocklyConstants.SENSORPORT, BlocklyConstants.NO_PORT);
+                ? Jaxb2Ast.extractField(fields, BlocklyConstants.ACTORPORT, BlocklyConstants.EMPTY_PORT)
+                : Jaxb2Ast.extractField(fields, BlocklyConstants.SENSORPORT, BlocklyConstants.EMPTY_PORT);
 
         String mode =
             isBlink
@@ -127,10 +120,10 @@ public class LightAction<V> extends Action<V> {
         String color = Jaxb2Ast.extractField(fields, BlocklyConstants.SWITCH_COLOR, BlocklyConstants.DEFAULT);
         return LightAction
             .make(
-                factory.sanitizePort(port),
+                Jaxb2Ast.sanitizePort(port),
                 factory.getBrickLedColor(color),
                 factory.getBlinkMode(mode),
-                helper.convertPhraseToExpr(ledColor),
+                Jaxb2Ast.convertPhraseToExpr(ledColor),
                 Jaxb2Ast.extractBlockProperties(block),
                 Jaxb2Ast.extractComment(block));
     }
@@ -145,7 +138,7 @@ public class LightAction<V> extends Action<V> {
         if ( !this.mode.toString().equals(BlocklyConstants.DEFAULT) ) {
             Ast2Jaxb.addField(jaxbDestination, isBlink ? BlocklyConstants.SWITCH_BLINK : BlocklyConstants.SWITCH_STATE, getMode().toString());
         }
-        if ( !this.port.toString().equals(BlocklyConstants.NO_PORT) ) {
+        if ( !this.port.toString().equals(BlocklyConstants.EMPTY_PORT) ) {
             Ast2Jaxb.addField(jaxbDestination, isActor ? BlocklyConstants.ACTORPORT : BlocklyConstants.SENSORPORT, getPort().toString());
         }
         if ( !this.rgbLedColor.toString().contains("EmptyExpr [defVal=COLOR]") ) {

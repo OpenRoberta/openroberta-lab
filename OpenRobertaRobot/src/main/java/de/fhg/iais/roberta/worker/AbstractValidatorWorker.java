@@ -1,5 +1,7 @@
 package de.fhg.iais.roberta.worker;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import com.google.common.collect.ClassToInstanceMap;
@@ -37,7 +39,7 @@ public abstract class AbstractValidatorWorker implements IWorker {
         int errorCounter = visitor.getErrorCount();
         if ( errorCounter > 0 ) {
             project.setResult(Key.PROGRAM_INVALID_STATEMETNS);
-            project.addToErrorCounter(errorCounter);
+            project.addToErrorCounter(errorCounter, Collections.singletonList(Key.PROGRAM_INVALID_STATEMETNS.toString()));
         }
     }
 

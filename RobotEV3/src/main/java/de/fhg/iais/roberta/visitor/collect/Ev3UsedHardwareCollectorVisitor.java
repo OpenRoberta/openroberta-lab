@@ -58,14 +58,14 @@ public final class Ev3UsedHardwareCollectorVisitor extends AbstractUsedHardwareC
         if ( infraredSensor.getMode().equals(SC.PRESENCE) ) {
             mode = SC.SEEK;
         }
-        this.getBuilder(UsedHardwareBean.Builder.class).addUsedSensor(new UsedSensor(infraredSensor.getPort(), SC.INFRARED, mode));
+        this.getBuilder(UsedHardwareBean.Builder.class).addUsedSensor(new UsedSensor(infraredSensor.getUserDefinedPort(), SC.INFRARED, mode));
         return null;
     }
 
     @Override
     public Void visitHTColorSensor(HTColorSensor<Void> htColorSensor) {
         String mode = htColorSensor.getMode();
-        this.getBuilder(UsedHardwareBean.Builder.class).addUsedSensor(new UsedSensor(htColorSensor.getPort(), SC.HT_COLOR, mode));
+        this.getBuilder(UsedHardwareBean.Builder.class).addUsedSensor(new UsedSensor(htColorSensor.getUserDefinedPort(), SC.HT_COLOR, mode));
         return null;
     }
 }

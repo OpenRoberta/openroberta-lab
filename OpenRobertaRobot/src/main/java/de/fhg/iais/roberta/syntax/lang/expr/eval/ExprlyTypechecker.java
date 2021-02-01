@@ -205,7 +205,7 @@ public class ExprlyTypechecker<T> {
     }
 
     /**
-     * @param RgbColor Expression
+     * @param RgbColorAnno Expression
      * @return Type of block
      */
     private BlocklyType visitRgbColor(RgbColor<T> rgbColor) {

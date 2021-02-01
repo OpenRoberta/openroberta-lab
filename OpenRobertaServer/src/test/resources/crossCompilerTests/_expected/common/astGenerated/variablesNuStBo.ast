@@ -1,0 +1,22 @@
+
+StmtTextComment [Variable Test START]
+
+Var [number] := Binary [ADD, NumConst [0], NumConst [5]]
+
+
+Var [number] := Binary [ADD, NumConst [3], NumConst [0.999999999999]]
+
+
+Var [string] := StringConst [abc]
+
+
+Var [string] := StringConst [123]
+
+
+Var [string] := StringConst [³½¹]]
+
+
+Var [boolean2] := Unary [NOT, BoolConst [true]]
+
+
+StmtTextComment [Variable Test START END]

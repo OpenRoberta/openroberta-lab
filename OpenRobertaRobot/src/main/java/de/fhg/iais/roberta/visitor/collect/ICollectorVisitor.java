@@ -528,9 +528,9 @@ public interface ICollectorVisitor extends ISensorVisitor<Void>, IAllActorsVisit
 
     @Override
     default Void visitShowTextAction(ShowTextAction<Void> showTextAction) {
-        showTextAction.getMsg().accept(this);
-        showTextAction.getX().accept(this);
-        showTextAction.getY().accept(this);
+        showTextAction.msg.accept(this);
+        showTextAction.x.accept(this);
+        showTextAction.y.accept(this);
         return null;
     }
 
@@ -684,7 +684,7 @@ public interface ICollectorVisitor extends ISensorVisitor<Void>, IAllActorsVisit
     }
 
     @Override
-    default Void visitAccelerometer(AccelerometerSensor<Void> accelerometerSensor) {
+    default Void visitAccelerometerSensor(AccelerometerSensor<Void> accelerometerSensor) {
         return null;
     }
 

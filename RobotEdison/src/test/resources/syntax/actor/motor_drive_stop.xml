@@ -1,9 +1,0 @@
-<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="edison" xmlversion="3.1" description="" tags="">
-    <instance x="273" y="50">
-        <block type="robControls_start" id="6VI=,ALnJ+GZIZ)Umd+L" intask="true" deletable="false">
-            <mutation declare="false"></mutation>
-            <field name="DEBUG">TRUE</field>
-        </block>
-        <block type="robActions_motorDiff_stop" id="cPz1sKjpo`N{3p57;kTG" intask="true"></block>
-    </instance>
-</block_set>

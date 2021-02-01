@@ -1,9 +1,0 @@
-<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="edison" xmlversion="3.1" description="" tags="">
-    <instance x="408" y="162">
-        <block type="robCommunication_sendBlock" id="qxC`La=^w6`@#-6}|]v[" intask="false">
-            <mutation datatype="Number"></mutation>
-            <field name="TYPE">Number</field>
-            <data>edison</data>
-        </block>
-    </instance>
-</block_set>

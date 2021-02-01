@@ -11,12 +11,10 @@ import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.lang.expr.Assoc;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
-import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
+import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
-import de.fhg.iais.roberta.visitor.IVisitor;
-import de.fhg.iais.roberta.visitor.hardware.IMbedVisitor;
 
 /**
  * This class represents the <b>mbedImage_image</b> block from Blockly into the AST (abstract syntax tree). Object from this class will generate image.<br/>
@@ -83,12 +81,6 @@ public class Image<V> extends Expr<V> {
             + "]";
     }
 
-    @Override
-    protected V acceptImpl(IVisitor<V> visitor) {
-        return ((IMbedVisitor<V>) visitor).visitImage(this);
-
-    }
-
     /**
      * Transformation from JAXB object to corresponding AST object.
      *
@@ -96,7 +88,7 @@ public class Image<V> extends Expr<V> {
      * @param helper class for making the transformation
      * @return corresponding AST object
      */
-    public static <V> Phrase<V> jaxbToAst(Block block, AbstractJaxb2Ast<V> helper) {
+    public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
         List<Field> fields = Jaxb2Ast.extractFields(block, (short) 25);
         String[][] image = new String[5][5];
         for ( int i = 0; i < 5; i++ ) {

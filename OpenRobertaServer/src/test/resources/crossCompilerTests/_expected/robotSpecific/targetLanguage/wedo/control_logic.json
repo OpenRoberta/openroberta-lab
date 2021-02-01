@@ -1,0 +1,756 @@
+{"ops": [
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "0"
+  },
+  {
+    "opc": "VarDeclaration",
+    "name": "numVar",
+    "type": "NUMBER"
+  },
+  {
+    "opc": "expr",
+    "expr": "BOOL_CONST",
+    "value": true
+  },
+  {
+    "opc": "VarDeclaration",
+    "name": "boolVar",
+    "type": "BOOLEAN"
+  },
+  {
+    "opc": "expr",
+    "expr": "STRING_CONST",
+    "value": ""
+  },
+  {
+    "opc": "VarDeclaration",
+    "name": "stringVar",
+    "type": "STRING"
+  },
+  {
+    "opc": "expr",
+    "expr": "COLOR_CONST",
+    "value": 10
+  },
+  {
+    "opc": "VarDeclaration",
+    "name": "colourVar",
+    "type": "COLOR"
+  },
+  {
+    "opc": "comment",
+    "target": "createMethodCall"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": 11
+  },
+  {
+    "opc": "jump",
+    "conditional": "always",
+    "target": 15
+  },
+  {
+    "opc": "comment",
+    "target": "createMethodCall"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": 14
+  },
+  {
+    "opc": "jump",
+    "conditional": "always",
+    "target": 124
+  },
+  {"opc": "stop"},
+  {
+    "opc": "comment",
+    "target": "createMethodVoid"
+  },
+  {
+    "opc": "comment",
+    "target": "IfStatement"
+  },
+  {
+    "opc": "expr",
+    "name": "boolVar",
+    "expr": "Var"
+  },
+  {
+    "opc": "jump",
+    "conditional": false,
+    "target": 20
+  },
+  {
+    "opc": "jump",
+    "conditional": "always",
+    "target": 20
+  },
+  {
+    "opc": "comment",
+    "target": "IfStatement"
+  },
+  {
+    "opc": "expr",
+    "name": "boolVar",
+    "expr": "Var"
+  },
+  {
+    "opc": "jump",
+    "conditional": false,
+    "target": 24
+  },
+  {
+    "opc": "jump",
+    "conditional": "always",
+    "target": 27
+  },
+  {
+    "opc": "expr",
+    "name": "boolVar",
+    "expr": "Var"
+  },
+  {
+    "opc": "jump",
+    "conditional": false,
+    "target": 27
+  },
+  {
+    "opc": "jump",
+    "conditional": "always",
+    "target": 27
+  },
+  {
+    "opc": "comment",
+    "target": "IfStatement"
+  },
+  {
+    "opc": "expr",
+    "name": "boolVar",
+    "expr": "Var"
+  },
+  {
+    "opc": "jump",
+    "conditional": false,
+    "target": 31
+  },
+  {
+    "opc": "jump",
+    "conditional": "always",
+    "target": 31
+  },
+  {
+    "opc": "comment",
+    "target": "RepeatStmt"
+  },
+  {
+    "opc": "expr",
+    "name": "boolVar",
+    "expr": "Var"
+  },
+  {
+    "op": "NOT",
+    "opc": "expr",
+    "expr": "Unary"
+  },
+  {
+    "opc": "jump",
+    "conditional": false,
+    "target": 37
+  },
+  {
+    "opc": "jump",
+    "conditional": "always",
+    "target": 37
+  },
+  {
+    "opc": "jump",
+    "conditional": "always",
+    "target": 31
+  },
+  {
+    "opc": "comment",
+    "target": "RepeatStmt"
+  },
+  {
+    "opc": "expr",
+    "name": "boolVar",
+    "expr": "Var"
+  },
+  {
+    "opc": "jump",
+    "conditional": false,
+    "target": 42
+  },
+  {
+    "opc": "jump",
+    "conditional": "always",
+    "target": 37
+  },
+  {
+    "opc": "jump",
+    "conditional": "always",
+    "target": 37
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "0"
+  },
+  {
+    "opc": "VarDeclaration",
+    "name": "k0",
+    "type": "NUMBER"
+  },
+  {
+    "opc": "comment",
+    "target": "RepeatStmt"
+  },
+  {
+    "opc": "expr",
+    "name": "k0",
+    "expr": "Var"
+  },
+  {
+    "opc": "expr",
+    "name": "numVar",
+    "expr": "Var"
+  },
+  {
+    "op": "LT",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "opc": "jump",
+    "conditional": false,
+    "target": 54
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "1"
+  },
+  {
+    "opc": "expr",
+    "name": "k0",
+    "expr": "Var"
+  },
+  {
+    "op": "ADD",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "opc": "AssignStmt",
+    "name": "k0"
+  },
+  {
+    "opc": "jump",
+    "conditional": "always",
+    "target": 44
+  },
+  {
+    "opc": "unbindVar",
+    "name": "k0"
+  },
+  {
+    "opc": "expr",
+    "name": "numVar",
+    "expr": "Var"
+  },
+  {
+    "opc": "VarDeclaration",
+    "name": "i",
+    "type": "NUMBER"
+  },
+  {
+    "opc": "comment",
+    "target": "RepeatStmt"
+  },
+  {
+    "opc": "expr",
+    "name": "i",
+    "expr": "Var"
+  },
+  {
+    "opc": "expr",
+    "name": "numVar",
+    "expr": "Var"
+  },
+  {
+    "op": "LT",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "opc": "jump",
+    "conditional": false,
+    "target": 67
+  },
+  {
+    "opc": "expr",
+    "name": "numVar",
+    "expr": "Var"
+  },
+  {
+    "opc": "expr",
+    "name": "i",
+    "expr": "Var"
+  },
+  {
+    "op": "ADD",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "opc": "AssignStmt",
+    "name": "i"
+  },
+  {
+    "opc": "jump",
+    "conditional": "always",
+    "target": 57
+  },
+  {
+    "opc": "unbindVar",
+    "name": "i"
+  },
+  {
+    "opc": "comment",
+    "target": "WaitStmt"
+  },
+  {
+    "opc": "expr",
+    "name": "boolVar",
+    "expr": "Var"
+  },
+  {
+    "opc": "jump",
+    "conditional": false,
+    "target": 72
+  },
+  {
+    "opc": "jump",
+    "conditional": "always",
+    "target": 75
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": 1
+  },
+  {"opc": "WaitTimeSTMT"},
+  {
+    "opc": "jump",
+    "conditional": "always",
+    "target": 68
+  },
+  {
+    "opc": "comment",
+    "target": "WaitStmt"
+  },
+  {
+    "opc": "expr",
+    "name": "boolVar",
+    "expr": "Var"
+  },
+  {
+    "opc": "jump",
+    "conditional": false,
+    "target": 79
+  },
+  {
+    "opc": "jump",
+    "conditional": "always",
+    "target": 85
+  },
+  {
+    "opc": "expr",
+    "name": "boolVar",
+    "expr": "Var"
+  },
+  {
+    "opc": "jump",
+    "conditional": false,
+    "target": 82
+  },
+  {
+    "opc": "jump",
+    "conditional": "always",
+    "target": 85
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": 1
+  },
+  {"opc": "WaitTimeSTMT"},
+  {
+    "opc": "jump",
+    "conditional": "always",
+    "target": 75
+  },
+  {
+    "opc": "expr",
+    "name": "numVar",
+    "expr": "Var"
+  },
+  {"opc": "WaitTimeSTMT"},
+  {
+    "opc": "comment",
+    "target": "WaitStmt"
+  },
+  {
+    "GetSample": "buttons",
+    "opc": "GetSample",
+    "name": "W"
+  },
+  {
+    "opc": "expr",
+    "expr": "BOOL_CONST",
+    "value": true
+  },
+  {
+    "op": "EQ",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "opc": "jump",
+    "conditional": false,
+    "target": 93
+  },
+  {
+    "opc": "jump",
+    "conditional": "always",
+    "target": 96
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": 1
+  },
+  {"opc": "WaitTimeSTMT"},
+  {
+    "opc": "jump",
+    "conditional": "always",
+    "target": 87
+  },
+  {
+    "opc": "comment",
+    "target": "WaitStmt"
+  },
+  {
+    "GetSample": "gyro",
+    "mode": "UP",
+    "opc": "GetSample",
+    "port": "1",
+    "name": "W"
+  },
+  {
+    "opc": "expr",
+    "expr": "BOOL_CONST",
+    "value": true
+  },
+  {
+    "op": "EQ",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "opc": "jump",
+    "conditional": false,
+    "target": 102
+  },
+  {
+    "opc": "jump",
+    "conditional": "always",
+    "target": 105
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": 1
+  },
+  {"opc": "WaitTimeSTMT"},
+  {
+    "opc": "jump",
+    "conditional": "always",
+    "target": 96
+  },
+  {
+    "opc": "comment",
+    "target": "WaitStmt"
+  },
+  {
+    "GetSample": "infrared",
+    "opc": "GetSample",
+    "port": "2",
+    "name": "W"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "10"
+  },
+  {
+    "op": "LT",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "opc": "jump",
+    "conditional": false,
+    "target": 111
+  },
+  {
+    "opc": "jump",
+    "conditional": "always",
+    "target": 114
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": 1
+  },
+  {"opc": "WaitTimeSTMT"},
+  {
+    "opc": "jump",
+    "conditional": "always",
+    "target": 105
+  },
+  {
+    "opc": "comment",
+    "target": "WaitStmt"
+  },
+  {
+    "GetSample": "timer",
+    "opc": "GetSample",
+    "port": "1"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "500"
+  },
+  {
+    "op": "GT",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "opc": "jump",
+    "conditional": false,
+    "target": 120
+  },
+  {
+    "opc": "jump",
+    "conditional": "always",
+    "target": 123
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": 1
+  },
+  {"opc": "WaitTimeSTMT"},
+  {
+    "opc": "jump",
+    "conditional": "always",
+    "target": 114
+  },
+  {
+    "opc": "return",
+    "values": false
+  },
+  {
+    "opc": "comment",
+    "target": "createMethodVoid"
+  },
+  {
+    "opc": "expr",
+    "name": "numVar",
+    "expr": "Var"
+  },
+  {
+    "opc": "expr",
+    "name": "numVar",
+    "expr": "Var"
+  },
+  {
+    "op": "EQ",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {"opc": "ShowTextAction"},
+  {
+    "opc": "expr",
+    "name": "numVar",
+    "expr": "Var"
+  },
+  {
+    "opc": "expr",
+    "name": "numVar",
+    "expr": "Var"
+  },
+  {
+    "op": "NEQ",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {"opc": "ShowTextAction"},
+  {
+    "opc": "expr",
+    "name": "numVar",
+    "expr": "Var"
+  },
+  {
+    "opc": "expr",
+    "name": "numVar",
+    "expr": "Var"
+  },
+  {
+    "op": "LT",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {"opc": "ShowTextAction"},
+  {
+    "opc": "expr",
+    "name": "numVar",
+    "expr": "Var"
+  },
+  {
+    "opc": "expr",
+    "name": "numVar",
+    "expr": "Var"
+  },
+  {
+    "op": "LTE",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {"opc": "ShowTextAction"},
+  {
+    "opc": "expr",
+    "name": "numVar",
+    "expr": "Var"
+  },
+  {
+    "opc": "expr",
+    "name": "numVar",
+    "expr": "Var"
+  },
+  {
+    "op": "GT",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {"opc": "ShowTextAction"},
+  {
+    "opc": "expr",
+    "name": "numVar",
+    "expr": "Var"
+  },
+  {
+    "opc": "expr",
+    "name": "numVar",
+    "expr": "Var"
+  },
+  {
+    "op": "GTE",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {"opc": "ShowTextAction"},
+  {
+    "opc": "expr",
+    "name": "boolVar",
+    "expr": "Var"
+  },
+  {
+    "opc": "jump",
+    "conditional": false,
+    "target": 153
+  },
+  {
+    "opc": "expr",
+    "name": "boolVar",
+    "expr": "Var"
+  },
+  {
+    "opc": "jump",
+    "conditional": "always",
+    "target": 154
+  },
+  {
+    "opc": "expr",
+    "expr": "BOOL_CONST",
+    "value": false
+  },
+  {"opc": "ShowTextAction"},
+  {
+    "opc": "expr",
+    "name": "boolVar",
+    "expr": "Var"
+  },
+  {
+    "opc": "jump",
+    "conditional": true,
+    "target": 159
+  },
+  {
+    "opc": "expr",
+    "name": "boolVar",
+    "expr": "Var"
+  },
+  {
+    "opc": "jump",
+    "conditional": "always",
+    "target": 160
+  },
+  {
+    "opc": "expr",
+    "expr": "BOOL_CONST",
+    "value": true
+  },
+  {"opc": "ShowTextAction"},
+  {
+    "opc": "expr",
+    "name": "boolVar",
+    "expr": "Var"
+  },
+  {
+    "op": "NOT",
+    "opc": "expr",
+    "expr": "Unary"
+  },
+  {"opc": "ShowTextAction"},
+  {
+    "opc": "expr",
+    "expr": "BOOL_CONST",
+    "value": true
+  },
+  {"opc": "ShowTextAction"},
+  {
+    "opc": "expr",
+    "expr": "BOOL_CONST",
+    "value": false
+  },
+  {"opc": "ShowTextAction"},
+  {
+    "opc": "expr",
+    "expr": "C.NULL_CONST"
+  },
+  {"opc": "ShowTextAction"},
+  {
+    "opc": "return",
+    "values": false
+  }
+]}

@@ -13,10 +13,8 @@ import de.fhg.iais.roberta.syntax.MotionParam;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.sensor.ExternalSensor;
 import de.fhg.iais.roberta.syntax.sensor.SensorMetaDataBean;
-import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
+import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
-import de.fhg.iais.roberta.visitor.IVisitor;
-import de.fhg.iais.roberta.visitor.hardware.sensor.ISensorVisitor;
 
 public final class AccelerometerSensor<V> extends ExternalSensor<V> {
 
@@ -38,11 +36,6 @@ public final class AccelerometerSensor<V> extends ExternalSensor<V> {
         return new AccelerometerSensor<>(sensorMetaDataBean, properties, comment);
     }
 
-    @Override
-    protected V acceptImpl(IVisitor<V> visitor) {
-        return ((ISensorVisitor<V>) visitor).visitAccelerometer(this);
-    }
-
     /**
      * Transformation from JAXB object to corresponding AST object. Special version to fix issue #924 with Calliope/Microbit <hide> problem
      *
@@ -50,10 +43,10 @@ public final class AccelerometerSensor<V> extends ExternalSensor<V> {
      * @param helper class for making the transformation
      * @return corresponding AST object
      */
-    public static <V> SensorMetaDataBean extractPortAndModeAndSlotForAccelerometer(Block block, AbstractJaxb2Ast<V> helper) {
+    public static <V> SensorMetaDataBean extractPortAndModeAndSlotForAccelerometer(Block block, Jaxb2ProgramAst<V> helper) {
         List<Field> fields = Jaxb2Ast.extractFields(block, (short) 3);
         BlocklyDropdownFactory factory = helper.getDropdownFactory();
-        String portName = Jaxb2Ast.extractField(fields, BlocklyConstants.SENSORPORT, BlocklyConstants.NO_PORT);
+        String portName = Jaxb2Ast.extractField(fields, BlocklyConstants.SENSORPORT, BlocklyConstants.EMPTY_PORT);
         String modeName = Jaxb2Ast.extractField(fields, BlocklyConstants.MODE, BlocklyConstants.DEFAULT);
 
         String robotGroup = helper.getRobotFactory().getGroup();
@@ -64,10 +57,7 @@ public final class AccelerometerSensor<V> extends ExternalSensor<V> {
         } else {
             slotName = Jaxb2Ast.extractField(fields, BlocklyConstants.SLOT, BlocklyConstants.NO_SLOT);
         }
-
-        boolean isPortInMutation = block.getMutation() != null && block.getMutation().getPort() != null;
-
-        return new SensorMetaDataBean(factory.sanitizePort(portName), factory.getMode(modeName), factory.sanitizeSlot(slotName), isPortInMutation);
+        return new SensorMetaDataBean(Jaxb2Ast.sanitizePort(portName), factory.getMode(modeName), Jaxb2Ast.sanitizeSlot(slotName), block.getMutation());
     }
 
     /**
@@ -77,7 +67,7 @@ public final class AccelerometerSensor<V> extends ExternalSensor<V> {
      * @param helper class for making the transformation
      * @return corresponding AST object
      */
-    public static <V> Phrase<V> jaxbToAst(Block block, AbstractJaxb2Ast<V> helper) {
+    public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
         SensorMetaDataBean sensorData = extractPortAndModeAndSlotForAccelerometer(block, helper);
         return AccelerometerSensor.make(sensorData, Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
     }

@@ -11,11 +11,9 @@ import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.lang.expr.Var;
 import de.fhg.iais.roberta.syntax.sensor.BuiltinSensor;
-import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
+import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
-import de.fhg.iais.roberta.visitor.IVisitor;
-import de.fhg.iais.roberta.visitor.hardware.IArduinoVisitor;
 
 public class Lsm9ds1AccSensor<V> extends BuiltinSensor<V> {
 
@@ -41,11 +39,6 @@ public class Lsm9ds1AccSensor<V> extends BuiltinSensor<V> {
         setReadOnly();
     }
 
-    @Override
-    protected V acceptImpl(IVisitor<V> visitor) {
-        return ((IArduinoVisitor<V>) visitor).visitLsm9ds1AccSensor(this);
-    }
-
     public static <V> Lsm9ds1AccSensor<V> make(BlocklyBlockProperties properties, BlocklyComment comment, Var<V> x, Var<V> y, Var<V> z) {
         return new Lsm9ds1AccSensor<>(properties, comment, x, y, z);
     }
@@ -57,7 +50,7 @@ public class Lsm9ds1AccSensor<V> extends BuiltinSensor<V> {
      * @param helper class for making the transformation
      * @return corresponding AST object
      */
-    public static <V> Phrase<V> jaxbToAst(Block block, AbstractJaxb2Ast<V> helper) {
+    public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
         List<Value> values = Jaxb2Ast.extractValues(block, (short) 3);
         Var<V> x = helper.getVar(values, BlocklyConstants.VARIABLE_X);
         Var<V> y = helper.getVar(values, BlocklyConstants.VARIABLE_Y);

@@ -14,7 +14,7 @@ import de.fhg.iais.roberta.visitor.hardware.sensor.ISensorVisitor;
 
 public interface IBob3Visitor<V> extends ILightVisitor<V>, ISensorVisitor<V> {
 
-    default V visitBob3CodePadSensor(CodePadSensor<V> codePadSensor) {
+    default V visitCodePadSensor(CodePadSensor<V> codePadSensor) {
         throw new DbcException("Block is not implemented!");
     }
 

@@ -5,18 +5,12 @@ import java.util.List;
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.factory.BlocklyDropdownFactory;
-import de.fhg.iais.roberta.syntax.BlockTypeContainer;
-import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
-import de.fhg.iais.roberta.syntax.BlocklyComment;
-import de.fhg.iais.roberta.syntax.BlocklyConstants;
-import de.fhg.iais.roberta.syntax.Phrase;
+import de.fhg.iais.roberta.syntax.*;
 import de.fhg.iais.roberta.syntax.action.Action;
-import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
+import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.util.dbc.Assert;
-import de.fhg.iais.roberta.visitor.IVisitor;
-import de.fhg.iais.roberta.visitor.hardware.actor.ILightVisitor;
 
 /**
  * This class represents the <b>robActions_brickLight_off</b> and <b>robActions_brickLight_reset</b> blocks from Blockly into the AST (abstract syntax tree).
@@ -24,15 +18,15 @@ import de.fhg.iais.roberta.visitor.hardware.actor.ILightVisitor;
  * <br/>
  * The client must provide the {@link Status}.
  */
-public class LightStatusAction<V> extends Action<V> {
+public class LightStatusAction<V> extends Action<V> implements WithUserDefinedPort<V> {
     private final Status status;
-    private final String port;
+    private final String userDefinedPort;
 
-    private LightStatusAction(String port, Status status, BlocklyBlockProperties properties, BlocklyComment comment) {
+    private LightStatusAction(String userDefinedPort, Status status, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(BlockTypeContainer.getByName("LIGHT_STATUS_ACTION"), properties, comment);
         Assert.isTrue(status != null);
         this.status = status;
-        this.port = port;
+        this.userDefinedPort = userDefinedPort;
         setReadOnly();
     }
 
@@ -44,8 +38,8 @@ public class LightStatusAction<V> extends Action<V> {
      * @param comment added from the user,
      * @return read only object of class {@link LightStatusAction}
      */
-    public static <V> LightStatusAction<V> make(String port, Status status, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new LightStatusAction<>(port, status, properties, comment);
+    public static <V> LightStatusAction<V> make(String userDefinedPort, Status status, BlocklyBlockProperties properties, BlocklyComment comment) {
+        return new LightStatusAction<>(userDefinedPort, status, properties, comment);
     }
 
     /**
@@ -57,19 +51,14 @@ public class LightStatusAction<V> extends Action<V> {
 
     @Override
     public String toString() {
-        return "LightStatusAction [" + this.port + ", " + this.status + "]";
+        return "LightStatusAction [" + this.userDefinedPort + ", " + this.status + "]";
     }
 
     /**
      * @return port.
      */
-    public String getPort() {
-        return this.port;
-    }
-
-    @Override
-    protected V acceptImpl(IVisitor<V> visitor) {
-        return ((ILightVisitor<V>) visitor).visitLightStatusAction(this);
+    public String getUserDefinedPort() {
+        return this.userDefinedPort;
     }
 
     /**
@@ -79,7 +68,7 @@ public class LightStatusAction<V> extends Action<V> {
      * @param helper class for making the transformation
      * @return corresponding AST object
      */
-    public static <V> Phrase<V> jaxbToAst(Block block, AbstractJaxb2Ast<V> helper) {
+    public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
         Status status = LightStatusAction.Status.RESET;
         BlocklyDropdownFactory factory = helper.getDropdownFactory();
         List<Field> fields = Jaxb2Ast.extractFields(block, (short) 1);
@@ -89,15 +78,15 @@ public class LightStatusAction<V> extends Action<V> {
             || block.getType().equals("robActions_leds_off") ) {
             status = LightStatusAction.Status.OFF;
         }
-        return LightStatusAction.make(factory.sanitizePort(port), status, Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
+        return LightStatusAction.make(Jaxb2Ast.sanitizePort(port), status, Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
     }
 
     @Override
     public Block astToBlock() {
         Block jaxbDestination = new Block();
         Ast2Jaxb.setBasicProperties(this, jaxbDestination);
-        if ( !this.port.toString().equals("0") ) {
-            Ast2Jaxb.addField(jaxbDestination, BlocklyConstants.ACTORPORT, getPort().toString());
+        if ( !this.userDefinedPort.toString().equals("0") ) {
+            Ast2Jaxb.addField(jaxbDestination, BlocklyConstants.ACTORPORT, getUserDefinedPort().toString());
         }
         return jaxbDestination;
     }

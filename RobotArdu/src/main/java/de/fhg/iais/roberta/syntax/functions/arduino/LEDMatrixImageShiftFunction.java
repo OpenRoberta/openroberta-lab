@@ -17,14 +17,12 @@ import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.lang.expr.Assoc;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.syntax.lang.functions.Function;
-import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
+import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
-import de.fhg.iais.roberta.visitor.IVisitor;
-import de.fhg.iais.roberta.visitor.hardware.IMbotVisitor;
 
 /**
  * This class represents <b>mbedImage_shift</b> blocks from Blockly into the AST (abstract syntax tree).<br>
@@ -106,12 +104,6 @@ public class LEDMatrixImageShiftFunction<V> extends Function<V> {
     }
 
     @Override
-    protected V acceptImpl(IVisitor<V> visitor) {
-        return ((IMbotVisitor<V>) visitor).visitLEDMatrixImageShiftFunction(this);
-
-    }
-
-    @Override
     public String toString() {
         return "ImageShiftFunction [" + this.image + ", " + this.positions + ", " + this.shiftDirection + "]";
     }
@@ -123,7 +115,7 @@ public class LEDMatrixImageShiftFunction<V> extends Function<V> {
      * @param helper class for making the transformation
      * @return corresponding AST object
      */
-    public static <V> Phrase<V> jaxbToAst(Block block, AbstractJaxb2Ast<V> helper) {
+    public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
         BlocklyDropdownFactory factory = helper.getDropdownFactory();
         List<Field> fields = Jaxb2Ast.extractFields(block, (short) 1);
         List<Value> values = Jaxb2Ast.extractValues(block, (short) 2);
@@ -132,8 +124,8 @@ public class LEDMatrixImageShiftFunction<V> extends Function<V> {
         Phrase<V> numberOfPositions = helper.extractValue(values, new ExprParam(BlocklyConstants.B, BlocklyType.NUMBER_INT));
         return LEDMatrixImageShiftFunction
             .make(
-                helper.convertPhraseToExpr(image),
-                helper.convertPhraseToExpr(numberOfPositions),
+                Jaxb2Ast.convertPhraseToExpr(image),
+                Jaxb2Ast.convertPhraseToExpr(numberOfPositions),
                 shiftingDirection,
                 Jaxb2Ast.extractBlockProperties(block),
                 Jaxb2Ast.extractComment(block));

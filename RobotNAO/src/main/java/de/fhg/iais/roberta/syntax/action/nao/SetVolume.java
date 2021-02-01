@@ -11,13 +11,11 @@ import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.Action;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
-import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
+import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
-import de.fhg.iais.roberta.visitor.IVisitor;
-import de.fhg.iais.roberta.visitor.hardware.INaoVisitor;
 
 /**
  * This class represents the <b>naoActions_setVolume</b> block from Blockly into the AST (abstract syntax tree). Object from this class will generate code for
@@ -56,11 +54,6 @@ public final class SetVolume<V> extends Action<V> {
         return "SetVolume [" + this.volume + "]";
     }
 
-    @Override
-    protected V acceptImpl(IVisitor<V> visitor) {
-        return ((INaoVisitor<V>) visitor).visitSetVolume(this);
-    }
-
     /**
      * Transformation from JAXB object to corresponding AST object.
      *
@@ -68,12 +61,12 @@ public final class SetVolume<V> extends Action<V> {
      * @param helper class for making the transformation
      * @return corresponding AST object
      */
-    public static <V> Phrase<V> jaxbToAst(Block block, AbstractJaxb2Ast<V> helper) {
+    public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
         List<Value> values = Jaxb2Ast.extractValues(block, (short) 1);
 
         Phrase<V> volume = helper.extractValue(values, new ExprParam(BlocklyConstants.VOLUME, BlocklyType.NUMBER_INT));
 
-        return SetVolume.make(helper.convertPhraseToExpr(volume), Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
+        return SetVolume.make(Jaxb2Ast.convertPhraseToExpr(volume), Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
     }
 
     @Override

@@ -14,14 +14,12 @@ import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.Action;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
-import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
+import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
-import de.fhg.iais.roberta.visitor.IVisitor;
-import de.fhg.iais.roberta.visitor.hardware.actor.IPinVisitor;
 
 /**
  * This class represents the <b>mbedActions_write_to_pin</b> blocks from Blockly into the AST (abstract syntax tree). Object from this class will generate code
@@ -94,11 +92,6 @@ public class PinWriteValueAction<V> extends Action<V> {
         return "PinWriteValueAction [" + this.pinValue + ", " + this.port + ", " + this.value + "]";
     }
 
-    @Override
-    protected V acceptImpl(IVisitor<V> visitor) {
-        return ((IPinVisitor<V>) visitor).visitPinWriteValueAction(this);
-    }
-
     /**
      * Transformation from JAXB object to corresponding AST object.
      *
@@ -106,7 +99,7 @@ public class PinWriteValueAction<V> extends Action<V> {
      * @param helper class for making the transformation
      * @return corresponding AST object
      */
-    public static <V> Phrase<V> jaxbToAst(Block block, AbstractJaxb2Ast<V> helper) {
+    public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
         BlocklyDropdownFactory factory = helper.getDropdownFactory();
         List<Field> fields = Jaxb2Ast.extractFields(block, (short) 2);
         List<Value> values = Jaxb2Ast.extractValues(block, (short) 1);
@@ -125,8 +118,8 @@ public class PinWriteValueAction<V> extends Action<V> {
         return PinWriteValueAction
             .make(
                 factory.getMode(pinvalue),
-                factory.sanitizePort(port),
-                helper.convertPhraseToExpr(value),
+                Jaxb2Ast.sanitizePort(port),
+                Jaxb2Ast.convertPhraseToExpr(value),
                 actorPortAndMode,
                 Jaxb2Ast.extractBlockProperties(block),
                 Jaxb2Ast.extractComment(block));

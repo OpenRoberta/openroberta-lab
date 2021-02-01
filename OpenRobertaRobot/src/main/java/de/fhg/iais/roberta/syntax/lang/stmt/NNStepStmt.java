@@ -11,14 +11,12 @@ import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.syntax.lang.expr.Var;
-import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
+import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
-import de.fhg.iais.roberta.visitor.IVisitor;
-import de.fhg.iais.roberta.visitor.lang.ILanguageVisitor;
 
 /**
  * This class represents the <b>nnStep</b> block from Blockly in the AST. An object of this class will generate a nnStep statement.<br/>
@@ -57,11 +55,6 @@ public class NNStepStmt<V> extends Stmt<V> {
         return "nnStep()";
     }
 
-    @Override
-    protected V acceptImpl(IVisitor<V> visitor) {
-        return ((ILanguageVisitor<V>) visitor).visitNNStepStmt(this);
-    }
-
     /**
      * Transformation from JAXB object to corresponding AST object.
      *
@@ -69,20 +62,20 @@ public class NNStepStmt<V> extends Stmt<V> {
      * @param helper class for making the transformation
      * @return corresponding AST object
      */
-    public static <V> Phrase<V> jaxbToAst(Block block, AbstractJaxb2Ast<V> helper) {
+    public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
         helper.getDropdownFactory();
         List<Value> values = Jaxb2Ast.extractValues(block, (short) 6);
         Phrase<V> i0 = helper.extractValue(values, new ExprParam("INPUT0", BlocklyType.NUMBER_INT));
         Phrase<V> i1 = helper.extractValue(values, new ExprParam("INPUT1", BlocklyType.NUMBER_INT));
         Phrase<V> i2 = helper.extractValue(values, new ExprParam("INPUT2", BlocklyType.NUMBER_INT));
-        List<Expr<V>> il = Arrays.asList(helper.convertPhraseToExpr(i0), helper.convertPhraseToExpr(i1), helper.convertPhraseToExpr(i2));
+        List<Expr<V>> il = Arrays.asList(Jaxb2Ast.convertPhraseToExpr(i0), Jaxb2Ast.convertPhraseToExpr(i1), Jaxb2Ast.convertPhraseToExpr(i2));
         Phrase<V> o0 = helper.extractValue(values, new ExprParam("OUTPUT0", BlocklyType.NUMBER_INT));
         Phrase<V> o1 = helper.extractValue(values, new ExprParam("OUTPUT1", BlocklyType.NUMBER_INT));
         Phrase<V> o2 = helper.extractValue(values, new ExprParam("OUTPUT2", BlocklyType.NUMBER_INT));
         Assert.isTrue(o0.getClass().equals(Var.class) && o1.getClass().equals(Var.class) && o2.getClass().equals(Var.class));
-        final Var<V> v0 = (Var<V>) helper.convertPhraseToExpr(o0);
-        final Var<V> v1 = (Var<V>) helper.convertPhraseToExpr(o1);
-        final Var<V> v2 = (Var<V>) helper.convertPhraseToExpr(o2);
+        final Var<V> v0 = (Var<V>) Jaxb2Ast.convertPhraseToExpr(o0);
+        final Var<V> v1 = (Var<V>) Jaxb2Ast.convertPhraseToExpr(o1);
+        final Var<V> v2 = (Var<V>) Jaxb2Ast.convertPhraseToExpr(o2);
         List<Var<V>> ol = Arrays.asList(v0, v1, v2);
         return NNStepStmt.make(il, ol, Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
     }

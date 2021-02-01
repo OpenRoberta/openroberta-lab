@@ -1,9 +1,0 @@
-crosscompilercall : true
-showsuccess: true
-
-robots:
-    wedo:
-        template: wedo
-        dir: wedo
-        suffix: ".json"
-        eval: true

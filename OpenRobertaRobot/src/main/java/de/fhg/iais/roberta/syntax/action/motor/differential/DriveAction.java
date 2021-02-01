@@ -16,14 +16,12 @@ import de.fhg.iais.roberta.syntax.MotionParam;
 import de.fhg.iais.roberta.syntax.MotorDuration;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.Action;
-import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
+import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
-import de.fhg.iais.roberta.visitor.IVisitor;
-import de.fhg.iais.roberta.visitor.hardware.actor.IDifferentialMotorVisitor;
 
 /**
  * This class represents the <b>robActions_motor_on_for</b> and <b>robActions_motor_on</b> blocks from Blockly into the AST (abstract syntax tree). Object from
@@ -79,11 +77,6 @@ public class DriveAction<V> extends Action<V> {
         return "DriveAction [" + this.direction + ", " + this.param + "]";
     }
 
-    @Override
-    protected V acceptImpl(IVisitor<V> visitor) {
-        return ((IDifferentialMotorVisitor<V>) visitor).visitDriveAction(this);
-    }
-
     /**
      * Transformation from JAXB object to corresponding AST object.
      *
@@ -91,7 +84,7 @@ public class DriveAction<V> extends Action<V> {
      * @param helper class for making the transformation
      * @return corresponding AST object
      */
-    public static <V> Phrase<V> jaxbToAst(Block block, AbstractJaxb2Ast<V> helper) {
+    public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
         List<Field> fields;
         String mode;
         List<Value> values;
@@ -105,12 +98,12 @@ public class DriveAction<V> extends Action<V> {
             values = Jaxb2Ast.extractValues(block, (short) 2);
             power = helper.extractValue(values, new ExprParam(BlocklyConstants.POWER, BlocklyType.NUMBER_INT));
             Phrase<V> distance = helper.extractValue(values, new ExprParam(BlocklyConstants.DISTANCE, BlocklyType.NUMBER_INT));
-            MotorDuration<V> md = new MotorDuration<V>(factory.getMotorMoveMode("DISTANCE"), helper.convertPhraseToExpr(distance));
-            mp = new MotionParam.Builder<V>().speed(helper.convertPhraseToExpr(power)).duration(md).build();
+            MotorDuration<V> md = new MotorDuration<V>(factory.getMotorMoveMode("DISTANCE"), Jaxb2Ast.convertPhraseToExpr(distance));
+            mp = new MotionParam.Builder<V>().speed(Jaxb2Ast.convertPhraseToExpr(power)).duration(md).build();
         } else {
             values = Jaxb2Ast.extractValues(block, (short) 1);
             power = helper.extractValue(values, new ExprParam(BlocklyConstants.POWER, BlocklyType.NUMBER_INT));
-            mp = new MotionParam.Builder<V>().speed(helper.convertPhraseToExpr(power)).build();
+            mp = new MotionParam.Builder<V>().speed(Jaxb2Ast.convertPhraseToExpr(power)).build();
         }
         return DriveAction.make(factory.getDriveDirection(mode), mp, Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
     }

@@ -85,7 +85,7 @@ public class SenseboxBrickValidatorVisitor extends AbstractBrickValidatorVisitor
     }
 
     @Override
-    public Void visitDataSendAction(SendDataAction<Void> sendDataAction) {
+    public Void visitSendDataAction(SendDataAction<Void> sendDataAction) {
         if ( this.SSID.equals("") || this.password.equals("") ) {
             sendDataAction.addInfo(NepoInfo.error("CONFIGURATION_ERROR_WLAN_CREDENTIALS_MISSING"));
             this.errorCount++;

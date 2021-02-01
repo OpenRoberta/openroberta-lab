@@ -46,7 +46,7 @@ public interface IEdisonVisitor<V> extends ILightVisitor<V>, //for the red LEDs
         throw new DbcException("Block is not implemented!");
     }
 
-    default V visitSensorResetAction(ResetSensor<V> vResetSensor) {
+    default V visitResetSensor(ResetSensor<V> vResetSensor) {
         throw new DbcException("Block is not implemented!");
     }
 
@@ -111,7 +111,7 @@ public interface IEdisonVisitor<V> extends ILightVisitor<V>, //for the red LEDs
     }
 
     @Override
-    default V visitAccelerometer(AccelerometerSensor<V> accelerometerSensor) {
+    default V visitAccelerometerSensor(AccelerometerSensor<V> accelerometerSensor) {
         throw new DbcException("Not supported!");
     }
 

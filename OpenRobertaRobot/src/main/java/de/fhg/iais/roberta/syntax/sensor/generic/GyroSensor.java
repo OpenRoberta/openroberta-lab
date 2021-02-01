@@ -13,11 +13,9 @@ import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.sensor.ExternalSensor;
 import de.fhg.iais.roberta.syntax.sensor.SensorMetaDataBean;
-import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
+import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
-import de.fhg.iais.roberta.visitor.IVisitor;
-import de.fhg.iais.roberta.visitor.hardware.sensor.ISensorVisitor;
 
 /**
  * This class represents the <b>robSensors_gyro_getMode</b>, <b>robSensors_gyro_getSample</b> and <b>robSensors_gyro_setMode</b> blocks from Blockly into the
@@ -47,11 +45,6 @@ public class GyroSensor<V> extends ExternalSensor<V> {
         return new GyroSensor<>(sensorMetaDataBean, properties, comment);
     }
 
-    @Override
-    protected V acceptImpl(IVisitor<V> visitor) {
-        return ((ISensorVisitor<V>) visitor).visitGyroSensor(this);
-    }
-
     /**
      * Transformation from JAXB object to corresponding AST object. Special version to fix issue #924 with Calliope/Microbit <hide> problem
      *
@@ -59,10 +52,10 @@ public class GyroSensor<V> extends ExternalSensor<V> {
      * @param helper class for making the transformation
      * @return corresponding AST object
      */
-    public static <V> SensorMetaDataBean extractPortAndModeAndSlotForGyro(Block block, AbstractJaxb2Ast<V> helper) {
+    public static <V> SensorMetaDataBean extractPortAndModeAndSlotForGyro(Block block, Jaxb2ProgramAst<V> helper) {
         List<Field> fields = Jaxb2Ast.extractFields(block, (short) 3);
         BlocklyDropdownFactory factory = helper.getDropdownFactory();
-        String portName = Jaxb2Ast.extractField(fields, BlocklyConstants.SENSORPORT, BlocklyConstants.NO_PORT);
+        String portName = Jaxb2Ast.extractField(fields, BlocklyConstants.SENSORPORT, BlocklyConstants.EMPTY_PORT);
         String modeName = Jaxb2Ast.extractField(fields, BlocklyConstants.MODE, BlocklyConstants.DEFAULT);
 
         String robotGroup = helper.getRobotFactory().getGroup();
@@ -73,9 +66,7 @@ public class GyroSensor<V> extends ExternalSensor<V> {
         } else {
             slotName = Jaxb2Ast.extractField(fields, BlocklyConstants.SLOT, BlocklyConstants.NO_SLOT);
         }
-
-        boolean isPortInMutation = block.getMutation() != null && block.getMutation().getPort() != null;
-        return new SensorMetaDataBean(factory.sanitizePort(portName), factory.getMode(modeName), factory.sanitizeSlot(slotName), isPortInMutation);
+        return new SensorMetaDataBean(Jaxb2Ast.sanitizePort(portName), factory.getMode(modeName), Jaxb2Ast.sanitizeSlot(slotName), block.getMutation());
     }
 
     /**
@@ -85,14 +76,14 @@ public class GyroSensor<V> extends ExternalSensor<V> {
      * @param helper class for making the transformation
      * @return corresponding AST object
      */
-    public static <V> Phrase<V> jaxbToAst(Block block, AbstractJaxb2Ast<V> helper) {
+    public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
         BlocklyDropdownFactory factory = helper.getDropdownFactory();
         SensorMetaDataBean sensorMetaDataBean;
         if ( block.getType().equals(BlocklyConstants.ROB_SENSORS_GYRO_RESET) ) {
             List<Field> fields = Jaxb2Ast.extractFields(block, (short) 1);
             String portName = Jaxb2Ast.extractField(fields, BlocklyConstants.SENSORPORT);
             sensorMetaDataBean =
-                new SensorMetaDataBean(factory.sanitizePort(portName), factory.getMode("RESET"), factory.sanitizeSlot(BlocklyConstants.NO_SLOT), false);
+                new SensorMetaDataBean(Jaxb2Ast.sanitizePort(portName), factory.getMode("RESET"), Jaxb2Ast.sanitizeSlot(BlocklyConstants.NO_SLOT), null);
             return GyroSensor.make(sensorMetaDataBean, Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
         } else {
             sensorMetaDataBean = extractPortAndModeAndSlotForGyro(block, helper);
@@ -105,7 +96,7 @@ public class GyroSensor<V> extends ExternalSensor<V> {
         Block jaxbDestination = new Block();
         Ast2Jaxb.setBasicProperties(this, jaxbDestination);
         //TODO: move reset to another block and delete astToBlock() method from here
-        String fieldValue = getPort();
+        String fieldValue = getUserDefinedPort();
         if ( getMode().equals("ANGLE") || getMode().equals("RATE") || getMode().equals("X") || getMode().equals("Y") || getMode().equals("Z") ) {
             Mutation mutation = new Mutation();
             mutation.setMode(getMode());

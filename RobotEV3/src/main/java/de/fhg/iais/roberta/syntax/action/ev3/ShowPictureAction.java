@@ -14,14 +14,12 @@ import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.Action;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
-import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
+import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
-import de.fhg.iais.roberta.visitor.IVisitor;
-import de.fhg.iais.roberta.visitor.hardware.IEv3Visitor;
 
 /**
  * This class represents the <b>robActions_display_picture</b> block from Blockly into the AST (abstract syntax tree). Object from this class will generate code
@@ -83,11 +81,6 @@ public class ShowPictureAction<V> extends Action<V> {
         return "ShowPictureAction [" + this.pic + ", " + this.x + ", " + this.y + "]";
     }
 
-    @Override
-    protected V acceptImpl(IVisitor<V> visitor) {
-        return ((IEv3Visitor<V>) visitor).visitShowPictureAction(this);
-    }
-
     /**
      * Transformation from JAXB object to corresponding AST object.
      *
@@ -95,7 +88,7 @@ public class ShowPictureAction<V> extends Action<V> {
      * @param helper class for making the transformation
      * @return corresponding AST object
      */
-    public static <V> Phrase<V> jaxbToAst(Block block, AbstractJaxb2Ast<V> helper) {
+    public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
         List<Field> fields = Jaxb2Ast.extractFields(block, (short) 1);
         List<Value> values = Jaxb2Ast.extractValues(block, (short) 2);
         String pic = Jaxb2Ast.extractField(fields, BlocklyConstants.PICTURE);
@@ -104,8 +97,8 @@ public class ShowPictureAction<V> extends Action<V> {
         return ShowPictureAction
             .make(
                 ((EV3Factory) helper.getRobotFactory()).getShowPicture(pic),
-                helper.convertPhraseToExpr(x),
-                helper.convertPhraseToExpr(y),
+                Jaxb2Ast.convertPhraseToExpr(x),
+                Jaxb2Ast.convertPhraseToExpr(y),
                 Jaxb2Ast.extractBlockProperties(block),
                 Jaxb2Ast.extractComment(block));
     }

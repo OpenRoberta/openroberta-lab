@@ -491,7 +491,6 @@
       "properties": [
         { "name": "programName", "type": "String", "required": false },
         { "name": "progXML", "type": "String", "required": false },
-        { "name": "errorCounter", "type": "int" },
         { "name": "confAnnos", "type": "String->JSONObject", "required": false },
         { "name": "compiledCode", "type": "String" },
         { "name": "configuration", "type": "JSONObject", "required": false }
@@ -503,7 +502,6 @@
     	"description": "the response for the /projectWorkflow/runNative, ../compileNative and ../reset REST request",
       "properties": [
         { "name": "programName", "type": "String", "required": false },
-        { "name": "errorCounter", "type": "int" },
         { "name": "confAnnos", "type": "String->JSONObject", "required": false },
         { "name": "compiledCode", "type": "String" }
       ]

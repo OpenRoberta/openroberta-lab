@@ -1,16 +1,14 @@
 package de.fhg.iais.roberta.components;
 
 import java.io.StringWriter;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 
 import org.json.JSONException;
+import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -62,6 +60,7 @@ public final class Project {
     private Key result = Key.COMPILERWORKFLOW_PROJECT_BUILD_SUCCESS;
     private int errorCounter = 0;
     private JSONObject configurationJSON;
+    private List<String> errorAndWarningMessages = null;
 
     private Project() {
     }
@@ -259,12 +258,23 @@ public final class Project {
         this.resultParams.put(key, value);
     }
 
-    public void addToErrorCounter(int nErrors) {
+    public void addToErrorCounter(int nErrors, List<String> errorAndWarningMessages) {
         this.errorCounter += nErrors;
+        if (errorAndWarningMessages != null) {
+            if (this.errorAndWarningMessages == null) {
+                this.errorAndWarningMessages = new ArrayList<>(errorAndWarningMessages);
+            } else {
+                this.errorAndWarningMessages.addAll(errorAndWarningMessages);
+            }
+        }
     }
 
     public int getErrorCounter() {
         return this.errorCounter;
+    }
+
+    public List<String> getErrorAndWarningMessages() {
+        return errorAndWarningMessages;
     }
 
     public String getAnnotatedProgramAsXml() {

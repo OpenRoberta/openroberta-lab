@@ -17,14 +17,12 @@ import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.syntax.lang.expr.ExprList;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtList;
-import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
+import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
-import de.fhg.iais.roberta.visitor.IVisitor;
-import de.fhg.iais.roberta.visitor.lang.ILanguageVisitor;
 
 /**
  * This class represents the <b>robProcedures_defreturn</b> block from Blockly into the AST (abstract syntax tree). Object from this class is used to create a
@@ -103,11 +101,6 @@ public class MethodReturn<V> extends Method<V> {
             + "]";
     }
 
-    @Override
-    protected V acceptImpl(IVisitor<V> visitor) {
-        return ((ILanguageVisitor<V>) visitor).visitMethodReturn(this);
-    }
-
     /**
      * Transformation from JAXB object to corresponding AST object.
      *
@@ -115,7 +108,7 @@ public class MethodReturn<V> extends Method<V> {
      * @param helper class for making the transformation
      * @return corresponding AST object
      */
-    public static <V> Phrase<V> jaxbToAst(Block block, AbstractJaxb2Ast<V> helper) {
+    public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
         List<Field> fields = Jaxb2Ast.extractFields(block, (short) 2);
         String name = Jaxb2Ast.extractField(fields, BlocklyConstants.NAME);
 
@@ -123,7 +116,7 @@ public class MethodReturn<V> extends Method<V> {
         ArrayList<Value> values = new ArrayList<Value>();
         ArrayList<Statement> statements = new ArrayList<Statement>();
         Jaxb2Ast.convertStmtValList(values, statements, valAndStmt);
-        ExprList<V> exprList = helper.statementsToExprs(statements, BlocklyConstants.ST);
+        ExprList<V> exprList = helper.statementsToMethodParameterDeclaration(statements, BlocklyConstants.ST);
         StmtList<V> statement = helper.extractStatement(statements, BlocklyConstants.STACK);
         Phrase<V> expr = helper.extractValue(values, new ExprParam(BlocklyConstants.RETURN, BlocklyType.NULL));
 
@@ -133,7 +126,7 @@ public class MethodReturn<V> extends Method<V> {
                 exprList,
                 statement,
                 BlocklyType.get(Jaxb2Ast.extractField(fields, BlocklyConstants.TYPE)),
-                helper.convertPhraseToExpr(expr),
+                Jaxb2Ast.convertPhraseToExpr(expr),
                 Jaxb2Ast.extractBlockProperties(block),
                 Jaxb2Ast.extractComment(block));
     }

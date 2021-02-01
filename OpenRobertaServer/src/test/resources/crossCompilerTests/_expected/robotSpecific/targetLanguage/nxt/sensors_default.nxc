@@ -1,0 +1,161 @@
+#define WHEELDIAMETER 5.6
+#define TRACKWIDTH 12.0
+#define MAXLINES 8
+#define MIN(X, Y) (((X) < (Y)) ? (X) : (Y))
+#define MAX(X, Y) (((X) > (Y)) ? (X) : (Y))
+#define M_PI PI
+#define M_E 2.718281828459045
+#define M_GOLDEN_RATIO 1.61803398875
+#define M_SQRT2 1.41421356237
+#define M_SQRT1_2 0.707106781187
+#define M_INFINITY 0x7f800000
+#include "NEPODefs.h" // contains NEPO declarations for the NXC NXT API resources
+
+
+void sensors();
+void waitUntil();
+
+long timer1;
+float ___numberVar;
+bool ___booleanVar;
+string ___stringVar;
+int ___colourVar;
+int ___connectionVar;
+float ___numberList[3];
+bool ___booleanList[3];
+string ___stringList[3];
+int ___colourList[3];
+int ___connectionList[3];
+task main() {
+    ___numberVar = 0;
+    ___booleanVar = true;
+    ___stringVar = "";
+    ___colourVar = INPUT_WHITECOLOR;
+    ___connectionVar = NULL;
+    float _____numberList[] = {0, 0, 0};
+    ___numberList = _____numberList;
+    bool _____booleanList[] = {true, true, true};
+    ___booleanList = _____booleanList;
+    string _____stringList[] = {"", "", ""};
+    ___stringList = _____stringList;
+    int _____colourList[] = {INPUT_WHITECOLOR, INPUT_WHITECOLOR, INPUT_WHITECOLOR};
+    ___colourList = _____colourList;
+    int _____connectionList[] = {NULL, NULL, NULL};
+    ___connectionList = _____connectionList;
+    SetSensor(S1, SENSOR_TOUCH);
+    SetSensor(S2, SENSOR_SOUND);
+    SetSensor(S3, SENSOR_LIGHT);
+    SetSensor(S3, SENSOR_LIGHT);
+    SetSensor(S4, SENSOR_LOWSPEED);
+    SetSensor(S1, SENSOR_TOUCH);
+    SetSensor(S1, SENSOR_TOUCH);
+    timer1 = CurrentTick();
+    sensors();
+    waitUntil();
+}
+
+void sensors() {
+    NumOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, Sensor(S1));
+    NumOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, Sensor(S2));
+    NumOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, _readLightSensor(S3, 1));
+    NumOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, _readLightSensor(S3, 2));
+    NumOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, SensorUS(S4));
+    ResetTachoCount(OUT_A);
+    ResetTachoCount(OUT_B);
+    ResetTachoCount(OUT_C);
+    NumOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, MotorTachoCount(OUT_A));
+    NumOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, MotorTachoCount(OUT_B));
+    NumOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, MotorTachoCount(OUT_C));
+    NumOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, MotorTachoCount(OUT_A) / 360.0);
+    NumOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, MotorTachoCount(OUT_B) / 360.0);
+    NumOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, MotorTachoCount(OUT_C) / 360.0);
+    NumOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, MotorTachoCount(OUT_A) * PI / 360.0 * WHEELDIAMETER);
+    NumOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, MotorTachoCount(OUT_B) * PI / 360.0 * WHEELDIAMETER);
+    NumOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, MotorTachoCount(OUT_C) * PI / 360.0 * WHEELDIAMETER);
+    NumOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, ButtonPressed(BTNCENTER, false));
+    NumOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, ButtonPressed(BTNLEFT, false));
+    NumOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, ButtonPressed(BTNRIGHT, false));
+    NumOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, (CurrentTick() - timer1));
+    timer1 = CurrentTick();
+}
+
+void waitUntil() {
+    while (true) {
+        if ( Sensor(S1) == true ) {
+            break;
+        }
+        Wait(15);
+    }
+    while (true) {
+        if ( Sensor(S2) > 50 ) {
+            break;
+        }
+        Wait(15);
+    }
+    while (true) {
+        if ( _readLightSensor(S3, 1) < 50 ) {
+            break;
+        }
+        Wait(15);
+    }
+    while (true) {
+        if ( _readLightSensor(S3, 2) < 50 ) {
+            break;
+        }
+        Wait(15);
+    }
+    while (true) {
+        if ( SensorUS(S4) < 30 ) {
+            break;
+        }
+        Wait(15);
+    }
+    while (true) {
+        if ( MotorTachoCount(OUT_B) > 180 ) {
+            break;
+        }
+        Wait(15);
+    }
+    while (true) {
+        if ( MotorTachoCount(OUT_B) / 360.0 > 2 ) {
+            break;
+        }
+        Wait(15);
+    }
+    while (true) {
+        if ( MotorTachoCount(OUT_B) * PI / 360.0 * WHEELDIAMETER < 30 ) {
+            break;
+        }
+        Wait(15);
+    }
+    while (true) {
+        if ( MotorTachoCount(OUT_B) * PI / 360.0 * WHEELDIAMETER < 30 ) {
+            break;
+        }
+        Wait(15);
+    }
+    while (true) {
+        if ( ButtonPressed(BTNCENTER, false) == true ) {
+            break;
+        }
+        Wait(15);
+    }
+    while (true) {
+        if ( ButtonPressed(BTNLEFT, false) == true ) {
+            break;
+        }
+        Wait(15);
+    }
+    while (true) {
+        if ( ButtonPressed(BTNRIGHT, false) == true ) {
+            break;
+        }
+        Wait(15);
+    }
+    while (true) {
+        if ( (CurrentTick() - timer1) > 500 ) {
+            break;
+        }
+        Wait(15);
+    }
+}

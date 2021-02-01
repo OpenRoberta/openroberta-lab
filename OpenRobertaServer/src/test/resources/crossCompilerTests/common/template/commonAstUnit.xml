@@ -1,0 +1,13 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="ev3" xmlversion="3.1" description="" tags="">
+    <instance x="384" y="50">
+        <block type="robControls_start" id="gs/X7L/cTzZWY:k?c@Ks" intask="true" deletable="false">
+            <mutation declare="true" />
+            <field name="DEBUG">TRUE</field>
+            <statement name="ST">
+                [[decl]]
+            </statement>
+        </block>
+        [[prog]]
+    </instance>
+    [[fragment]]
+</block_set>

@@ -64,8 +64,8 @@ public class FullRestRequest {
     }
 
     /**
-     * merge the properties of a JSON-object into this bean. The bean must be "under construction". The keys of the JSON-Object must be valid. The bean remains
-     * "under construction".<br>
+     * merge the properties of a JSON-object into this bean. The bean must be "under construction".
+     * The keys of the JSON-Object must be valid. The bean remains "under construction".<br>
      * Throws a runtime exception if inconsistencies are detected.
      */
     public FullRestRequest merge(JSONObject jsonO) {
@@ -118,13 +118,13 @@ public class FullRestRequest {
         if ( !this.immutable ) {
             _message = "FullRestRequest-object is already immutable: " + toString();
         }
-        if ( this.initToken == null ) {
+        if ( initToken == null ) {
             _message = "required property initToken of FullRestRequest-object is not set: " + toString();
         }
-        if ( this.log == null ) {
+        if ( log == null ) {
             _message = "required property log of FullRestRequest-object is not set: " + toString();
         }
-        if ( this.data == null ) {
+        if ( data == null ) {
             _message = "required property data of FullRestRequest-object is not set: " + toString();
         }
         if ( _message != null ) {

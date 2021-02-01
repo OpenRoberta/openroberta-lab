@@ -1,0 +1,55 @@
+
+StmtTextComment [Math power -- Start --]
+
+Var [result] := Binary [EQ, NumConst [1], MathPowerFunct [POWER, [NumConst [2], NumConst [0]]]]
+
+AssertStmt [asserts pos-1: Binary [EQ, BoolConst [true], Var [result]]]
+
+Var [result] := Binary [EQ, NumConst [2], MathPowerFunct [POWER, [NumConst [2], NumConst [1]]]]
+
+AssertStmt [asserts pos-2: Binary [EQ, BoolConst [true], Var [result]]]
+
+Var [result] := Binary [EQ, NumConst [4], MathPowerFunct [POWER, [NumConst [2], NumConst [2]]]]
+
+AssertStmt [asserts pos-3: Binary [EQ, BoolConst [true], Var [result]]]
+
+Var [result] := Binary [EQ, NumConst [8], MathPowerFunct [POWER, [NumConst [2], NumConst [3]]]]
+
+AssertStmt [asserts pos-4: Binary [EQ, BoolConst [true], Var [result]]]
+
+Var [result] := Binary [EQ, NumConst [-4], Unary [NEG, MathPowerFunct [POWER, [NumConst [2], NumConst [2]]]]]
+
+AssertStmt [asserts pos-5: Binary [EQ, BoolConst [true], Var [result]]]
+
+Var [result] := Binary [EQ, NumConst [4], MathPowerFunct [POWER, [NumConst [-2], NumConst [2]]]]
+
+AssertStmt [asserts pos-6: Binary [EQ, BoolConst [true], Var [result]]]
+
+Var [result] := Binary [EQ, Binary [MULTIPLY, MathPowerFunct [POWER, [NumConst [2], NumConst [2]]], MathPowerFunct [POWER, [NumConst [2], NumConst [3]]]], MathPowerFunct [POWER, [NumConst [2], Binary [ADD, NumConst [2], NumConst [3]]]]]
+
+AssertStmt [asserts pos-7: Binary [EQ, BoolConst [true], Var [result]]]
+
+Var [result] := Binary [EQ, Binary [MULTIPLY, MathPowerFunct [POWER, [NumConst [2], NumConst [2]]], MathPowerFunct [POWER, [NumConst [3], NumConst [2]]]], MathPowerFunct [POWER, [Binary [MULTIPLY, NumConst [2], NumConst [3]], NumConst [2]]]]
+
+AssertStmt [asserts pos-8: Binary [EQ, BoolConst [true], Var [result]]]
+
+Var [result] := Binary [EQ, MathPowerFunct [POWER, [MathPowerFunct [POWER, [NumConst [2], NumConst [2]]], NumConst [3]]], MathPowerFunct [POWER, [NumConst [2], Binary [MULTIPLY, NumConst [2], NumConst [3]]]]]
+
+AssertStmt [asserts pos-9: Binary [EQ, BoolConst [true], Var [result]]]
+
+Var [result] := Binary [EQ, Binary [DIVIDE, MathPowerFunct [POWER, [NumConst [2], NumConst [2]]], MathPowerFunct [POWER, [NumConst [3], NumConst [2]]]], MathPowerFunct [POWER, [Binary [DIVIDE, NumConst [2], NumConst [3]], NumConst [2]]]]
+
+AssertStmt [asserts pos-10: Binary [EQ, BoolConst [true], Var [result]]]
+
+Var [result] := Binary [EQ, Binary [DIVIDE, MathPowerFunct [POWER, [NumConst [2], NumConst [2]]], MathPowerFunct [POWER, [NumConst [2], NumConst [3]]]], MathPowerFunct [POWER, [NumConst [2], Binary [MINUS, NumConst [2], NumConst [3]]]]]
+
+AssertStmt [asserts pos-11: Binary [EQ, BoolConst [true], Var [result]]]
+DebugAction [StmtExpr [
+if Binary [EQ, BoolConst [true], Var [result]]
+,then
+exprStmt StringConst [Math Power Test: success]
+,else
+exprStmt StringConst [Basic Math Test: FAIL]
+]]
+
+StmtTextComment [Math power -- End --]

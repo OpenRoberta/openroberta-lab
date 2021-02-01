@@ -6,8 +6,6 @@ import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.lang.functions.Function;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
-import de.fhg.iais.roberta.visitor.IVisitor;
-import de.fhg.iais.roberta.visitor.lang.ILanguageVisitor;
 
 /**
  * Wraps subclasses of the class {@link Function} so they can be used as {@link Expr} in expressions.
@@ -52,11 +50,6 @@ public class FunctionExpr<V> extends Expr<V> {
     @Override
     public BlocklyType getVarType() {
         return this.function.getReturnType();
-    }
-
-    @Override
-    protected V acceptImpl(IVisitor<V> visitor) {
-        return ((ILanguageVisitor<V>) visitor).visitFunctionExpr(this);
     }
 
     @Override
