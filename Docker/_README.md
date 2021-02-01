@@ -90,28 +90,33 @@ in git and a version number in docker.
 It would be easy to build this image for the `arm32v7` architecture. But our `bamboo` server used for automated integration tests run on `x64` machines.
 Thus there is no need for this image. This may change in the future.
 
-This step creates an image, built upon the "base" image, that has executed a git clone of the
-main git repository `openroberta-lab` and has executed a `mvn clean install`. This is done to fill the
-(mvn) cache and speeds up later builds considerably. The entry point is defined as the bash script "runIT.sh".
-If called, it will checkout a branch given as parameter and runs both the tests and the integration tests.
+This step creates an image, built upon the "base" image, that has executed a git clone of an openroberta
+git repository and has executed a `mvn clean install`. This is done to fill the
+(mvn) cache and will speed up later builds considerably. The entry point is defined as the bash script "runIT.sh".
+If the image is started, it will checkout a branch given as start parameter and runs both the tests and the integration tests.
 
 ```bash
 BASE_DIR=/data/openroberta-lab
 ARCH=x64
 BASE_VERSION=25
-BRANCH=develop
+GITREPO=https://github.com/OpenRoberta/openroberta-lab.git       # this is the URL of the official repo, you may use your fork
+BRANCH=develop                                                   # the branch used to fill the maven cache
+IMAGE_NAME=openroberta/it-${ARCH}-offical-gitrepo-with-develop   # change the name SUFFIX when using a forked repo
 cd ${BASE_DIR}/conf/${ARCH}/docker-for-test
-docker build --no-cache --build-arg BASE_VERSION=${BASE_VERSION} --build-arg BRANCH=${BRANCH} \
-       -t openroberta/it-${ARCH}:${BASE_VERSION} .
-docker push openroberta/it-${ARCH}:${BASE_VERSION}
+docker build --no-cache --build-arg BASE_VERSION=${BASE_VERSION} --build-arg GITREPO="${GITREPO}" --build-arg BRANCH="${BRANCH}" \
+       -t ${IMAGE_NAME}:${BASE_VERSION} .
+docker push ${IMAGE_NAME}:${BASE_VERSION}
 ```
 
 To run the integration tests on your local machine (usually a build server like `bamboo` will do this), execute:
 
 ```bash
+ARCH=x64
 BASE_VERSION=25
+IMAGE_NAME=openroberta/it-${ARCH}-offical-gitrepo-with-develop      # the name from above!
+export GITREPO='https://github.com/OpenRoberta/openroberta-lab.git' # the repo URL from above!
 export BRANCH='develop'
-docker run openroberta/it-${ARCH}:${BASE_VERSION} ${BRANCH} x.x.x # x.x.x is the db version and unused for tests
+docker run "${IMAGE_NAME}" "${GITREPO}" "${BRANCH}"
 ```
 
 # Operating Instructions for the Test and Prod Server

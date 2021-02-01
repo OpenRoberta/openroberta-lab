@@ -7,21 +7,21 @@ else
    echo 'not running in a docker container - exit 12 to avoid destruction and crash :-)'
    exit 12
 fi
-BRANCH=$1
+GITREPO=$1
+case "$GITREPO" in
+    https:*) : ;;
+    *)       echo 'the git repo url is missing or invalid (first parameter) - exit 12'
+             exit 12 ;;
+esac
+BRANCH=$2
 if [ -z "$BRANCH" ]
 then
-    echo 'the branch to build is missing (first parameter) - exit 12'
+    echo 'the branch to build is missing (second parameter) - exit 12'
     exit 12
 fi
-VERSION="$2"
-if [ -z "$VERSION" ]
-then
-    echo 'the version parameter of form x.y.z is missing (second parameter) - exit 12'
-    exit 12
-fi
-echo "building branch $BRANCH with version $VERSION [version is unused as long as no db-its are executed]"
+
 cd /opt
-git clone --depth=1 -b $BRANCH https://github.com/OpenRoberta/openroberta-lab.git
+git clone --depth=1 "$GITREPO" -b "$BRANCH"
 cd /opt/openroberta-lab
 mvn clean install -DskipTests -DskipITs
 
