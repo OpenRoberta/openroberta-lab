@@ -15,8 +15,6 @@ import de.fhg.iais.roberta.syntax.SC;
 import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.Jaxb2ConfigurationAst;
 import de.fhg.iais.roberta.util.dbc.Assert;
-import de.fhg.iais.roberta.util.dbc.DbcException;
-import de.fhg.iais.roberta.visitor.IVisitor;
 
 /**
  * Representation of old/new configuration blocks in the AST. May have subclasses which override {@link ConfigurationComponent#astToBlock()} in order to
@@ -166,12 +164,6 @@ public class ConfigurationComponent extends Phrase<Void> {
             + ", componentProperties="
             + this.componentProperties
             + "]";
-    }
-
-    @Override
-    protected Void acceptImpl(IVisitor<Void> visitor) {
-        // TODO should this be rethought? ConfigurationComponents now act completely independent from the visitor pattern
-        throw new DbcException("ConfigurationComponent should not be visited on it's own, instead the whole Configuration should be visited");
     }
 
     /**

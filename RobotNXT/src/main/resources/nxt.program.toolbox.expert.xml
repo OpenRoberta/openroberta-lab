@@ -149,7 +149,7 @@
     </category>
   </category>
   <category name="TOOLBOX_SENSOR" svg="true">
-    <block type="robSensors_touch_isPressed">
+    <block type="robSensors_touch_getSample">
       <field name="SENSORPORT">1</field>
     </block>
     <block type="robSensors_sound_getSample">
@@ -170,7 +170,7 @@
     <block type="robSensors_encoder_getSample">
       <field name="SENSORPORT">B</field>
     </block>
-    <block type="robSensors_key_isPressed"/>
+    <block type="robSensors_key_getSample"/>
     <block type="robSensors_timer_getSample"/>
     <block type="robSensors_timer_reset"/>
     <block type="robSensors_htcolour_getSample"/>

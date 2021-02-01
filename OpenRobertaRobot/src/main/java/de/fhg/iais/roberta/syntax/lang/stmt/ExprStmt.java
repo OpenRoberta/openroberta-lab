@@ -4,8 +4,6 @@ import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.util.dbc.Assert;
-import de.fhg.iais.roberta.visitor.IVisitor;
-import de.fhg.iais.roberta.visitor.lang.ILanguageVisitor;
 
 /**
  * Wraps subclasses of the class {@link Expr} so they can be used as {@link Stmt}.
@@ -43,11 +41,6 @@ public class ExprStmt<V> extends Stmt<V> {
         appendNewLine(sb, 0, null);
         sb.append("exprStmt ").append(this.expr);
         return sb.toString();
-    }
-
-    @Override
-    protected V acceptImpl(IVisitor<V> visitor) {
-        return ((ILanguageVisitor<V>) visitor).visitExprStmt(this);
     }
 
     @Override

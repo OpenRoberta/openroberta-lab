@@ -1,0 +1,509 @@
+{"ops": [
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "0"
+  },
+  {
+    "opc": "VarDeclaration",
+    "name": "numVar",
+    "type": "NUMBER"
+  },
+  {
+    "opc": "expr",
+    "expr": "BOOL_CONST",
+    "value": true
+  },
+  {
+    "opc": "VarDeclaration",
+    "name": "boolVar",
+    "type": "BOOLEAN"
+  },
+  {
+    "opc": "expr",
+    "expr": "STRING_CONST",
+    "value": ""
+  },
+  {
+    "opc": "VarDeclaration",
+    "name": "stringVar",
+    "type": "STRING"
+  },
+  {
+    "opc": "expr",
+    "expr": "COLOR_CONST",
+    "value": 10
+  },
+  {
+    "opc": "VarDeclaration",
+    "name": "colourVar",
+    "type": "COLOR"
+  },
+  {
+    "opc": "comment",
+    "target": "createMethodCall"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": 11
+  },
+  {
+    "opc": "jump",
+    "conditional": "always",
+    "target": 12
+  },
+  {"opc": "stop"},
+  {
+    "opc": "comment",
+    "target": "createMethodVoid"
+  },
+  {
+    "opc": "expr",
+    "name": "numVar",
+    "expr": "Var"
+  },
+  {
+    "opc": "expr",
+    "name": "numVar",
+    "expr": "Var"
+  },
+  {
+    "op": "ADD",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {"opc": "ShowTextAction"},
+  {
+    "opc": "expr",
+    "name": "numVar",
+    "expr": "Var"
+  },
+  {
+    "opc": "expr",
+    "name": "numVar",
+    "expr": "Var"
+  },
+  {
+    "op": "MINUS",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {"opc": "ShowTextAction"},
+  {
+    "opc": "expr",
+    "name": "numVar",
+    "expr": "Var"
+  },
+  {
+    "opc": "expr",
+    "name": "numVar",
+    "expr": "Var"
+  },
+  {
+    "op": "MINUS",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {"opc": "ShowTextAction"},
+  {
+    "opc": "expr",
+    "name": "numVar",
+    "expr": "Var"
+  },
+  {
+    "opc": "expr",
+    "name": "numVar",
+    "expr": "Var"
+  },
+  {
+    "op": "DIVIDE",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {"opc": "ShowTextAction"},
+  {
+    "opc": "expr",
+    "name": "numVar",
+    "expr": "Var"
+  },
+  {
+    "opc": "expr",
+    "name": "numVar",
+    "expr": "Var"
+  },
+  {
+    "op": "POWER",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {"opc": "ShowTextAction"},
+  {
+    "opc": "expr",
+    "name": "numVar",
+    "expr": "Var"
+  },
+  {
+    "op": "ROOT",
+    "opc": "expr",
+    "expr": "SingleFunction"
+  },
+  {"opc": "ShowTextAction"},
+  {
+    "opc": "expr",
+    "name": "numVar",
+    "expr": "Var"
+  },
+  {
+    "op": "ABS",
+    "opc": "expr",
+    "expr": "SingleFunction"
+  },
+  {"opc": "ShowTextAction"},
+  {
+    "opc": "expr",
+    "name": "numVar",
+    "expr": "Var"
+  },
+  {
+    "op": "NEG",
+    "opc": "expr",
+    "expr": "Unary"
+  },
+  {"opc": "ShowTextAction"},
+  {
+    "opc": "expr",
+    "name": "numVar",
+    "expr": "Var"
+  },
+  {
+    "op": "LN",
+    "opc": "expr",
+    "expr": "SingleFunction"
+  },
+  {"opc": "ShowTextAction"},
+  {
+    "opc": "expr",
+    "name": "numVar",
+    "expr": "Var"
+  },
+  {
+    "op": "LOG10",
+    "opc": "expr",
+    "expr": "SingleFunction"
+  },
+  {"opc": "ShowTextAction"},
+  {
+    "opc": "expr",
+    "name": "numVar",
+    "expr": "Var"
+  },
+  {
+    "op": "EXP",
+    "opc": "expr",
+    "expr": "SingleFunction"
+  },
+  {"opc": "ShowTextAction"},
+  {
+    "opc": "expr",
+    "name": "numVar",
+    "expr": "Var"
+  },
+  {
+    "op": "POW10",
+    "opc": "expr",
+    "expr": "SingleFunction"
+  },
+  {"opc": "ShowTextAction"},
+  {
+    "opc": "expr",
+    "name": "numVar",
+    "expr": "Var"
+  },
+  {
+    "op": "SIN",
+    "opc": "expr",
+    "expr": "SingleFunction"
+  },
+  {"opc": "ShowTextAction"},
+  {
+    "opc": "expr",
+    "name": "numVar",
+    "expr": "Var"
+  },
+  {
+    "op": "COS",
+    "opc": "expr",
+    "expr": "SingleFunction"
+  },
+  {"opc": "ShowTextAction"},
+  {
+    "opc": "expr",
+    "name": "numVar",
+    "expr": "Var"
+  },
+  {
+    "op": "TAN",
+    "opc": "expr",
+    "expr": "SingleFunction"
+  },
+  {"opc": "ShowTextAction"},
+  {
+    "opc": "expr",
+    "name": "numVar",
+    "expr": "Var"
+  },
+  {
+    "op": "ASIN",
+    "opc": "expr",
+    "expr": "SingleFunction"
+  },
+  {"opc": "ShowTextAction"},
+  {
+    "opc": "expr",
+    "name": "numVar",
+    "expr": "Var"
+  },
+  {
+    "op": "ACOS",
+    "opc": "expr",
+    "expr": "SingleFunction"
+  },
+  {"opc": "ShowTextAction"},
+  {
+    "opc": "expr",
+    "name": "numVar",
+    "expr": "Var"
+  },
+  {
+    "op": "ATAN",
+    "opc": "expr",
+    "expr": "SingleFunction"
+  },
+  {"opc": "ShowTextAction"},
+  {
+    "opc": "expr",
+    "expr": "createMathConstant",
+    "value": "PI"
+  },
+  {"opc": "ShowTextAction"},
+  {
+    "opc": "expr",
+    "expr": "createMathConstant",
+    "value": "E"
+  },
+  {"opc": "ShowTextAction"},
+  {
+    "opc": "expr",
+    "expr": "createMathConstant",
+    "value": "GOLDEN_RATIO"
+  },
+  {"opc": "ShowTextAction"},
+  {
+    "opc": "expr",
+    "expr": "createMathConstant",
+    "value": "SQRT2"
+  },
+  {"opc": "ShowTextAction"},
+  {
+    "opc": "expr",
+    "expr": "createMathConstant",
+    "value": "SQRT1_2"
+  },
+  {"opc": "ShowTextAction"},
+  {
+    "opc": "expr",
+    "expr": "createMathConstant",
+    "value": "INFINITY"
+  },
+  {"opc": "ShowTextAction"},
+  {
+    "opc": "expr",
+    "name": "numVar",
+    "expr": "Var"
+  },
+  {
+    "op": "EVEN",
+    "opc": "expr",
+    "expr": "MathPropFunct"
+  },
+  {"opc": "ShowTextAction"},
+  {
+    "opc": "expr",
+    "name": "numVar",
+    "expr": "Var"
+  },
+  {
+    "op": "ODD",
+    "opc": "expr",
+    "expr": "MathPropFunct"
+  },
+  {"opc": "ShowTextAction"},
+  {
+    "opc": "expr",
+    "name": "numVar",
+    "expr": "Var"
+  },
+  {
+    "op": "PRIME",
+    "opc": "expr",
+    "expr": "MathPropFunct"
+  },
+  {"opc": "ShowTextAction"},
+  {
+    "opc": "expr",
+    "name": "numVar",
+    "expr": "Var"
+  },
+  {
+    "op": "WHOLE",
+    "opc": "expr",
+    "expr": "MathPropFunct"
+  },
+  {"opc": "ShowTextAction"},
+  {
+    "opc": "expr",
+    "name": "numVar",
+    "expr": "Var"
+  },
+  {
+    "op": "POSITIVE",
+    "opc": "expr",
+    "expr": "MathPropFunct"
+  },
+  {"opc": "ShowTextAction"},
+  {
+    "opc": "expr",
+    "name": "numVar",
+    "expr": "Var"
+  },
+  {
+    "op": "NEGATIVE",
+    "opc": "expr",
+    "expr": "MathPropFunct"
+  },
+  {"opc": "ShowTextAction"},
+  {
+    "opc": "expr",
+    "name": "numVar",
+    "expr": "Var"
+  },
+  {
+    "opc": "expr",
+    "name": "numVar",
+    "expr": "Var"
+  },
+  {
+    "op": "DIVISIBLE_BY",
+    "opc": "expr",
+    "expr": "MathPropFunct"
+  },
+  {"opc": "ShowTextAction"},
+  {
+    "opc": "expr",
+    "name": "numVar",
+    "expr": "Var"
+  },
+  {
+    "opc": "expr",
+    "name": "numVar",
+    "expr": "Var"
+  },
+  {
+    "opc": "mathChange",
+    "name": "numVar"
+  },
+  {
+    "opc": "expr",
+    "name": "numVar",
+    "expr": "Var"
+  },
+  {
+    "op": "ROUND",
+    "opc": "expr",
+    "expr": "SingleFunction"
+  },
+  {"opc": "ShowTextAction"},
+  {
+    "opc": "expr",
+    "name": "numVar",
+    "expr": "Var"
+  },
+  {
+    "op": "ROUNDUP",
+    "opc": "expr",
+    "expr": "SingleFunction"
+  },
+  {"opc": "ShowTextAction"},
+  {
+    "opc": "expr",
+    "name": "numVar",
+    "expr": "Var"
+  },
+  {
+    "op": "ROUNDDOWN",
+    "opc": "expr",
+    "expr": "SingleFunction"
+  },
+  {"opc": "ShowTextAction"},
+  {
+    "opc": "expr",
+    "name": "numVar",
+    "expr": "Var"
+  },
+  {
+    "opc": "expr",
+    "name": "numVar",
+    "expr": "Var"
+  },
+  {
+    "op": "MOD",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {"opc": "ShowTextAction"},
+  {
+    "opc": "expr",
+    "name": "numVar",
+    "expr": "Var"
+  },
+  {
+    "opc": "expr",
+    "name": "numVar",
+    "expr": "Var"
+  },
+  {
+    "opc": "expr",
+    "name": "numVar",
+    "expr": "Var"
+  },
+  {
+    "opc": "expr",
+    "expr": "MathConstrainFunct"
+  },
+  {"opc": "ShowTextAction"},
+  {
+    "opc": "expr",
+    "name": "numVar",
+    "expr": "Var"
+  },
+  {
+    "opc": "expr",
+    "name": "numVar",
+    "expr": "Var"
+  },
+  {
+    "opc": "expr",
+    "expr": "randInt"
+  },
+  {"opc": "ShowTextAction"},
+  {
+    "opc": "expr",
+    "expr": "randDouble"
+  },
+  {"opc": "ShowTextAction"},
+  {
+    "opc": "return",
+    "values": false
+  }
+]}

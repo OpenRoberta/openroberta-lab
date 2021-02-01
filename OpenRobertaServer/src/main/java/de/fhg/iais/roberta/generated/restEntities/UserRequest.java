@@ -76,11 +76,10 @@ public class UserRequest extends BaseRequest {
     }
 
     /**
-     * merge the properties of a JSON-object into this bean. The bean must be "under construction". The keys of the JSON-Object must be valid. The bean remains
-     * "under construction".<br>
+     * merge the properties of a JSON-object into this bean. The bean must be "under construction".
+     * The keys of the JSON-Object must be valid. The bean remains "under construction".<br>
      * Throws a runtime exception if inconsistencies are detected.
      */
-    @Override
     public UserRequest merge(JSONObject jsonO) {
         try {
             for ( String key : JSONObject.getNames(jsonO) ) {
@@ -116,7 +115,6 @@ public class UserRequest extends BaseRequest {
      * Checks whether all required fields are set. All lists are made immutable.<br>
      * Throws a runtime exception if inconsistencies are detected.
      */
-    @Override
     public UserRequest immutable() {
         if ( this.immutable ) {
             return this;
@@ -134,22 +132,22 @@ public class UserRequest extends BaseRequest {
         if ( !this.immutable ) {
             _message = "UserRequest-object is already immutable: " + toString();
         }
-        if ( this.accountName == null ) {
+        if ( accountName == null ) {
             _message = "required property accountName of UserRequest-object is not set: " + toString();
         }
-        if ( this.userEmail == null ) {
+        if ( userEmail == null ) {
             _message = "required property userEmail of UserRequest-object is not set: " + toString();
         }
-        if ( this.userName == null ) {
+        if ( userName == null ) {
             _message = "required property userName of UserRequest-object is not set: " + toString();
         }
-        if ( this.role == null ) {
+        if ( role == null ) {
             _message = "required property role of UserRequest-object is not set: " + toString();
         }
-        if ( this.language == null ) {
+        if ( language == null ) {
             _message = "required property language of UserRequest-object is not set: " + toString();
         }
-        if ( !this.isYoungerThen14Defined ) {
+        if ( !isYoungerThen14Defined ) {
             _message = "required property isYoungerThen14 of UserRequest-object is not set: " + toString();
         }
         if ( _message != null ) {
@@ -320,7 +318,6 @@ public class UserRequest extends BaseRequest {
      * generates a JSON-object from an immutable bean.<br>
      * Throws a runtime exception if inconsistencies are detected.
      */
-    @Override
     public JSONObject toJson() {
         if ( !this.immutable ) {
             throw new RuntimeException("no JSON from an object under construction: " + toString());

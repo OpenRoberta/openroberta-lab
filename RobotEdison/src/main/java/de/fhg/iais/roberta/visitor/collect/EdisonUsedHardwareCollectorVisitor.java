@@ -68,7 +68,7 @@ public class EdisonUsedHardwareCollectorVisitor extends AbstractUsedHardwareColl
     }
 
     @Override
-    public Void visitSensorResetAction(ResetSensor<Void> vResetSensor) {
+    public Void visitResetSensor(ResetSensor<Void> vResetSensor) {
         return null;
     }
 

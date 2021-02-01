@@ -6,7 +6,8 @@
                     <mutation declare="true"></mutation>
                     <field name="DEBUG">TRUE</field>
                     <statement name="ST">
-                        <block type="robGlobalVariables_declare" id="(?j85Q%P6kCGVd?%my0R" intask="true" deletable="false" movable="false">
+                        <block type="robGlobalVariables_declare" id="(?j85Q%P6kCGVd?%my0R" intask="true"
+                               deletable="false" movable="false">
                             <mutation next="true" declaration_type="Number"></mutation>
                             <field name="VAR">numberVar</field>
                             <field name="TYPE">Number</field>
@@ -16,7 +17,8 @@
                                 </block>
                             </value>
                         </block>
-                        <block type="robGlobalVariables_declare" id=".%S=Tob)Z3n9AI5yK?+N" intask="true" deletable="false" movable="false">
+                        <block type="robGlobalVariables_declare" id=".%S=Tob)Z3n9AI5yK?+N" intask="true"
+                               deletable="false" movable="false">
                             <mutation next="true" declaration_type="Boolean"></mutation>
                             <field name="VAR">booleanVar</field>
                             <field name="TYPE">Boolean</field>
@@ -26,7 +28,8 @@
                                 </block>
                             </value>
                         </block>
-                        <block type="robGlobalVariables_declare" id="6|.WDVY,@X3IR;E=0p7M" intask="true" deletable="false" movable="false">
+                        <block type="robGlobalVariables_declare" id="6|.WDVY,@X3IR;E=0p7M" intask="true"
+                               deletable="false" movable="false">
                             <mutation next="true" declaration_type="String"></mutation>
                             <field name="VAR">stringVar</field>
                             <field name="TYPE">String</field>
@@ -36,7 +39,8 @@
                                 </block>
                             </value>
                         </block>
-                        <block type="robGlobalVariables_declare" id="QdG=N3v~7?{p^EU-4QS~" intask="true" deletable="false" movable="false">
+                        <block type="robGlobalVariables_declare" id="QdG=N3v~7?{p^EU-4QS~" intask="true"
+                               deletable="false" movable="false">
                             <mutation next="true" declaration_type="Colour"></mutation>
                             <field name="VAR">colourVar</field>
                             <field name="TYPE">Colour</field>
@@ -46,7 +50,8 @@
                                 </block>
                             </value>
                         </block>
-                        <block type="robGlobalVariables_declare" id="UyQ({9lXoKM*BD2E3lQ[" intask="true" deletable="false" movable="false">
+                        <block type="robGlobalVariables_declare" id="UyQ({9lXoKM*BD2E3lQ[" intask="true"
+                               deletable="false" movable="false">
                             <mutation next="true" declaration_type="Connection"></mutation>
                             <field name="VAR">connectionVar</field>
                             <field name="TYPE">Connection</field>
@@ -54,7 +59,8 @@
                                 <block type="logic_null" id="mp:NGQL=w.F=6mHpk4Cm" intask="true"></block>
                             </value>
                         </block>
-                        <block type="robGlobalVariables_declare" id="T)~/,5F-}73,G#{hr([M" intask="true" deletable="false" movable="false">
+                        <block type="robGlobalVariables_declare" id="T)~/,5F-}73,G#{hr([M" intask="true"
+                               deletable="false" movable="false">
                             <mutation next="true" declaration_type="Array_Number"></mutation>
                             <field name="VAR">numberList</field>
                             <field name="TYPE">Array_Number</field>
@@ -80,7 +86,8 @@
                                 </block>
                             </value>
                         </block>
-                        <block type="robGlobalVariables_declare" id="4V.-fm:x+VZ=I{K!b|+:" intask="true" deletable="false" movable="false">
+                        <block type="robGlobalVariables_declare" id="4V.-fm:x+VZ=I{K!b|+:" intask="true"
+                               deletable="false" movable="false">
                             <mutation next="true" declaration_type="Array_Boolean"></mutation>
                             <field name="VAR">booleanList</field>
                             <field name="TYPE">Array_Boolean</field>
@@ -106,7 +113,8 @@
                                 </block>
                             </value>
                         </block>
-                        <block type="robGlobalVariables_declare" id="7;keDHsbkjbdH2Q(.z+t" intask="true" deletable="false" movable="false">
+                        <block type="robGlobalVariables_declare" id="7;keDHsbkjbdH2Q(.z+t" intask="true"
+                               deletable="false" movable="false">
                             <mutation next="true" declaration_type="Array_String"></mutation>
                             <field name="VAR">stringList</field>
                             <field name="TYPE">Array_String</field>
@@ -132,7 +140,8 @@
                                 </block>
                             </value>
                         </block>
-                        <block type="robGlobalVariables_declare" id="iofWH?P^_[tRvp:E_pZD" intask="true" deletable="false" movable="false">
+                        <block type="robGlobalVariables_declare" id="iofWH?P^_[tRvp:E_pZD" intask="true"
+                               deletable="false" movable="false">
                             <mutation next="true" declaration_type="Array_Colour"></mutation>
                             <field name="VAR">colourList</field>
                             <field name="TYPE">Array_Colour</field>
@@ -158,7 +167,8 @@
                                 </block>
                             </value>
                         </block>
-                        <block type="robGlobalVariables_declare" id="e/eqDrkl2{A+IXtn9V`5" intask="true" deletable="false" movable="false">
+                        <block type="robGlobalVariables_declare" id="e/eqDrkl2{A+IXtn9V`5" intask="true"
+                               deletable="false" movable="false">
                             <mutation next="false" declaration_type="Array_Connection"></mutation>
                             <field name="VAR">connectionList</field>
                             <field name="TYPE">Array_Connection</field>

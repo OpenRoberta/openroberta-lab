@@ -13,10 +13,10 @@
     <block type="bob3Actions_recall"/>
   </category>
   <category name="TOOLBOX_SENSOR" svg="true">
-    <block type="bob3Sensors_ambientlight"/>
+    <block type="robSensors_infrared_getSample"/>
     <block type="robSensors_pintouch_getSample"/>
-    <block type="bob3Sensors_temperature_getSample"/>
-    <block type="bob3Sensors_getCode"/>
+    <block type="robSensors_temperature_getSample"/>
+    <block type="robSensors_code_getSample"/>
     <block type="robSensors_timer_getSample"/>
     <block type="robSensors_timer_reset"/>
   </category>
@@ -67,7 +67,7 @@
         <value name="WAIT0">
           <block type="logic_compare">
             <value name="A">
-              <block type="bob3Sensors_getSample_bob3"/>
+              <block type="robSensors_getSample"/>
             </value>
             <value name="B">
               <block type="logic_boolean"/>

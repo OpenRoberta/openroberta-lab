@@ -21,3 +21,4 @@ OpenRobertaServer/db-*
 **/*.csv
 dbIptoCountry/
 **/notifications.json
+**/data/test/output/*

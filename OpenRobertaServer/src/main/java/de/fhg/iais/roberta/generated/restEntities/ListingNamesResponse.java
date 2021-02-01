@@ -90,11 +90,10 @@ public class ListingNamesResponse extends BaseResponse {
     }
 
     /**
-     * merge the properties of a JSON-object into this bean. The bean must be "under construction". The keys of the JSON-Object must be valid. The bean remains
-     * "under construction".<br>
+     * merge the properties of a JSON-object into this bean. The bean must be "under construction".
+     * The keys of the JSON-Object must be valid. The bean remains "under construction".<br>
      * Throws a runtime exception if inconsistencies are detected.
      */
-    @Override
     public ListingNamesResponse merge(JSONObject jsonO) {
         try {
             for ( String key : JSONObject.getNames(jsonO) ) {
@@ -150,7 +149,6 @@ public class ListingNamesResponse extends BaseResponse {
      * Checks whether all required fields are set. All lists are made immutable.<br>
      * Throws a runtime exception if inconsistencies are detected.
      */
-    @Override
     public ListingNamesResponse immutable() {
         if ( this.immutable ) {
             return this;
@@ -168,19 +166,19 @@ public class ListingNamesResponse extends BaseResponse {
         if ( !this.immutable ) {
             _message = "ListingNamesResponse-object is already immutable: " + toString();
         }
-        if ( this.rc == null ) {
+        if ( rc == null ) {
             _message = "required property rc of ListingNamesResponse-object is not set: " + toString();
         }
-        if ( this.initToken == null ) {
+        if ( initToken == null ) {
             _message = "required property initToken of ListingNamesResponse-object is not set: " + toString();
         }
-        if ( !this.serverTimeDefined ) {
+        if ( !serverTimeDefined ) {
             _message = "required property serverTime of ListingNamesResponse-object is not set: " + toString();
         }
-        if ( this.serverVersion == null ) {
+        if ( serverVersion == null ) {
             _message = "required property serverVersion of ListingNamesResponse-object is not set: " + toString();
         }
-        if ( this.programNames == null ) {
+        if ( programNames == null ) {
             _message = "required property programNames of ListingNamesResponse-object is not set: " + toString();
         }
         if ( _message != null ) {
@@ -215,7 +213,6 @@ public class ListingNamesResponse extends BaseResponse {
      * generates a JSON-object from an immutable bean.<br>
      * Throws a runtime exception if inconsistencies are detected.
      */
-    @Override
     public JSONObject toJson() {
         if ( !this.immutable ) {
             throw new RuntimeException("no JSON from an object under construction: " + toString());

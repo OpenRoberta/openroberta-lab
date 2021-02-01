@@ -54,7 +54,7 @@ public final class WeDoStackMachineVisitor<V> extends AbstractStackMachineVisito
 
     @Override
     public V visitLightStatusAction(LightStatusAction<V> lightStatusAction) {
-        ConfigurationComponent confLedBlock = getConfigurationComponent(lightStatusAction.getPort());
+        ConfigurationComponent confLedBlock = getConfigurationComponent(lightStatusAction.getUserDefinedPort());
         String brickName = confLedBlock.getProperty("VAR");
         if ( brickName != null ) {
             // for wedo this block is only for setting off the led, so no test for status required lightStatusAction.getStatus()
@@ -108,14 +108,14 @@ public final class WeDoStackMachineVisitor<V> extends AbstractStackMachineVisito
 
     @Override
     public V visitShowTextAction(ShowTextAction<V> showTextAction) {
-        showTextAction.getMsg().accept(this);
+        showTextAction.msg.accept(this);
         JSONObject o = makeNode(C.SHOW_TEXT_ACTION);
         return app(o);
     }
 
     @Override
     public V visitKeysSensor(KeysSensor<V> keysSensor) {
-        ConfigurationComponent keysSensorBlock = getConfigurationComponent(keysSensor.getPort());
+        ConfigurationComponent keysSensorBlock = getConfigurationComponent(keysSensor.getUserDefinedPort());
         String brickName = keysSensorBlock.getProperty("VAR");
         if ( brickName != null ) {
             JSONObject o = makeNode(C.GET_SAMPLE).put(C.GET_SAMPLE, C.BUTTONS).put(C.NAME, brickName);
@@ -127,7 +127,7 @@ public final class WeDoStackMachineVisitor<V> extends AbstractStackMachineVisito
 
     @Override
     public V visitGyroSensor(GyroSensor<V> gyroSensor) {
-        ConfigurationComponent confGyroSensor = getConfigurationComponent(gyroSensor.getPort());
+        ConfigurationComponent confGyroSensor = getConfigurationComponent(gyroSensor.getUserDefinedPort());
         String brickName = confGyroSensor.getProperty("VAR");
         String port = confGyroSensor.getProperty("CONNECTOR");
         String slot = gyroSensor.getSlot().toString(); // the mode is in the slot?
@@ -141,7 +141,7 @@ public final class WeDoStackMachineVisitor<V> extends AbstractStackMachineVisito
 
     @Override
     public V visitInfraredSensor(InfraredSensor<V> infraredSensor) {
-        ConfigurationComponent confInfraredSensor = getConfigurationComponent(infraredSensor.getPort());
+        ConfigurationComponent confInfraredSensor = getConfigurationComponent(infraredSensor.getUserDefinedPort());
         String brickName = confInfraredSensor.getProperty("VAR");
         String port = confInfraredSensor.getProperty("CONNECTOR");
         if ( brickName != null && port != null ) {
@@ -188,10 +188,10 @@ public final class WeDoStackMachineVisitor<V> extends AbstractStackMachineVisito
         switch ( timerSensor.getMode() ) {
             case "DEFAULT":
             case "VALUE":
-                o = makeNode(C.GET_SAMPLE).put(C.GET_SAMPLE, C.TIMER).put(C.PORT, timerSensor.getPort());
+                o = makeNode(C.GET_SAMPLE).put(C.GET_SAMPLE, C.TIMER).put(C.PORT, timerSensor.getUserDefinedPort());
                 break;
             case "RESET":
-                o = makeNode(C.TIMER_SENSOR_RESET).put(C.PORT, timerSensor.getPort());
+                o = makeNode(C.TIMER_SENSOR_RESET).put(C.PORT, timerSensor.getUserDefinedPort());
                 break;
             default:
                 throw new DbcException("Invalid Timer Mode " + timerSensor.getMode());

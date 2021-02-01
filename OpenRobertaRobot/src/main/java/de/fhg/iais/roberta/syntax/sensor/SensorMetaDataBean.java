@@ -1,48 +1,34 @@
 package de.fhg.iais.roberta.syntax.sensor;
 
+import de.fhg.iais.roberta.blockly.generated.Mutation;
+
 public class SensorMetaDataBean {
     private String port;
     private String mode;
     private String slot;
-    private boolean isPortInMutation;
+    private Mutation mutation;
 
-    public SensorMetaDataBean(String port, String mode, String slot, boolean isPortInMutation) {
+    public SensorMetaDataBean(String port, String mode, String slot, Mutation mutation) {
         this.port = port;
         this.mode = mode;
         this.slot = slot;
-        this.setPortInMutation(isPortInMutation);
+        this.mutation = mutation;
     }
 
     public String getPort() {
         return this.port;
     }
 
-    public void setPort(String port) {
-        this.port = port;
-    }
-
     public String getMode() {
         return this.mode;
-    }
-
-    public void setMode(String mode) {
-        this.mode = mode;
     }
 
     public String getSlot() {
         return this.slot;
     }
 
-    public void setSlot(String slot) {
-        this.slot = slot;
-    }
-
-    public boolean isPortInMutation() {
-        return this.isPortInMutation;
-    }
-
-    public void setPortInMutation(boolean isPortInMutation) {
-        this.isPortInMutation = isPortInMutation;
+    public Mutation getMutation() {
+        return this.mutation;
     }
 
     @Override

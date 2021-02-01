@@ -12,11 +12,9 @@ import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.sensor.ExternalSensor;
 import de.fhg.iais.roberta.syntax.sensor.SensorMetaDataBean;
-import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
+import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
-import de.fhg.iais.roberta.visitor.IVisitor;
-import de.fhg.iais.roberta.visitor.hardware.sensor.ISensorVisitor;
 
 /**
  * This class represents the <b>robSensors_compass_getSample</b> blocks from Blockly into the AST (abstract syntax tree). Object from this class will generate
@@ -46,11 +44,6 @@ public class CompassSensor<V> extends ExternalSensor<V> {
         return new CompassSensor<>(sensorMetaDataBean, properties, comment);
     }
 
-    @Override
-    protected V acceptImpl(IVisitor<V> visitor) {
-        return ((ISensorVisitor<V>) visitor).visitCompassSensor(this);
-    }
-
     /**
      * Transformation from JAXB object to corresponding AST object.
      *
@@ -58,14 +51,14 @@ public class CompassSensor<V> extends ExternalSensor<V> {
      * @param helper class for making the transformation
      * @return corresponding AST object
      */
-    public static <V> Phrase<V> jaxbToAst(Block block, AbstractJaxb2Ast<V> helper) {
+    public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
         BlocklyDropdownFactory factory = helper.getDropdownFactory();
         SensorMetaDataBean sensorMetaDataBean;
         if ( block.getType().equals(BlocklyConstants.ROB_SENSORS_COMPASS_CALIBRATE) ) {
             List<Field> fields = Jaxb2Ast.extractFields(block, (short) 1);
             String portName = Jaxb2Ast.extractField(fields, BlocklyConstants.SENSORPORT);
             sensorMetaDataBean =
-                new SensorMetaDataBean(factory.sanitizePort(portName), factory.getMode("CALIBRATE"), factory.sanitizeSlot(BlocklyConstants.NO_SLOT), false);
+                new SensorMetaDataBean(Jaxb2Ast.sanitizePort(portName), factory.getMode("CALIBRATE"), Jaxb2Ast.sanitizeSlot(BlocklyConstants.NO_SLOT), null);
             return CompassSensor.make(sensorMetaDataBean, Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
         }
         SensorMetaDataBean sensorData = extractPortAndModeAndSlot(block, helper);
@@ -78,7 +71,7 @@ public class CompassSensor<V> extends ExternalSensor<V> {
         if ( getMode().toString().equals("CALIBRATE") ) {
             jaxbDestination = new Block();
             Ast2Jaxb.setBasicProperties(this, jaxbDestination);
-            Ast2Jaxb.addField(jaxbDestination, BlocklyConstants.SENSORPORT, getPort());
+            Ast2Jaxb.addField(jaxbDestination, BlocklyConstants.SENSORPORT, getUserDefinedPort());
         }
         return jaxbDestination;
     }

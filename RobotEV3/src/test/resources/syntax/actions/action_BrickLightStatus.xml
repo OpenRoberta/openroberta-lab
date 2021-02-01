@@ -1,5 +1,0 @@
-<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="ev3" xmlversion="3.1" description="" tags="">
-    <instance x="-8" y="105">
-        <block type="robActions_brickLight_off" id="75"></block>
-    </instance>
-</block_set>

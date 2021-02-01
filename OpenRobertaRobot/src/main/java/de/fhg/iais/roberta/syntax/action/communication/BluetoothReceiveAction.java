@@ -13,13 +13,11 @@ import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.Action;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
-import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
+import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
-import de.fhg.iais.roberta.visitor.IVisitor;
-import de.fhg.iais.roberta.visitor.hardware.actor.IBluetoothVisitor;
 
 public class BluetoothReceiveAction<V> extends Action<V> {
     private final Expr<V> connection;
@@ -60,11 +58,6 @@ public class BluetoothReceiveAction<V> extends Action<V> {
         return this.dataType;
     }
 
-    @Override
-    protected V acceptImpl(IVisitor<V> visitor) {
-        return ((IBluetoothVisitor<V>) visitor).visitBluetoothReceiveAction(this);
-    }
-
     /**
      * Transformation from JAXB object to corresponding AST object.
      *
@@ -72,7 +65,7 @@ public class BluetoothReceiveAction<V> extends Action<V> {
      * @param helper class for making the transformation
      * @return corresponding AST object
      */
-    public static <V> Phrase<V> jaxbToAst(Block block, AbstractJaxb2Ast<V> helper) {
+    public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
         List<Value> values = Jaxb2Ast.extractValues(block, (short) 1);
         List<Field> fields = Jaxb2Ast.extractFields(block, (short) 3);
         Phrase<V> bluetoothRecieveConnection = helper.extractValue(values, new ExprParam(BlocklyConstants.CONNECTION, BlocklyType.NULL));
@@ -81,7 +74,7 @@ public class BluetoothReceiveAction<V> extends Action<V> {
             String bluetoothRecieveDataType = Jaxb2Ast.extractField(fields, BlocklyConstants.TYPE);
             return BluetoothReceiveAction
                 .make(
-                    helper.convertPhraseToExpr(bluetoothRecieveConnection),
+                    Jaxb2Ast.convertPhraseToExpr(bluetoothRecieveConnection),
                     bluetoothRecieveChannel,
                     bluetoothRecieveDataType,
                     Jaxb2Ast.extractBlockProperties(block),
@@ -91,7 +84,7 @@ public class BluetoothReceiveAction<V> extends Action<V> {
             String bluetoothRecieveDataType = Jaxb2Ast.extractField(fields, BlocklyConstants.TYPE);
             return BluetoothReceiveAction
                 .make(
-                    helper.convertPhraseToExpr(bluetoothRecieveConnection),
+                    Jaxb2Ast.convertPhraseToExpr(bluetoothRecieveConnection),
                     bluetoothReceiveChannel,
                     bluetoothRecieveDataType,
                     Jaxb2Ast.extractBlockProperties(block),

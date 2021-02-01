@@ -1,0 +1,30 @@
+
+Var [two] := FunctionExpr [ListGetIndex [GET, FROM_START, [MethodExpr [MethodCall [getList, , , ARRAY_NUMBER]], NumConst [1]]]]
+
+
+Var [summe] := Binary [ADD, Var [two], MethodExpr [MethodCall [get3, , , NUMBER]]]
+
+
+StmtTextComment [5]
+
+if Binary [EQ, MethodExpr [MethodCall [getString, , , STRING]], StringConst [++--]]
+,then
+exprStmt Binary [MATH_CHANGE, Var [summe], NumConst [4]]
+
+
+StmtTextComment [9]
+
+exprStmt Binary [MATH_CHANGE, Var [summe], FunctionExpr [ListGetIndex [GET, FROM_START, [MethodExpr [MethodCall [getListUpd1To8, Var [x2], Var [liste00], ARRAY_NUMBER]], NumConst [1]]]]]
+
+StmtTextComment [17]
+
+exprStmt Binary [MATH_CHANGE, Var [summe], MethodExpr [MethodCall [getParmPlus6, Var [x1], NumConst [1], NUMBER]]]
+
+StmtTextComment [24]
+
+if Binary [EQ, MethodExpr [MethodCall [getStringAppPP, Var [x3], StringConst [--], STRING]], StringConst [--++]]
+,then
+exprStmt Binary [MATH_CHANGE, Var [summe], NumConst [11]]
+
+
+StmtTextComment [35]

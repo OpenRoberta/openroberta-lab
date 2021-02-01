@@ -154,7 +154,7 @@ public interface ISensorVisitor<V> extends IHardwareVisitor<V> {
      *
      * @param accelerometerSensor to be visited
      */
-    default V visitAccelerometer(AccelerometerSensor<V> accelerometerSensor) {
+    default V visitAccelerometerSensor(AccelerometerSensor<V> accelerometerSensor) {
         throw new DbcException("AccelerometerSensor not implemented!");
     }
 

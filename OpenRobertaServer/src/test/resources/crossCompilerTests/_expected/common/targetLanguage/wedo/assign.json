@@ -1,0 +1,22 @@
+{"ops": [
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "0"
+  },
+  {
+    "opc": "VarDeclaration",
+    "name": "n",
+    "type": "NUMBER"
+  },
+  {
+    "opc": "expr",
+    "name": "n",
+    "expr": "Var"
+  },
+  {
+    "opc": "AssignStmt",
+    "name": "n"
+  },
+  {"opc": "stop"}
+]}

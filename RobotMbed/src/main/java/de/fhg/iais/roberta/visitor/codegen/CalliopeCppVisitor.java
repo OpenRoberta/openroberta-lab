@@ -102,8 +102,8 @@ import de.fhg.iais.roberta.syntax.sensor.mbed.RadioRssiSensor;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.visitor.IVisitor;
-import de.fhg.iais.roberta.visitor.collect.CalliopeMethods;
-import de.fhg.iais.roberta.visitor.hardware.IMbedVisitor;
+import de.fhg.iais.roberta.visitor.CalliopeMethods;
+import de.fhg.iais.roberta.visitor.IMbedVisitor;
 import de.fhg.iais.roberta.visitor.lang.codegen.prog.AbstractCppVisitor;
 
 /**
@@ -377,7 +377,7 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
 
     @Override
     public Void visitLightStatusAction(LightStatusAction<Void> lightStatusAction) {
-        String port = lightStatusAction.getPort();
+        String port = lightStatusAction.getUserDefinedPort();
         ConfigurationComponent confComp = this.robotConfiguration.getConfigurationComponent(port);
         String pin1 = confComp.getComponentType().equals("CALLIBOT") ? getCallibotPin(confComp, port) : "0";
         switch ( pin1 ) {
@@ -500,7 +500,7 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
 
     @Override
     public Void visitKeysSensor(KeysSensor<Void> keysSensor) {
-        String port = keysSensor.getPort();
+        String port = keysSensor.getUserDefinedPort();
         ConfigurationComponent configurationComponent = this.robotConfiguration.getConfigurationComponent(port);
         String pin1 = configurationComponent.getProperty("PIN1");
         this.sb.append("_uBit.button").append(pin1).append(".isPressed()");
@@ -543,7 +543,7 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
 
     @Override
     public Void visitUltrasonicSensor(UltrasonicSensor<Void> ultrasonicSensor) {
-        String port = ultrasonicSensor.getPort();
+        String port = ultrasonicSensor.getUserDefinedPort();
         ConfigurationComponent confComp = this.robotConfiguration.getConfigurationComponent(port);
         String pin1 = confComp.getComponentType().equals("CALLIBOT") ? getCallibotPin(confComp, port) : confComp.getProperty("PIN1");
         switch ( pin1 ) {
@@ -561,7 +561,7 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
 
     @Override
     public Void visitInfraredSensor(InfraredSensor<Void> infraredSensor) {
-        String port = infraredSensor.getPort();
+        String port = infraredSensor.getUserDefinedPort();
         ConfigurationComponent confComp = this.robotConfiguration.getConfigurationComponent(port);
         String pin1 = confComp.getComponentType().equals("CALLIBOT") ? getCallibotPin(confComp, port) : confComp.getProperty("PIN1");
         if ( pin1.equals("1") || pin1.contentEquals("2") ) {
@@ -603,13 +603,13 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
 
     @Override
     public Void visitPinTouchSensor(PinTouchSensor<Void> pinTouchSensor) {
-        this.sb.append("_uBit.io." + PIN_MAP.get(pinTouchSensor.getPort()) + ".isTouched()");
+        this.sb.append("_uBit.io." + PIN_MAP.get(pinTouchSensor.getUserDefinedPort()) + ".isTouched()");
         return null;
     }
 
     @Override
     public Void visitPinGetValueSensor(PinGetValueSensor<Void> pinValueSensor) {
-        String port = pinValueSensor.getPort();
+        String port = pinValueSensor.getUserDefinedPort();
         ConfigurationComponent configurationComponent = this.robotConfiguration.getConfigurationComponent(port);
         String pin1 = configurationComponent.getProperty("PIN1");
         String mode = pinValueSensor.getMode();
@@ -701,7 +701,7 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
             nlIndent();
             this.sb.append("_uBit.radio.enable();");
         }
-        if ( this.getBean(UsedHardwareBean.class).isSensorUsed(SC.ACCELEROMETER) ) {
+        if ( this.getBean(UsedHardwareBean.class).isSensorUsed(SC.ACCELEROMETER) || this.getBean(UsedHardwareBean.class).isSensorUsed(SC.COMPASS) ) {
             nlIndent();
             this.sb.append("_uBit.accelerometer.updateSample();");
         }
@@ -877,7 +877,7 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
 
     @Override
     public Void visitLedOnAction(LedOnAction<Void> ledOnAction) {
-        String port = ledOnAction.getPort();
+        String port = ledOnAction.getUserDefinedPort();
         ConfigurationComponent confComp = this.robotConfiguration.getConfigurationComponent(port);
         String pin1 = confComp.getComponentType().equals("CALLIBOT") ? getCallibotPin(confComp, port) : "0";
         switch ( pin1 ) {
@@ -977,7 +977,7 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
     }
 
     @Override
-    public Void visitAccelerometer(AccelerometerSensor<Void> accelerometerSensor) {
+    public Void visitAccelerometerSensor(AccelerometerSensor<Void> accelerometerSensor) {
         this.sb.append("_uBit.accelerometer.get");
         if ( accelerometerSensor.getSlot().equals("STRENGTH") ) {
             this.sb.append("Strength");
@@ -1384,7 +1384,7 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
 
     @Override
     public Void visitServoSetAction(ServoSetAction<Void> servoSetAction) {
-        String port = servoSetAction.getPort();
+        String port = servoSetAction.getUserDefinedPort();
         ConfigurationComponent confComp = this.robotConfiguration.getConfigurationComponent(port);
         String pin1 = confComp.getComponentType().equals("CALLIBOT") ? getCallibotPin(confComp, port) : confComp.getProperty("PIN1");
         if ( pin1.equals("0x14") || pin1.equals("0x15") ) {

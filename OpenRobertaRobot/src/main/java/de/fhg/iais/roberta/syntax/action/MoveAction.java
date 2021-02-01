@@ -3,8 +3,9 @@ package de.fhg.iais.roberta.syntax.action;
 import de.fhg.iais.roberta.syntax.BlockType;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
+import de.fhg.iais.roberta.syntax.WithUserDefinedPort;
 
-public abstract class MoveAction<V> extends Action<V> {
+public abstract class MoveAction<V> extends Action<V> implements WithUserDefinedPort<V> {
     private final String port;
 
     public MoveAction(String port, BlockType kind, BlocklyBlockProperties properties, BlocklyComment comment) {
@@ -18,5 +19,4 @@ public abstract class MoveAction<V> extends Action<V> {
     public String getUserDefinedPort() {
         return this.port;
     }
-
 }

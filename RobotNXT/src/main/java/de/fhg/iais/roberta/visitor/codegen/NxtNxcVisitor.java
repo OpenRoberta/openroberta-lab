@@ -320,19 +320,19 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
     public Void visitShowTextAction(ShowTextAction<Void> showTextAction) {
         this.sb.append(NxtNxcVisitor.getMethodForShowText(showTextAction));
         this.sb.append("(");
-        showTextAction.getX().accept(this);
+        showTextAction.x.accept(this);
         this.sb.append(", (MAXLINES - ");
-        showTextAction.getY().accept(this);
+        showTextAction.y.accept(this);
 
         this.sb.append(") * MAXLINES, ");
-        showTextAction.getMsg().accept(this);
+        showTextAction.msg.accept(this);
         this.sb.append(");");
         return null;
     }
 
     public static String getMethodForShowText(ShowTextAction<Void> showTextAction) {
         String methodName;
-        switch ( showTextAction.getMsg().getVarType() ) {
+        switch ( showTextAction.msg.getVarType() ) {
             case ARRAY_STRING:
             case STRING:
                 methodName = "TextOut";
@@ -345,47 +345,47 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
                 methodName = "ColorOut";
                 break;
             case NOTHING:
-                if ( showTextAction.getMsg().getProperty().getBlockType().contains("isPressed")
-                    || showTextAction.getMsg().getProperty().getBlockType().contains("logic_ternary") ) {
+                if ( showTextAction.msg.getProperty().getBlockType().contains("isPressed")
+                    || showTextAction.msg.getProperty().getBlockType().contains("logic_ternary") ) {
                     methodName = "BoolOut";
-                } else if ( showTextAction.getMsg().getProperty().getBlockType().contains("colour") ) {
+                } else if ( showTextAction.msg.getProperty().getBlockType().contains("colour") ) {
                     methodName = "ColorOut";
-                } else if ( showTextAction.getMsg().getProperty().getBlockType().contains("robSensors")
-                    || showTextAction.getMsg().getProperty().getBlockType().contains("robActions")
-                    || showTextAction.getMsg().toString().contains("POWER") ) {
+                } else if ( showTextAction.msg.getProperty().getBlockType().contains("robSensors")
+                    || showTextAction.msg.getProperty().getBlockType().contains("robActions")
+                    || showTextAction.msg.toString().contains("POWER") ) {
                     methodName = "NumOut";
                 } else {
                     methodName = "TextOut";
                 }
                 break;
             case CAPTURED_TYPE:
-                if ( showTextAction.getMsg().toString().contains("Number")
-                    || showTextAction.getMsg().toString().contains("ADD")
-                    || showTextAction.getMsg().toString().contains("MINUS")
-                    || showTextAction.getMsg().toString().contains("MULTIPLY")
-                    || showTextAction.getMsg().toString().contains("DIVIDE")
-                    || showTextAction.getMsg().toString().contains("MOD")
-                    || showTextAction.getMsg().toString().contains("NEG")
-                    || showTextAction.getMsg().toString().contains("LISTS_LENGTH")
-                    || showTextAction.getMsg().toString().contains("IndexOfFunct")
-                    || showTextAction.getMsg().toString().contains("[ListGetIndex [GET, FROM_START, [ListCreate [NUMBER")
-                    || showTextAction.getMsg().toString().contains("[ListGetIndex [GET, FROM_START, [ListCreate [CONNECTION")
-                    || showTextAction.getMsg().toString().contains("MotorGetPower")
-                    || showTextAction.getMsg().toString().contains("VolumeAction") ) {
+                if ( showTextAction.msg.toString().contains("Number")
+                    || showTextAction.msg.toString().contains("ADD")
+                    || showTextAction.msg.toString().contains("MINUS")
+                    || showTextAction.msg.toString().contains("MULTIPLY")
+                    || showTextAction.msg.toString().contains("DIVIDE")
+                    || showTextAction.msg.toString().contains("MOD")
+                    || showTextAction.msg.toString().contains("NEG")
+                    || showTextAction.msg.toString().contains("LISTS_LENGTH")
+                    || showTextAction.msg.toString().contains("IndexOfFunct")
+                    || showTextAction.msg.toString().contains("[ListGetIndex [GET, FROM_START, [ListCreate [NUMBER")
+                    || showTextAction.msg.toString().contains("[ListGetIndex [GET, FROM_START, [ListCreate [CONNECTION")
+                    || showTextAction.msg.toString().contains("MotorGetPower")
+                    || showTextAction.msg.toString().contains("VolumeAction") ) {
                     methodName = "NumOut";
-                } else if ( showTextAction.getMsg().toString().contains("Boolean")
-                    || showTextAction.getMsg().toString().contains("EQ")
-                    || showTextAction.getMsg().toString().contains("NEQ")
-                    || showTextAction.getMsg().toString().contains("LT")
-                    || showTextAction.getMsg().toString().contains("LTE")
-                    || showTextAction.getMsg().toString().contains("GT")
-                    || showTextAction.getMsg().toString().contains("GTE")
-                    || showTextAction.getMsg().toString().contains("LIST_IS_EMPTY")
-                    || showTextAction.getMsg().toString().contains("AND")
-                    || showTextAction.getMsg().toString().contains("OR")
-                    || showTextAction.getMsg().toString().contains("NOT")
-                    || showTextAction.getMsg().toString().contains("[ListGetIndex [GET, FROM_START, [ListCreate [BOOLEAN")
-                    || showTextAction.getMsg().toString().contains("BluetoothConnectAction") ) {
+                } else if ( showTextAction.msg.toString().contains("Boolean")
+                    || showTextAction.msg.toString().contains("EQ")
+                    || showTextAction.msg.toString().contains("NEQ")
+                    || showTextAction.msg.toString().contains("LT")
+                    || showTextAction.msg.toString().contains("LTE")
+                    || showTextAction.msg.toString().contains("GT")
+                    || showTextAction.msg.toString().contains("GTE")
+                    || showTextAction.msg.toString().contains("LIST_IS_EMPTY")
+                    || showTextAction.msg.toString().contains("AND")
+                    || showTextAction.msg.toString().contains("OR")
+                    || showTextAction.msg.toString().contains("NOT")
+                    || showTextAction.msg.toString().contains("[ListGetIndex [GET, FROM_START, [ListCreate [BOOLEAN")
+                    || showTextAction.msg.toString().contains("BluetoothConnectAction") ) {
                     methodName = "BoolOut";
                 } else {
                     methodName = "TextOut";
@@ -696,7 +696,7 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
 
     @Override
     public Void visitLightSensor(LightSensor<Void> lightSensor) {
-        String portName = this.brickConfiguration.getConfigurationComponent(lightSensor.getPort()).getInternalPortName();
+        String portName = this.brickConfiguration.getConfigurationComponent(lightSensor.getUserDefinedPort()).getInternalPortName();
         this.sb.append("_readLightSensor(");
         this.sb.append(portName);
         this.sb.append(", ");
@@ -716,14 +716,14 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
 
     @Override
     public Void visitKeysSensor(KeysSensor<Void> keysSensor) {
-        this.sb.append("ButtonPressed(" + getCodeName(keysSensor.getPort()) + ", false)");
+        this.sb.append("ButtonPressed(" + getCodeName(keysSensor.getUserDefinedPort()) + ", false)");
         return null;
     }
 
     @Override
     public Void visitColorSensor(ColorSensor<Void> colorSensor) {
         this.sb.append("SensorColor(");
-        String portName = this.brickConfiguration.getConfigurationComponent(colorSensor.getPort()).getInternalPortName();
+        String portName = this.brickConfiguration.getConfigurationComponent(colorSensor.getUserDefinedPort()).getInternalPortName();
         this.sb.append(portName).append(", \"").append(colorSensor.getMode()).append("\")");
         return null;
     }
@@ -731,14 +731,14 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
     @Override
     public Void visitHTColorSensor(HTColorSensor<Void> htColorSensor) {
         this.sb.append("SensorHtColor(");
-        String portName = this.brickConfiguration.getConfigurationComponent(htColorSensor.getPort()).getInternalPortName();
+        String portName = this.brickConfiguration.getConfigurationComponent(htColorSensor.getUserDefinedPort()).getInternalPortName();
         this.sb.append(portName).append(", \"").append(htColorSensor.getMode()).append("\")");
         return null;
     }
 
     @Override
     public Void visitSoundSensor(SoundSensor<Void> soundSensor) {
-        String portName = this.brickConfiguration.getConfigurationComponent(soundSensor.getPort()).getInternalPortName();
+        String portName = this.brickConfiguration.getConfigurationComponent(soundSensor.getUserDefinedPort()).getInternalPortName();
         this.sb.append("Sensor(");
         this.sb.append(portName);
         this.sb.append(")");
@@ -747,7 +747,7 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
 
     @Override
     public Void visitEncoderSensor(EncoderSensor<Void> encoderSensor) {
-        String userDefinedPort = encoderSensor.getPort();
+        String userDefinedPort = encoderSensor.getUserDefinedPort();
         String mode = encoderSensor.getMode();
         switch ( mode ) {
             case SC.RESET:
@@ -771,7 +771,7 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
 
     @Override
     public Void visitTimerSensor(TimerSensor<Void> timerSensor) {
-        String timerNumber = timerSensor.getPort();
+        String timerNumber = timerSensor.getUserDefinedPort();
         switch ( timerSensor.getMode() ) {
             case SC.DEFAULT:
             case SC.VALUE:
@@ -788,7 +788,7 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
 
     @Override
     public Void visitTouchSensor(TouchSensor<Void> touchSensor) {
-        String portName = this.brickConfiguration.getConfigurationComponent(touchSensor.getPort()).getInternalPortName();
+        String portName = this.brickConfiguration.getConfigurationComponent(touchSensor.getUserDefinedPort()).getInternalPortName();
         this.sb.append("Sensor(" + portName);
         this.sb.append(")");
         return null;
@@ -796,7 +796,7 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
 
     @Override
     public Void visitUltrasonicSensor(UltrasonicSensor<Void> ultrasonicSensor) {
-        String portName = this.brickConfiguration.getConfigurationComponent(ultrasonicSensor.getPort()).getInternalPortName();
+        String portName = this.brickConfiguration.getConfigurationComponent(ultrasonicSensor.getUserDefinedPort()).getInternalPortName();
         this.sb.append("SensorUS(" + portName + ")");
         return null;
     }

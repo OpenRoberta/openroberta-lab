@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
+import de.fhg.iais.roberta.blockly.generated.Mutation;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
@@ -11,14 +12,12 @@ import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.lang.expr.Assoc;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
-import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
+import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
-import de.fhg.iais.roberta.visitor.IVisitor;
-import de.fhg.iais.roberta.visitor.lang.ILanguageVisitor;
 
 /**
  * This class represents the <b>math_on_list</b> block from Blockly into the AST (abstract syntax tree).<br>
@@ -82,11 +81,6 @@ public class MathOnListFunct<V> extends Function<V> {
     }
 
     @Override
-    protected V acceptImpl(IVisitor<V> visitor) {
-        return ((ILanguageVisitor<V>) visitor).visitMathOnListFunct(this);
-    }
-
-    @Override
     public String toString() {
         return "MathOnListFunct [" + this.functName + ", " + this.param + "]";
     }
@@ -98,7 +92,7 @@ public class MathOnListFunct<V> extends Function<V> {
      * @param helper class for making the transformation
      * @return corresponding AST object
      */
-    public static <V> Phrase<V> jaxbToAst(Block block, AbstractJaxb2Ast<V> helper) {
+    public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
         List<ExprParam> exprParams = new ArrayList<ExprParam>();
         exprParams.add(new ExprParam(BlocklyConstants.LIST, BlocklyType.ARRAY));
         String op = Jaxb2Ast.getOperation(block, BlocklyConstants.OP);
@@ -111,6 +105,9 @@ public class MathOnListFunct<V> extends Function<V> {
         Block jaxbDestination = new Block();
         Ast2Jaxb.setBasicProperties(this, jaxbDestination);
 
+        Mutation mutation = new Mutation();
+        mutation.setOp(getFunctName().name());
+        jaxbDestination.setMutation(mutation);
         Ast2Jaxb.addField(jaxbDestination, BlocklyConstants.OP, getFunctName().name());
         Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.LIST, getParam().get(0));
         return jaxbDestination;

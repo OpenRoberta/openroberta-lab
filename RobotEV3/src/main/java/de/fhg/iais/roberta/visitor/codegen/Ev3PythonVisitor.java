@@ -209,17 +209,17 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
     @Override
     public Void visitShowTextAction(ShowTextAction<Void> showTextAction) {
         this.sb.append("hal.drawText(");
-        if ( !showTextAction.getMsg().getKind().hasName("STRING_CONST") ) {
+        if ( !showTextAction.msg.getKind().hasName("STRING_CONST") ) {
             this.sb.append("str(");
-            showTextAction.getMsg().accept(this);
+            showTextAction.msg.accept(this);
             this.sb.append(")");
         } else {
-            showTextAction.getMsg().accept(this);
+            showTextAction.msg.accept(this);
         }
         this.sb.append(", ");
-        showTextAction.getX().accept(this);
+        showTextAction.x.accept(this);
         this.sb.append(", ");
-        showTextAction.getY().accept(this);
+        showTextAction.y.accept(this);
         this.sb.append(")");
         return null;
     }
@@ -392,10 +392,10 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
     public Void visitKeysSensor(KeysSensor<Void> keysSensor) {
         switch ( keysSensor.getMode() ) {
             case SC.PRESSED:
-                this.sb.append("hal.isKeyPressed('" + keysSensor.getPort().toLowerCase() + "')");
+                this.sb.append("hal.isKeyPressed('" + keysSensor.getUserDefinedPort().toLowerCase() + "')");
                 break;
             case SC.WAIT_FOR_PRESS_AND_RELEASE:
-                this.sb.append("hal.isKeyPressedAndReleased(" + keysSensor.getPort().toLowerCase() + ")");
+                this.sb.append("hal.isKeyPressedAndReleased(" + keysSensor.getUserDefinedPort().toLowerCase() + ")");
                 break;
             default:
                 throw new DbcException("Invalide mode for KeysSensor!");
@@ -405,7 +405,7 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
 
     @Override
     public Void visitColorSensor(ColorSensor<Void> colorSensor) {
-        String colorSensorPort = colorSensor.getPort();
+        String colorSensorPort = colorSensor.getUserDefinedPort();
         String colorSensorMode = colorSensor.getMode();
         String methodName;
         switch ( colorSensorMode ) {
@@ -430,7 +430,7 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
 
     @Override
     public Void visitHTColorSensor(HTColorSensor<Void> htColorSensor) {
-        String colorSensorPort = htColorSensor.getPort();
+        String colorSensorPort = htColorSensor.getUserDefinedPort();
         String colorSensorMode = htColorSensor.getMode();
         String methodName;
         switch ( colorSensorMode ) {
@@ -455,7 +455,7 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
 
     @Override
     public Void visitEncoderSensor(EncoderSensor<Void> encoderSensor) {
-        String encoderSensorPort = encoderSensor.getPort().toString();
+        String encoderSensorPort = encoderSensor.getUserDefinedPort().toString();
         if ( encoderSensor.getMode().equals(SC.RESET) ) {
             this.sb.append("hal.resetMotorTacho('" + encoderSensorPort + "')");
         } else {
@@ -466,7 +466,7 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
 
     @Override
     public Void visitGyroSensor(GyroSensor<Void> gyroSensor) {
-        String gyroSensorPort = gyroSensor.getPort();
+        String gyroSensorPort = gyroSensor.getUserDefinedPort();
         if ( gyroSensor.getMode().equals(SC.RESET) ) {
             this.sb.append("hal.resetGyroSensor('" + gyroSensorPort + "')");
         } else {
@@ -477,7 +477,7 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
 
     @Override
     public Void visitCompassSensor(CompassSensor<Void> compassSensor) {
-        String compassSensorPort = compassSensor.getPort();
+        String compassSensorPort = compassSensor.getUserDefinedPort();
         switch ( compassSensor.getMode() ) {
             case SC.CALIBRATE:
                 // Calibration is not supported by ev3dev hitechnic sensor for now
@@ -494,7 +494,7 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
 
     @Override
     public Void visitInfraredSensor(InfraredSensor<Void> infraredSensor) {
-        String infraredSensorPort = infraredSensor.getPort();
+        String infraredSensorPort = infraredSensor.getUserDefinedPort();
         switch ( infraredSensor.getMode() ) {
             case SC.DISTANCE:
                 this.sb.append("hal.getInfraredSensorDistance('" + infraredSensorPort + "')");
@@ -511,7 +511,7 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
 
     @Override
     public Void visitIRSeekerSensor(IRSeekerSensor<Void> irSeekerSensor) {
-        String irSeekerSensorPort = irSeekerSensor.getPort();
+        String irSeekerSensorPort = irSeekerSensor.getUserDefinedPort();
         switch ( irSeekerSensor.getMode() ) {
             case SC.MODULATED:
                 this.sb.append("hal.getHiTecIRSeekerSensorValue('" + irSeekerSensorPort + "', 'AC')");
@@ -527,7 +527,7 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
 
     @Override
     public Void visitTimerSensor(TimerSensor<Void> timerSensor) {
-        String timerNumber = timerSensor.getPort();
+        String timerNumber = timerSensor.getUserDefinedPort();
         switch ( timerSensor.getMode() ) {
             case SC.DEFAULT:
             case SC.VALUE:
@@ -544,13 +544,13 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
 
     @Override
     public Void visitTouchSensor(TouchSensor<Void> touchSensor) {
-        this.sb.append("hal.isPressed('" + touchSensor.getPort() + "')");
+        this.sb.append("hal.isPressed('" + touchSensor.getUserDefinedPort() + "')");
         return null;
     }
 
     @Override
     public Void visitUltrasonicSensor(UltrasonicSensor<Void> ultrasonicSensor) {
-        String ultrasonicSensorPort = ultrasonicSensor.getPort();
+        String ultrasonicSensorPort = ultrasonicSensor.getUserDefinedPort();
         if ( ultrasonicSensor.getMode().equals(SC.DISTANCE) ) {
             this.sb.append("hal.getUltraSonicSensorDistance('" + ultrasonicSensorPort + "')");
         } else {
@@ -561,7 +561,7 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
 
     @Override
     public Void visitSoundSensor(SoundSensor<Void> soundSensor) {
-        String soundSensorPort = soundSensor.getPort();
+        String soundSensorPort = soundSensor.getUserDefinedPort();
         this.sb.append("hal.getSoundLevel('" + soundSensorPort + "')");
         return null;
     }

@@ -10,13 +10,11 @@ import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.syntax.lang.stmt.Stmt;
-import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
+import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
-import de.fhg.iais.roberta.visitor.IVisitor;
-import de.fhg.iais.roberta.visitor.hardware.IArduinoVisitor;
 
 public class NeuralNetworkAddTrainingsData<V> extends Stmt<V> {
     private Expr<V> classNumber;
@@ -40,11 +38,6 @@ public class NeuralNetworkAddTrainingsData<V> extends Stmt<V> {
         return new StringBuilder().append("NeuralNetworkAddTrainingsData [ ").append(this.classNumber).append("]").toString();
     }
 
-    @Override
-    protected V acceptImpl(IVisitor<V> visitor) {
-        return ((IArduinoVisitor<V>) visitor).visitNeuralNetworkAddTrainingsData(this);
-    }
-
     /**
      * Transformation from JAXB object to corresponding AST object.
      *
@@ -52,9 +45,9 @@ public class NeuralNetworkAddTrainingsData<V> extends Stmt<V> {
      * @param helper class for making the transformation
      * @return corresponding AST object
      */
-    public static <V> Phrase<V> jaxbToAst(Block block, AbstractJaxb2Ast<V> helper) {
+    public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
         List<Value> values = Jaxb2Ast.extractValues(block, (short) 1);
-        Expr<V> classNumber = helper.convertPhraseToExpr(helper.extractValue(values, new ExprParam("NN_CLASS_NUMBER", BlocklyType.CAPTURED_TYPE)));
+        Expr<V> classNumber = Jaxb2Ast.convertPhraseToExpr(helper.extractValue(values, new ExprParam("NN_CLASS_NUMBER", BlocklyType.CAPTURED_TYPE)));
         return NeuralNetworkAddTrainingsData.make(classNumber, Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
     }
 

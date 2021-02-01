@@ -62,7 +62,7 @@ public class MbotCppStackMachineVisitor<V> extends AbstractStackMachineVisitor<V
 
     @Override
     public V visitTimerSensor(TimerSensor<V> timerSensor) {
-        String port = timerSensor.getPort();
+        String port = timerSensor.getUserDefinedPort();
         JSONObject o;
         if ( timerSensor.getMode().equals(SC.DEFAULT) || timerSensor.getMode().equals(SC.VALUE) ) {
             o = makeLeaf(C.GET_SAMPLE, timerSensor).put(C.GET_SAMPLE, C.TIMER).put(C.PORT, port).put(C.NAME, "mbot");
@@ -75,14 +75,14 @@ public class MbotCppStackMachineVisitor<V> extends AbstractStackMachineVisitor<V
     @Override
     public V visitUltrasonicSensor(UltrasonicSensor<V> ultrasonicSensor) {
         String mode = ultrasonicSensor.getMode();
-        String port = ultrasonicSensor.getPort();
+        String port = ultrasonicSensor.getUserDefinedPort();
         JSONObject o = makeLeaf(C.GET_SAMPLE, ultrasonicSensor).put(C.GET_SAMPLE, C.ULTRASONIC).put(C.PORT, port).put(C.MODE, mode.toLowerCase()).put(C.NAME, "mbot");
         return app(o);
     }
 
     @Override
     public V visitInfraredSensor(InfraredSensor<V> infraredSensor) {
-        String port = infraredSensor.getPort();
+        String port = infraredSensor.getUserDefinedPort();
         String slot = infraredSensor.getSlot();
         if ( slot.equals("1") ) {
             slot = C.LEFT;
@@ -107,7 +107,7 @@ public class MbotCppStackMachineVisitor<V> extends AbstractStackMachineVisitor<V
         JSONObject o =
             makeLeaf(C.STATUS_LIGHT_ACTION, lightStatusAction)
                 .put(C.MODE, lightStatusAction.getStatus())
-                .put(C.PORT, lightStatusAction.getPort())
+                .put(C.PORT, lightStatusAction.getUserDefinedPort())
                 .put(C.NAME, "mbot");
         return app(o);
     }

@@ -16,14 +16,12 @@ import de.fhg.iais.roberta.syntax.MotionParam;
 import de.fhg.iais.roberta.syntax.MotorDuration;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.Action;
-import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
+import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
-import de.fhg.iais.roberta.visitor.IVisitor;
-import de.fhg.iais.roberta.visitor.hardware.actor.IDifferentialMotorVisitor;
 
 /**
  * This class represents the <b>robActions_motorDiff_turn</b> and <b>robActions_motorDiff_turn_for</b> blocks from Blockly into the AST (abstract syntax tree).
@@ -76,11 +74,6 @@ public class TurnAction<V> extends Action<V> {
         return "TurnAction [direction=" + this.direction + ", param=" + this.param + "]";
     }
 
-    @Override
-    protected V acceptImpl(IVisitor<V> visitor) {
-        return ((IDifferentialMotorVisitor<V>) visitor).visitTurnAction(this);
-    }
-
     /**
      * Transformation from JAXB object to corresponding AST object.
      *
@@ -88,7 +81,7 @@ public class TurnAction<V> extends Action<V> {
      * @param helper class for making the transformation
      * @return corresponding AST object
      */
-    public static <V> Phrase<V> jaxbToAst(Block block, AbstractJaxb2Ast<V> helper) {
+    public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
         List<Field> fields;
         String mode;
         List<Value> values;
@@ -100,13 +93,13 @@ public class TurnAction<V> extends Action<V> {
         if ( block.getType().equals(BlocklyConstants.ROB_ACTIONS_MOTOR_DIFF_TURN) ) {
             values = Jaxb2Ast.extractValues(block, (short) 1);
             Phrase<V> expr = helper.extractValue(values, new ExprParam(BlocklyConstants.POWER, BlocklyType.NUMBER_INT));
-            mp = new MotionParam.Builder<V>().speed(helper.convertPhraseToExpr(expr)).build();
+            mp = new MotionParam.Builder<V>().speed(Jaxb2Ast.convertPhraseToExpr(expr)).build();
         } else {
             values = Jaxb2Ast.extractValues(block, (short) 2);
             Phrase<V> left = helper.extractValue(values, new ExprParam(BlocklyConstants.POWER, BlocklyType.NUMBER_INT));
             Phrase<V> right = helper.extractValue(values, new ExprParam(BlocklyConstants.DEGREE, BlocklyType.NUMBER_INT));
-            MotorDuration<V> md = new MotorDuration<V>(factory.getMotorMoveMode("DEGREE"), helper.convertPhraseToExpr(right));
-            mp = new MotionParam.Builder<V>().speed(helper.convertPhraseToExpr(left)).duration(md).build();
+            MotorDuration<V> md = new MotorDuration<V>(factory.getMotorMoveMode("DEGREE"), Jaxb2Ast.convertPhraseToExpr(right));
+            mp = new MotionParam.Builder<V>().speed(Jaxb2Ast.convertPhraseToExpr(left)).duration(md).build();
         }
         return TurnAction.make(factory.getTurnDirection(mode), mp, Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
     }

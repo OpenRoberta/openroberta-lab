@@ -57,11 +57,10 @@ public class ShareRequest extends BaseRequest {
     }
 
     /**
-     * merge the properties of a JSON-object into this bean. The bean must be "under construction". The keys of the JSON-Object must be valid. The bean remains
-     * "under construction".<br>
+     * merge the properties of a JSON-object into this bean. The bean must be "under construction".
+     * The keys of the JSON-Object must be valid. The bean remains "under construction".<br>
      * Throws a runtime exception if inconsistencies are detected.
      */
-    @Override
     public ShareRequest merge(JSONObject jsonO) {
         try {
             for ( String key : JSONObject.getNames(jsonO) ) {
@@ -87,7 +86,6 @@ public class ShareRequest extends BaseRequest {
      * Checks whether all required fields are set. All lists are made immutable.<br>
      * Throws a runtime exception if inconsistencies are detected.
      */
-    @Override
     public ShareRequest immutable() {
         if ( this.immutable ) {
             return this;
@@ -105,10 +103,10 @@ public class ShareRequest extends BaseRequest {
         if ( !this.immutable ) {
             _message = "ShareRequest-object is already immutable: " + toString();
         }
-        if ( this.programName == null ) {
+        if ( programName == null ) {
             _message = "required property programName of ShareRequest-object is not set: " + toString();
         }
-        if ( this.shareData == null ) {
+        if ( shareData == null ) {
             _message = "required property shareData of ShareRequest-object is not set: " + toString();
         }
         if ( _message != null ) {
@@ -164,7 +162,6 @@ public class ShareRequest extends BaseRequest {
      * generates a JSON-object from an immutable bean.<br>
      * Throws a runtime exception if inconsistencies are detected.
      */
-    @Override
     public JSONObject toJson() {
         if ( !this.immutable ) {
             throw new RuntimeException("no JSON from an object under construction: " + toString());

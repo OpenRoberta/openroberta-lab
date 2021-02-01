@@ -74,7 +74,7 @@ public class MbotSimValidatorVisitor extends AbstractSimValidatorVisitor impleme
 
     @Override
     protected void checkSensorPort(ExternalSensor<Void> sensor) {
-        ConfigurationComponent usedSensor = this.robotConfiguration.optConfigurationComponent("ORT_" + sensor.getPort());
+        ConfigurationComponent usedSensor = this.robotConfiguration.optConfigurationComponent("ORT_" + sensor.getUserDefinedPort());
         if ( usedSensor == null ) {
             if ( sensor.getKind().hasName("INFRARED_SENSING") ) {
                 sensor.addInfo(NepoInfo.warning("SIM_CONFIGURATION_WARNING_WRONG_INFRARED_SENSOR_PORT"));

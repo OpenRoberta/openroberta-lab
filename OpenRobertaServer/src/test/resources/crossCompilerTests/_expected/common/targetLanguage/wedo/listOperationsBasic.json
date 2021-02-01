@@ -1,0 +1,421 @@
+{"ops": [
+  {
+    "NUMBER": 0,
+    "opc": "expr",
+    "expr": "createList"
+  },
+  {
+    "opc": "VarDeclaration",
+    "name": "initialEmptyNumbers",
+    "type": "ARRAY_NUMBER"
+  },
+  {
+    "NUMBER": 0,
+    "opc": "expr",
+    "expr": "createList"
+  },
+  {
+    "opc": "VarDeclaration",
+    "name": "initialEmptyBoolean",
+    "type": "ARRAY_BOOLEAN"
+  },
+  {
+    "NUMBER": 0,
+    "opc": "expr",
+    "expr": "createList"
+  },
+  {
+    "opc": "VarDeclaration",
+    "name": "initialEmptyStrings",
+    "type": "ARRAY_STRING"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "3"
+  },
+  {
+    "opc": "VarDeclaration",
+    "name": "number",
+    "type": "NUMBER"
+  },
+  {
+    "opc": "expr",
+    "expr": "BOOL_CONST",
+    "value": true
+  },
+  {
+    "opc": "VarDeclaration",
+    "name": "bool",
+    "type": "BOOLEAN"
+  },
+  {
+    "opc": "expr",
+    "expr": "STRING_CONST",
+    "value": "c"
+  },
+  {
+    "opc": "VarDeclaration",
+    "name": "string",
+    "type": "STRING"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "0"
+  },
+  {
+    "opc": "VarDeclaration",
+    "name": "item",
+    "type": "NUMBER"
+  },
+  {
+    "opc": "comment",
+    "value": "Basis List Operations START"
+  },
+  {
+    "opc": "comment",
+    "target": "IfStatement"
+  },
+  {
+    "opc": "expr",
+    "name": "initialEmptyNumbers",
+    "expr": "Var"
+  },
+  {
+    "op": "list_is_empty",
+    "opc": "expr",
+    "expr": "list_operation"
+  },
+  {
+    "opc": "jump",
+    "conditional": false,
+    "target": 38
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "1"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "2"
+  },
+  {
+    "NUMBER": 2,
+    "opc": "expr",
+    "expr": "createList"
+  },
+  {
+    "opc": "AssignStmt",
+    "name": "initialEmptyNumbers"
+  },
+  {
+    "opc": "expr",
+    "name": "initialEmptyNumbers",
+    "expr": "Var"
+  },
+  {
+    "op": "list_length",
+    "opc": "expr",
+    "expr": "list_operation"
+  },
+  {
+    "opc": "AssignStmt",
+    "name": "item"
+  },
+  {
+    "opc": "expr",
+    "name": "initialEmptyNumbers",
+    "expr": "Var"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "1"
+  },
+  {
+    "op": "list_find_item",
+    "opc": "expr",
+    "expr": "list_operation",
+    "position": "first"
+  },
+  {
+    "opc": "AssignStmt",
+    "name": "item"
+  },
+  {
+    "opc": "expr",
+    "name": "initialEmptyNumbers",
+    "expr": "Var"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "5"
+  },
+  {
+    "op": "list_find_item",
+    "opc": "expr",
+    "expr": "list_operation",
+    "position": "first"
+  },
+  {
+    "opc": "AssignStmt",
+    "name": "item"
+  },
+  {
+    "opc": "expr",
+    "name": "initialEmptyNumbers",
+    "expr": "Var"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "2"
+  },
+  {
+    "op": "set",
+    "opc": "list_operation",
+    "position": "first"
+  },
+  {
+    "opc": "jump",
+    "conditional": "always",
+    "target": 38
+  },
+  {
+    "opc": "comment",
+    "target": "IfStatement"
+  },
+  {
+    "opc": "expr",
+    "name": "initialEmptyBoolean",
+    "expr": "Var"
+  },
+  {
+    "op": "list_is_empty",
+    "opc": "expr",
+    "expr": "list_operation"
+  },
+  {
+    "opc": "jump",
+    "conditional": false,
+    "target": 61
+  },
+  {
+    "opc": "expr",
+    "expr": "BOOL_CONST",
+    "value": true
+  },
+  {
+    "opc": "expr",
+    "expr": "BOOL_CONST",
+    "value": false
+  },
+  {
+    "NUMBER": 2,
+    "opc": "expr",
+    "expr": "createList"
+  },
+  {
+    "opc": "AssignStmt",
+    "name": "initialEmptyBoolean"
+  },
+  {
+    "opc": "expr",
+    "name": "initialEmptyBoolean",
+    "expr": "Var"
+  },
+  {
+    "op": "list_length",
+    "opc": "expr",
+    "expr": "list_operation"
+  },
+  {
+    "opc": "AssignStmt",
+    "name": "item"
+  },
+  {
+    "opc": "expr",
+    "name": "initialEmptyBoolean",
+    "expr": "Var"
+  },
+  {
+    "opc": "expr",
+    "name": "bool",
+    "expr": "Var"
+  },
+  {
+    "op": "list_find_item",
+    "opc": "expr",
+    "expr": "list_operation",
+    "position": "first"
+  },
+  {
+    "opc": "AssignStmt",
+    "name": "item"
+  },
+  {
+    "opc": "expr",
+    "name": "initialEmptyBoolean",
+    "expr": "Var"
+  },
+  {
+    "opc": "expr",
+    "expr": "C.NULL_CONST"
+  },
+  {
+    "op": "list_find_item",
+    "opc": "expr",
+    "expr": "list_operation",
+    "position": "first"
+  },
+  {
+    "opc": "AssignStmt",
+    "name": "item"
+  },
+  {
+    "opc": "expr",
+    "name": "initialEmptyBoolean",
+    "expr": "Var"
+  },
+  {
+    "opc": "expr",
+    "expr": "BOOL_CONST",
+    "value": true
+  },
+  {
+    "op": "insert",
+    "opc": "list_operation",
+    "position": "last"
+  },
+  {
+    "opc": "jump",
+    "conditional": "always",
+    "target": 61
+  },
+  {
+    "opc": "comment",
+    "target": "IfStatement"
+  },
+  {
+    "opc": "expr",
+    "name": "initialEmptyStrings",
+    "expr": "Var"
+  },
+  {
+    "op": "list_is_empty",
+    "opc": "expr",
+    "expr": "list_operation"
+  },
+  {
+    "opc": "jump",
+    "conditional": false,
+    "target": 85
+  },
+  {
+    "opc": "expr",
+    "expr": "STRING_CONST",
+    "value": "a"
+  },
+  {
+    "opc": "expr",
+    "expr": "STRING_CONST",
+    "value": "b"
+  },
+  {
+    "NUMBER": 2,
+    "opc": "expr",
+    "expr": "createList"
+  },
+  {
+    "opc": "AssignStmt",
+    "name": "initialEmptyStrings"
+  },
+  {
+    "opc": "expr",
+    "name": "initialEmptyStrings",
+    "expr": "Var"
+  },
+  {
+    "op": "list_length",
+    "opc": "expr",
+    "expr": "list_operation"
+  },
+  {
+    "opc": "AssignStmt",
+    "name": "item"
+  },
+  {
+    "opc": "expr",
+    "name": "initialEmptyStrings",
+    "expr": "Var"
+  },
+  {
+    "opc": "expr",
+    "expr": "STRING_CONST",
+    "value": "a"
+  },
+  {
+    "op": "list_find_item",
+    "opc": "expr",
+    "expr": "list_operation",
+    "position": "first"
+  },
+  {
+    "opc": "AssignStmt",
+    "name": "item"
+  },
+  {
+    "opc": "expr",
+    "name": "initialEmptyStrings",
+    "expr": "Var"
+  },
+  {
+    "opc": "expr",
+    "expr": "STRING_CONST",
+    "value": "c"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "2"
+  },
+  {
+    "op": "set",
+    "opc": "list_operation",
+    "position": "from_end"
+  },
+  {
+    "opc": "expr",
+    "name": "initialEmptyStrings",
+    "expr": "Var"
+  },
+  {
+    "opc": "expr",
+    "expr": "STRING_CONST",
+    "value": "d"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "1"
+  },
+  {
+    "op": "insert",
+    "opc": "list_operation",
+    "position": "from_end"
+  },
+  {
+    "opc": "jump",
+    "conditional": "always",
+    "target": 85
+  },
+  {
+    "opc": "comment",
+    "value": "Basis List Operations END"
+  },
+  {"opc": "stop"}
+]}

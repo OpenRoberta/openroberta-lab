@@ -2,7 +2,7 @@ package de.fhg.iais.roberta.syntax.codegen.WeDo.ast;
 
 import org.junit.Test;
 
-import de.fhg.iais.roberta.ast.AstTest;
+import de.fhg.iais.roberta.AstTest;
 import de.fhg.iais.roberta.util.test.UnitTestHelper;
 
 public class WeDoConfigCompTest extends AstTest {

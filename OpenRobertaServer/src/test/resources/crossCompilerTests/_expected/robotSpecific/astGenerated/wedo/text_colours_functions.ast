@@ -1,0 +1,7 @@
+MethodCall [text, , , VOID]
+MethodCall [colour, , , VOID]
+MethodCall [parameters, Var [x], Var [x2], Var [x3], Var [x4], Var [numVar], Var [boolVar], Var [stringVar], Var [colourVar], VOID]
+ShowTextAction[msg: MethodExpr [MethodCall [function_return_numberVar, , , NUMBER]], x: EmptyExpr [defVal=NUMBER_INT], y: EmptyExpr [defVal=NUMBER_INT], port: - EMPTY_PORT -]
+ShowTextAction[msg: MethodExpr [MethodCall [function_return_booleanVar, , , BOOLEAN]], x: EmptyExpr [defVal=NUMBER_INT], y: EmptyExpr [defVal=NUMBER_INT], port: - EMPTY_PORT -]
+ShowTextAction[msg: MethodExpr [MethodCall [function_return_stringVar, , , STRING]], x: EmptyExpr [defVal=NUMBER_INT], y: EmptyExpr [defVal=NUMBER_INT], port: - EMPTY_PORT -]
+ShowTextAction[msg: MethodExpr [MethodCall [function_return_colourVar, , , COLOR]], x: EmptyExpr [defVal=NUMBER_INT], y: EmptyExpr [defVal=NUMBER_INT], port: - EMPTY_PORT -]

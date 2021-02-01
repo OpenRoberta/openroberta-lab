@@ -32,8 +32,8 @@ public class CalliopeTwo2ThreeTransformerTest {
     public void executeTransformer_ShouldReturnTransformedCompass_WhenGivenOldCompass() {
         String expectedProgramAst =
             "BlockAST[project=[[Location[x=549,y=76],MainTask[],"
-                + "DebugAction[SensorExpr[CompassSensor[_C,ANGLE,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[GetSampleSensor[CompassSensor[_C,ANGLE,EMPTY_SLOT]]]]]]]";
+                + "DebugAction[SensorExpr[CompassSensor[_C,ANGLE,- EMPTY_SLOT -]]],"
+                + "DebugAction[SensorExpr[GetSampleSensor[CompassSensor[_C,ANGLE,- EMPTY_SLOT -]]]]]]]";
         String[] expectedToBeInConfigAst =
             {
                 "ConfigurationComponent[componentType=COMPASS,isActor=true,userDefinedName=_C,portName=_C,componentProperties={}]"
@@ -53,10 +53,10 @@ public class CalliopeTwo2ThreeTransformerTest {
     public void executeTransformer_ShouldReturnTransformedKey_WhenGivenOldKey() {
         String expectedProgramAst =
             "BlockAST[project=[[Location[x=549,y=76],MainTask[],"
-                + "DebugAction[SensorExpr[KeysSensor[A,PRESSED,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[KeysSensor[B,PRESSED,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[GetSampleSensor[KeysSensor[A,PRESSED,EMPTY_SLOT]]]],"
-                + "DebugAction[SensorExpr[GetSampleSensor[KeysSensor[B,PRESSED,EMPTY_SLOT]]]]]]]";
+                + "DebugAction[SensorExpr[KeysSensor[A,PRESSED,- EMPTY_SLOT -]]],"
+                + "DebugAction[SensorExpr[KeysSensor[B,PRESSED,- EMPTY_SLOT -]]],"
+                + "DebugAction[SensorExpr[GetSampleSensor[KeysSensor[A,PRESSED,- EMPTY_SLOT -]]]],"
+                + "DebugAction[SensorExpr[GetSampleSensor[KeysSensor[B,PRESSED,- EMPTY_SLOT -]]]]]]]";
         String[] expectedToBeInConfigAst =
             {
                 "ConfigurationComponent[componentType=KEY,isActor=true,userDefinedName=A,portName=A,componentProperties={PIN1=A}]",
@@ -120,8 +120,8 @@ public class CalliopeTwo2ThreeTransformerTest {
     public void executeTransformer_ShouldReturnTransformedLight_WhenGivenOldLight() {
         String expectedProgramAst =
             "BlockAST[project=[[Location[x=549,y=76],MainTask[],"
-                + "DebugAction[SensorExpr[LightSensor[_L,VALUE,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[GetSampleSensor[LightSensor[_L,LIGHT_VALUE,EMPTY_SLOT]]]]]]]";
+                + "DebugAction[SensorExpr[LightSensor[_L,VALUE,- EMPTY_SLOT -]]],"
+                + "DebugAction[SensorExpr[GetSampleSensor[LightSensor[_L,LIGHT_VALUE,- EMPTY_SLOT -]]]]]]]";
         String[] expectedToBeInConfigAst =
             {
                 "ConfigurationComponent[componentType=LIGHT,isActor=true,userDefinedName=_L,portName=_L,componentProperties={}]"
@@ -236,8 +236,8 @@ public class CalliopeTwo2ThreeTransformerTest {
     public void executeTransformer_ShouldReturnTransformedSound_WhenGivenOldSound() {
         String expectedProgramAst =
             "BlockAST[project=[[Location[x=549,y=76],MainTask[],"
-                + "DebugAction[SensorExpr[SoundSensor[_S,SOUND,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[GetSampleSensor[SoundSensor[_S,SOUND,EMPTY_SLOT]]]]]]]";
+                + "DebugAction[SensorExpr[SoundSensor[_S,SOUND,- EMPTY_SLOT -]]],"
+                + "DebugAction[SensorExpr[GetSampleSensor[SoundSensor[_S,SOUND,- EMPTY_SLOT -]]]]]]]";
         String[] expectedToBeInConfigAst =
             {
                 "ConfigurationComponent[componentType=SOUND,isActor=true,userDefinedName=_S,portName=_S,componentProperties={}]"
@@ -257,8 +257,8 @@ public class CalliopeTwo2ThreeTransformerTest {
     public void executeTransformer_ShouldReturnTransformedTemperature_WhenGivenOldTemperature() {
         String expectedProgramAst =
             "BlockAST[project=[[Location[x=549,y=76],MainTask[],"
-                + "DebugAction[SensorExpr[TemperatureSensor[_T,VALUE,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[GetSampleSensor[TemperatureSensor[_T,TEMPERATURE,EMPTY_SLOT]]]]]]]";
+                + "DebugAction[SensorExpr[TemperatureSensor[_T,VALUE,- EMPTY_SLOT -]]],"
+                + "DebugAction[SensorExpr[GetSampleSensor[TemperatureSensor[_T,TEMPERATURE,- EMPTY_SLOT -]]]]]]]";
         String[] expectedToBeInConfigAst =
             {
                 "ConfigurationComponent[componentType=TEMPERATURE,isActor=true,userDefinedName=_T,portName=_T,componentProperties={}]"
@@ -279,10 +279,10 @@ public class CalliopeTwo2ThreeTransformerTest {
     public void executeTransformer_ShouldReturnTransformedUltrasonic_WhenGivenOldUltrasonic() {
         String expectedProgramAst =
             "BlockAST[project=[[Location[x=549,y=76],MainTask[],"
-                + "DebugAction[SensorExpr[UltrasonicSensor[A1,DISTANCE,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[UltrasonicSensor[CalliBot_vorne,DISTANCE,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[GetSampleSensor[UltrasonicSensor[A1,DISTANCE,EMPTY_SLOT]]]],"
-                + "DebugAction[SensorExpr[GetSampleSensor[UltrasonicSensor[CalliBot_vorne,DISTANCE,EMPTY_SLOT]]]]]]]";
+                + "DebugAction[SensorExpr[UltrasonicSensor[A1,DISTANCE,- EMPTY_SLOT -]]],"
+                + "DebugAction[SensorExpr[UltrasonicSensor[CalliBot_vorne,DISTANCE,- EMPTY_SLOT -]]],"
+                + "DebugAction[SensorExpr[GetSampleSensor[UltrasonicSensor[A1,DISTANCE,- EMPTY_SLOT -]]]],"
+                + "DebugAction[SensorExpr[GetSampleSensor[UltrasonicSensor[CalliBot_vorne,DISTANCE,- EMPTY_SLOT -]]]]]]]";
         String[] expectedToBeInConfigAst =
             {
                 "ConfigurationComponent[componentType=ULTRASONIC,isActor=true,userDefinedName=A1,portName=A1,componentProperties={PIN1=1}]",
@@ -435,10 +435,10 @@ public class CalliopeTwo2ThreeTransformerTest {
     public void executeTransformer_ShouldReturnTransformedHumidity_WhenGivenOldHumidity() {
         String expectedProgramAst =
             "BlockAST[project=[[Location[x=512,y=50],MainTask[],"
-                + "DebugAction[SensorExpr[HumiditySensor[A1,HUMIDITY,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[HumiditySensor[A1,TEMPERATURE,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[GetSampleSensor[HumiditySensor[A1,HUMIDITY,EMPTY_SLOT]]]],"
-                + "DebugAction[SensorExpr[GetSampleSensor[HumiditySensor[A1,TEMPERATURE,EMPTY_SLOT]]]]]]]";
+                + "DebugAction[SensorExpr[HumiditySensor[A1,HUMIDITY,- EMPTY_SLOT -]]],"
+                + "DebugAction[SensorExpr[HumiditySensor[A1,TEMPERATURE,- EMPTY_SLOT -]]],"
+                + "DebugAction[SensorExpr[GetSampleSensor[HumiditySensor[A1,HUMIDITY,- EMPTY_SLOT -]]]],"
+                + "DebugAction[SensorExpr[GetSampleSensor[HumiditySensor[A1,TEMPERATURE,- EMPTY_SLOT -]]]]]]]";
         String[] expectedToBeInConfigAst =
             {
                 "ConfigurationComponent[componentType=HUMIDITY,isActor=true,userDefinedName=A1,portName=A1,componentProperties={PIN1=5}]"
@@ -458,10 +458,10 @@ public class CalliopeTwo2ThreeTransformerTest {
     public void executeTransformer_ShouldReturnTransformedInfrared_WhenGivenOldInfrared() {
         String expectedProgramAst =
             "BlockAST[project=[[Location[x=512,y=50],MainTask[],"
-                + "DebugAction[SensorExpr[InfraredSensor[I_CalliBot_links,LINE,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[InfraredSensor[I_CalliBot_rechts,LINE,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[GetSampleSensor[InfraredSensor[I_CalliBot_links,LINE,EMPTY_SLOT]]]],"
-                + "DebugAction[SensorExpr[GetSampleSensor[InfraredSensor[I_CalliBot_rechts,LINE,EMPTY_SLOT]]]]]]]";
+                + "DebugAction[SensorExpr[InfraredSensor[I_CalliBot_links,LINE,- EMPTY_SLOT -]]],"
+                + "DebugAction[SensorExpr[InfraredSensor[I_CalliBot_rechts,LINE,- EMPTY_SLOT -]]],"
+                + "DebugAction[SensorExpr[GetSampleSensor[InfraredSensor[I_CalliBot_links,LINE,- EMPTY_SLOT -]]]],"
+                + "DebugAction[SensorExpr[GetSampleSensor[InfraredSensor[I_CalliBot_rechts,LINE,- EMPTY_SLOT -]]]]]]]";
         String[] expectedToBeInConfigAst =
             {
                 "ConfigurationComponent[componentType=CALLIBOT, isActor=true, userDefinedName=CalliBot, portName=CalliBot,"
@@ -519,12 +519,12 @@ public class CalliopeTwo2ThreeTransformerTest {
     public void executeTransformer_ShouldReturnTransformedSounds_WhenGivenOldSounds() {
         String expectedProgramAst =
             "BlockAST[project=[[Location[x=512,y=50],MainTask[],"
-                + "ToneAction[NumConst[300],NumConst[100]],"
-                + "PlayNoteAction[duration=2000,frequency=261.626],"
-                + "PlayNoteAction[duration=1000,frequency=261.626],"
-                + "PlayNoteAction[duration=500,frequency=261.626],"
-                + "PlayNoteAction[duration=250,frequency=261.626],"
-                + "PlayNoteAction[duration=125,frequency=261.626]]]]";
+                + "ToneAction[frequency:NumConst[300],duration:NumConst[100],port:_B],"
+                + "PlayNoteAction[duration:2000,frequency:261.626,port:_B],"
+                + "PlayNoteAction[duration:1000,frequency:261.626,port:_B],"
+                + "PlayNoteAction[duration:500,frequency:261.626,port:_B],"
+                + "PlayNoteAction[duration:250,frequency:261.626,port:_B],"
+                + "PlayNoteAction[duration:125,frequency:261.626,port:_B]]]]";
         String[] expectedToBeInConfigAst =
             {
                 "ConfigurationComponent[componentType=BUZZER,isActor=true,userDefinedName=_B,portName=_B,componentProperties={}]"
@@ -544,71 +544,71 @@ public class CalliopeTwo2ThreeTransformerTest {
     public void executeTransformer_ShouldReturnTransformedPinsSensor_WhenGivenOldPinsSensor() {
         String expectedProgramAst =
             "BlockAST[project=[[Location[x=512,y=50],MainTask[],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[P1,ANALOG,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[P2,ANALOG,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[A1,ANALOG,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[C04,ANALOG,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[C05,ANALOG,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[C06,ANALOG,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[C16,ANALOG,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[C17,ANALOG,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[P0,DIGITAL,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[P1_2,DIGITAL,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[P2_2,DIGITAL,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[P3,DIGITAL,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[A0,DIGITAL,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[A1_2,DIGITAL,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[C04_2,DIGITAL,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[C05_2,DIGITAL,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[C06_2,DIGITAL,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[C07,DIGITAL,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[C08,DIGITAL,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[C09,DIGITAL,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[C10,DIGITAL,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[C11,DIGITAL,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[C12,DIGITAL,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[C16_2,DIGITAL,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[C17_2,DIGITAL,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[C18,DIGITAL,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[C19,DIGITAL,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[P0,PULSEHIGH,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[P1_2,PULSEHIGH,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[P2_2,PULSEHIGH,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[P3,PULSEHIGH,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[A0,PULSEHIGH,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[A1_2,PULSEHIGH,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[C04_2,PULSEHIGH,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[C05_2,PULSEHIGH,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[C06_2,PULSEHIGH,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[C07,PULSEHIGH,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[C08,PULSEHIGH,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[C09,PULSEHIGH,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[C10,PULSEHIGH,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[C11,PULSEHIGH,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[C12,PULSEHIGH,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[C16_2,PULSEHIGH,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[C17_2,PULSEHIGH,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[C18,PULSEHIGH,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[C19,PULSEHIGH,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[P0,PULSELOW,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[P1_2,PULSELOW,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[P2_2,PULSELOW,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[P3,PULSELOW,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[A0,PULSELOW,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[A1_2,PULSELOW,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[C04_2,PULSELOW,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[C05_2,PULSELOW,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[C06_2,PULSELOW,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[C07,PULSELOW,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[C08,PULSELOW,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[C09,PULSELOW,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[C10,PULSELOW,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[C11,PULSELOW,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[C12,PULSELOW,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[C16_2,PULSELOW,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[C17_2,PULSELOW,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[C18,PULSELOW,EMPTY_SLOT]]],"
-                + "DebugAction[SensorExpr[PinGetValueSensor[C19,PULSELOW,EMPTY_SLOT]]]]]]";
+                + "DebugAction[SensorExpr[PinGetValueSensor[P1,ANALOG,- EMPTY_SLOT -]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[P2,ANALOG,- EMPTY_SLOT -]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[A1,ANALOG,- EMPTY_SLOT -]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[C04,ANALOG,- EMPTY_SLOT -]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[C05,ANALOG,- EMPTY_SLOT -]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[C06,ANALOG,- EMPTY_SLOT -]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[C16,ANALOG,- EMPTY_SLOT -]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[C17,ANALOG,- EMPTY_SLOT -]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[P0,DIGITAL,- EMPTY_SLOT -]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[P1_2,DIGITAL,- EMPTY_SLOT -]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[P2_2,DIGITAL,- EMPTY_SLOT -]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[P3,DIGITAL,- EMPTY_SLOT -]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[A0,DIGITAL,- EMPTY_SLOT -]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[A1_2,DIGITAL,- EMPTY_SLOT -]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[C04_2,DIGITAL,- EMPTY_SLOT -]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[C05_2,DIGITAL,- EMPTY_SLOT -]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[C06_2,DIGITAL,- EMPTY_SLOT -]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[C07,DIGITAL,- EMPTY_SLOT -]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[C08,DIGITAL,- EMPTY_SLOT -]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[C09,DIGITAL,- EMPTY_SLOT -]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[C10,DIGITAL,- EMPTY_SLOT -]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[C11,DIGITAL,- EMPTY_SLOT -]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[C12,DIGITAL,- EMPTY_SLOT -]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[C16_2,DIGITAL,- EMPTY_SLOT -]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[C17_2,DIGITAL,- EMPTY_SLOT -]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[C18,DIGITAL,- EMPTY_SLOT -]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[C19,DIGITAL,- EMPTY_SLOT -]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[P0,PULSEHIGH,- EMPTY_SLOT -]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[P1_2,PULSEHIGH,- EMPTY_SLOT -]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[P2_2,PULSEHIGH,- EMPTY_SLOT -]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[P3,PULSEHIGH,- EMPTY_SLOT -]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[A0,PULSEHIGH,- EMPTY_SLOT -]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[A1_2,PULSEHIGH,- EMPTY_SLOT -]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[C04_2,PULSEHIGH,- EMPTY_SLOT -]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[C05_2,PULSEHIGH,- EMPTY_SLOT -]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[C06_2,PULSEHIGH,- EMPTY_SLOT -]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[C07,PULSEHIGH,- EMPTY_SLOT -]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[C08,PULSEHIGH,- EMPTY_SLOT -]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[C09,PULSEHIGH,- EMPTY_SLOT -]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[C10,PULSEHIGH,- EMPTY_SLOT -]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[C11,PULSEHIGH,- EMPTY_SLOT -]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[C12,PULSEHIGH,- EMPTY_SLOT -]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[C16_2,PULSEHIGH,- EMPTY_SLOT -]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[C17_2,PULSEHIGH,- EMPTY_SLOT -]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[C18,PULSEHIGH,- EMPTY_SLOT -]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[C19,PULSEHIGH,- EMPTY_SLOT -]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[P0,PULSELOW,- EMPTY_SLOT -]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[P1_2,PULSELOW,- EMPTY_SLOT -]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[P2_2,PULSELOW,- EMPTY_SLOT -]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[P3,PULSELOW,- EMPTY_SLOT -]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[A0,PULSELOW,- EMPTY_SLOT -]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[A1_2,PULSELOW,- EMPTY_SLOT -]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[C04_2,PULSELOW,- EMPTY_SLOT -]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[C05_2,PULSELOW,- EMPTY_SLOT -]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[C06_2,PULSELOW,- EMPTY_SLOT -]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[C07,PULSELOW,- EMPTY_SLOT -]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[C08,PULSELOW,- EMPTY_SLOT -]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[C09,PULSELOW,- EMPTY_SLOT -]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[C10,PULSELOW,- EMPTY_SLOT -]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[C11,PULSELOW,- EMPTY_SLOT -]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[C12,PULSELOW,- EMPTY_SLOT -]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[C16_2,PULSELOW,- EMPTY_SLOT -]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[C17_2,PULSELOW,- EMPTY_SLOT -]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[C18,PULSELOW,- EMPTY_SLOT -]]],"
+                + "DebugAction[SensorExpr[PinGetValueSensor[C19,PULSELOW,- EMPTY_SLOT -]]]]]]";
         String[] expectedToBeInConfigAst =
             {
                 "ConfigurationComponent[componentType=ANALOG_PIN,isActor=true,userDefinedName=A1,portName=A1,componentProperties={PIN1=5}]",
@@ -812,7 +812,7 @@ public class CalliopeTwo2ThreeTransformerTest {
     public void executeTransformer_ShouldReturnTransformedWaitFor_WhenGivenOldWaitFor() {
         String expectedProgramAst =
             "BlockAST[project=[[Location[x=512,y=50],MainTask[],"
-                + "WaitStmt[(repeat[WAIT,SensorExpr[GetSampleSensor[GestureSensor[NO_PORT,UP,EMPTY_SLOT]]]])]]]]";
+                + "WaitStmt[(repeat[WAIT,SensorExpr[GetSampleSensor[GestureSensor[- EMPTY_PORT -,UP,- EMPTY_SLOT -]]]])]]]]";
 
         Project project =
             UnitTestHelper

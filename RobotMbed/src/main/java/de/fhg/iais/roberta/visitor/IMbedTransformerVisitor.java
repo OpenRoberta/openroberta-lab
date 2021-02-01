@@ -30,7 +30,6 @@ import de.fhg.iais.roberta.syntax.functions.mbed.ImageInvertFunction;
 import de.fhg.iais.roberta.syntax.functions.mbed.ImageShiftFunction;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.syntax.sensor.mbed.RadioRssiSensor;
-import de.fhg.iais.roberta.visitor.hardware.IMbedVisitor;
 
 @SuppressWarnings("unchecked")
 public interface IMbedTransformerVisitor<V> extends ITransformerVisitor<V>, IMbedVisitor<Phrase<V>> {
@@ -84,7 +83,7 @@ public interface IMbedTransformerVisitor<V> extends ITransformerVisitor<V>, IMbe
 
     @Override
     default Phrase<V> visitLedOnAction(LedOnAction<Phrase<V>> ledOnAction) {
-        return LedOnAction.make(ledOnAction.getPort(), (Expr<V>) ledOnAction.getLedColor().modify(this), ledOnAction.getProperty(), ledOnAction.getComment());
+        return LedOnAction.make(ledOnAction.getUserDefinedPort(), (Expr<V>) ledOnAction.getLedColor().modify(this), ledOnAction.getProperty(), ledOnAction.getComment());
     }
 
     @Override
@@ -205,7 +204,7 @@ public interface IMbedTransformerVisitor<V> extends ITransformerVisitor<V>, IMbe
     @Override
     default Phrase<V> visitServoSetAction(ServoSetAction<Phrase<V>> servoSetAction) {
         return ServoSetAction
-            .make(servoSetAction.getPort(), (Expr<V>) servoSetAction.getValue().modify(this), servoSetAction.getProperty(), servoSetAction.getComment());
+            .make(servoSetAction.getUserDefinedPort(), (Expr<V>) servoSetAction.getValue().modify(this), servoSetAction.getProperty(), servoSetAction.getComment());
     }
 
     @Override

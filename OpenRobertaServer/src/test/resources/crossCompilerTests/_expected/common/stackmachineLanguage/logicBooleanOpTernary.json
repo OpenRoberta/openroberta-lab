@@ -1,0 +1,859 @@
+{"ops": [
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "+": ["3Df87EkA#(muZKGFm/~s"],
+    "value": "0"
+  },
+  {
+    "opc": "VarDeclaration",
+    "name": "x",
+    "+": ["1Ucfub%Ria?tg8mCGJc2"],
+    "type": "NUMBER",
+    "-": ["3Df87EkA#(muZKGFm/~s"]
+  },
+  {
+    "opc": "comment",
+    "+": ["Q*yRqZ3)e~@!K]#nsR?="],
+    "-": ["1Ucfub%Ria?tg8mCGJc2"],
+    "value": "logik_boolean_op-- Start"
+  },
+  {
+    "opc": "comment",
+    "+": ["Kyxf{P8icOB1Dl-gkLQ@"],
+    "-": ["Q*yRqZ3)e~@!K]#nsR?="],
+    "target": "IfStatement"
+  },
+  {
+    "opc": "expr",
+    "expr": "BOOL_CONST",
+    "+": ["}uaQ@t:~1|I)@y:8M,Bn"],
+    "value": true
+  },
+  {
+    "opc": "jump",
+    "conditional": false,
+    "-": ["}uaQ@t:~1|I)@y:8M,Bn"],
+    "target": 10
+  },
+  {
+    "opc": "expr",
+    "name": "x",
+    "expr": "Var",
+    "+": ["D#iMF{N2#Xg?N=Sz=s{)"]
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "+": ["A;:yk|:0[*;jk:L2(WTI"],
+    "-": ["D#iMF{N2#Xg?N=Sz=s{)"],
+    "value": "1"
+  },
+  {
+    "op": "ADD",
+    "opc": "expr",
+    "expr": "Binary",
+    "+": ["n2N1`[:)IYF=|swz#`*H"],
+    "-": ["A;:yk|:0[*;jk:L2(WTI"]
+  },
+  {
+    "opc": "jump",
+    "conditional": "always",
+    "-": ["n2N1`[:)IYF=|swz#`*H"],
+    "target": 13
+  },
+  {
+    "opc": "expr",
+    "name": "x",
+    "expr": "Var",
+    "+": ["^[N?zL]O.eZ0y7o@Lqj_"]
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "+": ["/6awbMBE*peujCO/n}:#"],
+    "-": ["^[N?zL]O.eZ0y7o@Lqj_"],
+    "value": "1000"
+  },
+  {
+    "op": "ADD",
+    "opc": "expr",
+    "expr": "Binary",
+    "+": ["L|bLf9e]/wupZo24BXIu"],
+    "-": ["/6awbMBE*peujCO/n}:#"]
+  },
+  {
+    "opc": "AssignStmt",
+    "name": "x",
+    "+": ["bJljdYw5Y;@4xj3P5D7v"],
+    "-": [
+      "L|bLf9e]/wupZo24BXIu",
+      "Kyxf{P8icOB1Dl-gkLQ@"
+    ]
+  },
+  {
+    "opc": "comment",
+    "+": ["eiX,RC6%!*WwkE-hDitc"],
+    "-": ["bJljdYw5Y;@4xj3P5D7v"],
+    "target": "IfStatement"
+  },
+  {
+    "opc": "expr",
+    "expr": "BOOL_CONST",
+    "+": ["(#r0)..e5==b9mkkAaSj"],
+    "value": false
+  },
+  {
+    "opc": "jump",
+    "conditional": false,
+    "-": ["(#r0)..e5==b9mkkAaSj"],
+    "target": 21
+  },
+  {
+    "opc": "expr",
+    "name": "x",
+    "expr": "Var",
+    "+": ["q%.|N:6tsacVkyat=mxu"]
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "+": ["ZYSp#4Uw2x/8R8lBo35i"],
+    "-": ["q%.|N:6tsacVkyat=mxu"],
+    "value": "1000"
+  },
+  {
+    "op": "ADD",
+    "opc": "expr",
+    "expr": "Binary",
+    "+": ["zIz/B7p;!FD/vJnELMRn"],
+    "-": ["ZYSp#4Uw2x/8R8lBo35i"]
+  },
+  {
+    "opc": "jump",
+    "conditional": "always",
+    "-": ["zIz/B7p;!FD/vJnELMRn"],
+    "target": 24
+  },
+  {
+    "opc": "expr",
+    "name": "x",
+    "expr": "Var",
+    "+": ["r_)@0gh4}M30Y}4~.Khm"]
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "+": ["J+UdJ(-D#Pdp6Z-8l]BQ"],
+    "-": ["r_)@0gh4}M30Y}4~.Khm"],
+    "value": "1"
+  },
+  {
+    "op": "ADD",
+    "opc": "expr",
+    "expr": "Binary",
+    "+": ["[5XdtV-70akp-f+{B4u-"],
+    "-": ["J+UdJ(-D#Pdp6Z-8l]BQ"]
+  },
+  {
+    "opc": "AssignStmt",
+    "name": "x",
+    "+": ["MrRpmbc[,.zX;mh)(185"],
+    "-": [
+      "[5XdtV-70akp-f+{B4u-",
+      "eiX,RC6%!*WwkE-hDitc"
+    ]
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "+": ["L_1:(IJV`Xf*|ELSnOvy"],
+    "-": ["MrRpmbc[,.zX;mh)(185"],
+    "value": "2"
+  },
+  {
+    "opc": "expr",
+    "name": "x",
+    "expr": "Var",
+    "+": ["1p0rtg}uSQ1uXVD-FeoD"],
+    "-": ["L_1:(IJV`Xf*|ELSnOvy"]
+  },
+  {
+    "op": "EQ",
+    "opc": "expr",
+    "expr": "Binary",
+    "+": ["85c@2y`#md=NOE7#+VmQ"],
+    "-": ["1p0rtg}uSQ1uXVD-FeoD"]
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "+": ["L_1:(IJV`Xf*|ELSnOvy"],
+    "-": ["85c@2y`#md=NOE7#+VmQ"],
+    "value": "2"
+  },
+  {
+    "opc": "expr",
+    "name": "x",
+    "expr": "Var",
+    "+": ["1p0rtg}uSQ1uXVD-FeoD"],
+    "-": ["L_1:(IJV`Xf*|ELSnOvy"]
+  },
+  {
+    "msg": "pos-1",
+    "op": "EQ",
+    "opc": "AssertAction",
+    "+": ["PrvoxR1Y{_`:_Mv3U(nt"],
+    "-": ["1p0rtg}uSQ1uXVD-FeoD"]
+  },
+  {
+    "opc": "comment",
+    "+": ["}G2Ei;LB9QoC#Fe_sgG#"],
+    "-": ["PrvoxR1Y{_`:_Mv3U(nt"],
+    "target": "IfStatement"
+  },
+  {
+    "opc": "comment",
+    "+": [")M{c{rxAwe%b*A^4Pl{3"],
+    "target": "IfStatement"
+  },
+  {
+    "opc": "expr",
+    "expr": "BOOL_CONST",
+    "+": ["5|F^NZa8vX.C]u^pv4Oe"],
+    "value": true
+  },
+  {
+    "opc": "jump",
+    "conditional": false,
+    "-": ["5|F^NZa8vX.C]u^pv4Oe"],
+    "target": 37
+  },
+  {
+    "opc": "expr",
+    "expr": "BOOL_CONST",
+    "+": ["nv6T:3qlZD)J13ALiYgN"],
+    "value": true
+  },
+  {
+    "opc": "jump",
+    "conditional": "always",
+    "-": ["nv6T:3qlZD)J13ALiYgN"],
+    "target": 38
+  },
+  {
+    "opc": "expr",
+    "expr": "BOOL_CONST",
+    "+": ["}sSH}Jv2vI?;?pUSNFKl"],
+    "value": false
+  },
+  {
+    "opc": "jump",
+    "conditional": false,
+    "-": [
+      "}sSH}Jv2vI?;?pUSNFKl",
+      ")M{c{rxAwe%b*A^4Pl{3"
+    ],
+    "target": 43
+  },
+  {
+    "opc": "expr",
+    "name": "x",
+    "expr": "Var",
+    "+": ["ca3X6B@;nQ3%:][^c[AK"]
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "+": ["ck7+nEUf(|MS2m`p~S4s"],
+    "-": ["ca3X6B@;nQ3%:][^c[AK"],
+    "value": "1"
+  },
+  {
+    "op": "ADD",
+    "opc": "expr",
+    "expr": "Binary",
+    "+": ["^`x9x6Tp`r(%pzX(ZIA0"],
+    "-": ["ck7+nEUf(|MS2m`p~S4s"]
+  },
+  {
+    "opc": "jump",
+    "conditional": "always",
+    "-": ["^`x9x6Tp`r(%pzX(ZIA0"],
+    "target": 46
+  },
+  {
+    "opc": "expr",
+    "name": "x",
+    "expr": "Var",
+    "+": ["=pXty~fLfy-zo87v~G_E"]
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "+": ["Z3/o)y[L]O.+IHZ0}EU#"],
+    "-": ["=pXty~fLfy-zo87v~G_E"],
+    "value": "1000"
+  },
+  {
+    "op": "ADD",
+    "opc": "expr",
+    "expr": "Binary",
+    "+": ["0S[-lmHg}m]Nx.39X+P?"],
+    "-": ["Z3/o)y[L]O.+IHZ0}EU#"]
+  },
+  {
+    "opc": "AssignStmt",
+    "name": "x",
+    "+": ["XDras=!S[GbV`31w2ov*"],
+    "-": [
+      "0S[-lmHg}m]Nx.39X+P?",
+      "}G2Ei;LB9QoC#Fe_sgG#"
+    ]
+  },
+  {
+    "opc": "comment",
+    "+": ["@=3zg@fcz=5y@OG*]yA@"],
+    "-": ["XDras=!S[GbV`31w2ov*"],
+    "target": "IfStatement"
+  },
+  {
+    "opc": "comment",
+    "+": ["c|.O,_x0Szgz%I=UKni`"],
+    "target": "IfStatement"
+  },
+  {
+    "opc": "expr",
+    "expr": "BOOL_CONST",
+    "+": [":!SkIS5T{:Kaq78jSoNz"],
+    "value": false
+  },
+  {
+    "opc": "jump",
+    "conditional": false,
+    "-": [":!SkIS5T{:Kaq78jSoNz"],
+    "target": 53
+  },
+  {
+    "opc": "expr",
+    "expr": "BOOL_CONST",
+    "+": ["Z=H+jA7]yPY.2,@.Jy=}"],
+    "value": false
+  },
+  {
+    "opc": "jump",
+    "conditional": "always",
+    "-": ["Z=H+jA7]yPY.2,@.Jy=}"],
+    "target": 54
+  },
+  {
+    "opc": "expr",
+    "expr": "BOOL_CONST",
+    "+": ["6mZ2hrQrG*DT05Zb3CUw"],
+    "value": true
+  },
+  {
+    "opc": "jump",
+    "conditional": false,
+    "-": [
+      "6mZ2hrQrG*DT05Zb3CUw",
+      "c|.O,_x0Szgz%I=UKni`"
+    ],
+    "target": 59
+  },
+  {
+    "opc": "expr",
+    "name": "x",
+    "expr": "Var",
+    "+": ["|}/AzFKTVD,)8P21|vn*"]
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "+": ["!QdWose+Ek:k-A=s70=+"],
+    "-": ["|}/AzFKTVD,)8P21|vn*"],
+    "value": "1"
+  },
+  {
+    "op": "ADD",
+    "opc": "expr",
+    "expr": "Binary",
+    "+": ["Ez,r=Llo=C=p|Y!M-PXk"],
+    "-": ["!QdWose+Ek:k-A=s70=+"]
+  },
+  {
+    "opc": "jump",
+    "conditional": "always",
+    "-": ["Ez,r=Llo=C=p|Y!M-PXk"],
+    "target": 62
+  },
+  {
+    "opc": "expr",
+    "name": "x",
+    "expr": "Var",
+    "+": ["TADIengv}spRn1!Ff.,u"]
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "+": ["2/b?aCy7pZoYoj.rq~(1"],
+    "-": ["TADIengv}spRn1!Ff.,u"],
+    "value": "1000"
+  },
+  {
+    "op": "ADD",
+    "opc": "expr",
+    "expr": "Binary",
+    "+": ["BW@i(.ZN+E?;Y3i%S9C#"],
+    "-": ["2/b?aCy7pZoYoj.rq~(1"]
+  },
+  {
+    "opc": "AssignStmt",
+    "name": "x",
+    "+": ["=8icLud.l{43*mcT+SX`"],
+    "-": [
+      "BW@i(.ZN+E?;Y3i%S9C#",
+      "@=3zg@fcz=5y@OG*]yA@"
+    ]
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "+": ["YUmV_/3HH{4R:o?35vs)"],
+    "-": ["=8icLud.l{43*mcT+SX`"],
+    "value": "4"
+  },
+  {
+    "opc": "expr",
+    "name": "x",
+    "expr": "Var",
+    "+": ["ZvN2r+eFcd/Y+qFN8XRs"],
+    "-": ["YUmV_/3HH{4R:o?35vs)"]
+  },
+  {
+    "op": "EQ",
+    "opc": "expr",
+    "expr": "Binary",
+    "+": ["Hp/(YiMUzGe=1,iT*.hi"],
+    "-": ["ZvN2r+eFcd/Y+qFN8XRs"]
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "+": ["YUmV_/3HH{4R:o?35vs)"],
+    "-": ["Hp/(YiMUzGe=1,iT*.hi"],
+    "value": "4"
+  },
+  {
+    "opc": "expr",
+    "name": "x",
+    "expr": "Var",
+    "+": ["ZvN2r+eFcd/Y+qFN8XRs"],
+    "-": ["YUmV_/3HH{4R:o?35vs)"]
+  },
+  {
+    "msg": "pos-2",
+    "op": "EQ",
+    "opc": "AssertAction",
+    "+": ["f82K:m?VUQS`)o=%x?B@"],
+    "-": ["ZvN2r+eFcd/Y+qFN8XRs"]
+  },
+  {
+    "opc": "comment",
+    "+": ["9)V1dA]V!r,xIl9hlkz="],
+    "-": ["f82K:m?VUQS`)o=%x?B@"],
+    "target": "IfStatement"
+  },
+  {
+    "opc": "comment",
+    "+": ["ah]Xc8pie}o.:7]e2Mh]"],
+    "target": "IfStatement"
+  },
+  {
+    "opc": "comment",
+    "+": ["~l;T2m*,M8A),I=M:UUg"],
+    "target": "IfStatement"
+  },
+  {
+    "opc": "expr",
+    "expr": "BOOL_CONST",
+    "+": ["mj}8WqB8d*|;qwsxT%}X"],
+    "value": true
+  },
+  {
+    "opc": "jump",
+    "conditional": false,
+    "-": ["mj}8WqB8d*|;qwsxT%}X"],
+    "target": 76
+  },
+  {
+    "opc": "expr",
+    "expr": "BOOL_CONST",
+    "+": [".I^h1%K[KwBvY,u!e]nx"],
+    "value": true
+  },
+  {
+    "opc": "jump",
+    "conditional": "always",
+    "-": [".I^h1%K[KwBvY,u!e]nx"],
+    "target": 77
+  },
+  {
+    "opc": "expr",
+    "expr": "BOOL_CONST",
+    "+": ["%B:uTOU*P%F6Z)tL[d}r"],
+    "value": false
+  },
+  {
+    "opc": "jump",
+    "conditional": false,
+    "-": [
+      "%B:uTOU*P%F6Z)tL[d}r",
+      "~l;T2m*,M8A),I=M:UUg"
+    ],
+    "target": 80
+  },
+  {
+    "opc": "expr",
+    "expr": "BOOL_CONST",
+    "+": ["JHEqLuZ6ZbVkXo~SW+rD"],
+    "value": true
+  },
+  {
+    "opc": "jump",
+    "conditional": "always",
+    "-": ["JHEqLuZ6ZbVkXo~SW+rD"],
+    "target": 81
+  },
+  {
+    "opc": "expr",
+    "expr": "BOOL_CONST",
+    "+": ["?Iq`0x,ZOwI_FSKVx{p5"],
+    "value": false
+  },
+  {
+    "opc": "jump",
+    "conditional": false,
+    "-": [
+      "?Iq`0x,ZOwI_FSKVx{p5",
+      "ah]Xc8pie}o.:7]e2Mh]"
+    ],
+    "target": 86
+  },
+  {
+    "opc": "expr",
+    "name": "x",
+    "expr": "Var",
+    "+": ["^Z((Z_M]h+*Ct`#VIM)]"]
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "+": ["%[r;ffl^l6t[e+)yM{Fi"],
+    "-": ["^Z((Z_M]h+*Ct`#VIM)]"],
+    "value": "1"
+  },
+  {
+    "op": "ADD",
+    "opc": "expr",
+    "expr": "Binary",
+    "+": ["p1Ag[G|;=IoL?owyp68V"],
+    "-": ["%[r;ffl^l6t[e+)yM{Fi"]
+  },
+  {
+    "opc": "jump",
+    "conditional": "always",
+    "-": ["p1Ag[G|;=IoL?owyp68V"],
+    "target": 89
+  },
+  {
+    "opc": "expr",
+    "name": "x",
+    "expr": "Var",
+    "+": ["vgft|~tuAfdiP]_o_yL9"]
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "+": ["U~qNY#kz#g:AkvE^4i:x"],
+    "-": ["vgft|~tuAfdiP]_o_yL9"],
+    "value": "1000"
+  },
+  {
+    "op": "ADD",
+    "opc": "expr",
+    "expr": "Binary",
+    "+": ["[~){_pULg;yOn)lABG_+"],
+    "-": ["U~qNY#kz#g:AkvE^4i:x"]
+  },
+  {
+    "opc": "AssignStmt",
+    "name": "x",
+    "+": ["w!t~4a4;,9Nz)h^-a;Cm"],
+    "-": [
+      "[~){_pULg;yOn)lABG_+",
+      "9)V1dA]V!r,xIl9hlkz="
+    ]
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "+": ["7;H!9jtmDrq*[vouu[Op"],
+    "-": ["w!t~4a4;,9Nz)h^-a;Cm"],
+    "value": "5"
+  },
+  {
+    "opc": "expr",
+    "name": "x",
+    "expr": "Var",
+    "+": ["?AjOXZV7B=jJ!+8[+z]x"],
+    "-": ["7;H!9jtmDrq*[vouu[Op"]
+  },
+  {
+    "op": "EQ",
+    "opc": "expr",
+    "expr": "Binary",
+    "+": ["LkgSbu)(+de.V?#B@Y~S"],
+    "-": ["?AjOXZV7B=jJ!+8[+z]x"]
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "+": ["7;H!9jtmDrq*[vouu[Op"],
+    "-": ["LkgSbu)(+de.V?#B@Y~S"],
+    "value": "5"
+  },
+  {
+    "opc": "expr",
+    "name": "x",
+    "expr": "Var",
+    "+": ["?AjOXZV7B=jJ!+8[+z]x"],
+    "-": ["7;H!9jtmDrq*[vouu[Op"]
+  },
+  {
+    "msg": "pos-3",
+    "op": "EQ",
+    "opc": "AssertAction",
+    "+": ["BrkE(d:8v^=UO8ypfRk]"],
+    "-": ["?AjOXZV7B=jJ!+8[+z]x"]
+  },
+  {
+    "opc": "comment",
+    "+": ["]u%#|n152xmkK}=o;v:y"],
+    "-": ["BrkE(d:8v^=UO8ypfRk]"],
+    "target": "IfStatement"
+  },
+  {
+    "opc": "comment",
+    "+": [")/gf35=VW(d4+-TDw7nn"],
+    "target": "IfStatement"
+  },
+  {
+    "opc": "comment",
+    "+": ["+`lexBo]zhN(8My92}s_"],
+    "target": "IfStatement"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "+": ["*ZMNTlS`7dzVw_uB,~!l"],
+    "value": "1"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "+": ["s0W7{@MXksBcLf1}#`xF"],
+    "-": ["*ZMNTlS`7dzVw_uB,~!l"],
+    "value": "2"
+  },
+  {
+    "op": "EQ",
+    "opc": "expr",
+    "expr": "Binary",
+    "+": ["i7X3;4U)pGV4{s`Hh7np"],
+    "-": ["s0W7{@MXksBcLf1}#`xF"]
+  },
+  {
+    "opc": "jump",
+    "conditional": false,
+    "-": ["i7X3;4U)pGV4{s`Hh7np"],
+    "target": 105
+  },
+  {
+    "opc": "expr",
+    "expr": "BOOL_CONST",
+    "+": ["23)Y-XrRTW%xVq)(6C,f"],
+    "value": true
+  },
+  {
+    "opc": "jump",
+    "conditional": "always",
+    "-": ["23)Y-XrRTW%xVq)(6C,f"],
+    "target": 106
+  },
+  {
+    "opc": "expr",
+    "expr": "BOOL_CONST",
+    "+": ["-o}yZ@dZrJTG?X~sr!Kn"],
+    "value": false
+  },
+  {
+    "opc": "jump",
+    "conditional": false,
+    "-": [
+      "-o}yZ@dZrJTG?X~sr!Kn",
+      "+`lexBo]zhN(8My92}s_"
+    ],
+    "target": 109
+  },
+  {
+    "opc": "expr",
+    "expr": "BOOL_CONST",
+    "+": ["ByP,?9|T1,12Zryku4`O"],
+    "value": false
+  },
+  {
+    "opc": "jump",
+    "conditional": "always",
+    "-": ["ByP,?9|T1,12Zryku4`O"],
+    "target": 110
+  },
+  {
+    "opc": "expr",
+    "expr": "BOOL_CONST",
+    "+": ["speX9laL_+|tY_]E|ecs"],
+    "value": true
+  },
+  {
+    "opc": "jump",
+    "conditional": false,
+    "-": [
+      "speX9laL_+|tY_]E|ecs",
+      ")/gf35=VW(d4+-TDw7nn"
+    ],
+    "target": 115
+  },
+  {
+    "opc": "expr",
+    "name": "x",
+    "expr": "Var",
+    "+": [":DWu2.@Mz,?/(=:0h4~Q"]
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "+": ["@oEf!NoCMSiuifpNB78R"],
+    "-": [":DWu2.@Mz,?/(=:0h4~Q"],
+    "value": "1"
+  },
+  {
+    "op": "ADD",
+    "opc": "expr",
+    "expr": "Binary",
+    "+": ["(z|sevuQDJ;D/?taXSmH"],
+    "-": ["@oEf!NoCMSiuifpNB78R"]
+  },
+  {
+    "opc": "jump",
+    "conditional": "always",
+    "-": ["(z|sevuQDJ;D/?taXSmH"],
+    "target": 118
+  },
+  {
+    "opc": "expr",
+    "name": "x",
+    "expr": "Var",
+    "+": ["u=~Qw}e%9ep+0ag2fJd0"]
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "+": ["Fw#7_t:1to=KSEcz1@N="],
+    "-": ["u=~Qw}e%9ep+0ag2fJd0"],
+    "value": "1000"
+  },
+  {
+    "op": "ADD",
+    "opc": "expr",
+    "expr": "Binary",
+    "+": [".tq[f6B|@:A-;N{VqNy("],
+    "-": ["Fw#7_t:1to=KSEcz1@N="]
+  },
+  {
+    "opc": "AssignStmt",
+    "name": "x",
+    "+": ["yJbX-zk6MSA?dCw)X8.E"],
+    "-": [
+      ".tq[f6B|@:A-;N{VqNy(",
+      "]u%#|n152xmkK}=o;v:y"
+    ]
+  },
+  {
+    "opc": "comment",
+    "+": ["^l(GI?/YX4SzU,*Zv};H"],
+    "-": ["yJbX-zk6MSA?dCw)X8.E"],
+    "target": "IfStatement"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "+": ["EI]X6=w49%FUgL%5o;`o"],
+    "value": "6"
+  },
+  {
+    "opc": "expr",
+    "name": "x",
+    "expr": "Var",
+    "+": ["fOf=Df@.!U}CkWO!nJvZ"],
+    "-": ["EI]X6=w49%FUgL%5o;`o"]
+  },
+  {
+    "op": "EQ",
+    "opc": "expr",
+    "expr": "Binary",
+    "+": ["z(Ea/^,b?4p^uPSGY8Lq"],
+    "-": ["fOf=Df@.!U}CkWO!nJvZ"]
+  },
+  {
+    "opc": "jump",
+    "conditional": false,
+    "-": ["z(Ea/^,b?4p^uPSGY8Lq"],
+    "target": 126
+  },
+  {
+    "opc": "expr",
+    "expr": "STRING_CONST",
+    "+": ["D5T7?(%XC2tCT}I#yi*M"],
+    "value": "Logic Ternary Op Test: success"
+  },
+  {
+    "opc": "jump",
+    "conditional": "always",
+    "-": ["D5T7?(%XC2tCT}I#yi*M"],
+    "target": 127
+  },
+  {
+    "opc": "expr",
+    "expr": "STRING_CONST",
+    "+": ["~Caj7rnSJ-/a!WuWnEp8"],
+    "value": "Logic Ternary Op Test: FAIL"
+  },
+  {
+    "opc": "DebugAction",
+    "+": ["Tv)vHeT0i{[=QzG:s=G?"],
+    "-": [
+      "~Caj7rnSJ-/a!WuWnEp8",
+      "^l(GI?/YX4SzU,*Zv};H"
+    ]
+  },
+  {
+    "opc": "comment",
+    "+": ["c{YOF7Mz(An2FX?yTns~"],
+    "-": ["Tv)vHeT0i{[=QzG:s=G?"],
+    "value": "Logic Ternary Op -- End"
+  },
+  {
+    "opc": "stop",
+    "-": ["c{YOF7Mz(An2FX?yTns~"]
+  }
+]}

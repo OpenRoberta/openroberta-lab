@@ -72,11 +72,10 @@ public class SaveRequest extends BaseRequest {
     }
 
     /**
-     * merge the properties of a JSON-object into this bean. The bean must be "under construction". The keys of the JSON-Object must be valid. The bean remains
-     * "under construction".<br>
+     * merge the properties of a JSON-object into this bean. The bean must be "under construction".
+     * The keys of the JSON-Object must be valid. The bean remains "under construction".<br>
      * Throws a runtime exception if inconsistencies are detected.
      */
-    @Override
     public SaveRequest merge(JSONObject jsonO) {
         try {
             for ( String key : JSONObject.getNames(jsonO) ) {
@@ -110,7 +109,6 @@ public class SaveRequest extends BaseRequest {
      * Checks whether all required fields are set. All lists are made immutable.<br>
      * Throws a runtime exception if inconsistencies are detected.
      */
-    @Override
     public SaveRequest immutable() {
         if ( this.immutable ) {
             return this;
@@ -128,10 +126,10 @@ public class SaveRequest extends BaseRequest {
         if ( !this.immutable ) {
             _message = "SaveRequest-object is already immutable: " + toString();
         }
-        if ( this.programName == null ) {
+        if ( programName == null ) {
             _message = "required property programName of SaveRequest-object is not set: " + toString();
         }
-        if ( this.progXML == null ) {
+        if ( progXML == null ) {
             _message = "required property progXML of SaveRequest-object is not set: " + toString();
         }
         if ( _message != null ) {
@@ -307,7 +305,6 @@ public class SaveRequest extends BaseRequest {
      * generates a JSON-object from an immutable bean.<br>
      * Throws a runtime exception if inconsistencies are detected.
      */
-    @Override
     public JSONObject toJson() {
         if ( !this.immutable ) {
             throw new RuntimeException("no JSON from an object under construction: " + toString());

@@ -176,7 +176,7 @@ public final class ArduinoBrickValidatorVisitor extends AbstractBrickValidatorVi
     @Override
     public Void visitLightStatusAction(LightStatusAction<Void> lightStatusAction) {
         if ( lightStatusAction.getInfos().getErrorCount() == 0 ) {
-            ConfigurationComponent usedConfigurationBlock = this.robotConfiguration.optConfigurationComponent(lightStatusAction.getPort());
+            ConfigurationComponent usedConfigurationBlock = this.robotConfiguration.optConfigurationComponent(lightStatusAction.getUserDefinedPort());
             if ( usedConfigurationBlock == null ) {
                 lightStatusAction.addInfo(NepoInfo.error("CONFIGURATION_ERROR_ACTOR_MISSING"));
                 this.errorCount++;
@@ -212,7 +212,7 @@ public final class ArduinoBrickValidatorVisitor extends AbstractBrickValidatorVi
     @Override
     public Void visitShowTextAction(ShowTextAction<Void> showtextAction) {
         if ( showtextAction.getInfos().getErrorCount() == 0 ) {
-            ConfigurationComponent usedConfigurationBlock = this.robotConfiguration.optConfigurationComponent(showtextAction.getPort());
+            ConfigurationComponent usedConfigurationBlock = this.robotConfiguration.optConfigurationComponent(showtextAction.port);
             if ( usedConfigurationBlock == null ) {
                 showtextAction.addInfo(NepoInfo.error("CONFIGURATION_ERROR_ACTOR_MISSING"));
                 this.errorCount++;
@@ -224,7 +224,7 @@ public final class ArduinoBrickValidatorVisitor extends AbstractBrickValidatorVi
     @Override
     public Void visitClearDisplayAction(ClearDisplayAction<Void> clearDisplayAction) {
         if ( clearDisplayAction.getInfos().getErrorCount() == 0 ) {
-            ConfigurationComponent usedConfigurationBlock = this.robotConfiguration.optConfigurationComponent(clearDisplayAction.getPort());
+            ConfigurationComponent usedConfigurationBlock = this.robotConfiguration.optConfigurationComponent(clearDisplayAction.port);
             if ( usedConfigurationBlock == null ) {
                 clearDisplayAction.addInfo(NepoInfo.error("CONFIGURATION_ERROR_ACTOR_MISSING"));
                 this.errorCount++;
@@ -321,9 +321,9 @@ public final class ArduinoBrickValidatorVisitor extends AbstractBrickValidatorVi
 
     @Override
     public Void visitLsm9ds1GyroSensor(Lsm9ds1GyroSensor<Void> sensor) {
-        sensor.getX().accept(this);
-        sensor.getY().accept(this);
-        sensor.getZ().accept(this);
+        sensor.x.accept(this);
+        sensor.y.accept(this);
+        sensor.z.accept(this);
         return null;
     }
 
@@ -405,7 +405,7 @@ public final class ArduinoBrickValidatorVisitor extends AbstractBrickValidatorVi
 
     @Override
     public Void visitNeuralNetworkClassify(NeuralNetworkClassify<Void> nn) {
-        nn.getProbabilities().accept(this);
+        nn.probabilities.accept(this);
         return null;
     }
 }

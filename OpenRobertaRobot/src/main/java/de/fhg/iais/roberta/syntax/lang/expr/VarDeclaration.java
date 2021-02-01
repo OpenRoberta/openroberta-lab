@@ -11,21 +11,16 @@ import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
+import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
-import de.fhg.iais.roberta.visitor.IVisitor;
-import de.fhg.iais.roberta.visitor.lang.ILanguageVisitor;
 
 /**
- * This class represents the <b>robGlobalvariables_declare</b> blocks from Blockly into the AST (abstract syntax tree). Object from this class will generate
- * code for creating a variable.<br/>
- * <br>
- * User must provide name of the variable, type of the variable and initial value. To create an instance from this class use the method
- * {@link #make(BlocklyType, String, Expr, BlocklyBlockProperties, BlocklyComment)}.<br>
+ * This class represents the <b>robGlobalvariables_declare</b> blocks from Blockly in the AST (abstract syntax tree). Object from this class will generate
+ * code for creating a variable.
  */
 public class VarDeclaration<V> extends Expr<V> {
     private final BlocklyType typeVar;
@@ -124,11 +119,6 @@ public class VarDeclaration<V> extends Expr<V> {
     }
 
     @Override
-    protected V acceptImpl(IVisitor<V> visitor) {
-        return ((ILanguageVisitor<V>) visitor).visitVarDeclaration(this);
-    }
-
-    @Override
     public BlocklyType getVarType() {
         return this.typeVar;
     }
@@ -145,7 +135,7 @@ public class VarDeclaration<V> extends Expr<V> {
      * @param helper class for making the transformation
      * @return corresponding AST object
      */
-    public static <V> Phrase<V> jaxbToAst(Block block, AbstractJaxb2Ast<V> helper) {
+    public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
         boolean isGlobalVariable = block.getType().equals(BlocklyConstants.ROB_LOCAL_VARIABLES_DECLARE) ? false : true;
         List<Field> fields = Jaxb2Ast.extractFields(block, (short) 2);
         List<Value> values = Jaxb2Ast.extractValues(block, (short) 1);
@@ -158,7 +148,7 @@ public class VarDeclaration<V> extends Expr<V> {
             .make(
                 typeVar,
                 name,
-                helper.convertPhraseToExpr(expr),
+                Jaxb2Ast.convertPhraseToExpr(expr),
                 next,
                 isGlobalVariable,
                 Jaxb2Ast.extractBlockProperties(block),

@@ -60,10 +60,10 @@ public final class BotnrollCppVisitor extends AbstractCommonArduinoCppVisitor im
     @Override
     public Void visitShowTextAction(ShowTextAction<Void> showTextAction) {
         String toChar = "";
-        String varType = showTextAction.getMsg().getVarType().toString();
-        boolean isVar = showTextAction.getMsg().getKind().getName().toString().equals("VAR");
+        String varType = showTextAction.msg.getVarType().toString();
+        boolean isVar = showTextAction.msg.getKind().getName().toString().equals("VAR");
         String mode = null;
-        Expr<Void> tt = showTextAction.getMsg();
+        Expr<Void> tt = showTextAction.msg;
         if ( !(tt instanceof StmtExpr) && tt.getKind().hasName("SENSOR_EXPR") ) {
             ExternalSensor<Void> sens = (ExternalSensor<Void>) ((SensorExpr<Void>) tt).getSens();
             if ( sens.getKind().hasName("COLOR_SENSING") ) {
@@ -72,8 +72,8 @@ public final class BotnrollCppVisitor extends AbstractCommonArduinoCppVisitor im
         }
 
         this.sb.append("one.lcd");
-        if ( showTextAction.getY().toString().equals("NumConst [1]") || showTextAction.getY().toString().equals("NumConst [2]") ) {
-            showTextAction.getY().accept(this);
+        if ( showTextAction.y.toString().equals("NumConst [1]") || showTextAction.y.toString().equals("NumConst [2]") ) {
+            showTextAction.y.accept(this);
         } else {
             this.sb.append("1");
         }
@@ -87,10 +87,10 @@ public final class BotnrollCppVisitor extends AbstractCommonArduinoCppVisitor im
 
         if ( varType.equals("BOOLEAN") ) {
             this.sb.append("bnr.boolToString(");
-            showTextAction.getMsg().accept(this);
+            showTextAction.msg.accept(this);
             this.sb.append(")");
         } else {
-            showTextAction.getMsg().accept(this);
+            showTextAction.msg.accept(this);
         }
 
         this.sb.append(toChar + ");");
@@ -307,7 +307,7 @@ public final class BotnrollCppVisitor extends AbstractCommonArduinoCppVisitor im
     public Void visitLightSensor(LightSensor<Void> lightSensor) {
         this.sb.append("one.readAdc(");
         // ports from 0 to 7
-        this.sb.append(lightSensor.getPort()); // we could add "-1" so the number of ports would be 1-8 for users
+        this.sb.append(lightSensor.getUserDefinedPort()); // we could add "-1" so the number of ports would be 1-8 for users
         // botnroll's light sensor returns values from 0 to 1023, so to get a range from 0 to 100 we divide
         // the result by 10.23
         this.sb.append(") / 10.23");
@@ -316,7 +316,7 @@ public final class BotnrollCppVisitor extends AbstractCommonArduinoCppVisitor im
 
     @Override
     public Void visitKeysSensor(KeysSensor<Void> keysSensor) {
-        switch ( keysSensor.getPort() ) {
+        switch ( keysSensor.getUserDefinedPort() ) {
             case SC.LEFT:
                 this.sb.append("bnr.buttonIsPressed(1)");
                 break;
@@ -335,7 +335,7 @@ public final class BotnrollCppVisitor extends AbstractCommonArduinoCppVisitor im
 
     @Override
     public Void visitColorSensor(ColorSensor<Void> colorSensor) {
-        String port = colorSensor.getPort();
+        String port = colorSensor.getUserDefinedPort();
         String colors;
         if ( port.equals("1") ) {
             colors = "colorsLeft, ";
@@ -379,7 +379,7 @@ public final class BotnrollCppVisitor extends AbstractCommonArduinoCppVisitor im
 
     @Override
     public Void visitInfraredSensor(InfraredSensor<Void> infraredSensor) {
-        String port = infraredSensor.getPort();
+        String port = infraredSensor.getUserDefinedPort();
         switch ( infraredSensor.getMode() ) {
             case SC.OBSTACLE:
                 this.sb.append("bnr.infraredSensorObstacle(");
@@ -400,8 +400,8 @@ public final class BotnrollCppVisitor extends AbstractCommonArduinoCppVisitor im
 
     @Override
     public Void visitUltrasonicSensor(UltrasonicSensor<Void> ultrasonicSensor) {
-        String port = ultrasonicSensor.getPort();
-        if ( ultrasonicSensor.getPort().equals("3") ) {
+        String port = ultrasonicSensor.getUserDefinedPort();
+        if ( ultrasonicSensor.getUserDefinedPort().equals("3") ) {
             this.sb.append("bnr.sonar()");
         } else {
             this.sb.append("bnr.ultrasonicDistance(" + port + ")");

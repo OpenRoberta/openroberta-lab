@@ -18,7 +18,7 @@ public abstract class AbstractBrickValidatorVisitor extends AbstractProgramValid
 
     @Override
     protected void checkSensorPort(ExternalSensor<Void> sensor) {
-        ConfigurationComponent usedSensor = this.robotConfiguration.optConfigurationComponent(sensor.getPort());
+        ConfigurationComponent usedSensor = this.robotConfiguration.optConfigurationComponent(sensor.getUserDefinedPort());
         if ( usedSensor == null ) {
             sensor.addInfo(NepoInfo.error("CONFIGURATION_ERROR_SENSOR_MISSING"));
             this.errorCount++;

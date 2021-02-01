@@ -24,7 +24,13 @@
         <block type="robControls_if" />
         <block type="robControls_ifElse" />
         <block type="robControls_loopForever" />
-        <block type="controls_repeat" />
+        <block type="controls_repeat_ext">
+            <value name="TIMES">
+                <block type="math_number">
+                    <field name="NUM">10</field>
+                </block>
+            </value>
+        </block>
         <block type="robControls_wait_time">
             <value name="WAIT">
                 <block type="math_number">

@@ -18,8 +18,8 @@ public class NonsequentialTest {
     /**
      * this is an example about problems with non-sequential execution. Generated code could be like this. The story: write a program to<br>
      * <br>
-     * - assemble some information (maybe colors the robot detects with its color sensor during moving)<br>
-     * - terminate, if a button is pressed<br>
+     * - assemble some information<br>
+     * - terminate the assembly, if a button is pressed<br>
      * <br>
      * <b>First have a look at the program: what do you expect? what happens?</b>
      */
@@ -31,7 +31,7 @@ public class NonsequentialTest {
             public void run() {
                 System.out.println("the button has not been pressed yet");
                 waitMillisec(1000);
-                System.out.println("now the button is pressed. This will set run to false");
+                System.out.println("now the button is assumed to be pressed. This will set run to false");
                 NonsequentialTest.this.run = false;
                 System.out.println("button thread has done its job and terminates");
             }
@@ -41,7 +41,7 @@ public class NonsequentialTest {
             public void run() {
                 System.out.println("working thread started");
                 while ( NonsequentialTest.this.run ) {
-                    // do something: look at the color sensor, if a new color is detected, put it into a list of already visited colors
+                    // do something
                 }
                 System.out.println("working thread terminated");
             }

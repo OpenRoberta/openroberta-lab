@@ -192,7 +192,7 @@ public class ExprlyUnParser<T> {
     }
 
     /**
-     * @param RgbColor Expression
+     * @param RgbColorAnno Expression
      * @return Textual representation of the RGB Color
      */
     public String visitRgbColor(RgbColor<T> rgbColor) {

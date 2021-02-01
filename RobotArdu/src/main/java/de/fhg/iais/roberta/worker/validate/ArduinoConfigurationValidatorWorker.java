@@ -81,7 +81,7 @@ public class ArduinoConfigurationValidatorWorker extends AbstractValidatorWorker
                     blockPins.add(v);
                     currentFreePins.removeIf(s -> s.equals(v) && !v.equals(SC.LED_BUILTIN)); // built in LED cannot overlap
                 } else {
-                    project.addToErrorCounter(1);
+                    project.addToErrorCounter(1, null);
                     project.setResult(Key.PROGRAM_INVALID_STATEMETNS);
                     String blockId = configurationComponent.getProperty().getBlocklyId();
                     project.addToConfAnnotationList(blockId, NepoInfo.error("CONFIGURATION_ERROR_OVERLAPPING_PORTS"));
@@ -89,7 +89,7 @@ public class ArduinoConfigurationValidatorWorker extends AbstractValidatorWorker
             }
         });
         if ( blockPins.stream().distinct().count() != blockPins.size() ) {
-            project.addToErrorCounter(1);
+            project.addToErrorCounter(1, null);
             project.setResult(Key.PROGRAM_INVALID_STATEMETNS);
             String blockId = configurationComponent.getProperty().getBlocklyId();
             project.addToConfAnnotationList(blockId, NepoInfo.error("CONFIGURATION_ERROR_OVERLAPPING_PORTS"));
@@ -102,7 +102,7 @@ public class ArduinoConfigurationValidatorWorker extends AbstractValidatorWorker
             Map<String, String> componentProperties = configurationComponent.getComponentProperties();
             componentProperties.forEach((k, v) -> {
                 if ( v.equals(SC.LED_BUILTIN) && !project.getRobot().equals("unowifirev2") ) {
-                    project.addToErrorCounter(1);
+                    project.addToErrorCounter(1, null);
                     project.setResult(Key.PROGRAM_INVALID_STATEMETNS);
                     project
                         .addToConfAnnotationList(configurationComponent.getProperty().getBlocklyId(), NepoInfo.error("CONFIGURATION_ERROR_NO_BUILTIN_RGBLED"));

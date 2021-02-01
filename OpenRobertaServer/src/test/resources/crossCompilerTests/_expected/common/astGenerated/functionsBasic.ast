@@ -1,0 +1,16 @@
+
+StmtTextComment [Basic Functions START]
+MethodCall [number, , , VOID]
+MethodCall [breakFunct, , , VOID]
+AssertStmt [asserts pos-1: Binary [EQ, NumConst [5], Var [n1]]]
+
+Var [n1] := MethodExpr [MethodCall [retNumber, , , NUMBER]]
+
+
+Var [b] := MethodExpr [MethodCall [retBool, , , BOOLEAN]]
+
+
+Var [n1] := MethodExpr [MethodCall [retNumber2, Var [x], NumConst [10], NUMBER]]
+
+
+StmtTextComment [Basic Functions END]

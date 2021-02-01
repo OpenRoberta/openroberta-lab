@@ -201,7 +201,7 @@ public interface INaoVisitor<V> extends ISpeechVisitor<V>, ISensorVisitor<V> {
      *
      * @param DetectMarkMode on phrase to be visited
      */
-    V visitNaoMark(DetectMarkSensor<V> naoMark);
+    V visitDetectMarkSensor(DetectMarkSensor<V> naoMark);
 
     /**
      * visit a {@link DetectMarkSensor}.
@@ -236,9 +236,9 @@ public interface INaoVisitor<V> extends ISpeechVisitor<V>, ISensorVisitor<V> {
      *
      * @param DetectFaceSensor on phrase to be visited
      */
-    V visitDetectFace(DetectFaceSensor<V> detectFace);
+    V visitDetectFaceSensor(DetectFaceSensor<V> detectFace);
 
-    V visitElectricCurrent(ElectricCurrentSensor<V> electricCurrent);
+    V visitElectricCurrentSensor(ElectricCurrentSensor<V> electricCurrent);
 
     V visitSetIntensity(SetIntensity<V> setIntensity);
 
@@ -258,5 +258,5 @@ public interface INaoVisitor<V> extends ISpeechVisitor<V>, ISensorVisitor<V> {
      *
      * @param detectedFaceInformation on phrase to be visited
      */
-    V visitDetecedFaceInformation(DetectedFaceInformation<V> detectedFaceInformation);
+    V visitDetectedFaceInformation(DetectedFaceInformation<V> detectedFaceInformation);
 }

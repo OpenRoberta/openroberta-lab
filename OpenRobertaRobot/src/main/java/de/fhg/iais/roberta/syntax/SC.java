@@ -109,6 +109,7 @@ public interface SC {
     String WIRELESS = "WIRELESS";
     String SEND_DATA = "SEND_DATA";
     String RADIO = "RADIO";
+    String DISPLAY = "DISPLAY";
     String DISPLAY_GRAYSCALE = "DISPLAY_GRAYSCALE";
     String FOUR_DIGIT_DISPLAY = "FOUR_DIGIT_DISPLAY";
     String LED_BAR = "LED_BAR";

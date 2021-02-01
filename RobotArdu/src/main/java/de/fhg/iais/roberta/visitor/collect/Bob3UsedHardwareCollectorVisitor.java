@@ -29,7 +29,7 @@ public final class Bob3UsedHardwareCollectorVisitor extends AbstractUsedHardware
     }
 
     @Override
-    public Void visitBob3CodePadSensor(CodePadSensor<Void> codePadSensor) {
+    public Void visitCodePadSensor(CodePadSensor<Void> codePadSensor) {
         return null;
     }
 

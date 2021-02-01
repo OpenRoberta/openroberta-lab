@@ -1,0 +1,964 @@
+{"ops": [
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "0"
+  },
+  {
+    "opc": "VarDeclaration",
+    "name": "X",
+    "type": "NUMBER"
+  },
+  {
+    "opc": "comment",
+    "target": "IfStatement"
+  },
+  {
+    "opc": "expr",
+    "expr": "BOOL_CONST",
+    "value": true
+  },
+  {
+    "opc": "jump",
+    "conditional": false,
+    "target": 9
+  },
+  {
+    "opc": "expr",
+    "name": "X",
+    "expr": "Var"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "1"
+  },
+  {
+    "opc": "mathChange",
+    "name": "X"
+  },
+  {
+    "opc": "jump",
+    "conditional": "always",
+    "target": 9
+  },
+  {
+    "opc": "comment",
+    "target": "IfStatement"
+  },
+  {
+    "opc": "expr",
+    "expr": "BOOL_CONST",
+    "value": false
+  },
+  {
+    "opc": "jump",
+    "conditional": false,
+    "target": 16
+  },
+  {
+    "opc": "expr",
+    "name": "X",
+    "expr": "Var"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "1000"
+  },
+  {
+    "opc": "mathChange",
+    "name": "X"
+  },
+  {
+    "opc": "jump",
+    "conditional": "always",
+    "target": 16
+  },
+  {
+    "opc": "comment",
+    "target": "IfStatement"
+  },
+  {
+    "opc": "expr",
+    "expr": "BOOL_CONST",
+    "value": true
+  },
+  {
+    "opc": "jump",
+    "conditional": false,
+    "target": 30
+  },
+  {
+    "opc": "comment",
+    "target": "IfStatement"
+  },
+  {
+    "opc": "expr",
+    "expr": "BOOL_CONST",
+    "value": true
+  },
+  {
+    "opc": "jump",
+    "conditional": false,
+    "target": 26
+  },
+  {
+    "opc": "expr",
+    "name": "X",
+    "expr": "Var"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "1"
+  },
+  {
+    "opc": "mathChange",
+    "name": "X"
+  },
+  {
+    "opc": "jump",
+    "conditional": "always",
+    "target": 26
+  },
+  {
+    "opc": "expr",
+    "name": "X",
+    "expr": "Var"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "1"
+  },
+  {
+    "opc": "mathChange",
+    "name": "X"
+  },
+  {
+    "opc": "jump",
+    "conditional": "always",
+    "target": 30
+  },
+  {
+    "opc": "comment",
+    "target": "IfStatement"
+  },
+  {
+    "opc": "expr",
+    "expr": "BOOL_CONST",
+    "value": true
+  },
+  {
+    "opc": "jump",
+    "conditional": false,
+    "target": 44
+  },
+  {
+    "opc": "comment",
+    "target": "IfStatement"
+  },
+  {
+    "opc": "expr",
+    "expr": "BOOL_CONST",
+    "value": false
+  },
+  {
+    "opc": "jump",
+    "conditional": false,
+    "target": 40
+  },
+  {
+    "opc": "expr",
+    "name": "X",
+    "expr": "Var"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "1000"
+  },
+  {
+    "opc": "mathChange",
+    "name": "X"
+  },
+  {
+    "opc": "jump",
+    "conditional": "always",
+    "target": 40
+  },
+  {
+    "opc": "expr",
+    "name": "X",
+    "expr": "Var"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "1"
+  },
+  {
+    "opc": "mathChange",
+    "name": "X"
+  },
+  {
+    "opc": "jump",
+    "conditional": "always",
+    "target": 44
+  },
+  {
+    "opc": "comment",
+    "target": "IfStatement"
+  },
+  {
+    "opc": "expr",
+    "expr": "BOOL_CONST",
+    "value": false
+  },
+  {
+    "opc": "jump",
+    "conditional": false,
+    "target": 58
+  },
+  {
+    "opc": "comment",
+    "target": "IfStatement"
+  },
+  {
+    "opc": "expr",
+    "expr": "BOOL_CONST",
+    "value": false
+  },
+  {
+    "opc": "jump",
+    "conditional": false,
+    "target": 54
+  },
+  {
+    "opc": "expr",
+    "name": "X",
+    "expr": "Var"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "1000"
+  },
+  {
+    "opc": "mathChange",
+    "name": "X"
+  },
+  {
+    "opc": "jump",
+    "conditional": "always",
+    "target": 54
+  },
+  {
+    "opc": "expr",
+    "name": "X",
+    "expr": "Var"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "1000"
+  },
+  {
+    "opc": "mathChange",
+    "name": "X"
+  },
+  {
+    "opc": "jump",
+    "conditional": "always",
+    "target": 58
+  },
+  {
+    "opc": "comment",
+    "target": "IfStatement"
+  },
+  {
+    "opc": "expr",
+    "expr": "BOOL_CONST",
+    "value": false
+  },
+  {
+    "opc": "jump",
+    "conditional": false,
+    "target": 72
+  },
+  {
+    "opc": "comment",
+    "target": "IfStatement"
+  },
+  {
+    "opc": "expr",
+    "expr": "BOOL_CONST",
+    "value": true
+  },
+  {
+    "opc": "jump",
+    "conditional": false,
+    "target": 68
+  },
+  {
+    "opc": "expr",
+    "name": "X",
+    "expr": "Var"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "1000"
+  },
+  {
+    "opc": "mathChange",
+    "name": "X"
+  },
+  {
+    "opc": "jump",
+    "conditional": "always",
+    "target": 68
+  },
+  {
+    "opc": "expr",
+    "name": "X",
+    "expr": "Var"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "1000"
+  },
+  {
+    "opc": "mathChange",
+    "name": "X"
+  },
+  {
+    "opc": "jump",
+    "conditional": "always",
+    "target": 72
+  },
+  {
+    "opc": "comment",
+    "target": "IfStatement"
+  },
+  {
+    "opc": "expr",
+    "expr": "BOOL_CONST",
+    "value": true
+  },
+  {
+    "opc": "jump",
+    "conditional": false,
+    "target": 93
+  },
+  {
+    "opc": "comment",
+    "target": "IfStatement"
+  },
+  {
+    "opc": "expr",
+    "expr": "BOOL_CONST",
+    "value": true
+  },
+  {
+    "opc": "jump",
+    "conditional": false,
+    "target": 89
+  },
+  {
+    "opc": "comment",
+    "target": "IfStatement"
+  },
+  {
+    "opc": "expr",
+    "expr": "BOOL_CONST",
+    "value": false
+  },
+  {
+    "opc": "jump",
+    "conditional": false,
+    "target": 85
+  },
+  {
+    "opc": "expr",
+    "name": "X",
+    "expr": "Var"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "1000"
+  },
+  {
+    "opc": "mathChange",
+    "name": "X"
+  },
+  {
+    "opc": "jump",
+    "conditional": "always",
+    "target": 85
+  },
+  {
+    "opc": "expr",
+    "name": "X",
+    "expr": "Var"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "1"
+  },
+  {
+    "opc": "mathChange",
+    "name": "X"
+  },
+  {
+    "opc": "jump",
+    "conditional": "always",
+    "target": 89
+  },
+  {
+    "opc": "expr",
+    "name": "X",
+    "expr": "Var"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "1"
+  },
+  {
+    "opc": "mathChange",
+    "name": "X"
+  },
+  {
+    "opc": "jump",
+    "conditional": "always",
+    "target": 93
+  },
+  {
+    "opc": "comment",
+    "target": "IfStatement"
+  },
+  {
+    "opc": "expr",
+    "expr": "BOOL_CONST",
+    "value": true
+  },
+  {
+    "opc": "jump",
+    "conditional": false,
+    "target": 100
+  },
+  {
+    "opc": "expr",
+    "name": "X",
+    "expr": "Var"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "1"
+  },
+  {
+    "opc": "mathChange",
+    "name": "X"
+  },
+  {
+    "opc": "jump",
+    "conditional": "always",
+    "target": 106
+  },
+  {
+    "opc": "expr",
+    "expr": "BOOL_CONST",
+    "value": false
+  },
+  {
+    "opc": "jump",
+    "conditional": false,
+    "target": 106
+  },
+  {
+    "opc": "expr",
+    "name": "X",
+    "expr": "Var"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "1000"
+  },
+  {
+    "opc": "mathChange",
+    "name": "X"
+  },
+  {
+    "opc": "jump",
+    "conditional": "always",
+    "target": 106
+  },
+  {
+    "opc": "comment",
+    "target": "IfStatement"
+  },
+  {
+    "opc": "expr",
+    "expr": "BOOL_CONST",
+    "value": false
+  },
+  {
+    "opc": "jump",
+    "conditional": false,
+    "target": 113
+  },
+  {
+    "opc": "expr",
+    "name": "X",
+    "expr": "Var"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "1000"
+  },
+  {
+    "opc": "mathChange",
+    "name": "X"
+  },
+  {
+    "opc": "jump",
+    "conditional": "always",
+    "target": 119
+  },
+  {
+    "opc": "expr",
+    "expr": "BOOL_CONST",
+    "value": true
+  },
+  {
+    "opc": "jump",
+    "conditional": false,
+    "target": 119
+  },
+  {
+    "opc": "expr",
+    "name": "X",
+    "expr": "Var"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "1"
+  },
+  {
+    "opc": "mathChange",
+    "name": "X"
+  },
+  {
+    "opc": "jump",
+    "conditional": "always",
+    "target": 119
+  },
+  {
+    "opc": "comment",
+    "target": "IfStatement"
+  },
+  {
+    "opc": "expr",
+    "expr": "BOOL_CONST",
+    "value": true
+  },
+  {
+    "opc": "jump",
+    "conditional": false,
+    "target": 126
+  },
+  {
+    "opc": "expr",
+    "name": "X",
+    "expr": "Var"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "1"
+  },
+  {
+    "opc": "mathChange",
+    "name": "X"
+  },
+  {
+    "opc": "jump",
+    "conditional": "always",
+    "target": 129
+  },
+  {
+    "opc": "expr",
+    "name": "X",
+    "expr": "Var"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "1000"
+  },
+  {
+    "opc": "mathChange",
+    "name": "X"
+  },
+  {
+    "opc": "comment",
+    "target": "IfStatement"
+  },
+  {
+    "opc": "expr",
+    "expr": "BOOL_CONST",
+    "value": false
+  },
+  {
+    "opc": "jump",
+    "conditional": false,
+    "target": 136
+  },
+  {
+    "opc": "expr",
+    "name": "X",
+    "expr": "Var"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "1000"
+  },
+  {
+    "opc": "mathChange",
+    "name": "X"
+  },
+  {
+    "opc": "jump",
+    "conditional": "always",
+    "target": 139
+  },
+  {
+    "opc": "expr",
+    "name": "X",
+    "expr": "Var"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "1"
+  },
+  {
+    "opc": "mathChange",
+    "name": "X"
+  },
+  {
+    "opc": "comment",
+    "target": "IfStatement"
+  },
+  {
+    "opc": "expr",
+    "expr": "BOOL_CONST",
+    "value": true
+  },
+  {
+    "opc": "jump",
+    "conditional": false,
+    "target": 146
+  },
+  {
+    "opc": "expr",
+    "name": "X",
+    "expr": "Var"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "1"
+  },
+  {
+    "opc": "mathChange",
+    "name": "X"
+  },
+  {
+    "opc": "jump",
+    "conditional": "always",
+    "target": 155
+  },
+  {
+    "opc": "expr",
+    "expr": "BOOL_CONST",
+    "value": true
+  },
+  {
+    "opc": "jump",
+    "conditional": false,
+    "target": 152
+  },
+  {
+    "opc": "expr",
+    "name": "X",
+    "expr": "Var"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "1000"
+  },
+  {
+    "opc": "mathChange",
+    "name": "X"
+  },
+  {
+    "opc": "jump",
+    "conditional": "always",
+    "target": 155
+  },
+  {
+    "opc": "expr",
+    "name": "X",
+    "expr": "Var"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "1000"
+  },
+  {
+    "opc": "mathChange",
+    "name": "X"
+  },
+  {
+    "opc": "comment",
+    "target": "IfStatement"
+  },
+  {
+    "opc": "expr",
+    "expr": "BOOL_CONST",
+    "value": false
+  },
+  {
+    "opc": "jump",
+    "conditional": false,
+    "target": 162
+  },
+  {
+    "opc": "expr",
+    "name": "X",
+    "expr": "Var"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "1000"
+  },
+  {
+    "opc": "mathChange",
+    "name": "X"
+  },
+  {
+    "opc": "jump",
+    "conditional": "always",
+    "target": 171
+  },
+  {
+    "opc": "expr",
+    "expr": "BOOL_CONST",
+    "value": false
+  },
+  {
+    "opc": "jump",
+    "conditional": false,
+    "target": 168
+  },
+  {
+    "opc": "expr",
+    "name": "X",
+    "expr": "Var"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "1000"
+  },
+  {
+    "opc": "mathChange",
+    "name": "X"
+  },
+  {
+    "opc": "jump",
+    "conditional": "always",
+    "target": 171
+  },
+  {
+    "opc": "expr",
+    "name": "X",
+    "expr": "Var"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "1"
+  },
+  {
+    "opc": "mathChange",
+    "name": "X"
+  },
+  {
+    "opc": "comment",
+    "target": "IfStatement"
+  },
+  {
+    "opc": "expr",
+    "expr": "BOOL_CONST",
+    "value": true
+  },
+  {
+    "opc": "jump",
+    "conditional": false,
+    "target": 178
+  },
+  {
+    "opc": "expr",
+    "name": "X",
+    "expr": "Var"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "1"
+  },
+  {
+    "opc": "mathChange",
+    "name": "X"
+  },
+  {
+    "opc": "jump",
+    "conditional": "always",
+    "target": 187
+  },
+  {
+    "opc": "expr",
+    "expr": "BOOL_CONST",
+    "value": false
+  },
+  {
+    "opc": "jump",
+    "conditional": false,
+    "target": 184
+  },
+  {
+    "opc": "expr",
+    "name": "X",
+    "expr": "Var"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "1000"
+  },
+  {
+    "opc": "mathChange",
+    "name": "X"
+  },
+  {
+    "opc": "jump",
+    "conditional": "always",
+    "target": 187
+  },
+  {
+    "opc": "expr",
+    "name": "X",
+    "expr": "Var"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "1000"
+  },
+  {
+    "opc": "mathChange",
+    "name": "X"
+  },
+  {
+    "opc": "comment",
+    "target": "IfStatement"
+  },
+  {
+    "opc": "expr",
+    "expr": "BOOL_CONST",
+    "value": false
+  },
+  {
+    "opc": "jump",
+    "conditional": false,
+    "target": 194
+  },
+  {
+    "opc": "expr",
+    "name": "X",
+    "expr": "Var"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "1000"
+  },
+  {
+    "opc": "mathChange",
+    "name": "X"
+  },
+  {
+    "opc": "jump",
+    "conditional": "always",
+    "target": 203
+  },
+  {
+    "opc": "expr",
+    "expr": "BOOL_CONST",
+    "value": true
+  },
+  {
+    "opc": "jump",
+    "conditional": false,
+    "target": 200
+  },
+  {
+    "opc": "expr",
+    "name": "X",
+    "expr": "Var"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "1"
+  },
+  {
+    "opc": "mathChange",
+    "name": "X"
+  },
+  {
+    "opc": "jump",
+    "conditional": "always",
+    "target": 203
+  },
+  {
+    "opc": "expr",
+    "name": "X",
+    "expr": "Var"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "1000"
+  },
+  {
+    "opc": "mathChange",
+    "name": "X"
+  },
+  {"opc": "stop"}
+]}

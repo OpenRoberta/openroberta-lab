@@ -1,0 +1,69 @@
+
+Var [x] := FunctionExpr [MathOnListFunct [SUM, [Var [l1]]]]
+
+
+Var [x] := FunctionExpr [MathOnListFunct [MIN, [Var [l1]]]]
+
+
+Var [x] := FunctionExpr [MathOnListFunct [MAX, [Var [l1]]]]
+
+
+Var [x] := FunctionExpr [MathOnListFunct [AVERAGE, [Var [l1]]]]
+
+
+Var [x] := FunctionExpr [MathOnListFunct [MEDIAN, [Var [l1]]]]
+
+
+Var [x] := FunctionExpr [MathOnListFunct [STD_DEV, [Var [l1]]]]
+
+
+Var [l2] := Var [l1]
+
+
+Var [b] := FunctionExpr [LengthOfFunct [LIST_IS_EMPTY, [Var [l1]]]]
+
+
+Var [x] := FunctionExpr [LengthOfFunct [LIST_LENGTH, [Var [l1]]]]
+
+
+Var [x] := FunctionExpr [IndexOfFunct [FIRST, [Var [l1], NumConst [0]]]]
+
+
+Var [x] := FunctionExpr [IndexOfFunct [LAST, [Var [l1], NumConst [0]]]]
+
+
+Var [x] := FunctionExpr [ListGetIndex [GET, FROM_START, [Var [l1], NumConst [0]]]]
+
+
+Var [x] := FunctionExpr [ListGetIndex [GET, FROM_END, [Var [l1], NumConst [0]]]]
+
+
+Var [x] := FunctionExpr [ListGetIndex [GET, FIRST, [Var [l1]]]]
+
+
+Var [x] := FunctionExpr [ListGetIndex [GET, LAST, [Var [l1]]]]
+
+
+Var [x] := FunctionExpr [ListGetIndex [GET_REMOVE, FROM_START, [Var [l1], NumConst [0]]]]
+
+
+Var [x] := FunctionExpr [ListGetIndex [GET_REMOVE, FROM_END, [Var [l1], NumConst [0]]]]
+
+
+Var [x] := FunctionExpr [ListGetIndex [GET_REMOVE, FIRST, [Var [l1]]]]
+
+
+Var [x] := FunctionExpr [ListGetIndex [GET_REMOVE, LAST, [Var [l1]]]]
+
+ListGetIndex [REMOVE, FROM_START, [Var [l1], NumConst [0]]]
+ListGetIndex [REMOVE, FROM_END, [Var [l1], NumConst [0]]]
+ListGetIndex [REMOVE, FIRST, [Var [l1]]]
+ListGetIndex [REMOVE, LAST, [Var [l1]]]
+ListSetIndex [SET, FROM_START, [Var [l1], NumConst [0], NumConst [0]]]
+ListSetIndex [SET, FROM_END, [Var [l1], NumConst [0], NumConst [0]]]
+ListSetIndex [SET, FIRST, [Var [l1], NumConst [0]]]
+ListSetIndex [SET, LAST, [Var [l1], NumConst [0]]]
+ListSetIndex [INSERT, FROM_START, [Var [l1], NumConst [0], NumConst [0]]]
+ListSetIndex [INSERT, FROM_END, [Var [l1], NumConst [0], NumConst [0]]]
+ListSetIndex [INSERT, FIRST, [Var [l1], NumConst [0]]]
+ListSetIndex [INSERT, LAST, [Var [l1], NumConst [0]]]

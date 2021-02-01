@@ -9,13 +9,11 @@ import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
+import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
-import de.fhg.iais.roberta.visitor.IVisitor;
-import de.fhg.iais.roberta.visitor.hardware.IRaspberryPiVisitor;
 
 /**
  * This class represents the <b>robColour_picker</b> block from Blockly into the AST (abstract syntax tree). Object from this class will generate color
@@ -74,11 +72,6 @@ public class ColorHexString<V> extends Expr<V> {
         return "ColorHexString [" + this.value + "]";
     }
 
-    @Override
-    protected V acceptImpl(IVisitor<V> visitor) {
-        return ((IRaspberryPiVisitor<V>) visitor).visitColorHexString(this);
-    }
-
     /**
      * Transformation from JAXB object to corresponding AST object.
      *
@@ -86,7 +79,7 @@ public class ColorHexString<V> extends Expr<V> {
      * @param helper class for making the transformation
      * @return corresponding AST object
      */
-    public static <V> Phrase<V> jaxbToAst(Block block, AbstractJaxb2Ast<V> helper) {
+    public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
         List<Field> fields = Jaxb2Ast.extractFields(block, (short) 1);
         String field = Jaxb2Ast.extractField(fields, BlocklyConstants.COLOUR);
         return ColorHexString.make(field, Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));

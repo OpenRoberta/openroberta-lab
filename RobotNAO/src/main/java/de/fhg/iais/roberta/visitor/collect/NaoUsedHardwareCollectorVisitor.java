@@ -198,7 +198,7 @@ public final class NaoUsedHardwareCollectorVisitor extends AbstractUsedHardwareC
     }
 
     @Override
-    public Void visitNaoMark(DetectMarkSensor<Void> naoMark) {
+    public Void visitDetectMarkSensor(DetectMarkSensor<Void> naoMark) {
         this.getBuilder(UsedHardwareBean.Builder.class).addUsedSensor(new UsedSensor(null, SC.DETECT_MARK, null));
         return null;
     }
@@ -231,7 +231,7 @@ public final class NaoUsedHardwareCollectorVisitor extends AbstractUsedHardwareC
     }
 
     @Override
-    public Void visitDetectFace(DetectFaceSensor<Void> detectFace) {
+    public Void visitDetectFaceSensor(DetectFaceSensor<Void> detectFace) {
         this.getBuilder(UsedHardwareBean.Builder.class).addUsedSensor(new UsedSensor(null, SC.NAO_FACE, null));
         return null;
     }
@@ -243,7 +243,7 @@ public final class NaoUsedHardwareCollectorVisitor extends AbstractUsedHardwareC
     }
 
     @Override
-    public Void visitElectricCurrent(ElectricCurrentSensor<Void> electricCurrent) {
+    public Void visitElectricCurrentSensor(ElectricCurrentSensor<Void> electricCurrent) {
         return null;
     }
 
@@ -273,7 +273,7 @@ public final class NaoUsedHardwareCollectorVisitor extends AbstractUsedHardwareC
 
     @Override
     public Void visitRecognizeWord(RecognizeWord<Void> recognizeWord) {
-        recognizeWord.getVocabulary().accept(this);
+        recognizeWord.vocabulary.accept(this);
         this.getBuilder(UsedHardwareBean.Builder.class).addUsedSensor(new UsedSensor(null, SC.NAO_SPEECH, null));
         return null;
     }
@@ -286,7 +286,7 @@ public final class NaoUsedHardwareCollectorVisitor extends AbstractUsedHardwareC
     }
 
     @Override
-    public Void visitDetecedFaceInformation(DetectedFaceInformation<Void> detectedFaceInformation) {
+    public Void visitDetectedFaceInformation(DetectedFaceInformation<Void> detectedFaceInformation) {
         detectedFaceInformation.getFaceName().accept(this);
         this.getBuilder(UsedHardwareBean.Builder.class).addUsedSensor(new UsedSensor(null, SC.NAO_FACE, null));
         return null;

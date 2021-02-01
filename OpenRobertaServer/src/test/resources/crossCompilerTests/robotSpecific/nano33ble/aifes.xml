@@ -1,0 +1,459 @@
+<export xmlns="http://de.fhg.iais.roberta.blockly">
+	<program>
+		<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="nano33ble" xmlversion="3.1" description="" tags="">
+			<instance x="42" y="25">
+				<block type="robControls_start_ardu" id="x,iSg:V_K+*W/6H1vOE+" intask="true" deletable="false">
+					<mutation declare="true"/>
+					<field name="DEBUG"/>
+					<statement name="ST">
+						<block type="robGlobalVariables_declare" id="=BKrCzuv0k88lJouNL=h" intask="true" deletable="false" movable="false">
+							<mutation next="true" declaration_type="Number"/>
+							<field name="VAR">classes</field>
+							<field name="TYPE">Number</field>
+							<value name="VALUE">
+								<block type="math_number" id="WV3#VP4|UoCt%:(28BAk" intask="true">
+									<field name="NUM">4</field>
+								</block>
+							</value>
+						</block>
+						<block type="robGlobalVariables_declare" id="qrTePo3%v+,.#Bb;=/7q" intask="true" deletable="false" movable="false">
+							<mutation next="true" declaration_type="Number"/>
+							<field name="VAR">inputs</field>
+							<field name="TYPE">Number</field>
+							<value name="VALUE">
+								<block type="math_number" id="XftONC*%VfT(n`L*CrQ?" intask="true">
+									<field name="NUM">3</field>
+								</block>
+							</value>
+						</block>
+						<block type="robGlobalVariables_declare" id="GCoHSokNl[N~f^p|E=JC" intask="true" deletable="false" movable="false">
+							<mutation next="true" declaration_type="Number"/>
+							<field name="VAR">neurons</field>
+							<field name="TYPE">Number</field>
+							<value name="VALUE">
+								<block type="math_number" id="Z1+iy9g/}U@=xv|{uUa%" intask="true">
+									<field name="NUM">30</field>
+								</block>
+							</value>
+						</block>
+						<block type="robGlobalVariables_declare" id="Mcg=6GCKLr[M+iuyrNaw" intask="true" deletable="false" movable="false">
+							<mutation next="true" declaration_type="Array_Number"/>
+							<field name="VAR">probabilities</field>
+							<field name="TYPE">Array_Number</field>
+							<value name="VALUE">
+								<block type="robLists_repeat" id="zo~WN7qv6N{!=T[`%rOq" intask="true">
+									<mutation list_type="Number"/>
+									<field name="LIST_TYPE">Number</field>
+									<value name="ITEM">
+										<block type="math_number" id="g|-bRr6K2j#G(MqM9G}o" intask="true">
+											<field name="NUM">0</field>
+										</block>
+									</value>
+									<value name="NUM">
+										<block type="variables_get" id="Bsf!gzhll*~_CZcnrt_4" intask="true">
+											<mutation datatype="Number"/>
+											<field name="VAR">classes</field>
+										</block>
+									</value>
+								</block>
+							</value>
+						</block>
+						<block type="robGlobalVariables_declare" id="-]d-S/;EPkeYzUdyLX5r" intask="true" deletable="false" movable="false">
+							<mutation next="true" declaration_type="Number"/>
+							<field name="VAR">mostLikelyClass</field>
+							<field name="TYPE">Number</field>
+							<value name="VALUE">
+								<block type="math_number" id="}Dm6kVkEiAar[U7-2%G-" intask="true">
+									<field name="NUM">0</field>
+								</block>
+							</value>
+						</block>
+						<block type="robGlobalVariables_declare" id="]%8B]V9vr-)Mjb(/vbx[" intask="true" deletable="false" movable="false">
+							<mutation next="true" declaration_type="Number"/>
+							<field name="VAR">pOfMostLikelyClass</field>
+							<field name="TYPE">Number</field>
+							<value name="VALUE">
+								<block type="math_number" id="DyxtQ~`v.1r_;t{(FZ[[" intask="true">
+									<field name="NUM">0</field>
+								</block>
+							</value>
+						</block>
+						<block type="robGlobalVariables_declare" id="SMHh_(2_)#ul#7QI-qV6" intask="true" deletable="false" movable="false">
+							<mutation next="true" declaration_type="Number"/>
+							<field name="VAR">x</field>
+							<field name="TYPE">Number</field>
+							<value name="VALUE">
+								<block type="math_number" id="LNY@v}Fu9MQI`npH1oZC" intask="true">
+									<field name="NUM">0</field>
+								</block>
+							</value>
+						</block>
+						<block type="robGlobalVariables_declare" id="eZ+oYZL+JS?jwy2dn]3G" intask="true" deletable="false" movable="false">
+							<mutation next="true" declaration_type="Number"/>
+							<field name="VAR">y</field>
+							<field name="TYPE">Number</field>
+							<value name="VALUE">
+								<block type="math_number" id="C0s+}og3fX7Jrew:b.|#" intask="true">
+									<field name="NUM">0</field>
+								</block>
+							</value>
+						</block>
+						<block type="robGlobalVariables_declare" id="-8+!`P!ROKv/sE+c)uy!" intask="true" deletable="false" movable="false">
+							<mutation next="false" declaration_type="Number"/>
+							<field name="VAR">z</field>
+							<field name="TYPE">Number</field>
+							<value name="VALUE">
+								<block type="math_number" id="]vvnyMp[%Hz-Jrmy@=GY" intask="true">
+									<field name="NUM">0</field>
+								</block>
+							</value>
+						</block>
+					</statement>
+				</block>
+				<block type="robControls_loopForever_ardu" id="=pcp55NgKjv3p,88q(W." intask="true" deletable="false" movable="false">
+					<statement name="DO">
+						<block type="robActions_aifes_setupneuralnet" id="jBRPp/?%PEeU^tiv5pwh" intask="true">
+							<value name="NN_NUMBER_OF_CLASSES">
+								<block type="variables_get" id="+5rLz,gU@a1olyV17a^U" intask="true">
+									<mutation datatype="Number"/>
+									<field name="VAR">classes</field>
+								</block>
+							</value>
+							<value name="NN_NUMBER_INPUT_NEURONS">
+								<block type="variables_get" id="yN%7M#/,HKt;0z1{V1ie" intask="true">
+									<mutation datatype="Number"/>
+									<field name="VAR">inputs</field>
+								</block>
+							</value>
+							<value name="NN_MAX_NUMBER_OF_NEURONS">
+								<block type="variables_get" id="Tbz1qovO=Bek,Sx/G{ci" intask="true">
+									<mutation datatype="Number"/>
+									<field name="VAR">neurons</field>
+								</block>
+							</value>
+						</block>
+						<block type="robControls_for" id="np2i{|U`51ALm@TLRz=u" intask="true">
+							<field name="VAR">classNumber</field>
+							<value name="FROM">
+								<block type="math_number" id="4#@KIvv62AtP@!P~|ih8" intask="true">
+									<field name="NUM">0</field>
+								</block>
+							</value>
+							<value name="TO">
+								<block type="variables_get" id="Xy.gnf=M}35hCZTJNh@g" intask="true">
+									<mutation datatype="Number"/>
+									<field name="VAR">classes</field>
+								</block>
+							</value>
+							<value name="BY">
+								<block type="math_number" id="`|xjv]+CC?;e^YsJBSYd" intask="true">
+									<field name="NUM">1</field>
+								</block>
+							</value>
+							<statement name="DO">
+								<block type="robControls_for" id="y|?dgi__;/`])OLWF:lE" intask="true">
+									<field name="VAR">datasets</field>
+									<value name="FROM">
+										<block type="math_number" id=")mSz_!x5J4s8f^{j/04:" intask="true">
+											<field name="NUM">1</field>
+										</block>
+									</value>
+									<value name="TO">
+										<block type="math_number" id="R@YI(i-%[=`?dAEJb;zB" intask="true">
+											<field name="NUM">10</field>
+										</block>
+									</value>
+									<value name="BY">
+										<block type="math_number" id="taRAt/7[]R}_1,J{1NQJ" intask="true">
+											<field name="NUM">1</field>
+										</block>
+									</value>
+									<statement name="DO">
+										<block type="robProcedures_callnoreturn" id="Yz,xnEWk1R;(p*PC~,z^" intask="true">
+											<mutation name="getAllRawData"/>
+										</block>
+										<block type="robActions_aifes_addtrainingsdata" id="rpJnTSbPom%`{O%?W|C`" intask="true">
+											<value name="NN_CLASS_NUMBER">
+												<block type="variables_get" id="bsNPn9,kp(RW27-aU75U" disabled="true" intask="true">
+													<mutation datatype="Number"/>
+													<field name="VAR">classNumber</field>
+												</block>
+											</value>
+										</block>
+									</statement>
+								</block>
+							</statement>
+						</block>
+						<block type="robActions_aifes_train" id="|[5FS^X|oeB,n@djKiA," intask="true"/>
+						<block type="robControls_loopForever" id="laHqRu32K}mI.F^82qkL" intask="true">
+							<statement name="DO">
+								<block type="robProcedures_callnoreturn" id="{nf6Xy1NQFyrbqjBD%oF" intask="true">
+									<mutation name="getAllRawData"/>
+								</block>
+								<block type="robActions_aifes_classify" id="GA6GH^znMY6,GC}3!=a@" intask="true">
+									<value name="NN_CLASS_PROBABILITIES">
+										<block type="variables_get" id="QwyUGEJK,J=6oCeIj(;b" intask="true">
+											<mutation datatype="Array_Number"/>
+											<field name="VAR">probabilities</field>
+										</block>
+									</value>
+								</block>
+								<block type="robProcedures_callnoreturn" id="a)7Da]G1DQ;zoRNEFu:N" intask="true">
+									<mutation name="printClassWithHighestProbability"/>
+								</block>
+							</statement>
+						</block>
+					</statement>
+				</block>
+			</instance>
+			<instance x="948" y="50">
+				<block type="robProcedures_defnoreturn" id="trWcxDJpUrp]e%!i2.Y)" intask="true">
+					<mutation declare="false"/>
+					<field name="NAME">getAllRawData</field>
+					<statement name="STACK">
+						<block type="robActions_aifes_initrawdata" id="fzSt++(E}ccO}BC{Gvf1" intask="true"/>
+						<block type="robControls_wait_for" id="v@*1i6Zw3-Gj^H|@3iWg" intask="true">
+							<value name="WAIT0">
+								<block type="robSensors_getSample" id="6?-AnmI85aOC2,bHY`[0" intask="true">
+									<mutation input="KEY_PRESSED"/>
+									<field name="SENSORTYPE">KEY_PRESSED</field>
+									<field name="SENSORPORT">record</field>
+									<field name="SLOT"/>
+								</block>
+							</value>
+						</block>
+						<block type="robControls_loopForever" id="Hl0j|:YM*K+k*@(2G9jI" intask="true">
+							<statement name="DO">
+								<block type="robControls_if" id="kx/Y)}L+A{HFxvW59=eI" intask="true">
+									<value name="IF0">
+										<block type="logic_negate" id="``m7)_a;1!C}T;1|-d^6" intask="true">
+											<value name="BOOL">
+												<block type="robSensors_key_getSample" id=")V#99!4y{07}CFKMY(20" intask="true">
+													<mutation mode="PRESSED"/>
+													<field name="MODE">PRESSED</field>
+													<field name="SENSORPORT">record</field>
+													<field name="SLOT"/>
+												</block>
+											</value>
+										</block>
+									</value>
+									<statement name="DO0">
+										<block type="controls_flow_statements" id="xfy]sF6+u3kjwG@/k*xB" intask="true">
+											<field name="FLOW">BREAK</field>
+										</block>
+									</statement>
+								</block>
+								<block type="robControls_wait" id="(-:hADOT12m?FzyucHX(" intask="true">
+									<value name="WAIT0">
+										<block type="robSensors_lsm9ds1_acceleration_getDataAvailableSample" id="L-aHTaKkj-QH}sZMGy{?" intask="true">
+											<value name="VARIABLE_X">
+												<block type="variables_get" id="2+=Xj*?Lv5+~XMS3WCV0" intask="true">
+													<mutation datatype="Number"/>
+													<field name="VAR">x</field>
+												</block>
+											</value>
+											<value name="VARIABLE_Y">
+												<block type="variables_get" id=";oTg4Ypj:Ek^o}Z`U7}0" intask="true">
+													<mutation datatype="Number"/>
+													<field name="VAR">y</field>
+												</block>
+											</value>
+											<value name="VARIABLE_Z">
+												<block type="variables_get" id="EI{+n[z-tAaNP-c;N/0I" intask="true">
+													<mutation datatype="Number"/>
+													<field name="VAR">z</field>
+												</block>
+											</value>
+										</block>
+									</value>
+								</block>
+								<block type="robActions_aifes_addrawdata" id="~6s6EL@lqqwU;A]DtMXf" intask="true">
+									<value name="NN_RAW_DATA">
+										<block type="variables_get" id="Uxb-MZ:g#T9+kdR(nf0r" intask="true">
+											<mutation datatype="Number"/>
+											<field name="VAR">x</field>
+										</block>
+									</value>
+								</block>
+								<block type="robActions_aifes_addrawdata" id="ImgsUl38;EXEQBLEp#-[" intask="true">
+									<value name="NN_RAW_DATA">
+										<block type="variables_get" id="*f9:OAm+#(fJ2*zm*wTj" intask="true">
+											<mutation datatype="Number"/>
+											<field name="VAR">y</field>
+										</block>
+									</value>
+								</block>
+								<block type="robActions_aifes_addrawdata" id="%I#ir*%s4FGgwGf):-0(" intask="true">
+									<value name="NN_RAW_DATA">
+										<block type="variables_get" id="JJDVBl*BF-%X3Uf%gcU;" intask="true">
+											<mutation datatype="Number"/>
+											<field name="VAR">z</field>
+										</block>
+									</value>
+								</block>
+							</statement>
+						</block>
+					</statement>
+				</block>
+			</instance>
+			<instance x="947" y="516">
+				<block type="robProcedures_defnoreturn" id="M(!rmF4{p@eC,)RI.Pyq" intask="true">
+					<mutation declare="false"/>
+					<field name="NAME">printClassWithHighestProbability</field>
+					<statement name="STACK">
+						<block type="variables_set" id=",O#8c7zk1W=zWNf5h2wk" intask="true">
+							<mutation datatype="Number"/>
+							<field name="VAR">mostLikelyClass</field>
+							<value name="VALUE">
+								<block type="math_number" id="hbr|%#X)W#^@Rv*@=.XL" intask="true">
+									<field name="NUM">0</field>
+								</block>
+							</value>
+						</block>
+						<block type="variables_set" id="oxYsdcLAI3w.}7yYXK3B" intask="true">
+							<mutation datatype="Number"/>
+							<field name="VAR">pOfMostLikelyClass</field>
+							<value name="VALUE">
+								<block type="math_number" id="#taG{k(v8y,Ye/pBXZ2e" intask="true">
+									<field name="NUM">0</field>
+								</block>
+							</value>
+						</block>
+						<block type="robControls_forEach" id="CtdO6EbwG;GQh.h71G4V" intask="true">
+							<mutation list_type="Number"/>
+							<field name="TYPE">Number</field>
+							<field name="VAR">i</field>
+							<value name="LIST">
+								<block type="variables_get" id="@rziFpk/F*DWh0]#1Q!," intask="true">
+									<mutation datatype="Array_Number"/>
+									<field name="VAR">probabilities</field>
+								</block>
+							</value>
+							<statement name="DO">
+								<block type="robControls_if" id="[gc6W9*Du::wM;4ymb;Z" intask="true">
+									<value name="IF0">
+										<block type="logic_compare" id="?a3M#qcVX8b=!gg)-5tN" intask="true">
+											<field name="OP">GT</field>
+											<value name="A">
+												<block type="robLists_getIndex" id="qqqLYp0=ry].g:rRHnYn" intask="true">
+													<mutation statement="false" at="true" datatype="Number"/>
+													<field name="MODE">GET</field>
+													<field name="WHERE">FROM_START</field>
+													<value name="VALUE">
+														<block type="variables_get" id=")-M)j#JLWhs}od~P|k#f" intask="true">
+															<mutation datatype="Array_Number"/>
+															<field name="VAR">probabilities</field>
+														</block>
+													</value>
+													<value name="AT">
+														<block type="variables_get" id="qL69Di0oaR:VfX1,;/93" intask="true">
+															<mutation datatype="Number"/>
+															<field name="VAR">i</field>
+														</block>
+													</value>
+												</block>
+											</value>
+											<value name="B">
+												<block type="variables_get" id="UmAb[e^dGkV6KSrax?V," intask="true">
+													<mutation datatype="Number"/>
+													<field name="VAR">pOfMostLikelyClass</field>
+												</block>
+											</value>
+										</block>
+									</value>
+									<statement name="DO0">
+										<block type="variables_set" id="MNi{Tot/Q14gc*BCtiJl" intask="true">
+											<mutation datatype="Number"/>
+											<field name="VAR">mostLikelyClass</field>
+											<value name="VALUE">
+												<block type="variables_get" id="2{hw:Y1N(zr%7tu}B}ei" intask="true">
+													<mutation datatype="Number"/>
+													<field name="VAR">i</field>
+												</block>
+											</value>
+										</block>
+										<block type="variables_set" id="SZvdkZ~+Do38W*dkA[/h" intask="true">
+											<mutation datatype="Number"/>
+											<field name="VAR">pOfMostLikelyClass</field>
+											<value name="VALUE">
+												<block type="robLists_getIndex" id="XLzYm13BBp:eS|[Vc|M;" intask="true">
+													<mutation statement="false" at="true" datatype="Number"/>
+													<field name="MODE">GET</field>
+													<field name="WHERE">FROM_START</field>
+													<value name="VALUE">
+														<block type="variables_get" id="7@ss~`]|oESaH%LRQFpm" intask="true">
+															<mutation datatype="Array_Number"/>
+															<field name="VAR">probabilities</field>
+														</block>
+													</value>
+													<value name="AT">
+														<block type="variables_get" id="i+w_fD*_Um!-B;VpFDI1" intask="true">
+															<mutation datatype="Number"/>
+															<field name="VAR">i</field>
+														</block>
+													</value>
+												</block>
+											</value>
+										</block>
+									</statement>
+								</block>
+							</statement>
+						</block>
+						<block type="robActions_serial_print" id="|V-KEA?bm4Bo)djoK^V;" intask="true">
+							<value name="OUT">
+								<block type="variables_get" id=",sq#.ey,+^kYn{wFLHrh" intask="true">
+									<mutation datatype="Number"/>
+									<field name="VAR">mostLikelyClass</field>
+								</block>
+							</value>
+						</block>
+						<block type="robActions_serial_print" id="}PlrF_CR]CJM-g5t6-C)" intask="true">
+							<value name="OUT">
+								<block type="variables_get" id="B#XJ#D3ak*U`9#9)`_4P" intask="true">
+									<mutation datatype="Number"/>
+									<field name="VAR">pOfMostLikelyClass</field>
+								</block>
+							</value>
+						</block>
+					</statement>
+				</block>
+			</instance>
+		</block_set>
+	</program>
+	<config>
+		<block_set robottype="nano33ble" xmlversion="3.1" description="" tags="" xmlns="http://de.fhg.iais.roberta.blockly">
+			<instance x="100" y="220">
+				<block type="robConf_lsm9ds1" id="2" intask="true" deletable="false">
+					<field name="NAME">_LSM9DS1</field>
+				</block>
+			</instance>
+			<instance x="102" y="535">
+				<block type="robConf_key" id="nGXyXK*c6Z;C8n/r2zy]" intask="true">
+					<field name="NAME">record</field>
+					<field name="PIN1">2</field>
+				</block>
+			</instance>
+			<instance x="100" y="460">
+				<block type="robConf_hts221" id="5" intask="true" deletable="false">
+					<field name="NAME">_HTS221</field>
+				</block>
+			</instance>
+			<instance x="100" y="80">
+				<block type="robConf_led" id="1" intask="true" deletable="false">
+					<field name="NAME">L</field>
+					<field name="INPUT">LED_BUILTIN</field>
+				</block>
+			</instance>
+			<instance x="100" y="380">
+				<block type="robConf_lps22hb" id="4" intask="true" deletable="false">
+					<field name="NAME">_LPS22HB</field>
+				</block>
+			</instance>
+			<instance x="100" y="300">
+				<block type="robConf_apds9960" id="3" intask="true" deletable="false">
+					<field name="NAME">_APDS9960</field>
+				</block>
+			</instance>
+		</block_set>
+	</config>
+</export>

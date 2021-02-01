@@ -1,0 +1,15 @@
+
+(repeat [FOREVER_ARDU, BoolConst [true]]MethodStmt [MethodCall [text, , , VOID]]MethodStmt [MethodCall [colours, , , VOID]]MethodStmt [MethodCall [function_parameter, Var [x], Var [x2], Var [x3], Var [x4], Var [x5], Var [x6], Var [x7], Var [x8], Var [numberVar], Var [booleanVar], Var [stringVar], Var [colourVar], Var [numberList], Var [booleanList], Var [stringList], Var [colourList], VOID]]
+AktionStmt [PinWriteValueSensor [MethodExpr [MethodCall [function_return_numberVar, , , NUMBER]]]]
+AktionStmt [PinWriteValueSensor [MethodExpr [MethodCall [function_return_booleanVar, , , BOOLEAN]]]]
+AktionStmt [PinWriteValueSensor [MethodExpr [MethodCall [function_return_stringVar, , , STRING]]]]
+AktionStmt [PinWriteValueSensor [MethodExpr [MethodCall [function_return_colourVar, , , COLOR]]]]
+Var [numberList] := MethodExpr [MethodCall [function_return_numberList, , , ARRAY_NUMBER]]
+
+Var [booleanList] := MethodExpr [MethodCall [function_return_booleanList, , , ARRAY_BOOLEAN]]
+
+Var [stringList] := MethodExpr [MethodCall [function_return_stringList, , , ARRAY_STRING]]
+
+Var [colourList] := MethodExpr [MethodCall [function_return_colourList, , , ARRAY_COLOUR]]
+
+)

@@ -1,6 +1,10 @@
 package de.fhg.iais.roberta.syntax;
 
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
+
 import de.fhg.iais.roberta.blockly.generated.Block;
+import de.fhg.iais.roberta.transformer.*;
 import de.fhg.iais.roberta.typecheck.NepoInfo;
 import de.fhg.iais.roberta.typecheck.NepoInfos;
 import de.fhg.iais.roberta.util.dbc.Assert;
@@ -15,9 +19,7 @@ import de.fhg.iais.roberta.visitor.IVisitor;
  * - if in construction phase, they should use {@link #mayChange()} to assert that.<br>
  * - if the construction has finished and {@link #setReadOnly()} has been called, they should use {@link #isReadOnly()} to assert their immutability.<br>
  * <br>
- * There are two ways for a client to find out which kind a {@link #Phrase}-object is:<br>
- * - {@link #getKind()}<br>
- * - {@link #getAs(Class)}<br>
+ * To find out which kind a {@link #Phrase}-object is use {@link #getKind()}
  */
 abstract public class Phrase<V> {
     private boolean readOnly = false;
@@ -32,7 +34,6 @@ abstract public class Phrase<V> {
      * This constructor set the kind of the object used in the AST (abstract syntax tree). All possible kinds can be found in {@link BlockType}.
      *
      * @param kind of the the object used in AST,
-     * @param disabled,
      * @param comment that the user added to the block
      */
     public Phrase(BlockType kind, BlocklyBlockProperties property, BlocklyComment comment) {
@@ -105,13 +106,8 @@ abstract public class Phrase<V> {
         if ( getProperty().isDisabled() || (getProperty().isInTask() != null && getProperty().isInTask() == false) ) {
             return null;
         }
-        return this.acceptImpl(visitor);
+        return visitor.visit(this);
     }
-
-    /**
-     * accept an visitor
-     */
-    protected abstract V acceptImpl(IVisitor<V> visitor);
 
     /**
      * Can be used to modify the Phrase itself. Used in conjunction with {@link ITransformerVisitor} to replace phrases with copies of themselves or even other
@@ -123,7 +119,7 @@ abstract public class Phrase<V> {
     public final Phrase<Void> modify(ITransformerVisitor<?> visitor) {
         // don't use accept, go over ALL blocks
         @SuppressWarnings("unchecked")
-        V v = this.acceptImpl((IVisitor<V>) visitor);
+        V v = ((IVisitor<V>) visitor).visit(this);
 
         if ( v instanceof Phrase ) {
             @SuppressWarnings("unchecked")
@@ -135,13 +131,30 @@ abstract public class Phrase<V> {
     }
 
     /**
-     * @return converts AST representation of block to JAXB representation of block
+     * converts the AST representation of this block to a JAXB (~~XML) representation<br>
+     * <b>This is the default implementation of annotated AST classes</b>
+     *
+     * @return the JAXB (~~XML) representation
      */
-    public abstract Block astToBlock();
+    public Block astToBlock() {
+        return AnnotationHelper.astToBlock(this);
+    }
+
+    /**
+     * the String representation of this phrase. To be used for debugging, not programming!<br>
+     * <b>This is the default implementation of annotated AST classes</b>
+     *
+     * @return the String representation of this phrase
+     */
+    @Override
+    public String toString() {
+        String generated = AnnotationHelper.toString(this);
+        return generated != null ? generated : super.toString();
+    }
 
     /**
      * append a newline, then append spaces up to an indentation level, then append an (optional) text<br>
-     * helper for constructing readable {@link #toString()}- and {@link #generateJava(StringBuilder, int)}-methods for statement trees
+     * helper for constructing readable text from statement trees
      *
      * @param sb the string builder, to which has to be appended
      * @param indentation number defining the level of indentation

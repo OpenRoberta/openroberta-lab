@@ -1,0 +1,41 @@
+<export xmlns="http://de.fhg.iais.roberta.blockly">
+	<program>
+		<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="arduino" xmlversion="3.1" description="" tags="">
+			<instance x="-2171" y="-633">
+				<block type="robControls_start_ardu" id="D})/z!#B6yD@Yfz-dXMy" intask="true" deletable="false">
+					<mutation declare="false"/>
+					<field name="DEBUG"/>
+				</block>
+				<block type="robControls_loopForever_ardu" id="oNMW+*oSI,ts;FLc%tXY" intask="true" deletable="false" movable="false">
+					<statement name="DO">
+						<block type="robActions_write_pin" id="U!:FQk+*8W?ED6{dHe[@" intask="true">
+							<mutation protocol="DIGITAL"/>
+							<field name="MODE">DIGITAL</field>
+							<field name="ACTORPORT">A</field>
+							<value name="VALUE">
+								<block type="math_number" id="o53gdnNiP;WScNrh+iEs" intask="true">
+									<field name="NUM">1</field>
+								</block>
+							</value>
+						</block>
+					</statement>
+				</block>
+			</instance>
+		</block_set>
+	</program>
+	<config>
+		<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="arduino" xmlversion="3.1" description="" tags="">
+			<instance x="40" y="43">
+				<block type="robConf_digitalin" id="Hog,1KIbH[j1c)_SE0v;" intask="true">
+					<field name="NAME">A</field>
+					<field name="INPUT">0</field>
+				</block>
+			</instance>
+			<instance x="266" y="117">
+				<block type="robConf_robot" id="robot" intask="true">
+					<field name="ROBOT">undefined</field>
+				</block>
+			</instance>
+		</block_set>
+	</config>
+</export>

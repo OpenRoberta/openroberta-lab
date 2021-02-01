@@ -1,0 +1,151 @@
+#define WHEELDIAMETER 5.6
+#define TRACKWIDTH 12.0
+#define MAXLINES 8
+#define MIN(X, Y) (((X) < (Y)) ? (X) : (Y))
+#define MAX(X, Y) (((X) > (Y)) ? (X) : (Y))
+#define M_PI PI
+#define M_E 2.718281828459045
+#define M_GOLDEN_RATIO 1.61803398875
+#define M_SQRT2 1.41421356237
+#define M_SQRT1_2 0.707106781187
+#define M_INFINITY 0x7f800000
+#include "NEPODefs.h" // contains NEPO declarations for the NXC NXT API resources
+
+
+void action();
+void move();
+void drive();
+void display();
+void sounds();
+void lights();
+byte volume = 0x02;
+float ___numberVar;
+bool ___booleanVar;
+string ___stringVar;
+int ___colourVar;
+int ___connectionVar;
+float ___numberList[3];
+bool ___booleanList[3];
+string ___stringList[3];
+int ___colourList[3];
+int ___connectionList[3];
+task main() {
+    ___numberVar = 0;
+    ___booleanVar = true;
+    ___stringVar = "";
+    ___colourVar = INPUT_WHITECOLOR;
+    ___connectionVar = NULL;
+    float _____numberList[] = {0, 0, 0};
+    ___numberList = _____numberList;
+    bool _____booleanList[] = {true, true, true};
+    ___booleanList = _____booleanList;
+    string _____stringList[] = {"", "", ""};
+    ___stringList = _____stringList;
+    int _____colourList[] = {INPUT_WHITECOLOR, INPUT_WHITECOLOR, INPUT_WHITECOLOR};
+    ___colourList = _____colourList;
+    int _____connectionList[] = {NULL, NULL, NULL};
+    ___connectionList = _____connectionList;
+    SetSensor(S1, SENSOR_TOUCH);
+    SetSensor(S2, SENSOR_SOUND);
+    SetSensor(S3, SENSOR_LIGHT);
+    SetSensor(S4, SENSOR_LOWSPEED);
+    action();
+}
+
+void action() {
+    move();
+    drive();
+    display();
+    sounds();
+    lights();
+}
+
+void move() {
+    OnFwd(OUT_A, MIN(MAX(___numberVar, -100), 100));
+    OnFwdRegEx(OUT_B, MIN(MAX(___numberVar, -100), 100), OUT_REGMODE_SPEED, RESET_NONE);
+    OnFwdRegEx(OUT_C, MIN(MAX(___numberVar, -100), 100), OUT_REGMODE_SPEED, RESET_NONE);
+    RotateMotor(OUT_A, MIN(MAX(___numberVar, -100), 100), 360 * ___numberVar);
+    RotateMotor(OUT_A, MIN(MAX(___numberVar, -100), 100), ___numberVar);
+    RotateMotor(OUT_B, MIN(MAX(___numberVar, -100), 100), 360 * ___numberVar);
+    RotateMotor(OUT_B, MIN(MAX(___numberVar, -100), 100), ___numberVar);
+    RotateMotor(OUT_C, MIN(MAX(___numberVar, -100), 100), 360 * ___numberVar);
+    RotateMotor(OUT_C, MIN(MAX(___numberVar, -100), 100), ___numberVar);
+    NumOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, MotorPower(OUT_A));
+    NumOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, MotorPower(OUT_B));
+    NumOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, MotorPower(OUT_C));
+    Float(OUT_A);
+    Off(OUT_A);
+    Float(OUT_B);
+    Off(OUT_B);
+    Float(OUT_C);
+    Off(OUT_C);
+}
+
+void drive() {
+    RotateMotorEx(OUT_BC, MIN(MAX(___numberVar, -100), 100), (___numberVar * 360 / (PI * WHEELDIAMETER)), 0, true, true);
+    Wait(1);
+    RotateMotorEx(OUT_BC, -1 * MIN(MAX(___numberVar, -100), 100), (___numberVar * 360 / (PI * WHEELDIAMETER)), 0, true, true);
+    Wait(1);
+    OnFwdRegEx(OUT_BC, MIN(MAX(___numberVar, -100), 100), OUT_REGMODE_SYNC, RESET_NONE);
+    OnFwdRegEx(OUT_BC, -1 * MIN(MAX(___numberVar, -100), 100), OUT_REGMODE_SYNC, RESET_NONE);
+    Off(OUT_BC);
+    RotateMotorEx(OUT_BC, MIN(MAX(___numberVar, -100), 100), (___numberVar * TRACKWIDTH / WHEELDIAMETER), 100, true, true);
+    Wait(1);
+    RotateMotorEx(OUT_BC, MIN(MAX(___numberVar, -100), 100), (___numberVar * TRACKWIDTH / WHEELDIAMETER), -100, true, true);
+    Wait(1);
+    OnFwdSync(OUT_BC, MIN(MAX(___numberVar, -100), 100), 100);
+    OnFwdSync(OUT_BC, MIN(MAX(___numberVar, -100), 100), -100);
+    SteerDriveEx(OUT_C, OUT_B, MIN(MAX(___numberVar, -100), 100), MIN(MAX(___numberVar, -100), 100), true, ___numberVar);
+    SteerDriveEx(OUT_C, OUT_B, MIN(MAX(___numberVar, -100), 100), MIN(MAX(___numberVar, -100), 100), false, ___numberVar);
+    SteerDrive(OUT_C, OUT_B, MIN(MAX(___numberVar, -100), 100), MIN(MAX(___numberVar, -100), 100), true);
+    SteerDrive(OUT_C, OUT_B, MIN(MAX(___numberVar, -100), 100), MIN(MAX(___numberVar, -100), 100), false);
+}
+
+void display() {
+    TextOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, ___stringVar);
+    ClearScreen();
+}
+
+void sounds() {
+    PlayToneEx(___numberVar, ___numberVar, volume, false);
+    Wait(___numberVar);
+    PlayToneEx(261.626, 2000, volume, false);
+    Wait(2000);
+    PlayToneEx(293.665, 1000, volume, false);
+    Wait(1000);
+    PlayToneEx(329.628, 500, volume, false);
+    Wait(500);
+    PlayToneEx(349.228, 250, volume, false);
+    Wait(250);
+    PlayToneEx(391.995, 125, volume, false);
+    Wait(125);
+    volume = (___numberVar) * 4 / 100.0;
+    NumOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, volume * 100 / 4);
+}
+
+void lights() {
+    SetSensorColorRed(1);
+    SetSensorColorRed(2);
+    SetSensorColorRed(3);
+    SetSensorColorRed(4);
+    SetSensorColorNone(1);
+    SetSensorColorNone(2);
+    SetSensorColorNone(3);
+    SetSensorColorNone(4);
+    SetSensorColorGreen(1);
+    SetSensorColorGreen(2);
+    SetSensorColorGreen(3);
+    SetSensorColorGreen(4);
+    SetSensorColorNone(1);
+    SetSensorColorNone(2);
+    SetSensorColorNone(3);
+    SetSensorColorNone(4);
+    SetSensorColorBlue(1);
+    SetSensorColorBlue(2);
+    SetSensorColorBlue(3);
+    SetSensorColorBlue(4);
+    SetSensorColorNone(1);
+    SetSensorColorNone(2);
+    SetSensorColorNone(3);
+    SetSensorColorNone(4);
+}

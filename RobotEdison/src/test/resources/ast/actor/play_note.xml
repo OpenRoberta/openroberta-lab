@@ -1,8 +1,0 @@
-<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="edison" xmlversion="3.1" description="" tags="">
-    <instance x="370" y="204">
-        <block type="mbedActions_play_note" id="/g-s=BsLCfYQs_[A)`*/" intask="false">
-            <field name="DURATION">2000</field>
-            <field name="FREQUENCE">130.813</field>
-        </block>
-    </instance>
-</block_set>

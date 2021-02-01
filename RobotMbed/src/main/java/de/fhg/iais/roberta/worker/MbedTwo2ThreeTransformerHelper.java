@@ -10,6 +10,7 @@ import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.components.ConfigurationComponent;
 import de.fhg.iais.roberta.factory.BlocklyDropdownFactory;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
+import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.util.Pair;
 import de.fhg.iais.roberta.util.dbc.Assert;
 
@@ -31,7 +32,7 @@ public final class MbedTwo2ThreeTransformerHelper {
         PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("ACCELEROMETER_SENSING", "VALUE", "Y"), "robConf_accelerometer");
         PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("ACCELEROMETER_SENSING", "VALUE", "Z"), "robConf_accelerometer");
         PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("ACCELEROMETER_SENSING", "VALUE", "STRENGTH"), "robConf_accelerometer");
-        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("COMPASS_SENSING", "ANGLE", "NO_PORT"), "robConf_compass");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("COMPASS_SENSING", "ANGLE", BlocklyConstants.EMPTY_PORT), "robConf_compass");
         PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("COMPASS_SENSING", "DEFAULT", ""), "robConf_compass");
         PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("FOURDIGITDISPLAY_SHOW_ACTION", "", "5"), "robConf_fourdigitdisplay");
         PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("FOURDIGITDISPLAY_CLEAR_ACTION", "", "5"), "robConf_fourdigitdisplay");
@@ -57,8 +58,8 @@ public final class MbedTwo2ThreeTransformerHelper {
         PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("LIGHT_ACTION", "OFF", "2"), "robConf_callibot");
         PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("LIGHT_ACTION", "OFF", "3"), "robConf_callibot");
         PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("LIGHT_SENSING", "DEFAULT", ""), "robConf_light");
-        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("LIGHT_SENSING", "LIGHT_VALUE", "NO_PORT"), "robConf_light");
-        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("LIGHT_SENSING", "VALUE", "NO_PORT"), "robConf_light");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("LIGHT_SENSING", "LIGHT_VALUE", BlocklyConstants.EMPTY_PORT), "robConf_light");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("LIGHT_SENSING", "VALUE", BlocklyConstants.EMPTY_PORT), "robConf_light");
         PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("LIGHT_STATUS_ACTION", "OFF", "0"), "robConf_rgbled");
         PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("LIGHT_STATUS_ACTION", "OFF", "1"), "robConf_callibot");
         PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("LIGHT_STATUS_ACTION", "OFF", "2"), "robConf_callibot");
@@ -325,7 +326,7 @@ public final class MbedTwo2ThreeTransformerHelper {
         PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("PIN_WRITE_VALUE", "DIGITAL", "C17"), "robConf_digitalin");
         PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("PIN_WRITE_VALUE", "DIGITAL", "C18"), "robConf_digitalin");
         PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("PIN_WRITE_VALUE", "DIGITAL", "C19"), "robConf_digitalin");
-        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("PLAY_NOTE_ACTION", "", "NO_PORT"), "robConf_buzzer");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("PLAY_NOTE_ACTION", "", BlocklyConstants.EMPTY_PORT), "robConf_buzzer");
         PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("SERVO_SET_ACTION", "", "1"), "robConf_servo");
         PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("SERVO_SET_ACTION", "", "2"), "robConf_servo");
         PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("SERVO_SET_ACTION", "", "5"), "robConf_servo");
@@ -334,11 +335,11 @@ public final class MbedTwo2ThreeTransformerHelper {
         PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("SERVO_SET_ACTION", "", "C06"), "robConf_servo");
         PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("SERVO_SET_ACTION", "", "C16"), "robConf_servo");
         PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("SERVO_SET_ACTION", "", "C17"), "robConf_servo");
-        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("SOUND_SENSING", "SOUND", "NO_PORT"), "robConf_sound");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("SOUND_SENSING", "SOUND", BlocklyConstants.EMPTY_PORT), "robConf_sound");
         PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("TEMPERATURE_SENSING", "DEFAULT", ""), "robConf_temperature");
-        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("TEMPERATURE_SENSING", "TEMPERATURE", "NO_PORT"), "robConf_temperature");
-        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("TEMPERATURE_SENSING", "VALUE", "NO_PORT"), "robConf_temperature");
-        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("TONE_ACTION", "", "NO_PORT"), "robConf_buzzer");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("TEMPERATURE_SENSING", "TEMPERATURE", BlocklyConstants.EMPTY_PORT), "robConf_temperature");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("TEMPERATURE_SENSING", "VALUE", BlocklyConstants.EMPTY_PORT), "robConf_temperature");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("TONE_ACTION", "", BlocklyConstants.EMPTY_PORT), "robConf_buzzer");
         PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("ULTRASONIC_SENSING", "DISTANCE", "1"), "robConf_ultrasonic");
         PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("ULTRASONIC_SENSING", "DISTANCE", "2"), "robConf_callibot");
 

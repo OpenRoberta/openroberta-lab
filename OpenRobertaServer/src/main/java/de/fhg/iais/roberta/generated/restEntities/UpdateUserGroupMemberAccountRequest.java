@@ -63,11 +63,10 @@ public class UpdateUserGroupMemberAccountRequest extends BaseRequest {
     }
 
     /**
-     * merge the properties of a JSON-object into this bean. The bean must be "under construction". The keys of the JSON-Object must be valid. The bean remains
-     * "under construction".<br>
+     * merge the properties of a JSON-object into this bean. The bean must be "under construction".
+     * The keys of the JSON-Object must be valid. The bean remains "under construction".<br>
      * Throws a runtime exception if inconsistencies are detected.
      */
-    @Override
     public UpdateUserGroupMemberAccountRequest merge(JSONObject jsonO) {
         try {
             for ( String key : JSONObject.getNames(jsonO) ) {
@@ -95,7 +94,6 @@ public class UpdateUserGroupMemberAccountRequest extends BaseRequest {
      * Checks whether all required fields are set. All lists are made immutable.<br>
      * Throws a runtime exception if inconsistencies are detected.
      */
-    @Override
     public UpdateUserGroupMemberAccountRequest immutable() {
         if ( this.immutable ) {
             return this;
@@ -113,13 +111,13 @@ public class UpdateUserGroupMemberAccountRequest extends BaseRequest {
         if ( !this.immutable ) {
             _message = "UpdateUserGroupMemberAccountRequest-object is already immutable: " + toString();
         }
-        if ( this.groupName == null ) {
+        if ( groupName == null ) {
             _message = "required property groupName of UpdateUserGroupMemberAccountRequest-object is not set: " + toString();
         }
-        if ( this.currentGroupMemberAccount == null ) {
+        if ( currentGroupMemberAccount == null ) {
             _message = "required property currentGroupMemberAccount of UpdateUserGroupMemberAccountRequest-object is not set: " + toString();
         }
-        if ( this.newGroupMemberAccount == null ) {
+        if ( newGroupMemberAccount == null ) {
             _message = "required property newGroupMemberAccount of UpdateUserGroupMemberAccountRequest-object is not set: " + toString();
         }
         if ( _message != null ) {
@@ -196,7 +194,6 @@ public class UpdateUserGroupMemberAccountRequest extends BaseRequest {
      * generates a JSON-object from an immutable bean.<br>
      * Throws a runtime exception if inconsistencies are detected.
      */
-    @Override
     public JSONObject toJson() {
         if ( !this.immutable ) {
             throw new RuntimeException("no JSON from an object under construction: " + toString());

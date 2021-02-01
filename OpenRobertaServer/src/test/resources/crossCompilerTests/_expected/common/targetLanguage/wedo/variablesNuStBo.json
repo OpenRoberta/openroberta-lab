@@ -1,0 +1,120 @@
+{"ops": [
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "0"
+  },
+  {
+    "opc": "VarDeclaration",
+    "name": "number",
+    "type": "NUMBER"
+  },
+  {
+    "opc": "expr",
+    "expr": "BOOL_CONST",
+    "value": true
+  },
+  {
+    "opc": "VarDeclaration",
+    "name": "boolean2",
+    "type": "BOOLEAN"
+  },
+  {
+    "opc": "expr",
+    "expr": "STRING_CONST",
+    "value": ""
+  },
+  {
+    "opc": "VarDeclaration",
+    "name": "string",
+    "type": "STRING"
+  },
+  {
+    "opc": "comment",
+    "value": "Variable Test START"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "0"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "5"
+  },
+  {
+    "op": "ADD",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "opc": "AssignStmt",
+    "name": "number"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "3"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "0.999999999999"
+  },
+  {
+    "op": "ADD",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "opc": "AssignStmt",
+    "name": "number"
+  },
+  {
+    "opc": "expr",
+    "expr": "STRING_CONST",
+    "value": "abc"
+  },
+  {
+    "opc": "AssignStmt",
+    "name": "string"
+  },
+  {
+    "opc": "expr",
+    "expr": "STRING_CONST",
+    "value": "123"
+  },
+  {
+    "opc": "AssignStmt",
+    "name": "string"
+  },
+  {
+    "opc": "expr",
+    "expr": "STRING_CONST",
+    "value": "³½¹]"
+  },
+  {
+    "opc": "AssignStmt",
+    "name": "string"
+  },
+  {
+    "opc": "expr",
+    "expr": "BOOL_CONST",
+    "value": true
+  },
+  {
+    "op": "NOT",
+    "opc": "expr",
+    "expr": "Unary"
+  },
+  {
+    "opc": "AssignStmt",
+    "name": "boolean2"
+  },
+  {
+    "opc": "comment",
+    "value": "Variable Test START END"
+  },
+  {"opc": "stop"}
+]}

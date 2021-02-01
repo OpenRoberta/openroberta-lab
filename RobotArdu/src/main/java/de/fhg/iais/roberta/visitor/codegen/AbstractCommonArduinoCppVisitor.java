@@ -224,7 +224,7 @@ public abstract class AbstractCommonArduinoCppVisitor extends AbstractCppVisitor
 
     @Override
     public Void visitTimerSensor(TimerSensor<Void> timerSensor) {
-        String timerNumber = timerSensor.getPort();
+        String timerNumber = timerSensor.getUserDefinedPort();
         switch ( timerSensor.getMode() ) {
             case SC.DEFAULT:
             case SC.VALUE:

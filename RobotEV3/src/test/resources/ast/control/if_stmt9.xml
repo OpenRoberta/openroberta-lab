@@ -1,5 +1,0 @@
-<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="ev3" xmlversion="3.1" description="" tags="">
-    <instance x="-93" y="90">
-        <block type="robControls_if" id="294" inline="false"></block>
-    </instance>
-</block_set>

@@ -1,7 +1,0 @@
-<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="edison" xmlversion="3.1" description="" tags="">
-    <instance x="360" y="166">
-        <block type="math_arithmetic" id="?KQ;g`#zo`WB)]]L~8cY" intask="false">
-            <field name="OP">ADD</field>
-        </block>
-    </instance>
-</block_set>

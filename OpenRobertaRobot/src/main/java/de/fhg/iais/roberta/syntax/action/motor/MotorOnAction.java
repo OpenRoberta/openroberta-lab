@@ -16,14 +16,12 @@ import de.fhg.iais.roberta.syntax.MotorDuration;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.MoveAction;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
-import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
+import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
-import de.fhg.iais.roberta.visitor.IVisitor;
-import de.fhg.iais.roberta.visitor.hardware.actor.IMotorVisitor;
 
 /**
  * This class represents the <b>robActions_motor_on_for</b> and <b>robActions_motor_on</b> blocks from Blockly into the AST (abstract syntax tree). Object from
@@ -63,7 +61,7 @@ public final class MotorOnAction<V> extends MoveAction<V> {
      * @param helper class for making the transformation
      * @return corresponding AST object
      */
-    public static <V> Phrase<V> jaxbToAst(Block block, AbstractJaxb2Ast<V> helper) {
+    public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
         String port;
         List<Field> fields;
         List<Value> values;
@@ -77,7 +75,7 @@ public final class MotorOnAction<V> extends MoveAction<V> {
             values = Jaxb2Ast.extractValues(block, (short) 1);
             port = Jaxb2Ast.extractField(fields, BlocklyConstants.MOTORPORT);
             Phrase<V> expr = helper.extractValue(values, new ExprParam(BlocklyConstants.POWER, BlocklyType.NUMBER_INT));
-            mp = new MotionParam.Builder<V>().speed(helper.convertPhraseToExpr(expr)).build();
+            mp = new MotionParam.Builder<V>().speed(Jaxb2Ast.convertPhraseToExpr(expr)).build();
         } else {
             fields = Jaxb2Ast.extractFields(block, (short) 2);
             values = Jaxb2Ast.extractValues(block, (short) 2);
@@ -86,12 +84,12 @@ public final class MotorOnAction<V> extends MoveAction<V> {
             Phrase<V> right = helper.extractValue(values, new ExprParam(BlocklyConstants.VALUE, BlocklyType.NUMBER_INT));
             MotorDuration<V> md;
             if ( fields.size() == 1 ) {
-                md = new MotorDuration<>(null, helper.convertPhraseToExpr(right));
+                md = new MotorDuration<>(null, Jaxb2Ast.convertPhraseToExpr(right));
             } else {
                 String mode = Jaxb2Ast.extractField(fields, BlocklyConstants.MOTORROTATION);
-                md = new MotorDuration<>(factory.getMotorMoveMode(mode), helper.convertPhraseToExpr(right));
+                md = new MotorDuration<>(factory.getMotorMoveMode(mode), Jaxb2Ast.convertPhraseToExpr(right));
             }
-            mp = new MotionParam.Builder<V>().speed(helper.convertPhraseToExpr(left)).duration(md).build();
+            mp = new MotionParam.Builder<V>().speed(Jaxb2Ast.convertPhraseToExpr(left)).duration(md).build();
         }
         return MotorOnAction.make(port, mp, Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
     }
@@ -124,11 +122,6 @@ public final class MotorOnAction<V> extends MoveAction<V> {
     @Override
     public String toString() {
         return "MotorOnAction [" + getUserDefinedPort() + ", " + this.param + "]";
-    }
-
-    @Override
-    protected V acceptImpl(IVisitor<V> visitor) {
-        return ((IMotorVisitor<V>) visitor).visitMotorOnAction(this);
     }
 
     @Override

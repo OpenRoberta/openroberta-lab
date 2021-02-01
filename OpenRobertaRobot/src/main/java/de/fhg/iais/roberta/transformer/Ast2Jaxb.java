@@ -6,12 +6,14 @@ import java.util.List;
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Comment;
 import de.fhg.iais.roberta.blockly.generated.Field;
+import de.fhg.iais.roberta.blockly.generated.Mutation;
 import de.fhg.iais.roberta.blockly.generated.Repetitions;
 import de.fhg.iais.roberta.blockly.generated.Shadow;
 import de.fhg.iais.roberta.blockly.generated.Statement;
 import de.fhg.iais.roberta.blockly.generated.Value;
 import de.fhg.iais.roberta.blockly.generated.Warning;
 import de.fhg.iais.roberta.syntax.BlockType;
+import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.syntax.lang.expr.ExprList;
@@ -173,7 +175,8 @@ public final class Ast2Jaxb {
     }
 
     /**
-     * Add's a value {@link Value} object to JAXB block representation {@link Block}.
+     * Add's a {@link Value} object to JAXB block representation {@link Block}.<br>
+     * This method skips a field which value BlocklyConstants.EMPTY_PORT (this is a bad hack!)
      *
      * @param repetitions to which the value will be added; must be <b>not</b> null,
      * @param name of the value; must be <b>non-empty</b> string
@@ -183,6 +186,9 @@ public final class Ast2Jaxb {
         Assert.isTrue(!name.equals(""));
         Assert.notNull(repetitions);
         Assert.notNull(value);
+        if (value.equals(BlocklyConstants.EMPTY_PORT)) {
+            return;
+        }
         if ( !value.getKind().hasName("EMPTY_EXPR") ) {
             Value blockValue = new Value();
             blockValue.setName(name);
@@ -192,9 +198,11 @@ public final class Ast2Jaxb {
     }
 
     /**
-     * Add's a value {@link Field} object to JAXB block representation {@link Block}.
+     * Add's a {@link Field} object to JAXB block representation {@link Block}.
      * <p>
-     * This method does <b>not</b> add the {@link Field} object into {@link Repetitions} object.
+     * - This method does <b>not</b> add the {@link Field} object into {@link Repetitions} object.<br>
+     * - This method skips a field which value BlocklyConstants.EMPTY_PORT (this is a bad hack!)<br>
+     * - This method handles a field which value BlocklyConstants.EMPTY_SLOT very special (this is a bad hack!)
      *
      * @param block to which the field will be added; must be <b>not</b> null,
      * @param name of the field; must be <b>non-empty</b> string
@@ -203,10 +211,31 @@ public final class Ast2Jaxb {
     public static void addField(Block block, String name, String value) {
         Assert.isTrue(!name.equals(""));
         Assert.notNull(block);
-        Field field = new Field();
-        field.setName(name);
-        field.setValue(value);
-        block.getField().add(field);
+        if (value.equals(BlocklyConstants.EMPTY_PORT)) {
+            // ignore
+        } else if (value.equals(BlocklyConstants.EMPTY_SLOT)) {
+            Field field = new Field();
+            field.setName(name);
+            field.setValue("");
+            block.getField().add(field);
+        } else {
+            Field field = new Field();
+            field.setName(name);
+            field.setValue(value);
+            block.getField().add(field);
+        }
+    }
+
+   /**
+     * Add's a {@link Mutation} object to JAXB block representation {@link Block}.
+     *
+     * @param block to which the mutation will be added; must be <b>not</b> null,
+     * @param name of the field; must be <b>non-empty</b> string
+     * @param value is the AST representation of the Blockly block where the value is stored
+     */
+    public static void addMutation(Block block, Mutation value) {
+        Assert.notNull(block);
+        block.setMutation(value);
     }
 
     private static Shadow block2shadow(Block block) {

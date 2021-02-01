@@ -14,14 +14,12 @@ import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
-import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
+import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
-import de.fhg.iais.roberta.visitor.IVisitor;
-import de.fhg.iais.roberta.visitor.lang.ILanguageVisitor;
 
 /**
  * This class represents the <b>if-else-elseif</b> blocks from Blockly into the AST (abstract syntax tree). Object from this class will generate if
@@ -191,11 +189,6 @@ public class IfStmt<V> extends Stmt<V> {
         return sb.toString();
     }
 
-    @Override
-    protected V acceptImpl(IVisitor<V> visitor) {
-        return ((ILanguageVisitor<V>) visitor).visitIfStmt(this);
-    }
-
     /**
      * Transformation from JAXB object to corresponding AST object.
      *
@@ -203,7 +196,7 @@ public class IfStmt<V> extends Stmt<V> {
      * @param helper class for making the transformation
      * @return corresponding AST object
      */
-    public static <V> Phrase<V> jaxbToAst(Block block, AbstractJaxb2Ast<V> helper) {
+    public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
         if ( block.getType().equals(BlocklyConstants.LOGIC_TERNARY) ) {
             List<Value> values = block.getValue();
             Assert.isTrue(values.size() <= 3, "Number of values is not less or equal to 3!");
@@ -211,13 +204,13 @@ public class IfStmt<V> extends Stmt<V> {
             Phrase<V> thenStmt = helper.extractValue(values, new ExprParam(BlocklyConstants.THEN, BlocklyType.ANY));
             Phrase<V> elseStmt = helper.extractValue(values, new ExprParam(BlocklyConstants.ELSE, BlocklyType.ANY));
             StmtList<V> thenList = StmtList.make();
-            thenList.addStmt(ExprStmt.make(helper.convertPhraseToExpr(thenStmt)));
+            thenList.addStmt(ExprStmt.make(Jaxb2Ast.convertPhraseToExpr(thenStmt)));
             thenList.setReadOnly();
             StmtList<V> elseList = StmtList.make();
-            elseList.addStmt(ExprStmt.make(helper.convertPhraseToExpr(elseStmt)));
+            elseList.addStmt(ExprStmt.make(Jaxb2Ast.convertPhraseToExpr(elseStmt)));
             elseList.setReadOnly();
             return IfStmt
-                .make(helper.convertPhraseToExpr(ifExpr), thenList, elseList, Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block), 0, 0);
+                .make(Jaxb2Ast.convertPhraseToExpr(ifExpr), thenList, elseList, Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block), 0, 0);
         }
         Mutation mutation = block.getMutation();
         int _else = Jaxb2Ast.getElse(mutation);

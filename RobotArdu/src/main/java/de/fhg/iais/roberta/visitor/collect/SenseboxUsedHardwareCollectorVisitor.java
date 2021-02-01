@@ -56,12 +56,12 @@ public final class SenseboxUsedHardwareCollectorVisitor extends AbstractUsedHard
 
     @Override
     public Void visitVemlLightSensor(VemlLightSensor<Void> lightSensor) {
-        this.getBuilder(UsedHardwareBean.Builder.class).addUsedSensor(new UsedSensor(lightSensor.getPort(), SC.LIGHTVEML, lightSensor.getMode()));
+        this.getBuilder(UsedHardwareBean.Builder.class).addUsedSensor(new UsedSensor(lightSensor.getUserDefinedPort(), SC.LIGHTVEML, lightSensor.getMode()));
         return null;
     }
 
     @Override
-    public Void visitDataSendAction(SendDataAction<Void> sendDataAction) {
+    public Void visitSendDataAction(SendDataAction<Void> sendDataAction) {
         // TODO check that WiFi config block is used, otherwise throw an exception
         // and show user the error, that they must use this block in conjunction
         // with WiFi/ethernet/LoRa
@@ -71,19 +71,19 @@ public final class SenseboxUsedHardwareCollectorVisitor extends AbstractUsedHard
 
     @Override
     public Void visitTemperatureSensor(TemperatureSensor<Void> temperatureSensor) {
-        this.getBuilder(UsedHardwareBean.Builder.class).addUsedSensor(new UsedSensor(temperatureSensor.getPort(), SC.TEMPERATURE, temperatureSensor.getMode()));
+        this.getBuilder(UsedHardwareBean.Builder.class).addUsedSensor(new UsedSensor(temperatureSensor.getUserDefinedPort(), SC.TEMPERATURE, temperatureSensor.getMode()));
         return null;
     }
 
     @Override
     public Void visitHumiditySensor(HumiditySensor<Void> humiditySensor) {
-        this.getBuilder(UsedHardwareBean.Builder.class).addUsedSensor(new UsedSensor(humiditySensor.getPort(), SC.HUMIDITY, humiditySensor.getMode()));
+        this.getBuilder(UsedHardwareBean.Builder.class).addUsedSensor(new UsedSensor(humiditySensor.getUserDefinedPort(), SC.HUMIDITY, humiditySensor.getMode()));
         return null;
     }
 
     @Override
     public Void visitCompassSensor(CompassSensor<Void> compassSensor) {
-        this.getBuilder(UsedHardwareBean.Builder.class).addUsedSensor(new UsedSensor(compassSensor.getPort(), SC.COMPASS, compassSensor.getMode()));
+        this.getBuilder(UsedHardwareBean.Builder.class).addUsedSensor(new UsedSensor(compassSensor.getUserDefinedPort(), SC.COMPASS, compassSensor.getMode()));
         return null;
     }
 
@@ -112,13 +112,13 @@ public final class SenseboxUsedHardwareCollectorVisitor extends AbstractUsedHard
 
     @Override
     public Void visitParticleSensor(ParticleSensor<Void> particleSensor) {
-        this.getBuilder(UsedHardwareBean.Builder.class).addUsedSensor(new UsedSensor(particleSensor.getPort(), SC.PARTICLE, particleSensor.getMode()));
+        this.getBuilder(UsedHardwareBean.Builder.class).addUsedSensor(new UsedSensor(particleSensor.getUserDefinedPort(), SC.PARTICLE, particleSensor.getMode()));
         return null;
     }
 
     @Override
     public Void visitGpsSensor(GpsSensor<Void> gpsSensor) {
-        this.getBuilder(UsedHardwareBean.Builder.class).addUsedSensor(new UsedSensor(gpsSensor.getPort(), SC.GPS, gpsSensor.getMode()));
+        this.getBuilder(UsedHardwareBean.Builder.class).addUsedSensor(new UsedSensor(gpsSensor.getUserDefinedPort(), SC.GPS, gpsSensor.getMode()));
         return null;
     }
 
@@ -133,7 +133,7 @@ public final class SenseboxUsedHardwareCollectorVisitor extends AbstractUsedHard
     public Void visitEnvironmentalSensor(EnvironmentalSensor<Void> environmentalSensor) {
         this
             .getBuilder(UsedHardwareBean.Builder.class)
-            .addUsedSensor(new UsedSensor(environmentalSensor.getPort(), SC.ENVIRONMENTAL, environmentalSensor.getMode()));
+            .addUsedSensor(new UsedSensor(environmentalSensor.getUserDefinedPort(), SC.ENVIRONMENTAL, environmentalSensor.getMode()));
         return null;
     }
 }

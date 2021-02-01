@@ -16,7 +16,7 @@ import de.fhg.iais.roberta.visitor.hardware.IBob3Visitor;
  */
 public interface IBob3CollectorVisitor extends ICollectorVisitor, IBob3Visitor<Void> {
     @Override
-    default Void visitBob3CodePadSensor(CodePadSensor<Void> codePadSensor) {
+    default Void visitCodePadSensor(CodePadSensor<Void> codePadSensor) {
         return null;
     }
 

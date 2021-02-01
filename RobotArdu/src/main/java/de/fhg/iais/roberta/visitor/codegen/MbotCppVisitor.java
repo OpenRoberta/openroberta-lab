@@ -173,7 +173,7 @@ public final class MbotCppVisitor extends AbstractCommonArduinoCppVisitor implem
 
     @Override
     public Void visitClearDisplayAction(ClearDisplayAction<Void> clearDisplayAction) {
-        this.sb.append("__meLEDMatrix_").append(clearDisplayAction.getPort()).append(".clearScreen();");
+        this.sb.append("__meLEDMatrix_").append(clearDisplayAction.port).append(".clearScreen();");
         return null;
     }
 
@@ -232,7 +232,7 @@ public final class MbotCppVisitor extends AbstractCommonArduinoCppVisitor implem
 
     @Override
     public Void visitLightStatusAction(LightStatusAction<Void> lightStatusAction) {
-        this.sb.append("_meRgbLed.setColor(" + lightStatusAction.getPort());
+        this.sb.append("_meRgbLed.setColor(" + lightStatusAction.getUserDefinedPort());
         this.sb.append(", 0, 0, 0);");
         nlIndent();
         this.sb.append("_meRgbLed.show();");
@@ -361,7 +361,7 @@ public final class MbotCppVisitor extends AbstractCommonArduinoCppVisitor implem
 
     @Override
     public Void visitLightSensor(LightSensor<Void> lightSensor) {
-        this.sb.append("_meLight" + lightSensor.getPort() + ".read() * ANALOG2PERCENT");
+        this.sb.append("_meLight" + lightSensor.getUserDefinedPort() + ".read() * ANALOG2PERCENT");
         return null;
     }
 
@@ -378,7 +378,7 @@ public final class MbotCppVisitor extends AbstractCommonArduinoCppVisitor implem
 
     @Override
     public Void visitSoundSensor(SoundSensor<Void> soundSensor) {
-        this.sb.append("_meSoundSensor" + soundSensor.getPort() + ".strength()");
+        this.sb.append("_meSoundSensor" + soundSensor.getUserDefinedPort() + ".strength()");
         return null;
     }
 
@@ -395,43 +395,43 @@ public final class MbotCppVisitor extends AbstractCommonArduinoCppVisitor implem
 
     @Override
     public Void visitGyroSensor(GyroSensor<Void> gyroSensor) {
-        this.sb.append("myGyro" + gyroSensor.getPort() + ".getGyro" + gyroSensor.getMode() + "()");
+        this.sb.append("myGyro" + gyroSensor.getUserDefinedPort() + ".getGyro" + gyroSensor.getMode() + "()");
         return null;
     }
 
     @Override
-    public Void visitAccelerometer(AccelerometerSensor<Void> accelerometer) {
-        this.sb.append("myGyro" + accelerometer.getPort() + ".getAngle" + accelerometer.getMode().toString() + "()");
+    public Void visitAccelerometerSensor(AccelerometerSensor<Void> accelerometer) {
+        this.sb.append("myGyro" + accelerometer.getUserDefinedPort() + ".getAngle" + accelerometer.getMode().toString() + "()");
         return null;
     }
 
     @Override
     public Void visitInfraredSensor(InfraredSensor<Void> infraredSensor) {
-        this.sb.append("!__meLineFollower" + infraredSensor.getPort() + ".readSensor" + infraredSensor.getSlot() + "()");
+        this.sb.append("!__meLineFollower" + infraredSensor.getUserDefinedPort() + ".readSensor" + infraredSensor.getSlot() + "()");
         return null;
     }
 
     @Override
     public Void visitTemperatureSensor(TemperatureSensor<Void> temperatureSensor) {
-        this.sb.append("_meTemp" + temperatureSensor.getPort() + ".getTemperature()");
+        this.sb.append("_meTemp" + temperatureSensor.getUserDefinedPort() + ".getTemperature()");
         return null;
     }
 
     @Override
     public Void visitTouchSensor(TouchSensor<Void> touchSensor) {
-        this.sb.append("_meTouch" + touchSensor.getPort() + ".touched()");
+        this.sb.append("_meTouch" + touchSensor.getUserDefinedPort() + ".touched()");
         return null;
     }
 
     @Override
     public Void visitUltrasonicSensor(UltrasonicSensor<Void> ultrasonicSensor) {
-        this.sb.append("_meUltraSensor" + ultrasonicSensor.getPort() + ".distanceCm()");
+        this.sb.append("_meUltraSensor" + ultrasonicSensor.getUserDefinedPort() + ".distanceCm()");
         return null;
     }
 
     @Override
     public Void visitMotionSensor(MotionSensor<Void> motionSensor) {
-        this.sb.append("_mePir" + motionSensor.getPort() + ".isHumanDetected()");
+        this.sb.append("_mePir" + motionSensor.getUserDefinedPort() + ".isHumanDetected()");
         return null;
     }
 
@@ -443,7 +443,7 @@ public final class MbotCppVisitor extends AbstractCommonArduinoCppVisitor implem
 
     @Override
     public Void visitJoystick(Joystick<Void> joystick) {
-        this.sb.append("_meJoystick" + joystick.getPort() + ".read" + joystick.getAxis() + "()");
+        this.sb.append("_meJoystick" + joystick.getUserDefinedPort() + ".read" + joystick.getAxis() + "()");
         return null;
     }
 
@@ -669,7 +669,7 @@ public final class MbotCppVisitor extends AbstractCommonArduinoCppVisitor implem
     public Void visitVoltageSensor(VoltageSensor<Void> voltageSensor) {
         //RatedVoltage: 5V
         //Signal type: Analog (range from 0 to 970)
-        this.sb.append("_mePotentiometer" + voltageSensor.getPort() + ".read()*5/970");
+        this.sb.append("_mePotentiometer" + voltageSensor.getUserDefinedPort() + ".read()*5/970");
         return null;
     }
 

@@ -1,133 +1,57 @@
 package de.fhg.iais.roberta.syntax.lang.expr;
 
-import java.util.List;
-
-import de.fhg.iais.roberta.blockly.generated.Block;
-import de.fhg.iais.roberta.blockly.generated.Value;
-import de.fhg.iais.roberta.syntax.BlockTypeContainer;
-import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
-import de.fhg.iais.roberta.syntax.BlocklyComment;
-import de.fhg.iais.roberta.syntax.BlocklyConstants;
-import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
-import de.fhg.iais.roberta.transformer.Ast2Jaxb;
-import de.fhg.iais.roberta.transformer.ExprParam;
-import de.fhg.iais.roberta.transformer.Jaxb2Ast;
+import de.fhg.iais.roberta.syntax.*;
+import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
+import de.fhg.iais.roberta.transformer.NepoOp;
+import de.fhg.iais.roberta.transformer.NepoValue;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
-import de.fhg.iais.roberta.visitor.IVisitor;
-import de.fhg.iais.roberta.visitor.lang.ILanguageVisitor;
 
 /**
- * This class represents the <b>robColour_rgb</b> block from Blockly into the AST (abstract syntax tree). Object from this class will generate color.<br/>
- * <br>
- * The client must provide the value for each color channel. <br>
- * <br>
- * To create an instance from this class use the method {@link #make(Expr, Expr, Expr, BlocklyBlockProperties, BlocklyComment)}.<br>
+ * This class represents the <b>robColour_rgb</b> block from Blockly
  */
+@NepoOp(containerType = "RGB_COLOR", blocklyType = BlocklyType.COLOR, precedence = 999, assoc = Assoc.NONE)
 public class RgbColor<V> extends Expr<V> {
-    private final Expr<V> R;
-    private final Expr<V> G;
-    private final Expr<V> B;
-    private final Expr<V> A;
+    @NepoValue(name = BlocklyConstants.RED, type = BlocklyType.NUMBER_INT)
+    public final Expr<V> R;
+    @NepoValue(name = BlocklyConstants.GREEN, type = BlocklyType.NUMBER_INT)
+    public final Expr<V> G;
+    @NepoValue(name = BlocklyConstants.BLUE, type = BlocklyType.NUMBER_INT)
+    public final Expr<V> B;
+    @NepoValue(name = BlocklyConstants.ALPHA, type = BlocklyType.NUMBER_INT)
+    public final Expr<V> A;
 
-    private RgbColor(Expr<V> R, Expr<V> G, Expr<V> B, Expr<V> A, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockTypeContainer.getByName("RGB_COLOR"), properties, comment);
-        this.R = R;
-        this.G = G;
-        this.B = B;
-        this.A = A;
+    public RgbColor(BlockType kind, BlocklyBlockProperties properties, BlocklyComment comment, Expr<V> r, Expr<V> g, Expr<V> b, Expr<V> a) {
+        super(kind, properties, comment);
+        R = r;
+        G = g;
+        B = b;
+        A = a;
         setReadOnly();
     }
 
-    /**
-     * creates instance of {@link RgbColor}. This instance is read only and can not be modified.
-     *
-     * @param value that the boolean constant will have,
-     * @param properties of the block (see {@link BlocklyBlockProperties}),
-     * @param comment added from the user,
-     * @return read only object of class {@link RgbColor}
-     */
-    public static <V> RgbColor<V> make(Expr<V> R, Expr<V> G, Expr<V> B, Expr<V> A, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new RgbColor<V>(R, G, B, A, properties, comment);
-    }
-
+    // TODO: inline, if proposal is accepted
     public Expr<V> getR() {
-        return this.R;
+        return R;
     }
 
+    // TODO: inline, if proposal is accepted
     public Expr<V> getG() {
-        return this.G;
+        return G;
     }
 
+    // TODO: inline, if proposal is accepted
     public Expr<V> getB() {
-        return this.B;
+        return B;
     }
 
+    // TODO: inline, if proposal is accepted
     public Expr<V> getA() {
-        return this.A;
+        return A;
     }
 
-    @Override
-    public int getPrecedence() {
-        return 999;
-    }
-
-    @Override
-    public Assoc getAssoc() {
-        return Assoc.NONE;
-    }
-
-    @Override
-    public BlocklyType getVarType() {
-        return BlocklyType.COLOR;
-    }
-
-    @Override
-    public String toString() {
-        return "RgbColor [" + this.R + ", " + this.G + ", " + this.B + ", " + this.A + "]";
-    }
-
-    @Override
-    protected V acceptImpl(IVisitor<V> visitor) {
-        return ((ILanguageVisitor<V>) visitor).visitRgbColor(this);
-
-    }
-
-    /**
-     * Transformation from JAXB object to corresponding AST object.
-     *
-     * @param block for transformation
-     * @param helper class for making the transformation
-     * @return corresponding AST object
-     */
-    public static <V> Phrase<V> jaxbToAst(Block block, AbstractJaxb2Ast<V> helper) {
-        List<Value> values;
-        values = Jaxb2Ast.extractValues(block, (short) 4);
-
-        Phrase<V> red = helper.extractValue(values, new ExprParam(BlocklyConstants.RED, BlocklyType.NUMBER_INT));
-        Phrase<V> green = helper.extractValue(values, new ExprParam(BlocklyConstants.GREEN, BlocklyType.NUMBER_INT));
-        Phrase<V> blue = helper.extractValue(values, new ExprParam(BlocklyConstants.BLUE, BlocklyType.NUMBER_INT));
-        Phrase<V> alpha = helper.extractValue(values, new ExprParam(BlocklyConstants.ALPHA, BlocklyType.NUMBER_INT));
-        return RgbColor
-            .make(
-                helper.convertPhraseToExpr(red),
-                helper.convertPhraseToExpr(green),
-                helper.convertPhraseToExpr(blue),
-                helper.convertPhraseToExpr(alpha),
-                Jaxb2Ast.extractBlockProperties(block),
-                Jaxb2Ast.extractComment(block));
-    }
-
-    @Override
-    public Block astToBlock() {
-        Block jaxbDestination = new Block();
-        Ast2Jaxb.setBasicProperties(this, jaxbDestination);
-        Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.RED, this.R);
-        Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.GREEN, this.G);
-        Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.BLUE, this.B);
-        Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.ALPHA, this.A);
-
-        return jaxbDestination;
+    // TODO: remove, if Transformer is better engineered
+    public static <V> RgbColor<V> make(BlocklyBlockProperties properties, BlocklyComment comment, Expr<V> r, Expr<V> g, Expr<V> b, Expr<V> a) {
+        return new RgbColor(BlockTypeContainer.getByName("RGB_COLOR"), properties, comment, r, g, b, a);
     }
 
 }

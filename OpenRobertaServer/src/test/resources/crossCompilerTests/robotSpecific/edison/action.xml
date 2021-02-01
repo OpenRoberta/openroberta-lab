@@ -326,10 +326,16 @@
                             <field name="DURATION">125</field>
                             <field name="FREQUENCE">391.995</field>
                         </block>
+                        <block type="robActions_play_file" id="8dBD5WDzml1{P+p=Jht:" intask="true">
+                            <field name="FILE">0</field>
+                        </block>
+                        <block type="robActions_play_file" id="{.kTer5;kj~ddU2x,eUN" intask="true">
+                            <field name="FILE">1</field>
+                        </block>
                     </statement>
                 </block>
             </instance>
-            <instance x="934" y="1305">
+            <instance x="915" y="1437">
                 <block type="robProcedures_defnoreturn" id="`sMPBo/@36?=*8FYw.u-" intask="true">
                     <mutation declare="false"></mutation>
                     <field name="NAME">lights</field>
@@ -348,7 +354,7 @@
     <config>
         <block_set robottype="edison" xmlversion="3.1" description="" tags="" xmlns="http://de.fhg.iais.roberta.blockly">
             <instance x="213" y="213">
-                <block type="robBrick_Edison-Brick" id="1" intask="true" deletable="false" />
+                <block type="robBrick_Edison-Brick" id="1" intask="true" deletable="false"/>
             </instance>
         </block_set>
     </config>

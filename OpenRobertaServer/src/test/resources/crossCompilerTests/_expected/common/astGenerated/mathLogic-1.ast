@@ -1,0 +1,70 @@
+
+Var [r1] := FunctionExpr [MathSingleFunct [ROOT, [Binary [ADD, Binary [MINUS, NumConst [20], Binary [MULTIPLY, NumConst [2], Binary [DIVIDE, NumConst [4], NumConst [2]]]], MathPowerFunct [POWER, [NumConst [3], NumConst [2]]]]]]]
+
+
+Var [b1] := Binary [AND, Var [b1], Unary [NOT, FunctionExpr [MathNumPropFunct [EVEN, [Var [r1]]]]]]
+
+
+Var [b1] := Binary [AND, Var [b1], FunctionExpr [MathNumPropFunct [ODD, [Var [r1]]]]]
+
+
+Var [b1] := Binary [AND, Var [b1], FunctionExpr [MathNumPropFunct [PRIME, [Var [r1]]]]]
+
+
+Var [b1] := Binary [AND, Var [b1], FunctionExpr [MathNumPropFunct [WHOLE, [Var [r1]]]]]
+
+
+Var [b1] := Binary [AND, Var [b1], FunctionExpr [MathNumPropFunct [POSITIVE, [Var [r1]]]]]
+
+
+Var [b1] := Binary [AND, Var [b1], Unary [NOT, FunctionExpr [MathNumPropFunct [NEGATIVE, [Var [r1]]]]]]
+
+
+Var [b1] := Binary [AND, Var [b1], FunctionExpr [MathNumPropFunct [DIVISIBLE_BY, [Var [r1], NumConst [5]]]]]
+
+
+Var [b1] := Binary [AND, Var [b1], Unary [NOT, FunctionExpr [MathNumPropFunct [DIVISIBLE_BY, [Var [r1], NumConst [3]]]]]]
+
+
+exprStmt Binary [MATH_CHANGE, Var [r1], NumConst [1]]
+
+Var [b1] := Binary [AND, Var [b1], FunctionExpr [MathNumPropFunct [EVEN, [Var [r1]]]]]
+
+
+Var [r2] := FunctionExpr [MathSingleFunct [ROOT, [NumConst [20]]]]
+
+
+Var [b1] := Binary [AND, Var [b1], Unary [NOT, FunctionExpr [MathNumPropFunct [WHOLE, [Var [r2]]]]]]
+
+
+Var [b1] := Binary [AND, Var [b1], Binary [EQ, FunctionExpr [MathSingleFunct [ROUND, [Var [r2]]]], NumConst [4]]]
+
+
+Var [b1] := Binary [AND, Var [b1], Binary [EQ, FunctionExpr [MathSingleFunct [ROUNDUP, [Var [r2]]]], NumConst [5]]]
+
+
+Var [b1] := Binary [AND, Var [b1], Binary [EQ, FunctionExpr [MathSingleFunct [ROUNDDOWN, [Var [r2]]]], NumConst [4]]]
+
+
+Var [b1] := Binary [AND, Var [b1], Binary [GT, Var [r1], Var [r2]]]
+
+
+Var [b1] := Binary [AND, Var [b1], Binary [GTE, Var [r1], Var [r2]]]
+
+
+Var [b1] := Var [b1]
+
+
+Var [b1] := Binary [AND, Binary [AND, Var [b1], Binary [LT, Var [r2], Var [r1]]], Binary [LTE, Var [r1], Var [r1]]]
+
+
+Var [b1] := Binary [AND, Var [b1], Binary [EQ, Binary [MOD, Var [r1], NumConst [4]], NumConst [2]]]
+
+
+Var [b1] := Binary [AND, Var [b1], Binary [EQ, NumConst [29], Binary [ADD, FunctionExpr [MathConstrainFunct [[MathPowerFunct [POWER, [NumConst [3], NumConst [2]]], NumConst [1], NumConst [20]]]], Binary [ADD, FunctionExpr [MathConstrainFunct [[NumConst [9], Binary [MULTIPLY, NumConst [3], NumConst [4]], NumConst [18]]]], FunctionExpr [MathConstrainFunct [[Binary [MULTIPLY, NumConst [3], NumConst [3]], NumConst [5], NumConst [8]]]]]]]]
+
+
+Var [b1] := Binary [AND, Var [b1], Binary [GT, NumConst [11], Binary [MULTIPLY, FunctionExpr [MathRandomFloatFunct []], FunctionExpr [MathRandomIntFunct [[NumConst [1], NumConst [10]]]]]]]
+
+
+StmtTextComment [if b1 is true, the test succeeded, otherwise it failed :-)]

@@ -1,7 +1,0 @@
-<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="edison" xmlversion="3.1" description="" tags="">
-    <instance x="428" y="213">
-        <block type="math_round" id="TIDVD%X1bg3J%4|=jT!j" intask="false">
-            <field name="OP">ROUNDDOWN</field>
-        </block>
-    </instance>
-</block_set>

@@ -4,6 +4,8 @@ import java.lang.reflect.Method;
 import java.util.Locale;
 import java.util.Map;
 
+import de.fhg.iais.roberta.blockly.generated.Mutation;
+import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,7 +39,6 @@ import de.fhg.iais.roberta.mode.general.ListElementOperations;
 import de.fhg.iais.roberta.mode.general.WorkingState;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
-import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.sensor.Sensor;
 import de.fhg.iais.roberta.syntax.sensor.SensorMetaDataBean;
 import de.fhg.iais.roberta.util.PluginProperties;
@@ -69,28 +70,6 @@ public class BlocklyDropdownFactory {
         String configurationComponentType = this.configurationComponentTypes.get(blocklyName);
         Assert.notNull(configurationComponentType, "No associated component type for %s in the properties", blocklyName);
         return configurationComponentType;
-    }
-
-    public String sanitizePort(String port) {
-        if ( port == null || port.isEmpty() ) {
-            return BlocklyConstants.NO_PORT;
-        }
-        return port;
-    }
-
-    /**
-     * Get a sensor port from {@link ISensorPort} given string parameter. It is possible for one sensor port to have multiple string mappings. Throws exception
-     * if the sensor port does not exists.
-     *
-     * @param name of the sensor port
-     * @return the sensor port from the enum {@link ISensorPort}
-     */
-    public String sanitizeSlot(String slot) {
-        Assert.notNull(slot, "Null slot port!");
-        if ( slot.isEmpty() ) {
-            return BlocklyConstants.EMPTY_SLOT;
-        }
-        return slot;
     }
 
     public String getMode(String mode) {
@@ -240,7 +219,7 @@ public class BlocklyDropdownFactory {
         String sensorKey,
         String port,
         String slot,
-        boolean isPortInMutation,
+        Mutation mutation,
         BlocklyBlockProperties properties,
         BlocklyComment comment) {
 
@@ -250,7 +229,7 @@ public class BlocklyDropdownFactory {
         try {
             Class<Sensor<?>> sensorClass = (Class<Sensor<?>>) BlocklyDropdownFactory.class.getClassLoader().loadClass(implementingClass);
             String mode = waBean.getMode();
-            SensorMetaDataBean sensorMetaDataBean = new SensorMetaDataBean(sanitizePort(port), getMode(mode), sanitizeSlot(slot), isPortInMutation);
+            SensorMetaDataBean sensorMetaDataBean = new SensorMetaDataBean(Jaxb2Ast.sanitizePort(port), getMode(mode), Jaxb2Ast.sanitizeSlot(slot), mutation);
             Method makeMethod = sensorClass.getDeclaredMethod("make", SensorMetaDataBean.class, BlocklyBlockProperties.class, BlocklyComment.class);
             return (Sensor<?>) makeMethod.invoke(null, sensorMetaDataBean, properties, comment);
         } catch ( Exception e ) {

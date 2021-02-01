@@ -1,0 +1,319 @@
+#define WHEELDIAMETER 5.6
+#define TRACKWIDTH 12.0
+#define MAXLINES 8
+#define MIN(X, Y) (((X) < (Y)) ? (X) : (Y))
+#define MAX(X, Y) (((X) > (Y)) ? (X) : (Y))
+#define M_PI PI
+#define M_E 2.718281828459045
+#define M_GOLDEN_RATIO 1.61803398875
+#define M_SQRT2 1.41421356237
+#define M_SQRT1_2 0.707106781187
+#define M_INFINITY 0x7f800000
+#include "NEPODefs.h" // contains NEPO declarations for the NXC NXT API resources
+
+
+void math();
+void lists();
+
+float MathAcos(float val);
+float MathAsin(float val);
+float MathAtan(float val);
+float MathCos(float val);
+float MathFactorial(float val);
+float MathLn(float val);
+float MathLog(float val);
+float MathPow(float firstValue, float secondValue);
+bool MathPrime(float number);
+int MathRound(float val);
+int MathFloor(float val);
+int MathRoundUp(float val);
+float MathSin(float val);
+float ArrayStdDev(float arr[]);
+float MathTan(float val);
+bool MathIsWhole(float val);
+
+float ___numberVar;
+bool ___booleanVar;
+string ___stringVar;
+int ___colourVar;
+int ___connectionVar;
+float ___numberList[3];
+bool ___booleanList[3];
+string ___stringList[3];
+int ___colourList[3];
+int ___connectionList[3];
+task main() {
+    ___numberVar = 0;
+    ___booleanVar = true;
+    ___stringVar = "";
+    ___colourVar = INPUT_WHITECOLOR;
+    ___connectionVar = NULL;
+    float _____numberList[] = {0, 0, 0};
+    ___numberList = _____numberList;
+    bool _____booleanList[] = {true, true, true};
+    ___booleanList = _____booleanList;
+    string _____stringList[] = {"", "", ""};
+    ___stringList = _____stringList;
+    int _____colourList[] = {INPUT_WHITECOLOR, INPUT_WHITECOLOR, INPUT_WHITECOLOR};
+    ___colourList = _____colourList;
+    int _____connectionList[] = {NULL, NULL, NULL};
+    ___connectionList = _____connectionList;
+    math();
+    lists();
+}
+
+void math() {
+    NumOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, 0);
+    NumOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, (___numberVar + ___numberVar));
+    NumOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, (___numberVar - ___numberVar));
+    NumOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, (___numberVar * ___numberVar));
+    NumOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, (___numberVar / ((___numberVar)*1.0)));
+    NumOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, MathPow(___numberVar, ___numberVar));
+    NumOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, sqrt(___numberVar));
+    NumOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, abs(___numberVar));
+    NumOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, - (___numberVar));
+    NumOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, MathLn(___numberVar));
+    NumOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, MathLog(___numberVar));
+    NumOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, MathPow(M_E, ___numberVar));
+    NumOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, MathPow(10, ___numberVar));
+    NumOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, MathSin(___numberVar));
+    NumOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, MathCos(___numberVar));
+    NumOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, MathTan(___numberVar));
+    NumOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, MathAsin(___numberVar));
+    NumOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, MathAcos(___numberVar));
+    NumOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, MathAtan(___numberVar));
+    BoolOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, (___numberVar % 2 == 0));
+    BoolOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, (___numberVar % 2 != 0));
+    BoolOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, MathPrime(___numberVar));
+    BoolOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, MathIsWhole(___numberVar));
+    BoolOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, (___numberVar > 0));
+    BoolOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, (___numberVar < 0));
+    BoolOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, (___numberVar % ___numberVar == 0));
+    ___numberVar += ___numberVar;
+    NumOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, MathRound(___numberVar));
+    NumOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, MathRoundUp(___numberVar));
+    NumOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, MathFloor(___numberVar));
+    NumOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, ArraySum(___numberList));
+    NumOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, ArrayMin(___numberList));
+    NumOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, ArrayMax(___numberList));
+    NumOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, ArrayMean(___numberList));
+    NumOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, ArrayMedian(___numberList));
+    NumOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, ArrayStdDev(___numberList));
+    NumOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, ___numberList[0]);
+    NumOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, ___numberVar % ___numberVar);
+    NumOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, MIN(MAX(___numberVar, ___numberVar), ___numberVar));
+    NumOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, Random(___numberVar - ___numberVar) + ___numberVar);
+    NumOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, Random(100) / 100);
+}
+
+void lists() {
+    BoolOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, ArrayLen(___numberList));
+    BoolOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, ArrayLen(___stringList));
+    BoolOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, ArrayLen(___booleanList));
+    BoolOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, ArrayLen(___numberList) == 0);
+    BoolOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, ArrayLen(___stringList) == 0);
+    BoolOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, ArrayLen(___booleanList) == 0);
+    NumOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, ArrFindFirstNum(___numberList, ___numberVar));
+    NumOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, ArrFindFirstStr(___stringList, ___stringVar));
+    NumOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, ArrFindFirstBool(___booleanList, ___booleanVar));
+    NumOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, ArrFindLastNum(___numberList, ___numberVar));
+    NumOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, ArrFindLastStr(___stringList, ___stringVar));
+    NumOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, ArrFindLastBool(___booleanList, ___booleanVar));
+    NumOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, ___numberList[sanitiseFromStart(ArrayLen(___numberList), ___numberVar)]);
+    TextOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, ___stringList[sanitiseFromStart(ArrayLen(___stringList), ___numberVar)]);
+    BoolOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, ___booleanList[sanitiseFromStart(ArrayLen(___booleanList), ___numberVar)]);
+    NumOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, ___numberList[sanitiseFromEnd(ArrayLen(___numberList), -1 - ___numberVar)]);
+    TextOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, ___stringList[sanitiseFromEnd(ArrayLen(___stringList), -1 - ___numberVar)]);
+    BoolOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, ___booleanList[sanitiseFromEnd(ArrayLen(___booleanList), -1 - ___numberVar)]);
+    NumOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, ___numberList[sanitiseFromStart(ArrayLen(___numberList), 0)]);
+    TextOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, ___stringList[sanitiseFromStart(ArrayLen(___stringList), 0)]);
+    BoolOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, ___booleanList[sanitiseFromStart(ArrayLen(___booleanList), 0)]);
+    NumOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, ___numberList[sanitiseFromEnd(ArrayLen(___numberList), -1)]);
+    TextOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, ___stringList[sanitiseFromEnd(ArrayLen(___stringList), -1)]);
+    BoolOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, ___booleanList[sanitiseFromEnd(ArrayLen(___booleanList), -1)]);
+    ___numberList[sanitiseFromStart(ArrayLen(___numberList), ___numberVar)] = ___numberVar;;
+    ___stringList[sanitiseFromStart(ArrayLen(___stringList), ___numberVar)] = ___stringVar;;
+    ___booleanList[sanitiseFromStart(ArrayLen(___booleanList), ___numberVar)] = ___booleanVar;;
+    ___numberList[sanitiseFromEnd(ArrayLen(___numberList), -1 - ___numberVar)] = ___numberVar;;
+    ___stringList[sanitiseFromEnd(ArrayLen(___stringList), -1 - ___numberVar)] = ___stringVar;;
+    ___booleanList[sanitiseFromEnd(ArrayLen(___booleanList), -1 - ___numberVar)] = ___booleanVar;;
+    ___numberList[sanitiseFromStart(ArrayLen(___numberList), 0)] = ___numberVar;;
+    ___stringList[sanitiseFromStart(ArrayLen(___stringList), 0)] = ___stringVar;;
+    ___booleanList[sanitiseFromStart(ArrayLen(___booleanList), 0)] = ___booleanVar;;
+    ___numberList[sanitiseFromEnd(ArrayLen(___numberList), -1)] = ___numberVar;;
+    ___stringList[sanitiseFromEnd(ArrayLen(___stringList), -1)] = ___stringVar;;
+    ___booleanList[sanitiseFromEnd(ArrayLen(___booleanList), -1)] = ___booleanVar;;
+}
+
+float MathAcos(float val) {
+    if (abs(val) > 1) {
+        TextOut(0, LCD_LINE1, "invalid value");
+        Wait(1000);
+        ClearScreen();
+        return NULL;
+    } else {
+        return 90 - MathAsin(val);
+    }
+}
+
+float MathAsin(float val) {
+    if (abs(val) > 1) {
+        TextOut(0, LCD_LINE1, "invalid value");
+        Wait(1000);
+        ClearScreen();
+        return NULL;
+    } else {
+        float summ = 0;
+        for (float n = 0; n < 15; n++) {
+            summ += MathFactorial(2 * n) * MathPow(val, (2 * n + 1)) / MathPow(4, n) / MathPow(MathFactorial(n), 2) / (2 * n + 1);
+        }
+        return summ * 180 / PI;
+    }
+}
+
+float MathAtan(float val) {
+    if (abs(val) > 1) {
+        float values[] = {1, sqrt(3), 2, 3, 0x7f800000};
+        float results[] = {45, 60, 63.435, 71.565, 90};
+        int i = 1;
+        while (values[i] < abs(val)) {
+            i++;
+        }
+        float result = results[i - 1] + (abs(val) - values[i - 1]) * (results[i] - results[i - 1]) / (values[i] - values[i - 1]);
+        if (val > 0) {
+            return result;
+        } else {
+            return -result;
+        }
+    } else {
+        float summ = 0;
+        for (float n = 1; n < 15; n++) {
+            summ += MathPow(-1, (n - 1)) * MathPow(val, (2 * n - 1)) / (2 * n - 1);
+        }
+        return summ * 180 / PI;
+    }
+}
+
+float MathCos(float val) {
+    float angle = PI * val / 180;
+    float summ = 0;
+    for (float n = 0; n < 10; n++) {
+        summ += (MathPow(-1, n) / MathFactorial(2 * n)) * MathPow(angle, (2 * n));
+    }
+    return summ;
+}
+
+float MathFactorial(float val) {
+    float result = val;
+    if (val == 0) {
+        return 1;
+    } else {
+        for (int i = 1; i < val; i++) {
+            result = result * (val - i);
+        }
+        return result;
+    }
+}
+
+float MathLn(float val) {
+    if (val > 1) {
+        float values[] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 10000};
+        float results[] = {0, 0.693147, 1.098612, 1.386294, 1.609438, 1.791759, 1.945910, 2.079442, 2.197225, 2.302585, 2.995732, 3.401197, 3.688879, 3.912023, 4.094345, 4.248495, 4.382027, 4.499810, 4.605170, 5.298317, 5.703782, 5.991465, 6.214608, 6.396930, 6.551080, 6.684612, 6.802395, 6.907755, 9.210340};
+        int i = 1;
+        while (values[i] < abs(val)) {
+            i++;
+        }
+        float result = results[i - 1] + (abs(val) - values[i - 1]) * (results[i] - results[i - 1]) / (values[i] - values[i - 1]);
+        if (val <= 100000) {
+            return result;
+        } else {
+            return 9.22;
+        }
+    } else if ((val > 0) && (val <= 1)) {
+        float summ = 0;
+        for (int n = 1; n < 10; n++) {
+            summ += MathPow(-1, (n + 1)) * MathPow((val - 1), n) / n;
+        }
+        return summ;
+    } else {
+        TextOut(0, LCD_LINE1, "invalid value");
+        Wait(1000);
+        ClearScreen();
+        return NULL;
+    }
+}
+
+float MathLog(float val) {
+    return MathLn(val) / MathLn(2.71828);
+}
+
+float MathPow(float firstValue, float secondValue) {
+    float result = 1;
+    for (int i = 0; i < abs(secondValue); i++) {
+        result = result * firstValue;
+    }
+    if (secondValue < 0) {
+        if (firstValue == 0) {
+            return NULL;
+        } else {
+            return 1 / result;
+        }
+    } else {
+        return result;
+    }
+}
+
+bool MathPrime(float number) {
+    if ((number % 2 == 0) || (number == 1)) return false;
+    //if not, then just check the odds
+    for (int i = 3; i * i <= number; i += 2) {
+        if (number % i == 0)
+            return false;
+    }
+    return true;
+}
+
+int MathRound(float val) {
+    return MathFloor(0.5 + val);
+}
+
+int MathFloor(float val) {
+    int temp = val;
+    return temp;
+}
+
+int MathRoundUp(float val) {
+    return (1 + MathFloor(val));
+}
+
+float MathSin(float val) {
+    float angle = PI * val / 180;
+    float summ = 0;
+    for (int n = 0; n < 10; n++) {
+        summ += MathPow(-1, n) * MathPow(angle, (2 * n + 1)) / MathFactorial(2 * n + 1);
+    }
+    return summ;
+}
+
+float ArrayStdDev(float arr[]) {
+    int n = idty(ArrayLen(arr));
+    if (n == 0) {
+        return 0;
+    }
+    float variance = 0;
+    float mean = ArrayMean(arr);
+    for (int i = 0; i < ArrayLen(arr); i++) {
+        variance += MathPow(arr[i] - mean, 2);
+    }
+    variance /= n;
+    return sqrt(variance);
+}
+
+float MathTan(float val) {
+    return MathSin(val) / MathCos(val);
+}
+
+bool MathIsWhole(float val) {
+    int intPart = val;
+    return ((val - intPart) == 0);
+}

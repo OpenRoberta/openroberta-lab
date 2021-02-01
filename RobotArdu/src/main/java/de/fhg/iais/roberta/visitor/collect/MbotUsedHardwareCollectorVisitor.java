@@ -46,7 +46,7 @@ public final class MbotUsedHardwareCollectorVisitor extends AbstractUsedHardware
 
     @Override
     public Void visitJoystick(Joystick<Void> joystick) {
-        this.getBuilder(UsedHardwareBean.Builder.class).addUsedSensor(new UsedSensor(joystick.getPort(), SC.JOYSTICK, SC.DEFAULT));
+        this.getBuilder(UsedHardwareBean.Builder.class).addUsedSensor(new UsedSensor(joystick.getUserDefinedPort(), SC.JOYSTICK, SC.DEFAULT));
         return null;
     }
 

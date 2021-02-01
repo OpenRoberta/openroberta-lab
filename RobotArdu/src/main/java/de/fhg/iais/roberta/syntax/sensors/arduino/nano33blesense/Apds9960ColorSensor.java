@@ -11,11 +11,9 @@ import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.lang.expr.Var;
 import de.fhg.iais.roberta.syntax.sensor.BuiltinSensor;
-import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
+import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
-import de.fhg.iais.roberta.visitor.IVisitor;
-import de.fhg.iais.roberta.visitor.hardware.IArduinoVisitor;
 
 public class Apds9960ColorSensor<V> extends BuiltinSensor<V> {
 
@@ -41,11 +39,6 @@ public class Apds9960ColorSensor<V> extends BuiltinSensor<V> {
         setReadOnly();
     }
 
-    @Override
-    protected V acceptImpl(IVisitor<V> visitor) {
-        return ((IArduinoVisitor<V>) visitor).visitApds9960ColorSensor(this);
-    }
-
     public static <V> Apds9960ColorSensor<V> make(BlocklyBlockProperties properties, BlocklyComment comment, Var<V> r, Var<V> g, Var<V> b) {
         return new Apds9960ColorSensor<>(properties, comment, r, g, b);
     }
@@ -57,7 +50,7 @@ public class Apds9960ColorSensor<V> extends BuiltinSensor<V> {
      * @param helper class for making the transformation
      * @return corresponding AST object
      */
-    public static <V> Phrase<V> jaxbToAst(Block block, AbstractJaxb2Ast<V> helper) {
+    public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
         List<Value> values = Jaxb2Ast.extractValues(block, (short) 3);
         Var<V> r = helper.getVar(values, BlocklyConstants.VARIABLE_R);
         Var<V> g = helper.getVar(values, BlocklyConstants.VARIABLE_G);

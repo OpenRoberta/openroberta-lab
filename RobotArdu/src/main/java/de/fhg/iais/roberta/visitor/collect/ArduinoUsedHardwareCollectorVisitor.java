@@ -71,12 +71,12 @@ public final class ArduinoUsedHardwareCollectorVisitor extends AbstractUsedHardw
 
     @Override
     public Void visitPinGetValueSensor(PinGetValueSensor<Void> pinGetValueSensor) {
-        ConfigurationComponent sensor = this.robotConfiguration.optConfigurationComponent(pinGetValueSensor.getPort());
+        ConfigurationComponent sensor = this.robotConfiguration.optConfigurationComponent(pinGetValueSensor.getUserDefinedPort());
         if ( sensor == null ) {
             throw new DbcException("Inconsistent configuration and program " + pinGetValueSensor);
         }
 
-        this.getBuilder(UsedHardwareBean.Builder.class).addUsedSensor(new UsedSensor(pinGetValueSensor.getPort(), SC.PIN_VALUE, pinGetValueSensor.getMode()));
+        this.getBuilder(UsedHardwareBean.Builder.class).addUsedSensor(new UsedSensor(pinGetValueSensor.getUserDefinedPort(), SC.PIN_VALUE, pinGetValueSensor.getMode()));
         return null;
     }
 
@@ -180,7 +180,7 @@ public final class ArduinoUsedHardwareCollectorVisitor extends AbstractUsedHardw
 
     @Override
     public Void visitNeuralNetworkClassify(NeuralNetworkClassify<Void> nn) {
-        nn.getProbabilities().accept(this);
+        nn.probabilities.accept(this);
         return null;
     }
 }

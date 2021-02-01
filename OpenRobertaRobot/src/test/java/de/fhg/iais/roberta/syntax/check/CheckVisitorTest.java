@@ -5,7 +5,7 @@ import org.junit.Test;
 
 import com.google.common.collect.ClassToInstanceMap;
 
-import de.fhg.iais.roberta.ast.AstTest;
+import de.fhg.iais.roberta.AstTest;
 import de.fhg.iais.roberta.bean.IProjectBean;
 import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.components.Project;
@@ -111,7 +111,7 @@ public class CheckVisitorTest extends AstTest {
 
     @Test
     public void check_noLoops_returnsEmptyMap() throws Exception {
-        Project.Builder builder = UnitTestHelper.setupWithProgramXML(testFactory, Util.readResourceContent("/visitors/invalide_use_of_variable.xml"));
+        Project.Builder builder = UnitTestHelper.setupWithProgramXMLWithDefaultConfig(testFactory,Util.readResourceContent("/visitors/invalide_use_of_variable.xml"));
         Project project = builder.build();
 
         TestProgramCheckWorker worker = new TestProgramCheckWorker();

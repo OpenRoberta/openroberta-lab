@@ -6,37 +6,45 @@ import org.apache.commons.lang3.math.NumberUtils;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Field;
+import de.fhg.iais.roberta.blockly.generated.Hide;
 import de.fhg.iais.roberta.factory.BlocklyDropdownFactory;
+import de.fhg.iais.roberta.syntax.BlockType;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.Action;
-import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
+import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
+import de.fhg.iais.roberta.transformer.NepoField;
+import de.fhg.iais.roberta.transformer.NepoHide;
+import de.fhg.iais.roberta.transformer.NepoPhrase;
 import de.fhg.iais.roberta.util.dbc.Assert;
-import de.fhg.iais.roberta.visitor.IVisitor;
-import de.fhg.iais.roberta.visitor.hardware.actor.ISoundVisitor;
 
 /**
- * This class represents the <b>mbedActions_play_note</b> blocks from Blockly into the AST (abstract syntax tree). Object from this class will generate code for
- * playing a specific note.<br/>
- * <br/>
+ * This class represents the <b>mbedActions_play_note</b> block<br/>
  * The client must provide the note value and note of the sound. <br>
  */
+@NepoPhrase(containerType = "PLAY_NOTE_ACTION")
 public class PlayNoteAction<V> extends Action<V> {
-    private final String duration;
-    private final String frequency;
-    private final String port;
+    @NepoField(name = BlocklyConstants.DURATION, value = "2000")
+    public final String duration;
+    @NepoField(name = BlocklyConstants.FREQUENCE, value = "261.626")
+    public final String frequency;
+    @NepoField(name = BlocklyConstants.ACTORPORT, value = BlocklyConstants.EMPTY_PORT)
+    public final  String port;
+    @NepoHide
+    public final Hide hide;
 
-    private PlayNoteAction(String port, String duration, String frequency, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockTypeContainer.getByName("PLAY_NOTE_ACTION"), properties, comment);
+    public PlayNoteAction(BlockType kind, BlocklyBlockProperties properties, BlocklyComment comment, String duration, String frequency, String port, Hide hide) {
+        super(kind, properties, comment);
         Assert.isTrue(NumberUtils.isCreatable(duration) && NumberUtils.isCreatable(frequency));
         this.duration = duration;
         this.frequency = frequency;
         this.port = port;
+        this.hide = hide;
         setReadOnly();
     }
 
@@ -49,64 +57,23 @@ public class PlayNoteAction<V> extends Action<V> {
      * @param comment added from the user,
      * @return read only object of class {@link PlayNoteAction}
      */
-    public static <V> PlayNoteAction<V> make(String port, String duration, String frequency, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new PlayNoteAction<>(port, duration, frequency, properties, comment);
+    public static <V> PlayNoteAction<V> make(String port, String duration, String frequency, BlocklyBlockProperties properties, BlocklyComment comment, Hide hide) {
+        return new PlayNoteAction<>(BlockTypeContainer.getByName("PLAY_NOTE_ACTION"), properties, comment, duration, frequency, port, hide);
     }
 
-    /**
-     * @return port.
-     */
     public String getPort() {
         return this.port;
     }
 
-    /**
-     * @return the duration of the sound.
-     */
     public String getDuration() {
         return this.duration;
     }
 
-    /**
-     * @return the frequency of this action.
-     */
     public String getFrequency() {
         return this.frequency;
     }
 
-    @Override
-    public String toString() {
-        return "PlayNoteAction [ duration=" + this.duration + ", frequency=" + this.frequency + "]";
-    }
-
-    @Override
-    protected V acceptImpl(IVisitor<V> visitor) {
-        return ((ISoundVisitor<V>) visitor).visitPlayNoteAction(this);
-    }
-
-    /**
-     * Transformation from JAXB object to corresponding AST object.
-     *
-     * @param block for transformation
-     * @param helper class for making the transformation
-     * @return corresponding AST object
-     */
-    public static <V> Phrase<V> jaxbToAst(Block block, AbstractJaxb2Ast<V> helper) {
-        List<Field> fields = Jaxb2Ast.extractFields(block, (short) 3);
-        BlocklyDropdownFactory factory = helper.getDropdownFactory();
-        String port = Jaxb2Ast.extractField(fields, BlocklyConstants.ACTORPORT, BlocklyConstants.NO_PORT);
-        String duration = Jaxb2Ast.extractField(fields, BlocklyConstants.DURATION, "2000");
-        String frequency = Jaxb2Ast.extractField(fields, BlocklyConstants.FREQUENCE, "261.626");
-        return PlayNoteAction.make(factory.sanitizePort(port), duration, frequency, Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
-    }
-
-    @Override
-    public Block astToBlock() {
-        Block jaxbDestination = new Block();
-        Ast2Jaxb.setBasicProperties(this, jaxbDestination);
-        Ast2Jaxb.addField(jaxbDestination, BlocklyConstants.DURATION, this.duration);
-        Ast2Jaxb.addField(jaxbDestination, BlocklyConstants.FREQUENCE, this.frequency);
-
-        return jaxbDestination;
+    public Hide getHide() {
+        return this.hide;
     }
 }

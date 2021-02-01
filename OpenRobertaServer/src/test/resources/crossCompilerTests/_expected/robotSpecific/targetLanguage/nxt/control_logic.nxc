@@ -1,0 +1,119 @@
+#define WHEELDIAMETER 5.6
+#define TRACKWIDTH 12.0
+#define MAXLINES 8
+#define MIN(X, Y) (((X) < (Y)) ? (X) : (Y))
+#define MAX(X, Y) (((X) > (Y)) ? (X) : (Y))
+#define M_PI PI
+#define M_E 2.718281828459045
+#define M_GOLDEN_RATIO 1.61803398875
+#define M_SQRT2 1.41421356237
+#define M_SQRT1_2 0.707106781187
+#define M_INFINITY 0x7f800000
+#include "NEPODefs.h" // contains NEPO declarations for the NXC NXT API resources
+
+
+void control();
+void logic();
+
+float ___numberVar;
+bool ___booleanVar;
+string ___stringVar;
+int ___colourVar;
+int ___connectionVar;
+float ___numberList[3];
+bool ___booleanList[3];
+string ___stringList[3];
+int ___colourList[3];
+int ___connectionList[3];
+task main() {
+    ___numberVar = 0;
+    ___booleanVar = true;
+    ___stringVar = "";
+    ___colourVar = INPUT_WHITECOLOR;
+    ___connectionVar = NULL;
+    float _____numberList[] = {0, 0, 0};
+    ___numberList = _____numberList;
+    bool _____booleanList[] = {true, true, true};
+    ___booleanList = _____booleanList;
+    string _____stringList[] = {"", "", ""};
+    ___stringList = _____stringList;
+    int _____colourList[] = {INPUT_WHITECOLOR, INPUT_WHITECOLOR, INPUT_WHITECOLOR};
+    ___colourList = _____colourList;
+    int _____connectionList[] = {NULL, NULL, NULL};
+    ___connectionList = _____connectionList;
+    control();
+    logic();
+}
+
+void control() {
+    if ( ___booleanVar ) {
+    } else if ( ___booleanVar ) {
+    }
+    if ( ___booleanVar ) {
+    } else if ( ___booleanVar ) {
+    }
+    while ( true ) {
+    }
+    for (int ___k0 = 0; ___k0 < ___numberVar; ___k0 += 1) {
+        Wait(___numberVar);
+    }
+    while ( ___booleanVar ) {
+        break;
+    }
+    while ( ! ___booleanVar ) {
+        continue;
+    }
+    for (int ___i = ___numberVar; ___i < ___numberVar; ___i += ___numberVar) {
+    }
+    float ___item;
+    for(int ___i = 0; ___i < ArrayLen(___numberList); ++___i) {
+        ___item = ___numberList[___i];
+    }
+    bool ___item2;
+    for(int ___i = 0; ___i < ArrayLen(___booleanList); ++___i) {
+        ___item2 = ___booleanList[___i];
+    }
+    string ___item3;
+    for(int ___i = 0; ___i < ArrayLen(___stringList); ++___i) {
+        ___item3 = ___stringList[___i];
+    }
+    int ___item4;
+    for(int ___i = 0; ___i < ArrayLen(___colourList); ++___i) {
+        ___item4 = ___colourList[___i];
+    }
+    int ___item5;
+    for(int ___i = 0; ___i < ArrayLen(___connectionList); ++___i) {
+        ___item5 = ___connectionList[___i];
+    }
+    while (true) {
+        if ( ___booleanVar ) {
+            break;
+        }
+        if ( ___booleanVar ) {
+            break;
+        }
+        Wait(15);
+    }
+    while (true) {
+        if ( ___booleanVar ) {
+            break;
+        }
+        Wait(15);
+    }
+}
+
+void logic() {
+    BoolOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, ___numberVar == ___numberVar);
+    BoolOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, ___numberVar != ___numberVar);
+    BoolOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, ___numberVar < ___numberVar);
+    BoolOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, ___numberVar <= ___numberVar);
+    BoolOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, ___numberVar > ___numberVar);
+    BoolOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, ___numberVar >= ___numberVar);
+    BoolOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, ___booleanVar && ___booleanVar);
+    BoolOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, ___booleanVar || ___booleanVar);
+    BoolOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, ! ___booleanVar);
+    BoolOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, true);
+    BoolOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, false);
+    NumOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, NULL);
+    BoolOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, ( ( ___booleanVar ) ? ( ___numberVar ) : ( ___numberVar) ));
+}

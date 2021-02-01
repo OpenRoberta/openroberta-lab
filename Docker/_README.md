@@ -77,7 +77,7 @@ mvn clean install # necessary to create the update resources for ev3- and arduin
 docker build --no-cache -t openroberta/base-${ARCH}:${BASE_VERSION} \
        --build-arg CCBIN_VERSION=${CCBIN_VERSION} \
        -f $BASE_DIR/conf/${ARCH}/docker-for-meta-2-cc-resources/Dockerfile .
-docker push openroberta/base-${ARCH}:${BASE_VERSION}
+docker ro
 ```
 
 _Note:_ If the git repository `ora-cc-rsc` is changed, the `openroberta/base-${ARCH}` image and all images built upon it must be rebuilt. This is fast,

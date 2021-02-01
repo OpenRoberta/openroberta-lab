@@ -358,9 +358,10 @@ public final class BlocklyConstants {
     public static final String PIN_PULL = "PIN_PULL";
     public static final String DEFAULT = "DEFAULT";
     public static final String NO_PORT = "NO_PORT";
+    public static final String EMPTY_PORT = "- EMPTY_PORT -";
     public static final String NO_SLOT = "NO_SLOT";
     public static final String SLOT = "SLOT";
-    public static final String EMPTY_SLOT = "EMPTY_SLOT";
+    public static final String EMPTY_SLOT = "- EMPTY_SLOT -";
     public static final String ELECTRIC_CURRENT = "ELECTRIC_CURRENT";
     public static final String FSR = "FSR";
     public static final String COLON = "COLON";

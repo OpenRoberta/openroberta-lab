@@ -76,8 +76,8 @@ public class RobotInfo {
     }
 
     /**
-     * merge the properties of a JSON-object into this bean. The bean must be "under construction". The keys of the JSON-Object must be valid. The bean remains
-     * "under construction".<br>
+     * merge the properties of a JSON-object into this bean. The bean must be "under construction".
+     * The keys of the JSON-Object must be valid. The bean remains "under construction".<br>
      * Throws a runtime exception if inconsistencies are detected.
      */
     public RobotInfo merge(JSONObject jsonO) {
@@ -130,25 +130,25 @@ public class RobotInfo {
         if ( !this.immutable ) {
             _message = "RobotInfo-object is already immutable: " + toString();
         }
-        if ( !this.waitDefined ) {
+        if ( !waitDefined ) {
             _message = "required property wait of RobotInfo-object is not set: " + toString();
         }
-        if ( this.battery == null ) {
+        if ( battery == null ) {
             _message = "required property battery of RobotInfo-object is not set: " + toString();
         }
-        if ( this.name == null ) {
+        if ( name == null ) {
             _message = "required property name of RobotInfo-object is not set: " + toString();
         }
-        if ( this.version == null ) {
+        if ( version == null ) {
             _message = "required property version of RobotInfo-object is not set: " + toString();
         }
-        if ( this.firmwareName == null ) {
+        if ( firmwareName == null ) {
             _message = "required property firmwareName of RobotInfo-object is not set: " + toString();
         }
-        if ( this.sensorvalues == null ) {
+        if ( sensorvalues == null ) {
             _message = "required property sensorvalues of RobotInfo-object is not set: " + toString();
         }
-        if ( !this.nepoexitvalueDefined ) {
+        if ( !nepoexitvalueDefined ) {
             _message = "required property nepoexitvalue of RobotInfo-object is not set: " + toString();
         }
         if ( _message != null ) {

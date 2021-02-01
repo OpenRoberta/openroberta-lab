@@ -46,7 +46,7 @@ public interface IEdisonCollectorVisitor extends ICollectorVisitor, IEdisonVisit
     }
 
     @Override
-    default Void visitSensorResetAction(ResetSensor<Void> voidResetSensor) {
+    default Void visitResetSensor(ResetSensor<Void> voidResetSensor) {
         return null;
     }
 
@@ -58,8 +58,8 @@ public interface IEdisonCollectorVisitor extends ICollectorVisitor, IEdisonVisit
     }
 
     @Override
-    default Void visitAccelerometer(AccelerometerSensor<Void> accelerometerSensor) {
-        return ICollectorVisitor.super.visitAccelerometer(accelerometerSensor);
+    default Void visitAccelerometerSensor(AccelerometerSensor<Void> accelerometerSensor) {
+        return ICollectorVisitor.super.visitAccelerometerSensor(accelerometerSensor);
     }
 
     @Override

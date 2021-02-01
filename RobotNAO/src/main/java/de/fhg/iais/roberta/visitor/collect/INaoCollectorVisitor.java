@@ -171,7 +171,7 @@ public interface INaoCollectorVisitor extends ICollectorVisitor, INaoVisitor<Voi
     }
 
     @Override
-    default Void visitNaoMark(DetectMarkSensor<Void> naoMark) {
+    default Void visitDetectMarkSensor(DetectMarkSensor<Void> naoMark) {
         return null;
     }
 
@@ -201,12 +201,12 @@ public interface INaoCollectorVisitor extends ICollectorVisitor, INaoVisitor<Voi
     }
 
     @Override
-    default Void visitDetectFace(DetectFaceSensor<Void> detectFace) {
+    default Void visitDetectFaceSensor(DetectFaceSensor<Void> detectFace) {
         return null;
     }
 
     @Override
-    default Void visitElectricCurrent(ElectricCurrentSensor<Void> electricCurrent) {
+    default Void visitElectricCurrentSensor(ElectricCurrentSensor<Void> electricCurrent) {
         return null;
     }
 
@@ -223,7 +223,7 @@ public interface INaoCollectorVisitor extends ICollectorVisitor, INaoVisitor<Voi
 
     @Override
     default Void visitRecognizeWord(RecognizeWord<Void> recognizeWord) {
-        recognizeWord.getVocabulary().accept(this);
+        recognizeWord.vocabulary.accept(this);
         return null;
     }
 
@@ -234,7 +234,7 @@ public interface INaoCollectorVisitor extends ICollectorVisitor, INaoVisitor<Voi
     }
 
     @Override
-    default Void visitDetecedFaceInformation(DetectedFaceInformation<Void> detectedFaceInformation) {
+    default Void visitDetectedFaceInformation(DetectedFaceInformation<Void> detectedFaceInformation) {
         detectedFaceInformation.getFaceName().accept(this);
         return null;
     }

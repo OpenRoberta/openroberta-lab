@@ -1,5 +1,6 @@
 package de.fhg.iais.roberta.factory.generic;
 
+import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -51,7 +52,7 @@ public class RobotModeFactoryTest {
 
     @Test
     public void getActorPortFromString() {
-        Assert.assertEquals(this.dropdownFactory.sanitizePort("A"), "A");
+        Assert.assertEquals(Jaxb2Ast.sanitizePort("A"), "A");
     }
 
     @Test

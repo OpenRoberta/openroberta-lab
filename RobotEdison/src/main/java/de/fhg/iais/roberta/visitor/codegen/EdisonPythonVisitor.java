@@ -155,7 +155,7 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
         this.sb.append(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(EdisonMethods.OBSTACLEDETECTION));
         this.sb.append("(");
 
-        switch ( infraredSensor.getPort() ) {
+        switch ( infraredSensor.getUserDefinedPort() ) {
             case "FRONT":
                 this.sb.append("Ed.OBSTACLE_AHEAD");
                 break;
@@ -199,7 +199,7 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
      */
     @Override
     public Void visitLightSensor(LightSensor<Void> lightSensor) {
-        switch ( lightSensor.getPort() ) {
+        switch ( lightSensor.getUserDefinedPort() ) {
             case "LLIGHT":
                 this.sb.append("Ed.ReadLeftLightLevel() / 10");
                 break;
@@ -380,7 +380,7 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
      */
     @Override
     public Void visitKeysSensor(KeysSensor<Void> keysSensor) {
-        switch ( keysSensor.getPort() ) {
+        switch ( keysSensor.getUserDefinedPort() ) {
             case "REC":
                 this.sb.append("Ed.ReadKeypad() == Ed.KEYPAD_ROUND");
                 break;
@@ -639,7 +639,7 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
      */
     @Override
     public Void visitLightStatusAction(LightStatusAction<Void> lightStatusAction) {
-        switch ( lightStatusAction.getPort() ) {
+        switch ( lightStatusAction.getUserDefinedPort() ) {
             case "1":
             case "RLED":
                 this.sb.append("Ed.RightLed(Ed.OFF)");
@@ -748,7 +748,7 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
      * @return
      */
     @Override
-    public Void visitSensorResetAction(ResetSensor<Void> resetSensor) {
+    public Void visitResetSensor(ResetSensor<Void> resetSensor) {
         switch ( resetSensor.getSensor() ) {
             case "OBSTACLEDETECTOR":
                 this.sb.append("Ed.ReadObstacleDetection()");

@@ -48,7 +48,7 @@ public interface IArduinoCollectorVisitor extends ICollectorVisitor, IArduinoVis
     }
 
     @Override
-    default Void visitDataSendAction(SendDataAction<Void> sendDataAction) {
+    default Void visitSendDataAction(SendDataAction<Void> sendDataAction) {
         sendDataAction.getId2Phenomena().forEach(stringExprPair -> {
             stringExprPair.getSecond().accept(this);
         });
@@ -119,9 +119,9 @@ public interface IArduinoCollectorVisitor extends ICollectorVisitor, IArduinoVis
 
     @Override
     default Void visitLsm9ds1GyroSensor(Lsm9ds1GyroSensor<Void> lsm9ds1GyroSensor) {
-        lsm9ds1GyroSensor.getX().accept(this);
-        lsm9ds1GyroSensor.getY().accept(this);
-        lsm9ds1GyroSensor.getZ().accept(this);
+        lsm9ds1GyroSensor.x.accept(this);
+        lsm9ds1GyroSensor.y.accept(this);
+        lsm9ds1GyroSensor.z.accept(this);
         return null;
     }
 

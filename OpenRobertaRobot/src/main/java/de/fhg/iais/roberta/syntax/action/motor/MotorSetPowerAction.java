@@ -13,14 +13,12 @@ import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.MoveAction;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
-import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
+import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
-import de.fhg.iais.roberta.visitor.IVisitor;
-import de.fhg.iais.roberta.visitor.hardware.actor.IMotorVisitor;
 
 /**
  * This class represents the <b>robActions_motor_setPower</b> block from Blockly into the AST (abstract syntax tree). Object from this class will generate code
@@ -63,11 +61,6 @@ public class MotorSetPowerAction<V> extends MoveAction<V> {
         return "MotorSetPowerAction [port=" + getUserDefinedPort() + ", power=" + this.power + "]";
     }
 
-    @Override
-    protected V acceptImpl(IVisitor<V> visitor) {
-        return ((IMotorVisitor<V>) visitor).visitMotorSetPowerAction(this);
-    }
-
     /**
      * Transformation from JAXB object to corresponding AST object.
      *
@@ -75,14 +68,14 @@ public class MotorSetPowerAction<V> extends MoveAction<V> {
      * @param helper class for making the transformation
      * @return corresponding AST object
      */
-    public static <V> Phrase<V> jaxbToAst(Block block, AbstractJaxb2Ast<V> helper) {
+    public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
         BlocklyDropdownFactory factory = helper.getDropdownFactory();
         List<Field> fields = Jaxb2Ast.extractFields(block, (short) 1);
         List<Value> values = Jaxb2Ast.extractValues(block, (short) 1);
         String portName = Jaxb2Ast.extractField(fields, BlocklyConstants.MOTORPORT);
         Phrase<V> left = helper.extractValue(values, new ExprParam(BlocklyConstants.POWER, BlocklyType.NUMBER_INT));
         return MotorSetPowerAction
-            .make(factory.sanitizePort(portName), helper.convertPhraseToExpr(left), Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
+            .make(Jaxb2Ast.sanitizePort(portName), Jaxb2Ast.convertPhraseToExpr(left), Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
     }
 
     @Override

@@ -66,7 +66,7 @@ import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.RadioRssiSensor;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.C;
-import de.fhg.iais.roberta.visitor.hardware.IMbedVisitor;
+import de.fhg.iais.roberta.visitor.IMbedVisitor;
 import de.fhg.iais.roberta.visitor.lang.codegen.AbstractStackMachineVisitor;
 
 public class MbedStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> implements IMbedVisitor<V> {
@@ -250,7 +250,7 @@ public class MbedStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> i
 
     @Override
     public V visitKeysSensor(KeysSensor<V> keysSensor) {
-        String port = keysSensor.getPort();
+        String port = keysSensor.getUserDefinedPort();
         ConfigurationComponent cc = this.configuration.optConfigurationComponent(port);
         String pin1 = (cc == null) ? "0" : cc.getProperty("PIN1");
 
@@ -266,7 +266,7 @@ public class MbedStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> i
 
     @Override
     public V visitTimerSensor(TimerSensor<V> timerSensor) {
-        String port = timerSensor.getPort();
+        String port = timerSensor.getUserDefinedPort();
         JSONObject o;
         if ( timerSensor.getMode().equals(SC.DEFAULT) || timerSensor.getMode().equals(SC.VALUE) ) {
             o = makeLeaf(C.GET_SAMPLE, timerSensor).put(C.GET_SAMPLE, C.TIMER).put(C.PORT, port).put(C.NAME, "calliope");
@@ -278,7 +278,7 @@ public class MbedStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> i
 
     @Override
     public V visitPinTouchSensor(PinTouchSensor<V> sensorGetSample) {
-        String port = sensorGetSample.getPort();
+        String port = sensorGetSample.getUserDefinedPort();
         String mode = sensorGetSample.getMode();
 
         JSONObject o = makeLeaf(C.GET_SAMPLE, sensorGetSample).put(C.GET_SAMPLE, C.PIN + port).put(C.MODE, mode.toLowerCase()).put(C.NAME, "calliope");
@@ -307,7 +307,7 @@ public class MbedStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> i
 
     @Override
     public V visitPinGetValueSensor(PinGetValueSensor<V> pinValueSensor) {
-        String port = pinValueSensor.getPort();
+        String port = pinValueSensor.getUserDefinedPort();
         ConfigurationComponent cc = this.configuration.optConfigurationComponent(port);
         String pin1 = (cc == null) ? "0" : cc.getProperty("PIN1");
         String mode = pinValueSensor.getMode();
@@ -353,7 +353,7 @@ public class MbedStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> i
     }
 
     @Override
-    public V visitAccelerometer(AccelerometerSensor<V> accelerometerSensor) {
+    public V visitAccelerometerSensor(AccelerometerSensor<V> accelerometerSensor) {
         return null;
     }
 

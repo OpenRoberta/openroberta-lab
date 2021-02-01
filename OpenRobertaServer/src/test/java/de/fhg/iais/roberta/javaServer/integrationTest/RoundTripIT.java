@@ -96,7 +96,7 @@ public class RoundTripIT {
     @Before
     public void setUp() throws Exception {
         // TODO: Does this work? Check and re-engineer
-        ServerProperties serverProperties = new ServerProperties(Util.loadProperties("classpath:/openRoberta.properties"));
+        ServerProperties serverProperties = new ServerProperties(Util.loadProperties("classpath:/openRoberta.propertiesxxx"));
         browserVisibility = Boolean.parseBoolean(serverProperties.getStringProperty("browser.visibility"));
         brickCommunicator = new RobotCommunicator();
         xsltTransformer = new XsltTransformer();
@@ -221,7 +221,7 @@ public class RoundTripIT {
 
     private void startServerAndLogin() throws IOException, InterruptedException {
         List<String> addr = Arrays.asList("server.ip=localhost", "server.port=1998");
-        server = new ServerStarter("classpath:/openRoberta.properties", addr).start(EMPTY_STRING_LIST);
+        server = new ServerStarter("classpath:/openRoberta.propertiesxxx", addr).start(EMPTY_STRING_LIST);
         int port = server.getURI().getPort();
         baseUrl = "http://localhost:" + port;
         driver.get(baseUrl + "/");

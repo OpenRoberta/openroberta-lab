@@ -22,7 +22,7 @@ public final class NxtBrickValidatorVisitor extends AbstractBrickValidatorVisito
     @Override
     protected void checkSensorPort(ExternalSensor<Void> sensor) {
         super.checkSensorPort(sensor);
-        ConfigurationComponent usedSensor = this.robotConfiguration.optConfigurationComponent(sensor.getPort());
+        ConfigurationComponent usedSensor = this.robotConfiguration.optConfigurationComponent(sensor.getUserDefinedPort());
         if ( usedSensor == null ) {
             // should be handled by super implementation
         } else {
@@ -44,7 +44,7 @@ public final class NxtBrickValidatorVisitor extends AbstractBrickValidatorVisito
     public Void visitHTColorSensor(HTColorSensor<Void> htColorSensor) {
         checkSensorPort(htColorSensor);
         String mode = htColorSensor.getMode();
-        this.getBuilder(UsedHardwareBean.Builder.class).addUsedSensor(new UsedSensor(htColorSensor.getPort(), SC.HT_COLOR, mode));
+        this.getBuilder(UsedHardwareBean.Builder.class).addUsedSensor(new UsedSensor(htColorSensor.getUserDefinedPort(), SC.HT_COLOR, mode));
         return null;
     }
 }

@@ -1,0 +1,89 @@
+#define WHEELDIAMETER 5.6
+#define TRACKWIDTH 12.0
+#define MAXLINES 8
+#define MIN(X, Y) (((X) < (Y)) ? (X) : (Y))
+#define MAX(X, Y) (((X) > (Y)) ? (X) : (Y))
+#define M_PI PI
+#define M_E 2.718281828459045
+#define M_GOLDEN_RATIO 1.61803398875
+#define M_SQRT2 1.41421356237
+#define M_SQRT1_2 0.707106781187
+#define M_INFINITY 0x7f800000
+#include "NEPODefs.h" // contains NEPO declarations for the NXC NXT API resources
+
+
+float n2F(string ___Note);
+
+byte volume = 0x02;
+float ___Schlag;
+float ___item[25];
+string ___item2[25];
+task main() {
+    ___Schlag = 500;
+    float _____item[] = {131, 139, 147, 156, 165, 175, 185, 196, 208, 220, 233, 247, 262, 277, 294, 311, 330, 349, 370, 392, 415, 440, 466, 494, 523};
+    ___item = _____item;
+    string _____item2[] = {"c", "cis", "d", "dis", "e", "f", "fis", "g", "gis", "a", "ais", "h", "c1", "cis1", "d1", "dis1", "e1", "f1", "fis1", "g1", "gis1", "a1", "ais1", "h1", "c2"};
+    ___item2 = _____item2;
+    volume = (100) * 4 / 100.0;
+    PlayToneEx(n2F("d"), (1 * ___Schlag), volume, false);
+    Wait((1 * ___Schlag));
+    PlayToneEx(n2F("e"), (1 * ___Schlag), volume, false);
+    Wait((1 * ___Schlag));
+    PlayToneEx(n2F("fis"), (1 * ___Schlag), volume, false);
+    Wait((1 * ___Schlag));
+    PlayToneEx(n2F("g"), (1 * ___Schlag), volume, false);
+    Wait((1 * ___Schlag));
+    PlayToneEx(n2F("a"), (2 * ___Schlag), volume, false);
+    Wait((2 * ___Schlag));
+    PlayToneEx(n2F("a"), (2 * ___Schlag), volume, false);
+    Wait((2 * ___Schlag));
+    PlayToneEx(n2F("h"), (1 * ___Schlag), volume, false);
+    Wait((1 * ___Schlag));
+    PlayToneEx(n2F("h"), (1 * ___Schlag), volume, false);
+    Wait((1 * ___Schlag));
+    PlayToneEx(n2F("h"), (1 * ___Schlag), volume, false);
+    Wait((1 * ___Schlag));
+    PlayToneEx(n2F("h"), (1 * ___Schlag), volume, false);
+    Wait((1 * ___Schlag));
+    PlayToneEx(n2F("a"), (2 * ___Schlag), volume, false);
+    Wait((2 * ___Schlag));
+    Wait((2 * ___Schlag));
+    PlayToneEx(n2F("h"), (1 * ___Schlag), volume, false);
+    Wait((1 * ___Schlag));
+    PlayToneEx(n2F("h"), (1 * ___Schlag), volume, false);
+    Wait((1 * ___Schlag));
+    PlayToneEx(n2F("h"), (1 * ___Schlag), volume, false);
+    Wait((1 * ___Schlag));
+    PlayToneEx(n2F("h"), (1 * ___Schlag), volume, false);
+    Wait((1 * ___Schlag));
+    PlayToneEx(n2F("a"), (2 * ___Schlag), volume, false);
+    Wait((2 * ___Schlag));
+    Wait((2 * ___Schlag));
+    PlayToneEx(n2F("g"), (1 * ___Schlag), volume, false);
+    Wait((1 * ___Schlag));
+    PlayToneEx(n2F("g"), (1 * ___Schlag), volume, false);
+    Wait((1 * ___Schlag));
+    PlayToneEx(n2F("g"), (1 * ___Schlag), volume, false);
+    Wait((1 * ___Schlag));
+    PlayToneEx(n2F("g"), (1 * ___Schlag), volume, false);
+    Wait((1 * ___Schlag));
+    PlayToneEx(n2F("fis"), (2 * ___Schlag), volume, false);
+    Wait((2 * ___Schlag));
+    PlayToneEx(n2F("fis"), (2 * ___Schlag), volume, false);
+    Wait((2 * ___Schlag));
+    PlayToneEx(n2F("a"), (1 * ___Schlag), volume, false);
+    Wait((1 * ___Schlag));
+    PlayToneEx(n2F("a"), (1 * ___Schlag), volume, false);
+    Wait((1 * ___Schlag));
+    PlayToneEx(n2F("a"), (1 * ___Schlag), volume, false);
+    Wait((1 * ___Schlag));
+    PlayToneEx(n2F("a"), (1 * ___Schlag), volume, false);
+    Wait((1 * ___Schlag));
+    PlayToneEx(n2F("d"), (2 * ___Schlag), volume, false);
+    Wait((2 * ___Schlag));
+}
+
+float n2F(string ___Note) {
+    return ___item[sanitiseFromStart(ArrayLen(___item), ArrFindFirstStr(___item2, ___Note))];
+}
+

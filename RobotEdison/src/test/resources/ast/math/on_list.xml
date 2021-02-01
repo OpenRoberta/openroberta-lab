@@ -1,8 +1,0 @@
-<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="edison" xmlversion="3.1" description="" tags="">
-    <instance x="426" y="224">
-        <block type="math_on_list" id="GAin1IwEhxvQ%P-_cd1c" intask="false">
-            <mutation op="SUM"></mutation>
-            <field name="OP">SUM</field>
-        </block>
-    </instance>
-</block_set>

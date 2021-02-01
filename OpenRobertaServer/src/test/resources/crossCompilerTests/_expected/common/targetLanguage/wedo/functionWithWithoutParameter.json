@@ -1,0 +1,464 @@
+{"ops": [
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "3"
+  },
+  {
+    "opc": "VarDeclaration",
+    "name": "two",
+    "type": "NUMBER"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "3"
+  },
+  {
+    "opc": "VarDeclaration",
+    "name": "summe",
+    "type": "NUMBER"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "0"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "0"
+  },
+  {
+    "NUMBER": 2,
+    "opc": "expr",
+    "expr": "createList"
+  },
+  {
+    "opc": "VarDeclaration",
+    "name": "liste00",
+    "type": "ARRAY_NUMBER"
+  },
+  {
+    "opc": "comment",
+    "target": "createMethodCall"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": 11
+  },
+  {
+    "opc": "jump",
+    "conditional": "always",
+    "target": 66
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "1"
+  },
+  {
+    "op": "get",
+    "opc": "expr",
+    "expr": "list_operation",
+    "position": "from_start"
+  },
+  {
+    "opc": "AssignStmt",
+    "name": "two"
+  },
+  {
+    "opc": "expr",
+    "name": "two",
+    "expr": "Var"
+  },
+  {
+    "opc": "comment",
+    "target": "createMethodCall"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": 18
+  },
+  {
+    "opc": "jump",
+    "conditional": "always",
+    "target": 63
+  },
+  {
+    "op": "ADD",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "opc": "AssignStmt",
+    "name": "summe"
+  },
+  {
+    "opc": "comment",
+    "value": "5"
+  },
+  {
+    "opc": "comment",
+    "target": "IfStatement"
+  },
+  {
+    "opc": "comment",
+    "target": "createMethodCall"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": 25
+  },
+  {
+    "opc": "jump",
+    "conditional": "always",
+    "target": 88
+  },
+  {
+    "opc": "expr",
+    "expr": "STRING_CONST",
+    "value": "++--"
+  },
+  {
+    "op": "EQ",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "opc": "jump",
+    "conditional": false,
+    "target": 32
+  },
+  {
+    "opc": "expr",
+    "name": "summe",
+    "expr": "Var"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "4"
+  },
+  {
+    "opc": "mathChange",
+    "name": "summe"
+  },
+  {
+    "opc": "jump",
+    "conditional": "always",
+    "target": 32
+  },
+  {
+    "opc": "comment",
+    "value": "9"
+  },
+  {
+    "opc": "expr",
+    "name": "summe",
+    "expr": "Var"
+  },
+  {
+    "opc": "comment",
+    "target": "createMethodCall"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": 38
+  },
+  {
+    "opc": "expr",
+    "name": "liste00",
+    "expr": "Var"
+  },
+  {
+    "opc": "jump",
+    "conditional": "always",
+    "target": 79
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "1"
+  },
+  {
+    "op": "get",
+    "opc": "expr",
+    "expr": "list_operation",
+    "position": "from_start"
+  },
+  {
+    "opc": "mathChange",
+    "name": "summe"
+  },
+  {
+    "opc": "comment",
+    "value": "17"
+  },
+  {
+    "opc": "expr",
+    "name": "summe",
+    "expr": "Var"
+  },
+  {
+    "opc": "comment",
+    "target": "createMethodCall"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": 47
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "1"
+  },
+  {
+    "opc": "jump",
+    "conditional": "always",
+    "target": 72
+  },
+  {
+    "opc": "mathChange",
+    "name": "summe"
+  },
+  {
+    "opc": "comment",
+    "value": "24"
+  },
+  {
+    "opc": "comment",
+    "target": "IfStatement"
+  },
+  {
+    "opc": "comment",
+    "target": "createMethodCall"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": 54
+  },
+  {
+    "opc": "expr",
+    "expr": "STRING_CONST",
+    "value": "--"
+  },
+  {
+    "opc": "jump",
+    "conditional": "always",
+    "target": 93
+  },
+  {
+    "opc": "expr",
+    "expr": "STRING_CONST",
+    "value": "--++"
+  },
+  {
+    "op": "EQ",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "opc": "jump",
+    "conditional": false,
+    "target": 61
+  },
+  {
+    "opc": "expr",
+    "name": "summe",
+    "expr": "Var"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "11"
+  },
+  {
+    "opc": "mathChange",
+    "name": "summe"
+  },
+  {
+    "opc": "jump",
+    "conditional": "always",
+    "target": 61
+  },
+  {
+    "opc": "comment",
+    "value": "35"
+  },
+  {"opc": "stop"},
+  {
+    "opc": "comment",
+    "target": "createMethodReturn"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "3"
+  },
+  {
+    "opc": "return",
+    "values": true
+  },
+  {
+    "opc": "comment",
+    "target": "createMethodReturn"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "1"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "2"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "3"
+  },
+  {
+    "NUMBER": 3,
+    "opc": "expr",
+    "expr": "createList"
+  },
+  {
+    "opc": "return",
+    "values": true
+  },
+  {
+    "opc": "comment",
+    "target": "createMethodReturn"
+  },
+  {
+    "opc": "VarDeclaration",
+    "name": "x1",
+    "type": "NUMBER"
+  },
+  {
+    "opc": "expr",
+    "name": "x1",
+    "expr": "Var"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "6"
+  },
+  {
+    "op": "ADD",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "opc": "unbindVar",
+    "name": "x1"
+  },
+  {
+    "opc": "return",
+    "values": true
+  },
+  {
+    "opc": "comment",
+    "target": "createMethodReturn"
+  },
+  {
+    "opc": "VarDeclaration",
+    "name": "x2",
+    "type": "ARRAY_NUMBER"
+  },
+  {
+    "opc": "expr",
+    "name": "x2",
+    "expr": "Var"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "8"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "1"
+  },
+  {
+    "op": "set",
+    "opc": "list_operation",
+    "position": "from_start"
+  },
+  {
+    "opc": "expr",
+    "name": "x2",
+    "expr": "Var"
+  },
+  {
+    "opc": "unbindVar",
+    "name": "x2"
+  },
+  {
+    "opc": "return",
+    "values": true
+  },
+  {
+    "opc": "comment",
+    "target": "createMethodReturn"
+  },
+  {
+    "opc": "expr",
+    "expr": "STRING_CONST",
+    "value": "++"
+  },
+  {
+    "opc": "expr",
+    "expr": "STRING_CONST",
+    "value": "--"
+  },
+  {
+    "NUMBER": 2,
+    "opc": "createTextJoin"
+  },
+  {
+    "opc": "return",
+    "values": true
+  },
+  {
+    "opc": "comment",
+    "target": "createMethodReturn"
+  },
+  {
+    "opc": "VarDeclaration",
+    "name": "x3",
+    "type": "STRING"
+  },
+  {
+    "opc": "expr",
+    "name": "x3",
+    "expr": "Var"
+  },
+  {
+    "opc": "expr",
+    "expr": "STRING_CONST",
+    "value": "++"
+  },
+  {
+    "NUMBER": 2,
+    "opc": "createTextJoin"
+  },
+  {
+    "opc": "unbindVar",
+    "name": "x3"
+  },
+  {
+    "opc": "return",
+    "values": true
+  }
+]}

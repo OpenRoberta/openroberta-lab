@@ -103,11 +103,10 @@ public class GetUserResponse extends BaseResponse {
     }
 
     /**
-     * merge the properties of a JSON-object into this bean. The bean must be "under construction". The keys of the JSON-Object must be valid. The bean remains
-     * "under construction".<br>
+     * merge the properties of a JSON-object into this bean. The bean must be "under construction".
+     * The keys of the JSON-Object must be valid. The bean remains "under construction".<br>
      * Throws a runtime exception if inconsistencies are detected.
      */
-    @Override
     public GetUserResponse merge(JSONObject jsonO) {
         try {
             for ( String key : JSONObject.getNames(jsonO) ) {
@@ -171,7 +170,6 @@ public class GetUserResponse extends BaseResponse {
      * Checks whether all required fields are set. All lists are made immutable.<br>
      * Throws a runtime exception if inconsistencies are detected.
      */
-    @Override
     public GetUserResponse immutable() {
         if ( this.immutable ) {
             return this;
@@ -189,28 +187,28 @@ public class GetUserResponse extends BaseResponse {
         if ( !this.immutable ) {
             _message = "GetUserResponse-object is already immutable: " + toString();
         }
-        if ( this.rc == null ) {
+        if ( rc == null ) {
             _message = "required property rc of GetUserResponse-object is not set: " + toString();
         }
-        if ( this.initToken == null ) {
+        if ( initToken == null ) {
             _message = "required property initToken of GetUserResponse-object is not set: " + toString();
         }
-        if ( !this.serverTimeDefined ) {
+        if ( !serverTimeDefined ) {
             _message = "required property serverTime of GetUserResponse-object is not set: " + toString();
         }
-        if ( this.serverVersion == null ) {
+        if ( serverVersion == null ) {
             _message = "required property serverVersion of GetUserResponse-object is not set: " + toString();
         }
-        if ( !this.userIdDefined ) {
+        if ( !userIdDefined ) {
             _message = "required property userId of GetUserResponse-object is not set: " + toString();
         }
-        if ( this.userAccountName == null ) {
+        if ( userAccountName == null ) {
             _message = "required property userAccountName of GetUserResponse-object is not set: " + toString();
         }
-        if ( this.userEmail == null ) {
+        if ( userEmail == null ) {
             _message = "required property userEmail of GetUserResponse-object is not set: " + toString();
         }
-        if ( !this.isYoungerThen14Defined ) {
+        if ( !isYoungerThen14Defined ) {
             _message = "required property isYoungerThen14 of GetUserResponse-object is not set: " + toString();
         }
         if ( _message != null ) {
@@ -340,7 +338,6 @@ public class GetUserResponse extends BaseResponse {
      * generates a JSON-object from an immutable bean.<br>
      * Throws a runtime exception if inconsistencies are detected.
      */
-    @Override
     public JSONObject toJson() {
         if ( !this.immutable ) {
             throw new RuntimeException("no JSON from an object under construction: " + toString());

@@ -1,5 +1,0 @@
-<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="edison" xmlversion="3.1" description="" tags="">
-    <instance x="400" y="237">
-        <block type="math_modulo" id="g;lvjN+Oi5xti;ghWnhY" intask="false"></block>
-    </instance>
-</block_set>

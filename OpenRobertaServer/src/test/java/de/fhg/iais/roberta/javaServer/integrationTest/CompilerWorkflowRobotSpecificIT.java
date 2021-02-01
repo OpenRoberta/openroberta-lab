@@ -75,9 +75,10 @@ public class CompilerWorkflowRobotSpecificIT {
             "server.log.configfile=/logback-test.xml"
         };
 
+    private static final boolean CROSSCOMPILER_CALL = true;
+    private static final boolean SHOW_SUCCESS = true;
+
     private static JSONObject robotsFromTestSpec;
-    private static boolean crosscompilerCall;
-    private static boolean showSuccess;
 
     private static String resourceBase;
     private static String generatedStackmachineProgramsDir;
@@ -116,8 +117,6 @@ public class CompilerWorkflowRobotSpecificIT {
         resourceBase = "/crossCompilerTests/robotSpecific/";
         JSONObject testSpecification = Util.loadYAML("classpath:/crossCompilerTests/testSpec.yml");
         robotsFromTestSpec = testSpecification.getJSONObject("robots");
-        crosscompilerCall = testSpecification.getBoolean("crosscompilercall");
-        showSuccess = testSpecification.getBoolean("showsuccess");
     }
 
     @Before
@@ -214,7 +213,7 @@ public class CompilerWorkflowRobotSpecificIT {
             boolean result = false;
             JSONObject entity = null;
             Response response = null;
-            if ( crosscompilerCall ) {
+            if (CROSSCOMPILER_CALL) {
                 String xmlText = Util.readResourceContent(fullResource);
 
                 JSONObject cmdCompile = JSONUtilForServer.mkD("{'programName':'prog','language':'de'}");
@@ -276,7 +275,7 @@ public class CompilerWorkflowRobotSpecificIT {
         try {
             logStart(robotName, fullResource);
             setRobotTo(robotName);
-            if ( crosscompilerCall ) {
+            if (CROSSCOMPILER_CALL) {
                 JSONObject cmd = JSONUtilForServer.mkD("{'programName':'" + resource + "','language':'de'}");
                 String fileContent = Util.readResourceContent(fullResource);
                 cmd.getJSONObject("data").put("progXML", fileContent);
@@ -313,7 +312,7 @@ public class CompilerWorkflowRobotSpecificIT {
         LOG.info(String.format(format, name, fullResource));
         LOG.info("]]]]]]]]]]");
         if ( result ) {
-            if ( showSuccess ) {
+            if (SHOW_SUCCESS) {
                 results.add(String.format("succ; %-15s; %-60s;", name, fullResource));
             }
         } else {
