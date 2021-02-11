@@ -134,6 +134,7 @@ Blockly.Msg.COLOUR_RGB_TITLE = "顏色";
 Blockly.Msg.COLOUR_RGB_TOOLTIP = "創建具有給定紅色、綠色和藍色值的顏色。值應介於0和255之間。";
 Blockly.Msg.COLOUR_RGB_WHITE = "白色";
 Blockly.Msg.COLOUR_TOOLTIP = "表示顏色感應器。";
+Blockly.Msg.COLOUR_TOOLTIP_SIMULATION_ONLY = "Setting the alignment or position of the colour sensor only takes effect in the simulation. This option is not relevant when compiling the source code.";  // untranslated
 Blockly.Msg.COMPASS_CALIBRATE_TOOLTIP = "校準指南針。將羅盤感應器非常緩慢地轉動兩次 (大約40秒)。";
 Blockly.Msg.COMPASS_GETSAMPLE_TOOLTIP = "Gets the current reading from the compass sensor.";  // untranslated
 Blockly.Msg.COMPASS_TOOLTIP = "表示羅盤感應器。";

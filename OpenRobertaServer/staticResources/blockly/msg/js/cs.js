@@ -134,6 +134,7 @@ Blockly.Msg.COLOUR_RGB_TITLE = "obarvěte barvou";
 Blockly.Msg.COLOUR_RGB_TOOLTIP = "Vytvoří barvu se zadanými hodnotami červené, zelené a modré složky. Všechny hodnoty musí být mezi 0 a 255.";
 Blockly.Msg.COLOUR_RGB_WHITE = "bílá";
 Blockly.Msg.COLOUR_TOOLTIP = "Představuje barevný senzor.";
+Blockly.Msg.COLOUR_TOOLTIP_SIMULATION_ONLY = "Setting the alignment or position of the colour sensor only takes effect in the simulation. This option is not relevant when compiling the source code.";  // untranslated
 Blockly.Msg.COMPASS_CALIBRATE_TOOLTIP = "Calibrates the compass. Turn the compass sensor VERY slowly for two times (about 40 seconds).";  // untranslated
 Blockly.Msg.COMPASS_GETSAMPLE_TOOLTIP = "Gets the current reading from the compass sensor.";  // untranslated
 Blockly.Msg.COMPASS_TOOLTIP = "Představuje kompas.";

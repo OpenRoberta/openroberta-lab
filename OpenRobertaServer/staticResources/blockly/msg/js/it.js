@@ -134,6 +134,7 @@ Blockly.Msg.COLOUR_RGB_TITLE = "colora con";
 Blockly.Msg.COLOUR_RGB_TOOLTIP = "Crea un colore con i valori dati rosso, verde e blu. I valori devono essere tra 0 e 255.";
 Blockly.Msg.COLOUR_RGB_WHITE = "bianca";
 Blockly.Msg.COLOUR_TOOLTIP = "Rappresenta un sensore di colore.";
+Blockly.Msg.COLOUR_TOOLTIP_SIMULATION_ONLY = "Setting the alignment or position of the colour sensor only takes effect in the simulation. This option is not relevant when compiling the source code.";  // untranslated
 Blockly.Msg.COMPASS_CALIBRATE_TOOLTIP = "Calibra la bussola. Ruotare il sensore bussola MOLTO lentamente per due volte (circa 40 secondi).";
 Blockly.Msg.COMPASS_GETSAMPLE_TOOLTIP = "Gets the current reading from the compass sensor.";  // untranslated
 Blockly.Msg.COMPASS_TOOLTIP = "Rappresenta un sensore bussola.";

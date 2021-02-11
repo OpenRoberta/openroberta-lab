@@ -134,6 +134,7 @@ Blockly.Msg.COLOUR_RGB_TITLE = "colorează cu";
 Blockly.Msg.COLOUR_RGB_TOOLTIP = "Creeaza o culoare din rosu, verde si albastru. Valorile trebuie sa fie intre 0 si 255.";
 Blockly.Msg.COLOUR_RGB_WHITE = "alb";
 Blockly.Msg.COLOUR_TOOLTIP = "Reprezinta un senzor de culoare.";
+Blockly.Msg.COLOUR_TOOLTIP_SIMULATION_ONLY = "Setting the alignment or position of the colour sensor only takes effect in the simulation. This option is not relevant when compiling the source code.";  // untranslated
 Blockly.Msg.COMPASS_CALIBRATE_TOOLTIP = "Calibrati compasul. Intoarceti foarte incet compasul de doua ori (cca. 40 secunde)";
 Blockly.Msg.COMPASS_GETSAMPLE_TOOLTIP = "Gets the current reading from the compass sensor.";  // untranslated
 Blockly.Msg.COMPASS_TOOLTIP = "Reprezinta un senzor compas.";

@@ -134,6 +134,7 @@ Blockly.Msg.COLOUR_RGB_TITLE = "renk değerleri";
 Blockly.Msg.COLOUR_RGB_TOOLTIP = "Kırmızı, yeşil ve mavinin belirtilen miktarıyla bir renk oluşturun.  Tüm değerler 0 ile 255 arasında olmalıdır.";
 Blockly.Msg.COLOUR_RGB_WHITE = "white";  // untranslated
 Blockly.Msg.COLOUR_TOOLTIP = "Bir renk sensörünü belirtir.";
+Blockly.Msg.COLOUR_TOOLTIP_SIMULATION_ONLY = "Setting the alignment or position of the colour sensor only takes effect in the simulation. This option is not relevant when compiling the source code.";  // untranslated
 Blockly.Msg.COMPASS_CALIBRATE_TOOLTIP = "Calibrates the compass. Turn the compass sensor VERY slowly for two times (about 40 seconds).";  // untranslated
 Blockly.Msg.COMPASS_GETSAMPLE_TOOLTIP = "Gets the current reading from the compass sensor.";  // untranslated
 Blockly.Msg.COMPASS_TOOLTIP = "Yön (Pusula) sensörünü belirtir.";

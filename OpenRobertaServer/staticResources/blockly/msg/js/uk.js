@@ -134,6 +134,7 @@ Blockly.Msg.COLOUR_RGB_TITLE = "колір з";
 Blockly.Msg.COLOUR_RGB_TOOLTIP = "Створює кольор з вказаними значеннями червого, зеленого та синього. Усі значення повинні бути між 0 та 255.";
 Blockly.Msg.COLOUR_RGB_WHITE = "білий";
 Blockly.Msg.COLOUR_TOOLTIP = "Представляє сенсор кольору.";
+Blockly.Msg.COLOUR_TOOLTIP_SIMULATION_ONLY = "Setting the alignment or position of the colour sensor only takes effect in the simulation. This option is not relevant when compiling the source code.";  // untranslated
 Blockly.Msg.COMPASS_CALIBRATE_TOOLTIP = "Калібрує компас. Поверніть компас ДУЖЕ повільно два рази (протягом 40 секунд).";
 Blockly.Msg.COMPASS_GETSAMPLE_TOOLTIP = "Gets the current reading from the compass sensor.";  // untranslated
 Blockly.Msg.COMPASS_TOOLTIP = "Представляє сенсор компасу.";

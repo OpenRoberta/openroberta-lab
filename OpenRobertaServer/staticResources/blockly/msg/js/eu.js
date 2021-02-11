@@ -134,6 +134,7 @@ Blockly.Msg.COLOUR_RGB_TITLE = "colour with";
 Blockly.Msg.COLOUR_RGB_TOOLTIP = "Kolore bat sortzen du emandako balio gorri, berde eta urdinekin. Balioak 0 eta 255 artean egon beharko lukete.";
 Blockly.Msg.COLOUR_RGB_WHITE = "zuria";
 Blockly.Msg.COLOUR_TOOLTIP = "Kolore sentsore bat irudikatzen du.";
+Blockly.Msg.COLOUR_TOOLTIP_SIMULATION_ONLY = "Setting the alignment or position of the colour sensor only takes effect in the simulation. This option is not relevant when compiling the source code.";  // untranslated
 Blockly.Msg.COMPASS_CALIBRATE_TOOLTIP = "Iparrorratza kalibratzen du. Iparrorratz sentsorea OSO poliki mugitu bi aldiz (40 bat segunduz).";
 Blockly.Msg.COMPASS_GETSAMPLE_TOOLTIP = "Gets the current reading from the compass sensor.";  // untranslated
 Blockly.Msg.COMPASS_TOOLTIP = "Iparrorratz sentsorea irudikatzen du.";

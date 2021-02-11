@@ -134,6 +134,7 @@ Blockly.Msg.COLOUR_RGB_TITLE = "Färreb mit";
 Blockly.Msg.COLOUR_RGB_TOOLTIP = "Kreiere ene Farreb mit sellrbst definierte rot, grün und blau Wearte. All Wearte müsse zwischich 0 und 100 liehe.";
 Blockly.Msg.COLOUR_RGB_WHITE = "white";  // untranslated
 Blockly.Msg.COLOUR_TOOLTIP = "Represents a colour sensor.";  // untranslated
+Blockly.Msg.COLOUR_TOOLTIP_SIMULATION_ONLY = "Setting the alignment or position of the colour sensor only takes effect in the simulation. This option is not relevant when compiling the source code.";  // untranslated
 Blockly.Msg.COMPASS_CALIBRATE_TOOLTIP = "Calibrates the compass. Turn the compass sensor VERY slowly for two times (about 40 seconds).";  // untranslated
 Blockly.Msg.COMPASS_GETSAMPLE_TOOLTIP = "Gets the current reading from the compass sensor.";  // untranslated
 Blockly.Msg.COMPASS_TOOLTIP = "Represents a compass sensor.";  // untranslated

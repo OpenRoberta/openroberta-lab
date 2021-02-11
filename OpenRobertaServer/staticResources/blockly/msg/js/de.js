@@ -134,6 +134,7 @@ Blockly.Msg.COLOUR_RGB_TITLE = "Farbe mit";
 Blockly.Msg.COLOUR_RGB_TOOLTIP = "Erstellt eine Farbe mit den Werten für rot, grün und blau. Die Werte sollten zwischen 0 und 255 liegen.";
 Blockly.Msg.COLOUR_RGB_WHITE = "weiß";
 Blockly.Msg.COLOUR_TOOLTIP = "Block für den Farbsensor";
+Blockly.Msg.COLOUR_TOOLTIP_SIMULATION_ONLY = "Das Einstellen der Ausrichtung oder Position des Farbsensors wirkt sich nur in der Simulation aus. Beim Kompilieren des Quellcodes ist diese Option nicht von Bedeutung.";
 Blockly.Msg.COMPASS_CALIBRATE_TOOLTIP = "Kalibriert den Kompass. Drehe den Kompass Sensor zwei Mal GANZ langsam (ca. 40 Sekunden).";
 Blockly.Msg.COMPASS_GETSAMPLE_TOOLTIP = "Gibt den aktuellen Wert des Kompasssensors zurück.";
 Blockly.Msg.COMPASS_TOOLTIP = "Block für den Kompasssensor.";

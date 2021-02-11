@@ -134,6 +134,7 @@ Blockly.Msg.COLOUR_RGB_TITLE = "färg med";
 Blockly.Msg.COLOUR_RGB_TOOLTIP = "Skapar en färg utifrån de angivna värdena för röd, grön och blå. Värdena bör vara mellan 0 och 255.";
 Blockly.Msg.COLOUR_RGB_WHITE = "vit";
 Blockly.Msg.COLOUR_TOOLTIP = "Representerar en färgsensor";
+Blockly.Msg.COLOUR_TOOLTIP_SIMULATION_ONLY = "Setting the alignment or position of the colour sensor only takes effect in the simulation. This option is not relevant when compiling the source code.";  // untranslated
 Blockly.Msg.COMPASS_CALIBRATE_TOOLTIP = "Kalibrerar kompassen. Vänd kompass-sensorn två gånger MYCKET långamt(ungefär i 40 sekunder).";
 Blockly.Msg.COMPASS_GETSAMPLE_TOOLTIP = "Gets the current reading from the compass sensor.";  // untranslated
 Blockly.Msg.COMPASS_TOOLTIP = "Representerar en kompassensor";
