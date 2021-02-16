@@ -169,46 +169,66 @@ define(['simulation.simulation', 'interpreter.constants', 'simulation.robot', 'g
                     if (tmpSensor.alignment !== "HORIZONTAL") { // DEFAULT CASE
                         switch (tmpSensor.position) {
                             case("RIGHT"):
+                                tmpSensor.x = -15;
+                                var y = orderColorR * 10;
+                                if (y === 0) {
+                                    tmpSensor.y = -10;
+                                } else {
+                                    tmpSensor.y = y;
+                                }
                                 orderColorR++;
-                                tmpSensor.x = -15
-                                tmpSensor.y = -orderColorR * 10 + (5 * (countColorR-1)) + 10;
                                 break;
                             case("LEFT"):
+                                tmpSensor.x = 15;
+                                var y = orderColorL * 10;
+                                if (y === 0) {
+                                    tmpSensor.y = -10;
+                                } else {
+                                    tmpSensor.y = y;
+                                }
                                 orderColorL++;
-                                tmpSensor.x = 15
-                                tmpSensor.y = -orderColorL * 10 + (5 * (countColorL-1))+10;
                                 break;
                             case("BACK"):
                                 orderColorB++;
-                                tmpSensor.x = -orderColorB * 10 + (5 * (countColorB-1))+10;
-                                tmpSensor.y = 25
+                                tmpSensor.x = -orderColorB * 10 + (5 * (countColorB - 1)) + 10;
+                                tmpSensor.y = 25;
                                 break;
                             default: // FRONT
                                 orderColorF++;
-                                tmpSensor.x = -orderColorF * 10 + (5 * (countColorF-1))+10;
+                                tmpSensor.x = -orderColorF * 10 + (5 * (countColorF - 1)) + 10;
                                 break;
                         }
                     } else {
                         switch (tmpSensor.position) {
                             case("RIGHT"):
+                                tmpSensor.x = -25;
+                                var y = orderColorR * 10;
+                                if (y === 0) {
+                                    tmpSensor.y = -10;
+                                } else {
+                                    tmpSensor.y = y;
+                                }
                                 orderColorR++;
-                                tmpSensor.x = -25
-                                tmpSensor.y = -orderColorR * 10 + (5 * (countColorR-1)) + 10;
                                 break;
                             case("LEFT"):
+                                tmpSensor.x = 25;
+                                var y = orderColorL * 10;
+                                if (y === 0) {
+                                    tmpSensor.y = -10;
+                                } else {
+                                    tmpSensor.y = y;
+                                }
                                 orderColorL++;
-                                tmpSensor.x = 25
-                                tmpSensor.y = -orderColorL * 10 + (5 * (countColorL-1))+10;
                                 break;
                             case("BACK"):
                                 orderColorB++;
-                                tmpSensor.x = -orderColorB * 10 + (5 * (countColorB-1))+10;
-                                tmpSensor.y = 30
+                                tmpSensor.x = -orderColorB * 10 + (5 * (countColorB - 1)) + 10;
+                                tmpSensor.y = 30;
                                 break;
                             default: // FRONT
                                 orderColorF++;
-                                tmpSensor.x = -orderColorF * 10 + (5 * (countColorF-1))+10;
-                                tmpSensor.y = -25
+                                tmpSensor.x = -orderColorF * 10 + (5 * (countColorF - 1)) + 10;
+                                tmpSensor.y = -25;
                                 break;
                         }
                     }
