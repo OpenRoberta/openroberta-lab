@@ -89,7 +89,8 @@ define(['simulation.simulation', 'interpreter.constants', 'simulation.robot', 'g
             y1: 0,
             x2: 0,
             y2: 0,
-            value: 0
+            value: 0,
+            position: 'FRONT'
         };
         this.gyroSensor = {
             value: 0,
@@ -147,7 +148,24 @@ define(['simulation.simulation', 'interpreter.constants', 'simulation.robot', 'g
         for (var c in configuration) {
             switch (configuration[c]["TYPE"]) {
                 case ("TOUCH"):
-                    this.touchSensor[c] = touchSensorProto;
+                    var tmpSensor = {};
+                    for (var prop in touchSensorProto) {
+                        if (touchSensorProto.hasOwnProperty(prop)) {
+                            tmpSensor[prop] = touchSensorProto[prop];
+                        }
+                    }
+                    if (configuration[c]["SENSOR_POSITION"]) {
+                        tmpSensor.position = configuration[c]["SENSOR_POSITION"];
+                    }
+                    switch (tmpSensor.position) {
+                        case("BACK"):
+                            tmpSensor.y = 30;
+                            break;
+                        default: // FRONT
+                            tmpSensor.y = -25;
+                            break;
+                    }
+                    this.touchSensor[c] = tmpSensor;
                     break;
                 case ("GYRO"):
                     this.gyroSensor[c] = gyroSensorProto;
