@@ -22,14 +22,18 @@ import de.fhg.iais.roberta.generated.restEntities.ProjectNepoResponse;
 import de.fhg.iais.roberta.generated.restEntities.ProjectSourceResponse;
 import de.fhg.iais.roberta.generated.restEntities.ProjectSourceSimulationResponse;
 import de.fhg.iais.roberta.generated.restEntities.ProjectWorkflowRequest;
+import de.fhg.iais.roberta.javaServer.provider.OraData;
 import de.fhg.iais.roberta.javaServer.restServices.all.service.ProjectService;
 import de.fhg.iais.roberta.mode.action.Language;
+import de.fhg.iais.roberta.persistence.ConfigurationProcessor;
+import de.fhg.iais.roberta.persistence.util.DbSession;
 import de.fhg.iais.roberta.persistence.util.HttpSessionState;
 import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
 import de.fhg.iais.roberta.util.Key;
 import de.fhg.iais.roberta.util.Pair;
 import de.fhg.iais.roberta.util.Statistics;
 import de.fhg.iais.roberta.util.UtilForREST;
+import de.fhg.iais.roberta.util.dbc.DbcException;
 
 @Path("/projectWorkflow")
 public class ProjectWorkflowRestController {
@@ -46,13 +50,13 @@ public class ProjectWorkflowRestController {
     @Path("/source")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getSourceCode(FullRestRequest fullRequest) {
+    public Response getSourceCode(@OraData DbSession dbSession, FullRestRequest fullRequest) {
         HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, fullRequest, true);
         ProjectWorkflowRequest wfRequest = ProjectWorkflowRequest.make(fullRequest.getData());
         ProjectSourceResponse response = ProjectSourceResponse.make();
         try {
             response.setProgXML(wfRequest.getProgXML()); // always return the program, even if the workflow fails
-            Project project = request2project(wfRequest, httpSessionState, this.robotCommunicator, true, false);
+            Project project = request2project(wfRequest, dbSession, httpSessionState, this.robotCommunicator, true, false);
             ProjectService.executeWorkflow("showsource", project);
             // To make this compatible with old frontend we will have to use the old names...
             response.setCmd("showSourceP");
@@ -73,13 +77,13 @@ public class ProjectWorkflowRestController {
     @Path("/sourceSimulation")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getSimulationVMCode(FullRestRequest fullRequest) {
+    public Response getSimulationVMCode(@OraData DbSession dbSession, FullRestRequest fullRequest) {
         HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, fullRequest, true);
         try {
             ProjectWorkflowRequest wfRequest = ProjectWorkflowRequest.make(fullRequest.getData());
             ProjectSourceSimulationResponse response = ProjectSourceSimulationResponse.make();
             response.setProgXML(wfRequest.getProgXML()); // always return the program, even if the workflow fails
-            Project project = request2project(wfRequest, httpSessionState, this.robotCommunicator, true, false);
+            Project project = request2project(wfRequest, dbSession, httpSessionState, this.robotCommunicator, true, false);
             ProjectService.executeWorkflow("getsimulationcode", project);
             // To make this compatible with old frontend we will have to use the old names...
             response.setCmd("runPSim");
@@ -102,13 +106,13 @@ public class ProjectWorkflowRestController {
     @Path("/run")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response runProgram(FullRestRequest fullRequest) {
+    public Response runProgram(@OraData DbSession dbSession, FullRestRequest fullRequest) {
         HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, fullRequest, true);
         try {
             ProjectWorkflowRequest wfRequest = ProjectWorkflowRequest.make(fullRequest.getData());
             ProjectNepoResponse response = ProjectNepoResponse.make();
             response.setProgXML(wfRequest.getProgXML()); // always return the program, even if the workflow fails
-            Project project = request2project(wfRequest, httpSessionState, this.robotCommunicator, true, false);
+            Project project = request2project(wfRequest, dbSession, httpSessionState, this.robotCommunicator, true, false);
             ProjectService.executeWorkflow("run", project);
             response.setCmd("runPBack");
             response.setConfAnnos(project.getConfAnnotationList());
@@ -140,13 +144,13 @@ public class ProjectWorkflowRestController {
     @Path("/compileProgram")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response compileProgram(FullRestRequest fullRequest) {
+    public Response compileProgram(@OraData DbSession dbSession, FullRestRequest fullRequest) {
         HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, fullRequest, true);
         try {
             ProjectWorkflowRequest wfRequest = ProjectWorkflowRequest.make(fullRequest.getData());
             ProjectNepoResponse response = ProjectNepoResponse.make();
             response.setProgXML(wfRequest.getProgXML()); // always return the program, even if the workflow fails
-            Project project = request2project(wfRequest, httpSessionState, this.robotCommunicator, true, true);
+            Project project = request2project(wfRequest, dbSession, httpSessionState, this.robotCommunicator, true, true);
             ProjectService.executeWorkflow("compile", project);
             response.setCmd("compileP");
             response.setProgXML(project.getAnnotatedProgramAsXml());
@@ -167,12 +171,12 @@ public class ProjectWorkflowRestController {
     @Path("/runNative")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response runNative(FullRestRequest fullRequest) {
+    public Response runNative(@OraData DbSession dbSession, FullRestRequest fullRequest) {
         HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, fullRequest, true);
         try {
             ProjectWorkflowRequest wfRequest = ProjectWorkflowRequest.make(fullRequest.getData());
             ProjectNativeResponse response = ProjectNativeResponse.make();
-            Project project = request2project(wfRequest, httpSessionState, this.robotCommunicator, false, false);
+            Project project = request2project(wfRequest, dbSession, httpSessionState, this.robotCommunicator, false, false);
             ProjectService.executeWorkflow("runnative", project);
             response.setCmd("runNative");
             response.setErrorCounter(project.getErrorCounter());
@@ -191,12 +195,12 @@ public class ProjectWorkflowRestController {
     @Path("/compileNative")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response compileNative(FullRestRequest fullRequest) {
+    public Response compileNative(@OraData DbSession dbSession, FullRestRequest fullRequest) {
         HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, fullRequest, true);
         try {
             ProjectWorkflowRequest wfRequest = ProjectWorkflowRequest.make(fullRequest.getData());
             ProjectNativeResponse response = ProjectNativeResponse.make();
-            Project project = request2project(wfRequest, httpSessionState, this.robotCommunicator, false, false);
+            Project project = request2project(wfRequest, dbSession, httpSessionState, this.robotCommunicator, false, false);
             ProjectService.executeWorkflow("compilenative", project);
             response.setCmd("runNative");
             response.setErrorCounter(project.getErrorCounter());
@@ -251,10 +255,12 @@ public class ProjectWorkflowRestController {
 
     private static Project request2project(
         ProjectWorkflowRequest wfRequest,
+        DbSession dbSession,
         HttpSessionState httpSessionState,
         RobotCommunicator robotCommunicator,
         boolean isNepo,
         boolean isExportXml) {
+        final String robot = wfRequest.getRobot() == null ? httpSessionState.getRobotFactory().getGroup() : wfRequest.getRobot();
         Project.Builder project =
             new Project.Builder()
                 .setProgramName(wfRequest.getProgramName())
@@ -262,18 +268,26 @@ public class ProjectWorkflowRestController {
                 .setPassword(wfRequest.getPassword())
                 .setLanguage(Language.findByAbbr(wfRequest.getLanguage()))
                 .setToken(httpSessionState.getToken())
-                .setRobot(wfRequest.getRobot() == null ? httpSessionState.getRobotName() : wfRequest.getRobot())
+                .setRobot(robot)
                 .setFactory(httpSessionState.getRobotFactory())
                 .setRobotCommunicator(robotCommunicator);
         String progXml;
         String confXml;
         if ( isExportXml ) {
-            Pair<String, String> progConfPair = splitExportXML(wfRequest.getProgXML());
+            Pair<String, String> progConfPair = ProjectWorkflowRestController.splitExportXML(wfRequest.getProgXML());
             progXml = progConfPair.getFirst();
             confXml = progConfPair.getSecond();
         } else {
             progXml = wfRequest.getProgXML();
-            confXml = wfRequest.getConfXML() == null ? httpSessionState.getRobotFactory().getConfigurationDefault() : wfRequest.getConfXML();
+            if ( wfRequest.getConfigurationName() != null ) {
+                ConfigurationProcessor cp = new ConfigurationProcessor(dbSession, httpSessionState);
+                confXml = cp.getConfigurationText(wfRequest.getConfigurationName(), httpSessionState.getUserId(), robot);
+                if ( !cp.succeeded() ) {
+                    throw new DbcException("invalid configuration request for name " + wfRequest.getConfigurationName() + ". Front end error.");
+                }
+            } else {
+                confXml = wfRequest.getConfXML() == null ? httpSessionState.getRobotFactory().getConfigurationDefault() : wfRequest.getConfXML();
+            }
         }
         if ( isNepo ) {
             project.setProgramXml(progXml);

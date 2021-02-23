@@ -1,9 +1,5 @@
 package de.fhg.iais.roberta.javaServer.integrationTest;
 
-import static org.junit.Assert.fail;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.when;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -26,6 +22,7 @@ import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -110,7 +107,7 @@ public class CompilerWorkflowRobotCommonIT {
         LOG.info("XXXXXXXXXX START of COMMON-IT XXXXXXXXXX");
         if ( System.getenv(ORA_CC_RSC_ENVVAR) == null ) {
             LOG.error("the environment variable \"" + ORA_CC_RSC_ENVVAR + "\" must contain the absolute path to the ora-cc-rsc repository - test fails");
-            fail();
+            Assert.fail();
         }
         Properties baseServerProperties = Util.loadProperties(null);
         serverProperties = new ServerProperties(baseServerProperties);
@@ -160,8 +157,8 @@ public class CompilerWorkflowRobotCommonIT {
     public void setupTest() throws Exception {
         this.restWorkflow = new ProjectWorkflowRestController(robotCommunicator);
         this.restAdmin = new ClientAdmin(robotCommunicator, serverProperties);
-        when(this.sessionFactoryWrapper.getSession()).thenReturn(this.dbSession);
-        doNothing().when(this.dbSession).commit();
+        Mockito.when(this.sessionFactoryWrapper.getSession()).thenReturn(this.dbSession);
+        Mockito.doNothing().when(this.dbSession).commit();
     }
 
     /**
@@ -286,11 +283,11 @@ public class CompilerWorkflowRobotCommonIT {
         String xmlText = Util.readResourceContent(fullResource);
         Pair<Result, String> showSourceResult = executeWorkflowShowSource(programFileName, xmlText, robotName);
         if ( showSourceResult.getFirst() == Result.FAILURE ) {
-            fail();
+            Assert.fail();
         }
         Result result = executeWorkflow(workflowName, robotName, programFileName, xmlText, showSourceResult.getSecond());
         if ( result == Result.FAILURE ) {
-            fail();
+            Assert.fail();
         }
     }
 
@@ -313,7 +310,7 @@ public class CompilerWorkflowRobotCommonIT {
                 setRobotTo(robotName);
                 JSONObject cmd = JSONUtilForServer.mkD("{'programName':'prog','language':'de'}");
                 cmd.getJSONObject("data").put("progXML", programAndConfigXml);
-                Response response = this.restWorkflow.compileProgram(FullRestRequest.make(cmd));
+                Response response = this.restWorkflow.compileProgram(null, FullRestRequest.make(cmd));
                 result = checkEntityRc(response, "ok", "PROGRAM_INVALID_STATEMETNS");
                 reason = "response-info";
             } else {
@@ -349,7 +346,7 @@ public class CompilerWorkflowRobotCommonIT {
             Export jaxbImportExport = JaxbHelper.xml2Element(programAndConfXml, Export.class);
             String programXml = JaxbHelper.blockSet2xml(jaxbImportExport.getProgram().getBlockSet());
             cmd.getJSONObject("data").put("progXML", programXml);
-            Response response = this.restWorkflow.getSimulationVMCode(FullRestRequest.make(cmd));
+            Response response = this.restWorkflow.getSimulationVMCode(null, FullRestRequest.make(cmd));
             result = checkEntityRc(response, "ok", "PROGRAM_INVALID_STATEMETNS");
             reason = "response-info";
         } catch ( Exception e ) {
@@ -490,7 +487,7 @@ public class CompilerWorkflowRobotCommonIT {
             LOG.info("XXXXXXXXXX COMMON-IT succeeded XXXXXXXXXX");
         } else {
             LOG.error("XXXXXXXXXX at least one test of COMMON-IT FAILED XXXXXXXXXX");
-            fail();
+            Assert.fail();
         }
     }
 

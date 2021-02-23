@@ -1,8 +1,6 @@
 package de.fhg.iais.roberta.javaServer.integrationTest;
 
 import static org.junit.Assert.fail;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.when;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -17,7 +15,6 @@ import javax.ws.rs.core.Response;
 
 import org.json.JSONObject;
 import org.junit.AfterClass;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
@@ -25,6 +22,7 @@ import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -126,8 +124,8 @@ public class CompilerWorkflowRobotSpecificIT {
     public void setup() throws Exception {
         this.restWorkflow = new ProjectWorkflowRestController(robotCommunicator);
         this.restAdmin = new ClientAdmin(robotCommunicator, serverProperties);
-        when(this.sessionFactoryWrapper.getSession()).thenReturn(this.dbSession);
-        doNothing().when(this.dbSession).commit();
+        Mockito.when(this.sessionFactoryWrapper.getSession()).thenReturn(this.dbSession);
+        Mockito.doNothing().when(this.dbSession).commit();
     }
 
     @AfterClass
@@ -143,7 +141,7 @@ public class CompilerWorkflowRobotSpecificIT {
         Set<String> foundPlugins = pluginMap.keySet();
         for ( String robot : robotsFromTestSpec.keySet() ) {
             if ( !foundPlugins.contains(robot) ) {
-                Assert.fail("Plugin not found: " + robot);
+                fail("Plugin not found: " + robot);
             }
         }
     }
@@ -221,7 +219,7 @@ public class CompilerWorkflowRobotSpecificIT {
 
                 JSONObject cmdCompile = JSONUtilForServer.mkD("{'programName':'prog','language':'de'}");
                 cmdCompile.getJSONObject("data").put("progXML", xmlText).put("SSID", "1").put("password", "2");
-                response = this.restWorkflow.compileProgram(FullRestRequest.make(cmdCompile));
+                response = this.restWorkflow.compileProgram(null, FullRestRequest.make(cmdCompile));
                 entity = checkEntityRc(response, expectResult, "ORA_PROGRAM_INVALID_STATEMETNS");
                 boolean resultCompile = entity != null;
 
@@ -233,7 +231,7 @@ public class CompilerWorkflowRobotSpecificIT {
                     if ( pluginMap.get(robotName).hasSim() ) {
                         JSONObject cmdGenSim = JSONUtilForServer.mkD("{'programName':'prog','language':'de'}");
                         cmdGenSim.getJSONObject("data").put("progXML", programText).put("confXML", configText).put("SSID", "1").put("password", "2");
-                        response = this.restWorkflow.getSimulationVMCode(FullRestRequest.make(cmdGenSim));
+                        response = this.restWorkflow.getSimulationVMCode(null, FullRestRequest.make(cmdGenSim));
                         entity = checkEntityRc(response, expectResult, "ORA_PROGRAM_INVALID_STATEMETNS");
                         boolean resultSimCode = entity != null;
                         result = resultCompile && resultSimCode;
@@ -282,7 +280,7 @@ public class CompilerWorkflowRobotSpecificIT {
                 JSONObject cmd = JSONUtilForServer.mkD("{'programName':'" + resource + "','language':'de'}");
                 String fileContent = Util.readResourceContent(fullResource);
                 cmd.getJSONObject("data").put("progXML", fileContent);
-                Response response = this.restWorkflow.compileNative(FullRestRequest.make(cmd));
+                Response response = this.restWorkflow.compileNative(null, FullRestRequest.make(cmd));
                 result = checkEntityRc(response, expectResult) != null;
             } else {
                 result = true;
