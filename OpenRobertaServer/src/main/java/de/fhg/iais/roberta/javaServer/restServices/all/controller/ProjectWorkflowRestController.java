@@ -260,7 +260,7 @@ public class ProjectWorkflowRestController {
         RobotCommunicator robotCommunicator,
         boolean isNepo,
         boolean isExportXml) {
-        final String robot = wfRequest.getRobot() == null ? httpSessionState.getRobotFactory().getGroup() : wfRequest.getRobot();
+        final String robot = wfRequest.getRobot() == null ? httpSessionState.getRobotName() : wfRequest.getRobot();
         Project.Builder project =
             new Project.Builder()
                 .setProgramName(wfRequest.getProgramName())
@@ -281,7 +281,8 @@ public class ProjectWorkflowRestController {
             progXml = wfRequest.getProgXML();
             if ( wfRequest.getConfigurationName() != null ) {
                 ConfigurationProcessor cp = new ConfigurationProcessor(dbSession, httpSessionState);
-                confXml = cp.getConfigurationText(wfRequest.getConfigurationName(), httpSessionState.getUserId(), robot);
+                confXml =
+                    cp.getConfigurationText(wfRequest.getConfigurationName(), httpSessionState.getUserId(), httpSessionState.getRobotFactory().getGroup());
                 if ( !cp.succeeded() ) {
                     throw new DbcException("invalid configuration request for name " + wfRequest.getConfigurationName() + ". Front end error.");
                 }
