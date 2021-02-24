@@ -214,7 +214,7 @@ block:
   SHOW_TEXT_ACTION:
       category: ACTOR
       implementor: de.fhg.iais.roberta.syntax.action.display.ShowTextAction
-      type: [robActions_display_text,robActions_display_text_i2c]
+      type: [robActions_display_text,robActions_display_text_i2c,robActions_display_text_oledssd1306i2c]
   TONE_ACTION:
       category: ACTOR
       implementor: de.fhg.iais.roberta.syntax.action.sound.ToneAction
@@ -230,7 +230,7 @@ block:
   CLEAR_DISPLAY_ACTION:
       category: ACTOR
       implementor: de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction
-      type: [robActions_display_clear,robActions_display_clear_i2c,mbedActions_display_clear, mBotActions_display_clear]
+      type: [robActions_display_clear,robActions_display_clear_i2c,mbedActions_display_clear, mBotActions_display_clear, robActions_display_clear_oledssd1306i2c]
   MOTOR_ON_ACTION:
       category: ACTOR
       implementor: de.fhg.iais.roberta.syntax.action.motor.MotorOnAction

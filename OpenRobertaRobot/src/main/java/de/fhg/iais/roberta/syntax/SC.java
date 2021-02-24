@@ -134,4 +134,6 @@ public interface SC {
     String LPS22HB = "LPS22HB";
     String HTS221 = "HTS221";
 
+    String OLEDSSD1306I2C = "OLEDSSD1306I2C";
+
 }

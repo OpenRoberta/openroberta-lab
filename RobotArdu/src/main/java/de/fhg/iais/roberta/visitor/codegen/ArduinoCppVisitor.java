@@ -74,12 +74,23 @@ public class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor implement
         this.sb.append("_lcd_" + showTextAction.getPort() + ".print(");
         showTextAction.getMsg().accept(this);
         this.sb.append(");");
+        nlIndent();
+        if (showTextAction.getProperty().getBlockType().contains("oledssd1306i2c")) {
+            this.sb.append("_lcd_" + showTextAction.getPort() + ".display();");
+        }
         return null;
     }
 
+
+
     @Override
     public Void visitClearDisplayAction(ClearDisplayAction<Void> clearDisplayAction) {
-        this.sb.append("_lcd_" + clearDisplayAction.getPort() + ".clear();");
+        this.sb.append("_lcd_").append(clearDisplayAction.getPort());
+        if (clearDisplayAction.getProperty().getBlockType().contains("oledssd1306i2c")) {
+            this.sb.append(".clearDisplay();");
+        } else {
+            this.sb.append(".clear();");
+        }
         return null;
     }
 
@@ -523,6 +534,9 @@ public class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor implement
                 case SC.LCDI2C:
                     headerFiles.add("#include <LiquidCrystal_I2C/LiquidCrystal_I2C.h>");
                     break;
+                case SC.OLEDSSD1306I2C:
+                    headerFiles.add("#include <Adafruit_SSD1306.h>");
+                    break;
                 case SC.STEPMOTOR:
                     headerFiles.add("#include <Stepper/src/Stepper.h>");
                     break;
@@ -639,6 +653,11 @@ public class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor implement
                     this.sb.append("_lcd_" + usedConfigurationBlock.getUserDefinedPortName() + ".begin();");
                     nlIndent();
                     break;
+                case SC.OLEDSSD1306I2C:
+                    this.sb.append("_lcd_" + usedConfigurationBlock.getUserDefinedPortName() + ".begin(SSD1306_SWITCHCAPVCC, SCREEN_ADDRESS);");
+                    nlIndent();
+                    break;
+
                 case SC.LED:
                     this.sb.append("pinMode(_led_" + usedConfigurationBlock.getUserDefinedPortName() + ", OUTPUT);");
                     nlIndent();
@@ -704,7 +723,6 @@ public class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor implement
                     this.sb.append("HTS").append(".begin();");
                     nlIndent();
                     break;
-
                 default:
                     throw new DbcException("Sensor is not supported: " + usedConfigurationBlock.getComponentType());
             }
@@ -795,12 +813,29 @@ public class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor implement
                     nlIndent();
                     break;
                 case SC.LCDI2C:
-                    String address = cc.getOptProperty("ADDRESS");
+                    String addresslcdi2c = cc.getOptProperty("ADDRESS");
                     // TODO check if this is still needed after we rework the configuration back-transformation
-                    if ( address == null ) {
-                        address = "0x27";
+                    if ( addresslcdi2c == null ) {
+                        addresslcdi2c = "0x27";
                     }
-                    this.sb.append("LiquidCrystal_I2C _lcd_").append(blockName).append("(").append(address).append(", 16, 2);");
+                    this.sb.append("LiquidCrystal_I2C _lcd_").append(blockName).append("(").append(addresslcdi2c).append(", 16, 2);");
+                    nlIndent();
+                    break;
+                case SC.OLEDSSD1306I2C:
+                    String addressssd1306 = cc.getOptProperty("ADDRESS");
+                    // TODO check if this is still needed after we rework the configuration back-transformation
+                    if ( addressssd1306 == null ) {
+                        addressssd1306 = "0x3D";
+                    }
+                    this.sb.append("#define SCREEN_ADDRESS \"").append(addressssd1306).append("\"");
+                    nlIndent();
+                    this.sb.append("#define OLED_RESET 4");
+                    nlIndent();
+                    this.sb.append("#define SCREEN_WIDTH 128");
+                    nlIndent();
+                    this.sb.append("#define SCREEN_HEIGHT ").append(addressssd1306.equals("0x3D") ? "64" : "32");
+                    nlIndent();
+                    this.sb.append("Adafruit_SSD1306 _lcd_").append(blockName).append("(SCREEN_WIDTH,SCREEN_HEIGHT,&Wire, OLED_RESET);");
                     nlIndent();
                     break;
                 case SC.LED:

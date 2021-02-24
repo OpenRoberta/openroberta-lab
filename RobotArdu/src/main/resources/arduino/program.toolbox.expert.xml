@@ -67,7 +67,7 @@
                 </value>
             </block>
             <block type="robActions_display_clear_i2c" />
-            <block type="robActions_display_text_oledssd1306i2ci2c">
+            <block type="robActions_display_text_oledssd1306i2c">
                 <value name="OUT">
                     <block type="text">
                         <field name="TEXT">Hallo</field>
@@ -84,7 +84,7 @@
                     </block>
                 </value>
             </block>
-            <block type="robActions_display_clear_oledssd1306i2ci2c" />
+            <block type="robActions_display_clear_oledssd1306i2c" />
         </category>
         <category name="TOOLBOX_SOUND" svg="true">
             <block type="robActions_play_tone">
