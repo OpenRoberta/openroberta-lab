@@ -385,7 +385,7 @@ define(['exports', 'log', 'util', 'comm', 'message', 'guiState.controller', 'blo
             Blockly.Xml.domToWorkspace(dom, bricklyWorkspace);
         }
         bricklyWorkspace.setVersion(dom.getAttribute('xmlversion'));
-        var name = xml == GUISTATE_C.getConfigurationConf() ? GUISTATE_C.getRobotGroup().toUpperCase() + "basis" : '';
+        var name = GUISTATE_C.getConfigurationName() == '' ? GUISTATE_C.getRobotGroup().toUpperCase() + "basis" : GUISTATE_C.getConfigurationName();
         GUISTATE_C.setConfigurationName(name);
         GUISTATE_C.setConfigurationSaved(true);
         $('#tabConfigurationName').html(name);
