@@ -1,54 +1,42 @@
 {
-    "ops":[
-        {
-            "op":"expr",
-            "opc":"INITIATE_BLOCK",
-            "BLOCK_ID":"mdSVJclsydU}L@Rrf=m("
-        },
-        {
-            "opc":"expr",
-            "BLOCK_ID":"mdSVJclsydU}L@Rrf=m(",
-            "expr":"COLOR_CONST",
-            "value":[
-                255,
-                0,
-                0
-            ]
-        },
-        {
-            "opc":"TERMINATE_BLOCK",
-            "BLOCK_ID":"mdSVJclsydU}L@Rrf=m("
-        },
-        {
-            "op":"ledOnAction",
-            "opc":"INITIATE_BLOCK",
-            "BLOCK_ID":"j()bCMB@vT0D+pGbc0[0"
-        },
-        {
-            "opc":"ledOnAction",
-            "BLOCK_ID":"j()bCMB@vT0D+pGbc0[0"
-        },
-        {
-            "opc":"TERMINATE_BLOCK",
-            "BLOCK_ID":"j()bCMB@vT0D+pGbc0[0"
-        },
-        {
-            "op":"statusLightAction",
-            "opc":"INITIATE_BLOCK",
-            "BLOCK_ID":"hsCy=%3|2^SI%i/J[^.`"
-        },
-        {
-            "opc":"statusLightAction",
-            "BLOCK_ID":"hsCy=%3|2^SI%i/J[^.`",
-            "port":"internal",
-            "name":"calliope"
-        },
-        {
-            "opc":"TERMINATE_BLOCK",
-            "BLOCK_ID":"hsCy=%3|2^SI%i/J[^.`"
-        }
-    ],
-    "functionDeclaration":{
-
+  "ops": [
+    {
+      "opc": "expr",
+      "expr": "COLOR_CONST",
+      "+": [
+        "mdSVJclsydU}L@Rrf=m("
+      ],
+      "value": [
+        255,
+        0,
+        0
+      ]
+    },
+    {
+      "opc": "ledOnAction",
+      "+": [
+        "j()bCMB@vT0D+pGbc0[0"
+      ],
+      "-": [
+        "mdSVJclsydU}L@Rrf=m("
+      ]
+    },
+    {
+      "opc": "statusLightAction",
+      "port": "internal",
+      "name": "calliope",
+      "+": [
+        "hsCy=%3|2^SI%i/J[^.`"
+      ],
+      "-": [
+        "j()bCMB@vT0D+pGbc0[0"
+      ]
+    },
+    {
+      "opc": "stop",
+      "-": [
+        "hsCy=%3|2^SI%i/J[^.`"
+      ]
     }
+  ]
 }

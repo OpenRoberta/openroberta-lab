@@ -101,8 +101,12 @@
       "expr": "STRING_CONST",
       "value": "Hallo"
     },
-    {"opc": "ShowTextAction"},
-    {"opc": "ClearDisplay"},
+    {
+      "opc": "ShowTextAction"
+    },
+    {
+      "opc": "ClearDisplay"
+    },
     {
       "opc": "expr",
       "expr": "NUM_CONST",
@@ -145,148 +149,178 @@
       "name": "W"
     },
     {
-      "opc": "WaitStmt",
-      "stmtList": [
-        {
-          "GetSample": "buttons",
-          "opc": "GetSample",
-          "name": "W"
-        },
-        {
-          "opc": "expr",
-          "expr": "BOOL_CONST",
-          "value": true
-        },
-        {
-          "op": "EQ",
-          "opc": "expr",
-          "expr": "Binary"
-        },
-        {
-          "opc": "IfTrueStatement",
-          "stmtList": [{
-            "opc": "flowControl",
-            "conditional": false,
-            "break": true,
-            "kind": "WaitStmt"
-          }]
-        },
-        {
-          "opc": "expr",
-          "expr": "NUM_CONST",
-          "value": 1
-        },
-        {"opc": "WaitTimeSTMT"}
-      ]
+      "opc": "comment",
+      "target": "WaitStmt"
     },
     {
-      "opc": "WaitStmt",
-      "stmtList": [
-        {
-          "GetSample": "gyro",
-          "mode": "UP",
-          "opc": "GetSample",
-          "port": "1",
-          "name": "W"
-        },
-        {
-          "opc": "expr",
-          "expr": "BOOL_CONST",
-          "value": true
-        },
-        {
-          "op": "EQ",
-          "opc": "expr",
-          "expr": "Binary"
-        },
-        {
-          "opc": "IfTrueStatement",
-          "stmtList": [{
-            "opc": "flowControl",
-            "conditional": false,
-            "break": true,
-            "kind": "WaitStmt"
-          }]
-        },
-        {
-          "opc": "expr",
-          "expr": "NUM_CONST",
-          "value": 1
-        },
-        {"opc": "WaitTimeSTMT"}
-      ]
+      "GetSample": "buttons",
+      "opc": "GetSample",
+      "name": "W"
     },
     {
-      "opc": "WaitStmt",
-      "stmtList": [
-        {
-          "GetSample": "infrared",
-          "opc": "GetSample",
-          "port": "2",
-          "name": "W"
-        },
-        {
-          "opc": "expr",
-          "expr": "NUM_CONST",
-          "value": "10"
-        },
-        {
-          "op": "LT",
-          "opc": "expr",
-          "expr": "Binary"
-        },
-        {
-          "opc": "IfTrueStatement",
-          "stmtList": [{
-            "opc": "flowControl",
-            "conditional": false,
-            "break": true,
-            "kind": "WaitStmt"
-          }]
-        },
-        {
-          "opc": "expr",
-          "expr": "NUM_CONST",
-          "value": 1
-        },
-        {"opc": "WaitTimeSTMT"}
-      ]
+      "opc": "expr",
+      "expr": "BOOL_CONST",
+      "value": true
     },
     {
-      "opc": "WaitStmt",
-      "stmtList": [
-        {
-          "GetSample": "timer",
-          "opc": "GetSample",
-          "port": "1"
-        },
-        {
-          "opc": "expr",
-          "expr": "NUM_CONST",
-          "value": "500"
-        },
-        {
-          "op": "GT",
-          "opc": "expr",
-          "expr": "Binary"
-        },
-        {
-          "opc": "IfTrueStatement",
-          "stmtList": [{
-            "opc": "flowControl",
-            "conditional": false,
-            "break": true,
-            "kind": "WaitStmt"
-          }]
-        },
-        {
-          "opc": "expr",
-          "expr": "NUM_CONST",
-          "value": 1
-        },
-        {"opc": "WaitTimeSTMT"}
-      ]
+      "op": "EQ",
+      "opc": "expr",
+      "expr": "Binary"
+    },
+    {
+      "opc": "jump",
+      "conditional": false,
+      "target": 37
+    },
+    {
+      "opc": "jump",
+      "conditional": "always",
+      "target": 40
+    },
+    {
+      "opc": "expr",
+      "expr": "NUM_CONST",
+      "value": 1
+    },
+    {
+      "opc": "WaitTimeSTMT"
+    },
+    {
+      "opc": "jump",
+      "conditional": "always",
+      "target": 31
+    },
+    {
+      "opc": "comment",
+      "target": "WaitStmt"
+    },
+    {
+      "GetSample": "gyro",
+      "mode": "UP",
+      "opc": "GetSample",
+      "port": "1",
+      "name": "W"
+    },
+    {
+      "opc": "expr",
+      "expr": "BOOL_CONST",
+      "value": true
+    },
+    {
+      "op": "EQ",
+      "opc": "expr",
+      "expr": "Binary"
+    },
+    {
+      "opc": "jump",
+      "conditional": false,
+      "target": 46
+    },
+    {
+      "opc": "jump",
+      "conditional": "always",
+      "target": 49
+    },
+    {
+      "opc": "expr",
+      "expr": "NUM_CONST",
+      "value": 1
+    },
+    {
+      "opc": "WaitTimeSTMT"
+    },
+    {
+      "opc": "jump",
+      "conditional": "always",
+      "target": 40
+    },
+    {
+      "opc": "comment",
+      "target": "WaitStmt"
+    },
+    {
+      "GetSample": "infrared",
+      "opc": "GetSample",
+      "port": "2",
+      "name": "W"
+    },
+    {
+      "opc": "expr",
+      "expr": "NUM_CONST",
+      "value": "10"
+    },
+    {
+      "op": "LT",
+      "opc": "expr",
+      "expr": "Binary"
+    },
+    {
+      "opc": "jump",
+      "conditional": false,
+      "target": 55
+    },
+    {
+      "opc": "jump",
+      "conditional": "always",
+      "target": 58
+    },
+    {
+      "opc": "expr",
+      "expr": "NUM_CONST",
+      "value": 1
+    },
+    {
+      "opc": "WaitTimeSTMT"
+    },
+    {
+      "opc": "jump",
+      "conditional": "always",
+      "target": 49
+    },
+    {
+      "opc": "comment",
+      "target": "WaitStmt"
+    },
+    {
+      "GetSample": "timer",
+      "opc": "GetSample",
+      "port": "1"
+    },
+    {
+      "opc": "expr",
+      "expr": "NUM_CONST",
+      "value": "500"
+    },
+    {
+      "op": "GT",
+      "opc": "expr",
+      "expr": "Binary"
+    },
+    {
+      "opc": "jump",
+      "conditional": false,
+      "target": 64
+    },
+    {
+      "opc": "jump",
+      "conditional": "always",
+      "target": 67
+    },
+    {
+      "opc": "expr",
+      "expr": "NUM_CONST",
+      "value": 1
+    },
+    {
+      "opc": "WaitTimeSTMT"
+    },
+    {
+      "opc": "jump",
+      "conditional": "always",
+      "target": 58
+    },
+    {
+      "opc": "stop"
     }
-  ],
-  "functionDeclaration": {}
+  ]
 }

@@ -1,127 +1,95 @@
 {
-    "ops":[
-        {
-            "op":"expr",
-            "opc":"INITIATE_BLOCK",
-            "BLOCK_ID":"`85zzp86|El)6pxPC_i9"
-        },
-        {
-            "opc":"expr",
-            "BLOCK_ID":"`85zzp86|El)6pxPC_i9",
-            "expr":"NUM_CONST",
-            "value":"250"
-        },
-        {
-            "opc":"TERMINATE_BLOCK",
-            "BLOCK_ID":"`85zzp86|El)6pxPC_i9"
-        },
-        {
-            "op":"writePinAction",
-            "opc":"INITIATE_BLOCK",
-            "BLOCK_ID":"#01y;@M{,biUmNRUkr{Q"
-        },
-        {
-            "mode":"analog",
-            "opc":"writePinAction",
-            "BLOCK_ID":"#01y;@M{,biUmNRUkr{Q",
-            "pin":"1"
-        },
-        {
-            "opc":"TERMINATE_BLOCK",
-            "BLOCK_ID":"#01y;@M{,biUmNRUkr{Q"
-        },
-        {
-            "op":"expr",
-            "opc":"INITIATE_BLOCK",
-            "BLOCK_ID":"%1C+h@BMb#J0w8EeToM%"
-        },
-        {
-            "opc":"expr",
-            "BLOCK_ID":"%1C+h@BMb#J0w8EeToM%",
-            "expr":"NUM_CONST",
-            "value":"250"
-        },
-        {
-            "opc":"TERMINATE_BLOCK",
-            "BLOCK_ID":"%1C+h@BMb#J0w8EeToM%"
-        },
-        {
-            "op":"writePinAction",
-            "opc":"INITIATE_BLOCK",
-            "BLOCK_ID":"iBT,ueyPUw:^.W!q.X6^"
-        },
-        {
-            "mode":"analog",
-            "opc":"writePinAction",
-            "BLOCK_ID":"iBT,ueyPUw:^.W!q.X6^",
-            "pin":"2"
-        },
-        {
-            "opc":"TERMINATE_BLOCK",
-            "BLOCK_ID":"iBT,ueyPUw:^.W!q.X6^"
-        },
-        {
-            "op":"expr",
-            "opc":"INITIATE_BLOCK",
-            "BLOCK_ID":"mCDsQ~T_H)]_bg^T4/++"
-        },
-        {
-            "opc":"expr",
-            "BLOCK_ID":"mCDsQ~T_H)]_bg^T4/++",
-            "expr":"NUM_CONST",
-            "value":"250"
-        },
-        {
-            "opc":"TERMINATE_BLOCK",
-            "BLOCK_ID":"mCDsQ~T_H)]_bg^T4/++"
-        },
-        {
-            "op":"writePinAction",
-            "opc":"INITIATE_BLOCK",
-            "BLOCK_ID":"tk:F#7d#/qF#2n:bF3JD"
-        },
-        {
-            "mode":"digital",
-            "opc":"writePinAction",
-            "BLOCK_ID":"tk:F#7d#/qF#2n:bF3JD",
-            "pin":"0"
-        },
-        {
-            "opc":"TERMINATE_BLOCK",
-            "BLOCK_ID":"tk:F#7d#/qF#2n:bF3JD"
-        },
-        {
-            "op":"expr",
-            "opc":"INITIATE_BLOCK",
-            "BLOCK_ID":"_O?M+!z46-@5S[u1_K[3"
-        },
-        {
-            "opc":"expr",
-            "BLOCK_ID":"_O?M+!z46-@5S[u1_K[3",
-            "expr":"NUM_CONST",
-            "value":"250"
-        },
-        {
-            "opc":"TERMINATE_BLOCK",
-            "BLOCK_ID":"_O?M+!z46-@5S[u1_K[3"
-        },
-        {
-            "op":"writePinAction",
-            "opc":"INITIATE_BLOCK",
-            "BLOCK_ID":"(z_kYRQ-8_WM_lZ5mu{L"
-        },
-        {
-            "mode":"digital",
-            "opc":"writePinAction",
-            "BLOCK_ID":"(z_kYRQ-8_WM_lZ5mu{L",
-            "pin":"2"
-        },
-        {
-            "opc":"TERMINATE_BLOCK",
-            "BLOCK_ID":"(z_kYRQ-8_WM_lZ5mu{L"
-        }
-    ],
-    "functionDeclaration":{
-
+  "ops": [
+    {
+      "opc": "expr",
+      "expr": "NUM_CONST",
+      "+": [
+        "`85zzp86|El)6pxPC_i9"
+      ],
+      "value": "250"
+    },
+    {
+      "mode": "analog",
+      "opc": "writePinAction",
+      "pin": "1",
+      "+": [
+        "#01y;@M{,biUmNRUkr{Q"
+      ],
+      "-": [
+        "`85zzp86|El)6pxPC_i9"
+      ]
+    },
+    {
+      "opc": "expr",
+      "expr": "NUM_CONST",
+      "+": [
+        "%1C+h@BMb#J0w8EeToM%"
+      ],
+      "-": [
+        "#01y;@M{,biUmNRUkr{Q"
+      ],
+      "value": "250"
+    },
+    {
+      "mode": "analog",
+      "opc": "writePinAction",
+      "pin": "2",
+      "+": [
+        "iBT,ueyPUw:^.W!q.X6^"
+      ],
+      "-": [
+        "%1C+h@BMb#J0w8EeToM%"
+      ]
+    },
+    {
+      "opc": "expr",
+      "expr": "NUM_CONST",
+      "+": [
+        "mCDsQ~T_H)]_bg^T4/++"
+      ],
+      "-": [
+        "iBT,ueyPUw:^.W!q.X6^"
+      ],
+      "value": "250"
+    },
+    {
+      "mode": "digital",
+      "opc": "writePinAction",
+      "pin": "0",
+      "+": [
+        "tk:F#7d#/qF#2n:bF3JD"
+      ],
+      "-": [
+        "mCDsQ~T_H)]_bg^T4/++"
+      ]
+    },
+    {
+      "opc": "expr",
+      "expr": "NUM_CONST",
+      "+": [
+        "_O?M+!z46-@5S[u1_K[3"
+      ],
+      "-": [
+        "tk:F#7d#/qF#2n:bF3JD"
+      ],
+      "value": "250"
+    },
+    {
+      "mode": "digital",
+      "opc": "writePinAction",
+      "pin": "2",
+      "+": [
+        "(z_kYRQ-8_WM_lZ5mu{L"
+      ],
+      "-": [
+        "_O?M+!z46-@5S[u1_K[3"
+      ]
+    },
+    {
+      "opc": "stop",
+      "-": [
+        "(z_kYRQ-8_WM_lZ5mu{L"
+      ]
     }
+  ]
 }

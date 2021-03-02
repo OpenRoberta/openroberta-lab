@@ -2,6 +2,7 @@ package de.fhg.iais.roberta.visitor;
 
 public class C {
     public static final String ADD = "ADD";
+    public static final String ALWAYS = "always";
     public static final String AMBIENTLIGHT = "ambientlight";
     public static final String ANALOG = "analog";
     public static final String AND = "AND";
@@ -106,6 +107,8 @@ public class C {
     public static final String GTE = "GTE";
     public static final String GYRO = "gyro";
     public static final String GYRO_SENSOR_RESET = "createResetGyroSensor";
+    public static final String HIGHTLIGHT_PLUS = "+";
+    public static final String HIGHTLIGHT_MINUS = "-";
     public static final String IF_RETURN = "createMethodIfReturn";
     public static final String IF_STMT = "IfStatement";
     public static final String IF_TRUE_STMT = "IfTrueStatement";
@@ -118,6 +121,7 @@ public class C {
     public static final String INITIATE_BLOCK = "INITIATE_BLOCK";
     public static final String INSERT = "insert";
     public static final String ITEM = "item";
+    public static final String JUMP = "jump";
     public static final String KIND = "kind";
     public static final String LANGUAGE = "language";
     public static final String LAST = "last";
@@ -155,8 +159,7 @@ public class C {
     public static final double MAX_ROTATION = 2.0;
     public static final int MAX_WIDTH = 2000;
     public static final String MEDIAN = "median";
-    public static final String METHOD_CALL_RETURN = "createMethodCallReturn";
-    public static final String METHOD_CALL_VOID = "createMethodCallVoid";
+    public static final String METHOD_CALL = "createMethodCall";
     public static final String METHOD_RETURN = "createMethodReturn";
     public static final String METHOD_VOID = "createMethodVoid";
     public static final String MIN = "min";
@@ -266,6 +269,7 @@ public class C {
     public static final String STRING = "STRING";
     public static final String STRING_CONST = "STRING_CONST";
     public static final String SUM = "sum";
+    public static final String TARGET = "target";
     public static final String TERMINATE_BLOCK = "TERMINATE_BLOCK";
     public static final String TEMPERATURE = "temperature";
     public static final String TERNARY_EXPR = "createTernaryExpr";
@@ -288,6 +292,7 @@ public class C {
     public static final String TYPE = "type";
     public static final String ULTRASONIC = "ultrasonic";
     public static final String UNARY = "Unary";
+    public static final String UNBIND_VAR = "unbindVar";
     public static final String UNTIL = "UNTIL";
     public static final String UP = "UP";
     public static final String VALUE = "value";

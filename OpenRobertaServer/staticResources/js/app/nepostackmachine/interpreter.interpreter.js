@@ -6,7 +6,7 @@ define(["require", "exports", "./interpreter.state", "./interpreter.constants", 
         /*
          *
          * . @param generatedCode argument contains the operations and the function definitions
-         * . @param r implementation of the ARobotBehaviour class
+         * . @param robotBehaviour implementation of the ARobotBehaviour class
          * . @param cbOnTermination is called when the program has terminated
         */
         function Interpreter(generatedCode, r, cbOnTermination, simBreakpoints) {
@@ -15,19 +15,15 @@ define(["require", "exports", "./interpreter.state", "./interpreter.constants", 
             this.terminated = false;
             this.callbackOnTermination = cbOnTermination;
             var stmts = generatedCode[C.OPS];
-            var functions = generatedCode[C.FUNCTION_DECLARATION];
-            this.r = r;
+            this.robotBehaviour = r;
             this.breakpoints = simBreakpoints;
             this.events = {};
             this.events[C.DEBUG_STEP_INTO] = false;
             this.events[C.DEBUG_BREAKPOINT] = false;
             this.events[C.DEBUG_STEP_OVER] = false;
-            this.stepBlock = null;
-            this.previousBlockId = null;
-            var stop = {};
-            stop[C.OPCODE] = "stop";
-            stmts.push(stop);
-            this.s = new interpreter_state_1.State(stmts, functions);
+            this.lastStoppedBlock = null;
+            this.stepOverBlock = null;
+            this.state = new interpreter_state_1.State(stmts);
         }
         /**
          * run the operations.
@@ -49,30 +45,29 @@ define(["require", "exports", "./interpreter.state", "./interpreter.constants", 
         Interpreter.prototype.terminate = function () {
             this.terminated = true;
             this.callbackOnTermination();
-            this.r.close();
-            this.s.removeHighlights([]);
+            this.robotBehaviour.close();
+            this.state.removeHighlights([]);
         };
         Interpreter.prototype.getRobotBehaviour = function () {
-            return this.r;
+            return this.robotBehaviour;
         };
         /** Returns the map of interpreters variables */
         Interpreter.prototype.getVariables = function () {
-            return this.s.getVariables();
+            return this.state.getVariables();
         };
         /** Removes all highlights from currently executing blocks*/
         Interpreter.prototype.removeHighlights = function () {
-            this.s.removeHighlights([]);
+            this.state.removeHighlights([]);
         };
         /** Sets the debug mode*/
         Interpreter.prototype.setDebugMode = function (mode) {
-            var s = this.s;
-            s.setDebugMode(mode);
+            this.state.setDebugMode(mode);
             if (mode) {
                 stackmachineJsHelper.getJqueryObject("#blockly").addClass("debug");
-                s.addHighlights(this.breakpoints);
+                this.state.addHighlights(this.breakpoints);
             }
             else {
-                s.removeHighlights(this.breakpoints);
+                this.state.removeHighlights(this.breakpoints);
                 stackmachineJsHelper.getJqueryObject("#blockly").removeClass("debug");
             }
         };
@@ -86,8 +81,8 @@ define(["require", "exports", "./interpreter.state", "./interpreter.constants", 
         };
         /**
          * the central interpreter. It is a stack machine interpreting operations given as JSON objects. The operations are all IMMUTABLE. It
-         * - uses the S (state) component to store the state of the interpretation.
-         * - uses the R (robotBehaviour) component for accessing hardware sensors and actors
+         * - uses the this.state component to store the state of the interpretation.
+         * - uses the this.robotBehaviour component for accessing hardware sensors and actors
          *
          * if the program is not terminated, it will take one operation after the other and execute it. The property C.OPCODE contains the
          * operation code and is used for switching to the various operations implementations. For some operation codes the implementations is extracted to
@@ -96,93 +91,37 @@ define(["require", "exports", "./interpreter.state", "./interpreter.constants", 
          * The state of the interpreter consists of
          * - a stack of computed values
          * - the actual array of operations to be executed now, including a program counter as index into the array
-         * - a stack of operations-arrays (including their program counters), that are actually frozen until the actual array has been interpreted.
          * - a hash map of bindings. A binding map a name as key to an array of values. This implements hiding of variables.
-         *
-         * The stack of operations-arrays is used to store the history of complex operation as
-         *   - function call
-         *   - if-then-else
-         *   - repeat
-         *   - wait
-         * - If such an operation is executed, it pushes the actual array of operations (including itself) onto the stack of operations-arrays,
-         *   set the actual array of operations to a new array of own operations (found at the property C.STMT_LIST) and set the program counter to 0
-         * - The program counter of the pushed array of operations keeps pointing to the operation that effected the push. Thus some operations as break
-         *   have to increase the program counter (to avoid an endless loop)
-         * - if the actual array of operations is exhausted, the last array of operations pushed to the stack of operations-arrays is re-activated
-         *
-         * The statement C.FLOW_CONTROL is rather complex:
-         * - it is used explicitly by 'continue' and 'break' and know about the repeat-statement / repeat-continuation structure (@see eval_repeat())
-         * - it is used implicitly by if-then-else, if one branch is selected and is exhausted. It forces the continuation after the if-then-else
          *
          * Each operation code implementation may
          * - create new bindings of values to names (variable declaration)
          * - change the values of the binding (assign)
          * - push and pop values to the stack (expressions)
-         * - push and pop to the stack of operations-arrays
          *
          * Debugging functions:
-         *
          * -StepOver will step over a given line. If the line contains a function the function will be executed and the result returned without debugging each line.
          * -StepInto If the line does not contain a function it behaves the same as “step over” but if it does the debugger will enter the called function
          * and continue line-by-line debugging there.
          * -BreakPoint will continue execution until the next breakpoint is reached or the program exits.
-    
          */
         Interpreter.prototype.evalOperation = function (maxRunTime) {
-            var s = this.s;
-            var n = this.r;
-            while (maxRunTime >= new Date().getTime() && !n.getBlocking()) {
-                var op = s.getOp();
-                var results = this.evalSingleOperation(s, n, op);
-                var result = results[0];
-                var stop_1 = results[1];
-                if (s.getDebugMode()) {
-                    if (this.events[C.DEBUG_BREAKPOINT]) {
-                        if (this.isPossibleBreakPoint(op)) {
-                            for (var i = 0; i < this.breakpoints.length; i++) {
-                                if (op[C.BLOCK_ID] === this.breakpoints[i]) {
-                                    stackmachineJsHelper.setSimBreak();
-                                    this.previousBlockId = op[C.BLOCK_ID];
-                                    this.events[C.DEBUG_BREAKPOINT] = false;
-                                    return result;
-                                }
-                            }
-                        }
-                    }
-                    if (this.events[C.DEBUG_STEP_INTO]) {
-                        if (this.isPossibleStepInto(op)) {
-                            stackmachineJsHelper.setSimBreak();
-                            this.previousBlockId = op[C.BLOCK_ID];
-                            this.events[C.DEBUG_STEP_INTO] = false;
-                            return result;
-                        }
-                    }
-                    if (this.events[C.DEBUG_STEP_OVER]) {
-                        if (this.stepBlock !== null && !s.beingExecuted(this.stepBlock) && this.isPossibleStepInto(op)) {
-                            stackmachineJsHelper.setSimBreak();
-                            this.previousBlockId = op[C.BLOCK_ID];
-                            this.events[C.DEBUG_STEP_OVER] = false;
-                            this.stepBlock = null;
-                            return result;
-                        }
-                        else if (this.stepBlock === null && this.isPossibleStepOver(op)) {
-                            this.stepBlock = op;
-                        }
-                        else if (this.stepBlock === null && this.isPossibleStepInto(op)) {
-                            stackmachineJsHelper.setSimBreak();
-                            this.previousBlockId = op[C.BLOCK_ID];
-                            this.events[C.DEBUG_STEP_OVER] = false;
-                            return result;
-                        }
-                    }
+            while (maxRunTime >= new Date().getTime() && !this.robotBehaviour.getBlocking()) {
+                var op = this.state.getOp();
+                this.state.evalTerminations(op);
+                this.state.evalInitiations(op);
+                if (this.state.getDebugMode()) {
+                    var canContinue = this.calculateDebugBehaviour(op);
+                    if (!canContinue)
+                        return 0;
                 }
-                this.previousBlockId = op[C.BLOCK_ID];
+                var _a = this.evalSingleOperation(op), result = _a[0], stop_1 = _a[1];
+                this.lastStoppedBlock = null;
                 if (result > 0 || stop_1) {
                     return result;
                 }
                 if (this.terminated) {
                     // termination either requested by the client or by executing 'stop' or after last statement
-                    n.close();
+                    this.robotBehaviour.close();
                     this.callbackOnTermination();
                     return 0;
                 }
@@ -190,16 +129,60 @@ define(["require", "exports", "./interpreter.state", "./interpreter.constants", 
             return 0;
         };
         /**
+         * Is responsible for all debugging behavior
+         * @param op
+         * @return whether the interpreter can continue evaluating the operation
+         * @private
+         */
+        Interpreter.prototype.calculateDebugBehaviour = function (op) {
+            if (this.events[C.DEBUG_BREAKPOINT] && Interpreter.isBreakPoint(op, this.breakpoints) && op !== this.lastStoppedBlock) {
+                this.breakPoint(op);
+                return false;
+            }
+            if (this.events[C.DEBUG_STEP_INTO] && Interpreter.isPossibleStepInto(op) && op !== this.lastStoppedBlock) {
+                this.stepInto(op);
+                return false;
+            }
+            if (this.events[C.DEBUG_STEP_OVER]) {
+                if (this.stepOverBlock !== null && !this.state.beingExecuted(this.stepOverBlock) && Interpreter.isPossibleStepInto(op)) {
+                    this.stepOver(op);
+                    return false;
+                }
+                else if (this.stepOverBlock === null && Interpreter.isPossibleStepOver(op)) {
+                    this.stepOverBlock = op;
+                }
+                else if (this.stepOverBlock === null && this.lastStoppedBlock !== op && Interpreter.isPossibleStepInto(op)) {
+                    this.stepOver(op);
+                    return false;
+                }
+            }
+            return true;
+        };
+        Interpreter.prototype.stepOver = function (op) {
+            stackmachineJsHelper.setSimBreak();
+            this.events[C.DEBUG_STEP_OVER] = false;
+            this.stepOverBlock = null;
+            this.lastStoppedBlock = op;
+        };
+        Interpreter.prototype.stepInto = function (op) {
+            stackmachineJsHelper.setSimBreak();
+            this.events[C.DEBUG_STEP_INTO] = false;
+            this.lastStoppedBlock = op;
+        };
+        Interpreter.prototype.breakPoint = function (op) {
+            stackmachineJsHelper.setSimBreak();
+            this.events[C.DEBUG_BREAKPOINT] = false;
+            this.lastStoppedBlock = op;
+        };
+        /**
          *  called from @see evalOperation() to evaluate all the operations
          *
-         * @param s the S (state) component to store the state of the interpretation.
-         * @param n the R (robotBehaviour) component for accessing hardware sensors and actors
          * @param stmt the operation to be evaluated
          * @returns [result,stop] result will be time required till next instruction and stop indicates if evalOperation should return result or not.
          */
-        Interpreter.prototype.evalSingleOperation = function (s, n, stmt) {
-            s.opLog('actual ops: ');
-            s.processBlock(stmt);
+        Interpreter.prototype.evalSingleOperation = function (stmt) {
+            this.state.opLog('actual ops: ');
+            this.state.incrementProgramCounter();
             if (stmt === undefined) {
                 U.debug('PROGRAM TERMINATED. No ops remaining');
                 this.terminated = true;
@@ -207,13 +190,20 @@ define(["require", "exports", "./interpreter.state", "./interpreter.constants", 
             else {
                 var opCode = stmt[C.OPCODE];
                 switch (opCode) {
+                    case C.JUMP: {
+                        var condition = stmt[C.CONDITIONAL];
+                        if (condition === C.ALWAYS || this.state.pop() === condition) {
+                            this.state.pc = stmt[C.TARGET];
+                        }
+                        break;
+                    }
                     case C.ASSIGN_STMT: {
                         var name_1 = stmt[C.NAME];
-                        s.setVar(name_1, s.pop());
+                        this.state.setVar(name_1, this.state.pop());
                         break;
                     }
                     case C.CLEAR_DISPLAY_ACTION: {
-                        n.clearDisplay();
+                        this.robotBehaviour.clearDisplay();
                         return [0, true];
                     }
                     case C.CREATE_DEBUG_ACTION: {
@@ -223,59 +213,31 @@ define(["require", "exports", "./interpreter.state", "./interpreter.constants", 
                     case C.EXPR:
                         this.evalExpr(stmt);
                         break;
-                    case C.FLOW_CONTROL: {
-                        var conditional = stmt[C.CONDITIONAL];
-                        var activatedBy = stmt[C.BOOLEAN] === undefined ? true : stmt[C.BOOLEAN];
-                        var doIt = conditional ? (s.pop() === activatedBy) : true;
-                        if (doIt) {
-                            s.popOpsUntil(stmt[C.KIND]);
-                            if (stmt[C.BREAK]) {
-                                s.getOp();
-                            }
-                            s.terminateBlock(stmt);
-                        }
-                        break;
-                    }
                     case C.GET_SAMPLE: {
-                        n.getSample(s, stmt[C.NAME], stmt[C.GET_SAMPLE], stmt[C.PORT], stmt[C.MODE]);
+                        this.robotBehaviour.getSample(this.state, stmt[C.NAME], stmt[C.GET_SAMPLE], stmt[C.PORT], stmt[C.MODE]);
                         break;
                     }
-                    case C.IF_STMT:
-                        s.pushOps(stmt[C.STMT_LIST]);
-                        break;
                     case C.NNSTEP_STMT:
                         this.evalNNStep();
                         break;
-                    case C.IF_TRUE_STMT:
-                        if (s.pop()) {
-                            s.pushOps(stmt[C.STMT_LIST]);
-                        }
-                        break;
-                    case C.IF_RETURN:
-                        if (s.pop()) {
-                            s.pushOps(stmt[C.STMT_LIST]);
-                        }
-                        break;
                     case C.LED_ON_ACTION: {
-                        var color_1 = s.pop();
-                        n.ledOnAction(stmt[C.NAME], stmt[C.PORT], color_1);
+                        var color_1 = this.state.pop();
+                        this.robotBehaviour.ledOnAction(stmt[C.NAME], stmt[C.PORT], color_1);
                         break;
                     }
-                    case C.METHOD_CALL_VOID:
-                    case C.METHOD_CALL_RETURN: {
-                        for (var _i = 0, _a = stmt[C.NAMES]; _i < _a.length; _i++) {
-                            var parameterName = _a[_i];
-                            s.bindVar(parameterName, s.pop());
-                        }
-                        var body = s.getFunction(stmt[C.NAME])[C.STATEMENTS];
-                        s.processBlock(body[body.length - 1]);
-                        s.pushOps(body);
+                    case C.RETURN:
+                        var returnValue = void 0;
+                        if (stmt[C.VALUES])
+                            returnValue = this.state.pop();
+                        var returnAddress = this.state.pop();
+                        this.state.pc = returnAddress;
+                        if (stmt[C.VALUES])
+                            this.state.push(returnValue);
                         break;
-                    }
                     case C.MOTOR_ON_ACTION: {
                         var speedOnly = stmt[C.SPEED_ONLY];
-                        var duration = speedOnly ? undefined : s.pop();
-                        var speed = s.pop();
+                        var duration = speedOnly ? undefined : this.state.pop();
+                        var speed = this.state.pop();
                         var name_2 = stmt[C.NAME];
                         var port = stmt[C.PORT];
                         var durationType = stmt[C.MOTOR_DURATION];
@@ -287,7 +249,7 @@ define(["require", "exports", "./interpreter.state", "./interpreter.constants", 
                                 duration /= 360.0;
                             }
                         }
-                        n.motorOnAction(name_2, port, duration, speed);
+                        this.robotBehaviour.motorOnAction(name_2, port, duration, speed);
                         return [duration ? duration : 0, true];
                     }
                     case C.DRIVE_ACTION: {
@@ -298,15 +260,15 @@ define(["require", "exports", "./interpreter.state", "./interpreter.constants", 
                         var distance = void 0;
                         if (setTime) {
                             distance = undefined;
-                            time = setTime ? s.pop() : undefined;
+                            time = setTime ? this.state.pop() : undefined;
                         }
                         else {
                             time = undefined;
-                            distance = speedOnly ? undefined : s.pop();
+                            distance = speedOnly ? undefined : this.state.pop();
                         }
-                        var speed = s.pop();
+                        var speed = this.state.pop();
                         var direction = stmt[C.DRIVE_DIRECTION];
-                        var duration = n.driveAction(name_3, direction, speed, distance, time);
+                        var duration = this.robotBehaviour.driveAction(name_3, direction, speed, distance, time);
                         return [duration, true];
                     }
                     case C.TURN_ACTION: {
@@ -316,16 +278,16 @@ define(["require", "exports", "./interpreter.state", "./interpreter.constants", 
                         var angle = void 0;
                         if (setTime) {
                             angle = undefined;
-                            time = setTime ? s.pop() : undefined;
+                            time = setTime ? this.state.pop() : undefined;
                         }
                         else {
                             time = undefined;
-                            angle = speedOnly ? undefined : s.pop();
+                            angle = speedOnly ? undefined : this.state.pop();
                         }
-                        var speed = s.pop();
+                        var speed = this.state.pop();
                         var name_4 = stmt[C.NAME];
                         var direction = stmt[C.TURN_DIRECTION];
-                        var duration = n.turnAction(name_4, direction, speed, angle, time);
+                        var duration = this.robotBehaviour.turnAction(name_4, direction, speed, angle, time);
                         return [duration, true];
                     }
                     case C.CURVE_ACTION: {
@@ -335,96 +297,59 @@ define(["require", "exports", "./interpreter.state", "./interpreter.constants", 
                         var distance = void 0;
                         if (setTime) {
                             distance = undefined;
-                            time = setTime ? s.pop() : undefined;
+                            time = setTime ? this.state.pop() : undefined;
                         }
                         else {
                             time = undefined;
-                            distance = speedOnly ? undefined : s.pop();
+                            distance = speedOnly ? undefined : this.state.pop();
                         }
-                        var speedR = s.pop();
-                        var speedL = s.pop();
+                        var speedR = this.state.pop();
+                        var speedL = this.state.pop();
                         var name_5 = stmt[C.NAME];
                         var direction = stmt[C.DRIVE_DIRECTION];
-                        var duration = n.curveAction(name_5, direction, speedL, speedR, distance, time);
+                        var duration = this.robotBehaviour.curveAction(name_5, direction, speedL, speedR, distance, time);
                         return [duration, true];
                     }
                     case C.STOP_DRIVE:
                         var name_6 = stmt[C.NAME];
-                        n.driveStop(name_6);
+                        this.robotBehaviour.driveStop(name_6);
                         return [0, true];
                     case C.BOTH_MOTORS_ON_ACTION: {
-                        var duration = s.pop();
-                        var speedB = s.pop();
-                        var speedA = s.pop();
+                        var duration = this.state.pop();
+                        var speedB = this.state.pop();
+                        var speedA = this.state.pop();
                         var portA = stmt[C.PORT_A];
                         var portB = stmt[C.PORT_B];
-                        n.motorOnAction(portA, portA, duration, speedA);
-                        n.motorOnAction(portB, portB, duration, speedB);
+                        this.robotBehaviour.motorOnAction(portA, portA, duration, speedA);
+                        this.robotBehaviour.motorOnAction(portB, portB, duration, speedB);
                         return [duration, true];
                     }
                     case C.MOTOR_STOP: {
-                        n.motorStopAction(stmt[C.NAME], stmt[C.PORT]);
+                        this.robotBehaviour.motorStopAction(stmt[C.NAME], stmt[C.PORT]);
                         return [0, true];
                     }
                     case C.MOTOR_SET_POWER: {
-                        var speed = s.pop();
+                        var speed = this.state.pop();
                         var name_7 = stmt[C.NAME];
                         var port = stmt[C.PORT];
-                        n.setMotorSpeed(name_7, port, speed);
+                        this.robotBehaviour.setMotorSpeed(name_7, port, speed);
                         return [0, true];
                     }
                     case C.MOTOR_GET_POWER: {
                         var port = stmt[C.PORT];
-                        n.getMotorSpeed(s, name_6, port);
+                        this.robotBehaviour.getMotorSpeed(this.state, name_6, port);
                         break;
                     }
-                    case C.REPEAT_STMT:
-                        this.evalRepeat(stmt);
-                        break;
-                    case C.REPEAT_STMT_CONTINUATION:
-                        if (stmt[C.MODE] === C.FOR || stmt[C.MODE] === C.TIMES) {
-                            var runVariableName = stmt[C.NAME];
-                            var end = s.get1();
-                            var incr = s.get0();
-                            var value = s.getVar(runVariableName) + incr;
-                            if (+value >= +end) {
-                                s.popOpsUntil(C.REPEAT_STMT);
-                                s.getOp(); // the repeat has terminated
-                            }
-                            else {
-                                s.setVar(runVariableName, value);
-                                s.pushOps(stmt[C.STMT_LIST]);
-                            }
-                        }
-                        else if (stmt[C.MODE] === C.FOR_EACH) {
-                            var runVariableName = stmt[C.EACH_COUNTER];
-                            var varName = stmt[C.NAME];
-                            var listName = stmt[C.LIST];
-                            var list = s.getVar(listName);
-                            var end = list.length;
-                            var incr = s.get0();
-                            var value = s.getVar(runVariableName) + incr;
-                            if (+value >= +end) {
-                                s.popOpsUntil(C.REPEAT_STMT);
-                                s.getOp(); // the repeat has terminated
-                            }
-                            else {
-                                s.setVar(runVariableName, value);
-                                s.bindVar(varName, list[value]);
-                                s.pushOps(stmt[C.STMT_LIST]);
-                            }
-                        }
-                        break;
                     case C.SHOW_TEXT_ACTION: {
-                        var text = s.pop();
+                        var text = this.state.pop();
                         var name_8 = stmt[C.NAME];
                         if (name_8 === "ev3") {
-                            var x = s.pop();
-                            var y = s.pop();
-                            n.showTextActionPosition(text, x, y);
+                            var x = this.state.pop();
+                            var y = this.state.pop();
+                            this.robotBehaviour.showTextActionPosition(text, x, y);
                             return [0, true];
                         }
-                        return [n.showTextAction(text, stmt[C.MODE]), true];
+                        return [this.robotBehaviour.showTextAction(text, stmt[C.MODE]), true];
                     }
                     case C.SHOW_IMAGE_ACTION: {
                         var image = void 0;
@@ -432,115 +357,114 @@ define(["require", "exports", "./interpreter.state", "./interpreter.constants", 
                             image = stmt[C.IMAGE];
                         }
                         else {
-                            image = s.pop();
+                            image = this.state.pop();
                         }
-                        return [n.showImageAction(image, stmt[C.MODE]), true];
+                        return [this.robotBehaviour.showImageAction(image, stmt[C.MODE]), true];
                     }
                     case C.DISPLAY_SET_BRIGHTNESS_ACTION: {
-                        var b = s.pop();
-                        return [n.displaySetBrightnessAction(b), true];
+                        var b = this.state.pop();
+                        return [this.robotBehaviour.displaySetBrightnessAction(b), true];
                     }
                     case C.IMAGE_SHIFT_ACTION: {
-                        var nShift = s.pop();
-                        var image = s.pop();
+                        var nShift = this.state.pop();
+                        var image = this.state.pop();
                         if (stmt[C.NAME] === "mbot") {
-                            s.push(this.shiftImageActionMbot(image, stmt[C.DIRECTION], nShift));
+                            this.state.push(this.shiftImageActionMbot(image, stmt[C.DIRECTION], nShift));
                         }
                         else {
-                            s.push(this.shiftImageAction(image, stmt[C.DIRECTION], nShift));
+                            this.state.push(this.shiftImageAction(image, stmt[C.DIRECTION], nShift));
                         }
                         break;
                     }
                     case C.DISPLAY_SET_PIXEL_BRIGHTNESS_ACTION: {
-                        var b = s.pop();
-                        var y = s.pop();
-                        var x = s.pop();
-                        return [n.displaySetPixelBrightnessAction(x, y, b), true];
+                        var b = this.state.pop();
+                        var y = this.state.pop();
+                        var x = this.state.pop();
+                        return [this.robotBehaviour.displaySetPixelBrightnessAction(x, y, b), true];
                     }
                     case C.DISPLAY_GET_PIXEL_BRIGHTNESS_ACTION: {
-                        var y = s.pop();
-                        var x = s.pop();
-                        n.displayGetPixelBrightnessAction(s, x, y);
+                        var y = this.state.pop();
+                        var x = this.state.pop();
+                        this.robotBehaviour.displayGetPixelBrightnessAction(this.state, x, y);
                         break;
                     }
                     case C.LIGHT_ACTION:
                         var color = void 0;
                         if (stmt[C.NAME] === "mbot") {
-                            var rgb = s.pop();
+                            var rgb = this.state.pop();
                             color = "rgb(" + rgb[0] + "," + rgb[1] + "," + rgb[2] + ")";
                         }
                         else {
                             color = stmt[C.COLOR];
                         }
-                        n.lightAction(stmt[C.MODE], color, stmt[C.PORT]);
+                        this.robotBehaviour.lightAction(stmt[C.MODE], color, stmt[C.PORT]);
                         return [0, true];
                     case C.STATUS_LIGHT_ACTION:
-                        n.statusLightOffAction(stmt[C.NAME], stmt[C.PORT]);
+                        this.robotBehaviour.statusLightOffAction(stmt[C.NAME], stmt[C.PORT]);
                         return [0, true];
                     case C.STOP:
                         U.debug("PROGRAM TERMINATED. stop op");
                         this.terminated = true;
                         break;
                     case C.TEXT_JOIN: {
-                        var n_1 = stmt[C.NUMBER];
-                        var result = new Array(n_1);
-                        for (var i = 0; i < n_1; i++) {
-                            var e = s.pop();
-                            result[n_1 - i - 1] = e;
+                        var n = stmt[C.NUMBER];
+                        var result = new Array(n);
+                        for (var i = 0; i < n; i++) {
+                            var e = this.state.pop();
+                            result[n - i - 1] = e;
                         }
-                        s.push(result.join(""));
+                        this.state.push(result.join(""));
                         break;
                     }
                     case C.TIMER_SENSOR_RESET:
-                        n.timerReset(stmt[C.PORT]);
+                        this.robotBehaviour.timerReset(stmt[C.PORT]);
                         break;
                     case C.ENCODER_SENSOR_RESET:
-                        n.encoderReset(stmt[C.PORT]);
+                        this.robotBehaviour.encoderReset(stmt[C.PORT]);
                         return [0, true];
                     case C.GYRO_SENSOR_RESET:
-                        n.gyroReset(stmt[C.PORT]);
+                        this.robotBehaviour.gyroReset(stmt[C.PORT]);
                         return [0, true];
                     case C.TONE_ACTION: {
-                        var duration = s.pop();
-                        var frequency = s.pop();
-                        return [n.toneAction(stmt[C.NAME], frequency, duration), true];
+                        var duration = this.state.pop();
+                        var frequency = this.state.pop();
+                        return [this.robotBehaviour.toneAction(stmt[C.NAME], frequency, duration), true];
                     }
                     case C.PLAY_FILE_ACTION:
-                        return [n.playFileAction(stmt[C.FILE]), true];
+                        return [this.robotBehaviour.playFileAction(stmt[C.FILE]), true];
                     case C.SET_VOLUME_ACTION:
-                        n.setVolumeAction(s.pop());
+                        this.robotBehaviour.setVolumeAction(this.state.pop());
                         return [0, true];
                     case C.GET_VOLUME:
-                        n.getVolumeAction(s);
+                        this.robotBehaviour.getVolumeAction(this.state);
                         break;
                     case C.SET_LANGUAGE_ACTION:
-                        n.setLanguage(stmt[C.LANGUAGE]);
+                        this.robotBehaviour.setLanguage(stmt[C.LANGUAGE]);
                         break;
                     case C.SAY_TEXT_ACTION: {
-                        var pitch = s.pop();
-                        var speed = s.pop();
-                        var text = s.pop();
-                        return [n.sayTextAction(text, speed, pitch), true];
+                        var pitch = this.state.pop();
+                        var speed = this.state.pop();
+                        var text = this.state.pop();
+                        return [this.robotBehaviour.sayTextAction(text, speed, pitch), true];
                     }
+                    case C.UNBIND_VAR:
+                        var variableToUnbind = stmt[C.NAME];
+                        this.state.unbindVar(variableToUnbind);
+                        break;
                     case C.VAR_DECLARATION: {
                         var name_9 = stmt[C.NAME];
-                        s.bindVar(name_9, s.pop());
-                        break;
-                    }
-                    case C.WAIT_STMT: {
-                        U.debug('waitstmt started');
-                        s.pushOps(stmt[C.STMT_LIST]);
+                        this.state.bindVar(name_9, this.state.pop());
                         break;
                     }
                     case C.WAIT_TIME_STMT: {
-                        var time = s.pop();
+                        var time = this.state.pop();
                         return [time, true]; // wait for handler being called
                     }
                     case C.WRITE_PIN_ACTION: {
-                        var value = s.pop();
+                        var value = this.state.pop();
                         var mode = stmt[C.MODE];
                         var pin = stmt[C.PIN];
-                        n.writePinAction(pin, mode, value);
+                        this.robotBehaviour.writePinAction(pin, mode, value);
                         return [0, true];
                     }
                     case C.LIST_OPERATION: {
@@ -548,10 +472,10 @@ define(["require", "exports", "./interpreter.state", "./interpreter.constants", 
                         var loc = stmt[C.POSITION];
                         var ix = 0;
                         if (loc != C.LAST && loc != C.FIRST) {
-                            ix = s.pop();
+                            ix = this.state.pop();
                         }
-                        var value = s.pop();
-                        var list = s.pop();
+                        var value = this.state.pop();
+                        var list = this.state.pop();
                         ix = this.getIndex(list, loc, ix);
                         if (op == C.SET) {
                             list[ix] = value;
@@ -568,31 +492,24 @@ define(["require", "exports", "./interpreter.state", "./interpreter.constants", 
                     }
                     case C.TEXT_APPEND:
                     case C.MATH_CHANGE: {
-                        var value = s.pop();
+                        var value = this.state.pop();
                         var name_10 = stmt[C.NAME];
-                        s.bindVar(name_10, s.pop() + value);
+                        this.state.bindVar(name_10, this.state.pop() + value);
                         break;
                     }
                     case C.DEBUG_ACTION: {
-                        var value = s.pop();
-                        n.debugAction(value);
+                        var value = this.state.pop();
+                        this.robotBehaviour.debugAction(value);
                         break;
                     }
                     case C.ASSERT_ACTION: {
-                        var right = s.pop();
-                        var left = s.pop();
-                        var value = s.pop();
-                        n.assertAction(stmt[C.MSG], left, stmt[C.OP], right, value);
+                        var right = this.state.pop();
+                        var left = this.state.pop();
+                        var value = this.state.pop();
+                        this.robotBehaviour.assertAction(stmt[C.MSG], left, stmt[C.OP], right, value);
                         break;
                     }
                     case C.COMMENT: {
-                        break;
-                    }
-                    case C.INITIATE_BLOCK: {
-                        break;
-                    }
-                    case C.TERMINATE_BLOCK: {
-                        s.terminateBlock(stmt);
                         break;
                     }
                     default:
@@ -609,51 +526,50 @@ define(["require", "exports", "./interpreter.state", "./interpreter.constants", 
         Interpreter.prototype.evalExpr = function (expr) {
             var _a;
             var kind = expr[C.EXPR];
-            var s = this.s;
             switch (kind) {
                 case C.VAR:
-                    s.push(s.getVar(expr[C.NAME]));
+                    this.state.push(this.state.getVar(expr[C.NAME]));
                     break;
                 case C.NUM_CONST:
-                    s.push(+expr[C.VALUE]);
+                    this.state.push(+expr[C.VALUE]);
                     break;
                 case C.CREATE_LIST: {
                     var n = expr[C.NUMBER];
                     var arr = new Array(n);
                     for (var i = 0; i < n; i++) {
-                        var e = s.pop();
+                        var e = this.state.pop();
                         arr[n - i - 1] = e;
                     }
-                    s.push(arr);
+                    this.state.push(arr);
                     break;
                 }
                 case C.CREATE_LIST_REPEAT: {
-                    var rep = s.pop();
-                    var val = s.pop();
+                    var rep = this.state.pop();
+                    var val = this.state.pop();
                     var arr = new Array();
                     for (var i = 0; i < rep; i++) {
                         arr[i] = val;
                     }
-                    s.push(arr);
+                    this.state.push(arr);
                     break;
                 }
                 case C.BOOL_CONST:
-                    s.push(expr[C.VALUE]);
+                    this.state.push(expr[C.VALUE]);
                     break;
                 case C.STRING_CONST:
-                    s.push(expr[C.VALUE]);
+                    this.state.push(expr[C.VALUE]);
                     break;
                 case C.COLOR_CONST:
-                    s.push(expr[C.VALUE]);
+                    this.state.push(expr[C.VALUE]);
                     break;
                 case C.IMAGE:
-                    s.push(expr[C.VALUE]);
+                    this.state.push(expr[C.VALUE]);
                     break;
                 case C.RGB_COLOR_CONST: {
-                    var b = s.pop();
-                    var g = s.pop();
-                    var r = s.pop();
-                    s.push([r, g, b]);
+                    var b = this.state.pop();
+                    var g = this.state.pop();
+                    var r = this.state.pop();
+                    this.state.push([r, g, b]);
                     break;
                 }
                 case C.UNARY: {
@@ -661,7 +577,7 @@ define(["require", "exports", "./interpreter.state", "./interpreter.constants", 
                     switch (subOp) {
                         case C.NOT:
                             var truthy;
-                            var bool = s.pop();
+                            var bool = this.state.pop();
                             if (bool === 'true') {
                                 truthy = true;
                             }
@@ -671,11 +587,11 @@ define(["require", "exports", "./interpreter.state", "./interpreter.constants", 
                             else {
                                 truthy = !!bool;
                             }
-                            s.push(!truthy);
+                            this.state.push(!truthy);
                             break;
                         case C.NEG:
-                            var value_1 = s.pop();
-                            s.push(-value_1);
+                            var value_1 = this.state.pop();
+                            this.state.push(-value_1);
                             break;
                         default:
                             U.dbcException("invalid unary expr subOp: " + subOp);
@@ -686,22 +602,22 @@ define(["require", "exports", "./interpreter.state", "./interpreter.constants", 
                     var value_2 = expr[C.VALUE];
                     switch (value_2) {
                         case 'PI':
-                            s.push(Math.PI);
+                            this.state.push(Math.PI);
                             break;
                         case 'E':
-                            s.push(Math.E);
+                            this.state.push(Math.E);
                             break;
                         case 'GOLDEN_RATIO':
-                            s.push((1.0 + Math.sqrt(5.0)) / 2.0);
+                            this.state.push((1.0 + Math.sqrt(5.0)) / 2.0);
                             break;
                         case 'SQRT2':
-                            s.push(Math.SQRT2);
+                            this.state.push(Math.SQRT2);
                             break;
                         case 'SQRT1_2':
-                            s.push(Math.SQRT1_2);
+                            this.state.push(Math.SQRT1_2);
                             break;
                         case 'INFINITY':
-                            s.push(Infinity);
+                            this.state.push(Infinity);
                             break;
                         default:
                             throw "Invalid Math Constant Name";
@@ -710,59 +626,59 @@ define(["require", "exports", "./interpreter.state", "./interpreter.constants", 
                 }
                 case C.SINGLE_FUNCTION: {
                     var subOp = expr[C.OP];
-                    var value_3 = s.pop();
+                    var value_3 = this.state.pop();
                     U.debug('---------- ' + subOp + ' with ' + value_3);
                     switch (subOp) {
                         case 'SQUARE':
-                            s.push(Math.pow(value_3, 2));
+                            this.state.push(Math.pow(value_3, 2));
                             break;
                         case 'ROOT':
-                            s.push(Math.sqrt(value_3));
+                            this.state.push(Math.sqrt(value_3));
                             break;
                         case 'ABS':
-                            s.push(Math.abs(value_3));
+                            this.state.push(Math.abs(value_3));
                             break;
                         case 'LN':
-                            s.push(Math.log(value_3));
+                            this.state.push(Math.log(value_3));
                             break;
                         case 'LOG10':
-                            s.push(Math.log(value_3) / Math.LN10);
+                            this.state.push(Math.log(value_3) / Math.LN10);
                             break;
                         case 'EXP':
-                            s.push(Math.exp(value_3));
+                            this.state.push(Math.exp(value_3));
                             break;
                         case 'POW10':
-                            s.push(Math.pow(10, value_3));
+                            this.state.push(Math.pow(10, value_3));
                             break;
                         case 'SIN':
-                            s.push(Math.sin(value_3));
+                            this.state.push(Math.sin(value_3));
                             break;
                         case 'COS':
-                            s.push(Math.cos(value_3));
+                            this.state.push(Math.cos(value_3));
                             break;
                         case 'TAN':
-                            s.push(Math.tan(value_3));
+                            this.state.push(Math.tan(value_3));
                             break;
                         case 'ASIN':
-                            s.push(Math.asin(value_3));
+                            this.state.push(Math.asin(value_3));
                             break;
                         case 'ATAN':
-                            s.push(Math.atan(value_3));
+                            this.state.push(Math.atan(value_3));
                             break;
                         case 'ACOS':
-                            s.push(Math.acos(value_3));
+                            this.state.push(Math.acos(value_3));
                             break;
                         case 'ROUND':
-                            s.push(Math.round(value_3));
+                            this.state.push(Math.round(value_3));
                             break;
                         case 'ROUNDUP':
-                            s.push(Math.ceil(value_3));
+                            this.state.push(Math.ceil(value_3));
                             break;
                         case 'ROUNDDOWN':
-                            s.push(Math.floor(value_3));
+                            this.state.push(Math.floor(value_3));
                             break;
                         case C.IMAGE_INVERT_ACTION:
-                            s.push(this.invertImage(value_3));
+                            this.state.push(this.invertImage(value_3));
                             break;
                         default:
                             throw "Invalid Function Name";
@@ -770,49 +686,49 @@ define(["require", "exports", "./interpreter.state", "./interpreter.constants", 
                     break;
                 }
                 case C.MATH_CONSTRAIN_FUNCTION: {
-                    var max_1 = s.pop();
-                    var min_1 = s.pop();
-                    var value_4 = s.pop();
-                    s.push(Math.min(Math.max(value_4, min_1), max_1));
+                    var max_1 = this.state.pop();
+                    var min_1 = this.state.pop();
+                    var value_4 = this.state.pop();
+                    this.state.push(Math.min(Math.max(value_4, min_1), max_1));
                     break;
                 }
                 case C.RANDOM_INT: {
-                    var max = s.pop();
-                    var min = s.pop();
+                    var max = this.state.pop();
+                    var min = this.state.pop();
                     if (min > max) {
                         _a = [max, min], min = _a[0], max = _a[1];
                     }
-                    s.push(Math.floor(Math.random() * (max - min + 1) + min));
+                    this.state.push(Math.floor(Math.random() * (max - min + 1) + min));
                     break;
                 }
                 case C.RANDOM_DOUBLE:
-                    s.push(Math.random());
+                    this.state.push(Math.random());
                     break;
                 case C.MATH_PROP_FUNCT: {
                     var subOp = expr[C.OP];
-                    var value_5 = s.pop();
+                    var value_5 = this.state.pop();
                     switch (subOp) {
                         case 'EVEN':
-                            s.push(this.isWhole(value_5) && value_5 % 2 === 0);
+                            this.state.push(this.isWhole(value_5) && value_5 % 2 === 0);
                             break;
                         case 'ODD':
-                            s.push(this.isWhole(value_5) && value_5 % 2 !== 0);
+                            this.state.push(this.isWhole(value_5) && value_5 % 2 !== 0);
                             break;
                         case 'PRIME':
-                            s.push(this.isPrime(value_5));
+                            this.state.push(this.isPrime(value_5));
                             break;
                         case 'WHOLE':
-                            s.push(this.isWhole(value_5));
+                            this.state.push(this.isWhole(value_5));
                             break;
                         case 'POSITIVE':
-                            s.push(value_5 >= 0);
+                            this.state.push(value_5 >= 0);
                             break;
                         case 'NEGATIVE':
-                            s.push(value_5 < 0);
+                            this.state.push(value_5 < 0);
                             break;
                         case 'DIVISIBLE_BY':
-                            var first = s.pop();
-                            s.push(first % value_5 === 0);
+                            var first = this.state.pop();
+                            this.state.push(first % value_5 === 0);
                             break;
                         default:
                             throw "Invalid Math Property Function Name";
@@ -821,28 +737,28 @@ define(["require", "exports", "./interpreter.state", "./interpreter.constants", 
                 }
                 case C.MATH_ON_LIST: {
                     var subOp = expr[C.OP];
-                    var value_6 = s.pop();
+                    var value_6 = this.state.pop();
                     switch (subOp) {
                         case C.SUM:
-                            s.push(this.sum(value_6));
+                            this.state.push(this.sum(value_6));
                             break;
                         case C.MIN:
-                            s.push(this.min(value_6));
+                            this.state.push(this.min(value_6));
                             break;
                         case C.MAX:
-                            s.push(this.max(value_6));
+                            this.state.push(this.max(value_6));
                             break;
                         case C.AVERAGE:
-                            s.push(this.mean(value_6));
+                            this.state.push(this.mean(value_6));
                             break;
                         case C.MEDIAN:
-                            s.push(this.median(value_6));
+                            this.state.push(this.median(value_6));
                             break;
                         case C.STD_DEV:
-                            s.push(this.std(value_6));
+                            this.state.push(this.std(value_6));
                             break;
                         case C.RANDOM:
-                            s.push(value_6[this.getRandomInt(value_6.length)]);
+                            this.state.push(value_6[this.getRandomInt(value_6.length)]);
                             break;
                         default:
                             throw "Invalid Math on List Function Name";
@@ -850,44 +766,44 @@ define(["require", "exports", "./interpreter.state", "./interpreter.constants", 
                     break;
                 }
                 case C.CAST_STRING: {
-                    var num = s.pop();
-                    s.push(num.toString());
+                    var num = this.state.pop();
+                    this.state.push(num.toString());
                     break;
                 }
                 case C.CAST_CHAR: {
-                    var num = s.pop();
-                    s.push(String.fromCharCode(num));
+                    var num = this.state.pop();
+                    this.state.push(String.fromCharCode(num));
                     break;
                 }
                 case C.CAST_STRING_NUMBER: {
-                    var value = s.pop();
-                    s.push(parseFloat(value));
+                    var value = this.state.pop();
+                    this.state.push(parseFloat(value));
                     break;
                 }
                 case C.CAST_CHAR_NUMBER: {
-                    var index = s.pop();
-                    var value = s.pop();
-                    s.push(value.charCodeAt(index));
+                    var index = this.state.pop();
+                    var value = this.state.pop();
+                    this.state.push(value.charCodeAt(index));
                     break;
                 }
                 case C.LIST_OPERATION: {
                     var subOp = expr[C.OP];
                     switch (subOp) {
                         case C.LIST_IS_EMPTY:
-                            s.push(s.pop().length == 0);
+                            this.state.push(this.state.pop().length == 0);
                             break;
                         case C.LIST_LENGTH:
-                            s.push(s.pop().length);
+                            this.state.push(this.state.pop().length);
                             break;
                         case C.LIST_FIND_ITEM:
                             {
-                                var item = s.pop();
-                                var list = s.pop();
+                                var item = this.state.pop();
+                                var list = this.state.pop();
                                 if (expr[C.POSITION] == C.FIRST) {
-                                    s.push(list.indexOf(item));
+                                    this.state.push(list.indexOf(item));
                                 }
                                 else {
-                                    s.push(list.lastIndexOf(item));
+                                    this.state.push(list.lastIndexOf(item));
                                 }
                             }
                             break;
@@ -898,13 +814,13 @@ define(["require", "exports", "./interpreter.state", "./interpreter.constants", 
                                 var loc = expr[C.POSITION];
                                 var ix = 0;
                                 if (loc != C.LAST && loc != C.FIRST) {
-                                    ix = s.pop();
+                                    ix = this.state.pop();
                                 }
-                                var list = s.pop();
+                                var list = this.state.pop();
                                 ix = this.getIndex(list, loc, ix);
                                 var v = list[ix];
                                 if (subOp == C.GET_REMOVE || subOp == C.GET) {
-                                    s.push(v);
+                                    this.state.push(v);
                                 }
                                 if (subOp == C.GET_REMOVE || subOp == C.REMOVE) {
                                     list.splice(ix, 1);
@@ -917,15 +833,15 @@ define(["require", "exports", "./interpreter.state", "./interpreter.constants", 
                                 var start_ix = void 0;
                                 var end_ix = void 0;
                                 if (position[1] != C.LAST) {
-                                    end_ix = s.pop();
+                                    end_ix = this.state.pop();
                                 }
                                 if (position[0] != C.FIRST) {
-                                    start_ix = s.pop();
+                                    start_ix = this.state.pop();
                                 }
-                                var list = s.pop();
+                                var list = this.state.pop();
                                 start_ix = this.getIndex(list, position[0], start_ix);
                                 end_ix = this.getIndex(list, position[1], end_ix) + 1;
-                                s.push(list.slice(start_ix, end_ix));
+                                this.state.push(list.slice(start_ix, end_ix));
                             }
                             break;
                         default:
@@ -935,9 +851,9 @@ define(["require", "exports", "./interpreter.state", "./interpreter.constants", 
                 }
                 case C.BINARY: {
                     var subOp = expr[C.OP];
-                    var right = s.pop();
-                    var left = s.pop();
-                    s.push(this.evalBinary(subOp, left, right));
+                    var right = this.state.pop();
+                    var left = this.state.pop();
+                    this.state.push(this.evalBinary(subOp, left, right));
                     break;
                 }
                 default:
@@ -1017,86 +933,9 @@ define(["require", "exports", "./interpreter.state", "./interpreter.constants", 
                 }
             }
         };
-        /**
-         * called from @see evalOperation() to run a repeat statement
-         *
-         * a repeat-statement ALWAYS contains a single repeat-continuation statement. That in turn contains the body statements written by the programmer.
-         * The repeat-statement does initialization of init, end, step and the run variable for the FOR and TIMES variant (other variants don't need that)
-         * The repeat-continuation is for updating the run variable in the FOR and TIMES variant.
-         *
-         * A continue statement pops the stack until a repeat-continuation is found and re-executes it
-         * A break statement pops the stack until a repeat-statement is found and skips that
-         *
-         * Have a look at the functions for push and pop of operations in the STATE component. The cleanup of the run variable is done there.
-         * This is not optimal, as design decisions are distributed over two components.
-         *
-         * . @param stmt the repeat statement
-         */
-        Interpreter.prototype.evalRepeat = function (stmt) {
-            var s = this.s;
-            var mode = stmt[C.MODE];
-            var contl = stmt[C.STMT_LIST];
-            if (contl.length !== 1 || contl[0][C.OPCODE] !== C.REPEAT_STMT_CONTINUATION) {
-                U.dbcException("repeat expects an embedded continuation statement");
-            }
-            var cont = contl[0];
-            switch (mode) {
-                case C.FOREVER:
-                case C.FOREVER_ARDU:
-                case C.UNTIL:
-                case C.WHILE:
-                    s.pushOps(contl);
-                    s.getOp(); // pseudo execution. Init is already done. Continuation is for termination only.
-                    s.pushOps(cont[C.STMT_LIST]);
-                    break;
-                case C.FOR_EACH: {
-                    var runVariableName = stmt[C.EACH_COUNTER];
-                    var varName = stmt[C.NAME];
-                    var listName = stmt[C.LIST];
-                    var start = s.get1();
-                    var list = s.getVar(listName);
-                    var end = list.length;
-                    if (+start >= +end) {
-                        s.pop();
-                        s.pop();
-                        s.pop();
-                    }
-                    else {
-                        s.bindVar(runVariableName, start);
-                        s.bindVar(varName, list[start]);
-                        s.pushOps(contl);
-                        s.getOp(); // pseudo excution. Init is already done. Continuation is for termination only.
-                        s.pushOps(cont[C.STMT_LIST]);
-                        break;
-                    }
-                    break;
-                }
-                case C.TIMES:
-                case C.FOR: {
-                    var runVariableName = stmt[C.NAME];
-                    var start = s.get2();
-                    var end = s.get1();
-                    if (+start >= +end) {
-                        s.pop();
-                        s.pop();
-                        s.pop();
-                    }
-                    else {
-                        s.bindVar(runVariableName, start);
-                        s.pushOps(contl);
-                        s.getOp(); // pseudo excution. Init is already done. Continuation is for termination only.
-                        s.pushOps(cont[C.STMT_LIST]);
-                        break;
-                    }
-                    break;
-                }
-                default:
-                    U.dbcException("invalid repeat mode: " + mode);
-            }
-        };
         Interpreter.prototype.evalNNStep = function () {
             console.log('NNStep encountered');
-            var s = this.s;
+            var s = this.state;
             var i2 = s.pop();
             var i1 = s.pop();
             var i0 = s.pop();
@@ -1281,73 +1120,30 @@ define(["require", "exports", "./interpreter.state", "./interpreter.constants", 
             }
             return image;
         };
-        /** Returns true if the operation is a possible breakpoint*/
-        Interpreter.prototype.isPossibleBreakPoint = function (op) {
-            if (op.hasOwnProperty(C.BLOCK_ID)) {
-                if (op[C.BLOCK_ID] !== this.previousBlockId) {
-                    switch (op[C.OPCODE]) {
-                        case C.INITIATE_BLOCK:
-                        case C.REPEAT_STMT_CONTINUATION:
-                        case C.REPEAT_STMT:
-                        case C.METHOD_CALL_VOID:
-                        case C.METHOD_CALL_RETURN:
-                            return true;
-                        default:
-                            return false;
-                    }
+        /** Returns true if the operation is a possible block where stepInto should stop*/
+        Interpreter.isPossibleStepInto = function (op) {
+            if (op.hasOwnProperty(C.HIGHTLIGHT_PLUS)) {
+                if (op[C.OPCODE] === C.COMMENT && this.COMMENTS_STEP_INTO.includes(op[C.TARGET])) {
+                    return true;
                 }
+                if (this.DO_NOT_STEP_INTO.includes(op[C.OPCODE])) {
+                    return false;
+                }
+                return true;
             }
             return false;
-        };
-        /** Returns true if the operation is a possible block where stepInto should stop*/
-        Interpreter.prototype.isPossibleStepInto = function (op) {
-            if (op.hasOwnProperty(C.BLOCK_ID)) {
-                if (this.previousBlockId == null || op[C.BLOCK_ID] !== this.previousBlockId) {
-                    switch (op[C.OPCODE]) {
-                        case C.INITIATE_BLOCK: {
-                            switch (op[C.OP]) {
-                                case C.EXPR:
-                                case C.GET_SAMPLE:
-                                case C.VAR_DECLARATION:
-                                    return false;
-                            }
-                            return true;
-                        }
-                        case C.REPEAT_STMT:
-                        case C.REPEAT_STMT_CONTINUATION:
-                        case C.METHOD_CALL_VOID:
-                        case C.METHOD_CALL_RETURN:
-                            return true;
-                        default: {
-                            return false;
-                        }
-                    }
-                }
-                return false;
-            }
         };
         /** Returns true if the operation is a possible block where stepOver should stop*/
-        Interpreter.prototype.isPossibleStepOver = function (op) {
-            if (op.hasOwnProperty(C.BLOCK_ID)) {
-                switch (op[C.OPCODE]) {
-                    case C.METHOD_CALL_VOID:
-                    case C.METHOD_CALL_RETURN:
-                        return true;
-                    case C.INITIATE_BLOCK: {
-                        switch (op[C.OP]) {
-                            case C.METHOD_CALL_VOID:
-                            case C.METHOD_CALL_RETURN:
-                                return true;
-                        }
-                        return false;
-                    }
-                    default: {
-                        return false;
-                    }
-                }
-            }
-            return false;
+        Interpreter.isPossibleStepOver = function (op) {
+            var isMethodCall = op[C.OPCODE] === C.COMMENT && op[C.TARGET] === C.METHOD_CALL;
+            return op.hasOwnProperty(C.HIGHTLIGHT_PLUS) && isMethodCall;
         };
+        Interpreter.isBreakPoint = function (op, breakpoints) {
+            var _a;
+            return (_a = op[C.HIGHTLIGHT_PLUS]) === null || _a === void 0 ? void 0 : _a.some(function (blockId) { return breakpoints.includes(blockId); });
+        };
+        Interpreter.DO_NOT_STEP_INTO = [C.EXPR, C.GET_SAMPLE, C.VAR_DECLARATION];
+        Interpreter.COMMENTS_STEP_INTO = [C.IF_STMT, C.REPEAT_STMT, C.WAIT_STMT, C.METHOD_CALL];
         return Interpreter;
     }());
     exports.Interpreter = Interpreter;
