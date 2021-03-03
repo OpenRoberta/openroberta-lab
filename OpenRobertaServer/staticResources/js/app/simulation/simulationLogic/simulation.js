@@ -351,8 +351,6 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
         userPrograms = programs;
         runRenderUntil = [];
         configurations = [];
-        positionConfigurations = [];
-        alignmentConfigurations = [];
         for (i = 0; i < programs.length; i++) {
             runRenderUntil[i] = 0;
         }

@@ -253,25 +253,18 @@ define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constan
                 this.rCtx.fillRect(this.robots[r].wheelBack.x, this.robots[r].wheelBack.y, this.robots[r].wheelBack.w, this.robots[r].wheelBack.h);
                 this.rCtx.shadowBlur = 0;
                 this.rCtx.shadowOffsetX = 0;
-                //this.rCtx.fillStyle = "black";
-                //this.rCtx.fillRect(this.robots[r].frontRight.x + 12.5, this.robots[r].frontRight.y, 20, 10);
             }
             //bumper
-            var touchSensors;
             if (this.robots[r].touchSensor) {
-                touchSensors = this.robots[r].touchSensor;
-                for (var t in touchSensors){
+                for (var t in this.robots[r].touchSensor){
                     this.rCtx.fillStyle = this.robots[r].geom.color;
-                    switch (touchSensors[t].position) {
+                    this.rCtx.shadowBlur = 0;
+                    this.rCtx.shadowOffsetX = 0;
+                    switch (this.robots[r].touchSensor[t].position) {
                         case "BACK":
-                            this.rCtx.shadowBlur = 0;
-                            this.rCtx.shadowOffsetX = 0;
-                            this.rCtx.fillRect(this.robots[r].backRight.x + 12.5, this.robots[r].backRight.y -8, 20, 10);
-                            this.rCtx.fillRect(this.robots[r].frontRight.x + 12.5, this.robots[r].frontRight.y, 20, 10);
+                            this.rCtx.fillRect(this.robots[r].backRight.x + 12.5, this.robots[r].backRight.y - 8, 20, 10);
                             break;
                         default:
-                            this.rCtx.shadowBlur = 0;
-                            this.rCtx.shadowOffsetX = 0;
                             this.rCtx.fillRect(this.robots[r].frontRight.x + 12.5, this.robots[r].frontRight.y, 20, 10);
                             break;
                     }
@@ -328,18 +321,22 @@ define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constan
             if (Array.isArray(this.robots[r].touchSensor)) {
                 touch = true;
             }
+            var touchSensors;
+            if (this.robots[r].touchSensor) {
+                touchSensors = this.robots[r].touchSensor;
+            }
+            this.rCtx.fillStyle = this.robots[r].geom.color;
+            this.rCtx.shadowBlur = 5;
+            this.rCtx.shadowOffsetX = 0;
+            this.rCtx.fillRect(this.robots[r].frontRight.x, this.robots[r].frontRight.y, this.robots[r].frontLeft.x - this.robots[r].frontRight.x, 3.5);
             for (var t in touchSensors) {
-                this.rCtx.shadowBlur = 5;
                 this.rCtx.fillStyle = this.robots[r].geom.color;
-                this.rCtx.shadowOffsetX = 0;
-                this.rCtx.fillRect(this.robots[r].frontRight.x, this.robots[r].frontRight.y, this.robots[r].frontLeft.x - this.robots[r].frontRight.x, 3.5);
                 if (touchSensors[t].position === "BACK") {
-                    this.rCtx.shadowOffsetX = 0;
                     this.rCtx.fillRect(this.robots[r].backRight.x, this.robots[r].backRight.y, this.robots[r].backLeft.x - this.robots[r].backRight.x, 3.5);
                 }
                 if (touchSensors[t].value === 1) {
                     this.rCtx.fillStyle = 'red';
-                    switch (touchSensors[t].position){
+                    switch (touchSensors[t].position) {
                         case "BACK":
                             this.rCtx.fillRect(this.robots[r].backRight.x, this.robots[r].backRight.y, this.robots[r].backLeft.x - this.robots[r].backRight.x, 3.5);
                             break;
