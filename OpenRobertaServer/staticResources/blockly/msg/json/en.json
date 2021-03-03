@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2021-02-16 14:48:22.674713",
+		"lastupdated": "2021-03-03 16:57:40.391107",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -547,6 +547,7 @@
 	"SENSOR_ENCODER": "encoder",
 	"SENSOR_GYRO": "gyroscope",
 	"SENSOR_GYRO_WEDO": "tilt sensor",
+	"SENSOR_LSM9DS1": "LSM9DS1",
 	"SENSOR_APDS9960": "APDS9960",
 	"SENSOR_LPS22HB": "LPS22HB",
 	"SENSOR_HTS221": "HTS221",
@@ -1451,6 +1452,7 @@
 	"SENSOR_RFID_ARDUINO": "RFID-RC522 reader",
 	"ACTION_LCD": "LCD 1602",
 	"ACTION_LCDI2C": "LCD 1602 I²C",
+	"ACTION_OLEDSSD1306I2C": "OLED SSD1306 I²C",
 	"ACTION_LED": "LED",
 	"ACTION_PLAY": "play",
 	"ACTION_RELAY": "relay SRD-05VDC-SL-C",
@@ -1470,6 +1472,7 @@
 	"KEY_TOOLTIP": "Represents a button.",
 	"LCD_TOOLTIP": "Represents an LCD display.",
 	"LCDI2C_TOOLTIP": "Represents an LCD 1602 display with a soldered I²C module.",
+	"SSD1306I2C_TOOLTIP": "Represents an I²C OLED SSD1306 display (addresses 128x64: 0x3D, 128x32: 0x3C)",
 	"PLAY_TOOLTIP": "Represents a buzzer.",
 	"RELAY_TOOLTIP": "Represents a relay.",
 	"RGBLED_TOOLTIP": "Represents an RGB LED.",
