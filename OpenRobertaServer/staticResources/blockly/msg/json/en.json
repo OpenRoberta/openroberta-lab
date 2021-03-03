@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2021-02-24 13:42:57.023892",
+		"lastupdated": "2021-03-03 16:57:40.391107",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -430,6 +430,7 @@
 	"BATTERY_GETSAMPLE_TOOLTIP": "Gets the current voltage from the battery.",
 	"ULTRASONIC_TOOLTIP": "Represents an ultrasonic sensor.",
 	"COLOUR_TOOLTIP": "Represents a colour sensor.",
+	"TOOLTIP_SIMULATION_ONLY": "Setting the alignment or position of this sensor only takes effect in the simulation. This option is not relevant when compiling the source code.",
 	"HTCOLOUR_TOOLTIP": "Represents a HiTechnic NXT Color Sensor V2.",
 	"INFRARED_TOOLTIP": "Represents an infrared sensor.",
 	"IRSEEKER_TOOLTIP": "Represents a HiTechnic NXT IRSeeker V2 sensor.",
@@ -1801,5 +1802,10 @@
 	"MIN_PULSE_WIDTH": "Minimum pulse width",
 	"MAX_PULSE_WIDTH": "Maximum pulse width",
 	"FRAME_WIDTH": "Frame width",
-	"LIGHT_LDR": "Light (LDR)"
+	"LIGHT_LDR": "Light (LDR)",
+	"SLOT_BACK": "back",
+	"SENSOR_POSITION": "sensor position",
+	"ALIGNMENT_DOWN": "down",
+	"ALIGNMENT_HORIZONTAL": "horizontal",
+	"SENSOR_ALIGNMENT": "sensor alignment"
 }

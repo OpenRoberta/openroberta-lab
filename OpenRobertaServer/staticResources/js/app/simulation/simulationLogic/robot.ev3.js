@@ -78,7 +78,9 @@ define(['simulation.simulation', 'interpreter.constants', 'simulation.robot', 'g
             r: 5,
             colorValue: 0,
             lightValue: 0,
-            color: 'grey'
+            color: 'grey',
+            position: 'FRONT',
+            alignment: 'DOWN'
         };
         this.touchSensor = {
             x: 0,
@@ -87,7 +89,8 @@ define(['simulation.simulation', 'interpreter.constants', 'simulation.robot', 'g
             y1: 0,
             x2: 0,
             y2: 0,
-            value: 0
+            value: 0,
+            position: 'FRONT'
         };
         this.gyroSensor = {
             value: 0,
@@ -95,8 +98,12 @@ define(['simulation.simulation', 'interpreter.constants', 'simulation.robot', 'g
         };
         var countTouch, countGyro, countColor, countUltra;
         countTouch = countGyro = countColor = countUltra = 0;
+        var countColorR, countColorL, countColorB, countColorF; // Count color sensors on each position
+        countColorR = countColorL = countColorB = countColorF = 0;
+        var orderColorR, orderColorL, orderColorB, orderColorF; // Set order for color sensors on each position
+        orderColorR = orderColorL = orderColorB = orderColorF = 0;
         for (var c in configuration) {
-            switch (configuration[c]) {
+            switch (configuration[c]["TYPE"]) {
                 case "TOUCH":
                     countTouch++;
                     break;
@@ -105,6 +112,20 @@ define(['simulation.simulation', 'interpreter.constants', 'simulation.robot', 'g
                     break;
                 case "COLOR":
                 case "LIGHT":
+                    switch (configuration[c]["SENSOR_POSITION"]) {
+                        case("RIGHT"):
+                            countColorR++;
+                            break;
+                        case("LEFT"):
+                            countColorL++;
+                            break;
+                        case("BACK"):
+                            countColorB++;
+                            break;
+                        default: // FRONT
+                            countColorF++;
+                            break;
+                    }
                     countColor++;
                     break;
                 case "ULTRASONIC":
@@ -125,23 +146,110 @@ define(['simulation.simulation', 'interpreter.constants', 'simulation.robot', 'g
             this.touchSensor = [];
         }
         for (var c in configuration) {
-            switch (configuration[c]) {
+            switch (configuration[c]["TYPE"]) {
                 case ("TOUCH"):
-                    this.touchSensor[c] = touchSensorProto;
+                    var tmpSensor = {};
+                    for (var prop in touchSensorProto) {
+                        if (touchSensorProto.hasOwnProperty(prop)) {
+                            tmpSensor[prop] = touchSensorProto[prop];
+                        }
+                    }
+                    if (configuration[c]["SENSOR_POSITION"]) {
+                        tmpSensor.position = configuration[c]["SENSOR_POSITION"];
+                    }
+                    switch (tmpSensor.position) {
+                        case("BACK"):
+                            tmpSensor.y = 30;
+                            break;
+                        default: // FRONT
+                            tmpSensor.y = -25;
+                            break;
+                    }
+                    this.touchSensor[c] = tmpSensor;
                     break;
                 case ("GYRO"):
                     this.gyroSensor[c] = gyroSensorProto;
                     break;
                 case ("COLOR"):
                 case ("LIGHT"):
-                    var order = Object.keys(this.colorSensor).length;
                     var tmpSensor = {};
                     for (var prop in colorSensorProto) {
                         if (colorSensorProto.hasOwnProperty(prop)) {
                             tmpSensor[prop] = colorSensorProto[prop];
                         }
                     }
-                    tmpSensor.x = -order * 10 + (5 * (countColor - 1));
+                    if (configuration[c]["SENSOR_POSITION"]) {
+                        tmpSensor.position = configuration[c]["SENSOR_POSITION"];
+                    }
+                    if (configuration[c]["SENSOR_ALIGNMENT"]) {
+                        tmpSensor.alignment = configuration[c]["SENSOR_ALIGNMENT"];
+                    }
+                    if (tmpSensor.alignment !== "HORIZONTAL") { // DEFAULT CASE
+                        switch (tmpSensor.position) {
+                            case("RIGHT"):
+                                tmpSensor.x = -15;
+                                var y = orderColorR * 10;
+                                if (y === 0) {
+                                    tmpSensor.y = -10;
+                                } else {
+                                    tmpSensor.y = y;
+                                }
+                                orderColorR++;
+                                break;
+                            case("LEFT"):
+                                tmpSensor.x = 15;
+                                var y = orderColorL * 10;
+                                if (y === 0) {
+                                    tmpSensor.y = -10;
+                                } else {
+                                    tmpSensor.y = y;
+                                }
+                                orderColorL++;
+                                break;
+                            case("BACK"):
+                                orderColorB++;
+                                tmpSensor.x = -orderColorB * 10 + (5 * (countColorB - 1)) + 10;
+                                tmpSensor.y = 25;
+                                break;
+                            default: // FRONT
+                                orderColorF++;
+                                tmpSensor.x = -orderColorF * 10 + (5 * (countColorF - 1)) + 10;
+                                break;
+                        }
+                    } else {
+                        switch (tmpSensor.position) {
+                            case("RIGHT"):
+                                tmpSensor.x = -25;
+                                var y = orderColorR * 10;
+                                if (y === 0) {
+                                    tmpSensor.y = -10;
+                                } else {
+                                    tmpSensor.y = y;
+                                }
+                                orderColorR++;
+                                break;
+                            case("LEFT"):
+                                tmpSensor.x = 25;
+                                var y = orderColorL * 10;
+                                if (y === 0) {
+                                    tmpSensor.y = -10;
+                                } else {
+                                    tmpSensor.y = y;
+                                }
+                                orderColorL++;
+                                break;
+                            case("BACK"):
+                                orderColorB++;
+                                tmpSensor.x = -orderColorB * 10 + (5 * (countColorB - 1)) + 10;
+                                tmpSensor.y = 30;
+                                break;
+                            default: // FRONT
+                                orderColorF++;
+                                tmpSensor.x = -orderColorF * 10 + (5 * (countColorF - 1)) + 10;
+                                tmpSensor.y = -25;
+                                break;
+                        }
+                    }
                     this.colorSensor[c] = tmpSensor;
                     break;
                 case ("ULTRASONIC"):

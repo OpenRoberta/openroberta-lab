@@ -11,6 +11,8 @@ import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.visitor.C;
 import de.fhg.iais.roberta.visitor.lang.codegen.AbstractStackMachineVisitor;
 
+import java.util.Map;
+
 /**
  * Uses the {@link AbstractStackMachineVisitor} to visit the current AST and generate the robot's specific stack machine code.
  */
@@ -28,7 +30,12 @@ public abstract class AbstractStackMachineGeneratorWorker implements IWorker {
         JSONObject simSensorConfigurationJSON = new JSONObject();
         for ( ConfigurationComponent sensor : project.getConfigurationAst().getSensors() ) {
             try {
-                simSensorConfigurationJSON.put(sensor.getUserDefinedPortName(), sensor.getComponentType());
+                JSONObject tmpSensor = new JSONObject();
+                tmpSensor.put("TYPE", sensor.getComponentType());
+                for (Map.Entry<String, String> entry : sensor.getComponentProperties().entrySet()) {
+                    tmpSensor.put(entry.getKey(), entry.getValue());
+                }
+                simSensorConfigurationJSON.put(sensor.getUserDefinedPortName(), tmpSensor);
             } catch ( JSONException e ) {
                 throw new DbcException("exception when generating the simulation configuration ", e);
             }

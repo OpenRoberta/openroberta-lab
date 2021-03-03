@@ -139,6 +139,10 @@ public class ConfigurationComponent extends Phrase<Void> {
         return propertyValue;
     }
 
+    public boolean hasProperty(String propertyName) {
+        return this.componentProperties.containsKey(propertyName);
+    }
+
     public String getOptProperty(String propertyName) {
         Assert.nonEmptyString(propertyName, "No valid property name %s", propertyName);
         return this.componentProperties.get(propertyName);

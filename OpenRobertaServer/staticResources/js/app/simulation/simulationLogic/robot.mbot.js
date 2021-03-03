@@ -176,7 +176,7 @@ define(["simulation.simulation", "interpreter.constants", "simulation.robot.ev3"
         };
 
         for (var c in configuration) {
-            switch (configuration[c]) {
+            switch (configuration[c]["TYPE"]) {
                 case ("INFRARED"):
                     this.infraredSensors[c] = tempInfrared;
                     break;
