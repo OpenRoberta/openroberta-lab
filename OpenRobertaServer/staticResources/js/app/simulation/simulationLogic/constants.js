@@ -533,5 +533,19 @@ define({
 
     DEBUG_STEP_INTO: "DebugStepInto",
 
-    DEBUG_STEP_OVER: "DebugStepOver"
+    DEBUG_STEP_OVER: "DebugStepOver",
+
+    POSITION_ENUM: {
+        FRONT: "FRONT",
+        BACK: "BACK",
+        LEFT: "LEFT",
+        RIGHT: "RIGHT"
+    },
+
+    ALIGNMENT_ENUM: {
+        DOWN: "DOWN",
+        HORIZONTAL: "HORIZONTAL"
+    },
+
+    COLOR_SENSOR_HORIZONTAL_DISTANCE: 3
 });

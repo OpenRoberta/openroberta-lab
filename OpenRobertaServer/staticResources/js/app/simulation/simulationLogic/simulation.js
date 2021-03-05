@@ -612,7 +612,7 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
             obstacle.y = 254;
             obstacle.w = 50;
             obstacle.h = 50;
-            obstacle.color = "#009EE3";
+            obstacle.color = "#33B8CA";
             obstacle.img = null;
         } else {
             var x = imgObjectList[currentBackground].width - 50;
@@ -1062,7 +1062,7 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
         $("#simRobotModal").modal("hide");
         robots = [];
         if (numRobots >= 1) {
-            var tempRobot = createRobot(reqRobot, configurations[0], 0, 0, interpreters[0].getRobotBehaviour());
+            var tempRobot = createRobot(reqRobot, configurations[0],0, 0, interpreters[0].getRobotBehaviour());
             tempRobot.savedName = userPrograms[0].savedName;
             robots[0] = tempRobot;
             if (robots[0].brick) {
