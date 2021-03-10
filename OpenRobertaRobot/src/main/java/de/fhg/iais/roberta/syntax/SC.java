@@ -136,4 +136,9 @@ public interface SC {
 
     String OLEDSSD1306I2C = "OLEDSSD1306I2C";
 
+    String FRONT = "FRONT";
+    String BACK = "BACK";
+    String SENSOR_POSITION = "SENSOR_POSITION";
+    String HORIZONTAL = "HORIZONTAL";
+    String SENSOR_ALIGNMENT = "SENSOR_ALIGNMENT";
 }
