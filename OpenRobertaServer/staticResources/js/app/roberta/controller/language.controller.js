@@ -163,6 +163,23 @@ define(['exports', 'log', 'jquery', 'guiState.controller', 'program.controller',
                 $('#simControl').attr('data-original-title', value);
             } else if (lkey === "Blockly.Msg.MENU_SIM_SCENE_TOOLTIP") {
                 $('#simScene').attr('data-original-title', value);
+            } else if (lkey === "Blockly.Msg.MENU_SIM_ADD_COLOR_OBJECT_TOOLTIP") {
+                $('#simCustomColorObject').attr('data-original-title', value);
+            } else if (lkey === "Blockly.Msg.MENU_SIM_ADD_OBSTACLE_TOOLTIP") {
+                $('#simCustomObstacle').attr('data-original-title', value);
+                $('#simAddObstacleRectangle').attr('data-original-title', value);
+            } else if (lkey === "Blockly.Msg.MENU_SIM_DELETE_ELEMENTS_TOOLTIP") {
+                $('#simDeleteElements').attr('data-original-title', value);
+            } else if (lkey === "Blockly.Msg.MENU_SIM_CHANGE_COLOR_TOOLTIP") {
+                $('#simChangeObjectColor').attr('data-original-title', value);
+            } else if (lkey === "Blockly.Msg.MENU_SIM_DELETE_OBJECT_TOOLTIP") {
+                $('#simDeleteObject').attr('data-original-title', value);
+            } else if (lkey === "Blockly.Msg.MENU_SIM_CONFIG") {
+                $('#simConfig').attr('data-original-title', value);
+            } else if (lkey === "Blockly.Msg.MENU_SIM_CONFIG_DOWNLOAD") {
+                $('#simDownloadConfig').attr('data-original-title', value);
+            } else if (lkey === "Blockly.Msg.MENU_SIM_CONFIG_UPLOAD") {
+                $('#simUploadConfig').attr('data-original-title', value);
             } else if (lkey === "Blockly.Msg.MENU_SIM_ROBOT_TOOLTIP") {
                 $('#simRobot').attr('data-original-title', value);
             } else if (lkey == 'Blockly.Msg.MENU_SIM_VALUES_TOOLTIP') {

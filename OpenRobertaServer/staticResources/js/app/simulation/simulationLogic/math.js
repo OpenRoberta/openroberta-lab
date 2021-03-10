@@ -54,16 +54,10 @@ define([ 'exports', 'simulation.constants' ], function(exports, CONSTANTS) {
         var yi = ((line2.y1 - line2.y2) * (line1.x1 * line1.y2 - line1.y1 * line1.x2) - (line1.y1 - line1.y2) * (line2.x1 * line2.y2 - line2.y1 * line2.x2))
                 / d;
 
-        if (xi < Math.min(line1.x1, line1.x2) - 0.01 || xi > Math.max(line1.x1, line1.x2) + 0.01) {
+        if (!this.isLineAlignedToPoint(xi, yi, line1)) {
             return null;
         }
-        if (xi < Math.min(line2.x1, line2.x2) - 0.01 || xi > Math.max(line2.x1, line2.x2) + 0.01) {
-            return null;
-        }
-        if (yi < Math.min(line1.y1, line1.y2) - 0.01 || yi > Math.max(line1.y1, line1.y2) + 0.01) {
-            return null;
-        }
-        if (yi < Math.min(line2.y1, line2.y2) - 0.01 || yi > Math.max(line2.y1, line2.y2) + 0.01) {
+        if (!this.isLineAlignedToPoint(xi, yi, line2)) {
             return null;
         }
         return {
@@ -71,6 +65,111 @@ define([ 'exports', 'simulation.constants' ], function(exports, CONSTANTS) {
             y : yi
         };
     };
+
+    /**
+     * Finds the closest intersection from the intersections of a line
+     * @memberOf exports
+     * @param  {line}
+     *              a line
+     * @return {x, y}
+     *              closest intersection point (coordinate)
+     */
+    exports.getClosestIntersectionPointCircle = function(line, circle) {
+        const intersections = this.getIntersectionPointsCircle(line, circle);
+
+        if (intersections.length == 1) {
+            return intersections[0]; // one intersection
+        }
+
+        if (intersections.length == 2)
+        {
+            const dist1 = getDistance({x: line.x1, y: line.y1}, intersections[0]);
+            const dist2 = getDistance({x: line.x1, y: line.y1}, intersections[1]);
+
+            if (dist1 < dist2) {
+                return intersections[0];
+            }
+            else {
+                return intersections[1];
+            }
+        }
+
+        return null; // no intersections at all
+    }
+
+
+    /**
+     * Finds the intersection between a circles border
+     * and a line from the origin to the otherLineEndPoint.
+     * @memberOf exports
+     * @param  {line}
+     *              a line
+     * @return {{x, y}[]}
+     *              array with point(s) of the intersection
+     */
+     exports.getIntersectionPointsCircle = function(line, circle) {
+             var dx, dy, A, B, C, det, t;
+
+             dx = line.x2 - line.x1;
+             dy = line.y2 - line.y1;
+
+
+             A = dx * dx + dy * dy;
+             B = 2 * (dx * (line.x1 - circle.x) + dy * (line.y1 - circle.y));
+             C = (line.x1 - circle.x) * (line.x1 - circle.x) + (line.y1 - circle.y) * (line.y1 - circle.y) - circle.r * circle.r;
+
+             det = B * B - 4 * A * C;
+             if ((A <= 0.0000001) || (det < 0))
+             {
+                 return [];
+             }
+             else if (det == 0)
+             {
+                 // One solution.
+                 t = -B / (2 * A);
+                 var intersection1 = {x: line.x1 + t * dx, y: line.y1 + t * dy};
+
+                if (this.isLineAlignedToPoint(intersection1.x, intersection1.y, line))
+                    return [intersection1];
+
+                return [];
+             }
+             else
+             {
+                 // Two solutions.
+                 t = ((-B + Math.sqrt(det)) / (2 * A));
+                 var intersection1 = {x: line.x1 + t * dx, y: line.y1 + t * dy};
+                 t = ((-B - Math.sqrt(det)) / (2 * A));
+                 var intersection2 = {x: line.x1 + t * dx, y: line.y1 + t * dy};
+
+                 if (this.isLineAlignedToPoint(intersection1.x, intersection1.y, line) && this.isLineAlignedToPoint(intersection2.x, intersection2.y, line))
+                     return [intersection1, intersection2];
+
+                 return [];
+             }
+         };
+    /**
+     * Checks if Alignment of lines is correct to sensor
+     *
+     * @memberOf exports
+     * @param {xi}
+     *            x coordinate of point
+     * @param {yi}
+     *            y coordinate of point
+     * @param {line}
+     *            a line
+     * @returns {boolean}
+     */
+    exports.isLineAlignedToPoint = function(xi, yi, line) {
+
+        if (xi < Math.min(line.x1, line.x2) - 0.01 || xi > Math.max(line.x1, line.x2) + 0.01) {
+            return false;
+        }
+        if (yi < Math.min(line.y1, line.y2) - 0.01 || yi > Math.max(line.y1, line.y2) + 0.01) {
+            return false;
+        }
+        return true;
+    }
     /**
      * Get four lines from a rectangle.
      * 
@@ -130,6 +229,56 @@ define([ 'exports', 'simulation.constants' ], function(exports, CONSTANTS) {
 
     };
     /**
+     * Get distance from a point to a circle's border.
+     *
+     * @memberOf exports
+     * @param {point}
+     *            a point
+     * @param {circle}
+     *            a circle object
+     * @returns {distance}
+     *           distance
+     */
+    exports.getDistanceToCircle = function(point, circle) {
+        var vX = point.x - circle.x;
+        var vY = point.y - circle.y;
+        var magV = Math.sqrt(vX*vX + vY*vY);
+        var aX = circle.x + vX / magV * circle.r;
+        var aY = circle.y + vY / magV * circle.r;
+        return {
+            x: aX,
+            y: aY
+        }
+    };
+    /**
+     * Get four lines from a triangle.
+     *
+     * @memberOf exports
+     * @param {tria}
+     *            a triangle
+     * @returns {Array} three lines
+     */
+    exports.getLinesFromTria = function(tria) {
+        if (tria.isParallelToAxis) {
+            return [{
+                x1: tria.ax,
+                x2: tria.bx,
+                y1: tria.ay,
+                y2: tria.by
+            }, {
+                x1: tria.bx,
+                x2: tria.cx,
+                y1: tria.by,
+                y2: tria.cy
+            }, {
+                x1: tria.ax,
+                x2: tria.cx,
+                y1: tria.ay,
+                y2: tria.cy
+            }];
+        }
+    };
+        /**
      * Calculate the square of a number.
      * 
      * @memberOf exports

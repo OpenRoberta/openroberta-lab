@@ -704,6 +704,13 @@ div.rightMenuButton:hover,
     z-index: 99;
 }
 
+#simEditButtons {
+    left: 12px;
+    top: 10px;
+    position: absolute;
+    z-index: 99;
+}
+
 #codeButtons {
     left: 12px;
     bottom: 0px;
@@ -924,7 +931,7 @@ div.rightMenuButton:hover,
 
 .dropdown-menu > li > a {
 	position: relative;
-    padding-right: 90px;
+    padding-right: 70px;
 }
 
 .dropdown-menu > li:not(.disabled) > a:hover,
@@ -2283,6 +2290,42 @@ input[type=range]:focus::-ms-fill-upper {
 #userGroupMemberTable .edit-member-name .btn.iais-loading-spin:before {
     display: inline-block;
     animation: iais-loading-spin 1.2s linear infinite;
+}
+
+#simEditButtons > .btn-group,
+#simButtons > .btn-group,
+.secondRow > .btn-group {
+    width: 48px;
+    height: 48px;
+}
+
+#simEditButtons >.btn-group > .dropdown-menu,
+.secondRow > .btn-group > .dropdown-menu {
+    width: 48px;
+    margin-top: 6px;
+}
+
+#simButtons >.btn-group > .dropdown-menu {
+    width: 48px;
+    margin-bottom: 6px;
+}
+
+#simEditButtons > .btn-group > .dropdown-menu > li > a,
+#simButtons > .btn-group > .dropdown-menu > li > a,
+.secondRow > .btn-group > .dropdown-menu > li > a {
+    padding-left:5px;
+    padding-right:0;
+    text-align: center;
+    height: 35px;
+    font-size: 28px;
+}
+
+#simEditButtons > .config > .dropdown-menu > li > a {
+    padding: 8px 0px 7px 0px;
+    text-align: center;
+    height: 100%;
+    margin: 0;
+    vertical-align: middle;
 }
 
 @keyframes iais-loading-spin {
