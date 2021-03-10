@@ -169,6 +169,61 @@ define(['exports', 'message', 'log', 'util', 'simulation.simulation', 'simulatio
 
                 $("#simButtonsCollapse").collapse('hide');
             }, 'simVariables clicked');
+
+            $('#simAddObstacleRectangle').onWrap('click', function(event) {
+                SIM.addObstacle("rectangle");
+            }, 'simAddObstacle clicked');
+
+            $('#simAddObstacleTriangle').onWrap('click', function(event) {
+                SIM.addObstacle("triangle");
+            }, 'simAddObstacle clicked');
+
+            $('#simAddObstacleCircle').onWrap('click', function(event) {
+                SIM.addObstacle("circle");
+            }, 'simAddObstacle clicked');
+
+            $('#simAddColorBlockBlack').onWrap('click', function(event) {
+                SIM.addColorBlock("black");
+            }, 'simAddColorBlockBlack clicked');
+
+            $('#simAddColorBlockBlue').onWrap('click', function(event) {
+                SIM.addColorBlock("blue");
+            }, 'simAddColorBlockBlue clicked');
+
+            $('#simAddColorBlockGreen').onWrap('click', function(event) {
+                SIM.addColorBlock("green");
+            }, 'simAddColorBlockGreen clicked');
+
+            $('#simAddColorBlockRed').onWrap('click', function(event) {
+                SIM.addColorBlock("red");
+            }, 'simAddColorBlockRed clicked');
+
+            $('#simAddColorBlockYellow').onWrap('click', function(event) {
+                SIM.addColorBlock("yellow");
+            }, 'simAddColorBlockYellow clicked');
+
+            $('#simDeleteElements').onWrap('click', function(event) {
+                SIM.deleteElements();
+            }, 'simDeleteElements clicked');
+
+            $('#simChangeObjectColor').onWrap('click', function(event) {
+                SIM.displayColorPicker();
+            }, 'simEditObject clicked');
+
+            $('#simDeleteObject').onWrap('click', function(event) {
+                SIM.deleteSelectedObject();
+            }, 'simDeleteObject clicked');
+
+            $('#simDownloadConfig').onWrap('click', function(event) {
+                var filename = GUISTATE_C.getProgramName() + '-sim_configuration.json';
+                UTIL.download(filename, JSON.stringify(SIM.getSimConfig()));
+                MSG.displayMessage("MENU_MESSAGE_DOWNLOAD", "TOAST", filename);
+            }, 'simDownloadConfig clicked');
+
+            $('#simUploadConfig').onWrap('click', function(event) {
+                SIM.importConfigData();
+            }, 'simUploadConfig clicked');
+
         }
 
         function toggleSim() {

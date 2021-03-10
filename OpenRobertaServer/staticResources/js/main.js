@@ -8,6 +8,7 @@ require.config({
         'bootstrap-tagsinput': 'libs/bootstrap/bootstrap-3.3.1-dist/dist/js/bootstrap-tagsinput.min',
         'bootstrap.wysiwyg': 'libs/bootstrap/bootstrap-3.3.1-dist/dist/js/bootstrap-wysiwyg.min',
         'enjoyHint': 'libs/enjoyHint/enjoyhint.min',
+        'huebee': 'libs/color-picker/huebee.min',
         'jquery': 'libs/jquery/jquery-3.3.1.min',
         'jquery-scrollto': 'libs/jquery/jquery.scrollTo-2.1.2.min',
         'jquery-validate': 'libs/jquery/jquery.validate-1.17.0.min',
@@ -137,7 +138,7 @@ require.config({
     }
 });
 
-require(['require', 'wrap', 'log', 'jquery', 'blockly', 'guiState.controller', 'progList.controller', 'logList.controller', 'confList.controller',
+require(['require', 'huebee', 'wrap', 'log','jquery', 'blockly', 'guiState.controller', 'progList.controller', 'logList.controller', 'confList.controller',
     'progDelete.controller', 'confDelete.controller', 'progShare.controller', 'menu.controller', 'multSim.controller', 'user.controller', 'nn.controller',
     'robot.controller', 'program.controller', 'progSim.controller', 'notification.controller', 'progCode.controller', 'progDelete.controller', 'progHelp.controller',
     'legal.controller', 'progInfo.controller', 'progRun.controller', 'configuration.controller', 'language.controller', 'socket.controller',
@@ -145,6 +146,7 @@ require(['require', 'wrap', 'log', 'jquery', 'blockly', 'guiState.controller', '
     'sourceCodeEditor.controller', 'codeflask', 'interpreter.jsHelper', 'confVisualization', 'robotBlock'], function(
         require) {
     $ = require('jquery');
+    huebee = require('huebee');
     WRAP = require('wrap');
     LOG = require('log');
     COMM = require('comm');

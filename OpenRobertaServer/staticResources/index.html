@@ -34,6 +34,7 @@ limitations under the License.
 <link rel="stylesheet" type="text/css" href="/css/enjoyhint.css"></link>
 <link rel="stylesheet" type="text/css" href="/css/prettify.css"></link>
 <link rel="stylesheet" type="text/css" href="/css/roberta.css"></link>
+<link rel="stylesheet" type="text/css" href="/css/huebee.min.css"></link>
 <!-- Make sure css files are loaded before js files -->
 <script data-main="js/main" src="js/require.js"></script>
 <link rel="manifest" href="manifest.webapp.json"></link>
@@ -326,6 +327,62 @@ limitations under the License.
                 <div id="uniDiv" style="position: absolute; left: 0; top: -1000; z-index: 0;">
                     <canvas id="unitBackgroundLayer" width=1 height=1></canvas>
                 </div>
+                <div id="simEditButtons">
+                    <div class="btn-group blbtn">
+                        <button id="simCustomObstacle" type="button" class="blbtn typcn typcn-tabs-outline dropdown-toggle" data-toggle="dropdown" aria-expanded="true" lkey="Blockly.Msg.MENU_SIM_ADD_OBSTACLE_TOOLTIP" rel="tooltip"
+                                data-original-title=""></button>
+                        <ul class="dropdown-menu">
+                            <li><a id="simAddObstacleRectangle" class="typcn typcn-media-stop"></a></li>
+                            <li><a id="simAddObstacleTriangle" class="typcn typcn-arrow-sorted-up"></a></li>
+                            <li><a id="simAddObstacleCircle" class="typcn typcn-media-record"></a></li>
+                        </ul>
+                    </div>
+                    <div class="btn-group blbtn">
+                        <button id="simCustomColorObject" type="button" class="blbtn typcn typcn-media-stop" style="color: #009640" dropdown-toggle data-toggle="dropdown" aria-expanded="true" lkey="Blockly.Msg.MENU_SIM_ADD_COLOR_OBJECT_TOOLTIP" rel="tooltip"
+                                data-original-title=""></button>
+                        <ul class="dropdown-menu">
+                            <li><a id="simAddColorBlockBlack" class="typcn typcn-media-stop" style="color: #000000"></a></li>
+                            <li><a id="simAddColorBlockBlue" class="typcn typcn-media-stop" style="color: #0000FF"></a></li>
+                            <li><a id="simAddColorBlockGreen" class="typcn typcn-media-stop" style="color: #009640"></a></li>
+                            <li><a id="simAddColorBlockRed" class="typcn typcn-media-stop" style="color: #FF0000"></a></li>
+                            <li><a id="simAddColorBlockYellow" class="typcn typcn-media-stop" style="color: #FFFF00"></a></li>
+                        </ul>
+                    </div>
+                    <div class="btn-group blbtn">
+                        <button id="simDeleteElements" type="button" class="blbtn typcn typcn-arrow-loop" lkey="Blockly.Msg.MENU_SIM_DELETE_ELEMENTS_TOOLTIP" rel="tooltip"
+                                data-original-title="" title=""></button>
+                    </div>
+                    <div class="btn-group blbtn">
+                        <button id="simScene" type="button" class="simScene blbtn typcn typcn-image" lkey="Blockly.Msg.MENU_SIM_SCENE_TOOLTIP" rel="tooltip"
+                                data-original-title="" title=""></button>
+                    </div>
+                    <div class="btn-group blbtn">
+                        <button id="simImport" type="button" class="simRobot blbtn typcn typcn-upload" lkey="Blockly.Msg.MENU_SIM_IMPORT_TOOLTIP" rel="tooltip"
+                                                         data-original-title="" title=""></button>
+                    </div>
+                    <div class="btn-group config blbtn">
+                        <button id="simConfig" type="button" class="blbtn typcn typcn-folder" dropdown-toggle data-toggle="dropdown" aria-expanded="true" lkey="Blockly.Msg.MENU_SIM_CONFIG"
+                                rel="tooltip" data-original-title="" title=""></button>
+                        <ul class="dropdown-menu">
+                            <li><a id="simDownloadConfig" class="blbtn typcn typcn-download-outline" lkey="Blockly.Msg.MENU_SIM_CONFIG_DOWNLOAD"
+                                   rel="tooltip" data-original-title="" title=""></a></li>
+                            <li><a id="simUploadConfig" class="blbtn typcn typcn-upload-outline" lkey="Blockly.Msg.MENU_SIM_CONFIG_UPLOAD"
+                                   rel="tooltip" data-original-title="" title=""></a></li>
+                        </ul>
+                    </div>
+                    <div class="secondRow">
+                        <div class="btn-group blbtn">
+                            <button id="simChangeObjectColor" type="button" class="blbtn typcn typcn-pipette" lkey="Blockly.Msg.MENU_SIM_CHANGE_COLOR_TOOLTIP" rel="tooltip"
+                                    data-original-title=""></button>
+                            <div id="colorpicker"></div>
+                        </div>
+
+                        <div class="btn-group blbtn">
+                            <button id="simDeleteObject" type="button" class="blbtn typcn typcn-trash" style="color: #FF0000" lkey="Blockly.Msg.MENU_SIM_DELETE_OBJECT_TOOLTIP" rel="tooltip"
+                                    data-original-title=""></button>
+                        </div>
+                    </div>
+                </div>
                 <div id="canvasDiv">
                     <canvas id="backgroundLayer" class="canvasSim" style="z-index: 1" width=1 height=1></canvas>
                     <canvas id="rulerLayer" class="canvasSim" style="z-index: 2" width=1 height=1></canvas>
@@ -335,28 +392,24 @@ limitations under the License.
                 <div id="simButtons">
                     <button id="simControl" type="button" class="blbtn typcn typcn-media-play-outline" lkey="Blockly.Msg.MENU_SIM_START_TOOLTIP" rel="tooltip"
                         data-original-title="" title=""></button>
-                    <button id="simScene" type="button" class="simScene blbtn typcn typcn-image" lkey="Blockly.Msg.MENU_SIM_SCENE_TOOLTIP" rel="tooltip"
-                        data-original-title="" title=""></button>
                     <button id="simRobot" type="button" class="simRobot blbtn typcn" lkey="Blockly.Msg.MENU_SIM_ROBOT_TOOLTIP" rel="tooltip"
                         data-original-title="" title=""></button>
                     <button id="simValues" type="button" class="simValues blbtn typcn typcn-sensor" lkey="Blockly.Msg.MENU_SIM_VALUES_TOOLTIP" rel="tooltip"
                         data-original-title="" title=""></button>
                     <button id="simResetPose" type="button" class="simLocation blbtn typcn typcn-location-outline" lkey="Blockly.Msg.MENU_SIM_POSE_TOOLTIP"
                         rel="tooltip" data-original-title="" title=""></button>
-                    <button id="simImport" type="button" class="simRobot blbtn typcn typcn-upload" lkey="Blockly.Msg.MENU_SIM_IMPORT_TOOLTIP" rel="tooltip"
-                        data-original-title="" title=""></button>
                     <button id="debugMode" type="button" class="blbtn typcn typcn-spanner-outline" lkey="Blockly.Msg.MENU_DEBUG_START_TOOLTIP" rel="tooltip"
                             data-original-title="" title=""></button>
-                    <button id="simControlBreakPoint" type="button" class="blbtn typcn typcn-database" lkey="Blockly.Msg.MENU_DEBUG_STEP_BREAKPOINT_TOOLTIP" rel="tooltip"
+                    <button id="simControlBreakPoint" class="blbtn typcn typcn-database" lkey="Blockly.Msg.MENU_DEBUG_STEP_BREAKPOINT_TOOLTIP" rel="tooltip"
                             data-original-title="" title=""></button>
-                    <button id="simControlStepOver" type="button" class="blbtn typcn typcn-arrow-forward-outline" lkey="Blockly.Msg.MENU_DEBUG_STEP_OVER_TOOLTIP" rel="tooltip"
+                    <button id="simControlStepOver" class="blbtn typcn typcn-arrow-forward-outline" lkey="Blockly.Msg.MENU_DEBUG_STEP_OVER_TOOLTIP" rel="tooltip"
                             data-original-title="" title=""></button>
-                    <button id="simControlStepInto" type="button" class="blbtn typcn typcn-arrow-down-outline" lkey="Blockly.Msg.MENU_DEBUG_STEP_INTO_TOOLTIP" rel="tooltip"
+                    <button id="simControlStepInto" class="blbtn typcn typcn-arrow-down-outline" lkey="Blockly.Msg.MENU_DEBUG_STEP_INTO_TOOLTIP" rel="tooltip"
                             data-original-title="" title=""></button>
-                    <button id="simVariables" type="button" class="simVariables blbtn typcn typcn-variable" lkey="Blockly.Msg.MENU_SIM_VARIABLES_TOOLTIP" rel="tooltip"
+                    <button id="simVariables" class="simVariables blbtn typcn typcn-variable" lkey="Blockly.Msg.MENU_SIM_VARIABLES_TOOLTIP" rel="tooltip"
                             data-original-title="" title=""></button>
-
                 </div>
+
             </div>
             <div id="tutorialDiv" class="fromRight">
                 <div id="tutorialContent"></div>
