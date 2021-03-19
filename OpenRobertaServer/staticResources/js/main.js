@@ -8,7 +8,7 @@ require.config({
         'bootstrap-tagsinput': 'libs/bootstrap/bootstrap-3.3.1-dist/dist/js/bootstrap-tagsinput.min',
         'bootstrap.wysiwyg': 'libs/bootstrap/bootstrap-3.3.1-dist/dist/js/bootstrap-wysiwyg.min',
         'enjoyHint': 'libs/enjoyHint/enjoyhint.min',
-        'huebee': 'libs/color-picker/huebee.min',
+        'huebee': 'libs/huebee/huebee.min',
         'jquery': 'libs/jquery/jquery-3.3.1.min',
         'jquery-scrollto': 'libs/jquery/jquery.scrollTo-2.1.2.min',
         'jquery-validate': 'libs/jquery/jquery.validate-1.17.0.min',
@@ -146,7 +146,6 @@ require(['require', 'huebee', 'wrap', 'log','jquery', 'blockly', 'guiState.contr
     'sourceCodeEditor.controller', 'codeflask', 'interpreter.jsHelper', 'confVisualization', 'robotBlock'], function(
         require) {
     $ = require('jquery');
-    huebee = require('huebee');
     WRAP = require('wrap');
     LOG = require('log');
     COMM = require('comm');

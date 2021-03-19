@@ -80,6 +80,7 @@ define(['simulation.simulation', 'interpreter.constants', 'simulation.robot', 'g
             lightValue: 0,
             color: 'grey'
         };
+        this.colorRange = ["#000000", "#0056a6", "#00642f", "#532115", "#585858", "#b30006", "#f7e307"];
         this.touchSensor = {
             x: 0,
             y: -25,

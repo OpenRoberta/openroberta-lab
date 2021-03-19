@@ -129,41 +129,6 @@ define(["require", "exports"], function (require, exports) {
                 { name: '13', position: { x: 28.9, y: 91.4 } }
             ], "width": "253px", "height": "100px"
         },
-        "nano33ble": {
-            "ports": [
-                { name: 'LED_BUILTIN', position: { x: 28.9, y: 91.4 } },
-                { name: 'TX1', position: { x: 228.9, y: 5.6 } },
-                { name: 'RX0', position: { x: 214.6, y: 5.6 } },
-                { name: 'RESET', position: { x: 200.3, y: 5.6 } },
-                { name: 'GND', position: { x: 186.1, y: 5.6 } },
-                { name: '2', position: { x: 171.8, y: 5.6 } },
-                { name: '3', position: { x: 157.5, y: 5.6 } },
-                { name: '4', position: { x: 143.2, y: 5.6 } },
-                { name: '5', position: { x: 128.9, y: 5.6 } },
-                { name: '6', position: { x: 114.6, y: 5.6 } },
-                { name: '7', position: { x: 100.3, y: 5.6 }, },
-                { name: '8', position: { x: 86.1, y: 5.6 } },
-                { name: '9', position: { x: 71.8, y: 5.6 } },
-                { name: '10', position: { x: 57.5, y: 5.6 } },
-                { name: '11', position: { x: 43.2, y: 5.6 } },
-                { name: '12', position: { x: 28.9, y: 5.6 } },
-                { name: 'VIN', position: { x: 228.9, y: 91.4 } },
-                { name: 'GND', position: { x: 214.6, y: 91.4 } },
-                { name: 'RESET', position: { x: 200.3, y: 91.4 } },
-                { name: '5V', position: { x: 186.1, y: 91.4 } },
-                { name: 'A7', position: { x: 171.8, y: 91.4 } },
-                { name: 'A6', position: { x: 157.5, y: 91.4 } },
-                { name: 'A5', position: { x: 143.2, y: 91.4 } },
-                { name: 'A4', position: { x: 128.9, y: 91.4 } },
-                { name: 'A3', position: { x: 114.6, y: 91.4 } },
-                { name: 'A2', position: { x: 100.3, y: 91.4 } },
-                { name: 'A1', position: { x: 86.1, y: 91.4 } },
-                { name: 'A0', position: { x: 71.8, y: 91.4 } },
-                { name: 'REF', position: { x: 57.5, y: 91.4 } },
-                { name: '3V3', position: { x: 43.2, y: 91.4 } },
-                { name: '13', position: { x: 28.9, y: 91.4 } }
-            ], "width": "253px", "height": "100px"
-        },
         "arduino_uno": {
             "ports": [
                 { name: 'LED_BUILTIN', position: { x: 131.5, y: 7.8 } },

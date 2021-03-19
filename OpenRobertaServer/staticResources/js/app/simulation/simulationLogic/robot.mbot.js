@@ -38,6 +38,7 @@ define(["simulation.simulation", "interpreter.constants", "simulation.robot.ev3"
         };
         this.geom.color = "#0f9cF4";
         this.touchSensor = null;
+        this.colorRange = [];
 
         this.buttons = {
             center: false,

@@ -499,12 +499,19 @@ canvas.border {
     width: 0;
     height: 0;
     border-top: 5px solid transparent;
-    border-right: 6px solid #C0C0C0;
+    border-right: 6px solid #333;
     border-bottom: 5px solid transparent;
 }
 
 .rightMenuButton.rightActive {
     color: #E2001A;
+}
+
+.rightMenuButton.rightActive:before {
+    border-top: 5px solid transparent;
+    border-left: 6px solid #333;
+    border-bottom: 5px solid transparent;
+    right: -6px;
 }
 
 div.rightMenuButton:hover,
@@ -711,6 +718,52 @@ div.rightMenuButton:hover,
     z-index: 99;
 }
 
+.huebee__container {
+  position: absolute;
+  left: 0;
+  top: 6px;
+  padding: 10px;
+  padding-top: 24px;
+  background: #e7e7e7;
+  border-radius: 2px;
+  box-shadow: none;
+}
+
+.huebee__cursor {
+  border: 5px solid #fff;
+  border-radius: 2px;
+  width: 30px;
+  height: 30px;
+}
+
+.huebee {
+  /* disable reveal/hide transition */
+  transition: none;
+}
+
+.huebee__close-button {
+    display: block;
+    position: absolute;
+    width: 24px;
+    height: 24px;
+    top: 0px;
+    right: 0;
+    border-radius: 0;
+    background: none;
+}
+
+.huebee__close-button__x {
+  stroke-width: 2;
+  stroke: #bbb;
+}
+.huebee__close-button__x:hover, .huebee__close-button__x:focus {
+  stroke: #333;
+}
+
+.huebee__close-button:hover, .huebee__close-button:focus {
+  background: #e7e7e7;
+}
+
 #codeButtons {
     left: 12px;
     bottom: 0px;
@@ -730,6 +783,11 @@ div.rightMenuButton:hover,
 .btn-toolbar > .btn-group,
 .btn-toolbar > .input-group {
     margin-bottom: 5px;
+}
+
+.btn-group.open .dropdown-toggle {
+    -webkit-box-shadow: none;
+    box-shadow: none;
 }
 
 /***** BEGIN Overwrite Bootstrap-CSS *****/
@@ -2292,27 +2350,22 @@ input[type=range]:focus::-ms-fill-upper {
     animation: iais-loading-spin 1.2s linear infinite;
 }
 
-#simEditButtons > .btn-group,
-#simButtons > .btn-group,
-.secondRow > .btn-group {
+#simEditButtons > .btn-group {
     width: 48px;
     height: 48px;
+    vertical-align: top;
 }
 
-#simEditButtons >.btn-group > .dropdown-menu,
-.secondRow > .btn-group > .dropdown-menu {
+#simEditButtons > .btn-group.open button {
+    background-color: #e7e7e7;
+}
+
+#simEditButtons >.btn-group > .dropdown-menu {
     width: 48px;
     margin-top: 6px;
 }
 
-#simButtons >.btn-group > .dropdown-menu {
-    width: 48px;
-    margin-bottom: 6px;
-}
-
-#simEditButtons > .btn-group > .dropdown-menu > li > a,
-#simButtons > .btn-group > .dropdown-menu > li > a,
-.secondRow > .btn-group > .dropdown-menu > li > a {
+#simEditButtons > .btn-group > .dropdown-menu > li > a {
     padding-left:5px;
     padding-right:0;
     text-align: center;
@@ -2320,12 +2373,14 @@ input[type=range]:focus::-ms-fill-upper {
     font-size: 28px;
 }
 
-#simEditButtons > .config > .dropdown-menu > li > a {
-    padding: 8px 0px 7px 0px;
-    text-align: center;
-    height: 100%;
-    margin: 0;
-    vertical-align: middle;
+.simChangeObject.disabled {
+	color: #bbb;
+	cursor: not-allowed;
+}
+
+.typcn-media-play-outline.rotated:before {
+	display: inline-block;
+	transform: rotate(-90deg);
 }
 
 @keyframes iais-loading-spin {
