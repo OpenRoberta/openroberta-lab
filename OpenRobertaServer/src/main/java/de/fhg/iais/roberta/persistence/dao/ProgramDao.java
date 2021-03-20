@@ -114,7 +114,7 @@ public class ProgramDao extends AbstractDao<Program> {
         Robot robot,
         User author,
         User sharedUser,
-        Timestamp timestamp) //
+        Timestamp timestamp)
     {
         checkProgramValidity(name, owner, robot, author, programText);
         Program program = loadSharedForUpdate(name, sharedUser, robot, owner, author);

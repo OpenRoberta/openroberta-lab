@@ -180,6 +180,7 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'confList.model', 'configu
     var eventsDeleteShareLoad = {
         'click .delete' : function(e, value, row, index) {
             //var deleted = false;
+            e.stopPropagation();
             var selectedRows = [ row ];
             var names = '';
             for (var i = 0; i < selectedRows.length; i++) {
