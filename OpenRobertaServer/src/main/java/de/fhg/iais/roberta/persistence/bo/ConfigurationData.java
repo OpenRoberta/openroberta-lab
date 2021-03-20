@@ -32,10 +32,9 @@ public class ConfigurationData {
     }
 
     /**
-     * create a new configuration
-     *
-     * @param name the name of the configuration, not null
-     * @param owner the user who created and thus owns the program
+     * Create new configuration data.
+     * 
+     * @param configurationText the configuration text, never null
      */
     public ConfigurationData(String configurationText) {
         this.configurationHash = createHash(configurationText);
