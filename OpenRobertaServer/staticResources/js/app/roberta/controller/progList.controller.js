@@ -453,13 +453,16 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'message', 'progList.model
 
                 if (result.configName === undefined) {
                     if (result.confXML === undefined) {
+                        // Set default configuration
                         GUISTATE_C.setConfigurationNameDefault();
                         GUISTATE_C.setConfigurationXML(GUISTATE_C.getConfigurationConf());
                     } else {
+                        // Set anonymous configuration
                         GUISTATE_C.setConfigurationName('');
                         GUISTATE_C.setConfigurationXML(result.confXML);
                     }
                 } else {
+                    // Set named configuration
                     GUISTATE_C.setConfigurationName(result.configName);
                     GUISTATE_C.setConfigurationXML(result.confXML);
                 }

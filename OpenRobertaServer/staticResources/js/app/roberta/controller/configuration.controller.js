@@ -385,7 +385,13 @@ define(['exports', 'log', 'util', 'comm', 'message', 'guiState.controller', 'blo
             Blockly.Xml.domToWorkspace(dom, bricklyWorkspace);
         }
         bricklyWorkspace.setVersion(dom.getAttribute('xmlversion'));
-        var name = GUISTATE_C.getConfigurationName() == '' ? GUISTATE_C.getRobotGroup().toUpperCase() + "basis" : GUISTATE_C.getConfigurationName();
+        var name;
+        var configName = GUISTATE_C.getConfigurationName() == undefined ? "" : GUISTATE_C.getConfigurationName();
+        if(xml == GUISTATE_C.getConfigurationConf()){
+            name = GUISTATE_C.getRobotGroup().toUpperCase() + "basis";
+        }else{
+            name = configName;
+        }
         GUISTATE_C.setConfigurationName(name);
         GUISTATE_C.setConfigurationSaved(true);
         $('#tabConfigurationName').html(name);
