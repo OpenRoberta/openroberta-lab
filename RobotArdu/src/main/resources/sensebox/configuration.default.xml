@@ -24,4 +24,7 @@
             <field name="NAME">B</field>
         </block>
     </instance>
+    <instance x="500" y="250">
+    	<block type="robConf_robot" id="robot" intask="false" deletable="false">
+    		<field name="ROBOT"></field></block></instance>
 </block_set>
