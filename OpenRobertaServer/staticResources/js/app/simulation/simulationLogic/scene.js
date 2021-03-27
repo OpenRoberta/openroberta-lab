@@ -2,8 +2,8 @@
  * @fileOverview Scene for a robot simulation
  * @author Beate Jost <beate.jost@iais.fraunhofer.de>
  */
-define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constants', 'simulation.constants', 'program.controller', 'jquery'], function(SIM,
-    SIMATH, UTIL, IC, C, PROGRAM_C, $) {
+define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constants', 'simulation.constants', 'jquery'], function(SIM,
+    SIMATH, UTIL, IC, C, $) {
 
     /**
      * Creates a new Scene.
@@ -106,17 +106,17 @@ define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constan
         }
     };
 
-    Scene.prototype.drawObstacles = function() {
+    Scene.prototype.drawObstacles = function(highLight) {
         this.oCtx.clearRect(SIM.getGround().x - 20, SIM.getGround().y - 20, SIM.getGround().w + 40, SIM.getGround().h + 40);
-        this.drawObjects(this.oCtx, SIM.getObstacleList(), true);
+        this.drawObjects(this.oCtx, SIM.getObstacleList(), highLight, true);
     };
 
-    Scene.prototype.drawColorAreas = function() {
-        this.drawObjects(this.bCtx, SIM.getColorAreaList(), false, this.uCtx);
+    Scene.prototype.drawColorAreas = function(highLight) {
+        this.drawObjects(this.bCtx, SIM.getColorAreaList(), highLight, false, this.uCtx);
     };
 
-    Scene.prototype.drawObjects = function(ctx, objectList, shadow, optCtx) {
-
+    Scene.prototype.drawObjects = function(ctx, objectList, opt_highLight, shadow, optCtx) {
+        let highLight = opt_highLight.length > 0 ? opt_highLight : false;
         for (let key in objectList) {
             let obj = objectList[key];
             ctx.restore();
@@ -167,43 +167,11 @@ define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constan
                         optCtx.fill();
                     }
                 }
-                if (SIM.getSelectedObject() != null) {
-                    this.highlightObject();
-                }
+
             }
         }
-        if (SIM.getSelectedObject() != null) this.highlightObject();
-    }
-
-    Scene.prototype.highlightObject = function() {
-        let selectedObject = SIM.getSelectedObject();
-        if (selectedObject != null) {
-            var objectCorners;
-            if (selectedObject.form === "rectangle") {
-                objectCorners = [
-                    { x: Math.round(selectedObject.x), y: Math.round(selectedObject.y) },
-                    { x: (Math.round(selectedObject.x) + selectedObject.w), y: Math.round(selectedObject.y) },
-                    { x: Math.round(selectedObject.x), y: (Math.round(selectedObject.y) + selectedObject.h) },
-                    { x: (Math.round(selectedObject.x) + selectedObject.w), y: (Math.round(selectedObject.y) + selectedObject.h) }
-                ];
-            } else if (selectedObject.form === "triangle") {
-                objectCorners = [
-                    { x: Math.round(selectedObject.ax), y: Math.round(selectedObject.ay) },
-                    { x: Math.round(selectedObject.bx), y: Math.round(selectedObject.by) },
-                    { x: Math.round(selectedObject.cx), y: Math.round(selectedObject.cy) }
-                ];
-            } else if (selectedObject.form === "circle") {
-                var cx = Math.round(selectedObject.x);
-                var cy = Math.round(selectedObject.y);
-                var r = Math.round(selectedObject.r);
-                objectCorners = [
-                    { x: cx - r, y: cy - r },
-                    { x: cx + r, y: cy - r },
-                    { x: cx - r, y: cy + r },
-                    { x: cx + r, y: cy + r }
-                ];
-            }
-            for (let c in objectCorners) {
+        if (highLight) {
+            for (let c in highLight) {
                 this.oCtx.restore();
                 this.oCtx.save();
                 this.oCtx.scale(SIM.getScale(), SIM.getScale());
@@ -211,7 +179,7 @@ define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constan
                 this.oCtx.lineWidth = 2;
                 this.oCtx.shadowBlur = 0;
                 this.oCtx.strokeStyle = "gray";
-                this.oCtx.arc(objectCorners[c].x, objectCorners[c].y, 4, 0, 2 * Math.PI);
+                this.oCtx.arc(highLight[c].x, highLight[c].y, C.CORNER_RADIUS, 0, 2 * Math.PI);
                 this.oCtx.fillStyle = "black";
                 this.oCtx.stroke();
                 this.oCtx.fill();
@@ -391,6 +359,11 @@ define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constan
             this.rCtx.fill();
             this.rCtx.shadowBlur = 0;
             this.rCtx.shadowOffsetX = 0;
+            this.rCtx.beginPath();
+            this.rCtx.lineWidth = 2;
+            this.rCtx.fill();
+            this.rCtx.closePath();
+
             //LED
             if (this.robots[r].led && !this.robots[r].leds) {
                 this.rCtx.fillStyle = this.robots[r].led.color;
@@ -398,7 +371,6 @@ define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constan
                 this.rCtx.arc(this.robots[r].led.x, this.robots[r].led.y, 2.5, 0, Math.PI * 2);
                 this.rCtx.fill();
             }
-
             if (this.robots[r].leds) {
                 for (var port in this.robots[r].leds) {
                     this.rCtx.fillStyle = this.robots[r].leds[port].color;
@@ -486,6 +458,26 @@ define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constan
                 this.rCtx.beginPath();
                 this.rCtx.arc(this.robots[r].ledSensor.x, this.robots[r].ledSensor.y, 2.5, 0, Math.PI * 2);
                 this.rCtx.fill();
+            }
+
+            if (SIM.getSelectedRobot() === r) {
+                var objectCorners = [
+                    { x: Math.round(this.robots[r].frontRight.x), y: Math.round(this.robots[r].frontRight.y) },
+                    { x: (Math.round(this.robots[r].geom.x) + this.robots[r].geom.w), y: Math.round(this.robots[r].frontLeft.y) },
+                    { x: Math.round(this.robots[r].geom.x), y: (Math.round(this.robots[r].geom.y) + this.robots[r].geom.h) },
+                    { x: (Math.round(this.robots[r].geom.x) + this.robots[r].geom.w), y: (Math.round(this.robots[r].geom.y) + this.robots[r].geom.h) }
+                ];
+                for (let c in objectCorners) {
+                    this.rCtx.beginPath();
+                    this.rCtx.lineWidth = 2;
+                    this.rCtx.shadowBlur = 0;
+                    this.rCtx.strokeStyle = "gray";
+                    this.rCtx.arc(objectCorners[c].x, objectCorners[c].y, C.CORNER_RADIUS, 0, 2 * Math.PI);
+                    this.rCtx.fillStyle = "black";
+                    this.rCtx.stroke();
+                    this.rCtx.fill();
+                    this.rCtx.closePath();
+                }
             }
             this.rCtx.restore();
             // ultra

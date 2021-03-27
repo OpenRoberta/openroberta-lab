@@ -166,12 +166,12 @@ define(['exports', 'message', 'log', 'util', 'simulation.simulation', 'simulatio
                     bottom: 'inherit'
                 });
                 $('#simVariablesModal').draggable();
-
                 $("#simButtonsCollapse").collapse('hide');
             }, 'simVariables clicked');
 
             $('#simAddObstacleRectangle').onWrap('click', function(event) {
                 SIM.addObstacle("rectangle");
+                event.stopPropagation();
             }, 'simAddObstacle clicked');
 
             $('#simAddObstacleTriangle').onWrap('click', function(event) {
@@ -180,18 +180,22 @@ define(['exports', 'message', 'log', 'util', 'simulation.simulation', 'simulatio
 
             $('#simAddObstacleCircle').onWrap('click', function(event) {
                 SIM.addObstacle("circle");
+                event.stopPropagation();
             }, 'simAddObstacle clicked');
 
             $('#simAddAreaRectangle').onWrap('click', function(event) {
                 SIM.addColorArea("rectangle");
+                event.stopPropagation();
             }, 'imAddAreaRectangle clicked');
 
             $('#simAddAreaTriangle').onWrap('click', function(event) {
                 SIM.addColorArea("triangle");
+                event.stopPropagation();
             }, 'imAddAreaRectangle clicked');
 
             $('#simAddAreaCircle').onWrap('click', function(event) {
                 SIM.addColorArea("circle");
+                event.stopPropagation();
             }, 'imAddAreaRectangle clicked');
 
             $('#simChangeObjectColor').onWrap('click', function(event) {

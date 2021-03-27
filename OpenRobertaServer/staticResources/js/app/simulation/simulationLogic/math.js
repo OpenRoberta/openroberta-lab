@@ -374,7 +374,7 @@ define(['exports', 'simulation.constants'], function(exports, CONSTANTS) {
             case ("circle"):
                 return (x - p.x) * (x - p.x) + (y - p.y) * (y - p.y) <= p.r * p.r;
             case ("robot"):
-                return isPointInsideRectangle({
+                return exports.isPointInsideRectangle({
                     x: x,
                     y: y
                 }, {

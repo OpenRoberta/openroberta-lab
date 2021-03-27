@@ -718,6 +718,14 @@ div.rightMenuButton:hover,
     z-index: 99;
 }
 
+button#simCustomColorObject.typcn:before {
+	color: #FBED00;
+}
+
+button#simCustomObstacle.typcn:before {
+	color: 009EE3;
+}
+
 .huebee__container {
   position: absolute;
   left: 0;

@@ -7,10 +7,8 @@
  * @namespace SIM
  */
 
-define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 'simulation.constants', 'util', 'program.controller',
-    'interpreter.interpreter', 'interpreter.robotSimBehaviour', 'volume-meter', 'simulation.constants', 'message', 'jquery', 'huebee'
-], function(exports, Scene, SIMATH, ROBERTA_PROGRAM, CONST, UTIL, PROGRAM_C,
-    SIM_I, MBED_R, Volume, C, MSG, $, huebee) {
+define(['exports', 'simulation.scene', 'simulation.constants', 'util', 'interpreter.interpreter', 'interpreter.robotSimBehaviour', 'volume-meter', 'message', 'jquery', 'huebee'
+], function(exports, Scene, C, UTIL, SIM_I, MBED_R, Volume, MSG, $, HUEBEE) {
 
     const standColorObstacle = "#33B8CA";
     const standColorArea = "#FBED00";
@@ -21,27 +19,18 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
     var canvasOffset;
     var offsetX;
     var offsetY;
-    var isDownRobots = [];
-    var isDownObstacle = false;
-    var isDownRuler = false;
-    var isDownColorArea = false;
-    var isDownColorAreaCorner = false;
-    var isDownObstacleCorner = false;
-    var colorAreasActivated = true;
     var startX;
     var startY;
     var scale = 1;
-    var timerStep = 0;
-    var selectedObstacle;
-    var selectedColorArea;
-    var selectedObject;
-    var selectedCorner;
-    var selectedCornerObject;
-    var hoverColorArea;
-    var hoverObstacle;
-    var hoverObstacleCorners;
-    var hoverColorAreaCorners;
-    var hoveringCorner;
+    var selectedRobot = -1;
+    var selectedObstacle = -1;
+    var selectedColorArea = -1;
+    var downCorner = -1;
+    var downRuler = false;
+    var downRobot = -1;
+    var downColorArea = -1;
+    var downObstacle = -1;
+    var highLightCorners = [];
     var canceled;
     var storedPrograms;
     var copiedObject;
@@ -54,8 +43,10 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
     var imgObstacle1 = new Image();
     var imgPattern = new Image();
     var imgRuler = new Image();
+    var mouseX;
+    var mouseY;
 
-    var colorpicker = new huebee('#colorpicker', {
+    var colorpicker = new HUEBEE('#colorpicker', {
         shades: 1,
         hues: 8,
         setText: false
@@ -165,8 +156,8 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
         resetSelection();
         scene.updateBackgrounds(imgObjectList[currentBackground]);
         relatives2coordinates(configData);
-        scene.drawObstacles();
-        scene.drawColorAreas();
+        scene.drawObstacles(highLightCorners);
+        scene.drawColorAreas(highLightCorners);
         scene.drawRuler();
         addMouseEvents();
         resizeAll();
@@ -257,10 +248,8 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
             }
         }
     }
-
     exports.setPause = setPause;
 
-    var stepCounter;
     var runRenderUntil;
 
     function setStep() {
@@ -294,33 +283,41 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
     exports.resetPose = resetPose;
 
     function deleteSelectedObject() {
-        if (selectedColorArea != null) {
+        if (selectedColorArea >= 0) {
             colorAreaList.splice(selectedColorArea, 1);
-            resetSelection();
+            selectedColorArea = -1;
+            highLightCorners = [];
             updateColorAreaLayer();
         }
-        if (selectedObstacle != null) {
+        if (selectedObstacle >= 0) {
             obstacleList.splice(selectedObstacle, 1)
-            resetSelection();
+            selectedObstacle = -1;
+            highLightCorners = [];
             updateObstacleLayer();
         }
     }
     exports.deleteSelectedObject = deleteSelectedObject;
 
     function addObstacle(shape) {
-        addObject(shape, "obstacle", obstacleList, selectedObstacle);
-        scene.drawObstacles();
+        let obstacle = addObject(shape, "obstacle", obstacleList);
+        selectedObstacle = obstacleList.length - 1;
+        highLightCorners = calculateCorners(obstacle);
+        updateObstacleLayer();
     }
     exports.addObstacle = addObstacle;
 
     function addColorArea(shape) {
-        addObject(shape, "colorArea", colorAreaList, selectedColorArea);
-        scene.drawColorAreas();
-        scene.drawObstacles();
+        let colorArea = addObject(shape, "colorArea", colorAreaList);
+        selectedColorArea = colorAreaList.length - 1;
+        highLightCorners = calculateCorners(colorArea);
+        updateColorAreaLayer();
     }
     exports.addColorArea = addColorArea;
 
-    function addObject(shape, type, objectList, thisSelectedObject) {
+    function addObject(shape, type, objectList) {
+        resetSelection();
+        $("#robotLayer").attr("tabindex", 0);
+        $("#robotLayer").focus();
         let newObject = {};
         let x = Math.random() * ((ground.w - 200) - 100) + 100;
         let y = Math.random() * ((ground.h - 100) - 100) + 100;
@@ -367,12 +364,12 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
         }
         newObject.type = type;
         objectList.push(newObject);
-        thisSelectedObject = objectList.length - 1;
-        selectedObject = newObject;
         enableChangeObjectButtons();
+        return newObject;
     }
 
     function changeColorWithColorPicker(color) {
+        let selectedObject = selectedObstacle >= 0 ? obstacleList[selectedObstacle] : selectedColorArea >= 0 ? colorAreaList[selectedColorArea] : null;
         if (selectedObject != null) {
             selectedObject.color = color;
             updateColorAreaLayer();
@@ -464,13 +461,11 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
     var globalID;
     var robots = [];
     var robotIndex = 0;
-    var mouseOnRobotIndex = 0;
     var simRobotType;
     var numRobots = 0;
     exports.getNumRobots = function() {
         return numRobots;
     };
-    var ROBOT;
 
     function callbackOnTermination() {
         console.log("END of Sim");
@@ -572,8 +567,12 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
     function getRobotIndex() {
         return robotIndex;
     }
-
     exports.getRobotIndex = getRobotIndex;
+
+    function getSelectedRobot() {
+        return selectedRobot;
+    }
+    exports.getSelectedRobot = getSelectedRobot;
 
     function cancel() {
         canceled = true;
@@ -644,7 +643,6 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
 
                     if (!(allInterpretersTerminated() && !robots[i].endless)) {
                         setTimeout(function() {
-                            //delete robot.button.Reset;
                             setPause(false);
                             for (var j = 0; j < robots.length; j++) {
                                 robots[j].pause = false;
@@ -793,23 +791,15 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
         }
     }
 
-    function isAnyRobotDown() {
-        for (var i = 0; i < numRobots; i++) {
-            if (isDownRobots[i]) {
-                return true;
-            }
-        }
-        return false;
-    }
-
     function handleKeyEvent(e) {
         var keyName = e.key;
         var keyCode = e.keyCode;
-        if (!selectedObject) {
+        let selectedObject = selectedObstacle >= 0 ? obstacleList[selectedObstacle] : selectedColorArea >= 0 ? colorAreaList[selectedColorArea] : null;
+        if (selectedRobot >= 0) {
             switch (keyName) {
                 case "ArrowUp":
-                    robots[robotIndex].pose.x += Math.cos(robots[robotIndex].pose.theta);
-                    robots[robotIndex].pose.y += Math.sin(robots[robotIndex].pose.theta);
+                    robots[selectedRobot].pose.x += Math.cos(robots[selectedRobot].pose.theta);
+                    robots[selectedRobot].pose.y += Math.sin(robots[selectedRobot].pose.theta);
                     e.preventDefault();
                     e.stopPropagation();
                     break;
@@ -819,20 +809,20 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
                     e.stopPropagation();
                     break;
                 case "ArrowDown":
-                    robots[robotIndex].pose.x -= Math.cos(robots[robotIndex].pose.theta);
-                    robots[robotIndex].pose.y -= Math.sin(robots[robotIndex].pose.theta);
+                    robots[selectedRobot].pose.x -= Math.cos(robots[selectedRobot].pose.theta);
+                    robots[selectedRobot].pose.y -= Math.sin(robots[selectedRobot].pose.theta);
                     e.preventDefault();
                     e.stopPropagation();
                     break;
                 case "ArrowRight":
-                    robots[robotIndex].pose.theta += Math.PI / 180;
+                    robots[selectedRobot].pose.theta += Math.PI / 180;
                     e.preventDefault();
                     e.stopPropagation();
                     break;
                 default:
                 // nothing to do so far
             }
-        } else {
+        } else if (selectedObject) {
             const shift = 5;
             switch (keyName) {
                 case "ArrowUp":
@@ -902,6 +892,7 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
                 default:
                 // nothing to do so far
             }
+            highLightCorners = calculateCorners(selectedObject);
             selectedObject.type === "obstacle" ? updateObstacleLayer() : updateColorAreaLayer();
         }
         switch (keyCode) {
@@ -917,12 +908,8 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
                 var toCopyObject = {};
                 toCopyObject = $.extend(toCopyObject, selectedObject);
                 if (!$.isEmptyObject(toCopyObject) && selectedObject) {
-                    if (mouseX == undefined) {
-                        let mouseX = ground.w / 2;
-                    }
-                    if (mouseY == undefined) {
-                        let mouseY = ground.h / 2;
-                    }
+                    mouseX = mouseX || ground.w / 2;
+                    mouseY = mouseY || ground.h / 2;
                     if (toCopyObject.form === "triangle") {
                         const diffx = toCopyObject.ax - mouseX;
                         const diffy = toCopyObject.ay - mouseY;
@@ -964,6 +951,8 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
             default:
             // nothing to do so far
         }
+        $("#robotLayer").attr("tabindex", 0);
+        $("#robotLayer").focus();
     }
 
     function disableChangeObjectButtons() {
@@ -975,11 +964,10 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
     }
 
     function handleMouseDown(e) {
+        e.preventDefault();
+        e.stopPropagation();
         var X = e.clientX || e.originalEvent.touches[0].pageX;
         var Y = e.clientY || e.originalEvent.touches[0].pageY;
-        var scsq = 1;
-        if (scale < 1)
-            scsq = scale * scale;
         var top = $('#robotLayer').offset().top;
         var left = $('#robotLayer').offset().left;
         startX = (parseInt(X - left, 10)) / scale;
@@ -989,45 +977,82 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
         for (var i = 0; i < numRobots; i++) {
             dx = startX - robots[i].mouse.rx;
             dy = startY - robots[i].mouse.ry;
-            var boolDown = (dx * dx + dy * dy < robots[i].mouse.r * robots[i].mouse.r);
-            isDownRobots[i] = boolDown;
+            let boolDown = (dx * dx + dy * dy < robots[i].mouse.r * robots[i].mouse.r);
             if (boolDown) {
-                mouseOnRobotIndex = i;
+                downRobot = i;
+                if (selectedRobot !== i) {
+                    robotIndex = i;
+                    $("#brick" + i).hide();
+                    $("#brick" + robotIndex).show();
+                    if ($("#robotIndex")[0]) {
+                        $("#robotIndex")[0][i].selected = true;
+                    }
+                    if (robots[i].drawWidth) {
+                        robots[i].canDraw = false;
+                    }
+                    highLightCorners = [];
+                    if (selectedObstacle >= 0) {
+                        selectedObstacle = -1;
+                        updateObstacleLayer();
+                    }
+                    if (selectedColorArea >= 0) {
+                        selectedColorArea = -1;
+                        updateColorAreaLayer();
+                    }
+                    downCorner = -1;
+                    highLightCorners = [];
+                    downRuler = false;
+                }
+                selectedRobot = i;
+                return;
             }
         }
 
-
-        if (selectedObstacle != null) {
-            var obstacleCorners = [];
-            if (obstacleList[selectedObstacle].form != "circle") {
-                obstacleCorners = calculateCorners(obstacleList[selectedObstacle]);
-            } else {
-                isDownObstacleCorner = checkDownCircleCorner(startX, startY, obstacleList[selectedObstacle].x, obstacleList[selectedObstacle].y, obstacleList[selectedObstacle].r);
-                selectedCornerObject = obstacleList[selectedObstacle];
-            }
-            for (let corner_index in obstacleCorners) {
-                isDownObstacleCorner = (startX > obstacleCorners[corner_index].x && startX < obstacleCorners[corner_index].x + obstacleCorners[corner_index].w && startY > obstacleCorners[corner_index].y && startY < obstacleCorners[corner_index].y + obstacleCorners[corner_index].h);
+        if (highLightCorners.length > 0 && (selectedObstacle >= 0 || selectedColorArea >= 0)) {
+            for (var i = 0; i < highLightCorners.length; i++) {
+                let corner = highLightCorners[i];
+                let isDownObstacleCorner = checkDownCircle(startX, startY, corner.x, corner.y, C.CORNER_RADIUS * 3);
                 if (isDownObstacleCorner) {
-                    selectedCorner = corner_index;
-                    selectedCornerObject = obstacleList[selectedObstacle];
-                    break;
-                }
-            }
-        }
-        if (selectedColorArea != null) {
-            let colorAreaCorners = calculateCorners(colorAreaList[selectedColorArea]);
-            for (let corner_index in colorAreaCorners) {
-                isDownColorAreaCorner = (startX > colorAreaCorners[corner_index].x && startX < colorAreaCorners[corner_index].x + colorAreaCorners[corner_index].w && startY > colorAreaCorners[corner_index].y && startY < colorAreaCorners[corner_index].y + colorAreaCorners[corner_index].h);
-                if (isDownColorAreaCorner) {
-                    selectedCorner = corner_index;
-                    selectedCornerObject = colorAreaList[selectedColorArea];
-                    break;
+                    downCorner = i;
+                    return;
                 }
             }
         }
 
-        for (let key in colorAreaList) {
-            let colorArea = colorAreaList.slice().reverse()[key];
+        for (var i = obstacleList.length - 1; i >= 0; i--) {
+            let obstacle = obstacleList[i];
+            let obstacleIsDown = false;
+            if (obstacle.form === "rectangle") {
+                obstacleIsDown = (startX > obstacle.x && startX < obstacle.x + obstacle.w && startY > obstacle.y && startY < obstacle.y + obstacle.h);
+            } else if (obstacle.form === "triangle") {
+                obstacleIsDown = checkDownTriangle(startX, startY, obstacle.ax, obstacle.ay, obstacle.bx, obstacle.by, obstacle.cx, obstacle.cy);
+            } else if (obstacle.form === "circle") {
+                obstacleIsDown = checkDownCircle(startX, startY, obstacle.x, obstacle.y, obstacle.r);
+            }
+            if (obstacleIsDown) {
+                downObstacle = i;
+                if (selectedObstacle !== i) {
+                    enableChangeObjectButtons();
+                    highLightCorners = calculateCorners(obstacleList[i]);
+                    selectedObstacle = i;
+
+                    selectedRobot = -1;
+                    if (selectedColorArea >= 0) {
+                        selectedColorArea = -1;
+                        updateColorAreaLayer();
+                    }
+                    downCorner = -1;
+                    downRuler = false;
+                    updateObstacleLayer();
+                }
+                return;
+            }
+        }
+
+
+        for (var i = colorAreaList.length - 1; i >= 0; i--) {
+            let colorArea = colorAreaList[i];
+            let isDownColorArea = false;
             if (colorArea.form === "rectangle") {
                 isDownColorArea = (startX > colorArea.x && startX < colorArea.x + colorArea.w && startY > colorArea.y && startY < colorArea.y + colorArea.h);
             } else if (colorArea.form === "triangle") {
@@ -1035,49 +1060,43 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
             } else if (colorArea.form === "circle") {
                 isDownColorArea = checkDownCircle(startX, startY, colorArea.x, colorArea.y, colorArea.r);
             }
-            key++;
-            if (isDownColorArea && !isDownObstacleCorner && colorAreasActivated) {
-                enableChangeObjectButtons();
-                selectedObstacle = null;
-                selectedColorArea = colorAreaList.length - key;
-                selectedObject = colorAreaList[selectedColorArea];
-                colorAreaList.splice(selectedColorArea, 1);
-                colorAreaList.push(selectedObject);
-                selectedColorArea = colorAreaList.length - 1;
+            if (isDownColorArea) {
+                downColorArea = i;
+                if (selectedColorArea !== i) {
+                    enableChangeObjectButtons();
+                    highLightCorners = calculateCorners(colorAreaList[i]);
+                    selectedColorArea = i;
+                    selectedRobot = -1;
+                    if (selectedObstacle >= 0) {
+                        selectedObstacle = -1;
+                        updateObstacleLayer();
+                    }
+                    downCorner = -1;
+                    downRuler = false;
+                    updateColorAreaLayer();
+                }
+                return;
+            }
+        }
+
+        let rulerIsDown = (startX > ruler.x && startX < ruler.x + ruler.w && startY > ruler.y && startY < ruler.y + ruler.h);
+
+        if (!downRuler && rulerIsDown) {
+            downRuler = true;
+            selectedRobot = -1;
+            if (selectedObstacle >= 0) {
+                selectedObstacle = -1;
+                updateObstacleLayer();
+            }
+            if (selectedColorArea >= 0) {
+                selectedColorArea = -1;
                 updateColorAreaLayer();
-                updateObstacleLayer();
-                break;
             }
+            downCorner = -1;
+            highLightCorners = [];
+            return;
         }
-        for (let key in obstacleList) {
-            let obstacle = obstacleList.slice().reverse()[key];
-
-            if (obstacle.form === "rectangle") {
-                isDownObstacle = (startX > obstacle.x && startX < obstacle.x + obstacle.w && startY > obstacle.y && startY < obstacle.y + obstacle.h);
-            } else if (obstacle.form === "triangle") {
-                isDownObstacle = checkDownTriangle(startX, startY, obstacle.ax, obstacle.ay, obstacle.bx, obstacle.by, obstacle.cx, obstacle.cy);
-            } else if (obstacle.form === "circle") {
-                isDownObstacle = checkDownCircle(startX, startY, obstacle.x, obstacle.y, obstacle.r);
-            }
-            key++;
-            if (isDownObstacle && !isDownColorAreaCorner) {
-                enableChangeObjectButtons();
-                selectedColorArea = null;
-                selectedObstacle = obstacleList.length - key;
-                selectedObject = obstacleList[selectedObstacle];
-                obstacleList.splice(selectedObstacle, 1);
-                obstacleList.push(selectedObject);
-                selectedObstacle = obstacleList.length - 1;
-                updateObstacleLayer();
-                break;
-            }
-        }
-
-        isDownRuler = (startX > ruler.x && startX < ruler.x + ruler.w && startY > ruler.y && startY < ruler.y + ruler.h);
-        checkSelection();
-        if (isDownRobots || isDownObstacle || isDownObstacleCorner || isDownRuler || isDownColorArea || isDownColorAreaCorner || isAnyRobotDown()) {
-            e.stopPropagation();
-        }
+        resetSelection();
     }
 
     function checkDownTriangle(px, py, x1, y1, x2, y2, x3, y3) {
@@ -1091,138 +1110,86 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
         }
         return false;
     }
-    exports.checkDownTriangle = checkDownTriangle;
 
     function checkDownCircle(px, py, cx, cy, r) {
-        return (px - cx) * (px - cx) + (py - cy) * (py - cy) <= r * r;
+        return ((px - cx) * (px - cx) + (py - cy) * (py - cy) <= r * r);
     }
-    exports.checkDownCircle = checkDownCircle;
-
-    function checkDownCircleCorner(px, py, cx, cy, r) {
-        return checkDownCircle(px, py, cx, cy, r) && !checkDownCircle(px, py, cx, cy, r - 10);
-    }
-    exports.checkDownCircle = checkDownCircle;
 
     function calculateCorners(object) {
-        const shift = 10;
         let objectCorners;
         if (object.form === "rectangle") {
             objectCorners = [
-                { x: (Math.round(object.x - shift)), y: (Math.round(object.y - shift) + object.h), w: shift * 2, h: shift * 2 },
-                { x: Math.round(object.x - shift), y: Math.round(object.y - shift), w: shift * 2, h: shift * 2 },
-                { x: (Math.round(object.x - shift) + object.w), y: Math.round(object.y - shift), w: shift * 2, h: shift * 2 },
-                { x: (Math.round(object.x - shift) + object.w), y: (Math.round(object.y - shift) + object.h), w: shift * 2, h: shift * 2 }
+                { x: (Math.round(object.x)), y: (Math.round(object.y) + object.h) },
+                { x: Math.round(object.x), y: Math.round(object.y) },
+                { x: (Math.round(object.x) + object.w), y: Math.round(object.y) },
+                { x: (Math.round(object.x) + object.w), y: (Math.round(object.y) + object.h) }
             ];
         } else if (object.form === "triangle") {
             objectCorners = [
-                { x: Math.round(object.ax - shift), y: Math.round(object.ay - shift), w: shift * 2, h: shift * 2 },
-                { x: Math.round(object.bx - shift), y: Math.round(object.by - shift), w: shift * 2, h: shift * 2 },
-                { x: Math.round(object.cx - shift), y: Math.round(object.cy - shift), w: shift * 2, h: shift * 2 },
+                { x: Math.round(object.ax), y: Math.round(object.ay) },
+                { x: Math.round(object.bx), y: Math.round(object.by) },
+                { x: Math.round(object.cx), y: Math.round(object.cy) },
             ];
         } else if (object.form === "circle") {
             var cx = Math.round(object.x);
             var cy = Math.round(object.y);
             var r = Math.round(object.r);
             objectCorners = [
-                { x: cx - r - shift, y: cy - r - shift, w: shift * 2, h: shift * 2 },
-                { x: cx + r - shift, y: cy - r - shift, w: shift * 2, h: shift * 2 },
-                { x: cx - r - shift, y: cy + r - shift, w: shift * 2, h: shift * 2 },
-                { x: cx + r - shift, y: cy + r - shift, w: shift * 2, h: shift * 2 }
+                { x: cx - r, y: cy - r },
+                { x: cx + r, y: cy - r },
+                { x: cx - r, y: cy + r },
+                { x: cx + r, y: cy + r }
             ];
         }
         return objectCorners;
     }
-    exports.calculateCorners = calculateCorners;
-
-    function checkSelection() {
-        if (!isDownColorArea && !isDownObstacle && !isDownObstacleCorner && !isDownColorAreaCorner) {
-            resetSelection();
-            scene.drawObstacles();
-        }
-    }
-    exports.checkSelection = checkSelection;
 
     function resetSelection() {
-        disableChangeObjectButtons();
-        colorpicker.close();
-        selectedObject = null;
-        selectedColorArea = null;
-        selectedObstacle = null;
-        selectedCornerObject = null;
-    }
-    exports.resetSelection = resetSelection;
-
-    function handleDoubleMouseClick(e) {
-        if (numRobots > 1) {
-            var X = e.clientX || e.originalEvent.touches[0].pageX;
-            var Y = e.clientY || e.originalEvent.touches[0].pageY;
-            var dx;
-            var dy;
-            var top = $('#robotLayer').offset().top;
-            var left = $('#robotLayer').offset().left;
-            startX = (parseInt(X - left, 10)) / scale;
-            startY = (parseInt(Y - top, 10)) / scale;
-            for (var i = 0; i < numRobots; i++) {
-                dx = startX - robots[i].mouse.rx;
-                dy = startY - robots[i].mouse.ry;
-                var boolDown = (dx * dx + dy * dy < robots[i].mouse.r * robots[i].mouse.r);
-                if (boolDown) {
-                    $("#brick" + robotIndex).hide();
-                    robotIndex = i;
-                    $("#brick" + robotIndex).show();
-                    $("#robotIndex")[0][i].selected = true;
-                    break;
-                }
-            }
-        }
+        selectedRobot = -1;
+        selectedObstacle = -1;
+        selectedColorArea = -1;
+        highLightCorners = [];
+        downCorner = -1;
+        downRuler = false;
+        downRobot = -1;
+        downColorArea = -1;
+        downObstacle = -1;
+        updateColorAreaLayer();
     }
 
     function handleMouseUp(e) {
         $("#robotLayer").css('cursor', 'auto');
-        if (mouseOnRobotIndex >= 0 && robots[mouseOnRobotIndex].drawWidth) {
-            robots[mouseOnRobotIndex].canDraw = true;
+        if (selectedRobot >= 0 && robots[selectedRobot].drawWidth) {
+            robots[selectedRobot].canDraw = true;
         }
-        isDownObstacle = false;
-        isDownRuler = false;
-        isDownColorArea = false;
-        isDownColorAreaCorner = false;
-        isDownObstacleCorner = false;
-        for (var i = 0; i < numRobots; i++) {
-            if (isDownRobots[i]) {
-                isDownRobots[i] = false;
-            }
-        }
-        mouseOnRobotIndex = -1;
+        handleMouseOut(e);
     }
 
     function handleMouseOut(e) {
         e.preventDefault();
-        isDownObstacle = false;
-        isDownRuler = false;
-        isDownColorArea = false;
-        for (var i = 0; i < numRobots; i++) {
-            if (isDownRobots[i]) {
-                isDownRobots[i] = false;
-            }
-        }
-        mouseOnRobotIndex = -1;
         e.stopPropagation();
+        downCorner = -1;
+        downRuler = false;
+        downRobot = -1;
+        downColorArea = -1;
+        downObstacle = -1;
     }
 
     function updateColorAreaLayer() {
         scene.updateBackgrounds();
-        scene.drawColorAreas();
-        scene.drawObstacles();
+        scene.drawColorAreas(highLightCorners);
+        updateObstacleLayer();
     }
-    exports.updateColorAreaLayer = updateColorAreaLayer;
 
     function updateObstacleLayer() {
         scene.drawRuler();
-        scene.drawObstacles();
+        scene.drawObstacles(highLightCorners);
     }
-    exports.updateObstacleLayer = updateObstacleLayer;
 
     function handleMouseMove(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        $("#robotLayer").css('cursor', 'default');
         var X = e.clientX || e.originalEvent.touches[0].pageX;
         var Y = e.clientY || e.originalEvent.touches[0].pageY;
         var top = $('#robotLayer').offset().top;
@@ -1231,221 +1198,246 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
         mouseY = (parseInt(Y - top, 10)) / scale;
         var dx;
         var dy;
-        if (!isAnyRobotDown() && !isDownObstacle && !isDownRuler && !isDownColorArea && !isDownObstacleCorner && !isDownColorAreaCorner) {
-            var hoverRobot = false;
-            for (var i = 0; i < numRobots; i++) {
-                dx = mouseX - robots[i].mouse.rx;
-                dy = mouseY - robots[i].mouse.ry;
-                var tempcheckhover = (dx * dx + dy * dy < robots[i].mouse.r * robots[i].mouse.r);
-                if (tempcheckhover) {
-                    hoverRobot = true;
-                    break;
-                }
-            }
-            for (let i = 0; i < obstacleList.length; i++) {
-                let obstacle = obstacleList[i];
-                if (obstacle.form === "rectangle") {
-                    hoverObstacle = (mouseX > obstacle.x && mouseX < obstacle.x + obstacle.w && mouseY > obstacle.y && mouseY < obstacle.y + obstacle.h);
-                } else if (obstacle.form === "triangle") {
-                    hoverObstacle = checkDownTriangle(mouseX, mouseY, obstacle.ax, obstacle.ay, obstacle.bx, obstacle.by, obstacle.cx, obstacle.cy);
-                } else if (obstacle.form === "circle") {
-                    hoverObstacle = checkDownCircle(mouseX, mouseY, obstacle.x, obstacle.y, obstacle.r);
-                }
-                let obstacleCorners = calculateCorners(obstacle);
-                for (let corner_index in obstacleCorners) {
-                    hoverObstacleCorners = (mouseX > obstacleCorners[corner_index].x && mouseX < obstacleCorners[corner_index].x + obstacleCorners[corner_index].w && mouseY > obstacleCorners[corner_index].y && mouseY < obstacleCorners[corner_index].y + obstacleCorners[corner_index].h);
-                    if (hoverObstacleCorners) {
-                        hoveringCorner = corner_index;
-                        break;
-                    }
-                }
-                if (hoverObstacle) {
-                    break;
-                }
-            }
-            for (let key in colorAreaList) {
-                let colorArea = colorAreaList.slice()[key];
-                if (colorArea.form === "rectangle") {
-                    hoverColorArea = (mouseX > colorArea.x && mouseX < colorArea.x + colorArea.w && mouseY > colorArea.y && mouseY < colorArea.y + colorArea.h);
-                } else if (colorArea.form === "triangle") {
-                    hoverColorArea = checkDownTriangle(mouseX, mouseY, colorArea.ax, colorArea.ay, colorArea.bx, colorArea.by, colorArea.cx, colorArea.cy);
-                } else if (colorArea.form === "circle") {
-                    hoverColorArea = checkDownCircle(mouseX, mouseY, colorArea.x, colorArea.y, colorArea.r);
-                }
-                let colorAreaCorners = calculateCorners(colorArea);
-                for (let corner_index in colorAreaCorners) {
-                    hoverColorAreaCorners = (mouseX > colorAreaCorners[corner_index].x && mouseX < colorAreaCorners[corner_index].x + colorAreaCorners[corner_index].w && mouseY > colorAreaCorners[corner_index].y && mouseY < colorAreaCorners[corner_index].y + colorAreaCorners[corner_index].h);
-                    if (hoverColorAreaCorners) {
-                        hoveringCorner = corner_index;
-                        break;
-                    }
-                }
-                if (hoverColorArea) {
-                    break;
-                }
-            }
-            var hoverRuler = (mouseX > ruler.x && mouseX < ruler.x + ruler.w && mouseY > ruler.y && mouseY < ruler.y + ruler.h);
-            if (hoverObstacleCorners || (hoverColorAreaCorners && colorAreasActivated)) {
-                if (hoveringCorner == 0) $("#robotLayer").css('cursor', 'nesw-resize');
-                else if (hoveringCorner == 1) $("#robotLayer").css('cursor', 'nw-resize');
-                else if (hoveringCorner == 2) $("#robotLayer").css('cursor', 'ne-resize');
-                else if (hoveringCorner == 3) $("#robotLayer").css('cursor', 'nwse-resize');
-                else $("#robotLayer").css('cursor', 'ne-resize');
-            } else if (hoverColorArea && !colorAreasActivated) {
-                $("#robotLayer").css('cursor', 'not-allowed');
-            } else if (hoverRobot || hoverObstacle || hoverRuler || hoverColorArea) {
+
+        // move robots
+        for (var i = 0; i < numRobots; i++) {
+            dx = mouseX - robots[i].mouse.rx;
+            dy = mouseY - robots[i].mouse.ry;
+            let hoverRobot = (dx * dx + dy * dy < robots[i].mouse.r * robots[i].mouse.r);
+            if (hoverRobot) {
                 $("#robotLayer").css('cursor', 'pointer');
-            } else {
-                $("#robotLayer").css('cursor', 'auto');
+                if (downRobot === i && selectedRobot === i) {
+                    robots[i].pose.xOld = robots[i].pose.x;
+                    robots[i].pose.yOld = robots[i].pose.y;
+                    robots[i].pose.x += dx;
+                    robots[i].pose.y += dy;
+                    robots[i].mouse.rx += dx;
+                    robots[i].mouse.ry += dy;
+                    return;
+                }
+                break;
             }
-            return;
         }
         dx = (mouseX - startX);
         dy = (mouseY - startY);
         startX = mouseX;
         startY = mouseY;
-        const minSizeObjects = 15;
-        if (isAnyRobotDown()) {
-            if (robots[mouseOnRobotIndex].drawWidth) {
-                robots[mouseOnRobotIndex].canDraw = false;
-            }
-            robots[mouseOnRobotIndex].pose.xOld = robots[mouseOnRobotIndex].pose.x;
-            robots[mouseOnRobotIndex].pose.yOld = robots[mouseOnRobotIndex].pose.y;
-            robots[mouseOnRobotIndex].pose.x += dx;
-            robots[mouseOnRobotIndex].pose.y += dy;
-            robots[mouseOnRobotIndex].mouse.rx += dx;
-            robots[mouseOnRobotIndex].mouse.ry += dy;
-        } else if (isDownObstacle && selectedObstacle != null && !isDownObstacleCorner && obstacleList[selectedObstacle].form === "rectangle") {
-            obstacleList[selectedObstacle].x += dx;
-            obstacleList[selectedObstacle].y += dy;
-            updateObstacleLayer();
-        } else if (isDownObstacle && selectedObstacle != null && !isDownObstacleCorner && obstacleList[selectedObstacle].form === "triangle") {
-            obstacleList[selectedObstacle].ax += dx;
-            obstacleList[selectedObstacle].ay += dy;
-            obstacleList[selectedObstacle].bx += dx;
-            obstacleList[selectedObstacle].by += dy;
-            obstacleList[selectedObstacle].cx += dx;
-            obstacleList[selectedObstacle].cy += dy;
-            updateObstacleLayer();
-        } else if (isDownObstacle && selectedObstacle != null && !isDownObstacleCorner && obstacleList[selectedObstacle].form === "circle") {
-            obstacleList[selectedObstacle].x += dx;
-            obstacleList[selectedObstacle].y += dy;
-            updateObstacleLayer();
-        } else if (isDownObstacleCorner && selectedObject == selectedCornerObject && selectedObstacle != null) {
-            if (obstacleList[selectedObstacle].form === "triangle") {
-                if (selectedCorner == 0) {
-                    obstacleList[selectedObstacle].ax += dx;
-                    obstacleList[selectedObstacle].ay += dy;
-                } else if (selectedCorner == 1) {
-                    obstacleList[selectedObstacle].bx += dx;
-                    obstacleList[selectedObstacle].by += dy;
-                } else if (selectedCorner == 2) {
-                    obstacleList[selectedObstacle].cx += dx;
-                    obstacleList[selectedObstacle].cy += dy;
-                }
-            } else if (obstacleList[selectedObstacle].form === "circle") {
-                if (obstacleList[selectedObstacle].r >= minSizeObjects) {
-                    if (mouseX >= obstacleList[selectedObstacle].x) obstacleList[selectedObstacle].r += dx;
-                    else if (mouseX < obstacleList[selectedObstacle].x) obstacleList[selectedObstacle].r -= dx;
-                } else if (obstacleList[selectedObstacle].r < minSizeObjects) {
-                    obstacleList[selectedObstacle].r = minSizeObjects;
-                }
-            } else if (obstacleList[selectedObstacle].form === "rectangle") {
-                if (obstacleList[selectedObstacle].w >= minSizeObjects && obstacleList[selectedObstacle].h >= minSizeObjects) {
-                    if (selectedCorner == 0) {
-                        obstacleList[selectedObstacle].x += dx;
-                        obstacleList[selectedObstacle].w -= dx;
-                        obstacleList[selectedObstacle].h += dy;
-                    } else if (selectedCorner == 1) {
-                        obstacleList[selectedObstacle].x += dx;
-                        obstacleList[selectedObstacle].y += dy;
-                        obstacleList[selectedObstacle].w -= dx;
-                        obstacleList[selectedObstacle].h -= dy;
-                    } else if (selectedCorner == 2) {
-                        obstacleList[selectedObstacle].y += dy;
-                        obstacleList[selectedObstacle].w += dx;
-                        obstacleList[selectedObstacle].h -= dy;
-                    } else if (selectedCorner == 3) {
-                        obstacleList[selectedObstacle].w += dx;
-                        obstacleList[selectedObstacle].h += dy;
+
+        function resizeObject(object, corner) {
+            switch (object.form) {
+                case "triangle":
+                    switch (corner) {
+                        case 0:
+                            object.ax += dx;
+                            object.ay += dy;
+                            break;
+                        case 1:
+                            object.bx += dx;
+                            object.by += dy;
+                            break;
+                        case 2:
+                            object.cx += dx;
+                            object.cy += dy;
+
+                            break;
+                        default:
+                            break;
                     }
-                } else if (obstacleList[selectedObstacle].w < minSizeObjects) {
-                    if (selectedCorner == 0 || selectedCorner == 1) obstacleList[selectedObstacle].x -= minSizeObjects - obstacleList[selectedObstacle].w;
-                    obstacleList[selectedObstacle].w = minSizeObjects;
-                } else if (obstacleList[selectedObstacle].h < minSizeObjects) {
-                    if (selectedCorner == 1 || selectedCorner == 2) obstacleList[selectedObstacle].y -= minSizeObjects - obstacleList[selectedObstacle].h;
-                    obstacleList[selectedObstacle].h = minSizeObjects;
-                }
-            }
-            updateObstacleLayer();
-        } else if (isDownRuler) {
-            ruler.x += dx;
-            ruler.y += dy;
-            scene.drawRuler();
-        } else if (isDownColorArea && selectedColorArea != null && !isDownColorAreaCorner && colorAreaList[selectedColorArea].form === "rectangle") {
-            colorAreaList[selectedColorArea].x += dx;
-            colorAreaList[selectedColorArea].y += dy;
-            updateColorAreaLayer();
-        } else if (isDownColorArea && selectedColorArea != null && !isDownColorAreaCorner && colorAreaList[selectedColorArea].form === "triangle") {
-            colorAreaList[selectedColorArea].ax += dx;
-            colorAreaList[selectedColorArea].ay += dy;
-            colorAreaList[selectedColorArea].bx += dx;
-            colorAreaList[selectedColorArea].by += dy;
-            colorAreaList[selectedColorArea].cx += dx;
-            colorAreaList[selectedColorArea].cy += dy;
-            updateColorAreaLayer();
-        } else if (isDownColorArea && selectedColorArea != null && !isDownColorAreaCorner && colorAreaList[selectedColorArea].form === "circle") {
-            colorAreaList[selectedColorArea].x += dx;
-            colorAreaList[selectedColorArea].y += dy;
-            updateColorAreaLayer();
-        } else if (isDownColorAreaCorner && selectedObject == selectedCornerObject && selectedColorArea != null) {
-            if (colorAreaList[selectedColorArea].form === "triangle") {
-                if (selectedCorner == 0) {
-                    colorAreaList[selectedColorArea].ax += dx;
-                    colorAreaList[selectedColorArea].ay += dy;
-                } else if (selectedCorner == 1) {
-                    colorAreaList[selectedColorArea].bx += dx;
-                    colorAreaList[selectedColorArea].by += dy;
-                } else if (selectedCorner == 2) {
-                    colorAreaList[selectedColorArea].cx += dx;
-                    colorAreaList[selectedColorArea].cy += dy;
-                }
-            } else if (colorAreaList[selectedColorArea].form === "circle") {
-                if (colorAreaList[selectedColorArea].r >= minSizeObjects) {
-                    if (mouseX >= colorAreaList[selectedColorArea].x) colorAreaList[selectedColorArea].r += dx;
-                    else if (mouseX < colorAreaList[selectedColorArea].x) colorAreaList[selectedColorArea].r -= dx;
-                } else if (colorAreaList[selectedColorArea].r < minSizeObjects) {
-                    colorAreaList[selectedColorArea].r = minSizeObjects;
-                }
-            } else if (colorAreaList[selectedColorArea].form === "rectangle") {
-                if (colorAreaList[selectedColorArea].w >= minSizeObjects && colorAreaList[selectedColorArea].h >= minSizeObjects) {
-                    if (selectedCorner == 0) {
-                        colorAreaList[selectedColorArea].x += dx;
-                        colorAreaList[selectedColorArea].w -= dx;
-                        colorAreaList[selectedColorArea].h += dy;
-                    } else if (selectedCorner == 1) {
-                        colorAreaList[selectedColorArea].x += dx;
-                        colorAreaList[selectedColorArea].y += dy;
-                        colorAreaList[selectedColorArea].w -= dx;
-                        colorAreaList[selectedColorArea].h -= dy;
-                    } else if (selectedCorner == 2) {
-                        colorAreaList[selectedColorArea].y += dy;
-                        colorAreaList[selectedColorArea].w += dx;
-                        colorAreaList[selectedColorArea].h -= dy;
-                    } else if (selectedCorner == 3) {
-                        colorAreaList[selectedColorArea].w += dx;
-                        colorAreaList[selectedColorArea].h += dy;
+                    break;
+                case "circle":
+                    if (Math.abs(dx) >= Math.abs(dy)) {
+                        if (mouseX < object.x) {
+                            object.r -= dx;
+                        } else {
+                            object.r += dx;
+                        }
+                    } else {
+                        if (mouseY < object.y) {
+                            object.r -= dy;
+                        } else {
+                            object.r += dy;
+                        }
                     }
-                } else if (colorAreaList[selectedColorArea].w < minSizeObjects) {
-                    if (selectedCorner == 0 || selectedCorner == 1) colorAreaList[selectedColorArea].x -= minSizeObjects - colorAreaList[selectedColorArea].w;
-                    colorAreaList[selectedColorArea].w = minSizeObjects;
-                } else if (colorAreaList[selectedColorArea].h < minSizeObjects) {
-                    if (selectedCorner == 1 || selectedCorner == 2) colorAreaList[selectedColorArea].y -= minSizeObjects - colorAreaList[selectedColorArea].h;
-                    colorAreaList[selectedColorArea].h = minSizeObjects;
-                }
+                    object.r = Math.max(object.r, C.MIN_SIZE_OBJECT);
+                    break;
+                case "rectangle":
+                    if (object.w >= C.MIN_SIZE_OBJECT && object.h >= C.MIN_SIZE_OBJECT) {
+                        switch (corner) {
+                            case 0:
+                                object.x += dx;
+                                object.w -= dx;
+                                object.h += dy;
+                                break;
+                            case 1:
+                                object.x += dx;
+                                object.y += dy;
+                                object.w -= dx;
+                                object.h -= dy;
+                                break;
+                            case 2:
+                                object.y += dy;
+                                object.w += dx;
+                                object.h -= dy;
+                                break;
+                            case 3:
+                                object.w += dx;
+                                object.h += dy;
+                                break;
+                            default:
+                                break;
+                        }
+                    } else if (object.w < C.MIN_SIZE_OBJECT) {
+                        if (downCorner == 0 || downCorner == 1) {
+                            object.x -= C.MIN_SIZE_OBJECT - object.w;
+                        }
+                        object.w = C.MIN_SIZE_OBJECT;
+                    } else if (object.h < C.MIN_SIZE_OBJECT) {
+                        if (downCorner == 1 || downCorner == 2) {
+                            object.y -= C.MIN_SIZE_OBJECT - object.h;
+                        }
+                        object.h = C.MIN_SIZE_OBJECT;
+                    }
+                    break;
+                default:
+                    break;
             }
-            updateColorAreaLayer();
+            highLightCorners = calculateCorners(object);
         }
+        let hoverCorners = false;
+        for (var i = 0; i < highLightCorners.length; i++) {
+            let corner = highLightCorners[i];
+            hoverCorners = checkDownCircle(mouseX, mouseY, corner.x, corner.y, C.CORNER_RADIUS * 3);
+            if (hoverCorners) {
+                if ((selectedObstacle >= 0 && obstacleList[selectedObstacle].form !== "circle" || selectedColorArea >= 0 && colorAreaList[selectedColorArea].form !== "circle")) {
+                    switch (i) {
+                        case 0:
+                            $("#robotLayer").css('cursor', 'sw-resize');
+                            break;
+                        case 1:
+                            $("#robotLayer").css('cursor', 'nw-resize');
+                            break;
+                        case 2:
+                            $("#robotLayer").css('cursor', 'ne-resize');
+                            break;
+                        case 3:
+                            $("#robotLayer").css('cursor', 'se-resize');
+                    }
+                } else {
+                    switch (i) {
+                        case 0:
+                        case 2:
+                            $("#robotLayer").css('cursor', 'nesw-resize');
+                            break;
+                        case 1:
+                        case 3:
+                            $("#robotLayer").css('cursor', 'nwse-resize');
+                            break;
+                        default:
+                    }
+                }
+                break;
+            }
+        }
+
+        if (downCorner >= 0 && (selectedObstacle >= 0 || selectedColorArea >= 0)) {
+            if (selectedObstacle >= 0) {
+                resizeObject(obstacleList[selectedObstacle], downCorner);
+                updateObstacleLayer();
+            } else if (selectedColorArea >= 0) {
+                resizeObject(colorAreaList[selectedColorArea], downCorner);
+                updateColorAreaLayer();
+            }
+            return;
+        }
+
+        // move obstacles
+        for (let i = 0; i < obstacleList.length; i++) {
+            let obstacle = obstacleList[i];
+            let hoverObstacle = false;
+            if (obstacle.form === "rectangle") {
+                hoverObstacle = (mouseX > obstacle.x && mouseX < obstacle.x + obstacle.w && mouseY > obstacle.y && mouseY < obstacle.y + obstacle.h);
+            } else if (obstacle.form === "triangle") {
+                hoverObstacle = checkDownTriangle(mouseX, mouseY, obstacle.ax, obstacle.ay, obstacle.bx, obstacle.by, obstacle.cx, obstacle.cy);
+            } else if (obstacle.form === "circle") {
+                hoverObstacle = checkDownCircle(mouseX, mouseY, obstacle.x, obstacle.y, obstacle.r);
+            }
+            if (hoverObstacle && !hoverCorners) {
+                $("#robotLayer").css('cursor', 'pointer');
+            }
+            if (downObstacle === i && selectedObstacle === i) {
+                $("#robotLayer").css('cursor', 'pointer');
+                switch (obstacle.form) {
+                    case "rectangle":
+                    case "circle":
+                        obstacle.x += dx;
+                        obstacle.y += dy;
+                        break;
+                    case "triangle":
+                        obstacle.ax += dx;
+                        obstacle.ay += dy;
+                        obstacle.bx += dx;
+                        obstacle.by += dy;
+                        obstacle.cx += dx;
+                        obstacle.cy += dy;
+                        break;
+                    default:
+                }
+                highLightCorners = calculateCorners(obstacle);
+                updateObstacleLayer();
+                return;
+            }
+        }
+
+        // move colorAreas
+        for (let i = 0; i < colorAreaList.length; i++) {
+            let colorArea = colorAreaList[i];
+            let hoverColorArea = false;
+            if (colorArea.form === "rectangle") {
+                hoverColorArea = (mouseX > colorArea.x && mouseX < colorArea.x + colorArea.w && mouseY > colorArea.y && mouseY < colorArea.y + colorArea.h);
+            } else if (colorArea.form === "triangle") {
+                hoverColorArea = checkDownTriangle(mouseX, mouseY, colorArea.ax, colorArea.ay, colorArea.bx, colorArea.by, colorArea.cx, colorArea.cy);
+            } else if (colorArea.form === "circle") {
+                hoverColorArea = checkDownCircle(mouseX, mouseY, colorArea.x, colorArea.y, colorArea.r);
+            }
+            if (hoverColorArea && !hoverCorners) {
+                $("#robotLayer").css('cursor', 'pointer');
+            }
+            if (downColorArea === i && selectedColorArea === i) {
+                $("#robotLayer").css('cursor', 'pointer');
+                switch (colorArea.form) {
+                    case "rectangle":
+                    case "circle":
+                        colorArea.x += dx;
+                        colorArea.y += dy;
+                        break;
+                    case "triangle":
+                        colorArea.ax += dx;
+                        colorArea.ay += dy;
+                        colorArea.bx += dx;
+                        colorArea.by += dy;
+                        colorArea.cx += dx;
+                        colorArea.cy += dy;
+                        break;
+                    default:
+                }
+                highLightCorners = calculateCorners(colorArea);
+                updateColorAreaLayer();
+                return;
+            }
+        }
+
+        let hoverRuler = (mouseX > ruler.x && mouseX < ruler.x + ruler.w && mouseY > ruler.y && mouseY < ruler.y + ruler.h);
+        if (hoverRuler) {
+            $("#robotLayer").css('cursor', 'pointer');
+            if (downRuler) {
+                ruler.x += dx;
+                ruler.y += dy;
+                scene.drawRuler();
+                e.preventDefault();
+                return;
+            }
+        }
+        e.preventDefault();
     }
 
     var dist = 0;
@@ -1492,8 +1484,8 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
         if (zoom) {
             scene.drawBackground();
             scene.drawRuler();
-            scene.drawObstacles();
-            scene.drawColorAreas();
+            scene.drawObstacles(highLightCorners);
+            scene.drawColorAreas(highLightCorners);
             e.stopPropagation();
         }
     }
@@ -1513,8 +1505,8 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
             var scaleY = scene.playground.h / (ground.h + 20);
             scale = Math.min(scaleX, scaleY) - 0.05;
             scene.updateBackgrounds();
-            scene.drawObstacles();
-            scene.drawColorAreas();
+            scene.drawObstacles(highLightCorners);
+            scene.drawColorAreas(highLightCorners);
             scene.drawRuler();
         }
     }
@@ -1566,6 +1558,7 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
         $("#robotIndex").on('change', function(e) {
             $("#brick" + robotIndex).hide();
             robotIndex = e.target.selectedIndex;
+            selectedRobot = e.target.selectedIndex;
             $("#brick" + robotIndex).show();
         });
     }
@@ -1588,8 +1581,8 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
     function initScene() {
         scene = new Scene(imgObjectList[currentBackground], robots, imgPattern, ruler);
         scene.updateBackgrounds();
-        scene.drawObstacles();
-        scene.drawColorAreas();
+        scene.drawObstacles(highLightCorners);
+        scene.drawColorAreas(highLightCorners);
         scene.drawRuler();
         scene.drawRobots();
         scene.drawVariables();
@@ -1597,7 +1590,7 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
         disableChangeObjectButtons();
 
         if (robots[0].colorRange) {
-            colorpicker = new huebee('#colorpicker', {
+            colorpicker = new HUEBEE('#colorpicker', {
                 shades: 1,
                 hues: 8,
                 customColors: robots[0].colorRange,
@@ -1606,13 +1599,13 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
             colorpicker.on('change', function(color) {
                 changeColorWithColorPicker(color);
             });
-            let close = huebee.prototype.close;
-            huebee.prototype.close = function() {
+            let close = HUEBEE.prototype.close;
+            HUEBEE.prototype.close = function() {
                 $(".huebee__container").off("mouseup touchend", resetColorpickerCursor);
                 close.apply(this);
             };
-            let open = huebee.prototype.open;
-            huebee.prototype.open = function() {
+            let open = HUEBEE.prototype.open;
+            HUEBEE.prototype.open = function() {
                 open.apply(this);
                 $(".huebee__container").on("mouseup touchend", resetColorpickerCursor)
             };
@@ -1626,28 +1619,19 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
         render();
     }
 
-    function getSelectedObject() {
-        return selectedObject;
-    }
-
-    exports.getSelectedObject = getSelectedObject;
-
     function getScale() {
         return scale;
     }
-
     exports.getScale = getScale;
 
     function getGround() {
         return ground;
     }
-
     exports.getGround = getGround;
 
     function getInfo() {
         return info;
     }
-
     exports.getInfo = getInfo;
 
     function isIE() {
@@ -2046,7 +2030,6 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
         }
         return this.webAudio;
     }
-
     exports.getWebAudio = getWebAudio;
 
     /** adds/removes the ability for a block to be a breakpoint to a block */
@@ -2116,7 +2099,7 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
         }
         if (!breakpoints.length > 0 && interpreters !== null) {
             for (var i = 0; i < numRobots; i++) {
-                interpreters[i].removeEvent(CONST.DEBUG_BREAKPOINT);
+                interpreters[i].removeEvent(C.DEBUG_BREAKPOINT);
             }
         }
     }
@@ -2178,7 +2161,7 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
     }
 
     if (!window.requestAnimationFrame) {
-        window.requestAnimationFrame = function(callback, element) {
+        window.requestAnimationFrame = function(callback) {
             var currTime = new Date().getTime();
             var timeToCall = Math.max(0, frameRateMs - (currTime - lastTime));
             var id = window.setTimeout(function() {
