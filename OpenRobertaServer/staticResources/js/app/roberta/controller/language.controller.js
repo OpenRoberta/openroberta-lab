@@ -196,8 +196,6 @@ define(['exports', 'log', 'jquery', 'guiState.controller', 'program.controller',
                 $('#simControlStepInto').attr('data-original-title', value);
             } else if (lkey == 'Blockly.Msg.MENU_DEBUG_STEP_OVER_TOOLTIP') {
                 $('#simControlStepOver').attr('data-original-title', value);
-            } else if (lkey == 'Blockly.Msg.MENU_SIM_VARIABLES_TOOLTIP') {
-                $('#simVariables').attr('data-original-title', value);
             } else if (lkey == 'Blockly.Msg.MENU_CODE_DOWNLOAD_TOOLTIP') {
                 $('#codeDownload').attr('data-original-title', value);
                 $('#downloadSourceCodeEditor').attr('data-original-title', value);

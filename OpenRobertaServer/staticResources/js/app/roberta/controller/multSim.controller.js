@@ -127,7 +127,7 @@ define(['exports', 'message', 'util', 'progList.model', 'program.controller', 'p
         $("#showMultipleSimPrograms").modal('hide');
         const INITIAL_WIDTH = 0.5;
         SIM.init(programs, true, GUISTATE_C.getRobotGroup());
-        $('#debugMode, #simControlBreakPoint, #simControlStepOver, #simControlStepInto, #simVariables').hide();
+        $('#simCancel, #simControlStepOver, #simControlStepInto').hide();
         $(".sim").removeClass('hide');
         $('#simButtonsCollapse').collapse({
             'toggle': false

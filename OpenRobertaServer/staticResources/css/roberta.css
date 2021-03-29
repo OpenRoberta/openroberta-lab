@@ -1137,7 +1137,6 @@ button#simCustomObstacle.typcn:before {
     color: #f1f1f1;
 }
 
-.modal#simVariablesContent button.close,
 .modal#simValuesModal button.close {
     margin-right: -10px;
     margin-top: -14px;
@@ -1150,15 +1149,6 @@ button#simCustomObstacle.typcn:before {
     width: auto;
 }
 
-#simVariablesContent label {
-    display: inline-block;
-    float: left;
-    clear: left;
-    width: auto;
-    text-align: left;
-    margin-right: 6px;
-}
-
 #simValuesContent label {
     display: inline-block;
     float: left;
@@ -1168,18 +1158,10 @@ button#simCustomObstacle.typcn:before {
     margin-right: 6px;
 }
 
-#simVariablesContent div > div,
 #simValuesContent div > div {
     white-space: nowrap;
     overflow: hidden;
     min-width: 250px;
-}
-
-#simVariablesContent span {
-    display: inline;
-    float: right;
-    padding: 0 10px;
-    width: auto;
 }
 
 #simValuesContent span {
@@ -1196,7 +1178,6 @@ button#simCustomObstacle.typcn:before {
     color: #ffffff;
 }
 
-.modal#simVariablesModal button.close,
 .modal#simValuesModal button.close:hover {
     margin-right: -10px;
     margin-top: -14px;
@@ -2381,7 +2362,7 @@ input[type=range]:focus::-ms-fill-upper {
     font-size: 28px;
 }
 
-.simChangeObject.disabled {
+.simChangeObject.disabled, #simCancel.disabled {
 	color: #bbb;
 	cursor: not-allowed;
 }

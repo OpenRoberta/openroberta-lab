@@ -443,6 +443,11 @@ limitations under the License.
 						data-original-title="" title="">
 						<span id="" class="simButton typcn typcn-simulation"></span>
 					</div>
+					<div href="#" id="simDebugButton" class="rightMenuButton"
+						lkey="Blockly.Msg.MENU_RIGHT_SIM_TOOLTIP" rel="tooltip"
+						data-original-title="" title="">
+						<span id="" class="simDebugButton typcn typcn-debug"></span>
+					</div>
 				</div>
 			</div>
 			<div id="simDiv" class="fromRight">
@@ -508,21 +513,33 @@ limitations under the License.
 						</ul>
 					</div>
 					<div class="btn-group">
-					<button id="simChangeObjectColor" type="button"
-						class="blbtn typcn typcn-pipette simChangeObject"
-						lkey="Blockly.Msg.MENU_SIM_CHANGE_COLOR_TOOLTIP" rel="tooltip"
-						data-original-title=""></button>
+						<button id="simChangeObjectColor" type="button"
+							class="blbtn typcn typcn-pipette simChangeObject"
+							lkey="Blockly.Msg.MENU_SIM_CHANGE_COLOR_TOOLTIP" rel="tooltip"
+							data-original-title=""></button>
 						<div id="colorpicker"></div>
-						</div>
+					</div>
 					<button id="simDeleteObject" type="button"
 						class="blbtn typcn typcn-blockly-trashcan simChangeObject"
 						lkey="Blockly.Msg.MENU_SIM_DELETE_OBJECT_TOOLTIP" rel="tooltip"
-						data-original-title=""></button>					
+						data-original-title=""></button>
 				</div>
 				<div id="simButtons">
+					<button id="simCancel" type="button"
+						class="blbtn typcn typcn-media-stop-outline disabled"
+						lkey="Blockly.Msg.MENU_SIM_STOP_TOOLTIP" rel="tooltip"
+						data-original-title="" title=""></button>
 					<button id="simControl" type="button"
 						class="blbtn typcn typcn-media-play-outline"
 						lkey="Blockly.Msg.MENU_SIM_START_TOOLTIP" rel="tooltip"
+						data-original-title="" title=""></button>
+					<button id="simControlStepOver"
+						class="blbtn typcn typcn-arrow-forward-outline"
+						lkey="Blockly.Msg.MENU_DEBUG_STEP_OVER_TOOLTIP" rel="tooltip"
+						data-original-title="" title=""></button>
+					<button id="simControlStepInto"
+						class="blbtn typcn typcn-arrow-down-outline"
+						lkey="Blockly.Msg.MENU_DEBUG_STEP_INTO_TOOLTIP" rel="tooltip"
 						data-original-title="" title=""></button>
 					<button id="simRobot" type="button" class="simRobot blbtn typcn"
 						lkey="Blockly.Msg.MENU_SIM_ROBOT_TOOLTIP" rel="tooltip"
@@ -534,26 +551,6 @@ limitations under the License.
 					<button id="simResetPose" type="button"
 						class="simLocation blbtn typcn typcn-location-outline"
 						lkey="Blockly.Msg.MENU_SIM_POSE_TOOLTIP" rel="tooltip"
-						data-original-title="" title=""></button>
-					<button id="debugMode" type="button"
-						class="blbtn typcn typcn-spanner-outline"
-						lkey="Blockly.Msg.MENU_DEBUG_START_TOOLTIP" rel="tooltip"
-						data-original-title="" title=""></button>
-					<button id="simControlBreakPoint"
-						class="blbtn typcn typcn-database"
-						lkey="Blockly.Msg.MENU_DEBUG_STEP_BREAKPOINT_TOOLTIP"
-						rel="tooltip" data-original-title="" title=""></button>
-					<button id="simControlStepOver"
-						class="blbtn typcn typcn-arrow-forward-outline"
-						lkey="Blockly.Msg.MENU_DEBUG_STEP_OVER_TOOLTIP" rel="tooltip"
-						data-original-title="" title=""></button>
-					<button id="simControlStepInto"
-						class="blbtn typcn typcn-arrow-down-outline"
-						lkey="Blockly.Msg.MENU_DEBUG_STEP_INTO_TOOLTIP" rel="tooltip"
-						data-original-title="" title=""></button>
-					<button id="simVariables"
-						class="simVariables blbtn typcn typcn-variable"
-						lkey="Blockly.Msg.MENU_SIM_VARIABLES_TOOLTIP" rel="tooltip"
 						data-original-title="" title=""></button>
 				</div>
 
@@ -1937,21 +1934,6 @@ limitations under the License.
 				<div id="valuesContent">
 					<div id="constantValue"></div>
 					<div id="notConstantValue"></div>
-				</div>
-			</div>
-		</div>
-	</div>
-	<!-- Popup for simulation variable data -->
-	<div id="simVariablesModal" class="modal fade simRobotModal"
-		data-backdrop="false">
-		<div class="modal-dialog">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal"
-					aria-hidden="true">&times;</button>
-			</div>
-			<div id="simVariablesContent">
-				<div id="variablesContent">
-					<div id="variableValue"></div>
 				</div>
 			</div>
 		</div>

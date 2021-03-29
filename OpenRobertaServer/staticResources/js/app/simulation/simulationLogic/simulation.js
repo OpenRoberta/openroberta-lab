@@ -239,14 +239,6 @@ define(['exports', 'simulation.scene', 'simulation.constants', 'util', 'interpre
             }
             pause = value;
         }
-        for (var i = 0; i < robots.length; i++) {
-            if (robots[i].left) {
-                robots[i].left = 0;
-            }
-            if (robots[i].right) {
-                robots[i].right = 0;
-            }
-        }
     }
     exports.setPause = setPause;
 
@@ -633,7 +625,6 @@ define(['exports', 'simulation.scene', 'simulation.constants', 'util', 'interpre
                     }
                     removeMouseEvents();
                     scene.drawRobots();
-                    scene.drawVariables();
 
                     // some time to cancel all timeouts
                     setTimeout(function() {
@@ -684,7 +675,6 @@ define(['exports', 'simulation.scene', 'simulation.constants', 'util', 'interpre
         reset = robots[0].buttons.Reset;
         scene.updateSensorValues(!pause);
         scene.drawRobots();
-        scene.drawVariables();
         renderTime = new Date().getTime() - renderTimeStart;
     }
 
@@ -1512,6 +1502,7 @@ define(['exports', 'simulation.scene', 'simulation.constants', 'util', 'interpre
     }
 
     function addMouseEvents() {
+        removeMouseEvents();
         $("#robotLayer").on('mousedown touchstart', function(e) {
             if (robots[robotIndex].handleMouseDown) {
                 robots[robotIndex].handleMouseDown(e, offsetX, offsetY, scale, scene.playground.w / 2, scene.playground.h / 2);
@@ -1585,7 +1576,6 @@ define(['exports', 'simulation.scene', 'simulation.constants', 'util', 'interpre
         scene.drawColorAreas(highLightCorners);
         scene.drawRuler();
         scene.drawRobots();
-        scene.drawVariables();
         addMouseEvents();
         disableChangeObjectButtons();
 
@@ -2077,6 +2067,11 @@ define(['exports', 'simulation.scene', 'simulation.constants', 'util', 'interpre
         }
     }
 
+    function getDebugMode() {
+        return debugMode;
+    }
+    exports.getDebugMode = getDebugMode;
+
     /** updates the debug mode for all interpreters */
     function updateDebugMode(mode) {
         debugMode = mode;
@@ -2087,7 +2082,6 @@ define(['exports', 'simulation.scene', 'simulation.constants', 'util', 'interpre
         }
         updateBreakpointEvent();
     }
-
     exports.updateDebugMode = updateDebugMode;
 
     /** removes breakpoint block */
@@ -2125,9 +2119,7 @@ define(['exports', 'simulation.scene', 'simulation.constants', 'util', 'interpre
             }
         }
         Blockly.getMainWorkspace().getAllBlocks().forEach(function(block) {
-            if (block.inTask && !block.disabled && !block.getInheritedDisabled()) {
-                $(block.svgPath_).stop(true, true).animate({ 'fill-opacity': '1' }, 0);
-            }
+            $(block.svgPath_).stop(true, true).removeAttr('style');
         });
         breakpoints = [];
         debugMode = false;

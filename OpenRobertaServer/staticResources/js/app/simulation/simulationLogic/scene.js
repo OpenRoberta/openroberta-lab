@@ -187,19 +187,6 @@ define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constan
         }
     }
 
-    Scene.prototype.drawVariables = function() {
-        $("#variableValue").html("");
-        var variables = SIM.getSimVariables()
-        if (Object.keys(variables).length > 0) {
-            for (var v in variables) {
-                var value = variables[v][0];
-                addVariableValue(v, value);
-            }
-        } else {
-            $('#variableValue').append('<div><label> No variables instantiated</label></div>')
-        }
-    }
-
     Scene.prototype.drawMbed = function() {
         this.rCtx.clearRect(0, 0, C.MAX_WIDTH, C.MAX_HEIGHT);
         this.rCtx.restore();
@@ -299,6 +286,16 @@ define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constan
                     for (var side in this.robots[r].infraredSensors[s]) {
                         $("#notConstantValue").append('<div><label>Infrared Sensor ' + s.replace("ORT_", "") + ' ' + side + '</label><span>' + this.robots[r].infraredSensors[s][side].value + '</span></div>');
 
+                    }
+                }
+                if (SIM.getDebugMode()) {
+                    var variables = SIM.getSimVariables()
+                    if (Object.keys(variables).length > 0) {
+                        $('#notConstantValue').append('<div><label>Variables</label></div>');
+                        for (var v in variables) {
+                            var value = variables[v][0];
+                            addVariableValue(v, value);
+                        }
                     }
                 }
             }
@@ -1036,15 +1033,15 @@ define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constan
     function addVariableValue(name, value) {
         switch (typeof value) {
             case "number": {
-                $("#variableValue").append('<div><label>' + name + ' :  </label><span> ' + UTIL.round(value, 0) + '</span></div>');
+                $("#notConstantValue").append('<div><label>' + name + ' :  </label><span> ' + UTIL.round(value, 0) + '</span></div>');
                 break;
             }
             case "string": {
-                $("#variableValue").append('<div><label>' + name + ' :  </label><span> ' + value + '</span></div>');
+                $("#notConstantValue").append('<div><label>' + name + ' :  </label><span> ' + value + '</span></div>');
                 break;
             }
             case "boolean": {
-                $("#variableValue").append('<div><label>' + name + ' :  </label><span> ' + value + '</span></div>');
+                $("#notConstantValue").append('<div><label>' + name + ' :  </label><span> ' + value + '</span></div>');
                 break;
             }
             case "object": {
