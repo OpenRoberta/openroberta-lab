@@ -1097,42 +1097,39 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
         if ( !initiateList.isEmpty() ) {
             initiateList.removeIf(IS_INVALID_BLOCK_ID);
             operation.put(C.HIGHTLIGHT_PLUS, new ArrayList<>(initiateList));
+            notYetTerminatedList.addAll(initiateList);
             initiateList.clear();
         }
         if ( !terminateList.isEmpty() ) {
             terminateList.removeIf(IS_INVALID_BLOCK_ID);
             operation.put(C.HIGHTLIGHT_MINUS, new ArrayList<>(terminateList));
+            notYetTerminatedList.removeAll(terminateList);
             terminateList.clear();
         }
         return operation;
     }
 
     protected JSONObject makeLeaf(String opCode, Phrase<V> phrase) {
-        String blocklyId = phrase.getProperty().getBlocklyId();
-        boolean shouldHaveInitiateAndTerminate = debugger && !notYetTerminatedList.contains(blocklyId);
+        String blockId = phrase.getProperty().getBlocklyId();
+        boolean isSameBlockAgain = notYetTerminatedList.contains(blockId) && terminateList.contains(blockId);
+        if (isSameBlockAgain) terminateList.remove(blockId);
 
-        if ( shouldHaveInitiateAndTerminate ) initiateList.add(blocklyId);
+        beginPhrase(phrase);
 
         JSONObject node = makeNode(opCode);
 
-        if (shouldHaveInitiateAndTerminate) terminateList.add(blocklyId);
+        endPhrase(phrase);
         return node;
     }
 
-    private void endPhrase(Phrase<V> phrase) {
-        if ( debugger ) {
-            String blocklyId = phrase.getProperty().getBlocklyId();
-            terminateList.add(blocklyId);
-            notYetTerminatedList.remove(blocklyId);
-        }
+    protected void endPhrase(Phrase<V> phrase) {
+        String blocklyId = phrase.getProperty().getBlocklyId();
+        if ( debugger && !terminateList.contains(blocklyId) ) terminateList.add(blocklyId);
     }
 
     protected void beginPhrase(Phrase<V> phrase) {
-        if ( debugger ) {
-            String blocklyId = phrase.getProperty().getBlocklyId();
-            initiateList.add(blocklyId);
-            notYetTerminatedList.add(blocklyId);
-        }
+        String blocklyId = phrase.getProperty().getBlocklyId();
+        if ( debugger && !initiateList.contains(blocklyId) && !notYetTerminatedList.contains(blocklyId) ) initiateList.add(blocklyId);
     }
 
     protected V app(JSONObject o) {
