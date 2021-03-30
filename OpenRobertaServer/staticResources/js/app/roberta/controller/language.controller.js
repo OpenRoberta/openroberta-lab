@@ -139,6 +139,8 @@ define(['exports', 'log', 'jquery', 'guiState.controller', 'program.controller',
                 $('#codeButton').attr('data-original-title', value);
             } else if (lkey == 'Blockly.Msg.MENU_RIGHT_SIM_TOOLTIP') {
                 $('#simButton').attr('data-original-title', value);
+            } else if (lkey == 'Blockly.Msg.MENU_RIGHT_SIM_DEBUG_TOOLTIP') {
+                $('#simDebugButton').attr('data-original-title', value);
             } else if (lkey == 'Blockly.Msg.MENU_RIGHT_INFO_TOOLTIP') {
                 $('#infoButton').attr('data-original-title', value);
             } else if (lkey == 'Blockly.Msg.MENU_RIGHT_HELP_TOOLTIP') {
@@ -161,6 +163,8 @@ define(['exports', 'log', 'jquery', 'guiState.controller', 'program.controller',
                 $('#iconDisplayRobotState').attr('data-original-title', value);
             } else if (lkey === "Blockly.Msg.MENU_SIM_START_TOOLTIP") {
                 $('#simControl').attr('data-original-title', value);
+            } else if (lkey === "Blockly.Msg.MENU_SIM_STOP_TOOLTIP") {
+                $('#simCancel').attr('data-original-title', value);
             } else if (lkey === "Blockly.Msg.MENU_SIM_SCENE_TOOLTIP") {
                 $('#simScene').attr('data-original-title', value);
             } else if (lkey === "Blockly.Msg.MENU_SIM_ADD_COLOR_OBJECT_TOOLTIP") {
@@ -174,11 +178,9 @@ define(['exports', 'log', 'jquery', 'guiState.controller', 'program.controller',
                 $('#simChangeObjectColor').attr('data-original-title', value);
             } else if (lkey === "Blockly.Msg.MENU_SIM_DELETE_OBJECT_TOOLTIP") {
                 $('#simDeleteObject').attr('data-original-title', value);
-            } else if (lkey === "Blockly.Msg.MENU_SIM_CONFIG") {
-                $('#simConfig').attr('data-original-title', value);
-            } else if (lkey === "Blockly.Msg.MENU_SIM_CONFIG_DOWNLOAD") {
+            } else if (lkey === "Blockly.Msg.MENU_SIM_CONFIG_EXPORT") {
                 $('#simDownloadConfig').attr('data-original-title', value);
-            } else if (lkey === "Blockly.Msg.MENU_SIM_CONFIG_UPLOAD") {
+            } else if (lkey === "Blockly.Msg.MENU_SIM_CONFIG_IMPORT") {
                 $('#simUploadConfig').attr('data-original-title', value);
             } else if (lkey === "Blockly.Msg.MENU_SIM_ROBOT_TOOLTIP") {
                 $('#simRobot').attr('data-original-title', value);

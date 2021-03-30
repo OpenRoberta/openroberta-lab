@@ -233,7 +233,13 @@ define(['exports', 'simulation.scene', 'simulation.constants', 'util', 'interpre
             if (value && !debugMode) {
                 $('#simControl').addClass('typcn-media-play-outline').removeClass('typcn-media-stop');
                 $('#simControl').attr('data-original-title', Blockly.Msg.MENU_SIM_START_TOOLTIP);
-            } else {
+                /*            } else if (value && debugMode) {
+                                $('#simControl').addClass('typcn-media-play').removeClass('typcn-media-play');
+                                $('#simCancel').addClass("disabled");
+                            } else if (!value && debugMode) {
+                                $('#simControl').addClass('typcn-media-play-outline').removeClass('typcn-media-play');
+                                $('#simCancel').removeClass("disabled").addClass("disabled");*/
+            } else if (!value && !debugMode) {
                 $('#simControl').addClass('typcn-media-stop').removeClass('typcn-media-play-outline');
                 $('#simControl').attr('data-original-title', Blockly.Msg.MENU_SIM_STOP_TOOLTIP);
             }
@@ -460,6 +466,13 @@ define(['exports', 'simulation.scene', 'simulation.constants', 'util', 'interpre
     };
 
     function callbackOnTermination() {
+        if (debugMode) {
+            $('#simControl').addClass('typcn-media-play-outline').removeClass('typcn-play');
+            $('#simCancel').removeClass("disabled");
+        } else {
+            $('#simControl').addClass('typcn-media-play-outline').removeClass('typcn-media-stop');
+            $('#simControl').attr('data-original-title', Blockly.Msg.MENU_SIM_START_TOOLTIP);
+        }
         console.log("END of Sim");
     }
 
@@ -609,7 +622,7 @@ define(['exports', 'simulation.scene', 'simulation.constants', 'util', 'interpre
         stepCounter += 1;
 
         for (var i = 0; i < numRobots; i++) {
-            if (!robots[i].pause && !pause) {
+            if ((robots[i] && !robots[i].pause) && !pause) {
                 if (!interpreters[i].isTerminated() && !reset) {
                     if (runRenderUntil[i] <= now) {
                         var delayMs = interpreters[i].run(now + dtRobot);
@@ -679,10 +692,13 @@ define(['exports', 'simulation.scene', 'simulation.constants', 'util', 'interpre
     }
 
     function reloadProgram() {
-        $('.simForward').removeClass('typcn-media-pause');
-        $('.simForward').addClass('typcn-media-play');
-        $('#simControl').addClass('typcn-media-play-outline').removeClass('typcn-media-stop');
-        $('#simControl').attr('data-original-title', Blockly.Msg.MENU_SIM_START_TOOLTIP);
+        if (debugMode) {
+            $('#simControl').addClass('typcn-media-play').removeClass('typcn-play-outline');
+            $('#simCancel').addClass("disabled");
+        } else {
+            $('#simControl').addClass('typcn-media-play-outline').removeClass('typcn-media-stop');
+            $('#simControl').attr('data-original-title', Blockly.Msg.MENU_SIM_START_TOOLTIP);
+        }
     }
 
     //set standard obstacle
