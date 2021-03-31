@@ -122,7 +122,6 @@ define(['exports', 'simulation.scene', 'simulation.constants', 'util', 'interpre
     function setBackground(num) {
         num = num || -1;
         setPause(true);
-        $('#simControl').attr('data-original-title', Blockly.Msg.MENU_SIM_STOP_TOOLTIP);
         let configData = {};
         if (num === -1) {
             configData = exportConfigData();
@@ -233,12 +232,6 @@ define(['exports', 'simulation.scene', 'simulation.constants', 'util', 'interpre
             if (value && !debugMode) {
                 $('#simControl').addClass('typcn-media-play-outline').removeClass('typcn-media-stop');
                 $('#simControl').attr('data-original-title', Blockly.Msg.MENU_SIM_START_TOOLTIP);
-                /*            } else if (value && debugMode) {
-                                $('#simControl').addClass('typcn-media-play').removeClass('typcn-media-play');
-                                $('#simCancel').addClass("disabled");
-                            } else if (!value && debugMode) {
-                                $('#simControl').addClass('typcn-media-play-outline').removeClass('typcn-media-play');
-                                $('#simCancel').removeClass("disabled").addClass("disabled");*/
             } else if (!value && !debugMode) {
                 $('#simControl').addClass('typcn-media-stop').removeClass('typcn-media-play-outline');
                 $('#simControl').attr('data-original-title', Blockly.Msg.MENU_SIM_STOP_TOOLTIP);
@@ -466,12 +459,14 @@ define(['exports', 'simulation.scene', 'simulation.constants', 'util', 'interpre
     };
 
     function callbackOnTermination() {
-        if (debugMode) {
-            $('#simControl').addClass('typcn-media-play-outline').removeClass('typcn-play');
-            $('#simCancel').removeClass("disabled");
-        } else {
-            $('#simControl').addClass('typcn-media-play-outline').removeClass('typcn-media-stop');
-            $('#simControl').attr('data-original-title', Blockly.Msg.MENU_SIM_START_TOOLTIP);
+        if (!robots[0].endless) {
+            if (debugMode) {
+                $('#simControl').addClass('typcn-media-play-outline').removeClass('typcn-play');
+                $('#simCancel').removeClass("disabled");
+            } else {
+                $('#simControl').addClass('typcn-media-play-outline').removeClass('typcn-media-stop');
+                $('#simControl').attr('data-original-title', Blockly.Msg.MENU_SIM_START_TOOLTIP);
+            }
         }
         console.log("END of Sim");
     }

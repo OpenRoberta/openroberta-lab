@@ -215,6 +215,9 @@ define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constan
                 }
             }
         }
+        if (SIM.getDebugMode()) {
+            drawVariables();
+        }
         this.rCtx.scale(SIM.getScale(), SIM.getScale());
         this.rCtx.save();
 
@@ -289,14 +292,7 @@ define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constan
                     }
                 }
                 if (SIM.getDebugMode()) {
-                    var variables = SIM.getSimVariables()
-                    if (Object.keys(variables).length > 0) {
-                        $('#notConstantValue').append('<div><label>Variables</label></div>');
-                        for (var v in variables) {
-                            var value = variables[v][0];
-                            addVariableValue(v, value);
-                        }
-                    }
+                    drawVariables();
                 }
             }
             this.rCtx.scale(SIM.getScale(), SIM.getScale());
@@ -1028,6 +1024,17 @@ define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constan
         var f = typeof fn == 'function';
         var s = f && ((fn.name && ['', fn.name]) || fn.toString().match(/function ([^\(]+)/));
         return (!f && 'not a function') || (s && s[1] || 'anonymous');
+    }
+
+    function drawVariables() {
+        var variables = SIM.getSimVariables()
+        if (Object.keys(variables).length > 0) {
+            $('#notConstantValue').append('<div><label>Variables</label></div>');
+            for (var v in variables) {
+                var value = variables[v][0];
+                addVariableValue(v, value);
+            }
+        }
     }
 
     function addVariableValue(name, value) {
