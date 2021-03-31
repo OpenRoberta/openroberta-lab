@@ -17,7 +17,7 @@ export class State {
      // the hash map of function definitions
     private bindings; // the binding of values to names (the 'environment')
     private stack: any[]; // the stack of values
-    private currentBlocks: string[]; //hash map current blocks being executed
+    private currentBlocks: Set<string>; //hash map current blocks being executed
     private debugMode: boolean;
 
     /**
@@ -32,7 +32,7 @@ export class State {
         this.pc = 0;
         this.bindings = {};
         this.stack = [];
-        this.currentBlocks = [];
+        this.currentBlocks = new Set();
         this.debugMode = false;
         // p( 'storeCode with state reset' );
     }
@@ -230,7 +230,7 @@ export class State {
                     }
                     this.highlightBlock(block);
                 }
-                this.currentBlocks.push(block.id);
+                this.currentBlocks.add(block.id);
             });
     }
 
@@ -245,14 +245,14 @@ export class State {
                     }
                     this.removeBlockHighlight(block);
                 }
-                this.currentBlocks = this.currentBlocks.filter(currentBlock => currentBlock !== block.id);
+                this.currentBlocks.delete(block.id);
             });
     }
 
     /** Returns true if the current block is currently being executed**/
     public beingExecuted(stmt) {
         let blockId = stmt[C.HIGHTLIGHT_PLUS].slice(-1).pop();
-        return blockId && this.currentBlocks.includes(blockId);
+        return blockId && this.currentBlocks.has(blockId);
     }
 
     private highlightBlock(block) {
@@ -276,7 +276,7 @@ export class State {
     /** Will add highlights from all currently blocks being currently executed and all given Breakpoints
      * @param breakPoints the array of breakpoint block id's to have their highlights added*/
     public addHighlights(breakPoints: any[]) {
-        this.currentBlocks
+        Array.from(this.currentBlocks)
             .map(blockId => stackmachineJsHelper.getBlockById(blockId))
             .forEach(block => this.highlightBlock(block));
 
@@ -296,7 +296,7 @@ export class State {
     /** Will remove highlights from all currently blocks being currently executed and all given Breakpoints
      * @param breakPoints the array of breakpoint block id's to have their highlights removed*/
     public removeHighlights(breakPoints: any[]) {
-        this.currentBlocks
+        Array.from(this.currentBlocks)
             .map(blockId => stackmachineJsHelper.getBlockById(blockId))
             .forEach(block => {
                 let object = stackmachineJsHelper.getJqueryObject(block);
