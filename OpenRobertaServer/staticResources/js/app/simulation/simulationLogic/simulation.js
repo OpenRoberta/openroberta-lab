@@ -459,7 +459,7 @@ define(['exports', 'simulation.scene', 'simulation.constants', 'util', 'interpre
     };
 
     function callbackOnTermination() {
-        if (!robots[0].endless) {
+        if (!robots[0].endless && allInterpretersTerminated()) {
             if (debugMode) {
                 $('#simControl').addClass('typcn-media-play-outline').removeClass('typcn-play');
                 $('#simCancel').removeClass("disabled");
@@ -652,15 +652,6 @@ define(['exports', 'simulation.scene', 'simulation.constants', 'util', 'interpre
         }
         var renderTimeStart = new Date().getTime();
 
-        function allInterpretersTerminated() {
-            for (var i = 0; i < interpreters.length; i++) {
-                if (!interpreters[i].isTerminated()) {
-                    return false;
-                }
-            }
-            return true;
-        }
-
         function allPause() {
             for (var i = 0; i < robots.length; i++) {
                 if (!robots[i].pause) {
@@ -681,6 +672,15 @@ define(['exports', 'simulation.scene', 'simulation.constants', 'util', 'interpre
         scene.updateSensorValues(!pause);
         scene.drawRobots();
         renderTime = new Date().getTime() - renderTimeStart;
+    }
+
+    function allInterpretersTerminated() {
+        for (var i = 0; i < interpreters.length; i++) {
+            if (!interpreters[i].isTerminated()) {
+                return false;
+            }
+        }
+        return true;
     }
 
     function reloadProgram() {
@@ -979,8 +979,8 @@ define(['exports', 'simulation.scene', 'simulation.constants', 'util', 'interpre
             if (boolDown) {
                 downRobot = i;
                 if (selectedRobot !== i) {
+                    $("#brick" + robotIndex).hide();
                     robotIndex = i;
-                    $("#brick" + selectedRobot).hide();
                     $("#brick" + robotIndex).show();
                     if ($("#robotIndex")[0]) {
                         $("#robotIndex")[0][i].selected = true;
