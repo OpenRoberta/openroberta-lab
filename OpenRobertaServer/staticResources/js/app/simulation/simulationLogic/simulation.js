@@ -1204,18 +1204,18 @@ define(['exports', 'simulation.scene', 'simulation.constants', 'util', 'interpre
             let hoverRobot = (dx * dx + dy * dy < robots[i].mouse.r * robots[i].mouse.r);
             if (hoverRobot) {
                 $("#robotLayer").css('cursor', 'pointer');
-                if (downRobot === i && selectedRobot === i) {
-                    robots[i].pose.xOld = robots[i].pose.x;
-                    robots[i].pose.yOld = robots[i].pose.y;
-                    robots[i].pose.x += dx;
-                    robots[i].pose.y += dy;
-                    robots[i].mouse.rx += dx;
-                    robots[i].mouse.ry += dy;
-                    return;
-                }
-                break;
+            }
+            if (downRobot === i && selectedRobot === i) {
+                robots[i].pose.xOld = robots[i].pose.x;
+                robots[i].pose.yOld = robots[i].pose.y;
+                robots[i].pose.x += dx;
+                robots[i].pose.y += dy;
+                robots[i].mouse.rx += dx;
+                robots[i].mouse.ry += dy;
+                return;
             }
         }
+
         dx = (mouseX - startX);
         dy = (mouseY - startY);
         startX = mouseX;
@@ -1543,9 +1543,6 @@ define(['exports', 'simulation.scene', 'simulation.constants', 'util', 'interpre
             handleMouseWheel(e);
         });
         $("#canvasDiv").draggable();
-        $("#robotLayer").on("dblclick", function(e) {
-            handleDoubleMouseClick(e);
-        });
         $("#robotLayer").attr("tabindex", 0);
         $("#robotLayer").on("click touchstart", function(e) {
             $("#robotLayer").attr("tabindex", 0);

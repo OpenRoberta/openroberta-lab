@@ -345,16 +345,16 @@ define(['exports', 'simulation.constants'], function(exports, CONSTANTS) {
     exports.checkObstacle = function(robot, p) {
         var x = robot.frontLeft.rx;
         var y = robot.frontLeft.ry;
-        robot.frontLeft.bumped = check(p, x, y);
+        robot.frontLeft.bumped = robot.frontLeft.bumped || check(p, x, y);
         x = robot.frontRight.rx;
         y = robot.frontRight.ry;
-        robot.frontRight.bumped = check(p, x, y);
+        robot.frontRight.bumped = robot.frontRight.bumped || check(p, x, y);
         x = robot.backLeft.rx;
         y = robot.backLeft.ry;
-        robot.backLeft.bumped = check(p, x, y);
+        robot.backLeft.bumped = robot.backLeft.bumped || check(p, x, y);
         x = robot.backRight.rx;
         y = robot.backRight.ry;
-        robot.backRight.bumped = check(p, x, y);
+        robot.backRight.bumped = robot.backRight.bumped || check(p, x, y);
         return robot.frontLeft.bumped || robot.frontRight.bumped ? 1 : 0;
     }
 
