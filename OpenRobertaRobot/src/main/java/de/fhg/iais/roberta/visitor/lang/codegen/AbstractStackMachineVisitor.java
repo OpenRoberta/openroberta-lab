@@ -200,7 +200,7 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
                  ▼          │              ▼          │
                 JUMP Always─┼─┐           JUMP Always─┼─┐
                  ▼          │ │            ▼          │ │
-                left◄───────┘ │           left◄───────┘ │
+                false◄──────┘ │           true◄───────┘ │
                  ▼            │            ▼            │
                   ◄───────────┘             ◄───────────┘
                  */
@@ -215,7 +215,7 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
                 app(jumpToEnd);
 
                 skipNextCondition.put(C.TARGET, opArray.size());
-                binary.getLeft().accept(this);
+                app(makeLeaf(C.EXPR, binary).put(C.EXPR, C.BOOL_CONST).put(C.VALUE, isOr));
                 jumpToEnd.put(C.TARGET, opArray.size());
                 return null;
             default:
