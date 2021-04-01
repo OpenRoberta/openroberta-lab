@@ -147,7 +147,8 @@ define([ 'simulation.simulation', 'interpreter.constants', 'util', 'simulation.r
             that.display.lightLevel = lightValue;
             e.stopPropagation();
         });
-
+        $sliderLight.val(100);
+        $rangeLight.val(100);
 
         for (var i = 0; i < 4; i++) {
             if (this['pin' + i]) {

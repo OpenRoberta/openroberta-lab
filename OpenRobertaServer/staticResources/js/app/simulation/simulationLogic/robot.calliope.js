@@ -370,7 +370,7 @@ define(['simulation.simulation', 'simulation.robot.mbed'], function(SIM, Mbed) {
         var dxDisplay = startX;
         var dyDisplay = startY + 20;
         var Display = (dxDisplay * dxDisplay + dyDisplay * dyDisplay < this.display.rLight * this.display.rLight);
-        var lightSliderActive = $('#sliderLight').val() !== "0";
+        var lightSliderActive = $('#sliderLight').val() !== "100";
         if (!lightSliderActive) {
             this.display.lightLevel = 100;
         }

@@ -203,7 +203,7 @@ define([ 'simulation.simulation', 'simulation.robot.mbed' ], function(SIM, Mbed)
         var dxDisplay = startX;
         var dyDisplay = startY + 20;
         var Display = (dxDisplay * dxDisplay + dyDisplay * dyDisplay < this.display.rLight * this.display.rLight); //
-        var lightSliderActive = $('#sliderLight').val() !== "0";
+        var lightSliderActive = $('#sliderLight').val() !== "100";
         if (!lightSliderActive) this.display.lightLevel = 100;
         if (A || B || Reset || bothButtons || Display || Pin0 || Pin1 || Pin2) {
             if (e.type === 'mousedown') {
