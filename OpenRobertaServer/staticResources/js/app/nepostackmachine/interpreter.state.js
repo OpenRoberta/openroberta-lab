@@ -194,8 +194,8 @@ define(["require", "exports", "./interpreter.constants", "./interpreter.util"], 
                         stackmachineJsHelper.getJqueryObject(block === null || block === void 0 ? void 0 : block.svgPath_).removeClass("breakpoint").addClass("selectedBreakpoint");
                     }
                     _this.highlightBlock(block);
+                    _this.currentBlocks.add(block.id);
                 }
-                _this.currentBlocks.add(block.id);
             });
         };
         /** removes block froms currentBlocks and removes highlighting from block**/
@@ -208,8 +208,8 @@ define(["require", "exports", "./interpreter.constants", "./interpreter.util"], 
                         stackmachineJsHelper.getJqueryObject(block === null || block === void 0 ? void 0 : block.svgPath_).removeClass("selectedBreakpoint").addClass("breakpoint");
                     }
                     _this.removeBlockHighlight(block);
+                    _this.currentBlocks.delete(block.id);
                 }
-                _this.currentBlocks.delete(block.id);
             });
         };
         /** Returns true if the current block is currently being executed**/

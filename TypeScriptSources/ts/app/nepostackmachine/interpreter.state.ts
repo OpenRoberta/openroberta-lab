@@ -229,8 +229,8 @@ export class State {
                         stackmachineJsHelper.getJqueryObject(block?.svgPath_).removeClass("breakpoint").addClass("selectedBreakpoint");
                     }
                     this.highlightBlock(block);
-                }
-                this.currentBlocks.add(block.id);
+                    this.currentBlocks.add(block.id);
+                }                
             });
     }
 
@@ -244,8 +244,8 @@ export class State {
                         stackmachineJsHelper.getJqueryObject(block?.svgPath_).removeClass("selectedBreakpoint").addClass("breakpoint");
                     }
                     this.removeBlockHighlight(block);
-                }
-                this.currentBlocks.delete(block.id);
+                    this.currentBlocks.delete(block.id);
+                }             
             });
     }
 

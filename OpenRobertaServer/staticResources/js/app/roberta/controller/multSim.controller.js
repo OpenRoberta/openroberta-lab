@@ -78,20 +78,9 @@ define(['exports', 'message', 'util', 'progList.model', 'program.controller', 'p
                             dat.savedName = item[0];
                             extractedprograms[i] = dat;
                             var xmlTextProgram = dat.progXML;
-                            var configName;
-                            var xmlConfigText;
-                            if (dat.configName === undefined) {
-                                if (dat.confXML === undefined) {
-                                    configName = undefined;
-                                    xmlConfigText = undefined;
-                                } else {
-                                    configName = undefined;
-                                    xmlConfigText = dat.confXML;
-                                }
-                            } else {
-                                configName = dat.configName;
-                                xmlConfigText = dat.confXML;
-                            }
+                            let isNamedConfig = dat.configName !== (GUISTATE_C.getRobotGroup().toUpperCase() + 'basis') && dat.configName !== "";
+                            var configName = isNamedConfig ? dat.configName : undefined;
+                            var xmlConfigText = dat.configName !== "" ? dat.confXML : undefined;
                             var language = GUISTATE_C.getLanguage();
                             PROGRAM_M.runInSim(dat.savedName, configName, xmlTextProgram, xmlConfigText, language, function(result) {
                                 numberOfPrograms++;
