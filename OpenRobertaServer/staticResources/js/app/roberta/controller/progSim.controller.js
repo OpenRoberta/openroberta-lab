@@ -141,8 +141,6 @@ define(['exports', 'message', 'log', 'util', 'simulation.simulation', 'simulatio
                     bottom: 'inherit'
                 });
                 $('#simValuesModal').draggable();
-
-                $("#simButtonsCollapse").collapse('hide');
             }, 'simValues clicked');
 
             $('#simResetPose').onWrap('click', function(event) {

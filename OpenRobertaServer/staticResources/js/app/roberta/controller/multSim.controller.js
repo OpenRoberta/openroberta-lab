@@ -118,14 +118,11 @@ define(['exports', 'message', 'util', 'progList.model', 'program.controller', 'p
         SIM.init(programs, true, GUISTATE_C.getRobotGroup());
         $('#simCancel, #simControlStepOver, #simControlStepInto').hide();
         $(".sim").removeClass('hide');
-        $('#simButtonsCollapse').collapse({
-            'toggle': false
-        });
-        if ($("#blockly").hasClass("rightActive") && !$("#simDiv").hasClass("rightActive")) {
+        if ($("#blockly").hasClass("rightActive") && !$("#simButton").hasClass("rightActive")) {
             $('#blockly').closeRightView(function() {
                 $('#blockly').openRightView('sim', INITIAL_WIDTH);
             });
-        } else if (!$("#simDiv").hasClass("rightActive")) {
+        } else if (!$("#simButton").hasClass("rightActive")) {
             $('#blockly').openRightView('sim', INITIAL_WIDTH);
         }
     }

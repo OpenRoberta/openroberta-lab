@@ -499,10 +499,7 @@ define(['exports', 'simulation.scene', 'simulation.constants', 'util', 'interpre
                 $('.dropdown.sim, .simScene').show();
                 $('#simImport').hide();
             } else {
-                $('.dropdown.sim, .simScene, #simImport, #simResetPose, #simButtonsHead, #simEditButtons').show();
-            }
-            if ($('#device-size').find('div:visible').first().attr('id')) {
-                $('#simButtonsHead').show();
+                $('.dropdown.sim, .simScene, #simImport, #simResetPose, #simEditButtons').show();
             }
         }
         interpreters = programs.map(function(x) {
@@ -983,7 +980,7 @@ define(['exports', 'simulation.scene', 'simulation.constants', 'util', 'interpre
                 downRobot = i;
                 if (selectedRobot !== i) {
                     robotIndex = i;
-                    $("#brick" + i).hide();
+                    $("#brick" + selectedRobot).hide();
                     $("#brick" + robotIndex).show();
                     if ($("#robotIndex")[0]) {
                         $("#robotIndex")[0][i].selected = true;
