@@ -114,7 +114,9 @@
       "expr": "NUM_CONST",
       "value": 1
     },
-    {"opc": "WaitTimeSTMT"},
+    {
+      "opc": "WaitTimeSTMT"
+    },
     {
       "opc": "jump",
       "conditional": "always",
@@ -156,7 +158,9 @@
       "expr": "NUM_CONST",
       "value": 1
     },
-    {"opc": "WaitTimeSTMT"},
+    {
+      "opc": "WaitTimeSTMT"
+    },
     {
       "opc": "jump",
       "conditional": "always",
@@ -197,7 +201,9 @@
       "expr": "NUM_CONST",
       "value": 1
     },
-    {"opc": "WaitTimeSTMT"},
+    {
+      "opc": "WaitTimeSTMT"
+    },
     {
       "opc": "jump",
       "conditional": "always",
@@ -237,7 +243,9 @@
       "expr": "NUM_CONST",
       "value": 1
     },
-    {"opc": "WaitTimeSTMT"},
+    {
+      "opc": "WaitTimeSTMT"
+    },
     {
       "opc": "jump",
       "conditional": "always",
@@ -420,8 +428,12 @@
       "expr": "STRING_CONST",
       "value": "Hallo"
     },
-    {"opc": "ShowTextAction"},
-    {"opc": "ClearDisplay"},
+    {
+      "opc": "ShowTextAction"
+    },
+    {
+      "opc": "ClearDisplay"
+    },
     {
       "opc": "expr",
       "expr": "NUM_CONST",
@@ -649,7 +661,9 @@
       "expr": "NUM_CONST",
       "value": "500"
     },
-    {"opc": "WaitTimeSTMT"},
+    {
+      "opc": "WaitTimeSTMT"
+    },
     {
       "opc": "expr",
       "expr": "NUM_CONST",
@@ -683,7 +697,9 @@
       "expr": "NUM_CONST",
       "value": "500"
     },
-    {"opc": "WaitTimeSTMT"},
+    {
+      "opc": "WaitTimeSTMT"
+    },
     {
       "opc": "expr",
       "expr": "NUM_CONST",
@@ -723,7 +739,9 @@
       "name": "i",
       "expr": "Var"
     },
-    {"opc": "ShowTextAction"},
+    {
+      "opc": "ShowTextAction"
+    },
     {
       "opc": "expr",
       "expr": "NUM_CONST",
@@ -838,74 +856,31 @@
     {
       "opc": "jump",
       "conditional": "always",
-      "target": 189
+      "target": 180
     },
     {
       "opc": "expr",
-      "expr": "NUM_CONST",
-      "value": "0"
-    },
-    {
-      "opc": "expr",
-      "expr": "createMathConstant",
-      "value": "PI"
-    },
-    {
-      "op": "ROOT",
-      "opc": "expr",
-      "expr": "SingleFunction"
-    },
-    {
-      "opc": "expr",
-      "expr": "NUM_CONST",
-      "value": "1"
-    },
-    {
-      "opc": "expr",
-      "expr": "NUM_CONST",
-      "value": "2"
-    },
-    {
-      "op": "MOD",
-      "opc": "expr",
-      "expr": "Binary"
-    },
-    {
-      "op": "ROUND",
-      "opc": "expr",
-      "expr": "SingleFunction"
-    },
-    {
-      "op": "SIN",
-      "opc": "expr",
-      "expr": "SingleFunction"
-    },
-    {
-      "op": "ADD",
-      "opc": "expr",
-      "expr": "Binary"
-    },
-    {
-      "op": "EQ",
-      "opc": "expr",
-      "expr": "Binary"
+      "expr": "BOOL_CONST",
+      "value": false
     },
     {
       "opc": "jump",
       "conditional": false,
-      "target": 191
+      "target": 182
     },
     {
       "opc": "jump",
       "conditional": "always",
-      "target": 194
+      "target": 185
     },
     {
       "opc": "expr",
       "expr": "NUM_CONST",
       "value": 1
     },
-    {"opc": "WaitTimeSTMT"},
+    {
+      "opc": "WaitTimeSTMT"
+    },
     {
       "opc": "jump",
       "conditional": "always",
@@ -978,7 +953,9 @@
       "NUMBER": 2,
       "opc": "createTextJoin"
     },
-    {"opc": "ShowTextAction"},
+    {
+      "opc": "ShowTextAction"
+    },
     {
       "opc": "expr",
       "expr": "randDouble"
@@ -991,7 +968,9 @@
       "NUMBER": 2,
       "opc": "createTextJoin"
     },
-    {"opc": "ShowTextAction"},
+    {
+      "opc": "ShowTextAction"
+    },
     {
       "opc": "expr",
       "expr": "COLOR_CONST",
@@ -1089,12 +1068,12 @@
     {
       "opc": "expr",
       "expr": "NUM_CONST",
-      "value": 237
+      "value": 228
     },
     {
       "opc": "jump",
       "conditional": "always",
-      "target": 366
+      "target": 357
     },
     {
       "opc": "comment",
@@ -1103,12 +1082,12 @@
     {
       "opc": "expr",
       "expr": "NUM_CONST",
-      "value": 240
+      "value": 231
     },
     {
       "opc": "jump",
       "conditional": "always",
-      "target": 383
+      "target": 374
     },
     {
       "opc": "AssignStmt",
@@ -1531,7 +1510,7 @@
     {
       "opc": "jump",
       "conditional": false,
-      "target": 332
+      "target": 323
     },
     {
       "opc": "expr",
@@ -1541,12 +1520,12 @@
     {
       "opc": "jump",
       "conditional": "always",
-      "target": 333
+      "target": 324
     },
     {
       "opc": "expr",
       "expr": "BOOL_CONST",
-      "value": true
+      "value": false
     },
     {
       "opc": "AssignStmt",
@@ -1560,7 +1539,7 @@
     {
       "opc": "jump",
       "conditional": true,
-      "target": 338
+      "target": 329
     },
     {
       "opc": "expr",
@@ -1570,7 +1549,7 @@
     {
       "opc": "jump",
       "conditional": "always",
-      "target": 339
+      "target": 330
     },
     {
       "opc": "expr",
@@ -1700,7 +1679,9 @@
       "expr": "NUM_CONST",
       "value": "30"
     },
-    {"opc": "stop"},
+    {
+      "opc": "stop"
+    },
     {
       "opc": "comment",
       "target": "createMethodVoid"
@@ -1710,7 +1691,9 @@
       "expr": "STRING_CONST",
       "value": "Hallo"
     },
-    {"opc": "ShowTextAction"},
+    {
+      "opc": "ShowTextAction"
+    },
     {
       "opc": "expr",
       "expr": "NUM_CONST",
@@ -1744,7 +1727,7 @@
     {
       "opc": "jump",
       "conditional": false,
-      "target": 378
+      "target": 369
     },
     {
       "opc": "expr",
@@ -1754,17 +1737,17 @@
     {
       "opc": "jump",
       "conditional": "always",
-      "target": 379
+      "target": 370
     },
     {
       "opc": "expr",
       "expr": "BOOL_CONST",
-      "value": true
+      "value": false
     },
     {
       "opc": "jump",
       "conditional": false,
-      "target": 382
+      "target": 373
     },
     {
       "opc": "expr",
@@ -1773,7 +1756,7 @@
     {
       "opc": "jump",
       "conditional": "always",
-      "target": 382
+      "target": 373
     },
     {
       "opc": "return",
@@ -1795,7 +1778,7 @@
     {
       "opc": "jump",
       "conditional": false,
-      "target": 389
+      "target": 380
     },
     {
       "opc": "expr",
@@ -1805,17 +1788,17 @@
     {
       "opc": "jump",
       "conditional": "always",
-      "target": 390
+      "target": 381
     },
     {
       "opc": "expr",
       "expr": "BOOL_CONST",
-      "value": true
+      "value": false
     },
     {
       "opc": "jump",
       "conditional": false,
-      "target": 393
+      "target": 384
     },
     {
       "opc": "expr",
@@ -1825,7 +1808,7 @@
     {
       "opc": "jump",
       "conditional": "always",
-      "target": 394
+      "target": 385
     },
     {
       "opc": "expr",
