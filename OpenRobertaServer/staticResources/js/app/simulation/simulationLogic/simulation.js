@@ -137,7 +137,7 @@ define(['exports', 'simulation.scene', 'simulation.constants', 'util', 'interpre
             }
         } else {
             currentBackground = num;
-        }        
+        }
         var debug = robots[0].debug;
         var moduleName = 'simulation.robot.' + simRobotType;
 
@@ -271,6 +271,11 @@ define(['exports', 'simulation.scene', 'simulation.constants', 'util', 'interpre
                 robots[i].time = 0;
             }
         }
+        resetSelection();
+        scene.resetAllCanvas();
+        scene.drawColorAreas(highLightCorners);
+        scene.drawObstacles(highLightCorners);
+        scene.drawRuler();
     }
     exports.resetPose = resetPose;
 
@@ -779,6 +784,7 @@ define(['exports', 'simulation.scene', 'simulation.constants', 'util', 'interpre
                     standObst.img = null;
                     standObst.form = "rectangle";
             }
+            standObst.type = "obstacle";
             obstacleList[0] = standObst;
         }
     }
@@ -1209,7 +1215,6 @@ define(['exports', 'simulation.scene', 'simulation.constants', 'util', 'interpre
 
     function handleMouseMove(e) {
         e.preventDefault();
-        e.stopPropagation();
         $("#robotLayer").css('cursor', 'default');
         var X = e.clientX || e.originalEvent.touches[0].pageX;
         var Y = e.clientY || e.originalEvent.touches[0].pageY;
@@ -1575,7 +1580,7 @@ define(['exports', 'simulation.scene', 'simulation.constants', 'util', 'interpre
         $("#blocklyDiv").on("click touchstart", setFocusBlocklyDiv);
         $("#robotLayer").on("keydown", handleKeyEvent);
         $("#robotLayer").on("keyup", function() {
-            if (robots[selectedRobot].drawWidth) {
+            if (selectedRobot >= 0 && robots[selectedRobot].drawWidth) {
                 robots[selectedRobot].pose.xOld = robots[selectedRobot].pose.x;
                 robots[selectedRobot].pose.yOld = robots[selectedRobot].pose.y;
                 robots[selectedRobot].canDraw = true;

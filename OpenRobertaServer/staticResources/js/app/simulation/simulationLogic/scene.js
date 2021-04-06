@@ -1080,7 +1080,7 @@ define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constan
             }
         }
     };
-    
+
     Scene.prototype.drawPattern = function(ctx, pattern) {
         if (this.robots && (getFnName(this.robots[0].constructor).indexOf("Calliope") >= 0 || getFnName(this.robots[0].constructor) === 'Microbit')) {
             return;
