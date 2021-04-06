@@ -85,15 +85,21 @@ Might take some time. The last lines of a successful build looks like:
     [INFO] ------------------------------------------------------------------------
     
 #### Step 2: Make sure you have a database
+The two main shell scripts to work with are `./admin.sh` and `./ora.sh`. To use them, you need a bash-compatible shell. On linux system they are available,
+on win* systems you get one for free if you have installed git. Call the scripts without parameter or with `-h` to get a help message.
+`./admin.sh` is used for data base administration, `./ora.sh` for server export and start as well as for docker administration.
 If you have a fresh clone of the server, make sure that the OpenRobertaServer folder has a subfolder **db-embedded** with the database inside. If you don't have a database, you can create an empty database with
 
-    ./ora.sh create-empty-db
+    ./admin.sh -git-mode create-empty-db
     
 If you try to create a new database, but one exists, the old one is *not* changed and the command has no effect. The new database is found in the folder **OpenRobertaServer/db-embedded**.
 
-#### Step 3: Starting your own server instance using a Unix-like shell (on either lin* or win*).
+#### Step 3: Starting your own server
 
     ./ora.sh [-oraccrsc <optional-path-to-crosscompiler-resources, defaults-to '../ora-cc-rsc'>] start-from-git
+
+If you did not install the crosscompiler resources and don't use the -oraccrsc parameter, everything works fine (programming, simulation, code generation,
+user management, ...), except of generation of binaries for robot systems.
 
 #### Step 4: Accessing your openroberta installation
 
@@ -105,7 +111,7 @@ Often you want to run an openroberta installation of a fixed version for a long 
 
     mvn clean install                          # generate the server in the git repo
     ./ora.sh export /data/my-openroberta gzip  # export to the target directory. gzip compresses the static web resources fpr better performance.
-    cd /data/my-openroberta
+    cd /data/my-openroberta                    # the export command supplies an administration script admin.sh, which is different from the one in the git workspace
     ./admin.sh create-empty-db                 # create an empty db at ./db-server - of course you may copy an old database to that location
     ./admin.sh start-server                    # spawns two processes: a database server and the openroberta jetty server
 

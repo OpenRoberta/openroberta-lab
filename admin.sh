@@ -29,11 +29,11 @@ while true
 do
   case "$1" in
     -git-mode)     DB_MODE='embedded'
-	               DB_NAME='openroberta-db'
-				   DB_PARENTDIR='./OpenRobertaServer/db-embedded'
-				   JAVA_LIB_DIR='./OpenRobertaServer/target/resources'
-				   ADMIN_DIR='./admin' # this directory is .gitignore-d
-				   shift ;;
+                   DB_NAME='openroberta-db'
+				           DB_PARENTDIR='./OpenRobertaServer/db-embedded'
+				           JAVA_LIB_DIR='./OpenRobertaServer/target/resources'
+				           ADMIN_DIR='./admin' # this directory is .gitignore-d
+				           shift ;;
     -db-mode)      DB_MODE=$2
                    shift; shift ;;
     -db-name)      DB_NAME=$2
@@ -50,6 +50,8 @@ do
                    shift ;;
     -q)            QUIET='yes'
                    shift ;;
+    -h|-help|--help) cat admin-help.txt
+                   exit 0 ;;
     *)             break ;;
   esac
 done

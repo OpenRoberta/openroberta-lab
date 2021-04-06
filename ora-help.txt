@@ -10,7 +10,7 @@ The database may be run in 'server' mode. This is for the test and prod server, 
 - you can get access to the database used by the server concurrently with a sql client. Be careful NOT to block the server by your sql
 
 Commands of the ora.sh script:
-  help      get help (this text)
+  help       get help (this text). Synonyms are -h -help and --help
   
   export INSTALLATION-DIR [gzip]  create a self-contained installation. The INSTALLATION-DIR must NOT exist.
               Parameter 'gzip' compresses in directory staticResources suitable files (as *.js, *.css, etc.) to save bandwith when staticResources are loaded.
