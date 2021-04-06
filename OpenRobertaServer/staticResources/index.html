@@ -451,18 +451,23 @@ limitations under the License.
 				</div>
 			</div>
 			<div id="simDiv" class="fromRight">
-				<div id="uniDiv"
-					style="position: absolute; left: 0; top: -2000; z-index: 0;">
-					<canvas id="unitBackgroundLayer" width=1 height=1></canvas>
-				</div>
 				<div id="canvasDiv">
-					<canvas id="backgroundLayer" class="canvasSim" style="z-index: 1"
+					<div id="uniDiv"
+						style="position: absolute; left: 0; top: -2000; z-index: 0;">
+						<canvas id="unitBackgroundLayer" class="canvasSim unified" width=1
+							height=1></canvas>
+						<canvas id="unitDrawBackgroundLayer" class="canvasSim unified"
+							style="z-index: 1" width=1 height=1></canvas>
+					</div>
+					<canvas id="backgroundLayer" class="canvasSim" style="z-index: 2"
 						width=1 height=1></canvas>
-					<canvas id="rulerLayer" class="canvasSim" style="z-index: 2"
+					<canvas id="drawLayer" class="canvasSim" style="z-index: 3" width=1
+						height=1></canvas>
+					<canvas id="rulerLayer" class="canvasSim" style="z-index: 4"
 						width=1 height=1></canvas>
-					<canvas id="objectLayer" class="canvasSim" style="z-index: 3"
+					<canvas id="objectLayer" class="canvasSim" style="z-index: 5"
 						width=1 height=1></canvas>
-					<canvas id="robotLayer" class="canvasSim" style="z-index: 4"
+					<canvas id="robotLayer" class="canvasSim" style="z-index: 6"
 						width=1 height=1></canvas>
 				</div>
 				<div id="simEditButtons">
@@ -548,10 +553,10 @@ limitations under the License.
 						class="simLocation blbtn typcn typcn-location-outline"
 						lkey="Blockly.Msg.MENU_SIM_POSE_TOOLTIP" rel="tooltip"
 						data-original-title="" title=""></button>
-					<button id="simCancel" type="button"
-                        class="blbtn typcn typcn-media-stop disabled"
-                        lkey="Blockly.Msg.MENU_SIM_STOP_TOOLTIP" rel="tooltip"
-                        data-original-title="" title=""></button>
+					<button id="simStop" type="button"
+						class="blbtn typcn typcn-media-stop disabled"
+						lkey="Blockly.Msg.MENU_SIM_STOP_TOOLTIP" rel="tooltip"
+						data-original-title="" title=""></button>
 				</div>
 
 			</div>

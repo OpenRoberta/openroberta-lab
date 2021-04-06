@@ -2367,11 +2367,11 @@ input[type=range]:focus::-ms-fill-upper {
 	cursor: not-allowed;
 }
 
-#simCancel {
+#simStop, #simControl.typcn-media-stop {
     color: #E2001A;
 }
 
-#simCancel.disabled {
+#simStop.disabled {
 	color: #F6B3B9;
     cursor: not-allowed;
 }
