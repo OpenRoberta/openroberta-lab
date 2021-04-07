@@ -129,31 +129,40 @@ They are setup in the same way. The following text describes the test server set
 The template for this framework is contained in directory `Docker/openroberta`. It contains the directories
 
 * conf - contains an example of an nginx and an apache2 configuration and four directories used to generate docker images for the db and the jetty server
+  
 * scripts - contains shell scripts to administrate the framework. The main script is `run.sh`. Call it without parameters to get help.
   the directory `helper` contains scripts, that are sourced from `run.sh` and do the "real" work.
+  
 * git - here one or more git repos, used to generate the openroberta server instances, are contained. At least one git repo is needed, usually a clone
   from https://github.com/OpenRoberta/openroberta-lab.git
+  
 * server - contains the servers. Each server has a name (one of master,test,dev,dev1...dev9), which is also the name of a directory. This directory stores all
-  data to configure the server in file `decl.sh`. In directory `export` all artifacts making up the server are stored during server
-  generation. In directory `admin` all logging data and the tutorials are stored.
+  data to configure the server in file `decl.sh`. In the file `_server-template/decl.sh` each property is explained.
   Each server has an associated docker image (and usually a running container), whose name is essentially the server's name.
+  * In the subdirectory `export` all artifacts making up the server are stored during server generation. 
+  * In subdirectory `admin` all logging data and the tutorials are stored.
+  
 * db - contains the databases. Each database has a name (one of master,test,dev,dev1...dev9) matching the name of the jetty server who needs this data.
   the name of the database is the name of a directory, which in turn contains all database files. All databases are served by one Hsqldb server instance.
   Directory `dbAdmin` stores logging data and database backups.
-  There is one docker image `openroberta/db_server` and usually a running container, whose name is usually `db-server`.
+  There is one docker image `openroberta/db_server` and usually a running container, whose name is `db-server`.
 
 ## Overview
 
-All running openroberta instances are generated from a branch or a commit of a git repository.
+* All running openroberta instances are generated from a branch or a commit of a git repository.
 
-* Each instance of the openroberta lab server is running in a docker container of its own.
+* Each instance of the openroberta lab server is running in a docker container of its own. The name of the corresponding image is
+  `openroberta/server_${SERVER_NAME}_${ARCH}:${TAG_VERSION}`. `SERVER_NAME` is one of master,test,dev,dev1...dev9, `ARCH` is almost always x64 and
+  `TAG_VERSION` is almost always the value of `BASE_VERSION` from the server's `decl.sh`. There is only one exception: if the server's `decl.sh` contains
+  a declaration of `TAG_VERSION`, then this value is used as tag number *when the server's container is started*.
+  
 * Each instance of the openroberta lab server is connected to a database dedicated to this openroberta lab server. All databases are published by one
   database server running in a docker container of its own.
 
 For instance, if you want to deploy the `develop` branch on server `dev4`, do the following (the variables used are explained below):
 
 * make sure, that in the directory `$SERVER_DIR/dev4` the file `decl.sh` contains the expected data (branch name, port number for accessing the server, e.g.)
-* be sure, that in `$DATABASE_DIR/dev4` a valid database is available. Check whether `decl.sh` contains `dev4` in variable `DATABASES`. It not,
+* be sure, that in `$DATABASE_DIR/dev4` a valid database is available. Check whether the global `decl.sh` contains `dev4` in variable `DATABASES`. It not,
   add it and restart the database server by `$SCRIPT_DIR/run.sh start-dbc`
 
 All container of an openroberta docker installation use a bridge network with (the unique!) name `$DOCKER_NETWORK_NAME`.
