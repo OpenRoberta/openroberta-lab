@@ -73,7 +73,7 @@ public class ServerStarter {
     private static final String LOG_LEVEL_KEY = "server.log.level=";
 
     private static final long INTERVAL_HTTPSESSION_EXPIRE_SEC = TimeUnit.HOURS.toSeconds(3);
-    private static final long INTERVAL_DB_SESSION_EXPIRE_SEC = TimeUnit.MINUTES.toSeconds(30);
+    private static final long INTERVAL_DB_SESSION_EXPIRE_SEC = TimeUnit.MINUTES.toSeconds(15);
 
     private final ServerProperties serverProperties; // for the startup
     private Injector injector;
