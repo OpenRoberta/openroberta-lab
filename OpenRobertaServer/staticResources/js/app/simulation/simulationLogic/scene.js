@@ -2,23 +2,24 @@
  * @fileOverview Scene for a robot simulation
  * @author Beate Jost <beate.jost@iais.fraunhofer.de>
  */
-define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constants', 'simulation.constants', 'program.controller', 'jquery'], function(SIM,
-    SIMATH, UTIL, IC, C, PROGRAM_C, $) {
+define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constants', 'simulation.constants', 'jquery'], function(SIM,
+    SIMATH, UTIL, IC, C, $) {
 
     /**
      * Creates a new Scene.
      *
      * @constructor
      */
-    function Scene(backgroundImg, robots, obstacle, pattern, ruler) {
+    function Scene(backgroundImg, robots, pattern, ruler) {
         this.backgroundImg = backgroundImg;
         this.robots = robots;
-        this.obstacle = obstacle;
         this.numprogs = robots.length;
         this.ruler = ruler;
         this.pattern = pattern;
         this.uCtx = $('#unitBackgroundLayer')[0].getContext('2d'); // unit context
+        this.udCtx = $('#unitDrawBackgroundLayer')[0].getContext('2d'); // unit draw context
         this.bCtx = $('#backgroundLayer')[0].getContext('2d'); // background context
+        this.dCtx = $('#drawLayer')[0].getContext('2d'); // background context
         this.mCtx = $('#rulerLayer')[0].getContext('2d'); // ruler == *m*easurement context
         this.oCtx = $('#objectLayer')[0].getContext('2d'); // object context
         this.rCtx = $('#robotLayer')[0].getContext('2d'); // robot context
@@ -43,12 +44,46 @@ define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constan
             robotIndexColour += "</select>";
             $("#constantValue").append('<div><label>Robot</label><span style="width:auto">' + robotIndexColour + '</span></div>');
         }
+        this.resetAllCanvas(this.backgroundImg);
     }
 
-    Scene.prototype.updateBackgrounds = function() {
-        this.drawBackground(1, this.uCtx);
-        this.drawBackground();
-    };
+    Scene.prototype.resetAllCanvas = function(opt_img) {
+        this.backgroundImg = opt_img || this.backgroundImg;
+        let resetUnified = opt_img || false;
+        let sc = SIM.getScale();
+        var left = (this.playground.w - (this.backgroundImg.width + 20) * sc) / 2.0;
+        var top = (this.playground.h - (this.backgroundImg.height + 20) * sc) / 2.0;
+        var w = (this.backgroundImg.width + 20) * sc;
+        var h = (this.backgroundImg.height + 20) * sc;
+        $('#canvasDiv').css({
+            top: top + 'px',
+            left: left + 'px',
+        });
+        $('.canvasSim').each(function() {
+            if ($(this).hasClass("unified")) {
+                if (resetUnified) {
+                    this.width = w / sc;
+                    this.height = h / sc;
+                }
+            } else {
+                this.width = w;
+                this.height = h;
+            }
+        });
+        if (resetUnified) {
+            this.uCtx.drawImage(this.backgroundImg, 10, 10, this.backgroundImg.width, this.backgroundImg.height);
+            this.drawPattern(this.uCtx, this.pattern);
+        }
+        this.bCtx.drawImage($("#unitBackgroundLayer")[0], 0, 0, this.backgroundImg.width + 20, this.backgroundImg.height + 20, 0, 0, w, h);
+    }
+
+    Scene.prototype.resizeBackgrounds = function(sc) {
+        let w = $("#unitDrawBackgroundLayer").width();
+        let h = $("#unitDrawBackgroundLayer").height();
+        this.resetAllCanvas();
+        // redraw drawings
+        this.dCtx.drawImage($("#unitDrawBackgroundLayer")[0], 0, 0, w, h, 0, 0, w * sc, h * sc);
+    }
 
     Scene.prototype.drawBackground = function(option_scale, option_context) {
         var ctx = option_context || this.bCtx;
@@ -60,6 +95,10 @@ define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constan
         if (option_context) { //unified background
             $('#unitBackgroundLayer').get(0).width = w;
             $('#unitBackgroundLayer').get(0).height = h;
+            $('#unitDrawBackgroundLayer').get(0).width = w;
+            $('#unitDrawBackgroundLayer').get(0).height = h;
+        } else {
+            ctx.clearRect(SIM.getGround().x - 20, SIM.getGround().y - 20, SIM.getGround().w + 40, SIM.getGround().h + 40);
         }
         $('.canvasSim').each(function() {
             $(this).get(0).width = w;
@@ -74,16 +113,7 @@ define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constan
         ctx.save();
         ctx.scale(sc, sc);
         if (this.backgroundImg) {
-            if (getFnName(this.robots[0].constructor).indexOf("Calliope") < 0 && getFnName(this.robots[0].constructor) != 'Microbit') {
-                ctx.beginPath();
-                if (this.pattern) {
-                    var patternImg = this.pattern;
-                    var pattern = ctx.createPattern(patternImg, 'repeat');
-                    ctx.strokeStyle = pattern;
-                }
-                ctx.lineWidth = 10;
-                ctx.strokeRect(5, 5, this.backgroundImg.width + 10, this.backgroundImg.height + 10);
-            }
+            this.drawPattern(ctx, this.pattern);
             ctx.drawImage(this.backgroundImg, 10, 10, this.backgroundImg.width, this.backgroundImg.height);
         }
     };
@@ -102,35 +132,98 @@ define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constan
         }
     };
 
-    Scene.prototype.drawObjects = function() {
-        this.oCtx.clearRect(this.obstacle.xOld - 20, this.obstacle.yOld - 20, this.obstacle.wOld + 40, this.obstacle.hOld + 40);
-        this.obstacle.xOld = this.obstacle.x;
-        this.obstacle.yOld = this.obstacle.y;
-        this.obstacle.wOld = this.obstacle.w;
-        this.obstacle.hOld = this.obstacle.h;
-        this.oCtx.restore();
-        this.oCtx.save();
-        this.oCtx.scale(SIM.getScale(), SIM.getScale());
-        if (this.obstacle.img) {
-            this.oCtx.drawImage(this.obstacle.img, this.obstacle.x, this.obstacle.y, this.obstacle.w, this.obstacle.h);
-        } else if (this.obstacle.color) {
-            this.oCtx.fillStyle = this.obstacle.color;
-            this.oCtx.shadowBlur = 5;
-            this.oCtx.shadowColor = "black";
-            this.oCtx.fillRect(this.obstacle.x, this.obstacle.y, this.obstacle.w, this.obstacle.h);
-        }
+    Scene.prototype.drawObstacles = function(highLight) {
+        this.oCtx.clearRect(SIM.getGround().x - 20, SIM.getGround().y - 20, SIM.getGround().w + 40, SIM.getGround().h + 40);
+        this.drawObjects(this.oCtx, SIM.getObstacleList(), highLight, true);
     };
 
-    Scene.prototype.drawVariables = function() {
-        $("#variableValue").html("");
-        var variables = SIM.getSimVariables()
-        if (Object.keys(variables).length > 0) {
-            for (var v in variables) {
-                var value = variables[v][0];
-                addVariableValue(v, value);
+    Scene.prototype.drawColorAreas = function(highLight) {
+        let w = (this.backgroundImg.width + 20);
+        let h = (this.backgroundImg.height + 20);
+        this.uCtx.clearRect(0, 0, w, h);
+        this.uCtx.beginPath();
+        this.drawPattern(this.uCtx, this.pattern);
+
+        this.uCtx.drawImage(this.backgroundImg, 10, 10, this.backgroundImg.width, this.backgroundImg.height);
+        let wb = w * SIM.getScale();
+        let hb = h * SIM.getScale();
+        this.bCtx.save();
+        this.bCtx.setTransform(1, 0, 0, 1, 0, 0);
+        this.bCtx.clearRect(0, 0, wb, hb);
+        this.bCtx.drawImage($("#unitBackgroundLayer")[0], 0, 0, w, h, 0, 0, wb, hb);
+        this.bCtx.restore();
+        this.drawObjects(this.bCtx, SIM.getColorAreaList(), highLight, false, this.uCtx);
+    };
+
+    Scene.prototype.drawObjects = function(ctx, objectList, opt_highLight, shadow, optCtx) {
+        let highLight = opt_highLight.length > 0 ? opt_highLight : false;
+        for (let key in objectList) {
+            let obj = objectList[key];
+            ctx.restore();
+            ctx.save();
+            ctx.scale(SIM.getScale(), SIM.getScale());
+            ctx.fillStyle = obj.color;
+            if (shadow) {
+                ctx.shadowColor = '#3e3e3e';
+                ctx.shadowOffsetY = 5;
+                ctx.shadowOffsetX = 5;
+                ctx.shadowBlur = 5;
             }
-        } else {
-            $('#variableValue').append('<div><label> No variables instantiated</label></div>')
+            if (optCtx) {
+                optCtx.fillStyle = obj.color;
+            }
+            if (obj.img) {
+                if (optCtx) {
+                    optCtx.drawImage(obj.img, obj.x, obj.y, obj.w, obj.h);
+                } else {
+                    ctx.drawImage(obj.img, obj.x, obj.y, obj.w, obj.h);
+                }
+            } else if (obj.color) {
+                if (obj.form === "rectangle") {
+                    ctx.fillRect(obj.x, obj.y, obj.w, obj.h);
+                    if (optCtx) {
+                        optCtx.fillRect(obj.x, obj.y, obj.w, obj.h);
+                    }
+                } else if (obj.form === "triangle") {
+                    ctx.beginPath();
+                    ctx.moveTo(obj.ax, obj.ay);
+                    ctx.lineTo(obj.bx, obj.by);
+                    ctx.lineTo(obj.cx, obj.cy);
+                    ctx.fill();
+                    if (optCtx) {
+                        optCtx.beginPath();
+                        optCtx.moveTo(obj.ax, obj.ay);
+                        optCtx.lineTo(obj.bx, obj.by);
+                        optCtx.lineTo(obj.cx, obj.cy);
+                        optCtx.fill();
+                    }
+                } else if (obj.form === "circle") {
+                    ctx.beginPath();
+                    ctx.arc(obj.x, obj.y, obj.r, obj.startAngle, obj.endAngle, Math.PI * 2, true);
+                    ctx.fill();
+                    if (optCtx) {
+                        optCtx.beginPath();
+                        optCtx.arc(obj.x, obj.y, obj.r, obj.startAngle, obj.endAngle, Math.PI * 2, true);
+                        optCtx.fill();
+                    }
+                }
+
+            }
+        }
+        if (highLight) {
+            for (let c in highLight) {
+                ctx.restore();
+                ctx.save();
+                ctx.scale(SIM.getScale(), SIM.getScale());
+                ctx.beginPath();
+                ctx.lineWidth = 2;
+                ctx.shadowBlur = 0;
+                ctx.strokeStyle = "gray";
+                ctx.arc(highLight[c].x, highLight[c].y, C.CORNER_RADIUS, 0, 2 * Math.PI);
+                ctx.fillStyle = "black";
+                ctx.stroke();
+                ctx.fill();
+            }
         }
     }
 
@@ -162,6 +255,9 @@ define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constan
                 }
             }
         }
+        if (SIM.getDebugMode()) {
+            drawVariables();
+        }
         this.rCtx.scale(SIM.getScale(), SIM.getScale());
         this.rCtx.save();
 
@@ -182,7 +278,9 @@ define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constan
             this.drawMbed();
             return;
         }
-        this.rCtx.clearRect(0, 0, C.MAX_WIDTH, C.MAX_HEIGHT);
+        this.rCtx.clearRect(SIM.getGround().x - 20, SIM.getGround().y - 20, SIM.getGround().w + 40, SIM.getGround().h + 40);
+        this.dCtx.restore();
+        this.dCtx.save();
         for (var r = 0; r < this.numprogs; r++) {
             this.rCtx.restore();
             this.rCtx.save();
@@ -234,6 +332,9 @@ define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constan
                         $("#notConstantValue").append('<div><label>Infrared Sensor ' + s.replace("ORT_", "") + ' ' + side + '</label><span>' + this.robots[r].infraredSensors[s][side].value + '</span></div>');
 
                     }
+                }
+                if (SIM.getDebugMode()) {
+                    drawVariables();
                 }
             }
             this.rCtx.scale(SIM.getScale(), SIM.getScale());
@@ -293,6 +394,11 @@ define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constan
             this.rCtx.fill();
             this.rCtx.shadowBlur = 0;
             this.rCtx.shadowOffsetX = 0;
+            this.rCtx.beginPath();
+            this.rCtx.lineWidth = 2;
+            this.rCtx.fill();
+            this.rCtx.closePath();
+
             //LED
             if (this.robots[r].led && !this.robots[r].leds) {
                 this.rCtx.fillStyle = this.robots[r].led.color;
@@ -300,7 +406,6 @@ define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constan
                 this.rCtx.arc(this.robots[r].led.x, this.robots[r].led.y, 2.5, 0, Math.PI * 2);
                 this.rCtx.fill();
             }
-
             if (this.robots[r].leds) {
                 for (var port in this.robots[r].leds) {
                     this.rCtx.fillStyle = this.robots[r].leds[port].color;
@@ -389,6 +494,26 @@ define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constan
                 this.rCtx.arc(this.robots[r].ledSensor.x, this.robots[r].ledSensor.y, 2.5, 0, Math.PI * 2);
                 this.rCtx.fill();
             }
+
+            if (SIM.getSelectedRobot() === r) {
+                var objectCorners = [
+                    { x: Math.round(this.robots[r].frontRight.x), y: Math.round(this.robots[r].frontRight.y) },
+                    { x: (Math.round(this.robots[r].geom.x) + this.robots[r].geom.w), y: Math.round(this.robots[r].frontLeft.y) },
+                    { x: Math.round(this.robots[r].geom.x), y: (Math.round(this.robots[r].geom.y) + this.robots[r].geom.h) },
+                    { x: (Math.round(this.robots[r].geom.x) + this.robots[r].geom.w), y: (Math.round(this.robots[r].geom.y) + this.robots[r].geom.h) }
+                ];
+                for (let c in objectCorners) {
+                    this.rCtx.beginPath();
+                    this.rCtx.lineWidth = 2;
+                    this.rCtx.shadowBlur = 0;
+                    this.rCtx.strokeStyle = "gray";
+                    this.rCtx.arc(objectCorners[c].x, objectCorners[c].y, C.CORNER_RADIUS, 0, 2 * Math.PI);
+                    this.rCtx.fillStyle = "black";
+                    this.rCtx.stroke();
+                    this.rCtx.fill();
+                    this.rCtx.closePath();
+                }
+            }
             this.rCtx.restore();
             // ultra
             var ultraSensors = this.robots[r].ultraSensor;
@@ -429,39 +554,42 @@ define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constan
             }
 
             //this.rCtx.stroke();
-            this.rCtx.lineDashOffset = 0;
-            this.rCtx.setLineDash([]);
             if (this.robots[r].canDraw) {
-                this.bCtx.lineCap = 'round';
-                this.bCtx.beginPath();
-                this.bCtx.lineWidth = this.robots[r].drawWidth;
-                this.bCtx.strokeStyle = this.robots[r].drawColor;
-                this.bCtx.moveTo(this.robots[r].pose.xOld, this.robots[r].pose.yOld);
-                this.bCtx.lineTo(this.robots[r].pose.x, this.robots[r].pose.y);
-                this.bCtx.stroke();
-                this.uCtx.beginPath();
-                this.uCtx.lineCap = 'round';
-                this.uCtx.lineWidth = this.robots[r].drawWidth;
-                this.uCtx.strokeStyle = this.robots[r].drawColor;
-                this.uCtx.moveTo(this.robots[r].pose.xOld, this.robots[r].pose.yOld);
-                this.uCtx.lineTo(this.robots[r].pose.x, this.robots[r].pose.y);
-                this.uCtx.stroke();
+                this.dCtx.scale(SIM.getScale(), SIM.getScale());
+                this.dCtx.beginPath();
+
+                this.dCtx.lineCap = 'round';
+                this.dCtx.lineWidth = this.robots[r].drawWidth;
+                this.dCtx.strokeStyle = this.robots[r].drawColor;
+                this.dCtx.moveTo(this.robots[r].pose.xOld, this.robots[r].pose.yOld);
+                this.dCtx.lineTo(this.robots[r].pose.x, this.robots[r].pose.y);
+                this.dCtx.stroke();
+                this.udCtx.beginPath();
+                this.udCtx.lineCap = 'round';
+                this.udCtx.lineWidth = this.robots[r].drawWidth;
+                this.udCtx.strokeStyle = this.robots[r].drawColor;
+                this.udCtx.moveTo(this.robots[r].pose.xOld, this.robots[r].pose.yOld);
+                this.udCtx.lineTo(this.robots[r].pose.x, this.robots[r].pose.y);
+                this.udCtx.stroke();
                 this.robots[r].pose.xOld = this.robots[r].pose.x;
                 this.robots[r].pose.yOld = this.robots[r].pose.y;
+                this.dCtx.restore();
+                this.dCtx.save();
             }
         }
+        this.dCtx.restore();
     };
 
     Scene.prototype.updateSensorValues = function(running) {
         for (var r = 0; r < this.numprogs; r++) {
-            var personalObstacleList = SIM.obstacleList.slice();
+            var personalObstacleList = SIM.getObstacleList().slice();
             var values = this.robots[r].robotBehaviour.hardwareState.sensors;
             for (var i = 0; i < this.numprogs; i++) {
                 if (i === r) {
                     continue;
                 } else {
                     var tempobstacle = {
-                        isParallelToAxis: false,
+                        form: "robot",
                         backLeft: this.robots[i].backLeft,
                         backRight: this.robots[i].backRight,
                         frontLeft: this.robots[i].frontLeft,
@@ -486,118 +614,45 @@ define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constan
                 this.robots[r].frontRight.bumped = false;
                 this.robots[r].backLeft.bumped = false;
                 this.robots[r].backRight.bumped = false;
+                if (SIM.getGround()) {
+                    var x = this.robots[r].frontLeft.rx;
+                    var y = this.robots[r].frontLeft.ry;
+                    if (x < SIM.getGround().x || x > SIM.getGround().x + SIM.getGround().w || y < SIM.getGround().y || y > SIM.getGround().y + SIM.getGround().h) {
+                        this.robots[r].frontLeft.bumped = true;
+                        touchSensor.value = 1;
+                    }
+                    x = this.robots[r].frontRight.rx;
+                    y = this.robots[r].frontRight.ry;
+                    if (x < SIM.getGround().x || x > SIM.getGround().x + SIM.getGround().w || y < SIM.getGround().y || y > SIM.getGround().y + SIM.getGround().h) {
+                        this.robots[r].frontRight.bumped = true;
+                        touchSensor.value = 1;
+                    }
+                    x = this.robots[r].backLeft.rx;
+                    y = this.robots[r].backLeft.ry;
+                    if (x < SIM.getGround().x || x > SIM.getGround().x + SIM.getGround().w || y < SIM.getGround().y || y > SIM.getGround().y + SIM.getGround().h) {
+                        this.robots[r].backLeft.bumped = true;
+                    }
+                    x = this.robots[r].backRight.rx;
+                    y = this.robots[r].backRight.ry;
+                    if (x < SIM.getGround().x || x > SIM.getGround().x + SIM.getGround().w || y < SIM.getGround().y || y > SIM.getGround().y + SIM.getGround().h) {
+                        this.robots[r].backRight.bumped = true;
+                    }
+                }
                 for (var i = 0; i < personalObstacleList.length; i++) {
                     var p = personalObstacleList[i];
-                    if (i === 0) {
-                        var x = this.robots[r].frontLeft.rx;
-                        var y = this.robots[r].frontLeft.ry;
-                        if (x < p.x || x > p.x + p.w || y < p.y || y > p.y + p.h) {
-                            this.robots[r].frontLeft.bumped = true;
-                            touchSensor.value = 1;
-                        }
-                        x = this.robots[r].frontRight.rx;
-                        y = this.robots[r].frontRight.ry;
-                        if (x < p.x || x > p.x + p.w || y < p.y || y > p.y + p.h) {
-                            this.robots[r].frontRight.bumped = true;
-                            touchSensor.value = 1;
-                        }
-                        x = this.robots[r].backLeft.rx;
-                        y = this.robots[r].backLeft.ry;
-                        if (x < p.x || x > p.x + p.w || y < p.y || y > p.y + p.h) {
-                            this.robots[r].backLeft.bumped = true;
-                        }
-                        x = this.robots[r].backRight.rx;
-                        y = this.robots[r].backRight.ry;
-                        if (x < p.x || x > p.x + p.w || y < p.y || y > p.y + p.h) {
-                            this.robots[r].backRight.bumped = true;
-                        }
-                    } else {
-                        if (p.isParallelToAxis) {
-                            var x = this.robots[r].frontLeft.rx;
-                            var y = this.robots[r].frontLeft.ry;
-                            if (x > p.x && x < p.x + p.w && y > p.y && y < p.y + p.h) {
-                                this.robots[r].frontLeft.bumped = true;
-                                touchSensor.value = 1;
-                            }
-                            x = this.robots[r].frontRight.rx;
-                            y = this.robots[r].frontRight.ry;
-                            if (x > p.x && x < p.x + p.w && y > p.y && y < p.y + p.h) {
-                                this.robots[r].frontRight.bumped = true;
-                                touchSensor.value = 1;
-                            }
-                            x = this.robots[r].backLeft.rx;
-                            y = this.robots[r].backLeft.ry;
-                            if (x > p.x && x < p.x + p.w && y > p.y && y < p.y + p.h) {
-                                this.robots[r].backLeft.bumped = true;
-                            }
-                            x = this.robots[r].backRight.rx;
-                            y = this.robots[r].backRight.ry;
-                            if (x > p.x && x < p.x + p.w && y > p.y && y < p.y + p.h) {
-                                this.robots[r].backRight.bumped = true;
-                            }
-                        } else {
-                            var rectobj = {
-                                p1: {
-                                    x: p.backLeft.rx,
-                                    y: p.backLeft.ry
-                                },
-                                p2: {
-                                    x: p.frontLeft.rx,
-                                    y: p.frontLeft.ry
-                                },
-                                p3: {
-                                    x: p.frontRight.rx,
-                                    y: p.frontRight.ry
-                                },
-                                p4: {
-                                    x: p.backRight.rx,
-                                    y: p.backRight.ry
-                                }
-                            };
-                            var x = this.robots[r].frontLeft.rx;
-                            var y = this.robots[r].frontLeft.ry;
-                            if (SIMATH.isPointInsideRectangle({
-                                x: x,
-                                y: y
-                            }, rectobj)) {
-                                this.robots[r].frontLeft.bumped = true;
-                                touchSensor.value = 1;
-                            }
-                            x = this.robots[r].frontRight.rx;
-                            y = this.robots[r].frontRight.ry;
-                            if (SIMATH.isPointInsideRectangle({
-                                x: x,
-                                y: y
-                            }, rectobj)) {
-                                this.robots[r].frontRight.bumped = true;
-                                touchSensor.value = 1;
-                            }
-                            x = this.robots[r].backLeft.rx;
-                            y = this.robots[r].backLeft.ry;
-                            if (SIMATH.isPointInsideRectangle({
-                                x: x,
-                                y: y
-                            }, rectobj)) {
-                                this.robots[r].backLeft.bumped = true;
-                            }
-                            x = this.robots[r].backRight.rx;
-                            y = this.robots[r].backRight.ry;
-                            if (SIMATH.isPointInsideRectangle({
-                                x: x,
-                                y: y
-                            }, rectobj)) {
-                                this.robots[r].backRight.bumped = true;
-                            }
-                        }
-                        if (touchSensor.value === 0) {
-                            var obstacleLines = SIMATH.getLinesFromRect(personalObstacleList[i]);
+                    touchSensor.value = touchSensor.value || SIMATH.checkObstacle(this.robots[r], p);
+                    if (touchSensor.value === 0) {
+                        const robotSeg = {
+                            x1: this.robots[r].frontLeft.rx,
+                            x2: this.robots[r].frontRight.rx,
+                            y1: this.robots[r].frontLeft.ry,
+                            y2: this.robots[r].frontRight.ry
+                        };
+                        var p;
+                        if (personalObstacleList[i].form !== "circle") {
+                            var obstacleLines = SIMATH.getLinesFromObj(personalObstacleList[i]);
                             for (var k = 0; k < obstacleLines.length; k++) {
-                                var interPoint = SIMATH.getIntersectionPoint({
-                                    x1: this.robots[r].frontLeft.rx,
-                                    x2: this.robots[r].frontRight.rx,
-                                    y1: this.robots[r].frontLeft.ry,
-                                    y2: this.robots[r].frontRight.ry
-                                }, obstacleLines[k]);
+                                var interPoint = SIMATH.getIntersectionPoint(robotSeg, obstacleLines[k]);
                                 if (interPoint) {
                                     if (Math.abs(this.robots[r].frontLeft.rx - interPoint.x) < Math.abs(this.robots[r].frontRight.rx - interPoint.x)) {
                                         this.robots[r].frontLeft.bumped = true;
@@ -606,7 +661,7 @@ define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constan
                                     }
                                     touchSensor.value = 1;
                                 } else {
-                                    var p = SIMATH.getDistanceToLine({
+                                    p = SIMATH.getDistanceToLine({
                                         x: touchSensor.rx,
                                         y: touchSensor.ry
                                     }, {
@@ -616,42 +671,88 @@ define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constan
                                         x: obstacleLines[k].x2,
                                         y: obstacleLines[k].y2
                                     });
-                                    var thisTolerance = Math.max(Math.abs(this.robots[r].right), Math.abs(this.robots[r].left));
-                                    if (SIMATH.sqr(touchSensor.rx - p.x) + SIMATH.sqr(touchSensor.ry - p.y) <
-                                        SIM.getDt() * (personalObstacleList[i].tolerance + thisTolerance)) {
-                                        this.robots[r].frontLeft.bumped = true;
-                                        this.robots[r].frontRight.bumped = true;
-                                        touchSensor.value = 1;
-                                    } else {
-                                        var interPoint = SIMATH.getIntersectionPoint({
-                                            x1: this.robots[r].backLeft.rx,
-                                            x2: this.robots[r].backRight.rx,
-                                            y1: this.robots[r].backLeft.ry,
-                                            y2: this.robots[r].backRight.ry
-                                        }, obstacleLines[k]);
-                                        if (interPoint) {
-                                            if (Math.abs(this.robots[r].backLeft.rx - interPoint.x) < Math.abs(this.robots[r].backRight.rx - interPoint.x)) {
-                                                this.robots[r].backLeft.bumped = true;
-                                            } else {
-                                                this.robots[r].backRight.bumped = true;
-                                            }
+                                }
+                                var thisTolerance = Math.max(Math.abs(this.robots[r].right), Math.abs(this.robots[r].left));
+                                if (SIMATH.sqr(touchSensor.rx - p.x) + SIMATH.sqr(touchSensor.ry - p.y) <
+                                    SIM.getDt() * (personalObstacleList[i].tolerance + thisTolerance)) {
+                                    this.robots[r].frontLeft.bumped = true;
+                                    this.robots[r].frontRight.bumped = true;
+                                    touchSensor.value = 1;
+                                } else {
+                                    var interPoint = SIMATH.getIntersectionPoint({
+                                        x1: this.robots[r].backLeft.rx,
+                                        x2: this.robots[r].backRight.rx,
+                                        y1: this.robots[r].backLeft.ry,
+                                        y2: this.robots[r].backRight.ry
+                                    }, obstacleLines[k]);
+                                    if (interPoint) {
+                                        if (Math.abs(this.robots[r].backLeft.rx - interPoint.x) < Math.abs(this.robots[r].backRight.rx - interPoint.x)) {
+                                            this.robots[r].backLeft.bumped = true;
                                         } else {
-                                            var p = SIMATH.getDistanceToLine({
-                                                x: touchSensor.rx,
-                                                y: touchSensor.ry
-                                            }, {
-                                                x: obstacleLines[k].x1,
-                                                y: obstacleLines[k].y1
-                                            }, {
-                                                x: obstacleLines[k].x2,
-                                                y: obstacleLines[k].y2
-                                            });
-                                            if (SIMATH.sqr(this.robots[r].backMiddle.rx - p.x) + SIMATH.sqr(this.robots[r].backMiddle.ry - p.y) <
-                                                SIM.getDt() * (personalObstacleList[i].tolerance + thisTolerance)) {
-                                                this.robots[r].backLeft.bumped = true;
-                                                this.robots[r].backRight.bumped = true;
-                                            }
+                                            this.robots[r].backRight.bumped = true;
                                         }
+                                    } else {
+                                        p = SIMATH.getDistanceToLine({
+                                            x: touchSensor.rx,
+                                            y: touchSensor.ry
+                                        }, {
+                                            x: obstacleLines[k].x1,
+                                            y: obstacleLines[k].y1
+                                        }, {
+                                            x: obstacleLines[k].x2,
+                                            y: obstacleLines[k].y2
+                                        });
+                                    }
+                                    if (SIMATH.sqr(this.robots[r].backMiddle.rx - p.x) + SIMATH.sqr(this.robots[r].backMiddle.ry - p.y) <
+                                        SIM.getDt() * (personalObstacleList[i].tolerance + thisTolerance)) {
+                                        this.robots[r].backLeft.bumped = true;
+                                        this.robots[r].backRight.bumped = true;
+                                    }
+                                }
+                            }
+                        } else {
+                            var interPoint = SIMATH.getClosestIntersectionPointCircle(robotSeg, personalObstacleList[i]);
+                            if (interPoint) {
+                                if (Math.abs(this.robots[r].frontLeft.rx - interPoint.x) < Math.abs(this.robots[r].frontRight.rx - interPoint.x)) {
+                                    this.robots[r].frontLeft.bumped = true;
+                                } else {
+                                    this.robots[r].frontRight.bumped = true;
+                                }
+                                touchSensor.value = 1;
+                            } else {
+                                p = SIMATH.getDistanceToCircle({
+                                    x: touchSensor.rx,
+                                    y: touchSensor.ry
+                                }, personalObstacleList[i]);
+                            }
+                            var thisTolerance = Math.max(Math.abs(this.robots[r].right), Math.abs(this.robots[r].left));
+                            if (SIMATH.sqr(touchSensor.rx - p.x) + SIMATH.sqr(touchSensor.ry - p.y) <
+                                SIM.getDt() * (personalObstacleList[i].tolerance + thisTolerance)) {
+                                this.robots[r].frontLeft.bumped = true;
+                                this.robots[r].frontRight.bumped = true;
+                                touchSensor.value = 1;
+                            } else {
+                                var interPoint = SIMATH.getClosestIntersectionPointCircle({
+                                    x1: this.robots[r].backLeft.rx,
+                                    x2: this.robots[r].backRight.rx,
+                                    y1: this.robots[r].backLeft.ry,
+                                    y2: this.robots[r].backRight.ry
+                                }, personalObstacleList[i]);
+                                if (interPoint) {
+                                    if (Math.abs(this.robots[r].backLeft.rx - interPoint.x) < Math.abs(this.robots[r].backRight.rx - interPoint.x)) {
+                                        this.robots[r].backLeft.bumped = true;
+                                    } else {
+                                        this.robots[r].backRight.bumped = true;
+                                    }
+                                } else {
+                                    p = SIMATH.getDistanceToCircle({
+                                        x: touchSensor.rx,
+                                        y: touchSensor.ry
+                                    }, personalObstacleList[i]);
+                                    if (SIMATH.sqr(this.robots[r].backMiddle.rx - p.x) + SIMATH.sqr(this.robots[r].backMiddle.ry - p.y) <
+                                        SIM.getDt() * (personalObstacleList[i].tolerance + thisTolerance)) {
+                                        this.robots[r].backLeft.bumped = true;
+                                        this.robots[r].backRight.bumped = true;
                                     }
                                 }
                             }
@@ -672,11 +773,15 @@ define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constan
                 values.color = {};
                 values.light = {};
                 for (var s in colorSensors) {
-                    var red = 0;
-                    var green = 0;
-                    var blue = 0;
-                    var colors = this.uCtx.getImageData(Math.round(colorSensors[s].rx - 3), Math.round(colorSensors[s].ry - 3), 6, 6);
-                    var out = [0, 4, 16, 20, 24, 44, 92, 116, 120, 124, 136, 140]; // outside the circle
+                    let red = 0;
+                    let green = 0;
+                    let blue = 0;
+                    let x = Math.round(colorSensors[s].rx - 3);
+                    let y = Math.round(colorSensors[s].ry - 3);
+                    let colors = this.uCtx.getImageData(x, y, 6, 6);
+                    let colorsD = this.udCtx.getImageData(x, y, 6, 6);
+                    mergeDrawings(colors, colorsD);
+                    let out = [0, 4, 16, 20, 24, 44, 92, 116, 120, 124, 136, 140]; // outside the circle
                     for (var j = 0; j < colors.data.length; j += 24) {
                         for (var i = j; i < j + 24; i += 4) {
                             if (out.indexOf(i) < 0) {
@@ -763,19 +868,39 @@ define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constan
 
                     var uA = new Array(u1, u2, u3, u4, u5);
                     ultraSensors[s].distance = C.MAXDIAG;
+                    var uDis = [Infinity, Infinity, Infinity, Infinity, Infinity];
+                    personalObstacleList.push(SIM.getGround());
                     for (var i = 0; i < personalObstacleList.length; i++) {
-                        var obstacleLines = (SIMATH.getLinesFromRect(personalObstacleList[i]));
-                        var uDis = [Infinity, Infinity, Infinity, Infinity, Infinity];
-                        for (var k = 0; k < obstacleLines.length; k++) {
+
+                        if (personalObstacleList[i].form !== "circle") {
+                            var obstacleLines = (SIMATH.getLinesFromObj(personalObstacleList[i]));
+                            for (var k = 0; k < obstacleLines.length; k++) {
+                                for (var j = 0; j < uA.length; j++) {
+                                    var interPoint = SIMATH.getIntersectionPoint(uA[j], obstacleLines[k]);
+                                    if (interPoint) {
+                                        var dis = Math.sqrt((interPoint.x - ultraSensors[s].rx) * (interPoint.x - ultraSensors[s].rx) + (interPoint.y - ultraSensors[s].ry) * (interPoint.y - ultraSensors[s].ry));
+                                        if (dis < ultraSensors[s].distance) {
+                                            ultraSensors[s].distance = dis;
+                                            ultraSensors[s].cx = interPoint.x;
+                                            ultraSensors[s].cy = interPoint.y;
+                                        }
+                                        if (dis < uDis[j]) {
+                                            uDis[j] = dis;
+                                            ultraSensors[s].u[j] = interPoint;
+                                        }
+                                    }
+                                }
+                            }
+                        } else {
                             for (var j = 0; j < uA.length; j++) {
-                                var interPoint = SIMATH.getIntersectionPoint(uA[j], obstacleLines[k]);
+                                var interPoint = SIMATH.getClosestIntersectionPointCircle(uA[j], personalObstacleList[i]);
+
                                 if (interPoint) {
                                     var dis = Math.sqrt((interPoint.x - ultraSensors[s].rx) * (interPoint.x - ultraSensors[s].rx) + (interPoint.y - ultraSensors[s].ry) * (interPoint.y - ultraSensors[s].ry));
                                     if (dis < ultraSensors[s].distance) {
                                         ultraSensors[s].distance = dis;
                                         ultraSensors[s].cx = interPoint.x;
                                         ultraSensors[s].cy = interPoint.y;
-
                                     }
                                     if (dis < uDis[j]) {
                                         uDis[j] = dis;
@@ -813,6 +938,8 @@ define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constan
                         var green = 0;
                         var blue = 0;
                         var colors = this.uCtx.getImageData(Math.round(infraredSensors[s][side].rx - 3), Math.round(infraredSensors[s][side].ry - 3), 6, 6);
+                        var colorsD = this.udCtx.getImageData(Math.round(infraredSensors[s][side].rx - 3), Math.round(infraredSensors[s][side].ry - 3), 6, 6);
+                        mergeDrawings(colors, colorsD);
                         var out = [0, 4, 16, 20, 24, 44, 92, 116, 120, 124, 136, 140]; // outside the circle
                         for (var j = 0; j < colors.data.length; j += 24) {
                             for (var i = j; i < j + 24; i += 4) {
@@ -942,7 +1069,31 @@ define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constan
             }
             values.frameTime = SIM.getDt();
         }
+
+        function mergeDrawings(colors, colorsD) {
+            for (var i = 0; i <= colors.data.length; i += 4) {
+                if (colorsD.data[i + 3] === 255) {
+                    for (var j = i; j < i + 3; j++) {
+                        colors.data[j] = colorsD.data[j];
+                    }
+                }
+            }
+        }
     };
+
+    Scene.prototype.drawPattern = function(ctx, pattern) {
+        if (this.robots && (getFnName(this.robots[0].constructor).indexOf("Calliope") >= 0 || getFnName(this.robots[0].constructor) === 'Microbit')) {
+            return;
+        }
+        ctx.beginPath();
+        if (pattern) {
+            var patternImg = pattern;
+            var pattern = ctx.createPattern(patternImg, 'repeat');
+            ctx.strokeStyle = pattern;
+        }
+        ctx.lineWidth = 10;
+        ctx.strokeRect(5, 5, this.backgroundImg.width + 10, this.backgroundImg.height + 10);
+    }
 
     function getFnName(fn) {
         var f = typeof fn == 'function';
@@ -950,18 +1101,29 @@ define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constan
         return (!f && 'not a function') || (s && s[1] || 'anonymous');
     }
 
+    function drawVariables() {
+        var variables = SIM.getSimVariables()
+        if (Object.keys(variables).length > 0) {
+            $('#notConstantValue').append('<div><label>Variables</label></div>');
+            for (var v in variables) {
+                var value = variables[v][0];
+                addVariableValue(v, value);
+            }
+        }
+    }
+
     function addVariableValue(name, value) {
         switch (typeof value) {
             case "number": {
-                $("#variableValue").append('<div><label>' + name + ' :  </label><span> ' + UTIL.round(value, 0) + '</span></div>');
+                $("#notConstantValue").append('<div><label>' + name + ' :  </label><span> ' + UTIL.round(value, 0) + '</span></div>');
                 break;
             }
             case "string": {
-                $("#variableValue").append('<div><label>' + name + ' :  </label><span> ' + value + '</span></div>');
+                $("#notConstantValue").append('<div><label>' + name + ' :  </label><span> ' + value + '</span></div>');
                 break;
             }
             case "boolean": {
-                $("#variableValue").append('<div><label>' + name + ' :  </label><span> ' + value + '</span></div>');
+                $("#notConstantValue").append('<div><label>' + name + ' :  </label><span> ' + value + '</span></div>');
                 break;
             }
             case "object": {

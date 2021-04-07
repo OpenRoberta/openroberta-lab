@@ -1,165 +1,133 @@
 {
-    "ops":[
-        {
-            "op":"expr",
-            "opc":"INITIATE_BLOCK",
-            "BLOCK_ID":"v3/rd]{Goeu}9(Cs*No7"
-        },
-        {
-            "opc":"expr",
-            "BLOCK_ID":"v3/rd]{Goeu}9(Cs*No7",
-            "expr":"NUM_CONST",
-            "value":"300"
-        },
-        {
-            "opc":"TERMINATE_BLOCK",
-            "BLOCK_ID":"v3/rd]{Goeu}9(Cs*No7"
-        },
-        {
-            "op":"expr",
-            "opc":"INITIATE_BLOCK",
-            "BLOCK_ID":"*m9D{z9sjsGKKPbY-3t7"
-        },
-        {
-            "opc":"expr",
-            "BLOCK_ID":"*m9D{z9sjsGKKPbY-3t7",
-            "expr":"NUM_CONST",
-            "value":"100"
-        },
-        {
-            "opc":"TERMINATE_BLOCK",
-            "BLOCK_ID":"*m9D{z9sjsGKKPbY-3t7"
-        },
-        {
-            "op":"ToneAction",
-            "opc":"INITIATE_BLOCK",
-            "BLOCK_ID":"f[p,XI]V`,gR1kyo?eXg"
-        },
-        {
-            "opc":"ToneAction",
-            "BLOCK_ID":"f[p,XI]V`,gR1kyo?eXg"
-        },
-        {
-            "opc":"TERMINATE_BLOCK",
-            "BLOCK_ID":"f[p,XI]V`,gR1kyo?eXg"
-        },
-        {
-            "opc":"expr",
-            "expr":"NUM_CONST",
-            "value":"261.626"
-        },
-        {
-            "opc":"expr",
-            "expr":"NUM_CONST",
-            "value":"2000"
-        },
-        {
-            "op":"ToneAction",
-            "opc":"INITIATE_BLOCK",
-            "BLOCK_ID":"#Qef|+e=Q6j[gt{{i0{+"
-        },
-        {
-            "opc":"ToneAction",
-            "BLOCK_ID":"#Qef|+e=Q6j[gt{{i0{+"
-        },
-        {
-            "opc":"TERMINATE_BLOCK",
-            "BLOCK_ID":"#Qef|+e=Q6j[gt{{i0{+"
-        },
-        {
-            "opc":"expr",
-            "expr":"NUM_CONST",
-            "value":"261.626"
-        },
-        {
-            "opc":"expr",
-            "expr":"NUM_CONST",
-            "value":"1000"
-        },
-        {
-            "op":"ToneAction",
-            "opc":"INITIATE_BLOCK",
-            "BLOCK_ID":"[weC8tcKn[ZaovaQl{bk"
-        },
-        {
-            "opc":"ToneAction",
-            "BLOCK_ID":"[weC8tcKn[ZaovaQl{bk"
-        },
-        {
-            "opc":"TERMINATE_BLOCK",
-            "BLOCK_ID":"[weC8tcKn[ZaovaQl{bk"
-        },
-        {
-            "opc":"expr",
-            "expr":"NUM_CONST",
-            "value":"261.626"
-        },
-        {
-            "opc":"expr",
-            "expr":"NUM_CONST",
-            "value":"500"
-        },
-        {
-            "op":"ToneAction",
-            "opc":"INITIATE_BLOCK",
-            "BLOCK_ID":"*6p,_?Ii4s(vC!?r09z|"
-        },
-        {
-            "opc":"ToneAction",
-            "BLOCK_ID":"*6p,_?Ii4s(vC!?r09z|"
-        },
-        {
-            "opc":"TERMINATE_BLOCK",
-            "BLOCK_ID":"*6p,_?Ii4s(vC!?r09z|"
-        },
-        {
-            "opc":"expr",
-            "expr":"NUM_CONST",
-            "value":"261.626"
-        },
-        {
-            "opc":"expr",
-            "expr":"NUM_CONST",
-            "value":"250"
-        },
-        {
-            "op":"ToneAction",
-            "opc":"INITIATE_BLOCK",
-            "BLOCK_ID":"B2f_=`lCUvn-HD_[,R-i"
-        },
-        {
-            "opc":"ToneAction",
-            "BLOCK_ID":"B2f_=`lCUvn-HD_[,R-i"
-        },
-        {
-            "opc":"TERMINATE_BLOCK",
-            "BLOCK_ID":"B2f_=`lCUvn-HD_[,R-i"
-        },
-        {
-            "opc":"expr",
-            "expr":"NUM_CONST",
-            "value":"261.626"
-        },
-        {
-            "opc":"expr",
-            "expr":"NUM_CONST",
-            "value":"125"
-        },
-        {
-            "op":"ToneAction",
-            "opc":"INITIATE_BLOCK",
-            "BLOCK_ID":"s]nVg:U8b~|GxdlHYKZ|"
-        },
-        {
-            "opc":"ToneAction",
-            "BLOCK_ID":"s]nVg:U8b~|GxdlHYKZ|"
-        },
-        {
-            "opc":"TERMINATE_BLOCK",
-            "BLOCK_ID":"s]nVg:U8b~|GxdlHYKZ|"
-        }
-    ],
-    "functionDeclaration":{
-
+  "ops": [
+    {
+      "opc": "expr",
+      "expr": "NUM_CONST",
+      "+": [
+        "v3/rd]{Goeu}9(Cs*No7"
+      ],
+      "value": "300"
+    },
+    {
+      "opc": "expr",
+      "expr": "NUM_CONST",
+      "+": [
+        "*m9D{z9sjsGKKPbY-3t7"
+      ],
+      "-": [
+        "v3/rd]{Goeu}9(Cs*No7"
+      ],
+      "value": "100"
+    },
+    {
+      "opc": "ToneAction",
+      "+": [
+        "f[p,XI]V`,gR1kyo?eXg"
+      ],
+      "-": [
+        "*m9D{z9sjsGKKPbY-3t7"
+      ]
+    },
+    {
+      "opc": "expr",
+      "expr": "NUM_CONST",
+      "-": [
+        "f[p,XI]V`,gR1kyo?eXg"
+      ],
+      "value": "261.626"
+    },
+    {
+      "opc": "expr",
+      "expr": "NUM_CONST",
+      "value": "2000"
+    },
+    {
+      "opc": "ToneAction",
+      "+": [
+        "#Qef|+e=Q6j[gt{{i0{+"
+      ]
+    },
+    {
+      "opc": "expr",
+      "expr": "NUM_CONST",
+      "-": [
+        "#Qef|+e=Q6j[gt{{i0{+"
+      ],
+      "value": "261.626"
+    },
+    {
+      "opc": "expr",
+      "expr": "NUM_CONST",
+      "value": "1000"
+    },
+    {
+      "opc": "ToneAction",
+      "+": [
+        "[weC8tcKn[ZaovaQl{bk"
+      ]
+    },
+    {
+      "opc": "expr",
+      "expr": "NUM_CONST",
+      "-": [
+        "[weC8tcKn[ZaovaQl{bk"
+      ],
+      "value": "261.626"
+    },
+    {
+      "opc": "expr",
+      "expr": "NUM_CONST",
+      "value": "500"
+    },
+    {
+      "opc": "ToneAction",
+      "+": [
+        "*6p,_?Ii4s(vC!?r09z|"
+      ]
+    },
+    {
+      "opc": "expr",
+      "expr": "NUM_CONST",
+      "-": [
+        "*6p,_?Ii4s(vC!?r09z|"
+      ],
+      "value": "261.626"
+    },
+    {
+      "opc": "expr",
+      "expr": "NUM_CONST",
+      "value": "250"
+    },
+    {
+      "opc": "ToneAction",
+      "+": [
+        "B2f_=`lCUvn-HD_[,R-i"
+      ]
+    },
+    {
+      "opc": "expr",
+      "expr": "NUM_CONST",
+      "-": [
+        "B2f_=`lCUvn-HD_[,R-i"
+      ],
+      "value": "261.626"
+    },
+    {
+      "opc": "expr",
+      "expr": "NUM_CONST",
+      "value": "125"
+    },
+    {
+      "opc": "ToneAction",
+      "+": [
+        "s]nVg:U8b~|GxdlHYKZ|"
+      ]
+    },
+    {
+      "opc": "stop",
+      "-": [
+        "s]nVg:U8b~|GxdlHYKZ|"
+      ]
     }
+  ]
 }

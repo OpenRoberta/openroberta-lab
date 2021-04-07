@@ -315,6 +315,41 @@ define(["require", "exports"], function (require, exports) {
                 { name: 'accelerometer', position: { x: 238.2, y: 99.5 } },
                 { name: 'compass', position: { x: 238.2, y: 104.7 } },
             ], "width": "435px", "height": "172px"
+        },
+        "sensebox": {
+            "ports": [
+                // Digital Pins
+                { name: '1', position: { x: 151, y: 104 } },
+                { name: '2', position: { x: 160, y: 104 } },
+                { name: '3', position: { x: 151, y: 63 } },
+                { name: '4', position: { x: 160, y: 63 } },
+                { name: '5', position: { x: 151, y: 21 } },
+                { name: '6', position: { x: 160, y: 21 } },
+                { name: '7', position: { x: 22, y: 117 } },
+                { name: '8', position: { x: 14, y: 117 } },
+                // special pins and ports
+                { name: 'XBEE1', position: { x: 73, y: 203 } },
+                { name: 'XBEE2', position: { x: 320, y: 203 } },
+                { name: 'I2C', position: { x: 323, y: 21 } },
+                { name: 'I2C', position: { x: 289, y: 63 } },
+                { name: 'I2C', position: { x: 354, y: 63 } },
+                { name: 'I2C', position: { x: 289, y: 104 } },
+                { name: 'I2C', position: { x: 354, y: 104 } },
+                { name: 'Serial1', position: { x: 220, y: 105 } },
+                { name: 'Serial2', position: { x: 220, y: 63 } },
+                // base pins
+                { name: 'GND', position: { x: 133, y: 104 } },
+                { name: 'GND', position: { x: 133, y: 63 } },
+                { name: 'GND', position: { x: 133, y: 21 } },
+                { name: 'GND', position: { x: 50, y: 21 } },
+                { name: '5V', position: { x: 141, y: 104 } },
+                { name: '5V', position: { x: 141, y: 63 } },
+                { name: '5V', position: { x: 141, y: 21 } },
+                { name: '5V', position: { x: 59, y: 21 } },
+                //build in
+                { name: 'accelerometer', position: { x: 187, y: 207 } },
+                { name: 'sensebox', position: { x: 187, y: 207 } },
+            ], "width": "398px", "height": "303px"
         }
     };
 });

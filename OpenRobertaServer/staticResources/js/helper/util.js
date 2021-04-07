@@ -1,4 +1,4 @@
-define([ 'exports', 'message', 'log', 'jquery', 'jquery-validate', 'bootstrap' ], function(exports, MSG, LOG, $) {
+define(['exports', 'message', 'log', 'jquery', 'jquery-validate', 'bootstrap'], function(exports, MSG, LOG, $) {
 
     const ANIMATION_DURATION = 750;
 
@@ -45,7 +45,7 @@ define([ 'exports', 'message', 'log', 'jquery', 'jquery-validate', 'bootstrap' ]
         // Handle Object
         if (obj instanceof Object) {
             copy = {};
-            for ( var attr in obj) {
+            for (var attr in obj) {
                 if (obj.hasOwnProperty(attr))
                     copy[attr] = clone(obj[attr]);
             }
@@ -118,7 +118,7 @@ define([ 'exports', 'message', 'log', 'jquery', 'jquery-validate', 'bootstrap' ]
         if (dateLong) {
             var date = new Date(dateLong);
             var datestring = ("0" + date.getDate()).slice(-2) + "." + ("0" + (date.getMonth() + 1)).slice(-2) + "." + date.getFullYear() + ", "
-                    + ("0" + date.getHours()).slice(-2) + ":" + ("0" + date.getMinutes()).slice(-2);
+                + ("0" + date.getHours()).slice(-2) + ":" + ("0" + date.getMinutes()).slice(-2);
             return datestring;
         } else {
             return "";
@@ -190,10 +190,10 @@ define([ 'exports', 'message', 'log', 'jquery', 'jquery-validate', 'bootstrap' ]
 
     function checkVisibility() {
         var stateKey, eventKey, keys = {
-            hidden : "visibilitychange",
-            webkitHidden : "webkitvisibilitychange",
-            mozHidden : "mozvisibilitychange",
-            msHidden : "msvisibilitychange"
+            hidden: "visibilitychange",
+            webkitHidden: "webkitvisibilitychange",
+            mozHidden: "mozvisibilitychange",
+            msHidden: "msvisibilitychange"
         };
         for (stateKey in keys) {
             if (stateKey in document) {
@@ -263,7 +263,7 @@ define([ 'exports', 'message', 'log', 'jquery', 'jquery-validate', 'bootstrap' ]
             $('#show-message').find('button').attr("data-dismiss", "modal");
         });
         MSG.displayInformation({
-            rc : "not ok"
+            rc: "not ok"
         }, "", msg);
     }
     exports.showMsgOnTop = showMsgOnTop;
@@ -351,8 +351,8 @@ define([ 'exports', 'message', 'log', 'jquery', 'jquery-validate', 'bootstrap' ]
 
     function download(fileName, content) {
         if ('Blob' in window && navigator.userAgent.toLowerCase().match(/iPad|iPhone|Android/i) == null) {
-            var contentAsBlob = new Blob([ content ], {
-                type : 'application/octet-stream'
+            var contentAsBlob = new Blob([content], {
+                type: 'application/octet-stream'
             });
             if ('msSaveOrOpenBlob' in navigator) {
                 navigator.msSaveOrOpenBlob(contentAsBlob, fileName);
@@ -430,12 +430,12 @@ define([ 'exports', 'message', 'log', 'jquery', 'jquery-validate', 'bootstrap' ]
     exports.clearTabAlert = clearTabAlert;
 
     var __entityMap = {
-        "&" : "&amp;",
-        "<" : "&lt;",
-        ">" : "&gt;",
-        '"' : '&quot;',
-        "'" : '&#39;',
-        "/" : '&#x2F;'
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': '&quot;',
+        "'": '&#39;',
+        "/": '&#x2F;'
     };
 
     String.prototype.escapeHTML = function() {
@@ -447,10 +447,10 @@ define([ 'exports', 'message', 'log', 'jquery', 'jquery-validate', 'bootstrap' ]
     $.fn.draggable = function(opt) {
 
         opt = $.extend({
-            handle : "",
-            cursor : "move",
-            draggableClass : "draggable",
-            activeHandleClass : "active-handle"
+            handle: "",
+            cursor: "move",
+            draggableClass: "draggable",
+            activeHandleClass: "active-handle"
         }, opt);
 
         var $selected = null;
@@ -467,7 +467,7 @@ define([ 'exports', 'message', 'log', 'jquery', 'jquery-validate', 'bootstrap' ]
                 $selected.addClass(opt.draggableClass).find(opt.handle).addClass(opt.activeHandleClass);
             }
             var drg_h = $selected.outerHeight(), drg_w = $selected.outerWidth(), pos_y = $selected.offset().top + drg_h - pageY, pos_x = $selected.offset().left
-                    + drg_w - pageX;
+                + drg_w - pageX;
             $(document).on("mousemove touchmove", function(e) {
                 var pageX = e.pageX || e.originalEvent.touches[0].pageX;
                 var pageY = e.pageY || e.originalEvent.touches[0].pageY;
@@ -477,26 +477,26 @@ define([ 'exports', 'message', 'log', 'jquery', 'jquery-validate', 'bootstrap' ]
                     var left = Math.min(left, $('#main-section').width() - 80);
                     var left = Math.max(left, 42);
                     $selected.offset({
-                        top : 0,
-                        left : left - 4
+                        top: 0,
+                        left: left - 4
                     });
                     $('#blockly').width(left + 3);
                     $('.rightMenuButton').css({
-                        'right' : $(window).width() - left
+                        'right': $(window).width() - left
                     });
                     $('.fromRight').css({
-                        'width' : $(window).width() - $('#blockly').width()
+                        'width': $(window).width() - $('#blockly').width()
                     })
                     ratioWorkspace = $('#blockly').outerWidth() / $('#main-section').outerWidth();
                     $(window).resize();
                 } else {
                     $selected.offset({
-                        top : pageY + pos_y - drg_h,
-                        left : pageX + pos_x - drg_w
+                        top: pageY + pos_y - drg_h,
+                        left: pageX + pos_x - drg_w
                     });
                 }
                 $selected.css({
-                    right : 'auto',
+                    right: 'auto',
                 });
             }).on("mouseup touchend", function() {
                 $(this).off("mousemove touchmove"); // Unbind events from document
@@ -539,20 +539,20 @@ define([ 'exports', 'message', 'log', 'jquery', 'jquery-validate', 'bootstrap' ]
         $('.blocklyToolboxDiv').css('display', 'inherit');
         var that = this; //$('#blockly')
         $('.fromRight.rightActive').animate({
-            width : 0
+            width: 0
         }, {
-            duration : ANIMATION_DURATION,
-            start : function() {
+            duration: ANIMATION_DURATION,
+            start: function() {
                 $(".modal").modal("hide");
                 $('.rightMenuButton.rightActive').removeClass('rightActive');
             },
-            step : function(now) {
+            step: function(now) {
                 that.width($('#main-section').outerWidth() - now);
                 $('.rightMenuButton').css('right', now);
                 ratioWorkspace = $('#blockly').outerWidth() / $('#main-section').outerWidth();
                 $(window).resize();
             },
-            done : function() {
+            done: function() {
                 that.width($('#main-section').outerWidth());
                 $('.rightMenuButton').css('right', 0);
                 $('.fromRight.rightActive.shifting').removeClass('shifting');
@@ -573,6 +573,10 @@ define([ 'exports', 'message', 'log', 'jquery', 'jquery-validate', 'bootstrap' ]
         Blockly.hideChaff();
         var width;
         var smallScreen;
+        let buttonName = viewName;
+        if (opt_callBack && typeof opt_callBack == "string") {
+            buttonName = opt_callBack;
+        }
         if ($(window).width() < 768) {
             smallScreen = true;
             width = this.width() - 52;
@@ -583,7 +587,7 @@ define([ 'exports', 'message', 'log', 'jquery', 'jquery-validate', 'bootstrap' ]
         if ($('#blockly').hasClass('rightActive')) {
             $('.fromRight.rightActive').removeClass('rightActive');
             $('.rightMenuButton.rightActive').removeClass('rightActive');
-            $('#' + viewName + 'Div, #' + viewName + 'Button').addClass('rightActive');
+            $('#' + viewName + 'Div, #' + buttonName + 'Button').addClass('rightActive');
             $(window).resize();
             if (smallScreen) {
                 $('.blocklyToolboxDiv').css('display', 'none');
@@ -594,22 +598,22 @@ define([ 'exports', 'message', 'log', 'jquery', 'jquery-validate', 'bootstrap' ]
             return;
         }
         this.addClass('rightActive');
-        $('#' + viewName + 'Div, #' + viewName + 'Button').addClass('rightActive');
+        $('#' + viewName + 'Div, #' + buttonName + 'Button').addClass('rightActive');
         var that = this;
         $('.fromRight.rightActive').animate({
-            width : width
+            width: width
         }, {
-            duration : ANIMATION_DURATION,
-            start : function() {
+            duration: ANIMATION_DURATION,
+            start: function() {
                 $('#' + viewName + 'Div').addClass('shifting');
             },
-            step : function(now, tween) {
+            step: function(now, tween) {
                 that.width($('#main-section').outerWidth() - now);
                 $('.rightMenuButton').css('right', now);
                 ratioWorkspace = $('#blockly').outerWidth() / $('#main-section').outerWidth();
                 $(window).resize();
             },
-            done : function() {
+            done: function() {
                 $('#sliderDiv').show();
                 that.width($('#main-section').outerWidth() - $('.fromRight.rightActive').width());
                 $('.rightMenuButton').css('right', $('.fromRight.rightActive').width());
@@ -620,7 +624,7 @@ define([ 'exports', 'message', 'log', 'jquery', 'jquery-validate', 'bootstrap' ]
                     $('.blocklyToolboxDiv').css('display', 'none');
                 }
                 $('#sliderDiv').css({
-                    'left' : that.width() - 7
+                    'left': that.width() - 7
                 });
                 if (typeof opt_callBack == 'function') {
                     opt_callBack();
@@ -704,23 +708,23 @@ define([ 'exports', 'message', 'log', 'jquery', 'jquery-validate', 'bootstrap' ]
      *            confAnnos - {block id, {type of annotation, message key}}
      */
     function annotateBlocks(workspace, annotations) {
-        for ( var annoId in annotations) {
+        for (var annoId in annotations) {
             var block = workspace.getBlockById(annoId);
             if (block) {
                 var anno = annotations[annoId];
-                for ( var annoType in anno) {
+                for (var annoType in anno) {
                     var annoMsg = Blockly.Msg[anno[annoType]] || anno[annoType] || "unknown error";
                     switch (annoType) {
-                    case "ERROR":
-                        block.setErrorText(annoMsg);
-                        block.error.setVisible(true);
-                        break;
-                    case "WARNING":
-                        block.setWarningText(annoMsg);
-                        block.warning.setVisible(true);
-                        break;
-                    default:
-                        console.warn("Unsupported annotation: " + annoType);
+                        case "ERROR":
+                            block.setErrorText(annoMsg);
+                            block.error.setVisible(true);
+                            break;
+                        case "WARNING":
+                            block.setWarningText(annoMsg);
+                            block.warning.setVisible(true);
+                            break;
+                        default:
+                            console.warn("Unsupported annotation: " + annoType);
                     }
                 }
             }

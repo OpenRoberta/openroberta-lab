@@ -499,12 +499,19 @@ canvas.border {
     width: 0;
     height: 0;
     border-top: 5px solid transparent;
-    border-right: 6px solid #C0C0C0;
+    border-right: 6px solid #333;
     border-bottom: 5px solid transparent;
 }
 
 .rightMenuButton.rightActive {
     color: #E2001A;
+}
+
+.rightMenuButton.rightActive:before {
+    border-top: 5px solid transparent;
+    border-left: 6px solid #333;
+    border-bottom: 5px solid transparent;
+    right: -6px;
 }
 
 div.rightMenuButton:hover,
@@ -704,6 +711,67 @@ div.rightMenuButton:hover,
     z-index: 99;
 }
 
+#simEditButtons {
+    left: 12px;
+    top: 10px;
+    position: absolute;
+    z-index: 99;
+}
+
+button#simCustomColorObject.typcn:before {
+	color: #FBED00;
+}
+
+button#simCustomObstacle.typcn:before {
+	color: 009EE3;
+}
+
+.huebee__container {
+  position: absolute;
+  left: 0;
+  top: 6px;
+  padding: 10px;
+  padding-top: 24px;
+  background: #e7e7e7;
+  border-radius: 2px;
+  box-shadow: none;
+}
+
+.huebee__cursor {
+  border: 5px solid #fff;
+  border-radius: 2px;
+  width: 30px;
+  height: 30px;
+}
+
+.huebee {
+  /* disable reveal/hide transition */
+  transition: none;
+}
+
+.huebee__close-button {
+    display: block;
+    position: absolute;
+    width: 24px;
+    height: 24px;
+    top: 0px;
+    right: 0;
+    border-radius: 0;
+    background: none;
+}
+
+.huebee__close-button__x {
+  stroke-width: 2;
+  stroke: #bbb;
+}
+.huebee__close-button__x:hover, .huebee__close-button__x:focus {
+  stroke: #333;
+}
+
+.huebee__close-button:hover, .huebee__close-button:focus {
+  background: #e7e7e7;
+}
+
 #codeButtons {
     left: 12px;
     bottom: 0px;
@@ -723,6 +791,11 @@ div.rightMenuButton:hover,
 .btn-toolbar > .btn-group,
 .btn-toolbar > .input-group {
     margin-bottom: 5px;
+}
+
+.btn-group.open .dropdown-toggle {
+    -webkit-box-shadow: none;
+    box-shadow: none;
 }
 
 /***** BEGIN Overwrite Bootstrap-CSS *****/
@@ -924,7 +997,7 @@ div.rightMenuButton:hover,
 
 .dropdown-menu > li > a {
 	position: relative;
-    padding-right: 90px;
+    padding-right: 70px;
 }
 
 .dropdown-menu > li:not(.disabled) > a:hover,
@@ -1064,7 +1137,6 @@ div.rightMenuButton:hover,
     color: #f1f1f1;
 }
 
-.modal#simVariablesContent button.close,
 .modal#simValuesModal button.close {
     margin-right: -10px;
     margin-top: -14px;
@@ -1077,15 +1149,6 @@ div.rightMenuButton:hover,
     width: auto;
 }
 
-#simVariablesContent label {
-    display: inline-block;
-    float: left;
-    clear: left;
-    width: auto;
-    text-align: left;
-    margin-right: 6px;
-}
-
 #simValuesContent label {
     display: inline-block;
     float: left;
@@ -1095,18 +1158,10 @@ div.rightMenuButton:hover,
     margin-right: 6px;
 }
 
-#simVariablesContent div > div,
 #simValuesContent div > div {
     white-space: nowrap;
     overflow: hidden;
     min-width: 250px;
-}
-
-#simVariablesContent span {
-    display: inline;
-    float: right;
-    padding: 0 10px;
-    width: auto;
 }
 
 #simValuesContent span {
@@ -1123,7 +1178,6 @@ div.rightMenuButton:hover,
     color: #ffffff;
 }
 
-.modal#simVariablesModal button.close,
 .modal#simValuesModal button.close:hover {
     margin-right: -10px;
     margin-top: -14px;
@@ -2283,6 +2337,51 @@ input[type=range]:focus::-ms-fill-upper {
 #userGroupMemberTable .edit-member-name .btn.iais-loading-spin:before {
     display: inline-block;
     animation: iais-loading-spin 1.2s linear infinite;
+}
+
+#simEditButtons > .btn-group {
+    width: 48px;
+    height: 48px;
+    vertical-align: top;
+}
+
+#simEditButtons > .btn-group.open button {
+    background-color: #e7e7e7;
+}
+
+#simEditButtons >.btn-group > .dropdown-menu {
+    width: 48px;
+    margin-top: 6px;
+}
+
+#simEditButtons > .btn-group > .dropdown-menu > li > a {
+    padding-left:5px;
+    padding-right:0;
+    text-align: center;
+    height: 35px;
+    font-size: 28px;
+}
+
+.simChangeObject.disabled { 
+	color: #bbb;
+	cursor: not-allowed;
+}
+
+#simStop, #simControl.typcn-media-stop {
+    color: #E2001A;
+}
+
+#simStop.disabled {
+	color: #F6B3B9;
+    cursor: not-allowed;
+}
+#simControl.blue, #simControlStepOver.blue, #simControlStepInto.blue {
+	color: #1C5A94;
+}
+
+.typcn-media-play-outline.rotated:before {
+	display: inline-block;
+	transform: rotate(-90deg);
 }
 
 @keyframes iais-loading-spin {

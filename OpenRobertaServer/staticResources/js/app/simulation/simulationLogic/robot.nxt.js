@@ -29,6 +29,8 @@ define(['simulation.simulation', 'interpreter.constants', 'simulation.robot.ev3'
         for (var s in this.touchSensor) {
             this.touchSensor[s].color = 'LIGHTGREY';
         }
+        this.colorRange = ["#000000", "#0057a6", "#00642e", "#00ff00", "#585858", "#800080",
+            "#b30006", "#dc143c", "#ee82ee", "#f7d117", "#ff00ff", "#ffa500"];
         this.buttons = {
             escape: false,
             left: false,

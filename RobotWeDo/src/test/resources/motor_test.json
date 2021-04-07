@@ -20,7 +20,9 @@
       "opc": "motorStop",
       "port": "1",
       "name": "W"
+    },
+    {
+      "opc": "stop"
     }
-  ],
-  "functionDeclaration": {}
+  ]
 }

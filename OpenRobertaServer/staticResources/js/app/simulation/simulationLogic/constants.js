@@ -103,11 +103,11 @@ define({
     DIRECTION: "direction",
 
     PLAY_FILE_ACTION: "PlayFileAction",
-    
+
     SET_LANGUAGE_ACTION: "SetLanguageAction",
-    
+
     SAY_TEXT_ACTION: "SayTextAction",
-    
+
     LANGUAGE: "language",
 
     PITCH: "pitch",
@@ -435,7 +435,7 @@ define({
     METHOD_VOID: "createMethodVoid",
 
     METHOD_RETURN: "createMethodReturn",
-    
+
     IF_RETURN: "createMethodIfReturn",
 
     RETURN_TYPE: "returnType",
@@ -468,7 +468,7 @@ define({
 
     BUTTON_B: "B",
 
-    COMMENT : "comment",
+    COMMENT: "comment",
 
     COMPASS: "compass",
 
@@ -485,15 +485,15 @@ define({
     PIN_GET_VALUE_SENSOR: "createPinGetValueSensor",
 
     PIN_WRITE_VALUE_SENSOR: "createPinWriteValueSensor",
-    
+
     NOOP_STMT: "createNoopStmt",
 
     PIN: "pin",
-    
+
     ASSERT_STMT: "createAssertStmt",
-    
+
     TEST: "test",
-    
+
     CONSOLE_DEBUG: "createConsoleDebugAction",
 
     COLOR_ENUM: {
@@ -533,5 +533,9 @@ define({
 
     DEBUG_STEP_INTO: "DebugStepInto",
 
-    DEBUG_STEP_OVER: "DebugStepOver"
+    DEBUG_STEP_OVER: "DebugStepOver",
+
+    MIN_SIZE_OBJECT: 10, 
+    
+    CORNER_RADIUS: 5
 });

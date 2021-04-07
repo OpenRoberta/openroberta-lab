@@ -179,7 +179,7 @@ public class RepeatStmt<V> extends Stmt<V> {
                             empty,
                             false,
                             false,
-                            BlocklyBlockProperties.make("1", "1"),
+                            Jaxb2Ast.extractBlockProperties(block),
                             null);
 
                 values = Jaxb2Ast.extractValues(block, (short) 1);

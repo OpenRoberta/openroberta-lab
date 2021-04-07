@@ -839,6 +839,7 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
                     nlIndent();
                     break;
                 // no additional configuration needed:
+                case SC.ROBOT:
                 case SC.ULTRASONIC:
                 case SC.POTENTIOMETER:
                 case SC.LIGHT:
@@ -1025,6 +1026,8 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
                 case SC.ENVIRONMENTAL:
                     this.sb.append("Bsec _iaqSensor_").append(cc.getUserDefinedPortName()).append(';');
                     nlIndent();
+                    break;
+                case SC.ROBOT:
                     break;
                 default:
                     throw new DbcException("Configuration block is not supported: " + cc.getComponentType());

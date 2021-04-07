@@ -103,7 +103,7 @@ shift
 case "$cmd" in
 export) _export $* ;;
 
-''|help|-h)     cat ora-help.txt ;;
+''|help|-h|-help|--help) cat ora-help.txt ;;
 
 start-from-git) if [[ ! -d $DB_PARENTDIR ]]; then 
                    echo "No database found. An empty database will be created."

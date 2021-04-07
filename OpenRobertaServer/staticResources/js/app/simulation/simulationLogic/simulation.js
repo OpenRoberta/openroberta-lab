@@ -7,11 +7,11 @@
  * @namespace SIM
  */
 
-define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 'simulation.constants', 'util', 'program.controller',
-    'interpreter.interpreter', 'interpreter.robotSimBehaviour', 'volume-meter', 'simulation.constants', 'message', 'jquery'
-], function(exports, Scene, SIMATH, ROBERTA_PROGRAM, CONST, UTIL, PROGRAM_C,
-    SIM_I, MBED_R, Volume, C, MSG, $) {
+define(['exports', 'simulation.scene', 'simulation.constants', 'util', 'interpreter.interpreter', 'interpreter.robotSimBehaviour', 'volume-meter', 'message', 'jquery', 'huebee'
+], function(exports, Scene, C, UTIL, SIM_I, MBED_R, Volume, MSG, $, HUEBEE) {
 
+    const standColorObstacle = "#33B8CA";
+    const standColorArea = "#FBED00";
     var interpreters;
     var scene;
     var userPrograms;
@@ -19,35 +19,50 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
     var canvasOffset;
     var offsetX;
     var offsetY;
-    var isDownRobots = [];
-    var isDownObstacle = false;
-    var isDownRuler = false;
     var startX;
     var startY;
     var scale = 1;
-    var timerStep = 0;
+    var selectedRobot = -1;
+    var selectedObstacle = -1;
+    var selectedColorArea = -1;
+    var downCorner = -1;
+    var downRuler = false;
+    var downRobot = -1;
+    var downColorArea = -1;
+    var downObstacle = -1;
+    var highLightCorners = [];
     var canceled;
     var storedPrograms;
+    var copiedObject;
     var customBackgroundLoaded = false;
     var debugMode = false;
     var breakpoints = [];
+    var obstacleList = [];
+    var colorAreaList = [];
     var observers = {};
-
     var imgObstacle1 = new Image();
     var imgPattern = new Image();
     var imgRuler = new Image();
+    var mouseX;
+    var mouseY;
+
+    var colorpicker = new HUEBEE('#colorpicker', {
+        shades: 1,
+        hues: 8,
+        setText: false
+    });
     var imgList = ['/js/app/simulation/simBackgrounds/baustelle.svg', '/js/app/simulation/simBackgrounds/ruler.svg',
         '/js/app/simulation/simBackgrounds/wallPattern.png', '/js/app/simulation/simBackgrounds/calliopeBackground.svg',
         '/js/app/simulation/simBackgrounds/microbitBackground.svg', '/js/app/simulation/simBackgrounds/simpleBackground.svg',
         '/js/app/simulation/simBackgrounds/drawBackground.svg', '/js/app/simulation/simBackgrounds/robertaBackground.svg',
-        '/js/app/simulation/simBackgrounds/rescueBackground.svg', '/js/app/simulation/simBackgrounds/wroBackground.svg',
+        '/js/app/simulation/simBackgrounds/rescueBackground.svg', '/js/app/simulation/simBackgrounds/blank.svg',
         '/js/app/simulation/simBackgrounds/mathBackground.svg'
     ];
     var imgListIE = ['/js/app/simulation/simBackgrounds/baustelle.png', '/js/app/simulation/simBackgrounds/ruler.png',
         '/js/app/simulation/simBackgrounds/wallPattern.png', '/js/app/simulation/simBackgrounds/calliopeBackground.png',
         '/js/app/simulation/simBackgrounds/microbitBackground.png', '/js/app/simulation/simBackgrounds/simpleBackground.png',
         '/js/app/simulation/simBackgrounds/drawBackground.png', '/js/app/simulation/simBackgrounds/robertaBackground.png',
-        '/js/app/simulation/simBackgrounds/rescueBackground.png', '/js/app/simulation/simBackgrounds/wroBackground.png',
+        '/js/app/simulation/simBackgrounds/rescueBackground.png', '/js/app/simulation/simBackgrounds/blank.png',
         '/js/app/simulation/simBackgrounds/mathBackground.png'
     ];
     var imgObjectList = [];
@@ -104,23 +119,11 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
 
     var currentBackground = 2;
 
-    function setBackground(num, callback) {
-        if (num == undefined) {
-            setObstacle();
-            setRuler();
-            removeMouseEvents();
-            scene = new Scene(imgObjectList[currentBackground], robots, obstacle, imgPattern, ruler);
-            scene.updateBackgrounds();
-            scene.drawObjects();
-            scene.drawRuler();
-            addMouseEvents();
-            reloadProgram();
-            resizeAll();
-            return currentBackground;
-        }
-        setPause(true);
-        $('#simControl').attr('data-original-title', Blockly.Msg.MENU_SIM_STOP_TOOLTIP);
+    function setBackground(num) {
+        num = num || -1;
+        let configData = {};
         if (num === -1) {
+            configData = exportConfigData();
             currentBackground += 1;
             if (currentBackground >= imgObjectList.length) {
                 currentBackground = 2;
@@ -137,23 +140,44 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
         }
         var debug = robots[0].debug;
         var moduleName = 'simulation.robot.' + simRobotType;
+
+        removeMouseEvents();
+        resetSelection();
         require([moduleName], function(ROBOT) {
             createRobots(ROBOT, numRobots);
             for (var i = 0; i < robots.length; i++) {
                 robots[i].debug = debug;
                 robots[i].reset();
             }
-            callback();
+            scene.robots = robots;
         });
+        let config = coordinates2relatives();
+        scene.resetAllCanvas(imgObjectList[currentBackground]);
+        relatives2coordinates(config);
+        setObstacle();
+        setRuler();
+        scene.drawObstacles(highLightCorners);
+        scene.drawColorAreas(highLightCorners);
+        scene.drawRuler();
+        addMouseEvents();
+        resizeAll();
     }
-
     exports.setBackground = setBackground;
 
     function getBackground() {
         return currentBackground;
     }
-
     exports.getBackground = getBackground;
+
+    function getObstacleList() {
+        return obstacleList;
+    }
+    exports.getObstacleList = getObstacleList;
+
+    function getColorAreaList() {
+        return colorAreaList;
+    }
+    exports.getColorAreaList = getColorAreaList;
 
     function initMicrophone(robot) {
         if (navigator.mediaDevices === undefined) {
@@ -209,25 +233,15 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
             if (value && !debugMode) {
                 $('#simControl').addClass('typcn-media-play-outline').removeClass('typcn-media-stop');
                 $('#simControl').attr('data-original-title', Blockly.Msg.MENU_SIM_START_TOOLTIP);
-            } else {
+            } else if (!value && !debugMode) {
                 $('#simControl').addClass('typcn-media-stop').removeClass('typcn-media-play-outline');
                 $('#simControl').attr('data-original-title', Blockly.Msg.MENU_SIM_STOP_TOOLTIP);
             }
             pause = value;
         }
-        for (var i = 0; i < robots.length; i++) {
-            if (robots[i].left) {
-                robots[i].left = 0;
-            }
-            if (robots[i].right) {
-                robots[i].right = 0;
-            }
-        }
     }
-
     exports.setPause = setPause;
 
-    var stepCounter;
     var runRenderUntil;
 
     function setStep() {
@@ -246,11 +260,10 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
             info = true;
         }
     }
-
     exports.setInfo = setInfo;
 
     function resetPose() {
-        for (var i = 0; i < numRobots; i++) {
+        for (var i = 0; i < robots.length; i++) {
             if (robots[i].resetPose) {
                 robots[i].resetPose();
             }
@@ -258,14 +271,135 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
                 robots[i].time = 0;
             }
         }
-        obstacle.x = obstacle.xStart;
-        obstacle.y = obstacle.yStart;
-        scene.drawBackground();
+        resetSelection();
+        scene.resetAllCanvas();
+        scene.drawColorAreas(highLightCorners);
+        scene.drawObstacles(highLightCorners);
         scene.drawRuler();
-        scene.drawObjects();
+    }
+    exports.resetPose = resetPose;
+
+    function deleteSelectedObject() {
+        if (selectedColorArea >= 0) {
+            colorAreaList.splice(selectedColorArea, 1);
+            selectedColorArea = -1;
+            highLightCorners = [];
+            updateColorAreaLayer();
+        }
+        if (selectedObstacle >= 0) {
+            obstacleList.splice(selectedObstacle, 1)
+            selectedObstacle = -1;
+            highLightCorners = [];
+            updateObstacleLayer();
+        }
+    }
+    exports.deleteSelectedObject = deleteSelectedObject;
+
+    function addObstacle(shape) {
+        let obstacle = addObject(shape, "obstacle", obstacleList);
+        if (selectedColorArea >= 0) {
+            highLightCorners = [];
+            updateColorAreaLayer();
+        }
+        resetSelection();
+        selectedObstacle = obstacleList.length - 1;
+
+        highLightCorners = calculateCorners(obstacle);
+        updateObstacleLayer();
+    }
+    exports.addObstacle = addObstacle;
+
+    function addColorArea(shape) {
+        let colorArea = addObject(shape, "colorArea", colorAreaList);
+        if (selectedObstacle >= 0) {
+            highLightCorners = [];
+            updateObstacleLayer();
+        }
+        resetSelection();
+        selectedColorArea = colorAreaList.length - 1;
+
+        highLightCorners = calculateCorners(colorArea);
+        updateColorAreaLayer();
+    }
+    exports.addColorArea = addColorArea;
+
+    function addObject(shape, type, objectList) {
+        $("#robotLayer").attr("tabindex", 0);
+        $("#robotLayer").focus();
+        let newObject = {};
+        let x = Math.random() * ((ground.w - 200) - 100) + 100;
+        let y = Math.random() * ((ground.h - 100) - 100) + 100;
+        switch (shape) {
+            case "rectangle":
+                newObject = {
+                    form: "rectangle",
+                    x: x,
+                    y: y,
+                    w: 100,
+                    h: 100,
+                    theta: 0,
+                    img: null
+                };
+                break;
+            case "triangle":
+                newObject = {
+                    form: "triangle",
+                    ax: x - 50,
+                    ay: y + 50,
+                    bx: x,
+                    by: y - 50,
+                    cx: x + 50,
+                    cy: y + 50
+                };
+                break;
+            case "circle":
+                newObject = {
+                    form: "circle",
+                    x: x,
+                    y: y,
+                    r: 50,
+                    startAngle: 50,
+                    endAngle: 0
+                };
+                break;
+            default:
+                console.error("SIMULATION: no or wrong shape");
+        }
+        if (type === "obstacle") {
+            newObject.color = standColorObstacle;
+        } else {
+            newObject.color = standColorArea;
+        }
+        newObject.type = type;
+        objectList.push(newObject);
+        enableChangeObjectButtons();
+        return newObject;
     }
 
-    exports.resetPose = resetPose;
+    function changeColorWithColorPicker(color) {
+        let selectedObject = selectedObstacle >= 0 ? obstacleList[selectedObstacle] : selectedColorArea >= 0 ? colorAreaList[selectedColorArea] : null;
+        if (selectedObject != null) {
+            selectedObject.color = color;
+            updateColorAreaLayer();
+            updateObstacleLayer();
+        }
+    }
+
+    function toggleColorPicker() {
+        if ($(".huebee").length) {
+            colorpicker.close();
+        } else {
+            colorpicker.open();
+        }
+    }
+    exports.toggleColorPicker = toggleColorPicker;
+
+    function resetColorpickerCursor(event) {
+        colorpicker.color = null;
+        colorpicker.setTexts();
+        colorpicker.setBackgrounds();
+        colorpicker.cursor.classList.add('is-hidden');
+    }
 
     function stopProgram() {
         setPause(true);
@@ -291,15 +425,17 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
 
     // obstacles
     // scaled playground
-    var ground = {
+    ground = {
         x: 0,
         y: 0,
         w: 500,
         h: 500,
-        isParallelToAxis: true
+        isParallelToAxis: true,
+        type: "ground",
+        form: "rectangle"
     };
 
-    var obstacle = {
+    var defaultObstacle = {
         x: 0,
         y: 0,
         xOld: 0,
@@ -309,10 +445,12 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
         wOld: 0,
         hOld: 0,
         isParallelToAxis: true,
-        xStart: 0,
-        yStart: 0
+        theta: 0,
+        form: "rectangle",
+        type: "obstacle"
     };
-    exports.obstacleList = [ground, obstacle];
+
+    obstacleList = [defaultObstacle];
 
     var ruler = {
         x: 0,
@@ -322,7 +460,8 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
         w: 0,
         h: 0,
         wOld: 0,
-        hOld: 0
+        hOld: 0,
+        type: "ruler"
     };
     // Note: The ruler is not considered an obstacle. The robot will
     // simply drive over it.
@@ -330,15 +469,22 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
     var globalID;
     var robots = [];
     var robotIndex = 0;
-    var mouseOnRobotIndex = 0;
     var simRobotType;
     var numRobots = 0;
     exports.getNumRobots = function() {
         return numRobots;
     };
-    var ROBOT;
 
     function callbackOnTermination() {
+        if (!robots[0].endless && allInterpretersTerminated()) {
+            if (debugMode) {
+                $('#simControl').addClass('typcn-media-play-outline').removeClass('typcn-play');
+                $('#simStop').removeClass("disabled");
+            } else {
+                $('#simControl').addClass('typcn-media-play-outline').removeClass('typcn-media-stop');
+                $('#simControl').attr('data-original-title', Blockly.Msg.MENU_SIM_START_TOOLTIP);
+            }
+        }
         console.log("END of Sim");
     }
 
@@ -356,9 +502,11 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
         }
         if (robotType.indexOf("calliope") >= 0) {
             currentBackground = 0;
-            $('.dropdown.sim, .simScene, #simImport, #simResetPose, #simButtonsHead').hide();
+            resetScene([], []);
+            $('.dropdown.sim, .simScene, #simImport, #simResetPose, #simButtonsHead, #simEditButtons').hide();
         } else if (robotType === 'microbit') {
-            $('.dropdown.sim, .simScene, #simImport, #simResetPose, #simButtonsHead').hide();
+            resetScene([], []);
+            $('.dropdown.sim, .simScene, #simImport, #simResetPose, #simButtonsHead, #simEditButtons').hide();
             currentBackground = 1;
         } else if (currentBackground === 0 || currentBackground == 1) {
             currentBackground = 2;
@@ -368,10 +516,7 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
                 $('.dropdown.sim, .simScene').show();
                 $('#simImport').hide();
             } else {
-                $('.dropdown.sim, .simScene, #simImport, #simResetPose').show();
-            }
-            if ($('#device-size').find('div:visible').first().attr('id')) {
-                $('#simButtonsHead').show();
+                $('.dropdown.sim, .simScene, #simImport, #simResetPose, #simEditButtons').show();
             }
         }
         interpreters = programs.map(function(x) {
@@ -401,7 +546,9 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
                 removeMouseEvents();
                 canceled = false;
                 isDownObstacle = false;
+                colorpicker.close();
                 isDownRuler = false;
+                isDownColorArea = false;
                 stepCounter = 0;
                 pause = true;
                 info = false;
@@ -434,8 +581,12 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
     function getRobotIndex() {
         return robotIndex;
     }
-
     exports.getRobotIndex = getRobotIndex;
+
+    function getSelectedRobot() {
+        return selectedRobot;
+    }
+    exports.getSelectedRobot = getSelectedRobot;
 
     function cancel() {
         canceled = true;
@@ -447,9 +598,9 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
     var reset = false;
 
     /*
-     * The below Colors are picked from the toolkit and should be used to color
-     * the robots
-     */
+        * The below Colors are picked from the toolkit and should be used to color
+        * the robots
+        */
     var colorsAdmissible = [
         [242, 148, 0],
         [143, 164, 2],
@@ -480,7 +631,7 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
         stepCounter += 1;
 
         for (var i = 0; i < numRobots; i++) {
-            if (!robots[i].pause && !pause) {
+            if ((robots[i] && !robots[i].pause) && !pause) {
                 if (!interpreters[i].isTerminated() && !reset) {
                     if (runRenderUntil[i] <= now) {
                         var delayMs = interpreters[i].run(now + dtRobot);
@@ -493,9 +644,9 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
                         robots[j].buttons.Reset = false;
                         robots[j].pause = true;
                         robots[j].reset();
-                    } removeMouseEvents();
+                    }
+                    removeMouseEvents();
                     scene.drawRobots();
-                    scene.drawVariables();
 
                     // some time to cancel all timeouts
                     setTimeout(function() {
@@ -505,7 +656,6 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
 
                     if (!(allInterpretersTerminated() && !robots[i].endless)) {
                         setTimeout(function() {
-                            //delete robot.button.Reset;
                             setPause(false);
                             for (var j = 0; j < robots.length; j++) {
                                 robots[j].pause = false;
@@ -518,15 +668,6 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
             updateBreakpointEvent();
         }
         var renderTimeStart = new Date().getTime();
-
-        function allInterpretersTerminated() {
-            for (var i = 0; i < interpreters.length; i++) {
-                if (!interpreters[i].isTerminated()) {
-                    return false;
-                }
-            }
-            return true;
-        }
 
         function allPause() {
             for (var i = 0; i < robots.length; i++) {
@@ -547,85 +688,105 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
         reset = robots[0].buttons.Reset;
         scene.updateSensorValues(!pause);
         scene.drawRobots();
-        scene.drawVariables();
         renderTime = new Date().getTime() - renderTimeStart;
     }
 
-    function reloadProgram() {
-        $('.simForward').removeClass('typcn-media-pause');
-        $('.simForward').addClass('typcn-media-play');
-        $('#simControl').addClass('typcn-media-play-outline').removeClass('typcn-media-stop');
-        $('#simControl').attr('data-original-title', Blockly.Msg.MENU_SIM_START_TOOLTIP);
+    function allInterpretersTerminated() {
+        for (var i = 0; i < interpreters.length; i++) {
+            if (!interpreters[i].isTerminated()) {
+                return false;
+            }
+        }
+        return true;
     }
 
-    function setObstacle() {
-        if (currentBackground == 3) {
-            obstacle.x = 500;
-            obstacle.y = 250;
-            obstacle.w = 100;
-            obstacle.h = 100;
-            obstacle.img = null;
-            obstacle.color = "#33B8CA";
-        } else if (currentBackground == 2) {
-            obstacle.x = 580;
-            obstacle.y = 290;
-            obstacle.w = 100;
-            obstacle.h = 100;
-            obstacle.img = null;
-            obstacle.color = "#33B8CA";
-        } else if (currentBackground == 4) {
-            obstacle.x = 500;
-            obstacle.y = 260;
-            obstacle.w = 100;
-            obstacle.h = 100;
-            obstacle.img = imgObstacle1;
-            obstacle.color = null;
-        } else if (currentBackground == 7) {
-            obstacle.x = 0;
-            obstacle.y = 0;
-            obstacle.w = 0;
-            obstacle.h = 0;
-            obstacle.color = null;
-        } else if (currentBackground == 0) {
-            obstacle.x = 0;
-            obstacle.y = 0;
-            obstacle.w = 0;
-            obstacle.h = 0;
-            obstacle.color = null;
-            obstacle.img = null;
-        } else if (currentBackground == 1) {
-            obstacle.x = 0;
-            obstacle.y = 0;
-            obstacle.w = 0;
-            obstacle.h = 0;
-            obstacle.color = null;
-            obstacle.img = null;
-        } else if (currentBackground == 5) {
-            obstacle.x = 505;
-            obstacle.y = 405;
-            obstacle.w = 20;
-            obstacle.h = 20;
-            obstacle.color = "#33B8CA";
-            obstacle.img = null;
-        } else if (currentBackground == 6) {
-            obstacle.x = 425;
-            obstacle.y = 254;
-            obstacle.w = 50;
-            obstacle.h = 50;
-            obstacle.color = "#009EE3";
-            obstacle.img = null;
+    function reloadProgram() {
+        if (debugMode) {
+            $('#simControl').addClass('typcn-media-play').removeClass('typcn-play-outline');
+            $('#simStop').addClass("disabled");
         } else {
-            var x = imgObjectList[currentBackground].width - 50;
-            var y = imgObjectList[currentBackground].height - 50;
-            obstacle.x = x;
-            obstacle.y = y;
-            obstacle.w = 50;
-            obstacle.h = 50;
-            obstacle.color = "#33B8CA";
-            obstacle.img = null;
+            $('#simControl').addClass('typcn-media-play-outline').removeClass('typcn-media-stop');
+            $('#simControl').attr('data-original-title', Blockly.Msg.MENU_SIM_START_TOOLTIP);
         }
-        obstacle.xStart = obstacle.x;
-        obstacle.yStart = obstacle.y;
+    }
+
+    //set standard obstacle
+    function setObstacle() {
+        if (obstacleList.length == 0) {
+            obstacleList.push(defaultObstacle);
+        }
+        if (obstacleList.length == 1) {
+            var standObst = {};
+            switch (currentBackground) {
+                case 0:
+                case 1:
+                case 7:
+                    standObst.x = 0;
+                    standObst.y = 0;
+                    standObst.w = 0;
+                    standObst.h = 0;
+                    standObst.color = null;
+                    standObst.img = null;
+                    standObst.form = "rectangle";
+                    break;
+                case 2:
+                    standObst.x = 580;
+                    standObst.y = 290;
+                    standObst.w = 100;
+                    standObst.h = 100;
+                    standObst.color = standColorObstacle;
+                    standObst.form = "rectangle";
+                    break;
+                case 3:
+                    standObst.x = 500;
+                    standObst.y = 250;
+                    standObst.w = 100;
+                    standObst.h = 100;
+                    standObst.img = null;
+                    standObst.color = standColorObstacle;
+                    standObst.form = "rectangle";
+                    break;
+                case 4:
+                    standObst.x = 500;
+                    standObst.y = 260;
+                    standObst.w = 100;
+                    standObst.h = 100;
+                    standObst.img = imgObstacle1;
+                    standObst.color = null;
+                    standObst.form = "rectangle";
+                    break;
+                case 5:
+                    standObst.x = 505;
+                    standObst.y = 405;
+                    standObst.w = 20;
+                    standObst.h = 20;
+                    standObst.color = standColorObstacle;
+                    standObst.img = null;
+                    standObst.form = "rectangle";
+                    break;
+                case 6:
+                    standObst.x = 425;
+                    standObst.y = 254;
+                    standObst.w = 50;
+                    standObst.h = 50;
+                    standObst.color = "#009EE3";
+                    standObst.img = null;
+                    standObst.form = "rectangle";
+                    break;
+                default:
+                    var x = imgObjectList[currentBackground].width - 50;
+                    var y = imgObjectList[currentBackground].height - 50;
+                    standObst.x = x;
+                    standObst.y = y;
+                    standObst.w = 50;
+                    standObst.h = 50;
+                    standObst.color = standColorObstacle;
+                    standObst.img = null;
+                    standObst.form = "rectangle";
+            }
+            standObst.type = "obstacle";
+            obstacleList[0] = standObst;
+        }
     }
 
     function setRuler() {
@@ -635,7 +796,7 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
             ruler.w = 300;
             ruler.h = 30;
             ruler.img = imgRuler;
-            ruler.color = null;
+            ruler.color = '#ff0000';
         } else {
             // All other scenes currently don't have a movable ruler.
             ruler.x = 0;
@@ -647,47 +808,185 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
         }
     }
 
-    function isAnyRobotDown() {
-        for (var i = 0; i < numRobots; i++) {
-            if (isDownRobots[i]) {
-                return true;
-            }
-        }
-        return false;
-    }
-
     function handleKeyEvent(e) {
         var keyName = e.key;
-        switch (keyName) {
-            case "ArrowUp":
-                robots[robotIndex].pose.x += Math.cos(robots[robotIndex].pose.theta);
-                robots[robotIndex].pose.y += Math.sin(robots[robotIndex].pose.theta);
+        var keyCode = e.keyCode;
+        let selectedObject = selectedObstacle >= 0 ? obstacleList[selectedObstacle] : selectedColorArea >= 0 ? colorAreaList[selectedColorArea] : null;
+        if (selectedRobot >= 0) {
+            if (robots[selectedRobot].drawWidth) {
+                robots[selectedRobot].canDraw = false;
+            }
+            switch (keyName) {
+                case "ArrowUp":
+                    robots[selectedRobot].pose.x += Math.cos(robots[selectedRobot].pose.theta);
+                    robots[selectedRobot].pose.y += Math.sin(robots[selectedRobot].pose.theta);
+                    e.preventDefault();
+                    e.stopPropagation();
+                    break;
+                case "ArrowLeft":
+                    robots[robotIndex].pose.theta -= Math.PI / 180;
+                    e.preventDefault();
+                    e.stopPropagation();
+                    break;
+                case "ArrowDown":
+                    robots[selectedRobot].pose.x -= Math.cos(robots[selectedRobot].pose.theta);
+                    robots[selectedRobot].pose.y -= Math.sin(robots[selectedRobot].pose.theta);
+                    e.preventDefault();
+                    e.stopPropagation();
+                    break;
+                case "ArrowRight":
+                    robots[selectedRobot].pose.theta += Math.PI / 180;
+                    e.preventDefault();
+                    e.stopPropagation();
+                    break;
+                default:
+            }
+        } else if (selectedObject) {
+            const shift = 5;
+            switch (keyName) {
+                case "ArrowUp":
+                    switch (selectedObject.form) {
+                        case "rectangle":
+                        case "circle":
+                            selectedObject.y -= shift;
+                            break;
+                        case "triangle":
+                            selectedObject.ay -= shift;
+                            selectedObject.by -= shift;
+                            selectedObject.cy -= shift;
+                            break;
+                        default:
+                    }
+                    e.preventDefault();
+                    e.stopPropagation();
+                    break;
+                case "ArrowLeft":
+                    switch (selectedObject.form) {
+                        case "rectangle":
+                        case "circle":
+                            selectedObject.x -= shift;
+                            break;
+                        case "triangle":
+                            selectedObject.ax -= shift;
+                            selectedObject.bx -= shift;
+                            selectedObject.cx -= shift;
+                            break;
+                        default:
+                    }
+                    e.preventDefault();
+                    e.stopPropagation();
+                    break;
+                case "ArrowDown":
+                    switch (selectedObject.form) {
+                        case "rectangle":
+                        case "circle":
+                            selectedObject.y += shift;
+                            break;
+                        case "triangle":
+                            selectedObject.ay += shift;
+                            selectedObject.by += shift;
+                            selectedObject.cy += shift;
+                            break;
+                        default:
+                    }
+                    e.preventDefault();
+                    e.stopPropagation();
+                    break;
+                case "ArrowRight":
+                    switch (selectedObject.form) {
+                        case "rectangle":
+                        case "circle":
+                            selectedObject.x += shift;
+                            break;
+                        case "triangle":
+                            selectedObject.ax += shift;
+                            selectedObject.bx += shift;
+                            selectedObject.cx += shift;
+                            break;
+                        default:
+                    }
+                    e.preventDefault();
+                    e.stopPropagation();
+                    break;
+                default:
+                // nothing to do so far
+            }
+            highLightCorners = calculateCorners(selectedObject);
+            selectedObject.type === "obstacle" ? updateObstacleLayer() : updateColorAreaLayer();
+        }
+        switch (keyCode) {
+            case 17 && 67:
+                copiedObject = {};
+                if (selectedObject) {
+                    copiedObject = $.extend(copiedObject, selectedObject);
+                }
                 e.preventDefault();
+                e.stopPropagation();
                 break;
-            case "ArrowLeft":
-                robots[robotIndex].pose.theta -= Math.PI / 180;
+            case 17 && 86:
+                var toCopyObject = {};
+                toCopyObject = $.extend(toCopyObject, selectedObject);
+                if (!$.isEmptyObject(toCopyObject) && selectedObject) {
+                    mouseX = mouseX || ground.w / 2;
+                    mouseY = mouseY || ground.h / 2;
+                    if (toCopyObject.form === "triangle") {
+                        const diffx = toCopyObject.ax - mouseX;
+                        const diffy = toCopyObject.ay - mouseY;
+                        toCopyObject.ax = mouseX;
+                        toCopyObject.ay = mouseY;
+                        toCopyObject.bx -= diffx;
+                        toCopyObject.by -= diffy;
+                        toCopyObject.cx -= diffx;
+                        toCopyObject.cy -= diffy;
+                    } else if (toCopyObject.form === "rectangle") {
+                        toCopyObject.x = mouseX - toCopyObject.w / 2;
+                        toCopyObject.y = mouseY - toCopyObject.h / 2;
+                    } else if (toCopyObject.form === "circle") {
+                        toCopyObject.x = mouseX;
+                        toCopyObject.y = mouseY;
+                    }
+                    if (toCopyObject.type === "obstacle") {
+                        obstacleList.push(toCopyObject);
+                        updateObstacleLayer();
+                    } else if (toCopyObject.type === "colorArea") {
+                        colorAreaList.push(toCopyObject);
+                        updateColorAreaLayer();
+
+                    }
+                }
                 e.preventDefault();
+                e.stopPropagation();
                 break;
-            case "ArrowDown":
-                robots[robotIndex].pose.x -= Math.cos(robots[robotIndex].pose.theta);
-                robots[robotIndex].pose.y -= Math.sin(robots[robotIndex].pose.theta);
+            case 8:
+                deleteSelectedObject();
                 e.preventDefault();
+                e.stopPropagation();
                 break;
-            case "ArrowRight":
-                robots[robotIndex].pose.theta += Math.PI / 180;
+            case 46:
+                deleteSelectedObject();
                 e.preventDefault();
+                e.stopPropagation();
                 break;
             default:
             // nothing to do so far
         }
+        $("#robotLayer").attr("tabindex", 0);
+        $("#robotLayer").focus();
+    }
+
+    function disableChangeObjectButtons() {
+        $(".simChangeObject").removeClass("disabled").addClass("disabled");
+    }
+
+    function enableChangeObjectButtons() {
+        $(".simChangeObject").removeClass("disabled");
     }
 
     function handleMouseDown(e) {
+        e.preventDefault();
+        e.stopPropagation();
         var X = e.clientX || e.originalEvent.touches[0].pageX;
         var Y = e.clientY || e.originalEvent.touches[0].pageY;
-        var scsq = 1;
-        if (scale < 1)
-            scsq = scale * scale;
         var top = $('#robotLayer').offset().top;
         var left = $('#robotLayer').offset().left;
         startX = (parseInt(X - left, 10)) / scale;
@@ -697,73 +996,226 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
         for (var i = 0; i < numRobots; i++) {
             dx = startX - robots[i].mouse.rx;
             dy = startY - robots[i].mouse.ry;
-            var boolDown = (dx * dx + dy * dy < robots[i].mouse.r * robots[i].mouse.r);
-            isDownRobots[i] = boolDown;
+            let boolDown = (dx * dx + dy * dy < robots[i].mouse.r * robots[i].mouse.r);
             if (boolDown) {
-                mouseOnRobotIndex = i;
-            }
-        }
-        isDownObstacle = (startX > obstacle.x && startX < obstacle.x + obstacle.w && startY > obstacle.y && startY < obstacle.y + obstacle.h);
-        isDownRuler = (startX > ruler.x && startX < ruler.x + ruler.w && startY > ruler.y && startY < ruler.y + ruler.h);
-        if (isDownRobots || isDownObstacle || isDownRuler || isAnyRobotDown()) {
-            e.stopPropagation();
-        }
-    }
-
-    function handleDoubleMouseClick(e) {
-        if (numRobots > 1) {
-            var X = e.clientX || e.originalEvent.touches[0].pageX;
-            var Y = e.clientY || e.originalEvent.touches[0].pageY;
-            var dx;
-            var dy;
-            var top = $('#robotLayer').offset().top;
-            var left = $('#robotLayer').offset().left;
-            startX = (parseInt(X - left, 10)) / scale;
-            startY = (parseInt(Y - top, 10)) / scale;
-            for (var i = 0; i < numRobots; i++) {
-                dx = startX - robots[i].mouse.rx;
-                dy = startY - robots[i].mouse.ry;
-                var boolDown = (dx * dx + dy * dy < robots[i].mouse.r * robots[i].mouse.r);
-                if (boolDown) {
+                downRobot = i;
+                if (selectedRobot !== i) {
                     $("#brick" + robotIndex).hide();
                     robotIndex = i;
                     $("#brick" + robotIndex).show();
-                    $("#robotIndex")[0][i].selected = true;
-                    break;
+                    if ($("#robotIndex")[0]) {
+                        $("#robotIndex")[0][i].selected = true;
+                    }
+                    highLightCorners = [];
+                    if (selectedObstacle >= 0) {
+                        selectedObstacle = -1;
+                        updateObstacleLayer();
+                    }
+                    if (selectedColorArea >= 0) {
+                        selectedColorArea = -1;
+                        updateColorAreaLayer();
+                    }
+                    downCorner = -1;
+                    highLightCorners = [];
+                    downRuler = false;
+                }
+                selectedRobot = i;
+                if (robots[i].drawWidth) {
+                    robots[i].canDraw = false;
+                }
+                return;
+            }
+        }
+
+        if (highLightCorners.length > 0 && (selectedObstacle >= 0 || selectedColorArea >= 0)) {
+            for (var i = 0; i < highLightCorners.length; i++) {
+                let corner = highLightCorners[i];
+                let isDownObstacleCorner = checkDownCircle(startX, startY, corner.x, corner.y, C.CORNER_RADIUS * 3);
+                if (isDownObstacleCorner) {
+                    downCorner = i;
+                    return;
                 }
             }
         }
+
+        for (var i = obstacleList.length - 1; i >= 0; i--) {
+            let obstacle = obstacleList[i];
+            let obstacleIsDown = false;
+            if (obstacle.form === "rectangle") {
+                obstacleIsDown = (startX > obstacle.x && startX < obstacle.x + obstacle.w && startY > obstacle.y && startY < obstacle.y + obstacle.h);
+            } else if (obstacle.form === "triangle") {
+                obstacleIsDown = checkDownTriangle(startX, startY, obstacle.ax, obstacle.ay, obstacle.bx, obstacle.by, obstacle.cx, obstacle.cy);
+            } else if (obstacle.form === "circle") {
+                obstacleIsDown = checkDownCircle(startX, startY, obstacle.x, obstacle.y, obstacle.r);
+            }
+            if (obstacleIsDown) {
+                downObstacle = i;
+                if (selectedObstacle !== i) {
+                    enableChangeObjectButtons();
+                    selectedRobot = -1;
+                    if (selectedColorArea >= 0) {
+                        selectedColorArea = -1;
+                        highLightCorners = [];
+                        updateColorAreaLayer();
+                    }
+                    highLightCorners = calculateCorners(obstacleList[i]);
+                    selectedObstacle = i;
+                    downCorner = -1;
+                    downRuler = false;
+                    updateObstacleLayer();
+                }
+                return;
+            }
+        }
+
+
+        for (var i = colorAreaList.length - 1; i >= 0; i--) {
+            let colorArea = colorAreaList[i];
+            let isDownColorArea = false;
+            if (colorArea.form === "rectangle") {
+                isDownColorArea = (startX > colorArea.x && startX < colorArea.x + colorArea.w && startY > colorArea.y && startY < colorArea.y + colorArea.h);
+            } else if (colorArea.form === "triangle") {
+                isDownColorArea = checkDownTriangle(startX, startY, colorArea.ax, colorArea.ay, colorArea.bx, colorArea.by, colorArea.cx, colorArea.cy);
+            } else if (colorArea.form === "circle") {
+                isDownColorArea = checkDownCircle(startX, startY, colorArea.x, colorArea.y, colorArea.r);
+            }
+            if (isDownColorArea) {
+                downColorArea = i;
+                if (selectedColorArea !== i) {
+                    enableChangeObjectButtons();
+                    selectedRobot = -1;
+                    if (selectedObstacle >= 0) {
+                        selectedObstacle = -1;
+                        highLightCorners = [];
+                        updateObstacleLayer();
+                    }
+                    highLightCorners = calculateCorners(colorAreaList[i]);
+                    selectedColorArea = i;
+                    downCorner = -1;
+                    downRuler = false;
+                    updateColorAreaLayer();
+                }
+                return;
+            }
+        }
+
+        let rulerIsDown = (startX > ruler.x && startX < ruler.x + ruler.w && startY > ruler.y && startY < ruler.y + ruler.h);
+
+        if (!downRuler && rulerIsDown) {
+            downRuler = true;
+            selectedRobot = -1;
+            if (selectedObstacle >= 0) {
+                selectedObstacle = -1;
+                updateObstacleLayer();
+            }
+            if (selectedColorArea >= 0) {
+                selectedColorArea = -1;
+                updateColorAreaLayer();
+            }
+            downCorner = -1;
+            highLightCorners = [];
+            return;
+        }
+        if (selectedObstacle >= 0) {
+            highLightCorners = [];
+            updateObstacleLayer();
+            disableChangeObjectButtons();
+        }
+        if (selectedColorArea >= 0) {
+            highLightCorners = [];
+            updateColorAreaLayer();
+            disableChangeObjectButtons();
+        }
+        resetSelection();
+    }
+
+    function checkDownTriangle(px, py, x1, y1, x2, y2, x3, y3) {
+        var areaOrig = Math.floor(Math.abs((x2 - x1) * (y3 - y1) - (x3 - x1) * (y2 - y1)));
+        var area1 = Math.floor(Math.abs((x1 - px) * (y2 - py) - (x2 - px) * (y1 - py)));
+        var area2 = Math.floor(Math.abs((x2 - px) * (y3 - py) - (x3 - px) * (y2 - py)));
+        var area3 = Math.floor(Math.abs((x3 - px) * (y1 - py) - (x1 - px) * (y3 - py)));
+
+        if (area1 + area2 + area3 <= areaOrig) {
+            return true;
+        }
+        return false;
+    }
+
+    function checkDownCircle(px, py, cx, cy, r) {
+        return ((px - cx) * (px - cx) + (py - cy) * (py - cy) <= r * r);
+    }
+
+    function calculateCorners(object) {
+        let objectCorners;
+        if (object.form === "rectangle") {
+            objectCorners = [
+                { x: (Math.round(object.x)), y: (Math.round(object.y) + object.h) },
+                { x: Math.round(object.x), y: Math.round(object.y) },
+                { x: (Math.round(object.x) + object.w), y: Math.round(object.y) },
+                { x: (Math.round(object.x) + object.w), y: (Math.round(object.y) + object.h) }
+            ];
+        } else if (object.form === "triangle") {
+            objectCorners = [
+                { x: Math.round(object.ax), y: Math.round(object.ay) },
+                { x: Math.round(object.bx), y: Math.round(object.by) },
+                { x: Math.round(object.cx), y: Math.round(object.cy) },
+            ];
+        } else if (object.form === "circle") {
+            var cx = Math.round(object.x);
+            var cy = Math.round(object.y);
+            var r = Math.round(object.r);
+            objectCorners = [
+                { x: cx - r, y: cy - r },
+                { x: cx + r, y: cy - r },
+                { x: cx - r, y: cy + r },
+                { x: cx + r, y: cy + r }
+            ];
+        }
+        return objectCorners;
+    }
+
+    function resetSelection() {
+        selectedRobot = -1;
+        selectedObstacle = -1;
+        selectedColorArea = -1;
+        highLightCorners = [];
+        downCorner = -1;
+        downRuler = false;
+        downRobot = -1;
+        downColorArea = -1;
+        downObstacle = -1;
     }
 
     function handleMouseUp(e) {
         $("#robotLayer").css('cursor', 'auto');
-        if (mouseOnRobotIndex >= 0 && robots[mouseOnRobotIndex].drawWidth) {
-            robots[mouseOnRobotIndex].canDraw = true;
+        if (selectedRobot >= 0 && robots[selectedRobot].drawWidth) {
+            robots[selectedRobot].canDraw = true;
         }
-        isDownObstacle = false;
-        isDownRuler = false;
-        for (var i = 0; i < numRobots; i++) {
-            if (isDownRobots[i]) {
-                isDownRobots[i] = false;
-            }
-        }
-        mouseOnRobotIndex = -1;
+        handleMouseOut(e);
     }
 
     function handleMouseOut(e) {
         e.preventDefault();
-        isDownObstacle = false;
-        isDownRuler = false;
-        for (var i = 0; i < numRobots; i++) {
-            if (isDownRobots[i]) {
-                isDownRobots[i] = false;
-            }
-        }
-        mouseOnRobotIndex = -1;
         e.stopPropagation();
+        downCorner = -1;
+        downRuler = false;
+        downRobot = -1;
+        downColorArea = -1;
+        downObstacle = -1;
+    }
+
+    function updateColorAreaLayer() {
+        scene.drawColorAreas(highLightCorners);
+    }
+
+    function updateObstacleLayer() {
+        scene.drawRuler();
+        scene.drawObstacles(highLightCorners);
     }
 
     function handleMouseMove(e) {
+        e.preventDefault();
+        $("#robotLayer").css('cursor', 'default');
         var X = e.clientX || e.originalEvent.touches[0].pageX;
         var Y = e.clientY || e.originalEvent.touches[0].pageY;
         var top = $('#robotLayer').offset().top;
@@ -772,50 +1224,246 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
         mouseY = (parseInt(Y - top, 10)) / scale;
         var dx;
         var dy;
-        if (!isAnyRobotDown() && !isDownObstacle && !isDownRuler) {
-            var hoverRobot = false;
-            for (var i = 0; i < numRobots; i++) {
-                dx = mouseX - robots[i].mouse.rx;
-                dy = mouseY - robots[i].mouse.ry;
-                var tempcheckhover = (dx * dx + dy * dy < robots[i].mouse.r * robots[i].mouse.r);
-                if (tempcheckhover) {
-                    hoverRobot = true;
-                    break;
-                }
-            }
-            var hoverObstacle = (mouseX > obstacle.x && mouseX < obstacle.x + obstacle.w && mouseY > obstacle.y && mouseY < obstacle.y + obstacle.h);
-            var hoverRuler = (mouseX > ruler.x && mouseX < ruler.x + ruler.w && mouseY > ruler.y && mouseY < ruler.y + ruler.h);
-            if (hoverRobot || hoverObstacle || hoverRuler) {
+
+        // move robots
+        for (var i = 0; i < numRobots; i++) {
+            dx = mouseX - robots[i].mouse.rx;
+            dy = mouseY - robots[i].mouse.ry;
+            let hoverRobot = (dx * dx + dy * dy < robots[i].mouse.r * robots[i].mouse.r);
+            if (hoverRobot) {
                 $("#robotLayer").css('cursor', 'pointer');
-            } else {
-                $("#robotLayer").css('cursor', 'auto');
             }
-            return;
+            if (downRobot === i && selectedRobot === i) {
+                robots[i].pose.xOld = robots[i].pose.x;
+                robots[i].pose.yOld = robots[i].pose.y;
+                robots[i].pose.x += dx;
+                robots[i].pose.y += dy;
+                robots[i].mouse.rx += dx;
+                robots[i].mouse.ry += dy;
+                return;
+            }
         }
-        $("#robotLayer").css('cursor', 'pointer');
+
         dx = (mouseX - startX);
         dy = (mouseY - startY);
         startX = mouseX;
         startY = mouseY;
-        if (isAnyRobotDown()) {
-            if (robots[mouseOnRobotIndex].drawWidth) {
-                robots[mouseOnRobotIndex].canDraw = false;
+
+        function resizeObject(object, corner) {
+            switch (object.form) {
+                case "triangle":
+                    switch (corner) {
+                        case 0:
+                            object.ax += dx;
+                            object.ay += dy;
+                            break;
+                        case 1:
+                            object.bx += dx;
+                            object.by += dy;
+                            break;
+                        case 2:
+                            object.cx += dx;
+                            object.cy += dy;
+
+                            break;
+                        default:
+                            break;
+                    }
+                    break;
+                case "circle":
+                    if (Math.abs(dx) >= Math.abs(dy)) {
+                        if (mouseX < object.x) {
+                            object.r -= dx;
+                        } else {
+                            object.r += dx;
+                        }
+                    } else {
+                        if (mouseY < object.y) {
+                            object.r -= dy;
+                        } else {
+                            object.r += dy;
+                        }
+                    }
+                    object.r = Math.max(object.r, C.MIN_SIZE_OBJECT);
+                    break;
+                case "rectangle":
+                    if (object.w >= C.MIN_SIZE_OBJECT && object.h >= C.MIN_SIZE_OBJECT) {
+                        switch (corner) {
+                            case 0:
+                                object.x += dx;
+                                object.w -= dx;
+                                object.h += dy;
+                                break;
+                            case 1:
+                                object.x += dx;
+                                object.y += dy;
+                                object.w -= dx;
+                                object.h -= dy;
+                                break;
+                            case 2:
+                                object.y += dy;
+                                object.w += dx;
+                                object.h -= dy;
+                                break;
+                            case 3:
+                                object.w += dx;
+                                object.h += dy;
+                                break;
+                            default:
+                                break;
+                        }
+                    } else if (object.w < C.MIN_SIZE_OBJECT) {
+                        if (downCorner == 0 || downCorner == 1) {
+                            object.x -= C.MIN_SIZE_OBJECT - object.w;
+                        }
+                        object.w = C.MIN_SIZE_OBJECT;
+                    } else if (object.h < C.MIN_SIZE_OBJECT) {
+                        if (downCorner == 1 || downCorner == 2) {
+                            object.y -= C.MIN_SIZE_OBJECT - object.h;
+                        }
+                        object.h = C.MIN_SIZE_OBJECT;
+                    }
+                    break;
+                default:
+                    break;
             }
-            robots[mouseOnRobotIndex].pose.xOld = robots[mouseOnRobotIndex].pose.x;
-            robots[mouseOnRobotIndex].pose.yOld = robots[mouseOnRobotIndex].pose.y;
-            robots[mouseOnRobotIndex].pose.x += dx;
-            robots[mouseOnRobotIndex].pose.y += dy;
-            robots[mouseOnRobotIndex].mouse.rx += dx;
-            robots[mouseOnRobotIndex].mouse.ry += dy;
-        } else if (isDownObstacle) {
-            obstacle.x += dx;
-            obstacle.y += dy;
-            scene.drawObjects();
-        } else if (isDownRuler) {
-            ruler.x += dx;
-            ruler.y += dy;
-            scene.drawRuler();
+            highLightCorners = calculateCorners(object);
         }
+        let hoverCorners = false;
+        for (var i = 0; i < highLightCorners.length; i++) {
+            let corner = highLightCorners[i];
+            hoverCorners = checkDownCircle(mouseX, mouseY, corner.x, corner.y, C.CORNER_RADIUS * 3);
+            if (hoverCorners) {
+                if ((selectedObstacle >= 0 && obstacleList[selectedObstacle].form !== "circle" || selectedColorArea >= 0 && colorAreaList[selectedColorArea].form !== "circle")) {
+                    switch (i) {
+                        case 0:
+                            $("#robotLayer").css('cursor', 'sw-resize');
+                            break;
+                        case 1:
+                            $("#robotLayer").css('cursor', 'nw-resize');
+                            break;
+                        case 2:
+                            $("#robotLayer").css('cursor', 'ne-resize');
+                            break;
+                        case 3:
+                            $("#robotLayer").css('cursor', 'se-resize');
+                    }
+                } else {
+                    switch (i) {
+                        case 0:
+                        case 2:
+                            $("#robotLayer").css('cursor', 'nesw-resize');
+                            break;
+                        case 1:
+                        case 3:
+                            $("#robotLayer").css('cursor', 'nwse-resize');
+                            break;
+                        default:
+                    }
+                }
+                break;
+            }
+        }
+
+        if (downCorner >= 0 && (selectedObstacle >= 0 || selectedColorArea >= 0)) {
+            if (selectedObstacle >= 0) {
+                resizeObject(obstacleList[selectedObstacle], downCorner);
+                updateObstacleLayer();
+            } else if (selectedColorArea >= 0) {
+                resizeObject(colorAreaList[selectedColorArea], downCorner);
+                updateColorAreaLayer();
+            }
+            return;
+        }
+
+        // move obstacles
+        for (let i = 0; i < obstacleList.length; i++) {
+            let obstacle = obstacleList[i];
+            let hoverObstacle = false;
+            if (obstacle.form === "rectangle") {
+                hoverObstacle = (mouseX > obstacle.x && mouseX < obstacle.x + obstacle.w && mouseY > obstacle.y && mouseY < obstacle.y + obstacle.h);
+            } else if (obstacle.form === "triangle") {
+                hoverObstacle = checkDownTriangle(mouseX, mouseY, obstacle.ax, obstacle.ay, obstacle.bx, obstacle.by, obstacle.cx, obstacle.cy);
+            } else if (obstacle.form === "circle") {
+                hoverObstacle = checkDownCircle(mouseX, mouseY, obstacle.x, obstacle.y, obstacle.r);
+            }
+            if (hoverObstacle && !hoverCorners) {
+                $("#robotLayer").css('cursor', 'pointer');
+            }
+            if (downObstacle === i && selectedObstacle === i) {
+                $("#robotLayer").css('cursor', 'pointer');
+                switch (obstacle.form) {
+                    case "rectangle":
+                    case "circle":
+                        obstacle.x += dx;
+                        obstacle.y += dy;
+                        break;
+                    case "triangle":
+                        obstacle.ax += dx;
+                        obstacle.ay += dy;
+                        obstacle.bx += dx;
+                        obstacle.by += dy;
+                        obstacle.cx += dx;
+                        obstacle.cy += dy;
+                        break;
+                    default:
+                }
+                highLightCorners = calculateCorners(obstacle);
+                updateObstacleLayer();
+                return;
+            }
+        }
+
+        // move colorAreas
+        for (let i = 0; i < colorAreaList.length; i++) {
+            let colorArea = colorAreaList[i];
+            let hoverColorArea = false;
+            if (colorArea.form === "rectangle") {
+                hoverColorArea = (mouseX > colorArea.x && mouseX < colorArea.x + colorArea.w && mouseY > colorArea.y && mouseY < colorArea.y + colorArea.h);
+            } else if (colorArea.form === "triangle") {
+                hoverColorArea = checkDownTriangle(mouseX, mouseY, colorArea.ax, colorArea.ay, colorArea.bx, colorArea.by, colorArea.cx, colorArea.cy);
+            } else if (colorArea.form === "circle") {
+                hoverColorArea = checkDownCircle(mouseX, mouseY, colorArea.x, colorArea.y, colorArea.r);
+            }
+            if (hoverColorArea && !hoverCorners) {
+                $("#robotLayer").css('cursor', 'pointer');
+            }
+            if (downColorArea === i && selectedColorArea === i) {
+                $("#robotLayer").css('cursor', 'pointer');
+                switch (colorArea.form) {
+                    case "rectangle":
+                    case "circle":
+                        colorArea.x += dx;
+                        colorArea.y += dy;
+                        break;
+                    case "triangle":
+                        colorArea.ax += dx;
+                        colorArea.ay += dy;
+                        colorArea.bx += dx;
+                        colorArea.by += dy;
+                        colorArea.cx += dx;
+                        colorArea.cy += dy;
+                        break;
+                    default:
+                }
+                highLightCorners = calculateCorners(colorArea);
+                updateColorAreaLayer();
+                return;
+            }
+        }
+
+        let hoverRuler = (mouseX > ruler.x && mouseX < ruler.x + ruler.w && mouseY > ruler.y && mouseY < ruler.y + ruler.h);
+        if (hoverRuler) {
+            $("#robotLayer").css('cursor', 'pointer');
+            if (downRuler) {
+                ruler.x += dx;
+                ruler.y += dy;
+                scene.drawRuler();
+                e.preventDefault();
+                return;
+            }
+        }
+        e.preventDefault();
     }
 
     var dist = 0;
@@ -860,9 +1508,10 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
             zoom = true;
         }
         if (zoom) {
-            scene.drawBackground();
+            scene.resizeBackgrounds(scale);
             scene.drawRuler();
-            scene.drawObjects();
+            scene.drawObstacles(highLightCorners);
+            scene.drawColorAreas(highLightCorners);
             e.stopPropagation();
         }
     }
@@ -881,13 +1530,15 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
             var scaleX = scene.playground.w / (ground.w + 20);
             var scaleY = scene.playground.h / (ground.h + 20);
             scale = Math.min(scaleX, scaleY) - 0.05;
-            scene.updateBackgrounds();
-            scene.drawObjects();
+            scene.resizeBackgrounds(scale);
+            scene.drawObstacles(highLightCorners);
+            scene.drawColorAreas(highLightCorners);
             scene.drawRuler();
         }
     }
 
     function addMouseEvents() {
+        removeMouseEvents();
         $("#robotLayer").on('mousedown touchstart', function(e) {
             if (robots[robotIndex].handleMouseDown) {
                 robots[robotIndex].handleMouseDown(e, offsetX, offsetY, scale, scene.playground.w / 2, scene.playground.h / 2);
@@ -920,15 +1571,33 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
             handleMouseWheel(e);
         });
         $("#canvasDiv").draggable();
-        $("#robotLayer").on("dblclick", function(e) {
-            handleDoubleMouseClick(e);
+        $("#robotLayer").attr("tabindex", 0);
+        $("#robotLayer").on("click touchstart", function(e) {
+            $("#robotLayer").attr("tabindex", 0);
+            $("#robotLayer").focus();
+            e.preventDefault();
         });
-        $(document).on('keydown', handleKeyEvent);
+        $("#blocklyDiv").on("click touchstart", setFocusBlocklyDiv);
+        $("#robotLayer").on("keydown", handleKeyEvent);
+        $("#robotLayer").on("keyup", function() {
+            if (selectedRobot >= 0 && robots[selectedRobot].drawWidth) {
+                robots[selectedRobot].pose.xOld = robots[selectedRobot].pose.x;
+                robots[selectedRobot].pose.yOld = robots[selectedRobot].pose.y;
+                robots[selectedRobot].canDraw = true;
+            }
+        });
         $("#robotIndex").on('change', function(e) {
             $("#brick" + robotIndex).hide();
             robotIndex = e.target.selectedIndex;
+            selectedRobot = e.target.selectedIndex;
             $("#brick" + robotIndex).show();
         });
+    }
+
+    function setFocusBlocklyDiv(e) {
+        $("#blocklyDiv").attr("tabindex", 0);
+        $("#blocklyDiv").focus();
+        e.preventDefault();
     }
 
     function removeMouseEvents() {
@@ -937,17 +1606,39 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
         $("#canvasDiv").off();
         $("#simRobotModal").off();
         $("#robotIndex").off();
-        $(document).off('keydown', handleKeyEvent);
+        $("#blocklyDiv").off("click touchstart", setFocusBlocklyDiv);
     }
 
     function initScene() {
-        scene = new Scene(imgObjectList[currentBackground], robots, obstacle, imgPattern, ruler);
-        scene.updateBackgrounds();
-        scene.drawObjects();
+        scene = new Scene(imgObjectList[currentBackground], robots, imgPattern, ruler);
+        scene.drawObstacles(highLightCorners);
+        scene.drawColorAreas(highLightCorners);
         scene.drawRuler();
         scene.drawRobots();
-        scene.drawVariables();
         addMouseEvents();
+        disableChangeObjectButtons();
+
+        if (robots[0].colorRange) {
+            colorpicker = new HUEBEE('#colorpicker', {
+                shades: 1,
+                hues: 8,
+                customColors: robots[0].colorRange,
+                setText: false
+            });
+            colorpicker.on('change', function(color) {
+                changeColorWithColorPicker(color);
+            });
+            let close = HUEBEE.prototype.close;
+            HUEBEE.prototype.close = function() {
+                $(".huebee__container").off("mouseup touchend", resetColorpickerCursor);
+                close.apply(this);
+            };
+            let open = HUEBEE.prototype.open;
+            HUEBEE.prototype.open = function() {
+                open.apply(this);
+                $(".huebee__container").on("mouseup touchend", resetColorpickerCursor)
+            };
+        }
         for (var i = 0; i < numRobots; i++) {
             readyRobots[i] = true;
         }
@@ -960,13 +1651,16 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
     function getScale() {
         return scale;
     }
-
     exports.getScale = getScale;
+
+    function getGround() {
+        return ground;
+    }
+    exports.getGround = getGround;
 
     function getInfo() {
         return info;
     }
-
     exports.getInfo = getInfo;
 
     function isIE() {
@@ -985,6 +1679,171 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
         var edge = ua.indexOf('Edge');
         return edge > -1;
     }
+
+    function importConfigData() {
+        $('#backgroundFileSelector').val(null);
+        $('#backgroundFileSelector').attr("accept", ".json");
+        $('#backgroundFileSelector').trigger('click'); // opening dialog
+        $('#backgroundFileSelector').change(function(event) {
+            var file = event.target.files[0];
+            var reader = new FileReader();
+            reader.onload = (function(theFile) {
+                return function(e) {
+                    try {
+                        const configData = JSON.parse(e.target.result);
+                        relatives2coordinates(configData);
+                        resetSelection();
+                        resetScene(obstacleList || [], colorAreaList || [])
+                        initScene();
+                    } catch (ex) {
+                        MSG.displayPopupMessage("Blockly.Msg.POPUP_BACKGROUND_STORAGE", Blockly.Msg.POPUP_CONFIG_UPLOAD_ERROR);
+                    }
+                }
+            })(file);
+            reader.readAsText(file);
+            event.preventDefault();
+            event.stopPropagation();
+        });
+    }
+    exports.importConfigData = importConfigData;
+
+    function exportConfigData() {
+        return coordinates2relatives();
+    }
+    exports.exportConfigData = exportConfigData;
+
+    function coordinates2relatives() {
+        let height = $('#unitBackgroundLayer').height();
+        let width = $('#unitBackgroundLayer').width();
+        let relatives = {};
+        function calculateShape(object) {
+            switch (object.form) {
+                case "rectangle":
+                    return {
+                        "x": object.x / width,
+                        "y": object.y / height,
+                        "w": object.w / width,
+                        "h": object.h / height,
+                        "theta": object.theta,
+                        color: object.color,
+                        form: object.form,
+                        type: object.type
+                    };
+                case "triangle":
+                    return {
+                        ax: object.ax / width,
+                        ay: object.ay / height,
+                        bx: object.bx / width,
+                        by: object.by / height,
+                        cx: object.cx / width,
+                        cy: object.cy / height,
+                        color: object.color,
+                        form: object.form,
+                        type: object.type
+                    }
+                case "circle":
+                    return {
+                        "x": object.x / width,
+                        "y": object.y / height,
+                        "r": object.r / height / width,
+                        color: object.color,
+                        form: object.form,
+                        type: object.type,
+                        startAngle: 50,
+                        endAngle: 0
+                    };
+            }
+        }
+        relatives.robotPoses = robots.map(function(robot) {
+            return {
+                "x": robot.pose.x / width,
+                "y": robot.pose.y / height,
+                "theta": robot.pose.theta,
+                "xOld": robot.pose.x / width,
+                "yOld": robot.pose.y / height,
+                "transX": 0,
+                "transY": 0,
+                "thetaOld": robot.pose.thetaOld,
+                "thetaDiff": 0
+            }
+        })
+        relatives.obstacles = obstacleList.map(function(object) {
+            return calculateShape(object);
+        });
+        relatives.colorAreas = colorAreaList.map(function(object) {
+            return calculateShape(object);
+        });
+        relatives.ruler = ruler;
+        return relatives;
+    }
+
+    function relatives2coordinates(relatives) {
+        let height = $('#unitBackgroundLayer').height();
+        let width = $('#unitBackgroundLayer').width();
+        function calculateShape(object) {
+            switch (object.form) {
+                case "rectangle":
+                    return {
+                        "x": object.x * width,
+                        "y": object.y * height,
+                        "w": object.w * width,
+                        "h": object.h * height,
+                        "theta": object.theta,
+                        color: object.color,
+                        form: object.form,
+                        type: object.type
+                    };
+                case "triangle":
+                    return {
+                        ax: object.ax * width,
+                        ay: object.ay * height,
+                        bx: object.bx * width,
+                        by: object.by * height,
+                        cx: object.cx * width,
+                        cy: object.cy * height,
+                        color: object.color,
+                        form: object.form,
+                        type: object.type
+                    }
+                case "circle":
+                    return {
+                        "x": object.x * width,
+                        "y": object.y * height,
+                        "r": object.r * height * width,
+                        color: object.color,
+                        form: object.form,
+                        type: object.type,
+                        startAngle: 50,
+                        endAngle: 0
+                    };
+            }
+        }
+        for (var i = 0; i < robots.length; i++) {
+            if (relatives.robotPoses[i]) {
+                robots[i].pose.x = relatives.robotPoses[i].x * width;
+                robots[i].pose.y = relatives.robotPoses[i].y * height;
+                robots[i].pose.theta = relatives.robotPoses[i].theta;
+                robots[i].pose.xOld = relatives.robotPoses[i].xOld * width;
+                robots[i].pose.yOld = relatives.robotPoses[i].yOld * height;
+                robots[i].pose.thetaOld = relatives.robotPoses[i].thetaOld;
+            }
+        }
+        obstacleList = relatives.obstacles.map(function(object) {
+            return calculateShape(object);
+        });
+        colorAreaList = relatives.colorAreas.map(function(object) {
+            return calculateShape(object);
+        });
+        ruler = relatives.ruler;
+    }
+
+    function resetScene(obstacleL, colorAreaL) {
+        obstacleList = obstacleL;
+        colorAreaList = colorAreaL;
+        copiedObject = null;
+    }
+    exports.resetScene = resetScene;
+
 
     function importImage() {
         $('#backgroundFileSelector').val(null);
@@ -1022,7 +1881,7 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
                         } else {
                             imgObjectList[imgObjectList.length] = image;
                         }
-                        setBackground(imgObjectList.length - 1, setBackground);
+                        setBackground(imgObjectList.length - 1);
                         initScene();
                     }
 
@@ -1200,7 +2059,6 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
         }
         return this.webAudio;
     }
-
     exports.getWebAudio = getWebAudio;
 
     /** adds/removes the ability for a block to be a breakpoint to a block */
@@ -1248,6 +2106,11 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
         }
     }
 
+    function getDebugMode() {
+        return debugMode;
+    }
+    exports.getDebugMode = getDebugMode;
+
     /** updates the debug mode for all interpreters */
     function updateDebugMode(mode) {
         debugMode = mode;
@@ -1258,7 +2121,6 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
         }
         updateBreakpointEvent();
     }
-
     exports.updateDebugMode = updateDebugMode;
 
     /** removes breakpoint block */
@@ -1270,7 +2132,7 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
         }
         if (!breakpoints.length > 0 && interpreters !== null) {
             for (var i = 0; i < numRobots; i++) {
-                interpreters[i].removeEvent(CONST.DEBUG_BREAKPOINT);
+                interpreters[i].removeEvent(C.DEBUG_BREAKPOINT);
             }
         }
     }
@@ -1296,9 +2158,7 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
             }
         }
         Blockly.getMainWorkspace().getAllBlocks().forEach(function(block) {
-            if (block.inTask && !block.disabled && !block.getInheritedDisabled()) {
-                $(block.svgPath_).stop(true, true).animate({ 'fill-opacity': '1' }, 0);
-            }
+            $(block.svgPath_).stop(true, true).removeAttr('style');
         });
         breakpoints = [];
         debugMode = false;
@@ -1332,7 +2192,7 @@ define(['exports', 'simulation.scene', 'simulation.math', 'program.controller', 
     }
 
     if (!window.requestAnimationFrame) {
-        window.requestAnimationFrame = function(callback, element) {
+        window.requestAnimationFrame = function(callback) {
             var currTime = new Date().getTime();
             var timeToCall = Math.max(0, frameRateMs - (currTime - lastTime));
             var id = window.setTimeout(function() {

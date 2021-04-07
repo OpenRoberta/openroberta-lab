@@ -10,17 +10,18 @@ define(["require", "exports", "./interpreter.constants", "./interpreter.util"], 
          * . @param ops the array of operations
          * . @param fct the function definitions
          */
-        function State(ops, fct) {
-            this.functions = fct;
+        function State(ops) {
             this.operations = ops;
             this.pc = 0;
-            this.operationsStack = [];
             this.bindings = {};
             this.stack = [];
-            this.currentBlocks = {};
+            this.currentBlocks = new Set();
             this.debugMode = false;
             // p( 'storeCode with state reset' );
         }
+        State.prototype.incrementProgramCounter = function () {
+            this.pc++;
+        };
         /** returns the boolean debugMode */
         State.prototype.getDebugMode = function () {
             return this.debugMode;
@@ -28,14 +29,6 @@ define(["require", "exports", "./interpreter.constants", "./interpreter.util"], 
         /** updates the boolean debugMode */
         State.prototype.setDebugMode = function (mode) {
             this.debugMode = mode;
-        };
-        /**
-         * returns the code block of a function. The code block contains formal parameter names and the array of operations implementing the function
-         *
-         * . @param name the name of the function
-         */
-        State.prototype.getFunction = function (name) {
-            return this.functions[name];
         };
         /**
          * introduces a new binding. An old binding (if it exists) is hidden, until an unbinding occurs.
@@ -178,71 +171,10 @@ define(["require", "exports", "./interpreter.constants", "./interpreter.util"], 
             }
         };
         /**
-         * push the actual array of operations to the stack. 'ops' becomes the new actual array of operation.
-         * The pc of the frozen array of operations is decremented by 1. This operation is typically called by
-         * 'compound' statements as repeat, if, wait, but also for function calls.
-         *
-         * . @param ops the new array of operations. Its 'pc' is set to 0
-         */
-        State.prototype.pushOps = function (ops) {
-            if (this.pc <= 0) {
-                U.dbcException('pc must be > 0, but is ' + this.pc);
-            }
-            this.pc--;
-            var opsWrapper = {};
-            opsWrapper[C.OPS] = this.operations;
-            opsWrapper[C.PC] = this.pc;
-            this.operationsStack.unshift(opsWrapper);
-            this.operations = ops;
-            this.pc = 0;
-            this.opLog('PUSHING STMTS');
-        };
-        /**
          * get the next operation to be executed from the actual array of operations.
-         * - If the 'pc' is less than the length of the actual array of operations, 'pc' is the index of
-         *   the operation to be returned. The 'pc' is incremented by 1.
-         * - Otherwise the stack of frozen operations is pop-ped until a not exhausted array of operations is found
-         *
-         * NOTE: responsible for getting the new actual array of operations is @see popOpsUntil(). Here some cleanup of stack and binding
-         * is done. Be VERY careful, if you change the implementation of @see popOpsUntil().
          */
         State.prototype.getOp = function () {
-            if (this.operations !== undefined && this.pc >= this.operations.length) {
-                this.popOpsUntil();
-            }
-            return this.operations[this.pc++];
-        };
-        /**
-         * unwind the stack of operation-arrays until
-         * - if optional parameter is missing: executable operations are found, i.e. the 'pc' points INTO the array of operations
-         * - if optional parameter is there: executable operations are found and C.OP_CODE of the operation with index 'pc' matches the value of 'target'.
-         *   This is used by operations with C.OP_CODE 'C.FLOW_CONTROL' to unwind the stack until the statement list is found, that is the target of a 'continue'
-         *   or 'break'. The 'if' statement uses it to skip behind the if after one of the 'then'-statement lists has been taken and is exhausted.
-         *
-         * . @param target optional parameter: if present, the unwinding of the stack will proceed until the C.OP_CODE of the operation matches 'target'
-         */
-        State.prototype.popOpsUntil = function (target) {
-            while (true) {
-                var opsWrapper = this.operationsStack.shift();
-                if (opsWrapper === undefined) {
-                    throw 'pop ops until ' + target + '-stmt failed';
-                }
-                var suspendedStmt = opsWrapper[C.OPS][opsWrapper[C.PC]];
-                this.terminateBlock(suspendedStmt);
-                if (suspendedStmt !== undefined) {
-                    if (suspendedStmt[C.OPCODE] === C.REPEAT_STMT && (suspendedStmt[C.MODE] === C.TIMES || suspendedStmt[C.MODE] === C.FOR)) {
-                        this.unbindVar(suspendedStmt[C.NAME]);
-                        this.pop();
-                        this.pop();
-                        this.pop();
-                    }
-                    if (target === undefined || suspendedStmt[C.OPCODE] === target) {
-                        this.operations = opsWrapper[C.OPS];
-                        this.pc = opsWrapper[C.PC];
-                        return;
-                    }
-                }
-            }
+            return this.operations[this.pc];
         };
         /**
          * FOR DEBUGGING: write the actual array of operations to the 'console.log'. The actual operation is prefixed by '*'
@@ -252,48 +184,38 @@ define(["require", "exports", "./interpreter.constants", "./interpreter.util"], 
         State.prototype.opLog = function (msg) {
             U.opLog(msg, this.operations, this.pc);
         };
-        /** adds/removes block from currentBlocks and applies correct highlight to block**/
-        State.prototype.processBlock = function (stmt) {
-            for (var id in this.currentBlocks) {
-                var block = this.currentBlocks[id].block;
-                if (this.currentBlocks[id].terminate) {
-                    if (this.debugMode) {
-                        if (stackmachineJsHelper.getJqueryObject(block.svgPath_).hasClass("selectedBreakpoint")) {
-                            stackmachineJsHelper.getJqueryObject(block.svgPath_).removeClass("selectedBreakpoint").addClass("breakpoint");
-                        }
-                        this.removeBlockHighlight(block);
+        /** adds block to currentBlocks and applies correct highlight to block**/
+        State.prototype.evalInitiations = function (stmt) {
+            var _this = this;
+            var _a;
+            (_a = stmt[C.HIGHTLIGHT_PLUS]) === null || _a === void 0 ? void 0 : _a.map(function (blockId) { return stackmachineJsHelper.getBlockById(blockId); }).forEach(function (block) {
+                if (_this.debugMode) {
+                    if (stackmachineJsHelper.getJqueryObject(block === null || block === void 0 ? void 0 : block.svgPath_).hasClass("breakpoint")) {
+                        stackmachineJsHelper.getJqueryObject(block === null || block === void 0 ? void 0 : block.svgPath_).removeClass("breakpoint").addClass("selectedBreakpoint");
                     }
-                    delete this.currentBlocks[id];
+                    _this.highlightBlock(block);
+                    _this.currentBlocks.add(block.id);
                 }
-            }
-            if (stmt.hasOwnProperty(C.BLOCK_ID)) {
-                var block = stackmachineJsHelper.getBlockById(stmt[C.BLOCK_ID]);
-                if (!this.currentBlocks.hasOwnProperty(stmt[C.BLOCK_ID]) && block !== null) {
-                    if (this.debugMode) {
-                        if (stackmachineJsHelper.getJqueryObject(block.svgPath_).hasClass("breakpoint")) {
-                            stackmachineJsHelper.getJqueryObject(block.svgPath_).removeClass("breakpoint").addClass("selectedBreakpoint");
-                        }
-                        this.highlightBlock(block);
-                    }
-                    this.currentBlocks[stmt[C.BLOCK_ID]] = { "block": block, "terminate": false };
-                }
-            }
+            });
         };
-        /** Marks a block to be terminated in the next iteration of the interpreter **/
-        State.prototype.terminateBlock = function (stmt) {
-            if (stmt.hasOwnProperty(C.BLOCK_ID)) {
-                var block_id = stmt[C.BLOCK_ID];
-                if (block_id in this.currentBlocks) {
-                    this.currentBlocks[block_id].terminate = true;
+        /** removes block froms currentBlocks and removes highlighting from block**/
+        State.prototype.evalTerminations = function (stmt) {
+            var _this = this;
+            var _a;
+            (_a = stmt[C.HIGHTLIGHT_MINUS]) === null || _a === void 0 ? void 0 : _a.map(function (blockId) { return stackmachineJsHelper.getBlockById(blockId); }).forEach(function (block) {
+                if (_this.debugMode) {
+                    if (stackmachineJsHelper.getJqueryObject(block === null || block === void 0 ? void 0 : block.svgPath_).hasClass("selectedBreakpoint")) {
+                        stackmachineJsHelper.getJqueryObject(block === null || block === void 0 ? void 0 : block.svgPath_).removeClass("selectedBreakpoint").addClass("breakpoint");
+                    }
+                    _this.removeBlockHighlight(block);
+                    _this.currentBlocks.delete(block.id);
                 }
-            }
+            });
         };
         /** Returns true if the current block is currently being executed**/
         State.prototype.beingExecuted = function (stmt) {
-            if (stmt.hasOwnProperty(C.BLOCK_ID)) {
-                return this.currentBlocks.hasOwnProperty(stmt[C.BLOCK_ID]);
-            }
-            return false;
+            var blockId = stmt[C.HIGHTLIGHT_PLUS].slice(-1).pop();
+            return blockId && this.currentBlocks.has(blockId);
         };
         State.prototype.highlightBlock = function (block) {
             stackmachineJsHelper.getJqueryObject(block.svgPath_).stop(true, true).animate({ 'fill-opacity': '1' }, 0);
@@ -314,14 +236,14 @@ define(["require", "exports", "./interpreter.constants", "./interpreter.util"], 
         /** Will add highlights from all currently blocks being currently executed and all given Breakpoints
          * @param breakPoints the array of breakpoint block id's to have their highlights added*/
         State.prototype.addHighlights = function (breakPoints) {
-            for (var id in this.currentBlocks) {
-                this.highlightBlock(this.currentBlocks[id].block);
-            }
-            var currentBlocks = this.currentBlocks;
+            var _this = this;
+            Array.from(this.currentBlocks)
+                .map(function (blockId) { return stackmachineJsHelper.getBlockById(blockId); })
+                .forEach(function (block) { return _this.highlightBlock(block); });
             breakPoints.forEach(function (id) {
                 var block = stackmachineJsHelper.getBlockById(id);
                 if (block !== null) {
-                    if (currentBlocks.hasOwnProperty(id)) {
+                    if (_this.currentBlocks.hasOwnProperty(id)) {
                         stackmachineJsHelper.getJqueryObject(block.svgPath_).addClass("selectedBreakpoint");
                     }
                     else {
@@ -333,16 +255,19 @@ define(["require", "exports", "./interpreter.constants", "./interpreter.util"], 
         /** Will remove highlights from all currently blocks being currently executed and all given Breakpoints
          * @param breakPoints the array of breakpoint block id's to have their highlights removed*/
         State.prototype.removeHighlights = function (breakPoints) {
-            for (var id in this.currentBlocks) {
-                var block = this.currentBlocks[id].block;
+            var _this = this;
+            Array.from(this.currentBlocks)
+                .map(function (blockId) { return stackmachineJsHelper.getBlockById(blockId); })
+                .forEach(function (block) {
                 var object = stackmachineJsHelper.getJqueryObject(block);
                 if (object.hasClass("selectedBreakpoint")) {
                     object.removeClass("selectedBreakpoint").addClass("breakpoint");
                 }
-                this.removeBlockHighlight(block);
-            }
-            breakPoints.forEach(function (id) {
-                var block = stackmachineJsHelper.getBlockById(id);
+                _this.removeBlockHighlight(block);
+            });
+            breakPoints
+                .map(function (blockId) { return stackmachineJsHelper.getBlockById(blockId); })
+                .forEach(function (block) {
                 if (block !== null) {
                     stackmachineJsHelper.getJqueryObject(block.svgPath_).removeClass("breakpoint").removeClass("selectedBreakpoint");
                 }

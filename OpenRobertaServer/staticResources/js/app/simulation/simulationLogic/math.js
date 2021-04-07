@@ -4,7 +4,7 @@
  * @version 0.1
  */
 
-define([ 'exports', 'simulation.constants' ], function(exports, CONSTANTS) {
+define(['exports', 'simulation.constants'], function(exports, CONSTANTS) {
     /**
      * exports helper for calculations in ORsimulation
      * 
@@ -50,27 +50,122 @@ define([ 'exports', 'simulation.constants' ], function(exports, CONSTANTS) {
             return null;
         }
         var xi = ((line2.x1 - line2.x2) * (line1.x1 * line1.y2 - line1.y1 * line1.x2) - (line1.x1 - line1.x2) * (line2.x1 * line2.y2 - line2.y1 * line2.x2))
-                / d;
+            / d;
         var yi = ((line2.y1 - line2.y2) * (line1.x1 * line1.y2 - line1.y1 * line1.x2) - (line1.y1 - line1.y2) * (line2.x1 * line2.y2 - line2.y1 * line2.x2))
-                / d;
+            / d;
 
-        if (xi < Math.min(line1.x1, line1.x2) - 0.01 || xi > Math.max(line1.x1, line1.x2) + 0.01) {
+        if (!this.isLineAlignedToPoint(xi, yi, line1)) {
             return null;
         }
-        if (xi < Math.min(line2.x1, line2.x2) - 0.01 || xi > Math.max(line2.x1, line2.x2) + 0.01) {
-            return null;
-        }
-        if (yi < Math.min(line1.y1, line1.y2) - 0.01 || yi > Math.max(line1.y1, line1.y2) + 0.01) {
-            return null;
-        }
-        if (yi < Math.min(line2.y1, line2.y2) - 0.01 || yi > Math.max(line2.y1, line2.y2) + 0.01) {
+        if (!this.isLineAlignedToPoint(xi, yi, line2)) {
             return null;
         }
         return {
-            x : xi,
-            y : yi
+            x: xi,
+            y: yi
         };
     };
+
+    /**
+     * Finds the closest intersection from the intersections of a line
+     * @memberOf exports
+     * @param  {line}
+     *              a line
+     * @return {x, y}
+     *              closest intersection point (coordinate)
+     */
+    exports.getClosestIntersectionPointCircle = function(line, circle) {
+        const intersections = this.getIntersectionPointsCircle(line, circle);
+
+        if (intersections.length == 1) {
+            return intersections[0]; // one intersection
+        }
+
+        if (intersections.length == 2) {
+            const dist1 = getDistance({ x: line.x1, y: line.y1 }, intersections[0]);
+            const dist2 = getDistance({ x: line.x1, y: line.y1 }, intersections[1]);
+
+            if (dist1 < dist2) {
+                return intersections[0];
+            }
+            else {
+                return intersections[1];
+            }
+        }
+
+        return null; // no intersections at all
+    }
+
+
+    /**
+     * Finds the intersection between a circles border
+     * and a line from the origin to the otherLineEndPoint.
+     * @memberOf exports
+     * @param  {line}
+     *              a line
+     * @return {{x, y}[]}
+     *              array with point(s) of the intersection
+     */
+    exports.getIntersectionPointsCircle = function(line, circle) {
+        var dx, dy, A, B, C, det, t;
+
+        dx = line.x2 - line.x1;
+        dy = line.y2 - line.y1;
+
+
+        A = dx * dx + dy * dy;
+        B = 2 * (dx * (line.x1 - circle.x) + dy * (line.y1 - circle.y));
+        C = (line.x1 - circle.x) * (line.x1 - circle.x) + (line.y1 - circle.y) * (line.y1 - circle.y) - circle.r * circle.r;
+
+        det = B * B - 4 * A * C;
+        if ((A <= 0.0000001) || (det < 0)) {
+            return [];
+        }
+        else if (det == 0) {
+            // One solution.
+            t = -B / (2 * A);
+            var intersection1 = { x: line.x1 + t * dx, y: line.y1 + t * dy };
+
+            if (this.isLineAlignedToPoint(intersection1.x, intersection1.y, line))
+                return [intersection1];
+
+            return [];
+        }
+        else {
+            // Two solutions.
+            t = ((-B + Math.sqrt(det)) / (2 * A));
+            var intersection1 = { x: line.x1 + t * dx, y: line.y1 + t * dy };
+            t = ((-B - Math.sqrt(det)) / (2 * A));
+            var intersection2 = { x: line.x1 + t * dx, y: line.y1 + t * dy };
+
+            if (this.isLineAlignedToPoint(intersection1.x, intersection1.y, line) && this.isLineAlignedToPoint(intersection2.x, intersection2.y, line))
+                return [intersection1, intersection2];
+
+            return [];
+        }
+    };
+    /**
+     * Checks if Alignment of lines is correct to sensor
+     *
+     * @memberOf exports
+     * @param {xi}
+     *            x coordinate of point
+     * @param {yi}
+     *            y coordinate of point
+     * @param {line}
+     *            a line
+     * @returns {boolean}
+     */
+    exports.isLineAlignedToPoint = function(xi, yi, line) {
+
+        if (xi < Math.min(line.x1, line.x2) - 0.01 || xi > Math.max(line.x1, line.x2) + 0.01) {
+            return false;
+        }
+        if (yi < Math.min(line.y1, line.y2) - 0.01 || yi > Math.max(line.y1, line.y2) + 0.01) {
+            return false;
+        }
+        return true;
+    }
     /**
      * Get four lines from a rectangle.
      * 
@@ -79,67 +174,111 @@ define([ 'exports', 'simulation.constants' ], function(exports, CONSTANTS) {
      *            a rectangle
      * @returns {Array} four lines
      */
-    exports.getLinesFromRect = function(rect) {
-        if (rect.isParallelToAxis) {
-            return [ {
-                x1 : rect.x,
-                x2 : rect.x,
-                y1 : rect.y,
-                y2 : rect.y + rect.h
-            }, {
+    exports.getLinesFromObj = function(obj) {
+        switch (obj.form) {
+            case "rectangle":
+                return [{
+                    x1: obj.x,
+                    x2: obj.x,
+                    y1: obj.y,
+                    y2: obj.y + obj.h
+                }, {
 
-                x1 : rect.x,
-                x2 : rect.x + rect.w,
-                y1 : rect.y,
-                y2 : rect.y
-            }, {
-                x1 : rect.x + rect.w,
-                x2 : rect.x,
-                y1 : rect.y + rect.h,
-                y2 : rect.y + rect.h
-            }, {
-                x1 : rect.x + rect.w,
-                x2 : rect.x + rect.w,
-                y1 : rect.y + rect.h,
-                y2 : rect.y
-            } ];
-        } else {
-            return [ {
-                x1 : rect.backLeft.rx,
-                x2 : rect.frontLeft.rx,
-                y1 : rect.backLeft.ry,
-                y2 : rect.frontLeft.ry
-            }, {
+                    x1: obj.x,
+                    x2: obj.x + obj.w,
+                    y1: obj.y,
+                    y2: obj.y
+                }, {
+                    x1: obj.x + obj.w,
+                    x2: obj.x,
+                    y1: obj.y + obj.h,
+                    y2: obj.y + obj.h
+                }, {
+                    x1: obj.x + obj.w,
+                    x2: obj.x + obj.w,
+                    y1: obj.y + obj.h,
+                    y2: obj.y
+                }];
+            case "robot":
+                return [{
+                    x1: obj.backLeft.rx,
+                    x2: obj.frontLeft.rx,
+                    y1: obj.backLeft.ry,
+                    y2: obj.frontLeft.ry
+                }, {
 
-                x1 : rect.frontLeft.rx,
-                x2 : rect.frontRight.rx,
-                y1 : rect.frontLeft.ry,
-                y2 : rect.frontRight.ry
-            }, {
-                x1 : rect.frontRight.rx,
-                x2 : rect.backRight.rx,
-                y1 : rect.frontRight.ry,
-                y2 : rect.backRight.ry
-            }, {
-                x1 : rect.backRight.rx,
-                x2 : rect.backLeft.rx,
-                y1 : rect.backRight.ry,
-                y2 : rect.backLeft.ry
-            } ];
+                    x1: obj.frontLeft.rx,
+                    x2: obj.frontRight.rx,
+                    y1: obj.frontLeft.ry,
+                    y2: obj.frontRight.ry
+                }, {
+                    x1: obj.frontRight.rx,
+                    x2: obj.backRight.rx,
+                    y1: obj.frontRight.ry,
+                    y2: obj.backRight.ry
+                }, {
+                    x1: obj.backRight.rx,
+                    x2: obj.backLeft.rx,
+                    y1: obj.backRight.ry,
+                    y2: obj.backLeft.ry
+                }];
+            case "triangle":
+                return [{
+                    x1: obj.ax,
+                    x2: obj.bx,
+                    y1: obj.ay,
+                    y2: obj.by
+                }, {
+                    x1: obj.bx,
+                    x2: obj.cx,
+                    y1: obj.by,
+                    y2: obj.cy
+                }, {
+                    x1: obj.ax,
+                    x2: obj.cx,
+                    y1: obj.ay,
+                    y2: obj.cy
+                }];
+            default:
+                return false;
         }
-
     };
+
+    /**
+     * Get distance from a point to a circle's border.
+     *
+     * @memberOf exports
+     * @param {point}
+     *            a point
+     * @param {circle}
+     *            a circle object
+     * @returns {distance}
+     *           distance
+     */
+    exports.getDistanceToCircle = function(point, circle) {
+        var vX = point.x - circle.x;
+        var vY = point.y - circle.y;
+        var magV = Math.sqrt(vX * vX + vY * vY);
+        var aX = circle.x + vX / magV * circle.r;
+        var aY = circle.y + vY / magV * circle.r;
+        return {
+            x: aX,
+            y: aY
+        };
+    };
+
     /**
      * Calculate the square of a number.
      * 
      * @memberOf exports
-     * @param {Number}
-     *            x value to square
-     * @returns {Number} square of x
+                * @param { Number }
+     * x value to square
+                * @returns { Number } square of x
      */
     exports.sqr = function(x) {
         return x * x;
     };
+
     /**
      * Get the distance of two points.
      * 
@@ -179,8 +318,8 @@ define([ 'exports', 'simulation.constants' ], function(exports, CONSTANTS) {
             return p2;
         }
         return ({
-            x : p1.x + t * (p2.x - p1.x),
-            y : p1.y + t * (p2.y - p1.y)
+            x: p1.x + t * (p2.x - p1.x),
+            y: p1.y + t * (p2.y - p1.y)
         });
     }
     exports.getDistanceToLine = getDistanceToLine;
@@ -202,6 +341,65 @@ define([ 'exports', 'simulation.constants' ], function(exports, CONSTANTS) {
             return false;
         }
     }
+
+    exports.checkObstacle = function(robot, p) {
+        var x = robot.frontLeft.rx;
+        var y = robot.frontLeft.ry;
+        robot.frontLeft.bumped = robot.frontLeft.bumped || check(p, x, y);
+        x = robot.frontRight.rx;
+        y = robot.frontRight.ry;
+        robot.frontRight.bumped = robot.frontRight.bumped || check(p, x, y);
+        x = robot.backLeft.rx;
+        y = robot.backLeft.ry;
+        robot.backLeft.bumped = robot.backLeft.bumped || check(p, x, y);
+        x = robot.backRight.rx;
+        y = robot.backRight.ry;
+        robot.backRight.bumped = robot.backRight.bumped || check(p, x, y);
+        return robot.frontLeft.bumped || robot.frontRight.bumped ? 1 : 0;
+    }
+
+    check = function(p, x, y) {
+        switch (p.form) {
+            case ("rectangle"):
+                return (x > p.x && x < p.x + p.w && y > p.y && y < p.y + p.h);
+            case ("triangle"):
+                var areaOrig = Math.floor(Math.abs((p.bx - p.ax) * (p.cy - p.ay) - (p.cx - p.ax) * (p.by - p.ay)));
+                var area1 = Math.floor(Math.abs((p.ax - x) * (p.by - y) - (p.bx - x) * (p.ay - y)));
+                var area2 = Math.floor(Math.abs((p.bx - x) * (p.cy - y) - (p.cx - x) * (p.by - y)));
+                var area3 = Math.floor(Math.abs((p.cx - x) * (p.ay - y) - (p.ax - x) * (p.cy - y)));
+                if (area1 + area2 + area3 <= areaOrig) {
+                    return true;
+                }
+                return false;
+            case ("circle"):
+                return (x - p.x) * (x - p.x) + (y - p.y) * (y - p.y) <= p.r * p.r;
+            case ("robot"):
+                return exports.isPointInsideRectangle({
+                    x: x,
+                    y: y
+                }, {
+                    p1: {
+                        x: p.backLeft.rx,
+                        y: p.backLeft.ry
+                    },
+                    p2: {
+                        x: p.frontLeft.rx,
+                        y: p.frontLeft.ry
+                    },
+                    p3: {
+                        x: p.frontRight.rx,
+                        y: p.frontRight.ry
+                    },
+                    p4: {
+                        x: p.backRight.rx,
+                        y: p.backRight.ry
+                    }
+                });
+            default:
+                return false;
+        }
+    }
+
     /**
      * Convert a rgb value to hsv value.
      * 
@@ -214,7 +412,7 @@ define([ 'exports', 'simulation.constants' ], function(exports, CONSTANTS) {
      *            b blue value
      * @returns {Array} hsv value
      */
-//copy from http://stackoverflow.com/questions/2348597/why-doesnt-this-javascript-rgb-to-hsl-code-work
+    //copy from http://stackoverflow.com/questions/2348597/why-doesnt-this-javascript-rgb-to-hsl-code-work
     exports.rgbToHsv = function(r, g, b) {
         var min = Math.min(r, g, b), max = Math.max(r, g, b), delta = max - min, h, s, v = max;
 
@@ -223,7 +421,7 @@ define([ 'exports', 'simulation.constants' ], function(exports, CONSTANTS) {
             s = Math.floor(delta / max * 100);
         } else {
             // black
-            return [ 0, 0, 0 ];
+            return [0, 0, 0];
         }
         if (r === max) {
             h = (g - b) / delta; // between yellow & magenta
@@ -236,7 +434,7 @@ define([ 'exports', 'simulation.constants' ], function(exports, CONSTANTS) {
         if (h < 0) {
             h += 360;
         }
-        return [ h, s, v ];
+        return [h, s, v];
     };
     /**
      * Map a hsv value to a color name.

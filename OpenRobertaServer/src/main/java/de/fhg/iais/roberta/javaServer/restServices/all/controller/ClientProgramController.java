@@ -103,7 +103,7 @@ public class ClientProgramController {
 
             Program program = programProcessor.persistProgramText(programName, ownerName, programText, configName, configText, robot, programTimestamp);
 
-            response.setLastChanged((program != null) ? program.getLastChanged().getTime() : -1);
+            response.setLastChanged(program != null ? program.getLastChanged().getTime() : -1);
             UtilForREST.addResultInfo(response, programProcessor);
             Statistics.info("ProgramSave", "success", programProcessor.succeeded());
             return UtilForREST.responseWithFrontendInfo(response, httpSessionState, null);
@@ -187,7 +187,8 @@ public class ClientProgramController {
                     String configXML = progConfPair.getSecond();
                     response.setProgXML(progConfPair.getFirst());
                     // check and set config name for default config.
-                    if(configName == null && configText == null){
+
+                    if ( configName == null && configText == null ) {
                         configName = robot.toUpperCase() + "basis";
                     }
                     response.setConfigName(configName); // may be null, if an anonymous configuration is used
@@ -705,7 +706,7 @@ public class ClientProgramController {
     }
 
     private static String getRobot(HttpSessionState httpSessionState) {
-        return (httpSessionState.getRobotFactory(httpSessionState.getRobotName()).getGroup().isEmpty())
+        return httpSessionState.getRobotFactory(httpSessionState.getRobotName()).getGroup().isEmpty()
             ? httpSessionState.getRobotName()
             : httpSessionState.getRobotFactory(httpSessionState.getRobotName()).getGroup();
     }

@@ -139,6 +139,8 @@ define(['exports', 'log', 'jquery', 'guiState.controller', 'program.controller',
                 $('#codeButton').attr('data-original-title', value);
             } else if (lkey == 'Blockly.Msg.MENU_RIGHT_SIM_TOOLTIP') {
                 $('#simButton').attr('data-original-title', value);
+            } else if (lkey == 'Blockly.Msg.MENU_RIGHT_SIM_DEBUG_TOOLTIP') {
+                $('#simDebugButton').attr('data-original-title', value);
             } else if (lkey == 'Blockly.Msg.MENU_RIGHT_INFO_TOOLTIP') {
                 $('#infoButton').attr('data-original-title', value);
             } else if (lkey == 'Blockly.Msg.MENU_RIGHT_HELP_TOOLTIP') {
@@ -161,8 +163,25 @@ define(['exports', 'log', 'jquery', 'guiState.controller', 'program.controller',
                 $('#iconDisplayRobotState').attr('data-original-title', value);
             } else if (lkey === "Blockly.Msg.MENU_SIM_START_TOOLTIP") {
                 $('#simControl').attr('data-original-title', value);
+            } else if (lkey === "Blockly.Msg.MENU_SIM_STOP_TOOLTIP") {
+                $('#simCancel').attr('data-original-title', value);
             } else if (lkey === "Blockly.Msg.MENU_SIM_SCENE_TOOLTIP") {
                 $('#simScene').attr('data-original-title', value);
+            } else if (lkey === "Blockly.Msg.MENU_SIM_ADD_COLOR_OBJECT_TOOLTIP") {
+                $('#simCustomColorObject').attr('data-original-title', value);
+            } else if (lkey === "Blockly.Msg.MENU_SIM_ADD_OBSTACLE_TOOLTIP") {
+                $('#simCustomObstacle').attr('data-original-title', value);
+                $('#simAddObstacleRectangle').attr('data-original-title', value);
+            } else if (lkey === "Blockly.Msg.MENU_SIM_DELETE_ELEMENTS_TOOLTIP") {
+                $('#simDeleteElements').attr('data-original-title', value);
+            } else if (lkey === "Blockly.Msg.MENU_SIM_CHANGE_COLOR_TOOLTIP") {
+                $('#simChangeObjectColor').attr('data-original-title', value);
+            } else if (lkey === "Blockly.Msg.MENU_SIM_DELETE_OBJECT_TOOLTIP") {
+                $('#simDeleteObject').attr('data-original-title', value);
+            } else if (lkey === "Blockly.Msg.MENU_SIM_CONFIG_EXPORT") {
+                $('#simDownloadConfig').attr('data-original-title', value);
+            } else if (lkey === "Blockly.Msg.MENU_SIM_CONFIG_IMPORT") {
+                $('#simUploadConfig').attr('data-original-title', value);
             } else if (lkey === "Blockly.Msg.MENU_SIM_ROBOT_TOOLTIP") {
                 $('#simRobot').attr('data-original-title', value);
             } else if (lkey == 'Blockly.Msg.MENU_SIM_VALUES_TOOLTIP') {
@@ -179,8 +198,6 @@ define(['exports', 'log', 'jquery', 'guiState.controller', 'program.controller',
                 $('#simControlStepInto').attr('data-original-title', value);
             } else if (lkey == 'Blockly.Msg.MENU_DEBUG_STEP_OVER_TOOLTIP') {
                 $('#simControlStepOver').attr('data-original-title', value);
-            } else if (lkey == 'Blockly.Msg.MENU_SIM_VARIABLES_TOOLTIP') {
-                $('#simVariables').attr('data-original-title', value);
             } else if (lkey == 'Blockly.Msg.MENU_CODE_DOWNLOAD_TOOLTIP') {
                 $('#codeDownload').attr('data-original-title', value);
                 $('#downloadSourceCodeEditor').attr('data-original-title', value);

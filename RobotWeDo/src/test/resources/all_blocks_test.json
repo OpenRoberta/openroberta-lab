@@ -81,147 +81,175 @@
       "type": "COLOR"
     },
     {
-      "opc": "WaitStmt",
-      "stmtList": [
-        {
-          "GetSample": "buttons",
-          "opc": "GetSample",
-          "name": "W"
-        },
-        {
-          "opc": "expr",
-          "expr": "BOOL_CONST",
-          "value": true
-        },
-        {
-          "op": "EQ",
-          "opc": "expr",
-          "expr": "Binary"
-        },
-        {
-          "opc": "IfTrueStatement",
-          "stmtList": [{
-            "opc": "flowControl",
-            "conditional": false,
-            "break": true,
-            "kind": "WaitStmt"
-          }]
-        },
-        {
-          "opc": "expr",
-          "expr": "NUM_CONST",
-          "value": 1
-        },
-        {"opc": "WaitTimeSTMT"}
-      ]
+      "opc": "comment",
+      "target": "WaitStmt"
     },
     {
-      "opc": "WaitStmt",
-      "stmtList": [
-        {
-          "GetSample": "gyro",
-          "mode": "UP",
-          "opc": "GetSample",
-          "port": "1",
-          "name": "W"
-        },
-        {
-          "opc": "expr",
-          "expr": "BOOL_CONST",
-          "value": true
-        },
-        {
-          "op": "EQ",
-          "opc": "expr",
-          "expr": "Binary"
-        },
-        {
-          "opc": "IfTrueStatement",
-          "stmtList": [{
-            "opc": "flowControl",
-            "conditional": false,
-            "break": true,
-            "kind": "WaitStmt"
-          }]
-        },
-        {
-          "opc": "expr",
-          "expr": "NUM_CONST",
-          "value": 1
-        },
-        {"opc": "WaitTimeSTMT"}
-      ]
+      "GetSample": "buttons",
+      "opc": "GetSample",
+      "name": "W"
     },
     {
-      "opc": "WaitStmt",
-      "stmtList": [
-        {
-          "GetSample": "infrared",
-          "opc": "GetSample",
-          "port": "2",
-          "name": "W"
-        },
-        {
-          "opc": "expr",
-          "expr": "NUM_CONST",
-          "value": "10"
-        },
-        {
-          "op": "LT",
-          "opc": "expr",
-          "expr": "Binary"
-        },
-        {
-          "opc": "IfTrueStatement",
-          "stmtList": [{
-            "opc": "flowControl",
-            "conditional": false,
-            "break": true,
-            "kind": "WaitStmt"
-          }]
-        },
-        {
-          "opc": "expr",
-          "expr": "NUM_CONST",
-          "value": 1
-        },
-        {"opc": "WaitTimeSTMT"}
-      ]
+      "opc": "expr",
+      "expr": "BOOL_CONST",
+      "value": true
     },
     {
-      "opc": "WaitStmt",
-      "stmtList": [
-        {
-          "GetSample": "timer",
-          "opc": "GetSample",
-          "port": "1"
-        },
-        {
-          "opc": "expr",
-          "expr": "NUM_CONST",
-          "value": "500"
-        },
-        {
-          "op": "GT",
-          "opc": "expr",
-          "expr": "Binary"
-        },
-        {
-          "opc": "IfTrueStatement",
-          "stmtList": [{
-            "opc": "flowControl",
-            "conditional": false,
-            "break": true,
-            "kind": "WaitStmt"
-          }]
-        },
-        {
-          "opc": "expr",
-          "expr": "NUM_CONST",
-          "value": 1
-        },
-        {"opc": "WaitTimeSTMT"}
-      ]
+      "op": "EQ",
+      "opc": "expr",
+      "expr": "Binary"
+    },
+    {
+      "opc": "jump",
+      "conditional": false,
+      "target": 22
+    },
+    {
+      "opc": "jump",
+      "conditional": "always",
+      "target": 25
+    },
+    {
+      "opc": "expr",
+      "expr": "NUM_CONST",
+      "value": 1
+    },
+    {
+      "opc": "WaitTimeSTMT"
+    },
+    {
+      "opc": "jump",
+      "conditional": "always",
+      "target": 16
+    },
+    {
+      "opc": "comment",
+      "target": "WaitStmt"
+    },
+    {
+      "GetSample": "gyro",
+      "mode": "UP",
+      "opc": "GetSample",
+      "port": "1",
+      "name": "W"
+    },
+    {
+      "opc": "expr",
+      "expr": "BOOL_CONST",
+      "value": true
+    },
+    {
+      "op": "EQ",
+      "opc": "expr",
+      "expr": "Binary"
+    },
+    {
+      "opc": "jump",
+      "conditional": false,
+      "target": 31
+    },
+    {
+      "opc": "jump",
+      "conditional": "always",
+      "target": 34
+    },
+    {
+      "opc": "expr",
+      "expr": "NUM_CONST",
+      "value": 1
+    },
+    {
+      "opc": "WaitTimeSTMT"
+    },
+    {
+      "opc": "jump",
+      "conditional": "always",
+      "target": 25
+    },
+    {
+      "opc": "comment",
+      "target": "WaitStmt"
+    },
+    {
+      "GetSample": "infrared",
+      "opc": "GetSample",
+      "port": "2",
+      "name": "W"
+    },
+    {
+      "opc": "expr",
+      "expr": "NUM_CONST",
+      "value": "10"
+    },
+    {
+      "op": "LT",
+      "opc": "expr",
+      "expr": "Binary"
+    },
+    {
+      "opc": "jump",
+      "conditional": false,
+      "target": 40
+    },
+    {
+      "opc": "jump",
+      "conditional": "always",
+      "target": 43
+    },
+    {
+      "opc": "expr",
+      "expr": "NUM_CONST",
+      "value": 1
+    },
+    {
+      "opc": "WaitTimeSTMT"
+    },
+    {
+      "opc": "jump",
+      "conditional": "always",
+      "target": 34
+    },
+    {
+      "opc": "comment",
+      "target": "WaitStmt"
+    },
+    {
+      "GetSample": "timer",
+      "opc": "GetSample",
+      "port": "1"
+    },
+    {
+      "opc": "expr",
+      "expr": "NUM_CONST",
+      "value": "500"
+    },
+    {
+      "op": "GT",
+      "opc": "expr",
+      "expr": "Binary"
+    },
+    {
+      "opc": "jump",
+      "conditional": false,
+      "target": 49
+    },
+    {
+      "opc": "jump",
+      "conditional": "always",
+      "target": 52
+    },
+    {
+      "opc": "expr",
+      "expr": "NUM_CONST",
+      "value": 1
+    },
+    {
+      "opc": "WaitTimeSTMT"
+    },
+    {
+      "opc": "jump",
+      "conditional": "always",
+      "target": 43
     },
     {
       "opc": "createResetTimer",
@@ -233,9 +261,72 @@
       "value": "0"
     },
     {
+      "opc": "VarDeclaration",
+      "name": "k0",
+      "type": "NUMBER"
+    },
+    {
+      "opc": "comment",
+      "target": "RepeatStmt"
+    },
+    {
+      "opc": "expr",
+      "name": "k0",
+      "expr": "Var"
+    },
+    {
       "opc": "expr",
       "expr": "NUM_CONST",
       "value": "10"
+    },
+    {
+      "op": "LT",
+      "opc": "expr",
+      "expr": "Binary"
+    },
+    {
+      "opc": "jump",
+      "conditional": false,
+      "target": 73
+    },
+    {
+      "GetSample": "infrared",
+      "opc": "GetSample",
+      "port": "2",
+      "name": "W"
+    },
+    {
+      "opc": "AssignStmt",
+      "name": "item"
+    },
+    {
+      "GetSample": "timer",
+      "opc": "GetSample",
+      "port": "1"
+    },
+    {
+      "opc": "AssignStmt",
+      "name": "item2"
+    },
+    {
+      "GetSample": "buttons",
+      "opc": "GetSample",
+      "name": "W"
+    },
+    {
+      "opc": "AssignStmt",
+      "name": "item3"
+    },
+    {
+      "GetSample": "gyro",
+      "mode": "UP",
+      "opc": "GetSample",
+      "port": "1",
+      "name": "W"
+    },
+    {
+      "opc": "AssignStmt",
+      "name": "item4"
     },
     {
       "opc": "expr",
@@ -243,327 +334,280 @@
       "value": "1"
     },
     {
-      "mode": "TIMES",
-      "opc": "RepeatStmt",
-      "stmtList": [{
-        "mode": "TIMES",
-        "opc": "RepeatStmtCont",
-        "stmtList": [
-          {
-            "GetSample": "infrared",
-            "opc": "GetSample",
-            "port": "2",
-            "name": "W"
-          },
-          {
-            "opc": "AssignStmt",
-            "name": "item"
-          },
-          {
-            "GetSample": "timer",
-            "opc": "GetSample",
-            "port": "1"
-          },
-          {
-            "opc": "AssignStmt",
-            "name": "item2"
-          },
-          {
-            "GetSample": "buttons",
-            "opc": "GetSample",
-            "name": "W"
-          },
-          {
-            "opc": "AssignStmt",
-            "name": "item3"
-          },
-          {
-            "GetSample": "gyro",
-            "mode": "UP",
-            "opc": "GetSample",
-            "port": "1",
-            "name": "W"
-          },
-          {
-            "opc": "AssignStmt",
-            "name": "item4"
-          }
-        ],
-        "name": "k0"
-      }],
+      "opc": "expr",
+      "name": "k0",
+      "expr": "Var"
+    },
+    {
+      "op": "ADD",
+      "opc": "expr",
+      "expr": "Binary"
+    },
+    {
+      "opc": "AssignStmt",
       "name": "k0"
     },
     {
-      "opc": "IfStatement",
-      "stmtList": [
-        {
-          "GetSample": "buttons",
-          "opc": "GetSample",
-          "name": "W"
-        },
-        {
-          "opc": "IfTrueStatement",
-          "stmtList": [
-            {
-              "opc": "IfStatement",
-              "stmtList": [
-                {
-                  "GetSample": "gyro",
-                  "mode": "UP",
-                  "opc": "GetSample",
-                  "port": "1",
-                  "name": "W"
-                },
-                {
-                  "opc": "IfTrueStatement",
-                  "stmtList": [
-                    {
-                      "opc": "expr",
-                      "expr": "NUM_CONST",
-                      "value": "30"
-                    },
-                    {
-                      "opc": "expr",
-                      "expr": "NUM_CONST",
-                      "value": "1000"
-                    },
-                    {
-                      "opc": "motorOnAction",
-                      "speedOnly": false,
-                      "port": "1",
-                      "name": "W"
-                    },
-                    {
-                      "opc": "motorStop",
-                      "port": "1",
-                      "name": "W"
-                    },
-                    {
-                      "opc": "expr",
-                      "expr": "NUM_CONST",
-                      "value": "30"
-                    },
-                    {
-                      "opc": "motorOnAction",
-                      "speedOnly": true,
-                      "port": "1",
-                      "name": "W"
-                    },
-                    {
-                      "opc": "motorStop",
-                      "port": "1",
-                      "name": "W"
-                    },
-                    {
-                      "opc": "expr",
-                      "expr": "STRING_CONST",
-                      "value": "Hallo"
-                    },
-                    {"opc": "ShowTextAction"},
-                    {"opc": "ClearDisplay"},
-                    {
-                      "opc": "expr",
-                      "expr": "NUM_CONST",
-                      "value": "261.626"
-                    },
-                    {
-                      "opc": "expr",
-                      "expr": "NUM_CONST",
-                      "value": "2000"
-                    },
-                    {
-                      "opc": "ToneAction",
-                      "name": "W"
-                    },
-                    {
-                      "opc": "expr",
-                      "expr": "NUM_CONST",
-                      "value": "300"
-                    },
-                    {
-                      "opc": "expr",
-                      "expr": "NUM_CONST",
-                      "value": "100"
-                    },
-                    {
-                      "opc": "ToneAction",
-                      "name": "W"
-                    },
-                    {
-                      "opc": "expr",
-                      "expr": "COLOR_CONST",
-                      "value": 9
-                    },
-                    {
-                      "opc": "ledOnAction",
-                      "name": "W"
-                    },
-                    {
-                      "opc": "statusLightAction",
-                      "name": "W"
-                    },
-                    {
-                      "opc": "flowControl",
-                      "conditional": false,
-                      "break": true,
-                      "kind": "IfStatement"
-                    }
-                  ]
-                },
-                {
-                  "opc": "expr",
-                  "expr": "NUM_CONST",
-                  "value": "30"
-                },
-                {
-                  "opc": "expr",
-                  "expr": "NUM_CONST",
-                  "value": "1000"
-                },
-                {
-                  "opc": "motorOnAction",
-                  "speedOnly": false,
-                  "port": "1",
-                  "name": "W"
-                },
-                {
-                  "opc": "motorStop",
-                  "port": "1",
-                  "name": "W"
-                },
-                {
-                  "opc": "expr",
-                  "expr": "COLOR_CONST",
-                  "value": 9
-                },
-                {
-                  "opc": "ledOnAction",
-                  "name": "W"
-                },
-                {
-                  "opc": "statusLightAction",
-                  "name": "W"
-                },
-                {
-                  "opc": "flowControl",
-                  "conditional": false,
-                  "break": true,
-                  "kind": "IfStatement"
-                }
-              ]
-            },
-            {
-              "opc": "flowControl",
-              "conditional": false,
-              "break": true,
-              "kind": "IfStatement"
-            }
-          ]
-        },
-        {
-          "opc": "flowControl",
-          "conditional": false,
-          "break": true,
-          "kind": "IfStatement"
-        }
-      ]
+      "opc": "jump",
+      "conditional": "always",
+      "target": 55
     },
     {
-      "mode": "UNTIL",
-      "opc": "RepeatStmt",
-      "stmtList": [{
-        "mode": "UNTIL",
-        "opc": "RepeatStmtCont",
-        "stmtList": [
-          {
-            "GetSample": "buttons",
-            "opc": "GetSample",
-            "name": "W"
-          },
-          {
-            "op": "NOT",
-            "opc": "expr",
-            "expr": "Unary"
-          },
-          {
-            "opc": "flowControl",
-            "conditional": true,
-            "break": true,
-            "kind": "RepeatStmt",
-            "BOOLEAN": false
-          },
-          {
-            "opc": "expr",
-            "expr": "NUM_CONST",
-            "value": "30"
-          },
-          {
-            "opc": "expr",
-            "expr": "NUM_CONST",
-            "value": "1000"
-          },
-          {
-            "opc": "motorOnAction",
-            "speedOnly": false,
-            "port": "1",
-            "name": "W"
-          },
-          {
-            "opc": "motorStop",
-            "port": "1",
-            "name": "W"
-          }
-        ]
-      }]
+      "opc": "unbindVar",
+      "name": "k0"
     },
     {
-      "mode": "WHILE",
-      "opc": "RepeatStmt",
-      "stmtList": [{
-        "mode": "WHILE",
-        "opc": "RepeatStmtCont",
-        "stmtList": [
-          {
-            "GetSample": "buttons",
-            "opc": "GetSample",
-            "name": "W"
-          },
-          {
-            "opc": "flowControl",
-            "conditional": true,
-            "break": true,
-            "kind": "RepeatStmt",
-            "BOOLEAN": false
-          },
-          {
-            "opc": "expr",
-            "expr": "NUM_CONST",
-            "value": "30"
-          },
-          {
-            "opc": "expr",
-            "expr": "NUM_CONST",
-            "value": "1000"
-          },
-          {
-            "opc": "motorOnAction",
-            "speedOnly": false,
-            "port": "1",
-            "name": "W"
-          },
-          {
-            "opc": "motorStop",
-            "port": "1",
-            "name": "W"
-          },
-          {
-            "opc": "flowControl",
-            "conditional": false,
-            "break": true,
-            "kind": "RepeatStmt"
-          }
-        ]
-      }]
+      "opc": "comment",
+      "target": "IfStatement"
+    },
+    {
+      "GetSample": "buttons",
+      "opc": "GetSample",
+      "name": "W"
+    },
+    {
+      "opc": "jump",
+      "conditional": false,
+      "target": 108
+    },
+    {
+      "opc": "comment",
+      "target": "IfStatement"
+    },
+    {
+      "GetSample": "gyro",
+      "mode": "UP",
+      "opc": "GetSample",
+      "port": "1",
+      "name": "W"
+    },
+    {
+      "opc": "jump",
+      "conditional": false,
+      "target": 100
+    },
+    {
+      "opc": "expr",
+      "expr": "NUM_CONST",
+      "value": "30"
+    },
+    {
+      "opc": "expr",
+      "expr": "NUM_CONST",
+      "value": "1000"
+    },
+    {
+      "opc": "motorOnAction",
+      "speedOnly": false,
+      "port": "1",
+      "name": "W"
+    },
+    {
+      "opc": "motorStop",
+      "port": "1",
+      "name": "W"
+    },
+    {
+      "opc": "expr",
+      "expr": "NUM_CONST",
+      "value": "30"
+    },
+    {
+      "opc": "motorOnAction",
+      "speedOnly": true,
+      "port": "1",
+      "name": "W"
+    },
+    {
+      "opc": "motorStop",
+      "port": "1",
+      "name": "W"
+    },
+    {
+      "opc": "expr",
+      "expr": "STRING_CONST",
+      "value": "Hallo"
+    },
+    {
+      "opc": "ShowTextAction"
+    },
+    {
+      "opc": "ClearDisplay"
+    },
+    {
+      "opc": "expr",
+      "expr": "NUM_CONST",
+      "value": "261.626"
+    },
+    {
+      "opc": "expr",
+      "expr": "NUM_CONST",
+      "value": "2000"
+    },
+    {
+      "opc": "ToneAction",
+      "name": "W"
+    },
+    {
+      "opc": "expr",
+      "expr": "NUM_CONST",
+      "value": "300"
+    },
+    {
+      "opc": "expr",
+      "expr": "NUM_CONST",
+      "value": "100"
+    },
+    {
+      "opc": "ToneAction",
+      "name": "W"
+    },
+    {
+      "opc": "expr",
+      "expr": "COLOR_CONST",
+      "value": 9
+    },
+    {
+      "opc": "ledOnAction",
+      "name": "W"
+    },
+    {
+      "opc": "statusLightAction",
+      "name": "W"
+    },
+    {
+      "opc": "jump",
+      "conditional": "always",
+      "target": 107
+    },
+    {
+      "opc": "expr",
+      "expr": "NUM_CONST",
+      "value": "30"
+    },
+    {
+      "opc": "expr",
+      "expr": "NUM_CONST",
+      "value": "1000"
+    },
+    {
+      "opc": "motorOnAction",
+      "speedOnly": false,
+      "port": "1",
+      "name": "W"
+    },
+    {
+      "opc": "motorStop",
+      "port": "1",
+      "name": "W"
+    },
+    {
+      "opc": "expr",
+      "expr": "COLOR_CONST",
+      "value": 9
+    },
+    {
+      "opc": "ledOnAction",
+      "name": "W"
+    },
+    {
+      "opc": "statusLightAction",
+      "name": "W"
+    },
+    {
+      "opc": "jump",
+      "conditional": "always",
+      "target": 108
+    },
+    {
+      "opc": "comment",
+      "target": "RepeatStmt"
+    },
+    {
+      "GetSample": "buttons",
+      "opc": "GetSample",
+      "name": "W"
+    },
+    {
+      "op": "NOT",
+      "opc": "expr",
+      "expr": "Unary"
+    },
+    {
+      "opc": "jump",
+      "conditional": false,
+      "target": 117
+    },
+    {
+      "opc": "expr",
+      "expr": "NUM_CONST",
+      "value": "30"
+    },
+    {
+      "opc": "expr",
+      "expr": "NUM_CONST",
+      "value": "1000"
+    },
+    {
+      "opc": "motorOnAction",
+      "speedOnly": false,
+      "port": "1",
+      "name": "W"
+    },
+    {
+      "opc": "motorStop",
+      "port": "1",
+      "name": "W"
+    },
+    {
+      "opc": "jump",
+      "conditional": "always",
+      "target": 108
+    },
+    {
+      "opc": "comment",
+      "target": "RepeatStmt"
+    },
+    {
+      "GetSample": "buttons",
+      "opc": "GetSample",
+      "name": "W"
+    },
+    {
+      "opc": "jump",
+      "conditional": false,
+      "target": 126
+    },
+    {
+      "opc": "expr",
+      "expr": "NUM_CONST",
+      "value": "30"
+    },
+    {
+      "opc": "expr",
+      "expr": "NUM_CONST",
+      "value": "1000"
+    },
+    {
+      "opc": "motorOnAction",
+      "speedOnly": false,
+      "port": "1",
+      "name": "W"
+    },
+    {
+      "opc": "motorStop",
+      "port": "1",
+      "name": "W"
+    },
+    {
+      "opc": "jump",
+      "conditional": "always",
+      "target": 126
+    },
+    {
+      "opc": "jump",
+      "conditional": "always",
+      "target": 117
     },
     {
       "opc": "expr",
@@ -571,9 +615,54 @@
       "value": "0"
     },
     {
+      "opc": "VarDeclaration",
+      "name": "k1",
+      "type": "NUMBER"
+    },
+    {
+      "opc": "comment",
+      "target": "RepeatStmt"
+    },
+    {
+      "opc": "expr",
+      "name": "k1",
+      "expr": "Var"
+    },
+    {
       "opc": "expr",
       "expr": "NUM_CONST",
       "value": "10"
+    },
+    {
+      "op": "LT",
+      "opc": "expr",
+      "expr": "Binary"
+    },
+    {
+      "opc": "jump",
+      "conditional": false,
+      "target": 143
+    },
+    {
+      "opc": "expr",
+      "expr": "COLOR_CONST",
+      "value": 9
+    },
+    {
+      "opc": "ledOnAction",
+      "name": "W"
+    },
+    {
+      "opc": "statusLightAction",
+      "name": "W"
+    },
+    {
+      "opc": "expr",
+      "expr": "NUM_CONST",
+      "value": "500"
+    },
+    {
+      "opc": "WaitTimeSTMT"
     },
     {
       "opc": "expr",
@@ -581,34 +670,26 @@
       "value": "1"
     },
     {
-      "mode": "TIMES",
-      "opc": "RepeatStmt",
-      "stmtList": [{
-        "mode": "TIMES",
-        "opc": "RepeatStmtCont",
-        "stmtList": [
-          {
-            "opc": "expr",
-            "expr": "COLOR_CONST",
-            "value": 9
-          },
-          {
-            "opc": "ledOnAction",
-            "name": "W"
-          },
-          {
-            "opc": "statusLightAction",
-            "name": "W"
-          },
-          {
-            "opc": "expr",
-            "expr": "NUM_CONST",
-            "value": "500"
-          },
-          {"opc": "WaitTimeSTMT"}
-        ],
-        "name": "k1"
-      }],
+      "opc": "expr",
+      "name": "k1",
+      "expr": "Var"
+    },
+    {
+      "op": "ADD",
+      "opc": "expr",
+      "expr": "Binary"
+    },
+    {
+      "opc": "AssignStmt",
+      "name": "k1"
+    },
+    {
+      "opc": "jump",
+      "conditional": "always",
+      "target": 128
+    },
+    {
+      "opc": "unbindVar",
       "name": "k1"
     },
     {
@@ -616,11 +697,27 @@
       "expr": "NUM_CONST",
       "value": "500"
     },
-    {"opc": "WaitTimeSTMT"},
+    {
+      "opc": "WaitTimeSTMT"
+    },
     {
       "opc": "expr",
       "expr": "NUM_CONST",
       "value": "0"
+    },
+    {
+      "opc": "VarDeclaration",
+      "name": "i",
+      "type": "NUMBER"
+    },
+    {
+      "opc": "comment",
+      "target": "RepeatStmt"
+    },
+    {
+      "opc": "expr",
+      "name": "i",
+      "expr": "Var"
     },
     {
       "opc": "expr",
@@ -628,26 +725,49 @@
       "value": "5"
     },
     {
+      "op": "LT",
+      "opc": "expr",
+      "expr": "Binary"
+    },
+    {
+      "opc": "jump",
+      "conditional": false,
+      "target": 160
+    },
+    {
+      "opc": "expr",
+      "name": "i",
+      "expr": "Var"
+    },
+    {
+      "opc": "ShowTextAction"
+    },
+    {
       "opc": "expr",
       "expr": "NUM_CONST",
       "value": "1"
     },
     {
-      "mode": "FOR",
-      "opc": "RepeatStmt",
-      "stmtList": [{
-        "mode": "FOR",
-        "opc": "RepeatStmtCont",
-        "stmtList": [
-          {
-            "opc": "expr",
-            "name": "i",
-            "expr": "Var"
-          },
-          {"opc": "ShowTextAction"}
-        ],
-        "name": "i"
-      }],
+      "opc": "expr",
+      "name": "i",
+      "expr": "Var"
+    },
+    {
+      "op": "ADD",
+      "opc": "expr",
+      "expr": "Binary"
+    },
+    {
+      "opc": "AssignStmt",
+      "name": "i"
+    },
+    {
+      "opc": "jump",
+      "conditional": "always",
+      "target": 148
+    },
+    {
+      "opc": "unbindVar",
       "name": "i"
     },
     {
@@ -665,111 +785,106 @@
       "name": "item"
     },
     {
-      "opc": "WaitStmt",
-      "stmtList": [
-        {
-          "opc": "IfStatement",
-          "stmtList": [
-            {
-              "opc": "expr",
-              "expr": "NUM_CONST",
-              "value": "0"
-            },
-            {
-              "opc": "expr",
-              "expr": "createMathConstant",
-              "value": "PI"
-            },
-            {
-              "op": "ROOT",
-              "opc": "expr",
-              "expr": "SingleFunction"
-            },
-            {
-              "opc": "expr",
-              "expr": "NUM_CONST",
-              "value": "1"
-            },
-            {
-              "opc": "expr",
-              "expr": "NUM_CONST",
-              "value": "2"
-            },
-            {
-              "op": "MOD",
-              "opc": "expr",
-              "expr": "Binary"
-            },
-            {
-              "op": "ROUND",
-              "opc": "expr",
-              "expr": "SingleFunction"
-            },
-            {
-              "op": "SIN",
-              "opc": "expr",
-              "expr": "SingleFunction"
-            },
-            {
-              "op": "ADD",
-              "opc": "expr",
-              "expr": "Binary"
-            },
-            {
-              "op": "EQ",
-              "opc": "expr",
-              "expr": "Binary"
-            },
-            {
-              "opc": "IfTrueStatement",
-              "stmtList": [
-                {
-                  "opc": "expr",
-                  "expr": "BOOL_CONST",
-                  "value": true
-                },
-                {
-                  "op": "NOT",
-                  "opc": "expr",
-                  "expr": "Unary"
-                },
-                {
-                  "opc": "flowControl",
-                  "conditional": false,
-                  "break": true,
-                  "kind": "IfStatement"
-                }
-              ]
-            },
-            {
-              "opc": "expr",
-              "expr": "BOOL_CONST",
-              "value": false
-            },
-            {
-              "opc": "flowControl",
-              "conditional": false,
-              "break": true,
-              "kind": "IfStatement"
-            }
-          ]
-        },
-        {
-          "opc": "IfTrueStatement",
-          "stmtList": [{
-            "opc": "flowControl",
-            "conditional": false,
-            "break": true,
-            "kind": "WaitStmt"
-          }]
-        },
-        {
-          "opc": "expr",
-          "expr": "NUM_CONST",
-          "value": 1
-        },
-        {"opc": "WaitTimeSTMT"}
-      ]
+      "opc": "comment",
+      "target": "WaitStmt"
+    },
+    {
+      "opc": "expr",
+      "expr": "NUM_CONST",
+      "value": "0"
+    },
+    {
+      "opc": "expr",
+      "expr": "createMathConstant",
+      "value": "PI"
+    },
+    {
+      "op": "ROOT",
+      "opc": "expr",
+      "expr": "SingleFunction"
+    },
+    {
+      "opc": "expr",
+      "expr": "NUM_CONST",
+      "value": "1"
+    },
+    {
+      "opc": "expr",
+      "expr": "NUM_CONST",
+      "value": "2"
+    },
+    {
+      "op": "MOD",
+      "opc": "expr",
+      "expr": "Binary"
+    },
+    {
+      "op": "ROUND",
+      "opc": "expr",
+      "expr": "SingleFunction"
+    },
+    {
+      "op": "SIN",
+      "opc": "expr",
+      "expr": "SingleFunction"
+    },
+    {
+      "op": "ADD",
+      "opc": "expr",
+      "expr": "Binary"
+    },
+    {
+      "op": "EQ",
+      "opc": "expr",
+      "expr": "Binary"
+    },
+    {
+      "opc": "jump",
+      "conditional": false,
+      "target": 179
+    },
+    {
+      "opc": "expr",
+      "expr": "BOOL_CONST",
+      "value": true
+    },
+    {
+      "op": "NOT",
+      "opc": "expr",
+      "expr": "Unary"
+    },
+    {
+      "opc": "jump",
+      "conditional": "always",
+      "target": 180
+    },
+    {
+      "opc": "expr",
+      "expr": "BOOL_CONST",
+      "value": false
+    },
+    {
+      "opc": "jump",
+      "conditional": false,
+      "target": 182
+    },
+    {
+      "opc": "jump",
+      "conditional": "always",
+      "target": 185
+    },
+    {
+      "opc": "expr",
+      "expr": "NUM_CONST",
+      "value": 1
+    },
+    {
+      "opc": "WaitTimeSTMT"
+    },
+    {
+      "opc": "jump",
+      "conditional": "always",
+      "target": 164
     },
     {
       "opc": "expr",
@@ -838,7 +953,9 @@
       "NUMBER": 2,
       "opc": "createTextJoin"
     },
-    {"opc": "ShowTextAction"},
+    {
+      "opc": "ShowTextAction"
+    },
     {
       "opc": "expr",
       "expr": "randDouble"
@@ -851,7 +968,9 @@
       "NUMBER": 2,
       "opc": "createTextJoin"
     },
-    {"opc": "ShowTextAction"},
+    {
+      "opc": "ShowTextAction"
+    },
     {
       "opc": "expr",
       "expr": "COLOR_CONST",
@@ -943,14 +1062,32 @@
       "name": "W"
     },
     {
-      "opc": "createMethodCallVoid",
-      "names": [],
-      "name": "doSomething"
+      "opc": "comment",
+      "target": "createMethodCall"
     },
     {
-      "opc": "createMethodCallReturn",
-      "names": [],
-      "name": "doSomething2"
+      "opc": "expr",
+      "expr": "NUM_CONST",
+      "value": 228
+    },
+    {
+      "opc": "jump",
+      "conditional": "always",
+      "target": 357
+    },
+    {
+      "opc": "comment",
+      "target": "createMethodCall"
+    },
+    {
+      "opc": "expr",
+      "expr": "NUM_CONST",
+      "value": 231
+    },
+    {
+      "opc": "jump",
+      "conditional": "always",
+      "target": 374
     },
     {
       "opc": "AssignStmt",
@@ -1366,82 +1503,58 @@
       "name": "item3"
     },
     {
-      "opc": "IfStatement",
-      "stmtList": [
-        {
-          "opc": "expr",
-          "expr": "BOOL_CONST",
-          "value": true
-        },
-        {
-          "opc": "IfTrueStatement",
-          "stmtList": [
-            {
-              "opc": "expr",
-              "expr": "BOOL_CONST",
-              "value": false
-            },
-            {
-              "opc": "flowControl",
-              "conditional": false,
-              "break": true,
-              "kind": "IfStatement"
-            }
-          ]
-        },
-        {
-          "opc": "expr",
-          "expr": "BOOL_CONST",
-          "value": false
-        },
-        {
-          "opc": "flowControl",
-          "conditional": false,
-          "break": true,
-          "kind": "IfStatement"
-        }
-      ]
+      "opc": "expr",
+      "expr": "BOOL_CONST",
+      "value": true
+    },
+    {
+      "opc": "jump",
+      "conditional": false,
+      "target": 323
+    },
+    {
+      "opc": "expr",
+      "expr": "BOOL_CONST",
+      "value": false
+    },
+    {
+      "opc": "jump",
+      "conditional": "always",
+      "target": 324
+    },
+    {
+      "opc": "expr",
+      "expr": "BOOL_CONST",
+      "value": false
     },
     {
       "opc": "AssignStmt",
       "name": "item3"
     },
     {
-      "opc": "IfStatement",
-      "stmtList": [
-        {
-          "opc": "expr",
-          "expr": "BOOL_CONST",
-          "value": true
-        },
-        {
-          "opc": "IfTrueStatement",
-          "stmtList": [
-            {
-              "opc": "expr",
-              "expr": "BOOL_CONST",
-              "value": true
-            },
-            {
-              "opc": "flowControl",
-              "conditional": false,
-              "break": true,
-              "kind": "IfStatement"
-            }
-          ]
-        },
-        {
-          "opc": "expr",
-          "expr": "BOOL_CONST",
-          "value": false
-        },
-        {
-          "opc": "flowControl",
-          "conditional": false,
-          "break": true,
-          "kind": "IfStatement"
-        }
-      ]
+      "opc": "expr",
+      "expr": "BOOL_CONST",
+      "value": true
+    },
+    {
+      "opc": "jump",
+      "conditional": true,
+      "target": 329
+    },
+    {
+      "opc": "expr",
+      "expr": "BOOL_CONST",
+      "value": false
+    },
+    {
+      "opc": "jump",
+      "conditional": "always",
+      "target": 330
+    },
+    {
+      "opc": "expr",
+      "expr": "BOOL_CONST",
+      "value": true
     },
     {
       "opc": "AssignStmt",
@@ -1565,170 +1678,146 @@
       "opc": "expr",
       "expr": "NUM_CONST",
       "value": "30"
-    }
-  ],
-  "functionDeclaration": {
-    "doSomething": {
-      "opc": "createMethodVoid",
-      "name": "doSomething",
-      "statements": [
-        {
-          "opc": "expr",
-          "expr": "STRING_CONST",
-          "value": "Hallo"
-        },
-        {"opc": "ShowTextAction"},
-        {
-          "opc": "expr",
-          "expr": "NUM_CONST",
-          "value": "30"
-        },
-        {
-          "opc": "expr",
-          "expr": "NUM_CONST",
-          "value": "1000"
-        },
-        {
-          "opc": "motorOnAction",
-          "speedOnly": false,
-          "port": "1",
-          "name": "W"
-        },
-        {
-          "opc": "motorStop",
-          "port": "1",
-          "name": "W"
-        },
-        {
-          "opc": "IfStatement",
-          "stmtList": [
-            {
-              "opc": "expr",
-              "expr": "BOOL_CONST",
-              "value": true
-            },
-            {
-              "opc": "IfTrueStatement",
-              "stmtList": [
-                {
-                  "opc": "expr",
-                  "expr": "BOOL_CONST",
-                  "value": true
-                },
-                {
-                  "opc": "flowControl",
-                  "conditional": false,
-                  "break": true,
-                  "kind": "IfStatement"
-                }
-              ]
-            },
-            {
-              "opc": "expr",
-              "expr": "BOOL_CONST",
-              "value": false
-            },
-            {
-              "opc": "flowControl",
-              "conditional": false,
-              "break": true,
-              "kind": "IfStatement"
-            }
-          ]
-        },
-        {
-          "opc": "createMethodIfReturn",
-          "stmtList": [
-            {
-              "opc": "expr",
-              "expr": "null"
-            },
-            {
-              "opc": "flowControl",
-              "conditional": false,
-              "break": true,
-              "kind": "createMethodCallReturn"
-            }
-          ]
-        },
-        {
-          "opc": "flowControl",
-          "conditional": false,
-          "break": true,
-          "kind": "createMethodCallVoid"
-        }
-      ]
     },
-    "doSomething2": {
-      "opc": "createMethodReturn",
-      "name": "doSomething2",
-      "statements": [
-        {
-          "opc": "IfStatement",
-          "stmtList": [
-            {
-              "opc": "expr",
-              "expr": "BOOL_CONST",
-              "value": true
-            },
-            {
-              "opc": "IfTrueStatement",
-              "stmtList": [
-                {
-                  "opc": "expr",
-                  "expr": "BOOL_CONST",
-                  "value": true
-                },
-                {
-                  "opc": "flowControl",
-                  "conditional": false,
-                  "break": true,
-                  "kind": "IfStatement"
-                }
-              ]
-            },
-            {
-              "opc": "expr",
-              "expr": "BOOL_CONST",
-              "value": false
-            },
-            {
-              "opc": "flowControl",
-              "conditional": false,
-              "break": true,
-              "kind": "IfStatement"
-            }
-          ]
-        },
-        {
-          "opc": "createMethodIfReturn",
-          "stmtList": [
-            {
-              "opc": "expr",
-              "expr": "NUM_CONST",
-              "value": "30"
-            },
-            {
-              "opc": "flowControl",
-              "conditional": false,
-              "break": true,
-              "kind": "createMethodCallReturn"
-            }
-          ]
-        },
-        {
-          "opc": "expr",
-          "expr": "NUM_CONST",
-          "value": "30"
-        },
-        {
-          "opc": "flowControl",
-          "conditional": false,
-          "break": true,
-          "kind": "createMethodCallReturn"
-        }
-      ],
-      "type": "NUMBER"
+    {
+      "opc": "stop"
+    },
+    {
+      "opc": "comment",
+      "target": "createMethodVoid"
+    },
+    {
+      "opc": "expr",
+      "expr": "STRING_CONST",
+      "value": "Hallo"
+    },
+    {
+      "opc": "ShowTextAction"
+    },
+    {
+      "opc": "expr",
+      "expr": "NUM_CONST",
+      "value": "30"
+    },
+    {
+      "opc": "expr",
+      "expr": "NUM_CONST",
+      "value": "1000"
+    },
+    {
+      "opc": "motorOnAction",
+      "speedOnly": false,
+      "port": "1",
+      "name": "W"
+    },
+    {
+      "opc": "motorStop",
+      "port": "1",
+      "name": "W"
+    },
+    {
+      "opc": "comment",
+      "target": "createMethodIfReturn"
+    },
+    {
+      "opc": "expr",
+      "expr": "BOOL_CONST",
+      "value": true
+    },
+    {
+      "opc": "jump",
+      "conditional": false,
+      "target": 369
+    },
+    {
+      "opc": "expr",
+      "expr": "BOOL_CONST",
+      "value": true
+    },
+    {
+      "opc": "jump",
+      "conditional": "always",
+      "target": 370
+    },
+    {
+      "opc": "expr",
+      "expr": "BOOL_CONST",
+      "value": false
+    },
+    {
+      "opc": "jump",
+      "conditional": false,
+      "target": 373
+    },
+    {
+      "opc": "expr",
+      "expr": "null"
+    },
+    {
+      "opc": "jump",
+      "conditional": "always",
+      "target": 373
+    },
+    {
+      "opc": "return",
+      "values": false
+    },
+    {
+      "opc": "comment",
+      "target": "createMethodReturn"
+    },
+    {
+      "opc": "comment",
+      "target": "createMethodIfReturn"
+    },
+    {
+      "opc": "expr",
+      "expr": "BOOL_CONST",
+      "value": true
+    },
+    {
+      "opc": "jump",
+      "conditional": false,
+      "target": 380
+    },
+    {
+      "opc": "expr",
+      "expr": "BOOL_CONST",
+      "value": true
+    },
+    {
+      "opc": "jump",
+      "conditional": "always",
+      "target": 381
+    },
+    {
+      "opc": "expr",
+      "expr": "BOOL_CONST",
+      "value": false
+    },
+    {
+      "opc": "jump",
+      "conditional": false,
+      "target": 384
+    },
+    {
+      "opc": "expr",
+      "expr": "NUM_CONST",
+      "value": "30"
+    },
+    {
+      "opc": "jump",
+      "conditional": "always",
+      "target": 385
+    },
+    {
+      "opc": "expr",
+      "expr": "NUM_CONST",
+      "value": "30"
+    },
+    {
+      "opc": "return",
+      "values": true
     }
-  }
+  ]
 }

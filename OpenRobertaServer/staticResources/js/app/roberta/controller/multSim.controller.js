@@ -78,20 +78,9 @@ define(['exports', 'message', 'util', 'progList.model', 'program.controller', 'p
                             dat.savedName = item[0];
                             extractedprograms[i] = dat;
                             var xmlTextProgram = dat.progXML;
-                            var configName;
-                            var xmlConfigText;
-                            if (dat.configName === undefined) {
-                                if (dat.confXML === undefined) {
-                                    configName = undefined;
-                                    xmlConfigText = undefined;
-                                } else {
-                                    configName = undefined;
-                                    xmlConfigText = dat.confXML;
-                                }
-                            } else {
-                                configName = dat.configName;
-                                xmlConfigText = dat.confXML;
-                            }
+                            let isNamedConfig = dat.configName !== (GUISTATE_C.getRobotGroup().toUpperCase() + 'basis') && dat.configName !== "";
+                            var configName = isNamedConfig ? dat.configName : undefined;
+                            var xmlConfigText = dat.configName !== "" ? dat.confXML : undefined;
                             var language = GUISTATE_C.getLanguage();
                             PROGRAM_M.runInSim(dat.savedName, configName, xmlTextProgram, xmlConfigText, language, function(result) {
                                 numberOfPrograms++;
@@ -127,16 +116,13 @@ define(['exports', 'message', 'util', 'progList.model', 'program.controller', 'p
         $("#showMultipleSimPrograms").modal('hide');
         const INITIAL_WIDTH = 0.5;
         SIM.init(programs, true, GUISTATE_C.getRobotGroup());
-        $('#debugMode, #simControlBreakPoint, #simControlStepOver, #simControlStepInto, #simVariables').hide();
+        $('#simCancel, #simControlStepOver, #simControlStepInto').hide();
         $(".sim").removeClass('hide');
-        $('#simButtonsCollapse').collapse({
-            'toggle': false
-        });
-        if ($("#blockly").hasClass("rightActive") && !$("#simDiv").hasClass("rightActive")) {
+        if ($("#blockly").hasClass("rightActive") && !$("#simButton").hasClass("rightActive")) {
             $('#blockly').closeRightView(function() {
                 $('#blockly').openRightView('sim', INITIAL_WIDTH);
             });
-        } else if (!$("#simDiv").hasClass("rightActive")) {
+        } else if (!$("#simButton").hasClass("rightActive")) {
             $('#blockly').openRightView('sim', INITIAL_WIDTH);
         }
     }

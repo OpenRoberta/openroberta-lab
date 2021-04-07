@@ -321,15 +321,6 @@ define(['exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socket
         $('#head-navigation-gallery').onWrap('click', 'a,.visible-xs', function(event) {
             $('#navbarCollapse').collapse('hide');
         });
-        $('#simButtonsCollapse').onWrap('click', 'a', function(event) {
-            $('#simButtonsCollapse').collapse('hide');
-        });
-        $('#navbarButtonsHead').onWrap('click', '', function(event) {
-            $('#simButtonsCollapse').collapse('hide');
-        });
-        $('#simButtonsHead').onWrap('click', '', function(event) {
-            $('#navbarCollapse').collapse('hide');
-        });
         if (GUISTATE_C.isPublicServerVersion()) {
             var feedbackButton = '<div href="#" id="feedbackButton" class="rightMenuButton" rel="tooltip" data-original-title="" title="">'
                 + '<span id="" class="feedbackButton typcn typcn-feedback"></span>'
@@ -538,40 +529,6 @@ define(['exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socket
             return false;
         }, 'tutorial clicked');
 
-        $('.sim-nav').onWrap('click', 'li:not(.disabled) a', function(event) {
-            $('.modal').modal('hide'); // head-navigation-sim-control
-            $('.menuSim').parent().removeClass('disabled'); //these two were in all cases
-            $("#simButtonsCollapse").collapse('hide'); //so I extracted them here
-            switch (event.target.id) {
-                case 'menuSimSimple':
-                    $('.simSimple').parent().addClass('disabled');
-                    SIM.setBackground(2, SIM.setBackground);
-                    break;
-                case 'menuSimDraw':
-                    $('.simDraw').parent().addClass('disabled');
-                    SIM.setBackground(3, SIM.setBackground);
-                    break;
-                case 'menuSimRoberta':
-                    $('.simRoberta').parent().addClass('disabled');
-                    SIM.setBackground(4, SIM.setBackground);
-                    break;
-                case 'menuSimRescue':
-                    $('.simRescue').parent().addClass('disabled');
-                    SIM.setBackground(5, SIM.setBackground);
-                    break;
-                case 'menuSimWRO':
-                    $('.simWRO').parent().addClass('disabled');
-                    SIM.setBackground(6, SIM.setBackground);
-                    break;
-                case 'menuSimMath':
-                    $('.simMath').parent().addClass('disabled');
-                    SIM.setBackground(7, SIM.setBackground);
-                    break;
-                default:
-                    break;
-            }
-        }, 'sim clicked');
-
         $('#menuTabProgram').onWrap('click', '', function(event) {
             if ($('#tabSimulation').hasClass('tabClicked')) {
                 $('.scroller-left').click();
@@ -614,34 +571,6 @@ define(['exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socket
                 window.open("https://www.roberta-home.de/index.php?id=135&L=1");
             }
         }, 'head navigation menu item clicked');
-
-        $('.simScene').onWrap('click', function(event) {
-            SIM.setBackground(-1, SIM.setBackground);
-            var scene = $("#simButtonsCollapse").collapse('hide');
-            $('.menuSim').parent().removeClass('disabled');
-            switch (scene) {
-                case 2:
-                    $('.simSimple').parent().addClass('disabled');
-                    break;
-                case 3:
-                    $('.simDraw').parent().addClass('disabled');
-                    break;
-                case 4:
-                    $('.simRoberta').parent().addClass('disabled');
-                    break;
-                case 5:
-                    $('.simRescue').parent().addClass('disabled');
-                    break;
-                case 6:
-                    $('.simWRO').parent().addClass('disabled');
-                    break;
-                case 7:
-                    $('.simMath').parent().addClass('disabled');
-                    break;
-                default:
-                    break;
-            }
-        }, 'simScene clicked');
 
         $('#startPopupBack').on('click', function(event) {
             $('#popup-robot-main').removeClass('hidden', 1000);
