@@ -175,6 +175,7 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
         generateTTSInitialization();
         generateGyroInitialization();
         generateDebugInitialization(mainTask);
+        init_rand_seed();
         nlIndent();
         return null;
     }
@@ -578,6 +579,7 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
 
     @Override
     public Void visitMathRandomIntFunct(MathRandomIntFunct<Void> mathRandomIntFunct) {
+        setRandSeedInit(true);
         Expr<Void> min = mathRandomIntFunct.getParam().get(0);
         Expr<Void> max = mathRandomIntFunct.getParam().get(1);
         this.sb.append("((rand() % (int) (");
