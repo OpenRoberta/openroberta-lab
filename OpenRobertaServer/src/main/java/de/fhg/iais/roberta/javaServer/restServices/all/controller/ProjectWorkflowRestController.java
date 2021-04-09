@@ -52,9 +52,9 @@ public class ProjectWorkflowRestController {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getSourceCode(@OraData DbSession dbSession, FullRestRequest fullRequest) {
         HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, fullRequest, true);
-        ProjectWorkflowRequest wfRequest = ProjectWorkflowRequest.make(fullRequest.getData());
-        ProjectSourceResponse response = ProjectSourceResponse.make();
         try {
+            ProjectWorkflowRequest wfRequest = ProjectWorkflowRequest.make(fullRequest.getData());
+            ProjectSourceResponse response = ProjectSourceResponse.make();
             response.setProgXML(wfRequest.getProgXML()); // always return the program, even if the workflow fails
             Project project = request2project(wfRequest, dbSession, httpSessionState, this.robotCommunicator, true, false);
             ProjectService.executeWorkflow("showsource", project);
@@ -70,6 +70,10 @@ public class ProjectWorkflowRestController {
             LOG.info("getSourceCode failed", e);
             Statistics.info("ProgramSource", "success", false);
             return UtilForREST.makeBaseResponseForError(Key.SERVER_ERROR, httpSessionState, this.robotCommunicator);
+        } finally {
+            if ( dbSession != null ) {
+                dbSession.close();
+            }
         }
     }
 
@@ -99,6 +103,10 @@ public class ProjectWorkflowRestController {
             LOG.info("getSimulationVMCode failed", e);
             Statistics.info("SimulationRun", "LoggedIn", httpSessionState.isUserLoggedIn(), "success", true);
             return UtilForREST.makeBaseResponseForError(Key.SERVER_ERROR, httpSessionState, this.robotCommunicator);
+        } finally {
+            if ( dbSession != null ) {
+                dbSession.close();
+            }
         }
     }
 
@@ -131,6 +139,10 @@ public class ProjectWorkflowRestController {
             LOG.info("runProgram failed", e);
             Statistics.info("ProgramRun", "LoggedIn", httpSessionState.isUserLoggedIn(), "success", false);
             return UtilForREST.makeBaseResponseForError(Key.SERVER_ERROR, httpSessionState, this.robotCommunicator);
+        } finally {
+            if ( dbSession != null ) {
+                dbSession.close();
+            }
         }
     }
 
@@ -164,6 +176,10 @@ public class ProjectWorkflowRestController {
             LOG.info("compileProgram failed", e);
             Statistics.info("ProgramCompile", "LoggedIn", httpSessionState.isUserLoggedIn(), "success", false);
             return UtilForREST.makeBaseResponseForError(Key.SERVER_ERROR, httpSessionState, this.robotCommunicator);
+        } finally {
+            if ( dbSession != null ) {
+                dbSession.close();
+            }
         }
     }
 
@@ -188,6 +204,10 @@ public class ProjectWorkflowRestController {
             LOG.info("runNative failed", e);
             Statistics.info("ProgramRunNative", "LoggedIn", httpSessionState.isUserLoggedIn(), "success", false);
             return UtilForREST.makeBaseResponseForError(Key.SERVER_ERROR, httpSessionState, this.robotCommunicator);
+        } finally {
+            if ( dbSession != null ) {
+                dbSession.close();
+            }
         }
     }
 
@@ -212,6 +232,10 @@ public class ProjectWorkflowRestController {
             LOG.info("compileNative failed", e);
             Statistics.info("ProgramCompileNative", "LoggedIn", httpSessionState.isUserLoggedIn(), "success", false);
             return UtilForREST.makeBaseResponseForError(Key.SERVER_ERROR, httpSessionState, this.robotCommunicator);
+        } finally {
+            if ( dbSession != null ) {
+                dbSession.close();
+            }
         }
     }
 
