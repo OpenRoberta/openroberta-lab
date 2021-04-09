@@ -71,15 +71,11 @@ import de.fhg.iais.roberta.visitor.lang.codegen.AbstractLanguageVisitor;
  * StringBuilder. <b>This representation is correct C++ code.</b> <br>
  */
 public abstract class AbstractCppVisitor extends AbstractLanguageVisitor {
-
-    private boolean randSeedInit;
-
     /**
      * initialize the cpp code generator visitor.
      */
     protected AbstractCppVisitor(List<List<Phrase<Void>>> programPhrases, ClassToInstanceMap<IProjectBean> beans) {
         super(programPhrases, beans);
-        setRandSeedInit(false);
     }
 
     @Override
@@ -607,7 +603,6 @@ public abstract class AbstractCppVisitor extends AbstractLanguageVisitor {
 
     @Override
     public Void visitMathRandomFloatFunct(MathRandomFloatFunct<Void> mathRandomFloatFunct) {
-        setRandSeedInit(true);
         this.sb.append("((double) rand() / (RAND_MAX))");
         return null;
     }
@@ -989,23 +984,5 @@ public abstract class AbstractCppVisitor extends AbstractLanguageVisitor {
 
                     )
                     .collect(entriesToMap()));
-    }
-
-    /**
-     * Puts random seed initializer code.
-     */
-    protected void init_rand_seed(){
-        if(isRandSeedInit()){
-            this.sb.append("srand (time(NULL));");
-            nlIndent();
-        }
-    }
-
-    protected boolean isRandSeedInit() {
-        return randSeedInit;
-    }
-
-    protected void setRandSeedInit(boolean randSeedInit) {
-        this.randSeedInit = randSeedInit;
     }
 }
