@@ -121,8 +121,6 @@ define(['exports', 'simulation.scene', 'simulation.constants', 'util', 'interpre
 
     function setBackground(num) {
         num = num || -1;
-        setPause(true);
-        $('#simControl').attr('data-original-title', Blockly.Msg.MENU_SIM_STOP_TOOLTIP);
         let configData = {};
         if (num === -1) {
             configData = exportConfigData();
@@ -140,10 +138,11 @@ define(['exports', 'simulation.scene', 'simulation.constants', 'util', 'interpre
         } else {
             currentBackground = num;
         }
-        setObstacle();
-        setRuler();
         var debug = robots[0].debug;
         var moduleName = 'simulation.robot.' + simRobotType;
+
+        removeMouseEvents();
+        resetSelection();
         require([moduleName], function(ROBOT) {
             createRobots(ROBOT, numRobots);
             for (var i = 0; i < robots.length; i++) {
@@ -152,10 +151,11 @@ define(['exports', 'simulation.scene', 'simulation.constants', 'util', 'interpre
             }
             scene.robots = robots;
         });
-        removeMouseEvents();
-        resetSelection();
-        scene.updateBackgrounds(imgObjectList[currentBackground]);
-        relatives2coordinates(configData);
+        let config = coordinates2relatives();
+        scene.resetAllCanvas(imgObjectList[currentBackground]);
+        relatives2coordinates(config);
+        setObstacle();
+        setRuler();
         scene.drawObstacles(highLightCorners);
         scene.drawColorAreas(highLightCorners);
         scene.drawRuler();
@@ -233,7 +233,7 @@ define(['exports', 'simulation.scene', 'simulation.constants', 'util', 'interpre
             if (value && !debugMode) {
                 $('#simControl').addClass('typcn-media-play-outline').removeClass('typcn-media-stop');
                 $('#simControl').attr('data-original-title', Blockly.Msg.MENU_SIM_START_TOOLTIP);
-            } else {
+            } else if (!value && !debugMode) {
                 $('#simControl').addClass('typcn-media-stop').removeClass('typcn-media-play-outline');
                 $('#simControl').attr('data-original-title', Blockly.Msg.MENU_SIM_STOP_TOOLTIP);
             }
@@ -271,6 +271,11 @@ define(['exports', 'simulation.scene', 'simulation.constants', 'util', 'interpre
                 robots[i].time = 0;
             }
         }
+        resetSelection();
+        scene.resetAllCanvas();
+        scene.drawColorAreas(highLightCorners);
+        scene.drawObstacles(highLightCorners);
+        scene.drawRuler();
     }
     exports.resetPose = resetPose;
 
@@ -292,7 +297,13 @@ define(['exports', 'simulation.scene', 'simulation.constants', 'util', 'interpre
 
     function addObstacle(shape) {
         let obstacle = addObject(shape, "obstacle", obstacleList);
+        if (selectedColorArea >= 0) {
+            highLightCorners = [];
+            updateColorAreaLayer();
+        }
+        resetSelection();
         selectedObstacle = obstacleList.length - 1;
+
         highLightCorners = calculateCorners(obstacle);
         updateObstacleLayer();
     }
@@ -300,14 +311,19 @@ define(['exports', 'simulation.scene', 'simulation.constants', 'util', 'interpre
 
     function addColorArea(shape) {
         let colorArea = addObject(shape, "colorArea", colorAreaList);
+        if (selectedObstacle >= 0) {
+            highLightCorners = [];
+            updateObstacleLayer();
+        }
+        resetSelection();
         selectedColorArea = colorAreaList.length - 1;
+
         highLightCorners = calculateCorners(colorArea);
         updateColorAreaLayer();
     }
     exports.addColorArea = addColorArea;
 
     function addObject(shape, type, objectList) {
-        resetSelection();
         $("#robotLayer").attr("tabindex", 0);
         $("#robotLayer").focus();
         let newObject = {};
@@ -460,6 +476,15 @@ define(['exports', 'simulation.scene', 'simulation.constants', 'util', 'interpre
     };
 
     function callbackOnTermination() {
+        if (!robots[0].endless && allInterpretersTerminated()) {
+            if (debugMode) {
+                $('#simControl').addClass('typcn-media-play-outline').removeClass('typcn-play');
+                $('#simStop').removeClass("disabled");
+            } else {
+                $('#simControl').addClass('typcn-media-play-outline').removeClass('typcn-media-stop');
+                $('#simControl').attr('data-original-title', Blockly.Msg.MENU_SIM_START_TOOLTIP);
+            }
+        }
         console.log("END of Sim");
     }
 
@@ -491,10 +516,7 @@ define(['exports', 'simulation.scene', 'simulation.constants', 'util', 'interpre
                 $('.dropdown.sim, .simScene').show();
                 $('#simImport').hide();
             } else {
-                $('.dropdown.sim, .simScene, #simImport, #simResetPose, #simButtonsHead, #simEditButtons').show();
-            }
-            if ($('#device-size').find('div:visible').first().attr('id')) {
-                $('#simButtonsHead').show();
+                $('.dropdown.sim, .simScene, #simImport, #simResetPose, #simEditButtons').show();
             }
         }
         interpreters = programs.map(function(x) {
@@ -609,7 +631,7 @@ define(['exports', 'simulation.scene', 'simulation.constants', 'util', 'interpre
         stepCounter += 1;
 
         for (var i = 0; i < numRobots; i++) {
-            if (!robots[i].pause && !pause) {
+            if ((robots[i] && !robots[i].pause) && !pause) {
                 if (!interpreters[i].isTerminated() && !reset) {
                     if (runRenderUntil[i] <= now) {
                         var delayMs = interpreters[i].run(now + dtRobot);
@@ -647,15 +669,6 @@ define(['exports', 'simulation.scene', 'simulation.constants', 'util', 'interpre
         }
         var renderTimeStart = new Date().getTime();
 
-        function allInterpretersTerminated() {
-            for (var i = 0; i < interpreters.length; i++) {
-                if (!interpreters[i].isTerminated()) {
-                    return false;
-                }
-            }
-            return true;
-        }
-
         function allPause() {
             for (var i = 0; i < robots.length; i++) {
                 if (!robots[i].pause) {
@@ -678,11 +691,23 @@ define(['exports', 'simulation.scene', 'simulation.constants', 'util', 'interpre
         renderTime = new Date().getTime() - renderTimeStart;
     }
 
+    function allInterpretersTerminated() {
+        for (var i = 0; i < interpreters.length; i++) {
+            if (!interpreters[i].isTerminated()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     function reloadProgram() {
-        $('.simForward').removeClass('typcn-media-pause');
-        $('.simForward').addClass('typcn-media-play');
-        $('#simControl').addClass('typcn-media-play-outline').removeClass('typcn-media-stop');
-        $('#simControl').attr('data-original-title', Blockly.Msg.MENU_SIM_START_TOOLTIP);
+        if (debugMode) {
+            $('#simControl').addClass('typcn-media-play').removeClass('typcn-play-outline');
+            $('#simStop').addClass("disabled");
+        } else {
+            $('#simControl').addClass('typcn-media-play-outline').removeClass('typcn-media-stop');
+            $('#simControl').attr('data-original-title', Blockly.Msg.MENU_SIM_START_TOOLTIP);
+        }
     }
 
     //set standard obstacle
@@ -691,7 +716,7 @@ define(['exports', 'simulation.scene', 'simulation.constants', 'util', 'interpre
             obstacleList.push(defaultObstacle);
         }
         if (obstacleList.length == 1) {
-            var standObst = obstacleList[0];
+            var standObst = {};
             switch (currentBackground) {
                 case 0:
                 case 1:
@@ -759,6 +784,8 @@ define(['exports', 'simulation.scene', 'simulation.constants', 'util', 'interpre
                     standObst.img = null;
                     standObst.form = "rectangle";
             }
+            standObst.type = "obstacle";
+            obstacleList[0] = standObst;
         }
     }
 
@@ -786,6 +813,9 @@ define(['exports', 'simulation.scene', 'simulation.constants', 'util', 'interpre
         var keyCode = e.keyCode;
         let selectedObject = selectedObstacle >= 0 ? obstacleList[selectedObstacle] : selectedColorArea >= 0 ? colorAreaList[selectedColorArea] : null;
         if (selectedRobot >= 0) {
+            if (robots[selectedRobot].drawWidth) {
+                robots[selectedRobot].canDraw = false;
+            }
             switch (keyName) {
                 case "ArrowUp":
                     robots[selectedRobot].pose.x += Math.cos(robots[selectedRobot].pose.theta);
@@ -810,7 +840,6 @@ define(['exports', 'simulation.scene', 'simulation.constants', 'util', 'interpre
                     e.stopPropagation();
                     break;
                 default:
-                // nothing to do so far
             }
         } else if (selectedObject) {
             const shift = 5;
@@ -971,14 +1000,11 @@ define(['exports', 'simulation.scene', 'simulation.constants', 'util', 'interpre
             if (boolDown) {
                 downRobot = i;
                 if (selectedRobot !== i) {
+                    $("#brick" + robotIndex).hide();
                     robotIndex = i;
-                    $("#brick" + i).hide();
                     $("#brick" + robotIndex).show();
                     if ($("#robotIndex")[0]) {
                         $("#robotIndex")[0][i].selected = true;
-                    }
-                    if (robots[i].drawWidth) {
-                        robots[i].canDraw = false;
                     }
                     highLightCorners = [];
                     if (selectedObstacle >= 0) {
@@ -994,6 +1020,9 @@ define(['exports', 'simulation.scene', 'simulation.constants', 'util', 'interpre
                     downRuler = false;
                 }
                 selectedRobot = i;
+                if (robots[i].drawWidth) {
+                    robots[i].canDraw = false;
+                }
                 return;
             }
         }
@@ -1023,14 +1052,14 @@ define(['exports', 'simulation.scene', 'simulation.constants', 'util', 'interpre
                 downObstacle = i;
                 if (selectedObstacle !== i) {
                     enableChangeObjectButtons();
-                    highLightCorners = calculateCorners(obstacleList[i]);
-                    selectedObstacle = i;
-
                     selectedRobot = -1;
                     if (selectedColorArea >= 0) {
                         selectedColorArea = -1;
+                        highLightCorners = [];
                         updateColorAreaLayer();
                     }
+                    highLightCorners = calculateCorners(obstacleList[i]);
+                    selectedObstacle = i;
                     downCorner = -1;
                     downRuler = false;
                     updateObstacleLayer();
@@ -1054,13 +1083,14 @@ define(['exports', 'simulation.scene', 'simulation.constants', 'util', 'interpre
                 downColorArea = i;
                 if (selectedColorArea !== i) {
                     enableChangeObjectButtons();
-                    highLightCorners = calculateCorners(colorAreaList[i]);
-                    selectedColorArea = i;
                     selectedRobot = -1;
                     if (selectedObstacle >= 0) {
                         selectedObstacle = -1;
+                        highLightCorners = [];
                         updateObstacleLayer();
                     }
+                    highLightCorners = calculateCorners(colorAreaList[i]);
+                    selectedColorArea = i;
                     downCorner = -1;
                     downRuler = false;
                     updateColorAreaLayer();
@@ -1085,6 +1115,16 @@ define(['exports', 'simulation.scene', 'simulation.constants', 'util', 'interpre
             downCorner = -1;
             highLightCorners = [];
             return;
+        }
+        if (selectedObstacle >= 0) {
+            highLightCorners = [];
+            updateObstacleLayer();
+            disableChangeObjectButtons();
+        }
+        if (selectedColorArea >= 0) {
+            highLightCorners = [];
+            updateColorAreaLayer();
+            disableChangeObjectButtons();
         }
         resetSelection();
     }
@@ -1144,7 +1184,6 @@ define(['exports', 'simulation.scene', 'simulation.constants', 'util', 'interpre
         downRobot = -1;
         downColorArea = -1;
         downObstacle = -1;
-        updateColorAreaLayer();
     }
 
     function handleMouseUp(e) {
@@ -1166,9 +1205,7 @@ define(['exports', 'simulation.scene', 'simulation.constants', 'util', 'interpre
     }
 
     function updateColorAreaLayer() {
-        scene.updateBackgrounds();
         scene.drawColorAreas(highLightCorners);
-        updateObstacleLayer();
     }
 
     function updateObstacleLayer() {
@@ -1178,7 +1215,6 @@ define(['exports', 'simulation.scene', 'simulation.constants', 'util', 'interpre
 
     function handleMouseMove(e) {
         e.preventDefault();
-        e.stopPropagation();
         $("#robotLayer").css('cursor', 'default');
         var X = e.clientX || e.originalEvent.touches[0].pageX;
         var Y = e.clientY || e.originalEvent.touches[0].pageY;
@@ -1196,18 +1232,18 @@ define(['exports', 'simulation.scene', 'simulation.constants', 'util', 'interpre
             let hoverRobot = (dx * dx + dy * dy < robots[i].mouse.r * robots[i].mouse.r);
             if (hoverRobot) {
                 $("#robotLayer").css('cursor', 'pointer');
-                if (downRobot === i && selectedRobot === i) {
-                    robots[i].pose.xOld = robots[i].pose.x;
-                    robots[i].pose.yOld = robots[i].pose.y;
-                    robots[i].pose.x += dx;
-                    robots[i].pose.y += dy;
-                    robots[i].mouse.rx += dx;
-                    robots[i].mouse.ry += dy;
-                    return;
-                }
-                break;
+            }
+            if (downRobot === i && selectedRobot === i) {
+                robots[i].pose.xOld = robots[i].pose.x;
+                robots[i].pose.yOld = robots[i].pose.y;
+                robots[i].pose.x += dx;
+                robots[i].pose.y += dy;
+                robots[i].mouse.rx += dx;
+                robots[i].mouse.ry += dy;
+                return;
             }
         }
+
         dx = (mouseX - startX);
         dy = (mouseY - startY);
         startX = mouseX;
@@ -1472,7 +1508,7 @@ define(['exports', 'simulation.scene', 'simulation.constants', 'util', 'interpre
             zoom = true;
         }
         if (zoom) {
-            scene.drawBackground();
+            scene.resizeBackgrounds(scale);
             scene.drawRuler();
             scene.drawObstacles(highLightCorners);
             scene.drawColorAreas(highLightCorners);
@@ -1494,7 +1530,7 @@ define(['exports', 'simulation.scene', 'simulation.constants', 'util', 'interpre
             var scaleX = scene.playground.w / (ground.w + 20);
             var scaleY = scene.playground.h / (ground.h + 20);
             scale = Math.min(scaleX, scaleY) - 0.05;
-            scene.updateBackgrounds();
+            scene.resizeBackgrounds(scale);
             scene.drawObstacles(highLightCorners);
             scene.drawColorAreas(highLightCorners);
             scene.drawRuler();
@@ -1535,9 +1571,6 @@ define(['exports', 'simulation.scene', 'simulation.constants', 'util', 'interpre
             handleMouseWheel(e);
         });
         $("#canvasDiv").draggable();
-        $("#robotLayer").on("dblclick", function(e) {
-            handleDoubleMouseClick(e);
-        });
         $("#robotLayer").attr("tabindex", 0);
         $("#robotLayer").on("click touchstart", function(e) {
             $("#robotLayer").attr("tabindex", 0);
@@ -1546,6 +1579,13 @@ define(['exports', 'simulation.scene', 'simulation.constants', 'util', 'interpre
         });
         $("#blocklyDiv").on("click touchstart", setFocusBlocklyDiv);
         $("#robotLayer").on("keydown", handleKeyEvent);
+        $("#robotLayer").on("keyup", function() {
+            if (selectedRobot >= 0 && robots[selectedRobot].drawWidth) {
+                robots[selectedRobot].pose.xOld = robots[selectedRobot].pose.x;
+                robots[selectedRobot].pose.yOld = robots[selectedRobot].pose.y;
+                robots[selectedRobot].canDraw = true;
+            }
+        });
         $("#robotIndex").on('change', function(e) {
             $("#brick" + robotIndex).hide();
             robotIndex = e.target.selectedIndex;
@@ -1571,7 +1611,6 @@ define(['exports', 'simulation.scene', 'simulation.constants', 'util', 'interpre
 
     function initScene() {
         scene = new Scene(imgObjectList[currentBackground], robots, imgPattern, ruler);
-        scene.updateBackgrounds();
         scene.drawObstacles(highLightCorners);
         scene.drawColorAreas(highLightCorners);
         scene.drawRuler();
@@ -1642,7 +1681,6 @@ define(['exports', 'simulation.scene', 'simulation.constants', 'util', 'interpre
     }
 
     function importConfigData() {
-        console.log(scale);
         $('#backgroundFileSelector').val(null);
         $('#backgroundFileSelector').attr("accept", ".json");
         $('#backgroundFileSelector').trigger('click'); // opening dialog
@@ -1654,6 +1692,7 @@ define(['exports', 'simulation.scene', 'simulation.constants', 'util', 'interpre
                     try {
                         const configData = JSON.parse(e.target.result);
                         relatives2coordinates(configData);
+                        resetSelection();
                         resetScene(obstacleList || [], colorAreaList || [])
                         initScene();
                     } catch (ex) {
@@ -1674,8 +1713,8 @@ define(['exports', 'simulation.scene', 'simulation.constants', 'util', 'interpre
     exports.exportConfigData = exportConfigData;
 
     function coordinates2relatives() {
-        let height = $('#uniDiv').height();
-        let width = $('#uniDiv').width();
+        let height = $('#unitBackgroundLayer').height();
+        let width = $('#unitBackgroundLayer').width();
         let relatives = {};
         function calculateShape(object) {
             switch (object.form) {
@@ -1739,8 +1778,8 @@ define(['exports', 'simulation.scene', 'simulation.constants', 'util', 'interpre
     }
 
     function relatives2coordinates(relatives) {
-        let height = $('#uniDiv').height();
-        let width = $('#uniDiv').width();
+        let height = $('#unitBackgroundLayer').height();
+        let width = $('#unitBackgroundLayer').width();
         function calculateShape(object) {
             switch (object.form) {
                 case "rectangle":

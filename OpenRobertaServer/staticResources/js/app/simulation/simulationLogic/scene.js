@@ -17,7 +17,9 @@ define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constan
         this.ruler = ruler;
         this.pattern = pattern;
         this.uCtx = $('#unitBackgroundLayer')[0].getContext('2d'); // unit context
+        this.udCtx = $('#unitDrawBackgroundLayer')[0].getContext('2d'); // unit draw context
         this.bCtx = $('#backgroundLayer')[0].getContext('2d'); // background context
+        this.dCtx = $('#drawLayer')[0].getContext('2d'); // background context
         this.mCtx = $('#rulerLayer')[0].getContext('2d'); // ruler == *m*easurement context
         this.oCtx = $('#objectLayer')[0].getContext('2d'); // object context
         this.rCtx = $('#robotLayer')[0].getContext('2d'); // robot context
@@ -42,15 +44,46 @@ define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constan
             robotIndexColour += "</select>";
             $("#constantValue").append('<div><label>Robot</label><span style="width:auto">' + robotIndexColour + '</span></div>');
         }
+        this.resetAllCanvas(this.backgroundImg);
     }
 
-    Scene.prototype.updateBackgrounds = function(opt_background) {
-        if (opt_background) {
-            this.backgroundImg = opt_background;
+    Scene.prototype.resetAllCanvas = function(opt_img) {
+        this.backgroundImg = opt_img || this.backgroundImg;
+        let resetUnified = opt_img || false;
+        let sc = SIM.getScale();
+        var left = (this.playground.w - (this.backgroundImg.width + 20) * sc) / 2.0;
+        var top = (this.playground.h - (this.backgroundImg.height + 20) * sc) / 2.0;
+        var w = (this.backgroundImg.width + 20) * sc;
+        var h = (this.backgroundImg.height + 20) * sc;
+        $('#canvasDiv').css({
+            top: top + 'px',
+            left: left + 'px',
+        });
+        $('.canvasSim').each(function() {
+            if ($(this).hasClass("unified")) {
+                if (resetUnified) {
+                    this.width = w / sc;
+                    this.height = h / sc;
+                }
+            } else {
+                this.width = w;
+                this.height = h;
+            }
+        });
+        if (resetUnified) {
+            this.uCtx.drawImage(this.backgroundImg, 10, 10, this.backgroundImg.width, this.backgroundImg.height);
+            this.drawPattern(this.uCtx, this.pattern);
         }
-        this.drawBackground(1, this.uCtx);
-        this.drawBackground();
-    };
+        this.bCtx.drawImage($("#unitBackgroundLayer")[0], 0, 0, this.backgroundImg.width + 20, this.backgroundImg.height + 20, 0, 0, w, h);
+    }
+
+    Scene.prototype.resizeBackgrounds = function(sc) {
+        let w = $("#unitDrawBackgroundLayer").width();
+        let h = $("#unitDrawBackgroundLayer").height();
+        this.resetAllCanvas();
+        // redraw drawings
+        this.dCtx.drawImage($("#unitDrawBackgroundLayer")[0], 0, 0, w, h, 0, 0, w * sc, h * sc);
+    }
 
     Scene.prototype.drawBackground = function(option_scale, option_context) {
         var ctx = option_context || this.bCtx;
@@ -62,6 +95,8 @@ define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constan
         if (option_context) { //unified background
             $('#unitBackgroundLayer').get(0).width = w;
             $('#unitBackgroundLayer').get(0).height = h;
+            $('#unitDrawBackgroundLayer').get(0).width = w;
+            $('#unitDrawBackgroundLayer').get(0).height = h;
         } else {
             ctx.clearRect(SIM.getGround().x - 20, SIM.getGround().y - 20, SIM.getGround().w + 40, SIM.getGround().h + 40);
         }
@@ -78,16 +113,7 @@ define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constan
         ctx.save();
         ctx.scale(sc, sc);
         if (this.backgroundImg) {
-            if (getFnName(this.robots[0].constructor).indexOf("Calliope") < 0 && getFnName(this.robots[0].constructor) != 'Microbit') {
-                ctx.beginPath();
-                if (this.pattern) {
-                    var patternImg = this.pattern;
-                    var pattern = ctx.createPattern(patternImg, 'repeat');
-                    ctx.strokeStyle = pattern;
-                }
-                ctx.lineWidth = 10;
-                ctx.strokeRect(5, 5, this.backgroundImg.width + 10, this.backgroundImg.height + 10);
-            }
+            this.drawPattern(ctx, this.pattern);
             ctx.drawImage(this.backgroundImg, 10, 10, this.backgroundImg.width, this.backgroundImg.height);
         }
     };
@@ -112,6 +138,20 @@ define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constan
     };
 
     Scene.prototype.drawColorAreas = function(highLight) {
+        let w = (this.backgroundImg.width + 20);
+        let h = (this.backgroundImg.height + 20);
+        this.uCtx.clearRect(0, 0, w, h);
+        this.uCtx.beginPath();
+        this.drawPattern(this.uCtx, this.pattern);
+
+        this.uCtx.drawImage(this.backgroundImg, 10, 10, this.backgroundImg.width, this.backgroundImg.height);
+        let wb = w * SIM.getScale();
+        let hb = h * SIM.getScale();
+        this.bCtx.save();
+        this.bCtx.setTransform(1, 0, 0, 1, 0, 0);
+        this.bCtx.clearRect(0, 0, wb, hb);
+        this.bCtx.drawImage($("#unitBackgroundLayer")[0], 0, 0, w, h, 0, 0, wb, hb);
+        this.bCtx.restore();
         this.drawObjects(this.bCtx, SIM.getColorAreaList(), highLight, false, this.uCtx);
     };
 
@@ -172,17 +212,17 @@ define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constan
         }
         if (highLight) {
             for (let c in highLight) {
-                this.oCtx.restore();
-                this.oCtx.save();
-                this.oCtx.scale(SIM.getScale(), SIM.getScale());
-                this.oCtx.beginPath();
-                this.oCtx.lineWidth = 2;
-                this.oCtx.shadowBlur = 0;
-                this.oCtx.strokeStyle = "gray";
-                this.oCtx.arc(highLight[c].x, highLight[c].y, C.CORNER_RADIUS, 0, 2 * Math.PI);
-                this.oCtx.fillStyle = "black";
-                this.oCtx.stroke();
-                this.oCtx.fill();
+                ctx.restore();
+                ctx.save();
+                ctx.scale(SIM.getScale(), SIM.getScale());
+                ctx.beginPath();
+                ctx.lineWidth = 2;
+                ctx.shadowBlur = 0;
+                ctx.strokeStyle = "gray";
+                ctx.arc(highLight[c].x, highLight[c].y, C.CORNER_RADIUS, 0, 2 * Math.PI);
+                ctx.fillStyle = "black";
+                ctx.stroke();
+                ctx.fill();
             }
         }
     }
@@ -215,6 +255,9 @@ define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constan
                 }
             }
         }
+        if (SIM.getDebugMode()) {
+            drawVariables();
+        }
         this.rCtx.scale(SIM.getScale(), SIM.getScale());
         this.rCtx.save();
 
@@ -235,7 +278,9 @@ define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constan
             this.drawMbed();
             return;
         }
-        this.rCtx.clearRect(0, 0, C.MAX_WIDTH / SIM.getScale(), C.MAX_HEIGHT / SIM.getScale());
+        this.rCtx.clearRect(SIM.getGround().x - 20, SIM.getGround().y - 20, SIM.getGround().w + 40, SIM.getGround().h + 40);
+        this.dCtx.restore();
+        this.dCtx.save();
         for (var r = 0; r < this.numprogs; r++) {
             this.rCtx.restore();
             this.rCtx.save();
@@ -289,14 +334,7 @@ define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constan
                     }
                 }
                 if (SIM.getDebugMode()) {
-                    var variables = SIM.getSimVariables()
-                    if (Object.keys(variables).length > 0) {
-                        $('#notConstantValue').append('<div><label>Variables</label></div>');
-                        for (var v in variables) {
-                            var value = variables[v][0];
-                            addVariableValue(v, value);
-                        }
-                    }
+                    drawVariables();
                 }
             }
             this.rCtx.scale(SIM.getScale(), SIM.getScale());
@@ -516,27 +554,30 @@ define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constan
             }
 
             //this.rCtx.stroke();
-            this.rCtx.lineDashOffset = 0;
-            this.rCtx.setLineDash([]);
             if (this.robots[r].canDraw) {
-                this.bCtx.lineCap = 'round';
-                this.bCtx.beginPath();
-                this.bCtx.lineWidth = this.robots[r].drawWidth;
-                this.bCtx.strokeStyle = this.robots[r].drawColor;
-                this.bCtx.moveTo(this.robots[r].pose.xOld, this.robots[r].pose.yOld);
-                this.bCtx.lineTo(this.robots[r].pose.x, this.robots[r].pose.y);
-                this.bCtx.stroke();
-                this.uCtx.beginPath();
-                this.uCtx.lineCap = 'round';
-                this.uCtx.lineWidth = this.robots[r].drawWidth;
-                this.uCtx.strokeStyle = this.robots[r].drawColor;
-                this.uCtx.moveTo(this.robots[r].pose.xOld, this.robots[r].pose.yOld);
-                this.uCtx.lineTo(this.robots[r].pose.x, this.robots[r].pose.y);
-                this.uCtx.stroke();
+                this.dCtx.scale(SIM.getScale(), SIM.getScale());
+                this.dCtx.beginPath();
+
+                this.dCtx.lineCap = 'round';
+                this.dCtx.lineWidth = this.robots[r].drawWidth;
+                this.dCtx.strokeStyle = this.robots[r].drawColor;
+                this.dCtx.moveTo(this.robots[r].pose.xOld, this.robots[r].pose.yOld);
+                this.dCtx.lineTo(this.robots[r].pose.x, this.robots[r].pose.y);
+                this.dCtx.stroke();
+                this.udCtx.beginPath();
+                this.udCtx.lineCap = 'round';
+                this.udCtx.lineWidth = this.robots[r].drawWidth;
+                this.udCtx.strokeStyle = this.robots[r].drawColor;
+                this.udCtx.moveTo(this.robots[r].pose.xOld, this.robots[r].pose.yOld);
+                this.udCtx.lineTo(this.robots[r].pose.x, this.robots[r].pose.y);
+                this.udCtx.stroke();
                 this.robots[r].pose.xOld = this.robots[r].pose.x;
                 this.robots[r].pose.yOld = this.robots[r].pose.y;
+                this.dCtx.restore();
+                this.dCtx.save();
             }
         }
+        this.dCtx.restore();
     };
 
     Scene.prototype.updateSensorValues = function(running) {
@@ -732,11 +773,15 @@ define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constan
                 values.color = {};
                 values.light = {};
                 for (var s in colorSensors) {
-                    var red = 0;
-                    var green = 0;
-                    var blue = 0;
-                    var colors = this.uCtx.getImageData(Math.round(colorSensors[s].rx - 3), Math.round(colorSensors[s].ry - 3), 6, 6);
-                    var out = [0, 4, 16, 20, 24, 44, 92, 116, 120, 124, 136, 140]; // outside the circle
+                    let red = 0;
+                    let green = 0;
+                    let blue = 0;
+                    let x = Math.round(colorSensors[s].rx - 3);
+                    let y = Math.round(colorSensors[s].ry - 3);
+                    let colors = this.uCtx.getImageData(x, y, 6, 6);
+                    let colorsD = this.udCtx.getImageData(x, y, 6, 6);
+                    mergeDrawings(colors, colorsD);
+                    let out = [0, 4, 16, 20, 24, 44, 92, 116, 120, 124, 136, 140]; // outside the circle
                     for (var j = 0; j < colors.data.length; j += 24) {
                         for (var i = j; i < j + 24; i += 4) {
                             if (out.indexOf(i) < 0) {
@@ -893,6 +938,8 @@ define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constan
                         var green = 0;
                         var blue = 0;
                         var colors = this.uCtx.getImageData(Math.round(infraredSensors[s][side].rx - 3), Math.round(infraredSensors[s][side].ry - 3), 6, 6);
+                        var colorsD = this.udCtx.getImageData(Math.round(infraredSensors[s][side].rx - 3), Math.round(infraredSensors[s][side].ry - 3), 6, 6);
+                        mergeDrawings(colors, colorsD);
                         var out = [0, 4, 16, 20, 24, 44, 92, 116, 120, 124, 136, 140]; // outside the circle
                         for (var j = 0; j < colors.data.length; j += 24) {
                             for (var i = j; i < j + 24; i += 4) {
@@ -1022,12 +1069,47 @@ define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constan
             }
             values.frameTime = SIM.getDt();
         }
+
+        function mergeDrawings(colors, colorsD) {
+            for (var i = 0; i <= colors.data.length; i += 4) {
+                if (colorsD.data[i + 3] === 255) {
+                    for (var j = i; j < i + 3; j++) {
+                        colors.data[j] = colorsD.data[j];
+                    }
+                }
+            }
+        }
     };
+
+    Scene.prototype.drawPattern = function(ctx, pattern) {
+        if (this.robots && (getFnName(this.robots[0].constructor).indexOf("Calliope") >= 0 || getFnName(this.robots[0].constructor) === 'Microbit')) {
+            return;
+        }
+        ctx.beginPath();
+        if (pattern) {
+            var patternImg = pattern;
+            var pattern = ctx.createPattern(patternImg, 'repeat');
+            ctx.strokeStyle = pattern;
+        }
+        ctx.lineWidth = 10;
+        ctx.strokeRect(5, 5, this.backgroundImg.width + 10, this.backgroundImg.height + 10);
+    }
 
     function getFnName(fn) {
         var f = typeof fn == 'function';
         var s = f && ((fn.name && ['', fn.name]) || fn.toString().match(/function ([^\(]+)/));
         return (!f && 'not a function') || (s && s[1] || 'anonymous');
+    }
+
+    function drawVariables() {
+        var variables = SIM.getSimVariables()
+        if (Object.keys(variables).length > 0) {
+            $('#notConstantValue').append('<div><label>Variables</label></div>');
+            for (var v in variables) {
+                var value = variables[v][0];
+                addVariableValue(v, value);
+            }
+        }
     }
 
     function addVariableValue(name, value) {

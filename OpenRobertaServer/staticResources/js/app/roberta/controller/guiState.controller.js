@@ -1125,10 +1125,10 @@ define(['exports', 'util', 'message', 'guiState.model', 'progHelp.controller', '
     function checkSim() {
         if (GUISTATE.gui.sim == true) {
             $('#menuRunSim').parent().parent().removeClass('disabled');
-            $('#simButton').show();
+            $('#simButton, #simDebugButton').show();
         } else {
             $('#menuRunSim').parent().parent().addClass('disabled');
-            $('#simButton').hide();
+            $('#simButton, #simDebugButton').hide();
         }
         if (GUISTATE.gui.multipleSim == true) {
             $('#menuRunMulipleSim').parent().parent().removeClass('unavailable');

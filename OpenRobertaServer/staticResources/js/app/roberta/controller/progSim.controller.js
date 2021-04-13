@@ -36,11 +36,11 @@ define(['exports', 'message', 'log', 'util', 'simulation.simulation', 'simulatio
 
             $('#simRobotModal').removeClass("modal-backdrop");
 
-            $('#simCancel').onWrap('click', function(event) {
-                $('#simCancel').addClass("disabled");
+            $('#simStop').onWrap('click', function(event) {
+                $('#simStop').addClass("disabled");
                 $('#simControl').addClass('typcn-media-play-outline').removeClass('typcn-media-play');
                 SIM.stopProgram();
-            }, 'simCancel clicked');
+            }, 'simStop clicked');
             $('#simControl').onWrap('click', function(event) {
                 event.stopPropagation();
                 if (SIM.getNumRobots() == 1) {
@@ -61,8 +61,12 @@ define(['exports', 'message', 'log', 'util', 'simulation.simulation', 'simulatio
                             PROGRAM.runInSim(GUISTATE_C.getProgramName(), configName, xmlTextProgram, xmlConfigText, language, function(result) {
                                 if (result.rc == "ok") {
                                     MSG.displayMessage("MESSAGE_EDIT_START", "TOAST", GUISTATE_C.getProgramName());
-                                    $('#simControl').addClass('typcn-media-stop').removeClass('typcn-media-play-outline');
-                                    $('#simControl').attr('data-original-title', Blockly.Msg.MENU_SIM_STOP_TOOLTIP);
+                                    if (SIM.getDebugMode()) {
+                                        $('#simControl').addClass('typcn-media-play').removeClass('typcn-media-play-outline');
+                                    } else {
+                                        $('#simControl').addClass('typcn-media-stop').removeClass('typcn-media-play-outline');
+                                        $('#simControl').attr('data-original-title', Blockly.Msg.MENU_SIM_STOP_TOOLTIP);
+                                    }
                                     setTimeout(function() {
                                         SIM.setPause(false);
                                     }, 500);
@@ -137,8 +141,6 @@ define(['exports', 'message', 'log', 'util', 'simulation.simulation', 'simulatio
                     bottom: 'inherit'
                 });
                 $('#simValuesModal').draggable();
-
-                $("#simButtonsCollapse").collapse('hide');
             }, 'simValues clicked');
 
             $('#simResetPose').onWrap('click', function(event) {
@@ -214,12 +216,11 @@ define(['exports', 'message', 'log', 'util', 'simulation.simulation', 'simulatio
             if (($('#simButton').hasClass('rightActive') && !debug) || ($('#simDebugButton').hasClass('rightActive') && debug)) {
                 SIM.cancel();
                 $('#simControl').addClass('typcn-media-play-outline').removeClass('typcn-media-play');
-                $('#debugMode').attr('data-original-title', Blockly.Msg.MENU_DEBUG_START_TOOLTIP).hide();
                 $('#blockly').closeRightView(function() {
                     $('.nav > li > ul > .robotType').removeClass('disabled');
                     $('.' + GUISTATE_C.getRobot()).addClass('disabled');
                 });
-                $('#simCancel,  #simControlStepOver,#simControlStepInto').hide();
+                $('#simStop, #simControlStepOver,#simControlStepInto').hide();
                 SIM.endDebugging();
             } else {
                 var xmlProgram = Blockly.Xml.workspaceToDom(blocklyWorkspace);
@@ -234,10 +235,14 @@ define(['exports', 'message', 'log', 'util', 'simulation.simulation', 'simulatio
                         SIM.init([result], true, GUISTATE_C.getRobotGroup());
                         $('#simControl').addClass('typcn-media-play-outline').removeClass('typcn-media-play');
                         if (SIM.getNumRobots() === 1 && debug) {
-                            $('#simCancel, #simControlStepOver, #simControlStepInto').show();
+                            $('#simStop, #simControlStepOver, #simControlStepInto').show();
+                            $('#simControl').attr('data-original-title', Blockly.Msg.MENU_DEBUG_STEP_BREAKPOINT_TOOLTIP);
+                            $('#simControl').addClass("blue");
                             SIM.updateDebugMode(true);
                         } else {
-                            $('#simCancel, #simControlStepOver, #simControlStepInto').hide();
+                            $('#simStop, #simControlStepOver, #simControlStepInto').hide();
+                            $('#simControl').attr('data-original-title', Blockly.Msg.MENU_SIM_START_TOOLTIP);
+                            $('#simControl').removeClass("blue");
                             SIM.endDebugging();
                         }
                         if (TOUR_C.getInstance() && TOUR_C.getInstance().trigger) {
@@ -271,14 +276,13 @@ define(['exports', 'message', 'log', 'util', 'simulation.simulation', 'simulatio
                         SIM.init([result], false, GUISTATE_C.getRobotGroup());
                     }
                     $('#simControl').removeClass('typcn-media-play-outline').addClass('typcn-media-play');
-                    $('#simCancel').removeClass('disabled');
+                    $('#simStop').removeClass('disabled');
                 });
             } else if ($('#simControl').hasClass('typcn-media-play')) {
                 SIM.setPause(false);
                 SIM.interpreterAddEvent(event);
             } else {
                 $('#simControl').addClass('typcn-media-play-outline').removeClass('typcn-media-play');
-                $('#simControl').attr('data-original-title', Blockly.Msg.MENU_SIM_START_TOOLTIP);
                 SIM.stopProgram();
             }
         }

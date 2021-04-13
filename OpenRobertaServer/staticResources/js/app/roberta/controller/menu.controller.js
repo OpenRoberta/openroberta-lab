@@ -321,15 +321,6 @@ define(['exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socket
         $('#head-navigation-gallery').onWrap('click', 'a,.visible-xs', function(event) {
             $('#navbarCollapse').collapse('hide');
         });
-        $('#simButtonsCollapse').onWrap('click', 'a', function(event) {
-            $('#simButtonsCollapse').collapse('hide');
-        });
-        $('#navbarButtonsHead').onWrap('click', '', function(event) {
-            $('#simButtonsCollapse').collapse('hide');
-        });
-        $('#simButtonsHead').onWrap('click', '', function(event) {
-            $('#navbarCollapse').collapse('hide');
-        });
         if (GUISTATE_C.isPublicServerVersion()) {
             var feedbackButton = '<div href="#" id="feedbackButton" class="rightMenuButton" rel="tooltip" data-original-title="" title="">'
                 + '<span id="" class="feedbackButton typcn typcn-feedback"></span>'

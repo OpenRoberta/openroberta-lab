@@ -1,4 +1,4 @@
-define([ 'simulation.simulation', 'simulation.robot.mbed' ], function(SIM, Mbed) {
+define(['simulation.simulation', 'simulation.robot.mbed'], function(SIM, Mbed) {
 
     /**
      * Creates a new Calliope device for a simulation.
@@ -12,46 +12,46 @@ define([ 'simulation.simulation', 'simulation.robot.mbed' ], function(SIM, Mbed)
         Mbed.call(this, pose, num, robotBehaviour);
         var that = this;
         this.led = {
-                color : 'grey',
-                x : 0,
-                y : -90,
-                r : 10,
-                draw : function(canvas) {
-                    if (this.color != 'grey') {
-                        canvas.arc(this.x, this.y, this.r - 5, 0, Math.PI * 2);
-                        canvas.fill();
-                        var rad = canvas.createRadialGradient(this.x, this.y, this.r - 5, this.x, this.y, this.r + 5);
-                        rad.addColorStop(0, 'rgba(' + this.color[0] + ',' + this.color[1] + ',' + this.color[2] + ',1)');
-                        rad.addColorStop(1, 'rgba(' + this.color[0] + ',' + this.color[1] + ',' + this.color[2] + ',0)');
-                        canvas.fillStyle = rad;
-                        canvas.beginPath();
-                        canvas.arc(this.x, this.y, this.r + 5, 0, Math.PI * 2);
-                        canvas.fill();
-                    }
+            color: 'grey',
+            x: 0,
+            y: -90,
+            r: 10,
+            draw: function(canvas) {
+                if (this.color != 'grey') {
+                    canvas.arc(this.x, this.y, this.r - 5, 0, Math.PI * 2);
+                    canvas.fill();
+                    var rad = canvas.createRadialGradient(this.x, this.y, this.r - 5, this.x, this.y, this.r + 5);
+                    rad.addColorStop(0, 'rgba(' + this.color[0] + ',' + this.color[1] + ',' + this.color[2] + ',1)');
+                    rad.addColorStop(1, 'rgba(' + this.color[0] + ',' + this.color[1] + ',' + this.color[2] + ',0)');
+                    canvas.fillStyle = rad;
+                    canvas.beginPath();
+                    canvas.arc(this.x, this.y, this.r + 5, 0, Math.PI * 2);
+                    canvas.fill();
                 }
-            };
+            }
+        };
         this.motorA = {
             // Copyright (C) Ken Fyrstenberg / Epistemex
             // MIT license (header required)
-            cx : -45, // center x
-            cy : -130, // center y
-            theta : 0,
-            color : 'grey',
+            cx: -45, // center x
+            cy: -130, // center y
+            theta: 0,
+            color: 'grey',
 
-            draw : function(canvas) {
+            draw: function(canvas) {
                 var notches = 7, // num. of notches
-                radiusO = 20, // outer radius
-                radiusI = 15, // inner radius
-                radiusH = 10, // hole radius
-                taperO = 50, // outer taper %
-                taperI = 30, // inner taper %
+                    radiusO = 20, // outer radius
+                    radiusI = 15, // inner radius
+                    radiusH = 10, // hole radius
+                    taperO = 50, // outer taper %
+                    taperI = 30, // inner taper %
 
-                pi2 = 2 * Math.PI, // cache 2xPI (360deg)
-                angle = pi2 / (notches * 2), // angle between notches
-                taperAI = angle * taperI * 0.005, // inner taper offset
-                taperAO = angle * taperO * 0.005, // outer taper offset
-                a = angle, // iterator (angle)
-                toggle = false; // notch radis (i/o)
+                    pi2 = 2 * Math.PI, // cache 2xPI (360deg)
+                    angle = pi2 / (notches * 2), // angle between notches
+                    taperAI = angle * taperI * 0.005, // inner taper offset
+                    taperAO = angle * taperO * 0.005, // outer taper offset
+                    a = angle, // iterator (angle)
+                    toggle = false; // notch radis (i/o)
 
                 // starting point
                 canvas.save();
@@ -104,27 +104,27 @@ define([ 'simulation.simulation', 'simulation.robot.mbed' ], function(SIM, Mbed)
             }
         };
         this.motorB = {
-            cx : 45, // center x
-            cy : -130, // center y
-            theta : 0,
-            color : 'grey',
+            cx: 45, // center x
+            cy: -130, // center y
+            theta: 0,
+            color: 'grey',
 
-            draw : that.motorA.draw
+            draw: that.motorA.draw
         };
         this.endless = true;
         this.button = {
-            xA : -130,
-            yA : 55,
-            rA : 15,
-            colorA : 'blue',
-            xB : 130,
-            yB : 55,
-            rB : 15,
-            colorB : 'red',
-            xReset : 0,
-            yReset : 140,
-            rReset : 10,
-            colorReset : '#ffffff',
+            xA: -130,
+            yA: 55,
+            rA: 15,
+            colorA: 'blue',
+            xB: 130,
+            yB: 55,
+            rB: 15,
+            colorB: 'red',
+            xReset: 0,
+            yReset: 140,
+            rReset: 10,
+            colorReset: '#ffffff',
             rBoth: 15,
             xBothA: -191.7375,
             yBothA: 105.125,
@@ -158,11 +158,11 @@ define([ 'simulation.simulation', 'simulation.robot.mbed' ], function(SIM, Mbed)
             }
         };
         this.pin0 = {
-            x : -196.5,
-            y : -0.5,
-            r : 26,
-            touched : false,
-            draw : function(canvas) {
+            x: -196.5,
+            y: -0.5,
+            r: 26,
+            touched: false,
+            draw: function(canvas) {
                 if (this.touched) {
                     canvas.fillStyle = 'green';
                     canvas.beginPath();
@@ -238,25 +238,25 @@ define([ 'simulation.simulation', 'simulation.robot.mbed' ], function(SIM, Mbed)
             }
         };
         this.pin1 = {
-            x : -97,
-            y : -169.5,
-            r : 26,
-            touched : false,
-            draw : that.pin0.draw
+            x: -97,
+            y: -169.5,
+            r: 26,
+            touched: false,
+            draw: that.pin0.draw
         };
         this.pin2 = {
-            x : 98.5,
-            y : -168.5,
-            r : 26,
-            touched : false,
-            draw : that.pin0.draw
+            x: 98.5,
+            y: -168.5,
+            r: 26,
+            touched: false,
+            draw: that.pin0.draw
         };
         this.pin3 = {
-            x : 196.5,
-            y : -0.5,
-            r : 26,
-            touched : false,
-            draw : that.pin0.draw
+            x: 196.5,
+            y: -0.5,
+            r: 26,
+            touched: false,
+            draw: that.pin0.draw
         };
         SIM.initMicrophone(this);
     }
@@ -350,8 +350,8 @@ define([ 'simulation.simulation', 'simulation.robot.mbed' ], function(SIM, Mbed)
         var dyBothA = startY + this.button.yBothA;
         var dxBothB = startX - this.button.xBothB;
         var dyBothB = startY + this.button.yBothB;
-        var bothA = (Math.pow(dxBothA,2) + Math.pow(dyBothA,2) < Math.pow(this.button.rBoth,2) / scsq);
-        var bothB = (Math.pow(dxBothB,2) + Math.pow(dyBothB,2) < Math.pow(this.button.rBoth,2) / scsq);
+        var bothA = (Math.pow(dxBothA, 2) + Math.pow(dyBothA, 2) < Math.pow(this.button.rBoth, 2) / scsq);
+        var bothB = (Math.pow(dxBothB, 2) + Math.pow(dyBothB, 2) < Math.pow(this.button.rBoth, 2) / scsq);
         var bothButtons = bothA || bothB;
 
         var dxPin0 = startX - this.pin0.x;
@@ -370,8 +370,10 @@ define([ 'simulation.simulation', 'simulation.robot.mbed' ], function(SIM, Mbed)
         var dxDisplay = startX;
         var dyDisplay = startY + 20;
         var Display = (dxDisplay * dxDisplay + dyDisplay * dyDisplay < this.display.rLight * this.display.rLight);
-        var lightSliderActive = $('#sliderLight').val() !== "0";
-        if (!lightSliderActive) this.display.lightLevel = 100;
+        var lightSliderActive = $('#sliderLight').val() !== "100";
+        if (!lightSliderActive) {
+            this.display.lightLevel = 100;
+        }
         if (A || B || Reset || bothButtons || Display || Pin0 || Pin1 || Pin2 || Pin3) {
             if (e.type === 'mousedown' || e.type === 'touchstart') {
                 if (A) {
@@ -416,25 +418,25 @@ define([ 'simulation.simulation', 'simulation.robot.mbed' ], function(SIM, Mbed)
 
     Calliope.prototype.controle = function() {
         $('#simRobotContent').append('<div id="mbedContent"><div id="mbedButtons" class="btn-group btn-group-vertical" data-toggle="buttons">' + //
-        '<label style="margin: 8px;margin-top: 12px; margin-left: 0">' + Blockly.Msg.SENSOR_GESTURE + '</label>' + //
-        '<label class="btn simbtn active"><input type="radio" id="up" name="options" autocomplete="off">' + Blockly.Msg.SENSOR_GESTURE_UP + '</label>' + //
-        '<label class="btn simbtn"><input type="radio" id="down" name="options" autocomplete="off" >' + Blockly.Msg.SENSOR_GESTURE_DOWN + '</label>' + //
-        '<label class="btn simbtn"><input type="radio" id="face_up" name="options" autocomplete="off" >' + Blockly.Msg.SENSOR_GESTURE_FACE_UP + '</label>' + //
-        '<label class="btn simbtn"><input type="radio" id="face_down"name="options" autocomplete="off" >' + Blockly.Msg.SENSOR_GESTURE_FACE_DOWN + '</label>' + //
-        '<label class="btn simbtn"><input type="radio" id="shake" name="options" autocomplete="off" >' + Blockly.Msg.SENSOR_GESTURE_SHAKE + '</label>' + //
-        '<label class="btn simbtn"><input type="radio" id="freefall" name="options" autocomplete="off" >' + Blockly.Msg.SENSOR_GESTURE_FREEFALL + '</label>' + //
-        '<label style="margin: 8px;margin-top: 12px; margin-left: 0">' + Blockly.Msg.SENSOR_COMPASS
-                + '</label><input type="text" value="0" style="margin-bottom: 8px;margin-top: 12px; min-width: 45px; width: 45px; display: inline-block; border: 1px solid #333; border-radius: 2px; text-align: right;" id="range" />'
-                + '<div style="margin:8px 0; "><input id="slider" type="range" min="0" max="360" value="0" step="5" /></div>' + //
-        '<label style="margin: 8px;margin-top: 12px; margin-left: 0">' + Blockly.Msg.SENSOR_LIGHT
-                + '</label><input type="text" value="0" style="margin-bottom: 8px;margin-top: 12px; min-width: 45px; width: 45px; display: inline-block; border: 1px solid #333; border-radius: 2px; text-align: right; float: right;" id="rangeLight" />'
-                + '<div style="margin:8px 0; "><input id="sliderLight" type="range" min="0" max="100" value="0" /></div>' + //
-                '<label style="width:100%;margin: 8px;margin-top: 12px; margin-left: 0"><select class="customDropdown" id="pin"><option id="0">'
-                + Blockly.Msg.SENSOR_PIN + ' 0</option><option id="1">' + Blockly.Msg.SENSOR_PIN + ' 1</option><option id="2">' + Blockly.Msg.SENSOR_PIN
-                + ' 2</option><option id="3">' + Blockly.Msg.SENSOR_PIN
-                + ' 3</option></select><select class="customDropdown" style="float: right;" id="state"><option value="off">' + Blockly.Msg.OFF
-                + '</option><option value="analog">analog</option><option value="digital">digital</option></select></label>' + //
-                '<div style="margin:8px 0; "><input id="slider1" type="range" min="0" max="1023" value="0" step="1" /></div></div>'); //
+            '<label style="margin: 8px;margin-top: 12px; margin-left: 0">' + Blockly.Msg.SENSOR_GESTURE + '</label>' + //
+            '<label class="btn simbtn active"><input type="radio" id="up" name="options" autocomplete="off">' + Blockly.Msg.SENSOR_GESTURE_UP + '</label>' + //
+            '<label class="btn simbtn"><input type="radio" id="down" name="options" autocomplete="off" >' + Blockly.Msg.SENSOR_GESTURE_DOWN + '</label>' + //
+            '<label class="btn simbtn"><input type="radio" id="face_up" name="options" autocomplete="off" >' + Blockly.Msg.SENSOR_GESTURE_FACE_UP + '</label>' + //
+            '<label class="btn simbtn"><input type="radio" id="face_down"name="options" autocomplete="off" >' + Blockly.Msg.SENSOR_GESTURE_FACE_DOWN + '</label>' + //
+            '<label class="btn simbtn"><input type="radio" id="shake" name="options" autocomplete="off" >' + Blockly.Msg.SENSOR_GESTURE_SHAKE + '</label>' + //
+            '<label class="btn simbtn"><input type="radio" id="freefall" name="options" autocomplete="off" >' + Blockly.Msg.SENSOR_GESTURE_FREEFALL + '</label>' + //
+            '<label style="margin: 8px;margin-top: 12px; margin-left: 0">' + Blockly.Msg.SENSOR_COMPASS
+            + '</label><input type="text" value="0" style="margin-bottom: 8px;margin-top: 12px; min-width: 45px; width: 45px; display: inline-block; border: 1px solid #333; border-radius: 2px; text-align: right;" id="range" />'
+            + '<div style="margin:8px 0; "><input id="slider" type="range" min="0" max="360" value="0" step="5" /></div>' + //
+            '<label style="margin: 8px;margin-top: 12px; margin-left: 0">' + Blockly.Msg.SENSOR_LIGHT
+            + '</label><input type="text" value="0" style="margin-bottom: 8px;margin-top: 12px; min-width: 45px; width: 45px; display: inline-block; border: 1px solid #333; border-radius: 2px; text-align: right; float: right;" id="rangeLight" />'
+            + '<div style="margin:8px 0; "><input id="sliderLight" type="range" min="0" max="100" value="0" /></div>' + //
+            '<label style="width:100%;margin: 8px;margin-top: 12px; margin-left: 0"><select class="customDropdown" id="pin"><option id="0">'
+            + Blockly.Msg.SENSOR_PIN + ' 0</option><option id="1">' + Blockly.Msg.SENSOR_PIN + ' 1</option><option id="2">' + Blockly.Msg.SENSOR_PIN
+            + ' 2</option><option id="3">' + Blockly.Msg.SENSOR_PIN
+            + ' 3</option></select><select class="customDropdown" style="float: right;" id="state"><option value="off">' + Blockly.Msg.OFF
+            + '</option><option value="analog">analog</option><option value="digital">digital</option></select></label>' + //
+            '<div style="margin:8px 0; "><input id="slider1" type="range" min="0" max="1023" value="0" step="1" /></div></div>'); //
     };
 
     return Calliope;

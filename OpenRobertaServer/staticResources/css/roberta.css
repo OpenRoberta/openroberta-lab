@@ -2362,9 +2362,21 @@ input[type=range]:focus::-ms-fill-upper {
     font-size: 28px;
 }
 
-.simChangeObject.disabled, #simCancel.disabled {
+.simChangeObject.disabled { 
 	color: #bbb;
 	cursor: not-allowed;
+}
+
+#simStop, #simControl.typcn-media-stop {
+    color: #E2001A;
+}
+
+#simStop.disabled {
+	color: #F6B3B9;
+    cursor: not-allowed;
+}
+#simControl.blue, #simControlStepOver.blue, #simControlStepInto.blue {
+	color: #1C5A94;
 }
 
 .typcn-media-play-outline.rotated:before {

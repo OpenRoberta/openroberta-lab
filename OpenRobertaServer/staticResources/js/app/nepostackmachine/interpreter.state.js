@@ -15,7 +15,7 @@ define(["require", "exports", "./interpreter.constants", "./interpreter.util"], 
             this.pc = 0;
             this.bindings = {};
             this.stack = [];
-            this.currentBlocks = [];
+            this.currentBlocks = new Set();
             this.debugMode = false;
             // p( 'storeCode with state reset' );
         }
@@ -194,8 +194,8 @@ define(["require", "exports", "./interpreter.constants", "./interpreter.util"], 
                         stackmachineJsHelper.getJqueryObject(block === null || block === void 0 ? void 0 : block.svgPath_).removeClass("breakpoint").addClass("selectedBreakpoint");
                     }
                     _this.highlightBlock(block);
+                    _this.currentBlocks.add(block.id);
                 }
-                _this.currentBlocks.push(block.id);
             });
         };
         /** removes block froms currentBlocks and removes highlighting from block**/
@@ -208,14 +208,14 @@ define(["require", "exports", "./interpreter.constants", "./interpreter.util"], 
                         stackmachineJsHelper.getJqueryObject(block === null || block === void 0 ? void 0 : block.svgPath_).removeClass("selectedBreakpoint").addClass("breakpoint");
                     }
                     _this.removeBlockHighlight(block);
+                    _this.currentBlocks.delete(block.id);
                 }
-                _this.currentBlocks = _this.currentBlocks.filter(function (currentBlock) { return currentBlock !== block.id; });
             });
         };
         /** Returns true if the current block is currently being executed**/
         State.prototype.beingExecuted = function (stmt) {
             var blockId = stmt[C.HIGHTLIGHT_PLUS].slice(-1).pop();
-            return blockId && this.currentBlocks.includes(blockId);
+            return blockId && this.currentBlocks.has(blockId);
         };
         State.prototype.highlightBlock = function (block) {
             stackmachineJsHelper.getJqueryObject(block.svgPath_).stop(true, true).animate({ 'fill-opacity': '1' }, 0);
@@ -237,7 +237,7 @@ define(["require", "exports", "./interpreter.constants", "./interpreter.util"], 
          * @param breakPoints the array of breakpoint block id's to have their highlights added*/
         State.prototype.addHighlights = function (breakPoints) {
             var _this = this;
-            this.currentBlocks
+            Array.from(this.currentBlocks)
                 .map(function (blockId) { return stackmachineJsHelper.getBlockById(blockId); })
                 .forEach(function (block) { return _this.highlightBlock(block); });
             breakPoints.forEach(function (id) {
@@ -256,7 +256,7 @@ define(["require", "exports", "./interpreter.constants", "./interpreter.util"], 
          * @param breakPoints the array of breakpoint block id's to have their highlights removed*/
         State.prototype.removeHighlights = function (breakPoints) {
             var _this = this;
-            this.currentBlocks
+            Array.from(this.currentBlocks)
                 .map(function (blockId) { return stackmachineJsHelper.getBlockById(blockId); })
                 .forEach(function (block) {
                 var object = stackmachineJsHelper.getJqueryObject(block);
