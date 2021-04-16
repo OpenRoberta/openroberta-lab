@@ -67,8 +67,7 @@ $ git checkout -b branch_name
 $ git add .
 ```
 ## Step 5 : Commit
-- To commit give a descriptive message for convenience 
-
+- A good commit message focuses on the `why` instead of the `what`.
 ```
 # This message get associated with all files you have changed
 
