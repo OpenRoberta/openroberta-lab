@@ -63,7 +63,7 @@ Project administrators will follow these Community Impact Guidelines in determin
 
 **Consequence**: A warning with consequences for continued behavior. No interaction with the people involved, including unsolicited interaction with those enforcing the Code of Conduct, for a specified period of time. This includes avoiding interaction in all community spaces as well. Violating these terms may lead to a temporary or permanent ban. 
 
-### 4. Permanent Ban
+### 3. Permanent Ban
 
 **Community Impact**: Demonstrating a pattern of violation of community standards, including sustained inappropriate behavior, harassment of an individual, or aggression toward or disparagement of classes of individuals. 
 
