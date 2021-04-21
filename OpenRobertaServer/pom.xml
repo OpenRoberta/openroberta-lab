@@ -119,7 +119,6 @@
         <dependency>
             <groupId>de.fhg.iais.openroberta</groupId>
             <artifactId>RobotWeDo</artifactId>
-            <version>${project.version}</version> <!-- removing this throws an error. Why? -->
             <scope>test</scope>
         </dependency>
         <dependency>

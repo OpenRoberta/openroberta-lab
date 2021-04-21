@@ -128,7 +128,7 @@
             </dependency>
             <dependency>
                 <groupId>de.fhg.iais.openroberta</groupId>
-                <artifactId>RobotWedo</artifactId>
+                <artifactId>RobotWeDo</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
