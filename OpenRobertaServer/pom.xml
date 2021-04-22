@@ -21,10 +21,6 @@
     <description>the server of the OpenRoberta application including the static resources delivered to the browser</description>
     <dependencies>
         <dependency>
-            <groupId>de.fhg.iais.openroberta</groupId>
-            <artifactId>OpenRobertaRobot</artifactId>
-        </dependency>
-        <dependency>
             <groupId>com.google.inject</groupId>
             <artifactId>guice</artifactId>
         </dependency>
@@ -80,46 +76,41 @@
             <groupId>org.seleniumhq.selenium</groupId>
             <artifactId>selenium-java</artifactId>
         </dependency>
-
         <dependency>
             <groupId>de.fhg.iais.openroberta</groupId>
             <artifactId>RobotArdu</artifactId>
-            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>de.fhg.iais.openroberta</groupId>
             <artifactId>RobotEV3</artifactId>
-            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>de.fhg.iais.openroberta</groupId>
             <artifactId>RobotMbed</artifactId>
-            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>de.fhg.iais.openroberta</groupId>
             <artifactId>RobotNAO</artifactId>
-            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>de.fhg.iais.openroberta</groupId>
             <artifactId>RobotNXT</artifactId>
-            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>de.fhg.iais.openroberta</groupId>
             <artifactId>RobotVorwerk</artifactId>
-            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>de.fhg.iais.openroberta</groupId>
             <artifactId>RobotEdison</artifactId>
-            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>de.fhg.iais.openroberta</groupId>
             <artifactId>RobotWeDo</artifactId>
-            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>de.fhg.iais.openroberta</groupId>
+            <artifactId>OpenRobertaRobot</artifactId>
         </dependency>
         <dependency>
             <groupId>de.fhg.iais.openroberta</groupId>
