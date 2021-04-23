@@ -19,6 +19,7 @@ export class Interpreter {
     private events: any;
     private stepOverBlock: any;
     private lastStoppedBlock: any;
+    private lastBlock: any;
 
     /*
      *
@@ -39,6 +40,7 @@ export class Interpreter {
         this.events[C.DEBUG_BREAKPOINT] = false;
         this.events[C.DEBUG_STEP_OVER] = false;
 
+        this.lastBlock = null;
         this.lastStoppedBlock = null;
         this.stepOverBlock = null;
 
@@ -136,8 +138,8 @@ export class Interpreter {
     private evalOperation(maxRunTime: number) {
         while (maxRunTime >= new Date().getTime() && !this.robotBehaviour.getBlocking()) {
             let op = this.state.getOp();
-            this.state.evalTerminations(op);
             this.state.evalInitiations(op);
+            this.lastBlock && this.state.evalTerminations(this.lastBlock);
 
             if (this.state.getDebugMode()) {
                 let canContinue = this.calculateDebugBehaviour(op);
@@ -145,6 +147,7 @@ export class Interpreter {
             }
 
             let [result, stop] = this.evalSingleOperation(op);
+            this.lastBlock = op;
             this.lastStoppedBlock = null;
 
             if (result > 0 || stop) {

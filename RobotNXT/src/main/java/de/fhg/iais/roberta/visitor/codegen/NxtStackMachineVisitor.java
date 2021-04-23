@@ -112,20 +112,20 @@ public class NxtStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> im
                 colorConst.addInfo(NepoInfo.error("SIM_BLOCK_NOT_SUPPORTED"));
                 throw new DbcException("Invalid color constant: " + colorConst.getHexValueAsString());
         }
-        JSONObject o = makeLeaf(C.EXPR, colorConst).put(C.EXPR, C.COLOR_CONST).put(C.VALUE, color);
+        JSONObject o = makeNode(C.EXPR).put(C.EXPR, C.COLOR_CONST).put(C.VALUE, color);
         return app(o);
     }
 
     @Override
     public V visitClearDisplayAction(ClearDisplayAction<V> clearDisplayAction) {
-        JSONObject o = makeLeaf(C.CLEAR_DISPLAY_ACTION, clearDisplayAction);
+        JSONObject o = makeNode(C.CLEAR_DISPLAY_ACTION);
 
         return app(o);
     }
 
     @Override
     public V visitLightStatusAction(LightStatusAction<V> lightStatusAction) {
-        JSONObject o = makeLeaf(C.STATUS_LIGHT_ACTION, lightStatusAction).put(C.NAME, "ev3").put(C.PORT, "internal");
+        JSONObject o = makeNode(C.STATUS_LIGHT_ACTION).put(C.NAME, "ev3").put(C.PORT, "internal");
         return app(o);
     }
 
@@ -133,7 +133,7 @@ public class NxtStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> im
     public V visitToneAction(ToneAction<V> toneAction) {
         toneAction.getFrequency().accept(this);
         toneAction.getDuration().accept(this);
-        JSONObject o = makeLeaf(C.TONE_ACTION, toneAction);
+        JSONObject o = makeNode(C.TONE_ACTION);
         return app(o);
     }
 
@@ -143,14 +143,14 @@ public class NxtStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> im
         String duration = playNoteAction.getDuration();
         app(makeNode(C.EXPR).put(C.EXPR, C.NUM_CONST).put(C.VALUE, freq));
         app(makeNode(C.EXPR).put(C.EXPR, C.NUM_CONST).put(C.VALUE, duration));
-        JSONObject o = makeLeaf(C.TONE_ACTION, playNoteAction);
+        JSONObject o = makeNode(C.TONE_ACTION);
         return app(o);
     }
 
     @Override
     public V visitPlayFileAction(PlayFileAction<V> playFileAction) {
         String image = playFileAction.getFileName().toString();
-        JSONObject o = makeLeaf(C.PLAY_FILE_ACTION, playFileAction).put(C.FILE, image).put(C.NAME, "ev3");
+        JSONObject o = makeNode(C.PLAY_FILE_ACTION).put(C.FILE, image).put(C.NAME, "ev3");
         return app(o);
     }
 
@@ -158,10 +158,10 @@ public class NxtStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> im
     public V visitVolumeAction(VolumeAction<V> volumeAction) {
         JSONObject o;
         if ( volumeAction.getMode() == VolumeAction.Mode.GET ) {
-            o = makeLeaf(C.GET_VOLUME, volumeAction);
+            o = makeNode(C.GET_VOLUME);
         } else {
             volumeAction.getVolume().accept(this);
-            o = makeLeaf(C.SET_VOLUME_ACTION, volumeAction);
+            o = makeNode(C.SET_VOLUME_ACTION);
         }
         return app(o);
     }
@@ -169,7 +169,7 @@ public class NxtStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> im
     @Override
     public V visitMotorGetPowerAction(MotorGetPowerAction<V> motorGetPowerAction) {
         String port = motorGetPowerAction.getUserDefinedPort();
-        JSONObject o = makeLeaf(C.MOTOR_GET_POWER, motorGetPowerAction).put(C.PORT, port.toLowerCase());
+        JSONObject o = makeNode(C.MOTOR_GET_POWER).put(C.PORT, port.toLowerCase());
         return app(o);
     }
 
@@ -184,12 +184,12 @@ public class NxtStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> im
             driveDirection = getDriveDirection(driveAction.getDirection() == DriveDirection.FOREWARD);
         }
         JSONObject o =
-            makeLeaf(C.DRIVE_ACTION, driveAction).put(C.DRIVE_DIRECTION, driveDirection).put(C.NAME, "ev3").put(C.SPEED_ONLY, speedOnly).put(C.SET_TIME, false);
+            makeNode(C.DRIVE_ACTION).put(C.DRIVE_DIRECTION, driveDirection).put(C.NAME, "ev3").put(C.SPEED_ONLY, speedOnly).put(C.SET_TIME, false);
         if ( speedOnly ) {
             return app(o);
         } else {
             app(o);
-            return app(makeLeaf(C.STOP_DRIVE, driveAction).put(C.NAME, "ev3"));
+            return app(makeNode(C.STOP_DRIVE).put(C.NAME, "ev3"));
         }
     }
 
@@ -204,7 +204,7 @@ public class NxtStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> im
             turnDirection = getTurnDirection(turnAction.getDirection() == TurnDirection.LEFT);
         }
         JSONObject o =
-            makeLeaf(C.TURN_ACTION, turnAction)
+            makeNode(C.TURN_ACTION)
                 .put(C.TURN_DIRECTION, turnDirection.toString().toLowerCase())
                 .put(C.NAME, "ev3")
                 .put(C.SPEED_ONLY, speedOnly)
@@ -213,7 +213,7 @@ public class NxtStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> im
             return app(o);
         } else {
             app(o);
-            return app(makeLeaf(C.STOP_DRIVE, turnAction).put(C.NAME, "ev3"));
+            return app(makeNode(C.STOP_DRIVE).put(C.NAME, "ev3"));
         }
     }
 
@@ -229,18 +229,18 @@ public class NxtStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> im
             driveDirection = getDriveDirection(curveAction.getDirection() == DriveDirection.FOREWARD);
         }
         JSONObject o =
-            makeLeaf(C.CURVE_ACTION, curveAction).put(C.DRIVE_DIRECTION, driveDirection).put(C.NAME, "ev3").put(C.SPEED_ONLY, speedOnly).put(C.SET_TIME, false);
+            makeNode(C.CURVE_ACTION).put(C.DRIVE_DIRECTION, driveDirection).put(C.NAME, "ev3").put(C.SPEED_ONLY, speedOnly).put(C.SET_TIME, false);
         if ( speedOnly ) {
             return app(o);
         } else {
             app(o);
-            return app(makeLeaf(C.STOP_DRIVE, curveAction).put(C.NAME, "ev3"));
+            return app(makeNode(C.STOP_DRIVE).put(C.NAME, "ev3"));
         }
     }
 
     @Override
     public V visitMotorDriveStopAction(MotorDriveStopAction<V> stopAction) {
-        JSONObject o = makeLeaf(C.STOP_DRIVE, stopAction).put(C.NAME, "ev3");
+        JSONObject o = makeNode(C.STOP_DRIVE).put(C.NAME, "ev3");
         return app(o);
     }
 
@@ -250,14 +250,14 @@ public class NxtStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> im
         MotorDuration<V> duration = motorOnAction.getParam().getDuration();
         boolean speedOnly = !processOptionalDuration(duration);
         String port = motorOnAction.getUserDefinedPort();
-        JSONObject o = makeLeaf(C.MOTOR_ON_ACTION, motorOnAction).put(C.PORT, port.toLowerCase()).put(C.NAME, port.toLowerCase()).put(C.SPEED_ONLY, speedOnly);
+        JSONObject o = makeNode(C.MOTOR_ON_ACTION).put(C.PORT, port.toLowerCase()).put(C.NAME, port.toLowerCase()).put(C.SPEED_ONLY, speedOnly);
         if ( speedOnly ) {
             return app(o);
         } else {
             String durationType = duration.getType().toString().toLowerCase();
             o.put(C.MOTOR_DURATION, durationType);
             app(o);
-            return app(makeLeaf(C.MOTOR_STOP, motorOnAction).put(C.PORT, port.toLowerCase()));
+            return app(makeNode(C.MOTOR_STOP).put(C.PORT, port.toLowerCase()));
         }
     }
 
@@ -265,14 +265,14 @@ public class NxtStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> im
     public V visitMotorSetPowerAction(MotorSetPowerAction<V> motorSetPowerAction) {
         String port = motorSetPowerAction.getUserDefinedPort();
         motorSetPowerAction.getPower().accept(this);
-        JSONObject o = makeLeaf(C.MOTOR_SET_POWER, motorSetPowerAction).put(C.PORT, port.toLowerCase());
+        JSONObject o = makeNode(C.MOTOR_SET_POWER).put(C.PORT, port.toLowerCase());
         return app(o);
     }
 
     @Override
     public V visitMotorStopAction(MotorStopAction<V> motorStopAction) {
         String port = motorStopAction.getUserDefinedPort();
-        JSONObject o = makeLeaf(C.MOTOR_STOP, motorStopAction).put(C.PORT, port.toLowerCase());
+        JSONObject o = makeNode(C.MOTOR_STOP).put(C.PORT, port.toLowerCase());
         return app(o);
     }
 
@@ -281,7 +281,7 @@ public class NxtStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> im
         showTextAction.y.accept(this);
         showTextAction.x.accept(this);
         showTextAction.msg.accept(this);
-        JSONObject o = makeLeaf(C.SHOW_TEXT_ACTION, showTextAction).put(C.NAME, "ev3");
+        JSONObject o = makeNode(C.SHOW_TEXT_ACTION).put(C.NAME, "ev3");
         return app(o);
     }
 
@@ -290,14 +290,14 @@ public class NxtStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> im
         String mode = lightAction.getMode().toString().toLowerCase();
         String color = lightAction.getColor().toString().toLowerCase();
         String port = lightAction.getPort();
-        JSONObject o = makeLeaf(C.LIGHT_ACTION, lightAction).put(C.MODE, mode).put(C.PORT, port).put(C.COLOR, color);
+        JSONObject o = makeNode(C.LIGHT_ACTION).put(C.MODE, mode).put(C.PORT, port).put(C.COLOR, color);
         return app(o);
     }
 
     @Override
     public V visitTouchSensor(TouchSensor<V> touchSensor) {
         String port = touchSensor.getUserDefinedPort();
-        JSONObject o = makeLeaf(C.GET_SAMPLE, touchSensor).put(C.GET_SAMPLE, C.TOUCH).put(C.PORT, port).put(C.NAME, "ev3");
+        JSONObject o = makeNode(C.GET_SAMPLE).put(C.GET_SAMPLE, C.TOUCH).put(C.PORT, port).put(C.NAME, "ev3");
         return app(o);
     }
 
@@ -305,7 +305,7 @@ public class NxtStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> im
     public V visitColorSensor(ColorSensor<V> colorSensor) {
         String mode = colorSensor.getMode();
         String port = colorSensor.getUserDefinedPort();
-        JSONObject o = makeLeaf(C.GET_SAMPLE, colorSensor).put(C.GET_SAMPLE, C.COLOR).put(C.PORT, port).put(C.MODE, mode.toLowerCase()).put(C.NAME, "ev3");
+        JSONObject o = makeNode(C.GET_SAMPLE).put(C.GET_SAMPLE, C.COLOR).put(C.PORT, port).put(C.MODE, mode.toLowerCase()).put(C.NAME, "ev3");
         return app(o);
     }
 
@@ -315,9 +315,9 @@ public class NxtStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> im
         String port = encoderSensor.getUserDefinedPort().toLowerCase();
         JSONObject o;
         if ( mode.equals(C.RESET) ) {
-            o = makeLeaf(C.ENCODER_SENSOR_RESET, encoderSensor).put(C.PORT, port).put(C.NAME, "ev3");
+            o = makeNode(C.ENCODER_SENSOR_RESET).put(C.PORT, port).put(C.NAME, "ev3");
         } else {
-            o = makeLeaf(C.GET_SAMPLE, encoderSensor).put(C.GET_SAMPLE, C.ENCODER_SENSOR_SAMPLE).put(C.PORT, port).put(C.MODE, mode).put(C.NAME, "ev3");
+            o = makeNode(C.GET_SAMPLE).put(C.GET_SAMPLE, C.ENCODER_SENSOR_SAMPLE).put(C.PORT, port).put(C.MODE, mode).put(C.NAME, "ev3");
         }
         return app(o);
     }
@@ -325,14 +325,14 @@ public class NxtStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> im
     @Override
     public V visitTemperatureSensor(TemperatureSensor<V> temperatureSensor) {
         String mode = temperatureSensor.getMode();
-        JSONObject o = makeLeaf(C.GET_SAMPLE, temperatureSensor).put(C.GET_SAMPLE, C.TEMPERATURE).put(C.PORT, mode.toLowerCase()).put(C.NAME, "ev3");
+        JSONObject o = makeNode(C.GET_SAMPLE).put(C.GET_SAMPLE, C.TEMPERATURE).put(C.PORT, mode.toLowerCase()).put(C.NAME, "ev3");
         return app(o);
     }
 
     @Override
     public V visitKeysSensor(KeysSensor<V> keysSensor) {
         String mode = keysSensor.getUserDefinedPort().toLowerCase();
-        JSONObject o = makeLeaf(C.GET_SAMPLE, keysSensor).put(C.GET_SAMPLE, C.BUTTONS).put(C.MODE, mode).put(C.NAME, "ev3");
+        JSONObject o = makeNode(C.GET_SAMPLE).put(C.GET_SAMPLE, C.BUTTONS).put(C.MODE, mode).put(C.NAME, "ev3");
         return app(o);
     }
 
@@ -340,7 +340,7 @@ public class NxtStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> im
     public V visitLightSensor(LightSensor<V> lightSensor) {
         String mode = lightSensor.getMode().toLowerCase();
         String port = lightSensor.getUserDefinedPort().toLowerCase();
-        JSONObject o = makeLeaf(C.GET_SAMPLE, lightSensor).put(C.GET_SAMPLE, C.COLOR).put(C.MODE, mode).put(C.PORT, port).put(C.NAME, "ev3");
+        JSONObject o = makeNode(C.GET_SAMPLE).put(C.GET_SAMPLE, C.COLOR).put(C.MODE, mode).put(C.PORT, port).put(C.NAME, "ev3");
         return app(o);
     }
 
@@ -349,9 +349,9 @@ public class NxtStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> im
         String port = timerSensor.getUserDefinedPort();
         JSONObject o;
         if ( timerSensor.getMode().equals(SC.DEFAULT) || timerSensor.getMode().equals(SC.VALUE) ) {
-            o = makeLeaf(C.GET_SAMPLE, timerSensor).put(C.GET_SAMPLE, C.TIMER).put(C.PORT, port).put(C.NAME, "ev3");
+            o = makeNode(C.GET_SAMPLE).put(C.GET_SAMPLE, C.TIMER).put(C.PORT, port).put(C.NAME, "ev3");
         } else {
-            o = makeLeaf(C.TIMER_SENSOR_RESET, timerSensor).put(C.PORT, port).put(C.NAME, "ev3");
+            o = makeNode(C.TIMER_SENSOR_RESET).put(C.PORT, port).put(C.NAME, "ev3");
         }
         return app(o);
     }
@@ -361,21 +361,21 @@ public class NxtStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> im
         String port = sensorGetSample.getUserDefinedPort();
         String mode = sensorGetSample.getMode();
 
-        JSONObject o = makeLeaf(C.GET_SAMPLE, sensorGetSample).put(C.GET_SAMPLE, C.PIN + port).put(C.MODE, mode.toLowerCase()).put(C.NAME, "ev3");
+        JSONObject o = makeNode(C.GET_SAMPLE).put(C.GET_SAMPLE, C.PIN + port).put(C.MODE, mode.toLowerCase()).put(C.NAME, "ev3");
         return app(o);
     }
 
     @Override
     public V visitSoundSensor(SoundSensor<V> soundSensor) {
         String port = soundSensor.getUserDefinedPort();
-        JSONObject o = makeLeaf(C.GET_SAMPLE, soundSensor).put(C.GET_SAMPLE, C.SOUND).put(C.MODE, C.VOLUME).put(C.PORT, port).put(C.NAME, "ev3");
+        JSONObject o = makeNode(C.GET_SAMPLE).put(C.GET_SAMPLE, C.SOUND).put(C.MODE, C.VOLUME).put(C.PORT, port).put(C.NAME, "ev3");
         return app(o);
     }
 
     @Override
     public V visitCompassSensor(CompassSensor<V> compassSensor) {
         String mode = compassSensor.getMode();
-        JSONObject o = makeLeaf(C.GET_SAMPLE, compassSensor).put(C.GET_SAMPLE, C.COMPASS).put(C.MODE, mode.toLowerCase()).put(C.NAME, "ev3");
+        JSONObject o = makeNode(C.GET_SAMPLE).put(C.GET_SAMPLE, C.COMPASS).put(C.MODE, mode.toLowerCase()).put(C.NAME, "ev3");
         return app(o);
     }
 
@@ -385,9 +385,9 @@ public class NxtStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> im
         String port = gyroSensor.getUserDefinedPort().toLowerCase();
         JSONObject o;
         if ( mode.equals(C.RESET) ) {
-            o = makeLeaf(C.GYRO_SENSOR_RESET, gyroSensor).put(C.PORT, port).put(C.NAME, "ev3");
+            o = makeNode(C.GYRO_SENSOR_RESET).put(C.PORT, port).put(C.NAME, "ev3");
         } else {
-            o = makeLeaf(C.GET_SAMPLE, gyroSensor).put(C.GET_SAMPLE, C.GYRO).put(C.MODE, mode).put(C.NAME, "ev3");
+            o = makeNode(C.GET_SAMPLE).put(C.GET_SAMPLE, C.GYRO).put(C.MODE, mode).put(C.NAME, "ev3");
         }
         return app(o);
     }
@@ -406,7 +406,7 @@ public class NxtStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> im
     public V visitUltrasonicSensor(UltrasonicSensor<V> ultrasonicSensor) {
         String mode = ultrasonicSensor.getMode();
         String port = ultrasonicSensor.getUserDefinedPort();
-        JSONObject o = makeLeaf(C.GET_SAMPLE, ultrasonicSensor).put(C.GET_SAMPLE, C.ULTRASONIC).put(C.MODE, mode.toLowerCase()).put(C.PORT, port).put(C.NAME, "ev3");
+        JSONObject o = makeNode(C.GET_SAMPLE).put(C.GET_SAMPLE, C.ULTRASONIC).put(C.MODE, mode.toLowerCase()).put(C.PORT, port).put(C.NAME, "ev3");
         return app(o);
     }
 
