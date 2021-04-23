@@ -21,6 +21,7 @@ define(["require", "exports", "./interpreter.state", "./interpreter.constants", 
             this.events[C.DEBUG_STEP_INTO] = false;
             this.events[C.DEBUG_BREAKPOINT] = false;
             this.events[C.DEBUG_STEP_OVER] = false;
+            this.lastBlock = null;
             this.lastStoppedBlock = null;
             this.stepOverBlock = null;
             this.state = new interpreter_state_1.State(stmts);
@@ -107,14 +108,15 @@ define(["require", "exports", "./interpreter.state", "./interpreter.constants", 
         Interpreter.prototype.evalOperation = function (maxRunTime) {
             while (maxRunTime >= new Date().getTime() && !this.robotBehaviour.getBlocking()) {
                 var op = this.state.getOp();
-                this.state.evalTerminations(op);
                 this.state.evalInitiations(op);
+                this.lastBlock && this.state.evalTerminations(this.lastBlock);
                 if (this.state.getDebugMode()) {
                     var canContinue = this.calculateDebugBehaviour(op);
                     if (!canContinue)
                         return 0;
                 }
                 var _a = this.evalSingleOperation(op), result = _a[0], stop_1 = _a[1];
+                this.lastBlock = op;
                 this.lastStoppedBlock = null;
                 if (result > 0 || stop_1) {
                     return result;

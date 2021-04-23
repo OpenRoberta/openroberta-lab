@@ -56,7 +56,7 @@ public class MbotCppStackMachineVisitor<V> extends AbstractStackMachineVisitor<V
 
     @Override
     public V visitKeysSensor(KeysSensor<V> keysSensor) {
-        JSONObject o = makeLeaf(C.GET_SAMPLE, keysSensor).put(C.GET_SAMPLE, C.BUTTONS).put(C.MODE, "center");
+        JSONObject o = makeNode(C.GET_SAMPLE).put(C.GET_SAMPLE, C.BUTTONS).put(C.MODE, "center");
         return app(o);
     }
 
@@ -65,9 +65,9 @@ public class MbotCppStackMachineVisitor<V> extends AbstractStackMachineVisitor<V
         String port = timerSensor.getUserDefinedPort();
         JSONObject o;
         if ( timerSensor.getMode().equals(SC.DEFAULT) || timerSensor.getMode().equals(SC.VALUE) ) {
-            o = makeLeaf(C.GET_SAMPLE, timerSensor).put(C.GET_SAMPLE, C.TIMER).put(C.PORT, port).put(C.NAME, "mbot");
+            o = makeNode(C.GET_SAMPLE).put(C.GET_SAMPLE, C.TIMER).put(C.PORT, port).put(C.NAME, "mbot");
         } else {
-            o = makeLeaf(C.TIMER_SENSOR_RESET, timerSensor).put(C.PORT, port).put(C.NAME, "mbot");
+            o = makeNode(C.TIMER_SENSOR_RESET).put(C.PORT, port).put(C.NAME, "mbot");
         }
         return app(o);
     }
@@ -76,7 +76,7 @@ public class MbotCppStackMachineVisitor<V> extends AbstractStackMachineVisitor<V
     public V visitUltrasonicSensor(UltrasonicSensor<V> ultrasonicSensor) {
         String mode = ultrasonicSensor.getMode();
         String port = ultrasonicSensor.getUserDefinedPort();
-        JSONObject o = makeLeaf(C.GET_SAMPLE, ultrasonicSensor).put(C.GET_SAMPLE, C.ULTRASONIC).put(C.PORT, port).put(C.MODE, mode.toLowerCase()).put(C.NAME, "mbot");
+        JSONObject o = makeNode(C.GET_SAMPLE).put(C.GET_SAMPLE, C.ULTRASONIC).put(C.PORT, port).put(C.MODE, mode.toLowerCase()).put(C.NAME, "mbot");
         return app(o);
     }
 
@@ -89,7 +89,7 @@ public class MbotCppStackMachineVisitor<V> extends AbstractStackMachineVisitor<V
         } else if ( slot.equals("2") ) {
             slot = C.RIGHT;
         }
-        JSONObject o = makeLeaf(C.GET_SAMPLE, infraredSensor).put(C.GET_SAMPLE, C.INFRARED).put(C.PORT, port).put(C.MODE, slot).put(C.NAME, "mbot");
+        JSONObject o = makeNode(C.GET_SAMPLE).put(C.GET_SAMPLE, C.INFRARED).put(C.PORT, port).put(C.MODE, slot).put(C.NAME, "mbot");
         return app(o);
     }
 
@@ -98,14 +98,14 @@ public class MbotCppStackMachineVisitor<V> extends AbstractStackMachineVisitor<V
         String mode = lightAction.getMode().toString().toLowerCase();
         lightAction.getRgbLedColor().accept(this);
         String port = lightAction.getPort();
-        JSONObject o = makeLeaf(C.LIGHT_ACTION, lightAction).put(C.MODE, mode).put(C.PORT, port).put(C.NAME, "mbot");
+        JSONObject o = makeNode(C.LIGHT_ACTION).put(C.MODE, mode).put(C.PORT, port).put(C.NAME, "mbot");
         return app(o);
     }
 
     @Override
     public V visitLightStatusAction(LightStatusAction<V> lightStatusAction) {
         JSONObject o =
-            makeLeaf(C.STATUS_LIGHT_ACTION, lightStatusAction)
+            makeNode(C.STATUS_LIGHT_ACTION)
                 .put(C.MODE, lightStatusAction.getStatus())
                 .put(C.PORT, lightStatusAction.getUserDefinedPort())
                 .put(C.NAME, "mbot");
@@ -118,14 +118,14 @@ public class MbotCppStackMachineVisitor<V> extends AbstractStackMachineVisitor<V
         int g = colorConst.getGreenChannelInt();
         int b = colorConst.getBlueChannelInt();
 
-        JSONObject o = makeLeaf(C.EXPR, colorConst).put(C.EXPR, "COLOR_CONST").put(C.VALUE, new JSONArray(Arrays.asList(r, g, b)));
+        JSONObject o = makeNode(C.EXPR).put(C.EXPR, "COLOR_CONST").put(C.VALUE, new JSONArray(Arrays.asList(r, g, b)));
         return app(o);
     }
 
     @Override
     public V visitMotorGetPowerAction(MotorGetPowerAction<V> motorGetPowerAction) {
         String port = motorGetPowerAction.getUserDefinedPort();
-        JSONObject o = makeLeaf(C.MOTOR_GET_POWER, motorGetPowerAction).put(C.PORT, port.toLowerCase());
+        JSONObject o = makeNode(C.MOTOR_GET_POWER).put(C.PORT, port.toLowerCase());
         return app(o);
     }
 
@@ -134,12 +134,12 @@ public class MbotCppStackMachineVisitor<V> extends AbstractStackMachineVisitor<V
         driveAction.getParam().getSpeed().accept(this);
         boolean speedOnly = !processOptionalDuration(driveAction.getParam().getDuration());
         DriveDirection driveDirection = (DriveDirection) driveAction.getDirection();
-        JSONObject o = makeLeaf(C.DRIVE_ACTION, driveAction).put(C.DRIVE_DIRECTION, driveDirection).put(C.NAME, "mbot").put(C.SPEED_ONLY, speedOnly);
+        JSONObject o = makeNode(C.DRIVE_ACTION).put(C.DRIVE_DIRECTION, driveDirection).put(C.NAME, "mbot").put(C.SPEED_ONLY, speedOnly);
         if ( speedOnly ) {
             return app(o.put(C.SET_TIME, false));
         } else {
             app(o.put(C.SET_TIME, true));
-            return app(makeLeaf(C.STOP_DRIVE, driveAction).put(C.NAME, "mbot"));
+            return app(makeNode(C.STOP_DRIVE).put(C.NAME, "mbot"));
         }
     }
 
@@ -149,12 +149,12 @@ public class MbotCppStackMachineVisitor<V> extends AbstractStackMachineVisitor<V
         boolean speedOnly = !processOptionalDuration(turnAction.getParam().getDuration());
         ITurnDirection turnDirection = turnAction.getDirection();
         JSONObject o =
-            makeLeaf(C.TURN_ACTION, turnAction).put(C.TURN_DIRECTION, turnDirection.toString().toLowerCase()).put(C.NAME, "mbot").put(C.SPEED_ONLY, speedOnly);
+            makeNode(C.TURN_ACTION).put(C.TURN_DIRECTION, turnDirection.toString().toLowerCase()).put(C.NAME, "mbot").put(C.SPEED_ONLY, speedOnly);
         if ( speedOnly ) {
             return app(o.put(C.SET_TIME, false));
         } else {
             app(o.put(C.SET_TIME, true));
-            return app(makeLeaf(C.STOP_DRIVE, turnAction).put(C.NAME, "mbot"));
+            return app(makeNode(C.STOP_DRIVE).put(C.NAME, "mbot"));
         }
     }
 
@@ -165,18 +165,18 @@ public class MbotCppStackMachineVisitor<V> extends AbstractStackMachineVisitor<V
         boolean speedOnly = !processOptionalDuration(curveAction.getParamLeft().getDuration());
         DriveDirection driveDirection = (DriveDirection) curveAction.getDirection();
 
-        JSONObject o = makeLeaf(C.CURVE_ACTION, curveAction).put(C.DRIVE_DIRECTION, driveDirection).put(C.NAME, "mbot").put(C.SPEED_ONLY, speedOnly);
+        JSONObject o = makeNode(C.CURVE_ACTION).put(C.DRIVE_DIRECTION, driveDirection).put(C.NAME, "mbot").put(C.SPEED_ONLY, speedOnly);
         if ( speedOnly ) {
             return app(o.put(C.SET_TIME, false));
         } else {
             app(o.put(C.SET_TIME, true));
-            return app(makeLeaf(C.STOP_DRIVE, curveAction).put(C.NAME, "mbot"));
+            return app(makeNode(C.STOP_DRIVE).put(C.NAME, "mbot"));
         }
     }
 
     @Override
     public V visitMotorDriveStopAction(MotorDriveStopAction<V> stopAction) {
-        JSONObject o = makeLeaf(C.STOP_DRIVE, stopAction).put(C.NAME, "mbot");
+        JSONObject o = makeNode(C.STOP_DRIVE).put(C.NAME, "mbot");
         return app(o);
     }
 
@@ -188,7 +188,7 @@ public class MbotCppStackMachineVisitor<V> extends AbstractStackMachineVisitor<V
         String port = motorOnAction.getUserDefinedPort();
         port = getMbotMotorPort(port);
 
-        JSONObject o = makeLeaf(C.MOTOR_ON_ACTION, motorOnAction).put(C.PORT, port.toLowerCase()).put(C.NAME, "mbot").put(C.SPEED_ONLY, speedOnly);
+        JSONObject o = makeNode(C.MOTOR_ON_ACTION).put(C.PORT, port.toLowerCase()).put(C.NAME, "mbot").put(C.SPEED_ONLY, speedOnly);
         if ( speedOnly ) {
             return app(o);
         } else {
@@ -210,7 +210,7 @@ public class MbotCppStackMachineVisitor<V> extends AbstractStackMachineVisitor<V
         port = getMbotMotorPort(port);
 
         motorSetPowerAction.getPower().accept(this);
-        JSONObject o = makeLeaf(C.MOTOR_SET_POWER, motorSetPowerAction).put(C.PORT, port.toLowerCase());
+        JSONObject o = makeNode(C.MOTOR_SET_POWER).put(C.PORT, port.toLowerCase());
         return app(o);
     }
 
@@ -218,7 +218,7 @@ public class MbotCppStackMachineVisitor<V> extends AbstractStackMachineVisitor<V
     public V visitMotorStopAction(MotorStopAction<V> motorStopAction) {
         String port = motorStopAction.getUserDefinedPort();
         port = getMbotMotorPort(port);
-        JSONObject o = makeLeaf(C.MOTOR_STOP, motorStopAction).put(C.PORT, port.toLowerCase());
+        JSONObject o = makeNode(C.MOTOR_STOP).put(C.PORT, port.toLowerCase());
         return app(o);
     }
 
@@ -245,7 +245,7 @@ public class MbotCppStackMachineVisitor<V> extends AbstractStackMachineVisitor<V
     public V visitToneAction(ToneAction<V> toneAction) {
         toneAction.getFrequency().accept(this);
         toneAction.getDuration().accept(this);
-        JSONObject o = makeLeaf(C.TONE_ACTION, toneAction);
+        JSONObject o = makeNode(C.TONE_ACTION);
         return app(o);
     }
 
@@ -255,13 +255,13 @@ public class MbotCppStackMachineVisitor<V> extends AbstractStackMachineVisitor<V
         String duration = playNoteAction.getDuration();
         app(makeNode(C.EXPR).put(C.EXPR, C.NUM_CONST).put(C.VALUE, freq));
         app(makeNode(C.EXPR).put(C.EXPR, C.NUM_CONST).put(C.VALUE, duration));
-        JSONObject o = makeLeaf(C.TONE_ACTION, playNoteAction);
+        JSONObject o = makeNode(C.TONE_ACTION);
         return app(o);
     }
 
     @Override
     public V visitClearDisplayAction(ClearDisplayAction<V> clearDisplayAction) {
-        JSONObject o = makeLeaf(C.CLEAR_DISPLAY_ACTION, clearDisplayAction);
+        JSONObject o = makeNode(C.CLEAR_DISPLAY_ACTION);
 
         return app(o);
     }
@@ -269,14 +269,14 @@ public class MbotCppStackMachineVisitor<V> extends AbstractStackMachineVisitor<V
     @Override
     public V visitLEDMatrixImageAction(LEDMatrixImageAction<V> ledMatrixImageAction) {
         ledMatrixImageAction.getValuesToDisplay().accept(this);
-        JSONObject o = makeLeaf(C.SHOW_IMAGE_ACTION, ledMatrixImageAction).put(C.MODE, ledMatrixImageAction.getDisplayImageMode().toString().toLowerCase());
+        JSONObject o = makeNode(C.SHOW_IMAGE_ACTION).put(C.MODE, ledMatrixImageAction.getDisplayImageMode().toString().toLowerCase());
         return app(o);
     }
 
     @Override
     public V visitLEDMatrixTextAction(LEDMatrixTextAction<V> ledMatrixTextAction) {
         ledMatrixTextAction.getMsg().accept(this);
-        JSONObject o = makeLeaf(C.SHOW_TEXT_ACTION, ledMatrixTextAction).put(C.MODE, C.TEXT);
+        JSONObject o = makeNode(C.SHOW_TEXT_ACTION).put(C.MODE, C.TEXT);
         return app(o);
     }
 
@@ -296,7 +296,7 @@ public class MbotCppStackMachineVisitor<V> extends AbstractStackMachineVisitor<V
             }
             jsonImage.put(new JSONArray(a));
         }
-        JSONObject o = makeLeaf(C.EXPR, ledMatrixImage).put(C.EXPR, C.IMAGE);
+        JSONObject o = makeNode(C.EXPR).put(C.EXPR, C.IMAGE);
         o.put(C.VALUE, jsonImage);
         return app(o);
     }
@@ -306,14 +306,14 @@ public class MbotCppStackMachineVisitor<V> extends AbstractStackMachineVisitor<V
         ledMatrixImageShiftFunction.getImage().accept(this);
         ledMatrixImageShiftFunction.getPositions().accept(this);
         IDirection direction = ledMatrixImageShiftFunction.getShiftDirection();
-        JSONObject o = makeLeaf(C.IMAGE_SHIFT_ACTION, ledMatrixImageShiftFunction).put(C.DIRECTION, direction.toString().toLowerCase()).put(C.NAME, "mbot");
+        JSONObject o = makeNode(C.IMAGE_SHIFT_ACTION).put(C.DIRECTION, direction.toString().toLowerCase()).put(C.NAME, "mbot");
         return app(o);
     }
 
     @Override
     public V visitLEDMatrixImageInvertFunction(LEDMatrixImageInvertFunction<V> ledMatrixImageInverFunction) {
         ledMatrixImageInverFunction.getImage().accept(this);
-        JSONObject o = makeLeaf(C.EXPR, ledMatrixImageInverFunction).put(C.EXPR, C.SINGLE_FUNCTION).put(C.OP, C.IMAGE_INVERT_ACTION);
+        JSONObject o = makeNode(C.EXPR).put(C.EXPR, C.SINGLE_FUNCTION).put(C.OP, C.IMAGE_INVERT_ACTION);
         return app(o);
     }
 
