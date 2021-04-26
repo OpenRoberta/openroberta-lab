@@ -78,6 +78,7 @@ Blockly.Msg.BRICKLIGHT_ON_TOOLTIP = "Aseta EV3-yksikön valo päälle.";
 Blockly.Msg.BRICKLIGHT_ORANGE = "oranssi";
 Blockly.Msg.BRICKLIGHT_RED = "punainen";
 Blockly.Msg.BRICKLIGHT_RESET_TOOLTIP = "Alusta EV3-yksikön valo. Aseta oletusvalo (välkkyvä vihreä).";
+Blockly.Msg.BRICKNAME_ORB = "ORB";  // untranslated
 Blockly.Msg.BRICKNAME_WEDO = "WeDo";  // untranslated
 Blockly.Msg.BRICK_IPADDRESS = "ip address";  // untranslated
 Blockly.Msg.BRICK_PASSWORD = "password";  // untranslated

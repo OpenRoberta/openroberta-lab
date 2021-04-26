@@ -78,6 +78,7 @@ Blockly.Msg.BRICKLIGHT_ON_TOOLTIP = "Sätt på ljus för enheten";
 Blockly.Msg.BRICKLIGHT_ORANGE = "orange";
 Blockly.Msg.BRICKLIGHT_RED = "röd";
 Blockly.Msg.BRICKLIGHT_RESET_TOOLTIP = "Återställ enhetsljus. Sätt standard enhetsljus: grönt och blinkar.";
+Blockly.Msg.BRICKNAME_ORB = "ORB";  // untranslated
 Blockly.Msg.BRICKNAME_WEDO = "WeDo";
 Blockly.Msg.BRICK_IPADDRESS = "ipadress";
 Blockly.Msg.BRICK_PASSWORD = "lösenord";

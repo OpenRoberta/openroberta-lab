@@ -78,6 +78,7 @@ Blockly.Msg.BRICKLIGHT_ON_TOOLTIP = "Allume la lumière du robot";
 Blockly.Msg.BRICKLIGHT_ORANGE = "orange";
 Blockly.Msg.BRICKLIGHT_RED = "rouge";
 Blockly.Msg.BRICKLIGHT_RESET_TOOLTIP = "Réinitialise la lumière du robot à sa valeur par défaut : vert clignotant";
+Blockly.Msg.BRICKNAME_ORB = "ORB";  // untranslated
 Blockly.Msg.BRICKNAME_WEDO = "WeDo";
 Blockly.Msg.BRICK_IPADDRESS = "adresse IP";
 Blockly.Msg.BRICK_PASSWORD = "mot de passe";

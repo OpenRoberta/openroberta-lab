@@ -78,6 +78,7 @@ Blockly.Msg.BRICKLIGHT_ON_TOOLTIP = "Enciende las luces del ladrillo";
 Blockly.Msg.BRICKLIGHT_ORANGE = "naranja";
 Blockly.Msg.BRICKLIGHT_RED = "rojo";
 Blockly.Msg.BRICKLIGHT_RESET_TOOLTIP = "Reinicia la luz del ladrillo. Vuelve a la configuración por defecto: luz verde y parpadear.";
+Blockly.Msg.BRICKNAME_ORB = "ORB";  // untranslated
 Blockly.Msg.BRICKNAME_WEDO = "WeDo";  // untranslated
 Blockly.Msg.BRICK_IPADDRESS = "ip address";  // untranslated
 Blockly.Msg.BRICK_PASSWORD = "password";  // untranslated

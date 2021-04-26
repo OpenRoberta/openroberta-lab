@@ -78,6 +78,7 @@ Blockly.Msg.BRICKLIGHT_ON_TOOLTIP = "EV3 ışığını aç";
 Blockly.Msg.BRICKLIGHT_ORANGE = "Turuncu";
 Blockly.Msg.BRICKLIGHT_RED = "Kırmızı";
 Blockly.Msg.BRICKLIGHT_RESET_TOOLTIP = "EV3 ışığını sıfırlar. Varsayılan EV3 ışığını belirler: yanıp sönen yeşil ışık.";
+Blockly.Msg.BRICKNAME_ORB = "ORB";  // untranslated
 Blockly.Msg.BRICKNAME_WEDO = "WeDo";  // untranslated
 Blockly.Msg.BRICK_IPADDRESS = "ip address";  // untranslated
 Blockly.Msg.BRICK_PASSWORD = "password";  // untranslated

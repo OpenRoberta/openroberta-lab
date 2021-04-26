@@ -78,6 +78,7 @@ Blockly.Msg.BRICKLIGHT_ON_TOOLTIP = "Włącza diody kostki sterującej.";
 Blockly.Msg.BRICKLIGHT_ORANGE = "pomarańczowy";
 Blockly.Msg.BRICKLIGHT_RED = "czerwony";
 Blockly.Msg.BRICKLIGHT_RESET_TOOLTIP = "Resetuje diody kostki sterującej. Przywraca domyślne ustawienia: migająca zielona dioda.";
+Blockly.Msg.BRICKNAME_ORB = "ORB";  // untranslated
 Blockly.Msg.BRICKNAME_WEDO = "WeDo";  // untranslated
 Blockly.Msg.BRICK_IPADDRESS = "ip address";  // untranslated
 Blockly.Msg.BRICK_PASSWORD = "password";  // untranslated

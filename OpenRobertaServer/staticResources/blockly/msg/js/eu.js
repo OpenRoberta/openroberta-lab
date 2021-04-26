@@ -78,6 +78,7 @@ Blockly.Msg.BRICKLIGHT_ON_TOOLTIP = "Adreiluaren argiak pizten ditu.";
 Blockly.Msg.BRICKLIGHT_ORANGE = "laranja";
 Blockly.Msg.BRICKLIGHT_RED = "gorria";
 Blockly.Msg.BRICKLIGHT_RESET_TOOLTIP = "EV3-aren argia berrabiarazten du. Defektuzko konfiguraziora itzultzen da: argi berdea eta keinadak.";
+Blockly.Msg.BRICKNAME_ORB = "ORB";  // untranslated
 Blockly.Msg.BRICKNAME_WEDO = "WeDo";
 Blockly.Msg.BRICK_IPADDRESS = "ip helbidea";
 Blockly.Msg.BRICK_PASSWORD = "pasahitza";

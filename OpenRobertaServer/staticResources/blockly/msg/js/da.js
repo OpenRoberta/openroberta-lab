@@ -78,6 +78,7 @@ Blockly.Msg.BRICKLIGHT_ON_TOOLTIP = "Tænd EV3 indikatorlampen.";
 Blockly.Msg.BRICKLIGHT_ORANGE = "orange";
 Blockly.Msg.BRICKLIGHT_RED = "rød";
 Blockly.Msg.BRICKLIGHT_RESET_TOOLTIP = "Nulstiller EV3 indikatorlampen. Standardindstillingen er: grøn og blinkende.";
+Blockly.Msg.BRICKNAME_ORB = "ORB";  // untranslated
 Blockly.Msg.BRICKNAME_WEDO = "WeDo";  // untranslated
 Blockly.Msg.BRICK_IPADDRESS = "ip address";  // untranslated
 Blockly.Msg.BRICK_PASSWORD = "password";  // untranslated

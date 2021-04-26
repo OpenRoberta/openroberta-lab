@@ -114,6 +114,11 @@
         </dependency>
         <dependency>
             <groupId>de.fhg.iais.openroberta</groupId>
+            <artifactId>RobotORB</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>de.fhg.iais.openroberta</groupId>
             <artifactId>OpenRobertaRobot</artifactId>
             <type>test-jar</type>
             <scope>test</scope>
@@ -221,7 +226,7 @@
                                 </artifactItem>
                                 <artifactItem>
                                     <groupId>de.fhg.iais.openroberta</groupId>
-                                    <artifactId>RobotEdison</artifactId>
+                                    <artifactId>RobotORB</artifactId>
                                     <version>${project.version}</version>
                                     <type>jar</type>
                                     <overWrite>true</overWrite>

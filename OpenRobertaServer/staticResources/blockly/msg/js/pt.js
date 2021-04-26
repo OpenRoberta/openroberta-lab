@@ -78,6 +78,7 @@ Blockly.Msg.BRICKLIGHT_ON_TOOLTIP = "Ligar luz do controlador.";
 Blockly.Msg.BRICKLIGHT_ORANGE = "Laranja";
 Blockly.Msg.BRICKLIGHT_RED = "Vermelho";
 Blockly.Msg.BRICKLIGHT_RESET_TOOLTIP = "Repor luz do controlador. Coloca por defeito: verde a piscar.";
+Blockly.Msg.BRICKNAME_ORB = "ORB";  // untranslated
 Blockly.Msg.BRICKNAME_WEDO = "WeDo";  // untranslated
 Blockly.Msg.BRICK_IPADDRESS = "ip address";  // untranslated
 Blockly.Msg.BRICK_PASSWORD = "password";  // untranslated

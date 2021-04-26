@@ -78,6 +78,7 @@ Blockly.Msg.BRICKLIGHT_ON_TOOLTIP = "打開積木燈";
 Blockly.Msg.BRICKLIGHT_ORANGE = "橘色";
 Blockly.Msg.BRICKLIGHT_RED = "紅色";
 Blockly.Msg.BRICKLIGHT_RESET_TOOLTIP = "重置積木燈。設置預設積木燈：綠色閃爍";
+Blockly.Msg.BRICKNAME_ORB = "ORB";  // untranslated
 Blockly.Msg.BRICKNAME_WEDO = "WeDo";
 Blockly.Msg.BRICK_IPADDRESS = "ip 位址";
 Blockly.Msg.BRICK_PASSWORD = "密碼";

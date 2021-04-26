@@ -50,6 +50,7 @@
         <module>RobotWeDo</module>
         <module>RobotEdison</module>
         <module>RobotRaspberryPi</module>
+        <module>RobotORB</module>
         <module>OpenRobertaServer</module>
         <module>TypeScriptSources</module>
     </modules>
@@ -134,6 +135,11 @@
             <dependency>
                 <groupId>de.fhg.iais.openroberta</groupId>
                 <artifactId>RobotEdison</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>de.fhg.iais.openroberta</groupId>
+                <artifactId>RobotORB</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>

@@ -78,6 +78,7 @@ Blockly.Msg.BRICKLIGHT_ON_TOOLTIP = "Zapnout LED na kostce.";
 Blockly.Msg.BRICKLIGHT_ORANGE = "oranžová";
 Blockly.Msg.BRICKLIGHT_RED = "červená";
 Blockly.Msg.BRICKLIGHT_RESET_TOOLTIP = "Resetovat LED na kostce. Nastaví původní stav: blikající zelená.";
+Blockly.Msg.BRICKNAME_ORB = "ORB";  // untranslated
 Blockly.Msg.BRICKNAME_WEDO = "WeDo";  // untranslated
 Blockly.Msg.BRICK_IPADDRESS = "ip address";  // untranslated
 Blockly.Msg.BRICK_PASSWORD = "password";  // untranslated

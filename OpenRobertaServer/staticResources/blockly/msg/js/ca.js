@@ -78,6 +78,7 @@ Blockly.Msg.BRICKLIGHT_ON_TOOLTIP = "Encén els llums del bloc EV3.";
 Blockly.Msg.BRICKLIGHT_ORANGE = "taronja";
 Blockly.Msg.BRICKLIGHT_RED = "vermell";
 Blockly.Msg.BRICKLIGHT_RESET_TOOLTIP = "Reinicia els llums del bloc EV3. Torna a la configuració per defecte: verd intermitent.";
+Blockly.Msg.BRICKNAME_ORB = "ORB";  // untranslated
 Blockly.Msg.BRICKNAME_WEDO = "WeDo";  // untranslated
 Blockly.Msg.BRICK_IPADDRESS = "ip address";  // untranslated
 Blockly.Msg.BRICK_PASSWORD = "password";  // untranslated

@@ -78,6 +78,7 @@ Blockly.Msg.BRICKLIGHT_ON_TOOLTIP = "Accende le luci del brick";
 Blockly.Msg.BRICKLIGHT_ORANGE = "arancio";
 Blockly.Msg.BRICKLIGHT_RED = "rosso";
 Blockly.Msg.BRICKLIGHT_RESET_TOOLTIP = "Reimposta luci del brick EV3. Imposta le luci iniziali del brick EV3: verde lampeggiante";
+Blockly.Msg.BRICKNAME_ORB = "ORB";  // untranslated
 Blockly.Msg.BRICKNAME_WEDO = "WeDo";
 Blockly.Msg.BRICK_IPADDRESS = "indirizzo ip";
 Blockly.Msg.BRICK_PASSWORD = "password";
