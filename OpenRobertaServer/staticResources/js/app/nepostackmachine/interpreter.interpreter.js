@@ -12,6 +12,7 @@ define(["require", "exports", "./interpreter.state", "./interpreter.constants", 
         function Interpreter(generatedCode, r, cbOnTermination, simBreakpoints) {
             this.terminated = false;
             this.callbackOnTermination = undefined;
+            this.debugDelay = 2;
             this.terminated = false;
             this.callbackOnTermination = cbOnTermination;
             var stmts = generatedCode[C.OPS];
@@ -108,16 +109,15 @@ define(["require", "exports", "./interpreter.state", "./interpreter.constants", 
         Interpreter.prototype.evalOperation = function (maxRunTime) {
             while (maxRunTime >= new Date().getTime() && !this.robotBehaviour.getBlocking()) {
                 var op = this.state.getOp();
-                this.state.evalInitiations(op);
-                this.lastBlock && this.state.evalTerminations(this.lastBlock);
+                this.state.evalHighlightings(op, this.lastBlock);
                 if (this.state.getDebugMode()) {
                     var canContinue = this.calculateDebugBehaviour(op);
                     if (!canContinue)
                         return 0;
                 }
                 var _a = this.evalSingleOperation(op), result = _a[0], stop_1 = _a[1];
-                this.lastBlock = op;
                 this.lastStoppedBlock = null;
+                this.lastBlock = op;
                 if (result > 0 || stop_1) {
                     return result;
                 }
@@ -126,6 +126,9 @@ define(["require", "exports", "./interpreter.state", "./interpreter.constants", 
                     this.robotBehaviour.close();
                     this.callbackOnTermination();
                     return 0;
+                }
+                if (this.state.getDebugMode()) {
+                    return this.debugDelay;
                 }
             }
             return 0;

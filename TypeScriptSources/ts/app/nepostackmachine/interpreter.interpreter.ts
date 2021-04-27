@@ -21,6 +21,8 @@ export class Interpreter {
     private lastStoppedBlock: any;
     private lastBlock: any;
 
+    private readonly debugDelay = 2;
+
     /*
      *
      * . @param generatedCode argument contains the operations and the function definitions
@@ -110,6 +112,7 @@ export class Interpreter {
     }
 
 
+
     /**
      * the central interpreter. It is a stack machine interpreting operations given as JSON objects. The operations are all IMMUTABLE. It
      * - uses the this.state component to store the state of the interpretation.
@@ -138,17 +141,16 @@ export class Interpreter {
     private evalOperation(maxRunTime: number) {
         while (maxRunTime >= new Date().getTime() && !this.robotBehaviour.getBlocking()) {
             let op = this.state.getOp();
-            this.state.evalInitiations(op);
-            this.lastBlock && this.state.evalTerminations(this.lastBlock);
+            this.state.evalHighlightings(op, this.lastBlock);
 
             if (this.state.getDebugMode()) {
                 let canContinue = this.calculateDebugBehaviour(op);
-                if (!canContinue) return 0
+                if (!canContinue) return 0;
             }
 
             let [result, stop] = this.evalSingleOperation(op);
-            this.lastBlock = op;
             this.lastStoppedBlock = null;
+            this.lastBlock = op;
 
             if (result > 0 || stop) {
                 return result;
@@ -158,6 +160,10 @@ export class Interpreter {
                 this.robotBehaviour.close();
                 this.callbackOnTermination()
                 return 0;
+            }
+
+            if (this.state.getDebugMode()) {
+                return this.debugDelay;
             }
         }
         return 0;
