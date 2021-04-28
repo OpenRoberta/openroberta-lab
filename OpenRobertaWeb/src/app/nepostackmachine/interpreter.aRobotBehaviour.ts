@@ -106,4 +106,6 @@ export abstract class ARobotBehaviour {
     abstract temperatureLedAction(blue: number, red: number): void;
 
     abstract soundLedAction(val: number): void;
+
+    abstract setConfiguration(configuration: any): void;
 }

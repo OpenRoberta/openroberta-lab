@@ -442,4 +442,8 @@ export class RobotSimBehaviour extends ARobotBehaviour {
     temperatureLedAction(blue: number, red: number): void {
         this.hardwareState.actions.temperatureLeds = [red, blue];
     }
+
+    public setConfiguration(configuration: any): void {
+        throw new Error('Method not implemented.');
+    }
 }

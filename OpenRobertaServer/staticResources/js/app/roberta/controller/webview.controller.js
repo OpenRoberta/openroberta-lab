@@ -1,4 +1,4 @@
-define(["require", "exports", "guiState.controller", "interpreter.interpreter", "interpreter.robotWeDoBehaviour", "log", "blockly", "jquery"], function (require, exports, GUISTATE_C, INTERPRETER, WEDO_B, LOG, Blockly, $) {
+define(["require", "exports", "guiState.controller", "interpreter.interpreter", "interpreter.robotWeDoBehaviour", "interpreter.robotOrbBehaviour", "log", "blockly", "jquery"], function (require, exports, GUISTATE_C, INTERPRETER, WEDO_B, ORB_B, LOG, Blockly, $) {
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.jsToDisplay = exports.jsToAppInterface = exports.setRobotBehaviour = exports.isRobotConnected = exports.getInterpreter = exports.appToJsInterface = exports.init = void 0;
     var ready;
@@ -107,8 +107,8 @@ define(["require", "exports", "guiState.controller", "interpreter.interpreter", 
         GUISTATE_C.setConnectionState('wait');
         GUISTATE_C.getBlocklyWorkspace().robControls.switchToStart();
     }
-    function getInterpreter(program) {
-        interpreter = new INTERPRETER.Interpreter(program, theRobotBehaviour, callbackOnTermination, []);
+    function getInterpreter(program, configuration) {
+        interpreter = new INTERPRETER.Interpreter(program, configuration, theRobotBehaviour, callbackOnTermination, []);
         return interpreter;
     }
     exports.getInterpreter = getInterpreter;
@@ -120,7 +120,10 @@ define(["require", "exports", "guiState.controller", "interpreter.interpreter", 
         switch (GUISTATE_C.getRobot()) {
             case 'wedo':
                 theRobotBehaviour = new WEDO_B.RobotWeDoBehaviour(jsToAppInterface, jsToDisplay);
-            // TODO: introduce here new robots and behaviours and add them to the dependencies on top of the file
+                break;
+            case 'orb':
+                theRobotBehaviour = new ORB_B.RobotOrbBehaviour(jsToAppInterface, jsToDisplay);
+                break;
             default:
                 LOG.error('Webview: no robot behaviour for ' + GUISTATE_C.getRobot() + ' available!');
         }

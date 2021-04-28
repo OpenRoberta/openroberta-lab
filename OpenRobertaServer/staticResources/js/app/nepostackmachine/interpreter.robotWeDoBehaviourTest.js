@@ -188,6 +188,9 @@ define(["require", "exports", "./interpreter.aRobotBehaviour", "./interpreter.co
         };
         RobotWeDoBehaviourTest.prototype.proxHLedAction = function (ledValues) {
         };
+        RobotWeDoBehaviourTest.prototype.setConfiguration = function (configuration) {
+            throw new Error('Method not implemented.');
+        };
         return RobotWeDoBehaviourTest;
     }(interpreter_aRobotBehaviour_1.ARobotBehaviour));
     exports.RobotWeDoBehaviourTest = RobotWeDoBehaviourTest;

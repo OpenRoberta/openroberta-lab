@@ -2,6 +2,8 @@ import { RobotWeDoBehaviourTest } from './interpreter.robotWeDoBehaviourTest';
 import { Interpreter } from './interpreter.interpreter';
 import * as U from './interpreter.util';
 import * as FS from 'fs';
+import { ARobotBehaviour } from './interpreter.aRobotBehaviour';
+import { getJSON } from 'jquery';
 
 // general settings: directory with test files, extent of debugging (opLog is VERY gossipy)
 const showResult = false;
@@ -70,8 +72,9 @@ function processOps(fileName: string) {
     try {
         const generatedCodeAsString = FS.readFileSync(baseDirectory + fileName + '.json', 'utf8');
         const generatedCode = JSON.parse(generatedCodeAsString);
+        const configuration = null;
         const interpreter = new Interpreter(
-            generatedCode,
+            generatedCode, configuration,
             new RobotWeDoBehaviourTest(showOpLog, showDebug),
             function () {
                 callbackOnTermination(fileName);

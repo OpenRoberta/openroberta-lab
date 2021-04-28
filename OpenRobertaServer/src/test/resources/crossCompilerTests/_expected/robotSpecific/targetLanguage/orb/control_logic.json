@@ -1,0 +1,2511 @@
+{
+  "ops": [
+    {
+      "opc": "expr",
+      "expr": "NUM_CONST",
+      "+": [
+        ";M]^uLf.I0NE;Y*f/eS_",
+        "qLo1{YOH@jh6{q`7iiXA"
+      ],
+      "value": "0",
+      "-": [
+        ";M]^uLf.I0NE;Y*f/eS_"
+      ]
+    },
+    {
+      "opc": "VarDeclaration",
+      "name": "numberVar",
+      "type": "NUMBER",
+      "-": [
+        "qLo1{YOH@jh6{q`7iiXA"
+      ]
+    },
+    {
+      "opc": "expr",
+      "expr": "BOOL_CONST",
+      "+": [
+        "7pVW673SXnb95OQ%c3g?",
+        "QZ@O=lFdVrDVT3h|}-u?"
+      ],
+      "value": true,
+      "-": [
+        "7pVW673SXnb95OQ%c3g?"
+      ]
+    },
+    {
+      "opc": "VarDeclaration",
+      "name": "booleanVar",
+      "type": "BOOLEAN",
+      "-": [
+        "QZ@O=lFdVrDVT3h|}-u?"
+      ]
+    },
+    {
+      "opc": "expr",
+      "expr": "STRING_CONST",
+      "+": [
+        "sX~~fmLDy3Lkqa7nN=-s",
+        "wkjE;MeU=:u=:S,-HbXh"
+      ],
+      "value": "",
+      "-": [
+        "wkjE;MeU=:u=:S,-HbXh"
+      ]
+    },
+    {
+      "opc": "VarDeclaration",
+      "name": "stringVar",
+      "type": "STRING",
+      "-": [
+        "sX~~fmLDy3Lkqa7nN=-s"
+      ]
+    },
+    {
+      "opc": "expr",
+      "expr": "COLOR_CONST",
+      "+": [
+        "e^^Lry5RFPc!DETnMS(y",
+        "@Xe@[F/LCzj6^)iaFaZ_"
+      ],
+      "value": "WHITE",
+      "-": [
+        "@Xe@[F/LCzj6^)iaFaZ_"
+      ]
+    },
+    {
+      "opc": "VarDeclaration",
+      "name": "colourVar",
+      "type": "COLOR",
+      "-": [
+        "e^^Lry5RFPc!DETnMS(y"
+      ]
+    },
+    {
+      "opc": "expr",
+      "expr": "C.NULL_CONST",
+      "+": [
+        "c^2-6P0-k2:::`jX*j2G",
+        "A-M8foPVg49ntigY|e:="
+      ],
+      "-": [
+        "c^2-6P0-k2:::`jX*j2G"
+      ]
+    },
+    {
+      "opc": "VarDeclaration",
+      "name": "connectionVar",
+      "type": "CONNECTION",
+      "-": [
+        "A-M8foPVg49ntigY|e:="
+      ]
+    },
+    {
+      "opc": "expr",
+      "expr": "NUM_CONST",
+      "+": [
+        ";]}FN.45GXrNG!mGx!rH",
+        "}]??Sw.v}B)o{N%!|kC4",
+        "H=7G@c0Pt(QI^kuuinNX"
+      ],
+      "value": "0",
+      "-": [
+        "}]??Sw.v}B)o{N%!|kC4"
+      ]
+    },
+    {
+      "opc": "expr",
+      "expr": "NUM_CONST",
+      "+": [
+        "Byv}kK8LKZ0)p2xM1UwT"
+      ],
+      "value": "0",
+      "-": [
+        "Byv}kK8LKZ0)p2xM1UwT"
+      ]
+    },
+    {
+      "NUMBER": 2,
+      "opc": "expr",
+      "expr": "createList",
+      "-": [
+        ";]}FN.45GXrNG!mGx!rH"
+      ]
+    },
+    {
+      "opc": "VarDeclaration",
+      "name": "numberList",
+      "type": "ARRAY_NUMBER",
+      "-": [
+        "H=7G@c0Pt(QI^kuuinNX"
+      ]
+    },
+    {
+      "opc": "expr",
+      "expr": "BOOL_CONST",
+      "+": [
+        "~T]CD~CAlZKMJl/OC4|y",
+        "?Ganm-eK7Bqm!sn@bynA",
+        "hmkkttRR5!{V0J~o1Ats"
+      ],
+      "value": true,
+      "-": [
+        "hmkkttRR5!{V0J~o1Ats"
+      ]
+    },
+    {
+      "opc": "expr",
+      "expr": "BOOL_CONST",
+      "+": [
+        ":DZ!N24VGJbh=EElA1-*"
+      ],
+      "value": true,
+      "-": [
+        ":DZ!N24VGJbh=EElA1-*"
+      ]
+    },
+    {
+      "NUMBER": 2,
+      "opc": "expr",
+      "expr": "createList",
+      "-": [
+        "~T]CD~CAlZKMJl/OC4|y"
+      ]
+    },
+    {
+      "opc": "VarDeclaration",
+      "name": "booleanList",
+      "type": "ARRAY_BOOLEAN",
+      "-": [
+        "?Ganm-eK7Bqm!sn@bynA"
+      ]
+    },
+    {
+      "opc": "expr",
+      "expr": "STRING_CONST",
+      "+": [
+        "|cJKNL#?V6^g22o@O9%+",
+        "]@WE+-G!NjvE6O{cCW5d",
+        "Lt;U4+Fq?w;);Qpwt:y;"
+      ],
+      "value": "",
+      "-": [
+        "]@WE+-G!NjvE6O{cCW5d"
+      ]
+    },
+    {
+      "opc": "expr",
+      "expr": "STRING_CONST",
+      "+": [
+        "0hK_K6D(pHA#mPX;HXtU"
+      ],
+      "value": "",
+      "-": [
+        "0hK_K6D(pHA#mPX;HXtU"
+      ]
+    },
+    {
+      "NUMBER": 2,
+      "opc": "expr",
+      "expr": "createList",
+      "-": [
+        "Lt;U4+Fq?w;);Qpwt:y;"
+      ]
+    },
+    {
+      "opc": "VarDeclaration",
+      "name": "stringList",
+      "type": "ARRAY_STRING",
+      "-": [
+        "|cJKNL#?V6^g22o@O9%+"
+      ]
+    },
+    {
+      "opc": "expr",
+      "expr": "COLOR_CONST",
+      "+": [
+        "(g_dz|)WyGW(o_Ka0*[B",
+        "S)@^ZAgoPOM5~UXhK*h(",
+        "*|M1njKvqd1LL,7s?[2i"
+      ],
+      "value": "WHITE",
+      "-": [
+        "*|M1njKvqd1LL,7s?[2i"
+      ]
+    },
+    {
+      "opc": "expr",
+      "expr": "COLOR_CONST",
+      "+": [
+        "[U;1C]sr(,MlKn8wLE:l"
+      ],
+      "value": "WHITE",
+      "-": [
+        "[U;1C]sr(,MlKn8wLE:l"
+      ]
+    },
+    {
+      "NUMBER": 2,
+      "opc": "expr",
+      "expr": "createList",
+      "-": [
+        "(g_dz|)WyGW(o_Ka0*[B"
+      ]
+    },
+    {
+      "opc": "VarDeclaration",
+      "name": "colourList",
+      "type": "ARRAY_COLOUR",
+      "-": [
+        "S)@^ZAgoPOM5~UXhK*h("
+      ]
+    },
+    {
+      "opc": "expr",
+      "name": "connectionVar",
+      "expr": "Var",
+      "+": [
+        "#ddQYFk.2)@}i#Z?+O%L",
+        "X70t94-EF`W=_@OtQ6N:",
+        "6r;)JlRqUsB9mM(lATwm"
+      ],
+      "-": [
+        "6r;)JlRqUsB9mM(lATwm"
+      ]
+    },
+    {
+      "opc": "expr",
+      "name": "connectionVar",
+      "expr": "Var",
+      "+": [
+        "+llC4qp57vrA*Ip9/?~o"
+      ],
+      "-": [
+        "+llC4qp57vrA*Ip9/?~o"
+      ]
+    },
+    {
+      "NUMBER": 2,
+      "opc": "expr",
+      "expr": "createList",
+      "-": [
+        "#ddQYFk.2)@}i#Z?+O%L"
+      ]
+    },
+    {
+      "opc": "VarDeclaration",
+      "name": "connectionList",
+      "type": "ARRAY_CONNECTION",
+      "-": [
+        "X70t94-EF`W=_@OtQ6N:"
+      ]
+    },
+    {
+      "opc": "returnAddress",
+      "possibleDebugStop": [
+        "M2XEw_F`!t2K1r3#3Gix"
+      ],
+      "+": [
+        "M2XEw_F`!t2K1r3#3Gix"
+      ],
+      "target": "rtn_1"
+    },
+    {
+      "opc": "call",
+      "target": "mthd_s_control"
+    },
+    {
+      "opc": "comment",
+      "text": "call",
+      "label": "rtn_1",
+      "type": "end",
+      "-": [
+        "M2XEw_F`!t2K1r3#3Gix"
+      ]
+    },
+    {
+      "opc": "returnAddress",
+      "possibleDebugStop": [
+        "TJ:4/JFtZIvEFP1v;4|K"
+      ],
+      "+": [
+        "TJ:4/JFtZIvEFP1v;4|K"
+      ],
+      "target": "rtn_2"
+    },
+    {
+      "opc": "call",
+      "target": "mthd_s_logic"
+    },
+    {
+      "opc": "comment",
+      "text": "call",
+      "label": "rtn_2",
+      "type": "end",
+      "-": [
+        "TJ:4/JFtZIvEFP1v;4|K"
+      ]
+    },
+    {
+      "opc": "stop"
+    },
+    {
+      "opc": "comment",
+      "possibleDebugStop": [
+        "H2bNushrR5w;Hw{|GJq2"
+      ],
+      "+": [
+        "H2bNushrR5w;Hw{|GJq2"
+      ],
+      "text": "createMethodVoid",
+      "label": "mthd_s_control",
+      "type": "start"
+    },
+    {
+      "opc": "comment",
+      "possibleDebugStop": [
+        "Pk@7IZcH2lXy%%lR{R)k"
+      ],
+      "+": [
+        "Pk@7IZcH2lXy%%lR{R)k"
+      ],
+      "text": "IfStatement",
+      "type": "start",
+      "n": 4
+    },
+    {
+      "opc": "comment",
+      "text": "IfStatement",
+      "label": "i_0_4"
+    },
+    {
+      "opc": "expr",
+      "name": "booleanVar",
+      "expr": "Var",
+      "+": [
+        "kvv1d}:p)Nh@i%J#Lmlb"
+      ],
+      "-": [
+        "kvv1d}:p)Nh@i%J#Lmlb"
+      ]
+    },
+    {
+      "opc": "jump",
+      "conditional": false,
+      "target": "i_1_4"
+    },
+    {
+      "opc": "jump",
+      "conditional": "always",
+      "target": "i_e_4"
+    },
+    {
+      "opc": "comment",
+      "text": "IfStatement",
+      "label": "i_1_4"
+    },
+    {
+      "opc": "expr",
+      "name": "booleanVar",
+      "expr": "Var",
+      "+": [
+        "w7~be:y[SwWV0.^rHX@%"
+      ],
+      "-": [
+        "w7~be:y[SwWV0.^rHX@%"
+      ]
+    },
+    {
+      "opc": "jump",
+      "conditional": false,
+      "target": "i_2_4"
+    },
+    {
+      "opc": "jump",
+      "conditional": "always",
+      "target": "i_e_4"
+    },
+    {
+      "opc": "comment",
+      "text": "IfStatement",
+      "label": "i_2_4"
+    },
+    {
+      "opc": "comment",
+      "text": "IfStatement",
+      "label": "i_e_4",
+      "type": "end",
+      "-": [
+        "Pk@7IZcH2lXy%%lR{R)k"
+      ]
+    },
+    {
+      "opc": "comment",
+      "possibleDebugStop": [
+        "*[_HkCQWMWIJS^GtQ1)x"
+      ],
+      "+": [
+        "*[_HkCQWMWIJS^GtQ1)x"
+      ],
+      "text": "IfStatement",
+      "type": "start",
+      "n": 5
+    },
+    {
+      "opc": "comment",
+      "text": "IfStatement",
+      "label": "i_0_5"
+    },
+    {
+      "opc": "expr",
+      "name": "booleanVar",
+      "expr": "Var",
+      "+": [
+        "Ylf*b2l((@Q^+8Bd_4JK"
+      ],
+      "-": [
+        "Ylf*b2l((@Q^+8Bd_4JK"
+      ]
+    },
+    {
+      "opc": "jump",
+      "conditional": false,
+      "target": "i_1_5"
+    },
+    {
+      "opc": "jump",
+      "conditional": "always",
+      "target": "i_e_5"
+    },
+    {
+      "opc": "comment",
+      "text": "IfStatement",
+      "label": "i_1_5"
+    },
+    {
+      "opc": "expr",
+      "name": "booleanVar",
+      "expr": "Var",
+      "+": [
+        "wk`i^q|ZBC/HY/~@xPNd"
+      ],
+      "-": [
+        "wk`i^q|ZBC/HY/~@xPNd"
+      ]
+    },
+    {
+      "opc": "jump",
+      "conditional": false,
+      "target": "i_2_5"
+    },
+    {
+      "opc": "jump",
+      "conditional": "always",
+      "target": "i_e_5"
+    },
+    {
+      "opc": "comment",
+      "text": "IfStatement",
+      "label": "i_2_5"
+    },
+    {
+      "opc": "comment",
+      "text": "IfStatement",
+      "label": "i_e_5",
+      "type": "end",
+      "-": [
+        "*[_HkCQWMWIJS^GtQ1)x"
+      ]
+    },
+    {
+      "opc": "comment",
+      "+": [
+        "L*-wMpSt.N4c}fEBaF_S"
+      ],
+      "text": "RepeatStmt",
+      "label": "r_s_6",
+      "type": "start"
+    },
+    {
+      "opc": "comment",
+      "text": "RepeatStmt",
+      "label": "r_l_6"
+    },
+    {
+      "opc": "comment",
+      "possibleDebugStop": [
+        "L*-wMpSt.N4c}fEBaF_S"
+      ]
+    },
+    {
+      "opc": "jump",
+      "conditional": "always",
+      "target": "r_s_6"
+    },
+    {
+      "opc": "comment",
+      "text": "RepeatStmt",
+      "label": "r_e_6",
+      "type": "end",
+      "-": [
+        "L*-wMpSt.N4c}fEBaF_S"
+      ]
+    },
+    {
+      "opc": "comment",
+      "+": [
+        "K=W[*Cj__X^Cx.g[[-[h"
+      ],
+      "text": "RepeatStmt",
+      "type": "start",
+      "n": 7
+    },
+    {
+      "opc": "expr",
+      "expr": "NUM_CONST",
+      "value": "0"
+    },
+    {
+      "opc": "VarDeclaration",
+      "name": "k0",
+      "type": "NUMBER"
+    },
+    {
+      "opc": "comment",
+      "text": "RepeatStmt",
+      "label": "r_l_7"
+    },
+    {
+      "opc": "expr",
+      "name": "k0",
+      "expr": "Var"
+    },
+    {
+      "opc": "expr",
+      "name": "numberVar",
+      "expr": "Var",
+      "+": [
+        "eLiA`K9VbY?M|X0v%prQ"
+      ],
+      "-": [
+        "eLiA`K9VbY?M|X0v%prQ"
+      ]
+    },
+    {
+      "op": "LT",
+      "opc": "expr",
+      "expr": "Binary"
+    },
+    {
+      "opc": "jump",
+      "conditional": false,
+      "target": "r_e_7"
+    },
+    {
+      "opc": "comment",
+      "possibleDebugStop": [
+        "K=W[*Cj__X^Cx.g[[-[h"
+      ]
+    },
+    {
+      "opc": "comment",
+      "text": "RepeatStmt",
+      "label": "r_c_7"
+    },
+    {
+      "opc": "expr",
+      "expr": "NUM_CONST",
+      "value": "1"
+    },
+    {
+      "opc": "expr",
+      "name": "k0",
+      "expr": "Var"
+    },
+    {
+      "op": "ADD",
+      "opc": "expr",
+      "expr": "Binary"
+    },
+    {
+      "opc": "AssignStmt",
+      "name": "k0"
+    },
+    {
+      "opc": "jump",
+      "conditional": "always",
+      "target": "r_l_7"
+    },
+    {
+      "opc": "comment",
+      "text": "RepeatStmt",
+      "label": "r_e_7"
+    },
+    {
+      "opc": "unbindVar",
+      "name": "k0"
+    },
+    {
+      "opc": "comment",
+      "text": "RepeatStmt",
+      "type": "end",
+      "-": [
+        "K=W[*Cj__X^Cx.g[[-[h"
+      ]
+    },
+    {
+      "opc": "comment",
+      "+": [
+        "78o/7;7SqEs_;,?1%uTY"
+      ],
+      "text": "RepeatStmt",
+      "type": "start",
+      "n": 8
+    },
+    {
+      "opc": "expr",
+      "name": "numberVar",
+      "expr": "Var",
+      "+": [
+        "D?319rk)}8/Hc1s*lHa?"
+      ],
+      "-": [
+        "D?319rk)}8/Hc1s*lHa?"
+      ]
+    },
+    {
+      "opc": "VarDeclaration",
+      "name": "i",
+      "type": "NUMBER"
+    },
+    {
+      "opc": "comment",
+      "text": "RepeatStmt",
+      "label": "r_l_8"
+    },
+    {
+      "opc": "expr",
+      "name": "i",
+      "expr": "Var"
+    },
+    {
+      "opc": "expr",
+      "name": "numberVar",
+      "expr": "Var",
+      "+": [
+        "|8{p4Fu^Tq8-B!]9msPx"
+      ],
+      "-": [
+        "|8{p4Fu^Tq8-B!]9msPx"
+      ]
+    },
+    {
+      "op": "LT",
+      "opc": "expr",
+      "expr": "Binary"
+    },
+    {
+      "opc": "jump",
+      "conditional": false,
+      "target": "r_e_8"
+    },
+    {
+      "opc": "comment",
+      "possibleDebugStop": [
+        "78o/7;7SqEs_;,?1%uTY"
+      ]
+    },
+    {
+      "opc": "comment",
+      "text": "RepeatStmt",
+      "label": "r_c_8"
+    },
+    {
+      "opc": "expr",
+      "name": "numberVar",
+      "expr": "Var",
+      "+": [
+        "9`3*FCy1Ay9TFTb(M=u;"
+      ],
+      "-": [
+        "9`3*FCy1Ay9TFTb(M=u;"
+      ]
+    },
+    {
+      "opc": "expr",
+      "name": "i",
+      "expr": "Var"
+    },
+    {
+      "op": "ADD",
+      "opc": "expr",
+      "expr": "Binary"
+    },
+    {
+      "opc": "AssignStmt",
+      "name": "i"
+    },
+    {
+      "opc": "jump",
+      "conditional": "always",
+      "target": "r_l_8"
+    },
+    {
+      "opc": "comment",
+      "text": "RepeatStmt",
+      "label": "r_e_8"
+    },
+    {
+      "opc": "unbindVar",
+      "name": "i"
+    },
+    {
+      "opc": "comment",
+      "text": "RepeatStmt",
+      "type": "end",
+      "-": [
+        "78o/7;7SqEs_;,?1%uTY"
+      ]
+    },
+    {
+      "opc": "comment",
+      "+": [
+        "67em4e6hWxh+L0}_D#tB"
+      ],
+      "text": "RepeatStmt",
+      "label": "r_s_9",
+      "type": "start"
+    },
+    {
+      "opc": "comment",
+      "text": "RepeatStmt",
+      "label": "r_l_9"
+    },
+    {
+      "opc": "comment",
+      "possibleDebugStop": [
+        "67em4e6hWxh+L0}_D#tB"
+      ]
+    },
+    {
+      "opc": "jump",
+      "possibleDebugStop": [
+        "da8=WYPP.SMqz-B=9o:D"
+      ],
+      "conditional": "always",
+      "+": [
+        "da8=WYPP.SMqz-B=9o:D"
+      ],
+      "-": [
+        "H2bNushrR5w;Hw{|GJq2",
+        "da8=WYPP.SMqz-B=9o:D",
+        "67em4e6hWxh+L0}_D#tB"
+      ],
+      "target": "r_e_9"
+    },
+    {
+      "opc": "jump",
+      "conditional": "always",
+      "target": "r_s_9"
+    },
+    {
+      "opc": "comment",
+      "text": "RepeatStmt",
+      "label": "r_e_9",
+      "type": "end",
+      "-": [
+        "67em4e6hWxh+L0}_D#tB"
+      ]
+    },
+    {
+      "opc": "comment",
+      "+": [
+        "]1#+robHoW-,g+gil?*A"
+      ],
+      "text": "RepeatStmt",
+      "label": "r_s_10",
+      "type": "start"
+    },
+    {
+      "opc": "comment",
+      "text": "RepeatStmt",
+      "label": "r_l_10"
+    },
+    {
+      "opc": "comment",
+      "possibleDebugStop": [
+        "]1#+robHoW-,g+gil?*A"
+      ]
+    },
+    {
+      "opc": "jump",
+      "possibleDebugStop": [
+        "y#}VvjI,-3?^bipqVW`y"
+      ],
+      "conditional": "always",
+      "+": [
+        "y#}VvjI,-3?^bipqVW`y"
+      ],
+      "-": [
+        "]1#+robHoW-,g+gil?*A",
+        "H2bNushrR5w;Hw{|GJq2",
+        "y#}VvjI,-3?^bipqVW`y"
+      ],
+      "target": "r_l_10"
+    },
+    {
+      "opc": "jump",
+      "conditional": "always",
+      "target": "r_s_10"
+    },
+    {
+      "opc": "comment",
+      "text": "RepeatStmt",
+      "label": "r_e_10",
+      "type": "end",
+      "-": [
+        "]1#+robHoW-,g+gil?*A"
+      ]
+    },
+    {
+      "opc": "expr",
+      "possibleDebugStop": [
+        "9#GXvvJ0m/M]z,^ov[`4"
+      ],
+      "name": "numberVar",
+      "expr": "Var",
+      "+": [
+        "?JfIf*[+oM;4IE#JeK=x",
+        "9#GXvvJ0m/M]z,^ov[`4"
+      ],
+      "-": [
+        "?JfIf*[+oM;4IE#JeK=x"
+      ]
+    },
+    {
+      "opc": "WaitTimeSTMT",
+      "-": [
+        "9#GXvvJ0m/M]z,^ov[`4"
+      ]
+    },
+    {
+      "opc": "comment",
+      "+": [
+        "86kk):/~H21AP/3npJm8"
+      ],
+      "text": "RepeatStmt",
+      "label": "r_l_11",
+      "type": "start"
+    },
+    {
+      "opc": "comment",
+      "possibleDebugStop": [
+        "86kk):/~H21AP/3npJm8"
+      ]
+    },
+    {
+      "opc": "expr",
+      "name": "booleanVar",
+      "expr": "Var",
+      "+": [
+        "k+Q)P~Rap,mmk#D]2w)V"
+      ],
+      "-": [
+        "k+Q)P~Rap,mmk#D]2w)V"
+      ]
+    },
+    {
+      "opc": "jump",
+      "conditional": false,
+      "-": [
+        "86kk):/~H21AP/3npJm8",
+        "H2bNushrR5w;Hw{|GJq2"
+      ],
+      "target": "r_e_11"
+    },
+    {
+      "opc": "jump",
+      "conditional": "always",
+      "target": "r_l_11"
+    },
+    {
+      "opc": "comment",
+      "text": "RepeatStmt",
+      "label": "r_e_11",
+      "type": "end",
+      "-": [
+        "86kk):/~H21AP/3npJm8"
+      ]
+    },
+    {
+      "opc": "comment",
+      "+": [
+        "b(nL`AfiKGqFZc,i6N]@"
+      ],
+      "text": "RepeatStmt",
+      "label": "r_l_12",
+      "type": "start"
+    },
+    {
+      "opc": "comment",
+      "possibleDebugStop": [
+        "b(nL`AfiKGqFZc,i6N]@"
+      ]
+    },
+    {
+      "opc": "expr",
+      "name": "booleanVar",
+      "expr": "Var",
+      "+": [
+        "B#%e8}ppUR-UP/5EoKdg"
+      ],
+      "-": [
+        "B#%e8}ppUR-UP/5EoKdg"
+      ]
+    },
+    {
+      "op": "NOT",
+      "opc": "expr",
+      "expr": "Unary"
+    },
+    {
+      "opc": "jump",
+      "conditional": false,
+      "-": [
+        "b(nL`AfiKGqFZc,i6N]@",
+        "H2bNushrR5w;Hw{|GJq2"
+      ],
+      "target": "r_e_12"
+    },
+    {
+      "opc": "jump",
+      "conditional": "always",
+      "target": "r_l_12"
+    },
+    {
+      "opc": "comment",
+      "text": "RepeatStmt",
+      "label": "r_e_12",
+      "type": "end",
+      "-": [
+        "b(nL`AfiKGqFZc,i6N]@"
+      ]
+    },
+    {
+      "opc": "comment",
+      "+": [
+        "cvO5i%x(V?V^M5K39d:H"
+      ],
+      "text": "RepeatStmt",
+      "type": "start",
+      "n": 13
+    },
+    {
+      "opc": "expr",
+      "expr": "NUM_CONST",
+      "value": 0
+    },
+    {
+      "opc": "VarDeclaration",
+      "name": "item_runningVariable",
+      "type": "NUMBER"
+    },
+    {
+      "opc": "expr",
+      "expr": "NUM_CONST",
+      "value": 0
+    },
+    {
+      "opc": "VarDeclaration",
+      "name": "item",
+      "type": "NUMBER"
+    },
+    {
+      "opc": "comment",
+      "text": "RepeatStmt",
+      "label": "r_l_13"
+    },
+    {
+      "opc": "expr",
+      "name": "item_runningVariable",
+      "expr": "Var"
+    },
+    {
+      "opc": "expr",
+      "name": "numberList",
+      "expr": "Var",
+      "+": [
+        "F_YV2GhD7q(jfVB22p,1"
+      ],
+      "-": [
+        "F_YV2GhD7q(jfVB22p,1"
+      ]
+    },
+    {
+      "op": "list_length",
+      "opc": "expr",
+      "expr": "list_operation"
+    },
+    {
+      "op": "LT",
+      "opc": "expr",
+      "expr": "Binary"
+    },
+    {
+      "opc": "jump",
+      "conditional": false,
+      "target": "r_e_13"
+    },
+    {
+      "opc": "expr",
+      "name": "numberList",
+      "expr": "Var",
+      "+": [
+        "F_YV2GhD7q(jfVB22p,1"
+      ],
+      "-": [
+        "F_YV2GhD7q(jfVB22p,1"
+      ]
+    },
+    {
+      "opc": "expr",
+      "name": "item_runningVariable",
+      "expr": "Var"
+    },
+    {
+      "op": "get",
+      "opc": "expr",
+      "expr": "list_operation",
+      "position": "from_start"
+    },
+    {
+      "opc": "AssignStmt",
+      "name": "item"
+    },
+    {
+      "opc": "comment",
+      "possibleDebugStop": [
+        "cvO5i%x(V?V^M5K39d:H"
+      ]
+    },
+    {
+      "opc": "comment",
+      "text": "RepeatStmt",
+      "label": "r_c_13"
+    },
+    {
+      "opc": "expr",
+      "expr": "NUM_CONST",
+      "value": 1
+    },
+    {
+      "opc": "expr",
+      "name": "item_runningVariable",
+      "expr": "Var"
+    },
+    {
+      "op": "ADD",
+      "opc": "expr",
+      "expr": "Binary"
+    },
+    {
+      "opc": "AssignStmt",
+      "name": "item_runningVariable"
+    },
+    {
+      "opc": "jump",
+      "conditional": "always",
+      "target": "r_l_13"
+    },
+    {
+      "opc": "comment",
+      "text": "RepeatStmt",
+      "label": "r_e_13"
+    },
+    {
+      "opc": "unbindVar",
+      "name": "item"
+    },
+    {
+      "opc": "unbindVar",
+      "name": "item_runningVariable"
+    },
+    {
+      "opc": "comment",
+      "text": "RepeatStmt",
+      "type": "end",
+      "-": [
+        "cvO5i%x(V?V^M5K39d:H"
+      ]
+    },
+    {
+      "opc": "comment",
+      "+": [
+        "iUcNhxw)wO)h%NL9ZI5?"
+      ],
+      "text": "RepeatStmt",
+      "type": "start",
+      "n": 14
+    },
+    {
+      "opc": "expr",
+      "expr": "NUM_CONST",
+      "value": 0
+    },
+    {
+      "opc": "VarDeclaration",
+      "name": "item2_runningVariable",
+      "type": "NUMBER"
+    },
+    {
+      "opc": "expr",
+      "expr": "BOOL_CONST",
+      "value": "true"
+    },
+    {
+      "opc": "VarDeclaration",
+      "name": "item2",
+      "type": "BOOLEAN"
+    },
+    {
+      "opc": "comment",
+      "text": "RepeatStmt",
+      "label": "r_l_14"
+    },
+    {
+      "opc": "expr",
+      "name": "item2_runningVariable",
+      "expr": "Var"
+    },
+    {
+      "opc": "expr",
+      "name": "booleanList",
+      "expr": "Var",
+      "+": [
+        "5Yt{Yn{L;b`_tK]mbn-G"
+      ],
+      "-": [
+        "5Yt{Yn{L;b`_tK]mbn-G"
+      ]
+    },
+    {
+      "op": "list_length",
+      "opc": "expr",
+      "expr": "list_operation"
+    },
+    {
+      "op": "LT",
+      "opc": "expr",
+      "expr": "Binary"
+    },
+    {
+      "opc": "jump",
+      "conditional": false,
+      "target": "r_e_14"
+    },
+    {
+      "opc": "expr",
+      "name": "booleanList",
+      "expr": "Var",
+      "+": [
+        "5Yt{Yn{L;b`_tK]mbn-G"
+      ],
+      "-": [
+        "5Yt{Yn{L;b`_tK]mbn-G"
+      ]
+    },
+    {
+      "opc": "expr",
+      "name": "item2_runningVariable",
+      "expr": "Var"
+    },
+    {
+      "op": "get",
+      "opc": "expr",
+      "expr": "list_operation",
+      "position": "from_start"
+    },
+    {
+      "opc": "AssignStmt",
+      "name": "item2"
+    },
+    {
+      "opc": "comment",
+      "possibleDebugStop": [
+        "iUcNhxw)wO)h%NL9ZI5?"
+      ]
+    },
+    {
+      "opc": "comment",
+      "text": "RepeatStmt",
+      "label": "r_c_14"
+    },
+    {
+      "opc": "expr",
+      "expr": "NUM_CONST",
+      "value": 1
+    },
+    {
+      "opc": "expr",
+      "name": "item2_runningVariable",
+      "expr": "Var"
+    },
+    {
+      "op": "ADD",
+      "opc": "expr",
+      "expr": "Binary"
+    },
+    {
+      "opc": "AssignStmt",
+      "name": "item2_runningVariable"
+    },
+    {
+      "opc": "jump",
+      "conditional": "always",
+      "target": "r_l_14"
+    },
+    {
+      "opc": "comment",
+      "text": "RepeatStmt",
+      "label": "r_e_14"
+    },
+    {
+      "opc": "unbindVar",
+      "name": "item2"
+    },
+    {
+      "opc": "unbindVar",
+      "name": "item2_runningVariable"
+    },
+    {
+      "opc": "comment",
+      "text": "RepeatStmt",
+      "type": "end",
+      "-": [
+        "iUcNhxw)wO)h%NL9ZI5?"
+      ]
+    },
+    {
+      "opc": "comment",
+      "+": [
+        "AZGK1GOn74A6KG+kP{BB"
+      ],
+      "text": "RepeatStmt",
+      "type": "start",
+      "n": 15
+    },
+    {
+      "opc": "expr",
+      "expr": "NUM_CONST",
+      "value": 0
+    },
+    {
+      "opc": "VarDeclaration",
+      "name": "item3_runningVariable",
+      "type": "NUMBER"
+    },
+    {
+      "opc": "expr",
+      "expr": "STRING_CONST",
+      "value": ""
+    },
+    {
+      "opc": "VarDeclaration",
+      "name": "item3",
+      "type": "STRING"
+    },
+    {
+      "opc": "comment",
+      "text": "RepeatStmt",
+      "label": "r_l_15"
+    },
+    {
+      "opc": "expr",
+      "name": "item3_runningVariable",
+      "expr": "Var"
+    },
+    {
+      "opc": "expr",
+      "name": "stringList",
+      "expr": "Var",
+      "+": [
+        ".d~/t1/;N(G~Tb{V-kp6"
+      ],
+      "-": [
+        ".d~/t1/;N(G~Tb{V-kp6"
+      ]
+    },
+    {
+      "op": "list_length",
+      "opc": "expr",
+      "expr": "list_operation"
+    },
+    {
+      "op": "LT",
+      "opc": "expr",
+      "expr": "Binary"
+    },
+    {
+      "opc": "jump",
+      "conditional": false,
+      "target": "r_e_15"
+    },
+    {
+      "opc": "expr",
+      "name": "stringList",
+      "expr": "Var",
+      "+": [
+        ".d~/t1/;N(G~Tb{V-kp6"
+      ],
+      "-": [
+        ".d~/t1/;N(G~Tb{V-kp6"
+      ]
+    },
+    {
+      "opc": "expr",
+      "name": "item3_runningVariable",
+      "expr": "Var"
+    },
+    {
+      "op": "get",
+      "opc": "expr",
+      "expr": "list_operation",
+      "position": "from_start"
+    },
+    {
+      "opc": "AssignStmt",
+      "name": "item3"
+    },
+    {
+      "opc": "comment",
+      "possibleDebugStop": [
+        "AZGK1GOn74A6KG+kP{BB"
+      ]
+    },
+    {
+      "opc": "comment",
+      "text": "RepeatStmt",
+      "label": "r_c_15"
+    },
+    {
+      "opc": "expr",
+      "expr": "NUM_CONST",
+      "value": 1
+    },
+    {
+      "opc": "expr",
+      "name": "item3_runningVariable",
+      "expr": "Var"
+    },
+    {
+      "op": "ADD",
+      "opc": "expr",
+      "expr": "Binary"
+    },
+    {
+      "opc": "AssignStmt",
+      "name": "item3_runningVariable"
+    },
+    {
+      "opc": "jump",
+      "conditional": "always",
+      "target": "r_l_15"
+    },
+    {
+      "opc": "comment",
+      "text": "RepeatStmt",
+      "label": "r_e_15"
+    },
+    {
+      "opc": "unbindVar",
+      "name": "item3"
+    },
+    {
+      "opc": "unbindVar",
+      "name": "item3_runningVariable"
+    },
+    {
+      "opc": "comment",
+      "text": "RepeatStmt",
+      "type": "end",
+      "-": [
+        "AZGK1GOn74A6KG+kP{BB"
+      ]
+    },
+    {
+      "opc": "comment",
+      "+": [
+        "82iic)!D%ku{2A?N@e@]"
+      ],
+      "text": "RepeatStmt",
+      "type": "start",
+      "n": 16
+    },
+    {
+      "opc": "expr",
+      "expr": "NUM_CONST",
+      "value": 0
+    },
+    {
+      "opc": "VarDeclaration",
+      "name": "item4_runningVariable",
+      "type": "NUMBER"
+    },
+    {
+      "opc": "expr",
+      "expr": "COLOR_CONST",
+      "value": 3
+    },
+    {
+      "opc": "VarDeclaration",
+      "name": "item4",
+      "type": "COLOR"
+    },
+    {
+      "opc": "comment",
+      "text": "RepeatStmt",
+      "label": "r_l_16"
+    },
+    {
+      "opc": "expr",
+      "name": "item4_runningVariable",
+      "expr": "Var"
+    },
+    {
+      "opc": "expr",
+      "name": "colourList",
+      "expr": "Var",
+      "+": [
+        "}VQUSEsh4=/}Pn))%E+D"
+      ],
+      "-": [
+        "}VQUSEsh4=/}Pn))%E+D"
+      ]
+    },
+    {
+      "op": "list_length",
+      "opc": "expr",
+      "expr": "list_operation"
+    },
+    {
+      "op": "LT",
+      "opc": "expr",
+      "expr": "Binary"
+    },
+    {
+      "opc": "jump",
+      "conditional": false,
+      "target": "r_e_16"
+    },
+    {
+      "opc": "expr",
+      "name": "colourList",
+      "expr": "Var",
+      "+": [
+        "}VQUSEsh4=/}Pn))%E+D"
+      ],
+      "-": [
+        "}VQUSEsh4=/}Pn))%E+D"
+      ]
+    },
+    {
+      "opc": "expr",
+      "name": "item4_runningVariable",
+      "expr": "Var"
+    },
+    {
+      "op": "get",
+      "opc": "expr",
+      "expr": "list_operation",
+      "position": "from_start"
+    },
+    {
+      "opc": "AssignStmt",
+      "name": "item4"
+    },
+    {
+      "opc": "comment",
+      "possibleDebugStop": [
+        "82iic)!D%ku{2A?N@e@]"
+      ]
+    },
+    {
+      "opc": "comment",
+      "text": "RepeatStmt",
+      "label": "r_c_16"
+    },
+    {
+      "opc": "expr",
+      "expr": "NUM_CONST",
+      "value": 1
+    },
+    {
+      "opc": "expr",
+      "name": "item4_runningVariable",
+      "expr": "Var"
+    },
+    {
+      "op": "ADD",
+      "opc": "expr",
+      "expr": "Binary"
+    },
+    {
+      "opc": "AssignStmt",
+      "name": "item4_runningVariable"
+    },
+    {
+      "opc": "jump",
+      "conditional": "always",
+      "target": "r_l_16"
+    },
+    {
+      "opc": "comment",
+      "text": "RepeatStmt",
+      "label": "r_e_16"
+    },
+    {
+      "opc": "unbindVar",
+      "name": "item4"
+    },
+    {
+      "opc": "unbindVar",
+      "name": "item4_runningVariable"
+    },
+    {
+      "opc": "comment",
+      "text": "RepeatStmt",
+      "type": "end",
+      "-": [
+        "82iic)!D%ku{2A?N@e@]"
+      ]
+    },
+    {
+      "opc": "comment",
+      "+": [
+        "k/k,s{`?2ZN8PIPW570k"
+      ],
+      "text": "RepeatStmt",
+      "type": "start",
+      "n": 17
+    },
+    {
+      "opc": "expr",
+      "expr": "NUM_CONST",
+      "value": 0
+    },
+    {
+      "opc": "VarDeclaration",
+      "name": "item5_runningVariable",
+      "type": "NUMBER"
+    },
+    {
+      "opc": "expr",
+      "expr": "null"
+    },
+    {
+      "opc": "VarDeclaration",
+      "name": "item5",
+      "type": "CONNECTION"
+    },
+    {
+      "opc": "comment",
+      "text": "RepeatStmt",
+      "label": "r_l_17"
+    },
+    {
+      "opc": "expr",
+      "name": "item5_runningVariable",
+      "expr": "Var"
+    },
+    {
+      "opc": "expr",
+      "name": "connectionList",
+      "expr": "Var",
+      "+": [
+        "+aEP46V4].OP3uJ:JU?~"
+      ],
+      "-": [
+        "+aEP46V4].OP3uJ:JU?~"
+      ]
+    },
+    {
+      "op": "list_length",
+      "opc": "expr",
+      "expr": "list_operation"
+    },
+    {
+      "op": "LT",
+      "opc": "expr",
+      "expr": "Binary"
+    },
+    {
+      "opc": "jump",
+      "conditional": false,
+      "target": "r_e_17"
+    },
+    {
+      "opc": "expr",
+      "name": "connectionList",
+      "expr": "Var",
+      "+": [
+        "+aEP46V4].OP3uJ:JU?~"
+      ],
+      "-": [
+        "+aEP46V4].OP3uJ:JU?~"
+      ]
+    },
+    {
+      "opc": "expr",
+      "name": "item5_runningVariable",
+      "expr": "Var"
+    },
+    {
+      "op": "get",
+      "opc": "expr",
+      "expr": "list_operation",
+      "position": "from_start"
+    },
+    {
+      "opc": "AssignStmt",
+      "name": "item5"
+    },
+    {
+      "opc": "comment",
+      "possibleDebugStop": [
+        "k/k,s{`?2ZN8PIPW570k"
+      ]
+    },
+    {
+      "opc": "comment",
+      "text": "RepeatStmt",
+      "label": "r_c_17"
+    },
+    {
+      "opc": "expr",
+      "expr": "NUM_CONST",
+      "value": 1
+    },
+    {
+      "opc": "expr",
+      "name": "item5_runningVariable",
+      "expr": "Var"
+    },
+    {
+      "op": "ADD",
+      "opc": "expr",
+      "expr": "Binary"
+    },
+    {
+      "opc": "AssignStmt",
+      "name": "item5_runningVariable"
+    },
+    {
+      "opc": "jump",
+      "conditional": "always",
+      "target": "r_l_17"
+    },
+    {
+      "opc": "comment",
+      "text": "RepeatStmt",
+      "label": "r_e_17"
+    },
+    {
+      "opc": "unbindVar",
+      "name": "item5"
+    },
+    {
+      "opc": "unbindVar",
+      "name": "item5_runningVariable"
+    },
+    {
+      "opc": "comment",
+      "text": "RepeatStmt",
+      "type": "end",
+      "-": [
+        "k/k,s{`?2ZN8PIPW570k"
+      ]
+    },
+    {
+      "opc": "comment",
+      "+": [
+        "|68Z5|S.LE6S0NaP7Th9"
+      ],
+      "text": "WaitStmt",
+      "label": "w_s_18",
+      "type": "start",
+      "n": 18
+    },
+    {
+      "opc": "comment",
+      "possibleDebugStop": [
+        "|68Z5|S.LE6S0NaP7Th9"
+      ]
+    },
+    {
+      "opc": "comment",
+      "text": "WaitStmt",
+      "label": "w_0_18"
+    },
+    {
+      "opc": "expr",
+      "name": "booleanVar",
+      "expr": "Var",
+      "+": [
+        "AB0No)pB1-#gH]=EQ|/X"
+      ],
+      "-": [
+        "AB0No)pB1-#gH]=EQ|/X"
+      ]
+    },
+    {
+      "opc": "jump",
+      "conditional": false,
+      "target": "w_1_18"
+    },
+    {
+      "opc": "jump",
+      "conditional": "always",
+      "-": [
+        "H2bNushrR5w;Hw{|GJq2",
+        "|68Z5|S.LE6S0NaP7Th9"
+      ],
+      "target": "w_e_18"
+    },
+    {
+      "opc": "comment",
+      "text": "WaitStmt",
+      "label": "w_1_18"
+    },
+    {
+      "opc": "expr",
+      "name": "booleanVar",
+      "expr": "Var",
+      "+": [
+        "#ng7,J[oPek_H/9b34x2"
+      ],
+      "-": [
+        "#ng7,J[oPek_H/9b34x2"
+      ]
+    },
+    {
+      "opc": "jump",
+      "conditional": false,
+      "target": "w_2_18"
+    },
+    {
+      "opc": "jump",
+      "conditional": "always",
+      "-": [
+        "H2bNushrR5w;Hw{|GJq2",
+        "|68Z5|S.LE6S0NaP7Th9"
+      ],
+      "target": "w_e_18"
+    },
+    {
+      "opc": "comment",
+      "text": "WaitStmt",
+      "label": "w_2_18"
+    },
+    {
+      "opc": "expr",
+      "expr": "NUM_CONST",
+      "value": 1
+    },
+    {
+      "opc": "WaitTimeSTMT"
+    },
+    {
+      "opc": "jump",
+      "conditional": "always",
+      "target": "w_s_18"
+    },
+    {
+      "opc": "comment",
+      "text": "WaitStmt",
+      "label": "w_e_18",
+      "type": "end",
+      "-": [
+        "|68Z5|S.LE6S0NaP7Th9"
+      ]
+    },
+    {
+      "opc": "comment",
+      "+": [
+        "#7_8ZMyj~67g=NdlEr/D"
+      ],
+      "text": "WaitStmt",
+      "label": "w_s_19",
+      "type": "start",
+      "n": 19
+    },
+    {
+      "opc": "comment",
+      "possibleDebugStop": [
+        "#7_8ZMyj~67g=NdlEr/D"
+      ]
+    },
+    {
+      "opc": "comment",
+      "text": "WaitStmt",
+      "label": "w_0_19"
+    },
+    {
+      "opc": "expr",
+      "name": "booleanVar",
+      "expr": "Var",
+      "+": [
+        "P-5P@6juN1t5=.meQ8rM"
+      ],
+      "-": [
+        "P-5P@6juN1t5=.meQ8rM"
+      ]
+    },
+    {
+      "opc": "jump",
+      "conditional": false,
+      "target": "w_1_19"
+    },
+    {
+      "opc": "jump",
+      "conditional": "always",
+      "-": [
+        "#7_8ZMyj~67g=NdlEr/D",
+        "H2bNushrR5w;Hw{|GJq2"
+      ],
+      "target": "w_e_19"
+    },
+    {
+      "opc": "comment",
+      "text": "WaitStmt",
+      "label": "w_1_19"
+    },
+    {
+      "opc": "expr",
+      "expr": "NUM_CONST",
+      "value": 1
+    },
+    {
+      "opc": "WaitTimeSTMT"
+    },
+    {
+      "opc": "jump",
+      "conditional": "always",
+      "target": "w_s_19"
+    },
+    {
+      "opc": "comment",
+      "text": "WaitStmt",
+      "label": "w_e_19",
+      "type": "end",
+      "-": [
+        "#7_8ZMyj~67g=NdlEr/D"
+      ]
+    },
+    {
+      "opc": "comment",
+      "text": "createMethodVoid",
+      "label": "mthd_e_3",
+      "type": "start"
+    },
+    {
+      "opc": "return",
+      "values": false
+    },
+    {
+      "opc": "comment",
+      "text": "createMethodVoid",
+      "type": "end",
+      "-": [
+        "H2bNushrR5w;Hw{|GJq2"
+      ]
+    },
+    {
+      "opc": "comment",
+      "possibleDebugStop": [
+        "*r%daS[ar=0:dM|Ib?F["
+      ],
+      "+": [
+        "*r%daS[ar=0:dM|Ib?F["
+      ],
+      "text": "createMethodVoid",
+      "label": "mthd_s_logic",
+      "type": "start"
+    },
+    {
+      "opc": "expr",
+      "possibleDebugStop": [
+        "R~l|CuOHGsSAYaa3@FY^"
+      ],
+      "name": "numberVar",
+      "expr": "Var",
+      "+": [
+        "l1:RG+pI#cG9D-+,oU)[",
+        "R~l|CuOHGsSAYaa3@FY^",
+        "6rRWXsBaqF-{;#k{K7cS"
+      ],
+      "-": [
+        "l1:RG+pI#cG9D-+,oU)["
+      ]
+    },
+    {
+      "opc": "expr",
+      "name": "numberVar",
+      "expr": "Var",
+      "+": [
+        "K1;.sn%]%/=XoIfa#AS-"
+      ],
+      "-": [
+        "K1;.sn%]%/=XoIfa#AS-"
+      ]
+    },
+    {
+      "op": "EQ",
+      "opc": "expr",
+      "expr": "Binary",
+      "-": [
+        "6rRWXsBaqF-{;#k{K7cS"
+      ]
+    },
+    {
+      "opc": "ShowTextAction",
+      "name": "orb",
+      "-": [
+        "R~l|CuOHGsSAYaa3@FY^"
+      ]
+    },
+    {
+      "opc": "expr",
+      "possibleDebugStop": [
+        "m=6Ylj#u_NEVH=gH.oDC"
+      ],
+      "name": "numberVar",
+      "expr": "Var",
+      "+": [
+        "*,K-k{0qG)cW5f=zBsKH",
+        "#;%?Wd8eAzCd6rJB_,vW",
+        "m=6Ylj#u_NEVH=gH.oDC"
+      ],
+      "-": [
+        "*,K-k{0qG)cW5f=zBsKH"
+      ]
+    },
+    {
+      "opc": "expr",
+      "name": "numberVar",
+      "expr": "Var",
+      "+": [
+        "}aL{?@2n}.YTw6rwd;+="
+      ],
+      "-": [
+        "}aL{?@2n}.YTw6rwd;+="
+      ]
+    },
+    {
+      "op": "NEQ",
+      "opc": "expr",
+      "expr": "Binary",
+      "-": [
+        "#;%?Wd8eAzCd6rJB_,vW"
+      ]
+    },
+    {
+      "opc": "ShowTextAction",
+      "name": "orb",
+      "-": [
+        "m=6Ylj#u_NEVH=gH.oDC"
+      ]
+    },
+    {
+      "opc": "expr",
+      "possibleDebugStop": [
+        "?)I^0bMr9.%iaf;29t_v"
+      ],
+      "name": "numberVar",
+      "expr": "Var",
+      "+": [
+        "?)I^0bMr9.%iaf;29t_v",
+        "O0dCw:.5@+K8%tjfD?TP",
+        "EoeY9B6YBO6LeYt^7@T0"
+      ],
+      "-": [
+        "EoeY9B6YBO6LeYt^7@T0"
+      ]
+    },
+    {
+      "opc": "expr",
+      "name": "numberVar",
+      "expr": "Var",
+      "+": [
+        "niAGw%}Qlk@,tKtyMmKe"
+      ],
+      "-": [
+        "niAGw%}Qlk@,tKtyMmKe"
+      ]
+    },
+    {
+      "op": "LT",
+      "opc": "expr",
+      "expr": "Binary",
+      "-": [
+        "O0dCw:.5@+K8%tjfD?TP"
+      ]
+    },
+    {
+      "opc": "ShowTextAction",
+      "name": "orb",
+      "-": [
+        "?)I^0bMr9.%iaf;29t_v"
+      ]
+    },
+    {
+      "opc": "expr",
+      "possibleDebugStop": [
+        "1Gv6~fBt]{IGfwh5y!De"
+      ],
+      "name": "numberVar",
+      "expr": "Var",
+      "+": [
+        "1Gv6~fBt]{IGfwh5y!De",
+        "^2uKG@HsTOPuOun24n%B",
+        "lcSxo^!p747Z:AjyDt8?"
+      ],
+      "-": [
+        "^2uKG@HsTOPuOun24n%B"
+      ]
+    },
+    {
+      "opc": "expr",
+      "name": "numberVar",
+      "expr": "Var",
+      "+": [
+        "8@2_G`AC2ioSpDiF204G"
+      ],
+      "-": [
+        "8@2_G`AC2ioSpDiF204G"
+      ]
+    },
+    {
+      "op": "LTE",
+      "opc": "expr",
+      "expr": "Binary",
+      "-": [
+        "lcSxo^!p747Z:AjyDt8?"
+      ]
+    },
+    {
+      "opc": "ShowTextAction",
+      "name": "orb",
+      "-": [
+        "1Gv6~fBt]{IGfwh5y!De"
+      ]
+    },
+    {
+      "opc": "expr",
+      "possibleDebugStop": [
+        "GMe[DL?/VQtbX2[f0pQS"
+      ],
+      "name": "numberVar",
+      "expr": "Var",
+      "+": [
+        "n9T/p,z:RIPw9kUoJC}S",
+        ",JLqB)5N)jr,AYHU#lhu",
+        "GMe[DL?/VQtbX2[f0pQS"
+      ],
+      "-": [
+        "n9T/p,z:RIPw9kUoJC}S"
+      ]
+    },
+    {
+      "opc": "expr",
+      "name": "numberVar",
+      "expr": "Var",
+      "+": [
+        "1Tu6TI=Q-p|8BzJ^yhVe"
+      ],
+      "-": [
+        "1Tu6TI=Q-p|8BzJ^yhVe"
+      ]
+    },
+    {
+      "op": "GT",
+      "opc": "expr",
+      "expr": "Binary",
+      "-": [
+        ",JLqB)5N)jr,AYHU#lhu"
+      ]
+    },
+    {
+      "opc": "ShowTextAction",
+      "name": "orb",
+      "-": [
+        "GMe[DL?/VQtbX2[f0pQS"
+      ]
+    },
+    {
+      "opc": "expr",
+      "possibleDebugStop": [
+        "{=oaSkX)ChCO5B8Fbc9p"
+      ],
+      "name": "numberVar",
+      "expr": "Var",
+      "+": [
+        "{=oaSkX)ChCO5B8Fbc9p",
+        "s(tw1l7e(h9s=}c/rpU~",
+        "(Q9dbp~vY+~%|2}OtugR"
+      ],
+      "-": [
+        "(Q9dbp~vY+~%|2}OtugR"
+      ]
+    },
+    {
+      "opc": "expr",
+      "name": "numberVar",
+      "expr": "Var",
+      "+": [
+        "Pi4f[Ox-(hb3vLIC6tzF"
+      ],
+      "-": [
+        "Pi4f[Ox-(hb3vLIC6tzF"
+      ]
+    },
+    {
+      "op": "GTE",
+      "opc": "expr",
+      "expr": "Binary",
+      "-": [
+        "s(tw1l7e(h9s=}c/rpU~"
+      ]
+    },
+    {
+      "opc": "ShowTextAction",
+      "name": "orb",
+      "-": [
+        "{=oaSkX)ChCO5B8Fbc9p"
+      ]
+    },
+    {
+      "opc": "comment",
+      "possibleDebugStop": [
+        "4SXb;5Cd8N-lcOOkIoxc"
+      ],
+      "+": [
+        "4SXb;5Cd8N-lcOOkIoxc",
+        "28J#9V0nI)b+*AM4Fc|Z"
+      ],
+      "text": "Binary",
+      "type": "start",
+      "n": 21
+    },
+    {
+      "opc": "expr",
+      "name": "booleanVar",
+      "expr": "Var",
+      "+": [
+        "(ZsxO9fl~pOt9f@h7(03"
+      ],
+      "-": [
+        "(ZsxO9fl~pOt9f@h7(03"
+      ]
+    },
+    {
+      "opc": "jump",
+      "conditional": false,
+      "target": "b_m_21"
+    },
+    {
+      "opc": "expr",
+      "name": "booleanVar",
+      "expr": "Var",
+      "+": [
+        "iW,4nBa(J2d@7g9a5veG"
+      ],
+      "-": [
+        "iW,4nBa(J2d@7g9a5veG"
+      ]
+    },
+    {
+      "opc": "jump",
+      "conditional": "always",
+      "target": "b_e_21"
+    },
+    {
+      "opc": "expr",
+      "expr": "BOOL_CONST",
+      "label": "b_m_21",
+      "value": false
+    },
+    {
+      "opc": "comment",
+      "text": "Binary",
+      "label": "b_e_21",
+      "type": "end",
+      "-": [
+        "28J#9V0nI)b+*AM4Fc|Z"
+      ]
+    },
+    {
+      "opc": "ShowTextAction",
+      "name": "orb",
+      "-": [
+        "4SXb;5Cd8N-lcOOkIoxc"
+      ]
+    },
+    {
+      "opc": "comment",
+      "possibleDebugStop": [
+        "/B]rz*NA]k)Xz6,i!7H*"
+      ],
+      "+": [
+        "/B]rz*NA]k)Xz6,i!7H*",
+        "o9@UlZjTU}:~D~6zid};"
+      ],
+      "text": "Binary",
+      "type": "start",
+      "n": 22
+    },
+    {
+      "opc": "expr",
+      "name": "booleanVar",
+      "expr": "Var",
+      "+": [
+        ",q5p:#e@6|vYgGx?4L%q"
+      ],
+      "-": [
+        ",q5p:#e@6|vYgGx?4L%q"
+      ]
+    },
+    {
+      "opc": "jump",
+      "conditional": true,
+      "target": "b_m_22"
+    },
+    {
+      "opc": "expr",
+      "name": "booleanVar",
+      "expr": "Var",
+      "+": [
+        "+{+~paj.7R,oUvyMA.@L"
+      ],
+      "-": [
+        "+{+~paj.7R,oUvyMA.@L"
+      ]
+    },
+    {
+      "opc": "jump",
+      "conditional": "always",
+      "target": "b_e_22"
+    },
+    {
+      "opc": "expr",
+      "expr": "BOOL_CONST",
+      "label": "b_m_22",
+      "value": true
+    },
+    {
+      "opc": "comment",
+      "text": "Binary",
+      "label": "b_e_22",
+      "type": "end",
+      "-": [
+        "o9@UlZjTU}:~D~6zid};"
+      ]
+    },
+    {
+      "opc": "ShowTextAction",
+      "name": "orb",
+      "-": [
+        "/B]rz*NA]k)Xz6,i!7H*"
+      ]
+    },
+    {
+      "opc": "expr",
+      "possibleDebugStop": [
+        "z1XW?Insq=O?98je.BU["
+      ],
+      "name": "booleanVar",
+      "expr": "Var",
+      "+": [
+        "Ja96J5JL0iF?a0fUE7|+",
+        "z1XW?Insq=O?98je.BU[",
+        "w}Kev5iBtQr9_B5G*5;P"
+      ],
+      "-": [
+        "Ja96J5JL0iF?a0fUE7|+"
+      ]
+    },
+    {
+      "op": "NOT",
+      "opc": "expr",
+      "expr": "Unary",
+      "-": [
+        "w}Kev5iBtQr9_B5G*5;P"
+      ]
+    },
+    {
+      "opc": "ShowTextAction",
+      "name": "orb",
+      "-": [
+        "z1XW?Insq=O?98je.BU["
+      ]
+    },
+    {
+      "opc": "expr",
+      "possibleDebugStop": [
+        "WB@HZ)*Hg4;@xPtz-:gB"
+      ],
+      "expr": "BOOL_CONST",
+      "+": [
+        "WB@HZ)*Hg4;@xPtz-:gB",
+        "D|d3:?o=i57Oba_;_Ei)"
+      ],
+      "value": true,
+      "-": [
+        "D|d3:?o=i57Oba_;_Ei)"
+      ]
+    },
+    {
+      "opc": "ShowTextAction",
+      "name": "orb",
+      "-": [
+        "WB@HZ)*Hg4;@xPtz-:gB"
+      ]
+    },
+    {
+      "opc": "expr",
+      "possibleDebugStop": [
+        "q]s=Pmg:ppdcNgw=BUiF"
+      ],
+      "expr": "BOOL_CONST",
+      "+": [
+        "b~0p)JhT0]mdxu9}?Boj",
+        "q]s=Pmg:ppdcNgw=BUiF"
+      ],
+      "value": false,
+      "-": [
+        "b~0p)JhT0]mdxu9}?Boj"
+      ]
+    },
+    {
+      "opc": "ShowTextAction",
+      "name": "orb",
+      "-": [
+        "q]s=Pmg:ppdcNgw=BUiF"
+      ]
+    },
+    {
+      "opc": "expr",
+      "possibleDebugStop": [
+        "96T4G)6sng+*hd7m?R?i"
+      ],
+      "expr": "C.NULL_CONST",
+      "+": [
+        "TQ@Y-=a+:6tb}~[NDBvz",
+        "96T4G)6sng+*hd7m?R?i"
+      ],
+      "-": [
+        "TQ@Y-=a+:6tb}~[NDBvz"
+      ]
+    },
+    {
+      "opc": "ShowTextAction",
+      "name": "orb",
+      "-": [
+        "96T4G)6sng+*hd7m?R?i"
+      ]
+    },
+    {
+      "opc": "comment",
+      "possibleDebugStop": [
+        "tIdf5H}sYS!~^ArpI#TQ"
+      ],
+      "+": [
+        "tIdf5H}sYS!~^ArpI#TQ",
+        "q1xnh8o+GLDBp:{Jvt}B"
+      ],
+      "text": "ternary",
+      "type": "start",
+      "n": 23
+    },
+    {
+      "opc": "expr",
+      "name": "booleanVar",
+      "expr": "Var",
+      "+": [
+        "]Zvp^:nfP3:9=SBhJ]P{"
+      ],
+      "-": [
+        "]Zvp^:nfP3:9=SBhJ]P{"
+      ]
+    },
+    {
+      "opc": "jump",
+      "conditional": false,
+      "target": "t_m_23"
+    },
+    {
+      "opc": "expr",
+      "name": "numberVar",
+      "expr": "Var",
+      "+": [
+        "c,]Y!C+0`?Q|hgp4IlfA"
+      ],
+      "-": [
+        "c,]Y!C+0`?Q|hgp4IlfA"
+      ]
+    },
+    {
+      "opc": "jump",
+      "conditional": "always",
+      "target": "t_e_23"
+    },
+    {
+      "opc": "comment",
+      "text": "ternary",
+      "label": "t_m_23"
+    },
+    {
+      "opc": "expr",
+      "name": "numberVar",
+      "expr": "Var",
+      "+": [
+        "6^c6(gY5hz@Y{]EY:?gf"
+      ],
+      "-": [
+        "6^c6(gY5hz@Y{]EY:?gf"
+      ]
+    },
+    {
+      "opc": "comment",
+      "text": "ternary",
+      "label": "t_e_23",
+      "type": "end",
+      "-": [
+        "q1xnh8o+GLDBp:{Jvt}B"
+      ]
+    },
+    {
+      "opc": "ShowTextAction",
+      "name": "orb",
+      "-": [
+        "tIdf5H}sYS!~^ArpI#TQ"
+      ]
+    },
+    {
+      "opc": "comment",
+      "text": "createMethodVoid",
+      "label": "mthd_e_20",
+      "type": "start"
+    },
+    {
+      "opc": "return",
+      "values": false
+    },
+    {
+      "opc": "comment",
+      "text": "createMethodVoid",
+      "type": "end",
+      "-": [
+        "*r%daS[ar=0:dM|Ib?F["
+      ]
+    }
+  ]
+}

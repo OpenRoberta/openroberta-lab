@@ -1,0 +1,51 @@
+<block_set robottype="orb" xmlns="http://de.fhg.iais.roberta.blockly" xmlversion="3.1" description="" tags="">
+    <instance x="40" y="50">
+        <block type="robConf_differentialdrive" id="1" intask="true">
+            <field name="NAME">Diff</field>
+            <field name="BRICK_WHEEL_DIAMETER">5.6</field>
+            <field name="BRICK_TRACK_WIDTH">22.8</field>
+            <field name="MOTOR_L">2</field>
+            <field name="MOTOR_R">3</field>
+        </block>
+    </instance>
+    <instance x="40" y="190">
+        <block type="robConf_motor" id="2" intask="true">
+            <field name="NAME">M1</field>
+            <field name="MOTOR">2</field>
+        </block>
+    </instance>
+    <instance x="40" y="260">
+        <block type="robConf_motor" id="3" intask="true">
+            <field name="NAME">M2</field>
+            <field name="MOTOR">3</field>
+        </block>
+    </instance>
+    <instance x="250" y="50">
+        <block type="robConf_touch" id="4" intask="true">
+            <field name="NAME">T</field>
+            <field name="VAR">W</field>
+            <field name="CONNECTOR">1</field>
+        </block>
+    </instance>
+    <instance x="250" y="120">
+        <block type="robConf_gyro" id="5" intask="true">
+            <field name="NAME">G</field>
+            <field name="VAR">W</field>
+            <field name="CONNECTOR">2</field>
+        </block>
+    </instance>
+    <instance x="250" y="190">
+        <block type="robConf_colour" id="6" intask="true">
+            <field name="NAME">C</field>
+            <field name="VAR">W</field>
+            <field name="CONNECTOR">3</field>
+        </block>
+    </instance>
+    <instance x="250" y="260">
+        <block type="robConf_ultrasonic" id="7" intask="true">
+            <field name="NAME">U</field>
+            <field name="VAR">W</field>
+            <field name="CONNECTOR">4</field>
+        </block>
+    </instance>
+</block_set>

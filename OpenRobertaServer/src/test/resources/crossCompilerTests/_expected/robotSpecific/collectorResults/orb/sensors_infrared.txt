@@ -1,0 +1,6 @@
+Sensors: 
+[UsedSensor [I, INFRARED, DISTANCE], UsedSensor [I, INFRARED, SEEK]]
+Actors: 
+[UsedActor [- EMPTY_PORT -, DISPLAY]]
+Methods: 
+[]

@@ -1,0 +1,6 @@
+Sensors: 
+[UsedSensor [B, TOUCH, PRESSED], UsedSensor [U, ULTRASONIC, DISTANCE], UsedSensor [U, ULTRASONIC, PRESENCE], UsedSensor [F, COLOR, COLOUR], UsedSensor [F, COLOR, LIGHT], UsedSensor [F, COLOR, AMBIENTLIGHT], UsedSensor [1, TIMER, VALUE], UsedSensor [2, TIMER, VALUE], UsedSensor [3, TIMER, VALUE], UsedSensor [4, TIMER, VALUE], UsedSensor [S1, GYRO, ANGLE], UsedSensor [S1, GYRO, RATE], UsedSensor [F, COLOR, RGB]]
+Actors:
+[UsedActor [M1, MOTOR], UsedActor [- EMPTY_PORT -, DISPLAY]]
+Methods: 
+[]

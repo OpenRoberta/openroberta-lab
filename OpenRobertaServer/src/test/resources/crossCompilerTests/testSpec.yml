@@ -112,6 +112,10 @@ robots:
     dir: wedo
     suffix: ".json"
     eval: false
+  orb:
+    template: orb
+    dir: orb
+    suffix: ".json"
 
 progs:
   assign:

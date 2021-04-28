@@ -386,6 +386,8 @@ define(["require", "exports", "./interpreter.aRobotBehaviour", "./interpreter.co
             U.debug('***** assert action "' + value + ' ' + _msg + ' ' + _left + ' ' + _op + ' ' + _right + '" *****');
             console.assert(value, _msg + ' ' + _left + ' ' + _op + ' ' + _right);
         };
+        RobotMbedBehaviour.prototype.close = function () {
+        };
         RobotSimBehaviour.prototype.close = function () { };
         RobotSimBehaviour.prototype.timerGet = function (port) {
             // not used here anymore

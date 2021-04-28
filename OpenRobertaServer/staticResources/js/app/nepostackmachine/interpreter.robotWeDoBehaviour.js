@@ -225,6 +225,16 @@ define(["require", "exports", "./interpreter.aRobotBehaviour", "./interpreter.co
         RobotWeDoBehaviour.prototype.motorOnAction = function (name, port, durationType, duration, speed, time) {
             var brickid = this.getBrickIdByName(name); // TODO: better style
             var robotText = 'robot: ' + name + ', port: ' + port;
+            if (duration !== undefined) {
+                if (durationType === C.DEGREE || durationType === C.DISTANCE || durationType === C.ROTATIONS) {
+                    // if durationType is defined, then duration must be defined, too. Thus, it is never 'undefined' :-)
+                    var rotationPerSecond = (C.MAX_ROTATION * Math.abs(speed)) / 100.0;
+                    duration = (duration / rotationPerSecond) * 1000;
+                    if (durationType === C.DEGREE) {
+                        duration /= 360.0;
+                    }
+                }
+            }
             var durText = duration === undefined ? ' w.o. duration' : ' for ' + duration + ' msec';
             U.debug(robotText + ' motor speed ' + speed + durText);
             var cmd = {
@@ -235,10 +245,10 @@ define(["require", "exports", "./interpreter.aRobotBehaviour", "./interpreter.co
                 action: 'on',
                 id: port,
                 direction: speed < 0 ? 1 : 0,
-                power: Math.abs(speed)
+                power: Math.abs(speed),
             };
             this.btInterfaceFct(cmd);
-            return 0;
+            return duration !== undefined ? 0 : duration;
         };
         RobotWeDoBehaviour.prototype.motorStopAction = function (name, port) {
             var brickid = this.getBrickIdByName(name); // TODO: better style
@@ -353,6 +363,9 @@ define(["require", "exports", "./interpreter.aRobotBehaviour", "./interpreter.co
             throw new Error('Method not implemented.');
         };
         RobotWeDoBehaviour.prototype.proxHLedAction = function (ledValues) {
+        };
+        RobotWeDoBehaviour.prototype.setConfiguration = function (configuration) {
+            throw new Error('Method not implemented.');
         };
         return RobotWeDoBehaviour;
     }(interpreter_aRobotBehaviour_1.ARobotBehaviour));

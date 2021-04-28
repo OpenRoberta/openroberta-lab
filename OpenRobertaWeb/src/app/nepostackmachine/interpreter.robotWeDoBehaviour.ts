@@ -26,7 +26,7 @@ export class RobotWeDoBehaviour extends ARobotBehaviour {
         DOWN: '9.0',
         BACK: '5.0',
         FRONT: '7.0',
-        NO: '0.0'
+        NO: '0.0',
     };
 
     constructor(btInterfaceFct: any, toDisplayFct: any) {
@@ -227,6 +227,16 @@ export class RobotWeDoBehaviour extends ARobotBehaviour {
     public motorOnAction(name: string, port: any, durationType: string, duration: number, speed: number, time: number): number {
         var brickid = this.getBrickIdByName(name); // TODO: better style
         const robotText = 'robot: ' + name + ', port: ' + port;
+        if (duration !== undefined) {
+            if (durationType === C.DEGREE || durationType === C.DISTANCE || durationType === C.ROTATIONS) {
+                // if durationType is defined, then duration must be defined, too. Thus, it is never 'undefined' :-)
+                let rotationPerSecond = (C.MAX_ROTATION * Math.abs(speed)) / 100.0;
+                duration = (duration / rotationPerSecond) * 1000;
+                if (durationType === C.DEGREE) {
+                    duration /= 360.0;
+                }
+            }
+        }
         const durText = duration === undefined ? ' w.o. duration' : ' for ' + duration + ' msec';
         U.debug(robotText + ' motor speed ' + speed + durText);
         const cmd = {
@@ -237,10 +247,10 @@ export class RobotWeDoBehaviour extends ARobotBehaviour {
             action: 'on',
             id: port,
             direction: speed < 0 ? 1 : 0,
-            power: Math.abs(speed)
+            power: Math.abs(speed),
         };
         this.btInterfaceFct(cmd);
-        return 0;
+        return duration !== undefined ? 0 : duration;
     }
 
     public motorStopAction(name: string, port: number) {
@@ -387,6 +397,9 @@ export class RobotWeDoBehaviour extends ARobotBehaviour {
         throw new Error('Method not implemented.');
     }
 
-    proxHLedAction(ledValues: number[]): void {
+    proxHLedAction(ledValues: number[]): void {}
+
+    public setConfiguration(configuration: any): void {
+        throw new Error('Method not implemented.');
     }
 }

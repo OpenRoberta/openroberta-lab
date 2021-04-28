@@ -1,0 +1,6 @@
+Sensors: 
+[]
+Actors: 
+[UsedActor [links, MOTOR], UsedActor [rechts, MOTOR], UsedActor [Motor1, MOTOR], UsedActor [Motor4, MOTOR], UsedActor [- EMPTY_PORT -, DISPLAY], UsedActor [Diff, DIFFERENTIALDRIVE]]
+Methods: 
+[]
