@@ -57,6 +57,8 @@ define(['simulation.simulation', 'interpreter.constants', 'simulation.robot.ev3'
     Nxt.prototype.reset = function() {
         this.encoder.left = 0;
         this.encoder.right = 0;
+        this.left = 0;
+        this.right = 0;
         this.ledSensor.color = '';
         for (var key in this.timer) {
             this.timer[key] = 0;
