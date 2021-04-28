@@ -91,6 +91,7 @@ require.config({
         'interpreter.constants': 'app/nepostackmachine/interpreter.constants',
         'interpreter.interpreter': 'app/nepostackmachine/interpreter.interpreter',
         'interpreter.aRobotBehaviour': 'app/nepostackmachine/interpreter.aRobotBehaviour',
+        'interpreter.robotOrbBehaviour' : 'app/nepostackmachine/interpreter.robotOrbBehaviour',
         'interpreter.robotWeDoBehaviour': 'app/nepostackmachine/interpreter.robotWeDoBehaviour',
         'interpreter.robotSimBehaviour': 'app/nepostackmachine/interpreter.robotSimBehaviour',
         'interpreter.state': 'app/nepostackmachine/interpreter.state',
