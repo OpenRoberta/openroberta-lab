@@ -1,0 +1,14 @@
+<toolbox_set id='toolbox' style='display: none'>
+	<category name='TOOLBOX_ACTION' svg='true'>
+		<block type='robBrick_motor_big' />
+		<block type='robBrick_motor_middle' />
+		<block type='robBrick_actor' />
+	</category>
+	<category name='TOOLBOX_SENSOR' svg='true'>
+		<block type='robBrick_ultrasonic'></block>
+		<block type='robBrick_colour'></block>
+		<block type='robBrick_infrared'></block>
+		<block type='robBrick_touch'></block>
+		<block type='robBrick_gyro'></block>
+	</category>
+</toolbox_set>
