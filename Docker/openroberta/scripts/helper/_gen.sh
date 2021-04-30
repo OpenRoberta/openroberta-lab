@@ -34,10 +34,10 @@ fi
     if [ "${GIT_PULL_BEFORE_BUILD}" == 'false' ]
     then
         echo 'git repo is already uptodate, nothing is pulled, nothing is checked out'
-        LAST_COMMIT="git working tree co-
-        nsidered UPTODATE. Last commit is $(git rev-list HEAD...HEAD~1)"
+        LAST_COMMIT="git working tree considered UPTODATE. Last commit is $(git rev-list HEAD...HEAD~1)"
     elif [ "${COMMIT}" == '' ]
     then
+        # if the lines of this then-part are changed, update step 4 of the Docker/_README-standalone-1server.md
         echo "checking out branch '${BRANCH}'. Throw away the complete old state"
         # this will remove files, that may be VALUABLE
         # get all from remote, remove working tree and index files, that are dirty

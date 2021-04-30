@@ -143,16 +143,7 @@
                 <scope>test</scope>
                 <version>${project.version}</version>
             </dependency>
-            <dependency>
-                <groupId>de.fhg.iais.openroberta</groupId>
-                <artifactId>TypeScriptSources</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>de.fhg.iais.openroberta</groupId>
-                <artifactId>NNprocessor</artifactId>
-                <version>${project.version}</version>
-            </dependency>
+
             <dependency>
                 <groupId>org.slf4j</groupId>
                 <artifactId>slf4j-api</artifactId>

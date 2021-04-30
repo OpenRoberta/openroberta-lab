@@ -251,7 +251,7 @@ public class ServerStarter {
     public static void initLoggingBeforeFirstUse(String[] args) throws JoranException {
         String configFile = "/logback.xml";
         String adminDir = ".";
-        String logLevel = "INFO";
+        String logLevel = "ERROR";
         for ( String serverDefine : args ) {
             if ( serverDefine.startsWith(LOG_CONFIGFILE) ) {
                 configFile = extractValue(serverDefine.substring(LOG_CONFIGFILE.length()));

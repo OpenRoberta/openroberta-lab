@@ -3,6 +3,7 @@ jdk:
   - openjdk8
 
 after_success:
+  - env
   - bash <(curl -s https://codecov.io/bash)
 
 notifications:

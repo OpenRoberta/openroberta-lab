@@ -1,4 +1,4 @@
-BASE_VERSION=''            # the version of the docker base image, FROM which this server image is derived. Read and get the number from the 'Docker/_README.md' file.
+BASE_VERSION=''            # the version of the docker base image, FROM which this server image is derived. Read and get the number from the 'Docker/_README-standalone-1server.md' file.
 TAG_VERSION=''             # OPTIONAL parameter. ONLY for starting container. If defined, take this as the tag to be started. It replaces the default tag 'BASE_VERSION'. BE CAREFUL.
 
 PORT=''                    # port the jetty server will listen to, very often 1999

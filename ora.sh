@@ -125,8 +125,8 @@ new-docker-setup) base_dir="$1"
                 fi
                 cp -r Docker/openroberta $base_dir
                 cp Docker/_README.md $base_dir
-                echo "New docker setup created in $base_dir. Edit 'decl.sh' and setup databases and servers now."
-                echo "Please read the first paragraph in `Docker/_README.md` !" ;;
+                echo 'New docker setup created in $base_dir. Edit `decl.sh` and setup databases and servers now.'
+                echo 'Please read the first paragraph in `Docker/_README.md` !' ;;
 
 new-server-in-docker-setup)
                 base_dir="$1"

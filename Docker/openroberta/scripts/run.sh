@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# script to generate, start, stop docker container (database and jetty) for openroberta. See Docker/openroberta/_README.md for details
+# script to generate, start, stop docker container (database and jetty) for openroberta. See Docker/openroberta/_README-standalone-1server.md for details
 
 QUIET=false
 YES=false
