@@ -103,6 +103,7 @@ import org.json.JSONObject;
 
 import java.util.*;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor<V> {
     private static final Predicate<String> IS_INVALID_BLOCK_ID = s -> s.equals("1");
@@ -116,9 +117,9 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
     private List<JSONObject> opArray = new ArrayList<>();
     protected final ConfigurationAst configuration;
     private final List<JSONObject> flowControlStatements = new ArrayList<>();
+    private final List<JSONObject> returnStatements = new ArrayList<>();
     private final Map<String, List<JSONObject>> methodCalls = new HashMap<>();
     private final Map<String, Integer> methodDeclarations = new HashMap<>();
-
 
     /**
      * blocklyIds which will be initiated with next block
@@ -470,8 +471,6 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
 
         jumpsToEnd
             .forEach(jump -> jump.put(C.TARGET, opArray.size()));
-
-        endPhrase(ifStmt);
         return null;
     }
 
@@ -492,6 +491,7 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
     @Override
     public final V visitRepeatStmt(RepeatStmt<V> repeatStmt) {
         Mode mode = repeatStmt.getMode();
+        String blocklyId = repeatStmt.getProperty().getBlocklyId();
 
         switch ( mode ) {
             case WAIT:
@@ -556,13 +556,14 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
                     flowControlStatements.forEach(statement -> {
                         if ( statement.get(C.TARGET).equals(CONTINUE_MARKER) ) {
                             statement.put(C.TARGET, programCounterAfterStatementList);
+                            removeOpenBlocksFromDehighlight(statement);
                         } else if ( statement.get(C.TARGET).equals(BREAK_MARKER) ) {
                             statement.put(C.TARGET, programCounterAfterForLoop);
+                            removeOpenBlocksFromDehighlight(statement, blocklyId);
                         } else {
                             throw new DbcException("Invalid flow control expression");
                         }
                     });
-                    endPhrase(repeatStmt);
                 });
                 return null;
             case FOR_EACH:
@@ -632,13 +633,14 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
                     flowControlStatements.forEach(statement -> {
                         if ( statement.get(C.TARGET).equals(CONTINUE_MARKER) ) {
                             statement.put(C.TARGET, programCounterAfterStatementList);
+                            removeOpenBlocksFromDehighlight(statement);
                         } else if ( statement.get(C.TARGET).equals(BREAK_MARKER) ) {
                             statement.put(C.TARGET, programCounterAfterForLoop);
+                            removeOpenBlocksFromDehighlight(statement, blocklyId);
                         } else {
                             throw new DbcException("Invalid flow control expression");
                         }
                     });
-                    endPhrase(repeatStmt);
                 });
                 return null;
             case FOREVER:
@@ -654,13 +656,14 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
                     flowControlStatements.forEach(flowControlStatement -> {
                         if ( flowControlStatement.get(C.TARGET).equals(BREAK_MARKER) ) {
                             flowControlStatement.put(C.TARGET, opArray.size());
+                            removeOpenBlocksFromDehighlight(flowControlStatement, blocklyId);
                         } else if ( flowControlStatement.get(C.TARGET).equals(CONTINUE_MARKER) ) {
                             flowControlStatement.put(C.TARGET, beforeExprTarget);
+                            removeOpenBlocksFromDehighlight(flowControlStatement);
                         } else {
                             throw new DbcException("Invalid flow control expression");
                         }
                     });
-                    endPhrase(repeatStmt);
                 });
                 return null;
             case WHILE:
@@ -680,19 +683,33 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
                     flowControlStatements.forEach(flowControlStatement -> {
                         if ( flowControlStatement.get(C.TARGET).equals(BREAK_MARKER) ) {
                             flowControlStatement.put(C.TARGET, opArray.size());
+                            removeOpenBlocksFromDehighlight(flowControlStatement);
                         } else if ( flowControlStatement.get(C.TARGET).equals(CONTINUE_MARKER) ) {
                             flowControlStatement.put(C.TARGET, beforeExprTarget);
+                            removeOpenBlocksFromDehighlight(flowControlStatement, blocklyId);
                         } else {
                             throw new DbcException("Invalid flow control expression");
                         }
                     });
-                    endPhrase(repeatStmt);
                 });
                 return null;
             default:
                 throw new DbcException("Invalid repeat mode: " + mode);
         }
 
+    }
+
+    private void removeOpenBlocksFromDehighlight(JSONObject statement) {
+        removeOpenBlocksFromDehighlight(statement, null);
+    }
+
+    private void removeOpenBlocksFromDehighlight(JSONObject statement, String repeatId) {
+        if ( debugger ) {
+            List<Object> newDehightlight = statement.getJSONArray(C.HIGHTLIGHT_MINUS).toList().stream()
+                .filter(id -> !openBlocks.contains(id) || id.equals(repeatId))
+                .collect(Collectors.toList());
+            statement.put(C.HIGHTLIGHT_MINUS, newDehightlight);
+        }
     }
 
     @Override
@@ -703,7 +720,14 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
 
     @Override
     public final V visitStmtFlowCon(StmtFlowCon<V> stmtFlowCon) {
-        JSONObject o = makeNode(C.JUMP).put(C.CONDITIONAL, C.ALWAYS).put(C.TARGET, stmtFlowCon.getFlow() == Flow.BREAK ? BREAK_MARKER : CONTINUE_MARKER);
+        JSONObject o = makeNode(C.JUMP)
+            .put(C.CONDITIONAL, C.ALWAYS)
+            .put(C.TARGET, stmtFlowCon.getFlow() == Flow.BREAK ? BREAK_MARKER : CONTINUE_MARKER);
+
+        if ( debugger ) {
+            o.put(C.HIGHTLIGHT_MINUS, openBlocks);
+        }
+
         flowControlStatements.add(o);
         return app(o);
     }
@@ -755,7 +779,6 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
                     throw new DbcException("Invalid flow control expression");
                 }
             });
-            endPhrase(waitStmt);
         });
         return null;
     }
@@ -950,7 +973,7 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
 
     @Override
     public final V visitMethodVoid(MethodVoid<V> methodVoid) {
-        encloseFlowStatementScope(() -> {
+        encloseReturnStatementScope(() -> {
             registerMethodDeclaration(methodVoid.getMethodName());
 
             app(makeNode(C.COMMENT).put(C.TARGET, C.METHOD_VOID));
@@ -971,9 +994,10 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
 
             methodVoid.getBody().accept(this);
 
-            flowControlStatements.forEach(statement -> {
+            returnStatements.forEach(statement -> {
                 if ( statement.get(C.TARGET).equals(METHOD_END) ) {
                     statement.put(C.TARGET, opArray.size());
+                    removeOpenBlocksFromDehighlight(statement, methodVoid.getProperty().getBlocklyId());
                 } else {
                     throw new DbcException("Invalid flow control expression");
                 }
@@ -983,8 +1007,6 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
                 .map(parameter -> (VarDeclaration<V>) parameter)
                 .forEach(parameter -> app(makeNode(C.UNBIND_VAR).put(C.NAME, parameter.getName())));
 
-            endPhrase(methodVoid);
-
             app(makeNode(C.RETURN).put(C.VALUES, false));
         });
         return null;
@@ -993,7 +1015,7 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
 
     @Override
     public final V visitMethodReturn(MethodReturn<V> methodReturn) {
-        encloseFlowStatementScope(() -> {
+        encloseReturnStatementScope(() -> {
 
             registerMethodDeclaration(methodReturn.getMethodName());
 
@@ -1017,9 +1039,10 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
 
             methodReturn.getReturnValue().accept(this);
 
-            flowControlStatements.forEach(statement -> {
+            returnStatements.forEach(statement -> {
                 if ( statement.get(C.TARGET).equals(METHOD_END) ) {
                     statement.put(C.TARGET, opArray.size());
+                    removeOpenBlocksFromDehighlight(statement, methodReturn.getProperty().getBlocklyId());
                 } else {
                     throw new DbcException("Invalid flow control expression");
                 }
@@ -1029,8 +1052,6 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
                 .map(parameter -> (VarDeclaration<V>) parameter)
                 .forEach(parameter -> app(makeNode(C.UNBIND_VAR).put(C.NAME, parameter.getName())));
 
-            endPhrase(methodReturn);
-
             app(makeNode(C.RETURN).put(C.VALUES, true));
         });
         return null;
@@ -1038,7 +1059,6 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
 
     @Override
     public final V visitMethodIfReturn(MethodIfReturn<V> methodIfReturn) {
-
         app(makeNode(C.COMMENT).put(C.TARGET, C.IF_RETURN));
 
         methodIfReturn.getCondition().accept(this);
@@ -1047,9 +1067,13 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
 
         methodIfReturn.getReturnValue().accept(this);
         JSONObject jumpToMethodEnd = makeNode(C.JUMP).put(C.CONDITIONAL, C.ALWAYS).put(C.TARGET, METHOD_END);
-        flowControlStatements.add(jumpToMethodEnd);
 
-        endPhrase(methodIfReturn);
+        if ( debugger ) {
+            jumpToMethodEnd.put(C.HIGHTLIGHT_MINUS, openBlocks);
+        }
+
+        returnStatements.add(jumpToMethodEnd);
+
         app(jumpToMethodEnd);
         jumpOverReturn.put(C.TARGET, opArray.size());
         return null;
@@ -1071,7 +1095,6 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
             .forEach(v -> v.accept(this));
         app(createJumpToMethod(methodCall));
         returnAddress.put(C.VALUE, opArray.size());
-        endPhrase(methodCall);
         return null;
     }
 
@@ -1171,7 +1194,6 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
         if ( !toInitateBlocks.isEmpty() ) {
             toInitateBlocks.removeIf(IS_INVALID_BLOCK_ID);
             operation.put(C.HIGHTLIGHT_PLUS, new ArrayList<>(toInitateBlocks));
-            openBlocks.addAll(toInitateBlocks);
             toInitateBlocks.clear();
         }
         return operation;
@@ -1198,6 +1220,7 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
         String blocklyId = phrase.getProperty().getBlocklyId();
         if ( debugger && isValidBlocklyId(blocklyId) ) {
             toInitateBlocks.add(blocklyId);
+            openBlocks.add(blocklyId);
         }
     }
 
@@ -1214,11 +1237,16 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
         return this.opArray;
     }
 
-    /**
-     * Enclose the scope of flowControlStatements while runnable is run
-     *
-     * @param runnable
-     */
+    protected void encloseReturnStatementScope(Runnable runnable) {
+        runnable.run();
+        returnStatements.clear();
+    }
+
+        /**
+         * Enclose the scope of flowControlStatements while runnable is run
+         *
+         * @param runnable
+         */
     protected void encloseFlowStatementScope(Runnable runnable) {
         List<JSONObject> flowControlTemp = new ArrayList<>(flowControlStatements);
         flowControlStatements.clear();
