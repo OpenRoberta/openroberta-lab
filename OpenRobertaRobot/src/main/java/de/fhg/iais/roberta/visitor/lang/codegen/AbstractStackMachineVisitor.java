@@ -441,14 +441,13 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
 
     @Override
     public final V visitIfStmt(IfStmt<V> ifStmt) {
+        appComment(C.IF_STMT, true);
+
         int numberOfThens = ifStmt.getExpr().size();
         if ( ifStmt.isTernary() ) {
             Assert.isTrue(numberOfThens == 1);
             Assert.isFalse(ifStmt.getElseList().get().isEmpty());
         }
-
-        app(makeNode(C.COMMENT).put(C.TARGET, C.IF_STMT));
-
         List<JSONObject> jumpsToEnd = new ArrayList<>();
         // TODO: better a list of pairs. pair of lists needs this kind of for
         for ( int i = 0; i < numberOfThens; i++ ) {
@@ -471,7 +470,13 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
 
         jumpsToEnd
             .forEach(jump -> jump.put(C.TARGET, opArray.size()));
+
+        appComment(C.IF_STMT, false);
         return null;
+    }
+
+    private V appComment(Object commentType, boolean isStart) {
+        return app(makeNode(C.COMMENT).put(C.TARGET, commentType).put(C.TYPE, isStart ? C.START : C.END));
     }
 
     @Override
@@ -508,6 +513,8 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
             case FOR:
             case TIMES:
                 encloseFlowStatementScope(() -> {
+                    appComment(C.REPEAT_STMT, true);
+
                     if ( !(repeatStmt.getExpr() instanceof ExprList<?>) ) {
                         throw new DbcException(String.format("Expected %s to be an ExprList", repeatStmt.getExpr()));
                     }
@@ -527,8 +534,6 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
                     app(makeNode(C.VAR_DECLARATION).put(C.TYPE, initialValue.getVarType()).put(C.NAME, variableName));
 
                     int programCounterAfterInitialization = opArray.size();
-
-                    app(makeNode(C.COMMENT).put(C.TARGET, C.REPEAT_STMT));
 
                     // Termination Expr
                     variable.accept(this);
@@ -564,10 +569,12 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
                             throw new DbcException("Invalid flow control expression");
                         }
                     });
+                    appComment(C.REPEAT_STMT, false);
                 });
                 return null;
             case FOR_EACH:
                 encloseFlowStatementScope(() -> {
+                    appComment(C.REPEAT_STMT, true);
                     if ( !(repeatStmt.getExpr() instanceof Binary<?>) ) {
                         throw new DbcException(String.format("Expected %s to be an Binary", repeatStmt.getExpr()));
                     }
@@ -592,8 +599,6 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
                     // Init variable (Element element)
                     varDeclaration.accept(this);
                     int programCounterAfterInitialization = opArray.size();
-
-                    app(makeNode(C.COMMENT).put(C.TARGET, C.REPEAT_STMT));
 
                     // Termination expr ( i < list.length )
                     app(makeNode(C.EXPR).put(C.EXPR, C.VAR).put(C.NAME, runVariableName));
@@ -641,14 +646,15 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
                             throw new DbcException("Invalid flow control expression");
                         }
                     });
+                    appComment(C.REPEAT_STMT, false);
                 });
                 return null;
             case FOREVER:
             case FOREVER_ARDU:
                 encloseFlowStatementScope(() -> {
-                    int beforeExprTarget = opArray.size();
+                    appComment(C.REPEAT_STMT, true);
 
-                    app(makeNode(C.COMMENT).put(C.TARGET, C.REPEAT_STMT));
+                    int beforeExprTarget = opArray.size();
 
                     repeatStmt.getList().accept(this);
 
@@ -664,14 +670,14 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
                             throw new DbcException("Invalid flow control expression");
                         }
                     });
+                    appComment(C.REPEAT_STMT, false);
                 });
                 return null;
             case WHILE:
             case UNTIL:
                 encloseFlowStatementScope(() -> {
+                    appComment(C.REPEAT_STMT, true);
                     int beforeExprTarget = opArray.size();
-
-                    app(makeNode(C.COMMENT).put(C.TARGET, C.REPEAT_STMT));
 
                     repeatStmt.getExpr().accept(this);
                     // no difference between WHILE and UNTIL because a NOT gets injected into UNTIL by jaxbToAST
@@ -691,6 +697,8 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
                             throw new DbcException("Invalid flow control expression");
                         }
                     });
+
+                    appComment(C.REPEAT_STMT, false);
                 });
                 return null;
             default:
@@ -763,9 +771,8 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
     @Override
     public final V visitWaitStmt(WaitStmt<V> waitStmt) {
         encloseFlowStatementScope(() -> {
+            appComment(C.WAIT_STMT, true);
             int programCounterStart = opArray.size();
-
-            app(makeNode(C.COMMENT).put(C.TARGET, C.WAIT_STMT));
 
             waitStmt.getStatements().get()
                 .forEach(statement -> statement.accept(this));
@@ -779,6 +786,7 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
                     throw new DbcException("Invalid flow control expression");
                 }
             });
+            appComment(C.WAIT_STMT, false);
         });
         return null;
     }
@@ -975,8 +983,7 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
     public final V visitMethodVoid(MethodVoid<V> methodVoid) {
         encloseReturnStatementScope(() -> {
             registerMethodDeclaration(methodVoid.getMethodName());
-
-            app(makeNode(C.COMMENT).put(C.TARGET, C.METHOD_VOID));
+            appComment(C.METHOD_VOID, true);
 
             // Start of method
             ExprList<V> parameters = methodVoid.getParameters();
@@ -1008,6 +1015,7 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
                 .forEach(parameter -> app(makeNode(C.UNBIND_VAR).put(C.NAME, parameter.getName())));
 
             app(makeNode(C.RETURN).put(C.VALUES, false));
+            appComment(C.METHOD_VOID, false);
         });
         return null;
     }
@@ -1016,10 +1024,8 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
     @Override
     public final V visitMethodReturn(MethodReturn<V> methodReturn) {
         encloseReturnStatementScope(() -> {
-
             registerMethodDeclaration(methodReturn.getMethodName());
-
-            app(makeNode(C.COMMENT).put(C.TARGET, C.METHOD_RETURN));
+            appComment(C.METHOD_RETURN, true);
 
             // Start of method
             ExprList<V> parameters = methodReturn.getParameters();
@@ -1053,13 +1059,14 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
                 .forEach(parameter -> app(makeNode(C.UNBIND_VAR).put(C.NAME, parameter.getName())));
 
             app(makeNode(C.RETURN).put(C.VALUES, true));
+            appComment(C.METHOD_RETURN, false);
         });
         return null;
     }
 
     @Override
     public final V visitMethodIfReturn(MethodIfReturn<V> methodIfReturn) {
-        app(makeNode(C.COMMENT).put(C.TARGET, C.IF_RETURN));
+        appComment(C.IF_RETURN, true);
 
         methodIfReturn.getCondition().accept(this);
         JSONObject jumpOverReturn = makeNode(C.JUMP).put(C.CONDITIONAL, false);
@@ -1076,6 +1083,8 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
 
         app(jumpToMethodEnd);
         jumpOverReturn.put(C.TARGET, opArray.size());
+
+        appComment(C.IF_RETURN, false);
         return null;
     }
 
@@ -1087,7 +1096,7 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
 
     @Override
     public final V visitMethodCall(MethodCall<V> methodCall) {
-        app(makeNode(C.COMMENT).put(C.TARGET, C.METHOD_CALL));
+        appComment(C.METHOD_CALL, true);
 
         JSONObject returnAddress = makeNode(C.EXPR).put(C.EXPR, C.NUM_CONST);
         app(returnAddress);
@@ -1095,6 +1104,7 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
             .forEach(v -> v.accept(this));
         app(createJumpToMethod(methodCall));
         returnAddress.put(C.VALUE, opArray.size());
+        appComment(C.METHOD_CALL, false);
         return null;
     }
 
