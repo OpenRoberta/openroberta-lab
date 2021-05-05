@@ -39,9 +39,9 @@ on Ubuntu:
 * EV3 c4ev3
   * `sudo apt-get install g++-arm-linux-gnueabi`
 * Edison
-  * `sudo apt-get python` (Python 2 is needed, it is called `python` for Ubuntu 18.04 and `python2` for 20.04)
+  * `sudo apt-get install python` (Python 2 is needed, it is called `python` for Ubuntu 18.04 and `python2` for 20.04)
 * Bionics4Education
-  * `sudo apt-get python-serial` (`python3-serial` for Ubuntu 20.04)
+  * `sudo apt-get install python-serial` (`python3-serial` for Ubuntu 20.04)
   * install [xtensa-esp32-elf](https://dl.espressif.com/dl/xtensa-esp32-elf-linux64-1.22.0-61-gab8375a-5.2.0.tar.gz)
  
 on Windows:
@@ -142,7 +142,7 @@ As described above either **db-embedded** or **db-server** is the name of the di
 new columns for new features. The java class **DbUpgrader** is responsible for detecting the need for an upgrade and executing the upgrade (once and only once) when the database is openend
 at server startup. If a database needs more than one upgrade, this is no problem. They are executed one after the other.
 
-There is _no_ need for the developer to care about database upgrades. But note, that is _not_ possible to upgrade databases with versions before **3.1.0**. As this a very old version, this should
+There is _no_ need for the developer to care about database upgrades. But note, that is _not_ possible to upgrade databases with versions before **3.1.0**. As this is a very old version, this should
 never be necessary. If this is needed, please contact the OpenRoberta team.
 
 ### Importing the Project
