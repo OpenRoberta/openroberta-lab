@@ -514,7 +514,6 @@ define(["require", "exports", "./interpreter.state", "./interpreter.constants", 
                         this.robotBehaviour.assertAction(stmt[C.MSG], left, stmt[C.OP], right, value);
                         break;
                     }
-                    case C.POSSIBLE_DEBUG_STOP:
                     case C.COMMENT: {
                         break;
                     }
@@ -1126,43 +1125,27 @@ define(["require", "exports", "./interpreter.state", "./interpreter.constants", 
             }
             return image;
         };
-        /** Returns true if the operation is a possible block where stepInto should stop*/
         Interpreter.isPossibleStepInto = function (op) {
             var _a;
-            if (op[C.OPCODE] === C.POSSIBLE_DEBUG_STOP) {
-                return true;
-            }
-            if (op.hasOwnProperty(C.HIGHTLIGHT_PLUS)) {
-                if (op[C.OPCODE] === C.COMMENT) {
-                    return this.COMMENTS_STEP_INTO.indexOf(op[C.TARGET]) >= 0;
-                }
-                if (this.DO_NOT_STEP_INTO.indexOf(op[C.OPCODE]) >= 0) {
-                    return false;
-                }
-                if (op[C.OPCODE] === C.EXPR) {
-                    var isStartOfNotExpr = (_a = op[C.HIGHTLIGHT_PLUS]) === null || _a === void 0 ? void 0 : _a.map(function (id) { return stackmachineJsHelper.getBlockById(id); }).some(function (block) { return block.getChildren().length > 0; });
-                    return isStartOfNotExpr;
-                }
+            if (((_a = op[C.POSSIBLE_DEBUG_STOP]) === null || _a === void 0 ? void 0 : _a.length) > 0) {
                 return true;
             }
             return false;
         };
-        /** Returns true if the operation is a possible block where stepOver should stop*/
         Interpreter.isPossibleStepOver = function (op) {
             var isMethodCall = op[C.OPCODE] === C.COMMENT && op[C.TARGET] === C.METHOD_CALL;
             return op.hasOwnProperty(C.HIGHTLIGHT_PLUS) && isMethodCall;
         };
         Interpreter.isBreakPoint = function (op, breakpoints) {
-            if (op[C.OPCODE] === C.POSSIBLE_DEBUG_STOP && breakpoints.indexOf(op[C.TARGET]) >= 0) {
+            var _a, _b;
+            if ((_a = op[C.POSSIBLE_DEBUG_STOP]) === null || _a === void 0 ? void 0 : _a.some(function (blockId) { return breakpoints.indexOf(blockId) >= 0; })) {
                 return true;
             }
-            if (op[C.HIGHTLIGHT_PLUS] && this.COMMENTS_STEP_INTO.indexOf(op[C.TARGET]) >= 0) {
-                return op[C.HIGHTLIGHT_PLUS].some(function (blockId) { return breakpoints.indexOf(blockId) >= 0; });
+            if ((_b = op[C.HIGHTLIGHT_PLUS]) === null || _b === void 0 ? void 0 : _b.some(function (blockId) { return breakpoints.indexOf(blockId) >= 0; })) {
+                return true;
             }
             return false;
         };
-        Interpreter.DO_NOT_STEP_INTO = [C.EXPR, C.GET_SAMPLE, C.VAR_DECLARATION];
-        Interpreter.COMMENTS_STEP_INTO = [C.IF_STMT, C.REPEAT_STMT, C.WAIT_STMT, C.METHOD_CALL];
         return Interpreter;
     }());
     exports.Interpreter = Interpreter;
