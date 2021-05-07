@@ -115,7 +115,7 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
     public static final int JUMP_THEN_MARKER = -1;
     public static final int BREAK_MARKER = -1;
     public static final int CONTINUE_MARKER = -2;
-    private static final int METHOD_END = -3;
+    public static final int METHOD_END = -3;
 
     private List<JSONObject> opArray = new ArrayList<>();
     protected final ConfigurationAst configuration;
