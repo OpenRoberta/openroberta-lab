@@ -57,7 +57,7 @@
         <repository>
             <id>ORA-releases</id>
             <name>Open Roberta releases repository</name>
-            <url>http://maven.iais.fraunhofer.de/artifactory/openroberta-release</url>
+            <url>https://maven.iais.fraunhofer.de/artifactory/openroberta-release</url>
             <releases>
                 <enabled>true</enabled>
             </releases>
@@ -70,7 +70,7 @@
         <pluginRepository>
             <id>NM-releases</id>
             <name>Netmedia releases repository</name>
-            <url>http://maven.iais.fraunhofer.de/artifactory/nm-public-release</url>
+            <url>https://maven.iais.fraunhofer.de/artifactory/nm-public-release</url>
             <releases>
                 <enabled>true</enabled>
             </releases>
