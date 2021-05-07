@@ -90,6 +90,8 @@ import de.fhg.iais.roberta.syntax.lang.stmt.StmtList;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtTextComment;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
+import de.fhg.iais.roberta.syntax.sensor.Sensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.GetSampleSensor;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.typecheck.NepoInfo;
 import de.fhg.iais.roberta.util.dbc.Assert;
@@ -107,6 +109,7 @@ import java.util.stream.Collectors;
 
 public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor<V> {
     private static final Predicate<String> IS_INVALID_BLOCK_ID = s -> s.equals("1");
+    private static final List<Class<? extends Phrase>> DONT_ADD_DEBUG_STOP = Arrays.asList(Expr.class, VarDeclaration.class, Sensor.class, MainTask.class, ExprStmt.class, StmtList.class, RepeatStmt.class, WaitStmt.class);
 
     public static final int JUMP_END_MARKER = -2;
     public static final int JUMP_THEN_MARKER = -1;
@@ -121,6 +124,9 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
     private final Map<String, List<JSONObject>> methodCalls = new HashMap<>();
     private final Map<String, Integer> methodDeclarations = new HashMap<>();
 
+    /**
+     * blocklyIds which will be added to the next block marking a possible step into for the debugger
+     */
     private final Set<String> possibleDebugStops = new HashSet<>();
     /**
      * blocklyIds which will be initiated with next block
@@ -145,6 +151,35 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
         V visit = ILanguageVisitor.super.visit(visitable);
         if ( shouldHightlight ) endPhrase(visitable);
         return visit;
+    }
+
+    protected void endPhrase(Phrase<V> phrase) {
+        String blocklyId = phrase.getProperty().getBlocklyId();
+        if ( !opArray.isEmpty() && isValidBlocklyId(blocklyId) ) {
+            JSONObject lastElement = opArray.get(opArray.size() - 1);
+            if ( !lastElement.has(C.HIGHTLIGHT_MINUS) ) {
+                lastElement.put(C.HIGHTLIGHT_MINUS, Collections.singletonList(blocklyId));
+            } else {
+                JSONArray array = lastElement.getJSONArray(C.HIGHTLIGHT_MINUS);
+                if ( !array.toList().contains(blocklyId) ) {
+                    array.put(blocklyId);
+                }
+            }
+        }
+        toInitateBlocks.remove(blocklyId);
+        openBlocks.remove(blocklyId);
+    }
+
+    protected void beginPhrase(Phrase<V> phrase) {
+        String blocklyId = phrase.getProperty().getBlocklyId();
+        if ( debugger && isValidBlocklyId(blocklyId) ) {
+            toInitateBlocks.add(blocklyId);
+            openBlocks.add(blocklyId);
+
+            if ( DONT_ADD_DEBUG_STOP.stream().noneMatch(cls -> cls.isInstance(phrase)) ) {
+                possibleDebugStops.add(blocklyId);
+            }
+        }
     }
 
     @Override
@@ -531,15 +566,14 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
                     app(makeNode(C.VAR_DECLARATION).put(C.TYPE, initialValue.getVarType()).put(C.NAME, variableName));
 
                     int programCounterAfterInitialization = opArray.size();
-
-                    addPossibleDebugStop(repeatStmt);
-
                     // Termination Expr
                     variable.accept(this);
                     terminationValue.accept(this);
                     app(makeNode(C.EXPR).put(C.EXPR, C.BINARY).put(C.OP, Op.LT));
                     JSONObject jump = makeNode(C.JUMP).put(C.CONDITIONAL, false);
                     app(jump);
+
+                    addDebugStatment(repeatStmt);
 
                     repeatStmt.getList().accept(this);
 
@@ -598,7 +632,6 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
                     // Init variable (Element element)
                     varDeclaration.accept(this);
                     int programCounterAfterInitialization = opArray.size();
-                    addPossibleDebugStop(repeatStmt);
 
                     // Termination expr ( i < list.length )
                     app(makeNode(C.EXPR).put(C.EXPR, C.VAR).put(C.NAME, runVariableName));
@@ -618,6 +651,7 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
                         .put(C.POSITION, IndexLocation.FROM_START.toString().toLowerCase()));
                     app(makeNode(C.ASSIGN_STMT).put(C.NAME, variableName));
 
+                    addDebugStatment(repeatStmt);
                     repeatStmt.getList().accept(this);
 
                     int programCounterAfterStatementList = opArray.size();
@@ -655,7 +689,7 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
                     appComment(C.REPEAT_STMT, true);
 
                     int beforeExprTarget = opArray.size();
-                    addPossibleDebugStop(repeatStmt);
+                    addDebugStatment(repeatStmt);
 
                     repeatStmt.getList().accept(this);
 
@@ -679,7 +713,7 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
                 encloseFlowStatementScope(() -> {
                     appComment(C.REPEAT_STMT, true);
                     int beforeExprTarget = opArray.size();
-                    addPossibleDebugStop(repeatStmt);
+                    addDebugStatment(repeatStmt);
 
                     repeatStmt.getExpr().accept(this);
                     // no difference between WHILE and UNTIL because a NOT gets injected into UNTIL by jaxbToAST
@@ -762,7 +796,7 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
         encloseFlowStatementScope(() -> {
             appComment(C.WAIT_STMT, true);
             int programCounterStart = opArray.size();
-            addPossibleDebugStop(waitStmt);
+            addDebugStatment(waitStmt);
 
             waitStmt.getStatements().get()
                 .forEach(statement -> statement.accept(this));
@@ -1121,9 +1155,10 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
         return app(o);
     }
 
-    private void addPossibleDebugStop(Phrase<?> phrase) {
+    private void addDebugStatment(Phrase<?> phrase) {
         if ( debugger ) {
-            app(makeNode(C.POSSIBLE_DEBUG_STOP).put(C.TARGET, phrase.getProperty().getBlocklyId()));
+            possibleDebugStops.add(phrase.getProperty().getBlocklyId());
+            app(makeNode(C.COMMENT));
         }
     }
 
@@ -1219,32 +1254,12 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
             operation.put(C.HIGHTLIGHT_PLUS, new ArrayList<>(toInitateBlocks));
             toInitateBlocks.clear();
         }
+        if ( !possibleDebugStops.isEmpty() ) {
+            possibleDebugStops.removeIf(IS_INVALID_BLOCK_ID);
+            operation.put(C.POSSIBLE_DEBUG_STOP, new ArrayList<>(possibleDebugStops));
+            possibleDebugStops.clear();
+        }
         return operation;
-    }
-
-    protected void endPhrase(Phrase<V> phrase) {
-        String blocklyId = phrase.getProperty().getBlocklyId();
-        if ( !opArray.isEmpty() && isValidBlocklyId(blocklyId) ) {
-            JSONObject lastElement = opArray.get(opArray.size() - 1);
-            if ( !lastElement.has(C.HIGHTLIGHT_MINUS) ) {
-                lastElement.put(C.HIGHTLIGHT_MINUS, Collections.singletonList(blocklyId));
-            } else {
-                JSONArray array = lastElement.getJSONArray(C.HIGHTLIGHT_MINUS);
-                if ( !array.toList().contains(blocklyId) ) {
-                    array.put(blocklyId);
-                }
-            }
-        }
-        toInitateBlocks.remove(blocklyId);
-        openBlocks.remove(blocklyId);
-    }
-
-    protected void beginPhrase(Phrase<V> phrase) {
-        String blocklyId = phrase.getProperty().getBlocklyId();
-        if ( debugger && isValidBlocklyId(blocklyId) ) {
-            toInitateBlocks.add(blocklyId);
-            openBlocks.add(blocklyId);
-        }
     }
 
     protected V app(JSONObject o) {
@@ -1265,11 +1280,11 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
         returnStatements.clear();
     }
 
-        /**
-         * Enclose the scope of flowControlStatements while runnable is run
-         *
-         * @param runnable
-         */
+    /**
+     * Enclose the scope of flowControlStatements while runnable is run
+     *
+     * @param runnable
+     */
     protected void encloseFlowStatementScope(Runnable runnable) {
         List<JSONObject> flowControlTemp = new ArrayList<>(flowControlStatements);
         flowControlStatements.clear();

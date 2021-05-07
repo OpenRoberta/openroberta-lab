@@ -8,9 +8,6 @@ declare var stackmachineJsHelper;
 
 export class Interpreter {
 
-    private static readonly DO_NOT_STEP_INTO = [C.EXPR, C.GET_SAMPLE, C.VAR_DECLARATION];
-    private static readonly COMMENTS_STEP_INTO = [C.IF_STMT, C.REPEAT_STMT, C.WAIT_STMT, C.METHOD_CALL];
-
     public breakpoints: any[];
     private terminated = false;
     private callbackOnTermination = undefined;
@@ -553,7 +550,6 @@ export class Interpreter {
                     this.robotBehaviour.assertAction(stmt[C.MSG], left, stmt[C.OP], right, value);
                     break;
                 }
-                case C.POSSIBLE_DEBUG_STOP:
                 case C.COMMENT: {
                     break;
                 }
@@ -1170,40 +1166,24 @@ export class Interpreter {
         return image;
     }
 
-    /** Returns true if the operation is a possible block where stepInto should stop*/
-    private static isPossibleStepInto(op) {
-        if (op[C.OPCODE] === C.POSSIBLE_DEBUG_STOP) {
-            return true;
-        }
-        if (op.hasOwnProperty(C.HIGHTLIGHT_PLUS)) {
-            if (op[C.OPCODE] === C.COMMENT) {
-                return this.COMMENTS_STEP_INTO.indexOf(op[C.TARGET]) >= 0;
-            }
-            if (this.DO_NOT_STEP_INTO.indexOf(op[C.OPCODE]) >= 0) {
-                return false;
-            }
-            if (op[C.OPCODE] === C.EXPR) {
-                let isStartOfNotExpr = op[C.HIGHTLIGHT_PLUS]?.map(id => stackmachineJsHelper.getBlockById(id)).some(block => block.getChildren().length > 0);
-                return isStartOfNotExpr;
-            }
+    private static isPossibleStepInto(op): boolean {
+        if (op[C.POSSIBLE_DEBUG_STOP]?.length > 0) {
             return true;
         }
         return false;
     }
 
-
-    /** Returns true if the operation is a possible block where stepOver should stop*/
-    private static isPossibleStepOver(op) {
+    private static isPossibleStepOver(op): boolean {
         let isMethodCall = op[C.OPCODE] === C.COMMENT && op[C.TARGET] === C.METHOD_CALL;
         return op.hasOwnProperty(C.HIGHTLIGHT_PLUS) && isMethodCall;
     }
 
     private static isBreakPoint(op: any, breakpoints: any[]): boolean {
-        if (op[C.OPCODE] === C.POSSIBLE_DEBUG_STOP && breakpoints.indexOf(op[C.TARGET]) >= 0) {
+        if (op[C.POSSIBLE_DEBUG_STOP]?.some(blockId => breakpoints.indexOf(blockId) >= 0)) {
             return true;
         }
-        if (op[C.HIGHTLIGHT_PLUS] && this.COMMENTS_STEP_INTO.indexOf(op[C.TARGET]) >= 0) {
-            return op[C.HIGHTLIGHT_PLUS].some(blockId => breakpoints.indexOf(blockId) >= 0);
+        if (op[C.HIGHTLIGHT_PLUS]?.some(blockId => breakpoints.indexOf(blockId) >= 0)) {
+            return true;
         }
         return false;
     }
