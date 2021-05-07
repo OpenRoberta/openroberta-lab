@@ -121,6 +121,7 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
     private final Map<String, List<JSONObject>> methodCalls = new HashMap<>();
     private final Map<String, Integer> methodDeclarations = new HashMap<>();
 
+    private final Set<String> possibleDebugStops = new HashSet<>();
     /**
      * blocklyIds which will be initiated with next block
      */
@@ -475,10 +476,6 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
         return null;
     }
 
-    private V appComment(Object commentType, boolean isStart) {
-        return app(makeNode(C.COMMENT).put(C.TARGET, commentType).put(C.TYPE, isStart ? C.START : C.END));
-    }
-
     @Override
     public final V visitNNStepStmt(NNStepStmt<V> nnStepStmt) {
         for ( Expr<V> e : nnStepStmt.getIl() ) {
@@ -534,6 +531,8 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
                     app(makeNode(C.VAR_DECLARATION).put(C.TYPE, initialValue.getVarType()).put(C.NAME, variableName));
 
                     int programCounterAfterInitialization = opArray.size();
+
+                    addPossibleDebugStop(repeatStmt);
 
                     // Termination Expr
                     variable.accept(this);
@@ -599,6 +598,7 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
                     // Init variable (Element element)
                     varDeclaration.accept(this);
                     int programCounterAfterInitialization = opArray.size();
+                    addPossibleDebugStop(repeatStmt);
 
                     // Termination expr ( i < list.length )
                     app(makeNode(C.EXPR).put(C.EXPR, C.VAR).put(C.NAME, runVariableName));
@@ -655,6 +655,7 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
                     appComment(C.REPEAT_STMT, true);
 
                     int beforeExprTarget = opArray.size();
+                    addPossibleDebugStop(repeatStmt);
 
                     repeatStmt.getList().accept(this);
 
@@ -678,6 +679,7 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
                 encloseFlowStatementScope(() -> {
                     appComment(C.REPEAT_STMT, true);
                     int beforeExprTarget = opArray.size();
+                    addPossibleDebugStop(repeatStmt);
 
                     repeatStmt.getExpr().accept(this);
                     // no difference between WHILE and UNTIL because a NOT gets injected into UNTIL by jaxbToAST
@@ -705,19 +707,6 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
                 throw new DbcException("Invalid repeat mode: " + mode);
         }
 
-    }
-
-    private void removeOpenBlocksFromDehighlight(JSONObject statement) {
-        removeOpenBlocksFromDehighlight(statement, null);
-    }
-
-    private void removeOpenBlocksFromDehighlight(JSONObject statement, String repeatId) {
-        if ( debugger ) {
-            List<Object> newDehightlight = statement.getJSONArray(C.HIGHTLIGHT_MINUS).toList().stream()
-                .filter(id -> !openBlocks.contains(id) || id.equals(repeatId))
-                .collect(Collectors.toList());
-            statement.put(C.HIGHTLIGHT_MINUS, newDehightlight);
-        }
     }
 
     @Override
@@ -773,6 +762,7 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
         encloseFlowStatementScope(() -> {
             appComment(C.WAIT_STMT, true);
             int programCounterStart = opArray.size();
+            addPossibleDebugStop(waitStmt);
 
             waitStmt.getStatements().get()
                 .forEach(statement -> statement.accept(this));
@@ -1129,6 +1119,29 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
         debugAction.getValue().accept(this);
         JSONObject o = makeNode(C.DEBUG_ACTION);
         return app(o);
+    }
+
+    private void addPossibleDebugStop(Phrase<?> phrase) {
+        if ( debugger ) {
+            app(makeNode(C.POSSIBLE_DEBUG_STOP).put(C.TARGET, phrase.getProperty().getBlocklyId()));
+        }
+    }
+
+    private V appComment(Object commentType, boolean isStart) {
+        return app(makeNode(C.COMMENT).put(C.TARGET, commentType).put(C.TYPE, isStart ? C.START : C.END));
+    }
+
+    private void removeOpenBlocksFromDehighlight(JSONObject statement) {
+        removeOpenBlocksFromDehighlight(statement, null);
+    }
+
+    private void removeOpenBlocksFromDehighlight(JSONObject statement, String repeatId) {
+        if ( debugger ) {
+            List<Object> newDehightlight = statement.getJSONArray(C.HIGHTLIGHT_MINUS).toList().stream()
+                .filter(id -> !openBlocks.contains(id) || id.equals(repeatId))
+                .collect(Collectors.toList());
+            statement.put(C.HIGHTLIGHT_MINUS, newDehightlight);
+        }
     }
 
     private JSONObject createJumpToMethod(MethodCall<V> methodCall) {

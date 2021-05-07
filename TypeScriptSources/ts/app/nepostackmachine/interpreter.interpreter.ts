@@ -553,6 +553,7 @@ export class Interpreter {
                     this.robotBehaviour.assertAction(stmt[C.MSG], left, stmt[C.OP], right, value);
                     break;
                 }
+                case C.POSSIBLE_DEBUG_STOP:
                 case C.COMMENT: {
                     break;
                 }
@@ -1171,12 +1172,19 @@ export class Interpreter {
 
     /** Returns true if the operation is a possible block where stepInto should stop*/
     private static isPossibleStepInto(op) {
+        if (op[C.OPCODE] === C.POSSIBLE_DEBUG_STOP) {
+            return true;
+        }
         if (op.hasOwnProperty(C.HIGHTLIGHT_PLUS)) {
-            if (op[C.OPCODE] === C.COMMENT && this.COMMENTS_STEP_INTO.includes(op[C.TARGET])) {
-                return true;
+            if (op[C.OPCODE] === C.COMMENT) {
+                return this.COMMENTS_STEP_INTO.indexOf(op[C.TARGET]) >= 0;
             }
-            if (this.DO_NOT_STEP_INTO.includes(op[C.OPCODE])) {
+            if (this.DO_NOT_STEP_INTO.indexOf(op[C.OPCODE]) >= 0) {
                 return false;
+            }
+            if (op[C.OPCODE] === C.EXPR) {
+                let isStartOfNotExpr = op[C.HIGHTLIGHT_PLUS]?.map(id => stackmachineJsHelper.getBlockById(id)).some(block => block.getChildren().length > 0);
+                return isStartOfNotExpr;
             }
             return true;
         }
@@ -1190,7 +1198,13 @@ export class Interpreter {
         return op.hasOwnProperty(C.HIGHTLIGHT_PLUS) && isMethodCall;
     }
 
-    private static isBreakPoint(op: any, breakpoints: any[]) {
-        return op[C.HIGHTLIGHT_PLUS]?.some(blockId => breakpoints.includes(blockId));
+    private static isBreakPoint(op: any, breakpoints: any[]): boolean {
+        if (op[C.OPCODE] === C.POSSIBLE_DEBUG_STOP && breakpoints.indexOf(op[C.TARGET]) >= 0) {
+            return true;
+        }
+        if (op[C.HIGHTLIGHT_PLUS] && this.COMMENTS_STEP_INTO.indexOf(op[C.TARGET]) >= 0) {
+            return op[C.HIGHTLIGHT_PLUS].some(blockId => breakpoints.indexOf(blockId) >= 0);
+        }
+        return false;
     }
 }
