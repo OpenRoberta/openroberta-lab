@@ -218,6 +218,7 @@ export const PLAY_NOTE_ACTION: string = "playNoteAction";
 export const PORT: string = "port";
 export const PORT_A: string = "portA";
 export const PORT_B: string = "portB";
+export const POSSIBLE_DEBUG_STOP: string = "possibleDebugStop";
 export const POSITION: string = "position";
 export const POWER: string = "POWER";
 export const PRESENCE: string = "presence";
