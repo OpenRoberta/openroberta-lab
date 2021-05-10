@@ -326,6 +326,8 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
                   ◄───────────┘             ◄───────────┘
                  */
 
+                appComment(C.BINARY, true);
+
                 boolean isOr = binary.getOp() == Op.OR;
                 binary.getLeft().accept(this);
                 JSONObject skipNextCondition = makeNode(C.JUMP).put(C.CONDITIONAL, isOr);
@@ -338,6 +340,8 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
                 skipNextCondition.put(C.TARGET, opArray.size());
                 app(makeNode(C.EXPR).put(C.EXPR, C.BOOL_CONST).put(C.VALUE, isOr));
                 jumpToEnd.put(C.TARGET, opArray.size());
+
+                appComment(C.BINARY, false);
                 return null;
             default:
                 binary.getLeft().accept(this);
