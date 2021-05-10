@@ -95,7 +95,7 @@ public class ProjectWorkflowRestController {
             response.setFileExtension(project.getSourceCodeFileExtension());
             response.setProgXML(project.getAnnotatedProgramAsXml());
             response.setConfAnnos(project.getConfAnnotationList());
-            response.setJavaScriptConfiguration(project.getSimSensorConfigurationJSON());
+            response.setConfiguration(project.getConfigurationJSON());
             addProjectResultToResponse(response, project);
             Statistics.info("SimulationRun", "LoggedIn", httpSessionState.isUserLoggedIn(), "success", project.hasSucceeded());
             return UtilForREST.responseWithFrontendInfo(response, httpSessionState, this.robotCommunicator);
@@ -126,6 +126,7 @@ public class ProjectWorkflowRestController {
             response.setConfAnnos(project.getConfAnnotationList());
             response.setErrorCounter(project.getErrorCounter());
             response.setCompiledCode(project.getCompiledHex());
+            response.setConfiguration(project.getConfigurationJSON());
             // TODO auto connection robots return COMPILERWORKFLOW_SUCCESS or COMPILERWORKFLOW_PROGRAM_GENERATION_SUCCESS
             // TODO which is not mapped to anything in the frontend, ROBOT_PUSH_RUN is mapped to the message that was used before workflows
             if ( project.getResult() == Key.COMPILERWORKFLOW_SUCCESS || project.getResult() == Key.COMPILERWORKFLOW_PROGRAM_GENERATION_SUCCESS ) {

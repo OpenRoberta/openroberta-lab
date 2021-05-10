@@ -521,7 +521,7 @@ define(['exports', 'simulation.scene', 'simulation.constants', 'util', 'interpre
         }
         interpreters = programs.map(function(x) {
             var src = JSON.parse(x.javaScriptProgram);
-            configurations.push(x.javaScriptConfiguration);
+            configurations.push(x.configuration.SENSORS);
             return new SIM_I.Interpreter(src, new MBED_R.RobotMbedBehaviour(), callbackOnTermination, breakpoints);
         });
         updateDebugMode(debugMode);

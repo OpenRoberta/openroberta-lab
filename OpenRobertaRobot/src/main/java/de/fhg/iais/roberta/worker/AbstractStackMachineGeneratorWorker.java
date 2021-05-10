@@ -1,13 +1,10 @@
 package de.fhg.iais.roberta.worker;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import de.fhg.iais.roberta.bean.UsedHardwareBean;
-import de.fhg.iais.roberta.components.ConfigurationComponent;
 import de.fhg.iais.roberta.components.Project;
 import de.fhg.iais.roberta.util.Key;
-import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.visitor.C;
 import de.fhg.iais.roberta.visitor.lang.codegen.AbstractStackMachineVisitor;
 
@@ -25,15 +22,6 @@ public abstract class AbstractStackMachineGeneratorWorker implements IWorker {
         generatedCode.put(C.OPS, visitor.getOpArray());
         project.setSourceCode(generatedCode.toString(2));
         project.setCompiledHex(generatedCode.toString(2));
-        JSONObject simSensorConfigurationJSON = new JSONObject();
-        for ( ConfigurationComponent sensor : project.getConfigurationAst().getSensors() ) {
-            try {
-                simSensorConfigurationJSON.put(sensor.getUserDefinedPortName(), sensor.getComponentType());
-            } catch ( JSONException e ) {
-                throw new DbcException("exception when generating the simulation configuration ", e);
-            }
-        }
-        project.setSimSensorConfigurationJSON(simSensorConfigurationJSON);
         project.setResult(Key.COMPILERWORKFLOW_PROGRAM_GENERATION_SUCCESS);
     }
 

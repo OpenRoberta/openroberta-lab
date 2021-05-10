@@ -481,7 +481,7 @@
         { "name": "fileExtension", "type": "String" },
         { "name": "progXML", "type": "String" },
         { "name": "confAnnos", "type": "String->JSONObject" },
-        { "name": "javaScriptConfiguration", "type": "JSONObject" }
+        { "name": "configuration", "type": "JSONObject" }
       ]
     },
     {
@@ -493,7 +493,8 @@
         { "name": "progXML", "type": "String", "required": false },
         { "name": "errorCounter", "type": "int" },
         { "name": "confAnnos", "type": "String->JSONObject", "required": false },
-        { "name": "compiledCode", "type": "String" }
+        { "name": "compiledCode", "type": "String" },
+        { "name": "configuration", "type": "JSONObject", "required": false }
       ]
     },
     {

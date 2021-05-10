@@ -10,6 +10,7 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -57,10 +58,10 @@ public final class Project {
     private ProgramAst<Void> program = null;
     private ConfigurationAst configuration = null;
     private StringBuilder sourceCodeBuilder = new StringBuilder();
-    private JSONObject simSensorConfigurationJSON = new JSONObject();
     private String compiledHex = "";
     private Key result = Key.COMPILERWORKFLOW_PROJECT_BUILD_SUCCESS;
     private int errorCounter = 0;
+    private JSONObject configurationJSON;
 
     private Project() {
     }
@@ -282,12 +283,8 @@ public final class Project {
         }
     }
 
-    public JSONObject getSimSensorConfigurationJSON() {
-        return this.simSensorConfigurationJSON;
-    }
-
-    public void setSimSensorConfigurationJSON(JSONObject simSensorConfigurationJSON2) {
-        this.simSensorConfigurationJSON = simSensorConfigurationJSON2;
+    public JSONObject getConfigurationJSON() {
+        return this.configurationJSON;
     }
 
     public static class Builder {
@@ -360,6 +357,28 @@ public final class Project {
 
         public Builder setConfigurationAst(ConfigurationAst configurationAst) {
             this.project.configuration = configurationAst;
+            this.project.configurationJSON = new JSONObject();
+            JSONObject sensorsJSON = new JSONObject();
+            JSONObject actuatorsJSON = new JSONObject();
+            try {
+                this.project.configurationJSON.put("TRACKWIDTH", configurationAst.getTrackWidth());
+                this.project.configurationJSON.put("WHEELDIAMETER", configurationAst.getWheelDiameter());
+                for ( ConfigurationComponent sensor : configurationAst.getSensors() ) {
+                    sensorsJSON.put(sensor.getUserDefinedPortName(), sensor.getComponentType());
+                }
+                for ( ConfigurationComponent actuator : configurationAst.getActors() ) {
+                    JSONObject propJSON = new JSONObject();
+                    propJSON.put("TYPE", actuator.getComponentType());
+                    for ( String prop : actuator.getComponentProperties().keySet() ) {
+                        propJSON.put(prop, actuator.getComponentProperties().get(prop));
+                    }
+                    actuatorsJSON.put(actuator.getUserDefinedPortName(), propJSON);
+                }
+                this.project.configurationJSON.put("SENSORS", sensorsJSON);
+                this.project.configurationJSON.put("ACTUATORS", actuatorsJSON);
+            } catch ( JSONException e ) {
+                throw new DbcException("exception when generating the configuration ", e);
+            }
             return this;
         }
 
@@ -391,14 +410,14 @@ public final class Project {
          * Transforms program XML into AST.
          */
         private void transformProgram() {
-            if ( (this.programXml == null) || this.programXml.trim().isEmpty() ) {
+            if ( this.programXml == null || this.programXml.trim().isEmpty() ) {
                 this.project.result = Key.COMPILERWORKFLOW_ERROR_PROGRAM_NOT_FOUND;
             } else {
                 try {
                     BlockSet blockSet = JaxbHelper.xml2BlockSet(this.programXml);
                     // Assume any program without or an empty xmlVersion is 2.0
                     String xmlversion = blockSet.getXmlversion();
-                    if ( (xmlversion == null) || xmlversion.isEmpty() ) {
+                    if ( xmlversion == null || xmlversion.isEmpty() ) {
                         blockSet.setXmlversion("2.0");
                     }
                     Jaxb2ProgramAst<Void> transformer = new Jaxb2ProgramAst<>(this.project.robotFactory);
@@ -414,17 +433,18 @@ public final class Project {
          * Transforms configuration XML into AST.
          */
         private void transformConfiguration() {
-            if ( (this.configurationXml == null) || this.configurationXml.trim().isEmpty() ) {
+            if ( this.configurationXml == null || this.configurationXml.trim().isEmpty() ) {
                 this.project.result = Key.COMPILERWORKFLOW_ERROR_CONFIGURATION_NOT_FOUND;
             } else {
                 try {
                     BlockSet blockSet = JaxbHelper.xml2BlockSet(this.configurationXml);
                     // Assume any program without or an empty xmlVersion is 2.0
                     String xmlversion = blockSet.getXmlversion();
-                    if ( (xmlversion == null) || xmlversion.isEmpty() ) {
+                    if ( xmlversion == null || xmlversion.isEmpty() ) {
                         blockSet.setXmlversion("2.0");
                     }
                     String topBlock = this.project.robotFactory.optTopBlockOfOldConfiguration();
+                    ConfigurationAst confAst;
                     if ( this.project.robotFactory.getConfigurationType().equals("new") ) { // new configuration
                         // if the program has a new configuration but still has the old top block in the XML, the new default configuration should be loaded
                         if ( topBlock != null ) {
@@ -432,15 +452,16 @@ public final class Project {
                                 blockSet = JaxbHelper.xml2BlockSet(this.project.robotFactory.getConfigurationDefault());
                             }
                         }
-                        this.project.configuration = Jaxb2ConfigurationAst.blocks2NewConfig(blockSet, this.project.robotFactory.getBlocklyDropdownFactory());
+                        confAst = Jaxb2ConfigurationAst.blocks2NewConfig(blockSet, this.project.robotFactory.getBlocklyDropdownFactory());
                     } else { // old configuration
                         String sensorPrefix = this.project.robotFactory.optSensorPrefix();
                         if ( topBlock == null || sensorPrefix == null ) {
                             throw new DbcException("A top block and a sensor prefix are required for an old configuration!");
                         }
-                        this.project.configuration =
+                        confAst =
                             Jaxb2ConfigurationAst.blocks2OldConfig(blockSet, this.project.robotFactory.getBlocklyDropdownFactory(), topBlock, sensorPrefix);
                     }
+                    setConfigurationAst(confAst);
                     this.project.configuration.setRobotName(this.project.getRobot()); // TODO remove dependencies on robot name to remove this
                 } catch ( JAXBException e ) {
                     LOG.error("Generation of the configuration failed", e);
@@ -449,4 +470,5 @@ public final class Project {
             }
         }
     }
+
 }
