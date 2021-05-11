@@ -41,7 +41,7 @@ on Ubuntu:
 * Edison
   * `sudo apt-get install python` (Python 2 is needed, it is called `python` for Ubuntu 18.04 and `python2` for 20.04)
 * Bionics4Education
-  * `sudo apt-get install python-serial` (`python3-serial` for Ubuntu 20.04)
+  * `sudo apt-get install python-serial` (`python3-serial` for Ubuntu 20.04, in this case you should have `python` default to `python3`, test it by running `python --version` and if it is `2.x` you can change it by running `sudo apt-get install python-is-python3`)
   * install [xtensa-esp32-elf](https://dl.espressif.com/dl/xtensa-esp32-elf-linux64-1.22.0-61-gab8375a-5.2.0.tar.gz)
  
 on Windows:
