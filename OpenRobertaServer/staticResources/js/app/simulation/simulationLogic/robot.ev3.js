@@ -1,4 +1,4 @@
-define(['simulation.simulation', 'interpreter.constants', 'simulation.robot', 'guiState.controller'], function(SIM, C, Robot, GUISTATE_C) {
+define(['simulation.simulation', 'interpreter.constants', 'simulation.robot', 'guiState.controller'], function (SIM, C, Robot, GUISTATE_C) {
 
     /**
      * Creates a new Ev3 for a simulation.
@@ -244,13 +244,15 @@ define(['simulation.simulation', 'interpreter.constants', 'simulation.robot', 'g
             timer5: false
         };
         var SpeechSynthesis = window.speechSynthesis;
+        //cancel needed so speak works in chrome because it's created already speaking
+        SpeechSynthesis.cancel();
         if (!SpeechSynthesis) {
             context = null;
             console.log("Sorry, but the Speech Synthesis API is not supported by your browser. Please, consider upgrading to the latest version or downloading Google Chrome or Mozilla Firefox");
         }
         this.sayText = {
             language: "en-US",
-            say: function(text, lang, speed, pitch) {
+            say: function (text, lang, speed, pitch, volume) {
                 // Prevents an empty string from crashing the simulation
                 if (text === "") text = " ";
                 // IE apparently doesnt support default parameters, this prevents it from crashing the whole simulation
@@ -284,10 +286,16 @@ define(['simulation.simulation', 'interpreter.constants', 'simulation.robot', 'g
                 }
                 utterThis.pitch = pitch;
                 utterThis.rate = speed;
-                utterThis.onend = function(event) {
+                utterThis.volume = volume;
+                utterThis.onend = function (event) {
                     that.sayText.finished = true;
                 };
-                SpeechSynthesis.speak(utterThis);
+                //does not work for volume = 0 thus workaround with if statement
+                if (volume != 0) {
+                    SpeechSynthesis.speak(utterThis);
+                } else {
+                    that.sayText.finished = true;
+                }
             },
             finished: false
         };
@@ -295,51 +303,48 @@ define(['simulation.simulation', 'interpreter.constants', 'simulation.robot', 'g
             duration: 0,
             timer: 0,
             file: {
-                0: function(a) {
-                    var ts = a.context.currentTime;
-                    a.oscillator.frequency.setValueAtTime(600, ts);
-                    a.gainNode.gain.setValueAtTime(a.volume, ts);
-                    ts += 1;
-                    a.gainNode.gain.setValueAtTime(0, ts);
+                0: function (a) {
+                    var ct = a.context.currentTime;
+                    a.oscillator.frequency.setValueAtTime(600, ct);
+                    a.oscillator.start(ct);
+                    a.oscillator.stop(ct + 200 / 1000);
                 },
-                1: function(a) {
-                    var ts = a.context.currentTime;
-                    for (var i = 0; i < 2; i++) {
-                        a.oscillator.frequency.setValueAtTime(600, ts);
-                        a.gainNode.gain.setValueAtTime(a.volume, ts);
-                        ts += (150 / 1000.0);
-                        a.gainNode.gain.setValueAtTime(0, ts);
-                        ts += (25 / 1000.0);
+                1: function (a) {
+                    var ct = a.context.currentTime;
+                    a.oscillator.frequency.setValueAtTime(600, ct);
+                    a.oscillator.start(ct);
+                    a.gainNode.gain.setValueAtTime(0, ct + 200 / 1000);
+                    a.gainNode.gain.setValueAtTime(a.volume, ct + 300 / 1000);
+                    a.oscillator.stop(ct + 500 / 1000);
+                },
+                2: function (a) {
+                    var frequency = 300;
+                    var ct = a.context.currentTime;
+                    a.oscillator.start(ct);
+                    for (var i = 0; i < 4; i++) {
+                        a.oscillator.frequency.setValueAtTime(frequency + i * 200, ct + ((i * 300) / 1000));
+                        a.gainNode.gain.setValueAtTime(0, ct + ((i * 300) + 200) / 1000);
+                        a.gainNode.gain.setValueAtTime(a.volume, ct + (i * 300) / 1000);
                     }
+                    a.oscillator.stop(ct + (1100) / 1000);
+
                 },
-                2: function(a) {
-                    var C2 = 523;
-                    var ts = a.context.currentTime;
-                    for (var i = 4; i < 8; i++) {
-                        a.oscillator.frequency.setValueAtTime(C2 * i / 4, ts);
-                        a.gainNode.gain.setValueAtTime(a.volume, ts);
-                        ts += (100 / 1000.0);
-                        a.gainNode.gain.setValueAtTime(0, ts);
-                        ts += (25 / 1000.0);
+                3: function (a) {
+                    var frequency = 700;
+                    var ct = a.context.currentTime;
+                    a.oscillator.start(ct);
+                    for (var i = 0; i < 4; i++) {
+                        a.oscillator.frequency.setValueAtTime(frequency - i * 200, ct + ((i * 300) / 1000));
+                        a.gainNode.gain.setValueAtTime(0, ct + ((i * 300) + 200) / 1000);
+                        a.gainNode.gain.setValueAtTime(a.volume, ct + (i * 300) / 1000);
                     }
+                    a.oscillator.stop(ct + (1100) / 1000);
                 },
-                3: function(a) {
-                    var C2 = 523;
-                    var ts = a.context.currentTime;
-                    for (var i = 7; i >= 4; i--) {
-                        a.oscillator.frequency.setValueAtTime(C2 * i / 4, ts);
-                        a.gainNode.gain.setValueAtTime(a.volume, ts);
-                        ts += (100 / 1000.0);
-                        a.gainNode.gain.setValueAtTime(0, ts);
-                        ts += (25 / 1000.0);
-                    }
-                },
-                4: function(a) {
-                    var ts = a.context.currentTime;
-                    a.oscillator.frequency.setValueAtTime(100, ts);
-                    a.gainNode.gain.setValueAtTime(a.volume, ts);
-                    ts += (500 / 1000.0);
-                    a.gainNode.gain.setValueAtTime(0, ts);
+                4: function (a) {
+                    var ct = a.context.currentTime;
+                    a.oscillator.frequency.setValueAtTime(200, ct);
+                    a.oscillator.start(ct);
+                    a.oscillator.stop(ct + 200 / 1000);
                 }
             }
         };
@@ -349,7 +354,7 @@ define(['simulation.simulation', 'interpreter.constants', 'simulation.robot', 'g
     Ev3.prototype = Object.create(Robot.prototype);
     Ev3.prototype.constructor = Ev3;
 
-    Ev3.prototype.reset = function() {
+    Ev3.prototype.reset = function () {
         this.encoder.left = 0;
         this.encoder.right = 0;
         this.left = 0;
@@ -364,11 +369,11 @@ define(['simulation.simulation', 'interpreter.constants', 'simulation.robot', 'g
         var that = this;
         for (var property in that.buttons) {
             $('#' + property + that.id).off('mousedown touchstart');
-            $('#' + property + that.id).on('mousedown touchstart', function() {
+            $('#' + property + that.id).on('mousedown touchstart', function () {
                 that.buttons[this.id.replace(/\d+$/, "")] = true;
             });
             $('#' + property + that.id).off('mouseup touchend');
-            $('#' + property + that.id).on('mouseup touchend', function() {
+            $('#' + property + that.id).on('mouseup touchend', function () {
                 that.buttons[this.id.replace(/\d+$/, "")] = false;
             });
         }
@@ -387,7 +392,7 @@ define(['simulation.simulation', 'interpreter.constants', 'simulation.robot', 'g
      *            motors/wheels, display, led ...
      * 
      */
-    Ev3.prototype.update = function() {
+    Ev3.prototype.update = function () {
         // update pose
         var motors = this.robotBehaviour.getActionState("motors", true);
         if (motors) {
@@ -553,23 +558,28 @@ define(['simulation.simulation', 'interpreter.constants', 'simulation.robot', 'g
         if ((volume || volume === 0) && this.webAudio.context) {
             this.webAudio.volume = volume / 100.0;
         }
+
+        function oscillatorFinish() {
+            that.tone.finished = true;
+            oscillator.disconnect(that.webAudio.gainNode);
+            that.webAudio.gainNode.disconnect(that.webAudio.context.destination);
+        }
+
         var tone = this.robotBehaviour.getActionState("tone", true);
         if (tone && this.webAudio.context) {
             var cT = this.webAudio.context.currentTime;
+            this.webAudio.gainNode = this.webAudio.context.createGain();
+            this.webAudio.gainNode.gain.value = this.webAudio.volume;
+            this.webAudio.oscillator = this.webAudio.context.createOscillator();
+            var oscillator = this.webAudio.oscillator;
+            oscillator.type = 'square';
+            //applies gain to Sound
+            oscillator.connect(this.webAudio.gainNode).connect(this.webAudio.context.destination);
+            var that = this;
+            oscillator.onended = function (e) {
+                oscillatorFinish();
+            };
             if (tone.frequency && tone.duration > 0) {
-                var oscillator = this.webAudio.context.createOscillator();
-                oscillator.type = 'square';
-                oscillator.connect(this.webAudio.context.destination);
-                var that = this;
-
-                function oscillatorFinish() {
-                    that.tone.finished = true;
-                    oscillator.disconnect(that.webAudio.context.destination);
-                    delete oscillator;
-                }
-                oscillator.onended = function(e) {
-                    oscillatorFinish();
-                };
                 oscillator.frequency.value = tone.frequency;
                 oscillator.start(cT);
                 oscillator.stop(cT + tone.duration / 1000.0);
@@ -587,7 +597,7 @@ define(['simulation.simulation', 'interpreter.constants', 'simulation.robot', 'g
         var sayText = this.robotBehaviour.getActionState("sayText", true);
         if (sayText && window.speechSynthesis) {
             if (sayText.text !== undefined) {
-                this.sayText.say(sayText.text, this.sayText.language, sayText.speed, sayText.pitch);
+                this.sayText.say(sayText.text, this.sayText.language, sayText.speed, sayText.pitch, this.webAudio.volume);
             }
         }
         // update timer
@@ -612,7 +622,7 @@ define(['simulation.simulation', 'interpreter.constants', 'simulation.robot', 'g
      * @returns the translated point
      * 
      */
-    Ev3.prototype.translate = function(sin, cos, point) {
+    Ev3.prototype.translate = function (sin, cos, point) {
         point.rx = this.pose.x - point.y * cos + point.x * sin;
         point.ry = this.pose.y - point.y * sin - point.x * cos;
         return point;

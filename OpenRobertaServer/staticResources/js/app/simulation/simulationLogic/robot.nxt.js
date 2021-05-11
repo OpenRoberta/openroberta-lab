@@ -1,4 +1,4 @@
-define(['simulation.simulation', 'interpreter.constants', 'simulation.robot.ev3'], function(SIM, C, Ev3) {
+define(['simulation.simulation', 'interpreter.constants', 'simulation.robot.ev3'], function (SIM, C, Ev3) {
 
     /**
      * Creates a new robot for a simulation.
@@ -54,7 +54,7 @@ define(['simulation.simulation', 'interpreter.constants', 'simulation.robot.ev3'
     Nxt.prototype = Object.create(Ev3.prototype);
     Nxt.prototype.constructor = Nxt;
 
-    Nxt.prototype.reset = function() {
+    Nxt.prototype.reset = function () {
         this.encoder.left = 0;
         this.encoder.right = 0;
         this.left = 0;
@@ -66,11 +66,11 @@ define(['simulation.simulation', 'interpreter.constants', 'simulation.robot.ev3'
         var robot = this;
         for (var property in robot.buttons) {
             $('#' + property + robot.id).off('mousedown touchstart');
-            $('#' + property + robot.id).on('mousedown touchstart', function() {
+            $('#' + property + robot.id).on('mousedown touchstart', function () {
                 robot.buttons[this.id.replace(/\d+$/, "")] = true;
             });
             $('#' + property + robot.id).off('mouseup touchend');
-            $('#' + property + robot.id).on('mouseup touchend', function() {
+            $('#' + property + robot.id).on('mouseup touchend', function () {
                 robot.buttons[this.id.replace(/\d+$/, "")] = false;
             });
         }
@@ -89,7 +89,7 @@ define(['simulation.simulation', 'interpreter.constants', 'simulation.robot.ev3'
      *            motors/wheels, display, led ...
      * 
      */
-    Nxt.prototype.update = function() {
+    Nxt.prototype.update = function () {
         var motors = this.robotBehaviour.getActionState("motors", true);
         if (motors) {
             var left = motors.c;
@@ -222,21 +222,25 @@ define(['simulation.simulation', 'interpreter.constants', 'simulation.robot.ev3'
         if ((volume || volume === 0) && this.webAudio.context) {
             this.webAudio.volume = volume / 100.0;
         }
+
+        function oscillatorFinish() {
+            that.tone.finished = true;
+            oscillator.disconnect(that.webAudio.gainNode);
+            that.webAudio.gainNode.disconnect(that.webAudio.context.destination);
+        }
+
         var tone = this.robotBehaviour.getActionState("tone", true);
         if (tone && this.webAudio.context) {
             var cT = this.webAudio.context.currentTime;
+            this.webAudio.gainNode = this.webAudio.context.createGain();
+            this.webAudio.gainNode.gain.value = this.webAudio.volume;
+            this.webAudio.oscillator = this.webAudio.context.createOscillator();
             if (tone.frequency && tone.duration > 0) {
-                var oscillator = this.webAudio.context.createOscillator();
+                var oscillator = this.webAudio.oscillator;
                 oscillator.type = 'square';
-                oscillator.connect(this.webAudio.context.destination);
+                oscillator.connect(this.webAudio.gainNode).connect(this.webAudio.context.destination);
                 var that = this;
-
-                function oscillatorFinish() {
-                    that.tone.finished = true;
-                    oscillator.disconnect(that.webAudio.context.destination);
-                    delete oscillator;
-                }
-                oscillator.onended = function(e) {
+                oscillator.onended = function (e) {
                     oscillatorFinish();
                 };
                 oscillator.frequency.value = tone.frequency;
