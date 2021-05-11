@@ -43,7 +43,7 @@ This Code of Conduct applies to project administrators, mentors and all contribu
 
 ## Enforcement
 
-Instances of harassment, abuse or any unacceptable behavior may be reported to project administrators responsible for enforcement by emailing (  ). All complaints will be reviewed and investigated promptly and fairly. 
+Instances of harassment, abuse or any unacceptable behavior may be reported to project administrators responsible for enforcement by emailing (support-o-r@iais.fraunhofer.de). All complaints will be reviewed and investigated promptly and fairly. 
 
 Project administrators are obligated to respect the privacy of the reporter of any incident. 
 
