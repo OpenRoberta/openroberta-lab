@@ -155,19 +155,21 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
 
     protected void endPhrase(Phrase<V> phrase) {
         String blocklyId = phrase.getProperty().getBlocklyId();
-        if ( !opArray.isEmpty() && isValidBlocklyId(blocklyId) ) {
-            JSONObject lastElement = opArray.get(opArray.size() - 1);
-            if ( !lastElement.has(C.HIGHTLIGHT_MINUS) ) {
-                lastElement.put(C.HIGHTLIGHT_MINUS, Collections.singletonList(blocklyId));
-            } else {
-                JSONArray array = lastElement.getJSONArray(C.HIGHTLIGHT_MINUS);
-                if ( !array.toList().contains(blocklyId) ) {
-                    array.put(blocklyId);
+        if ( debugger && isValidBlocklyId(blocklyId)) {
+            if ( !opArray.isEmpty() ) {
+                JSONObject lastElement = opArray.get(opArray.size() - 1);
+                if ( !lastElement.has(C.HIGHTLIGHT_MINUS) ) {
+                    lastElement.put(C.HIGHTLIGHT_MINUS, Collections.singletonList(blocklyId));
+                } else {
+                    JSONArray array = lastElement.getJSONArray(C.HIGHTLIGHT_MINUS);
+                    if ( !array.toList().contains(blocklyId) ) {
+                        array.put(blocklyId);
+                    }
                 }
             }
+            toInitateBlocks.remove(blocklyId);
+            openBlocks.remove(blocklyId);
         }
-        toInitateBlocks.remove(blocklyId);
-        openBlocks.remove(blocklyId);
     }
 
     protected void beginPhrase(Phrase<V> phrase) {
