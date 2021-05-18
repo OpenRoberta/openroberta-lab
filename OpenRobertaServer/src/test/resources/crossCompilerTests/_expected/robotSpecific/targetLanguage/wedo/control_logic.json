@@ -41,6 +41,7 @@
   },
   {
     "opc": "comment",
+    "type": "start",
     "target": "createMethodCall"
   },
   {
@@ -51,29 +52,42 @@
   {
     "opc": "jump",
     "conditional": "always",
-    "target": 15
+    "target": 17
   },
   {
     "opc": "comment",
+    "type": "end",
+    "target": "createMethodCall"
+  },
+  {
+    "opc": "comment",
+    "type": "start",
     "target": "createMethodCall"
   },
   {
     "opc": "expr",
     "expr": "NUM_CONST",
-    "value": 14
+    "value": 15
   },
   {
     "opc": "jump",
     "conditional": "always",
-    "target": 124
+    "target": 140
+  },
+  {
+    "opc": "comment",
+    "type": "end",
+    "target": "createMethodCall"
   },
   {"opc": "stop"},
   {
     "opc": "comment",
+    "type": "start",
     "target": "createMethodVoid"
   },
   {
     "opc": "comment",
+    "type": "start",
     "target": "IfStatement"
   },
   {
@@ -84,31 +98,22 @@
   {
     "opc": "jump",
     "conditional": false,
-    "target": 20
+    "target": 22
   },
   {
     "opc": "jump",
     "conditional": "always",
-    "target": 20
+    "target": 22
   },
   {
     "opc": "comment",
+    "type": "end",
     "target": "IfStatement"
   },
   {
-    "opc": "expr",
-    "name": "boolVar",
-    "expr": "Var"
-  },
-  {
-    "opc": "jump",
-    "conditional": false,
-    "target": 24
-  },
-  {
-    "opc": "jump",
-    "conditional": "always",
-    "target": 27
+    "opc": "comment",
+    "type": "start",
+    "target": "IfStatement"
   },
   {
     "opc": "expr",
@@ -123,10 +128,31 @@
   {
     "opc": "jump",
     "conditional": "always",
-    "target": 27
+    "target": 30
+  },
+  {
+    "opc": "expr",
+    "name": "boolVar",
+    "expr": "Var"
+  },
+  {
+    "opc": "jump",
+    "conditional": false,
+    "target": 30
+  },
+  {
+    "opc": "jump",
+    "conditional": "always",
+    "target": 30
   },
   {
     "opc": "comment",
+    "type": "end",
+    "target": "IfStatement"
+  },
+  {
+    "opc": "comment",
+    "type": "start",
     "target": "IfStatement"
   },
   {
@@ -137,15 +163,21 @@
   {
     "opc": "jump",
     "conditional": false,
-    "target": 31
+    "target": 35
   },
   {
     "opc": "jump",
     "conditional": "always",
-    "target": 31
+    "target": 35
   },
   {
     "opc": "comment",
+    "type": "end",
+    "target": "IfStatement"
+  },
+  {
+    "opc": "comment",
+    "type": "start",
     "target": "RepeatStmt"
   },
   {
@@ -161,20 +193,26 @@
   {
     "opc": "jump",
     "conditional": false,
-    "target": 37
+    "target": 42
+  },
+  {
+    "opc": "jump",
+    "conditional": "always",
+    "target": 42
   },
   {
     "opc": "jump",
     "conditional": "always",
     "target": 37
-  },
-  {
-    "opc": "jump",
-    "conditional": "always",
-    "target": 31
   },
   {
     "opc": "comment",
+    "type": "end",
+    "target": "RepeatStmt"
+  },
+  {
+    "opc": "comment",
+    "type": "start",
     "target": "RepeatStmt"
   },
   {
@@ -185,17 +223,27 @@
   {
     "opc": "jump",
     "conditional": false,
-    "target": 42
+    "target": 48
   },
   {
     "opc": "jump",
     "conditional": "always",
-    "target": 37
+    "target": 44
   },
   {
     "opc": "jump",
     "conditional": "always",
-    "target": 37
+    "target": 44
+  },
+  {
+    "opc": "comment",
+    "type": "end",
+    "target": "RepeatStmt"
+  },
+  {
+    "opc": "comment",
+    "type": "start",
+    "target": "RepeatStmt"
   },
   {
     "opc": "expr",
@@ -206,10 +254,6 @@
     "opc": "VarDeclaration",
     "name": "k0",
     "type": "NUMBER"
-  },
-  {
-    "opc": "comment",
-    "target": "RepeatStmt"
   },
   {
     "opc": "expr",
@@ -229,7 +273,7 @@
   {
     "opc": "jump",
     "conditional": false,
-    "target": 54
+    "target": 61
   },
   {
     "opc": "expr",
@@ -253,11 +297,21 @@
   {
     "opc": "jump",
     "conditional": "always",
-    "target": 44
+    "target": 52
   },
   {
     "opc": "unbindVar",
     "name": "k0"
+  },
+  {
+    "opc": "comment",
+    "type": "end",
+    "target": "RepeatStmt"
+  },
+  {
+    "opc": "comment",
+    "type": "start",
+    "target": "RepeatStmt"
   },
   {
     "opc": "expr",
@@ -268,10 +322,6 @@
     "opc": "VarDeclaration",
     "name": "i",
     "type": "NUMBER"
-  },
-  {
-    "opc": "comment",
-    "target": "RepeatStmt"
   },
   {
     "opc": "expr",
@@ -291,7 +341,7 @@
   {
     "opc": "jump",
     "conditional": false,
-    "target": 67
+    "target": 75
   },
   {
     "opc": "expr",
@@ -315,7 +365,7 @@
   {
     "opc": "jump",
     "conditional": "always",
-    "target": 57
+    "target": 66
   },
   {
     "opc": "unbindVar",
@@ -323,36 +373,12 @@
   },
   {
     "opc": "comment",
-    "target": "WaitStmt"
-  },
-  {
-    "opc": "expr",
-    "name": "boolVar",
-    "expr": "Var"
-  },
-  {
-    "opc": "jump",
-    "conditional": false,
-    "target": 72
-  },
-  {
-    "opc": "jump",
-    "conditional": "always",
-    "target": 75
-  },
-  {
-    "opc": "expr",
-    "expr": "NUM_CONST",
-    "value": 1
-  },
-  {"opc": "WaitTimeSTMT"},
-  {
-    "opc": "jump",
-    "conditional": "always",
-    "target": 68
+    "type": "end",
+    "target": "RepeatStmt"
   },
   {
     "opc": "comment",
+    "type": "start",
     "target": "WaitStmt"
   },
   {
@@ -363,27 +389,12 @@
   {
     "opc": "jump",
     "conditional": false,
-    "target": 79
+    "target": 81
   },
   {
     "opc": "jump",
     "conditional": "always",
-    "target": 85
-  },
-  {
-    "opc": "expr",
-    "name": "boolVar",
-    "expr": "Var"
-  },
-  {
-    "opc": "jump",
-    "conditional": false,
-    "target": 82
-  },
-  {
-    "opc": "jump",
-    "conditional": "always",
-    "target": 85
+    "target": 84
   },
   {
     "opc": "expr",
@@ -394,7 +405,63 @@
   {
     "opc": "jump",
     "conditional": "always",
-    "target": 75
+    "target": 78
+  },
+  {
+    "opc": "comment",
+    "type": "end",
+    "target": "WaitStmt"
+  },
+  {
+    "opc": "comment",
+    "type": "start",
+    "target": "WaitStmt"
+  },
+  {
+    "opc": "expr",
+    "name": "boolVar",
+    "expr": "Var"
+  },
+  {
+    "opc": "jump",
+    "conditional": false,
+    "target": 89
+  },
+  {
+    "opc": "jump",
+    "conditional": "always",
+    "target": 95
+  },
+  {
+    "opc": "expr",
+    "name": "boolVar",
+    "expr": "Var"
+  },
+  {
+    "opc": "jump",
+    "conditional": false,
+    "target": 92
+  },
+  {
+    "opc": "jump",
+    "conditional": "always",
+    "target": 95
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": 1
+  },
+  {"opc": "WaitTimeSTMT"},
+  {
+    "opc": "jump",
+    "conditional": "always",
+    "target": 86
+  },
+  {
+    "opc": "comment",
+    "type": "end",
+    "target": "WaitStmt"
   },
   {
     "opc": "expr",
@@ -404,6 +471,7 @@
   {"opc": "WaitTimeSTMT"},
   {
     "opc": "comment",
+    "type": "start",
     "target": "WaitStmt"
   },
   {
@@ -424,12 +492,12 @@
   {
     "opc": "jump",
     "conditional": false,
-    "target": 93
+    "target": 104
   },
   {
     "opc": "jump",
     "conditional": "always",
-    "target": 96
+    "target": 107
   },
   {
     "opc": "expr",
@@ -440,10 +508,16 @@
   {
     "opc": "jump",
     "conditional": "always",
-    "target": 87
+    "target": 99
   },
   {
     "opc": "comment",
+    "type": "end",
+    "target": "WaitStmt"
+  },
+  {
+    "opc": "comment",
+    "type": "start",
     "target": "WaitStmt"
   },
   {
@@ -466,12 +540,12 @@
   {
     "opc": "jump",
     "conditional": false,
-    "target": 102
+    "target": 114
   },
   {
     "opc": "jump",
     "conditional": "always",
-    "target": 105
+    "target": 117
   },
   {
     "opc": "expr",
@@ -482,10 +556,16 @@
   {
     "opc": "jump",
     "conditional": "always",
-    "target": 96
+    "target": 109
   },
   {
     "opc": "comment",
+    "type": "end",
+    "target": "WaitStmt"
+  },
+  {
+    "opc": "comment",
+    "type": "start",
     "target": "WaitStmt"
   },
   {
@@ -507,12 +587,12 @@
   {
     "opc": "jump",
     "conditional": false,
-    "target": 111
+    "target": 124
   },
   {
     "opc": "jump",
     "conditional": "always",
-    "target": 114
+    "target": 127
   },
   {
     "opc": "expr",
@@ -523,10 +603,16 @@
   {
     "opc": "jump",
     "conditional": "always",
-    "target": 105
+    "target": 119
   },
   {
     "opc": "comment",
+    "type": "end",
+    "target": "WaitStmt"
+  },
+  {
+    "opc": "comment",
+    "type": "start",
     "target": "WaitStmt"
   },
   {
@@ -547,12 +633,12 @@
   {
     "opc": "jump",
     "conditional": false,
-    "target": 120
+    "target": 134
   },
   {
     "opc": "jump",
     "conditional": "always",
-    "target": 123
+    "target": 137
   },
   {
     "opc": "expr",
@@ -563,7 +649,12 @@
   {
     "opc": "jump",
     "conditional": "always",
-    "target": 114
+    "target": 129
+  },
+  {
+    "opc": "comment",
+    "type": "end",
+    "target": "WaitStmt"
   },
   {
     "opc": "return",
@@ -571,6 +662,12 @@
   },
   {
     "opc": "comment",
+    "type": "end",
+    "target": "createMethodVoid"
+  },
+  {
+    "opc": "comment",
+    "type": "start",
     "target": "createMethodVoid"
   },
   {
@@ -670,6 +767,11 @@
   },
   {"opc": "ShowTextAction"},
   {
+    "opc": "comment",
+    "type": "start",
+    "target": "Binary"
+  },
+  {
     "opc": "expr",
     "name": "boolVar",
     "expr": "Var"
@@ -677,7 +779,7 @@
   {
     "opc": "jump",
     "conditional": false,
-    "target": 153
+    "target": 170
   },
   {
     "opc": "expr",
@@ -687,14 +789,24 @@
   {
     "opc": "jump",
     "conditional": "always",
-    "target": 154
+    "target": 171
   },
   {
     "opc": "expr",
     "expr": "BOOL_CONST",
     "value": false
   },
+  {
+    "opc": "comment",
+    "type": "end",
+    "target": "Binary"
+  },
   {"opc": "ShowTextAction"},
+  {
+    "opc": "comment",
+    "type": "start",
+    "target": "Binary"
+  },
   {
     "opc": "expr",
     "name": "boolVar",
@@ -703,7 +815,7 @@
   {
     "opc": "jump",
     "conditional": true,
-    "target": 159
+    "target": 178
   },
   {
     "opc": "expr",
@@ -713,12 +825,17 @@
   {
     "opc": "jump",
     "conditional": "always",
-    "target": 160
+    "target": 179
   },
   {
     "opc": "expr",
     "expr": "BOOL_CONST",
     "value": true
+  },
+  {
+    "opc": "comment",
+    "type": "end",
+    "target": "Binary"
   },
   {"opc": "ShowTextAction"},
   {
@@ -752,5 +869,10 @@
   {
     "opc": "return",
     "values": false
+  },
+  {
+    "opc": "comment",
+    "type": "end",
+    "target": "createMethodVoid"
   }
 ]}

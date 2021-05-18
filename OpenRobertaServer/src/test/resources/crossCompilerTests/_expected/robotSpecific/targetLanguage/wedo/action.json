@@ -41,6 +41,7 @@
   },
   {
     "opc": "comment",
+    "type": "start",
     "target": "createMethodCall"
   },
   {
@@ -51,57 +52,62 @@
   {
     "opc": "jump",
     "conditional": "always",
-    "target": 12
+    "target": 13
+  },
+  {
+    "opc": "comment",
+    "type": "end",
+    "target": "createMethodCall"
   },
   {"opc": "stop"},
   {
     "opc": "comment",
+    "type": "start",
     "target": "createMethodVoid"
   },
   {
     "opc": "comment",
+    "type": "start",
     "target": "createMethodCall"
   },
   {
     "opc": "expr",
     "expr": "NUM_CONST",
-    "value": 16
+    "value": 17
   },
   {
     "opc": "jump",
     "conditional": "always",
-    "target": 26
+    "target": 32
   },
   {
     "opc": "comment",
+    "type": "end",
+    "target": "createMethodCall"
+  },
+  {
+    "opc": "comment",
+    "type": "start",
     "target": "createMethodCall"
   },
   {
     "opc": "expr",
     "expr": "NUM_CONST",
-    "value": 19
+    "value": 21
   },
   {
     "opc": "jump",
     "conditional": "always",
-    "target": 35
+    "target": 42
   },
   {
     "opc": "comment",
+    "type": "end",
     "target": "createMethodCall"
   },
   {
-    "opc": "expr",
-    "expr": "NUM_CONST",
-    "value": 22
-  },
-  {
-    "opc": "jump",
-    "conditional": "always",
-    "target": 46
-  },
-  {
     "opc": "comment",
+    "type": "start",
     "target": "createMethodCall"
   },
   {
@@ -112,7 +118,32 @@
   {
     "opc": "jump",
     "conditional": "always",
-    "target": 66
+    "target": 54
+  },
+  {
+    "opc": "comment",
+    "type": "end",
+    "target": "createMethodCall"
+  },
+  {
+    "opc": "comment",
+    "type": "start",
+    "target": "createMethodCall"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": 29
+  },
+  {
+    "opc": "jump",
+    "conditional": "always",
+    "target": 75
+  },
+  {
+    "opc": "comment",
+    "type": "end",
+    "target": "createMethodCall"
   },
   {
     "opc": "return",
@@ -120,6 +151,12 @@
   },
   {
     "opc": "comment",
+    "type": "end",
+    "target": "createMethodVoid"
+  },
+  {
+    "opc": "comment",
+    "type": "start",
     "target": "createMethodVoid"
   },
   {
@@ -165,6 +202,12 @@
   },
   {
     "opc": "comment",
+    "type": "end",
+    "target": "createMethodVoid"
+  },
+  {
+    "opc": "comment",
+    "type": "start",
     "target": "createMethodVoid"
   },
   {
@@ -198,6 +241,12 @@
   },
   {
     "opc": "comment",
+    "type": "end",
+    "target": "createMethodVoid"
+  },
+  {
+    "opc": "comment",
+    "type": "start",
     "target": "createMethodVoid"
   },
   {
@@ -290,6 +339,12 @@
   },
   {
     "opc": "comment",
+    "type": "end",
+    "target": "createMethodVoid"
+  },
+  {
+    "opc": "comment",
+    "type": "start",
     "target": "createMethodVoid"
   },
   {
@@ -308,5 +363,10 @@
   {
     "opc": "return",
     "values": false
+  },
+  {
+    "opc": "comment",
+    "type": "end",
+    "target": "createMethodVoid"
   }
 ]}

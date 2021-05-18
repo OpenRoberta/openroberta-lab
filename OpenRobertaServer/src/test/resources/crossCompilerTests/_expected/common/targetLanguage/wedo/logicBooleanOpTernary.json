@@ -15,6 +15,7 @@
   },
   {
     "opc": "comment",
+    "type": "start",
     "target": "IfStatement"
   },
   {
@@ -63,11 +64,17 @@
     "expr": "Binary"
   },
   {
+    "opc": "comment",
+    "type": "end",
+    "target": "IfStatement"
+  },
+  {
     "opc": "AssignStmt",
     "name": "x"
   },
   {
     "opc": "comment",
+    "type": "start",
     "target": "IfStatement"
   },
   {
@@ -78,7 +85,7 @@
   {
     "opc": "jump",
     "conditional": false,
-    "target": 21
+    "target": 22
   },
   {
     "opc": "expr",
@@ -98,7 +105,7 @@
   {
     "opc": "jump",
     "conditional": "always",
-    "target": 24
+    "target": 25
   },
   {
     "opc": "expr",
@@ -114,6 +121,11 @@
     "op": "ADD",
     "opc": "expr",
     "expr": "Binary"
+  },
+  {
+    "opc": "comment",
+    "type": "end",
+    "target": "IfStatement"
   },
   {
     "opc": "AssignStmt",
@@ -121,10 +133,12 @@
   },
   {
     "opc": "comment",
+    "type": "start",
     "target": "IfStatement"
   },
   {
     "opc": "comment",
+    "type": "start",
     "target": "IfStatement"
   },
   {
@@ -135,7 +149,7 @@
   {
     "opc": "jump",
     "conditional": false,
-    "target": 31
+    "target": 33
   },
   {
     "opc": "expr",
@@ -145,7 +159,7 @@
   {
     "opc": "jump",
     "conditional": "always",
-    "target": 32
+    "target": 34
   },
   {
     "opc": "expr",
@@ -153,28 +167,13 @@
     "value": false
   },
   {
+    "opc": "comment",
+    "type": "end",
+    "target": "IfStatement"
+  },
+  {
     "opc": "jump",
     "conditional": false,
-    "target": 37
-  },
-  {
-    "opc": "expr",
-    "name": "x",
-    "expr": "Var"
-  },
-  {
-    "opc": "expr",
-    "expr": "NUM_CONST",
-    "value": "1"
-  },
-  {
-    "op": "ADD",
-    "opc": "expr",
-    "expr": "Binary"
-  },
-  {
-    "opc": "jump",
-    "conditional": "always",
     "target": 40
   },
   {
@@ -185,6 +184,26 @@
   {
     "opc": "expr",
     "expr": "NUM_CONST",
+    "value": "1"
+  },
+  {
+    "op": "ADD",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "opc": "jump",
+    "conditional": "always",
+    "target": 43
+  },
+  {
+    "opc": "expr",
+    "name": "x",
+    "expr": "Var"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
     "value": "1000"
   },
   {
@@ -193,15 +212,22 @@
     "expr": "Binary"
   },
   {
+    "opc": "comment",
+    "type": "end",
+    "target": "IfStatement"
+  },
+  {
     "opc": "AssignStmt",
     "name": "x"
   },
   {
     "opc": "comment",
+    "type": "start",
     "target": "IfStatement"
   },
   {
     "opc": "comment",
+    "type": "start",
     "target": "IfStatement"
   },
   {
@@ -212,7 +238,7 @@
   {
     "opc": "jump",
     "conditional": false,
-    "target": 47
+    "target": 51
   },
   {
     "opc": "expr",
@@ -222,7 +248,7 @@
   {
     "opc": "jump",
     "conditional": "always",
-    "target": 48
+    "target": 52
   },
   {
     "opc": "expr",
@@ -230,9 +256,14 @@
     "value": true
   },
   {
+    "opc": "comment",
+    "type": "end",
+    "target": "IfStatement"
+  },
+  {
     "opc": "jump",
     "conditional": false,
-    "target": 53
+    "target": 58
   },
   {
     "opc": "expr",
@@ -252,7 +283,7 @@
   {
     "opc": "jump",
     "conditional": "always",
-    "target": 56
+    "target": 61
   },
   {
     "opc": "expr",
@@ -270,19 +301,27 @@
     "expr": "Binary"
   },
   {
+    "opc": "comment",
+    "type": "end",
+    "target": "IfStatement"
+  },
+  {
     "opc": "AssignStmt",
     "name": "x"
   },
   {
     "opc": "comment",
+    "type": "start",
     "target": "IfStatement"
   },
   {
     "opc": "comment",
+    "type": "start",
     "target": "IfStatement"
   },
   {
     "opc": "comment",
+    "type": "start",
     "target": "IfStatement"
   },
   {
@@ -293,7 +332,7 @@
   {
     "opc": "jump",
     "conditional": false,
-    "target": 64
+    "target": 70
   },
   {
     "opc": "expr",
@@ -303,7 +342,7 @@
   {
     "opc": "jump",
     "conditional": "always",
-    "target": 65
+    "target": 71
   },
   {
     "opc": "expr",
@@ -311,9 +350,14 @@
     "value": false
   },
   {
+    "opc": "comment",
+    "type": "end",
+    "target": "IfStatement"
+  },
+  {
     "opc": "jump",
     "conditional": false,
-    "target": 68
+    "target": 75
   },
   {
     "opc": "expr",
@@ -323,7 +367,7 @@
   {
     "opc": "jump",
     "conditional": "always",
-    "target": 69
+    "target": 76
   },
   {
     "opc": "expr",
@@ -331,9 +375,14 @@
     "value": false
   },
   {
+    "opc": "comment",
+    "type": "end",
+    "target": "IfStatement"
+  },
+  {
     "opc": "jump",
     "conditional": false,
-    "target": 74
+    "target": 82
   },
   {
     "opc": "expr",
@@ -353,7 +402,7 @@
   {
     "opc": "jump",
     "conditional": "always",
-    "target": 77
+    "target": 85
   },
   {
     "opc": "expr",
@@ -371,19 +420,27 @@
     "expr": "Binary"
   },
   {
+    "opc": "comment",
+    "type": "end",
+    "target": "IfStatement"
+  },
+  {
     "opc": "AssignStmt",
     "name": "x"
   },
   {
     "opc": "comment",
+    "type": "start",
     "target": "IfStatement"
   },
   {
     "opc": "comment",
+    "type": "start",
     "target": "IfStatement"
   },
   {
     "opc": "comment",
+    "type": "start",
     "target": "IfStatement"
   },
   {
@@ -404,7 +461,7 @@
   {
     "opc": "jump",
     "conditional": false,
-    "target": 87
+    "target": 96
   },
   {
     "opc": "expr",
@@ -414,37 +471,47 @@
   {
     "opc": "jump",
     "conditional": "always",
-    "target": 88
-  },
-  {
-    "opc": "expr",
-    "expr": "BOOL_CONST",
-    "value": false
-  },
-  {
-    "opc": "jump",
-    "conditional": false,
-    "target": 91
-  },
-  {
-    "opc": "expr",
-    "expr": "BOOL_CONST",
-    "value": false
-  },
-  {
-    "opc": "jump",
-    "conditional": "always",
-    "target": 92
-  },
-  {
-    "opc": "expr",
-    "expr": "BOOL_CONST",
-    "value": true
-  },
-  {
-    "opc": "jump",
-    "conditional": false,
     "target": 97
+  },
+  {
+    "opc": "expr",
+    "expr": "BOOL_CONST",
+    "value": false
+  },
+  {
+    "opc": "comment",
+    "type": "end",
+    "target": "IfStatement"
+  },
+  {
+    "opc": "jump",
+    "conditional": false,
+    "target": 101
+  },
+  {
+    "opc": "expr",
+    "expr": "BOOL_CONST",
+    "value": false
+  },
+  {
+    "opc": "jump",
+    "conditional": "always",
+    "target": 102
+  },
+  {
+    "opc": "expr",
+    "expr": "BOOL_CONST",
+    "value": true
+  },
+  {
+    "opc": "comment",
+    "type": "end",
+    "target": "IfStatement"
+  },
+  {
+    "opc": "jump",
+    "conditional": false,
+    "target": 108
   },
   {
     "opc": "expr",
@@ -464,7 +531,7 @@
   {
     "opc": "jump",
     "conditional": "always",
-    "target": 100
+    "target": 111
   },
   {
     "opc": "expr",
@@ -480,6 +547,11 @@
     "op": "ADD",
     "opc": "expr",
     "expr": "Binary"
+  },
+  {
+    "opc": "comment",
+    "type": "end",
+    "target": "IfStatement"
   },
   {
     "opc": "AssignStmt",

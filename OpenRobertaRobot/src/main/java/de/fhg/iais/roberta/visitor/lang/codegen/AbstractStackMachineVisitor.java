@@ -146,7 +146,8 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
 
     @Override
     public V visit(Phrase<V> visitable) {
-        boolean shouldHightlight = !openBlocks.contains(visitable.getProperty().getBlocklyId());
+        boolean isNotMainTask = !(visitable instanceof MainTask);
+        boolean shouldHightlight = isNotMainTask && !openBlocks.contains(visitable.getProperty().getBlocklyId());
         if ( shouldHightlight ) beginPhrase(visitable);
         V visit = ILanguageVisitor.super.visit(visitable);
         if ( shouldHightlight ) endPhrase(visitable);
@@ -544,6 +545,7 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
                 app(skipThenPart);
                 repeatStmt.getList().accept(this);
                 JSONObject breakStatement = makeNode(C.JUMP).put(C.CONDITIONAL, C.ALWAYS).put(C.TARGET, BREAK_MARKER);
+                addHightlightingsToJump(breakStatement);
                 app(breakStatement);
                 flowControlStatements.add(breakStatement);
                 skipThenPart.put(C.TARGET, opArray.size());
@@ -724,6 +726,7 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
                     repeatStmt.getExpr().accept(this);
                     // no difference between WHILE and UNTIL because a NOT gets injected into UNTIL by jaxbToAST
                     JSONObject jumpOverWhile = makeNode(C.JUMP).put(C.CONDITIONAL, false).put(C.TARGET, BREAK_MARKER);
+                    addHightlightingsToJump(jumpOverWhile);
                     flowControlStatements.add(jumpOverWhile);
                     app(jumpOverWhile);
                     repeatStmt.getList().accept(this);
@@ -761,9 +764,7 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
             .put(C.CONDITIONAL, C.ALWAYS)
             .put(C.TARGET, stmtFlowCon.getFlow() == Flow.BREAK ? BREAK_MARKER : CONTINUE_MARKER);
 
-        if ( debugger ) {
-            o.put(C.HIGHTLIGHT_MINUS, openBlocks);
-        }
+        addHightlightingsToJump(o);
 
         flowControlStatements.add(o);
         return app(o);
@@ -1104,10 +1105,7 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
 
         methodIfReturn.getReturnValue().accept(this);
         JSONObject jumpToMethodEnd = makeNode(C.JUMP).put(C.CONDITIONAL, C.ALWAYS).put(C.TARGET, METHOD_END);
-
-        if ( debugger ) {
-            jumpToMethodEnd.put(C.HIGHTLIGHT_MINUS, openBlocks);
-        }
+        addHightlightingsToJump(jumpToMethodEnd);
 
         returnStatements.add(jumpToMethodEnd);
 
@@ -1161,6 +1159,13 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
         return app(o);
     }
 
+    private void addHightlightingsToJump(JSONObject o) {
+        if ( !debugger ) {
+            return;
+        }
+        o.put(C.HIGHTLIGHT_MINUS, new ArrayList<>(openBlocks));
+    }
+
     private void addDebugStatment(Phrase<?> phrase) {
         if ( debugger ) {
             possibleDebugStops.add(phrase.getProperty().getBlocklyId());
@@ -1177,12 +1182,18 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
     }
 
     private void removeOpenBlocksFromDehighlight(JSONObject statement, String repeatId) {
-        if ( debugger ) {
-            List<Object> newDehightlight = statement.getJSONArray(C.HIGHTLIGHT_MINUS).toList().stream()
-                .filter(id -> !openBlocks.contains(id) || id.equals(repeatId))
-                .collect(Collectors.toList());
-            statement.put(C.HIGHTLIGHT_MINUS, newDehightlight);
+        if ( !debugger ) {
+            return;
         }
+
+        if ( !statement.has(C.HIGHTLIGHT_MINUS) ) {
+            throw new DbcException("Jump is missing a Hightlight Minus");
+        }
+
+        List<Object> newDehightlight = statement.getJSONArray(C.HIGHTLIGHT_MINUS).toList().stream()
+            .filter(id -> !openBlocks.contains(id) || id.equals(repeatId))
+            .collect(Collectors.toList());
+        statement.put(C.HIGHTLIGHT_MINUS, newDehightlight);
     }
 
     private JSONObject createJumpToMethod(MethodCall<V> methodCall) {
