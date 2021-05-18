@@ -51,6 +51,7 @@
   },
   {
     "opc": "comment",
+    "type": "start",
     "target": "IfStatement"
   },
   {
@@ -89,8 +90,18 @@
     "value": "90"
   },
   {
+    "opc": "comment",
+    "type": "end",
+    "target": "IfStatement"
+  },
+  {
     "opc": "AssignStmt",
     "name": "r3"
+  },
+  {
+    "opc": "comment",
+    "type": "start",
+    "target": "Binary"
   },
   {
     "opc": "expr",
@@ -100,7 +111,7 @@
   {
     "opc": "jump",
     "conditional": false,
-    "target": 26
+    "target": 28
   },
   {
     "opc": "expr",
@@ -125,7 +136,7 @@
   {
     "opc": "jump",
     "conditional": "always",
-    "target": 27
+    "target": 29
   },
   {
     "opc": "expr",
@@ -133,8 +144,18 @@
     "value": false
   },
   {
+    "opc": "comment",
+    "type": "end",
+    "target": "Binary"
+  },
+  {
     "opc": "AssignStmt",
     "name": "b1"
+  },
+  {
+    "opc": "comment",
+    "type": "start",
+    "target": "Binary"
   },
   {
     "opc": "expr",
@@ -144,7 +165,7 @@
   {
     "opc": "jump",
     "conditional": false,
-    "target": 35
+    "target": 39
   },
   {
     "opc": "expr",
@@ -169,7 +190,7 @@
   {
     "opc": "jump",
     "conditional": "always",
-    "target": 36
+    "target": 40
   },
   {
     "opc": "expr",
@@ -177,8 +198,18 @@
     "value": false
   },
   {
+    "opc": "comment",
+    "type": "end",
+    "target": "Binary"
+  },
+  {
     "opc": "AssignStmt",
     "name": "b1"
+  },
+  {
+    "opc": "comment",
+    "type": "start",
+    "target": "Binary"
   },
   {
     "opc": "expr",
@@ -188,7 +219,7 @@
   {
     "opc": "jump",
     "conditional": false,
-    "target": 44
+    "target": 50
   },
   {
     "opc": "expr",
@@ -213,7 +244,7 @@
   {
     "opc": "jump",
     "conditional": "always",
-    "target": 45
+    "target": 51
   },
   {
     "opc": "expr",
@@ -221,8 +252,18 @@
     "value": false
   },
   {
+    "opc": "comment",
+    "type": "end",
+    "target": "Binary"
+  },
+  {
     "opc": "AssignStmt",
     "name": "b1"
+  },
+  {
+    "opc": "comment",
+    "type": "start",
+    "target": "Binary"
   },
   {
     "opc": "expr",
@@ -232,7 +273,7 @@
   {
     "opc": "jump",
     "conditional": false,
-    "target": 53
+    "target": 61
   },
   {
     "opc": "expr",
@@ -257,7 +298,7 @@
   {
     "opc": "jump",
     "conditional": "always",
-    "target": 54
+    "target": 62
   },
   {
     "opc": "expr",
@@ -265,8 +306,18 @@
     "value": false
   },
   {
+    "opc": "comment",
+    "type": "end",
+    "target": "Binary"
+  },
+  {
     "opc": "AssignStmt",
     "name": "b1"
+  },
+  {
+    "opc": "comment",
+    "type": "start",
+    "target": "Binary"
   },
   {
     "opc": "expr",
@@ -276,7 +327,7 @@
   {
     "opc": "jump",
     "conditional": false,
-    "target": 62
+    "target": 72
   },
   {
     "opc": "expr",
@@ -301,7 +352,7 @@
   {
     "opc": "jump",
     "conditional": "always",
-    "target": 63
+    "target": 73
   },
   {
     "opc": "expr",
@@ -309,8 +360,18 @@
     "value": false
   },
   {
+    "opc": "comment",
+    "type": "end",
+    "target": "Binary"
+  },
+  {
     "opc": "AssignStmt",
     "name": "b1"
+  },
+  {
+    "opc": "comment",
+    "type": "start",
+    "target": "Binary"
   },
   {
     "opc": "expr",
@@ -320,7 +381,7 @@
   {
     "opc": "jump",
     "conditional": false,
-    "target": 71
+    "target": 83
   },
   {
     "opc": "expr",
@@ -345,7 +406,7 @@
   {
     "opc": "jump",
     "conditional": "always",
-    "target": 72
+    "target": 84
   },
   {
     "opc": "expr",
@@ -353,8 +414,18 @@
     "value": false
   },
   {
+    "opc": "comment",
+    "type": "end",
+    "target": "Binary"
+  },
+  {
     "opc": "AssignStmt",
     "name": "b1"
+  },
+  {
+    "opc": "comment",
+    "type": "start",
+    "target": "Binary"
   },
   {
     "opc": "expr",
@@ -364,7 +435,12 @@
   {
     "opc": "jump",
     "conditional": false,
-    "target": 85
+    "target": 101
+  },
+  {
+    "opc": "comment",
+    "type": "start",
+    "target": "Binary"
   },
   {
     "opc": "expr",
@@ -384,7 +460,7 @@
   {
     "opc": "jump",
     "conditional": false,
-    "target": 83
+    "target": 98
   },
   {
     "opc": "expr",
@@ -404,17 +480,22 @@
   {
     "opc": "jump",
     "conditional": "always",
-    "target": 84
+    "target": 99
   },
   {
     "opc": "expr",
     "expr": "BOOL_CONST",
     "value": false
+  },
+  {
+    "opc": "comment",
+    "type": "end",
+    "target": "Binary"
   },
   {
     "opc": "jump",
     "conditional": "always",
-    "target": 86
+    "target": 102
   },
   {
     "opc": "expr",
@@ -422,8 +503,18 @@
     "value": false
   },
   {
+    "opc": "comment",
+    "type": "end",
+    "target": "Binary"
+  },
+  {
     "opc": "AssignStmt",
     "name": "b1"
+  },
+  {
+    "opc": "comment",
+    "type": "start",
+    "target": "Binary"
   },
   {
     "opc": "expr",
@@ -433,7 +524,12 @@
   {
     "opc": "jump",
     "conditional": false,
-    "target": 103
+    "target": 123
+  },
+  {
+    "opc": "comment",
+    "type": "start",
+    "target": "Binary"
   },
   {
     "opc": "expr",
@@ -463,7 +559,7 @@
   {
     "opc": "jump",
     "conditional": false,
-    "target": 101
+    "target": 120
   },
   {
     "opc": "expr",
@@ -493,22 +589,32 @@
   {
     "opc": "jump",
     "conditional": "always",
-    "target": 102
+    "target": 121
   },
   {
     "opc": "expr",
     "expr": "BOOL_CONST",
     "value": false
+  },
+  {
+    "opc": "comment",
+    "type": "end",
+    "target": "Binary"
   },
   {
     "opc": "jump",
     "conditional": "always",
-    "target": 104
+    "target": 124
   },
   {
     "opc": "expr",
     "expr": "BOOL_CONST",
     "value": false
+  },
+  {
+    "opc": "comment",
+    "type": "end",
+    "target": "Binary"
   },
   {
     "opc": "AssignStmt",

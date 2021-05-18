@@ -41,6 +41,7 @@
   },
   {
     "opc": "comment",
+    "type": "start",
     "target": "createMethodCall"
   },
   {
@@ -51,7 +52,12 @@
   {
     "opc": "jump",
     "conditional": "always",
-    "target": 66
+    "target": 75
+  },
+  {
+    "opc": "comment",
+    "type": "end",
+    "target": "createMethodCall"
   },
   {
     "opc": "expr",
@@ -75,17 +81,23 @@
   },
   {
     "opc": "comment",
+    "type": "start",
     "target": "createMethodCall"
   },
   {
     "opc": "expr",
     "expr": "NUM_CONST",
-    "value": 18
+    "value": 19
   },
   {
     "opc": "jump",
     "conditional": "always",
-    "target": 63
+    "target": 71
+  },
+  {
+    "opc": "comment",
+    "type": "end",
+    "target": "createMethodCall"
   },
   {
     "op": "ADD",
@@ -102,21 +114,28 @@
   },
   {
     "opc": "comment",
+    "type": "start",
     "target": "IfStatement"
   },
   {
     "opc": "comment",
+    "type": "start",
     "target": "createMethodCall"
   },
   {
     "opc": "expr",
     "expr": "NUM_CONST",
-    "value": 25
+    "value": 27
   },
   {
     "opc": "jump",
     "conditional": "always",
-    "target": 88
+    "target": 100
+  },
+  {
+    "opc": "comment",
+    "type": "end",
+    "target": "createMethodCall"
   },
   {
     "opc": "expr",
@@ -131,7 +150,7 @@
   {
     "opc": "jump",
     "conditional": false,
-    "target": 32
+    "target": 35
   },
   {
     "opc": "expr",
@@ -150,7 +169,12 @@
   {
     "opc": "jump",
     "conditional": "always",
-    "target": 32
+    "target": 35
+  },
+  {
+    "opc": "comment",
+    "type": "end",
+    "target": "IfStatement"
   },
   {
     "opc": "comment",
@@ -163,12 +187,13 @@
   },
   {
     "opc": "comment",
+    "type": "start",
     "target": "createMethodCall"
   },
   {
     "opc": "expr",
     "expr": "NUM_CONST",
-    "value": 38
+    "value": 42
   },
   {
     "opc": "expr",
@@ -178,7 +203,12 @@
   {
     "opc": "jump",
     "conditional": "always",
-    "target": 79
+    "target": 90
+  },
+  {
+    "opc": "comment",
+    "type": "end",
+    "target": "createMethodCall"
   },
   {
     "opc": "expr",
@@ -206,12 +236,13 @@
   },
   {
     "opc": "comment",
+    "type": "start",
     "target": "createMethodCall"
   },
   {
     "opc": "expr",
     "expr": "NUM_CONST",
-    "value": 47
+    "value": 52
   },
   {
     "opc": "expr",
@@ -221,7 +252,12 @@
   {
     "opc": "jump",
     "conditional": "always",
-    "target": 72
+    "target": 82
+  },
+  {
+    "opc": "comment",
+    "type": "end",
+    "target": "createMethodCall"
   },
   {
     "opc": "mathChange",
@@ -233,16 +269,18 @@
   },
   {
     "opc": "comment",
+    "type": "start",
     "target": "IfStatement"
   },
   {
     "opc": "comment",
+    "type": "start",
     "target": "createMethodCall"
   },
   {
     "opc": "expr",
     "expr": "NUM_CONST",
-    "value": 54
+    "value": 60
   },
   {
     "opc": "expr",
@@ -252,7 +290,12 @@
   {
     "opc": "jump",
     "conditional": "always",
-    "target": 93
+    "target": 106
+  },
+  {
+    "opc": "comment",
+    "type": "end",
+    "target": "createMethodCall"
   },
   {
     "opc": "expr",
@@ -267,7 +310,7 @@
   {
     "opc": "jump",
     "conditional": false,
-    "target": 61
+    "target": 68
   },
   {
     "opc": "expr",
@@ -286,7 +329,12 @@
   {
     "opc": "jump",
     "conditional": "always",
-    "target": 61
+    "target": 68
+  },
+  {
+    "opc": "comment",
+    "type": "end",
+    "target": "IfStatement"
   },
   {
     "opc": "comment",
@@ -295,6 +343,7 @@
   {"opc": "stop"},
   {
     "opc": "comment",
+    "type": "start",
     "target": "createMethodReturn"
   },
   {
@@ -308,6 +357,12 @@
   },
   {
     "opc": "comment",
+    "type": "end",
+    "target": "createMethodReturn"
+  },
+  {
+    "opc": "comment",
+    "type": "start",
     "target": "createMethodReturn"
   },
   {
@@ -336,6 +391,12 @@
   },
   {
     "opc": "comment",
+    "type": "end",
+    "target": "createMethodReturn"
+  },
+  {
+    "opc": "comment",
+    "type": "start",
     "target": "createMethodReturn"
   },
   {
@@ -368,6 +429,12 @@
   },
   {
     "opc": "comment",
+    "type": "end",
+    "target": "createMethodReturn"
+  },
+  {
+    "opc": "comment",
+    "type": "start",
     "target": "createMethodReturn"
   },
   {
@@ -410,6 +477,12 @@
   },
   {
     "opc": "comment",
+    "type": "end",
+    "target": "createMethodReturn"
+  },
+  {
+    "opc": "comment",
+    "type": "start",
     "target": "createMethodReturn"
   },
   {
@@ -432,6 +505,12 @@
   },
   {
     "opc": "comment",
+    "type": "end",
+    "target": "createMethodReturn"
+  },
+  {
+    "opc": "comment",
+    "type": "start",
     "target": "createMethodReturn"
   },
   {
@@ -460,5 +539,10 @@
   {
     "opc": "return",
     "values": true
+  },
+  {
+    "opc": "comment",
+    "type": "end",
+    "target": "createMethodReturn"
   }
 ]}
