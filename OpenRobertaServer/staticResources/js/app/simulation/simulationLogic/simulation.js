@@ -1617,7 +1617,6 @@ define(['exports', 'simulation.scene', 'simulation.constants', 'util', 'interpre
         $("#robotLayer").off();
         $("#simDiv").off();
         $("#canvasDiv").off();
-        $("#simRobotModal").off();
         $("#robotIndex").off();
         $("#blocklyDiv").off("click touchstart", setFocusBlocklyDiv);
     }
