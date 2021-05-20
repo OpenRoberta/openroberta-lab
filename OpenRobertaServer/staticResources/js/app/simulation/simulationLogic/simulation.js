@@ -1532,18 +1532,16 @@ define(['exports', 'simulation.scene', 'simulation.constants', 'util', 'interpre
             scale = Math.min(scaleX, scaleY) - 0.05;
             scene.resizeBackgrounds(scale);
             scene.drawRuler();
-
-            if(selectedObstacle >= 0){
+            if (selectedObstacle >= 0) {
                 scene.drawObstacles(highLightCorners);
                 scene.drawColorAreas([]);
                 return;
             }
-            if(selectedColorArea >= 0){
+            if (selectedColorArea >= 0) {
                 scene.drawObstacles([]);
                 scene.drawColorAreas(highLightCorners);
                 return;
             }
-
             scene.drawObstacles([]);
             scene.drawColorAreas([]);
         }
@@ -1626,14 +1624,9 @@ define(['exports', 'simulation.scene', 'simulation.constants', 'util', 'interpre
         scene.drawRobots();
         addMouseEvents();
         disableChangeObjectButtons();
-
-        if(selectedObstacle >= 0){
-            highLightCorners = calculateCorners(obstacleList[selectedObstacle]);
-        }
-        if(selectedColorArea >= 0){
-            highLightCorners = calculateCorners(colorAreaList[selectedColorArea]);
-        }
-        
+        highLightCorners = [];
+        selectedObstacle = -1;
+        selectedColorArea = -1;
         if (robots[0].colorRange) {
             colorpicker = new HUEBEE('#colorpicker', {
                 shades: 1,
