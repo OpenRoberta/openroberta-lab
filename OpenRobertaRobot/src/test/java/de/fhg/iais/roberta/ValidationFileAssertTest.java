@@ -1,9 +1,5 @@
 package de.fhg.iais.roberta;
 
-import org.assertj.core.api.Assertions;
-import org.junit.After;
-import org.junit.Test;
-
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -12,6 +8,10 @@ import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import org.assertj.core.api.Assertions;
+import org.junit.After;
+import org.junit.Test;
 
 public class ValidationFileAssertTest {
 

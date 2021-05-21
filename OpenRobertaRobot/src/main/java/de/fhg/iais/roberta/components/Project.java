@@ -1,14 +1,17 @@
 package de.fhg.iais.roberta.components;
 
 import java.io.StringWriter;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 
 import org.json.JSONException;
-import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -260,8 +263,8 @@ public final class Project {
 
     public void addToErrorCounter(int nErrors, List<String> errorAndWarningMessages) {
         this.errorCounter += nErrors;
-        if (errorAndWarningMessages != null) {
-            if (this.errorAndWarningMessages == null) {
+        if ( errorAndWarningMessages != null ) {
+            if ( this.errorAndWarningMessages == null ) {
                 this.errorAndWarningMessages = new ArrayList<>(errorAndWarningMessages);
             } else {
                 this.errorAndWarningMessages.addAll(errorAndWarningMessages);

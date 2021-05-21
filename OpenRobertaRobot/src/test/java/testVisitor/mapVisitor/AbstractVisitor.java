@@ -1,13 +1,13 @@
 package testVisitor.mapVisitor;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
 import testVisitor.IVisitor;
 import testVisitor.ast.A;
 import testVisitor.ast.B;
 import testVisitor.ast.C;
-
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
 
 public interface AbstractVisitor<V> extends IVisitor<V> {
     default List<V> visitAImpl(A<V> a) {

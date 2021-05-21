@@ -1,13 +1,13 @@
 package de.fhg.iais.roberta.syntax.sensors.arduino.nano33blesense;
 
-import java.util.List;
-
-import de.fhg.iais.roberta.blockly.generated.Block;
-import de.fhg.iais.roberta.blockly.generated.Value;
-import de.fhg.iais.roberta.syntax.*;
+import de.fhg.iais.roberta.syntax.BlockType;
+import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
+import de.fhg.iais.roberta.syntax.BlocklyComment;
+import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.lang.expr.Var;
 import de.fhg.iais.roberta.syntax.sensor.BuiltinSensor;
-import de.fhg.iais.roberta.transformer.*;
+import de.fhg.iais.roberta.transformer.NepoPhrase;
+import de.fhg.iais.roberta.transformer.NepoValue;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 
 @NepoPhrase(containerType = "LSM9DS1_GYRO")

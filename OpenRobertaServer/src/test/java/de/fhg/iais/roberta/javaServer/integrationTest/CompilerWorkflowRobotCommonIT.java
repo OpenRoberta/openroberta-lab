@@ -134,7 +134,7 @@ public class CompilerWorkflowRobotCommonIT {
     }
 
     @AfterClass
-    public static void printResults() {
+    public static void tearDownClassAndPrintResults() {
         logSummary();
         LOG.info("XXXXXXXXXX results of COMMON-IT crosscompilercall XXXXXXXXXX");
         for ( String result : resultsCrosscompilerCalls ) {
@@ -150,6 +150,9 @@ public class CompilerWorkflowRobotCommonIT {
         }
         logSummary();
         LOG.info("XXXXXXXXXX END of COMMON-IT XXXXXXXXXX");
+        if (!resultAcc) {
+            Assert.fail();
+        }
     }
 
     @Before
@@ -276,7 +279,7 @@ public class CompilerWorkflowRobotCommonIT {
     public void testSingleWorkflow() throws Exception {
         String workflowName = "reset";
         final String robotName = "festobionic";
-        String pathToProgramFile = "robotSpecific/festobionic/sensors.xml"; // relative to OpenRobertaServer/src/test/resources/crossCompilerTests
+        String pathToProgramFile = "robotSpecific/festobionic/sensors_all_but_pins.xml"; // relative to OpenRobertaServer/src/test/resources/crossCompilerTests
         String programFileName = "sensors";
         String fullResource = "/crossCompilerTests/" + pathToProgramFile + "/" + programFileName + ".xml";
         String xmlText = Util.readResourceContent(fullResource);
@@ -486,7 +489,6 @@ public class CompilerWorkflowRobotCommonIT {
             LOG.info("XXXXXXXXXX COMMON-IT succeeded XXXXXXXXXX");
         } else {
             LOG.error("XXXXXXXXXX at least one test of COMMON-IT FAILED XXXXXXXXXX");
-            Assert.fail();
         }
     }
 
@@ -514,7 +516,7 @@ public class CompilerWorkflowRobotCommonIT {
                 resultList.add(String.format("succ; %-15s; %-60s;", robotName, progName));
             }
         } else {
-            resultList.add(String.format("fail; %-15s; %-60s;", robotName, progName));
+            resultList.add(String.format("FAIL; %-15s; %-60s;", robotName, progName));
         }
     }
 

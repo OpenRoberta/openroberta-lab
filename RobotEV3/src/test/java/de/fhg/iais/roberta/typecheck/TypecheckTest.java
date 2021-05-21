@@ -1,9 +1,9 @@
 package de.fhg.iais.roberta.typecheck;
 
-import de.fhg.iais.roberta.AstTest;
 import org.junit.Assert;
 import org.junit.Test;
 
+import de.fhg.iais.roberta.AstTest;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.util.test.UnitTestHelper;
 

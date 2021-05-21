@@ -5,83 +5,13 @@
  */
 package de.fhg.iais.roberta.generated.restEntities;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
-
 import java.util.Iterator;
-
-import java.util.List;
-
 import java.util.Map;
-
 import java.util.Map.Entry;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.json.JSONArray;
-
-import javax.annotation.processing.Generated;
-
-import de.fhg.iais.roberta.generated.restEntities.InitRequest;
-import de.fhg.iais.roberta.generated.restEntities.FullRestRequest;
-import de.fhg.iais.roberta.generated.restEntities.BaseRequest;
-import de.fhg.iais.roberta.generated.restEntities.BaseResponse;
-import de.fhg.iais.roberta.generated.restEntities.InitResponse;
-import de.fhg.iais.roberta.generated.restEntities.RobotInfo;
-import de.fhg.iais.roberta.generated.restEntities.SaveRequest;
-import de.fhg.iais.roberta.generated.restEntities.ShareCreateRequest;
-import de.fhg.iais.roberta.generated.restEntities.SaveResponse;
-import de.fhg.iais.roberta.generated.restEntities.ShareDeleteRequest;
-import de.fhg.iais.roberta.generated.restEntities.ListingRequest;
-import de.fhg.iais.roberta.generated.restEntities.ListingResponse;
-import de.fhg.iais.roberta.generated.restEntities.ImportRequest;
-import de.fhg.iais.roberta.generated.restEntities.ImportResponse;
-import de.fhg.iais.roberta.generated.restEntities.ImportErrorResponse;
-import de.fhg.iais.roberta.generated.restEntities.ShareRequest;
-import de.fhg.iais.roberta.generated.restEntities.ShareResponse;
-import de.fhg.iais.roberta.generated.restEntities.LikeRequest;
-import de.fhg.iais.roberta.generated.restEntities.EntityRequest;
-import de.fhg.iais.roberta.generated.restEntities.EntityResponse;
-import de.fhg.iais.roberta.generated.restEntities.ListingNamesResponse;
-import de.fhg.iais.roberta.generated.restEntities.DeleteRequest;
-import de.fhg.iais.roberta.generated.restEntities.SetTokenRequest;
-import de.fhg.iais.roberta.generated.restEntities.SetTokenResponse;
-import de.fhg.iais.roberta.generated.restEntities.SetRobotRequest;
-import de.fhg.iais.roberta.generated.restEntities.SetRobotResponse;
-import de.fhg.iais.roberta.generated.restEntities.SaveConfRequest;
-import de.fhg.iais.roberta.generated.restEntities.ConfRequest;
-import de.fhg.iais.roberta.generated.restEntities.ConfResponse;
-import de.fhg.iais.roberta.generated.restEntities.PingResponse;
-import de.fhg.iais.roberta.generated.restEntities.LoginRequest;
-import de.fhg.iais.roberta.generated.restEntities.LoginResponse;
-import de.fhg.iais.roberta.generated.restEntities.GetUserResponse;
-import de.fhg.iais.roberta.generated.restEntities.UserRequest;
-import de.fhg.iais.roberta.generated.restEntities.ChangePasswordRequest;
-import de.fhg.iais.roberta.generated.restEntities.DeleteUserRequest;
-import de.fhg.iais.roberta.generated.restEntities.ResetPasswordRequest;
-import de.fhg.iais.roberta.generated.restEntities.IsResetPasswordLinkExpiredResponse;
-import de.fhg.iais.roberta.generated.restEntities.PasswordRecoveryRequest;
-import de.fhg.iais.roberta.generated.restEntities.ResendActivationRequest;
-import de.fhg.iais.roberta.generated.restEntities.ActivateUserRequest;
-import de.fhg.iais.roberta.generated.restEntities.GetStatusTextResponse;
-import de.fhg.iais.roberta.generated.restEntities.SetStatusTextRequest;
-import de.fhg.iais.roberta.generated.restEntities.ProjectWorkflowRequest;
-import de.fhg.iais.roberta.generated.restEntities.ProjectWorkflowResetRequest;
-import de.fhg.iais.roberta.generated.restEntities.ProjectSourceResponse;
-import de.fhg.iais.roberta.generated.restEntities.ProjectSourceSimulationResponse;
-import de.fhg.iais.roberta.generated.restEntities.ProjectNepoResponse;
-import de.fhg.iais.roberta.generated.restEntities.ProjectNativeResponse;
-import de.fhg.iais.roberta.generated.restEntities.UserGroupProgramListRequest;
-import de.fhg.iais.roberta.generated.restEntities.UserGroupRequest;
-import de.fhg.iais.roberta.generated.restEntities.UserGroupResponse;
-import de.fhg.iais.roberta.generated.restEntities.UserGroupListResponse;
-import de.fhg.iais.roberta.generated.restEntities.ChangeUserGroupRequest;
-import de.fhg.iais.roberta.generated.restEntities.UpdateUserGroupMemberAccountRequest;
-import de.fhg.iais.roberta.generated.restEntities.UserGroupsRequest;
-import de.fhg.iais.roberta.generated.restEntities.UserGroupMembersRequest;
-import de.fhg.iais.roberta.generated.restEntities.NotificationsResponse;
 
 /**
  * the response for the /projectWorkflow/run and ../compileProgram REST request<br>
@@ -92,8 +22,6 @@ import de.fhg.iais.roberta.generated.restEntities.NotificationsResponse;
 public class ProjectNepoResponse extends BaseResponse {
     protected String programName;
     protected String progXML;
-    protected int errorCounter;
-    protected boolean errorCounterDefined = false;
     protected Map<String, JSONObject> confAnnos;
     protected String compiledCode;
     protected JSONObject configuration;
@@ -140,7 +68,6 @@ public class ProjectNepoResponse extends BaseResponse {
         boolean notificationsAvailable,
         String programName,
         String progXML,
-        int errorCounter,
         Map<String, JSONObject> confAnnos,
         String compiledCode,
         JSONObject configuration) {
@@ -164,7 +91,6 @@ public class ProjectNepoResponse extends BaseResponse {
         entity.setNotificationsAvailable(notificationsAvailable);
         entity.setProgramName(programName);
         entity.setProgXML(progXML);
-        entity.setErrorCounter(errorCounter);
         entity.setConfAnnos(confAnnos);
         entity.setCompiledCode(compiledCode);
         entity.setConfiguration(configuration);
@@ -226,8 +152,6 @@ public class ProjectNepoResponse extends BaseResponse {
                     setProgramName(jsonO.optString(key));
                 } else if ( "progXML".equals(key) ) {
                     setProgXML(jsonO.optString(key));
-                } else if ( "errorCounter".equals(key) ) {
-                    setErrorCounter(jsonO.getInt(key));
                 } else if ( "confAnnos".equals(key) ) {
                     JSONObject map = jsonO.optJSONObject(key);
                     if ( map != null ) {
@@ -284,9 +208,6 @@ public class ProjectNepoResponse extends BaseResponse {
         }
         if ( serverVersion == null ) {
             _message = "required property serverVersion of ProjectNepoResponse-object is not set: " + toString();
-        }
-        if ( !errorCounterDefined ) {
-            _message = "required property errorCounter of ProjectNepoResponse-object is not set: " + toString();
         }
         if ( compiledCode == null ) {
             _message = "required property compiledCode of ProjectNepoResponse-object is not set: " + toString();
@@ -355,28 +276,6 @@ public class ProjectNepoResponse extends BaseResponse {
             throw new RuntimeException("progXML assigned to an immutable object: " + toString());
         }
         this.progXML = progXML;
-        return this;
-    }
-
-    /**
-     * GET errorCounter. Object must be immutable. Never return null or an undefined/default value.
-     */
-    public int getErrorCounter() {
-        if ( !this.immutable ) {
-            throw new RuntimeException("no errorCounter from an object under construction: " + toString());
-        }
-        return this.errorCounter;
-    }
-
-    /**
-     * SET errorCounter. Object must be mutable.
-     */
-    public ProjectNepoResponse setErrorCounter(int errorCounter) {
-        if ( this.immutable ) {
-            throw new RuntimeException("errorCounter assigned to an immutable object: " + toString());
-        }
-        this.errorCounter = errorCounter;
-        this.errorCounterDefined = true;
         return this;
     }
 
@@ -542,7 +441,6 @@ public class ProjectNepoResponse extends BaseResponse {
             if ( this.progXML != null ) {
                 jsonO.put("progXML", this.progXML);
             }
-            jsonO.put("errorCounter", this.errorCounter);
             if ( this.confAnnos != null ) {
                 {
                     JSONObject map = new JSONObject();
@@ -604,8 +502,6 @@ public class ProjectNepoResponse extends BaseResponse {
             + this.programName
             + ", progXML="
             + this.progXML
-            + ", errorCounter="
-            + this.errorCounter
             + ", confAnnos="
             + this.confAnnos
             + ", compiledCode="
@@ -626,4 +522,3 @@ public class ProjectNepoResponse extends BaseResponse {
     }
 
 }
-

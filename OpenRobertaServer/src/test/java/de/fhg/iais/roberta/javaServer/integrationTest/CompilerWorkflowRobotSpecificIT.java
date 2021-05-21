@@ -63,7 +63,7 @@ import de.fhg.iais.roberta.util.testsetup.IntegrationTest;
 @Category(IntegrationTest.class)
 @RunWith(MockitoJUnitRunner.class)
 public class CompilerWorkflowRobotSpecificIT {
-    private static final Logger LOG = LoggerFactory.getLogger("SPECIFIC_IT");
+    private static final Logger LOG = LoggerFactory.getLogger("SPECIFIC-IT");
     private static final boolean ENABLE_SIMULATOR_TESTS = false; // TODO: re-enable generation of simulation code
 
     private static final List<String> EMPTY_STRING_LIST = Collections.emptyList();
@@ -193,8 +193,8 @@ public class CompilerWorkflowRobotSpecificIT {
     @Ignore
     @Test
     public void testSingleNepoProgram() throws Exception {
-        final String robotName = "wedo";
-        final String programFileName = "ci_motor-and-tone";
+        final String robotName = "calliope2017NoBlue";
+        final String programFileName = "actors_all_without_pins_and_callibot";
         final String robotDir = robotsFromTestSpec.getJSONObject(robotName).getString("dir");
         final boolean evalGeneratedProgram = true;
         setRobotTo(robotName);
@@ -219,7 +219,7 @@ public class CompilerWorkflowRobotSpecificIT {
                 JSONObject cmdCompile = JSONUtilForServer.mkD("{'programName':'prog','language':'de'}");
                 cmdCompile.getJSONObject("data").put("progXML", xmlText).put("SSID", "1").put("password", "2");
                 response = this.restWorkflow.compileProgram(null, FullRestRequest.make(cmdCompile));
-                entity = checkEntityRc(response, expectResult, "ORA_PROGRAM_INVALID_STATEMETNS");
+                entity = checkEntityRc(response, expectResult);
                 boolean resultCompile = entity != null;
 
                 Export jaxbImportExport = JaxbHelper.xml2Element(xmlText, Export.class);
@@ -231,7 +231,7 @@ public class CompilerWorkflowRobotSpecificIT {
                         JSONObject cmdGenSim = JSONUtilForServer.mkD("{'programName':'prog','language':'de'}");
                         cmdGenSim.getJSONObject("data").put("progXML", programText).put("confXML", configText).put("SSID", "1").put("password", "2");
                         response = this.restWorkflow.getSimulationVMCode(null, FullRestRequest.make(cmdGenSim));
-                        entity = checkEntityRc(response, expectResult, "ORA_PROGRAM_INVALID_STATEMETNS");
+                        entity = checkEntityRc(response, expectResult);
                         boolean resultSimCode = entity != null;
                         result = resultCompile && resultSimCode;
                     } else {
@@ -240,7 +240,7 @@ public class CompilerWorkflowRobotSpecificIT {
                 } else {
                     result = resultCompile;
                 }
-                if ( evalGeneratedProgram && result && robotName.equals("wedo") && evalGeneratedProgram ) {
+                if ( evalGeneratedProgram && result && robotName.equals("wedo") ) {
                     String compiledCode = entity.optString("compiledCode", null);
                     if ( compiledCode != null ) {
                         final String programName = resource.substring(0, resource.length() - 4);
@@ -316,7 +316,7 @@ public class CompilerWorkflowRobotSpecificIT {
                 results.add(String.format("succ; %-15s; %-60s;", name, fullResource));
             }
         } else {
-            results.add(String.format("fail; %-15s; %-60s;", name, fullResource));
+            results.add(String.format("FAIL; %-15s; %-60s;", name, fullResource));
         }
     }
 

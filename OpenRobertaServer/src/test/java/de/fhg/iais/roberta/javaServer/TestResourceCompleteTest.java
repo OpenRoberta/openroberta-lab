@@ -1,26 +1,33 @@
 package de.fhg.iais.roberta.javaServer;
 
-import de.fhg.iais.roberta.factory.IRobotFactory;
-import de.fhg.iais.roberta.util.Util;
-import org.assertj.core.api.Assertions;
-import org.json.JSONObject;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
-
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.Function;
-import java.util.function.Predicate;
+import java.util.AbstractMap;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import org.assertj.core.api.Assertions;
+import org.json.JSONObject;
+import org.junit.BeforeClass;
+import org.junit.Ignore;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
+
+import de.fhg.iais.roberta.factory.IRobotFactory;
+import de.fhg.iais.roberta.util.Util;
 
 @RunWith(Parameterized.class)
 public class TestResourceCompleteTest {

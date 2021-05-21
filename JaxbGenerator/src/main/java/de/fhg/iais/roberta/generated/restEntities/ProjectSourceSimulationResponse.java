@@ -24,7 +24,7 @@ public class ProjectSourceSimulationResponse extends BaseResponse {
     protected String fileExtension;
     protected String progXML;
     protected Map<String, JSONObject> confAnnos;
-    protected JSONObject javaScriptConfiguration;
+    protected JSONObject configuration;
 
     /**
      * the response for the /projectWorkflow/sourceSimulation REST request
@@ -70,7 +70,7 @@ public class ProjectSourceSimulationResponse extends BaseResponse {
         String fileExtension,
         String progXML,
         Map<String, JSONObject> confAnnos,
-        JSONObject javaScriptConfiguration) {
+        JSONObject configuration) {
         ProjectSourceSimulationResponse entity = new ProjectSourceSimulationResponse();
         entity.setCmd(cmd);
         entity.setRc(rc);
@@ -93,7 +93,7 @@ public class ProjectSourceSimulationResponse extends BaseResponse {
         entity.setFileExtension(fileExtension);
         entity.setProgXML(progXML);
         entity.setConfAnnos(confAnnos);
-        entity.setJavaScriptConfiguration(javaScriptConfiguration);
+        entity.setConfiguration(configuration);
         entity.immutable();
         return entity;
     }
@@ -163,8 +163,8 @@ public class ProjectSourceSimulationResponse extends BaseResponse {
                             putConfAnnos(subKey, map.getJSONObject(subKey));
                         }
                     }
-                } else if ( "javaScriptConfiguration".equals(key) ) {
-                    setJavaScriptConfiguration(jsonO.getJSONObject(key));
+                } else if ( "configuration".equals(key) ) {
+                    setConfiguration(jsonO.getJSONObject(key));
                 } else {
                     throw new RuntimeException("JSON parse error. Found invalid key: " + key + " in " + jsonO);
                 }
@@ -221,8 +221,8 @@ public class ProjectSourceSimulationResponse extends BaseResponse {
         if ( confAnnos == null ) {
             _message = "required property confAnnos of ProjectSourceSimulationResponse-object is not set: " + toString();
         }
-        if ( javaScriptConfiguration == null ) {
-            _message = "required property javaScriptConfiguration of ProjectSourceSimulationResponse-object is not set: " + toString();
+        if ( configuration == null ) {
+            _message = "required property configuration of ProjectSourceSimulationResponse-object is not set: " + toString();
         }
         if ( _message != null ) {
             this.immutable = false;
@@ -337,23 +337,23 @@ public class ProjectSourceSimulationResponse extends BaseResponse {
     }
 
     /**
-     * GET javaScriptConfiguration. Object must be immutable. Never return null or an undefined/default value.
+     * GET configuration. Object must be immutable. Never return null or an undefined/default value.
      */
-    public JSONObject getJavaScriptConfiguration() {
+    public JSONObject getConfiguration() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no javaScriptConfiguration from an object under construction: " + toString());
+            throw new RuntimeException("no configuration from an object under construction: " + toString());
         }
-        return this.javaScriptConfiguration;
+        return this.configuration;
     }
 
     /**
-     * SET javaScriptConfiguration. Object must be mutable.
+     * SET configuration. Object must be mutable.
      */
-    public ProjectSourceSimulationResponse setJavaScriptConfiguration(JSONObject javaScriptConfiguration) {
+    public ProjectSourceSimulationResponse setConfiguration(JSONObject configuration) {
         if ( this.immutable ) {
-            throw new RuntimeException("javaScriptConfiguration assigned to an immutable object: " + toString());
+            throw new RuntimeException("configuration assigned to an immutable object: " + toString());
         }
-        this.javaScriptConfiguration = javaScriptConfiguration;
+        this.configuration = configuration;
         return this;
     }
 
@@ -421,7 +421,7 @@ public class ProjectSourceSimulationResponse extends BaseResponse {
                 }
                 jsonO.put("confAnnos", map);
             }
-            jsonO.put("javaScriptConfiguration", this.javaScriptConfiguration);
+            jsonO.put("configuration", this.configuration);
         } catch ( JSONException e ) {
             throw new RuntimeException("JSON unparse error when unparsing: " + this, e);
         }
@@ -474,8 +474,8 @@ public class ProjectSourceSimulationResponse extends BaseResponse {
             + this.progXML
             + ", confAnnos="
             + this.confAnnos
-            + ", javaScriptConfiguration="
-            + this.javaScriptConfiguration
+            + ", configuration="
+            + this.configuration
             + " ]";
     }
 
