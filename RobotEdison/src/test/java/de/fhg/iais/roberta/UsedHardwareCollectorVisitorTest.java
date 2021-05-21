@@ -4,10 +4,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import de.fhg.iais.roberta.AstTest;
-import de.fhg.iais.roberta.factory.RobotFactory;
-import de.fhg.iais.roberta.util.PluginProperties;
-import de.fhg.iais.roberta.util.Util;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -20,7 +16,10 @@ import de.fhg.iais.roberta.bean.UsedHardwareBean.Builder;
 import de.fhg.iais.roberta.bean.UsedMethodBean;
 import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.components.ConfigurationComponent;
+import de.fhg.iais.roberta.factory.RobotFactory;
 import de.fhg.iais.roberta.syntax.Phrase;
+import de.fhg.iais.roberta.util.PluginProperties;
+import de.fhg.iais.roberta.util.Util;
 import de.fhg.iais.roberta.util.test.UnitTestHelper;
 import de.fhg.iais.roberta.visitor.collect.EdisonUsedHardwareCollectorVisitor;
 

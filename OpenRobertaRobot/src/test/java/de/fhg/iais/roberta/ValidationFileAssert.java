@@ -1,14 +1,14 @@
 package de.fhg.iais.roberta;
 
-import org.assertj.core.api.AbstractAssert;
-import org.assertj.core.api.Assertions;
-
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
+
+import org.assertj.core.api.AbstractAssert;
+import org.assertj.core.api.Assertions;
 
 public class ValidationFileAssert extends AbstractAssert<ValidationFileAssert, String> {
 

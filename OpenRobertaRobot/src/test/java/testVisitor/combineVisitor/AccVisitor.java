@@ -1,14 +1,14 @@
 package testVisitor.combineVisitor;
 
-import testVisitor.IVisitor;
-import testVisitor.ast.B;
-import testVisitor.ast.C;
-import testVisitor.ast.A;
-import testVisitor.ast.Phrase;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import testVisitor.IVisitor;
+import testVisitor.ast.A;
+import testVisitor.ast.B;
+import testVisitor.ast.C;
+import testVisitor.ast.Phrase;
 
 public class AccVisitor implements IVisitor<String>, IStructureRunner<String> {
     @Override

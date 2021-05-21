@@ -7,8 +7,8 @@ import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.sensor.ExternalSensor;
 import de.fhg.iais.roberta.syntax.sensor.SensorMetaDataBean;
-import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
+import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 
 /**
  * This class represents <b>robSensors_irseeker_getSample</b> block from Blockly into the AST (abstract syntax tree). Object from this class will generate code

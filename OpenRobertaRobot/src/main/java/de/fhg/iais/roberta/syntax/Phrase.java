@@ -1,10 +1,7 @@
 package de.fhg.iais.roberta.syntax;
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Field;
-
 import de.fhg.iais.roberta.blockly.generated.Block;
-import de.fhg.iais.roberta.transformer.*;
+import de.fhg.iais.roberta.transformer.AnnotationHelper;
 import de.fhg.iais.roberta.typecheck.NepoInfo;
 import de.fhg.iais.roberta.typecheck.NepoInfos;
 import de.fhg.iais.roberta.util.dbc.Assert;

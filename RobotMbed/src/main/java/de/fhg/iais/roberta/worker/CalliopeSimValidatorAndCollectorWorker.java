@@ -4,8 +4,8 @@ import com.google.common.collect.ClassToInstanceMap;
 
 import de.fhg.iais.roberta.bean.IProjectBean;
 import de.fhg.iais.roberta.components.Project;
-import de.fhg.iais.roberta.visitor.validate.CommonNepoValidatorAndCollectorVisitor;
 import de.fhg.iais.roberta.visitor.validate.CalliopeSimValidatorAndCollectorVisitor;
+import de.fhg.iais.roberta.visitor.validate.CommonNepoValidatorAndCollectorVisitor;
 
 public class CalliopeSimValidatorAndCollectorWorker extends AbstractValidatorAndCollectorWorker {
 

@@ -1,6 +1,5 @@
 package de.fhg.iais.roberta.factory.generic;
 
-import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -17,6 +16,7 @@ import de.fhg.iais.roberta.mode.action.ev3.ShowPicture;
 import de.fhg.iais.roberta.mode.general.IndexLocation;
 import de.fhg.iais.roberta.mode.general.ListElementOperations;
 import de.fhg.iais.roberta.syntax.SC;
+import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.util.PluginProperties;
 import de.fhg.iais.roberta.util.Util;
 import de.fhg.iais.roberta.util.dbc.DbcException;

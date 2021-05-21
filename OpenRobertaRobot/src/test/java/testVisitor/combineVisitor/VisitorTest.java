@@ -1,6 +1,7 @@
 package testVisitor.combineVisitor;
 
 import org.junit.Test;
+
 import testVisitor.ast.A;
 
 public class VisitorTest {

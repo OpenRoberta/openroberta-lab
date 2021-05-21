@@ -1,7 +1,18 @@
 package de.fhg.iais.roberta;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
+
+import org.assertj.core.api.Assertions;
+import org.junit.BeforeClass;
+import org.junit.Test;
+
 import com.google.common.collect.ImmutableClassToInstanceMap;
 import com.google.common.collect.Lists;
+
 import de.fhg.iais.roberta.bean.IProjectBean;
 import de.fhg.iais.roberta.bean.UsedHardwareBean;
 import de.fhg.iais.roberta.bean.UsedMethodBean;
@@ -15,11 +26,6 @@ import de.fhg.iais.roberta.util.Util;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.util.test.UnitTestHelper;
 import de.fhg.iais.roberta.visitor.collect.ArduinoUsedHardwareCollectorVisitor;
-import org.assertj.core.api.Assertions;
-import org.junit.BeforeClass;
-import org.junit.Test;
-
-import java.util.*;
 
 public class ArduinoUsedHardwareCollectorVisitorTest {
     private static RobotFactory testFactory;

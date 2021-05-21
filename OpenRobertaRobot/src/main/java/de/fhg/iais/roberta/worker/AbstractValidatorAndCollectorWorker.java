@@ -1,8 +1,12 @@
 package de.fhg.iais.roberta.worker;
 
+import java.util.Collections;
+import java.util.List;
+
 import com.google.common.collect.ClassToInstanceMap;
 import com.google.common.collect.ImmutableClassToInstanceMap;
 import com.google.common.collect.ImmutableClassToInstanceMap.Builder;
+
 import de.fhg.iais.roberta.bean.IProjectBean;
 import de.fhg.iais.roberta.bean.IProjectBean.IBuilder;
 import de.fhg.iais.roberta.bean.UsedHardwareBean;
@@ -13,9 +17,6 @@ import de.fhg.iais.roberta.util.Key;
 import de.fhg.iais.roberta.visitor.IVisitor;
 import de.fhg.iais.roberta.visitor.validate.AbstractProgramValidatorVisitor;
 import de.fhg.iais.roberta.visitor.validate.CommonNepoValidatorAndCollectorVisitor;
-
-import java.util.Collections;
-import java.util.List;
 
 /**
  * Uses the {@link AbstractProgramValidatorVisitor} to visit the current AST and validate the hardware. May also annotate the AST to add information about

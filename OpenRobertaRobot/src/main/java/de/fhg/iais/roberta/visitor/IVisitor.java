@@ -1,10 +1,10 @@
 package de.fhg.iais.roberta.visitor;
 
-import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.util.dbc.DbcException;
-
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+
+import de.fhg.iais.roberta.syntax.Phrase;
+import de.fhg.iais.roberta.util.dbc.DbcException;
 
 /**
  * Interface to be used with the visitor pattern to traverse an AST (and generate code, e.g.).

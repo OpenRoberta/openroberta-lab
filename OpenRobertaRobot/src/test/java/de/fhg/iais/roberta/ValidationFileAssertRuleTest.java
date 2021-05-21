@@ -1,14 +1,14 @@
 package de.fhg.iais.roberta;
 
-import org.assertj.core.api.Assertions;
-import org.junit.After;
-import org.junit.Rule;
-import org.junit.Test;
-
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import org.assertj.core.api.Assertions;
+import org.junit.After;
+import org.junit.Rule;
+import org.junit.Test;
 
 public class ValidationFileAssertRuleTest {
     @Rule

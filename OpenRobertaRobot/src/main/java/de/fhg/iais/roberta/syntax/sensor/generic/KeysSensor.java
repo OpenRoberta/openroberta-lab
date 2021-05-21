@@ -7,16 +7,11 @@ import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.sensor.ExternalSensor;
 import de.fhg.iais.roberta.syntax.sensor.SensorMetaDataBean;
-import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
+import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 
 /**
- * This class represents the <b>robSensors_key_isPressed</b> and <b>robSensors_key_isPressedAndReleased</b> blocks from Blockly into the AST (abstract syntax
- * tree). Object from this class will generate code for checking if a button on the brick is pressed.<br/>
- * <br>
- * The client must provide the {@link BrickKey} and {@link Mode}. <br>
- * <br>
- * To create an instance from this class use the method {@link #make(Mode, BrickKey, BlocklyBlockProperties, BlocklyComment)}.<br>
+ * This class represents the <b>robSensors_key_isPressed</b> and <b>robSensors_key_isPressedAndReleased</b> blocks
  */
 public class KeysSensor<V> extends ExternalSensor<V> {
 

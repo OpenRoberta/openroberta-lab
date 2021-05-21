@@ -7,8 +7,6 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import de.fhg.iais.roberta.typecheck.BlocklyType;
-
 @Documented
 @Target(ElementType.FIELD)
 @Inherited

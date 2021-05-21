@@ -1,6 +1,5 @@
 package de.fhg.iais.roberta.worker;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
