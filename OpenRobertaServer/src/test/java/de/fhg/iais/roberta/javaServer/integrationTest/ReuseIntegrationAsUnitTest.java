@@ -51,7 +51,6 @@ import de.fhg.iais.roberta.util.Util;
 import de.fhg.iais.roberta.util.jaxb.JaxbHelper;
 import de.fhg.iais.roberta.util.test.UnitTestHelper;
 
-@Ignore
 public class ReuseIntegrationAsUnitTest {
 
     private static final boolean STORE_ALWAYS_DATA_INTO_FILES = true;
@@ -139,6 +138,7 @@ public class ReuseIntegrationAsUnitTest {
         checkAndShowTestResult();
     }
 
+    @Ignore
     @Test
     public void testOneCommonProgrammAsUnitTest() throws Exception {
         String programName = "functionWithWithoutParameter";
@@ -256,6 +256,7 @@ public class ReuseIntegrationAsUnitTest {
         }
     }
 
+    @Ignore
     @Test
     public void testAllRobotSpecificProgramsAsUnitTests() throws Exception {
         LOG.info("========= testing robot specific programs");
@@ -271,6 +272,7 @@ public class ReuseIntegrationAsUnitTest {
         checkAndShowTestResult();
     }
 
+    @Ignore
     @Test
     public void testOneRobotSpecificProgramAsUnitTests() throws Exception {
         String robotName = "calliope2017NoBlue";
