@@ -21,6 +21,7 @@ import java.util.stream.Stream;
 import org.assertj.core.api.Assertions;
 import org.json.JSONObject;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -28,6 +29,7 @@ import org.junit.runners.Parameterized;
 import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.util.Util;
 
+@Ignore
 @RunWith(Parameterized.class)
 public class TestResourceCompleteTest {
 
