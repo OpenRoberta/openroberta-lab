@@ -276,7 +276,7 @@ public class CompilerWorkflowRobotCommonIT {
     public void testSingleWorkflow() throws Exception {
         String workflowName = "reset";
         final String robotName = "festobionic";
-        String pathToProgramFile = "robotSpecific/festobionic/sensors.xml"; // relative to OpenRobertaServer/src/test/resources/crossCompilerTests
+        String pathToProgramFile = "robotSpecific/festobionic/sensors_all_but_pins.xml"; // relative to OpenRobertaServer/src/test/resources/crossCompilerTests
         String programFileName = "sensors";
         String fullResource = "/crossCompilerTests/" + pathToProgramFile + "/" + programFileName + ".xml";
         String xmlText = Util.readResourceContent(fullResource);
