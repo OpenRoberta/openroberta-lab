@@ -406,7 +406,7 @@ define(['exports', 'simulation.scene', 'simulation.constants', 'util', 'interpre
         for (var i = 0; i < numRobots; i++) {
             robots[i].reset();
         }
-        reloadProgram();
+        resetButtons();
 
         if (debugMode) {
             for (var i = 0; i < numRobots; i++) {
@@ -476,14 +476,23 @@ define(['exports', 'simulation.scene', 'simulation.constants', 'util', 'interpre
     };
 
     function callbackOnTermination() {
-        if (!robots[0].endless && allInterpretersTerminated()) {
-            if (debugMode) {
-                $('#simControl').addClass('typcn-media-play-outline').removeClass('typcn-play');
-                $('#simStop').removeClass("disabled");
-            } else {
-                $('#simControl').addClass('typcn-media-play-outline').removeClass('typcn-media-stop');
-                $('#simControl').attr('data-original-title', Blockly.Msg.MENU_SIM_START_TOOLTIP);
+        if (allInterpretersTerminated()) {
+            if (!robots[0].endless) {
+                if (debugMode) {
+                    $('#simControl').addClass('typcn-media-play-outline').removeClass('typcn-play');
+                    $('#simStop').removeClass("disabled");
+                } else {
+                    $('#simControl').addClass('typcn-media-play-outline').removeClass('typcn-media-stop');
+                    $('#simControl').attr('data-original-title', Blockly.Msg.MENU_SIM_START_TOOLTIP);
+                }
+            } else if (debugMode) {
+                if (!$('#simStop').hasClass("disabled")) {
+                    $('#simStop').hide();
+                    $('#simControl').addClass('typcn-media-stop').removeClass('typcn-media-play').removeClass('blue');
+                    $('#simControl').attr('data-original-title', Blockly.Msg.MENU_SIM_STOP_TOOLTIP);
+                }
             }
+
         }
         console.log("END of Sim");
     }
@@ -565,7 +574,7 @@ define(['exports', 'simulation.scene', 'simulation.constants', 'util', 'interpre
                     robots[i].reset();
                 }
             }
-            reloadProgram();
+            resetButtons();
         }
 
     }
@@ -700,9 +709,9 @@ define(['exports', 'simulation.scene', 'simulation.constants', 'util', 'interpre
         return true;
     }
 
-    function reloadProgram() {
+    function resetButtons() {
         if (debugMode) {
-            $('#simControl').addClass('typcn-media-play').removeClass('typcn-play-outline');
+            $('#simControl').addClass('typcn-media-play-outline').removeClass('typcn-media-play');
             $('#simStop').addClass("disabled");
         } else {
             $('#simControl').addClass('typcn-media-play-outline').removeClass('typcn-media-stop');
