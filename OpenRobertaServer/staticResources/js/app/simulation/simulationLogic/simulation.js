@@ -1104,6 +1104,7 @@ define(['exports', 'simulation.scene', 'simulation.constants', 'util', 'interpre
         if (!downRuler && rulerIsDown) {
             downRuler = true;
             selectedRobot = -1;
+            highLightCorners = [];
             if (selectedObstacle >= 0) {
                 selectedObstacle = -1;
                 updateObstacleLayer();
@@ -1113,7 +1114,6 @@ define(['exports', 'simulation.scene', 'simulation.constants', 'util', 'interpre
                 updateColorAreaLayer();
             }
             downCorner = -1;
-            highLightCorners = [];
             return;
         }
         if (selectedObstacle >= 0) {
@@ -1510,8 +1510,7 @@ define(['exports', 'simulation.scene', 'simulation.constants', 'util', 'interpre
         if (zoom) {
             scene.resizeBackgrounds(scale);
             scene.drawRuler();
-            scene.drawObstacles(highLightCorners);
-            scene.drawColorAreas(highLightCorners);
+            updateSelectedObjects();
             e.stopPropagation();
         }
     }
@@ -1532,19 +1531,24 @@ define(['exports', 'simulation.scene', 'simulation.constants', 'util', 'interpre
             scale = Math.min(scaleX, scaleY) - 0.05;
             scene.resizeBackgrounds(scale);
             scene.drawRuler();
-            if (selectedObstacle >= 0) {
-                scene.drawObstacles(highLightCorners);
-                scene.drawColorAreas([]);
-                return;
-            }
-            if (selectedColorArea >= 0) {
-                scene.drawObstacles([]);
-                scene.drawColorAreas(highLightCorners);
-                return;
-            }
-            scene.drawObstacles([]);
-            scene.drawColorAreas([]);
+            updateSelectedObjects();
         }
+    }
+
+    function updateSelectedObjects() {
+        if (selectedObstacle >= 0) {
+            scene.drawObstacles(highLightCorners);
+            scene.drawColorAreas([]);
+            return;
+        }
+        if (selectedColorArea >= 0) {
+            scene.drawObstacles([]);
+            scene.drawColorAreas(highLightCorners);
+            return;
+        }
+        highLightCorners = []
+        scene.drawObstacles(highLightCorners);
+        scene.drawColorAreas(highLightCorners);
     }
 
     function addMouseEvents() {
@@ -1622,11 +1626,9 @@ define(['exports', 'simulation.scene', 'simulation.constants', 'util', 'interpre
     function initScene() {
         scene = new Scene(imgObjectList[currentBackground], robots, imgPattern, ruler);
         scene.drawRobots();
+        resetSelection();
         addMouseEvents();
         disableChangeObjectButtons();
-        highLightCorners = [];
-        selectedObstacle = -1;
-        selectedColorArea = -1;
         if (robots[0].colorRange) {
             colorpicker = new HUEBEE('#colorpicker', {
                 shades: 1,
