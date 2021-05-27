@@ -183,12 +183,14 @@ progs:
        decl: strings
        exclude:
           uno: "Comparison of string and char not possible"
+          nano33ble: "Comparison of string and char not possible"
           mega: "Comparison of string and char not possible"
           nano: "Comparison of string and char not possible"
           botnroll: "Comparison of string and char not possible"
           unowifirev2: "Comparison of string and char not possible"
           sensebox: "Comparison of string and char not possible"
           nxt: "Comparison of string and char not possible"
+          nao: "seems to be not yet implemented"
           bob3: "no strings"
           festobionic: "Comparison of string and char not possible"
           edison: "no strings"

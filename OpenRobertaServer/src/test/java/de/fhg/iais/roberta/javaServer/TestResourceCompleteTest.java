@@ -29,7 +29,6 @@ import org.junit.runners.Parameterized;
 import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.util.Util;
 
-@Ignore
 @RunWith(Parameterized.class)
 public class TestResourceCompleteTest {
 
