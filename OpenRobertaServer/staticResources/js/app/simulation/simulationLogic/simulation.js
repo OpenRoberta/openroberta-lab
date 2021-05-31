@@ -1546,9 +1546,8 @@ define(['exports', 'simulation.scene', 'simulation.constants', 'util', 'interpre
             scene.drawColorAreas(highLightCorners);
             return;
         }
-        highLightCorners = []
-        scene.drawObstacles(highLightCorners);
-        scene.drawColorAreas(highLightCorners);
+        scene.drawObstacles([]);
+        scene.drawColorAreas([]);
     }
 
     function addMouseEvents() {
