@@ -397,6 +397,9 @@ define(['exports', 'log', 'util', 'message', 'comm', 'wrap', 'robot.controller',
                     case 'menuExportProg':
                         PROGRAM_C.exportXml();
                         break;
+                    case 'menuExportAllProgs' :
+                        PROGRAM_C.exportAllXml();
+                        break;
                     case 'menuLinkProg':
                         PROGRAM_C.linkProgram();
                         break;

@@ -1,16 +1,25 @@
 package de.fhg.iais.roberta.javaServer.restServices.all.controller;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.ResponseBuilder;
 import javax.xml.bind.UnmarshalException;
 
 import org.json.JSONArray;
@@ -438,6 +447,105 @@ public class ClientProgramController {
             String errorTicketId = Util.getErrorTicketId();
             LOG.error("Exception. Error ticket: {}", errorTicketId, e);
             return UtilForREST.makeBaseResponseForError(Key.SERVER_ERROR, httpSessionState, null); // TODO: redesign error ticker number and add then: append("parameters", errorTicketId);
+        }
+    }
+
+    //this method is used to export all Programs of the current user
+    @GET
+    @Path("/ExportAllPrograms")
+    public Response ExportALlProgrammsOfUser(@OraData DbSession dbSession, @QueryParam("initToken") String initToken) throws IOException {
+        HttpSessionState httpSessionState = UtilForREST.validateInitToken(initToken);
+        if ( !httpSessionState.isUserLoggedIn() ) { //safety check if user is logged in
+            LOG.error("Unauthorized export request");
+            return null;
+        }
+        int userId = httpSessionState.getUserId();
+        ProgramProcessor programProcessor = new ProgramProcessor(dbSession, httpSessionState);
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        JSONArray programInfo = programProcessor.getProgramsInfoForExport(userId);
+        //building the Zip file with name,programText and config in a predetermined directory strucuture
+        try (ZipOutputStream zos = new ZipOutputStream(baos)) {
+            //checking if the user has groups
+            User lastUser = (User) programInfo.getJSONArray(programInfo.length()-1).get(2);
+            boolean hasGroups = !(lastUser.getId() == userId);
+            boolean hasPrograms = false;
+            for ( int i = 0; i < programInfo.length(); i++ ) {
+                JSONArray program = programInfo.getJSONArray(i);
+                String config;
+                // First get Program Config
+                if ( !program.isNull(4) ) {
+                    config = program.getString(4);
+                } else { // if the config is null get the default config of the robotgroup used by the program
+                    config = httpSessionState.getRobotFactoriesOfGroup(program.getString(1)).get(0).getConfigurationDefault();
+                }
+                // Then build the xml content with programText and config
+                String xml =
+                    "<export xmlns=\"http://de.fhg.iais.roberta.blockly\"><program>"
+                        + program.getString(3)
+                        + "</program><config>"
+                        + config
+                        + "</config></export>";
+                String fileNameInZip = program.getString(0) + ".xml";
+               
+                //put it into the correct directory:
+                String currentFolder = "";
+                User author = (User) program.get(2);
+                String robotGroup = httpSessionState.getRobotFactoriesOfGroup(program.getString(1)).get(0).getGroup();
+                if ( author.getId() == userId ) {
+                    //Programs by the User
+                    hasPrograms = true;
+                    if ( hasGroups ) {
+                        currentFolder = "MyPrograms/" + robotGroup;
+                    } else {
+                        currentFolder = robotGroup;
+                    }
+                } else { //Programs of Users in Groups owned by the User
+                         //Group members are given in the Format Grpname:Username this cuts of the group name
+                    String username = author.getAccount().substring(author.getUserGroup().getName().length() + 1);
+                    if ( hasPrograms ) {
+                        currentFolder = "GroupPrograms/" + author.getUserGroup().getName() + "/" + robotGroup + "/" + username;
+                    } else {
+                        currentFolder = author.getUserGroup().getName() + "/" + robotGroup + "/" + username;
+                    }
+                }
+                //add program.xml to Zip                
+                zos.putNextEntry(new ZipEntry(currentFolder + "/" + fileNameInZip));
+                zos.write(xml.getBytes());
+                zos.closeEntry();
+            }
+        }
+        //return Zip to download
+        InputStream zip = new ByteArrayInputStream(baos.toByteArray());
+        ResponseBuilder response = Response.ok(zip, "application/zip");
+        return response.header("Content-Disposition", "attachment; filename=\"NEPO_Programs.zip\"").build();
+    }
+
+    //this method checks if the user is logged in
+    //returns ok message if yes and error massege if not
+    @POST
+    @Path("/loggedInCheck")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response checkConditionsForExport(@OraData DbSession dbSession, FullRestRequest request) {
+        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, request, true);
+        try {
+            if ( !httpSessionState.isUserLoggedIn() ) {
+                LOG.error("Unauthorized export request");
+                return UtilForREST.makeBaseResponseForError(Key.USER_ERROR_NOT_LOGGED_IN, httpSessionState, null);
+            }
+
+            BaseResponse response = BaseResponse.make(); // baseresponse
+            UtilForREST.addSuccessInfo(response, Key.SERVER_SUCCESS);
+            return UtilForREST.responseWithFrontendInfo(response, httpSessionState, null);
+        } catch ( Exception e ) {
+            dbSession.rollback();
+            String errorTicketId = Util.getErrorTicketId();
+            LOG.error("Exception. Error ticket: {}", errorTicketId, e);
+            return UtilForREST.makeBaseResponseForError(Key.SERVER_ERROR, httpSessionState, null);
+        } finally {
+            if ( dbSession != null ) {
+                dbSession.close();
+            }
         }
     }
 

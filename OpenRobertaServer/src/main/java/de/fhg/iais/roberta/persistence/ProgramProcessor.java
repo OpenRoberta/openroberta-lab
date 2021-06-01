@@ -1,7 +1,9 @@
 package de.fhg.iais.roberta.persistence;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -230,6 +232,68 @@ public class ProgramProcessor extends AbstractProcessor {
         } else {
             return null; // null to indicate, that the default configuration has to be used.
         }
+    }
+
+    /**
+     * Get information about all the programs owned by a user for every robot needed for exporting
+     * 
+     * @param ownerId the owner of the program
+     * @return JSONArray with programId, and programInfos: programName, robotName, User owner, programText, and config in that order,
+     *         when the default configuration is used by the program the config for it is null
+     *         they are ordered userPrograms, then groupPrograms
+     */
+    public JSONArray getProgramsInfoForExport(int ownerId) {
+        UserDao userDao = new UserDao(this.dbSession);
+        ProgramDao programDao = new ProgramDao(this.dbSession);
+        User owner = userDao.get(ownerId);
+
+        if ( owner == null ) {
+            setStatus(ProcessorStatus.FAILED, Key.PROGRAM_GET_ALL_ERROR_USER_NOT_FOUND, new HashMap<>());
+            return null;
+        }
+        Map<Integer, JSONArray> programInfos = new LinkedHashMap<>();
+        List<Program> userPrograms = programDao.loadAll(owner);
+        List<Program> groupPrograms = getProgrammsOfGroupsOwnedByUser(ownerId);
+        //connecting user programs and group programs
+        List<Program> allPrograms = new ArrayList<>(userPrograms);
+        allPrograms.addAll(groupPrograms);
+        for ( Program program : allPrograms ) {
+            JSONArray programInfo = new JSONArray();
+            String programText = program.getProgramText();
+            String config = getProgramsConfig(program);
+            String robotName = program.getRobot().getName();
+            programInfo.put(program.getName());
+            programInfo.put(robotName);
+            programInfo.put(program.getAuthor());
+            programInfo.put(programText);
+            programInfo.put(config);
+            
+            programInfos.put(program.getId(), programInfo);
+        }
+
+        return new JSONArray(programInfos.values());
+    }
+    /**
+     * Get all groups that the given user owns and their programs
+     *
+     * @param ownerId the owner of the groups
+     * 
+     * @return the Programs by the groups of the owner
+     */
+    public List<Program> getProgrammsOfGroupsOwnedByUser(int ownerId){
+        UserGroupDao userGroupDao = new UserGroupDao(this.dbSession);
+        ProgramDao programDao = new ProgramDao(this.dbSession);
+        UserDao userDao = new UserDao(this.dbSession);
+        User owner = userDao.get(ownerId);
+        List<UserGroup> ownersGroups = userGroupDao.loadAll(owner);
+        List<Program> membersPrograms = new ArrayList<Program>(); //Programs of every group the user owns
+
+        for ( UserGroup userGroup : ownersGroups ) {    
+            for ( User member : userGroup.getMembers() ) {  //for all members of the group
+                 membersPrograms.addAll(programDao.loadAll(member));
+            }
+        }
+        return membersPrograms; //new JSONArray(programs.values());
     }
 
     /**

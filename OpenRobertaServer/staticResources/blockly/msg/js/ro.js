@@ -657,6 +657,7 @@ Blockly.Msg.MENU_EDIT = "editează";
 Blockly.Msg.MENU_EDIT_TOOLTIP = "editează";
 Blockly.Msg.MENU_EV3 = "pregătește robotul";
 Blockly.Msg.MENU_EXPERT = "expert";
+Blockly.Msg.MENU_EXPORT_ALL_PROGS = "export all programs";  // untranslated
 Blockly.Msg.MENU_EXPORT_PROG = "exportă programul";
 Blockly.Msg.MENU_FAQ = "întrebări frecvente";
 Blockly.Msg.MENU_GALLERY = "galerie";

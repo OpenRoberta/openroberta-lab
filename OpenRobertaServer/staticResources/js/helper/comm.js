@@ -99,6 +99,15 @@ define([ 'exports', 'jquery', 'wrap', 'log' ], function(exports, $, WRAP, LOG) {
     exports.json = json;
 
     /**
+     * downloads the object in response
+     */
+    function download(url) {
+        var fullUrl = urlPrefix + url + "?initToken=" + initToken;
+        window.open(fullUrl, '_blank');
+    }
+    exports.download = download;
+
+    /**
      * POST a XML DOM object as ENTITY and expect a JSON object as response.
      */
     function xml(url, xml, successFn, message) {
