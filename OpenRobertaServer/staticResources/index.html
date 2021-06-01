@@ -37,6 +37,7 @@ limitations under the License.
 <link rel="stylesheet" type="text/css" href="/css/roberta.css"></link>
 <!-- Make sure css files are loaded before js files -->
 <script data-main="js/main" src="js/require.js"></script>
+<script type="module" src="https://cyberbotics.com/wwi/R2021b/WebotsStreaming.js"></script>
 <link rel="manifest" href="manifest.webapp.json"></link>
 <link rel="SHORTCUT ICON" href="../css/img/NEPO.ico" type="image/vnd.microsoft.icon"></link>
 <link rel="apple-touch-icon" sizes="144x144" href="/css/img/Nepo_N.png" />
@@ -301,6 +302,9 @@ limitations under the License.
                 </div>
             </div>
             <div id="simDiv" class="fromRight">
+                <webots-streaming id="webotsDiv" hidden>
+
+                </webots-streaming>
                 <div id="canvasDiv">
                     <div id="uniDiv" style="position: absolute; left: 0; top: -2000; z-index: 0;">
                         <canvas id="unitBackgroundLayer" class="canvasSim unified" width=1 height=1></canvas>
@@ -347,7 +351,7 @@ limitations under the License.
                     <button id="simDeleteObject" type="button" class="blbtn typcn typcn-blockly-trashcan simChangeObject"
                         lkey="Blockly.Msg.MENU_SIM_DELETE_OBJECT_TOOLTIP" rel="tooltip" data-original-title=""></button>
                 </div>
-                <div id="simButtons">
+                <div id="simButtons" class="simButtons">
                     <button id="simControl" type="button" class="blbtn typcn typcn-media-play-outline" lkey="Blockly.Msg.MENU_SIM_START_TOOLTIP" rel="tooltip"
                         data-original-title="" title=""></button>
                     <button id="simControlStepOver" class="blbtn typcn typcn-arrow-forward-outline blue" lkey="Blockly.Msg.MENU_DEBUG_STEP_OVER_TOOLTIP"
@@ -363,7 +367,14 @@ limitations under the License.
                     <button id="simStop" type="button" class="blbtn typcn typcn-media-stop disabled" lkey="Blockly.Msg.MENU_SIM_STOP_TOOLTIP" rel="tooltip"
                         data-original-title="" title=""></button>
                 </div>
-
+                <div id="webotsButtons" class="simButtons" hidden>
+                    <button id="webotsPlay" type="button" class="blbtn typcn typcn-media-play-outline" lkey="Blockly.Msg.MENU_SIM_START_TOOLTIP" rel="tooltip"
+                        data-original-title="" title=""></button>
+                    <button id="webotsConnect" class="blbtn typcn typcn-power" lkey="Blockly.Msg.MENU_DEBUG_STEP_OVER_TOOLTIP"
+                        rel="tooltip" data-original-title="" title=""></button>
+                    <button id="webotsReset" class="blbtn typcn typcn-arrow-sync-outline" lkey="Blockly.Msg.MENU_DEBUG_STEP_INTO_TOOLTIP"
+                        rel="tooltip" data-original-title="" title=""></button>
+                </div>
             </div>
             <div id="tutorialDiv" class="fromRight">
                 <div id="tutorialContent"></div>

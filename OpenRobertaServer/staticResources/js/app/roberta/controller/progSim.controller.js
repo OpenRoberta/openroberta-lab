@@ -1,5 +1,5 @@
-define(['exports', 'message', 'log', 'util', 'simulation.simulation', 'simulation.constants', 'guiState.controller', 'tour.controller', 'program.controller', 'program.model',
-    'blockly', 'jquery', 'jquery-validate'], function(exports, MSG, LOG, UTIL, SIM, CONST, GUISTATE_C, TOUR_C, PROG_C, PROGRAM, Blockly, $) {
+define(['exports', 'message', 'log', 'util', 'nao.simulation' ,'simulation.simulation', 'simulation.constants', 'guiState.controller', 'tour.controller', 'program.controller', 'program.model',
+    'blockly', 'jquery', 'jquery-validate'], function(exports, MSG, LOG, UTIL, NAOSIM, SIM, CONST, GUISTATE_C, TOUR_C, PROG_C, PROGRAM, Blockly, $) {
 
         const INITIAL_WIDTH = 0.5;
         var blocklyWorkspace;
@@ -212,7 +212,39 @@ define(['exports', 'message', 'log', 'util', 'simulation.simulation', 'simulatio
             }, "simToggleBackground clicked");
         }
 
-        function toggleSim() {
+    function initSimulation(result) {
+        SIM.init([result], true, GUISTATE_C.getRobotGroup());
+        $('#simControl').addClass('typcn-media-play-outline').removeClass('typcn-media-play');
+        if (SIM.getNumRobots() === 1 && debug) {
+            $('#simStop, #simControlStepOver, #simControlStepInto').show();
+            $('#simControl').attr('data-original-title', Blockly.Msg.MENU_DEBUG_STEP_BREAKPOINT_TOOLTIP);
+            $('#simControl').addClass("blue");
+            SIM.updateDebugMode(true);
+        } else {
+            $('#simStop, #simControlStepOver, #simControlStepInto').hide();
+            $('#simControl').attr('data-original-title', Blockly.Msg.MENU_SIM_START_TOOLTIP);
+            $('#simControl').removeClass("blue");
+            SIM.endDebugging();
+        }
+        if (TOUR_C.getInstance() && TOUR_C.getInstance().trigger) {
+            TOUR_C.getInstance().trigger('startSim');
+        }
+        let name = debug ? "simDebug" : "sim";
+        $('#blockly').openRightView("sim", INITIAL_WIDTH, name);
+    }
+
+    function initNaoSimulation(result) {
+        NAOSIM.init(result.javaScriptProgram);
+        $('#simControl').addClass('typcn-media-play-outline').removeClass('typcn-media-play');
+
+        $('#simStop, #simControlStepOver, #simControlStepInto').hide();
+        $('#simControl').attr('data-original-title', Blockly.Msg.MENU_SIM_START_TOOLTIP);
+        $('#simControl').removeClass("blue");
+
+        $('#blockly').openRightView("sim", INITIAL_WIDTH, "sim");
+    }
+
+    function toggleSim() {
             if (($('#simButton').hasClass('rightActive') && !debug) || ($('#simDebugButton').hasClass('rightActive') && debug)) {
                 SIM.cancel();
                 $('#simControl').addClass('typcn-media-play-outline').removeClass('typcn-media-play');
@@ -232,24 +264,11 @@ define(['exports', 'message', 'log', 'util', 'simulation.simulation', 'simulatio
 
                 PROGRAM.runInSim(GUISTATE_C.getProgramName(), configName, xmlTextProgram, xmlConfigText, language, function(result) {
                     if (result.rc == "ok") {
-                        SIM.init([result], true, GUISTATE_C.getRobotGroup());
-                        $('#simControl').addClass('typcn-media-play-outline').removeClass('typcn-media-play');
-                        if (SIM.getNumRobots() === 1 && debug) {
-                            $('#simStop, #simControlStepOver, #simControlStepInto').show();
-                            $('#simControl').attr('data-original-title', Blockly.Msg.MENU_DEBUG_STEP_BREAKPOINT_TOOLTIP);
-                            $('#simControl').addClass("blue");
-                            SIM.updateDebugMode(true);
+                        if (GUISTATE_C.getRobot() === "nao") {
+                            initNaoSimulation(result);
                         } else {
-                            $('#simStop, #simControlStepOver, #simControlStepInto').hide();
-                            $('#simControl').attr('data-original-title', Blockly.Msg.MENU_SIM_START_TOOLTIP);
-                            $('#simControl').removeClass("blue");
-                            SIM.endDebugging();
+                            initSimulation(result);
                         }
-                        if (TOUR_C.getInstance() && TOUR_C.getInstance().trigger) {
-                            TOUR_C.getInstance().trigger('startSim');
-                        }
-                        let name = debug ? "simDebug" : "sim";
-                        $('#blockly').openRightView("sim", INITIAL_WIDTH, name);
                     } else {
                         MSG.displayInformation(result, "", result.message, "");
                     }

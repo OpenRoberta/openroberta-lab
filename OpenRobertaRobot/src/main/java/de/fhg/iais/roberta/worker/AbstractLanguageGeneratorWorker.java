@@ -1,5 +1,10 @@
 package de.fhg.iais.roberta.worker;
 
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+
 import com.google.common.collect.ClassToInstanceMap;
 import com.google.common.collect.ImmutableClassToInstanceMap;
 
@@ -9,6 +14,7 @@ import de.fhg.iais.roberta.bean.UsedHardwareBean;
 import de.fhg.iais.roberta.bean.UsedMethodBean;
 import de.fhg.iais.roberta.components.Project;
 import de.fhg.iais.roberta.util.Key;
+import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.visitor.lang.codegen.AbstractLanguageVisitor;
 
 /**
@@ -38,6 +44,12 @@ public abstract class AbstractLanguageGeneratorWorker implements IWorker {
         visitor.setStringBuilders(project.getSourceCode(), project.getIndentation());
         visitor.generateCode(project.isWithWrapping());
         project.setResult(Key.COMPILERWORKFLOW_PROGRAM_GENERATION_SUCCESS);
+
+        try {
+            Files.write(Paths.get("RobotNAO/target/out.py"), project.getSourceCode().toString().getBytes(StandardCharsets.UTF_8));
+        } catch ( IOException e ) {
+            throw new DbcException(e);
+        }
     }
 
     /**

@@ -107,8 +107,12 @@ require.config({
         'robotBlock': 'app/configVisualization/robotBlock',
         'wires': 'app/configVisualization/wires',
 
+        'nao.simulation':"app/naoSimulation/nao.simulation"
     },
     shim: {
+        'webots': {
+            exports: "webots"
+        },
         'bootstrap': {
             deps: ['jquery']
         },
