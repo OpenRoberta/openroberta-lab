@@ -1,16 +1,21 @@
 package de.fhg.iais.roberta.javaServer.restServices.all.controller;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.ResponseBuilder;
 import javax.xml.bind.UnmarshalException;
 
 import org.json.JSONArray;
@@ -438,6 +443,51 @@ public class ClientProgramController {
             String errorTicketId = Util.getErrorTicketId();
             LOG.error("Exception. Error ticket: {}", errorTicketId, e);
             return UtilForREST.makeBaseResponseForError(Key.SERVER_ERROR, httpSessionState, null); // TODO: redesign error ticker number and add then: append("parameters", errorTicketId);
+        }
+    }
+
+    @GET
+    @Path("/TestExportAllPrograms")
+    //@Produces("text/plain")
+    public Response testExportALlProgrammsOfUser() {
+        String myName = "name";
+        InputStream stream = new ByteArrayInputStream(myName.getBytes(StandardCharsets.UTF_8));
+
+        // HttpHeaders headers = new HttpHeaders();
+        // headers.add("Cache-Control", "no-cache, no-store, must-revalidate");
+        // headers.add("Pragma", "no-cache");
+        // headers.add("Expires", "0");
+
+        ResponseBuilder response = Response.ok(stream,"text/plain");
+        return response.header("Content-Disposition", "attachment; filename=\"sample.txt\"").build();
+    }  
+
+    //this method checks if exportAllPrograms can be executed and returns error masseges if not
+    //does nothing if every check passes
+    @POST
+    @Path("/exportCheck")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response checkConditionsForExport(@OraData DbSession dbSession, FullRestRequest request) {
+        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, request, true);
+        try {
+            if ( !httpSessionState.isUserLoggedIn() ) {
+                LOG.error("Unauthorized export request");
+                return UtilForREST.makeBaseResponseForError(Key.USER_ERROR_NOT_LOGGED_IN, httpSessionState, null);
+            }
+
+            BaseResponse response = BaseResponse.make(); // baseresponse
+            response.setRc(Key.SERVER_SUCCESS.toString());
+            return UtilForREST.responseWithFrontendInfo(response, httpSessionState, null);
+        } catch ( Exception e ) {
+            dbSession.rollback();
+            String errorTicketId = Util.getErrorTicketId();
+            LOG.error("Exception. Error ticket: {}", errorTicketId, e);
+            return UtilForREST.makeBaseResponseForError(Key.SERVER_ERROR, httpSessionState, null); // TODO: redesign error ticker number and add then: append("parameters", errorTicketId);
+        } finally {
+            if ( dbSession != null ) {
+                dbSession.close();
+            }
         }
     }
 

@@ -98,6 +98,19 @@ define([ 'exports', 'jquery', 'wrap', 'log' ], function(exports, $, WRAP, LOG) {
     }
     exports.json = json;
 
+    function download(url, filename) {
+
+        var a = document.createElement('a');
+        a.href = urlPrefix + url;
+        a.download = "testtest"; // Set the file name.
+        a.style.display = 'none';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        window.URL.revokeObjectURL(urlPrefix+url);
+    }
+    exports.download = download;
+
     /**
      * POST a XML DOM object as ENTITY and expect a JSON object as response.
      */

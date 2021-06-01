@@ -9,10 +9,15 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
     /**
      * Refresh program list
      */
-    function loadProgList(successFn) {
-        COMM.json("/program/listing/names", {}, successFn, "load program list");
+    //REPLACE THIS WITH BELOW
+     function loadProgList(successFn) {
+        COMM.download("/program/TestExportAllPrograms","MyPrograms.zip");
     }
     exports.loadProgList = loadProgList;
+    /*function loadProgList(successFn) {
+        COMM.json("/program/listing/names", {}, successFn, "load program list");
+    }
+    exports.loadProgList = loadProgList;*/
     
     /**
      * 
