@@ -657,6 +657,7 @@ Blockly.Msg.MENU_EDIT = "editar";
 Blockly.Msg.MENU_EDIT_TOOLTIP = "editar";
 Blockly.Msg.MENU_EV3 = "Preparación del EV3";
 Blockly.Msg.MENU_EXPERT = "experto";
+Blockly.Msg.MENU_EXPORT_ALL_PROGS = "export all programs";  // untranslated
 Blockly.Msg.MENU_EXPORT_PROG = "exportar programa";
 Blockly.Msg.MENU_FAQ = "Preguntas frecuentes";
 Blockly.Msg.MENU_GALLERY = "galería";

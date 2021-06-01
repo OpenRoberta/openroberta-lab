@@ -657,6 +657,7 @@ Blockly.Msg.MENU_EDIT = "muokkaa";
 Blockly.Msg.MENU_EDIT_TOOLTIP = "muokkaa";
 Blockly.Msg.MENU_EV3 = "EV3-robotin valmistelu (en)";
 Blockly.Msg.MENU_EXPERT = "edistynyt käyttäjä";
+Blockly.Msg.MENU_EXPORT_ALL_PROGS = "export all programs";  // untranslated
 Blockly.Msg.MENU_EXPORT_PROG = "tuo ohjelma";
 Blockly.Msg.MENU_FAQ = "UKK (usein kysytyt kysymykset) (en)";
 Blockly.Msg.MENU_GALLERY = "galleria";
