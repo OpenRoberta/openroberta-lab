@@ -527,6 +527,8 @@ define(['exports', 'simulation.scene', 'simulation.constants', 'util', 'interpre
                 $('.dropdown.sim, .simScene, #simImport, #simResetPose, #simEditButtons').show();
             }
         }
+        $('#simButtons, #canvasDiv').show();
+        $('#webotsButtons, #webotsDiv').hide();
         interpreters = programs.map(function(x) {
             var src = JSON.parse(x.javaScriptProgram);
             configurations.push(x.configuration.SENSORS);

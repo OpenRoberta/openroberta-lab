@@ -1,0 +1,40 @@
+#VRML_SIM R2021c utf8
+# license: Copyright Cyberbotics Ltd. Licensed for use only with Webots.
+# license url: https://cyberbotics.com/webots_assets_license
+# A painting (1.5 x 1 x 0.05 m).
+
+PROTO LandscapePainting [
+  field SFVec3f    translation 0 0.5 0
+  field SFRotation rotation    0 1 0 0
+  field SFString   name        "landscape painting"
+  field SFColor    color       1 1 1                              # Defines the color of the painting.
+  field MFString   textureUrl  "webots://projects/objects/paintings/protos/textures/landscape_painting.jpg"  # Defines the texure used for the painting.
+]
+{
+Solid {
+  translation IS translation
+  rotation IS rotation
+  children [
+    Shape {
+      appearance PBRAppearance {
+        baseColor IS color
+        baseColorMap ImageTexture {
+          url IS textureUrl
+        }
+        metalness 0
+        normalMap ImageTexture {
+          url "webots://projects/objects/paintings/protos/textures/canvas_normal.jpg"
+        }
+        occlusionMap ImageTexture {
+          url "webots://projects/objects/paintings/protos/textures/canvas_occlusion.jpg"
+        }
+      }
+    }
+  ]
+  name IS name
+  model "landscape painting"
+  boundingObject Box {
+    size 1.5 1 0.05
+  }
+}
+}

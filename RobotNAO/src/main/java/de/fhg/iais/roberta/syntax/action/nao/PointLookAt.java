@@ -88,15 +88,15 @@ public final class PointLookAt<V> extends Action<V> {
         return this.pointLook;
     }
 
-    public Expr<V> getpointX() {
+    public Expr<V> getPointX() {
         return this.pointX;
     }
 
-    public Expr<V> getpointY() {
+    public Expr<V> getPointY() {
         return this.pointY;
     }
 
-    public Expr<V> getpointZ() {
+    public Expr<V> getPointZ() {
         return this.pointZ;
     }
 

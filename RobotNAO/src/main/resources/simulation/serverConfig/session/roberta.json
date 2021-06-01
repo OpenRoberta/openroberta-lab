@@ -1,0 +1,10 @@
+{  
+  "port": 1999,
+  "portRewrite": true,
+  "server": "sim.open-roberta.org",
+  "administrator": "root@sim.open-roberta.org",
+  "simulationServers": [
+    "sim.open-roberta.org/2000"  
+  ],
+  "logDir": "log/"
+}

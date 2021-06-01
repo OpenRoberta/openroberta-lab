@@ -1,0 +1,8 @@
+{
+  "port": 2000,
+  "server": "localhost",
+  "simulationServers": [
+    "localhost:2001"
+  ],
+  "debug": true
+}

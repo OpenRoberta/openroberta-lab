@@ -1,0 +1,11 @@
+Webots Proto Cache File version 1.5
+protoFileHash: 754f8f69b9200581cf55fff3ce764549
+needsRobotAncestor: 1
+baseType: Robot
+slotType: 
+parameters: translation,rotation,name,version,degreeOfFreedom,color,controller,controllerArgs,customData,supervisor,synchronization,selfCollision,gpsAccuracy,cameraWidth,cameraHeight,cameraAntiAliasing,cameraAmbientOcclusionRadius,cameraBloomThreshold,cameraFocus,jersey,channel,contactMaterial,footContactMaterial,fingerContactMaterial,fingerRadius,fingerTorque,bodySlot,headSlot,leftFootSlot,rightFootSlot,leftHandSlot,rightHandSlot
+tags: 
+license: 
+licenseUrl: 
+documentationUrl: https://www.cyberbotics.com/doc/guide/nao
+info: Generic\smodel\sof\sNao\srobot\nModel\sdesigned\sby\sCyberbotics\sLtd.\saccording\sto\sthe\sonline\sdocumentation\sprovided\sby\sAldebaran\sRobotics.

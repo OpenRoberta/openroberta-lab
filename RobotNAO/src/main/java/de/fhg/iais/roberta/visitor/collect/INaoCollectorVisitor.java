@@ -108,9 +108,9 @@ public interface INaoCollectorVisitor extends ICollectorVisitor, INaoVisitor<Voi
 
     @Override
     default Void visitPointLookAt(PointLookAt<Void> pointLookAt) {
-        pointLookAt.getpointX().accept(this);
-        pointLookAt.getpointY().accept(this);
-        pointLookAt.getpointZ().accept(this);
+        pointLookAt.getPointX().accept(this);
+        pointLookAt.getPointY().accept(this);
+        pointLookAt.getPointZ().accept(this);
         pointLookAt.getSpeed().accept(this);
         return null;
     }
