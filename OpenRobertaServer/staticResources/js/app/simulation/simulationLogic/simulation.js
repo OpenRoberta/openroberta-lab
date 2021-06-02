@@ -380,8 +380,7 @@ define(['exports', 'simulation.scene', 'simulation.constants', 'util', 'interpre
         let selectedObject = selectedObstacle >= 0 ? obstacleList[selectedObstacle] : selectedColorArea >= 0 ? colorAreaList[selectedColorArea] : null;
         if (selectedObject != null) {
             selectedObject.color = color;
-            updateColorAreaLayer();
-            updateObstacleLayer();
+            updateSelectedObjects();
         }
     }
 
@@ -1537,13 +1536,13 @@ define(['exports', 'simulation.scene', 'simulation.constants', 'util', 'interpre
 
     function updateSelectedObjects() {
         if (selectedObstacle >= 0) {
-            scene.drawObstacles(highLightCorners);
             scene.drawColorAreas([]);
+            updateObstacleLayer();
             return;
         }
         if (selectedColorArea >= 0) {
             scene.drawObstacles([]);
-            scene.drawColorAreas(highLightCorners);
+            updateColorAreaLayer();
             return;
         }
         scene.drawObstacles([]);
