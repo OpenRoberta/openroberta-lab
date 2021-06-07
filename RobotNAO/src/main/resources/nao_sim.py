@@ -25,8 +25,9 @@ class Nao (Robot):
 
     # load motion files
     def loadMotionFiles(self):
+        self.standup = Motion('../../motions/StandUpFromFront.motion')
         self.handWave = Motion('../../motions/HandWave.motion')
-        self.forwards = Motion('../../motions/Forwards.motion')
+        self.forwards = Motion('../../motions/Forwards50.motion')
         self.backwards = Motion('../../motions/Backwards.motion')
         self.sideStepLeft = Motion('../../motions/SideStepLeft.motion')
         self.sideStepRight = Motion('../../motions/SideStepRight.motion')
@@ -291,14 +292,29 @@ class Nao (Robot):
         self.loadMotionFiles()
         self.printHelp()
 
+    #def turn(self, degree):
+     #   self.turnLeft60.play()
+      #  self.
+
     def walk(self, distance):
         # start new motion
         self.forwards.setLoop(True)
         self.forwards.play()
-        while self.step(self.timeStep) != -1:
-            pass
+        self.wait(distance / FORWARD_SPEED)
         self.forwards.stop()
 
+        self.standup.play()
+        while self.step(self.timeStep) != -1:
+            if self.standup.isOver():
+                break
+        self.standup.stop()
+
+
+    def wait(self, time):
+        startTime = self.getTime()
+        while self.step(self.timeStep) != -1:
+            if self.getTime() - startTime > time:
+                break
 
     def run(self):
         self.handWave.setLoop(True)

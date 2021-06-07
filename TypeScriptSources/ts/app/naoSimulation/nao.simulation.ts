@@ -1,51 +1,28 @@
+import * as $ from 'jquery';
+
 const URL = "wss://cyberbotics1.epfl.ch/1999/session?url=file:///home/cyberbotics/webots/projects/robots/softbank/nao/worlds/nao_room.wbt";
 
-let view = null;
-const connectButton = document.getElementById('webotsConnect');
-const runButton = document.getElementById('webotsPlay');
-const resetButton = document.getElementById('webotsReset');
-const streamingViewer = document.getElementById('webotsDiv');
-const regularSimulationDiv = document.getElementById('canvasDiv');
-const simEditButtons = document.getElementById('simEditButtons');
-const simButtons = document.getElementById("simButtons");
-const webotsButtons = document.getElementById("webotsButtons");
+interface StreamingViewer extends HTMLElement {
+    connect(url: string, mode: string, broadcast: boolean, mobileDevice: boolean, callback: Function, disconnectCallback: Function);
 
-let sourceCode = null;
+    disconnect();
+
+    sendMessage(message: string);
+
+    hideToolbar();
+
+    showToolbar();
+}
+
+const runButton = document.querySelector<HTMLButtonElement>('#simControl');
+const resetButton = document.querySelector<HTMLButtonElement>('#simResetPose');
+
+let streamingViewer: StreamingViewer;
+let sourceCode;
 
 function connect() {
-    streamingViewer.connect(URL, "x3d", false, false, onConnect, onDisconnect)
+    streamingViewer.connect(URL, "x3d", false, false, () => sendController(sourceCode), () => console.log("disconnected"))
     streamingViewer.hideToolbar();
-}
-
-function disconnect() {
-    view.close();
-    connectButton.onclick = connect;
-    runButton.disabled = true;
-    resetButton.disabled = true;
-}
-
-function onConnect() {
-    connectButton.onclick = disconnect;
-    runButton.disabled = false;
-    console.log("connected");
-
-    //sendController(sourceCode)
-}
-
-function onDisconnect() {
-    connectButton.onclick = connect;
-    runButton.disabled = true;
-    console.log("disconnected");
-}
-
-function run() {
-    streamingViewer.sendMessage('real-time:-1');
-    runButton.onclick = pause;
-}
-
-function pause() {
-    streamingViewer.sendMessage('pause');
-    runButton.onclick = run;
 }
 
 function sendController(sourceCode) {
@@ -61,19 +38,76 @@ function reset() {
     streamingViewer.sendMessage('robot:{"name":"supervisor","message":"reset"}');
 }
 
+function createStreamingElement() {
+    streamingViewer = document.querySelector('#webotsDiv');
+    if (streamingViewer) {
+        return;
+    }
+
+    streamingViewer = document.createElement('webots-streaming') as StreamingViewer;
+    streamingViewer.id = 'webotsDiv';
+    document.getElementById('simDiv').prepend(streamingViewer);
+}
+
+async function loadWebotsSources() {
+    if (document.querySelector('script[src="https://cyberbotics.com/wwi/R2021b/WebotsStreaming.js"]')) {
+        return;
+    }
+
+    await new Promise((resolve, reject) => {
+        let script = document.createElement('script');
+        script.onload = resolve;
+        script.type = "module";
+        script.src = "https://cyberbotics.com/wwi/R2021b/WebotsStreaming.js";
+        document.head.appendChild(script);
+    });
+}
+
+async function glmLoaded() {
+    if (window.hasOwnProperty("glm")) {
+        return;
+    }
+    await new Promise((resolve, _) => {
+        document.querySelector('script[src="https://git.io/glm-js.min.js"]').addEventListener("load", resolve);
+    });
+}
+
+export function disconnect() {
+    // Bug with webots, it doesnt remove its resize event listener
+    window.onresize = undefined;
+    streamingViewer.disconnect();
+}
+
 export function init(sc) {
-    regularSimulationDiv.hidden = true;
-    simEditButtons.hidden = true;
-    simButtons.hidden = true;
+    console.log("init");
 
-    webotsButtons.hidden = false;
-    streamingViewer.hidden = false;
+    $('#simEditButtons, #canvasDiv, #simRobot, #simValues').hide();
+    $('#webotsDiv, #simButtons').show();
 
-    runButton.disabled = true;
+    loadWebotsSources()
+        .then(async () => {
+            createStreamingElement();
+            await glmLoaded();
+            connect();
+        })
 
     sourceCode = sc;
+}
 
-    connectButton.onclick = connect;
-    runButton.onclick = run;
-    resetButton.onclick = reset;
+export function resetPose() {
+    console.log("sending reset");
+    streamingViewer.sendMessage('robot:{"name":"supervisor","message":"reset"}');
+}
+
+export function stopProgram() {
+    streamingViewer.sendMessage('pause');
+}
+
+export function run(sc) {
+    streamingViewer.sendMessage('pause');
+
+    sourceCode = sc;
+    sendController(sourceCode);
+
+    streamingViewer.sendMessage('real-time:-1');
 }
