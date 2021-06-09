@@ -1,7 +1,8 @@
 <head><title></title><meta http-equiv="content-type" content="text/html; charset=utf-8"></head><body><div id="helpContent"><div id="robControls_start" class="help beginner"><br><h3 id="ProgrammierBlöckeCalliope-»Programmstart«"><span style="color: rgb(0,0,0);">»Programmstart«</span><span style="color: rgb(0,0,0);"> </span></h3><p>Jedes Programm beginnt mit dem »Programmstart-Block«, welcher nicht gelöscht werden kann. Den ersten Block, den man verwenden möchte, verbindet man direkt mit der  »Sequenzverbindung« am Programmstart-Block. </p><p>Einstellmöglichkeiten:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-plus">Erzeuge eine neue globale Variable.</li><li class="typcn typcn-minus"><span>Entferne die globale Variable.</span></li>
-</ul><br>Wenn globale Variablen erzeugt wurden:<ul style="margin-top: 0; margin-bottom: 10px">
+</ul><br><p><span style="letter-spacing: 0.0px;">Wenn globale Variablen erzeugt wurden:</span>
+</p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-pen">Text, Name der Variablen.</li><li class="typcn typcn-arrow-sorted-down">Typ der Variablen.</li><li class="typcn typcn-arrow-left">Wert, Anfangswert der Variablen.</li>
 </ul></div><div id="mbedActions_display_text" class="help beginner"><h3 id="ProgrammierBlöckeCalliope-»ZeigeText...«"><span style="color: rgb(0,0,0);">»Zeige Text ...«</span></h3><p>Mit dem Block »Zeige ...« kannst du deinen Calliope mini Text darstellen lassen.</p><p>Einstellmöglichkeiten und Eingabewert:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
@@ -21,8 +22,8 @@
 </ul></div><div id="mbedActions_display_getPixel" class="help expert"><h3 id="ProgrammierBlöckeCalliope-»gibLEDHelligkeitx...«[Experten-Block]">»gib LED Helligkeit x ...« <span class="typcn typcn-star"></span></h3><p>Die Helligkeit einer LED auf dem Bildschirm deines Calliope mini wird gelesen. Die Position der LED wird mittels x-Achse und y-Achse ermittelt. x ist die horizontale und y ist die vertikale Achse. 0 bedeutet, dass die LED ausgeschaltet ist und 9, dass die LED am hellsten leuchtet.</p><p>Eingabewerte:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-left">Zahl, Wert zwischen 0 und 4 für die x-Position der LED. Dabei steht 0 für die erste LED in der Reihe und 4 für die fünfte und die letzte LED in der Reihe.</li><li class="typcn typcn-arrow-left">Zahl, Wert zwischen 0 und 4 für die y-Position der LED. Dabei steht 0 für die erste LED in der Spalte und 4 für die fünfte und die letzte LED in der Spalte.</li>
-</ul>Rückgabewert:
-<ul style="margin-top: 0; margin-bottom: 10px">
+</ul><br><p>Rückgabewert:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-right">Zahl, Wert zwischen 0 und 9. Dabei bedeutet 0, dass die LED aus ist und 9, dass die LED am hellsten leuchtet.</li>
 </ul><br></div><div id="robActions_serial_print" class="help expert"><h3 id="ProgrammierBlöckeCalliope-»ZeigeaufSerialMonitor...«[Experten-Block]">»Zeige auf Serial Monitor ...« <span class="typcn typcn-star"></span></h3><p>Mit dem Block »Zeige auf Serial Monitor...« kannst du die Ausgabe in einem Serialen Monitor deiner Wahl (z.B. Arduino Serial Monitor / (Chrome) Browser Serial Monitor) anzeigen lassen.</p><p>Eingabewert:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
@@ -84,20 +85,20 @@
 </ul></div><div id="robSensors_key_getSample" class="help beginner"> <h3 id="ProgrammierBlöckeCalliope-»Taste...gedrückt?«">»Taste ... gedrückt?«</h3><p>Mit dem Block »Taste ... gedrückt?« kannst du einem anderen Block »mitteilen«,  ob eine der eingebauten Tasten gedrückt wurde oder nicht. Dieser Block gibt die logischen Werte <em>wahr = gedrückt</em> oder <em>falsch = nicht gedrückt</em> zurück.</p><p>Einstellmöglichkeiten:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-sorted-down">Option, wähle die Taste aus, die du abfragen möchtest.</li>
-</ul>Rückgabewert:
-<ul style="margin-top: 0; margin-bottom: 10px">
+</ul><br><p>Rückgabewert:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-right">Logischer Wert: »wahr«, wenn die Taste gedrückt ist, sonst »falsch«.</li>
 </ul> </div><div id="robSensors_pintouch_getSample" class="help beginner"> <h3 id="ProgrammierBlöckeCalliope-»Pin...gedrückt?«">»Pin ... gedrückt?«</h3><p>Mit dem Block »Pin ... gedrückt?« kannst du einem anderen Block »mitteilen«,  ob der ausgewählte Pin berührt wird oder nicht. Dieser Block gibt die logischen Werte <em>wahr = gedrückt</em> oder <em>falsch = nicht gedrückt</em> zurück.</p><p>Einstellmöglichkeiten:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-sorted-down">Option, wähle den Pin aus, den du abfragen willst.</li>
-</ul>Rückgabewert:
-<ul style="margin-top: 0; margin-bottom: 10px">
+</ul><br><p>Rückgabewert:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-right">Logischer Wert: »wahr«, wenn der Pin berührt wird, sonst »falsch«.</li>
 </ul> </div><div id="robSensors_gesture_getSample" class="help beginner"> <h3 id="ProgrammierBlöckeCalliope-»Gib...Lage«">»Gib ... Lage«</h3><p>Mit dem Block »Gib ... Lage« kannst du einem anderen Block »mitteilen«, ob sich der Calliope mini in einer bestimmten Lage befindet. Dieser Block fragt den eingebauten Gyrosensor des Calliope mini ab.</p><p>Befindet sich der Calliope mini in der abgefragten Lage liefert der »Gib ... Lage« Block  »wahr«, sonst »falsch«.</p><p>Einstellmöglichkeiten:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-sorted-down"><p>Option, wähle die Lage, die abgefragt werden soll. Mögliche Lagen:</p><ul><li>aufrecht: USB-Anschluss des Calliope mini zeigt nach oben</li><li>kopfüber: USB-Anschluss des Calliope mini zeigt nach unten</li><li>auf der Vorderseite: Calliope-Beschriftung zeigt nach unten</li><li>auf der Rückseite: Calliope-Beschriftung zeigt nach oben</li><li>geschüttelt: Calliope mini wird geschüttelt</li><li>frei fallend: Calliope mini wird nach unten beschleunigt</li></ul></li>
-</ul>Rückgabewert:
-<ul style="margin-top: 0; margin-bottom: 10px">
+</ul><br><p>Rückgabewert:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-right">Logischer Wert: »wahr«, wenn er sich in der ausgewählten Lage befindet, sonst »falsch«.</li>
 </ul> </div><div id="robSensors_compass_getSample" class="help beginner"> <h3 id="ProgrammierBlöckeCalliope-»gibWinkel°Kompasssensor«">»gib Winkel ° Kompasssensor«</h3><p>Mit dem Block »gib Winkel Kompasssensor« kannst du die Orientierung deines Calliope minis im Bezug auf die Himmelsrichtungen auslesen, genau wie auf einem Kompass.</p><p>Dazu musst du vorher den Calliope mini kalibrieren, indem du den Calliope mini in alle Richtungen neigst, bis alle LEDS auf dem Display des Calliope mini leuchten.</p><p>Rückgabewert:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
@@ -120,8 +121,8 @@
 </ul> </div><div id="robSensors_pin_getSample" class="help expert"> <h3 id="ProgrammierBlöckeCalliope-»gib...WertPin...«[Experten-Block]">»gib ... Wert Pin ...« <span class="typcn typcn-star"></span></h3><p>Mit dem Block »gib ... Wert Pin ...« kannst du den Eingabewert an dem ausgewählten Pin auslesen, wenn du dort ein anderes Gerät oder Zusatzmodul angeschlossen hast. </p><p>Einstellmöglichkeiten:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-sorted-down">Option, wähle, welche Art von Signal du einlesen möchtest. »Analog« sind die Werte zwischen 0 und 1023. 0 bedeutet, dass es keine keine Spannung am Pin anliegt, und 1023 bedeutet, dass die vollen 3.3V anliegen. »Digital« sind entweder 0 oder 1. 0 bedeutet, dass keine Spannung anliegt und 1 bedeutet, dass volle Spannung anliegt.</li><li class="typcn typcn-arrow-sorted-down">Pin, wähle den Pin aus, den du abfragen willst.</li>
-</ul>Rückgabewert:
-<ul style="margin-top: 0; margin-bottom: 10px">
+</ul><br><p>Rückgabewert:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-right">Zahl; aktueller Wert des Eingangssignals. Entweder zwischen 0 und 1023  bei einem analogen Signal, bei einem digitalen Signal entweder 0 oder 1.</li>
 </ul> </div><div id="robSensors_gyro_getSample" class="help expert"> <h3 id="ProgrammierBlöckeCalliope-»gibWinkel°Kreiselsensor...«">»gib Winkel ° Kreiselsensor ...«</h3><p>Dieser Block gibt den aktuellen Wert des Kreiselsensors zurück. Der Wert ist der Winkel, um den der Calliope mini in die ausgewählte Richtung geneigt ist.</p><p class="auto-cursor-target">Einstellmöglichkeiten:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
@@ -132,8 +133,8 @@
 </ul> </div><div id="robSensors_accelerometer_getSample" class="help expert"> <h3 id="ProgrammierBlöckeCalliope-»gibWertmilli-gBeschleunigungssensor...«[Experten-Block]">»gib Wert milli-g Beschleunigungssensor ...« <span class="typcn typcn-star"></span></h3><p>Mit dem Block »gib Wert milli-g Beschleunigung ...« kannst du die Beschleunigung des Calliope mini auslesen. Es gibt drei Richtungen, in denen die Beschleunigung gemessen werden kann. Die Beschleunigung kann in die drei verschiedenen Raumrichtungen (links-rechts, vorne-hinten und oben-unten) gemessen werden.</p><p>Einstellmöglichkeiten:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-sorted-down">Optionen; wähle, für welche Richtung der Wert ausgegeben werden soll. »x« ist die links-rechts-Achse, »y« die vorne-hinten-Achse, »z« ist die oben-unten Achse.</li>
-</ul>Rückgabewert:
-<ul style="margin-top: 0; margin-bottom: 10px">
+</ul><br><p>Rückgabewert:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-right">Zahl; aktueller Wert der Beschleunigung in milli-g. 1g oder 1000 milli-g wirken auf den Calliope mini aufgrund der Erdbeschleunigung, ohne das er bewegt wird.</li>
 </ul> </div><div id="robSensors_humidity_getSample" class="help expert"><h3 id="ProgrammierBlöckeCalliope-»gib...LuftfeuchtigkeitssensorA1«[Experten-Block]">»gib ... Luftfeuchtigkeitssensor A1« <span class="typcn typcn-star"></span></h3><p class="western">Dieser Block zeigt den Wert des Feuchtigkeitssensors. Dieser Sensor misst sowohl die relative Luftfeuchtigkeit als auch die Temperatur der Umgebung und muss an den Pin A1 angeschlossen werden.</p><p class="western">Der verwendete Sensor ist ein SHT31 und kommuniziert per I²C mit dem Calliope mini.</p><p class="western">Rückgabewert:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
@@ -144,8 +145,8 @@
 </ul></div><div id="robSensors_ultrasonic_getSample" class="help expert"><h3 id="ProgrammierBlöckeCalliope-»gibAbstandcmUltraschallsensor...«[Experten-Block]">»gib Abstand cm Ultraschallsensor ...« <span class="typcn typcn-star"></span></h3><p class="western">Dieser Sensor misst den Abstand zum nächsten Objekt durch das Aussenden von Ultraschallwellen. Dieser Senosor muss entweder am Calliope mini an den Pin A1 oder an den vorgesehenen Platz am Calli:bot angeschlossen werden. Der verwendete Sensor ist ein Grove Ultraschall-Sensor auf Basis eines HC-SR04, allerdings mit einem verbauten Mikrocontroller, der die Kommunikation übernimmt.</p><p class="western">Einstellmöglichkeiten:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-sorted-down">Option, der Eingang kann entweder für Calliope mini oder den Calli:bot konfiguriert werden.</li>
-</ul>Rückgabewert:
-<ul style="margin-top: 0; margin-bottom: 10px">
+</ul><br><p class="western">Rückgabewert:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-left">Zahl, Wert des Ultraschallsensors - Abstand zum nächsten Objekt in Zentimetern.</li>
 </ul><br></div><div id="robSensors_infrared_getSample" class="help expert"><h3 id="ProgrammierBlöckeCalliope-»gibLinieInfrarotsensorCalli:bot...«[Experten-Block]">»gib Linie Infrarotsensor Calli:bot ...« <span class="typcn typcn-star"></span></h3><p class="western">Dieser Sensor misst die Schattierung des Untergrunds und gibt zurück, ob es sich um einen hellen oder dunklen Untergrund handelt.</p><p class="western">Rückgabewert:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
@@ -156,8 +157,8 @@
 </ul></div><div id="robSensors_colourtcs3472_getSample" class="help expert"><h3 id="ProgrammierBlöckeCalliope-»Gib...FarbsensorTCS3472...«[Experten-Block]"><br>»Gib ... Farbsensor TCS3472 ... « <span class="typcn typcn-star"></span></h3><p>Mit diesem Block kannst du den Farbsensor TCS3472 abfragen. Dieser Sensor kann die Farbe, die Helligkeit und die Farbzusammensetzung seiner Umgebung messen.</p><p>Optionen:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-sorted-down">Option, wähle die Eigenschaft aus, die du messen möchtest. Es steht Farbe, Licht und RGB zur Auswahl.</li><li class="typcn typcn-arrow-sorted-down">Option, wähle den Sensor aus, den du abfragen möchtest.</li>
-</ul>Rückgabewert:
-<ul style="margin-top: 0; margin-bottom: 10px">
+</ul><br><p>Rückgabewert:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-right">Farbe, die Farbe der Umgebung.</li><li class="typcn typcn-arrow-right">Zahl, die Helligkeit der Umgebung in Prozent.</li><li class="typcn typcn-arrow-right">Liste von Zahlen, die Aufteilung der Farbe in Werte von Rot, Grün und Blau.</li>
 </ul><br></div><div id="robControls_if" class="help beginner"><h3 style="text-align: left;" id="ProgrammierBlöckeCalliope-»Wennmache«">»Wenn mache«</h3><p style="text-align: left;">Mit dem Block »Wenn mache« kannst du gezielt Aktionen auslösen, die von einer Bedingung abhängen. Der »Wenn mache«-Block benötigt einen logischen Wert als Eingabewert. Falls die Bedingung in »Wenn« erfüllt (wahr) ist, wird der eingefügte Block (oder die Blöcke) ausgeführt. Bei einem verschachtelten »Wenn mache« Block, also wenn eine weitere Unterscheidung eingefügt wurde, wird zuerst die erste »Wenn« Bedingung abgefragt und, falls diese nicht erfüllt ist (Bedingung = falsch), wird die zweite »oder wenn« Bedingung geprüft. Auch diese zweite Bedingung benötigt wieder einen logischen Wert als Eingabewert.</p><p style="text-align: left;">Die Bedingungen können beliebig durch Anklicken des »+« Plus-Symbols erweitert und durch das »-« Minus-Symbol wieder bis auf eine einzige Bedingung reduziert werden.</p><p style="text-align: left;">Einstellmöglichkeiten und Eingabewerte:
 </p><ul style="margin-top: 0; margin-bottom: 10px">

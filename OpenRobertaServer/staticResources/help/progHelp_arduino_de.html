@@ -1,7 +1,8 @@
-<head><title></title><meta http-equiv="content-type" content="text/html; charset=utf-8"></head><body><div id="helpContent"><div id="robControls_start_ardu" class="help beginner"><h3 id="ProgrammierBlöckeArduino-»Start«"><span style="color: rgb(0,0,0);">»Start«</span><span style="color: rgb(0,0,0);"> </span></h3><p>Jedes Programm beginnt mit dem »Start«-Block, welcher nicht gelöscht werden kann. Den ersten Block, den man verwenden möchte, verbindet man direkt mit der  »Sequenzverbindung« am »Start«-Block.</p><p>Einstellmöglichkeiten:
+<head><title></title><meta http-equiv="content-type" content="text/html; charset=utf-8"></head><body><div id="helpContent"><div id="robControls_start_ardu" class="help beginner"><h3 id="ProgrammierBlöckeArduino-»Start«"><span style="color: rgb(0,0,0);">»Start«</span><span style="color: rgb(0,0,0);"> </span></h3><p>Jedes Programm beginnt mit dem »Start«-Block, welcher nicht gelöscht werden kann. Den ersten Block, den man verwenden möchte, verbindet man direkt mit der  »Sequenzverbindung« am »Wiederhole unendlich oft«-Block.</p><p>Für Systeme, die auf einem Arduino oder einem ähnlichen Mikrocontroller basieren, ist hier immer eine »Wiederhole unendlich oft«-Schleife mit dem Start-Block verbunden, die ebenfalls nicht entfernt werden kann. Dies liegt daran, dass solche Mikrocontroller meistens für genau eine Aufgabe programmiert werden, die dann immer wieder ausgeführt werden soll. Wenn du nur einen Durchlauf des Programm möchtest, kannst du den Roboter am Ende der Schleife einfach für eine sehr lange Zeit warten lassen.</p><p>Einstellmöglichkeiten:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-plus">Erzeuge eine neue globale Variable.</li><li class="typcn typcn-minus"><span>Entferne die globale Variable.</span></li>
-</ul>Wenn globale Variablen erzeugt wurden:<ul style="margin-top: 0; margin-bottom: 10px">
+</ul><br><p>Wenn globale Variablen erzeugt wurden:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-pen">Text, Name der Variablen.</li><li class="typcn typcn-arrow-sorted-down">Typ der Variablen.</li><li class="typcn typcn-arrow-left">Wert, Anfangswert der Variablen.</li>
 </ul><br></div><div id="robActions_motor_on_for_ardu" class="help expert"><h3 id="ProgrammierBlöckeArduino-»ServomotorSG90...Setzean°«"><span style="color: rgb(0,0,0);">»Servomotor SG90 ... Setze an°« </span></h3><p>Mit dem Block »Servormotor SG90 ... Setze an°« programmierst du die Position eines Servomotors in Grad. Der Servomotor fährt dann in die entsprechende Position.</p><p>Einstellmöglichkeiten und Eingabewert:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
@@ -45,8 +46,8 @@
 </ul><br></div><div id="robSensors_out_getSample" class="help beginner"> <h3 id="ProgrammierBlöckeArduino-»gibanalogen/digitalenWertSensor...«">»gib analogen/digitalen Wert Sensor...«</h3><p>Mit dem Block »gib analogen/digitalen Wert Sensor...« kannst du einem anderen Block »mitteilen«, welcher analoge oder digitale Wert an einem Sensor deines Arduino anliegt.</p><p>Einstellmöglichkeiten:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-sorted-down">»analog« oder »digital«. Stelle ein, wie der welche Art der zu messende Wert hat.</li><li class="typcn typcn-arrow-sorted-down">Pin, wähle einen Pin aus.</li>
-</ul>Rückgabewert:
-<ul style="margin-top: 0; margin-bottom: 10px">
+</ul><br><p>Rückgabewert:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-right">Zahl, Wert der an dem Pin anliegt.</li>
 </ul><br> </div><div id="robSensors_timer_getSample" class="help beginner"> <h3 id="ProgrammierBlöckeArduino-»GibWertmsZeitgeber«">»Gib Wert ms Zeitgeber«</h3><p>Mit dem Block »Gib Wert Zeitgeber« kannst du einem anderen Block den aktuellen Stand des internen Zeitgebers in Millisekunden »mitteilen«. Der Zeitgeber wird automatisch mit dem Beginn eines Programms gestartet.</p><p>Einstellöglichkeiten:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
@@ -90,44 +91,44 @@
 </ul><br> </div><div id="robSensors_humidity_getSample" class="help expert"> <h3 id="ProgrammierBlöckeArduino-»gibWert%LuftfeuchtigkeitsensorDHT11...«">»gib Wert % Luftfeuchtigkeitsensor DHT11...«</h3><p>Mit dem Block »gib Wert % Luftfeuchtigkeitsensor ...« kannst du einem anderen Block »mitteilen«, wie hoch die Luftfeuchtigkeit zwischen 0% und 100% ist, die der Luftfeuchtigkeitssensor misst.</p><p>Einstellmöglichkeiten:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-sorted-down">Port, wähle einen Luftfeuchtigkeitsensor aus, den du in der Roboterkonfiguration angelegt hast.</li>
-</ul>Rückgabewert:
-<ul style="margin-top: 0; margin-bottom: 10px">
+</ul><br><p>Rückgabewert:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-right">Zahl, Luftfeuchtigkeit in %.</li>
 </ul><br> </div><div id="robSensors_drop_getSample" class="help expert"> <h3 id="ProgrammierBlöckeArduino-»gibWert%Tropfsensor...«">»gib Wert % Tropfsensor...«</h3><p>Mit dem Block »gib Wert % Tropfsensor ...« kannst du einem anderen Block »mitteilen«, wie hoch die nass der Tropfsensor zwischen 0% und 100% ist.</p><p>Einstellmöglichkeiten:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-sorted-down">Port, wähle einen Tropfensensor aus, den du in der Roboterkonfiguration angelegt hast.</li>
-</ul>Rückgabewert:
-<ul style="margin-top: 0; margin-bottom: 10px">
+</ul><br><p><span style="letter-spacing: 0.0px;">Rückgabewert:</span>
+</p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-right">Zahl, Nässe in %.</li>
 </ul><br> </div><div id="robSensors_pulse_getSample" class="help expert"> <h3 id="ProgrammierBlöckeArduino-»gibWertPulssensor...«">»gib Wert Pulssensor...«</h3><p>Mit dem Block »gib Wert Pulssensor ...« kannst du einem anderen Block »mitteilen«, wie hoch der Puls der Person ist, bei der der Sensor verwendet wird.</p><p>Einstellmöglichkeiten:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-sorted-down">Port, wähle einen Pulssensor aus, den du in der Roboterkonfiguration angelegt hast.</li>
-</ul>Rückgabewert:
-<ul style="margin-top: 0; margin-bottom: 10px">
+</ul><br><p><span style="letter-spacing: 0.0px;">Rückgabewert:</span>
+</p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-right">Zahl, gemessener Puls.</li>
 </ul><br> </div><div id="robSensors_potentiometer_getSample" class="help expert"><h3 id="ProgrammierBlöckeArduino-»GibWertVPotentiometer...«">»Gib Wert V Potentiometer ...«</h3><p>Mit dem Block »Gib Wert V Potentiometer ...« kannst du einem anderen Block »mitteilen«, auf welchen Wert in Volt das an deinen Arduino angeschlossene Potentiometer eingestellt ist.</p><p>Einstellmöglichkeiten:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-sorted-down">Port, wähle ein Potentiometer aus, das du in der Roboterkonfiguration angelegt hast.</li>
-</ul><br><p>Rückgabewert:
+</ul><br><p><span style="letter-spacing: 0.0px;">Rückgabewert:</span>
 </p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-right">Zahl, Spannung in Volt, auf die das Potentiometer eingestellt ist.</li>
 </ul><br></div><div id="robSensors_moisture_getSample" class="help expert"> <h3 id="ProgrammierBlöckeArduino-»gibWert%Feuchtigkeitssensor...«">»gib Wert % Feuchtigkeitssensor ...«</h3><p>Mit dem Block »gib Wert % Feuchtigkeitssensor ...« kannst du einem anderen Block »mitteilen«, wie hoch die Feuchtigkeit zwischen 0 und 100 ist, die der Feuchtigkeitssensor misst.</p><p>Optionen:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-sorted-down">Port, wähle einen Feuchtigkeitsensor aus, den du in der Roboterkonfiguration angelegt hast.</li>
-</ul><br><p>Rückgabewert:
+</ul><br><p><span style="letter-spacing: 0.0px;">Rückgabewert:</span>
 </p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-right">Zahl, Feuchtigkeit in %<span>.</span></li>
 </ul><br> </div><div id="robSensors_ultrasonic_getSample" class="help expert"> <h3 id="ProgrammierBlöckeArduino-»gibAbstandcmUltraschallHC-SR04...«">»gib Abstand cm Ultraschall HC-SR04 ...«</h3><p>Mit dem Block »gib Abstand cm Ultraschall HC-SR04 ...« kannst du einem anderen Block »mitteilen«,  welcher Abstand in cm von dem Ultraschallsensor gemessen wird.</p><p>Einstellmöglichkeiten:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-sorted-down">Port, wähle einen Ultraschallsensor HS-SR04 aus, den du in der Roboterkonfiguration angelegt hast.</li>
-</ul><br><p>Rückgabewert:
+</ul><br><p><span style="letter-spacing: 0.0px;">Rückgabewert:</span>
 </p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-right">Zahl, Abstand in cm</li>
 </ul><br> </div><div id="robSensors_rfid_getSample" class="help expert"> <h3 id="ProgrammierBlöckeArduino-»gibID/AnwesenheitRFID-RC522Reader...«">»gib ID/Anwesenheit RFID-RC522 Reader...«</h3><p>Mit dem Block »gib ID/Anwesenheit RFID-RC522 Reader ...« kannst du einem anderen Block »mitteilen«, welche UID (Unique Identification Number) ein RFID-Tag hat, dass du an den Sensor hälst oder ob ein RFID-Tag erkannt wurde.</p><p>Einstellmöglichkeiten:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-sorted-down">»ID« oder »Anwesenheit«. Stelle ein, wie der Infrarotsensor messen soll.</li><li class="typcn typcn-arrow-sorted-down">Port, wähle einen RFID Reader aus, den du in der Roboterkonfiguration angelegt hast.</li>
-</ul>Rückgabewert:
-<ul style="margin-top: 0; margin-bottom: 10px">
+</ul><br><p><span style="letter-spacing: 0.0px;">Rückgabewert:</span>
+</p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-right"><p>Text,<span> bei »Kartenserie«;</span> UID des RFID-Tags.</p><p><span>Logischer Wert, bei »Anwesenheit«;</span><span> »Wahr« wenn ein RFID-Tag erkannt wird und »Falsch« wenn nicht</span><span> .</span></p></li>
 </ul><br> </div><div id="robControls_if" class="help beginner"><h3 style="text-align: left;" id="ProgrammierBlöckeArduino-»Wennmache«">»Wenn mache«</h3><p style="text-align: left;">Mit dem Block »Wenn mache« kannst du gezielt Aktionen auslösen, die von einer Bedingung abhängen. Der »Wenn mache«-Block benötigt einen logischen Wert als Eingabewert. Falls die Bedingung in »Wenn« erfüllt (wahr) ist, wird der eingefügte Block (oder die Blöcke) ausgeführt. Bei einem verschachtelten »Wenn mache« Block, also wenn eine weitere Unterscheidung eingefügt wurde, wird zuerst die erste »Wenn« Bedingung abgefragt und, falls diese nicht erfüllt ist (Bedingung = falsch), wird die zweite »oder wenn« Bedingung geprüft. Auch diese zweite Bedingung benötigt wieder einen logischen Wert als Eingabewert.</p><p style="text-align: left;">Die Bedingungen können beliebig durch Anklicken des »+« Plus-Symbols erweitert und durch das »-« Minus-Symbol wieder bis auf eine einzige Bedingung reduziert werden.</p><p style="text-align: left;">Einstellmöglichkeiten und Eingabewerte:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
@@ -264,10 +265,22 @@
 </ul><p>Rückgabewert:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-right">Zahl, eine ganzzahlige Zufallszahl, die innerhalb der eingestellten Grenzen liegt</li>
-</ul><br></div><div id="math_random_float" class="help expert"><h3 style="text-align: left;" id="ProgrammierBlöckeArduino-»Zufallszahl«[Experten-Block]">»Zufallszahl« <span class="typcn typcn-star"></span></h3><p style="text-align: left;">Mit dem Block »Zufallszahl« wird eine Zufallszahl zwischen 0,0 und 1,0 bestimmt.</p><p style="text-align: left;">Rückgabewert:
+</ul><br></div><div id="math_random_float" class="help expert"><h3 style="text-align: left;" id="ProgrammierBlöckeArduino-»Zufallszahl«">»Zufallszahl« </h3><p style="text-align: left;">Mit dem Block »Zufallszahl« wird eine Zufallszahl zwischen 0,0 und 1,0 bestimmt.</p><p style="text-align: left;">Rückgabewert:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-right">Zahl, eine positive Zufallszahl kleiner oder gleich 1.</li>
-</ul></div><div id="text" class="help beginner notBob3"><h3 style="text-align: left;" id="ProgrammierBlöckeArduino-»Text«">»Text«</h3><p style="text-align: left;">Mit dem einfachen »Text«-Block wird ein Stück Text bereitgestellt.</p><p style="text-align: left;">Eingabewert:
+</ul></div><div id="math_cast_toString" class="help expert notWedo notNxt notBotnroll notNao notBob3 notSensebox notMbot notEdison notFestbionics notArduino"><h3 id="ProgrammierBlöckeArduino-»wandle...uminZeichenkette«[Experten-Block]">»wandle ... um in Zeichenkette« <span class="typcn typcn-star"></span></h3><p><span style="letter-spacing: -0.006em;">Dieser Block wandelt eine Zahl in eine Zeichenkette um, die diese Zahl enthält. Als </span><span style="letter-spacing: -0.084px;">Beispiel</span><span style="letter-spacing: -0.006em;"> wird die Zahl 123 in die Zeichenkette »123« umgewandelt.</span></p><p><span style="letter-spacing: -0.006em;">Optionen und Eingabewerte:</span>
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-left">Zahl, die Zahl die in eine Zeichenkette umgewandelt werden soll.</li>
+</ul><br><p><span style="letter-spacing: -0.006em;">Rückgabewerte:</span>
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right">Zeichenkette, die Zeichenkette bestehend aus der gewählten Zahl.</li>
+</ul><br></div><div id="math_cast_toChar" class="help expert notWedo notNxt notBotnroll notNao notBob3 notSensebox notMbot notEdison notFestbionics notArduino"><h3 id="ProgrammierBlöckeArduino-»wandle...uminZeichen«[Experten-Block]">»wandle ... um in Zeichen« <span class="typcn typcn-star"></span></h3><p><span style="letter-spacing: -0.006em;">Dieser Block wandelt eine einzelne Zahl den dazugehörigen ASCII-Buchstaben um. Falls es zu dieser Zahl kein dazugehöriges ASCII-Zeichen gibt, wird eine leere Zeichenkette weitergegeben. So wird z.B. die Zahl 97 in den Buchstaben »a« umgewandelt.</span></p><p><span style="letter-spacing: -0.006em;">Optionen und Eingabewerte:</span>
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-left">Zahl, der ASCII-Code, der in das dazugehörige Zeichen umgewandelt werden soll. Zahl zwischen 0 und 255.</li>
+</ul><br><p><span style="letter-spacing: -0.006em;">Rückgabewerte:</span>
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right">Zeichen, das Zeichen das dem gewählten ASCII-Code entspricht.</li>
+</ul><br></div><div id="text" class="help beginner notBob3"><h3 style="text-align: left;" id="ProgrammierBlöckeArduino-»Text«">»Text«</h3><p style="text-align: left;">Mit dem einfachen »Text«-Block wird ein Stück Text bereitgestellt.</p><p style="text-align: left;">Eingabewert:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-pen">Zeichenkette, bestehend aus beliebigen Zeichen</li>
 </ul><p>Rückgabewert:
@@ -276,7 +289,7 @@
 </ul><br></div><div id="text_comment" class="help beginner"><h3 style="text-align: left;" id="ProgrammierBlöckeArduino-»Kommentar«">»Kommentar«</h3><p style="text-align: left;">Dokumentiere dein Programm mit diesem Block, damit du und andere es später leichter haben, dein Programm zu verstehen. Dieser Kommentar wird auch im generierten Source Code zu sehen sein.  </p><p style="text-align: left;">Eingabewert:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-pen">Zeichenkette, bestehend aus beliebigen Zeichen</li>
-</ul></div><div id="robText_join" class="help expert notBob3"><h3 style="text-align: left;" id="ProgrammierBlöckeArduino-»ErstelleText«[Experten-Block]">»Erstelle Text« <span class="typcn typcn-star"></span></h3><p style="text-align: left;">Mit dem »Erstelle Text«-Block wird ein Stück Text aus verschiedenen Eingabewerten zusammengesetzt. Mit dem +-Zeichen können weitere Eingabemöglichkeiten geschaffen werden. Alle Eingaben werden zu einer kontinuierlichen Zeichenkette zusammengefügt. </p><p style="text-align: left;">Eingabewerte:
+</ul></div><div id="robText_join" class="help expert notBob3 notFestobionic"><h3 style="text-align: left;" id="ProgrammierBlöckeArduino-»ErstelleText«[Experten-Block]">»Erstelle Text« <span class="typcn typcn-star"></span></h3><p style="text-align: left;">Mit dem »Erstelle Text«-Block wird ein Stück Text aus verschiedenen Eingabewerten zusammengesetzt. Mit dem +-Zeichen können weitere Eingabemöglichkeiten geschaffen werden. Alle Eingaben werden zu einer kontinuierlichen Zeichenkette zusammengefügt. </p><p style="text-align: left;">Eingabewerte:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-plus">Weitere Eingabemöglichkeiten bereitstellen.</li><li class="typcn typcn-minus">Letzte Eingabemöglichkeit entfernen (bei mehr als 2 Eingabemöglichkeiten).</li><li class="typcn typcn-arrow-left">Beliebiger Wert, Zahl, Text, logischer Wert, Farbe.</li>
 </ul><p>Rückgabewert:
@@ -285,7 +298,19 @@
 </ul><br></div><div id="robText_append" class="help expert notWedo notBob3"><h3 style="text-align: left;" id="ProgrammierBlöckeArduino-»Textanhängen«[Experten-Block]">»Text anhängen« <span class="typcn typcn-star"></span></h3><p style="text-align: left;">Mit dem »Text anhängen«-Block können Zeichenketten erweitert werden, z.B. indem an empfangene Nachrichten eine Signatur angehängt wird.</p><p style="text-align: left;">Eingabemöglichkeiten:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-left">Text, Zeichenkette, an die Text angehängt werden soll</li><li class="typcn typcn-arrow-left">Text, Zeichenkette, die an einen Text angehängt werden soll</li>
-</ul></div><div id="robLists_create_with" class="help expert notWedo notBob3"><h3 id="ProgrammierBlöckeArduino-»ErzeugeListe«[Experten-Block]">»Erzeuge Liste« <span class="typcn typcn-star"></span></h3><p>Der Block »Erzeuge eine leere Liste« erzeugt eine Liste ohne Inhalt. Der Block »Liste« erzeugt eine Liste mit einigen voreingestellten Werten. Mit + und - können weitere Listenelemente am Ende hinzugefügt bzw. entfernt werden. Wenn das letzte Element einer Liste entfernt wurde, liegt eine leere Liste vor.</p><p>Einstellmöglichkeiten:
+</ul></div><div id="text_cast_string_toNumber" class="help expert notWedo notNxt notBotnroll notNao notBob3 notSensebox notMbot notEdison notFestbionics notArduino"><h3 id="ProgrammierBlöckeArduino-»wandle...uminZahl«[Experten-Block]">»wandle ... um in Zahl« <span class="typcn typcn-star"></span></h3><p><span style="letter-spacing: -0.006em;">Dieser Block wandelt eine Zeichenkette in eine Zahl um, falls dies möglich ist. Wenn eine Zeichenkette also nur Zahlen enthält, kann dieser Block die Zeichenkette in eine Zahl umwandeln. Wenn der Block keine Zahlen enthält, gibt dieser Block »NaN« in der Simulation des Open Roberta Labs weiter, kann aber auch ein anderes Verhalten aufweisen, welches von der verwendeten Programmiersprache des Roboters abhängt. </span><span style="letter-spacing: -0.006em;">Falls die Zeichenkette zwar mit Zahlen beginnt, aber danach weitere Zeichen enthält, die keine Zahlen sind, gibt dieser Block nur die Zahlen weiter und stoppt, sobald das erste Zeichen in der Zeichenkette steht. Also als Beispiel macht dieser Block aus der Zeichenkette »52abcd« die Zahl 52.</span></p><p><span style="letter-spacing: -0.006em;">Optionen und Eingabewerte:</span>
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-left">Zeichenkette, die nur aus Zahlen besteht und in eine Zahl umgewandelt werden soll.</li>
+</ul><br><p><span style="letter-spacing: -0.006em;">Rückgabewerte:</span>
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right">Zahl, die zahl aus der die Zeichenkette bestand.</li>
+</ul><br></div><div id="text_cast_char_toNumber" class="help expert notWedo notNxt notBotnroll notNao notBob3 notSensebox notMbot notEdison notFestbionics notArduino"><h3 id="ProgrammierBlöckeArduino-»wandleZeichen...anPosition...inZahl«[Experten-Block]">»wandle Zeichen ... an Position ... in Zahl« <span class="typcn typcn-star"></span></h3><p><span style="letter-spacing: -0.006em;">Dieser Block wandelt einen Buchstaben oder ein Zeichen aus einer Zeichenkette in die dazugehörige ASCII-Nummer um. Jedes Zeichen hat dabei eine dazugehörige Nummer in der ASCII-Tabelle. So wird z.B. ein kleines »a« in die Zahl 97 umgewandelt.</span></p><p><span style="letter-spacing: -0.006em;">Optionen und Eingabewerte:</span>
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-left">Zeichenkette, aus dieser wird ein einzelnes Zeichen ausgewählt.</li><li class="typcn typcn-arrow-left">Zahl, die Stelle des Zeichens das umgewandelt werden soll. Beachte das die Nummerierung bei 0 anfängt.</li>
+</ul><br><p>Rückgabewerte:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right">Zahl, der ASCII-Code des ausgewählten Zeichens.</li>
+</ul><br></div><div id="robLists_create_with" class="help expert notWedo notBob3"><h3 id="ProgrammierBlöckeArduino-»ErzeugeListe«[Experten-Block]">»Erzeuge Liste« <span class="typcn typcn-star"></span></h3><p>Der Block »Erzeuge eine leere Liste« erzeugt eine Liste ohne Inhalt. Der Block »Liste« erzeugt eine Liste mit einigen voreingestellten Werten. Mit + und - können weitere Listenelemente am Ende hinzugefügt bzw. entfernt werden. Wenn das letzte Element einer Liste entfernt wurde, liegt eine leere Liste vor.</p><p>Einstellmöglichkeiten:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-sorted-down">Typ, »Zahl«, »logischer Wert«, »Zeichenkette«, »Farbe« oder »Verbindung«.</li><li class="typcn typcn-plus">Erzeuge ein weiteres Listenelement am Ende der bestehenden Liste.</li><li class="typcn typcn-minus"> Lösche das Listenelement am Ende der bestehenden Liste.</li><li class="typcn typcn-arrow-left">Werte, die dem Listentyp entsprechen. Hiermit können Anfangswerte gesetzt werden.</li>
 </ul><br><p>Rückgabewert:

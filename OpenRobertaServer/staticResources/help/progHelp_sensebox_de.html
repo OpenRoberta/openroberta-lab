@@ -1,7 +1,7 @@
-<head><title></title><meta http-equiv="content-type" content="text/html; charset=utf-8"></head><body><div id="helpContent"><div id="robControls_start_ardu" class="help beginner"><h3 id="BlockbeschreibungsenseBox-»Programmstart«"><span style="color: rgb(0,0,0);">»Programmstart«</span><span style="color: rgb(0,0,0);"> </span></h3><p>Jedes Programm beginnt mit dem »Programmstart-Block«, welcher nicht gelöscht werden kann. Den ersten Block, den man verwenden möchte, verbindet man direkt mit der  »Sequenzverbindung« am Programmstart-Block. </p><p>Einstellmöglichkeiten:
+<head><title></title><meta http-equiv="content-type" content="text/html; charset=utf-8"></head><body><div id="helpContent"><div id="robControls_start_ardu" class="help beginner"><h3 id="BlockbeschreibungsenseBox-»Start«"><span style="color: rgb(0,0,0);">»Start«</span><span style="color: rgb(0,0,0);"> </span></h3><p>Jedes Programm beginnt mit dem »Start«-Block, welcher nicht gelöscht werden kann. Den ersten Block, den man verwenden möchte, verbindet man direkt mit der  »Sequenzverbindung« am »Wiederhole unendlich oft«-Block.</p><p>Für Systeme, die auf einem Arduino oder einem ähnlichen Mikrocontroller basieren, ist hier immer eine »Wiederhole unendlich oft«-Schleife mit dem Start-Block verbunden, die ebenfalls nicht entfernt werden kann. Dies liegt daran, dass solche Mikrocontroller meistens für genau eine Aufgabe programmiert werden, die dann immer wieder ausgeführt werden soll. Wenn du nur einen Durchlauf des Programm möchtest, kannst du den Roboter am Ende der Schleife einfach für eine sehr lange Zeit warten lassen.</p><p>Einstellmöglichkeiten:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-plus">Erzeuge eine neue globale Variable.</li><li class="typcn typcn-minus"><span>Entferne die globale Variable.</span></li>
-</ul><br><p>Wenn globale Variablen erzeugt wurden:
+</ul><p class="auto-cursor-target">Wenn globale Variablen erzeugt wurden:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-pen">Text, Name der Variablen.</li><li class="typcn typcn-arrow-sorted-down">Typ der Variablen.</li><li class="typcn typcn-arrow-left">Wert, Anfangswert der Variablen.</li>
 </ul></div><div id="robActions_serial_print" class="help beginner"><h3 id="BlockbeschreibungsenseBox-»ZeigeaufSerialMonitor...«">»Zeige auf Serial Monitor ... «</h3><p>Mit diesem Block kannst du einen Text per Serial Port an deinen Computer schicken. Dazu muss deine senseBox per USB mit deinem Computer verbunden sein. Wie du einen Serial Monitor installierst, kannst du <a href="https://jira.iais.fraunhofer.de/wiki/display/ORInfo/Open+Roberta+Connector">hier </a>nachlesen.</p><p>Eingabewerte:
@@ -43,38 +43,38 @@
 </ul></div><div id="robSensors_key_getSample" class="help beginner"><h3 id="BlockbeschreibungsenseBox-»Taste...gedrückt?«">»Taste ... gedrückt?«</h3><p>Mit diesem Block kannst du den Zustand einer Taste deiner senseBox abfragen.</p><p>Einstellungen:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-sorted-down">Option, Name bzw. Port des Tasters.</li>
-</ul>Rückgabewert:
-<ul style="margin-top: 0; margin-bottom: 10px">
+</ul><br><p>Rückgabewert:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-right">logischer Wert, »wahr«, wenn der Taster gedrückt ist, sonst »falsch«.</li>
 </ul><br></div><div id="robSensors_light_getSample" class="help beginner"><h3 id="BlockbeschreibungsenseBox-»GibLicht%Lichtsensor...«">»Gib Licht % Lichtsensor ... «</h3><p>Mit diesem Block kannst du den eingebauten Lichtsensor deiner senseBox abfragen. Dieser Sensor misst die Helligkeit des einfallenden Lichts.</p><p>Einstellungen:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-sorted-down">Option, Name bzw. Port des Lichtsensors.</li>
-</ul>Rückgabewert:
-<ul style="margin-top: 0; margin-bottom: 10px">
+</ul><br><p>Rückgabewert:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-right">Zahl, gemessener Lichteinfall in Prozent. je höher die zahl, desto heller ist die Umgebung.</li>
 </ul><br></div><div id="robSensors_potentiometer_getSample" class="help beginner"><h3 id="BlockbeschreibungsenseBox-»GibWertVPotentiometer...«">»Gib Wert V Potentiometer ... «</h3><p>Mit diesem Block kannst du die Spannung eines angeschlossenen Potentiometer messen.</p><p>Einstellungen:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-sorted-down">Option, Name bzw. Port des angeschlossenen Potentiometers.</li>
-</ul>Rückgabewert:
-<ul style="margin-top: 0; margin-bottom: 10px">
+</ul><br><p>Rückgabewert:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-right">Zahl, gemessene Spannung in Volt.</li>
 </ul><br></div><div id="robSensors_sound_getSample" class="help beginner"><h3 id="BlockbeschreibungsenseBox-»GibGeräusch%Geräuschsensor...«">»Gib Geräusch % Geräuschsensor ... «</h3><p>Mit diesem Block kannst du den eingebauten Geräuschsensor deiner senseBox abfragen.</p><p>Einstellungen:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-sorted-down">Option, Name bzw. Port des Geräuschsensors.</li>
-</ul>Rückgabewert:
-<ul style="margin-top: 0; margin-bottom: 10px">
+</ul><br><p>Rückgabewert:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-right">Zahl, gemessene Lautstärke in einem Bereich von 0 bis 1023. Je höher diese zahl ist, desto höher ist die Lautstärke.</li>
 </ul><br></div><div id="robSensors_ultrasonic_getSample" class="help beginner"><h3 id="BlockbeschreibungsenseBox-»GibAbstandcmUltraschallsensor...«">»Gib Abstand cm Ultraschallsensor ... «</h3><p>Mit diesem Block kannst du den Ultraschallsensor deiner senseBox abfragen. Dieser Sensor misst den Abstand zum nächsten Hindernis, indem er Ultraschallwellen aussendet und misst, wie lange diese benötigen um zurück zu kehren.</p><p>Einstellungen:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-sorted-down">Option, Name bzw. Port des angeschlossenen Sensors.</li>
-</ul>Rückgabewert:
-<ul style="margin-top: 0; margin-bottom: 10px">
+</ul><br><p>Rückgabewert:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-right">Zahl, Abstand zum nächsten Hindernis in Zentimetern. Die Messungenauigkeit liegt bei etwa 3 Zentimetern.</li>
 </ul><br></div><div id="robSensors_humidity_getSample" class="help beginner"><h3 id="BlockbeschreibungsenseBox-»Gib...Luftfeuchtigkeit/TemperaturSensorHDC1080...«">»Gib ... Luftfeuchtigkeit/ Temperatur Sensor HDC1080 ... «</h3><p>Mit diesem Block kannst den HDC1080-Sensor an deiner senseBox steuern. Dieser Sensor kann sowohl die Temperatur als auch die Luftfeuchtigkeit messen.</p><p>Einstellungen:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-sorted-down">Option, Eigenschaft die gemessen werden soll. Entweder Temperatur oder Luftfeuchtigkeit.</li><li class="typcn typcn-arrow-sorted-down">Option, Name bzw. Port des angeschlossenen Sensors.</li>
-</ul>Rückgabewert:
-<ul style="margin-top: 0; margin-bottom: 10px">
+</ul><br><p>Rückgabewert:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-right">Zahl, gemessene Temperatur in °C oder Luftfeuchtigkeit in Prozent</li>
 </ul><br></div><div id="robSensors_temperature_getSample" class="help beginner"><h3 id="BlockbeschreibungsenseBox-»Gib..Temperatur/LuftdruckSensorBMP280...«">»Gib .. Temperatur/ Luftdruck Sensor BMP280...  «</h3><p>Mit diesem Block kannst du den BMP280-Sensor steuern. Dieser Sensor kann sowohl die Temperatur als auch den Luftdruck messen.</p><p>Einstellungen:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
@@ -82,26 +82,26 @@
 <ul style="margin-top: 0; margin-bottom: 10px">
 Option, Name bzw. Port des angeschlossenen Sensors.
 </ul>
-</ul>Rückgabewert:
-<ul style="margin-top: 0; margin-bottom: 10px">
+</ul><br><p>Rückgabewert:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-right">Zahl, Temperatur in °C und Luftdruck in Pascal.</li>
 </ul><br></div><div id="robSensors_lightveml_getSample" class="help beginner"><h3 id="BlockbeschreibungsenseBox-»Gib...%sichtbares/UVLichtSensor...«">»Gib ... % sichtbares/UV Licht Sensor ... «</h3><p>Mit diesem Block kannst du den Licht-/UV-Sensor deiner senseBox abfragen. Dieser Sensor kann sowohl Licht im sichtbaren als auch im UV-Bereich messen.</p><p>Einstellungen:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-sorted-down">Option, Auswahl des Lichts, das gemessen werden soll.</li><li class="typcn typcn-arrow-sorted-down">Option, Name bzw. Port des Sensors.</li>
-</ul>Rückgabewert:
-<ul style="margin-top: 0; margin-bottom: 10px">
+</ul><br><p>Rückgabewert:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-right">Zahl, die gemessene Lichtstärke in Lux für sichtbares Licht und in Mikrowatt pro Quadratzentimeter für UV-Licht.</li>
 </ul><br></div><div id="robSensors_accelerometer_getSample" class="help beginner"><h3 id="BlockbeschreibungsenseBox-»Gib...gBeschleunigungssensor...«">»Gib ... g Beschleunigungssensor ... «</h3><p>Mit diesem Block kannst du den Beschleunigungssensor deiner senseBox abfragen. Dieser Sensor misst die Beschleunigung deiner senseBox in die gewählte Richtung.</p><p>Einstellungen:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-sorted-down">Option, Achse bzw. Richtung die gemessen werden soll.</li><li class="typcn typcn-arrow-sorted-down">Option, Name bzw. Port des Sensors.</li>
-</ul>Rückgabewert:
-<ul style="margin-top: 0; margin-bottom: 10px">
+</ul><br><p>Rückgabewert:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-right">Zahl, Wert der Beschleunigung in die gewählte Richtung verglichen mit der Standard-Erdbeschleunigung.</li>
 </ul><br></div><div id="robSensors_particle_getSample" class="help beginner"><h3 id="BlockbeschreibungsenseBox-»Gib...KonzentrationSDS011Feinstaubsensor«">»Gib ... Konzentration SDS011 Feinstaubsensor«</h3><p>Mit diesem Block kannst du den Feinstaubsensor deiner senseBox abfragen. Der Feinstaubsensor kann entweder Partikel mit einem Durchmesser von 2,5 Mikrometer oder 10 Mikrometer messen.</p><p>Einstellungen:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-sorted-down">Option, Größe der Partikel, die du messen möchtest.</li><li class="typcn typcn-arrow-sorted-down">Option, Name bzw. Port des Feinstaubsensors..</li>
-</ul>Rückgabewert:
-<ul style="margin-top: 0; margin-bottom: 10px">
+</ul><br><p>Rückgabewert:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-right">Zahl, Konzentration der gewählten Partikel in Mikrogramm/m^3.</li>
 </ul><br></div><div id="robSensors_gps_getSample" class="help expert"><h3 id="BlockbeschreibungsenseBox-»Gib...GPS-Empfänger...«[Experten-Block]">»Gib ... GPS-Empfänger ... « <span class="typcn typcn-star"></span></h3><p>Mit diesem Block kannst du einen angeschlossenen GPS-Empfänger abfragen. Der GPS-Empfänger kann verschiedene Werte wie Position, Geschwindigkeit und Höhe des Empfängers messen.</p><p>Einstellungen:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
@@ -109,11 +109,19 @@ Option, Name bzw. Port des angeschlossenen Sensors.
 </ul><br><p>Rückgabewert:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-right">Zahl, Wert der ausgewählten Eigenschaft.</li>
-</ul><br></div><div id="robSensors_timer_getSample" class="help beginner"><h3 id="BlockbeschreibungsenseBox-»GibWertmsZeitgeber...«">»Gib Wert ms Zeitgeber ... «</h3><p>Mit diesem Block kannst du den momentanen Wert eines Zeitgebers abfragen.</p><p>Einstellungen:
+</ul><br></div><div id="robSensors_environmental_getSample" class="help expert"><h3 id="BlockbeschreibungsenseBox-»gib...UmweltsensorBME680«[Experten-Block]">»gib ... Umweltsensor BME680 « <span class="typcn typcn-star"></span></h3><p>Mit diesem Block kannst du einen Umweltsensor abfragen, den du an einen der I²C-Anschlüsse der senseBox angeschlossen hast. Dieser Sensor kann eine Vielzahl verschiedener Eigenschaften deiner Umwelt messen. Dazu gehören u.a. die Temperatur, die Luftfeuchtigkeit, der Luftdruck und die Luftqualität.</p><p>Die Innenraum-Luftqualität (IAQ) wird in sieben Bereiche unterteilt. Dabei gilt</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="normalBullet"><strong>IAQ &lt; 50 :  </strong>reine Luft, keine Verunreinigungen feststellbar.</li><li class="normalBullet"><strong>51 &lt; IAQ &lt; 100 :  </strong>Fast reine Luft, wenige Verunreinigungen feststellbar.</li><li class="normalBullet"><strong>101 &lt; IAQ &lt; 150 :  </strong>leicht verschmutzte Luft, Lüften wird empfohlen.</li><li class="normalBullet"><strong>151 &lt; IAQ &lt; 200:  </strong>mittlere Verschmutzung der Luft, Lüften mit frischer Luft wird empfohlen.</li><li class="normalBullet"><strong>201 &lt; IAQ &lt; 250 :  </strong>schwere Verunreinigung der Luft, alle Fenster und Türen sollten geöffnet werden.</li><li class="normalBullet"><strong>251 &lt; IAQ &lt; 350 :  </strong>sehr schwere Verunreinigung der Luft, die Ursache sollte identifiziert und behoben werden.</li><li class="normalBullet"><strong>351 &lt; IAQ: </strong>Extrem verunreinigte Luft, es wird empfohlen den Raum umgehend zu verlassen und die Ursache der Verschmutzung zu beheben.</li>
+</ul><br><p>Des weiteren kann der Sensor aus der Verschmutzung der Umgebungsluft die Äquivalenzwerte in CO2 und Atemluft bestimmen. Diese werden in ppm, also Parts Per Million angegeben. Dies beschreibt ein Gasatom pro eine Millionen normaler Luftatome. Diese Daten stellen allerdings nur einen Schätzwert da, da der Sensor diese nicht direkt messen kann.</p><p>Zuletzt kann der Sensor einen Kalibrierungswert ausgeben. Dieser zeigt an, wie genau die Messung der IAQ ist. Nur wenn dieser Kalibrierungswert 3 zurück gibt, ist die Messung genau. Zu Beginn einer Messung der IAQ muss der Sensor zunächst etwa 25 min kalibriert werden. Dies geschieht automatisch, allerdings sind Messungen erst nach diesen 25 min präzise.</p><div class="confluence-information-macro confluence-information-macro-warning"><div class="confluence-information-macro-body"><p>Der Gassensor des Umweltsensors kann nicht gleichzeitig mit dem BMP280 Luftdrucksensor verwendet werden.</p></div></div><p class="auto-cursor-target">Optionen:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-sorted-down">Option, wähle die Eigenschaft aus, die du messen möchtest. Du kannst hier wählen zwischen Temperatur, Luftdruck, Luftfeuchtigkeit, Luftqualität (IAQ), Kalibrierungswert, CO2 Äquivalent und VOC Atemluft Äquivalent.</li>
+</ul>Rückgabewerte:
+<ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right">Zahl, Temperatur der Umgebung in °C</li><li class="typcn typcn-arrow-right">Zahl, Luftdruck der Umgebung in hPa.</li><li class="typcn typcn-arrow-right">Zahl, Luftfeuchtigkeit der Umgebung in %.</li><li class="typcn typcn-arrow-right">Zahl, Innenraumluftqualität (IAQ), Zahl zwischen 0 und 500. </li><li class="typcn typcn-arrow-right">Zahl, Kalibrierungswert, ganze Zahl zwischen 0 und 3.</li><li class="typcn typcn-arrow-right">Zahl, CO2 Äquivalent aus der Luftverschmutzung, angegeben in Parts Per Million (ppm). </li><li class="typcn typcn-arrow-right">Zahl, Atemluft Äquivalent der Luftverschmutzung, angegeben in Parts Per Million (ppm).</li>
+</ul></div><div id="robSensors_timer_getSample" class="help beginner"><h3 id="BlockbeschreibungsenseBox-»GibWertmsZeitgeber...«">»Gib Wert ms Zeitgeber ... «</h3><p>Mit diesem Block kannst du den momentanen Wert eines Zeitgebers abfragen.</p><p>Einstellungen:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-sorted-down">Option, Nummer des Zeitgebers, den du abfragen möchtest.</li>
-</ul>Rückgabewert:
-<ul style="margin-top: 0; margin-bottom: 10px">
+</ul><br><p>Rückgabewert:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-right">Zahl, Zeit seit der letzten Rücksetzung des Zeitgebers in Millisekunden.</li>
 </ul><br></div><div id="robSensors_timer_reset" class="help beginner"><h3 id="BlockbeschreibungsenseBox-»SetzeZeitgeber...zurück«">»Setze Zeitgeber ... zurück «</h3><p>Mit diesem Block kannst du einen der Zeitgeber zurücksetzen bzw. neu starten.</p><p>Einstellungen:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
@@ -253,10 +261,22 @@ Option, Name bzw. Port des angeschlossenen Sensors.
 </ul><p>Rückgabewert:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-right">Zahl, eine ganzzahlige Zufallszahl, die innerhalb der eingestellten Grenzen liegt</li>
-</ul><br></div><div id="math_random_float" class="help expert"><h3 style="text-align: left;" id="BlockbeschreibungsenseBox-»Zufallszahl«[Experten-Block]">»Zufallszahl« <span class="typcn typcn-star"></span></h3><p style="text-align: left;">Mit dem Block »Zufallszahl« wird eine Zufallszahl zwischen 0,0 und 1,0 bestimmt.</p><p style="text-align: left;">Rückgabewert:
+</ul><br></div><div id="math_random_float" class="help expert"><h3 style="text-align: left;" id="BlockbeschreibungsenseBox-»Zufallszahl«">»Zufallszahl« </h3><p style="text-align: left;">Mit dem Block »Zufallszahl« wird eine Zufallszahl zwischen 0,0 und 1,0 bestimmt.</p><p style="text-align: left;">Rückgabewert:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-right">Zahl, eine positive Zufallszahl kleiner oder gleich 1.</li>
-</ul></div><div id="text" class="help beginner notBob3"><h3 style="text-align: left;" id="BlockbeschreibungsenseBox-»Text«">»Text«</h3><p style="text-align: left;">Mit dem einfachen »Text«-Block wird ein Stück Text bereitgestellt.</p><p style="text-align: left;">Eingabewert:
+</ul></div><div id="math_cast_toString" class="help expert notWedo notNxt notBotnroll notNao notBob3 notSensebox notMbot notEdison notFestbionics notArduino"><h3 id="BlockbeschreibungsenseBox-»wandle...uminZeichenkette«[Experten-Block]">»wandle ... um in Zeichenkette« <span class="typcn typcn-star"></span></h3><p><span style="letter-spacing: -0.006em;">Dieser Block wandelt eine Zahl in eine Zeichenkette um, die diese Zahl enthält. Als </span><span style="letter-spacing: -0.084px;">Beispiel</span><span style="letter-spacing: -0.006em;"> wird die Zahl 123 in die Zeichenkette »123« umgewandelt.</span></p><p><span style="letter-spacing: -0.006em;">Optionen und Eingabewerte:</span>
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-left">Zahl, die Zahl die in eine Zeichenkette umgewandelt werden soll.</li>
+</ul><br><p><span style="letter-spacing: -0.006em;">Rückgabewerte:</span>
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right">Zeichenkette, die Zeichenkette bestehend aus der gewählten Zahl.</li>
+</ul><br></div><div id="math_cast_toChar" class="help expert notWedo notNxt notBotnroll notNao notBob3 notSensebox notMbot notEdison notFestbionics notArduino"><h3 id="BlockbeschreibungsenseBox-»wandle...uminZeichen«[Experten-Block]">»wandle ... um in Zeichen« <span class="typcn typcn-star"></span></h3><p><span style="letter-spacing: -0.006em;">Dieser Block wandelt eine einzelne Zahl den dazugehörigen ASCII-Buchstaben um. Falls es zu dieser Zahl kein dazugehöriges ASCII-Zeichen gibt, wird eine leere Zeichenkette weitergegeben. So wird z.B. die Zahl 97 in den Buchstaben »a« umgewandelt.</span></p><p><span style="letter-spacing: -0.006em;">Optionen und Eingabewerte:</span>
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-left">Zahl, der ASCII-Code, der in das dazugehörige Zeichen umgewandelt werden soll. Zahl zwischen 0 und 255.</li>
+</ul><br><p><span style="letter-spacing: -0.006em;">Rückgabewerte:</span>
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right">Zeichen, das Zeichen das dem gewählten ASCII-Code entspricht.</li>
+</ul><br></div><div id="text" class="help beginner notBob3"><h3 style="text-align: left;" id="BlockbeschreibungsenseBox-»Text«">»Text«</h3><p style="text-align: left;">Mit dem einfachen »Text«-Block wird ein Stück Text bereitgestellt.</p><p style="text-align: left;">Eingabewert:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-pen">Zeichenkette, bestehend aus beliebigen Zeichen</li>
 </ul><p>Rückgabewert:
@@ -274,7 +294,19 @@ Option, Name bzw. Port des angeschlossenen Sensors.
 </ul><br></div><div id="robText_append" class="help expert notWedo notBob3"><h3 style="text-align: left;" id="BlockbeschreibungsenseBox-»Textanhängen«[Experten-Block]">»Text anhängen« <span class="typcn typcn-star"></span></h3><p style="text-align: left;">Mit dem »Text anhängen«-Block können Zeichenketten erweitert werden, z.B. indem an empfangene Nachrichten eine Signatur angehängt wird.</p><p style="text-align: left;">Eingabemöglichkeiten:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-left">Text, Zeichenkette, an die Text angehängt werden soll</li><li class="typcn typcn-arrow-left">Text, Zeichenkette, die an einen Text angehängt werden soll</li>
-</ul></div><div id="robLists_create_with" class="help expert notWedo notBob3"><h3 id="BlockbeschreibungsenseBox-»ErzeugeListe«[Experten-Block]">»Erzeuge Liste« <span class="typcn typcn-star"></span></h3><p>Der Block »Erzeuge eine leere Liste« erzeugt eine Liste ohne Inhalt. Der Block »Liste« erzeugt eine Liste mit einigen voreingestellten Werten. Mit + und - können weitere Listenelemente am Ende hinzugefügt bzw. entfernt werden. Wenn das letzte Element einer Liste entfernt wurde, liegt eine leere Liste vor.</p><p>Einstellmöglichkeiten:
+</ul></div><div id="text_cast_string_toNumber" class="help expert notWedo notNxt notBotnroll notNao notBob3 notSensebox notMbot notEdison notFestbionics notArduino"><h3 id="BlockbeschreibungsenseBox-»wandle...uminZahl«[Experten-Block]">»wandle ... um in Zahl« <span class="typcn typcn-star"></span></h3><p><span style="letter-spacing: -0.006em;">Dieser Block wandelt eine Zeichenkette in eine Zahl um, falls dies möglich ist. Wenn eine Zeichenkette also nur Zahlen enthält, kann dieser Block die Zeichenkette in eine Zahl umwandeln. Wenn der Block keine Zahlen enthält, gibt dieser Block »NaN« in der Simulation des Open Roberta Labs weiter, kann aber auch ein anderes Verhalten aufweisen, welches von der verwendeten Programmiersprache des Roboters abhängt. </span><span style="letter-spacing: -0.006em;">Falls die Zeichenkette zwar mit Zahlen beginnt, aber danach weitere Zeichen enthält, die keine Zahlen sind, gibt dieser Block nur die Zahlen weiter und stoppt, sobald das erste Zeichen in der Zeichenkette steht. Also als Beispiel macht dieser Block aus der Zeichenkette »52abcd« die Zahl 52.</span></p><p><span style="letter-spacing: -0.006em;">Optionen und Eingabewerte:</span>
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-left">Zeichenkette, die nur aus Zahlen besteht und in eine Zahl umgewandelt werden soll.</li>
+</ul><br><p><span style="letter-spacing: -0.006em;">Rückgabewerte:</span>
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right">Zahl, die zahl aus der die Zeichenkette bestand.</li>
+</ul><br></div><div id="text_cast_char_toNumber" class="help expert notWedo notNxt notBotnroll notNao notBob3 notSensebox notMbot notEdison notFestbionics notArduino"><h3 id="BlockbeschreibungsenseBox-»wandleZeichen...anPosition...inZahl«[Experten-Block]">»wandle Zeichen ... an Position ... in Zahl« <span class="typcn typcn-star"></span></h3><p><span style="letter-spacing: -0.006em;">Dieser Block wandelt einen Buchstaben oder ein Zeichen aus einer Zeichenkette in die dazugehörige ASCII-Nummer um. Jedes Zeichen hat dabei eine dazugehörige Nummer in der ASCII-Tabelle. So wird z.B. ein kleines »a« in die Zahl 97 umgewandelt.</span></p><p><span style="letter-spacing: -0.006em;">Optionen und Eingabewerte:</span>
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-left">Zeichenkette, aus dieser wird ein einzelnes Zeichen ausgewählt.</li><li class="typcn typcn-arrow-left">Zahl, die Stelle des Zeichens das umgewandelt werden soll. Beachte das die Nummerierung bei 0 anfängt.</li>
+</ul><br><p>Rückgabewerte:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-right">Zahl, der ASCII-Code des ausgewählten Zeichens.</li>
+</ul><br></div><div id="robLists_create_with" class="help expert notWedo notBob3"><h3 id="BlockbeschreibungsenseBox-»ErzeugeListe«[Experten-Block]">»Erzeuge Liste« <span class="typcn typcn-star"></span></h3><p>Der Block »Erzeuge eine leere Liste« erzeugt eine Liste ohne Inhalt. Der Block »Liste« erzeugt eine Liste mit einigen voreingestellten Werten. Mit + und - können weitere Listenelemente am Ende hinzugefügt bzw. entfernt werden. Wenn das letzte Element einer Liste entfernt wurde, liegt eine leere Liste vor.</p><p>Einstellmöglichkeiten:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-sorted-down">Typ, »Zahl«, »logischer Wert«, »Zeichenkette«, »Farbe« oder »Verbindung«.</li><li class="typcn typcn-plus">Erzeuge ein weiteres Listenelement am Ende der bestehenden Liste.</li><li class="typcn typcn-minus"> Lösche das Listenelement am Ende der bestehenden Liste.</li><li class="typcn typcn-arrow-left">Werte, die dem Listentyp entsprechen. Hiermit können Anfangswerte gesetzt werden.</li>
 </ul><br><p>Rückgabewert:
