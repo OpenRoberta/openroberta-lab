@@ -1,7 +1,8 @@
 <head><title></title><meta http-equiv="content-type" content="text/html; charset=utf-8"></head><body><div id="helpContent"><div id="robControls_start" class="help beginner"><h3 id="ProgrammingblocksCalliope-»start«"><span style="color: rgb(0,0,0);">»start«</span><span style="color: rgb(0,0,0);"> </span></h3><p>Each program starts with the red »start« block.</p><p>This block is always available in the Open Roberta Lab and cannot be deleted. The little triangle below the start block is called  »sequence connector«. The first block you want to use will be connected by using the »sequence connector« at the start block.  The sequence connector color changes to yellow when a suitable block comes into its range.</p><p>Settings:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-plus">create a new global variable</li><li class="typcn typcn-minus">delete the global variable</li>
-</ul><br>If global variables have been created:<ul style="margin-top: 0; margin-bottom: 10px">
+</ul><br><p><span style="letter-spacing: 0.0px;">If global variables have been created:</span>
+</p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-pen">Text, name of the variable</li><li class="typcn typcn-arrow-sorted-down">Type of the variable, »Number«, »Boolean«, »String«, »Colour«, »Image«, »List Number«, »List Boolean«, »List String«, »List Image«</li><li class="typcn typcn-arrow-left">Value, that corresponds to the variable type. This is the initial value of the variable.</li>
 </ul></div><div id="mbedActions_display_text" class="help beginner"><h3 id="ProgrammingblocksCalliope-»showtext/character«"><span style="color: rgb(0,0,0);">»show text/character«</span></h3><p>With the »show text/character« block you can display text and numbers on the display of your robot. </p><p>Settings and input values:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
@@ -48,10 +49,10 @@
 </ul></div><div id="mbedActions_motors_stop" class="help expert"><h3 id="ProgrammingblocksCalliope-»stopmotorportA+B«">» stop motor port A + B «</h3><p>With this block you can stop the two motors connected directly to the Calliope mini.</p></div><div id="mbedActions_motor_on" class="help expert"><h3 id="ProgrammingblocksCalliope-»motor...onspeed%...«[Expert-Block]">»motor ... on speed % ... « <span class="typcn typcn-star"></span></h3><p>The block »<span style="color: rgb(0,0,255);"><span style="color: rgb(0,0,0);">motor <span style="color: rgb(0,0,255);"><span style="color: rgb(0,0,0);">... on speed</span></span></span></span><span style="color: rgb(0,0,255);"><span style="color: rgb(0,0,0);">« can be used to turn on a motor and to control its speed</span></span>.</p><p>You can choose between a motor connected directly to the Calliope mini or a motor of the Calli:bot.</p><p>Settings and input value:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-sorted-down">Motor; pick the motor you want to control.</li><li class="typcn typcn-arrow-left">number, speed you want the motor to rotate at, between 0 and 100.</li>
-</ul></div><div id="mbedActions_motor_stop" class="help expert"><h3 id="ProgrammingblocksCalliope-»stopmotor...«[Expert-Block]">»stop motor ... « <span class="typcn typcn-star"></span></h3><p>With this block you can stop one of the connected motors at once.</p><p>Settings:</p><li class="typcn typcn-arrow-sorted-down">
-<ul style="margin-top: 0; margin-bottom: 10px">
-option, choose the motor that you want to stop.
-</ul></li></div><div id="mbedActions_single_motor_on" class="help expert"><h3 id="ProgrammingblocksCalliope-»motoronspeed%...«[Expert-Block]">»motor on speed % ... « <span class="typcn typcn-star"></span></h3><p>With this block you can control the motor connected to motor control pins aboce the RGB-LED.</p><p>Input value:
+</ul></div><div id="mbedActions_motor_stop" class="help expert"><h3 id="ProgrammingblocksCalliope-»stopmotor...«[Expert-Block]">»stop motor ... « <span class="typcn typcn-star"></span></h3><p>With this block you can stop one of the connected motors at once.</p><p>Settings:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
+<li class="typcn typcn-arrow-sorted-down">option, choose the motor that you want to stop.</li>
+</ul></div><div id="mbedActions_single_motor_on" class="help expert"><h3 id="ProgrammingblocksCalliope-»motoronspeed%...«[Expert-Block]">»motor on speed % ... « <span class="typcn typcn-star"></span></h3><p>With this block you can control the motor connected to motor control pins aboce the RGB-LED.</p><p>Input value:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-left">number, speed you want the motor to rotate at, between 0 and 100.</li>
 </ul></div><div id="mbedActions_single_motor_stop" class="help expert"><h3 id="ProgrammingblocksCalliope-»motorstop...«[Expert-Block]">»motor stop ... « <span class="typcn typcn-star"></span></h3><p>Using this block you can stop the connected motor either immediatly, let it run out or make it go to sleep.</p><p>Settings:
@@ -84,14 +85,14 @@ option, choose the motor that you want to stop.
 </ul></div><div id="robSensors_key_getSample" class="help beginner"> <h3 id="ProgrammingblocksCalliope-»button...pressed?«">»button ... pressed?«</h3><p>With the block »button ... pressed?« you can "tell" another block whether a button is pressed or not. This block returns the logical values <em>true = pressed</em> or <em>false = not pressed</em>. This block can only be used in conjunction with another block which requires a logical value as an input parameter, for example together with the »if do« block.</p><p>Settings:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-sorted-down">Button, select the button you want to check.</li>
-</ul>Return value:
-<ul style="margin-top: 0; margin-bottom: 10px">
+</ul><br><p>Return value:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-right">Boolean value: »true«, if the button is pressed, otherwise »false«.</li>
 </ul> </div><div id="robSensors_pintouch_getSample" class="help beginner"> <h3 id="ProgrammingblocksCalliope-»ispin...touched?«">»is pin ... touched?«</h3><p>You can check whether a pin of the Calliiope is touched or not by using the block »is pin ... touched?« . This block returns logical values (true if the pin is touched and false if not)</p><p>Settings:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-sorted-down">Pin, select the pin you want to check.</li>
-</ul>Return value:
-<ul style="margin-top: 0; margin-bottom: 10px">
+</ul><br><p>Return value:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-right">Logical value: »true«, if the pin is touched, »false« else.</li>
 </ul> </div><div id="robSensors_gesture_getSample" class="help beginner"> <h3 id="ProgrammingblocksCalliope-»gesture...aktive?«">»gesture ... aktive?«</h3><p>With the block  »gesture ... aktive?« you can  "tell" another block whether the Calliope is in a specific gesture or not .</p><p>If the Calliope is in the checked gesture the return value will be true. If not it will be false.</p><p>Settings:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
@@ -108,7 +109,7 @@ option, choose the motor that you want to stop.
 </ul></div><div id="mbedSensors_timer_reset" class="help beginner"><h3 id="ProgrammingblocksCalliope-»resettimer«">»reset timer«</h3><p>With the block »reset timer« the internal timer can be reseted to the value 0.</p> </div><div id="robSensors_temperature_getSample" class="help beginner"> <h3 id="ProgrammingblocksCalliope-»getvaluetemperaturesensor«">»get value temperature sensor«</h3><p>with the »get value temperature sensor« you can read out the currently measured temperature.</p><p>Return value:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-right">Number; Temperature in degrees.</li>
-</ul> </div><div id="robSensors_rssi_getSample" class="help expert"> <h3 id="ProgrammingblocksCalliope-»getvaluesignalstrength«[Expert-Block]">»get value signal strength « <span class="typcn typcn-star"></span></h3><p>With this block you can "sense" the brightness of your surroundings. This block queries the built-in light sensor of the Calliope mini.</p><p>return value:
+</ul> </div><div id="robSensors_rssi_getSample" class="help expert"> <h3 id="ProgrammingblocksCalliope-»getvaluesignalstrength«[Expert-Block]">»get value signal strength « <span class="typcn typcn-star"></span></h3><p>With this block you can "sense" the brightness of your surroundings. This block queries the built-in light sensor of the Calliope mini.</p><p>Return value:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-right">number, strength of the last received message.</li>
 </ul><br> </div><div id="robSensors_light_getSample" class="help beginner"> <br><h3 id="ProgrammingblocksCalliope-»getvalue%lightsensor«">»get value % light sensor«</h3><p>With the block »get value ambient light« you can measure the brightness of the ambient light.</p><p>Return value:
@@ -117,8 +118,8 @@ option, choose the motor that you want to stop.
 </ul> </div><div id="robSensors_pin_getSample" class="help expert"> <h3 id="ProgrammingblocksCalliope-»getanalog/digitalvaluepin...«[Expert-Block]">»get analog/digital value pin ...« <span class="typcn typcn-star"></span></h3><p>With the »get analog/digital value pin ...« block you can read out a analog or digital input value. You can connect other devices or additional modules to a  pin.</p><p>Settings:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-sorted-down">Analog/Digital; which kind of signal do you want to read?</li><li class="typcn typcn-arrow-sorted-down">Pin, select the pin you want to read out.</li>
-</ul>Return value:
-<ul style="margin-top: 0; margin-bottom: 10px">
+</ul><br><p>Return value:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-right">Number; current input signal.</li>
 </ul> </div><div id="robSensors_gyro_getSample" class="help expert"> <h3 id="ProgrammingblocksCalliope-»getvaluerotation...«[Expert-Block]">»get value rotation ...« <span class="typcn typcn-star"></span></h3><p>Read the value of rotation in degrees, how the Calliope was pitched or rolled.</p><p>Settings:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
@@ -135,7 +136,7 @@ option, choose the motor that you want to stop.
 </ul> </div><div id="robSensors_humidity_getSample" class="help expert"><h3 id="ProgrammingblocksCalliope-»get...humiditysensor«[Expert-Block]">»get ... humidity sensor « <span class="typcn typcn-star"></span></h3><p>This block shows the value of the humidity sensor. This sensor measures both the relative humidity and the temperature of the environment and must be connected to pin A1.</p><p>The sensor used is an SHT31 and communicates via I²C with the Calliope mini.</p><p>Settings:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-sorted-down">option, choose which value you want to measure, either temperature or humidity.</li>
-</ul><br><p>return values:
+</ul><br><p>Return values:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-right">number, relative humidity in % or temperature in °C.</li>
 </ul> </div><div id="robSensors_ultrasonic_getSample" class="help expert"><h3 id="ProgrammingblocksCalliope-»getdistancecmultrasonicsensor...«[Expert-Block]">»get distance cm ultrasonic sensor ... « <span class="typcn typcn-star"></span></h3><p>This sensor measures the distance to the next object by emitting ultrasonic waves. This sensor must be connected either to pin A1 on the Calliope mini or to the intended location on the Calli:bot. The sensor used is a Grove ultrasonic sensor based on a HC-SR04, but with a built-in microcontroller that handles the communication.</p><p>Settings:
@@ -153,8 +154,8 @@ option, choose the motor that you want to stop.
 </ul></div><div id="robSensors_colourtcs3472_getSample" class="help expert"><h3 class="auto-cursor-target" id="ProgrammingblocksCalliope-»get...coloursensorTCS3472...«[Expert-Block]">»get ... colour sensor TCS3472 ... « <span class="typcn typcn-star"></span></h3><p>With this block you can poll the colour sensor TCS3472. This sensor can measure the colour, brightness and colour composition of its surroundings.</p><p>Options:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-sorted-down">Option, select the property you want to measure. You can choose between colour, light and RGB.</li><li class="typcn typcn-arrow-sorted-down">Option, choose the colour sensor you want to poll.</li>
-</ul>Return values:
-<ul style="margin-top: 0; margin-bottom: 10px">
+</ul><br><p>Return values:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-right">Colour, the colour of the surroundings.</li><li class="typcn typcn-arrow-right">Number, the brightness of the surroundings in percent.</li><li class="typcn typcn-arrow-right">List of numbers, dividing the colour into values of red, green and blue.</li>
 </ul><br></div><div id="robControls_if" class="help beginner"><h3 id="ProgrammingblocksCalliope-»ifdo«">»if do«<strong><br></strong></h3><p>With the block »if do« you can selectively trigger actions to be executed by your robot. The »if do« block therefore requires a logical value as an input parameter, the condition. Only if the condition of the »if« statement is true, the inserted block will be executed. In a nested »if do« block, if a further distinction was added, the first »if« condition is queried. If it is not fulfilled (condition = false), the second »else if« condition will be checked. Also this second condition requires a logical value as an input parameter.</p><p>The conditions may arbitrarily be expanded by clicking the "+" plus symbol. The "-" minus symbol reduces the block.</p><p>Settings and input values:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
@@ -387,28 +388,28 @@ option, choose the motor that you want to stop.
 </ul></div><div id="mbedColour_picker" class="help beginner notWedo notEv3 notNxt notMicrobit notBotnroll notNao notBob3 notArduino notSensebox notMbot notFestobionic notEdison"><h3 id="ProgrammingblocksCalliope-»Colourpicker«">»Colour picker «</h3><p>With this block you can choose from a pool of predefined colours for your robot.</p><p>options:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-sorted-down">option, choose the colour you want to use.</li>
-</ul><br><p>return value:
+</ul><br><p>Return value:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-right">colour, your selected colour.</li>
 </ul><br></div><div id="robColour_picker" class="help beginner notMicrobit notNao notFestobionic notEdison notCalliope"><h3 id="ProgrammingblocksCalliope-»Colourpicker«.1">»Colour picker «</h3><p>With this block you can choose from a pool of predefined colours for your robot.</p><p>options:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-sorted-down">option, choose the colour you want to use.</li>
-</ul><br><p>return value:
+</ul><br><p><span style="letter-spacing: 0.0px;">Return value:</span>
 </p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-right">colour, your selected colour.</li>
 </ul><br></div><div id="naoColour_picker" class="help beginner notWedo notEv3 notNxt notMicrobit notBotnroll notBob3 notArduino notSensebox notMbot notFestobionic notMicrobit notCalliope"><h3 id="ProgrammingblocksCalliope-»Colourpicker«.2">»Colour picker «</h3><p>With this block you can choose from a pool of predefined colours for your robot.</p><p>options:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-sorted-down">option, choose the colour you want to use.</li>
-</ul><br><p>return value:
+</ul><br><p>Return value:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-right">colour, your selected colour.</li>
-</ul><br></div><div id="mbedColour_rgb" class="help expert notWedo notEv3 notNxt notMicrobit notBotnroll notNao notBob3 notArduino notSensebox notMbot notFestobionic notEdison"><h3 id="ProgrammingblocksCalliope-»Colourwithred...green...blue...white...«[ExpertBlock]">»Colour with red ... green ... blue  ... white ... « <span class="typcn typcn-star"></span></h3><p>With this block you can create your own colour by mixing red, green and blue.</p><p>input values:
+</ul><br></div><div id="mbedColour_rgb" class="help expert notWedo notEv3 notNxt notMicrobit notBotnroll notNao notBob3 notArduino notSensebox notMbot notFestobionic notEdison"><h3 id="ProgrammingblocksCalliope-»Colourwithred...green...blue...white...«[ExpertBlock]">»Colour with red ... green ... blue  ... white ... « <span class="typcn typcn-star"></span></h3><p>With this block you can create your own colour by mixing red, green and blue.</p><p>Input values:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-left">number, the red part in your color. Value between 0 and 255.</li><li class="typcn typcn-arrow-left">number, the green part in your color. Value between 0 and 255.</li><li class="typcn typcn-arrow-left">number, the blue part in your color. Value between 0 and 255.</li><li class="typcn typcn-arrow-left">number, the brightness of your color. Value between 0 and 255.</li>
-</ul><br></div><div id="robColour_rgb" class="help expert notWedo notEv3 notNxt notMicrobit notBotnroll notNao notBob3 notArduino notSensebox notCalliope notFestobionic notEdison"><h3 id="ProgrammingblocksCalliope-»Colourwithred...green...blue...«[ExpertBlock]">»Colour with red ... green ... blue  ... « <span class="typcn typcn-star"></span></h3><p>With this block you can create your own colour by mixing red, green and blue.</p><p>input values:
+</ul><br></div><div id="robColour_rgb" class="help expert notWedo notEv3 notNxt notMicrobit notBotnroll notNao notBob3 notArduino notSensebox notCalliope notFestobionic notEdison"><h3 id="ProgrammingblocksCalliope-»Colourwithred...green...blue...«[ExpertBlock]">»Colour with red ... green ... blue  ... « <span class="typcn typcn-star"></span></h3><p>With this block you can create your own colour by mixing red, green and blue.</p><p>Input values:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-left">number, the red part in your color. Value between 0 and 255.</li><li class="typcn typcn-arrow-left">number, the green part in your color. Value between 0 and 255.</li><li class="typcn typcn-arrow-left">number, the blue part in your color. Value between 0 and 255.</li>
-</ul><br></div><div id="naoColour_rgb" class="help expert notWedo notEv3 notNxt notMicrobit notBob3 notBotnroll notMbot notFestobionic notEdison notCalliope"><h3 id="ProgrammingblocksCalliope-»Colourwithred...green...blue...«[ExpertBlock].1">»Colour with red ... green ... blue  ... « <span class="typcn typcn-star"></span></h3><p>With this block you can create your own colour by mixing red, green and blue.</p><p>input values:
+</ul><br></div><div id="naoColour_rgb" class="help expert notWedo notEv3 notNxt notMicrobit notBob3 notBotnroll notMbot notFestobionic notEdison notCalliope"><h3 id="ProgrammingblocksCalliope-»Colourwithred...green...blue...«[ExpertBlock].1">»Colour with red ... green ... blue  ... « <span class="typcn typcn-star"></span></h3><p>With this block you can create your own colour by mixing red, green and blue.</p><p>Input values:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-left">number, the red part in your color. Value between 0 and 255.</li><li class="typcn typcn-arrow-left">number, the green part in your color. Value between 0 and 255.</li><li class="typcn typcn-arrow-left">number, the blue part in your color. Value between 0 and 255.</li>
 </ul><br></div><div id="variables_set" class="help beginner"><h3 id="ProgrammingblocksCalliope-»setvariable«">»set variable«</h3><p>Using the block »set variable« will assign a value to a variable. Depending on the variable type the value may be assigned by an input connector.</p><p>Settings and input value:
@@ -435,13 +436,13 @@ option, choose the motor that you want to stop.
 </ul><br><p>Return value:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-right">Value of the specified data type.</li>
-</ul><br><br></div><div id="robProcedures_callnoreturn" class="help expert"><h3 id="ProgrammingblocksCalliope-»functioncallwithoutreturnvalue«">»function call without return value «</h3><p>With this block you can call a previous defined function in your program.</p><p>input values:
+</ul><br><br></div><div id="robProcedures_callnoreturn" class="help expert"><h3 id="ProgrammingblocksCalliope-»functioncallwithoutreturnvalue«">»function call without return value «</h3><p>With this block you can call a previous defined function in your program.</p><p>Input values:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-left">element, depending of the required input value of the function.</li>
-</ul></div><div id="robProcedures_callreturn" class="help expert"><h3 class="auto-cursor-target" id="ProgrammingblocksCalliope-»functioncallwithreturnvalue«">»function call with return value «</h3><p>With this block you can call a previous defined function in your program.</p><p>input values:
+</ul></div><div id="robProcedures_callreturn" class="help expert"><h3 class="auto-cursor-target" id="ProgrammingblocksCalliope-»functioncallwithreturnvalue«">»function call with return value «</h3><p>With this block you can call a previous defined function in your program.</p><p>Input values:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-left">element, depending on the required input value of the function.</li>
-</ul><p class="auto-cursor-target">return value:
+</ul><p class="auto-cursor-target">Return value:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-right">element,  depending on the  return value of the function.</li>
 </ul></div><div id="mbedImage_image" class="help beginner"><br><h3 id="ProgrammingblocksCalliope-»createimage«">»create image«<span style="color: rgb(0,0,0);"> </span></h3><p>You can use the block <span style="color: rgb(0,0,0);">»create image« to create images, which can be displayed on the Calliope. Every single light is  represented by a dot in the grid.</span></p><p><span style="color: rgb(0,0,0);">You can type in a number between 0 and 9 t<span style="color: rgb(0,0,0);">o adjust the brightness of the light or just a<span style="color: rgb(0,0,0);"> </span><span style="color: rgb(0,0,0);">»#« to turn it on. Every empty field represents a turned off light.</span></span></span></p><p>Input value:
@@ -453,14 +454,14 @@ option, choose the motor that you want to stop.
 </ul></div><div id="mbedImage_invert" class="help expert"><h3 id="ProgrammingblocksCalliope-»invertimage«[Expertblock]">»invert image« <span class="typcn typcn-star"></span></h3><p>An image will be inverted. Lightened LEDs of the calliope display will be switched of and vice versa.</p><p>Input value:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-left"><span>Image to be inverted<br></span></li>
-</ul>Return value:
-<ul style="margin-top: 0; margin-bottom: 10px">
+</ul><br><p>Return value:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-right">Image, the inversion of the input image</li>
 </ul></div><div id="mbedImage_shift" class="help expert"><h3 id="ProgrammingblocksCalliope-»shiftimage...«[Expertblock]">»shift image ...« <span class="typcn typcn-star"></span></h3><p>An image will be shifted by some positions on the Calliope display. You may select the shift direction and the amount of shifting.</p><p>Input values and settings:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-left"><span>Image to be shifted<br></span></li><li class="typcn typcn-arrow-sorted-down">Direction of shifting; up, down, left or right</li><li class="typcn typcn-arrow-left"><span>Number, amount for shifting<br></span></li>
-</ul>Return value:
-<ul style="margin-top: 0; margin-bottom: 10px">
+</ul><br><p>Return value:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-right">Image, shifted</li>
 </ul></div><div id="mbedCommunication_sendBlock" class="help expert"><br><h3 id="ProgrammingblocksCalliope-»sendmessage«[Expertblock]">»send message« <span class="typcn typcn-star"></span></h3><p>Using the  <span style="color: rgb(0,0,0);">»send message« block you can send a message, which can be received by every Calliope in reach.</span></p><p>Input value:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
@@ -468,7 +469,7 @@ option, choose the motor that you want to stop.
 </ul></div><div id="mbedCommunication_receiveBlock" class="help expert"><br><h3 id="ProgrammingblocksCalliope-»receivemessage«[Expertblock]">»receive message« <span class="typcn typcn-star"></span></h3><p>With <span style="color: rgb(0,0,0);">the »receive message« block you can receive messages, sent by other calliopes in reach and <span style="color: rgb(0,0,0);">»tell« them to another block.</span></span></p><p><span style="color: rgb(0,0,0);">Performing the <span style="color: rgb(0,0,0);">»receive message« block the Calliope is not waiting for a message, so it wont receive a message, if none was sent. Instead, it will return a default value if you did not receive a message, wich is an unknown string, 0 or "false", depending on the secelted data type.<br></span></span></p><p>If you want to receive a string, but want to check if you really received a message, you need to store the unknown default value for your calliope mini first. To do that, just add a new variable at the beginning of your program and save a string message in it at the beginning of your program with this block. Like this, your calliope will save the unknown value in the variable and you can use it later to compare the messages you receive against it.</p><p>Return values:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-right">message type, »String«.</li>
-</ul></div><div id="mbedCommunication_setChannel" class="help expert"><h3 id="ProgrammingblocksCalliope-»setchannelto...«[Expertblock]">»set channel to ... « <span class="typcn typcn-star"></span></h3><p>With this block you can set the channel of your Calliope mini. The Calliope mini can only send and receive messages on this channel, not on any others. So it is very important that two Calliope minis are set to the same channel for them to be able to communicate with one another.</p><p>input values:
+</ul></div><div id="mbedCommunication_setChannel" class="help expert"><h3 id="ProgrammingblocksCalliope-»setchannelto...«[Expertblock]">»set channel to ... « <span class="typcn typcn-star"></span></h3><p>With this block you can set the channel of your Calliope mini. The Calliope mini can only send and receive messages on this channel, not on any others. So it is very important that two Calliope minis are set to the same channel for them to be able to communicate with one another.</p><p>Input values:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-sorted-down">number, the channel for your Calliope mini.</li>
 </ul></div></div></body>
