@@ -94,4 +94,6 @@ export abstract class ARobotBehaviour {
     abstract assertAction(msg: string, left: any, op: string, right: any, value: boolean): void;
 
     abstract close(): void;
+
+    abstract setConfiguration(configuration: any): number;
 }

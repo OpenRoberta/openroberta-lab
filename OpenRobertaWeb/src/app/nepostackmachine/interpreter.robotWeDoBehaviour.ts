@@ -362,4 +362,7 @@ export class RobotWeDoBehaviour extends ARobotBehaviour {
             this.showTextAction('> Assertion failed: ' + _msg + ' ' + _left + ' ' + _op + ' ' + _right, undefined);
         }
     }
+    public setConfiguration(configuration: any): number {
+        throw new Error("Method not implemented.");
+    }
 }

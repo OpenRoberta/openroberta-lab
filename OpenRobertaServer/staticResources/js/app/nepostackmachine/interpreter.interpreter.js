@@ -7,8 +7,8 @@ define(["require", "exports", "./interpreter.state", "./interpreter.constants", 
          * . @param generatedCode argument contains the operations and the function definitions
          * . @param robotBehaviour implementation of the ARobotBehaviour class
          * . @param cbOnTermination is called when the program has terminated
-         */
-        function Interpreter(generatedCode, r, cbOnTermination, simBreakpoints) {
+        */
+        function Interpreter(generatedCode, configuration, r, cbOnTermination, simBreakpoints) {
             this.terminated = false;
             this.callbackOnTermination = undefined;
             this.debugDelay = 2;
@@ -16,6 +16,7 @@ define(["require", "exports", "./interpreter.state", "./interpreter.constants", 
             this.callbackOnTermination = cbOnTermination;
             var stmts = generatedCode[C.OPS];
             this.robotBehaviour = r;
+            r.setConfiguration(configuration);
             this.breakpoints = simBreakpoints;
             this.events = {};
             this.events[C.DEBUG_STEP_INTO] = false;

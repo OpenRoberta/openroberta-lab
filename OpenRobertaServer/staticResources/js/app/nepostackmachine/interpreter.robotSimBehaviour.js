@@ -447,7 +447,9 @@ define(["require", "exports", "./interpreter.aRobotBehaviour", "./interpreter.co
             U.debug('***** assert action "' + value + ' ' + _msg + ' ' + _left + ' ' + _op + ' ' + _right + '" *****');
             console.assert(value, _msg + ' ' + _left + ' ' + _op + ' ' + _right);
         };
-        RobotMbedBehaviour.prototype.close = function () { };
+        RobotMbedBehaviour.prototype.setConfiguration = function (configuration) {
+            throw new Error("Method not implemented.");
+        };
         return RobotMbedBehaviour;
     }(interpreter_aRobotBehaviour_1.ARobotBehaviour));
     exports.RobotMbedBehaviour = RobotMbedBehaviour;
