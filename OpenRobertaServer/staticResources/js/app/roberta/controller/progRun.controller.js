@@ -311,7 +311,8 @@ define(['exports', 'util', 'log', 'message', 'program.controller', 'program.mode
         if (result.rc === "ok") {
             var programSrc = result.compiledCode;
             var program = JSON.parse(programSrc);
-            interpreter = WEBVIEW_C.getInterpreter(program);
+            var configuration = result.configuration;
+            interpreter = WEBVIEW_C.getInterpreter(program, configuration);
             if (interpreter !== null) {
                 GUISTATE_C.setConnectionState("busy");
                 blocklyWorkspace.robControls.switchToStop();

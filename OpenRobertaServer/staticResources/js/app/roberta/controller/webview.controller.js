@@ -101,8 +101,8 @@ function(exports,
         GUISTATE_C.getBlocklyWorkspace().robControls.switchToStart();
     }
 
-    function getInterpreter(program) {
-        interpreter = new INTERPRETER.Interpreter(program, theRobotBehaviour, callbackOnTermination, []);
+    function getInterpreter(program, configuration) {
+        interpreter = new INTERPRETER.Interpreter(program, configuration, theRobotBehaviour, callbackOnTermination, []);
         return interpreter;
     }
     exports.getInterpreter = getInterpreter;
