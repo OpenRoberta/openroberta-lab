@@ -15,10 +15,10 @@
 """Example of Python controller for Nao robot.
    This demonstrates how to access sensors and actuators"""
 
-from controller import Robot, Keyboard, Motion
+from controller import Robot, Motion
 
-FORWARD_SPEED = 2 # cm / s
-
+FORWARD_SPEED = 50 / 6.76 # cm / s
+TURN_SPEED = 60 / 4.5 # °/s
 
 class Nao (Robot):
     PHALANX_MAX = 8
@@ -180,26 +180,6 @@ class Nao (Robot):
             if len(self.lphalanx) > i and self.lphalanx[i] is not None:
                 self.lphalanx[i].setPosition(clampedAngle)
 
-    def printHelp(self):
-        print('----------nao_demo_python----------')
-        print('Use the keyboard to control the robots (one at a time)')
-        print('(The 3D window need to be focused)')
-        print('[Up][Down]: move one step forward/backwards')
-        print('[<-][->]: side step left/right')
-        print('[Shift] + [<-][->]: turn left/right')
-        print('[U]: print ultrasound sensors')
-        print('[A]: print accelerometers')
-        print('[G]: print gyros')
-        print('[S]: print gps')
-        print('[I]: print inertial unit (roll/pitch/yaw)')
-        print('[F]: print foot sensors')
-        print('[B]: print foot bumpers')
-        print('[Home][End]: print scaled top/bottom camera image')
-        print('[PageUp][PageDown]: open/close hands')
-        print('[7][8][9]: change all leds RGB color')
-        print('[0]: turn all leds off')
-        print('[H]: print this help message')
-
     def findAndEnableDevices(self):
         # get the time step of the current world.
         self.timeStep = int(self.getBasicTimeStep())
@@ -290,24 +270,42 @@ class Nao (Robot):
         # initialize stuff
         self.findAndEnableDevices()
         self.loadMotionFiles()
-        self.printHelp()
 
-    #def turn(self, degree):
-     #   self.turnLeft60.play()
-      #  self.
+    def reset_pose(self):
+        pass
+
+
+    def turn(self, degree):
+        """
+            Turn left to this degree
+        """
+        turn_motion = self.turnLeft60 if degree > 0 else self.turnRight60
+
+        turn_motion.setLoop(True)
+        turn_motion.play()
+        self.wait(abs(degree) / TURN_SPEED)
+        turn_motion.stop()
+        self.reset_pose()
 
     def walk(self, distance):
-        # start new motion
         self.forwards.setLoop(True)
         self.forwards.play()
         self.wait(distance / FORWARD_SPEED)
         self.forwards.stop()
 
-        self.standup.play()
+        self.reset_pose()
+
+    def wave(self):
+        self.handWave.play()
+
         while self.step(self.timeStep) != -1:
-            if self.standup.isOver():
+            if self.handWave.isOver():
                 break
-        self.standup.stop()
+
+        self.handWave.stop()
+
+    def blink(self):
+        pass
 
 
     def wait(self, time):
@@ -315,71 +313,3 @@ class Nao (Robot):
         while self.step(self.timeStep) != -1:
             if self.getTime() - startTime > time:
                 break
-
-    def run(self):
-        self.handWave.setLoop(True)
-        self.handWave.play()
-
-        # until a key is pressed
-        key = -1
-        while robot.step(self.timeStep) != -1:
-            key = self.keyboard.getKey()
-            if key > 0:
-                break
-
-        self.handWave.setLoop(False)
-
-        while True:
-            key = self.keyboard.getKey()
-
-            if key == Keyboard.LEFT:
-                self.startMotion(self.sideStepLeft)
-            elif key == Keyboard.RIGHT:
-                self.startMotion(self.sideStepRight)
-            elif key == Keyboard.UP:
-                self.startMotion(self.forwards)
-            elif key == Keyboard.DOWN:
-                self.startMotion(self.backwards)
-            elif key == Keyboard.LEFT | Keyboard.SHIFT:
-                self.startMotion(self.turnLeft60)
-            elif key == Keyboard.RIGHT | Keyboard.SHIFT:
-                self.startMotion(self.turnRight60)
-            elif key == ord('A'):
-                self.printAcceleration()
-            elif key == ord('G'):
-                self.printGyro()
-            elif key == ord('S'):
-                self.printGps()
-            elif key == ord('I'):
-                self.printInertialUnit()
-            elif key == ord('F'):
-                self.printFootSensors()
-            elif key == ord('B'):
-                self.printFootBumpers()
-            elif key == ord('U'):
-                self.printUltrasoundSensors()
-            elif key == Keyboard.HOME:
-                self.printCameraImage(self.cameraTop)
-            elif key == Keyboard.END:
-                self.printCameraImage(self.cameraBottom)
-            elif key == Keyboard.PAGEUP:
-                self.setHandsAngle(0.96)
-            elif key == Keyboard.PAGEDOWN:
-                self.setHandsAngle(0.0)
-            elif key == ord('7'):
-                self.setAllLedsColor(0xff0000)  # red
-            elif key == ord('8'):
-                self.setAllLedsColor(0x00ff00)  # green
-            elif key == ord('9'):
-                self.setAllLedsColor(0x0000ff)  # blue
-            elif key == ord('0'):
-                self.setAllLedsColor(0x000000)  # off
-            elif key == ord('H'):
-                self.printHelp()
-
-            if robot.step(self.timeStep) == -1:
-                break
-
-
-# create the Robot instance and run main loop
-robot = Nao()

@@ -139,6 +139,9 @@ public final class NaoPythonSimVisitor extends AbstractPythonVisitor implements 
         nlIndent();
         this.sb.append("def run():");
         incrIndentation();
+        nlIndent();
+        this.sb.append("robot = Nao()");
+
         List<Stmt<Void>> variableList = variables.get();
         if ( !variableList.isEmpty() ) {
             nlIndent();
@@ -404,7 +407,7 @@ public final class NaoPythonSimVisitor extends AbstractPythonVisitor implements 
 
     @Override
     public Void visitTurnDegrees(TurnDegrees<Void> turnDegrees) {
-        this.sb.append("h.walk(0, 0,");
+        this.sb.append("robot.turn(");
         if ( turnDegrees.getTurnDirection() == TurnDirection.RIGHT ) {
             this.sb.append("-");
         }
@@ -437,16 +440,16 @@ public final class NaoPythonSimVisitor extends AbstractPythonVisitor implements 
     public Void visitAnimation(Animation<Void> animation) {
         switch ( animation.getMove() ) {
             case TAICHI:
-                this.sb.append("h.taiChi()");
+                this.sb.append("robot.taiChi()");
                 break;
             case BLINK:
-                this.sb.append("h.blink()");
+                this.sb.append("robot.blink()");
                 break;
             case WAVE:
-                this.sb.append("h.wave()");
+                this.sb.append("robot.wave()");
                 break;
             case WIPEFOREHEAD:
-                this.sb.append("h.wipeForehead()");
+                this.sb.append("robot.wipeForehead()");
                 break;
         }
         return null;
