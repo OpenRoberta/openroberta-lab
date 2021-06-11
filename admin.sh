@@ -46,7 +46,7 @@ do
                    shift; shift ;;
     -Xmx*)         XMX=$1
                    shift ;;
-    -rdbg)         RDBG='-agentlib:jdwp=transport=dt_socket,server=y,address=8000,suspend=n'
+    -rdbg)         RDBG='-agentlib:jdwp=transport=dt_socket,server=y,address=0.0.0.0:2000,suspend=y'
                    shift ;;
     -q)            QUIET='yes'
                    shift ;;

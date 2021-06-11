@@ -13,14 +13,14 @@
 		<property name="connection.password">Pid</property>
 		<property name="connection.autocommit">false</property>
 
-    <property name="hibernate.c3p0.min_size">5</property>
-    <property name="hibernate.c3p0.max_size">200</property>
-    <property name="hibernate.c3p0.timeout">700</property>
-    <property name="hibernate.c3p0.idle_test_period">300</property>
-    <property name="hibernate.c3p0.max_statements">100</property>
-    <property name="hibernate.c3p0.statementCacheNumDeferredCloseThreads">1</property>
-    <property name="hibernate.c3p0.testConnectionOnCheckout">true</property>
-    <property name="hibernate.c3p0.autoCommitOnClose">true</property>
+        <property name="hibernate.c3p0.min_size">5</property>
+        <property name="hibernate.c3p0.max_size">200</property>
+        <property name="hibernate.c3p0.timeout">700</property>
+        <property name="hibernate.c3p0.idle_test_period">300</property>
+        <property name="hibernate.c3p0.max_statements">100</property>
+        <property name="hibernate.c3p0.statementCacheNumDeferredCloseThreads">1</property>
+        <property name="hibernate.c3p0.testConnectionOnCheckout">true</property>
+        <property name="hibernate.c3p0.autoCommitOnClose">true</property>
 
 		<mapping class="de.fhg.iais.roberta.persistence.bo.Program" />
 		<mapping class="de.fhg.iais.roberta.persistence.bo.Configuration" />

@@ -374,8 +374,7 @@ public class ServerStarter {
     }
 
     /**
-     * setup the hibernate.connection.url<br>
-     * <b>Note:</b> the "hibernate.connection.url" property is added to the properties!
+     * setup the hibernate.connection.url and add it to the properties. From there it is retrieved later by GUICE.
      *
      * @param properties for configuring OpenRoberta, merged from property file and runtime arguments.
      */

@@ -68,7 +68,7 @@ public class RobertaGuiceModule extends AbstractModule {
 
         bind(new TypeLiteral<Map<String, IRobotFactory>>() {
         }).annotatedWith(Names.named("robotPluginMap")).toInstance(this.robotPluginMap);
-        bind(String.class).annotatedWith(Names.named("hibernate.config.xml")).toInstance("hibernate-cfg.xml");
+        bind(String.class).annotatedWith(Names.named("hibernate.config.xml")).toInstance("/hibernate-cfg.xml");
 
         try {
             Names.bindProperties(binder(), this.serverProperties.getserverProperties());
