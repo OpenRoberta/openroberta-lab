@@ -36,12 +36,12 @@ define(['exports', 'message', 'log', 'util', 'simulation.simulation', 'simulatio
 
             $('#simRobotModal').removeClass("modal-backdrop");
 
-            $('#simStop').onWrap('click', function(event) {
+            $('#simStop').onWrap('click', function (event) {
                 $('#simStop').addClass("disabled");
                 $('#simControl').addClass('typcn-media-play-outline').removeClass('typcn-media-play');
                 SIM.stopProgram();
             }, 'simStop clicked');
-            $('#simControl').onWrap('click', function(event) {
+            $('#simControl').onWrap('click', function (event) {
                 event.stopPropagation();
                 if (SIM.getNumRobots() == 1) {
                     if (SIM.getDebugMode()) {
@@ -215,7 +215,7 @@ define(['exports', 'message', 'log', 'util', 'simulation.simulation', 'simulatio
         function toggleSim() {
             if (($('#simButton').hasClass('rightActive') && !debug) || ($('#simDebugButton').hasClass('rightActive') && debug)) {
                 SIM.cancel();
-                $('#simControl').addClass('typcn-media-play-outline').removeClass('typcn-media-play');
+                $('#simControl').addClass('typcn-media-play-outline').removeClass('typcn-media-play').removeClass('typcn-media-stop');
                 $('#blockly').closeRightView(function() {
                     $('.nav > li > ul > .robotType').removeClass('disabled');
                     $('.' + GUISTATE_C.getRobot()).addClass('disabled');
@@ -282,6 +282,11 @@ define(['exports', 'message', 'log', 'util', 'simulation.simulation', 'simulatio
                 SIM.setPause(false);
                 SIM.interpreterAddEvent(event);
             } else {
+                if ($('#simControl').hasClass('typcn-media-stop')) {
+                    $('#simControl').addClass("blue").removeClass('typcn-media-stop');
+                    $('#simControl').attr('data-original-title', Blockly.Msg.MENU_DEBUG_STEP_BREAKPOINT_TOOLTIP);
+                    $('#simStop').show();
+                }
                 $('#simControl').addClass('typcn-media-play-outline').removeClass('typcn-media-play');
                 SIM.stopProgram();
             }
