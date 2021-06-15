@@ -98,16 +98,18 @@ define([ 'exports', 'jquery', 'wrap', 'log' ], function(exports, $, WRAP, LOG) {
     }
     exports.json = json;
 
-    function download(url, filename) {
+    function download(url) {
+        //alternative:
+        // var a = document.createElement('a');
+        // a.href = urlPrefix + url;
+        // a.download = "testtest.zip"; // Set the file name.
+        // a.style.display = 'none';
+        // document.body.appendChild(a);
+        // a.click();
+        // document.body.removeChild(a);
+        // window.URL.revokeObjectURL(urlPrefix+url);
 
-        var a = document.createElement('a');
-        a.href = urlPrefix + url;
-        a.download = "testtest"; // Set the file name.
-        a.style.display = 'none';
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        window.URL.revokeObjectURL(urlPrefix+url);
+        window.open(urlPrefix+url,'_blank');
     }
     exports.download = download;
 

@@ -11,7 +11,7 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
      */
     //REPLACE THIS WITH BELOW
      function loadProgList(successFn) {
-        COMM.download("/program/TestExportAllPrograms","MyPrograms.zip");
+        COMM.download("/program/TestExportAllPrograms");
     }
     exports.loadProgList = loadProgList;
     /*function loadProgList(successFn) {
