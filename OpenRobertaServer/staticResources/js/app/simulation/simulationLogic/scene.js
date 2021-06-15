@@ -42,7 +42,11 @@ define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constan
                 robotIndexColour += '<option style="background-color:' + this.robots[i].geom.color + '" value="' + SIM.getRobotIndex() + '">&nbsp' + "</option>";
             }
             robotIndexColour += "</select>";
-            $("#constantValue").append('<div><label>Robot</label><span style="width:auto">' + robotIndexColour + '</span></div>');
+            $("#constantValue").append('<div><label id="robotLabel">Robot</label><span style="width:auto">' + robotIndexColour + '</span></div>');
+        } else {
+            //remove if there is only one robot
+            $("#robotLabel").remove();
+            $("#robotIndex").remove();
         }
         this.resetAllCanvas(this.backgroundImg);
     }
@@ -301,6 +305,7 @@ define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constan
                     $("#robotIndex").css('background-color', this.robots[SIM.getRobotIndex()].geom.color);
                     $("#notConstantValue").append('<div><label>Program Name</label><span>' + this.robots[r].savedName + '</span></div>');
                 }
+                
                 $("#notConstantValue").append('<div><label>FPS</label><span>' + UTIL.round(1 / SIM.getDt(), 0) + '</span></div>');
                 $("#notConstantValue").append('<div><label>Time</label><span>' + UTIL.round(this.robots[r].time, 3) + 's</span></div>');
                 $("#notConstantValue").append('<div><label>Robot X</label><span>' + UTIL.round(x, 0) + '</span></div>');
