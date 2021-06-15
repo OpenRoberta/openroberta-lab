@@ -7,10 +7,6 @@ robots:
         template: ardu
         dir: botnroll
         suffix: ".ino"
-    calliope2016:
-        template: calliope
-        dir: calliope
-        suffix: ".cpp"
     calliope2017NoBlue:
         template: calliope
         dir: calliope
@@ -62,10 +58,6 @@ robots:
     unowifirev2:
         template: ardu
         dir: unowifirev2
-        suffix: ".ino"
-    nano33ble:
-        template: ardu
-        dir: nano33ble
         suffix: ".ino"
     wedo:
         template: wedo
