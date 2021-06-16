@@ -192,6 +192,7 @@ public class ClientAdmin {
                     response.setConfiguration(configuration);
                     response.setSim(robotFactory.hasSim());
                     response.setMultipleSim(robotFactory.hasMultipleSim());
+                    response.setWebotsSim(robotFactory.hasWebotsSim());
                     response.setConnection(robotFactory.getConnectionType());
                     response.setVendor(robotFactory.getVendorId());
                     response.setConfigurationUsed(robotFactory.hasConfiguration());

@@ -68,7 +68,7 @@ define(['exports', 'message', 'log', 'util', 'nao.simulation', 'simulation.simul
                                     $('#simControl').addClass('typcn-media-stop').removeClass('typcn-media-play-outline');
                                     $('#simControl').attr('data-original-title', Blockly.Msg.MENU_SIM_STOP_TOOLTIP);
                                 }
-                                if (GUISTATE_C.getRobot() === "nao") {
+                                if (GUISTATE_C.hasWebotsSim()) {
                                     NAOSIM.run(result.javaScriptProgram);
                                 } else {
                                     setTimeout(function() {
@@ -84,7 +84,7 @@ define(['exports', 'message', 'log', 'util', 'nao.simulation', 'simulation.simul
                     } else {
                         $('#simControl').addClass('typcn-media-play-outline').removeClass('typcn-media-stop');
                         $('#simControl').attr('data-original-title', Blockly.Msg.MENU_SIM_START_TOOLTIP);
-                        if (GUISTATE_C.getRobot() === "nao") {
+                        if (GUISTATE_C.hasWebotsSim()) {
                             NAOSIM.stopProgram();
                         } else {
                             SIM.stopProgram();
@@ -152,7 +152,7 @@ define(['exports', 'message', 'log', 'util', 'nao.simulation', 'simulation.simul
         }, 'simValues clicked');
 
         $('#simResetPose').onWrap('click', function(event) {
-            if (GUISTATE_C.getRobot() === "nao") {
+            if (GUISTATE_C.hasWebotsSim()) {
                 NAOSIM.resetPose();
                 return;
             }
@@ -258,7 +258,7 @@ define(['exports', 'message', 'log', 'util', 'nao.simulation', 'simulation.simul
 
     function toggleSim() {
         if (($('#simButton').hasClass('rightActive') && !debug) || ($('#simDebugButton').hasClass('rightActive') && debug)) {
-            if (GUISTATE_C.getRobot() === "nao") {
+            if (GUISTATE_C.hasWebotsSim()) {
                 NAOSIM.disconnect();
             } else {
                 SIM.cancel();
@@ -280,7 +280,7 @@ define(['exports', 'message', 'log', 'util', 'nao.simulation', 'simulation.simul
 
             PROGRAM.runInSim(GUISTATE_C.getProgramName(), configName, xmlTextProgram, xmlConfigText, language, function(result) {
                 if (result.rc == "ok") {
-                    if (GUISTATE_C.getRobot() === "nao") {
+                    if (GUISTATE_C.hasWebotsSim()) {
                         initNaoSimulation(result);
                     } else {
                         initSimulation(result);

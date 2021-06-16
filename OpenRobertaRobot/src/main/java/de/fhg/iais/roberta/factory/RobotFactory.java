@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -106,6 +107,11 @@ public class RobotFactory implements IRobotFactory {
     @Override
     public final Boolean hasMultipleSim() {
         return this.pluginProperties.getStringProperty("robot.multisim") != null && this.pluginProperties.getStringProperty("robot.multisim").equals("true");
+    }
+
+    @Override
+    public Boolean hasWebotsSim() {
+        return this.pluginProperties.getStringProperty("robot.webotsSim") != null && this.pluginProperties.getStringProperty("robot.webotsSim").equals("true");
     }
 
     @Override

@@ -142,13 +142,13 @@ require.config({
     }
 });
 
-require(['require', 'huebee', 'wrap', 'log','jquery', 'blockly', 'guiState.controller', 'progList.controller', 'logList.controller', 'confList.controller',
+require(['require', 'huebee', 'wrap', 'log', 'jquery', 'blockly', 'guiState.controller', 'progList.controller', 'logList.controller', 'confList.controller',
     'progDelete.controller', 'confDelete.controller', 'progShare.controller', 'menu.controller', 'multSim.controller', 'user.controller', 'nn.controller',
     'robot.controller', 'program.controller', 'progSim.controller', 'notification.controller', 'progCode.controller', 'progDelete.controller', 'progHelp.controller',
     'legal.controller', 'progInfo.controller', 'progRun.controller', 'configuration.controller', 'language.controller', 'socket.controller',
     'progTutorial.controller', 'tutorialList.controller', 'userGroup.controller', 'volume-meter', 'user.model', 'webview.controller',
     'sourceCodeEditor.controller', 'codeflask', 'interpreter.jsHelper', 'confVisualization', 'robotBlock'], function(
-        require) {
+    require) {
     $ = require('jquery');
     WRAP = require('wrap');
     LOG = require('log');

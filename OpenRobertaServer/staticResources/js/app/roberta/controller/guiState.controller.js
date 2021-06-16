@@ -256,6 +256,7 @@ define(['exports', 'util', 'message', 'guiState.model', 'progHelp.controller', '
         GUISTATE.gui.configuration = result.configuration;
         GUISTATE.gui.sim = result.sim;
         GUISTATE.gui.multipleSim = result.multipleSim;
+        GUISTATE.gui.webotsSim = result.webotsSim;
         GUISTATE.gui.neuralNetwork = result.neuralNetwork === undefined ? false : result.neuralNetwork;
         GUISTATE.gui.connection = result.connection;
         GUISTATE.gui.vendor = result.vendor;
@@ -1153,6 +1154,11 @@ define(['exports', 'util', 'message', 'guiState.model', 'progHelp.controller', '
         return GUISTATE.gui.multipleSim;
     }
     exports.hasMultiSim = hasMultiSim;
+
+    function hasWebotsSim() {
+        return GUISTATE.gui.webotsSim;
+    }
+    exports.hasWebotsSim = hasWebotsSim;
 
     function getListOfTutorials() {
         return GUISTATE.server.tutorial;

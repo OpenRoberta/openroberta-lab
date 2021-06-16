@@ -30,7 +30,9 @@ define([ 'exports', 'message', 'comm' ], function(exports, MSG, COMM) {
         exports.gui.configuration.conf = '';
         exports.gui.connection = '';
         exports.gui.vendor = '';
-        exports.gui.sim = '';
+        exports.gui.sim = false;
+        exports.gui.multipleSim = false;
+        exports.gui.webotsSim = false;
         exports.gui.fileExtension = ''
         exports.gui.connectionType = {
             TOKEN : 'token',
