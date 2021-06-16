@@ -713,7 +713,7 @@ div.rightMenuButton:hover,
     background-image: none;
 }
 
-.simButtons {
+#simButtons {
     left: 12px;
     bottom: 6px;
     position: absolute;
