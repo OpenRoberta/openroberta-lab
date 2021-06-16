@@ -19,9 +19,16 @@ const resetButton = document.querySelector<HTMLButtonElement>('#simResetPose');
 
 let streamingViewer: StreamingViewer;
 let sourceCode;
+let connected = false;
 
 function connect() {
-    streamingViewer.connect(URL, "x3d", false, false, () => sendController(sourceCode), () => console.log("disconnected"))
+    streamingViewer.connect(URL, "x3d", false, false, () => {
+        connected = true;
+        sendController(sourceCode);
+    }, () => {
+        connected = false;
+        console.log("disconnected");
+    });
     streamingViewer.hideToolbar();
 }
 
@@ -78,20 +85,20 @@ export function disconnect() {
     streamingViewer.disconnect();
 }
 
-export function init(sc) {
-    console.log("init");
-
+export async function init(sc) {
     $('#simEditButtons, #canvasDiv, #simRobot, #simValues').hide();
     $('#webotsDiv, #simButtons').show();
 
-    loadWebotsSources()
-        .then(async () => {
-            createStreamingElement();
-            await glmLoaded();
-            connect();
-        })
-
     sourceCode = sc;
+
+    if (connected) {
+        return;
+    }
+
+    await loadWebotsSources()
+    createStreamingElement();
+    await glmLoaded();
+    connect();
 }
 
 export function resetPose() {

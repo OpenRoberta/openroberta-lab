@@ -43,8 +43,15 @@ define(["require", "exports", "jquery"], function (require, exports, $) {
     var resetButton = document.querySelector('#simResetPose');
     var streamingViewer;
     var sourceCode;
+    var connected = false;
     function connect() {
-        streamingViewer.connect(URL, "x3d", false, false, function () { return sendController(sourceCode); }, function () { return console.log("disconnected"); });
+        streamingViewer.connect(URL, "x3d", false, false, function () {
+            connected = true;
+            sendController(sourceCode);
+        }, function () {
+            connected = false;
+            console.log("disconnected");
+        });
         streamingViewer.hideToolbar();
     }
     function sendController(sourceCode) {
@@ -114,25 +121,28 @@ define(["require", "exports", "jquery"], function (require, exports, $) {
     }
     exports.disconnect = disconnect;
     function init(sc) {
-        var _this = this;
-        console.log("init");
-        $('#simEditButtons, #canvasDiv, #simRobot, #simValues').hide();
-        $('#webotsDiv, #simButtons').show();
-        loadWebotsSources()
-            .then(function () { return __awaiter(_this, void 0, void 0, function () {
+        return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
+                        $('#simEditButtons, #canvasDiv, #simRobot, #simValues').hide();
+                        $('#webotsDiv, #simButtons').show();
+                        sourceCode = sc;
+                        if (connected) {
+                            return [2 /*return*/];
+                        }
+                        return [4 /*yield*/, loadWebotsSources()];
+                    case 1:
+                        _a.sent();
                         createStreamingElement();
                         return [4 /*yield*/, glmLoaded()];
-                    case 1:
+                    case 2:
                         _a.sent();
                         connect();
                         return [2 /*return*/];
                 }
             });
-        }); });
-        sourceCode = sc;
+        });
     }
     exports.init = init;
     function resetPose() {
