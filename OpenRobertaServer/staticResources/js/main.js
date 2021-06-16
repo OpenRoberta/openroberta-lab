@@ -107,7 +107,7 @@ require.config({
         'robotBlock': 'app/configVisualization/robotBlock',
         'wires': 'app/configVisualization/wires',
 
-        'nao.simulation':"app/naoSimulation/nao.simulation"
+        'webots.simulation':"app/webotsSimulation/webots.simulation"
     },
     shim: {
         'webots': {

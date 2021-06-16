@@ -1,4 +1,4 @@
-define(['exports', 'message', 'log', 'util', 'nao.simulation', 'simulation.simulation', 'simulation.constants', 'guiState.controller', 'tour.controller', 'program.controller', 'program.model',
+define(['exports', 'message', 'log', 'util', 'webots.simulation', 'simulation.simulation', 'simulation.constants', 'guiState.controller', 'tour.controller', 'program.controller', 'program.model',
     'blockly', 'jquery', 'jquery-validate'], function(exports, MSG, LOG, UTIL, NAOSIM, SIM, CONST, GUISTATE_C, TOUR_C, PROG_C, PROGRAM, Blockly, $) {
 
     const INITIAL_WIDTH = 0.5;
