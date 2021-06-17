@@ -15,10 +15,15 @@
 """Example of Python controller for Nao robot.
    This demonstrates how to access sensors and actuators"""
 
-from controller import Robot, Motion
+from controller import Robot, Motion, Motor, PositionSensor
+import math
 
 FORWARD_SPEED = 50 / 6.76 # cm / s
 TURN_SPEED = 60 / 4.5 # °/s
+
+DELTA = 0.001
+TIMEOUT = 15 # s
+
 
 class Nao (Robot):
     PHALANX_MAX = 8
@@ -274,6 +279,35 @@ class Nao (Robot):
     def reset_pose(self):
         pass
 
+    def moveJoint(self, joint_name, degrees, mode):
+        """
+
+        :param joint_name:
+        :param degrees:
+        :param mode: 1 for absolute positioning and 2 for relative positioning
+        """
+        device: Motor = self.getDevice(joint_name)
+        sensor: PositionSensor = device.getPositionSensor()
+        sensor.enable(self.timeStep)
+
+        self.step(self.timeStep)
+
+        absolute = mode == 1
+
+        rad = math.radians(degrees) if absolute else sensor.getValue() + math.radians(degrees)
+        rad = min(rad, device.getMaxPosition())
+        rad = max(rad, device.getMinPosition())
+
+        device.setPosition(rad)
+
+        start_time = self.getTime()
+        while self.step(self.timeStep) != -1:
+            value_reached = math.fabs(sensor.getValue() - rad) <= DELTA
+            timeout = self.getTime() - start_time >= TIMEOUT
+            if value_reached or timeout:
+                break
+
+        sensor.disable()
 
     def turn(self, degree):
         """

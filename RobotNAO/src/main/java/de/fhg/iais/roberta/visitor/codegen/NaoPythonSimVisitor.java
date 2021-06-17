@@ -297,7 +297,7 @@ public final class NaoPythonSimVisitor extends AbstractPythonVisitor implements 
 
     @Override
     public Void visitMoveJoint(MoveJoint<Void> moveJoint) {
-        this.sb.append("h.moveJoint(");
+        this.sb.append("robot.moveJoint(");
         switch ( moveJoint.getJoint() ) {
             case HEADYAW:
                 this.sb.append("\"HeadYaw\"");
