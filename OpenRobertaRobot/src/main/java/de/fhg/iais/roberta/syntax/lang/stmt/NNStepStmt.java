@@ -65,13 +65,13 @@ public class NNStepStmt<V> extends Stmt<V> {
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
         helper.getDropdownFactory();
         List<Value> values = Jaxb2Ast.extractValues(block, (short) 6);
-        Phrase<V> i0 = helper.extractValue(values, new ExprParam("INPUT0", BlocklyType.NUMBER_INT));
-        Phrase<V> i1 = helper.extractValue(values, new ExprParam("INPUT1", BlocklyType.NUMBER_INT));
-        Phrase<V> i2 = helper.extractValue(values, new ExprParam("INPUT2", BlocklyType.NUMBER_INT));
+        Phrase<V> i0 = helper.extractValue(values, new ExprParam("NN_STEP_INPUT0", BlocklyType.NUMBER_INT));
+        Phrase<V> i1 = helper.extractValue(values, new ExprParam("NN_STEP_INPUT1", BlocklyType.NUMBER_INT));
+        Phrase<V> i2 = helper.extractValue(values, new ExprParam("NN_STEP_INPUT2", BlocklyType.NUMBER_INT));
         List<Expr<V>> il = Arrays.asList(Jaxb2Ast.convertPhraseToExpr(i0), Jaxb2Ast.convertPhraseToExpr(i1), Jaxb2Ast.convertPhraseToExpr(i2));
-        Phrase<V> o0 = helper.extractValue(values, new ExprParam("OUTPUT0", BlocklyType.NUMBER_INT));
-        Phrase<V> o1 = helper.extractValue(values, new ExprParam("OUTPUT1", BlocklyType.NUMBER_INT));
-        Phrase<V> o2 = helper.extractValue(values, new ExprParam("OUTPUT2", BlocklyType.NUMBER_INT));
+        Phrase<V> o0 = helper.extractValue(values, new ExprParam("NN_STEP_OUTPUT0", BlocklyType.NUMBER_INT));
+        Phrase<V> o1 = helper.extractValue(values, new ExprParam("NN_STEP_OUTPUT1", BlocklyType.NUMBER_INT));
+        Phrase<V> o2 = helper.extractValue(values, new ExprParam("NN_STEP_OUTPUT2", BlocklyType.NUMBER_INT));
         Assert.isTrue(o0.getClass().equals(Var.class) && o1.getClass().equals(Var.class) && o2.getClass().equals(Var.class));
         final Var<V> v0 = (Var<V>) Jaxb2Ast.convertPhraseToExpr(o0);
         final Var<V> v1 = (Var<V>) Jaxb2Ast.convertPhraseToExpr(o1);
@@ -83,12 +83,12 @@ public class NNStepStmt<V> extends Stmt<V> {
     @Override
     public Block astToBlock() {
         Block jaxbDestination = new Block();
-        Ast2Jaxb.addValue(jaxbDestination, "INPUT0", this.il.get(0));
-        Ast2Jaxb.addValue(jaxbDestination, "INPUT1", this.il.get(1));
-        Ast2Jaxb.addValue(jaxbDestination, "INPUT2", this.il.get(2));
-        Ast2Jaxb.addValue(jaxbDestination, "OUTPUT0", this.ol.get(0));
-        Ast2Jaxb.addValue(jaxbDestination, "OUTPUT1", this.ol.get(1));
-        Ast2Jaxb.addValue(jaxbDestination, "OUTPUT2", this.ol.get(2));
+        Ast2Jaxb.addValue(jaxbDestination, "NN_STEP_INPUT0", this.il.get(0));
+        Ast2Jaxb.addValue(jaxbDestination, "NN_STEP_INPUT1", this.il.get(1));
+        Ast2Jaxb.addValue(jaxbDestination, "NN_STEP_INPUT2", this.il.get(2));
+        Ast2Jaxb.addValue(jaxbDestination, "NN_STEP_OUTPUT0", this.ol.get(0));
+        Ast2Jaxb.addValue(jaxbDestination, "NN_STEP_OUTPUT1", this.ol.get(1));
+        Ast2Jaxb.addValue(jaxbDestination, "NN_STEP_OUTPUT2", this.ol.get(2));
         Ast2Jaxb.setBasicProperties(this, jaxbDestination);
         return jaxbDestination;
     }
