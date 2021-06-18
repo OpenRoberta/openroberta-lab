@@ -12,6 +12,7 @@ define(["require", "exports", "./interpreter.state", "./interpreter.constants", 
         function Interpreter(generatedCode, r, cbOnTermination, simBreakpoints) {
             this.terminated = false;
             this.callbackOnTermination = undefined;
+            this.debugDelay = 2;
             this.terminated = false;
             this.callbackOnTermination = cbOnTermination;
             var stmts = generatedCode[C.OPS];
@@ -21,6 +22,7 @@ define(["require", "exports", "./interpreter.state", "./interpreter.constants", 
             this.events[C.DEBUG_STEP_INTO] = false;
             this.events[C.DEBUG_BREAKPOINT] = false;
             this.events[C.DEBUG_STEP_OVER] = false;
+            this.lastBlock = null;
             this.lastStoppedBlock = null;
             this.stepOverBlock = null;
             this.state = new interpreter_state_1.State(stmts);
@@ -107,8 +109,7 @@ define(["require", "exports", "./interpreter.state", "./interpreter.constants", 
         Interpreter.prototype.evalOperation = function (maxRunTime) {
             while (maxRunTime >= new Date().getTime() && !this.robotBehaviour.getBlocking()) {
                 var op = this.state.getOp();
-                this.state.evalTerminations(op);
-                this.state.evalInitiations(op);
+                this.state.evalHighlightings(op, this.lastBlock);
                 if (this.state.getDebugMode()) {
                     var canContinue = this.calculateDebugBehaviour(op);
                     if (!canContinue)
@@ -116,6 +117,7 @@ define(["require", "exports", "./interpreter.state", "./interpreter.constants", 
                 }
                 var _a = this.evalSingleOperation(op), result = _a[0], stop_1 = _a[1];
                 this.lastStoppedBlock = null;
+                this.lastBlock = op;
                 if (result > 0 || stop_1) {
                     return result;
                 }
@@ -124,6 +126,9 @@ define(["require", "exports", "./interpreter.state", "./interpreter.constants", 
                     this.robotBehaviour.close();
                     this.callbackOnTermination();
                     return 0;
+                }
+                if (this.state.getDebugMode()) {
+                    return this.debugDelay;
                 }
             }
             return 0;
@@ -1120,30 +1125,27 @@ define(["require", "exports", "./interpreter.state", "./interpreter.constants", 
             }
             return image;
         };
-        /** Returns true if the operation is a possible block where stepInto should stop*/
         Interpreter.isPossibleStepInto = function (op) {
-            if (op.hasOwnProperty(C.HIGHTLIGHT_PLUS)) {
-                if (op[C.OPCODE] === C.COMMENT && this.COMMENTS_STEP_INTO.includes(op[C.TARGET])) {
-                    return true;
-                }
-                if (this.DO_NOT_STEP_INTO.includes(op[C.OPCODE])) {
-                    return false;
-                }
+            var _a;
+            if (((_a = op[C.POSSIBLE_DEBUG_STOP]) === null || _a === void 0 ? void 0 : _a.length) > 0) {
                 return true;
             }
             return false;
         };
-        /** Returns true if the operation is a possible block where stepOver should stop*/
         Interpreter.isPossibleStepOver = function (op) {
             var isMethodCall = op[C.OPCODE] === C.COMMENT && op[C.TARGET] === C.METHOD_CALL;
             return op.hasOwnProperty(C.HIGHTLIGHT_PLUS) && isMethodCall;
         };
         Interpreter.isBreakPoint = function (op, breakpoints) {
-            var _a;
-            return (_a = op[C.HIGHTLIGHT_PLUS]) === null || _a === void 0 ? void 0 : _a.some(function (blockId) { return breakpoints.includes(blockId); });
+            var _a, _b;
+            if ((_a = op[C.POSSIBLE_DEBUG_STOP]) === null || _a === void 0 ? void 0 : _a.some(function (blockId) { return breakpoints.indexOf(blockId) >= 0; })) {
+                return true;
+            }
+            if ((_b = op[C.HIGHTLIGHT_PLUS]) === null || _b === void 0 ? void 0 : _b.some(function (blockId) { return breakpoints.indexOf(blockId) >= 0; })) {
+                return true;
+            }
+            return false;
         };
-        Interpreter.DO_NOT_STEP_INTO = [C.EXPR, C.GET_SAMPLE, C.VAR_DECLARATION];
-        Interpreter.COMMENTS_STEP_INTO = [C.IF_STMT, C.REPEAT_STMT, C.WAIT_STMT, C.METHOD_CALL];
         return Interpreter;
     }());
     exports.Interpreter = Interpreter;

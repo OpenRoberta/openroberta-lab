@@ -45,6 +45,7 @@
   },
   {
     "opc": "comment",
+    "type": "start",
     "target": "createMethodCall"
   },
   {
@@ -55,35 +56,52 @@
   {
     "opc": "jump",
     "conditional": "always",
-    "target": 30
+    "target": 35
   },
   {
     "opc": "comment",
+    "type": "end",
+    "target": "createMethodCall"
+  },
+  {
+    "opc": "comment",
+    "type": "start",
     "target": "createMethodCall"
   },
   {
     "opc": "expr",
     "expr": "NUM_CONST",
-    "value": 15
+    "value": 16
   },
   {
     "opc": "jump",
     "conditional": "always",
-    "target": 36
+    "target": 42
   },
   {
     "opc": "comment",
+    "type": "end",
+    "target": "createMethodCall"
+  },
+  {
+    "opc": "comment",
+    "type": "start",
     "target": "createMethodCall"
   },
   {
     "opc": "expr",
     "expr": "NUM_CONST",
-    "value": 18
+    "value": 20
   },
   {
     "opc": "jump",
     "conditional": "always",
-    "target": 54
+    "target": 63
+  },
+  {
+    "opc": "comment",
+    "type": "end",
+    "target": "createMethodCall"
   },
   {
     "opc": "AssignStmt",
@@ -91,17 +109,23 @@
   },
   {
     "opc": "comment",
+    "type": "start",
     "target": "createMethodCall"
   },
   {
     "opc": "expr",
     "expr": "NUM_CONST",
-    "value": 22
+    "value": 25
   },
   {
     "opc": "jump",
     "conditional": "always",
-    "target": 49
+    "target": 57
+  },
+  {
+    "opc": "comment",
+    "type": "end",
+    "target": "createMethodCall"
   },
   {
     "opc": "AssignStmt",
@@ -109,12 +133,13 @@
   },
   {
     "opc": "comment",
+    "type": "start",
     "target": "createMethodCall"
   },
   {
     "opc": "expr",
     "expr": "NUM_CONST",
-    "value": 27
+    "value": 31
   },
   {
     "opc": "expr",
@@ -124,7 +149,12 @@
   {
     "opc": "jump",
     "conditional": "always",
-    "target": 59
+    "target": 69
+  },
+  {
+    "opc": "comment",
+    "type": "end",
+    "target": "createMethodCall"
   },
   {
     "opc": "AssignStmt",
@@ -137,6 +167,7 @@
   {"opc": "stop"},
   {
     "opc": "comment",
+    "type": "start",
     "target": "createMethodVoid"
   },
   {
@@ -164,10 +195,17 @@
   },
   {
     "opc": "comment",
+    "type": "end",
     "target": "createMethodVoid"
   },
   {
     "opc": "comment",
+    "type": "start",
+    "target": "createMethodVoid"
+  },
+  {
+    "opc": "comment",
+    "type": "start",
     "target": "createMethodIfReturn"
   },
   {
@@ -188,7 +226,7 @@
   {
     "opc": "jump",
     "conditional": false,
-    "target": 44
+    "target": 50
   },
   {
     "opc": "expr",
@@ -197,7 +235,12 @@
   {
     "opc": "jump",
     "conditional": "always",
-    "target": 48
+    "target": 55
+  },
+  {
+    "opc": "comment",
+    "type": "end",
+    "target": "createMethodIfReturn"
   },
   {
     "opc": "expr",
@@ -224,6 +267,12 @@
   },
   {
     "opc": "comment",
+    "type": "end",
+    "target": "createMethodVoid"
+  },
+  {
+    "opc": "comment",
+    "type": "start",
     "target": "createMethodReturn"
   },
   {
@@ -246,6 +295,12 @@
   },
   {
     "opc": "comment",
+    "type": "end",
+    "target": "createMethodReturn"
+  },
+  {
+    "opc": "comment",
+    "type": "start",
     "target": "createMethodReturn"
   },
   {
@@ -268,6 +323,12 @@
   },
   {
     "opc": "comment",
+    "type": "end",
+    "target": "createMethodReturn"
+  },
+  {
+    "opc": "comment",
+    "type": "start",
     "target": "createMethodReturn"
   },
   {
@@ -306,5 +367,10 @@
   {
     "opc": "return",
     "values": true
+  },
+  {
+    "opc": "comment",
+    "type": "end",
+    "target": "createMethodReturn"
   }
 ]}

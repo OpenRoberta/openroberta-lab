@@ -8,9 +8,6 @@ declare var stackmachineJsHelper;
 
 export class Interpreter {
 
-    private static readonly DO_NOT_STEP_INTO = [C.EXPR, C.GET_SAMPLE, C.VAR_DECLARATION];
-    private static readonly COMMENTS_STEP_INTO = [C.IF_STMT, C.REPEAT_STMT, C.WAIT_STMT, C.METHOD_CALL];
-
     public breakpoints: any[];
     private terminated = false;
     private callbackOnTermination = undefined;
@@ -19,6 +16,9 @@ export class Interpreter {
     private events: any;
     private stepOverBlock: any;
     private lastStoppedBlock: any;
+    private lastBlock: any;
+
+    private readonly debugDelay = 2;
 
     /*
      *
@@ -39,6 +39,7 @@ export class Interpreter {
         this.events[C.DEBUG_BREAKPOINT] = false;
         this.events[C.DEBUG_STEP_OVER] = false;
 
+        this.lastBlock = null;
         this.lastStoppedBlock = null;
         this.stepOverBlock = null;
 
@@ -108,6 +109,7 @@ export class Interpreter {
     }
 
 
+
     /**
      * the central interpreter. It is a stack machine interpreting operations given as JSON objects. The operations are all IMMUTABLE. It
      * - uses the this.state component to store the state of the interpretation.
@@ -136,16 +138,16 @@ export class Interpreter {
     private evalOperation(maxRunTime: number) {
         while (maxRunTime >= new Date().getTime() && !this.robotBehaviour.getBlocking()) {
             let op = this.state.getOp();
-            this.state.evalTerminations(op);
-            this.state.evalInitiations(op);
+            this.state.evalHighlightings(op, this.lastBlock);
 
             if (this.state.getDebugMode()) {
                 let canContinue = this.calculateDebugBehaviour(op);
-                if (!canContinue) return 0
+                if (!canContinue) return 0;
             }
 
             let [result, stop] = this.evalSingleOperation(op);
             this.lastStoppedBlock = null;
+            this.lastBlock = op;
 
             if (result > 0 || stop) {
                 return result;
@@ -155,6 +157,10 @@ export class Interpreter {
                 this.robotBehaviour.close();
                 this.callbackOnTermination()
                 return 0;
+            }
+
+            if (this.state.getDebugMode()) {
+                return this.debugDelay;
             }
         }
         return 0;
@@ -1160,28 +1166,25 @@ export class Interpreter {
         return image;
     }
 
-    /** Returns true if the operation is a possible block where stepInto should stop*/
-    private static isPossibleStepInto(op) {
-        if (op.hasOwnProperty(C.HIGHTLIGHT_PLUS)) {
-            if (op[C.OPCODE] === C.COMMENT && this.COMMENTS_STEP_INTO.includes(op[C.TARGET])) {
-                return true;
-            }
-            if (this.DO_NOT_STEP_INTO.includes(op[C.OPCODE])) {
-                return false;
-            }
+    private static isPossibleStepInto(op): boolean {
+        if (op[C.POSSIBLE_DEBUG_STOP]?.length > 0) {
             return true;
         }
         return false;
     }
 
-
-    /** Returns true if the operation is a possible block where stepOver should stop*/
-    private static isPossibleStepOver(op) {
+    private static isPossibleStepOver(op): boolean {
         let isMethodCall = op[C.OPCODE] === C.COMMENT && op[C.TARGET] === C.METHOD_CALL;
         return op.hasOwnProperty(C.HIGHTLIGHT_PLUS) && isMethodCall;
     }
 
-    private static isBreakPoint(op: any, breakpoints: any[]) {
-        return op[C.HIGHTLIGHT_PLUS]?.some(blockId => breakpoints.includes(blockId));
+    private static isBreakPoint(op: any, breakpoints: any[]): boolean {
+        if (op[C.POSSIBLE_DEBUG_STOP]?.some(blockId => breakpoints.indexOf(blockId) >= 0)) {
+            return true;
+        }
+        if (op[C.HIGHTLIGHT_PLUS]?.some(blockId => breakpoints.indexOf(blockId) >= 0)) {
+            return true;
+        }
+        return false;
     }
 }

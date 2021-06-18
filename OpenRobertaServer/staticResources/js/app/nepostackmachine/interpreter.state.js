@@ -184,32 +184,37 @@ define(["require", "exports", "./interpreter.constants", "./interpreter.util"], 
         State.prototype.opLog = function (msg) {
             U.opLog(msg, this.operations, this.pc);
         };
-        /** adds block to currentBlocks and applies correct highlight to block**/
-        State.prototype.evalInitiations = function (stmt) {
-            var _this = this;
+        State.prototype.evalHighlightings = function (currentStmt, lastStmt) {
             var _a;
-            (_a = stmt[C.HIGHTLIGHT_PLUS]) === null || _a === void 0 ? void 0 : _a.map(function (blockId) { return stackmachineJsHelper.getBlockById(blockId); }).forEach(function (block) {
-                if (_this.debugMode) {
-                    if (stackmachineJsHelper.getJqueryObject(block === null || block === void 0 ? void 0 : block.svgPath_).hasClass("breakpoint")) {
-                        stackmachineJsHelper.getJqueryObject(block === null || block === void 0 ? void 0 : block.svgPath_).removeClass("breakpoint").addClass("selectedBreakpoint");
-                    }
-                    _this.highlightBlock(block);
-                    _this.currentBlocks.add(block.id);
+            if (this.debugMode) {
+                var initiations_1 = (currentStmt === null || currentStmt === void 0 ? void 0 : currentStmt[C.HIGHTLIGHT_PLUS]) || [];
+                var terminations = (_a = lastStmt === null || lastStmt === void 0 ? void 0 : lastStmt[C.HIGHTLIGHT_MINUS]) === null || _a === void 0 ? void 0 : _a.filter(function (term) { return initiations_1.indexOf(term) < 0; });
+                this.evalTerminations(terminations);
+                this.evalInitiations(initiations_1);
+            }
+        };
+        /** adds block to currentBlocks and applies correct highlight to block**/
+        State.prototype.evalInitiations = function (initiations) {
+            var _this = this;
+            initiations
+                .map(function (blockId) { return stackmachineJsHelper.getBlockById(blockId); })
+                .forEach(function (block) {
+                if (stackmachineJsHelper.getJqueryObject(block === null || block === void 0 ? void 0 : block.svgPath_).hasClass("breakpoint")) {
+                    stackmachineJsHelper.getJqueryObject(block === null || block === void 0 ? void 0 : block.svgPath_).removeClass("breakpoint").addClass("selectedBreakpoint");
                 }
+                _this.highlightBlock(block);
+                _this.currentBlocks.add(block.id);
             });
         };
         /** removes block froms currentBlocks and removes highlighting from block**/
-        State.prototype.evalTerminations = function (stmt) {
+        State.prototype.evalTerminations = function (terminations) {
             var _this = this;
-            var _a;
-            (_a = stmt[C.HIGHTLIGHT_MINUS]) === null || _a === void 0 ? void 0 : _a.map(function (blockId) { return stackmachineJsHelper.getBlockById(blockId); }).forEach(function (block) {
-                if (_this.debugMode) {
-                    if (stackmachineJsHelper.getJqueryObject(block === null || block === void 0 ? void 0 : block.svgPath_).hasClass("selectedBreakpoint")) {
-                        stackmachineJsHelper.getJqueryObject(block === null || block === void 0 ? void 0 : block.svgPath_).removeClass("selectedBreakpoint").addClass("breakpoint");
-                    }
-                    _this.removeBlockHighlight(block);
-                    _this.currentBlocks.delete(block.id);
+            terminations === null || terminations === void 0 ? void 0 : terminations.map(function (blockId) { return stackmachineJsHelper.getBlockById(blockId); }).forEach(function (block) {
+                if (stackmachineJsHelper.getJqueryObject(block === null || block === void 0 ? void 0 : block.svgPath_).hasClass("selectedBreakpoint")) {
+                    stackmachineJsHelper.getJqueryObject(block === null || block === void 0 ? void 0 : block.svgPath_).removeClass("selectedBreakpoint").addClass("breakpoint");
                 }
+                _this.removeBlockHighlight(block);
+                _this.currentBlocks.delete(block.id);
             });
         };
         /** Returns true if the current block is currently being executed**/
@@ -219,19 +224,9 @@ define(["require", "exports", "./interpreter.constants", "./interpreter.util"], 
         };
         State.prototype.highlightBlock = function (block) {
             stackmachineJsHelper.getJqueryObject(block.svgPath_).stop(true, true).animate({ 'fill-opacity': '1' }, 0);
-            var start = new Date().getTime();
-            var end = start;
-            while (end < start + 1) {
-                end = new Date().getTime();
-            }
         };
         State.prototype.removeBlockHighlight = function (block) {
             stackmachineJsHelper.getJqueryObject(block.svgPath_).stop(true, true).animate({ 'fill-opacity': '0.3' }, 50);
-            var start = new Date().getTime();
-            var end = start;
-            while (end < start + 1) {
-                end = new Date().getTime();
-            }
         };
         /** Will add highlights from all currently blocks being currently executed and all given Breakpoints
          * @param breakPoints the array of breakpoint block id's to have their highlights added*/

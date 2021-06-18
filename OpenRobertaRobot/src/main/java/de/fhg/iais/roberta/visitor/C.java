@@ -220,6 +220,7 @@ public class C {
     public static final String PORT = "port";
     public static final String PORT_A = "portA";
     public static final String PORT_B = "portB";
+    public static final String POSSIBLE_DEBUG_STOP = "possibleDebugStop";
     public static final String POSITION = "position";
     public static final String POWER = "POWER";
     public static final String PRESENCE = "presence";
@@ -260,6 +261,7 @@ public class C {
     public static final String SPEED_L = "speedL";
     public static final String SPEED_ONLY = "speedOnly";
     public static final String SPEED_R = "speedR";
+    public static final String START = "start";
     public static final String STATEMENTS = "statements";
     public static final String STATUS_LIGHT_ACTION = "statusLightAction";
     public static final String STD_DEV = "std_dev";
