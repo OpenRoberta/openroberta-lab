@@ -124,7 +124,7 @@ public final class NaoPythonSimVisitor extends AbstractPythonVisitor implements 
 
     @Override
     public Void visitWaitTimeStmt(WaitTimeStmt<Void> waitTimeStmt) {
-        this.sb.append("h.wait(");
+        this.sb.append("robot.wait(");
         waitTimeStmt.getTime().accept(this);
         this.sb.append(")");
         return null;

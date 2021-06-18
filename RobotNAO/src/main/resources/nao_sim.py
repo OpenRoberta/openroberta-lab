@@ -19,6 +19,7 @@ from controller import Robot, Motion, Motor, PositionSensor
 import math
 
 FORWARD_SPEED = 50 / 6.76 # cm / s
+BACKWARD_SPEED = 19.23 / 2.6 # cm / s
 TURN_SPEED = 60 / 4.5 # °/s
 
 DELTA = 0.001
@@ -317,15 +318,18 @@ class Nao (Robot):
 
         turn_motion.setLoop(True)
         turn_motion.play()
-        self.wait(abs(degree) / TURN_SPEED)
+        self.wait((abs(degree) / TURN_SPEED) * 1000)
         turn_motion.stop()
         self.reset_pose()
 
     def walk(self, distance):
-        self.forwards.setLoop(True)
-        self.forwards.play()
-        self.wait(distance / FORWARD_SPEED)
-        self.forwards.stop()
+        motion = self.forwards if distance >= 0 else self.backwards
+        speed = FORWARD_SPEED if distance >= 0 else BACKWARD_SPEED
+
+        motion.setLoop(True)
+        motion.play()
+        self.wait((abs(distance) / speed) * 1000)
+        motion.stop()
 
         self.reset_pose()
 
@@ -343,7 +347,11 @@ class Nao (Robot):
 
 
     def wait(self, time):
-        startTime = self.getTime()
+        """
+
+        :param time: time in ms
+        """
+        start_time = self.getTime()
         while self.step(self.timeStep) != -1:
-            if self.getTime() - startTime > time:
+            if self.getTime() - start_time > (time / 1000):
                 break
