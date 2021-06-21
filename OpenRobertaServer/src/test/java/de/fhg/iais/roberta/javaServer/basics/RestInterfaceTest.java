@@ -120,6 +120,8 @@ public class RestInterfaceTest {
         this.restProject = new ClientProgramController(this.serverProperties);
         this.restConfiguration = new ClientConfiguration(this.robotCommunicator);
         Map<String, IRobotFactory> robotPlugins = ServerStarter.configureRobotPlugins(this.robotCommunicator, this.serverProperties, EMPTY_STRING_LIST);
+        DbSession dbSession = this.sessionFactoryWrapper.getSession();  // session is closed in the method called below
+        ServerStarter.checkRobotPluginsDB(dbSession, robotPlugins.values());
         this.sPid = HttpSessionState.initOnlyLegalForDebugging("pid", robotPlugins, this.serverProperties, 1);
         this.sMinscha = HttpSessionState.initOnlyLegalForDebugging("minscha", robotPlugins, this.serverProperties, 2);
     }

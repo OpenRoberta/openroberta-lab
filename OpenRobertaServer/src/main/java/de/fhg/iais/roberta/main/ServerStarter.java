@@ -233,7 +233,8 @@ public class ServerStarter {
         this.injector = robertaGuiceServletConfig.getCreatedInjector();
         Ev3SensorLoggingWS.setGuiceInjector(this.injector);
 
-        checkRobotPluginsDB(robotPluginMap.values());
+        DbSession dbSession = this.injector.getInstance(SessionFactoryWrapper.class).getSession();  // session is closed in the method called below
+        checkRobotPluginsDB(dbSession, robotPluginMap.values());
         Runtime.getRuntime().addShutdownHook(new ShutdownHook("embedded".equals(this.serverProperties.getStringProperty("database.mode")), this.injector));
         LOG.info("Shutdown hook added. If the server is gracefully stopped in the future, a shutdown message is logged");
         logTheNumberOfStoredPrograms();
@@ -410,25 +411,25 @@ public class ServerStarter {
     /**
      * step through all configured robot factories and make sure, that the group name of each robot (or its name, if no group is configured) is in the
      * database.<br>
-     * This is required, because the robot (group) name is used as foreign key in some tables
+     * This is required, because the robot (group) name is used as foreign key in some tables. The method is public and static because it is used
+     * in class {@link RestInterfaceTest}
      *
      * @param robotFactories collection of all configured robot factories
      */
-    private void checkRobotPluginsDB(Collection<IRobotFactory> robotFactories) {
+    public static void checkRobotPluginsDB(DbSession dbSession, Collection<IRobotFactory> robotFactories) {
         try {
-            DbSession session = this.injector.getInstance(SessionFactoryWrapper.class).getSession();
-            RobotDao robotDao = new RobotDao(session);
+            RobotDao robotDao = new RobotDao(dbSession);
             for ( IRobotFactory robotFactory : robotFactories ) {
                 String robotForDb = robotFactory.getGroup();
                 Robot pluginRobot = robotDao.loadRobot(robotForDb);
                 if ( pluginRobot == null ) {
                     // add missing robot type to database
                     Robot robot = new Robot(robotForDb);
-                    session.save(robot);
+                    dbSession.save(robot);
                     ServerStarter.LOG.info(robot.getName() + " added to the database");
                 }
             }
-            session.close();
+            dbSession.close();
         } catch ( Exception e ) {
             LOG.error("Server could not check robot names in the database (exit 20)", e);
             System.exit(20);
