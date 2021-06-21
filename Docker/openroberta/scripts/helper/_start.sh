@@ -29,7 +29,7 @@ CONTAINER="server-${SERVER_NAME}"
 if [ "${REMOTE_DEBUG}" == 'true' ]
 then
     REMOTE_DEBUG_PARAM='remote.debug'
-    REMOTE_DEBUG_PORT='-p 8000:8000'
+    REMOTE_DEBUG_PORT='-p 2000:2000'
 else
     REMOTE_DEBUG_PARAM=''
     REMOTE_DEBUG_PORT=''
