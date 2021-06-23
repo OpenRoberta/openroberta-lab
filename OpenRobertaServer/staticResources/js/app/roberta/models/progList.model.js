@@ -11,13 +11,13 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
      */
     //REPLACE THIS WITH BELOW
      function loadProgList(successFn) {
-        COMM.download("/program/TestExportAllPrograms");
+        COMM.download("/program/TestExportAllPrograms?initToken=y-1tv17--HSK");
     }
     exports.loadProgList = loadProgList;
-    /*function loadProgList(successFn) {
-        COMM.json("/program/listing/names", {}, successFn, "load program list");
-    }
-    exports.loadProgList = loadProgList;*/
+    // function loadProgList(successFn) {
+    //     COMM.json("/program/listing/names", {}, successFn, "load program list");
+    // }
+    // exports.loadProgList = loadProgList;
     
     /**
      * 

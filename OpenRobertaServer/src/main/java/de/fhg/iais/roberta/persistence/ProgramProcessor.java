@@ -234,10 +234,12 @@ public class ProgramProcessor extends AbstractProcessor {
 
     /**
      * Get information about all the programs owned by a user for every robot needed for exporting
-     *
+     * 
      * @param ownerId the owner of the program
+     * @return JSONArray with programId, and programInfos: programName, robotName, programText, and config in that order,
+     *         when the default configuration is used by the program the config for it is null
      */
-    public JSONArray getProgramsInfoForExport(int ownerId){
+    public JSONArray getProgramsInfoForExport(int ownerId) {
         UserDao userDao = new UserDao(this.dbSession);
         ProgramDao programDao = new ProgramDao(this.dbSession);
         UserGroupProgramShareDao userGroupProgramShareDao = new UserGroupProgramShareDao(this.dbSession);
@@ -251,14 +253,25 @@ public class ProgramProcessor extends AbstractProcessor {
         Map<Integer, JSONArray> programInfos = new HashMap<>();
         List<Program> programs = programDao.loadAll(owner);
         UserGroup ownersGroup = owner.getUserGroup();
-        
-        for(Program program : programs){
+
+        for ( Program program : programs ) {
             JSONArray programInfo = new JSONArray();
+
+            // if (config == null){
+            //     Properties robotProperties = Util.loadProperties("classpath:/" + "ev3c4ev3"/*program.getRobot().getName()*/+ ".properties");
+            //     String defaultConfigurationURI = robotProperties.getProperty("robot.configuration.default");
+            //     config = Util.rea
+            //     dResourceContent(defaultConfigurationURI);
+            // }
+
+            String programText = program.getProgramText();
             String config = getProgramsConfig(program);
-            String export = "<export xmlns=\"http://de.fhg.iais.roberta.blockly\"><program>" + program.getProgramText() + "</program><config>"
-            + config + "</config></export>";
+            String robotName = program.getRobot().getName();
+
             programInfo.put(program.getName());
-            programInfo.put(export);
+            programInfo.put(robotName);
+            programInfo.put(programText);
+            programInfo.put(config);
             programInfos.put(program.getId(), programInfo);
         }
         //WIP

@@ -1,17 +1,9 @@
 package de.fhg.iais.roberta.javaServer.restServices.all.controller;
 
-import java.io.BufferedOutputStream;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Paths;
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.Set;
@@ -19,19 +11,17 @@ import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
-import javax.naming.directory.BasicAttribute;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.StreamingOutput;
 import javax.ws.rs.core.Response.ResponseBuilder;
 import javax.xml.bind.UnmarshalException;
 
-import org.apache.commons.io.IOUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -84,7 +74,6 @@ import de.fhg.iais.roberta.util.UtilForREST;
 import de.fhg.iais.roberta.util.XsltTransformer;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.util.jaxb.JaxbHelper;
-import javassist.bytecode.SourceFileAttribute;
 
 @Path("/program")
 public class ClientProgramController {
@@ -461,31 +450,51 @@ public class ClientProgramController {
         }
     }
 
+    //this method is used to export all Programs of the current user
     @GET
     @Path("/TestExportAllPrograms")
-    //@Produces("text/plain")
-    public Response testExportALlProgrammsOfUser() throws IOException {
-        
+    public Response testExportALlProgrammsOfUser(@OraData DbSession dbSession, @QueryParam("initToken") String initToken) throws IOException {
 
+        HttpSessionState httpSessionState = UtilForREST.validateInitToken(initToken); //UtilForREST.validateInitToken(initToken);
+        if ( !httpSessionState.isUserLoggedIn() ) { //safety chack if user is still logged in
+            LOG.error("Unauthorized export request");
+            return null;
+        }
 
+        ProgramProcessor programProcessor = new ProgramProcessor(dbSession, httpSessionState);
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        JSONArray programInfo = programProcessor.getProgramsInfoForExport(httpSessionState.getUserId());
 
+        //building the Zip file with name,programText and config
         try (ZipOutputStream zos = new ZipOutputStream(baos)) {
-            for(int i=0;i<10;i++){ //this would be for the length of the json Array
-            String data ="<note> <body> this is xml text number: "+i + "</body> </note>"; // this would be .xml[i]
-            String fileNameInZip ="test"+i+".xml"; //this would be programName[i]
-            zos.putNextEntry(new ZipEntry(fileNameInZip));
-            zos.write(data.getBytes());
-            zos.closeEntry();
+            for ( int i = 0; i < programInfo.length(); i++ ) {
+                JSONArray program = programInfo.getJSONArray(i);
+                String config;
 
+                if ( !program.isNull(3) ) {
+                    config = program.getString(3);
+                } else { // if the config is null get the default config of the robot used by the program
+                    config = httpSessionState.getRobotFactoriesOfGroup(program.getString(1)).get(0).getConfigurationDefault();
+                }
+                // buildig the xml content with programText and config
+                String xml =
+                    "<export xmlns=\"http://de.fhg.iais.roberta.blockly\"><program>"
+                        + program.getString(2)
+                        + "</program><config>"
+                        + config
+                        + "</config></export>";
+                String fileNameInZip = program.getString(0) + ".xml";
+                zos.putNextEntry(new ZipEntry(fileNameInZip));
+                zos.write(xml.getBytes());
+                zos.closeEntry();
             }
-          }
+        }
 
         InputStream zip = new ByteArrayInputStream(baos.toByteArray());
-        
-        ResponseBuilder response = Response.ok(zip,"application/zip");
+
+        ResponseBuilder response = Response.ok(zip, "application/zip");
         return response.header("Content-Disposition", "attachment; filename=\"test.zip\"").build();
-    }  
+    }
 
     //this method checks if exportAllPrograms can be executed and returns error masseges if not
     //does nothing if every check passes

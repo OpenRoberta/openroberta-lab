@@ -75,7 +75,7 @@ public class UtilForREST {
         new ClientLogger().log(loggerForRequest, fullRequest.getLog());
         return httpSessionState;
     }
-
+    
     /**
      * validate the init-token from the frontend-request and the init-token from the state stored in this object.<br>
      * If an error is detected a {@linkplain DbcKeyException} is thrown.<br>
@@ -86,7 +86,7 @@ public class UtilForREST {
      * @param initToken the token from the frontend-request, retrieved from the server when the connection front-end to server was established
      * @return a HttpSessionState object matching the initToken
      */
-    private static HttpSessionState validateInitToken(String initToken) {
+    public static HttpSessionState validateInitToken(String initToken) {
         if ( initToken == null ) {
             String errorMsgIfError = "frontend request has no initToken";
             LOG.error(errorMsgIfError);
