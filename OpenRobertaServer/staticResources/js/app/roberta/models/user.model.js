@@ -275,9 +275,8 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
     function getStatusText(successFn) {
         COMM.json("/user/getStatusText", {
             "cmd" : "getStatusText"
-        }, successFn);
+        }, successFn, 'get status text');
     }
-
     exports.getStatusText = getStatusText;
 
     function setStatusText(english, german, timestamp, successFn) {
@@ -286,7 +285,7 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
             "english" : english,
             "german" : german,
             "timestamp" : timestamp
-        }, successFn);
+        }, successFn, 'set status text');
     }
 
     exports.setStatusText = setStatusText;

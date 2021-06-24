@@ -99,7 +99,7 @@ define([ 'exports', 'message', 'comm' ], function(exports, MSG, COMM) {
                     console.log("ERROR: " + result.message)
                     // MSG.displayInformation(result, "", result.message);
                 }
-            });
+            }, 'init data from server');
         }
         getInitFromServer();
 

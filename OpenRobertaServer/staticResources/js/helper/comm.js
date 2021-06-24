@@ -16,8 +16,13 @@ define([ 'exports', 'jquery', 'wrap', 'log' ], function(exports, $, WRAP, LOG) {
     }
 
     /**
-     * the default error fn. Should be replaced by an own implementation. Not
-     * public.
+     * counts the number of communication errors (server down, ...). If the number hits a warning level,
+     * the user is informed.
+     */
+     exports.errorNum = 0;
+
+    /**
+     * the error fn.
      */
     function errorFn(response) {
         alert('The COMM (default) errorfn is called.'); // This is an annoying behavior ...
@@ -57,13 +62,12 @@ define([ 'exports', 'jquery', 'wrap', 'log' ], function(exports, $, WRAP, LOG) {
             type : 'GET',
             dataType : 'json',
             data : data,
-            success : WRAP.fn3(successFn, message),
-            error : errorFn
+            success : WRAP.wrapREST(successFn, message),
+            error : WRAP.wrapErrorFn(errorFn)
         });
     }
     exports.get = get;
 
-    exports.errorNum = 0;
     /**
      * POST a JSON object as ENTITY and expect a JSON object as response.
      */
@@ -88,8 +92,8 @@ define([ 'exports', 'jquery', 'wrap', 'log' ], function(exports, $, WRAP, LOG) {
             contentType : 'application/json; charset=utf-8',
             dataType : 'json',
             data : JSON.stringify(load),
-            success : WRAP.fn3(successFnWrapper, message),
-            error : errorFn
+            success : WRAP.wrapREST(successFnWrapper, message),
+            error : WRAP.wrapErrorFn(errorFn)
         });
     }
     exports.json = json;
@@ -104,14 +108,14 @@ define([ 'exports', 'jquery', 'wrap', 'log' ], function(exports, $, WRAP, LOG) {
             contentType : 'text/plain; charset=utf-8',
             dataType : 'json',
             data : xml,
-            success : WRAP.fn3(successFn, message),
-            error : errorFn
+            success : WRAP.wrapREST(successFn, message),
+            error : WRAP.wrapErrorFn(errorFn)
         });
     }
     exports.xml = xml;
 
     /**
-     * check whether a server is available (b.t.w. send logging data!).<br>
+     * check whether a server is available (... and send logging data!).<br>
      * SuccessFn is optional.
      */
     function ping(successFn) {
@@ -129,7 +133,7 @@ define([ 'exports', 'jquery', 'wrap', 'log' ], function(exports, $, WRAP, LOG) {
                     }
                 }
             }
-            return json('/ping', {}, successFnWrapper);
+            return json('/ping', {}, successFnWrapper); // no message to reduce amount of logging data
         }
     }
     exports.ping = ping;
@@ -140,7 +144,7 @@ define([ 'exports', 'jquery', 'wrap', 'log' ], function(exports, $, WRAP, LOG) {
         return $.ajax({
             type : "GET",
             url : URL,
-            //success : WRAP.fn3(successFn, "list success"),
+            //success : WRAP.wrapREST(successFn, "list success"),
             error : onError,
             complete : completeFn
         });
@@ -179,14 +183,14 @@ define([ 'exports', 'jquery', 'wrap', 'log' ], function(exports, $, WRAP, LOG) {
             dataType : 'json',
             statusCode : {
                 200 : function() {
-                    WRAP.fn3(successFn, "Upload success");
+                    WRAP.wrapREST(successFn, "Upload success");
                 },
                 202 : function() {
-                    WRAP.fn3(successFn, "Upload success");
+                    WRAP.wrapREST(successFn, "Upload success");
                 },
-                400 : errorFn,
-                403 : errorFn,
-                404 : errorFn
+                400 : WRAP.wrapErrorFn(errorFn),
+                403 : WRAP.wrapErrorFn(errorFn),
+                404 : WRAP.wrapErrorFn(errorFn)
             },
             error : function(jqXHR) {
             }

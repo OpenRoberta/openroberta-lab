@@ -10,12 +10,12 @@ define(['exports', 'comm'], function (exports, COMM) {
             if (result.rc === "ok" && result.message === "ORA_SERVER_SUCCESS") {
                 successFn(result)
             }
-        });
+        }, 'load notofications');
     };
 
     exports.postNotifications = function (notifications, successFn) {
         COMM.json("/notifications/postNotifications", {
             notifications : notifications
-        }, successFn);
+        }, successFn, 'send notifications to server');
     };
 });

@@ -186,7 +186,7 @@ require(['require', 'huebee', 'wrap', 'log','jquery', 'blockly', 'guiState.contr
     confVisualization = require('confVisualization');
     robotBlock = require('robotBlock');
 
-    $(document).ready(WRAP.fn3(init, 'page init'));
+    $(document).ready(WRAP.wrapTotal(init, 'page init'));
 });
 
 /**
@@ -253,14 +253,12 @@ function handleServerErrors(jqXHR) {
     if (this.url === "/rest/ping") {
         COMM.errorNum += 1;
     }
-    if (this.url !== "/rest/ping" || COMM.errorNum > ALLOWED_PING_NUM) {
-        guiStateController.setPing(false);
+    // show message, if REST call is no ping or EXACTLY ALLOWED_PING_NUM requests fail (to avoid multiple messages)
+    if (this.url !== "/rest/ping" || COMM.errorNum == ALLOWED_PING_NUM) {
         if (jqXHR.status && jqXHR.status < 500) {
             COMM.showServerError("FRONTEND");
         } else {
             COMM.showServerError("CONNECTION");
         }
-        guiStateController.setPing(true);
-
     }
 }
