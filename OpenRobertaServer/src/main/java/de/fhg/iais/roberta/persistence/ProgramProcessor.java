@@ -256,14 +256,6 @@ public class ProgramProcessor extends AbstractProcessor {
 
         for ( Program program : programs ) {
             JSONArray programInfo = new JSONArray();
-
-            // if (config == null){
-            //     Properties robotProperties = Util.loadProperties("classpath:/" + "ev3c4ev3"/*program.getRobot().getName()*/+ ".properties");
-            //     String defaultConfigurationURI = robotProperties.getProperty("robot.configuration.default");
-            //     config = Util.rea
-            //     dResourceContent(defaultConfigurationURI);
-            // }
-
             String programText = program.getProgramText();
             String config = getProgramsConfig(program);
             String robotName = program.getRobot().getName();
@@ -274,7 +266,6 @@ public class ProgramProcessor extends AbstractProcessor {
             programInfo.put(config);
             programInfos.put(program.getId(), programInfo);
         }
-        //WIP
         return new JSONArray(programInfos.values());
     }
 

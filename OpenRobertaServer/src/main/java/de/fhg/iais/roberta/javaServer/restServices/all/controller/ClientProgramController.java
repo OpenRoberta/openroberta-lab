@@ -452,28 +452,24 @@ public class ClientProgramController {
 
     //this method is used to export all Programs of the current user
     @GET
-    @Path("/TestExportAllPrograms")
+    @Path("/ExportAllPrograms")
     public Response testExportALlProgrammsOfUser(@OraData DbSession dbSession, @QueryParam("initToken") String initToken) throws IOException {
-
-        HttpSessionState httpSessionState = UtilForREST.validateInitToken(initToken); //UtilForREST.validateInitToken(initToken);
-        if ( !httpSessionState.isUserLoggedIn() ) { //safety chack if user is still logged in
+        HttpSessionState httpSessionState = UtilForREST.validateInitToken(initToken);
+        if ( !httpSessionState.isUserLoggedIn() ) { //safety check if user is logged in
             LOG.error("Unauthorized export request");
             return null;
         }
-
         ProgramProcessor programProcessor = new ProgramProcessor(dbSession, httpSessionState);
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         JSONArray programInfo = programProcessor.getProgramsInfoForExport(httpSessionState.getUserId());
-
         //building the Zip file with name,programText and config
         try (ZipOutputStream zos = new ZipOutputStream(baos)) {
             for ( int i = 0; i < programInfo.length(); i++ ) {
                 JSONArray program = programInfo.getJSONArray(i);
                 String config;
-
                 if ( !program.isNull(3) ) {
                     config = program.getString(3);
-                } else { // if the config is null get the default config of the robot used by the program
+                } else { // if the config is null get the default config of the robotgroup used by the program
                     config = httpSessionState.getRobotFactoriesOfGroup(program.getString(1)).get(0).getConfigurationDefault();
                 }
                 // buildig the xml content with programText and config
@@ -489,17 +485,15 @@ public class ClientProgramController {
                 zos.closeEntry();
             }
         }
-
         InputStream zip = new ByteArrayInputStream(baos.toByteArray());
-
         ResponseBuilder response = Response.ok(zip, "application/zip");
         return response.header("Content-Disposition", "attachment; filename=\"test.zip\"").build();
     }
 
-    //this method checks if exportAllPrograms can be executed and returns error masseges if not
-    //does nothing if every check passes
+    //this method checks if the user is logged in
+    //returns ok message if yes and error massege if not
     @POST
-    @Path("/exportCheck")
+    @Path("/loggedInCheck")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response checkConditionsForExport(@OraData DbSession dbSession, FullRestRequest request) {
@@ -511,13 +505,13 @@ public class ClientProgramController {
             }
 
             BaseResponse response = BaseResponse.make(); // baseresponse
-            response.setRc(Key.SERVER_SUCCESS.toString());
+            UtilForREST.addSuccessInfo(response, Key.SERVER_SUCCESS);
             return UtilForREST.responseWithFrontendInfo(response, httpSessionState, null);
         } catch ( Exception e ) {
             dbSession.rollback();
             String errorTicketId = Util.getErrorTicketId();
             LOG.error("Exception. Error ticket: {}", errorTicketId, e);
-            return UtilForREST.makeBaseResponseForError(Key.SERVER_ERROR, httpSessionState, null); // TODO: redesign error ticker number and add then: append("parameters", errorTicketId);
+            return UtilForREST.makeBaseResponseForError(Key.SERVER_ERROR, httpSessionState, null);
         } finally {
             if ( dbSession != null ) {
                 dbSession.close();
