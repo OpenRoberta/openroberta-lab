@@ -363,7 +363,7 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.controller', 'guiState.m
         } else {
             $('#show-message-confirm').one('shown.bs.modal', function(e) {
                 $('#confirm').off();
-                $('#confirm').on('click', function(e) {
+                $('#confirm').onWrap('click', function(e) {
                     e.preventDefault();
                     switchRobot(robot, true, opt_callback);
                 });

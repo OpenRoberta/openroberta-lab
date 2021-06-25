@@ -92,7 +92,7 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'message', 'progList.model
                 height : UTIL.calcDataTableHeight()
             });
         });
-        $tabProgList.on('show.bs.tab', function(e) {
+        $tabProgList.onWrap('show.bs.tab', function(e) {
             guiStateController.setView('tabProgList');
             $programNameTable.bootstrapTable("load", []);
             $userGroupSelect.hide();
@@ -112,7 +112,7 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'message', 'progList.model
             }
         });
 
-        $tabProgList.on('shown.bs.tab', function(e) {
+        $tabProgList.onWrap('shown.bs.tab', function(e) {
             switch ($tabProgList.data('type')) {
                 case 'userProgram':
                     PROGLIST.loadProgList(update);

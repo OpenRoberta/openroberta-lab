@@ -57,7 +57,7 @@ define(['exports', 'message', 'util', 'progList.model', 'program.controller', 'p
                     data: dataarr
                 });
                 $("#loadMultipleSimPrograms").off();
-                $("#loadMultipleSimPrograms").on("click", function() {
+                $("#loadMultipleSimPrograms").onWrap("click", function() {
                     var selections = $("#multipleRobotsTable").bootstrapTable('getSelections');
                     var selectedprograms = [];
                     for (var i = 0; i < selections.length; i++) {

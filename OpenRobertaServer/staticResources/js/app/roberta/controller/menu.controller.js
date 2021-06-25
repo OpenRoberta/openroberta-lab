@@ -1,6 +1,6 @@
-define(['exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socket.controller', 'user.controller', 'user.model', 'notification.controller', 'userGroup.controller', 'guiState.controller',
+define(['exports', 'log', 'util', 'message', 'comm', 'wrap', 'robot.controller', 'socket.controller', 'user.controller', 'user.model', 'notification.controller', 'userGroup.controller', 'guiState.controller',
     'program.controller', 'program.model', 'multSim.controller', 'progRun.controller', 'configuration.controller', 'import.controller', 'enjoyHint',
-    'tour.controller', 'simulation.simulation', 'progList.model', 'jquery', 'blockly', 'slick'], function(exports, LOG, UTIL, MSG, COMM, ROBOT_C, SOCKET_C,
+    'tour.controller', 'simulation.simulation', 'progList.model', 'jquery', 'blockly', 'slick'], function(exports, LOG, UTIL, MSG, COMM, WRAP, ROBOT_C, SOCKET_C,
         USER_C, USER, NOTIFICATION_C, USERGROUP_C, GUISTATE_C, PROGRAM_C, PROGRAM_M, MULT_SIM, RUN_C, CONFIGURATION_C, IMPORT_C, EnjoyHint, TOUR_C, SIM, PROGLIST, $, Blockly) {
 
     var n = 0;
@@ -212,7 +212,7 @@ define(['exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socket
         for (var i = 0; i < length; i++) {
             if (robots[i].name == 'sim') {
                 i++;
-                // TODO check this hardcoded Open Roberta Sim again (maybe some day there is a better choise for us)
+                // TODO check this hardcoded Open Roberta Sim again (maybe some day there is a better choice for us)
                 proto.attr('data-type', GUISTATE_C.getDefaultRobot());
             }
             addPair(robots[i].group, robots[i].name);
@@ -351,65 +351,73 @@ define(['exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socket
             });
         }
 
-        // EDIT Menu
-        $('#head-navigation-program-edit').onWrap('click', '.dropdown-menu li:not(.disabled) a', function(event) {
-            switch (event.target.id) {
-                case 'menuRunProg':
-                    RUN_C.runOnBrick();
-                    break;
-                case 'menuRunSim':
-                    $('#simButton').trigger('click');
-                    break;
-                case 'menuCheckProg':
-                    PROGRAM_C.checkProgram();
-                    break;
-                case 'menuNewProg':
-                    PROGRAM_C.newProgram();
-                    break;
-                case 'menuListProg':
-                    $('#tabProgList').data('type', 'userProgram');
-                    $('#tabProgList').click();
-                    break;
-                case 'menuListExamples':
-                    $('#tabProgList').data('type', 'exampleProgram');
-                    $('#tabProgList').click();
-                    break;
-                case 'menuSaveProg':
-                    PROGRAM_C.saveToServer();
-                    break;
-                case 'menuSaveAsProg':
-                    PROGRAM_C.showSaveAsModal();
-                    break;
-                case 'menuShowCode':
-                    $('#codeButton').trigger("click");
-                    break;
-                case 'menuSourceCodeEditor':
-                    $('#tabSourceCodeEditor').trigger("click");
-                    break;
-                case 'menuImportProg':
-                    IMPORT_C.importXml();
-                    break;
-                case 'menuExportProg':
-                    PROGRAM_C.exportXml();
-                    break;
-                case 'menuLinkProg':
-                    PROGRAM_C.linkProgram();
-                    break;
-                case 'menuToolboxBeginner':
-                    $('.levelTabs a[href="#beginner"]').tab('show');
-                    break;
-                case 'menuToolboxExpert':
-                    $('.levelTabs a[href="#expert"]').tab('show');
-                    break;
-                case 'menuRunMulipleSim':
-                    MULT_SIM.showListProg();
-                    break;
-                case 'menuDefaultFirmware':
-                    RUN_C.reset2DefaultFirmware();
-                default:
-                    break;
+        // EDIT Menu  --- don't use onWrap here, because the export xml target must be enabled always
+        $('#head-navigation-program-edit').on('click', '.dropdown-menu li:not(.disabled) a', function(event) {
+            if (event.target.id === 'menuExportProg') {
+                PROGRAM_C.exportXml();
+                return;
             }
-        }, 'program edit clicked');
+            var fn = function(event) {
+                switch (event.target.id) {
+                    case 'menuRunProg':
+                        RUN_C.runOnBrick();
+                        break;
+                    case 'menuRunSim':
+                        $('#simButton').trigger('click');
+                        break;
+                    case 'menuCheckProg':
+                        PROGRAM_C.checkProgram();
+                        break;
+                    case 'menuNewProg':
+                        PROGRAM_C.newProgram();
+                        break;
+                    case 'menuListProg':
+                        $('#tabProgList').data('type', 'userProgram');
+                        $('#tabProgList').click();
+                        break;
+                    case 'menuListExamples':
+                        $('#tabProgList').data('type', 'exampleProgram');
+                        $('#tabProgList').click();
+                        break;
+                    case 'menuSaveProg':
+                        PROGRAM_C.saveToServer();
+                        break;
+                    case 'menuSaveAsProg':
+                        PROGRAM_C.showSaveAsModal();
+                        break;
+                    case 'menuShowCode':
+                        $('#codeButton').trigger("click");
+                        break;
+                    case 'menuSourceCodeEditor':
+                        $('#tabSourceCodeEditor').trigger("click");
+                        break;
+                    case 'menuImportProg':
+                        IMPORT_C.importXml();
+                        break;
+                    case 'menuExportProg':
+                        PROGRAM_C.exportXml();
+                        break;
+                    case 'menuLinkProg':
+                        PROGRAM_C.linkProgram();
+                        break;
+                    case 'menuToolboxBeginner':
+                        $('.levelTabs a[href="#beginner"]').tab('show');
+                        break;
+                    case 'menuToolboxExpert':
+                        $('.levelTabs a[href="#expert"]').tab('show');
+                        break;
+                    case 'menuRunMulipleSim':
+                        MULT_SIM.showListProg();
+                        break;
+                    case 'menuDefaultFirmware':
+                        RUN_C.reset2DefaultFirmware();
+                        break;
+                    default:
+                        break;
+                };
+            };
+            WRAP.wrapUI(fn,'edit menu click')(event);
+        });
 
         // CONF Menu
         $('#head-navigation-configuration-edit').onWrap('click', '.dropdown-menu li:not(.disabled) a', function(event) {
@@ -687,7 +695,7 @@ define(['exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socket
         });
 
         // experimental
-        $(document).on('keydown', function(e) {
+        $(document).onWrap('keydown', function(e) {
             if ((e.metaKey || e.ctrlKey) && (String.fromCharCode(e.which) === '1')) {
                 IMPORT_C.importSourceCodeToCompile();
                 return false;
