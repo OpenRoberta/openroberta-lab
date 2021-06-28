@@ -53,7 +53,6 @@ define([ 'exports', 'comm', 'log', 'jquery' ], function(exports, COMM, LOG, $) {
      */
     function wrapUI(fnToBeWrapped, message) {
         var wrap = function() {
-            LOG.info("wrapUI " + message + "  noa: " + numberOfActiveActions);
             if (numberOfActiveActions > 0) {
                 if (message !== undefined) {
                     LOG.text('SUPPRESSED ACTION: ' + message);
@@ -88,7 +87,6 @@ define([ 'exports', 'comm', 'log', 'jquery' ], function(exports, COMM, LOG, $) {
         numberOfActiveActions++;
         var rest = function() {
             COMM.errorNum = 0;
-            LOG.info("wrapREST " + message + "  noa: " + numberOfActiveActions);
             try {
                 var fn = wrapTotal(fnToBeWrapped, message);
                 var that = this;
@@ -107,7 +105,6 @@ define([ 'exports', 'comm', 'log', 'jquery' ], function(exports, COMM, LOG, $) {
 
     function wrapErrorFn(errorFnToBeWrapped) {
         var wrap = function() {
-            LOG.info("wrapErrorFn " + message + "  noa: " + numberOfActiveActions);
             try {
                 var fn = wrapTotal(errorFnToBeWrapped, message);
                 var that = this;

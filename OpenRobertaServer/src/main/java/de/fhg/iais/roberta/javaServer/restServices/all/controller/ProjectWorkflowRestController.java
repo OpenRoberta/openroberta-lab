@@ -67,7 +67,7 @@ public class ProjectWorkflowRestController {
             Statistics.info("ProgramSource", "success", project.hasSucceeded());
             return UtilForREST.responseWithFrontendInfo(response, httpSessionState, this.robotCommunicator);
         } catch ( Exception e ) {
-            LOG.info("getSourceCode failed", e);
+            LOG.error("getSourceCode failed", e);
             Statistics.info("ProgramSource", "success", false);
             return UtilForREST.makeBaseResponseForError(Key.SERVER_ERROR, httpSessionState, this.robotCommunicator);
         } finally {
