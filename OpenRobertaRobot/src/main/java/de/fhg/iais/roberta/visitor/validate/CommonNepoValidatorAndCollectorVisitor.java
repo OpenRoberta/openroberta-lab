@@ -80,7 +80,7 @@ public abstract class CommonNepoValidatorAndCollectorVisitor implements ILanguag
     private final HashMap<Integer, Integer> waitsInLoops = new HashMap<>();
     protected int errorCount = 0;
     protected int warningCount = 0;
-    protected List<String> errorAndWarningMessages = new ArrayList<>();;
+    protected List<String> errorAndWarningMessages = new ArrayList<>();
     private int loopCounter = 0;
     private int currentLoop = 0;
 
@@ -302,7 +302,7 @@ public abstract class CommonNepoValidatorAndCollectorVisitor implements ILanguag
     @Override
     public Void visitMethodIfReturn(MethodIfReturn<Void> methodIfReturn) {
         requiredComponentVisited(methodIfReturn, methodIfReturn.getCondition());
-        if (!methodIfReturn.getReturnType().equals(BlocklyType.VOID)) {
+        if ( !methodIfReturn.getReturnType().equals(BlocklyType.VOID) ) {
             requiredComponentVisited(methodIfReturn, methodIfReturn.getReturnValue());
         }
         return null;
@@ -447,7 +447,10 @@ public abstract class CommonNepoValidatorAndCollectorVisitor implements ILanguag
             || var.getVarType().equals(BlocklyType.ARRAY_STRING) ) {
             this.getBuilder(UsedHardwareBean.Builder.class).setListsUsed(true);
         }
-        optionalComponentVisited(var.getValue());
+        // TODO: dangerous check to detect local decls (fct params e.g.). Better don't reuse the blockly block for global vars
+        if (!var.getProperty().getBlockType().equals("robLocalVariables_declare")) {
+            requiredComponentVisited(var, var.getValue());
+        }
         this.getBuilder(UsedHardwareBean.Builder.class).addGlobalVariable(var.getName());
         this.getBuilder(UsedHardwareBean.Builder.class).addDeclaredVariable(var.getName());
         return null;
@@ -472,7 +475,8 @@ public abstract class CommonNepoValidatorAndCollectorVisitor implements ILanguag
     }
 
     /**
-     * if the subPhrase is not the {@link EmptyExpr}, visit the subPhrase
+     * if the subPhrase is not the {@link EmptyExpr}, visit the subPhrase. There are almost no reasons to use this method, because
+     * all subpharses are required. Only bad design of blockly blocks require to use this method (RGBA, for instance)
      *
      * @param subPhrase to be visited, if not empty
      */

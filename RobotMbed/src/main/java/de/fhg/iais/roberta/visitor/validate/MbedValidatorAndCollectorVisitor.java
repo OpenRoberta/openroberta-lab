@@ -148,11 +148,7 @@ public class MbedValidatorAndCollectorVisitor extends CommonNepoValidatorAndColl
 
     @Override
     public Void visitDisplayImageAction(DisplayImageAction<Void> displayImageAction) {
-        if ( (displayImageAction.getDisplayImageMode() == DisplayImageMode.ANIMATION) ) {
-            requiredComponentVisited(displayImageAction, displayImageAction.getValuesToDisplay());
-        } else {
-            optionalComponentVisited(displayImageAction.getValuesToDisplay());
-        }
+        requiredComponentVisited(displayImageAction, displayImageAction.getValuesToDisplay());
         usedHardwareBuilder.addUsedActor(new UsedActor("", SC.DISPLAY));
         return null;
     }
@@ -275,7 +271,7 @@ public class MbedValidatorAndCollectorVisitor extends CommonNepoValidatorAndColl
     @Override
     public Void visitLightAction(LightAction<Void> lightAction) {
         checkActorByPortExists(lightAction, lightAction.getPort());
-        optionalComponentVisited(lightAction.getRgbLedColor());
+        requiredComponentVisited(lightAction, lightAction.getRgbLedColor());
         usedHardwareBuilder.addUsedActor(new UsedActor("", SC.CALLIBOT));
         return null;
     }
@@ -556,7 +552,11 @@ public class MbedValidatorAndCollectorVisitor extends CommonNepoValidatorAndColl
     private Void addActorMaybeCallibot(WithUserDefinedPort<Void> phrase) {
         final String userDefinedPort = phrase.getUserDefinedPort();
         ConfigurationComponent configurationComponent = checkActorByPortExists((Phrase<Void>) phrase, userDefinedPort);
-        return addActorMaybeCallibot(phrase, configurationComponent.getComponentType());
+        if (configurationComponent != null) {
+            return addActorMaybeCallibot(phrase, configurationComponent.getComponentType());
+        } else {
+            return null; // checkActorByPortExists added the error message
+        }
     }
 
     private Void addActorMaybeCallibot(WithUserDefinedPort<Void> phrase, String componentType) {
