@@ -668,6 +668,7 @@
 	"MENU_START_BRICK": "run on »$«",
 	"MENU_STOP_BRICK": "stop program on »$«",
 	"MENU_EXPORT_PROG": "export program",
+	"MENU_EXPORT_ALL_PROGS": "export all programs",
 	"MENU_IMPORT_PROG": "import program ...",
 	"MENU_CHECK": "check",
 	"MENU_NEW": "new",
