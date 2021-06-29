@@ -338,7 +338,7 @@ public final class Ast2Jaxb {
         }
     }
 
-    private static void addError(Phrase<?> astSource, Block block) {
+    public static void addError(Phrase<?> astSource, Block block) {
         de.fhg.iais.roberta.blockly.generated.Error error = new de.fhg.iais.roberta.blockly.generated.Error();
         for ( NepoInfo info : astSource.getInfos().getInfos() ) {
             if ( info.getSeverity() == Severity.ERROR ) {

@@ -270,8 +270,12 @@ public class MbedValidatorAndCollectorVisitor extends CommonNepoValidatorAndColl
 
     @Override
     public Void visitLightAction(LightAction<Void> lightAction) {
+        // TODO: design better blockly blocks and don't reuse blocks with different number of parameters and don't use EmptyExpr
+        String blocktype = lightAction.getProperty().getBlockType();
         checkActorByPortExists(lightAction, lightAction.getPort());
-        requiredComponentVisited(lightAction, lightAction.getRgbLedColor());
+        if ( !blocktype.equals("robActions_brickLight_on") ) {
+            requiredComponentVisited(lightAction, lightAction.getRgbLedColor());
+        }
         usedHardwareBuilder.addUsedActor(new UsedActor("", SC.CALLIBOT));
         return null;
     }

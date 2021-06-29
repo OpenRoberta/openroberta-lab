@@ -448,7 +448,9 @@ public abstract class CommonNepoValidatorAndCollectorVisitor implements ILanguag
             this.getBuilder(UsedHardwareBean.Builder.class).setListsUsed(true);
         }
         // TODO: dangerous check to detect local decls (fct params e.g.). Better don't reuse the blockly block for global vars
-        if (!var.getProperty().getBlockType().equals("robLocalVariables_declare")) {
+        String blocktype = var.getProperty().getBlockType();
+        boolean allowedEmptyExprInHiddenDecls = blocktype.equals("robLocalVariables_declare") || blocktype.equals("robControls_forEach");
+        if (!allowedEmptyExprInHiddenDecls) {
             requiredComponentVisited(var, var.getValue());
         }
         this.getBuilder(UsedHardwareBean.Builder.class).addGlobalVariable(var.getName());
