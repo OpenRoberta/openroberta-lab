@@ -25,7 +25,7 @@ define([ 'exports', 'log', 'message', 'comm', 'util', 'user.model', 'userGroup.m
                 $userGroupTable.bootstrapTable('hideLoading');
             }, 250);
         })
-        $('#tabUserGroupList').click();
+        $('#tabUserGroupList').clickWrap();
         if (GUISTATE_C.getView() !== 'tabUserGroupList') {
             GUISTATE_C.setView('tabUserGroupList');
         }
@@ -314,7 +314,7 @@ define([ 'exports', 'log', 'message', 'comm', 'util', 'user.model', 'userGroup.m
         }, 'Bulk delete usergroup');
 
         $('#backUserGroupList').onWrap('click', function() {
-            $('#tabProgram').click();
+            $('#tabProgram').clickWrap();
             return false;
         }, "closed usergroup view and went back to program view.");
         
@@ -557,7 +557,7 @@ define([ 'exports', 'log', 'message', 'comm', 'util', 'user.model', 'userGroup.m
                     'dblclick .member-name.active': function(e, value, row, index){
                         var $toggleButton = $(this).closest('td').find('.member-name-toggle-button');
                         if ($toggleButton.is(':visible') && $toggleButton.css('visibility') !== 'hidden' && !$toggleButton.hasClass('disabled') && !$toggleButton.prop('disabled')) {
-                            $(this).closest('td').find('.member-name-toggle-button').click();
+                            $(this).closest('td').find('.member-name-toggle-button').clickWrap();
                         }
                     },
                     'click .member-name-edit-button': function(e, value, row, index) {
@@ -577,7 +577,7 @@ define([ 'exports', 'log', 'message', 'comm', 'util', 'user.model', 'userGroup.m
                         
                         if (typeof newName === 'undefined' || newName === '' || newName === oldName) {
                             if (row.id !== 0) {
-                                $self.find('.member-name-toggle-button').click();
+                                $self.find('.member-name-toggle-button').clickWrap();
                             }
                             return;
                         }
@@ -624,13 +624,13 @@ define([ 'exports', 'log', 'message', 'comm', 'util', 'user.model', 'userGroup.m
                     'keydown input': function(e, value, row, index) {
                         if (e.originalEvent.keyCode === 13) {
                             e.preventDefault();
-                            $(this).closest('td').find('.member-name-edit-button').click();
+                            $(this).closest('td').find('.member-name-edit-button').clickWrap();
                             return false;
                         }
                     },
                     'submit form': function(e) {
                         e.preventDefault();
-                        $(this).closest('td').find('.member-name-edit-button').click();
+                        $(this).closest('td').find('.member-name-edit-button').clickWrap();
                         return false;
                     }
                 },
@@ -916,7 +916,7 @@ define([ 'exports', 'log', 'message', 'comm', 'util', 'user.model', 'userGroup.m
             
             USERGROUP.setUserGroupMemberDefaultPasswords(userGroupName, memberAccounts, function (data) {
                 if (data.rc === 'ok') {
-                    $userGroupMemberTable.closest('#userGroupMemberList').find('button[name="refresh"]').click();
+                    $userGroupMemberTable.closest('#userGroupMemberList').find('button[name="refresh"]').clickWrap();
                 } else {
                     UTIL.showMsgOnTop(data.message);
                 }
@@ -984,7 +984,7 @@ define([ 'exports', 'log', 'message', 'comm', 'util', 'user.model', 'userGroup.m
         
         $addMembersForm.submit(function(e) {
             e.preventDefault();
-            $addMembersModal.find('.accept-button').click();
+            $addMembersModal.find('.accept-button').clickWrap();
             return false;
         });
         
@@ -992,7 +992,7 @@ define([ 'exports', 'log', 'message', 'comm', 'util', 'user.model', 'userGroup.m
             if (e.originalEvent.keyCode === 13) {
                 e.stopPropagation();
                 e.preventDefault();
-                $addMembersModal.find('.accept-button').click();
+                $addMembersModal.find('.accept-button').clickWrap();
                 return false;
             }
         });
@@ -1076,6 +1076,6 @@ define([ 'exports', 'log', 'message', 'comm', 'util', 'user.model', 'userGroup.m
             });
             $userGroupMemberTable.bootstrapTable('hideLoading');
         }, 250);
-        $('#tabUserGroupMemberList').click();
+        $('#tabUserGroupMemberList').clickWrap();
     }
 });

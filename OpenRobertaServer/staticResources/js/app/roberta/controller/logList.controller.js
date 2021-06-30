@@ -52,9 +52,9 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'guiState.controller', 'lo
 
     function initLogListEvents() {
 
-        $('#tabLogList').onWrap('show.bs.tab', function() {
+        $('#tabLogList').on('show.bs.tab', function() {
             GUISTATE_C.setView('tabLogList');
-        }, "log list activated");
+        });
 
         $(window).resize(function() {
             $('#logTable').bootstrapTable('resetView', {

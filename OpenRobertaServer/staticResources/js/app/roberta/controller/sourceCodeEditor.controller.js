@@ -1,5 +1,5 @@
-define([ 'require', 'exports', 'message', 'log', 'util', 'comm', 'guiState.controller', 'program.model', 'program.controller', 'progRun.controller','import.controller', 'blockly', 'codeflask', 'jquery'  ],
-        function(require, exports, MSG, LOG, UTIL, COMM, GUISTATE_C, PROGRAM, PROG_C, PROGRUN_C, IMPORT_C, Blockly, CodeFlask, $) {
+define([ 'require', 'exports', 'message', 'log', 'util', 'comm', 'wrap', 'guiState.controller', 'program.model', 'program.controller', 'progRun.controller','import.controller', 'blockly', 'codeflask', 'jquery'  ],
+        function(require, exports, MSG, LOG, UTIL, COMM, WRAP, GUISTATE_C, PROGRAM, PROG_C, PROGRUN_C, IMPORT_C, Blockly, CodeFlask, $) {
 
     var flask;
     var currentLanguage;
@@ -110,23 +110,23 @@ define([ 'require', 'exports', 'message', 'log', 'util', 'comm', 'guiState.contr
             getSourceCode();
             return false;
         }, "import from blockly button clicked");
-        
+
         $('#tabSourceCodeEditor').onWrap('show.bs.tab', function() {
             if(currentLanguage === 'python' || currentLanguage === 'json') {
                 $('#buildSourceCodeEditor').addClass('disabled');
             }
             $('#main-section').css('background-color', '#EEE');
             getSourceCode();
-        }, "background color changed by source code editor");
+        });
         
         $('#tabSourceCodeEditor').onWrap('shown.bs.tab', function() {
             GUISTATE_C.setView('tabSourceCodeEditor');
-        }, "background color changed by source code editor");
+        });
 
-        $('#tabSourceCodeEditor').onWrap('hide.bs.tab', function() {
+        $('#tabSourceCodeEditor').on('hide.bs.tab', function() {
             $('#buildSourceCodeEditor').removeClass('disabled');
             $('#main-section').css('background-color', '#FFF');
-        }, "background color changed by source code editor");
+        });
         
         $('#sourceCodeEditorPane').find('button[name="rightMostButton"]').attr('title', '').attr('rel', 'tooltip').attr('data-placement', 'left').attr('lkey', 'Blockly.Msg.SOURCE_CODE_EDITOR_IMPORT_TOOLTIP').attr('data-original-title', Blockly.Msg.SOURCE_CODE_EDITOR_IMPORT_TOOLTIP).tooltip('fixTitle');
     }

@@ -92,7 +92,7 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'message', 'progList.model
                 height : UTIL.calcDataTableHeight()
             });
         });
-        $tabProgList.onWrap('show.bs.tab', function(e) {
+        $tabProgList.on('show.bs.tab', function(e) {
             guiStateController.setView('tabProgList');
             $programNameTable.bootstrapTable("load", []);
             $userGroupSelect.hide();
@@ -112,7 +112,7 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'message', 'progList.model
             }
         });
 
-        $tabProgList.onWrap('shown.bs.tab', function(e) {
+        $tabProgList.on('shown.bs.tab', function(e) {
             switch ($tabProgList.data('type')) {
                 case 'userProgram':
                     PROGLIST.loadProgList(update);
@@ -123,7 +123,7 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'message', 'progList.model
             }
         });
 
-        $progList.find('button[name="refresh"]').onWrap('click', function() {
+        $progList.find('button[name="refresh"]').on('click', function() {
             switch ($tabProgList.data('type')) {
                 case 'userProgram':
                     $userGroupSelect.change();
@@ -134,7 +134,7 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'message', 'progList.model
                     PROGLIST.loadExampleList(updateExamplePrograms);
             }
             return false;
-        }, "refresh program list clicked");
+        });
         
         $userGroupSelect.change(function(evt) {
             if ($tabProgList.data('type') !== 'userProgram') {
@@ -213,7 +213,7 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'message', 'progList.model
                 $('.deleteSomeProg').show();
               } else {
                 if (result.cmd === "loadPN") {
-                    $('#backProgList').click();
+                    $('#backProgList').clickWrap();
                 }
             }
 
@@ -241,7 +241,7 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'message', 'progList.model
             $('.deleteSomeProg').hide();
         } else {
             if (result.cmd === "loadPN") {
-                $('#backProgList').click();
+                $('#backProgList').clickWrap();
             }
         }
         $('#programNameTable').find('.load').attr('data-original-title', Blockly.Msg.PROGLIST_LOAD_TOOLTIP

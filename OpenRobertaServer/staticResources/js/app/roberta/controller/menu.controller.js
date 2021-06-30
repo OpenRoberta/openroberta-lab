@@ -44,10 +44,10 @@ define(['exports', 'log', 'util', 'message', 'comm', 'wrap', 'robot.controller',
             TOUR_C.start('overview');
         } else if (target[0] === "#gallery") {
             GUISTATE_C.setStartWithoutPopup();
-            $('#tabGalleryList').click();
+            $('#tabGalleryList').clickWrap();
         } else if (target[0] === "#tutorial") {
             GUISTATE_C.setStartWithoutPopup();
-            $('#tabTutorialList').click();
+            $('#tabTutorialList').clickWrap();
         } else if (target[0] === "#loadSystem" && target.length >= 2) {
             GUISTATE_C.setStartWithoutPopup();
             ROBOT_C.switchRobot(target[1], true);
@@ -373,11 +373,11 @@ define(['exports', 'log', 'util', 'message', 'comm', 'wrap', 'robot.controller',
                         break;
                     case 'menuListProg':
                         $('#tabProgList').data('type', 'userProgram');
-                        $('#tabProgList').click();
+                        $('#tabProgList').clickWrap();
                         break;
                     case 'menuListExamples':
                         $('#tabProgList').data('type', 'exampleProgram');
-                        $('#tabProgList').click();
+                        $('#tabProgList').clickWrap();
                         break;
                     case 'menuSaveProg':
                         PROGRAM_C.saveToServer();
@@ -386,10 +386,10 @@ define(['exports', 'log', 'util', 'message', 'comm', 'wrap', 'robot.controller',
                         PROGRAM_C.showSaveAsModal();
                         break;
                     case 'menuShowCode':
-                        $('#codeButton').trigger("click");
+                        $('#codeButton').clickWrap();
                         break;
                     case 'menuSourceCodeEditor':
-                        $('#tabSourceCodeEditor').trigger("click");
+                        $('#tabSourceCodeEditor').clickWrap();
                         break;
                     case 'menuImportProg':
                         IMPORT_C.importXml();
@@ -430,7 +430,7 @@ define(['exports', 'log', 'util', 'message', 'comm', 'wrap', 'robot.controller',
                     CONFIGURATION_C.newConfiguration();
                     break;
                 case 'menuListConfig':
-                    $('#tabConfList').click();
+                    $('#tabConfList').clickWrap();
                     break
                 case 'menuSaveConfig':
                     CONFIGURATION_C.saveToServer();
@@ -491,7 +491,7 @@ define(['exports', 'log', 'util', 'message', 'comm', 'wrap', 'robot.controller',
                 $("#version").text(GUISTATE_C.getServerVersion());
                 $("#show-about").modal("show");
             } else if (domId === 'menuLogging') { // Submenu 'Help'
-                $('#tabLogList').click();
+                $('#tabLogList').clickWrap();
             }
         }, 'help clicked');
 
@@ -529,29 +529,29 @@ define(['exports', 'log', 'util', 'message', 'comm', 'wrap', 'robot.controller',
         }, 'user clicked');
 
         $('#head-navigation-gallery').onWrap('click', function(event) {
-            $('#tabGalleryList').click();
+            $('#tabGalleryList').clickWrap();
             return false;
         }, 'gallery clicked');
         $('#head-navigation-tutorial').onWrap('click', function(event) {
-            $('#tabTutorialList').click();
+            $('#tabTutorialList').clickWrap();
             return false;
         }, 'tutorial clicked');
 
         $('#menuTabProgram').onWrap('click', '', function(event) {
             if ($('#tabSimulation').hasClass('tabClicked')) {
-                $('.scroller-left').click();
+                $('.scroller-left').clickWrap();
             }
-            $('.scroller-left').click();
-            $('#tabProgram').click();
+            $('.scroller-left').clickWrap();
+            $('#tabProgram').clickWrap();
         }, 'tabProgram clicked');
 
         $('#menuTabConfiguration').onWrap('click', '', function(event) {
             if ($('#tabProgram').hasClass('tabClicked')) {
-                $('.scroller-right').click();
+                $('.scroller-right').clickWrap();
             } else if ($('#tabConfiguration').hasClass('tabClicked')) {
-                $('.scroller-right').click();
+                $('.scroller-right').clickWrap();
             }
-            $('#tabConfiguration').click();
+            $('#tabConfiguration').clickWrap();
         }, 'tabConfiguration clicked');
 
         // Close submenu on mouseleave
@@ -644,7 +644,7 @@ define(['exports', 'log', 'util', 'message', 'comm', 'wrap', 'robot.controller',
 
         $('#takeATour').onWrap('click', function(event) {
             if (GUISTATE_C.getView() !== "tabProgram") {
-                $('#tabProgram').click();
+                $('#tabProgram').clickWrap();
             }
             if (GUISTATE_C.getRobotGroup() !== 'ev3') {
                 ROBOT_C.switchRobot('ev3lejosv1', true);
@@ -667,7 +667,7 @@ define(['exports', 'log', 'util', 'message', 'comm', 'wrap', 'robot.controller',
         // init popup events
 
         $('.cancelPopup').onWrap('click', function() {
-            $('.ui-dialog-titlebar-close').click();
+            $('.ui-dialog-titlebar-close').clickWrap();
         });
 
         $('#about-join').onWrap('click', function() {
@@ -825,7 +825,7 @@ define(['exports', 'log', 'util', 'message', 'comm', 'wrap', 'robot.controller',
             //Overriding the Ctrl + M for viewing all programs
             if ((e.metaKey || e.ctrlKey) && event.which == 77 && GUISTATE_C.isUserLoggedIn()) {
                 e.preventDefault();
-                $('#tabProgList').click();
+                $('#tabProgList').clickWrap();
                 return false;
             }
             //Overriding the Ctrl + G for viewing the simulation window

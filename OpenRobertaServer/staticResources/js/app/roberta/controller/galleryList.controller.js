@@ -120,7 +120,7 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'message', 'guiState.contr
             });
         });
 
-        $('#tabGalleryList').onWrap('show.bs.tab', function(e) {
+        $('#tabGalleryList').on('show.bs.tab', function(e) {
             $('#filterRobot').val(GUISTATE_C.getRobotGroup());
             guiStateController.setView('tabGalleryList');
             if ($('#galleryTable').bootstrapTable("getData").length === 0) {

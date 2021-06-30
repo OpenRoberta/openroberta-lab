@@ -1056,7 +1056,7 @@ define(['exports', 'util', 'message', 'guiState.model', 'progHelp.controller', '
         GUISTATE.user.userGroup = '';
         GUISTATE.user.userGroupOwner = '';
         if (getView() === 'tabUserGroupList') {
-            $('#tabProgram').click();
+            $('#tabProgram').clickWrap();
         }
         setProgramName('NEPOprog');
         setProgramOwnerName(null);

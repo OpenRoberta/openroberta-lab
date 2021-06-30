@@ -137,4 +137,16 @@ define([ 'exports', 'comm', 'log', 'jquery' ], function(exports, COMM, LOG, $) {
         }
     };
 
+    $.fn.clickWrap = function(optMessage) {
+        numberOfActiveActions--;
+        try {
+            this.trigger('click');
+        } catch (e) {
+            numberOfActiveActions++;
+            var err = new Error();
+            LOG.error("clickWrap CRASHED UNEXPECTED AND SEVERELY with EXCEPTION: " + e + " and stacktrace: " + err.stack);
+            COMM.ping(); // transfer data to the server
+        }
+        numberOfActiveActions++;
+    };
 });

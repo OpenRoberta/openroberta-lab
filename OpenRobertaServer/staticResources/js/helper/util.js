@@ -364,7 +364,7 @@ define(['exports', 'message', 'log', 'jquery', 'jquery-validate', 'bootstrap'], 
                 downloadLink.onclick = destroyClickedElement;
                 downloadLink.style.display = 'none';
                 document.body.appendChild(downloadLink);
-                downloadLink.click();
+                downloadLink.clickWrap();
             }
         } else {
             var downloadLink = document.createElement('a');
@@ -373,7 +373,7 @@ define(['exports', 'message', 'log', 'jquery', 'jquery-validate', 'bootstrap'], 
             downloadLink.style.display = 'none';
             document.body.appendChild(downloadLink);
             downloadLink.onclick = destroyClickedElement;
-            downloadLink.click();
+            downloadLink.clickWrap();
         }
     }
     exports.download = download;
