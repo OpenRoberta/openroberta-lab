@@ -1,6 +1,7 @@
-define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'program.controller', 'configuration.controller', 'program.model',
-        'robot.controller', 'blockly', 'jquery', 'jquery-validate' ], function(exports, COMM, MSG, LOG, UTIL, GUISTATE_C, PROGRAM_C,
-        CONFIGURATION_C, PROGRAM, ROBOT_C, Blockly, $) {
+define(['exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'program.controller', 'configuration.controller', 'program.model',
+    'robot.controller', 'blockly', 'jquery', 'jquery-validate'
+], function(exports, COMM, MSG, LOG, UTIL, GUISTATE_C, PROGRAM_C,
+    CONFIGURATION_C, PROGRAM, ROBOT_C, Blockly, $) {
 
     function init(callback) {
         $('#fileSelector').val(null);
@@ -26,7 +27,7 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'pr
         $('#fileSelector').trigger('click'); // opening dialog 
     }
     exports.importXml = importXml;
-    
+
     function importSourceCode(callback) {
         init(callback);
         $('#fileSelector').attr("accept", "." + GUISTATE_C.getSourceCodeFileExtension());
@@ -46,8 +47,8 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'pr
 
     function loadProgramFromXML(name, xml) {
         if (xml.search("<export") === -1) {
-            xml = '<export xmlns="http://de.fhg.iais.roberta.blockly"><program>' + xml + '</program><config>' + GUISTATE_C.getConfigurationXML()
-                    + '</config></export>';
+            xml = '<export xmlns="http://de.fhg.iais.roberta.blockly"><program>' + xml + '</program><config>' + GUISTATE_C.getConfigurationXML() +
+                '</config></export>';
         }
         PROGRAM.loadProgramFromXML(name, xml, function(result) {
             if (result.rc == "ok") {
@@ -64,18 +65,21 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'pr
                 result.name = 'NEPOprog';
                 result.programShared = false;
                 result.programTimestamp = '';
+                var nameConfOld = GUISTATE_C.getConfigurationName();
                 try {
                     CONFIGURATION_C.configurationToBricklyWorkspace(result.confXML);
                     GUISTATE_C.setConfigurationXML(result.confXML);
                     PROGRAM_C.programToBlocklyWorkspace(result.progXML);
                     GUISTATE_C.setProgram(result);
                     GUISTATE_C.setProgramXML(result.progXML);
+                    GUISTATE_C.setConfigurationName("");
                     LOG.info('show program ' + GUISTATE_C.getProgramName());
                 } catch (e) {
                     // restore old Program
                     LOG.error(e.message);
                     GUISTATE_C.setProgramXML(xmlProgOld);
                     GUISTATE_C.setConfigurationXML(xmlConfOld);
+                    GUISTATE_C.setConfigurationName(nameConfOld);
                     CONFIGURATION_C.reloadConf();
                     PROGRAM_C.reloadProgram();
                     result.rc = "error";
