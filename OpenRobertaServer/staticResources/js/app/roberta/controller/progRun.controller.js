@@ -153,8 +153,8 @@ define(['exports', 'util', 'log', 'message', 'program.controller', 'program.mode
                 $("#popupDownloadHeader").text(textH.replace("$", $.trim(GUISTATE_C.getRobotRealName())));
                 for (var i = 1; Blockly.Msg['POPUP_DOWNLOAD_STEP_' + i]; i++) {
                     var step = $('<li class="typcn typcn-roberta">');
-                    var a = Blockly.Msg['POPUP_DOWNLOAD_STEP_' + i + '_' + GUISTATE_C.getRobotGroup().toUpperCase()] || Blockly.Msg['POPUP_DOWNLOAD_STEP_' + i]
-                        || 'POPUP_DOWNLOAD_STEP_' + i;
+                    var a = Blockly.Msg['POPUP_DOWNLOAD_STEP_' + i + '_' + GUISTATE_C.getRobotGroup().toUpperCase()] || Blockly.Msg['POPUP_DOWNLOAD_STEP_' + i] ||
+                        'POPUP_DOWNLOAD_STEP_' + i;
                     step.html('<span class="download-message">' + a + '</span>');
                     step.css('opacity', '0');
                     $('#download-instructions').append(step);
@@ -237,8 +237,8 @@ define(['exports', 'util', 'log', 'message', 'program.controller', 'program.mode
             $("#popupDownloadHeader").text(textH.replace("$", $.trim(GUISTATE_C.getRobotRealName())));
             for (var i = 1; Blockly.Msg['POPUP_DOWNLOAD_STEP_' + i]; i++) {
                 var step = $('<li class="typcn typcn-roberta">');
-                var a = Blockly.Msg['POPUP_DOWNLOAD_STEP_' + i + '_' + GUISTATE_C.getRobotGroup().toUpperCase()] || Blockly.Msg['POPUP_DOWNLOAD_STEP_' + i]
-                    || 'POPUP_DOWNLOAD_STEP_' + i;
+                var a = Blockly.Msg['POPUP_DOWNLOAD_STEP_' + i + '_' + GUISTATE_C.getRobotGroup().toUpperCase()] || Blockly.Msg['POPUP_DOWNLOAD_STEP_' + i] ||
+                    'POPUP_DOWNLOAD_STEP_' + i;
                 step.html('<span class="download-message">' + a + '</span>');
                 step.css('opacity', '0');
                 $('#download-instructions').append(step);
@@ -332,11 +332,12 @@ define(['exports', 'util', 'log', 'message', 'program.controller', 'program.mode
             var maxRunTime = new Date().getTime() + 100;
             var waitTime = interpreter.run(maxRunTime);
 
-            if (waitTime > 0) {
+            if (waitTime >= 0) {
                 timeout(runStepInterpreter, waitTime);
                 return;
             }
         }
+        interpreter.run(0);
     }
 
     /**
