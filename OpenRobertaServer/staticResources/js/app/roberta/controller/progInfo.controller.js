@@ -22,7 +22,7 @@ define([ 'exports', 'message', 'log', 'util', 'guiState.controller', 'blockly', 
 
     function initEvents() {
         $('#infoButton').off('click touchend');
-        $('#infoButton').on('click touchend', function(event) {
+        $('#infoButton').onWrap('click touchend', function(event) {
             toggleInfo();
             return false;
         });
@@ -34,7 +34,7 @@ define([ 'exports', 'message', 'log', 'util', 'guiState.controller', 'blockly', 
                 });
             }
         });
-        $('#infoContent, #infoTags').on('change', function() {
+        $('#infoContent, #infoTags').onWrap('change', function() {
             blocklyWorkspace.description = $('#infoContent').html();
             blocklyWorkspace.tags = $('#infoTags').val();
             if (GUISTATE_C.isProgramSaved()) {
@@ -47,7 +47,7 @@ define([ 'exports', 'message', 'log', 'util', 'guiState.controller', 'blockly', 
             }
         });
         // prevent to copy eg ms word formatting!
-        $('[contenteditable]#infoContent').on('paste', function(e) {
+        $('[contenteditable]#infoContent').onWrap('paste', function(e) {
             e.preventDefault();
             var text = '';
             if (e.clipboardData || e.originalEvent.clipboardData) {

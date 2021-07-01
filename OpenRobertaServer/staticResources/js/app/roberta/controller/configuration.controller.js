@@ -55,7 +55,7 @@ define(['exports', 'log', 'util', 'comm', 'message', 'guiState.controller', 'blo
     }
 
     function initEvents() {
-        $('#tabConfiguration').on('show.bs.tab', function(e) {
+        $('#tabConfiguration').onWrap('show.bs.tab', function(e) {
             GUISTATE_C.setView('tabConfiguration');
         });
 
@@ -75,11 +75,11 @@ define(['exports', 'log', 'util', 'comm', 'message', 'guiState.controller', 'blo
             confVis.refresh();
         }, 'tabConfiguration clicked');
 
-        $('#tabConfiguration').on('hide.bs.tab', function(e) {
+        $('#tabConfiguration').onWrap('hide.bs.tab', function(e) {
             Blockly.hideChaff(false);
         });;
 
-        $('#tabConfiguration').on('hidden.bs.tab', function(e) {
+        $('#tabConfiguration').onWrap('hidden.bs.tab', function(e) {
             var dom = (confVis) ? confVis.getXml() : Blockly.Xml.workspaceToDom(bricklyWorkspace);
             var xml = Blockly.Xml.domToText(dom);
             GUISTATE_C.setConfigurationXML(xml);
@@ -255,12 +255,12 @@ define(['exports', 'log', 'util', 'comm', 'message', 'guiState.controller', 'blo
         } else {
             $('#show-message-confirm').one('shown.bs.modal', function(e) {
                 $('#confirm').off();
-                $('#confirm').on('click', function(e) {
+                $('#confirm').onWrap('click', function(e) {
                     e.preventDefault();
                     newConfiguration(true);
                 });
                 $('#confirmCancel').off();
-                $('#confirmCancel').on('click', function(e) {
+                $('#confirmCancel').onWrap('click', function(e) {
                     e.preventDefault();
                     $('.modal').modal('hide');
                 });

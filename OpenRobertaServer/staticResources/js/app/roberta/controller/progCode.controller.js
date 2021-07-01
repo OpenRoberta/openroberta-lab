@@ -49,7 +49,7 @@ define([ 'exports', 'message', 'log', 'util', 'guiState.controller', 'program.co
 
     function initEvents() {
         $('#codeButton').off('click touchend');
-        $('#codeButton').on('click touchend', function(event) {
+        $('#codeButton').onWrap('click touchend', function(event) {
             toggleCode();
             return false;
         });

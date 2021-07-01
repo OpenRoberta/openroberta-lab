@@ -306,7 +306,7 @@ define(['exports', 'log', 'util', 'message', 'comm', 'wrap', 'robot.controller',
             e.stopPropagation();
         });
 
-        $('.modal').on('shown.bs.modal', function() {
+        $('.modal').onWrap('shown.bs.modal', function() {
             $(this).find('[autofocus]').focus();
         });
 
@@ -339,7 +339,7 @@ define(['exports', 'log', 'util', 'message', 'comm', 'wrap', 'robot.controller',
                     $('#feedbackIframe').height(height);
                 }
             };
-            $('#feedbackButton').onWrap('click', '', function(event) {
+            $('#feedbackButton').on('click', '', function(event) {
                 $('#feedbackModal').on('show.bs.modal', function() {
                     if (GUISTATE_C.getLanguage().toLowerCase() === "de") {
                         $("#feedbackIframe").attr("src", "https://www.roberta-home.de/lab/feedback/");

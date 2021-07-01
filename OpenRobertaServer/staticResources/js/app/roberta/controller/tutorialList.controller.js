@@ -111,12 +111,12 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'message', 'guiState.contr
             });
         });
 
-        $('#tabTutorialList').on('show.bs.tab', function(e) {
+        $('#tabTutorialList').onWrap('show.bs.tab', function(e) {
             guiStateController.setView('tabTutorialList');
             updateTutorialList();
         });
 
-        $('#tutorialTable').on('all.bs.table', function(e) {
+        $('#tutorialTable').onWrap('all.bs.table', function(e) {
             configureTagsInput();
         });
 

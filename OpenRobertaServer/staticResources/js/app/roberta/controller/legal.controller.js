@@ -58,9 +58,8 @@ define([ 'exports', 'message', 'log', 'util', 'guiState.controller', 'blockly', 
             var $link = links[documentType], $storage = storages[documentType];
 
             if ($storage && $link) {
-                $link.on('click touchend', function(evt) {
+                $link.onWrap('click touchend', function(evt) {
                     evt.preventDefault();
-
                     $legalDiv.animate({
                         scrollTop : $storage.offset().top - 92
                     }, 'slow');
@@ -68,7 +67,7 @@ define([ 'exports', 'message', 'log', 'util', 'guiState.controller', 'blockly', 
             }
         };
         $legalButton.off('click touchend');
-        $legalButton.on('click touchend', function(event) {
+        $legalButton.onWrap('click touchend', function(event) {
             event.preventDefault();
             toggleLegal();
         });

@@ -43,7 +43,7 @@ define([ 'exports', 'message', 'log', 'util', 'guiState.controller', 'blockly', 
 
     function initEvents() {
         $('#helpButton').off('click touchend');
-        $('#helpButton').on('click touchend', function(event) {
+        $('#helpButton').onWrap('click touchend', function(event) {
             if ($('#helpButton').is(":visible")) {
                 toggleHelp();
             }

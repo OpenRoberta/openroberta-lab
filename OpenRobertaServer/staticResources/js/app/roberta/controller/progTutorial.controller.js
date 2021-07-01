@@ -19,10 +19,10 @@ define([ 'exports', 'comm', 'message', 'log', 'guiState.controller', 'program.co
     exports.init = init;
 
     function initEvents() {
-        $(".menu.tutorial").on("click", function(event) {
+        $(".menu.tutorial").onWrap("click", function(event) {
             startTutorial(event.target.id);
         });
-        $('#tutorialButton').on('click touchend', function() {
+        $('#tutorialButton').onWrap('click touchend', function() {
             toggleTutorial();
             return false;
         });

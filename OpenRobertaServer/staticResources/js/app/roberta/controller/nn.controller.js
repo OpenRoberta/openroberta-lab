@@ -17,7 +17,7 @@ define([ 'exports', 'log', 'util', 'comm', 'message', 'guiState.controller',  'n
     }
 
     function initEvents() {
-        $('#tabNN').on('show.bs.tab', function(e) {
+        $('#tabNN').onWrap('show.bs.tab', function(e) {
             GUISTATE_C.setView('tabNN');
         }, 'show tabNN');
 
@@ -25,16 +25,11 @@ define([ 'exports', 'log', 'util', 'comm', 'message', 'guiState.controller',  'n
             $(window).resize();
         }, 'shown tabNN');
 
-        $('#tabNN').on('hide.bs.tab', function(e) {
-        });
+        $('#tabNN').onWrap('hide.bs.tab', function(e) {
+        }, 'hide tabNN');
 
-        $('#tabNN').on('hide.bs.tab', function(e) {
-        });
-
-        $('#tabNN').on('hidden.bs.tab', function(e) {
-
-        });
-
+        $('#tabNN').onWrap('hidden.bs.tab', function(e) {
+        }, 'hidden tabNN');
     }
 
     function initNNForms() {

@@ -73,7 +73,7 @@ define(["require", "exports", "guiState.model", "guiState.controller", "notifica
             .slideUp();
     }
     function initNotificationModal() {
-        $notificationForm.on('submit', function (e) {
+        $notificationForm.onWrap('submit', function (e) {
             e.preventDefault();
             readFileInputField(function (fileContent) {
                 notificationModel.postNotifications(fileContent, function (restResponse) {

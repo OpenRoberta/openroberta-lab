@@ -74,7 +74,7 @@ define(['exports', 'log', 'jquery', 'guiState.controller', 'program.controller',
 
     function initEvents() {
 
-        $('#language').on('click', 'li a', function() {
+        $('#language').onWrap('click', 'li a', function() {
             LOG.info('language clicked');
             var language = $(this).attr('lang');
             switchLanguage(language);

@@ -13,7 +13,7 @@ define(['exports', 'message', 'log', 'util', 'simulation.simulation', 'simulatio
 
         function initEvents() {
             $('#simButton').off('click touchend');
-            $('#simButton').on('click touchend', function(event) {
+            $('#simButton').onWrap('click touchend', function(event) {
                 debug = false;
                 // Workaround for IOS speech synthesis, speech must be triggered once by a button click explicitly before it can be used programmatically
                 if (window.speechSynthesis && GUISTATE_C.getRobot().indexOf("ev3") !== -1) {
@@ -24,7 +24,7 @@ define(['exports', 'message', 'log', 'util', 'simulation.simulation', 'simulatio
             });
 
             $('#simDebugButton').off('click touchend');
-            $('#simDebugButton').on('click touchend', function(event) {
+            $('#simDebugButton').onWrap('click touchend', function(event) {
                 debug = true;
                 // Workaround for IOS speech synthesis, speech must be triggered once by a button click explicitly before it can be used programmatically
                 if (window.speechSynthesis && GUISTATE_C.getRobot().indexOf("ev3") !== -1) {

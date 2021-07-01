@@ -92,7 +92,7 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'message', 'progList.model
                 height : UTIL.calcDataTableHeight()
             });
         });
-        $tabProgList.on('show.bs.tab', function(e) {
+        $tabProgList.onWrap('show.bs.tab', function(e) {
             guiStateController.setView('tabProgList');
             $programNameTable.bootstrapTable("load", []);
             $userGroupSelect.hide();
@@ -110,9 +110,9 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'message', 'progList.model
                     });
                 }
             }
-        });
+        }, 'show prog list');
 
-        $tabProgList.on('shown.bs.tab', function(e) {
+        $tabProgList.onWrap('shown.bs.tab', function(e) {
             switch ($tabProgList.data('type')) {
                 case 'userProgram':
                     PROGLIST.loadProgList(update);
@@ -121,9 +121,9 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'message', 'progList.model
                 default:
                     PROGLIST.loadExampleList(updateExamplePrograms);
             }
-        });
+        }, 'shown prog list');
 
-        $progList.find('button[name="refresh"]').on('click', function() {
+        $progList.find('button[name="refresh"]').onWrap('click', function() {
             switch ($tabProgList.data('type')) {
                 case 'userProgram':
                     $userGroupSelect.change();
@@ -134,7 +134,7 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'message', 'progList.model
                     PROGLIST.loadExampleList(updateExamplePrograms);
             }
             return false;
-        });
+        }, 'refresh prog list');
         
         $userGroupSelect.change(function(evt) {
             if ($tabProgList.data('type') !== 'userProgram') {

@@ -52,7 +52,7 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'guiState.controller', 'lo
 
     function initLogListEvents() {
 
-        $('#tabLogList').on('show.bs.tab', function() {
+        $('#tabLogList').onWrap('show.bs.tab', function() {
             GUISTATE_C.setView('tabLogList');
         });
 
