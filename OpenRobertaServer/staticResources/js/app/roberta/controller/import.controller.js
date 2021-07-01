@@ -24,14 +24,14 @@ define(['exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'pro
     function importXml() {
         init(loadProgramFromXML);
         $('#fileSelector').attr("accept", ".xml");
-        $('#fileSelector').trigger('click'); // opening dialog 
+        $('#fileSelector').clickWrap(); // opening dialog
     }
     exports.importXml = importXml;
 
     function importSourceCode(callback) {
         init(callback);
         $('#fileSelector').attr("accept", "." + GUISTATE_C.getSourceCodeFileExtension());
-        $('#fileSelector').trigger('click'); // opening dialog 
+        $('#fileSelector').clickWrap(); // opening dialog
     }
     exports.importSourceCode = importSourceCode;
 
@@ -103,7 +103,7 @@ define(['exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'pro
     function importSourceCodeToCompile() {
         init(compileFromSource);
         $('#fileSelector').attr("accept", "." + GUISTATE_C.getSourceCodeFileExtension());
-        $('#fileSelector').trigger('click'); // opening dialog       
+        $('#fileSelector').clickWrap(); // opening dialog
     }
     exports.importSourceCodeToCompile = importSourceCodeToCompile;
 
@@ -125,7 +125,7 @@ define(['exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'pro
     function importNepoCodeToCompile() {
         init(compileFromNepoCode);
         $('#fileSelector').attr("accept", ".xml");
-        $('#fileSelector').trigger('click'); // opening dialog   
+        $('#fileSelector').clickWrap(); // opening dialog
     }
     exports.importNepoCodeToCompile = importNepoCodeToCompile;
 

@@ -630,7 +630,7 @@ define(['exports', 'util', 'message', 'guiState.model', 'progHelp.controller', '
             $('#runSourceCodeEditor').addClass('disabled');
         }
         if ($('.rightMenuButton.rightActive')) {
-            $('.rightMenuButton.rightActive').trigger('click');
+            $('.rightMenuButton.rightActive').clickWrap();
         }
         if (view === 'tabConfiguration') {
             $('#head-navigation-program-edit').css('display', 'none');
@@ -1038,7 +1038,7 @@ define(['exports', 'util', 'message', 'guiState.model', 'progHelp.controller', '
         }
 
         if (GUISTATE.gui.view == 'tabGalleryList') {
-            $('#galleryList').find('button[name="refresh"]').trigger('click');
+            $('#galleryList').find('button[name="refresh"]').clickWrap();
         }
     }
     exports.setLogin = setLogin;
@@ -1068,11 +1068,11 @@ define(['exports', 'util', 'message', 'guiState.model', 'progHelp.controller', '
         $('#head-navi-icon-user').removeClass('ok');
         $('#head-navi-icon-user').addClass('error');
         if (GUISTATE.gui.view == 'tabProgList') {
-            $('#tabProgram').trigger('click');
+            $('#tabProgram').clickWrap();
         } else if (GUISTATE.gui.view == 'tabConfList') {
-            $('#tabConfiguration').trigger('click');
+            $('#tabConfiguration').clickWrap();
         } else if (GUISTATE.gui.view == 'tabGalleryList') {
-            $('#galleryList').find('button[name="refresh"]').trigger('click');
+            $('#galleryList').find('button[name="refresh"]').clickWrap();
         }
     }
 

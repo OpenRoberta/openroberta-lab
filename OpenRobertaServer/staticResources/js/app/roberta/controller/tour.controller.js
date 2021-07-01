@@ -17,18 +17,18 @@ define(['exports', 'comm', 'message', 'log', 'blockly', 'jquery', 'jquery-scroll
             onSkip: function() {
                 Blockly.mainWorkspace.clear();    
                 enjoyhint_instance = {};
-                $('#tabProgram').trigger('click');
+                $('#tabProgram').clickWrap();
                 if ($('.rightMenuButton.rightActive')) {
-                    $('.rightMenuButton.rightActive').trigger('click');
+                    $('.rightMenuButton.rightActive').clickWrap();
                 }
                 $("#show-startup-message").modal("show");
             },
             onEnd: function() {
                 Blockly.mainWorkspace.clear();
                 enjoyhint_instance = {};
-                $('#tabProgram').trigger('click');
+                $('#tabProgram').clickWrap();
                 if ($('.rightMenuButton.rightActive')) {
-                    $('.rightMenuButton.rightActive').trigger('click');
+                    $('.rightMenuButton.rightActive').clickWrap();
                 }
                 setTimeout(function() {
                     $("#show-startup-message").modal("show");                  
@@ -212,7 +212,7 @@ define(['exports', 'comm', 'message', 'log', 'blockly', 'jquery', 'jquery-scroll
             },
             'showSkip': false,
             onBeforeStart: function() {
-                $('#tabConfiguration').trigger('click');
+                $('#tabConfiguration').clickWrap();
             }
         }, {
             'event': 'click',
@@ -231,7 +231,7 @@ define(['exports', 'comm', 'message', 'log', 'blockly', 'jquery', 'jquery-scroll
             },
             'showSkip': false,
             onBeforeStart: function() {
-                $('#tabProgram').trigger('click');
+                $('#tabProgram').clickWrap();
             }
        }, {
            'event_type': 'next',
@@ -254,7 +254,7 @@ define(['exports', 'comm', 'message', 'log', 'blockly', 'jquery', 'jquery-scroll
            },
            'showSkip': false,          
             onBeforeStart: function() {
-                $('#beginner').trigger('click');
+                $('#beginner').clickWrap();
             }
         }, {
             'event_type': 'next',

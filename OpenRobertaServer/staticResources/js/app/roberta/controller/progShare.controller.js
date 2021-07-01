@@ -92,18 +92,18 @@ define([ 'require', 'exports', 'log', 'util', 'message', 'comm', 'guiState.contr
         $('#show-relations').onWrap('updateAndShow', function(e, data) {
             showShareWithUser(data);
             return false;
-        });
+        }, 'show relations');
 
         // triggered from the progList
         $('#share-with-gallery').onWrap('updateAndShow', function(e, row) {
             showShareWithGallery(row);
             return false;
-        });
+        }, 'share with gallery');
 
         // click on the ok button from modal
         $('#shareProgram').onWrap('click', function(e) {
             updateSharedWithUsers();
-        });
+        }, 'ok click for share program');
         // click on the ok button from modal
         $('#shareWithGallery').onWrap('click', function(e) {
             var table = $('#share-with-gallery .modal-body').find(">:first-child");
@@ -113,7 +113,7 @@ define([ 'require', 'exports', 'log', 'util', 'message', 'comm', 'guiState.contr
                 $('#textShareGallery').show();
             }
             updateShareWithGallery($('#share-with-gallery').data('action'));
-        });
+        }, 'ok click for share with gallery');
 
         $('#cancelShareWithGallery').onWrap('click', function(e) {
             var table = $('#share-with-gallery .modal-body').find(">:first-child");
@@ -123,7 +123,7 @@ define([ 'require', 'exports', 'log', 'util', 'message', 'comm', 'guiState.contr
                 $('#textShareGallery').show();
             }
             $('#share-with-gallery').modal("hide");
-        });
+        }, 'ok click for cancel share with gallery');
     }
 
     function showShareWithUser(data) {
@@ -310,7 +310,7 @@ define([ 'require', 'exports', 'log', 'util', 'message', 'comm', 'guiState.contr
                             }
                             MSG.displayMessage(result.message, "TOAST", shareObj.label);
                             LOG.info("share program " + row.name + " with '" + shareObj.label + "'(" + shareObj.type + ") having right '" + shareObj.right + "'");                      
-                            $('#progList').find('button[name="refresh"]').trigger('click');                    
+                            $('#progList').find('button[name="refresh"]').clickWrap();
                         } else {
                             UTIL.showMsgOnTop(result.message);
                         }
@@ -332,7 +332,7 @@ define([ 'require', 'exports', 'log', 'util', 'message', 'comm', 'guiState.contr
         PROGRAM.shareProgramWithGallery(progName, function(result) {
             if (result.rc === 'ok') {
                 LOG.info("share program " + progName + " with Gallery");
-                $('#progList').find('button[name="refresh"]').trigger('click');
+                $('#progList').find('button[name="refresh"]').clickWrap();
             }
             MSG.displayInformation(result, result.message, result.message, progName);
         });       

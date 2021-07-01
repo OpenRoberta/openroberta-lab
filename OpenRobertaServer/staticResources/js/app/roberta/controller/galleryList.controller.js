@@ -147,7 +147,7 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'message', 'guiState.contr
         }, "Load program from gallery double clicked");
 
         $('#backGalleryList').onWrap('click', function() {
-            $('#tabProgram').trigger('click');
+            $('#tabProgram').clickWrap();
             return false;
         }, "back to program view");
 
@@ -167,7 +167,7 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'message', 'guiState.contr
             });
         });
 //        TODO reactivate this once the table-view is improved
-//        $('#toogleView').click(function (e) {
+//        $('#toogleView').clickWrap(function (e) {
 //            // toggle button icon
 //            var iconClassName = '';
 //            if (currentViewMode === 'gallery') {

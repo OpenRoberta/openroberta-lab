@@ -1700,7 +1700,7 @@ define(['exports', 'simulation.scene', 'simulation.constants', 'util', 'interpre
     function importConfigData() {
         $('#backgroundFileSelector').val(null);
         $('#backgroundFileSelector').attr("accept", ".json");
-        $('#backgroundFileSelector').trigger('click'); // opening dialog
+        $('#backgroundFileSelector').clickWrap(); // opening dialog
         $('#backgroundFileSelector').change(function(event) {
             var file = event.target.files[0];
             var reader = new FileReader();
@@ -1865,7 +1865,7 @@ define(['exports', 'simulation.scene', 'simulation.constants', 'util', 'interpre
     function importImage() {
         $('#backgroundFileSelector').val(null);
         $('#backgroundFileSelector').attr("accept", ".png, .jpg, .jpeg, .svg");
-        $('#backgroundFileSelector').trigger('click'); // opening dialog
+        $('#backgroundFileSelector').clickWrap(); // opening dialog
         $('#backgroundFileSelector').change(function(event) {
             var file = event.target.files[0];
             var reader = new FileReader();

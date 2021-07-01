@@ -230,7 +230,7 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'ro
                         CONFIGURATION_C.reloadConf();
                         reloadProgram();
                     });
-                    $('#tabProgram').trigger('click');
+                    $('#tabProgram').clickWrap();
                 }
                 MSG.displayInformation(result, "", result.message);
             });
@@ -243,7 +243,7 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'ro
         $formSingleModal = $('#single-modal-form');
         $('#buttonCancelFirmwareUpdateAndRun').onWrap('click', function() {
             start();
-        });
+        }, 'cancel firmware update and run');
     }
     exports.initProgramForms = initProgramForms;
 

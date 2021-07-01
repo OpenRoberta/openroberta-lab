@@ -65,7 +65,7 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.controller', 'guiState.m
     function initRobotForms() {
         $('#iconDisplayRobotState').onWrap('click', function() {
             showRobotInfo();
-        }, 'icon robot click');
+        }, 'display robot state');
 
         $('#wlan-form').removeData('validator');
         $.validator.addMethod("wlanRegex", function(value, element) {
@@ -151,7 +151,7 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.controller', 'guiState.m
                     id : data.brickid
                 }
             });
-        });
+        }, 'insert robot connections');
 
         $('#show-available-connections').onWrap('connect', function(event, data) {
             var result = {};
@@ -159,7 +159,7 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.controller', 'guiState.m
             result["robot.state"] = 'wait';
             GUISTATE_C.setState(result);
             $('#show-available-connections').modal('hide');
-        }, "");
+        }, 'connect to a robot');
     }
 
     function showSetTokenModal() {
@@ -337,13 +337,13 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.controller', 'guiState.m
                     }
                     CONFIGURATION_C.changeRobotSvg();
                     if (GUISTATE_C.getView() == 'tabConfList') {
-                        $('#confList>.bootstrap-table').find('button[name="refresh"]').trigger('click');
+                        $('#confList>.bootstrap-table').find('button[name="refresh"]').clickWrap();
                     }
                     if (GUISTATE_C.getView() == 'tabProgList') {
-                        $('#progList>.bootstrap-table').find('button[name="refresh"]').trigger('click');
+                        $('#progList>.bootstrap-table').find('button[name="refresh"]').clickWrap();
                     }
                     if ($('.rightMenuButton.rightActive')) {
-                        $('.rightMenuButton.rightActive').trigger('click');
+                        $('.rightMenuButton.rightActive').clickWrap();
                     }
                     PROGCODE_C.setCodeLanguage(GUISTATE_C.getSourceCodeFileExtension());
                     CODEEDITOR_C.setCodeLanguage(GUISTATE_C.getSourceCodeFileExtension());
@@ -366,12 +366,12 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.controller', 'guiState.m
                 $('#confirm').onWrap('click', function(e) {
                     e.preventDefault();
                     switchRobot(robot, true, opt_callback);
-                });
+                }, 'confirm modal');
                 $('#confirmCancel').off();
-                $('#confirmCancel').on('click', function(e) {
+                $('#confirmCancel').onWrap('click', function(e) {
                     e.preventDefault();
                     $('.modal').modal('hide');
-                });
+                }, 'cancel modal');
             });
             if (GUISTATE_C.isUserLoggedIn()) {
                 MSG.displayMessage("POPUP_BEFOREUNLOAD_LOGGEDIN", "POPUP", "", true);

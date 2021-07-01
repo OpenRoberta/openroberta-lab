@@ -13,7 +13,7 @@ define([ 'require', 'exports', 'log', 'util', 'message', 'comm', 'configuration.
 
     function initEvents() {
         /**
-         * Delete the programs that were selected in program list
+         * Delete the configurations that were selected in configuration list
          */
         $('#doDeleteConfiguration').onWrap('click', function() {
             var configurations = $("#confirmDeleteConfiguration").data('configurations');
@@ -24,10 +24,10 @@ define([ 'require', 'exports', 'log', 'util', 'message', 'comm', 'configuration.
                     UTIL.response(result);
                     if (result.rc === 'ok') {
                         MSG.displayInformation(result, "MESSAGE_CONFIGURATION_DELETED", result.message, confName);
-                        $('#confList').find('button[name="refresh"]').trigger('click');
+                        $('#confList').find('button[name="refresh"]').clickWrap();
                         LOG.info('delete configuration "' + confName);
                     }
-                });
+                }, 'delete configuration');
             }
             $('.modal').modal('hide');
         }), 'doDeleteConfigurations clicked';

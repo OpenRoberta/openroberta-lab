@@ -311,7 +311,7 @@ define([ 'exports', 'log', 'message', 'comm', 'util', 'user.model', 'userGroup.m
                     }
                 });
             }
-        }, 'Bulk delete usergroup');
+        }, 'bulk delete usergroup');
 
         $('#backUserGroupList').onWrap('click', function() {
             $('#tabProgram').clickWrap();
@@ -331,13 +331,13 @@ define([ 'exports', 'log', 'message', 'comm', 'util', 'user.model', 'userGroup.m
         var $createUserGroupModal = $('#create-user-group'),
             $createUserGroupForm = $createUserGroupModal.find('#user-group-form');
         
-        $('#showCreateUserGroupPopup').click(function() {
+        $('#showCreateUserGroupPopup').clickWrap(function() {
             $createUserGroupForm.validate();
             $createUserGroupModal.modal('show');
             return false;
         });
 
-        $('#create-user-group .close-button').click(function() {
+        $('#create-user-group .close-button').clickWrap(function() {
             $createUserGroupModal.modal('hide');
             return false;
         });
@@ -385,7 +385,7 @@ define([ 'exports', 'log', 'message', 'comm', 'util', 'user.model', 'userGroup.m
             }
         });
         
-        $('#create-user-group .accept-button').click(function() {
+        $('#create-user-group .accept-button').clickWrap(function() {
             var validator = $createUserGroupForm.validate(),
                 groupName = $('#userGroupNameInput').val(),
                 initialMembersCount = $('#initialMembersInput').val().trim(),
@@ -923,7 +923,7 @@ define([ 'exports', 'log', 'message', 'comm', 'util', 'user.model', 'userGroup.m
             });
         }, 'Bulk resetted passwords of usergroup members.');
         
-        $('#backUserGroupMemberList').click(function() {
+        $('#backUserGroupMemberList').clickWrap(function() {
             showPanel();
             return false;
         });
@@ -938,13 +938,13 @@ define([ 'exports', 'log', 'message', 'comm', 'util', 'user.model', 'userGroup.m
             $memberCountInput = $addMembersForm.find('#additionalMembersInput'),
             $memberCountInputHint = $addMembersModal.find('label[for="additionalMembersInput"] ~ .hint');
         
-        $('#showAddMembersPopup').click(function() {
+        $('#showAddMembersPopup').clickWrap(function() {
             $addMembersForm.validate();
             $addMembersModal.modal('show');
             return false;
         });
 
-        $addMembersModal.find('.close-button').click(function() {
+        $addMembersModal.find('.close-button').clickWrap(function() {
             $addMembersModal.modal('hide');
             return false;
         });
@@ -997,7 +997,7 @@ define([ 'exports', 'log', 'message', 'comm', 'util', 'user.model', 'userGroup.m
             }
         });
         
-        $addMembersModal.find('.accept-button').click(function() {
+        $addMembersModal.find('.accept-button').clickWrap(function() {
             
             var validator = $addMembersForm.validate();
             

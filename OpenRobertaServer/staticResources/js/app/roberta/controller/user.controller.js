@@ -482,7 +482,7 @@ define([ 'exports', 'log', 'message', 'util', 'user.model', 'guiState.controller
         $formRegister.onWrap('submit', function(e) {
             e.preventDefault();
             createUserToServer();
-        });
+        }, 'submit registration data');
         $("#registerUser").text(Blockly.Msg["POPUP_REGISTER_USER"]);
         $("#registerAccountName").prop("disabled", false);
         $("#userInfoLabel").addClass('hidden');
@@ -506,11 +506,11 @@ define([ 'exports', 'log', 'message', 'util', 'user.model', 'guiState.controller
         $formLost.onWrap('submit', function(e) {
             e.preventDefault();
             userPasswordRecovery();
-        });
+        }, 'submit password recovery data');
         $formLogin.onWrap('submit', function(e) {
             e.preventDefault();
             login();
-        });
+        }, 'submit login data');
         $('#register-form input.form-control, #register-form select.form-control').focus(function(e) {
             var $hint = $(this).parent().next('.hint');
             $("#register-form .hint").not($hint).slideUp($msgAnimateTime);
@@ -531,33 +531,32 @@ define([ 'exports', 'log', 'message', 'util', 'user.model', 'guiState.controller
             headerChange($h3Login, $h3Register);
             modalAnimate($formLogin, $formRegister);
             UTIL.setFocusOnElement($('#registerAccountName'));
-
-        });
+        }, 'login_register_btn');
         $('#register_login_btn').onWrap('click', function() {
             headerChange($h3Register, $h3Login);
             modalAnimate($formRegister, $formLogin);
             UTIL.setFocusOnElement($('#loginAccountName'));
-        });
+        }, 'register_login_btn');
         $('#login_lost_btn').onWrap('click', function() {
             headerChange($h3Login, $h3Lost);
             modalAnimate($formLogin, $formLost);
             UTIL.setFocusOnElement($('#lost_email'));
-        });
+        }, 'login_lost_btn');
         $('#lost_login_btn').onWrap('click', function() {
             headerChange($h3Lost, $h3Login);
             modalAnimate($formLost, $formLogin)
             UTIL.setFocusOnElement($('#loginAccountName'));
-        });
+        }, 'lost_login_btn');
         $('#lost_register_btn').onWrap('click', function() {
             headerChange($h3Lost, $h3Register);
             modalAnimate($formLost, $formRegister);
             UTIL.setFocusOnElement($('#registerAccountName'));
-        });
+        }, 'lost_register_btn');
         $('#register_lost_btn').onWrap('click', function() {
             headerChange($h3Register, $h3Lost);
             modalAnimate($formRegister, $formLost);
             UTIL.setFocusOnElement($('#lost_email'));
-        });
+        }, 'register_lost_btn');
 
         validateLoginUser();
         validateRegisterUser();

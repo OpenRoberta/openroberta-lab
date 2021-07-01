@@ -68,7 +68,7 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'guiState.controller', 'lo
         }, "empty log list clicked");
 
         $('#backLogList').onWrap('click', function() {
-            $('#' + GUISTATE_C.getPrevView()).trigger('click');
+            $('#' + GUISTATE_C.getPrevView()).clickWrap();
             return false;
         }, "back to previous view");
     }

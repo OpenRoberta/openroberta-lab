@@ -60,7 +60,7 @@ define([ 'require', 'exports', 'message', 'log', 'util', 'comm', 'wrap', 'guiSta
                     $('#confirm').on('click', function(e) {
                         e.preventDefault();
                         wasEditedByUser = false;
-                        $('#tabProgram').trigger('click');
+                        $('#tabProgram').clickWrap();
                     });
                     $('#confirmCancel').off();
                     $('#confirmCancel').on('click', function(e) {
@@ -71,7 +71,7 @@ define([ 'require', 'exports', 'message', 'log', 'util', 'comm', 'wrap', 'guiSta
                 MSG.displayMessage('SOURCE_CODE_EDITOR_CLOSE_CONFIRMATION', 'POPUP', '', true, false);
             } else {
                 wasEditedByUser = false;
-                $('#tabProgram').trigger('click');
+                $('#tabProgram').clickWrap();
             }
             return false;
         }, "back to previous view");
@@ -117,11 +117,11 @@ define([ 'require', 'exports', 'message', 'log', 'util', 'comm', 'wrap', 'guiSta
             }
             $('#main-section').css('background-color', '#EEE');
             getSourceCode();
-        });
+        }, 'in show source code editor');
         
         $('#tabSourceCodeEditor').onWrap('shown.bs.tab', function() {
             GUISTATE_C.setView('tabSourceCodeEditor');
-        });
+        }, 'after show source code editor');
 
         $('#tabSourceCodeEditor').on('hide.bs.tab', function() {
             $('#buildSourceCodeEditor').removeClass('disabled');

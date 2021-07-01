@@ -37,7 +37,7 @@ define([ 'exports', 'comm', 'message', 'log', 'guiState.controller', 'program.co
         }
 
         function startTutorial() {
-            $('#tabProgram').trigger('click');
+            $('#tabProgram').clickWrap();
             if (tutorial.initXML) {
                 IMPORT_C.loadProgramFromXML('egal', tutorial.initXML);
             }
@@ -126,18 +126,18 @@ define([ 'exports', 'comm', 'message', 'log', 'guiState.controller', 'program.co
         $('#tutorialAbort').onWrap('click.dismiss.bs.modal', function(event) {
             exitTutorial();
             return false;
-        });
+        }, 'tutorial exit');
         $('#tutorialContinue').off('click.dismiss.bs.modal');
         $('#tutorialContinue').onWrap('click.dismiss.bs.modal', function(event) {
             LOG.info('tutorial executed ' + tutorial.index + tutorialId);
             return false;
-        });
+        }, 'tuorial continue');
 
         $('#tutorialOverview').modal({
             backdrop : 'static',
             keyboard : false,
             show : true
-        });
+        }, 'tutorial overview');
     }
 
     function createInstruction() {
@@ -185,7 +185,7 @@ define([ 'exports', 'comm', 'message', 'log', 'guiState.controller', 'program.co
                         'click' : function() {
                             MSG.displayMessage(tutorial.end, "POPUP", "");
                             $(".modal").one('hide.bs.modal', function(e) {
-                                $("#tutorialEnd").trigger("click");
+                                $("#tutorialEnd").clickWrap();
                                 return false;
                             });
                             return false;
@@ -400,7 +400,7 @@ define([ 'exports', 'comm', 'message', 'log', 'guiState.controller', 'program.co
 
     function closeTutorialView() {
         if ($('.rightMenuButton.rightActive').length >= 0) {
-            $('.rightMenuButton.rightActive').trigger('click');
+            $('.rightMenuButton.rightActive').clickWrap();
         }
     }
 
@@ -413,6 +413,6 @@ define([ 'exports', 'comm', 'message', 'log', 'guiState.controller', 'program.co
         $('.blocklyToolboxDiv>.levelTabs').removeClass('invisible');
         PROG_C.loadExternalToolbox(GUISTATE_C.getProgramToolbox());
         Blockly.mainWorkspace.options.maxBlocks = undefined;
-        $('#tabTutorialList').trigger('click');
+        $('#tabTutorialList').clickWrap();
     }
 });

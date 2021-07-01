@@ -40,7 +40,7 @@ define(['exports', 'message', 'log', 'util', 'simulation.simulation', 'simulatio
                 $('#simStop').addClass("disabled");
                 $('#simControl').addClass('typcn-media-play-outline').removeClass('typcn-media-play');
                 SIM.stopProgram();
-            }, 'simStop clicked');
+            }, 'sim stop clicked');
             $('#simControl').onWrap('click', function (event) {
                 event.stopPropagation();
                 if (SIM.getNumRobots() == 1) {
@@ -98,7 +98,7 @@ define(['exports', 'message', 'log', 'util', 'simulation.simulation', 'simulatio
                         SIM.stopProgram();
                     }
                 }
-            });
+            }, 'sim start clicked');
             $('#simImport').onWrap('click', function(event) {
                 SIM.importImage();
             }, 'simImport clicked');
@@ -107,9 +107,9 @@ define(['exports', 'message', 'log', 'util', 'simulation.simulation', 'simulatio
 
             $('.simInfo').onWrap('click', function(event) {
                 SIM.setInfo();
-            }, 'simInfo clicked');
+            }, 'sim info clicked');
 
-            $('#simRobot').on('click', function(event) {
+            $('#simRobot').onWrap('click', function(event) {
                 $("#simRobotModal").modal("toggle");
                 var robot = GUISTATE_C.getRobot();
                 var position = $("#simDiv").position();
@@ -128,7 +128,7 @@ define(['exports', 'message', 'log', 'util', 'simulation.simulation', 'simulatio
                     });
                 }
                 $('#simRobotModal').draggable();
-            });
+            }, 'sim show robot clicked');
 
             $('#simValues').onWrap('click', function(event) {
                 $("#simValuesModal").modal("toggle");
@@ -141,75 +141,75 @@ define(['exports', 'message', 'log', 'util', 'simulation.simulation', 'simulatio
                     bottom: 'inherit'
                 });
                 $('#simValuesModal').draggable();
-            }, 'simValues clicked');
+            }, 'sim show values clicked');
 
             $('#simResetPose').onWrap('click', function(event) {
                 SIM.resetPose();
-            }, 'simResetPose clicked');
+            }, 'sim reset pose clicked');
 
             $('#simControlStepInto').onWrap('click', function(event) {
                 toggleSimEvent(CONST.DEBUG_STEP_INTO);
 
-            }, 'simControlStepInto clicked');
+            }, 'sim step into clicked');
 
             $('#simControlStepOver').onWrap('click', function(event) {
                 toggleSimEvent(CONST.DEBUG_STEP_OVER);
-            }, 'simControlStepOver clicked');
+            }, 'sim step over clicked');
 
             $('#simAddObstacleRectangle').onWrap('click', function(event) {
                 SIM.addObstacle("rectangle");
                 event.stopPropagation();
-            }, 'simAddObstacle clicked');
+            }, 'sim add rectangle obstacle clicked');
 
             $('#simAddObstacleTriangle').onWrap('click', function(event) {
                 SIM.addObstacle("triangle");
-            }, 'simAddObstacle clicked');
+            }, 'sim add triangle obstacle clicked');
 
             $('#simAddObstacleCircle').onWrap('click', function(event) {
                 SIM.addObstacle("circle");
                 event.stopPropagation();
-            }, 'simAddObstacle clicked');
+            }, 'sim add circle obstacle clicked');
 
             $('#simAddAreaRectangle').onWrap('click', function(event) {
                 SIM.addColorArea("rectangle");
                 event.stopPropagation();
-            }, 'imAddAreaRectangle clicked');
+            }, 'sim add rectangle area clicked');
 
             $('#simAddAreaTriangle').onWrap('click', function(event) {
                 SIM.addColorArea("triangle");
                 event.stopPropagation();
-            }, 'imAddAreaRectangle clicked');
+            }, 'sim add triangle area clicked');
 
             $('#simAddAreaCircle').onWrap('click', function(event) {
                 SIM.addColorArea("circle");
                 event.stopPropagation();
-            }, 'imAddAreaRectangle clicked');
+            }, 'sim add circle area clicked');
 
             $('#simChangeObjectColor').onWrap('click', function(event) {
                 if (!$('#simChangeObjectColor').hasClass("disabled")) {
                     SIM.toggleColorPicker();
                 }
-            }, 'simEditObject clicked');
+            }, 'sim edit object clicked');
 
             $('#simDeleteObject').onWrap('click', function(event) {
                 if (!$('#simDeleteObject').hasClass("disabled")) {
                     SIM.deleteSelectedObject();
                 }
-            }, 'simDeleteObject clicked');
+            }, 'sim delete object clicked');
 
             $('#simDownloadConfig').onWrap('click', function(event) {
                 var filename = GUISTATE_C.getProgramName() + '-sim_configuration.json';
                 UTIL.download(filename, JSON.stringify(SIM.exportConfigData()));
                 MSG.displayMessage("MENU_MESSAGE_DOWNLOAD", "TOAST", filename);
-            }, 'simDownloadConfig clicked');
+            }, 'sim download config clicked');
 
             $('#simUploadConfig').onWrap('click', function(event) {
                 SIM.importConfigData();
-            }, 'simUploadConfig clicked');
+            }, 'sim upload config clicked');
 
             $('#simScene').onWrap('click', function(event) {
                 SIM.setBackground(-1, SIM.setBackground);
-            }, "simToggleBackground clicked");
+            }, "sim toggle background clicked");
         }
 
         function toggleSim() {

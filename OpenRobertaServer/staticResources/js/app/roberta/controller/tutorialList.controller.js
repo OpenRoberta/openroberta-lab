@@ -132,7 +132,7 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'message', 'guiState.contr
         }, "Load program from tutorial double clicked");
 
         $('#backTutorialList').onWrap('click', function() {
-            $('#tabProgram').trigger('click');
+            $('#tabProgram').clickWrap();
             return false;
         }, "back to program view");
 

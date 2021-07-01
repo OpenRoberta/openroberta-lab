@@ -182,7 +182,7 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'message', 'progList.model
         }, 'uncheck one program');
 
         $('#backProgList').onWrap('click', function() {
-            $('#tabProgram').trigger('click');
+            $('#tabProgram').clickWrap();
             return false;
         }, "back to program view")
 
@@ -473,7 +473,7 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'message', 'progList.model
                     // TODO review this in 4 weeks and remove it if possible                         
                     checkMissingInformaton(result);
                 });
-                $('#tabProgram').trigger('click');
+                $('#tabProgram').clickWrap();
 
             }
             MSG.displayInformation(result, "", result.message);

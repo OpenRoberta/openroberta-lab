@@ -348,7 +348,7 @@ define(['exports', 'log', 'util', 'message', 'comm', 'wrap', 'robot.controller',
                     }
                 });
                 $('#feedbackModal').modal({ show: true });
-            });
+            }, 'feedback button clicked');
         }
 
         // EDIT Menu  --- don't use onWrap here, because the export xml target must be enabled always
@@ -363,7 +363,7 @@ define(['exports', 'log', 'util', 'message', 'comm', 'wrap', 'robot.controller',
                         RUN_C.runOnBrick();
                         break;
                     case 'menuRunSim':
-                        $('#simButton').trigger('click');
+                        $('#simButton').clickWrap();
                         break;
                     case 'menuCheckProg':
                         PROGRAM_C.checkProgram();
@@ -555,7 +555,7 @@ define(['exports', 'log', 'util', 'message', 'comm', 'wrap', 'robot.controller',
         }, 'tabConfiguration clicked');
 
         // Close submenu on mouseleave
-        $('.navbar-fixed-top').onWrap('mouseleave', function(event) {
+        $('.navbar-fixed-top').on('mouseleave', function(event) {
             $('.navbar-fixed-top .dropdown').removeClass('open');
         });
 
@@ -565,20 +565,20 @@ define(['exports', 'log', 'util', 'message', 'comm', 'wrap', 'robot.controller',
 
         $('.menuGeneral').onWrap('click', function(event) {
             window.open("https://jira.iais.fraunhofer.de/wiki/display/ORInfo");
-        }, 'head navigation menu item clicked');
+        }, 'head navigation menu item general clicked');
         $('.menuFaq').onWrap('click', function(event) {
             window.open("https://jira.iais.fraunhofer.de/wiki/display/ORInfo/FAQ");
-        }, 'head navigation menu item clicked');
+        }, 'head navigation menu item faq clicked');
         $('.shortcut').onWrap('click', function(event) {
             window.open("https://jira.iais.fraunhofer.de/wiki/display/ORInfo/FAQ");
-        }, 'head navigation menu item clicked');
+        }, 'head navigation menu item faq (shortcut) clicked');
         $('.menuAboutProject').onWrap('click', function(event) {
             if (GUISTATE_C.getLanguage() == 'de') {
                 window.open("https://www.roberta-home.de/index.php?id=135");
             } else {
                 window.open("https://www.roberta-home.de/index.php?id=135&L=1");
             }
-        }, 'head navigation menu item clicked');
+        }, 'head navigation menu item about clicked');
 
         $('#startPopupBack').on('click', function(event) {
             $('#popup-robot-main').removeClass('hidden', 1000);
@@ -598,7 +598,7 @@ define(['exports', 'log', 'util', 'message', 'comm', 'wrap', 'robot.controller',
                 return;
             }
             event.preventDefault();
-            $('#startPopupBack').trigger('click');
+            $('#startPopupBack').clickWrap();
             var choosenRobotType = event.target.dataset.type || event.currentTarget.dataset.type;
             var choosenRobotGroup = event.target.dataset.group || event.currentTarget.dataset.group;
             if (event.target.className.indexOf("info") >= 0) {
@@ -650,7 +650,7 @@ define(['exports', 'log', 'util', 'message', 'comm', 'wrap', 'robot.controller',
                 ROBOT_C.switchRobot('ev3lejosv1', true);
             }
             if (GUISTATE_C.getProgramToolboxLevel() !== 'beginner') {
-                $('#beginner').trigger('click');
+                $('#beginner').clickWrap();
             }
             PROGRAM_C.newProgram(true);
             TOUR_C.start('welcome');
@@ -662,17 +662,17 @@ define(['exports', 'log', 'util', 'message', 'comm', 'wrap', 'robot.controller',
             event.stopPropagation();
             $("#show-startup-message").modal("show");
 
-        }, 'take a tour clicked');
+        }, 'go to wiki clicked');
 
         // init popup events
 
         $('.cancelPopup').onWrap('click', function() {
             $('.ui-dialog-titlebar-close').clickWrap();
-        });
+        }, 'cancel popup clicked');
 
         $('#about-join').onWrap('click', function() {
             $('#show-about').modal('hide');
-        });
+        }, 'hide show about clicked');
 
         $(window).on('beforeunload', function(e) {
             return Blockly.Msg.POPUP_BEFOREUNLOAD;
@@ -794,13 +794,14 @@ define(['exports', 'log', 'util', 'message', 'comm', 'wrap', 'robot.controller',
             //Overriding the Ctrl + Z for showing the source code
             if ((e.metaKey || e.ctrlKey) && event.which == 90 && !(e.shiftKey)) {
                 e.preventDefault();
-                $('#codeButton').trigger("click");
+                $('#codeButton').clickWrap();
                 return false;
             }
             //Overriding the Ctrl + Shift + Z for showing the source code editor
             if ((e.metaKey || e.ctrlKey) && (e.shiftKey) && event.which == 90) {
+                console.log("ctrl-shift-Z");
                 e.preventDefault();
-                $('#tabSourceCodeEditor').trigger("click");
+                $('#tabSourceCodeEditor').clickWrap();
                 return false;
             }
             //Overriding the Ctrl + Shift + G when not logged in
@@ -832,7 +833,7 @@ define(['exports', 'log', 'util', 'message', 'comm', 'wrap', 'robot.controller',
             if ((e.metaKey || e.ctrlKey) && event.which == 71 && !(e.shiftKey)) {
                 if (GUISTATE_C.hasSim()) {
                     e.preventDefault();
-                    $('#simButton').trigger('click');
+                    $('#simButton').clickWrap();
                     return false;
                 } else {
                     e.preventDefault();

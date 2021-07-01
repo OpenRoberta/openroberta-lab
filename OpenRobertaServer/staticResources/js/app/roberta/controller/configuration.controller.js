@@ -172,7 +172,7 @@ define(['exports', 'log', 'util', 'comm', 'message', 'guiState.controller', 'blo
                 $('#tabConfiguration').one('shown.bs.tab', function() {
                     showConfiguration(result);
                 });
-                $('#tabConfiguration').trigger('click');
+                $('#tabConfiguration').clickWrap();
             }
             MSG.displayInformation(result, "", result.message);
         });

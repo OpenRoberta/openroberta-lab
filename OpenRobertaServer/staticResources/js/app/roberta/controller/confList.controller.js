@@ -135,7 +135,7 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'confList.model', 'configu
         }, 'uncheck one configuration');
 
         $('#backConfList').onWrap('click', function() {
-            $('#tabConfiguration').trigger('click');
+            $('#tabConfiguration').clickWrap();
             return false;
         }, "back to configuration view");
 

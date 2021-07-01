@@ -19,11 +19,11 @@ define([ 'exports', 'log', 'util', 'comm', 'message', 'guiState.controller',  'n
     function initEvents() {
         $('#tabNN').on('show.bs.tab', function(e) {
             GUISTATE_C.setView('tabNN');
-        });
+        }, 'show tabNN');
 
         $('#tabNN').onWrap('shown.bs.tab', function(e) {
             $(window).resize();
-        }, 'tabNN clicked');
+        }, 'shown tabNN');
 
         $('#tabNN').on('hide.bs.tab', function(e) {
         });
@@ -101,7 +101,7 @@ define([ 'exports', 'log', 'util', 'comm', 'message', 'guiState.controller',  'n
                 $('#tabNN').one('shown.bs.tab', function() {
                     showNN(result);
                 });
-                $('#tabNN').trigger('click');
+                $('#tabNN').clickWrap();
             }
             MSG.displayInformation(result, "", result.message);
         });
