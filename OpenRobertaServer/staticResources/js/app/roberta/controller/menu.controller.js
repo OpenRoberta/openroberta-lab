@@ -348,7 +348,7 @@ define(['exports', 'log', 'util', 'message', 'comm', 'wrap', 'robot.controller',
                     }
                 });
                 $('#feedbackModal').modal({ show: true });
-            }, 'feedback button clicked');
+            });
         }
 
         // EDIT Menu  --- don't use onWrap here, because the export xml target must be enabled always
