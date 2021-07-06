@@ -153,4 +153,18 @@ define([ 'exports', 'comm', 'log', 'jquery' ], function(exports, COMM, LOG, $) {
             COMM.ping(); // transfer data to the server
         }
     };
+
+
+    $.fn.tabWrapShow = function() {
+        numberOfActiveActions--;
+        try {
+            this.tab('show');
+            numberOfActiveActions++;
+        } catch (e) {
+            numberOfActiveActions++;
+            var err = new Error();
+            LOG.error("tabWrap CRASHED UNEXPECTED AND SEVERELY with EXCEPTION: " + e + " and stacktrace: " + err.stack);
+            COMM.ping(); // transfer data to the server
+        }
+    };
 });

@@ -314,11 +314,11 @@ define(['exports', 'log', 'util', 'message', 'comm', 'wrap', 'robot.controller',
             'toggle': false
         });
 
-        $('#navbarCollapse').onWrap('click', '.dropdown-menu a,.visible-xs', function(event) {
+        $('#navbarCollapse').on('click', '.dropdown-menu a,.visible-xs', function(event) {
             $('#navbarCollapse').collapse('hide');
         });
         // for gallery
-        $('#head-navigation-gallery').onWrap('click', 'a,.visible-xs', function(event) {
+        $('#head-navigation-gallery').on('click', 'a,.visible-xs', function(event) {
             $('#navbarCollapse').collapse('hide');
         });
         if (GUISTATE_C.isPublicServerVersion()) {
@@ -401,10 +401,10 @@ define(['exports', 'log', 'util', 'message', 'comm', 'wrap', 'robot.controller',
                         PROGRAM_C.linkProgram();
                         break;
                     case 'menuToolboxBeginner':
-                        $('.levelTabs a[href="#beginner"]').tab('show');
+                        $('.levelTabs a[href="#beginner"]').tabWrapShow();
                         break;
                     case 'menuToolboxExpert':
-                        $('.levelTabs a[href="#expert"]').tab('show');
+                        $('.levelTabs a[href="#expert"]').tabWrapShow();
                         break;
                     case 'menuRunMulipleSim':
                         MULT_SIM.showListProg();

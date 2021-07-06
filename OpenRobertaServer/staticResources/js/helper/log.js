@@ -3,6 +3,7 @@ define([ 'exports', 'jquery', 'bootstrap-table' ], function(exports, $) {
     // switches for logging:
     var logToLog = true; // log to HTML-list with id #log
     var logToComm = true; // log to server along with the next ajax call
+    var logToConsole = false; // log ERROR to console for DEBUGGING
 
     var markerINFO = '[[INFO]] ';
     var markerERROR = '[[ERR ]] ';
@@ -19,6 +20,7 @@ define([ 'exports', 'jquery', 'bootstrap-table' ], function(exports, $) {
         /* jshint expr : true */
         logToLog && logLog(obj, marker);
         logToComm && logComm(obj, marker);
+        logToConsole && marker === markerERROR && logConsole(obj, marker);
     }
     exports.text = text;
 
@@ -109,6 +111,18 @@ define([ 'exports', 'jquery', 'bootstrap-table' ], function(exports, $) {
             }
         });
     }
+
+        /**
+         * IMPLEMENTATION OF logging to a HTML-list with id #log. expect: HTML-list
+         * with id #log expect: css-classes 'log0' and 'log1' and 'lERR'
+         */
+        function logConsole(obj, marker) {
+            if (typeof obj === 'object') {
+                obj = JSON.stringify(obj);
+            }
+            console.log(markerERROR + obj);
+        }
+
 
     /**
      * toggle the visibility of the HTML-list with id #log

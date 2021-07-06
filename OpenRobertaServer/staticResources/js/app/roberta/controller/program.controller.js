@@ -70,7 +70,7 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'ro
                         GUISTATE_C.setConfigurationName('');
                         // or reset to last saved version:
                         //$('#tabConfiguration').trigger('reload');
-                        $('#tabProgram').tab('show');
+                        $('#tabProgram').tabWrapShow();
                     });
                     $('#confirmCancel').off();
                     $('#confirmCancel').on('click', function(e) {
@@ -81,7 +81,7 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'ro
                 MSG.displayMessage("POPUP_CONFIGURATION_UNSAVED", "POPUP", "", true);
                 return false;
             } else {
-                $('#tabProgram').tab('show');
+                $('#tabProgram').tabWrapShow();
             }
         });
         $('#tabProgram').onWrap('show.bs.tab', function(e) {
@@ -106,7 +106,7 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'ro
         // work around for touch devices
         $('.levelTabs').on('touchend', function(e) {
             var target = $(e.target).attr("href");
-            $('.levelTabs a[href="' + target + '"]').tab('show');
+            $('.levelTabs a[href="' + target + '"]').tabWrapShow();
         });
 
         $('.levelTabs a[data-toggle="tab"]').onWrap('shown.bs.tab', function(e) {
