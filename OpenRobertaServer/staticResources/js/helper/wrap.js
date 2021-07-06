@@ -36,9 +36,9 @@ define([ 'exports', 'comm', 'log', 'jquery' ], function(exports, COMM, LOG, $) {
                 var err = new Error();
                 var elapsed = new Date() - start;
                 if (message !== undefined) {
-                    LOG.error('[[TIME]] ' + elapsed + ' msec: ' + message + ', then EXCEPTION: ' + e + ' with stacktrace: ' + err.stack);
+                    LOG.error('[[ERR ]] ' + elapsed + ' msec: ' + message + ', then EXCEPTION: ' + e + ' with stacktrace: ' + err.stack);
                 } else {
-                    LOG.error('[[TIME]] ' + elapsed + ' msec: wrapTotal caught an EXCEPTION: ' + e + ' with stacktrace: ' + err.stack);
+                    LOG.error('[[ERR ]] ' + elapsed + ' msec: wrapTotal caught an EXCEPTION: ' + e + ' with stacktrace: ' + err.stack);
                 }
             }
         };

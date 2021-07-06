@@ -72,7 +72,7 @@ define(['exports', 'log', 'util', 'comm', 'message', 'guiState.controller', 'blo
                 UTIL.annotateBlocks(bricklyWorkspace, GUISTATE_C.confAnnos);
                 delete GUISTATE_C.confAnnos;
             }
-            confVis.refresh();
+            confVis && confVis.refresh();
         }, 'tabConfiguration clicked');
 
         $('#tabConfiguration').onWrap('hide.bs.tab', function(e) {

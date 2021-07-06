@@ -34,7 +34,7 @@ define([ 'exports', 'message', 'log', 'util', 'guiState.controller', 'blockly', 
                 });
             }
         });
-        $('#infoContent, #infoTags').onWrap('change', function() {
+        $('#infoContent, #infoTags').on('change', function() { // TODO: here should be an onWrap. But this change is called during a run of another wrapped callback
             blocklyWorkspace.description = $('#infoContent').html();
             blocklyWorkspace.tags = $('#infoTags').val();
             if (GUISTATE_C.isProgramSaved()) {
