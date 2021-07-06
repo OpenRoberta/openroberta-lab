@@ -328,16 +328,11 @@ define(['exports', 'util', 'log', 'message', 'program.controller', 'program.mode
     }
 
     function runStepInterpreter() {
-        while (!interpreter.isTerminated() && !reset) {
+        if (!interpreter.isTerminated() && !reset) {
             var maxRunTime = new Date().getTime() + 100;
-            var waitTime = interpreter.run(maxRunTime);
-
-            if (waitTime >= 0) {
-                timeout(runStepInterpreter, waitTime);
-                return;
-            }
+            var waitTime = Math.max(100, interpreter.run(maxRunTime));
+            timeout(runStepInterpreter, waitTime);
         }
-        interpreter.run(0);
     }
 
     /**
