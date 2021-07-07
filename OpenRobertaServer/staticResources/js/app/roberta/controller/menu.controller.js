@@ -1,7 +1,8 @@
 define(['exports', 'log', 'util', 'message', 'comm', 'wrap', 'robot.controller', 'socket.controller', 'user.controller', 'user.model', 'notification.controller', 'userGroup.controller', 'guiState.controller',
     'program.controller', 'program.model', 'multSim.controller', 'progRun.controller', 'configuration.controller', 'import.controller', 'enjoyHint',
-    'tour.controller', 'simulation.simulation', 'progList.model', 'jquery', 'blockly', 'slick'], function(exports, LOG, UTIL, MSG, COMM, WRAP, ROBOT_C, SOCKET_C,
-        USER_C, USER, NOTIFICATION_C, USERGROUP_C, GUISTATE_C, PROGRAM_C, PROGRAM_M, MULT_SIM, RUN_C, CONFIGURATION_C, IMPORT_C, EnjoyHint, TOUR_C, SIM, PROGLIST, $, Blockly) {
+    'tour.controller', 'simulation.simulation', 'progList.model', 'jquery', 'blockly', 'slick'
+], function(exports, LOG, UTIL, MSG, COMM, WRAP, ROBOT_C, SOCKET_C,
+    USER_C, USER, NOTIFICATION_C, USERGROUP_C, GUISTATE_C, PROGRAM_C, PROGRAM_M, MULT_SIM, RUN_C, CONFIGURATION_C, IMPORT_C, EnjoyHint, TOUR_C, SIM, PROGLIST, $, Blockly) {
 
     var n = 0;
 
@@ -18,7 +19,9 @@ define(['exports', 'log', 'util', 'message', 'comm', 'wrap', 'robot.controller',
 
     // from https://stackoverflow.com/questions/19491336/get-url-parameter-jquery-or-how-to-get-query-string-values-in-js/21903119#21903119
     function getUrlParameter(sParam) {
-        var sPageURL = window.location.search.substring(1), sURLVariables = sPageURL.split(QUERY_DELIMITER), sParameterName, i;
+        var sPageURL = window.location.search.substring(1),
+            sURLVariables = sPageURL.split(QUERY_DELIMITER),
+            sParameterName, i;
 
         for (i = 0; i < sURLVariables.length; i++) {
             sParameterName = sURLVariables[i].split(QUERY_ASSIGNMENT);
@@ -322,9 +325,9 @@ define(['exports', 'log', 'util', 'message', 'comm', 'wrap', 'robot.controller',
             $('#navbarCollapse').collapse('hide');
         });
         if (GUISTATE_C.isPublicServerVersion()) {
-            var feedbackButton = '<div href="#" id="feedbackButton" class="rightMenuButton" rel="tooltip" data-original-title="" title="">'
-                + '<span id="" class="feedbackButton typcn typcn-feedback"></span>'
-                + '</div>'
+            var feedbackButton = '<div href="#" id="feedbackButton" class="rightMenuButton" rel="tooltip" data-original-title="" title="">' +
+                '<span id="" class="feedbackButton typcn typcn-feedback"></span>' +
+                '</div>'
             $("#rightMenuDiv").append(feedbackButton);
             window.onmessage = function(msg) {
                 if (msg.data === "closeFeedback") {
@@ -353,12 +356,9 @@ define(['exports', 'log', 'util', 'message', 'comm', 'wrap', 'robot.controller',
 
         // EDIT Menu  --- don't use onWrap here, because the export xml target must be enabled always
         $('#head-navigation-program-edit').on('click', '.dropdown-menu li:not(.disabled) a', function(event) {
-            if (event.target.id === 'menuExportProg') {
-                PROGRAM_C.exportXml();
-                return;
-            }
             var fn = function(event) {
-                switch (event.target.id) {
+                var targetId = event.target.id || (event.target.children[0] && event.target.children[0].id) || (event.target.previousSibling && event.target.previousSibling.id);
+                switch (targetId) {
                     case 'menuRunProg':
                         RUN_C.runOnBrick();
                         break;
@@ -416,7 +416,7 @@ define(['exports', 'log', 'util', 'message', 'comm', 'wrap', 'robot.controller',
                         break;
                 };
             };
-            WRAP.wrapUI(fn,'edit menu click')(event);
+            WRAP.wrapUI(fn, 'edit menu click')(event);
         });
 
         // CONF Menu
@@ -456,8 +456,8 @@ define(['exports', 'log', 'util', 'message', 'comm', 'wrap', 'robot.controller',
                 if (domId === 'menuConnect') {
                     //console.log(GUISTATE_C.getIsAgent());
                     //console.log(GUISTATE_C.getConnection());
-                    if (GUISTATE_C.getConnection() == 'arduinoAgent'
-                        || (GUISTATE_C.getConnection() == 'arduinoAgentOrToken' && GUISTATE_C.getIsAgent() == true)) {
+                    if (GUISTATE_C.getConnection() == 'arduinoAgent' ||
+                        (GUISTATE_C.getConnection() == 'arduinoAgentOrToken' && GUISTATE_C.getIsAgent() == true)) {
                         var ports = SOCKET_C.getPortList();
                         var robots = SOCKET_C.getRobotList();
                         $('#singleModalListInput').empty();
@@ -694,13 +694,12 @@ define(['exports', 'log', 'util', 'message', 'comm', 'wrap', 'robot.controller',
             $(this).css('height', newHeight);
         });
 
-        // experimental
         $(document).onWrap('keydown', function(e) {
             if ((e.metaKey || e.ctrlKey) && (String.fromCharCode(e.which) === '1')) {
                 IMPORT_C.importSourceCodeToCompile();
                 return false;
             }
-            if ((e.metaKey || e.ctrlKey) && event.which == 69) {
+            if ((e.metaKey || e.ctrlKey) && e.which == 69) {
                 PROGRAM_C.exportXml();
                 return false;
             }
@@ -735,26 +734,6 @@ define(['exports', 'log', 'util', 'message', 'comm', 'wrap', 'robot.controller',
                 expr.setInTask(false);
                 return false;
             }
-            // for IMU sensors of Arduino Uno Wifi Rev2, go to config first to create brickly workspace
-            if ((e.metaKey || e.ctrlKey) && (String.fromCharCode(e.which) === '5')) {
-                var expr = GUISTATE_C.getBricklyWorkspace().newBlock('robConf_accelerometer');
-                expr.initSvg();
-                expr.render();
-                expr.setInTask(false);
-                var expr = GUISTATE_C.getBricklyWorkspace().newBlock('robConf_gyro');
-                expr.initSvg();
-                expr.render();
-                expr.setInTask(false);
-                var expr = GUISTATE_C.getBlocklyWorkspace().newBlock('robSensors_accelerometer_getSample');
-                expr.initSvg();
-                expr.render();
-                expr.setInTask(false);
-                var expr = GUISTATE_C.getBlocklyWorkspace().newBlock('robSensors_gyro_getSample');
-                expr.initSvg();
-                expr.render();
-                expr.setInTask(false);
-                return false;
-            }
             if ((e.metaKey || e.ctrlKey) && (String.fromCharCode(e.which) === '7')) {
                 var expr = GUISTATE_C.getBlocklyWorkspace().newBlock('robActions_nnstep');
                 expr.initSvg();
@@ -762,91 +741,43 @@ define(['exports', 'log', 'util', 'message', 'comm', 'wrap', 'robot.controller',
                 expr.setInTask(false);
                 return false;
             }
-            //Overriding the Ctrl + Shift + S when not logged in
-            if ((e.metaKey || e.ctrlKey) && (e.shiftKey) && event.which == 83 && !GUISTATE_C.isUserLoggedIn()) {
-                e.preventDefault();
-            }
-            //Overriding the Ctrl + Shift + S for saving program with new name in the server
-            if ((e.metaKey || e.ctrlKey) && (e.shiftKey) && event.which == 83 && GUISTATE_C.isUserLoggedIn()) {
-                e.preventDefault();
-                PROGRAM_C.showSaveAsModal();
-            }
-            //Overriding the Ctrl + S when not logged in
-            if ((e.metaKey || e.ctrlKey) && (!e.shiftKey) && event.which == 83 && !GUISTATE_C.isUserLoggedIn()) {
-                e.preventDefault();
-            }
             //Overriding the Ctrl + S for saving the program in the database on the server
-            if ((e.metaKey || e.ctrlKey) && (!e.shiftKey) && event.which == 83 && GUISTATE_C.isUserLoggedIn()) {
+            if ((e.metaKey || e.ctrlKey) && e.which == 83) {
                 e.preventDefault();
-                if (GUISTATE_C.getProgramName() === "NEPOprog") {
-                    PROGRAM_C.showSaveAsModal();
+                if (GUISTATE_C.isUserLoggedIn()) {
+                    if (GUISTATE_C.getProgramName() === "NEPOprog" || e.shiftKey) {
+                        PROGRAM_C.showSaveAsModal();
+                    } else if (!GUISTATE_C.isProgramSaved()) {
+                        PROGRAM_C.saveToServer();
+                    }
                 } else {
-                    PROGRAM_C.saveToServer();
+                    MSG.displayMessage("ORA_PROGRAM_GET_ONE_ERROR_NOT_LOGGED_IN", "POPUP", "");
                 }
-                return false;
             }
             //Overriding the Ctrl + R for running the program
-            if ((e.metaKey || e.ctrlKey) && event.which == 82) {
+            if ((e.metaKey || e.ctrlKey) && e.which == 82) {
                 e.preventDefault();
-                RUN_C.runOnBrick();
-                return false;
-            }
-            //Overriding the Ctrl + Z for showing the source code
-            if ((e.metaKey || e.ctrlKey) && event.which == 90 && !(e.shiftKey)) {
-                e.preventDefault();
-                $('#codeButton').clickWrap();
-                return false;
-            }
-            //Overriding the Ctrl + Shift + Z for showing the source code editor
-            if ((e.metaKey || e.ctrlKey) && (e.shiftKey) && event.which == 90) {
-                console.log("ctrl-shift-Z");
-                e.preventDefault();
-                $('#tabSourceCodeEditor').clickWrap();
-                return false;
-            }
-            //Overriding the Ctrl + Shift + G when not logged in
-            if ((e.metaKey || e.ctrlKey) && (e.shiftKey) && event.which == 71 && !GUISTATE_C.isUserLoggedIn()) {
-                e.preventDefault();
-            }
-            //Overriding the Ctrl + Shift + G for multiple robot simulation
-            if ((e.metaKey || e.ctrlKey) && (e.shiftKey) && event.which == 71 && GUISTATE_C.isUserLoggedIn()) {
-                if (GUISTATE_C.hasMultiSim()) {
-                    e.preventDefault();
-                    MULT_SIM.showListProg();
-                    return false;
-                } else {
-                    e.preventDefault();
-                    return false;
+                if (GUISTATE_C.isRunEnabled()) {
+                    RUN_C.runOnBrick();
                 }
-            }
-            //Overriding the Ctrl + M when not logged in
-            if ((e.metaKey || e.ctrlKey) && event.which == 77 && !GUISTATE_C.isUserLoggedIn()) {
-                e.preventDefault();
             }
             //Overriding the Ctrl + M for viewing all programs
-            if ((e.metaKey || e.ctrlKey) && event.which == 77 && GUISTATE_C.isUserLoggedIn()) {
+            if ((e.metaKey || e.ctrlKey) && e.which == 77) {
                 e.preventDefault();
-                $('#tabProgList').clickWrap();
-                return false;
-            }
-            //Overriding the Ctrl + G for viewing the simulation window
-            if ((e.metaKey || e.ctrlKey) && event.which == 71 && !(e.shiftKey)) {
-                if (GUISTATE_C.hasSim()) {
-                    e.preventDefault();
-                    $('#simButton').clickWrap();
-                    return false;
+                if (GUISTATE_C.isUserLoggedIn()) {
+                    $('#tabProgList').data('type', 'userProgram');
+                    $('#tabProgList').clickWrap();
                 } else {
-                    e.preventDefault();
-                    return false;
+                    MSG.displayMessage("ORA_PROGRAM_GET_ONE_ERROR_NOT_LOGGED_IN", "POPUP", "");
                 }
             }
-            //Overriding the Ctrl + I for importing NEPO code to compile
-            if ((e.metaKey || e.ctrlKey) && event.which == 73) {
+            //Overriding the Ctrl + I for importing NEPO Xml
+            if ((e.metaKey || e.ctrlKey) && e.which == 73) {
                 IMPORT_C.importXml()
                 return false;
             }
             //Overriding the Ctrl + E for exporting the NEPO code
-            if ((e.metaKey || e.ctrlKey) && event.which == 69) {
+            if ((e.metaKey || e.ctrlKey) && e.which == 69) {
                 PROGRAM_C.exportXml();
                 return false;
             }

@@ -25,7 +25,7 @@ define(['exports', 'util', 'log', 'message', 'program.controller', 'program.mode
             return false;
         });
         if (GUISTATE_C.getConnection() !== 'autoConnection' && GUISTATE_C.getConnection() !== 'jsPlay') {
-            blocklyWorkspace.robControls.disable('runOnBrick');
+            GUISTATE_C.setRunEnabled(false);
         }
     }
 

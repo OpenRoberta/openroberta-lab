@@ -13,6 +13,24 @@ ol {
     margin: 0;
 }
 
+dl.grid {
+    display: grid;
+    grid-template-columns: 1fr 100%;
+}
+
+dd {
+    margin: 0;
+    padding-left: 1em;
+}
+
+dl.grid dd {
+    margin-bottom: 1em;
+}
+
+dl.grid dt {
+    min-width: 100px;
+}
+
 @font-face {
     font-family: 'Roboto';
     src: url('fonts/Roboto-Regular.ttf') format('truetype');

@@ -184,22 +184,19 @@ define(['exports', 'util', 'message', 'guiState.model', 'progHelp.controller', '
                     $('#head-navi-icon-robot').removeClass('error');
                     $('#head-navi-icon-robot').removeClass('busy');
                     $('#head-navi-icon-robot').addClass('wait');
-                    GUISTATE.gui.blocklyWorkspace.robControls.enable('runOnBrick');
-                    $('.menuRunProg').removeClass('disabled');
+                    setRunEnabled(true);
                     $('#runSourceCodeEditor').removeClass('disabled');
                 } else if (GUISTATE.robot.state === 'busy') {
                     $('#head-navi-icon-robot').removeClass('wait');
                     $('#head-navi-icon-robot').removeClass('error');
                     $('#head-navi-icon-robot').addClass('busy');
-                    GUISTATE.gui.blocklyWorkspace.robControls.disable('runOnBrick');
-                    $('.menuRunProg').addClass('disabled');
+                    setRunEnabled(false);
                     $('#runSourceCodeEditor').addClass('disabled');
                 } else {
                     $('#head-navi-icon-robot').removeClass('busy');
                     $('#head-navi-icon-robot').removeClass('wait');
                     $('#head-navi-icon-robot').addClass('error');
-                    GUISTATE.gui.blocklyWorkspace.robControls.disable('runOnBrick');
-                    $('.menuRunProg').addClass('disabled');
+                    setRunEnabled(false);
                     $('#runSourceCodeEditor').addClass('disabled');
                 }
                 break;
@@ -313,10 +310,7 @@ define(['exports', 'util', 'message', 'guiState.model', 'progHelp.controller', '
                 $('#head-navi-icon-robot').removeClass('error');
                 $('#head-navi-icon-robot').removeClass('busy');
                 $('#head-navi-icon-robot').removeClass('wait');
-                if (GUISTATE.gui.blocklyWorkspace) {
-                    GUISTATE.gui.blocklyWorkspace.robControls.disable('runOnBrick');
-                }
-                $('.menuRunProg').addClass('disabled');
+                setRunEnabled(false);
                 $('#runSourceCodeEditor').addClass('disabled');
                 $('#menuConnect').parent().removeClass('disabled');
                 setPingTime(SHORT);
@@ -328,10 +322,7 @@ define(['exports', 'util', 'message', 'guiState.model', 'progHelp.controller', '
                 $('#head-navi-icon-robot').removeClass('error');
                 $('#head-navi-icon-robot').removeClass('busy');
                 $('#head-navi-icon-robot').addClass('wait');
-                if (GUISTATE.gui.blocklyWorkspace) {
-                    GUISTATE.gui.blocklyWorkspace.robControls.enable('runOnBrick');
-                }
-                $('.menuRunProg').removeClass('disabled');
+                setRunEnabled(true);
                 $('#runSourceCodeEditor').removeClass('disabled');
                 $('#menuConnect').parent().addClass('disabled');
                 setPingTime(LONG);
@@ -351,10 +342,7 @@ define(['exports', 'util', 'message', 'guiState.model', 'progHelp.controller', '
                 $('#head-navi-icon-robot').removeClass('error');
                 $('#head-navi-icon-robot').removeClass('busy');
                 $('#head-navi-icon-robot').removeClass('wait');
-                if (GUISTATE.gui.blocklyWorkspace) {
-                    GUISTATE.gui.blocklyWorkspace.robControls.disable('runOnBrick');
-                }
-                $('.menuRunProg').addClass('disabled');
+                setRunEnabled(false);
                 $('#menuConnect').parent().removeClass('disabled');
                 // are we in an Open Roberta Webview
                 if (inWebview()) {
@@ -444,23 +432,20 @@ define(['exports', 'util', 'message', 'guiState.model', 'progHelp.controller', '
                 $('#head-navi-icon-robot').removeClass('error');
                 $('#head-navi-icon-robot').removeClass('wait');
                 $('#head-navi-icon-robot').addClass('busy');
-                GUISTATE.gui.blocklyWorkspace.robControls.disable('runOnBrick');
-                $('.menuRunProg').addClass('disabled');
+                setRunEnabled(false);
                 break;
             case "error":
                 $('#head-navi-icon-robot').removeClass('busy');
                 $('#head-navi-icon-robot').removeClass('wait');
                 $('#head-navi-icon-robot').addClass('error');
-                GUISTATE.gui.blocklyWorkspace.robControls.disable('runOnBrick');
-                $('.menuRunProg').addClass('disabled');
+                setRunEnabled(false);
                 break;
             case "wait":
                 if (isRobotConnected()) {
                     $('#head-navi-icon-robot').removeClass('busy');
                     $('#head-navi-icon-robot').removeClass('error');
                     $('#head-navi-icon-robot').addClass('wait');
-                    GUISTATE.gui.blocklyWorkspace.robControls.enable('runOnBrick');
-                    $('.menuRunProg').removeClass('disabled');
+                    setRunEnabled(true);
                 } else {
                     setConnectionState('error');
                 }
@@ -470,6 +455,24 @@ define(['exports', 'util', 'message', 'guiState.model', 'progHelp.controller', '
         }
     }
     exports.setConnectionState = setConnectionState;
+
+    function isRunEnabled() {
+        return GUISTATE.gui.runEnabled;
+    }
+    exports.isRunEnabled = isRunEnabled;
+
+    function setRunEnabled(running) {
+        running ? true : false;
+        GUISTATE.gui.runEnabled = running;
+        if (running) {
+            GUISTATE.gui.blocklyWorkspace && GUISTATE.gui.blocklyWorkspace.robControls.enable('runOnBrick');
+            $('.menuRunProg').removeClass('disabled');
+        } else {
+            GUISTATE.gui.blocklyWorkspace && GUISTATE.gui.blocklyWorkspace.robControls.disable('runOnBrick');
+            $('.menuRunProg').addClass('disabled');
+        }
+    }
+    exports.setRunEnabled = setRunEnabled;
 
     function getRobot() {
         return GUISTATE.gui.robot;
@@ -560,8 +563,8 @@ define(['exports', 'util', 'message', 'guiState.model', 'progHelp.controller', '
         if (GUISTATE.robot.time > 0) {
             return true;
         }
-        if (GUISTATE.gui.connection === GUISTATE.gui.connectionType.AUTO || GUISTATE.gui.connection === GUISTATE.gui.connectionType.LOCAL
-            || GUISTATE.gui.connectionType.JSPLAY) {
+        if (GUISTATE.gui.connection === GUISTATE.gui.connectionType.AUTO || GUISTATE.gui.connection === GUISTATE.gui.connectionType.LOCAL ||
+            GUISTATE.gui.connectionType.JSPLAY) {
             return true;
         }
         if (GUISTATE.gui.connection === GUISTATE.gui.connectionType.AGENTORTOKEN) {
@@ -625,8 +628,7 @@ define(['exports', 'util', 'message', 'guiState.model', 'progHelp.controller', '
         GUISTATE.gui.prevView = GUISTATE.gui.view;
         GUISTATE.gui.view = view;
         if (!isRobotConnected()) {
-            $('.menuRunProg').addClass('disabled');
-            getBlocklyWorkspace().robControls.disable('runOnBrick');
+            setRunEnabled(false);
             $('#runSourceCodeEditor').addClass('disabled');
         }
         if ($('.rightMenuButton.rightActive')) {
@@ -1252,11 +1254,8 @@ define(['exports', 'util', 'message', 'guiState.model', 'progHelp.controller', '
                     $('#head-navi-icon-robot').removeClass('error');
                     $('#head-navi-icon-robot').removeClass('busy');
                     $('#head-navi-icon-robot').removeClass('wait');
-                    if (GUISTATE.gui.blocklyWorkspace) {
-                        GUISTATE.gui.blocklyWorkspace.robControls.disable('runOnBrick');
-                        $('#runSourceCodeEditor').addClass('disabled');
-                    }
-                    $('.menuRunProg').addClass('disabled');
+                    setRunEnabled(false);
+                    $('#runSourceCodeEditor').addClass('disabled');
                     $('#menuConnect').parent().addClass('disabled');
                     setIsAgent(true);
                 } else {
@@ -1268,11 +1267,8 @@ define(['exports', 'util', 'message', 'guiState.model', 'progHelp.controller', '
                 $('#head-navi-icon-robot').removeClass('error');
                 $('#head-navi-icon-robot').removeClass('busy');
                 $('#head-navi-icon-robot').addClass('wait');
-                if (GUISTATE.gui.blocklyWorkspace) {
-                    GUISTATE.gui.blocklyWorkspace.robControls.enable('runOnBrick');
-                    $('#runSourceCodeEditor').removeClass('disabled');
-                }
-                $('.menuRunProg').removeClass('disabled');
+                setRunEnabled(true);
+                $('#runSourceCodeEditor').removeClass('disabled');
                 $('#menuConnect').parent().addClass('disabled');
                 break;
             default:
@@ -1284,21 +1280,14 @@ define(['exports', 'util', 'message', 'guiState.model', 'progHelp.controller', '
                     $('#head-navi-icon-robot').removeClass('error');
                     $('#head-navi-icon-robot').removeClass('busy');
                     $('#head-navi-icon-robot').removeClass('wait');
-                    if (GUISTATE.gui.blocklyWorkspace) {
-                        GUISTATE.gui.blocklyWorkspace.robControls.disable('runOnBrick');
-                        $('#runSourceCodeEditor').addClass('disabled');
-                    }
-                    $('.menuRunProg').addClass('disabled');
+                    setRunEnabled(false);
                     //$('#menuConnect').parent().addClass('disabled');
                 } else {
                     $('#head-navi-icon-robot').removeClass('error');
                     $('#head-navi-icon-robot').removeClass('busy');
                     $('#head-navi-icon-robot').addClass('wait');
-                    if (GUISTATE.gui.blocklyWorkspace) {
-                        GUISTATE.gui.blocklyWorkspace.robControls.enable('runOnBrick');
-                        $('#runSourceCodeEditor').removeClass('disabled');
-                    }
-                    $('.menuRunProg').removeClass('disabled')
+                    setRunEnabled(true);
+                    $('#runSourceCodeEditor').removeClass('disabled');
                 }
                 break;
         }
