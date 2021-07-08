@@ -168,7 +168,7 @@ define(['exports', 'util', 'log', 'message', 'program.controller', 'program.mode
                     $(this).html($(this).html().replace("$", substituteName));
                 });
 
-                $("#save-client-compiled-program").one("shown.bs.modal", function(e) {
+                $("#save-client-compiled-program").oneWrap("shown.bs.modal", function(e) {
                     $('#download-instructions li').each(function(index) {
                         $(this).delay(750 * index).animate({
                             opacity: 1
@@ -176,7 +176,7 @@ define(['exports', 'util', 'log', 'message', 'program.controller', 'program.mode
                     });
                 });
 
-                $('#save-client-compiled-program').one('hidden.bs.modal', function(e) {
+                $('#save-client-compiled-program').oneWrap('hidden.bs.modal', function(e) {
                     var textH = $("#popupDownloadHeader").text();
                     $("#popupDownloadHeader").text(textH.replace($.trim(GUISTATE_C.getRobotRealName()), "$"));
                     if ($('#label-checkbox').is(':checked')) {
@@ -244,7 +244,7 @@ define(['exports', 'util', 'log', 'message', 'program.controller', 'program.mode
                 $('#download-instructions').append(step);
             }
 
-            $("#save-client-compiled-program").one("shown.bs.modal", function(e) {
+            $("#save-client-compiled-program").oneWrap("shown.bs.modal", function(e) {
                 $('#download-instructions li').each(function(index) {
                     $(this).delay(750 * index).animate({
                         opacity: 1
@@ -252,7 +252,7 @@ define(['exports', 'util', 'log', 'message', 'program.controller', 'program.mode
                 });
             });
 
-            $('#save-client-compiled-program').one('hidden.bs.modal', function(e) {
+            $('#save-client-compiled-program').oneWrap('hidden.bs.modal', function(e) {
                 if (!window.msCrypto) {
                     audio.pause();
                     audio.load();

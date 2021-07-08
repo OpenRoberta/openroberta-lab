@@ -194,7 +194,7 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'message', 'progList.model
                 names += '<br>';
             }
             $('#confirmDeleteProgramName').html(names);
-            $('#confirmDeleteProgram').one('hide.bs.modal', function(event) {
+            $('#confirmDeleteProgram').oneWrap('hide.bs.modal', function(event) {
                 PROGLIST.loadProgList(update);
             });
             $("#confirmDeleteProgram").data('programs', programs);
@@ -268,7 +268,7 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'message', 'progList.model
             }
             $('#confirmDeleteProgramName').html(names);
             $("#confirmDeleteProgram").data('programs', selectedRows);
-            $('#confirmDeleteProgram').one('hidden.bs.modal', function(event) {
+            $('#confirmDeleteProgram').oneWrap('hidden.bs.modal', function(event) {
             });
             $("#confirmDeleteProgram").modal("show");
             return false;
@@ -466,7 +466,7 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'message', 'progList.model
                     GUISTATE_C.setConfigurationName(result.configName);
                     GUISTATE_C.setConfigurationXML(result.confXML);
                 }
-                $('#tabProgram').one('shown.bs.tab', function(e) {
+                $('#tabProgram').oneWrap('shown.bs.tab', function(e) {
                     CONFIGURATION_C.reloadConf();
                     PROGRAM_C.reloadProgram();
                     // this is a temporary function to  inform users about possible data loss from bug issue #924

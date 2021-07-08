@@ -55,7 +55,7 @@ define([ 'require', 'exports', 'message', 'log', 'util', 'comm', 'wrap', 'guiSta
 
         $('#backSourceCodeEditor').onWrap('click', function() {
             if ( wasEditedByUser ) {
-                $('#show-message-confirm').one('shown.bs.modal', function(e) {
+                $('#show-message-confirm').oneWrap('shown.bs.modal', function(e) {
                     $('#confirm').off();
                     $('#confirm').on('click', function(e) {
                         e.preventDefault();

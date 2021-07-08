@@ -361,7 +361,7 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.controller', 'guiState.m
                 }
             });
         } else {
-            $('#show-message-confirm').one('shown.bs.modal', function(e) {
+            $('#show-message-confirm').oneWrap('shown.bs.modal', function(e) {
                 $('#confirm').off();
                 $('#confirm').onWrap('click', function(e) {
                     e.preventDefault();

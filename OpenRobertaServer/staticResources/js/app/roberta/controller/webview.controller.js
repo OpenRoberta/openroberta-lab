@@ -159,7 +159,7 @@ define(['exports', 'guiState.controller', 'interpreter.interpreter', 'interprete
         if (action.show !== undefined) {
             $("#showDisplayText").append("<div>" + action.show + "</div>");
             if (!$('#showDisplayText').is(':visible')) {
-                $('#showDisplay').one('hidden.bs.modal', function() {
+                $('#showDisplay').oneWrap('hidden.bs.modal', function() {
                     $("#showDisplayText").empty();
                 })
                 $("#showDisplay").modal("show");

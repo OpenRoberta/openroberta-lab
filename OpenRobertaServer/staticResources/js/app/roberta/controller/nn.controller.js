@@ -93,7 +93,7 @@ define([ 'exports', 'log', 'util', 'comm', 'message', 'guiState.controller',  'n
         CONFIGURATION.loadNNFromListing(nn[0], nn[1], function(result) {
             if (result.rc === 'ok') {
                 result.name = nn[0];
-                $('#tabNN').one('shown.bs.tab', function() {
+                $('#tabNN').oneWrap('shown.bs.tab', function() {
                     showNN(result);
                 });
                 $('#tabNN').clickWrap();
@@ -154,7 +154,7 @@ define([ 'exports', 'log', 'util', 'comm', 'message', 'guiState.controller',  'n
             GUISTATE_C.setNN(result);
             initNNEnvironment();
         } else {
-            $('#show-message-nnirm').one('shown.bs.modal', function(e) {
+            $('#show-message-nnirm').oneWrap('shown.bs.modal', function(e) {
                 $('#nnirm').off();
                 $('#nnirm').on('click', function(e) {
                     e.preventDefault();

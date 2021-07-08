@@ -185,7 +185,7 @@ define([ 'exports', 'log', 'message', 'comm', 'util', 'user.model', 'userGroup.m
                         } else if (groupMembers.filter(function (groupMember) {return !groupMember.hasDefaultPassword;}).length === 0) {
                             var modalMessageKey = 'USERGROUP_DELETE_WITH_MEMBERS_WARNING',
                                 modalMessage = Blockly.Msg[modalMessageKey] || 'Are your sure that you want to delete the usergroup including all members? No member did log in so far.';
-                            $('#show-message-confirm').one('shown.bs.modal', function(e) {
+                            $('#show-message-confirm').oneWrap('shown.bs.modal', function(e) {
                                 $('#confirm').off();
                                 $('#confirm').on('click', function(e) {
                                     e.preventDefault();
@@ -281,7 +281,7 @@ define([ 'exports', 'log', 'message', 'comm', 'util', 'user.model', 'userGroup.m
                 } else {
                     var modalMessageKey = 'USERGROUP_DELETE_WITH_MEMBERS_WARNING',
                         modalMessage = Blockly.Msg[modalMessageKey] || 'Are your sure that you want to delete the usergroup including all members? No member did log in so far.';
-                    $('#show-message-confirm').one('shown.bs.modal', function(e) {
+                    $('#show-message-confirm').oneWrap('shown.bs.modal', function(e) {
                         $('#confirm').off();
                         $('#confirm').on('click', function(e) {
                             e.preventDefault();
@@ -708,7 +708,7 @@ define([ 'exports', 'log', 'message', 'comm', 'util', 'user.model', 'userGroup.m
                         
                         var modalMessageKey = row.hasDefaultPassword ? 'DELETE_USERGROUP_MEMBER_WARNING' : 'DELETE_USERGROUP_MEMBER_AFTER_LOGIN_WARNING',
                             modalMessage = Blockly.Msg[modalMessageKey] || 'The member you want to delete might have create own programs and did already log in. Are you sure, that you want to delete the member?';
-                        $('#show-message-confirm').one('shown.bs.modal', function(e) {
+                        $('#show-message-confirm').oneWrap('shown.bs.modal', function(e) {
                             $('#confirm').off();
                             $('#confirm').on('click', function(e) {
                                 e.preventDefault();
@@ -884,7 +884,7 @@ define([ 'exports', 'log', 'message', 'comm', 'util', 'user.model', 'userGroup.m
             
             var modalMessageKey = hasDefaultPassword ? 'DELETE_USERGROUP_MEMBER_WARNING' : 'DELETE_USERGROUP_MEMBER_AFTER_LOGIN_WARNING',
                 modalMessage = Blockly.Msg[modalMessageKey] || 'The member you want to delete might have create own programs and did already log in. Are you sure, that you want to delete the member?';
-            $('#show-message-confirm').one('shown.bs.modal', function(e) {
+            $('#show-message-confirm').oneWrap('shown.bs.modal', function(e) {
                 $('#confirm').off();
                 $('#confirm').on('click', function(e) {
                     e.preventDefault();

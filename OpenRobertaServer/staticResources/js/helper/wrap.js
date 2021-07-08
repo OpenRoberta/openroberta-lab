@@ -84,9 +84,9 @@ define([ 'exports', 'comm', 'log', 'jquery' ], function(exports, COMM, LOG, $) {
      * @memberof WRAP
      */
     function wrapREST(fnToBeWrapped, message) {
-        numberOfActiveActions++;
         var rest = function() {
             COMM.errorNum = 0;
+            numberOfActiveActions++;
             try {
                 var fn = wrapTotal(fnToBeWrapped, message);
                 var that = this;
@@ -154,7 +154,6 @@ define([ 'exports', 'comm', 'log', 'jquery' ], function(exports, COMM, LOG, $) {
         }
     };
 
-
     $.fn.tabWrapShow = function() {
         numberOfActiveActions--;
         try {
@@ -164,6 +163,19 @@ define([ 'exports', 'comm', 'log', 'jquery' ], function(exports, COMM, LOG, $) {
             numberOfActiveActions++;
             var err = new Error();
             LOG.error("tabWrap CRASHED UNEXPECTED AND SEVERELY with EXCEPTION: " + e + " and stacktrace: " + err.stack);
+            COMM.ping(); // transfer data to the server
+        }
+    };
+
+    $.fn.oneWrap = function(event, callback) {
+        numberOfActiveActions--;
+        try {
+            this.one(event, callback);
+            numberOfActiveActions++;
+        } catch (e) {
+            numberOfActiveActions++;
+            var err = new Error();
+            LOG.error("oneWrap CRASHED UNEXPECTED AND SEVERELY with EXCEPTION: " + e + " and stacktrace: " + err.stack);
             COMM.ping(); // transfer data to the server
         }
     };

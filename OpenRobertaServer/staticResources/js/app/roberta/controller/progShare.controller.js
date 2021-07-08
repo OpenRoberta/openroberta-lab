@@ -181,7 +181,7 @@ define([ 'require', 'exports', 'log', 'util', 'message', 'comm', 'guiState.contr
                 write : '',
             }
         });
-        $('#show-relations').one('shown.bs.modal', function(e) {
+        $('#show-relations').oneWrap('shown.bs.modal', function(e) {
             $('#relationsTable').bootstrapTable("resetView");
             $('#relationsTable').find('input :first').focus();
         });

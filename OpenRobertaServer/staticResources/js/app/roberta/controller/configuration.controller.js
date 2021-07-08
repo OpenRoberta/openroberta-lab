@@ -169,7 +169,7 @@ define(['exports', 'log', 'util', 'comm', 'message', 'guiState.controller', 'blo
         CONFIGURATION.loadConfigurationFromListing(conf[0], conf[1], function(result) {
             if (result.rc === 'ok') {
                 result.name = conf[0];
-                $('#tabConfiguration').one('shown.bs.tab', function() {
+                $('#tabConfiguration').oneWrap('shown.bs.tab', function() {
                     showConfiguration(result);
                 });
                 $('#tabConfiguration').clickWrap();
@@ -253,7 +253,7 @@ define(['exports', 'log', 'util', 'comm', 'message', 'guiState.controller', 'blo
             GUISTATE_C.setConfiguration(result);
             initConfigurationEnvironment();
         } else {
-            $('#show-message-confirm').one('shown.bs.modal', function(e) {
+            $('#show-message-confirm').oneWrap('shown.bs.modal', function(e) {
                 $('#confirm').off();
                 $('#confirm').onWrap('click', function(e) {
                     e.preventDefault();

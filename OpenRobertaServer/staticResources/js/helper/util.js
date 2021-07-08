@@ -258,7 +258,7 @@ define(['exports', 'message', 'log', 'jquery', 'jquery-validate', 'bootstrap'], 
      */
     function showMsgOnTop(msg) {
         $('#show-message').find('button').removeAttr("data-dismiss");
-        $('#show-message').find('button').one('click', function(e) {
+        $('#show-message').find('button').oneWrap('click', function(e) {
             $('#show-message').modal("hide");
             $('#show-message').find('button').attr("data-dismiss", "modal");
         });

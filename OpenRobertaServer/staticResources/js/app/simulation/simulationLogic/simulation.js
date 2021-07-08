@@ -1903,7 +1903,7 @@ define(['exports', 'simulation.scene', 'simulation.constants', 'util', 'interpre
                     }
 
                     if (UTIL.isLocalStorageAvailable()) {
-                        $('#show-message-confirm').one('shown.bs.modal', function(e) {
+                        $('#show-message-confirm').oneWrap('shown.bs.modal', function(e) {
                             $('#confirm').off();
                             $('#confirm').on('click', function(e) {
                                 e.preventDefault();

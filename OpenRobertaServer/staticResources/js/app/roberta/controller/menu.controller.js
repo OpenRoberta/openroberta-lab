@@ -331,7 +331,7 @@ define(['exports', 'log', 'util', 'message', 'comm', 'wrap', 'robot.controller',
             $("#rightMenuDiv").append(feedbackButton);
             window.onmessage = function(msg) {
                 if (msg.data === "closeFeedback") {
-                    $('#feedbackIframe').one('load', function() {
+                    $('#feedbackIframe').oneWrap('load', function() {
                         setTimeout(function() {
                             $("#feedbackIframe").attr("src", "about:blank");
                             $('#feedbackModal').modal("hide");
@@ -618,7 +618,7 @@ define(['exports', 'log', 'util', 'message', 'comm', 'wrap', 'robot.controller',
                             uri += QUERY_START + LOAD_SYSTEM_CALL + QUERY_ASSIGNMENT + choosenRobotType;
                             window.history.replaceState({}, document.title, uri);
 
-                            $('#show-message').one('hidden.bs.modal', function(e) {
+                            $('#show-message').oneWrap('hidden.bs.modal', function(e) {
                                 e.preventDefault();
                                 cleanUri();
                                 ROBOT_C.switchRobot(choosenRobotType, true);

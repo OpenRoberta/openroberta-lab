@@ -86,7 +86,7 @@ define([ 'exports', 'comm', 'message', 'log', 'guiState.controller', 'program.co
             nextStep();
             openTutorialView();
         });
-        $("#tutorialEnd").one("click", function() {
+        $("#tutorialEnd").oneWrap("click", function() {
             exitTutorial();
         });
     }
@@ -184,7 +184,7 @@ define([ 'exports', 'comm', 'message', 'log', 'guiState.controller', 'program.co
                         'class' : 'btn',
                         'click' : function() {
                             MSG.displayMessage(tutorial.end, "POPUP", "");
-                            $(".modal").one('hide.bs.modal', function(e) {
+                            $(".modal").oneWrap('hide.bs.modal', function(e) {
                                 $("#tutorialEnd").clickWrap();
                                 return false;
                             });

@@ -62,7 +62,7 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'ro
             e.preventDefault();
             if (GUISTATE_C.getView() === 'tabConfiguration' && GUISTATE_C.isUserLoggedIn() && !GUISTATE_C.isConfigurationSaved()
                     && !GUISTATE_C.isConfigurationAnonymous()) {
-                $('#show-message-confirm').one('shown.bs.modal', function(e) {
+                $('#show-message-confirm').oneWrap('shown.bs.modal', function(e) {
                     $('#confirm').off();
                     $('#confirm').on('click', function(e) {
                         e.preventDefault();
@@ -226,7 +226,7 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'ro
                         GUISTATE_C.setConfigurationName(result.configName);
                         GUISTATE_C.setConfigurationXML(result.confXML);
                     }
-                    $('#tabProgram').one('shown.bs.tab', function(e) {
+                    $('#tabProgram').oneWrap('shown.bs.tab', function(e) {
                         CONFIGURATION_C.reloadConf();
                         reloadProgram();
                     });
@@ -324,7 +324,7 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'ro
     exports.newProgram = newProgram;
 
     function confirmLoadProgram() {
-        $('#show-message-confirm').one('shown.bs.modal', function(e) {
+        $('#show-message-confirm').oneWrap('shown.bs.modal', function(e) {
             $('#confirm').off();
             $('#confirm').on('click', function(e) {
                 e.preventDefault();

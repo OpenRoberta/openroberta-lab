@@ -147,7 +147,7 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'confList.model', 'configu
                 names += '<br>';
             }
             $('#confirmDeleteConfName').html(names);
-            $('#confirmDeleteConfiguration').one('hide.bs.modal', function(event) {
+            $('#confirmDeleteConfiguration').oneWrap('hide.bs.modal', function(event) {
                 CONFLIST.loadConfList(update);
             });
             $("#confirmDeleteConfiguration").data('configurations', configurations);
