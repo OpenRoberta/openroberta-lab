@@ -688,22 +688,22 @@ define(['exports', 'log', 'util', 'message', 'comm', 'wrap', 'robot.controller',
             //            }
         });
 
-        // help Bootstrap to calculate the correct size for the collapse element when the sceen height is smaller than the elements height.
+        // help Bootstrap to calculate the correct size for the collapse element when the screen height is smaller than the elements height.
         $('#navbarCollapse').on('shown.bs.collapse', function() {
             var newHeight = Math.min($(this).height(), Math.max($('#blockly').height(), $('#brickly').height()));
             $(this).css('height', newHeight);
         });
 
         $(document).onWrap('keydown', function(e) {
-            if ((e.metaKey || e.ctrlKey) && (String.fromCharCode(e.which) === '1')) {
+            //Overriding the Ctrl + 1 for importing sourcecode
+            if ((e.metaKey || e.ctrlKey) && e.which == 49) {
+                e.preventDefault();
                 IMPORT_C.importSourceCodeToCompile();
                 return false;
             }
-            if ((e.metaKey || e.ctrlKey) && e.which == 69) {
-                PROGRAM_C.exportXml();
-                return false;
-            }
-            if ((e.metaKey || e.ctrlKey) && (String.fromCharCode(e.which) === '2')) {
+            //Overriding the Ctrl + 2 for creating a debug block
+            if ((e.metaKey || e.ctrlKey) && e.which == 50) {
+                e.preventDefault();
                 var debug = GUISTATE_C.getBlocklyWorkspace().newBlock('robActions_debug');
                 debug.initSvg();
                 debug.render();
@@ -711,7 +711,9 @@ define(['exports', 'log', 'util', 'message', 'comm', 'wrap', 'robot.controller',
 
                 return false;
             }
-            if ((e.metaKey || e.ctrlKey) && (String.fromCharCode(e.which) === '3')) {
+            //Overriding the Ctrl + 3 for creating a assertion + compare block
+            if ((e.metaKey || e.ctrlKey) && e.which == 51) {
+                e.preventDefault();
                 var assert = GUISTATE_C.getBlocklyWorkspace().newBlock('robActions_assert');
                 assert.initSvg();
                 assert.setInTask(false);
@@ -727,14 +729,18 @@ define(['exports', 'log', 'util', 'message', 'comm', 'wrap', 'robot.controller',
                 parentConnection.connect(childConnection);
                 return false;
             }
-            if ((e.metaKey || e.ctrlKey) && (String.fromCharCode(e.which) === '4')) {
+            //Overriding the Ctrl + 4 for creating evaluate-expression block
+            if ((e.metaKey || e.ctrlKey) && e.which == 52) {
+                e.preventDefault();
                 var expr = GUISTATE_C.getBlocklyWorkspace().newBlock('robActions_eval_expr');
                 expr.initSvg();
                 expr.render();
                 expr.setInTask(false);
                 return false;
             }
-            if ((e.metaKey || e.ctrlKey) && (String.fromCharCode(e.which) === '7')) {
+            //Overriding the Ctrl + 7 for creating nnStep block
+            if ((e.metaKey || e.ctrlKey) && e.which == 55) {
+                e.preventDefault();
                 var expr = GUISTATE_C.getBlocklyWorkspace().newBlock('robActions_nnstep');
                 expr.initSvg();
                 expr.render();
@@ -773,11 +779,13 @@ define(['exports', 'log', 'util', 'message', 'comm', 'wrap', 'robot.controller',
             }
             //Overriding the Ctrl + I for importing NEPO Xml
             if ((e.metaKey || e.ctrlKey) && e.which == 73) {
+                e.preventDefault();
                 IMPORT_C.importXml()
                 return false;
             }
             //Overriding the Ctrl + E for exporting the NEPO code
             if ((e.metaKey || e.ctrlKey) && e.which == 69) {
+                e.preventDefault();
                 PROGRAM_C.exportXml();
                 return false;
             }
