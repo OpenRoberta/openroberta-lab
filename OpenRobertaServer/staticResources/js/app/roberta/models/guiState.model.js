@@ -1,4 +1,4 @@
-define([ 'exports', 'message', 'comm' ], function(exports, MSG, COMM) {
+define(['exports', 'message', 'comm'], function(exports, MSG, COMM) {
 
     /**
      * Initialize gui state object
@@ -33,13 +33,14 @@ define([ 'exports', 'message', 'comm' ], function(exports, MSG, COMM) {
         exports.gui.sim = '';
         exports.gui.fileExtension = ''
         exports.gui.connectionType = {
-            TOKEN : 'token',
-            AUTO : 'autoConnection',
-            AGENTORTOKEN : 'arduinoAgentOrToken',
-            LOCAL : 'local',
-            WEBVIEW : 'webview',
-            JSPLAY : 'jsPlay' //Play file in the browser with JavaScript
+            TOKEN: 'token',
+            AUTO: 'autoConnection',
+            AGENTORTOKEN: 'arduinoAgentOrToken',
+            LOCAL: 'local',
+            WEBVIEW: 'webview',
+            JSPLAY: 'jsPlay' //Play file in the browser with JavaScript
         }
+        exports.gui.runEnabled = false;
 
         exports.user = {};
         exports.user.id = -1;
@@ -86,8 +87,8 @@ define([ 'exports', 'message', 'comm' ], function(exports, MSG, COMM) {
         var getInitFromServer = function() {
             COMM.setInitToken(undefined);
             return COMM.json("/init", {
-                "cmd" : "init",
-                "screenSize" : [ window.screen.availWidth, window.screen.availHeight ]
+                "cmd": "init",
+                "screenSize": [window.screen.availWidth, window.screen.availHeight]
             }, function(result) {
                 if (result.rc === 'ok') {
                     COMM.setInitToken(result.initToken);
@@ -97,7 +98,7 @@ define([ 'exports', 'message', 'comm' ], function(exports, MSG, COMM) {
                     ready.resolve();
                 } else {
                     console.log("ERROR: " + result.message)
-                    // MSG.displayInformation(result, "", result.message);
+                        // MSG.displayInformation(result, "", result.message);
                 }
             }, 'init data from server');
         }

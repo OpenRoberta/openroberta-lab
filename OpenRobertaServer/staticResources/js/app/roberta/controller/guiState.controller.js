@@ -1126,22 +1126,22 @@ define(['exports', 'util', 'message', 'guiState.model', 'progHelp.controller', '
 
     function checkSim() {
         if (GUISTATE.gui.sim == true) {
-            $('#menuRunSim').parent().parent().removeClass('disabled');
+            $('#menuRunSim').parent().removeClass('disabled');
             $('#simButton, #simDebugButton').show();
         } else {
-            $('#menuRunSim').parent().parent().addClass('disabled');
+            $('#menuRunSim').parent().addClass('disabled');
             $('#simButton, #simDebugButton').hide();
         }
         if (GUISTATE.gui.multipleSim == true) {
-            $('#menuRunMulipleSim').parent().parent().removeClass('unavailable');
-            $('#menuRunMulipleSim').parent().parent().addClass('available');
+            $('#menuRunMulipleSim').parent().removeClass('unavailable');
+            $('#menuRunMulipleSim').parent().addClass('available');
             if (isUserLoggedIn()) {
-                $('#menuRunMulipleSim').parent().parent().removeClass('disabled');
+                $('#menuRunMulipleSim').parent().removeClass('disabled');
             }
         } else {
-            $('#menuRunMulipleSim').parent().parent().addClass('unavailable');
-            $('#menuRunMulipleSim').parent().parent().removeClass('available');
-            $('#menuRunMulipleSim').parent().parent().addClass('disabled');
+            $('#menuRunMulipleSim').parent().addClass('unavailable');
+            $('#menuRunMulipleSim').parent().removeClass('available');
+            $('#menuRunMulipleSim').parent().addClass('disabled');
         }
     }
     exports.checkSim = checkSim;
