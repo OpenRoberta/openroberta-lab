@@ -466,10 +466,10 @@ define(['exports', 'util', 'message', 'guiState.model', 'progHelp.controller', '
         GUISTATE.gui.runEnabled = running;
         if (running) {
             GUISTATE.gui.blocklyWorkspace && GUISTATE.gui.blocklyWorkspace.robControls.enable('runOnBrick');
-            $('.menuRunProg').removeClass('disabled');
+            $(".menuRunProg, #runSourceCodeEditor").removeClass('disabled');
         } else {
             GUISTATE.gui.blocklyWorkspace && GUISTATE.gui.blocklyWorkspace.robControls.disable('runOnBrick');
-            $('.menuRunProg').addClass('disabled');
+            $(".menuRunProg, #runSourceCodeEditor").addClass('disabled');
         }
     }
     exports.setRunEnabled = setRunEnabled;

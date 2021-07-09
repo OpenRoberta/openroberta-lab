@@ -695,6 +695,9 @@ define(['exports', 'log', 'util', 'message', 'comm', 'wrap', 'robot.controller',
         });
 
         $(document).onWrap('keydown', function(e) {
+            if (GUISTATE_C.getView() != "tabProgram") {
+                return;
+            }
             //Overriding the Ctrl + 1 for importing sourcecode
             if ((e.metaKey || e.ctrlKey) && e.which == 49) {
                 e.preventDefault();
@@ -738,8 +741,8 @@ define(['exports', 'log', 'util', 'message', 'comm', 'wrap', 'robot.controller',
                 expr.setInTask(false);
                 return false;
             }
-            //Overriding the Ctrl + 7 for creating nnStep block
-            if ((e.metaKey || e.ctrlKey) && e.which == 55) {
+            //Overriding the Ctrl + 5 for creating nnStep block
+            if ((e.metaKey || e.ctrlKey) && e.which == 53) {
                 e.preventDefault();
                 var expr = GUISTATE_C.getBlocklyWorkspace().newBlock('robActions_nnstep');
                 expr.initSvg();
