@@ -127,15 +127,15 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'message', 'guiState.contr
                 $(".pace").show(); // Show loading icon and hide gallery table 
             }
             loadGalleryData();
-        });
+        }, "show gallery list");
 
         $('#tabGalleryList').onWrap('shown.bs.tab', function(e) {
             $(window).trigger("resize");
-        });
+        }, "shown gallery list");
 
-        $('#galleryTable').onWrap('all.bs.table', function(e) {
+        $('#galleryTable').onWrap('page-change.bs.table', function(e) {
             configureTagsInput();
-        });
+        }, "page-change gallery list");
 
         $('#galleryList').find('button[name="refresh"]').onWrap('click', function() {
             loadGalleryData();
@@ -195,6 +195,7 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'message', 'guiState.contr
         UTIL.response(result);
         if (result.rc === 'ok') {
             $('#galleryTable').bootstrapTable("load", result.programNames);
+            configureTagsInput();
         }
         $(".pace").fadeOut(300); // Hide loading icon and show gallery table
     }
@@ -334,5 +335,4 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'message', 'guiState.contr
         $('#galleryList').find('.galleryTags>input').attr('readonly', 'true');
         $('#galleryList').find('span[data-role=remove]').addClass('hidden');
     }
-    exports.configureTagsInput = configureTagsInput;
 });

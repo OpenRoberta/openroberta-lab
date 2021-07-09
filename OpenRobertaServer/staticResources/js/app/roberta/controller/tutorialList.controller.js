@@ -114,9 +114,9 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'message', 'guiState.contr
         $('#tabTutorialList').onWrap('show.bs.tab', function(e) {
             guiStateController.setView('tabTutorialList');
             updateTutorialList();
-        });
+        }, "show tutorial list");
 
-        $('#tutorialTable').onWrap('all.bs.table', function(e) {
+        $('#tutorialTable').on('page-change.bs.table', function(e) {
             configureTagsInput();
         });
 
@@ -149,6 +149,7 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'message', 'guiState.contr
                 }
             }
             $('#tutorialTable').bootstrapTable("load", tutorialArray);
+            configureTagsInput();
         }
     }
     var rowAttributes = function(row, index) {
@@ -228,5 +229,4 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'message', 'guiState.contr
         $('#tutorialList').find('.tutorialTags>input').attr('readonly', 'true');
         $('#tutorialList').find('span[data-role=remove]').addClass('hidden');
     }
-    exports.configureTagsInput = configureTagsInput;
 });
