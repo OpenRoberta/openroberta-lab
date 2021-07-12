@@ -37,8 +37,6 @@ public abstract class AstTest {
             robotName = "nxt";
         } else if ( pwd.contains("RobotRaspberryPi") ) {
             robotName = "nano";
-        } else if ( pwd.contains("RobotVorwerk") ) {
-            robotName = "vorwerk";
         } else if ( pwd.contains("RobotWeDo") ) {
             robotName = "wedo";
         }

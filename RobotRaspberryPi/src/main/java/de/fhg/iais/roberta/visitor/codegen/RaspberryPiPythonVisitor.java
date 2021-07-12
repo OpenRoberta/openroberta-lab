@@ -163,7 +163,7 @@ public final class RaspberryPiPythonVisitor extends AbstractPythonVisitor implem
         this.sb.append("except Exception as e:");
         incrIndentation();
         nlIndent();
-        this.sb.append("print('Fehler im Vorwerk')");
+        this.sb.append("print('Fehler im Raspi Pi')");
         nlIndent();
         this.sb.append("print(e.__class__.__name__)");
         nlIndent();

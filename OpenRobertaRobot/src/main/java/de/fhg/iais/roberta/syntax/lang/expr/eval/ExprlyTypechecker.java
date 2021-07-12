@@ -1171,7 +1171,6 @@ public class ExprlyTypechecker<T> {
         HashSet<String> wedo = new HashSet<>();
         HashSet<String> ev3 = new HashSet<>();
         HashSet<String> nxt = new HashSet<>();
-        HashSet<String> vorwerk = new HashSet<>();
         HashSet<String> microbit = new HashSet<>();
         HashSet<String> botnroll = new HashSet<>();
         HashSet<String> nao = new HashSet<>();
@@ -1217,9 +1216,6 @@ public class ExprlyTypechecker<T> {
         nxt.add("noSubList");
         nxt.add("noTextJoin");
         map.put("nxt", nxt);
-
-        vorwerk.add("noColor");
-        map.put("vorwerk", vorwerk);
 
         microbit.add("noColor");
         map.put("microbit", microbit);

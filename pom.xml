@@ -46,7 +46,6 @@
         <module>RobotArdu</module>
         <module>RobotNAO</module>
         <module>RobotMbed</module>
-        <module>RobotVorwerk</module>
         <module>RobotWeDo</module>
         <module>RobotEdison</module>
         <module>RobotRaspberryPi</module>
@@ -119,11 +118,6 @@
             <dependency>
                 <groupId>de.fhg.iais.openroberta</groupId>
                 <artifactId>RaspberryPi</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>de.fhg.iais.openroberta</groupId>
-                <artifactId>RobotVorwerk</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>

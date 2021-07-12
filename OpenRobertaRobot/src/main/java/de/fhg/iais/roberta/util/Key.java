@@ -121,7 +121,6 @@ public enum Key {
     LIKE_GET_ALL_SUCCESS( true ),
     LIKE_DELETE_SUCCESS( true ),
     RASPBERRY_PROGRAM_UPLOAD_ERROR( false ),
-    VORWERK_PROGRAM_UPLOAD_ERROR( false ),
     LIST_CREATE_WITH_ERROR( false ),
     FIRMWARE_RESET_SUCCESS( true ),
     FIRMWARE_RESET_ERROR( false ),

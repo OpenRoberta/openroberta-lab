@@ -234,7 +234,7 @@ block:
   MOTOR_ON_ACTION:
       category: ACTOR
       implementor: de.fhg.iais.roberta.syntax.action.motor.MotorOnAction
-      type: [robActions_motor_on,robActions_motor_on_for,sim_motor_on,sim_motor_on_for,robActions_motor_on_for_ardu,mbedActions_motor_on,vorwerkActions_motor_on_for]
+      type: [robActions_motor_on,robActions_motor_on_for,sim_motor_on,sim_motor_on_for,robActions_motor_on_for_ardu,mbedActions_motor_on]
   MOTOR_GET_POWER_ACTION:
       category: ACTOR
       implementor: de.fhg.iais.roberta.syntax.action.motor.MotorGetPowerAction
@@ -246,11 +246,11 @@ block:
   MOTOR_STOP_ACTION:
       category: ACTOR
       implementor: de.fhg.iais.roberta.syntax.action.motor.MotorStopAction
-      type: [robActions_motor_stop,sim_motor_stop,mbedActions_motor_stop,makeblockActions_motor_stop,vorwerkActions_motor_stop]
+      type: [robActions_motor_stop,sim_motor_stop,mbedActions_motor_stop,makeblockActions_motor_stop]
   PLAY_FILE_ACTION:
       category: ACTOR
       implementor: de.fhg.iais.roberta.syntax.action.sound.PlayFileAction
-      type: [robActions_play_file,vorwerkActions_play_file]
+      type: [robActions_play_file]
   VOLUME_ACTION:
       category: ACTOR
       implementor: de.fhg.iais.roberta.syntax.action.sound.VolumeAction

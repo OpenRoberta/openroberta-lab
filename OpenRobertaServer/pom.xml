@@ -98,10 +98,6 @@
         </dependency>
         <dependency>
             <groupId>de.fhg.iais.openroberta</groupId>
-            <artifactId>RobotVorwerk</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>de.fhg.iais.openroberta</groupId>
             <artifactId>RobotEdison</artifactId>
         </dependency>
         <dependency>
@@ -194,13 +190,6 @@
                                 <artifactItem>
                                     <groupId>de.fhg.iais.openroberta</groupId>
                                     <artifactId>RobotNAO</artifactId>
-                                    <version>${project.version}</version>
-                                    <type>jar</type>
-                                    <overWrite>true</overWrite>
-                                </artifactItem>
-                                <artifactItem>
-                                    <groupId>de.fhg.iais.openroberta</groupId>
-                                    <artifactId>RobotVorwerk</artifactId>
                                     <version>${project.version}</version>
                                     <type>jar</type>
                                     <overWrite>true</overWrite>
