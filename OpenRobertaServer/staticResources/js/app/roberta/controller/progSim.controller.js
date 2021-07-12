@@ -114,7 +114,7 @@ define(['exports', 'message', 'log', 'util', 'simulation.simulation', 'simulatio
                 var robot = GUISTATE_C.getRobot();
                 var position = $("#simDiv").position();
                 position.top += 12;
-                if (robot == 'calliope' || robot == 'microbit') {
+                if (['calliope2016', 'calliope2017', 'calliope2017NoBlue', 'microbit'].includes(robot)) {
                     position.left = $("#blocklyDiv").width() + 12;
                     $("#simRobotModal").css({
                         top: position.top,
