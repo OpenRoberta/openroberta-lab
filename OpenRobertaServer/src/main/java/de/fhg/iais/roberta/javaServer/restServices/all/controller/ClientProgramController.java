@@ -453,7 +453,7 @@ public class ClientProgramController {
     //this method is used to export all Programs of the current user
     @GET
     @Path("/ExportAllPrograms")
-    public Response testExportALlProgrammsOfUser(@OraData DbSession dbSession, @QueryParam("initToken") String initToken) throws IOException {
+    public Response ExportALlProgrammsOfUser(@OraData DbSession dbSession, @QueryParam("initToken") String initToken) throws IOException {
         HttpSessionState httpSessionState = UtilForREST.validateInitToken(initToken);
         if ( !httpSessionState.isUserLoggedIn() ) { //safety check if user is logged in
             LOG.error("Unauthorized export request");
@@ -462,32 +462,48 @@ public class ClientProgramController {
         ProgramProcessor programProcessor = new ProgramProcessor(dbSession, httpSessionState);
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         JSONArray programInfo = programProcessor.getProgramsInfoForExport(httpSessionState.getUserId());
-        //building the Zip file with name,programText and config
+        //building the Zip file with name,programText and config in a predetermined directory strucuture
         try (ZipOutputStream zos = new ZipOutputStream(baos)) {
             for ( int i = 0; i < programInfo.length(); i++ ) {
                 JSONArray program = programInfo.getJSONArray(i);
                 String config;
-                if ( !program.isNull(3) ) {
-                    config = program.getString(3);
+                // First get Program Config
+                if ( !program.isNull(4) ) {
+                    config = program.getString(4);
                 } else { // if the config is null get the default config of the robotgroup used by the program
                     config = httpSessionState.getRobotFactoriesOfGroup(program.getString(1)).get(0).getConfigurationDefault();
                 }
-                // buildig the xml content with programText and config
+                // Then build the xml content with programText and config
                 String xml =
                     "<export xmlns=\"http://de.fhg.iais.roberta.blockly\"><program>"
-                        + program.getString(2)
+                        + program.getString(3)
                         + "</program><config>"
                         + config
                         + "</config></export>";
                 String fileNameInZip = program.getString(0) + ".xml";
-                zos.putNextEntry(new ZipEntry(fileNameInZip));
+                //put it into the correct directory:
+                String currentFolder = "";
+                User author = (User) program.get(2);
+                String robotGroup = httpSessionState.getRobotFactoriesOfGroup(program.getString(1)).get(0).getGroup();
+                System.out.println(author);
+                if ( author.getId() == httpSessionState.getUserId() ) {
+                    //Programs by the User
+                    currentFolder = "MyPrograms/" + robotGroup;
+                } else { //Programs of Users in Groups owned by the User
+                         //Group members are given in the Format Grpname:Username this cuts of the group name
+                    String username = author.getAccount().substring(author.getUserGroup().getName().length() + 1);
+                    currentFolder = "GroupPrograms/" + author.getUserGroup().getName() + "/" + robotGroup + "/" + username;
+                }
+                //done                
+                zos.putNextEntry(new ZipEntry(currentFolder + "/" + fileNameInZip));
                 zos.write(xml.getBytes());
                 zos.closeEntry();
             }
         }
+        //return Zip to download
         InputStream zip = new ByteArrayInputStream(baos.toByteArray());
         ResponseBuilder response = Response.ok(zip, "application/zip");
-        return response.header("Content-Disposition", "attachment; filename=\"test.zip\"").build();
+        return response.header("Content-Disposition", "attachment; filename=\"NEPO_Programs.zip\"").build();
     }
 
     //this method checks if the user is logged in
