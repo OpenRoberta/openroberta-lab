@@ -12,15 +12,15 @@ import de.fhg.iais.roberta.bean.UsedHardwareBean;
 import de.fhg.iais.roberta.bean.UsedHardwareBean.Builder;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.util.test.UnitTestHelper;
-import de.fhg.iais.roberta.visitor.collect.Ev3UsedHardwareCollectorVisitor;
+import de.fhg.iais.roberta.visitor.validate.Ev3ValidatorAndCollectorVisitor;
 
 public class EV3ProgramUsedHardwareCheckTest extends Ev3LejosAstTest {
 
     private void runTest(String pathToXml, String sensorResult, String actorResult) throws Exception {
         List<List<Phrase<Void>>> phrasesOfPhrases = UnitTestHelper.getProgramAst(testFactory, pathToXml);
         UsedHardwareBean.Builder builder = new Builder();
-        Ev3UsedHardwareCollectorVisitor checkVisitor =
-            new Ev3UsedHardwareCollectorVisitor(
+        Ev3ValidatorAndCollectorVisitor checkVisitor =
+            new Ev3ValidatorAndCollectorVisitor(
                 makeLargeLargeMediumTouchGyroColorUltrasonic(),
                 ImmutableClassToInstanceMap.of(UsedHardwareBean.Builder.class, builder));
         for ( List<Phrase<Void>> phrases : phrasesOfPhrases ) {
