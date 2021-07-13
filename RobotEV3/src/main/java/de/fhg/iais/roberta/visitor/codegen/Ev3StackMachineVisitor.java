@@ -17,6 +17,7 @@ import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.MotorDuration;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.SC;
+import de.fhg.iais.roberta.syntax.action.communication.BluetoothCheckConnectAction;
 import de.fhg.iais.roberta.syntax.action.communication.BluetoothConnectAction;
 import de.fhg.iais.roberta.syntax.action.communication.BluetoothReceiveAction;
 import de.fhg.iais.roberta.syntax.action.communication.BluetoothSendAction;
@@ -355,24 +356,9 @@ public class Ev3StackMachineVisitor<V> extends AbstractStackMachineVisitor<V> im
     }
 
     @Override
-    public V visitTemperatureSensor(TemperatureSensor<V> temperatureSensor) {
-        // TODO check if this is really supported!
-        String mode = temperatureSensor.getMode();
-        JSONObject o = makeNode(C.GET_SAMPLE).put(C.GET_SAMPLE, C.TEMPERATURE).put(C.PORT, mode.toLowerCase()).put(C.NAME, "ev3");
-        return app(o);
-    }
-
-    @Override
     public V visitKeysSensor(KeysSensor<V> keysSensor) {
         String mode = keysSensor.getUserDefinedPort().toLowerCase();
         JSONObject o = makeNode(C.GET_SAMPLE).put(C.GET_SAMPLE, C.BUTTONS).put(C.MODE, mode).put(C.NAME, "ev3");
-        return app(o);
-    }
-
-    @Override
-    public V visitLightSensor(LightSensor<V> lightSensor) {
-        // TODO check if this is really supported!
-        JSONObject o = makeNode(C.GET_SAMPLE).put(C.GET_SAMPLE, C.LIGHT).put(C.PORT, C.AMBIENTLIGHT).put(C.NAME, "ev3");
         return app(o);
     }
 
@@ -385,16 +371,6 @@ public class Ev3StackMachineVisitor<V> extends AbstractStackMachineVisitor<V> im
         } else {
             o = makeNode(C.TIMER_SENSOR_RESET).put(C.PORT, port).put(C.NAME, "ev3");
         }
-        return app(o);
-    }
-
-    @Override
-    public V visitPinTouchSensor(PinTouchSensor<V> sensorGetSample) {
-        // TODO check if this is really supported!
-        String port = sensorGetSample.getUserDefinedPort();
-        String mode = sensorGetSample.getMode();
-
-        JSONObject o = makeNode(C.GET_SAMPLE).put(C.GET_SAMPLE, C.PIN + port).put(C.MODE, mode.toLowerCase()).put(C.NAME, "ev3");
         return app(o);
     }
 
@@ -428,11 +404,6 @@ public class Ev3StackMachineVisitor<V> extends AbstractStackMachineVisitor<V> im
 
     @Override
     public V visitIRSeekerSensor(IRSeekerSensor<V> irSeekerSensor) {
-        return null;
-    }
-
-    @Override
-    public V visitHumiditySensor(HumiditySensor<V> humiditySensor) {
         return null;
     }
 
@@ -495,6 +466,11 @@ public class Ev3StackMachineVisitor<V> extends AbstractStackMachineVisitor<V> im
 
     @Override
     public V visitBluetoothWaitForConnectionAction(BluetoothWaitForConnectionAction<V> bluetoothWaitForConnection) {
+        return null;
+    }
+
+    @Override
+    public V visitBluetoothCheckConnectAction(BluetoothCheckConnectAction<V> bluetoothCheckConnectAction) {
         return null;
     }
 }
