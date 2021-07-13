@@ -117,8 +117,8 @@ define(['exports', 'message', 'log', 'jquery', 'jquery-validate', 'bootstrap'], 
     function formatDate(dateLong) {
         if (dateLong) {
             var date = new Date(dateLong);
-            var datestring = ("0" + date.getDate()).slice(-2) + "." + ("0" + (date.getMonth() + 1)).slice(-2) + "." + date.getFullYear() + ", "
-                + ("0" + date.getHours()).slice(-2) + ":" + ("0" + date.getMinutes()).slice(-2);
+            var datestring = ("0" + date.getDate()).slice(-2) + "." + ("0" + (date.getMonth() + 1)).slice(-2) + "." + date.getFullYear() + ", " +
+                ("0" + date.getHours()).slice(-2) + ":" + ("0" + date.getMinutes()).slice(-2);
             return datestring;
         } else {
             return "";
@@ -466,8 +466,11 @@ define(['exports', 'message', 'log', 'jquery', 'jquery-validate', 'bootstrap'], 
                 $selected = $(this).parent();
                 $selected.addClass(opt.draggableClass).find(opt.handle).addClass(opt.activeHandleClass);
             }
-            var drg_h = $selected.outerHeight(), drg_w = $selected.outerWidth(), pos_y = $selected.offset().top + drg_h - pageY, pos_x = $selected.offset().left
-                + drg_w - pageX;
+            var drg_h = $selected.outerHeight(),
+                drg_w = $selected.outerWidth(),
+                pos_y = $selected.offset().top + drg_h - pageY,
+                pos_x = $selected.offset().left +
+                drg_w - pageX;
             $(document).on("mousemove touchmove", function(e) {
                 var pageX = e.pageX || e.originalEvent.touches[0].pageX;
                 var pageY = e.pageY || e.originalEvent.touches[0].pageY;
@@ -534,8 +537,11 @@ define(['exports', 'message', 'log', 'jquery', 'jquery-validate', 'bootstrap'], 
     }
 
     $.fn.closeRightView = function(opt_callBack) {
-        Blockly.hideChaff();
+        if ($('.fromRight.rightActive').hasClass('shifting')) {
+            return;
+        }
         $('.fromRight.rightActive').addClass('shifting');
+        Blockly.hideChaff();
         $('.blocklyToolboxDiv').css('display', 'inherit');
         var that = this; //$('#blockly')
         $('.fromRight.rightActive').animate({
@@ -555,7 +561,6 @@ define(['exports', 'message', 'log', 'jquery', 'jquery-validate', 'bootstrap'], 
             done: function() {
                 that.width($('#main-section').outerWidth());
                 $('.rightMenuButton').css('right', 0);
-                $('.fromRight.rightActive.shifting').removeClass('shifting');
                 ratioWorkspace = 1;
                 $('.fromRight').width(0);
                 that.removeClass('rightActive');
@@ -565,11 +570,17 @@ define(['exports', 'message', 'log', 'jquery', 'jquery-validate', 'bootstrap'], 
                 if (typeof opt_callBack == 'function') {
                     opt_callBack();
                 }
+            },
+            always: function() {
+                $('.fromRight.shifting').removeClass('shifting');
             }
         });
     };
 
     $.fn.openRightView = function(viewName, initialViewWidth, opt_callBack) {
+        if ($('.fromRight.rightActive').hasClass('shifting')) {
+            return;
+        }
         Blockly.hideChaff();
         var width;
         var smallScreen;
@@ -597,16 +608,15 @@ define(['exports', 'message', 'log', 'jquery', 'jquery-validate', 'bootstrap'], 
             }
             return;
         }
+
         this.addClass('rightActive');
+        $('#' + viewName + 'Div').addClass('shifting');
         $('#' + viewName + 'Div, #' + buttonName + 'Button').addClass('rightActive');
         var that = this;
         $('.fromRight.rightActive').animate({
             width: width
         }, {
             duration: ANIMATION_DURATION,
-            start: function() {
-                $('#' + viewName + 'Div').addClass('shifting');
-            },
             step: function(now, tween) {
                 that.width($('#main-section').outerWidth() - now);
                 $('.rightMenuButton').css('right', now);
@@ -617,7 +627,6 @@ define(['exports', 'message', 'log', 'jquery', 'jquery-validate', 'bootstrap'], 
                 $('#sliderDiv').show();
                 that.width($('#main-section').outerWidth() - $('.fromRight.rightActive').width());
                 $('.rightMenuButton').css('right', $('.fromRight.rightActive').width());
-                $('#' + viewName + 'Div').removeClass('shifting');
                 ratioWorkspace = $('#blockly').outerWidth() / $('#main-section').outerWidth();
                 $(window).resize();
                 if (smallScreen) {
@@ -629,6 +638,9 @@ define(['exports', 'message', 'log', 'jquery', 'jquery-validate', 'bootstrap'], 
                 if (typeof opt_callBack == 'function') {
                     opt_callBack();
                 }
+            },
+            always: function() {
+                $('#' + viewName + 'Div').removeClass('shifting');
             }
         });
     };

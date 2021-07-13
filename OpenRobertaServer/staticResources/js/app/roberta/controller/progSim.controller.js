@@ -213,6 +213,9 @@ define(['exports', 'message', 'log', 'util', 'simulation.simulation', 'simulatio
         }
 
         function toggleSim() {
+            if ($('.fromRight.rightActive').hasClass('shifting')) {
+                return;
+            }
             if (($('#simButton').hasClass('rightActive') && !debug) || ($('#simDebugButton').hasClass('rightActive') && debug)) {
                 SIM.cancel();
                 $('#simControl').addClass('typcn-media-play-outline').removeClass('typcn-media-play').removeClass('typcn-media-stop');
