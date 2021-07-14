@@ -467,6 +467,7 @@ public class ClientProgramController {
         try (ZipOutputStream zos = new ZipOutputStream(baos)) {
             //checking if the user has groups 
             boolean hasGroups = programProcessor.getProgrammsOfGroupsOwnedByUser(userId).size()!= 0;
+            boolean hasPrograms = false;
             for ( int i = 0; i < programInfo.length(); i++ ) {
                 JSONArray program = programInfo.getJSONArray(i);
                 String config;
@@ -491,6 +492,7 @@ public class ClientProgramController {
                 System.out.println(author);
                 if ( author.getId() == httpSessionState.getUserId() ) {
                     //Programs by the User
+                    hasPrograms = true;
                     if ( hasGroups ) {
                         currentFolder = "MyPrograms/" + robotGroup;
                     } else {
@@ -499,9 +501,13 @@ public class ClientProgramController {
                 } else { //Programs of Users in Groups owned by the User
                          //Group members are given in the Format Grpname:Username this cuts of the group name
                     String username = author.getAccount().substring(author.getUserGroup().getName().length() + 1);
-                    currentFolder = "GroupPrograms/" + author.getUserGroup().getName() + "/" + robotGroup + "/" + username;
+                    if ( hasPrograms ) {
+                        currentFolder = "GroupPrograms/" + author.getUserGroup().getName() + "/" + robotGroup + "/" + username;
+                    } else {
+                        currentFolder = author.getUserGroup().getName() + "/" + robotGroup + "/" + username;
+                    }
                 }
-                //done                
+                //add program.xml to Zip                
                 zos.putNextEntry(new ZipEntry(currentFolder + "/" + fileNameInZip));
                 zos.write(xml.getBytes());
                 zos.closeEntry();
