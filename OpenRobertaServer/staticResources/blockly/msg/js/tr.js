@@ -657,6 +657,7 @@ Blockly.Msg.MENU_EDIT = "Duzenle";
 Blockly.Msg.MENU_EDIT_TOOLTIP = "Duzenle";
 Blockly.Msg.MENU_EV3 = "Robotu hazirlama";
 Blockly.Msg.MENU_EXPERT = "Uzman";
+Blockly.Msg.MENU_EXPORT_ALL_PROGS = "export all programs";  // untranslated
 Blockly.Msg.MENU_EXPORT_PROG = "Programi disariya aktar";
 Blockly.Msg.MENU_FAQ = "Sikca sorulan sorular";
 Blockly.Msg.MENU_GALLERY = "gallery";  // untranslated

@@ -657,6 +657,7 @@ Blockly.Msg.MENU_EDIT = "編輯";
 Blockly.Msg.MENU_EDIT_TOOLTIP = "編輯";
 Blockly.Msg.MENU_EV3 = "機器人準備";
 Blockly.Msg.MENU_EXPERT = "專家";
+Blockly.Msg.MENU_EXPORT_ALL_PROGS = "export all programs";  // untranslated
 Blockly.Msg.MENU_EXPORT_PROG = "導出程式";
 Blockly.Msg.MENU_FAQ = "常見問題";
 Blockly.Msg.MENU_GALLERY = "庫";

@@ -657,6 +657,7 @@ Blockly.Msg.MENU_EDIT = "editatu";
 Blockly.Msg.MENU_EDIT_TOOLTIP = "editatu";
 Blockly.Msg.MENU_EV3 = "EV3-aren antolaketa";
 Blockly.Msg.MENU_EXPERT = "aditua";
+Blockly.Msg.MENU_EXPORT_ALL_PROGS = "export all programs";  // untranslated
 Blockly.Msg.MENU_EXPORT_PROG = "programa esportatu";
 Blockly.Msg.MENU_FAQ = "Ohiko galderak";
 Blockly.Msg.MENU_GALLERY = "galeria";
