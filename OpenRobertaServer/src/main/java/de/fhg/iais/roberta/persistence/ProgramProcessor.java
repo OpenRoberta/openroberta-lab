@@ -253,7 +253,7 @@ public class ProgramProcessor extends AbstractProcessor {
         List<Program> userPrograms = programDao.loadAll(owner);
         List<Program> groupPrograms = getProgrammsOfGroupsOwnedByUser(ownerId);
         //connecting user programs and group programs
-        List<Program> allPrograms = new ArrayList(userPrograms);
+        List<Program> allPrograms = new ArrayList<>(userPrograms);
         allPrograms.addAll(groupPrograms);
         for ( Program program : allPrograms ) {
             JSONArray programInfo = new JSONArray();
@@ -278,7 +278,7 @@ public class ProgramProcessor extends AbstractProcessor {
      * 
      * @return the Programs by the groups of the owner
      */
-    private List<Program> getProgrammsOfGroupsOwnedByUser(int ownerId){
+    public List<Program> getProgrammsOfGroupsOwnedByUser(int ownerId){
         UserGroupDao userGroupDao = new UserGroupDao(this.dbSession);
         ProgramDao programDao = new ProgramDao(this.dbSession);
         UserDao userDao = new UserDao(this.dbSession);

@@ -459,11 +459,14 @@ public class ClientProgramController {
             LOG.error("Unauthorized export request");
             return null;
         }
+        int userId = httpSessionState.getUserId();
         ProgramProcessor programProcessor = new ProgramProcessor(dbSession, httpSessionState);
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        JSONArray programInfo = programProcessor.getProgramsInfoForExport(httpSessionState.getUserId());
+        JSONArray programInfo = programProcessor.getProgramsInfoForExport(userId);
         //building the Zip file with name,programText and config in a predetermined directory strucuture
         try (ZipOutputStream zos = new ZipOutputStream(baos)) {
+            //checking if the user has groups 
+            boolean hasGroups = programProcessor.getProgrammsOfGroupsOwnedByUser(userId).size()!= 0;
             for ( int i = 0; i < programInfo.length(); i++ ) {
                 JSONArray program = programInfo.getJSONArray(i);
                 String config;
@@ -488,7 +491,11 @@ public class ClientProgramController {
                 System.out.println(author);
                 if ( author.getId() == httpSessionState.getUserId() ) {
                     //Programs by the User
-                    currentFolder = "MyPrograms/" + robotGroup;
+                    if ( hasGroups ) {
+                        currentFolder = "MyPrograms/" + robotGroup;
+                    } else {
+                        currentFolder = robotGroup;
+                    }
                 } else { //Programs of Users in Groups owned by the User
                          //Group members are given in the Format Grpname:Username this cuts of the group name
                     String username = author.getAccount().substring(author.getUserGroup().getName().length() + 1);
