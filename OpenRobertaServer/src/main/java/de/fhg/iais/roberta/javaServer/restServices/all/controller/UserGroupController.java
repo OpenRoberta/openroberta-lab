@@ -339,15 +339,16 @@ public class UserGroupController {
                 return UtilForREST.makeBaseResponseForError(Key.USER_ERROR_NOT_LOGGED_IN, httpSessionState, this.brickCommunicator);
             }
 
-            String groupName = request.getGroupName();
-            String memberAccount = request.getCurrentGroupMemberAccount();
-            String newMemberAccount = request.getNewGroupMemberAccount();
-
+            String groupName = request.getGroupName().trim();
+            String memberAccount = request.getCurrentGroupMemberAccount().trim();
+            String newMemberAccount = request.getNewGroupMemberAccount().trim();
+            if( newMemberAccount.equals("") ){
+                return UtilForREST.makeBaseResponseForError(Key.SERVER_ERROR, httpSessionState, this.brickCommunicator);
+            }
             UserGroup userGroup = userGroupProcessor.getGroup(groupName, loggedInUser, false);
             if ( userGroup == null ) {
                 return UtilForREST.makeBaseResponseForError(userGroupProcessor.getMessage(), httpSessionState, this.brickCommunicator);
             }
-
             if ( memberAccount.equals("") ) {
                 List<String> memberAsList = new ArrayList<String>(1);
                 memberAsList.add(newMemberAccount.trim());

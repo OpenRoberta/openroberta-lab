@@ -1,5 +1,5 @@
-define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'robot.controller', 'program.model', 'configuration.controller', 'progCode.controller', 'blockly', 'jquery',
-        'jquery-validate' ], function(exports, COMM, MSG, LOG, UTIL, GUISTATE_C, ROBOT_C, PROGRAM, CONFIGURATION_C, PROGCODE_C, Blockly, $) {
+define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'robot.controller', 'program.model', 'user.model', 'configuration.controller', 'progCode.controller', 'blockly', 'jquery',
+        'jquery-validate' ], function(exports, COMM, MSG, LOG, UTIL, GUISTATE_C, ROBOT_C, PROGRAM, USER, CONFIGURATION_C, PROGCODE_C, Blockly, $) {
 
     var $formSingleModal;
 
@@ -412,7 +412,7 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'ro
      * Download all programs by the current User
      */
     function exportAllXml() {
-        PROGRAM.userLoggedInCheck(function (result) {
+        USER.userLoggedInCheck(function (result) {
             if (result.rc === 'ok') {
                 PROGRAM.exportAllProgramsXml();
             } else {
