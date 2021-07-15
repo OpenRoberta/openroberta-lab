@@ -77,6 +77,15 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
     exports.logout = logout;
 
     /**
+     * Checks if the user is logged in 
+     */
+    function userLoggedInCheck(successFn) {
+        COMM.json("/user/loggedInCheck", {}, successFn, "Check for export all programs")
+    }
+
+    exports.userLoggedInCheck = userLoggedInCheck;
+
+    /**
      * Retrive user from server.
      * 
      * @param accountName

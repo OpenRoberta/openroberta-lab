@@ -81,19 +81,10 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
      * if no user is logged in this does nothing
      */
     function exportAllProgramsXml() {
-        COMM.download("/program/ExportAllPrograms");
+        COMM.download("/program/exportAllPrograms");
     }
 
     exports.exportAllProgramsXml = exportAllProgramsXml;
-
-    /**
-     * Checks if the user is logged in 
-     */
-    function userLoggedInCheck(successFn) {
-        COMM.json("/program/loggedInCheck", {}, successFn, "Check for export all programs")
-    }
-
-    exports.userLoggedInCheck = userLoggedInCheck;
 
     /**
      * Share program with another user.

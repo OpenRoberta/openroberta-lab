@@ -286,7 +286,7 @@ public class ProgramProcessor extends AbstractProcessor {
         UserDao userDao = new UserDao(this.dbSession);
         User owner = userDao.get(ownerId);
         List<UserGroup> ownersGroups = userGroupDao.loadAll(owner);
-        List<Program> membersPrograms = new ArrayList<Program>(); //Programs of every group the user owns
+        List<Program> membersPrograms = new ArrayList<>(); //Programs of every group the user owns
 
         for ( UserGroup userGroup : ownersGroups ) {    
             for ( User member : userGroup.getMembers() ) {  //for all members of the group

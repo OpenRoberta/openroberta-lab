@@ -432,6 +432,6 @@ public class UserGroupProcessor extends AbstractProcessor {
                 return;
             }
         }
-        this.setStatus(ProcessorStatus.SUCCEEDED, Key.SERVER_SUCCESS, processorParameters);
+        this.setStatus(ProcessorStatus.SUCCEEDED, Key.GROUP_ADD_MEMBER_SUCCESS, processorParameters);
     }
 }
