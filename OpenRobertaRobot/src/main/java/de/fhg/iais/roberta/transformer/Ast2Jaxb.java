@@ -5,6 +5,7 @@ import java.util.List;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Comment;
+import de.fhg.iais.roberta.blockly.generated.Data;
 import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.blockly.generated.Mutation;
 import de.fhg.iais.roberta.blockly.generated.Repetitions;
@@ -224,6 +225,18 @@ public final class Ast2Jaxb {
             field.setValue(value);
             block.getField().add(field);
         }
+    }
+
+    /**
+     * Add's a {@link Data} object to JAXB block representation
+     * @param block to which the field will be added; must be <b>not</b> null,
+     * @param value is the AST representation of the Blockly block where the value is stored
+     */
+    public static void addData(Block block, String value) {
+        Assert.notNull(block);
+        Data data = new Data();
+        data.setValue(value);
+        block.setData(data);
     }
 
    /**

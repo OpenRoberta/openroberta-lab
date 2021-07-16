@@ -8,43 +8,30 @@ Ed.ReadClapSensor()
 Ed.ReadLineState()
 Ed.TimeWait(250, Ed.TIME_MILLISECONDS)
 
-___numberVar = 200
-___booleanVar = True
-___numberList = Ed.List(3, [0,0,0])
-
-def action():
-    global ___numberVar, ___booleanVar, ___numberList
-    move()
-    drive()
-    sounds()
-    lights()
-
-def move():
-    global ___numberVar, ___booleanVar, ___numberList
-    _motorOn(0, ___numberVar, Ed.DISTANCE_UNLIMITED)
-    _motorOn(1, ___numberVar, Ed.DISTANCE_UNLIMITED)
-    Ed.DriveLeftMotor(Ed.STOP, Ed.SPEED_1, 1)
-    Ed.DriveRightMotor(Ed.STOP, Ed.SPEED_1, 1)
+___n = 1000
+___b = True
+___nl = Ed.List(3, [0,0,0])
 
 def drive():
-    global ___numberVar, ___booleanVar, ___numberList
-    _diffDrive(Ed.FORWARD, ___numberVar, ___numberVar)
-    _diffDrive(Ed.BACKWARD, ___numberVar, ___numberVar)
-    _diffDrive(Ed.FORWARD, ___numberVar, Ed.DISTANCE_UNLIMITED)
-    _diffDrive(Ed.BACKWARD, ___numberVar, Ed.DISTANCE_UNLIMITED)
+    global ___n, ___b, ___nl
+    _diffDrive(Ed.FORWARD, ___n, ___n)
+    _diffDrive(Ed.BACKWARD, ___n, ___n)
+    _diffDrive(Ed.FORWARD, ___n, Ed.DISTANCE_UNLIMITED)
+    _diffDrive(Ed.BACKWARD, ___n, Ed.DISTANCE_UNLIMITED)
     Ed.Drive(Ed.STOP, Ed.SPEED_1, 1)
-    _diffTurn(Ed.SPIN_RIGHT, ___numberVar, ___numberVar)
-    _diffTurn(Ed.SPIN_LEFT, ___numberVar, ___numberVar)
-    _diffTurn(Ed.SPIN_RIGHT, ___numberVar, Ed.DISTANCE_UNLIMITED)
-    _diffTurn(Ed.SPIN_LEFT, ___numberVar, Ed.DISTANCE_UNLIMITED)
-    _diffCurve(Ed.FORWARD, ___numberVar, ___numberVar, ___numberVar)
-    _diffCurve(Ed.BACKWARD, ___numberVar, ___numberVar, ___numberVar)
-    _diffCurve(Ed.FORWARD, ___numberVar, ___numberVar, Ed.DISTANCE_UNLIMITED)
-    _diffCurve(Ed.BACKWARD, ___numberVar, ___numberVar, Ed.DISTANCE_UNLIMITED)
+    _diffTurn(Ed.SPIN_RIGHT, ___n, ___n)
+    _diffTurn(Ed.SPIN_LEFT, ___n, ___n)
+    _diffTurn(Ed.SPIN_RIGHT, ___n, Ed.DISTANCE_UNLIMITED)
+    _diffTurn(Ed.SPIN_LEFT, ___n, Ed.DISTANCE_UNLIMITED)
+    _diffCurve(Ed.FORWARD, ___n, ___n, ___n)
+    _diffCurve(Ed.BACKWARD, ___n, ___n, ___n)
+    _diffCurve(Ed.FORWARD, ___n, ___n, Ed.DISTANCE_UNLIMITED)
+    _diffCurve(Ed.BACKWARD, ___n, ___n, Ed.DISTANCE_UNLIMITED)
 
 def sounds():
-    global ___numberVar, ___booleanVar, ___numberList
-    
+    global ___n, ___b, ___nl
+    Ed.PlayTone(8000000/1000, ___n)
+    Ed.TimeWait(___n, Ed.TIME_MILLISECONDS)
     Ed.PlayTone(4000000/261, 2000)
     Ed.TimeWait(2000, Ed.TIME_MILLISECONDS)
     Ed.PlayTone(4000000/293, 1000)
@@ -55,21 +42,35 @@ def sounds():
     Ed.TimeWait(250, Ed.TIME_MILLISECONDS)
     Ed.PlayTone(4000000/391, 125)
     Ed.TimeWait(125, Ed.TIME_MILLISECONDS)
-    ___soundfile1 = Ed.TuneString(7,"c8e8g8z")
-    Ed.PlayTune(___soundfile1)
-    while (Ed.ReadMusicEnd() == Ed.MUSIC_NOT_FINISHED):
-        pass
-    ___soundfile2 = Ed.TuneString(7,"g8e8c8z")
-    Ed.PlayTune(___soundfile2)
-    while (Ed.ReadMusicEnd() == Ed.MUSIC_NOT_FINISHED):
-        pass
 
 def lights():
-    global ___numberVar, ___booleanVar, ___numberList
+    global ___n, ___b, ___nl
     Ed.LeftLed(Ed.ON)
     Ed.RightLed(Ed.OFF)
 
+def action():
+    global ___n, ___b, ___nl
+    move()
+    drive()
+    sounds()
+    lights()
+
+def move():
+    global ___n, ___b, ___nl
+    _motorOn(0, ___n, Ed.DISTANCE_UNLIMITED)
+    _motorOn(1, ___n, Ed.DISTANCE_UNLIMITED)
+    Ed.DriveLeftMotor(Ed.STOP, Ed.SPEED_1, 1)
+    Ed.DriveRightMotor(Ed.STOP, Ed.SPEED_1, 1)
+
 action()
+___soundfile1 = Ed.TuneString(7,"c8e8g8z")
+Ed.PlayTune(___soundfile1)
+while (Ed.ReadMusicEnd() == Ed.MUSIC_NOT_FINISHED):
+    pass
+___soundfile2 = Ed.TuneString(7,"g8e8c8z")
+Ed.PlayTune(___soundfile2)
+while (Ed.ReadMusicEnd() == Ed.MUSIC_NOT_FINISHED):
+    pass
 
 
 def _diffCurve(direction, leftSpeed, rightSpeed, distance):

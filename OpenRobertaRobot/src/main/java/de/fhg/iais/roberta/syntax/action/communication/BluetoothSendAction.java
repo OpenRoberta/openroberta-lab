@@ -117,13 +117,13 @@ public class BluetoothSendAction<V> extends Action<V> {
         Phrase<V> bluetoothSendMessage = helper.extractValue(values, new ExprParam(BlocklyConstants.MESSAGE, BlocklyType.STRING));
         Phrase<V> bluetoothSendConnection = helper.extractValue(values, new ExprParam(BlocklyConstants.CONNECTION, BlocklyType.NULL));
         Data data = block.getData();
-        String datum = data.getValue();
+        String dataValue = data.getValue();
         if ( fields.size() == 3 ) {
             String bluetoothSendChannel = Jaxb2Ast.extractField(fields, BlocklyConstants.CHANNEL);
             String bluetoothRecieveDataType = Jaxb2Ast.extractField(fields, BlocklyConstants.TYPE);
             return BluetoothSendAction
                 .make(
-                    datum,
+                    dataValue,
                     Jaxb2Ast.convertPhraseToExpr(bluetoothSendConnection),
                     Jaxb2Ast.convertPhraseToExpr(bluetoothSendMessage),
                     bluetoothSendChannel,
@@ -135,7 +135,7 @@ public class BluetoothSendAction<V> extends Action<V> {
             String bluetoothRecieveDataType = Jaxb2Ast.extractField(fields, BlocklyConstants.TYPE);
             return BluetoothSendAction
                 .make(
-                    datum,
+                    dataValue,
                     Jaxb2Ast.convertPhraseToExpr(bluetoothSendConnection),
                     Jaxb2Ast.convertPhraseToExpr(bluetoothSendMessage),
                     bluetoothSendChannel,
@@ -145,7 +145,6 @@ public class BluetoothSendAction<V> extends Action<V> {
         }
     }
 
-    //TODO: fix tests for NXT
     @Override
     public Block astToBlock() {
         Block jaxbDestination = new Block();

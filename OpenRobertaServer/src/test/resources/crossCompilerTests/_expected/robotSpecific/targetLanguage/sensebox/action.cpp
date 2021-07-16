@@ -16,22 +16,22 @@
 void action();
 
 
-double ___numVar;
-bool ___boolVar;
-String ___stringVar;
-unsigned int ___colourVar;
-std::list<double> ___numList;
-std::list<bool> ___boolList;
-std::list<String> ___stringList;
-std::list<unsigned int> ___colourList;
+double ___n;
+bool ___b;
+String ___s;
+unsigned int ___c;
+std::list<double> ___nl;
+std::list<bool> ___bl;
+std::list<String> ___sl;
+std::list<unsigned int> ___cl;
 Adafruit_NeoPixel _rgbled_R2 = Adafruit_NeoPixel(1, 1, NEO_RGB + NEO_KHZ800);
 char* _ID1 = "";
-int _buzzer_B2 = 6;
 int _output_A = 4;
+int _led_G = 8;
+int _buzzer_B2 = 6;
 int _output_A2 = 5;
 int _led_R = 7;
 File _dataFile;
-int _led_G = 8;
 Bee* _bee_ = new Bee();
 OpenSenseMap _osm("", _bee_);
 #define OLED_RESET 4
@@ -40,64 +40,60 @@ Plot _plot_myDisplay(&_display_myDisplay);
 
 
 void action() {
-    Serial.println(___numVar);
-    Serial.println(___boolVar);
-    Serial.println(___stringVar);
-    Serial.println(___colourVar);
-    _display_myDisplay.setCursor(___numVar, ___numVar);
+    Serial.println(___n);
+    Serial.println(___b);
+    Serial.println(___s);
+    Serial.println(___c);
+    _display_myDisplay.setCursor(___n, ___n);
     _display_myDisplay.setTextSize(1);
     _display_myDisplay.setTextColor(WHITE, BLACK);
-    _display_myDisplay.println(___numVar);
+    _display_myDisplay.println(___n);
     _display_myDisplay.display();
     
-    _display_myDisplay.setCursor(___numVar, ___numVar);
+    _display_myDisplay.setCursor(___n, ___n);
     _display_myDisplay.setTextSize(1);
     _display_myDisplay.setTextColor(WHITE, BLACK);
-    _display_myDisplay.println(___boolVar);
+    _display_myDisplay.println(___b);
     _display_myDisplay.display();
     
-    _display_myDisplay.setCursor(___numVar, ___numVar);
+    _display_myDisplay.setCursor(___n, ___n);
     _display_myDisplay.setTextSize(1);
     _display_myDisplay.setTextColor(WHITE, BLACK);
-    _display_myDisplay.println(___stringVar);
+    _display_myDisplay.println(___s);
     _display_myDisplay.display();
     
-    _display_myDisplay.setCursor(___numVar, ___numVar);
+    _display_myDisplay.setCursor(___n, ___n);
     _display_myDisplay.setTextSize(1);
     _display_myDisplay.setTextColor(WHITE, BLACK);
-    _display_myDisplay.println(___colourVar);
+    _display_myDisplay.println(___c);
     _display_myDisplay.display();
-    
-    
-    
-    
     
     _display_myDisplay.clearDisplay();
-    tone(_buzzer_B2, ___numVar);
-    delay(___numVar);
+    tone(_buzzer_B2, ___n);
+    delay(___n);
     noTone(_buzzer_B2);
     digitalWrite(_led_R, HIGH);
     digitalWrite(_led_R, LOW);
     digitalWrite(_led_R, HIGH);
     digitalWrite(_led_R, LOW);
-    _rgbled_R2.setPixelColor(0, _rgbled_R2.Color(RCHANNEL(___colourVar), GCHANNEL(___colourVar), BCHANNEL(___colourVar)));
+    _rgbled_R2.setPixelColor(0, _rgbled_R2.Color(RCHANNEL(___c), GCHANNEL(___c), BCHANNEL(___c)));
     _rgbled_R2.show();
     _rgbled_R2.setPixelColor(0, _rgbled_R2.Color(0,0,0));
     _rgbled_R2.show();
     
-    _osm.uploadMeasurement(___numVar, _ID1);
+    _osm.uploadMeasurement(___n, _ID1);
     
     _dataFile = SD.open("FILE.TXT", FILE_WRITE);
     _dataFile.print(_ID1);
     _dataFile.print(" : ");
-    _dataFile.println(___numVar);
+    _dataFile.println(___n);
     _dataFile.close();
     _plot_myDisplay.clear();
     _plot_myDisplay.drawPlot();
     
-    _plot_myDisplay.addDataPoint(___numVar, ___numVar);
+    _plot_myDisplay.addDataPoint(___n, ___n);
     
-    digitalWrite(_output_A, ___numVar);
+    digitalWrite(_output_A, ___n);
     analogWrite(_output_A2, 1);
 }
 
@@ -107,12 +103,12 @@ void setup()
     
     _rgbled_R2.begin();
     pinMode(_output_A, OUTPUT);
+    pinMode(_led_G, OUTPUT);
     pinMode(_output_A2, OUTPUT);
     pinMode(_led_R, OUTPUT);
     SD.begin(28);
     _dataFile = SD.open("FILE.TXT", FILE_WRITE);
     _dataFile.close();
-    pinMode(_led_G, OUTPUT);
     _bee_->connectToWifi("test","test");
     delay(1000);
     senseBoxIO.powerI2C(true);
@@ -131,14 +127,14 @@ void setup()
     _plot_myDisplay.setXPrecision(0);
     _plot_myDisplay.setYPrecision(0);
     _plot_myDisplay.clear();
-    ___numVar = 0;
-    ___boolVar = true;
-    ___stringVar = "";
-    ___colourVar = RGB(0xFF, 0xFF, 0xFF);
-    ___numList = {0, 0, 0};
-    ___boolList = {true, true, true};
-    ___stringList = {"", "", ""};
-    ___colourList = {RGB(0xFF, 0xFF, 0xFF), RGB(0xFF, 0xFF, 0xFF), RGB(0xFF, 0xFF, 0xFF)};
+    ___n = 0;
+    ___b = true;
+    ___s = "";
+    ___c = RGB(0xFF, 0xFF, 0xFF);
+    ___nl = {0, 0, 0};
+    ___bl = {true, true, true};
+    ___sl = {"", "", ""};
+    ___cl = {RGB(0xFF, 0xFF, 0xFF), RGB(0xFF, 0xFF, 0xFF), RGB(0xFF, 0xFF, 0xFF)};
 }
 
 void loop()

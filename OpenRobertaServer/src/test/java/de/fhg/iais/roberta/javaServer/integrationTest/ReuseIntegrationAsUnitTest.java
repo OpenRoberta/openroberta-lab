@@ -256,7 +256,6 @@ public class ReuseIntegrationAsUnitTest {
         }
     }
 
-    @Ignore
     @Test
     public void testAllRobotSpecificProgramsAsUnitTests() throws Exception {
         LOG.info("========= testing robot specific programs");
@@ -275,8 +274,8 @@ public class ReuseIntegrationAsUnitTest {
     @Ignore
     @Test
     public void testOneRobotSpecificProgramAsUnitTests() throws Exception {
-        String robotName = "calliope2017NoBlue";
-        String programName = "error-compass";
+        String robotName = "bob3";
+        String programName = "infra2";
         LOG.info("========= testing program " + programName + " for robot " + robotName);
         final String resourceDirectory = setupRobotFactoryAndGetResourceDirForRobotSpecificTests(robotName);
         runRegenerateAndCodeGenerationForOneRobotSpecificProgram(resourceDirectory, programName + ".xml", robotName);
@@ -396,7 +395,7 @@ public class ReuseIntegrationAsUnitTest {
 
         if ( diffProg != null ) { // || diffConfig != null
             if ( diffProg != null ) {
-                LOG.error(diffProg);
+                LOG.error("error in program " + programName + " is: " + diffProg);
             }
             // if ( diffConfig != null ) {
             //    LOG.error(diffConfig);

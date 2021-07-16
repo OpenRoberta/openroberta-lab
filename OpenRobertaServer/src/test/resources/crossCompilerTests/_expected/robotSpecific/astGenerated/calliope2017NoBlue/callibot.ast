@@ -1,0 +1,29 @@
+BothMotorsOnAction [M, NumConst [30], M, NumConst [10]]
+LedOnAction [ R, ColorConst [#ff0000] ]
+LightStatusAction [R, OFF]
+LightStatusAction [R2, OFF]
+LightStatusAction [R3, OFF]
+LightStatusAction [R4, OFF]
+LightStatusAction [R5, OFF]
+LightAction [L, ON, DEFAULT, EmptyExpr [defVal=COLOR]]
+LightAction [L2, ON, DEFAULT, EmptyExpr [defVal=COLOR]]
+LightAction [L3, ON, DEFAULT, EmptyExpr [defVal=COLOR]]
+BothMotorsOnAction [M, NumConst [30], M3, NumConst [10]]
+MotorOnAction [M, MotionParam [speed=NumConst [30], duration=null]]
+MotorStop [port=M3, mode=FLOAT]
+ServoSetAction [S, NumConst [90]]
+ServoSetAction [S5, NumConst [45]]
+MotionKitSingleSetAction [C17, FOREWARD]
+MotionKitSingleSetAction [C16, BACKWARD]
+MotionKitSingleSetAction [BOTH, OFF]
+MotionKitDualSetAction [FOREWARD, FOREWARD]
+MotionKitDualSetAction [FOREWARD, BACKWARD]
+
+Var [line] := SensorExpr [InfraredSensor [I, LINE, - EMPTY_SLOT -]]
+
+
+Var [line] := SensorExpr [InfraredSensor [I2, LINE, - EMPTY_SLOT -]]
+
+
+Var [dist] := SensorExpr [UltrasonicSensor [U, DISTANCE, - EMPTY_SLOT -]]
+

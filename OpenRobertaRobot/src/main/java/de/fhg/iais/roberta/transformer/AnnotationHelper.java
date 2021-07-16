@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
+import de.fhg.iais.roberta.blockly.generated.Data;
 import de.fhg.iais.roberta.blockly.generated.Hide;
 import de.fhg.iais.roberta.blockly.generated.Mutation;
 import de.fhg.iais.roberta.blockly.generated.Value;
@@ -106,6 +107,15 @@ public class AnnotationHelper {
                         }
                         constructorParameterTypes.add(String.class);
                         constructorParameterValues.add(fieldValue);
+                    } else if ( anno instanceof NepoData ) {
+                        NepoData nepoData = (NepoData) anno;
+                        Data data = block.getData();
+                        if (data == null) {
+                            throw new DbcException("invalid data block in AST class " + astClass.getSimpleName());
+                        }
+                        String dataValue = data.getValue();
+                        constructorParameterTypes.add(String.class);
+                        constructorParameterValues.add(dataValue);
                     } else if ( anno instanceof NepoMutation ) {
                         constructorParameterTypes.add(Mutation.class);
                         constructorParameterValues.add(block.getMutation());
@@ -198,6 +208,8 @@ public class AnnotationHelper {
                         Ast2Jaxb.addField(jaxbDestination, ((NepoField) anno).name(), (String) field.get(phrase));
                     } else if ( anno instanceof NepoValue ) {
                         Ast2Jaxb.addValue(jaxbDestination, ((NepoValue) anno).name(), (Phrase<?>) field.get(phrase));
+                    } else if ( anno instanceof NepoData ) {
+                        Ast2Jaxb.addData(jaxbDestination, (String) field.get(phrase));
                     } else if ( anno instanceof NepoMutation ) {
                         Ast2Jaxb.addMutation(jaxbDestination, (Mutation) field.get(phrase));
                     } else if ( anno instanceof NepoHide ) {

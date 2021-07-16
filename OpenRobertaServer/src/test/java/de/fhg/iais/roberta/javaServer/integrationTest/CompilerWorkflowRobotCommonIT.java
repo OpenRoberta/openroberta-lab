@@ -107,8 +107,9 @@ public class CompilerWorkflowRobotCommonIT {
         ServerStarter.initLoggingBeforeFirstUse(ARGS);
         LOG.info("XXXXXXXXXX START of COMMON-IT XXXXXXXXXX");
         if ( System.getenv(ORA_CC_RSC_ENVVAR) == null ) {
-            LOG.error("the environment variable \"" + ORA_CC_RSC_ENVVAR + "\" must contain the absolute path to the ora-cc-rsc repository - test fails");
-            Assert.fail();
+            String msg = "the environment variable \"" + ORA_CC_RSC_ENVVAR + "\" must contain the absolute path to the ora-cc-rsc repository - test fails";
+            LOG.error(msg);
+            Assert.fail(msg);
         }
         Properties baseServerProperties = Util.loadProperties(null);
         serverProperties = new ServerProperties(baseServerProperties);

@@ -3,6 +3,7 @@ package de.fhg.iais.roberta.syntax.action.communication;
 import java.util.List;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
+import de.fhg.iais.roberta.blockly.generated.Data;
 import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.blockly.generated.Mutation;
 import de.fhg.iais.roberta.blockly.generated.Value;
@@ -21,10 +22,12 @@ import de.fhg.iais.roberta.typecheck.BlocklyType;
 
 public class BluetoothReceiveAction<V> extends Action<V> {
     private final Expr<V> connection;
+    private final String dataValue;
     String channel;
     String dataType;
 
     private BluetoothReceiveAction(
+        String dataValue,
         Expr<V> bluetoothRecieveConnection,
         String channel,
         String dataType,
@@ -34,16 +37,18 @@ public class BluetoothReceiveAction<V> extends Action<V> {
         this.connection = bluetoothRecieveConnection;
         this.channel = channel;
         this.dataType = dataType;
+        this.dataValue = dataValue;
         setReadOnly();
     }
 
     public static <V> BluetoothReceiveAction<V> make(
+        String dataValue,
         Expr<V> bluetoothRecieveConnection,
         String channel,
         String dataType,
         BlocklyBlockProperties properties,
         BlocklyComment comment) {
-        return new BluetoothReceiveAction<V>(bluetoothRecieveConnection, channel, dataType, properties, comment);
+        return new BluetoothReceiveAction<V>(dataValue, bluetoothRecieveConnection, channel, dataType, properties, comment);
     }
 
     public Expr<V> getConnection() {
@@ -69,11 +74,14 @@ public class BluetoothReceiveAction<V> extends Action<V> {
         List<Value> values = Jaxb2Ast.extractValues(block, (short) 1);
         List<Field> fields = Jaxb2Ast.extractFields(block, (short) 3);
         Phrase<V> bluetoothRecieveConnection = helper.extractValue(values, new ExprParam(BlocklyConstants.CONNECTION, BlocklyType.NULL));
+        Data data = block.getData();
+        String dataValue = data.getValue();
         if ( fields.size() == 3 ) {
             String bluetoothRecieveChannel = Jaxb2Ast.extractField(fields, BlocklyConstants.CHANNEL);
             String bluetoothRecieveDataType = Jaxb2Ast.extractField(fields, BlocklyConstants.TYPE);
             return BluetoothReceiveAction
                 .make(
+                    dataValue,
                     Jaxb2Ast.convertPhraseToExpr(bluetoothRecieveConnection),
                     bluetoothRecieveChannel,
                     bluetoothRecieveDataType,
@@ -84,6 +92,7 @@ public class BluetoothReceiveAction<V> extends Action<V> {
             String bluetoothRecieveDataType = Jaxb2Ast.extractField(fields, BlocklyConstants.TYPE);
             return BluetoothReceiveAction
                 .make(
+                    dataValue,
                     Jaxb2Ast.convertPhraseToExpr(bluetoothRecieveConnection),
                     bluetoothReceiveChannel,
                     bluetoothRecieveDataType,
@@ -92,23 +101,25 @@ public class BluetoothReceiveAction<V> extends Action<V> {
         }
     }
 
-    //TODO: add tests for NXT blocks
     @Override
     public Block astToBlock() {
         Block jaxbDestination = new Block();
-
         Mutation mutation = new Mutation();
         mutation.setDatatype(this.dataType);
         jaxbDestination.setMutation(mutation);
-
         Ast2Jaxb.addField(jaxbDestination, BlocklyConstants.TYPE, this.dataType);
         Ast2Jaxb.addField(jaxbDestination, BlocklyConstants.PROTOCOL, "BLUETOOTH");
         Ast2Jaxb.addField(jaxbDestination, BlocklyConstants.CHANNEL, getChannel());
-
         Ast2Jaxb.setBasicProperties(this, jaxbDestination);
-
         Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.CONNECTION, getConnection());
+        Data data = new Data();
+        data.setValue(this.dataValue);
+        jaxbDestination.setData(data);
         return jaxbDestination;
+    }
+
+    public String getDataValue() {
+        return dataValue;
     }
 
     @Override
