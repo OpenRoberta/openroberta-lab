@@ -132,6 +132,10 @@ define(["require", "exports"], function (require, exports) {
         "nano33ble": {
             "ports": [
                 { name: 'LED_BUILTIN', position: { x: 28.9, y: 91.4 } },
+                { name: 'lsm9ds1', position: { x: 85.0, y: 40.0 } },
+                { name: 'apds9960', position: { x: 92.0, y: 47.0 } },
+                { name: 'lps22hb', position: { x: 99.0, y: 54.0 } },
+                { name: 'hts221', position: { x: 106.0, y: 61.0 } },
                 { name: 'TX1', position: { x: 228.9, y: 5.6 } },
                 { name: 'RX0', position: { x: 214.6, y: 5.6 } },
                 { name: 'RESET', position: { x: 200.3, y: 5.6 } },
