@@ -4,6 +4,7 @@ import java.util.List;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Field;
+import de.fhg.iais.roberta.blockly.generated.Hide;
 import de.fhg.iais.roberta.blockly.generated.Mutation;
 import de.fhg.iais.roberta.factory.BlocklyDropdownFactory;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
@@ -46,30 +47,6 @@ public class GyroSensor<V> extends ExternalSensor<V> {
     }
 
     /**
-     * Transformation from JAXB object to corresponding AST object. Special version to fix issue #924 with Calliope/Microbit <hide> problem
-     *
-     * @param block for transformation
-     * @param helper class for making the transformation
-     * @return corresponding AST object
-     */
-    public static <V> SensorMetaDataBean extractPortAndModeAndSlotForGyro(Block block, Jaxb2ProgramAst<V> helper) {
-        List<Field> fields = Jaxb2Ast.extractFields(block, (short) 3);
-        BlocklyDropdownFactory factory = helper.getDropdownFactory();
-        String portName = Jaxb2Ast.extractField(fields, BlocklyConstants.SENSORPORT, BlocklyConstants.EMPTY_PORT);
-        String modeName = Jaxb2Ast.extractField(fields, BlocklyConstants.MODE, BlocklyConstants.DEFAULT);
-
-        String robotGroup = helper.getRobotFactory().getGroup();
-        boolean calliopeOrMicrobit = "calliope".equals(robotGroup) || "microbit".equals(robotGroup);
-        String slotName;
-        if ( calliopeOrMicrobit ) {
-            slotName = Jaxb2Ast.extractNonEmptyField(fields, BlocklyConstants.SLOT, BlocklyConstants.X);
-        } else {
-            slotName = Jaxb2Ast.extractField(fields, BlocklyConstants.SLOT, BlocklyConstants.NO_SLOT);
-        }
-        return new SensorMetaDataBean(Jaxb2Ast.sanitizePort(portName), factory.getMode(modeName), Jaxb2Ast.sanitizeSlot(slotName), block.getMutation());
-    }
-
-    /**
      * Transformation from JAXB object to corresponding AST object.
      *
      * @param block for transformation
@@ -86,7 +63,7 @@ public class GyroSensor<V> extends ExternalSensor<V> {
                 new SensorMetaDataBean(Jaxb2Ast.sanitizePort(portName), factory.getMode("RESET"), Jaxb2Ast.sanitizeSlot(BlocklyConstants.NO_SLOT), null);
             return GyroSensor.make(sensorMetaDataBean, Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
         } else {
-            sensorMetaDataBean = extractPortAndModeAndSlotForGyro(block, helper);
+            sensorMetaDataBean = extractPortAndModeAndSlot(block, helper);
             return GyroSensor.make(sensorMetaDataBean, Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
         }
     }
@@ -97,19 +74,20 @@ public class GyroSensor<V> extends ExternalSensor<V> {
         Ast2Jaxb.setBasicProperties(this, jaxbDestination);
         //TODO: move reset to another block and delete astToBlock() method from here
         String fieldValue = getUserDefinedPort();
-        if ( getMode().equals("ANGLE") || getMode().equals("RATE") || getMode().equals("X") || getMode().equals("Y") || getMode().equals("Z") ) {
+        String mode = getMode();
+        if ( mode.equals("ANGLE") || mode.equals("RATE") || mode.equals("X") || mode.equals("Y") || mode.equals("Z") || mode.equals("TILTED") ) {
+            Ast2Jaxb.addField(jaxbDestination, BlocklyConstants.MODE, mode);
             Mutation mutation = new Mutation();
             mutation.setMode(getMode());
             jaxbDestination.setMutation(mutation);
-            Ast2Jaxb.addField(jaxbDestination, BlocklyConstants.MODE, getMode());
             Ast2Jaxb.addField(jaxbDestination, BlocklyConstants.SENSORPORT, fieldValue);
             Ast2Jaxb.addField(jaxbDestination, BlocklyConstants.SLOT, getSlot());
-        } else if ( getMode().equals("TILTED") ) {
-            String fieldSlot = getSlot();
-            Ast2Jaxb.addField(jaxbDestination, BlocklyConstants.SLOT, fieldSlot);
-            Ast2Jaxb.addField(jaxbDestination, BlocklyConstants.SENSORPORT, fieldValue);
         } else {
             Ast2Jaxb.addField(jaxbDestination, BlocklyConstants.SENSORPORT, fieldValue);
+        }
+        List<Hide> hide = getSensorMetaDataBean().getHide();
+        if ( hide != null && hide.size() > 0) {
+            jaxbDestination.getHide().addAll(hide);
         }
         return jaxbDestination;
     }

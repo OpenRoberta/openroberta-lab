@@ -109,7 +109,9 @@ public class BluetoothReceiveAction<V> extends Action<V> {
         jaxbDestination.setMutation(mutation);
         Ast2Jaxb.addField(jaxbDestination, BlocklyConstants.TYPE, this.dataType);
         Ast2Jaxb.addField(jaxbDestination, BlocklyConstants.PROTOCOL, "BLUETOOTH");
-        Ast2Jaxb.addField(jaxbDestination, BlocklyConstants.CHANNEL, getChannel());
+        if ( !"-1".equals(getChannel()) ) {
+            Ast2Jaxb.addField(jaxbDestination, BlocklyConstants.CHANNEL, getChannel());
+        }
         Ast2Jaxb.setBasicProperties(this, jaxbDestination);
         Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.CONNECTION, getConnection());
         Data data = new Data();

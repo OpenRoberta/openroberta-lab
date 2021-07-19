@@ -88,7 +88,7 @@ public class PlotPointAction<V> extends Action<V> {
     public Block astToBlock() {
         Block jaxbDestination = new Block();
         Ast2Jaxb.setBasicProperties(this, jaxbDestination);
-
+        Ast2Jaxb.addField(jaxbDestination, BlocklyConstants.ACTORPORT, port);
         Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.VALUE, getValue());
         Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.TICKMARK, getTickmark());
         return jaxbDestination;

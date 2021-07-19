@@ -62,6 +62,7 @@ public class PlotClearAction<V> extends Action<V> {
     public Block astToBlock() {
         Block jaxbDestination = new Block();
         Ast2Jaxb.setBasicProperties(this, jaxbDestination);
+        Ast2Jaxb.addField(jaxbDestination, BlocklyConstants.ACTORPORT, port);
         return jaxbDestination;
     }
 }

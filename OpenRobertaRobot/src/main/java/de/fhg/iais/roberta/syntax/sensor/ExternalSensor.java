@@ -4,6 +4,7 @@ import java.util.List;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Field;
+import de.fhg.iais.roberta.blockly.generated.Hide;
 import de.fhg.iais.roberta.blockly.generated.Mutation;
 import de.fhg.iais.roberta.factory.BlocklyDropdownFactory;
 import de.fhg.iais.roberta.syntax.BlockType;
@@ -55,25 +56,44 @@ public abstract class ExternalSensor<V> extends Sensor<V> implements WithUserDef
         return metaDataBean.getMutation();
     }
 
+    public List<Hide> getHide() {
+        return metaDataBean.getHide();
+    }
+
+    public SensorMetaDataBean getSensorMetaDataBean() {
+        return metaDataBean;
+    }
+
     @Override
     public String toString() {
         return this.getClass().getSimpleName() + " [" + this.getUserDefinedPort() + ", " + this.getMode() + ", " + this.getSlot() + "]";
     }
 
     /**
-     * Transformation from JAXB object to corresponding AST object.
+     * extract info about external sensor and put all relevant data into a bean: port, mode, slot, mutation; but no hide
      *
      * @param block for transformation
      * @param helper class for making the transformation
-     * @return corresponding AST object
+     * @return an {@link SensorMetaDataBean}
      */
     public static <V> SensorMetaDataBean extractPortAndModeAndSlot(Block block, Jaxb2ProgramAst<V> helper) {
+        return extractPortModeSlotMutationHide(block, helper);
+    }
+
+    /**
+     * extract info about external sensor and put all relevant data into a bean
+     *
+     * @param block for transformation
+     * @param helper class for making the transformation
+     * @return an {@link SensorMetaDataBean}
+     */
+    public static <V> SensorMetaDataBean extractPortModeSlotMutationHide(Block block, Jaxb2ProgramAst<V> helper) {
         List<Field> fields = Jaxb2Ast.extractFields(block, (short) 3);
         BlocklyDropdownFactory factory = helper.getDropdownFactory();
         String portName = Jaxb2Ast.extractField(fields, BlocklyConstants.SENSORPORT, BlocklyConstants.EMPTY_PORT);
         String modeName = Jaxb2Ast.extractField(fields, BlocklyConstants.MODE, BlocklyConstants.DEFAULT);
         String slotName = Jaxb2Ast.extractField(fields, BlocklyConstants.SLOT, BlocklyConstants.EMPTY_SLOT);
-        return new SensorMetaDataBean(Jaxb2Ast.sanitizePort(portName), factory.getMode(modeName), Jaxb2Ast.sanitizeSlot(slotName), block.getMutation());
+        return new SensorMetaDataBean(Jaxb2Ast.sanitizePort(portName), factory.getMode(modeName), Jaxb2Ast.sanitizeSlot(slotName), block.getMutation(), block.getHide());
     }
 
     @Override
@@ -83,8 +103,12 @@ public abstract class ExternalSensor<V> extends Sensor<V> implements WithUserDef
         if ( !this.getMode().equals(BlocklyConstants.DEFAULT) ) {
             Ast2Jaxb.addField(jaxbDestination, BlocklyConstants.MODE, this.getMode());
         }
-        if ( getMutation() != null) {
+        if ( getMutation() != null ) {
             jaxbDestination.setMutation(getMutation());
+        }
+        List<Hide> hide = getHide();
+        if ( hide != null ) {
+            jaxbDestination.getHide().addAll(hide);
         }
         String portValue = this.getUserDefinedPort();
         if ( portValue.equals(BlocklyConstants.EMPTY_PORT) ) {
@@ -100,11 +124,7 @@ public abstract class ExternalSensor<V> extends Sensor<V> implements WithUserDef
     }
 
     /**
-     * Transformation from JAXB object to corresponding AST object.
-     *
-     * @param block for transformation
-     * @param helper class for making the transformation
-     * @return corresponding AST object
+     * this is an incredible bad design and must be refactored
      */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
         SensorMetaDataBean sensorData = extractPortAndModeAndSlot(block, helper);

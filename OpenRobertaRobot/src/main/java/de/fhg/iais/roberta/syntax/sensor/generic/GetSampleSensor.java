@@ -4,6 +4,7 @@ import java.util.List;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Field;
+import de.fhg.iais.roberta.blockly.generated.Hide;
 import de.fhg.iais.roberta.blockly.generated.Mutation;
 import de.fhg.iais.roberta.factory.BlocklyDropdownFactory;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
@@ -31,6 +32,7 @@ public class GetSampleSensor<V> extends Sensor<V> {
     private final String slot;
     private final String sensorTypeAndMode;
     private final Mutation mutation;
+    private final List<Hide> hide;
 
     @SuppressWarnings("unchecked")
     private GetSampleSensor(
@@ -38,6 +40,7 @@ public class GetSampleSensor<V> extends Sensor<V> {
         String port,
         String slot,
         Mutation mutation,
+        List<Hide> hide,
         BlocklyBlockProperties properties,
         BlocklyComment comment,
         BlocklyDropdownFactory factory) //
@@ -49,6 +52,7 @@ public class GetSampleSensor<V> extends Sensor<V> {
         this.slot = slot;
         this.sensorTypeAndMode = sensorTypeAndMode;
         this.mutation = mutation;
+        this.hide = hide;
         this.sensor = (Sensor<V>) factory.createSensor(sensorTypeAndMode, port, slot, mutation, properties, comment);
         setReadOnly();
     }
@@ -67,28 +71,27 @@ public class GetSampleSensor<V> extends Sensor<V> {
         String port,
         String slot,
         Mutation mutation,
+        List<Hide> hide,
         BlocklyBlockProperties properties,
         BlocklyComment comment,
         BlocklyDropdownFactory factory) {
-        return new GetSampleSensor<>(sensorTypeAndMode, port, slot, mutation, properties, comment, factory);
+        return new GetSampleSensor(sensorTypeAndMode, port, slot, mutation, hide, properties, comment, factory);
     }
 
-    /**
-     * @return the sensor
-     */
     public Sensor<V> getSensor() {
         return this.sensor;
     }
 
-    /**
-     * @return name of the port
-     */
     public String getSensorPort() {
         return this.sensorPort;
     }
 
     public String getSlot() {
         return this.slot;
+    }
+
+    public List<Hide> getHide() {
+        return this.hide;
     }
 
     /**
@@ -134,6 +137,7 @@ public class GetSampleSensor<V> extends Sensor<V> {
                 portName,
                 slotName,
                 block.getMutation(),
+                block.getHide(),
                 Jaxb2Ast.extractBlockProperties(block),
                 Jaxb2Ast.extractComment(block),
                 helper.getDropdownFactory());
@@ -145,6 +149,9 @@ public class GetSampleSensor<V> extends Sensor<V> {
         Ast2Jaxb.setBasicProperties(this.sensor, jaxbDestination);
         if ( this.mutation != null ) {
             jaxbDestination.setMutation(mutation);
+        }
+        if ( this.hide != null && this.hide.size() > 0 ) {
+            jaxbDestination.getHide().addAll(hide);
         }
         Ast2Jaxb.addField(jaxbDestination, BlocklyConstants.SENSORTYPE, this.sensorTypeAndMode);
         Ast2Jaxb.addField(jaxbDestination, BlocklyConstants.SENSORPORT, this.sensorPort);

@@ -170,6 +170,7 @@ public class MbedThree2ThreeOneTransformerVisitor implements IMbedTransformerVis
                 getNewBean(sensor).getPort(),
                 sensorGetSample.getSlot(),
                 sensorGetSample.getMutation(),
+                sensorGetSample.getHide(),
                 sensorGetSample.getProperty(),
                 sensorGetSample.getComment(),
                 getBlocklyDropdownFactory());

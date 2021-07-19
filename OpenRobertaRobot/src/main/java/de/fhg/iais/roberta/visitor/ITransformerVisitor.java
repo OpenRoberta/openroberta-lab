@@ -757,6 +757,7 @@ public interface ITransformerVisitor<V> extends ISensorVisitor<Phrase<V>>, IAllA
     default Phrase<V> visitBluetoothReceiveAction(BluetoothReceiveAction<Phrase<V>> bluetoothReceiveAction) {
         return BluetoothReceiveAction
             .make(
+                bluetoothReceiveAction.getDataValue(),
                 (Expr<V>) bluetoothReceiveAction.getConnection().modify(this),
                 bluetoothReceiveAction.getChannel(),
                 bluetoothReceiveAction.getDataType(),
@@ -970,6 +971,7 @@ public interface ITransformerVisitor<V> extends ISensorVisitor<Phrase<V>>, IAllA
                 sensorGetSample.getSensorPort(),
                 sensorGetSample.getSlot(),
                 sensorGetSample.getMutation(),
+                sensorGetSample.getHide(),
                 sensorGetSample.getProperty(),
                 sensorGetSample.getComment(),
                 getBlocklyDropdownFactory());

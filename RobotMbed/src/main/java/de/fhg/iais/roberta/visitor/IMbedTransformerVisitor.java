@@ -183,7 +183,7 @@ public interface IMbedTransformerVisitor<V> extends ITransformerVisitor<V>, IMbe
 
     @Override
     default Phrase<V> visitRadioRssiSensor(RadioRssiSensor<Phrase<V>> radioRssiSensor) {
-        return RadioRssiSensor.make(radioRssiSensor.getProperty(), radioRssiSensor.getComment());
+        return RadioRssiSensor.make(radioRssiSensor.getSensorMetaDataBean(), radioRssiSensor.getProperty(), radioRssiSensor.getComment());
     }
 
     @Override

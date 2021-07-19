@@ -453,6 +453,7 @@ public class MbedTwo2ThreeTransformerVisitor implements IMbedTransformerVisitor<
                     compAndName.getSecond(),
                     sensorGetSample.getSensorPort(),
                     sensorGetSample.getMutation(),
+                    sensorGetSample.getHide(),
                     sensorGetSample.getProperty(),
                     sensorGetSample.getComment(),
                     getBlocklyDropdownFactory());
@@ -465,6 +466,7 @@ public class MbedTwo2ThreeTransformerVisitor implements IMbedTransformerVisitor<
                     sensorGetSample.getSensorPort(),
                     sensorGetSample.getSensorPort(),
                     sensorGetSample.getMutation(),
+                    sensorGetSample.getHide(),
                     sensorGetSample.getProperty(),
                     sensorGetSample.getComment(),
                     getBlocklyDropdownFactory());
@@ -475,6 +477,7 @@ public class MbedTwo2ThreeTransformerVisitor implements IMbedTransformerVisitor<
                     collectSensorAndGetNewBean(sensor).getPort(),
                     sensorGetSample.getSlot(),
                     sensorGetSample.getMutation(),
+                    sensorGetSample.getHide(),
                     sensorGetSample.getProperty(),
                     sensorGetSample.getComment(),
                     getBlocklyDropdownFactory());

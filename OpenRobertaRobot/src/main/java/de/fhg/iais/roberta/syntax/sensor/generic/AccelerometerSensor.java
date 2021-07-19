@@ -37,30 +37,6 @@ public final class AccelerometerSensor<V> extends ExternalSensor<V> {
     }
 
     /**
-     * Transformation from JAXB object to corresponding AST object. Special version to fix issue #924 with Calliope/Microbit <hide> problem
-     *
-     * @param block for transformation
-     * @param helper class for making the transformation
-     * @return corresponding AST object
-     */
-    public static <V> SensorMetaDataBean extractPortAndModeAndSlotForAccelerometer(Block block, Jaxb2ProgramAst<V> helper) {
-        List<Field> fields = Jaxb2Ast.extractFields(block, (short) 3);
-        BlocklyDropdownFactory factory = helper.getDropdownFactory();
-        String portName = Jaxb2Ast.extractField(fields, BlocklyConstants.SENSORPORT, BlocklyConstants.EMPTY_PORT);
-        String modeName = Jaxb2Ast.extractField(fields, BlocklyConstants.MODE, BlocklyConstants.DEFAULT);
-
-        String robotGroup = helper.getRobotFactory().getGroup();
-        boolean calliopeOrMicrobit = "calliope".equals(robotGroup) || "microbit".equals(robotGroup);
-        String slotName;
-        if ( calliopeOrMicrobit ) {
-            slotName = Jaxb2Ast.extractNonEmptyField(fields, BlocklyConstants.SLOT, BlocklyConstants.X);
-        } else {
-            slotName = Jaxb2Ast.extractField(fields, BlocklyConstants.SLOT, BlocklyConstants.NO_SLOT);
-        }
-        return new SensorMetaDataBean(Jaxb2Ast.sanitizePort(portName), factory.getMode(modeName), Jaxb2Ast.sanitizeSlot(slotName), block.getMutation());
-    }
-
-    /**
      * Transformation from JAXB object to corresponding AST object.
      *
      * @param block for transformation
@@ -68,7 +44,7 @@ public final class AccelerometerSensor<V> extends ExternalSensor<V> {
      * @return corresponding AST object
      */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
-        SensorMetaDataBean sensorData = extractPortAndModeAndSlotForAccelerometer(block, helper);
+        SensorMetaDataBean sensorData = extractPortAndModeAndSlot(block, helper);
         return AccelerometerSensor.make(sensorData, Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
     }
 }

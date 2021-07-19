@@ -232,6 +232,7 @@ public class TransformerTest extends AstTest {
                     "GetSamplePort",
                     "GetSampleSlot",
                     sensorGetSample.getMutation(),
+                    sensorGetSample.getHide(),
                     sensorGetSample.getProperty(),
                     sensorGetSample.getComment(),
                     this.blocklyDropdownFactory);
