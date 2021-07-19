@@ -1,7 +1,6 @@
 package de.fhg.iais.roberta.visitor.validate;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -9,11 +8,9 @@ import com.google.common.collect.ClassToInstanceMap;
 
 import de.fhg.iais.roberta.bean.IProjectBean;
 import de.fhg.iais.roberta.bean.UsedHardwareBean;
-import de.fhg.iais.roberta.bean.UsedMethodBean;
 import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.inter.mode.general.IListElementOperations;
 import de.fhg.iais.roberta.mode.general.ListElementOperations;
-import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
 import de.fhg.iais.roberta.syntax.lang.expr.Binary;
 import de.fhg.iais.roberta.syntax.lang.expr.BoolConst;
@@ -68,32 +65,17 @@ import de.fhg.iais.roberta.syntax.lang.stmt.StmtTextComment;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
-import de.fhg.iais.roberta.typecheck.NepoInfo;
 import de.fhg.iais.roberta.visitor.lang.ILanguageVisitor;
 
-public abstract class CommonNepoValidatorAndCollectorVisitor implements ILanguageVisitor<Void> {
+public abstract class CommonNepoValidatorAndCollectorVisitor extends AbstractValidatorAndCollectorVisitor implements ILanguageVisitor<Void> {
 
-    protected final UsedMethodBean.Builder usedMethodBuilder;
-    protected final UsedHardwareBean.Builder usedHardwareBuilder;
-    protected final ConfigurationAst robotConfiguration;
-    private final ClassToInstanceMap<IProjectBean.IBuilder<?>> beanBuilders;
     private final HashMap<Integer, Integer> waitsInLoops = new HashMap<>();
-    protected int errorCount = 0;
-    protected int warningCount = 0;
-    protected List<String> errorAndWarningMessages = new ArrayList<>();
     private int loopCounter = 0;
     private int currentLoop = 0;
 
     protected CommonNepoValidatorAndCollectorVisitor(ConfigurationAst robotConfiguration, ClassToInstanceMap<IProjectBean.IBuilder<?>> beanBuilders) //
     {
-        this.robotConfiguration = robotConfiguration;
-        this.beanBuilders = beanBuilders;
-        this.usedMethodBuilder = getBuilder(UsedMethodBean.Builder.class);
-        this.usedHardwareBuilder = getBuilder(UsedHardwareBean.Builder.class);
-    }
-
-    protected <T extends IProjectBean.IBuilder<?>> T getBuilder(Class<T> clazz) {
-        return this.beanBuilders.getInstance(clazz);
+        super(robotConfiguration, beanBuilders);
     }
 
     @Override
@@ -474,69 +456,6 @@ public abstract class CommonNepoValidatorAndCollectorVisitor implements ILanguag
     public Void visitWaitTimeStmt(WaitTimeStmt<Void> waitTimeStmt) {
         requiredComponentVisited(waitTimeStmt, waitTimeStmt.getTime());
         return null;
-    }
-
-    /**
-     * if the subPhrase is not the {@link EmptyExpr}, visit the subPhrase. There are almost no reasons to use this method, because
-     * all subpharses are required. Only bad design of blockly blocks require to use this method (RGBA, for instance)
-     *
-     * @param subPhrase to be visited, if not empty
-     */
-    protected void optionalComponentVisited(Phrase<Void> subPhrase) {
-        if ( !(subPhrase instanceof EmptyExpr<?>) ) {
-            subPhrase.accept(this);
-        }
-    }
-
-    /**
-     * for the superPhrase check, that subPhrases are not empty. If true, visit the subPhrases, otherwise add error information to the superPhrase.
-     *
-     * @param superPhrase phrase, whose components should be checked and visited
-     * @param subPhrases the component of superPhrase to be checked and visited
-     */
-    @SafeVarargs
-    protected final void requiredComponentVisited(Phrase<Void> superPhrase, Phrase<Void>... subPhrases) {
-        for ( Phrase<Void> subPhrase : subPhrases ) {
-            if ( subPhrase instanceof EmptyExpr<?> ) {
-                addErrorToPhrase(superPhrase, "ERROR_MISSING_PARAMETER");
-            } else {
-                subPhrase.accept(this);
-            }
-        }
-    }
-
-    protected final <T extends Phrase<Void>> void requiredComponentVisited(Phrase<Void> superPhrase, List<T> subPhrases) {
-        for ( Phrase<Void> subPhrase : subPhrases ) {
-            if ( subPhrase instanceof EmptyExpr<?> ) {
-                addErrorToPhrase(superPhrase, "ERROR_MISSING_PARAMETER");
-            } else {
-                subPhrase.accept(this);
-            }
-        }
-    }
-
-    protected void addErrorToPhrase(final Phrase<Void> phrase, final String message) {
-        phrase.addInfo(NepoInfo.error(message));
-        errorAndWarningMessages.add(message);
-        errorCount++;
-    }
-
-    protected void addWarningToPhrase(final Phrase<Void> phrase, final String message) {
-        phrase.addInfo(NepoInfo.warning(message));
-        errorAndWarningMessages.add(message);
-        warningCount++;
-    }
-
-    public int getErrorCount() {
-        return this.errorCount;
-    }
-
-    public List<String> getErrorAndWarningMessages() {
-        return Collections.unmodifiableList(errorAndWarningMessages);
-    }
-
-    public int getWarningCount() {
-        return this.warningCount;
     }
 
     private void increaseLoopCounter() {

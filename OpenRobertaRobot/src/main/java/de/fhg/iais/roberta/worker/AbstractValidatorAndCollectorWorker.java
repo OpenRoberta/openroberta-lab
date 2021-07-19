@@ -7,6 +7,7 @@ import com.google.common.collect.ClassToInstanceMap;
 import com.google.common.collect.ImmutableClassToInstanceMap;
 import com.google.common.collect.ImmutableClassToInstanceMap.Builder;
 
+import de.fhg.iais.roberta.bean.ErrorAndWarningBean;
 import de.fhg.iais.roberta.bean.IProjectBean;
 import de.fhg.iais.roberta.bean.IProjectBean.IBuilder;
 import de.fhg.iais.roberta.bean.UsedHardwareBean;
@@ -27,11 +28,18 @@ public abstract class AbstractValidatorAndCollectorWorker implements IWorker {
     @Override
     public final void execute(Project project) {
         Builder<IProjectBean.IBuilder<?>> mapBuilder = new ImmutableClassToInstanceMap.Builder<>();
+
         UsedMethodBean.Builder usedMethodBeanBuilder = new UsedMethodBean.Builder();
         mapBuilder.put(UsedMethodBean.Builder.class, usedMethodBeanBuilder);
+
         UsedHardwareBean.Builder usedHardwareBeanBuilder = new UsedHardwareBean.Builder();
         mapBuilder.put(UsedHardwareBean.Builder.class, usedHardwareBeanBuilder);
+
+        ErrorAndWarningBean.Builder errorAndWarningBeanBuilder = new ErrorAndWarningBean.Builder();
+        mapBuilder.put(ErrorAndWarningBean.Builder.class, errorAndWarningBeanBuilder);
+
         ImmutableClassToInstanceMap<IBuilder<?>> map = mapBuilder.build();
+
         CommonNepoValidatorAndCollectorVisitor visitor = this.getVisitor(project, mapBuilder.build());
         List<List<Phrase<Void>>> tree = project.getProgramAst().getTree();
         // workaround: because methods in the tree may use global variables before the main task is
@@ -51,10 +59,11 @@ public abstract class AbstractValidatorAndCollectorWorker implements IWorker {
         project.addWorkerResult(map.get(UsedMethodBean.Builder.class).build());
         project.addWorkerResult(map.get(UsedHardwareBean.Builder.class).build());
 
-        int errorCounter = visitor.getErrorCount();
+        ErrorAndWarningBean errorAndWarningBean = errorAndWarningBeanBuilder.build();
+        int errorCounter = errorAndWarningBean.getErrorCount();
         if ( errorCounter > 0 ) {
             project.setResult(Key.PROGRAM_INVALID_STATEMETNS);
-            project.addToErrorCounter(errorCounter, visitor.getErrorAndWarningMessages());
+            project.addToErrorCounter(errorCounter, errorAndWarningBean.getErrorAndWarningMessages());
         }
     }
 
