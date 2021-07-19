@@ -7,11 +7,7 @@ import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.components.ConfigurationComponent;
 import de.fhg.iais.roberta.components.UsedActor;
 import de.fhg.iais.roberta.components.UsedSensor;
-import de.fhg.iais.roberta.syntax.MotorDuration;
-import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.SC;
-import de.fhg.iais.roberta.syntax.action.Action;
-import de.fhg.iais.roberta.syntax.action.MoveAction;
 import de.fhg.iais.roberta.syntax.action.communication.BluetoothCheckConnectAction;
 import de.fhg.iais.roberta.syntax.action.communication.BluetoothConnectAction;
 import de.fhg.iais.roberta.syntax.action.communication.BluetoothReceiveAction;
@@ -36,7 +32,6 @@ import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
 import de.fhg.iais.roberta.syntax.action.sound.VolumeAction;
 import de.fhg.iais.roberta.syntax.action.speech.SayTextAction;
 import de.fhg.iais.roberta.syntax.action.speech.SetLanguageAction;
-import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.syntax.lang.expr.NumConst;
 import de.fhg.iais.roberta.syntax.sensor.ExternalSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
@@ -51,17 +46,16 @@ import de.fhg.iais.roberta.syntax.sensor.generic.SoundSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
-import de.fhg.iais.roberta.typecheck.NepoInfo;
 import de.fhg.iais.roberta.visitor.hardware.IEv3Visitor;
+import de.fhg.iais.roberta.visitor.hardware.actor.DifferentialMotorValidatorAndCollectorVisitor;
 
 public class Ev3ValidatorAndCollectorVisitor extends CommonNepoValidatorAndCollectorVisitor implements IEv3Visitor<Void> {
 
-    public static final double DOUBLE_EPS = 1E-7;
+    private final DifferentialMotorValidatorAndCollectorVisitor differentialMotorValidatorAndCollectorVisitor;
 
-    public Ev3ValidatorAndCollectorVisitor(
-        ConfigurationAst robotConfiguration,
-        ClassToInstanceMap<IProjectBean.IBuilder<?>> beanBuilders) {
+    public Ev3ValidatorAndCollectorVisitor(ConfigurationAst robotConfiguration, ClassToInstanceMap<IProjectBean.IBuilder<?>> beanBuilders) {
         super(robotConfiguration, beanBuilders);
+        differentialMotorValidatorAndCollectorVisitor = new DifferentialMotorValidatorAndCollectorVisitor(this, robotConfiguration, beanBuilders);
     }
 
     @Override
@@ -117,30 +111,12 @@ public class Ev3ValidatorAndCollectorVisitor extends CommonNepoValidatorAndColle
 
     @Override
     public Void visitCurveAction(CurveAction<Void> curveAction) {
-        visitMotorDuration(curveAction.getParamLeft().getDuration());
-        visitMotorDuration(curveAction.getParamRight().getDuration());
-
-        requiredComponentVisited(curveAction, curveAction.getParamLeft().getSpeed(), curveAction.getParamRight().getSpeed());
-        checkLeftRightMotorPort(curveAction);
-        checkForZeroSpeedInCurve(curveAction.getParamLeft().getSpeed(), curveAction.getParamRight().getSpeed(), curveAction);
-        return null;
+        return differentialMotorValidatorAndCollectorVisitor.visitCurveAction(curveAction);
     }
 
     @Override
     public Void visitDriveAction(DriveAction<Void> driveAction) {
-        checkLeftRightMotorPort(driveAction);
-        Expr<Void> speed = driveAction.getParam().getSpeed();
-        requiredComponentVisited(driveAction, driveAction.getParam().getSpeed());
-
-        speed.accept(this);
-        MotorDuration<Void> duration = driveAction.getParam().getDuration();
-        if ( duration != null ) {
-            checkForZeroSpeed(speed, driveAction);
-        }
-        visitMotorDuration(duration);
-
-        addLeftAndRightMotorToUsedActors();
-        return null;
+        return differentialMotorValidatorAndCollectorVisitor.visitDriveAction(driveAction);
     }
 
     @Override
@@ -208,61 +184,27 @@ public class Ev3ValidatorAndCollectorVisitor extends CommonNepoValidatorAndColle
 
     @Override
     public Void visitMotorDriveStopAction(MotorDriveStopAction<Void> stopAction) {
-        checkLeftRightMotorPort(stopAction);
-        return null;
+        return differentialMotorValidatorAndCollectorVisitor.visitMotorDriveStopAction(stopAction);
     }
 
     @Override
     public Void visitMotorGetPowerAction(MotorGetPowerAction<Void> motorGetPowerAction) {
-        checkMotorPort(motorGetPowerAction);
-        ConfigurationComponent actor = this.robotConfiguration.getConfigurationComponent(motorGetPowerAction.getUserDefinedPort());
-        usedHardwareBuilder.addUsedActor(new UsedActor(motorGetPowerAction.getUserDefinedPort(), actor.getComponentType()));
-        return null;
+        return differentialMotorValidatorAndCollectorVisitor.visitMotorGetPowerAction(motorGetPowerAction);
     }
 
     @Override
     public Void visitMotorOnAction(MotorOnAction<Void> motorOnAction) {
-        requiredComponentVisited(motorOnAction, motorOnAction.getParam().getSpeed());
-        MotorDuration<Void> duration = motorOnAction.getParam().getDuration();
-        if ( duration != null ) {
-            // Instead of visitDuration ??
-            requiredComponentVisited(motorOnAction, motorOnAction.getParam().getDuration().getValue());
-        } else {
-            checkForZeroSpeed(motorOnAction.getParam().getSpeed(), motorOnAction);
-        }
-
-        checkMotorPort(motorOnAction);
-        if ( motorOnAction.getInfos().getErrorCount() == 0 ) {
-            ConfigurationComponent usedConfigurationBlock = this.robotConfiguration.optConfigurationComponent(motorOnAction.getUserDefinedPort());
-            boolean hasDuration = motorOnAction.getParam().getDuration() != null;
-            if ( usedConfigurationBlock == null ) {
-                addErrorToPhrase(motorOnAction, "CONFIGURATION_ERROR_ACTOR_MISSING");
-            } else if ( SC.OTHER.equals(usedConfigurationBlock.getComponentType()) && hasDuration ) {
-                motorOnAction.addInfo(NepoInfo.error("CONFIGURATION_ERROR_OTHER_NOT_SUPPORTED"));
-            }
-        }
-
-        ConfigurationComponent actor = this.robotConfiguration.getConfigurationComponent(motorOnAction.getUserDefinedPort());
-        usedHardwareBuilder.addUsedActor(new UsedActor(motorOnAction.getUserDefinedPort(), actor.getComponentType()));
-        return null;
+        return differentialMotorValidatorAndCollectorVisitor.visitMotorOnAction(motorOnAction);
     }
 
     @Override
     public Void visitMotorSetPowerAction(MotorSetPowerAction<Void> motorSetPowerAction) {
-        checkMotorPort(motorSetPowerAction);
-        requiredComponentVisited(motorSetPowerAction, motorSetPowerAction.getPower());
-
-        ConfigurationComponent actor = this.robotConfiguration.getConfigurationComponent(motorSetPowerAction.getUserDefinedPort());
-        usedHardwareBuilder.addUsedActor(new UsedActor(motorSetPowerAction.getUserDefinedPort(), actor.getComponentType()));
-        return null;
+        return differentialMotorValidatorAndCollectorVisitor.visitMotorSetPowerAction(motorSetPowerAction);
     }
 
     @Override
     public Void visitMotorStopAction(MotorStopAction<Void> motorStopAction) {
-        checkMotorPort(motorStopAction);
-        ConfigurationComponent actor = this.robotConfiguration.getConfigurationComponent(motorStopAction.getUserDefinedPort());
-        usedHardwareBuilder.addUsedActor(new UsedActor(motorStopAction.getUserDefinedPort(), actor.getComponentType()));
-        return null;
+        return differentialMotorValidatorAndCollectorVisitor.visitMotorStopAction(motorStopAction);
     }
 
     @Override
@@ -324,7 +266,7 @@ public class Ev3ValidatorAndCollectorVisitor extends CommonNepoValidatorAndColle
         requiredComponentVisited(toneAction, toneAction.getDuration(), toneAction.getFrequency());
 
         if ( toneAction.getDuration().getKind().hasName("NUM_CONST") ) {
-            Double toneActionConst = Double.valueOf(((NumConst<Void>) toneAction.getDuration()).getValue());
+            double toneActionConst = Double.parseDouble(((NumConst<Void>) toneAction.getDuration()).getValue());
             if ( toneActionConst <= 0 ) {
                 addWarningToPhrase(toneAction, "BLOCK_NOT_EXECUTED");
             }
@@ -341,16 +283,7 @@ public class Ev3ValidatorAndCollectorVisitor extends CommonNepoValidatorAndColle
 
     @Override
     public Void visitTurnAction(TurnAction<Void> turnAction) {
-        checkLeftRightMotorPort(turnAction);
-        requiredComponentVisited(turnAction, turnAction.getParam().getSpeed());
-
-        Expr<Void> speed = turnAction.getParam().getSpeed();
-        MotorDuration<Void> duration = turnAction.getParam().getDuration();
-        if ( duration != null ) {
-            checkForZeroSpeed(speed, turnAction);
-        }
-        visitMotorDuration(duration);
-        return null;
+        return differentialMotorValidatorAndCollectorVisitor.visitTurnAction(turnAction);
     }
 
     @Override
@@ -432,97 +365,4 @@ public class Ev3ValidatorAndCollectorVisitor extends CommonNepoValidatorAndColle
         }
     }
 
-    private void checkLeftRightMotorPort(Phrase<Void> driveAction) {
-        if ( validNumberOfMotors(driveAction) ) {
-            ConfigurationComponent leftMotor = this.robotConfiguration.getFirstMotor(SC.LEFT);
-            ConfigurationComponent rightMotor = this.robotConfiguration.getFirstMotor(SC.RIGHT);
-            checkLeftMotorPresenceAndRegulation(driveAction, leftMotor);
-            checkRightMotorPresenceAndRegulation(driveAction, rightMotor);
-            checkMotorRotationDirection(driveAction, leftMotor, rightMotor);
-        }
-    }
-
-    protected boolean validNumberOfMotors(Phrase<Void> driveAction) {
-        if ( this.robotConfiguration.getMotors(SC.RIGHT).size() > 1 ) {
-            addErrorToPhrase(driveAction, "CONFIGURATION_ERROR_MULTIPLE_RIGHT_MOTORS");
-            return false;
-        }
-        if ( this.robotConfiguration.getMotors(SC.LEFT).size() > 1 ) {
-            addErrorToPhrase(driveAction, "CONFIGURATION_ERROR_MULTIPLE_LEFT_MOTORS");
-            return false;
-        }
-        return true;
-    }
-
-    private void checkRightMotorPresenceAndRegulation(Phrase<Void> driveAction, ConfigurationComponent rightMotor) {
-        if ( rightMotor == null ) {
-            addErrorToPhrase(driveAction, "CONFIGURATION_ERROR_MOTOR_RIGHT_MISSING");
-        } else {
-            checkIfMotorRegulated(driveAction, rightMotor, "CONFIGURATION_ERROR_MOTOR_RIGHT_UNREGULATED");
-        }
-    }
-
-    private void checkLeftMotorPresenceAndRegulation(Phrase<Void> driveAction, ConfigurationComponent leftMotor) {
-        if ( leftMotor == null ) {
-            addErrorToPhrase(driveAction, "CONFIGURATION_ERROR_MOTOR_LEFT_MISSING");
-        } else {
-            checkIfMotorRegulated(driveAction, leftMotor, "CONFIGURATION_ERROR_MOTOR_LEFT_UNREGULATED");
-        }
-    }
-
-    private void checkIfMotorRegulated(Phrase<Void> driveAction, ConfigurationComponent motor, String errorMsg) {
-        if ( !motor.getProperty(SC.MOTOR_REGULATION).equals(SC.TRUE) ) {
-            addErrorToPhrase(driveAction, errorMsg);
-        }
-    }
-
-    private void checkMotorRotationDirection(Phrase<Void> driveAction, ConfigurationComponent m1, ConfigurationComponent m2) {
-        if ( (m1 != null) && (m2 != null) && !m1.getProperty(SC.MOTOR_REVERSE).equals(m2.getProperty(SC.MOTOR_REVERSE)) ) {
-            addErrorToPhrase(driveAction, "CONFIGURATION_ERROR_MOTORS_ROTATION_DIRECTION");
-        }
-    }
-
-    protected void checkMotorPort(MoveAction<Void> action) {
-        if ( this.robotConfiguration.optConfigurationComponent(action.getUserDefinedPort()) == null ) {
-            addErrorToPhrase(action, "CONFIGURATION_ERROR_MOTOR_MISSING");
-        }
-    }
-
-    private void checkForZeroSpeed(Expr<Void> speed, Action<Void> action) {
-        if ( speed.getKind().hasName("NUM_CONST") ) {
-            NumConst<Void> speedNumConst = (NumConst<Void>) speed;
-            if ( Math.abs(Double.valueOf(speedNumConst.getValue())) < DOUBLE_EPS ) {
-                addWarningToPhrase(action, "MOTOR_SPEED_0");
-            }
-        }
-    }
-
-    private void checkForZeroSpeedInCurve(Expr<Void> speedLeft, Expr<Void> speedRight, Action<Void> action) {
-        if ( speedLeft.getKind().hasName("NUM_CONST") && speedRight.getKind().hasName("NUM_CONST") ) {
-            Double speedLeftNumConst = Double.valueOf(((NumConst<Void>) speedLeft).getValue());
-            Double speedRightNumConst = Double.valueOf(((NumConst<Void>) speedRight).getValue());
-            if ( (Math.abs(speedLeftNumConst) < DOUBLE_EPS) && (Math.abs(speedRightNumConst) < DOUBLE_EPS) ) {
-                addWarningToPhrase(action, "BLOCK_NOT_EXECUTED");
-            }
-        }
-    }
-
-    private void visitMotorDuration(MotorDuration<Void> duration) {
-        // TODO
-        if ( duration != null ) {
-            duration.getValue().accept(this);
-        }
-    }
-
-    private void addLeftAndRightMotorToUsedActors() {
-        //TODO: remove the check
-        if ( this.robotConfiguration != null ) {
-            String userDefinedLeftPortName = this.robotConfiguration.getFirstMotor("LEFT").getUserDefinedPortName();
-            String userDefinedRightPortName = this.robotConfiguration.getFirstMotor("RIGHT").getUserDefinedPortName();
-            if ( (userDefinedLeftPortName != null) && (userDefinedRightPortName != null) ) {
-                usedHardwareBuilder.addUsedActor(new UsedActor(userDefinedLeftPortName, SC.LARGE));
-                usedHardwareBuilder.addUsedActor(new UsedActor(userDefinedRightPortName, SC.LARGE));
-            }
-        }
-    }
 }

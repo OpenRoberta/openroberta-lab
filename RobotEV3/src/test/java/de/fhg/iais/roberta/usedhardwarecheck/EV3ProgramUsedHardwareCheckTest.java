@@ -8,8 +8,10 @@ import org.junit.Test;
 import com.google.common.collect.ImmutableClassToInstanceMap;
 
 import de.fhg.iais.roberta.Ev3LejosAstTest;
+import de.fhg.iais.roberta.bean.ErrorAndWarningBean;
+import de.fhg.iais.roberta.bean.IProjectBean;
 import de.fhg.iais.roberta.bean.UsedHardwareBean;
-import de.fhg.iais.roberta.bean.UsedHardwareBean.Builder;
+import de.fhg.iais.roberta.bean.UsedMethodBean;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.util.test.UnitTestHelper;
 import de.fhg.iais.roberta.visitor.validate.Ev3ValidatorAndCollectorVisitor;
@@ -18,17 +20,25 @@ public class EV3ProgramUsedHardwareCheckTest extends Ev3LejosAstTest {
 
     private void runTest(String pathToXml, String sensorResult, String actorResult) throws Exception {
         List<List<Phrase<Void>>> phrasesOfPhrases = UnitTestHelper.getProgramAst(testFactory, pathToXml);
-        UsedHardwareBean.Builder builder = new Builder();
+        UsedHardwareBean.Builder usedHardwareBuilder = new UsedHardwareBean.Builder();
+        UsedMethodBean.Builder usedMethodBuilder = new UsedMethodBean.Builder();
+        ErrorAndWarningBean.Builder errorAndWarningBuilder = new ErrorAndWarningBean.Builder();
+
+        ImmutableClassToInstanceMap.Builder<IProjectBean.IBuilder<?>> map = new ImmutableClassToInstanceMap.Builder<>();
+        map.put(UsedMethodBean.Builder.class, usedMethodBuilder);
+        map.put(UsedHardwareBean.Builder.class, usedHardwareBuilder);
+        map.put(ErrorAndWarningBean.Builder.class, errorAndWarningBuilder);
+
         Ev3ValidatorAndCollectorVisitor checkVisitor =
             new Ev3ValidatorAndCollectorVisitor(
                 makeLargeLargeMediumTouchGyroColorUltrasonic(),
-                ImmutableClassToInstanceMap.of(UsedHardwareBean.Builder.class, builder));
+                map.build());
         for ( List<Phrase<Void>> phrases : phrasesOfPhrases ) {
             for ( Phrase<Void> phrase : phrases ) {
                 phrase.accept(checkVisitor);
             }
         }
-        UsedHardwareBean bean = builder.build();
+        UsedHardwareBean bean = usedHardwareBuilder.build();
         Assert.assertEquals(sensorResult, bean.getUsedSensors().toString());
         Assert.assertEquals(actorResult, bean.getUsedActors().toString());
     }
