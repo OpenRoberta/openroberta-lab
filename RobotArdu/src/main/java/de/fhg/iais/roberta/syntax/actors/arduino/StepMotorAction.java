@@ -1,4 +1,4 @@
-package de.fhg.iais.roberta.syntax.actors.arduino.bob3;
+package de.fhg.iais.roberta.syntax.actors.arduino;
 
 import java.util.List;
 
@@ -28,44 +28,38 @@ import de.fhg.iais.roberta.util.dbc.Assert;
  * <br>
  * To create an instance from this class use the method {@link #make(ColorConst, BlocklyBlockProperties, BlocklyComment)}.<br>
  */
-public class LedOnAction<V> extends Action<V> {
-    private final Expr<V> ledColor;
-    private final String side;
-
-    private LedOnAction(String side, Expr<V> ledColor, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockTypeContainer.getByName("BOB3_RGB_LED_ON"), properties, comment);
-        Assert.notNull(ledColor);
-        this.ledColor = ledColor;
-        this.side = side;
+public class StepMotorAction<V> extends Action<V> {
+    private final Expr<V> stepMotorPos;
+    
+    private StepMotorAction(Expr<V> stepMotorPos, BlocklyBlockProperties properties, BlocklyComment comment) {
+        super(BlockTypeContainer.getByName("FESTOBIONIC_STEPMOTOR"), properties, comment);
+        Assert.notNull(stepMotorPos);
+        this.stepMotorPos = stepMotorPos;
         setReadOnly();
     }
 
     /**
-     * Creates instance of {@link LedOnAction}. This instance is read only and can not be modified.
+     * Creates instance of {@link StepMotorAction}. This instance is read only and can not be modified.
      *
      * @param ledColor {@link ColorConst} color of the led; must <b>not</b> be null,
      * @param properties of the block (see {@link BlocklyBlockProperties}),
      * @param comment added from the user,
-     * @return read only object of class {@link LedOnAction}
+     * @return read only object of class {@link StepMotorAction}
      */
-    private static <V> LedOnAction<V> make(String side, Expr<V> ledColor, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new LedOnAction<>(side, ledColor, properties, comment);
+    private static <V> StepMotorAction<V> make(Expr<V> stepMotorPos, BlocklyBlockProperties properties, BlocklyComment comment) {
+        return new StepMotorAction<>(stepMotorPos, properties, comment);
     }
 
     /**
      * @return {@link ColorConst} color of the led.
      */
-    public Expr<V> getLedColor() {
-        return this.ledColor;
+    public Expr<V> getStepMotorPos() {
+        return this.stepMotorPos;
     }
 
     @Override
     public String toString() {
-        return "LedOnAction [ " + this.ledColor + " ]";
-    }
-
-    public String getSide() {
-        return this.side;
+        return "StepMotorAction [ " + this.stepMotorPos + " ]";
     }
 
     /**
@@ -77,12 +71,12 @@ public class LedOnAction<V> extends Action<V> {
      */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
         List<Value> values = Jaxb2Ast.extractValues(block, (short) 1);
-        List<Field> fields = Jaxb2Ast.extractFields(block, (short) 1);
-        String side = Jaxb2Ast.extractField(fields, BlocklyConstants.LED + BlocklyConstants.SIDE);
+        //List<Field> fields = Jaxb2Ast.extractFields(block, (short) 1);
+        //String side = Jaxb2Ast.extractField(fields, BlocklyConstants.VALUE + BlocklyConstants.SIDE);
 
-        Phrase<V> ledColor = helper.extractValue(values, new ExprParam(BlocklyConstants.COLOR, BlocklyType.COLOR));
+        Phrase<V> stepMotorPos = helper.extractValue(values, new ExprParam(BlocklyConstants.VALUE, BlocklyType.NUMBER_INT));
 
-        return LedOnAction.make(side, Jaxb2Ast.convertPhraseToExpr(ledColor), Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
+        return StepMotorAction.make(Jaxb2Ast.convertPhraseToExpr(stepMotorPos), Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
 
     }
 
@@ -90,8 +84,8 @@ public class LedOnAction<V> extends Action<V> {
     public Block astToBlock() {
         Block jaxbDestination = new Block();
         Ast2Jaxb.setBasicProperties(this, jaxbDestination);
-        Ast2Jaxb.addField(jaxbDestination, BlocklyConstants.LED + BlocklyConstants.SIDE, this.side);
-        Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.COLOR, this.ledColor);
+		//Ast2Jaxb.addField(jaxbDestination, BlocklyConstants.VALUE + BlocklyConstants.SIDE, this.side);
+        Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.VALUE, this.stepMotorPos);
         return jaxbDestination;
 
     }

@@ -1258,6 +1258,7 @@ Blockly.Msg.PORT_KNEE = "knä";
 Blockly.Msg.PORT_SHOULDER = "axel";
 Blockly.Msg.PORT_WHEEL = "wheel";  // untranslated
 Blockly.Msg.PORT_WRIST = "vrist";
+Blockly.Msg.POSITION = "position";  // untranslated
 Blockly.Msg.POTENTIOMETER_TOOLTIP = "Står för en potentiometer";
 Blockly.Msg.PROCEDURES_ALLOW_STATEMENTS = "tillåta uttalanden";
 Blockly.Msg.PROCEDURES_BEFORE_PARAMS = "med:";

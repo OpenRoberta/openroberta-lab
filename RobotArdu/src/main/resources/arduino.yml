@@ -35,12 +35,16 @@ block:
       type: [bob3Actions_recall]
   BOB3_RGB_LED_ON:
       category: ACTOR
-      implementor: de.fhg.iais.roberta.syntax.actors.arduino.bob3.LedOnAction
+      implementor: de.fhg.iais.roberta.syntax.actors.arduino.LedOnAction
       type: [makeblockActions_leds_on]
   BOB3_RGB_LED_OFF:
       category: ACTOR
-      implementor: de.fhg.iais.roberta.syntax.actors.arduino.bob3.LedOffAction
+      implementor: de.fhg.iais.roberta.syntax.actors.arduino.LedOffAction
       type: [makeblockActions_leds_off]
+  FESTOBIONIC_STEPMOTOR:
+      category: ACTOR
+      implementor: de.fhg.iais.roberta.syntax.actors.arduino.StepMotorAction
+      type: [festobionicActions_stepmotor]
   #MBOT
   ARDU_JOYSTICK_GETSAMPLE:
       category: SENSOR
@@ -175,7 +179,7 @@ configuration:
   LPS22HB:  [robConf_lps22hb]
   HTS221: [robConf_hts221]
   OLEDSSD1306I2C: [robConf_oledssd1306i2c]
-
+  
 mode:
   GPS: [LATITUDE, LONGITUDE, ALTITUDE, SPEED, DATE, TIME]
   ENVIRONMENTAL: [TEMPERATURE, HUMIDITY, PRESSURE, IAQ, CALIBRATION, CO2EQUIVALENT, VOCEQUIVALENT]

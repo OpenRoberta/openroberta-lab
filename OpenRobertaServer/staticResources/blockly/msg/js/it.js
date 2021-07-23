@@ -1258,6 +1258,7 @@ Blockly.Msg.PORT_KNEE = "ginocchio";
 Blockly.Msg.PORT_SHOULDER = "spalla";
 Blockly.Msg.PORT_WHEEL = "wheel";  // untranslated
 Blockly.Msg.PORT_WRIST = "polso";
+Blockly.Msg.POSITION = "position";  // untranslated
 Blockly.Msg.POTENTIOMETER_TOOLTIP = "rappresenta un potenziometro.";
 Blockly.Msg.PROCEDURES_ALLOW_STATEMENTS = "consenti dichiarazioni";
 Blockly.Msg.PROCEDURES_BEFORE_PARAMS = "conː";

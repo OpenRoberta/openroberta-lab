@@ -1500,6 +1500,7 @@
 	"FOURDIGITDISPLAY_CLEAR_TOOLTIP": "Clears the 4-Digit Display.",
 	"COLON": "colon",
 	"FROM_POSITION": "from position",
+	"POSITION": "position",
 	"LEDBAR": "LED Bar",
 	"LEDBAR_TOOLTIP": "Represents a Grove LED Bar v2.0 by Seeed.",
 	"LEDBAR_SET_TOOLTIP": "Sets the specified LED [0-9] on the LED Bar to the given brightness [0-8].",
