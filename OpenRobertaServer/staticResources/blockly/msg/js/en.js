@@ -1258,6 +1258,7 @@ Blockly.Msg.PORT_KNEE = "knee";
 Blockly.Msg.PORT_SHOULDER = "shoulder";
 Blockly.Msg.PORT_WHEEL = "wheel";
 Blockly.Msg.PORT_WRIST = "wrist";
+Blockly.Msg.POSITION = "position";
 Blockly.Msg.POTENTIOMETER_TOOLTIP = "Represents a potentiometer.";
 Blockly.Msg.PROCEDURES_ALLOW_STATEMENTS = "allow statements";
 Blockly.Msg.PROCEDURES_BEFORE_PARAMS = "with:";

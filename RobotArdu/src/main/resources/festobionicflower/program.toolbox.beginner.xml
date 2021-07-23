@@ -1,0 +1,124 @@
+<toolbox_set id="toolbox" style="display: none">
+    <category name="TOOLBOX_ACTION" svg="true">
+      <block type="robActions_serial_print">
+            <value name="OUT">
+                <block type="text">
+                    <field name="TEXT">Hallo</field>
+                </block>
+            </value>
+        </block>
+        <block type="makeblockActions_leds_on">
+        <value name="COLOR">
+          <block type="robColour_picker">
+            <field name="COLOUR">#cc0000</field>
+          </block>
+        </value>
+      </block>
+      <block type="makeblockActions_leds_off"/>
+      <block type="festobionicActions_stepmotor">
+        <value name="VALUE">
+          <block type="math_number" intask="true">
+            <field name="NUM">0</field>
+          </block>
+        </value>
+      </block>
+    </category>
+    <category name="TOOLBOX_SENSOR" svg="true">
+        <block type="robSensors_touch_getSample"></block>
+        <block type="robSensors_light_getSample"></block>
+        <block type="robSensors_timer_getSample"/>
+        <block type="robSensors_timer_reset"></block>
+    </category>
+    <category name="TOOLBOX_CONTROL" svg="true">
+        <block type="robControls_if" />
+        <block type="robControls_ifElse" />
+        <block type="robControls_loopForever" />
+        <block type="controls_repeat_ext">
+            <value name="TIMES">
+                <block type="math_number">
+                    <field name="NUM">10</field>
+                </block>
+            </value>
+        </block>
+        <block type="robControls_wait_time">
+            <value name="WAIT">
+                <block type="math_number">
+                    <field name="NUM">500</field>
+                </block>
+            </value>
+        </block>
+        <block type="robControls_wait_for">
+            <value name="WAIT0">
+                <block type="logic_compare">
+                    <field name="OP">GT</field>
+                    <value name="A">
+                        <block type="robSensors_getSample">
+                        </block>
+                    </value>
+                    <value name="B">
+                        <block type="math_number">
+                            <field name="NUM">500</field>
+                        </block>
+                    </value>
+                </block>
+            </value>
+        </block>
+    </category>
+    <category name="TOOLBOX_LOGIC" svg="true">
+        <block type="logic_compare" />
+        <block type="logic_operation" />
+        <block type="logic_boolean" />
+    </category>
+    <category name="TOOLBOX_MATH" svg="true">
+        <block type="math_number" />
+        <block type="math_arithmetic" />
+    </category>
+    <category name="TOOLBOX_TEXT" svg="true">
+        <block type="text" />
+        <block type="text_comment" />
+    </category>
+  <category name="TOOLBOX_COLOUR" svg="true">
+    <block type="robColour_picker">
+      <field name="COLOUR">#999999</field>
+    </block>
+    <block type="robColour_picker">
+      <field name="COLOUR">#cc0000</field>
+    </block>
+    <block type="robColour_picker">
+      <field name="COLOUR">#ff6600</field>
+    </block>
+    <block type="robColour_picker">
+      <field name="COLOUR">#ffcc33</field>
+    </block>
+    <block type="robColour_picker">
+      <field name="COLOUR">#33cc00</field>
+    </block>
+    <block type="robColour_picker">
+      <field name="COLOUR">#00cccc</field>
+    </block>
+    <block type="robColour_picker">
+      <field name="COLOUR">#3366ff</field>
+    </block>
+    <block type="robColour_picker">
+      <field name="COLOUR">#cc33cc</field>
+    </block>
+    <block type="naoColour_rgb">
+      <value name="RED">
+        <block type="math_number" intask="true">
+          <field name="NUM">120</field>
+        </block>
+      </value>
+      <value name="GREEN">
+        <block type="math_number" intask="true">
+          <field name="NUM">120</field>
+        </block>
+      </value>
+      <value name="BLUE">
+        <block type="math_number" intask="true">
+          <field name="NUM">120</field>
+        </block>
+      </value>
+    </block>
+  </category>
+    <category name="TOOLBOX_VARIABLE" custom="VARIABLE" svg="true" />
+</toolbox_set>

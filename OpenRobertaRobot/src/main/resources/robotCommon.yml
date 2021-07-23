@@ -874,7 +874,7 @@ configuration:
   STEPMOTOR: [ robConf_stepmotor ]
   TEMPERATURE: [ robConf_temperature, robBrick_temperature ]
   TIMER: [ robBrick_timer ]
-  TOUCH: [ robBrick_touch ]
+  TOUCH: [ robBrick_touch ,robConf_touch]
   ULTRASONIC: [ robConf_ultrasonic, robBrick_ultrasonic ]
   WEDO: [ robBrick_WeDo-Brick ]
   WIRELESS: [ robConf_wireless ]

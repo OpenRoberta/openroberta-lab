@@ -1258,6 +1258,7 @@ Blockly.Msg.PORT_KNEE = "коліно";
 Blockly.Msg.PORT_SHOULDER = "плече";
 Blockly.Msg.PORT_WHEEL = "wheel";  // untranslated
 Blockly.Msg.PORT_WRIST = "зап'ястя";
+Blockly.Msg.POSITION = "position";  // untranslated
 Blockly.Msg.POTENTIOMETER_TOOLTIP = "Символізує потенціометр";
 Blockly.Msg.PROCEDURES_ALLOW_STATEMENTS = "дозволити дії";
 Blockly.Msg.PROCEDURES_BEFORE_PARAMS = "з:";

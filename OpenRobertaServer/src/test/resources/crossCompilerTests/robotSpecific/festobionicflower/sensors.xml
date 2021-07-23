@@ -1,0 +1,176 @@
+<export xmlns="http://de.fhg.iais.roberta.blockly">
+    <program>
+        <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="festobionic" xmlversion="3.1" description="" tags="">
+            <instance x="-2172" y="-664">
+                <block type="robControls_start_ardu" id="D})/z!#B6yD@Yfz-dXMy" intask="true" deletable="false">
+                    <mutation declare="true"></mutation>
+                    <field name="DEBUG"></field>
+                    <statement name="ST">
+                        <block type="robGlobalVariables_declare" id="[*H;:vX2r*VN`B{qInky" intask="true" deletable="false" movable="false">
+                            <mutation next="true" declaration_type="Number"></mutation>
+                            <field name="VAR">numberVar</field>
+                            <field name="TYPE">Number</field>
+                            <value name="VALUE">
+                                <block type="math_number" id="l)xthJ.3(=~3!h!;foL|" intask="true">
+                                    <field name="NUM">0</field>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="robGlobalVariables_declare" id="m]F2pABR0z1rLqYv(oDl" intask="true" deletable="false" movable="false">
+                            <mutation next="true" declaration_type="Boolean"></mutation>
+                            <field name="VAR">booleanVar</field>
+                            <field name="TYPE">Boolean</field>
+                            <value name="VALUE">
+                                <block type="logic_boolean" id="`mwc~5=KphbEy7|9)ch+" intask="true">
+                                    <field name="BOOL">TRUE</field>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="robGlobalVariables_declare" id="Lbq7anOQS{qu.Gwf`/%u" intask="true" deletable="false" movable="false">
+                            <mutation next="true" declaration_type="String"></mutation>
+                            <field name="VAR">stringVar</field>
+                            <field name="TYPE">String</field>
+                            <value name="VALUE">
+                                <block type="text" id="_:%().}yahHAh}8N8MWS" intask="true">
+                                    <field name="TEXT"></field>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="robGlobalVariables_declare" id="~@7M0anMppylkakL4KVD" intask="true" deletable="false" movable="false">
+                            <mutation next="true" declaration_type="Array_Number"></mutation>
+                            <field name="VAR">numberList</field>
+                            <field name="TYPE">Array_Number</field>
+                            <value name="VALUE">
+                                <block type="robLists_create_with" id="z@gH1YsC,(lRtp8jVQLQ" intask="true">
+                                    <mutation items="2" list_type="Number"></mutation>
+                                    <field name="LIST_TYPE">Number</field>
+                                    <value name="ADD0">
+                                        <block type="math_number" id="QZVIFBJ^cw5c6zd}eR82" intask="true">
+                                            <field name="NUM">0</field>
+                                        </block>
+                                    </value>
+                                    <value name="ADD1">
+                                        <block type="math_number" id="30opSHT9yPrG7cU`nAH-" intask="true">
+                                            <field name="NUM">0</field>
+                                        </block>
+                                    </value>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="robGlobalVariables_declare" id="jI|;0P8xG@lRiLet;;:{" intask="true" deletable="false" movable="false">
+                            <mutation next="true" declaration_type="Array_Boolean"></mutation>
+                            <field name="VAR">booleanList</field>
+                            <field name="TYPE">Array_Boolean</field>
+                            <value name="VALUE">
+                                <block type="robLists_create_with" id="]!LhrONN?*2uWv9OjmyK" intask="true">
+                                    <mutation items="2" list_type="Boolean"></mutation>
+                                    <field name="LIST_TYPE">Boolean</field>
+                                    <value name="ADD0">
+                                        <block type="logic_boolean" id="k=9Vs`n51EkCl2Oxj~yE" intask="true">
+                                            <field name="BOOL">TRUE</field>
+                                        </block>
+                                    </value>
+                                    <value name="ADD1">
+                                        <block type="logic_boolean" id="fMQWfA[|V@[M|3yNzpiH" intask="true">
+                                            <field name="BOOL">TRUE</field>
+                                        </block>
+                                    </value>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="robGlobalVariables_declare" id="t9K@cnB)uj?s0).,CvEh" intask="true" deletable="false" movable="false">
+                            <mutation next="false" declaration_type="Array_String"></mutation>
+                            <field name="VAR">stringList</field>
+                            <field name="TYPE">Array_String</field>
+                            <value name="VALUE">
+                                <block type="robLists_create_with" id="+bTR?9FK20rjG;v9wKm]" intask="true">
+                                    <mutation items="2" list_type="String"></mutation>
+                                    <field name="LIST_TYPE">String</field>
+                                    <value name="ADD0">
+                                        <block type="text" id="EBIb89cq4*@H(^WAQDN+" intask="true">
+                                            <field name="TEXT"></field>
+                                        </block>
+                                    </value>
+                                    <value name="ADD1">
+                                        <block type="text" id="d7RMhp,#Njx?K1_DWI;3" intask="true">
+                                            <field name="TEXT"></field>
+                                        </block>
+                                    </value>
+                                </block>
+                            </value>
+                        </block>
+                    </statement>
+                </block>
+                <block type="robControls_loopForever_ardu" id="oNMW+*oSI,ts;FLc%tXY" intask="true" deletable="false" movable="false">
+                    <statement name="DO">
+                        <block type="robProcedures_callnoreturn" id="NqM!U{%LO!mS98yB(cBj" intask="true">
+                            <mutation name="sensors"></mutation>
+                        </block>
+                        <block type="robProcedures_callnoreturn" id="4,skYdCHH4`V[`GBr{r1" intask="true">
+                            <mutation name="sensorsWaitUntil"></mutation>
+                        </block>
+                    </statement>
+                </block>
+            </instance>
+            <instance x="-1391" y="-651">
+                <block type="robProcedures_defnoreturn" id="%QFDQagBSbX`.g[]Z`ev" intask="true">
+                    <mutation declare="false"></mutation>
+                    <field name="NAME">sensors</field>
+                    <statement name="STACK">
+                        <block type="robActions_serial_print" id="_Eldb9_?_`j^LOa67bt-" intask="true">
+                            <value name="OUT">
+                                <block type="robSensors_timer_getSample" id="~40oKwYF!VLemgLa!4rn" intask="true">
+                                    <mutation mode="VALUE"></mutation>
+                                    <field name="MODE">VALUE</field>
+                                    <field name="SENSORPORT">1</field>
+                                    <field name="SLOT"></field>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="robSensors_timer_reset" id="GST-EJUG|nfw!uu1|ZRg" intask="true">
+                            <field name="SENSORPORT">1</field>
+                        </block>
+                    </statement>
+                </block>
+            </instance>
+            <instance x="-1392" y="-379">
+                <block type="robProcedures_defnoreturn" id="jo[A#s!%WGMo7jIWE9/x" intask="true">
+                    <mutation declare="false"></mutation>
+                    <field name="NAME">sensorsWaitUntil</field>
+                    <statement name="STACK">
+                        <block type="robControls_wait_for" id="@MWRrtId/sarI*a_|x5T" intask="true">
+                            <value name="WAIT0">
+                                <block type="logic_compare" id="zG4E[)z}o*]1K^NJQT8{" intask="true">
+                                    <field name="OP">GT</field>
+                                    <value name="A">
+                                        <block type="robSensors_getSample" id="6P_vQWy0,Co.mE6YnF+#" intask="true">
+                                            <mutation input="TIMER_VALUE"></mutation>
+                                            <field name="SENSORTYPE">TIMER_VALUE</field>
+                                            <field name="SENSORPORT">1</field>
+                                            <field name="SLOT"></field>
+                                        </block>
+                                    </value>
+                                    <value name="B">
+                                        <block type="math_number" id="O9abpy1KiLT)69=4T*D!" intask="true">
+                                            <field name="NUM">500</field>
+                                        </block>
+                                    </value>
+                                </block>
+                            </value>
+                        </block>
+                    </statement>
+                </block>
+            </instance>
+        </block_set>
+    </program>
+    <config>
+        <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="festobionic" xmlversion="3.1" description="" tags="">
+            <instance x="375" y="-176">
+                <block type="robConf_led" id="1" intask="true">
+                    <field name="NAME">L</field>
+                    <field name="INPUT">LED_BUILTIN</field>
+                </block>
+            </instance>
+        </block_set>
+    </config>
+</export>

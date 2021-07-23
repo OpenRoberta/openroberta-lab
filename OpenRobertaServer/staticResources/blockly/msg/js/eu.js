@@ -1258,6 +1258,7 @@ Blockly.Msg.PORT_KNEE = "belauna";
 Blockly.Msg.PORT_SHOULDER = "sorbalda";
 Blockly.Msg.PORT_WHEEL = "wheel";  // untranslated
 Blockly.Msg.PORT_WRIST = "eskumuturra";
+Blockly.Msg.POSITION = "position";  // untranslated
 Blockly.Msg.POTENTIOMETER_TOOLTIP = "Potentziometro bat irudikatzen du.";
 Blockly.Msg.PROCEDURES_ALLOW_STATEMENTS = "allow statements";  // untranslated
 Blockly.Msg.PROCEDURES_BEFORE_PARAMS = "honekin";
