@@ -86,28 +86,28 @@ function getSensorValueColor(id: number) {
     if (0 <= id && id < 4) {
         if (isSensorValueValid(id) == true) { 
             if (propFromORB.Sensor[id].value[0] == 0) {
-                return ("No Color");
+                return ("NONE");
             }
             if (propFromORB.Sensor[id].value[0] == 1) {
-                return ("Black");
+                return ("BLACK");
             }
             if (propFromORB.Sensor[id].value[0] == 2) {
-                return ("Blue");
+                return ("BLUE");
             }
             if (propFromORB.Sensor[id].value[0] == 3) {
-                return ("Green");
+                return ("GREEN");
             }
             if (propFromORB.Sensor[id].value[0] == 4) {
-                return ("Yellow");
+                return ("YELLOW");
             }
             if (propFromORB.Sensor[id].value[0] == 5) {
-                return ("Red");
+                return ("RED");
             }
             if (propFromORB.Sensor[id].value[0] == 6) {
-                return ("White");
+                return ("WHITE");
             }
             if (propFromORB.Sensor[id].value[0] == 7) {
-                return ("Brown");
+                return ("BROWN");
             }
         }
     }
@@ -154,6 +154,10 @@ function getSensorValueTouch(id: number) {
         }
     }
     return (0);
+}
+
+function getEncoderValue(port: number) {
+    return(getMotorPos(port));
 }
 
 function setMotor(id: number, mode: number, speed: number, pos: number) {
@@ -300,6 +304,23 @@ export class RobotOrbBehaviour extends ARobotBehaviour {
         this.toDisplayFct({ "clear": true });
     };
 
+    public mappPortMotor(port: any) {
+        //From MotorBlock come only letter, It must be mapped to numbers.
+        //Think of a better solution
+        if (port == 'a') {
+            return 1;
+        }
+        if (port == 'b') {
+            return 2;
+        }
+        if (port == 'c') {
+            return 3;
+        }
+        if (port == 'd') {
+            return 4;
+        }
+    }
+
     public getSample = function(s, name: string, sensor: string, port: number, slot: string) {
         if (sensor == "ultrasonic") {
             cmdConfigToORB.configToORB.Sensor[port - 1].type = 1;
@@ -365,24 +386,14 @@ export class RobotOrbBehaviour extends ARobotBehaviour {
                 s.push(getSensorValue(port));
             }
         }
+        else if (sensor == C.TIMER){
+            s.push( this.timerGet( port ) );
+            return;
+        }
+        else if (sensor == "encoder"){
+            s.push(getEncoderValue(this.mappPortMotor(port)));
+        }
         return;
-    }
-
-    public mappPortMotor(port: any) {
-        //From MotorBlock come only letter, It must be mapped to numbers.
-        //Think of a better solution
-        if (port == 'a') {
-            return 1;
-        }
-        if (port == 'b') {
-            return 2;
-        }
-        if (port == 'c') {
-            return 3;
-        }
-        if (port == 'd') {
-            return 4;
-        }
     }
 
     public motorOnAction(name: string, port: any, duration: number, speed: number) {
@@ -396,7 +407,6 @@ export class RobotOrbBehaviour extends ARobotBehaviour {
         else {
             return (this.setMoveToMotorOnProcent(port, speed, duration));
         }
-        return 0;
     }
 
     public motorStopAction(name: string, port: number) {
@@ -420,7 +430,6 @@ export class RobotOrbBehaviour extends ARobotBehaviour {
             }
             return (this.setMoveToProcent(speed, speed, distance, distance));
         }
-        return 0;
     }
 
     public curveAction(name: string, direction: string, speedL: number, speedR: number, distance: number) {
@@ -460,7 +469,6 @@ export class RobotOrbBehaviour extends ARobotBehaviour {
             let distance = angle * Math.PI / 360 * driveConfig.trackWidth;
             return (this.setMoveToProcent(speed, speed, distance, -distance));
         }
-        return 0;
     }
 
 
@@ -697,13 +705,21 @@ export class RobotOrbBehaviour extends ARobotBehaviour {
             }
         }
     }
-    public encoderReset(_port: string): void {
-        throw new Error("Method not implemented.");
-    }
 
-    public gyroReset(_port: number): void {
+    public encoderReset(port: string) {
+		U.debug('encoderReset for ' + port);
+		this.hardwareState.actions.encoder = {};
+		if (port == C.MOTOR_LEFT) {
+			this.hardwareState.actions.encoder.leftReset = true;
+		}
+		else {
+			this.hardwareState.actions.encoder.rightReset = true;
+		}
+	}
+
+	public gyroReset(_port: number): void {
         throw new Error("Method not implemented.");
-    }
+	}
 
     public lightAction(_mode: string, _color: string, _port: string): void {
         throw new Error("Method not implemented.");

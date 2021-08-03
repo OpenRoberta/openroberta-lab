@@ -108,7 +108,7 @@ define(["require", "exports", "./interpreter.aRobotBehaviour", "./interpreter.co
                     return ("Yellow");
                 }
                 if (propFromORB.Sensor[id].value[0] == 5) {
-                    return ("Red");
+                    return ("RED");
                 }
                 if (propFromORB.Sensor[id].value[0] == 6) {
                     return ("White");
@@ -158,6 +158,9 @@ define(["require", "exports", "./interpreter.aRobotBehaviour", "./interpreter.co
             }
         }
         return (0);
+    }
+    function getEncoderValue(port) {
+        return (getMotorPos(port));
     }
     function setMotor(id, mode, speed, pos) {
         id = id - 1;
@@ -279,6 +282,13 @@ define(["require", "exports", "./interpreter.aRobotBehaviour", "./interpreter.co
                         this.btInterfaceFct(cmdConfigToORB);
                         s.push(getSensorValue(port));
                     }
+                }
+                else if (sensor == C.TIMER) {
+                    s.push(this.timerGet(port));
+                    return;
+                }
+                else if (sensor == "encoder") {
+                    s.push(getEncoderValue(this.mappPortMotor(port)));
                 }
                 return;
             };
@@ -659,8 +669,15 @@ define(["require", "exports", "./interpreter.aRobotBehaviour", "./interpreter.co
                 }
             }
         };
-        RobotOrbBehaviour.prototype.encoderReset = function (_port) {
-            throw new Error("Method not implemented.");
+        RobotOrbBehaviour.prototype.encoderReset = function (port) {
+            U.debug('encoderReset for ' + port);
+            this.hardwareState.actions.encoder = {};
+            if (port == C.MOTOR_LEFT) {
+                this.hardwareState.actions.encoder.leftReset = true;
+            }
+            else {
+                this.hardwareState.actions.encoder.rightReset = true;
+            }
         };
         RobotOrbBehaviour.prototype.gyroReset = function (_port) {
             throw new Error("Method not implemented.");
