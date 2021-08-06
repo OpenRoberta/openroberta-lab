@@ -467,14 +467,15 @@ define(["simulation.simulation", "interpreter.constants", "simulation.robot.ev3"
                 var textArray = generateText(display.text);
 
                 function f(textArray, that) {
-                    if (textArray && textArray.length >= 16) {
-                        var newArray = textArray.slice(1);
-                        that.display.leds = newArray;
+                    var newArray = textArray;
+                    that.display.leds = newArray;
+                    if (textArray.length > 21) {
                         textArray.shift();
                         that.display.timeout = setTimeout(f, 150, textArray, that);
                     } else {
                         that.display.finished = true;
                     }
+
                 }
                 f(textArray, that);
             }
@@ -517,8 +518,8 @@ define(["simulation.simulation", "interpreter.constants", "simulation.robot.ev3"
     }
     var generateText = function(text) {
         var string = [];
-        string.push([0, 0, 0, 0, 0]);
-        string.push([0, 0, 0, 0, 0]);
+        string.push([0, 0, 0, 0, 0, 0, 0]);
+        string.push([0, 0, 0, 0, 0, 0, 0]);
         for (var i = 0; i < text.length; i++) {
             var letter = letters[text[i]];
             if (!letter)
@@ -531,12 +532,12 @@ define(["simulation.simulation", "interpreter.constants", "simulation.robot.ev3"
             while (newLetter.length) {
                 string.push([0, 0].concat(newLetter.splice(0, 5)));
             }
-            string.push([0, 0, 0, 0, 0]);
-            string.push([0, 0, 0, 0, 0]);
+            string.push([0, 0, 0, 0, 0, 0, 0]);
+            string.push([0, 0, 0, 0, 0, 0, 0]);
         }
-        string.push([0, 0, 0, 0, 0]);
-        string.push([0, 0, 0, 0, 0]);
-        string.push([0, 0, 0, 0, 0]);
+        string.push([0, 0, 0, 0, 0, 0, 0]);
+        string.push([0, 0, 0, 0, 0, 0, 0]);
+        string.push([0, 0, 0, 0, 0, 0, 0]);
         return string;
     };
     var letters = {
