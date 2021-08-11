@@ -11,7 +11,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-define(["require", "exports", "./interpreter.aRobotBehaviour", "./interpreter.constants", "./interpreter.util"], function (require, exports, interpreter_aRobotBehaviour_1, C, U) {
+define(["require", "exports", "./interpreter.aRobotBehaviour", "./interpreter.constants", "./interpreter.util", "util"], function (require, exports, interpreter_aRobotBehaviour_1, C, U, UTIL) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.RobotMbedBehaviour = void 0;
@@ -370,7 +370,8 @@ define(["require", "exports", "./interpreter.aRobotBehaviour", "./interpreter.co
                 duration = imageLen * 200;
             }
             this.hardwareState.actions.display = {};
-            this.hardwareState.actions.display.picture = image;
+            //create deep clone
+            this.hardwareState.actions.display.picture = UTIL.clone(image);
             if (mode) {
                 this.hardwareState.actions.display.mode = mode.toLowerCase();
             }
