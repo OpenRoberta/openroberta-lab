@@ -7,6 +7,7 @@ import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.components.ConfigurationComponent;
 import de.fhg.iais.roberta.components.UsedActor;
 import de.fhg.iais.roberta.components.UsedSensor;
+import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.SC;
 import de.fhg.iais.roberta.syntax.action.communication.BluetoothCheckConnectAction;
 import de.fhg.iais.roberta.syntax.action.communication.BluetoothConnectAction;
@@ -46,7 +47,7 @@ import de.fhg.iais.roberta.syntax.sensor.generic.SoundSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
-import de.fhg.iais.roberta.visitor.hardware.IEv3Visitor;
+import de.fhg.iais.roberta.visitor.IEv3Visitor;
 import de.fhg.iais.roberta.visitor.hardware.actor.DifferentialMotorValidatorAndCollectorVisitor;
 
 public class Ev3ValidatorAndCollectorVisitor extends CommonNepoValidatorAndCollectorVisitor implements IEv3Visitor<Void> {
@@ -89,6 +90,7 @@ public class Ev3ValidatorAndCollectorVisitor extends CommonNepoValidatorAndColle
 
     @Override
     public Void visitClearDisplayAction(ClearDisplayAction<Void> clearDisplayAction) {
+        usedHardwareBuilder.addUsedActor(new UsedActor(BlocklyConstants.EMPTY_PORT, SC.DISPLAY));
         return null;
     }
 
@@ -102,6 +104,7 @@ public class Ev3ValidatorAndCollectorVisitor extends CommonNepoValidatorAndColle
     @Override
     public Void visitCompassSensor(CompassSensor<Void> compassSensor) {
         checkSensorPort(compassSensor);
+        //TODO There should exist a constant with value ev3dev
         if ( this.robotConfiguration.getRobotName().equals("ev3dev") && (compassSensor.getMode().equals(SC.CALIBRATE)) ) {
             addWarningToPhrase(compassSensor, "BLOCK_NOT_SUPPORTED");
         }
@@ -133,9 +136,8 @@ public class Ev3ValidatorAndCollectorVisitor extends CommonNepoValidatorAndColle
     @Override
     public Void visitGyroSensor(GyroSensor<Void> gyroSensor) {
         checkSensorPort(gyroSensor);
-        if ( !gyroSensor.getMode().equals(SC.RESET) ) { // TODO why is this necessary?
+        if ( !gyroSensor.getMode().equals(SC.RESET) ) {
             usedHardwareBuilder.addUsedSensor(new UsedSensor(gyroSensor.getUserDefinedPort(), SC.GYRO, gyroSensor.getMode()));
-            return null;
         }
         return null;
     }
@@ -143,8 +145,7 @@ public class Ev3ValidatorAndCollectorVisitor extends CommonNepoValidatorAndColle
     @Override
     public Void visitHTColorSensor(HTColorSensor<Void> htColorSensor) {
         checkSensorPort(htColorSensor);
-        String mode = htColorSensor.getMode();
-        usedHardwareBuilder.addUsedSensor(new UsedSensor(htColorSensor.getUserDefinedPort(), SC.HT_COLOR, mode));
+        usedHardwareBuilder.addUsedSensor(new UsedSensor(htColorSensor.getUserDefinedPort(), SC.HT_COLOR, htColorSensor.getMode()));
         return null;
     }
 
@@ -160,7 +161,7 @@ public class Ev3ValidatorAndCollectorVisitor extends CommonNepoValidatorAndColle
         checkSensorPort(infraredSensor);
         String mode = infraredSensor.getMode();
         if ( infraredSensor.getMode().equals(SC.PRESENCE) ) {
-            // TODO WHATT ?????
+            // TODO Why do we do this ?????
             mode = SC.SEEK;
         }
         usedHardwareBuilder.addUsedSensor(new UsedSensor(infraredSensor.getUserDefinedPort(), SC.INFRARED, mode));
@@ -169,16 +170,20 @@ public class Ev3ValidatorAndCollectorVisitor extends CommonNepoValidatorAndColle
 
     @Override
     public Void visitKeysSensor(KeysSensor<Void> keysSensor) {
+        // TODO Shouldn't we do this: checkSensorPort(keysSensor);
         return null;
     }
 
     @Override
     public Void visitLightAction(LightAction<Void> lightAction) {
+        optionalComponentVisited(lightAction.getRgbLedColor());
+        usedHardwareBuilder.addUsedActor(new UsedActor(lightAction.getPort(), SC.LIGHT));
         return null;
     }
 
     @Override
     public Void visitLightStatusAction(LightStatusAction<Void> lightStatusAction) {
+        usedHardwareBuilder.addUsedActor(new UsedActor(lightStatusAction.getUserDefinedPort(), SC.LIGHT));
         return null;
     }
 
@@ -209,11 +214,13 @@ public class Ev3ValidatorAndCollectorVisitor extends CommonNepoValidatorAndColle
 
     @Override
     public Void visitPlayFileAction(PlayFileAction<Void> playFileAction) {
+        usedHardwareBuilder.addUsedActor(new UsedActor(BlocklyConstants.EMPTY_PORT, SC.SOUND));
         return null;
     }
 
     @Override
     public Void visitPlayNoteAction(PlayNoteAction<Void> playNoteAction) {
+        usedHardwareBuilder.addUsedActor(new UsedActor(playNoteAction.getPort(), SC.SOUND));
         return null;
     }
 
@@ -225,7 +232,7 @@ public class Ev3ValidatorAndCollectorVisitor extends CommonNepoValidatorAndColle
         if ( this.robotConfiguration.getRobotName().equals("ev3lejosv0") ) {
             addWarningToPhrase(sayTextAction, "BLOCK_NOT_SUPPORTED");
         }
-        usedHardwareBuilder.addUsedActor(new UsedActor(SC.VOICE, SC.VOICE));
+        usedHardwareBuilder.addUsedActor(new UsedActor(BlocklyConstants.EMPTY_PORT, SC.VOICE));
         return null;
     }
 
@@ -245,6 +252,7 @@ public class Ev3ValidatorAndCollectorVisitor extends CommonNepoValidatorAndColle
     @Override
     public Void visitShowTextAction(ShowTextAction<Void> showTextAction) {
         requiredComponentVisited(showTextAction, showTextAction.msg, showTextAction.x, showTextAction.y);
+        usedHardwareBuilder.addUsedActor(new UsedActor(showTextAction.port, SC.DISPLAY));
         return null;
     }
 
@@ -271,6 +279,7 @@ public class Ev3ValidatorAndCollectorVisitor extends CommonNepoValidatorAndColle
                 addWarningToPhrase(toneAction, "BLOCK_NOT_EXECUTED");
             }
         }
+        usedHardwareBuilder.addUsedActor(new UsedActor(toneAction.getPort(), SC.SOUND));
         return null;
     }
 
@@ -295,10 +304,10 @@ public class Ev3ValidatorAndCollectorVisitor extends CommonNepoValidatorAndColle
 
     @Override
     public Void visitVolumeAction(VolumeAction<Void> volumeAction) {
-        // TODO Ansonsten nicht visiten ??
         if ( volumeAction.getMode() == VolumeAction.Mode.SET ) {
-            volumeAction.getVolume().accept(this);
+            requiredComponentVisited(volumeAction, volumeAction.getVolume());
         }
+        usedHardwareBuilder.addUsedActor(new UsedActor(BlocklyConstants.EMPTY_PORT, SC.SOUND));
         return null;
     }
 

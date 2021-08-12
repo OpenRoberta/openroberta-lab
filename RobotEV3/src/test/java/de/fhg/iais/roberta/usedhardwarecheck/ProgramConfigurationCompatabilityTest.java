@@ -12,7 +12,7 @@ import de.fhg.iais.roberta.components.ConfigurationComponent;
 import de.fhg.iais.roberta.components.Project;
 import de.fhg.iais.roberta.util.Util;
 import de.fhg.iais.roberta.util.test.UnitTestHelper;
-import de.fhg.iais.roberta.worker.validate.Ev3BrickValidatorWorker;
+import de.fhg.iais.roberta.worker.validate.Ev3ValidatorAndCollectorWorker;
 
 public class ProgramConfigurationCompatabilityTest extends Ev3LejosAstTest {
 
@@ -33,7 +33,7 @@ public class ProgramConfigurationCompatabilityTest extends Ev3LejosAstTest {
 
         Project.Builder builder1 = UnitTestHelper.setupWithProgramXMLWithDefaultConfig(testFactory,Util.readResourceContent("/visitors/program_config_compatibility.xml"));
         builder1.setConfigurationAst(builder.build());
-        Ev3BrickValidatorWorker worker = new Ev3BrickValidatorWorker();
+        Ev3ValidatorAndCollectorWorker worker = new Ev3ValidatorAndCollectorWorker();
         Project project = builder1.build();
         worker.execute(project);
         Assert.assertEquals(4, project.getErrorCounter());
@@ -60,7 +60,7 @@ public class ProgramConfigurationCompatabilityTest extends Ev3LejosAstTest {
         Project.Builder builder1 =
             UnitTestHelper.setupWithProgramXMLWithDefaultConfig(testFactory,Util.readResourceContent("/visitors" + "/program_config_compatibility_gyro_touch_ultra_color.xml"));
         builder1.setConfigurationAst(builder.build());
-        Ev3BrickValidatorWorker worker = new Ev3BrickValidatorWorker();
+        Ev3ValidatorAndCollectorWorker worker = new Ev3ValidatorAndCollectorWorker();
         Project project = builder1.build();
         worker.execute(project);
         Assert.assertEquals(0, project.getErrorCounter());

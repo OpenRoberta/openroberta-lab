@@ -49,8 +49,6 @@ public class NEPOprog {
         hal.rotateRegulatedMotor(ActorPort.B, ___numberVar, MotorMoveMode.DEGREE, ___numberVar);
         hal.rotateRegulatedMotor(ActorPort.C, ___numberVar, MotorMoveMode.ROTATIONS, ___numberVar);
         hal.rotateRegulatedMotor(ActorPort.C, ___numberVar, MotorMoveMode.DEGREE, ___numberVar);
-        hal.rotateUnregulatedMotor(ActorPort.D, ___numberVar, MotorMoveMode.ROTATIONS, ___numberVar);
-        hal.rotateUnregulatedMotor(ActorPort.D, ___numberVar, MotorMoveMode.DEGREE, ___numberVar);
         hal.drawText(String.valueOf(hal.getRegulatedMotorSpeed(ActorPort.A)), ___numberVar, ___numberVar);
         hal.drawText(String.valueOf(hal.getRegulatedMotorSpeed(ActorPort.B)), ___numberVar, ___numberVar);
         hal.drawText(String.valueOf(hal.getRegulatedMotorSpeed(ActorPort.C)), ___numberVar, ___numberVar);
