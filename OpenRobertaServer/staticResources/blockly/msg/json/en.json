@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2021-07-07 11:00:07.937397",
+		"lastupdated": "2021-08-24 13:53:52.122282",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -1788,5 +1788,7 @@
 	"MIN_PULSE_WIDTH": "Minimum pulse width",
 	"MAX_PULSE_WIDTH": "Maximum pulse width",
 	"FRAME_WIDTH": "Frame width",
-	"LIGHT_LDR": "Light (LDR)"
+	"LIGHT_LDR": "Light (LDR)",
+	"POPUP_REPLACE": "Replace",
+	"POPUP_BACKGROUND_REPLACE": "A program with the same name already exists. <br> Would you like to replace it?"
 }

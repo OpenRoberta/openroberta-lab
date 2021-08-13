@@ -179,13 +179,43 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'ro
             var userAccountName = GUISTATE_C.getUserAccountName();
 
             LOG.info('saveAs program ' + GUISTATE_C.getProgramName());
-            PROGRAM.saveAsProgramToServer(progName, userAccountName, xmlProgramText, configName, xmlConfigText, GUISTATE_C.getProgramTimestamp(), function(result) {
-                UTIL.response(result);
+            PROGRAM.saveAsProgramToServer(progName, userAccountName, xmlProgramText, configName, xmlConfigText, GUISTATE_C.getProgramTimestamp(), function (result) {
                 if (result.rc === 'ok') {
+                    LOG.info('saved program ' + GUISTATE_C.getProgramName() + " as " + progName);
                     result.name = progName;
                     result.programShared = false;
                     GUISTATE_C.setProgram(result, userAccountName, userAccountName);
                     MSG.displayInformation(result, "MESSAGE_EDIT_SAVE_PROGRAM_AS", result.message, GUISTATE_C.getProgramName());
+                } else {
+                    if (result.cause === 'ORA_PROGRAM_SAVE_AS_ERROR_PROGRAM_EXISTS') {
+                        //show replace option
+                        //get last changed of program to overwrite
+                        var lastChanged = result.lastChanged;
+                        var modalMessage = Blockly.Msg.POPUP_BACKGROUND_REPLACE || 'A program with the same name already exists! <br> Would you like to replace it?';
+                        $("#show-message-confirm").oneWrap('shown.bs.modal', function (e) {
+                            $('#confirm').off();
+                            $('#confirm').onWrap('click', function (e) {
+                                e.preventDefault();
+                                PROGRAM.saveProgramToServer(progName, userAccountName, xmlProgramText, configName, xmlConfigText, lastChanged, function (result) {
+                                    if (result.rc === 'ok') {
+                                        LOG.info('saved program ' + GUISTATE_C.getProgramName() + " as " + progName + " and overwrote old content");
+                                        result.name = progName;
+                                        GUISTATE_C.setProgram(result, userAccountName, userAccountName);
+                                        MSG.displayInformation(result, "MESSAGE_EDIT_SAVE_PROGRAM_AS", result.message, GUISTATE_C.getProgramName());
+                                    } else {
+                                        LOG.info('failed to overwrite ' + progName);
+                                        MSG.displayMessage(result.message, "POPUP", "");
+                                    }
+                                });
+                            }, 'confirm modal');
+                            $('#confirmCancel').off();
+                            $('#confirmCancel').onWrap('click', function (e) {
+                                e.preventDefault();
+                                $('.modal').modal('hide');
+                            }, 'cancel modal');
+                        });
+                        MSG.displayPopupMessage("ORA_PROGRAM_SAVE_AS_ERROR_PROGRAM_EXISTS", modalMessage, Blockly.Msg.POPUP_REPLACE, Blockly.Msg.POPUP_CANCEL);
+                    }
                 }
             });
         }

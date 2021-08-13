@@ -21,7 +21,7 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
         COMM.json("/program/save", {
             "cmd" : "saveAs",
             "programName" : programName,
-            "ownerAccount": ownerAccount,
+            "ownerAccount" : ownerAccount,
             "progXML" : xmlProgramText,
             "configName" : configName,
             "confXML" : xmlConfigText,

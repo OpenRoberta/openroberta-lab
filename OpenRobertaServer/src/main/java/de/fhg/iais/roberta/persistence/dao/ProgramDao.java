@@ -79,8 +79,8 @@ public class ProgramDao extends AbstractDao<Program> {
             }
         } else {
             if ( timestamp == null ) {
-                // save as && the program exists.
-                return Pair.of(Key.PROGRAM_SAVE_AS_ERROR_PROGRAM_EXISTS, null);
+                // save as && the program exists and is not supposed to be replaced
+                return Pair.of(Key.PROGRAM_SAVE_AS_ERROR_PROGRAM_EXISTS, program);
             } else if ( timestamp.equals(program.getLastChanged()) ) {
                 program.setProgramText(programText);
                 program.setConfigData(confName, confHash);

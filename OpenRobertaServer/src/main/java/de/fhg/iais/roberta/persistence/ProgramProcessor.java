@@ -561,7 +561,7 @@ public class ProgramProcessor extends AbstractProcessor {
     }
 
     /**
-     * insert or update a given program owned by a given user. Overwrites an existing program if mayExist == true.
+     * insert or update a given program owned by a given user.
      *
      * @param programName the name of the program. Never null.
      * @param programText the program text. Never null.
