@@ -1183,6 +1183,7 @@ Blockly.Msg.POPUP_ABOUT_TEXT_DEV = "Open Roberta Lab är en öppen källkodsprog
 Blockly.Msg.POPUP_ABOUT_TEXT_GOOG = "Open Roberta inleddes i samarbete med Google Tyskland för att minska hindren för studenter, lärare och skolor som programmerar utbildningsrobotar. </a>";
 Blockly.Msg.POPUP_AGE = "Ålder";
 Blockly.Msg.POPUP_ATTENTION = "Var uppmärksam";
+Blockly.Msg.POPUP_BACKGROUND_REPLACE = "A program with the same name already exists. <br> Would you like to replace it?";  // untranslated
 Blockly.Msg.POPUP_BACKGROUND_STORAGE = "The Open Roberta Lab can automatically load your simulation background on your next visits. For this purpose, we will save data in the Local Storage on your computer. <a href='https://www.roberta-home.de/en/privacy-policy-open-roberta-lab/' target='_blank'>More information in our privacy policy.</a>";  // untranslated
 Blockly.Msg.POPUP_BEFOREUNLOAD = "Du har osparade ändringar i ditt program eller konfiguration. Logga in och spara ditt program eller konfiguration.";
 Blockly.Msg.POPUP_BEFOREUNLOAD_LOGGEDIN = "Du har osparade ändringar i ditt program eller konfiguration.";
@@ -1223,6 +1224,7 @@ Blockly.Msg.POPUP_PASSWORD_RECOVERY = "återställ lösenord ...";
 Blockly.Msg.POPUP_PROGRAM_TERMINATED_UNEXPECTED = "Exekveringen av programmet har avslutats oväntat på roboten!";
 Blockly.Msg.POPUP_REGISTER_USER = "Registrera nu";
 Blockly.Msg.POPUP_REPEAT_PASSWORD = "Repetera lösenord";
+Blockly.Msg.POPUP_REPLACE = "Replace";  // untranslated
 Blockly.Msg.POPUP_ROBOT_BATTERY = "Spänning";
 Blockly.Msg.POPUP_ROBOT_NAME = "Namn";
 Blockly.Msg.POPUP_ROBOT_NOT_CONNECTED = "Du måste först ansluta din robot.";
