@@ -1,0 +1,6 @@
+Sensors: 
+[UsedSensor [S2, PIN_VALUE, ANALOG], UsedSensor [S, PIN_VALUE, DIGITAL], UsedSensor [1, TIMER, VALUE], UsedSensor [1, TIMER, RESET], UsedSensor [B, MOTION, PRESENCE], UsedSensor [L2, LIGHT, LIGHT], UsedSensor [I, INFRARED, VALUE], UsedSensor [L3, HUMIDITY, HUMIDITY], UsedSensor [T2, TEMPERATURE, VALUE], UsedSensor [T3, DROP, VALUE], UsedSensor [P, PULSE, VALUE], UsedSensor [P2, VOLTAGE, VALUE], UsedSensor [U, ULTRASONIC, DISTANCE], UsedSensor [R, RFID, IDONE], UsedSensor [R, RFID, PRESENCE], UsedSensor [T2, TEMPERATURE, TEMPERATURE], UsedSensor [I, INFRARED, PRESENCE], UsedSensor [L3, HUMIDITY, TEMPERATURE]]
+Actors: 
+[UsedActor [SERIAL, SERIAL]]
+Methods: 
+[]

@@ -1,0 +1,6 @@
+Sensors: 
+[UsedSensor [1, TOUCH, PRESSED], UsedSensor [2, SOUND, SOUND], UsedSensor [3, LIGHT, LIGHT], UsedSensor [3, LIGHT, AMBIENTLIGHT], UsedSensor [4, ULTRASONIC, DISTANCE], UsedSensor [1, TIMER, VALUE], UsedSensor [1, TIMER, RESET]]
+Actors: 
+[UsedActor [A, OTHER], UsedActor [B, LARGE], UsedActor [C, LARGE]]
+Methods: 
+[]

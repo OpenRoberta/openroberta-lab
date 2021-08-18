@@ -1,0 +1,6 @@
+Sensors: 
+[]
+Actors: 
+[UsedActor [LSM9DS1, LSM9DS1], UsedActor [SERIAL, SERIAL]]
+Methods: 
+[GET, LISTS_REPEAT]

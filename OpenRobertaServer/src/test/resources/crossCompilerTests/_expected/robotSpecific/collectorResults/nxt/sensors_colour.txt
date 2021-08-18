@@ -1,0 +1,6 @@
+Sensors: 
+[UsedSensor [3, COLOR, COLOUR], UsedSensor [3, COLOR, LIGHT], UsedSensor [3, COLOR, AMBIENTLIGHT], UsedSensor [4, HT_COLOR, COLOUR], UsedSensor [4, HT_COLOR, LIGHT], UsedSensor [4, HT_COLOR, AMBIENTLIGHT], UsedSensor [4, HT_COLOR, RGB]]
+Actors: 
+[]
+Methods: 
+[]

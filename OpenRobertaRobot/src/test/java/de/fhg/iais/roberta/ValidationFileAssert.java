@@ -12,8 +12,12 @@ import org.assertj.core.api.Assertions;
 
 public class ValidationFileAssert extends AbstractAssert<ValidationFileAssert, String> {
 
-    public static final Path VALIDATION_DIRECTORY = Paths.get("src/test/resources/_expected");
-    public static final Path OUTPUT_DIRECTORY = Paths.get("target/unitTests");
+    public static final Path DEFAULT_VALIDATION_DIRECTORY = Paths.get("src/test/resources");
+    public static final Path DEFAULT_OUTPUT_DIRECTORY = Paths.get("target/unitTests");
+
+    public static Path VALIDATION_DIRECTORY = DEFAULT_VALIDATION_DIRECTORY;
+    public static Path OUTPUT_DIRECTORY = DEFAULT_OUTPUT_DIRECTORY;
+
     public static final String HEADER_LINE = "<-- This file was automatically generated, if the content is alright, remove this line -->";
     public static final String DEFAULT_MASK = "<MASK>";
 
@@ -57,8 +61,8 @@ public class ValidationFileAssert extends AbstractAssert<ValidationFileAssert, S
         Path outputFile = OUTPUT_DIRECTORY.resolve(filename);
 
         try {
-            createDirectoryIfNotExists(VALIDATION_DIRECTORY);
-            createDirectoryIfNotExists(OUTPUT_DIRECTORY);
+            createDirectoryIfNotExists(validationFile.getParent());
+            createDirectoryIfNotExists(outputFile.getParent());
 
             writeValidationFileIfNecessary(validationFile);
             writeOutputFile(outputFile);
@@ -93,11 +97,11 @@ public class ValidationFileAssert extends AbstractAssert<ValidationFileAssert, S
     }
 
     public static class ValidationFileAssertWithFilename extends ValidationFileAssert {
+
         public static final String DEFAULT_SUFFIX = "txt";
-
         private final String prefix;
-        private final String suffix;
 
+        private final String suffix;
         private ValidationFileAssertWithFilename(String content, String mask, String prefix, String suffix) {
             super(content, mask);
             this.prefix = prefix;
@@ -133,14 +137,14 @@ public class ValidationFileAssert extends AbstractAssert<ValidationFileAssert, S
             super.isEqualToValidationFile(this.prefix + suffix);
             return this;
         }
-    }
 
+    }
     public static class Generator {
 
         private final String mask;
+
         private final String filenamePrefix;
         private final String suffix;
-
         public Generator(String mask, String filenamePrefix) {
             this.mask = mask;
             this.filenamePrefix = filenamePrefix;
@@ -162,6 +166,11 @@ public class ValidationFileAssert extends AbstractAssert<ValidationFileAssert, S
         public ValidationFileAssertWithFilename generateValidationFileAssert(String content) {
             return new ValidationFileAssertWithFilename(content, mask, filenamePrefix, suffix);
         }
+
     }
 
+    public static void resetDirectories() {
+        VALIDATION_DIRECTORY = DEFAULT_VALIDATION_DIRECTORY;
+        OUTPUT_DIRECTORY = DEFAULT_OUTPUT_DIRECTORY;
+    }
 }

@@ -1,0 +1,6 @@
+Sensors: 
+[]
+Actors: 
+[UsedActor [SERIAL, SERIAL], UsedActor [R, LED], UsedActor [R2, RGBLED], UsedActor [NONE, SEND_DATA], UsedActor [myDisplay, SENSEBOX_PLOTTING]]
+Methods: 
+[]
