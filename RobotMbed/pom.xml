@@ -8,7 +8,7 @@
 	<parent>
 		<groupId>de.fhg.iais.openroberta</groupId>
 		<artifactId>OpenRobertaParent</artifactId>
-		<version>4.1.2</version>
+		<version>4.1.3-SNAPSHOT</version>
 	</parent>
 	<artifactId>RobotMbed</artifactId>
 	<name>RobotMbed</name>
