@@ -12,11 +12,13 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.xml.bind.JAXBException;
 import javax.xml.parsers.DocumentBuilder;
@@ -32,6 +34,7 @@ import javax.xml.transform.stream.StreamResult;
 import org.apache.commons.io.FileUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
@@ -41,6 +44,9 @@ import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 
+import de.fhg.iais.roberta.ValidationFileAssert;
+import de.fhg.iais.roberta.bean.UsedHardwareBean;
+import de.fhg.iais.roberta.bean.UsedMethodBean;
 import de.fhg.iais.roberta.blockly.generated.BlockSet;
 import de.fhg.iais.roberta.components.ProgramAst;
 import de.fhg.iais.roberta.components.Project;
@@ -61,6 +67,7 @@ public class ReuseIntegrationAsUnitTest {
     private static final boolean LOG_NAMES_ON_SUCCESS = false;
     private static final boolean TEST_SUCCEEDS_EVEN_IF_REGENERATION_FAILS = false;
     private static final boolean TEST_SUCCEEDS_EVEN_IF_CODE_GENERATION_FAILS = false;
+    private static final boolean TEST_SUCCEEDS_EVEN_IF_COLLECTOR_TEST_FAILS = false;
 
     private static final Logger LOG = LoggerFactory.getLogger(ReuseIntegrationAsUnitTest.class);
     private static final String ROBOT_NAME_FOR_COMMON_TESTS = "ev3lejosv1";
@@ -86,6 +93,7 @@ public class ReuseIntegrationAsUnitTest {
     private static final String CONFIG_GENERATED = "configGenerated/";
     private static final String CONFIG_REGENERATED = "configRegenerated/";
     private static final String TARGET_LANGUAGE_GENERATED = "targetLanguage/";
+    private static final String COLLECTOR_RESULTS = "collectorResults/";
     private static final String STACKMACHINE_CODE_GENERATED = "stackmachineLanguage/";
     private static final String TARGET_LANGUAGE_SOURCE = "targetSource/";
 
@@ -98,6 +106,8 @@ public class ReuseIntegrationAsUnitTest {
     private int successCountRegeneration = 0;
     private int errorCountCodeGeneration = 0;
     private int successCountCodeGeneration = 0;
+    private int successCountCollectorTest = 0;
+    private int errorCountCollectorTest = 0;
 
     @BeforeClass
     public static void setupClass() throws IOException {
@@ -106,6 +116,14 @@ public class ReuseIntegrationAsUnitTest {
         JSONObject testSpecification = Util.loadYAML(TEST_SPEC_YML);
         progDeclsFromTestSpec = testSpecification.getJSONObject("progs");
         robotsFromTestSpec = testSpecification.getJSONObject("robots");
+
+        ValidationFileAssert.VALIDATION_DIRECTORY = Paths.get("src/test/resources" + CROSS_COMPILER_TESTS + EXPECTED);
+        ValidationFileAssert.OUTPUT_DIRECTORY = Paths.get("target/unitTests/" + EXPECTED);
+    }
+
+    @AfterClass
+    public static void afterClass() {
+        ValidationFileAssert.resetDirectories();
     }
 
     @Test
@@ -329,6 +347,15 @@ public class ReuseIntegrationAsUnitTest {
             logFail("code generation " + msgSuffix);
 
         }
+
+        boolean collectorResultsOk = compareCollectorResultsForOneProgram(ROBOT_SPECIFIC, robotName, programName, exportXmlText);
+        if ( collectorResultsOk ) {
+            successCountCollectorTest++;
+            logSucc("collector results " + msgSuffix);
+        } else {
+            errorCountCollectorTest++;
+            logFail("collector results " + msgSuffix);
+        }
     }
 
     /**
@@ -437,6 +464,46 @@ public class ReuseIntegrationAsUnitTest {
      * @param programName
      * @param robotFactory
      */
+    private boolean compareCollectorResultsForOneProgram(String directory, String robotName, String programName, String exportXml) //
+    {
+        Pair<String, String> progConfPair = ProjectWorkflowRestController.splitExportXML(exportXml);
+        String programXml = progConfPair.getFirst();
+        String configXml = progConfPair.getSecond();
+        Project.Builder builder = UnitTestHelper.setupWithConfigAndProgramXML(testFactory, programXml, configXml);
+        builder.setRobot(robotName).setProgramName("NEPOprog").setSSID("test").setPassword("test").setLanguage(Language.ENGLISH);
+        Project project = builder.build();
+
+        try {
+            UnitTestHelper.executeWorkflow("showsource", testFactory, project);
+
+            UsedHardwareBean usedHardwareBean = project.getWorkerResult(UsedHardwareBean.class);
+            UsedMethodBean usedMethodBean = project.getWorkerResult(UsedMethodBean.class);
+
+            List<Enum<?>> usedMethodsSorted = usedMethodBean.getUsedMethods().stream().sorted(Comparator.comparing(Enum::toString)).collect(Collectors.toList());
+
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.append("Sensors: \n");
+            stringBuilder.append(usedHardwareBean.getUsedSensors());
+            stringBuilder.append(System.lineSeparator());
+            stringBuilder.append("Actors: \n");
+            stringBuilder.append(usedHardwareBean.getUsedActors());
+            stringBuilder.append(System.lineSeparator());
+            stringBuilder.append("Methods: \n");
+            stringBuilder.append(usedMethodsSorted);
+
+            try {
+                ValidationFileAssert.assertThat(stringBuilder.toString()).isEqualToValidationFile(directory + COLLECTOR_RESULTS + robotName + "/" +  programName + ".txt");
+                return true;
+            } catch ( AssertionError e ) {
+                LOG.error("collector results doesn't match for " + programName + " with error" + e.getMessage(), e);
+                return false;
+            }
+        } catch ( Exception e ) {
+            LOG.error("showsource workflow failed for " + programName + " with Exception " + e.getMessage(), e);
+            return false;
+        }
+    }
+
     private boolean compareGeneratedTargetLanguageForOneProgram(String directory, String robotName, String programName, String exportXml) //
     {
         Pair<String, String> progConfPair = ProjectWorkflowRestController.splitExportXML(exportXml);
@@ -564,9 +631,14 @@ public class ReuseIntegrationAsUnitTest {
         if ( errorCountCodeGeneration > 0 ) {
             LOG.error("code generation ERRORS found: " + errorCountCodeGeneration);
         }
+        LOG.info("succeeding collector tests: " + successCountCollectorTest);
+        if ( errorCountCollectorTest > 0 ) {
+            LOG.error("collector ERRORS found: " + errorCountCollectorTest);
+        }
         boolean regenerationSucceeds = errorCountRegeneration == 0 || TEST_SUCCEEDS_EVEN_IF_REGENERATION_FAILS;
         boolean codeGenerationSucceeds = errorCountCodeGeneration == 0 || TEST_SUCCEEDS_EVEN_IF_CODE_GENERATION_FAILS;
-        Assert.assertTrue("test errors", regenerationSucceeds && codeGenerationSucceeds);
+        boolean collectorTestsSucceeds = errorCountCollectorTest == 0 || TEST_SUCCEEDS_EVEN_IF_COLLECTOR_TEST_FAILS;
+        Assert.assertTrue("test errors", regenerationSucceeds && codeGenerationSucceeds && collectorTestsSucceeds);
     }
 
     private static void logStart(String msg) {

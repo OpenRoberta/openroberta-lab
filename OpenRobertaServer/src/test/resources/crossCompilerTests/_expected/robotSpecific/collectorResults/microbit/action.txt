@@ -1,0 +1,6 @@
+Sensors: 
+[]
+Actors: 
+[UsedActor [, DISPLAY], UsedActor [, DISPLAY_GRAYSCALE], UsedActor [, MUSIC], UsedActor [A_0_A, ANALOG_INPUT]]
+Methods: 
+[]

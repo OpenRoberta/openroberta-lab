@@ -1,0 +1,6 @@
+Sensors: 
+[UsedSensor [3, ULTRASONIC, DISTANCE]]
+Actors: 
+[UsedActor [B, MEDIUM], UsedActor [A, MEDIUM], UsedActor [C, ARDU], UsedActor [D, ARDU]]
+Methods: 
+[]

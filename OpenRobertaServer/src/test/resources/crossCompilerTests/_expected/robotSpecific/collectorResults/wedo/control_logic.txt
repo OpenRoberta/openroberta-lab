@@ -1,0 +1,6 @@
+Sensors: 
+[UsedSensor [T2, GYRO, TILTED], UsedSensor [I, INFRARED, DISTANCE], UsedSensor [1, TIMER, VALUE]]
+Actors: 
+[]
+Methods: 
+[]
