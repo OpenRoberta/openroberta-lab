@@ -5,7 +5,7 @@
     <parent>
         <groupId>de.fhg.iais.openroberta</groupId>
         <artifactId>OpenRobertaParent</artifactId>
-        <version>4.1.3-SNAPSHOT</version>
+        <version>4.1.3</version>
     </parent>
     <artifactId>TypeScriptSources</artifactId>
     <description>the stack machine for the simulator and WeDo; the neural network engine</description>
