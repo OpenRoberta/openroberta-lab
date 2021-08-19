@@ -79,7 +79,8 @@ function showAlertInNotificationModal(context, content, time?) {
 }
 
 function initNotificationModal() {
-    $notificationForm.on('submit', e => {
+    // @ts-ignore
+    $notificationForm.onWrap('submit', e => {
         e.preventDefault();
         readFileInputField(fileContent => {
             notificationModel.postNotifications(fileContent, function(restResponse) {
