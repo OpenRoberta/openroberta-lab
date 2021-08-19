@@ -27,11 +27,12 @@ define([ 'exports', 'comm', 'log', 'jquery' ], function(exports, COMM, LOG, $) {
             var start = new Date();
             try {
                 var that = this;
-                fnToBeWrapped.apply(that,arguments);
+                var result = fnToBeWrapped.apply(that,arguments);
                 if (message !== undefined) {
                     var elapsed = new Date() - start;
                     LOG.text(elapsed + ' msec: ' + message, '[[TIME]] ');
                 }
+                return result;
             } catch (e) {
                 var err = new Error();
                 var elapsed = new Date() - start;
@@ -65,8 +66,9 @@ define([ 'exports', 'comm', 'log', 'jquery' ], function(exports, COMM, LOG, $) {
                 numberOfActiveActions++;
                 var fn = wrapTotal(fnToBeWrapped, message);
                 var that = this;
-                fn.apply(that,arguments);
+                var result = fn.apply(that,arguments);
                 numberOfActiveActions--;
+                return result;
              } catch (e) {
                 numberOfActiveActions--;
                 var err = new Error();
