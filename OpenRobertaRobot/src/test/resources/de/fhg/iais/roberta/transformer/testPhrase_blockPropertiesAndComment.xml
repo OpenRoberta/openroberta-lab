@@ -1,0 +1,11 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly">
+    <instance>
+        <block type="TEST_PHRASE_FIELD" id="b2Ieob%0r|errWxr`reW" intask="true">
+            <field name="TYPE">WHATEVER</field>
+            <field name="FLAG">FALSE</field>
+            <field name="VALUE">2.15</field>
+            <field name="OP_TYPE">RESET</field>
+            <comment pinned="false" h="80" w="160">Test</comment>
+        </block>
+    </instance>
+</block_set>

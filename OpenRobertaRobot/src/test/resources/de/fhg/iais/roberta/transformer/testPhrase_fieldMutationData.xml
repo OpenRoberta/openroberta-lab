@@ -1,0 +1,10 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly">
+    <instance>
+        <block type="TEST_PHRASE_ALL" id="b2Ieob%0r|errWxr`reW" intask="true">
+            <mutation next="true" declaration_type="Number"></mutation>
+            <field name="TYPE">IMAGE</field>
+            <data>ev3</data>
+            <hide name="TYPE" value="IMAGE"/>
+        </block>
+    </instance>
+</block_set>
