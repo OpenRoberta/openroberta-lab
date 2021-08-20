@@ -45,6 +45,9 @@ import de.fhg.iais.roberta.persistence.util.DbSession;
 import de.fhg.iais.roberta.persistence.util.HttpSessionState;
 import de.fhg.iais.roberta.persistence.util.SessionFactoryWrapper;
 import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
+import de.fhg.iais.roberta.syntax.BlockTypeContainer;
+import de.fhg.iais.roberta.transformer.AnnotationHelper;
+import de.fhg.iais.roberta.transformer.NepoAnnotationException;
 import de.fhg.iais.roberta.util.ServerProperties;
 import de.fhg.iais.roberta.util.Statistics;
 import de.fhg.iais.roberta.util.Util;
@@ -235,6 +238,7 @@ public class ServerStarter {
 
         DbSession dbSession = this.injector.getInstance(SessionFactoryWrapper.class).getSession();  // session is closed in the method called below
         checkRobotPluginsDB(dbSession, robotPluginMap.values());
+        checkAstClassAnnotations();
         Runtime.getRuntime().addShutdownHook(new ShutdownHook("embedded".equals(this.serverProperties.getStringProperty("database.mode")), this.injector));
         LOG.info("Shutdown hook added. If the server is gracefully stopped in the future, a shutdown message is logged");
         logTheNumberOfStoredPrograms();
@@ -406,6 +410,16 @@ public class ServerStarter {
             System.exit(20);
         }
 
+    }
+
+    /**
+     * Checks all AST classes if the Nepo Annotations where used correctly.
+     * Throws a {@link NepoAnnotationException} if an AST class is invalid.
+     */
+    private void checkAstClassAnnotations() {
+        BlockTypeContainer.getAstClasses().stream()
+            .filter(AnnotationHelper::isNepoAnnotatedClass)
+            .forEach(AnnotationHelper::checkNepoAnnotatedClass);
     }
 
     /**
