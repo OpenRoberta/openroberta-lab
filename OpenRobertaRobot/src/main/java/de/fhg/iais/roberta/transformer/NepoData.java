@@ -6,11 +6,27 @@ import java.lang.annotation.Inherited;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+import java.util.Collections;
+import java.util.List;
 
+/**
+ * This annotation can be used to parse xml data objects from blocks.<br>
+ *
+ * Example XML
+ * <pre>{@code
+ *  <block>
+ *      <data>ev3</data>
+ *  </block>
+ * }</pre>
+ *
+ * <b>The field annotated with {@link NepoData} must be of type {@link String} and public!</b><br>
+ * <b>The data object must always be present on the block that gets parsed!</b><br>
+ * The class using this Annotation should also be annoted with either {@link NepoPhrase} or {@link NepoOp}
+ */
 @Documented
 @Target(ElementType.FIELD)
 @Inherited
 @Retention(RetentionPolicy.RUNTIME)
 public @interface NepoData {
-    boolean required() default true;
+    List<Class<?>> VALID_TYPES = Collections.singletonList(String.class);
 }
