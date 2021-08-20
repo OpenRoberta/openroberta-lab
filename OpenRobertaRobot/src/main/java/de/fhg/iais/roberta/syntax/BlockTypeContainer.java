@@ -8,6 +8,7 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Functions;
 
 import de.fhg.iais.roberta.components.Category;
@@ -117,4 +118,10 @@ public class BlockTypeContainer {
         Assert.notNull(blockType, "blockly name is not found: " + blocklyName);
         return blockType;
     }
+
+    @VisibleForTesting
+    public static Map<String, BlockType> getBlockTypesByName() {
+        return blockTypesByName;
+    }
+
 }
