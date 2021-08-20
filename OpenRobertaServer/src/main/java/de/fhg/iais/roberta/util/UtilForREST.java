@@ -21,6 +21,7 @@ import de.fhg.iais.roberta.generated.restEntities.BaseResponse;
 import de.fhg.iais.roberta.generated.restEntities.FullRestRequest;
 import de.fhg.iais.roberta.javaServer.restServices.all.controller.ClientAdmin;
 import de.fhg.iais.roberta.persistence.AbstractProcessor;
+import de.fhg.iais.roberta.persistence.util.DbSession;
 import de.fhg.iais.roberta.persistence.util.HttpSessionState;
 import de.fhg.iais.roberta.robotCommunication.RobotCommunicationData;
 import de.fhg.iais.roberta.robotCommunication.RobotCommunicationData.State;
@@ -74,6 +75,26 @@ public class UtilForREST {
         MDC.put("robotName", String.valueOf(httpSessionState.getRobotName()));
         new ClientLogger().log(loggerForRequest, fullRequest.getLog());
         return httpSessionState;
+    }
+
+    /**
+     * all REST services, excluded is only the /init request, have to call this method. It processes the init-token, which protects user and server against a
+     * frontend session not backed up by a backend session (occurs only when the server is restarted)<br>
+     *
+     * @param dbSession to be closed, when the http session is invalid (server restart); may be null
+     * @param loggerForRequest
+     * @param fullRequest
+     * @param rememberTheCall if true, count the request as a real call (a login, e.g.); otherwise don't increase the call counter (a ping, e.g.)
+     * @return
+     */
+    public static HttpSessionState handleRequestInit(DbSession dbSession, Logger loggerForRequest, FullRestRequest fullRequest, boolean rememberTheCall) {
+        try {
+            return handleRequestInit(loggerForRequest, fullRequest, rememberTheCall);
+        } finally {
+            if ( dbSession != null ) {
+                dbSession.close();
+            }
+        }
     }
 
     /**

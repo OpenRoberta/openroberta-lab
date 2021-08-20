@@ -82,7 +82,7 @@ public class ClientProgramController {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response saveProgram(@OraData DbSession dbSession, FullRestRequest request) {
-        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, request, true);
+        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(dbSession, LOG, request, true);
         try {
             SaveResponse response = SaveResponse.make();
             SaveRequest saveRequest = SaveRequest.make(request.getData());
@@ -124,7 +124,7 @@ public class ClientProgramController {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response deleteProgram(@OraData DbSession dbSession, FullRestRequest request) {
-        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, request, true);
+        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(dbSession, LOG, request, true);
         try {
             BaseResponse response = BaseResponse.make();
             JSONObject dataPart = request.getData();
@@ -162,7 +162,7 @@ public class ClientProgramController {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response getProgram(@OraData DbSession dbSession, @XsltTrans XsltTransformer xsltTransformer, FullRestRequest request) {
-        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, request, true);
+        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(dbSession, LOG, request, true);
         try {
             ListingResponse response = ListingResponse.make();
             JSONObject dataPart = request.getData();
@@ -219,7 +219,7 @@ public class ClientProgramController {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response getProgramEntity(@OraData DbSession dbSession, FullRestRequest request) {
-        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, request, true);
+        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(dbSession, LOG, request, true);
         try {
             EntityResponse response = EntityResponse.make();
             JSONObject dataPart = request.getData();
@@ -260,7 +260,7 @@ public class ClientProgramController {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response getInfosOfProgramsOfLoggedInUser(@OraData DbSession dbSession, FullRestRequest request) {
-        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, request, true);
+        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(dbSession, LOG, request, true);
         try {
             ListingNamesResponse response = ListingNamesResponse.make();
             ProgramProcessor programProcessor = new ProgramProcessor(dbSession, httpSessionState);
@@ -301,7 +301,7 @@ public class ClientProgramController {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response getProgramInfoOfProgramsOwnedByUserGroupMembers(@OraData DbSession dbSession, FullRestRequest fullRequest) {
-        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, fullRequest, true);
+        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(dbSession, LOG, fullRequest, true);
         try {
             ListingNamesResponse response = ListingNamesResponse.make();
             UserGroupProgramListRequest request = UserGroupProgramListRequest.make(fullRequest.getData());
@@ -357,7 +357,7 @@ public class ClientProgramController {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response getInfosOfExamplePrograms(@OraData DbSession dbSession, FullRestRequest request) {
-        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, request, true);
+        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(dbSession, LOG, request, true);
         try {
             ListingNamesResponse response = ListingNamesResponse.make();
             ProgramProcessor programProcessor = new ProgramProcessor(dbSession, httpSessionState);
@@ -446,7 +446,7 @@ public class ClientProgramController {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response shareProgram(@OraData DbSession dbSession, FullRestRequest request) {
-        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, request, true);
+        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(dbSession, LOG, request, true);
         try {
             ShareResponse response = ShareResponse.make();
             ShareRequest shareRequest = ShareRequest.make(request.getData());
@@ -507,7 +507,7 @@ public class ClientProgramController {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response likeProgram(@OraData DbSession dbSession, FullRestRequest request) {
-        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, request, true);
+        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(dbSession, LOG, request, true);
         try {
             BaseResponse response = BaseResponse.make();
             LikeRequest likeRequest = LikeRequest.make(request.getData());
@@ -554,7 +554,7 @@ public class ClientProgramController {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response shareProgramInGallery(@OraData DbSession dbSession, FullRestRequest request) {
-        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, request, true);
+        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(dbSession, LOG, request, true);
         try {
             SaveResponse response = SaveResponse.make();
             ShareCreateRequest shareCreateRequest = ShareCreateRequest.make(request.getData());
@@ -635,7 +635,7 @@ public class ClientProgramController {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response deleteSharedProgram(@OraData DbSession dbSession, FullRestRequest request) {
-        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, request, true);
+        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(dbSession, LOG, request, true);
         try {
             BaseResponse response = BaseResponse.make();
             ShareDeleteRequest shareDeleteRequest = ShareDeleteRequest.make(request.getData());
@@ -680,7 +680,7 @@ public class ClientProgramController {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response getProgramsFromGallery(@OraData DbSession dbSession, FullRestRequest request) {
-        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, request, true);
+        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(dbSession, LOG, request, true);
         try {
             ListingNamesResponse response = ListingNamesResponse.make();
             ProgramProcessor programProcessor = new ProgramProcessor(dbSession, httpSessionState);

@@ -45,7 +45,7 @@ public class ClientConfiguration {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/saveC")
     public Response saveConfig(@OraData DbSession dbSession, FullRestRequest fullRequest) throws Exception {
-        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, fullRequest, true);
+        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(dbSession, LOG, fullRequest, true);
         try {
             BaseResponse response = BaseResponse.make();
             int userId = httpSessionState.getUserId();
@@ -79,7 +79,7 @@ public class ClientConfiguration {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/saveAsC")
     public Response saveAsConfig(@OraData DbSession dbSession, FullRestRequest fullRequest) throws Exception {
-        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, fullRequest, true);
+        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(dbSession, LOG, fullRequest, true);
         try {
             BaseResponse response = BaseResponse.make();
             int userId = httpSessionState.getUserId();
@@ -113,7 +113,7 @@ public class ClientConfiguration {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/loadC")
     public Response loadConfig(@OraData DbSession dbSession, FullRestRequest fullRequest) throws Exception {
-        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, fullRequest, true);
+        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(dbSession, LOG, fullRequest, true);
         try {
             ConfResponse response = ConfResponse.make();
             int userId = httpSessionState.getUserId();
@@ -155,7 +155,7 @@ public class ClientConfiguration {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/deleteC")
     public Response deleteConfig(@OraData DbSession dbSession, FullRestRequest fullRequest) throws Exception {
-        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, fullRequest, true);
+        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(dbSession, LOG, fullRequest, true);
         try {
             BaseResponse response = BaseResponse.make();
             int userId = httpSessionState.getUserId();
@@ -188,7 +188,7 @@ public class ClientConfiguration {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/loadCN")
     public Response loadConfigNames(@OraData DbSession dbSession, FullRestRequest fullRequest) throws Exception {
-        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, fullRequest, true);
+        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(dbSession, LOG, fullRequest, true);
         try {
             ConfResponse response = ConfResponse.make();
             int userId = httpSessionState.getUserId();

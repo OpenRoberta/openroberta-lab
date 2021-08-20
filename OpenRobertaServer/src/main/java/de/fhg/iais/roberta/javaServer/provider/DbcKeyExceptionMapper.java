@@ -1,5 +1,7 @@
 package de.fhg.iais.roberta.javaServer.provider;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -20,6 +22,8 @@ import de.fhg.iais.roberta.util.dbc.DbcKeyException;
 public class DbcKeyExceptionMapper implements ExceptionMapper<DbcKeyException> {
     private static final Logger LOG = LoggerFactory.getLogger(DbcKeyExceptionMapper.class);
     private static final String SERVER_ERROR = Key.SERVER_ERROR.getKey();
+    private static final int INIT_FAIL_MOD = 5;
+    private static final AtomicInteger numberOfInitFails = new AtomicInteger();
     static final String ERROR_IN_ERROR = "{\"rc\":\"error\",\"message\":\"" + SERVER_ERROR + "\",\"rc\":\"" + SERVER_ERROR + "\",}";
 
     @Override
@@ -27,7 +31,14 @@ public class DbcKeyExceptionMapper implements ExceptionMapper<DbcKeyException> {
         final String errorKey = e.getKey().getKey();
         final BaseResponse response = BaseResponse.make();
         if ( errorKey.startsWith("ORA_INIT_FAIL") ) {
-            LOG.error("init DbcKeyException was caught at system border: " + e.getMessage() + ". No stack trace!");
+            int actualNumberOfInitFails = numberOfInitFails.getAndIncrement();
+            if ( actualNumberOfInitFails < INIT_FAIL_MOD ) {
+                LOG.error("init DbcKeyException was caught at system border: " + e.getMessage());
+            } else if ( actualNumberOfInitFails == INIT_FAIL_MOD ) {
+                LOG.error("init DbcKeyException logged every 10th occurences only");
+            } else if ( actualNumberOfInitFails % INIT_FAIL_MOD == 0 ) {
+                LOG.error(INIT_FAIL_MOD + " init DbcKeyException were caught at system border: " + e.getMessage());
+            }
             response.setInitToken("invalid-token");
         } else {
             LOG.error("DbcKeyException was caught at system border", e);

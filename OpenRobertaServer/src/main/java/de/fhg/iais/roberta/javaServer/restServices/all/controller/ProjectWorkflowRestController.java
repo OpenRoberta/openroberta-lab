@@ -51,7 +51,7 @@ public class ProjectWorkflowRestController {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response getSourceCode(@OraData DbSession dbSession, FullRestRequest fullRequest) {
-        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, fullRequest, true);
+        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(dbSession, LOG, fullRequest, true);
         try {
             ProjectWorkflowRequest wfRequest = ProjectWorkflowRequest.make(fullRequest.getData());
             ProjectSourceResponse response = ProjectSourceResponse.make();
@@ -82,7 +82,7 @@ public class ProjectWorkflowRestController {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response getSimulationVMCode(@OraData DbSession dbSession, FullRestRequest fullRequest) {
-        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, fullRequest, true);
+        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(dbSession, LOG, fullRequest, true);
         try {
             ProjectWorkflowRequest wfRequest = ProjectWorkflowRequest.make(fullRequest.getData());
             ProjectSourceSimulationResponse response = ProjectSourceSimulationResponse.make();
@@ -115,7 +115,7 @@ public class ProjectWorkflowRestController {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response runProgram(@OraData DbSession dbSession, FullRestRequest fullRequest) {
-        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, fullRequest, true);
+        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(dbSession, LOG, fullRequest, true);
         try {
             ProjectWorkflowRequest wfRequest = ProjectWorkflowRequest.make(fullRequest.getData());
             ProjectNepoResponse response = ProjectNepoResponse.make();
@@ -157,7 +157,7 @@ public class ProjectWorkflowRestController {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response compileProgram(@OraData DbSession dbSession, FullRestRequest fullRequest) {
-        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, fullRequest, true);
+        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(dbSession, LOG, fullRequest, true);
         try {
             ProjectWorkflowRequest wfRequest = ProjectWorkflowRequest.make(fullRequest.getData());
             ProjectNepoResponse response = ProjectNepoResponse.make();
@@ -187,7 +187,7 @@ public class ProjectWorkflowRestController {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response runNative(@OraData DbSession dbSession, FullRestRequest fullRequest) {
-        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, fullRequest, true);
+        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(dbSession, LOG, fullRequest, true);
         try {
             ProjectWorkflowRequest wfRequest = ProjectWorkflowRequest.make(fullRequest.getData());
             ProjectNativeResponse response = ProjectNativeResponse.make();
@@ -214,7 +214,7 @@ public class ProjectWorkflowRestController {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response compileNative(@OraData DbSession dbSession, FullRestRequest fullRequest) {
-        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, fullRequest, true);
+        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(dbSession, LOG, fullRequest, true);
         try {
             ProjectWorkflowRequest wfRequest = ProjectWorkflowRequest.make(fullRequest.getData());
             ProjectNativeResponse response = ProjectNativeResponse.make();

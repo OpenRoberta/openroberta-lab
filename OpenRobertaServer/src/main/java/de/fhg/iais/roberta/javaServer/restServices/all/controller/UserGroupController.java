@@ -448,9 +448,7 @@ public class UserGroupController {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/setUserGroupMemberDefaultPasswords")
     public Response setUserGroupMemberDefaultPasswords(@OraData DbSession dbSession, FullRestRequest fullRequest) throws Exception {
-        LOG.info("command is setUserGroupMemberDefaultPasswords");
-        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, fullRequest, true);
-
+        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(dbSession, LOG, fullRequest, true);
         try {
             BaseResponse response = BaseResponse.make();
             UserGroupMembersRequest request = UserGroupMembersRequest.make(fullRequest.getData());

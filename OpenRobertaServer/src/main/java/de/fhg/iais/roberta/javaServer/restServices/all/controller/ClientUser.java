@@ -106,7 +106,7 @@ public class ClientUser {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/login")
     public Response login(@OraData DbSession dbSession, FullRestRequest fullRequest) throws Exception {
-        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, fullRequest, true);
+        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(dbSession, LOG, fullRequest, true);
         try {
             LoginResponse response = LoginResponse.make();
             LoginRequest request = LoginRequest.make(fullRequest.getData());
@@ -190,7 +190,7 @@ public class ClientUser {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/getUser")
     public Response getUser(@OraData DbSession dbSession, FullRestRequest fullRequest) throws Exception {
-        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, fullRequest, true);
+        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(dbSession, LOG, fullRequest, true);
         try {
             GetUserResponse response = GetUserResponse.make();
             String cmd = "getUser";
@@ -268,7 +268,7 @@ public class ClientUser {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/createUser")
     public Response createUser(@OraData DbSession dbSession, FullRestRequest fullRequest) throws Exception {
-        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, fullRequest, true);
+        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(dbSession, LOG, fullRequest, true);
         try {
             BaseResponse response = BaseResponse.make();
             UserRequest request = UserRequest.make(fullRequest.getData());
@@ -311,7 +311,7 @@ public class ClientUser {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/updateUser")
     public Response updateUser(@OraData DbSession dbSession, FullRestRequest fullRequest) throws Exception {
-        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, fullRequest, true);
+        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(dbSession, LOG, fullRequest, true);
         try {
             BaseResponse response = BaseResponse.make();
             UserRequest request = UserRequest.make(fullRequest.getData());
@@ -364,7 +364,7 @@ public class ClientUser {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/changePassword")
     public Response changePassword(@OraData DbSession dbSession, FullRestRequest fullRequest) throws Exception {
-        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, fullRequest, true);
+        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(dbSession, LOG, fullRequest, true);
         try {
             BaseResponse response = BaseResponse.make();
             ChangePasswordRequest request = ChangePasswordRequest.make(fullRequest.getData());
@@ -402,7 +402,7 @@ public class ClientUser {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/passwordRecovery")
     public Response passwordRecovery(@OraData DbSession dbSession, FullRestRequest fullRequest) throws Exception {
-        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, fullRequest, true);
+        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(dbSession, LOG, fullRequest, true);
         try {
             BaseResponse response = BaseResponse.make();
             Map<String, String> responseParameters = new HashMap<>();
@@ -457,7 +457,7 @@ public class ClientUser {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/isResetPasswordLinkExpired")
     public Response isResetPasswordLinkExpired(@OraData DbSession dbSession, FullRestRequest fullRequest) throws Exception {
-        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, fullRequest, true);
+        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(dbSession, LOG, fullRequest, true);
         try {
             IsResetPasswordLinkExpiredResponse response = IsResetPasswordLinkExpiredResponse.make();
             Map<String, String> responseParameters = new HashMap<>();
@@ -508,7 +508,7 @@ public class ClientUser {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/resetPassword")
     public Response resetPassword(@OraData DbSession dbSession, FullRestRequest fullRequest) throws Exception {
-        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, fullRequest, true);
+        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(dbSession, LOG, fullRequest, true);
         try {
             BaseResponse response = BaseResponse.make();
             ResetPasswordRequest request = ResetPasswordRequest.make(fullRequest.getData());
@@ -546,7 +546,7 @@ public class ClientUser {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/activateUser")
     public Response activateUser(@OraData DbSession dbSession, FullRestRequest fullRequest) throws Exception {
-        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, fullRequest, true);
+        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(dbSession, LOG, fullRequest, true);
         try {
             BaseResponse response = BaseResponse.make();
             ActivateUserRequest request = ActivateUserRequest.make(fullRequest.getData());
@@ -585,7 +585,7 @@ public class ClientUser {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/resendActivation")
     public Response resendActivation(@OraData DbSession dbSession, FullRestRequest fullRequest) throws Exception {
-        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, fullRequest, true);
+        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(dbSession, LOG, fullRequest, true);
         try {
             BaseResponse response = BaseResponse.make();
             ResendActivationRequest request = ResendActivationRequest.make(fullRequest.getData());
@@ -622,7 +622,7 @@ public class ClientUser {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/deleteUser")
     public Response deleteUser(@OraData DbSession dbSession, FullRestRequest fullRequest) throws Exception {
-        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, fullRequest, true);
+        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(dbSession, LOG, fullRequest, true);
         try {
             BaseResponse response = BaseResponse.make();
             DeleteUserRequest request = DeleteUserRequest.make(fullRequest.getData());
