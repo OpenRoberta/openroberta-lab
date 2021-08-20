@@ -4,11 +4,11 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Functions;
 
 import de.fhg.iais.roberta.components.Category;
@@ -119,9 +119,9 @@ public class BlockTypeContainer {
         return blockType;
     }
 
-    @VisibleForTesting
-    public static Map<String, BlockType> getBlockTypesByName() {
-        return blockTypesByName;
+    public static List<Class<?>> getAstClasses() {
+        return blockTypesByName.values().stream()
+            .map(BlockType::getAstClass)
+            .collect(Collectors.toList());
     }
-
 }
