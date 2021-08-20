@@ -90,10 +90,11 @@ public class UtilForREST {
     public static HttpSessionState handleRequestInit(DbSession dbSession, Logger loggerForRequest, FullRestRequest fullRequest, boolean rememberTheCall) {
         try {
             return handleRequestInit(loggerForRequest, fullRequest, rememberTheCall);
-        } finally {
+        } catch ( Exception e ) {
             if ( dbSession != null ) {
                 dbSession.close();
             }
+            throw e;
         }
     }
 
