@@ -52,48 +52,15 @@ public class ClientConfiguration {
             String robotGroup = httpSessionState.getRobotFactory(httpSessionState.getRobotName()).getGroup();
             final String robotName = robotGroup != "" ? robotGroup : httpSessionState.getRobotName();
             SaveConfRequest request = SaveConfRequest.make(fullRequest.getData());
-            String cmd = "saveC";
+            String cmd = request.getCmd();
             LOG.info("command is: " + cmd);
             response.setCmd(cmd);
+            Boolean mayExist = cmd.equals("saveC");
 
             ConfigurationProcessor cp = new ConfigurationProcessor(dbSession, httpSessionState);
             String configurationName = request.getName();
             String configurationXml = request.getConfiguration();
-            cp.updateConfiguration(configurationName, userId, robotName, configurationXml, true);
-            UtilForREST.addResultInfo(response, cp);
-            return UtilForREST.responseWithFrontendInfo(response, httpSessionState, this.brickCommunicator);
-        } catch ( Exception e ) {
-            dbSession.rollback();
-            String errorTicketId = Util.getErrorTicketId();
-            LOG.error("Exception. Error ticket: " + errorTicketId, e);
-            return UtilForREST.makeBaseResponseForError(Key.SERVER_ERROR, httpSessionState, null); // TODO: redesign error ticker number and add then: append("parameters", errorTicketId);
-        } finally {
-            if ( dbSession != null ) {
-                dbSession.close();
-            }
-        }
-    }
-
-    @POST
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    @Path("/saveAsC")
-    public Response saveAsConfig(@OraData DbSession dbSession, FullRestRequest fullRequest) throws Exception {
-        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(dbSession, LOG, fullRequest, true);
-        try {
-            BaseResponse response = BaseResponse.make();
-            int userId = httpSessionState.getUserId();
-            String robotGroup = httpSessionState.getRobotFactory(httpSessionState.getRobotName()).getGroup();
-            final String robotName = robotGroup != "" ? robotGroup : httpSessionState.getRobotName();
-            SaveConfRequest request = SaveConfRequest.make(fullRequest.getData());
-            String cmd = "saveAsC";
-            LOG.info("command is: " + cmd);
-            response.setCmd(cmd);
-            ConfigurationProcessor cp = new ConfigurationProcessor(dbSession, httpSessionState);
-
-            String configurationName = request.getName();
-            String configurationXml = request.getConfiguration();
-            cp.updateConfiguration(configurationName, userId, robotName, configurationXml, false);
+            cp.updateConfiguration(configurationName, userId, robotName, configurationXml, mayExist);
             UtilForREST.addResultInfo(response, cp);
             return UtilForREST.responseWithFrontendInfo(response, httpSessionState, this.brickCommunicator);
         } catch ( Exception e ) {

@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2021-08-26 16:01:14.761603",
+		"lastupdated": "2021-08-31 13:49:51.768730",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -1791,5 +1791,7 @@
 	"FRAME_WIDTH": "Frame width",
 	"LIGHT_LDR": "Light (LDR)",
 	"POPUP_REPLACE": "Replace",
-	"POPUP_BACKGROUND_REPLACE": "A program with the same name already exists. <br> Would you like to replace it?"
+	"POPUP_BACKGROUND_REPLACE": "A program with the same name already exists. <br> Would you like to replace it?",
+	"POPUP_BACKGROUND_REPLACE_CONFIGURATION": "A configuration with the same name already exists. <br> Would you like to replace it?",
+	"ORA_CONFIGURATION_SAVE_AS_ERROR_CONFIGURATION_EXISTS": "This configuration already exists."
 }

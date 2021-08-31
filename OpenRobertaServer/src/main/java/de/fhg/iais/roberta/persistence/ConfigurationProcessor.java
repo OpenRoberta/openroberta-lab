@@ -82,7 +82,7 @@ public class ConfigurationProcessor extends AbstractProcessor {
             if ( configurationDao.persistConfigurationText(configurationName, owner, robot, configurationText, mayExist) ) {
                 setStatus(ProcessorStatus.SUCCEEDED, Key.CONFIGURATION_SAVE_SUCCESS, new HashMap<>());
             } else {
-                setStatus(ProcessorStatus.FAILED, Key.CONFIGURATION_SAVE_ERROR, new HashMap<>());
+                setStatus(ProcessorStatus.FAILED, Key.CONFIGURATION_SAVE_AS_ERROR_CONFIGURATION_EXISTS, new HashMap<>());
             }
         } else {
             setStatus(ProcessorStatus.FAILED, Key.USER_ERROR_NOT_LOGGED_IN, new HashMap<>());

@@ -422,7 +422,7 @@ public abstract class AbstractRestInterfaceTest {
             jsonAsString += ";'configuration':'" + CONF_PRE + configText + CONF_POST + "'";
         }
         jsonAsString += ";}";
-        this.response = this.restConfiguration.saveAsConfig(newDbSession(), mkFRR(httpSession.getInitToken(), jsonAsString));
+        this.response = this.restConfiguration.saveConfig(newDbSession(), mkFRR(httpSession.getInitToken(), jsonAsString));
         JSONUtilForServer.assertEntityRc(this.response, result, msgOpt);
     }
 
