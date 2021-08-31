@@ -435,7 +435,7 @@ public class ProgramRestTest extends AbstractRestInterfaceTest {
             saveConfigAs(this.sMinscha, minschaId, "mc1", "mc1.1.conf.minscha", "ok", Key.CONFIGURATION_SAVE_SUCCESS);
             saveConfigAs(this.sMinscha, minschaId, null, "mc1.1.conf.minscha", "error", Key.SERVER_ERROR);
             saveConfigAs(this.sMinscha, minschaId, "mc2", null, "error", Key.SERVER_ERROR);
-            saveConfigAs(this.sMinscha, minschaId, "mc1", "mc1.2.conf.minscha", "error", Key.CONFIGURATION_SAVE_ERROR);
+            saveConfigAs(this.sMinscha, minschaId, "mc1", "mc1.2.conf.minscha", "error", Key.CONFIGURATION_SAVE_AS_ERROR_CONFIGURATION_EXISTS);
             Assert.assertEquals(1, this.memoryDbSetup.getOneBigIntegerAsLong("select count(*) from CONFIGURATION where NAME like 'mc%'"));
             String confHash = this.memoryDbSetup.getOne("select CONFIGURATION_HASH from CONFIGURATION where NAME = 'mc1'");
             String confText = this.memoryDbSetup.getOne("select CONFIGURATION_TEXT from CONFIGURATION_DATA where CONFIGURATION_HASH = '" + confHash + "'");

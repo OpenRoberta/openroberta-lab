@@ -1044,6 +1044,7 @@ Blockly.Msg.ORA_CONFIGURATION_ERROR_ID_INVALID = "Nazwa konfiguracja nie jest po
 Blockly.Msg.ORA_CONFIGURATION_GET_ALL_SUCCESS = "Konfiguracja została załadowana";
 Blockly.Msg.ORA_CONFIGURATION_GET_ONE_ERROR_NOT_FOUND = "Konfiguracja robota nie może zostać znaleziona w bazie danych.";
 Blockly.Msg.ORA_CONFIGURATION_GET_ONE_SUCCESS = "Konfiguracja została załadowana";
+Blockly.Msg.ORA_CONFIGURATION_SAVE_AS_ERROR_CONFIGURATION_EXISTS = "This configuration already exists.";  // untranslated
 Blockly.Msg.ORA_CONFIGURATION_SAVE_ERROR = "Wystąpił błąd podczas zapisywania konfiguracji robota.";
 Blockly.Msg.ORA_CONFIGURATION_SAVE_ERROR_NOT_SAVED_TO_DB = "Błąd wystąpił błąd podczas zapisywania konfiguracji w bazie danych.";
 Blockly.Msg.ORA_CONFIGURATION_SAVE_SUCCESS = "Konfiguracja została zapisana";
@@ -1185,6 +1186,7 @@ Blockly.Msg.POPUP_ABOUT_TEXT_GOOG = "Open Roberta została rozpoczęta we wspó�
 Blockly.Msg.POPUP_AGE = "Wiek";
 Blockly.Msg.POPUP_ATTENTION = "Uwaga";
 Blockly.Msg.POPUP_BACKGROUND_REPLACE = "A program with the same name already exists. <br> Would you like to replace it?";  // untranslated
+Blockly.Msg.POPUP_BACKGROUND_REPLACE_CONFIGURATION = "A configuration with the same name already exists. <br> Would you like to replace it?";  // untranslated
 Blockly.Msg.POPUP_BACKGROUND_STORAGE = "The Open Roberta Lab can automatically load your simulation background on your next visits. For this purpose, we will save data in the Local Storage on your computer. <a href='https://www.roberta-home.de/en/privacy-policy-open-roberta-lab/' target='_blank'>More information in our privacy policy.</a>";  // untranslated
 Blockly.Msg.POPUP_BEFOREUNLOAD = "Masz niezapisane zmiany w swoim programie lub konfiguracji. Zaloguj się i zapisz swój program lub konfigurację.";
 Blockly.Msg.POPUP_BEFOREUNLOAD_LOGGEDIN = "Masz niezapisane zmiany w swoim programie lub konfiguracji.";

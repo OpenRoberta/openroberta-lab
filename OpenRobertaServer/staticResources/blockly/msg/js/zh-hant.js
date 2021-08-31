@@ -1044,6 +1044,7 @@ Blockly.Msg.ORA_CONFIGURATION_ERROR_ID_INVALID = "配置名稱不是有效的識
 Blockly.Msg.ORA_CONFIGURATION_GET_ALL_SUCCESS = "配置已載入";
 Blockly.Msg.ORA_CONFIGURATION_GET_ONE_ERROR_NOT_FOUND = "在資料庫中找不到機器人配置。";
 Blockly.Msg.ORA_CONFIGURATION_GET_ONE_SUCCESS = "配置已載入";
+Blockly.Msg.ORA_CONFIGURATION_SAVE_AS_ERROR_CONFIGURATION_EXISTS = "This configuration already exists.";  // untranslated
 Blockly.Msg.ORA_CONFIGURATION_SAVE_ERROR = "儲存機器人配置時出現錯誤。";
 Blockly.Msg.ORA_CONFIGURATION_SAVE_ERROR_NOT_SAVED_TO_DB = "在資料庫中儲存配置時出現錯誤。";
 Blockly.Msg.ORA_CONFIGURATION_SAVE_SUCCESS = "配置已儲存";
@@ -1185,6 +1186,7 @@ Blockly.Msg.POPUP_ABOUT_TEXT_GOOG = "Open Roberta是與谷歌德國合作發起�
 Blockly.Msg.POPUP_AGE = "年齡";
 Blockly.Msg.POPUP_ATTENTION = "注意";
 Blockly.Msg.POPUP_BACKGROUND_REPLACE = "A program with the same name already exists. <br> Would you like to replace it?";  // untranslated
+Blockly.Msg.POPUP_BACKGROUND_REPLACE_CONFIGURATION = "A configuration with the same name already exists. <br> Would you like to replace it?";  // untranslated
 Blockly.Msg.POPUP_BACKGROUND_STORAGE = "The Open Roberta Lab can automatically load your simulation background on your next visits. For this purpose, we will save data in the Local Storage on your computer. <a href='https://www.roberta-home.de/en/privacy-policy-open-roberta-lab/' target='_blank'>More information in our privacy policy.</a>";  // untranslated
 Blockly.Msg.POPUP_BEFOREUNLOAD = "您的程式或配置中有未儲存的更改。登錄並儲存您的程式或配置。";
 Blockly.Msg.POPUP_BEFOREUNLOAD_LOGGEDIN = "您的程式或配置中有未儲存的更改。";

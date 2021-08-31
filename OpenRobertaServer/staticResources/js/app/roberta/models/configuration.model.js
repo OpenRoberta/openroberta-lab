@@ -16,7 +16,7 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
      *            {String} - XML representation of the robot configuration
      */
     function saveAsConfigurationToServer(configName, xmlText, successFn) {
-        COMM.json("/conf/saveAsC", {
+        COMM.json("/conf/saveC", {
             "cmd" : "saveAsC",
             "name" : configName,
             "configuration" : xmlText
