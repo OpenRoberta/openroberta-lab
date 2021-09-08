@@ -9,8 +9,8 @@ The steps below explain how to get started with the sources. If you just want to
 the [Wiki - Installation](https://github.com/OpenRoberta/openroberta-lab/wiki/Installation). If you want to contribute, please get in touch with us,
 see [Wiki - Community](https://github.com/OpenRoberta/openroberta-lab/wiki/Community), before you start.
 
-After a fresh git clone you get the **openroberta-lab** project folder. It includes almost everything you need to setup and extend your own openrobertalab server.
-License information is available in the **docs** folder.
+After a fresh git clone you get the **openroberta-lab** project folder. It includes almost everything you need to setup and extend your own
+openrobertalab server. License information is available in the **docs** folder.
 
 Things you need on your computer:
 
