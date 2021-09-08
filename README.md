@@ -47,6 +47,8 @@ on Ubuntu:
 on Windows:
 * Arduino based robots
   * install [avr-gcc](http://downloads.arduino.cc/tools/avr-gcc-7.3.0-atmel3.6.1-arduino5-i686-w64-mingw32.zip)
+* NXT
+  * currently the installation description is missing
 * Calliope
   * install [gcc-arm-none-eabi](https://developer.arm.com/tools-and-software/open-source-software/developer-tools/gnu-toolchain/gnu-rm/downloads)
   * install [srecord](http://srecord.sourceforge.net/)
@@ -98,7 +100,7 @@ If you try to create a new database, but one exists, the old one is *not* change
 
     ./ora.sh [-oraccrsc <optional-path-to-crosscompiler-resources, defaults-to '../ora-cc-rsc'>] start-from-git
 
-If you did not install the crosscompiler resources and don't use the -oraccrsc parameter, everything works fine (programming, simulation, code generation,
+If you did not install the crosscompiler resources, everything works fine (programming, simulation, code generation,
 user management, ...), except of generation of binaries for robot systems.
 
 #### Step 4: Accessing your openroberta installation
@@ -151,8 +153,6 @@ You can also import the project into IDE's such as [Eclipse](https://github.com/
 
 ### Development notes
 
-You can follow the test status [here](https://travis-ci.org/OpenRoberta/).
-
 Development happens in the [develop](https://github.com/OpenRoberta/openroberta-lab/tree/develop) branch. Please sent PRs against that branch.
 
     git clone https://github.com/OpenRoberta/openroberta-lab.git
@@ -192,9 +192,3 @@ We use BrowserStack for Cross-Browser Testing
 [<img src="https://github.com/OpenRoberta/openroberta-lab/blob/develop/Resources/images/browserstack-logo-600x315.png" width="150">](http://browserstack.com/)
 
 #### Have a look at the notes in LICENCE and NOTICE
-
-Build status:
-
-* master [![master](https://travis-ci.org/OpenRoberta/openroberta-lab.svg?branch=master)](https://travis-ci.org/OpenRoberta/openroberta-lab/builds)
-* develop [![develop](https://travis-ci.org/OpenRoberta/openroberta-lab.svg?branch=develop)](https://travis-ci.org/OpenRoberta/openroberta-lab/builds)
-
