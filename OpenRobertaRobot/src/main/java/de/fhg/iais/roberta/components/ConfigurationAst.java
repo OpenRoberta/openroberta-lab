@@ -14,7 +14,7 @@ import de.fhg.iais.roberta.util.dbc.DbcException;
 
 /**
  * An AST representation of the old/new configurations. Contains an insertion ordered Map of {@link ConfigurationComponent}s. May have subclasses with hardcoded
- * configurations which can reuse the {@link Builder} using the generic {@link Builder#build(Class)}.
+ * configurations which can reuse the {@link Builder} using the generic {@link Builder#build()}.
  */
 public final class ConfigurationAst {
     // LinkedHashMap to preserve insertion order of elements. Helps to recreate the same XML output as XML input.
@@ -31,7 +31,7 @@ public final class ConfigurationAst {
     private final String password;
     private String robotName;
 
-    protected ConfigurationAst(
+    private ConfigurationAst(
         Iterable<ConfigurationComponent> configurationComponents,
         String robotType,
         String xmlVersion,
@@ -212,7 +212,12 @@ public final class ConfigurationAst {
     }
 
     public String getFirstMotorPort(String side) {
-        return getFirstMotor(side).getUserDefinedPortName();
+        ConfigurationComponent firstMotor = getFirstMotor(side);
+        if ( firstMotor == null ) {
+            return null;
+        } else {
+            return firstMotor.getUserDefinedPortName();
+        }
     }
 
     public ConfigurationComponent getFirstMotor(String side) {
