@@ -1292,10 +1292,14 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
     private void generateSensors() {
         Map<String, UsedSensor> usedSensorMap = new HashMap<>();
         for ( UsedSensor usedSensor : this.getBean(UsedHardwareBean.class).getUsedSensors() ) {
-            nlIndent();
-            this.sb.append("SetSensor(");
             ConfigurationComponent configurationComponent = this.brickConfiguration.getConfigurationComponent(usedSensor.getPort());
             String sensorType = configurationComponent.getComponentType();
+            nlIndent();
+            if ( sensorType.equals(SC.LIGHT) ) {
+                this.sb.append("SetSensorLight(");
+            } else {
+                this.sb.append("SetSensor(");
+            }
             this.sb.append(configurationComponent.getInternalPortName()).append(", ");
 
             switch ( sensorType ) {
@@ -1306,7 +1310,11 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
                     this.sb.append("SENSOR_LOWSPEED);");
                     break;
                 case SC.LIGHT:
-                    this.sb.append("SENSOR_LIGHT);");
+                    if ( usedSensor.getMode().equals("LIGHT") ) {
+                        this.sb.append("true);");
+                    } else {
+                        this.sb.append("false);");
+                    }
                     break;
                 case SC.TOUCH:
                     this.sb.append("SENSOR_TOUCH);");
