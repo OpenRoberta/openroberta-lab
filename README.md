@@ -48,7 +48,7 @@ on Windows:
 * Arduino based robots
   * install [avr-gcc](http://downloads.arduino.cc/tools/avr-gcc-7.3.0-atmel3.6.1-arduino5-i686-w64-mingw32.zip)
 * NXT
-  * currently the installation description is missing
+  * currently the installation description is missing and will be supplied soon
 * Calliope
   * install [gcc-arm-none-eabi](https://developer.arm.com/tools-and-software/open-source-software/developer-tools/gnu-toolchain/gnu-rm/downloads)
   * install [srecord](http://srecord.sourceforge.net/)
