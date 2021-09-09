@@ -31,7 +31,6 @@ import de.fhg.iais.roberta.syntax.functions.mbed.ImageShiftFunction;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.syntax.sensor.mbed.RadioRssiSensor;
 
-@SuppressWarnings("unchecked")
 public interface IMbedTransformerVisitor<V> extends ITransformerVisitor<V>, IMbedVisitor<Phrase<V>> {
 
     @Override
@@ -83,7 +82,7 @@ public interface IMbedTransformerVisitor<V> extends ITransformerVisitor<V>, IMbe
 
     @Override
     default Phrase<V> visitLedOnAction(LedOnAction<Phrase<V>> ledOnAction) {
-        return LedOnAction.make(ledOnAction.getUserDefinedPort(), (Expr<V>) ledOnAction.getLedColor().modify(this), ledOnAction.getProperty(), ledOnAction.getComment());
+        return LedOnAction.make(ledOnAction.getProperty(), ledOnAction.getComment(), (Expr<V>) ledOnAction.getLedColor().modify(this), ledOnAction.getUserDefinedPort(), ledOnAction.hide);
     }
 
     @Override

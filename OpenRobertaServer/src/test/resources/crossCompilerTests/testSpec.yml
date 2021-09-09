@@ -11,6 +11,17 @@ robots:
         template: calliope
         dir: calliope
         suffix: ".cpp"
+    calliope2017:
+      template: calliope
+      dir: calliope
+      suffix: ".cpp"
+      # messages: not available if bluetooth is enabled
+      # other: RAM overflow. Partition the programs!
+      exclude: [messages,actors_all_without_pins_and_callibot,callibot,control_logic,math_lists,sensors_all_without_pins_and_callibot,text_colour_images_functions]
+    calliope2016:
+        template: calliope
+        dir: calliope
+        suffix: ".cpp"
     edison:
         template: edison
         dir: edison
@@ -47,10 +58,10 @@ robots:
         template: nxt
         dir: nxt
         suffix: ".nxc"
-    sensebox:
-        template: sensebox
-        dir: sensebox
-        suffix: ".ino"
+#    sensebox:
+#        template: sensebox
+#        dir: sensebox
+#        suffix: ".ino"
     uno:
         template: ardu
         dir: ardu
@@ -59,6 +70,10 @@ robots:
         template: ardu
         dir: unowifirev2
         suffix: ".ino"
+    nano33ble:
+      template: nano33ble
+      dir: nano33ble
+      suffix: ".ino"
     wedo:
         template: wedo
         dir: wedo
@@ -118,6 +133,7 @@ progs:
     listOperationsBasic:
        decl: basicListOperations
        exclude:
+          calliope2017: "RAM overflow - partition the program!"
           nxt: "no extendable lists"
           bob3: "no lists"
           edison: "Edisons lists are not extendable"
@@ -135,6 +151,7 @@ progs:
     mathAndLists:
        decl: mathAndLists
        exclude:
+          calliope2017: "RAM overflow - partition the program!"
           edison: "no extendable lists"
           nxt: "no extendable lists"
           bob3: "no lists"
@@ -174,6 +191,7 @@ progs:
     strings:
        decl: strings
        exclude:
+          calliope2017: "RAM overflow - partition the program!"
           uno: "Comparison of string and char not possible"
           nano33ble: "Comparison of string and char not possible"
           mega: "Comparison of string and char not possible"

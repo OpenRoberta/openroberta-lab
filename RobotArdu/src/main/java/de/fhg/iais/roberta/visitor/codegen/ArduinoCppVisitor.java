@@ -836,7 +836,7 @@ public class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor implement
                     if ( addressssd1306 == null ) {
                         addressssd1306 = "0x3D";
                     }
-                    this.sb.append("#define SCREEN_ADDRESS \"").append(addressssd1306).append("\"");
+                    this.sb.append("#define SCREEN_ADDRESS ").append(addressssd1306);
                     nlIndent();
                     this.sb.append("#define OLED_RESET 4");
                     nlIndent();

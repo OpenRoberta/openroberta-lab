@@ -80,7 +80,7 @@ public class MbedThree2ThreeOneTransformerVisitor implements IMbedTransformerVis
     public Phrase<Void> visitLedOnAction(LedOnAction<Phrase<Void>> ledOnAction) {
         String newName = getNewName(ledOnAction.getUserDefinedPort());
 
-        return LedOnAction.make(newName, (Expr<Void>) ledOnAction.getLedColor().modify(this), ledOnAction.getProperty(), ledOnAction.getComment());
+        return LedOnAction.make(ledOnAction.getProperty(), ledOnAction.getComment(), (Expr<Void>) ledOnAction.getLedColor().modify(this), newName, ledOnAction.hide);
     }
 
     @Override

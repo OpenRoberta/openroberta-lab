@@ -1,0 +1,24 @@
+<export xmlns="http://de.fhg.iais.roberta.blockly">
+	<program>
+        <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="nano33ble" xmlversion="3.1" description="" tags="">
+            <instance x="384" y="50">
+                <block type="robControls_start_ardu" id="CR3M+Se+PMS6*K+3YRoG" intask="true" deletable="false">
+                    <mutation declare="true" />
+                    <field name="DEBUG" />
+                    <statement name="ST">
+                        [[decl]]
+                    </statement>
+                </block>
+                <block type="robControls_loopForever_ardu" id="-D9%psvulqWiKFbY+9n0" intask="true" deletable="false" movable="false">
+                    <statement name="DO">
+                        [[prog]]
+                    </statement>
+                </block>
+            </instance>
+            [[fragment]]
+        </block_set>
+    </program>
+	<config>
+		[[conf]]
+	</config>
+</export>

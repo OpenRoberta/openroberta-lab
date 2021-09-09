@@ -4,14 +4,15 @@
 
 #include <Servo/src/Servo.h>
 #include <LiquidCrystal_I2C/LiquidCrystal_I2C.h>
+#include <Adafruit_SSD1306.h>
 #include <Stepper/src/Stepper.h>
 #include <NEPODefs.h>
 
 void action();
-void display();
-void lights();
 void move();
+void display();
 void sounds();
+void lights();
 void pin();
 
 double ___n;
@@ -32,6 +33,11 @@ int _relay_R = 6;
 Servo _servo_S;
 LiquidCrystal_I2C _lcd_L3(0x27, 16, 2);
 int _led_L = LED_BUILTIN;
+#define SCREEN_ADDRESS 0x3D
+#define OLED_RESET 4
+#define SCREEN_WIDTH 128
+#define SCREEN_HEIGHT 64
+Adafruit_SSD1306 _lcd_O(SCREEN_WIDTH,SCREEN_HEIGHT,&Wire, OLED_RESET);
 int _SPU_S2 = 2048;
 Stepper _stepper_S2(_SPU_S2, 1, 4, 2, 12);
 
@@ -40,6 +46,15 @@ void action() {
     display();
     sounds();
     lights();
+    pin();
+}
+
+void move() {
+    _servo_S.write(___n);
+    _stepper_S2.setSpeed(___n);
+    _stepper_S2.step(_SPU_S2*(___n));
+    digitalWrite(_relay_R, LOW);
+    digitalWrite(_relay_R, HIGH);
 }
 
 void display() {
@@ -48,6 +63,15 @@ void display() {
     _lcd_L3.print(___s);
     
     _lcd_L3.clear();
+    _lcd_O.setCursor(0,1);
+    _lcd_O.print("Hallo");
+    _lcd_O.display();
+    _lcd_O.clearDisplay();
+}
+
+void sounds() {
+    tone(_buzzer_S3, ___n, ___n);
+    delay(___n);
 }
 
 void lights() {
@@ -61,19 +85,6 @@ void lights() {
     analogWrite(_led_green_R2, 0);
     analogWrite(_led_blue_R2, 0);
     
-}
-
-void move() {
-    _servo_S.write(___n);
-    _stepper_S2.setSpeed(___n);
-    _stepper_S2.step(_SPU_S2*(___n));
-    digitalWrite(_relay_R, LOW);
-    digitalWrite(_relay_R, HIGH);
-}
-
-void sounds() {
-    tone(_buzzer_S3, ___n, ___n);
-    delay(___n);
 }
 
 void pin() {
@@ -93,6 +104,7 @@ void setup()
     _servo_S.attach(7);
     _lcd_L3.begin();
     pinMode(_led_L, OUTPUT);
+    _lcd_O.begin(SSD1306_SWITCHCAPVCC, SCREEN_ADDRESS);
     ___n = 0;
     ___b = true;
     ___s = "";

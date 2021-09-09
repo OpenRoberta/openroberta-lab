@@ -77,12 +77,12 @@ public class CalliopeTwo2ThreeTransformerTest {
     public void executeTransformer_ShouldReturnTransformedLedRgbled_WhenGivenOldLedRgbled() {
         String expectedProgramAst =
             "BlockAST[project=[[Location[x=512,y=50],MainTask[],"
-                + "LedOnAction[_R,ColorConst[#ff0000]],"
-                + "LedOnAction[CalliBot_links_vorne,ColorConst[#ff0000]],"
-                + "LedOnAction[CalliBot_rechts_vorne,ColorConst[#ff0000]],"
-                + "LedOnAction[CalliBot_links_hinten,ColorConst[#ff0000]],"
-                + "LedOnAction[CalliBot_rechts_hinten,ColorConst[#ff0000]],"
-                + "LedOnAction[CalliBot_alle,ColorConst[#ff0000]],"
+                + "LedOnAction[ledColor:ColorConst[#ff0000],port:_R],"
+                + "LedOnAction[ledColor:ColorConst[#ff0000],port:CalliBot_links_vorne],"
+                + "LedOnAction[ledColor:ColorConst[#ff0000],port:CalliBot_rechts_vorne],"
+                + "LedOnAction[ledColor:ColorConst[#ff0000],port:CalliBot_links_hinten],"
+                + "LedOnAction[ledColor:ColorConst[#ff0000],port:CalliBot_rechts_hinten],"
+                + "LedOnAction[ledColor:ColorConst[#ff0000],port:CalliBot_alle],"
                 + "LightStatusAction[_R, OFF],"
                 + "LightStatusAction[CalliBot_links_vorne, OFF],"
                 + "LightStatusAction[CalliBot_rechts_vorne, OFF],"

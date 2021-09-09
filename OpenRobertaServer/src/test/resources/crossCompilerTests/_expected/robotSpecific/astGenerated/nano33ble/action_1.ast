@@ -1,3 +1,0 @@
-
-(repeat [FOREVER_ARDU, BoolConst [true]]MethodStmt [MethodCall [action, , , VOID]]
-)

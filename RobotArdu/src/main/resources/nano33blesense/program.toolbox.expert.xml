@@ -1,26 +1,6 @@
 <toolbox_set id="toolbox" style="display: none">
     <category name="TOOLBOX_ACTION" svg="true">
         <category name="TOOLBOX_MOVE" svg="true">
-            <block type="robActions_motor_on_for_ardu">
-                <value name="POWER">
-                    <block type="math_number" id="Dy#ytr1sQ2WFyWrdDQ_!" intask="true">
-                        <field name="NUM">90</field>
-                    </block>
-                </value>
-            </block>
-            <block type="robActions_motor_on_for">
-                <field name="MOTORROTATION">ROTATIONS</field>
-                <value name="POWER">
-                    <block type="math_number" id="!QbWfztiAOh%s]g~yrx-" intask="true">
-                        <field name="NUM">10</field>
-                    </block>
-                </value>
-                <value name="VALUE">
-                    <block type="math_number" id="6x6fhJgxUI5ju.hpZ(sX" intask="true">
-                        <field name="NUM">5</field>
-                    </block>
-                </value>
-            </block>
             <block type="robActions_set_relay" />
         </category>
         <category name="TOOLBOX_DISPLAY" svg="true">
@@ -31,25 +11,7 @@
                     </block>
                 </value>
             </block>
-            <block type="robActions_display_text">
-                <value name="OUT">
-                    <block type="text">
-                        <field name="TEXT">Hallo</field>
-                    </block>
-                </value>
-                <value name="ROW">
-                    <block type="math_number">
-                        <field name="NUM">0</field>
-                    </block>
-                </value>
-                <value name="COL">
-                    <block type="math_number">
-                        <field name="NUM">0</field>
-                    </block>
-                </value>
-            </block>
-            <block type="robActions_display_clear" />
-            <block type="robActions_display_text_i2c">
+            <block type="robActions_display_text_oledssd1306i2c">
                 <value name="OUT">
                     <block type="text">
                         <field name="TEXT">Hallo</field>
@@ -66,7 +28,7 @@
                     </block>
                 </value>
             </block>
-            <block type="robActions_display_clear_i2c" />
+            <block type="robActions_display_clear_oledssd1306i2c" />
         </category>
         <category name="TOOLBOX_SOUND" svg="true">
             <block type="robActions_play_tone">
@@ -110,15 +72,11 @@
         <block type="robSensors_key_getSample" />
         <block type="robSensors_motion_getSample" />
         <block type="robSensors_light_getSample" />
-        <block type="robSensors_infrared_getSample" />
         <block type="robSensors_temperature_getSample" />
-        <block type="robSensors_humidity_getSample" />
         <block type="robSensors_drop_getSample" />
         <block type="robSensors_pulse_getSample" />
         <block type="robSensors_potentiometer_getSample" />
-        <block type="robSensors_moisture_getSample" />
         <block type="robSensors_ultrasonic_getSample" />
-        <block type="robSensors_rfid_getSample" />
     </category>
     <category name="TOOLBOX_INTEGRATED_SENSOR" svg="true">
         <block type="robSensors_lsm9ds1_acceleration_getDataAvailableSample"></block>

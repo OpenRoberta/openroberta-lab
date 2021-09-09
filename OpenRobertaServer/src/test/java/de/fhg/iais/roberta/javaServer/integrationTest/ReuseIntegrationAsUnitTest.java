@@ -11,7 +11,9 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 import java.util.Set;
@@ -28,6 +30,7 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
 import org.apache.commons.io.FileUtils;
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.junit.Assert;
 import org.junit.BeforeClass;
@@ -45,7 +48,6 @@ import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.javaServer.restServices.all.controller.ProjectWorkflowRestController;
 import de.fhg.iais.roberta.mode.action.Language;
 import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.syntax.sensor.ExternalSensor;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.util.Pair;
 import de.fhg.iais.roberta.util.Util;
@@ -265,9 +267,17 @@ public class ReuseIntegrationAsUnitTest {
         for ( final String robotName : robotNameArray ) {
             LOG.info("========= processing robot: " + robotName);
             final String resourceDirectory = setupRobotFactoryAndGetResourceDirForRobotSpecificTests(robotName);
+            JSONArray programsToExcludeJA = robotsFromTestSpec.getJSONObject(robotName).optJSONArray("exclude");
+            final List<String> excludedPrograms = new ArrayList<>(programsToExcludeJA == null ? 0 : programsToExcludeJA.length());
+            if ( programsToExcludeJA != null ) {
+                for ( Iterator<Object> it = programsToExcludeJA.iterator(); it.hasNext(); ) {
+                    Object object = it.next();
+                    excludedPrograms.add(object.toString());
+                }
+            }
             de.fhg.iais.roberta.util.FileUtils.fileStreamOfResourceDirectory(resourceDirectory). //
                 filter(f -> f.endsWith(".xml"))
-                .forEach(f -> runRegenerateAndCodeGenerationForOneRobotSpecificProgram(resourceDirectory, f, robotName));
+                .forEach(f -> runRegenerateAndCodeGenerationForOneRobotSpecificProgram(resourceDirectory, f, robotName, excludedPrograms));
         }
         checkAndShowTestResult();
     }
@@ -279,19 +289,20 @@ public class ReuseIntegrationAsUnitTest {
         String programName = "sensors_all_without_pins_and_callibot";
         LOG.info("========= testing program " + programName + " for robot " + robotName);
         final String resourceDirectory = setupRobotFactoryAndGetResourceDirForRobotSpecificTests(robotName);
-        runRegenerateAndCodeGenerationForOneRobotSpecificProgram(resourceDirectory, programName + ".xml", robotName);
+        runRegenerateAndCodeGenerationForOneRobotSpecificProgram(resourceDirectory, programName + ".xml", robotName, Collections.emptyList());
         checkAndShowTestResult();
     }
 
     private void runRegenerateAndCodeGenerationForOneRobotSpecificProgram(
         String resourceDirectoryWithPrograms, String fileNameWithRobotSpecificTestProgram,
-        String robotName) //
+        String robotName,
+        List<String> excludedPrograms) //
     {
         int index = fileNameWithRobotSpecificTestProgram.lastIndexOf(".xml");
         Assert.assertTrue(index > 0);
         String programName = fileNameWithRobotSpecificTestProgram.substring(0, index);
-        if ( "error".equals(programName) ) {
-            LOG.info("ignoring program \"error\"");
+        if ( "error".equals(programName) || excludedPrograms.contains(programName) ) {
+            LOG.info("ignoring excluded program \"" + programName + "\"");
             return;
         }
         String msgSuffix = robotName + "/" + programName;
