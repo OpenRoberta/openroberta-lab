@@ -44,8 +44,8 @@ task main() {
     ___connectionList = _____connectionList;
     SetSensor(S1, SENSOR_TOUCH);
     SetSensor(S2, SENSOR_SOUND);
-    SetSensor(S3, SENSOR_LIGHT);
-    SetSensor(S3, SENSOR_LIGHT);
+    SetSensorLight(S3, true);
+    SetSensorLight(S3, false);
     SetSensor(S4, SENSOR_LOWSPEED);
     SetSensor(S1, SENSOR_TOUCH);
     SetSensor(S1, SENSOR_TOUCH);
