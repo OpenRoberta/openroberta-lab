@@ -1033,6 +1033,108 @@
   },
   {
     "opc": "comment",
+    "+": ["cxfo[ShpOxQ{^!uhfS:z"],
+    "type": "start",
+    "target": "RepeatStmt"
+  },
+  {
+    "opc": "comment",
+    "possibleDebugStop": ["cxfo[ShpOxQ{^!uhfS:z"]
+  },
+  {
+    "opc": "comment",
+    "+": ["j?},W_ISE[?]JeG9L+5Q"],
+    "type": "start",
+    "target": "WaitStmt"
+  },
+  {
+    "opc": "comment",
+    "possibleDebugStop": ["j?},W_ISE[?]JeG9L+5Q"]
+  },
+  {
+    "opc": "expr",
+    "expr": "BOOL_CONST",
+    "+": ["7)1@^oj6.RXADjmSqy/m"],
+    "value": true,
+    "-": ["7)1@^oj6.RXADjmSqy/m"]
+  },
+  {
+    "opc": "jump",
+    "conditional": false,
+    "target": 171
+  },
+  {
+    "opc": "jump",
+    "possibleDebugStop": [":zZz2fjO`J}Zpz{l:_9N"],
+    "conditional": "always",
+    "+": [":zZz2fjO`J}Zpz{l:_9N"],
+    "-": [
+      "cxfo[ShpOxQ{^!uhfS:z",
+      ":zZz2fjO`J}Zpz{l:_9N",
+      "j?},W_ISE[?]JeG9L+5Q"
+    ],
+    "target": 179
+  },
+  {
+    "opc": "jump",
+    "conditional": "always",
+    "-": [
+      "cxfo[ShpOxQ{^!uhfS:z",
+      "j?},W_ISE[?]JeG9L+5Q"
+    ],
+    "target": 177
+  },
+  {
+    "opc": "expr",
+    "expr": "BOOL_CONST",
+    "+": ["H.4D9lPtFlEk[]v7cpTz"],
+    "value": true,
+    "-": ["H.4D9lPtFlEk[]v7cpTz"]
+  },
+  {
+    "opc": "jump",
+    "conditional": false,
+    "target": 174
+  },
+  {
+    "opc": "jump",
+    "conditional": "always",
+    "-": [
+      "cxfo[ShpOxQ{^!uhfS:z",
+      "j?},W_ISE[?]JeG9L+5Q"
+    ],
+    "target": 177
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": 1
+  },
+  {"opc": "WaitTimeSTMT"},
+  {
+    "opc": "jump",
+    "conditional": "always",
+    "target": 166
+  },
+  {
+    "opc": "comment",
+    "type": "end",
+    "-": ["j?},W_ISE[?]JeG9L+5Q"],
+    "target": "WaitStmt"
+  },
+  {
+    "opc": "jump",
+    "conditional": "always",
+    "target": 164
+  },
+  {
+    "opc": "comment",
+    "type": "end",
+    "-": ["cxfo[ShpOxQ{^!uhfS:z"],
+    "target": "RepeatStmt"
+  },
+  {
+    "opc": "comment",
     "possibleDebugStop": ["U}o*^r#`B[*k7d2CvvO]"],
     "+": ["U}o*^r#`B[*k7d2CvvO]"],
     "value": "Control Flow Nested Loop -- End",

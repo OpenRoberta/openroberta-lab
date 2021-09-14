@@ -46,4 +46,11 @@ exprStmt StringConst[value: Control Flow Nested Loops Test:success]
 ,else
 exprStmt StringConst[value: ntrol Flow Nested Loops Test: FAIL]
 ]]
+
+(repeat [FOREVER, BoolConst[value: true]]WaitStmt [
+(repeat [WAIT, BoolConst[value: true]]StmtFlowCon[flow: BREAK]
+)
+(repeat [WAIT, BoolConst[value: true]]
+)]
+)
 StmtTextComment[textComment: Control Flow Nested Loop -- End]
