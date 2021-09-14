@@ -82,8 +82,7 @@
 										<statement name="DO0">
 											<block type="controls_flow_statements"
 												id="5b_Do@kr#A}n/x^Fs0rB" intask="true">
-												<field name="FLOW">CONTINUE
-												</field>
+												<field name="FLOW">CONTINUE</field>
 											</block>
 										</statement>
 									</block>

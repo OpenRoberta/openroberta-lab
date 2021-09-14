@@ -124,8 +124,8 @@ public class CalliopeThree2ThreeOneTransformerTest {
     public void executeTransformer_ShouldReturnTransformedCompass_WhenGivenOldCompass() {
         String expectedProgramAst =
             "BlockAST[project=[[Location[x=549,y=76],MainTask[],"
-                + "DebugAction[SensorExpr[CompassSensor[_C,ANGLE,- EMPTY_SLOT -]]],"
-                + "DebugAction[SensorExpr[GetSampleSensor[CompassSensor[_C,ANGLE,- EMPTY_SLOT -]]]]]]]";
+                + "DebugAction[value:SensorExpr[CompassSensor[_C,ANGLE,- EMPTY_SLOT -]]],"
+                + "DebugAction[value:SensorExpr[GetSampleSensor[CompassSensor[_C,ANGLE,- EMPTY_SLOT -]]]]]]]";
         String[] expectedToBeInConfigAst =
             {
                 "ConfigurationComponent[componentType=COMPASS,isActor=true,userDefinedName=_C,portName=_C,componentProperties={}]"
@@ -145,12 +145,12 @@ public class CalliopeThree2ThreeOneTransformerTest {
     public void executeTransformer_ShouldReturnTransformedLedRgbled_WhenGivenOldLedRgbled() {
         String expectedProgramAst =
             "BlockAST[project=[[Location[x=512,y=50],MainTask[],"
-                + "LedOnAction[ledColor:ColorConst[#ff0000],port:_R],"
-                + "LedOnAction[ledColor:ColorConst[#ff0000],port:CalliBot_links_vorne],"
-                + "LedOnAction[ledColor:ColorConst[#ff0000],port:CalliBot_rechts_vorne],"
-                + "LedOnAction[ledColor:ColorConst[#ff0000],port:CalliBot_links_hinten],"
-                + "LedOnAction[ledColor:ColorConst[#ff0000],port:CalliBot_rechts_hinten],"
-                + "LedOnAction[ledColor:ColorConst[#ff0000],port:CalliBot_alle],"
+                + "LedOnAction[ledColor:ColorConst[hexValue:#ff0000],port:_R],"
+                + "LedOnAction[ledColor:ColorConst[hexValue:#ff0000],port:CalliBot_links_vorne],"
+                + "LedOnAction[ledColor:ColorConst[hexValue:#ff0000],port:CalliBot_rechts_vorne],"
+                + "LedOnAction[ledColor:ColorConst[hexValue:#ff0000],port:CalliBot_links_hinten],"
+                + "LedOnAction[ledColor:ColorConst[hexValue:#ff0000],port:CalliBot_rechts_hinten],"
+                + "LedOnAction[ledColor:ColorConst[hexValue:#ff0000],port:CalliBot_alle],"
                 + "LightStatusAction[_R, OFF],"
                 + "LightStatusAction[CalliBot_links_vorne, OFF],"
                 + "LightStatusAction[CalliBot_rechts_vorne, OFF],"
@@ -188,8 +188,8 @@ public class CalliopeThree2ThreeOneTransformerTest {
     public void executeTransformer_ShouldReturnTransformedLight_WhenGivenOldLight() {
         String expectedProgramAst =
             "BlockAST[project=[[Location[x=549,y=76],MainTask[],"
-                + "DebugAction[SensorExpr[LightSensor[_L,VALUE,- EMPTY_SLOT -]]],"
-                + "DebugAction[SensorExpr[GetSampleSensor[LightSensor[_L,LIGHT_VALUE,- EMPTY_SLOT -]]]]]]]";
+                + "DebugAction[value:SensorExpr[LightSensor[_L,VALUE,- EMPTY_SLOT -]]],"
+                + "DebugAction[value:SensorExpr[GetSampleSensor[LightSensor[_L,LIGHT_VALUE,- EMPTY_SLOT -]]]]]]]";
         String[] expectedToBeInConfigAst =
             {
                 "ConfigurationComponent[componentType=LIGHT,isActor=true,userDefinedName=_L,portName=_L,componentProperties={}]"
@@ -209,8 +209,8 @@ public class CalliopeThree2ThreeOneTransformerTest {
     public void executeTransformer_ShouldReturnTransformedSound_WhenGivenOldSound() {
         String expectedProgramAst =
             "BlockAST[project=[[Location[x=549,y=76],MainTask[],"
-                + "DebugAction[SensorExpr[SoundSensor[_S,SOUND,- EMPTY_SLOT -]]],"
-                + "DebugAction[SensorExpr[GetSampleSensor[SoundSensor[_S,SOUND,- EMPTY_SLOT -]]]]]]]";
+                + "DebugAction[value:SensorExpr[SoundSensor[_S,SOUND,- EMPTY_SLOT -]]],"
+                + "DebugAction[value:SensorExpr[GetSampleSensor[SoundSensor[_S,SOUND,- EMPTY_SLOT -]]]]]]]";
         String[] expectedToBeInConfigAst =
             {
                 "ConfigurationComponent[componentType=SOUND,isActor=true,userDefinedName=_S,portName=_S,componentProperties={}]"
@@ -230,8 +230,8 @@ public class CalliopeThree2ThreeOneTransformerTest {
     public void executeTransformer_ShouldReturnTransformedTemperature_WhenGivenOldTemperature() {
         String expectedProgramAst =
             "BlockAST[project=[[Location[x=549,y=76],MainTask[],"
-                + "DebugAction[SensorExpr[TemperatureSensor[_T,VALUE,- EMPTY_SLOT -]]],"
-                + "DebugAction[SensorExpr[GetSampleSensor[TemperatureSensor[_T,TEMPERATURE,- EMPTY_SLOT -]]]]]]]";
+                + "DebugAction[value:SensorExpr[TemperatureSensor[_T,VALUE,- EMPTY_SLOT -]]],"
+                + "DebugAction[value:SensorExpr[GetSampleSensor[TemperatureSensor[_T,TEMPERATURE,- EMPTY_SLOT -]]]]]]]";
         String[] expectedToBeInConfigAst =
             {
                 "ConfigurationComponent[componentType=TEMPERATURE,isActor=true,userDefinedName=_T,portName=_T,componentProperties={}]"
@@ -252,10 +252,10 @@ public class CalliopeThree2ThreeOneTransformerTest {
     public void executeTransformer_ShouldReturnTransformedUltrasonic_WhenGivenOldUltrasonic() {
         String expectedProgramAst =
             "BlockAST[project=[[Location[x=549,y=76],MainTask[],"
-                + "DebugAction[SensorExpr[UltrasonicSensor[A1,DISTANCE,- EMPTY_SLOT -]]],"
-                + "DebugAction[SensorExpr[UltrasonicSensor[CalliBot_vorne,DISTANCE,- EMPTY_SLOT -]]],"
-                + "DebugAction[SensorExpr[GetSampleSensor[UltrasonicSensor[A1,DISTANCE,- EMPTY_SLOT -]]]],"
-                + "DebugAction[SensorExpr[GetSampleSensor[UltrasonicSensor[CalliBot_vorne,DISTANCE,- EMPTY_SLOT -]]]]]]]";
+                + "DebugAction[value:SensorExpr[UltrasonicSensor[A1,DISTANCE,- EMPTY_SLOT -]]],"
+                + "DebugAction[value:SensorExpr[UltrasonicSensor[CalliBot_vorne,DISTANCE,- EMPTY_SLOT -]]],"
+                + "DebugAction[value:SensorExpr[GetSampleSensor[UltrasonicSensor[A1,DISTANCE,- EMPTY_SLOT -]]]],"
+                + "DebugAction[value:SensorExpr[GetSampleSensor[UltrasonicSensor[CalliBot_vorne,DISTANCE,- EMPTY_SLOT -]]]]]]]";
         String[] expectedToBeInConfigAst =
             {
                 "ConfigurationComponent[componentType=ULTRASONIC,isActor=true,userDefinedName=A1,portName=A1,componentProperties={PIN1=1}]",
@@ -281,14 +281,14 @@ public class CalliopeThree2ThreeOneTransformerTest {
     public void executeTransformer_ShouldReturnTransformedAccelerometer_WhenGivenOldAccelerometer() {
         String expectedProgramAst =
             "BlockAST[project=[[Location[x=512,y=50],MainTask[],"
-                + "DebugAction[SensorExpr[AccelerometerSensor[_A,VALUE,X]]],"
-                + "DebugAction[SensorExpr[AccelerometerSensor[_A,VALUE,Y]]],"
-                + "DebugAction[SensorExpr[AccelerometerSensor[_A,VALUE,Z]]],"
-                + "DebugAction[SensorExpr[AccelerometerSensor[_A,VALUE,STRENGTH]]],"
-                + "DebugAction[SensorExpr[GetSampleSensor[AccelerometerSensor[_A,DEFAULT,X]]]],"
-                + "DebugAction[SensorExpr[GetSampleSensor[AccelerometerSensor[_A,DEFAULT,Y]]]],"
-                + "DebugAction[SensorExpr[GetSampleSensor[AccelerometerSensor[_A,DEFAULT,Z]]]],"
-                + "DebugAction[SensorExpr[GetSampleSensor[AccelerometerSensor[_A,DEFAULT,STRENGTH]]]]]]]";
+                + "DebugAction[value:SensorExpr[AccelerometerSensor[_A,VALUE,X]]],"
+                + "DebugAction[value:SensorExpr[AccelerometerSensor[_A,VALUE,Y]]],"
+                + "DebugAction[value:SensorExpr[AccelerometerSensor[_A,VALUE,Z]]],"
+                + "DebugAction[value:SensorExpr[AccelerometerSensor[_A,VALUE,STRENGTH]]],"
+                + "DebugAction[value:SensorExpr[GetSampleSensor[AccelerometerSensor[_A,DEFAULT,X]]]],"
+                + "DebugAction[value:SensorExpr[GetSampleSensor[AccelerometerSensor[_A,DEFAULT,Y]]]],"
+                + "DebugAction[value:SensorExpr[GetSampleSensor[AccelerometerSensor[_A,DEFAULT,Z]]]],"
+                + "DebugAction[value:SensorExpr[GetSampleSensor[AccelerometerSensor[_A,DEFAULT,STRENGTH]]]]]]]";
         String[] expectedToBeInConfigAst =
             {
                 "ConfigurationComponent[componentType=ACCELEROMETER,isActor=true,userDefinedName=_A,portName=_A,componentProperties={}]"
@@ -309,10 +309,10 @@ public class CalliopeThree2ThreeOneTransformerTest {
     public void executeTransformer_ShouldReturnTransformedGyro_WhenGivenOldGyro() {
         String expectedProgramAst =
             "BlockAST[project=[[Location[x=512,y=50],MainTask[],"
-                + "DebugAction[SensorExpr[GyroSensor[_G,ANGLE,X]]],"
-                + "DebugAction[SensorExpr[GyroSensor[_G,ANGLE,Y]]],"
-                + "DebugAction[SensorExpr[GetSampleSensor[GyroSensor[_G,ANGLE,X]]]],"
-                + "DebugAction[SensorExpr[GetSampleSensor[GyroSensor[_G,ANGLE,Y]]]]]]]";
+                + "DebugAction[value:SensorExpr[GyroSensor[_G,ANGLE,X]]],"
+                + "DebugAction[value:SensorExpr[GyroSensor[_G,ANGLE,Y]]],"
+                + "DebugAction[value:SensorExpr[GetSampleSensor[GyroSensor[_G,ANGLE,X]]]],"
+                + "DebugAction[value:SensorExpr[GetSampleSensor[GyroSensor[_G,ANGLE,Y]]]]]]]";
         String[] expectedToBeInConfigAst =
             {
                 "ConfigurationComponent[componentType=GYRO,isActor=true,userDefinedName=_G,portName=_G,componentProperties={}]"
@@ -332,7 +332,7 @@ public class CalliopeThree2ThreeOneTransformerTest {
     public void executeTransformer_ShouldReturnTransformedSounds_WhenGivenOldSounds() {
         String expectedProgramAst =
             "BlockAST[project=[[Location[x=512,y=50],MainTask[],"
-                + "ToneAction[frequency:NumConst[300],duration:NumConst[100],port:-EMPTY_PORT-],"
+                + "ToneAction[frequency:NumConst[value:300],duration:NumConst[value:100],port:-EMPTY_PORT-],"
                 + "PlayNoteAction[duration:2000,frequency:261.626,port:-EMPTY_PORT-],"
                 + "PlayNoteAction[duration:1000,frequency:261.626,port:-EMPTY_PORT-],"
                 + "PlayNoteAction[duration:500,frequency:261.626,port:-EMPTY_PORT-],"
@@ -357,37 +357,37 @@ public class CalliopeThree2ThreeOneTransformerTest {
     public void executeTransformer_ShouldReturnTransformedWaitFor_WhenGivenOldWaitFor() {
         String expectedProgramAst =
             "BlockAST[project=[[Location[x=512,y=50],MainTask[],"
-                + "DebugAction[SensorExpr[GetSampleSensor[KeysSensor[A,PRESSED,- EMPTY_SLOT -]]]],"
-                + "DebugAction[SensorExpr[GetSampleSensor[KeysSensor[B,PRESSED,- EMPTY_SLOT -]]]],"
-                + "DebugAction[SensorExpr[GetSampleSensor[PinTouchSensor[0,PRESSED,- EMPTY_SLOT -]]]],"
-                + "DebugAction[SensorExpr[GetSampleSensor[PinTouchSensor[1,PRESSED,- EMPTY_SLOT -]]]],"
-                + "DebugAction[SensorExpr[GetSampleSensor[PinTouchSensor[2,PRESSED,- EMPTY_SLOT -]]]],"
-                + "DebugAction[SensorExpr[GetSampleSensor[PinTouchSensor[3,PRESSED,- EMPTY_SLOT -]]]],"
-                + "DebugAction[SensorExpr[GetSampleSensor[GestureSensor[- EMPTY_PORT -,UP,- EMPTY_SLOT -]]]],"
-                + "DebugAction[SensorExpr[GetSampleSensor[GestureSensor[- EMPTY_PORT -,DOWN,- EMPTY_SLOT -]]]],"
-                + "DebugAction[SensorExpr[GetSampleSensor[GestureSensor[- EMPTY_PORT -,FACE_DOWN,- EMPTY_SLOT -]]]],"
-                + "DebugAction[SensorExpr[GetSampleSensor[GestureSensor[- EMPTY_PORT -,FACE_UP,- EMPTY_SLOT -]]]],"
-                + "DebugAction[SensorExpr[GetSampleSensor[GestureSensor[- EMPTY_PORT -,SHAKE,- EMPTY_SLOT -]]]],"
-                + "DebugAction[SensorExpr[GetSampleSensor[GestureSensor[- EMPTY_PORT -,FREEFALL,- EMPTY_SLOT -]]]],"
-                + "DebugAction[SensorExpr[GetSampleSensor[CompassSensor[_C,ANGLE,- EMPTY_SLOT -]]]],"
-                + "DebugAction[SensorExpr[GetSampleSensor[SoundSensor[_S,SOUND,- EMPTY_SLOT -]]]],"
-                + "DebugAction[SensorExpr[GetSampleSensor[TimerSensor[1,VALUE,- EMPTY_SLOT -]]]],"
-                + "DebugAction[SensorExpr[GetSampleSensor[TemperatureSensor[_T,TEMPERATURE,- EMPTY_SLOT -]]]],"
-                + "DebugAction[SensorExpr[GetSampleSensor[LightSensor[_L,LIGHT_VALUE,- EMPTY_SLOT -]]]],"
-                + "DebugAction[SensorExpr[GetSampleSensor[PinGetValueSensor[S7,ANALOG,- EMPTY_SLOT -]]]],"
-                + "DebugAction[SensorExpr[GetSampleSensor[PinGetValueSensor[S6,DIGITAL,- EMPTY_SLOT -]]]],"
-                + "DebugAction[SensorExpr[GetSampleSensor[PinGetValueSensor[S6,PULSEHIGH,- EMPTY_SLOT -]]]],"
-                + "DebugAction[SensorExpr[GetSampleSensor[PinGetValueSensor[S6,PULSELOW,- EMPTY_SLOT -]]]],"
-                + "DebugAction[SensorExpr[GetSampleSensor[GyroSensor[_G,ANGLE,X]]]],"
-                + "DebugAction[SensorExpr[GetSampleSensor[GyroSensor[_G,ANGLE,Y]]]],"
-                + "DebugAction[SensorExpr[GetSampleSensor[AccelerometerSensor[_A,DEFAULT,X]]]],"
-                + "DebugAction[SensorExpr[GetSampleSensor[AccelerometerSensor[_A,DEFAULT,Y]]]],"
-                + "DebugAction[SensorExpr[GetSampleSensor[AccelerometerSensor[_A,DEFAULT,Z]]]],"
-                + "DebugAction[SensorExpr[GetSampleSensor[AccelerometerSensor[_A,DEFAULT,STRENGTH]]]],"
-                + "DebugAction[SensorExpr[GetSampleSensor[HumiditySensor[H,HUMIDITY,- EMPTY_SLOT -]]]],"
-                + "DebugAction[SensorExpr[GetSampleSensor[HumiditySensor[H,TEMPERATURE,- EMPTY_SLOT -]]]],"
-                + "DebugAction[SensorExpr[GetSampleSensor[UltrasonicSensor[CalliBot_vorne,DISTANCE,- EMPTY_SLOT -]]]],"
-                + "DebugAction[SensorExpr[GetSampleSensor[InfraredSensor[I_CalliBot_links,LINE,- EMPTY_SLOT -]]]]]]]";
+                + "DebugAction[value:SensorExpr[GetSampleSensor[KeysSensor[A,PRESSED,- EMPTY_SLOT -]]]],"
+                + "DebugAction[value:SensorExpr[GetSampleSensor[KeysSensor[B,PRESSED,- EMPTY_SLOT -]]]],"
+                + "DebugAction[value:SensorExpr[GetSampleSensor[PinTouchSensor[0,PRESSED,- EMPTY_SLOT -]]]],"
+                + "DebugAction[value:SensorExpr[GetSampleSensor[PinTouchSensor[1,PRESSED,- EMPTY_SLOT -]]]],"
+                + "DebugAction[value:SensorExpr[GetSampleSensor[PinTouchSensor[2,PRESSED,- EMPTY_SLOT -]]]],"
+                + "DebugAction[value:SensorExpr[GetSampleSensor[PinTouchSensor[3,PRESSED,- EMPTY_SLOT -]]]],"
+                + "DebugAction[value:SensorExpr[GetSampleSensor[GestureSensor[- EMPTY_PORT -,UP,- EMPTY_SLOT -]]]],"
+                + "DebugAction[value:SensorExpr[GetSampleSensor[GestureSensor[- EMPTY_PORT -,DOWN,- EMPTY_SLOT -]]]],"
+                + "DebugAction[value:SensorExpr[GetSampleSensor[GestureSensor[- EMPTY_PORT -,FACE_DOWN,- EMPTY_SLOT -]]]],"
+                + "DebugAction[value:SensorExpr[GetSampleSensor[GestureSensor[- EMPTY_PORT -,FACE_UP,- EMPTY_SLOT -]]]],"
+                + "DebugAction[value:SensorExpr[GetSampleSensor[GestureSensor[- EMPTY_PORT -,SHAKE,- EMPTY_SLOT -]]]],"
+                + "DebugAction[value:SensorExpr[GetSampleSensor[GestureSensor[- EMPTY_PORT -,FREEFALL,- EMPTY_SLOT -]]]],"
+                + "DebugAction[value:SensorExpr[GetSampleSensor[CompassSensor[_C,ANGLE,- EMPTY_SLOT -]]]],"
+                + "DebugAction[value:SensorExpr[GetSampleSensor[SoundSensor[_S,SOUND,- EMPTY_SLOT -]]]],"
+                + "DebugAction[value:SensorExpr[GetSampleSensor[TimerSensor[1,VALUE,- EMPTY_SLOT -]]]],"
+                + "DebugAction[value:SensorExpr[GetSampleSensor[TemperatureSensor[_T,TEMPERATURE,- EMPTY_SLOT -]]]],"
+                + "DebugAction[value:SensorExpr[GetSampleSensor[LightSensor[_L,LIGHT_VALUE,- EMPTY_SLOT -]]]],"
+                + "DebugAction[value:SensorExpr[GetSampleSensor[PinGetValueSensor[S7,ANALOG,- EMPTY_SLOT -]]]],"
+                + "DebugAction[value:SensorExpr[GetSampleSensor[PinGetValueSensor[S6,DIGITAL,- EMPTY_SLOT -]]]],"
+                + "DebugAction[value:SensorExpr[GetSampleSensor[PinGetValueSensor[S6,PULSEHIGH,- EMPTY_SLOT -]]]],"
+                + "DebugAction[value:SensorExpr[GetSampleSensor[PinGetValueSensor[S6,PULSELOW,- EMPTY_SLOT -]]]],"
+                + "DebugAction[value:SensorExpr[GetSampleSensor[GyroSensor[_G,ANGLE,X]]]],"
+                + "DebugAction[value:SensorExpr[GetSampleSensor[GyroSensor[_G,ANGLE,Y]]]],"
+                + "DebugAction[value:SensorExpr[GetSampleSensor[AccelerometerSensor[_A,DEFAULT,X]]]],"
+                + "DebugAction[value:SensorExpr[GetSampleSensor[AccelerometerSensor[_A,DEFAULT,Y]]]],"
+                + "DebugAction[value:SensorExpr[GetSampleSensor[AccelerometerSensor[_A,DEFAULT,Z]]]],"
+                + "DebugAction[value:SensorExpr[GetSampleSensor[AccelerometerSensor[_A,DEFAULT,STRENGTH]]]],"
+                + "DebugAction[value:SensorExpr[GetSampleSensor[HumiditySensor[H,HUMIDITY,- EMPTY_SLOT -]]]],"
+                + "DebugAction[value:SensorExpr[GetSampleSensor[HumiditySensor[H,TEMPERATURE,- EMPTY_SLOT -]]]],"
+                + "DebugAction[value:SensorExpr[GetSampleSensor[UltrasonicSensor[CalliBot_vorne,DISTANCE,- EMPTY_SLOT -]]]],"
+                + "DebugAction[value:SensorExpr[GetSampleSensor[InfraredSensor[I_CalliBot_links,LINE,- EMPTY_SLOT -]]]]]]]";
 
         Project project =
             UnitTestHelper

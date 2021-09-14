@@ -12,7 +12,7 @@ public class NumConstTest extends AstTest {
 
     @Test
     public void make() throws Exception {
-        String a = "BlockAST [project=[[Location [x=-15, y=-845], NumConst [0]]]]";
+        String a = "BlockAST [project=[[Location [x=-15, y=-845], NumConst [value:0]]]]";
         UnitTestHelper.checkProgramAstEquality(testFactory, a, "/ast/math/math_num_constant.xml");
     }
 

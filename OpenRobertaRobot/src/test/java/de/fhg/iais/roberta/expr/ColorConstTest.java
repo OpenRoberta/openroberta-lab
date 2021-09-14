@@ -12,7 +12,7 @@ public class ColorConstTest extends AstTest {
 
     @Test
     public void make() throws Exception {
-        String a = "BlockAST [project=[[Location [x=116, y=139], ColorConst [#0057A6]]]]";
+        String a = "BlockAST [project=[[Location [x=116, y=139], ColorConst [hexValue:#0057A6]]]]";
 
         UnitTestHelper.checkProgramAstEquality(testFactory, a, "/ast/colour/colour_const1.xml");
     }

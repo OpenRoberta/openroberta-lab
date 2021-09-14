@@ -1,47 +1,46 @@
 
-Var [x] := Binary [ADD, Var [x], FunctionExpr [MathSingleFunct [ROOT, [NumConst [4]]]]]
+Var [x] := Binary [ADD, Var [x], FunctionExpr [MathSingleFunct [ROOT, [NumConst[value: 4]]]]]
 
 
-Var [x] := Binary [ADD, Var [x], FunctionExpr [MathSingleFunct [ABS, [NumConst [-2]]]]]
+Var [x] := Binary [ADD, Var [x], FunctionExpr [MathSingleFunct [ABS, [NumConst[value: -2]]]]]
 
 
-Var [x] := Binary [ADD, Var [x], Unary [NEG, NumConst [-4]]]
+Var [x] := Binary [ADD, Var [x], Unary [NEG, NumConst[value: -4]]]
 
 
-Var [x] := Binary [ADD, Var [x], FunctionExpr [MathSingleFunct [LN, [FunctionExpr [MathSingleFunct [EXP, [NumConst [2]]]]]]]]
+Var [x] := Binary [ADD, Var [x], FunctionExpr [MathSingleFunct [LN, [FunctionExpr [MathSingleFunct [EXP, [NumConst[value: 2]]]]]]]]
 
 
-Var [x] := Binary [ADD, Var [x], FunctionExpr [MathSingleFunct [LOG10, [NumConst [100]]]]]
+Var [x] := Binary [ADD, Var [x], FunctionExpr [MathSingleFunct [LOG10, [NumConst[value: 100]]]]]
 
 
-Var [x] := Binary [ADD, Var [x], FunctionExpr [MathSingleFunct [POW10, [NumConst [2]]]]]
+Var [x] := Binary [ADD, Var [x], FunctionExpr [MathSingleFunct [POW10, [NumConst[value: 2]]]]]
 
 
-Var [x] := Binary [ADD, Var [x], Binary [MOD, NumConst [5], NumConst [3]]]
+Var [x] := Binary [ADD, Var [x], Binary [MOD, NumConst[value: 5], NumConst[value: 3]]]
 
 
-Var [x] := Binary [ADD, Var [x], FunctionExpr [MathSingleFunct [SIN, [Binary [DIVIDE, MathConst [PI], NumConst [2]]]]]]
+Var [x] := Binary [ADD, Var [x], FunctionExpr [MathSingleFunct [SIN, [Binary [DIVIDE, MathConst[mathConst: PI], NumConst[value: 2]]]]]]
 
 
-Var [x] := Binary [ADD, Var [x], FunctionExpr [MathSingleFunct [COS, [NumConst [0]]]]]
+Var [x] := Binary [ADD, Var [x], FunctionExpr [MathSingleFunct [COS, [NumConst[value: 0]]]]]
 
 
-Var [x] := Binary [ADD, Var [x], FunctionExpr [MathSingleFunct [TAN, [NumConst [0]]]]]
+Var [x] := Binary [ADD, Var [x], FunctionExpr [MathSingleFunct [TAN, [NumConst[value: 0]]]]]
 
 
-Var [x] := Binary [ADD, Var [x], FunctionExpr [MathSingleFunct [ASIN, [NumConst [0]]]]]
+Var [x] := Binary [ADD, Var [x], FunctionExpr [MathSingleFunct [ASIN, [NumConst[value: 0]]]]]
 
 
-Var [x] := Binary [ADD, Var [x], FunctionExpr [MathSingleFunct [ACOS, [NumConst [1]]]]]
+Var [x] := Binary [ADD, Var [x], FunctionExpr [MathSingleFunct [ACOS, [NumConst[value: 1]]]]]
 
 
-Var [x] := Binary [ADD, Var [x], FunctionExpr [MathSingleFunct [ATAN, [NumConst [0]]]]]
+Var [x] := Binary [ADD, Var [x], FunctionExpr [MathSingleFunct [ATAN, [NumConst[value: 0]]]]]
 
 
-Var [x] := Binary [ADD, Var [x], FunctionExpr [MathSingleFunct [ROUNDDOWN, [NumConst [42.8]]]]]
+Var [x] := Binary [ADD, Var [x], FunctionExpr [MathSingleFunct [ROUNDDOWN, [NumConst[value: 42.8]]]]]
 
 
-Var [x] := Binary [ADD, Var [x], FunctionExpr [MathSingleFunct [SIN, [FunctionExpr [MathConstrainFunct [[NumConst [2], NumConst [1], NumConst [100]]]]]]]]
+Var [x] := Binary [ADD, Var [x], FunctionExpr [MathSingleFunct [SIN, [FunctionExpr [MathConstrainFunct [[NumConst[value: 2], NumConst[value: 1], NumConst[value: 100]]]]]]]]
 
-
-StmtTextComment [expected: 170]
+StmtTextComment[textComment: expected: 170]

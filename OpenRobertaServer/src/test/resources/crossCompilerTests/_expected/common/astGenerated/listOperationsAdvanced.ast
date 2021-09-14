@@ -1,23 +1,22 @@
-
-StmtTextComment [Basis List Operations START]
+StmtTextComment[textComment: Basis List Operations START]
 
 if FunctionExpr [LengthOfFunct [LIST_IS_EMPTY, [Var [nl]]]]
 ,then
-Var [nl] := ListCreate [NUMBER, NumConst [3], NumConst [4], NumConst [5], NumConst [6], NumConst [7], NumConst [8]]
-FunctionStmt [ListSetIndex [INSERT, FROM_END, [Var [nl3], FunctionExpr [ListGetIndex [GET_REMOVE, FIRST, [Var [nl]]]], NumConst [1]]]]
+Var [nl] := ListCreate [NUMBER, NumConst[value: 3], NumConst[value: 4], NumConst[value: 5], NumConst[value: 6], NumConst[value: 7], NumConst[value: 8]]
+FunctionStmt [ListSetIndex [INSERT, FROM_END, [Var [nl3], FunctionExpr [ListGetIndex [GET_REMOVE, FIRST, [Var [nl]]]], NumConst[value: 1]]]]
 
 
 if FunctionExpr [LengthOfFunct [LIST_IS_EMPTY, [Var [bl]]]]
 ,then
-Var [bl] := ListCreate [BOOLEAN, BoolConst [true], BoolConst [false], BoolConst [true]]
+Var [bl] := ListCreate [BOOLEAN, BoolConst[value: true], BoolConst[value: false], BoolConst[value: true]]
 
-Var [bl] := ListCreate [BOOLEAN, Binary [EQ, FunctionExpr [ListGetIndex [GET, FIRST, [Var [bl]]]], FunctionExpr [ListGetIndex [GET, LAST, [Var [bl]]]]], Binary [EQ, FunctionExpr [ListGetIndex [GET, FROM_START, [Var [bl], NumConst [1]]]], FunctionExpr [ListGetIndex [GET, FROM_END, [Var [bl], NumConst [1]]]]], Binary [EQ, FunctionExpr [ListGetIndex [GET, LAST, [Var [bl]]]], FunctionExpr [ListGetIndex [GET, FIRST, [Var [bl]]]]]]
+Var [bl] := ListCreate [BOOLEAN, Binary [EQ, FunctionExpr [ListGetIndex [GET, FIRST, [Var [bl]]]], FunctionExpr [ListGetIndex [GET, LAST, [Var [bl]]]]], Binary [EQ, FunctionExpr [ListGetIndex [GET, FROM_START, [Var [bl], NumConst[value: 1]]]], FunctionExpr [ListGetIndex [GET, FROM_END, [Var [bl], NumConst[value: 1]]]]], Binary [EQ, FunctionExpr [ListGetIndex [GET, LAST, [Var [bl]]]], FunctionExpr [ListGetIndex [GET, FIRST, [Var [bl]]]]]]
 
 
 
 if FunctionExpr [LengthOfFunct [LIST_IS_EMPTY, [Var [sl]]]]
 ,then
-Var [sl] := ListCreate [STRING, StringConst [d], StringConst [e], StringConst [f]]
+Var [sl] := ListCreate [STRING, StringConst[value: d], StringConst[value: e], StringConst[value: f]]
 
 
 
@@ -27,23 +26,22 @@ Var [n] := FunctionExpr [LengthOfFunct [LIST_LENGTH, [Var [nl]]]]
 Var [n] := FunctionExpr [LengthOfFunct [LIST_LENGTH, [FunctionExpr [GetSubFunct [GET_SUBLIST, [FIRST, LAST], [Var [nl]]]]]]]
 
 
-Var [n] := Binary [ADD, FunctionExpr [LengthOfFunct [LIST_LENGTH, [FunctionExpr [GetSubFunct [GET_SUBLIST, [FIRST, LAST], [Var [nl]]]]]]], FunctionExpr [LengthOfFunct [LIST_LENGTH, [FunctionExpr [GetSubFunct [GET_SUBLIST, [FROM_START, FROM_START], [Var [nl], NumConst [1], NumConst [3]]]]]]]]
+Var [n] := Binary [ADD, FunctionExpr [LengthOfFunct [LIST_LENGTH, [FunctionExpr [GetSubFunct [GET_SUBLIST, [FIRST, LAST], [Var [nl]]]]]]], FunctionExpr [LengthOfFunct [LIST_LENGTH, [FunctionExpr [GetSubFunct [GET_SUBLIST, [FROM_START, FROM_START], [Var [nl], NumConst[value: 1], NumConst[value: 3]]]]]]]]
 
 
-Var [n] := FunctionExpr [IndexOfFunct [FIRST, [Var [sl], StringConst [b]]]]
+Var [n] := FunctionExpr [IndexOfFunct [FIRST, [Var [sl], StringConst[value: b]]]]
 
 
-Var [n] := FunctionExpr [ListGetIndex [GET, LAST, [FunctionExpr [ListRepeat [NUMBER, [NumConst [5], NumConst [5]]]]]]]
+Var [n] := FunctionExpr [ListGetIndex [GET, LAST, [FunctionExpr [ListRepeat [NUMBER, [NumConst[value: 5], NumConst[value: 5]]]]]]]
 
 
-Var [s] := FunctionExpr [ListGetIndex [GET, FROM_END, [FunctionExpr [ListRepeat [STRING, [StringConst [copy], NumConst [5]]]], NumConst [5]]]]
+Var [s] := FunctionExpr [ListGetIndex [GET, FROM_END, [FunctionExpr [ListRepeat [STRING, [StringConst[value: copy], NumConst[value: 5]]]], NumConst[value: 5]]]]
 
 
 (repeat [UNTIL, Unary [NOT, Unary [NOT, FunctionExpr [LengthOfFunct [LIST_IS_EMPTY, [Var [sl]]]]]]]FunctionStmt [ListSetIndex [SET, LAST, [Var [sl3], FunctionExpr [ListGetIndex [GET_REMOVE, FIRST, [Var [sl]]]]]]]
 )
 
-(repeat [UNTIL, Unary [NOT, Binary [LTE, FunctionExpr [LengthOfFunct [LIST_LENGTH, [Var [nl3]]]], NumConst [9]]]]FunctionStmt [ListSetIndex [INSERT, FROM_END, [Var [nl3], FunctionExpr [ListGetIndex [GET_REMOVE, FIRST, [Var [nl]]]], NumConst [1]]]]
+(repeat [UNTIL, Unary [NOT, Binary [LTE, FunctionExpr [LengthOfFunct [LIST_LENGTH, [Var [nl3]]]], NumConst[value: 9]]]]FunctionStmt [ListSetIndex [INSERT, FROM_END, [Var [nl3], FunctionExpr [ListGetIndex [GET_REMOVE, FIRST, [Var [nl]]]], NumConst[value: 1]]]]
 )
-ListSetIndex [SET, FIRST, [FunctionExpr [GetSubFunct [GET_SUBLIST, [FROM_START, FROM_END], [Var [nl3], NumConst [2], NumConst [5]]]], FunctionExpr [IndexOfFunct [FIRST, [Var [nl3], Var [n]]]]]]
-
-StmtTextComment [Basis List Operations END]
+ListSetIndex [SET, FIRST, [FunctionExpr [GetSubFunct [GET_SUBLIST, [FROM_START, FROM_END], [Var [nl3], NumConst[value: 2], NumConst[value: 5]]]], FunctionExpr [IndexOfFunct [FIRST, [Var [nl3], Var [n]]]]]]
+StmtTextComment[textComment: Basis List Operations END]

@@ -1,5 +1,5 @@
 
-(repeat [FOREVER_ARDU, BoolConst [true]]
+(repeat [FOREVER_ARDU, BoolConst[value: true]]
 Var [b] := SensorExpr [Lsm9ds1AccSensor []]
 
 Var [b] := SensorExpr [Lsm9ds1GyroSensor []]

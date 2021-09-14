@@ -1,58 +1,49 @@
+StmtTextComment[textComment: Control Flow Nested Loop --Start]
 
-StmtTextComment [Control Flow Nested Loop --Start]
-
-(repeat [FOREVER, BoolConst [true]]
-(repeat [UNTIL, Unary [NOT, Binary [GTE, Var [X], NumConst [20]]]]
-(repeat [FOR, Var [i], NumConst [1], NumConst [11], NumConst [1]]
-(repeat [TIMES, Var [k0], NumConst [0], NumConst [2], NumConst [1]]
+(repeat [FOREVER, BoolConst[value: true]]
+(repeat [UNTIL, Unary [NOT, Binary [GTE, Var [X], NumConst[value: 20]]]]
+(repeat [FOR, Var [i], NumConst[value: 1], NumConst[value: 11], NumConst[value: 1]]
+(repeat [TIMES, Var [k0], NumConst[value: 0], NumConst[value: 2], NumConst[value: 1]]
 if FunctionExpr [MathNumPropFunct [EVEN, [Var [i]]]]
+,thenStmtFlowCon[flow: CONTINUE]
+
+exprStmt Binary [MATH_CHANGE, Var [X], NumConst[value: 1]]
+)
+)
+)StmtFlowCon[flow: BREAK]
+)
+AssertStmt[asserts: Binary [EQ, NumConst[value: 20], Var [X]], msg: pos-1]
+
+(repeat [FOR, Var [j], NumConst[value: 1], NumConst[value: 4], NumConst[value: 3]]
+exprStmt Binary [MATH_CHANGE, Var [X], NumConst[value: 1]]AssertStmt[asserts: Binary [EQ, NumConst[value: 21], Var [X]], msg:  = X]
+(repeat [FOR, Var [k], NumConst[value: 1], NumConst[value: 5], NumConst[value: 3]]
+exprStmt Binary [MATH_CHANGE, Var [X], NumConst[value: 1]]
+)
+)
+AssertStmt[asserts: Binary [EQ, NumConst[value: 23], Var [X]], msg: pos-2]
+
+(repeat [FOREVER, BoolConst[value: true]]
+(repeat [FOREVER, BoolConst[value: true]]
+if Binary [EQ, NumConst[value: 23], Var [X]]
 ,then
-StmtFlowCon [CONTINUE]
-
-exprStmt Binary [MATH_CHANGE, Var [X], NumConst [1]]
-)
-)
-)
-StmtFlowCon [BREAK]
-)
-AssertStmt [asserts pos-1: Binary [EQ, NumConst [20], Var [X]]]
-
-(repeat [FOR, Var [j], NumConst [1], NumConst [4], NumConst [3]]
-exprStmt Binary [MATH_CHANGE, Var [X], NumConst [1]]AssertStmt [asserts  = X: Binary [EQ, NumConst [21], Var [X]]]
-(repeat [FOR, Var [k], NumConst [1], NumConst [5], NumConst [3]]
-exprStmt Binary [MATH_CHANGE, Var [X], NumConst [1]]
-)
-)
-AssertStmt [asserts pos-2: Binary [EQ, NumConst [23], Var [X]]]
-
-(repeat [FOREVER, BoolConst [true]]
-(repeat [FOREVER, BoolConst [true]]
-if Binary [EQ, NumConst [23], Var [X]]
-,then
-(repeat [FOREVER, BoolConst [true]]
+(repeat [FOREVER, BoolConst[value: true]]
 if FunctionExpr [MathNumPropFunct [EVEN, [Var [X]]]]
-,then
-StmtFlowCon [CONTINUE]
+,thenStmtFlowCon[flow: CONTINUE]
 
-exprStmt Binary [MATH_CHANGE, Var [X], NumConst [1]]
-StmtFlowCon [BREAK]
+exprStmt Binary [MATH_CHANGE, Var [X], NumConst[value: 1]]StmtFlowCon[flow: BREAK]
 )
 if FunctionExpr [MathNumPropFunct [EVEN, [Var [X]]]]
-,then
-StmtFlowCon [BREAK]
+,thenStmtFlowCon[flow: BREAK]
 
-exprStmt Binary [MATH_CHANGE, Var [X], NumConst [1000]]
-
-StmtFlowCon [BREAK]
+exprStmt Binary [MATH_CHANGE, Var [X], NumConst[value: 1000]]
+StmtFlowCon[flow: BREAK]
+)StmtFlowCon[flow: BREAK]
 )
-StmtFlowCon [BREAK]
-)
-DebugAction [StmtExpr [
-if Binary [EQ, NumConst [24], Var [X]]
+DebugAction[value: StmtExpr [
+if Binary [EQ, NumConst[value: 24], Var [X]]
 ,then
-exprStmt StringConst [Control Flow Nested Loops Test:success]
+exprStmt StringConst[value: Control Flow Nested Loops Test:success]
 ,else
-exprStmt StringConst [ntrol Flow Nested Loops Test: FAIL]
+exprStmt StringConst[value: ntrol Flow Nested Loops Test: FAIL]
 ]]
-
-StmtTextComment [Control Flow Nested Loop -- End]
+StmtTextComment[textComment: Control Flow Nested Loop -- End]

@@ -1,55 +1,53 @@
+StmtTextComment[textComment: Math power -- Start --]
 
-StmtTextComment [Math power -- Start --]
+Var [result] := Binary [EQ, NumConst[value: 1], MathPowerFunct [POWER, [NumConst[value: 2], NumConst[value: 0]]]]
 
-Var [result] := Binary [EQ, NumConst [1], MathPowerFunct [POWER, [NumConst [2], NumConst [0]]]]
+AssertStmt[asserts: Binary [EQ, BoolConst[value: true], Var [result]], msg: pos-1]
 
-AssertStmt [asserts pos-1: Binary [EQ, BoolConst [true], Var [result]]]
+Var [result] := Binary [EQ, NumConst[value: 2], MathPowerFunct [POWER, [NumConst[value: 2], NumConst[value: 1]]]]
 
-Var [result] := Binary [EQ, NumConst [2], MathPowerFunct [POWER, [NumConst [2], NumConst [1]]]]
+AssertStmt[asserts: Binary [EQ, BoolConst[value: true], Var [result]], msg: pos-2]
 
-AssertStmt [asserts pos-2: Binary [EQ, BoolConst [true], Var [result]]]
+Var [result] := Binary [EQ, NumConst[value: 4], MathPowerFunct [POWER, [NumConst[value: 2], NumConst[value: 2]]]]
 
-Var [result] := Binary [EQ, NumConst [4], MathPowerFunct [POWER, [NumConst [2], NumConst [2]]]]
+AssertStmt[asserts: Binary [EQ, BoolConst[value: true], Var [result]], msg: pos-3]
 
-AssertStmt [asserts pos-3: Binary [EQ, BoolConst [true], Var [result]]]
+Var [result] := Binary [EQ, NumConst[value: 8], MathPowerFunct [POWER, [NumConst[value: 2], NumConst[value: 3]]]]
 
-Var [result] := Binary [EQ, NumConst [8], MathPowerFunct [POWER, [NumConst [2], NumConst [3]]]]
+AssertStmt[asserts: Binary [EQ, BoolConst[value: true], Var [result]], msg: pos-4]
 
-AssertStmt [asserts pos-4: Binary [EQ, BoolConst [true], Var [result]]]
+Var [result] := Binary [EQ, NumConst[value: -4], Unary [NEG, MathPowerFunct [POWER, [NumConst[value: 2], NumConst[value: 2]]]]]
 
-Var [result] := Binary [EQ, NumConst [-4], Unary [NEG, MathPowerFunct [POWER, [NumConst [2], NumConst [2]]]]]
+AssertStmt[asserts: Binary [EQ, BoolConst[value: true], Var [result]], msg: pos-5]
 
-AssertStmt [asserts pos-5: Binary [EQ, BoolConst [true], Var [result]]]
+Var [result] := Binary [EQ, NumConst[value: 4], MathPowerFunct [POWER, [NumConst[value: -2], NumConst[value: 2]]]]
 
-Var [result] := Binary [EQ, NumConst [4], MathPowerFunct [POWER, [NumConst [-2], NumConst [2]]]]
+AssertStmt[asserts: Binary [EQ, BoolConst[value: true], Var [result]], msg: pos-6]
 
-AssertStmt [asserts pos-6: Binary [EQ, BoolConst [true], Var [result]]]
+Var [result] := Binary [EQ, Binary [MULTIPLY, MathPowerFunct [POWER, [NumConst[value: 2], NumConst[value: 2]]], MathPowerFunct [POWER, [NumConst[value: 2], NumConst[value: 3]]]], MathPowerFunct [POWER, [NumConst[value: 2], Binary [ADD, NumConst[value: 2], NumConst[value: 3]]]]]
 
-Var [result] := Binary [EQ, Binary [MULTIPLY, MathPowerFunct [POWER, [NumConst [2], NumConst [2]]], MathPowerFunct [POWER, [NumConst [2], NumConst [3]]]], MathPowerFunct [POWER, [NumConst [2], Binary [ADD, NumConst [2], NumConst [3]]]]]
+AssertStmt[asserts: Binary [EQ, BoolConst[value: true], Var [result]], msg: pos-7]
 
-AssertStmt [asserts pos-7: Binary [EQ, BoolConst [true], Var [result]]]
+Var [result] := Binary [EQ, Binary [MULTIPLY, MathPowerFunct [POWER, [NumConst[value: 2], NumConst[value: 2]]], MathPowerFunct [POWER, [NumConst[value: 3], NumConst[value: 2]]]], MathPowerFunct [POWER, [Binary [MULTIPLY, NumConst[value: 2], NumConst[value: 3]], NumConst[value: 2]]]]
 
-Var [result] := Binary [EQ, Binary [MULTIPLY, MathPowerFunct [POWER, [NumConst [2], NumConst [2]]], MathPowerFunct [POWER, [NumConst [3], NumConst [2]]]], MathPowerFunct [POWER, [Binary [MULTIPLY, NumConst [2], NumConst [3]], NumConst [2]]]]
+AssertStmt[asserts: Binary [EQ, BoolConst[value: true], Var [result]], msg: pos-8]
 
-AssertStmt [asserts pos-8: Binary [EQ, BoolConst [true], Var [result]]]
+Var [result] := Binary [EQ, MathPowerFunct [POWER, [MathPowerFunct [POWER, [NumConst[value: 2], NumConst[value: 2]]], NumConst[value: 3]]], MathPowerFunct [POWER, [NumConst[value: 2], Binary [MULTIPLY, NumConst[value: 2], NumConst[value: 3]]]]]
 
-Var [result] := Binary [EQ, MathPowerFunct [POWER, [MathPowerFunct [POWER, [NumConst [2], NumConst [2]]], NumConst [3]]], MathPowerFunct [POWER, [NumConst [2], Binary [MULTIPLY, NumConst [2], NumConst [3]]]]]
+AssertStmt[asserts: Binary [EQ, BoolConst[value: true], Var [result]], msg: pos-9]
 
-AssertStmt [asserts pos-9: Binary [EQ, BoolConst [true], Var [result]]]
+Var [result] := Binary [EQ, Binary [DIVIDE, MathPowerFunct [POWER, [NumConst[value: 2], NumConst[value: 2]]], MathPowerFunct [POWER, [NumConst[value: 3], NumConst[value: 2]]]], MathPowerFunct [POWER, [Binary [DIVIDE, NumConst[value: 2], NumConst[value: 3]], NumConst[value: 2]]]]
 
-Var [result] := Binary [EQ, Binary [DIVIDE, MathPowerFunct [POWER, [NumConst [2], NumConst [2]]], MathPowerFunct [POWER, [NumConst [3], NumConst [2]]]], MathPowerFunct [POWER, [Binary [DIVIDE, NumConst [2], NumConst [3]], NumConst [2]]]]
+AssertStmt[asserts: Binary [EQ, BoolConst[value: true], Var [result]], msg: pos-10]
 
-AssertStmt [asserts pos-10: Binary [EQ, BoolConst [true], Var [result]]]
+Var [result] := Binary [EQ, Binary [DIVIDE, MathPowerFunct [POWER, [NumConst[value: 2], NumConst[value: 2]]], MathPowerFunct [POWER, [NumConst[value: 2], NumConst[value: 3]]]], MathPowerFunct [POWER, [NumConst[value: 2], Binary [MINUS, NumConst[value: 2], NumConst[value: 3]]]]]
 
-Var [result] := Binary [EQ, Binary [DIVIDE, MathPowerFunct [POWER, [NumConst [2], NumConst [2]]], MathPowerFunct [POWER, [NumConst [2], NumConst [3]]]], MathPowerFunct [POWER, [NumConst [2], Binary [MINUS, NumConst [2], NumConst [3]]]]]
-
-AssertStmt [asserts pos-11: Binary [EQ, BoolConst [true], Var [result]]]
-DebugAction [StmtExpr [
-if Binary [EQ, BoolConst [true], Var [result]]
+AssertStmt[asserts: Binary [EQ, BoolConst[value: true], Var [result]], msg: pos-11]
+DebugAction[value: StmtExpr [
+if Binary [EQ, BoolConst[value: true], Var [result]]
 ,then
-exprStmt StringConst [Math Power Test: success]
+exprStmt StringConst[value: Math Power Test: success]
 ,else
-exprStmt StringConst [Basic Math Test: FAIL]
+exprStmt StringConst[value: Basic Math Test: FAIL]
 ]]
-
-StmtTextComment [Math power -- End --]
+StmtTextComment[textComment: Math power -- End --]

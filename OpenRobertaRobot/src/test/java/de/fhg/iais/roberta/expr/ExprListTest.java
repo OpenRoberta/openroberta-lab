@@ -22,7 +22,7 @@ public class ExprListTest {
         ExprList<Void> exprList = ExprList.make();
         exprList.addExpr(numConst);
 
-        String a = "NumConst [0]";
+        String a = "NumConst[value: 0]";
 
         Assert.assertEquals(a, exprList.toString());
     }
@@ -33,7 +33,7 @@ public class ExprListTest {
         ExprList<Void> exprList = ExprList.make();
         exprList.addExpr(numConst);
         exprList.setReadOnly();
-        String a = "[NumConst [0]]";
+        String a = "[NumConst[value: 0]]";
 
         Assert.assertEquals(a, exprList.get().toString());
     }
