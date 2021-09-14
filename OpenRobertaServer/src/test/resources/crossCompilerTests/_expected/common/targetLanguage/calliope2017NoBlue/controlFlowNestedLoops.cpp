@@ -70,6 +70,22 @@ int main()
     _uBit.serial.setTxBufferSize(ManagedString((( ( 24 == ___X ) ? ( ManagedString("Control Flow Nested Loops Test:success") ) : ( ManagedString("ntrol Flow Nested Loops Test: FAIL")) ))).length() + 2);
     _uBit.serial.send(ManagedString(( ( 24 == ___X ) ? ( ManagedString("Control Flow Nested Loops Test:success") ) : ( ManagedString("ntrol Flow Nested Loops Test: FAIL")) )) + "\r\n", MicroBitSerialMode::ASYNC);
     _uBit.sleep(_ITERATION_SLEEP_TIMEOUT);
+    while ( true ) {
+        while (true) {
+            if ( true ) {
+                goto break_loop10;
+                break;
+            }
+            if ( true ) {
+                break;
+            }
+            _uBit.sleep(_ITERATION_SLEEP_TIMEOUT);
+        }
+        continue_loop10:
+        _uBit.sleep(_ITERATION_SLEEP_TIMEOUT);
+    }
+    break_loop10:
+    
     // Control Flow Nested Loop -- End
     release_fiber();
 }

@@ -101,6 +101,21 @@ public class NEPOprog {
             }
         }
         System.out.println(( ( 24 == ___X ) ? "Control Flow Nested Loops Test:success" : "ntrol Flow Nested Loops Test: FAIL" ));
+        if ( true ) {
+            loop10:
+            while ( true ) {
+                while ( true ) {
+                    if ( true ) {
+                        if (true) break loop10;
+                        break;
+                    }
+                    if ( true ) {
+                        break;
+                    }
+                    hal.waitFor(15);
+                }
+            }
+        }
         // Control Flow Nested Loop -- End
     }
 
