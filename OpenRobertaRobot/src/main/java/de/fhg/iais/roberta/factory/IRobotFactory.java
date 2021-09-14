@@ -78,6 +78,9 @@ public interface IRobotFactory {
      */
     String optTopBlockOfOldConfiguration();
 
+    /**
+     * @return the robot group. Never null and never the empty String
+     */
     String getGroup();
 
     default String getMenuVersion() {

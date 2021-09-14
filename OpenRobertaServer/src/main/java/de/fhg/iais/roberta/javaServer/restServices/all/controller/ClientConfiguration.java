@@ -49,13 +49,12 @@ public class ClientConfiguration {
         try {
             BaseResponse response = BaseResponse.make();
             int userId = httpSessionState.getUserId();
-            String robotGroup = httpSessionState.getRobotFactory(httpSessionState.getRobotName()).getGroup();
-            final String robotName = robotGroup != "" ? robotGroup : httpSessionState.getRobotName();
+            String robotName = httpSessionState.getRobotFactory(httpSessionState.getRobotName()).getGroup();
             SaveConfRequest request = SaveConfRequest.make(fullRequest.getData());
             String cmd = request.getCmd();
             LOG.info("command is: " + cmd);
             response.setCmd(cmd);
-            Boolean mayExist = cmd.equals("saveC");
+            boolean mayExist = cmd.equals("saveC");
 
             ConfigurationProcessor cp = new ConfigurationProcessor(dbSession, httpSessionState);
             String configurationName = request.getName();
@@ -84,8 +83,7 @@ public class ClientConfiguration {
         try {
             ConfResponse response = ConfResponse.make();
             int userId = httpSessionState.getUserId();
-            String robotGroup = httpSessionState.getRobotFactory(httpSessionState.getRobotName()).getGroup();
-            final String robotName = robotGroup != "" ? robotGroup : httpSessionState.getRobotName();
+            String robotName = httpSessionState.getRobotFactory(httpSessionState.getRobotName()).getGroup();
             ConfRequest request = ConfRequest.make(fullRequest.getData());
             String cmd = "loadC";
             LOG.info("command is: " + cmd);
@@ -126,8 +124,8 @@ public class ClientConfiguration {
         try {
             BaseResponse response = BaseResponse.make();
             int userId = httpSessionState.getUserId();
-            String robotGroup = httpSessionState.getRobotFactory(httpSessionState.getRobotName()).getGroup();
-            final String robotName = robotGroup != "" ? robotGroup : httpSessionState.getRobotName();
+            String robotName = httpSessionState.getRobotFactory(httpSessionState.getRobotName()).getGroup();
+            // TODO: remove final String robotName = robotGroup.equals("") ? httpSessionState.getRobotName() : robotGroup;
             ConfRequest request = ConfRequest.make(fullRequest.getData());
             String cmd = "deleteC";
             LOG.info("command is: " + cmd);
@@ -159,8 +157,7 @@ public class ClientConfiguration {
         try {
             ConfResponse response = ConfResponse.make();
             int userId = httpSessionState.getUserId();
-            String robotGroup = httpSessionState.getRobotFactory(httpSessionState.getRobotName()).getGroup();
-            final String robotName = robotGroup != "" ? robotGroup : httpSessionState.getRobotName();
+            String robotName = httpSessionState.getRobotFactory(httpSessionState.getRobotName()).getGroup();
             String cmd = "loadCN";
             LOG.info("command is: " + cmd);
             response.setCmd(cmd);

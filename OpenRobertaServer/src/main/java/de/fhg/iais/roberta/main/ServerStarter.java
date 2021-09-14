@@ -298,6 +298,10 @@ public class ServerStarter {
         String resourceDir = serverProperties.getCrosscompilerResourceDir();
         String tempDir = serverProperties.getTempDir();
         for ( String robotName : robotWhitelist ) {
+            robotName = robotName.trim();
+            if ( robotName.equals("") ) {
+                throw new DbcException("invalid robot name in white list - Server does NOT start");
+            }
             if ( robotName.equals("sim") ) {
                 continue;
             }

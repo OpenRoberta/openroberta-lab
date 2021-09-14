@@ -28,7 +28,7 @@ public class PluginProperties {
      * @param properties all properties from the file "<robotName>.properties". Plugin-specific. Accessed by their plugin-specific names
      */
     public PluginProperties(String robotName, String resourceDir, String tempDir, Properties properties) {
-        Assert.notNull(robotName);
+        Assert.nonEmptyString(robotName);
         Assert.notNull(resourceDir);
         Assert.notNull(tempDir);
         Assert.notNull(properties);
@@ -53,6 +53,9 @@ public class PluginProperties {
         return tempResourceDir;
     }
 
+    /**
+     * @return the robot name. Never null and never the empty String
+     */
     public String getRobotName() {
         return this.robotName;
     }

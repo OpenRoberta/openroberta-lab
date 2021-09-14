@@ -65,7 +65,7 @@ public class RobotFactory implements IRobotFactory {
     @Override
     public final String getGroup() {
         String group = this.pluginProperties.getStringProperty("robot.plugin.group");
-        return group != null ? group : this.pluginProperties.getRobotName();
+        return group != null && !group.equals("") ? group : this.pluginProperties.getRobotName();
     }
 
     @Override
