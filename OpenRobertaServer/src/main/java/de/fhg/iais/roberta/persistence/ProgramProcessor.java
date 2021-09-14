@@ -235,14 +235,12 @@ public class ProgramProcessor extends AbstractProcessor {
     }
 
     /**
-     * Get information about all the programs owned by a user for every robot needed for exporting
+     * Get programs owned by an user and his groups for every robot
      * 
-     * @param ownerId the owner of the program
-     * @return JSONArray with programId, and programInfos: programName, robotName, User owner, programText, and config in that order,
-     *         when the default configuration is used by the program the config for it is null
-     *         they are ordered userPrograms, then groupPrograms
+     * @param ownerId the owner of the programs
+     * @return all programs by a given user and his groups
      */
-    public JSONArray getProgramsInfoForExport(int ownerId) {
+    public List<Program> getProgramsByUserAndHisGroups(int ownerId) {
         UserDao userDao = new UserDao(this.dbSession);
         ProgramDao programDao = new ProgramDao(this.dbSession);
         User owner = userDao.get(ownerId);
@@ -257,22 +255,10 @@ public class ProgramProcessor extends AbstractProcessor {
         //connecting user programs and group programs
         List<Program> allPrograms = new ArrayList<>(userPrograms);
         allPrograms.addAll(groupPrograms);
-        for ( Program program : allPrograms ) {
-            JSONArray programInfo = new JSONArray();
-            String programText = program.getProgramText();
-            String config = getProgramsConfig(program);
-            String robotName = program.getRobot().getName();
-            programInfo.put(program.getName());
-            programInfo.put(robotName);
-            programInfo.put(program.getAuthor());
-            programInfo.put(programText);
-            programInfo.put(config);
-            
-            programInfos.put(program.getId(), programInfo);
-        }
 
-        return new JSONArray(programInfos.values());
+        return allPrograms;
     }
+
     /**
      * Get all groups that the given user owns and their programs
      *
