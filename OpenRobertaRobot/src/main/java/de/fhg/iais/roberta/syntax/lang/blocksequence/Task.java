@@ -5,6 +5,7 @@ import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.lang.expr.Assoc;
+import de.fhg.iais.roberta.transformer.AnnotationHelper;
 
 /**
  * the top class of all tasks. There are two ways for a client to find out which kind of task an {@link #Task}-object is:<br>
@@ -18,17 +19,23 @@ public abstract class Task<V> extends Phrase<V> {
     }
 
     /**
-     * get the precedence of the expression
+     * get the precedence of the task
+     * <b>This is the default implementation of annotated AST classes</b>
      *
      * @return the precedence
      */
-    abstract public int getPrecedence();
+    public int getPrecedence() {
+        return AnnotationHelper.getPrecedence(this.getClass());
+    }
 
     /**
-     * get the association of the expression
+     * get the association of the task
+     * <b>This is the default implementation of annotated AST classes</b>
      *
      * @return the association
      */
-    abstract public Assoc getAssoc();
+    public Assoc getAssoc() {
+        return AnnotationHelper.getAssoc(this.getClass());
+    }
 
 }

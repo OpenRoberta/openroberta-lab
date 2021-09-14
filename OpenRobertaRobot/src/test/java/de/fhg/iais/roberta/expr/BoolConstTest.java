@@ -12,7 +12,7 @@ public class BoolConstTest extends AstTest {
 
     @Test
     public void make() throws Exception {
-        String a = "BlockAST [project=[[Location [x=1, y=171], BoolConst [true]]]]";
+        String a = "BlockAST [project=[[Location [x=1, y=171], BoolConst [value:true]]]]";
 
         UnitTestHelper.checkProgramAstEquality(testFactory, a, "/ast/logic/logic_boolConst.xml");
     }

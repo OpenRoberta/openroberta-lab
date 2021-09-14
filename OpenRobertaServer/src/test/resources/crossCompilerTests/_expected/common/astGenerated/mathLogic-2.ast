@@ -2,34 +2,33 @@
 Var [r3] := StmtExpr [
 if Var [sim]
 ,then
-exprStmt Binary [DIVIDE, MathConst [PI], NumConst [2]]
+exprStmt Binary [DIVIDE, MathConst[mathConst: PI], NumConst[value: 2]]
 ,else
-exprStmt NumConst [90]
+exprStmt NumConst[value: 90]
 ]
 
 
-Var [b1] := Binary [AND, Var [b1], Binary [EQ, FunctionExpr [MathSingleFunct [SIN, [Var [r3]]]], NumConst [1]]]
+Var [b1] := Binary [AND, Var [b1], Binary [EQ, FunctionExpr [MathSingleFunct [SIN, [Var [r3]]]], NumConst[value: 1]]]
 
 
-Var [b1] := Binary [AND, Var [b1], Binary [EQ, FunctionExpr [MathSingleFunct [COS, [NumConst [0]]]], NumConst [1]]]
+Var [b1] := Binary [AND, Var [b1], Binary [EQ, FunctionExpr [MathSingleFunct [COS, [NumConst[value: 0]]]], NumConst[value: 1]]]
 
 
-Var [b1] := Binary [AND, Var [b1], Binary [EQ, FunctionExpr [MathSingleFunct [TAN, [NumConst [0]]]], NumConst [0]]]
+Var [b1] := Binary [AND, Var [b1], Binary [EQ, FunctionExpr [MathSingleFunct [TAN, [NumConst[value: 0]]]], NumConst[value: 0]]]
 
 
-Var [b1] := Binary [AND, Var [b1], Binary [EQ, FunctionExpr [MathSingleFunct [ASIN, [NumConst [1]]]], Var [r3]]]
+Var [b1] := Binary [AND, Var [b1], Binary [EQ, FunctionExpr [MathSingleFunct [ASIN, [NumConst[value: 1]]]], Var [r3]]]
 
 
-Var [b1] := Binary [AND, Var [b1], Binary [EQ, FunctionExpr [MathSingleFunct [ACOS, [NumConst [1]]]], NumConst [0]]]
+Var [b1] := Binary [AND, Var [b1], Binary [EQ, FunctionExpr [MathSingleFunct [ACOS, [NumConst[value: 1]]]], NumConst[value: 0]]]
 
 
-Var [b1] := Binary [AND, Var [b1], Binary [EQ, FunctionExpr [MathSingleFunct [ATAN, [NumConst [0]]]], NumConst [0]]]
+Var [b1] := Binary [AND, Var [b1], Binary [EQ, FunctionExpr [MathSingleFunct [ATAN, [NumConst[value: 0]]]], NumConst[value: 0]]]
 
 
-Var [b1] := Binary [AND, Var [b1], Binary [AND, Binary [GT, MathConst [E], NumConst [2.6]], Binary [LT, MathConst [E], NumConst [2.8]]]]
+Var [b1] := Binary [AND, Var [b1], Binary [AND, Binary [GT, MathConst[mathConst: E], NumConst[value: 2.6]], Binary [LT, MathConst[mathConst: E], NumConst[value: 2.8]]]]
 
 
-Var [b1] := Binary [AND, Var [b1], Binary [AND, Binary [GTE, Binary [MULTIPLY, MathConst [SQRT2], MathConst [SQRT1_2]], NumConst [0.999]], Binary [LTE, Binary [MULTIPLY, MathConst [SQRT2], MathConst [SQRT1_2]], NumConst [1.001]]]]
+Var [b1] := Binary [AND, Var [b1], Binary [AND, Binary [GTE, Binary [MULTIPLY, MathConst[mathConst: SQRT2], MathConst[mathConst: SQRT1_2]], NumConst[value: 0.999]], Binary [LTE, Binary [MULTIPLY, MathConst[mathConst: SQRT2], MathConst[mathConst: SQRT1_2]], NumConst[value: 1.001]]]]
 
-
-StmtTextComment [if b1 is true, the test succeeded, otherwise it failed]
+StmtTextComment[textComment: if b1 is true, the test succeeded, otherwise it failed]

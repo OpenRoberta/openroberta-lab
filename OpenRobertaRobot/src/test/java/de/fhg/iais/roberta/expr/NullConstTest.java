@@ -14,14 +14,8 @@ public class NullConstTest extends AstTest {
     @Test
     public void make() throws Exception {
         NullConst<Void> nullConst = NullConst.make(BlocklyBlockProperties.make("1", "1"), null);
-        String a = "NullConst [null]";
+        String a = "NullConst[]";
         Assert.assertEquals(a, nullConst.toString());
-    }
-
-    @Test
-    public void getValue() throws Exception {
-        NullConst<Void> nullConst = NullConst.make(BlocklyBlockProperties.make("1", "1"), null);
-        Assert.assertEquals(null, nullConst.getValue());
     }
 
     @Test

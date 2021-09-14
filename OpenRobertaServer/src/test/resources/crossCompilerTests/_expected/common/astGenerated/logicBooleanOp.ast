@@ -1,115 +1,113 @@
+StmtTextComment[textComment: Logic Boolean Operators -- Start]
 
-StmtTextComment [Logic Boolean Operators -- Start]
-
-if Binary [AND, BoolConst [true], BoolConst [true]]
+if Binary [AND, BoolConst[value: true], BoolConst[value: true]]
 ,then
-exprStmt Binary [MATH_CHANGE, Var [x], NumConst [1]]
+exprStmt Binary [MATH_CHANGE, Var [x], NumConst[value: 1]]
 
 
-if Binary [AND, BoolConst [true], BoolConst [false]]
+if Binary [AND, BoolConst[value: true], BoolConst[value: false]]
 ,then
-exprStmt Binary [MATH_CHANGE, Var [x], NumConst [1000]]
+exprStmt Binary [MATH_CHANGE, Var [x], NumConst[value: 1000]]
 
 
-if Binary [AND, BoolConst [false], BoolConst [true]]
+if Binary [AND, BoolConst[value: false], BoolConst[value: true]]
 ,then
-exprStmt Binary [MATH_CHANGE, Var [x], NumConst [1000]]
+exprStmt Binary [MATH_CHANGE, Var [x], NumConst[value: 1000]]
 
 
-if Binary [AND, BoolConst [false], BoolConst [false]]
+if Binary [AND, BoolConst[value: false], BoolConst[value: false]]
 ,then
-exprStmt Binary [MATH_CHANGE, Var [x], NumConst [1000]]
+exprStmt Binary [MATH_CHANGE, Var [x], NumConst[value: 1000]]
 
-AssertStmt [asserts pos-1: Binary [EQ, NumConst [1], Var [x]]]
+AssertStmt[asserts: Binary [EQ, NumConst[value: 1], Var [x]], msg: pos-1]
 
-if Unary [NOT, Binary [AND, BoolConst [true], BoolConst [true]]]
+if Unary [NOT, Binary [AND, BoolConst[value: true], BoolConst[value: true]]]
 ,then
-exprStmt Binary [MATH_CHANGE, Var [x], NumConst [1000]]
+exprStmt Binary [MATH_CHANGE, Var [x], NumConst[value: 1000]]
 
 
-if Unary [NOT, Binary [AND, BoolConst [true], BoolConst [false]]]
+if Unary [NOT, Binary [AND, BoolConst[value: true], BoolConst[value: false]]]
 ,then
-exprStmt Binary [MATH_CHANGE, Var [x], NumConst [1]]
+exprStmt Binary [MATH_CHANGE, Var [x], NumConst[value: 1]]
 
 
-if Unary [NOT, Binary [AND, BoolConst [false], BoolConst [true]]]
+if Unary [NOT, Binary [AND, BoolConst[value: false], BoolConst[value: true]]]
 ,then
-exprStmt Binary [MATH_CHANGE, Var [x], NumConst [1]]
+exprStmt Binary [MATH_CHANGE, Var [x], NumConst[value: 1]]
 
 
-if Unary [NOT, Binary [AND, BoolConst [false], BoolConst [false]]]
+if Unary [NOT, Binary [AND, BoolConst[value: false], BoolConst[value: false]]]
 ,then
-exprStmt Binary [MATH_CHANGE, Var [x], NumConst [1]]
+exprStmt Binary [MATH_CHANGE, Var [x], NumConst[value: 1]]
 
-AssertStmt [asserts pos-2: Binary [EQ, NumConst [4], Var [x]]]
+AssertStmt[asserts: Binary [EQ, NumConst[value: 4], Var [x]], msg: pos-2]
 
-if Binary [OR, BoolConst [true], BoolConst [true]]
+if Binary [OR, BoolConst[value: true], BoolConst[value: true]]
 ,then
-exprStmt Binary [MATH_CHANGE, Var [x], NumConst [1]]
+exprStmt Binary [MATH_CHANGE, Var [x], NumConst[value: 1]]
 
 
-if Binary [OR, BoolConst [true], BoolConst [false]]
+if Binary [OR, BoolConst[value: true], BoolConst[value: false]]
 ,then
-exprStmt Binary [MATH_CHANGE, Var [x], NumConst [1]]
+exprStmt Binary [MATH_CHANGE, Var [x], NumConst[value: 1]]
 
 
-if Binary [OR, BoolConst [false], BoolConst [true]]
+if Binary [OR, BoolConst[value: false], BoolConst[value: true]]
 ,then
-exprStmt Binary [MATH_CHANGE, Var [x], NumConst [1]]
+exprStmt Binary [MATH_CHANGE, Var [x], NumConst[value: 1]]
 
 
-if Binary [OR, BoolConst [false], BoolConst [false]]
+if Binary [OR, BoolConst[value: false], BoolConst[value: false]]
 ,then
-exprStmt Binary [MATH_CHANGE, Var [x], NumConst [1000]]
+exprStmt Binary [MATH_CHANGE, Var [x], NumConst[value: 1000]]
 
-AssertStmt [asserts pos-3: Binary [EQ, NumConst [7], Var [x]]]
+AssertStmt[asserts: Binary [EQ, NumConst[value: 7], Var [x]], msg: pos-3]
 
-if Unary [NOT, Binary [OR, BoolConst [true], BoolConst [true]]]
+if Unary [NOT, Binary [OR, BoolConst[value: true], BoolConst[value: true]]]
 ,then
-exprStmt Binary [MATH_CHANGE, Var [x], NumConst [1000]]
+exprStmt Binary [MATH_CHANGE, Var [x], NumConst[value: 1000]]
 
 
-if Unary [NOT, Binary [OR, BoolConst [true], BoolConst [false]]]
+if Unary [NOT, Binary [OR, BoolConst[value: true], BoolConst[value: false]]]
 ,then
-exprStmt Binary [MATH_CHANGE, Var [x], NumConst [1000]]
+exprStmt Binary [MATH_CHANGE, Var [x], NumConst[value: 1000]]
 
 
-if Unary [NOT, Binary [OR, BoolConst [false], BoolConst [true]]]
+if Unary [NOT, Binary [OR, BoolConst[value: false], BoolConst[value: true]]]
 ,then
-exprStmt Binary [MATH_CHANGE, Var [x], NumConst [1000]]
+exprStmt Binary [MATH_CHANGE, Var [x], NumConst[value: 1000]]
 
 
-if Unary [NOT, Binary [OR, BoolConst [false], BoolConst [false]]]
+if Unary [NOT, Binary [OR, BoolConst[value: false], BoolConst[value: false]]]
 ,then
-exprStmt Binary [MATH_CHANGE, Var [x], NumConst [1]]
+exprStmt Binary [MATH_CHANGE, Var [x], NumConst[value: 1]]
 
-AssertStmt [asserts pos-4: Binary [EQ, NumConst [8], Var [x]]]
+AssertStmt[asserts: Binary [EQ, NumConst[value: 8], Var [x]], msg: pos-4]
 
-if Binary [AND, Binary [AND, BoolConst [true], BoolConst [true]], Binary [AND, BoolConst [true], BoolConst [true]]]
+if Binary [AND, Binary [AND, BoolConst[value: true], BoolConst[value: true]], Binary [AND, BoolConst[value: true], BoolConst[value: true]]]
 ,then
-exprStmt Binary [MATH_CHANGE, Var [x], NumConst [1]]
+exprStmt Binary [MATH_CHANGE, Var [x], NumConst[value: 1]]
 
 
-if Binary [OR, Binary [AND, BoolConst [true], BoolConst [false]], Binary [AND, BoolConst [false], BoolConst [true]]]
+if Binary [OR, Binary [AND, BoolConst[value: true], BoolConst[value: false]], Binary [AND, BoolConst[value: false], BoolConst[value: true]]]
 ,then
-exprStmt Binary [MATH_CHANGE, Var [x], NumConst [1000]]
+exprStmt Binary [MATH_CHANGE, Var [x], NumConst[value: 1000]]
 
 
-if Binary [AND, Unary [NOT, Binary [OR, BoolConst [true], BoolConst [true]]], Unary [NOT, Binary [OR, BoolConst [true], BoolConst [true]]]]
+if Binary [AND, Unary [NOT, Binary [OR, BoolConst[value: true], BoolConst[value: true]]], Unary [NOT, Binary [OR, BoolConst[value: true], BoolConst[value: true]]]]
 ,then
-exprStmt Binary [MATH_CHANGE, Var [x], NumConst [1000]]
+exprStmt Binary [MATH_CHANGE, Var [x], NumConst[value: 1000]]
 
 
-if Binary [OR, Unary [NOT, Binary [AND, BoolConst [true], BoolConst [false]]], Unary [NOT, Binary [AND, BoolConst [true], BoolConst [false]]]]
+if Binary [OR, Unary [NOT, Binary [AND, BoolConst[value: true], BoolConst[value: false]]], Unary [NOT, Binary [AND, BoolConst[value: true], BoolConst[value: false]]]]
 ,then
-exprStmt Binary [MATH_CHANGE, Var [x], NumConst [1]]
+exprStmt Binary [MATH_CHANGE, Var [x], NumConst[value: 1]]
 
-DebugAction [StmtExpr [
-if Binary [EQ, NumConst [10], Var [x]]
+DebugAction[value: StmtExpr [
+if Binary [EQ, NumConst[value: 10], Var [x]]
 ,then
-exprStmt StringConst [Logic Boolean operators Test: success]
+exprStmt StringConst[value: Logic Boolean operators Test: success]
 ,else
-exprStmt StringConst [Logic Boolean operators Test: FAIL]
+exprStmt StringConst[value: Logic Boolean operators Test: FAIL]
 ]]
-
-StmtTextComment [Logic Boolean Operators -- End]
+StmtTextComment[textComment: Logic Boolean Operators -- End]

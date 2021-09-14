@@ -1,9 +1,9 @@
 
-(repeat [FOREVER_ARDU, BoolConst [true]]NeuralNetworkNew [ Var [classes]Var [inputs]Var [neurons]]
-(repeat [FOR, Var [classNumber], NumConst [0], Var [classes], NumConst [1]]
-(repeat [FOR, Var [datasets], NumConst [1], NumConst [10], NumConst [1]]MethodStmt [MethodCall [getAllRawData, , , VOID]]NeuralNetworkAddTrainingsData [ Var [classNumber]]
+(repeat [FOREVER_ARDU, BoolConst[value: true]]NeuralNetworkNew [ Var [classes]Var [inputs]Var [neurons]]
+(repeat [FOR, Var [classNumber], NumConst[value: 0], Var [classes], NumConst[value: 1]]
+(repeat [FOR, Var [datasets], NumConst[value: 1], NumConst[value: 10], NumConst[value: 1]]MethodStmt [MethodCall [getAllRawData, , , VOID]]NeuralNetworkAddTrainingsData [ Var [classNumber]]
 )
 )NeuralNetworkTrain []
-(repeat [FOREVER, BoolConst [true]]MethodStmt [MethodCall [getAllRawData, , , VOID]]NeuralNetworkClassify[probabilities: Var [probabilities]]MethodStmt [MethodCall [printClassWithHighestProbability, , , VOID]]
+(repeat [FOREVER, BoolConst[value: true]]MethodStmt [MethodCall [getAllRawData, , , VOID]]NeuralNetworkClassify[probabilities: Var [probabilities]]MethodStmt [MethodCall [printClassWithHighestProbability, , , VOID]]
 )
 )

@@ -1,18 +1,14 @@
 package de.fhg.iais.roberta.syntax.lang.expr;
 
-import java.util.List;
 import java.util.Locale;
 
-import de.fhg.iais.roberta.blockly.generated.Block;
-import de.fhg.iais.roberta.blockly.generated.Field;
+import de.fhg.iais.roberta.syntax.BlockType;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
-import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.transformer.Ast2Jaxb;
-import de.fhg.iais.roberta.transformer.Jaxb2Ast;
-import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
+import de.fhg.iais.roberta.transformer.NepoField;
+import de.fhg.iais.roberta.transformer.NepoOp;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
@@ -23,11 +19,13 @@ import de.fhg.iais.roberta.util.dbc.DbcException;
  * <br>
  * To create an instance from this class use the method {@link #make(Const, BlocklyBlockProperties, BlocklyComment)}.<br>
  */
+@NepoOp(containerType = "MATH_CONST", blocklyType = BlocklyType.NUMBER)
 public class MathConst<V> extends Expr<V> {
-    private final Const mathConst;
+    @NepoField(name = BlocklyConstants.CONSTANT)
+    public final Const mathConst;
 
-    private MathConst(Const mathConst, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockTypeContainer.getByName("MATH_CONST"), properties, comment);
+    public MathConst(BlockType kind, BlocklyBlockProperties properties, BlocklyComment comment, Const mathConst) {
+        super(kind, properties, comment);
         Assert.isTrue(mathConst != null);
         this.mathConst = mathConst;
         setReadOnly();
@@ -42,7 +40,7 @@ public class MathConst<V> extends Expr<V> {
      * @return read only object of class {@link MathConst}
      */
     public static <V> MathConst<V> make(Const mathConst, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new MathConst<V>(mathConst, properties, comment);
+        return new MathConst<V>(BlockTypeContainer.getByName("MATH_CONST"), properties, comment, mathConst);
     }
 
     /**
@@ -52,35 +50,15 @@ public class MathConst<V> extends Expr<V> {
         return this.mathConst;
     }
 
-    @Override
-    public int getPrecedence() {
-        return 999;
-    }
-
-    @Override
-    public Assoc getAssoc() {
-        return Assoc.NONE;
-    }
-
-    @Override
-    public BlocklyType getVarType() {
-        return BlocklyType.NUMBER;
-    }
-
-    @Override
-    public String toString() {
-        return "MathConst [" + this.mathConst + "]";
-    }
-
     /**
      * This enum defines all possible math constant.
      */
-    public static enum Const {
+    public enum Const {
         GOLDEN_RATIO(), PI(), E(), SQRT2(), SQRT1_2(), INFINITY();
 
         private final String[] values;
 
-        private Const(String... values) {
+        Const(String... values) {
             this.values = values;
         }
 
@@ -110,24 +88,4 @@ public class MathConst<V> extends Expr<V> {
         }
     }
 
-    /**
-     * Transformation from JAXB object to corresponding AST object.
-     *
-     * @param block for transformation
-     * @param helper class for making the transformation
-     * @return corresponding AST object
-     */
-    public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
-        List<Field> fields = Jaxb2Ast.extractFields(block, (short) 1);
-        String field = Jaxb2Ast.extractField(fields, BlocklyConstants.CONSTANT);
-        return MathConst.make(MathConst.Const.get(field), Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
-    }
-
-    @Override
-    public Block astToBlock() {
-        Block jaxbDestination = new Block();
-        Ast2Jaxb.setBasicProperties(this, jaxbDestination);
-        Ast2Jaxb.addField(jaxbDestination, BlocklyConstants.CONSTANT, getMathConst().name());
-        return jaxbDestination;
-    }
 }

@@ -13,7 +13,7 @@ public class BinaryTest extends AstTest {
 
     @Test
     public void make() throws Exception {
-        String a = "BlockAST [project=[[Location [x=27, y=-575], Binary [ADD, NumConst [1], MathPowerFunct [POWER, [NumConst [5], NumConst [8]]]]]]]";
+        String a = "BlockAST [project=[[Location [x=27, y=-575], Binary [ADD, NumConst [value:1], MathPowerFunct [POWER, [NumConst [value:5], NumConst [value:8]]]]]]]";
         UnitTestHelper.checkProgramAstEquality(testFactory, a, "/ast/math/math_arithmetic.xml");
     }
 
@@ -26,13 +26,13 @@ public class BinaryTest extends AstTest {
     @Test
     public void getLeft() throws Exception {
         Binary<Void> binary = (Binary<Void>) UnitTestHelper.getAstOfFirstBlock(testFactory, "/ast/math/math_arithmetic.xml");
-        Assert.assertEquals("NumConst [1]", binary.getLeft().toString());
+        Assert.assertEquals("NumConst[value: 1]", binary.getLeft().toString());
     }
 
     @Test
     public void getRight() throws Exception {
         Binary<Void> binary = (Binary<Void>) UnitTestHelper.getAstOfFirstBlock(testFactory, "/ast/math/math_arithmetic.xml");
-        Assert.assertEquals("MathPowerFunct [POWER, [NumConst [5], NumConst [8]]]", binary.getRight().toString());
+        Assert.assertEquals("MathPowerFunct [POWER, [NumConst[value: 5], NumConst[value: 8]]]", binary.getRight().toString());
     }
 
     @Test

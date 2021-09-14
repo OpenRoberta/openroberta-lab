@@ -1,42 +1,40 @@
+StmtTextComment[textComment: String Concat -- Start --]
 
-StmtTextComment [String Concat -- Start --]
+exprStmt Binary [TEXT_APPEND, Var [text], StringConst[value:  one]]
+AssertStmt[asserts: Binary [EQ, StringConst[value: start: one], Var [text]], msg: POS-1]
 
-exprStmt Binary [TEXT_APPEND, Var [text], StringConst [ one]]
-AssertStmt [asserts POS-1: Binary [EQ, StringConst [start: one], Var [text]]]
+exprStmt Binary [TEXT_APPEND, Var [text], FunctionExpr [TextJoinFunct [StringConst[value:  two], StringConst[value:  three]]]]
+AssertStmt[asserts: Binary [EQ, StringConst[value: start: one two three], Var [text]], msg: POS-2]
 
-exprStmt Binary [TEXT_APPEND, Var [text], FunctionExpr [TextJoinFunct [StringConst [ two], StringConst [ three]]]]
-AssertStmt [asserts POS-2: Binary [EQ, StringConst [start: one two three], Var [text]]]
+exprStmt Binary [TEXT_APPEND, Var [text], FunctionExpr [TextJoinFunct [NumConst[value: 4], NumConst[value: 5]]]]
+AssertStmt[asserts: Binary [EQ, StringConst[value: start: one two three45], Var [text]], msg: POS-3]
 
-exprStmt Binary [TEXT_APPEND, Var [text], FunctionExpr [TextJoinFunct [NumConst [4], NumConst [5]]]]
-AssertStmt [asserts POS-3: Binary [EQ, StringConst [start: one two three45], Var [text]]]
+exprStmt Binary [TEXT_APPEND, Var [text], FunctionExpr [TextJoinFunct [NumConst[value: 6], StringConst[value:  seven]]]]
+AssertStmt[asserts: Binary [EQ, StringConst[value: start: one two three456 seven], Var [text]], msg: POS-4]
 
-exprStmt Binary [TEXT_APPEND, Var [text], FunctionExpr [TextJoinFunct [NumConst [6], StringConst [ seven]]]]
-AssertStmt [asserts POS-4: Binary [EQ, StringConst [start: one two three456 seven], Var [text]]]
+Var [text] := FunctionExpr [TextJoinFunct [FunctionExpr [TextJoinFunct [Var [text], Var [eight]]], StringConst[value:  nine]]]
 
-Var [text] := FunctionExpr [TextJoinFunct [FunctionExpr [TextJoinFunct [Var [text], Var [eight]]], StringConst [ nine]]]
+AssertStmt[asserts: Binary [EQ, StringConst[value: start: one two three456 seven eight nine], Var [text]], msg: POS-5]
 
-AssertStmt [asserts POS-5: Binary [EQ, StringConst [start: one two three456 seven eight nine], Var [text]]]
+Var [text] := FunctionExpr [TextJoinFunct [FunctionExpr [TextJoinFunct [Var [text], StringConst[value: ten]]], FunctionExpr [TextJoinFunct [StringConst[value:  eleven], StringConst[value:  twelve]]]]]
 
-Var [text] := FunctionExpr [TextJoinFunct [FunctionExpr [TextJoinFunct [Var [text], StringConst [ten]]], FunctionExpr [TextJoinFunct [StringConst [ eleven], StringConst [ twelve]]]]]
-
-DebugAction [StmtExpr [
-if Binary [EQ, StringConst [start: one two three456 seven eight nine ten eleven twelve], Var [text]]
+DebugAction[value: StmtExpr [
+if Binary [EQ, StringConst[value: start: one two three456 seven eight nine ten eleven twelve], Var [text]]
 ,then
-exprStmt StringConst [String Concat SUCCESS]
+exprStmt StringConst[value: String Concat SUCCESS]
 ,else
-exprStmt StringConst [String Concat FAIL]
+exprStmt StringConst[value: String Concat FAIL]
 ]]
 
 Var [number] := FunctionExpr [TextStringCastNumberFunct [[Var [text]]]]
 
 
-Var [number] := FunctionExpr [TextCharCastNumberFunct [[Var [text], NumConst [0]]]]
+Var [number] := FunctionExpr [TextCharCastNumberFunct [[Var [text], NumConst[value: 0]]]]
 
 
-Var [text] := FunctionExpr [MathCastStringFunct [[NumConst [10]]]]
+Var [text] := FunctionExpr [MathCastStringFunct [[NumConst[value: 10]]]]
 
 
-Var [text] := FunctionExpr [MathCastCharFunct [[NumConst [30]]]]
+Var [text] := FunctionExpr [MathCastCharFunct [[NumConst[value: 30]]]]
 
-
-StmtTextComment [String Concat -- End --]
+StmtTextComment[textComment: String Concat -- End --]

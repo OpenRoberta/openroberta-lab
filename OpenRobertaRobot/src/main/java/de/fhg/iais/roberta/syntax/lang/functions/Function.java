@@ -5,6 +5,7 @@ import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.lang.expr.Assoc;
+import de.fhg.iais.roberta.transformer.AnnotationHelper;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 
 /**
@@ -27,19 +28,33 @@ public abstract class Function<V> extends Phrase<V> {
     }
 
     /**
-     * get the precedence of the function
+     * get the precedence of the expression
+     * <b>This is the default implementation of annotated AST classes</b>
      *
      * @return the precedence
      */
-    abstract public int getPrecedence();
+    public int getPrecedence() {
+        return AnnotationHelper.getPrecedence(this.getClass());
+    }
 
     /**
-     * get the association of the function
+     * get the association of the expression
+     * <b>This is the default implementation of annotated AST classes</b>
      *
      * @return the association
      */
-    abstract public Assoc getAssoc();
+    public Assoc getAssoc() {
+        return AnnotationHelper.getAssoc(this.getClass());
+    }
 
-    abstract public BlocklyType getReturnType();
+    /**
+     * get the BlocklyType (used for typechecking ...) of this expression
+     * <b>This is the default implementation of annotated AST classes</b>
+     *
+     * @return the BlocklyType
+     */
+    public BlocklyType getReturnType() {
+        return AnnotationHelper.getVarType(this.getClass());
+    }
 
 }

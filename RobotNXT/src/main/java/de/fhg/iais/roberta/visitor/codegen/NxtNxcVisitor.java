@@ -385,7 +385,7 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
                     || showTextAction.msg.toString().contains("OR")
                     || showTextAction.msg.toString().contains("NOT")
                     || showTextAction.msg.toString().contains("[ListGetIndex [GET, FROM_START, [ListCreate [BOOLEAN")
-                    || showTextAction.msg.toString().contains("BluetoothConnectAction") ) {
+                    || showTextAction.msg.toString().contains("BluetoothCheckConnectAction") ) {
                     methodName = "BoolOut";
                 } else {
                     methodName = "TextOut";

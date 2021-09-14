@@ -1,86 +1,82 @@
+StmtTextComment[textComment: Control Flow Loop -- Start]
+AssertStmt[asserts: Binary [EQ, NumConst[value: 0], Var [x]], msg: pos-0]
 
-StmtTextComment [Control Flow Loop -- Start]
-AssertStmt [asserts pos-0: Binary [EQ, NumConst [0], Var [x]]]
-
-(repeat [TIMES, Var [k0], NumConst [0], NumConst [5], NumConst [1]]
-Var [x] := Binary [ADD, Var [x], NumConst [1]]
-
-)
-AssertStmt [asserts pos-1: Binary [EQ, NumConst [5], Var [x]]]
-
-(repeat [UNTIL, Unary [NOT, Binary [EQ, Var [x], NumConst [10]]]]
-Var [x] := Binary [ADD, Var [x], NumConst [1]]
+(repeat [TIMES, Var [k0], NumConst[value: 0], NumConst[value: 5], NumConst[value: 1]]
+Var [x] := Binary [ADD, Var [x], NumConst[value: 1]]
 
 )
-AssertStmt [asserts pos-2: Binary [EQ, NumConst [10], Var [x]]]
+AssertStmt[asserts: Binary [EQ, NumConst[value: 5], Var [x]], msg: pos-1]
 
-(repeat [WHILE, Binary [LT, Var [x], NumConst [15]]]
-Var [x] := Binary [ADD, Var [x], NumConst [1]]
-
-)
-AssertStmt [asserts pos-3: Binary [EQ, NumConst [15], Var [x]]]
-
-(repeat [FOR, Var [i], NumConst [1], NumConst [6], NumConst [1]]
-Var [x] := Binary [ADD, Var [x], NumConst [1]]
+(repeat [UNTIL, Unary [NOT, Binary [EQ, Var [x], NumConst[value: 10]]]]
+Var [x] := Binary [ADD, Var [x], NumConst[value: 1]]
 
 )
-AssertStmt [asserts pos-4: Binary [EQ, NumConst [20], Var [x]]]
+AssertStmt[asserts: Binary [EQ, NumConst[value: 10], Var [x]], msg: pos-2]
 
-(repeat [FOR, Var [j], NumConst [2], NumConst [5], NumConst [3]]
-Var [x] := Binary [ADD, Var [x], NumConst [1]]
-
-)
-AssertStmt [asserts pos-5: Binary [EQ, NumConst [21], Var [x]]]
-
-(repeat [FOR, Var [k], NumConst [2], NumConst [6], NumConst [3]]
-Var [x] := Binary [ADD, Var [x], NumConst [1]]
+(repeat [WHILE, Binary [LT, Var [x], NumConst[value: 15]]]
+Var [x] := Binary [ADD, Var [x], NumConst[value: 1]]
 
 )
-AssertStmt [asserts pos-6: Binary [EQ, NumConst [23], Var [x]]]
+AssertStmt[asserts: Binary [EQ, NumConst[value: 15], Var [x]], msg: pos-3]
 
-(repeat [FOR, Var [o], NumConst [2], NumConst [7], NumConst [3]]
-Var [x] := Binary [ADD, Var [x], NumConst [1]]
-
-)
-AssertStmt [asserts pos-7: Binary [EQ, NumConst [25], Var [x]]]
-
-(repeat [FOR, Var [p], NumConst [10], NumConst [9], NumConst [-1]]
-Var [x] := Binary [ADD, Var [x], NumConst [1]]
+(repeat [FOR, Var [i], NumConst[value: 1], NumConst[value: 6], NumConst[value: 1]]
+Var [x] := Binary [ADD, Var [x], NumConst[value: 1]]
 
 )
-AssertStmt [asserts pos-8: Binary [EQ, NumConst [25], Var [x]]]
+AssertStmt[asserts: Binary [EQ, NumConst[value: 20], Var [x]], msg: pos-4]
 
-(repeat [FOR, Var [m], NumConst [1], NumConst [5], Var [y]]
-Var [y] := Binary [ADD, Var [y], NumConst [1]]
-
-Var [x] := Binary [ADD, Var [x], NumConst [1]]
+(repeat [FOR, Var [j], NumConst[value: 2], NumConst[value: 5], NumConst[value: 3]]
+Var [x] := Binary [ADD, Var [x], NumConst[value: 1]]
 
 )
-AssertStmt [asserts pos-9: Binary [EQ, NumConst [27], Var [x]]]
+AssertStmt[asserts: Binary [EQ, NumConst[value: 21], Var [x]], msg: pos-5]
 
-(repeat [FOREVER, BoolConst [true]]
-if Binary [LT, Var [x], NumConst [30]]
+(repeat [FOR, Var [k], NumConst[value: 2], NumConst[value: 6], NumConst[value: 3]]
+Var [x] := Binary [ADD, Var [x], NumConst[value: 1]]
+
+)
+AssertStmt[asserts: Binary [EQ, NumConst[value: 23], Var [x]], msg: pos-6]
+
+(repeat [FOR, Var [o], NumConst[value: 2], NumConst[value: 7], NumConst[value: 3]]
+Var [x] := Binary [ADD, Var [x], NumConst[value: 1]]
+
+)
+AssertStmt[asserts: Binary [EQ, NumConst[value: 25], Var [x]], msg: pos-7]
+
+(repeat [FOR, Var [p], NumConst[value: 10], NumConst[value: 9], NumConst[value: -1]]
+Var [x] := Binary [ADD, Var [x], NumConst[value: 1]]
+
+)
+AssertStmt[asserts: Binary [EQ, NumConst[value: 25], Var [x]], msg: pos-8]
+
+(repeat [FOR, Var [m], NumConst[value: 1], NumConst[value: 5], Var [y]]
+Var [y] := Binary [ADD, Var [y], NumConst[value: 1]]
+
+Var [x] := Binary [ADD, Var [x], NumConst[value: 1]]
+
+)
+AssertStmt[asserts: Binary [EQ, NumConst[value: 27], Var [x]], msg: pos-9]
+
+(repeat [FOREVER, BoolConst[value: true]]
+if Binary [LT, Var [x], NumConst[value: 30]]
 ,then
-Var [x] := Binary [ADD, Var [x], NumConst [1]]
+Var [x] := Binary [ADD, Var [x], NumConst[value: 1]]
 
-if BoolConst [true]
-,then
-StmtFlowCon [CONTINUE]
+if BoolConst[value: true]
+,thenStmtFlowCon[flow: CONTINUE]
 
-Var [x] := Binary [ADD, Var [x], NumConst [1000]]
+Var [x] := Binary [ADD, Var [x], NumConst[value: 1000]]
 
-,else if Binary [GTE, Var [x], NumConst [30]]
-,then
-StmtFlowCon [BREAK]
+,else if Binary [GTE, Var [x], NumConst[value: 30]]
+,thenStmtFlowCon[flow: BREAK]
 
 )
-AssertStmt [asserts pos-10: Binary [EQ, NumConst [30], Var [x]]]
-DebugAction [StmtExpr [
-if Binary [EQ, Var [x], NumConst [30]]
+AssertStmt[asserts: Binary [EQ, NumConst[value: 30], Var [x]], msg: pos-10]
+DebugAction[value: StmtExpr [
+if Binary [EQ, Var [x], NumConst[value: 30]]
 ,then
-exprStmt StringConst [Control Flow Loops: success]
+exprStmt StringConst[value: Control Flow Loops: success]
 ,else
-exprStmt StringConst [Control Flow Loops: FAIL]
+exprStmt StringConst[value: Control Flow Loops: FAIL]
 ]]
-
-StmtTextComment [Control Flow Loop -- End]
+StmtTextComment[textComment: Control Flow Loop -- End]

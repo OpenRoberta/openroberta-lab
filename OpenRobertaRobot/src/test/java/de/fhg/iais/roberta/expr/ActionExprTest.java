@@ -14,7 +14,7 @@ public class ActionExprTest {
     public void make() throws Exception {
         MotorDriveStopAction<Void> sa = MotorDriveStopAction.make(BlocklyBlockProperties.make("1", "1"), null);
         ActionExpr<Void> ae = ActionExpr.make(sa);
-        String a = "ActionExpr [StopAction []]";
+        String a = "ActionExpr [MotorDriveStopAction[]]";
         Assert.assertEquals(a, ae.toString());
     }
 
