@@ -1,0 +1,37 @@
+name: IntegrationTest-Dispatch
+
+on:
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: 'Branch/ref for integration tests'
+        required: true
+        default: 'develop'
+      oraccrsctag:
+        description: 'Tag for the crosscompiler resources'
+        required: true
+        default: 'tag # from ora-cc-rsc repo'
+
+jobs:
+  integration-test:
+    runs-on: ubuntu-latest
+    container: openroberta/base-x64:${{ github.event.inputs.oraccrsctag }}
+    steps:
+      - name: branch ${{ github.event.inputs.branch }}, repo ${{ github.repository }}, ora-cc-rsc-tag ${{ github.event.inputs.oraccrsctag }}
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.inputs.branch }}
+      - name: Setup Java JDK
+        uses: actions/setup-java@v2.1.0
+        with:
+          java-version: '11'
+          distribution: 'adopt'
+      - name: Cache local maven repository
+        uses: actions/cache@v2
+        with:
+          path: /root/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+      - name: Build with maven and run integration tests
+        run: mvn --batch-mode clean install -PrunIT

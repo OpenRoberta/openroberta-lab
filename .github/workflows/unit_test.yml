@@ -13,12 +13,8 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Run unit tests for branch ${{ github.ref }} of repo ${{ github.repository }}
-        run: echo "Run unit tests for branch ${{ github.ref }} of repo ${{ github.repository }}"
-      - name: Checkout the branch
+      - name: Checkout branch ${{ github.ref }} of repo ${{ github.repository }}
         uses: actions/checkout@v2
-        with:
-          ref: ${{ github.ref }}
       - name: Setup Java JDK
         uses: actions/setup-java@v2.1.0
         with:

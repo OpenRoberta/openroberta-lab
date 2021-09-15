@@ -1,0 +1,29 @@
+name: IntegrationTest-Scheduled
+
+# the ora-cc-rsc tag number (currently 16) is used twice in this workflow
+on:
+  schedule:
+    - cron: "30 0 * * *"
+
+jobs:
+  integration-test:
+    if: ${{ github.repository == 'OpenRoberta/openroberta-lab' }}
+    runs-on: ubuntu-latest
+    container: openroberta/base-x64:16 # ora-cc-rsc tag number
+    steps:
+      - name: branch ${{ github.ref }}, repo ${{ github.repository }}, ora-cc-rsc-tag 16 # ora-cc-rsc tag number
+        uses: actions/checkout@v2
+      - name: Setup Java JDK
+        uses: actions/setup-java@v2.1.0
+        with:
+          java-version: '11'
+          distribution: 'adopt'
+      - name: Cache local maven repository
+        uses: actions/cache@v2
+        with:
+          path: /root/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+      - name: Build with maven and run integration tests
+        run: mvn --batch-mode clean install -PrunIT
