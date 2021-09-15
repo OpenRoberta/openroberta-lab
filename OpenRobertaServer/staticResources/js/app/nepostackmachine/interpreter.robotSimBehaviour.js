@@ -202,21 +202,31 @@ define(["require", "exports", "./interpreter.aRobotBehaviour", "./interpreter.co
             this.setBlocking(true);
             return 0;
         };
-        RobotMbedBehaviour.prototype.motorOnAction = function (name, port, duration, speed) {
+        RobotMbedBehaviour.prototype.motorOnAction = function (name, port, duration, durationType, speed) {
             var robotText = 'robot: ' + name + ', port: ' + port;
-            var durText = duration === undefined ? ' w.o. duration' : ' for ' + duration + ' msec';
+            if (duration !== undefined) {
+                if (durationType === C.DEGREE || durationType === C.DISTANCE || durationType === C.ROTATIONS) {
+                    // if durationType is defined, then duration must be defined, too. Thus, it is never 'undefined' :-)
+                    var rotationPerSecond = C.MAX_ROTATION * Math.abs(speed) / 100.0;
+                    duration = duration / rotationPerSecond * 1000;
+                    if (durationType === C.DEGREE) {
+                        duration /= 360.0;
+                    }
+                }
+            }
+            var durText = duration === undefined ? ' w.o. duration' : (' for ' + duration + ' msec');
             U.debug(robotText + ' motor speed ' + speed + durText);
             if (this.hardwareState.actions.motors == undefined) {
                 this.hardwareState.actions.motors = {};
             }
             this.hardwareState.actions.motors[port] = speed;
             this.hardwareState.motors[port] = speed;
-            return 0;
+            return duration === undefined ? 0 : duration;
         };
         RobotMbedBehaviour.prototype.motorStopAction = function (name, port) {
             var robotText = 'robot: ' + name + ', port: ' + port;
             U.debug(robotText + ' motor stop');
-            this.motorOnAction(name, port, 0, 0);
+            this.motorOnAction(name, port, 0, undefined, 0);
         };
         RobotMbedBehaviour.prototype.driveAction = function (name, direction, speed, distance, time) {
             var robotText = 'robot: ' + name + ', direction: ' + direction;
@@ -448,7 +458,8 @@ define(["require", "exports", "./interpreter.aRobotBehaviour", "./interpreter.co
             console.assert(value, _msg + ' ' + _left + ' ' + _op + ' ' + _right);
         };
         RobotMbedBehaviour.prototype.setConfiguration = function (configuration) {
-            throw new Error("Method not implemented.");
+            //throw new Error("Method not implemented.");
+            return 0;
         };
         return RobotMbedBehaviour;
     }(interpreter_aRobotBehaviour_1.ARobotBehaviour));

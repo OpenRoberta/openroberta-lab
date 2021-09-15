@@ -59,7 +59,7 @@ export abstract class ARobotBehaviour {
 
     abstract sayTextAction(text: string, speed: number, pitch: number): number;
 
-    abstract motorOnAction(name: string, port: any, duration: number, speed: number): number;
+    abstract motorOnAction(name: string, port: any, duration: number, durationType: any, speed: number): number;
 
     abstract getMotorSpeed(s: State, name: string, port: any): void;
 

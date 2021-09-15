@@ -214,10 +214,20 @@ define(["require", "exports", "./interpreter.aRobotBehaviour", "./interpreter.co
             this.btInterfaceFct(cmd);
             return duration;
         };
-        RobotWeDoBehaviour.prototype.motorOnAction = function (name, port, duration, speed) {
+        RobotWeDoBehaviour.prototype.motorOnAction = function (name, port, duration, durationType, speed) {
             var brickid = this.getBrickIdByName(name); // TODO: better style
             var robotText = 'robot: ' + name + ', port: ' + port;
-            var durText = duration === undefined ? ' w.o. duration' : ' for ' + duration + ' msec';
+            if (duration !== undefined) {
+                if (durationType === C.DEGREE || durationType === C.DISTANCE || durationType === C.ROTATIONS) {
+                    // if durationType is defined, then duration must be defined, too. Thus, it is never 'undefined' :-)
+                    var rotationPerSecond = C.MAX_ROTATION * Math.abs(speed) / 100.0;
+                    duration = duration / rotationPerSecond * 1000;
+                    if (durationType === C.DEGREE) {
+                        duration /= 360.0;
+                    }
+                }
+            }
+            var durText = duration === undefined ? ' w.o. duration' : (' for ' + duration + ' msec');
             U.debug(robotText + ' motor speed ' + speed + durText);
             var cmd = {
                 target: 'wedo',
@@ -230,7 +240,7 @@ define(["require", "exports", "./interpreter.aRobotBehaviour", "./interpreter.co
                 power: Math.abs(speed),
             };
             this.btInterfaceFct(cmd);
-            return 0;
+            return duration !== undefined ? 0 : duration;
         };
         RobotWeDoBehaviour.prototype.motorStopAction = function (name, port) {
             var brickid = this.getBrickIdByName(name); // TODO: better style

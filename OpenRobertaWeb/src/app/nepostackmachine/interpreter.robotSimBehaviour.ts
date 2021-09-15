@@ -206,8 +206,18 @@ export class RobotMbedBehaviour extends ARobotBehaviour {
 		return 0;
 	}
 
-	public motorOnAction(name: string, port: any, duration: number, speed: number): number {
+	public motorOnAction(name: string, port: any, duration: number, durationType: any, speed: number): number {
 		const robotText = 'robot: ' + name + ', port: ' + port;
+		if(duration !== undefined) {
+      if (durationType === C.DEGREE || durationType === C.DISTANCE || durationType === C.ROTATIONS) {
+          // if durationType is defined, then duration must be defined, too. Thus, it is never 'undefined' :-)
+          let rotationPerSecond = C.MAX_ROTATION * Math.abs(speed) / 100.0;
+          duration = duration / rotationPerSecond * 1000;
+          if (durationType === C.DEGREE) {
+              duration /= 360.0;
+          }
+      }
+		}
 		const durText = duration === undefined ? ' w.o. duration' : (' for ' + duration + ' msec');
 		U.debug(robotText + ' motor speed ' + speed + durText);
 		if (this.hardwareState.actions.motors == undefined) {
@@ -215,13 +225,13 @@ export class RobotMbedBehaviour extends ARobotBehaviour {
 		}
 		this.hardwareState.actions.motors[port] = speed;
 		this.hardwareState.motors[port] = speed;
-		return 0;
+		return duration === undefined ? 0 : duration;
 	}
 
 	public motorStopAction(name: string, port: any) {
 		const robotText = 'robot: ' + name + ', port: ' + port;
 		U.debug(robotText + ' motor stop');
-		this.motorOnAction(name, port, 0, 0);
+		this.motorOnAction(name, port, 0, undefined, 0);
 
 	}
 
@@ -480,6 +490,7 @@ export class RobotMbedBehaviour extends ARobotBehaviour {
 	}
 
 	public setConfiguration(configuration: any): number {
-        throw new Error("Method not implemented.");
-    }
+				//throw new Error("Method not implemented.");
+        return 0;
+		}
 }
