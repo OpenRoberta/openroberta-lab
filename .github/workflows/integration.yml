@@ -13,7 +13,7 @@ on:
 jobs:
   integration-test:
     runs-on: ubuntu-latest
-    container: openroberta/base:25
+    container: openroberta/base:26
     steps:
       - name: Select the branch
         id: branchSelection
