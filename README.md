@@ -2,8 +2,8 @@
 Open Roberta Lab
 ================
 
-[![Unit Test](https://github.com/OpenRoberta/openroberta-lab/actions/workflows/build.yml/badge.svg?branch=develop)](https://github.com/OpenRoberta/openroberta-lab/actions/workflows/build.yml)
-[![Integration Test (Nightly)](https://github.com/OpenRoberta/openroberta-lab/actions/workflows/integration.yml/badge.svg?event=schedule)](https://github.com/OpenRoberta/openroberta-lab/actions/workflows/integration.yml)
+[![Unit Test](https://github.com/OpenRoberta/openroberta-lab/actions/workflows/UnitTest.yml/badge.svg?branch=develop)](https://github.com/OpenRoberta/openroberta-lab/actions/workflows/UnitTest.yml)
+[![Integration Test (Nightly)](https://github.com/OpenRoberta/openroberta-lab/actions/workflows/IntegrationTest-Scheduled.yml/badge.svg?event=schedule)](https://github.com/OpenRoberta/openroberta-lab/actions/workflows/IntegrationTest-Scheduled.yml)
 
 ### Note about the default branch
 
