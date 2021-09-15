@@ -5,6 +5,15 @@ Open Roberta Lab
 [![Unit Test](https://github.com/OpenRoberta/openroberta-lab/actions/workflows/build.yml/badge.svg?branch=develop)](https://github.com/OpenRoberta/openroberta-lab/actions/workflows/build.yml)
 [![Integration Test (Nightly)](https://github.com/OpenRoberta/openroberta-lab/actions/workflows/integration.yml/badge.svg?event=schedule)](https://github.com/OpenRoberta/openroberta-lab/actions/workflows/integration.yml)
 
+### Note about the default branch
+
+For a short time, we use ``develop`` to the default branch of our repository. If you clone our repository, you'll get ``develop`` first. In general this is a
+stable version. You can deploy a local version as described below. If you want the currently deployed version, please checkout ``master`` before building.
+
+The local version needs data for the cross compiler. They are stored in the separate repository ``ora-cc-rsc``. Note:
+- ``master``(version 4.1.3, the currently deployed version) needs the data stored in tag ``15``
+- ``develop`` (version 4.1.4-SNAPSHOT) needs the data stored in tag ``16``
+
 ### Introduction
 
 The source of the OpenRoberta Lab is stored in the Github repository '[openroberta-lab](https://github.com/OpenRoberta/openroberta-lab)'.
