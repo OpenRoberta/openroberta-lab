@@ -11,8 +11,8 @@ For a short time, we use ``develop`` to the default branch of our repository. If
 stable version. You can deploy a local version as described below. If you want the currently deployed version, please checkout ``master`` before building.
 
 The local version needs data for the cross compiler. They are stored in the separate repository ``ora-cc-rsc``. Note:
-- ``master``(version 4.1.3, the currently deployed version) needs the data stored in tag ``15``
-- ``develop`` (version 4.1.4-SNAPSHOT) needs the data stored in tag ``16``
+- ``master``(version 4.1.3, the currently deployed version) needs the data stored in tag ``25``
+- ``develop`` (version 4.1.4-SNAPSHOT) needs the data stored in tag ``26``
 
 ### Introduction
 
