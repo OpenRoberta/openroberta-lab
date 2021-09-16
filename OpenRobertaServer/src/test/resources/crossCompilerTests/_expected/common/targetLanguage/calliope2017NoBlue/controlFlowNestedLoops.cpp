@@ -81,10 +81,10 @@ int main()
             }
             _uBit.sleep(_ITERATION_SLEEP_TIMEOUT);
         }
-        continue_loop10:
+        continue_loop10:;
         _uBit.sleep(_ITERATION_SLEEP_TIMEOUT);
     }
-    break_loop10:
+    break_loop10:;
     
     // Control Flow Nested Loop -- End
     release_fiber();

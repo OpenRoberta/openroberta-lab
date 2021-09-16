@@ -45,7 +45,7 @@ public abstract class AbstractLanguageVisitor implements ILanguageVisitor<Void> 
     //TODO find more simple way of handling the loops
     private static final String INDENT = "    ";
     private int loopCounter = 0;
-    protected LinkedList<Integer> currenLoop = new LinkedList<>();
+    protected LinkedList<Integer> currentLoop = new LinkedList<>();
 
     protected StringBuilder sb = new StringBuilder();
     protected final List<Phrase<Void>> programPhrases;
@@ -332,7 +332,7 @@ public abstract class AbstractLanguageVisitor implements ILanguageVisitor<Void> 
 
     protected void increaseLoopCounter() {
         this.loopCounter++;
-        this.currenLoop.add(this.loopCounter);
+        this.currentLoop.add(this.loopCounter);
     }
 
     protected String whitespace() {

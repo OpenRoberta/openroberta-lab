@@ -1,11 +1,5 @@
 package de.fhg.iais.roberta.visitor.lang.codegen.prog;
 
-import static de.fhg.iais.roberta.mode.general.ListElementOperations.GET;
-import static de.fhg.iais.roberta.mode.general.ListElementOperations.GET_REMOVE;
-import static de.fhg.iais.roberta.mode.general.ListElementOperations.INSERT;
-import static de.fhg.iais.roberta.mode.general.ListElementOperations.REMOVE;
-import static de.fhg.iais.roberta.mode.general.ListElementOperations.SET;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -22,6 +16,11 @@ import de.fhg.iais.roberta.bean.IProjectBean;
 import de.fhg.iais.roberta.bean.UsedHardwareBean;
 import de.fhg.iais.roberta.inter.mode.general.IMode;
 import de.fhg.iais.roberta.mode.general.IndexLocation;
+import static de.fhg.iais.roberta.mode.general.ListElementOperations.GET;
+import static de.fhg.iais.roberta.mode.general.ListElementOperations.GET_REMOVE;
+import static de.fhg.iais.roberta.mode.general.ListElementOperations.INSERT;
+import static de.fhg.iais.roberta.mode.general.ListElementOperations.REMOVE;
+import static de.fhg.iais.roberta.mode.general.ListElementOperations.SET;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.lang.expr.Binary;
 import de.fhg.iais.roberta.syntax.lang.expr.BoolConst;
@@ -247,8 +246,8 @@ public abstract class AbstractPythonVisitor extends AbstractLanguageVisitor {
 
     @Override
     public Void visitStmtFlowCon(StmtFlowCon<Void> stmtFlowCon) {
-        if ( this.getBean(UsedHardwareBean.class).getLoopsLabelContainer().get(this.currenLoop.getLast()) != null ) {
-            if ( this.getBean(UsedHardwareBean.class).getLoopsLabelContainer().get(this.currenLoop.getLast()) ) {
+        if ( this.getBean(UsedHardwareBean.class).getLoopsLabelContainer().get(this.currentLoop.getLast()) != null ) {
+            if ( this.getBean(UsedHardwareBean.class).getLoopsLabelContainer().get(this.currentLoop.getLast()) ) {
                 this.sb.append("raise " + (stmtFlowCon.getFlow() == Flow.BREAK ? "BreakOutOfALoop" : "ContinueLoop"));
                 return null;
             }
@@ -854,7 +853,7 @@ public abstract class AbstractPythonVisitor extends AbstractLanguageVisitor {
     protected void appendTry() {
         increaseLoopCounter();
 
-        if ( this.getBean(UsedHardwareBean.class).getLoopsLabelContainer().get(this.currenLoop.getLast()) ) {
+        if ( this.getBean(UsedHardwareBean.class).getLoopsLabelContainer().get(this.currentLoop.getLast()) ) {
             incrIndentation();
             nlIndent();
             this.sb.append("try:");
@@ -862,7 +861,7 @@ public abstract class AbstractPythonVisitor extends AbstractLanguageVisitor {
     }
 
     protected void appendExceptionHandling() {
-        if ( this.getBean(UsedHardwareBean.class).getLoopsLabelContainer().get(this.currenLoop.getLast()) ) {
+        if ( this.getBean(UsedHardwareBean.class).getLoopsLabelContainer().get(this.currentLoop.getLast()) ) {
             decrIndentation();
             nlIndent();
             this.sb.append("except BreakOutOfALoop:");
@@ -877,7 +876,7 @@ public abstract class AbstractPythonVisitor extends AbstractLanguageVisitor {
             this.sb.append("continue");
             decrIndentation();
         }
-        this.currenLoop.removeLast();
+        this.currentLoop.removeLast();
     }
 
     protected void appendPassIfEmptyBody(RepeatStmt<Void> repeatStmt) {

@@ -230,7 +230,7 @@ public abstract class AbstractJavaVisitor extends AbstractLanguageVisitor {
         incrIndentation();
         repeatStmt.getList().accept(this);
         if ( !isWaitStmt ) {
-            this.currenLoop.removeLast();
+            this.currentLoop.removeLast();
         } else {
             appendBreakStmt();
         }
@@ -254,9 +254,9 @@ public abstract class AbstractJavaVisitor extends AbstractLanguageVisitor {
 
     @Override
     public Void visitStmtFlowCon(StmtFlowCon<Void> stmtFlowCon) {
-        if ( this.getBean(UsedHardwareBean.class).getLoopsLabelContainer().get(this.currenLoop.getLast()) != null ) {
-            if ( this.getBean(UsedHardwareBean.class).getLoopsLabelContainer().get(this.currenLoop.getLast()) ) {
-                this.sb.append("if (true) " + stmtFlowCon.getFlow().toString().toLowerCase() + " loop" + this.currenLoop.getLast() + ";");
+        if ( this.getBean(UsedHardwareBean.class).getLoopsLabelContainer().get(this.currentLoop.getLast()) != null ) {
+            if ( this.getBean(UsedHardwareBean.class).getLoopsLabelContainer().get(this.currentLoop.getLast()) ) {
+                this.sb.append("if (true) " + stmtFlowCon.getFlow().toString().toLowerCase() + " loop" + this.currentLoop.getLast() + ";");
                 return null;
             }
         }
@@ -750,8 +750,8 @@ public abstract class AbstractJavaVisitor extends AbstractLanguageVisitor {
 
     private void addLabelToLoop() {
         increaseLoopCounter();
-        if ( this.getBean(UsedHardwareBean.class).getLoopsLabelContainer().get(this.currenLoop.getLast()) ) {
-            this.sb.append("loop" + this.currenLoop.getLast() + ":");
+        if ( this.getBean(UsedHardwareBean.class).getLoopsLabelContainer().get(this.currentLoop.getLast()) ) {
+            this.sb.append("loop" + this.currentLoop.getLast() + ":");
             nlIndent();
         }
     }
