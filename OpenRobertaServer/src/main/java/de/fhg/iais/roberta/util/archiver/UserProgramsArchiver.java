@@ -1,11 +1,8 @@
-package de.fhg.iais.roberta.util.Archiver;
+package de.fhg.iais.roberta.util.archiver;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.util.List;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.persistence.ProgramProcessor;
@@ -17,9 +14,6 @@ public class UserProgramsArchiver {
     private HttpSessionState userSession;
     private ProgramProcessor programProcessor;
     private int userId;
-
-    private static final Logger LOG = LoggerFactory.getLogger(UserProgramsArchiver.class);
-
 
     public UserProgramsArchiver(HttpSessionState userSession, ProgramProcessor programProcessor) {
         this.programProcessor = programProcessor;

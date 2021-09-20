@@ -247,9 +247,8 @@ public class ProgramProcessor extends AbstractProcessor {
 
         if ( owner == null ) {
             setStatus(ProcessorStatus.FAILED, Key.PROGRAM_GET_ALL_ERROR_USER_NOT_FOUND, new HashMap<>());
-            return null;
+            return new ArrayList<Program>();
         }
-        Map<Integer, JSONArray> programInfos = new LinkedHashMap<>();
         List<Program> userPrograms = programDao.loadAll(owner);
         List<Program> groupPrograms = getProgrammsOfGroupsOwnedByUser(ownerId);
         //connecting user programs and group programs
@@ -279,7 +278,7 @@ public class ProgramProcessor extends AbstractProcessor {
                  membersPrograms.addAll(programDao.loadAll(member));
             }
         }
-        return membersPrograms; //new JSONArray(programs.values());
+        return membersPrograms;
     }
 
     /**
