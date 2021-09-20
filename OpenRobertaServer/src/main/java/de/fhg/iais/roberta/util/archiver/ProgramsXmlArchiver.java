@@ -1,6 +1,7 @@
-package de.fhg.iais.roberta.util.Archiver;
+package de.fhg.iais.roberta.util.archiver;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.zip.ZipEntry;
@@ -14,8 +15,6 @@ public class ProgramsXmlArchiver {
     private boolean hasGroups;
     boolean hasPrograms;
 
-    private ByteArrayOutputStream baos;
-    private ZipOutputStream zos;
     private int ownerId;
 
     private List<Pair<Program, String>> programConfigList;
@@ -23,16 +22,6 @@ public class ProgramsXmlArchiver {
     public ProgramsXmlArchiver(int ownerId) {
         this.ownerId = ownerId;
         programConfigList = new ArrayList<>();
-    }
-
-    private void openStreams() {
-        baos = new ByteArrayOutputStream();
-        zos = new ZipOutputStream(baos);
-    }
-
-    public void closeStreams() throws Exception {
-        baos.close();
-        zos.close();
     }
 
     public void putProgram(Program program, String configuration) {
@@ -46,20 +35,22 @@ public class ProgramsXmlArchiver {
     }
 
     public ByteArrayOutputStream getArchive() throws Exception {
-        openStreams();
-        for ( Pair<Program, String> progConf : programConfigList ) {
-            Program program = progConf.getFirst();
-            String config = progConf.getSecond();
-            String programXml = buildProgramXml(program, config);
-            String path = getProgramPath(program, config);
-
-            //add program.xml to Zip
-            zos.putNextEntry(new ZipEntry(path));
-            zos.write(programXml.getBytes());
-            zos.closeEntry();
+        try (ByteArrayOutputStream baos = new ByteArrayOutputStream(); ZipOutputStream zipOutputStream = new ZipOutputStream(baos)) {
+            for ( Pair<Program, String> progConf : programConfigList ) {
+                addProgramToZip(progConf.getFirst(), progConf.getSecond(), zipOutputStream);
+            }
+            return baos;
         }
-        closeStreams();
-        return baos;
+    }
+
+
+    private void addProgramToZip(Program program, String configuration, ZipOutputStream zip) throws IOException {
+        String programXml = buildProgramXml(program, configuration);
+        String path = getProgramPath(program, configuration);
+
+        zip.putNextEntry(new ZipEntry(path));
+        zip.write(programXml.getBytes());
+        zip.closeEntry();
     }
 
     private static String buildProgramXml(Program program, String configuration) {
