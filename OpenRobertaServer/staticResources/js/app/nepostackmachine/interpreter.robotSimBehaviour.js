@@ -370,7 +370,7 @@ define(["require", "exports", "./interpreter.aRobotBehaviour", "./interpreter.co
                 duration = imageLen * 200;
             }
             this.hardwareState.actions.display = {};
-            //create deep clone
+            // @ts-ignore
             this.hardwareState.actions.display.picture = UTIL.clone(image);
             if (mode) {
                 this.hardwareState.actions.display.mode = mode.toLowerCase();

@@ -2,6 +2,7 @@ import { ARobotBehaviour } from "./interpreter.aRobotBehaviour";
 import { State } from "./interpreter.state";
 import * as C from "./interpreter.constants";
 import * as U from "./interpreter.util";
+import * as UTIL from "util";
 
 export class RobotMbedBehaviour extends ARobotBehaviour {
 
@@ -383,7 +384,8 @@ export class RobotMbedBehaviour extends ARobotBehaviour {
 			duration = imageLen * 200;
 		}
 		this.hardwareState.actions.display = {};
-		this.hardwareState.actions.display.picture = image;
+		// @ts-ignore
+		this.hardwareState.actions.display.picture = UTIL.clone(image);
 		if (mode) {
 			this.hardwareState.actions.display.mode = mode.toLowerCase();
 		}
