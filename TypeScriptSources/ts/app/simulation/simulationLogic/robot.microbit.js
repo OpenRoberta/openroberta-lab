@@ -1,4 +1,5 @@
-define([ 'simulation.simulation', 'simulation.robot.mbed' ], function(SIM, Mbed) {
+import * as SIM from 'simulation.simulation';
+import Mbed from 'simulation.robot.mbed';
 
     /**
      * Creates a new Microbit device for a simulation.
@@ -244,5 +245,5 @@ define([ 'simulation.simulation', 'simulation.robot.mbed' ], function(SIM, Mbed)
         }
     };
 
-    return Microbit;
-});
+    export default Microbit;
+

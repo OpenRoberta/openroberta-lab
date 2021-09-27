@@ -7,8 +7,9 @@
         "typeRoots" : ["./node_modules/@types"],
         "module": "amd",
         "noUnusedLocals": false,
-		    "noUnusedParameters": false,
-		    "allowJs": true
+        "noUnusedParameters": false,
+		"allowJs": true,
+        "noImplicitUseStrict": true
     },
     "include": ["ts/**/*"],
     "exclude": [

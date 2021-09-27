@@ -1,113 +1,114 @@
-define(['exports', 'message', 'comm'], function(exports, MSG, COMM) {
+import * as exports from 'exports';
+import * as MSG from 'message';
+import * as COMM from 'comm';
 
-    /**
-     * Initialize gui state object
-     */
-    function init() {
-        var ready = new $.Deferred();
+export const server = {};
+export const gui = {};
+export const user = {};
+export const program = {};
+export const configuration = {};
+export const toolbox = '';
+export const robot = {};
 
-        exports.server = {};
-        exports.server.ping = true;
-        exports.server.pingTime = 3000;
+/**
+ * Initialize gui state object
+ */
+function init() {
+    var ready = new $.Deferred();
 
-        exports.gui = {};
-        exports.gui.view = '';
-        exports.gui.prevView = '';
-        exports.gui.language = '';
-        exports.gui.robot = '';
-        exports.gui.blocklyWorkspace = '';
-        exports.gui.bricklyWorkspace = '';
-        exports.gui.program = {};
-        exports.gui.program.toolbox = {};
-        exports.gui.program.toolbox.a = '';
-        exports.gui.program.prog = {};
-        exports.gui.program = {};
-        exports.gui.program.toolbox = {};
-        exports.gui.program.prog = {};
-        exports.gui.program.download = false;
-        exports.gui.configuration = {};
-        exports.gui.configuration.toolbox = '';
-        exports.gui.configuration.conf = '';
-        exports.gui.connection = '';
-        exports.gui.vendor = '';
-        exports.gui.sim = false;
-        exports.gui.multipleSim = false;
-        exports.gui.webotsSim = false;
-        exports.gui.webotsUrl = '';
-        exports.gui.fileExtension = ''
-        exports.gui.connectionType = {
-            TOKEN: 'token',
-            AUTO: 'autoConnection',
-            AGENTORTOKEN: 'arduinoAgentOrToken',
-            LOCAL: 'local',
-            WEBVIEW: 'webview',
-            JSPLAY: 'jsPlay' //Play file in the browser with JavaScript
-        }
-        exports.gui.runEnabled = false;
-
-        exports.user = {};
-        exports.user.id = -1;
-        exports.user.accountName = '';
-        exports.user.name = '';
-        exports.user.isAccountActivated = false;
-
-        //exports.socket.portNames = [];
-        //exports.socket.vendorIds = [];
-
-        exports.program = {};
-        exports.program.name = '';
-        exports.program.saved = true;
-        exports.program.shared = true;
-        exports.program.timestamp = '';
-        exports.program.source = '';
-        exports.program.xml = '';
-        exports.program.toolbox = {};
-        exports.program.toolbox.level = '';
-        exports.program.toolbox.xml = '';
-
-        exports.configuration = {};
-        exports.configuration.name = '';
-        exports.configuration.saved = true;
-        exports.configuration.timestamp = '';
-        exports.configuration.xml = '';
-
-        exports.toolbox = '';
-
-        exports.robot = {};
-        exports.robot.token = '';
-        exports.robot.name = '';
-        exports.robot.state = '';
-        exports.robot.battery = '';
-        exports.robot.version = '';
-        exports.robot.fWName = '';
-        exports.robot.sensorValues = '';
-        exports.robot.nepoExitValue = 0;
-        exports.robot.time = -1;
-        exports.robot.robotPort = '';
-        exports.robot.socket = null;
-        exports.robot.hasWlan = false;
-
-        var getInitFromServer = function() {
-            COMM.setInitToken(undefined);
-            return COMM.json("/init", {
-                "cmd": "init",
-                "screenSize": [window.screen.availWidth, window.screen.availHeight]
-            }, function(result) {
-                if (result.rc === 'ok') {
-                    COMM.setInitToken(result.initToken);
-                    $.extend(exports.server, result.server);
-                    exports.server.version = result["server.version"];
-                    exports.server.time = result.serverTime;
-                    ready.resolve();
-                } else {
-                    console.log("ERROR: " + result.message)
-                        // MSG.displayInformation(result, "", result.message);
-                }
-            }, 'init data from server');
-        }
-        getInitFromServer();
-
-        return ready.promise();
+    server.ping = true;
+    server.pingTime = 3000;
+    
+    gui.view = '';
+    gui.prevView = '';
+    gui.language = '';
+    gui.robot = '';
+    gui.blocklyWorkspace = '';
+    gui.bricklyWorkspace = '';
+    gui.program = {};
+    gui.program.toolbox = {};
+    gui.program.toolbox.a = '';
+    gui.program.prog = {};
+    gui.program = {};
+    gui.program.toolbox = {};
+    gui.program.prog = {};
+    gui.program.download = false;
+    gui.configuration = {};
+    gui.configuration.toolbox = '';
+    gui.configuration.conf = '';
+    gui.connection = '';
+    gui.vendor = '';
+    gui.sim = false;
+    gui.multipleSim = false;
+    gui.webotsSim = false;
+    gui.webotsUrl = '';
+    gui.fileExtension = ''
+    gui.connectionType = {
+        TOKEN: 'token',
+        AUTO: 'autoConnection',
+        AGENTORTOKEN: 'arduinoAgentOrToken',
+        LOCAL: 'local',
+        WEBVIEW: 'webview',
+        JSPLAY: 'jsPlay' //Play file in the browser with JavaScript
     }
-    exports.init = init;
-});
+    gui.runEnabled = false;
+
+    user.id = -1;
+    user.accountName = '';
+    user.name = '';
+    user.isAccountActivated = false;
+
+    //socket.portNames = [];
+    //socket.vendorIds = [];
+
+    program.name = '';
+    program.saved = true;
+    program.shared = true;
+    program.timestamp = '';
+    program.source = '';
+    program.xml = '';
+    program.toolbox = {};
+    program.toolbox.level = '';
+    program.toolbox.xml = '';
+
+    configuration.name = '';
+    configuration.saved = true;
+    configuration.timestamp = '';
+    configuration.xml = '';
+    
+    robot.token = '';
+    robot.name = '';
+    robot.state = '';
+    robot.battery = '';
+    robot.version = '';
+    robot.fWName = '';
+    robot.sensorValues = '';
+    robot.nepoExitValue = 0;
+    robot.time = -1;
+    robot.robotPort = '';
+    robot.socket = null;
+    robot.hasWlan = false;
+
+    var getInitFromServer = function() {
+        COMM.setInitToken(undefined);
+        return COMM.json("/init", {
+            "cmd": "init",
+            "screenSize": [window.screen.availWidth, window.screen.availHeight]
+        }, function(result) {
+            if (result.rc === 'ok') {
+                COMM.setInitToken(result.initToken);
+                $.extend(server, result.server);
+                server.version = result["server.version"];
+                server.time = result.serverTime;
+                ready.resolve();
+            } else {
+                console.log("ERROR: " + result.message)
+                    // MSG.displayInformation(result, "", result.message);
+            }
+        }, 'init data from server');
+    }
+    getInitFromServer();
+
+    return ready.promise();
+}
+export { init };

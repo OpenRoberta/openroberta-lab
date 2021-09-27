@@ -1,4 +1,4 @@
-define([ 'simulation.robot.ev3' ], function(Ev3) {
+import Ev3 from 'simulation.robot.ev3';
 
     /**
      * Creates a new DrawRobot for a drawing scene.
@@ -90,5 +90,5 @@ define([ 'simulation.robot.ev3' ], function(Ev3) {
     DrawRobot.prototype = Object.create(Ev3.prototype);
     DrawRobot.prototype.constructor = DrawRobot;
 
-    return DrawRobot;
-});
+    export default DrawRobot;
+

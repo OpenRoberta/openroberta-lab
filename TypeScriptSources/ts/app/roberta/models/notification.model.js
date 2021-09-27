@@ -3,19 +3,20 @@
  *
  * @module rest/program
  */
-define(['exports', 'comm'], function (exports, COMM) {
 
-    exports.getNotifications = function (successFn) {
-        COMM.json("/notifications/getNotifications", {}, function (result) {
-            if (result.rc === "ok" && result.message === "ORA_SERVER_SUCCESS") {
-                successFn(result)
-            }
-        }, 'load notofications');
-    };
+import * as COMM from 'comm';
 
-    exports.postNotifications = function (notifications, successFn) {
-        COMM.json("/notifications/postNotifications", {
-            notifications : notifications
-        }, successFn, 'send notifications to server');
-    };
-});
+export const getNotifications = function (successFn) {
+    COMM.json("/notifications/getNotifications", {}, function (result) {
+        if (result.rc === "ok" && result.message === "ORA_SERVER_SUCCESS") {
+            successFn(result)
+        }
+    }, 'load notofications');
+};
+
+export const postNotifications = function (notifications, successFn) {
+    COMM.json("/notifications/postNotifications", {
+        notifications : notifications
+    }, successFn, 'send notifications to server');
+};
+

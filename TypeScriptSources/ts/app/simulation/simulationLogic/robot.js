@@ -1,4 +1,5 @@
-define([ 'simulation.simulation', 'simulation.constants' ], function(SIM, CONSTANTS) {
+import * as SIM from 'simulation.simulation';
+import CONSTANTS from 'simulation.constants';
 
     /**
      * Creates a new robot for a simulation.
@@ -58,5 +59,5 @@ define([ 'simulation.simulation', 'simulation.constants' ], function(SIM, CONSTA
     Robot.prototype.reset = null;
     Robot.prototype.update = null;
 
-    return Robot;
-});
+    export default Robot;
+

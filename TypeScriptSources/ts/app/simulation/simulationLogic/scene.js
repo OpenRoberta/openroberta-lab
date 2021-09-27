@@ -2,8 +2,12 @@
  * @fileOverview Scene for a robot simulation
  * @author Beate Jost <beate.jost@iais.fraunhofer.de>
  */
-define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constants', 'simulation.constants', 'jquery'], function(SIM,
-    SIMATH, UTIL, IC, C, $) {
+import * as SIM from 'simulation.simulation';
+import * as SIMATH from 'simulation.math';
+import * as UTIL from 'util';
+import * as IC from 'interpreter.constants';
+import C from 'simulation.constants';
+import * as $ from 'jquery';
 
     /**
      * Creates a new Scene.
@@ -1140,5 +1144,4 @@ define(['simulation.simulation', 'simulation.math', 'util', 'interpreter.constan
         }
     }
 
-    return Scene;
-});
+    export default Scene;

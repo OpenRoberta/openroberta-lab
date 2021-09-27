@@ -1,4 +1,4 @@
-define({
+export default {
 
     ARG1: "arg1",
 
@@ -535,7 +535,7 @@ define({
 
     DEBUG_STEP_OVER: "DebugStepOver",
 
-    MIN_SIZE_OBJECT: 10, 
-    
+    MIN_SIZE_OBJECT: 10,
+
     CORNER_RADIUS: 5
-});
+}

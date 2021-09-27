@@ -1,4 +1,4 @@
-define([ 'simulation.robot.ev3' ], function(Ev3) {
+import Ev3 from 'simulation.robot.ev3';
 
     function MathRobot() {
         Ev3.call(this, {
@@ -18,5 +18,5 @@ define([ 'simulation.robot.ev3' ], function(Ev3) {
     MathRobot.prototype = Object.create(Ev3.prototype);
     MathRobot.prototype.constructor = MathRobot;
 
-    return MathRobot;
-});
+    export default MathRobot;
+

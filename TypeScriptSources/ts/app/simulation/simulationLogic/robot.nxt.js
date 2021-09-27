@@ -1,4 +1,6 @@
-define(['simulation.simulation', 'interpreter.constants', 'simulation.robot.ev3'], function (SIM, C, Ev3) {
+import * as SIM from 'simulation.simulation';
+import * as C from 'interpreter.constants';
+import Ev3 from 'simulation.robot.ev3';
 
     /**
      * Creates a new robot for a simulation.
@@ -262,5 +264,4 @@ define(['simulation.simulation', 'interpreter.constants', 'simulation.robot.ev3'
         }
     };
 
-    return Nxt;
-});
+    export default Nxt;

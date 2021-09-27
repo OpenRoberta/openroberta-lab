@@ -1,4 +1,4 @@
-define([ 'simulation.robot.ev3' ], function(Ev3) {
+import Ev3 from 'simulation.robot.ev3';
 
     /**
      * Creates a new RescueRobot for the rescue scene.
@@ -21,5 +21,5 @@ define([ 'simulation.robot.ev3' ], function(Ev3) {
     RescueRobot.prototype = Object.create(Ev3.prototype);
     RescueRobot.prototype.constructor = RescueRobot;
 
-    return RescueRobot;
-});
+    export default RescueRobot;
+

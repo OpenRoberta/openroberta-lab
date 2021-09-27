@@ -1,4 +1,6 @@
-define(["simulation.simulation", "interpreter.constants", "simulation.robot.ev3"], function(SIM, C, Ev3) {
+import SIM from "simulation.simulation";
+import C from "interpreter.constants";
+import Ev3 from "simulation.robot.ev3";
 
     /**
      * Creates a new robot for a simulation.
@@ -642,5 +644,5 @@ define(["simulation.simulation", "interpreter.constants", "simulation.robot.ev3"
         8: [5, 2, 4, 6, 8, 10, 11, 13, 15, 16, 18, 20, 22, 24],
         9: [5, 2, 6, 8, 10, 11, 13, 14, 16, 18, 22]
     };
-    return Mbot;
-});
+    export default Mbot;
+

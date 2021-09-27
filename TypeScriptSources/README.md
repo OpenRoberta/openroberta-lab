@@ -1,6 +1,19 @@
 ### Typescript support for the OpenRoberta lab
 
-#### Getting Started
+### Migration from old staticResource system
+
+1. Use tools to automate
+```bash
+amdtoes6 --dir ts --out ts
+cjs-to-es6 ts
+```
+2. Replace
+`import (\S+) from '(\S+)';`
+with
+`import * as $1 from '$2';`
+3. Fix individual errors
+
+### Getting Started
 
 **Requirements**
 * Have node and npm installed globally

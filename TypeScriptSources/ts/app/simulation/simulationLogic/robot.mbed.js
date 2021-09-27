@@ -1,4 +1,8 @@
-define([ 'simulation.simulation', 'interpreter.constants', 'util', 'simulation.robot', 'blockly'], function(SIM, C, UTIL, Robot, Blockly) {
+import * as SIM from 'simulation.simulation';
+import * as C from 'interpreter.constants';
+import * as UTIL from 'util';
+import Robot from 'simulation.robot';
+import * as Blockly from 'blockly';
 
     /**
      * Creates a new mbed device for a simulation.
@@ -538,5 +542,4 @@ define([ 'simulation.simulation', 'interpreter.constants', 'util', 'simulation.r
     Mbed.prototype.resetPose = function() {
     };
 
-    return Mbed;
-});
+    export default Mbed;

@@ -1,4 +1,6 @@
-define(['simulation.simulation', 'simulation.robot.mbed', 'blockly'], function(SIM, Mbed, Blockly) {
+import * as SIM from 'simulation.simulation';
+import Mbed from 'simulation.robot.mbed';
+import * as Blockly from 'blockly';
 
     /**
      * Creates a new Calliope device for a simulation.
@@ -439,5 +441,4 @@ define(['simulation.simulation', 'simulation.robot.mbed', 'blockly'], function(S
             '<div style="margin:8px 0; "><input id="slider1" type="range" min="0" max="1023" value="0" step="1" /></div></div>'); //
     };
 
-    return Calliope;
-});
+    export default Calliope;

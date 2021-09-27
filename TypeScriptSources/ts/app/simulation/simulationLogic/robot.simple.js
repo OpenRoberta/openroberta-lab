@@ -1,4 +1,4 @@
-define([ 'simulation.robot.ev3' ], function(Ev3) {
+import Ev3 from 'simulation.robot.ev3';
 
     /**
      * Creates a new SimpleRobot for the simple scene.
@@ -21,5 +21,5 @@ define([ 'simulation.robot.ev3' ], function(Ev3) {
     SimpleRobot.prototype = Object.create(Ev3.prototype);
     SimpleRobot.prototype.constructor = SimpleRobot;
 
-    return SimpleRobot;
-});
+    export default SimpleRobot;
+

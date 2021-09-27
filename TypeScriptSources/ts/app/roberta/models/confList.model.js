@@ -4,16 +4,17 @@
  * 
  * @module rest/program
  */
-define([ 'exports', 'comm' ], function(exports, COMM) {
 
-    /**
-     * Refresh program list
-     */
-    function loadConfList(successFn) {
-        COMM.json("/conf/loadCN", {
-            "cmd" : "loadCN"
-        }, successFn, 'refresh configuration list');
-    }
-    exports.loadConfList = loadConfList;
+import * as COMM from 'comm';
 
-});
+/**
+ * Refresh program list
+ */
+function loadConfList(successFn) {
+    COMM.json("/conf/loadCN", {
+        "cmd" : "loadCN"
+    }, successFn, 'refresh configuration list');
+}
+export { loadConfList };
+
+

@@ -1,4 +1,7 @@
-define(['simulation.simulation', 'interpreter.constants', 'simulation.robot', 'guiState.controller'], function (SIM, C, Robot, GUISTATE_C) {
+import * as SIM from 'simulation.simulation';
+import * as C from 'interpreter.constants';
+import Robot from 'simulation.robot';
+import * as GUISTATE_C from 'guiState.controller';
 
     /**
      * Creates a new Ev3 for a simulation.
@@ -628,5 +631,4 @@ define(['simulation.simulation', 'interpreter.constants', 'simulation.robot', 'g
         return point;
     };
 
-    return Ev3;
-});
+    export default Ev3;
