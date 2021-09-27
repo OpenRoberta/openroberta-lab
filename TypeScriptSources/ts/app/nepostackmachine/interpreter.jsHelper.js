@@ -1,4 +1,4 @@
-define(["require","simulation.simulation", "exports"], function(require,SIM, exports) {
+define(["require","simulation.simulation", 'blockly', "exports"], function(require,SIM, Blockly ,exports) {
 
 	//This file contains function which allow the interpreter to communicate with the simulation.
 

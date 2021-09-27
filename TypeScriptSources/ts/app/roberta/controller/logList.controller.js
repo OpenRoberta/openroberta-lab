@@ -1,5 +1,5 @@
-define([ 'require', 'exports', 'log', 'util', 'comm', 'guiState.controller', 'logList.model', 'jquery', 'bootstrap-table' ], function(require, exports, LOG,
-        UTIL, COMM, GUISTATE_C, LOGLIST, $) {
+define([ 'require', 'exports', 'log', 'util', 'comm', 'guiState.controller', 'logList.model', 'jquery', 'blockly' ,'bootstrap-table' ], function(require, exports, LOG,
+        UTIL, COMM, GUISTATE_C, LOGLIST, $, Blockly) {
 
     /**
      * Initialize table of programs

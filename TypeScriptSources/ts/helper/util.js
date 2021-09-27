@@ -1,4 +1,4 @@
-define(['exports', 'message', 'log', 'jquery', 'jquery-validate', 'bootstrap'], function(exports, MSG, LOG, $) {
+define(['exports', 'message', 'log', 'jquery', 'blockly','jquery-validate', 'bootstrap'], function(exports, MSG, LOG, $, Blockly) {
 
     const ANIMATION_DURATION = 750;
 

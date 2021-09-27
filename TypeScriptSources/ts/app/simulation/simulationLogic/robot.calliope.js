@@ -1,4 +1,4 @@
-define(['simulation.simulation', 'simulation.robot.mbed'], function(SIM, Mbed) {
+define(['simulation.simulation', 'simulation.robot.mbed', 'blockly'], function(SIM, Mbed, Blockly) {
 
     /**
      * Creates a new Calliope device for a simulation.

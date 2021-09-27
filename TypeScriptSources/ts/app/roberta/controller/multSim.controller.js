@@ -5,8 +5,8 @@
 /**
  * Controller for multiple simulation part of the project
  */
-define(['exports', 'message', 'util', 'progList.model', 'program.controller', 'program.model', 'guiState.controller', 'simulation.simulation', 'jquery'], function(
-    exports, MSG, UTIL, PROGLIST, PROG_C, PROGRAM_M, GUISTATE_C, SIM, $) {
+define(['exports', 'message', 'util', 'progList.model', 'program.controller', 'program.model', 'guiState.controller', 'simulation.simulation', 'jquery', 'blockly'], function(
+    exports, MSG, UTIL, PROGLIST, PROG_C, PROGRAM_M, GUISTATE_C, SIM, $, Blockly) {
 
     function showListProg() {
         PROGLIST.loadProgList(function(result) {

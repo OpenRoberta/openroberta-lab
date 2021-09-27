@@ -1,5 +1,5 @@
-define([ 'exports', 'log', 'util', 'comm', 'message', 'guiState.controller',  'neuralnetwork-lib','d3','neuralnetwork.playground', 'jquery', 'jquery-validate' ], function(exports,
-        LOG, UTIL, COMM, MSG, GUISTATE_C, LIB, d3, PG, $) {
+define([ 'exports', 'log', 'util', 'comm', 'message', 'guiState.controller',  'neuralnetwork-lib','d3','neuralnetwork.playground', 'jquery','blockly', 'jquery-validate' ], function(exports,
+        LOG, UTIL, COMM, MSG, GUISTATE_C, LIB, d3, PG, $, Blockly) {
 
     var $formSingleModal;
 

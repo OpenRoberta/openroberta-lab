@@ -7,8 +7,7 @@
  * @namespace SIM
  */
 
-define(['exports', 'simulation.scene', 'simulation.constants', 'util', 'interpreter.interpreter', 'interpreter.robotSimBehaviour', 'volume-meter', 'message', 'jquery', 'huebee'
-], function(exports, Scene, C, UTIL, SIM_I, MBED_R, Volume, MSG, $, HUEBEE) {
+define(['exports', 'simulation.scene', 'simulation.constants', 'util', 'interpreter.interpreter', 'interpreter.robotSimBehaviour', 'volume-meter', 'message', 'jquery', 'huebee', 'blockly'], function(exports, Scene, C, UTIL, SIM_I, MBED_R, Volume, MSG, $, HUEBEE, Blockly) {
 
     const standColorObstacle = "#33B8CA";
     const standColorArea = "#FBED00";

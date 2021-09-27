@@ -1,5 +1,5 @@
-define(['exports', 'util', 'message', 'guiState.model', 'progHelp.controller', 'legal.controller', 'webview.controller', 'confVisualization', 'socket.controller', 'jquery'], function(
-    exports, UTIL, MSG, GUISTATE, HELP_C, LEGAL_C, WEBVIEW_C, CV, SOCKET_C, $) {
+define(['exports', 'util', 'message', 'guiState.model', 'progHelp.controller', 'legal.controller', 'webview.controller', 'confVisualization', 'socket.controller', 'jquery', 'blockly'], function(
+    exports, UTIL, MSG, GUISTATE, HELP_C, LEGAL_C, WEBVIEW_C, CV, SOCKET_C, $, Blockly) {
 
     var LONG = 300000; // Ping time 5min
     var SHORT = 3000; // Ping time 3sec

@@ -1,6 +1,6 @@
 define([ 'exports', 'util', 'log', 'message', 'guiState.controller', 'guiState.model', 'robot.model', 'program.controller', 'configuration.controller',
-        'webview.controller', 'socket.controller', 'sourceCodeEditor.controller', 'progCode.controller', 'jquery', 'jquery-validate' ], function(exports, UTIL, LOG, MSG, GUISTATE_C, GUISTATE, ROBOT, PROGRAM_C,
-        CONFIGURATION_C, WEBVIEW_C, SOCKET_C, CODEEDITOR_C, PROGCODE_C,  $) {
+        'webview.controller', 'socket.controller', 'sourceCodeEditor.controller', 'progCode.controller', 'jquery', 'blockly','jquery-validate' ], function(exports, UTIL, LOG, MSG, GUISTATE_C, GUISTATE, ROBOT, PROGRAM_C,
+        CONFIGURATION_C, WEBVIEW_C, SOCKET_C, CODEEDITOR_C, PROGCODE_C,  $, Blockly) {
 
     var $formSingleModal;
     var $formSingleListModal;

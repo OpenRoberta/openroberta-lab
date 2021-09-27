@@ -1,4 +1,4 @@
-define([ 'simulation.simulation', 'interpreter.constants', 'util', 'simulation.robot' ], function(SIM, C, UTIL, Robot) {
+define([ 'simulation.simulation', 'interpreter.constants', 'util', 'simulation.robot', 'blockly'], function(SIM, C, UTIL, Robot, Blockly) {
 
     /**
      * Creates a new mbed device for a simulation.
