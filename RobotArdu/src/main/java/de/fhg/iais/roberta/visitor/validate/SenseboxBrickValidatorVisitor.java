@@ -38,9 +38,10 @@ import de.fhg.iais.roberta.syntax.sensors.arduino.sensebox.GpsSensor;
 import de.fhg.iais.roberta.typecheck.NepoInfo;
 import de.fhg.iais.roberta.util.Pair;
 import de.fhg.iais.roberta.visitor.hardware.IArduinoVisitor;
+import de.fhg.iais.roberta.visitor.hardware.ISenseboxVisitor;
 import de.fhg.iais.roberta.visitor.hardware.sensor.ISensorVisitor;
 
-public class SenseboxBrickValidatorVisitor extends AbstractBrickValidatorVisitor implements ISensorVisitor<Void>, IArduinoVisitor<Void> {
+public class SenseboxBrickValidatorVisitor extends AbstractBrickValidatorVisitor implements ISenseboxVisitor<Void> {
 
     private final String SSID;
     private final String password;
