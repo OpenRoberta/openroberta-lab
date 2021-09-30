@@ -60,7 +60,7 @@ public class IVisitorTest {
             .isEqualTo(exception);
     }
 
-    public static class SpecificVisitor implements IVisitor<Void> {
+    public static class SpecificVisitor extends BaseVisitor<Void> {
         public Void visitSensor(Sensor sensor) {
             return null;
         }

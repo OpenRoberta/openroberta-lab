@@ -62,9 +62,10 @@ import de.fhg.iais.roberta.syntax.lang.stmt.StmtTextComment;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
+import de.fhg.iais.roberta.visitor.BaseVisitor;
 import de.fhg.iais.roberta.visitor.lang.ILanguageVisitor;
 
-public abstract class AbstractCollectorVisitor implements ILanguageVisitor<Void> {
+public abstract class AbstractCollectorVisitor extends BaseVisitor<Void> implements ILanguageVisitor<Void> {
 
     private final ClassToInstanceMap<IProjectBean.IBuilder<?>> beanBuilders;
     private final HashMap<Integer, Integer> waitsInLoops = new HashMap<>();
