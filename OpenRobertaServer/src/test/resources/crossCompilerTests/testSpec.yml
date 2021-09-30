@@ -63,6 +63,10 @@ robots:
     template: microbit
     dir: microbit
     suffix: ".py"
+  mbot2:
+    template: mbot2
+    dir: mbot2
+    suffix: ".py"
   nao:
     template: nao
     dir: nao

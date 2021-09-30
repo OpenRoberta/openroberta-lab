@@ -1,0 +1,203 @@
+<toolbox_set id="toolboxBeginner" style="display: none">
+    <category name="TOOLBOX_ACTION" svg="true">
+        <block type="robActions_motorDiff_on_for">
+            <value name="POWER">
+                <block type="math_number">
+                    <field name="NUM">30</field>
+                </block>
+            </value>
+            <value name="DISTANCE">
+                <block type="math_number">
+                    <field name="NUM">10</field>
+                </block>
+            </value>
+        </block>
+        <block type="robActions_motorDiff_on">
+            <value name="POWER">
+                <block type="math_number">
+                    <field name="NUM">30</field>
+                </block>
+            </value>
+        </block>
+        <block type="robActions_motorDiff_stop"/>
+        <block type="robActions_motorDiff_turn_for">
+            <value name="POWER">
+                <block type="math_number">
+                    <field name="NUM">30</field>
+                </block>
+            </value>
+            <value name="DEGREE">
+                <block type="math_number">
+                    <field name="NUM">20</field>
+                </block>
+            </value>
+        </block>
+        <block type="robActions_motorDiff_turn">
+            <value name="POWER">
+                <block type="math_number">
+                    <field name="NUM">30</field>
+                </block>
+            </value>
+        </block>
+        <block type="robActions_motorDiff_curve_for">
+            <value name="POWER_LEFT">
+                <block type="math_number">
+                    <field name="NUM">10</field>
+                </block>
+            </value>
+            <value name="POWER_RIGHT">
+                <block type="math_number">
+                    <field name="NUM">30</field>
+                </block>
+            </value>
+            <value name="DISTANCE">
+                <block type="math_number">
+                    <field name="NUM">20</field>
+                </block>
+            </value>
+        </block>
+        <block type="robActions_motorDiff_curve">
+            <value name="POWER_LEFT">
+                <block type="math_number">
+                    <field name="NUM">10</field>
+                </block>
+            </value>
+            <value name="POWER_RIGHT">
+                <block type="math_number">
+                    <field name="NUM">30</field>
+                </block>
+            </value>
+        </block>
+        <block type="robActions_println">
+            <value name="OUT">
+                <block type="text">
+                    <field name="TEXT">Hallo</field>
+                </block>
+            </value>
+        </block>
+        <block type="robActions_display_clear"/>
+        <block type="mbedActions_play_tone">
+            <value name="FREQUENCE">
+                <block type="math_number">
+                    <field name="NUM">300</field>
+                </block>
+            </value>
+            <value name="DURATION">
+                <block type="math_number">
+                    <field name="NUM">100</field>
+                </block>
+            </value>
+        </block>
+        <block type="mbedActions_play_note"/>
+        <block type="robActions_play_setVolume">
+            <value name="VOLUME">
+                <block type="math_number">
+                    <field name="NUM">50</field>
+                </block>
+            </value>
+        </block>
+        <block type="robActions_led_on_new_config">
+            <value name="COLOR">
+                <block type="robColour_picker">
+                    <field name="COLOUR">#cc0000</field>
+                </block>
+            </value>
+        </block>
+        <block type="robActions_leds_off"/>
+        <block type="robActions_led_setBrightness">
+            <value name="BRIGHTNESS">
+                <block type="math_number">
+                    <field name="NUM">50</field>
+                </block>
+            </value>
+        </block>
+    </category>
+    <category name="TOOLBOX_SENSOR" svg="true">
+        <block type="robSensors_ultrasonic_getSample"/>
+        <block type="robSensors_quadrgb_getSample"/>
+        <block type="robSensors_sound_getSample"/>
+        <block type="robSensors_joystickKeys_getSample"/>
+        <block type="robSensors_key_getSample"/>
+        <block type="robSensors_gyro_getSample"/>
+        <block type="robSensors_gyro_reset_axis"/>
+        <block type="robSensors_timer_getSample"/>
+        <block type="robSensors_timer_reset"/>
+        <block type="robSensors_encoder_getSample"/>
+        <block type="robSensors_encoder_reset"/>
+    </category>
+    <category name="TOOLBOX_CONTROL" svg="true">
+        <block type="robControls_if"/>
+        <block type="robControls_ifElse"/>
+        <block type="robControls_loopForever"/>
+        <block type="controls_repeat_ext">
+            <value name="TIMES">
+                <block type="math_number">
+                    <field name="NUM">10</field>
+                </block>
+            </value>
+        </block>
+        <block type="robControls_wait_time">
+            <value name="WAIT">
+                <block type="math_number">
+                    <field name="NUM">500</field>
+                </block>
+            </value>
+        </block>
+        <block type="robControls_wait_for">
+            <value name="WAIT0">
+                <block type="logic_compare">
+                    <value name="A">
+                        <block type="robSensors_getSample"/>
+                    </value>
+                    <value name="B">
+                        <block type="logic_boolean"/>
+                    </value>
+                </block>
+            </value>
+        </block>
+    </category>
+    <category name="TOOLBOX_LOGIC" svg="true">
+        <block type="logic_compare"/>
+        <block type="logic_operation"/>
+        <block type="logic_boolean"/>
+    </category>
+    <category name="TOOLBOX_MATH" svg="true">
+        <block type="math_number"/>
+        <block type="math_arithmetic"/>
+    </category>
+    <category name="TOOLBOX_TEXT" svg="true">
+        <block type="text"/>
+        <block type="text_comment"/>
+    </category>
+    <category name="TOOLBOX_COLOUR" svg="true">
+        <block type="robColour_picker">
+            <field name="COLOUR">#cc0000</field>
+        </block>
+        <block type="robColour_picker">
+            <field name="COLOUR">#ff6600</field>
+        </block>
+        <block type="robColour_picker">
+            <field name="COLOUR">#ffff00</field>
+        </block>
+        <block type="robColour_picker">
+            <field name="COLOUR">#33cc00</field>
+        </block>
+        <block type="robColour_picker">
+            <field name="COLOUR">#33ffff</field>
+        </block>
+        <block type="robColour_picker">
+            <field name="COLOUR">#3366ff</field>
+        </block>
+        <block type="robColour_picker">
+            <field name="COLOUR">#cc33cc</field>
+        </block>
+        <block type="robColour_picker">
+            <field name="COLOUR">#FFFFFF</field>
+        </block>
+        <block type="robColour_picker">
+            <field name="COLOUR">#000000</field>
+        </block>
+    </category>
+    <category name="TOOLBOX_VARIABLE" custom="VARIABLE" svg="true">
+    </category>
+</toolbox_set>

@@ -1,0 +1,88 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="mbot2" xmlversion="3.1" description="" tags="">
+            <instance x="300" y="50">
+                <block type="robConf_differentialdrive" intask="true" id= "1" deletable="false">
+                    <field name="NAME">_D</field>
+                    <field name="BRICK_WHEEL_DIAMETER">6.5</field>
+                    <field name="BRICK_TRACK_WIDTH">11.5</field>
+                    <field name="MOTOR_L">EM1</field>
+                    <field name="MOTOR_R">EM2</field>
+                </block>
+            </instance>
+            <instance x="100" y="50">
+                <block type="robConf_encoder" intask="true" id= "2" deletable="false">
+                    <field name="NAME">L</field>
+                    <field name="PORT1">EM1</field>
+                </block>
+            </instance>
+            <instance x="100" y="120">
+                <block type="robConf_encoder" intask="true" id= "3" deletable="false">
+                    <field name="NAME">R</field>
+                    <field name="PORT1">EM2</field>
+                </block>
+            </instance>
+            <instance x="100" y="200">
+                <block type="robConf_rgbled" intask="true" id= "4" deletable="false">
+                    <field name="NAME">_R</field>
+                </block>
+            </instance>
+            <instance x="200" y="200">
+                <block type="robConf_lcd" intask="true" id= "5" deletable="false">
+                    <field name="NAME">_LCD</field>
+                </block>
+            </instance>
+            <instance x="290" y="200">
+                <block type="robConf_buzzer" intask="true" id= "6" deletable="false">
+                    <field name="NAME">_B</field>
+                </block>
+            </instance>
+            <instance x="100" y="250">
+                <block type="robConf_key" intask="true" id= "7" deletable="false">
+                    <field name="NAME">A</field>
+                    <field name="PIN1">A</field>
+                </block>
+            </instance>
+            <instance x="100" y="310">
+                <block type="robConf_key" intask="true" id= "8" deletable="false">
+                    <field name="NAME">B</field>
+                    <field name="PIN1">B</field>
+                </block>
+            </instance>
+            <instance x="100" y="370">
+                <block type="robConf_joystick" intask="true" id= "9" deletable="false">
+                    <field name="NAME">_J</field>
+                </block>
+            </instance>
+            <instance x="190" y="250">
+                <block type="robConf_light" intask="true" id= "10" deletable="false">
+                    <field name="NAME">_L</field>
+                </block>
+            </instance>
+            <instance x="190" y="280">
+                <block type="robConf_sound" intask="true" id= "11" deletable="false">
+                    <field name="NAME">_S</field>
+                </block>
+            </instance>
+            <instance x="300" y="280">
+                <block type="robConf_gyro" intask="true" id= "12" deletable="false">
+                    <field name="NAME">_G</field>
+                </block>
+            </instance>
+            <instance x="300" y="250">
+                <block type="robConf_accelerometer" intask="true" id= "13" deletable="false">
+                    <field name="NAME">_A</field>
+                </block>
+            </instance>
+            <instance x="550" y="250">
+                <block type="robConf_mbuild_port" intask="true" id= "14" deletable="false">
+                    <field name="NAME">_M</field>
+                    <statement name="MBUILDSENSOR">
+                        <block type="robBrick_mbuild_ultrasonic2" id= "15" intask="true">
+                            <field name="NAME">U</field>
+                        </block>
+                        <block type="robBrick_mbuild_quadrgb" id= "16" intask="true">
+                            <field name="NAME">Q</field>
+                        </block>
+                    </statement>
+                </block>
+            </instance>
+            </block_set>

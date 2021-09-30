@@ -1,0 +1,6 @@
+Sensors: 
+[UsedSensor [U, ULTRASONIC, LED], UsedSensor [U, MBUILDSENSOR, ULTRASONIC], UsedSensor [Q, QUADRGB, LED], UsedSensor [Q, MBUILDSENSOR, QUADRGB]]
+Actors: 
+[UsedActor [L, ENCODER], UsedActor [R, ENCODER], UsedActor [_D, DIFFERENTIALDRIVE], UsedActor [_LCD, DISPLAY], UsedActor [, DISPLAY], UsedActor [, MUSIC], UsedActor [- EMPTY_PORT -, SOUND], UsedActor [_B, RECORD], UsedActor [_R, RGBLED]]
+Methods: 
+[DIFFDRIVEFOR, RGBASSTRING]

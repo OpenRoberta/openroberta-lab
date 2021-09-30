@@ -4,6 +4,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
+import de.fhg.iais.roberta.syntax.action.communication.BluetoothWaitForConnectionAction;
 import de.fhg.iais.roberta.syntax.action.motor.differential.MotorDriveStopAction;
 import de.fhg.iais.roberta.syntax.lang.expr.ActionExpr;
 import de.fhg.iais.roberta.syntax.lang.expr.Assoc;
@@ -14,8 +15,8 @@ public class ActionExprTest {
     public void make() throws Exception {
         MotorDriveStopAction<Void> sa = MotorDriveStopAction.make(BlocklyBlockProperties.make("1", "1"), null);
         ActionExpr<Void> ae = ActionExpr.make(sa);
-        String a = "ActionExpr [MotorDriveStopAction[]]";
-        Assert.assertEquals(a, ae.toString());
+        String a = "ActionExpr [MotorDriveStopAction[port: - EMPTY_PORT -]]";
+        Assert.assertEquals(ae.toString(), a);
     }
 
     @Test

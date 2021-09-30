@@ -2,6 +2,7 @@ package de.fhg.iais.roberta.components;
 
 import java.util.Collections;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
@@ -21,9 +22,9 @@ import de.fhg.iais.roberta.util.dbc.Assert;
  * implement changed behaviour, these must follow the naming structure defined in {@link Jaxb2ConfigurationAst#BRICK_BLOCK_PATTERN} as implemented over in
  * {@link Jaxb2ConfigurationAst#instance2NewConfigComp(Instance, BlocklyDropdownFactory)} TODO this subclassing should be removed and the class declared final
  * if possible
+ * TODO this class should be made abstract with astToBlock as the abstract method and ConfigurationComponentLeaf as the new normal configurationComponent
  */
 public class ConfigurationComponent extends Phrase<Void> {
-
     private final String componentType;
     private final boolean isActor; // TODO for the new configuration there is currently no distinction between actors and sensors, should there be one?
     private final String userDefinedPortName;
@@ -123,6 +124,10 @@ public class ConfigurationComponent extends Phrase<Void> {
 
     public String getUserDefinedPortName() {
         return this.userDefinedPortName;
+    }
+
+    public LinkedHashMap<String, List<ConfigurationComponent>> getSubComponents() {
+        throw new UnsupportedOperationException("ConfigurationComponent does not have subcomponents");
     }
 
     public Map<String, String> getComponentProperties() {
