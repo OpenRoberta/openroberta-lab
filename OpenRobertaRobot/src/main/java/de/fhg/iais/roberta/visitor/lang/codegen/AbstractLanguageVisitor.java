@@ -41,9 +41,10 @@ import de.fhg.iais.roberta.syntax.lang.stmt.StmtList;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtTextComment;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
+import de.fhg.iais.roberta.visitor.BaseVisitor;
 import de.fhg.iais.roberta.visitor.lang.ILanguageVisitor;
 
-public abstract class AbstractLanguageVisitor implements ILanguageVisitor<Void> {
+public abstract class AbstractLanguageVisitor extends BaseVisitor<Void> implements ILanguageVisitor<Void> {
     //TODO find more simple way of handling the loops
     private static final String INDENT = "    ";
     private int loopCounter = 0;

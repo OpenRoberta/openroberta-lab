@@ -3,8 +3,8 @@ package de.fhg.iais.roberta.worker.validate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class Nano33bleConfigurationValidatorWorker extends ArduinoConfigurationValidatorWorker {
-    public Nano33bleConfigurationValidatorWorker() {
+public class Nano33BleValidatorAndCollectorWorker extends ArduinoValidatorAndCollectorWorker {
+    public Nano33BleValidatorAndCollectorWorker() {
         super(
             Stream
                 .of(

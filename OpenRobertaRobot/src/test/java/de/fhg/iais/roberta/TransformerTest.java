@@ -15,6 +15,7 @@ import de.fhg.iais.roberta.syntax.sensor.generic.KeysSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
 import de.fhg.iais.roberta.util.Util;
 import de.fhg.iais.roberta.util.test.UnitTestHelper;
+import de.fhg.iais.roberta.visitor.BaseVisitor;
 import de.fhg.iais.roberta.visitor.ITransformerVisitor;
 import de.fhg.iais.roberta.worker.AbstractTransformerWorker;
 
@@ -188,7 +189,7 @@ public class TransformerTest extends AstTest {
         Assert.assertEquals("3.0", project.getConfigurationAst().getXmlVersion());
     }
 
-    public static class TestTransformerVisitor implements ITransformerVisitor<Void> {
+    public static class TestTransformerVisitor extends BaseVisitor<Phrase<Void>> implements ITransformerVisitor<Void> {
 
         private final BlocklyDropdownFactory blocklyDropdownFactory;
 

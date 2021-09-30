@@ -19,6 +19,7 @@ import de.fhg.iais.roberta.syntax.actors.arduino.sensebox.PlotClearAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.sensebox.PlotPointAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.sensebox.SendDataAction;
 import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.GetSampleSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.HumiditySensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.ParticleSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.PinGetValueSensor;
@@ -26,14 +27,14 @@ import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.VemlLightSensor;
 import de.fhg.iais.roberta.syntax.sensors.arduino.sensebox.EnvironmentalSensor;
 import de.fhg.iais.roberta.syntax.sensors.arduino.sensebox.GpsSensor;
-import de.fhg.iais.roberta.visitor.hardware.IArduinoVisitor;
+import de.fhg.iais.roberta.visitor.hardware.ISenseboxVisitor;
 
 /**
  * This visitor collects information for used actors and sensors in blockly program.
  *
  * @author VinArt
  */
-public final class SenseboxUsedHardwareCollectorVisitor extends AbstractUsedHardwareCollectorVisitor implements IArduinoVisitor<Void> {
+public final class SenseboxUsedHardwareCollectorVisitor extends AbstractUsedHardwareCollectorVisitor implements ISenseboxVisitor<Void> {
 
     public SenseboxUsedHardwareCollectorVisitor(List<List<Phrase<Void>>> phrasesSet, ClassToInstanceMap<IProjectBean.IBuilder<?>> beanBuilders) {
         super(null, beanBuilders);
@@ -47,6 +48,11 @@ public final class SenseboxUsedHardwareCollectorVisitor extends AbstractUsedHard
     @Override
     public Void visitPinGetValueSensor(PinGetValueSensor<Void> pinGetValueSensor) {
         return null;
+    }
+
+    @Override
+    public Void visitGetSampleSensor(GetSampleSensor<Void> sensorGetSample) {
+        return super.visitGetSampleSensor(sensorGetSample);
     }
 
     @Override

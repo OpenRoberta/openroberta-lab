@@ -16,7 +16,7 @@ import de.fhg.iais.roberta.util.dbc.Assert;
 public class StmtList<V> extends Stmt<V> {
     private final List<Stmt<V>> sl = new ArrayList<Stmt<V>>();
 
-    private StmtList() {
+    public StmtList() {
         super(BlockTypeContainer.getByName("STMT_LIST"), BlocklyBlockProperties.make("1", "1"), null);
     }
 
