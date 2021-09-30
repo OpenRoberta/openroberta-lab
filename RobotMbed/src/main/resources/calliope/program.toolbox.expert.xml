@@ -103,7 +103,7 @@
 					</block>
 				</value>
 			</block>
-			<block type="robActions_brickLight_on"></block>
+			<block type="robActions_brickLight_on"/>
 		</category>
 		<category name="TOOLBOX_MOVE" svg="true">
 			<block type="mbedActions_motors_on">
@@ -296,16 +296,16 @@
 			</value>
 		</block>
 		<block type="math_random_float" />
-		<block type="math_cast_toString"></block>
-		<block type="math_cast_toChar"></block>
+		<block type="math_cast_toString"/>
+		<block type="math_cast_toChar"/>
 	</category>
 	<category name="TOOLBOX_TEXT" svg="true">
 		<block type="text" />
 		<block type="text_comment" />
 		<block type="robText_join" />
 		<block type="robText_append" />
-		<block type="text_cast_string_toNumber"></block>
-		<block type="text_cast_char_toNumber"></block>
+		<block type="text_cast_string_toNumber"/>
+		<block type="text_cast_char_toNumber"/>
 	</category>
 	<category name="TOOLBOX_LIST" svg="true">
 		<block type="robLists_create_with">

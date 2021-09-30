@@ -4,6 +4,7 @@ import java.util.List;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Field;
+import de.fhg.iais.roberta.blockly.generated.Hide;
 import de.fhg.iais.roberta.blockly.generated.Value;
 import de.fhg.iais.roberta.factory.BlocklyDropdownFactory;
 import de.fhg.iais.roberta.inter.mode.action.IDriveDirection;
@@ -36,11 +37,15 @@ public class CurveAction<V> extends Action<V> {
     private final IDriveDirection direction;
     private final MotionParam<V> paramLeft;
     private final MotionParam<V> paramRight;
+    private final String port;
+    private final List<Hide> hide;
 
     private CurveAction(
         IDriveDirection direction,
         MotionParam<V> paramLeft,
         MotionParam<V> paramRight,
+        String port,
+        List<Hide> hide,
         BlocklyBlockProperties properties,
         BlocklyComment comment) {
         super(BlockTypeContainer.getByName("CURVE_ACTION"), properties, comment);
@@ -48,6 +53,8 @@ public class CurveAction<V> extends Action<V> {
         this.direction = direction;
         this.paramLeft = paramLeft;
         this.paramRight = paramRight;
+        this.port = port;
+        this.hide = hide;
         setReadOnly();
     }
 
@@ -56,7 +63,7 @@ public class CurveAction<V> extends Action<V> {
      *
      * @param direction {@link DriveDirection} in which the robot will drive; must be <b>not</b> null,
      * @param param {@link MotionParam} that set up the parameters for the movement of the robot (distance the robot should cover and speed), must be <b>not</b>
-     *        null,
+     *     null,
      * @param properties of the block (see {@link BlocklyBlockProperties}),
      * @param comment added from the user,
      * @return read only object of class {@link CurveAction}
@@ -67,7 +74,18 @@ public class CurveAction<V> extends Action<V> {
         MotionParam<V> paramRight,
         BlocklyBlockProperties properties,
         BlocklyComment comment) {
-        return new CurveAction<>(direction, paramLeft, paramRight, properties, comment);
+        return new CurveAction<>(direction, paramLeft, paramRight, BlocklyConstants.EMPTY_PORT, null, properties, comment);
+    }
+
+    public static <V> CurveAction<V> make(
+        IDriveDirection direction,
+        MotionParam<V> paramLeft,
+        MotionParam<V> paramRight,
+        String port,
+        List<Hide> hide,
+        BlocklyBlockProperties properties,
+        BlocklyComment comment) {
+        return new CurveAction<>(direction, paramLeft, paramRight, port, hide, properties, comment);
     }
 
     /**
@@ -86,6 +104,20 @@ public class CurveAction<V> extends Action<V> {
 
     public MotionParam<V> getParamRight() {
         return this.paramRight;
+    }
+
+    /**
+     * @return {@link String} port the used actor is connected to
+     */
+    public String getPort() {
+        return this.port;
+    }
+
+    /**
+     * @return {@link List<Hide>} List of hidden ports
+     */
+    public List<Hide> getHide() {
+        return this.hide;
     }
 
     @Override
@@ -109,7 +141,7 @@ public class CurveAction<V> extends Action<V> {
         Phrase<V> left;
         Phrase<V> right;
         BlocklyDropdownFactory factory = helper.getDropdownFactory();
-        fields = Jaxb2Ast.extractFields(block, (short) 1);
+        fields = Jaxb2Ast.extractFields(block, (short) 2);
         mode = Jaxb2Ast.extractField(fields, BlocklyConstants.DIRECTION);
 
         if ( !block.getType().equals(BlocklyConstants.ROB_ACTIONS_MOTOR_DIFF_CURVE) ) {
@@ -127,6 +159,12 @@ public class CurveAction<V> extends Action<V> {
             mpLeft = new MotionParam.Builder<V>().speed(Jaxb2Ast.convertPhraseToExpr(left)).build();
             mpRight = new MotionParam.Builder<V>().speed(Jaxb2Ast.convertPhraseToExpr(right)).build();
         }
+
+        if ( fields.stream().anyMatch(field -> field.getName().equals(BlocklyConstants.ACTORPORT)) ) {
+            String port = Jaxb2Ast.extractField(fields, BlocklyConstants.ACTORPORT);
+            return CurveAction.make(factory.getDriveDirection(mode), mpLeft, mpRight, port, block.getHide(), Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
+        }
+
         return CurveAction.make(factory.getDriveDirection(mode), mpLeft, mpRight, Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
     }
 
@@ -145,6 +183,10 @@ public class CurveAction<V> extends Action<V> {
 
         if ( getParamLeft().getDuration() != null ) {
             Ast2Jaxb.addValue(jaxbDestination, getParamLeft().getDuration().getType().toString(), getParamLeft().getDuration().getValue());
+        }
+        Ast2Jaxb.addField(jaxbDestination, BlocklyConstants.ACTORPORT, port);
+        if ( this.hide != null ) {
+            jaxbDestination.getHide().addAll(hide);
         }
         return jaxbDestination;
     }

@@ -1,0 +1,95 @@
+include: "classpath:/robotCommon.yml"
+block:
+  PLAY_RECORDING_ACTION:
+      category: ACTOR
+      implementor: de.fhg.iais.roberta.syntax.action.mbot2.PlayRecordingAction
+      type: [ robActions_play_recording ]
+
+  DISPLAY_SET_COLOUR_ACTION:
+      category: ACTOR
+      implementor: de.fhg.iais.roberta.syntax.action.mbot2.DisplaySetColourAction
+      type: [ robactions_display_set_colour ]
+
+  PRINTLN_ACTION:
+      category: ACTOR
+      implementor: de.fhg.iais.roberta.syntax.action.mbot2.PrintlnAction
+      type: [ robactions_println ]
+
+  QUAD_COLOR_SENSING:
+      category: SENSOR
+      implementor: de.fhg.iais.roberta.syntax.sensor.mbot2.QuadRGBSensor
+      type: [ robSensors_quadrgb_getSample, robSensors_line_getSample ]
+
+  QUADRGB_LIGHT_ACTION:
+      category: ACTOR
+      implementor: de.fhg.iais.roberta.syntax.action.mbot2.QuadRGBLightOnAction
+      type: [ robActions_quadRGB_led_on ]
+
+  QUADRGB_LIGHT_OFF_ACTION:
+      category: ACTOR
+      implementor: de.fhg.iais.roberta.syntax.action.mbot2.QuadRGBLightOffAction
+      type: [ robActions_quadRGB_led_off ]
+
+  ULTRASONIC2_LIGHT_ACTION:
+      category: ACTOR
+      implementor: de.fhg.iais.roberta.syntax.action.mbot2.Ultrasonic2LEDAction
+      type: [ robActions_ultrasonic2_led ]
+
+  CYBERPI_SET_BRIGHTNESS_ACTION:
+      category: ACTOR
+      implementor: de.fhg.iais.roberta.syntax.action.mbot2.LedBrightnessAction
+      type: [ robActions_led_setBrightness ]
+
+  CYBERPI_LED_ON_ACTION:
+      category: ACTOR
+      implementor: de.fhg.iais.roberta.syntax.action.mbot2.LedOnActionWithIndex
+      type: [ robActions_led_on_new_config ]
+
+  LEDS_OFF_ACTION:
+      category: ACTOR
+      implementor: de.fhg.iais.roberta.syntax.action.mbot2.LedsOffAction
+      type: [ robActions_leds_off ]
+
+  JOYSTICK_SENSING:
+    category: SENSOR
+    implementor: de.fhg.iais.roberta.syntax.sensor.mbot2.Joystick
+    type: [ robSensors_joystickKeys_getSample ]
+
+  SOUND_RECORD:
+    category: SENSOR
+    implementor: de.fhg.iais.roberta.syntax.sensor.mbot2.SoundRecord
+    type: [ robSensors_sound_record ]
+
+  GYRO_RESET_AXIS:
+    category: SENSOR
+    implementor: de.fhg.iais.roberta.syntax.sensor.mbot2.GyroResetAxis
+    type: [ robSensors_gyro_reset_axis ]
+
+configuration:
+  MBUILD_PORT: [ robConf_mbuild_port ]
+  MBUILD_ULTRASONIC2: [ robBrick_mbuild_ultrasonic2 ]
+  MBUILD_QUADRGB: [ robBrick_mbuild_quadrgb ]
+
+mode:
+
+
+wait:
+  JOYSTICK_PRESSED:
+    implementor: de.fhg.iais.roberta.syntax.sensor.mbot2.Joystick
+    sensor: JOYSTICK_PRESSED
+    mode: PRESSED
+
+  QUADRGB_COLOUR:
+    implementor: de.fhg.iais.roberta.syntax.sensor.mbot2.QuadRGBSensor
+    sensor: QUADRGB
+    mode: COLOUR
+
+  QUADRGB_AMBIENTLIGHT:
+    implementor: de.fhg.iais.roberta.syntax.sensor.mbot2.QuadRGBSensor
+    sensor: QUADRGB
+    mode: AMBIENTLIGHT
+
+  QUADRGB_LINE:
+    implementor: de.fhg.iais.roberta.syntax.sensor.mbot2.QuadRGBSensor
+    sensor: QUADRGB
+    mode: LINE

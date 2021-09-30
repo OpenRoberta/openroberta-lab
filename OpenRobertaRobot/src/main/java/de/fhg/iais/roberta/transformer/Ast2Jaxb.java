@@ -13,6 +13,7 @@ import de.fhg.iais.roberta.blockly.generated.Shadow;
 import de.fhg.iais.roberta.blockly.generated.Statement;
 import de.fhg.iais.roberta.blockly.generated.Value;
 import de.fhg.iais.roberta.blockly.generated.Warning;
+import de.fhg.iais.roberta.components.ConfigurationComponent;
 import de.fhg.iais.roberta.syntax.BlockType;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
@@ -76,6 +77,27 @@ public final class Ast2Jaxb {
             statement.getBlock().addAll(extractStmtList(value));
             block.getStatement().add(statement);
         }
+    }
+
+    /**
+     * Add's a statement {@link Statement} object to JAXB block representation of a configuration block {@link Block}.
+     * <p>
+     * This method does <b>not</b> add the statement object into {@link Repetitions} object.
+     *
+     * @param block to which the statement will be added; must be <b>not</b> null,
+     * @param name of the statement; must be <b>non-empty</b> string
+     * @param value is the List of ConfigurationComponents of the statement
+     */
+    public static void addConfigurationComponents(Block block, String name, List<ConfigurationComponent>  values){
+        Assert.isTrue(!name.equals(""));
+        Assert.notNull(block);
+        Assert.notNull(values);
+        Statement statement = new Statement();
+        statement.setName(name);
+        for(ConfigurationComponent component : values){
+            statement.getBlock().add(component.astToBlock());
+        }
+        block.getStatement().add(statement);
     }
 
     /**
