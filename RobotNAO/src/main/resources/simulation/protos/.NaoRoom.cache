@@ -1,0 +1,11 @@
+Webots Proto Cache File version 1.5
+protoFileHash: 7f983c6272bc6e347c874e30e0ff8ffd
+needsRobotAncestor: 0
+baseType: Solid
+slotType: 
+parameters: name
+tags: 
+license:  Copyright Cyberbotics Ltd. Licensed for use only with Webots.
+licenseUrl:  https://cyberbotics.com/webots_assets_license
+documentationUrl: 
+info: The\sroom\sof\sthe\sNao\schallenge

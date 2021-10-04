@@ -109,6 +109,16 @@ public class RobotFactory implements IRobotFactory {
     }
 
     @Override
+    public Boolean hasWebotsSim() {
+        return this.pluginProperties.getStringProperty("robot.webots.sim") != null && this.pluginProperties.getStringProperty("robot.webots.sim").equals("true");
+    }
+
+    @Override
+    public String getWebotsUrl() {
+        return this.pluginProperties.getStringProperty("robot.webots.url");
+    }
+
+    @Override
     public final String getInfoDE() {
         String robotInfoDE = this.pluginProperties.getStringProperty("robot.info.de");
         if ( robotInfoDE == null ) {

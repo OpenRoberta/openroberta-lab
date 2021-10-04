@@ -125,12 +125,10 @@ define([ 'exports', 'comm', 'message', 'log', 'guiState.controller', 'program.co
         $('#tutorialAbort').off('click.dismiss.bs.modal');
         $('#tutorialAbort').onWrap('click.dismiss.bs.modal', function(event) {
             exitTutorial();
-            return false;
         }, 'tutorial exit');
         $('#tutorialContinue').off('click.dismiss.bs.modal');
         $('#tutorialContinue').onWrap('click.dismiss.bs.modal', function(event) {
             LOG.info('tutorial executed ' + tutorial.index + tutorialId);
-            return false;
         }, 'tuorial continue');
 
         $('#tutorialOverview').modal({

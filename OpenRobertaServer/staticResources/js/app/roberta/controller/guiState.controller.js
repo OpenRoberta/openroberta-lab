@@ -253,6 +253,8 @@ define(['exports', 'util', 'message', 'guiState.model', 'progHelp.controller', '
         GUISTATE.gui.configuration = result.configuration;
         GUISTATE.gui.sim = result.sim;
         GUISTATE.gui.multipleSim = result.multipleSim;
+        GUISTATE.gui.webotsSim = result.webotsSim;
+        GUISTATE.gui.webotsUrl = result.webotsUrl;
         GUISTATE.gui.neuralNetwork = result.neuralNetwork === undefined ? false : result.neuralNetwork;
         GUISTATE.gui.connection = result.connection;
         GUISTATE.gui.vendor = result.vendor;
@@ -1125,14 +1127,17 @@ define(['exports', 'util', 'message', 'guiState.model', 'progHelp.controller', '
     exports.setConfiguration = setConfiguration;
 
     function checkSim() {
-        if (GUISTATE.gui.sim == true) {
+        if (hasSim()) {
             $('#menuRunSim').parent().removeClass('disabled');
             $('#simButton, #simDebugButton').show();
         } else {
             $('#menuRunSim').parent().addClass('disabled');
             $('#simButton, #simDebugButton').hide();
         }
-        if (GUISTATE.gui.multipleSim == true) {
+        if (hasWebotsSim()) {
+            $('#simDebugButton').hide();
+        }
+        if (hasMultiSim()) {
             $('#menuRunMulipleSim').parent().removeClass('unavailable');
             $('#menuRunMulipleSim').parent().addClass('available');
             if (isUserLoggedIn()) {
@@ -1147,14 +1152,24 @@ define(['exports', 'util', 'message', 'guiState.model', 'progHelp.controller', '
     exports.checkSim = checkSim;
 
     function hasSim() {
-        return GUISTATE.gui.sim;
+        return GUISTATE.gui.sim == true;
     }
     exports.hasSim = hasSim;
 
     function hasMultiSim() {
-        return GUISTATE.gui.multipleSim;
+        return GUISTATE.gui.multipleSim == true;
     }
     exports.hasMultiSim = hasMultiSim;
+
+    function hasWebotsSim() {
+        return GUISTATE.gui.webotsSim == true;
+    }
+    exports.hasWebotsSim = hasWebotsSim;
+
+    function getWebotsUrl() {
+        return GUISTATE.gui.webotsUrl;
+    }
+    exports.getWebotsUrl = getWebotsUrl;
 
     function getListOfTutorials() {
         return GUISTATE.server.tutorial;
