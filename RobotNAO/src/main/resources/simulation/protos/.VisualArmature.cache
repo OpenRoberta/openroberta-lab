@@ -1,0 +1,11 @@
+Webots Proto Cache File version 1.5
+protoFileHash: 6dac4e51f29c0700c6d576015103ac6c
+needsRobotAncestor: 0
+baseType: Transform
+slotType: 
+parameters: translation,rotation,dimension,outlineColor,textureUrl
+tags: 
+license:  Copyright Cyberbotics Ltd. Licensed for use only with Webots.
+licenseUrl:  https://cyberbotics.com/webots_assets_license
+documentationUrl: 
+info: An\soutline\stextured\sarmature\swithout\sback\nTypically\suseful\sto\screate\sa\swall\spainting\sinvisible\sfrom\sbackward

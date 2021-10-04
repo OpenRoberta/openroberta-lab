@@ -464,11 +464,11 @@ public final class NaoPythonVisitor extends AbstractPythonVisitor implements INa
         this.sb.append("h.pointLookAt(" + getEnumCode(pointLookAt.getPointLook()));
         this.sb.append(", " + pointLookAt.getFrame().getValues()[0] + ", ");
 
-        pointLookAt.getpointX().accept(this);
+        pointLookAt.getPointX().accept(this);
         this.sb.append(", ");
-        pointLookAt.getpointY().accept(this);
+        pointLookAt.getPointY().accept(this);
         this.sb.append(", ");
-        pointLookAt.getpointZ().accept(this);
+        pointLookAt.getPointZ().accept(this);
         this.sb.append(", ");
         pointLookAt.getSpeed().accept(this);
         this.sb.append(")");

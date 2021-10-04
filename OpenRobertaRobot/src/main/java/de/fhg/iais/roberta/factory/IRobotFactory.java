@@ -40,6 +40,10 @@ public interface IRobotFactory {
 
     Boolean hasMultipleSim();
 
+    Boolean hasWebotsSim();
+
+    String getWebotsUrl();
+
     String getInfoDE();
 
     String getInfoEN();

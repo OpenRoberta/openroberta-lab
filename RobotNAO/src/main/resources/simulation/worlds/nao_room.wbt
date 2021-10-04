@@ -1,0 +1,154 @@
+#VRML_SIM R2021c utf8
+WorldInfo {
+  info [
+    "A NAO robot in a living room"
+  ]
+  title "NAO room"
+  basicTimeStep 10
+  coordinateSystem "NUE"
+  contactProperties [
+    ContactProperties {
+      material1 "key"
+      material2 "keyhole"
+      coulombFriction [
+        0.2
+      ]
+    }
+    ContactProperties {
+      material1 "NAO foot material"
+      coulombFriction [
+        7
+      ]
+      bounce 0.3
+      bounceVelocity 0.003
+    }
+  ]
+}
+Viewpoint {
+  orientation -0.8179651648038769 -0.5700335835607552 -0.07742546596727777 0.3291044508055664
+  position -0.4605818580701608 1.9359108350620637 4.435304326155082
+  followType "None"
+}
+Background {
+  skyColor [
+    0.827451 0.843137 0.811765
+  ]
+}
+Key {
+  translation 0.89 0.418 -1.52
+  rotation 0 0 1 -1.5707996938995747
+  contactMaterial "key"
+}
+KeyPot {
+  translation 0.15 0.2 0
+}
+Table {
+  translation 0 -0.1 0
+  rotation 1 0 0 4.692820414042842e-06
+  size 0.6 0.3 0.8
+  trayAppearance PaintedWood {
+  }
+  legAppearance PaintedWood {
+  }
+}
+Door {
+  hidden translation_5 -6.254641249370252e-11 0 0.00100000030009606
+  translation 1 0 -2
+  size 1 2.2 0.1
+  position 1.5794528516523498e-10
+  jointAtLeft FALSE
+  frameAppearance NULL
+  doorHandle DoorLever {
+    rotation 0 0 1 0
+    jointAtLeft FALSE
+  }
+}
+DEF NAO Nao {
+  translation 1.0025492555167363 0.33448337265326583 -1.7463351474692634
+  rotation 0.5787509564475986 0.5769471349935084 0.5763500098323695 -2.0931396940985483
+  controller "nao_demo_python"
+  controllerArgs [
+    ""
+  ]
+  cameraWidth 320
+  cameraHeight 240
+}
+Robot {
+  name "supervisor"
+  controller "streaming_supervisor"
+  supervisor TRUE
+}
+SoccerBall {
+  translation -1 0.11370569999993595 -1
+  rotation 0 1 0 0
+}
+Floor {
+  translation 0 0.001 0
+  size 4 4
+  appearance Appearance {
+    material Material {
+      ambientIntensity 0
+      diffuseColor 0.533333 0.541176 0.521569
+      emissiveColor 0.533333 0.541176 0.521569
+      shininess 0
+    }
+  }
+}
+Floor {
+  translation 0 0.002 0
+  name "carpet-thin"
+  size 2.2 2
+  appearance Appearance {
+    material Material {
+      ambientIntensity 0
+      diffuseColor 0.215686 0.827451 0.988235
+      emissiveColor 0.215686 0.827451 0.988235
+      shininess 0
+    }
+  }
+}
+Wall {
+  translation -0.8 0 -2
+  name "wall-back1"
+  size 2.6 2.2 0.1
+}
+Wall {
+  translation 1.7 0 -2
+  name "wall-back2"
+  size 0.6 2.2 0.1
+}
+Wall {
+  translation 2 0 0
+  rotation 0 1 0 1.5865096938995749
+  name "wall-right"
+  size 4 2.2 0.1
+}
+Wall {
+  translation 0 0 1.95
+  name "wall-front"
+  size 4 2.2 0.1
+  appearance Appearance {
+    material Material {
+      transparency 1
+    }
+  }
+}
+Wall {
+  translation -2 0 0
+  rotation 0 1 0 1.5865096938995749
+  name "wall-left"
+  size 4 2.2 0.1
+}
+PointLight {
+  attenuation 0 0 1
+  intensity 6
+  location 0 2 0
+}
+VisualArmature {
+  translation -0.8 1.1 -1.9
+  dimension 1.5 0.94 0.05
+  outlineColor 0.9 1 1
+  textureUrl [
+    "textures/TouchTomorrow.png"
+  ]
+}
