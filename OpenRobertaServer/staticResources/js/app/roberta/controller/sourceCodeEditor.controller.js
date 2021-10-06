@@ -1,5 +1,5 @@
 define(['require', 'exports', 'message', 'log', 'util', 'comm', 'wrap', 'guiState.controller', 'program.model', 'program.controller', 'progRun.controller', 'import.controller', 'blockly', 'codeflask', 'jquery'],
-    function(require, exports, MSG, LOG, UTIL, COMM, WRAP, GUISTATE_C, PROGRAM, PROG_C, PROGRUN_C, IMPORT_C, Blockly, CodeFlask, $) {
+    function (require, exports, MSG, LOG, UTIL, COMM, WRAP, GUISTATE_C, PROGRAM, PROG_C, PROGRUN_C, IMPORT_C, Blockly, CodeFlask, $) {
 
         var flask;
         var currentLanguage;
@@ -14,6 +14,11 @@ define(['require', 'exports', 'message', 'log', 'util', 'comm', 'wrap', 'guiStat
             initEvents();
         }
         exports.init = init;
+
+        function clickSourceCodeEditor(){
+            getSourceCode();
+        }
+        exports.clickSourceCodeEditor = clickSourceCodeEditor;
 
         function setCodeLanguage(language) {
             var langToSet;
@@ -110,8 +115,8 @@ define(['require', 'exports', 'message', 'log', 'util', 'comm', 'wrap', 'guiStat
                 return false;
             }, "upload source code button clicked");
 
-            $('#importSourceCodeEditor').onWrap('click', function() {
-                getSourceCode();
+            $('#importSourceCodeEditor').onWrap('click', function(event) {
+                getSourceCode(event.target.id);
                 return false;
             }, "import from blockly button clicked");
 
@@ -120,7 +125,6 @@ define(['require', 'exports', 'message', 'log', 'util', 'comm', 'wrap', 'guiStat
                     $('#buildSourceCodeEditor').addClass('disabled');
                 }
                 $('#main-section').css('background-color', '#EEE');
-                getSourceCode();
             }, 'in show source code editor');
 
             $('#tabSourceCodeEditor').onWrap('shown.bs.tab', function() {
@@ -135,7 +139,7 @@ define(['require', 'exports', 'message', 'log', 'util', 'comm', 'wrap', 'guiStat
             $('#sourceCodeEditorPane').find('button[name="rightMostButton"]').attr('title', '').attr('rel', 'tooltip').attr('data-placement', 'left').attr('lkey', 'Blockly.Msg.SOURCE_CODE_EDITOR_IMPORT_TOOLTIP').attr('data-original-title', Blockly.Msg.SOURCE_CODE_EDITOR_IMPORT_TOOLTIP).tooltip('fixTitle');
         }
 
-        function getSourceCode() {
+        function getSourceCode(opt_event_id) {
             var blocklyWorkspace = GUISTATE_C.getBlocklyWorkspace();
             var dom = Blockly.Xml.workspaceToDom(blocklyWorkspace);
             var xmlProgram = Blockly.Xml.domToText(dom);
@@ -145,7 +149,12 @@ define(['require', 'exports', 'message', 'log', 'util', 'comm', 'wrap', 'guiStat
             var language = GUISTATE_C.getLanguage();
             PROGRAM.showSourceProgram(GUISTATE_C.getProgramName(), configName, xmlProgram, xmlConfigText, PROG_C.SSID, PROG_C.password, language,
                 function(result) {
+                    PROG_C.reloadProgram(result);
                     if (result.rc == "ok") {
+                        if(opt_event_id !== "importSourceCodeEditor"){
+                            $('#tabSourceCodeEditor').clickWrap();
+                        }
+                        GUISTATE_C.setState(result)
                         flask.updateCode(result.sourceCode);
                     } else {
                         MSG.displayInformation(result, result.message, result.message, result.parameters);
