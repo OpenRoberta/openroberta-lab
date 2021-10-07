@@ -22,4 +22,8 @@ public abstract class Sensor<V> extends Phrase<V> {
     public Sensor(BlockType kind, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(kind, properties, comment);
     }
+
+    public Sensor(BlockType kind) {
+        super(kind);
+    }
 }

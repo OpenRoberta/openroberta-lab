@@ -144,6 +144,7 @@ public abstract class AbstractCollectorVisitor extends BaseVisitor<Void> impleme
             this.getBuilder(UsedHardwareBean.Builder.class).setListsUsed(true);
         }
         var.getValue().accept(this);
+
         this.getBuilder(UsedHardwareBean.Builder.class).addGlobalVariable(var.getName());
         this.getBuilder(UsedHardwareBean.Builder.class).addDeclaredVariable(var.getName());
         return null;

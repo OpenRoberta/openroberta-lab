@@ -395,6 +395,12 @@ public final class Project {
             return this;
         }
 
+        public Builder setProgramAst(ProgramAst<Void> programAst) {
+            this.project.program = programAst;
+            return this;
+        }
+
+
         public Builder setProgramNativeSource(String programNativeSource) {
             this.programNativeSource = programNativeSource;
             return this;

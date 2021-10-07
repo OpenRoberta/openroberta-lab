@@ -37,6 +37,14 @@ public abstract class ExternalSensor<V> extends Sensor<V> implements WithUserDef
         this.metaDataBean = metaDataBean;
     }
 
+    public ExternalSensor(SensorMetaDataBean metaDataBean, BlockType kind) {
+        super(kind);
+        Assert.notNull(metaDataBean.getMode());
+        Assert.notNull(metaDataBean.getPort());
+        Assert.notNull(metaDataBean.getSlot());
+        this.metaDataBean = metaDataBean;
+    }
+
     /**
      * @return get the port on which the sensor is connected. See enum {@link SensorPort} for all possible sensor ports
      */

@@ -20,6 +20,11 @@ public class KeysSensor<V> extends ExternalSensor<V> {
         setReadOnly();
     }
 
+    public KeysSensor(SensorMetaDataBean sensorMetaDataBean) {
+        super(sensorMetaDataBean, BlockTypeContainer.getByName("KEYS_SENSING"));
+        setReadOnly();
+    }
+
     /**
      * Creates instance of {@link KeysSensor}. This instance is read only and can not be modified.
      *

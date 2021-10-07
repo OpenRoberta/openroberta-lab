@@ -28,6 +28,14 @@ public class MainTask<V> extends Task<V> {
     private final StmtList<V> variables;
     private final String debug;
 
+    public MainTask() {
+        super(BlockTypeContainer.getByName("MAIN_TASK"));
+        this.debug = "";
+        this.variables = new StmtList<>();
+        this.variables.setReadOnly();
+        setReadOnly();
+    }
+
     private MainTask(StmtList<V> variables, String debug, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(BlockTypeContainer.getByName("MAIN_TASK"), properties, comment);
         Assert.isTrue(variables.isReadOnly() && variables != null);
