@@ -50,7 +50,6 @@
         <module>RobotEdison</module>
         <module>RobotRaspberryPi</module>
         <module>OpenRobertaServer</module>
-        <module>TypeScriptSources</module>
     </modules>
     <repositories>
         <repository>

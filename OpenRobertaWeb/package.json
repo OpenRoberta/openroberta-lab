@@ -1,6 +1,6 @@
 {
-  "name": "TypeScriptSources",
-  "description": "contains the sources of Typescript, that are generated for and consumed by the single-page app running in a modern browser",
+  "name": "openroberta-web",
+  "description": "contains the frontend sources of the openrobert-lab",
   "version": "1.0.0",
   "scripts": {
     "watch": "tsc --watch",
