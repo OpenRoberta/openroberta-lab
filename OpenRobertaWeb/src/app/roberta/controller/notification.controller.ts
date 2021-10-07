@@ -9,15 +9,10 @@ DO NOT EDIT THIS IN openroberta-lab/OpenRobertaServer/staticResources/js !
 -------------------------------------------------------------------------
 */
 
-// @ts-ignore
 import * as guiStateModel from "guiState.model";
-// @ts-ignore
 import * as guiStateController from "guiState.controller";
-// @ts-ignore
 import * as notificationModel from "notification.model";
-// @ts-ignore
 import * as comm from "comm";
-
 import * as $ from "jquery";
 
 const fadingDuration = 400;
@@ -79,7 +74,6 @@ function showAlertInNotificationModal(context, content, time?) {
 }
 
 function initNotificationModal() {
-    // @ts-ignore
     $notificationForm.onWrap('submit', e => {
         e.preventDefault();
         readFileInputField(fileContent => {

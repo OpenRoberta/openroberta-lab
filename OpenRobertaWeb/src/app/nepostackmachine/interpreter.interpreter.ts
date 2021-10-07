@@ -2,7 +2,7 @@ import { ARobotBehaviour } from "./interpreter.aRobotBehaviour";
 import { State } from "./interpreter.state";
 import * as C from "./interpreter.constants";
 import * as U from "./interpreter.util";
-import * as PG from "./neuralnetwork.playground";
+import * as PG from "neuralnetwork.playground";
 
 declare var stackmachineJsHelper;
 

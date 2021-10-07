@@ -384,7 +384,6 @@ export class RobotMbedBehaviour extends ARobotBehaviour {
 			duration = imageLen * 200;
 		}
 		this.hardwareState.actions.display = {};
-		// @ts-ignore
 		this.hardwareState.actions.display.picture = UTIL.clone(image);
 		if (mode) {
 			this.hardwareState.actions.display.mode = mode.toLowerCase();
