@@ -1,18 +1,5 @@
 ### Typescript support for the OpenRoberta lab
 
-### Migration from old staticResource system
-
-1. Use tools to automate
-```bash
-amdtoes6 --dir ts --out ts
-cjs-to-es6 ts
-```
-2. Replace
-`import (\S+) from '(\S+)';`
-with
-`import * as $1 from '$2';`
-3. Fix individual errors
-
 ### Getting Started
 
 **Requirements**
@@ -20,8 +7,8 @@ with
 
 **Installing & Developing**
 1. Install the dependencies using `npm i`
-2. To let typescript compile using `npm run build` or `npx tsc`
-3. Use typescript in watch mode using `npm run watch` or `npx tsc --watch`
+2. To let typescript compile using `npm run build`
+3. Use typescript in watch mode using `npm run watch`
 
 ### Typescript support for the OpenRoberta lab (Eclipse)
 
@@ -75,9 +62,22 @@ You can find additional information on [Jetbrain's own Typescript Manual](https:
 
 ### Structure of the project
 
-1. the ts sources are in directory `ts`. Each "component"/"framework", we have written, should be assembled in a directory below the directory `app`. This is necessary
+1. the sources are in directory `ts`. Each "component"/"framework", we have written, should be assembled in a directory below the directory `app`. This is necessary
    because the javascript resources loaded by the browser expect this structure (have a look into directory `OpenRobertaServer/staticResources/js`)
 2. `node_modules` contains javascript, type declarations, ... .
 3. the `neuralnetwork` component needs `d3` in a specific version (see `package.json`).  Run `npm install --save` to install **all** dependencies locally.
 4. `tsc` needs type declarations, for instance to know the signatures of javascript built-ins. Run `npm install --save @types/node` to install these.
-5. **never** commit directory `node_modules`. It must be ignored in `.gitignore`.  
+5. **never** commit directory `node_modules`. It must be ignored in `.gitignore`.
+
+### Migration from old staticResource system
+
+1. Use tools to automate
+```bash
+amdtoes6 --dir ts --out ts
+cjs-to-es6 ts
+```
+2. Replace
+   `import (\S+) from '(\S+)';`
+   with
+   `import * as $1 from '$2';`
+3. Fix individual errors

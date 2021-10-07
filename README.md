@@ -29,6 +29,7 @@ Things you need on your computer:
 
 * Java JDK >= 1.8 (e.g. `openjdk-11-jdk` on Ubuntu) and JAVA JDK <= 13.0.2
 * Maven >= 3.2
+* NPM
 * Git
 * Web browser
 
@@ -88,6 +89,7 @@ Please file issues in the main project **openroberta-lab**.
     git clone https://github.com/OpenRoberta/openroberta-lab.git # get the repository
     cd openroberta-lab                                           # cd into repository
     mvn clean install                                            # generate the server
+    npm install && npm run build                                 # build the frontend
 
 Might take some time. The last lines of a successful build looks like:
 
@@ -124,7 +126,7 @@ Start your browser at [http://localhost:1999](http://localhost:1999) That's it!
 
 Often you want to run an openroberta installation of a fixed version for a long time. This is easy. Let's assume, that you want to use the (non-existing) directory /data/my-openroberta.
 
-    mvn clean install                          # generate the server in the git repo
+    mvn clean install && npm run build         # generate the server in the git repo
     ./ora.sh export /data/my-openroberta gzip  # export to the target directory. gzip compresses the static web resources fpr better performance.
     cd /data/my-openroberta                    # the export command supplies an administration script admin.sh, which is different from the one in the git workspace
     ./admin.sh create-empty-db                 # create an empty db at ./db-server - of course you may copy an old database to that location
@@ -185,11 +187,16 @@ The server is made of
 
 Furthermore, the project OpenRobertaServer contains in directory staticResources for the browser client
 * HTML and CSS
-* Javascript libraries based on jquery and bootstrap for the frontend
+* Generated Javascript under `/js` (this should not be edited!)
+  * Javascript libraries based on jquery and bootstrap for the frontend
   * assertions (DBC), ajax-based server calls (COMM), logging (LOG) and
   * javascript resources for [blockly](https://developers.google.com/blockly)
   * controller and models written in Javascript, which implement the GUI
 
+**The original Javascript sources can be found in `OpenRobertaWeb/`**
+To compile them run `npm run build` (either in the root directory or inside OpenRobertaWeb).
+For development, we also advice to run `npm run watch` to compile when sources are changed.
+  
 To run tests, use `mvn test`. Running `mvn clean install` will make a stable, reproducible build with all unit tests executed.
 
 To run the integration tests you have to supply an additional flag: `mvn clean install -PrunIT`.
