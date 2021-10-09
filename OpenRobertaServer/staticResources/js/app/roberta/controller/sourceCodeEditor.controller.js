@@ -1,5 +1,5 @@
 define(['require', 'exports', 'message', 'log', 'util', 'comm', 'wrap', 'guiState.controller', 'program.model', 'program.controller', 'progRun.controller', 'import.controller', 'blockly', 'codeflask', 'jquery'],
-    function (require, exports, MSG, LOG, UTIL, COMM, WRAP, GUISTATE_C, PROGRAM, PROG_C, PROGRUN_C, IMPORT_C, Blockly, CodeFlask, $) {
+    function(require, exports, MSG, LOG, UTIL, COMM, WRAP, GUISTATE_C, PROGRAM, PROG_C, PROGRUN_C, IMPORT_C, Blockly, CodeFlask, $) {
 
         var flask;
         var currentLanguage;
@@ -15,8 +15,8 @@ define(['require', 'exports', 'message', 'log', 'util', 'comm', 'wrap', 'guiStat
         }
         exports.init = init;
 
-        function clickSourceCodeEditor(){
-            getSourceCode();
+        function clickSourceCodeEditor() {
+            getSourceCode(true);
         }
         exports.clickSourceCodeEditor = clickSourceCodeEditor;
 
@@ -115,8 +115,8 @@ define(['require', 'exports', 'message', 'log', 'util', 'comm', 'wrap', 'guiStat
                 return false;
             }, "upload source code button clicked");
 
-            $('#importSourceCodeEditor').onWrap('click', function(event) {
-                getSourceCode(event.target.id);
+            $('#importSourceCodeEditor').onWrap('click', function() {
+                getSourceCode(false);
                 return false;
             }, "import from blockly button clicked");
 
@@ -139,7 +139,7 @@ define(['require', 'exports', 'message', 'log', 'util', 'comm', 'wrap', 'guiStat
             $('#sourceCodeEditorPane').find('button[name="rightMostButton"]').attr('title', '').attr('rel', 'tooltip').attr('data-placement', 'left').attr('lkey', 'Blockly.Msg.SOURCE_CODE_EDITOR_IMPORT_TOOLTIP').attr('data-original-title', Blockly.Msg.SOURCE_CODE_EDITOR_IMPORT_TOOLTIP).tooltip('fixTitle');
         }
 
-        function getSourceCode(opt_event_id) {
+        function getSourceCode(reload) {
             var blocklyWorkspace = GUISTATE_C.getBlocklyWorkspace();
             var dom = Blockly.Xml.workspaceToDom(blocklyWorkspace);
             var xmlProgram = Blockly.Xml.domToText(dom);
@@ -151,7 +151,7 @@ define(['require', 'exports', 'message', 'log', 'util', 'comm', 'wrap', 'guiStat
                 function(result) {
                     PROG_C.reloadProgram(result);
                     if (result.rc == "ok") {
-                        if(opt_event_id !== "importSourceCodeEditor"){
+                        if (reload) {
                             $('#tabSourceCodeEditor').clickWrap();
                         }
                         GUISTATE_C.setState(result)
