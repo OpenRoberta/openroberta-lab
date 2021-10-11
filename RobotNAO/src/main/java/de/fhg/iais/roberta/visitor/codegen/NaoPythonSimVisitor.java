@@ -1,7 +1,5 @@
 package de.fhg.iais.roberta.visitor.codegen;
 
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -52,7 +50,6 @@ import de.fhg.iais.roberta.syntax.lang.expr.ColorConst;
 import de.fhg.iais.roberta.syntax.lang.expr.ConnectConst;
 import de.fhg.iais.roberta.syntax.lang.expr.RgbColor;
 import de.fhg.iais.roberta.syntax.lang.expr.VarDeclaration;
-import de.fhg.iais.roberta.syntax.lang.functions.FunctionNames;
 import de.fhg.iais.roberta.syntax.lang.functions.MathCastCharFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathCastStringFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.TextCharCastNumberFunct;
@@ -77,12 +74,12 @@ import de.fhg.iais.roberta.syntax.sensor.nao.FsrSensor;
 import de.fhg.iais.roberta.syntax.sensor.nao.NaoMarkInformation;
 import de.fhg.iais.roberta.syntax.sensor.nao.RecognizeWord;
 import de.fhg.iais.roberta.util.dbc.DbcException;
+import de.fhg.iais.roberta.visitor.collect.NaoSimMethods;
 import de.fhg.iais.roberta.visitor.hardware.INaoVisitor;
 import de.fhg.iais.roberta.visitor.lang.codegen.prog.AbstractPythonVisitor;
 
 public final class NaoPythonSimVisitor extends AbstractPythonVisitor implements INaoVisitor<Void> {
 
-    public static final Path NAO_SIM_PATH = Paths.get("RobotNAO/src/main/resources/simulation/NEPOprogTemplate.py");
     protected ILanguage language;
 
     /**
@@ -114,14 +111,14 @@ public final class NaoPythonSimVisitor extends AbstractPythonVisitor implements 
         incrIndentation();
         visitStmtList(waitStmt.getStatements());
         nlIndent();
-        this.sb.append("robot.wait(15)");
+        this.sb.append("wait(robot, 1)");
         decrIndentation();
         return null;
     }
 
     @Override
     public Void visitWaitTimeStmt(WaitTimeStmt<Void> waitTimeStmt) {
-        this.sb.append("robot.wait(");
+        this.sb.append("wait(robot, ");
         waitTimeStmt.getTime().accept(this);
         this.sb.append(")");
         return null;
@@ -130,6 +127,8 @@ public final class NaoPythonSimVisitor extends AbstractPythonVisitor implements 
     @Override
     public Void visitMainTask(MainTask<Void> mainTask) {
         this.sb.append("robot = Nao()");
+        nlIndent();
+        this.sb.append("robot.load_motion_files()");
         StmtList<Void> variables = mainTask.getVariables();
         variables.accept(this);
         generateUserDefinedMethods();
@@ -168,32 +167,29 @@ public final class NaoPythonSimVisitor extends AbstractPythonVisitor implements 
 
     @Override
     public Void visitHand(Hand<Void> hand) {
-        this.sb.append("robot.");
-        switch ( hand.getModus() ) {
-            case ACTIVE:
-                this.sb.append("open_hand(");
-                break;
-            case REST:
-                this.sb.append("close_hand(");
-                break;
-        }
-
+        this.sb.append("move_hand_joint(robot, ");
         switch ( hand.getTurnDirection() ) {
             case LEFT:
-                this.sb.append("BodySide.LEFT");
+                this.sb.append("BodySide.LEFT, ");
                 break;
             case RIGHT:
-                this.sb.append("BodySide.RIGHT");
+                this.sb.append("BodySide.RIGHT, ");
                 break;
         }
-
-        this.sb.append(")");
+        switch ( hand.getModus() ) {
+            case ACTIVE:
+                this.sb.append("1)");
+                break;
+            case REST:
+                this.sb.append("0)");
+                break;
+        }
         return null;
     }
 
     @Override
     public Void visitMoveJoint(MoveJoint<Void> moveJoint) {
-        this.sb.append("robot.move_joint(");
+        this.sb.append("move_joint(robot, ");
         switch ( moveJoint.getJoint() ) {
             case HEADYAW:
                 this.sb.append("\"HeadYaw\"");
@@ -293,7 +289,7 @@ public final class NaoPythonSimVisitor extends AbstractPythonVisitor implements 
 
     @Override
     public Void visitWalkDistance(WalkDistance<Void> walkDistance) {
-        this.sb.append("robot.walk(");
+        this.sb.append("walk(robot, ");
         if ( walkDistance.getWalkDirection() == DriveDirection.BACKWARD ) {
             this.sb.append("-");
         }
@@ -304,7 +300,7 @@ public final class NaoPythonSimVisitor extends AbstractPythonVisitor implements 
 
     @Override
     public Void visitTurnDegrees(TurnDegrees<Void> turnDegrees) {
-        this.sb.append("robot.turn(");
+        this.sb.append("turn(robot, ");
         if ( turnDegrees.getTurnDirection() == TurnDirection.RIGHT ) {
             this.sb.append("-");
         }
@@ -315,7 +311,7 @@ public final class NaoPythonSimVisitor extends AbstractPythonVisitor implements 
 
     @Override
     public Void visitSetLeds(SetLeds<Void> setLeds) {
-        this.sb.append("robot.set_led(Led.");
+        this.sb.append("set_led(robot, Led.");
         this.sb.append(setLeds.getLed().toString());
         this.sb.append(", ");
         setLeds.getColor().accept(this);
@@ -325,7 +321,7 @@ public final class NaoPythonSimVisitor extends AbstractPythonVisitor implements 
 
     @Override
     public Void visitSetIntensity(SetIntensity<Void> setIntensity) {
-        this.sb.append("robot.set_intensity(Led.");
+        this.sb.append("set_intensity(robot, Led.");
         this.sb.append(setIntensity.getLed().toString());
         this.sb.append(", ");
         setIntensity.getIntensity().accept(this);
@@ -335,23 +331,23 @@ public final class NaoPythonSimVisitor extends AbstractPythonVisitor implements 
 
     @Override
     public Void visitLedOff(LedOff<Void> ledOff) {
-        this.sb.append("robot.led_off(Led.");
+        this.sb.append("set_led(robot, Led.");
         this.sb.append(ledOff.getLed().toString());
-        this.sb.append(")");
+        this.sb.append(", 0)");
         return null;
     }
 
     @Override
     public Void visitLedReset(LedReset<Void> ledReset) {
-        this.sb.append("robot.led_off(Led.");
+        this.sb.append("set_led(robot, Led.");
         this.sb.append(ledReset.getLed().toString());
-        this.sb.append(")");
+        this.sb.append(", 0)");
         return null;
     }
 
     @Override
     public Void visitTouchSensor(TouchSensor<Void> touchSensor) {
-        this.sb.append("robot.is_touched(");
+        this.sb.append("is_touched(robot, ");
         this.sb.append(getEnumCode(touchSensor.getUserDefinedPort()));
         this.sb.append(", ");
         this.sb.append(getEnumCode(touchSensor.getSlot()));
@@ -361,29 +357,29 @@ public final class NaoPythonSimVisitor extends AbstractPythonVisitor implements 
 
     @Override
     public Void visitUltrasonicSensor(UltrasonicSensor<Void> sonar) {
-        this.sb.append("robot.get_ultrasonic()");
+        this.sb.append("get_ultrasonic(robot)");
         return null;
     }
 
     @Override
-    public Void visitGyroSensor(GyroSensor<Void> gyrometer) {
-        this.sb.append("robot.get_gyro_");
-        this.sb.append(gyrometer.getSlot().toLowerCase());
-        this.sb.append("()");
+    public Void visitGyroSensor(GyroSensor<Void> gyroSensor) {
+        this.sb.append("get_gyro_");
+        this.sb.append(gyroSensor.getSlot().toLowerCase());
+        this.sb.append("(robot)");
         return null;
     }
 
     @Override
     public Void visitAccelerometerSensor(AccelerometerSensor<Void> accelerometer) {
-        this.sb.append("robot.get_accelerometer_");
+        this.sb.append("get_accelerometer_");
         this.sb.append(accelerometer.getUserDefinedPort().toLowerCase());
-        this.sb.append("()");
+        this.sb.append("(robot)");
         return null;
     }
 
     @Override
     public Void visitFsrSensor(FsrSensor<Void> fsr) {
-        this.sb.append("robot.get_force(BodySide.");
+        this.sb.append("get_force(robot, BodySide.");
         this.sb.append(fsr.getUserDefinedPort().toUpperCase());
         this.sb.append(")");
         return null;
@@ -436,10 +432,10 @@ public final class NaoPythonSimVisitor extends AbstractPythonVisitor implements 
         nlIndent();
 
         Set<Enum<?>> usedMethods = new HashSet<>();
-        usedMethods.add(FunctionNames.TEMPLATE);
+        usedMethods.add(NaoSimMethods.MOTIONS);
+        usedMethods.add(NaoSimMethods.TEMPLATE);
         String template = this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodDefinitions(usedMethods);
         this.sb.append(template);
-
         nlIndent();
 
         if ( !this.getBean(UsedHardwareBean.class).getLoopsLabelContainer().isEmpty() ) {
@@ -458,7 +454,7 @@ public final class NaoPythonSimVisitor extends AbstractPythonVisitor implements 
             return;
         }
         nlIndent();
-        this.sb.append("robot.wait(3000)"); // give the simulation time to render all
+        this.sb.append("wait(robot, 3000)"); // give the simulation time to render all
         nlIndent();
         this.sb.append("print(\"finished\")");
         decrIndentation(); // everything is still indented from main program
@@ -481,7 +477,6 @@ public final class NaoPythonSimVisitor extends AbstractPythonVisitor implements 
         nlIndent();
         decrIndentation();
         nlIndent();
-
         super.generateProgramSuffix(withWrapping);
     }
 
@@ -513,7 +508,7 @@ public final class NaoPythonSimVisitor extends AbstractPythonVisitor implements 
 
     @Override
     public Void visitApplyPosture(ApplyPosture<Void> applyPosture) {
-        this.sb.append("robot.perform(\"").append(applyPosture.getPosture()).append("\")");
+        this.sb.append("perform(robot, \"").append(applyPosture.getPosture()).append("\")");
         return null;
     }
 
@@ -539,7 +534,7 @@ public final class NaoPythonSimVisitor extends AbstractPythonVisitor implements 
 
     @Override
     public Void visitAnimation(Animation<Void> animation) {
-        this.sb.append("robot.perform(\"").append(animation.getMove()).append("\")");
+        this.sb.append("perform(robot, \"").append(animation.getMove()).append("\")");
         return null;
     }
 
@@ -550,7 +545,7 @@ public final class NaoPythonSimVisitor extends AbstractPythonVisitor implements 
 
     @Override
     public Void visitSetVolume(SetVolume<Void> setVolume) {
-        this.sb.append("robot.setVolume(");
+        this.sb.append("setVolume(robot, ");
         setVolume.getVolume().accept(this);
         this.sb.append(")");
         return null;
@@ -558,13 +553,13 @@ public final class NaoPythonSimVisitor extends AbstractPythonVisitor implements 
 
     @Override
     public Void visitGetVolume(GetVolume<Void> getVolume) {
-        this.sb.append("robot.getVolume()");
+        this.sb.append("getVolume(robot)");
         return null;
     }
 
     @Override
     public Void visitSetLanguageAction(SetLanguageAction<Void> setLanguageAction) {
-        this.sb.append("robot.setLanguage(\"").append(getLanguageString(setLanguageAction.getLanguage())).append("\")");
+        this.sb.append("setLanguage(robot, \"").append(getLanguageString(setLanguageAction.getLanguage())).append("\")");
         return null;
     }
 
@@ -575,7 +570,7 @@ public final class NaoPythonSimVisitor extends AbstractPythonVisitor implements 
 
     @Override
     public Void visitSayTextAction(SayTextAction<Void> sayTextAction) {
-        this.sb.append("robot.say(");
+        this.sb.append("say(robot, ");
         this.sb.append("str(");
         sayTextAction.getMsg().accept(this);
         this.sb.append(")");
@@ -692,7 +687,7 @@ public final class NaoPythonSimVisitor extends AbstractPythonVisitor implements 
 
     @Override
     public Void visitRecognizeWord(RecognizeWord<Void> recognizeWord) {
-        this.sb.append("robot.getRecognizedWord(");
+        this.sb.append("getRecognizedWord(robot, ");
         recognizeWord.vocabulary.accept(this);
         this.sb.append(")");
         return null;

@@ -7,7 +7,9 @@ import java.util.List;
 import com.google.common.collect.ClassToInstanceMap;
 
 import de.fhg.iais.roberta.bean.IProjectBean;
+import de.fhg.iais.roberta.bean.UsedMethodBean;
 import de.fhg.iais.roberta.components.ConfigurationAst;
+import de.fhg.iais.roberta.mode.action.nao.Move;
 import de.fhg.iais.roberta.syntax.action.nao.Animation;
 import de.fhg.iais.roberta.syntax.action.nao.ApplyPosture;
 import de.fhg.iais.roberta.syntax.action.nao.Autonomous;
@@ -53,15 +55,18 @@ import de.fhg.iais.roberta.syntax.sensor.nao.ElectricCurrentSensor;
 import de.fhg.iais.roberta.syntax.sensor.nao.FsrSensor;
 import de.fhg.iais.roberta.syntax.sensor.nao.NaoMarkInformation;
 import de.fhg.iais.roberta.syntax.sensor.nao.RecognizeWord;
+import de.fhg.iais.roberta.visitor.collect.NaoSimMethods;
 import de.fhg.iais.roberta.visitor.hardware.INaoVisitor;
 
-public class NaoSimValidatorVisitor extends CommonNepoValidatorAndCollectorVisitor implements INaoVisitor<Void> {
+public class NaoSimValidatorAndCollectorVisitor extends CommonNepoValidatorAndCollectorVisitor implements INaoVisitor<Void> {
 
     public static final List<String> VALID_TOUCH_SENSOR_PORTS = Collections.singletonList("BUMPER");
     public static final List<String> VALID_TOUCH_SENSOR_SLOTS = Arrays.asList("LEFT", "RIGHT");
 
-    public NaoSimValidatorVisitor(ConfigurationAst robotConfiguration, ClassToInstanceMap<IProjectBean.IBuilder<?>> beanBuilders) {
+    public NaoSimValidatorAndCollectorVisitor(ConfigurationAst robotConfiguration, ClassToInstanceMap<IProjectBean.IBuilder<?>> beanBuilders) {
         super(robotConfiguration, beanBuilders);
+        this.getBuilder(UsedMethodBean.Builder.class).addUsedMethod(NaoSimMethods.WAIT_TIME);
+        this.getBuilder(UsedMethodBean.Builder.class).addUsedMethod(NaoSimMethods.RESET_POSE);
     }
 
     @Override
@@ -72,71 +77,104 @@ public class NaoSimValidatorVisitor extends CommonNepoValidatorAndCollectorVisit
         if ( !isPortValid || !isSlotValid ) {
             addErrorToPhrase(touchSensor, "SIM_BLOCK_NOT_SUPPORTED");
         }
+        this.getBuilder(UsedMethodBean.Builder.class).addUsedMethod(NaoSimMethods.IS_TOUCHED);
         return null;
     }
 
     @Override
     public Void visitUltrasonicSensor(UltrasonicSensor<Void> ultrasonicSensor) {
+        this.getBuilder(UsedMethodBean.Builder.class).addUsedMethod(NaoSimMethods.GET_ULTRASONIC);
         return null;
     }
 
     @Override
     public Void visitGyroSensor(GyroSensor<Void> gyroSensor) {
+        switch ( gyroSensor.getSlot().toUpperCase() ) {
+            case "X":
+                this.getBuilder(UsedMethodBean.Builder.class).addUsedMethod(NaoSimMethods.GET_GYRO_X);
+                break;
+            case "Y":
+                this.getBuilder(UsedMethodBean.Builder.class).addUsedMethod(NaoSimMethods.GET_GYRO_Y);
+                break;
+        }
         return null;
     }
 
     @Override
     public Void visitAccelerometerSensor(AccelerometerSensor<Void> accelerometerSensor) {
+        switch ( accelerometerSensor.getUserDefinedPort().toUpperCase() ) {
+            case "X":
+                this.getBuilder(UsedMethodBean.Builder.class).addUsedMethod(NaoSimMethods.GET_ACCELEROMETER_X);
+                break;
+            case "Y":
+                this.getBuilder(UsedMethodBean.Builder.class).addUsedMethod(NaoSimMethods.GET_ACCELEROMETER_Y);
+                break;
+            case "Z":
+                this.getBuilder(UsedMethodBean.Builder.class).addUsedMethod(NaoSimMethods.GET_ACCELEROMETER_Z);
+                break;
+        }
         return null;
     }
 
     @Override
     public Void visitSetIntensity(SetIntensity<Void> setIntensity) {
         requiredComponentVisited(setIntensity, setIntensity.getIntensity());
+        this.getBuilder(UsedMethodBean.Builder.class).addUsedMethod(NaoSimMethods.SET_LED);
+        this.getBuilder(UsedMethodBean.Builder.class).addUsedMethod(NaoSimMethods.SET_INTENSITY);
         return null;
     }
 
     @Override
     public Void visitFsrSensor(FsrSensor<Void> forceSensor) {
+        this.getBuilder(UsedMethodBean.Builder.class).addUsedMethod(NaoSimMethods.GET_FORCE);
         return null;
     }
 
     @Override
     public Void visitHand(Hand<Void> hand) {
+        this.getBuilder(UsedMethodBean.Builder.class).addUsedMethod(NaoSimMethods.MOVE_HAND_JOINT);
         return null;
     }
 
     @Override
     public Void visitMoveJoint(MoveJoint<Void> moveJoint) {
         requiredComponentVisited(moveJoint, moveJoint.getDegrees());
+        this.getBuilder(UsedMethodBean.Builder.class).addUsedMethod(NaoSimMethods.MOVE_JOINT);
         return null;
     }
 
     @Override
     public Void visitWalkDistance(WalkDistance<Void> walkDistance) {
         requiredComponentVisited(walkDistance, walkDistance.getDistanceToWalk());
+        this.getBuilder(UsedMethodBean.Builder.class).addUsedMethod(NaoSimMethods.WALK_DISTANCE);
+        this.getBuilder(UsedMethodBean.Builder.class).addUsedMethod(NaoSimMethods.CALC_DIST);
+        this.getBuilder(UsedMethodBean.Builder.class).addUsedMethod(NaoSimMethods.GET_FORCE);
         return null;
     }
 
     @Override
     public Void visitTurnDegrees(TurnDegrees<Void> turnDegrees) {
         requiredComponentVisited(turnDegrees, turnDegrees.getDegreesToTurn());
+        this.getBuilder(UsedMethodBean.Builder.class).addUsedMethod(NaoSimMethods.TURN);
         return null;
     }
 
     @Override
     public Void visitSetLeds(SetLeds<Void> setLeds) {
         requiredComponentVisited(setLeds, setLeds.getColor());
+        this.getBuilder(UsedMethodBean.Builder.class).addUsedMethod(NaoSimMethods.SET_LED);
         return null;
     }
 
     @Override
     public Void visitLedOff(LedOff<Void> ledOff) {
+        this.getBuilder(UsedMethodBean.Builder.class).addUsedMethod(NaoSimMethods.SET_LED);
         return null;
     }
 
     @Override
     public Void visitLedReset(LedReset<Void> ledReset) {
+        this.getBuilder(UsedMethodBean.Builder.class).addUsedMethod(NaoSimMethods.LED_OFF);
         return null;
     }
 
@@ -163,6 +201,8 @@ public class NaoSimValidatorVisitor extends CommonNepoValidatorAndCollectorVisit
                 addWarningToPhrase(applyPosture, "SIM_BLOCK_NOT_SUPPORTED");
                 break;
             default:
+                this.getBuilder(UsedMethodBean.Builder.class).addUsedMethod(NaoSimMethods.ANIMATION);
+                this.getBuilder(UsedMethodBean.Builder.class).addUsedMethod(NaoSimMethods.SET_LED);
                 break;
         }
         return null;
@@ -195,6 +235,10 @@ public class NaoSimValidatorVisitor extends CommonNepoValidatorAndCollectorVisit
 
     @Override
     public Void visitAnimation(Animation<Void> animation) {
+        this.getBuilder(UsedMethodBean.Builder.class).addUsedMethod(NaoSimMethods.ANIMATION);
+        if ( animation.getMove() == Move.BLINK ) {
+            this.getBuilder(UsedMethodBean.Builder.class).addUsedMethod(NaoSimMethods.SET_LED);
+        }
         return null;
     }
 
@@ -208,16 +252,19 @@ public class NaoSimValidatorVisitor extends CommonNepoValidatorAndCollectorVisit
     @Override
     public Void visitSetVolume(SetVolume<Void> setVolume) {
         requiredComponentVisited(setVolume, setVolume.getVolume());
+        this.getBuilder(UsedMethodBean.Builder.class).addUsedMethod(NaoSimMethods.SET_VOLUME);
         return null;
     }
 
     @Override
     public Void visitGetVolume(GetVolume<Void> getVolume) {
+        this.getBuilder(UsedMethodBean.Builder.class).addUsedMethod(NaoSimMethods.GET_VOLUME);
         return null;
     }
 
     @Override
     public Void visitSetLanguageAction(SetLanguageAction<Void> setLanguageAction) {
+        this.getBuilder(UsedMethodBean.Builder.class).addUsedMethod(NaoSimMethods.SET_LANGUAGE);
         return null;
     }
 
@@ -232,6 +279,7 @@ public class NaoSimValidatorVisitor extends CommonNepoValidatorAndCollectorVisit
         requiredComponentVisited(sayTextAction, sayTextAction.getMsg());
         optionalComponentVisited(sayTextAction.getPitch());
         optionalComponentVisited(sayTextAction.getSpeed());
+        this.getBuilder(UsedMethodBean.Builder.class).addUsedMethod(NaoSimMethods.SAY_TEXT);
         return null;
     }
 
@@ -298,13 +346,14 @@ public class NaoSimValidatorVisitor extends CommonNepoValidatorAndCollectorVisit
 
     @Override
     public Void visitElectricCurrentSensor(ElectricCurrentSensor<Void> electricCurrent) {
-        addWarningToPhrase(electricCurrent, "SIM_BLOCK_NOT_SUPPORTED");
+        addErrorToPhrase(electricCurrent, "SIM_BLOCK_NOT_SUPPORTED");
         return null;
     }
 
     @Override
     public Void visitRecognizeWord(RecognizeWord<Void> recognizeWord) {
         requiredComponentVisited(recognizeWord, recognizeWord.vocabulary);
+        this.getBuilder(UsedMethodBean.Builder.class).addUsedMethod(NaoSimMethods.GET_RECOGNIZED_WORD);
         return null;
     }
 
@@ -351,5 +400,4 @@ public class NaoSimValidatorVisitor extends CommonNepoValidatorAndCollectorVisit
         addWarningToPhrase(textCharCastNumberFunct, "BLOCK_NOT_SUPPORTED");
         return null;
     }
-
 }
