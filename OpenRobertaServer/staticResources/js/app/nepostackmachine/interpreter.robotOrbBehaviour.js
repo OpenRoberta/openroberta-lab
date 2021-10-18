@@ -64,8 +64,8 @@ define(["require", "exports", "./interpreter.aRobotBehaviour", "./interpreter.co
                 { "mode": 0, "pos": 0 }]
         }
     };
-    var isEncoderReset = false;
-    var substrationValue = 0;
+    var substrationValueEncoder = 0;
+    var substrationValueGyro = 0;
     //Noch mode prüfen
     function isSensorValueValid(id) {
         if (propFromORB.Sensor[id].valid == true) {
@@ -137,15 +137,25 @@ define(["require", "exports", "./interpreter.aRobotBehaviour", "./interpreter.co
         }
         return (0);
     }
-    function getSensorValueGyro(id) {
+    function getSensorValueGyro(id, slot) {
         id = id - 1;
         if (0 <= id && id < 4) {
             if (isSensorValueValid(id) == true) {
                 if (propFromORB.Sensor[id].value[0] <= 32767) {
+                    if (slot == "angle") {
+                        var y = propFromORB.Sensor[id].value[0];
+                        var x = propFromORB.Sensor[id].value[1];
+                        return y - substrationValueGyro;
+                    }
                     return (propFromORB.Sensor[id].value);
                 }
                 else {
                     propFromORB.Sensor[id].value[0] = propFromORB.Sensor[id].value[0] - 65536;
+                    if (slot == "angle") {
+                        var y = propFromORB.Sensor[id].value[0];
+                        var x = propFromORB.Sensor[id].value[1];
+                        return y + substrationValueGyro;
+                    }
                     return (propFromORB.Sensor[id].value);
                 }
             }
@@ -169,9 +179,7 @@ define(["require", "exports", "./interpreter.aRobotBehaviour", "./interpreter.co
     function getEncoderValue(port, mode) {
         var value = 0;
         if (mode == "degree") {
-            var x = getMotorPos(port);
-            var y = substrationValue;
-            return value = (getMotorPos(port) - substrationValue) / 2.7;
+            return value = (getMotorPos(port) - substrationValueEncoder) / 2.7;
         }
         if (mode == "rotation") {
             return value = getMotorPos(port) / 1000;
@@ -280,12 +288,12 @@ define(["require", "exports", "./interpreter.aRobotBehaviour", "./interpreter.co
                     if (slot == "angle") {
                         configSensor(port, 1, 0, 0);
                         this.btInterfaceFct(cmdConfigToORB);
-                        s.push(getSensorValueGyro(port));
+                        s.push(getSensorValueGyro(port, slot));
                     }
                     if (slot == "rate") {
                         configSensor(port, 1, 1, 0);
                         this.btInterfaceFct(cmdConfigToORB);
-                        s.push(getSensorValueGyro(port));
+                        s.push(getSensorValueGyro(port, slot));
                     }
                 }
                 else if (sensor == "infrared") {
@@ -396,7 +404,6 @@ define(["require", "exports", "./interpreter.aRobotBehaviour", "./interpreter.co
         ;
         RobotOrbBehaviour.prototype.mappPortMotor = function (port) {
             //From MotorBlock come only letter, It must be mapped to numbers.
-            //Think of a better solution
             if (port == 'a') {
                 return 0;
             }
@@ -581,7 +588,7 @@ define(["require", "exports", "./interpreter.aRobotBehaviour", "./interpreter.co
         RobotOrbBehaviour.prototype.displaySetBrightnessAction = function (_value) {
             return 0;
         };
-        RobotOrbBehaviour.prototype.showTextActionPosition = function (text, x, y) {
+        RobotOrbBehaviour.prototype.showTextActionPosition = function (text) {
             var showText = "" + text;
             U.debug('***** show "' + showText + '" *****');
             this.toDisplayFct({ "show": showText });
@@ -664,23 +671,13 @@ define(["require", "exports", "./interpreter.aRobotBehaviour", "./interpreter.co
                 }
             }
         };
-        /*
-            public encoderReset(port: string) {
-                U.debug('encoderReset for ' + port);
-                this.hardwareState.actions.encoder = {};
-                if (port == C.MOTOR_LEFT) {
-                    this.hardwareState.actions.encoder.leftReset = true;
-                }
-                else {
-                    this.hardwareState.actions.encoder.rightReset = true;
-                }
-            }*/
         RobotOrbBehaviour.prototype.encoderReset = function (port) {
             U.debug('encoderReset for ' + port);
-            substrationValue = getMotorPos(this.mappPortMotor(port));
+            substrationValueEncoder = getMotorPos(this.mappPortMotor(port));
         };
-        RobotOrbBehaviour.prototype.gyroReset = function (_port) {
-            throw new Error("Method not implemented.");
+        RobotOrbBehaviour.prototype.gyroReset = function (port) {
+            U.debug('gyroReset for ' + port);
+            substrationValueGyro = getSensorValue(port);
         };
         RobotOrbBehaviour.prototype.lightAction = function (_mode, _color, _port) {
             throw new Error("Method not implemented.");

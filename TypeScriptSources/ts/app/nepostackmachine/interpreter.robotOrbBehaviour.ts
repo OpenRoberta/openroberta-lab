@@ -55,8 +55,9 @@ let cmdPropToORB = {
     }
 }
 
-var isEncoderReset = false;
-var substrationValue = 0;
+var substrationValueEncoder = 0;
+var substrationValueGyro = 0;
+
  
 //Noch mode prüfen
 function isSensorValueValid(id: number): boolean {
@@ -134,15 +135,25 @@ function getSensorValueUltrasonic(id: number) {
     return (0);
 }
 
-function getSensorValueGyro(id: number) {
+function getSensorValueGyro(id: number, slot: string) {
     id = id - 1;
     if (0 <= id && id < 4) {
         if (isSensorValueValid(id) == true) {
             if (propFromORB.Sensor[id].value[0] <= 32767) {
+                if (slot == "angle"){
+                    var y = propFromORB.Sensor[id].value[0];
+                    var x = propFromORB.Sensor[id].value[1];
+                    return y - substrationValueGyro;
+                }
                 return (propFromORB.Sensor[id].value);
             }
             else {
                 propFromORB.Sensor[id].value[0] = propFromORB.Sensor[id].value[0] - 65536;
+                if (slot == "angle"){
+                    var y = propFromORB.Sensor[id].value[0];
+                    var x = propFromORB.Sensor[id].value[1];
+                    return y + substrationValueGyro;
+                }
                 return (propFromORB.Sensor[id].value);
             }
         }
@@ -168,9 +179,7 @@ function getSensorValueTouch(id: number) {
 function getEncoderValue(port: number, mode: any) {
     var value = 0;
     if (mode == "degree"){
-        var x = getMotorPos(port);
-        var y = substrationValue;
-        return value = (getMotorPos(port) - substrationValue) / 2.7;
+        return value = (getMotorPos(port) - substrationValueEncoder) / 2.7;
     }
     if (mode == "rotation"){
         return value = getMotorPos(port) / 1000;
@@ -325,7 +334,6 @@ export class RobotOrbBehaviour extends ARobotBehaviour {
 
     public mappPortMotor(port: any) {
         //From MotorBlock come only letter, It must be mapped to numbers.
-        //Think of a better solution
         if (port == 'a') {
             return 0;
         }
@@ -385,12 +393,12 @@ export class RobotOrbBehaviour extends ARobotBehaviour {
             if (slot == "angle") {
                 configSensor(port, 1, 0, 0);
                 this.btInterfaceFct(cmdConfigToORB);
-                s.push(getSensorValueGyro(port));
+                s.push(getSensorValueGyro(port, slot));
             }
             if (slot == "rate") {
                 configSensor(port, 1, 1, 0);
                 this.btInterfaceFct(cmdConfigToORB);
-                s.push(getSensorValueGyro(port));
+                s.push(getSensorValueGyro(port, slot));
             }
         }
         else if (sensor == "infrared") {
@@ -614,7 +622,7 @@ export class RobotOrbBehaviour extends ARobotBehaviour {
         return 0;
     }
 
-    public showTextActionPosition(text: any, x: number, y: number): void {
+    public showTextActionPosition(text: any): void {
         const showText = "" + text;
         U.debug('***** show "' + showText + '" *****');
         this.toDisplayFct({ "show": showText });
@@ -704,25 +712,15 @@ export class RobotOrbBehaviour extends ARobotBehaviour {
             }
         }
     }
-/*
-    public encoderReset(port: string) {
-		U.debug('encoderReset for ' + port);
-		this.hardwareState.actions.encoder = {};
-		if (port == C.MOTOR_LEFT) {
-			this.hardwareState.actions.encoder.leftReset = true;
-		}
-		else {
-			this.hardwareState.actions.encoder.rightReset = true;
-		}
-	}*/
 
     public encoderReset(port: any): void {
 		U.debug('encoderReset for ' + port);
-        substrationValue = getMotorPos(this.mappPortMotor(port));
+        substrationValueEncoder = getMotorPos(this.mappPortMotor(port));
 	}
 
-	public gyroReset(_port: number): void {
-        throw new Error("Method not implemented.");
+	public gyroReset(port: number): void {
+        U.debug('gyroReset for ' + port);
+        substrationValueGyro = getSensorValue(port);
 	}
 
     public lightAction(_mode: string, _color: string, _port: string): void {

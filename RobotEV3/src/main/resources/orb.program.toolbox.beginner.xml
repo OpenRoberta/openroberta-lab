@@ -85,7 +85,6 @@
         </block>
       </value>
     </block>
-    <block type="robActions_display_clear"/>
   </category>
   <category name="TOOLBOX_SENSOR" svg="true">
     <block type="robSensors_touch_getSample"/>
@@ -104,7 +103,6 @@
     <block type="robSensors_encoder_getSample">
       <field name="SENSORPORT">B</field>
     </block>
-    <block type="robSensors_key_getSample"/>
     <block type="robSensors_gyro_reset">
       <field name="SENSORPORT">2</field>
     </block>
