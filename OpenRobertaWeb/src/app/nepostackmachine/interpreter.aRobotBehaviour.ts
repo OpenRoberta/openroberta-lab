@@ -1,8 +1,8 @@
-import { State } from "./interpreter.state";
+import { State } from './interpreter.state';
 
 export abstract class ARobotBehaviour {
     protected hardwareState;
-    private blocking
+    private blocking;
 
     constructor() {
         this.hardwareState = {};
@@ -29,7 +29,6 @@ export abstract class ARobotBehaviour {
         return this.blocking;
     }
 
-
     abstract clearDisplay(): void;
 
     abstract getSample(s: State, name: string, sensor: string, port: number, mode: string): void;
@@ -44,7 +43,7 @@ export abstract class ARobotBehaviour {
 
     abstract ledOnAction(name: string, port: number, color: number): void;
 
-    abstract lightAction(mode: string, color: string,port: string): void;
+    abstract lightAction(mode: string, color: string, port: string): void;
 
     abstract statusLightOffAction(name: string, port: number): void;
 

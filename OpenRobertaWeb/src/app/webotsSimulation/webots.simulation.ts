@@ -1,7 +1,7 @@
 import * as $ from 'jquery';
-import * as guiStateController from 'guiState.controller'
+import * as guiStateController from 'guiState.controller';
 
-const MODE = "x3d";
+const MODE = 'x3d';
 const BROADCAST = false;
 
 class StreamingViewer {
@@ -39,7 +39,7 @@ class StreamingViewer {
         window.onresize = undefined;
         this.view.close();
         this.element.innerHTML = null;
-        if (this.view.mode === "mjpeg") {
+        if (this.view.mode === 'mjpeg') {
             this.view.multimediaClient = undefined;
         }
         this.disconnectCallback();
@@ -50,7 +50,7 @@ class StreamingViewer {
         if (toolbar) {
             if (toolbar.style.display !== 'none') {
                 toolbar.style.display = 'none';
-                $("#view3d").height("100%");
+                $('#view3d').height('100%');
                 window.dispatchEvent(new Event('resize'));
             }
         }
@@ -59,9 +59,8 @@ class StreamingViewer {
     showToolbar() {
         let toolbar = this.getToolbar();
         if (toolbar) {
-            if (toolbar.style.display !== 'block')
-                toolbar.style.display = 'block';
-            $("#view3d").height("calc(100% - 48px)");
+            if (toolbar.style.display !== 'block') toolbar.style.display = 'block';
+            $('#view3d').height('calc(100% - 48px)');
             window.dispatchEvent(new Event('resize'));
         }
     }
@@ -79,8 +78,7 @@ class StreamingViewer {
     }
 
     sendMessage(message: string) {
-        if (typeof this.view !== 'undefined' && this.view.stream.socket.readyState === 1)
-            this.view.stream.socket.send(message);
+        if (typeof this.view !== 'undefined' && this.view.stream.socket.readyState === 1) this.view.stream.socket.send(message);
     }
 
     private getToolbar() {
@@ -104,8 +102,8 @@ class WebotsSimulation extends StreamingViewer {
 
     uploadController(sourceCode: string) {
         let message = {
-            name: "supervisor",
-            message: "upload:" + sourceCode
+            name: 'supervisor',
+            message: 'upload:' + sourceCode,
         };
         super.sendMessage('robot:' + JSON.stringify(message));
     }
@@ -117,43 +115,48 @@ class WebotsSimulation extends StreamingViewer {
             return;
         }
 
-        super.connect(url, false, () => {
-            this.connected = true;
-        }, () => {
-            this.connected = false;
-        });
+        super.connect(
+            url,
+            false,
+            () => {
+                this.connected = true;
+            },
+            () => {
+                this.connected = false;
+            }
+        );
 
         super.hideToolbar();
         this.initSpeechSynthesis();
         this.initSpeechRecognition();
 
-        $("#webotsProgress").height("120px");
+        $('#webotsProgress').height('120px');
 
         let that = this;
-        this.view.onstdout = function(text: string) {
-            if (text.startsWith("finish")) {
-                $("#simControl").trigger("click")
-            } else if (text.startsWith("say")) {
-                let data = text.split(":");
+        this.view.onstdout = function (text: string) {
+            if (text.startsWith('finish')) {
+                $('#simControl').trigger('click');
+            } else if (text.startsWith('say')) {
+                let data = text.split(':');
                 that.sayText(data);
-            } else if (text.startsWith("setLanguage")) {
-                let data = text.split(":");
+            } else if (text.startsWith('setLanguage')) {
+                let data = text.split(':');
                 that.lang = data[1];
-            } else if (text.startsWith("setVolume")) {
-                let data = text.split(":");
+            } else if (text.startsWith('setVolume')) {
+                let data = text.split(':');
                 that.volume = parseInt(data[1]) / 100;
-            } else if (text.startsWith("getVolume")) {
+            } else if (text.startsWith('getVolume')) {
                 let message = {
-                    name: "NAO",
-                    message: "volume:" + that.volume * 100
+                    name: 'NAO',
+                    message: 'volume:' + that.volume * 100,
                 };
-                that.sendMessage("robot:" + JSON.stringify(message));
-            } else if (text.startsWith("recognizeSpeech")) {
+                that.sendMessage('robot:' + JSON.stringify(message));
+            } else if (text.startsWith('recognizeSpeech')) {
                 that.recognizeSpeech();
             } else {
                 // console.log(text);  // enable this maybe for debugging
             }
-        }
+        };
     }
 
     reset() {
@@ -182,7 +185,9 @@ class WebotsSimulation extends StreamingViewer {
         this.SpeechSynthesis.cancel();
         if (!this.SpeechSynthesis) {
             this.context = null;
-            console.log("Sorry, but the Speech Synthesis API is not supported by your browser. Please, consider upgrading to the latest version or downloading Google Chrome or Mozilla Firefox");
+            console.log(
+                'Sorry, but the Speech Synthesis API is not supported by your browser. Please, consider upgrading to the latest version or downloading Google Chrome or Mozilla Firefox'
+            );
         }
     }
 
@@ -192,10 +197,10 @@ class WebotsSimulation extends StreamingViewer {
         let pitch = data[3];
         let lang = this.lang || guiStateController.getLanguage();
         // Prevents an empty string from crashing the simulation
-        if (text === "") text = " ";
+        if (text === '') text = ' ';
         // IE apparently doesnt support default parameters, this prevents it from crashing the whole simulation
-        speed = (speed === undefined) ? 30 : speed;
-        pitch = (pitch === undefined) ? 50 : pitch;
+        speed = speed === undefined ? 30 : speed;
+        pitch = pitch === undefined ? 50 : pitch;
         // Clamp values
         speed = Math.max(0, Math.min(100, speed));
         pitch = Math.max(0, Math.min(100, pitch));
@@ -208,8 +213,8 @@ class WebotsSimulation extends StreamingViewer {
         // Workaround to keep utterance object from being garbage collected by the browser
         (window as any).utterances = [];
         (window as any).utterances.push(utterThis);
-        if (lang === "") {
-            console.log("Language is not supported!");
+        if (lang === '') {
+            console.log('Language is not supported!');
         } else {
             var voices = (this.SpeechSynthesis as any).getVoices();
             for (var i = 0; i < voices.length; i++) {
@@ -219,7 +224,11 @@ class WebotsSimulation extends StreamingViewer {
                 }
             }
             if (utterThis.voice === null) {
-                console.log("Language \"" + lang + "\" could not be found. Try a different browser or for chromium add the command line flag \"--enable-speech-dispatcher\".");
+                console.log(
+                    'Language "' +
+                        lang +
+                        '" could not be found. Try a different browser or for chromium add the command line flag "--enable-speech-dispatcher".'
+                );
             }
         }
         utterThis.pitch = pitch;
@@ -227,17 +236,17 @@ class WebotsSimulation extends StreamingViewer {
         utterThis.volume = this.volume;
         let that = this;
         let message = {
-            name: "NAO",
-            message: "finish"
+            name: 'NAO',
+            message: 'finish',
         };
-        utterThis.onend = function(event) {
-            that.sendMessage("robot:" + JSON.stringify(message));
+        utterThis.onend = function (event) {
+            that.sendMessage('robot:' + JSON.stringify(message));
         };
         //does not work for volume = 0 thus workaround with if statement
         if (this.volume != 0) {
             (this.SpeechSynthesis as any).speak(utterThis);
         } else {
-            this.sendMessage("robot:" + JSON.stringify(message));
+            this.sendMessage('robot:' + JSON.stringify(message));
         }
     }
 
@@ -249,50 +258,50 @@ class WebotsSimulation extends StreamingViewer {
             this.recognition.continuous = false;
             this.recognition.interimResults = true;
 
-            this.recognition.onresult = function(event) {
+            this.recognition.onresult = function (event) {
                 for (var i = event.resultIndex; i < event.results.length; ++i) {
                     if (event.results[i].isFinal) {
                         that.final_transcript += event.results[i][0].transcript;
                     }
                 }
-            }
+            };
 
-            this.recognition.onend = function() {
+            this.recognition.onend = function () {
                 let message = {
-                    name: "NAO",
-                    message: "transcript:" + that.final_transcript
+                    name: 'NAO',
+                    message: 'transcript:' + that.final_transcript,
                 };
-                that.sendMessage("robot:" + JSON.stringify(message));
+                that.sendMessage('robot:' + JSON.stringify(message));
                 this.stop();
-            }
+            };
         }
     }
 
     recognizeSpeech() {
         if (this.recognition) {
-            this.final_transcript = "";
+            this.final_transcript = '';
             this.recognition.lang = this.lang || guiStateController.getLanguage();
             this.recognition.start();
         } else {
-            alert("Sorry, your browser does not support speech recognition. Please use the latest version of Chrome, Edge, Safari or Opera");
+            alert('Sorry, your browser does not support speech recognition. Please use the latest version of Chrome, Edge, Safari or Opera');
             let message = {
-                name: "NAO",
-                message: "transcript:" + ""
+                name: 'NAO',
+                message: 'transcript:' + '',
             };
-            this.sendMessage("robot:" + JSON.stringify(message));
+            this.sendMessage('robot:' + JSON.stringify(message));
         }
     }
 }
 
 async function waitFor(predicate: () => boolean, interval: number, timeout: number): Promise<void> {
-    const start = Date.now()
+    const start = Date.now();
     return new Promise((resolve, reject) => {
         function check() {
             return setTimeout(() => {
                 if (predicate()) {
                     resolve();
-                } else if ((Date.now() - start) > timeout) {
-                    reject()
+                } else if (Date.now() - start > timeout) {
+                    reject();
                 } else {
                     check();
                 }
@@ -307,10 +316,8 @@ class WebotsSimulationController {
     private webotsSimulation: WebotsSimulation;
 
     async init(sourceCode) {
-
         $('#simEditButtons, #canvasDiv, #simRobot, #simValues').hide();
         $('#webotsDiv, #simButtons').show();
-
 
         if (!this.webotsSimulation) {
             this.prepareWebots();
@@ -321,15 +328,14 @@ class WebotsSimulationController {
             try {
                 await this.wasmLoaded();
             } catch (e) {
-                console.error("Could not load webots simulation", e);
+                console.error('Could not load webots simulation', e);
                 return;
             }
 
             this.webotsSimulation = new WebotsSimulation(WebotsSimulationController.createWebotsDiv(), webots);
         }
 
-        this.webotsSimulation.start(guiStateController.getWebotsUrl(), sourceCode)
-
+        this.webotsSimulation.start(guiStateController.getWebotsUrl(), sourceCode);
     }
 
     run(sourceCode) {
@@ -382,13 +388,12 @@ class WebotsSimulationController {
     }
 
     private static prepareModuleForWebots() {
-        if (!window.hasOwnProperty("Module")) {
+        if (!window.hasOwnProperty('Module')) {
             window['Module'] = [];
         }
-        window['Module']['locateFile'] = function(path, prefix) {
+        window['Module']['locateFile'] = function (path, prefix) {
             // if it's a data file, use a custom dir
-            if (path.endsWith(".data"))
-                return window.location.origin + "/js/libs/webots/" + path;
+            if (path.endsWith('.data')) return window.location.origin + '/js/libs/webots/' + path;
 
             // otherwise, use the default, the prefix (JS file's dir) + the path
             return prefix + path;
@@ -396,4 +401,4 @@ class WebotsSimulationController {
     }
 }
 
-export = new WebotsSimulationController()
+export = new WebotsSimulationController();

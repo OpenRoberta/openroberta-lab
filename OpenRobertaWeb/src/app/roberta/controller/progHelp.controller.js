@@ -1,4 +1,3 @@
-
 import * as MSG from 'message';
 import * as LOG from 'log';
 import * as UTIL from 'util';
@@ -11,7 +10,7 @@ const INITIAL_WIDTH = 0.3;
 var blocklyWorkspace;
 var currentHelp;
 /**
- * 
+ *
  */
 function init() {
     blocklyWorkspace = GUISTATE_C.getBlocklyWorkspace();
@@ -22,10 +21,10 @@ function init() {
 function initView() {
     $('#helpContent').remove();
 
-    var loadHelpFile = function(helpFileName) {
+    var loadHelpFile = function (helpFileName) {
         var url = '../help/' + helpFileName;
-        $('#helpDiv').load(url, function(response, status, xhr) {
-            if (status == "error") {
+        $('#helpDiv').load(url, function (response, status, xhr) {
+            if (status == 'error') {
                 $('#helpButton').hide();
             } else {
                 $('#helpButton').show();
@@ -48,8 +47,8 @@ export { init, initView };
 
 function initEvents() {
     $('#helpButton').off('click touchend');
-    $('#helpButton').onWrap('click touchend', function(event) {
-        if ($('#helpButton').is(":visible")) {
+    $('#helpButton').onWrap('click touchend', function (event) {
+        if ($('#helpButton').is(':visible')) {
             toggleHelp();
         }
         return false;
@@ -67,20 +66,19 @@ function toggleHelp() {
             $('.help.expert').show();
         }
         var robotGroup = GUISTATE_C.findGroup(GUISTATE_C.getRobot());
-        var exludeClass = "".concat(".help.not", robotGroup.charAt(0).toUpperCase(), robotGroup.slice(1));
+        var exludeClass = ''.concat('.help.not', robotGroup.charAt(0).toUpperCase(), robotGroup.slice(1));
         $(exludeClass).hide();
         if (currentHelp != GUISTATE_C.getRobotGroup() + '_' + GUISTATE_C.getLanguage().toLowerCase()) {
             init();
         }
-        $('#blockly').openRightView('help', INITIAL_WIDTH, function() {
+        $('#blockly').openRightView('help', INITIAL_WIDTH, function () {
             if (Blockly.selected) {
                 var block = Blockly.selected.type;
                 $('#' + block).addClass('selectedHelp');
                 $('#helpContent').scrollTo('#' + block, 1000, {
-                    offset : -10,
+                    offset: -10,
                 });
             }
         });
     }
 }
-

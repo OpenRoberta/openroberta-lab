@@ -41,7 +41,7 @@ try {
 }
 
 function processDirectory() {
-    FS.readdir(baseDirectory, function(err, files: string[]) {
+    FS.readdir(baseDirectory, function (err, files: string[]) {
         if (err === null || err === undefined) {
             for (let file of files) {
                 if (file.match(/^.*\.xml$/)) {
@@ -59,8 +59,8 @@ function processDirectory() {
 }
 
 /**
-* run the operations, that are stored in file '<fileName>.json'
-*/
+ * run the operations, that are stored in file '<fileName>.json'
+ */
 function processOps(fileName: string) {
     if (fileName === null || fileName === undefined) {
         printResult();
@@ -70,7 +70,14 @@ function processOps(fileName: string) {
     try {
         const generatedCodeAsString = FS.readFileSync(baseDirectory + fileName + '.json', 'utf8');
         const generatedCode = JSON.parse(generatedCodeAsString);
-        const interpreter = new Interpreter(generatedCode, new RobotWeDoBehaviourTest(showOpLog, showDebug), function() { callbackOnTermination(fileName); }, []);
+        const interpreter = new Interpreter(
+            generatedCode,
+            new RobotWeDoBehaviourTest(showOpLog, showDebug),
+            function () {
+                callbackOnTermination(fileName);
+            },
+            []
+        );
         while (!interpreter.isTerminated()) {
             interpreter.run(new Date().getTime() + MAX_MSEC_TO_RUN);
         }
@@ -82,16 +89,19 @@ function processOps(fileName: string) {
 }
 
 /**
-* called, when the program has terminated
-*/
+ * called, when the program has terminated
+ */
 function callbackOnTermination(fileName: string) {
     p('program has terminated');
-    const resultLines = U.getInfoResult().trim().split(/[\r\n]+/);
+    const resultLines = U.getInfoResult()
+        .trim()
+        .split(/[\r\n]+/);
     const xmlAsString = FS.readFileSync(baseDirectory + fileName + '.xml', 'utf8');
     const matchArray = xmlAsString.match(/START-RESULT(.*)END-RESULT/);
 
     if (matchArray === null || showResult) {
-        const headerMsg = MARK + (matchArray === null ? ' no expected results found in the blockly program description. ' : ' ') + 'The results assembled are: ' + MARK;
+        const headerMsg =
+            MARK + (matchArray === null ? ' no expected results found in the blockly program description. ' : ' ') + 'The results assembled are: ' + MARK;
         p(headerMsg);
         p('ROBOT');
         p('WeDo');
@@ -101,13 +111,17 @@ function callbackOnTermination(fileName: string) {
         }
         p('END-RESULT');
         p(MARK + ' end of results assembled ' + MARK);
-    };
+    }
 
     var result = 'ok';
     if (matchArray === null) {
-        result = "NO-DATA";
+        result = 'NO-DATA';
     } else {
-        const expectedResult = matchArray[1].replace(/&amp;/g, '&').replace(/&nbsp;/g, ' ').replace(/&quot;/g, '"').replace(/&lt;[a-zA-Z;\/]*&gt;/g, '\n');
+        const expectedResult = matchArray[1]
+            .replace(/&amp;/g, '&')
+            .replace(/&nbsp;/g, ' ')
+            .replace(/&quot;/g, '"')
+            .replace(/&lt;[a-zA-Z;\/]*&gt;/g, '\n');
         const expectedLinesRaw = expectedResult.trim().split(/[\r\n]+/);
         const expectedLines = [];
         for (let line of expectedLinesRaw) {

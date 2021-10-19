@@ -1,4 +1,3 @@
-
 import * as UTIL from 'util';
 import * as LOG from 'log';
 import * as MSG from 'message';
@@ -24,15 +23,18 @@ function makeRequest() {
     vendorList = [];
     productList = [];
     robotList = [];
-    COMM.listRobotsFromAgent(function(text) {
-        //console.log("listing robots");
-    }, function(response) {
-        agentPortList = response.responseText;
-    }, function() {
-    });
+    COMM.listRobotsFromAgent(
+        function (text) {
+            //console.log("listing robots");
+        },
+        function (response) {
+            agentPortList = response.responseText;
+        },
+        function () {}
+    );
     try {
         jsonObject = JSON.parse(agentPortList);
-        jsonObject.forEach(function(port) {
+        jsonObject.forEach(function (port) {
             if (GUISTATE_C.getVendor() === port['IdVendor'].toLowerCase()) {
                 portList.push(port['Name']);
                 vendorList.push(port['IdVendor']);
@@ -41,10 +43,10 @@ function makeRequest() {
             }
         });
     } catch (e) {
-        GUISTATE_C.setRobotPort("");
+        GUISTATE_C.setRobotPort('');
     }
     if (portList.indexOf(GUISTATE_C.getRobotPort()) < 0) {
-        GUISTATE_C.setRobotPort("");
+        GUISTATE_C.setRobotPort('');
     }
     if (portList.length == 1) {
         ROBOT_C.setPort(portList[0]);
@@ -66,20 +68,20 @@ function listRobotStop() {
 }
 
 function init() {
-    robotSocket = GUISTATE_C.getSocket()
+    robotSocket = GUISTATE_C.getSocket();
     if (robotSocket == null || GUISTATE_C.getIsAgent() == false) {
         robotSocket = IO('ws://127.0.0.1:8991/');
         GUISTATE_C.setSocket(robotSocket);
         GUISTATE_C.setIsAgent(true);
         $('#menuConnect').parent().addClass('disabled');
-        robotSocket.on('connect_error', function(err) {
+        robotSocket.on('connect_error', function (err) {
             GUISTATE_C.setIsAgent(false);
         });
 
-        robotSocket.on('connect', function() {
+        robotSocket.on('connect', function () {
             robotSocket.emit('command', 'log on');
             GUISTATE_C.setIsAgent(true);
-            window.setInterval(function() {
+            window.setInterval(function () {
                 portList = [];
                 vendorList = [];
                 productList = [];
@@ -93,11 +95,11 @@ function init() {
          * VID: 0x10c4, PID: 0xea60 Mbot: /dev/ttyUSB0, VID: 0x1a86, PID:
          * 0x7523 ArduinoUno: /dev/ttyACM0, VID: 0x2a03, PID: 0x0043
          */
-        robotSocket.on('message', function(data) {
+        robotSocket.on('message', function (data) {
             if (data.includes('"Network": false')) {
                 var robot;
                 jsonObject = JSON.parse(data);
-                jsonObject['Ports'].forEach(function(port) {
+                jsonObject['Ports'].forEach(function (port) {
                     if (GUISTATE_C.getVendor() === port['VendorID'].toLowerCase()) {
                         portList.push(port['Name']);
                         vendorList.push(port['VendorID']);
@@ -107,15 +109,15 @@ function init() {
                 });
                 GUISTATE_C.setIsAgent(true);
 
-                robotSocket.on('connect_error', function(err) {
+                robotSocket.on('connect_error', function (err) {
                     GUISTATE_C.setIsAgent(false);
                     $('#menuConnect').parent().removeClass('disabled');
                 });
                 if (portList.indexOf(GUISTATE_C.getRobotPort()) < 0) {
-                    if (GUISTATE_C.getRobotPort() != "") {
+                    if (GUISTATE_C.getRobotPort() != '') {
                         //MSG.displayMessage(Blockly.Msg["MESSAGE_ROBOT_DISCONNECTED"], 'POPUP', '');
                     }
-                    GUISTATE_C.setRobotPort("");
+                    GUISTATE_C.setRobotPort('');
                 }
                 if (portList.length == 1) {
                     ROBOT_C.setPort(portList[0]);
@@ -127,16 +129,14 @@ function init() {
             }
         });
 
-        robotSocket.on('disconnect', function() {
-        });
+        robotSocket.on('disconnect', function () {});
 
-        robotSocket.on('error', function(err) {
-        });
+        robotSocket.on('error', function (err) {});
     }
 }
 
 function closeConnection() {
-    robotSocket = GUISTATE_C.getSocket()
+    robotSocket = GUISTATE_C.getSocket();
 
     if (robotSocket != null) {
         robotSocket.disconnect();
@@ -153,11 +153,10 @@ function getRobotList() {
 }
 
 function uploadProgram(programHex, robotPort) {
-    COMM.sendProgramHexToAgent(programHex, robotPort, GUISTATE_C.getProgramName(), GUISTATE_C.getSignature(), GUISTATE_C.getCommandLine(), function() {
-        LOG.text("Create agent upload success");
+    COMM.sendProgramHexToAgent(programHex, robotPort, GUISTATE_C.getProgramName(), GUISTATE_C.getSignature(), GUISTATE_C.getCommandLine(), function () {
+        LOG.text('Create agent upload success');
         $('#menuRunProg').parent().removeClass('disabled');
         $('#runOnBrick').parent().removeClass('disabled');
     });
 }
 export { listRobotStart, listRobotStop, init, closeConnection, getPortList, getRobotList, uploadProgram };
-

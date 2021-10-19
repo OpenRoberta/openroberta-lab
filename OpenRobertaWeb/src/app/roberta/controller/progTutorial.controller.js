@@ -26,10 +26,10 @@ function init() {
 }
 
 function initEvents() {
-    $(".menu.tutorial").onWrap("click", function(event) {
+    $('.menu.tutorial').onWrap('click', function (event) {
         startTutorial(event.target.id);
     });
-    $('#tutorialButton').onWrap('click touchend', function() {
+    $('#tutorialButton').onWrap('click touchend', function () {
         toggleTutorial();
         return false;
     });
@@ -63,9 +63,17 @@ function loadFromTutorial(tutId) {
 
         // create this tutorial navigation
         for (var i = 0; i < tutorial.step.length; i++) {
-            $('#tutorial-list').append($('<li>').attr('class', 'step').append($('<a>').attr({
-                'href' : '#'
-            }).append(i + 1)));
+            $('#tutorial-list').append(
+                $('<li>')
+                    .attr('class', 'step')
+                    .append(
+                        $('<a>')
+                            .attr({
+                                href: '#',
+                            })
+                            .append(i + 1)
+                    )
+            );
         }
         $('#tutorial-list li:last-child').addClass('last');
         $('#tutorial-header').html(tutorial.name);
@@ -87,20 +95,19 @@ function loadFromTutorial(tutId) {
 export { init, loadFromTutorial };
 
 function initStepEvents() {
-    $("#tutorial-list.nav li.step a").on("click", function() {
+    $('#tutorial-list.nav li.step a').on('click', function () {
         Blockly.hideChaff();
         step = $(this).text() - 2;
         nextStep();
         openTutorialView();
     });
-    $("#tutorialEnd").oneWrap("click", function() {
+    $('#tutorialEnd').oneWrap('click', function () {
         exitTutorial();
     });
 }
 
 function showOverview() {
-    if (!tutorial.overview)
-        return;
+    if (!tutorial.overview) return;
     var html = tutorial.overview.description;
     html += '</br></br><b>Lernziel: </b>';
     html += tutorial.overview.goal;
@@ -112,11 +119,11 @@ function showOverview() {
     html += '</br><span class="typcn typcn-group"/>&emsp;&emsp;';
     html += tutorial.age;
     html += '</br><span class="typcn typcn-simulation"/>&emsp;&emsp;';
-    html += tutorial.sim && (tutorial.sim === "sim" || tutorial.sim === 1) ? "ja" : "nein";
+    html += tutorial.sim && (tutorial.sim === 'sim' || tutorial.sim === 1) ? 'ja' : 'nein';
     if (tutorial.level) {
         html += '</br><span class="typcn typcn-mortar-board"/>&emsp;&emsp;';
-        var maxLevel = isNaN(tutorial.level) ? (tutorial.level).split("/")[1] : 3;
-        var thisLevel = isNaN(tutorial.level) ? (tutorial.level).split("/")[0] : tutorial.level;
+        var maxLevel = isNaN(tutorial.level) ? tutorial.level.split('/')[1] : 3;
+        var thisLevel = isNaN(tutorial.level) ? tutorial.level.split('/')[0] : tutorial.level;
         for (var i = 1; i <= maxLevel; i++) {
             if (i <= thisLevel) {
                 html += '<span class="typcn typcn-star-full-outline"/>';
@@ -130,19 +137,30 @@ function showOverview() {
     $('#tutorialOverviewText').html(html);
     $('#tutorialOverviewTitle').html(tutorial.name);
     $('#tutorialAbort').off('click.dismiss.bs.modal');
-    $('#tutorialAbort').onWrap('click.dismiss.bs.modal', function(event) {
-        exitTutorial();
-    }, 'tutorial exit');
+    $('#tutorialAbort').onWrap(
+        'click.dismiss.bs.modal',
+        function (event) {
+            exitTutorial();
+        },
+        'tutorial exit'
+    );
     $('#tutorialContinue').off('click.dismiss.bs.modal');
-    $('#tutorialContinue').onWrap('click.dismiss.bs.modal', function(event) {
-        LOG.info('tutorial executed ' + tutorial.index + tutorialId);
-    }, 'tuorial continue');
+    $('#tutorialContinue').onWrap(
+        'click.dismiss.bs.modal',
+        function (event) {
+            LOG.info('tutorial executed ' + tutorial.index + tutorialId);
+        },
+        'tuorial continue'
+    );
 
-    $('#tutorialOverview').modal({
-        backdrop : 'static',
-        keyboard : false,
-        show : true
-    }, 'tutorial overview');
+    $('#tutorialOverview').modal(
+        {
+            backdrop: 'static',
+            keyboard: false,
+            show: true,
+        },
+        'tutorial overview'
+    );
 }
 
 function createInstruction() {
@@ -173,37 +191,56 @@ function createInstruction() {
             }
 
             if (tutorial.step[step].solution) {
-                $('#tutorialContent').append($('<div>').attr('id', 'helpDiv').append($('<button>', {
-                    'text' : 'Hilfe',
-                    'id' : 'quizHelp',
-                    'class' : 'btn test',
-                    'click' : function() {
-                        showSolution();
-                    }
-                })));
+                $('#tutorialContent').append(
+                    $('<div>')
+                        .attr('id', 'helpDiv')
+                        .append(
+                            $('<button>', {
+                                text: 'Hilfe',
+                                id: 'quizHelp',
+                                class: 'btn test',
+                                click: function () {
+                                    showSolution();
+                                },
+                            })
+                        )
+                );
             }
 
-            if (step == maxSteps - 1) { // last step
-                $('#tutorialContent').append($('<div>').attr('class', 'quiz continue').append($('<button>', {
-                    'text' : 'Tutorial beenden',
-                    'class' : 'btn',
-                    'click' : function() {
-                        MSG.displayMessage(tutorial.end, "POPUP", "");
-                        $(".modal").oneWrap('hide.bs.modal', function(e) {
-                            $("#tutorialEnd").clickWrap();
-                            return false;
-                        });
-                        return false;
-                    }
-                })));
+            if (step == maxSteps - 1) {
+                // last step
+                $('#tutorialContent').append(
+                    $('<div>')
+                        .attr('class', 'quiz continue')
+                        .append(
+                            $('<button>', {
+                                text: 'Tutorial beenden',
+                                class: 'btn',
+                                click: function () {
+                                    MSG.displayMessage(tutorial.end, 'POPUP', '');
+                                    $('.modal').oneWrap('hide.bs.modal', function (e) {
+                                        $('#tutorialEnd').clickWrap();
+                                        return false;
+                                    });
+                                    return false;
+                                },
+                            })
+                        )
+                );
             } else {
-                $('#tutorialContent').append($('<div>').attr('class', 'quiz continue').append($('<button>', {
-                    'text' : 'weiter',
-                    'class' : 'btn',
-                    'click' : function() {
-                        createQuiz();
-                    }
-                })));
+                $('#tutorialContent').append(
+                    $('<div>')
+                        .attr('class', 'quiz continue')
+                        .append(
+                            $('<button>', {
+                                text: 'weiter',
+                                class: 'btn',
+                                click: function () {
+                                    createQuiz();
+                                },
+                            })
+                        )
+                );
             }
         } else {
             // apparently a step without an instruction -> go directly to the quiz
@@ -216,33 +253,50 @@ function createQuiz() {
     if (tutorial.step[step].quiz) {
         $('#tutorialContent').html('');
         $('#tutorialContent').append($('<div>').attr('class', 'quiz content'));
-        tutorial.step[step].quiz.forEach(function(quiz, iQuiz) {
+        tutorial.step[step].quiz.forEach(function (quiz, iQuiz) {
             $('#tutorialContent .quiz.content').append($('<div>').attr('class', 'quiz question').append(quiz.question));
             var answers = shuffle(quiz.answer);
-            quiz.answer.forEach(function(answer, iAnswer) {
+            quiz.answer.forEach(function (answer, iAnswer) {
                 var correct = answer.charAt(0) !== '!';
                 if (!correct) {
                     answer = answer.substr(1);
                 }
-                $('#tutorialContent .quiz.content').append($('<label>').attr('class', 'quiz answer').append(answer).append($('<input>', {
-                    'type' : 'checkbox',
-                    'class' : 'quiz',
-                    'name' : 'answer_' + iAnswer,
-                    'id' : iQuiz + '_' + iAnswer,
-                    'value' : correct,
-                })).append($('<span>', {
-                    'for' : iQuiz + '_' + iAnswer,
-                    'class' : 'checkmark quiz'
-                })));
+                $('#tutorialContent .quiz.content').append(
+                    $('<label>')
+                        .attr('class', 'quiz answer')
+                        .append(answer)
+                        .append(
+                            $('<input>', {
+                                type: 'checkbox',
+                                class: 'quiz',
+                                name: 'answer_' + iAnswer,
+                                id: iQuiz + '_' + iAnswer,
+                                value: correct,
+                            })
+                        )
+                        .append(
+                            $('<span>', {
+                                for: iQuiz + '_' + iAnswer,
+                                class: 'checkmark quiz',
+                            })
+                        )
+                );
             });
         });
-        $('#tutorialContent .quiz.content').append($('<div>').attr('class', 'quiz footer').attr('id', 'quizFooter').append($('<button/>', {
-            text : 'prüfen!',
-            'class' : 'btn test left',
-            click : function() {
-                checkQuiz();
-            }
-        })));
+        $('#tutorialContent .quiz.content').append(
+            $('<div>')
+                .attr('class', 'quiz footer')
+                .attr('id', 'quizFooter')
+                .append(
+                    $('<button/>', {
+                        text: 'prüfen!',
+                        class: 'btn test left',
+                        click: function () {
+                            checkQuiz();
+                        },
+                    })
+                )
+        );
     } else {
         // apparently no quiz provided, go to next step
         nextStep();
@@ -252,52 +306,68 @@ function createQuiz() {
 function nextStep() {
     step += 1;
     if (step < maxSteps) {
-        $("#tutorial-list .active").removeClass("active");
-        $("#tutorial-list .preActive").removeClass("preActive");
-        $("#tutorial-list .step a:contains('" + (step + 1) + "')").parent().addClass("active");
-        $("#tutorial-list .step a:contains('" + (step) + "')").parent().addClass("preActive");
+        $('#tutorial-list .active').removeClass('active');
+        $('#tutorial-list .preActive').removeClass('preActive');
+        $("#tutorial-list .step a:contains('" + (step + 1) + "')")
+            .parent()
+            .addClass('active');
+        $("#tutorial-list .step a:contains('" + step + "')")
+            .parent()
+            .addClass('preActive');
         createInstruction();
         if (step == maxSteps - 1 && quiz) {
             var finalMaxCredits = 0;
-            for (var i = maxCredits.length; i--;) {
+            for (var i = maxCredits.length; i--; ) {
                 if (maxCredits[i]) {
                     finalMaxCredits += maxCredits[i];
                 }
             }
             var finalCredits = 0;
-            for (var i = credits.length; i--;) {
+            for (var i = credits.length; i--; ) {
                 if (credits[i]) {
-                    finalCredits += credits[i]
+                    finalCredits += credits[i];
                 }
             }
             var percent = 0;
             if (finalMaxCredits !== 0) {
-                percent = Math.round(100 / finalMaxCredits * finalCredits);
+                percent = Math.round((100 / finalMaxCredits) * finalCredits);
             }
             var thumbs = Math.round((percent - 50) / 17) + 1;
-            var $quizFooter = $('<div>').attr('class', 'quiz footer').attr('id', 'quizFooter').append(finalCredits + ' von ' + finalMaxCredits
-                    + ' Antworten oder ' + percent + '% sind richtig! ');
+            var $quizFooter = $('<div>')
+                .attr('class', 'quiz footer')
+                .attr('id', 'quizFooter')
+                .append(finalCredits + ' von ' + finalMaxCredits + ' Antworten oder ' + percent + '% sind richtig! ');
             $quizFooter.insertBefore($('.quiz.continue'));
-            $('#quizFooter').append($('<span>', {
-                'id' : 'quizResult'
-            }));
+            $('#quizFooter').append(
+                $('<span>', {
+                    id: 'quizResult',
+                })
+            );
             if (percent > 0) {
-                $('#quizResult').append($('<span>', {
-                    'class' : 'typcn typcn-thumbs-up'
-                }));
+                $('#quizResult').append(
+                    $('<span>', {
+                        class: 'typcn typcn-thumbs-up',
+                    })
+                );
             }
             if (percent == 100) {
-                $('#quizResult').append($('<span>', {
-                    'class' : 'typcn typcn-thumbs-up'
-                }));
-                $('#quizResult').append($('<span>', {
-                    'class' : 'typcn typcn-thumbs-up'
-                }));
+                $('#quizResult').append(
+                    $('<span>', {
+                        class: 'typcn typcn-thumbs-up',
+                    })
+                );
+                $('#quizResult').append(
+                    $('<span>', {
+                        class: 'typcn typcn-thumbs-up',
+                    })
+                );
                 $('#quizResult').append(' Spitze!');
             } else if (percent > 80) {
-                $('#quizResult').append($('<span>', {
-                    'class' : 'typcn typcn-thumbs-up'
-                }));
+                $('#quizResult').append(
+                    $('<span>', {
+                        class: 'typcn typcn-thumbs-up',
+                    })
+                );
                 $('#quizResult').append(' Super!');
             } else if (percent > 60) {
                 $('#quizResult').append(' Gut gemacht!');
@@ -308,14 +378,16 @@ function nextStep() {
             }
         }
     } else {
-        // end of the tutorial                
+        // end of the tutorial
     }
 }
 
 function showSolution() {
-    $('#helpDiv').append($('<div>').append(tutorial.step[step].solution).attr({
-        'class' : 'imgSol'
-    }));
+    $('#helpDiv').append(
+        $('<div>').append(tutorial.step[step].solution).attr({
+            class: 'imgSol',
+        })
+    );
     $('#quizHelp').remove();
 }
 
@@ -324,7 +396,7 @@ function checkQuiz() {
     var countChecked = 0;
     var totalQuestions = $('.quiz.question').length;
     var totalCorrect = $('.quiz.answer [value=true').length;
-    $('.quiz input').each(function(i, elem) {
+    $('.quiz input').each(function (i, elem) {
         $this = $(this);
         $label = $('label>span[for="' + $this.attr('id') + '"]');
         if ($(this).is(':checked')) {
@@ -341,13 +413,15 @@ function checkQuiz() {
     });
     $('#quizFooter').html('');
     if (countCorrect !== totalCorrect) {
-        $('#quizFooter').append($('<button/>', {
-            text : 'nochmal',
-            'class' : 'btn test',
-            click : function() {
-                createQuiz();
-            }
-        }));
+        $('#quizFooter').append(
+            $('<button/>', {
+                text: 'nochmal',
+                class: 'btn test',
+                click: function () {
+                    createQuiz();
+                },
+            })
+        );
         var confirmText;
         if (countChecked == 0) {
             confirmText = 'Bitte kreuze mindestens eine Anwort an.';
@@ -356,24 +430,31 @@ function checkQuiz() {
         } else {
             confirmText = countCorrect + ' Anworten von ' + totalCorrect + ' sind richtig!';
         }
-        $('#quizFooter').append($('<span>', {
-            text : confirmText,
-        }));
+        $('#quizFooter').append(
+            $('<span>', {
+                text: confirmText,
+            })
+        );
     }
-    $('#tutorialContent').append($('<div>').attr('class', 'quiz continue').append($('<button>', {
-        'text' : 'weiter',
-        'class' : 'btn',
-        'click' : function() {
-            nextStep();
-        }
-    })));
+    $('#tutorialContent').append(
+        $('<div>')
+            .attr('class', 'quiz continue')
+            .append(
+                $('<button>', {
+                    text: 'weiter',
+                    class: 'btn',
+                    click: function () {
+                        nextStep();
+                    },
+                })
+            )
+    );
     credits[step] = countCorrect;
     maxCredits[step] = totalCorrect;
 }
 
 function shuffle(answers) {
-    for (var j, x, i = answers.length; i; j = Math.floor(Math.random() * i), x = answers[--i], answers[i] = answers[j], answers[j] = x)
-        ;
+    for (var j, x, i = answers.length; i; j = Math.floor(Math.random() * i), x = answers[--i], answers[i] = answers[j], answers[j] = x);
     return answers;
 }
 
@@ -420,4 +501,3 @@ function exitTutorial() {
     Blockly.mainWorkspace.options.maxBlocks = undefined;
     $('#tabTutorialList').clickWrap();
 }
-

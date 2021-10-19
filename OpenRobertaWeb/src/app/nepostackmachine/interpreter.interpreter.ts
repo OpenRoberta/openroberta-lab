@@ -1,13 +1,12 @@
-import { ARobotBehaviour } from "./interpreter.aRobotBehaviour";
-import { State } from "./interpreter.state";
-import * as C from "./interpreter.constants";
-import * as U from "./interpreter.util";
-import * as PG from "neuralnetwork.playground";
+import { ARobotBehaviour } from './interpreter.aRobotBehaviour';
+import { State } from './interpreter.state';
+import * as C from './interpreter.constants';
+import * as U from './interpreter.util';
+import * as PG from 'neuralnetwork.playground';
 
 declare var stackmachineJsHelper;
 
 export class Interpreter {
-
     public breakpoints: any[];
     private terminated = false;
     private callbackOnTermination = undefined;
@@ -25,7 +24,7 @@ export class Interpreter {
      * . @param generatedCode argument contains the operations and the function definitions
      * . @param robotBehaviour implementation of the ARobotBehaviour class
      * . @param cbOnTermination is called when the program has terminated
-    */
+     */
     constructor(generatedCode: any, r: ARobotBehaviour, cbOnTermination: () => void, simBreakpoints: any[]) {
         this.terminated = false;
         this.callbackOnTermination = cbOnTermination;
@@ -68,7 +67,7 @@ export class Interpreter {
     public terminate() {
         this.terminated = true;
         this.callbackOnTermination();
-        this.robotBehaviour.close()
+        this.robotBehaviour.close();
         this.state.removeHighlights([]);
     }
 
@@ -88,13 +87,13 @@ export class Interpreter {
 
     /** Sets the debug mode*/
     public setDebugMode(mode) {
-        this.state.setDebugMode(mode)
+        this.state.setDebugMode(mode);
         if (mode) {
-            stackmachineJsHelper.getJqueryObject("#blockly").addClass("debug");
+            stackmachineJsHelper.getJqueryObject('#blockly').addClass('debug');
             this.state.addHighlights(this.breakpoints);
         } else {
             this.state.removeHighlights(this.breakpoints);
-            stackmachineJsHelper.getJqueryObject("#blockly").removeClass("debug");
+            stackmachineJsHelper.getJqueryObject('#blockly').removeClass('debug');
         }
     }
 
@@ -107,8 +106,6 @@ export class Interpreter {
     public removeEvent(mode) {
         this.events[mode] = false;
     }
-
-
 
     /**
      * the central interpreter. It is a stack machine interpreting operations given as JSON objects. The operations are all IMMUTABLE. It
@@ -155,7 +152,7 @@ export class Interpreter {
             if (this.terminated) {
                 // termination either requested by the client or by executing 'stop' or after last statement
                 this.robotBehaviour.close();
-                this.callbackOnTermination()
+                this.callbackOnTermination();
                 return 0;
             }
 
@@ -256,7 +253,7 @@ export class Interpreter {
                     this.evalExpr(stmt);
                     break;
                 case C.GET_SAMPLE: {
-                    this.robotBehaviour.getSample(this.state, stmt[C.NAME], stmt[C.GET_SAMPLE], stmt[C.PORT], stmt[C.MODE])
+                    this.robotBehaviour.getSample(this.state, stmt[C.NAME], stmt[C.GET_SAMPLE], stmt[C.PORT], stmt[C.MODE]);
                     break;
                 }
                 case C.NNSTEP_STMT:
@@ -264,7 +261,7 @@ export class Interpreter {
                     break;
                 case C.LED_ON_ACTION: {
                     const color = this.state.pop();
-                    this.robotBehaviour.ledOnAction(stmt[C.NAME], stmt[C.PORT], color)
+                    this.robotBehaviour.ledOnAction(stmt[C.NAME], stmt[C.PORT], color);
                     break;
                 }
                 case C.RETURN:
@@ -285,8 +282,8 @@ export class Interpreter {
                     const durationType = stmt[C.MOTOR_DURATION];
                     if (durationType === C.DEGREE || durationType === C.DISTANCE || durationType === C.ROTATIONS) {
                         // if durationType is defined, then duration must be defined, too. Thus, it is never 'undefined' :-)
-                        let rotationPerSecond = C.MAX_ROTATION * Math.abs(speed) / 100.0;
-                        duration = duration / rotationPerSecond * 1000;
+                        let rotationPerSecond = (C.MAX_ROTATION * Math.abs(speed)) / 100.0;
+                        duration = (duration / rotationPerSecond) * 1000;
                         if (durationType === C.DEGREE) {
                             duration /= 360.0;
                         }
@@ -386,7 +383,7 @@ export class Interpreter {
                 case C.SHOW_TEXT_ACTION: {
                     const text = this.state.pop();
                     const name = stmt[C.NAME];
-                    if (name === "ev3") {
+                    if (name === 'ev3') {
                         const x = this.state.pop();
                         const y = this.state.pop();
                         this.robotBehaviour.showTextActionPosition(text, x, y);
@@ -396,7 +393,7 @@ export class Interpreter {
                 }
                 case C.SHOW_IMAGE_ACTION: {
                     let image;
-                    if (stmt[C.NAME] == "ev3") {
+                    if (stmt[C.NAME] == 'ev3') {
                         image = stmt[C.IMAGE];
                     } else {
                         image = this.state.pop();
@@ -411,7 +408,7 @@ export class Interpreter {
                 case C.IMAGE_SHIFT_ACTION: {
                     const nShift = this.state.pop();
                     const image = this.state.pop();
-                    if (stmt[C.NAME] === "mbot") {
+                    if (stmt[C.NAME] === 'mbot') {
                         this.state.push(this.shiftImageActionMbot(image, stmt[C.DIRECTION], nShift));
                     } else {
                         this.state.push(this.shiftImageAction(image, stmt[C.DIRECTION], nShift));
@@ -424,7 +421,6 @@ export class Interpreter {
                     const y = this.state.pop();
                     const x = this.state.pop();
                     return [this.robotBehaviour.displaySetPixelBrightnessAction(x, y, b), true];
-
                 }
                 case C.DISPLAY_GET_PIXEL_BRIGHTNESS_ACTION: {
                     const y = this.state.pop();
@@ -434,19 +430,19 @@ export class Interpreter {
                 }
                 case C.LIGHT_ACTION:
                     let color;
-                    if (stmt[C.NAME] === "mbot") {
-                        const rgb = this.state.pop()
-                        color = "rgb(" + rgb[0] + "," + rgb[1] + "," + rgb[2] + ")";
+                    if (stmt[C.NAME] === 'mbot') {
+                        const rgb = this.state.pop();
+                        color = 'rgb(' + rgb[0] + ',' + rgb[1] + ',' + rgb[2] + ')';
                     } else {
-                        color = stmt[C.COLOR]
+                        color = stmt[C.COLOR];
                     }
                     this.robotBehaviour.lightAction(stmt[C.MODE], color, stmt[C.PORT]);
                     return [0, true];
                 case C.STATUS_LIGHT_ACTION:
-                    this.robotBehaviour.statusLightOffAction(stmt[C.NAME], stmt[C.PORT])
+                    this.robotBehaviour.statusLightOffAction(stmt[C.NAME], stmt[C.PORT]);
                     return [0, true];
                 case C.STOP:
-                    U.debug("PROGRAM TERMINATED. stop op");
+                    U.debug('PROGRAM TERMINATED. stop op');
                     this.terminated = true;
                     break;
                 case C.TEXT_JOIN: {
@@ -456,7 +452,7 @@ export class Interpreter {
                         const e = this.state.pop();
                         result[n - i - 1] = e;
                     }
-                    this.state.push(result.join(""));
+                    this.state.push(result.join(''));
                     break;
                 }
                 case C.TIMER_SENSOR_RESET:
@@ -519,7 +515,7 @@ export class Interpreter {
                     }
                     const value = this.state.pop();
                     let list = this.state.pop();
-                    ix = this.getIndex(list, loc, ix)
+                    ix = this.getIndex(list, loc, ix);
                     if (op == C.SET) {
                         list[ix] = value;
                     } else if (op == C.INSERT) {
@@ -554,7 +550,7 @@ export class Interpreter {
                     break;
                 }
                 default:
-                    U.dbcException("invalid stmt op: " + opCode);
+                    U.dbcException('invalid stmt op: ' + opCode);
             }
         }
         return [0, false];
@@ -625,7 +621,7 @@ export class Interpreter {
                         } else if (bool === 'false' || bool === '0' || bool === '') {
                             truthy = false;
                         } else {
-                            truthy = !!bool
+                            truthy = !!bool;
                         }
                         this.state.push(!truthy);
                         break;
@@ -634,7 +630,7 @@ export class Interpreter {
                         this.state.push(-value);
                         break;
                     default:
-                        U.dbcException("invalid unary expr subOp: " + subOp);
+                        U.dbcException('invalid unary expr subOp: ' + subOp);
                 }
                 break;
             }
@@ -660,14 +656,14 @@ export class Interpreter {
                         this.state.push(Infinity);
                         break;
                     default:
-                        throw "Invalid Math Constant Name";
+                        throw 'Invalid Math Constant Name';
                 }
                 break;
             }
             case C.SINGLE_FUNCTION: {
                 const subOp = expr[C.OP];
                 const value = this.state.pop();
-                U.debug('---------- ' + subOp + ' with ' + value)
+                U.debug('---------- ' + subOp + ' with ' + value);
                 switch (subOp) {
                     case 'SQUARE':
                         this.state.push(Math.pow(value, 2));
@@ -721,7 +717,7 @@ export class Interpreter {
                         this.state.push(this.invertImage(value));
                         break;
                     default:
-                        throw "Invalid Function Name";
+                        throw 'Invalid Function Name';
                 }
                 break;
             }
@@ -771,7 +767,7 @@ export class Interpreter {
                         this.state.push(first % value === 0);
                         break;
                     default:
-                        throw "Invalid Math Property Function Name";
+                        throw 'Invalid Math Property Function Name';
                 }
                 break;
             }
@@ -802,7 +798,7 @@ export class Interpreter {
                         break;
 
                     default:
-                        throw "Invalid Math on List Function Name";
+                        throw 'Invalid Math on List Function Name';
                 }
                 break;
             }
@@ -836,54 +832,57 @@ export class Interpreter {
                     case C.LIST_LENGTH:
                         this.state.push(this.state.pop().length);
                         break;
-                    case C.LIST_FIND_ITEM: {
-                        const item = this.state.pop();
-                        const list = this.state.pop();
-                        if (expr[C.POSITION] == C.FIRST) {
-                            this.state.push(list.indexOf(item));
-                        } else {
-                            this.state.push(list.lastIndexOf(item));
+                    case C.LIST_FIND_ITEM:
+                        {
+                            const item = this.state.pop();
+                            const list = this.state.pop();
+                            if (expr[C.POSITION] == C.FIRST) {
+                                this.state.push(list.indexOf(item));
+                            } else {
+                                this.state.push(list.lastIndexOf(item));
+                            }
                         }
-                    }
                         break;
                     case C.GET:
                     case C.REMOVE:
-                    case C.GET_REMOVE: {
-                        const loc = expr[C.POSITION];
-                        let ix = 0;
-                        if (loc != C.LAST && loc != C.FIRST) {
-                            ix = this.state.pop();
+                    case C.GET_REMOVE:
+                        {
+                            const loc = expr[C.POSITION];
+                            let ix = 0;
+                            if (loc != C.LAST && loc != C.FIRST) {
+                                ix = this.state.pop();
+                            }
+                            let list = this.state.pop();
+                            ix = this.getIndex(list, loc, ix);
+                            let v = list[ix];
+                            if (subOp == C.GET_REMOVE || subOp == C.GET) {
+                                this.state.push(v);
+                            }
+                            if (subOp == C.GET_REMOVE || subOp == C.REMOVE) {
+                                list.splice(ix, 1);
+                            }
                         }
-                        let list = this.state.pop();
-                        ix = this.getIndex(list, loc, ix)
-                        let v = list[ix];
-                        if (subOp == C.GET_REMOVE || subOp == C.GET) {
-                            this.state.push(v);
-                        }
-                        if (subOp == C.GET_REMOVE || subOp == C.REMOVE) {
-                            list.splice(ix, 1);
-                        }
-                    }
                         break;
-                    case C.LIST_GET_SUBLIST: {
-                        const position = expr[C.POSITION];
-                        let start_ix;
-                        let end_ix;
-                        if (position[1] != C.LAST) {
-                            end_ix = this.state.pop();
+                    case C.LIST_GET_SUBLIST:
+                        {
+                            const position = expr[C.POSITION];
+                            let start_ix;
+                            let end_ix;
+                            if (position[1] != C.LAST) {
+                                end_ix = this.state.pop();
+                            }
+                            if (position[0] != C.FIRST) {
+                                start_ix = this.state.pop();
+                            }
+                            let list = this.state.pop();
+                            start_ix = this.getIndex(list, position[0], start_ix);
+                            end_ix = this.getIndex(list, position[1], end_ix) + 1;
+                            this.state.push(list.slice(start_ix, end_ix));
                         }
-                        if (position[0] != C.FIRST) {
-                            start_ix = this.state.pop();
-                        }
-                        let list = this.state.pop();
-                        start_ix = this.getIndex(list, position[0], start_ix);
-                        end_ix = this.getIndex(list, position[1], end_ix) + 1;
-                        this.state.push(list.slice(start_ix, end_ix));
-                    }
                         break;
 
                     default:
-                        throw "Invalid Op on List Function Name";
+                        throw 'Invalid Op on List Function Name';
                 }
 
                 break;
@@ -897,7 +896,7 @@ export class Interpreter {
             }
 
             default:
-                U.dbcException("invalid expr op: " + kind);
+                U.dbcException('invalid expr op: ' + kind);
         }
     }
 
@@ -932,7 +931,7 @@ export class Interpreter {
                         return true;
                     }
                 default:
-                    U.dbcException("invalid binary expr supOp for array-like structures: " + subOp);
+                    U.dbcException('invalid binary expr supOp for array-like structures: ' + subOp);
             }
         } else if (leftIsArray || rightIsArray) {
             return false;
@@ -967,7 +966,7 @@ export class Interpreter {
                 case C.MOD:
                     return left % right;
                 default:
-                    U.dbcException("invalid binary expr supOp: " + subOp);
+                    U.dbcException('invalid binary expr supOp: ' + subOp);
             }
         }
     }
@@ -1014,9 +1013,8 @@ export class Interpreter {
      * . @param value to be checked
      */
     private isWhole(value: number) {
-        return Number(value) === value && value % 1 === 0
+        return Number(value) === value && value % 1 === 0;
     }
-
 
     private min(values: Array<number>): number {
         return Math.min.apply(null, values);
@@ -1038,7 +1036,7 @@ export class Interpreter {
     private median(values: Array<number>): number {
         values.sort((a, b) => a - b);
         const median = (values[(values.length - 1) >> 1] + values[values.length >> 1]) / 2;
-        return Number(median.toFixed(2))
+        return Number(median.toFixed(2));
     }
 
     private std(values: Array<number>): number {
@@ -1047,7 +1045,6 @@ export class Interpreter {
         const squareDiffs = diffs.map((diff) => diff * diff);
         const avgSquareDiff = this.mean(squareDiffs);
         return Number(Math.sqrt(avgSquareDiff).toFixed(2));
-
     }
 
     private getRandomInt(max: number): number {
@@ -1085,37 +1082,37 @@ export class Interpreter {
     private shiftImageAction(image: number[][], direction: string, nShift: number): number[][] {
         nShift = Math.round(nShift);
         var shift = {
-            down: function() {
+            down: function () {
                 image.pop();
                 image.unshift([0, 0, 0, 0, 0]);
             },
-            up: function() {
+            up: function () {
                 image.shift();
                 image.push([0, 0, 0, 0, 0]);
             },
-            right: function() {
-                image.forEach(function(array: number[]) {
+            right: function () {
+                image.forEach(function (array: number[]) {
                     array.pop();
                     array.unshift(0);
                 });
             },
-            left: function() {
-                image.forEach(function(array: number[]) {
+            left: function () {
+                image.forEach(function (array: number[]) {
                     array.shift();
                     array.push(0);
                 });
-            }
+            },
         };
         if (nShift < 0) {
             nShift *= -1;
-            if (direction === "up") {
-                direction = "down";
-            } else if (direction === "down") {
-                direction = "up";
-            } else if (direction === "left") {
-                direction = "right";
-            } else if (direction === "right") {
-                direction = "left";
+            if (direction === 'up') {
+                direction = 'down';
+            } else if (direction === 'down') {
+                direction = 'up';
+            } else if (direction === 'left') {
+                direction = 'right';
+            } else if (direction === 'right') {
+                direction = 'left';
             }
         }
         for (var i = 0; i < nShift; i++) {
@@ -1127,37 +1124,37 @@ export class Interpreter {
     private shiftImageActionMbot(image: number[][], direction: string, nShift: number): number[][] {
         nShift = Math.round(nShift);
         var shift = {
-            left: function() {
+            left: function () {
                 image.pop();
                 image.unshift([0, 0, 0, 0, 0, 0, 0, 0]);
             },
-            right: function() {
+            right: function () {
                 image.shift();
                 image.push([0, 0, 0, 0, 0, 0, 0, 0]);
             },
-            up: function() {
-                image.forEach(function(array: number[]) {
+            up: function () {
+                image.forEach(function (array: number[]) {
                     array.pop();
                     array.unshift(0);
                 });
             },
-            down: function() {
-                image.forEach(function(array: number[]) {
+            down: function () {
+                image.forEach(function (array: number[]) {
                     array.shift();
                     array.push(0);
                 });
-            }
+            },
         };
         if (nShift < 0) {
             nShift *= -1;
-            if (direction === "up") {
-                direction = "down";
-            } else if (direction === "down") {
-                direction = "up";
-            } else if (direction === "left") {
-                direction = "right";
-            } else if (direction === "right") {
-                direction = "left";
+            if (direction === 'up') {
+                direction = 'down';
+            } else if (direction === 'down') {
+                direction = 'up';
+            } else if (direction === 'left') {
+                direction = 'right';
+            } else if (direction === 'right') {
+                direction = 'left';
             }
         }
         for (var i = 0; i < nShift; i++) {
@@ -1179,10 +1176,10 @@ export class Interpreter {
     }
 
     private static isBreakPoint(op: any, breakpoints: any[]): boolean {
-        if (op[C.POSSIBLE_DEBUG_STOP]?.some(blockId => breakpoints.indexOf(blockId) >= 0)) {
+        if (op[C.POSSIBLE_DEBUG_STOP]?.some((blockId) => breakpoints.indexOf(blockId) >= 0)) {
             return true;
         }
-        if (op[C.HIGHTLIGHT_PLUS]?.some(blockId => breakpoints.indexOf(blockId) >= 0)) {
+        if (op[C.HIGHTLIGHT_PLUS]?.some((blockId) => breakpoints.indexOf(blockId) >= 0)) {
             return true;
         }
         return false;

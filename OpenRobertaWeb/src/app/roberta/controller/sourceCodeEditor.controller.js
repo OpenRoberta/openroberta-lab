@@ -62,92 +62,130 @@ function resetScroll() {
 export { init, setCodeLanguage, resetScroll, clickSourceCodeEditor };
 
 function initEvents() {
-    flask.onUpdate(function(code) {
+    flask.onUpdate(function (code) {
         if ($('#sourceCodeEditorPane').hasClass('active')) {
             wasEditedByUser = true;
         }
     });
 
-    $('#backSourceCodeEditor').onWrap('click', function() {
-        if (wasEditedByUser) {
-            $('#show-message-confirm').oneWrap('shown.bs.modal', function(e) {
-                $('#confirm').off();
-                $('#confirm').on('click', function(e) {
-                    e.preventDefault();
-                    wasEditedByUser = false;
-                    $('#tabProgram').clickWrap();
+    $('#backSourceCodeEditor').onWrap(
+        'click',
+        function () {
+            if (wasEditedByUser) {
+                $('#show-message-confirm').oneWrap('shown.bs.modal', function (e) {
+                    $('#confirm').off();
+                    $('#confirm').on('click', function (e) {
+                        e.preventDefault();
+                        wasEditedByUser = false;
+                        $('#tabProgram').clickWrap();
+                    });
+                    $('#confirmCancel').off();
+                    $('#confirmCancel').on('click', function (e) {
+                        e.preventDefault();
+                        $('.modal').modal('hide');
+                    });
                 });
-                $('#confirmCancel').off();
-                $('#confirmCancel').on('click', function(e) {
-                    e.preventDefault();
-                    $('.modal').modal('hide');
-                });
-            });
-            MSG.displayMessage('SOURCE_CODE_EDITOR_CLOSE_CONFIRMATION', 'POPUP', '', true, false);
-        } else {
-            wasEditedByUser = false;
-            $('#tabProgram').clickWrap();
-        }
-        return false;
-    }, "back to previous view");
-
-    $('#runSourceCodeEditor').onWrap('click', function() {
-        PROGRUN_C.runNative(flask.getCode());
-        return false;
-    }, "run button clicked");
-
-    $('#buildSourceCodeEditor').onWrap('click', function() {
-        GUISTATE_C.setRunEnabled(false);
-        $("#buildSourceCodeEditor").addClass('disabled');
-        PROGRAM.compileN(GUISTATE_C.getProgramName(), flask.getCode(), GUISTATE_C.getLanguage(), function(result) {
-            if (result.rc == "ok") {
-                MSG.displayMessage(result.message, 'POPUP', '', false, false);
+                MSG.displayMessage('SOURCE_CODE_EDITOR_CLOSE_CONFIRMATION', 'POPUP', '', true, false);
             } else {
-                MSG.displayInformation(result, result.message, result.message, GUISTATE_C.getProgramName());
+                wasEditedByUser = false;
+                $('#tabProgram').clickWrap();
             }
-            GUISTATE_C.setRunEnabled(true);
-            $("#buildSourceCodeEditor").removeClass('disabled');
-        });
-        return false;
-    }, "build button clicked");
+            return false;
+        },
+        'back to previous view'
+    );
 
-    $('#downloadSourceCodeEditor').onWrap('click', function() {
-        var filename = GUISTATE_C.getProgramName() + '.' + GUISTATE_C.getSourceCodeFileExtension();
-        UTIL.download(filename, flask.getCode());
-        MSG.displayMessage("MENU_MESSAGE_DOWNLOAD", "TOAST", filename);
-        return false;
-    }, "download source code button clicked");
+    $('#runSourceCodeEditor').onWrap(
+        'click',
+        function () {
+            PROGRUN_C.runNative(flask.getCode());
+            return false;
+        },
+        'run button clicked'
+    );
 
-    $('#uploadSourceCodeEditor').onWrap('click', function() {
-        IMPORT_C.importSourceCode(function(name, source) {
-            flask.updateCode(source);
-        });
-        return false;
-    }, "upload source code button clicked");
-
-    $('#importSourceCodeEditor').onWrap('click', function() {
-        getSourceCode(false);
-        return false;
-    }, "import from blockly button clicked");
-
-    $('#tabSourceCodeEditor').onWrap('show.bs.tab', function() {
-        if (currentLanguage === 'python' || currentLanguage === 'json') {
+    $('#buildSourceCodeEditor').onWrap(
+        'click',
+        function () {
+            GUISTATE_C.setRunEnabled(false);
             $('#buildSourceCodeEditor').addClass('disabled');
-        }
-        $('#main-section').css('background-color', '#EEE');
+            PROGRAM.compileN(GUISTATE_C.getProgramName(), flask.getCode(), GUISTATE_C.getLanguage(), function (result) {
+                if (result.rc == 'ok') {
+                    MSG.displayMessage(result.message, 'POPUP', '', false, false);
+                } else {
+                    MSG.displayInformation(result, result.message, result.message, GUISTATE_C.getProgramName());
+                }
+                GUISTATE_C.setRunEnabled(true);
+                $('#buildSourceCodeEditor').removeClass('disabled');
+            });
+            return false;
+        },
+        'build button clicked'
+    );
 
-    }, 'in show source code editor');
+    $('#downloadSourceCodeEditor').onWrap(
+        'click',
+        function () {
+            var filename = GUISTATE_C.getProgramName() + '.' + GUISTATE_C.getSourceCodeFileExtension();
+            UTIL.download(filename, flask.getCode());
+            MSG.displayMessage('MENU_MESSAGE_DOWNLOAD', 'TOAST', filename);
+            return false;
+        },
+        'download source code button clicked'
+    );
 
-    $('#tabSourceCodeEditor').onWrap('shown.bs.tab', function() {
-        GUISTATE_C.setView('tabSourceCodeEditor');
-    }, 'after show source code editor');
+    $('#uploadSourceCodeEditor').onWrap(
+        'click',
+        function () {
+            IMPORT_C.importSourceCode(function (name, source) {
+                flask.updateCode(source);
+            });
+            return false;
+        },
+        'upload source code button clicked'
+    );
 
-    $('#tabSourceCodeEditor').on('hide.bs.tab', function() {
+    $('#importSourceCodeEditor').onWrap(
+        'click',
+        function () {
+            getSourceCode(false);
+            return false;
+        },
+        'import from blockly button clicked'
+    );
+
+    $('#tabSourceCodeEditor').onWrap(
+        'show.bs.tab',
+        function () {
+            if (currentLanguage === 'python' || currentLanguage === 'json') {
+                $('#buildSourceCodeEditor').addClass('disabled');
+            }
+            $('#main-section').css('background-color', '#EEE');
+        },
+        'in show source code editor'
+    );
+
+    $('#tabSourceCodeEditor').onWrap(
+        'shown.bs.tab',
+        function () {
+            GUISTATE_C.setView('tabSourceCodeEditor');
+        },
+        'after show source code editor'
+    );
+
+    $('#tabSourceCodeEditor').on('hide.bs.tab', function () {
         $('#buildSourceCodeEditor').removeClass('disabled');
         $('#main-section').css('background-color', '#FFF');
     });
 
-    $('#sourceCodeEditorPane').find('button[name="rightMostButton"]').attr('title', '').attr('rel', 'tooltip').attr('data-placement', 'left').attr('lkey', 'Blockly.Msg.SOURCE_CODE_EDITOR_IMPORT_TOOLTIP').attr('data-original-title', Blockly.Msg.SOURCE_CODE_EDITOR_IMPORT_TOOLTIP).tooltip('fixTitle');
+    $('#sourceCodeEditorPane')
+        .find('button[name="rightMostButton"]')
+        .attr('title', '')
+        .attr('rel', 'tooltip')
+        .attr('data-placement', 'left')
+        .attr('lkey', 'Blockly.Msg.SOURCE_CODE_EDITOR_IMPORT_TOOLTIP')
+        .attr('data-original-title', Blockly.Msg.SOURCE_CODE_EDITOR_IMPORT_TOOLTIP)
+        .tooltip('fixTitle');
 }
 
 function getSourceCode(reload) {
@@ -158,17 +196,16 @@ function getSourceCode(reload) {
     var configName = isNamedConfig ? GUISTATE_C.getConfigurationName() : undefined;
     var xmlConfigText = GUISTATE_C.isConfigurationAnonymous() ? GUISTATE_C.getConfigurationXML() : undefined;
     var language = GUISTATE_C.getLanguage();
-    PROGRAM.showSourceProgram(GUISTATE_C.getProgramName(), configName, xmlProgram, xmlConfigText, PROG_C.SSID, PROG_C.password, language,
-        function(result) {
-            PROG_C.reloadProgram(result);
-                    if (result.rc == "ok") {
-                        if (reload) {
-                            $('#tabSourceCodeEditor').clickWrap();
-                        }
-                        GUISTATE_C.setState(result)
-                flask.updateCode(result.sourceCode);
-            } else {
-                MSG.displayInformation(result, result.message, result.message, result.parameters);
+    PROGRAM.showSourceProgram(GUISTATE_C.getProgramName(), configName, xmlProgram, xmlConfigText, PROG_C.SSID, PROG_C.password, language, function (result) {
+        PROG_C.reloadProgram(result);
+        if (result.rc == 'ok') {
+            if (reload) {
+                $('#tabSourceCodeEditor').clickWrap();
             }
-        });
+            GUISTATE_C.setState(result);
+            flask.updateCode(result.sourceCode);
+        } else {
+            MSG.displayInformation(result, result.message, result.message, result.parameters);
+        }
+    });
 }

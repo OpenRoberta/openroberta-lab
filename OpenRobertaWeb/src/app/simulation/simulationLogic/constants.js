@@ -1,519 +1,518 @@
 export default {
+    ARG1: 'arg1',
 
-    ARG1: "arg1",
+    ARG2: 'arg2',
 
-    ARG2: "arg2",
+    EXPR: 'expr',
 
-    EXPR: "expr",
+    VALUE: 'value',
 
-    VALUE: "value",
+    OP: 'op',
 
-    OP: "op",
+    LEFT: 'left',
 
-    LEFT: "left",
+    RIGHT: 'right',
 
-    RIGHT: "right",
+    ENTER: 'enter',
 
-    ENTER: "enter",
+    DOWN: 'down',
 
-    DOWN: "down",
+    UP: 'up',
 
-    UP: "up",
+    ANY: 'any',
 
-    ANY: "any",
+    ESCAPE: 'escape',
 
-    ESCAPE: "escape",
+    SHAKE: 'shake',
 
-    SHAKE: "shake",
+    FREEFALL: 'freefall',
 
-    FREEFALL: "freefall",
+    FACE_UP: 'face_up',
 
-    FACE_UP: "face_up",
+    FACE_DOWN: 'face_down',
 
-    FACE_DOWN: "face_down",
+    BINARY: 'Binary',
 
-    BINARY: "Binary",
+    UNARY: 'Unary',
 
-    UNARY: "Unary",
+    VAR: 'Var',
 
-    VAR: "Var",
+    TYPE: 'type',
 
-    TYPE: "type",
+    NAME: 'name',
 
-    NAME: "name",
+    STMT: 'stmt',
 
-    STMT: "stmt",
+    PARAMETERS: 'parameters',
 
-    PARAMETERS: "parameters",
+    FUNCTION_DECLARATION: 'functionDeclaration',
 
-    FUNCTION_DECLARATION: "functionDeclaration",
+    VAR_DECLARATION: 'VarDeclaration',
 
-    VAR_DECLARATION: "VarDeclaration",
+    SINGLE_FUNCTION: 'SingleFunction',
 
-    SINGLE_FUNCTION: "SingleFunction",
+    MATH_RAIN_FUNCTION: 'MathrainFunct',
 
-    MATH_RAIN_FUNCTION: "MathrainFunct",
+    RANDOM_INT: 'randInt',
 
-    RANDOM_INT: "randInt",
+    RANDOM_DOUBLE: 'randDouble',
 
-    RANDOM_DOUBLE: "randDouble",
+    RANDOM: 'random',
 
-    RANDOM: "random",
+    ASSIGN_STMT: 'AssignStmt',
 
-    ASSIGN_STMT: "AssignStmt",
+    ASSIGN_METHOD_PARAMETER_STMT: 'AssignMethodParameter',
 
-    ASSIGN_METHOD_PARAMETER_STMT: "AssignMethodParameter",
+    REPEAT_STMT: 'RepeatStmt',
 
-    REPEAT_STMT: "RepeatStmt",
+    IF_STMT: 'IfStatement',
 
-    IF_STMT: "IfStatement",
+    WAIT_STMT: 'WaitStmt',
 
-    WAIT_STMT: "WaitStmt",
+    MATH_CONST: 'createMathConstant',
 
-    MATH_CONST: "createMathConstant",
+    SHOW_TEXT_ACTION: 'ShowTextAction',
 
-    SHOW_TEXT_ACTION: "ShowTextAction",
+    SHOW_PICTURE_ACTION: 'ShowPictureAction',
 
-    SHOW_PICTURE_ACTION: "ShowPictureAction",
+    DISPLAY_IMAGE_ACTION: 'DisplayImageAction',
 
-    DISPLAY_IMAGE_ACTION: "DisplayImageAction",
+    CLEAR_DISPLAY_ACTION: 'ClearDisplay',
 
-    CLEAR_DISPLAY_ACTION: "ClearDisplay",
+    CREATE_DEBUG_ACTION: 'CreateDebugAction',
 
-    CREATE_DEBUG_ACTION: "CreateDebugAction",
+    TONE_ACTION: 'ToneAction',
 
-    TONE_ACTION: "ToneAction",
+    FREQUENCY: 'frequency',
 
-    FREQUENCY: "frequency",
+    DURATION: 'duration',
 
-    DURATION: "duration",
+    GET_VOLUME: 'GetVolume',
 
-    GET_VOLUME: "GetVolume",
+    SET_VOLUME_ACTION: 'SetVolumeAction',
 
-    SET_VOLUME_ACTION: "SetVolumeAction",
+    VOLUME: 'volume',
 
-    VOLUME: "volume",
+    IMAGE: 'image',
 
-    IMAGE: "image",
+    IMAGE_SHIFT_ACTION: 'ImageShiftAction',
 
-    IMAGE_SHIFT_ACTION: "ImageShiftAction",
+    IMAGE_INVERT_ACTION: 'ImageInvertAction',
 
-    IMAGE_INVERT_ACTION: "ImageInvertAction",
+    DIRECTION: 'direction',
 
-    DIRECTION: "direction",
+    PLAY_FILE_ACTION: 'PlayFileAction',
 
-    PLAY_FILE_ACTION: "PlayFileAction",
+    SET_LANGUAGE_ACTION: 'SetLanguageAction',
 
-    SET_LANGUAGE_ACTION: "SetLanguageAction",
+    SAY_TEXT_ACTION: 'SayTextAction',
 
-    SAY_TEXT_ACTION: "SayTextAction",
+    LANGUAGE: 'language',
 
-    LANGUAGE: "language",
+    PITCH: 'pitch',
 
-    PITCH: "pitch",
+    FILE: 'file',
 
-    FILE: "file",
+    TEXT: 'text',
 
-    TEXT: "text",
+    CHARACTER: 'character',
 
-    CHARACTER: "character",
+    TEXT_APPEND: 'textAppend',
 
-    TEXT_APPEND: "textAppend",
+    PICTURE: 'picture',
 
-    PICTURE: "picture",
+    X: 'x',
 
-    X: "x",
+    Y: 'y',
 
-    Y: "y",
+    N: 'n',
 
-    N: "n",
+    MATH_PROP_FUNCT: 'MathPropFunct',
 
-    MATH_PROP_FUNCT: "MathPropFunct",
+    WAIT_TIME_STMT: 'WaitTimeSTMT',
 
-    WAIT_TIME_STMT: "WaitTimeSTMT",
+    TIME: 'time',
 
-    TIME: "time",
+    LIST: 'list',
 
-    LIST: "list",
+    STMT_LIST: 'stmtList',
 
-    STMT_LIST: "stmtList",
+    DRIVE_ACTION: 'DriveAction',
 
-    DRIVE_ACTION: "DriveAction",
+    CURVE_ACTION: 'CurveAction',
 
-    CURVE_ACTION: "CurveAction",
+    TURN_LIGHT: 'turnLight',
 
-    TURN_LIGHT: "turnLight",
+    TURN_ACTION: 'TurnAction',
 
-    TURN_ACTION: "TurnAction",
+    STOP_DRIVE: 'stopDrive',
 
-    STOP_DRIVE: "stopDrive",
+    DRIVE_DIRECTION: 'driveDirection',
 
-    DRIVE_DIRECTION: "driveDirection",
+    TURN_DIRECTION: 'turnDirection',
 
-    TURN_DIRECTION: "turnDirection",
+    SPEED: 'speed',
 
-    SPEED: "speed",
+    SPEED_L: 'speedL',
 
-    SPEED_L: "speedL",
+    SPEED_R: 'speedR',
 
-    SPEED_R: "speedR",
+    DISTANCE: 'distance',
 
-    DISTANCE: "distance",
+    PRESENCE: 'presence',
 
-    PRESENCE: "presence",
+    SEEK: 'presence',
 
-    SEEK: "presence",
+    RESET: 'reset',
 
-    RESET: "reset",
+    GET_SAMPLE: 'GetSample',
 
-    GET_SAMPLE: "GetSample",
+    SENSOR_TYPE: 'sensorType',
 
-    SENSOR_TYPE: "sensorType",
+    SENSOR_MODE: 'sensorMode',
 
-    SENSOR_MODE: "sensorMode",
+    THEN_LIST: 'thenList',
 
-    THEN_LIST: "thenList",
+    ELSE_STMTS: 'elseStmts',
 
-    ELSE_STMTS: "elseStmts",
+    EXPR_LIST: 'exprList',
 
-    EXPR_LIST: "exprList",
+    STATEMENTS: 'statements',
 
-    STATEMENTS: "statements",
+    TOUCH: 'touch',
 
-    TOUCH: "touch",
+    INFRARED: 'infrared',
 
-    INFRARED: "infrared",
+    ULTRASONIC: 'ultrasonic',
 
-    ULTRASONIC: "ultrasonic",
+    GYRO: 'gyro',
 
-    GYRO: "gyro",
+    SOUND: 'sound',
 
-    SOUND: "sound",
+    BUTTONS: 'buttons',
 
-    BUTTONS: "buttons",
+    RATE: 'rate',
 
-    RATE: "rate",
+    NUM_CONST: 'NumConst',
 
-    NUM_CONST: "NumConst",
+    BOOL_CONST: 'BoolConst',
 
-    BOOL_CONST: "BoolConst",
+    STRING_CONST: 'StringConst',
 
-    STRING_CONST: "StringConst",
+    IMAGE_CONST: 'image',
 
-    IMAGE_CONST: "image",
+    ANIMATION: 'animation',
 
-    ANIMATION: "animation",
+    STRING: 'STRING',
 
-    STRING: "STRING",
+    BOOLEAN: 'BOOLEAN',
 
-    BOOLEAN: "BOOLEAN",
+    NUMBER: 'NUMBER',
 
-    NUMBER: "NUMBER",
+    NULL_CONST: 'null',
 
-    NULL_CONST: "null",
+    LOOP_NUMBER: 'loopNumber',
 
-    LOOP_NUMBER: "loopNumber",
+    TERNARY_EXPR: 'createTernaryExpr',
 
-    TERNARY_EXPR: "createTernaryExpr",
+    NUMERIC: 'Numeric',
 
-    NUMERIC: "Numeric",
+    ARRAY_NUMBER: 'Array_Number',
 
-    ARRAY_NUMBER: "Array_Number",
+    ARRAY_STRING: 'Array_String',
 
-    ARRAY_STRING: "Array_String",
+    ARRAY_BOOLEAN: 'Array_Boolean',
 
-    ARRAY_BOOLEAN: "Array_Boolean",
+    ARRAY_COLOR: 'Array_Colour',
 
-    ARRAY_COLOR: "Array_Colour",
+    ARRAY_IMAGE: 'Array_Image',
 
-    ARRAY_IMAGE: "Array_Image",
+    CONTINUE: 'continue',
 
-    CONTINUE: "continue",
+    BREAK: 'break',
 
-    BREAK: "break",
+    FLOW_CONTROL: 'flowControl',
 
-    FLOW_CONTROL: "flowControl",
+    ADD: 'ADD',
 
-    ADD: "ADD",
+    MINUS: 'MINUS',
 
-    MINUS: "MINUS",
+    POWER: 'POWER',
 
-    POWER: "POWER",
+    DIVIDE: 'DIVIDE',
 
-    DIVIDE: "DIVIDE",
+    MULTIPLY: 'MULTIPLY',
 
-    MULTIPLY: "MULTIPLY",
+    LT: 'LT',
 
-    LT: "LT",
+    GT: 'GT',
 
-    GT: "GT",
+    EQ: 'EQ',
 
-    EQ: "EQ",
+    NEQ: 'NEQ',
 
-    NEQ: "NEQ",
+    IN: 'in',
 
-    IN: "in",
+    GTE: 'GTE',
 
-    GTE: "GTE",
+    LTE: 'LTE',
 
-    LTE: "LTE",
+    OR: 'OR',
 
-    OR: "OR",
+    AND: 'AND',
 
-    AND: "AND",
+    NEG: 'NEG',
 
-    NEG: "NEG",
+    MOD: 'MOD',
 
-    MOD: "MOD",
+    MIN: 'min',
 
-    MIN: "min",
+    MAX: 'max',
 
-    MAX: "max",
+    AVERAGE: 'average',
 
-    AVERAGE: "average",
+    MEDIAN: 'median',
 
-    MEDIAN: "median",
+    MODE: 'mode',
 
-    MODE: "mode",
+    STD_DEV: 'stdDev',
 
-    STD_DEV: "stdDev",
+    FOREWARD: 'FOREWARD',
 
-    FOREWARD: "FOREWARD",
+    BACKWARD: 'BACKWARD',
 
-    BACKWARD: "BACKWARD",
+    WHILE: 'WHILE',
 
-    WHILE: "WHILE",
+    UNTIL: 'UNTIL',
 
-    UNTIL: "UNTIL",
+    FOREVER: 'FOREVER',
 
-    FOREVER: "FOREVER",
+    FOR: 'FOR',
 
-    FOR: "FOR",
+    FOR_EACH: 'forEach',
 
-    FOR_EACH: "forEach",
+    MATH_CHANGE: 'mathChange',
 
-    MATH_CHANGE: "mathChange",
+    NOT: 'NOT',
 
-    NOT: "NOT",
+    ANGLE: 'angle',
 
-    ANGLE: "angle",
+    COLOR: 'color',
 
-    COLOR: "color",
+    COLOUR: 'colorValue',
 
-    COLOUR: "colorValue",
+    LED_COLOR_CONST: 'ledColor',
 
-    LED_COLOR_CONST: "ledColor",
+    RGB_COLOR_CONST: 'rgbColor',
 
-    RGB_COLOR_CONST: "rgbColor",
+    LED_ON_ACTION: 'ledOnAction',
 
-    LED_ON_ACTION: "ledOnAction",
+    GREEN: 'GREEN',
 
-    GREEN: "GREEN",
+    RED: 'red',
 
-    RED: "red",
+    ANIMATION: 'animation',
 
-    ANIMATION: "animation",
+    SUM: 'sum',
 
-    SUM: "sum",
+    RGB: 'rgb',
 
-    RGB: "rgb",
+    ORANGE: 'ORANGE',
 
-    ORANGE: "ORANGE",
+    ON: 'ON',
 
-    ON: "ON",
+    OFF: 'OFF',
 
-    OFF: "OFF",
+    FLASH: 'FLASH',
 
-    FLASH: "FLASH",
+    DOUBLE_FLASH: 'DOUBLE_FLASH',
 
-    DOUBLE_FLASH: "DOUBLE_FLASH",
+    STATUS_LIGHT_ACTION: 'statusLightAction',
 
-    STATUS_LIGHT_ACTION: "statusLightAction",
+    AMBIENTLIGHT: 'ambientlight',
 
-    AMBIENTLIGHT: "ambientlight",
+    DISPLAY_TEXT_ACTION: 'displayTextAction',
 
-    DISPLAY_TEXT_ACTION: "displayTextAction",
+    BRIGHTNESS: 'brightness',
 
-    BRIGHTNESS: "brightness",
+    PIXEL: 'pixel',
 
-    PIXEL: "pixel",
+    DISPLAY_SET_BRIGHTNESS_ACTION: 'displaySetBrightnessAction',
 
-    DISPLAY_SET_BRIGHTNESS_ACTION: "displaySetBrightnessAction",
+    DISPLAY_SET_PIXEL_ACTION: 'displaySetPixelAction',
 
-    DISPLAY_SET_PIXEL_ACTION: "displaySetPixelAction",
+    DISPLAY_GET_BRIGHTNESS_ACTION: 'displayGetBrightnessAction',
 
-    DISPLAY_GET_BRIGHTNESS_ACTION: "displayGetBrightnessAction",
+    DISPLAY_GET_PIXEL_ACTION: 'displayGetPixelAction',
 
-    DISPLAY_GET_PIXEL_ACTION: "displayGetPixelAction",
+    TIMES: 'TIMES',
 
-    TIMES: "TIMES",
+    SIZE: 'size',
 
-    SIZE: "size",
+    CREATE_LIST_IS_EMPTY: 'isListEmpty',
 
-    CREATE_LIST_IS_EMPTY: "isListEmpty",
+    CREATE_LIST_LENGTH: 'listLength',
 
-    CREATE_LIST_LENGTH: "listLength",
+    CREATE_LIST_WITH_ITEM: 'createCreateListWithItem',
 
-    CREATE_LIST_WITH_ITEM: "createCreateListWithItem",
+    CREATE_LIST_FIND_ITEM: 'createListFindItem',
 
-    CREATE_LIST_FIND_ITEM: "createListFindItem",
+    COLOR_CONST: 'COLOR_CONST',
 
-    COLOR_CONST: "COLOR_CONST",
+    PILOT: 'pilot',
 
-    PILOT: "pilot",
+    MOTOR_LEFT: 'C',
 
-    MOTOR_LEFT: "C",
+    MOTOR_RIGHT: 'B',
 
-    MOTOR_RIGHT: "B",
+    MOTOR_XA: 'XA',
 
-    MOTOR_XA: "XA",
+    MOTOR_XB: 'XB',
 
-    MOTOR_XB: "XB",
+    MOTOR_XAB: 'XAB',
 
-    MOTOR_XAB: "XAB",
+    MOTOR_SIDE: 'motorSide',
 
-    MOTOR_SIDE: "motorSide",
+    MOTOR_ON_ACTION: 'motorOnAction',
 
-    MOTOR_ON_ACTION: "motorOnAction",
+    MOTOR_GET_POWER: 'motorGetPowerAction',
 
-    MOTOR_GET_POWER: "motorGetPowerAction",
+    MOTOR_SET_POWER: 'motorSetPowerAction',
 
-    MOTOR_SET_POWER: "motorSetPowerAction",
+    ENCODER_SENSOR_RESET: 'encoderSensorReset',
 
-    ENCODER_SENSOR_RESET: "encoderSensorReset",
+    ENCODER_SENSOR_SAMPLE: 'encoderSensorSample',
 
-    ENCODER_SENSOR_SAMPLE: "encoderSensorSample",
+    GET_GYRO_SENSOR_SAMPLE: 'gyroSensorSample',
 
-    GET_GYRO_SENSOR_SAMPLE: "gyroSensorSample",
+    MOTOR_STOP: 'motorStop',
 
-    MOTOR_STOP: "motorStop",
+    MOTOR_MOVE_MODE: 'motorMoveMode',
 
-    MOTOR_MOVE_MODE: "motorMoveMode",
+    MOTOR_DURATION: 'motorDuration',
 
-    MOTOR_DURATION: "motorDuration",
+    MOTOR_DURATION_VALUE: 'motorDurationValue',
 
-    MOTOR_DURATION_VALUE: "motorDurationValue",
+    ROTATIONS: 'ROTATIONS',
 
-    ROTATIONS: "ROTATIONS",
+    ROTATION: 'ROTATION',
 
-    ROTATION: "ROTATION",
+    DEGREE: 'DEGREE',
 
-    DEGREE: "DEGREE",
+    POSITION: 'position',
 
-    POSITION: "position",
+    FIRST: 'first',
 
-    FIRST: "first",
+    LAST: 'last',
 
-    LAST: "last",
+    FROM_START: 'fromStart',
 
-    FROM_START: "fromStart",
+    FROM_END: 'fromEnd',
 
-    FROM_END: "fromEnd",
+    GET: 'get',
 
-    GET: "get",
+    SET: 'set',
 
-    SET: "set",
+    REMOVE: 'remove',
 
-    REMOVE: "remove",
+    GET_REMOVE: 'getRemove',
 
-    GET_REMOVE: "getRemove",
+    ITEM: 'item',
 
-    ITEM: "item",
+    CREATE_LISTS_SET_INDEX: 'createListsSetIndex',
 
-    CREATE_LISTS_SET_INDEX: "createListsSetIndex",
+    CREATE_LISTS_GET_INDEX: 'createListsGetIndex',
 
-    CREATE_LISTS_GET_INDEX: "createListsGetIndex",
+    CREATE_LISTS_GET_INDEX_STMT: 'createListsGetIndexStmt',
 
-    CREATE_LISTS_GET_INDEX_STMT: "createListsGetIndexStmt",
+    CREATE_LISTS_GET_SUBLIST: 'createGetSubList',
 
-    CREATE_LISTS_GET_SUBLIST: "createGetSubList",
+    GYRO_SENSOR_RESET: 'createResetGyroSensor',
 
-    GYRO_SENSOR_RESET: "createResetGyroSensor",
+    TIMER_SENSOR_RESET: 'createResetTimer',
 
-    TIMER_SENSOR_RESET: "createResetTimer",
+    METHOD_VOID: 'createMethodVoid',
 
-    METHOD_VOID: "createMethodVoid",
+    METHOD_RETURN: 'createMethodReturn',
 
-    METHOD_RETURN: "createMethodReturn",
+    IF_RETURN: 'createMethodIfReturn',
 
-    IF_RETURN: "createMethodIfReturn",
+    RETURN_TYPE: 'returnType',
 
-    RETURN_TYPE: "returnType",
+    METHOD_CALL_VOID: 'createMethodCallVoid',
 
-    METHOD_CALL_VOID: "createMethodCallVoid",
+    METHOD_CALL_RETURN: 'createMethodCallReturn',
 
-    METHOD_CALL_RETURN: "createMethodCallReturn",
+    TEXT_JOIN: 'createTextJoin',
 
-    TEXT_JOIN: "createTextJoin",
+    LIGHT_ACTION: 'lightSensorAction',
 
-    LIGHT_ACTION: "lightSensorAction",
+    WHERE1: 'where1',
 
-    WHERE1: "where1",
+    WHERE2: 'where2',
 
-    WHERE2: "where2",
+    AT1: 'at1',
 
-    AT1: "at1",
+    AT2: 'at2',
 
-    AT2: "at2",
+    RETURN: 'return',
 
-    RETURN: "return",
+    VALUES: 'values',
 
-    VALUES: "values",
+    INSERT: 'insert',
 
-    INSERT: "insert",
+    LIGHT: 'light',
 
-    LIGHT: "light",
+    BUTTON_A: 'A',
 
-    BUTTON_A: "A",
+    BUTTON_B: 'B',
 
-    BUTTON_B: "B",
+    COMMENT: 'comment',
 
-    COMMENT: "comment",
+    COMPASS: 'compass',
 
-    COMPASS: "compass",
+    GESTURE: 'gesture',
 
-    GESTURE: "gesture",
+    TEMPERATURE: 'temperature',
 
-    TEMPERATURE: "temperature",
+    ANALOG: 'analog',
 
-    ANALOG: "analog",
+    DIGITAL: 'digital',
 
-    DIGITAL: "digital",
+    PIN_TOUCH_SENSOR: 'createPinTouchSensor',
 
-    PIN_TOUCH_SENSOR: "createPinTouchSensor",
+    PIN_GET_VALUE_SENSOR: 'createPinGetValueSensor',
 
-    PIN_GET_VALUE_SENSOR: "createPinGetValueSensor",
+    PIN_WRITE_VALUE_SENSOR: 'createPinWriteValueSensor',
 
-    PIN_WRITE_VALUE_SENSOR: "createPinWriteValueSensor",
+    NOOP_STMT: 'createNoopStmt',
 
-    NOOP_STMT: "createNoopStmt",
+    PIN: 'pin',
 
-    PIN: "pin",
+    ASSERT_STMT: 'createAssertStmt',
 
-    ASSERT_STMT: "createAssertStmt",
+    TEST: 'test',
 
-    TEST: "test",
-
-    CONSOLE_DEBUG: "createConsoleDebugAction",
+    CONSOLE_DEBUG: 'createConsoleDebugAction',
 
     COLOR_ENUM: {
-        NONE: "NONE",
-        BLACK: "BLACK",
-        BLUE: "BLUE",
-        GREEN: "GREEN",
-        YELLOW: "YELLOW",
-        RED: "RED",
-        WHITE: "WHITE",
-        BROWN: "BROWN"
+        NONE: 'NONE',
+        BLACK: 'BLACK',
+        BLUE: 'BLUE',
+        GREEN: 'GREEN',
+        YELLOW: 'YELLOW',
+        RED: 'RED',
+        WHITE: 'WHITE',
+        BROWN: 'BROWN',
     },
 
-    TIMER: "timer",
+    TIMER: 'timer',
 
-    MATH_ON_LIST: "createMathOnList",
+    MATH_ON_LIST: 'createMathOnList',
 
     TRACKWIDTH: 40,
 
-    TURN_RATIO: (40 / 3.) / 2.8,
+    TURN_RATIO: 40 / 3 / 2.8,
 
     WHEEL_DIAMETER: 5.6,
 
@@ -529,13 +528,13 @@ export default {
 
     WAVE_LENGTH: 60,
 
-    DEBUG_BREAKPOINT: "DebugBreakpoint",
+    DEBUG_BREAKPOINT: 'DebugBreakpoint',
 
-    DEBUG_STEP_INTO: "DebugStepInto",
+    DEBUG_STEP_INTO: 'DebugStepInto',
 
-    DEBUG_STEP_OVER: "DebugStepOver",
+    DEBUG_STEP_OVER: 'DebugStepOver',
 
     MIN_SIZE_OBJECT: 10,
 
-    CORNER_RADIUS: 5
-}
+    CORNER_RADIUS: 5,
+};

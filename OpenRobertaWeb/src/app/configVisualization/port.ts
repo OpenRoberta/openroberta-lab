@@ -3,18 +3,22 @@ export class Port {
     position_: any;
     connectedTo: any;
 
-    constructor(parent, name, position, connectedTo?:any) {
+    constructor(parent, name, position, connectedTo?: any) {
         this.position_ = position;
-        this.element_ = (<any>window).Blockly.createSvgElement('rect', {
-            'class': 'port',
-            'width': 5,
-            'height': 5,
-            'fill': 'red',
-            'stroke': 'black',
-            'stroke-width': 1,
-            'transform': `translate(${position.x}, ${position.y})`,
-            'r': 3,
-        }, parent);
+        this.element_ = (<any>window).Blockly.createSvgElement(
+            'rect',
+            {
+                class: 'port',
+                width: 5,
+                height: 5,
+                fill: 'red',
+                stroke: 'black',
+                'stroke-width': 1,
+                transform: `translate(${position.x}, ${position.y})`,
+                r: 3,
+            },
+            parent
+        );
         this.connectedTo = connectedTo;
         if (name) {
             this.element_.tooltip = name;

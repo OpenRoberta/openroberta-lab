@@ -18,7 +18,7 @@ function init() {
 
     server.ping = true;
     server.pingTime = 3000;
-    
+
     gui.view = '';
     gui.prevView = '';
     gui.language = '';
@@ -42,15 +42,15 @@ function init() {
     gui.multipleSim = false;
     gui.webotsSim = false;
     gui.webotsUrl = '';
-    gui.fileExtension = ''
+    gui.fileExtension = '';
     gui.connectionType = {
         TOKEN: 'token',
         AUTO: 'autoConnection',
         AGENTORTOKEN: 'arduinoAgentOrToken',
         LOCAL: 'local',
         WEBVIEW: 'webview',
-        JSPLAY: 'jsPlay' //Play file in the browser with JavaScript
-    }
+        JSPLAY: 'jsPlay', //Play file in the browser with JavaScript
+    };
     gui.runEnabled = false;
 
     user.id = -1;
@@ -75,7 +75,7 @@ function init() {
     configuration.saved = true;
     configuration.timestamp = '';
     configuration.xml = '';
-    
+
     robot.token = '';
     robot.name = '';
     robot.state = '';
@@ -89,24 +89,29 @@ function init() {
     robot.socket = null;
     robot.hasWlan = false;
 
-    var getInitFromServer = function() {
+    var getInitFromServer = function () {
         COMM.setInitToken(undefined);
-        return COMM.json("/init", {
-            "cmd": "init",
-            "screenSize": [window.screen.availWidth, window.screen.availHeight]
-        }, function(result) {
-            if (result.rc === 'ok') {
-                COMM.setInitToken(result.initToken);
-                $.extend(server, result.server);
-                server.version = result["server.version"];
-                server.time = result.serverTime;
-                ready.resolve();
-            } else {
-                console.log("ERROR: " + result.message)
+        return COMM.json(
+            '/init',
+            {
+                cmd: 'init',
+                screenSize: [window.screen.availWidth, window.screen.availHeight],
+            },
+            function (result) {
+                if (result.rc === 'ok') {
+                    COMM.setInitToken(result.initToken);
+                    $.extend(server, result.server);
+                    server.version = result['server.version'];
+                    server.time = result.serverTime;
+                    ready.resolve();
+                } else {
+                    console.log('ERROR: ' + result.message);
                     // MSG.displayInformation(result, "", result.message);
-            }
-        }, 'init data from server');
-    }
+                }
+            },
+            'init data from server'
+        );
+    };
     getInitFromServer();
 
     return ready.promise();

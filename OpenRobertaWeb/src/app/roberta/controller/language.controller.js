@@ -1,4 +1,3 @@
-
 import * as LOG from 'log';
 import * as $ from 'jquery';
 import * as GUISTATE_C from 'guiState.controller';
@@ -14,45 +13,45 @@ import * as Blockly from 'blockly';
 function init() {
     var ready = new $.Deferred();
     var language;
-    if (navigator.language.indexOf("de") > -1) {
+    if (navigator.language.indexOf('de') > -1) {
         language = 'de';
-    } else if (navigator.language.indexOf("fi") > -1) {
+    } else if (navigator.language.indexOf('fi') > -1) {
         language = 'fi';
-    } else if (navigator.language.indexOf("da") > -1) {
+    } else if (navigator.language.indexOf('da') > -1) {
         language = 'da';
-    } else if (navigator.language.indexOf("es") > -1) {
+    } else if (navigator.language.indexOf('es') > -1) {
         language = 'es';
-    } else if (navigator.language.indexOf("fr") > -1) {
+    } else if (navigator.language.indexOf('fr') > -1) {
         language = 'fr';
-    } else if (navigator.language.indexOf("it") > -1) {
+    } else if (navigator.language.indexOf('it') > -1) {
         language = 'it';
-    } else if (navigator.language.indexOf("ca") > -1) {
+    } else if (navigator.language.indexOf('ca') > -1) {
         language = 'ca';
-    } else if (navigator.language.indexOf("pt") > -1) {
+    } else if (navigator.language.indexOf('pt') > -1) {
         language = 'pt';
-    } else if (navigator.language.indexOf("pl") > -1) {
+    } else if (navigator.language.indexOf('pl') > -1) {
         language = 'pl';
-    } else if (navigator.language.indexOf("ru") > -1) {
+    } else if (navigator.language.indexOf('ru') > -1) {
         language = 'ru';
-    } else if (navigator.language.indexOf("be") > -1) {
+    } else if (navigator.language.indexOf('be') > -1) {
         language = 'be';
-    } else if (navigator.language.indexOf("cs") > -1) {
+    } else if (navigator.language.indexOf('cs') > -1) {
         language = 'cs';
-    } else if (navigator.language.indexOf("tr") > -1) {
+    } else if (navigator.language.indexOf('tr') > -1) {
         language = 'tr';
-    } else if (navigator.language.indexOf("nl") > -1) {
+    } else if (navigator.language.indexOf('nl') > -1) {
         language = 'nl';
-    } else if (navigator.language.indexOf("sv") > -1) {
+    } else if (navigator.language.indexOf('sv') > -1) {
         language = 'sv';
-    } else if (navigator.language.indexOf("zh-hans") > -1) {
+    } else if (navigator.language.indexOf('zh-hans') > -1) {
         language = 'zh-hans';
-    } else if (navigator.language.indexOf("zh-hant") > -1) {
+    } else if (navigator.language.indexOf('zh-hant') > -1) {
         language = 'zh-hant';
-    } else if (navigator.language.indexOf("ro") > -1) {
+    } else if (navigator.language.indexOf('ro') > -1) {
         language = 'ro';
-    } else if (navigator.language.indexOf("eu") > -1) {
+    } else if (navigator.language.indexOf('eu') > -1) {
         language = 'eu';
-    } else if (navigator.language.indexOf("uk") > -1) {
+    } else if (navigator.language.indexOf('uk') > -1) {
         language = 'uk';
     } else {
         language = 'en';
@@ -66,9 +65,11 @@ function init() {
         $('.EN').css('display', 'inline');
         $('li>a.EN').css('display', 'block');
     }
-    $('#language li a[lang=' + language + ']').parent().addClass('disabled');
+    $('#language li a[lang=' + language + ']')
+        .parent()
+        .addClass('disabled');
     var url = 'blockly/msg/js/' + language + '.js';
-    getCachedScript(url).done(function(data) {
+    getCachedScript(url).done(function (data) {
         translate();
         ready.resolve(language);
     });
@@ -78,22 +79,21 @@ function init() {
 }
 
 function initEvents() {
-
-    $('#language').onWrap('click', 'li a', function() {
+    $('#language').onWrap('click', 'li a', function () {
         LOG.info('language clicked');
         var language = $(this).attr('lang');
         switchLanguage(language);
-    }), 'switch language clicked';
+    }),
+        'switch language clicked';
 }
 
 function switchLanguage(language) {
-
     if (GUISTATE_C.getLanguage == language) {
         return;
     }
 
     var url = 'blockly/msg/js/' + language.toLowerCase() + '.js';
-    getCachedScript(url).done(function(data) {
+    getCachedScript(url).done(function (data) {
         translate();
         GUISTATE_C.setLanguage(language);
         PROGRAM_C.reloadView();
@@ -101,8 +101,8 @@ function switchLanguage(language) {
         USER_C.initValidationMessages();
         NOTIFICATION_C.reloadNotifications();
         var value = Blockly.Msg.MENU_START_BRICK;
-        if (value.indexOf("$") >= 0) {
-            value = value.replace("$", GUISTATE_C.getRobotRealName());
+        if (value.indexOf('$') >= 0) {
+            value = value.replace('$', GUISTATE_C.getRobotRealName());
         }
         $('#menuRunProg').text(value);
         if (GUISTATE_C.getBlocklyWorkspace()) {
@@ -120,15 +120,15 @@ function translate($domElement) {
         $domElement = $(document.body);
     }
 
-    $domElement.find("[lkey]").each(function(index) {
+    $domElement.find('[lkey]').each(function (index) {
         var lkey = $(this).attr('lkey');
-        var key = lkey.replace("Blockly.Msg.", "");
+        var key = lkey.replace('Blockly.Msg.', '');
         var value = Blockly.Msg[key];
         if (value == undefined) {
             console.log('UNDEFINED    key : value = ' + key + ' : ' + value);
         }
         if (lkey === 'Blockly.Msg.SOURCE_CODE_EDITOR_PLACEHOLDER') {
-            $("#sourceCodeEditorTextArea").attr("placeholder", value);
+            $('#sourceCodeEditorTextArea').attr('placeholder', value);
         } else if (lkey === 'Blockly.Msg.SOURCE_CODE_EDITOR_UPLOAD_TOOLTIP') {
             $('#uploadSourceCodeEditor').attr('data-original-title', value);
         } else if (lkey === 'Blockly.Msg.SOURCE_CODE_EDITOR_IMPORT_TOOLTIP') {
@@ -166,28 +166,28 @@ function translate($domElement) {
             $('#iconDisplayLogin').attr('data-original-title', value);
         } else if (lkey === 'Blockly.Msg.MENU_ROBOT_STATE_TOOLTIP') {
             $('#iconDisplayRobotState').attr('data-original-title', value);
-        } else if (lkey === "Blockly.Msg.MENU_SIM_START_TOOLTIP") {
+        } else if (lkey === 'Blockly.Msg.MENU_SIM_START_TOOLTIP') {
             $('#simControl').attr('data-original-title', value);
-        } else if (lkey === "Blockly.Msg.MENU_SIM_STOP_TOOLTIP") {
+        } else if (lkey === 'Blockly.Msg.MENU_SIM_STOP_TOOLTIP') {
             $('#simCancel').attr('data-original-title', value);
-        } else if (lkey === "Blockly.Msg.MENU_SIM_SCENE_TOOLTIP") {
+        } else if (lkey === 'Blockly.Msg.MENU_SIM_SCENE_TOOLTIP') {
             $('#simScene').attr('data-original-title', value);
-        } else if (lkey === "Blockly.Msg.MENU_SIM_ADD_COLOR_OBJECT_TOOLTIP") {
+        } else if (lkey === 'Blockly.Msg.MENU_SIM_ADD_COLOR_OBJECT_TOOLTIP') {
             $('#simCustomColorObject').attr('data-original-title', value);
-        } else if (lkey === "Blockly.Msg.MENU_SIM_ADD_OBSTACLE_TOOLTIP") {
+        } else if (lkey === 'Blockly.Msg.MENU_SIM_ADD_OBSTACLE_TOOLTIP') {
             $('#simCustomObstacle').attr('data-original-title', value);
             $('#simAddObstacleRectangle').attr('data-original-title', value);
-        } else if (lkey === "Blockly.Msg.MENU_SIM_DELETE_ELEMENTS_TOOLTIP") {
+        } else if (lkey === 'Blockly.Msg.MENU_SIM_DELETE_ELEMENTS_TOOLTIP') {
             $('#simDeleteElements').attr('data-original-title', value);
-        } else if (lkey === "Blockly.Msg.MENU_SIM_CHANGE_COLOR_TOOLTIP") {
+        } else if (lkey === 'Blockly.Msg.MENU_SIM_CHANGE_COLOR_TOOLTIP') {
             $('#simChangeObjectColor').attr('data-original-title', value);
-        } else if (lkey === "Blockly.Msg.MENU_SIM_DELETE_OBJECT_TOOLTIP") {
+        } else if (lkey === 'Blockly.Msg.MENU_SIM_DELETE_OBJECT_TOOLTIP') {
             $('#simDeleteObject').attr('data-original-title', value);
-        } else if (lkey === "Blockly.Msg.MENU_SIM_CONFIG_EXPORT") {
+        } else if (lkey === 'Blockly.Msg.MENU_SIM_CONFIG_EXPORT') {
             $('#simDownloadConfig').attr('data-original-title', value);
-        } else if (lkey === "Blockly.Msg.MENU_SIM_CONFIG_IMPORT") {
+        } else if (lkey === 'Blockly.Msg.MENU_SIM_CONFIG_IMPORT') {
             $('#simUploadConfig').attr('data-original-title', value);
-        } else if (lkey === "Blockly.Msg.MENU_SIM_ROBOT_TOOLTIP") {
+        } else if (lkey === 'Blockly.Msg.MENU_SIM_ROBOT_TOOLTIP') {
             $('#simRobot').attr('data-original-title', value);
         } else if (lkey == 'Blockly.Msg.MENU_SIM_VALUES_TOOLTIP') {
             $('#simValues').attr('data-original-title', value);
@@ -212,9 +212,9 @@ function translate($domElement) {
             $('#head-navi-tooltip-tutorials').attr('data-original-title', value);
         } else if (lkey == 'Blockly.Msg.MENU_RIGHT_TUTORIAL_TOOLTIP') {
             $('#tutorialButton').attr('data-original-title', value);
-        } else if (lkey === "Blockly.Msg.BUTTON_EMPTY_LIST") {
+        } else if (lkey === 'Blockly.Msg.BUTTON_EMPTY_LIST') {
             $('#logList>.bootstrap-table').find('button[name="refresh"]').attr('data-original-title', value);
-        } else if (lkey === "Blockly.Msg.LIST_BACK_TOOLTIP") {
+        } else if (lkey === 'Blockly.Msg.LIST_BACK_TOOLTIP') {
             $('.bootstrap-table').find('.backList').attr('data-original-title', value);
         } else if (lkey == 'Blockly.Msg.PROGLIST_DELETE_ALL_TOOLTIP') {
             $('#deleteSomeProg').attr('data-original-title', value);
@@ -242,7 +242,7 @@ function translate($domElement) {
                 } else {
                     $(this).attr(attributeTargets[key], value);
                 }
-            };
+            }
         } else {
             $(this).html(value);
             $(this).attr('value', value);
@@ -259,13 +259,12 @@ export { init, translate };
 function getCachedScript(url, options) {
     // Allow user to set any option except for dataType, cache, and url
     options = $.extend(options || {}, {
-        dataType: "script",
+        dataType: 'script',
         cache: true,
-        url: url
+        url: url,
     });
 
     // Use $.ajax() since it is more flexible than $.getScript
     // Return the jqXHR object so we can chain callbacks
     return jQuery.ajax(options);
 }
-

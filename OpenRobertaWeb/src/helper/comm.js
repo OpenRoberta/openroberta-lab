@@ -2,6 +2,7 @@ import * as exports from 'exports';
 import * as $ from 'jquery';
 import * as WRAP from 'wrap';
 import * as LOG from 'log';
+
 /**
  * prefix to be prepended to each URL used in ajax calls.
  */
@@ -59,12 +60,12 @@ function setErrorFn(newErrorFn) {
  */
 function get(url, data, successFn, message) {
     return $.ajax({
-        url : urlPrefix + url,
-        type : 'GET',
-        dataType : 'json',
-        data : data,
-        success : WRAP.wrapREST(successFn, message),
-        error : WRAP.wrapErrorFn(errorFn)
+        url: urlPrefix + url,
+        type: 'GET',
+        dataType: 'json',
+        data: data,
+        success: WRAP.wrapREST(successFn, message),
+        error: WRAP.wrapErrorFn(errorFn),
     });
 }
 
@@ -74,26 +75,26 @@ function get(url, data, successFn, message) {
 function json(url, data, successFn, message) {
     var log = LOG.reportToComm();
     var load = {
-        log : log,
-        data : data,
-        initToken : initToken
+        log: log,
+        data: data,
+        initToken: initToken,
     };
     function successFnWrapper(response) {
-        if (response !== undefined && response.message !== undefined && response.message === "ORA_INIT_FAIL_INVALID_INIT_TOKEN") {
+        if (response !== undefined && response.message !== undefined && response.message === 'ORA_INIT_FAIL_INVALID_INIT_TOKEN') {
             frontendSessionValid = false;
-            showServerError("INIT_TOKEN");
+            showServerError('INIT_TOKEN');
         } else {
             successFn(response);
         }
     }
     return $.ajax({
-        url : urlPrefix + url,
-        type : 'POST',
-        contentType : 'application/json; charset=utf-8',
-        dataType : 'json',
-        data : JSON.stringify(load),
-        success : WRAP.wrapREST(successFnWrapper, message),
-        error : WRAP.wrapErrorFn(errorFn)
+        url: urlPrefix + url,
+        type: 'POST',
+        contentType: 'application/json; charset=utf-8',
+        dataType: 'json',
+        data: JSON.stringify(load),
+        success: WRAP.wrapREST(successFnWrapper, message),
+        error: WRAP.wrapErrorFn(errorFn),
     });
 }
 
@@ -101,7 +102,7 @@ function json(url, data, successFn, message) {
  * downloads the object in response
  */
 function download(url) {
-    var fullUrl = urlPrefix + url + "?initToken=" + initToken;
+    var fullUrl = urlPrefix + url + '?initToken=' + initToken;
     window.open(fullUrl, '_blank');
 }
 
@@ -110,13 +111,13 @@ function download(url) {
  */
 function xml(url, xml, successFn, message) {
     return $.ajax({
-        url : urlPrefix + url,
-        type : 'POST',
-        contentType : 'text/plain; charset=utf-8',
-        dataType : 'json',
-        data : xml,
-        success : WRAP.wrapREST(successFn, message),
-        error : WRAP.wrapErrorFn(errorFn)
+        url: urlPrefix + url,
+        type: 'POST',
+        contentType: 'text/plain; charset=utf-8',
+        dataType: 'json',
+        data: xml,
+        success: WRAP.wrapREST(successFn, message),
+        error: WRAP.wrapErrorFn(errorFn),
     });
 }
 
@@ -128,17 +129,17 @@ function ping(successFn) {
     if (!frontendSessionValid) {
         return;
     } else {
-        var successFnWrapper = function(result) {
+        var successFnWrapper = function (result) {
             if (result !== undefined && result.rc === 'error' && result.cause === 'ORA_INIT_FAIL_PING_ERROR' && result.initToken === 'invalid-token') {
                 frontendSessionValid = false;
             }
             if (successFn !== undefined) {
                 successFn(result);
-                if (onNotificationsAvailable && result["notifications.available"]) {
+                if (onNotificationsAvailable && result['notifications.available']) {
                     onNotificationsAvailable();
                 }
             }
-        }
+        };
         return json('/ping', {}, successFnWrapper); // no message to reduce amount of logging data
     }
 }
@@ -147,11 +148,11 @@ function listRobotsFromAgent(successFn, completeFn, onError) {
     var URL = 'http://127.0.0.1:8991/listrobots';
     var response = '';
     return $.ajax({
-        type : "GET",
-        url : URL,
+        type: 'GET',
+        url: URL,
         //success : WRAP.wrapREST(successFn, "list success"),
-        error : onError,
-        complete : completeFn
+        error: onError,
+        complete: completeFn,
     });
 }
 
@@ -159,75 +160,76 @@ function sendProgramHexToAgent(programHex, robotPort, programName, signature, co
     var URL = 'http://127.0.0.1:8991/upload';
     var board = 'arduino:avr:uno';
     var request = {
-        'board' : board,
-        'port' : robotPort,
-        'commandline' : commandLine,
-        'signature' : signature,
-        'hex' : programHex,
-        'filename' : programName + '.hex',
-        'extra' : {
-            'auth' : {
-                'password' : null
-            }
+        board: board,
+        port: robotPort,
+        commandline: commandLine,
+        signature: signature,
+        hex: programHex,
+        filename: programName + '.hex',
+        extra: {
+            auth: {
+                password: null,
+            },
         },
-        'wait_for_upload_port' : true,
-        'use_1200bps_touch' : true,
-        'network' : false,
-        'params_verbose' : '-v',
-        'params_quiet' : '-q -q',
-        'verbose' : true
-    }
+        wait_for_upload_port: true,
+        use_1200bps_touch: true,
+        network: false,
+        params_verbose: '-v',
+        params_quiet: '-q -q',
+        verbose: true,
+    };
     var JSONrequest = JSON.stringify(request);
 
     return $.ajax({
-        type : "POST",
-        url : URL,
-        data : JSONrequest,
-        contentType : 'application/x-www-form-urlencoded; charset=utf-8',
-        dataType : 'json',
-        statusCode : {
-            200 : function() {
-                WRAP.wrapREST(successFn, "Upload success");
+        type: 'POST',
+        url: URL,
+        data: JSONrequest,
+        contentType: 'application/x-www-form-urlencoded; charset=utf-8',
+        dataType: 'json',
+        statusCode: {
+            200: function () {
+                WRAP.wrapREST(successFn, 'Upload success');
             },
-            202 : function() {
-                WRAP.wrapREST(successFn, "Upload success");
+            202: function () {
+                WRAP.wrapREST(successFn, 'Upload success');
             },
-            400 : WRAP.wrapErrorFn(errorFn),
-            403 : WRAP.wrapErrorFn(errorFn),
-            404 : WRAP.wrapErrorFn(errorFn)
+            400: WRAP.wrapErrorFn(errorFn),
+            403: WRAP.wrapErrorFn(errorFn),
+            404: WRAP.wrapErrorFn(errorFn),
         },
-        error : function(jqXHR) {
-        }
+        error: function (jqXHR) {},
     });
-
 }
 
 function showServerError(type) {
-    type += navigator.language.indexOf("de") > -1 ? "_DE" : "_EN";
+    type += navigator.language.indexOf('de') > -1 ? '_DE' : '_EN';
     var message;
     switch (type) {
-    case "INIT_TOKEN_DE":
-        message = "Dieser Browsertab ist nicht mehr gültig, weil Deine Browser-Session abgelaufen ist oder der Openroberta-Server neu gestartet wurde.\n\nDu kannst dein Programm zwar noch verändern oder exportieren, aber nicht mehr übersetzen oder auf dein Gerät übertragen. Bitte lade diese Seite neu indem du auf »Aktualisieren« ↻ klickst!";
-        break;
-    case "INIT_TOKEN_EN":
-        message = "This browser tab is not valid anymore, because your browser session expired or the openroberta server was restarted.\n\nYou may edit or export your program, but it is impossible to compile or send it to your device. Please click on the »Refresh« ↻ button!";
-        break;
-    case "CONNECTION_DE":
-        message = "Deine Verbindung zum Open Roberta Server ist langsam oder unterbrochen. Du kannst dein Programm exportieren, um es zu sichern.";
-        break;
-    case "CONNECTION_EN":
-        message = "Your connection to the Open Roberta Server is slow or broken. To avoid data loss you may export your program.";
-        break;
-    case "FRONTEND_DE":
-        message = "Dein Browser hat ein ungültiges Kommando geschickt. Eventuell ist auch der Openroberta-Server neu gestartet worden. \n\nDu kannst dein Programm zwar noch verändern oder exportieren, aber nicht mehr übersetzen oder auf dein Gerät übertragen.\n\nBitte lösche vorsichtshalber den Browser-Cache!";
-        break;
-    case "FRONTEND_EN":
-        message = "Your browser has sent an invalid command. Maybe that the openroberta server was restarted.\n\nYou may edit or export your program, but it is impossible to compile or send it to your device.\n\nAs a precaution please clear your browser cache!";
-        break;
-    default:
-        message = "Connection error! Please clear your browser cache!"
+        case 'INIT_TOKEN_DE':
+            message =
+                'Dieser Browsertab ist nicht mehr gültig, weil Deine Browser-Session abgelaufen ist oder der Openroberta-Server neu gestartet wurde.\n\nDu kannst dein Programm zwar noch verändern oder exportieren, aber nicht mehr übersetzen oder auf dein Gerät übertragen. Bitte lade diese Seite neu indem du auf »Aktualisieren« ↻ klickst!';
+            break;
+        case 'INIT_TOKEN_EN':
+            message =
+                'This browser tab is not valid anymore, because your browser session expired or the openroberta server was restarted.\n\nYou may edit or export your program, but it is impossible to compile or send it to your device. Please click on the »Refresh« ↻ button!';
+            break;
+        case 'CONNECTION_DE':
+            message = 'Deine Verbindung zum Open Roberta Server ist langsam oder unterbrochen. Du kannst dein Programm exportieren, um es zu sichern.';
+            break;
+        case 'CONNECTION_EN':
+            message = 'Your connection to the Open Roberta Server is slow or broken. To avoid data loss you may export your program.';
+            break;
+        case 'FRONTEND_DE':
+            message =
+                'Dein Browser hat ein ungültiges Kommando geschickt. Eventuell ist auch der Openroberta-Server neu gestartet worden. \n\nDu kannst dein Programm zwar noch verändern oder exportieren, aber nicht mehr übersetzen oder auf dein Gerät übertragen.\n\nBitte lösche vorsichtshalber den Browser-Cache!';
+            break;
+        case 'FRONTEND_EN':
+            message =
+                'Your browser has sent an invalid command. Maybe that the openroberta server was restarted.\n\nYou may edit or export your program, but it is impossible to compile or send it to your device.\n\nAs a precaution please clear your browser cache!';
+            break;
+        default:
+            message = 'Connection error! Please clear your browser cache!';
     }
     alert(message);
 }
 export { setInitToken, setErrorFn, get, json, download, xml, ping, listRobotsFromAgent, sendProgramHexToAgent, showServerError };
-

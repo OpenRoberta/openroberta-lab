@@ -1,4 +1,3 @@
-
 import * as MSG from 'message';
 import * as LOG from 'log';
 import * as UTIL from 'util';
@@ -13,7 +12,7 @@ import 'bootstrap.wysiwyg';
 const INITIAL_WIDTH = 0.3;
 var blocklyWorkspace;
 /**
- * 
+ *
  */
 function init() {
     blocklyWorkspace = GUISTATE_C.getBlocklyWorkspace();
@@ -31,19 +30,20 @@ function initView() {
 
 function initEvents() {
     $('#infoButton').off('click touchend');
-    $('#infoButton').onWrap('click touchend', function(event) {
+    $('#infoButton').onWrap('click touchend', function (event) {
         toggleInfo();
         return false;
     });
-    $(window).on('resize', function(e) {
+    $(window).on('resize', function (e) {
         if ($('#infoDiv').hasClass('rightActive')) {
             $('#infoContainer').css({
-                "width" : $('#infoDiv').outerWidth(),
-                "height" : $('#infoDiv').outerHeight() - $('.btn-toolbar.editor').outerHeight() - 57,
+                width: $('#infoDiv').outerWidth(),
+                height: $('#infoDiv').outerHeight() - $('.btn-toolbar.editor').outerHeight() - 57,
             });
         }
     });
-    $('#infoContent, #infoTags').on('change', function() { // TODO: here should be an onWrap. But this change is called during a run of another wrapped callback
+    $('#infoContent, #infoTags').on('change', function () {
+        // TODO: here should be an onWrap. But this change is called during a run of another wrapped callback
         blocklyWorkspace.description = $('#infoContent').html();
         blocklyWorkspace.tags = $('#infoTags').val();
         if (GUISTATE_C.isProgramSaved()) {
@@ -56,7 +56,7 @@ function initEvents() {
         }
     });
     // prevent to copy eg ms word formatting!
-    $('[contenteditable]#infoContent').onWrap('paste', function(e) {
+    $('[contenteditable]#infoContent').onWrap('paste', function (e) {
         e.preventDefault();
         var text = '';
         if (e.clipboardData || e.originalEvent.clipboardData) {
@@ -84,4 +84,3 @@ function toggleInfo() {
         $('#blockly').openRightView('info', INITIAL_WIDTH);
     }
 }
-

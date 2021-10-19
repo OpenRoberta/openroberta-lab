@@ -11,7 +11,7 @@ const ANIMATION_DURATION = 750;
 var ratioWorkspace = 1;
 /**
  * Decode base64 string to array of bytes
- * 
+ *
  * @param b64string
  *            A base64 encoded string
  */
@@ -28,8 +28,7 @@ function clone(obj) {
     var copy;
 
     // Handle the 3 simple types, and null or undefined
-    if (null == obj || "object" != typeof obj)
-        return obj;
+    if (null == obj || 'object' != typeof obj) return obj;
 
     // Handle Date
     if (obj instanceof Date) {
@@ -51,8 +50,7 @@ function clone(obj) {
     if (obj instanceof Object) {
         copy = {};
         for (var attr in obj) {
-            if (obj.hasOwnProperty(attr))
-                copy[attr] = clone(obj[attr]);
+            if (obj.hasOwnProperty(attr)) copy[attr] = clone(obj[attr]);
         }
         return copy;
     }
@@ -66,11 +64,10 @@ function isEmpty(obj) {
 
 function getPropertyFromObject(obj, prop, arrayIndex) {
     //property not found
-    if (typeof obj === 'undefined')
-        return false;
+    if (typeof obj === 'undefined') return false;
 
     //index of next property split
-    var _index = prop.indexOf('.')
+    var _index = prop.indexOf('.');
 
     //property split found; recursive call
     if (_index > -1) {
@@ -87,11 +84,10 @@ function getPropertyFromObject(obj, prop, arrayIndex) {
 
 function setObjectProperty(obj, prop, value, arrayIndex) {
     //property not found
-    if (typeof obj === 'undefined')
-        return false;
+    if (typeof obj === 'undefined') return false;
 
     //index of next property split
-    var _index = prop.indexOf('.')
+    var _index = prop.indexOf('.');
 
     //property split found; recursive call
     if (_index > -1) {
@@ -101,31 +97,39 @@ function setObjectProperty(obj, prop, value, arrayIndex) {
 
     //no split; get property
     if (arrayIndex != undefined) {
-        return obj[prop][arrayIndex] = value;
+        return (obj[prop][arrayIndex] = value);
     }
     obj[prop] = value;
 }
 
 /**
  * Format date
- * 
+ *
  * @param {date}
  *            date from server to be formatted
  */
 function formatDate(dateLong) {
     if (dateLong) {
         var date = new Date(dateLong);
-        var datestring = ("0" + date.getDate()).slice(-2) + "." + ("0" + (date.getMonth() + 1)).slice(-2) + "." + date.getFullYear() + ", " +
-            ("0" + date.getHours()).slice(-2) + ":" + ("0" + date.getMinutes()).slice(-2);
+        var datestring =
+            ('0' + date.getDate()).slice(-2) +
+            '.' +
+            ('0' + (date.getMonth() + 1)).slice(-2) +
+            '.' +
+            date.getFullYear() +
+            ', ' +
+            ('0' + date.getHours()).slice(-2) +
+            ':' +
+            ('0' + date.getMinutes()).slice(-2);
         return datestring;
     } else {
-        return "";
+        return '';
     }
 }
 
 /**
  * Convert date into numeric value
- * 
+ *
  * @param {d}
  *            date in the form 'dd.mm.yyyy, hh:mm:ss'
  */
@@ -148,12 +152,12 @@ function parseDate(d) {
 
 /**
  * Format result of server call for logging
- * 
+ *
  * @param {result}
  *            Result-object from server call
  */
 function formatResultLog(result) {
-    var str = "{";
+    var str = '{';
     var comma = false;
     for (key in result) {
         if (comma) {
@@ -183,19 +187,21 @@ function calcDataTableHeight() {
 }
 
 function checkVisibility() {
-    var stateKey, eventKey, keys = {
-        hidden: "visibilitychange",
-        webkitHidden: "webkitvisibilitychange",
-        mozHidden: "mozvisibilitychange",
-        msHidden: "msvisibilitychange"
-    };
+    var stateKey,
+        eventKey,
+        keys = {
+            hidden: 'visibilitychange',
+            webkitHidden: 'webkitvisibilitychange',
+            mozHidden: 'mozvisibilitychange',
+            msHidden: 'msvisibilitychange',
+        };
     for (stateKey in keys) {
         if (stateKey in document) {
             eventKey = keys[stateKey];
             break;
         }
     }
-    return function(c) {
+    return function (c) {
         if (c) {
             document.addEventListener(eventKey, c);
         }
@@ -204,8 +210,8 @@ function checkVisibility() {
 }
 
 function setFocusOnElement($elem) {
-    setTimeout(function() {
-        if ($elem.is(":visible") == true) {
+    setTimeout(function () {
+        if ($elem.is(':visible') == true) {
             $elem.focus();
         }
     }, 800);
@@ -213,11 +219,11 @@ function setFocusOnElement($elem) {
 
 function showSingleModal(customize, onSubmit, onHidden, validator) {
     customize();
-    $('#single-modal-form').onWrap('submit', function(e) {
+    $('#single-modal-form').onWrap('submit', function (e) {
         e.preventDefault();
         onSubmit();
     });
-    $('#single-modal').onWrap('hidden.bs.modal', function() {
+    $('#single-modal').onWrap('hidden.bs.modal', function () {
         $('#single-modal-form').off('submit');
         $('#singleModalInput').val('');
         $('#single-modal-form').validate().resetForm();
@@ -225,60 +231,66 @@ function showSingleModal(customize, onSubmit, onHidden, validator) {
     });
     $('#single-modal-form').removeData('validator');
     $('#single-modal-form').validate(validator);
-    setFocusOnElement($("#singleModalInput"));
-    $("#single-modal").modal('show');
+    setFocusOnElement($('#singleModalInput'));
+    $('#single-modal').modal('show');
 }
 
 function showSingleListModal(customize, onSubmit, onHidden, validator) {
-    $('#single-modal-list-form').onWrap('submit', function(e) {
+    $('#single-modal-list-form').onWrap('submit', function (e) {
         e.preventDefault();
         onSubmit();
     });
-    $('#single-modal-list').onWrap('hidden.bs.modal', function() {
+    $('#single-modal-list').onWrap('hidden.bs.modal', function () {
         $('#single-modal-list-form').unbind('submit');
         onHidden();
     });
-    setFocusOnElement($("#singleModalListInput"));
-    $("#single-modal-list").modal('show');
+    setFocusOnElement($('#singleModalListInput'));
+    $('#single-modal-list').modal('show');
 }
 
 /**
  * Helper to show the information on top of the share modal.
- * 
+ *
  */
 function showMsgOnTop(msg) {
-    $('#show-message').find('button').removeAttr("data-dismiss");
-    $('#show-message').find('button').oneWrap('click', function(e) {
-        $('#show-message').modal("hide");
-        $('#show-message').find('button').attr("data-dismiss", "modal");
-    });
-    MSG.displayInformation({
-        rc: "not ok"
-    }, "", msg);
+    $('#show-message').find('button').removeAttr('data-dismiss');
+    $('#show-message')
+        .find('button')
+        .oneWrap('click', function (e) {
+            $('#show-message').modal('hide');
+            $('#show-message').find('button').attr('data-dismiss', 'modal');
+        });
+    MSG.displayInformation(
+        {
+            rc: 'not ok',
+        },
+        '',
+        msg
+    );
 }
 
 /**
  * Handle result of server call
- * 
+ *
  * @param {result}
  *            Result-object from server call
  */
 function response(result) {
     LOG.info('result from server: ' + formatResultLog(result));
     if (result.rc != 'ok') {
-        MSG.displayMessage(result.message, "POPUP", "");
+        MSG.displayMessage(result.message, 'POPUP', '');
     }
 }
 
 /**
  * Rounds a number to required decimal
- * 
+ *
  * @param value
  *            {Number} - to be rounded
  * @param decimals
  *            {Number} - number of decimals after rounding
  * @return {Number} rounded number
- * 
+ *
  */
 function round(value, decimals) {
     return Number(Math.round(value + 'e' + decimals) + 'e-' + decimals);
@@ -287,13 +299,13 @@ function round(value, decimals) {
 /**
  * Rounds a number to required decimal and clips value to the range [0, 255]
  * (Range of UltraSound sensor)
- * 
+ *
  * @param value
  *            {Number} - to be rounded
  * @param decimals
  *            {Number} - number of decimals after rounding
  * @return {Number} rounded and clipped number
- * 
+ *
  */
 function roundUltraSound(value, decimals) {
     var ultraReading = round(value, decimals);
@@ -306,7 +318,7 @@ function roundUltraSound(value, decimals) {
 
 /**
  * Get the sign of the number.
- * 
+ *
  * @param x
  *            {Number} -
  * @return {Number} - 1 if it is positive number o/w return -1
@@ -317,14 +329,14 @@ function sgn(x) {
 
 /**
  * Returns the basename (i.e. "hello" in "C:/folder/hello.txt")
- * 
+ *
  * @param path
  *            {String} - path
  */
 function getBasename(path) {
     var base = new String(path).substring(path.lastIndexOf('/') + 1);
-    if (base.lastIndexOf(".") != -1) {
-        base = base.substring(0, base.lastIndexOf("."));
+    if (base.lastIndexOf('.') != -1) {
+        base = base.substring(0, base.lastIndexOf('.'));
     }
     return base;
 }
@@ -336,7 +348,7 @@ function destroyClickedElement(event) {
 function download(fileName, content) {
     if ('Blob' in window && navigator.userAgent.toLowerCase().match(/iPad|iPhone|Android/i) == null) {
         var contentAsBlob = new Blob([content], {
-            type: 'application/octet-stream'
+            type: 'application/octet-stream',
         });
         if ('msSaveOrOpenBlob' in navigator) {
             navigator.msSaveOrOpenBlob(contentAsBlob, fileName);
@@ -364,9 +376,9 @@ function download(fileName, content) {
 function getHashFrom(string) {
     var hash = 0;
     for (var i = 0; i < string.length; i++) {
-        hash = ((hash << 5) - hash) + string.charCodeAt(i++);
+        hash = (hash << 5) - hash + string.charCodeAt(i++);
     }
-    return (hash < 0) ? ((hash * -1) + 0xFFFFFFFF) : hash;
+    return hash < 0 ? hash * -1 + 0xffffffff : hash;
 }
 
 function countBlocks(xmlString) {
@@ -387,8 +399,8 @@ function countBlocks(xmlString) {
 
 function isLocalStorageAvailable() {
     try {
-        localStorage.setItem("test", "test");
-        localStorage.removeItem("test");
+        localStorage.setItem('test', 'test');
+        localStorage.removeItem('test');
         return true;
     } catch (e) {
         return false;
@@ -398,123 +410,130 @@ function isLocalStorageAvailable() {
 function alertTab(tabIdentifier) {
     clearTabAlert(tabIdentifier);
     $('#' + tabIdentifier).width(); // trigger a reflow to sync animations
-    $('#' + tabIdentifier).prepend('<span class="typcn typcn-warning-outline"></span>') // add alert typicon
+    $('#' + tabIdentifier).prepend('<span class="typcn typcn-warning-outline"></span>'); // add alert typicon
     $('#' + tabIdentifier).addClass('blinking');
 }
 
 function clearTabAlert(tabIdentifier) {
-    $('#' + tabIdentifier).children().remove('.typcn') // remove alert typicon
+    $('#' + tabIdentifier)
+        .children()
+        .remove('.typcn'); // remove alert typicon
     $('#' + tabIdentifier).removeClass('blinking');
 }
 
 var __entityMap = {
-    "&": "&amp;",
-    "<": "&lt;",
-    ">": "&gt;",
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
     '"': '&quot;',
     "'": '&#39;',
-    "/": '&#x2F;'
+    '/': '&#x2F;',
 };
 
-String.prototype.escapeHTML = function() {
-    return String(this).replace(/[&<>"'\/]/g, function(s) {
+String.prototype.escapeHTML = function () {
+    return String(this).replace(/[&<>"'\/]/g, function (s) {
         return __entityMap[s];
     });
-}
+};
 
-$.fn.draggable = function(opt) {
-
-    opt = $.extend({
-        handle: "",
-        cursor: "move",
-        draggableClass: "draggable",
-        activeHandleClass: "active-handle"
-    }, opt);
+$.fn.draggable = function (opt) {
+    opt = $.extend(
+        {
+            handle: '',
+            cursor: 'move',
+            draggableClass: 'draggable',
+            activeHandleClass: 'active-handle',
+        },
+        opt
+    );
 
     var $selected = null;
-    var $elements = (opt.handle === "") ? this : this.find(opt.handle);
+    var $elements = opt.handle === '' ? this : this.find(opt.handle);
 
-    $elements.css('cursor', opt.cursor).on("mousedown touchstart", function(e) {
-        var pageX = e.pageX || e.originalEvent.touches[0].pageX;
-        var pageY = e.pageY || e.originalEvent.touches[0].pageY;
-        if (opt.handle === "") {
-            $selected = $(this);
-            $selected.addClass(opt.draggableClass);
-        } else {
-            $selected = $(this).parent();
-            $selected.addClass(opt.draggableClass).find(opt.handle).addClass(opt.activeHandleClass);
-        }
-        var drg_h = $selected.outerHeight(),
-            drg_w = $selected.outerWidth(),
-            pos_y = $selected.offset().top + drg_h - pageY,
-            pos_x = $selected.offset().left +
-            drg_w - pageX;
-        $(document).on("mousemove touchmove", function(e) {
+    $elements
+        .css('cursor', opt.cursor)
+        .on('mousedown touchstart', function (e) {
             var pageX = e.pageX || e.originalEvent.touches[0].pageX;
             var pageY = e.pageY || e.originalEvent.touches[0].pageY;
-            // special case movable slider between workspace and right divs
-            if (opt.axis == 'x') {
-                var left = pageX + pos_x - drg_w;
-                var left = Math.min(left, $('#main-section').width() - 80);
-                var left = Math.max(left, 42);
-                $selected.offset({
-                    top: 0,
-                    left: left - 4
-                });
-                $('#blockly').width(left + 3);
-                $('.rightMenuButton').css({
-                    'right': $(window).width() - left
-                });
-                $('.fromRight').css({
-                    'width': $(window).width() - $('#blockly').width()
+            if (opt.handle === '') {
+                $selected = $(this);
+                $selected.addClass(opt.draggableClass);
+            } else {
+                $selected = $(this).parent();
+                $selected.addClass(opt.draggableClass).find(opt.handle).addClass(opt.activeHandleClass);
+            }
+            var drg_h = $selected.outerHeight(),
+                drg_w = $selected.outerWidth(),
+                pos_y = $selected.offset().top + drg_h - pageY,
+                pos_x = $selected.offset().left + drg_w - pageX;
+            $(document)
+                .on('mousemove touchmove', function (e) {
+                    var pageX = e.pageX || e.originalEvent.touches[0].pageX;
+                    var pageY = e.pageY || e.originalEvent.touches[0].pageY;
+                    // special case movable slider between workspace and right divs
+                    if (opt.axis == 'x') {
+                        var left = pageX + pos_x - drg_w;
+                        var left = Math.min(left, $('#main-section').width() - 80);
+                        var left = Math.max(left, 42);
+                        $selected.offset({
+                            top: 0,
+                            left: left - 4,
+                        });
+                        $('#blockly').width(left + 3);
+                        $('.rightMenuButton').css({
+                            right: $(window).width() - left,
+                        });
+                        $('.fromRight').css({
+                            width: $(window).width() - $('#blockly').width(),
+                        });
+                        ratioWorkspace = $('#blockly').outerWidth() / $('#main-section').outerWidth();
+                        $(window).resize();
+                    } else {
+                        $selected.offset({
+                            top: pageY + pos_y - drg_h,
+                            left: pageX + pos_x - drg_w,
+                        });
+                    }
+                    $selected.css({
+                        right: 'auto',
+                    });
                 })
-                ratioWorkspace = $('#blockly').outerWidth() / $('#main-section').outerWidth();
-                $(window).resize();
-            } else {
-                $selected.offset({
-                    top: pageY + pos_y - drg_h,
-                    left: pageX + pos_x - drg_w
+                .on('mouseup touchend', function () {
+                    $(this).off('mousemove touchmove'); // Unbind events from document
+                    if ($selected !== null) {
+                        $selected.removeClass(opt.draggableClass);
+                        $selected = null;
+                    }
                 });
+        })
+        .on('mouseup touchend', function () {
+            if ($selected) {
+                if (opt.handle === '') {
+                    $selected.removeClass(opt.draggableClass);
+                } else {
+                    $selected.removeClass(opt.draggableClass).find(opt.handle).removeClass(opt.activeHandleClass);
+                }
             }
-            $selected.css({
-                right: 'auto',
-            });
-        }).on("mouseup touchend", function() {
-            $(this).off("mousemove touchmove"); // Unbind events from document
-            if ($selected !== null) {
-                $selected.removeClass(opt.draggableClass);
-                $selected = null;
-            }
+            $selected = null;
         });
-    }).on("mouseup touchend", function() {
-        if ($selected) {
-            if (opt.handle === "") {
-                $selected.removeClass(opt.draggableClass);
-            } else {
-                $selected.removeClass(opt.draggableClass).find(opt.handle).removeClass(opt.activeHandleClass);
-            }
-        }
-        $selected = null;
-    });
     return this;
 };
 
-
 const originalAddClass = $.fn.addClass;
-$.fn.addClass = function() {
+$.fn.addClass = function () {
     let result = originalAddClass.apply(this, arguments);
-    $(this).trigger("classChange");
+    $(this).trigger('classChange');
     return result;
-}
+};
 
 const originalRemoveClass = $.fn.removeClass;
-$.fn.removeClass = function() {
+$.fn.removeClass = function () {
     let result = originalRemoveClass.apply(this, arguments);
-    $(this).trigger("classChange");
+    $(this).trigger('classChange');
     return result;
-}
+};
 
-$.fn.closeRightView = function(opt_callBack) {
+$.fn.closeRightView = function (opt_callBack) {
     if ($('.fromRight.rightActive').hasClass('shifting')) {
         return;
     }
@@ -522,40 +541,43 @@ $.fn.closeRightView = function(opt_callBack) {
     Blockly.hideChaff();
     $('.blocklyToolboxDiv').css('display', 'inherit');
     var that = this; //$('#blockly')
-    $('.fromRight.rightActive').animate({
-        width: 0
-    }, {
-        duration: ANIMATION_DURATION,
-        start: function() {
-            $(".modal").modal("hide");
-            $('.rightMenuButton.rightActive').removeClass('rightActive');
+    $('.fromRight.rightActive').animate(
+        {
+            width: 0,
         },
-        step: function(now) {
-            that.width($('#main-section').outerWidth() - now);
-            $('.rightMenuButton').css('right', now);
-            ratioWorkspace = $('#blockly').outerWidth() / $('#main-section').outerWidth();
-            $(window).resize();
-        },
-        done: function() {
-            that.width($('#main-section').outerWidth());
-            $('.rightMenuButton').css('right', 0);
-            ratioWorkspace = 1;
-            $('.fromRight').width(0);
-            that.removeClass('rightActive');
-            $('.fromRight.rightActive').removeClass('rightActive');
-            $('#sliderDiv').hide();
-            $(window).resize();
-            if (typeof opt_callBack == 'function') {
-                opt_callBack();
-            }
-        },
-        always: function() {
-            $('.fromRight.shifting').removeClass('shifting');
+        {
+            duration: ANIMATION_DURATION,
+            start: function () {
+                $('.modal').modal('hide');
+                $('.rightMenuButton.rightActive').removeClass('rightActive');
+            },
+            step: function (now) {
+                that.width($('#main-section').outerWidth() - now);
+                $('.rightMenuButton').css('right', now);
+                ratioWorkspace = $('#blockly').outerWidth() / $('#main-section').outerWidth();
+                $(window).resize();
+            },
+            done: function () {
+                that.width($('#main-section').outerWidth());
+                $('.rightMenuButton').css('right', 0);
+                ratioWorkspace = 1;
+                $('.fromRight').width(0);
+                that.removeClass('rightActive');
+                $('.fromRight.rightActive').removeClass('rightActive');
+                $('#sliderDiv').hide();
+                $(window).resize();
+                if (typeof opt_callBack == 'function') {
+                    opt_callBack();
+                }
+            },
+            always: function () {
+                $('.fromRight.shifting').removeClass('shifting');
+            },
         }
-    });
+    );
 };
 
-$.fn.openRightView = function(viewName, initialViewWidth, opt_callBack) {
+$.fn.openRightView = function (viewName, initialViewWidth, opt_callBack) {
     if ($('.fromRight.rightActive').hasClass('shifting')) {
         return;
     }
@@ -563,7 +585,7 @@ $.fn.openRightView = function(viewName, initialViewWidth, opt_callBack) {
     var width;
     var smallScreen;
     let buttonName = viewName;
-    if (opt_callBack && typeof opt_callBack == "string") {
+    if (opt_callBack && typeof opt_callBack == 'string') {
         buttonName = opt_callBack;
     }
     if ($(window).width() < 768) {
@@ -591,39 +613,42 @@ $.fn.openRightView = function(viewName, initialViewWidth, opt_callBack) {
     $('#' + viewName + 'Div').addClass('shifting');
     $('#' + viewName + 'Div, #' + buttonName + 'Button').addClass('rightActive');
     var that = this;
-    $('.fromRight.rightActive').animate({
-        width: width
-    }, {
-        duration: ANIMATION_DURATION,
-        step: function(now, tween) {
-            that.width($('#main-section').outerWidth() - now);
-            $('.rightMenuButton').css('right', now);
-            ratioWorkspace = $('#blockly').outerWidth() / $('#main-section').outerWidth();
-            $(window).resize();
+    $('.fromRight.rightActive').animate(
+        {
+            width: width,
         },
-        done: function() {
-            $('#sliderDiv').show();
-            that.width($('#main-section').outerWidth() - $('.fromRight.rightActive').width());
-            $('.rightMenuButton').css('right', $('.fromRight.rightActive').width());
-            ratioWorkspace = $('#blockly').outerWidth() / $('#main-section').outerWidth();
-            $(window).resize();
-            if (smallScreen) {
-                $('.blocklyToolboxDiv').css('display', 'none');
-            }
-            $('#sliderDiv').css({
-                'left': that.width() - 7
-            });
-            if (typeof opt_callBack == 'function') {
-                opt_callBack();
-            }
-        },
-        always: function() {
-            $('#' + viewName + 'Div').removeClass('shifting');
+        {
+            duration: ANIMATION_DURATION,
+            step: function (now, tween) {
+                that.width($('#main-section').outerWidth() - now);
+                $('.rightMenuButton').css('right', now);
+                ratioWorkspace = $('#blockly').outerWidth() / $('#main-section').outerWidth();
+                $(window).resize();
+            },
+            done: function () {
+                $('#sliderDiv').show();
+                that.width($('#main-section').outerWidth() - $('.fromRight.rightActive').width());
+                $('.rightMenuButton').css('right', $('.fromRight.rightActive').width());
+                ratioWorkspace = $('#blockly').outerWidth() / $('#main-section').outerWidth();
+                $(window).resize();
+                if (smallScreen) {
+                    $('.blocklyToolboxDiv').css('display', 'none');
+                }
+                $('#sliderDiv').css({
+                    left: that.width() - 7,
+                });
+                if (typeof opt_callBack == 'function') {
+                    opt_callBack();
+                }
+            },
+            always: function () {
+                $('#' + viewName + 'Div').removeClass('shifting');
+            },
         }
-    });
+    );
 };
 
-$(window).resize(function() {
+$(window).resize(function () {
     var parentWidth = $('#main-section').outerWidth();
     var height = Math.max($('#blockly').outerHeight(), $('#brickly').outerHeight());
 
@@ -649,8 +674,8 @@ $(window).resize(function() {
         $('#bricklyDiv').width(parentWidth);
         $('#bricklyDiv').height(height);
     }
-    // here comes a fix for a strange browser behavior while zoom is not 100%. It is just in case (e.g. chrome 125% works fine, 110% not). 
-    // Seems that either the returned sizes from the browser sometimes include margins/borders and sometimes not or that the assigned sizes behave 
+    // here comes a fix for a strange browser behavior while zoom is not 100%. It is just in case (e.g. chrome 125% works fine, 110% not).
+    // Seems that either the returned sizes from the browser sometimes include margins/borders and sometimes not or that the assigned sizes behave
     // different (with and without margins/borders).
     var diff = $('#main-section').outerWidth() - $('#blocklyDiv').outerWidth() - rightWidth;
     if (diff != 0) {
@@ -666,7 +691,7 @@ $(window).resize(function() {
  * Remove error and warning annotation from all blocks located in this
  * workspace. Usually this is done with a reload of all blocks, but here we
  * only want to remove the annotations.
- * 
+ *
  * @param {workspacee}
  *            workspace
  */
@@ -692,7 +717,7 @@ function clearAnnotations(workspace) {
 /**
  * Annotate the visible configuration blocks with warnings and errors
  * generated server side.
- * 
+ *
  * @param {object}
  *            confAnnos - {block id, {type of annotation, message key}}
  */
@@ -702,22 +727,49 @@ function annotateBlocks(workspace, annotations) {
         if (block) {
             var anno = annotations[annoId];
             for (var annoType in anno) {
-                var annoMsg = Blockly.Msg[anno[annoType]] || anno[annoType] || "unknown error";
+                var annoMsg = Blockly.Msg[anno[annoType]] || anno[annoType] || 'unknown error';
                 switch (annoType) {
-                    case "ERROR":
+                    case 'ERROR':
                         block.setErrorText(annoMsg);
                         block.error.setVisible(true);
                         break;
-                    case "WARNING":
+                    case 'WARNING':
                         block.setWarningText(annoMsg);
                         block.warning.setVisible(true);
                         break;
                     default:
-                        console.warn("Unsupported annotation: " + annoType);
+                        console.warn('Unsupported annotation: ' + annoType);
                 }
             }
         }
     }
 }
-export { base64decode, clone, isEmpty, getPropertyFromObject, setObjectProperty, formatDate, parseDate, formatResultLog, calcDataTableHeight, checkVisibility, setFocusOnElement, showSingleModal, showSingleListModal, showMsgOnTop, response, round, roundUltraSound, sgn, getBasename, download, getHashFrom, countBlocks, isLocalStorageAvailable, alertTab, clearTabAlert, clearAnnotations, annotateBlocks };
-
+export {
+    base64decode,
+    clone,
+    isEmpty,
+    getPropertyFromObject,
+    setObjectProperty,
+    formatDate,
+    parseDate,
+    formatResultLog,
+    calcDataTableHeight,
+    checkVisibility,
+    setFocusOnElement,
+    showSingleModal,
+    showSingleListModal,
+    showMsgOnTop,
+    response,
+    round,
+    roundUltraSound,
+    sgn,
+    getBasename,
+    download,
+    getHashFrom,
+    countBlocks,
+    isLocalStorageAvailable,
+    alertTab,
+    clearTabAlert,
+    clearAnnotations,
+    annotateBlocks,
+};

@@ -15,11 +15,11 @@ function displayPopupMessage(lkey, value, confirmMsg, opt_denyMsg) {
         $('#confirmCancel').attr('value', opt_denyMsg);
         $('#messageConfirm').attr('lkey', lkey);
         $('#messageConfirm').html(value);
-        $("#show-message-confirm").modal("show");
+        $('#show-message-confirm').modal('show');
     } else {
         $('#message').attr('lkey', lkey);
         $('#message').html(value);
-        $("#show-message").modal("show");
+        $('#show-message').modal('show');
     }
 }
 
@@ -28,19 +28,23 @@ function displayPopupMessage(lkey, value, confirmMsg, opt_denyMsg) {
  */
 function displayToastMessages() {
     $('#toastText').html(toastMessages[toastMessages.length - 1]);
-    $('#toastContainer').delay(100).fadeIn("slow", function() {
-        $(this).delay(toastDelay).fadeOut("slow", function() {
-            toastMessages.pop();
-            if (toastMessages.length > 0) {
-                displayToastMessages();
-            }
+    $('#toastContainer')
+        .delay(100)
+        .fadeIn('slow', function () {
+            $(this)
+                .delay(toastDelay)
+                .fadeOut('slow', function () {
+                    toastMessages.pop();
+                    if (toastMessages.length > 0) {
+                        displayToastMessages();
+                    }
+                });
         });
-    });
 }
 
 /**
  * Display message
- * 
+ *
  * @param {messageId}
  *            ID of message to be displayed
  * @param {output}
@@ -50,13 +54,13 @@ function displayToastMessages() {
  */
 function displayMessage(messageId, output, replaceWith, opt_cancel, opt_robot) {
     var cancel = opt_cancel || false;
-    var robot = "";
+    var robot = '';
     if (opt_robot) {
         robot = '_' + opt_robot.toUpperCase();
     }
     if (messageId != undefined) {
-        if (messageId.indexOf(".") >= 0 || messageId.toUpperCase() != messageId) {
-            // Invalid Message-Key 
+        if (messageId.indexOf('.') >= 0 || messageId.toUpperCase() != messageId) {
+            // Invalid Message-Key
             LOG.info('Invalid message-key received: ' + messageId);
         }
 
@@ -65,31 +69,31 @@ function displayMessage(messageId, output, replaceWith, opt_cancel, opt_robot) {
         if (value === undefined || value === '') {
             value = messageId;
         }
-        
-        if( typeof replaceWith === "string" ) {
-            if (value.indexOf("$") >= 0) {
-                value = value.replace("$", replaceWith);
+
+        if (typeof replaceWith === 'string') {
+            if (value.indexOf('$') >= 0) {
+                value = value.replace('$', replaceWith);
             } else {
                 value = value.replace(/\{[^\}]+\}/g, replaceWith);
             }
-        } else if ( typeof replaceWith === "object" ) {
-            if (value.indexOf("$") >= 0) {
+        } else if (typeof replaceWith === 'object') {
+            if (value.indexOf('$') >= 0) {
                 var keys = Object.keys(replaceWith);
-                value = value.replace("$", replaceWith[keys[0]]);
+                value = value.replace('$', replaceWith[keys[0]]);
             } else {
-                Object.keys(replaceWith).forEach(function(key) {
+                Object.keys(replaceWith).forEach(function (key) {
                     if (replaceWith.hasOwnProperty(key)) {
-                        value = value.replace("{" + key + "}", replaceWith[key]);
+                        value = value.replace('{' + key + '}', replaceWith[key]);
                     }
                 });
             }
         }
-        
+
         if (output === 'POPUP') {
             if (cancel) {
-                displayPopupMessage(lkey, value + Blockly.Msg.POPUP_CONFIRM_CONTINUE, "OK", Blockly.Msg.POPUP_CANCEL);
+                displayPopupMessage(lkey, value + Blockly.Msg.POPUP_CONFIRM_CONTINUE, 'OK', Blockly.Msg.POPUP_CANCEL);
             } else {
-                displayPopupMessage(lkey, value, "OK");
+                displayPopupMessage(lkey, value, 'OK');
             }
         } else if (output === 'TOAST') {
             toastMessages.unshift(value);
@@ -102,7 +106,7 @@ function displayMessage(messageId, output, replaceWith, opt_cancel, opt_robot) {
 
 /**
  * Display information
- * 
+ *
  * @param {result}
  *            Response of a REST-call.
  * @param {successMessage}
@@ -113,16 +117,15 @@ function displayMessage(messageId, output, replaceWith, opt_cancel, opt_robot) {
  *            Parameter to be used in the message text.
  */
 function displayInformation(result, successMessage, errorMessage, messageParam, opt_robot) {
-    if (result.rc === "ok") {
+    if (result.rc === 'ok') {
         $('.modal').modal('hide'); // close all opened popups
-        displayMessage(successMessage, "TOAST", messageParam, false, opt_robot);
+        displayMessage(successMessage, 'TOAST', messageParam, false, opt_robot);
     } else {
         if (result.parameters === undefined) {
-            displayMessage(errorMessage, "POPUP", messageParam, false, opt_robot);        		
+            displayMessage(errorMessage, 'POPUP', messageParam, false, opt_robot);
         } else {
-            displayMessage(errorMessage, "POPUP", result.parameters, false, opt_robot);        		
+            displayMessage(errorMessage, 'POPUP', result.parameters, false, opt_robot);
         }
     }
 }
 export { displayPopupMessage, displayToastMessages, displayMessage, displayInformation };
-
