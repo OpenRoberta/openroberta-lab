@@ -16,6 +16,7 @@
   },
   "devDependencies": {
     "@types/bootstrap": "^3.3.28",
+    "prettier": "2.4.1",
     "typescript": "^3.9.2"
   }
 }

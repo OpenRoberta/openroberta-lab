@@ -1,0 +1,4 @@
+testData/
+jsGenerated/
+*.json
+package-lock.json
