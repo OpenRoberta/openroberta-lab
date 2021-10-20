@@ -42,8 +42,8 @@ def sensors():
     h.say(str(faceRecognitionModule.detectFace()))
     h.say(str(faceRecognitionModule.getFaceInformation(___stringVar)))
     h.say(str(speechRecognitionModule.recognizeWordFromDictionary(___stringVar)))
-    h.say(str(h.gyrometer('no port')))
-    h.say(str(h.gyrometer('no port')))
+    h.say(str(h.gyrometer('x')))
+    h.say(str(h.gyrometer('y')))
     h.say(str(h.accelerometer('x')))
     h.say(str(h.accelerometer('y')))
     h.say(str(h.accelerometer('z')))
@@ -119,11 +119,11 @@ def sensorsWaitUntil():
             break
         h.wait(15)
     while True:
-        if h.gyrometer('no port') > 90:
+        if h.gyrometer('x') > 90:
             break
         h.wait(15)
     while True:
-        if h.gyrometer('no port') > 90:
+        if h.gyrometer('y') > 90:
             break
         h.wait(15)
     while True:

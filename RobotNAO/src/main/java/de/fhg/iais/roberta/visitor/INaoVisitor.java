@@ -1,4 +1,4 @@
-package de.fhg.iais.roberta.visitor.hardware;
+package de.fhg.iais.roberta.visitor;
 
 import de.fhg.iais.roberta.syntax.action.nao.Animation;
 import de.fhg.iais.roberta.syntax.action.nao.ApplyPosture;

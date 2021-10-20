@@ -77,7 +77,7 @@ import de.fhg.iais.roberta.syntax.sensor.nao.NaoMarkInformation;
 import de.fhg.iais.roberta.syntax.sensor.nao.RecognizeWord;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.visitor.IVisitor;
-import de.fhg.iais.roberta.visitor.hardware.INaoVisitor;
+import de.fhg.iais.roberta.visitor.INaoVisitor;
 import de.fhg.iais.roberta.visitor.lang.codegen.prog.AbstractPythonVisitor;
 
 /**
@@ -792,7 +792,7 @@ public final class NaoPythonVisitor extends AbstractPythonVisitor implements INa
     @Override
     public Void visitGyroSensor(GyroSensor<Void> gyrometer) {
         this.sb.append("h.gyrometer(");
-        this.sb.append(getEnumCode(gyrometer.getUserDefinedPort()));
+        this.sb.append(getEnumCode(gyrometer.getSlot()));
         this.sb.append(")");
         return null;
     }
@@ -1066,7 +1066,6 @@ public final class NaoPythonVisitor extends AbstractPythonVisitor implements INa
                 case SC.ACCELEROMETER:
                     break;
                 default:
-
                     throw new DbcException("Sensor is not supported!" + usedSensor.getType().toString());
             }
         }
