@@ -1,4 +1,3 @@
-
 import * as COMM from 'comm';
 import * as MSG from 'message';
 import * as LOG from 'log';
@@ -15,29 +14,33 @@ import 'jquery-validate';
 function init(callback) {
     $('#fileSelector').val(null);
     $('#fileSelector').off();
-    $('#fileSelector').onWrap('change', function(event) {
-        var file = event.target.files[0];
-        var reader = new FileReader();
-        reader.onload = function(event) {
-            var name = UTIL.getBasename(file.name);
-            if ($.isFunction(callback)) {
-                callback(name, event.target.result);
-            }
-        }
-        reader.readAsText(file);
-        return false;
-    }, 'import clicked');
+    $('#fileSelector').onWrap(
+        'change',
+        function (event) {
+            var file = event.target.files[0];
+            var reader = new FileReader();
+            reader.onload = function (event) {
+                var name = UTIL.getBasename(file.name);
+                if ($.isFunction(callback)) {
+                    callback(name, event.target.result);
+                }
+            };
+            reader.readAsText(file);
+            return false;
+        },
+        'import clicked'
+    );
 }
 
 function importXml() {
     init(loadProgramFromXML);
-    $('#fileSelector').attr("accept", ".xml");
+    $('#fileSelector').attr('accept', '.xml');
     $('#fileSelector').clickWrap(); // opening dialog
 }
 
 function importSourceCode(callback) {
     init(callback);
-    $('#fileSelector').attr("accept", "." + GUISTATE_C.getSourceCodeFileExtension());
+    $('#fileSelector').attr('accept', '.' + GUISTATE_C.getSourceCodeFileExtension());
     $('#fileSelector').clickWrap(); // opening dialog
 }
 
@@ -45,18 +48,22 @@ function openProgramFromXML(target) {
     var robotType = target[1];
     var programName = target[2];
     var programXml = target[3];
-    ROBOT_C.switchRobot(robotType, true, function() {
+    ROBOT_C.switchRobot(robotType, true, function () {
         loadProgramFromXML(programName, programXml);
     });
 }
 
 function loadProgramFromXML(name, xml) {
-    if (xml.search("<export") === -1) {
-        xml = '<export xmlns="http://de.fhg.iais.roberta.blockly"><program>' + xml + '</program><config>' + GUISTATE_C.getConfigurationXML() +
+    if (xml.search('<export') === -1) {
+        xml =
+            '<export xmlns="http://de.fhg.iais.roberta.blockly"><program>' +
+            xml +
+            '</program><config>' +
+            GUISTATE_C.getConfigurationXML() +
             '</config></export>';
     }
-    PROGRAM.loadProgramFromXML(name, xml, function(result) {
-        if (result.rc == "ok") {
+    PROGRAM.loadProgramFromXML(name, xml, function (result) {
+        if (result.rc == 'ok') {
             // save the old program and configuration that it can be restored
             var dom = Blockly.Xml.workspaceToDom(GUISTATE_C.getBlocklyWorkspace());
             var xmlProgOld = Blockly.Xml.domToText(dom);
@@ -77,7 +84,7 @@ function loadProgramFromXML(name, xml) {
                 PROGRAM_C.programToBlocklyWorkspace(result.progXML);
                 GUISTATE_C.setProgram(result);
                 GUISTATE_C.setProgramXML(result.progXML);
-                GUISTATE_C.setConfigurationName("");
+                GUISTATE_C.setConfigurationName('');
                 LOG.info('show program ' + GUISTATE_C.getProgramName());
             } catch (e) {
                 // restore old Program
@@ -87,14 +94,14 @@ function loadProgramFromXML(name, xml) {
                 GUISTATE_C.setConfigurationName(nameConfOld);
                 CONFIGURATION_C.reloadConf();
                 PROGRAM_C.reloadProgram();
-                result.rc = "error";
-                MSG.displayInformation(result, "", Blockly.Msg.ORA_PROGRAM_IMPORT_ERROR, name);
+                result.rc = 'error';
+                MSG.displayInformation(result, '', Blockly.Msg.ORA_PROGRAM_IMPORT_ERROR, name);
             }
         } else {
-            if (result.message === "ORA_PROGRAM_IMPORT_ERROR_WRONG_ROBOT_TYPE") {
-                MSG.displayInformation(result, "", result.message, result.robotTypes);
+            if (result.message === 'ORA_PROGRAM_IMPORT_ERROR_WRONG_ROBOT_TYPE') {
+                MSG.displayInformation(result, '', result.message, result.robotTypes);
             } else {
-                MSG.displayInformation(result, "", result.message, name);
+                MSG.displayInformation(result, '', result.message, name);
             }
         }
     });
@@ -106,15 +113,15 @@ function loadProgramFromXML(name, xml) {
  */
 function importSourceCodeToCompile() {
     init(compileFromSource);
-    $('#fileSelector').attr("accept", "." + GUISTATE_C.getSourceCodeFileExtension());
+    $('#fileSelector').attr('accept', '.' + GUISTATE_C.getSourceCodeFileExtension());
     $('#fileSelector').clickWrap(); // opening dialog
 }
 
 function compileFromSource(name, source) {
-    PROGRAM.compileN(name, source, GUISTATE_C.getLanguage(), function(result) {
+    PROGRAM.compileN(name, source, GUISTATE_C.getLanguage(), function (result) {
         var alertMsg = result.rc;
         if (result.parameters !== undefined) {
-            alertMsg += "\nMessage is:\n" + result.parameters.MESSAGE;
+            alertMsg += '\nMessage is:\n' + result.parameters.MESSAGE;
         }
         alert(alertMsg);
     });
@@ -127,13 +134,13 @@ function compileFromSource(name, source) {
 
 function importNepoCodeToCompile() {
     init(compileFromNepoCode);
-    $('#fileSelector').attr("accept", ".xml");
+    $('#fileSelector').attr('accept', '.xml');
     $('#fileSelector').clickWrap(); // opening dialog
 }
 export { init, importXml, importSourceCode, openProgramFromXML, loadProgramFromXML, importSourceCodeToCompile, importNepoCodeToCompile };
 
 function compileFromNepoCode(name, source) {
-    PROGRAM.compileP(name, source, GUISTATE_C.getLanguage(), function(result) {
+    PROGRAM.compileP(name, source, GUISTATE_C.getLanguage(), function (result) {
         alert(result.rc);
     });
 }

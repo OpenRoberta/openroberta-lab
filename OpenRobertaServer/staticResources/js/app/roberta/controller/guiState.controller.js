@@ -12,7 +12,7 @@ define(["require", "exports", "util", "message", "guiState.model", "progHelp.con
             GUISTATE.gui.webview = opt_data || false;
             if (GUISTATE.gui.webview) {
                 $('.logo').css({
-                    'right': '32px',
+                    right: '32px',
                 });
             }
             GUISTATE.gui.view = 'tabProgram';
@@ -37,10 +37,12 @@ define(["require", "exports", "util", "message", "guiState.model", "progHelp.con
             setProgramName('NEPOprog');
             if (GUISTATE.server.theme !== 'default') {
                 var themePath = '../theme/' + GUISTATE.server.theme + '.json';
-                $.getJSON(themePath).done(function (data) {
+                $.getJSON(themePath)
+                    .done(function (data) {
                     // store new theme properties (only colors so far)
                     GUISTATE.server.theme = data;
-                }).fail(function (e, r) {
+                })
+                    .fail(function (e, r) {
                     // this should not happen
                     console.error('"' + themePath + '" is not a valid json file! The reason is probably a', r);
                     GUISTATE.server.theme = 'default';
@@ -68,7 +70,9 @@ define(["require", "exports", "util", "message", "guiState.model", "progHelp.con
             GUISTATE.gui.bricklyWorkspace.markFocused();
         }
         // Robot?
-        $('#menu-' + GUISTATE.gui.robot).parent().addClass('disabled');
+        $('#menu-' + GUISTATE.gui.robot)
+            .parent()
+            .addClass('disabled');
         // Tutorials?
         updateTutorialMenu();
     }
@@ -357,8 +361,8 @@ define(["require", "exports", "util", "message", "guiState.model", "progHelp.con
         GUISTATE.gui.robot = robot;
         GUISTATE.gui.robotGroup = robotGroup;
         var value = Blockly.Msg.MENU_START_BRICK;
-        if (value.indexOf("$") >= 0) {
-            value = value.replace("$", getRobotRealName());
+        if (value.indexOf('$') >= 0) {
+            value = value.replace('$', getRobotRealName());
         }
         $('#menuRunProg').html(value);
         if (GUISTATE.gui.blocklyWorkspace) {
@@ -369,9 +373,9 @@ define(["require", "exports", "util", "message", "guiState.model", "progHelp.con
             if (inWebview()) {
                 WEBVIEW_C.setRobotBehaviour();
                 WEBVIEW_C.jsToAppInterface({
-                    'target': 'internal',
-                    'type': 'setRobot',
-                    'robot': robotGroup
+                    target: 'internal',
+                    type: 'setRobot',
+                    robot: robotGroup,
                 });
             }
         }
@@ -408,19 +412,19 @@ define(["require", "exports", "util", "message", "guiState.model", "progHelp.con
     exports.findRobot = findRobot;
     function setConnectionState(state) {
         switch (state) {
-            case "busy":
+            case 'busy':
                 $('#head-navi-icon-robot').removeClass('error');
                 $('#head-navi-icon-robot').removeClass('wait');
                 $('#head-navi-icon-robot').addClass('busy');
                 setRunEnabled(false);
                 break;
-            case "error":
+            case 'error':
                 $('#head-navi-icon-robot').removeClass('busy');
                 $('#head-navi-icon-robot').removeClass('wait');
                 $('#head-navi-icon-robot').addClass('error');
                 setRunEnabled(false);
                 break;
-            case "wait":
+            case 'wait':
                 if (isRobotConnected()) {
                     $('#head-navi-icon-robot').removeClass('busy');
                     $('#head-navi-icon-robot').removeClass('error');
@@ -445,11 +449,11 @@ define(["require", "exports", "util", "message", "guiState.model", "progHelp.con
         GUISTATE.gui.runEnabled = running;
         if (running) {
             GUISTATE.gui.blocklyWorkspace && GUISTATE.gui.blocklyWorkspace.robControls.enable('runOnBrick');
-            $(".menuRunProg, #runSourceCodeEditor").removeClass('disabled');
+            $('.menuRunProg, #runSourceCodeEditor').removeClass('disabled');
         }
         else {
             GUISTATE.gui.blocklyWorkspace && GUISTATE.gui.blocklyWorkspace.robControls.disable('runOnBrick');
-            $(".menuRunProg, #runSourceCodeEditor").addClass('disabled');
+            $('.menuRunProg, #runSourceCodeEditor').addClass('disabled');
         }
     }
     exports.setRunEnabled = setRunEnabled;
@@ -490,7 +494,7 @@ define(["require", "exports", "util", "message", "guiState.model", "progHelp.con
                 return getRobots()[robot].realName;
             }
         }
-        return "Robot not found";
+        return 'Robot not found';
     }
     exports.getMenuRobotRealName = getMenuRobotRealName;
     function getIsRobotBeta(robotName) {
@@ -514,7 +518,7 @@ define(["require", "exports", "util", "message", "guiState.model", "progHelp.con
                 return getRobots()[robot].infoDE;
             }
         }
-        return "#";
+        return '#';
     }
     exports.getRobotInfoDE = getRobotInfoDE;
     function getRobotInfoEN(robotName) {
@@ -526,14 +530,15 @@ define(["require", "exports", "util", "message", "guiState.model", "progHelp.con
                 return getRobots()[robot].infoEN;
             }
         }
-        return "#";
+        return '#';
     }
     exports.getRobotInfoEN = getRobotInfoEN;
     function isRobotConnected() {
         if (GUISTATE.robot.time > 0) {
             return true;
         }
-        if (GUISTATE.gui.connection === GUISTATE.gui.connectionType.AUTO || GUISTATE.gui.connection === GUISTATE.gui.connectionType.LOCAL ||
+        if (GUISTATE.gui.connection === GUISTATE.gui.connectionType.AUTO ||
+            GUISTATE.gui.connection === GUISTATE.gui.connectionType.LOCAL ||
             GUISTATE.gui.connectionType.JSPLAY) {
             return true;
         }
@@ -551,7 +556,7 @@ define(["require", "exports", "util", "message", "guiState.model", "progHelp.con
     }
     exports.isConfigurationUsed = isConfigurationUsed;
     function isRobotDisconnected() {
-        return GUISTATE.robot.time = -1;
+        return (GUISTATE.robot.time = -1);
     }
     exports.isRobotDisconnected = isRobotDisconnected;
     function getRobotTime() {
@@ -585,7 +590,7 @@ define(["require", "exports", "util", "message", "guiState.model", "progHelp.con
         $('#head-navigation-program-edit').removeClass('disabled');
         $('.robotType').removeClass('disabled');
         $('#head-navigation-configuration-edit').removeClass('disabled');
-        $(".modal").modal("hide");
+        $('.modal').modal('hide');
         GUISTATE.gui.prevView = GUISTATE.gui.view;
         GUISTATE.gui.view = view;
         if (!isRobotConnected()) {
@@ -635,8 +640,12 @@ define(["require", "exports", "util", "message", "guiState.model", "progHelp.con
     }
     exports.getPrevView = getPrevView;
     function setLanguage(language) {
-        $('#language li a[lang=' + language + ']').parent().addClass('disabled');
-        $('#language li a[lang=' + GUISTATE.gui.language + ']').parent().removeClass('disabled');
+        $('#language li a[lang=' + language + ']')
+            .parent()
+            .addClass('disabled');
+        $('#language li a[lang=' + GUISTATE.gui.language + ']')
+            .parent()
+            .removeClass('disabled');
         if (language === 'de') {
             $('.EN').css('display', 'none');
             $('.DE').css('display', 'inline');
@@ -747,20 +756,24 @@ define(["require", "exports", "util", "message", "guiState.model", "progHelp.con
         var displayName = name;
         if (getProgramShareRelation() && getProgramShareRelation() !== 'NONE' && getProgramOwnerName() !== getUserAccountName()) {
             var owner = getProgramOwnerName(), author = getProgramAuthorName(), relation = getProgramShareRelation(), icon = '', content = '', suffix = '';
-            if (owner === 'Gallery') { // user has uploaded this program to the gallery
+            if (owner === 'Gallery') {
+                // user has uploaded this program to the gallery
                 icon = 'th-large-outline';
                 if (relation === 'READ') {
                     content = author;
                 }
             }
-            else if (owner === 'Roberta') { // user loads a program from the example program list
+            else if (owner === 'Roberta') {
+                // user loads a program from the example program list
                 icon = 'roberta';
             }
-            else if (relation == 'WRITE') { // user loads a program, owned by another user, but with WRITE rights
+            else if (relation == 'WRITE') {
+                // user loads a program, owned by another user, but with WRITE rights
                 icon = 'pencil';
                 suffix = '<span style="color:#33B8CA;">' + owner + '</span>';
             }
-            else if (relation == 'READ') { // user loads a program, owned by another user, but with READ rights
+            else if (relation == 'READ') {
+                // user loads a program, owned by another user, but with READ rights
                 icon = 'eye';
                 suffix = '<span style="color:#33B8CA;">' + owner + '</span>';
             }
@@ -882,7 +895,7 @@ define(["require", "exports", "util", "message", "guiState.model", "progHelp.con
     }
     exports.getStartWithoutPopup = getStartWithoutPopup;
     function setStartWithoutPopup() {
-        return GUISTATE.gui.startWithoutPopup = true;
+        return (GUISTATE.gui.startWithoutPopup = true);
     }
     exports.setStartWithoutPopup = setStartWithoutPopup;
     function getServerVersion() {
@@ -906,7 +919,7 @@ define(["require", "exports", "util", "message", "guiState.model", "progHelp.con
     }
     exports.isUserAccountActivated = isUserAccountActivated;
     function isUserMemberOfUserGroup() {
-        return GUISTATE.user.userGroup != "";
+        return GUISTATE.user.userGroup != '';
     }
     exports.isUserMemberOfUserGroup = isUserMemberOfUserGroup;
     function getUserUserGroup() {
@@ -1092,7 +1105,7 @@ define(["require", "exports", "util", "message", "guiState.model", "progHelp.con
     }
     exports.getCommandLine = getCommandLine;
     function setProgramToDownload() {
-        return GUISTATE.gui.program.download = true;
+        return (GUISTATE.gui.program.download = true);
     }
     exports.setProgramToDownload = setProgramToDownload;
     function isProgramToDownload() {
@@ -1170,7 +1183,7 @@ define(["require", "exports", "util", "message", "guiState.model", "progHelp.con
                 // Always:
                 $('#menuConnect').parent().removeClass('disabled');
                 // If the port is not chosen:
-                if (getRobotPort() == "") {
+                if (getRobotPort() == '') {
                     $('#head-navi-icon-robot').removeClass('error');
                     $('#head-navi-icon-robot').removeClass('busy');
                     $('#head-navi-icon-robot').removeClass('wait');

@@ -30,13 +30,13 @@ define(["require", "exports", "./interpreter.aRobotBehaviour", "./interpreter.co
             var robotText = 'robot: ' + name + ', port: ' + port;
             U.debug(robotText + ' getsample from ' + sensor);
             switch (sensor) {
-                case "infrared":
+                case 'infrared':
                     s.push(5);
                     break;
-                case "gyro":
+                case 'gyro':
                     s.push(3);
                     break;
-                case "buttons":
+                case 'buttons':
                     s.push(true);
                     break;
                 case C.TIMER:
@@ -75,7 +75,7 @@ define(["require", "exports", "./interpreter.aRobotBehaviour", "./interpreter.co
         };
         RobotWeDoBehaviourTest.prototype.motorOnAction = function (name, port, duration, speed) {
             var robotText = 'robot: ' + name + ', port: ' + port;
-            var durText = duration === undefined ? ' w.o. duration' : (' for ' + duration + ' msec');
+            var durText = duration === undefined ? ' w.o. duration' : ' for ' + duration + ' msec';
             U.info(robotText + ' motor speed ' + speed + durText);
             return 0;
         };
@@ -84,12 +84,11 @@ define(["require", "exports", "./interpreter.aRobotBehaviour", "./interpreter.co
             U.info(robotText + ' motor stop');
         };
         RobotWeDoBehaviourTest.prototype.showTextAction = function (text) {
-            var showText = "" + text;
+            var showText = '' + text;
             U.info('show "' + showText + '"');
             return 0;
         };
-        RobotWeDoBehaviourTest.prototype.writePinAction = function (_pin, _mode, _value) {
-        };
+        RobotWeDoBehaviourTest.prototype.writePinAction = function (_pin, _mode, _value) { };
         RobotWeDoBehaviourTest.prototype.showImageAction = function (_1, _2) {
             U.info('show image NYI');
             return 0;
@@ -104,68 +103,68 @@ define(["require", "exports", "./interpreter.aRobotBehaviour", "./interpreter.co
             // CI implementation. No real robot. No motor off, etc.
         };
         RobotWeDoBehaviourTest.prototype.encoderReset = function (_port) {
-            throw new Error("Method not implemented.");
+            throw new Error('Method not implemented.');
         };
         RobotWeDoBehaviourTest.prototype.gyroReset = function (_port) {
-            throw new Error("Method not implemented.");
+            throw new Error('Method not implemented.');
         };
         RobotWeDoBehaviourTest.prototype.lightAction = function (_mode, _color, _port) {
-            throw new Error("Method not implemented.");
+            throw new Error('Method not implemented.');
         };
         RobotWeDoBehaviourTest.prototype.playFileAction = function (_file) {
-            throw new Error("Method not implemented.");
+            throw new Error('Method not implemented.');
         };
         RobotWeDoBehaviourTest.prototype._setVolumeAction = function (_volume) {
-            throw new Error("Method not implemented.");
+            throw new Error('Method not implemented.');
         };
         RobotWeDoBehaviourTest.prototype._getVolumeAction = function (_s) {
-            throw new Error("Method not implemented.");
+            throw new Error('Method not implemented.');
         };
         RobotWeDoBehaviourTest.prototype.setLanguage = function (_language) {
-            throw new Error("Method not implemented.");
+            throw new Error('Method not implemented.');
         };
         RobotWeDoBehaviourTest.prototype.sayTextAction = function (_text, _speed, _pitch) {
-            throw new Error("Method not implemented.");
+            throw new Error('Method not implemented.');
         };
         RobotWeDoBehaviourTest.prototype.getMotorSpeed = function (_s, _name, _port) {
-            throw new Error("Method not implemented.");
+            throw new Error('Method not implemented.');
         };
         RobotWeDoBehaviourTest.prototype.setMotorSpeed = function (_name, _port, _speed) {
-            throw new Error("Method not implemented.");
+            throw new Error('Method not implemented.');
         };
         RobotWeDoBehaviourTest.prototype.driveStop = function (_name) {
-            throw new Error("Method not implemented.");
+            throw new Error('Method not implemented.');
         };
         RobotWeDoBehaviourTest.prototype.driveAction = function (_name, _direction, _speed, _distance) {
-            throw new Error("Method not implemented.");
+            throw new Error('Method not implemented.');
         };
         RobotWeDoBehaviourTest.prototype.curveAction = function (_name, _direction, _speedL, _speedR, _distance) {
-            throw new Error("Method not implemented.");
+            throw new Error('Method not implemented.');
         };
         RobotWeDoBehaviourTest.prototype.turnAction = function (_name, _direction, _speed, _angle) {
-            throw new Error("Method not implemented.");
+            throw new Error('Method not implemented.');
         };
         RobotWeDoBehaviourTest.prototype.showTextActionPosition = function (_text, _x, _y) {
-            throw new Error("Method not implemented.");
+            throw new Error('Method not implemented.');
         };
         RobotWeDoBehaviourTest.prototype.displaySetPixelBrightnessAction = function (_x, _y, _brightness) {
-            throw new Error("Method not implemented.");
+            throw new Error('Method not implemented.');
         };
         RobotWeDoBehaviourTest.prototype.displayGetPixelBrightnessAction = function (_s, _x, _y) {
-            throw new Error("Method not implemented.");
+            throw new Error('Method not implemented.');
         };
         RobotWeDoBehaviourTest.prototype.setVolumeAction = function (_volume) {
-            throw new Error("Method not implemented.");
+            throw new Error('Method not implemented.');
         };
         RobotWeDoBehaviourTest.prototype.getVolumeAction = function (_s) {
-            throw new Error("Method not implemented.");
+            throw new Error('Method not implemented.');
         };
         RobotWeDoBehaviourTest.prototype.debugAction = function (_value) {
-            var robotText = "> " + _value;
+            var robotText = '> ' + _value;
             U.info(' debug action ' + robotText);
         };
         RobotWeDoBehaviourTest.prototype.assertAction = function (_msg, _left, _op, _right, _value) {
-            var robotText = "> Assertion failed: " + _msg + " " + _left + " " + _op + " " + _right;
+            var robotText = '> Assertion failed: ' + _msg + ' ' + _left + ' ' + _op + ' ' + _right;
             U.info(' assert action ' + robotText);
         };
         return RobotWeDoBehaviourTest;

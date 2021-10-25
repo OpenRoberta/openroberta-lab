@@ -25,10 +25,10 @@ define(["require", "exports", "guiState.model", "guiState.controller", "notifica
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.showNotificationModal = exports.reloadNotifications = exports.init = void 0;
     var fadingDuration = 400;
-    var notificationElement = $("#releaseInfo");
+    var notificationElement = $('#releaseInfo');
     var notificationElementTitle = notificationElement.children('#releaseInfoTitle');
     var notificationElementDescription = notificationElement.children('#releaseInfoContent');
-    var $notificationForm = $("#notificationForm");
+    var $notificationForm = $('#notificationForm');
     var $notificationFileUpload = $('#notificationFileUpload');
     var $notificationFileDownload = $('#notificationFileDownload');
     var defaultElementMarkerTime = 5 * 60 * 1000;
@@ -55,7 +55,7 @@ define(["require", "exports", "guiState.model", "guiState.controller", "notifica
     function showNotificationModal() {
         notificationModel.getNotifications(function (result) {
             setFileDownloadContent(result.notifications);
-            $('#modal-notifications').modal("show");
+            $('#modal-notifications').modal('show');
         });
     }
     exports.showNotificationModal = showNotificationModal;
@@ -65,8 +65,8 @@ define(["require", "exports", "guiState.model", "guiState.controller", "notifica
         $alert
             .html(content)
             .removeClass()
-            .addClass("alert")
-            .addClass("alert-" + context)
+            .addClass('alert')
+            .addClass('alert-' + context)
             .slideDown()
             .delay(time)
             .slideUp();
@@ -76,23 +76,23 @@ define(["require", "exports", "guiState.model", "guiState.controller", "notifica
             e.preventDefault();
             readFileInputField(function (fileContent) {
                 notificationModel.postNotifications(fileContent, function (restResponse) {
-                    if (restResponse.rc === "ok" && restResponse.message === "ORA_NOTIFICATION_SUCCESS") {
-                        $notificationForm.trigger("reset");
-                        showAlertInNotificationModal("success", "The notifications were transmitted successfully");
+                    if (restResponse.rc === 'ok' && restResponse.message === 'ORA_NOTIFICATION_SUCCESS') {
+                        $notificationForm.trigger('reset');
+                        showAlertInNotificationModal('success', 'The notifications were transmitted successfully');
                         setFileDownloadContent(JSON.parse(fileContent));
                     }
                     else {
                         var errorCode = restResponse.cause;
-                        var exceptionMessage = restResponse.parameters && restResponse.parameters.MESSAGE ? ":" + restResponse.parameters.MESSAGE : "";
+                        var exceptionMessage = restResponse.parameters && restResponse.parameters.MESSAGE ? ':' + restResponse.parameters.MESSAGE : '';
                         var content = errorCode + exceptionMessage;
-                        showAlertInNotificationModal("danger", content, 60 * 1000);
+                        showAlertInNotificationModal('danger', content, 60 * 1000);
                     }
                 });
             });
         });
     }
     function readFileInputField(readyFn) {
-        var uploadedFiles = $notificationFileUpload.prop("files");
+        var uploadedFiles = $notificationFileUpload.prop('files');
         if (uploadedFiles.length > 0) {
             readFile(uploadedFiles[0], readyFn);
         }
@@ -103,9 +103,8 @@ define(["require", "exports", "guiState.model", "guiState.controller", "notifica
         fileReader.readAsText(file);
     }
     function setFileDownloadContent(jsonContent) {
-        var data = "text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(jsonContent, null, "\t"));
-        $notificationFileDownload
-            .attr("href", "data:" + data);
+        var data = 'text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(jsonContent, null, '\t'));
+        $notificationFileDownload.attr('href', 'data:' + data);
     }
     /*----------- NOTIFICATION HANDLING -----------*/
     function removeNotifications() {
@@ -238,9 +237,7 @@ define(["require", "exports", "guiState.model", "guiState.controller", "notifica
                 this.evaluateConditionsAndShowNotification();
                 return;
             }
-            this.specification
-                .triggers
-                .forEach(function (trigger) {
+            this.specification.triggers.forEach(function (trigger) {
                 var event = trigger.event, addClass = trigger.addClass, removeClass = trigger.removeClass, conditions = trigger.conditions;
                 var selector = parseSelector(trigger);
                 if (!selector)
@@ -253,7 +250,7 @@ define(["require", "exports", "guiState.model", "guiState.controller", "notifica
                 }
                 // Class changed event listeners
                 if (addClass || removeClass) {
-                    _this.addEventHandler(selector, "classChange", function () {
+                    _this.addEventHandler(selector, 'classChange', function () {
                         if (addClass && $(selector).hasClass(addClass)) {
                             _this.evaluateConditionsAndShowNotification(conditions);
                         }
@@ -329,23 +326,19 @@ define(["require", "exports", "guiState.model", "guiState.controller", "notifica
             var _this = _super.call(this, elementMarker.time || defaultElementMarkerTime) || this;
             _this._content = parseLocalized(elementMarker.content);
             _this.$element = $(parseSelector(elementMarker));
-            _this.$badge = $("<span class='badge badge-primary' style='display:none;'>" + _this._content + "</span>");
+            _this.$badge = $("<span class='badge badge-primary' style='display:none;'>" + _this._content + '</span>');
             return _this;
         }
         ElementMarkerState.prototype.hideAction = function () {
             if (this.$element.length) {
-                this.$badge
-                    .fadeOut(fadingDuration)
-                    .queue(function () {
+                this.$badge.fadeOut(fadingDuration).queue(function () {
                     $(this).remove();
                 });
             }
         };
         ElementMarkerState.prototype.showAction = function () {
             if (this.$element.length) {
-                this.$badge
-                    .appendTo(this.$element)
-                    .fadeIn(fadingDuration);
+                this.$badge.appendTo(this.$element).fadeIn(fadingDuration);
             }
         };
         return ElementMarkerState;
@@ -354,20 +347,16 @@ define(["require", "exports", "guiState.model", "guiState.controller", "notifica
         __extends(StartScreenNotificationState, _super);
         function StartScreenNotificationState(startScreen) {
             var _this = _super.call(this, startScreen.time || defaultStartScreenTime) || this;
-            _this.$startupMessage = $("#startup-message-statustext");
+            _this.$startupMessage = $('#startup-message-statustext');
             _this.content = parseLocalized(startScreen.content);
             _this.$element = $('<h4 style="display: none">' + _this.content + '</h4>');
             return _this;
         }
         StartScreenNotificationState.prototype.showAction = function () {
-            this.$element
-                .appendTo(this.$startupMessage)
-                .slideDown(fadingDuration);
+            this.$element.appendTo(this.$startupMessage).slideDown(fadingDuration);
         };
         StartScreenNotificationState.prototype.hideAction = function () {
-            this.$element
-                .slideUp(fadingDuration)
-                .queue(function () {
+            this.$element.slideUp(fadingDuration).queue(function () {
                 $(this).remove();
             });
         };
@@ -375,7 +364,7 @@ define(["require", "exports", "guiState.model", "guiState.controller", "notifica
     }(NotificationState));
     function parseSelector(element) {
         if (element.htmlId) {
-            return "#" + element.htmlId;
+            return '#' + element.htmlId;
         }
         if (element.htmlSelector) {
             return element.htmlSelector;
@@ -384,7 +373,7 @@ define(["require", "exports", "guiState.model", "guiState.controller", "notifica
     }
     function parseLocalized(object) {
         var localizedDescription = object[guiStateController.getLanguage()];
-        return localizedDescription || object["en"];
+        return localizedDescription || object['en'];
     }
     /**
      * Parse date from a datestring
@@ -393,6 +382,6 @@ define(["require", "exports", "guiState.model", "guiState.controller", "notifica
      * @param str datestring
      */
     function parseDateStringWithTimezone(str) {
-        return new Date(str + " +0200");
+        return new Date(str + ' +0200');
     }
 });

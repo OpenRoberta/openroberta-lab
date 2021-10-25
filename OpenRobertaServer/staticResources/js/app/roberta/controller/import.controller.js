@@ -20,13 +20,13 @@ define(["require", "exports", "message", "log", "util", "guiState.controller", "
     exports.init = init;
     function importXml() {
         init(loadProgramFromXML);
-        $('#fileSelector').attr("accept", ".xml");
+        $('#fileSelector').attr('accept', '.xml');
         $('#fileSelector').clickWrap(); // opening dialog
     }
     exports.importXml = importXml;
     function importSourceCode(callback) {
         init(callback);
-        $('#fileSelector').attr("accept", "." + GUISTATE_C.getSourceCodeFileExtension());
+        $('#fileSelector').attr('accept', '.' + GUISTATE_C.getSourceCodeFileExtension());
         $('#fileSelector').clickWrap(); // opening dialog
     }
     exports.importSourceCode = importSourceCode;
@@ -40,12 +40,16 @@ define(["require", "exports", "message", "log", "util", "guiState.controller", "
     }
     exports.openProgramFromXML = openProgramFromXML;
     function loadProgramFromXML(name, xml) {
-        if (xml.search("<export") === -1) {
-            xml = '<export xmlns="http://de.fhg.iais.roberta.blockly"><program>' + xml + '</program><config>' + GUISTATE_C.getConfigurationXML() +
-                '</config></export>';
+        if (xml.search('<export') === -1) {
+            xml =
+                '<export xmlns="http://de.fhg.iais.roberta.blockly"><program>' +
+                    xml +
+                    '</program><config>' +
+                    GUISTATE_C.getConfigurationXML() +
+                    '</config></export>';
         }
         PROGRAM.loadProgramFromXML(name, xml, function (result) {
-            if (result.rc == "ok") {
+            if (result.rc == 'ok') {
                 // save the old program and configuration that it can be restored
                 var dom = Blockly.Xml.workspaceToDom(GUISTATE_C.getBlocklyWorkspace());
                 var xmlProgOld = Blockly.Xml.domToText(dom);
@@ -65,7 +69,7 @@ define(["require", "exports", "message", "log", "util", "guiState.controller", "
                     PROGRAM_C.programToBlocklyWorkspace(result.progXML);
                     GUISTATE_C.setProgram(result);
                     GUISTATE_C.setProgramXML(result.progXML);
-                    GUISTATE_C.setConfigurationName("");
+                    GUISTATE_C.setConfigurationName('');
                     LOG.info('show program ' + GUISTATE_C.getProgramName());
                 }
                 catch (e) {
@@ -76,16 +80,16 @@ define(["require", "exports", "message", "log", "util", "guiState.controller", "
                     GUISTATE_C.setConfigurationName(nameConfOld);
                     CONFIGURATION_C.reloadConf();
                     PROGRAM_C.reloadProgram();
-                    result.rc = "error";
-                    MSG.displayInformation(result, "", Blockly.Msg.ORA_PROGRAM_IMPORT_ERROR, name);
+                    result.rc = 'error';
+                    MSG.displayInformation(result, '', Blockly.Msg.ORA_PROGRAM_IMPORT_ERROR, name);
                 }
             }
             else {
-                if (result.message === "ORA_PROGRAM_IMPORT_ERROR_WRONG_ROBOT_TYPE") {
-                    MSG.displayInformation(result, "", result.message, result.robotTypes);
+                if (result.message === 'ORA_PROGRAM_IMPORT_ERROR_WRONG_ROBOT_TYPE') {
+                    MSG.displayInformation(result, '', result.message, result.robotTypes);
                 }
                 else {
-                    MSG.displayInformation(result, "", result.message, name);
+                    MSG.displayInformation(result, '', result.message, name);
                 }
             }
         });
@@ -97,7 +101,7 @@ define(["require", "exports", "message", "log", "util", "guiState.controller", "
      */
     function importSourceCodeToCompile() {
         init(compileFromSource);
-        $('#fileSelector').attr("accept", "." + GUISTATE_C.getSourceCodeFileExtension());
+        $('#fileSelector').attr('accept', '.' + GUISTATE_C.getSourceCodeFileExtension());
         $('#fileSelector').clickWrap(); // opening dialog
     }
     exports.importSourceCodeToCompile = importSourceCodeToCompile;
@@ -105,7 +109,7 @@ define(["require", "exports", "message", "log", "util", "guiState.controller", "
         PROGRAM.compileN(name, source, GUISTATE_C.getLanguage(), function (result) {
             var alertMsg = result.rc;
             if (result.parameters !== undefined) {
-                alertMsg += "\nMessage is:\n" + result.parameters.MESSAGE;
+                alertMsg += '\nMessage is:\n' + result.parameters.MESSAGE;
             }
             alert(alertMsg);
         });
@@ -116,7 +120,7 @@ define(["require", "exports", "message", "log", "util", "guiState.controller", "
      */
     function importNepoCodeToCompile() {
         init(compileFromNepoCode);
-        $('#fileSelector').attr("accept", ".xml");
+        $('#fileSelector').attr('accept', '.xml');
         $('#fileSelector').clickWrap(); // opening dialog
     }
     exports.importNepoCodeToCompile = importNepoCodeToCompile;

@@ -18,14 +18,14 @@ define(["require", "exports", "simulation.simulation"], function (require, expor
             y: pose.y,
             theta: pose.theta,
             transX: pose.transX,
-            transY: pose.transY
+            transY: pose.transY,
         };
         this.mouse = {
             x: 0,
             y: 5,
             rx: 0,
             ry: 0,
-            r: 30
+            r: 30,
         };
         this.time = 0;
         this.timer = {};

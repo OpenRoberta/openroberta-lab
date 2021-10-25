@@ -1,4 +1,3 @@
-
 import * as LOG from 'log';
 import * as UTIL from 'util';
 import * as COMM from 'comm';
@@ -17,7 +16,7 @@ function init() {
     initView();
     initEvents();
     initNNForms();
-    initNNEnvironment();            
+    initNNEnvironment();
 }
 
 function initView() {
@@ -25,19 +24,25 @@ function initView() {
 }
 
 function initEvents() {
-    $('#tabNN').onWrap('show.bs.tab', function(e) {
-        GUISTATE_C.setView('tabNN');
-    }, 'show tabNN');
+    $('#tabNN').onWrap(
+        'show.bs.tab',
+        function (e) {
+            GUISTATE_C.setView('tabNN');
+        },
+        'show tabNN'
+    );
 
-    $('#tabNN').onWrap('shown.bs.tab', function(e) {
-        $(window).resize();
-    }, 'shown tabNN');
+    $('#tabNN').onWrap(
+        'shown.bs.tab',
+        function (e) {
+            $(window).resize();
+        },
+        'shown tabNN'
+    );
 
-    $('#tabNN').onWrap('hide.bs.tab', function(e) {
-    }, 'hide tabNN');
+    $('#tabNN').onWrap('hide.bs.tab', function (e) {}, 'hide tabNN');
 
-    $('#tabNN').onWrap('hidden.bs.tab', function(e) {
-    }, 'hidden tabNN');
+    $('#tabNN').onWrap('hidden.bs.tab', function (e) {}, 'hidden tabNN');
 }
 
 function initNNForms() {
@@ -54,12 +59,12 @@ function saveToServer() {
         return;
     }
     // TODO get the NN from the dom
-    CONFIGURATION.saveNNToServer(GUISTATE_C.getNNName(), xmlText, function(result) {
+    CONFIGURATION.saveNNToServer(GUISTATE_C.getNNName(), xmlText, function (result) {
         if (result.rc === 'ok') {
             GUISTATE_C.setNNSaved(true);
             LOG.info('save brick nn ' + GUISTATE_C.getNNName());
         }
-        MSG.displayInformation(result, "MESSAGE_EDIT_SAVE_CONFIGURATION", result.message, GUISTATE_C.getNNName());
+        MSG.displayInformation(result, 'MESSAGE_EDIT_SAVE_CONFIGURATION', result.message, GUISTATE_C.getNNName());
     });
 }
 
@@ -77,14 +82,14 @@ function saveAsToServer() {
         }
         var dom = Blockly.Xml.workspaceToDom(bricklyWorkspace);
         var xmlText = Blockly.Xml.domToText(dom);
-        CONFIGURATION.saveAsNNToServer(nnName, xmlText, function(result) {
+        CONFIGURATION.saveAsNNToServer(nnName, xmlText, function (result) {
             if (result.rc === 'ok') {
                 result.name = nnName;
                 GUISTATE_C.setNN(result);
                 GUISTATE_C.setProgramSaved(false);
                 LOG.info('save brick nn ' + GUISTATE_C.getNNName());
             }
-            MSG.displayInformation(result, "MESSAGE_EDIT_SAVE_CONFIGURATION_AS", result.message, GUISTATE_C.getNNName());
+            MSG.displayInformation(result, 'MESSAGE_EDIT_SAVE_CONFIGURATION_AS', result.message, GUISTATE_C.getNNName());
         });
     }
 }
@@ -95,53 +100,58 @@ function saveAsToServer() {
 // TODO check if we want /need a listing
 function loadFromListing(nn) {
     LOG.info('loadFromList ' + nn[0]);
-    CONFIGURATION.loadNNFromListing(nn[0], nn[1], function(result) {
+    CONFIGURATION.loadNNFromListing(nn[0], nn[1], function (result) {
         if (result.rc === 'ok') {
             result.name = nn[0];
-            $('#tabNN').oneWrap('shown.bs.tab', function() {
+            $('#tabNN').oneWrap('shown.bs.tab', function () {
                 showNN(result);
             });
             $('#tabNN').clickWrap();
         }
-        MSG.displayInformation(result, "", result.message);
+        MSG.displayInformation(result, '', result.message);
     });
 }
 
-function initNNEnvironment() {
-
-}
+function initNNEnvironment() {}
 
 function showSaveAsModal() {
     var regexString = new RegExp('^(?!\\b' + GUISTATE_C.getNNStandardName() + '\\b)([a-zA-Z_öäüÖÄÜß$€][a-zA-Z0-9_öäüÖÄÜß$€]*)$');
-    $.validator.addMethod("regex", function(value, element, regexp) {
-        value = value.trim();
-        return value.match(regexp);
-    }, "No special Characters allowed here. Use only upper and lowercase letters (A through Z; a through z) and numbers.");
-
-    UTIL.showSingleModal(function() {
-        $('#singleModalInput').attr('type', 'text');
-        $('#single-modal h3').text(Blockly.Msg["MENU_SAVE_AS"]);
-        $('#single-modal label').text(Blockly.Msg["POPUP_NAME"]);
-    }, saveAsToServer, function() {
-
-    }, {
-        rules : {
-            singleModalInput : {
-                required : true,
-                regex : regexString
-            }
+    $.validator.addMethod(
+        'regex',
+        function (value, element, regexp) {
+            value = value.trim();
+            return value.match(regexp);
         },
-        errorClass : "form-invalid",
-        errorPlacement : function(label, element) {
-            label.insertAfter(element);
+        'No special Characters allowed here. Use only upper and lowercase letters (A through Z; a through z) and numbers.'
+    );
+
+    UTIL.showSingleModal(
+        function () {
+            $('#singleModalInput').attr('type', 'text');
+            $('#single-modal h3').text(Blockly.Msg['MENU_SAVE_AS']);
+            $('#single-modal label').text(Blockly.Msg['POPUP_NAME']);
         },
-        messages : {
-            singleModalInput : {
-                required : jQuery.validator.format(Blockly.Msg["VALIDATION_FIELD_REQUIRED"]),
-                regex : jQuery.validator.format(Blockly.Msg["MESSAGE_INVALID_CONF_NAME"])
-            }
+        saveAsToServer,
+        function () {},
+        {
+            rules: {
+                singleModalInput: {
+                    required: true,
+                    regex: regexString,
+                },
+            },
+            errorClass: 'form-invalid',
+            errorPlacement: function (label, element) {
+                label.insertAfter(element);
+            },
+            messages: {
+                singleModalInput: {
+                    required: jQuery.validator.format(Blockly.Msg['VALIDATION_FIELD_REQUIRED']),
+                    regex: jQuery.validator.format(Blockly.Msg['MESSAGE_INVALID_CONF_NAME']),
+                },
+            },
         }
-    });
+    );
 }
 
 /**
@@ -151,34 +161,34 @@ function newNN(opt_further) {
     var further = opt_further || false;
     if (further || GUISTATE_C.isNNSaved()) {
         var result = {};
-        result.name = GUISTATE_C.getRobotGroup().toUpperCase() + "basis";
+        result.name = GUISTATE_C.getRobotGroup().toUpperCase() + 'basis';
         result.lastChanged = '';
         GUISTATE_C.setNN(result);
         initNNEnvironment();
     } else {
-        $('#show-message-nnirm').oneWrap('shown.bs.modal', function(e) {
+        $('#show-message-nnirm').oneWrap('shown.bs.modal', function (e) {
             $('#nnirm').off();
-            $('#nnirm').on('click', function(e) {
+            $('#nnirm').on('click', function (e) {
                 e.preventDefault();
                 newNN(true);
             });
             $('#nnirmCancel').off();
-            $('#nnirmCancel').on('click', function(e) {
+            $('#nnirmCancel').on('click', function (e) {
                 e.preventDefault();
                 $('.modal').modal('hide');
             });
         });
         if (GUISTATE_C.isUserLoggedIn()) {
-            MSG.displayMessage("POPUP_BEFOREUNLOAD_LOGGEDIN", "POPUP", "", true);
+            MSG.displayMessage('POPUP_BEFOREUNLOAD_LOGGEDIN', 'POPUP', '', true);
         } else {
-            MSG.displayMessage("POPUP_BEFOREUNLOAD", "POPUP", "", true);
+            MSG.displayMessage('POPUP_BEFOREUNLOAD', 'POPUP', '', true);
         }
     }
 }
 
 /**
  * Show nn
- * 
+ *
  * @param {load}
  *            load nn
  * @param {data}
@@ -237,17 +247,29 @@ function reloadView() {
 
 function resetView() {
     bricklyWorkspace.setDevice({
-        group : GUISTATE_C.getRobotGroup(),
-        robot : GUISTATE_C.getRobot()
+        group: GUISTATE_C.getRobotGroup(),
+        robot: GUISTATE_C.getRobot(),
     });
     initNNEnvironment();
     var toolbox = GUISTATE_C.getNNToolbox();
     bricklyWorkspace.updateToolbox(toolbox);
 }
-export { init, initNNForms, saveToServer, saveAsToServer, loadFromListing, initNNEnvironment, showSaveAsModal, newNN, showNN, getBricklyWorkspace, reloadNN, reloadView, resetView };
+export {
+    init,
+    initNNForms,
+    saveToServer,
+    saveAsToServer,
+    loadFromListing,
+    initNNEnvironment,
+    showSaveAsModal,
+    newNN,
+    showNN,
+    getBricklyWorkspace,
+    reloadNN,
+    reloadView,
+    resetView,
+};
 
 function isVisible() {
     return GUISTATE_C.getView() == 'tabNN';
 }
-
-

@@ -1,8 +1,21 @@
 define(["require", "exports", "util", "guiState.controller", "progTutorial.controller", "galleryList.controller", "jquery", "bootstrap-table", "bootstrap-tagsinput"], function (require, exports, UTIL, GUISTATE_C, TUTORIAL_C, GALLERYLIST_C, $) {
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.formatTags = exports.init = void 0;
-    var BACKGROUND_COLORS = ['#33B8CA', '#EBC300', '#39378B', '#005A94', '#179C7D', '#F29400', '#E2001A', '#EB6A0A', '#8FA402', '#BACC1E', '#9085BA',
-        '#FF69B4', '#DF01D7'];
+    var BACKGROUND_COLORS = [
+        '#33B8CA',
+        '#EBC300',
+        '#39378B',
+        '#005A94',
+        '#179C7D',
+        '#F29400',
+        '#E2001A',
+        '#EB6A0A',
+        '#8FA402',
+        '#BACC1E',
+        '#9085BA',
+        '#FF69B4',
+        '#DF01D7',
+    ];
     var currentColorIndex;
     var tutorialList;
     /**
@@ -12,8 +25,15 @@ define(["require", "exports", "util", "guiState.controller", "progTutorial.contr
         tutorialList = GUISTATE_C.getListOfTutorials();
         for (var tutorial in tutorialList) {
             if (tutorialList.hasOwnProperty(tutorial)) {
-                $("#head-navigation-tutorial-dropdown").append("<li class='" + tutorialList[tutorial].language + " " + tutorialList[tutorial].robot
-                    + "'><a href='#' id='" + tutorial + "' class='menu tutorial typcn typcn-mortar-board'>" + tutorialList[tutorial].name + "</a></li>");
+                $('#head-navigation-tutorial-dropdown').append("<li class='" +
+                    tutorialList[tutorial].language +
+                    ' ' +
+                    tutorialList[tutorial].robot +
+                    "'><a href='#' id='" +
+                    tutorial +
+                    "' class='menu tutorial typcn typcn-mortar-board'>" +
+                    tutorialList[tutorial].name +
+                    '</a></li>');
             }
         }
         initTutorialList();
@@ -39,84 +59,99 @@ define(["require", "exports", "util", "guiState.controller", "progTutorial.contr
                 paginationSwitchUp: 'typcn-book',
                 refresh: 'typcn-refresh',
             },
-            columns: [{
+            columns: [
+                {
                     field: 'robot',
                     sortable: true,
                     formatter: formatRobot,
-                }, {
+                },
+                {
                     field: 'name',
                     sortable: true,
                     formatter: formatName,
-                }, {
+                },
+                {
                     field: 'overview.description',
                     sortable: true,
                     formatter: formatTutorialOverview,
-                }, {
+                },
+                {
                     field: 'overview.goal',
                     sortable: true,
                     formatter: formatTutorialOverview,
-                }, {
+                },
+                {
                     field: 'overview.previous',
                     sortable: true,
                     formatter: formatTutorialOverview,
-                }, {
+                },
+                {
                     field: 'time',
                     title: titleTime,
                     sortable: true,
-                }, {
+                },
+                {
                     field: 'age',
                     title: titleAge,
                     sortable: true,
-                }, {
+                },
+                {
                     field: 'sim',
                     title: titleSim,
                     sortable: true,
                     formatter: formatSim,
-                }, {
+                },
+                {
                     field: 'level',
                     title: titleLevel,
                     sortable: true,
                     formatter: formatLevel,
-                }, {
+                },
+                {
                     field: 'tags',
                     sortable: true,
                     formatter: formatTags,
-                }, {
+                },
+                {
                     field: 'index',
                     visible: false,
-                }, {
+                },
+                {
                     field: 'group',
                     visible: false,
-                }]
+                },
+            ],
         });
         $('#tutorialTable').bootstrapTable('togglePagination');
     }
     function initTutorialListEvents() {
         $(window).resize(function () {
             $('#tutorialTable').bootstrapTable('resetView', {
-                height: UTIL.calcDataTableHeight()
+                height: UTIL.calcDataTableHeight(),
             });
         });
         $('#tabTutorialList').onWrap('show.bs.tab', function (e) {
             guiStateController.setView('tabTutorialList');
             updateTutorialList();
-        }, "show tutorial list");
+        }, 'show tutorial list');
         $('#tutorialTable').on('page-change.bs.table', function (e) {
             configureTagsInput();
         });
-        $('#tutorialList').find('button[name="refresh"]').onWrap('click', function () {
+        $('#tutorialList')
+            .find('button[name="refresh"]')
+            .onWrap('click', function () {
             updateTutorialList();
             return false;
-        }, "refresh tutorial list clicked");
+        }, 'refresh tutorial list clicked');
         $('#tutorialTable').onWrap('click-row.bs.table', function ($element, row) {
             $element.stopPropagation();
             $element.preventDefault();
             TUTORIAL_C.loadFromTutorial(row.id);
-        }, "Load program from tutorial double clicked");
+        }, 'Load program from tutorial double clicked');
         $('#backTutorialList').onWrap('click', function () {
             $('#tabProgram').clickWrap();
             return false;
-        }, "back to program view");
+        }, 'back to program view');
         $('#tutorialTable').on('shown.bs.collapse hidden.bs.collapse', function (e) {
             $('#tutorialTable').bootstrapTable('resetWidth');
         });
@@ -128,7 +163,7 @@ define(["require", "exports", "util", "guiState.controller", "progTutorial.contr
                     tutorialArray.push(tutorialList[tutorial]);
                 }
             }
-            $('#tutorialTable').bootstrapTable("load", tutorialArray);
+            $('#tutorialTable').bootstrapTable('load', tutorialArray);
             configureTagsInput();
         }
     }
@@ -136,8 +171,10 @@ define(["require", "exports", "util", "guiState.controller", "progTutorial.contr
         var hash = UTIL.getHashFrom(row.robot + row.name + row.index);
         currentColorIndex = hash % BACKGROUND_COLORS.length;
         return {
-            style: 'background-color :' + BACKGROUND_COLORS[currentColorIndex] + ';' + //
-                'padding: 24px 24px 6px 24px; border: solid 12px white; z-index: 1; cursor: pointer;'
+            style: 'background-color :' +
+                BACKGROUND_COLORS[currentColorIndex] +
+                ';' + //
+                'padding: 24px 24px 6px 24px; border: solid 12px white; z-index: 1; cursor: pointer;',
         };
     };
     var titleTime = '<span class="tutorialIcon typcn typcn-stopwatch" />';
@@ -164,13 +201,13 @@ define(["require", "exports", "util", "guiState.controller", "progTutorial.contr
     };
     var formatTags = function (tags, row, index) {
         if (!tags) {
-            tags = "&nbsp;";
+            tags = '&nbsp;';
         }
         return '<input class="infoTags" type="text" value="' + tags + '" data-role="tagsinput"/>';
     };
     exports.formatTags = formatTags;
     var formatSim = function (sim, row, index) {
-        if (sim && (sim === "sim" || sim === 1)) {
+        if (sim && (sim === 'sim' || sim === 1)) {
             return 'ja<span style="display:none;">simulation</span>';
         }
         else {
@@ -178,10 +215,10 @@ define(["require", "exports", "util", "guiState.controller", "progTutorial.contr
         }
     };
     var formatLevel = function (level, row, index) {
-        var html = "";
+        var html = '';
         if (level) {
-            var maxLevel = isNaN(level) ? level.split("/")[1] : 3;
-            var thisLevel = isNaN(level) ? level.split("/")[0] : level;
+            var maxLevel = isNaN(level) ? level.split('/')[1] : 3;
+            var thisLevel = isNaN(level) ? level.split('/')[0] : level;
             for (var i = 1; i <= maxLevel; i++) {
                 if (i <= thisLevel) {
                     html = '<span style="left: 0;" class="tutorialLevel typcn typcn-star-full-outline"/>' + html;

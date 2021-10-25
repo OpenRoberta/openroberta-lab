@@ -17,13 +17,12 @@ var SHORT = 3000; // Ping time 3sec
  */
 function init(language, opt_data) {
     var ready = $.Deferred();
-    $.when(GUISTATE.init()).then(function() {
+    $.when(GUISTATE.init()).then(function () {
         GUISTATE.gui.webview = opt_data || false;
         if (GUISTATE.gui.webview) {
             $('.logo').css({
-                'right': '32px',
+                right: '32px',
             });
-
         }
 
         GUISTATE.gui.view = 'tabProgram';
@@ -54,14 +53,16 @@ function init(language, opt_data) {
 
         if (GUISTATE.server.theme !== 'default') {
             var themePath = '../theme/' + GUISTATE.server.theme + '.json';
-            $.getJSON(themePath).done(function(data) {
-                // store new theme properties (only colors so far)
-                GUISTATE.server.theme = data;
-            }).fail(function(e, r) {
-                // this should not happen
-                console.error('"' + themePath + '" is not a valid json file! The reason is probably a', r);
-                GUISTATE.server.theme = 'default';
-            });
+            $.getJSON(themePath)
+                .done(function (data) {
+                    // store new theme properties (only colors so far)
+                    GUISTATE.server.theme = data;
+                })
+                .fail(function (e, r) {
+                    // this should not happen
+                    console.error('"' + themePath + '" is not a valid json file! The reason is probably a', r);
+                    GUISTATE.server.theme = 'default';
+                });
         }
         ready.resolve();
     });
@@ -84,14 +85,16 @@ function setInitialState() {
         GUISTATE.gui.bricklyWorkspace.markFocused();
     }
     // Robot?
-    $('#menu-' + GUISTATE.gui.robot).parent().addClass('disabled');
+    $('#menu-' + GUISTATE.gui.robot)
+        .parent()
+        .addClass('disabled');
     // Tutorials?
     updateTutorialMenu();
 }
 
 /**
  * Check if a program is a standard program or not
- * 
+ *
  */
 function isProgramStandard() {
     return GUISTATE.program.name == 'NEPOprog';
@@ -160,7 +163,7 @@ function setState(result) {
         if (result['robot.nepoexitvalue'] !== GUISTATE.robot.nepoExitValue) {
             GUISTATE.nepoExitValue = result['robot.nepoexitvalue'];
             if (GUISTATE.nepoExitValue !== 143 && GUISTATE.robot.nepoExitValue !== 0) {
-                MSG.displayMessage('POPUP_PROGRAM_TERMINATED_UNEXPECTED', 'POPUP', '')
+                MSG.displayMessage('POPUP_PROGRAM_TERMINATED_UNEXPECTED', 'POPUP', '');
             }
         }
     }
@@ -368,8 +371,8 @@ function setRobot(robot, result, opt_init) {
     GUISTATE.gui.robotGroup = robotGroup;
 
     var value = Blockly.Msg.MENU_START_BRICK;
-    if (value.indexOf("$") >= 0) {
-        value = value.replace("$", getRobotRealName());
+    if (value.indexOf('$') >= 0) {
+        value = value.replace('$', getRobotRealName());
     }
     $('#menuRunProg').html(value);
     if (GUISTATE.gui.blocklyWorkspace) {
@@ -380,9 +383,9 @@ function setRobot(robot, result, opt_init) {
         if (inWebview()) {
             WEBVIEW_C.setRobotBehaviour();
             WEBVIEW_C.jsToAppInterface({
-                'target': 'internal',
-                'type': 'setRobot',
-                'robot': robotGroup
+                target: 'internal',
+                type: 'setRobot',
+                robot: robotGroup,
             });
         }
     }
@@ -420,19 +423,19 @@ function findRobot(group) {
 
 function setConnectionState(state) {
     switch (state) {
-        case "busy":
+        case 'busy':
             $('#head-navi-icon-robot').removeClass('error');
             $('#head-navi-icon-robot').removeClass('wait');
             $('#head-navi-icon-robot').addClass('busy');
             setRunEnabled(false);
             break;
-        case "error":
+        case 'error':
             $('#head-navi-icon-robot').removeClass('busy');
             $('#head-navi-icon-robot').removeClass('wait');
             $('#head-navi-icon-robot').addClass('error');
             setRunEnabled(false);
             break;
-        case "wait":
+        case 'wait':
             if (isRobotConnected()) {
                 $('#head-navi-icon-robot').removeClass('busy');
                 $('#head-navi-icon-robot').removeClass('error');
@@ -456,10 +459,10 @@ function setRunEnabled(running) {
     GUISTATE.gui.runEnabled = running;
     if (running) {
         GUISTATE.gui.blocklyWorkspace && GUISTATE.gui.blocklyWorkspace.robControls.enable('runOnBrick');
-        $(".menuRunProg, #runSourceCodeEditor").removeClass('disabled');
+        $('.menuRunProg, #runSourceCodeEditor').removeClass('disabled');
     } else {
         GUISTATE.gui.blocklyWorkspace && GUISTATE.gui.blocklyWorkspace.robControls.disable('runOnBrick');
-        $(".menuRunProg, #runSourceCodeEditor").addClass('disabled');
+        $('.menuRunProg, #runSourceCodeEditor').addClass('disabled');
     }
 }
 
@@ -500,7 +503,7 @@ function getMenuRobotRealName(robotName) {
             return getRobots()[robot].realName;
         }
     }
-    return "Robot not found";
+    return 'Robot not found';
 }
 
 function getIsRobotBeta(robotName) {
@@ -524,7 +527,7 @@ function getRobotInfoDE(robotName) {
             return getRobots()[robot].infoDE;
         }
     }
-    return "#";
+    return '#';
 }
 
 function getRobotInfoEN(robotName) {
@@ -536,15 +539,18 @@ function getRobotInfoEN(robotName) {
             return getRobots()[robot].infoEN;
         }
     }
-    return "#";
+    return '#';
 }
 
 function isRobotConnected() {
     if (GUISTATE.robot.time > 0) {
         return true;
     }
-    if (GUISTATE.gui.connection === GUISTATE.gui.connectionType.AUTO || GUISTATE.gui.connection === GUISTATE.gui.connectionType.LOCAL ||
-        GUISTATE.gui.connectionType.JSPLAY) {
+    if (
+        GUISTATE.gui.connection === GUISTATE.gui.connectionType.AUTO ||
+        GUISTATE.gui.connection === GUISTATE.gui.connectionType.LOCAL ||
+        GUISTATE.gui.connectionType.JSPLAY
+    ) {
         return true;
     }
     if (GUISTATE.gui.connection === GUISTATE.gui.connectionType.AGENTORTOKEN) {
@@ -561,7 +567,7 @@ function isConfigurationUsed() {
 }
 
 function isRobotDisconnected() {
-    return GUISTATE.robot.time = -1;
+    return (GUISTATE.robot.time = -1);
 }
 
 function getRobotTime() {
@@ -595,7 +601,7 @@ function setView(view) {
     $('#head-navigation-program-edit').removeClass('disabled');
     $('.robotType').removeClass('disabled');
     $('#head-navigation-configuration-edit').removeClass('disabled');
-    $(".modal").modal("hide");
+    $('.modal').modal('hide');
     GUISTATE.gui.prevView = GUISTATE.gui.view;
     GUISTATE.gui.view = view;
     if (!isRobotConnected()) {
@@ -642,8 +648,12 @@ function getPrevView() {
 }
 
 function setLanguage(language) {
-    $('#language li a[lang=' + language + ']').parent().addClass('disabled');
-    $('#language li a[lang=' + GUISTATE.gui.language + ']').parent().removeClass('disabled');
+    $('#language li a[lang=' + language + ']')
+        .parent()
+        .addClass('disabled');
+    $('#language li a[lang=' + GUISTATE.gui.language + ']')
+        .parent()
+        .removeClass('disabled');
     if (language === 'de') {
         $('.EN').css('display', 'none');
         $('.DE').css('display', 'inline');
@@ -696,7 +706,6 @@ function setConfigurationSaved(save) {
         $('#menuSaveConfig').parent().removeClass('disabled');
         $('#menuSaveConfig').parent().addClass('disabled');
         getBricklyWorkspace().robControls.disable('saveProgram');
-
     } else {
         if (isUserLoggedIn() && !isConfigurationStandard() && !isConfigurationAnonymous()) {
             $('#menuSaveConfig').parent().removeClass('disabled');
@@ -739,7 +748,7 @@ function getProgramTimestamp() {
 }
 
 function setProgramTimestamp(timestamp) {
-    GUISTATE.program.timestamp = timestamp
+    GUISTATE.program.timestamp = timestamp;
 }
 
 function getProgramName() {
@@ -756,17 +765,21 @@ function setProgramName(name) {
             content = '',
             suffix = '';
 
-        if (owner === 'Gallery') { // user has uploaded this program to the gallery
+        if (owner === 'Gallery') {
+            // user has uploaded this program to the gallery
             icon = 'th-large-outline';
             if (relation === 'READ') {
                 content = author;
             }
-        } else if (owner === 'Roberta') { // user loads a program from the example program list
+        } else if (owner === 'Roberta') {
+            // user loads a program from the example program list
             icon = 'roberta';
-        } else if (relation == 'WRITE') { // user loads a program, owned by another user, but with WRITE rights
+        } else if (relation == 'WRITE') {
+            // user loads a program, owned by another user, but with WRITE rights
             icon = 'pencil';
             suffix = '<span style="color:#33B8CA;">' + owner + '</span>';
-        } else if (relation == 'READ') { // user loads a program, owned by another user, but with READ rights
+        } else if (relation == 'READ') {
+            // user loads a program, owned by another user, but with READ rights
             icon = 'eye';
             suffix = '<span style="color:#33B8CA;">' + owner + '</span>';
         }
@@ -889,7 +902,7 @@ function getStartWithoutPopup() {
 }
 
 function setStartWithoutPopup() {
-    return GUISTATE.gui.startWithoutPopup = true;
+    return (GUISTATE.gui.startWithoutPopup = true);
 }
 
 function getServerVersion() {
@@ -913,7 +926,7 @@ function isUserAccountActivated() {
 }
 
 function isUserMemberOfUserGroup() {
-    return GUISTATE.user.userGroup != "";
+    return GUISTATE.user.userGroup != '';
 }
 
 function getUserUserGroup() {
@@ -958,7 +971,6 @@ function setLogin(result) {
 }
 
 function setLogout() {
-
     if (isUserMemberOfUserGroup()) {
         $('#registerUserName, #registerUserEmail').prop('disabled', false);
         $('#userGroupMemberDefaultPasswordHint').addClass('hidden');
@@ -1020,7 +1032,7 @@ function setProgram(result, opt_owner, opt_author) {
 
 /**
  * Set configuration
- * @param {*} result 
+ * @param {*} result
  */
 function setConfiguration(result) {
     if (result) {
@@ -1097,7 +1109,7 @@ function getCommandLine() {
 }
 
 function setProgramToDownload() {
-    return GUISTATE.gui.program.download = true;
+    return (GUISTATE.gui.program.download = true);
 }
 
 function isProgramToDownload() {
@@ -1174,7 +1186,7 @@ function updateMenuStatus() {
             // Always:
             $('#menuConnect').parent().removeClass('disabled');
             // If the port is not chosen:
-            if (getRobotPort() == "") {
+            if (getRobotPort() == '') {
                 $('#head-navi-icon-robot').removeClass('error');
                 $('#head-navi-icon-robot').removeClass('busy');
                 $('#head-navi-icon-robot').removeClass('wait');
@@ -1205,4 +1217,128 @@ function updateTutorialMenu() {
 function getLegalTextsMap() {
     return GUISTATE.server.legalTexts;
 }
-export { init, setInitialState, isProgramStandard, isProgramWritable, isConfigurationStandard, getConfigurationStandardName, isConfigurationAnonymous, setState, getIsAgent, setIsAgent, getBlocklyWorkspace, setBlocklyWorkspace, getBricklyWorkspace, setBricklyWorkspace, setRobot, findGroup, findRobot, setConnectionState, isRunEnabled, setRunEnabled, getRobot, getRobotGroup, setRobotPort, getRobotPort, getRobotRealName, getMenuRobotRealName, getIsRobotBeta, getRobotInfoDE, getRobotInfoEN, isRobotConnected, isConfigurationUsed, isRobotDisconnected, getRobotTime, getRobotName, getRobotBattery, getRobotState, getRobotVersion, hasRobotDefaultFirmware, setView, getView, getPrevView, setLanguage, getLanguage, isProgramSaved, setProgramSaved, isConfigurationSaved, setConfigurationSaved, getProgramShared, setProgramSource, getProgramSource, getSourceCodeFileExtension, getBinaryFileExtension, isUserLoggedIn, getProgramTimestamp, setProgramTimestamp, getProgramName, setProgramName, getProgramOwnerName, setProgramOwnerName, getProgramAuthorName, setProgramAuthorName, getProgramShareRelation, setProgramShareRelation, getConfigurationName, setConfigurationName, setConfigurationNameDefault, setProgramToolboxLevel, getProgramToolboxLevel, getToolbox, getConfToolbox, getDefaultRobot, setDefaultRobot, getRobotFWName, setRobotToken, setConfigurationXML, getConfigurationXML, setProgramXML, getProgramXML, getRobots, getProgramToolbox, getConfigurationToolbox, getProgramProg, getConfigurationConf, getStartWithoutPopup, setStartWithoutPopup, getServerVersion, isPublicServerVersion, getUserName, getUserAccountName, isUserAccountActivated, isUserMemberOfUserGroup, getUserUserGroup, getUserUserGroupOwner, setLogin, setLogout, setProgram, setConfiguration, checkSim, hasSim, hasMultiSim, hasWebotsSim, getWebotsUrl, getListOfTutorials, getConnectionTypeEnum, getConnection, getVendor, getSignature, getCommandLine, setProgramToDownload, isProgramToDownload, setPing, doPing, setPingTime, getPingTime, setSocket, getSocket, getAvailableHelp, getTheme, inWebview, setWebview, updateMenuStatus, updateTutorialMenu, getLegalTextsMap };
+export {
+    init,
+    setInitialState,
+    isProgramStandard,
+    isProgramWritable,
+    isConfigurationStandard,
+    getConfigurationStandardName,
+    isConfigurationAnonymous,
+    setState,
+    getIsAgent,
+    setIsAgent,
+    getBlocklyWorkspace,
+    setBlocklyWorkspace,
+    getBricklyWorkspace,
+    setBricklyWorkspace,
+    setRobot,
+    findGroup,
+    findRobot,
+    setConnectionState,
+    isRunEnabled,
+    setRunEnabled,
+    getRobot,
+    getRobotGroup,
+    setRobotPort,
+    getRobotPort,
+    getRobotRealName,
+    getMenuRobotRealName,
+    getIsRobotBeta,
+    getRobotInfoDE,
+    getRobotInfoEN,
+    isRobotConnected,
+    isConfigurationUsed,
+    isRobotDisconnected,
+    getRobotTime,
+    getRobotName,
+    getRobotBattery,
+    getRobotState,
+    getRobotVersion,
+    hasRobotDefaultFirmware,
+    setView,
+    getView,
+    getPrevView,
+    setLanguage,
+    getLanguage,
+    isProgramSaved,
+    setProgramSaved,
+    isConfigurationSaved,
+    setConfigurationSaved,
+    getProgramShared,
+    setProgramSource,
+    getProgramSource,
+    getSourceCodeFileExtension,
+    getBinaryFileExtension,
+    isUserLoggedIn,
+    getProgramTimestamp,
+    setProgramTimestamp,
+    getProgramName,
+    setProgramName,
+    getProgramOwnerName,
+    setProgramOwnerName,
+    getProgramAuthorName,
+    setProgramAuthorName,
+    getProgramShareRelation,
+    setProgramShareRelation,
+    getConfigurationName,
+    setConfigurationName,
+    setConfigurationNameDefault,
+    setProgramToolboxLevel,
+    getProgramToolboxLevel,
+    getToolbox,
+    getConfToolbox,
+    getDefaultRobot,
+    setDefaultRobot,
+    getRobotFWName,
+    setRobotToken,
+    setConfigurationXML,
+    getConfigurationXML,
+    setProgramXML,
+    getProgramXML,
+    getRobots,
+    getProgramToolbox,
+    getConfigurationToolbox,
+    getProgramProg,
+    getConfigurationConf,
+    getStartWithoutPopup,
+    setStartWithoutPopup,
+    getServerVersion,
+    isPublicServerVersion,
+    getUserName,
+    getUserAccountName,
+    isUserAccountActivated,
+    isUserMemberOfUserGroup,
+    getUserUserGroup,
+    getUserUserGroupOwner,
+    setLogin,
+    setLogout,
+    setProgram,
+    setConfiguration,
+    checkSim,
+    hasSim,
+    hasMultiSim,
+    hasWebotsSim,
+    getWebotsUrl,
+    getListOfTutorials,
+    getConnectionTypeEnum,
+    getConnection,
+    getVendor,
+    getSignature,
+    getCommandLine,
+    setProgramToDownload,
+    isProgramToDownload,
+    setPing,
+    doPing,
+    setPingTime,
+    getPingTime,
+    setSocket,
+    getSocket,
+    getAvailableHelp,
+    getTheme,
+    inWebview,
+    setWebview,
+    updateMenuStatus,
+    updateTutorialMenu,
+    getLegalTextsMap,
+};

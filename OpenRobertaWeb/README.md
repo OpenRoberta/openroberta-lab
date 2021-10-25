@@ -3,9 +3,11 @@
 ### Getting Started
 
 **Requirements**
-* Have node and npm installed globally
+
+-   Have node and npm installed globally
 
 **Installing & Developing**
+
 1. Install the dependencies using `npm i`
 2. To let typescript compile using `npm run build`
 3. Use typescript in watch mode using `npm run watch`
@@ -34,24 +36,25 @@ Workflow, when using Eclipse (for Version: 2019-12 (4.14.0), does not work with 
 
 Pitfalls:
 1: 'goto dec' and others may opens a NEW editor. Thus a file may be accessed by more than one editor.
-   BE CAREFUL: NEVER edit the same source at the same time with two editors. Changes will be LOST in almost allcases!
+BE CAREFUL: NEVER edit the same source at the same time with two editors. Changes will be LOST in almost allcases!
 2: as with Java nature, if you open a .ts-file as simple resource instead as a ts resource, on save the incremental compilation will NOT be done.
 
 PERSONAL REMARK: I have activated 'codelens'. It is EXPERIMENTAL. It gives reference counts of components and a used-by functionality when clicking on the
-    references (small italic font).
-
+references (small italic font).
 
 ### Typescript support for the OpenRoberta lab (Intellij Ultimate / Webstorm)
+
 IntelliJ Ultimate supports typescript without third-party plugins.
 But make sure the JavaScript and TypeScript bundled plugin is enabled on the **Settings/Preferences | Plugins page**
 
 **Setup**
+
 1. Start with [Getting Started](#getting-started)
 2. Install the IntelliJ formatter from `Resources/formatter/openRobertaIdea.xml`
-2. Go to **Settings/Preferences | Language & Frameworks | Typescript | Select Typescript Compiler (./node_modules/typescript)**
+3. Go to **Settings/Preferences | Language & Frameworks | Typescript | Select Typescript Compiler (./node_modules/typescript)**
 
 **Developing**
-Our typescript compiler is configured to compile to `OpenRobertaServer/staticResources`. 
+Our typescript compiler is configured to compile to `OpenRobertaServer/staticResources`.
 
 1. Start open Roberta Server (either `./ora.sh start-from-git` or use the IDE Starter)
 2. To compile with typescript click the Typescript Widget in the status bar choose **Compile | Compile All**
@@ -65,17 +68,19 @@ You can find additional information on [Jetbrain's own Typescript Manual](https:
 1. the sources are in directory `ts`. Each "component"/"framework", we have written, should be assembled in a directory below the directory `app`. This is necessary
    because the javascript resources loaded by the browser expect this structure (have a look into directory `OpenRobertaServer/staticResources/js`)
 2. `node_modules` contains javascript, type declarations, ... .
-3. the `neuralnetwork` component needs `d3` in a specific version (see `package.json`).  Run `npm install --save` to install **all** dependencies locally.
+3. the `neuralnetwork` component needs `d3` in a specific version (see `package.json`). Run `npm install --save` to install **all** dependencies locally.
 4. `tsc` needs type declarations, for instance to know the signatures of javascript built-ins. Run `npm install --save @types/node` to install these.
 5. **never** commit directory `node_modules`. It must be ignored in `.gitignore`.
 
 ### Migration from old staticResource system
 
 1. Use tools to automate
+
 ```bash
 amdtoes6 --dir ts --out ts
 cjs-to-es6 ts
 ```
+
 2. Replace
    `import (\S+) from '(\S+)';`
    with

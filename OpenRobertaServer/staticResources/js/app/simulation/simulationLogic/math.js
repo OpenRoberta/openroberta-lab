@@ -48,10 +48,8 @@ define(["require", "exports", "simulation.constants"], function (require, export
         if (d === 0) {
             return null;
         }
-        var xi = ((line2.x1 - line2.x2) * (line1.x1 * line1.y2 - line1.y1 * line1.x2) - (line1.x1 - line1.x2) * (line2.x1 * line2.y2 - line2.y1 * line2.x2))
-            / d;
-        var yi = ((line2.y1 - line2.y2) * (line1.x1 * line1.y2 - line1.y1 * line1.x2) - (line1.y1 - line1.y2) * (line2.x1 * line2.y2 - line2.y1 * line2.x2))
-            / d;
+        var xi = ((line2.x1 - line2.x2) * (line1.x1 * line1.y2 - line1.y1 * line1.x2) - (line1.x1 - line1.x2) * (line2.x1 * line2.y2 - line2.y1 * line2.x2)) / d;
+        var yi = ((line2.y1 - line2.y2) * (line1.x1 * line1.y2 - line1.y1 * line1.x2) - (line1.y1 - line1.y2) * (line2.x1 * line2.y2 - line2.y1 * line2.x2)) / d;
         if (!this.isLineAlignedToPoint(xi, yi, line1)) {
             return null;
         }
@@ -60,7 +58,7 @@ define(["require", "exports", "simulation.constants"], function (require, export
         }
         return {
             x: xi,
-            y: yi
+            y: yi,
         };
     };
     /**
@@ -105,7 +103,7 @@ define(["require", "exports", "simulation.constants"], function (require, export
         B = 2 * (dx * (line.x1 - circle.x) + dy * (line.y1 - circle.y));
         C = (line.x1 - circle.x) * (line.x1 - circle.x) + (line.y1 - circle.y) * (line.y1 - circle.y) - circle.r * circle.r;
         det = B * B - 4 * A * C;
-        if ((A <= 0.0000001) || (det < 0)) {
+        if (A <= 0.0000001 || det < 0) {
             return [];
         }
         else if (det == 0) {
@@ -118,9 +116,9 @@ define(["require", "exports", "simulation.constants"], function (require, export
         }
         else {
             // Two solutions.
-            t = ((-B + Math.sqrt(det)) / (2 * A));
+            t = (-B + Math.sqrt(det)) / (2 * A);
             var intersection1 = { x: line.x1 + t * dx, y: line.y1 + t * dy };
-            t = ((-B - Math.sqrt(det)) / (2 * A));
+            t = (-B - Math.sqrt(det)) / (2 * A);
             var intersection2 = { x: line.x1 + t * dx, y: line.y1 + t * dy };
             if (this.isLineAlignedToPoint(intersection1.x, intersection1.y, line) && this.isLineAlignedToPoint(intersection2.x, intersection2.y, line))
                 return [intersection1, intersection2];
@@ -158,67 +156,81 @@ define(["require", "exports", "simulation.constants"], function (require, export
      */
     exports.getLinesFromObj = function (obj) {
         switch (obj.form) {
-            case "rectangle":
-                return [{
+            case 'rectangle':
+                return [
+                    {
                         x1: obj.x,
                         x2: obj.x,
                         y1: obj.y,
-                        y2: obj.y + obj.h
-                    }, {
+                        y2: obj.y + obj.h,
+                    },
+                    {
                         x1: obj.x,
                         x2: obj.x + obj.w,
                         y1: obj.y,
-                        y2: obj.y
-                    }, {
+                        y2: obj.y,
+                    },
+                    {
                         x1: obj.x + obj.w,
                         x2: obj.x,
                         y1: obj.y + obj.h,
-                        y2: obj.y + obj.h
-                    }, {
+                        y2: obj.y + obj.h,
+                    },
+                    {
                         x1: obj.x + obj.w,
                         x2: obj.x + obj.w,
                         y1: obj.y + obj.h,
-                        y2: obj.y
-                    }];
-            case "robot":
-                return [{
+                        y2: obj.y,
+                    },
+                ];
+            case 'robot':
+                return [
+                    {
                         x1: obj.backLeft.rx,
                         x2: obj.frontLeft.rx,
                         y1: obj.backLeft.ry,
-                        y2: obj.frontLeft.ry
-                    }, {
+                        y2: obj.frontLeft.ry,
+                    },
+                    {
                         x1: obj.frontLeft.rx,
                         x2: obj.frontRight.rx,
                         y1: obj.frontLeft.ry,
-                        y2: obj.frontRight.ry
-                    }, {
+                        y2: obj.frontRight.ry,
+                    },
+                    {
                         x1: obj.frontRight.rx,
                         x2: obj.backRight.rx,
                         y1: obj.frontRight.ry,
-                        y2: obj.backRight.ry
-                    }, {
+                        y2: obj.backRight.ry,
+                    },
+                    {
                         x1: obj.backRight.rx,
                         x2: obj.backLeft.rx,
                         y1: obj.backRight.ry,
-                        y2: obj.backLeft.ry
-                    }];
-            case "triangle":
-                return [{
+                        y2: obj.backLeft.ry,
+                    },
+                ];
+            case 'triangle':
+                return [
+                    {
                         x1: obj.ax,
                         x2: obj.bx,
                         y1: obj.ay,
-                        y2: obj.by
-                    }, {
+                        y2: obj.by,
+                    },
+                    {
                         x1: obj.bx,
                         x2: obj.cx,
                         y1: obj.by,
-                        y2: obj.cy
-                    }, {
+                        y2: obj.cy,
+                    },
+                    {
                         x1: obj.ax,
                         x2: obj.cx,
                         y1: obj.ay,
-                        y2: obj.cy
-                    }];
+                        y2: obj.cy,
+                    },
+                ];
             default:
                 return false;
         }
@@ -238,20 +250,20 @@ define(["require", "exports", "simulation.constants"], function (require, export
         var vX = point.x - circle.x;
         var vY = point.y - circle.y;
         var magV = Math.sqrt(vX * vX + vY * vY);
-        var aX = circle.x + vX / magV * circle.r;
-        var aY = circle.y + vY / magV * circle.r;
+        var aX = circle.x + (vX / magV) * circle.r;
+        var aY = circle.y + (vY / magV) * circle.r;
         return {
             x: aX,
-            y: aY
+            y: aY,
         };
     };
     /**
      * Calculate the square of a number.
      *
      * @memberOf exports
-                * @param { Number }
+     * @param { Number }
      * x value to square
-                * @returns { Number } square of x
+     * @returns { Number } square of x
      */
     exports.sqr = function (x) {
         return x * x;
@@ -294,10 +306,10 @@ define(["require", "exports", "simulation.constants"], function (require, export
         if (t > 1) {
             return p2;
         }
-        return ({
+        return {
             x: p1.x + t * (p2.x - p1.x),
-            y: p1.y + t * (p2.y - p1.y)
-        });
+            y: p1.y + t * (p2.y - p1.y),
+        };
     }
     exports.getDistanceToLine = getDistanceToLine;
     exports.isPointInsideRectangle = function (p, rect) {
@@ -335,9 +347,9 @@ define(["require", "exports", "simulation.constants"], function (require, export
     };
     check = function (p, x, y) {
         switch (p.form) {
-            case ("rectangle"):
-                return (x > p.x && x < p.x + p.w && y > p.y && y < p.y + p.h);
-            case ("triangle"):
+            case 'rectangle':
+                return x > p.x && x < p.x + p.w && y > p.y && y < p.y + p.h;
+            case 'triangle':
                 var areaOrig = Math.floor(Math.abs((p.bx - p.ax) * (p.cy - p.ay) - (p.cx - p.ax) * (p.by - p.ay)));
                 var area1 = Math.floor(Math.abs((p.ax - x) * (p.by - y) - (p.bx - x) * (p.ay - y)));
                 var area2 = Math.floor(Math.abs((p.bx - x) * (p.cy - y) - (p.cx - x) * (p.by - y)));
@@ -346,29 +358,29 @@ define(["require", "exports", "simulation.constants"], function (require, export
                     return true;
                 }
                 return false;
-            case ("circle"):
+            case 'circle':
                 return (x - p.x) * (x - p.x) + (y - p.y) * (y - p.y) <= p.r * p.r;
-            case ("robot"):
+            case 'robot':
                 return exports.isPointInsideRectangle({
                     x: x,
-                    y: y
+                    y: y,
                 }, {
                     p1: {
                         x: p.backLeft.rx,
-                        y: p.backLeft.ry
+                        y: p.backLeft.ry,
                     },
                     p2: {
                         x: p.frontLeft.rx,
-                        y: p.frontLeft.ry
+                        y: p.frontLeft.ry,
                     },
                     p3: {
                         x: p.frontRight.rx,
-                        y: p.frontRight.ry
+                        y: p.frontRight.ry,
                     },
                     p4: {
                         x: p.backRight.rx,
-                        y: p.backRight.ry
-                    }
+                        y: p.backRight.ry,
+                    },
                 });
             default:
                 return false;
@@ -389,9 +401,9 @@ define(["require", "exports", "simulation.constants"], function (require, export
     //copy from http://stackoverflow.com/questions/2348597/why-doesnt-this-javascript-rgb-to-hsl-code-work
     exports.rgbToHsv = function (r, g, b) {
         var min = Math.min(r, g, b), max = Math.max(r, g, b), delta = max - min, h, s, v = max;
-        v = Math.floor(max / 255 * 100);
+        v = Math.floor((max / 255) * 100);
         if (max !== 0) {
-            s = Math.floor(delta / max * 100);
+            s = Math.floor((delta / max) * 100);
         }
         else {
             // black

@@ -1,4 +1,4 @@
-const DEFAULT_COLORS = { "5V": "#f01414", "GND": "#333333" };
+const DEFAULT_COLORS = { '5V': '#f01414', GND: '#333333' };
 const DARK = 50;
 
 class Point {
@@ -12,7 +12,6 @@ class Point {
 }
 
 class WirePoint {
-
     next: WirePoint;
     pos: Point;
 
@@ -30,9 +29,11 @@ function distance(first: number, second: number) {
     return Math.abs(first - second);
 }
 
-function chooseByDistance(selectBetween: [number, number], comparisonPoint: number,
-    comparator: (x1: number, x2: number) => boolean = (x1, x2) => x1 > x2): number {
-
+function chooseByDistance(
+    selectBetween: [number, number],
+    comparisonPoint: number,
+    comparator: (x1: number, x2: number) => boolean = (x1, x2) => x1 > x2
+): number {
     const comparison = comparator(distance(selectBetween[0], comparisonPoint), distance(selectBetween[1], comparisonPoint));
     if (comparison) {
         return selectBetween[0];
@@ -40,15 +41,13 @@ function chooseByDistance(selectBetween: [number, number], comparisonPoint: numb
     return selectBetween[1];
 }
 
-
 export default class WireDrawer {
-
-    public static readonly SEPARATOR = 6
+    public static readonly SEPARATOR = 6;
 
     private head: WirePoint;
     private readonly blockCorners: {
-        upperLeft: Point,
-        lowerRight: Point
+        upperLeft: Point;
+        lowerRight: Point;
     };
     private readonly portIndex: number;
     private readonly left: boolean;
@@ -73,15 +72,14 @@ export default class WireDrawer {
         const { x: originX, y: originY } = this.head.pos;
         const { x: destinationX, y: destinationY } = this.head.next.pos;
 
-        if (originX === destinationX || originY === destinationY)
-            return;
+        if (originX === destinationX || originY === destinationY) return;
 
         let x = originX < destinationX ? Math.max(originX, destinationX) : Math.min(originX, destinationX);
         let y = originY < destinationY ? Math.min(originY, destinationY) : Math.max(originY, destinationY);
 
         if (!this.blockCorners) {
             this.addPoint_(this.head, { x, y });
-            return
+            return;
         }
 
         // Adjust path around block
@@ -96,12 +94,12 @@ export default class WireDrawer {
 
         this.addPoint_(this.head, {
             x: xExtra,
-            y: y
+            y: y,
         });
 
         this.addPoint_(this.head, {
             x: xExtra,
-            y: originY
+            y: originY,
         });
     }
 
@@ -124,12 +122,12 @@ export default class WireDrawer {
         let num = parseInt(color, 16);
         let r = (num >> 16) + dark;
         r = r < 0 ? 0 : r;
-        let b = ((num >> 8) & 0x00FF) + dark;
+        let b = ((num >> 8) & 0x00ff) + dark;
         b = b < 0 ? 0 : b;
-        let g = (num & 0x0000FF) + dark;
+        let g = (num & 0x0000ff) + dark;
         g = g < 0 ? 0 : g;
         let darkColor = g | (b << 8) | (r << 16);
-        return ("#" + darkColor.toString(16));
+        return '#' + darkColor.toString(16);
     }
 
     static getColor(block: any, name: string): string {

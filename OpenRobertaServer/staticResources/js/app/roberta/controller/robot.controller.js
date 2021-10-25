@@ -30,11 +30,11 @@ define(["require", "exports", "util", "log", "message", "guiState.controller", "
         $formSingleModal.validate();
         if ($formSingleModal.valid()) {
             ROBOT.setToken(token, function (result) {
-                if (result.rc === "ok") {
+                if (result.rc === 'ok') {
                     GUISTATE_C.setRobotToken(token);
                     GUISTATE_C.setState(result);
                     // console.log(result.message);
-                    MSG.displayInformation(result, "MESSAGE_ROBOT_CONNECTED", result.message, GUISTATE_C.getRobotName());
+                    MSG.displayInformation(result, 'MESSAGE_ROBOT_CONNECTED', result.message, GUISTATE_C.getRobotName());
                     handleFirmwareConflict(result['robot.update'], result['robot.serverVersion']);
                 }
                 else {
@@ -61,42 +61,42 @@ define(["require", "exports", "util", "log", "message", "guiState.controller", "
             showRobotInfo();
         }, 'display robot state');
         $('#wlan-form').removeData('validator');
-        $.validator.addMethod("wlanRegex", function (value, element) {
+        $.validator.addMethod('wlanRegex', function (value, element) {
             return this.optional(element) || /^[a-zA-Z0-9$ *\(\)\{\}\[\]><~`\'\\\/|=+!?.,%#+&^@_\-äöüÄÖÜß]+$/gi.test(value);
-        }, "This field contains nonvalid symbols.");
+        }, 'This field contains nonvalid symbols.');
         $('#wlan-form').validate({
             rules: {
                 wlanSsid: {
                     required: true,
-                    wlanRegex: true
+                    wlanRegex: true,
                 },
                 wlanPassword: {
                     required: true,
-                    wlanRegex: true
+                    wlanRegex: true,
                 },
             },
-            errorClass: "form-invalid",
+            errorClass: 'form-invalid',
             errorPlacement: function (label, element) {
                 label.insertBefore(element.parent());
             },
             messages: {
                 wlanSsid: {
-                    required: Blockly.Msg["VALIDATION_FIELD_REQUIRED"],
-                    wlanRegex: Blockly.Msg["VALIDATION_CONTAINS_SPECIAL_CHARACTERS"]
+                    required: Blockly.Msg['VALIDATION_FIELD_REQUIRED'],
+                    wlanRegex: Blockly.Msg['VALIDATION_CONTAINS_SPECIAL_CHARACTERS'],
                 },
                 wlanPassword: {
-                    required: Blockly.Msg["VALIDATION_FIELD_REQUIRED"],
-                    wlanRegex: Blockly.Msg["VALIDATION_CONTAINS_SPECIAL_CHARACTERS"]
-                }
-            }
+                    required: Blockly.Msg['VALIDATION_FIELD_REQUIRED'],
+                    wlanRegex: Blockly.Msg['VALIDATION_CONTAINS_SPECIAL_CHARACTERS'],
+                },
+            },
         });
         $('#setWlanCredentials').onWrap('click', function (e) {
             e.preventDefault();
             $('#wlan-form').validate();
             if ($('#wlan-form').valid()) {
-                PROGRAM_C.SSID = document.getElementById("wlanSsid").value;
-                PROGRAM_C.password = document.getElementById("wlanPassword").value;
-                $("#menu-wlan").modal('hide');
+                PROGRAM_C.SSID = document.getElementById('wlanSsid').value;
+                PROGRAM_C.password = document.getElementById('wlanPassword').value;
+                $('#menu-wlan').modal('hide');
             }
         }, 'wlan form submitted');
         $('#doUpdateFirmware').onWrap('click', function () {
@@ -109,26 +109,29 @@ define(["require", "exports", "util", "log", "message", "guiState.controller", "
             formatNoMatches: function () {
                 return '<div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>';
             },
-            columns: [{
+            columns: [
+                {
                     // TODO: translations
                     title: 'Name',
                     field: 'name',
-                }, {
+                },
+                {
                     visible: false,
-                    field: 'id'
-                }]
+                    field: 'id',
+                },
+            ],
         });
         $('#connectionsTable').onWrap('click-row.bs.table', function (e, row) {
             WEBVIEW_C.jsToAppInterface({
-                'target': GUISTATE_C.getRobot(),
-                'type': 'connect',
-                'robot': row.id
+                target: GUISTATE_C.getRobot(),
+                type: 'connect',
+                robot: row.id,
             });
-        }, "connect to robot");
+        }, 'connect to robot');
         $('#show-available-connections').on('hidden.bs.modal', function (e) {
             WEBVIEW_C.jsToAppInterface({
-                'target': GUISTATE_C.getRobot(),
-                'type': 'stopScan'
+                target: GUISTATE_C.getRobot(),
+                type: 'stopScan',
             });
         });
         $('#show-available-connections').onWrap('add', function (event, data) {
@@ -136,14 +139,14 @@ define(["require", "exports", "util", "log", "message", "guiState.controller", "
                 index: 999,
                 row: {
                     name: data.brickname,
-                    id: data.brickid
-                }
+                    id: data.brickid,
+                },
             });
         }, 'insert robot connections');
         $('#show-available-connections').onWrap('connect', function (event, data) {
             var result = {};
-            result["robot.name"] = data.brickname;
-            result["robot.state"] = 'wait';
+            result['robot.name'] = data.brickname;
+            result['robot.state'] = 'wait';
             GUISTATE_C.setState(result);
             $('#show-available-connections').modal('hide');
         }, 'connect to a robot');
@@ -151,11 +154,11 @@ define(["require", "exports", "util", "log", "message", "guiState.controller", "
     function showSetTokenModal() {
         UTIL.showSingleModal(function () {
             $('#singleModalInput').attr('type', 'text');
-            $('#single-modal h3').text(Blockly.Msg["MENU_CONNECT"]);
-            $('#single-modal label').text(Blockly.Msg["POPUP_VALUE"]);
+            $('#single-modal h3').text(Blockly.Msg['MENU_CONNECT']);
+            $('#single-modal label').text(Blockly.Msg['POPUP_VALUE']);
             $('#singleModalInput').addClass('capitalLetters');
-            $('#single-modal a[href]').text(Blockly.Msg["POPUP_STARTUP_HELP"]);
-            $('#single-modal a[href]').attr("href", "http://wiki.open-roberta.org");
+            $('#single-modal a[href]').text(Blockly.Msg['POPUP_STARTUP_HELP']);
+            $('#single-modal a[href]').attr('href', 'http://wiki.open-roberta.org');
         }, function () {
             setToken($('#singleModalInput').val().toUpperCase());
         }, function () {
@@ -165,20 +168,20 @@ define(["require", "exports", "util", "log", "message", "guiState.controller", "
                 singleModalInput: {
                     required: true,
                     minlength: 8,
-                    maxlength: 8
-                }
+                    maxlength: 8,
+                },
             },
-            errorClass: "form-invalid",
+            errorClass: 'form-invalid',
             errorPlacement: function (label, element) {
                 label.insertAfter(element);
             },
             messages: {
                 singleModalInput: {
-                    required: Blockly.Msg["VALIDATION_FIELD_REQUIRED"],
-                    minlength: Blockly.Msg["VALIDATION_TOKEN_LENGTH"],
-                    maxlength: Blockly.Msg["VALIDATION_TOKEN_LENGTH"]
-                }
-            }
+                    required: Blockly.Msg['VALIDATION_FIELD_REQUIRED'],
+                    minlength: Blockly.Msg['VALIDATION_TOKEN_LENGTH'],
+                    maxlength: Blockly.Msg['VALIDATION_TOKEN_LENGTH'],
+                },
+            },
         });
     }
     exports.showSetTokenModal = showSetTokenModal;
@@ -188,23 +191,22 @@ define(["require", "exports", "util", "log", "message", "guiState.controller", "
         }
         $('#connectionsTable').bootstrapTable('removeAll');
         WEBVIEW_C.jsToAppInterface({
-            'target': GUISTATE_C.getRobot(),
-            'type': 'startScan'
+            target: GUISTATE_C.getRobot(),
+            type: 'startScan',
         });
         $('#show-available-connections').modal('show');
     }
     exports.showScanModal = showScanModal;
     function showListModal() {
         UTIL.showSingleListModal(function () {
-            $('#single-modal-list h3').text(Blockly.Msg["MENU_CONNECT"]);
-            $('#single-modal-list label').text(Blockly.Msg["POPUP_VALUE"]);
-            $('#single-modal-list a[href]').text(Blockly.Msg["POPUP_STARTUP_HELP"]);
-            $('#single-modal-list a[href]').attr("href", "http://wiki.open-roberta.org");
+            $('#single-modal-list h3').text(Blockly.Msg['MENU_CONNECT']);
+            $('#single-modal-list label').text(Blockly.Msg['POPUP_VALUE']);
+            $('#single-modal-list a[href]').text(Blockly.Msg['POPUP_STARTUP_HELP']);
+            $('#single-modal-list a[href]').attr('href', 'http://wiki.open-roberta.org');
         }, function () {
             //console.log(document.getElementById("singleModalListInput").value);
-            setPort(document.getElementById("singleModalListInput").value);
-        }, function () {
-        });
+            setPort(document.getElementById('singleModalListInput').value);
+        }, function () { });
     }
     exports.showListModal = showListModal;
     /**
@@ -212,40 +214,40 @@ define(["require", "exports", "util", "log", "message", "guiState.controller", "
      */
     function showRobotInfo() {
         if (GUISTATE_C.isRobotConnected()) {
-            $("#robotName").text(GUISTATE_C.getRobotName());
-            $("#robotSystem").text(GUISTATE_C.getRobotFWName());
-            if (GUISTATE_C.getRobotState() === "wait") {
-                $("#robotStateWait").css('display', 'inline');
-                $("#robotStateDisconnected").css('display', 'none');
-                $("#robotStateBusy").css('display', 'none');
+            $('#robotName').text(GUISTATE_C.getRobotName());
+            $('#robotSystem').text(GUISTATE_C.getRobotFWName());
+            if (GUISTATE_C.getRobotState() === 'wait') {
+                $('#robotStateWait').css('display', 'inline');
+                $('#robotStateDisconnected').css('display', 'none');
+                $('#robotStateBusy').css('display', 'none');
             }
-            else if (GUISTATE_C.getRobotState() === "busy") {
-                $("#robotStateWait").css('display', 'none');
-                $("#robotStateDisconnected").css('display', 'none');
-                $("#robotStateBusy").css('display', 'inline');
+            else if (GUISTATE_C.getRobotState() === 'busy') {
+                $('#robotStateWait').css('display', 'none');
+                $('#robotStateDisconnected').css('display', 'none');
+                $('#robotStateBusy').css('display', 'inline');
             }
             else {
-                $("#robotStateWait").css('display', 'none');
-                $("#robotStateDisconnected").css('display', 'inline');
-                $("#robotStateBusy").css('display', 'none');
+                $('#robotStateWait').css('display', 'none');
+                $('#robotStateDisconnected').css('display', 'inline');
+                $('#robotStateBusy').css('display', 'none');
             }
             if (GUISTATE_C.getLanguage() == 'EN') {
-                $("#robotBattery").text(GUISTATE_C.getRobotBattery() + ' V');
+                $('#robotBattery').text(GUISTATE_C.getRobotBattery() + ' V');
             }
             else {
-                $("#robotBattery").text(GUISTATE_C.getRobotBattery().toString().replace(".", ",") + ' V');
+                $('#robotBattery').text(GUISTATE_C.getRobotBattery().toString().replace('.', ',') + ' V');
             }
             var robotWait = parseInt(GUISTATE_C.getRobotTime(), 10);
             if (robotWait < 1000) {
-                $("#robotWait").text(robotWait + ' ms');
+                $('#robotWait').text(robotWait + ' ms');
             }
             else {
-                $("#robotWait").text(Math.round(robotWait / 1000) + ' s');
+                $('#robotWait').text(Math.round(robotWait / 1000) + ' s');
             }
-            $("#show-robot-info").modal("show");
+            $('#show-robot-info').modal('show');
         }
         else {
-            MSG.displayMessage("ORA_ROBOT_NOT_CONNECTED", "POPUP", "");
+            MSG.displayMessage('ORA_ROBOT_NOT_CONNECTED', 'POPUP', '');
         }
     }
     exports.showRobotInfo = showRobotInfo;
@@ -253,7 +255,7 @@ define(["require", "exports", "util", "log", "message", "guiState.controller", "
      * Show WLAN credentials form to save them for further REST calls.
      */
     function showWlanForm() {
-        $("#menu-wlan").modal('show');
+        $('#menu-wlan').modal('show');
     }
     exports.showWlanForm = showWlanForm;
     /**
@@ -261,15 +263,21 @@ define(["require", "exports", "util", "log", "message", "guiState.controller", "
      */
     function handleFirmwareConflict(updateInfo, robotServerVersion) {
         if (updateInfo < 0) {
-            LOG.info("The firmware version '" + robotServerVersion + "' on the server is newer than the firmware version '" + GUISTATE_C.getRobotVersion()
-                + "' on the robot");
-            $("#confirmUpdateFirmware").modal('show');
+            LOG.info("The firmware version '" +
+                robotServerVersion +
+                "' on the server is newer than the firmware version '" +
+                GUISTATE_C.getRobotVersion() +
+                "' on the robot");
+            $('#confirmUpdateFirmware').modal('show');
             return true;
         }
         else if (updateInfo > 0) {
-            LOG.info("The firmware version '" + robotServerVersion + "' on the server is older than the firmware version '" + GUISTATE_C.getRobotVersion()
-                + "' on the robot");
-            MSG.displayMessage("MESSAGE_FIRMWARE_ERROR", "POPUP", "");
+            LOG.info("The firmware version '" +
+                robotServerVersion +
+                "' on the server is older than the firmware version '" +
+                GUISTATE_C.getRobotVersion() +
+                "' on the robot");
+            MSG.displayMessage('MESSAGE_FIRMWARE_ERROR', 'POPUP', '');
             return true;
         }
         return false;
@@ -281,11 +289,11 @@ define(["require", "exports", "util", "log", "message", "guiState.controller", "
     function updateFirmware() {
         ROBOT.updateFirmware(function (result) {
             GUISTATE_C.setState(result);
-            if (result.rc === "ok") {
-                MSG.displayMessage("MESSAGE_RESTART_ROBOT", "POPUP", "");
+            if (result.rc === 'ok') {
+                MSG.displayMessage('MESSAGE_RESTART_ROBOT', 'POPUP', '');
             }
             else {
-                MSG.displayInformation(result, "", result.message, GUISTATE_C.getRobotFWName());
+                MSG.displayInformation(result, '', result.message, GUISTATE_C.getRobotFWName());
             }
         });
     }
@@ -296,8 +304,8 @@ define(["require", "exports", "util", "log", "message", "guiState.controller", "
     function switchRobot(robot, opt_continue, opt_callback) {
         PROGRAM_C.SSID = null;
         PROGRAM_C.password = null;
-        document.getElementById("wlanSsid").value = "";
-        document.getElementById("wlanPassword").value = "";
+        document.getElementById('wlanSsid').value = '';
+        document.getElementById('wlanPassword').value = '';
         var further;
         // no need to ask for saving programs if you switch the robot in between a group
         if (typeof opt_continue === 'undefined' && GUISTATE_C.findGroup(robot) == GUISTATE_C.getRobotGroup()) {
@@ -308,11 +316,11 @@ define(["require", "exports", "util", "log", "message", "guiState.controller", "
         }
         if (further || (GUISTATE_C.isProgramSaved() && GUISTATE_C.isConfigurationSaved())) {
             if (robot === GUISTATE_C.getRobot()) {
-                typeof opt_callback === "function" && opt_callback();
+                typeof opt_callback === 'function' && opt_callback();
                 return;
             }
             ROBOT.setRobot(robot, function (result) {
-                if (result.rc === "ok") {
+                if (result.rc === 'ok') {
                     if (GUISTATE_C.findGroup(robot) != GUISTATE_C.getRobotGroup()) {
                         GUISTATE_C.setRobot(robot, result);
                         CONFIGURATION_C.resetView();
@@ -339,7 +347,8 @@ define(["require", "exports", "util", "log", "message", "guiState.controller", "
                     //                        'target' : 'wedo',
                     //                        'op' : {'type''disconnect'
                     //                    });
-                    typeof opt_callback === "function" ? opt_callback()
+                    typeof opt_callback === 'function'
+                        ? opt_callback()
                         : MSG.displayInformation(result, result.message, result.message, GUISTATE_C.getRobotRealName());
                 }
                 else {
@@ -361,10 +370,10 @@ define(["require", "exports", "util", "log", "message", "guiState.controller", "
                 }, 'cancel modal');
             });
             if (GUISTATE_C.isUserLoggedIn()) {
-                MSG.displayMessage("POPUP_BEFOREUNLOAD_LOGGEDIN", "POPUP", "", true);
+                MSG.displayMessage('POPUP_BEFOREUNLOAD_LOGGEDIN', 'POPUP', '', true);
             }
             else {
-                MSG.displayMessage("POPUP_BEFOREUNLOAD", "POPUP", "", true);
+                MSG.displayMessage('POPUP_BEFOREUNLOAD', 'POPUP', '', true);
             }
         }
     }

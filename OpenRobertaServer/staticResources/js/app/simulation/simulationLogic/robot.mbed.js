@@ -14,7 +14,13 @@ define(["require", "exports", "interpreter.constants", "util", "simulation.robot
         this.debug = true;
         this.idle = true;
         this.display = {
-            leds: [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]],
+            leds: [
+                [0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0],
+            ],
             color: ['255,255,255', '255,226,99', '255,227,0', '255,219,0', '255,201,0', '255,184,0', '255,143,0', '255, 113, 0', '255, 100, 0', '255, 76, 2'],
             x: -60,
             y: 80,
@@ -40,8 +46,7 @@ define(["require", "exports", "interpreter.constants", "util", "simulation.robot
                         if (colorIndex > 0) {
                             canvas.save();
                             canvas.beginPath();
-                            var rad = canvas.createRadialGradient((this.x + i * this.dx) * 2, this.y - j * this.dy, 1.5 * this.r, (this.x + i * this.dx) * 2, this.y
-                                - j * this.dy, 3 * this.r);
+                            var rad = canvas.createRadialGradient((this.x + i * this.dx) * 2, this.y - j * this.dy, 1.5 * this.r, (this.x + i * this.dx) * 2, this.y - j * this.dy, 3 * this.r);
                             rad.addColorStop(0, 'rgba(' + this.color[colorIndex] + ',1)');
                             rad.addColorStop(1, 'rgba(' + this.color[colorIndex] + ',0)');
                             canvas.fillStyle = rad;
@@ -55,25 +60,25 @@ define(["require", "exports", "interpreter.constants", "util", "simulation.robot
                     }
                 }
             },
-            finished: false
+            finished: false,
         };
         this.buttons = {
             A: false,
             B: false,
-            Reset: false
+            Reset: false,
         };
         this.temperature = {
-            degree: 25
+            degree: 25,
         };
         this.gesture = {
-            up: true
+            up: true,
         };
         this.compass = {
-            degree: 0
+            degree: 0,
         };
         this.time = 0;
         this.timer = {
-            timer1: false
+            timer1: false,
         };
         this.tone = {};
     }
@@ -83,29 +88,35 @@ define(["require", "exports", "interpreter.constants", "util", "simulation.robot
         for (var property in this.buttons) {
             property = false;
         }
-        this.display.leds = [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]];
+        this.display.leds = [
+            [0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0],
+        ];
         this.display.brightness = 255;
         clearTimeout(this.display.timeout);
         this.gesture = {};
         this.gesture.up = true;
-        $("#simRobotContent").html('');
-        $("#simRobotContent").html(this.controle);
+        $('#simRobotContent').html('');
+        $('#simRobotContent').html(this.controle);
         var that = this;
         $('input[name="options"]').change(function (e) {
             that.gesture = {};
             that.gesture[e.currentTarget.id] = true;
         });
         this.compass.degree = 0;
-        $('#slider').on("mousedown touchstart", function (e) {
+        $('#slider').on('mousedown touchstart', function (e) {
             e.stopPropagation();
         });
-        $('#slider').on("input change", function (e) {
+        $('#slider').on('input change', function (e) {
             e.preventDefault();
             $('#range').val($('#slider').val());
             that.compass.degree = $('#slider').val();
             e.stopPropagation();
         });
-        $('#range').on("change", function (e) {
+        $('#range').on('change', function (e) {
             e.preventDefault();
             var sval = $('#range').val();
             if (isNaN(sval))
@@ -119,17 +130,17 @@ define(["require", "exports", "interpreter.constants", "util", "simulation.robot
         });
         var $rangeLight = $('#rangeLight');
         var $sliderLight = $('#sliderLight');
-        $sliderLight.on("mousedown touchstart", function (e) {
+        $sliderLight.on('mousedown touchstart', function (e) {
             e.stopPropagation();
         });
-        $sliderLight.on("input change", function (e) {
+        $sliderLight.on('input change', function (e) {
             e.preventDefault();
             var lightValue = $sliderLight.val();
             $rangeLight.val(lightValue);
             that.display.lightLevel = lightValue;
             e.stopPropagation();
         });
-        $rangeLight.on("change", function (e) {
+        $rangeLight.on('change', function (e) {
             e.preventDefault();
             var lightValue = $rangeLight.val();
             if (isNaN(lightValue))
@@ -155,33 +166,33 @@ define(["require", "exports", "interpreter.constants", "util", "simulation.robot
         }
         this.pin = {};
         this.pin.no = 0;
-        $("select#pin").on('change', function () {
-            that.pin.no = $("select#pin option:selected").attr('id');
+        $('select#pin').on('change', function () {
+            that.pin.no = $('select#pin option:selected').attr('id');
             if (that['pin' + that.pin.no].analogIn !== undefined) {
                 $('#state').val('analog');
-                $('#slider1').attr("max", 1023);
+                $('#slider1').attr('max', 1023);
                 $('#slider1').val(that['pin' + that.pin.no].analogIn);
             }
             else if (that['pin' + that.pin.no].digitalIn !== undefined) {
                 $('#state').val('digital');
-                $('#slider1').attr("max", 1);
+                $('#slider1').attr('max', 1);
                 $('#slider1').val(that['pin' + that.pin.no].digitalIn);
             }
             else {
                 $('#state').val('off');
-                $('#slider1').attr("max", 1023);
+                $('#slider1').attr('max', 1023);
                 $('#slider1').val(0);
             }
         });
         $('#slider1').val(0);
-        $("select#state").on('change', function () {
-            if ($("select#state option:selected").attr('value') == 'off') {
+        $('select#state').on('change', function () {
+            if ($('select#state option:selected').attr('value') == 'off') {
                 delete that['pin' + that.pin.no].analogIn;
                 delete that['pin' + that.pin.no].digitalIn;
             }
-            else if ($("select#state option:selected").attr('value') == 'analog') {
+            else if ($('select#state option:selected').attr('value') == 'analog') {
                 delete that['pin' + that.pin.no].digitalIn;
-                $('#slider1').attr("max", 1023);
+                $('#slider1').attr('max', 1023);
                 if (!that['pin' + that.pin.no].analogIn) {
                     $('#slider1').val(0);
                     that['pin' + that.pin.no].analogIn = $('#slider1').val();
@@ -190,9 +201,9 @@ define(["require", "exports", "interpreter.constants", "util", "simulation.robot
                     $('#slider1').val(that['pin' + that.pin.no].analogIn);
                 }
             }
-            else if ($("select#state option:selected").attr('value') == 'digital') {
+            else if ($('select#state option:selected').attr('value') == 'digital') {
                 delete that['pin' + that.pin.no].analogIn;
-                $('#slider1').attr("max", 1);
+                $('#slider1').attr('max', 1);
                 if (!that['pin' + that.pin.no].digitalIn) {
                     $('#slider1').val(0);
                     that['pin' + that.pin.no].digitalIn = $('#slider1').val();
@@ -201,9 +212,9 @@ define(["require", "exports", "interpreter.constants", "util", "simulation.robot
                     $('#slider1').val(that['pin' + that.pin.no].digitalIn);
                 }
             }
-            that.pin.state = $("select#state option:selected").val();
+            that.pin.state = $('select#state option:selected').val();
         });
-        $('#slider1').on("mousedown touchstart", function (e) {
+        $('#slider1').on('mousedown touchstart', function (e) {
             e.stopPropagation();
         });
         $('#slider1').change(function (e) {
@@ -218,7 +229,7 @@ define(["require", "exports", "interpreter.constants", "util", "simulation.robot
      *
      */
     Mbed.prototype.update = function () {
-        var display = this.robotBehaviour.getActionState("display", true);
+        var display = this.robotBehaviour.getActionState('display', true);
         if (display) {
             if (display.text) {
                 var that = this;
@@ -282,7 +293,13 @@ define(["require", "exports", "interpreter.constants", "util", "simulation.robot
                 }
             }
             if (display.clear) {
-                this.display.leds = [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]];
+                this.display.leds = [
+                    [0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0],
+                ];
             }
             if (display.pixel) {
                 var pixel = display.pixel;
@@ -299,7 +316,7 @@ define(["require", "exports", "interpreter.constants", "util", "simulation.robot
                 }
             }
             if (display.brightness || display.brightness === 0) {
-                this.display.brightness = Math.round(display.brightness * 255.0 / 9.0, 0);
+                this.display.brightness = Math.round((display.brightness * 255.0) / 9.0, 0);
             }
         }
         for (var i = 0; i < 4; i++) {
@@ -314,7 +331,7 @@ define(["require", "exports", "interpreter.constants", "util", "simulation.robot
             }
         }
         // update timer
-        var timer = this.robotBehaviour.getActionState("timer", false);
+        var timer = this.robotBehaviour.getActionState('timer', false);
         if (timer) {
             for (var key in timer) {
                 if (timer[key] == 'reset') {
@@ -323,11 +340,11 @@ define(["require", "exports", "interpreter.constants", "util", "simulation.robot
             }
         }
         // update tone
-        var volume = this.robotBehaviour.getActionState("volume", true);
+        var volume = this.robotBehaviour.getActionState('volume', true);
         if ((volume || volume === 0) && this.webAudio.context) {
             this.webAudio.volume = volume / 100.0;
         }
-        var tone = this.robotBehaviour.getActionState("tone", true);
+        var tone = this.robotBehaviour.getActionState('tone', true);
         if (tone && this.webAudio.context) {
             var cT = this.webAudio.context.currentTime;
             if (tone.frequency && tone.duration > 0) {
@@ -338,7 +355,6 @@ define(["require", "exports", "interpreter.constants", "util", "simulation.robot
                 function oscillatorFinish() {
                     that.tone.finished = true;
                     oscillator.disconnect(that.webAudio.context.destination);
-                    delete oscillator;
                 }
                 oscillator.onended = function (e) {
                     oscillatorFinish();
@@ -435,7 +451,7 @@ define(["require", "exports", "interpreter.constants", "util", "simulation.robot
         g: [4, 2, 6, 8, 10, 11, 13, 15, 16, 17, 18, 19],
         h: [5, 1, 2, 3, 4, 5, 8, 13, 19, 20],
         i: [1, 1, 3, 4, 5],
-        j: [3, 5, 10, 11, 13, 14,],
+        j: [3, 5, 10, 11, 13, 14],
         k: [4, 1, 2, 3, 4, 5, 8, 12, 14, 20],
         l: [3, 1, 2, 3, 4, 10, 15],
         m: [5, 2, 3, 4, 5, 7, 13, 17, 22, 23, 24, 25],
@@ -465,7 +481,7 @@ define(["require", "exports", "interpreter.constants", "util", "simulation.robot
         '}': [3, 1, 5, 6, 7, 8, 9, 10, 13],
         '(': [2, 2, 3, 4, 6, 10],
         ')': [2, 1, 5, 7, 8, 9],
-        '<': [3, 3, 7, 9, 11, 15,],
+        '<': [3, 3, 7, 9, 11, 15],
         '>': [3, 1, 5, 7, 9, 13],
         '/': [5, 5, 9, 13, 17, 21],
         '\\': [5, 1, 7, 13, 19, 25],
@@ -480,7 +496,7 @@ define(["require", "exports", "interpreter.constants", "util", "simulation.robot
         '*': [3, 2, 4, 8, 12, 14],
         '-': [3, 3, 8, 13],
         '+': [3, 3, 7, 8, 9, 13],
-        '_': [5, 5, 10, 15, 20, 25],
+        _: [5, 5, 10, 15, 20, 25],
         '=': [3, 2, 4, 7, 9, 12, 14],
         '|': [1, 1, 2, 3, 4, 5],
         '~': [4, 3, 8, 14, 19],
@@ -495,7 +511,7 @@ define(["require", "exports", "interpreter.constants", "util", "simulation.robot
         6: [5, 4, 8, 10, 12, 13, 15, 16, 18, 20, 24],
         7: [5, 1, 5, 6, 9, 11, 13, 16, 17, 21],
         8: [5, 2, 4, 6, 8, 10, 11, 13, 15, 16, 18, 20, 22, 24],
-        9: [5, 2, 6, 8, 10, 11, 13, 14, 16, 18, 22]
+        9: [5, 2, 6, 8, 10, 11, 13, 14, 16, 18, 22],
     };
     Mbed.prototype.handleMouseUp = function (e, offsetX, offsetY, scale, w, h) {
         this.handleMouse(e, offsetX, offsetY, scale, w, h);
@@ -511,26 +527,46 @@ define(["require", "exports", "interpreter.constants", "util", "simulation.robot
     };
     Mbed.prototype.controle = function () {
         $('#simRobotContent').append('<div id="mbedContent"><div id="mbedButtons" class="btn-group btn-group-vertical" data-toggle="buttons">' + //
-            '<label style="margin: 8px;margin-top: 12px; margin-left: 0">' + Blockly.Msg.SENSOR_GESTURE + '</label>' + //
-            '<label class="btn simbtn active"><input type="radio" id="up" name="options" autocomplete="off">' + Blockly.Msg.SENSOR_GESTURE_UP + '</label>' + //
-            '<label class="btn simbtn"><input type="radio" id="down" name="options" autocomplete="off" >' + Blockly.Msg.SENSOR_GESTURE_DOWN + '</label>' + //
-            '<label class="btn simbtn"><input type="radio" id="face_down"name="options" autocomplete="off" >' + Blockly.Msg.SENSOR_GESTURE_FACE_DOWN + '</label>' + //
-            '<label class="btn simbtn"><input type="radio" id="face_up" name="options" autocomplete="off" >' + Blockly.Msg.SENSOR_GESTURE_FACE_UP + '</label>' + //
-            '<label class="btn simbtn"><input type="radio" id="shake" name="options" autocomplete="off" >' + Blockly.Msg.SENSOR_GESTURE_SHAKE + '</label>' + //
-            '<label class="btn simbtn"><input type="radio" id="freefall" name="options" autocomplete="off" >' + Blockly.Msg.SENSOR_GESTURE_FREEFALL + '</label>' + //
-            '<label style="margin: 8px;margin-top: 12px; margin-left: 0">' + Blockly.Msg.SENSOR_COMPASS
-            + '</label><input type="text" value="0" style="margin-bottom: 8px;margin-top: 12px; min-width: 45px; width: 45px; display: inline-block; border: 1px solid #333; border-radius: 2px; text-align: right;" id="range" />'
-            + '<div style="margin:8px 0; "><input id="slider" type="range" min="0" max="360" value="0" step="5" /></div>' + //
-            '<label style="margin: 8px;margin-top: 12px; margin-left: 0">' + Blockly.Msg.SENSOR_LIGHT
-            + '</label><input type="text" value="0" style="margin-bottom: 8px;margin-top: 12px; min-width: 45px; width: 45px; display: inline-block; border: 1px solid #333; border-radius: 2px; text-align: right; float: right;" id="rangeLight" />'
-            + '<div style="margin:8px 0; "><input id="sliderLight" type="range" min="0" max="100" value="0" /></div>' + //
-            '<label style="width:100%;margin: 8px;margin-top: 12px; margin-left: 0"><select class="customDropdown" id="pin"><option id="0">'
-            + Blockly.Msg.SENSOR_PIN + ' 0</option><option id="1">' + Blockly.Msg.SENSOR_PIN + ' 1</option><option id="2">' + Blockly.Msg.SENSOR_PIN
-            + ' 2</option></select><select class="customDropdown" style="float: right;" id="state"><option value="off">' + Blockly.Msg.OFF
-            + '</option><option value="analog">analog</option><option value="digital">digital</option></select></label>' + //
+            '<label style="margin: 8px;margin-top: 12px; margin-left: 0">' +
+            Blockly.Msg.SENSOR_GESTURE +
+            '</label>' + //
+            '<label class="btn simbtn active"><input type="radio" id="up" name="options" autocomplete="off">' +
+            Blockly.Msg.SENSOR_GESTURE_UP +
+            '</label>' + //
+            '<label class="btn simbtn"><input type="radio" id="down" name="options" autocomplete="off" >' +
+            Blockly.Msg.SENSOR_GESTURE_DOWN +
+            '</label>' + //
+            '<label class="btn simbtn"><input type="radio" id="face_down"name="options" autocomplete="off" >' +
+            Blockly.Msg.SENSOR_GESTURE_FACE_DOWN +
+            '</label>' + //
+            '<label class="btn simbtn"><input type="radio" id="face_up" name="options" autocomplete="off" >' +
+            Blockly.Msg.SENSOR_GESTURE_FACE_UP +
+            '</label>' + //
+            '<label class="btn simbtn"><input type="radio" id="shake" name="options" autocomplete="off" >' +
+            Blockly.Msg.SENSOR_GESTURE_SHAKE +
+            '</label>' + //
+            '<label class="btn simbtn"><input type="radio" id="freefall" name="options" autocomplete="off" >' +
+            Blockly.Msg.SENSOR_GESTURE_FREEFALL +
+            '</label>' + //
+            '<label style="margin: 8px;margin-top: 12px; margin-left: 0">' +
+            Blockly.Msg.SENSOR_COMPASS +
+            '</label><input type="text" value="0" style="margin-bottom: 8px;margin-top: 12px; min-width: 45px; width: 45px; display: inline-block; border: 1px solid #333; border-radius: 2px; text-align: right;" id="range" />' +
+            '<div style="margin:8px 0; "><input id="slider" type="range" min="0" max="360" value="0" step="5" /></div>' + //
+            '<label style="margin: 8px;margin-top: 12px; margin-left: 0">' +
+            Blockly.Msg.SENSOR_LIGHT +
+            '</label><input type="text" value="0" style="margin-bottom: 8px;margin-top: 12px; min-width: 45px; width: 45px; display: inline-block; border: 1px solid #333; border-radius: 2px; text-align: right; float: right;" id="rangeLight" />' +
+            '<div style="margin:8px 0; "><input id="sliderLight" type="range" min="0" max="100" value="0" /></div>' + //
+            '<label style="width:100%;margin: 8px;margin-top: 12px; margin-left: 0"><select class="customDropdown" id="pin"><option id="0">' +
+            Blockly.Msg.SENSOR_PIN +
+            ' 0</option><option id="1">' +
+            Blockly.Msg.SENSOR_PIN +
+            ' 1</option><option id="2">' +
+            Blockly.Msg.SENSOR_PIN +
+            ' 2</option></select><select class="customDropdown" style="float: right;" id="state"><option value="off">' +
+            Blockly.Msg.OFF +
+            '</option><option value="analog">analog</option><option value="digital">digital</option></select></label>' + //
             '<div style="margin:8px 0; "><input id="slider1" type="range" min="0" max="1023" value="0" step="1" /></div></div>'); //
     };
-    Mbed.prototype.resetPose = function () {
-    };
+    Mbed.prototype.resetPose = function () { };
     exports.default = Mbed;
 });

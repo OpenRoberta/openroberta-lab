@@ -5,7 +5,9 @@
   "scripts": {
     "watch": "tsc --watch",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "tsc"
+    "build": "tsc",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
   },
   "author": "",
   "license": "ISC",
@@ -16,6 +18,7 @@
   },
   "devDependencies": {
     "@types/bootstrap": "^3.3.28",
+    "prettier": "2.4.1",
     "typescript": "^3.9.2"
   }
 }

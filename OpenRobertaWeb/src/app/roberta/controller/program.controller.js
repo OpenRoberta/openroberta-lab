@@ -1,4 +1,3 @@
-
 import * as COMM from 'comm';
 import * as MSG from 'message';
 import * as LOG from 'log';
@@ -35,49 +34,55 @@ function init() {
 function initView() {
     var toolbox = GUISTATE_C.getProgramToolbox();
     blocklyWorkspace = Blockly.inject(document.getElementById('blocklyDiv'), {
-        path : '/blockly/',
-        toolbox : toolbox,
-        trashcan : true,
-        scrollbars : true,
-        media : '../blockly/media/',
-        zoom : {
-            controls : true,
-            wheel : false,
-            startScale : 1.0,
-            maxScale : 4,
-            minScale : .25,
-            scaleSpeed : 1.1
+        path: '/blockly/',
+        toolbox: toolbox,
+        trashcan: true,
+        scrollbars: true,
+        media: '../blockly/media/',
+        zoom: {
+            controls: true,
+            wheel: false,
+            startScale: 1.0,
+            maxScale: 4,
+            minScale: 0.25,
+            scaleSpeed: 1.1,
         },
-        checkInTask : [ 'start', '_def', 'event' ],
-        variableDeclaration : true,
-        robControls : true,
-        theme : GUISTATE_C.getTheme()
+        checkInTask: ['start', '_def', 'event'],
+        variableDeclaration: true,
+        robControls: true,
+        theme: GUISTATE_C.getTheme(),
     });
     $(window).resize();
     blocklyWorkspace.setDevice({
-        group : GUISTATE_C.getRobotGroup(),
-        robot : GUISTATE_C.getRobot()
+        group: GUISTATE_C.getRobotGroup(),
+        robot: GUISTATE_C.getRobot(),
     });
     GUISTATE_C.setBlocklyWorkspace(blocklyWorkspace);
     blocklyWorkspace.robControls.disable('saveProgram');
     blocklyWorkspace.robControls.refreshTooltips(GUISTATE_C.getRobotRealName());
     GUISTATE_C.checkSim();
     var toolbox = $('#blockly .blocklyToolboxDiv');
-    toolbox.prepend('<ul class="nav nav-tabs levelTabs"><li class="active"><a class="typcn typcn-media-stop-outline" href="#beginner" data-toggle="tab">1</a></li><li class=""><a href="#expert" class="typcn typcn-star-outline" data-toggle="tab">2</a></li></ul>');
+    toolbox.prepend(
+        '<ul class="nav nav-tabs levelTabs"><li class="active"><a class="typcn typcn-media-stop-outline" href="#beginner" data-toggle="tab">1</a></li><li class=""><a href="#expert" class="typcn typcn-star-outline" data-toggle="tab">2</a></li></ul>'
+    );
 }
 
 function initEvents() {
     $('#sliderDiv').draggable({
-        'axis' : 'x',
-        'cursor' : 'col-resize'
+        axis: 'x',
+        cursor: 'col-resize',
     });
-    $('#tabProgram').onWrap('click', function(e) {
+    $('#tabProgram').onWrap('click', function (e) {
         e.preventDefault();
-        if (GUISTATE_C.getView() === 'tabConfiguration' && GUISTATE_C.isUserLoggedIn() && !GUISTATE_C.isConfigurationSaved()
-                && !GUISTATE_C.isConfigurationAnonymous()) {
-            $('#show-message-confirm').oneWrap('shown.bs.modal', function(e) {
+        if (
+            GUISTATE_C.getView() === 'tabConfiguration' &&
+            GUISTATE_C.isUserLoggedIn() &&
+            !GUISTATE_C.isConfigurationSaved() &&
+            !GUISTATE_C.isConfigurationAnonymous()
+        ) {
+            $('#show-message-confirm').oneWrap('shown.bs.modal', function (e) {
                 $('#confirm').off();
-                $('#confirm').on('click', function(e) {
+                $('#confirm').on('click', function (e) {
                     e.preventDefault();
                     // TODO, check if we want to give the user the opportunity to convert the named configuration into an anonymous one
                     GUISTATE_C.setConfigurationName('');
@@ -86,44 +91,45 @@ function initEvents() {
                     $('#tabProgram').tabWrapShow();
                 });
                 $('#confirmCancel').off();
-                $('#confirmCancel').on('click', function(e) {
+                $('#confirmCancel').on('click', function (e) {
                     e.preventDefault();
                     $('.modal').modal('hide');
                 });
             });
-            MSG.displayMessage("POPUP_CONFIGURATION_UNSAVED", "POPUP", "", true);
+            MSG.displayMessage('POPUP_CONFIGURATION_UNSAVED', 'POPUP', '', true);
             return false;
         } else {
             $('#tabProgram').tabWrapShow();
         }
     });
-    $('#tabProgram').onWrap('show.bs.tab', function(e) {
+    $('#tabProgram').onWrap('show.bs.tab', function (e) {
         GUISTATE_C.setView('tabProgram');
     });
 
-    $('#tabProgram').onWrap('shown.bs.tab', function(e) {
+    $('#tabProgram').onWrap('shown.bs.tab', function (e) {
         blocklyWorkspace.markFocused();
         blocklyWorkspace.setVisible(true);
-        if (!seen) { // TODO may need to be removed if program tab can receive changes while in background
+        if (!seen) {
+            // TODO may need to be removed if program tab can receive changes while in background
             reloadView();
         }
         $(window).resize();
     });
-    $('#tabProgram').onWrap('hide.bs.tab', function(e) {
+    $('#tabProgram').onWrap('hide.bs.tab', function (e) {
         Blockly.hideChaff();
     });
-    $('#tabProgram').onWrap('hidden.bs.tab', function(e) {
+    $('#tabProgram').onWrap('hidden.bs.tab', function (e) {
         blocklyWorkspace.setVisible(false);
     });
 
     // work around for touch devices
-    $('.levelTabs').on('touchend', function(e) {
-        var target = $(e.target).attr("href");
+    $('.levelTabs').on('touchend', function (e) {
+        var target = $(e.target).attr('href');
         $('.levelTabs a[href="' + target + '"]').tabWrapShow();
     });
 
-    $('.levelTabs a[data-toggle="tab"]').onWrap('shown.bs.tab', function(e) {
-        var target = $(e.target).attr("href").substring(1); // activated tab
+    $('.levelTabs a[data-toggle="tab"]').onWrap('shown.bs.tab', function (e) {
+        var target = $(e.target).attr('href').substring(1); // activated tab
         e.preventDefault();
         loadToolbox(target);
         e.stopPropagation();
@@ -131,7 +137,7 @@ function initEvents() {
     });
 
     bindControl();
-    blocklyWorkspace.addChangeListener(function(event) {
+    blocklyWorkspace.addChangeListener(function (event) {
         if (listenToBlocklyEvents && event.type != Blockly.Events.UI && GUISTATE_C.isProgramSaved()) {
             GUISTATE_C.setProgramSaved(false);
         }
@@ -145,7 +151,7 @@ function initEvents() {
             var block = Blockly.selected.type;
             $('#' + block).addClass('selectedHelp');
             $('#helpContent').scrollTo('#' + block, 1000, {
-                offset : -10,
+                offset: -10,
             });
         }
         return false;
@@ -163,16 +169,23 @@ function saveToServer() {
     var configName = isNamedConfig ? GUISTATE_C.getConfigurationName() : undefined;
     var xmlConfigText = GUISTATE_C.isConfigurationAnonymous() ? GUISTATE_C.getConfigurationXML() : undefined;
 
-    PROGRAM.saveProgramToServer(GUISTATE_C.getProgramName(), GUISTATE_C.getProgramOwnerName(), xmlProgramText, configName, xmlConfigText, GUISTATE_C.getProgramTimestamp(), function(
-            result) {
-        if (result.rc === 'ok') {
-            GUISTATE_C.setProgramTimestamp(result.lastChanged);
-            GUISTATE_C.setProgramSaved(true);
-            GUISTATE_C.setConfigurationSaved(true);
-            LOG.info('save program ' + GUISTATE_C.getProgramName());
+    PROGRAM.saveProgramToServer(
+        GUISTATE_C.getProgramName(),
+        GUISTATE_C.getProgramOwnerName(),
+        xmlProgramText,
+        configName,
+        xmlConfigText,
+        GUISTATE_C.getProgramTimestamp(),
+        function (result) {
+            if (result.rc === 'ok') {
+                GUISTATE_C.setProgramTimestamp(result.lastChanged);
+                GUISTATE_C.setProgramSaved(true);
+                GUISTATE_C.setConfigurationSaved(true);
+                LOG.info('save program ' + GUISTATE_C.getProgramName());
+            }
+            MSG.displayInformation(result, 'MESSAGE_EDIT_SAVE_PROGRAM', result.message, GUISTATE_C.getProgramName());
         }
-        MSG.displayInformation(result, "MESSAGE_EDIT_SAVE_PROGRAM", result.message, GUISTATE_C.getProgramName());
-    });
+    );
 }
 
 /**
@@ -191,45 +204,70 @@ function saveAsProgramToServer() {
         var userAccountName = GUISTATE_C.getUserAccountName();
 
         LOG.info('saveAs program ' + GUISTATE_C.getProgramName());
-        PROGRAM.saveAsProgramToServer(progName, userAccountName, xmlProgramText, configName, xmlConfigText, GUISTATE_C.getProgramTimestamp(), function (result) {
-            if (result.rc === 'ok') {
-                LOG.info('saved program ' + GUISTATE_C.getProgramName() + " as " + progName);
-                result.name = progName;
-                result.programShared = false;
-                GUISTATE_C.setProgram(result, userAccountName, userAccountName);
-                MSG.displayInformation(result, "MESSAGE_EDIT_SAVE_PROGRAM_AS", result.message, GUISTATE_C.getProgramName());
-            } else {
-                if (result.cause === 'ORA_PROGRAM_SAVE_AS_ERROR_PROGRAM_EXISTS') {
-                    //show replace option
-                    //get last changed of program to overwrite
-                    var lastChanged = result.lastChanged;
-                    var modalMessage = Blockly.Msg.POPUP_BACKGROUND_REPLACE || 'A program with the same name already exists! <br> Would you like to replace it?';
-                    $("#show-message-confirm").oneWrap('shown.bs.modal', function (e) {
-                        $('#confirm').off();
-                        $('#confirm').onWrap('click', function (e) {
-                            e.preventDefault();
-                            PROGRAM.saveProgramToServer(progName, userAccountName, xmlProgramText, configName, xmlConfigText, lastChanged, function (result) {
-                                if (result.rc === 'ok') {
-                                    LOG.info('saved program ' + GUISTATE_C.getProgramName() + " as " + progName + " and overwrote old content");
-                                    result.name = progName;
-                                    GUISTATE_C.setProgram(result, userAccountName, userAccountName);
-                                    MSG.displayInformation(result, "MESSAGE_EDIT_SAVE_PROGRAM_AS", result.message, GUISTATE_C.getProgramName());
-                                } else {
-                                    LOG.info('failed to overwrite ' + progName);
-                                    MSG.displayMessage(result.message, "POPUP", "");
-                                }
-                            });
-                        }, 'confirm modal');
-                        $('#confirmCancel').off();
-                        $('#confirmCancel').onWrap('click', function (e) {
-                            e.preventDefault();
-                            $('.modal').modal('hide');
-                        }, 'cancel modal');
-                    });
-                    MSG.displayPopupMessage("ORA_PROGRAM_SAVE_AS_ERROR_PROGRAM_EXISTS", modalMessage, Blockly.Msg.POPUP_REPLACE, Blockly.Msg.POPUP_CANCEL);
+        PROGRAM.saveAsProgramToServer(
+            progName,
+            userAccountName,
+            xmlProgramText,
+            configName,
+            xmlConfigText,
+            GUISTATE_C.getProgramTimestamp(),
+            function (result) {
+                if (result.rc === 'ok') {
+                    LOG.info('saved program ' + GUISTATE_C.getProgramName() + ' as ' + progName);
+                    result.name = progName;
+                    result.programShared = false;
+                    GUISTATE_C.setProgram(result, userAccountName, userAccountName);
+                    MSG.displayInformation(result, 'MESSAGE_EDIT_SAVE_PROGRAM_AS', result.message, GUISTATE_C.getProgramName());
+                } else {
+                    if (result.cause === 'ORA_PROGRAM_SAVE_AS_ERROR_PROGRAM_EXISTS') {
+                        //show replace option
+                        //get last changed of program to overwrite
+                        var lastChanged = result.lastChanged;
+                        var modalMessage =
+                            Blockly.Msg.POPUP_BACKGROUND_REPLACE || 'A program with the same name already exists! <br> Would you like to replace it?';
+                        $('#show-message-confirm').oneWrap('shown.bs.modal', function (e) {
+                            $('#confirm').off();
+                            $('#confirm').onWrap(
+                                'click',
+                                function (e) {
+                                    e.preventDefault();
+                                    PROGRAM.saveProgramToServer(
+                                        progName,
+                                        userAccountName,
+                                        xmlProgramText,
+                                        configName,
+                                        xmlConfigText,
+                                        lastChanged,
+                                        function (result) {
+                                            if (result.rc === 'ok') {
+                                                LOG.info('saved program ' + GUISTATE_C.getProgramName() + ' as ' + progName + ' and overwrote old content');
+                                                result.name = progName;
+                                                GUISTATE_C.setProgram(result, userAccountName, userAccountName);
+                                                MSG.displayInformation(result, 'MESSAGE_EDIT_SAVE_PROGRAM_AS', result.message, GUISTATE_C.getProgramName());
+                                            } else {
+                                                LOG.info('failed to overwrite ' + progName);
+                                                MSG.displayMessage(result.message, 'POPUP', '');
+                                            }
+                                        }
+                                    );
+                                },
+                                'confirm modal'
+                            );
+                            $('#confirmCancel').off();
+                            $('#confirmCancel').onWrap(
+                                'click',
+                                function (e) {
+                                    e.preventDefault();
+                                    $('.modal').modal('hide');
+                                },
+                                'cancel modal'
+                            );
+                        });
+                        MSG.displayPopupMessage('ORA_PROGRAM_SAVE_AS_ERROR_PROGRAM_EXISTS', modalMessage, Blockly.Msg.POPUP_REPLACE, Blockly.Msg.POPUP_CANCEL);
+                    }
                 }
             }
-        });
+        );
     }
 }
 
@@ -248,14 +286,14 @@ function loadFromGallery(program) {
     }
     var owner = 'Gallery';
     function loadProgramFromGallery() {
-        PROGRAM.loadProgramFromListing(programName, owner, user, function(result) {
+        PROGRAM.loadProgramFromListing(programName, owner, user, function (result) {
             if (result.rc === 'ok') {
                 result.programShared = 'READ';
                 result.name = programName;
                 GUISTATE_C.setProgram(result, owner, user);
                 GUISTATE_C.setProgramXML(result.progXML);
-//                    GUISTATE_C.setConfigurationName('');
-//                    GUISTATE_C.setConfigurationXML(result.confXML);
+                //                    GUISTATE_C.setConfigurationName('');
+                //                    GUISTATE_C.setConfigurationXML(result.confXML);
                 if (result.configName === undefined) {
                     if (result.confXML === undefined) {
                         GUISTATE_C.setConfigurationNameDefault();
@@ -268,13 +306,13 @@ function loadFromGallery(program) {
                     GUISTATE_C.setConfigurationName(result.configName);
                     GUISTATE_C.setConfigurationXML(result.confXML);
                 }
-                $('#tabProgram').oneWrap('shown.bs.tab', function(e) {
+                $('#tabProgram').oneWrap('shown.bs.tab', function (e) {
                     CONFIGURATION_C.reloadConf();
                     reloadProgram();
                 });
                 $('#tabProgram').clickWrap();
             }
-            MSG.displayInformation(result, "", result.message);
+            MSG.displayInformation(result, '', result.message);
         });
     }
     ROBOT_C.switchRobot(robotType, null, loadProgramFromGallery);
@@ -282,41 +320,52 @@ function loadFromGallery(program) {
 
 function initProgramForms() {
     $formSingleModal = $('#single-modal-form');
-    $('#buttonCancelFirmwareUpdateAndRun').onWrap('click', function() {
-        start();
-    }, 'cancel firmware update and run');
+    $('#buttonCancelFirmwareUpdateAndRun').onWrap(
+        'click',
+        function () {
+            start();
+        },
+        'cancel firmware update and run'
+    );
 }
 
 function showSaveAsModal() {
-    $.validator.addMethod("regex", function(value, element, regexp) {
-        value = value.trim();
-        return value.match(regexp);
-    }, "No special Characters allowed here. Use only upper and lowercase letters (A through Z; a through z) and numbers.");
-
-    UTIL.showSingleModal(function() {
-        $('#singleModalInput').attr('type', 'text');
-        $('#single-modal h3').text(Blockly.Msg["MENU_SAVE_AS"]);
-        $('#single-modal label').text(Blockly.Msg["POPUP_NAME"]);
-    }, saveAsProgramToServer, function() {
-
-    }, {
-        rules : {
-            singleModalInput : {
-                required : true,
-                regex : /^[a-zA-Z_öäüÖÄÜß$€][a-zA-Z0-9_öäüÖÄÜß$€]{0,254}$/
-            }
+    $.validator.addMethod(
+        'regex',
+        function (value, element, regexp) {
+            value = value.trim();
+            return value.match(regexp);
         },
-        errorClass : "form-invalid",
-        errorPlacement : function(label, element) {
-            label.insertAfter(element);
+        'No special Characters allowed here. Use only upper and lowercase letters (A through Z; a through z) and numbers.'
+    );
+
+    UTIL.showSingleModal(
+        function () {
+            $('#singleModalInput').attr('type', 'text');
+            $('#single-modal h3').text(Blockly.Msg['MENU_SAVE_AS']);
+            $('#single-modal label').text(Blockly.Msg['POPUP_NAME']);
         },
-        messages : {
-            singleModalInput : {
-                required : Blockly.Msg["VALIDATION_FIELD_REQUIRED"],
-                regex : Blockly.Msg["MESSAGE_INVALID_NAME"]
-            }
+        saveAsProgramToServer,
+        function () {},
+        {
+            rules: {
+                singleModalInput: {
+                    required: true,
+                    regex: /^[a-zA-Z_öäüÖÄÜß$€][a-zA-Z0-9_öäüÖÄÜß$€]{0,254}$/,
+                },
+            },
+            errorClass: 'form-invalid',
+            errorPlacement: function (label, element) {
+                label.insertAfter(element);
+            },
+            messages: {
+                singleModalInput: {
+                    required: Blockly.Msg['VALIDATION_FIELD_REQUIRED'],
+                    regex: Blockly.Msg['MESSAGE_INVALID_NAME'],
+                },
+            },
         }
-    });
+    );
 }
 
 function initProgramEnvironment() {
@@ -346,7 +395,7 @@ function newProgram(opt_further) {
     function loadNewProgram() {
         var result = {};
         result.rc = 'ok';
-        result.name = "NEPOprog"
+        result.name = 'NEPOprog';
         result.programShared = false;
         result.lastChanged = '';
         GUISTATE_C.setProgram(result);
@@ -361,22 +410,22 @@ function newProgram(opt_further) {
 }
 
 function confirmLoadProgram() {
-    $('#show-message-confirm').oneWrap('shown.bs.modal', function(e) {
+    $('#show-message-confirm').oneWrap('shown.bs.modal', function (e) {
         $('#confirm').off();
-        $('#confirm').on('click', function(e) {
+        $('#confirm').on('click', function (e) {
             e.preventDefault();
             newProgram(true);
         });
         $('#confirmCancel').off();
-        $('#confirmCancel').on('click', function(e) {
+        $('#confirmCancel').on('click', function (e) {
             e.preventDefault();
             $('.modal').modal('hide');
         });
     });
     if (GUISTATE_C.isUserLoggedIn()) {
-        MSG.displayMessage("POPUP_BEFOREUNLOAD_LOGGEDIN", "POPUP", "", true);
+        MSG.displayMessage('POPUP_BEFOREUNLOAD_LOGGEDIN', 'POPUP', '', true);
     } else {
-        MSG.displayMessage("POPUP_BEFOREUNLOAD", "POPUP", "", true);
+        MSG.displayMessage('POPUP_BEFOREUNLOAD', 'POPUP', '', true);
     }
 }
 
@@ -384,17 +433,16 @@ function linkProgram() {
     var dom = Blockly.Xml.workspaceToDom(blocklyWorkspace);
     var xml = Blockly.Xml.domToText(dom);
     //TODO this should be removed after the next release
-    xml = '<export xmlns="http://de.fhg.iais.roberta.blockly"><program>' + xml + '</program><config>' + GUISTATE_C.getConfigurationXML()
-            + '</config></export>';
+    xml = '<export xmlns="http://de.fhg.iais.roberta.blockly"><program>' + xml + '</program><config>' + GUISTATE_C.getConfigurationXML() + '</config></export>';
     var link = 'https://lab.open-roberta.org/#loadProgram';
     link += '&&' + GUISTATE_C.getRobot();
     link += '&&' + GUISTATE_C.getProgramName();
     link += '&&' + xml;
     link = encodeURI(link);
-    var $temp = $("<input>");
-    $("body").append($temp);
+    var $temp = $('<input>');
+    $('body').append($temp);
     $temp.val(link).select();
-    document.execCommand("copy");
+    document.execCommand('copy');
     $temp.remove();
     var displayLink = '</br><textarea readonly style="width:100%;" type="text">' + link + '</textarea>';
     LOG.info('ProgramLinkShare');
@@ -406,11 +454,15 @@ function linkProgram() {
  */
 function exportXml() {
     var dom = Blockly.Xml.workspaceToDom(blocklyWorkspace);
-    var xml = '<export xmlns="http://de.fhg.iais.roberta.blockly"><program>' + Blockly.Xml.domToText(dom) + '</program><config>'
-        + GUISTATE_C.getConfigurationXML() + '</config></export>';
+    var xml =
+        '<export xmlns="http://de.fhg.iais.roberta.blockly"><program>' +
+        Blockly.Xml.domToText(dom) +
+        '</program><config>' +
+        GUISTATE_C.getConfigurationXML() +
+        '</config></export>';
     LOG.info('ProgramExport');
-    UTIL.download(GUISTATE_C.getProgramName() + ".xml", xml);
-    MSG.displayMessage("MENU_MESSAGE_DOWNLOAD", "TOAST", GUISTATE_C.getProgramName());
+    UTIL.download(GUISTATE_C.getProgramName() + '.xml', xml);
+    MSG.displayMessage('MENU_MESSAGE_DOWNLOAD', 'TOAST', GUISTATE_C.getProgramName());
 }
 
 /**
@@ -421,18 +473,17 @@ function exportAllXml() {
         if (result.rc === 'ok') {
             PROGRAM.exportAllProgramsXml();
         } else {
-            MSG.displayMessage(result.cause, "TOAST", "Log in check failed for Export");
+            MSG.displayMessage(result.cause, 'TOAST', 'Log in check failed for Export');
         }
     });
 }
-
 
 function getBlocklyWorkspace() {
     return blocklyWorkspace;
 }
 
 function bindControl() {
-    Blockly.bindEvent_(blocklyWorkspace.robControls.saveProgram, 'mousedown', null, function(e) {
+    Blockly.bindEvent_(blocklyWorkspace.robControls.saveProgram, 'mousedown', null, function (e) {
         LOG.info('saveProgram from blockly button');
         saveToServer();
         return false;
@@ -469,8 +520,8 @@ function reloadView() {
 
 function resetView() {
     blocklyWorkspace.setDevice({
-        group : GUISTATE_C.getRobotGroup(),
-        robot : GUISTATE_C.getRobot()
+        group: GUISTATE_C.getRobotGroup(),
+        robot: GUISTATE_C.getRobot(),
     });
     initProgramEnvironment();
     var toolbox = GUISTATE_C.getProgramToolbox();
@@ -532,13 +583,30 @@ function programToBlocklyWorkspace(xml, opt_fromShowSource) {
 
     var language = GUISTATE_C.getLanguage();
     if ($('#codeDiv').hasClass('rightActive') && !opt_fromShowSource) {
-        PROGRAM.showSourceProgram(GUISTATE_C.getProgramName(), configName, xmlProgram, xmlConfigText, language, function(result) {
+        PROGRAM.showSourceProgram(GUISTATE_C.getProgramName(), configName, xmlProgram, xmlConfigText, language, function (result) {
             PROGCODE_C.setCode(result.sourceCode);
         });
     }
-    setTimeout(function() {
+    setTimeout(function () {
         listenToBlocklyEvents = true;
     }, 500);
 }
-export { init, saveToServer, loadFromGallery, initProgramForms, showSaveAsModal, initProgramEnvironment, newProgram, linkProgram, exportXml, exportAllXml, getBlocklyWorkspace, reloadProgram, reloadView, resetView, loadToolbox, loadExternalToolbox, programToBlocklyWorkspace };
-
+export {
+    init,
+    saveToServer,
+    loadFromGallery,
+    initProgramForms,
+    showSaveAsModal,
+    initProgramEnvironment,
+    newProgram,
+    linkProgram,
+    exportXml,
+    exportAllXml,
+    getBlocklyWorkspace,
+    reloadProgram,
+    reloadView,
+    resetView,
+    loadToolbox,
+    loadExternalToolbox,
+    programToBlocklyWorkspace,
+};

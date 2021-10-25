@@ -15,20 +15,24 @@ define(["require", "exports", "log", "util", "message", "guiState.controller", "
                 paginationSwitchUp: 'typcn-book',
                 refresh: 'typcn-refresh',
             },
-            columns: [{
+            columns: [
+                {
                     title: 'Name',
                     field: 'name',
                     visible: false,
-                }, {
+                },
+                {
                     title: 'Owner',
                     field: 'owner',
                     visible: false,
-                }, {
-                    title: "<span lkey='Blockly.Msg.DATATABLE_SHARED_WITH'>" + (Blockly.Msg.DATATABLE_SHARED_WITH || "Geteilt mit") + "</span>",
+                },
+                {
+                    title: "<span lkey='Blockly.Msg.DATATABLE_SHARED_WITH'>" + (Blockly.Msg.DATATABLE_SHARED_WITH || 'Geteilt mit') + '</span>',
                     field: 'sharedWith',
                     events: eventAddShare,
                     formatter: formatSharedWith,
-                }, {
+                },
+                {
                     title: "<span class='typcn typcn-eye'></span>",
                     field: 'read',
                     events: eventCheckRead,
@@ -36,7 +40,8 @@ define(["require", "exports", "log", "util", "message", "guiState.controller", "
                     halign: 'center',
                     valign: 'middle',
                     formatter: formatRead,
-                }, {
+                },
+                {
                     title: "<span class='typcn typcn-pencil'></span>",
                     field: 'write',
                     events: eventCheckWrite,
@@ -44,7 +49,8 @@ define(["require", "exports", "log", "util", "message", "guiState.controller", "
                     halign: 'center',
                     valign: 'middle',
                     formatter: formatWrite,
-                },]
+                },
+            ],
         });
         $('#galleryPreview').bootstrapTable({
             height: 410,
@@ -53,35 +59,45 @@ define(["require", "exports", "log", "util", "message", "guiState.controller", "
             rowAttributes: GALLERY_C.rowAttributes,
             resizable: 'true',
             iconsPrefix: 'typcn',
-            columns: [{
+            columns: [
+                {
                     sortable: true,
                     //visible : false,
                     formatter: GALLERY_C.formatRobot,
-                }, {
+                },
+                {
                     sortable: true,
                     formatter: GALLERY_C.formatProgramName,
-                }, {
+                },
+                {
                     sortable: true,
                     formatter: GALLERY_C.formatProgramDescription,
-                }, {
+                },
+                {
                     title: GALLERY_C.titleAuthor,
                     sortable: true,
-                }, {
+                },
+                {
                     title: GALLERY_C.titleDate,
                     sortable: true,
-                    formatter: UTIL.formatDate
-                }, {
+                    formatter: UTIL.formatDate,
+                },
+                {
                     title: GALLERY_C.titleNumberOfViews,
                     sortable: true,
-                }, {
+                },
+                {
                     title: GALLERY_C.titleLikes,
                     sortable: true,
-                }, {
+                },
+                {
                     sortable: true,
                     formatter: GALLERY_C.formatTags,
-                }, {
+                },
+                {
                     visible: false,
-                }]
+                },
+            ],
         });
     }
     function initEvents() {
@@ -101,7 +117,7 @@ define(["require", "exports", "log", "util", "message", "guiState.controller", "
         }, 'ok click for share program');
         // click on the ok button from modal
         $('#shareWithGallery').onWrap('click', function (e) {
-            var table = $('#share-with-gallery .modal-body').find(">:first-child");
+            var table = $('#share-with-gallery .modal-body').find('>:first-child');
             if (table) {
                 table.show();
             }
@@ -111,14 +127,14 @@ define(["require", "exports", "log", "util", "message", "guiState.controller", "
             updateShareWithGallery($('#share-with-gallery').data('action'));
         }, 'ok click for share with gallery');
         $('#cancelShareWithGallery').onWrap('click', function (e) {
-            var table = $('#share-with-gallery .modal-body').find(">:first-child");
+            var table = $('#share-with-gallery .modal-body').find('>:first-child');
             if (table) {
                 table.show();
             }
             else {
                 $('#textShareGallery').show();
             }
-            $('#share-with-gallery').modal("hide");
+            $('#share-with-gallery').modal('hide');
         }, 'ok click for cancel share with gallery');
     }
     function showShareWithUser(data) {
@@ -127,7 +143,9 @@ define(["require", "exports", "log", "util", "message", "guiState.controller", "
         if (!$.isEmptyObject(data[2])) {
             shared = data[2];
         }
-        $('#show-relations h3').text(Blockly.Msg.BUTTON_DO_SHARE + ' »' + progName + '«').end();
+        $('#show-relations h3')
+            .text(Blockly.Msg.BUTTON_DO_SHARE + ' »' + progName + '«')
+            .end();
         // $('#show-relations').find('.modal-header>h3').text(Blockly.Msg.BUTTON_DO_SHARE + ' »' + progName + '«').end();
         $('#relationsTable').bootstrapTable('removeAll');
         if (shared) {
@@ -141,7 +159,7 @@ define(["require", "exports", "log", "util", "message", "guiState.controller", "
                             sharedWith: shareObj,
                             read: shareObj.right,
                             write: shareObj.right,
-                        }
+                        },
                     });
                 }
             });
@@ -155,11 +173,11 @@ define(["require", "exports", "log", "util", "message", "guiState.controller", "
                 sharedWith: {
                     label: null,
                     type: 'UserGroup',
-                    right: 'NONE'
+                    right: 'NONE',
                 },
                 read: 'READ',
                 write: '',
-            }
+            },
         });
         // add input row for new user to share with
         $('#relationsTable').bootstrapTable('insertRow', {
@@ -170,17 +188,17 @@ define(["require", "exports", "log", "util", "message", "guiState.controller", "
                 sharedWith: {
                     label: null,
                     type: 'User',
-                    right: 'NONE'
+                    right: 'NONE',
                 },
                 read: 'READ',
                 write: '',
-            }
+            },
         });
         $('#show-relations').oneWrap('shown.bs.modal', function (e) {
-            $('#relationsTable').bootstrapTable("resetView");
+            $('#relationsTable').bootstrapTable('resetView');
             $('#relationsTable').find('input :first').focus();
         });
-        $('#show-relations').modal("show");
+        $('#show-relations').modal('show');
     }
     function showShareWithGallery(row) {
         var progName = row[0];
@@ -191,10 +209,11 @@ define(["require", "exports", "log", "util", "message", "guiState.controller", "
         $('#share-with-gallery').data('progName', progName);
         $('#share-with-gallery').data('user', authorName);
         // check if this program has already shared with the gallery
-        PROGRAM.loadProgramFromListing(progName, "Gallery", authorName, function (result) {
-            if (result.rc === 'ok') { // already shared!
+        PROGRAM.loadProgramFromListing(progName, 'Gallery', authorName, function (result) {
+            if (result.rc === 'ok') {
+                // already shared!
                 //TODO create usefull text at least for german and english.
-                MSG.displayInformation({ 'rc': 'error' }, 'GALLERY_SHARED_ALREADY', 'GALLERY_SHARED_ALREADY', progName);
+                MSG.displayInformation({ rc: 'error' }, 'GALLERY_SHARED_ALREADY', 'GALLERY_SHARED_ALREADY', progName);
             }
             else {
                 $('#textShareGallery').html(Blockly.Msg.PROGLIST_SHARE_WITH_GALLERY);
@@ -202,13 +221,13 @@ define(["require", "exports", "log", "util", "message", "guiState.controller", "
                 PROGRAM.loadProgramEntity(progName, GUISTATE_C.getUserAccountName(), GUISTATE_C.getUserAccountName(), function (result) {
                     if (result.rc === 'ok') {
                         var progName = row[0];
-                        $('#share-with-gallery h3').text(Blockly.Msg.BUTTON_DO_UPLOAD_GALLERY.replace("$", progName));
-                        $('#galleryPreview').bootstrapTable("load", new Array(result.program));
+                        $('#share-with-gallery h3').text(Blockly.Msg.BUTTON_DO_UPLOAD_GALLERY.replace('$', progName));
+                        $('#galleryPreview').bootstrapTable('load', new Array(result.program));
                         $('.infoTags').tagsinput();
                         $('#galleryPreview .bootstrap-tagsinput').addClass('galleryTags');
                         $('#galleryPreview').find('.galleryTags>input').attr('readonly', 'true');
                         $('#galleryPreview').find('span[data-role=remove]').addClass('hidden');
-                        $('#share-with-gallery').modal("show");
+                        $('#share-with-gallery').modal('show');
                     }
                 });
             }
@@ -225,12 +244,12 @@ define(["require", "exports", "log", "util", "message", "guiState.controller", "
                 continue;
             }
             var sharedWith = JSON.parse(JSON.stringify(data[i].sharedWith)), $shareLabelInput = false;
-            updateRowIndex = -1,
-                right = 'NONE';
-            if ($("#checkRead" + i).is(':checked') && (sharedWith.type !== 'User' || !GUISTATE_C.isUserMemberOfUserGroup() || sharedWith.label !== GUISTATE_C.getUserUserGroupOwner())) {
+            (updateRowIndex = -1), (right = 'NONE');
+            if ($('#checkRead' + i).is(':checked') &&
+                (sharedWith.type !== 'User' || !GUISTATE_C.isUserMemberOfUserGroup() || sharedWith.label !== GUISTATE_C.getUserUserGroupOwner())) {
                 right = 'READ';
             }
-            if ($("#checkWrite" + i).is(':checked')) {
+            if ($('#checkWrite' + i).is(':checked')) {
                 right = 'WRITE';
             }
             if (sharedWith.label === null) {
@@ -242,14 +261,16 @@ define(["require", "exports", "log", "util", "message", "guiState.controller", "
                     // new user and owner are the same?
                     if (shareLabel === data[i].owner) {
                         if (!isNaN(rowIndex)) {
-                            UTIL.showMsgOnTop("ORA_USER_TO_SHARE_SAME_AS_LOGIN_USER");
+                            UTIL.showMsgOnTop('ORA_USER_TO_SHARE_SAME_AS_LOGIN_USER');
                             return;
                         }
                         continue;
                     }
-                    updateRowIndex = data.map(function (row) {
+                    updateRowIndex = data
+                        .map(function (row) {
                         return row.sharedWith !== null ? row.sharedWith.label : '';
-                    }).indexOf(shareLabel);
+                    })
+                        .indexOf(shareLabel);
                     if (updateRowIndex >= 0) {
                         sharedWith = JSON.parse(JSON.stringify(data[updateRowIndex].sharedWith));
                     }
@@ -275,7 +296,7 @@ define(["require", "exports", "log", "util", "message", "guiState.controller", "
                                             sharedWith: shareObj,
                                             read: shareObj.right,
                                             write: shareObj.right,
-                                        }
+                                        },
                                     });
                                 }
                                 else {
@@ -287,12 +308,12 @@ define(["require", "exports", "log", "util", "message", "guiState.controller", "
                                             sharedWith: shareObj,
                                             read: shareObj.right,
                                             write: shareObj.right,
-                                        }
+                                        },
                                     });
                                 }
                             }
-                            MSG.displayMessage(result.message, "TOAST", shareObj.label);
-                            LOG.info("share program " + row.name + " with '" + shareObj.label + "'(" + shareObj.type + ") having right '" + shareObj.right + "'");
+                            MSG.displayMessage(result.message, 'TOAST', shareObj.label);
+                            LOG.info('share program ' + row.name + " with '" + shareObj.label + "'(" + shareObj.type + ") having right '" + shareObj.right + "'");
                             $('#progList').find('button[name="refresh"]').clickWrap();
                         }
                         else {
@@ -303,7 +324,7 @@ define(["require", "exports", "log", "util", "message", "guiState.controller", "
             }
         }
         if (isNaN(rowIndex)) {
-            $('#show-relations').modal("hide");
+            $('#show-relations').modal('hide');
         }
     }
     /**
@@ -314,29 +335,29 @@ define(["require", "exports", "log", "util", "message", "guiState.controller", "
         var progName = $('#share-with-gallery').data('progName');
         PROGRAM.shareProgramWithGallery(progName, function (result) {
             if (result.rc === 'ok') {
-                LOG.info("share program " + progName + " with Gallery");
+                LOG.info('share program ' + progName + ' with Gallery');
                 $('#progList').find('button[name="refresh"]').clickWrap();
             }
             MSG.displayInformation(result, result.message, result.message, progName);
         });
-        $('#share-with-gallery').modal("hide");
+        $('#share-with-gallery').modal('hide');
     }
     var rowStyle = function (row, index) {
         return {
-            classes: 'typcn typcn-' + row[2] // the robot typicon as background image
+            classes: 'typcn typcn-' + row[2],
         };
     };
     var eventAddShare = {
         'click .addShare': function (e, value, row, index) {
             updateSharedWithUsers(index);
-        }
+        },
     };
     var eventCheckRead = {
         'click #checkRead0': function (e) {
             if (!$(this).is(':checked')) {
                 $('#checkWrite0').prop('checked', true);
             }
-        }
+        },
     };
     var eventCheckWrite = {
         'click #checkWrite0': function () {
@@ -346,7 +367,8 @@ define(["require", "exports", "log", "util", "message", "guiState.controller", "
         },
     };
     var formatRead = function (value, row, index) {
-        if (row.sharedWith.label === null && row.sharedWith.type === 'UserGroup' || row.sharedWith.type === 'User' && GUISTATE_C.isUserMemberOfUserGroup() && GUISTATE_C.getUserUserGroupOwner() === row.sharedWith.label) {
+        if ((row.sharedWith.label === null && row.sharedWith.type === 'UserGroup') ||
+            (row.sharedWith.type === 'User' && GUISTATE_C.isUserMemberOfUserGroup() && GUISTATE_C.getUserUserGroupOwner() === row.sharedWith.label)) {
             return '<input type="checkbox" id="checkRead' + index + '" checked disabled>';
         }
         if (value === 'READ') {
@@ -365,25 +387,25 @@ define(["require", "exports", "log", "util", "message", "guiState.controller", "
     };
     var formatSharedWith = function (value, row, index) {
         if (value === null || typeof value !== 'object') {
-            error.log('unknown share format "' + (typeof value) + '"');
+            error.log('unknown share format "' + typeof value + '"');
             return '';
         }
         if (value.label === null) {
             var typeLabel = '';
             if (value.type === 'User') {
-                var $html = $('<div class="input-group">'
-                    + '<label class="input-group-btn" for="shareWithUserInput">'
-                    + '<button type="button" style="height:34px" class="btn disabled editor">'
-                    + '<i class="typcn typcn-user"></i>'
-                    + '</button>'
-                    + '</label>'
-                    + '<span class="input-group-btn">'
-                    + '<button class="addShare btn" type="button" style="height: 34px">'
-                    + '<i class="typcn typcn-plus"></i>'
-                    + '</button>'
-                    + '</span>'
-                    + '<input class="shareLabelInput form-control" type="text" name="user.account" lkey="Blockly.Msg.SHARE_WITH_USER" data-translation-targets="placeholder"/>'
-                    + '</div>');
+                var $html = $('<div class="input-group">' +
+                    '<label class="input-group-btn" for="shareWithUserInput">' +
+                    '<button type="button" style="height:34px" class="btn disabled editor">' +
+                    '<i class="typcn typcn-user"></i>' +
+                    '</button>' +
+                    '</label>' +
+                    '<span class="input-group-btn">' +
+                    '<button class="addShare btn" type="button" style="height: 34px">' +
+                    '<i class="typcn typcn-plus"></i>' +
+                    '</button>' +
+                    '</span>' +
+                    '<input class="shareLabelInput form-control" type="text" name="user.account" lkey="Blockly.Msg.SHARE_WITH_USER" data-translation-targets="placeholder"/>' +
+                    '</div>');
                 LANG.translate($html);
                 return $('<div></div>').append($html).html();
             }
@@ -391,31 +413,37 @@ define(["require", "exports", "log", "util", "message", "guiState.controller", "
                 if (!GUISTATE_C.isUserMemberOfUserGroup()) {
                     USERGROUP.loadUserGroupList(function (data) {
                         if (data.rc == 'ok' && data.userGroups && data.userGroups.length > 0) {
-                            var existingUserGroupNames = $('#relationsTable').bootstrapTable('getData').filter(function (dataEntry) {
+                            var existingUserGroupNames = $('#relationsTable')
+                                .bootstrapTable('getData')
+                                .filter(function (dataEntry) {
                                 return dataEntry.sharedWith && dataEntry.sharedWith.type === 'UserGroup';
-                            }).map(function (dataEntry) {
+                            })
+                                .map(function (dataEntry) {
                                 return dataEntry.sharedWith.label;
                             }), $td = $('#relationsTable tr[data-index="' + index + '"] script').parent(), html;
-                            html = '<div class="input-group" title="" data-original-title lkey="Blockly.Msg.SHARE_WITH_USERGROUP" data-translation-targets="title data-original-title">'
-                                + '<label class="input-group-btn" for="shareWithUserGroupInput">'
-                                + '<button type="button" style="height:34px" class="btn disabled editor">'
-                                + '<i class="typcn typcn-group"></i>'
-                                + '</button>'
-                                + '</label>'
-                                + '<span class="input-group-btn">'
-                                + '<button class="addShare btn" type="button" style="height: 34px">'
-                                + '<i class="typcn typcn-plus"></i>'
-                                + '</button>'
-                                + '</span>'
-                                + '<select class="shareLabelInput form-control" name="userGroup.name">'
-                                + '<option value="" lkey="Blockly.Msg.SHARE_WITH_USERGROUP" data-translation-targets="html"></option>'
-                                + data.userGroups.filter(function (userGroup) {
-                                    return existingUserGroupNames.indexOf(userGroup.name) === -1;
-                                }).reduce(function (carry, userGroup) {
-                                    return carry + '<option value="' + userGroup.name + '">' + userGroup.name + '</option>';
-                                }, '')
-                                + '</select>'
-                                + '</div>';
+                            html =
+                                '<div class="input-group" title="" data-original-title lkey="Blockly.Msg.SHARE_WITH_USERGROUP" data-translation-targets="title data-original-title">' +
+                                    '<label class="input-group-btn" for="shareWithUserGroupInput">' +
+                                    '<button type="button" style="height:34px" class="btn disabled editor">' +
+                                    '<i class="typcn typcn-group"></i>' +
+                                    '</button>' +
+                                    '</label>' +
+                                    '<span class="input-group-btn">' +
+                                    '<button class="addShare btn" type="button" style="height: 34px">' +
+                                    '<i class="typcn typcn-plus"></i>' +
+                                    '</button>' +
+                                    '</span>' +
+                                    '<select class="shareLabelInput form-control" name="userGroup.name">' +
+                                    '<option value="" lkey="Blockly.Msg.SHARE_WITH_USERGROUP" data-translation-targets="html"></option>' +
+                                    data.userGroups
+                                        .filter(function (userGroup) {
+                                        return existingUserGroupNames.indexOf(userGroup.name) === -1;
+                                    })
+                                        .reduce(function (carry, userGroup) {
+                                        return carry + '<option value="' + userGroup.name + '">' + userGroup.name + '</option>';
+                                    }, '') +
+                                    '</select>' +
+                                    '</div>';
                             $td.html(html);
                             LANG.translate($td);
                             Object.keys(eventAddShare).forEach(function (eventKey) {
@@ -431,7 +459,7 @@ define(["require", "exports", "log", "util", "message", "guiState.controller", "
                         }
                     });
                 }
-                return '<script>$(\'#relationsTable\').find(\'tr[data-index="' + index + '"]\').hide();</script>';
+                return "<script>$('#relationsTable').find('tr[data-index=\"" + index + '"]\').hide();</script>';
             }
             error.log('unknown share type');
             return '';

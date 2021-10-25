@@ -1,25 +1,25 @@
 require.config({
     baseUrl: 'js',
     paths: {
-        'codeflask': 'libs/codeflask/codeflask.min',
-        'blockly': '../blockly/blockly_compressed',
-        'bootstrap': 'libs/bootstrap/bootstrap-3.3.1-dist/dist/js/bootstrap.min',
+        codeflask: 'libs/codeflask/codeflask.min',
+        blockly: '../blockly/blockly_compressed',
+        bootstrap: 'libs/bootstrap/bootstrap-3.3.1-dist/dist/js/bootstrap.min',
         'bootstrap-table': 'libs/bootstrap/bootstrap-3.3.1-dist/dist/js/bootstrap-table.min',
         'bootstrap-tagsinput': 'libs/bootstrap/bootstrap-3.3.1-dist/dist/js/bootstrap-tagsinput.min',
         'bootstrap.wysiwyg': 'libs/bootstrap/bootstrap-3.3.1-dist/dist/js/bootstrap-wysiwyg.min',
-        'enjoyHint': 'libs/enjoyHint/enjoyhint.min',
-        'huebee': 'libs/huebee/huebee.min',
-        'jquery': 'libs/jquery/jquery-3.3.1.min',
+        enjoyHint: 'libs/enjoyHint/enjoyhint.min',
+        huebee: 'libs/huebee/huebee.min',
+        jquery: 'libs/jquery/jquery-3.3.1.min',
         'jquery-scrollto': 'libs/jquery/jquery.scrollTo-2.1.2.min',
         'jquery-validate': 'libs/jquery/jquery.validate-1.17.0.min',
         'jquery-hotkeys': 'libs/jquery/jquery.hotkeys-0.2.0',
-        'slick': 'libs/slick/slick.min',
+        slick: 'libs/slick/slick.min',
         'socket.io': 'libs/socket.io/socket.io',
         'volume-meter': 'libs/sound/volume-meter',
         'neuralnetwork-lib': 'libs/neuralnetwork/lib',
-        'd3': 'libs/neuralnetwork/d3.min',
-        'webots': 'libs/webots/webots.min',
-        'glm': 'libs/webots/glm-js.min',
+        d3: 'libs/neuralnetwork/d3.min',
+        webots: 'libs/webots/webots.min',
+        glm: 'libs/webots/glm-js.min',
         'webots.enum': 'libs/webots/enum',
         'webots.wren': 'libs/webots/wrenjs',
 
@@ -86,11 +86,11 @@ require.config({
         'simulation.scene': 'app/simulation/simulationLogic/scene',
         'simulation.simulation': 'app/simulation/simulationLogic/simulation',
 
-        'comm': 'helper/comm',
-        'log': 'helper/log',
-        'message': 'helper/msg',
-        'util': 'helper/util',
-        'wrap': 'helper/wrap',
+        comm: 'helper/comm',
+        log: 'helper/log',
+        message: 'helper/msg',
+        util: 'helper/util',
+        wrap: 'helper/wrap',
 
         'interpreter.constants': 'app/nepostackmachine/interpreter.constants',
         'interpreter.interpreter': 'app/nepostackmachine/interpreter.interpreter',
@@ -105,54 +105,90 @@ require.config({
         'neuralnetwork.state': 'app/neuralnetwork/neuralnetwork.state',
         'neuralnetwork.playground': 'app/neuralnetwork/neuralnetwork.playground',
 
-        'confVisualization': 'app/configVisualization/confVisualization',
+        confVisualization: 'app/configVisualization/confVisualization',
         'const.robots': 'app/configVisualization/const.robots',
-        'port': 'app/configVisualization/port',
-        'robotBlock': 'app/configVisualization/robotBlock',
-        'wires': 'app/configVisualization/wires',
+        port: 'app/configVisualization/port',
+        robotBlock: 'app/configVisualization/robotBlock',
+        wires: 'app/configVisualization/wires',
 
-        'webots.simulation': "app/webotsSimulation/webots.simulation"
+        'webots.simulation': 'app/webotsSimulation/webots.simulation',
     },
     shim: {
-        'webots': {
-            deps: ['glm', 'webots.enum', 'webots.wren']
+        webots: {
+            deps: ['glm', 'webots.enum', 'webots.wren'],
         },
-        'bootstrap': {
-            deps: ['jquery']
+        bootstrap: {
+            deps: ['jquery'],
         },
-        'blockly': {
-            exports: 'Blockly'
+        blockly: {
+            exports: 'Blockly',
         },
-        'confVisualization': {
-            deps: ['blockly']
+        confVisualization: {
+            deps: ['blockly'],
         },
-        'robotBlock': {
-            deps: ['blockly']
+        robotBlock: {
+            deps: ['blockly'],
         },
-        'port': {
-            deps: ['blockly']
+        port: {
+            deps: ['blockly'],
         },
         'volume-meter': {
-            exports: "Volume",
-            init: function() {
+            exports: 'Volume',
+            init: function () {
                 return {
-                    createAudioMeter: createAudioMeter
+                    createAudioMeter: createAudioMeter,
                 };
-            }
+            },
         },
         'jquery-validate': {
-            deps: ['jquery']
-        }
-    }
+            deps: ['jquery'],
+        },
+    },
 });
 
-require(['require', 'huebee', 'wrap', 'log', 'jquery', 'blockly', 'guiState.controller', 'progList.controller', 'logList.controller', 'confList.controller',
-    'progDelete.controller', 'confDelete.controller', 'progShare.controller', 'menu.controller', 'multSim.controller', 'user.controller', 'nn.controller',
-    'robot.controller', 'program.controller', 'progSim.controller', 'notification.controller', 'progCode.controller', 'progDelete.controller', 'progHelp.controller',
-    'legal.controller', 'progInfo.controller', 'progRun.controller', 'configuration.controller', 'language.controller', 'socket.controller',
-    'progTutorial.controller', 'tutorialList.controller', 'userGroup.controller', 'volume-meter', 'user.model', 'webview.controller',
-    'sourceCodeEditor.controller', 'codeflask', 'interpreter.jsHelper', 'confVisualization', 'robotBlock'], function(
-    require) {
+require([
+    'require',
+    'huebee',
+    'wrap',
+    'log',
+    'jquery',
+    'blockly',
+    'guiState.controller',
+    'progList.controller',
+    'logList.controller',
+    'confList.controller',
+    'progDelete.controller',
+    'confDelete.controller',
+    'progShare.controller',
+    'menu.controller',
+    'multSim.controller',
+    'user.controller',
+    'nn.controller',
+    'robot.controller',
+    'program.controller',
+    'progSim.controller',
+    'notification.controller',
+    'progCode.controller',
+    'progDelete.controller',
+    'progHelp.controller',
+    'legal.controller',
+    'progInfo.controller',
+    'progRun.controller',
+    'configuration.controller',
+    'language.controller',
+    'socket.controller',
+    'progTutorial.controller',
+    'tutorialList.controller',
+    'userGroup.controller',
+    'volume-meter',
+    'user.model',
+    'webview.controller',
+    'sourceCodeEditor.controller',
+    'codeflask',
+    'interpreter.jsHelper',
+    'confVisualization',
+    'robotBlock',
+], function (require) {
     $ = require('jquery');
     WRAP = require('wrap');
     LOG = require('log');
@@ -202,52 +238,57 @@ require(['require', 'huebee', 'wrap', 'log', 'jquery', 'blockly', 'guiState.cont
  */
 function init() {
     COMM.setErrorFn(handleServerErrors);
-    $.when(languageController.init()).then(function(language) {
-        return webviewController.init(language);
-    }).then(function(language, opt_data) {
-        return guiStateController.init(language, opt_data);
-    }).then(function() {
-        return robotController.init();
-    }).then(function() {
-        return userController.init();
-    }).then(function() {
-        galleryListController.init();
-        tutorialListController.init();
-        progListController.init();
-        progDeleteController.init();
-        confListController.init();
-        confDeleteController.init();
-        progShareController.init();
-        logListController.init();
-        legalController.init();
-        sourceCodeEditorController.init();
-        programController.init();
-        configurationController.init();
-        progHelpController.init();
-        progInfoController.init();
-        progCodeController.init();
-        progSimController.init();
-        progRunController.init();
-        menuController.init();
-        tutorialController.init();
-        userGroupController.init();
-        notificationController.init();
-        // nnController.init();
+    $.when(languageController.init())
+        .then(function (language) {
+            return webviewController.init(language);
+        })
+        .then(function (language, opt_data) {
+            return guiStateController.init(language, opt_data);
+        })
+        .then(function () {
+            return robotController.init();
+        })
+        .then(function () {
+            return userController.init();
+        })
+        .then(function () {
+            galleryListController.init();
+            tutorialListController.init();
+            progListController.init();
+            progDeleteController.init();
+            confListController.init();
+            confDeleteController.init();
+            progShareController.init();
+            logListController.init();
+            legalController.init();
+            sourceCodeEditorController.init();
+            programController.init();
+            configurationController.init();
+            progHelpController.init();
+            progInfoController.init();
+            progCodeController.init();
+            progSimController.init();
+            progRunController.init();
+            menuController.init();
+            tutorialController.init();
+            userGroupController.init();
+            notificationController.init();
+            // nnController.init();
 
-        $(".cover").fadeOut(100, function() {
-            if (guiStateController.getStartWithoutPopup()) {
-                userModel.getStatusText(function(result) {
-                    if (result.statustext[0] !== "" && result.statustext[1] !== "") {
-                        $('#modal-statustext').modal("show");
-                    }
-                });
-            } else {
-                $("#show-startup-message").modal("show");
-            }
+            $('.cover').fadeOut(100, function () {
+                if (guiStateController.getStartWithoutPopup()) {
+                    userModel.getStatusText(function (result) {
+                        if (result.statustext[0] !== '' && result.statustext[1] !== '') {
+                            $('#modal-statustext').modal('show');
+                        }
+                    });
+                } else {
+                    $('#show-startup-message').modal('show');
+                }
+            });
+
+            $('.pace').fadeOut(500);
         });
-
-        $(".pace").fadeOut(500);
-    });
 }
 
 /**
@@ -257,16 +298,16 @@ ALLOWED_PING_NUM = 5;
 
 function handleServerErrors(jqXHR) {
     // TODO more?
-    LOG.error("Client connection issue: " + jqXHR.status);
-    if (this.url === "/rest/ping") {
+    LOG.error('Client connection issue: ' + jqXHR.status);
+    if (this.url === '/rest/ping') {
         COMM.errorNum += 1;
     }
     // show message, if REST call is no ping or EXACTLY ALLOWED_PING_NUM requests fail (to avoid multiple messages)
-    if (this.url !== "/rest/ping" || COMM.errorNum == ALLOWED_PING_NUM) {
+    if (this.url !== '/rest/ping' || COMM.errorNum == ALLOWED_PING_NUM) {
         if (jqXHR.status && jqXHR.status < 500) {
-            COMM.showServerError("FRONTEND");
+            COMM.showServerError('FRONTEND');
         } else {
-            COMM.showServerError("CONNECTION");
+            COMM.showServerError('CONNECTION');
         }
     }
 }

@@ -14,7 +14,7 @@ define(["require", "exports", "simulation.robot.ev3"], function (require, export
             xOld: 240,
             yOld: 200,
             transX: 0,
-            transY: 0
+            transY: 0,
         });
     }
     SimpleRobot.prototype = Object.create(simulation_robot_ev3_1.default.prototype);

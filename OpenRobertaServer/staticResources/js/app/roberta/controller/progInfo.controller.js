@@ -27,12 +27,13 @@ define(["require", "exports", "guiState.controller", "blockly", "jquery", "jquer
         $(window).on('resize', function (e) {
             if ($('#infoDiv').hasClass('rightActive')) {
                 $('#infoContainer').css({
-                    "width": $('#infoDiv').outerWidth(),
-                    "height": $('#infoDiv').outerHeight() - $('.btn-toolbar.editor').outerHeight() - 57,
+                    width: $('#infoDiv').outerWidth(),
+                    height: $('#infoDiv').outerHeight() - $('.btn-toolbar.editor').outerHeight() - 57,
                 });
             }
         });
         $('#infoContent, #infoTags').on('change', function () {
+            // TODO: here should be an onWrap. But this change is called during a run of another wrapped callback
             blocklyWorkspace.description = $('#infoContent').html();
             blocklyWorkspace.tags = $('#infoTags').val();
             if (GUISTATE_C.isProgramSaved()) {

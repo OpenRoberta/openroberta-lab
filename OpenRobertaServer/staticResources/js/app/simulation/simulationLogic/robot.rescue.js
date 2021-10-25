@@ -14,7 +14,7 @@ define(["require", "exports", "simulation.robot.ev3"], function (require, export
             xOld: 400,
             yOld: 40,
             transX: 0,
-            transY: 0
+            transY: 0,
         });
     }
     RescueRobot.prototype = Object.create(simulation_robot_ev3_1.default.prototype);

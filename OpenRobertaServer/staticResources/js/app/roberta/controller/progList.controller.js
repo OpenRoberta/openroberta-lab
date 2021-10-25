@@ -28,13 +28,16 @@ define(["require", "exports", "log", "util", "message", "progList.model", "userG
                 paginationSwitchUp: 'typcn-book',
                 refresh: 'typcn-refresh',
             },
-            columns: [{
-                    title: "<span lkey='Blockly.Msg.DATATABLE_PROGRAM_NAME'>" + (Blockly.Msg.DATATABLE_PROGRAM_NAME || "Name des Programms") + "</span>",
+            columns: [
+                {
+                    title: "<span lkey='Blockly.Msg.DATATABLE_PROGRAM_NAME'>" + (Blockly.Msg.DATATABLE_PROGRAM_NAME || 'Name des Programms') + '</span>',
                     sortable: true,
-                }, {
-                    title: "<span lkey='Blockly.Msg.DATATABLE_CREATED_BY'>" + (Blockly.Msg.DATATABLE_CREATED_BY || "Erzeugt von") + "</span>",
+                },
+                {
+                    title: "<span lkey='Blockly.Msg.DATATABLE_CREATED_BY'>" + (Blockly.Msg.DATATABLE_CREATED_BY || 'Erzeugt von') + '</span>',
                     sortable: true,
-                }, {
+                },
+                {
                     events: eventsRelations,
                     title: "<span class='typcn typcn-flow-merge'></span>",
                     sortable: true,
@@ -42,17 +45,21 @@ define(["require", "exports", "log", "util", "message", "progList.model", "userG
                     formatter: formatRelations,
                     align: 'left',
                     valign: 'middle',
-                }, {
-                    visible: false
-                }, {
-                    title: "<span lkey='Blockly.Msg.DATATABLE_CREATED_ON'>" + (Blockly.Msg.DATATABLE_CREATED_ON || "Erzeugt am") + "</span>",
+                },
+                {
+                    visible: false,
+                },
+                {
+                    title: "<span lkey='Blockly.Msg.DATATABLE_CREATED_ON'>" + (Blockly.Msg.DATATABLE_CREATED_ON || 'Erzeugt am') + '</span>',
                     sortable: true,
-                    formatter: UTIL.formatDate
-                }, {
-                    title: "<span lkey='Blockly.Msg.DATATABLE_ACTUALIZATION'>" + (Blockly.Msg.DATATABLE_ACTUALIZATION || "Letzte Aktualisierung") + "</span>",
+                    formatter: UTIL.formatDate,
+                },
+                {
+                    title: "<span lkey='Blockly.Msg.DATATABLE_ACTUALIZATION'>" + (Blockly.Msg.DATATABLE_ACTUALIZATION || 'Letzte Aktualisierung') + '</span>',
                     sortable: true,
-                    formatter: UTIL.formatDate
-                }, {
+                    formatter: UTIL.formatDate,
+                },
+                {
                     title: '<input name="btSelectAll" type="checkbox">',
                     formatter: function (value, row, index) {
                         if (GUISTATE_C.isUserMemberOfUserGroup() && row[1] === GUISTATE_C.getUserUserGroupOwner()) {
@@ -63,14 +70,16 @@ define(["require", "exports", "log", "util", "message", "progList.model", "userG
                     valign: 'middle',
                     halign: 'center',
                     align: 'center',
-                }, {
+                },
+                {
                     events: eventsDeleteShareLoad,
                     title: titleActions,
                     align: 'left',
                     valign: 'top',
                     formatter: formatDeleteShareLoad,
                     width: '117px',
-                },]
+                },
+            ],
         });
         $('#programNameTable').bootstrapTable('togglePagination');
     }
@@ -80,12 +89,12 @@ define(["require", "exports", "log", "util", "message", "progList.model", "userG
         $progList.find('button[name="refresh"]').parent().prepend($userGroupSelect);
         $(window).resize(function () {
             $programNameTable.bootstrapTable('resetView', {
-                height: UTIL.calcDataTableHeight()
+                height: UTIL.calcDataTableHeight(),
             });
         });
         $tabProgList.onWrap('show.bs.tab', function (e) {
             guiStateController.setView('tabProgList');
-            $programNameTable.bootstrapTable("load", []);
+            $programNameTable.bootstrapTable('load', []);
             $userGroupSelect.hide();
             if ($tabProgList.data('type') === 'userProgram') {
                 $userGroupOptGroup.closest('select').val('userProgram');
@@ -138,7 +147,7 @@ define(["require", "exports", "log", "util", "message", "progList.model", "userG
         });
         $programNameTable.onWrap('click-row.bs.table', function ($element, row) {
             loadFromListing(row);
-        }, "Load program from listing clicked");
+        }, 'Load program from listing clicked');
         $programNameTable.onWrap('check-all.bs.table', function ($element, rows) {
             $programNameTable.find('.deleteSomeProg').removeClass('disabled');
             $programNameTable.find('#shareSome').removeClass('disabled');
@@ -165,7 +174,7 @@ define(["require", "exports", "log", "util", "message", "progList.model", "userG
         $('#backProgList').onWrap('click', function () {
             $('#tabProgram').clickWrap();
             return false;
-        }, "back to program view");
+        }, 'back to program view');
         $(document).onWrap('click', '.deleteSomeProg', function () {
             var programs = $programNameTable.bootstrapTable('getSelections', {});
             var names = '<br>';
@@ -177,53 +186,60 @@ define(["require", "exports", "log", "util", "message", "progList.model", "userG
             $('#confirmDeleteProgram').oneWrap('hide.bs.modal', function (event) {
                 PROGLIST.loadProgList(update);
             });
-            $("#confirmDeleteProgram").data('programs', programs);
-            $("#confirmDeleteProgram").modal("show");
+            $('#confirmDeleteProgram').data('programs', programs);
+            $('#confirmDeleteProgram').modal('show');
             return false;
-        }, "delete programs");
+        }, 'delete programs');
         $programNameTable.on('shown.bs.collapse hidden.bs.collapse', function (e) {
             $programNameTable.bootstrapTable('resetWidth');
         });
         function update(result) {
             UTIL.response(result);
             if (result.rc === 'ok') {
-                $('#programNameTable').bootstrapTable("load", result.programNames);
+                $('#programNameTable').bootstrapTable('load', result.programNames);
                 $('.deleteSomeProg').show();
             }
             else {
-                if (result.cmd === "loadPN") {
+                if (result.cmd === 'loadPN') {
                     $('#backProgList').clickWrap();
                 }
             }
-            $('.deleteSomeProg').attr('data-original-title', Blockly.Msg.PROGLIST_DELETE_ALL_TOOLTIP || "Click here to delete all selected programs.");
-            $('#programNameTable').find('.delete').attr('data-original-title', Blockly.Msg.PROGLIST_DELETE_TOOLTIP || 'Click here to delete your program.');
-            $('#programNameTable').find('.share').attr('data-original-title', Blockly.Msg.PROGLIST_SHARE_TOOLTIP
-                || "Click here to share your program with a friend.");
-            $('#programNameTable').find('.gallery').attr('data-original-title', Blockly.Msg.PROGLIST_SHARE_WITH_GALLERY_TOOLTIP
-                || "Click here to upload your program to the gallery hence share it with all other users.");
-            $('#programNameTable').find('.load').attr('data-original-title', Blockly.Msg.PROGLIST_LOAD_TOOLTIP
-                || 'Click here to load your program in the programming environment.');
+            $('.deleteSomeProg').attr('data-original-title', Blockly.Msg.PROGLIST_DELETE_ALL_TOOLTIP || 'Click here to delete all selected programs.');
+            $('#programNameTable')
+                .find('.delete')
+                .attr('data-original-title', Blockly.Msg.PROGLIST_DELETE_TOOLTIP || 'Click here to delete your program.');
+            $('#programNameTable')
+                .find('.share')
+                .attr('data-original-title', Blockly.Msg.PROGLIST_SHARE_TOOLTIP || 'Click here to share your program with a friend.');
+            $('#programNameTable')
+                .find('.gallery')
+                .attr('data-original-title', Blockly.Msg.PROGLIST_SHARE_WITH_GALLERY_TOOLTIP || 'Click here to upload your program to the gallery hence share it with all other users.');
+            $('#programNameTable')
+                .find('.load')
+                .attr('data-original-title', Blockly.Msg.PROGLIST_LOAD_TOOLTIP || 'Click here to load your program in the programming environment.');
             $('#programNameTable').find('[rel="tooltip"]').tooltip();
         }
     }
     function updateExamplePrograms(result) {
         UTIL.response(result);
         if (result.rc === 'ok') {
-            $('#programNameTable').bootstrapTable("load", result.programNames);
-            $('#programNameTable').bootstrapTable("hideColumn", 2);
-            $('#programNameTable').bootstrapTable("hideColumn", 6);
-            $('#programNameTable').bootstrapTable("refreshOptions", {
-                "sortName": 0, "sortOrder": "asc"
+            $('#programNameTable').bootstrapTable('load', result.programNames);
+            $('#programNameTable').bootstrapTable('hideColumn', 2);
+            $('#programNameTable').bootstrapTable('hideColumn', 6);
+            $('#programNameTable').bootstrapTable('refreshOptions', {
+                sortName: 0,
+                sortOrder: 'asc',
             });
             $('.deleteSomeProg').hide();
         }
         else {
-            if (result.cmd === "loadPN") {
+            if (result.cmd === 'loadPN') {
                 $('#backProgList').clickWrap();
             }
         }
-        $('#programNameTable').find('.load').attr('data-original-title', Blockly.Msg.PROGLIST_LOAD_TOOLTIP
-            || 'Click here to load your program in the programming environment.');
+        $('#programNameTable')
+            .find('.load')
+            .attr('data-original-title', Blockly.Msg.PROGLIST_LOAD_TOOLTIP || 'Click here to load your program in the programming environment.');
         $('#programNameTable').find('[rel="tooltip"]').tooltip();
     }
     var eventsRelations = {
@@ -231,7 +247,7 @@ define(["require", "exports", "log", "util", "message", "progList.model", "userG
             e.stopPropagation();
             var collapseName = '.relation' + index;
             $(collapseName).collapse('toggle');
-        }
+        },
     };
     var eventsDeleteShareLoad = {
         'click .delete': function (e, value, row, index) {
@@ -243,10 +259,9 @@ define(["require", "exports", "log", "util", "message", "progList.model", "userG
                 names += '<br>';
             }
             $('#confirmDeleteProgramName').html(names);
-            $("#confirmDeleteProgram").data('programs', selectedRows);
-            $('#confirmDeleteProgram').oneWrap('hidden.bs.modal', function (event) {
-            });
-            $("#confirmDeleteProgram").modal("show");
+            $('#confirmDeleteProgram').data('programs', selectedRows);
+            $('#confirmDeleteProgram').oneWrap('hidden.bs.modal', function (event) { });
+            $('#confirmDeleteProgram').modal('show');
             return false;
         },
         'click .share': function (e, value, row, index) {
@@ -266,7 +281,7 @@ define(["require", "exports", "log", "util", "message", "progList.model", "userG
         'click .load': function (e, value, row, index) {
             e.stopPropagation();
             loadFromListing(row);
-        }
+        },
     };
     var formatRelations = function (value, row, index) {
         if ($.isEmptyObject(value)) {
@@ -314,7 +329,7 @@ define(["require", "exports", "log", "util", "message", "progList.model", "userG
         if (value.sharedWith && Object.keys(value.sharedWith).length > 1) {
             var result = [];
             $.each(value.sharedWith, function (i, obj) {
-                var typeLabel = "";
+                var typeLabel = '';
                 if (obj.type === 'User') {
                     typeLabel = '&nbsp;<span class="typcn typcn-user"></span>';
                 }
@@ -333,8 +348,11 @@ define(["require", "exports", "log", "util", "message", "progList.model", "userG
             });
             var resultString = '<div style="white-space:nowrap;"><span style="float:left;">';
             resultString += result[0];
-            resultString += '</span><a class="collapsed showRelations" href="#" style="float:right;"'
-                + 'href="#" data-toggle="collapse" data-target=".relation' + index + '"></a></div>';
+            resultString +=
+                '</span><a class="collapsed showRelations" href="#" style="float:right;"' +
+                    'href="#" data-toggle="collapse" data-target=".relation' +
+                    index +
+                    '"></a></div>';
             for (var i = 1; i < result.length; i++) {
                 resultString += '<div style="clear:both;" class="collapse relation' + index + '">';
                 resultString += result[i];
@@ -348,7 +366,8 @@ define(["require", "exports", "log", "util", "message", "progList.model", "userG
         var result = '';
         if ($('#tabProgList').data('type') === 'userProgram') {
             if (!GUISTATE_C.isUserMemberOfUserGroup() || GUISTATE_C.getUserUserGroupOwner() !== row[1]) {
-                result += '<a href="#" class="delete" rel="tooltip" lkey="Blockly.Msg.PROGLIST_DELETE_TOOLTIP" data-original-title="" title=""><span class="typcn typcn-delete"></span></a>';
+                result +=
+                    '<a href="#" class="delete" rel="tooltip" lkey="Blockly.Msg.PROGLIST_DELETE_TOOLTIP" data-original-title="" title=""><span class="typcn typcn-delete"></span></a>';
             }
             else {
                 result += '<a href="#" class="delete disabled" data-status="disabled"><span class="typcn typcn-delete"></span></a>';
@@ -360,13 +379,16 @@ define(["require", "exports", "log", "util", "message", "progList.model", "userG
                 }
             }
             else {
-                result += '<a href="#" class="share" rel="tooltip" lkey="Blockly.Msg.PROGLIST_SHARE_TOOLTIP" data-original-title="" title=""><span class="typcn typcn-flow-merge"></span></a>';
+                result +=
+                    '<a href="#" class="share" rel="tooltip" lkey="Blockly.Msg.PROGLIST_SHARE_TOOLTIP" data-original-title="" title=""><span class="typcn typcn-flow-merge"></span></a>';
                 if (!GUISTATE_C.isUserMemberOfUserGroup()) {
-                    result += '<a href="#" class="gallery" rel="tooltip" lkey="Blockly.Msg.PROGLIST_SHARE_WITH_GALLERY_TOOLTIP" data-original-title="" title=""><span class="typcn typcn-th-large-outline"></span></a>';
+                    result +=
+                        '<a href="#" class="gallery" rel="tooltip" lkey="Blockly.Msg.PROGLIST_SHARE_WITH_GALLERY_TOOLTIP" data-original-title="" title=""><span class="typcn typcn-th-large-outline"></span></a>';
                 }
             }
         }
-        result += '<a href="#" class="load" rel="tooltip" lkey="Blockly.Msg.PROGLIST_LOAD_TOOLTIP" data-original-title="" title=""><span class="typcn typcn-document"></span></a>';
+        result +=
+            '<a href="#" class="load" rel="tooltip" lkey="Blockly.Msg.PROGLIST_LOAD_TOOLTIP" data-original-title="" title=""><span class="typcn typcn-document"></span></a>';
         return result;
     };
     var sortRelations = function (a, b) {
@@ -384,7 +406,7 @@ define(["require", "exports", "log", "util", "message", "progList.model", "userG
         if (a.sharedWith && b.sharedWith) {
             var value = {
                 a: a.sharedWith[0].right,
-                b: b.sharedWith[0].right
+                b: b.sharedWith[0].right,
             };
             if (value.a === value.b)
                 return 0;
@@ -404,8 +426,8 @@ define(["require", "exports", "log", "util", "message", "progList.model", "userG
         }
         return -1;
     };
-    var titleActions = '<a href="#" id="deleteSomeProg" class="deleteSomeProg disabled" rel="tooltip" lkey="Blockly.Msg.PROGLIST_DELETE_ALL_TOOLTIP" data-original-title="" data-container="body" title="">'
-        + '<span class="typcn typcn-delete"></span></a>';
+    var titleActions = '<a href="#" id="deleteSomeProg" class="deleteSomeProg disabled" rel="tooltip" lkey="Blockly.Msg.PROGLIST_DELETE_ALL_TOOLTIP" data-original-title="" data-container="body" title="">' +
+        '<span class="typcn typcn-delete"></span></a>';
     /**
      * Load the program and configuration that was selected in program list
      */
@@ -447,12 +469,12 @@ define(["require", "exports", "log", "util", "message", "progList.model", "userG
                     CONFIGURATION_C.reloadConf();
                     PROGRAM_C.reloadProgram();
                     // this is a temporary function to  inform users about possible data loss from bug issue #924
-                    // TODO review this in 4 weeks and remove it if possible                         
+                    // TODO review this in 4 weeks and remove it if possible
                     checkMissingInformaton(result);
                 });
                 $('#tabProgram').clickWrap();
             }
-            MSG.displayInformation(result, "", result.message);
+            MSG.displayInformation(result, '', result.message);
         });
     }
     /**
@@ -460,15 +482,15 @@ define(["require", "exports", "log", "util", "message", "progList.model", "userG
      * TODO review this in 4 weeks and remove it if possible
      */
     function checkMissingInformaton(result) {
-        if (GUISTATE_C.getRobotGroup() === "calliope" || GUISTATE_C.getRobotGroup() === "microbit") {
-            var begin = new Date("2020-10-28 03:00:00").getTime();
-            var end = new Date("2020-11-04 03:00:00").getTime();
+        if (GUISTATE_C.getRobotGroup() === 'calliope' || GUISTATE_C.getRobotGroup() === 'microbit') {
+            var begin = new Date('2020-10-28 03:00:00').getTime();
+            var end = new Date('2020-11-04 03:00:00').getTime();
             var setWarning = function (block) {
-                if (GUISTATE_C.getLanguage().toLowerCase() === "de") {
-                    block.setWarningText("Hier sind beim letzten Speichern Information verloren gegangen,\nbitte überprüfe die Parameter und sichere das Programm! :-)");
+                if (GUISTATE_C.getLanguage().toLowerCase() === 'de') {
+                    block.setWarningText('Hier sind beim letzten Speichern Information verloren gegangen,\nbitte überprüfe die Parameter und sichere das Programm! :-)');
                 }
                 else {
-                    block.setWarningText("Information was lost during the last save,\nplease check the parameters and store the program! :-)");
+                    block.setWarningText('Information was lost during the last save,\nplease check the parameters and store the program! :-)');
                 }
                 block.warning.setVisible(true);
             };
@@ -476,13 +498,13 @@ define(["require", "exports", "log", "util", "message", "progList.model", "userG
                 var blocks = Blockly.getMainWorkspace() && Blockly.getMainWorkspace().getAllBlocks();
                 blocks.forEach(function (block) {
                     switch (block.type) {
-                        case "mbedActions_play_note":
-                        case "robSensors_accelerometer_getSample":
-                        case "robSensors_gyro_getSample":
+                        case 'mbedActions_play_note':
+                        case 'robSensors_accelerometer_getSample':
+                        case 'robSensors_gyro_getSample':
                             setWarning(block);
                             break;
-                        case "robSensors_getSample":
-                            if (block.sensorType_ && (block.sensorType_ === "ACCELEROMETER_VALUE" || block.sensorType_ === "GYRO_ANGLE")) {
+                        case 'robSensors_getSample':
+                            if (block.sensorType_ && (block.sensorType_ === 'ACCELEROMETER_VALUE' || block.sensorType_ === 'GYRO_ANGLE')) {
                                 setWarning(block);
                             }
                             break;

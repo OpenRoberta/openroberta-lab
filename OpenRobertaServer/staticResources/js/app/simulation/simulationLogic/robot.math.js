@@ -8,10 +8,10 @@ define(["require", "exports", "simulation.robot.ev3"], function (require, export
             xOld: 400,
             yOld: 250,
             transX: -400,
-            transY: -250
+            transY: -250,
         });
         this.canDraw = true;
-        this.drawColor = "#ffffff";
+        this.drawColor = '#ffffff';
         this.drawWidth = 1;
     }
     MathRobot.prototype = Object.create(simulation_robot_ev3_1.default.prototype);

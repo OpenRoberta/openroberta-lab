@@ -9,19 +9,19 @@ DO NOT EDIT THIS IN openroberta-lab/OpenRobertaServer/staticResources/js !
 -------------------------------------------------------------------------
 */
 
-import * as guiStateModel from "guiState.model";
-import * as guiStateController from "guiState.controller";
-import * as notificationModel from "notification.model";
-import * as comm from "comm";
-import * as $ from "jquery";
+import * as guiStateModel from 'guiState.model';
+import * as guiStateController from 'guiState.controller';
+import * as notificationModel from 'notification.model';
+import * as comm from 'comm';
+import * as $ from 'jquery';
 
 const fadingDuration = 400;
 
-const notificationElement = $("#releaseInfo");
+const notificationElement = $('#releaseInfo');
 
 const notificationElementTitle = notificationElement.children('#releaseInfoTitle');
 const notificationElementDescription = notificationElement.children('#releaseInfoContent');
-const $notificationForm = $("#notificationForm");
+const $notificationForm = $('#notificationForm');
 
 const $notificationFileUpload = $('#notificationFileUpload');
 const $notificationFileDownload = $('#notificationFileDownload');
@@ -30,10 +30,10 @@ const defaultElementMarkerTime = 5 * 60 * 1000;
 const defaultPopupTime = 20 * 1000;
 const defaultStartScreenTime = undefined;
 
-let activeNotifications: NotificationProcessor[] = []
+let activeNotifications: NotificationProcessor[] = [];
 
 function loadAndInitNotifications() {
-    notificationModel.getNotifications(result => {
+    notificationModel.getNotifications((result) => {
         activeNotifications = initNotifications(result.notifications);
     });
 }
@@ -47,16 +47,15 @@ export function init() {
 
 export function reloadNotifications() {
     removeNotifications();
-    loadAndInitNotifications()
+    loadAndInitNotifications();
 }
-
 
 /*----------- NOTIFICATION MODAL -----------*/
 
 export function showNotificationModal() {
-    notificationModel.getNotifications(function(result) {
+    notificationModel.getNotifications(function (result) {
         setFileDownloadContent(result.notifications);
-        $('#modal-notifications').modal("show");
+        $('#modal-notifications').modal('show');
     });
 }
 
@@ -66,28 +65,28 @@ function showAlertInNotificationModal(context, content, time?) {
     $alert
         .html(content)
         .removeClass()
-        .addClass("alert")
-        .addClass("alert-" + context)
+        .addClass('alert')
+        .addClass('alert-' + context)
         .slideDown()
         .delay(time)
         .slideUp();
 }
 
 function initNotificationModal() {
-    $notificationForm.onWrap('submit', e => {
+    $notificationForm.onWrap('submit', (e) => {
         e.preventDefault();
-        readFileInputField(fileContent => {
-            notificationModel.postNotifications(fileContent, function(restResponse) {
-                if (restResponse.rc === "ok" && restResponse.message === "ORA_NOTIFICATION_SUCCESS") {
-                    $notificationForm.trigger("reset");
-                    showAlertInNotificationModal("success", "The notifications were transmitted successfully");
+        readFileInputField((fileContent) => {
+            notificationModel.postNotifications(fileContent, function (restResponse) {
+                if (restResponse.rc === 'ok' && restResponse.message === 'ORA_NOTIFICATION_SUCCESS') {
+                    $notificationForm.trigger('reset');
+                    showAlertInNotificationModal('success', 'The notifications were transmitted successfully');
                     setFileDownloadContent(JSON.parse(fileContent));
                 } else {
                     const errorCode = restResponse.cause;
-                    const exceptionMessage = restResponse.parameters && restResponse.parameters.MESSAGE ? ":" + restResponse.parameters.MESSAGE : ""
-                    const content = errorCode + exceptionMessage
+                    const exceptionMessage = restResponse.parameters && restResponse.parameters.MESSAGE ? ':' + restResponse.parameters.MESSAGE : '';
+                    const content = errorCode + exceptionMessage;
 
-                    showAlertInNotificationModal("danger", content, 60 * 1000);
+                    showAlertInNotificationModal('danger', content, 60 * 1000);
                 }
             });
         });
@@ -95,38 +94,35 @@ function initNotificationModal() {
 }
 
 function readFileInputField(readyFn) {
-    let uploadedFiles = $notificationFileUpload.prop("files");
+    let uploadedFiles = $notificationFileUpload.prop('files');
     if (uploadedFiles.length > 0) {
-        readFile(uploadedFiles[0], readyFn)
+        readFile(uploadedFiles[0], readyFn);
     }
 }
 
-
 function readFile(file, readyFn) {
     const fileReader = new FileReader();
-    fileReader.onload = () => readyFn(fileReader.result)
+    fileReader.onload = () => readyFn(fileReader.result);
     fileReader.readAsText(file);
 }
 
 function setFileDownloadContent(jsonContent) {
-    const data = "text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(jsonContent, null, "\t"));
-    $notificationFileDownload
-        .attr("href", "data:" + data)
+    const data = 'text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(jsonContent, null, '\t'));
+    $notificationFileDownload.attr('href', 'data:' + data);
 }
-
 
 /*----------- NOTIFICATION HANDLING -----------*/
 
 function removeNotifications() {
-    activeNotifications.forEach(notification => {
+    activeNotifications.forEach((notification) => {
         notification.removeTriggers();
         notification.hideNotification();
-    })
+    });
     activeNotifications = [];
 }
 
 function initNotifications(notificationSpecifications): NotificationProcessor[] {
-    return notificationSpecifications.map(specification => new NotificationProcessor(specification));
+    return notificationSpecifications.map((specification) => new NotificationProcessor(specification));
 }
 
 class EventHandler {
@@ -163,14 +159,13 @@ class EventHandler {
     }
 }
 
-
 class NotificationProcessor {
     private specification: any;
     private activeEventHandler: EventHandler[] = [];
     private notificationHandlers: NotificationState[] = [];
 
     private setupNotificationHandlers() {
-        this.specification.handlers.forEach(handlerSpecification => {
+        this.specification.handlers.forEach((handlerSpecification) => {
             if (handlerSpecification.popupNotification) {
                 const popup = new PopupNotificationState(handlerSpecification.popupNotification);
                 this.notificationHandlers.push(popup);
@@ -183,8 +178,7 @@ class NotificationProcessor {
                 const startScreen = new StartScreenNotificationState(handlerSpecification.startScreen);
                 this.notificationHandlers.push(startScreen);
             }
-        })
-
+        });
     }
 
     public showNotification() {
@@ -192,11 +186,11 @@ class NotificationProcessor {
             this.removeTriggers();
         }
 
-        this.notificationHandlers.forEach(notification => notification.show());
+        this.notificationHandlers.forEach((notification) => notification.show());
     }
 
     public hideNotification() {
-        this.notificationHandlers.forEach(notification => notification.hide());
+        this.notificationHandlers.forEach((notification) => notification.hide());
     }
 
     private evaluateConditionsAndShowNotification(specificCondition?: any) {
@@ -212,13 +206,13 @@ class NotificationProcessor {
             return true;
         }
 
-        return conditions.every(condition => {
+        return conditions.every((condition) => {
             if (condition.guiModel) {
                 const { anyOf, equals, notEquals } = condition;
                 const element = guiStateModel.gui[condition.guiModel];
 
                 if (anyOf && Array.isArray(anyOf)) {
-                    return anyOf.some(each => element === each)
+                    return anyOf.some((each) => element === each);
                 }
                 if (equals) {
                     return element === equals;
@@ -228,7 +222,7 @@ class NotificationProcessor {
                         return element !== notEquals;
                     }
 
-                    return notEquals.every(each => element !== each)
+                    return notEquals.every((each) => element !== each);
                 }
             }
 
@@ -250,9 +244,8 @@ class NotificationProcessor {
                 }
             }
 
-            return true
+            return true;
         });
-
     }
 
     private addEventHandler(selector: string, event, fn: () => void) {
@@ -268,37 +261,35 @@ class NotificationProcessor {
             return;
         }
 
-        this.specification
-            .triggers
-            .forEach(trigger => {
-                const { event, addClass, removeClass, conditions } = trigger;
-                const selector = parseSelector(trigger);
+        this.specification.triggers.forEach((trigger) => {
+            const { event, addClass, removeClass, conditions } = trigger;
+            const selector = parseSelector(trigger);
 
-                if (!selector) return;
+            if (!selector) return;
 
-                // "Normal" event listeners
-                if (event) {
-                    this.addEventHandler(selector, event, () => {
+            // "Normal" event listeners
+            if (event) {
+                this.addEventHandler(selector, event, () => {
+                    this.evaluateConditionsAndShowNotification(conditions);
+                });
+            }
+
+            // Class changed event listeners
+            if (addClass || removeClass) {
+                this.addEventHandler(selector, 'classChange', () => {
+                    if (addClass && $(selector).hasClass(addClass)) {
                         this.evaluateConditionsAndShowNotification(conditions);
-                    });
-                }
-
-                // Class changed event listeners
-                if (addClass || removeClass) {
-                    this.addEventHandler(selector, "classChange", () => {
-                        if (addClass && $(selector).hasClass(addClass)) {
-                            this.evaluateConditionsAndShowNotification(conditions);
-                        }
-                        if (removeClass && !$(selector).hasClass(removeClass)) {
-                            this.evaluateConditionsAndShowNotification(conditions);
-                        }
-                    })
-                }
-            })
+                    }
+                    if (removeClass && !$(selector).hasClass(removeClass)) {
+                        this.evaluateConditionsAndShowNotification(conditions);
+                    }
+                });
+            }
+        });
     }
 
     public removeTriggers() {
-        this.activeEventHandler.forEach(eventHandler => eventHandler.removeTriggers());
+        this.activeEventHandler.forEach((eventHandler) => eventHandler.removeTriggers());
         this.activeEventHandler = [];
     }
 
@@ -311,7 +302,7 @@ class NotificationProcessor {
 
 interface Selector {
     htmlId?: string;
-    htmlSelector?: string
+    htmlSelector?: string;
 }
 
 interface ElementMarkerSpec extends Selector {
@@ -344,7 +335,7 @@ abstract class NotificationState {
     private setOrResetTimer() {
         if (this.time) {
             this.clearTimerIfExists();
-            this.timer = setTimeout(() => this.hide(), this.time)
+            this.timer = setTimeout(() => this.hide(), this.time);
         }
     }
 
@@ -384,9 +375,9 @@ class PopupNotificationState extends NotificationState {
     }
 
     protected showAction() {
-        notificationElementTitle.html(this._title)
-        notificationElementDescription.html(this._content)
-        notificationElement.fadeIn(fadingDuration)
+        notificationElementTitle.html(this._title);
+        notificationElementDescription.html(this._content);
+        notificationElement.fadeIn(fadingDuration);
     }
 
     public constructor(popupNotification: PopupNotificationSpec) {
@@ -395,7 +386,6 @@ class PopupNotificationState extends NotificationState {
         this._content = parseLocalized(popupNotification.content);
     }
 }
-
 
 class ElementMarkerState extends NotificationState {
     private readonly _content: any;
@@ -406,24 +396,20 @@ class ElementMarkerState extends NotificationState {
         super(elementMarker.time || defaultElementMarkerTime);
         this._content = parseLocalized(elementMarker.content);
         this.$element = $(parseSelector(elementMarker));
-        this.$badge = $("<span class='badge badge-primary' style='display:none;'>" + this._content + "</span>");
+        this.$badge = $("<span class='badge badge-primary' style='display:none;'>" + this._content + '</span>');
     }
 
     protected hideAction() {
         if (this.$element.length) {
-            this.$badge
-                .fadeOut(fadingDuration)
-                .queue(function() {
-                    $(this).remove();
-                })
+            this.$badge.fadeOut(fadingDuration).queue(function () {
+                $(this).remove();
+            });
         }
     }
 
     protected showAction() {
         if (this.$element.length) {
-            this.$badge
-                .appendTo(this.$element)
-                .fadeIn(fadingDuration);
+            this.$badge.appendTo(this.$element).fadeIn(fadingDuration);
         }
     }
 }
@@ -431,7 +417,7 @@ class ElementMarkerState extends NotificationState {
 class StartScreenNotificationState extends NotificationState {
     private readonly content: string;
     private $element;
-    private $startupMessage = $("#startup-message-statustext");
+    private $startupMessage = $('#startup-message-statustext');
 
     constructor(startScreen: StartScreenSpec) {
         super(startScreen.time || defaultStartScreenTime);
@@ -440,23 +426,19 @@ class StartScreenNotificationState extends NotificationState {
     }
 
     protected showAction() {
-        this.$element
-            .appendTo(this.$startupMessage)
-            .slideDown(fadingDuration);
+        this.$element.appendTo(this.$startupMessage).slideDown(fadingDuration);
     }
 
     protected hideAction() {
-        this.$element
-            .slideUp(fadingDuration)
-            .queue(function() {
-                $(this).remove();
-            })
+        this.$element.slideUp(fadingDuration).queue(function () {
+            $(this).remove();
+        });
     }
 }
 
 function parseSelector(element: Selector): string {
     if (element.htmlId) {
-        return "#" + element.htmlId;
+        return '#' + element.htmlId;
     }
 
     if (element.htmlSelector) {
@@ -468,7 +450,7 @@ function parseSelector(element: Selector): string {
 
 function parseLocalized(object: any): string {
     let localizedDescription = object[guiStateController.getLanguage()];
-    return localizedDescription || object["en"];
+    return localizedDescription || object['en'];
 }
 
 /**
@@ -478,5 +460,5 @@ function parseLocalized(object: any): string {
  * @param str datestring
  */
 function parseDateStringWithTimezone(str) {
-    return new Date(str + " +0200")
+    return new Date(str + ' +0200');
 }

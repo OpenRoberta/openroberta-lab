@@ -75,7 +75,7 @@ define(["require", "exports", "comm", "log", "jquery"], function (require, expor
             catch (e) {
                 numberOfActiveActions--;
                 var err = new Error();
-                LOG.error("wrapUI/wrapTotal CRASHED UNEXPECTED AND SEVERELY with EXCEPTION: " + e + " and stacktrace: " + err.stack);
+                LOG.error('wrapUI/wrapTotal CRASHED UNEXPECTED AND SEVERELY with EXCEPTION: ' + e + ' and stacktrace: ' + err.stack);
                 COMM.ping(); // transfer data to the server
             }
         };
@@ -100,7 +100,7 @@ define(["require", "exports", "comm", "log", "jquery"], function (require, expor
             catch (e) {
                 numberOfActiveActions--;
                 var err = new Error();
-                LOG.error("wrapREST/wrapTotal CRASHED UNEXPECTED AND SEVERELY with EXCEPTION: " + e + " and stacktrace: " + err.stack);
+                LOG.error('wrapREST/wrapTotal CRASHED UNEXPECTED AND SEVERELY with EXCEPTION: ' + e + ' and stacktrace: ' + err.stack);
                 COMM.ping(); // transfer data to the server
             }
         };
@@ -118,7 +118,7 @@ define(["require", "exports", "comm", "log", "jquery"], function (require, expor
             catch (e) {
                 numberOfActiveActions--;
                 var err = new Error();
-                LOG.error("wrapErrorFn/wrapTotal CRASHED UNEXPECTED AND SEVERELY with EXCEPTION: " + e + " and stacktrace: " + err.stack);
+                LOG.error('wrapErrorFn/wrapTotal CRASHED UNEXPECTED AND SEVERELY with EXCEPTION: ' + e + ' and stacktrace: ' + err.stack);
                 COMM.ping(); // transfer data to the server
             }
         };
@@ -131,7 +131,7 @@ define(["require", "exports", "comm", "log", "jquery"], function (require, expor
                 return this.on(event, callbackOrFilter, WRAP.wrapUI(callbackOrMessage, optMessage));
             }
             else {
-                LOG.error("illegal wrapping. Parameter: " + event + " ::: " + callbackOrFilter + " ::: " + callbackOrMessage + " ::: " + optMessage);
+                LOG.error('illegal wrapping. Parameter: ' + event + ' ::: ' + callbackOrFilter + ' ::: ' + callbackOrMessage + ' ::: ' + optMessage);
             }
         }
         else if (typeof callbackOrFilter === 'function') {
@@ -139,7 +139,7 @@ define(["require", "exports", "comm", "log", "jquery"], function (require, expor
                 return this.on(event, WRAP.wrapUI(callbackOrFilter, callbackOrMessage));
             }
             else {
-                LOG.error("illegal wrapping. Parameter: " + event + " ::: " + callbackOrFilter + " ::: " + callbackOrMessage + " ::: " + optMessage);
+                LOG.error('illegal wrapping. Parameter: ' + event + ' ::: ' + callbackOrFilter + ' ::: ' + callbackOrMessage + ' ::: ' + optMessage);
             }
         }
     };
@@ -157,7 +157,7 @@ define(["require", "exports", "comm", "log", "jquery"], function (require, expor
         catch (e) {
             numberOfActiveActions++;
             var err = new Error();
-            LOG.error("clickWrap CRASHED UNEXPECTED AND SEVERELY with EXCEPTION: " + e + " and stacktrace: " + err.stack);
+            LOG.error('clickWrap CRASHED UNEXPECTED AND SEVERELY with EXCEPTION: ' + e + ' and stacktrace: ' + err.stack);
             COMM.ping(); // transfer data to the server
         }
     };
@@ -170,7 +170,7 @@ define(["require", "exports", "comm", "log", "jquery"], function (require, expor
         catch (e) {
             numberOfActiveActions++;
             var err = new Error();
-            LOG.error("tabWrap CRASHED UNEXPECTED AND SEVERELY with EXCEPTION: " + e + " and stacktrace: " + err.stack);
+            LOG.error('tabWrap CRASHED UNEXPECTED AND SEVERELY with EXCEPTION: ' + e + ' and stacktrace: ' + err.stack);
             COMM.ping(); // transfer data to the server
         }
     };
@@ -183,7 +183,7 @@ define(["require", "exports", "comm", "log", "jquery"], function (require, expor
         catch (e) {
             numberOfActiveActions++;
             var err = new Error();
-            LOG.error("oneWrap CRASHED UNEXPECTED AND SEVERELY with EXCEPTION: " + e + " and stacktrace: " + err.stack);
+            LOG.error('oneWrap CRASHED UNEXPECTED AND SEVERELY with EXCEPTION: ' + e + ' and stacktrace: ' + err.stack);
             COMM.ping(); // transfer data to the server
         }
     };

@@ -98,12 +98,12 @@ function logLog(obj, marker) {
     }
     var data = $('#logTable').bootstrapTable('getData');
     $('#logTable').bootstrapTable('insertRow', {
-        index : 0,
-        row : {
-            0 : data.length + 1,
-            1 : marker,
-            2 : obj,
-        }
+        index: 0,
+        row: {
+            0: data.length + 1,
+            1: marker,
+            2: obj,
+        },
     });
 }
 
@@ -118,7 +118,6 @@ function logConsole(obj, marker) {
     console.log(markerERROR + obj);
 }
 
-
 /**
  * toggle the visibility of the HTML-list with id #log
  */
@@ -131,5 +130,3 @@ function toggleVisibility() {
     }
 }
 export { text, info, error, enableHtml, enableComm, length, reportToComm, toggleVisibility };
-
-

@@ -45,7 +45,7 @@ define(["require", "exports", "comm"], function (require, exports, COMM) {
             AGENTORTOKEN: 'arduinoAgentOrToken',
             LOCAL: 'local',
             WEBVIEW: 'webview',
-            JSPLAY: 'jsPlay' //Play file in the browser with JavaScript
+            JSPLAY: 'jsPlay',
         };
         exports.gui.runEnabled = false;
         exports.user.id = -1;
@@ -81,19 +81,19 @@ define(["require", "exports", "comm"], function (require, exports, COMM) {
         exports.robot.hasWlan = false;
         var getInitFromServer = function () {
             COMM.setInitToken(undefined);
-            return COMM.json("/init", {
-                "cmd": "init",
-                "screenSize": [window.screen.availWidth, window.screen.availHeight]
+            return COMM.json('/init', {
+                cmd: 'init',
+                screenSize: [window.screen.availWidth, window.screen.availHeight],
             }, function (result) {
                 if (result.rc === 'ok') {
                     COMM.setInitToken(result.initToken);
                     $.extend(exports.server, result.server);
-                    exports.server.version = result["server.version"];
+                    exports.server.version = result['server.version'];
                     exports.server.time = result.serverTime;
                     ready.resolve();
                 }
                 else {
-                    console.log("ERROR: " + result.message);
+                    console.log('ERROR: ' + result.message);
                     // MSG.displayInformation(result, "", result.message);
                 }
             }, 'init data from server');

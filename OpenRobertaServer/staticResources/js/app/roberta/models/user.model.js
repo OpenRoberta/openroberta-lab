@@ -11,9 +11,9 @@ define(["require", "exports", "comm"], function (require, exports, COMM) {
      *
      */
     function clear(successFn) {
-        COMM.json("/user/clear", {
-            "cmd": "clear",
-        }, successFn, "clear user");
+        COMM.json('/user/clear', {
+            cmd: 'clear',
+        }, successFn, 'clear user');
     }
     exports.clear = clear;
     /**
@@ -27,10 +27,10 @@ define(["require", "exports", "comm"], function (require, exports, COMM) {
      *
      */
     function login(accountName, passwd, successFn) {
-        COMM.json("/user/login", {
-            "cmd": "login",
-            "accountName": accountName,
-            "password": passwd
+        COMM.json('/user/login', {
+            cmd: 'login',
+            accountName: accountName,
+            password: passwd,
         }, successFn, "login user '" + accountName + "'");
     }
     exports.login = login;
@@ -49,13 +49,13 @@ define(["require", "exports", "comm"], function (require, exports, COMM) {
      *
      */
     function loginUserGroup(userGroupOwner, userGroupName, accountName, passwd, successFn) {
-        COMM.json("/user/login", {
-            "cmd": "login",
-            "accountName": accountName,
-            "password": passwd,
-            "userGroupOwner": userGroupOwner,
-            "userGroupName": userGroupName
-        }, successFn, "login user '" + accountName + "' of group '" + userGroupOwner + "." + userGroupName + "'.");
+        COMM.json('/user/login', {
+            cmd: 'login',
+            accountName: accountName,
+            password: passwd,
+            userGroupOwner: userGroupOwner,
+            userGroupName: userGroupName,
+        }, successFn, "login user '" + accountName + "' of group '" + userGroupOwner + '.' + userGroupName + "'.");
     }
     exports.loginUserGroup = loginUserGroup;
     /**
@@ -64,16 +64,16 @@ define(["require", "exports", "comm"], function (require, exports, COMM) {
      * @memberof USER
      */
     function logout(successFn) {
-        COMM.json("/user/logout", {
-            "cmd": "logout"
-        }, successFn, "logout user");
+        COMM.json('/user/logout', {
+            cmd: 'logout',
+        }, successFn, 'logout user');
     }
     exports.logout = logout;
     /**
      * Checks if the user is logged in
      */
     function userLoggedInCheck(successFn) {
-        COMM.json("/user/loggedInCheck", {}, successFn, "Check for export all programs");
+        COMM.json('/user/loggedInCheck', {}, successFn, 'Check for export all programs');
     }
     exports.userLoggedInCheck = userLoggedInCheck;
     /**
@@ -85,9 +85,9 @@ define(["require", "exports", "comm"], function (require, exports, COMM) {
      *
      */
     function getUserFromServer(accountName, successFn) {
-        COMM.json("/user/getUser", {
-            "cmd": "getUser"
-        }, successFn, "got user info from server");
+        COMM.json('/user/getUser', {
+            cmd: 'getUser',
+        }, successFn, 'got user info from server');
     }
     exports.getUserFromServer = getUserFromServer;
     /**
@@ -104,15 +104,15 @@ define(["require", "exports", "comm"], function (require, exports, COMM) {
      *
      */
     function createUserToServer(accountName, userName, userEmail, passwd, isYoungerThen14, language, successFn) {
-        COMM.json("/user/createUser", {
-            "cmd": "createUser",
-            "accountName": accountName,
-            "userName": userName,
-            "userEmail": userEmail,
-            "password": passwd,
-            "role": 'TEACHER',
-            "isYoungerThen14": isYoungerThen14 === "1" ? true : false,
-            "language": language
+        COMM.json('/user/createUser', {
+            cmd: 'createUser',
+            accountName: accountName,
+            userName: userName,
+            userEmail: userEmail,
+            password: passwd,
+            role: 'TEACHER',
+            isYoungerThen14: isYoungerThen14 === '1' ? true : false,
+            language: language,
         }, successFn, "save user '" + accountName + "' to server");
     }
     exports.createUserToServer = createUserToServer;
@@ -128,14 +128,14 @@ define(["require", "exports", "comm"], function (require, exports, COMM) {
      *
      */
     function updateUserToServer(accountName, userName, userEmail, isYoungerThen14, language, successFn) {
-        COMM.json("/user/updateUser", {
-            "cmd": "updateUser",
-            "accountName": accountName,
-            "userName": userName,
-            "userEmail": userEmail,
-            "isYoungerThen14": isYoungerThen14 === "1" ? true : false,
-            "language": language,
-            "role": 'TEACHER'
+        COMM.json('/user/updateUser', {
+            cmd: 'updateUser',
+            accountName: accountName,
+            userName: userName,
+            userEmail: userEmail,
+            isYoungerThen14: isYoungerThen14 === '1' ? true : false,
+            language: language,
+            role: 'TEACHER',
         }, successFn, "update user '" + accountName + "' to server");
     }
     exports.updateUserToServer = updateUserToServer;
@@ -150,11 +150,11 @@ define(["require", "exports", "comm"], function (require, exports, COMM) {
      *
      */
     function updateUserPasswordToServer(accountName, oldPassword, newPassword, successFn) {
-        COMM.json("/user/changePassword", {
-            "cmd": "changePassword",
-            "accountName": accountName,
-            "oldPassword": oldPassword,
-            "newPassword": newPassword
+        COMM.json('/user/changePassword', {
+            cmd: 'changePassword',
+            accountName: accountName,
+            oldPassword: oldPassword,
+            newPassword: newPassword,
         }, successFn, "update user password '" + accountName + "' to server");
     }
     exports.updateUserPasswordToServer = updateUserPasswordToServer;
@@ -169,10 +169,10 @@ define(["require", "exports", "comm"], function (require, exports, COMM) {
      *
      */
     function resetPasswordToServer(resetPasswordLink, newPassword, successFn) {
-        COMM.json("/user/resetPassword", {
-            "cmd": "resetPassword",
-            "resetPasswordLink": resetPasswordLink,
-            "newPassword": newPassword
+        COMM.json('/user/resetPassword', {
+            cmd: 'resetPassword',
+            resetPasswordLink: resetPasswordLink,
+            newPassword: newPassword,
         }, successFn, "update user password '" + resetPasswordLink + "' to server");
     }
     exports.resetPasswordToServer = resetPasswordToServer;
@@ -184,9 +184,9 @@ define(["require", "exports", "comm"], function (require, exports, COMM) {
      *
      */
     function checkTargetRecovery(target, successFn) {
-        COMM.json("/user/isResetPasswordLinkExpired", {
-            "cmd": "isResetPasswordLinkExpired",
-            "resetPasswordLink": target
+        COMM.json('/user/isResetPasswordLinkExpired', {
+            cmd: 'isResetPasswordLinkExpired',
+            resetPasswordLink: target,
         }, successFn, "check password recovery for '" + target + "'");
     }
     exports.checkTargetRecovery = checkTargetRecovery;
@@ -198,10 +198,10 @@ define(["require", "exports", "comm"], function (require, exports, COMM) {
      *
      */
     function userPasswordRecovery(lostEmail, lang, successFn) {
-        COMM.json("/user/passwordRecovery", {
-            "cmd": "passwordRecovery",
-            "lostEmail": lostEmail,
-            "language": lang
+        COMM.json('/user/passwordRecovery', {
+            cmd: 'passwordRecovery',
+            lostEmail: lostEmail,
+            language: lang,
         }, successFn, "password recovery for '" + lostEmail + "'");
     }
     exports.userPasswordRecovery = userPasswordRecovery;
@@ -215,10 +215,10 @@ define(["require", "exports", "comm"], function (require, exports, COMM) {
      *
      */
     function userSendAccountActivation(accountName, language, successFn) {
-        COMM.json("/user/resendActivation", {
-            "cmd": "resendActivation",
-            "accountName": accountName,
-            "language": language
+        COMM.json('/user/resendActivation', {
+            cmd: 'resendActivation',
+            accountName: accountName,
+            language: language,
         }, successFn, "send account activation mail for '" + accountName + "'");
     }
     exports.userSendAccountActivation = userSendAccountActivation;
@@ -229,9 +229,9 @@ define(["require", "exports", "comm"], function (require, exports, COMM) {
      *            {String} - url for the account
      */
     function userActivateAccount(url, successFn) {
-        COMM.json("/user/activateUser", {
-            "cmd": "activateUser",
-            "userActivationLink": url
+        COMM.json('/user/activateUser', {
+            cmd: 'activateUser',
+            userActivationLink: url,
         }, successFn, "send account activation mail for '" + url + "'");
     }
     exports.userActivateAccount = userActivateAccount;
@@ -245,25 +245,25 @@ define(["require", "exports", "comm"], function (require, exports, COMM) {
      *
      */
     function deleteUserOnServer(accountName, passwd, successFn) {
-        COMM.json("/user/deleteUser", {
-            "cmd": "deleteUser",
-            "accountName": accountName,
-            "password": passwd
+        COMM.json('/user/deleteUser', {
+            cmd: 'deleteUser',
+            accountName: accountName,
+            password: passwd,
         }, successFn, "delete user '" + accountName + "' on server");
     }
     exports.deleteUserOnServer = deleteUserOnServer;
     function getStatusText(successFn) {
-        COMM.json("/user/getStatusText", {
-            "cmd": "getStatusText"
+        COMM.json('/user/getStatusText', {
+            cmd: 'getStatusText',
         }, successFn, 'get status text');
     }
     exports.getStatusText = getStatusText;
     function setStatusText(english, german, timestamp, successFn) {
-        COMM.json("/user/setStatusText", {
-            "cmd": "setStatusText",
-            "english": english,
-            "german": german,
-            "timestamp": timestamp
+        COMM.json('/user/setStatusText', {
+            cmd: 'setStatusText',
+            english: english,
+            german: german,
+            timestamp: timestamp,
         }, successFn, 'set status text');
     }
     exports.setStatusText = setStatusText;

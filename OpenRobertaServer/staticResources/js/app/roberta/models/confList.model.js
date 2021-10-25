@@ -11,8 +11,8 @@ define(["require", "exports", "comm"], function (require, exports, COMM) {
      * Refresh program list
      */
     function loadConfList(successFn) {
-        COMM.json("/conf/loadCN", {
-            "cmd": "loadCN"
+        COMM.json('/conf/loadCN', {
+            cmd: 'loadCN',
         }, successFn, 'refresh configuration list');
     }
     exports.loadConfList = loadConfList;

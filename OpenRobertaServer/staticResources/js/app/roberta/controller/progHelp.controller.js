@@ -18,7 +18,7 @@ define(["require", "exports", "guiState.controller", "blockly", "jquery", "jquer
         var loadHelpFile = function (helpFileName) {
             var url = '../help/' + helpFileName;
             $('#helpDiv').load(url, function (response, status, xhr) {
-                if (status == "error") {
+                if (status == 'error') {
                     $('#helpButton').hide();
                 }
                 else {
@@ -43,7 +43,7 @@ define(["require", "exports", "guiState.controller", "blockly", "jquery", "jquer
     function initEvents() {
         $('#helpButton').off('click touchend');
         $('#helpButton').onWrap('click touchend', function (event) {
-            if ($('#helpButton').is(":visible")) {
+            if ($('#helpButton').is(':visible')) {
                 toggleHelp();
             }
             return false;
@@ -62,7 +62,7 @@ define(["require", "exports", "guiState.controller", "blockly", "jquery", "jquer
                 $('.help.expert').show();
             }
             var robotGroup = GUISTATE_C.findGroup(GUISTATE_C.getRobot());
-            var exludeClass = "".concat(".help.not", robotGroup.charAt(0).toUpperCase(), robotGroup.slice(1));
+            var exludeClass = ''.concat('.help.not', robotGroup.charAt(0).toUpperCase(), robotGroup.slice(1));
             $(exludeClass).hide();
             if (currentHelp != GUISTATE_C.getRobotGroup() + '_' + GUISTATE_C.getLanguage().toLowerCase()) {
                 init();

@@ -19,10 +19,8 @@ define(["require", "exports", "log", "util", "message", "guiState.controller", "
         $('#tabNN').onWrap('shown.bs.tab', function (e) {
             $(window).resize();
         }, 'shown tabNN');
-        $('#tabNN').onWrap('hide.bs.tab', function (e) {
-        }, 'hide tabNN');
-        $('#tabNN').onWrap('hidden.bs.tab', function (e) {
-        }, 'hidden tabNN');
+        $('#tabNN').onWrap('hide.bs.tab', function (e) { }, 'hide tabNN');
+        $('#tabNN').onWrap('hidden.bs.tab', function (e) { }, 'hidden tabNN');
     }
     function initNNForms() {
         $formSingleModal = $('#single-modal-form');
@@ -43,7 +41,7 @@ define(["require", "exports", "log", "util", "message", "guiState.controller", "
                 GUISTATE_C.setNNSaved(true);
                 LOG.info('save brick nn ' + GUISTATE_C.getNNName());
             }
-            MSG.displayInformation(result, "MESSAGE_EDIT_SAVE_CONFIGURATION", result.message, GUISTATE_C.getNNName());
+            MSG.displayInformation(result, 'MESSAGE_EDIT_SAVE_CONFIGURATION', result.message, GUISTATE_C.getNNName());
         });
     }
     exports.saveToServer = saveToServer;
@@ -68,7 +66,7 @@ define(["require", "exports", "log", "util", "message", "guiState.controller", "
                     GUISTATE_C.setProgramSaved(false);
                     LOG.info('save brick nn ' + GUISTATE_C.getNNName());
                 }
-                MSG.displayInformation(result, "MESSAGE_EDIT_SAVE_CONFIGURATION_AS", result.message, GUISTATE_C.getNNName());
+                MSG.displayInformation(result, 'MESSAGE_EDIT_SAVE_CONFIGURATION_AS', result.message, GUISTATE_C.getNNName());
             });
         }
     }
@@ -87,41 +85,39 @@ define(["require", "exports", "log", "util", "message", "guiState.controller", "
                 });
                 $('#tabNN').clickWrap();
             }
-            MSG.displayInformation(result, "", result.message);
+            MSG.displayInformation(result, '', result.message);
         });
     }
     exports.loadFromListing = loadFromListing;
-    function initNNEnvironment() {
-    }
+    function initNNEnvironment() { }
     exports.initNNEnvironment = initNNEnvironment;
     function showSaveAsModal() {
         var regexString = new RegExp('^(?!\\b' + GUISTATE_C.getNNStandardName() + '\\b)([a-zA-Z_öäüÖÄÜß$€][a-zA-Z0-9_öäüÖÄÜß$€]*)$');
-        $.validator.addMethod("regex", function (value, element, regexp) {
+        $.validator.addMethod('regex', function (value, element, regexp) {
             value = value.trim();
             return value.match(regexp);
-        }, "No special Characters allowed here. Use only upper and lowercase letters (A through Z; a through z) and numbers.");
+        }, 'No special Characters allowed here. Use only upper and lowercase letters (A through Z; a through z) and numbers.');
         UTIL.showSingleModal(function () {
             $('#singleModalInput').attr('type', 'text');
-            $('#single-modal h3').text(Blockly.Msg["MENU_SAVE_AS"]);
-            $('#single-modal label').text(Blockly.Msg["POPUP_NAME"]);
-        }, saveAsToServer, function () {
-        }, {
+            $('#single-modal h3').text(Blockly.Msg['MENU_SAVE_AS']);
+            $('#single-modal label').text(Blockly.Msg['POPUP_NAME']);
+        }, saveAsToServer, function () { }, {
             rules: {
                 singleModalInput: {
                     required: true,
-                    regex: regexString
-                }
+                    regex: regexString,
+                },
             },
-            errorClass: "form-invalid",
+            errorClass: 'form-invalid',
             errorPlacement: function (label, element) {
                 label.insertAfter(element);
             },
             messages: {
                 singleModalInput: {
-                    required: jQuery.validator.format(Blockly.Msg["VALIDATION_FIELD_REQUIRED"]),
-                    regex: jQuery.validator.format(Blockly.Msg["MESSAGE_INVALID_CONF_NAME"])
-                }
-            }
+                    required: jQuery.validator.format(Blockly.Msg['VALIDATION_FIELD_REQUIRED']),
+                    regex: jQuery.validator.format(Blockly.Msg['MESSAGE_INVALID_CONF_NAME']),
+                },
+            },
         });
     }
     exports.showSaveAsModal = showSaveAsModal;
@@ -132,7 +128,7 @@ define(["require", "exports", "log", "util", "message", "guiState.controller", "
         var further = opt_further || false;
         if (further || GUISTATE_C.isNNSaved()) {
             var result = {};
-            result.name = GUISTATE_C.getRobotGroup().toUpperCase() + "basis";
+            result.name = GUISTATE_C.getRobotGroup().toUpperCase() + 'basis';
             result.lastChanged = '';
             GUISTATE_C.setNN(result);
             initNNEnvironment();
@@ -151,10 +147,10 @@ define(["require", "exports", "log", "util", "message", "guiState.controller", "
                 });
             });
             if (GUISTATE_C.isUserLoggedIn()) {
-                MSG.displayMessage("POPUP_BEFOREUNLOAD_LOGGEDIN", "POPUP", "", true);
+                MSG.displayMessage('POPUP_BEFOREUNLOAD_LOGGEDIN', 'POPUP', '', true);
             }
             else {
-                MSG.displayMessage("POPUP_BEFOREUNLOAD", "POPUP", "", true);
+                MSG.displayMessage('POPUP_BEFOREUNLOAD', 'POPUP', '', true);
             }
         }
     }
@@ -225,7 +221,7 @@ define(["require", "exports", "log", "util", "message", "guiState.controller", "
     function resetView() {
         bricklyWorkspace.setDevice({
             group: GUISTATE_C.getRobotGroup(),
-            robot: GUISTATE_C.getRobot()
+            robot: GUISTATE_C.getRobot(),
         });
         initNNEnvironment();
         var toolbox = GUISTATE_C.getNNToolbox();

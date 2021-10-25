@@ -1,7 +1,7 @@
-import { ARobotBehaviour } from "./interpreter.aRobotBehaviour";
-import { State } from "./interpreter.state";
-import * as C from "./interpreter.constants";
-import * as U from "./interpreter.util";
+import { ARobotBehaviour } from './interpreter.aRobotBehaviour';
+import { State } from './interpreter.state';
+import * as C from './interpreter.constants';
+import * as U from './interpreter.util';
 
 export class RobotWeDoBehaviourTest extends ARobotBehaviour {
     private timers;
@@ -22,13 +22,13 @@ export class RobotWeDoBehaviourTest extends ARobotBehaviour {
         var robotText = 'robot: ' + name + ', port: ' + port;
         U.debug(robotText + ' getsample from ' + sensor);
         switch (sensor) {
-            case "infrared":
+            case 'infrared':
                 s.push(5);
                 break;
-            case "gyro":
+            case 'gyro':
                 s.push(3);
                 break;
-            case "buttons":
+            case 'buttons':
                 s.push(true);
                 break;
             case C.TIMER:
@@ -73,7 +73,7 @@ export class RobotWeDoBehaviourTest extends ARobotBehaviour {
 
     public motorOnAction(name: string, port: number, duration: number, speed: number): number {
         const robotText = 'robot: ' + name + ', port: ' + port;
-        const durText = duration === undefined ? ' w.o. duration' : (' for ' + duration + ' msec');
+        const durText = duration === undefined ? ' w.o. duration' : ' for ' + duration + ' msec';
         U.info(robotText + ' motor speed ' + speed + durText);
         return 0;
     }
@@ -84,13 +84,12 @@ export class RobotWeDoBehaviourTest extends ARobotBehaviour {
     }
 
     public showTextAction(text: any): number {
-        const showText = "" + text;
+        const showText = '' + text;
         U.info('show "' + showText + '"');
         return 0;
     }
 
-    public writePinAction(_pin: any, _mode: string, _value: number): void {
-    }
+    public writePinAction(_pin: any, _mode: string, _value: number): void {}
 
     public showImageAction(_1: any, _2: string): number {
         U.info('show image NYI');
@@ -110,88 +109,88 @@ export class RobotWeDoBehaviourTest extends ARobotBehaviour {
     }
 
     public encoderReset(_port: string): void {
-        throw new Error("Method not implemented.");
+        throw new Error('Method not implemented.');
     }
 
     public gyroReset(_port: number): void {
-        throw new Error("Method not implemented.");
+        throw new Error('Method not implemented.');
     }
 
     public lightAction(_mode: string, _color: string, _port: string): void {
-        throw new Error("Method not implemented.");
+        throw new Error('Method not implemented.');
     }
 
     public playFileAction(_file: string): number {
-        throw new Error("Method not implemented.");
+        throw new Error('Method not implemented.');
     }
 
     public _setVolumeAction(_volume: number): void {
-        throw new Error("Method not implemented.");
+        throw new Error('Method not implemented.');
     }
 
     public _getVolumeAction(_s: State): void {
-        throw new Error("Method not implemented.");
+        throw new Error('Method not implemented.');
     }
 
     public setLanguage(_language: string): void {
-        throw new Error("Method not implemented.");
+        throw new Error('Method not implemented.');
     }
 
     public sayTextAction(_text: string, _speed: number, _pitch: number): number {
-        throw new Error("Method not implemented.");
+        throw new Error('Method not implemented.');
     }
 
     public getMotorSpeed(_s: State, _name: string, _port: any): void {
-        throw new Error("Method not implemented.");
+        throw new Error('Method not implemented.');
     }
 
     public setMotorSpeed(_name: string, _port: any, _speed: number): void {
-        throw new Error("Method not implemented.");
+        throw new Error('Method not implemented.');
     }
 
     public driveStop(_name: string): void {
-        throw new Error("Method not implemented.");
+        throw new Error('Method not implemented.');
     }
 
     public driveAction(_name: string, _direction: string, _speed: number, _distance: number): number {
-        throw new Error("Method not implemented.");
+        throw new Error('Method not implemented.');
     }
 
     public curveAction(_name: string, _direction: string, _speedL: number, _speedR: number, _distance: number): number {
-        throw new Error("Method not implemented.");
+        throw new Error('Method not implemented.');
     }
 
     public turnAction(_name: string, _direction: string, _speed: number, _angle: number): number {
-        throw new Error("Method not implemented.");
+        throw new Error('Method not implemented.');
     }
 
     public showTextActionPosition(_text: any, _x: number, _y: number): void {
-        throw new Error("Method not implemented.");
+        throw new Error('Method not implemented.');
     }
 
     public displaySetPixelBrightnessAction(_x: number, _y: number, _brightness: number): number {
-        throw new Error("Method not implemented.");
+        throw new Error('Method not implemented.');
     }
 
     public displayGetPixelBrightnessAction(_s: State, _x: number, _y: number): void {
-        throw new Error("Method not implemented.");
+        throw new Error('Method not implemented.');
     }
 
     public setVolumeAction(_volume: number): void {
-        throw new Error("Method not implemented.");
+        throw new Error('Method not implemented.');
     }
 
     public getVolumeAction(_s: State): void {
-        throw new Error("Method not implemented.");
+        throw new Error('Method not implemented.');
     }
 
     public debugAction(_value: any): void {
-        const robotText = "> " + _value;
+        const robotText = '> ' + _value;
         U.info(' debug action ' + robotText);
     }
 
     public assertAction(_msg: string, _left: any, _op: string, _right: any, _value: any): void {
-        const robotText = "> Assertion failed: " + _msg + " " + _left + " " + _op + " " + _right;
+        const robotText = '> Assertion failed: ' + _msg + ' ' + _left + ' ' + _op + ' ' + _right;
         U.info(' assert action ' + robotText);
     }
 }

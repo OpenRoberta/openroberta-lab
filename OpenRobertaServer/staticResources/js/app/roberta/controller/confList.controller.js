@@ -27,13 +27,14 @@ define(["require", "exports", "util", "confList.model", "blockly", "jquery", "bo
             },
             columns: [
                 {
-                    title: "<span lkey='Blockly.Msg.DATATABLE_CONFIGURATION_NAME'>"
-                        + (Blockly.Msg.DATATABLE_CONFIGURATION_NAME || "Name der Configuration") + "</span>",
+                    title: "<span lkey='Blockly.Msg.DATATABLE_CONFIGURATION_NAME'>" +
+                        (Blockly.Msg.DATATABLE_CONFIGURATION_NAME || 'Name der Configuration') +
+                        '</span>',
                     sortable: true,
                     field: '0',
                 },
                 {
-                    title: "<span lkey='Blockly.Msg.DATATABLE_CREATED_BY'>" + (Blockly.Msg.DATATABLE_CREATED_BY || "Erzeugt von") + "</span>",
+                    title: "<span lkey='Blockly.Msg.DATATABLE_CREATED_BY'>" + (Blockly.Msg.DATATABLE_CREATED_BY || 'Erzeugt von') + '</span>',
                     sortable: true,
                     field: '1',
                 },
@@ -47,22 +48,23 @@ define(["require", "exports", "util", "confList.model", "blockly", "jquery", "bo
                     valign: 'middle',
                 },
                 {
-                    title: "<span lkey='Blockly.Msg.DATATABLE_CREATED_ON'>" + (Blockly.Msg.DATATABLE_CREATED_ON || "Erzeugt am") + "</span>",
+                    title: "<span lkey='Blockly.Msg.DATATABLE_CREATED_ON'>" + (Blockly.Msg.DATATABLE_CREATED_ON || 'Erzeugt am') + '</span>',
                     sortable: true,
                     field: '3',
-                    formatter: UTIL.formatDate
+                    formatter: UTIL.formatDate,
                 },
                 {
-                    title: "<span lkey='Blockly.Msg.DATATABLE_ACTUALIZATION'>" + (Blockly.Msg.DATATABLE_ACTUALIZATION || "Letzte Aktualisierung")
-                        + "</span>",
+                    title: "<span lkey='Blockly.Msg.DATATABLE_ACTUALIZATION'>" + (Blockly.Msg.DATATABLE_ACTUALIZATION || 'Letzte Aktualisierung') + '</span>',
                     sortable: true,
                     field: '4',
-                    formatter: UTIL.formatDate
-                }, {
+                    formatter: UTIL.formatDate,
+                },
+                {
                     field: '5',
                     checkbox: true,
                     valign: 'middle',
-                }, {
+                },
+                {
                     field: '7',
                     events: eventsDeleteShareLoad,
                     title: titleActions,
@@ -71,27 +73,29 @@ define(["require", "exports", "util", "confList.model", "blockly", "jquery", "bo
                     formatter: formatDeleteShareLoad,
                     width: '89px',
                 },
-            ]
+            ],
         });
         $('#confNameTable').bootstrapTable('togglePagination');
     }
     function initConfListEvents() {
         $(window).resize(function () {
             $('#confNameTable').bootstrapTable('resetView', {
-                height: UTIL.calcDataTableHeight()
+                height: UTIL.calcDataTableHeight(),
             });
         });
         $('#tabConfList').onWrap('show.bs.tab', function (e) {
             guiStateController.setView('tabConfList');
             CONFLIST.loadConfList(update);
         });
-        $('#confList>.bootstrap-table').find('button[name="refresh"]').onWrap('click', function () {
+        $('#confList>.bootstrap-table')
+            .find('button[name="refresh"]')
+            .onWrap('click', function () {
             CONFLIST.loadConfList(update);
             return false;
-        }, "refresh configuration list clicked");
+        }, 'refresh configuration list clicked');
         $('#confNameTable').onWrap('click-row.bs.table', function ($element, row) {
             configurationController.loadFromListing(row);
-        }, "Load configuration from listing clicked");
+        }, 'Load configuration from listing clicked');
         $('#confNameTable').onWrap('check-all.bs.table', function ($element, rows) {
             $('.deleteSomeConf').removeClass('disabled');
             $('#shareSome').removeClass('disabled');
@@ -126,7 +130,7 @@ define(["require", "exports", "util", "confList.model", "blockly", "jquery", "bo
         $('#backConfList').onWrap('click', function () {
             $('#tabConfiguration').clickWrap();
             return false;
-        }, "back to configuration view");
+        }, 'back to configuration view');
         $(document).onWrap('click', '.deleteSomeConf', function () {
             var configurations = $('#confNameTable').bootstrapTable('getSelections', {});
             var names = '';
@@ -138,10 +142,10 @@ define(["require", "exports", "util", "confList.model", "blockly", "jquery", "bo
             $('#confirmDeleteConfiguration').oneWrap('hide.bs.modal', function (event) {
                 CONFLIST.loadConfList(update);
             });
-            $("#confirmDeleteConfiguration").data('configurations', configurations);
-            $("#confirmDeleteConfiguration").modal("show");
+            $('#confirmDeleteConfiguration').data('configurations', configurations);
+            $('#confirmDeleteConfiguration').modal('show');
             return false;
-        }, "delete configurations");
+        }, 'delete configurations');
         $('#confNameTable').on('shown.bs.collapse hidden.bs.collapse', function (e) {
             $('#confNameTable').bootstrapTable('resetWidth');
         });
@@ -149,16 +153,17 @@ define(["require", "exports", "util", "confList.model", "blockly", "jquery", "bo
             UTIL.response(result);
             if (result.rc === 'ok') {
                 $('#confNameTable').bootstrapTable({});
-                $('#confNameTable').bootstrapTable("load", result.configurationNames);
-                $('#confNameTable').bootstrapTable("hideColumn", '2');
-                $('#confNameTable').bootstrapTable("hideColumn", '3');
+                $('#confNameTable').bootstrapTable('load', result.configurationNames);
+                $('#confNameTable').bootstrapTable('hideColumn', '2');
+                $('#confNameTable').bootstrapTable('hideColumn', '3');
             }
-            $('#deleteSomeConf').attr('data-original-title', Blockly.Msg.CONFLIST_DELETE_ALL_TOOLTIP
-                || "Click here to delete all selected robot configurations.");
-            $('#confNameTable').find('.delete').attr('data-original-title', Blockly.Msg.CONFLIST_DELETE_TOOLTIP
-                || 'Click here to delete your robot configuration.');
-            $('#confNameTable').find('.load').attr('data-original-title', Blockly.Msg.CONFLIST_LOAD_TOOLTIP
-                || 'Click here to load your robot configuration in the configuration environment.');
+            $('#deleteSomeConf').attr('data-original-title', Blockly.Msg.CONFLIST_DELETE_ALL_TOOLTIP || 'Click here to delete all selected robot configurations.');
+            $('#confNameTable')
+                .find('.delete')
+                .attr('data-original-title', Blockly.Msg.CONFLIST_DELETE_TOOLTIP || 'Click here to delete your robot configuration.');
+            $('#confNameTable')
+                .find('.load')
+                .attr('data-original-title', Blockly.Msg.CONFLIST_LOAD_TOOLTIP || 'Click here to load your robot configuration in the configuration environment.');
             $('#confNameTable').find('[rel="tooltip"]').tooltip();
         }
     }
@@ -173,8 +178,8 @@ define(["require", "exports", "util", "confList.model", "blockly", "jquery", "bo
                 names += '<br>';
             }
             $('#confirmDeleteConfName').html(names);
-            $("#confirmDeleteConfiguration").data('configurations', selectedRows);
-            $("#confirmDeleteConfiguration").modal("show");
+            $('#confirmDeleteConfiguration').data('configurations', selectedRows);
+            $('#confirmDeleteConfiguration').modal('show');
             return false;
         },
         'click .share': function (e, value, row, index) {
@@ -185,7 +190,7 @@ define(["require", "exports", "util", "confList.model", "blockly", "jquery", "bo
         },
         'click .load': function (e, value, row, index) {
             configurationController.loadFromListing(row);
-        }
+        },
     };
     var formatRelations = function (value, row, index) {
         if ($.isEmptyObject(value)) {
@@ -229,8 +234,11 @@ define(["require", "exports", "util", "confList.model", "blockly", "jquery", "bo
                         }
                         result += '&nbsp;';
                         result += user;
-                        result += '</span><a class="collapsed showRelations" href="#" style="float:right;"'
-                            + 'href="#" data-toggle="collapse" data-target=".relation' + index + '"></a></div>';
+                        result +=
+                            '</span><a class="collapsed showRelations" href="#" style="float:right;"' +
+                                'href="#" data-toggle="collapse" data-target=".relation' +
+                                index +
+                                '"></a></div>';
                     }
                     else {
                         result += '<div style="clear:both;" class="collapse relation' + index + '">';
@@ -251,8 +259,10 @@ define(["require", "exports", "util", "confList.model", "blockly", "jquery", "bo
     };
     var formatDeleteShareLoad = function (value, row, index) {
         var result = '';
-        result += '<a href="#" class="delete" rel="tooltip" lkey="Blockly.Msg.CONFLIST_DELETE_TOOLTIP" data-original-title="" title=""><span class="typcn typcn-delete"></span></a>';
-        result += '<a href="#" class="load" rel="tooltip" lkey="Blockly.Msg.CONFLIST_LOAD_TOOLTIP" data-original-title="" title=""><span class="typcn typcn-document"></span></a>';
+        result +=
+            '<a href="#" class="delete" rel="tooltip" lkey="Blockly.Msg.CONFLIST_DELETE_TOOLTIP" data-original-title="" title=""><span class="typcn typcn-delete"></span></a>';
+        result +=
+            '<a href="#" class="load" rel="tooltip" lkey="Blockly.Msg.CONFLIST_LOAD_TOOLTIP" data-original-title="" title=""><span class="typcn typcn-document"></span></a>';
         return result;
     };
     var sortRelations = function (a, b) {
@@ -301,6 +311,6 @@ define(["require", "exports", "util", "confList.model", "blockly", "jquery", "bo
         }
         return -1;
     };
-    var titleActions = '<a href="#" id="deleteSomeConf" class="deleteSomeConf disabled" rel="tooltip" lkey="Blockly.Msg.CONFLIST_DELETE_ALL_TOOLTIP" data-original-title="" data-container="body" title="">'
-        + '<span class="typcn typcn-delete"></span></a>';
+    var titleActions = '<a href="#" id="deleteSomeConf" class="deleteSomeConf disabled" rel="tooltip" lkey="Blockly.Msg.CONFLIST_DELETE_ALL_TOOLTIP" data-original-title="" data-container="body" title="">' +
+        '<span class="typcn typcn-delete"></span></a>';
 });

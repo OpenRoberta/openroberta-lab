@@ -40,7 +40,7 @@ export function loggingEnabled(_opLogEnabled: boolean, _debugEnabled: boolean) {
 }
 /**
  * FOR DEBUGGING: write the actual array of operations to the 'console.log'. The actual operation is prefixed by '*'
- * 
+ *
  * . @param msg the prefix of the message (for easy reading of the logs)
  * . @param operations the array of all operations to be executed
  * . @param pc the program counter
@@ -60,7 +60,7 @@ export function opLog(msg: string, operations: any[], pc: number) {
             }
             opc = opc + ']';
         }
-        opl = opl + (counter++ == pc ? '*' : '') + opc + ' '
+        opl = opl + (counter++ == pc ? '*' : '') + opc + ' ';
     }
     debug(msg + ' pc:' + pc + ' ' + opl);
 }

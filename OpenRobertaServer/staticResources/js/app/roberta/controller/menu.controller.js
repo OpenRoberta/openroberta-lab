@@ -8,7 +8,7 @@ define(["require", "exports", "message", "comm", "wrap", "robot.controller", "so
     var LOAD_SYSTEM_CALL = 'loadSystem';
     function cleanUri() {
         var uri = window.location.toString();
-        var clean_uri = uri.substring(0, uri.lastIndexOf("/"));
+        var clean_uri = uri.substring(0, uri.lastIndexOf('/'));
         window.history.replaceState({}, document.title, clean_uri);
     }
     // from https://stackoverflow.com/questions/19491336/get-url-parameter-jquery-or-how-to-get-query-string-values-in-js/21903119#21903119
@@ -23,30 +23,30 @@ define(["require", "exports", "message", "comm", "wrap", "robot.controller", "so
     }
     function handleQuery() {
         // old style queries
-        var target = decodeURI(document.location.hash).split("&&");
-        if (target[0] === "#forgotPassword") {
+        var target = decodeURI(document.location.hash).split('&&');
+        if (target[0] === '#forgotPassword') {
             USER_C.showResetPassword(target[1]);
         }
-        else if (target[0] === "#loadProgram" && target.length >= 4) {
+        else if (target[0] === '#loadProgram' && target.length >= 4) {
             GUISTATE_C.setStartWithoutPopup();
             IMPORT_C.openProgramFromXML(target);
         }
-        else if (target[0] === "#activateAccount") {
+        else if (target[0] === '#activateAccount') {
             USER_C.activateAccount(target[1]);
         }
-        else if (target[0] === "#overview") {
+        else if (target[0] === '#overview') {
             GUISTATE_C.setStartWithoutPopup();
             TOUR_C.start('overview');
         }
-        else if (target[0] === "#gallery") {
+        else if (target[0] === '#gallery') {
             GUISTATE_C.setStartWithoutPopup();
             $('#tabGalleryList').clickWrap();
         }
-        else if (target[0] === "#tutorial") {
+        else if (target[0] === '#tutorial') {
             GUISTATE_C.setStartWithoutPopup();
             $('#tabTutorialList').clickWrap();
         }
-        else if (target[0] === "#loadSystem" && target.length >= 2) {
+        else if (target[0] === '#loadSystem' && target.length >= 2) {
             GUISTATE_C.setStartWithoutPopup();
             ROBOT_C.switchRobot(target[1], true);
         }
@@ -111,20 +111,22 @@ define(["require", "exports", "message", "comm", "wrap", "robot.controller", "so
                         setPosition: true,
                         prevArrow: "<button type='button' class='slick-prev slick-arrow typcn typcn-arrow-left-outline'></button>",
                         nextArrow: "<button type='button' class='slick-next slick-arrow typcn typcn-arrow-right-outline'></button>",
-                        responsive: [{
+                        responsive: [
+                            {
                                 breakpoint: 992,
                                 settings: {
                                     centerPadding: '5px',
                                     slidesToShow: 1,
                                     swipeToSlide: true,
-                                    variableWidth: true
-                                }
-                            }]
+                                    variableWidth: true,
+                                },
+                            },
+                        ],
                     });
                     firsttime = false;
                 }
                 else {
-                    $('#popup-robot-main').slick("refresh");
+                    $('#popup-robot-main').slick('refresh');
                 }
             });
         });
@@ -132,7 +134,7 @@ define(["require", "exports", "message", "comm", "wrap", "robot.controller", "so
     exports.init = init;
     function initMenu() {
         // fill dropdown menu robot
-        $("#startupVersion").text(GUISTATE_C.getServerVersion());
+        $('#startupVersion').text(GUISTATE_C.getServerVersion());
         var robots = GUISTATE_C.getRobots();
         var proto = $('.robotType');
         var length = Object.keys(robots).length;
@@ -149,7 +151,7 @@ define(["require", "exports", "message", "comm", "wrap", "robot.controller", "so
             clone.find('.typcn').attr('id', 'menu-' + robotName);
             clone.attr('data-type', robotName);
             clone.addClass(robotName);
-            $("#navigation-robot>.anchor").before(clone);
+            $('#navigation-robot>.anchor').before(clone);
         }
         proto.remove();
         // fill start popup
@@ -173,22 +175,22 @@ define(["require", "exports", "message", "comm", "wrap", "robot.controller", "so
         var addInfoLink = function (clone, robotName) {
             var robotInfoDE = GUISTATE_C.getRobotInfoDE(robotName);
             var robotInfoEN = GUISTATE_C.getRobotInfoEN(robotName);
-            if (robotInfoDE !== "#" || robotInfoEN !== "#") {
+            if (robotInfoDE !== '#' || robotInfoEN !== '#') {
                 var $de = clone.find('a');
                 var $en = $de.clone();
-                if (robotInfoDE === "#") {
+                if (robotInfoDE === '#') {
                     robotInfoDE = robotInfoEN;
                 }
-                if (robotInfoEN === "#") {
+                if (robotInfoEN === '#') {
                     robotInfoEN = robotInfoDE;
                 }
                 $de.attr({
-                    'onclick': 'window.open("' + robotInfoDE + '");return false;',
-                    'class': 'DE'
+                    onclick: 'window.open("' + robotInfoDE + '");return false;',
+                    class: 'DE',
                 });
                 $en.attr({
-                    'onclick': 'window.open("' + robotInfoEN + '");return false;',
-                    'class': 'EN'
+                    onclick: 'window.open("' + robotInfoEN + '");return false;',
+                    class: 'EN',
                 });
                 $en.appendTo(clone);
             }
@@ -207,13 +209,14 @@ define(["require", "exports", "message", "comm", "wrap", "robot.controller", "so
         }
         for (var key in groupsDict) {
             if (groupsDict.hasOwnProperty(key)) {
-                if (groupsDict[key].length == 1 || key === "calliope") { //this means that a robot has no subgroup
+                if (groupsDict[key].length == 1 || key === 'calliope') {
+                    //this means that a robot has no subgroup
                     var robotName = key; // robot name is the same as robot group
                     var clone = proto.clone().prop('id', 'menu-' + robotName);
                     clone.find('span:eq( 0 )').removeClass('typcn-open');
                     clone.find('span:eq( 0 )').addClass('typcn-' + robotName);
-                    if (key === "calliope") {
-                        robotName = "calliope2017NoBlue";
+                    if (key === 'calliope') {
+                        robotName = 'calliope2017NoBlue';
                     }
                     clone.find('span:eq( 1 )').html(GUISTATE_C.getMenuRobotRealName(robotName));
                     clone.attr('data-type', robotName);
@@ -221,14 +224,15 @@ define(["require", "exports", "message", "comm", "wrap", "robot.controller", "so
                     if (!GUISTATE_C.getIsRobotBeta(robotName)) {
                         clone.find('img.img-beta').css('visibility', 'hidden');
                     }
-                    $("#popup-robot-main").append(clone);
+                    $('#popup-robot-main').append(clone);
                 }
-                else { // till the next for loop we create groups for robots
+                else {
+                    // till the next for loop we create groups for robots
                     var robotGroup = key;
                     var clone = proto.clone().prop('id', 'menu-' + robotGroup);
                     clone.attr('data-type', robotGroup);
-                    if (robotGroup == "arduino") {
-                        clone.find('span:eq( 1 )').html("Nepo4Arduino");
+                    if (robotGroup == 'arduino') {
+                        clone.find('span:eq( 1 )').html('Nepo4Arduino');
                     }
                     else {
                         clone.find('span:eq( 1 )').html(robotGroup.charAt(0).toUpperCase() + robotGroup.slice(1)); // we have no real name for group
@@ -238,8 +242,9 @@ define(["require", "exports", "message", "comm", "wrap", "robot.controller", "so
                     clone.find('img.img-beta').css('visibility', 'hidden'); // groups do not have 'beta' labels
                     addInfoLink(clone, robotGroup); // this will just kill the link tag, because no description for group
                     clone.attr('data-group', true);
-                    $("#popup-robot-main").append(clone);
-                    for (var i = 0; i < groupsDict[key].length; i++) { // and here we put robots in subgroups
+                    $('#popup-robot-main').append(clone);
+                    for (var i = 0; i < groupsDict[key].length; i++) {
+                        // and here we put robots in subgroups
                         var robotName = groupsDict[key][i];
                         var clone = proto.clone().prop('id', 'menu-' + robotName);
                         clone.addClass('hidden');
@@ -254,7 +259,7 @@ define(["require", "exports", "message", "comm", "wrap", "robot.controller", "so
                         clone.find('span:eq( 0 )').addClass('img-' + robotName); // there are no typicons for robots
                         clone.find('span:eq( 1 )').html(GUISTATE_C.getMenuRobotRealName(robotName)); // instead we use images
                         clone.attr('data-type', robotName);
-                        $("#popup-robot-subgroup").append(clone);
+                        $('#popup-robot-subgroup').append(clone);
                     }
                 }
             }
@@ -277,14 +282,14 @@ define(["require", "exports", "message", "comm", "wrap", "robot.controller", "so
      */
     function initMenuEvents() {
         // TODO check if this prevents iPads and iPhones to only react on double clicks
-        if (!navigator.userAgent.match(/iPad/i) && !(navigator.userAgent.match(/iPhone/i))) {
+        if (!navigator.userAgent.match(/iPad/i) && !navigator.userAgent.match(/iPhone/i)) {
             $('[rel="tooltip"]').not('.rightMenuButton').tooltip({
                 container: 'body',
-                placement: "right"
+                placement: 'right',
             });
             $('[rel="tooltip"].rightMenuButton').tooltip({
                 container: 'body',
-                placement: "left"
+                placement: 'left',
             });
         }
         // prevent Safari 10. from zooming
@@ -296,7 +301,7 @@ define(["require", "exports", "message", "comm", "wrap", "robot.controller", "so
             $(this).find('[autofocus]').focus();
         });
         $('#navbarCollapse').collapse({
-            'toggle': false
+            toggle: false,
         });
         $('#navbarCollapse').on('click', '.dropdown-menu a,.visible-xs', function (event) {
             $('#navbarCollapse').collapse('hide');
@@ -309,28 +314,28 @@ define(["require", "exports", "message", "comm", "wrap", "robot.controller", "so
             var feedbackButton = '<div href="#" id="feedbackButton" class="rightMenuButton" rel="tooltip" data-original-title="" title="">' +
                 '<span id="" class="feedbackButton typcn typcn-feedback"></span>' +
                 '</div>';
-            $("#rightMenuDiv").append(feedbackButton);
+            $('#rightMenuDiv').append(feedbackButton);
             window.onmessage = function (msg) {
-                if (msg.data === "closeFeedback") {
+                if (msg.data === 'closeFeedback') {
                     $('#feedbackIframe').oneWrap('load', function () {
                         setTimeout(function () {
-                            $("#feedbackIframe").attr("src", "about:blank");
-                            $('#feedbackModal').modal("hide");
+                            $('#feedbackIframe').attr('src', 'about:blank');
+                            $('#feedbackModal').modal('hide');
                         }, 1000);
                     });
                 }
-                else if (msg.data.indexOf("feedbackHeight") >= 0) {
-                    var height = msg.data.split(":")[1] || 400;
+                else if (msg.data.indexOf('feedbackHeight') >= 0) {
+                    var height = msg.data.split(':')[1] || 400;
                     $('#feedbackIframe').height(height);
                 }
             };
             $('#feedbackButton').on('click', '', function (event) {
                 $('#feedbackModal').on('show.bs.modal', function () {
-                    if (GUISTATE_C.getLanguage().toLowerCase() === "de") {
-                        $("#feedbackIframe").attr("src", "https://www.roberta-home.de/lab/feedback/");
+                    if (GUISTATE_C.getLanguage().toLowerCase() === 'de') {
+                        $('#feedbackIframe').attr('src', 'https://www.roberta-home.de/lab/feedback/');
                     }
                     else {
-                        $("#feedbackIframe").attr("src", "https://www.roberta-home.de/en/lab/feedback/");
+                        $('#feedbackIframe').attr('src', 'https://www.roberta-home.de/en/lab/feedback/');
                     }
                 });
                 $('#feedbackModal').modal({ show: true });
@@ -339,7 +344,9 @@ define(["require", "exports", "message", "comm", "wrap", "robot.controller", "so
         // EDIT Menu  --- don't use onWrap here, because the export xml target must be enabled always
         $('#head-navigation-program-edit').on('click', '.dropdown-menu li:not(.disabled) a', function (event) {
             var fn = function (event) {
-                var targetId = event.target.id || (event.target.children[0] && event.target.children[0].id) || (event.target.previousSibling && event.target.previousSibling.id);
+                var targetId = event.target.id ||
+                    (event.target.children[0] && event.target.children[0].id) ||
+                    (event.target.previousSibling && event.target.previousSibling.id);
                 switch (targetId) {
                     case 'menuRunProg':
                         RUN_C.runOnBrick();
@@ -400,7 +407,6 @@ define(["require", "exports", "message", "comm", "wrap", "robot.controller", "so
                     default:
                         break;
                 }
-                ;
             };
             WRAP.wrapUI(fn, 'edit menu click')(event);
         });
@@ -409,7 +415,7 @@ define(["require", "exports", "message", "comm", "wrap", "robot.controller", "so
             $('.modal').modal('hide'); // close all opened popups
             switch (event.target.id) {
                 case 'menuCheckConfig':
-                    MSG.displayMessage("MESSAGE_NOT_AVAILABLE", "POPUP", "");
+                    MSG.displayMessage('MESSAGE_NOT_AVAILABLE', 'POPUP', '');
                     break;
                 case 'menuNewConfig':
                     CONFIGURATION_C.newConfiguration();
@@ -448,7 +454,7 @@ define(["require", "exports", "message", "comm", "wrap", "robot.controller", "so
                         $('#singleModalListInput').empty();
                         i = 0;
                         ports.forEach(function (port) {
-                            $('#singleModalListInput').append("<option value=\"" + port + "\" selected>" + robots[i] + " " + port + "</option>");
+                            $('#singleModalListInput').append('<option value="' + port + '" selected>' + robots[i] + ' ' + port + '</option>');
                             i++;
                         });
                         ROBOT_C.showListModal();
@@ -473,14 +479,17 @@ define(["require", "exports", "message", "comm", "wrap", "robot.controller", "so
         $('#head-navigation-help').onWrap('click', '.dropdown-menu li:not(.disabled) a', function (event) {
             $('.modal').modal('hide'); // close all opened popups
             var domId = event.target.id;
-            if (domId === 'menuShowStart') { // Submenu 'Help'
-                $("#show-startup-message").modal("show");
+            if (domId === 'menuShowStart') {
+                // Submenu 'Help'
+                $('#show-startup-message').modal('show');
             }
-            else if (domId === 'menuAbout') { // Submenu 'Help'
-                $("#version").text(GUISTATE_C.getServerVersion());
-                $("#show-about").modal("show");
+            else if (domId === 'menuAbout') {
+                // Submenu 'Help'
+                $('#version').text(GUISTATE_C.getServerVersion());
+                $('#show-about').modal('show');
             }
-            else if (domId === 'menuLogging') { // Submenu 'Help'
+            else if (domId === 'menuLogging') {
+                // Submenu 'Help'
                 $('#tabLogList').clickWrap();
             }
         }, 'help clicked');
@@ -545,23 +554,23 @@ define(["require", "exports", "message", "comm", "wrap", "robot.controller", "so
             $('.navbar-fixed-top .dropdown').removeClass('open');
         });
         $('#img-nepo').onWrap('click', function () {
-            $("#show-startup-message").modal("show");
+            $('#show-startup-message').modal('show');
         }, 'logo was clicked');
         $('.menuGeneral').onWrap('click', function (event) {
-            window.open("https://jira.iais.fraunhofer.de/wiki/display/ORInfo");
+            window.open('https://jira.iais.fraunhofer.de/wiki/display/ORInfo');
         }, 'head navigation menu item general clicked');
         $('.menuFaq').onWrap('click', function (event) {
-            window.open("https://jira.iais.fraunhofer.de/wiki/display/ORInfo/FAQ");
+            window.open('https://jira.iais.fraunhofer.de/wiki/display/ORInfo/FAQ');
         }, 'head navigation menu item faq clicked');
         $('.shortcut').onWrap('click', function (event) {
-            window.open("https://jira.iais.fraunhofer.de/wiki/display/ORInfo/FAQ");
+            window.open('https://jira.iais.fraunhofer.de/wiki/display/ORInfo/FAQ');
         }, 'head navigation menu item faq (shortcut) clicked');
         $('.menuAboutProject').onWrap('click', function (event) {
             if (GUISTATE_C.getLanguage() == 'de') {
-                window.open("https://www.roberta-home.de/index.php?id=135");
+                window.open('https://www.roberta-home.de/index.php?id=135');
             }
             else {
-                window.open("https://www.roberta-home.de/index.php?id=135&L=1");
+                window.open('https://www.roberta-home.de/index.php?id=135&L=1');
             }
         }, 'head navigation menu item about clicked');
         $('#startPopupBack').on('click', function (event) {
@@ -569,7 +578,7 @@ define(["require", "exports", "message", "comm", "wrap", "robot.controller", "so
             $('.popup-robot.robotSubGroup').addClass('hidden', 1000);
             $('.robotSpecial').removeClass('robotSpecial');
             $('#startPopupBack').addClass('hidden');
-            $('#popup-robot-main').slick("refresh");
+            $('#popup-robot-main').slick('refresh');
         });
         var mousex = 0;
         var mousey = 0;
@@ -585,7 +594,7 @@ define(["require", "exports", "message", "comm", "wrap", "robot.controller", "so
             $('#startPopupBack').clickWrap();
             var choosenRobotType = event.target.dataset.type || event.currentTarget.dataset.type;
             var choosenRobotGroup = event.target.dataset.group || event.currentTarget.dataset.group;
-            if (event.target.className.indexOf("info") >= 0) {
+            if (event.target.className.indexOf('info') >= 0) {
                 var win = window.open(GUISTATE_C.getRobots()[choosenRobotType].info, '_blank');
             }
             else {
@@ -608,7 +617,7 @@ define(["require", "exports", "message", "comm", "wrap", "robot.controller", "so
                                 cleanUri();
                                 ROBOT_C.switchRobot(choosenRobotType, true);
                             });
-                            MSG.displayMessage("POPUP_CREATE_BOOKMARK", "POPUP", "");
+                            MSG.displayMessage('POPUP_CREATE_BOOKMARK', 'POPUP', '');
                         }
                         else {
                             ROBOT_C.switchRobot(choosenRobotType, true);
@@ -622,11 +631,11 @@ define(["require", "exports", "message", "comm", "wrap", "robot.controller", "so
             $('#oldReleases').show({
                 start: function () {
                     $('#moreReleases').addClass('hidden');
-                }
+                },
             });
         }, 'show more releases clicked');
         $('#takeATour').onWrap('click', function (event) {
-            if (GUISTATE_C.getView() !== "tabProgram") {
+            if (GUISTATE_C.getView() !== 'tabProgram') {
                 $('#tabProgram').clickWrap();
             }
             if (GUISTATE_C.getRobotGroup() !== 'ev3') {
@@ -642,7 +651,7 @@ define(["require", "exports", "message", "comm", "wrap", "robot.controller", "so
             event.preventDefault();
             window.open('https://jira.iais.fraunhofer.de/wiki/display/ORInfo', '_blank');
             event.stopPropagation();
-            $("#show-startup-message").modal("show");
+            $('#show-startup-message').modal('show');
         }, 'go to wiki clicked');
         // init popup events
         $('.cancelPopup').onWrap('click', function () {
@@ -670,7 +679,7 @@ define(["require", "exports", "message", "comm", "wrap", "robot.controller", "so
             $(this).css('height', newHeight);
         });
         $(document).onWrap('keydown', function (e) {
-            if (GUISTATE_C.getView() != "tabProgram") {
+            if (GUISTATE_C.getView() != 'tabProgram') {
                 return;
             }
             //Overriding the Ctrl + 1 for importing sourcecode
@@ -728,7 +737,7 @@ define(["require", "exports", "message", "comm", "wrap", "robot.controller", "so
             if ((e.metaKey || e.ctrlKey) && e.which == 83) {
                 e.preventDefault();
                 if (GUISTATE_C.isUserLoggedIn()) {
-                    if (GUISTATE_C.getProgramName() === "NEPOprog" || e.shiftKey) {
+                    if (GUISTATE_C.getProgramName() === 'NEPOprog' || e.shiftKey) {
                         PROGRAM_C.showSaveAsModal();
                     }
                     else if (!GUISTATE_C.isProgramSaved()) {
@@ -736,7 +745,7 @@ define(["require", "exports", "message", "comm", "wrap", "robot.controller", "so
                     }
                 }
                 else {
-                    MSG.displayMessage("ORA_PROGRAM_GET_ONE_ERROR_NOT_LOGGED_IN", "POPUP", "");
+                    MSG.displayMessage('ORA_PROGRAM_GET_ONE_ERROR_NOT_LOGGED_IN', 'POPUP', '');
                 }
             }
             //Overriding the Ctrl + R for running the program
@@ -754,7 +763,7 @@ define(["require", "exports", "message", "comm", "wrap", "robot.controller", "so
                     $('#tabProgList').clickWrap();
                 }
                 else {
-                    MSG.displayMessage("ORA_PROGRAM_GET_ONE_ERROR_NOT_LOGGED_IN", "POPUP", "");
+                    MSG.displayMessage('ORA_PROGRAM_GET_ONE_ERROR_NOT_LOGGED_IN', 'POPUP', '');
                 }
             }
             //Overriding the Ctrl + I for importing NEPO Xml

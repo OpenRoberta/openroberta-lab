@@ -5,7 +5,9 @@
   "scripts": {
     "postinstall": "cd OpenRobertaWeb && npm install",
     "build": "cd OpenRobertaWeb && npm run build",
-    "watch": "cd OpenRobertaWeb && npm run watch"
+    "watch": "cd OpenRobertaWeb && npm run watch",
+    "format": "cd OpenRobertaWeb && npm run format",
+    "format:check": "cd OpenRobertaWeb && npm run format:check"
   },
   "author": "",
   "license": "ISC"

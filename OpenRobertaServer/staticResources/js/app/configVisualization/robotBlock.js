@@ -30,10 +30,14 @@ define(["require", "exports", "./port", "./const.robots"], function (require, ex
         function RobotViewField(robot) {
             var _this = _super.call(this) || this;
             _this.robot = robot;
-            _this.robotImageSrc = const_robots_1.ROBOTS[_this.robot.group + '_' + _this.robot.name] ? (_this.robot.group + '_' + _this.robot.name) : const_robots_1.ROBOTS[_this.robot.group] ? _this.robot.group : null;
+            _this.robotImageSrc = const_robots_1.ROBOTS[_this.robot.group + '_' + _this.robot.name]
+                ? _this.robot.group + '_' + _this.robot.name
+                : const_robots_1.ROBOTS[_this.robot.group]
+                    ? _this.robot.group
+                    : null;
             if (_this.robotImageSrc) {
-                _this.width = const_robots_1.ROBOTS[_this.robotImageSrc]["width"];
-                _this.height = const_robots_1.ROBOTS[_this.robotImageSrc]["height"];
+                _this.width = const_robots_1.ROBOTS[_this.robotImageSrc]['width'];
+                _this.height = const_robots_1.ROBOTS[_this.robotImageSrc]['height'];
                 _this.size = new window.goog.math.Size(_this.width, _this.height + 2 * window.Blockly.BlockSvg.INLINE_PADDING_Y);
                 _this.ports_ = [];
             }
@@ -57,7 +61,7 @@ define(["require", "exports", "./port", "./const.robots"], function (require, ex
         RobotViewField.prototype.initBoardView_ = function () {
             var workspace = window.Blockly.getMainWorkspace();
             this.board_ = window.Blockly.createSvgElement('image', {}, this.element_);
-            var robotSrc = workspace.options.pathToMedia + "robots/" + this.robotImageSrc + ".svg";
+            var robotSrc = workspace.options.pathToMedia + 'robots/' + this.robotImageSrc + '.svg';
             var board = this.board_;
             board.setAttribute('href', robotSrc);
             board.setAttribute('x', 0);
@@ -68,14 +72,14 @@ define(["require", "exports", "./port", "./const.robots"], function (require, ex
         RobotViewField.prototype.initPorts_ = function () {
             var portsGroupSvg = window.Blockly.createSvgElement('g', {}, this.element_);
             var robot = const_robots_1.ROBOTS[this.robot.group + '_' + this.robot.name] || const_robots_1.ROBOTS[this.robot.group];
-            this.ports_ = robot["ports"].map(function (props) {
+            this.ports_ = robot['ports'].map(function (props) {
                 var name = props.name, position = props.position;
                 var port = new port_1.Port(portsGroupSvg, name, position);
                 return __assign({ portSvg: port.element }, props);
             });
         };
         RobotViewField.prototype.getPortByName = function (portName) {
-            var index = this.ports_["findIndex"](function (port) { return port.name === portName; });
+            var index = this.ports_['findIndex'](function (port) { return port.name === portName; });
             return this.ports_[index];
         };
         RobotViewField.prototype.setPosition = function (position) {
@@ -107,8 +111,8 @@ define(["require", "exports", "./port", "./const.robots"], function (require, ex
     function identifierToRobot(robotIdentifier) {
         var splits = robotIdentifier.split('_');
         var robot = {};
-        robot["group"] = splits[0];
-        robot["name"] = splits[1];
+        robot['group'] = splits[0];
+        robot['name'] = splits[1];
         return robot;
     }
 });

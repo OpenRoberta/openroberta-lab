@@ -22,15 +22,15 @@ numberOfActiveActions = 0;
 /**
  * wrap a function to catch and display errors. Calling wrapTotal with an arbitrary function with NEVER terminate with an exception.
  * An not undefined 2nd parameter is a messages that activates logging with time measuring
- * 
+ *
  * @memberof WRAP
  */
 function wrapTotal(fnToBeWrapped, message) {
-    var wrap = function() {
+    var wrap = function () {
         var start = new Date();
         try {
             var that = this;
-            var result = fnToBeWrapped.apply(that,arguments);
+            var result = fnToBeWrapped.apply(that, arguments);
             if (message !== undefined) {
                 var elapsed = new Date() - start;
                 LOG.text(elapsed + ' msec: ' + message, '[[TIME]] ');
@@ -55,7 +55,7 @@ function wrapTotal(fnToBeWrapped, message) {
  * @memberof WRAP
  */
 function wrapUI(fnToBeWrapped, message) {
-    var wrap = function() {
+    var wrap = function () {
         if (numberOfActiveActions > 0) {
             if (message !== undefined) {
                 LOG.text('SUPPRESSED ACTION: ' + message);
@@ -68,13 +68,13 @@ function wrapUI(fnToBeWrapped, message) {
             numberOfActiveActions++;
             var fn = wrapTotal(fnToBeWrapped, message);
             var that = this;
-            var result = fn.apply(that,arguments);
+            var result = fn.apply(that, arguments);
             numberOfActiveActions--;
             return result;
-         } catch (e) {
+        } catch (e) {
             numberOfActiveActions--;
             var err = new Error();
-            LOG.error("wrapUI/wrapTotal CRASHED UNEXPECTED AND SEVERELY with EXCEPTION: " + e + " and stacktrace: " + err.stack);
+            LOG.error('wrapUI/wrapTotal CRASHED UNEXPECTED AND SEVERELY with EXCEPTION: ' + e + ' and stacktrace: ' + err.stack);
             COMM.ping(); // transfer data to the server
         }
     };
@@ -87,18 +87,18 @@ function wrapUI(fnToBeWrapped, message) {
  * @memberof WRAP
  */
 function wrapREST(fnToBeWrapped, message) {
-    var rest = function() {
+    var rest = function () {
         COMM.errorNum = 0;
         numberOfActiveActions++;
         try {
             var fn = wrapTotal(fnToBeWrapped, message);
             var that = this;
-            fn.apply(that,arguments);
+            fn.apply(that, arguments);
             numberOfActiveActions--;
-         } catch (e) {
+        } catch (e) {
             numberOfActiveActions--;
             var err = new Error();
-            LOG.error("wrapREST/wrapTotal CRASHED UNEXPECTED AND SEVERELY with EXCEPTION: " + e + " and stacktrace: " + err.stack);
+            LOG.error('wrapREST/wrapTotal CRASHED UNEXPECTED AND SEVERELY with EXCEPTION: ' + e + ' and stacktrace: ' + err.stack);
             COMM.ping(); // transfer data to the server
         }
     };
@@ -106,16 +106,16 @@ function wrapREST(fnToBeWrapped, message) {
 }
 
 function wrapErrorFn(errorFnToBeWrapped) {
-    var wrap = function() {
+    var wrap = function () {
         try {
             var fn = wrapTotal(errorFnToBeWrapped, message);
             var that = this;
-            fn.apply(that,arguments);
+            fn.apply(that, arguments);
             numberOfActiveActions--;
-         } catch (e) {
+        } catch (e) {
             numberOfActiveActions--;
             var err = new Error();
-            LOG.error("wrapErrorFn/wrapTotal CRASHED UNEXPECTED AND SEVERELY with EXCEPTION: " + e + " and stacktrace: " + err.stack);
+            LOG.error('wrapErrorFn/wrapTotal CRASHED UNEXPECTED AND SEVERELY with EXCEPTION: ' + e + ' and stacktrace: ' + err.stack);
             COMM.ping(); // transfer data to the server
         }
     };
@@ -123,23 +123,23 @@ function wrapErrorFn(errorFnToBeWrapped) {
 }
 export { wrapTotal, wrapUI, wrapREST, wrapErrorFn };
 
-$.fn.onWrap = function(event, callbackOrFilter, callbackOrMessage, optMessage) {
+$.fn.onWrap = function (event, callbackOrFilter, callbackOrMessage, optMessage) {
     if (typeof callbackOrFilter === 'string') {
         if (typeof callbackOrMessage === 'function') {
             return this.on(event, callbackOrFilter, WRAP.wrapUI(callbackOrMessage, optMessage));
         } else {
-            LOG.error("illegal wrapping. Parameter: " + event + " ::: " + callbackOrFilter + " ::: " + callbackOrMessage + " ::: " + optMessage);
+            LOG.error('illegal wrapping. Parameter: ' + event + ' ::: ' + callbackOrFilter + ' ::: ' + callbackOrMessage + ' ::: ' + optMessage);
         }
     } else if (typeof callbackOrFilter === 'function') {
         if (typeof callbackOrMessage === 'string' || callbackOrMessage === undefined) {
             return this.on(event, WRAP.wrapUI(callbackOrFilter, callbackOrMessage));
         } else {
-            LOG.error("illegal wrapping. Parameter: " + event + " ::: " + callbackOrFilter + " ::: " + callbackOrMessage + " ::: " + optMessage);
+            LOG.error('illegal wrapping. Parameter: ' + event + ' ::: ' + callbackOrFilter + ' ::: ' + callbackOrMessage + ' ::: ' + optMessage);
         }
     }
 };
 
-$.fn.clickWrap = function(callback) {
+$.fn.clickWrap = function (callback) {
     numberOfActiveActions--;
     try {
         if (callback === undefined) {
@@ -151,12 +151,12 @@ $.fn.clickWrap = function(callback) {
     } catch (e) {
         numberOfActiveActions++;
         var err = new Error();
-        LOG.error("clickWrap CRASHED UNEXPECTED AND SEVERELY with EXCEPTION: " + e + " and stacktrace: " + err.stack);
+        LOG.error('clickWrap CRASHED UNEXPECTED AND SEVERELY with EXCEPTION: ' + e + ' and stacktrace: ' + err.stack);
         COMM.ping(); // transfer data to the server
     }
 };
 
-$.fn.tabWrapShow = function() {
+$.fn.tabWrapShow = function () {
     numberOfActiveActions--;
     try {
         this.tab('show');
@@ -164,12 +164,12 @@ $.fn.tabWrapShow = function() {
     } catch (e) {
         numberOfActiveActions++;
         var err = new Error();
-        LOG.error("tabWrap CRASHED UNEXPECTED AND SEVERELY with EXCEPTION: " + e + " and stacktrace: " + err.stack);
+        LOG.error('tabWrap CRASHED UNEXPECTED AND SEVERELY with EXCEPTION: ' + e + ' and stacktrace: ' + err.stack);
         COMM.ping(); // transfer data to the server
     }
 };
 
-$.fn.oneWrap = function(event, callback) {
+$.fn.oneWrap = function (event, callback) {
     numberOfActiveActions--;
     try {
         this.one(event, callback);
@@ -177,8 +177,7 @@ $.fn.oneWrap = function(event, callback) {
     } catch (e) {
         numberOfActiveActions++;
         var err = new Error();
-        LOG.error("oneWrap CRASHED UNEXPECTED AND SEVERELY with EXCEPTION: " + e + " and stacktrace: " + err.stack);
+        LOG.error('oneWrap CRASHED UNEXPECTED AND SEVERELY with EXCEPTION: ' + e + ' and stacktrace: ' + err.stack);
         COMM.ping(); // transfer data to the server
     }
 };
-

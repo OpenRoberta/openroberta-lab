@@ -47,7 +47,7 @@ define(["require", "exports", "log", "guiState.controller", "blockly", "jquery",
                 $link.onWrap('click touchend', function (evt) {
                     evt.preventDefault();
                     $legalDiv.animate({
-                        scrollTop: $storage.offset().top - 92
+                        scrollTop: $storage.offset().top - 92,
                     }, 'slow');
                 });
             }
@@ -65,8 +65,7 @@ define(["require", "exports", "log", "guiState.controller", "blockly", "jquery",
     }
     function loadLegalTexts() {
         var language = GUISTATE_C.getLanguage().toLowerCase(), legalTextsMap = GUISTATE_C.getLegalTextsMap(), loadFile = function (documentType, language) {
-            var $storage = storages[documentType], $link = links[documentType], content = legalTextsMap[documentType + language + '.html']
-                || legalTextsMap[documentType + 'en.html'] || legalTextsMap[documentType + 'de.html'];
+            var $storage = storages[documentType], $link = links[documentType], content = legalTextsMap[documentType + language + '.html'] || legalTextsMap[documentType + 'en.html'] || legalTextsMap[documentType + 'de.html'];
             if ($storage) {
                 $storage.children().remove();
                 if (content) {
@@ -101,7 +100,7 @@ define(["require", "exports", "log", "guiState.controller", "blockly", "jquery",
         else {
             LOG.info('legal view opened');
             $legalDiv.animate({
-                scrollTop: 0
+                scrollTop: 0,
             }, 'fast');
             $('#blockly').openRightView('legal', INITIAL_WIDTH);
         }

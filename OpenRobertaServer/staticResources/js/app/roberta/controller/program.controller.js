@@ -30,18 +30,18 @@ define(["require", "exports", "message", "log", "util", "guiState.controller", "
                 wheel: false,
                 startScale: 1.0,
                 maxScale: 4,
-                minScale: .25,
-                scaleSpeed: 1.1
+                minScale: 0.25,
+                scaleSpeed: 1.1,
             },
             checkInTask: ['start', '_def', 'event'],
             variableDeclaration: true,
             robControls: true,
-            theme: GUISTATE_C.getTheme()
+            theme: GUISTATE_C.getTheme(),
         });
         $(window).resize();
         blocklyWorkspace.setDevice({
             group: GUISTATE_C.getRobotGroup(),
-            robot: GUISTATE_C.getRobot()
+            robot: GUISTATE_C.getRobot(),
         });
         GUISTATE_C.setBlocklyWorkspace(blocklyWorkspace);
         blocklyWorkspace.robControls.disable('saveProgram');
@@ -52,13 +52,15 @@ define(["require", "exports", "message", "log", "util", "guiState.controller", "
     }
     function initEvents() {
         $('#sliderDiv').draggable({
-            'axis': 'x',
-            'cursor': 'col-resize'
+            axis: 'x',
+            cursor: 'col-resize',
         });
         $('#tabProgram').onWrap('click', function (e) {
             e.preventDefault();
-            if (GUISTATE_C.getView() === 'tabConfiguration' && GUISTATE_C.isUserLoggedIn() && !GUISTATE_C.isConfigurationSaved()
-                && !GUISTATE_C.isConfigurationAnonymous()) {
+            if (GUISTATE_C.getView() === 'tabConfiguration' &&
+                GUISTATE_C.isUserLoggedIn() &&
+                !GUISTATE_C.isConfigurationSaved() &&
+                !GUISTATE_C.isConfigurationAnonymous()) {
                 $('#show-message-confirm').oneWrap('shown.bs.modal', function (e) {
                     $('#confirm').off();
                     $('#confirm').on('click', function (e) {
@@ -75,7 +77,7 @@ define(["require", "exports", "message", "log", "util", "guiState.controller", "
                         $('.modal').modal('hide');
                     });
                 });
-                MSG.displayMessage("POPUP_CONFIGURATION_UNSAVED", "POPUP", "", true);
+                MSG.displayMessage('POPUP_CONFIGURATION_UNSAVED', 'POPUP', '', true);
                 return false;
             }
             else {
@@ -88,7 +90,8 @@ define(["require", "exports", "message", "log", "util", "guiState.controller", "
         $('#tabProgram').onWrap('shown.bs.tab', function (e) {
             blocklyWorkspace.markFocused();
             blocklyWorkspace.setVisible(true);
-            if (!seen) { // TODO may need to be removed if program tab can receive changes while in background
+            if (!seen) {
+                // TODO may need to be removed if program tab can receive changes while in background
                 reloadView();
             }
             $(window).resize();
@@ -101,11 +104,11 @@ define(["require", "exports", "message", "log", "util", "guiState.controller", "
         });
         // work around for touch devices
         $('.levelTabs').on('touchend', function (e) {
-            var target = $(e.target).attr("href");
+            var target = $(e.target).attr('href');
             $('.levelTabs a[href="' + target + '"]').tabWrapShow();
         });
         $('.levelTabs a[data-toggle="tab"]').onWrap('shown.bs.tab', function (e) {
-            var target = $(e.target).attr("href").substring(1); // activated tab
+            var target = $(e.target).attr('href').substring(1); // activated tab
             e.preventDefault();
             loadToolbox(target);
             e.stopPropagation();
@@ -149,7 +152,7 @@ define(["require", "exports", "message", "log", "util", "guiState.controller", "
                 GUISTATE_C.setConfigurationSaved(true);
                 LOG.info('save program ' + GUISTATE_C.getProgramName());
             }
-            MSG.displayInformation(result, "MESSAGE_EDIT_SAVE_PROGRAM", result.message, GUISTATE_C.getProgramName());
+            MSG.displayInformation(result, 'MESSAGE_EDIT_SAVE_PROGRAM', result.message, GUISTATE_C.getProgramName());
         });
     }
     exports.saveToServer = saveToServer;
@@ -170,11 +173,11 @@ define(["require", "exports", "message", "log", "util", "guiState.controller", "
             LOG.info('saveAs program ' + GUISTATE_C.getProgramName());
             PROGRAM.saveAsProgramToServer(progName, userAccountName, xmlProgramText, configName, xmlConfigText, GUISTATE_C.getProgramTimestamp(), function (result) {
                 if (result.rc === 'ok') {
-                    LOG.info('saved program ' + GUISTATE_C.getProgramName() + " as " + progName);
+                    LOG.info('saved program ' + GUISTATE_C.getProgramName() + ' as ' + progName);
                     result.name = progName;
                     result.programShared = false;
                     GUISTATE_C.setProgram(result, userAccountName, userAccountName);
-                    MSG.displayInformation(result, "MESSAGE_EDIT_SAVE_PROGRAM_AS", result.message, GUISTATE_C.getProgramName());
+                    MSG.displayInformation(result, 'MESSAGE_EDIT_SAVE_PROGRAM_AS', result.message, GUISTATE_C.getProgramName());
                 }
                 else {
                     if (result.cause === 'ORA_PROGRAM_SAVE_AS_ERROR_PROGRAM_EXISTS') {
@@ -182,20 +185,20 @@ define(["require", "exports", "message", "log", "util", "guiState.controller", "
                         //get last changed of program to overwrite
                         var lastChanged = result.lastChanged;
                         var modalMessage = Blockly.Msg.POPUP_BACKGROUND_REPLACE || 'A program with the same name already exists! <br> Would you like to replace it?';
-                        $("#show-message-confirm").oneWrap('shown.bs.modal', function (e) {
+                        $('#show-message-confirm').oneWrap('shown.bs.modal', function (e) {
                             $('#confirm').off();
                             $('#confirm').onWrap('click', function (e) {
                                 e.preventDefault();
                                 PROGRAM.saveProgramToServer(progName, userAccountName, xmlProgramText, configName, xmlConfigText, lastChanged, function (result) {
                                     if (result.rc === 'ok') {
-                                        LOG.info('saved program ' + GUISTATE_C.getProgramName() + " as " + progName + " and overwrote old content");
+                                        LOG.info('saved program ' + GUISTATE_C.getProgramName() + ' as ' + progName + ' and overwrote old content');
                                         result.name = progName;
                                         GUISTATE_C.setProgram(result, userAccountName, userAccountName);
-                                        MSG.displayInformation(result, "MESSAGE_EDIT_SAVE_PROGRAM_AS", result.message, GUISTATE_C.getProgramName());
+                                        MSG.displayInformation(result, 'MESSAGE_EDIT_SAVE_PROGRAM_AS', result.message, GUISTATE_C.getProgramName());
                                     }
                                     else {
                                         LOG.info('failed to overwrite ' + progName);
-                                        MSG.displayMessage(result.message, "POPUP", "");
+                                        MSG.displayMessage(result.message, 'POPUP', '');
                                     }
                                 });
                             }, 'confirm modal');
@@ -205,7 +208,7 @@ define(["require", "exports", "message", "log", "util", "guiState.controller", "
                                 $('.modal').modal('hide');
                             }, 'cancel modal');
                         });
-                        MSG.displayPopupMessage("ORA_PROGRAM_SAVE_AS_ERROR_PROGRAM_EXISTS", modalMessage, Blockly.Msg.POPUP_REPLACE, Blockly.Msg.POPUP_CANCEL);
+                        MSG.displayPopupMessage('ORA_PROGRAM_SAVE_AS_ERROR_PROGRAM_EXISTS', modalMessage, Blockly.Msg.POPUP_REPLACE, Blockly.Msg.POPUP_CANCEL);
                     }
                 }
             });
@@ -255,7 +258,7 @@ define(["require", "exports", "message", "log", "util", "guiState.controller", "
                     });
                     $('#tabProgram').clickWrap();
                 }
-                MSG.displayInformation(result, "", result.message);
+                MSG.displayInformation(result, '', result.message);
             });
         }
         ROBOT_C.switchRobot(robotType, null, loadProgramFromGallery);
@@ -269,32 +272,31 @@ define(["require", "exports", "message", "log", "util", "guiState.controller", "
     }
     exports.initProgramForms = initProgramForms;
     function showSaveAsModal() {
-        $.validator.addMethod("regex", function (value, element, regexp) {
+        $.validator.addMethod('regex', function (value, element, regexp) {
             value = value.trim();
             return value.match(regexp);
-        }, "No special Characters allowed here. Use only upper and lowercase letters (A through Z; a through z) and numbers.");
+        }, 'No special Characters allowed here. Use only upper and lowercase letters (A through Z; a through z) and numbers.');
         UTIL.showSingleModal(function () {
             $('#singleModalInput').attr('type', 'text');
-            $('#single-modal h3').text(Blockly.Msg["MENU_SAVE_AS"]);
-            $('#single-modal label').text(Blockly.Msg["POPUP_NAME"]);
-        }, saveAsProgramToServer, function () {
-        }, {
+            $('#single-modal h3').text(Blockly.Msg['MENU_SAVE_AS']);
+            $('#single-modal label').text(Blockly.Msg['POPUP_NAME']);
+        }, saveAsProgramToServer, function () { }, {
             rules: {
                 singleModalInput: {
                     required: true,
-                    regex: /^[a-zA-Z_öäüÖÄÜß$€][a-zA-Z0-9_öäüÖÄÜß$€]{0,254}$/
-                }
+                    regex: /^[a-zA-Z_öäüÖÄÜß$€][a-zA-Z0-9_öäüÖÄÜß$€]{0,254}$/,
+                },
             },
-            errorClass: "form-invalid",
+            errorClass: 'form-invalid',
             errorPlacement: function (label, element) {
                 label.insertAfter(element);
             },
             messages: {
                 singleModalInput: {
-                    required: Blockly.Msg["VALIDATION_FIELD_REQUIRED"],
-                    regex: Blockly.Msg["MESSAGE_INVALID_NAME"]
-                }
-            }
+                    required: Blockly.Msg['VALIDATION_FIELD_REQUIRED'],
+                    regex: Blockly.Msg['MESSAGE_INVALID_NAME'],
+                },
+            },
         });
     }
     exports.showSaveAsModal = showSaveAsModal;
@@ -325,7 +327,7 @@ define(["require", "exports", "message", "log", "util", "guiState.controller", "
         function loadNewProgram() {
             var result = {};
             result.rc = 'ok';
-            result.name = "NEPOprog";
+            result.name = 'NEPOprog';
             result.programShared = false;
             result.lastChanged = '';
             GUISTATE_C.setProgram(result);
@@ -354,27 +356,26 @@ define(["require", "exports", "message", "log", "util", "guiState.controller", "
             });
         });
         if (GUISTATE_C.isUserLoggedIn()) {
-            MSG.displayMessage("POPUP_BEFOREUNLOAD_LOGGEDIN", "POPUP", "", true);
+            MSG.displayMessage('POPUP_BEFOREUNLOAD_LOGGEDIN', 'POPUP', '', true);
         }
         else {
-            MSG.displayMessage("POPUP_BEFOREUNLOAD", "POPUP", "", true);
+            MSG.displayMessage('POPUP_BEFOREUNLOAD', 'POPUP', '', true);
         }
     }
     function linkProgram() {
         var dom = Blockly.Xml.workspaceToDom(blocklyWorkspace);
         var xml = Blockly.Xml.domToText(dom);
         //TODO this should be removed after the next release
-        xml = '<export xmlns="http://de.fhg.iais.roberta.blockly"><program>' + xml + '</program><config>' + GUISTATE_C.getConfigurationXML()
-            + '</config></export>';
+        xml = '<export xmlns="http://de.fhg.iais.roberta.blockly"><program>' + xml + '</program><config>' + GUISTATE_C.getConfigurationXML() + '</config></export>';
         var link = 'https://lab.open-roberta.org/#loadProgram';
         link += '&&' + GUISTATE_C.getRobot();
         link += '&&' + GUISTATE_C.getProgramName();
         link += '&&' + xml;
         link = encodeURI(link);
-        var $temp = $("<input>");
-        $("body").append($temp);
+        var $temp = $('<input>');
+        $('body').append($temp);
         $temp.val(link).select();
-        document.execCommand("copy");
+        document.execCommand('copy');
         $temp.remove();
         var displayLink = '</br><textarea readonly style="width:100%;" type="text">' + link + '</textarea>';
         LOG.info('ProgramLinkShare');
@@ -386,11 +387,14 @@ define(["require", "exports", "message", "log", "util", "guiState.controller", "
      */
     function exportXml() {
         var dom = Blockly.Xml.workspaceToDom(blocklyWorkspace);
-        var xml = '<export xmlns="http://de.fhg.iais.roberta.blockly"><program>' + Blockly.Xml.domToText(dom) + '</program><config>'
-            + GUISTATE_C.getConfigurationXML() + '</config></export>';
+        var xml = '<export xmlns="http://de.fhg.iais.roberta.blockly"><program>' +
+            Blockly.Xml.domToText(dom) +
+            '</program><config>' +
+            GUISTATE_C.getConfigurationXML() +
+            '</config></export>';
         LOG.info('ProgramExport');
-        UTIL.download(GUISTATE_C.getProgramName() + ".xml", xml);
-        MSG.displayMessage("MENU_MESSAGE_DOWNLOAD", "TOAST", GUISTATE_C.getProgramName());
+        UTIL.download(GUISTATE_C.getProgramName() + '.xml', xml);
+        MSG.displayMessage('MENU_MESSAGE_DOWNLOAD', 'TOAST', GUISTATE_C.getProgramName());
     }
     exports.exportXml = exportXml;
     /**
@@ -402,7 +406,7 @@ define(["require", "exports", "message", "log", "util", "guiState.controller", "
                 PROGRAM.exportAllProgramsXml();
             }
             else {
-                MSG.displayMessage(result.cause, "TOAST", "Log in check failed for Export");
+                MSG.displayMessage(result.cause, 'TOAST', 'Log in check failed for Export');
             }
         });
     }
@@ -451,7 +455,7 @@ define(["require", "exports", "message", "log", "util", "guiState.controller", "
     function resetView() {
         blocklyWorkspace.setDevice({
             group: GUISTATE_C.getRobotGroup(),
-            robot: GUISTATE_C.getRobot()
+            robot: GUISTATE_C.getRobot(),
         });
         initProgramEnvironment();
         var toolbox = GUISTATE_C.getProgramToolbox();
