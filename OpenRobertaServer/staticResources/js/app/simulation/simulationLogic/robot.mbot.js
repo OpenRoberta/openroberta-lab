@@ -1,5 +1,5 @@
-define(["simulation.simulation", "interpreter.constants", "simulation.robot.ev3"], function(SIM, C, Ev3) {
-
+define(["require", "exports", "simulation.simulation", "interpreter.constants", "simulation.robot.ev3"], function (require, exports, simulation_simulation_1, interpreter_constants_1, simulation_robot_ev3_1) {
+    Object.defineProperty(exports, "__esModule", { value: true });
     /**
      * Creates a new robot for a simulation.
      *
@@ -11,7 +11,7 @@ define(["simulation.simulation", "interpreter.constants", "simulation.robot.ev3"
      * @class
      */
     function Mbot(pose, configuration, num, robotBehaviour) {
-        Ev3.call(this, pose, configuration, num, robotBehaviour);
+        simulation_robot_ev3_1.default.call(this, pose, configuration, num, robotBehaviour);
         this.trackwidth = 25;
         this.name = "mbot";
         this.geom = {
@@ -39,11 +39,10 @@ define(["simulation.simulation", "interpreter.constants", "simulation.robot.ev3"
         this.geom.color = "#0f9cF4";
         this.touchSensor = null;
         this.colorRange = [];
-
         this.buttons = {
             center: false,
         };
-        this.infraredSensors = {}
+        this.infraredSensors = {};
         this.infraredSensors.left = {
             x: 2,
             y: -24,
@@ -78,10 +77,7 @@ define(["simulation.simulation", "interpreter.constants", "simulation.robot.ev3"
         this.infraredSensors = {};
         this.ultraSensor = {};
         this.infraredSensors = {};
-
-
         this.brick = document.createElement("canvas");
-
         this.brick.id = "brick" + num;
         this.brick.class = "border";
         this.brick.width = 480;
@@ -89,40 +85,42 @@ define(["simulation.simulation", "interpreter.constants", "simulation.robot.ev3"
         this.brick.classList.add("border");
         this.ctx = this.brick.getContext("2d");
         var that = this;
-        this.brick.addEventListener("mousemove", function(e) {
-            const rect = that.brick.getBoundingClientRect()
-            const x = e.clientX - rect.left
-            const y = e.clientY - rect.top
-            const pixel = that.ctx.getImageData(x, y, 1, 1).data;
-            const color = pixel[0] + pixel[1] + pixel[2];
+        this.brick.addEventListener("mousemove", function (e) {
+            var rect = that.brick.getBoundingClientRect();
+            var x = e.clientX - rect.left;
+            var y = e.clientY - rect.top;
+            var pixel = that.ctx.getImageData(x, y, 1, 1).data;
+            var color = pixel[0] + pixel[1] + pixel[2];
             if (color === 0) {
                 $("#" + that.brick.id).css("cursor", "pointer");
-            } else {
+            }
+            else {
                 $("#" + that.brick.id).css("cursor", "grabbing");
             }
         });
-        var mouseDown = function(e) {
-            const rect = that.brick.getBoundingClientRect();
-            const x = e.clientX || e.changedTouches[0].clientX - rect.left;
-            const y = e.clientY || e.changedTouches[0].clientY - rect.top;
-            const pixel = that.ctx.getImageData(x, y, 1, 1).data;
-            const color = pixel[0] + pixel[1] + pixel[2];
+        var mouseDown = function (e) {
+            var rect = that.brick.getBoundingClientRect();
+            var x = e.clientX || e.changedTouches[0].clientX - rect.left;
+            var y = e.clientY || e.changedTouches[0].clientY - rect.top;
+            var pixel = that.ctx.getImageData(x, y, 1, 1).data;
+            var color = pixel[0] + pixel[1] + pixel[2];
             if (color === 0) {
                 that.buttons.center = true;
-            } else {
+            }
+            else {
                 that.buttons.center = false;
             }
-        }
-        this.brick.addEventListener("mousedown", function(e) {
+        };
+        this.brick.addEventListener("mousedown", function (e) {
             mouseDown(e);
         });
-        this.brick.addEventListener("touchstart", function(e) {
+        this.brick.addEventListener("touchstart", function (e) {
             mouseDown(e);
         });
-        this.brick.addEventListener("mouseup", function(e) {
+        this.brick.addEventListener("mouseup", function (e) {
             that.buttons.center = false;
         });
-        this.brick.addEventListener("touchend", function(e) {
+        this.brick.addEventListener("touchend", function (e) {
             that.buttons.center = false;
         });
         this.display = {
@@ -135,7 +133,7 @@ define(["simulation.simulation", "interpreter.constants", "simulation.robot.ev3"
             dx: 30,
             dy: 30,
             color: [161, 223, 250],
-            draw: function(ctx) {
+            draw: function (ctx) {
                 ctx.beginPath();
                 ctx.fillStyle = "#F1F1F1";
                 ctx.clearRect(0, 0, this.leds.length * this.dx, this.leds[0].length * this.dy + 30);
@@ -143,7 +141,8 @@ define(["simulation.simulation", "interpreter.constants", "simulation.robot.ev3"
                 ctx.fill();
                 ctx.closePath();
                 ctx.beginPath();
-                ctx.fillStyle = "grey";;
+                ctx.fillStyle = "grey";
+                ;
                 ctx.rect(0, 0, this.leds.length * this.dx, 30);
                 ctx.fill();
                 ctx.closePath();
@@ -175,7 +174,6 @@ define(["simulation.simulation", "interpreter.constants", "simulation.robot.ev3"
             },
             finished: false
         };
-
         for (var c in configuration) {
             switch (configuration[c]) {
                 case ("INFRARED"):
@@ -186,7 +184,6 @@ define(["simulation.simulation", "interpreter.constants", "simulation.robot.ev3"
                     break;
             }
         }
-
         this.leds = {};
         //right led
         this.leds[1] = {
@@ -248,16 +245,13 @@ define(["simulation.simulation", "interpreter.constants", "simulation.robot.ev3"
             ry: 0
         };
     }
-
-    Mbot.prototype = Object.create(Ev3.prototype);
+    Mbot.prototype = Object.create(simulation_robot_ev3_1.default.prototype);
     Mbot.prototype.constructor = Mbot;
-
-    Mbot.prototype.reset = function() {
+    Mbot.prototype.reset = function () {
         this.encoder.left = 0;
         this.encoder.right = 0;
         this.left = 0;
         this.right = 0;
-
         for (var key in this.timer) {
             this.timer[key] = 0;
         }
@@ -266,45 +260,45 @@ define(["simulation.simulation", "interpreter.constants", "simulation.robot.ev3"
         this.tone.duration = 0;
         this.tone.frequency = 0;
         this.webAudio.volume = 0.5;
-
         if (this.leds) {
             for (var port in this.leds) {
                 this.leds[port].color = "LIGHTGRAY";
-                this.leds[port].mode = C.OFF;
+                this.leds[port].mode = interpreter_constants_1.default.OFF;
                 this.leds[port].blink = 0;
             }
         }
         clearTimeout(this.display.timeout);
         this.display.leds = [[0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0]];
     };
-
-    Mbot.prototype.update = function() {
+    Mbot.prototype.update = function () {
         var motors = this.robotBehaviour.getActionState("motors", true);
         if (motors) {
             var left = motors.c;
             if (left !== undefined) {
                 if (left > 100) {
                     left = 100;
-                } else if (left < -100) {
+                }
+                else if (left < -100) {
                     left = -100;
                 }
-                this.left = left * C.MAXPOWER;
+                this.left = left * interpreter_constants_1.default.MAXPOWER;
             }
             var right = motors.b;
             if (right !== undefined) {
                 if (right > 100) {
                     right = 100;
-                } else if (right < -100) {
+                }
+                else if (right < -100) {
                     right = -100;
                 }
-                this.right = right * C.MAXPOWER;
+                this.right = right * interpreter_constants_1.default.MAXPOWER;
             }
         }
         var tempRight = this.right;
         var tempLeft = this.left;
         this.pose.theta = (this.pose.theta + 2 * Math.PI) % (2 * Math.PI);
-        this.encoder.left += this.left * SIM.getDt();
-        this.encoder.right += this.right * SIM.getDt();
+        this.encoder.left += this.left * simulation_simulation_1.default.getDt();
+        this.encoder.right += this.right * simulation_simulation_1.default.getDt();
         var encoder = this.robotBehaviour.getActionState("encoder", true);
         if (encoder) {
             if (encoder.leftReset) {
@@ -327,32 +321,36 @@ define(["simulation.simulation", "interpreter.constants", "simulation.robot.ev3"
             tempRight *= -1;
         }
         if (tempRight == tempLeft) {
-            var moveXY = tempRight * SIM.getDt();
+            var moveXY = tempRight * simulation_simulation_1.default.getDt();
             var mX = Math.cos(this.pose.theta) * moveXY;
             var mY = Math.sqrt(Math.pow(moveXY, 2) - Math.pow(mX, 2));
             this.pose.x += mX;
             if (moveXY >= 0) {
                 if (this.pose.theta < Math.PI) {
                     this.pose.y += mY;
-                } else {
+                }
+                else {
                     this.pose.y -= mY;
                 }
-            } else {
+            }
+            else {
                 if (this.pose.theta > Math.PI) {
                     this.pose.y += mY;
-                } else {
+                }
+                else {
                     this.pose.y -= mY;
                 }
             }
             this.pose.thetaDiff = 0;
-        } else {
+        }
+        else {
             var R = this.trackwidth / 2 * ((tempLeft + tempRight) / (tempLeft - tempRight));
             var rot = (tempLeft - tempRight) / this.trackwidth;
             var iccX = this.pose.x - (R * Math.sin(this.pose.theta));
             var iccY = this.pose.y + (R * Math.cos(this.pose.theta));
-            this.pose.x = (Math.cos(rot * SIM.getDt()) * (this.pose.x - iccX) - Math.sin(rot * SIM.getDt()) * (this.pose.y - iccY)) + iccX;
-            this.pose.y = (Math.sin(rot * SIM.getDt()) * (this.pose.x - iccX) + Math.cos(rot * SIM.getDt()) * (this.pose.y - iccY)) + iccY;
-            this.pose.thetaDiff = rot * SIM.getDt();
+            this.pose.x = (Math.cos(rot * simulation_simulation_1.default.getDt()) * (this.pose.x - iccX) - Math.sin(rot * simulation_simulation_1.default.getDt()) * (this.pose.y - iccY)) + iccX;
+            this.pose.y = (Math.sin(rot * simulation_simulation_1.default.getDt()) * (this.pose.x - iccX) + Math.cos(rot * simulation_simulation_1.default.getDt()) * (this.pose.y - iccY)) + iccY;
+            this.pose.thetaDiff = rot * simulation_simulation_1.default.getDt();
             this.pose.theta = this.pose.theta + this.pose.thetaDiff;
         }
         var sin = Math.sin(this.pose.theta);
@@ -362,7 +360,6 @@ define(["simulation.simulation", "interpreter.constants", "simulation.robot.ev3"
         this.backRight = this.translate(sin, cos, this.backRight);
         this.backLeft = this.translate(sin, cos, this.backLeft);
         this.backMiddle = this.translate(sin, cos, this.backMiddle);
-
         for (var s in this.ultraSensor) {
             this.ultraSensor[s] = this.translate(sin, cos, this.ultraSensor[s]);
         }
@@ -372,11 +369,9 @@ define(["simulation.simulation", "interpreter.constants", "simulation.robot.ev3"
             }
         }
         this.mouse = this.translate(sin, cos, this.mouse);
-
         //update led(s)
         if (this.leds) {
             var leds = this.robotBehaviour.getActionState("leds", true);
-
             for (var port in leds) {
                 var led = leds[port];
                 if (led) {
@@ -387,19 +382,19 @@ define(["simulation.simulation", "interpreter.constants", "simulation.robot.ev3"
                         this.leds[port].blinkColor = color.toUpperCase();
                     }
                     switch (mode) {
-                        case C.OFF:
+                        case interpreter_constants_1.default.OFF:
                             this.leds[port].timer = 0;
                             this.leds[port].blink = 0;
                             this.leds[port].color = "LIGHTGRAY";
                             break;
-                        case C.ON:
+                        case interpreter_constants_1.default.ON:
                             this.leds[port].timer = 0;
                             this.leds[port].blink = 0;
                             break;
-                        case C.FLASH:
+                        case interpreter_constants_1.default.FLASH:
                             this.leds[port].blink = 2;
                             break;
-                        case C.DOUBLE_FLASH:
+                        case interpreter_constants_1.default.DOUBLE_FLASH:
                             this.leds[port].blink = 4;
                             break;
                     }
@@ -407,12 +402,14 @@ define(["simulation.simulation", "interpreter.constants", "simulation.robot.ev3"
                 if (this.leds[port].blink > 0) {
                     if (this.leds[port].timer > 0.5 && this.leds[port].blink == 2) {
                         this.leds[port].color = this.leds[port].blinkColor;
-                    } else if (this.leds[port].blink == 4 && (this.leds[port].timer > 0.5 && this.leds[port].timer < 0.67 || this.leds[port].timer > 0.83)) {
+                    }
+                    else if (this.leds[port].blink == 4 && (this.leds[port].timer > 0.5 && this.leds[port].timer < 0.67 || this.leds[port].timer > 0.83)) {
                         this.leds[port].color = this.leds[port].blinkColor;
-                    } else {
+                    }
+                    else {
                         this.leds[port].color = "LIGHTGRAY";
                     }
-                    this.leds[port].timer += SIM.getDt();
+                    this.leds[port].timer += simulation_simulation_1.default.getDt();
                     if (this.leds[port].timer > 1.0) {
                         this.leds[port].timer = 0;
                     }
@@ -433,14 +430,12 @@ define(["simulation.simulation", "interpreter.constants", "simulation.robot.ev3"
                 oscillator.type = "square";
                 oscillator.connect(this.webAudio.context.destination);
                 var that = this;
-
                 function oscillatorFinish() {
                     that.tone.finished = true;
                     oscillator.disconnect(that.webAudio.context.destination);
                     delete oscillator;
                 }
-
-                oscillator.onended = function(e) {
+                oscillator.onended = function (e) {
                     oscillatorFinish();
                 };
                 oscillator.frequency.value = tone.frequency;
@@ -465,35 +460,35 @@ define(["simulation.simulation", "interpreter.constants", "simulation.robot.ev3"
             if (display.text) {
                 var that = this;
                 var textArray = generateText(display.text);
-
                 function f(textArray, that) {
                     var newArray = textArray;
                     that.display.leds = newArray;
                     if (textArray.length > 21) {
                         textArray.shift();
                         that.display.timeout = setTimeout(f, 150, textArray, that);
-                    } else {
+                    }
+                    else {
                         that.display.finished = true;
                     }
-
                 }
                 f(textArray, that);
             }
             if (display.picture) {
-                if (display.mode == C.ANIMATION) {
+                if (display.mode == interpreter_constants_1.default.ANIMATION) {
                     var animation = display.picture;
                     var that = this;
-
                     function f(animation, index, that) {
                         if (animation && animation.length > index) {
                             that.display.leds = animation[index];
                             that.display.timeout = setTimeout(f, 150, animation, index + 1, that);
-                        } else {
+                        }
+                        else {
                             that.display.finished = true;
                         }
                     }
                     f(animation, 0, that);
-                } else {
+                }
+                else {
                     this.display.leds = display.picture;
                 }
             }
@@ -502,10 +497,10 @@ define(["simulation.simulation", "interpreter.constants", "simulation.robot.ev3"
             }
             if (display.pixel) {
                 var pixel = display.pixel;
-
                 if (0 <= pixel.y == pixel.y < this.display.leds.length && 0 <= pixel.x == pixel.x < this.display.leds[0].length) {
-                    this.display.leds[pixel.y][pixel.x] = pixel.brightness * C.BRIGHTNESS_MULTIPLIER;
-                } else {
+                    this.display.leds[pixel.y][pixel.x] = pixel.brightness * interpreter_constants_1.default.BRIGHTNESS_MULTIPLIER;
+                }
+                else {
                     if (0 <= pixel.y != pixel.y < this.display.leds.length) {
                         console.warn("actions.display.pixel.y out of range: " + pixel.y);
                     }
@@ -515,8 +510,8 @@ define(["simulation.simulation", "interpreter.constants", "simulation.robot.ev3"
                 }
             }
         }
-    }
-    var generateText = function(text) {
+    };
+    var generateText = function (text) {
         var string = [];
         string.push([0, 0, 0, 0, 0, 0, 0]);
         string.push([0, 0, 0, 0, 0, 0, 0]);
@@ -524,7 +519,6 @@ define(["simulation.simulation", "interpreter.constants", "simulation.robot.ev3"
             var letter = letters[text[i]];
             if (!letter)
                 letter = letters.blank;
-
             var newLetter = Array.apply(null, Array(letter[0] * 5)).map(Number.prototype.valueOf, 0);
             for (var j = 1; j < letter.length; j++) {
                 newLetter[letter[j] - 1] = 255;
@@ -642,5 +636,5 @@ define(["simulation.simulation", "interpreter.constants", "simulation.robot.ev3"
         8: [5, 2, 4, 6, 8, 10, 11, 13, 15, 16, 18, 20, 22, 24],
         9: [5, 2, 6, 8, 10, 11, 13, 14, 16, 18, 22]
     };
-    return Mbot;
+    exports.default = Mbot;
 });

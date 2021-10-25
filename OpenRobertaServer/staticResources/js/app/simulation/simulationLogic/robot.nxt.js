@@ -1,18 +1,17 @@
-define(['simulation.simulation', 'interpreter.constants', 'simulation.robot.ev3'], function (SIM, C, Ev3) {
-
+define(["require", "exports", "simulation.simulation", "interpreter.constants", "simulation.robot.ev3"], function (require, exports, SIM, C, simulation_robot_ev3_1) {
+    Object.defineProperty(exports, "__esModule", { value: true });
     /**
      * Creates a new robot for a simulation.
-     * 
+     *
      * This robot is a differential drive Nxt. It has two wheels directly
      * connected to motors and several sensors. Each component of the robot has
      * a position in the robots coordinate system. The robot itself has a pose
      * in the global coordinate system (x, y, theta).
-     * 
+     *
      * @class
      */
     function Nxt(pose, configuration, num, robotBehaviour) {
-        Ev3.call(this, pose, configuration, num, robotBehaviour);
-
+        simulation_robot_ev3_1.default.call(this, pose, configuration, num, robotBehaviour);
         this.geom = {
             x: -20,
             y: -20,
@@ -50,10 +49,8 @@ define(['simulation.simulation', 'interpreter.constants', 'simulation.robot.ev3'
         };
         SIM.initMicrophone(this);
     }
-
-    Nxt.prototype = Object.create(Ev3.prototype);
+    Nxt.prototype = Object.create(simulation_robot_ev3_1.default.prototype);
     Nxt.prototype.constructor = Nxt;
-
     Nxt.prototype.reset = function () {
         this.encoder.left = 0;
         this.encoder.right = 0;
@@ -79,15 +76,14 @@ define(['simulation.simulation', 'interpreter.constants', 'simulation.robot.ev3'
         this.tone.frequency = 0;
         this.webAudio.volume = 0.5;
     };
-
     /**
      * Update all actions of the Nxt. The new pose is calculated with the
      * forward kinematics equations for a differential drive Nxt.
-     * 
+     *
      * @param {actions}
      *            actions from the executing program: power for left and right
      *            motors/wheels, display, led ...
-     * 
+     *
      */
     Nxt.prototype.update = function () {
         var motors = this.robotBehaviour.getActionState("motors", true);
@@ -96,7 +92,8 @@ define(['simulation.simulation', 'interpreter.constants', 'simulation.robot.ev3'
             if (left !== undefined) {
                 if (left > 100) {
                     left = 100;
-                } else if (left < -100) {
+                }
+                else if (left < -100) {
                     left = -100;
                 }
                 this.left = left * C.MAXPOWER;
@@ -105,7 +102,8 @@ define(['simulation.simulation', 'interpreter.constants', 'simulation.robot.ev3'
             if (right !== undefined) {
                 if (right > 100) {
                     right = 100;
-                } else if (right < -100) {
+                }
+                else if (right < -100) {
                     right = -100;
                 }
                 this.right = right * C.MAXPOWER;
@@ -145,18 +143,22 @@ define(['simulation.simulation', 'interpreter.constants', 'simulation.robot.ev3'
             if (moveXY >= 0) {
                 if (this.pose.theta < Math.PI) {
                     this.pose.y += mY;
-                } else {
+                }
+                else {
                     this.pose.y -= mY;
                 }
-            } else {
+            }
+            else {
                 if (this.pose.theta > Math.PI) {
                     this.pose.y += mY;
-                } else {
+                }
+                else {
                     this.pose.y -= mY;
                 }
             }
             this.pose.thetaDiff = 0;
-        } else {
+        }
+        else {
             var R = C.TRACKWIDTH / 2 * ((tempLeft + tempRight) / (tempLeft - tempRight));
             var rot = (tempLeft - tempRight) / C.TRACKWIDTH;
             var iccX = this.pose.x - (R * Math.sin(this.pose.theta));
@@ -173,7 +175,6 @@ define(['simulation.simulation', 'interpreter.constants', 'simulation.robot.ev3'
         this.backRight = this.translate(sin, cos, this.backRight);
         this.backLeft = this.translate(sin, cos, this.backLeft);
         this.backMiddle = this.translate(sin, cos, this.backMiddle);
-
         for (var s in this.touchSensor) {
             this.touchSensor[s] = this.translate(sin, cos, this.touchSensor[s]);
         }
@@ -184,14 +185,12 @@ define(['simulation.simulation', 'interpreter.constants', 'simulation.robot.ev3'
             this.ultraSensor[s] = this.translate(sin, cos, this.ultraSensor[s]);
         }
         this.mouse = this.translate(sin, cos, this.mouse);
-
         for (var s in this.touchSensor) {
             this.touchSensor[s].x1 = this.frontRight.rx;
             this.touchSensor[s].y1 = this.frontRight.ry;
             this.touchSensor[s].x2 = this.frontLeft.rx;
             this.touchSensor[s].y2 = this.frontLeft.ry;
         }
-
         //update led(s)
         var led = this.robotBehaviour.getActionState("led", true);
         if (led) {
@@ -222,13 +221,11 @@ define(['simulation.simulation', 'interpreter.constants', 'simulation.robot.ev3'
         if ((volume || volume === 0) && this.webAudio.context) {
             this.webAudio.volume = volume / 100.0;
         }
-
         function oscillatorFinish() {
             that.tone.finished = true;
             oscillator.disconnect(that.webAudio.gainNode);
             that.webAudio.gainNode.disconnect(that.webAudio.context.destination);
         }
-
         var tone = this.robotBehaviour.getActionState("tone", true);
         if (tone && this.webAudio.context) {
             var cT = this.webAudio.context.currentTime;
@@ -261,6 +258,5 @@ define(['simulation.simulation', 'interpreter.constants', 'simulation.robot.ev3'
             }
         }
     };
-
-    return Nxt;
+    exports.default = Nxt;
 });

@@ -22,7 +22,6 @@ require.config({
         'glm': 'libs/webots/glm-js.min',
         'webots.enum': 'libs/webots/enum',
         'webots.wren': 'libs/webots/wrenjs',
-
         'confDelete.controller': 'app/roberta/controller/confDelete.controller',
         'configuration.controller': 'app/roberta/controller/configuration.controller',
         'configuration.model': 'app/roberta/models/configuration.model',
@@ -66,7 +65,6 @@ require.config({
         'socket.controller': 'app/roberta/controller/socket.controller',
         'webview.controller': 'app/roberta/controller/webview.controller',
         'sourceCodeEditor.controller': 'app/roberta/controller/sourceCodeEditor.controller',
-
         'simulation.constants': 'app/simulation/simulationLogic/constants',
         'simulation.math': 'app/simulation/simulationLogic/math',
         'simulation.robot': 'app/simulation/simulationLogic/robot',
@@ -85,13 +83,11 @@ require.config({
         'simulation.robot.nxt': 'app/simulation/simulationLogic/robot.nxt',
         'simulation.scene': 'app/simulation/simulationLogic/scene',
         'simulation.simulation': 'app/simulation/simulationLogic/simulation',
-
         'comm': 'helper/comm',
         'log': 'helper/log',
         'message': 'helper/msg',
         'util': 'helper/util',
         'wrap': 'helper/wrap',
-
         'interpreter.constants': 'app/nepostackmachine/interpreter.constants',
         'interpreter.interpreter': 'app/nepostackmachine/interpreter.interpreter',
         'interpreter.aRobotBehaviour': 'app/nepostackmachine/interpreter.aRobotBehaviour',
@@ -100,17 +96,14 @@ require.config({
         'interpreter.state': 'app/nepostackmachine/interpreter.state',
         'interpreter.util': 'app/nepostackmachine/interpreter.util',
         'interpreter.jsHelper': 'app/nepostackmachine/interpreter.jsHelper',
-
         'neuralnetwork.nn': 'app/neuralnetwork/neuralnetwork.nn',
         'neuralnetwork.state': 'app/neuralnetwork/neuralnetwork.state',
         'neuralnetwork.playground': 'app/neuralnetwork/neuralnetwork.playground',
-
         'confVisualization': 'app/configVisualization/confVisualization',
         'const.robots': 'app/configVisualization/const.robots',
         'port': 'app/configVisualization/port',
         'robotBlock': 'app/configVisualization/robotBlock',
         'wires': 'app/configVisualization/wires',
-
         'webots.simulation': "app/webotsSimulation/webots.simulation"
     },
     shim: {
@@ -134,7 +127,7 @@ require.config({
         },
         'volume-meter': {
             exports: "Volume",
-            init: function() {
+            init: function () {
                 return {
                     createAudioMeter: createAudioMeter
                 };
@@ -145,14 +138,12 @@ require.config({
         }
     }
 });
-
 require(['require', 'huebee', 'wrap', 'log', 'jquery', 'blockly', 'guiState.controller', 'progList.controller', 'logList.controller', 'confList.controller',
     'progDelete.controller', 'confDelete.controller', 'progShare.controller', 'menu.controller', 'multSim.controller', 'user.controller', 'nn.controller',
     'robot.controller', 'program.controller', 'progSim.controller', 'notification.controller', 'progCode.controller', 'progDelete.controller', 'progHelp.controller',
     'legal.controller', 'progInfo.controller', 'progRun.controller', 'configuration.controller', 'language.controller', 'socket.controller',
     'progTutorial.controller', 'tutorialList.controller', 'userGroup.controller', 'volume-meter', 'user.model', 'webview.controller',
-    'sourceCodeEditor.controller', 'codeflask', 'interpreter.jsHelper', 'confVisualization', 'robotBlock'], function(
-    require) {
+    'sourceCodeEditor.controller', 'codeflask', 'interpreter.jsHelper', 'confVisualization', 'robotBlock'], function (require) {
     $ = require('jquery');
     WRAP = require('wrap');
     LOG = require('log');
@@ -193,24 +184,22 @@ require(['require', 'huebee', 'wrap', 'log', 'jquery', 'blockly', 'guiState.cont
     stackmachineJsHelper = require('interpreter.jsHelper');
     confVisualization = require('confVisualization');
     robotBlock = require('robotBlock');
-
     $(document).ready(WRAP.wrapTotal(init, 'page init'));
 });
-
 /**
  * Initializations
  */
 function init() {
     COMM.setErrorFn(handleServerErrors);
-    $.when(languageController.init()).then(function(language) {
+    $.when(languageController.init()).then(function (language) {
         return webviewController.init(language);
-    }).then(function(language, opt_data) {
+    }).then(function (language, opt_data) {
         return guiStateController.init(language, opt_data);
-    }).then(function() {
+    }).then(function () {
         return robotController.init();
-    }).then(function() {
+    }).then(function () {
         return userController.init();
-    }).then(function() {
+    }).then(function () {
         galleryListController.init();
         tutorialListController.init();
         progListController.init();
@@ -233,28 +222,25 @@ function init() {
         userGroupController.init();
         notificationController.init();
         // nnController.init();
-
-        $(".cover").fadeOut(100, function() {
+        $(".cover").fadeOut(100, function () {
             if (guiStateController.getStartWithoutPopup()) {
-                userModel.getStatusText(function(result) {
+                userModel.getStatusText(function (result) {
                     if (result.statustext[0] !== "" && result.statustext[1] !== "") {
                         $('#modal-statustext').modal("show");
                     }
                 });
-            } else {
+            }
+            else {
                 $("#show-startup-message").modal("show");
             }
         });
-
         $(".pace").fadeOut(500);
     });
 }
-
 /**
  * Handle server errors
  */
 ALLOWED_PING_NUM = 5;
-
 function handleServerErrors(jqXHR) {
     // TODO more?
     LOG.error("Client connection issue: " + jqXHR.status);
@@ -265,7 +251,8 @@ function handleServerErrors(jqXHR) {
     if (this.url !== "/rest/ping" || COMM.errorNum == ALLOWED_PING_NUM) {
         if (jqXHR.status && jqXHR.status < 500) {
             COMM.showServerError("FRONTEND");
-        } else {
+        }
+        else {
             COMM.showServerError("CONNECTION");
         }
     }

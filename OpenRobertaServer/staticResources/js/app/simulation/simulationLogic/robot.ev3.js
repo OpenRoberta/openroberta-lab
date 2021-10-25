@@ -1,22 +1,21 @@
-define(['simulation.simulation', 'interpreter.constants', 'simulation.robot', 'guiState.controller'], function (SIM, C, Robot, GUISTATE_C) {
-
+define(["require", "exports", "simulation.simulation", "interpreter.constants", "simulation.robot", "guiState.controller"], function (require, exports, SIM, C, simulation_robot_1, GUISTATE_C) {
+    Object.defineProperty(exports, "__esModule", { value: true });
     /**
      * Creates a new Ev3 for a simulation.
-     * 
+     *
      * This Ev3 is a differential drive Ev3. It has two wheels directly
      * connected to motors and several sensors. Each component of the Ev3 has a
      * position in the Ev3s coordinate system. The Ev3 itself has a pose in the
      * global coordinate system (x, y, theta).
-     * 
+     *
      * @class
      */
     function Ev3(pose, configuration, num, robotBehaviour) {
-        Robot.call(this, pose, robotBehaviour);
+        simulation_robot_1.default.call(this, pose, robotBehaviour);
         var that = this;
         this.id = num || 0;
         this.left = 0;
         this.right = 0;
-
         this.geom = {
             x: -20,
             y: -20,
@@ -157,11 +156,13 @@ define(['simulation.simulation', 'interpreter.constants', 'simulation.robot', 'g
                         if (order == 1) {
                             tmpSensor.x = 20;
                             tmpSensor.theta = -Math.PI / 4;
-                        } else if (order == 2) {
+                        }
+                        else if (order == 2) {
                             tmpSensor.x = -20;
                             tmpSensor.theta = Math.PI / 4;
                         }
-                    } else if (countUltra % 2 === 0) {
+                    }
+                    else if (countUltra % 2 === 0) {
                         switch (order) {
                             case 0:
                                 tmpSensor.x = 20;
@@ -254,7 +255,8 @@ define(['simulation.simulation', 'interpreter.constants', 'simulation.robot', 'g
             language: "en-US",
             say: function (text, lang, speed, pitch, volume) {
                 // Prevents an empty string from crashing the simulation
-                if (text === "") text = " ";
+                if (text === "")
+                    text = " ";
                 // IE apparently doesnt support default parameters, this prevents it from crashing the whole simulation
                 speed = (speed === undefined) ? 30 : speed;
                 pitch = (pitch === undefined) ? 50 : pitch;
@@ -264,7 +266,6 @@ define(['simulation.simulation', 'interpreter.constants', 'simulation.robot', 'g
                 // Convert to SpeechSynthesis values
                 speed = speed * 0.015 + 0.5; // use range 0.5 - 2; range should be 0.1 - 10, but some voices dont accept values beyond 2
                 pitch = pitch * 0.02 + 0.001; // use range 0.0 - 2.0; + 0.001 as some voices dont accept 0
-
                 var utterThis = new SpeechSynthesisUtterance(text);
                 // https://bugs.chromium.org/p/chromium/issues/detail?id=509488#c11
                 // Workaround to keep utterance object from being garbage collected by the browser
@@ -272,7 +273,8 @@ define(['simulation.simulation', 'interpreter.constants', 'simulation.robot', 'g
                 utterances.push(utterThis);
                 if (lang === "") {
                     console.log("Language is not supported!");
-                } else {
+                }
+                else {
                     var voices = SpeechSynthesis.getVoices();
                     for (var i = 0; i < voices.length; i++) {
                         if (voices[i].lang.indexOf(lang) !== -1 || voices[i].lang.indexOf(lang.substr(0, 2)) !== -1) {
@@ -293,7 +295,8 @@ define(['simulation.simulation', 'interpreter.constants', 'simulation.robot', 'g
                 //does not work for volume = 0 thus workaround with if statement
                 if (volume != 0) {
                     SpeechSynthesis.speak(utterThis);
-                } else {
+                }
+                else {
                     that.sayText.finished = true;
                 }
             },
@@ -327,7 +330,6 @@ define(['simulation.simulation', 'interpreter.constants', 'simulation.robot', 'g
                         a.gainNode.gain.setValueAtTime(a.volume, ct + (i * 300) / 1000);
                     }
                     a.oscillator.stop(ct + (1100) / 1000);
-
                 },
                 3: function (a) {
                     var frequency = 700;
@@ -350,10 +352,8 @@ define(['simulation.simulation', 'interpreter.constants', 'simulation.robot', 'g
         };
         this.brick = '<svg id="brick' + this.id + '" xmlns="http://www.w3.org/2000/svg" width="313" height="482" viewBox="0 0 313 482">' + '<path stroke-alignment="inner" d="M1 88h17.5v-87h276v87h17.5v306h-17.5v87h-276v-87h-17.5z" style="fill:#fff;stroke:#000;stroke-width:2"/>' + '<rect x="19.5" y="2" width="274" height="225" style="fill:#A3A2A4;stroke:none"/>' + '<rect x="19.5" y="202" width="274" height="25" style="fill:#635F61;stroke:none"/>' + '<path d="M45 47.4c0-5.3 5.7-7.7 5.7-7.7s206.7 0 211 0c4.3 0 6.7 7.7 6.7 7.7v118.3c0 5.3-5.7 7.7-5.7 7.7s-206.7 0-211 0S44 164.7 44 164.7" fill="#333"/>' + '<rect x="67" y="41" width="180" height="130" fill="#ddd"/>' + '<line x1="155.7" y1="246" x2="155.7" y2="172.4" style="fill:none;stroke-width:9;stroke:#000"/>' + '<path id="led' + this.id + '" fill="url("#LIGHTGRAY' + this.id + '") d="M155.5 242.5 l20 0 40 40 0 52 -40 40 -40 0 -40 -40 0 -52 40 -40z" fill="#977" />' + '<path id="up' + this.id + '" class="simKey" d="M156 286c0 0 7 0 14.3-0.2s9 7.2 9 7.2v12.3h10.5v-19.5l9.7-9.7c0 0 2.8-0.2 0-3.3-2.8-3.2-26.5-25.7-26.5-25.7h-17-0.3-17c0 0-23.7 22.5-26.5 25.7s0 3.3 0 3.3l9.7 9.7v19.5h10.5v-12.3c0 0 1.7-7.3 9-7.2s14.3 0.2 14.3 0.2z" style="fill:#A3A2A4;stroke-width:2;stroke:#000"/>' + '<path id="down' + this.id + '" class="simKey" d="M156 331c0 0 7 0 14.3 0.2s9-7.2 9-7.2v-12.3h10.5v19.5l9.7 9.7c0 0 2.8 0.2 0 3.3-2.8 3.2-26.5 25.7-26.5 25.7h-17-0.3-17c0 0-23.7-22.5-26.5-25.7s0-3.3 0-3.3l9.7-9.7v-19.5h10.5v12.3c0 0 1.7 7.3 9 7.2s14.3-0.2 14.3-0.2z" style="fill:#A3A2A4;stroke-width:2;stroke:#000"/>' + '<path id="enter' + this.id + '" class="simKey" d="M138 293c0-1.4 0.9-2 0.9-2s32.6 0 33.2 0 1.1 2 1.1 2v31.4c0 1.4-0.9 2-0.9 2s-32.5 0-33.2 0c-0.7 0-1-2-1-2V293.1z" style="fill:#3C3C3B;stroke-width:2;stroke:#000"/>' + '<path id="escape' + this.id + '" class="simKey" d="M37 227v26.4c0 0 1.2 4.8 4.9 4.8s44.8 0 44.8 0l15.7-15.6v-15.7z" style="fill:#A3A2A4;stroke-width:2;stroke:#000"/>' + '<path id="left' + this.id + '" class="simKey" d="M69 309c0 12.5 14 17.9 14 17.9s27.1 0 29.8 0 2.8-1.7 2.8-1.7v-16.4 0.1-16.4c0 0-0.2-1.7-2.8-1.7s-29.7 0-29.7 0S69.3 296.7 69.3 309.2z" style="fill:#A3A2A4;stroke-width:2;stroke:#000"/>' + '<path id="right' + this.id + '" class="simKey" d="M242 309c0 12.5-14 17.9-14 17.9s-27.1 0-29.7 0-2.8-1.7-2.8-1.7v-16.4 0.1-16.4c0 0 0.2-1.7 2.8-1.7s29.8 0 29.8 0S241.9 296.7 241.9 309.2z" style="fill:#A3A2A4;stroke-width:2;stroke:#000"/>' + '<rect x="19" y="412.4" width="274" height="67.7" style="fill:#A3A2A4"/>' + '<rect x="2" y="376" width="17.5" height="17.5" style="fill:#635F61"/>' + '<rect x="294" y="376" width="17.5" height="17.5" style="fill:#635F61"/>' + '<rect x="231.7" y="426.6" width="9.6" height="5.4" style="fill:#E52520;stroke:#000"/>' + '<rect x="246.2" y="426.7" width="9.6" height="5.4" style="fill:#E52520;stroke:#000"/>' + '<rect x="227.5" y="432.4" width="32.6" height="26.2" style="fill:#E52520;stroke:#000"/>' + '<g id="display' + this.id + '" clip-path="url(#clipPath)" fill="#000" transform="translate(67, 41)" font-family="Courier New" font-size="10pt">' + '</g>' + '<defs>' + '<clipPath id="clipPath">' + '<rect x="0" y="0" width="178" height="128"/>' + '</clipPath>' + '<radialGradient id="ORANGE' + this.id + '" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">' + '<stop offset="0%" style="stop-color:rgb(255,255,255);stop-opacity:0" />' + '<stop offset="100%" style="stop-color:rgb( 255, 165, 0);stop-opacity:1" />' + '</radialGradient>' + '<radialGradient id="RED' + this.id + '" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">' + '<stop offset="0%" style="stop-color:rgb(255,255,255);stop-opacity:0" />' + '<stop offset="100%" style="stop-color:rgb(255,0,0);stop-opacity:1" />' + '</radialGradient>' + '<radialGradient id="GREEN' + this.id + '" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">' + '<stop offset="0%" style="stop-color:rgb(255,255,255);stop-opacity:0" />' + '<stop offset="100%" style="stop-color:rgb(0,128,0);stop-opacity:1" />' + '</radialGradient>' + '<radialGradient id="LIGHTGRAY' + this.id + '" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">' + '<stop offset="0%" style="stop-color:rgb(255,255,255);stop-opacity:0" />' + '<stop offset="100%" style="stop-color:rgb(211,211,211);stop-opacity:1" />' + '</radialGradient>' + '</defs>' + '</svg>';
     }
-
-    Ev3.prototype = Object.create(Robot.prototype);
+    Ev3.prototype = Object.create(simulation_robot_1.default.prototype);
     Ev3.prototype.constructor = Ev3;
-
     Ev3.prototype.reset = function () {
         this.encoder.left = 0;
         this.encoder.right = 0;
@@ -382,15 +382,14 @@ define(['simulation.simulation', 'interpreter.constants', 'simulation.robot', 'g
         this.tone.frequency = 0;
         this.webAudio.volume = 0.5;
     };
-
     /**
      * Update all actions of the Ev3. The new pose is calculated with the
      * forward kinematics equations for a differential drive Ev3.
-     * 
+     *
      * @param {actions}
      *            actions from the executing program: power for left and right
      *            motors/wheels, display, led ...
-     * 
+     *
      */
     Ev3.prototype.update = function () {
         // update pose
@@ -400,7 +399,8 @@ define(['simulation.simulation', 'interpreter.constants', 'simulation.robot', 'g
             if (left !== undefined) {
                 if (left > 100) {
                     left = 100;
-                } else if (left < -100) {
+                }
+                else if (left < -100) {
                     left = -100;
                 }
                 this.left = left * C.MAXPOWER;
@@ -409,7 +409,8 @@ define(['simulation.simulation', 'interpreter.constants', 'simulation.robot', 'g
             if (right !== undefined) {
                 if (right > 100) {
                     right = 100;
-                } else if (right < -100) {
+                }
+                else if (right < -100) {
                     right = -100;
                 }
                 this.right = right * C.MAXPOWER;
@@ -449,18 +450,22 @@ define(['simulation.simulation', 'interpreter.constants', 'simulation.robot', 'g
             if (moveXY >= 0) {
                 if (this.pose.theta < Math.PI) {
                     this.pose.y += mY;
-                } else {
+                }
+                else {
                     this.pose.y -= mY;
                 }
-            } else {
+            }
+            else {
                 if (this.pose.theta > Math.PI) {
                     this.pose.y += mY;
-                } else {
+                }
+                else {
                     this.pose.y -= mY;
                 }
             }
             this.pose.thetaDiff = 0;
-        } else {
+        }
+        else {
             var R = C.TRACKWIDTH / 2 * ((tempLeft + tempRight) / (tempLeft - tempRight));
             var rot = (tempLeft - tempRight) / C.TRACKWIDTH;
             var iccX = this.pose.x - (R * Math.sin(this.pose.theta));
@@ -477,7 +482,6 @@ define(['simulation.simulation', 'interpreter.constants', 'simulation.robot', 'g
         this.backRight = this.translate(sin, cos, this.backRight);
         this.backLeft = this.translate(sin, cos, this.backLeft);
         this.backMiddle = this.translate(sin, cos, this.backMiddle);
-
         for (var s in this.touchSensor) {
             this.touchSensor[s] = this.translate(sin, cos, this.touchSensor[s]);
         }
@@ -488,14 +492,12 @@ define(['simulation.simulation', 'interpreter.constants', 'simulation.robot', 'g
             this.ultraSensor[s] = this.translate(sin, cos, this.ultraSensor[s]);
         }
         this.mouse = this.translate(sin, cos, this.mouse);
-
         for (var s in this.touchSensor) {
             this.touchSensor[s].x1 = this.frontRight.rx;
             this.touchSensor[s].y1 = this.frontRight.ry;
             this.touchSensor[s].x2 = this.frontLeft.rx;
             this.touchSensor[s].y2 = this.frontLeft.ry;
         }
-
         //update led(s)
         var led = this.robotBehaviour.getActionState("led", true);
         if (led) {
@@ -526,9 +528,11 @@ define(['simulation.simulation', 'interpreter.constants', 'simulation.robot', 'g
         if (this.led.blink > 0) {
             if (this.led.timer > 0.5 && this.led.blink == 2) {
                 this.led.color = this.led.blinkColor;
-            } else if (this.led.blink == 4 && (this.led.timer > 0.5 && this.led.timer < 0.67 || this.led.timer > 0.83)) {
+            }
+            else if (this.led.blink == 4 && (this.led.timer > 0.5 && this.led.timer < 0.67 || this.led.timer > 0.83)) {
                 this.led.color = this.led.blinkColor;
-            } else {
+            }
+            else {
                 this.led.color = 'LIGHTGRAY';
             }
             this.led.timer += SIM.getDt();
@@ -558,13 +562,11 @@ define(['simulation.simulation', 'interpreter.constants', 'simulation.robot', 'g
         if ((volume || volume === 0) && this.webAudio.context) {
             this.webAudio.volume = volume / 100.0;
         }
-
         function oscillatorFinish() {
             that.tone.finished = true;
             oscillator.disconnect(that.webAudio.gainNode);
             that.webAudio.gainNode.disconnect(that.webAudio.context.destination);
         }
-
         var tone = this.robotBehaviour.getActionState("tone", true);
         if (tone && this.webAudio.context) {
             var cT = this.webAudio.context.currentTime;
@@ -612,7 +614,7 @@ define(['simulation.simulation', 'interpreter.constants', 'simulation.robot', 'g
     };
     /**
      * Translate a position to the global coordinate system
-     * 
+     *
      * @param {Number}
      *            sin the sine from the orientation from the Ev3
      * @param {Number}
@@ -620,13 +622,12 @@ define(['simulation.simulation', 'interpreter.constants', 'simulation.robot', 'g
      * @param {point}
      *            point to translate
      * @returns the translated point
-     * 
+     *
      */
     Ev3.prototype.translate = function (sin, cos, point) {
         point.rx = this.pose.x - point.y * cos + point.x * sin;
         point.ry = this.pose.y - point.y * sin - point.x * cos;
         return point;
     };
-
-    return Ev3;
+    exports.default = Ev3;
 });

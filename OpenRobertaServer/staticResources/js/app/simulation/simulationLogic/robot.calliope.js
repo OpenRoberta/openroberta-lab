@@ -1,5 +1,5 @@
-define(['simulation.simulation', 'simulation.robot.mbed'], function(SIM, Mbed) {
-
+define(["require", "exports", "simulation.simulation", "simulation.robot.mbed", "blockly"], function (require, exports, SIM, simulation_robot_mbed_1, Blockly) {
+    Object.defineProperty(exports, "__esModule", { value: true });
     /**
      * Creates a new Calliope device for a simulation.
      *
@@ -9,14 +9,14 @@ define(['simulation.simulation', 'simulation.robot.mbed'], function(SIM, Mbed) {
      * @class
      */
     function Calliope(pose, configuration, num, robotBehaviour) {
-        Mbed.call(this, pose, num, robotBehaviour);
+        simulation_robot_mbed_1.default.call(this, pose, num, robotBehaviour);
         var that = this;
         this.led = {
             color: 'grey',
             x: 0,
             y: -90,
             r: 10,
-            draw: function(canvas) {
+            draw: function (canvas) {
                 if (this.color != 'grey') {
                     canvas.arc(this.x, this.y, this.r - 5, 0, Math.PI * 2);
                     canvas.fill();
@@ -33,26 +33,23 @@ define(['simulation.simulation', 'simulation.robot.mbed'], function(SIM, Mbed) {
         this.motorA = {
             // Copyright (C) Ken Fyrstenberg / Epistemex
             // MIT license (header required)
-            cx: -45, // center x
-            cy: -130, // center y
+            cx: -45,
+            cy: -130,
             theta: 0,
             color: 'grey',
-
-            draw: function(canvas) {
+            draw: function (canvas) {
                 var notches = 7, // num. of notches
-                    radiusO = 20, // outer radius
-                    radiusI = 15, // inner radius
-                    radiusH = 10, // hole radius
-                    taperO = 50, // outer taper %
-                    taperI = 30, // inner taper %
-
-                    pi2 = 2 * Math.PI, // cache 2xPI (360deg)
-                    angle = pi2 / (notches * 2), // angle between notches
-                    taperAI = angle * taperI * 0.005, // inner taper offset
-                    taperAO = angle * taperO * 0.005, // outer taper offset
-                    a = angle, // iterator (angle)
-                    toggle = false; // notch radis (i/o)
-
+                radiusO = 20, // outer radius
+                radiusI = 15, // inner radius
+                radiusH = 10, // hole radius
+                taperO = 50, // outer taper %
+                taperI = 30, // inner taper %
+                pi2 = 2 * Math.PI, // cache 2xPI (360deg)
+                angle = pi2 / (notches * 2), // angle between notches
+                taperAI = angle * taperI * 0.005, // inner taper offset
+                taperAO = angle * taperO * 0.005, // outer taper offset
+                a = angle, // iterator (angle)
+                toggle = false; // notch radis (i/o)
                 // starting point
                 canvas.save();
                 canvas.beginPath();
@@ -60,7 +57,6 @@ define(['simulation.simulation', 'simulation.robot.mbed'], function(SIM, Mbed) {
                 canvas.rotate(-this.theta);
                 canvas.beginPath();
                 canvas.moveTo(radiusO * Math.cos(taperAO), radiusO * Math.sin(taperAO));
-
                 // loop
                 toogle = false;
                 a = angle;
@@ -78,37 +74,30 @@ define(['simulation.simulation', 'simulation.robot.mbed'], function(SIM, Mbed) {
                     // switch
                     toggle = !toggle;
                 }
-
                 // close the final line
                 canvas.closePath();
-
                 canvas.fillStyle = this.color;
                 canvas.fill();
-
                 canvas.lineWidth = 2;
                 canvas.strokeStyle = '#000';
                 canvas.stroke();
-
                 // Punch hole in gear
                 canvas.beginPath();
                 canvas.globalCompositeOperation = 'destination-out';
                 canvas.moveTo(radiusH, 0);
                 canvas.arc(0, 0, radiusH, 0, pi2);
                 canvas.closePath();
-
                 canvas.fill();
-
                 canvas.globalCompositeOperation = 'source-over';
                 canvas.stroke();
                 canvas.restore();
             }
         };
         this.motorB = {
-            cx: 45, // center x
-            cy: -130, // center y
+            cx: 45,
+            cy: -130,
             theta: 0,
             color: 'grey',
-
             draw: that.motorA.draw
         };
         this.endless = true;
@@ -132,24 +121,22 @@ define(['simulation.simulation', 'simulation.robot.mbed'], function(SIM, Mbed) {
             yBothB: 113.625,
             xBothLabel: -198.0625,
             yBothLabel: 143.0625,
-            draw: function(canvas) {
+            draw: function (canvas) {
                 canvas.beginPath();
                 canvas.save();
                 canvas.scale(1, -1);
-                canvas.translate(this.xBothLabel, -this.yBothLabel)
-                canvas.textAlign = "center"
+                canvas.translate(this.xBothLabel, -this.yBothLabel);
+                canvas.textAlign = "center";
                 canvas.font = "bold 14px Roboto";
-                canvas.textBaseline = "middle"
+                canvas.textBaseline = "middle";
                 canvas.fillStyle = "black";
                 canvas.fillText("A + B", 0, 0);
-                canvas.restore()
-
+                canvas.restore();
                 canvas.globalAlpha = that.buttons.A && that.buttons.B ? 0.7 : 0.6;
                 canvas.fillStyle = this.colorA;
                 canvas.beginPath();
                 canvas.arc(this.xBothA, this.yBothA, this.rBoth, 0, Math.PI * 2);
                 canvas.fill();
-
                 canvas.fillStyle = this.colorB;
                 canvas.beginPath();
                 canvas.arc(this.xBothB, this.yBothB, this.rBoth, 0, Math.PI * 2);
@@ -162,7 +149,7 @@ define(['simulation.simulation', 'simulation.robot.mbed'], function(SIM, Mbed) {
             y: -0.5,
             r: 26,
             touched: false,
-            draw: function(canvas) {
+            draw: function (canvas) {
                 if (this.touched) {
                     canvas.fillStyle = 'green';
                     canvas.beginPath();
@@ -189,7 +176,8 @@ define(['simulation.simulation', 'simulation.robot.mbed'], function(SIM, Mbed) {
                     canvas.fillText('\u2293', this.x - 14, -this.y + 41);
                     canvas.fillText(this.digitalOut, this.x + 6, -this.y + 41);
                     canvas.restore();
-                } else if (this.digitalIn !== undefined) {
+                }
+                else if (this.digitalIn !== undefined) {
                     canvas.fillStyle = 'red';
                     canvas.beginPath();
                     canvas.save();
@@ -204,7 +192,8 @@ define(['simulation.simulation', 'simulation.robot.mbed'], function(SIM, Mbed) {
                     canvas.fillText('\u2293', this.x - 22, -this.y + 41);
                     canvas.fillText(this.digitalIn, this.x + 15, -this.y + 41);
                     canvas.restore();
-                } else if (this.analogOut !== undefined) {
+                }
+                else if (this.analogOut !== undefined) {
                     canvas.fillStyle = 'green';
                     canvas.beginPath();
                     canvas.save();
@@ -219,7 +208,8 @@ define(['simulation.simulation', 'simulation.robot.mbed'], function(SIM, Mbed) {
                     canvas.fillText('\u223F', this.x - 14, -this.y + 41);
                     canvas.fillText(this.analogOut, this.x + 6, -this.y + 41);
                     canvas.restore();
-                } else if (this.analogIn !== undefined) {
+                }
+                else if (this.analogIn !== undefined) {
                     canvas.fillStyle = 'red';
                     canvas.beginPath();
                     canvas.save();
@@ -260,12 +250,10 @@ define(['simulation.simulation', 'simulation.robot.mbed'], function(SIM, Mbed) {
         };
         SIM.initMicrophone(this);
     }
-
-    Calliope.prototype = Object.create(Mbed.prototype);
+    Calliope.prototype = Object.create(simulation_robot_mbed_1.default.prototype);
     Calliope.prototype.constructor = Calliope;
-
-    Calliope.prototype.reset = function() {
-        Mbed.prototype.reset.apply(this);
+    Calliope.prototype.reset = function () {
+        simulation_robot_mbed_1.default.prototype.reset.apply(this);
         this.motorA.power = 0;
         this.motorB.power = 0;
         clearTimeout(this.motorB.timeout);
@@ -273,7 +261,6 @@ define(['simulation.simulation', 'simulation.robot.mbed'], function(SIM, Mbed) {
         this.led.color = 'grey';
         this.webAudio.volume = 0.5;
     };
-
     /**
      * Update all actions of the Calliope.
      *
@@ -281,20 +268,20 @@ define(['simulation.simulation', 'simulation.robot.mbed'], function(SIM, Mbed) {
      *            actions from the executing program: display, led ...
      *
      */
-    Calliope.prototype.update = function() {
-        Mbed.prototype.update.apply(this);
+    Calliope.prototype.update = function () {
+        simulation_robot_mbed_1.default.prototype.update.apply(this);
         // update debug
         var led = this.robotBehaviour.getActionState("led", true);
         if (led) {
             if (led.color) {
                 this.led.color = led.color;
-            } else {
+            }
+            else {
                 var mode = led.mode;
                 if (mode !== undefined && mode == 'off')
                     this.led.color = 'grey';
             }
         }
-
         // update motors
         var motors = this.robotBehaviour.getActionState("motors", true);
         if (motors) {
@@ -323,8 +310,7 @@ define(['simulation.simulation', 'simulation.robot.mbed'], function(SIM, Mbed) {
             }
         }
     };
-
-    Calliope.prototype.handleMouse = function(e, offsetX, offsetY, scale, w, h) {
+    Calliope.prototype.handleMouse = function (e, offsetX, offsetY, scale, w, h) {
         w = w / scale;
         h = h / scale;
         var X = e.clientX || e.originalEvent.touches[0].pageX;
@@ -345,7 +331,6 @@ define(['simulation.simulation', 'simulation.robot.mbed'], function(SIM, Mbed) {
         var dxReset = startX - this.button.xReset;
         var dyReset = startY + this.button.yReset;
         var Reset = (dxReset * dxReset + dyReset * dyReset < this.button.rReset * this.button.rReset / scsq);
-
         var dxBothA = startX - this.button.xBothA;
         var dyBothA = startY + this.button.yBothA;
         var dxBothB = startX - this.button.xBothB;
@@ -353,7 +338,6 @@ define(['simulation.simulation', 'simulation.robot.mbed'], function(SIM, Mbed) {
         var bothA = (Math.pow(dxBothA, 2) + Math.pow(dyBothA, 2) < Math.pow(this.button.rBoth, 2) / scsq);
         var bothB = (Math.pow(dxBothB, 2) + Math.pow(dyBothB, 2) < Math.pow(this.button.rBoth, 2) / scsq);
         var bothButtons = bothA || bothB;
-
         var dxPin0 = startX - this.pin0.x;
         var dyPin0 = startY + this.pin0.y;
         var Pin0 = (dxPin0 * dxPin0 + dyPin0 * dyPin0 < this.pin0.r * this.pin0.r / scsq);
@@ -378,27 +362,37 @@ define(['simulation.simulation', 'simulation.robot.mbed'], function(SIM, Mbed) {
             if (e.type === 'mousedown' || e.type === 'touchstart') {
                 if (A) {
                     this.buttons.A = true;
-                } else if (B) {
+                }
+                else if (B) {
                     this.buttons.B = true;
-                } else if (Display && !lightSliderActive) {
+                }
+                else if (Display && !lightSliderActive) {
                     this.display.lightLevel = 150;
-                } else if (Reset) {
+                }
+                else if (Reset) {
                     this.buttons.Reset = true;
-                } else if (bothButtons) {
+                }
+                else if (bothButtons) {
                     this.buttons.A = true;
                     this.buttons.B = true;
-                } else if (Pin0) {
+                }
+                else if (Pin0) {
                     this.pin0.touched = true;
-                } else if (Pin1) {
+                }
+                else if (Pin1) {
                     this.pin1.touched = true;
-                } else if (Pin2) {
+                }
+                else if (Pin2) {
                     this.pin2.touched = true;
-                } else if (Pin3) {
+                }
+                else if (Pin3) {
                     this.pin3.touched = true;
                 }
-            } else if (e.type === 'mousemove' && Display && !lightSliderActive) {
+            }
+            else if (e.type === 'mousemove' && Display && !lightSliderActive) {
                 this.display.lightLevel = 50;
-            } else if (e.type === 'mouseup') {
+            }
+            else if (e.type === 'mouseup') {
                 this.pin0.touched = false;
                 this.pin1.touched = false;
                 this.pin2.touched = false;
@@ -408,15 +402,16 @@ define(['simulation.simulation', 'simulation.robot.mbed'], function(SIM, Mbed) {
             }
             if (Display && !lightSliderActive) {
                 $("#robotLayer").css('cursor', 'crosshair');
-            } else {
+            }
+            else {
                 $("#robotLayer").css('cursor', 'pointer');
             }
-        } else {
+        }
+        else {
             $("#robotLayer").css('cursor', 'auto');
         }
     };
-
-    Calliope.prototype.controle = function() {
+    Calliope.prototype.controle = function () {
         $('#simRobotContent').append('<div id="mbedContent"><div id="mbedButtons" class="btn-group btn-group-vertical" data-toggle="buttons">' + //
             '<label style="margin: 8px;margin-top: 12px; margin-left: 0">' + Blockly.Msg.SENSOR_GESTURE + '</label>' + //
             '<label class="btn simbtn active"><input type="radio" id="up" name="options" autocomplete="off">' + Blockly.Msg.SENSOR_GESTURE_UP + '</label>' + //
@@ -438,6 +433,5 @@ define(['simulation.simulation', 'simulation.robot.mbed'], function(SIM, Mbed) {
             + '</option><option value="analog">analog</option><option value="digital">digital</option></select></label>' + //
             '<div style="margin:8px 0; "><input id="slider1" type="range" min="0" max="1023" value="0" step="1" /></div></div>'); //
     };
-
-    return Calliope;
+    exports.default = Calliope;
 });

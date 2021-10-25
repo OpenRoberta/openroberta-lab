@@ -1,5 +1,4 @@
 define(["require", "exports"], function (require, exports) {
-    "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var DEFAULT_COLORS = { "5V": "#f01414", "GND": "#333333" };
     var DARK = 50;

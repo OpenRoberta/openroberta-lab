@@ -1,56 +1,50 @@
-define(['exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'program.controller', 'configuration.controller', 'program.model',
-    'robot.controller', 'blockly', 'jquery', 'jquery-validate'
-], function(exports, COMM, MSG, LOG, UTIL, GUISTATE_C, PROGRAM_C,
-    CONFIGURATION_C, PROGRAM, ROBOT_C, Blockly, $) {
-
+define(["require", "exports", "message", "log", "util", "guiState.controller", "program.controller", "configuration.controller", "program.model", "robot.controller", "blockly", "jquery", "jquery-validate"], function (require, exports, MSG, LOG, UTIL, GUISTATE_C, PROGRAM_C, CONFIGURATION_C, PROGRAM, ROBOT_C, Blockly, $) {
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.importNepoCodeToCompile = exports.importSourceCodeToCompile = exports.loadProgramFromXML = exports.openProgramFromXML = exports.importSourceCode = exports.importXml = exports.init = void 0;
     function init(callback) {
         $('#fileSelector').val(null);
         $('#fileSelector').off();
-        $('#fileSelector').onWrap('change', function(event) {
+        $('#fileSelector').onWrap('change', function (event) {
             var file = event.target.files[0];
             var reader = new FileReader();
-            reader.onload = function(event) {
+            reader.onload = function (event) {
                 var name = UTIL.getBasename(file.name);
                 if ($.isFunction(callback)) {
                     callback(name, event.target.result);
                 }
-            }
+            };
             reader.readAsText(file);
             return false;
         }, 'import clicked');
     }
     exports.init = init;
-
     function importXml() {
         init(loadProgramFromXML);
         $('#fileSelector').attr("accept", ".xml");
         $('#fileSelector').clickWrap(); // opening dialog
     }
     exports.importXml = importXml;
-
     function importSourceCode(callback) {
         init(callback);
         $('#fileSelector').attr("accept", "." + GUISTATE_C.getSourceCodeFileExtension());
         $('#fileSelector').clickWrap(); // opening dialog
     }
     exports.importSourceCode = importSourceCode;
-
     function openProgramFromXML(target) {
         var robotType = target[1];
         var programName = target[2];
         var programXml = target[3];
-        ROBOT_C.switchRobot(robotType, true, function() {
+        ROBOT_C.switchRobot(robotType, true, function () {
             loadProgramFromXML(programName, programXml);
         });
     }
     exports.openProgramFromXML = openProgramFromXML;
-
     function loadProgramFromXML(name, xml) {
         if (xml.search("<export") === -1) {
             xml = '<export xmlns="http://de.fhg.iais.roberta.blockly"><program>' + xml + '</program><config>' + GUISTATE_C.getConfigurationXML() +
                 '</config></export>';
         }
-        PROGRAM.loadProgramFromXML(name, xml, function(result) {
+        PROGRAM.loadProgramFromXML(name, xml, function (result) {
             if (result.rc == "ok") {
                 // save the old program and configuration that it can be restored
                 var dom = Blockly.Xml.workspaceToDom(GUISTATE_C.getBlocklyWorkspace());
@@ -59,7 +53,6 @@ define(['exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'pro
                 dom = Blockly.Xml.workspaceToDom(GUISTATE_C.getBricklyWorkspace());
                 var xmlConfOld = Blockly.Xml.domToText(dom);
                 GUISTATE_C.setConfigurationXML(xmlConfOld);
-
                 // on server side we only test case insensitive block names, displaying xml can still fail:
                 result.programSaved = false;
                 result.name = 'NEPOprog';
@@ -74,7 +67,8 @@ define(['exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'pro
                     GUISTATE_C.setProgramXML(result.progXML);
                     GUISTATE_C.setConfigurationName("");
                     LOG.info('show program ' + GUISTATE_C.getProgramName());
-                } catch (e) {
+                }
+                catch (e) {
                     // restore old Program
                     LOG.error(e.message);
                     GUISTATE_C.setProgramXML(xmlProgOld);
@@ -85,17 +79,18 @@ define(['exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'pro
                     result.rc = "error";
                     MSG.displayInformation(result, "", Blockly.Msg.ORA_PROGRAM_IMPORT_ERROR, name);
                 }
-            } else {
+            }
+            else {
                 if (result.message === "ORA_PROGRAM_IMPORT_ERROR_WRONG_ROBOT_TYPE") {
                     MSG.displayInformation(result, "", result.message, result.robotTypes);
-                } else {
+                }
+                else {
                     MSG.displayInformation(result, "", result.message, name);
                 }
             }
         });
     }
     exports.loadProgramFromXML = loadProgramFromXML;
-
     /**
      * Open a file select dialog to load source code from local disk and send it
      * to the cross compiler
@@ -106,9 +101,8 @@ define(['exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'pro
         $('#fileSelector').clickWrap(); // opening dialog
     }
     exports.importSourceCodeToCompile = importSourceCodeToCompile;
-
     function compileFromSource(name, source) {
-        PROGRAM.compileN(name, source, GUISTATE_C.getLanguage(), function(result) {
+        PROGRAM.compileN(name, source, GUISTATE_C.getLanguage(), function (result) {
             var alertMsg = result.rc;
             if (result.parameters !== undefined) {
                 alertMsg += "\nMessage is:\n" + result.parameters.MESSAGE;
@@ -116,21 +110,18 @@ define(['exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'pro
             alert(alertMsg);
         });
     }
-
     /**
      * Open a file select dialog to load source code from local disk and send it
      * to the cross compiler
      */
-
     function importNepoCodeToCompile() {
         init(compileFromNepoCode);
         $('#fileSelector').attr("accept", ".xml");
         $('#fileSelector').clickWrap(); // opening dialog
     }
     exports.importNepoCodeToCompile = importNepoCodeToCompile;
-
     function compileFromNepoCode(name, source) {
-        PROGRAM.compileP(name, source, GUISTATE_C.getLanguage(), function(result) {
+        PROGRAM.compileP(name, source, GUISTATE_C.getLanguage(), function (result) {
             alert(result.rc);
         });
     }

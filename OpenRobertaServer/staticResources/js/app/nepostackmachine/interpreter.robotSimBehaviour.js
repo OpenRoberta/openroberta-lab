@@ -12,7 +12,6 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 define(["require", "exports", "./interpreter.aRobotBehaviour", "./interpreter.constants", "./interpreter.util", "util"], function (require, exports, interpreter_aRobotBehaviour_1, C, U, UTIL) {
-    "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.RobotMbedBehaviour = void 0;
     var RobotMbedBehaviour = /** @class */ (function (_super) {
@@ -370,7 +369,6 @@ define(["require", "exports", "./interpreter.aRobotBehaviour", "./interpreter.co
                 duration = imageLen * 200;
             }
             this.hardwareState.actions.display = {};
-            // @ts-ignore
             this.hardwareState.actions.display.picture = UTIL.clone(image);
             if (mode) {
                 this.hardwareState.actions.display.mode = mode.toLowerCase();

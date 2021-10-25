@@ -48,7 +48,6 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 define(["require", "exports", "jquery", "guiState.controller"], function (require, exports, $, guiStateController) {
-    "use strict";
     var MODE = "x3d";
     var BROADCAST = false;
     var StreamingViewer = /** @class */ (function () {

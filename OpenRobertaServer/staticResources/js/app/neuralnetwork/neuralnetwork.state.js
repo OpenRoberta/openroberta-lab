@@ -4,7 +4,6 @@
  * The Open Roberta Lab is open source and uses the Apache 2.0 License, see https://www.apache.org/licenses/LICENSE-2.0
  */
 define(["require", "exports", "./neuralnetwork.nn"], function (require, exports, nn) {
-    "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.State = exports.Type = exports.getKeyFromValue = exports.regularizations = exports.activations = void 0;
     /** Suffix added to the state when storing if a control is hidden or not. */

@@ -1,4 +1,6 @@
-define([ 'exports', 'log' ], function(exports, LOG) {
+define(["require", "exports", "log"], function (require, exports, LOG) {
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.assertTrue = exports.assertEq = void 0;
     /**
      * assertEq: assert that two objects are === w.r.t. to type and content,
      * otherwise LOG and throw an exception
@@ -8,10 +10,12 @@ define([ 'exports', 'log' ], function(exports, LOG) {
             if (typeof (expected) === typeof (given)) {
                 if (expected === given) {
                     return null;
-                } else {
+                }
+                else {
                     return 'Violation. Expected value: ' + expected + ', given: ' + given;
                 }
-            } else {
+            }
+            else {
                 return 'Violation. Expected type: ' + typeof (expected) + ', given: ' + typeof (given);
             }
         }
@@ -22,7 +26,6 @@ define([ 'exports', 'log' ], function(exports, LOG) {
         }
     }
     exports.assertEq = assertEq;
-
     /**
      * assertTrue: assert that a condition holds, otherwise LOG and throw an
      * exception

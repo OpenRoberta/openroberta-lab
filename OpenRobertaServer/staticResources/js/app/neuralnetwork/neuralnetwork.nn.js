@@ -4,7 +4,6 @@
  * The Open Roberta Lab is open source and uses the Apache 2.0 License, see https://www.apache.org/licenses/LICENSE-2.0
  */
 define(["require", "exports"], function (require, exports) {
-    "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.getOutputNode = exports.forEachNode = exports.updateWeights = exports.backProp = exports.forwardProp = exports.buildNetwork = exports.Link = exports.RegularizationFunction = exports.Activations = exports.Errors = exports.Node = void 0;
     /**

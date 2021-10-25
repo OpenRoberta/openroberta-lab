@@ -1,5 +1,6 @@
-define([ 'exports', 'comm', 'log', 'jquery' ], function(exports, COMM, LOG, $) {
-
+define(["require", "exports", "comm", "log", "jquery"], function (require, exports, COMM, LOG, $) {
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.wrapErrorFn = exports.wrapREST = exports.wrapUI = exports.wrapTotal = void 0;
     /**
      * we want to guarantee, that only ONE thread of work is active. A thread of work is usually started by a UI-callback attached to
      * the DOM, may call the REST-server and continues with the REST-callback associated with the response of the REST-call.
@@ -15,30 +16,31 @@ define([ 'exports', 'comm', 'log', 'jquery' ], function(exports, COMM, LOG, $) {
      * - the net effect is, that after the completion of the whole chain of actions, numberOfActiveActions is 0.
      */
     numberOfActiveActions = 0;
-
     /**
      * wrap a function to catch and display errors. Calling wrapTotal with an arbitrary function with NEVER terminate with an exception.
      * An not undefined 2nd parameter is a messages that activates logging with time measuring
-     * 
+     *
      * @memberof WRAP
      */
     function wrapTotal(fnToBeWrapped, message) {
-        var wrap = function() {
+        var wrap = function () {
             var start = new Date();
             try {
                 var that = this;
-                var result = fnToBeWrapped.apply(that,arguments);
+                var result = fnToBeWrapped.apply(that, arguments);
                 if (message !== undefined) {
                     var elapsed = new Date() - start;
                     LOG.text(elapsed + ' msec: ' + message, '[[TIME]] ');
                 }
                 return result;
-            } catch (e) {
+            }
+            catch (e) {
                 var err = new Error();
                 var elapsed = new Date() - start;
                 if (message !== undefined) {
                     LOG.error('[[ERR ]] ' + elapsed + ' msec: ' + message + ', then EXCEPTION: ' + e + ' with stacktrace: ' + err.stack);
-                } else {
+                }
+                else {
                     LOG.error('[[ERR ]] ' + elapsed + ' msec: wrapTotal caught an EXCEPTION: ' + e + ' with stacktrace: ' + err.stack);
                 }
             }
@@ -46,18 +48,18 @@ define([ 'exports', 'comm', 'log', 'jquery' ], function(exports, COMM, LOG, $) {
         return wrap;
     }
     exports.wrapTotal = wrapTotal;
-
     /**
      * wrap a UI-callback to sequentialize user actions
      *
      * @memberof WRAP
      */
     function wrapUI(fnToBeWrapped, message) {
-        var wrap = function() {
+        var wrap = function () {
             if (numberOfActiveActions > 0) {
                 if (message !== undefined) {
                     LOG.text('SUPPRESSED ACTION: ' + message);
-                } else {
+                }
+                else {
                     LOG.text('SUPPRESSED ACTION without message');
                 }
                 return;
@@ -66,10 +68,11 @@ define([ 'exports', 'comm', 'log', 'jquery' ], function(exports, COMM, LOG, $) {
                 numberOfActiveActions++;
                 var fn = wrapTotal(fnToBeWrapped, message);
                 var that = this;
-                var result = fn.apply(that,arguments);
+                var result = fn.apply(that, arguments);
                 numberOfActiveActions--;
                 return result;
-             } catch (e) {
+            }
+            catch (e) {
                 numberOfActiveActions--;
                 var err = new Error();
                 LOG.error("wrapUI/wrapTotal CRASHED UNEXPECTED AND SEVERELY with EXCEPTION: " + e + " and stacktrace: " + err.stack);
@@ -79,22 +82,22 @@ define([ 'exports', 'comm', 'log', 'jquery' ], function(exports, COMM, LOG, $) {
         return wrap;
     }
     exports.wrapUI = wrapUI;
-
     /**
      * wrap a REST-callback to sequentialize user actions
      *
      * @memberof WRAP
      */
     function wrapREST(fnToBeWrapped, message) {
-        var rest = function() {
+        var rest = function () {
             COMM.errorNum = 0;
             numberOfActiveActions++;
             try {
                 var fn = wrapTotal(fnToBeWrapped, message);
                 var that = this;
-                fn.apply(that,arguments);
+                fn.apply(that, arguments);
                 numberOfActiveActions--;
-             } catch (e) {
+            }
+            catch (e) {
                 numberOfActiveActions--;
                 var err = new Error();
                 LOG.error("wrapREST/wrapTotal CRASHED UNEXPECTED AND SEVERELY with EXCEPTION: " + e + " and stacktrace: " + err.stack);
@@ -104,15 +107,15 @@ define([ 'exports', 'comm', 'log', 'jquery' ], function(exports, COMM, LOG, $) {
         return rest;
     }
     exports.wrapREST = wrapREST;
-
     function wrapErrorFn(errorFnToBeWrapped) {
-        var wrap = function() {
+        var wrap = function () {
             try {
                 var fn = wrapTotal(errorFnToBeWrapped, message);
                 var that = this;
-                fn.apply(that,arguments);
+                fn.apply(that, arguments);
                 numberOfActiveActions--;
-             } catch (e) {
+            }
+            catch (e) {
                 numberOfActiveActions--;
                 var err = new Error();
                 LOG.error("wrapErrorFn/wrapTotal CRASHED UNEXPECTED AND SEVERELY with EXCEPTION: " + e + " and stacktrace: " + err.stack);
@@ -122,59 +125,62 @@ define([ 'exports', 'comm', 'log', 'jquery' ], function(exports, COMM, LOG, $) {
         return wrap;
     }
     exports.wrapErrorFn = wrapErrorFn;
-
-    $.fn.onWrap = function(event, callbackOrFilter, callbackOrMessage, optMessage) {
+    $.fn.onWrap = function (event, callbackOrFilter, callbackOrMessage, optMessage) {
         if (typeof callbackOrFilter === 'string') {
             if (typeof callbackOrMessage === 'function') {
                 return this.on(event, callbackOrFilter, WRAP.wrapUI(callbackOrMessage, optMessage));
-            } else {
+            }
+            else {
                 LOG.error("illegal wrapping. Parameter: " + event + " ::: " + callbackOrFilter + " ::: " + callbackOrMessage + " ::: " + optMessage);
             }
-        } else if (typeof callbackOrFilter === 'function') {
+        }
+        else if (typeof callbackOrFilter === 'function') {
             if (typeof callbackOrMessage === 'string' || callbackOrMessage === undefined) {
                 return this.on(event, WRAP.wrapUI(callbackOrFilter, callbackOrMessage));
-            } else {
+            }
+            else {
                 LOG.error("illegal wrapping. Parameter: " + event + " ::: " + callbackOrFilter + " ::: " + callbackOrMessage + " ::: " + optMessage);
             }
         }
     };
-
-    $.fn.clickWrap = function(callback) {
+    $.fn.clickWrap = function (callback) {
         numberOfActiveActions--;
         try {
             if (callback === undefined) {
                 this.click();
-            } else {
+            }
+            else {
                 this.click(callback);
             }
             numberOfActiveActions++;
-        } catch (e) {
+        }
+        catch (e) {
             numberOfActiveActions++;
             var err = new Error();
             LOG.error("clickWrap CRASHED UNEXPECTED AND SEVERELY with EXCEPTION: " + e + " and stacktrace: " + err.stack);
             COMM.ping(); // transfer data to the server
         }
     };
-
-    $.fn.tabWrapShow = function() {
+    $.fn.tabWrapShow = function () {
         numberOfActiveActions--;
         try {
             this.tab('show');
             numberOfActiveActions++;
-        } catch (e) {
+        }
+        catch (e) {
             numberOfActiveActions++;
             var err = new Error();
             LOG.error("tabWrap CRASHED UNEXPECTED AND SEVERELY with EXCEPTION: " + e + " and stacktrace: " + err.stack);
             COMM.ping(); // transfer data to the server
         }
     };
-
-    $.fn.oneWrap = function(event, callback) {
+    $.fn.oneWrap = function (event, callback) {
         numberOfActiveActions--;
         try {
             this.one(event, callback);
             numberOfActiveActions++;
-        } catch (e) {
+        }
+        catch (e) {
             numberOfActiveActions++;
             var err = new Error();
             LOG.error("oneWrap CRASHED UNEXPECTED AND SEVERELY with EXCEPTION: " + e + " and stacktrace: " + err.stack);

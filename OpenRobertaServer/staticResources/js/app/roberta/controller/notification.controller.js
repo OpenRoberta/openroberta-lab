@@ -22,7 +22,6 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 define(["require", "exports", "guiState.model", "guiState.controller", "notification.model", "comm", "jquery"], function (require, exports, guiStateModel, guiStateController, notificationModel, comm, $) {
-    "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.showNotificationModal = exports.reloadNotifications = exports.init = void 0;
     var fadingDuration = 400;
@@ -73,7 +72,6 @@ define(["require", "exports", "guiState.model", "guiState.controller", "notifica
             .slideUp();
     }
     function initNotificationModal() {
-        // @ts-ignore
         $notificationForm.onWrap('submit', function (e) {
             e.preventDefault();
             readFileInputField(function (fileContent) {

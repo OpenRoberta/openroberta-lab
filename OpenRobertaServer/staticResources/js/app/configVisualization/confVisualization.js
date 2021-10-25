@@ -28,7 +28,6 @@ var __spreadArrays = (this && this.__spreadArrays) || function () {
     return r;
 };
 define(["require", "exports", "./wires", "./const.robots", "./robotBlock", "./port", "jquery"], function (require, exports, wires_1, const_robots_1, robotBlock_1, port_1, $) {
-    "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.CircuitVisualization = void 0;
     var SEP = 2.5;

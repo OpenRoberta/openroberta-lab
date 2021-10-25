@@ -1,0 +1,12 @@
+{
+  "name": "openroberta-lab",
+  "description": "npm project of the openroberta lab",
+  "version": "1.0.0",
+  "scripts": {
+    "postinstall": "cd OpenRobertaWeb && npm install",
+    "build": "cd OpenRobertaWeb && npm run build",
+    "watch": "cd OpenRobertaWeb && npm run watch"
+  },
+  "author": "",
+  "license": "ISC"
+}

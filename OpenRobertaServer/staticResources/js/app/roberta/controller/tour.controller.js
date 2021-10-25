@@ -1,21 +1,21 @@
-define(['exports', 'comm', 'message', 'log', 'blockly', 'jquery', 'jquery-scrollto', 'enjoyHint'], function(exports, COMM, MSG, LOG, Blockly, $) {
-
+define(["require", "exports", "blockly", "jquery", "jquery-scrollto", "enjoyHint"], function (require, exports, Blockly, $) {
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.getInstance = exports.start = void 0;
     var enjoyhint_instance;
     var touchEvent;
-
     function is_touch_device() {
         try {
             document.createEvent("TouchEvent");
             return 'click touchend';
-        } catch (e) {
+        }
+        catch (e) {
             return 'click';
         }
     }
-
     function start(tour) {
         enjoyhint_instance = new EnjoyHint({
-            onSkip: function() {
-                Blockly.mainWorkspace.clear();    
+            onSkip: function () {
+                Blockly.mainWorkspace.clear();
                 enjoyhint_instance = {};
                 $('#tabProgram').clickWrap();
                 if ($('.rightMenuButton.rightActive')) {
@@ -23,16 +23,16 @@ define(['exports', 'comm', 'message', 'log', 'blockly', 'jquery', 'jquery-scroll
                 }
                 $("#show-startup-message").modal("show");
             },
-            onEnd: function() {
+            onEnd: function () {
                 Blockly.mainWorkspace.clear();
                 enjoyhint_instance = {};
                 $('#tabProgram').clickWrap();
                 if ($('.rightMenuButton.rightActive')) {
                     $('.rightMenuButton.rightActive').clickWrap();
                 }
-                setTimeout(function() {
-                    $("#show-startup-message").modal("show");                  
-                }, 1000);                 
+                setTimeout(function () {
+                    $("#show-startup-message").modal("show");
+                }, 1000);
             }
         });
         var enjoyhint_script_steps = [{}];
@@ -50,7 +50,6 @@ define(['exports', 'comm', 'message', 'log', 'blockly', 'jquery', 'jquery-scroll
             default:
                 return;
         }
-        
         // async translation
         var key, keyParts, translation;
         for (var i = 0; i < enjoyhint_script_steps.length; i++) {
@@ -58,7 +57,6 @@ define(['exports', 'comm', 'message', 'log', 'blockly', 'jquery', 'jquery-scroll
                 key = enjoyhint_script_steps[i].description;
                 keyParts = key.split('.');
                 translation = window;
-                
                 for (var j = 0; j < keyParts.length && translation !== null; j++) {
                     translation = translation[keyParts[j]];
                 }
@@ -68,7 +66,6 @@ define(['exports', 'comm', 'message', 'log', 'blockly', 'jquery', 'jquery-scroll
                 key = enjoyhint_script_steps[i].nextButton.text;
                 keyParts = key.split('.');
                 translation = window;
-                
                 for (var j = 0; j < keyParts.length && translation !== null; j++) {
                     translation = translation[keyParts[j]];
                 }
@@ -78,7 +75,6 @@ define(['exports', 'comm', 'message', 'log', 'blockly', 'jquery', 'jquery-scroll
                 key = enjoyhint_script_steps[i].skipButton.text;
                 keyParts = key.split('.');
                 translation = window;
-                
                 for (var j = 0; j < keyParts.length && translation !== null; j++) {
                     translation = translation[keyParts[j]];
                 }
@@ -89,12 +85,10 @@ define(['exports', 'comm', 'message', 'log', 'blockly', 'jquery', 'jquery-scroll
         enjoyhint_instance.run();
     }
     exports.start = start;
-
     function getInstance() {
         return enjoyhint_instance;
     }
     exports.getInstance = getInstance;
-
     var offsetLeft = $('#blockly').width() * -0.15;
     var offsetTop = $('#blockly').height() * -0.1;
     var welcome = [{
@@ -132,7 +126,7 @@ define(['exports', 'comm', 'message', 'log', 'blockly', 'jquery', 'jquery-scroll
             'selector': '#simButton',
             'description': 'Blockly.Msg.TOUR1_DESCRIPTION13',
             'showSkip': false,
-            onBeforeStart: function() {
+            onBeforeStart: function () {
                 var blocks = Blockly.getMainWorkspace().getTopBlocks();
                 if (!blocks[0].getNextBlock()) {
                     enjoyhint_instance.setCurrentStepBack();
@@ -140,7 +134,7 @@ define(['exports', 'comm', 'message', 'log', 'blockly', 'jquery', 'jquery-scroll
             }
         }, {
             'event': 'mousedown touchstart',
-            'timeout':1000,            
+            'timeout': 1000,
             'selector': '#simControl',
             'description': 'Blockly.Msg.TOUR1_DESCRIPTION13a',
             'showSkip': false,
@@ -156,15 +150,12 @@ define(['exports', 'comm', 'message', 'log', 'blockly', 'jquery', 'jquery-scroll
                 text: 'Blockly.Msg.TOUR1_DESCRIPTION00'
             },
             'showSkip': false,
-
         }, {
             'event': 'mousedown touchstart',
             'selector': '#simButton',
             'description': 'Blockly.Msg.TOUR1_DESCRIPTION16',
             'showSkip': false,
-        }
-    ];
-
+        }];
     var overview = [{
             'event_type': 'next',
             'selector': '.logo',
@@ -205,13 +196,13 @@ define(['exports', 'comm', 'message', 'log', 'blockly', 'jquery', 'jquery-scroll
             'event_type': 'next',
             'selector': '#bricklyDiv .blocklyBlockCanvas',
             'description': 'Blockly.Msg.TOUR1_DESCRIPTION05',
-            'shape':'circle',
-            'radius':100,
+            'shape': 'circle',
+            'radius': 100,
             'nextButton': {
                 text: 'Blockly.Msg.TOUR1_DESCRIPTION00'
             },
             'showSkip': false,
-            onBeforeStart: function() {
+            onBeforeStart: function () {
                 $('#tabConfiguration').clickWrap();
             }
         }, {
@@ -225,35 +216,35 @@ define(['exports', 'comm', 'message', 'log', 'blockly', 'jquery', 'jquery-scroll
         }, {
             'event_type': 'next',
             'selector': '.blocklyTreeRoot',
-            'description': 'Blockly.Msg.TOUR1_DESCRIPTION07',          
+            'description': 'Blockly.Msg.TOUR1_DESCRIPTION07',
             'nextButton': {
                 text: 'Blockly.Msg.TOUR1_DESCRIPTION00'
             },
             'showSkip': false,
-            onBeforeStart: function() {
+            onBeforeStart: function () {
                 $('#tabProgram').clickWrap();
             }
-       }, {
-           'event_type': 'next',
-           'selector': '.nav.nav-tabs.levelTabs',
-           'description': 'Blockly.Msg.TOUR1_DESCRIPTION07a',          
-           'nextButton': {
-               text: 'Blockly.Msg.TOUR1_DESCRIPTION00'
-           },
-           onBeforeStart: function() {
-               Blockly.hideChaff(false);
-           },
-           'showSkip': false,          
-       }, {
-           'event_type': 'next',
-           'selector': '#blocklyDiv>svg>g>g:eq(1)',
-           'description': 'Blockly.Msg.TOUR1_DESCRIPTION08',
-           'bottom': -100,
-           'nextButton': {
-               text: 'Blockly.Msg.TOUR1_DESCRIPTION00'
-           },
-           'showSkip': false,          
-            onBeforeStart: function() {
+        }, {
+            'event_type': 'next',
+            'selector': '.nav.nav-tabs.levelTabs',
+            'description': 'Blockly.Msg.TOUR1_DESCRIPTION07a',
+            'nextButton': {
+                text: 'Blockly.Msg.TOUR1_DESCRIPTION00'
+            },
+            onBeforeStart: function () {
+                Blockly.hideChaff(false);
+            },
+            'showSkip': false,
+        }, {
+            'event_type': 'next',
+            'selector': '#blocklyDiv>svg>g>g:eq(1)',
+            'description': 'Blockly.Msg.TOUR1_DESCRIPTION08',
+            'bottom': -100,
+            'nextButton': {
+                text: 'Blockly.Msg.TOUR1_DESCRIPTION00'
+            },
+            'showSkip': false,
+            onBeforeStart: function () {
                 $('#beginner').clickWrap();
             }
         }, {
@@ -288,10 +279,10 @@ define(['exports', 'comm', 'message', 'log', 'blockly', 'jquery', 'jquery-scroll
         }, {
             'event_type': 'custom',
             'event': 'startSim',
-            'selector': '#simButton', 
+            'selector': '#simButton',
             'description': 'Blockly.Msg.TOUR1_DESCRIPTION13',
             'showSkip': false,
-            onBeforeStart: function() {
+            onBeforeStart: function () {
                 var blocks = Blockly.getMainWorkspace().getTopBlocks();
                 if (!blocks[0].getNextBlock()) {
                     enjoyhint_instance.setCurrentStepBack();
@@ -299,7 +290,7 @@ define(['exports', 'comm', 'message', 'log', 'blockly', 'jquery', 'jquery-scroll
             }
         }, {
             'event': 'mousedown touchstart',
-            'timeout':1000,            
+            'timeout': 1000,
             'selector': '#simControl',
             'description': 'Blockly.Msg.TOUR1_DESCRIPTION13a',
             'showSkip': false,
@@ -315,12 +306,10 @@ define(['exports', 'comm', 'message', 'log', 'blockly', 'jquery', 'jquery-scroll
                 text: 'Blockly.Msg.TOUR1_DESCRIPTION00'
             },
             'showSkip': false,
-
         }, {
             'event': 'mousedown touchstart',
             'selector': '#simButton',
             'description': 'Blockly.Msg.TOUR1_DESCRIPTION16',
             'showSkip': false,
-        }
-    ];
+        }];
 });

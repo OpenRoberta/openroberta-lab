@@ -23,7 +23,6 @@ var __assign = (this && this.__assign) || function () {
     return __assign.apply(this, arguments);
 };
 define(["require", "exports", "./port", "./const.robots"], function (require, exports, port_1, const_robots_1) {
-    "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.createRobotBlock = void 0;
     var RobotViewField = /** @class */ (function (_super) {

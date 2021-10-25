@@ -1,16 +1,20 @@
-define(['exports', 'message', 'comm'], function(exports, MSG, COMM) {
-
+define(["require", "exports", "comm"], function (require, exports, COMM) {
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.init = exports.robot = exports.toolbox = exports.configuration = exports.program = exports.user = exports.gui = exports.server = void 0;
+    exports.server = {};
+    exports.gui = {};
+    exports.user = {};
+    exports.program = {};
+    exports.configuration = {};
+    exports.toolbox = '';
+    exports.robot = {};
     /**
      * Initialize gui state object
      */
     function init() {
         var ready = new $.Deferred();
-
-        exports.server = {};
         exports.server.ping = true;
         exports.server.pingTime = 3000;
-
-        exports.gui = {};
         exports.gui.view = '';
         exports.gui.prevView = '';
         exports.gui.language = '';
@@ -34,7 +38,7 @@ define(['exports', 'message', 'comm'], function(exports, MSG, COMM) {
         exports.gui.multipleSim = false;
         exports.gui.webotsSim = false;
         exports.gui.webotsUrl = '';
-        exports.gui.fileExtension = ''
+        exports.gui.fileExtension = '';
         exports.gui.connectionType = {
             TOKEN: 'token',
             AUTO: 'autoConnection',
@@ -42,19 +46,14 @@ define(['exports', 'message', 'comm'], function(exports, MSG, COMM) {
             LOCAL: 'local',
             WEBVIEW: 'webview',
             JSPLAY: 'jsPlay' //Play file in the browser with JavaScript
-        }
+        };
         exports.gui.runEnabled = false;
-
-        exports.user = {};
         exports.user.id = -1;
         exports.user.accountName = '';
         exports.user.name = '';
         exports.user.isAccountActivated = false;
-
-        //exports.socket.portNames = [];
-        //exports.socket.vendorIds = [];
-
-        exports.program = {};
+        //socket.portNames = [];
+        //socket.vendorIds = [];
         exports.program.name = '';
         exports.program.saved = true;
         exports.program.shared = true;
@@ -64,16 +63,10 @@ define(['exports', 'message', 'comm'], function(exports, MSG, COMM) {
         exports.program.toolbox = {};
         exports.program.toolbox.level = '';
         exports.program.toolbox.xml = '';
-
-        exports.configuration = {};
         exports.configuration.name = '';
         exports.configuration.saved = true;
         exports.configuration.timestamp = '';
         exports.configuration.xml = '';
-
-        exports.toolbox = '';
-
-        exports.robot = {};
         exports.robot.token = '';
         exports.robot.name = '';
         exports.robot.state = '';
@@ -86,27 +79,26 @@ define(['exports', 'message', 'comm'], function(exports, MSG, COMM) {
         exports.robot.robotPort = '';
         exports.robot.socket = null;
         exports.robot.hasWlan = false;
-
-        var getInitFromServer = function() {
+        var getInitFromServer = function () {
             COMM.setInitToken(undefined);
             return COMM.json("/init", {
                 "cmd": "init",
                 "screenSize": [window.screen.availWidth, window.screen.availHeight]
-            }, function(result) {
+            }, function (result) {
                 if (result.rc === 'ok') {
                     COMM.setInitToken(result.initToken);
                     $.extend(exports.server, result.server);
                     exports.server.version = result["server.version"];
                     exports.server.time = result.serverTime;
                     ready.resolve();
-                } else {
-                    console.log("ERROR: " + result.message)
-                        // MSG.displayInformation(result, "", result.message);
+                }
+                else {
+                    console.log("ERROR: " + result.message);
+                    // MSG.displayInformation(result, "", result.message);
                 }
             }, 'init data from server');
-        }
+        };
         getInitFromServer();
-
         return ready.promise();
     }
     exports.init = init;

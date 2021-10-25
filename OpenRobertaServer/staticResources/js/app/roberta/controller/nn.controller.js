@@ -1,42 +1,33 @@
-define([ 'exports', 'log', 'util', 'comm', 'message', 'guiState.controller',  'neuralnetwork-lib','d3','neuralnetwork.playground', 'jquery', 'jquery-validate' ], function(exports,
-        LOG, UTIL, COMM, MSG, GUISTATE_C, LIB, d3, PG, $) {
-
+define(["require", "exports", "log", "util", "message", "guiState.controller", "neuralnetwork.playground", "jquery", "blockly", "jquery-validate"], function (require, exports, LOG, UTIL, MSG, GUISTATE_C, PG, $, Blockly) {
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.resetView = exports.reloadView = exports.reloadNN = exports.getBricklyWorkspace = exports.showNN = exports.newNN = exports.showSaveAsModal = exports.initNNEnvironment = exports.loadFromListing = exports.saveAsToServer = exports.saveToServer = exports.initNNForms = exports.init = void 0;
     var $formSingleModal;
-
     function init() {
         initView();
         initEvents();
         initNNForms();
-        initNNEnvironment();            
+        initNNEnvironment();
     }
-
     exports.init = init;
-
     function initView() {
         PG.runPlayground();
     }
-
     function initEvents() {
-        $('#tabNN').onWrap('show.bs.tab', function(e) {
+        $('#tabNN').onWrap('show.bs.tab', function (e) {
             GUISTATE_C.setView('tabNN');
         }, 'show tabNN');
-
-        $('#tabNN').onWrap('shown.bs.tab', function(e) {
+        $('#tabNN').onWrap('shown.bs.tab', function (e) {
             $(window).resize();
         }, 'shown tabNN');
-
-        $('#tabNN').onWrap('hide.bs.tab', function(e) {
+        $('#tabNN').onWrap('hide.bs.tab', function (e) {
         }, 'hide tabNN');
-
-        $('#tabNN').onWrap('hidden.bs.tab', function(e) {
+        $('#tabNN').onWrap('hidden.bs.tab', function (e) {
         }, 'hidden tabNN');
     }
-
     function initNNForms() {
         $formSingleModal = $('#single-modal-form');
     }
     exports.initNNForms = initNNForms;
-
     /**
      * Save nn to server
      */
@@ -47,7 +38,7 @@ define([ 'exports', 'log', 'util', 'comm', 'message', 'guiState.controller',  'n
             return;
         }
         // TODO get the NN from the dom
-        CONFIGURATION.saveNNToServer(GUISTATE_C.getNNName(), xmlText, function(result) {
+        CONFIGURATION.saveNNToServer(GUISTATE_C.getNNName(), xmlText, function (result) {
             if (result.rc === 'ok') {
                 GUISTATE_C.setNNSaved(true);
                 LOG.info('save brick nn ' + GUISTATE_C.getNNName());
@@ -56,7 +47,6 @@ define([ 'exports', 'log', 'util', 'comm', 'message', 'guiState.controller',  'n
         });
     }
     exports.saveToServer = saveToServer;
-
     /**
      * Save nn with new name to server
      */
@@ -71,7 +61,7 @@ define([ 'exports', 'log', 'util', 'comm', 'message', 'guiState.controller',  'n
             }
             var dom = Blockly.Xml.workspaceToDom(bricklyWorkspace);
             var xmlText = Blockly.Xml.domToText(dom);
-            CONFIGURATION.saveAsNNToServer(nnName, xmlText, function(result) {
+            CONFIGURATION.saveAsNNToServer(nnName, xmlText, function (result) {
                 if (result.rc === 'ok') {
                     result.name = nnName;
                     GUISTATE_C.setNN(result);
@@ -83,17 +73,16 @@ define([ 'exports', 'log', 'util', 'comm', 'message', 'guiState.controller',  'n
         }
     }
     exports.saveAsToServer = saveAsToServer;
-
     /**
      * Load the nn that was selected in nns list
      */
-     // TODO check if we want /need a listing
+    // TODO check if we want /need a listing
     function loadFromListing(nn) {
         LOG.info('loadFromList ' + nn[0]);
-        CONFIGURATION.loadNNFromListing(nn[0], nn[1], function(result) {
+        CONFIGURATION.loadNNFromListing(nn[0], nn[1], function (result) {
             if (result.rc === 'ok') {
                 result.name = nn[0];
-                $('#tabNN').oneWrap('shown.bs.tab', function() {
+                $('#tabNN').oneWrap('shown.bs.tab', function () {
                     showNN(result);
                 });
                 $('#tabNN').clickWrap();
@@ -102,46 +91,40 @@ define([ 'exports', 'log', 'util', 'comm', 'message', 'guiState.controller',  'n
         });
     }
     exports.loadFromListing = loadFromListing;
-
     function initNNEnvironment() {
-
     }
     exports.initNNEnvironment = initNNEnvironment;
-
     function showSaveAsModal() {
         var regexString = new RegExp('^(?!\\b' + GUISTATE_C.getNNStandardName() + '\\b)([a-zA-Z_öäüÖÄÜß$€][a-zA-Z0-9_öäüÖÄÜß$€]*)$');
-        $.validator.addMethod("regex", function(value, element, regexp) {
+        $.validator.addMethod("regex", function (value, element, regexp) {
             value = value.trim();
             return value.match(regexp);
         }, "No special Characters allowed here. Use only upper and lowercase letters (A through Z; a through z) and numbers.");
-
-        UTIL.showSingleModal(function() {
+        UTIL.showSingleModal(function () {
             $('#singleModalInput').attr('type', 'text');
             $('#single-modal h3').text(Blockly.Msg["MENU_SAVE_AS"]);
             $('#single-modal label').text(Blockly.Msg["POPUP_NAME"]);
-        }, saveAsToServer, function() {
-
+        }, saveAsToServer, function () {
         }, {
-            rules : {
-                singleModalInput : {
-                    required : true,
-                    regex : regexString
+            rules: {
+                singleModalInput: {
+                    required: true,
+                    regex: regexString
                 }
             },
-            errorClass : "form-invalid",
-            errorPlacement : function(label, element) {
+            errorClass: "form-invalid",
+            errorPlacement: function (label, element) {
                 label.insertAfter(element);
             },
-            messages : {
-                singleModalInput : {
-                    required : jQuery.validator.format(Blockly.Msg["VALIDATION_FIELD_REQUIRED"]),
-                    regex : jQuery.validator.format(Blockly.Msg["MESSAGE_INVALID_CONF_NAME"])
+            messages: {
+                singleModalInput: {
+                    required: jQuery.validator.format(Blockly.Msg["VALIDATION_FIELD_REQUIRED"]),
+                    regex: jQuery.validator.format(Blockly.Msg["MESSAGE_INVALID_CONF_NAME"])
                 }
             }
         });
     }
     exports.showSaveAsModal = showSaveAsModal;
-
     /**
      * New nn
      */
@@ -153,31 +136,32 @@ define([ 'exports', 'log', 'util', 'comm', 'message', 'guiState.controller',  'n
             result.lastChanged = '';
             GUISTATE_C.setNN(result);
             initNNEnvironment();
-        } else {
-            $('#show-message-nnirm').oneWrap('shown.bs.modal', function(e) {
+        }
+        else {
+            $('#show-message-nnirm').oneWrap('shown.bs.modal', function (e) {
                 $('#nnirm').off();
-                $('#nnirm').on('click', function(e) {
+                $('#nnirm').on('click', function (e) {
                     e.preventDefault();
                     newNN(true);
                 });
                 $('#nnirmCancel').off();
-                $('#nnirmCancel').on('click', function(e) {
+                $('#nnirmCancel').on('click', function (e) {
                     e.preventDefault();
                     $('.modal').modal('hide');
                 });
             });
             if (GUISTATE_C.isUserLoggedIn()) {
                 MSG.displayMessage("POPUP_BEFOREUNLOAD_LOGGEDIN", "POPUP", "", true);
-            } else {
+            }
+            else {
                 MSG.displayMessage("POPUP_BEFOREUNLOAD", "POPUP", "", true);
             }
         }
     }
     exports.newNN = newNN;
-
     /**
      * Show nn
-     * 
+     *
      * @param {load}
      *            load nn
      * @param {data}
@@ -190,17 +174,16 @@ define([ 'exports', 'log', 'util', 'comm', 'message', 'guiState.controller',  'n
         }
     }
     exports.showNN = showNN;
-
     function getBricklyWorkspace() {
         return bricklyWorkspace;
     }
     exports.getBricklyWorkspace = getBricklyWorkspace;
-
     function reloadNN(opt_result) {
         var nn;
         if (opt_result) {
             nn = opt_result.nnXML;
-        } else {
+        }
+        else {
             nn = GUISTATE_C.getNNXML();
         }
         if (!seen) {
@@ -209,7 +192,8 @@ define([ 'exports', 'log', 'util', 'comm', 'message', 'guiState.controller',  'n
             if ($(window).width() < 768) {
                 x = $(window).width() / 50;
                 y = 25;
-            } else {
+            }
+            else {
                 x = $(window).width() / 5;
                 y = 50;
             }
@@ -219,38 +203,36 @@ define([ 'exports', 'log', 'util', 'comm', 'message', 'guiState.controller',  'n
                 var coordBlock = blocks[i].getRelativeToSurfaceXY();
                 blocks[i].moveBy(coordBlock.x - coord.x + x, coordBlock.y - coord.y + y);
             }
-        } else {
+        }
+        else {
             nnToBricklyWorkspace(nn);
         }
     }
     exports.reloadNN = reloadNN;
-
     function reloadView() {
         if (isVisible()) {
             var dom = Blockly.Xml.workspaceToDom(bricklyWorkspace);
             var xml = Blockly.Xml.domToText(dom);
             nnToBricklyWorkspace(xml);
-        } else {
+        }
+        else {
             seen = false;
         }
         var toolbox = GUISTATE_C.getNNToolbox();
         bricklyWorkspace.updateToolbox(toolbox);
     }
     exports.reloadView = reloadView;
-
     function resetView() {
         bricklyWorkspace.setDevice({
-            group : GUISTATE_C.getRobotGroup(),
-            robot : GUISTATE_C.getRobot()
+            group: GUISTATE_C.getRobotGroup(),
+            robot: GUISTATE_C.getRobot()
         });
         initNNEnvironment();
         var toolbox = GUISTATE_C.getNNToolbox();
         bricklyWorkspace.updateToolbox(toolbox);
     }
     exports.resetView = resetView;
-
     function isVisible() {
         return GUISTATE_C.getView() == 'tabNN';
     }
-
 });

@@ -1,5 +1,4 @@
-define(["require", "exports", "./interpreter.state", "./interpreter.constants", "./interpreter.util", "./neuralnetwork.playground"], function (require, exports, interpreter_state_1, C, U, PG) {
-    "use strict";
+define(["require", "exports", "./interpreter.state", "./interpreter.constants", "./interpreter.util", "neuralnetwork.playground"], function (require, exports, interpreter_state_1, C, U, PG) {
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Interpreter = void 0;
     var Interpreter = /** @class */ (function () {

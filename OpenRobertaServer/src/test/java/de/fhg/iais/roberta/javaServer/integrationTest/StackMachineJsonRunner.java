@@ -66,7 +66,7 @@ public class StackMachineJsonRunner {
         final String utf8Charset = StandardCharsets.UTF_8.displayName();
         FileUtils.writeStringToFile(new File(this.generatedStackmachineProgramsDir + programName + ".json"), stackmachineCode, utf8Charset);
         FileUtils.writeStringToFile(new File(this.generatedStackmachineProgramsDir + programName + ".xml"), programTextInclResultSpec, utf8Charset);
-        this.resultsOfInterpretation = runCommand("node", "../TypeScriptSources/jsGenerated/_main.js", this.generatedStackmachineProgramsDir, programName);
+        this.resultsOfInterpretation = runCommand("node", "../OpenRobertaWeb/jsGenerated/_main.js", this.generatedStackmachineProgramsDir, programName);
         return showAndEvaluateResult();
     }
 

@@ -3,19 +3,19 @@
  *
  * @module rest/program
  */
-define(['exports', 'comm'], function (exports, COMM) {
-
+define(["require", "exports", "comm"], function (require, exports, COMM) {
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.postNotifications = exports.getNotifications = void 0;
     exports.getNotifications = function (successFn) {
         COMM.json("/notifications/getNotifications", {}, function (result) {
             if (result.rc === "ok" && result.message === "ORA_SERVER_SUCCESS") {
-                successFn(result)
+                successFn(result);
             }
         }, 'load notofications');
     };
-
     exports.postNotifications = function (notifications, successFn) {
         COMM.json("/notifications/postNotifications", {
-            notifications : notifications
+            notifications: notifications
         }, successFn, 'send notifications to server');
     };
 });
