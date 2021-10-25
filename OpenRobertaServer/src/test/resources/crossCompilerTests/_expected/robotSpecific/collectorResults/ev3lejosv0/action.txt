@@ -1,0 +1,6 @@
+Sensors: 
+[]
+Actors: 
+[UsedActor [A, MEDIUM], UsedActor [B, LARGE], UsedActor [C, LARGE], UsedActor [D, OTHER], UsedActor [- EMPTY_PORT -, DISPLAY], UsedActor [- EMPTY_PORT -, SOUND], UsedActor [- EMPTY_PORT -, VOICE], UsedActor [- EMPTY_PORT -, LIGHT], UsedActor [0, LIGHT]]
+Methods: 
+[]

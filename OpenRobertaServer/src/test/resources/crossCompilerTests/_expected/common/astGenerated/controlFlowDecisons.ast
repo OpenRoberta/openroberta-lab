@@ -1,152 +1,152 @@
-AssertStmt [asserts pos-0: Binary [EQ, NumConst [0], Var [X]]]
+AssertStmt[asserts: Binary [EQ, NumConst[value: 0], Var [X]], msg: pos-0]
 
-if BoolConst [true]
+if BoolConst[value: true]
 ,then
-exprStmt Binary [MATH_CHANGE, Var [X], NumConst [1]]
+exprStmt Binary [MATH_CHANGE, Var [X], NumConst[value: 1]]
 
-AssertStmt [asserts pos-1: Binary [EQ, NumConst [1], Var [X]]]
+AssertStmt[asserts: Binary [EQ, NumConst[value: 1], Var [X]], msg: pos-1]
 
-if BoolConst [false]
+if BoolConst[value: false]
 ,then
-exprStmt Binary [MATH_CHANGE, Var [X], NumConst [1000]]
+exprStmt Binary [MATH_CHANGE, Var [X], NumConst[value: 1000]]
 
-AssertStmt [asserts pos-2: Binary [EQ, NumConst [1], Var [X]]]
+AssertStmt[asserts: Binary [EQ, NumConst[value: 1], Var [X]], msg: pos-2]
 
-if BoolConst [true]
+if BoolConst[value: true]
 ,then
-if BoolConst [true]
+if BoolConst[value: true]
 ,then
-exprStmt Binary [MATH_CHANGE, Var [X], NumConst [1]]
+exprStmt Binary [MATH_CHANGE, Var [X], NumConst[value: 1]]
 
-exprStmt Binary [MATH_CHANGE, Var [X], NumConst [1]]
+exprStmt Binary [MATH_CHANGE, Var [X], NumConst[value: 1]]
 
-AssertStmt [asserts pos-3: Binary [EQ, NumConst [3], Var [X]]]
+AssertStmt[asserts: Binary [EQ, NumConst[value: 3], Var [X]], msg: pos-3]
 
-if BoolConst [true]
+if BoolConst[value: true]
 ,then
-if BoolConst [false]
+if BoolConst[value: false]
 ,then
-exprStmt Binary [MATH_CHANGE, Var [X], NumConst [1000]]
+exprStmt Binary [MATH_CHANGE, Var [X], NumConst[value: 1000]]
 
-exprStmt Binary [MATH_CHANGE, Var [X], NumConst [1]]
+exprStmt Binary [MATH_CHANGE, Var [X], NumConst[value: 1]]
 
-AssertStmt [asserts pos-4: Binary [EQ, NumConst [4], Var [X]]]
+AssertStmt[asserts: Binary [EQ, NumConst[value: 4], Var [X]], msg: pos-4]
 
-if BoolConst [false]
+if BoolConst[value: false]
 ,then
-if BoolConst [false]
+if BoolConst[value: false]
 ,then
-exprStmt Binary [MATH_CHANGE, Var [X], NumConst [1000]]
+exprStmt Binary [MATH_CHANGE, Var [X], NumConst[value: 1000]]
 
-exprStmt Binary [MATH_CHANGE, Var [X], NumConst [1000]]
+exprStmt Binary [MATH_CHANGE, Var [X], NumConst[value: 1000]]
 
-AssertStmt [asserts pos-5: Binary [EQ, NumConst [4], Var [X]]]
+AssertStmt[asserts: Binary [EQ, NumConst[value: 4], Var [X]], msg: pos-5]
 
-if BoolConst [false]
+if BoolConst[value: false]
 ,then
-if BoolConst [true]
+if BoolConst[value: true]
 ,then
-exprStmt Binary [MATH_CHANGE, Var [X], NumConst [1000]]
+exprStmt Binary [MATH_CHANGE, Var [X], NumConst[value: 1000]]
 
-exprStmt Binary [MATH_CHANGE, Var [X], NumConst [1000]]
+exprStmt Binary [MATH_CHANGE, Var [X], NumConst[value: 1000]]
 
-AssertStmt [asserts pos-6: Binary [EQ, NumConst [4], Var [X]]]
+AssertStmt[asserts: Binary [EQ, NumConst[value: 4], Var [X]], msg: pos-6]
 
-if BoolConst [true]
+if BoolConst[value: true]
 ,then
-if BoolConst [true]
+if BoolConst[value: true]
 ,then
-if BoolConst [false]
+if BoolConst[value: false]
 ,then
-exprStmt Binary [MATH_CHANGE, Var [X], NumConst [1000]]
+exprStmt Binary [MATH_CHANGE, Var [X], NumConst[value: 1000]]
 
-exprStmt Binary [MATH_CHANGE, Var [X], NumConst [1]]
+exprStmt Binary [MATH_CHANGE, Var [X], NumConst[value: 1]]
 
-exprStmt Binary [MATH_CHANGE, Var [X], NumConst [1]]
+exprStmt Binary [MATH_CHANGE, Var [X], NumConst[value: 1]]
 
-AssertStmt [asserts pos-7: Binary [EQ, NumConst [6], Var [X]]]
+AssertStmt[asserts: Binary [EQ, NumConst[value: 6], Var [X]], msg: pos-7]
 
-if BoolConst [true]
+if BoolConst[value: true]
 ,then
-exprStmt Binary [MATH_CHANGE, Var [X], NumConst [1]]
-,else if BoolConst [false]
+exprStmt Binary [MATH_CHANGE, Var [X], NumConst[value: 1]]
+,else if BoolConst[value: false]
 ,then
-exprStmt Binary [MATH_CHANGE, Var [X], NumConst [1000]]
+exprStmt Binary [MATH_CHANGE, Var [X], NumConst[value: 1000]]
 
-AssertStmt [asserts pos-8: Binary [EQ, NumConst [7], Var [X]]]
+AssertStmt[asserts: Binary [EQ, NumConst[value: 7], Var [X]], msg: pos-8]
 
-if BoolConst [false]
+if BoolConst[value: false]
 ,then
-exprStmt Binary [MATH_CHANGE, Var [X], NumConst [1000]]
-,else if BoolConst [true]
+exprStmt Binary [MATH_CHANGE, Var [X], NumConst[value: 1000]]
+,else if BoolConst[value: true]
 ,then
-exprStmt Binary [MATH_CHANGE, Var [X], NumConst [1]]
+exprStmt Binary [MATH_CHANGE, Var [X], NumConst[value: 1]]
 
-AssertStmt [asserts pos-9: Binary [EQ, NumConst [8], Var [X]]]
+AssertStmt[asserts: Binary [EQ, NumConst[value: 8], Var [X]], msg: pos-9]
 
-if BoolConst [true]
+if BoolConst[value: true]
 ,then
-exprStmt Binary [MATH_CHANGE, Var [X], NumConst [1]]
+exprStmt Binary [MATH_CHANGE, Var [X], NumConst[value: 1]]
 ,else
-exprStmt Binary [MATH_CHANGE, Var [X], NumConst [1000]]
+exprStmt Binary [MATH_CHANGE, Var [X], NumConst[value: 1000]]
 
-AssertStmt [asserts pos-10: Binary [EQ, NumConst [9], Var [X]]]
+AssertStmt[asserts: Binary [EQ, NumConst[value: 9], Var [X]], msg: pos-10]
 
-if BoolConst [false]
+if BoolConst[value: false]
 ,then
-exprStmt Binary [MATH_CHANGE, Var [X], NumConst [1000]]
+exprStmt Binary [MATH_CHANGE, Var [X], NumConst[value: 1000]]
 ,else
-exprStmt Binary [MATH_CHANGE, Var [X], NumConst [1]]
+exprStmt Binary [MATH_CHANGE, Var [X], NumConst[value: 1]]
 
-AssertStmt [asserts pos-11: Binary [EQ, NumConst [10], Var [X]]]
+AssertStmt[asserts: Binary [EQ, NumConst[value: 10], Var [X]], msg: pos-11]
 
-if BoolConst [true]
+if BoolConst[value: true]
 ,then
-exprStmt Binary [MATH_CHANGE, Var [X], NumConst [1]]
-,else if BoolConst [true]
+exprStmt Binary [MATH_CHANGE, Var [X], NumConst[value: 1]]
+,else if BoolConst[value: true]
 ,then
-exprStmt Binary [MATH_CHANGE, Var [X], NumConst [1000]]
+exprStmt Binary [MATH_CHANGE, Var [X], NumConst[value: 1000]]
 ,else
-exprStmt Binary [MATH_CHANGE, Var [X], NumConst [1000]]
+exprStmt Binary [MATH_CHANGE, Var [X], NumConst[value: 1000]]
 
-AssertStmt [asserts pos-12: Binary [EQ, NumConst [11], Var [X]]]
+AssertStmt[asserts: Binary [EQ, NumConst[value: 11], Var [X]], msg: pos-12]
 
-if BoolConst [false]
+if BoolConst[value: false]
 ,then
-exprStmt Binary [MATH_CHANGE, Var [X], NumConst [1000]]
-,else if BoolConst [false]
+exprStmt Binary [MATH_CHANGE, Var [X], NumConst[value: 1000]]
+,else if BoolConst[value: false]
 ,then
-exprStmt Binary [MATH_CHANGE, Var [X], NumConst [1000]]
+exprStmt Binary [MATH_CHANGE, Var [X], NumConst[value: 1000]]
 ,else
-exprStmt Binary [MATH_CHANGE, Var [X], NumConst [1]]
+exprStmt Binary [MATH_CHANGE, Var [X], NumConst[value: 1]]
 
-AssertStmt [asserts pos-13: Binary [EQ, NumConst [12], Var [X]]]
+AssertStmt[asserts: Binary [EQ, NumConst[value: 12], Var [X]], msg: pos-13]
 
-if BoolConst [true]
+if BoolConst[value: true]
 ,then
-exprStmt Binary [MATH_CHANGE, Var [X], NumConst [1]]
-,else if BoolConst [false]
+exprStmt Binary [MATH_CHANGE, Var [X], NumConst[value: 1]]
+,else if BoolConst[value: false]
 ,then
-exprStmt Binary [MATH_CHANGE, Var [X], NumConst [1000]]
+exprStmt Binary [MATH_CHANGE, Var [X], NumConst[value: 1000]]
 ,else
-exprStmt Binary [MATH_CHANGE, Var [X], NumConst [1000]]
+exprStmt Binary [MATH_CHANGE, Var [X], NumConst[value: 1000]]
 
-AssertStmt [asserts pos-14: Binary [EQ, NumConst [14], Var [X]]]
+AssertStmt[asserts: Binary [EQ, NumConst[value: 14], Var [X]], msg: pos-14]
 
-if BoolConst [false]
+if BoolConst[value: false]
 ,then
-exprStmt Binary [MATH_CHANGE, Var [X], NumConst [1000]]
-,else if BoolConst [true]
+exprStmt Binary [MATH_CHANGE, Var [X], NumConst[value: 1000]]
+,else if BoolConst[value: true]
 ,then
-exprStmt Binary [MATH_CHANGE, Var [X], NumConst [1]]
+exprStmt Binary [MATH_CHANGE, Var [X], NumConst[value: 1]]
 ,else
-exprStmt Binary [MATH_CHANGE, Var [X], NumConst [1000]]
+exprStmt Binary [MATH_CHANGE, Var [X], NumConst[value: 1000]]
 
-AssertStmt [asserts pos-15: Binary [EQ, NumConst [14], Var [X]]]
-DebugAction [StmtExpr [
-if Binary [EQ, NumConst [14], Var [X]]
+AssertStmt[asserts: Binary [EQ, NumConst[value: 14], Var [X]], msg: pos-15]
+DebugAction[value: StmtExpr [
+if Binary [EQ, NumConst[value: 14], Var [X]]
 ,then
-exprStmt StringConst [Control Flow Test: success]
+exprStmt StringConst[value: Control Flow Test: success]
 ,else
-exprStmt StringConst [Control Flow Test: FAIL]
+exprStmt StringConst[value: Control Flow Test: FAIL]
 ]]

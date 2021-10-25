@@ -1,0 +1,6 @@
+Sensors: 
+[UsedSensor [4, INFRARED, DISTANCE], UsedSensor [4, INFRARED, SEEK], UsedSensor [2, SOUND, SOUND]]
+Actors: 
+[UsedActor [- EMPTY_PORT -, DISPLAY]]
+Methods: 
+[]

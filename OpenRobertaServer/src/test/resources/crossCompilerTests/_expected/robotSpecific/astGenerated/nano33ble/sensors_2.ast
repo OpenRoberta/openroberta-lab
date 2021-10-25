@@ -1,3 +1,0 @@
-
-(repeat [FOREVER_ARDU, BoolConst [true]]MethodStmt [MethodCall [sensors, , , VOID]]MethodStmt [MethodCall [sensorsWaitUntil, , , VOID]]
-)

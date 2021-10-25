@@ -18,6 +18,10 @@ require.config({
         'volume-meter': 'libs/sound/volume-meter',
         'neuralnetwork-lib': 'libs/neuralnetwork/lib',
         'd3': 'libs/neuralnetwork/d3.min',
+        'webots': 'libs/webots/webots.min',
+        'glm': 'libs/webots/glm-js.min',
+        'webots.enum': 'libs/webots/enum',
+        'webots.wren': 'libs/webots/wrenjs',
 
         'confDelete.controller': 'app/roberta/controller/confDelete.controller',
         'configuration.controller': 'app/roberta/controller/configuration.controller',
@@ -107,8 +111,12 @@ require.config({
         'robotBlock': 'app/configVisualization/robotBlock',
         'wires': 'app/configVisualization/wires',
 
+        'webots.simulation': "app/webotsSimulation/webots.simulation"
     },
     shim: {
+        'webots': {
+            deps: ['glm', 'webots.enum', 'webots.wren']
+        },
         'bootstrap': {
             deps: ['jquery']
         },
@@ -138,13 +146,13 @@ require.config({
     }
 });
 
-require(['require', 'huebee', 'wrap', 'log','jquery', 'blockly', 'guiState.controller', 'progList.controller', 'logList.controller', 'confList.controller',
+require(['require', 'huebee', 'wrap', 'log', 'jquery', 'blockly', 'guiState.controller', 'progList.controller', 'logList.controller', 'confList.controller',
     'progDelete.controller', 'confDelete.controller', 'progShare.controller', 'menu.controller', 'multSim.controller', 'user.controller', 'nn.controller',
     'robot.controller', 'program.controller', 'progSim.controller', 'notification.controller', 'progCode.controller', 'progDelete.controller', 'progHelp.controller',
     'legal.controller', 'progInfo.controller', 'progRun.controller', 'configuration.controller', 'language.controller', 'socket.controller',
     'progTutorial.controller', 'tutorialList.controller', 'userGroup.controller', 'volume-meter', 'user.model', 'webview.controller',
     'sourceCodeEditor.controller', 'codeflask', 'interpreter.jsHelper', 'confVisualization', 'robotBlock'], function(
-        require) {
+    require) {
     $ = require('jquery');
     WRAP = require('wrap');
     LOG = require('log');

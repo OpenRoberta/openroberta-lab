@@ -25,7 +25,7 @@ public class PlayNoteAction<V> extends Action<V> {
     @NepoField(name = BlocklyConstants.FREQUENCE, value = "261.626")
     public final String frequency;
     @NepoField(name = BlocklyConstants.ACTORPORT, value = BlocklyConstants.EMPTY_PORT)
-    public final  String port;
+    public final String port;
     @NepoHide
     public final Hide hide;
 
@@ -52,10 +52,6 @@ public class PlayNoteAction<V> extends Action<V> {
         return new PlayNoteAction<>(BlockTypeContainer.getByName("PLAY_NOTE_ACTION"), properties, comment, duration, frequency, port, hide);
     }
 
-    public String getPort() {
-        return this.port;
-    }
-
     public String getDuration() {
         return this.duration;
     }
@@ -66,5 +62,9 @@ public class PlayNoteAction<V> extends Action<V> {
 
     public Hide getHide() {
         return this.hide;
+    }
+
+    public String getPort() {
+        return this.port;
     }
 }

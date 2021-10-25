@@ -1,57 +1,55 @@
+StmtTextComment[textComment: Math basics START]
 
-StmtTextComment [Math basics START]
-
-Var [ergebnis] := Binary [ADD, Var [ergebnis], NumConst [1]]
-
-
-Var [ergebnis] := Binary [MINUS, Var [ergebnis], NumConst [3]]
+Var [ergebnis] := Binary [ADD, Var [ergebnis], NumConst[value: 1]]
 
 
-Var [ergebnis] := Binary [MULTIPLY, Var [ergebnis], NumConst [-1]]
+Var [ergebnis] := Binary [MINUS, Var [ergebnis], NumConst[value: 3]]
 
 
-Var [ergebnis] := Binary [DIVIDE, Var [ergebnis], NumConst [2]]
-
-AssertStmt [asserts pos-1: Binary [EQ, NumConst [1], Var [ergebnis]]]
-
-Var [ergebnis] := Binary [ADD, Var [ergebnis], Binary [MINUS, NumConst [0.1], NumConst [0.1]]]
+Var [ergebnis] := Binary [MULTIPLY, Var [ergebnis], NumConst[value: -1]]
 
 
-Var [ergebnis] := Binary [ADD, Var [ergebnis], Binary [MULTIPLY, NumConst [5], NumConst [2]]]
+Var [ergebnis] := Binary [DIVIDE, Var [ergebnis], NumConst[value: 2]]
+
+AssertStmt[asserts: Binary [EQ, NumConst[value: 1], Var [ergebnis]], msg: pos-1]
+
+Var [ergebnis] := Binary [ADD, Var [ergebnis], Binary [MINUS, NumConst[value: 0.1], NumConst[value: 0.1]]]
 
 
-Var [ergebnis] := Binary [ADD, Var [ergebnis], Binary [DIVIDE, NumConst [3], NumConst [2]]]
-
-AssertStmt [asserts pos-2: Binary [EQ, NumConst [12.5], Var [ergebnis]]]
-
-Var [ergebnis] := Binary [MULTIPLY, Var [ergebnis], Binary [ADD, NumConst [1], NumConst [2]]]
+Var [ergebnis] := Binary [ADD, Var [ergebnis], Binary [MULTIPLY, NumConst[value: 5], NumConst[value: 2]]]
 
 
-Var [ergebnis] := Binary [MULTIPLY, Var [ergebnis], Binary [MINUS, NumConst [1], NumConst [2]]]
+Var [ergebnis] := Binary [ADD, Var [ergebnis], Binary [DIVIDE, NumConst[value: 3], NumConst[value: 2]]]
+
+AssertStmt[asserts: Binary [EQ, NumConst[value: 12.5], Var [ergebnis]], msg: pos-2]
+
+Var [ergebnis] := Binary [MULTIPLY, Var [ergebnis], Binary [ADD, NumConst[value: 1], NumConst[value: 2]]]
 
 
-Var [ergebnis] := Binary [MULTIPLY, Var [ergebnis], Binary [DIVIDE, NumConst [1], NumConst [2]]]
-
-AssertStmt [asserts pos-3: Binary [EQ, NumConst [-18.75], Var [ergebnis]]]
-
-Var [ergebnis] := Binary [DIVIDE, Var [ergebnis], Binary [ADD, NumConst [0.1], NumConst [0.1]]]
+Var [ergebnis] := Binary [MULTIPLY, Var [ergebnis], Binary [MINUS, NumConst[value: 1], NumConst[value: 2]]]
 
 
-Var [ergebnis] := Binary [DIVIDE, Var [ergebnis], Binary [MINUS, NumConst [0.1], NumConst [0.2]]]
+Var [ergebnis] := Binary [MULTIPLY, Var [ergebnis], Binary [DIVIDE, NumConst[value: 1], NumConst[value: 2]]]
+
+AssertStmt[asserts: Binary [EQ, NumConst[value: -18.75], Var [ergebnis]], msg: pos-3]
+
+Var [ergebnis] := Binary [DIVIDE, Var [ergebnis], Binary [ADD, NumConst[value: 0.1], NumConst[value: 0.1]]]
 
 
-Var [ergebnis] := Binary [DIVIDE, Var [ergebnis], Binary [MULTIPLY, NumConst [0.1], NumConst [0.1]]]
-
-AssertStmt [asserts pos-4: Binary [GT, NumConst [1e-7], FunctionExpr [MathSingleFunct [ABS, [Binary [MINUS, NumConst [93750], Var [ergebnis]]]]]]]
-
-Var [ergebnis] := Binary [MINUS, Var [ergebnis], Binary [ADD, NumConst [1.535345], NumConst [0.999999999999999]]]
+Var [ergebnis] := Binary [DIVIDE, Var [ergebnis], Binary [MINUS, NumConst[value: 0.1], NumConst[value: 0.2]]]
 
 
-Var [ergebnis] := Binary [MINUS, Var [ergebnis], Binary [ADD, NumConst [0.1111111111111111], NumConst [0.9999999999999999]]]
+Var [ergebnis] := Binary [DIVIDE, Var [ergebnis], Binary [MULTIPLY, NumConst[value: 0.1], NumConst[value: 0.1]]]
+
+AssertStmt[asserts: Binary [GT, NumConst[value: 1e-7], FunctionExpr [MathSingleFunct [ABS, [Binary [MINUS, NumConst[value: 93750], Var [ergebnis]]]]]], msg: pos-4]
+
+Var [ergebnis] := Binary [MINUS, Var [ergebnis], Binary [ADD, NumConst[value: 1.535345], NumConst[value: 0.999999999999999]]]
 
 
-Var [ergebnis] := Binary [MINUS, Var [ergebnis], Binary [ADD, NumConst [435], NumConst [0.14543]]]
+Var [ergebnis] := Binary [MINUS, Var [ergebnis], Binary [ADD, NumConst[value: 0.1111111111111111], NumConst[value: 0.9999999999999999]]]
 
-AssertStmt [asserts pos-5: Binary [GT, NumConst [1e-7], FunctionExpr [MathSingleFunct [ABS, [Binary [MINUS, NumConst [93311.208113889], Var [ergebnis]]]]]]]
 
-StmtTextComment [Math basics END]
+Var [ergebnis] := Binary [MINUS, Var [ergebnis], Binary [ADD, NumConst[value: 435], NumConst[value: 0.14543]]]
+
+AssertStmt[asserts: Binary [GT, NumConst[value: 1e-7], FunctionExpr [MathSingleFunct [ABS, [Binary [MINUS, NumConst[value: 93311.208113889], Var [ergebnis]]]]]], msg: pos-5]
+StmtTextComment[textComment: Math basics END]

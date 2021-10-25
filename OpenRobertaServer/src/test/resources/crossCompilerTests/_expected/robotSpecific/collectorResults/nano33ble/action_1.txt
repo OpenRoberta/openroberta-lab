@@ -1,0 +1,6 @@
+Sensors: 
+[]
+Actors: 
+[UsedActor [SERIAL, SERIAL], UsedActor [analog, ANALOG_PIN], UsedActor [digital, ANALOG_PIN]]
+Methods: 
+[]

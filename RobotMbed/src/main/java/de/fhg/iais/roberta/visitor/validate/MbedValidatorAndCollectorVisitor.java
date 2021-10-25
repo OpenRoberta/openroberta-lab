@@ -353,7 +353,9 @@ public class MbedValidatorAndCollectorVisitor extends CommonNepoValidatorAndColl
     public Void visitPinWriteValueAction(PinWriteValueAction<Void> pinWriteValueAction) {
         ConfigurationComponent configurationComponent = checkActorByPortExists(pinWriteValueAction, pinWriteValueAction.getPort());
         requiredComponentVisited(pinWriteValueAction, pinWriteValueAction.getValue());
-        usedHardwareBuilder.addUsedActor(new UsedActor(configurationComponent.getUserDefinedPortName(), configurationComponent.getComponentType()));
+        if ( configurationComponent != null ) {
+            usedHardwareBuilder.addUsedActor(new UsedActor(configurationComponent.getUserDefinedPortName(), configurationComponent.getComponentType()));
+        }
         return null;
     }
 

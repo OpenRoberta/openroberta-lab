@@ -1,0 +1,6 @@
+Sensors: 
+[UsedSensor [M, MOISTURE, VALUE]]
+Actors: 
+[UsedActor [SERIAL, SERIAL]]
+Methods: 
+[]

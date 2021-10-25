@@ -1,8 +1,8 @@
 define(['exports', 'log', 'util', 'message', 'comm', 'wrap', 'robot.controller', 'socket.controller', 'user.controller', 'user.model', 'notification.controller', 'userGroup.controller', 'guiState.controller',
-    'program.controller', 'program.model', 'multSim.controller', 'progRun.controller', 'configuration.controller', 'import.controller', 'enjoyHint',
+    'program.controller', 'program.model', 'multSim.controller', 'progRun.controller', 'configuration.controller', 'import.controller','sourceCodeEditor.controller', 'enjoyHint',
     'tour.controller', 'simulation.simulation', 'progList.model', 'jquery', 'blockly', 'slick'
 ], function(exports, LOG, UTIL, MSG, COMM, WRAP, ROBOT_C, SOCKET_C,
-    USER_C, USER, NOTIFICATION_C, USERGROUP_C, GUISTATE_C, PROGRAM_C, PROGRAM_M, MULT_SIM, RUN_C, CONFIGURATION_C, IMPORT_C, EnjoyHint, TOUR_C, SIM, PROGLIST, $, Blockly) {
+    USER_C, USER, NOTIFICATION_C, USERGROUP_C, GUISTATE_C, PROGRAM_C, PROGRAM_M, MULT_SIM, RUN_C, CONFIGURATION_C, IMPORT_C, SOURCECODE_C, EnjoyHint, TOUR_C, SIM, PROGLIST, $, Blockly) {
 
     var n = 0;
 
@@ -389,13 +389,16 @@ define(['exports', 'log', 'util', 'message', 'comm', 'wrap', 'robot.controller',
                         $('#codeButton').clickWrap();
                         break;
                     case 'menuSourceCodeEditor':
-                        $('#tabSourceCodeEditor').clickWrap();
+                        SOURCECODE_C.clickSourceCodeEditor();
                         break;
                     case 'menuImportProg':
                         IMPORT_C.importXml();
                         break;
                     case 'menuExportProg':
                         PROGRAM_C.exportXml();
+                        break;
+                    case 'menuExportAllProgs' :
+                        PROGRAM_C.exportAllXml();
                         break;
                     case 'menuLinkProg':
                         PROGRAM_C.linkProgram();

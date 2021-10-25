@@ -77,7 +77,7 @@ public class MbedTwo2ThreeTransformerVisitor implements IMbedTransformerVisitor<
         this.builder.addUsedConfigurationComponent(compAndName.getFirst());
 
         return LedOnAction
-            .make(compAndName.getSecond(), (Expr<Void>) ledOnAction.getLedColor().modify(this), ledOnAction.getProperty(), ledOnAction.getComment());
+            .make(ledOnAction.getProperty(), ledOnAction.getComment(), (Expr<Void>) ledOnAction.getLedColor().modify(this), compAndName.getSecond(), ledOnAction.hide );
     }
 
     @Override

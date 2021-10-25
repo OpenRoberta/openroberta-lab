@@ -149,9 +149,9 @@ public abstract class AbstractCppVisitor extends AbstractLanguageVisitor {
 
     @Override
     public Void visitStmtFlowCon(StmtFlowCon<Void> stmtFlowCon) {
-        if ( this.getBean(UsedHardwareBean.class).getLoopsLabelContainer().get(this.currenLoop.getLast()) != null ) {
-            if ( this.getBean(UsedHardwareBean.class).getLoopsLabelContainer().get(this.currenLoop.getLast()) ) {
-                this.sb.append("goto " + stmtFlowCon.getFlow().toString().toLowerCase() + "_loop" + this.currenLoop.getLast() + ";");
+        if ( this.getBean(UsedHardwareBean.class).getLoopsLabelContainer().get(this.currentLoop.getLast()) != null ) {
+            if ( this.getBean(UsedHardwareBean.class).getLoopsLabelContainer().get(this.currentLoop.getLast()) ) {
+                this.sb.append("goto " + stmtFlowCon.getFlow().toString().toLowerCase() + "_loop" + this.currentLoop.getLast() + ";");
                 return null;
             }
         }
@@ -740,21 +740,21 @@ public abstract class AbstractCppVisitor extends AbstractLanguageVisitor {
     }
 
     protected void addContinueLabelToLoop() {
-        Integer lastLoop = this.currenLoop.getLast();
+        Integer lastLoop = this.currentLoop.getLast();
         if ( this.getBean(UsedHardwareBean.class).getLoopsLabelContainer().get(lastLoop) ) {
             nlIndent();
-            this.sb.append("continue_loop" + this.currenLoop.getLast() + ":");
+            this.sb.append("continue_loop" + this.currentLoop.getLast() + ":;");
         }
     }
 
     protected void addBreakLabelToLoop(boolean isWaitStmt) {
         if ( !isWaitStmt ) {
-            if ( this.getBean(UsedHardwareBean.class).getLoopsLabelContainer().get(this.currenLoop.getLast()) ) {
+            if ( this.getBean(UsedHardwareBean.class).getLoopsLabelContainer().get(this.currentLoop.getLast()) ) {
                 nlIndent();
-                this.sb.append("break_loop" + this.currenLoop.getLast() + ":");
+                this.sb.append("break_loop" + this.currentLoop.getLast() + ":;");
                 nlIndent();
             }
-            this.currenLoop.removeLast();
+            this.currentLoop.removeLast();
         }
     }
 

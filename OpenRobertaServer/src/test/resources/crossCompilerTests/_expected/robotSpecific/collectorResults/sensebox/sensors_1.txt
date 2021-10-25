@@ -1,0 +1,6 @@
+Sensors: 
+[UsedSensor [L, LIGHT, LIGHT], UsedSensor [P, VOLTAGE, VALUE], UsedSensor [S4, SOUND, SOUND], UsedSensor [H, HUMIDITY, HUMIDITY], UsedSensor [H, HUMIDITY, TEMPERATURE], UsedSensor [T, TEMPERATURE, TEMPERATURE], UsedSensor [T, TEMPERATURE, PRESSURE], UsedSensor [V, LIGHTVEML, LIGHT], UsedSensor [V, LIGHTVEML, UVLIGHT], UsedSensor [B, ACCELEROMETER, X], UsedSensor [B, ACCELEROMETER, Y], UsedSensor [B, ACCELEROMETER, Z], UsedSensor [S5, PARTICLE, PM25], UsedSensor [S5, PARTICLE, PM10], UsedSensor [G2, GPS, LATITUDE], UsedSensor [G2, GPS, LONGITUDE], UsedSensor [G2, GPS, ALTITUDE], UsedSensor [G2, GPS, SPEED], UsedSensor [G2, GPS, DATE], UsedSensor [G2, GPS, TIME], UsedSensor [1, TIMER, VALUE], UsedSensor [1, TIMER, RESET], UsedSensor [U, ENVIRONMENTAL, TEMPERATURE], UsedSensor [U, ENVIRONMENTAL, HUMIDITY], UsedSensor [U, ENVIRONMENTAL, PRESSURE], UsedSensor [U, ENVIRONMENTAL, IAQ], UsedSensor [U, ENVIRONMENTAL, CALIBRATION], UsedSensor [U, ENVIRONMENTAL, CO2EQUIVALENT], UsedSensor [U, ENVIRONMENTAL, VOCEQUIVALENT]]
+Actors: 
+[UsedActor [SERIAL, SERIAL]]
+Methods: 
+[]

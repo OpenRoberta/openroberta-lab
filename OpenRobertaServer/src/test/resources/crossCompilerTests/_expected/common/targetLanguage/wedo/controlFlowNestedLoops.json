@@ -617,6 +617,77 @@
   },
   {
     "opc": "comment",
+    "type": "start",
+    "target": "RepeatStmt"
+  },
+  {
+    "opc": "comment",
+    "type": "start",
+    "target": "WaitStmt"
+  },
+  {
+    "opc": "expr",
+    "expr": "BOOL_CONST",
+    "value": true
+  },
+  {
+    "opc": "jump",
+    "conditional": false,
+    "target": 132
+  },
+  {
+    "opc": "jump",
+    "conditional": "always",
+    "target": 140
+  },
+  {
+    "opc": "jump",
+    "conditional": "always",
+    "target": 138
+  },
+  {
+    "opc": "expr",
+    "expr": "BOOL_CONST",
+    "value": true
+  },
+  {
+    "opc": "jump",
+    "conditional": false,
+    "target": 135
+  },
+  {
+    "opc": "jump",
+    "conditional": "always",
+    "target": 138
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": 1
+  },
+  {"opc": "WaitTimeSTMT"},
+  {
+    "opc": "jump",
+    "conditional": "always",
+    "target": 128
+  },
+  {
+    "opc": "comment",
+    "type": "end",
+    "target": "WaitStmt"
+  },
+  {
+    "opc": "jump",
+    "conditional": "always",
+    "target": 127
+  },
+  {
+    "opc": "comment",
+    "type": "end",
+    "target": "RepeatStmt"
+  },
+  {
+    "opc": "comment",
     "value": "Control Flow Nested Loop -- End"
   },
   {"opc": "stop"}

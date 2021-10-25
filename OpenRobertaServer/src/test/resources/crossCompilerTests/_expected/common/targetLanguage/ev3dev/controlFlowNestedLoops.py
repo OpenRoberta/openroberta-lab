@@ -55,6 +55,19 @@ def run():
             break
         break
     print("Control Flow Nested Loops Test:success" if ( 24 == ___X ) else "ntrol Flow Nested Loops Test: FAIL")
+    while True:
+        try:
+            while True:
+                if True:
+                    raise BreakOutOfALoop
+                    break
+                if True:
+                    break
+                hal.waitFor(15)
+        except BreakOutOfALoop:
+            break
+        except ContinueLoop:
+            continue
     # Control Flow Nested Loop -- End
 
 def main():

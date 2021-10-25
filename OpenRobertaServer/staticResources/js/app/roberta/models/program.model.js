@@ -77,6 +77,16 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
     exports.loadProgramFromXML = loadProgramFromXML;
 
     /**
+     * Downloads the programs by the current User
+     * if no user is logged in this does nothing
+     */
+    function exportAllProgramsXml() {
+        COMM.download("/program/exportAllPrograms");
+    }
+
+    exports.exportAllProgramsXml = exportAllProgramsXml;
+
+    /**
      * Share program with another user.
      * 
      * @param programName

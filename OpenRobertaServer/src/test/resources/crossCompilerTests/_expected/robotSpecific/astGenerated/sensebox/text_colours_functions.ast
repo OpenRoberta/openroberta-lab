@@ -1,9 +1,9 @@
 
-(repeat [FOREVER_ARDU, BoolConst [true]]MethodStmt [MethodCall [text, , , VOID]]MethodStmt [MethodCall [colour, , , VOID]]MethodStmt [MethodCall [parameters, Var [x], Var [x2], Var [x3], Var [x4], Var [x5], Var [x6], Var [x7], Var [x8], Var [numVar], Var [boolVar], Var [stringVar], Var [colourVar], Var [numList], Var [boolList], Var [stringList], Var [colourList], VOID]]
-AktionStmt [PinWriteValueSensor [MethodExpr [MethodCall [function_return_numberVar, , , NUMBER]]]]
-AktionStmt [PinWriteValueSensor [MethodExpr [MethodCall [function_return_booleanVar, , , BOOLEAN]]]]
-AktionStmt [PinWriteValueSensor [MethodExpr [MethodCall [function_return_stringVar, , , STRING]]]]
-AktionStmt [PinWriteValueSensor [MethodExpr [MethodCall [function_return_colourVar, , , COLOR]]]]
+(repeat [FOREVER_ARDU, BoolConst[value: true]]MethodStmt [MethodCall [text, , , VOID]]MethodStmt [MethodCall [colour, , , VOID]]MethodStmt [MethodCall [parameters, Var [x], Var [x2], Var [x3], Var [x4], Var [x5], Var [x6], Var [x7], Var [x8], Var [numVar], Var [boolVar], Var [stringVar], Var [colourVar], Var [numList], Var [boolList], Var [stringList], Var [colourList], VOID]]
+AktionStmt [SerialWriteAction[value: MethodExpr [MethodCall [function_return_numberVar, , , NUMBER]]]]
+AktionStmt [SerialWriteAction[value: MethodExpr [MethodCall [function_return_booleanVar, , , BOOLEAN]]]]
+AktionStmt [SerialWriteAction[value: MethodExpr [MethodCall [function_return_stringVar, , , STRING]]]]
+AktionStmt [SerialWriteAction[value: MethodExpr [MethodCall [function_return_colourVar, , , COLOR]]]]
 Var [numList] := MethodExpr [MethodCall [function_return_numberList, , , ARRAY_NUMBER]]
 
 Var [boolList] := MethodExpr [MethodCall [function_return_booleanList, , , ARRAY_BOOLEAN]]

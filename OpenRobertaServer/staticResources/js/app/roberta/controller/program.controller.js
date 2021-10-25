@@ -1,5 +1,5 @@
-define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'robot.controller', 'program.model', 'configuration.controller', 'progCode.controller', 'blockly', 'jquery',
-        'jquery-validate' ], function(exports, COMM, MSG, LOG, UTIL, GUISTATE_C, ROBOT_C, PROGRAM, CONFIGURATION_C, PROGCODE_C, Blockly, $) {
+define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'robot.controller', 'program.model', 'user.model', 'configuration.controller', 'progCode.controller', 'blockly', 'jquery',
+        'jquery-validate' ], function(exports, COMM, MSG, LOG, UTIL, GUISTATE_C, ROBOT_C, PROGRAM, USER, CONFIGURATION_C, PROGCODE_C, Blockly, $) {
 
     var $formSingleModal;
 
@@ -401,12 +401,27 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'ro
     function exportXml() {
         var dom = Blockly.Xml.workspaceToDom(blocklyWorkspace);
         var xml = '<export xmlns="http://de.fhg.iais.roberta.blockly"><program>' + Blockly.Xml.domToText(dom) + '</program><config>'
-                + GUISTATE_C.getConfigurationXML() + '</config></export>';
+            + GUISTATE_C.getConfigurationXML() + '</config></export>';
         LOG.info('ProgramExport');
         UTIL.download(GUISTATE_C.getProgramName() + ".xml", xml);
         MSG.displayMessage("MENU_MESSAGE_DOWNLOAD", "TOAST", GUISTATE_C.getProgramName());
     }
     exports.exportXml = exportXml;
+
+    /**
+     * Download all programs by the current User
+     */
+    function exportAllXml() {
+        USER.userLoggedInCheck(function (result) {
+            if (result.rc === 'ok') {
+                PROGRAM.exportAllProgramsXml();
+            } else {
+                MSG.displayMessage(result.cause, "TOAST", "Log in check failed for Export");
+            }
+        });
+    }
+    exports.exportAllXml = exportAllXml;
+
 
     function getBlocklyWorkspace() {
         return blocklyWorkspace;

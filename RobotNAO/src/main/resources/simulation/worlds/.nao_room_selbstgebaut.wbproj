@@ -1,0 +1,13 @@
+Webots Project File version R2021c
+perspectives: 000000ff00000000fd00000002000000010000011c00000157fc0200000001fb0000001400540065007800740045006400690074006f00720100000016000001570000004100ffffff00000003000003c000000069fc0100000001fb0000001a0043006f006e0073006f006c00650041006c006c0041006c006c0100000000000003c00000006900ffffff000002a20000015700000001000000020000000100000008fc00000000
+simulationViewPerspectives: 000000ff000000010000000200000100000001a20100000002010000000100
+sceneTreePerspectives: 000000ff00000001000000020000007d000000fa0100000002010000000200
+maximizedDockId: -1
+centralWidgetVisible: 1
+projectionMode: PERSPECTIVE
+orthographicViewHeight: 1
+textFiles: 1 "../webots/projects/objects/floors/protos/Floor.proto" "../webots/projects/appearances/protos/VarnishedPine.proto"
+globalOptionalRendering: LightPositions
+consoles: Console:All:All
+renderingDevicePerspectives: NAO:CameraBottom;0;1;0;0
+renderingDevicePerspectives: NAO:CameraTop;0;1;0;0

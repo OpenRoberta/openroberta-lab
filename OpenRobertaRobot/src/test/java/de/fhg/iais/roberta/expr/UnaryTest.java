@@ -13,7 +13,7 @@ public class UnaryTest extends AstTest {
 
     @Test
     public void make() throws Exception {
-        String a = "BlockAST [project=[[Location [x=-46, y=111], Unary [NEG, NumConst [10]]]]]";
+        String a = "BlockAST [project=[[Location [x=-46, y=111], Unary [NEG, NumConst [value:10]]]]]";
 
         UnitTestHelper.checkProgramAstEquality(testFactory, a, "/ast/math/math_single1.xml");
     }
@@ -27,11 +27,11 @@ public class UnaryTest extends AstTest {
     @Test
     public void getExpr() throws Exception {
         Unary<Void> unary = (Unary<Void>) UnitTestHelper.getAstOfFirstBlock(testFactory, "/ast/math/math_single1.xml");
-        Assert.assertEquals("NumConst [10]", unary.getExpr().toString());
+        Assert.assertEquals("NumConst[value: 10]", unary.getExpr().toString());
     }
 
     @Test
-    public void getPresedance() throws Exception {
+    public void getPrecedance() throws Exception {
         Unary<Void> unary = (Unary<Void>) UnitTestHelper.getAstOfFirstBlock(testFactory, "/ast/math/math_single1.xml");
         Assert.assertEquals(10, unary.getPrecedence());
     }

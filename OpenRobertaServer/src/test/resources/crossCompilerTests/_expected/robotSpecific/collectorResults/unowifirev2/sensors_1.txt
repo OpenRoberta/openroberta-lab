@@ -1,0 +1,6 @@
+Sensors: 
+[UsedSensor [S2, PIN_VALUE, ANALOG], UsedSensor [S, PIN_VALUE, DIGITAL], UsedSensor [1, TIMER, VALUE], UsedSensor [1, TIMER, RESET], UsedSensor [B, MOTION, PRESENCE], UsedSensor [L2, LIGHT, LIGHT], UsedSensor [L3, HUMIDITY, HUMIDITY], UsedSensor [T3, DROP, VALUE], UsedSensor [P, PULSE, VALUE], UsedSensor [P2, VOLTAGE, VALUE], UsedSensor [U, ULTRASONIC, DISTANCE], UsedSensor [G, GYRO, X], UsedSensor [A, ACCELEROMETER, X], UsedSensor [T2, TEMPERATURE, TEMPERATURE], UsedSensor [L3, HUMIDITY, TEMPERATURE], UsedSensor [G, GYRO, Y], UsedSensor [G, GYRO, Z], UsedSensor [A, ACCELEROMETER, Y], UsedSensor [A, ACCELEROMETER, Z]]
+Actors: 
+[UsedActor [SERIAL, SERIAL]]
+Methods: 
+[]

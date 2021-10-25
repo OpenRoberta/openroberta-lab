@@ -1,10 +1,15 @@
 package de.fhg.iais.roberta.visitor.lang.codegen;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -91,7 +96,6 @@ import de.fhg.iais.roberta.syntax.lang.stmt.StmtTextComment;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
 import de.fhg.iais.roberta.syntax.sensor.Sensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.GetSampleSensor;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.typecheck.NepoInfo;
 import de.fhg.iais.roberta.util.dbc.Assert;
@@ -99,28 +103,21 @@ import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.visitor.C;
 import de.fhg.iais.roberta.visitor.IVisitor;
 import de.fhg.iais.roberta.visitor.lang.ILanguageVisitor;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
-
-import java.util.*;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
+import static de.fhg.iais.roberta.visitor.lang.codegen.JumpLinker.JumpTarget.BREAK;
+import static de.fhg.iais.roberta.visitor.lang.codegen.JumpLinker.JumpTarget.CONTINUE;
+import static de.fhg.iais.roberta.visitor.lang.codegen.JumpLinker.JumpTarget.INTERNAL_BREAK;
+import static de.fhg.iais.roberta.visitor.lang.codegen.JumpLinker.JumpTarget.METHOD_END;
+import static de.fhg.iais.roberta.visitor.lang.codegen.JumpLinker.JumpTarget.STATEMENT_END;
 
 public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor<V> {
     private static final Predicate<String> IS_INVALID_BLOCK_ID = s -> s.equals("1");
     private static final List<Class<? extends Phrase>> DONT_ADD_DEBUG_STOP = Arrays.asList(Expr.class, VarDeclaration.class, Sensor.class, MainTask.class, ExprStmt.class, StmtList.class, RepeatStmt.class, WaitStmt.class);
 
-    public static final int JUMP_END_MARKER = -2;
-    public static final int JUMP_THEN_MARKER = -1;
-    public static final int BREAK_MARKER = -1;
-    public static final int CONTINUE_MARKER = -2;
-    public static final int METHOD_END = -3;
-
     private List<JSONObject> opArray = new ArrayList<>();
     protected final ConfigurationAst configuration;
-    private final List<JSONObject> flowControlStatements = new ArrayList<>();
-    private final List<JSONObject> returnStatements = new ArrayList<>();
+
+    private final JumpLinker jumpLinker = new JumpLinker();
+
     private final Map<String, List<JSONObject>> methodCalls = new HashMap<>();
     private final Map<String, Integer> methodDeclarations = new HashMap<>();
 
@@ -131,10 +128,10 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
     /**
      * blocklyIds which will be initiated with next block
      */
-    private final Set<String> toInitateBlocks = new HashSet<>();
+    private final Set<String> toInitiateBlocks = new HashSet<>();
 
     /**
-     * blocklyIds which are inititated but not yet terminated
+     * blocklyIds which are initiated but not yet terminated
      */
     private final Set<String> openBlocks = new HashSet<>();
 
@@ -147,10 +144,10 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
     @Override
     public V visit(Phrase<V> visitable) {
         boolean isNotMainTask = !(visitable instanceof MainTask);
-        boolean shouldHightlight = isNotMainTask && !openBlocks.contains(visitable.getProperty().getBlocklyId());
-        if ( shouldHightlight ) beginPhrase(visitable);
+        boolean shouldHighlight = isNotMainTask && !openBlocks.contains(visitable.getProperty().getBlocklyId());
+        if ( shouldHighlight ) beginPhrase(visitable);
         V visit = ILanguageVisitor.super.visit(visitable);
-        if ( shouldHightlight ) endPhrase(visitable);
+        if ( shouldHighlight ) endPhrase(visitable);
         return visit;
     }
 
@@ -168,7 +165,7 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
                     }
                 }
             }
-            toInitateBlocks.remove(blocklyId);
+            toInitiateBlocks.remove(blocklyId);
             openBlocks.remove(blocklyId);
         }
     }
@@ -176,7 +173,7 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
     protected void beginPhrase(Phrase<V> phrase) {
         String blocklyId = phrase.getProperty().getBlocklyId();
         if ( debugger && isValidBlocklyId(blocklyId) ) {
-            toInitateBlocks.add(blocklyId);
+            toInitiateBlocks.add(blocklyId);
             openBlocks.add(blocklyId);
 
             if ( DONT_ADD_DEBUG_STOP.stream().noneMatch(cls -> cls.isInstance(phrase)) ) {
@@ -491,19 +488,18 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
             Assert.isTrue(numberOfThens == 1);
             Assert.isFalse(ifStmt.getElseList().get().isEmpty());
         }
-        List<JSONObject> jumpsToEnd = new ArrayList<>();
         // TODO: better a list of pairs. pair of lists needs this kind of for
         for ( int i = 0; i < numberOfThens; i++ ) {
             ifStmt.getExpr().get(i).accept(this);
             // JUMP when condition not fullfilled
-            JSONObject jumpOverThen = makeNode(C.JUMP).put(C.CONDITIONAL, false).put(C.TARGET, JUMP_THEN_MARKER);
+            JSONObject jumpOverThen = makeNode(C.JUMP).put(C.CONDITIONAL, false);
             app(jumpOverThen);
             ifStmt.getThenList().get(i).accept(this);
 
             // JUMP when if was fullfilled
-            JSONObject jumpToEnd = makeNode(C.JUMP).put(C.CONDITIONAL, C.ALWAYS).put(C.TARGET, JUMP_END_MARKER);
+            JSONObject jumpToEnd = makeNode(C.JUMP).put(C.CONDITIONAL, C.ALWAYS);
             app(jumpToEnd);
-            jumpsToEnd.add(jumpToEnd);
+            jumpLinker.register(jumpToEnd, STATEMENT_END);
 
             jumpOverThen.put(C.TARGET, opArray.size());
         }
@@ -511,7 +507,7 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
             ifStmt.getElseList().accept(this);
         }
 
-        jumpsToEnd
+        jumpLinker.handle(STATEMENT_END)
             .forEach(jump -> jump.put(C.TARGET, opArray.size()));
 
         appComment(C.IF_STMT, false);
@@ -541,18 +537,18 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
             case WAIT:
                 // the very special case of a wait stmt. The AST is not perfectly designed for this case
                 repeatStmt.getExpr().accept(this);
-                JSONObject skipThenPart = makeNode(C.JUMP).put(C.CONDITIONAL, false).put(C.TARGET, JUMP_THEN_MARKER);
+                JSONObject skipThenPart = makeNode(C.JUMP).put(C.CONDITIONAL, false);
                 app(skipThenPart);
                 repeatStmt.getList().accept(this);
-                JSONObject breakStatement = makeNode(C.JUMP).put(C.CONDITIONAL, C.ALWAYS).put(C.TARGET, BREAK_MARKER);
-                addHightlightingsToJump(breakStatement);
+                JSONObject breakStatement = makeNode(C.JUMP).put(C.CONDITIONAL, C.ALWAYS);
+                addHighlightingToJump(breakStatement);
                 app(breakStatement);
-                flowControlStatements.add(breakStatement);
+                jumpLinker.register(breakStatement, INTERNAL_BREAK);
                 skipThenPart.put(C.TARGET, opArray.size());
                 return null;
             case FOR:
             case TIMES:
-                encloseFlowStatementScope(() -> {
+                jumpLinker.isolate(() -> {
                     appComment(C.REPEAT_STMT, true);
 
                     if ( !(repeatStmt.getExpr() instanceof ExprList<?>) ) {
@@ -581,7 +577,7 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
                     JSONObject jump = makeNode(C.JUMP).put(C.CONDITIONAL, false);
                     app(jump);
 
-                    addDebugStatment(repeatStmt);
+                    addDebugStatement(repeatStmt);
 
                     repeatStmt.getList().accept(this);
 
@@ -599,22 +595,25 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
 
                     app(makeNode(C.UNBIND_VAR).put(C.NAME, variableName));
 
-                    flowControlStatements.forEach(statement -> {
-                        if ( statement.get(C.TARGET).equals(CONTINUE_MARKER) ) {
-                            statement.put(C.TARGET, programCounterAfterStatementList);
-                            removeOpenBlocksFromDehighlight(statement);
-                        } else if ( statement.get(C.TARGET).equals(BREAK_MARKER) ) {
-                            statement.put(C.TARGET, programCounterAfterForLoop);
-                            removeOpenBlocksFromDehighlight(statement, blocklyId);
-                        } else {
-                            throw new DbcException("Invalid flow control expression");
-                        }
+                    jumpLinker.handle(CONTINUE).forEach(statement -> {
+                        statement.put(C.TARGET, programCounterAfterStatementList);
+                        removeOpenBlocksFromUnhighlight(statement);
                     });
+
+                    jumpLinker.handle(BREAK).forEach(statement -> {
+                        statement.put(C.TARGET, programCounterAfterForLoop);
+                        removeOpenBlocksFromUnhighlight(statement, blocklyId);
+                    });
+
+                    if ( !jumpLinker.isEmpty() ) {
+                        throw new DbcException("Invalid flow control expression");
+                    }
+
                     appComment(C.REPEAT_STMT, false);
                 });
                 return null;
             case FOR_EACH:
-                encloseFlowStatementScope(() -> {
+                jumpLinker.isolate(() -> {
                     appComment(C.REPEAT_STMT, true);
                     if ( !(repeatStmt.getExpr() instanceof Binary<?>) ) {
                         throw new DbcException(String.format("Expected %s to be an Binary", repeatStmt.getExpr()));
@@ -659,7 +658,7 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
                         .put(C.POSITION, IndexLocation.FROM_START.toString().toLowerCase()));
                     app(makeNode(C.ASSIGN_STMT).put(C.NAME, variableName));
 
-                    addDebugStatment(repeatStmt);
+                    addDebugStatement(repeatStmt);
                     repeatStmt.getList().accept(this);
 
                     int programCounterAfterStatementList = opArray.size();
@@ -677,71 +676,82 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
                     app(makeNode(C.UNBIND_VAR).put(C.NAME, variableName));
                     app(makeNode(C.UNBIND_VAR).put(C.NAME, runVariableName));
 
-                    flowControlStatements.forEach(statement -> {
-                        if ( statement.get(C.TARGET).equals(CONTINUE_MARKER) ) {
-                            statement.put(C.TARGET, programCounterAfterStatementList);
-                            removeOpenBlocksFromDehighlight(statement);
-                        } else if ( statement.get(C.TARGET).equals(BREAK_MARKER) ) {
-                            statement.put(C.TARGET, programCounterAfterForLoop);
-                            removeOpenBlocksFromDehighlight(statement, blocklyId);
-                        } else {
-                            throw new DbcException("Invalid flow control expression");
-                        }
+                    jumpLinker.handle(CONTINUE).forEach(statement -> {
+                        statement.put(C.TARGET, programCounterAfterStatementList);
+                        removeOpenBlocksFromUnhighlight(statement);
                     });
+
+                    jumpLinker.handle(BREAK).forEach(statement -> {
+                        statement.put(C.TARGET, programCounterAfterForLoop);
+                        removeOpenBlocksFromUnhighlight(statement, blocklyId);
+                    });
+
+                    if ( !jumpLinker.isEmpty()) {
+                        throw new DbcException("Invalid flow control expression");
+                    }
+
                     appComment(C.REPEAT_STMT, false);
                 });
                 return null;
             case FOREVER:
             case FOREVER_ARDU:
-                encloseFlowStatementScope(() -> {
+                jumpLinker.isolate(() -> {
                     appComment(C.REPEAT_STMT, true);
 
                     int beforeExprTarget = opArray.size();
-                    addDebugStatment(repeatStmt);
+                    addDebugStatement(repeatStmt);
 
                     repeatStmt.getList().accept(this);
 
                     app(makeNode(C.JUMP).put(C.CONDITIONAL, C.ALWAYS).put(C.TARGET, beforeExprTarget));
-                    flowControlStatements.forEach(flowControlStatement -> {
-                        if ( flowControlStatement.get(C.TARGET).equals(BREAK_MARKER) ) {
-                            flowControlStatement.put(C.TARGET, opArray.size());
-                            removeOpenBlocksFromDehighlight(flowControlStatement, blocklyId);
-                        } else if ( flowControlStatement.get(C.TARGET).equals(CONTINUE_MARKER) ) {
-                            flowControlStatement.put(C.TARGET, beforeExprTarget);
-                            removeOpenBlocksFromDehighlight(flowControlStatement);
-                        } else {
-                            throw new DbcException("Invalid flow control expression");
-                        }
+
+                    jumpLinker.handle(BREAK).forEach(statement -> {
+                        statement.put(C.TARGET, opArray.size());
+                        removeOpenBlocksFromUnhighlight(statement, blocklyId);
                     });
+
+                    jumpLinker.handle(CONTINUE).forEach(statement -> {
+                        statement.put(C.TARGET, beforeExprTarget);
+                        removeOpenBlocksFromUnhighlight(statement);
+                    });
+
+                    if ( !jumpLinker.isEmpty() ) {
+                        throw new DbcException("Invalid flow control expression");
+                    }
+
                     appComment(C.REPEAT_STMT, false);
                 });
                 return null;
             case WHILE:
             case UNTIL:
-                encloseFlowStatementScope(() -> {
+                jumpLinker.isolate(() -> {
                     appComment(C.REPEAT_STMT, true);
                     int beforeExprTarget = opArray.size();
-                    addDebugStatment(repeatStmt);
+                    addDebugStatement(repeatStmt);
 
                     repeatStmt.getExpr().accept(this);
                     // no difference between WHILE and UNTIL because a NOT gets injected into UNTIL by jaxbToAST
-                    JSONObject jumpOverWhile = makeNode(C.JUMP).put(C.CONDITIONAL, false).put(C.TARGET, BREAK_MARKER);
-                    addHightlightingsToJump(jumpOverWhile);
-                    flowControlStatements.add(jumpOverWhile);
+                    JSONObject jumpOverWhile = makeNode(C.JUMP).put(C.CONDITIONAL, false);
+                    addHighlightingToJump(jumpOverWhile);
+                    jumpLinker.register(jumpOverWhile, BREAK);
+
                     app(jumpOverWhile);
                     repeatStmt.getList().accept(this);
                     app(makeNode(C.JUMP).put(C.CONDITIONAL, C.ALWAYS).put(C.TARGET, beforeExprTarget));
-                    flowControlStatements.forEach(flowControlStatement -> {
-                        if ( flowControlStatement.get(C.TARGET).equals(BREAK_MARKER) ) {
-                            flowControlStatement.put(C.TARGET, opArray.size());
-                            removeOpenBlocksFromDehighlight(flowControlStatement);
-                        } else if ( flowControlStatement.get(C.TARGET).equals(CONTINUE_MARKER) ) {
-                            flowControlStatement.put(C.TARGET, beforeExprTarget);
-                            removeOpenBlocksFromDehighlight(flowControlStatement, blocklyId);
-                        } else {
-                            throw new DbcException("Invalid flow control expression");
-                        }
+
+                    jumpLinker.handle(BREAK).forEach(statement -> {
+                        statement.put(C.TARGET, opArray.size());
+                        removeOpenBlocksFromUnhighlight(statement);
                     });
+
+                    jumpLinker.handle(CONTINUE).forEach(statement -> {
+                        statement.put(C.TARGET, beforeExprTarget);
+                        removeOpenBlocksFromUnhighlight(statement, blocklyId);
+                    });
+
+                    if ( !jumpLinker.isEmpty() ) {
+                        throw new DbcException("Invalid flow control expression");
+                    }
 
                     appComment(C.REPEAT_STMT, false);
                 });
@@ -760,14 +770,12 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
 
     @Override
     public final V visitStmtFlowCon(StmtFlowCon<V> stmtFlowCon) {
-        JSONObject o = makeNode(C.JUMP)
-            .put(C.CONDITIONAL, C.ALWAYS)
-            .put(C.TARGET, stmtFlowCon.getFlow() == Flow.BREAK ? BREAK_MARKER : CONTINUE_MARKER);
+        JSONObject jump = makeNode(C.JUMP)
+            .put(C.CONDITIONAL, C.ALWAYS);
 
-        addHightlightingsToJump(o);
-
-        flowControlStatements.add(o);
-        return app(o);
+        addHighlightingToJump(jump);
+        jumpLinker.register(jump, stmtFlowCon.getFlow() == Flow.BREAK ? BREAK : CONTINUE);
+        return app(jump);
     }
 
     @Override
@@ -800,23 +808,19 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
 
     @Override
     public final V visitWaitStmt(WaitStmt<V> waitStmt) {
-        encloseFlowStatementScope(() -> {
+        jumpLinker.isolate(() -> {
             appComment(C.WAIT_STMT, true);
             int programCounterStart = opArray.size();
-            addDebugStatment(waitStmt);
+            addDebugStatement(waitStmt);
 
             waitStmt.getStatements().get()
                 .forEach(statement -> statement.accept(this));
             this.getOpArray().add(makeNode(C.EXPR).put(C.EXPR, C.NUM_CONST).put(C.VALUE, 1));
             this.getOpArray().add(makeNode(C.WAIT_TIME_STMT));
             app(makeNode(C.JUMP).put(C.CONDITIONAL, C.ALWAYS).put(C.TARGET, programCounterStart));
-            flowControlStatements.forEach(statement -> {
-                if ( statement.get(C.TARGET).equals(BREAK_MARKER) ) {
-                    statement.put(C.TARGET, opArray.size());
-                } else {
-                    throw new DbcException("Invalid flow control expression");
-                }
-            });
+
+            jumpLinker.handle(INTERNAL_BREAK).forEach((statement) -> statement.put(C.TARGET, opArray.size()));
+
             appComment(C.WAIT_STMT, false);
         });
         return null;
@@ -1012,7 +1016,7 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
 
     @Override
     public final V visitMethodVoid(MethodVoid<V> methodVoid) {
-        encloseReturnStatementScope(() -> {
+        jumpLinker.isolate(() -> {
             registerMethodDeclaration(methodVoid.getMethodName());
             appComment(C.METHOD_VOID, true);
 
@@ -1032,13 +1036,10 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
 
             methodVoid.getBody().accept(this);
 
-            returnStatements.forEach(statement -> {
-                if ( statement.get(C.TARGET).equals(METHOD_END) ) {
-                    statement.put(C.TARGET, opArray.size());
-                    removeOpenBlocksFromDehighlight(statement, methodVoid.getProperty().getBlocklyId());
-                } else {
-                    throw new DbcException("Invalid flow control expression");
-                }
+
+            jumpLinker.handle(METHOD_END).forEach(statement -> {
+                statement.put(C.TARGET, opArray.size());
+                removeOpenBlocksFromUnhighlight(statement, methodVoid.getProperty().getBlocklyId());
             });
 
             parameters.get().stream()
@@ -1054,7 +1055,7 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
 
     @Override
     public final V visitMethodReturn(MethodReturn<V> methodReturn) {
-        encloseReturnStatementScope(() -> {
+        jumpLinker.isolate(() -> {
             registerMethodDeclaration(methodReturn.getMethodName());
             appComment(C.METHOD_RETURN, true);
 
@@ -1076,13 +1077,9 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
 
             methodReturn.getReturnValue().accept(this);
 
-            returnStatements.forEach(statement -> {
-                if ( statement.get(C.TARGET).equals(METHOD_END) ) {
-                    statement.put(C.TARGET, opArray.size());
-                    removeOpenBlocksFromDehighlight(statement, methodReturn.getProperty().getBlocklyId());
-                } else {
-                    throw new DbcException("Invalid flow control expression");
-                }
+            jumpLinker.handle(METHOD_END).forEach(statement -> {
+                statement.put(C.TARGET, opArray.size());
+                removeOpenBlocksFromUnhighlight(statement, methodReturn.getProperty().getBlocklyId());
             });
 
             parameters.get().stream()
@@ -1104,10 +1101,9 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
         app(jumpOverReturn);
 
         methodIfReturn.getReturnValue().accept(this);
-        JSONObject jumpToMethodEnd = makeNode(C.JUMP).put(C.CONDITIONAL, C.ALWAYS).put(C.TARGET, METHOD_END);
-        addHightlightingsToJump(jumpToMethodEnd);
-
-        returnStatements.add(jumpToMethodEnd);
+        JSONObject jumpToMethodEnd = makeNode(C.JUMP).put(C.CONDITIONAL, C.ALWAYS);
+        addHighlightingToJump(jumpToMethodEnd);
+        jumpLinker.register(jumpToMethodEnd, METHOD_END);
 
         app(jumpToMethodEnd);
         jumpOverReturn.put(C.TARGET, opArray.size());
@@ -1159,14 +1155,14 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
         return app(o);
     }
 
-    private void addHightlightingsToJump(JSONObject o) {
+    private void addHighlightingToJump(JSONObject o) {
         if ( !debugger ) {
             return;
         }
         o.put(C.HIGHTLIGHT_MINUS, new ArrayList<>(openBlocks));
     }
 
-    private void addDebugStatment(Phrase<?> phrase) {
+    private void addDebugStatement(Phrase<?> phrase) {
         if ( debugger ) {
             possibleDebugStops.add(phrase.getProperty().getBlocklyId());
             app(makeNode(C.COMMENT));
@@ -1177,23 +1173,23 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
         return app(makeNode(C.COMMENT).put(C.TARGET, commentType).put(C.TYPE, isStart ? C.START : C.END));
     }
 
-    private void removeOpenBlocksFromDehighlight(JSONObject statement) {
-        removeOpenBlocksFromDehighlight(statement, null);
+    private void removeOpenBlocksFromUnhighlight(JSONObject statement) {
+        removeOpenBlocksFromUnhighlight(statement, null);
     }
 
-    private void removeOpenBlocksFromDehighlight(JSONObject statement, String repeatId) {
+    private void removeOpenBlocksFromUnhighlight(JSONObject statement, String repeatId) {
         if ( !debugger ) {
             return;
         }
 
         if ( !statement.has(C.HIGHTLIGHT_MINUS) ) {
-            throw new DbcException("Jump is missing a Hightlight Minus");
+            throw new DbcException("Jump is missing a Highlight Minus");
         }
 
-        List<Object> newDehightlight = statement.getJSONArray(C.HIGHTLIGHT_MINUS).toList().stream()
+        List<Object> newUnhighlight = statement.getJSONArray(C.HIGHTLIGHT_MINUS).toList().stream()
             .filter(id -> !openBlocks.contains(id) || id.equals(repeatId))
             .collect(Collectors.toList());
-        statement.put(C.HIGHTLIGHT_MINUS, newDehightlight);
+        statement.put(C.HIGHTLIGHT_MINUS, newUnhighlight);
     }
 
     private JSONObject createJumpToMethod(MethodCall<V> methodCall) {
@@ -1266,10 +1262,10 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
 
     protected final JSONObject makeNode(String opCode) {
         JSONObject operation = new JSONObject().put(C.OPCODE, opCode);
-        if ( !toInitateBlocks.isEmpty() ) {
-            toInitateBlocks.removeIf(IS_INVALID_BLOCK_ID);
-            operation.put(C.HIGHTLIGHT_PLUS, new ArrayList<>(toInitateBlocks));
-            toInitateBlocks.clear();
+        if ( !toInitiateBlocks.isEmpty() ) {
+            toInitiateBlocks.removeIf(IS_INVALID_BLOCK_ID);
+            operation.put(C.HIGHTLIGHT_PLUS, new ArrayList<>(toInitiateBlocks));
+            toInitiateBlocks.clear();
         }
         if ( !possibleDebugStops.isEmpty() ) {
             possibleDebugStops.removeIf(IS_INVALID_BLOCK_ID);
@@ -1290,26 +1286,6 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
 
     public List<JSONObject> getOpArray() {
         return this.opArray;
-    }
-
-    protected void encloseReturnStatementScope(Runnable runnable) {
-        runnable.run();
-        returnStatements.clear();
-    }
-
-    /**
-     * Enclose the scope of flowControlStatements while runnable is run
-     *
-     * @param runnable
-     */
-    protected void encloseFlowStatementScope(Runnable runnable) {
-        List<JSONObject> flowControlTemp = new ArrayList<>(flowControlStatements);
-        flowControlStatements.clear();
-
-        runnable.run();
-
-        flowControlStatements.clear();
-        flowControlStatements.addAll(flowControlTemp);
     }
 
     private boolean isValidBlocklyId(String blocklyId) {

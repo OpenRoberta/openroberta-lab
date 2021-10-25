@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2021-08-24 13:53:52.122282",
+		"lastupdated": "2021-10-15 14:14:54.860050",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -668,6 +668,7 @@
 	"MENU_START_BRICK": "run on »$«",
 	"MENU_STOP_BRICK": "stop program on »$«",
 	"MENU_EXPORT_PROG": "export program",
+	"MENU_EXPORT_ALL_PROGS": "export all programs",
 	"MENU_IMPORT_PROG": "import program ...",
 	"MENU_CHECK": "check",
 	"MENU_NEW": "new",
@@ -1153,20 +1154,6 @@
 	"NAO_PART_ARM": "arm",
 	"NAO_PART_LEGS": "legs",
 	"NAO_PART_LEG": "leg",
-	"NAO_JOINT_HEADYAW": "head yaw",
-	"NAO_JOINT_HEADPITCH": "head pitch",
-	"NAO_JOINT_SHOULDERPITCH": "shoulder pitch",
-	"NAO_JOINT_SHOULDERROLL": "shoulder roll",
-	"NAO_JOINT_ELBOWYAW": "elbow yaw",
-	"NAO_JOINT_ELBOWROLL": "elbow roll",
-	"NAO_JOINT_WRISTYAW": "wrist yaw",
-	"NAO_JOINT_HAND": "hand",
-	"NAO_JOINT_HIPYAWPITCH": "hip yaw pitch",
-	"NAO_JOINT_HIPROLL": "hip roll",
-	"NAO_JOINT_HIPPITCH": "hip pitch",
-	"NAO_JOINT_KNEEPITCH": "knee pitch",
-	"NAO_JOINT_ANKLEPITCH": "ankle pitch",
-	"NAO_JOINT_ANKLEROLL": "ankle roll",
 	"MODE_OPEN": "open",
 	"MODE_CLOSE": "close",
 	"NAO_HAND": "hand",
@@ -1790,5 +1777,7 @@
 	"FRAME_WIDTH": "Frame width",
 	"LIGHT_LDR": "Light (LDR)",
 	"POPUP_REPLACE": "Replace",
-	"POPUP_BACKGROUND_REPLACE": "A program with the same name already exists. <br> Would you like to replace it?"
+	"POPUP_BACKGROUND_REPLACE": "A program with the same name already exists. <br> Would you like to replace it?",
+	"POPUP_BACKGROUND_REPLACE_CONFIGURATION": "A configuration with the same name already exists. <br> Would you like to replace it?",
+	"ORA_CONFIGURATION_SAVE_AS_ERROR_CONFIGURATION_EXISTS": "This configuration already exists."
 }

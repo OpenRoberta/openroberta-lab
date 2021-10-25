@@ -240,6 +240,19 @@ public class ProgramDao extends AbstractDao<Program> {
     }
 
     /**
+     * load all programs persisted in the database which are owned by a given user
+     *
+     * @return the list of all programs, may be an empty list, but never null
+     */
+    public List<Program> loadAll(User owner) {
+        Query hql = this.session.createQuery("from Program where owner=:owner");
+        hql.setEntity("owner", owner);
+        @SuppressWarnings("unchecked")
+        List<Program> il = hql.list();
+        return Collections.unmodifiableList(il);
+    }
+
+    /**
      * load all programs persisted in the database
      *
      * @return the list of all programs, may be an empty list, but never null

@@ -61,8 +61,6 @@ def move():
     hal.rotateRegulatedMotor('B', ___numberVar, 'degree', ___numberVar)
     hal.rotateRegulatedMotor('C', ___numberVar, 'rotations', ___numberVar)
     hal.rotateRegulatedMotor('C', ___numberVar, 'degree', ___numberVar)
-    hal.rotateUnregulatedMotor('D', ___numberVar, 'rotations', ___numberVar)
-    hal.rotateUnregulatedMotor('D', ___numberVar, 'degree', ___numberVar)
     hal.drawText(str(hal.getRegulatedMotorSpeed('A')), ___numberVar, ___numberVar)
     hal.drawText(str(hal.getRegulatedMotorSpeed('B')), ___numberVar, ___numberVar)
     hal.drawText(str(hal.getRegulatedMotorSpeed('C')), ___numberVar, ___numberVar)

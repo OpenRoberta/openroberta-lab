@@ -14,7 +14,7 @@ public class MathConstTest extends AstTest {
 
     @Test
     public void make() throws Exception {
-        String a = "BlockAST [project=[[Location [x=131, y=-615], MathConst [E]]]]";
+        String a = "BlockAST [project=[[Location [x=131, y=-615], MathConst [mathConst:E]]]]";
 
         UnitTestHelper.checkProgramAstEquality(testFactory, a, "/ast/math/math_constant1.xml");
     }

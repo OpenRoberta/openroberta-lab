@@ -1,0 +1,6 @@
+Sensors: 
+[UsedSensor [1, INFRARED, OBSTACLE], UsedSensor [2, INFRARED, OBSTACLE], UsedSensor [BOTH, INFRARED, OBSTACLE], UsedSensor [1, INFRARED, PRESENCE], UsedSensor [2, INFRARED, PRESENCE], UsedSensor [BOTH, INFRARED, PRESENCE], UsedSensor [0, LIGHT, LIGHT], UsedSensor [1, LIGHT, LIGHT], UsedSensor [2, LIGHT, LIGHT], UsedSensor [3, LIGHT, LIGHT], UsedSensor [4, LIGHT, LIGHT], UsedSensor [5, LIGHT, LIGHT], UsedSensor [6, LIGHT, LIGHT], UsedSensor [7, LIGHT, LIGHT], UsedSensor [- EMPTY_PORT -, COMPASS, ANGLE], UsedSensor [0, ULTRASONIC, DISTANCE], UsedSensor [1, ULTRASONIC, DISTANCE], UsedSensor [2, ULTRASONIC, DISTANCE], UsedSensor [3, ULTRASONIC, DISTANCE], UsedSensor [1, COLOR, COLOUR], UsedSensor [2, COLOR, COLOUR], UsedSensor [1, COLOR, LIGHT], UsedSensor [2, COLOR, LIGHT], UsedSensor [1, TIMER, VALUE], UsedSensor [1, TIMER, RESET], UsedSensor [- EMPTY_PORT -, VOLTAGE, VALUE]]
+Actors: 
+[]
+Methods: 
+[]

@@ -40,6 +40,10 @@ public interface IRobotFactory {
 
     Boolean hasMultipleSim();
 
+    Boolean hasWebotsSim();
+
+    String getWebotsUrl();
+
     String getInfoDE();
 
     String getInfoEN();
@@ -78,6 +82,9 @@ public interface IRobotFactory {
      */
     String optTopBlockOfOldConfiguration();
 
+    /**
+     * @return the robot group. Never null and never the empty String
+     */
     String getGroup();
 
     default String getMenuVersion() {

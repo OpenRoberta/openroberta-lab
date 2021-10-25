@@ -1,104 +1,102 @@
-
-StmtTextComment [logik_boolean_op-- Start]
-
-Var [x] := StmtExpr [
-if BoolConst [true]
-,then
-exprStmt Binary [ADD, Var [x], NumConst [1]]
-,else
-exprStmt Binary [ADD, Var [x], NumConst [1000]]
-]
-
+StmtTextComment[textComment: logik_boolean_op-- Start]
 
 Var [x] := StmtExpr [
-if BoolConst [false]
+if BoolConst[value: true]
 ,then
-exprStmt Binary [ADD, Var [x], NumConst [1000]]
+exprStmt Binary [ADD, Var [x], NumConst[value: 1]]
 ,else
-exprStmt Binary [ADD, Var [x], NumConst [1]]
-]
-
-AssertStmt [asserts pos-1: Binary [EQ, NumConst [2], Var [x]]]
-
-Var [x] := StmtExpr [
-if StmtExpr [
-if BoolConst [true]
-,then
-exprStmt BoolConst [true]
-,else
-exprStmt BoolConst [false]
-]
-,then
-exprStmt Binary [ADD, Var [x], NumConst [1]]
-,else
-exprStmt Binary [ADD, Var [x], NumConst [1000]]
+exprStmt Binary [ADD, Var [x], NumConst[value: 1000]]
 ]
 
 
 Var [x] := StmtExpr [
-if StmtExpr [
-if BoolConst [false]
+if BoolConst[value: false]
 ,then
-exprStmt BoolConst [false]
+exprStmt Binary [ADD, Var [x], NumConst[value: 1000]]
 ,else
-exprStmt BoolConst [true]
-]
-,then
-exprStmt Binary [ADD, Var [x], NumConst [1]]
-,else
-exprStmt Binary [ADD, Var [x], NumConst [1000]]
+exprStmt Binary [ADD, Var [x], NumConst[value: 1]]
 ]
 
-AssertStmt [asserts pos-2: Binary [EQ, NumConst [4], Var [x]]]
+AssertStmt[asserts: Binary [EQ, NumConst[value: 2], Var [x]], msg: pos-1]
+
+Var [x] := StmtExpr [
+if StmtExpr [
+if BoolConst[value: true]
+,then
+exprStmt BoolConst[value: true]
+,else
+exprStmt BoolConst[value: false]
+]
+,then
+exprStmt Binary [ADD, Var [x], NumConst[value: 1]]
+,else
+exprStmt Binary [ADD, Var [x], NumConst[value: 1000]]
+]
+
+
+Var [x] := StmtExpr [
+if StmtExpr [
+if BoolConst[value: false]
+,then
+exprStmt BoolConst[value: false]
+,else
+exprStmt BoolConst[value: true]
+]
+,then
+exprStmt Binary [ADD, Var [x], NumConst[value: 1]]
+,else
+exprStmt Binary [ADD, Var [x], NumConst[value: 1000]]
+]
+
+AssertStmt[asserts: Binary [EQ, NumConst[value: 4], Var [x]], msg: pos-2]
 
 Var [x] := StmtExpr [
 if StmtExpr [
 if StmtExpr [
-if BoolConst [true]
+if BoolConst[value: true]
 ,then
-exprStmt BoolConst [true]
+exprStmt BoolConst[value: true]
 ,else
-exprStmt BoolConst [false]
+exprStmt BoolConst[value: false]
 ]
 ,then
-exprStmt BoolConst [true]
+exprStmt BoolConst[value: true]
 ,else
-exprStmt BoolConst [false]
+exprStmt BoolConst[value: false]
 ]
 ,then
-exprStmt Binary [ADD, Var [x], NumConst [1]]
+exprStmt Binary [ADD, Var [x], NumConst[value: 1]]
 ,else
-exprStmt Binary [ADD, Var [x], NumConst [1000]]
+exprStmt Binary [ADD, Var [x], NumConst[value: 1000]]
 ]
 
-AssertStmt [asserts pos-3: Binary [EQ, NumConst [5], Var [x]]]
+AssertStmt[asserts: Binary [EQ, NumConst[value: 5], Var [x]], msg: pos-3]
 
 Var [x] := StmtExpr [
 if StmtExpr [
 if StmtExpr [
-if Binary [EQ, NumConst [1], NumConst [2]]
+if Binary [EQ, NumConst[value: 1], NumConst[value: 2]]
 ,then
-exprStmt BoolConst [true]
+exprStmt BoolConst[value: true]
 ,else
-exprStmt BoolConst [false]
+exprStmt BoolConst[value: false]
 ]
 ,then
-exprStmt BoolConst [false]
+exprStmt BoolConst[value: false]
 ,else
-exprStmt BoolConst [true]
+exprStmt BoolConst[value: true]
 ]
 ,then
-exprStmt Binary [ADD, Var [x], NumConst [1]]
+exprStmt Binary [ADD, Var [x], NumConst[value: 1]]
 ,else
-exprStmt Binary [ADD, Var [x], NumConst [1000]]
+exprStmt Binary [ADD, Var [x], NumConst[value: 1000]]
 ]
 
-DebugAction [StmtExpr [
-if Binary [EQ, NumConst [6], Var [x]]
+DebugAction[value: StmtExpr [
+if Binary [EQ, NumConst[value: 6], Var [x]]
 ,then
-exprStmt StringConst [Logic Ternary Op Test: success]
+exprStmt StringConst[value: Logic Ternary Op Test: success]
 ,else
-exprStmt StringConst [Logic Ternary Op Test: FAIL]
+exprStmt StringConst[value: Logic Ternary Op Test: FAIL]
 ]]
-
-StmtTextComment [Logic Ternary Op -- End]
+StmtTextComment[textComment: Logic Ternary Op -- End]

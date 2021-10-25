@@ -45,8 +45,6 @@ void move() {
     RotateMotorForAngle(OUT_B, Speed(___numberVar), ___numberVar);
     RotateMotorForAngle(OUT_C, Speed(___numberVar), 360 * ___numberVar);
     RotateMotorForAngle(OUT_C, Speed(___numberVar), ___numberVar);
-    RotateMotorForAngle(OUT_D, Speed(___numberVar), 360 * ___numberVar);
-    RotateMotorForAngle(OUT_D, Speed(___numberVar), ___numberVar);
     DrawString(ToString(MotorPower(OUT_A)), ___numberVar, ___numberVar);
     DrawString(ToString(MotorPower(OUT_B)), ___numberVar, ___numberVar);
     DrawString(ToString(MotorPower(OUT_C)), ___numberVar, ___numberVar);

@@ -167,18 +167,8 @@ public final class MbotCppVisitor extends AbstractCommonArduinoCppVisitor implem
     }
 
     @Override
-    public Void visitShowTextAction(ShowTextAction<Void> showTextAction) {
-        return null;
-    }
-
-    @Override
     public Void visitClearDisplayAction(ClearDisplayAction<Void> clearDisplayAction) {
         this.sb.append("__meLEDMatrix_").append(clearDisplayAction.port).append(".clearScreen();");
-        return null;
-    }
-
-    @Override
-    public Void visitVolumeAction(VolumeAction<Void> volumeAction) {
         return null;
     }
 
@@ -236,11 +226,6 @@ public final class MbotCppVisitor extends AbstractCommonArduinoCppVisitor implem
         this.sb.append(", 0, 0, 0);");
         nlIndent();
         this.sb.append("_meRgbLed.show();");
-        return null;
-    }
-
-    @Override
-    public Void visitPlayFileAction(PlayFileAction<Void> playFileAction) {
         return null;
     }
 

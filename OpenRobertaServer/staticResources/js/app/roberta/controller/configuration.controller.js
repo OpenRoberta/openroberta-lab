@@ -148,14 +148,41 @@ define(['exports', 'log', 'util', 'comm', 'message', 'guiState.controller', 'blo
             }
             var dom = (confVis) ? confVis.getXml() : Blockly.Xml.workspaceToDom(bricklyWorkspace);
             var xmlText = Blockly.Xml.domToText(dom);
-            CONFIGURATION.saveAsConfigurationToServer(confName, xmlText, function(result) {
+            CONFIGURATION.saveAsConfigurationToServer(confName, xmlText, function (result) {
                 if (result.rc === 'ok') {
                     result.name = confName;
                     GUISTATE_C.setConfiguration(result);
                     GUISTATE_C.setProgramSaved(false);
                     LOG.info('save brick configuration ' + GUISTATE_C.getConfigurationName());
+                    MSG.displayInformation(result, "MESSAGE_EDIT_SAVE_CONFIGURATION_AS", result.message, GUISTATE_C.getConfigurationName());
+                } else if (result.cause == 'ORA_CONFIGURATION_SAVE_AS_ERROR_CONFIGURATION_EXISTS') {
+                    //Replace popup window
+                    var modalMessage = Blockly.Msg.POPUP_BACKGROUND_REPLACE_CONFIGURATION || 'A configuration with the same name already exists! <br> Would you like to replace it?'
+                    $("#show-message-confirm").onWrap('shown.bs.modal', function (e) {
+                        $('#confirm').off();
+                        $('#confirm').onWrap('click', function (e) {
+                            e.preventDefault;
+                            CONFIGURATION.saveConfigurationToServer(confName, xmlText, function (result) {
+                                if (result.rc == 'ok') {
+                                    result.name = confName;
+                                    GUISTATE_C.setConfiguration(result);
+                                    GUISTATE_C.setProgramSaved(false);
+                                    LOG.info('saved configuration' + GUISTATE_C.getConfigurationName() + " as" + confName + " and overwrote old content");
+                                    MSG.displayInformation(result, "MESSAGE_EDIT_SAVE_CONFIGURATION_AS", result.message, GUISTATE_C.getConfigurationName());
+                                } else {
+                                    LOG.info('failed to overwrite ' + confName);
+                                    MSG.displayMessage(result.message, "POPUP", "");
+                                }
+                            });
+                        }, 'confirm modal');
+                        $('#confirmCancel').off();
+                        $('#confirmCancel').onWrap('click', function (e) {
+                            e.preventDefault();
+                            $('.modal').modal('hide');
+                        }, 'cancel modal');
+                    });
+                    MSG.displayPopupMessage("ORA_CONFIGURATION_SAVE_AS_ERROR_CONFIGURATION_EXISTS", modalMessage, Blockly.Msg.POPUP_REPLACE, Blockly.Msg.POPUP_CANCEL);
                 }
-                MSG.displayInformation(result, "MESSAGE_EDIT_SAVE_CONFIGURATION_AS", result.message, GUISTATE_C.getConfigurationName());
             });
         }
     }

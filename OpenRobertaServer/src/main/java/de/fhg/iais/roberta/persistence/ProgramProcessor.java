@@ -1,7 +1,9 @@
 package de.fhg.iais.roberta.persistence;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -230,6 +232,53 @@ public class ProgramProcessor extends AbstractProcessor {
         } else {
             return null; // null to indicate, that the default configuration has to be used.
         }
+    }
+
+    /**
+     * Get programs owned by an user and his groups for every robot
+     * 
+     * @param ownerId the owner of the programs
+     * @return all programs by a given user and his groups
+     */
+    public List<Program> getProgramsByUserAndHisGroups(int ownerId) {
+        UserDao userDao = new UserDao(this.dbSession);
+        ProgramDao programDao = new ProgramDao(this.dbSession);
+        User owner = userDao.get(ownerId);
+
+        if ( owner == null ) {
+            setStatus(ProcessorStatus.FAILED, Key.PROGRAM_GET_ALL_ERROR_USER_NOT_FOUND, new HashMap<>());
+            return new ArrayList<Program>();
+        }
+        List<Program> userPrograms = programDao.loadAll(owner);
+        List<Program> groupPrograms = getProgrammsOfGroupsOwnedByUser(ownerId);
+        //connecting user programs and group programs
+        List<Program> allPrograms = new ArrayList<>(userPrograms);
+        allPrograms.addAll(groupPrograms);
+
+        return allPrograms;
+    }
+
+    /**
+     * Get all groups that the given user owns and their programs
+     *
+     * @param ownerId the owner of the groups
+     * 
+     * @return the Programs by the groups of the owner
+     */
+    public List<Program> getProgrammsOfGroupsOwnedByUser(int ownerId){
+        UserGroupDao userGroupDao = new UserGroupDao(this.dbSession);
+        ProgramDao programDao = new ProgramDao(this.dbSession);
+        UserDao userDao = new UserDao(this.dbSession);
+        User owner = userDao.get(ownerId);
+        List<UserGroup> ownersGroups = userGroupDao.loadAll(owner);
+        List<Program> membersPrograms = new ArrayList<>(); //Programs of every group the user owns
+
+        for ( UserGroup userGroup : ownersGroups ) {    
+            for ( User member : userGroup.getMembers() ) {  //for all members of the group
+                 membersPrograms.addAll(programDao.loadAll(member));
+            }
+        }
+        return membersPrograms;
     }
 
     /**

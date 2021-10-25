@@ -65,7 +65,7 @@ public class RobotFactory implements IRobotFactory {
     @Override
     public final String getGroup() {
         String group = this.pluginProperties.getStringProperty("robot.plugin.group");
-        return group != null ? group : this.pluginProperties.getRobotName();
+        return group != null && !group.equals("") ? group : this.pluginProperties.getRobotName();
     }
 
     @Override
@@ -106,6 +106,16 @@ public class RobotFactory implements IRobotFactory {
     @Override
     public final Boolean hasMultipleSim() {
         return this.pluginProperties.getStringProperty("robot.multisim") != null && this.pluginProperties.getStringProperty("robot.multisim").equals("true");
+    }
+
+    @Override
+    public Boolean hasWebotsSim() {
+        return this.pluginProperties.getStringProperty("robot.webots.sim") != null && this.pluginProperties.getStringProperty("robot.webots.sim").equals("true");
+    }
+
+    @Override
+    public String getWebotsUrl() {
+        return this.pluginProperties.getStringProperty("robot.webots.url");
     }
 
     @Override

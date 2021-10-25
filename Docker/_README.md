@@ -66,11 +66,11 @@ The image is available at dockerhub. Name: openroberta/base-x64:<number>>. Use t
 BASE_DIR=/data/openroberta-lab
 ARCH=x64             # either x64 or arm32v7
 CCBIN_VERSION=1      # this is needed in the dockerfile!
-BASE_VERSION=26
+BASE_VERSION=27
 CC_RESOURCES=/data/openroberta-lab/git/ora-cc-rsc
 cd $CC_RESOURCES
 
-git checkout develop; git pull; git checkout master; git pull
+git checkout master; git pull
 git checkout tags/${BASE_VERSION}
 
 mvn clean install    # necessary to create the update resources for ev3- and arduino-based systems
@@ -87,20 +87,18 @@ in git and a version number in docker.
 
 ### step 3 image for the integration tests (x64 only)
 
-The image is often available at dockerhub. Usually you don't need it. Name: openroberta/it-x64-offical-gitrepo-with-develop:<number>>. Use the highest number.
+This section is outdated. We use a github action for integration tests.
 
-It would be easy to build this image for the `arm32v7` architecture. But our `bamboo` server used for automated integration tests run on `x64` machines.
-Thus there is no need for this image. This may change in the future.
-
-This step creates an image, built upon the "base" image, that has executed a git clone of an openroberta
+The image is often available at dockerhub. Name: openroberta/it-x64-offical-gitrepo-with-develop:<number>>. Use the highest number. It is only available
+for the `x64` architecture. This step creates an image, that during build has executed a git clone of an openroberta
 git repository and has executed a `mvn clean install`. This is done to fill the
-(mvn) cache and will speed up later builds considerably. The entry point is defined as the bash script "runIT.sh".
+(mvn) cache and to speed up later builds considerably. The entry point is defined as the bash script "runIT.sh".
 If the image is started, it will checkout a branch given as start parameter and runs both the tests and the integration tests.
 
 ```bash
 BASE_DIR=/data/openroberta-lab
 ARCH=x64
-BASE_VERSION=26
+BASE_VERSION=27
 GITREPO=https://github.com/OpenRoberta/openroberta-lab.git       # this is the URL of the official repo, you may use your fork
 BRANCH=develop                                                   # the branch used to fill the maven cache
 IMAGE_NAME=openroberta/it-${ARCH}-offical-gitrepo-with-develop   # change the name SUFFIX when using a forked repo
@@ -114,14 +112,16 @@ To run the integration tests on your local machine (usually a build server like 
 
 ```bash
 ARCH=x64
-BASE_VERSION=26
-IMAGE_NAME=openroberta/it-${ARCH}-offical-gitrepo-with-develop      # the name from above!
-export GITREPO='https://github.com/OpenRoberta/openroberta-lab.git' # the repo URL from above!
+BASE_VERSION=27
+IMAGE_NAME=openroberta/it-x64-offical-gitrepo-with-develop:${BASE_VERSION}      # the name from above!
+export GITREPO='https://github.com/OpenRoberta/openroberta-lab.git'             # the repo URL from above!
 export BRANCH='develop'
 docker run "${IMAGE_NAME}" "${GITREPO}" "${BRANCH}"
 ```
 
 ### step 4 image for a standalone lab
+
+This section is outdated. We use a github action for creating a standalone image (for all architectures).
 
 This creates an image, that can be used for a standalone server. The data base is embedded. Select carefully
 * the branch: it should be master
@@ -134,7 +134,7 @@ The image is available at dockerhub. Name: openroberta/standalone-${ARCH}:<numbe
 BASE_DIR='/data/openroberta-lab'
 GIT_REPO='openroberta-lab'                  # ${BASE_DIR}/git/${GIT_REPO} must be a git repo where branches can be added and deleted at will
 ARCH=x64                                    # either x64 or arm32v7
-BASE_VERSION=26
+BASE_VERSION=27
 EXPORT_DIR='/tmp/openroberta-lab-export'    # my choice, directory must not exist, is deleted at the end of this script
 VERSION='4.1.2'                             # becomes the TAG of the image generated
 BRANCH=master                               # the current master should be used for standalones
@@ -168,8 +168,6 @@ cd ${BASE_DIR}
 echo rm -Ir ${EXPORT_DIR}
 rm -Ir ${EXPORT_DIR}
 ```
-
-Note: the commands above should be refactored, it'a a bit confusing :-)
 
 # Operating Instructions for the Test and Prod Server
 

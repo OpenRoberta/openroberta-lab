@@ -1,16 +1,21 @@
 package de.fhg.iais.roberta.javaServer.restServices.all.controller;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.ResponseBuilder;
 import javax.xml.bind.UnmarshalException;
 
 import org.json.JSONArray;
@@ -63,6 +68,7 @@ import de.fhg.iais.roberta.util.Util;
 import de.fhg.iais.roberta.util.UtilForHtmlXml;
 import de.fhg.iais.roberta.util.UtilForREST;
 import de.fhg.iais.roberta.util.XsltTransformer;
+import de.fhg.iais.roberta.util.archiver.UserProgramsArchiver;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.util.jaxb.JaxbHelper;
 
@@ -440,6 +446,51 @@ public class ClientProgramController {
             return UtilForREST.makeBaseResponseForError(Key.SERVER_ERROR, httpSessionState, null); // TODO: redesign error ticker number and add then: append("parameters", errorTicketId);
         }
     }
+
+    /**
+     * used to export all Programs of every robot of the current user.
+     * To get give appropriate feedback logincheck from ClientUser.java should be called before this.
+     *
+     * @param initToken requires an initToken to creates a valid httpSessionState
+     * @return zip file sorted in an directory structure including all Programs by the user as an xml file
+     */
+    @GET
+    @Path("/exportAllPrograms")
+    public Response exportAllProgrammsOfUser(@OraData DbSession dbSession, @QueryParam("initToken") String initToken) throws IOException {
+        HttpSessionState httpSessionState;
+        try {
+            httpSessionState = UtilForREST.validateInitToken(initToken);
+        } catch ( Exception e ) {
+            if ( dbSession != null ) {
+                dbSession.close();
+            }
+            throw e;
+        }
+        try {
+            if ( !httpSessionState.isUserLoggedIn() ) {
+                LOG.error("Unauthorized export request");
+                return null;
+            }
+
+            ProgramProcessor programProcessor = new ProgramProcessor(dbSession, httpSessionState);
+            InputStream zip = new UserProgramsArchiver(httpSessionState, programProcessor).getArchive();
+            ResponseBuilder response = Response.ok(zip, "application/zip");
+            zip.close();
+            return response.header("Content-Disposition", "attachment; filename=\"NEPO_Programs.zip\"").build();
+        } catch ( Exception e ) {
+            dbSession.rollback();
+            String errorTicketId = Util.getErrorTicketId();
+            LOG.error("Exception in ExportAll. Error ticket: {}", errorTicketId, e);
+            return null;
+        } finally {
+            if ( dbSession != null ) {
+                dbSession.close();
+            }
+        }
+
+    }
+
+
 
     @POST
     @Path("/share")

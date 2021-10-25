@@ -185,6 +185,36 @@ public class ClientUser {
         }
     }
 
+    /**
+    * used to check wether or not the current user is logged in 
+     */ 
+    @POST
+    @Path("/loggedInCheck")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response loggedInCheck(@OraData DbSession dbSession, FullRestRequest request) {
+        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(dbSession, LOG, request, true);
+        try {
+            if ( !httpSessionState.isUserLoggedIn() ) {
+                LOG.error("Unauthorized export request");
+                return UtilForREST.makeBaseResponseForError(Key.USER_ERROR_NOT_LOGGED_IN, httpSessionState, null);
+            }
+
+            BaseResponse response = BaseResponse.make(); // baseresponse
+            UtilForREST.addSuccessInfo(response, Key.SERVER_SUCCESS);
+            return UtilForREST.responseWithFrontendInfo(response, httpSessionState, null);
+        } catch ( Exception e ) {
+            dbSession.rollback();
+            String errorTicketId = Util.getErrorTicketId();
+            LOG.error("Exception. Error ticket: {}", errorTicketId, e);
+            return UtilForREST.makeBaseResponseForError(Key.SERVER_ERROR, httpSessionState, null);
+        } finally {
+            if ( dbSession != null ) {
+                dbSession.close();
+            }
+        }
+    }
+
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)

@@ -12,7 +12,7 @@ public class StringConstTest extends AstTest {
 
     @Test
     public void make() throws Exception {
-        String a = "BlockAST [project=[[Location [x=-616, y=42], StringConst [text2]]]]";
+        String a = "BlockAST [project=[[Location [x=-616, y=42], StringConst [value:text2]]]]";
         UnitTestHelper.checkProgramAstEquality(testFactory, a, "/ast/text/text_string_const.xml");
     }
 

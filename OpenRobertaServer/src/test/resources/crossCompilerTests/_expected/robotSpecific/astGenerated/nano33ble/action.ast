@@ -1,0 +1,13 @@
+
+(repeat [FOREVER_ARDU, BoolConst[value: true]]
+AktionStmt [ToneAction[frequency: NumConst[value: 300], duration: NumConst[value: 100], port: S]]
+AktionStmt [LightAction [L, ON, DEFAULT, EmptyExpr [defVal=COLOR]]]
+AktionStmt [LightAction [R, DEFAULT, DEFAULT, ColorConst[hexValue: #cc0000]]]
+AktionStmt [LightStatusAction [R, RESET]]
+AktionStmt [ShowTextAction[msg: StringConst[value: Hallo], x: NumConst[value: 0], y: NumConst[value: 1], port: O]]
+AktionStmt [ClearDisplayAction[port: O]]
+AktionStmt [PinWriteValueAction [ANALOG, Aa, NumConst[value: 1]]]
+AktionStmt [PinWriteValueAction [DIGITAL, Ad, NumConst[value: 1]]]
+AktionStmt [RelayAction [rel, OFF]]
+AktionStmt [SerialWriteAction[value: StringConst[value: Hallo]]]
+)

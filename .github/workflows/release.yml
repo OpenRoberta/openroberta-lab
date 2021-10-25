@@ -1,0 +1,44 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - ORA-*
+
+jobs:
+  release:
+    if: ${{ github.repository == 'OpenRoberta/openroberta-lab' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Create release for branch ${{ github.ref }} and tag ${GITHUB_REF#refs/tags/ORA-} of repo ${{ github.repository }}
+        run: echo "Create release for branch ${{ github.ref }} and tag ${GITHUB_REF#refs/tags/ORA-} of repo ${{ github.repository }}"
+      - name: Checkout the branch
+        uses: actions/checkout@v2
+      - name: Setup Java JDK
+        uses: actions/setup-java@v2.1.0
+        with:
+          java-version: '11'
+          distribution: 'adopt'
+      - name: Cache local maven repository
+        uses: actions/cache@v2
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+      - name: Build with maven
+        run: mvn --batch-mode clean install -DskipTests
+      - name: Build binaries and zip it
+        run: ./ora.sh export openrobertalab_binaries gzip && zip -r openrobertalab_binaries.zip openrobertalab_binaries/
+      - name: Build changelog
+        uses: OpenRoberta/gh-actions-issue-changelog@v1
+        id: changelog
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Create release
+        uses: softprops/action-gh-release@v1
+        with:
+          body: ${{steps.changelog.outputs.changelog}}
+          files: openrobertalab_binaries.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

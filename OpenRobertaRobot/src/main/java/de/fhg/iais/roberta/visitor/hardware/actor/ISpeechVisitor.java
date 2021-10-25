@@ -6,18 +6,8 @@ import de.fhg.iais.roberta.visitor.hardware.IHardwareVisitor;
 
 public interface ISpeechVisitor<V> extends IHardwareVisitor<V> {
 
-    /**
-     * visit a {@link SayTextAction}.
-     *
-     * @param sayTextAction to be visited
-     */
     V visitSetLanguageAction(SetLanguageAction<V> setLanguageAction);
 
-    /**
-     * visit a {@link SayTextAction}.
-     *
-     * @param sayTextAction to be visited
-     */
     V visitSayTextAction(SayTextAction<V> sayTextAction);
 
 }

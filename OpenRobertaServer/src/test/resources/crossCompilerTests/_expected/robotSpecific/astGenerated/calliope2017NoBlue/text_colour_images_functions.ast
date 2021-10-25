@@ -1,0 +1,22 @@
+MethodCall [text, , , VOID]
+MethodCall [colours, , , VOID]
+MethodCall [images, , , VOID]
+MethodCall [function_parameter, Var [x], Var [x2], Var [x3], Var [x4], Var [x5], Var [x6], Var [x7], Var [x8], Var [x9], Var [x10], Var [numberVar], Var [booleanVar], Var [stringVar], Var [colourVar], Var [imageVar], Var [numberList], Var [booleanList], Var [stringList], Var [colourList], Var [imageList], VOID]
+DisplayTextAction [TEXT, MethodExpr [MethodCall [function_return_numberVar, , , NUMBER]]]
+DisplayTextAction [TEXT, MethodExpr [MethodCall [function_return_booleanVar, , , BOOLEAN]]]
+DisplayTextAction [TEXT, MethodExpr [MethodCall [function_return_stringVar, , , STRING]]]
+LedOnAction[ledColor: MethodExpr [MethodCall [function_return_colourVar, , , COLOR]], port: R]
+DisplayImageAction [IMAGE, MethodExpr [MethodCall [function_return_imageVar, , , IMAGE]]]
+
+Var [numberList] := MethodExpr [MethodCall [function_return_numberList, , , ARRAY_NUMBER]]
+
+
+Var [booleanList] := MethodExpr [MethodCall [function_return_booleanList, , , ARRAY_BOOLEAN]]
+
+
+Var [stringList] := MethodExpr [MethodCall [function_return_stringList, , , ARRAY_STRING]]
+
+
+Var [colourList] := MethodExpr [MethodCall [function_return_colourList, , , ARRAY_COLOUR]]
+
+DisplayImageAction [ANIMATION, MethodExpr [MethodCall [function_return_imageList, , , ARRAY_IMAGE]]]

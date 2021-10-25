@@ -22,11 +22,11 @@ import de.fhg.iais.roberta.util.dbc.Assert;
 @NepoPhrase(containerType = "TONE_ACTION")
 public class ToneAction<V> extends Action<V> {
     @NepoValue(name = BlocklyConstants.FREQUENCE, type = BlocklyType.NUMBER_INT)
-    public final  Expr<V> frequency;
+    public final Expr<V> frequency;
     @NepoValue(name = BlocklyConstants.DURATION, type = BlocklyType.NUMBER_INT)
-    public final  Expr<V> duration;
+    public final Expr<V> duration;
     @NepoField(name = BlocklyConstants.ACTORPORT, value = BlocklyConstants.EMPTY_PORT)
-    public final  String port;
+    public final String port;
     @NepoHide
     public final Hide hide;
 
@@ -41,22 +41,22 @@ public class ToneAction<V> extends Action<V> {
     }
 
     public static <V> ToneAction<V> make(Expr<V> frequency, Expr<V> duration, String port, BlocklyBlockProperties properties, BlocklyComment comment, Hide hide) {
-        return new ToneAction<>(BlockTypeContainer.getByName("TONE_ACTION"), properties, comment,frequency, duration, port, hide);
-    }
-
-    public Expr<V> getFrequency() {
-        return this.frequency;
+        return new ToneAction<>(BlockTypeContainer.getByName("TONE_ACTION"), properties, comment, frequency, duration, port, hide);
     }
 
     public Expr<V> getDuration() {
         return this.duration;
     }
 
-    public String getPort() {
-        return this.port;
+    public Expr<V> getFrequency() {
+        return this.frequency;
     }
 
     public Hide getHide() {
         return this.hide;
+    }
+
+    public String getPort() {
+        return this.port;
     }
 }
