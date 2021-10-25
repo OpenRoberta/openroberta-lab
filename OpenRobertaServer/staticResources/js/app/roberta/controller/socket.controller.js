@@ -19,8 +19,7 @@ define(["require", "exports", "log", "jquery", "robot.controller", "guiState.con
             //console.log("listing robots");
         }, function (response) {
             agentPortList = response.responseText;
-        }, function () {
-        });
+        }, function () { });
         try {
             jsonObject = JSON.parse(agentPortList);
             jsonObject.forEach(function (port) {
@@ -33,10 +32,10 @@ define(["require", "exports", "log", "jquery", "robot.controller", "guiState.con
             });
         }
         catch (e) {
-            GUISTATE_C.setRobotPort("");
+            GUISTATE_C.setRobotPort('');
         }
         if (portList.indexOf(GUISTATE_C.getRobotPort()) < 0) {
-            GUISTATE_C.setRobotPort("");
+            GUISTATE_C.setRobotPort('');
         }
         if (portList.length == 1) {
             ROBOT_C.setPort(portList[0]);
@@ -100,10 +99,10 @@ define(["require", "exports", "log", "jquery", "robot.controller", "guiState.con
                         $('#menuConnect').parent().removeClass('disabled');
                     });
                     if (portList.indexOf(GUISTATE_C.getRobotPort()) < 0) {
-                        if (GUISTATE_C.getRobotPort() != "") {
+                        if (GUISTATE_C.getRobotPort() != '') {
                             //MSG.displayMessage(Blockly.Msg["MESSAGE_ROBOT_DISCONNECTED"], 'POPUP', '');
                         }
-                        GUISTATE_C.setRobotPort("");
+                        GUISTATE_C.setRobotPort('');
                     }
                     if (portList.length == 1) {
                         ROBOT_C.setPort(portList[0]);
@@ -115,10 +114,8 @@ define(["require", "exports", "log", "jquery", "robot.controller", "guiState.con
                     system = jsonObject['OS'];
                 }
             });
-            robotSocket.on('disconnect', function () {
-            });
-            robotSocket.on('error', function (err) {
-            });
+            robotSocket.on('disconnect', function () { });
+            robotSocket.on('error', function (err) { });
         }
     }
     exports.init = init;
@@ -140,7 +137,7 @@ define(["require", "exports", "log", "jquery", "robot.controller", "guiState.con
     exports.getRobotList = getRobotList;
     function uploadProgram(programHex, robotPort) {
         COMM.sendProgramHexToAgent(programHex, robotPort, GUISTATE_C.getProgramName(), GUISTATE_C.getSignature(), GUISTATE_C.getCommandLine(), function () {
-            LOG.text("Create agent upload success");
+            LOG.text('Create agent upload success');
             $('#menuRunProg').parent().removeClass('disabled');
             $('#runOnBrick').parent().removeClass('disabled');
         });

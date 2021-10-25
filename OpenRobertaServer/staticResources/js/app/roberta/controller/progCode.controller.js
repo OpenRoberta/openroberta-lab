@@ -12,7 +12,7 @@ define(["require", "exports", "message", "util", "guiState.controller", "program
         flask = new CodeFlask('#codeContent', {
             language: 'java',
             lineNumbers: true,
-            readonly: true
+            readonly: true,
         });
         initEvents();
     }
@@ -53,7 +53,7 @@ define(["require", "exports", "message", "util", "guiState.controller", "program
         $('#codeDownload').onWrap('click', function (event) {
             var filename = GUISTATE_C.getProgramName() + '.' + GUISTATE_C.getSourceCodeFileExtension();
             UTIL.download(filename, GUISTATE_C.getProgramSource());
-            MSG.displayMessage("MENU_MESSAGE_DOWNLOAD", "TOAST", filename);
+            MSG.displayMessage('MENU_MESSAGE_DOWNLOAD', 'TOAST', filename);
         }, 'codeDownload clicked');
         $('#codeRefresh').onWrap('click', function (event) {
             event.stopPropagation();
@@ -66,7 +66,7 @@ define(["require", "exports", "message", "util", "guiState.controller", "program
             var language = GUISTATE_C.getLanguage();
             PROGRAM.showSourceProgram(GUISTATE_C.getProgramName(), configName, xmlProgram, xmlConfigText, PROG_C.SSID, PROG_C.password, language, function (result) {
                 PROG_C.reloadProgram(result, true);
-                if (result.rc == "ok") {
+                if (result.rc == 'ok') {
                     GUISTATE_C.setState(result);
                     flask.updateCode(result.sourceCode);
                     GUISTATE_C.setProgramSource(result.sourceCode);
@@ -91,7 +91,7 @@ define(["require", "exports", "message", "util", "guiState.controller", "program
             var language = GUISTATE_C.getLanguage();
             PROGRAM.showSourceProgram(GUISTATE_C.getProgramName(), configName, xmlProgram, xmlConfigText, PROG_C.SSID, PROG_C.password, language, function (result) {
                 PROG_C.reloadProgram(result);
-                if (result.rc == "ok") {
+                if (result.rc == 'ok') {
                     GUISTATE_C.setState(result);
                     flask.updateCode(result.sourceCode);
                     // TODO change javaSource to source on server

@@ -31,7 +31,7 @@ define(["require", "exports", "util", "log", "message", "program.controller", "p
      */
     function runNative(sourceCode) {
         GUISTATE_C.setPing(false);
-        GUISTATE_C.setConnectionState("busy");
+        GUISTATE_C.setConnectionState('busy');
         LOG.info('run ' + GUISTATE_C.getProgramName() + 'on brick from source code editor');
         var callback = getConnectionTypeCallbackForEditor();
         PROGRAM.runNative(GUISTATE_C.getProgramName(), sourceCode, GUISTATE_C.getLanguage(), function (result) {
@@ -45,7 +45,7 @@ define(["require", "exports", "util", "log", "message", "program.controller", "p
      */
     function runOnBrick() {
         GUISTATE_C.setPing(false);
-        GUISTATE_C.setConnectionState("busy");
+        GUISTATE_C.setConnectionState('busy');
         LOG.info('run ' + GUISTATE_C.getProgramName() + 'on brick');
         var xmlProgram = Blockly.Xml.workspaceToDom(blocklyWorkspace);
         var xmlTextProgram = Blockly.Xml.domToText(xmlProgram);
@@ -63,7 +63,7 @@ define(["require", "exports", "util", "log", "message", "program.controller", "p
                 runForAutoConnection(result);
             };
         }
-        if (GUISTATE_C.getConnection() === connectionType.AGENT || GUISTATE_C.getConnection() === connectionType.AGENTORTOKEN && GUISTATE_C.getIsAgent()) {
+        if (GUISTATE_C.getConnection() === connectionType.AGENT || (GUISTATE_C.getConnection() === connectionType.AGENTORTOKEN && GUISTATE_C.getIsAgent())) {
             return function (result) {
                 runForAgentConnection(result);
             };
@@ -91,7 +91,7 @@ define(["require", "exports", "util", "log", "message", "program.controller", "p
                 GUISTATE_C.setPing(true);
             };
         }
-        if (GUISTATE_C.getConnection() === connectionType.AGENT || GUISTATE_C.getConnection() === connectionType.AGENTORTOKEN && GUISTATE_C.getIsAgent()) {
+        if (GUISTATE_C.getConnection() === connectionType.AGENT || (GUISTATE_C.getConnection() === connectionType.AGENTORTOKEN && GUISTATE_C.getIsAgent())) {
             return function (result) {
                 runForAgentConnection(result);
                 PROG_C.reloadProgram(result);
@@ -120,67 +120,70 @@ define(["require", "exports", "util", "log", "message", "program.controller", "p
     }
     function runForAutoConnection(result) {
         GUISTATE_C.setState(result);
-        if (result.rc == "ok") {
-            var filename = (result.programName || GUISTATE_C.getProgramName()) + "." + GUISTATE_C.getBinaryFileExtension();
-            if (GUISTATE_C.getBinaryFileExtension() === "bin" || GUISTATE_C.getBinaryFileExtension() === "uf2") {
+        if (result.rc == 'ok') {
+            var filename = (result.programName || GUISTATE_C.getProgramName()) + '.' + GUISTATE_C.getBinaryFileExtension();
+            if (GUISTATE_C.getBinaryFileExtension() === 'bin' || GUISTATE_C.getBinaryFileExtension() === 'uf2') {
                 result.compiledCode = UTIL.base64decode(result.compiledCode);
             }
             if (GUISTATE_C.isProgramToDownload() || navigator.userAgent.toLowerCase().match(/iPad|iPhone|android/i) !== null) {
                 // either the user doesn't want to see the modal anymore or he uses a smartphone / tablet, where you cannot choose the download folder.
                 UTIL.download(filename, result.compiledCode);
                 setTimeout(function () {
-                    GUISTATE_C.setConnectionState("wait");
+                    GUISTATE_C.setConnectionState('wait');
                 }, 5000);
                 MSG.displayInformation(result, result.message, result.message, GUISTATE_C.getProgramName(), GUISTATE_C.getRobot());
             }
             else if (GUISTATE_C.getConnection() == GUISTATE_C.getConnectionTypeEnum().LOCAL) {
                 setTimeout(function () {
-                    GUISTATE_C.setConnectionState("wait");
+                    GUISTATE_C.setConnectionState('wait');
                 }, 5000);
                 MSG.displayInformation(result, result.message, result.message, GUISTATE_C.getProgramName(), GUISTATE_C.getRobot());
             }
             else {
                 createDownloadLink(filename, result.compiledCode);
-                var textH = $("#popupDownloadHeader").text();
-                $("#popupDownloadHeader").text(textH.replace("$", $.trim(GUISTATE_C.getRobotRealName())));
+                var textH = $('#popupDownloadHeader').text();
+                $('#popupDownloadHeader').text(textH.replace('$', $.trim(GUISTATE_C.getRobotRealName())));
                 for (var i = 1; Blockly.Msg['POPUP_DOWNLOAD_STEP_' + i]; i++) {
                     var step = $('<li class="typcn typcn-roberta">');
-                    var a = Blockly.Msg['POPUP_DOWNLOAD_STEP_' + i + '_' + GUISTATE_C.getRobotGroup().toUpperCase()] || Blockly.Msg['POPUP_DOWNLOAD_STEP_' + i] ||
+                    var a = Blockly.Msg['POPUP_DOWNLOAD_STEP_' + i + '_' + GUISTATE_C.getRobotGroup().toUpperCase()] ||
+                        Blockly.Msg['POPUP_DOWNLOAD_STEP_' + i] ||
                         'POPUP_DOWNLOAD_STEP_' + i;
                     step.html('<span class="download-message">' + a + '</span>');
                     step.css('opacity', '0');
                     $('#download-instructions').append(step);
                 }
                 var substituteName = GUISTATE_C.getRobotGroup().toUpperCase();
-                $("#download-instructions li").each(function (index) {
-                    if (GUISTATE_C.getRobotGroup() === "calliope") {
-                        substituteName = "MINI";
+                $('#download-instructions li').each(function (index) {
+                    if (GUISTATE_C.getRobotGroup() === 'calliope') {
+                        substituteName = 'MINI';
                     }
-                    $(this).html($(this).html().replace("$", substituteName));
+                    $(this).html($(this).html().replace('$', substituteName));
                 });
-                $("#save-client-compiled-program").oneWrap("shown.bs.modal", function (e) {
+                $('#save-client-compiled-program').oneWrap('shown.bs.modal', function (e) {
                     $('#download-instructions li').each(function (index) {
-                        $(this).delay(750 * index).animate({
-                            opacity: 1
+                        $(this)
+                            .delay(750 * index)
+                            .animate({
+                            opacity: 1,
                         }, 1000);
                     });
                 });
                 $('#save-client-compiled-program').oneWrap('hidden.bs.modal', function (e) {
-                    var textH = $("#popupDownloadHeader").text();
-                    $("#popupDownloadHeader").text(textH.replace($.trim(GUISTATE_C.getRobotRealName()), "$"));
+                    var textH = $('#popupDownloadHeader').text();
+                    $('#popupDownloadHeader').text(textH.replace($.trim(GUISTATE_C.getRobotRealName()), '$'));
                     if ($('#label-checkbox').is(':checked')) {
                         GUISTATE_C.setProgramToDownload();
                     }
                     $('#programLink').remove();
                     $('#download-instructions').empty();
-                    GUISTATE_C.setConnectionState("wait");
+                    GUISTATE_C.setConnectionState('wait');
                     MSG.displayInformation(result, result.message, result.message, GUISTATE_C.getProgramName(), GUISTATE_C.getRobot());
                 });
                 $('#save-client-compiled-program').modal('show');
             }
         }
         else {
-            GUISTATE_C.setConnectionState("wait");
+            GUISTATE_C.setConnectionState('wait');
             MSG.displayInformation(result, result.message, result.message, GUISTATE_C.getProgramName(), GUISTATE_C.getRobot());
         }
     }
@@ -197,8 +200,8 @@ define(["require", "exports", "util", "log", "message", "program.controller", "p
      *            program to it
      */
     function runForJSPlayConnection(result) {
-        if (result.rc !== "ok") {
-            GUISTATE_C.setConnectionState("wait");
+        if (result.rc !== 'ok') {
+            GUISTATE_C.setConnectionState('wait');
             MSG.displayInformation(result, result.message, result.message, GUISTATE_C.getProgramName(), GUISTATE_C.getRobot());
         }
         else {
@@ -216,25 +219,28 @@ define(["require", "exports", "util", "log", "message", "program.controller", "p
                 //All non-IE browsers can play WAV files in the browser, see: https://www.w3schools.com/html/html5_audio.asp
                 $('#OKButtonModalFooter').addClass('hidden');
                 var contentAsBlob = new Blob([wavFileContent], {
-                    type: 'audio/wav'
+                    type: 'audio/wav',
                 });
                 audio = new Audio(window.URL.createObjectURL(contentAsBlob));
                 createPlayButton(audio);
             }
-            var textH = $("#popupDownloadHeader").text();
-            $("#popupDownloadHeader").text(textH.replace("$", $.trim(GUISTATE_C.getRobotRealName())));
+            var textH = $('#popupDownloadHeader').text();
+            $('#popupDownloadHeader').text(textH.replace('$', $.trim(GUISTATE_C.getRobotRealName())));
             for (var i = 1; Blockly.Msg['POPUP_DOWNLOAD_STEP_' + i]; i++) {
                 var step = $('<li class="typcn typcn-roberta">');
-                var a = Blockly.Msg['POPUP_DOWNLOAD_STEP_' + i + '_' + GUISTATE_C.getRobotGroup().toUpperCase()] || Blockly.Msg['POPUP_DOWNLOAD_STEP_' + i] ||
+                var a = Blockly.Msg['POPUP_DOWNLOAD_STEP_' + i + '_' + GUISTATE_C.getRobotGroup().toUpperCase()] ||
+                    Blockly.Msg['POPUP_DOWNLOAD_STEP_' + i] ||
                     'POPUP_DOWNLOAD_STEP_' + i;
                 step.html('<span class="download-message">' + a + '</span>');
                 step.css('opacity', '0');
                 $('#download-instructions').append(step);
             }
-            $("#save-client-compiled-program").oneWrap("shown.bs.modal", function (e) {
+            $('#save-client-compiled-program').oneWrap('shown.bs.modal', function (e) {
                 $('#download-instructions li').each(function (index) {
-                    $(this).delay(750 * index).animate({
-                        opacity: 1
+                    $(this)
+                        .delay(750 * index)
+                        .animate({
+                        opacity: 1,
                     }, 1000);
                 });
             });
@@ -243,11 +249,11 @@ define(["require", "exports", "util", "log", "message", "program.controller", "p
                     audio.pause();
                     audio.load();
                 }
-                var textH = $("#popupDownloadHeader").text();
-                $("#popupDownloadHeader").text(textH.replace($.trim(GUISTATE_C.getRobotRealName()), "$"));
+                var textH = $('#popupDownloadHeader').text();
+                $('#popupDownloadHeader').text(textH.replace($.trim(GUISTATE_C.getRobotRealName()), '$'));
                 $('#programLink').remove();
                 $('#download-instructions').empty();
-                GUISTATE_C.setConnectionState("wait");
+                GUISTATE_C.setConnectionState('wait');
                 MSG.displayInformation(result, result.message, result.message, GUISTATE_C.getProgramName(), GUISTATE_C.getRobot());
                 //Un-hide the div if it was hidden before
                 $('#changedDownloadFolder').removeClass('hidden');
@@ -260,27 +266,27 @@ define(["require", "exports", "util", "log", "message", "program.controller", "p
         $('#menuRunProg').parent().addClass('disabled');
         $('#head-navi-icon-robot').addClass('busy');
         GUISTATE_C.setState(result);
-        if (result.rc == "ok") {
+        if (result.rc == 'ok') {
             SOCKET_C.uploadProgram(result.compiledCode, GUISTATE_C.getRobotPort());
             setTimeout(function () {
-                GUISTATE_C.setConnectionState("error");
+                GUISTATE_C.setConnectionState('error');
             }, 5000);
         }
         else {
-            GUISTATE_C.setConnectionState("error");
+            GUISTATE_C.setConnectionState('error');
         }
         MSG.displayInformation(result, result.message, result.message, GUISTATE_C.getProgramName());
     }
     function runForToken(result) {
         GUISTATE_C.setState(result);
         MSG.displayInformation(result, result.message, result.message, result.programName || GUISTATE_C.getProgramName(), GUISTATE_C.getRobot());
-        if (result.rc == "ok") {
+        if (result.rc == 'ok') {
             if (Blockly.Msg['MENU_ROBOT_STOP_HINT_' + GUISTATE_C.getRobotGroup().toUpperCase()]) {
                 MSG.displayMessage('MENU_ROBOT_STOP_HINT_' + GUISTATE_C.getRobotGroup().toUpperCase(), 'TOAST');
             }
         }
         else {
-            GUISTATE_C.setConnectionState("error");
+            GUISTATE_C.setConnectionState('error');
         }
     }
     function stopBrick() {
@@ -290,12 +296,12 @@ define(["require", "exports", "util", "log", "message", "program.controller", "p
     }
     function runForWebviewConnection(result) {
         MSG.displayInformation(result, result.message, result.message, GUISTATE_C.getProgramName());
-        if (result.rc === "ok") {
+        if (result.rc === 'ok') {
             var programSrc = result.compiledCode;
             var program = JSON.parse(programSrc);
             interpreter = WEBVIEW_C.getInterpreter(program);
             if (interpreter !== null) {
-                GUISTATE_C.setConnectionState("busy");
+                GUISTATE_C.setConnectionState('busy');
                 blocklyWorkspace.robControls.switchToStop();
                 try {
                     runStepInterpreter();
@@ -360,12 +366,12 @@ define(["require", "exports", "util", "log", "message", "program.controller", "p
         else {
             $('#trA').addClass('hidden');
             UTIL.download(fileName, content);
-            GUISTATE_C.setConnectionState("error");
+            GUISTATE_C.setConnectionState('error');
         }
         var downloadLink;
         if ('Blob' in window) {
             var contentAsBlob = new Blob([content], {
-                type: 'application/octet-stream'
+                type: 'application/octet-stream',
             });
             if ('msSaveOrOpenBlob' in navigator) {
                 navigator.msSaveOrOpenBlob(contentAsBlob, fileName);
@@ -423,7 +429,7 @@ define(["require", "exports", "util", "log", "message", "program.controller", "p
                     audio.play();
                     playIcon.setAttribute('class', 'typcn typcn-media-stop');
                     playing = true;
-                    audio.addEventListener("ended", function () {
+                    audio.addEventListener('ended', function () {
                         $('#save-client-compiled-program').modal('hide');
                     });
                 }
@@ -466,8 +472,8 @@ define(["require", "exports", "util", "log", "message", "program.controller", "p
         }
         else {
             MSG.displayInformation({
-                rc: "error"
-            }, "", "should not happen!");
+                rc: 'error',
+            }, '', 'should not happen!');
         }
     }
     exports.reset2DefaultFirmware = reset2DefaultFirmware;

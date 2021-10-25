@@ -14,17 +14,17 @@ define(["require", "exports", "simulation.robot.ev3"], function (require, export
             xOld: 200,
             yOld: 200,
             transX: 0,
-            transY: 0
+            transY: 0,
         });
         this.canDraw = true;
-        this.drawColor = "#000000";
+        this.drawColor = '#000000';
         this.drawWidth = 10;
         this.geom = {
             x: -20,
             y: -20,
             w: 40,
             h: 40,
-            color: '#FF69B4'
+            color: '#FF69B4',
         };
         this.touchSensor = {
             x: 0,
@@ -34,14 +34,14 @@ define(["require", "exports", "simulation.robot.ev3"], function (require, export
             x2: 0,
             y2: 0,
             value: 0,
-            color: "#FF69B4"
+            color: '#FF69B4',
         };
         this.wheelBack = {
             x: -2.5,
             y: 20,
             w: 5,
             h: 5,
-            color: '#999999'
+            color: '#999999',
         };
         this.led = {
             x: 0,
@@ -49,41 +49,41 @@ define(["require", "exports", "simulation.robot.ev3"], function (require, export
             color: '#000000',
             // color : 'DeepSkyBlue',
             // color : 'orange',
-            mode: ''
+            mode: '',
         };
         this.frontLeft = {
             x: 22.5,
             y: -25,
             rx: 0,
             ry: 0,
-            bumped: false
+            bumped: false,
         };
         this.frontRight = {
             x: -22.5,
             y: -25,
             rx: 0,
             ry: 0,
-            bumped: false
+            bumped: false,
         };
         this.backLeft = {
             x: 20,
             y: 20,
             rx: 0,
             ry: 0,
-            bumped: false
+            bumped: false,
         };
         this.backRight = {
             x: -20,
             y: 20,
             rx: 0,
             ry: 0,
-            bumped: false
+            bumped: false,
         };
         this.backMiddle = {
             x: 0,
             y: 20,
             rx: 0,
-            ry: 0
+            ry: 0,
         };
     }
     DrawRobot.prototype = Object.create(simulation_robot_ev3_1.default.prototype);

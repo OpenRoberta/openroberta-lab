@@ -21,7 +21,7 @@ define(["require", "exports", "message", "log", "jquery", "blockly", "jquery-val
     function clone(obj) {
         var copy;
         // Handle the 3 simple types, and null or undefined
-        if (null == obj || "object" != typeof obj)
+        if (null == obj || 'object' != typeof obj)
             return obj;
         // Handle Date
         if (obj instanceof Date) {
@@ -84,7 +84,7 @@ define(["require", "exports", "message", "log", "jquery", "blockly", "jquery-val
         }
         //no split; get property
         if (arrayIndex != undefined) {
-            return obj[prop][arrayIndex] = value;
+            return (obj[prop][arrayIndex] = value);
         }
         obj[prop] = value;
     }
@@ -98,12 +98,19 @@ define(["require", "exports", "message", "log", "jquery", "blockly", "jquery-val
     function formatDate(dateLong) {
         if (dateLong) {
             var date = new Date(dateLong);
-            var datestring = ("0" + date.getDate()).slice(-2) + "." + ("0" + (date.getMonth() + 1)).slice(-2) + "." + date.getFullYear() + ", " +
-                ("0" + date.getHours()).slice(-2) + ":" + ("0" + date.getMinutes()).slice(-2);
+            var datestring = ('0' + date.getDate()).slice(-2) +
+                '.' +
+                ('0' + (date.getMonth() + 1)).slice(-2) +
+                '.' +
+                date.getFullYear() +
+                ', ' +
+                ('0' + date.getHours()).slice(-2) +
+                ':' +
+                ('0' + date.getMinutes()).slice(-2);
             return datestring;
         }
         else {
-            return "";
+            return '';
         }
     }
     exports.formatDate = formatDate;
@@ -137,7 +144,7 @@ define(["require", "exports", "message", "log", "jquery", "blockly", "jquery-val
      *            Result-object from server call
      */
     function formatResultLog(result) {
-        var str = "{";
+        var str = '{';
         var comma = false;
         for (key in result) {
             if (comma) {
@@ -170,10 +177,10 @@ define(["require", "exports", "message", "log", "jquery", "blockly", "jquery-val
     exports.calcDataTableHeight = calcDataTableHeight;
     function checkVisibility() {
         var stateKey, eventKey, keys = {
-            hidden: "visibilitychange",
-            webkitHidden: "webkitvisibilitychange",
-            mozHidden: "mozvisibilitychange",
-            msHidden: "msvisibilitychange"
+            hidden: 'visibilitychange',
+            webkitHidden: 'webkitvisibilitychange',
+            mozHidden: 'mozvisibilitychange',
+            msHidden: 'msvisibilitychange',
         };
         for (stateKey in keys) {
             if (stateKey in document) {
@@ -191,7 +198,7 @@ define(["require", "exports", "message", "log", "jquery", "blockly", "jquery-val
     exports.checkVisibility = checkVisibility;
     function setFocusOnElement($elem) {
         setTimeout(function () {
-            if ($elem.is(":visible") == true) {
+            if ($elem.is(':visible') == true) {
                 $elem.focus();
             }
         }, 800);
@@ -211,8 +218,8 @@ define(["require", "exports", "message", "log", "jquery", "blockly", "jquery-val
         });
         $('#single-modal-form').removeData('validator');
         $('#single-modal-form').validate(validator);
-        setFocusOnElement($("#singleModalInput"));
-        $("#single-modal").modal('show');
+        setFocusOnElement($('#singleModalInput'));
+        $('#single-modal').modal('show');
     }
     exports.showSingleModal = showSingleModal;
     function showSingleListModal(customize, onSubmit, onHidden, validator) {
@@ -224,8 +231,8 @@ define(["require", "exports", "message", "log", "jquery", "blockly", "jquery-val
             $('#single-modal-list-form').unbind('submit');
             onHidden();
         });
-        setFocusOnElement($("#singleModalListInput"));
-        $("#single-modal-list").modal('show');
+        setFocusOnElement($('#singleModalListInput'));
+        $('#single-modal-list').modal('show');
     }
     exports.showSingleListModal = showSingleListModal;
     /**
@@ -233,14 +240,16 @@ define(["require", "exports", "message", "log", "jquery", "blockly", "jquery-val
      *
      */
     function showMsgOnTop(msg) {
-        $('#show-message').find('button').removeAttr("data-dismiss");
-        $('#show-message').find('button').oneWrap('click', function (e) {
-            $('#show-message').modal("hide");
-            $('#show-message').find('button').attr("data-dismiss", "modal");
+        $('#show-message').find('button').removeAttr('data-dismiss');
+        $('#show-message')
+            .find('button')
+            .oneWrap('click', function (e) {
+            $('#show-message').modal('hide');
+            $('#show-message').find('button').attr('data-dismiss', 'modal');
         });
         MSG.displayInformation({
-            rc: "not ok"
-        }, "", msg);
+            rc: 'not ok',
+        }, '', msg);
     }
     exports.showMsgOnTop = showMsgOnTop;
     /**
@@ -252,7 +261,7 @@ define(["require", "exports", "message", "log", "jquery", "blockly", "jquery-val
     function response(result) {
         LOG.info('result from server: ' + formatResultLog(result));
         if (result.rc != 'ok') {
-            MSG.displayMessage(result.message, "POPUP", "");
+            MSG.displayMessage(result.message, 'POPUP', '');
         }
     }
     exports.response = response;
@@ -308,8 +317,8 @@ define(["require", "exports", "message", "log", "jquery", "blockly", "jquery-val
      */
     function getBasename(path) {
         var base = new String(path).substring(path.lastIndexOf('/') + 1);
-        if (base.lastIndexOf(".") != -1) {
-            base = base.substring(0, base.lastIndexOf("."));
+        if (base.lastIndexOf('.') != -1) {
+            base = base.substring(0, base.lastIndexOf('.'));
         }
         return base;
     }
@@ -320,7 +329,7 @@ define(["require", "exports", "message", "log", "jquery", "blockly", "jquery-val
     function download(fileName, content) {
         if ('Blob' in window && navigator.userAgent.toLowerCase().match(/iPad|iPhone|Android/i) == null) {
             var contentAsBlob = new Blob([content], {
-                type: 'application/octet-stream'
+                type: 'application/octet-stream',
             });
             if ('msSaveOrOpenBlob' in navigator) {
                 navigator.msSaveOrOpenBlob(contentAsBlob, fileName);
@@ -350,9 +359,9 @@ define(["require", "exports", "message", "log", "jquery", "blockly", "jquery-val
     function getHashFrom(string) {
         var hash = 0;
         for (var i = 0; i < string.length; i++) {
-            hash = ((hash << 5) - hash) + string.charCodeAt(i++);
+            hash = (hash << 5) - hash + string.charCodeAt(i++);
         }
-        return (hash < 0) ? ((hash * -1) + 0xFFFFFFFF) : hash;
+        return hash < 0 ? hash * -1 + 0xffffffff : hash;
     }
     exports.getHashFrom = getHashFrom;
     function countBlocks(xmlString) {
@@ -373,8 +382,8 @@ define(["require", "exports", "message", "log", "jquery", "blockly", "jquery-val
     exports.countBlocks = countBlocks;
     function isLocalStorageAvailable() {
         try {
-            localStorage.setItem("test", "test");
-            localStorage.removeItem("test");
+            localStorage.setItem('test', 'test');
+            localStorage.removeItem('test');
             return true;
         }
         catch (e) {
@@ -390,17 +399,19 @@ define(["require", "exports", "message", "log", "jquery", "blockly", "jquery-val
     }
     exports.alertTab = alertTab;
     function clearTabAlert(tabIdentifier) {
-        $('#' + tabIdentifier).children().remove('.typcn'); // remove alert typicon
+        $('#' + tabIdentifier)
+            .children()
+            .remove('.typcn'); // remove alert typicon
         $('#' + tabIdentifier).removeClass('blinking');
     }
     exports.clearTabAlert = clearTabAlert;
     var __entityMap = {
-        "&": "&amp;",
-        "<": "&lt;",
-        ">": "&gt;",
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
         '"': '&quot;',
         "'": '&#39;',
-        "/": '&#x2F;'
+        '/': '&#x2F;',
     };
     String.prototype.escapeHTML = function () {
         return String(this).replace(/[&<>"'\/]/g, function (s) {
@@ -409,17 +420,19 @@ define(["require", "exports", "message", "log", "jquery", "blockly", "jquery-val
     };
     $.fn.draggable = function (opt) {
         opt = $.extend({
-            handle: "",
-            cursor: "move",
-            draggableClass: "draggable",
-            activeHandleClass: "active-handle"
+            handle: '',
+            cursor: 'move',
+            draggableClass: 'draggable',
+            activeHandleClass: 'active-handle',
         }, opt);
         var $selected = null;
-        var $elements = (opt.handle === "") ? this : this.find(opt.handle);
-        $elements.css('cursor', opt.cursor).on("mousedown touchstart", function (e) {
+        var $elements = opt.handle === '' ? this : this.find(opt.handle);
+        $elements
+            .css('cursor', opt.cursor)
+            .on('mousedown touchstart', function (e) {
             var pageX = e.pageX || e.originalEvent.touches[0].pageX;
             var pageY = e.pageY || e.originalEvent.touches[0].pageY;
-            if (opt.handle === "") {
+            if (opt.handle === '') {
                 $selected = $(this);
                 $selected.addClass(opt.draggableClass);
             }
@@ -427,9 +440,9 @@ define(["require", "exports", "message", "log", "jquery", "blockly", "jquery-val
                 $selected = $(this).parent();
                 $selected.addClass(opt.draggableClass).find(opt.handle).addClass(opt.activeHandleClass);
             }
-            var drg_h = $selected.outerHeight(), drg_w = $selected.outerWidth(), pos_y = $selected.offset().top + drg_h - pageY, pos_x = $selected.offset().left +
-                drg_w - pageX;
-            $(document).on("mousemove touchmove", function (e) {
+            var drg_h = $selected.outerHeight(), drg_w = $selected.outerWidth(), pos_y = $selected.offset().top + drg_h - pageY, pos_x = $selected.offset().left + drg_w - pageX;
+            $(document)
+                .on('mousemove touchmove', function (e) {
                 var pageX = e.pageX || e.originalEvent.touches[0].pageX;
                 var pageY = e.pageY || e.originalEvent.touches[0].pageY;
                 // special case movable slider between workspace and right divs
@@ -439,14 +452,14 @@ define(["require", "exports", "message", "log", "jquery", "blockly", "jquery-val
                     var left = Math.max(left, 42);
                     $selected.offset({
                         top: 0,
-                        left: left - 4
+                        left: left - 4,
                     });
                     $('#blockly').width(left + 3);
                     $('.rightMenuButton').css({
-                        'right': $(window).width() - left
+                        right: $(window).width() - left,
                     });
                     $('.fromRight').css({
-                        'width': $(window).width() - $('#blockly').width()
+                        width: $(window).width() - $('#blockly').width(),
                     });
                     ratioWorkspace = $('#blockly').outerWidth() / $('#main-section').outerWidth();
                     $(window).resize();
@@ -454,22 +467,24 @@ define(["require", "exports", "message", "log", "jquery", "blockly", "jquery-val
                 else {
                     $selected.offset({
                         top: pageY + pos_y - drg_h,
-                        left: pageX + pos_x - drg_w
+                        left: pageX + pos_x - drg_w,
                     });
                 }
                 $selected.css({
                     right: 'auto',
                 });
-            }).on("mouseup touchend", function () {
-                $(this).off("mousemove touchmove"); // Unbind events from document
+            })
+                .on('mouseup touchend', function () {
+                $(this).off('mousemove touchmove'); // Unbind events from document
                 if ($selected !== null) {
                     $selected.removeClass(opt.draggableClass);
                     $selected = null;
                 }
             });
-        }).on("mouseup touchend", function () {
+        })
+            .on('mouseup touchend', function () {
             if ($selected) {
-                if (opt.handle === "") {
+                if (opt.handle === '') {
                     $selected.removeClass(opt.draggableClass);
                 }
                 else {
@@ -483,13 +498,13 @@ define(["require", "exports", "message", "log", "jquery", "blockly", "jquery-val
     var originalAddClass = $.fn.addClass;
     $.fn.addClass = function () {
         var result = originalAddClass.apply(this, arguments);
-        $(this).trigger("classChange");
+        $(this).trigger('classChange');
         return result;
     };
     var originalRemoveClass = $.fn.removeClass;
     $.fn.removeClass = function () {
         var result = originalRemoveClass.apply(this, arguments);
-        $(this).trigger("classChange");
+        $(this).trigger('classChange');
         return result;
     };
     $.fn.closeRightView = function (opt_callBack) {
@@ -501,11 +516,11 @@ define(["require", "exports", "message", "log", "jquery", "blockly", "jquery-val
         $('.blocklyToolboxDiv').css('display', 'inherit');
         var that = this; //$('#blockly')
         $('.fromRight.rightActive').animate({
-            width: 0
+            width: 0,
         }, {
             duration: ANIMATION_DURATION,
             start: function () {
-                $(".modal").modal("hide");
+                $('.modal').modal('hide');
                 $('.rightMenuButton.rightActive').removeClass('rightActive');
             },
             step: function (now) {
@@ -529,7 +544,7 @@ define(["require", "exports", "message", "log", "jquery", "blockly", "jquery-val
             },
             always: function () {
                 $('.fromRight.shifting').removeClass('shifting');
-            }
+            },
         });
     };
     $.fn.openRightView = function (viewName, initialViewWidth, opt_callBack) {
@@ -540,7 +555,7 @@ define(["require", "exports", "message", "log", "jquery", "blockly", "jquery-val
         var width;
         var smallScreen;
         var buttonName = viewName;
-        if (opt_callBack && typeof opt_callBack == "string") {
+        if (opt_callBack && typeof opt_callBack == 'string') {
             buttonName = opt_callBack;
         }
         if ($(window).width() < 768) {
@@ -569,7 +584,7 @@ define(["require", "exports", "message", "log", "jquery", "blockly", "jquery-val
         $('#' + viewName + 'Div, #' + buttonName + 'Button').addClass('rightActive');
         var that = this;
         $('.fromRight.rightActive').animate({
-            width: width
+            width: width,
         }, {
             duration: ANIMATION_DURATION,
             step: function (now, tween) {
@@ -588,7 +603,7 @@ define(["require", "exports", "message", "log", "jquery", "blockly", "jquery-val
                     $('.blocklyToolboxDiv').css('display', 'none');
                 }
                 $('#sliderDiv').css({
-                    'left': that.width() - 7
+                    left: that.width() - 7,
                 });
                 if (typeof opt_callBack == 'function') {
                     opt_callBack();
@@ -596,7 +611,7 @@ define(["require", "exports", "message", "log", "jquery", "blockly", "jquery-val
             },
             always: function () {
                 $('#' + viewName + 'Div').removeClass('shifting');
-            }
+            },
         });
     };
     $(window).resize(function () {
@@ -623,8 +638,8 @@ define(["require", "exports", "message", "log", "jquery", "blockly", "jquery-val
             $('#bricklyDiv').width(parentWidth);
             $('#bricklyDiv').height(height);
         }
-        // here comes a fix for a strange browser behavior while zoom is not 100%. It is just in case (e.g. chrome 125% works fine, 110% not). 
-        // Seems that either the returned sizes from the browser sometimes include margins/borders and sometimes not or that the assigned sizes behave 
+        // here comes a fix for a strange browser behavior while zoom is not 100%. It is just in case (e.g. chrome 125% works fine, 110% not).
+        // Seems that either the returned sizes from the browser sometimes include margins/borders and sometimes not or that the assigned sizes behave
         // different (with and without margins/borders).
         var diff = $('#main-section').outerWidth() - $('#blocklyDiv').outerWidth() - rightWidth;
         if (diff != 0) {
@@ -676,18 +691,18 @@ define(["require", "exports", "message", "log", "jquery", "blockly", "jquery-val
             if (block) {
                 var anno = annotations[annoId];
                 for (var annoType in anno) {
-                    var annoMsg = Blockly.Msg[anno[annoType]] || anno[annoType] || "unknown error";
+                    var annoMsg = Blockly.Msg[anno[annoType]] || anno[annoType] || 'unknown error';
                     switch (annoType) {
-                        case "ERROR":
+                        case 'ERROR':
                             block.setErrorText(annoMsg);
                             block.error.setVisible(true);
                             break;
-                        case "WARNING":
+                        case 'WARNING':
                             block.setWarningText(annoMsg);
                             block.warning.setVisible(true);
                             break;
                         default:
-                            console.warn("Unsupported annotation: " + annoType);
+                            console.warn('Unsupported annotation: ' + annoType);
                     }
                 }
             }

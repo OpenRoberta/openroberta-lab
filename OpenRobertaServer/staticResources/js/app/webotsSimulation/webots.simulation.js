@@ -48,7 +48,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 define(["require", "exports", "jquery", "guiState.controller"], function (require, exports, $, guiStateController) {
-    var MODE = "x3d";
+    var MODE = 'x3d';
     var BROADCAST = false;
     var StreamingViewer = /** @class */ (function () {
         function StreamingViewer(element, webots) {
@@ -75,7 +75,7 @@ define(["require", "exports", "jquery", "guiState.controller"], function (requir
             window.onresize = undefined;
             this.view.close();
             this.element.innerHTML = null;
-            if (this.view.mode === "mjpeg") {
+            if (this.view.mode === 'mjpeg') {
                 this.view.multimediaClient = undefined;
             }
             this.disconnectCallback();
@@ -85,7 +85,7 @@ define(["require", "exports", "jquery", "guiState.controller"], function (requir
             if (toolbar) {
                 if (toolbar.style.display !== 'none') {
                     toolbar.style.display = 'none';
-                    $("#view3d").height("100%");
+                    $('#view3d').height('100%');
                     window.dispatchEvent(new Event('resize'));
                 }
             }
@@ -95,7 +95,7 @@ define(["require", "exports", "jquery", "guiState.controller"], function (requir
             if (toolbar) {
                 if (toolbar.style.display !== 'block')
                     toolbar.style.display = 'block';
-                $("#view3d").height("calc(100% - 48px)");
+                $('#view3d').height('calc(100% - 48px)');
                 window.dispatchEvent(new Event('resize'));
             }
         };
@@ -127,8 +127,8 @@ define(["require", "exports", "jquery", "guiState.controller"], function (requir
         }
         WebotsSimulation.prototype.uploadController = function (sourceCode) {
             var message = {
-                name: "supervisor",
-                message: "upload:" + sourceCode
+                name: 'supervisor',
+                message: 'upload:' + sourceCode,
             };
             _super.prototype.sendMessage.call(this, 'robot:' + JSON.stringify(message));
         };
@@ -146,32 +146,32 @@ define(["require", "exports", "jquery", "guiState.controller"], function (requir
             _super.prototype.hideToolbar.call(this);
             this.initSpeechSynthesis();
             this.initSpeechRecognition();
-            $("#webotsProgress").height("120px");
+            $('#webotsProgress').height('120px');
             var that = this;
             this.view.onstdout = function (text) {
-                if (text.startsWith("finish")) {
-                    $("#simControl").trigger("click");
+                if (text.startsWith('finish')) {
+                    $('#simControl').trigger('click');
                 }
-                else if (text.startsWith("say")) {
-                    var data = text.split(":");
+                else if (text.startsWith('say')) {
+                    var data = text.split(':');
                     that.sayText(data);
                 }
-                else if (text.startsWith("setLanguage")) {
-                    var data = text.split(":");
+                else if (text.startsWith('setLanguage')) {
+                    var data = text.split(':');
                     that.lang = data[1];
                 }
-                else if (text.startsWith("setVolume")) {
-                    var data = text.split(":");
+                else if (text.startsWith('setVolume')) {
+                    var data = text.split(':');
                     that.volume = parseInt(data[1]) / 100;
                 }
-                else if (text.startsWith("getVolume")) {
+                else if (text.startsWith('getVolume')) {
                     var message = {
-                        name: "NAO",
-                        message: "volume:" + that.volume * 100
+                        name: 'NAO',
+                        message: 'volume:' + that.volume * 100,
                     };
-                    that.sendMessage("robot:" + JSON.stringify(message));
+                    that.sendMessage('robot:' + JSON.stringify(message));
                 }
-                else if (text.startsWith("recognizeSpeech")) {
+                else if (text.startsWith('recognizeSpeech')) {
                     that.recognizeSpeech();
                 }
                 else {
@@ -199,7 +199,7 @@ define(["require", "exports", "jquery", "guiState.controller"], function (requir
             this.SpeechSynthesis.cancel();
             if (!this.SpeechSynthesis) {
                 this.context = null;
-                console.log("Sorry, but the Speech Synthesis API is not supported by your browser. Please, consider upgrading to the latest version or downloading Google Chrome or Mozilla Firefox");
+                console.log('Sorry, but the Speech Synthesis API is not supported by your browser. Please, consider upgrading to the latest version or downloading Google Chrome or Mozilla Firefox');
             }
         };
         WebotsSimulation.prototype.sayText = function (data) {
@@ -208,11 +208,11 @@ define(["require", "exports", "jquery", "guiState.controller"], function (requir
             var pitch = data[3];
             var lang = this.lang || guiStateController.getLanguage();
             // Prevents an empty string from crashing the simulation
-            if (text === "")
-                text = " ";
+            if (text === '')
+                text = ' ';
             // IE apparently doesnt support default parameters, this prevents it from crashing the whole simulation
-            speed = (speed === undefined) ? 30 : speed;
-            pitch = (pitch === undefined) ? 50 : pitch;
+            speed = speed === undefined ? 30 : speed;
+            pitch = pitch === undefined ? 50 : pitch;
             // Clamp values
             speed = Math.max(0, Math.min(100, speed));
             pitch = Math.max(0, Math.min(100, pitch));
@@ -224,8 +224,8 @@ define(["require", "exports", "jquery", "guiState.controller"], function (requir
             // Workaround to keep utterance object from being garbage collected by the browser
             window.utterances = [];
             window.utterances.push(utterThis);
-            if (lang === "") {
-                console.log("Language is not supported!");
+            if (lang === '') {
+                console.log('Language is not supported!');
             }
             else {
                 var voices = this.SpeechSynthesis.getVoices();
@@ -236,7 +236,9 @@ define(["require", "exports", "jquery", "guiState.controller"], function (requir
                     }
                 }
                 if (utterThis.voice === null) {
-                    console.log("Language \"" + lang + "\" could not be found. Try a different browser or for chromium add the command line flag \"--enable-speech-dispatcher\".");
+                    console.log('Language "' +
+                        lang +
+                        '" could not be found. Try a different browser or for chromium add the command line flag "--enable-speech-dispatcher".');
                 }
             }
             utterThis.pitch = pitch;
@@ -244,18 +246,18 @@ define(["require", "exports", "jquery", "guiState.controller"], function (requir
             utterThis.volume = this.volume;
             var that = this;
             var message = {
-                name: "NAO",
-                message: "finish"
+                name: 'NAO',
+                message: 'finish',
             };
             utterThis.onend = function (event) {
-                that.sendMessage("robot:" + JSON.stringify(message));
+                that.sendMessage('robot:' + JSON.stringify(message));
             };
             //does not work for volume = 0 thus workaround with if statement
             if (this.volume != 0) {
                 this.SpeechSynthesis.speak(utterThis);
             }
             else {
-                this.sendMessage("robot:" + JSON.stringify(message));
+                this.sendMessage('robot:' + JSON.stringify(message));
             }
         };
         WebotsSimulation.prototype.initSpeechRecognition = function () {
@@ -274,27 +276,27 @@ define(["require", "exports", "jquery", "guiState.controller"], function (requir
                 };
                 this.recognition.onend = function () {
                     var message = {
-                        name: "NAO",
-                        message: "transcript:" + that.final_transcript
+                        name: 'NAO',
+                        message: 'transcript:' + that.final_transcript,
                     };
-                    that.sendMessage("robot:" + JSON.stringify(message));
+                    that.sendMessage('robot:' + JSON.stringify(message));
                     this.stop();
                 };
             }
         };
         WebotsSimulation.prototype.recognizeSpeech = function () {
             if (this.recognition) {
-                this.final_transcript = "";
+                this.final_transcript = '';
                 this.recognition.lang = this.lang || guiStateController.getLanguage();
                 this.recognition.start();
             }
             else {
-                alert("Sorry, your browser does not support speech recognition. Please use the latest version of Chrome, Edge, Safari or Opera");
+                alert('Sorry, your browser does not support speech recognition. Please use the latest version of Chrome, Edge, Safari or Opera');
                 var message = {
-                    name: "NAO",
-                    message: "transcript:" + ""
+                    name: 'NAO',
+                    message: 'transcript:' + '',
                 };
-                this.sendMessage("robot:" + JSON.stringify(message));
+                this.sendMessage('robot:' + JSON.stringify(message));
             }
         };
         return WebotsSimulation;
@@ -310,7 +312,7 @@ define(["require", "exports", "jquery", "guiState.controller"], function (requir
                                 if (predicate()) {
                                     resolve();
                                 }
-                                else if ((Date.now() - start) > timeout) {
+                                else if (Date.now() - start > timeout) {
                                     reject();
                                 }
                                 else {
@@ -349,7 +351,7 @@ define(["require", "exports", "jquery", "guiState.controller"], function (requir
                             return [3 /*break*/, 5];
                         case 4:
                             e_1 = _a.sent();
-                            console.error("Could not load webots simulation", e_1);
+                            console.error('Could not load webots simulation', e_1);
                             return [2 /*return*/];
                         case 5:
                             this.webotsSimulation = new WebotsSimulation(WebotsSimulationController.createWebotsDiv(), webots);
@@ -410,13 +412,13 @@ define(["require", "exports", "jquery", "guiState.controller"], function (requir
             document.head.appendChild(link);
         };
         WebotsSimulationController.prepareModuleForWebots = function () {
-            if (!window.hasOwnProperty("Module")) {
+            if (!window.hasOwnProperty('Module')) {
                 window['Module'] = [];
             }
             window['Module']['locateFile'] = function (path, prefix) {
                 // if it's a data file, use a custom dir
-                if (path.endsWith(".data"))
-                    return window.location.origin + "/js/libs/webots/" + path;
+                if (path.endsWith('.data'))
+                    return window.location.origin + '/js/libs/webots/' + path;
                 // otherwise, use the default, the prefix (JS file's dir) + the path
                 return prefix + path;
             };

@@ -17,10 +17,10 @@ define(["require", "exports", "comm"], function (require, exports, COMM) {
      *            {String} - XML representation of the robot configuration
      */
     function saveAsConfigurationToServer(configName, xmlText, successFn) {
-        COMM.json("/conf/saveC", {
-            "cmd": "saveAsC",
-            "name": configName,
-            "configuration": xmlText
+        COMM.json('/conf/saveC', {
+            cmd: 'saveAsC',
+            name: configName,
+            configuration: xmlText,
         }, successFn, 'save configuration to server with new name ' + configName);
     }
     exports.saveAsConfigurationToServer = saveAsConfigurationToServer;
@@ -34,10 +34,10 @@ define(["require", "exports", "comm"], function (require, exports, COMM) {
      *            {String} - XML representation of the robot configuration
      */
     function saveConfigurationToServer(configName, xmlText, successFn) {
-        COMM.json("/conf/saveC", {
-            "cmd": "saveC",
-            "name": configName,
-            "configuration": xmlText
+        COMM.json('/conf/saveC', {
+            cmd: 'saveC',
+            name: configName,
+            configuration: xmlText,
         }, successFn, 'save configuration ' + configName + ' to server');
     }
     exports.saveConfigurationToServer = saveConfigurationToServer;
@@ -49,9 +49,9 @@ define(["require", "exports", "comm"], function (require, exports, COMM) {
      *
      */
     function deleteConfigurationFromListing(configName, successFn) {
-        COMM.json("/conf/deleteC", {
-            "cmd": "deleteC",
-            "name": configName
+        COMM.json('/conf/deleteC', {
+            cmd: 'deleteC',
+            name: configName,
         }, function (result) {
             successFn(result, configName);
         }, 'delete configuration ' + configName);
@@ -67,10 +67,10 @@ define(["require", "exports", "comm"], function (require, exports, COMM) {
      *            {String} - configuration owner
      */
     function loadConfigurationFromListing(configName, owner, successFn) {
-        COMM.json("/conf/loadC", {
-            "cmd": "loadC",
-            "name": configName,
-            "owner": owner
+        COMM.json('/conf/loadC', {
+            cmd: 'loadC',
+            name: configName,
+            owner: owner,
         }, successFn, 'load configuration ' + configName);
     }
     exports.loadConfigurationFromListing = loadConfigurationFromListing;
@@ -79,8 +79,8 @@ define(["require", "exports", "comm"], function (require, exports, COMM) {
      *
      */
     function refreshList(successFn) {
-        COMM.json("/conf/loadCN", {
-            "cmd": "loadCN"
+        COMM.json('/conf/loadCN', {
+            cmd: 'loadCN',
         }, successFn, 'refresh configuration list');
     }
     exports.refreshList = refreshList;

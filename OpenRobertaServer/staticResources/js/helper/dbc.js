@@ -7,7 +7,7 @@ define(["require", "exports", "log"], function (require, exports, LOG) {
      */
     function assertEq(expected, given) {
         function internalCheck(expected, given) {
-            if (typeof (expected) === typeof (given)) {
+            if (typeof expected === typeof given) {
                 if (expected === given) {
                     return null;
                 }
@@ -16,7 +16,7 @@ define(["require", "exports", "log"], function (require, exports, LOG) {
                 }
             }
             else {
-                return 'Violation. Expected type: ' + typeof (expected) + ', given: ' + typeof (given);
+                return 'Violation. Expected type: ' + typeof expected + ', given: ' + typeof given;
             }
         }
         var msg = internalCheck(expected, given);

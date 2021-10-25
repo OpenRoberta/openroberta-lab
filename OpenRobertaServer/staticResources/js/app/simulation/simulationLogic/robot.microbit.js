@@ -37,11 +37,11 @@ define(["require", "exports", "simulation.robot.mbed"], function (require, expor
                 canvas.save();
                 canvas.scale(1, -1);
                 canvas.translate(this.xBothLabel, -this.yBothLabel);
-                canvas.textAlign = "left";
-                canvas.font = "bold 14px Roboto";
-                canvas.textBaseline = "middle";
-                canvas.fillStyle = "black";
-                canvas.fillText("A + B", 0, 0);
+                canvas.textAlign = 'left';
+                canvas.font = 'bold 14px Roboto';
+                canvas.textBaseline = 'middle';
+                canvas.fillStyle = 'black';
+                canvas.fillText('A + B', 0, 0);
                 canvas.restore();
                 canvas.globalAlpha = that.buttons.A && that.buttons.B ? 0.7 : 0.6;
                 canvas.fillStyle = this.colorA;
@@ -53,7 +53,7 @@ define(["require", "exports", "simulation.robot.mbed"], function (require, expor
                 canvas.arc(this.xBothB, this.yBothB, this.rBoth, 0, Math.PI * 2);
                 canvas.fill();
                 canvas.globalAlpha = 1;
-            }
+            },
         };
         this.pin0 = {
             x: -209.5,
@@ -79,10 +79,10 @@ define(["require", "exports", "simulation.robot.mbed"], function (require, expor
                     canvas.save();
                     canvas.translate(this.x + 4, -this.y - 10);
                     canvas.rotate(Math.PI / 2);
-                    canvas.font = "bold 50px Roboto";
+                    canvas.font = 'bold 50px Roboto';
                     canvas.fillText('< ', 0, 0);
                     canvas.restore();
-                    canvas.font = "10px Courier";
+                    canvas.font = '10px Courier';
                     canvas.fillText('\u2293', this.x - 2, -this.y + 16);
                     canvas.fillText(this.digitalIn, this.x + 35, -this.y + 16);
                     canvas.restore();
@@ -95,26 +95,26 @@ define(["require", "exports", "simulation.robot.mbed"], function (require, expor
                     canvas.save();
                     canvas.translate(this.x + 4, -this.y - 10);
                     canvas.rotate(Math.PI / 2);
-                    canvas.font = "bold 50px Roboto";
+                    canvas.font = 'bold 50px Roboto';
                     canvas.fillText('< ', 0, 0);
                     canvas.restore();
-                    canvas.font = "10px Courier";
+                    canvas.font = '10px Courier';
                     canvas.fillText('\u223F', this.x - 2, -this.y + 16);
                     canvas.fillText(this.analogIn, this.x + 35, -this.y + 16);
                     canvas.restore();
                 }
                 else if (this.analogOut !== undefined) {
-                    canvas.fillStyle = "green";
+                    canvas.fillStyle = 'green';
                     canvas.beginPath();
                     canvas.save();
                     canvas.scale(1, -1);
                     canvas.save();
                     canvas.translate(this.x + 4, -this.y - 10);
                     canvas.rotate(Math.PI / 2);
-                    canvas.font = "bold 50px Roboto";
-                    canvas.fillText("> ", 0, 0);
+                    canvas.font = 'bold 50px Roboto';
+                    canvas.fillText('> ', 0, 0);
                     canvas.restore();
-                    canvas.font = "10px Courier";
+                    canvas.font = '10px Courier';
                     canvas.fillText('\u223F', this.x + 5, -this.y + 16);
                     canvas.fillText(this.analogOut, this.x + 30, -this.y + 16);
                     canvas.restore();
@@ -127,33 +127,33 @@ define(["require", "exports", "simulation.robot.mbed"], function (require, expor
                     canvas.save();
                     canvas.translate(this.x + 4, -this.y - 10);
                     canvas.rotate(Math.PI / 2);
-                    canvas.font = "bold 50px Roboto";
+                    canvas.font = 'bold 50px Roboto';
                     canvas.fillText('> ', 0, 0);
                     canvas.restore();
-                    canvas.font = "10px Courier";
+                    canvas.font = '10px Courier';
                     canvas.fillText('\u2293', this.x + 5, -this.y + 16);
                     canvas.fillText(this.digitalOut, this.x + 30, -this.y + 16);
                     canvas.restore();
                 }
-            }
+            },
         };
         this.pin1 = {
             x: -120,
             y: -170,
             wh: 40,
             touched: false,
-            draw: that.pin0.draw
+            draw: that.pin0.draw,
         };
         this.pin2 = {
             x: -20,
             y: -170,
             wh: 40,
             touched: false,
-            draw: that.pin0.draw
+            draw: that.pin0.draw,
         };
         this.time = 0;
         this.timer = {
-            timer1: false
+            timer1: false,
         };
     }
     Microbit.prototype = Object.create(simulation_robot_mbed_1.default.prototype);
@@ -170,35 +170,35 @@ define(["require", "exports", "simulation.robot.mbed"], function (require, expor
         var Y = e.clientY || e.originalEvent.touches[0].pageY;
         var top = $('#robotLayer').offset().top + $('#robotLayer').width() / 2;
         var left = $('#robotLayer').offset().left + $('#robotLayer').height() / 2;
-        startX = (parseInt(X - left, 10)) / scale;
-        startY = (parseInt(Y - top, 10)) / scale;
+        startX = parseInt(X - left, 10) / scale;
+        startY = parseInt(Y - top, 10) / scale;
         var scsq = 1;
         if (scale < 1)
             scsq = scale * scale;
         var dxA = startX - this.button.xA;
         var dyA = startY + this.button.yA;
-        var A = (dxA * dxA + dyA * dyA < this.button.rA * this.button.rA / scsq);
+        var A = dxA * dxA + dyA * dyA < (this.button.rA * this.button.rA) / scsq;
         var dxB = startX - this.button.xB;
         var dyB = startY + this.button.yB;
-        var B = (dxB * dxB + dyB * dyB < this.button.rB * this.button.rB / scsq);
+        var B = dxB * dxB + dyB * dyB < (this.button.rB * this.button.rB) / scsq;
         var dxReset = startX - this.button.xReset;
         var dyReset = startY + this.button.yReset;
-        var Reset = (dxReset * dxReset + dyReset * dyReset < this.button.rReset * this.button.rReset / scsq);
+        var Reset = dxReset * dxReset + dyReset * dyReset < (this.button.rReset * this.button.rReset) / scsq;
         var dxBothA = startX - this.button.xBothA;
         var dyBothA = startY + this.button.yBothA;
         var dxBothB = startX - this.button.xBothB;
         var dyBothB = startY + this.button.yBothB;
-        var bothA = (Math.pow(dxBothA, 2) + Math.pow(dyBothA, 2) < Math.pow(this.button.rBoth, 2) / scsq);
-        var bothB = (Math.pow(dxBothB, 2) + Math.pow(dyBothB, 2) < Math.pow(this.button.rBoth, 2) / scsq);
+        var bothA = Math.pow(dxBothA, 2) + Math.pow(dyBothA, 2) < Math.pow(this.button.rBoth, 2) / scsq;
+        var bothB = Math.pow(dxBothB, 2) + Math.pow(dyBothB, 2) < Math.pow(this.button.rBoth, 2) / scsq;
         var bothButtons = bothA || bothB;
-        var Pin0 = (startX > this.pin0.x) && (-startY > this.pin0.y) && (startX < this.pin0.x + this.pin0.wh) && (-startY < this.pin0.y + this.pin0.wh);
-        var Pin1 = (startX > this.pin1.x) && (-startY > this.pin1.y) && (startX < this.pin1.x + this.pin1.wh) && (-startY < this.pin1.y + this.pin1.wh);
-        var Pin2 = (startX > this.pin2.x) && (-startY > this.pin2.y) && (startX < this.pin2.x + this.pin2.wh) && (-startY < this.pin2.y + this.pin2.wh);
+        var Pin0 = startX > this.pin0.x && -startY > this.pin0.y && startX < this.pin0.x + this.pin0.wh && -startY < this.pin0.y + this.pin0.wh;
+        var Pin1 = startX > this.pin1.x && -startY > this.pin1.y && startX < this.pin1.x + this.pin1.wh && -startY < this.pin1.y + this.pin1.wh;
+        var Pin2 = startX > this.pin2.x && -startY > this.pin2.y && startX < this.pin2.x + this.pin2.wh && -startY < this.pin2.y + this.pin2.wh;
         // special case, display (center: 0,0) represents light level
         var dxDisplay = startX;
         var dyDisplay = startY + 20;
-        var Display = (dxDisplay * dxDisplay + dyDisplay * dyDisplay < this.display.rLight * this.display.rLight); //
-        var lightSliderActive = $('#sliderLight').val() !== "100";
+        var Display = dxDisplay * dxDisplay + dyDisplay * dyDisplay < this.display.rLight * this.display.rLight; //
+        var lightSliderActive = $('#sliderLight').val() !== '100';
         if (!lightSliderActive)
             this.display.lightLevel = 100;
         if (A || B || Reset || bothButtons || Display || Pin0 || Pin1 || Pin2) {
@@ -240,14 +240,14 @@ define(["require", "exports", "simulation.robot.mbed"], function (require, expor
                 this.buttons.B = false;
             }
             if (Display && !lightSliderActive) {
-                $("#robotLayer").css('cursor', 'crosshair');
+                $('#robotLayer').css('cursor', 'crosshair');
             }
             else {
-                $("#robotLayer").css('cursor', 'pointer');
+                $('#robotLayer').css('cursor', 'pointer');
             }
         }
         else {
-            $("#robotLayer").css('cursor', 'auto');
+            $('#robotLayer').css('cursor', 'auto');
         }
     };
     exports.default = Microbit;

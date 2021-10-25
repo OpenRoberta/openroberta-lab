@@ -28,7 +28,7 @@ define(["require", "exports", "simulation.simulation", "simulation.robot.mbed", 
                     canvas.arc(this.x, this.y, this.r + 5, 0, Math.PI * 2);
                     canvas.fill();
                 }
-            }
+            },
         };
         this.motorA = {
             // Copyright (C) Ken Fyrstenberg / Epistemex
@@ -91,14 +91,14 @@ define(["require", "exports", "simulation.simulation", "simulation.robot.mbed", 
                 canvas.globalCompositeOperation = 'source-over';
                 canvas.stroke();
                 canvas.restore();
-            }
+            },
         };
         this.motorB = {
             cx: 45,
             cy: -130,
             theta: 0,
             color: 'grey',
-            draw: that.motorA.draw
+            draw: that.motorA.draw,
         };
         this.endless = true;
         this.button = {
@@ -126,11 +126,11 @@ define(["require", "exports", "simulation.simulation", "simulation.robot.mbed", 
                 canvas.save();
                 canvas.scale(1, -1);
                 canvas.translate(this.xBothLabel, -this.yBothLabel);
-                canvas.textAlign = "center";
-                canvas.font = "bold 14px Roboto";
-                canvas.textBaseline = "middle";
-                canvas.fillStyle = "black";
-                canvas.fillText("A + B", 0, 0);
+                canvas.textAlign = 'center';
+                canvas.font = 'bold 14px Roboto';
+                canvas.textBaseline = 'middle';
+                canvas.fillStyle = 'black';
+                canvas.fillText('A + B', 0, 0);
                 canvas.restore();
                 canvas.globalAlpha = that.buttons.A && that.buttons.B ? 0.7 : 0.6;
                 canvas.fillStyle = this.colorA;
@@ -142,7 +142,7 @@ define(["require", "exports", "simulation.simulation", "simulation.robot.mbed", 
                 canvas.arc(this.xBothB, this.yBothB, this.rBoth, 0, Math.PI * 2);
                 canvas.fill();
                 canvas.globalAlpha = 1;
-            }
+            },
         };
         this.pin0 = {
             x: -196.5,
@@ -169,10 +169,10 @@ define(["require", "exports", "simulation.simulation", "simulation.robot.mbed", 
                     canvas.save();
                     canvas.translate(this.x - 16, -this.y + 15);
                     canvas.rotate(Math.PI / 2);
-                    canvas.font = "bold 50px Roboto";
+                    canvas.font = 'bold 50px Roboto';
                     canvas.fillText('> ', 0, 0);
                     canvas.restore();
-                    canvas.font = "10px Courier";
+                    canvas.font = '10px Courier';
                     canvas.fillText('\u2293', this.x - 14, -this.y + 41);
                     canvas.fillText(this.digitalOut, this.x + 6, -this.y + 41);
                     canvas.restore();
@@ -185,10 +185,10 @@ define(["require", "exports", "simulation.simulation", "simulation.robot.mbed", 
                     canvas.save();
                     canvas.translate(this.x - 16, -this.y + 15);
                     canvas.rotate(Math.PI / 2);
-                    canvas.font = "bold 50px Roboto";
+                    canvas.font = 'bold 50px Roboto';
                     canvas.fillText('< ', 0, 0);
                     canvas.restore();
-                    canvas.font = "10px Courier";
+                    canvas.font = '10px Courier';
                     canvas.fillText('\u2293', this.x - 22, -this.y + 41);
                     canvas.fillText(this.digitalIn, this.x + 15, -this.y + 41);
                     canvas.restore();
@@ -201,10 +201,10 @@ define(["require", "exports", "simulation.simulation", "simulation.robot.mbed", 
                     canvas.save();
                     canvas.translate(this.x - 16, -this.y + 15);
                     canvas.rotate(Math.PI / 2);
-                    canvas.font = "bold 50px Roboto";
+                    canvas.font = 'bold 50px Roboto';
                     canvas.fillText('> ', 0, 0);
                     canvas.restore();
-                    canvas.font = "10px Courier";
+                    canvas.font = '10px Courier';
                     canvas.fillText('\u223F', this.x - 14, -this.y + 41);
                     canvas.fillText(this.analogOut, this.x + 6, -this.y + 41);
                     canvas.restore();
@@ -217,36 +217,36 @@ define(["require", "exports", "simulation.simulation", "simulation.robot.mbed", 
                     canvas.save();
                     canvas.translate(this.x - 16, -this.y + 15);
                     canvas.rotate(Math.PI / 2);
-                    canvas.font = "bold 50px Roboto";
+                    canvas.font = 'bold 50px Roboto';
                     canvas.fillText('< ', 0, 0);
                     canvas.restore();
-                    canvas.font = "10px Courier";
+                    canvas.font = '10px Courier';
                     canvas.fillText('\u223F', this.x - 22, -this.y + 41);
                     canvas.fillText(this.analogIn, this.x + 15, -this.y + 41);
                     canvas.restore();
                 }
-            }
+            },
         };
         this.pin1 = {
             x: -97,
             y: -169.5,
             r: 26,
             touched: false,
-            draw: that.pin0.draw
+            draw: that.pin0.draw,
         };
         this.pin2 = {
             x: 98.5,
             y: -168.5,
             r: 26,
             touched: false,
-            draw: that.pin0.draw
+            draw: that.pin0.draw,
         };
         this.pin3 = {
             x: 196.5,
             y: -0.5,
             r: 26,
             touched: false,
-            draw: that.pin0.draw
+            draw: that.pin0.draw,
         };
         SIM.initMicrophone(this);
     }
@@ -271,7 +271,7 @@ define(["require", "exports", "simulation.simulation", "simulation.robot.mbed", 
     Calliope.prototype.update = function () {
         simulation_robot_mbed_1.default.prototype.update.apply(this);
         // update debug
-        var led = this.robotBehaviour.getActionState("led", true);
+        var led = this.robotBehaviour.getActionState('led', true);
         if (led) {
             if (led.color) {
                 this.led.color = led.color;
@@ -283,10 +283,10 @@ define(["require", "exports", "simulation.simulation", "simulation.robot.mbed", 
             }
         }
         // update motors
-        var motors = this.robotBehaviour.getActionState("motors", true);
+        var motors = this.robotBehaviour.getActionState('motors', true);
         if (motors) {
             function rotate(speed, that) {
-                that.theta += Math.PI * speed / 1000;
+                that.theta += (Math.PI * speed) / 1000;
                 that.theta = that.theta % (Math.PI * 2);
                 that.timeout = setTimeout(rotate, 150, speed, that);
             }
@@ -317,44 +317,44 @@ define(["require", "exports", "simulation.simulation", "simulation.robot.mbed", 
         var Y = e.clientY || e.originalEvent.touches[0].pageY;
         var top = $('#robotLayer').offset().top + $('#robotLayer').width() / 2;
         var left = $('#robotLayer').offset().left + $('#robotLayer').height() / 2;
-        startX = (parseInt(X - left, 10)) / scale;
-        startY = (parseInt(Y - top, 10)) / scale;
+        startX = parseInt(X - left, 10) / scale;
+        startY = parseInt(Y - top, 10) / scale;
         var scsq = 1;
         if (scale < 1)
             scsq = scale * scale;
         var dxA = startX - this.button.xA;
         var dyA = startY + this.button.yA;
-        var A = (dxA * dxA + dyA * dyA < this.button.rA * this.button.rA / scsq);
+        var A = dxA * dxA + dyA * dyA < (this.button.rA * this.button.rA) / scsq;
         var dxB = startX - this.button.xB;
         var dyB = startY + this.button.yB;
-        var B = (dxB * dxB + dyB * dyB < this.button.rB * this.button.rB / scsq);
+        var B = dxB * dxB + dyB * dyB < (this.button.rB * this.button.rB) / scsq;
         var dxReset = startX - this.button.xReset;
         var dyReset = startY + this.button.yReset;
-        var Reset = (dxReset * dxReset + dyReset * dyReset < this.button.rReset * this.button.rReset / scsq);
+        var Reset = dxReset * dxReset + dyReset * dyReset < (this.button.rReset * this.button.rReset) / scsq;
         var dxBothA = startX - this.button.xBothA;
         var dyBothA = startY + this.button.yBothA;
         var dxBothB = startX - this.button.xBothB;
         var dyBothB = startY + this.button.yBothB;
-        var bothA = (Math.pow(dxBothA, 2) + Math.pow(dyBothA, 2) < Math.pow(this.button.rBoth, 2) / scsq);
-        var bothB = (Math.pow(dxBothB, 2) + Math.pow(dyBothB, 2) < Math.pow(this.button.rBoth, 2) / scsq);
+        var bothA = Math.pow(dxBothA, 2) + Math.pow(dyBothA, 2) < Math.pow(this.button.rBoth, 2) / scsq;
+        var bothB = Math.pow(dxBothB, 2) + Math.pow(dyBothB, 2) < Math.pow(this.button.rBoth, 2) / scsq;
         var bothButtons = bothA || bothB;
         var dxPin0 = startX - this.pin0.x;
         var dyPin0 = startY + this.pin0.y;
-        var Pin0 = (dxPin0 * dxPin0 + dyPin0 * dyPin0 < this.pin0.r * this.pin0.r / scsq);
+        var Pin0 = dxPin0 * dxPin0 + dyPin0 * dyPin0 < (this.pin0.r * this.pin0.r) / scsq;
         var dxPin1 = startX - this.pin1.x;
         var dyPin1 = startY + this.pin1.y;
-        var Pin1 = (dxPin1 * dxPin1 + dyPin1 * dyPin1 < this.pin1.r * this.pin1.r / scsq);
+        var Pin1 = dxPin1 * dxPin1 + dyPin1 * dyPin1 < (this.pin1.r * this.pin1.r) / scsq;
         var dxPin2 = startX - this.pin2.x;
         var dyPin2 = startY + this.pin2.y;
-        var Pin2 = (dxPin2 * dxPin2 + dyPin2 * dyPin2 < this.pin2.r * this.pin2.r / scsq);
+        var Pin2 = dxPin2 * dxPin2 + dyPin2 * dyPin2 < (this.pin2.r * this.pin2.r) / scsq;
         var dxPin3 = startX - this.pin3.x;
         var dyPin3 = startY + this.pin3.y;
-        var Pin3 = (dxPin3 * dxPin3 + dyPin3 * dyPin3 < this.pin3.r * this.pin3.r / scsq);
+        var Pin3 = dxPin3 * dxPin3 + dyPin3 * dyPin3 < (this.pin3.r * this.pin3.r) / scsq;
         // special case, display (center: 0,0) represents light level
         var dxDisplay = startX;
         var dyDisplay = startY + 20;
-        var Display = (dxDisplay * dxDisplay + dyDisplay * dyDisplay < this.display.rLight * this.display.rLight);
-        var lightSliderActive = $('#sliderLight').val() !== "100";
+        var Display = dxDisplay * dxDisplay + dyDisplay * dyDisplay < this.display.rLight * this.display.rLight;
+        var lightSliderActive = $('#sliderLight').val() !== '100';
         if (!lightSliderActive) {
             this.display.lightLevel = 100;
         }
@@ -401,36 +401,58 @@ define(["require", "exports", "simulation.simulation", "simulation.robot.mbed", 
                 this.buttons.B = false;
             }
             if (Display && !lightSliderActive) {
-                $("#robotLayer").css('cursor', 'crosshair');
+                $('#robotLayer').css('cursor', 'crosshair');
             }
             else {
-                $("#robotLayer").css('cursor', 'pointer');
+                $('#robotLayer').css('cursor', 'pointer');
             }
         }
         else {
-            $("#robotLayer").css('cursor', 'auto');
+            $('#robotLayer').css('cursor', 'auto');
         }
     };
     Calliope.prototype.controle = function () {
         $('#simRobotContent').append('<div id="mbedContent"><div id="mbedButtons" class="btn-group btn-group-vertical" data-toggle="buttons">' + //
-            '<label style="margin: 8px;margin-top: 12px; margin-left: 0">' + Blockly.Msg.SENSOR_GESTURE + '</label>' + //
-            '<label class="btn simbtn active"><input type="radio" id="up" name="options" autocomplete="off">' + Blockly.Msg.SENSOR_GESTURE_UP + '</label>' + //
-            '<label class="btn simbtn"><input type="radio" id="down" name="options" autocomplete="off" >' + Blockly.Msg.SENSOR_GESTURE_DOWN + '</label>' + //
-            '<label class="btn simbtn"><input type="radio" id="face_down"name="options" autocomplete="off" >' + Blockly.Msg.SENSOR_GESTURE_FACE_DOWN + '</label>' + //
-            '<label class="btn simbtn"><input type="radio" id="face_up" name="options" autocomplete="off" >' + Blockly.Msg.SENSOR_GESTURE_FACE_UP + '</label>' + //
-            '<label class="btn simbtn"><input type="radio" id="shake" name="options" autocomplete="off" >' + Blockly.Msg.SENSOR_GESTURE_SHAKE + '</label>' + //
-            '<label class="btn simbtn"><input type="radio" id="freefall" name="options" autocomplete="off" >' + Blockly.Msg.SENSOR_GESTURE_FREEFALL + '</label>' + //
-            '<label style="margin: 8px;margin-top: 12px; margin-left: 0">' + Blockly.Msg.SENSOR_COMPASS
-            + '</label><input type="text" value="0" style="margin-bottom: 8px;margin-top: 12px; min-width: 45px; width: 45px; display: inline-block; border: 1px solid #333; border-radius: 2px; text-align: right;" id="range" />'
-            + '<div style="margin:8px 0; "><input id="slider" type="range" min="0" max="360" value="0" step="5" /></div>' + //
-            '<label style="margin: 8px;margin-top: 12px; margin-left: 0">' + Blockly.Msg.SENSOR_LIGHT
-            + '</label><input type="text" value="0" style="margin-bottom: 8px;margin-top: 12px; min-width: 45px; width: 45px; display: inline-block; border: 1px solid #333; border-radius: 2px; text-align: right; float: right;" id="rangeLight" />'
-            + '<div style="margin:8px 0; "><input id="sliderLight" type="range" min="0" max="100" value="0" /></div>' + //
-            '<label style="width:100%;margin: 8px;margin-top: 12px; margin-left: 0"><select class="customDropdown" id="pin"><option id="0">'
-            + Blockly.Msg.SENSOR_PIN + ' 0</option><option id="1">' + Blockly.Msg.SENSOR_PIN + ' 1</option><option id="2">' + Blockly.Msg.SENSOR_PIN
-            + ' 2</option><option id="3">' + Blockly.Msg.SENSOR_PIN
-            + ' 3</option></select><select class="customDropdown" style="float: right;" id="state"><option value="off">' + Blockly.Msg.OFF
-            + '</option><option value="analog">analog</option><option value="digital">digital</option></select></label>' + //
+            '<label style="margin: 8px;margin-top: 12px; margin-left: 0">' +
+            Blockly.Msg.SENSOR_GESTURE +
+            '</label>' + //
+            '<label class="btn simbtn active"><input type="radio" id="up" name="options" autocomplete="off">' +
+            Blockly.Msg.SENSOR_GESTURE_UP +
+            '</label>' + //
+            '<label class="btn simbtn"><input type="radio" id="down" name="options" autocomplete="off" >' +
+            Blockly.Msg.SENSOR_GESTURE_DOWN +
+            '</label>' + //
+            '<label class="btn simbtn"><input type="radio" id="face_down"name="options" autocomplete="off" >' +
+            Blockly.Msg.SENSOR_GESTURE_FACE_DOWN +
+            '</label>' + //
+            '<label class="btn simbtn"><input type="radio" id="face_up" name="options" autocomplete="off" >' +
+            Blockly.Msg.SENSOR_GESTURE_FACE_UP +
+            '</label>' + //
+            '<label class="btn simbtn"><input type="radio" id="shake" name="options" autocomplete="off" >' +
+            Blockly.Msg.SENSOR_GESTURE_SHAKE +
+            '</label>' + //
+            '<label class="btn simbtn"><input type="radio" id="freefall" name="options" autocomplete="off" >' +
+            Blockly.Msg.SENSOR_GESTURE_FREEFALL +
+            '</label>' + //
+            '<label style="margin: 8px;margin-top: 12px; margin-left: 0">' +
+            Blockly.Msg.SENSOR_COMPASS +
+            '</label><input type="text" value="0" style="margin-bottom: 8px;margin-top: 12px; min-width: 45px; width: 45px; display: inline-block; border: 1px solid #333; border-radius: 2px; text-align: right;" id="range" />' +
+            '<div style="margin:8px 0; "><input id="slider" type="range" min="0" max="360" value="0" step="5" /></div>' + //
+            '<label style="margin: 8px;margin-top: 12px; margin-left: 0">' +
+            Blockly.Msg.SENSOR_LIGHT +
+            '</label><input type="text" value="0" style="margin-bottom: 8px;margin-top: 12px; min-width: 45px; width: 45px; display: inline-block; border: 1px solid #333; border-radius: 2px; text-align: right; float: right;" id="rangeLight" />' +
+            '<div style="margin:8px 0; "><input id="sliderLight" type="range" min="0" max="100" value="0" /></div>' + //
+            '<label style="width:100%;margin: 8px;margin-top: 12px; margin-left: 0"><select class="customDropdown" id="pin"><option id="0">' +
+            Blockly.Msg.SENSOR_PIN +
+            ' 0</option><option id="1">' +
+            Blockly.Msg.SENSOR_PIN +
+            ' 1</option><option id="2">' +
+            Blockly.Msg.SENSOR_PIN +
+            ' 2</option><option id="3">' +
+            Blockly.Msg.SENSOR_PIN +
+            ' 3</option></select><select class="customDropdown" style="float: right;" id="state"><option value="off">' +
+            Blockly.Msg.OFF +
+            '</option><option value="analog">analog</option><option value="digital">digital</option></select></label>' + //
             '<div style="margin:8px 0; "><input id="slider1" type="range" min="0" max="1023" value="0" step="1" /></div></div>'); //
     };
     exports.default = Calliope;

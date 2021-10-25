@@ -97,7 +97,7 @@ define(["require", "exports", "jquery", "bootstrap-table"], function (require, e
                 0: data.length + 1,
                 1: marker,
                 2: obj,
-            }
+            },
         });
     }
     /**

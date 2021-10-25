@@ -1,8 +1,21 @@
 define(["require", "exports", "util", "message", "guiState.controller", "progList.model", "program.model", "program.controller", "blockly", "jquery", "bootstrap-table", "bootstrap-tagsinput"], function (require, exports, UTIL, MSG, GUISTATE_C, PROGLIST, PROGRAM, PROGRAM_C, Blockly, $) {
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.formatTags = exports.formatDate = exports.formatAuthor = exports.formatProgramDescription = exports.formatProgramName = exports.formatRobot = exports.titleLikes = exports.titleNumberOfViews = exports.rowAttributes = exports.rowStyle = exports.init = void 0;
-    var BACKGROUND_COLORS = ['#33B8CA', '#EBC300', '#39378B', '#005A94', '#179C7D', '#F29400', '#E2001A', '#EB6A0A', '#8FA402', '#BACC1E', '#9085BA',
-        '#FF69B4', '#DF01D7'];
+    var BACKGROUND_COLORS = [
+        '#33B8CA',
+        '#EBC300',
+        '#39378B',
+        '#005A94',
+        '#179C7D',
+        '#F29400',
+        '#E2001A',
+        '#EB6A0A',
+        '#8FA402',
+        '#BACC1E',
+        '#9085BA',
+        '#FF69B4',
+        '#DF01D7',
+    ];
     var currentColorIndex;
     var currentViewMode = 'gallery';
     /**
@@ -19,10 +32,10 @@ define(["require", "exports", "util", "message", "guiState.controller", "progLis
         var robots = GUISTATE_C.getRobots();
         var groups = {};
         var coerceName = function (name, group) {
-            if (group === "arduino")
-                return "Nepo4Arduino";
-            if (group === "ev3")
-                return "Ev3";
+            if (group === 'arduino')
+                return 'Nepo4Arduino';
+            if (group === 'ev3')
+                return 'Ev3';
             return GUISTATE_C.getMenuRobotRealName(name);
         };
         for (var propt in robots) {
@@ -40,7 +53,7 @@ define(["require", "exports", "util", "message", "guiState.controller", "progLis
         for (var group in groups) {
             filterField.append(new Option(groups[group], group));
         }
-        filterField.append(new Option("All robots", "all", true, true));
+        filterField.append(new Option('All robots', 'all', true, true));
     }
     function initGalleryList() {
         $('#galleryTable').bootstrapTable({
@@ -63,73 +76,85 @@ define(["require", "exports", "util", "message", "guiState.controller", "progLis
                 paginationSwitchUp: 'typcn-book',
                 refresh: 'typcn-refresh',
             },
-            columns: [{
+            columns: [
+                {
                     sortable: true,
                     //visible : false,
                     formatter: formatRobot,
-                }, {
+                },
+                {
                     sortable: true,
                     formatter: formatProgramName,
-                }, {
+                },
+                {
                     sortable: true,
                     formatter: formatProgramDescription,
-                }, {
+                },
+                {
                     formatter: formatAuthor,
                     sortable: true,
-                }, {
+                },
+                {
                     sortable: true,
                     formatter: formatDate,
-                }, {
+                },
+                {
                     title: titleNumberOfViews,
                     sortable: true,
-                }, {
+                },
+                {
                     title: titleLikes,
                     sortable: true,
-                }, {
+                },
+                {
                     sortable: true,
                     formatter: formatTags,
-                }, {
+                },
+                {
                     events: eventsLike,
                     formatter: formatLike,
-                }]
+                },
+            ],
         });
         $('#galleryTable').bootstrapTable('togglePagination');
     }
     function initGalleryListEvents() {
         $(window).resize(function () {
             $('#galleryTable').bootstrapTable('resetView', {
-                height: UTIL.calcDataTableHeight()
+                height: UTIL.calcDataTableHeight(),
             });
         });
         $('#tabGalleryList').onWrap('show.bs.tab', function (e) {
             $('#filterRobot').val(GUISTATE_C.getRobotGroup());
             guiStateController.setView('tabGalleryList');
-            if ($('#galleryTable').bootstrapTable("getData").length === 0) {
-                $(".pace").show(); // Show loading icon and hide gallery table 
+            if ($('#galleryTable').bootstrapTable('getData').length === 0) {
+                $('.pace').show(); // Show loading icon and hide gallery table
             }
             loadGalleryData();
-        }, "show gallery list");
+        }, 'show gallery list');
         $('#tabGalleryList').onWrap('shown.bs.tab', function (e) {
-            $(window).trigger("resize");
-        }, "shown gallery list");
+            $(window).trigger('resize');
+        }, 'shown gallery list');
         $('#galleryTable').onWrap('page-change.bs.table', function (e) {
             configureTagsInput();
-        }, "page-change gallery list");
-        $('#galleryList').find('button[name="refresh"]').onWrap('click', function () {
+        }, 'page-change gallery list');
+        $('#galleryList')
+            .find('button[name="refresh"]')
+            .onWrap('click', function () {
             loadGalleryData();
             return false;
-        }, "refresh gallery list clicked");
+        }, 'refresh gallery list clicked');
         $('#galleryTable').onWrap('click-row.bs.table', function ($element, row) {
             PROGRAM_C.loadFromGallery(row);
-        }, "Load program from gallery double clicked");
+        }, 'Load program from gallery double clicked');
         $('#backGalleryList').onWrap('click', function () {
             $('#tabProgram').clickWrap();
             return false;
-        }, "back to program view");
+        }, 'back to program view');
         $('#galleryTable').on('shown.bs.collapse hidden.bs.collapse', function (e) {
             $('#galleryTable').bootstrapTable('resetWidth');
         });
-        $('#filterRobot').onWrap('change', loadGalleryData, "gallery filter changed");
+        $('#filterRobot').onWrap('change', loadGalleryData, 'gallery filter changed');
         $('#fieldOrderBy').change(function (e) {
             var fieldData = e.target.value.split(':');
             var row = parseInt(fieldData[0]);
@@ -165,23 +190,23 @@ define(["require", "exports", "util", "message", "guiState.controller", "progLis
     function update(result) {
         UTIL.response(result);
         if (result.rc === 'ok') {
-            $('#galleryTable').bootstrapTable("load", result.programNames);
+            $('#galleryTable').bootstrapTable('load', result.programNames);
             configureTagsInput();
         }
-        $(".pace").fadeOut(300); // Hide loading icon and show gallery table
+        $('.pace').fadeOut(300); // Hide loading icon and show gallery table
     }
     function updateLike(value, index, row) {
         var likes = row[6] + value;
-        $('#galleryTable').bootstrapTable("updateCell", {
+        $('#galleryTable').bootstrapTable('updateCell', {
             index: index,
             field: 6,
-            value: likes
+            value: likes,
         });
         var like = value > 0 ? true : false;
-        $('#galleryTable').bootstrapTable("updateCell", {
+        $('#galleryTable').bootstrapTable('updateCell', {
             index: index,
             field: 8,
-            value: like
+            value: like,
         });
     }
     var eventsLike = {
@@ -191,7 +216,7 @@ define(["require", "exports", "util", "message", "guiState.controller", "progLis
                 return;
             $(e.target).data('blocked', 1);
             PROGRAM.likeProgram(true, row[1], row[3], row[0], function (result) {
-                if (result.rc == "ok") {
+                if (result.rc == 'ok') {
                     updateLike(1, index, row);
                     $(e.target).data('blocked', 0);
                 }
@@ -208,7 +233,7 @@ define(["require", "exports", "util", "message", "guiState.controller", "progLis
                 return;
             $(e.target).data('blocked', 1);
             PROGRAM.likeProgram(false, row[1], row[3], row[0], function (result) {
-                if (result.rc == "ok") {
+                if (result.rc == 'ok') {
                     updateLike(-1, index, row);
                     $(e.target).data('blocked', 0);
                 }
@@ -218,7 +243,7 @@ define(["require", "exports", "util", "message", "guiState.controller", "progLis
                 MSG.displayInformation(result, result.message, result.message, row[1]);
             });
             return false;
-        }
+        },
     };
     var rowStyle = function (row, index) {
         return {
@@ -249,27 +274,33 @@ define(["require", "exports", "util", "message", "guiState.controller", "progLis
     exports.formatProgramName = formatProgramName;
     var formatProgramDescription = function (value, row, index) {
         var xmlDoc = Blockly.Xml.textToDom(value, Blockly.getMainWorkspace());
-        var description = xmlDoc.getAttribute("description");
+        var description = xmlDoc.getAttribute('description');
         if (!description) {
-            description = "&nbsp;";
+            description = '&nbsp;';
         }
         return '<div class="galleryDescription color' + currentColorIndex + '">' + description + '</div>';
     };
     exports.formatProgramDescription = formatProgramDescription;
     var formatAuthor = function (value, row, index) {
-        return "<div class='galleryAuthor'><span class='title' lkey='Blockly.Msg.GALLERY_BY'>" + (Blockly.Msg.GALLERY_BY || "von") + "</span>" + value
-            + "</span></div>";
+        return ("<div class='galleryAuthor'><span class='title' lkey='Blockly.Msg.GALLERY_BY'>" +
+            (Blockly.Msg.GALLERY_BY || 'von') +
+            '</span>' +
+            value +
+            '</span></div>');
     };
     exports.formatAuthor = formatAuthor;
     var formatDate = function (value, row, index) {
-        return ("<span class='title' lkey='Blockly.Msg.GALLERY_DATE'>" + (Blockly.Msg.GALLERY_DATE || "erstellt") + "</span>" + UTIL.formatDate(value.replace(/\s/, 'T')));
+        return ("<span class='title' lkey='Blockly.Msg.GALLERY_DATE'>" +
+            (Blockly.Msg.GALLERY_DATE || 'erstellt') +
+            '</span>' +
+            UTIL.formatDate(value.replace(/\s/, 'T')));
     };
     exports.formatDate = formatDate;
     var formatTags = function (value, row, index) {
         var xmlDoc = Blockly.Xml.textToDom(row[2], Blockly.getMainWorkspace());
-        var tags = xmlDoc.getAttribute("tags");
+        var tags = xmlDoc.getAttribute('tags');
         if (!tags) {
-            tags = "&nbsp;";
+            tags = '&nbsp;';
         }
         return '<input class="infoTags" type="text" value="' + tags + '" data-role="tagsinput"/>';
     };
@@ -277,12 +308,14 @@ define(["require", "exports", "util", "message", "guiState.controller", "progLis
     var formatLike = function (value, row, index) {
         if (GUISTATE_C.isUserLoggedIn()) {
             if (value) {
-                return '<div class="galleryLike"><a href="#" class="dislike galleryLike typcn typcn-heart-half-outline"><span lkey="Blockly.Msg.GALLERY_DISLIKE">'
-                    + (Blockly.Msg.GALLERY_DISLIKE || 'gefällt mir nicht mehr') + '</span></a></div>';
+                return ('<div class="galleryLike"><a href="#" class="dislike galleryLike typcn typcn-heart-half-outline"><span lkey="Blockly.Msg.GALLERY_DISLIKE">' +
+                    (Blockly.Msg.GALLERY_DISLIKE || 'gefällt mir nicht mehr') +
+                    '</span></a></div>');
             }
             else {
-                return '<div class="galleryLike"><a href="#" class="like galleryLike typcn typcn-heart-full-outline"><span lkey="Blockly.Msg.GALLERY_LIKE">'
-                    + (Blockly.Msg.GALLERY_LIKE || 'gefällt mir') + '</span></a></div>';
+                return ('<div class="galleryLike"><a href="#" class="like galleryLike typcn typcn-heart-full-outline"><span lkey="Blockly.Msg.GALLERY_LIKE">' +
+                    (Blockly.Msg.GALLERY_LIKE || 'gefällt mir') +
+                    '</span></a></div>');
             }
         }
         else {

@@ -14,7 +14,7 @@ define(["require", "exports", "simulation.robot.ev3"], function (require, export
             xOld: 70,
             yOld: 90,
             transX: 0,
-            transY: 0
+            transY: 0,
         });
     }
     RobertaRobot.prototype = Object.create(simulation_robot_ev3_1.default.prototype);

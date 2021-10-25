@@ -74,42 +74,42 @@ define(["require", "exports", "message", "util", "guiState.controller", "program
                 $('#tabProgram').clickWrap();
             }
             return false;
-        }, "back to previous view");
+        }, 'back to previous view');
         $('#runSourceCodeEditor').onWrap('click', function () {
             PROGRUN_C.runNative(flask.getCode());
             return false;
-        }, "run button clicked");
+        }, 'run button clicked');
         $('#buildSourceCodeEditor').onWrap('click', function () {
             GUISTATE_C.setRunEnabled(false);
-            $("#buildSourceCodeEditor").addClass('disabled');
+            $('#buildSourceCodeEditor').addClass('disabled');
             PROGRAM.compileN(GUISTATE_C.getProgramName(), flask.getCode(), GUISTATE_C.getLanguage(), function (result) {
-                if (result.rc == "ok") {
+                if (result.rc == 'ok') {
                     MSG.displayMessage(result.message, 'POPUP', '', false, false);
                 }
                 else {
                     MSG.displayInformation(result, result.message, result.message, GUISTATE_C.getProgramName());
                 }
                 GUISTATE_C.setRunEnabled(true);
-                $("#buildSourceCodeEditor").removeClass('disabled');
+                $('#buildSourceCodeEditor').removeClass('disabled');
             });
             return false;
-        }, "build button clicked");
+        }, 'build button clicked');
         $('#downloadSourceCodeEditor').onWrap('click', function () {
             var filename = GUISTATE_C.getProgramName() + '.' + GUISTATE_C.getSourceCodeFileExtension();
             UTIL.download(filename, flask.getCode());
-            MSG.displayMessage("MENU_MESSAGE_DOWNLOAD", "TOAST", filename);
+            MSG.displayMessage('MENU_MESSAGE_DOWNLOAD', 'TOAST', filename);
             return false;
-        }, "download source code button clicked");
+        }, 'download source code button clicked');
         $('#uploadSourceCodeEditor').onWrap('click', function () {
             IMPORT_C.importSourceCode(function (name, source) {
                 flask.updateCode(source);
             });
             return false;
-        }, "upload source code button clicked");
+        }, 'upload source code button clicked');
         $('#importSourceCodeEditor').onWrap('click', function () {
             getSourceCode(false);
             return false;
-        }, "import from blockly button clicked");
+        }, 'import from blockly button clicked');
         $('#tabSourceCodeEditor').onWrap('show.bs.tab', function () {
             if (currentLanguage === 'python' || currentLanguage === 'json') {
                 $('#buildSourceCodeEditor').addClass('disabled');
@@ -123,7 +123,14 @@ define(["require", "exports", "message", "util", "guiState.controller", "program
             $('#buildSourceCodeEditor').removeClass('disabled');
             $('#main-section').css('background-color', '#FFF');
         });
-        $('#sourceCodeEditorPane').find('button[name="rightMostButton"]').attr('title', '').attr('rel', 'tooltip').attr('data-placement', 'left').attr('lkey', 'Blockly.Msg.SOURCE_CODE_EDITOR_IMPORT_TOOLTIP').attr('data-original-title', Blockly.Msg.SOURCE_CODE_EDITOR_IMPORT_TOOLTIP).tooltip('fixTitle');
+        $('#sourceCodeEditorPane')
+            .find('button[name="rightMostButton"]')
+            .attr('title', '')
+            .attr('rel', 'tooltip')
+            .attr('data-placement', 'left')
+            .attr('lkey', 'Blockly.Msg.SOURCE_CODE_EDITOR_IMPORT_TOOLTIP')
+            .attr('data-original-title', Blockly.Msg.SOURCE_CODE_EDITOR_IMPORT_TOOLTIP)
+            .tooltip('fixTitle');
     }
     function getSourceCode(reload) {
         var blocklyWorkspace = GUISTATE_C.getBlocklyWorkspace();
@@ -135,7 +142,7 @@ define(["require", "exports", "message", "util", "guiState.controller", "program
         var language = GUISTATE_C.getLanguage();
         PROGRAM.showSourceProgram(GUISTATE_C.getProgramName(), configName, xmlProgram, xmlConfigText, PROG_C.SSID, PROG_C.password, language, function (result) {
             PROG_C.reloadProgram(result);
-            if (result.rc == "ok") {
+            if (result.rc == 'ok') {
                 if (reload) {
                     $('#tabSourceCodeEditor').clickWrap();
                 }

@@ -19,14 +19,14 @@ define(["require", "exports", "comm"], function (require, exports, COMM) {
      *
      */
     function saveAsProgramToServer(programName, ownerAccount, xmlProgramText, configName, xmlConfigText, timestamp, successFn) {
-        COMM.json("/program/save", {
-            "cmd": "saveAs",
-            "programName": programName,
-            "ownerAccount": ownerAccount,
-            "progXML": xmlProgramText,
-            "configName": configName,
-            "confXML": xmlConfigText,
-            "timestamp": timestamp
+        COMM.json('/program/save', {
+            cmd: 'saveAs',
+            programName: programName,
+            ownerAccount: ownerAccount,
+            progXML: xmlProgramText,
+            configName: configName,
+            confXML: xmlConfigText,
+            timestamp: timestamp,
         }, successFn, "save program to server with new name '" + programName + "'");
     }
     exports.saveAsProgramToServer = saveAsProgramToServer;
@@ -45,14 +45,14 @@ define(["require", "exports", "comm"], function (require, exports, COMM) {
      *
      */
     function saveProgramToServer(programName, ownerAccount, xmlProgramText, configName, xmlConfigText, timestamp, successFn) {
-        COMM.json("/program/save", {
-            "cmd": "save",
-            "programName": programName,
-            "ownerAccount": ownerAccount,
-            "progXML": xmlProgramText,
-            "configName": configName,
-            "confXML": xmlConfigText,
-            "timestamp": timestamp
+        COMM.json('/program/save', {
+            cmd: 'save',
+            programName: programName,
+            ownerAccount: ownerAccount,
+            progXML: xmlProgramText,
+            configName: configName,
+            confXML: xmlConfigText,
+            timestamp: timestamp,
         }, successFn, "save program '" + programName + "' to server");
     }
     exports.saveProgramToServer = saveProgramToServer;
@@ -65,9 +65,9 @@ define(["require", "exports", "comm"], function (require, exports, COMM) {
      *            {String} - that represents the program
      */
     function loadProgramFromXML(programName, xmlText, successFn) {
-        COMM.json("/program/import", {
-            "programName": programName,
-            "progXML": xmlText
+        COMM.json('/program/import', {
+            programName: programName,
+            progXML: xmlText,
         }, successFn, "open program '" + programName + "' from XML");
     }
     exports.loadProgramFromXML = loadProgramFromXML;
@@ -76,7 +76,7 @@ define(["require", "exports", "comm"], function (require, exports, COMM) {
      * if no user is logged in this does nothing
      */
     function exportAllProgramsXml() {
-        COMM.download("/program/exportAllPrograms");
+        COMM.download('/program/exportAllPrograms');
     }
     exports.exportAllProgramsXml = exportAllProgramsXml;
     /**
@@ -91,17 +91,17 @@ define(["require", "exports", "comm"], function (require, exports, COMM) {
      *
      */
     function shareProgram(programName, shareObj, successFn) {
-        COMM.json("/program/share", {
-            "cmd": "shareP",
-            "programName": programName,
-            "shareData": shareObj
+        COMM.json('/program/share', {
+            cmd: 'shareP',
+            programName: programName,
+            shareData: shareObj,
         }, successFn, "share program '" + programName + "' with '" + shareObj.label + "'(" + shareObj.type + ") having right '" + shareObj.right + "'");
     }
     exports.shareProgram = shareProgram;
     function shareProgramWithGallery(programName, successFn) {
-        COMM.json("/program/share/create", {
-            "cmd": "shareWithGallery",
-            "programName": programName,
+        COMM.json('/program/share/create', {
+            cmd: 'shareWithGallery',
+            programName: programName,
         }, successFn, "share program '" + programName + "' with Gallery");
     }
     exports.shareProgramWithGallery = shareProgramWithGallery;
@@ -114,11 +114,11 @@ define(["require", "exports", "comm"], function (require, exports, COMM) {
      *            {String} - owner of the program
      */
     function deleteShare(programName, owner, author, successFn) {
-        COMM.json("/program/share/delete", {
-            "cmd": "shareDelete",
-            "programName": programName,
-            "owner": owner,
-            "author": author,
+        COMM.json('/program/share/delete', {
+            cmd: 'shareDelete',
+            programName: programName,
+            owner: owner,
+            author: author,
         }, function (result) {
             successFn(result, programName);
         }, "delete share program '" + programName + "' owner: " + owner);
@@ -132,9 +132,9 @@ define(["require", "exports", "comm"], function (require, exports, COMM) {
      *
      */
     function deleteProgramFromListing(programName, author, successFn) {
-        COMM.json("/program/delete", {
-            "programName": programName,
-            "author": author,
+        COMM.json('/program/delete', {
+            programName: programName,
+            author: author,
         }, function (result) {
             successFn(result, programName);
         }, "delete program '" + programName + "'");
@@ -150,10 +150,10 @@ define(["require", "exports", "comm"], function (require, exports, COMM) {
      *
      */
     function loadProgramFromListing(programName, ownerName, author, successFn) {
-        COMM.json("/program/listing", {
-            "programName": programName,
-            "owner": ownerName,
-            "author": author
+        COMM.json('/program/listing', {
+            programName: programName,
+            owner: ownerName,
+            author: author,
         }, successFn, "load program '" + programName + "' owned by '" + ownerName + "'");
     }
     exports.loadProgramFromListing = loadProgramFromListing;
@@ -167,10 +167,10 @@ define(["require", "exports", "comm"], function (require, exports, COMM) {
      *
      */
     function loadProgramEntity(programName, author, ownerName, successFn) {
-        COMM.json("/program/entity", {
-            "programName": programName,
-            "owner": ownerName,
-            "author": author
+        COMM.json('/program/entity', {
+            programName: programName,
+            owner: ownerName,
+            author: author,
         }, successFn, "load programEntity '" + programName + "' owned by '" + ownerName + "'");
     }
     exports.loadProgramEntity = loadProgramEntity;
@@ -178,7 +178,7 @@ define(["require", "exports", "comm"], function (require, exports, COMM) {
      * Refresh program list
      */
     function refreshList(successFn) {
-        COMM.json("/program/listing/names", {}, successFn, "refresh program list");
+        COMM.json('/program/listing/names', {}, successFn, 'refresh program list');
     }
     exports.refreshList = refreshList;
     /**
@@ -198,14 +198,14 @@ define(["require", "exports", "comm"], function (require, exports, COMM) {
      *            {String} - WLAN password for WiFi enabled robots
      */
     function showSourceProgram(programName, configName, xmlTextProgram, xmlTextConfig, SSID, password, language, successFn) {
-        COMM.json("/projectWorkflow/source", {
-            "programName": programName,
-            "configurationName": configName,
-            "progXML": xmlTextProgram,
-            "confXML": xmlTextConfig,
-            "SSID": SSID,
-            "password": password,
-            "language": language
+        COMM.json('/projectWorkflow/source', {
+            programName: programName,
+            configurationName: configName,
+            progXML: xmlTextProgram,
+            confXML: xmlTextConfig,
+            SSID: SSID,
+            password: password,
+            language: language,
         }, successFn, "show source code of program '" + programName + "'");
     }
     exports.showSourceProgram = showSourceProgram;
@@ -226,14 +226,14 @@ define(["require", "exports", "comm"], function (require, exports, COMM) {
      *            {String} - WLAN password for WiFi enabled robots
      */
     function runOnBrick(programName, configName, xmlTextProgram, xmlTextConfig, SSID, password, language, successFn) {
-        COMM.json("/projectWorkflow/run", {
-            "programName": programName,
-            "configurationName": configName,
-            "progXML": xmlTextProgram,
-            "confXML": xmlTextConfig,
-            "SSID": SSID,
-            "password": password,
-            "language": language
+        COMM.json('/projectWorkflow/run', {
+            programName: programName,
+            configurationName: configName,
+            progXML: xmlTextProgram,
+            confXML: xmlTextConfig,
+            SSID: SSID,
+            password: password,
+            language: language,
         }, successFn, "run program '" + programName + "' with configuration '" + configName + "'");
     }
     exports.runOnBrick = runOnBrick;
@@ -250,12 +250,12 @@ define(["require", "exports", "comm"], function (require, exports, COMM) {
      *            {String} - XML representation of the robot configuration
      */
     function runInSim(programName, configName, xmlTextProgram, xmlTextConfig, language, successFn) {
-        COMM.json("/projectWorkflow/sourceSimulation", {
-            "programName": programName,
-            "configurationName": configName,
-            "progXML": xmlTextProgram,
-            "confXML": xmlTextConfig,
-            "language": language
+        COMM.json('/projectWorkflow/sourceSimulation', {
+            programName: programName,
+            configurationName: configName,
+            progXML: xmlTextProgram,
+            confXML: xmlTextConfig,
+            language: language,
         }, successFn, "run program '" + programName + "' with configuration '" + configName + "'");
     }
     exports.runInSim = runInSim;
@@ -268,10 +268,10 @@ define(["require", "exports", "comm"], function (require, exports, COMM) {
      *            {String} - source code of the program
      */
     function runNative(programName, programText, language, successFn) {
-        COMM.json("/projectWorkflow/runNative", {
-            "programName": programName,
-            "progXML": programText,
-            "language": language
+        COMM.json('/projectWorkflow/runNative', {
+            programName: programName,
+            progXML: programText,
+            language: language,
         }, successFn, "run program '" + programName + "'");
     }
     exports.runNative = runNative;
@@ -285,10 +285,10 @@ define(["require", "exports", "comm"], function (require, exports, COMM) {
      *
      */
     function compileN(programName, programText, language, successFn) {
-        COMM.json("/projectWorkflow/compileNative", {
-            "programName": programName,
-            "progXML": programText,
-            "language": language
+        COMM.json('/projectWorkflow/compileNative', {
+            programName: programName,
+            progXML: programText,
+            language: language,
         }, successFn, "compile program '" + programName + "'");
     }
     exports.compileN = compileN;
@@ -302,11 +302,11 @@ define(["require", "exports", "comm"], function (require, exports, COMM) {
      *
      */
     function compileP(programName, programText, language, successFn) {
-        COMM.json("/projectWorkflow/compileProgram", {
-            "cmd": "compileP",
-            "programName": programName,
-            "progXML": programText,
-            "language": language
+        COMM.json('/projectWorkflow/compileProgram', {
+            cmd: 'compileP',
+            programName: programName,
+            progXML: programText,
+            language: language,
         }, successFn, "compile program '" + programName + "'");
     }
     exports.compileP = compileP;
@@ -323,12 +323,12 @@ define(["require", "exports", "comm"], function (require, exports, COMM) {
      *            {String} - XML representation of the robot configuration
      */
     function checkProgramCompatibility(programName, configName, xmlTextProgram, xmlTextConfig, successFn) {
-        COMM.json("/program", {
-            "cmd": "checkP",
-            "programName": programName,
-            "configuration": configName,
-            "progXML": xmlTextProgram,
-            "confXML": xmlTextConfig
+        COMM.json('/program', {
+            cmd: 'checkP',
+            programName: programName,
+            configuration: configName,
+            progXML: xmlTextProgram,
+            confXML: xmlTextConfig,
         }, successFn, "check program '" + programName + "' with configuration '" + configName + "'");
     }
     exports.checkProgramCompatibility = checkProgramCompatibility;
@@ -340,16 +340,16 @@ define(["require", "exports", "comm"], function (require, exports, COMM) {
      *
      */
     function likeProgram(like, programName, author, robotName, successFn) {
-        COMM.json("/program/like", {
-            "programName": programName,
-            "robotName": robotName,
-            "author": author,
-            "like": like
+        COMM.json('/program/like', {
+            programName: programName,
+            robotName: robotName,
+            author: author,
+            like: like,
         }, successFn, "like program '" + programName + "': '" + like + "'");
     }
     exports.likeProgram = likeProgram;
     function resetProgram(successFn) {
-        COMM.json("/projectWorkflow/reset", {}, successFn, "reset");
+        COMM.json('/projectWorkflow/reset', {}, successFn, 'reset');
     }
     exports.resetProgram = resetProgram;
 });

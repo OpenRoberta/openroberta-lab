@@ -7,19 +7,19 @@ define(["require", "exports", "./neuralnetwork.nn"], function (require, exports,
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.State = exports.Type = exports.getKeyFromValue = exports.regularizations = exports.activations = void 0;
     /** Suffix added to the state when storing if a control is hidden or not. */
-    var HIDE_STATE_SUFFIX = "_hide";
+    var HIDE_STATE_SUFFIX = '_hide';
     /** A map between names and activation functions. */
     exports.activations = {
-        "relu": nn.Activations.RELU,
-        "tanh": nn.Activations.TANH,
-        "sigmoid": nn.Activations.SIGMOID,
-        "linear": nn.Activations.LINEAR
+        relu: nn.Activations.RELU,
+        tanh: nn.Activations.TANH,
+        sigmoid: nn.Activations.SIGMOID,
+        linear: nn.Activations.LINEAR,
     };
     /** A map between names and regularization functions. */
     exports.regularizations = {
-        "none": null,
-        "L1": nn.RegularizationFunction.L1,
-        "L2": nn.RegularizationFunction.L2
+        none: null,
+        L1: nn.RegularizationFunction.L1,
+        L2: nn.RegularizationFunction.L2,
     };
     function getKeyFromValue(obj, value) {
         for (var key in obj) {
@@ -55,7 +55,6 @@ define(["require", "exports", "./neuralnetwork.nn"], function (require, exports,
         Type[Type["BOOLEAN"] = 4] = "BOOLEAN";
         Type[Type["OBJECT"] = 5] = "OBJECT";
     })(Type = exports.Type || (exports.Type = {}));
-    ;
     // Add the GUI state.
     var State = /** @class */ (function () {
         function State() {
