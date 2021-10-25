@@ -1,70 +1,78 @@
-import { ARobotBehaviour } from "./interpreter.aRobotBehaviour";
-import { State } from "./interpreter.state";
-import * as C from "./interpreter.constants";
-import * as U from "./interpreter.util";
+import { ARobotBehaviour } from './interpreter.aRobotBehaviour';
+import { State } from './interpreter.state';
+import * as C from './interpreter.constants';
+import * as U from './interpreter.util';
 
 var driveConfig = {
-    "motorL": { "port": 1, "orientation": 1 },
-    "motorR": { "port": 2, "orientation": 1 },
-    "orientation":[1, 1, 1, 1],
-    "wheelDiameter": 5.6, "trackWidth": 22.8, "distanceToTics": 1.0
-}
+    motorL: { port: 1, orientation: 1 },
+    motorR: { port: 2, orientation: 1 },
+    orientation: [1, 1, 1, 1],
+    wheelDiameter: 5.6,
+    trackWidth: 22.8,
+    distanceToTics: 1.0,
+};
 
 let propFromORB = {
-    "Motor": [{ "pwr": 0, "speed": 0, "pos": 0 },
-    { "pwr": 0, "speed": 0, "pos": 0 },
-    { "pwr": 0, "speed": 0, "pos": 0 },
-    { "pwr": 0, "speed": 0, "pos": 0 }],
-    "Sensor": [{ "valid": false, "type": 0, "option": 0, "value": [0, 0] },
-    { "valid": false, "type": 0, "option": 0, "value": [0, 0] },
-    { "valid": false, "type": 0, "option": 0, "value": [0, 0] },
-    { "valid": false, "type": 0, "option": 0, "value": [0, 0] }],
-    "Vcc": 0,
-    "Digital": [false, false],
-    "Status": 0
-}
+    Motor: [
+        { pwr: 0, speed: 0, pos: 0 },
+        { pwr: 0, speed: 0, pos: 0 },
+        { pwr: 0, speed: 0, pos: 0 },
+        { pwr: 0, speed: 0, pos: 0 },
+    ],
+    Sensor: [
+        { valid: false, type: 0, option: 0, value: [0, 0] },
+        { valid: false, type: 0, option: 0, value: [0, 0] },
+        { valid: false, type: 0, option: 0, value: [0, 0] },
+        { valid: false, type: 0, option: 0, value: [0, 0] },
+    ],
+    Vcc: 0,
+    Digital: [false, false],
+    Status: 0,
+};
 
 let cmdConfigToORB = {
-    "target": "orb",
-    "type": "configToORB",
-    "data": {
-        "Sensor": [
-          { "type": 0, "mode": 0, "option": 0 },
-          { "type": 0, "mode": 0, "option": 0 },
-          { "type": 0, "mode": 0, "option": 0 },
-          { "type": 0, "mode": 0, "option": 0 }
+    target: 'orb',
+    type: 'configToORB',
+    data: {
+        Sensor: [
+            { type: 0, mode: 0, option: 0 },
+            { type: 0, mode: 0, option: 0 },
+            { type: 0, mode: 0, option: 0 },
+            { type: 0, mode: 0, option: 0 },
         ],
-        "Motor": [
-          { "tics": 72, "acc": 30, "Kp": 50, "Ki": 30 },
-          { "tics": 72, "acc": 30, "Kp": 50, "Ki": 30 },
-          { "tics": 72, "acc": 30, "Kp": 50, "Ki": 30 },
-          { "tics": 72, "acc": 30, "Kp": 50, "Ki": 30 }
-        ]
-    }
-}
+        Motor: [
+            { tics: 72, acc: 30, Kp: 50, Ki: 30 },
+            { tics: 72, acc: 30, Kp: 50, Ki: 30 },
+            { tics: 72, acc: 30, Kp: 50, Ki: 30 },
+            { tics: 72, acc: 30, Kp: 50, Ki: 30 },
+        ],
+    },
+};
 let cmdPropToORB = {
-    "target": "orb",
-    "type": "propToORB",
-    "data": {
-        "Motor": [{ "mode": 0, "speed": 0, "pos": 0 },
-        { "mode": 0, "speed": 0, "pos": 0 },
-        { "mode": 0, "speed": 0, "pos": 0 },
-        { "mode": 0, "speed": 0, "pos": 0 }],
-        "Servo": [{ "mode": 0, "pos": 0 },
-        { "mode": 0, "pos": 0 }]
-    }
-}
+    target: 'orb',
+    type: 'propToORB',
+    data: {
+        Motor: [
+            { mode: 0, speed: 0, pos: 0 },
+            { mode: 0, speed: 0, pos: 0 },
+            { mode: 0, speed: 0, pos: 0 },
+            { mode: 0, speed: 0, pos: 0 },
+        ],
+        Servo: [
+            { mode: 0, pos: 0 },
+            { mode: 0, pos: 0 },
+        ],
+    },
+};
 
 var substrationValueEncoder = 0;
 var substrationValueGyro = 0;
 
- 
 //Noch mode prüfen
 function isSensorValueValid(id: number): boolean {
     if (propFromORB.Sensor[id].valid == true) {
         return true;
-    }
-    else {
+    } else {
         return false;
     }
 }
@@ -75,17 +83,15 @@ function configSensor(id: number, type: number, mode: number, option: number) {
         cmdConfigToORB.data.Sensor[id].type = type;
         cmdConfigToORB.data.Sensor[id].mode = mode;
         cmdConfigToORB.data.Sensor[id].option = option;
-        console.log("configSensor", "OK: " + "port=" + id + "," + JSON.stringify(cmdConfigToORB.data.Sensor[id]));
-    }
-    else
-        console.log("configSensor", "Err:wrong id");
+        console.log('configSensor', 'OK: ' + 'port=' + id + ',' + JSON.stringify(cmdConfigToORB.data.Sensor[id]));
+    } else console.log('configSensor', 'Err:wrong id');
 }
 
 function getSensorValue(id: number) {
     id = id - 1;
     if (0 <= id && id < 4) {
         if (isSensorValueValid(id) == true) {
-            return (propFromORB.Sensor[id].value[0]);
+            return propFromORB.Sensor[id].value[0];
         }
     }
     return 0;
@@ -94,34 +100,34 @@ function getSensorValue(id: number) {
 function getSensorValueColor(id: number) {
     id = id - 1;
     if (0 <= id && id < 4) {
-        if (isSensorValueValid(id) == true) { 
+        if (isSensorValueValid(id) == true) {
             if (propFromORB.Sensor[id].value[0] == 0) {
-                return ("NONE");
+                return 'NONE';
             }
             if (propFromORB.Sensor[id].value[0] == 1) {
-                return ("BLACK");
+                return 'BLACK';
             }
             if (propFromORB.Sensor[id].value[0] == 2) {
-                return ("BLUE");
+                return 'BLUE';
             }
             if (propFromORB.Sensor[id].value[0] == 3) {
-                return ("GREEN");
+                return 'GREEN';
             }
             if (propFromORB.Sensor[id].value[0] == 4) {
-                return ("YELLOW");
+                return 'YELLOW';
             }
             if (propFromORB.Sensor[id].value[0] == 5) {
-                return ("RED");
+                return 'RED';
             }
             if (propFromORB.Sensor[id].value[0] == 6) {
-                return ("WHITE");
+                return 'WHITE';
             }
             if (propFromORB.Sensor[id].value[0] == 7) {
-                return ("BROWN");
+                return 'BROWN';
             }
         }
     }
-    return (0);
+    return 0;
 }
 
 function getSensorValueUltrasonic(id: number) {
@@ -129,10 +135,10 @@ function getSensorValueUltrasonic(id: number) {
     if (0 <= id && id < 4) {
         if (isSensorValueValid(id) == true) {
             var a = propFromORB.Sensor[id].value[0];
-            return (a / 10);
+            return a / 10;
         }
     }
-    return (0);
+    return 0;
 }
 
 function getSensorValueGyro(id: number, slot: string) {
@@ -140,25 +146,24 @@ function getSensorValueGyro(id: number, slot: string) {
     if (0 <= id && id < 4) {
         if (isSensorValueValid(id) == true) {
             if (propFromORB.Sensor[id].value[0] <= 32767) {
-                if (slot == "angle"){
+                if (slot == 'angle') {
                     var y = propFromORB.Sensor[id].value[0];
                     var x = propFromORB.Sensor[id].value[1];
                     return y - substrationValueGyro;
                 }
-                return (propFromORB.Sensor[id].value);
-            }
-            else {
+                return propFromORB.Sensor[id].value;
+            } else {
                 propFromORB.Sensor[id].value[0] = propFromORB.Sensor[id].value[0] - 65536;
-                if (slot == "angle"){
+                if (slot == 'angle') {
                     var y = propFromORB.Sensor[id].value[0];
                     var x = propFromORB.Sensor[id].value[1];
                     return y + substrationValueGyro;
                 }
-                return (propFromORB.Sensor[id].value);
+                return propFromORB.Sensor[id].value;
             }
         }
     }
-    return (0);
+    return 0;
 }
 
 function getSensorValueTouch(id: number) {
@@ -167,26 +172,25 @@ function getSensorValueTouch(id: number) {
         if (isSensorValueValid(id) == true) {
             if (propFromORB.Sensor[id].value[0] == 1) {
                 return true;
-            }
-            else {
+            } else {
                 return false;
             }
         }
     }
-    return (0);
+    return 0;
 }
 
 function getEncoderValue(port: number, mode: any) {
     var value = 0;
-    if (mode == "degree"){
-        return value = (getMotorPos(port) - substrationValueEncoder) / 2.7;
+    if (mode == 'degree') {
+        return (value = (getMotorPos(port) - substrationValueEncoder) / 2.7);
     }
-    if (mode == "rotation"){
-        return value = getMotorPos(port) / 1000;
+    if (mode == 'rotation') {
+        return (value = getMotorPos(port) / 1000);
     }
-    if (mode == "distance"){
+    if (mode == 'distance') {
         var circumference = 2 * 3.14 * (driveConfig.wheelDiameter / 2);
-        return value = (getMotorPos(port) * circumference) / 1000;
+        return (value = (getMotorPos(port) * circumference) / 1000);
     }
 }
 
@@ -195,23 +199,27 @@ function setMotor(id: number, mode: number, speed: number, pos: number) {
         cmdPropToORB.data.Motor[id].mode = mode;
         cmdPropToORB.data.Motor[id].speed = Math.floor(speed);
         cmdPropToORB.data.Motor[id].pos = Math.floor(pos);
-        console.log("setMotor", "OK: " + "port=" + id + "," + JSON.stringify(cmdPropToORB.data.Motor[id]));
-    }
-    else
-        console.log("setMotor", "Err:wrong id");
+        console.log('setMotor', 'OK: ' + 'port=' + id + ',' + JSON.stringify(cmdPropToORB.data.Motor[id]));
+    } else console.log('setMotor', 'Err:wrong id');
 }
-
 
 function getMotorPos(id: number) {
     if (0 <= id && id < 4) {
-        return (propFromORB.Motor[id].pos);
+        return propFromORB.Motor[id].pos;
     }
-    return (0);
+    return 0;
 }
 
 export class RobotOrbBehaviour extends ARobotBehaviour {
-
-    private btInterfaceFct: (arg0: { target: string; type: string; configToORB?: { Sensor: { type: number; mode: number; option: number; }[]; Motor: { tics: number; acc: number; Kp: number; Ki: number; }[]; }; propToORB?: { Motor: { mode: number; speed: number; pos: number; }[]; Servo: { mode: number; pos: number; }[]; }; actuator?: string; brickid?: string; color?: number; }) => void;
+    private btInterfaceFct: (arg0: {
+        target: string;
+        type: string;
+        configToORB?: { Sensor: { type: number; mode: number; option: number }[]; Motor: { tics: number; acc: number; Kp: number; Ki: number }[] };
+        propToORB?: { Motor: { mode: number; speed: number; pos: number }[]; Servo: { mode: number; pos: number }[] };
+        actuator?: string;
+        brickid?: string;
+        color?: number;
+    }) => void;
     private toDisplayFct;
     private timers;
     private orb = {};
@@ -220,8 +228,8 @@ export class RobotOrbBehaviour extends ARobotBehaviour {
         DOWN: '9.0',
         BACK: '5.0',
         FRONT: '7.0',
-        NO: '0.0'
-    }
+        NO: '0.0',
+    };
 
     constructor(btInterfaceFct: any, toDisplayFct: any) {
         super();
@@ -235,64 +243,57 @@ export class RobotOrbBehaviour extends ARobotBehaviour {
 
     public update(data) {
         U.info('update type:' + data.type + ' state:' + data.state + ' sensor:' + data.sensor + ' actor:' + data.actuator);
-        if (data.target !== "orb") {
+        if (data.target !== 'orb') {
             return;
         }
         switch (data.type) {
-            case "connect":
-                if (data.state == "connected") {
+            case 'connect':
+                if (data.state == 'connected') {
                     this.orb[data.brickid] = {};
-                    this.orb[data.brickid]["brickname"] = data.brickname.replace(/\s/g, '').toUpperCase();
+                    this.orb[data.brickid]['brickname'] = data.brickname.replace(/\s/g, '').toUpperCase();
                     // for some reason we do not get the inital state of the button, so here it is hardcoded
-                    this.orb[data.brickid]["button"] = 'false';
-                }
-                else if (data.state == "disconnected") {
+                    this.orb[data.brickid]['button'] = 'false';
+                } else if (data.state == 'disconnected') {
                     delete this.orb[data.brickid];
                 }
                 break;
-            case "didAddService":
+            case 'didAddService':
                 var theOrbA = this.orb[data.brickid];
-                if (data.state == "connected") {
+                if (data.state == 'connected') {
                     if (data.id && data.sensor) {
                         theOrbA[data.id] = {};
                         theOrbA[data.id][this.finalName(data.sensor)] = '';
-                    }
-                    else if (data.id && data.actuator) {
+                    } else if (data.id && data.actuator) {
                         theOrbA[data.id] = {};
                         theOrbA[data.id][this.finalName(data.actuator)] = '';
-                    }
-                    else if (data.sensor) {
+                    } else if (data.sensor) {
                         theOrbA[this.finalName(data.sensor)] = '';
-                    }
-                    else {
+                    } else {
                         theOrbA[this.finalName(data.actuator)] = '';
                     }
                 }
                 break;
-            case "didRemoveService":
+            case 'didRemoveService':
                 if (data.id) {
                     delete this.orb[data.brickid][data.id];
-                }
-                else if (data.sensor) {
+                } else if (data.sensor) {
                     delete this.orb[data.brickid][this.finalName(data.sensor)];
-                }
-                else {
+                } else {
                     delete this.orb[data.brickid][this.finalName(data.actuator)];
                 }
                 break;
-            case "update":
+            case 'update':
                 var theOrbU = this.orb[data.brickid];
                 if (data.id) {
                     if (theOrbU[data.id] === undefined) {
                         theOrbU[data.id] = {};
                     }
                     theOrbU[data.id][this.finalName(data.sensor)] = data.state;
-                }
-                else {
+                } else {
                     theOrbU[this.finalName(data.sensor)] = data.state;
                 }
                 break;
-            case "propFromORB":
+            case 'propFromORB':
                 propFromORB = data.data;
                 break;
             default:
@@ -300,9 +301,9 @@ export class RobotOrbBehaviour extends ARobotBehaviour {
                 break;
         }
         U.info(this.orb);
-    };
+    }
 
-    public getConnectedBricks = function() {
+    public getConnectedBricks = function () {
         var brickids = [];
         for (var brickid in this.orb) {
             if (this.orb.hasOwnProperty(brickid)) {
@@ -312,7 +313,7 @@ export class RobotOrbBehaviour extends ARobotBehaviour {
         return brickids;
     };
 
-    public getBrickIdByName = function(name: string) {
+    public getBrickIdByName = function (name: string) {
         for (var brickid in this.orb) {
             if (this.orb.hasOwnProperty(brickid)) {
                 if (this.orb[brickid].brickname === name.toUpperCase()) {
@@ -323,13 +324,13 @@ export class RobotOrbBehaviour extends ARobotBehaviour {
         return null;
     };
 
-    public getBrickById = function(id: number) {
+    public getBrickById = function (id: number) {
         return this.orb[id];
     };
 
-    public clearDisplay = function() {
+    public clearDisplay = function () {
         U.debug('clear display');
-        this.toDisplayFct({ "clear": true });
+        this.toDisplayFct({ clear: true });
     };
 
     public mappPortMotor(port: any) {
@@ -348,96 +349,89 @@ export class RobotOrbBehaviour extends ARobotBehaviour {
         }
     }
 
-    public getSample = function(s, name: string, sensor: string, port: number, slot: string) {
-        if (sensor == "ultrasonic") {
+    public getSample = function (s, name: string, sensor: string, port: number, slot: string) {
+        if (sensor == 'ultrasonic') {
             cmdConfigToORB.data.Sensor[port - 1].type = 1;
-            if (slot == "distance") {
+            if (slot == 'distance') {
                 configSensor(port, 1, 0, 0);
                 this.btInterfaceFct(cmdConfigToORB);
                 s.push(getSensorValueUltrasonic(port));
-            }
-            else if (slot == "presence") {
+            } else if (slot == 'presence') {
                 configSensor(port, 1, 2, 0);
                 this.btInterfaceFct(cmdConfigToORB);
                 s.push(getSensorValue(port));
             }
-        }
-        else if (sensor == "color") {
-            if (slot == "colour") {
+        } else if (sensor == 'color') {
+            if (slot == 'colour') {
                 configSensor(port, 1, 2, 0);
                 this.btInterfaceFct(cmdConfigToORB);
                 s.push(getSensorValueColor(port));
             }
-            if (slot == "light") {
+            if (slot == 'light') {
                 configSensor(port, 1, 0, 0);
                 this.btInterfaceFct(cmdConfigToORB);
                 s.push(getSensorValue(port));
             }
-            if (slot == "ambientlight") {
+            if (slot == 'ambientlight') {
                 configSensor(port, 1, 1, 0);
                 this.btInterfaceFct(cmdConfigToORB);
                 s.push(getSensorValue(port));
             }
-            if (slot == "rgb") {
+            if (slot == 'rgb') {
                 configSensor(port, 1, 4, 0);
                 this.btInterfaceFct(cmdConfigToORB);
                 s.push(getSensorValueColor(port));
             }
-        }
-        else if (sensor == "touch") {
+        } else if (sensor == 'touch') {
             configSensor(port, 4, 0, 0);
             this.btInterfaceFct(cmdConfigToORB);
             s.push(getSensorValueTouch(port));
-        }
-        else if (sensor == "gyro") {
-            if (slot == "angle") {
+        } else if (sensor == 'gyro') {
+            if (slot == 'angle') {
                 configSensor(port, 1, 0, 0);
                 this.btInterfaceFct(cmdConfigToORB);
                 s.push(getSensorValueGyro(port, slot));
             }
-            if (slot == "rate") {
+            if (slot == 'rate') {
                 configSensor(port, 1, 1, 0);
                 this.btInterfaceFct(cmdConfigToORB);
                 s.push(getSensorValueGyro(port, slot));
             }
-        }
-        else if (sensor == "infrared") {
-            if (slot == "distance") {
+        } else if (sensor == 'infrared') {
+            if (slot == 'distance') {
                 configSensor(port, 1, 0, 0);
                 this.btInterfaceFct(cmdConfigToORB);
                 s.push(getSensorValue(port));
             }
-            if (slot == "presence") {
+            if (slot == 'presence') {
                 configSensor(port, 1, 2, 0);
                 this.btInterfaceFct(cmdConfigToORB);
                 s.push(getSensorValue(port));
             }
-        }
-        else if (sensor == C.TIMER){
-            s.push( this.timerGet( port ) );
+        } else if (sensor == C.TIMER) {
+            s.push(this.timerGet(port));
             return;
-        }
-        else if (sensor == "encoder"){
+        } else if (sensor == 'encoder') {
             s.push(getEncoderValue(this.mappPortMotor(port), slot));
         }
         return;
-    }
+    };
 
-    public setSpeedToProcent (speed: number): number{
-        if (speed > 100){
+    public setSpeedToProcent(speed: number): number {
+        if (speed > 100) {
             speed = 100;
         }
         var speedMax = 210;
-        speed = (speed * speedMax)/100;
+        speed = (speed * speedMax) / 100;
         return speed;
     }
 
-    public setSpeedToProcentDiff (speed: number): number{
-        if (speed > 100){
+    public setSpeedToProcentDiff(speed: number): number {
+        if (speed > 100) {
             speed = 100;
         }
         var speedMax = 420;
-        speed = (speed * speedMax)/100;
+        speed = (speed * speedMax) / 100;
         return speed;
     }
 
@@ -450,12 +444,11 @@ export class RobotOrbBehaviour extends ARobotBehaviour {
         if (duration === undefined) {
             setMotor(port, 2, driveConfig.orientation[port] * speed, 0);
             this.btInterfaceFct(cmdPropToORB);
-        }
-        else {
-             if (durationType === C.DEGREE) {
-                 duration /= 360.0;
+        } else {
+            if (durationType === C.DEGREE) {
+                duration /= 360.0;
             }
-            let delta = 1000*duration;
+            let delta = 1000 * duration;
             let target = getMotorPos(port) + driveConfig.orientation[port] * delta;
             timeToGo = this.calcTimeToGo(speed, delta);
             setMotor(port, 3, speed, target);
@@ -473,55 +466,51 @@ export class RobotOrbBehaviour extends ARobotBehaviour {
 
     public driveAction(name: string, direction: string, speed: number, distance: number) {
         U.debug('driveAction' + ' direction:' + direction + ' speed:' + speed + ' distance:' + distance);
-        if ((direction == C.BACKWARD) || (direction == "BACKWARD")) {
+        if (direction == C.BACKWARD || direction == 'BACKWARD') {
             speed *= -1;
         }
         if (distance === undefined || speed == 0) {
-            return (this.setDriveSpeed(speed, speed));
-        }
-        else {
+            return this.setDriveSpeed(speed, speed);
+        } else {
             if (speed < 0) {
                 distance *= -10;
-            }
-            else {
+            } else {
                 distance *= 10;
             }
-            return (this.setDriveMoveTo(speed, speed, distance, distance));
+            return this.setDriveMoveTo(speed, speed, distance, distance);
         }
     }
 
     public curveAction(name: string, direction: string, speedL: number, speedR: number, distance: number) {
         U.debug('curveAction' + ' direction:' + direction + ' speedL:' + speedL + ' speedR:' + speedR + ' distance:' + distance);
-        if ((direction == C.BACKWARD) || (direction == "BACKWARD")) {
+        if (direction == C.BACKWARD || direction == 'BACKWARD') {
             speedL *= -1;
             speedR *= -1;
         }
-        let speedMean = 0.5*(Math.abs(speedL) + Math.abs(speedR));
+        let speedMean = 0.5 * (Math.abs(speedL) + Math.abs(speedR));
         if (distance === undefined || speedMean == 0) {
-            return( this.setDriveSpeed(speedL, speedR) );
-        }
-        else {
-            let t = 10*distance / speedMean;
+            return this.setDriveSpeed(speedL, speedR);
+        } else {
+            let t = (10 * distance) / speedMean;
             let distL = speedL * t;
             let distR = speedR * t;
-            return (this.setDriveMoveTo(speedL, speedR, distL, distR));
+            return this.setDriveMoveTo(speedL, speedR, distL, distR);
         }
     }
 
     public turnAction(name: string, direction: string, speed: number, angle: number) {
         U.debug('turnAction' + ' direction:' + direction + ' speed:' + speed + ' angle:' + angle);
-         if (direction == C.LEFT) {
-              speed *= -1;
-         }
-         if (angle === undefined || speed == 0) {
-            return( this.setDriveSpeed(speed, -speed) );
+        if (direction == C.LEFT) {
+            speed *= -1;
         }
-        else {
+        if (angle === undefined || speed == 0) {
+            return this.setDriveSpeed(speed, -speed);
+        } else {
             if (speed < 0) {
-              angle *= -1;
+                angle *= -1;
             }
-            let distance = 10 * angle * Math.PI / 360 * driveConfig.trackWidth;
-            return (this.setDriveMoveTo(speed, -speed, distance, -distance));
+            let distance = ((10 * angle * Math.PI) / 360) * driveConfig.trackWidth;
+            return this.setDriveMoveTo(speed, -speed, distance, -distance);
         }
     }
 
@@ -530,7 +519,7 @@ export class RobotOrbBehaviour extends ARobotBehaviour {
         if (speed != 0) {
             t += 1000.0 * Math.abs(distance / speed);
         }
-        return (t);
+        return t;
     }
 
     public setDriveSpeed(speedL: number, speedR: number) {
@@ -556,7 +545,7 @@ export class RobotOrbBehaviour extends ARobotBehaviour {
         setMotor(driveConfig.motorL.port, 3, speedL, targetL);
         setMotor(driveConfig.motorR.port, 3, speedR, targetR);
         this.btInterfaceFct(cmdPropToORB);
-        return (Math.max(timeToGoL, timeToGoR));
+        return Math.max(timeToGoL, timeToGoR);
     }
 
     public driveStop(_name: string): void {
@@ -566,16 +555,15 @@ export class RobotOrbBehaviour extends ARobotBehaviour {
         this.btInterfaceFct(cmdPropToORB);
     }
 
-    public finalName = function(notNormalized) {
+    public finalName = function (notNormalized) {
         if (notNormalized !== undefined) {
             return notNormalized.replace(/\s/g, '').toLowerCase();
+        } else {
+            U.info('sensor name undefined');
+            return 'undefined';
         }
-        else {
-            U.info("sensor name undefined");
-            return "undefined";
-        }
-    }
-    
+    };
+
     public timerReset(port: number) {
         this.timers[port] = Date.now();
         U.debug('timerReset for ' + port);
@@ -596,7 +584,7 @@ export class RobotOrbBehaviour extends ARobotBehaviour {
         let brickid = this.getBrickIdByName(name);
         const robotText = 'robot: ' + name + ', port: ' + port;
         U.debug(robotText + ' led on color ' + color);
-        const cmd = { 'target': 'orb', 'type': 'command', 'actuator': 'light', 'brickid': brickid, 'color': color };
+        const cmd = { target: 'orb', type: 'command', actuator: 'light', brickid: brickid, color: color };
         this.btInterfaceFct(cmd);
     }
 
@@ -604,17 +592,17 @@ export class RobotOrbBehaviour extends ARobotBehaviour {
         let brickid = this.getBrickIdByName(name);
         const robotText = 'robot: ' + name + ', port: ' + port;
         U.debug(robotText + ' led off');
-        const cmd = { 'target': 'orb', 'type': 'command', 'actuator': 'light', 'brickid': brickid, 'color': 0 };
+        const cmd = { target: 'orb', type: 'command', actuator: 'light', brickid: brickid, color: 0 };
         this.btInterfaceFct(cmd);
     }
 
     public toneAction(name: string, frequency: number, duration: number) {
-        throw new Error("Method not implemented.");
+        throw new Error('Method not implemented.');
         return 0;
     }
 
     public showImageAction(_text: any, _mode: any) {
-        throw new Error("Method not implemented.");
+        throw new Error('Method not implemented.');
         return 0;
     }
 
@@ -623,25 +611,25 @@ export class RobotOrbBehaviour extends ARobotBehaviour {
     }
 
     public showTextActionPosition(text: any): void {
-        const showText = "" + text;
+        const showText = '' + text;
         U.debug('***** show "' + showText + '" *****');
-        this.toDisplayFct({ "show": showText });
+        this.toDisplayFct({ show: showText });
     }
 
     public showTextAction(text: any, _mode: string): number {
-        const showText = "" + text;
+        const showText = '' + text;
         U.debug('***** show "' + showText + '" *****');
-        this.toDisplayFct({ "show": showText });
+        this.toDisplayFct({ show: showText });
         return 0;
     }
 
     public setConfiguration(configuration: any) {
         driveConfig.trackWidth = configuration.TRACKWIDTH;
         driveConfig.wheelDiameter = configuration.WHEELDIAMETER;
-        if( driveConfig.wheelDiameter != 0 ) {
-            driveConfig.distanceToTics = 1000.0 / (10.0*driveConfig.wheelDiameter * Math.PI);
+        if (driveConfig.wheelDiameter != 0) {
+            driveConfig.distanceToTics = 1000.0 / (10.0 * driveConfig.wheelDiameter * Math.PI);
         }
-        
+
         this.setConfigMotors(configuration.ACTUATORS);
         this.setConfigSensors(configuration.SENSORS);
         this.wait(3);
@@ -650,38 +638,38 @@ export class RobotOrbBehaviour extends ARobotBehaviour {
 
     public setConfigSingleMotor(motor: any, idx: number) {
         if (motor != undefined) {
-          if(motor.MOTOR_REVERSE == "ON") {
-            driveConfig.orientation[idx] = -1;
-          }
-          if(motor.MOTOR_DRIVE == "RIGHT") {
-            driveConfig.motorR.port = idx;
-            driveConfig.motorR.orientation = driveConfig.orientation[idx];
-          } else if(motor.MOTOR_DRIVE == "LEFT") {
-            driveConfig.motorL.port = idx;
-            driveConfig.motorL.orientation = driveConfig.orientation[idx];
-          }
+            if (motor.MOTOR_REVERSE == 'ON') {
+                driveConfig.orientation[idx] = -1;
+            }
+            if (motor.MOTOR_DRIVE == 'RIGHT') {
+                driveConfig.motorR.port = idx;
+                driveConfig.motorR.orientation = driveConfig.orientation[idx];
+            } else if (motor.MOTOR_DRIVE == 'LEFT') {
+                driveConfig.motorL.port = idx;
+                driveConfig.motorL.orientation = driveConfig.orientation[idx];
+            }
         }
     }
 
     public setConfigMotors(motors: any): number {
-        this.setConfigSingleMotor(motors.A,0);
-        this.setConfigSingleMotor(motors.B,1);
-        this.setConfigSingleMotor(motors.C,2);
-        this.setConfigSingleMotor(motors.D,3);
+        this.setConfigSingleMotor(motors.A, 0);
+        this.setConfigSingleMotor(motors.B, 1);
+        this.setConfigSingleMotor(motors.C, 2);
+        this.setConfigSingleMotor(motors.D, 3);
         return 0;
     }
 
     public setConfigSensors(sensors: any): number {
         for (var i = 1; i < 5; i++) {
-            if (sensors[i] == "TOUCH") {
+            if (sensors[i] == 'TOUCH') {
                 configSensor(i, 4, 0, 0);
                 this.btInterfaceFct(cmdConfigToORB);
             }
-            if ((sensors[i] == "ULTRASONIC") || (sensors[i] == "GYRO") || (sensors[i] == "INFRARED")) {
+            if (sensors[i] == 'ULTRASONIC' || sensors[i] == 'GYRO' || sensors[i] == 'INFRARED') {
                 configSensor(i, 1, 0, 0);
                 this.btInterfaceFct(cmdConfigToORB);
             }
-            if (sensors[i] == "COLOR") {
+            if (sensors[i] == 'COLOR') {
                 configSensor(i, 1, 2, 0);
                 this.btInterfaceFct(cmdConfigToORB);
             }
@@ -690,13 +678,12 @@ export class RobotOrbBehaviour extends ARobotBehaviour {
     }
 
     public wait(seconds) {
-        var stopTime = (new Date()).getSeconds();
-        stopTime = ((stopTime + seconds) < 60) ? stopTime + seconds : seconds - (60 - stopTime);
-        while ((new Date()).getSeconds() < stopTime);
+        var stopTime = new Date().getSeconds();
+        stopTime = stopTime + seconds < 60 ? stopTime + seconds : seconds - (60 - stopTime);
+        while (new Date().getSeconds() < stopTime);
     }
 
-    public writePinAction(_pin: any, _mode: string, _value: number): void {
-    }
+    public writePinAction(_pin: any, _mode: string, _value: number): void {}
 
     public close() {
         let ids = this.getConnectedBricks();
@@ -714,41 +701,41 @@ export class RobotOrbBehaviour extends ARobotBehaviour {
     }
 
     public encoderReset(port: any): void {
-		U.debug('encoderReset for ' + port);
+        U.debug('encoderReset for ' + port);
         substrationValueEncoder = getMotorPos(this.mappPortMotor(port));
-	}
+    }
 
-	public gyroReset(port: number): void {
+    public gyroReset(port: number): void {
         U.debug('gyroReset for ' + port);
         substrationValueGyro = getSensorValue(port);
-	}
+    }
 
     public lightAction(_mode: string, _color: string, _port: string): void {
-        throw new Error("Method not implemented.");
+        throw new Error('Method not implemented.');
     }
 
     public playFileAction(_file: string): number {
-        throw new Error("Method not implemented.");
+        throw new Error('Method not implemented.');
     }
 
     public _setVolumeAction(_volume: number): void {
-        throw new Error("Method not implemented.");
+        throw new Error('Method not implemented.');
     }
 
     public _getVolumeAction(_s: State): void {
-        throw new Error("Method not implemented.");
+        throw new Error('Method not implemented.');
     }
 
     public setLanguage(_language: string): void {
-        throw new Error("Method not implemented.");
+        throw new Error('Method not implemented.');
     }
 
     public sayTextAction(_text: string, _speed: number, _pitch: number): number {
-        throw new Error("Method not implemented.");
+        throw new Error('Method not implemented.');
     }
 
     public getMotorSpeed(_s: State, _name: string, _port: any): void {
-        throw new Error("Method not implemented.");
+        throw new Error('Method not implemented.');
     }
 
     public setMotorSpeed(_name: string, _port: any, _speed: number): void {
@@ -758,32 +745,32 @@ export class RobotOrbBehaviour extends ARobotBehaviour {
     }
 
     public displaySetPixelBrightnessAction(_x: number, _y: number, _brightness: number): number {
-        throw new Error("Method not implemented.");
+        throw new Error('Method not implemented.');
     }
 
     public displayGetPixelBrightnessAction(_s: State, _x: number, _y: number): void {
-        throw new Error("Method not implemented.");
+        throw new Error('Method not implemented.');
     }
 
     public displayGetBrightnessAction(_volume: number): void {
-        throw new Error("Method not implemented.");
+        throw new Error('Method not implemented.');
     }
 
     public setVolumeAction(_volume: number): void {
-        throw new Error("Method not implemented.");
+        throw new Error('Method not implemented.');
     }
 
     public getVolumeAction(_s: State): void {
-        throw new Error("Method not implemented.");
+        throw new Error('Method not implemented.');
     }
 
     public debugAction(_value: any): void {
-        this.showTextAction("> " + _value, undefined);
+        this.showTextAction('> ' + _value, undefined);
     }
 
     public assertAction(_msg: string, _left: any, _op: string, _right: any, _value: any): void {
         if (!_value) {
-            this.showTextAction("> Assertion failed: " + _msg + " " + _left + " " + _op + " " + _right, undefined);
+            this.showTextAction('> Assertion failed: ' + _msg + ' ' + _left + ' ' + _op + ' ' + _right, undefined);
         }
     }
 }

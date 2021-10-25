@@ -24,7 +24,7 @@ export class Interpreter {
      * . @param generatedCode argument contains the operations and the function definitions
      * . @param robotBehaviour implementation of the ARobotBehaviour class
      * . @param cbOnTermination is called when the program has terminated
-    */
+     */
     constructor(generatedCode: any, configuration: any, r: ARobotBehaviour, cbOnTermination: () => void, simBreakpoints: any[]) {
         this.terminated = false;
         this.callbackOnTermination = cbOnTermination;
@@ -45,7 +45,6 @@ export class Interpreter {
 
         this.state = new State(stmts);
     }
-
 
     /**
      * run the operations.

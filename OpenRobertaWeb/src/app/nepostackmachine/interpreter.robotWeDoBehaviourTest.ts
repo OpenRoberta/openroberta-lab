@@ -195,6 +195,6 @@ export class RobotWeDoBehaviourTest extends ARobotBehaviour {
     }
 
     public setConfiguration(configuration: any): number {
-        throw new Error("Method not implemented.");
+        throw new Error('Method not implemented.');
     }
 }

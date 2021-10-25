@@ -1,7 +1,6 @@
-define(['exports', 'guiState.controller', 'interpreter.interpreter', 'interpreter.robotWeDoBehaviour', 'interpreter.robotOrbBehaviour', 'log', 'blockly', 'jquery'],
-function(exports,
-    GUISTATE_C, INTERPRETER, WEDO_B, ORB_B, LOG, Blockly, $) {
-
+define(["require", "exports", "guiState.controller", "interpreter.interpreter", "interpreter.robotWeDoBehaviour", "interpreter.robotOrbBehaviour", "log", "blockly", "jquery"], function (require, exports, GUISTATE_C, INTERPRETER, WEDO_B, ORB_B, LOG, Blockly, $) {
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.jsToDisplay = exports.jsToAppInterface = exports.setRobotBehaviour = exports.isRobotConnected = exports.getInterpreter = exports.appToJsInterface = exports.init = void 0;
     var ready;
     var aLanguage;
     var webViewType;
@@ -121,8 +120,10 @@ function(exports,
         switch (GUISTATE_C.getRobot()) {
             case 'wedo':
                 theRobotBehaviour = new WEDO_B.RobotWeDoBehaviour(jsToAppInterface, jsToDisplay);
+                break;
             case "orb":
                 theRobotBehaviour = new ORB_B.RobotOrbBehaviour(jsToAppInterface, jsToDisplay);
+                break;
             default:
                 LOG.error('Webview: no robot behaviour for ' + GUISTATE_C.getRobot() + ' available!');
         }

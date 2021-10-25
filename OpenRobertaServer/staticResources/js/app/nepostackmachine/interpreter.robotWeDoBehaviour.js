@@ -229,16 +229,7 @@ define(["require", "exports", "./interpreter.aRobotBehaviour", "./interpreter.co
             }
             var durText = duration === undefined ? ' w.o. duration' : (' for ' + duration + ' msec');
             U.debug(robotText + ' motor speed ' + speed + durText);
-            var cmd = {
-                target: 'wedo',
-                type: 'command',
-                actuator: 'motor',
-                brickid: brickid,
-                action: 'on',
-                id: port,
-                direction: speed < 0 ? 1 : 0,
-                power: Math.abs(speed),
-            };
+            var cmd = { 'target': 'wedo', 'type': 'command', 'actuator': 'motor', 'brickid': brickid, 'action': 'on', 'id': port, 'direction': speed < 0 ? 1 : 0, 'power': Math.abs(speed) };
             this.btInterfaceFct(cmd);
             return duration !== undefined ? 0 : duration;
         };

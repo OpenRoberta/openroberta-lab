@@ -216,23 +216,32 @@ export class RobotWeDoBehaviour extends ARobotBehaviour {
         return duration;
     }
 
-    public motorOnAction( name: string, port: any, duration: number, durationType: any, speed: number ): number {
-        var brickid = this.getBrickIdByName( name ); // TODO: better style
+    public motorOnAction(name: string, port: any, duration: number, durationType: any, speed: number): number {
+        var brickid = this.getBrickIdByName(name); // TODO: better style
         const robotText = 'robot: ' + name + ', port: ' + port;
-        if(duration !== undefined) {
-          if (durationType === C.DEGREE || durationType === C.DISTANCE || durationType === C.ROTATIONS) {
-              // if durationType is defined, then duration must be defined, too. Thus, it is never 'undefined' :-)
-              let rotationPerSecond = C.MAX_ROTATION * Math.abs(speed) / 100.0;
-              duration = duration / rotationPerSecond * 1000;
-              if (durationType === C.DEGREE) {
-                  duration /= 360.0;
-              }
-          }
+        if (duration !== undefined) {
+            if (durationType === C.DEGREE || durationType === C.DISTANCE || durationType === C.ROTATIONS) {
+                // if durationType is defined, then duration must be defined, too. Thus, it is never 'undefined' :-)
+                let rotationPerSecond = (C.MAX_ROTATION * Math.abs(speed)) / 100.0;
+                duration = (duration / rotationPerSecond) * 1000;
+                if (durationType === C.DEGREE) {
+                    duration /= 360.0;
+                }
+            }
         }
-        const durText = duration === undefined ? ' w.o. duration' : ( ' for ' + duration + ' msec' );
-        U.debug( robotText + ' motor speed ' + speed + durText );
-        const cmd = { 'target': 'wedo', 'type': 'command', 'actuator': 'motor', 'brickid': brickid, 'action': 'on', 'id': port, 'direction': speed < 0 ? 1 : 0, 'power': Math.abs( speed ) };
-        this.btInterfaceFct( cmd );
+        const durText = duration === undefined ? ' w.o. duration' : ' for ' + duration + ' msec';
+        U.debug(robotText + ' motor speed ' + speed + durText);
+        const cmd = {
+            target: 'wedo',
+            type: 'command',
+            actuator: 'motor',
+            brickid: brickid,
+            action: 'on',
+            id: port,
+            direction: speed < 0 ? 1 : 0,
+            power: Math.abs(speed),
+        };
+        this.btInterfaceFct(cmd);
         return duration !== undefined ? 0 : duration;
     }
 
@@ -364,6 +373,6 @@ export class RobotWeDoBehaviour extends ARobotBehaviour {
         }
     }
     public setConfiguration(configuration: any): number {
-        throw new Error("Method not implemented.");
+        throw new Error('Method not implemented.');
     }
 }

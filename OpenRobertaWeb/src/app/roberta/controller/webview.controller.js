@@ -1,6 +1,7 @@
 import * as GUISTATE_C from 'guiState.controller';
 import * as INTERPRETER from 'interpreter.interpreter';
 import * as WEDO_B from 'interpreter.robotWeDoBehaviour';
+import * as ORB_B from 'interpreter.robotOrbBehaviour';
 import * as LOG from 'log';
 import * as Blockly from 'blockly';
 import * as $ from 'jquery';
@@ -102,8 +103,8 @@ function callbackOnTermination() {
     GUISTATE_C.getBlocklyWorkspace().robControls.switchToStart();
 }
 
-function getInterpreter(program) {
-    interpreter = new INTERPRETER.Interpreter(program, theRobotBehaviour, callbackOnTermination, []);
+function getInterpreter(program, configuration) {
+    interpreter = new INTERPRETER.Interpreter(program, configuration, theRobotBehaviour, callbackOnTermination, []);
     return interpreter;
 }
 
@@ -115,7 +116,10 @@ function setRobotBehaviour() {
     switch (GUISTATE_C.getRobot()) {
         case 'wedo':
             theRobotBehaviour = new WEDO_B.RobotWeDoBehaviour(jsToAppInterface, jsToDisplay);
-        // TODO: introduce here new robots and behaviours and add them to the dependencies on top of the file
+            break;
+        case 'orb':
+            theRobotBehaviour = new ORB_B.RobotOrbBehaviour(jsToAppInterface, jsToDisplay);
+            break;
         default:
             LOG.error('Webview: no robot behaviour for ' + GUISTATE_C.getRobot() + ' available!');
     }
