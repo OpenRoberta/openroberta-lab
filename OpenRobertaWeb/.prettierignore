@@ -2,3 +2,4 @@ testData/
 jsGenerated/
 *.json
 package-lock.json
+src/app/nepostackmachine/interpreter.constants.ts
