@@ -4,8 +4,10 @@
   "version": "1.0.0",
   "scripts": {
     "watch": "tsc --watch",
+    "watch:sourceMap": "tsc --watch --inlineSourceMap",
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc",
+    "build:sourceMap": "tsc --inlineSourceMap",
     "format": "prettier --write .",
     "format:check": "prettier --check ."
   },

@@ -5,7 +5,9 @@
   "scripts": {
     "postinstall": "cd OpenRobertaWeb && npm install",
     "build": "cd OpenRobertaWeb && npm run build",
+    "build:sourceMap": "cd OpenRobertaWeb && npm run build:sourceMap",
     "watch": "cd OpenRobertaWeb && npm run watch",
+    "watch:sourceMap": "cd OpenRobertaWeb && npm run watch:sourceMap",
     "format": "cd OpenRobertaWeb && npm run format",
     "format:check": "cd OpenRobertaWeb && npm run format:check"
   },
