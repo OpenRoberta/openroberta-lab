@@ -187,17 +187,24 @@ The server is made of
 
 Furthermore, the project OpenRobertaServer contains in directory staticResources for the browser client
 * HTML and CSS
-* Generated Javascript under `/js` (this should not be edited!)
+* Generated Javascript under `/js` (**this should not be edited!**)
   * Javascript libraries based on jquery and bootstrap for the frontend
   * assertions (DBC), ajax-based server calls (COMM), logging (LOG) and
   * javascript resources for [blockly](https://developers.google.com/blockly)
   * controller and models written in Javascript, which implement the GUI
 
-**The original Javascript sources can be found in `OpenRobertaWeb/`**
-To compile them run `npm run build` (either in the root directory or inside OpenRobertaWeb).
-For development, we also advice to run `npm run watch` to compile when sources are changed.
-  
-To run tests, use `mvn test`. Running `mvn clean install` will make a stable, reproducible build with all unit tests executed.
+**The original Javascript sources can be found in `OpenRobertaWeb/`**  
+To work with the frontend (e.g. compiling the sources) we defined the following npm scripts:
+* `npm run build` - build the sources
+* `npm run build:sourceMap` - build the sources and generated source maps for debugging
+* `npm run watch` - build the sources on change
+* `npm run watch:sourceMap` - build the sources on change and generate source maps for debugging
+* `npm run format` - formats all javascript and typescript source files
+* `npm run format:check` - check if all javascript and typescript files are formatted
+
+**Attention:** Only check in those generated files build with `npm run build` or `npm run watch`!
+
+To run backend tests, use `mvn test`. Running `mvn clean install` will make a stable, reproducible build with all unit tests executed.
 
 To run the integration tests you have to supply an additional flag: `mvn clean install -PrunIT`.
 For these you need an environment variable `robot_crosscompiler_resourcebase` pointing to your `ora-cc-rsc` directory.
