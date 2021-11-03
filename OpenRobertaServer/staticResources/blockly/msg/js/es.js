@@ -1654,6 +1654,7 @@ Blockly.Msg.TOOLBOX_COLOUR = "Colores";
 Blockly.Msg.TOOLBOX_COMMUNICATION = "Mensajes";
 Blockly.Msg.TOOLBOX_CONTROL = "Control";
 Blockly.Msg.TOOLBOX_DECISION = "Decisiones";
+Blockly.Msg.TOOLBOX_DIALOG = "Dialog";  // untranslated
 Blockly.Msg.TOOLBOX_DISPLAY = "Pantalla";
 Blockly.Msg.TOOLBOX_DRIVE = "Drive";
 Blockly.Msg.TOOLBOX_IMAGE = "Imágenes";

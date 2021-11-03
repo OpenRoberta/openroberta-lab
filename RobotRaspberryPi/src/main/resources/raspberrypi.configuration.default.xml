@@ -1,9 +1,9 @@
-<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="vorwerk" xmlversion="">
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="raspberrypi" xmlversion="3.1">
     <instance x="325" y="53">
-        <block type="robDialog_conf_slot" id="?2{g/goO:)bGIhjJs!D{" intask="true">
-            <mutation sample="3" />
+        <block type="robConf_slot" id="?2{g/goO:)bGIhjJs!D{" intask="true">
+            <mutation items="3"/>
             <field name="NAME">On</field>
-            <field name="SAMPLE0">an</field>
+            <field name="SAMPLE1">an</field>
             <field name="SAMPLE2">ein</field>
             <field name="SAMPLE3">anmachen</field>
         </block>
@@ -19,35 +19,35 @@
         </block>
     </instance>
     <instance x="672" y="134">
-        <block type="robDialog_conf_intent" id="11" intask="true">
-            <mutation sample="3" />
+        <block type="robConf_intent" id="11" intask="true">
+            <mutation items="3"/>
             <field name="NAME">Welcome</field>
-            <field name="SAMPLE0">Hallo</field>
+            <field name="SAMPLE1">Hallo</field>
             <field name="SAMPLE2">Hi</field>
             <field name="SAMPLE3">Was</field>
         </block>
     </instance>
     <instance x="325" y="204">
-        <block type="robDialog_conf_slot" id="EHdJ7kLY)G1Y(h.-+wM2" intask="true">
-            <mutation sample="1" />
+        <block type="robConf_slot" id="EHdJ7kLY)G1Y(h.-+wM2" intask="true">
+            <mutation items="1"/>
             <field name="NAME">Off</field>
-            <field name="SAMPLE0">aus</field>
+            <field name="SAMPLE1">aus</field>
             <field name="SAMPLE3">ausmachen</field>
             <field name="SAMPLE4">ab</field>
         </block>
     </instance>
     <instance x="672" y="259">
-        <block type="robDialog_conf_intent" id="12" intask="true">
-            <mutation sample="1" />
+        <block type="robConf_intent" id="12" intask="true">
+            <mutation items="1"/>
             <field name="NAME">Help</field>
-            <field name="SAMPLE0">Hilfe</field>
+            <field name="SAMPLE1">Hilfe</field>
         </block>
     </instance>
     <instance x="672" y="333">
-        <block type="robDialog_conf_intent" id="13" intask="true">
-            <mutation sample="4" />
+        <block type="robConf_intent" id="13" intask="true">
+            <mutation items="4"/>
             <field name="NAME">Stop</field>
-            <field name="SAMPLE0">Stop</field>
+            <field name="SAMPLE1">Stop</field>
             <field name="SAMPLE2">Stoppe</field>
             <field name="SAMPLE3">Beenden</field>
             <field name="SAMPLE4">Abbruch</field>

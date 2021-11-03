@@ -33,16 +33,16 @@ define(["require", "exports", "log", "util", "message", "guiState.controller", "
                 startScale: 1.0,
                 maxScale: 4,
                 minScale: 0.25,
-                scaleSpeed: 1.1,
+                scaleSpeed: 1.1
             },
-            checkInTask: ['-Brick', 'robConf'],
+            checkInTask: ['-Brick', 'robConf', 'conf'],
             variableDeclaration: true,
             robControls: true,
-            theme: GUISTATE_C.getTheme(),
+            theme: GUISTATE_C.getTheme()
         });
         bricklyWorkspace.setDevice({
             group: GUISTATE_C.getRobotGroup(),
-            robot: GUISTATE_C.getRobot(),
+            robot: GUISTATE_C.getRobot()
         });
         // Configurations can't be executed
         bricklyWorkspace.robControls.runOnBrick.setAttribute('style', 'display : none');
@@ -237,8 +237,8 @@ define(["require", "exports", "log", "util", "message", "guiState.controller", "
             rules: {
                 singleModalInput: {
                     required: true,
-                    regex: regexString,
-                },
+                    regex: regexString
+                }
             },
             errorClass: 'form-invalid',
             errorPlacement: function (label, element) {
@@ -247,9 +247,9 @@ define(["require", "exports", "log", "util", "message", "guiState.controller", "
             messages: {
                 singleModalInput: {
                     required: jQuery.validator.format(Blockly.Msg['VALIDATION_FIELD_REQUIRED']),
-                    regex: jQuery.validator.format(Blockly.Msg['MESSAGE_INVALID_CONF_NAME']),
-                },
-            },
+                    regex: jQuery.validator.format(Blockly.Msg['MESSAGE_INVALID_CONF_NAME'])
+                }
+            }
         });
     }
     exports.showSaveAsModal = showSaveAsModal;
@@ -355,7 +355,7 @@ define(["require", "exports", "log", "util", "message", "guiState.controller", "
         if (CV.CircuitVisualization.isRobotVisualized(GUISTATE_C.getRobotGroup() + '_' + GUISTATE_C.getRobot())) {
             bricklyWorkspace.setDevice({
                 group: GUISTATE_C.getRobotGroup(),
-                robot: GUISTATE_C.getRobot(),
+                robot: GUISTATE_C.getRobot()
             });
             confVis.resetRobot();
         }
@@ -364,7 +364,7 @@ define(["require", "exports", "log", "util", "message", "guiState.controller", "
     function resetView() {
         bricklyWorkspace.setDevice({
             group: GUISTATE_C.getRobotGroup(),
-            robot: GUISTATE_C.getRobot(),
+            robot: GUISTATE_C.getRobot()
         });
         initConfigurationEnvironment();
         var toolbox = GUISTATE_C.getConfigurationToolbox();

@@ -1654,6 +1654,7 @@ Blockly.Msg.TOOLBOX_COLOUR = "Кольори";
 Blockly.Msg.TOOLBOX_COMMUNICATION = "Повідомлення";
 Blockly.Msg.TOOLBOX_CONTROL = "Контроль";
 Blockly.Msg.TOOLBOX_DECISION = "Рішення";
+Blockly.Msg.TOOLBOX_DIALOG = "Dialog";  // untranslated
 Blockly.Msg.TOOLBOX_DISPLAY = "Дисплей";
 Blockly.Msg.TOOLBOX_DRIVE = "Їхати";
 Blockly.Msg.TOOLBOX_IMAGE = "Зображення";

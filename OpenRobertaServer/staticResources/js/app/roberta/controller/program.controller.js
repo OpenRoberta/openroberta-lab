@@ -31,17 +31,17 @@ define(["require", "exports", "message", "log", "util", "guiState.controller", "
                 startScale: 1.0,
                 maxScale: 4,
                 minScale: 0.25,
-                scaleSpeed: 1.1,
+                scaleSpeed: 1.1
             },
-            checkInTask: ['start', '_def', 'event'],
+            checkInTask: ['start', '_def', 'intent'],
             variableDeclaration: true,
             robControls: true,
-            theme: GUISTATE_C.getTheme(),
+            theme: GUISTATE_C.getTheme()
         });
         $(window).resize();
         blocklyWorkspace.setDevice({
             group: GUISTATE_C.getRobotGroup(),
-            robot: GUISTATE_C.getRobot(),
+            robot: GUISTATE_C.getRobot()
         });
         GUISTATE_C.setBlocklyWorkspace(blocklyWorkspace);
         blocklyWorkspace.robControls.disable('saveProgram');
@@ -53,7 +53,7 @@ define(["require", "exports", "message", "log", "util", "guiState.controller", "
     function initEvents() {
         $('#sliderDiv').draggable({
             axis: 'x',
-            cursor: 'col-resize',
+            cursor: 'col-resize'
         });
         $('#tabProgram').onWrap('click', function (e) {
             e.preventDefault();
@@ -129,7 +129,7 @@ define(["require", "exports", "message", "log", "util", "guiState.controller", "
                 var block = Blockly.selected.type;
                 $('#' + block).addClass('selectedHelp');
                 $('#helpContent').scrollTo('#' + block, 1000, {
-                    offset: -10,
+                    offset: -10
                 });
             }
             return false;
@@ -284,8 +284,8 @@ define(["require", "exports", "message", "log", "util", "guiState.controller", "
             rules: {
                 singleModalInput: {
                     required: true,
-                    regex: /^[a-zA-Z_öäüÖÄÜß$€][a-zA-Z0-9_öäüÖÄÜß$€]{0,254}$/,
-                },
+                    regex: /^[a-zA-Z_öäüÖÄÜß$€][a-zA-Z0-9_öäüÖÄÜß$€]{0,254}$/
+                }
             },
             errorClass: 'form-invalid',
             errorPlacement: function (label, element) {
@@ -294,9 +294,9 @@ define(["require", "exports", "message", "log", "util", "guiState.controller", "
             messages: {
                 singleModalInput: {
                     required: Blockly.Msg['VALIDATION_FIELD_REQUIRED'],
-                    regex: Blockly.Msg['MESSAGE_INVALID_NAME'],
-                },
-            },
+                    regex: Blockly.Msg['MESSAGE_INVALID_NAME']
+                }
+            }
         });
     }
     exports.showSaveAsModal = showSaveAsModal;
@@ -455,7 +455,7 @@ define(["require", "exports", "message", "log", "util", "guiState.controller", "
     function resetView() {
         blocklyWorkspace.setDevice({
             group: GUISTATE_C.getRobotGroup(),
-            robot: GUISTATE_C.getRobot(),
+            robot: GUISTATE_C.getRobot()
         });
         initProgramEnvironment();
         var toolbox = GUISTATE_C.getProgramToolbox();

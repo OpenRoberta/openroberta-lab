@@ -1,0 +1,23 @@
+include: "classpath:/common.methods.yml"
+  # method names are based on FunctionNames and EdisonUsedHardwareCollectorVisitor.Method
+  # languages are based on HelperMethodGenerator.Language
+
+## FunctionNames
+
+KEY_PRESSED:
+  PYTHON: |
+    def _key_pressed():
+        global board
+        event = board.button.wait_for_press(0.050)
+        if (event == True):
+            return True
+        else:
+            return False
+
+CONTAINS:
+  PYTHON: |
+    def _contains(phrase, test_array):
+        for test in test_array:
+            if ((" " + phrase + " ").find(" " + test + " ") >= 0):
+                return True
+        return False

@@ -1654,6 +1654,7 @@ Blockly.Msg.TOOLBOX_COLOUR = "顏色";
 Blockly.Msg.TOOLBOX_COMMUNICATION = "消息";
 Blockly.Msg.TOOLBOX_CONTROL = "控制";
 Blockly.Msg.TOOLBOX_DECISION = "決定";
+Blockly.Msg.TOOLBOX_DIALOG = "Dialog";  // untranslated
 Blockly.Msg.TOOLBOX_DISPLAY = "顯示";
 Blockly.Msg.TOOLBOX_DRIVE = "驅動";
 Blockly.Msg.TOOLBOX_IMAGE = "圖像";

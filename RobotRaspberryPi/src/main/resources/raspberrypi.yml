@@ -1,16 +1,16 @@
 include: "classpath:/robotCommon.yml"
 block:
   INTENT_STMT:
-      category: DIALOG
-      implementor: de.fhg.iais.roberta.syntax.lang.stmt.IntentStmt
-      type: [robdialog_intent]
+    category: DIALOG
+    implementor: de.fhg.iais.roberta.syntax.lang.stmt.IntentStmt
+    type: [ robdialog_intent ]
 
   SLOT_SENSING:
-      category: SENSOR
-      implementor: de.fhg.iais.roberta.syntax.sensors.raspberrypi.SlotSensor
-      type: [robDialog_slot]
+    category: SENSOR
+    implementor: de.fhg.iais.roberta.syntax.sensors.raspberrypi.SlotSensor
+    type: [ robDialog_slot ]
 
 configuration:
-  INTENT: [robDialog_conf_intent]
-  SLOT: [robDialog_conf_slot]
+  INTENT: [ robConf_intent ]
+  SLOT: [ robConf_slot ]
 

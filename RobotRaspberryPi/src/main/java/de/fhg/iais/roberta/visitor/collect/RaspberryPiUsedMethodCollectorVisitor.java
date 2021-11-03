@@ -1,6 +1,8 @@
 package de.fhg.iais.roberta.visitor.collect;
 
 import de.fhg.iais.roberta.bean.UsedMethodBean;
+import de.fhg.iais.roberta.syntax.lang.stmt.IntentStmt;
+import de.fhg.iais.roberta.syntax.sensors.raspberrypi.SlotSensor;
 
 public class RaspberryPiUsedMethodCollectorVisitor extends AbstractUsedMethodCollectorVisitor implements IRaspberryPiCollectorVisitor {
     public RaspberryPiUsedMethodCollectorVisitor(UsedMethodBean.Builder builder) {

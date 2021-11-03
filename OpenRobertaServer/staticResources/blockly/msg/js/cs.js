@@ -1654,6 +1654,7 @@ Blockly.Msg.TOOLBOX_COLOUR = "Barvy";
 Blockly.Msg.TOOLBOX_COMMUNICATION = "Zprávy";
 Blockly.Msg.TOOLBOX_CONTROL = "Ovládání";
 Blockly.Msg.TOOLBOX_DECISION = "Podmínky";
+Blockly.Msg.TOOLBOX_DIALOG = "Dialog";  // untranslated
 Blockly.Msg.TOOLBOX_DISPLAY = "Displej";
 Blockly.Msg.TOOLBOX_DRIVE = "Jízda";
 Blockly.Msg.TOOLBOX_IMAGE = "Obrázky";

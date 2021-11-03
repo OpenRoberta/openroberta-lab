@@ -655,6 +655,7 @@
 	"TOOLBOX_ANIMATION": "",
 	"TOOLBOX_VISION": "",
 	"TOOLBOX_CLEANING": "",
+	"TOOLBOX_DIALOG": "",
 	"MENU_EDIT": "These texts are used outside of Blockly, but are placed in the Blockly namespace",
 	"MENU_ROBOT": "",
 	"MENU_HELP": "",

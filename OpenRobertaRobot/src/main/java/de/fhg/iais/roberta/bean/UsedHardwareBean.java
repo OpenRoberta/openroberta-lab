@@ -24,6 +24,7 @@ public class UsedHardwareBean implements IProjectBean {
     private List<String> declaredVariables = new ArrayList<>();
     private List<VarDeclaration<Void>> visitedVars = new ArrayList<>();
     private List<Method<Void>> userDefinedMethods = new ArrayList<>();
+    private Set<String> usedIntents = new LinkedHashSet<>();
     private Set<String> markedVariablesAsGlobal = new HashSet<>();
     private boolean isProgramEmpty = false;
     private boolean isListsUsed = false;
@@ -45,6 +46,10 @@ public class UsedHardwareBean implements IProjectBean {
 
     public Set<String> getMarkedVariablesAsGlobal() {
         return this.markedVariablesAsGlobal;
+    }
+
+    public Set<String> getUsedIntents() {
+        return this.usedIntents;
     }
 
     public boolean isProgramEmpty() {
@@ -108,6 +113,11 @@ public class UsedHardwareBean implements IProjectBean {
 
         public Builder addMarkedVariableAsGlobal(String markedVariableAsGlobal) {
             this.usedHardwareBean.markedVariablesAsGlobal.add(markedVariableAsGlobal);
+            return this;
+        }
+
+        public Builder addUsedIntents(String usedIntents) {
+            this.usedHardwareBean.usedIntents.add(usedIntents);
             return this;
         }
 

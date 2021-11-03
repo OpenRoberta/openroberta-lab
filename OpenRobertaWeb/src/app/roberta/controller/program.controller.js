@@ -45,17 +45,17 @@ function initView() {
             startScale: 1.0,
             maxScale: 4,
             minScale: 0.25,
-            scaleSpeed: 1.1,
+            scaleSpeed: 1.1
         },
-        checkInTask: ['start', '_def', 'event'],
+        checkInTask: ['start', '_def', 'intent'],
         variableDeclaration: true,
         robControls: true,
-        theme: GUISTATE_C.getTheme(),
+        theme: GUISTATE_C.getTheme()
     });
     $(window).resize();
     blocklyWorkspace.setDevice({
         group: GUISTATE_C.getRobotGroup(),
-        robot: GUISTATE_C.getRobot(),
+        robot: GUISTATE_C.getRobot()
     });
     GUISTATE_C.setBlocklyWorkspace(blocklyWorkspace);
     blocklyWorkspace.robControls.disable('saveProgram');
@@ -70,9 +70,9 @@ function initView() {
 function initEvents() {
     $('#sliderDiv').draggable({
         axis: 'x',
-        cursor: 'col-resize',
+        cursor: 'col-resize'
     });
-    $('#tabProgram').onWrap('click', function (e) {
+    $('#tabProgram').onWrap('click', function(e) {
         e.preventDefault();
         if (
             GUISTATE_C.getView() === 'tabConfiguration' &&
@@ -80,9 +80,9 @@ function initEvents() {
             !GUISTATE_C.isConfigurationSaved() &&
             !GUISTATE_C.isConfigurationAnonymous()
         ) {
-            $('#show-message-confirm').oneWrap('shown.bs.modal', function (e) {
+            $('#show-message-confirm').oneWrap('shown.bs.modal', function(e) {
                 $('#confirm').off();
-                $('#confirm').on('click', function (e) {
+                $('#confirm').on('click', function(e) {
                     e.preventDefault();
                     // TODO, check if we want to give the user the opportunity to convert the named configuration into an anonymous one
                     GUISTATE_C.setConfigurationName('');
@@ -91,7 +91,7 @@ function initEvents() {
                     $('#tabProgram').tabWrapShow();
                 });
                 $('#confirmCancel').off();
-                $('#confirmCancel').on('click', function (e) {
+                $('#confirmCancel').on('click', function(e) {
                     e.preventDefault();
                     $('.modal').modal('hide');
                 });
@@ -102,11 +102,11 @@ function initEvents() {
             $('#tabProgram').tabWrapShow();
         }
     });
-    $('#tabProgram').onWrap('show.bs.tab', function (e) {
+    $('#tabProgram').onWrap('show.bs.tab', function(e) {
         GUISTATE_C.setView('tabProgram');
     });
 
-    $('#tabProgram').onWrap('shown.bs.tab', function (e) {
+    $('#tabProgram').onWrap('shown.bs.tab', function(e) {
         blocklyWorkspace.markFocused();
         blocklyWorkspace.setVisible(true);
         if (!seen) {
@@ -115,20 +115,20 @@ function initEvents() {
         }
         $(window).resize();
     });
-    $('#tabProgram').onWrap('hide.bs.tab', function (e) {
+    $('#tabProgram').onWrap('hide.bs.tab', function(e) {
         Blockly.hideChaff();
     });
-    $('#tabProgram').onWrap('hidden.bs.tab', function (e) {
+    $('#tabProgram').onWrap('hidden.bs.tab', function(e) {
         blocklyWorkspace.setVisible(false);
     });
 
     // work around for touch devices
-    $('.levelTabs').on('touchend', function (e) {
+    $('.levelTabs').on('touchend', function(e) {
         var target = $(e.target).attr('href');
         $('.levelTabs a[href="' + target + '"]').tabWrapShow();
     });
 
-    $('.levelTabs a[data-toggle="tab"]').onWrap('shown.bs.tab', function (e) {
+    $('.levelTabs a[data-toggle="tab"]').onWrap('shown.bs.tab', function(e) {
         var target = $(e.target).attr('href').substring(1); // activated tab
         e.preventDefault();
         loadToolbox(target);
@@ -137,7 +137,7 @@ function initEvents() {
     });
 
     bindControl();
-    blocklyWorkspace.addChangeListener(function (event) {
+    blocklyWorkspace.addChangeListener(function(event) {
         if (listenToBlocklyEvents && event.type != Blockly.Events.UI && GUISTATE_C.isProgramSaved()) {
             GUISTATE_C.setProgramSaved(false);
         }
@@ -151,7 +151,7 @@ function initEvents() {
             var block = Blockly.selected.type;
             $('#' + block).addClass('selectedHelp');
             $('#helpContent').scrollTo('#' + block, 1000, {
-                offset: -10,
+                offset: -10
             });
         }
         return false;
@@ -176,7 +176,7 @@ function saveToServer() {
         configName,
         xmlConfigText,
         GUISTATE_C.getProgramTimestamp(),
-        function (result) {
+        function(result) {
             if (result.rc === 'ok') {
                 GUISTATE_C.setProgramTimestamp(result.lastChanged);
                 GUISTATE_C.setProgramSaved(true);
@@ -211,7 +211,7 @@ function saveAsProgramToServer() {
             configName,
             xmlConfigText,
             GUISTATE_C.getProgramTimestamp(),
-            function (result) {
+            function(result) {
                 if (result.rc === 'ok') {
                     LOG.info('saved program ' + GUISTATE_C.getProgramName() + ' as ' + progName);
                     result.name = progName;
@@ -225,11 +225,11 @@ function saveAsProgramToServer() {
                         var lastChanged = result.lastChanged;
                         var modalMessage =
                             Blockly.Msg.POPUP_BACKGROUND_REPLACE || 'A program with the same name already exists! <br> Would you like to replace it?';
-                        $('#show-message-confirm').oneWrap('shown.bs.modal', function (e) {
+                        $('#show-message-confirm').oneWrap('shown.bs.modal', function(e) {
                             $('#confirm').off();
                             $('#confirm').onWrap(
                                 'click',
-                                function (e) {
+                                function(e) {
                                     e.preventDefault();
                                     PROGRAM.saveProgramToServer(
                                         progName,
@@ -238,7 +238,7 @@ function saveAsProgramToServer() {
                                         configName,
                                         xmlConfigText,
                                         lastChanged,
-                                        function (result) {
+                                        function(result) {
                                             if (result.rc === 'ok') {
                                                 LOG.info('saved program ' + GUISTATE_C.getProgramName() + ' as ' + progName + ' and overwrote old content');
                                                 result.name = progName;
@@ -256,7 +256,7 @@ function saveAsProgramToServer() {
                             $('#confirmCancel').off();
                             $('#confirmCancel').onWrap(
                                 'click',
-                                function (e) {
+                                function(e) {
                                     e.preventDefault();
                                     $('.modal').modal('hide');
                                 },
@@ -286,7 +286,7 @@ function loadFromGallery(program) {
     }
     var owner = 'Gallery';
     function loadProgramFromGallery() {
-        PROGRAM.loadProgramFromListing(programName, owner, user, function (result) {
+        PROGRAM.loadProgramFromListing(programName, owner, user, function(result) {
             if (result.rc === 'ok') {
                 result.programShared = 'READ';
                 result.name = programName;
@@ -306,7 +306,7 @@ function loadFromGallery(program) {
                     GUISTATE_C.setConfigurationName(result.configName);
                     GUISTATE_C.setConfigurationXML(result.confXML);
                 }
-                $('#tabProgram').oneWrap('shown.bs.tab', function (e) {
+                $('#tabProgram').oneWrap('shown.bs.tab', function(e) {
                     CONFIGURATION_C.reloadConf();
                     reloadProgram();
                 });
@@ -322,7 +322,7 @@ function initProgramForms() {
     $formSingleModal = $('#single-modal-form');
     $('#buttonCancelFirmwareUpdateAndRun').onWrap(
         'click',
-        function () {
+        function() {
             start();
         },
         'cancel firmware update and run'
@@ -332,7 +332,7 @@ function initProgramForms() {
 function showSaveAsModal() {
     $.validator.addMethod(
         'regex',
-        function (value, element, regexp) {
+        function(value, element, regexp) {
             value = value.trim();
             return value.match(regexp);
         },
@@ -340,30 +340,30 @@ function showSaveAsModal() {
     );
 
     UTIL.showSingleModal(
-        function () {
+        function() {
             $('#singleModalInput').attr('type', 'text');
             $('#single-modal h3').text(Blockly.Msg['MENU_SAVE_AS']);
             $('#single-modal label').text(Blockly.Msg['POPUP_NAME']);
         },
         saveAsProgramToServer,
-        function () {},
+        function() {},
         {
             rules: {
                 singleModalInput: {
                     required: true,
-                    regex: /^[a-zA-Z_öäüÖÄÜß$€][a-zA-Z0-9_öäüÖÄÜß$€]{0,254}$/,
-                },
+                    regex: /^[a-zA-Z_öäüÖÄÜß$€][a-zA-Z0-9_öäüÖÄÜß$€]{0,254}$/
+                }
             },
             errorClass: 'form-invalid',
-            errorPlacement: function (label, element) {
+            errorPlacement: function(label, element) {
                 label.insertAfter(element);
             },
             messages: {
                 singleModalInput: {
                     required: Blockly.Msg['VALIDATION_FIELD_REQUIRED'],
-                    regex: Blockly.Msg['MESSAGE_INVALID_NAME'],
-                },
-            },
+                    regex: Blockly.Msg['MESSAGE_INVALID_NAME']
+                }
+            }
         }
     );
 }
@@ -410,14 +410,14 @@ function newProgram(opt_further) {
 }
 
 function confirmLoadProgram() {
-    $('#show-message-confirm').oneWrap('shown.bs.modal', function (e) {
+    $('#show-message-confirm').oneWrap('shown.bs.modal', function(e) {
         $('#confirm').off();
-        $('#confirm').on('click', function (e) {
+        $('#confirm').on('click', function(e) {
             e.preventDefault();
             newProgram(true);
         });
         $('#confirmCancel').off();
-        $('#confirmCancel').on('click', function (e) {
+        $('#confirmCancel').on('click', function(e) {
             e.preventDefault();
             $('.modal').modal('hide');
         });
@@ -469,7 +469,7 @@ function exportXml() {
  * Download all programs by the current User
  */
 function exportAllXml() {
-    USER.userLoggedInCheck(function (result) {
+    USER.userLoggedInCheck(function(result) {
         if (result.rc === 'ok') {
             PROGRAM.exportAllProgramsXml();
         } else {
@@ -483,7 +483,7 @@ function getBlocklyWorkspace() {
 }
 
 function bindControl() {
-    Blockly.bindEvent_(blocklyWorkspace.robControls.saveProgram, 'mousedown', null, function (e) {
+    Blockly.bindEvent_(blocklyWorkspace.robControls.saveProgram, 'mousedown', null, function(e) {
         LOG.info('saveProgram from blockly button');
         saveToServer();
         return false;
@@ -521,7 +521,7 @@ function reloadView() {
 function resetView() {
     blocklyWorkspace.setDevice({
         group: GUISTATE_C.getRobotGroup(),
-        robot: GUISTATE_C.getRobot(),
+        robot: GUISTATE_C.getRobot()
     });
     initProgramEnvironment();
     var toolbox = GUISTATE_C.getProgramToolbox();
@@ -583,11 +583,11 @@ function programToBlocklyWorkspace(xml, opt_fromShowSource) {
 
     var language = GUISTATE_C.getLanguage();
     if ($('#codeDiv').hasClass('rightActive') && !opt_fromShowSource) {
-        PROGRAM.showSourceProgram(GUISTATE_C.getProgramName(), configName, xmlProgram, xmlConfigText, language, function (result) {
+        PROGRAM.showSourceProgram(GUISTATE_C.getProgramName(), configName, xmlProgram, xmlConfigText, language, function(result) {
             PROGCODE_C.setCode(result.sourceCode);
         });
     }
-    setTimeout(function () {
+    setTimeout(function() {
         listenToBlocklyEvents = true;
     }, 500);
 }
@@ -608,5 +608,5 @@ export {
     resetView,
     loadToolbox,
     loadExternalToolbox,
-    programToBlocklyWorkspace,
+    programToBlocklyWorkspace
 };

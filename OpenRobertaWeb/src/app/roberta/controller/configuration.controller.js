@@ -43,16 +43,16 @@ function initView() {
             startScale: 1.0,
             maxScale: 4,
             minScale: 0.25,
-            scaleSpeed: 1.1,
+            scaleSpeed: 1.1
         },
         checkInTask: ['-Brick', 'robConf'],
         variableDeclaration: true,
         robControls: true,
-        theme: GUISTATE_C.getTheme(),
+        theme: GUISTATE_C.getTheme()
     });
     bricklyWorkspace.setDevice({
         group: GUISTATE_C.getRobotGroup(),
-        robot: GUISTATE_C.getRobot(),
+        robot: GUISTATE_C.getRobot()
     });
     // Configurations can't be executed
     bricklyWorkspace.robControls.runOnBrick.setAttribute('style', 'display : none');
@@ -61,13 +61,13 @@ function initView() {
 }
 
 function initEvents() {
-    $('#tabConfiguration').onWrap('show.bs.tab', function (e) {
+    $('#tabConfiguration').onWrap('show.bs.tab', function(e) {
         GUISTATE_C.setView('tabConfiguration');
     });
 
     $('#tabConfiguration').onWrap(
         'shown.bs.tab',
-        function (e) {
+        function(e) {
             bricklyWorkspace.markFocused();
             if (GUISTATE_C.isConfigurationUsed()) {
                 bricklyWorkspace.setVisible(true);
@@ -85,23 +85,23 @@ function initEvents() {
         'tabConfiguration clicked'
     );
 
-    $('#tabConfiguration').onWrap('hide.bs.tab', function (e) {
+    $('#tabConfiguration').onWrap('hide.bs.tab', function(e) {
         Blockly.hideChaff(false);
     });
 
-    $('#tabConfiguration').onWrap('hidden.bs.tab', function (e) {
+    $('#tabConfiguration').onWrap('hidden.bs.tab', function(e) {
         var dom = confVis ? confVis.getXml() : Blockly.Xml.workspaceToDom(bricklyWorkspace);
         var xml = Blockly.Xml.domToText(dom);
         GUISTATE_C.setConfigurationXML(xml);
         bricklyWorkspace.setVisible(false);
     });
 
-    Blockly.bindEvent_(bricklyWorkspace.robControls.saveProgram, 'mousedown', null, function (e) {
+    Blockly.bindEvent_(bricklyWorkspace.robControls.saveProgram, 'mousedown', null, function(e) {
         LOG.info('saveConfiguration from brickly button');
         saveToServer();
     });
 
-    bricklyWorkspace.addChangeListener(function (event) {
+    bricklyWorkspace.addChangeListener(function(event) {
         if (listenToBricklyEvents && event.type != Blockly.Events.UI && GUISTATE_C.isConfigurationSaved()) {
             if (GUISTATE_C.isConfigurationStandard()) {
                 GUISTATE_C.setConfigurationName('');
@@ -132,7 +132,7 @@ function saveToServer() {
     }
     var dom = confVis ? confVis.getXml() : Blockly.Xml.workspaceToDom(bricklyWorkspace);
     var xmlText = Blockly.Xml.domToText(dom);
-    CONFIGURATION.saveConfigurationToServer(GUISTATE_C.getConfigurationName(), xmlText, function (result) {
+    CONFIGURATION.saveConfigurationToServer(GUISTATE_C.getConfigurationName(), xmlText, function(result) {
         if (result.rc === 'ok') {
             GUISTATE_C.setConfigurationSaved(true);
             LOG.info('save brick configuration ' + GUISTATE_C.getConfigurationName());
@@ -155,7 +155,7 @@ function saveAsToServer() {
         }
         var dom = confVis ? confVis.getXml() : Blockly.Xml.workspaceToDom(bricklyWorkspace);
         var xmlText = Blockly.Xml.domToText(dom);
-        CONFIGURATION.saveAsConfigurationToServer(confName, xmlText, function (result) {
+        CONFIGURATION.saveAsConfigurationToServer(confName, xmlText, function(result) {
             if (result.rc === 'ok') {
                 result.name = confName;
                 GUISTATE_C.setConfiguration(result);
@@ -167,13 +167,13 @@ function saveAsToServer() {
                 var modalMessage =
                     Blockly.Msg.POPUP_BACKGROUND_REPLACE_CONFIGURATION ||
                     'A configuration with the same name already exists! <br> Would you like to replace it?';
-                $('#show-message-confirm').onWrap('shown.bs.modal', function (e) {
+                $('#show-message-confirm').onWrap('shown.bs.modal', function(e) {
                     $('#confirm').off();
                     $('#confirm').onWrap(
                         'click',
-                        function (e) {
+                        function(e) {
                             e.preventDefault;
-                            CONFIGURATION.saveConfigurationToServer(confName, xmlText, function (result) {
+                            CONFIGURATION.saveConfigurationToServer(confName, xmlText, function(result) {
                                 if (result.rc == 'ok') {
                                     result.name = confName;
                                     GUISTATE_C.setConfiguration(result);
@@ -191,7 +191,7 @@ function saveAsToServer() {
                     $('#confirmCancel').off();
                     $('#confirmCancel').onWrap(
                         'click',
-                        function (e) {
+                        function(e) {
                             e.preventDefault();
                             $('.modal').modal('hide');
                         },
@@ -214,10 +214,10 @@ function saveAsToServer() {
  */
 function loadFromListing(conf) {
     LOG.info('loadFromList ' + conf[0]);
-    CONFIGURATION.loadConfigurationFromListing(conf[0], conf[1], function (result) {
+    CONFIGURATION.loadConfigurationFromListing(conf[0], conf[1], function(result) {
         if (result.rc === 'ok') {
             result.name = conf[0];
-            $('#tabConfiguration').oneWrap('shown.bs.tab', function () {
+            $('#tabConfiguration').oneWrap('shown.bs.tab', function() {
                 showConfiguration(result);
             });
             $('#tabConfiguration').clickWrap();
@@ -257,7 +257,7 @@ function showSaveAsModal() {
     var regexString = new RegExp('^(?!\\b' + GUISTATE_C.getConfigurationStandardName() + '\\b)([a-zA-Z_öäüÖÄÜß$€][a-zA-Z0-9_öäüÖÄÜß$€]*)$');
     $.validator.addMethod(
         'regex',
-        function (value, element, regexp) {
+        function(value, element, regexp) {
             value = value.trim();
             return value.match(regexp);
         },
@@ -265,30 +265,30 @@ function showSaveAsModal() {
     );
 
     UTIL.showSingleModal(
-        function () {
+        function() {
             $('#singleModalInput').attr('type', 'text');
             $('#single-modal h3').text(Blockly.Msg['MENU_SAVE_AS']);
             $('#single-modal label').text(Blockly.Msg['POPUP_NAME']);
         },
         saveAsToServer,
-        function () {},
+        function() {},
         {
             rules: {
                 singleModalInput: {
                     required: true,
-                    regex: regexString,
-                },
+                    regex: regexString
+                }
             },
             errorClass: 'form-invalid',
-            errorPlacement: function (label, element) {
+            errorPlacement: function(label, element) {
                 label.insertAfter(element);
             },
             messages: {
                 singleModalInput: {
                     required: jQuery.validator.format(Blockly.Msg['VALIDATION_FIELD_REQUIRED']),
-                    regex: jQuery.validator.format(Blockly.Msg['MESSAGE_INVALID_CONF_NAME']),
-                },
-            },
+                    regex: jQuery.validator.format(Blockly.Msg['MESSAGE_INVALID_CONF_NAME'])
+                }
+            }
         }
     );
 }
@@ -305,14 +305,14 @@ function newConfiguration(opt_further) {
         GUISTATE_C.setConfiguration(result);
         initConfigurationEnvironment();
     } else {
-        $('#show-message-confirm').oneWrap('shown.bs.modal', function (e) {
+        $('#show-message-confirm').oneWrap('shown.bs.modal', function(e) {
             $('#confirm').off();
-            $('#confirm').onWrap('click', function (e) {
+            $('#confirm').onWrap('click', function(e) {
                 e.preventDefault();
                 newConfiguration(true);
             });
             $('#confirmCancel').off();
-            $('#confirmCancel').onWrap('click', function (e) {
+            $('#confirmCancel').onWrap('click', function(e) {
                 e.preventDefault();
                 $('.modal').modal('hide');
             });
@@ -389,7 +389,7 @@ function changeRobotSvg() {
     if (CV.CircuitVisualization.isRobotVisualized(GUISTATE_C.getRobotGroup() + '_' + GUISTATE_C.getRobot())) {
         bricklyWorkspace.setDevice({
             group: GUISTATE_C.getRobotGroup(),
-            robot: GUISTATE_C.getRobot(),
+            robot: GUISTATE_C.getRobot()
         });
         confVis.resetRobot();
     }
@@ -398,7 +398,7 @@ function changeRobotSvg() {
 function resetView() {
     bricklyWorkspace.setDevice({
         group: GUISTATE_C.getRobotGroup(),
-        robot: GUISTATE_C.getRobot(),
+        robot: GUISTATE_C.getRobot()
     });
     initConfigurationEnvironment();
     var toolbox = GUISTATE_C.getConfigurationToolbox();
@@ -440,7 +440,7 @@ function configurationToBricklyWorkspace(xml) {
     GUISTATE_C.setConfigurationName(name);
     GUISTATE_C.setConfigurationSaved(true);
     $('#tabConfigurationName').html(name);
-    setTimeout(function () {
+    setTimeout(function() {
         listenToBricklyEvents = true;
     }, 500);
     if (isVisible()) {
@@ -469,5 +469,5 @@ export {
     reloadView,
     changeRobotSvg,
     resetView,
-    configurationToBricklyWorkspace,
+    configurationToBricklyWorkspace
 };

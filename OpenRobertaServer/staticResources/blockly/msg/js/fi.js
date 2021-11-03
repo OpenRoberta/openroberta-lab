@@ -1654,6 +1654,7 @@ Blockly.Msg.TOOLBOX_COLOUR = "Värit";
 Blockly.Msg.TOOLBOX_COMMUNICATION = "Viestintä";
 Blockly.Msg.TOOLBOX_CONTROL = "Kontrollirak.";
 Blockly.Msg.TOOLBOX_DECISION = "Päätökset";
+Blockly.Msg.TOOLBOX_DIALOG = "Dialog";  // untranslated
 Blockly.Msg.TOOLBOX_DISPLAY = "Näytä";
 Blockly.Msg.TOOLBOX_DRIVE = "Aja";
 Blockly.Msg.TOOLBOX_IMAGE = "Images";  // untranslated

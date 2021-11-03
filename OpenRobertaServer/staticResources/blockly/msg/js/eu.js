@@ -1654,6 +1654,7 @@ Blockly.Msg.TOOLBOX_COLOUR = "Koloreak";
 Blockly.Msg.TOOLBOX_COMMUNICATION = "Mezuak";
 Blockly.Msg.TOOLBOX_CONTROL = "Kontrola";
 Blockly.Msg.TOOLBOX_DECISION = "Erabakiak";
+Blockly.Msg.TOOLBOX_DIALOG = "Dialog";  // untranslated
 Blockly.Msg.TOOLBOX_DISPLAY = "Pantaila";
 Blockly.Msg.TOOLBOX_DRIVE = "Garraioa";
 Blockly.Msg.TOOLBOX_IMAGE = "Irudiak";
