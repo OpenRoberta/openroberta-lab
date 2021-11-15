@@ -1,5 +1,8 @@
 package de.fhg.iais.roberta.visitor.validate;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import com.google.common.collect.ClassToInstanceMap;
 
 import de.fhg.iais.roberta.bean.IProjectBean;
@@ -28,6 +31,7 @@ import de.fhg.iais.roberta.syntax.neuralnetwork.NeuralNetworkClassify;
 import de.fhg.iais.roberta.syntax.neuralnetwork.NeuralNetworkInitRawData;
 import de.fhg.iais.roberta.syntax.neuralnetwork.NeuralNetworkSetup;
 import de.fhg.iais.roberta.syntax.neuralnetwork.NeuralNetworkTrain;
+import de.fhg.iais.roberta.syntax.sensor.ExternalSensor;
 import de.fhg.iais.roberta.syntax.sensor.Sensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.DropSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor;
@@ -56,8 +60,25 @@ import de.fhg.iais.roberta.visitor.hardware.sensor.ISensorVisitor;
 
 public final class ArduinoBrickValidatorVisitor extends AbstractBrickValidatorVisitor implements ISensorVisitor<Void>, IArduinoVisitor<Void> {
 
+    private static final Map<String, String> SENSOR_COMPONENT_TYPE_MAP = new HashMap<String, String>() {{
+        put("COLOR_SENSING", "COLOR");
+        put("TOUCH_SENSING", "TOUCH");
+        put("ULTRASONIC_SENSING", "TOUCH");
+        put("MOISTURE_SENSING", SC.MOISTURE);
+        put("MOTION_SENSING", SC.MOTION);
+        put("KEYS_SENSING", SC.KEY);
+        put("RFID_SENSING", SC.RFID);
+        put("DROP_SENSING", SC.DROP);
+        put("HUMIDITY_SENSING", SC.HUMIDITY);
+        put("VOLTAGE_SENSING", SC.VOLTAGE);
+        put("ENCODER_SENSING", SC.ENCODER);
+    }};
+    
+    private final Map<String, String> sensorComponentTypeMap;
+
     public ArduinoBrickValidatorVisitor(ConfigurationAst brickConfiguration, ClassToInstanceMap<IProjectBean.IBuilder<?>> beanBuilders) {
         super(brickConfiguration, beanBuilders);
+        this.sensorComponentTypeMap = SENSOR_COMPONENT_TYPE_MAP;
     }
 
     @Override
@@ -407,5 +428,21 @@ public final class ArduinoBrickValidatorVisitor extends AbstractBrickValidatorVi
     public Void visitNeuralNetworkClassify(NeuralNetworkClassify<Void> nn) {
         nn.probabilities.accept(this);
         return null;
+    }
+
+    @Override
+    protected void checkSensorPort(ExternalSensor<Void> sensor) {
+        ConfigurationComponent configurationComponent = this.robotConfiguration.optConfigurationComponent(sensor.getUserDefinedPort());
+
+        if ( configurationComponent == null ) {
+            addErrorToPhrase(sensor, "CONFIGURATION_ERROR_SENSOR_MISSING");
+            return;
+        }
+
+        String expectedComponentType = this.sensorComponentTypeMap.get(sensor.getKind().getName());
+
+        if ( expectedComponentType == null || !expectedComponentType.equalsIgnoreCase(configurationComponent.getComponentType()) ) {
+            addErrorToPhrase(sensor, "CONFIGURATION_ERROR_SENSOR_WRONG");
+        }
     }
 }

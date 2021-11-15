@@ -17,6 +17,11 @@ public class MoistureSensor<V> extends ExternalSensor<V> {
         setReadOnly();
     }
 
+    public MoistureSensor(SensorMetaDataBean sensorMetaDataBean) {
+        super(sensorMetaDataBean, BlockTypeContainer.getByName("MOISTURE_SENSING"));
+        setReadOnly();
+    }
+
     /**
      * Create object of the class {@link MoistureSensor}.
      *

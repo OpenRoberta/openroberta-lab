@@ -17,6 +17,11 @@ public class PulseSensor<V> extends ExternalSensor<V> {
         setReadOnly();
     }
 
+    public PulseSensor(SensorMetaDataBean sensorMetaDataBean) {
+        super(sensorMetaDataBean, BlockTypeContainer.getByName("PULSE_SENSING"));
+        setReadOnly();
+    }
+
     /**
      * Create object of the class {@link PulseSensor}.
      *

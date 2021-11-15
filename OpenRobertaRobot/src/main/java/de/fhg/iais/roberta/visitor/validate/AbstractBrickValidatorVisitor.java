@@ -5,6 +5,7 @@ import com.google.common.collect.ClassToInstanceMap;
 import de.fhg.iais.roberta.bean.IProjectBean;
 import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.components.ConfigurationComponent;
+import de.fhg.iais.roberta.syntax.SC;
 import de.fhg.iais.roberta.syntax.action.sound.VolumeAction;
 import de.fhg.iais.roberta.syntax.action.sound.VolumeAction.Mode;
 import de.fhg.iais.roberta.syntax.sensor.ExternalSensor;
@@ -79,7 +80,21 @@ public abstract class AbstractBrickValidatorVisitor extends AbstractProgramValid
                         this.errorCount++;
                     }
                     break;
+                case "MOTION_SENSING":
+                    if ( !type.equals(SC.MOTION) ) {
+                        sensor.addInfo(NepoInfo.error("CONFIGURATION_ERROR_SENSOR_WRONG"));
+                        this.errorCount++;
+                    }
+                    break;
+                case "MOISTURE_SENSING":
+                    if ( !type.equals(SC.MOISTURE) ) {
+                        sensor.addInfo(NepoInfo.error("CONFIGURATION_ERROR_SENSOR_WRONG"));
+                        this.errorCount++;
+                    }
+                    break;
                 default:
+                    sensor.addInfo(NepoInfo.error("CONFIGURATION_ERROR_SENSOR_WRONG"));
+                    this.errorCount++;
                     break;
             }
         }

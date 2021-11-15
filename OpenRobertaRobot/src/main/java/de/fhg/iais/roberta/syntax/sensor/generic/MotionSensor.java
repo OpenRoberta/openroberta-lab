@@ -11,9 +11,13 @@ import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 
 public class MotionSensor<V> extends ExternalSensor<V> {
-
     public MotionSensor(SensorMetaDataBean sensorMetaDataBean, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(sensorMetaDataBean, BlockTypeContainer.getByName("MOTION_SENSING"), properties, comment);
+        setReadOnly();
+    }
+
+    public MotionSensor(SensorMetaDataBean sensorMetaDataBean) {
+        super(sensorMetaDataBean, BlockTypeContainer.getByName("MOTION_SENSING"));
         setReadOnly();
     }
 

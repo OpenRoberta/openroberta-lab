@@ -1,6 +1,7 @@
 package de.fhg.iais.roberta.syntax.sensor.generic;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
+import de.fhg.iais.roberta.syntax.BlockType;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
@@ -15,6 +16,10 @@ public class DropSensor<V> extends ExternalSensor<V> {
     public DropSensor(SensorMetaDataBean sensorMetaDataBean, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(sensorMetaDataBean, BlockTypeContainer.getByName("DROP_SENSING"), properties, comment);
         setReadOnly();
+    }
+
+    public DropSensor(SensorMetaDataBean metaDataBean) {
+        super(metaDataBean, BlockTypeContainer.getByName("DROP_SENSING"));
     }
 
     /**

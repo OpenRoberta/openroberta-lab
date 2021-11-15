@@ -17,6 +17,11 @@ public class VoltageSensor<V> extends ExternalSensor<V> {
         setReadOnly();
     }
 
+    public VoltageSensor(SensorMetaDataBean sensorMetaDataBean) {
+        super(sensorMetaDataBean, BlockTypeContainer.getByName("VOLTAGE_SENSING"));
+        setReadOnly();
+    }
+
     /**
      * Create object of the class {@link VoltageSensor}.
      *
