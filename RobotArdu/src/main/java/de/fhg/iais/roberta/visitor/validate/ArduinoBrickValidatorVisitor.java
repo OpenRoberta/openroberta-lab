@@ -63,14 +63,14 @@ public final class ArduinoBrickValidatorVisitor extends AbstractBrickValidatorVi
     private static final Map<String, String> SENSOR_COMPONENT_TYPE_MAP = new HashMap<String, String>() {{
         put("COLOR_SENSING", "COLOR");
         put("TOUCH_SENSING", "TOUCH");
-        put("ULTRASONIC_SENSING", "TOUCH");
+        put("ULTRASONIC_SENSING", SC.ULTRASONIC);
         put("MOISTURE_SENSING", SC.MOISTURE);
         put("MOTION_SENSING", SC.MOTION);
         put("KEYS_SENSING", SC.KEY);
         put("RFID_SENSING", SC.RFID);
         put("DROP_SENSING", SC.DROP);
         put("HUMIDITY_SENSING", SC.HUMIDITY);
-        put("VOLTAGE_SENSING", SC.VOLTAGE);
+        put("VOLTAGE_SENSING", SC.POTENTIOMETER);
         put("ENCODER_SENSING", SC.ENCODER);
     }};
     
@@ -441,7 +441,7 @@ public final class ArduinoBrickValidatorVisitor extends AbstractBrickValidatorVi
 
         String expectedComponentType = this.sensorComponentTypeMap.get(sensor.getKind().getName());
 
-        if ( expectedComponentType == null || !expectedComponentType.equalsIgnoreCase(configurationComponent.getComponentType()) ) {
+        if ( expectedComponentType != null && !expectedComponentType.equalsIgnoreCase(configurationComponent.getComponentType()) ) {
             addErrorToPhrase(sensor, "CONFIGURATION_ERROR_SENSOR_WRONG");
         }
     }

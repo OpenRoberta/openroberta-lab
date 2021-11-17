@@ -93,8 +93,6 @@ public abstract class AbstractBrickValidatorVisitor extends AbstractProgramValid
                     }
                     break;
                 default:
-                    sensor.addInfo(NepoInfo.error("CONFIGURATION_ERROR_SENSOR_WRONG"));
-                    this.errorCount++;
                     break;
             }
         }

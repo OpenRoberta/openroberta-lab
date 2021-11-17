@@ -256,7 +256,7 @@ public class ArduinoValidatorAndCollectorWorkflowTest extends WorkflowTest {
 
     @Test
     public void visitVoltageSensor_withPort() {
-        configurationComponents.add(new ConfigurationComponent(SC.VOLTAGE, false, "P1", "P1", new HashMap<>()));
+        configurationComponents.add(new ConfigurationComponent(SC.POTENTIOMETER, false, "P1", "P1", new HashMap<>()));
 
         VoltageSensor<Void> voltageSensor = new VoltageSensor<>(new SensorMetaDataBean("P1", "", "", null));
         phrases.add(voltageSensor);
