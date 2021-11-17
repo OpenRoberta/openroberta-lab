@@ -1,5 +1,5 @@
-define(["simulation.simulation", "interpreter.constants", "simulation.robot.ev3"], function(SIM, C, Ev3) {
-
+define(["require", "exports", "simulation.simulation", "interpreter.constants", "simulation.robot.ev3"], function (require, exports, simulation_simulation_1, interpreter_constants_1, simulation_robot_ev3_1) {
+    Object.defineProperty(exports, "__esModule", { value: true });
     /**
      * Creates a new robot for a simulation.
      *
@@ -11,39 +11,38 @@ define(["simulation.simulation", "interpreter.constants", "simulation.robot.ev3"
      * @class
      */
     function Mbot(pose, configuration, num, robotBehaviour) {
-        Ev3.call(this, pose, configuration, num, robotBehaviour);
+        simulation_robot_ev3_1.default.call(this, pose, configuration, num, robotBehaviour);
         this.trackwidth = 25;
-        this.name = "mbot";
+        this.name = 'mbot';
         this.geom = {
             x: -12,
             y: -22,
             w: 24,
             h: 32,
             radius: 0,
-            color: "#0f9cF4"
+            color: '#0f9cF4',
         };
         this.wheelLeft = {
             x: 14,
             y: -10,
             w: 4,
             h: 20,
-            color: "#000000"
+            color: '#000000',
         };
         this.wheelRight = {
             x: -18,
             y: -10,
             w: 4,
             h: 20,
-            color: "#000000"
+            color: '#000000',
         };
-        this.geom.color = "#0f9cF4";
+        this.geom.color = '#0f9cF4';
         this.touchSensor = null;
         this.colorRange = [];
-
         this.buttons = {
             center: false,
         };
-        this.infraredSensors = {}
+        this.infraredSensors = {};
         this.infraredSensors.left = {
             x: 2,
             y: -24,
@@ -70,7 +69,7 @@ define(["simulation.simulation", "interpreter.constants", "simulation.robot.ev3"
             u: [],
             cx: 0,
             cy: 0,
-            color: "#FF69B4"
+            color: '#FF69B4',
         };
         this.colorSensor = null;
         var tempInfrared = this.infraredSensors;
@@ -78,55 +77,71 @@ define(["simulation.simulation", "interpreter.constants", "simulation.robot.ev3"
         this.infraredSensors = {};
         this.ultraSensor = {};
         this.infraredSensors = {};
-
-
-        this.brick = document.createElement("canvas");
-
-        this.brick.id = "brick" + num;
-        this.brick.class = "border";
+        this.brick = document.createElement('canvas');
+        this.brick.id = 'brick' + num;
+        this.brick.class = 'border';
         this.brick.width = 480;
         this.brick.height = 280;
-        this.brick.classList.add("border");
-        this.ctx = this.brick.getContext("2d");
+        this.brick.classList.add('border');
+        this.ctx = this.brick.getContext('2d');
         var that = this;
-        this.brick.addEventListener("mousemove", function(e) {
-            const rect = that.brick.getBoundingClientRect()
-            const x = e.clientX - rect.left
-            const y = e.clientY - rect.top
-            const pixel = that.ctx.getImageData(x, y, 1, 1).data;
-            const color = pixel[0] + pixel[1] + pixel[2];
+        this.brick.addEventListener('mousemove', function (e) {
+            var rect = that.brick.getBoundingClientRect();
+            var x = e.clientX - rect.left;
+            var y = e.clientY - rect.top;
+            var pixel = that.ctx.getImageData(x, y, 1, 1).data;
+            var color = pixel[0] + pixel[1] + pixel[2];
             if (color === 0) {
-                $("#" + that.brick.id).css("cursor", "pointer");
-            } else {
-                $("#" + that.brick.id).css("cursor", "grabbing");
+                $('#' + that.brick.id).css('cursor', 'pointer');
+            }
+            else {
+                $('#' + that.brick.id).css('cursor', 'grabbing');
             }
         });
-        var mouseDown = function(e) {
-            const rect = that.brick.getBoundingClientRect();
-            const x = e.clientX || e.changedTouches[0].clientX - rect.left;
-            const y = e.clientY || e.changedTouches[0].clientY - rect.top;
-            const pixel = that.ctx.getImageData(x, y, 1, 1).data;
-            const color = pixel[0] + pixel[1] + pixel[2];
+        var mouseDown = function (e) {
+            var rect = that.brick.getBoundingClientRect();
+            var x = e.clientX || e.changedTouches[0].clientX - rect.left;
+            var y = e.clientY || e.changedTouches[0].clientY - rect.top;
+            var pixel = that.ctx.getImageData(x, y, 1, 1).data;
+            var color = pixel[0] + pixel[1] + pixel[2];
             if (color === 0) {
                 that.buttons.center = true;
-            } else {
+            }
+            else {
                 that.buttons.center = false;
             }
-        }
-        this.brick.addEventListener("mousedown", function(e) {
+        };
+        this.brick.addEventListener('mousedown', function (e) {
             mouseDown(e);
         });
-        this.brick.addEventListener("touchstart", function(e) {
+        this.brick.addEventListener('touchstart', function (e) {
             mouseDown(e);
         });
-        this.brick.addEventListener("mouseup", function(e) {
+        this.brick.addEventListener('mouseup', function (e) {
             that.buttons.center = false;
         });
-        this.brick.addEventListener("touchend", function(e) {
+        this.brick.addEventListener('touchend', function (e) {
             that.buttons.center = false;
         });
         this.display = {
-            leds: [[0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0]],
+            leds: [
+                [0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0],
+            ],
             x: 15,
             y: 50,
             r: 5,
@@ -135,21 +150,21 @@ define(["simulation.simulation", "interpreter.constants", "simulation.robot.ev3"
             dx: 30,
             dy: 30,
             color: [161, 223, 250],
-            draw: function(ctx) {
+            draw: function (ctx) {
                 ctx.beginPath();
-                ctx.fillStyle = "#F1F1F1";
+                ctx.fillStyle = '#F1F1F1';
                 ctx.clearRect(0, 0, this.leds.length * this.dx, this.leds[0].length * this.dy + 30);
                 ctx.rect(0, 30, this.leds.length * this.dx, this.leds[0].length * this.dy + 30);
                 ctx.fill();
                 ctx.closePath();
                 ctx.beginPath();
-                ctx.fillStyle = "grey";;
+                ctx.fillStyle = 'grey';
                 ctx.rect(0, 0, this.leds.length * this.dx, 30);
                 ctx.fill();
                 ctx.closePath();
                 ctx.beginPath();
                 ctx.arc(15, 15, 10, 0, 2 * Math.PI, false);
-                ctx.fillStyle = "black";
+                ctx.fillStyle = 'black';
                 ctx.fill();
                 ctx.beginPath();
                 for (var i = 0; i < this.leds.length; i++) {
@@ -158,10 +173,9 @@ define(["simulation.simulation", "interpreter.constants", "simulation.robot.ev3"
                         if (thisLED > 0) {
                             ctx.save();
                             ctx.beginPath();
-                            var rad = ctx.createRadialGradient((this.x + i * this.dx) * 2, this.y + j * this.dy, 1.5 * this.r, (this.x + i * this.dx) * 2, this.y
-                                + j * this.dy, 3 * this.r);
-                            rad.addColorStop(0, "rgba(" + this.color + ",1)");
-                            rad.addColorStop(1, "rgba(" + this.color + ",0)");
+                            var rad = ctx.createRadialGradient((this.x + i * this.dx) * 2, this.y + j * this.dy, 1.5 * this.r, (this.x + i * this.dx) * 2, this.y + j * this.dy, 3 * this.r);
+                            rad.addColorStop(0, 'rgba(' + this.color + ',1)');
+                            rad.addColorStop(1, 'rgba(' + this.color + ',0)');
                             ctx.fillStyle = rad;
                             ctx.scale(0.5, 1);
                             ctx.beginPath();
@@ -173,91 +187,86 @@ define(["simulation.simulation", "interpreter.constants", "simulation.robot.ev3"
                     }
                 }
             },
-            finished: false
+            finished: false,
         };
-
         for (var c in configuration) {
             switch (configuration[c]) {
-                case ("INFRARED"):
+                case 'INFRARED':
                     this.infraredSensors[c] = tempInfrared;
                     break;
-                case ("ULTRASONIC"):
+                case 'ULTRASONIC':
                     this.ultraSensor[c] = tempUltra;
                     break;
             }
         }
-
         this.leds = {};
         //right led
         this.leds[1] = {
             x: -8,
             y: -18,
-            color: "LIGHTGREY",
-            blinkColor: "LIGHTGREY",
-            mode: "",
-            timer: 0
+            color: 'LIGHTGREY',
+            blinkColor: 'LIGHTGREY',
+            mode: '',
+            timer: 0,
         };
         //left led
         this.leds[2] = {
             x: 8,
             y: -18,
-            color: "LIGHTGREY",
-            blinkColor: "LIGHTGREY",
-            mode: "",
-            timer: 0
+            color: 'LIGHTGREY',
+            blinkColor: 'LIGHTGREY',
+            mode: '',
+            timer: 0,
         };
         this.wheelBack = {
             x: -4,
             y: -27,
             w: 8,
             h: 6,
-            color: "#000000"
+            color: '#000000',
         };
         this.frontLeft = {
             x: 12,
             y: -25,
             rx: 0,
             ry: 0,
-            bumped: false
+            bumped: false,
         };
         this.frontRight = {
             x: -12,
             y: -25,
             rx: 0,
             ry: 0,
-            bumped: false
+            bumped: false,
         };
         this.backLeft = {
             x: 18,
             y: 12,
             rx: 0,
             ry: 0,
-            bumped: false
+            bumped: false,
         };
         this.backRight = {
             x: -18,
             y: 12,
             rx: 0,
             ry: 0,
-            bumped: false
+            bumped: false,
         };
         this.backMiddle = {
             x: 0,
             y: 12,
             rx: 0,
-            ry: 0
+            ry: 0,
         };
     }
-
-    Mbot.prototype = Object.create(Ev3.prototype);
+    Mbot.prototype = Object.create(simulation_robot_ev3_1.default.prototype);
     Mbot.prototype.constructor = Mbot;
-
-    Mbot.prototype.reset = function() {
+    Mbot.prototype.reset = function () {
         this.encoder.left = 0;
         this.encoder.right = 0;
         this.left = 0;
         this.right = 0;
-
         for (var key in this.timer) {
             this.timer[key] = 0;
         }
@@ -266,46 +275,63 @@ define(["simulation.simulation", "interpreter.constants", "simulation.robot.ev3"
         this.tone.duration = 0;
         this.tone.frequency = 0;
         this.webAudio.volume = 0.5;
-
         if (this.leds) {
             for (var port in this.leds) {
-                this.leds[port].color = "LIGHTGRAY";
-                this.leds[port].mode = C.OFF;
+                this.leds[port].color = 'LIGHTGRAY';
+                this.leds[port].mode = interpreter_constants_1.default.OFF;
                 this.leds[port].blink = 0;
             }
         }
         clearTimeout(this.display.timeout);
-        this.display.leds = [[0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0]];
+        this.display.leds = [
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+        ];
     };
-
-    Mbot.prototype.update = function() {
-        var motors = this.robotBehaviour.getActionState("motors", true);
+    Mbot.prototype.update = function () {
+        var motors = this.robotBehaviour.getActionState('motors', true);
         if (motors) {
             var left = motors.c;
             if (left !== undefined) {
                 if (left > 100) {
                     left = 100;
-                } else if (left < -100) {
+                }
+                else if (left < -100) {
                     left = -100;
                 }
-                this.left = left * C.MAXPOWER;
+                this.left = left * interpreter_constants_1.default.MAXPOWER;
             }
             var right = motors.b;
             if (right !== undefined) {
                 if (right > 100) {
                     right = 100;
-                } else if (right < -100) {
+                }
+                else if (right < -100) {
                     right = -100;
                 }
-                this.right = right * C.MAXPOWER;
+                this.right = right * interpreter_constants_1.default.MAXPOWER;
             }
         }
         var tempRight = this.right;
         var tempLeft = this.left;
         this.pose.theta = (this.pose.theta + 2 * Math.PI) % (2 * Math.PI);
-        this.encoder.left += this.left * SIM.getDt();
-        this.encoder.right += this.right * SIM.getDt();
-        var encoder = this.robotBehaviour.getActionState("encoder", true);
+        this.encoder.left += this.left * simulation_simulation_1.default.getDt();
+        this.encoder.right += this.right * simulation_simulation_1.default.getDt();
+        var encoder = this.robotBehaviour.getActionState('encoder', true);
         if (encoder) {
             if (encoder.leftReset) {
                 this.encoder.left = 0;
@@ -327,32 +353,36 @@ define(["simulation.simulation", "interpreter.constants", "simulation.robot.ev3"
             tempRight *= -1;
         }
         if (tempRight == tempLeft) {
-            var moveXY = tempRight * SIM.getDt();
+            var moveXY = tempRight * simulation_simulation_1.default.getDt();
             var mX = Math.cos(this.pose.theta) * moveXY;
             var mY = Math.sqrt(Math.pow(moveXY, 2) - Math.pow(mX, 2));
             this.pose.x += mX;
             if (moveXY >= 0) {
                 if (this.pose.theta < Math.PI) {
                     this.pose.y += mY;
-                } else {
+                }
+                else {
                     this.pose.y -= mY;
                 }
-            } else {
+            }
+            else {
                 if (this.pose.theta > Math.PI) {
                     this.pose.y += mY;
-                } else {
+                }
+                else {
                     this.pose.y -= mY;
                 }
             }
             this.pose.thetaDiff = 0;
-        } else {
-            var R = this.trackwidth / 2 * ((tempLeft + tempRight) / (tempLeft - tempRight));
+        }
+        else {
+            var R = (this.trackwidth / 2) * ((tempLeft + tempRight) / (tempLeft - tempRight));
             var rot = (tempLeft - tempRight) / this.trackwidth;
-            var iccX = this.pose.x - (R * Math.sin(this.pose.theta));
-            var iccY = this.pose.y + (R * Math.cos(this.pose.theta));
-            this.pose.x = (Math.cos(rot * SIM.getDt()) * (this.pose.x - iccX) - Math.sin(rot * SIM.getDt()) * (this.pose.y - iccY)) + iccX;
-            this.pose.y = (Math.sin(rot * SIM.getDt()) * (this.pose.x - iccX) + Math.cos(rot * SIM.getDt()) * (this.pose.y - iccY)) + iccY;
-            this.pose.thetaDiff = rot * SIM.getDt();
+            var iccX = this.pose.x - R * Math.sin(this.pose.theta);
+            var iccY = this.pose.y + R * Math.cos(this.pose.theta);
+            this.pose.x = Math.cos(rot * simulation_simulation_1.default.getDt()) * (this.pose.x - iccX) - Math.sin(rot * simulation_simulation_1.default.getDt()) * (this.pose.y - iccY) + iccX;
+            this.pose.y = Math.sin(rot * simulation_simulation_1.default.getDt()) * (this.pose.x - iccX) + Math.cos(rot * simulation_simulation_1.default.getDt()) * (this.pose.y - iccY) + iccY;
+            this.pose.thetaDiff = rot * simulation_simulation_1.default.getDt();
             this.pose.theta = this.pose.theta + this.pose.thetaDiff;
         }
         var sin = Math.sin(this.pose.theta);
@@ -362,7 +392,6 @@ define(["simulation.simulation", "interpreter.constants", "simulation.robot.ev3"
         this.backRight = this.translate(sin, cos, this.backRight);
         this.backLeft = this.translate(sin, cos, this.backLeft);
         this.backMiddle = this.translate(sin, cos, this.backMiddle);
-
         for (var s in this.ultraSensor) {
             this.ultraSensor[s] = this.translate(sin, cos, this.ultraSensor[s]);
         }
@@ -372,11 +401,9 @@ define(["simulation.simulation", "interpreter.constants", "simulation.robot.ev3"
             }
         }
         this.mouse = this.translate(sin, cos, this.mouse);
-
         //update led(s)
         if (this.leds) {
-            var leds = this.robotBehaviour.getActionState("leds", true);
-
+            var leds = this.robotBehaviour.getActionState('leds', true);
             for (var port in leds) {
                 var led = leds[port];
                 if (led) {
@@ -387,19 +414,19 @@ define(["simulation.simulation", "interpreter.constants", "simulation.robot.ev3"
                         this.leds[port].blinkColor = color.toUpperCase();
                     }
                     switch (mode) {
-                        case C.OFF:
+                        case interpreter_constants_1.default.OFF:
                             this.leds[port].timer = 0;
                             this.leds[port].blink = 0;
-                            this.leds[port].color = "LIGHTGRAY";
+                            this.leds[port].color = 'LIGHTGRAY';
                             break;
-                        case C.ON:
+                        case interpreter_constants_1.default.ON:
                             this.leds[port].timer = 0;
                             this.leds[port].blink = 0;
                             break;
-                        case C.FLASH:
+                        case interpreter_constants_1.default.FLASH:
                             this.leds[port].blink = 2;
                             break;
-                        case C.DOUBLE_FLASH:
+                        case interpreter_constants_1.default.DOUBLE_FLASH:
                             this.leds[port].blink = 4;
                             break;
                     }
@@ -407,40 +434,39 @@ define(["simulation.simulation", "interpreter.constants", "simulation.robot.ev3"
                 if (this.leds[port].blink > 0) {
                     if (this.leds[port].timer > 0.5 && this.leds[port].blink == 2) {
                         this.leds[port].color = this.leds[port].blinkColor;
-                    } else if (this.leds[port].blink == 4 && (this.leds[port].timer > 0.5 && this.leds[port].timer < 0.67 || this.leds[port].timer > 0.83)) {
-                        this.leds[port].color = this.leds[port].blinkColor;
-                    } else {
-                        this.leds[port].color = "LIGHTGRAY";
                     }
-                    this.leds[port].timer += SIM.getDt();
+                    else if (this.leds[port].blink == 4 && ((this.leds[port].timer > 0.5 && this.leds[port].timer < 0.67) || this.leds[port].timer > 0.83)) {
+                        this.leds[port].color = this.leds[port].blinkColor;
+                    }
+                    else {
+                        this.leds[port].color = 'LIGHTGRAY';
+                    }
+                    this.leds[port].timer += simulation_simulation_1.default.getDt();
                     if (this.leds[port].timer > 1.0) {
                         this.leds[port].timer = 0;
                     }
                 }
-                $("#led" + this.id).attr("fill", 'url("#" + this.leds[port].color + this.id + "")');
+                $('#led' + this.id).attr('fill', 'url("#" + this.leds[port].color + this.id + "")');
             }
         }
         // update tone
-        var volume = this.robotBehaviour.getActionState("volume", true);
+        var volume = this.robotBehaviour.getActionState('volume', true);
         if ((volume || volume === 0) && this.webAudio.context) {
             this.webAudio.volume = volume / 100.0;
         }
-        var tone = this.robotBehaviour.getActionState("tone", true);
+        var tone = this.robotBehaviour.getActionState('tone', true);
         if (tone && this.webAudio.context) {
             var cT = this.webAudio.context.currentTime;
             if (tone.frequency && tone.duration > 0) {
                 var oscillator = this.webAudio.context.createOscillator();
-                oscillator.type = "square";
+                oscillator.type = 'square';
                 oscillator.connect(this.webAudio.context.destination);
                 var that = this;
-
                 function oscillatorFinish() {
                     that.tone.finished = true;
                     oscillator.disconnect(that.webAudio.context.destination);
-                    delete oscillator;
                 }
-
-                oscillator.onended = function(e) {
+                oscillator.onended = function (e) {
                     oscillatorFinish();
                 };
                 oscillator.frequency.value = tone.frequency;
@@ -452,71 +478,88 @@ define(["simulation.simulation", "interpreter.constants", "simulation.robot.ev3"
             }
         }
         // update timer
-        var timer = this.robotBehaviour.getActionState("timer", false);
+        var timer = this.robotBehaviour.getActionState('timer', false);
         if (timer) {
             for (var key in timer) {
-                if (timer[key] == "reset") {
+                if (timer[key] == 'reset') {
                     this.timer[key] = 0;
                 }
             }
         }
-        var display = this.robotBehaviour.getActionState("display", true);
+        var display = this.robotBehaviour.getActionState('display', true);
         if (display) {
             if (display.text) {
                 var that = this;
                 var textArray = generateText(display.text);
-
                 function f(textArray, that) {
                     var newArray = textArray;
                     that.display.leds = newArray;
                     if (textArray.length > 21) {
                         textArray.shift();
                         that.display.timeout = setTimeout(f, 150, textArray, that);
-                    } else {
+                    }
+                    else {
                         that.display.finished = true;
                     }
-
                 }
                 f(textArray, that);
             }
             if (display.picture) {
-                if (display.mode == C.ANIMATION) {
+                if (display.mode == interpreter_constants_1.default.ANIMATION) {
                     var animation = display.picture;
                     var that = this;
-
                     function f(animation, index, that) {
                         if (animation && animation.length > index) {
                             that.display.leds = animation[index];
                             that.display.timeout = setTimeout(f, 150, animation, index + 1, that);
-                        } else {
+                        }
+                        else {
                             that.display.finished = true;
                         }
                     }
                     f(animation, 0, that);
-                } else {
+                }
+                else {
                     this.display.leds = display.picture;
                 }
             }
             if (display.clear) {
-                this.display.leds = [[0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0]];
+                this.display.leds = [
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                ];
             }
             if (display.pixel) {
                 var pixel = display.pixel;
-
                 if (0 <= pixel.y == pixel.y < this.display.leds.length && 0 <= pixel.x == pixel.x < this.display.leds[0].length) {
-                    this.display.leds[pixel.y][pixel.x] = pixel.brightness * C.BRIGHTNESS_MULTIPLIER;
-                } else {
+                    this.display.leds[pixel.y][pixel.x] = pixel.brightness * interpreter_constants_1.default.BRIGHTNESS_MULTIPLIER;
+                }
+                else {
                     if (0 <= pixel.y != pixel.y < this.display.leds.length) {
-                        console.warn("actions.display.pixel.y out of range: " + pixel.y);
+                        console.warn('actions.display.pixel.y out of range: ' + pixel.y);
                     }
                     if (0 <= pixel.x != pixel.x < this.display.leds[0].length) {
-                        console.warn("actions.display.pixel.x out of range: " + pixel.x);
+                        console.warn('actions.display.pixel.x out of range: ' + pixel.x);
                     }
                 }
             }
         }
-    }
-    var generateText = function(text) {
+    };
+    var generateText = function (text) {
         var string = [];
         string.push([0, 0, 0, 0, 0, 0, 0]);
         string.push([0, 0, 0, 0, 0, 0, 0]);
@@ -524,7 +567,6 @@ define(["simulation.simulation", "interpreter.constants", "simulation.robot.ev3"
             var letter = letters[text[i]];
             if (!letter)
                 letter = letters.blank;
-
             var newLetter = Array.apply(null, Array(letter[0] * 5)).map(Number.prototype.valueOf, 0);
             for (var j = 1; j < letter.length; j++) {
                 newLetter[letter[j] - 1] = 255;
@@ -580,7 +622,7 @@ define(["simulation.simulation", "interpreter.constants", "simulation.robot.ev3"
         g: [4, 2, 6, 8, 10, 11, 13, 15, 16, 17, 18, 19],
         h: [5, 1, 2, 3, 4, 5, 8, 13, 19, 20],
         i: [1, 1, 3, 4, 5],
-        j: [3, 5, 10, 11, 13, 14,],
+        j: [3, 5, 10, 11, 13, 14],
         k: [4, 1, 2, 3, 4, 5, 8, 12, 14, 20],
         l: [3, 1, 2, 3, 4, 10, 15],
         m: [5, 2, 3, 4, 5, 7, 13, 17, 22, 23, 24, 25],
@@ -600,37 +642,37 @@ define(["simulation.simulation", "interpreter.constants", "simulation.robot.ev3"
         y: [5, 2, 5, 8, 10, 14, 18, 22],
         z: [4, 2, 5, 7, 9, 10, 12, 13, 15, 17, 20],
         blank: [5],
-        "!": [1, 1, 2, 3, 5],
-        "?": [5, 2, 6, 11, 13, 15, 16, 18, 22],
-        ",": [2, 5, 9],
-        ".": [1, 4],
-        "[": [3, 1, 2, 3, 4, 5, 6, 10, 11, 15],
-        "]": [3, 1, 5, 6, 10, 11, 12, 13, 14, 15],
-        "{": [3, 3, 6, 7, 8, 9, 10, 11, 15],
-        "}": [3, 1, 5, 6, 7, 8, 9, 10, 13],
-        "(": [2, 2, 3, 4, 6, 10],
-        ")": [2, 1, 5, 7, 8, 9],
-        "<": [3, 3, 7, 9, 11, 15,],
-        ">": [3, 1, 5, 7, 9, 13],
-        "/": [5, 5, 9, 13, 17, 21],
-        "\\": [5, 1, 7, 13, 19, 25],
-        ":": [1, 2, 4],
-        ";": [2, 5, 7, 9],
+        '!': [1, 1, 2, 3, 5],
+        '?': [5, 2, 6, 11, 13, 15, 16, 18, 22],
+        ',': [2, 5, 9],
+        '.': [1, 4],
+        '[': [3, 1, 2, 3, 4, 5, 6, 10, 11, 15],
+        ']': [3, 1, 5, 6, 10, 11, 12, 13, 14, 15],
+        '{': [3, 3, 6, 7, 8, 9, 10, 11, 15],
+        '}': [3, 1, 5, 6, 7, 8, 9, 10, 13],
+        '(': [2, 2, 3, 4, 6, 10],
+        ')': [2, 1, 5, 7, 8, 9],
+        '<': [3, 3, 7, 9, 11, 15],
+        '>': [3, 1, 5, 7, 9, 13],
+        '/': [5, 5, 9, 13, 17, 21],
+        '\\': [5, 1, 7, 13, 19, 25],
+        ':': [1, 2, 4],
+        ';': [2, 5, 7, 9],
         '"': [3, 1, 2, 11, 12],
         "'": [1, 1, 2],
-        "@": [5, 2, 3, 4, 6, 10, 11, 13, 15, 16, 19, 22, 23, 24],
-        "#": [5, 2, 4, 6, 7, 8, 9, 10, 12, 14, 16, 17, 18, 19, 20, 22, 24],
-        "%": [5, 1, 2, 5, 6, 9, 13, 17, 20, 21, 24, 25],
-        "^": [3, 2, 6, 12],
-        "*": [3, 2, 4, 8, 12, 14],
-        "-": [3, 3, 8, 13],
-        "+": [3, 3, 7, 8, 9, 13],
-        "_": [5, 5, 10, 15, 20, 25],
-        "=": [3, 2, 4, 7, 9, 12, 14],
-        "|": [1, 1, 2, 3, 4, 5],
-        "~": [4, 3, 8, 14, 19],
-        "`": [2, 1, 7],
-        "´": [2, 2, 6],
+        '@': [5, 2, 3, 4, 6, 10, 11, 13, 15, 16, 19, 22, 23, 24],
+        '#': [5, 2, 4, 6, 7, 8, 9, 10, 12, 14, 16, 17, 18, 19, 20, 22, 24],
+        '%': [5, 1, 2, 5, 6, 9, 13, 17, 20, 21, 24, 25],
+        '^': [3, 2, 6, 12],
+        '*': [3, 2, 4, 8, 12, 14],
+        '-': [3, 3, 8, 13],
+        '+': [3, 3, 7, 8, 9, 13],
+        _: [5, 5, 10, 15, 20, 25],
+        '=': [3, 2, 4, 7, 9, 12, 14],
+        '|': [1, 1, 2, 3, 4, 5],
+        '~': [4, 3, 8, 14, 19],
+        '`': [2, 1, 7],
+        '´': [2, 2, 6],
         0: [4, 2, 3, 4, 6, 10, 11, 15, 17, 18, 19],
         1: [3, 2, 5, 6, 7, 8, 9, 10, 15],
         2: [4, 1, 4, 5, 6, 8, 10, 11, 13, 15, 17, 20],
@@ -640,7 +682,7 @@ define(["simulation.simulation", "interpreter.constants", "simulation.robot.ev3"
         6: [5, 4, 8, 10, 12, 13, 15, 16, 18, 20, 24],
         7: [5, 1, 5, 6, 9, 11, 13, 16, 17, 21],
         8: [5, 2, 4, 6, 8, 10, 11, 13, 15, 16, 18, 20, 22, 24],
-        9: [5, 2, 6, 8, 10, 11, 13, 14, 16, 18, 22]
+        9: [5, 2, 6, 8, 10, 11, 13, 14, 16, 18, 22],
     };
-    return Mbot;
+    exports.default = Mbot;
 });

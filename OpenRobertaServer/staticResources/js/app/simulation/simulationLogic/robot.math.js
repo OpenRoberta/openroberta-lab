@@ -1,22 +1,20 @@
-define([ 'simulation.robot.ev3' ], function(Ev3) {
-
+define(["require", "exports", "simulation.robot.ev3"], function (require, exports, simulation_robot_ev3_1) {
+    Object.defineProperty(exports, "__esModule", { value: true });
     function MathRobot() {
-        Ev3.call(this, {
-            x : 400,
-            y : 250,
-            theta : 0,
-            xOld : 400,
-            yOld : 250,
-            transX : -400,
-            transY : -250
+        simulation_robot_ev3_1.default.call(this, {
+            x: 400,
+            y: 250,
+            theta: 0,
+            xOld: 400,
+            yOld: 250,
+            transX: -400,
+            transY: -250,
         });
         this.canDraw = true;
-        this.drawColor = "#ffffff";
+        this.drawColor = '#ffffff';
         this.drawWidth = 1;
     }
-
-    MathRobot.prototype = Object.create(Ev3.prototype);
+    MathRobot.prototype = Object.create(simulation_robot_ev3_1.default.prototype);
     MathRobot.prototype.constructor = MathRobot;
-
-    return MathRobot;
+    exports.default = MathRobot;
 });

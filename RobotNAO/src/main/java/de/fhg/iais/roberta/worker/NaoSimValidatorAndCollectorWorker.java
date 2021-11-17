@@ -7,8 +7,7 @@ import com.google.common.collect.ClassToInstanceMap;
 
 import de.fhg.iais.roberta.bean.IProjectBean;
 import de.fhg.iais.roberta.components.Project;
-import de.fhg.iais.roberta.util.HelperMethodGenerator;
-import de.fhg.iais.roberta.visitor.collect.NaoSimMethods;
+import de.fhg.iais.roberta.visitor.NaoSimMethods;
 import de.fhg.iais.roberta.visitor.validate.CommonNepoValidatorAndCollectorVisitor;
 import de.fhg.iais.roberta.visitor.validate.NaoSimValidatorAndCollectorVisitor;
 

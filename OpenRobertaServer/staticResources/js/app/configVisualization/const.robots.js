@@ -1,10 +1,9 @@
 define(["require", "exports"], function (require, exports) {
-    "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.ROBOTS = void 0;
     exports.ROBOTS = {
-        "arduino_mega": {
-            "ports": [
+        arduino_mega: {
+            ports: [
                 { name: 'LED_BUILTIN', position: { x: 161.2, y: 9.5 } },
                 { name: 'SCL', position: { x: 114.1, y: 9.5 } },
                 { name: 'SDA', position: { x: 125.9, y: 9.5 } },
@@ -92,10 +91,12 @@ define(["require", "exports"], function (require, exports) {
                 { name: 'A13', position: { x: 427.1, y: 233 } },
                 { name: 'A14', position: { x: 438.9, y: 233 } },
                 { name: 'A15', position: { x: 450.6, y: 233 } },
-            ], "width": "500px", "height": "247px"
+            ],
+            width: '500px',
+            height: '247px',
         },
-        "arduino_nano": {
-            "ports": [
+        arduino_nano: {
+            ports: [
                 { name: 'LED_BUILTIN', position: { x: 28.9, y: 91.4 } },
                 { name: 'RESET', position: { x: 200.3, y: 5.6 } },
                 { name: 'GND', position: { x: 186.1, y: 5.6 } },
@@ -106,7 +107,7 @@ define(["require", "exports"], function (require, exports) {
                 { name: '4', position: { x: 143.2, y: 5.6 } },
                 { name: '5', position: { x: 128.9, y: 5.6 } },
                 { name: '6', position: { x: 114.6, y: 5.6 } },
-                { name: '7', position: { x: 100.3, y: 5.6 }, },
+                { name: '7', position: { x: 100.3, y: 5.6 } },
                 { name: '8', position: { x: 86.1, y: 5.6 } },
                 { name: '9', position: { x: 71.8, y: 5.6 } },
                 { name: '10', position: { x: 57.5, y: 5.6 } },
@@ -126,26 +127,30 @@ define(["require", "exports"], function (require, exports) {
                 { name: 'A0', position: { x: 71.8, y: 91.4 } },
                 { name: 'REF', position: { x: 57.5, y: 91.4 } },
                 { name: '3V3', position: { x: 43.2, y: 91.4 } },
-                { name: '13', position: { x: 28.9, y: 91.4 } }
-            ], "width": "253px", "height": "100px"
+                { name: '13', position: { x: 28.9, y: 91.4 } },
+            ],
+            width: '253px',
+            height: '100px',
         },
-        "nano33ble": {
-            "ports": [
+        nano33ble: {
+            ports: [
                 { name: 'LED_BUILTIN', position: { x: 28.9, y: 91.4 } },
+                { name: 'RESET', position: { x: 200.3, y: 5.6 } },
+                { name: 'GND', position: { x: 186.1, y: 5.6 } },
                 { name: 'lsm9ds1', position: { x: 85.0, y: 40.0 } },
                 { name: 'apds9960', position: { x: 92.0, y: 47.0 } },
                 { name: 'lps22hb', position: { x: 99.0, y: 54.0 } },
                 { name: 'hts221', position: { x: 106.0, y: 61.0 } },
                 { name: 'TX1', position: { x: 228.9, y: 5.6 } },
                 { name: 'RX0', position: { x: 214.6, y: 5.6 } },
-                { name: 'RESET', position: { x: 200.3, y: 5.6 } },
-                { name: 'GND', position: { x: 186.1, y: 5.6 } },
+                { name: '0', position: { x: 214.6, y: 5.6 } },
+                { name: '1', position: { x: 228.9, y: 5.6 } },
                 { name: '2', position: { x: 171.8, y: 5.6 } },
                 { name: '3', position: { x: 157.5, y: 5.6 } },
                 { name: '4', position: { x: 143.2, y: 5.6 } },
                 { name: '5', position: { x: 128.9, y: 5.6 } },
                 { name: '6', position: { x: 114.6, y: 5.6 } },
-                { name: '7', position: { x: 100.3, y: 5.6 }, },
+                { name: '7', position: { x: 100.3, y: 5.6 } },
                 { name: '8', position: { x: 86.1, y: 5.6 } },
                 { name: '9', position: { x: 71.8, y: 5.6 } },
                 { name: '10', position: { x: 57.5, y: 5.6 } },
@@ -165,11 +170,13 @@ define(["require", "exports"], function (require, exports) {
                 { name: 'A0', position: { x: 71.8, y: 91.4 } },
                 { name: 'REF', position: { x: 57.5, y: 91.4 } },
                 { name: '3V3', position: { x: 43.2, y: 91.4 } },
-                { name: '13', position: { x: 28.9, y: 91.4 } }
-            ], "width": "253px", "height": "100px"
+                { name: '13', position: { x: 28.9, y: 91.4 } },
+            ],
+            width: '253px',
+            height: '100px',
         },
-        "arduino_uno": {
-            "ports": [
+        arduino_uno: {
+            ports: [
                 { name: 'LED_BUILTIN', position: { x: 131.5, y: 7.8 } },
                 { name: 'SCL', position: { x: 93, y: 7.8 } },
                 { name: 'SDA', position: { x: 102.6, y: 7.8 } },
@@ -203,10 +210,12 @@ define(["require", "exports"], function (require, exports) {
                 { name: 'A3', position: { x: 243.1, y: 190.5 } },
                 { name: 'A4', position: { x: 252.8, y: 190.5 } },
                 { name: 'A5', position: { x: 262.4, y: 190.5 } },
-            ], "width": "283px", "height": "202px"
+            ],
+            width: '283px',
+            height: '202px',
         },
-        "arduino_unowifirev2": {
-            "ports": [
+        arduino_unowifirev2: {
+            ports: [
                 { name: 'SCL', position: { x: 93, y: 7.8 } },
                 { name: 'SDA', position: { x: 102.6, y: 7.8 } },
                 { name: 'AREF', position: { x: 112.2, y: 7.8 } },
@@ -239,10 +248,12 @@ define(["require", "exports"], function (require, exports) {
                 { name: 'A3', position: { x: 243.1, y: 190.5 } },
                 { name: 'A4', position: { x: 252.8, y: 190.5 } },
                 { name: 'A5', position: { x: 262.4, y: 190.5 } },
-            ], "width": "283px", "height": "202px"
+            ],
+            width: '283px',
+            height: '202px',
         },
-        "calliope": {
-            "ports": [
+        calliope: {
+            ports: [
                 // Exceptions for weird XML names
                 { name: 'motor A', position: { x: 153.8, y: 210 } },
                 { name: 'motor B', position: { x: 145, y: 209 } },
@@ -284,10 +295,12 @@ define(["require", "exports"], function (require, exports) {
                 { name: 'compass', position: { x: 91.5, y: 130.3 } },
                 { name: 'gyro', position: { x: 97, y: 130.3 } },
                 { name: 'sound', position: { x: 214.0, y: 90.2 } },
-            ], "width": "322px", "height": "283px"
+            ],
+            width: '322px',
+            height: '283px',
         },
-        "microbit": {
-            "ports": [
+        microbit: {
+            ports: [
                 // Adressable pins
                 { name: '0', position: { x: 15, y: 167 } },
                 { name: '1', position: { x: 57.3, y: 167 } },
@@ -318,10 +331,12 @@ define(["require", "exports"], function (require, exports) {
                 { name: 'temperature', position: { x: 262, y: 48.2 } },
                 { name: 'accelerometer', position: { x: 238.2, y: 99.5 } },
                 { name: 'compass', position: { x: 238.2, y: 104.7 } },
-            ], "width": "435px", "height": "172px"
+            ],
+            width: '435px',
+            height: '172px',
         },
-        "sensebox": {
-            "ports": [
+        sensebox: {
+            ports: [
                 // Digital Pins
                 { name: '1', position: { x: 151, y: 104 } },
                 { name: '2', position: { x: 160, y: 104 } },
@@ -353,7 +368,9 @@ define(["require", "exports"], function (require, exports) {
                 //build in
                 { name: 'accelerometer', position: { x: 187, y: 207 } },
                 { name: 'sensebox', position: { x: 187, y: 207 } },
-            ], "width": "398px", "height": "303px"
-        }
+            ],
+            width: '398px',
+            height: '303px',
+        },
     };
 });

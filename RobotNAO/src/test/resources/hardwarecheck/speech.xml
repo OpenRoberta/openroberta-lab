@@ -1,0 +1,20 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="nao" xmlversion="3.1" description="" tags="">
+    <instance x="371" y="50">
+        <block type="robControls_start" id="*^]~zs~;T4LR2_kI+E5Y" intask="true" deletable="false">
+            <mutation declare="false"></mutation>
+            <field name="DEBUG">FALSE</field>
+        </block>
+        <block type="robActions_sayText" id="8MlF5/9Yv,Td1={KS;c#" intask="true">
+            <value name="OUT">
+                <block type="naoSensors_recognizeWord" id="pR3TjoloZ-?cuE`AGn*N" intask="true">
+                    <field name="MODE"></field>
+                    <value name="WORD">
+                        <block type="text" id="ZQT4mnHD=pc8?dFYzN^(" intask="true">
+                            <field name="TEXT">Hallo</field>
+                        </block>
+                    </value>
+                </block>
+            </value>
+        </block>
+    </instance>
+</block_set>

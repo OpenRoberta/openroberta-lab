@@ -1,7 +1,6 @@
 define(["require", "exports"], function (require, exports) {
-    "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    var DEFAULT_COLORS = { "5V": "#f01414", "GND": "#333333" };
+    var DEFAULT_COLORS = { '5V': '#f01414', GND: '#333333' };
     var DARK = 50;
     var Point = /** @class */ (function () {
         function Point(x, y) {
@@ -69,11 +68,11 @@ define(["require", "exports"], function (require, exports) {
             this.addPoint_(this.head, { x: x, y: y });
             this.addPoint_(this.head, {
                 x: xExtra,
-                y: y
+                y: y,
             });
             this.addPoint_(this.head, {
                 x: xExtra,
-                y: originY
+                y: originY,
             });
         };
         Object.defineProperty(WireDrawer.prototype, "path", {
@@ -97,12 +96,12 @@ define(["require", "exports"], function (require, exports) {
             var num = parseInt(color, 16);
             var r = (num >> 16) + dark;
             r = r < 0 ? 0 : r;
-            var b = ((num >> 8) & 0x00FF) + dark;
+            var b = ((num >> 8) & 0x00ff) + dark;
             b = b < 0 ? 0 : b;
-            var g = (num & 0x0000FF) + dark;
+            var g = (num & 0x0000ff) + dark;
             g = g < 0 ? 0 : g;
             var darkColor = g | (b << 8) | (r << 16);
-            return ("#" + darkColor.toString(16));
+            return '#' + darkColor.toString(16);
         };
         WireDrawer.getColor = function (block, name) {
             return DEFAULT_COLORS[name] ? DEFAULT_COLORS[name] : WireDrawer.darken(block.colour_);

@@ -74,8 +74,8 @@ import de.fhg.iais.roberta.syntax.sensor.nao.FsrSensor;
 import de.fhg.iais.roberta.syntax.sensor.nao.NaoMarkInformation;
 import de.fhg.iais.roberta.syntax.sensor.nao.RecognizeWord;
 import de.fhg.iais.roberta.util.dbc.DbcException;
-import de.fhg.iais.roberta.visitor.collect.NaoSimMethods;
-import de.fhg.iais.roberta.visitor.hardware.INaoVisitor;
+import de.fhg.iais.roberta.visitor.NaoSimMethods;
+import de.fhg.iais.roberta.visitor.INaoVisitor;
 import de.fhg.iais.roberta.visitor.lang.codegen.prog.AbstractPythonVisitor;
 
 public final class NaoPythonSimVisitor extends AbstractPythonVisitor implements INaoVisitor<Void> {

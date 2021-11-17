@@ -12,7 +12,6 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 define(["require", "exports", "./interpreter.aRobotBehaviour", "./interpreter.constants", "./interpreter.util"], function (require, exports, interpreter_aRobotBehaviour_1, C, U) {
-    "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.RobotWeDoBehaviour = void 0;
     var RobotWeDoBehaviour = /** @class */ (function (_super) {
@@ -25,7 +24,7 @@ define(["require", "exports", "./interpreter.aRobotBehaviour", "./interpreter.co
                 DOWN: '9.0',
                 BACK: '5.0',
                 FRONT: '7.0',
-                NO: '0.0'
+                NO: '0.0',
             };
             _this.btInterfaceFct = btInterfaceFct;
             _this.toDisplayFct = toDisplayFct;
@@ -36,24 +35,24 @@ define(["require", "exports", "./interpreter.aRobotBehaviour", "./interpreter.co
         }
         RobotWeDoBehaviour.prototype.update = function (data) {
             U.info('update type:' + data.type + ' state:' + data.state + ' sensor:' + data.sensor + ' actor:' + data.actuator);
-            if (data.target !== "wedo") {
+            if (data.target !== 'wedo') {
                 return;
             }
             switch (data.type) {
-                case "connect":
-                    if (data.state == "connected") {
+                case 'connect':
+                    if (data.state == 'connected') {
                         this.wedo[data.brickid] = {};
-                        this.wedo[data.brickid]["brickname"] = data.brickname.replace(/\s/g, '').toUpperCase();
+                        this.wedo[data.brickid]['brickname'] = data.brickname.replace(/\s/g, '').toUpperCase();
                         // for some reason we do not get the inital state of the button, so here it is hardcoded
-                        this.wedo[data.brickid]["button"] = 'false';
+                        this.wedo[data.brickid]['button'] = 'false';
                     }
-                    else if (data.state == "disconnected") {
+                    else if (data.state == 'disconnected') {
                         delete this.wedo[data.brickid];
                     }
                     break;
-                case "didAddService":
+                case 'didAddService':
                     var theWedoA = this.wedo[data.brickid];
-                    if (data.state == "connected") {
+                    if (data.state == 'connected') {
                         if (data.id && data.sensor) {
                             theWedoA[data.id] = {};
                             theWedoA[data.id][this.finalName(data.sensor)] = '';
@@ -70,7 +69,7 @@ define(["require", "exports", "./interpreter.aRobotBehaviour", "./interpreter.co
                         }
                     }
                     break;
-                case "didRemoveService":
+                case 'didRemoveService':
                     if (data.id) {
                         delete this.wedo[data.brickid][data.id];
                     }
@@ -81,7 +80,7 @@ define(["require", "exports", "./interpreter.aRobotBehaviour", "./interpreter.co
                         delete this.wedo[data.brickid][this.finalName(data.actuator)];
                     }
                     break;
-                case "update":
+                case 'update':
                     var theWedoU = this.wedo[data.brickid];
                     if (data.id) {
                         if (theWedoU[data.id] === undefined) {
@@ -123,21 +122,21 @@ define(["require", "exports", "./interpreter.aRobotBehaviour", "./interpreter.co
         };
         RobotWeDoBehaviour.prototype.clearDisplay = function () {
             U.debug('clear display');
-            this.toDisplayFct({ "clear": true });
+            this.toDisplayFct({ clear: true });
         };
         RobotWeDoBehaviour.prototype.getSample = function (s, name, sensor, port, slot) {
             var robotText = 'robot: ' + name + ', port: ' + port;
             U.info(robotText + ' getsample called for ' + sensor);
             var sensorName;
             switch (sensor) {
-                case "infrared":
-                    sensorName = "motionsensor";
+                case 'infrared':
+                    sensorName = 'motionsensor';
                     break;
-                case "gyro":
-                    sensorName = "tiltsensor";
+                case 'gyro':
+                    sensorName = 'tiltsensor';
                     break;
-                case "buttons":
-                    sensorName = "button";
+                case 'buttons':
+                    sensorName = 'button';
                     break;
                 case C.TIMER:
                     s.push(this.timerGet(port));
@@ -152,22 +151,22 @@ define(["require", "exports", "./interpreter.aRobotBehaviour", "./interpreter.co
             var theWedo = this.wedo[wedoId];
             var thePort = theWedo[port];
             if (thePort === undefined) {
-                thePort = theWedo["1"] !== undefined ? theWedo["1"] : theWedo["2"];
+                thePort = theWedo['1'] !== undefined ? theWedo['1'] : theWedo['2'];
             }
-            var theSensor = thePort === undefined ? "undefined" : thePort[sensor];
-            U.info('sensor object ' + (theSensor === undefined ? "undefined" : theSensor.toString()));
+            var theSensor = thePort === undefined ? 'undefined' : thePort[sensor];
+            U.info('sensor object ' + (theSensor === undefined ? 'undefined' : theSensor.toString()));
             switch (sensor) {
-                case "tiltsensor":
-                    if (slot === "ANY") {
+                case 'tiltsensor':
+                    if (slot === 'ANY') {
                         return parseInt(theSensor) !== parseInt(this.tiltMode.NO);
                     }
                     else {
                         return parseInt(theSensor) === parseInt(this.tiltMode[slot]);
                     }
-                case "motionsensor":
+                case 'motionsensor':
                     return parseInt(theSensor);
-                case "button":
-                    return theWedo.button === "true";
+                case 'button':
+                    return theWedo.button === 'true';
             }
         };
         RobotWeDoBehaviour.prototype.finalName = function (notNormalized) {
@@ -175,8 +174,8 @@ define(["require", "exports", "./interpreter.aRobotBehaviour", "./interpreter.co
                 return notNormalized.replace(/\s/g, '').toLowerCase();
             }
             else {
-                U.info("sensor name undefined");
-                return "undefined";
+                U.info('sensor name undefined');
+                return 'undefined';
             }
         };
         RobotWeDoBehaviour.prototype.timerReset = function (port) {
@@ -197,30 +196,39 @@ define(["require", "exports", "./interpreter.aRobotBehaviour", "./interpreter.co
             var brickid = this.getBrickIdByName(name);
             var robotText = 'robot: ' + name + ', port: ' + port;
             U.debug(robotText + ' led on color ' + color);
-            var cmd = { 'target': 'wedo', 'type': 'command', 'actuator': 'light', 'brickid': brickid, 'color': color };
+            var cmd = { target: 'wedo', type: 'command', actuator: 'light', brickid: brickid, color: color };
             this.btInterfaceFct(cmd);
         };
         RobotWeDoBehaviour.prototype.statusLightOffAction = function (name, port) {
             var brickid = this.getBrickIdByName(name);
             var robotText = 'robot: ' + name + ', port: ' + port;
             U.debug(robotText + ' led off');
-            var cmd = { 'target': 'wedo', 'type': 'command', 'actuator': 'light', 'brickid': brickid, 'color': 0 };
+            var cmd = { target: 'wedo', type: 'command', actuator: 'light', brickid: brickid, color: 0 };
             this.btInterfaceFct(cmd);
         };
         RobotWeDoBehaviour.prototype.toneAction = function (name, frequency, duration) {
             var brickid = this.getBrickIdByName(name); // TODO: better style
             var robotText = 'robot: ' + name;
             U.debug(robotText + ' piezo: ' + ', frequency: ' + frequency + ', duration: ' + duration);
-            var cmd = { 'target': 'wedo', 'type': 'command', 'actuator': 'piezo', 'brickid': brickid, 'frequency': Math.floor(frequency), 'duration': Math.floor(duration) };
+            var cmd = { target: 'wedo', type: 'command', actuator: 'piezo', brickid: brickid, frequency: Math.floor(frequency), duration: Math.floor(duration) };
             this.btInterfaceFct(cmd);
             return duration;
         };
         RobotWeDoBehaviour.prototype.motorOnAction = function (name, port, duration, speed) {
             var brickid = this.getBrickIdByName(name); // TODO: better style
             var robotText = 'robot: ' + name + ', port: ' + port;
-            var durText = duration === undefined ? ' w.o. duration' : (' for ' + duration + ' msec');
+            var durText = duration === undefined ? ' w.o. duration' : ' for ' + duration + ' msec';
             U.debug(robotText + ' motor speed ' + speed + durText);
-            var cmd = { 'target': 'wedo', 'type': 'command', 'actuator': 'motor', 'brickid': brickid, 'action': 'on', 'id': port, 'direction': speed < 0 ? 1 : 0, 'power': Math.abs(speed) };
+            var cmd = {
+                target: 'wedo',
+                type: 'command',
+                actuator: 'motor',
+                brickid: brickid,
+                action: 'on',
+                id: port,
+                direction: speed < 0 ? 1 : 0,
+                power: Math.abs(speed),
+            };
             this.btInterfaceFct(cmd);
             return 0;
         };
@@ -228,13 +236,13 @@ define(["require", "exports", "./interpreter.aRobotBehaviour", "./interpreter.co
             var brickid = this.getBrickIdByName(name); // TODO: better style
             var robotText = 'robot: ' + name + ', port: ' + port;
             U.debug(robotText + ' motor stop');
-            var cmd = { 'target': 'wedo', 'type': 'command', 'actuator': 'motor', 'brickid': brickid, 'action': 'stop', 'id': port };
+            var cmd = { target: 'wedo', type: 'command', actuator: 'motor', brickid: brickid, action: 'stop', id: port };
             this.btInterfaceFct(cmd);
         };
         RobotWeDoBehaviour.prototype.showTextAction = function (text, _mode) {
-            var showText = "" + text;
+            var showText = '' + text;
             U.debug('***** show "' + showText + '" *****');
-            this.toDisplayFct({ "show": showText });
+            this.toDisplayFct({ show: showText });
             return 0;
         };
         RobotWeDoBehaviour.prototype.showImageAction = function (_text, _mode) {
@@ -247,8 +255,7 @@ define(["require", "exports", "./interpreter.aRobotBehaviour", "./interpreter.co
         RobotWeDoBehaviour.prototype.displaySetPixelAction = function (_x, _y, _brightness) {
             return 0;
         };
-        RobotWeDoBehaviour.prototype.writePinAction = function (_pin, _mode, _value) {
-        };
+        RobotWeDoBehaviour.prototype.writePinAction = function (_pin, _mode, _value) { };
         RobotWeDoBehaviour.prototype.close = function () {
             var ids = this.getConnectedBricks();
             for (var id in ids) {
@@ -261,68 +268,68 @@ define(["require", "exports", "./interpreter.aRobotBehaviour", "./interpreter.co
             }
         };
         RobotWeDoBehaviour.prototype.encoderReset = function (_port) {
-            throw new Error("Method not implemented.");
+            throw new Error('Method not implemented.');
         };
         RobotWeDoBehaviour.prototype.gyroReset = function (_port) {
-            throw new Error("Method not implemented.");
+            throw new Error('Method not implemented.');
         };
         RobotWeDoBehaviour.prototype.lightAction = function (_mode, _color, _port) {
-            throw new Error("Method not implemented.");
+            throw new Error('Method not implemented.');
         };
         RobotWeDoBehaviour.prototype.playFileAction = function (_file) {
-            throw new Error("Method not implemented.");
+            throw new Error('Method not implemented.');
         };
         RobotWeDoBehaviour.prototype._setVolumeAction = function (_volume) {
-            throw new Error("Method not implemented.");
+            throw new Error('Method not implemented.');
         };
         RobotWeDoBehaviour.prototype._getVolumeAction = function (_s) {
-            throw new Error("Method not implemented.");
+            throw new Error('Method not implemented.');
         };
         RobotWeDoBehaviour.prototype.setLanguage = function (_language) {
-            throw new Error("Method not implemented.");
+            throw new Error('Method not implemented.');
         };
         RobotWeDoBehaviour.prototype.sayTextAction = function (_text, _speed, _pitch) {
-            throw new Error("Method not implemented.");
+            throw new Error('Method not implemented.');
         };
         RobotWeDoBehaviour.prototype.getMotorSpeed = function (_s, _name, _port) {
-            throw new Error("Method not implemented.");
+            throw new Error('Method not implemented.');
         };
         RobotWeDoBehaviour.prototype.setMotorSpeed = function (_name, _port, _speed) {
-            throw new Error("Method not implemented.");
+            throw new Error('Method not implemented.');
         };
         RobotWeDoBehaviour.prototype.driveStop = function (_name) {
-            throw new Error("Method not implemented.");
+            throw new Error('Method not implemented.');
         };
         RobotWeDoBehaviour.prototype.driveAction = function (_name, _direction, _speed, _distance) {
-            throw new Error("Method not implemented.");
+            throw new Error('Method not implemented.');
         };
         RobotWeDoBehaviour.prototype.curveAction = function (_name, _direction, _speedL, _speedR, _distance) {
-            throw new Error("Method not implemented.");
+            throw new Error('Method not implemented.');
         };
         RobotWeDoBehaviour.prototype.turnAction = function (_name, _direction, _speed, _angle) {
-            throw new Error("Method not implemented.");
+            throw new Error('Method not implemented.');
         };
         RobotWeDoBehaviour.prototype.showTextActionPosition = function (_text, _x, _y) {
-            throw new Error("Method not implemented.");
+            throw new Error('Method not implemented.');
         };
         RobotWeDoBehaviour.prototype.displaySetPixelBrightnessAction = function (_x, _y, _brightness) {
-            throw new Error("Method not implemented.");
+            throw new Error('Method not implemented.');
         };
         RobotWeDoBehaviour.prototype.displayGetPixelBrightnessAction = function (_s, _x, _y) {
-            throw new Error("Method not implemented.");
+            throw new Error('Method not implemented.');
         };
         RobotWeDoBehaviour.prototype.setVolumeAction = function (_volume) {
-            throw new Error("Method not implemented.");
+            throw new Error('Method not implemented.');
         };
         RobotWeDoBehaviour.prototype.getVolumeAction = function (_s) {
-            throw new Error("Method not implemented.");
+            throw new Error('Method not implemented.');
         };
         RobotWeDoBehaviour.prototype.debugAction = function (_value) {
-            this.showTextAction("> " + _value, undefined);
+            this.showTextAction('> ' + _value, undefined);
         };
         RobotWeDoBehaviour.prototype.assertAction = function (_msg, _left, _op, _right, _value) {
             if (!_value) {
-                this.showTextAction("> Assertion failed: " + _msg + " " + _left + " " + _op + " " + _right, undefined);
+                this.showTextAction('> Assertion failed: ' + _msg + ' ' + _left + ' ' + _op + ' ' + _right, undefined);
             }
         };
         return RobotWeDoBehaviour;

@@ -1,5 +1,5 @@
 Sensors: 
-[UsedSensor [HEAD, TOUCH, PRESSED], UsedSensor [HAND, TOUCH, PRESSED], UsedSensor [BUMPER, TOUCH, PRESSED], UsedSensor [- EMPTY_PORT -, ULTRASONIC, DISTANCE], UsedSensor [null, DETECT_MARK, null], UsedSensor [null, NAO_FACE, null], UsedSensor [null, NAO_SPEECH, null], UsedSensor [NO PORT, GYRO, ANGLE], UsedSensor [X, ACCELEROMETER, VALUE], UsedSensor [Y, ACCELEROMETER, VALUE], UsedSensor [Z, ACCELEROMETER, VALUE], UsedSensor [X, ACCELEROMETER, DEFAULT], UsedSensor [Y, ACCELEROMETER, DEFAULT], UsedSensor [Z, ACCELEROMETER, DEFAULT], UsedSensor [NO PORT, ULTRASONIC, DISTANCE]]
+[UsedSensor [- EMPTY_PORT -, ULTRASONIC, DISTANCE], UsedSensor [null, DETECT_MARK, null], UsedSensor [null, NAO_FACE, null], UsedSensor [null, NAO_SPEECH, null], UsedSensor [NO PORT, ULTRASONIC, DISTANCE]]
 Actors: 
 []
 Methods: 

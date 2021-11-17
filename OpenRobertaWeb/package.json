@@ -1,0 +1,26 @@
+{
+  "name": "openroberta-web",
+  "description": "contains the frontend sources of the openrobert-lab",
+  "version": "1.0.0",
+  "scripts": {
+    "watch": "tsc --watch",
+    "watch:sourceMap": "tsc --watch --inlineSourceMap",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc",
+    "build:sourceMap": "tsc --inlineSourceMap",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@types/d3": "^3.5.34",
+    "@types/jquery": "^3.5.5",
+    "d3": "^3.5.16"
+  },
+  "devDependencies": {
+    "@types/bootstrap": "^3.3.28",
+    "prettier": "2.4.1",
+    "typescript": "^3.9.2"
+  }
+}

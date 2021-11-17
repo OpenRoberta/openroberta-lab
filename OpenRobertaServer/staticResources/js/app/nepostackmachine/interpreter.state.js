@@ -1,5 +1,4 @@
 define(["require", "exports", "./interpreter.constants", "./interpreter.util"], function (require, exports, C, U) {
-    "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.State = void 0;
     var State = /** @class */ (function () {
@@ -199,8 +198,8 @@ define(["require", "exports", "./interpreter.constants", "./interpreter.util"], 
             initiations
                 .map(function (blockId) { return stackmachineJsHelper.getBlockById(blockId); })
                 .forEach(function (block) {
-                if (stackmachineJsHelper.getJqueryObject(block === null || block === void 0 ? void 0 : block.svgPath_).hasClass("breakpoint")) {
-                    stackmachineJsHelper.getJqueryObject(block === null || block === void 0 ? void 0 : block.svgPath_).removeClass("breakpoint").addClass("selectedBreakpoint");
+                if (stackmachineJsHelper.getJqueryObject(block === null || block === void 0 ? void 0 : block.svgPath_).hasClass('breakpoint')) {
+                    stackmachineJsHelper.getJqueryObject(block === null || block === void 0 ? void 0 : block.svgPath_).removeClass('breakpoint').addClass('selectedBreakpoint');
                 }
                 _this.highlightBlock(block);
                 _this.currentBlocks.add(block.id);
@@ -210,8 +209,8 @@ define(["require", "exports", "./interpreter.constants", "./interpreter.util"], 
         State.prototype.evalTerminations = function (terminations) {
             var _this = this;
             terminations === null || terminations === void 0 ? void 0 : terminations.map(function (blockId) { return stackmachineJsHelper.getBlockById(blockId); }).forEach(function (block) {
-                if (stackmachineJsHelper.getJqueryObject(block === null || block === void 0 ? void 0 : block.svgPath_).hasClass("selectedBreakpoint")) {
-                    stackmachineJsHelper.getJqueryObject(block === null || block === void 0 ? void 0 : block.svgPath_).removeClass("selectedBreakpoint").addClass("breakpoint");
+                if (stackmachineJsHelper.getJqueryObject(block === null || block === void 0 ? void 0 : block.svgPath_).hasClass('selectedBreakpoint')) {
+                    stackmachineJsHelper.getJqueryObject(block === null || block === void 0 ? void 0 : block.svgPath_).removeClass('selectedBreakpoint').addClass('breakpoint');
                 }
                 _this.removeBlockHighlight(block);
                 _this.currentBlocks.delete(block.id);
@@ -239,10 +238,10 @@ define(["require", "exports", "./interpreter.constants", "./interpreter.util"], 
                 var block = stackmachineJsHelper.getBlockById(id);
                 if (block !== null) {
                     if (_this.currentBlocks.hasOwnProperty(id)) {
-                        stackmachineJsHelper.getJqueryObject(block.svgPath_).addClass("selectedBreakpoint");
+                        stackmachineJsHelper.getJqueryObject(block.svgPath_).addClass('selectedBreakpoint');
                     }
                     else {
-                        stackmachineJsHelper.getJqueryObject(block.svgPath_).addClass("breakpoint");
+                        stackmachineJsHelper.getJqueryObject(block.svgPath_).addClass('breakpoint');
                     }
                 }
             });
@@ -255,8 +254,8 @@ define(["require", "exports", "./interpreter.constants", "./interpreter.util"], 
                 .map(function (blockId) { return stackmachineJsHelper.getBlockById(blockId); })
                 .forEach(function (block) {
                 var object = stackmachineJsHelper.getJqueryObject(block);
-                if (object.hasClass("selectedBreakpoint")) {
-                    object.removeClass("selectedBreakpoint").addClass("breakpoint");
+                if (object.hasClass('selectedBreakpoint')) {
+                    object.removeClass('selectedBreakpoint').addClass('breakpoint');
                 }
                 _this.removeBlockHighlight(block);
             });
@@ -264,7 +263,7 @@ define(["require", "exports", "./interpreter.constants", "./interpreter.util"], 
                 .map(function (blockId) { return stackmachineJsHelper.getBlockById(blockId); })
                 .forEach(function (block) {
                 if (block !== null) {
-                    stackmachineJsHelper.getJqueryObject(block.svgPath_).removeClass("breakpoint").removeClass("selectedBreakpoint");
+                    stackmachineJsHelper.getJqueryObject(block.svgPath_).removeClass('breakpoint').removeClass('selectedBreakpoint');
                 }
             });
         };

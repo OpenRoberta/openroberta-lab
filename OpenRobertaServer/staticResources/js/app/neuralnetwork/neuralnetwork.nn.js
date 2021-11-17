@@ -4,7 +4,6 @@
  * The Open Roberta Lab is open source and uses the Apache 2.0 License, see https://www.apache.org/licenses/LICENSE-2.0
  */
 define(["require", "exports"], function (require, exports) {
-    "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.getOutputNode = exports.forEachNode = exports.updateWeights = exports.backProp = exports.forwardProp = exports.buildNetwork = exports.Link = exports.RegularizationFunction = exports.Activations = exports.Errors = exports.Node = void 0;
     /**
@@ -62,27 +61,27 @@ define(["require", "exports"], function (require, exports) {
         function Errors() {
         }
         Errors.SQUARE = {
-            error: function (output, target) {
-                return 0.5 * Math.pow(output - target, 2);
-            },
-            der: function (output, target) { return output - target; }
+            error: function (output, target) { return 0.5 * Math.pow(output - target, 2); },
+            der: function (output, target) { return output - target; },
         };
         return Errors;
     }());
     exports.Errors = Errors;
     /** Polyfill for TANH */
-    Math.tanh = Math.tanh || function (x) {
-        if (x === Infinity) {
-            return 1;
-        }
-        else if (x === -Infinity) {
-            return -1;
-        }
-        else {
-            var e2x = Math.exp(2 * x);
-            return (e2x - 1) / (e2x + 1);
-        }
-    };
+    Math.tanh =
+        Math.tanh ||
+            function (x) {
+                if (x === Infinity) {
+                    return 1;
+                }
+                else if (x === -Infinity) {
+                    return -1;
+                }
+                else {
+                    var e2x = Math.exp(2 * x);
+                    return (e2x - 1) / (e2x + 1);
+                }
+            };
     /** Built-in activation functions */
     var Activations = /** @class */ (function () {
         function Activations() {
@@ -92,22 +91,22 @@ define(["require", "exports"], function (require, exports) {
             der: function (x) {
                 var output = Activations.TANH.output(x);
                 return 1 - output * output;
-            }
+            },
         };
         Activations.RELU = {
             output: function (x) { return Math.max(0, x); },
-            der: function (x) { return x <= 0 ? 0 : 1; }
+            der: function (x) { return (x <= 0 ? 0 : 1); },
         };
         Activations.SIGMOID = {
             output: function (x) { return 1 / (1 + Math.exp(-x)); },
             der: function (x) {
                 var output = Activations.SIGMOID.output(x);
                 return output * (1 - output);
-            }
+            },
         };
         Activations.LINEAR = {
             output: function (x) { return x; },
-            der: function (x) { return 1; }
+            der: function (x) { return 1; },
         };
         return Activations;
     }());
@@ -118,11 +117,11 @@ define(["require", "exports"], function (require, exports) {
         }
         RegularizationFunction.L1 = {
             output: function (w) { return Math.abs(w); },
-            der: function (w) { return w < 0 ? -1 : (w > 0 ? 1 : 0); }
+            der: function (w) { return (w < 0 ? -1 : w > 0 ? 1 : 0); },
         };
         RegularizationFunction.L2 = {
             output: function (w) { return 0.5 * w * w; },
-            der: function (w) { return w; }
+            der: function (w) { return w; },
         };
         return RegularizationFunction;
     }());
@@ -151,7 +150,7 @@ define(["require", "exports"], function (require, exports) {
             this.accErrorDer = 0;
             /** Number of accumulated derivatives since the last update. */
             this.numAccumulatedDers = 0;
-            this.id = source.id + "-" + dest.id;
+            this.id = source.id + '-' + dest.id;
             this.source = source;
             this.dest = dest;
             this.regularization = regularization;
@@ -223,8 +222,7 @@ define(["require", "exports"], function (require, exports) {
     function forwardProp(network, inputs) {
         var inputLayer = network[0];
         if (inputs.length !== inputLayer.length) {
-            throw new Error("The number of inputs must match the number of nodes in" +
-                " the input layer");
+            throw new Error('The number of inputs must match the number of nodes in' + ' the input layer');
         }
         // Update the input layer.
         for (var i = 0; i < inputLayer.length; i++) {
@@ -306,7 +304,7 @@ define(["require", "exports"], function (require, exports) {
                 var node = currentLayer[i];
                 // Update the node's bias.
                 if (node.numAccumulatedDers > 0) {
-                    node.bias -= learningRate * node.accInputDer / node.numAccumulatedDers;
+                    node.bias -= (learningRate * node.accInputDer) / node.numAccumulatedDers;
                     node.accInputDer = 0;
                     node.numAccumulatedDers = 0;
                 }
@@ -316,17 +314,13 @@ define(["require", "exports"], function (require, exports) {
                     if (link.isDead) {
                         continue;
                     }
-                    var regulDer = link.regularization ?
-                        link.regularization.der(link.weight) : 0;
+                    var regulDer = link.regularization ? link.regularization.der(link.weight) : 0;
                     if (link.numAccumulatedDers > 0) {
                         // Update the weight based on dE/dw.
-                        link.weight = link.weight -
-                            (learningRate / link.numAccumulatedDers) * link.accErrorDer;
+                        link.weight = link.weight - (learningRate / link.numAccumulatedDers) * link.accErrorDer;
                         // Further update the weight based on regularization.
-                        var newLinkWeight = link.weight -
-                            (learningRate * regularizationRate) * regulDer;
-                        if (link.regularization === RegularizationFunction.L1 &&
-                            link.weight * newLinkWeight < 0) {
+                        var newLinkWeight = link.weight - learningRate * regularizationRate * regulDer;
+                        if (link.regularization === RegularizationFunction.L1 && link.weight * newLinkWeight < 0) {
                             // The weight crossed 0 due to the regularization term. Set it to 0.
                             link.weight = 0;
                             link.isDead = true;
