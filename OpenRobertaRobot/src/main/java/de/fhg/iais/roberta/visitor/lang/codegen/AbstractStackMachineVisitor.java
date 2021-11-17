@@ -145,17 +145,12 @@ public abstract class AbstractStackMachineVisitor<V> extends BaseVisitor<V> impl
     }
 
     @Override
-    protected void beforeVisit(Phrase<V> visitable) {
+    public V visit(Phrase<V> visitable) {
         boolean shouldHighlight = shouldBeHighlighted(visitable);
         if ( shouldHighlight ) beginPhrase(visitable);
-        super.beforeVisit(visitable);
-    }
-
-    @Override
-    protected void afterVisit(Phrase<V> visitable) {
-        boolean shouldHighlight = shouldBeHighlighted(visitable);
+        V result = super.visit(visitable);
         if ( shouldHighlight ) endPhrase(visitable);
-        super.afterVisit(visitable);
+        return result;
     }
 
     private boolean shouldBeHighlighted(Phrase<V> visitable) {
