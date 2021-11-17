@@ -24,4 +24,7 @@ public abstract class Action<V> extends Phrase<V> {
         super(kind, properties, comment);
     }
 
+    public Action(BlockType kind) {
+        super(kind);
+    }
 }

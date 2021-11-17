@@ -9,8 +9,12 @@ import org.junit.Test;
 import de.fhg.iais.roberta.bean.UsedHardwareBean;
 import de.fhg.iais.roberta.components.ConfigurationComponent;
 import de.fhg.iais.roberta.components.Project;
+import de.fhg.iais.roberta.syntax.MotionParam;
+import de.fhg.iais.roberta.syntax.MotorDuration;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.SC;
+import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
+import de.fhg.iais.roberta.syntax.lang.expr.NumConst;
 import de.fhg.iais.roberta.syntax.sensor.SensorMetaDataBean;
 import de.fhg.iais.roberta.syntax.sensor.generic.DropSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor;
@@ -323,6 +327,71 @@ public class ArduinoValidatorAndCollectorWorkflowTest extends WorkflowTest {
         assertHasNepoInfo(encoderSensor, NepoInfo.Severity.ERROR, "CONFIGURATION_ERROR_SENSOR_WRONG");
     }
 
+    @Test
+    public void visitMotorOnAction() {
+        configurationComponents.add(new ConfigurationComponent(SC.MOTOR_DRIVE, true, "P1", "P1", new HashMap<>()));
+
+        MotionParam<Void> motionParam = new MotionParam.Builder<Void>()
+            .speed(new NumConst<>("10"))
+            .duration(new MotorDuration<>(null, new NumConst<>("10")))
+            .build();
+
+        MotorOnAction<Void> motorOnAction = new MotorOnAction<>("P1", motionParam);
+        phrases.add(motorOnAction);
+
+        executeWorkflow();
+
+        assertHasNoNepoInfo(motorOnAction);
+    }
+
+    @Test
+    public void visitMotorOnAction_withoutPort() {
+        MotionParam<Void> motionParam = new MotionParam.Builder<Void>()
+            .speed(new NumConst<>("10"))
+            .duration(new MotorDuration<>(null, new NumConst<>("10")))
+            .build();
+
+        MotorOnAction<Void> motorOnAction = new MotorOnAction<>("P1", motionParam);
+        phrases.add(motorOnAction);
+
+        executeWorkflow();
+
+        assertHasNepoInfo(motorOnAction, NepoInfo.Severity.ERROR, "CONFIGURATION_ERROR_ACTOR_MISSING");
+    }
+
+    @Test
+    public void visitMotorOnAction_withOtherType() {
+        configurationComponents.add(new ConfigurationComponent(SC.OTHER, true, "P1", "P1", new HashMap<>()));
+
+        MotionParam<Void> motionParam = new MotionParam.Builder<Void>()
+            .speed(new NumConst<>("10"))
+            .duration(new MotorDuration<>(null, new NumConst<>("10")))
+            .build();
+
+        MotorOnAction<Void> motorOnAction = new MotorOnAction<>("P1", motionParam);
+        phrases.add(motorOnAction);
+
+        executeWorkflow();
+
+        assertHasNepoInfo(motorOnAction, NepoInfo.Severity.ERROR, "CONFIGURATION_ERROR_OTHER_NOT_SUPPORTED");
+    }
+
+    @Test
+    public void visitMotorOnAction_withoutDuration() {
+        configurationComponents.add(new ConfigurationComponent(SC.OTHER, true, "P1", "P1", new HashMap<>()));
+
+        MotionParam<Void> motionParam = new MotionParam.Builder<Void>()
+            .speed(new NumConst<>("10"))
+            .build();
+
+        MotorOnAction<Void> motorOnAction = new MotorOnAction<>("P1", motionParam);
+        phrases.add(motorOnAction);
+
+        executeWorkflow();
+
+        assertHasNoNepoInfo(motorOnAction);
+    }
+
     private UsedHardwareBean getUsedHardwareBean(Project project) {
         return project.getWorkerResult(UsedHardwareBean.class);
     }
@@ -337,6 +406,18 @@ public class ArduinoValidatorAndCollectorWorkflowTest extends WorkflowTest {
             Assertions.assertThat(usedSensor.getPort()).isEqualTo(userDefinedPort);
             Assertions.assertThat(usedSensor.getMode()).isEqualTo(mode);
             Assertions.assertThat(usedSensor.getType()).isEqualTo(type);
+        });
+    }
+
+    private void assertHasUsedActor(Project project, String userDefinedPort, String type) {
+        UsedHardwareBean usedHardwareBean = getUsedHardwareBean(project);
+        assertHasUsedActor(usedHardwareBean, userDefinedPort, type);
+    }
+
+    private void assertHasUsedActor(UsedHardwareBean usedHardwareBean, String userDefinedPort, String type) {
+        Assertions.assertThat(usedHardwareBean.getUsedActors()).anySatisfy(usedActor -> {
+            Assertions.assertThat(usedActor.getPort()).isEqualTo(userDefinedPort);
+            Assertions.assertThat(usedActor.getType()).isEqualTo(type);
         });
     }
 

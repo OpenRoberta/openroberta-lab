@@ -41,6 +41,14 @@ public final class MotorOnAction<V> extends MoveAction<V> {
         setReadOnly();
     }
 
+    public MotorOnAction(String port, MotionParam<V> param) {
+        super(port, BlockTypeContainer.getByName("MOTOR_ON_ACTION"));
+        Assert.isTrue((param != null) && (port != null));
+        this.param = param;
+
+        setReadOnly();
+    }
+
     /**
      * Creates instance of {@link MotorOnAction}. This instance is read only and can not be modified.
      *

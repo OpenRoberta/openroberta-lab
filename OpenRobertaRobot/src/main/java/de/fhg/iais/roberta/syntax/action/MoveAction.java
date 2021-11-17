@@ -13,6 +13,11 @@ public abstract class MoveAction<V> extends Action<V> implements WithUserDefined
         this.port = port;
     }
 
+    public MoveAction(String port, BlockType kind) {
+        super(kind);
+        this.port = port;
+    }
+
     /**
      * @return port on which the motor is connected.
      */

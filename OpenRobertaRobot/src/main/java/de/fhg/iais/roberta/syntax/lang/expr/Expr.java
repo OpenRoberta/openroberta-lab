@@ -23,6 +23,10 @@ public abstract class Expr<V> extends Phrase<V> {
         super(kind, properties, comment);
     }
 
+    public Expr(BlockType kind) {
+        super(kind);
+    }
+
     /**
      * get the precedence of the expression
      * <b>This is the default implementation of annotated AST classes</b>
