@@ -24,6 +24,7 @@ import * as SOURCECODE_C from 'sourceCodeEditor.controller';
 import * as $ from 'jquery';
 import * as Blockly from 'blockly';
 import 'slick';
+import * as TUTORIAL_C from 'progTutorial.controller';
 
 var n = 0;
 
@@ -31,6 +32,8 @@ const QUERY_START = '?';
 const QUERY_DELIMITER = '&';
 const QUERY_ASSIGNMENT = '=';
 const LOAD_SYSTEM_CALL = 'loadSystem';
+const TUTORIAL = 'tutorial';
+const KIOSK = 'kiosk';
 
 function cleanUri() {
     var uri = window.location.toString();
@@ -83,6 +86,20 @@ function handleQuery() {
     if (loadSystem) {
         GUISTATE_C.setStartWithoutPopup();
         ROBOT_C.switchRobot(loadSystem, true);
+    }
+    let tutorial = getUrlParameter(TUTORIAL);
+    if (tutorial) {
+        if (tutorial === 'true' || tutorial === true) {
+            GUISTATE_C.setStartWithoutPopup();
+            $('#tabTutorialList').clickWrap();
+        } else {
+            let kiosk = getUrlParameter(KIOSK);
+            if (kiosk && kiosk === 'true') {
+                GUISTATE_C.setKioskMode(true);
+            }
+            GUISTATE_C.setStartWithoutPopup();
+            TUTORIAL_C.loadFromTutorial(tutorial);
+        }
     }
 }
 
@@ -505,7 +522,7 @@ function initMenuEvents() {
                         var ports = SOCKET_C.getPortList();
                         var robots = SOCKET_C.getRobotList();
                         $('#singleModalListInput').empty();
-                        i = 0;
+                        let i = 0;
                         ports.forEach(function (port) {
                             $('#singleModalListInput').append('<option value="' + port + '" selected>' + robots[i] + ' ' + port + '</option>');
                             i++;

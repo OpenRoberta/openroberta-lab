@@ -4,6 +4,7 @@ define(["require", "exports", "message", "log", "guiState.controller", "program.
     var INITIAL_WIDTH = 0.5;
     var blocklyWorkspace;
     var tutorialList;
+    var tutorialId;
     var tutorial;
     var step = 0;
     var maxSteps = 0;
@@ -28,12 +29,20 @@ define(["require", "exports", "message", "log", "guiState.controller", "program.
     function loadFromTutorial(tutId) {
         // initialize this tutorial
         tutorialId = tutId;
-        tutorial = tutorialList[tutId];
+        tutorial = tutorialList && tutorialList[tutId];
         if (tutorial) {
             ROBOT_C.switchRobot(tutorial.robot, null, startTutorial);
         }
         function startTutorial() {
             $('#tabProgram').clickWrap();
+            if (GUISTATE_C.isKioskMode()) {
+                $('#infoButton').hide();
+                $('#feedbackButton').hide();
+                // für Einsteiger-Tutorials ist die Code-Ansicht eher verwirrend als hilfreich, daher zeigen wir die Schaltfläche nicht
+                if (tutorial.level.startsWith('1')) {
+                    $('#codeButton').hide();
+                }
+            }
             if (tutorial.initXML) {
                 IMPORT_C.loadProgramFromXML('egal', tutorial.initXML);
             }
@@ -333,10 +342,9 @@ define(["require", "exports", "message", "log", "guiState.controller", "program.
         var countCorrect = 0;
         var countChecked = 0;
         var totalQuestions = $('.quiz.question').length;
-        var totalCorrect = $('.quiz.answer [value=true').length;
+        var totalCorrect = $('.quiz.answer [value=true]').length;
         $('.quiz input').each(function (i, elem) {
-            $this = $(this);
-            $label = $('label>span[for="' + $this.attr('id') + '"]');
+            var $label = $('label>span[for="' + $(this).attr('id') + '"]');
             if ($(this).is(':checked')) {
                 countChecked++;
             }
@@ -423,13 +431,19 @@ define(["require", "exports", "message", "log", "guiState.controller", "program.
     }
     function exitTutorial() {
         Blockly.hideChaff();
-        closeTutorialView();
         $('#tutorial-navigation').fadeOut(750);
         $('#head-navigation').fadeIn(750);
         $('#tutorialButton').fadeOut();
         $('.blocklyToolboxDiv>.levelTabs').removeClass('invisible');
         PROG_C.loadExternalToolbox(GUISTATE_C.getProgramToolbox());
         Blockly.mainWorkspace.options.maxBlocks = undefined;
-        $('#tabTutorialList').clickWrap();
+        if (GUISTATE_C.isKioskMode()) {
+            $('.modal').modal('hide');
+            loadFromTutorial(tutorialId);
+        }
+        else {
+            closeTutorialView();
+            $('#tabTutorialList').clickWrap();
+        }
     }
 });
