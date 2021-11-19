@@ -2,6 +2,8 @@ define(["require", "exports", "log", "util", "message", "guiState.controller", "
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.resetView = exports.reloadView = exports.reloadNN = exports.getBricklyWorkspace = exports.showNN = exports.newNN = exports.showSaveAsModal = exports.initNNEnvironment = exports.loadFromListing = exports.saveAsToServer = exports.saveToServer = exports.initNNForms = exports.init = void 0;
     var $formSingleModal;
+    var inputNeurons;
+    var outputNeurons;
     function init() {
         initView();
         initEvents();
@@ -15,9 +17,10 @@ define(["require", "exports", "log", "util", "message", "guiState.controller", "
     function initEvents() {
         $('#tabNN').onWrap('show.bs.tab', function (e) {
             GUISTATE_C.setView('tabNN');
+            extractInputOutputNeuronsFromNNstep();
         }, 'show tabNN');
         $('#tabNN').onWrap('shown.bs.tab', function (e) {
-            $(window).resize();
+            $(window).trigger('resize');
         }, 'shown tabNN');
         $('#tabNN').onWrap('hide.bs.tab', function (e) { }, 'hide tabNN');
         $('#tabNN').onWrap('hidden.bs.tab', function (e) { }, 'hidden tabNN');
@@ -26,6 +29,37 @@ define(["require", "exports", "log", "util", "message", "guiState.controller", "
         $formSingleModal = $('#single-modal-form');
     }
     exports.initNNForms = initNNForms;
+    function extractInputOutputNeuronsFromNNstep() {
+        inputNeurons = [];
+        outputNeurons = [];
+        var stepBlockFound = false;
+        for (var block in Blockly.Workspace.getByContainer('blocklyDiv').getAllBlocks()) {
+            if (block.type === 'robActions_NNstep') {
+                if (stepBlockFound) {
+                    LOG.error("more than one NNstep block makes no sense");
+                }
+                stepBlockFound = true;
+                extractInputOutputNeurons(block.getChildren());
+            }
+        }
+    }
+    function extractInputOutputNeurons(neurons) {
+        for (var block in neurons) {
+            if (block.type === 'robActions_inputneuron') {
+                inputNeurons.push(block.getFieldValue("NAME"));
+            }
+            else if (block.type === 'robActions_outputneuron') {
+                outputNeurons.push(block.getFieldValue("NAME"));
+            }
+            else {
+                LOG.error("in a NNstep block only input and output neurons are allowed");
+            }
+            var next = block.getChildren();
+            if (next) {
+                extractInputOutputNeurons(next);
+            }
+        }
+    }
     /**
      * Save nn to server
      */

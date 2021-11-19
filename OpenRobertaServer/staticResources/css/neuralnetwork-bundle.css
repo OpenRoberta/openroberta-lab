@@ -447,10 +447,6 @@ header h1 .optional {
   background: white;
 }
 
-svg text {
-  dominant-baseline: middle;
-}
-
 canvas {
   display: block;
 }

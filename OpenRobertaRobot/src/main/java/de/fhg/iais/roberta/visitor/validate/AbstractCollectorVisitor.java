@@ -52,6 +52,8 @@ import de.fhg.iais.roberta.syntax.lang.stmt.AssignStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.DebugAction;
 import de.fhg.iais.roberta.syntax.lang.stmt.IfStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.MethodStmt;
+import de.fhg.iais.roberta.syntax.lang.stmt.NNInputNeuronStmt;
+import de.fhg.iais.roberta.syntax.lang.stmt.NNOutputNeuronStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.NNStepStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.RepeatStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtFlowCon;
@@ -204,6 +206,19 @@ public abstract class AbstractCollectorVisitor implements ILanguageVisitor<Void>
 
     @Override
     public Void visitNNStepStmt(NNStepStmt<Void> nnStepStmt) {
+        nnStepStmt.getIoNeurons().accept(this);
+        return null;
+    }
+
+    @Override
+    public Void visitNNInputNeuronStmt(NNInputNeuronStmt<Void> nnInputNeuronStmt) {
+        nnInputNeuronStmt.getValue().accept(this);
+        return null;
+    }
+
+    @Override
+    public Void visitNNOutputNeuronStmt(NNOutputNeuronStmt<Void> nnOutputNeuronStmt) {
+        nnOutputNeuronStmt.getValue().accept(this);
         return null;
     }
 

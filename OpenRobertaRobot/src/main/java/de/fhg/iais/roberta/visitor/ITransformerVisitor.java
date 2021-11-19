@@ -96,6 +96,8 @@ import de.fhg.iais.roberta.syntax.lang.stmt.ExprStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.FunctionStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.IfStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.MethodStmt;
+import de.fhg.iais.roberta.syntax.lang.stmt.NNInputNeuronStmt;
+import de.fhg.iais.roberta.syntax.lang.stmt.NNOutputNeuronStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.NNStepStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.RepeatStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.SensorStmt;
@@ -135,6 +137,7 @@ import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.VemlLightSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.VoltageSensor;
+import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.visitor.hardware.actor.IAllActorsVisitor;
 import de.fhg.iais.roberta.visitor.hardware.sensor.ISensorVisitor;
@@ -430,15 +433,21 @@ public interface ITransformerVisitor<V> extends ISensorVisitor<Phrase<V>>, IAllA
 
     @Override
     default Phrase<V> visitNNStepStmt(NNStepStmt<Phrase<V>> nnStepStmt) {
-        List<Expr<V>> newIl = new ArrayList<>();
-        for ( Expr<Phrase<V>> e : nnStepStmt.getIl() ) {
-            newIl.add((Expr<V>) e.modify(this));
+        StmtList<V> newIoNeurons = StmtList.make();
+        for ( Stmt<Phrase<V>> e : nnStepStmt.getIoNeurons().get() ) {
+            newIoNeurons.get().add((Stmt<V>) e.modify(this));
         }
-        List<Var<V>> newOl = new ArrayList<>();
-        for ( Var<Phrase<V>> e : nnStepStmt.getOl() ) {
-            newOl.add((Var<V>) e.modify(this));
-        }
-        return NNStepStmt.make(newIl, newOl, nnStepStmt.getProperty(), nnStepStmt.getComment());
+        return NNStepStmt.make(newIoNeurons, nnStepStmt.getProperty(), nnStepStmt.getComment());
+    }
+
+    @Override
+    default Phrase<V> visitNNInputNeuronStmt(NNInputNeuronStmt<Phrase<V>> inNeuron) {
+        return NNInputNeuronStmt.make(inNeuron.getProperty(), inNeuron.getComment(), inNeuron.getName(), (Expr<V>) inNeuron.modify(this));
+    }
+
+    @Override
+    default Phrase<V> visitNNOutputNeuronStmt(NNOutputNeuronStmt<Phrase<V>> outNeuron) {
+        return NNOutputNeuronStmt.make(outNeuron.getProperty(), outNeuron.getComment(), outNeuron.getName(), (Expr<V>) outNeuron.modify(this));
     }
 
     @Override

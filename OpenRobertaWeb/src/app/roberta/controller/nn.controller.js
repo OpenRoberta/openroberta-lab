@@ -11,6 +11,8 @@ import * as Blockly from 'blockly';
 import 'jquery-validate';
 
 var $formSingleModal;
+var inputNeurons;
+var outputNeurons;
 
 function init() {
     initView();
@@ -28,6 +30,7 @@ function initEvents() {
         'show.bs.tab',
         function (e) {
             GUISTATE_C.setView('tabNN');
+            extractInputOutputNeuronsFromNNstep()
         },
         'show tabNN'
     );
@@ -35,7 +38,7 @@ function initEvents() {
     $('#tabNN').onWrap(
         'shown.bs.tab',
         function (e) {
-            $(window).resize();
+            $(window).trigger('resize');
         },
         'shown tabNN'
     );
@@ -47,6 +50,37 @@ function initEvents() {
 
 function initNNForms() {
     $formSingleModal = $('#single-modal-form');
+}
+
+function extractInputOutputNeuronsFromNNstep() {
+    inputNeurons = [];
+    outputNeurons = [];
+    var stepBlockFound = false;
+    for (const block in Blockly.Workspace.getByContainer('blocklyDiv').getAllBlocks()) {
+        if (block.type === 'robActions_NNstep') {
+            if (stepBlockFound) {
+                LOG.error("more than one NNstep block makes no sense");
+            }
+            stepBlockFound = true;
+            extractInputOutputNeurons(block.getChildren());
+        }
+    }
+}
+
+function extractInputOutputNeurons(neurons) {
+    for (const block in neurons) {
+        if (block.type === 'robActions_inputneuron') {
+            inputNeurons.push(block.getFieldValue("NAME"));
+        } else if (block.type === 'robActions_outputneuron') {
+            outputNeurons.push(block.getFieldValue("NAME"));
+        } else {
+            LOG.error("in a NNstep block only input and output neurons are allowed");
+        }
+        var next = block.getChildren();
+        if (next) {
+            extractInputOutputNeurons(next);
+        }
+    }
 }
 
 /**

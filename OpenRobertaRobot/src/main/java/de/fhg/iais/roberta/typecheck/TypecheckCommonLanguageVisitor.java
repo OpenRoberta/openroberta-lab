@@ -63,6 +63,8 @@ import de.fhg.iais.roberta.syntax.lang.stmt.ExprStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.FunctionStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.IfStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.MethodStmt;
+import de.fhg.iais.roberta.syntax.lang.stmt.NNInputNeuronStmt;
+import de.fhg.iais.roberta.syntax.lang.stmt.NNOutputNeuronStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.NNStepStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.RepeatStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.SensorStmt;
@@ -430,6 +432,18 @@ public class TypecheckCommonLanguageVisitor implements ILanguageVisitor<BlocklyT
     public BlocklyType visitNNStepStmt(NNStepStmt<BlocklyType> nnStepStmt) {
         return null;
     }
+
+    @Override
+    public BlocklyType visitNNInputNeuronStmt(NNInputNeuronStmt<BlocklyType> nnInputNeuronStmt) {
+        return null;
+    }
+
+    @Override
+    public BlocklyType visitNNOutputNeuronStmt(NNOutputNeuronStmt<BlocklyType> nnOutputNeuronStmt) {
+        return null;
+    }
+
+
 
     @Override
     public BlocklyType visitNullConst(NullConst<BlocklyType> nullConst) {
