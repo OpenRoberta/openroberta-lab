@@ -36,6 +36,7 @@ define(["require", "exports", "comm"], function (require, exports, COMM) {
         exports.gui.vendor = '';
         exports.gui.sim = false;
         exports.gui.multipleSim = false;
+        exports.gui.nn = false;
         exports.gui.webotsSim = false;
         exports.gui.webotsUrl = '';
         exports.gui.fileExtension = '';

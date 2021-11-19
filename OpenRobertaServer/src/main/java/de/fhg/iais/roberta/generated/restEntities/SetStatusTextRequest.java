@@ -9,8 +9,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
- * the request description for the /setStatusText REST request<br>
- * <br>
+ * the request description for the /setStatusText REST request<br><br>
  * Version: 1<br>
  * Datum: 2020-06-15
  */
@@ -213,17 +212,7 @@ public class SetStatusTextRequest extends BaseRequest {
 
     @Override
     public String toString() {
-        return "SetStatusTextRequest [immutable="
-            + this.immutable
-            + ", cmd="
-            + this.cmd
-            + ", english="
-            + this.english
-            + ", german="
-            + this.german
-            + ", timestamp="
-            + this.timestamp
-            + " ]";
+        return "SetStatusTextRequest [immutable=" + this.immutable + ", cmd=" + this.cmd + ", english=" + this.english + ", german=" + this.german + ", timestamp=" + this.timestamp + " ]";
     }
 
     @Override

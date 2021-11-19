@@ -328,6 +328,11 @@
    	<block type="math_cast_toString"></block>
 	<block type="math_cast_toChar"></block>
   </category>
+  <category name="TOOLBOX_NEURAL_NETWORK" svg="true">
+    <block type="robActions_NNstep"></block>
+    <block type="robActions_inputneuron"></block>
+    <block type="robActions_outputneuron"></block>
+  </category>
   <category name="TOOLBOX_TEXT" svg="true">
     <block type="text"/>
     <block type="text_comment"/>

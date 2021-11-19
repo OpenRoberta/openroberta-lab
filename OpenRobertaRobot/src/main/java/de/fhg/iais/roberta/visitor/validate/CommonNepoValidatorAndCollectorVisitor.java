@@ -2,7 +2,9 @@ package de.fhg.iais.roberta.visitor.validate;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import com.google.common.collect.ClassToInstanceMap;
 
@@ -61,12 +63,16 @@ import de.fhg.iais.roberta.syntax.lang.stmt.NNInputNeuronStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.NNOutputNeuronStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.NNStepStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.RepeatStmt;
+import de.fhg.iais.roberta.syntax.lang.stmt.Stmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtFlowCon;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtList;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtTextComment;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
+import de.fhg.iais.roberta.typecheck.NepoInfo;
+import de.fhg.iais.roberta.util.Util;
+import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.visitor.lang.ILanguageVisitor;
 
 public abstract class CommonNepoValidatorAndCollectorVisitor extends AbstractValidatorAndCollectorVisitor implements ILanguageVisitor<Void> {
@@ -316,6 +322,20 @@ public abstract class CommonNepoValidatorAndCollectorVisitor extends AbstractVal
 
     @Override
     public Void visitNNStepStmt(NNStepStmt<Void> nnStepStmt) {
+        Set<String> names = new HashSet<>();
+        String name;
+        for ( Stmt<Void> neuron: nnStepStmt.getIoNeurons().get() ) {
+            if ( neuron instanceof NNInputNeuronStmt ) {
+                name = ((NNInputNeuronStmt) neuron).getName();
+            } else if ( neuron instanceof NNOutputNeuronStmt ) {
+                name = ((NNOutputNeuronStmt) neuron).getName();
+            } else {
+                throw new DbcException("type of neuron not input or output");
+            }
+            if (!Util.isValidJavaIdentifier(name) || !names.add(name)) {
+                addErrorToPhrase(nnStepStmt, "NN_IO_NEURON_NAMES_INVALID");
+            }
+        }
         requiredComponentVisited(nnStepStmt, nnStepStmt.getIoNeurons());
         return null;
     }

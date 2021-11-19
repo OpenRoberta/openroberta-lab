@@ -174,7 +174,7 @@ define(["require", "exports"], function (require, exports) {
      *     no regularization.
      * @param inputIds List of ids for the input nodes.
      */
-    function buildNetwork(networkShape, activation, outputActivation, regularization, inputIds, initZero) {
+    function buildNetwork(networkShape, activation, outputActivation, regularization, inputIds, outputIds, initZero) {
         var numLayers = networkShape.length;
         var id = 1;
         /** List of layers, with each layer being a list of nodes. */
@@ -189,6 +189,9 @@ define(["require", "exports"], function (require, exports) {
                 var nodeId = id.toString();
                 if (isInputLayer) {
                     nodeId = inputIds[i];
+                }
+                else if (isOutputLayer) {
+                    nodeId = outputIds[i];
                 }
                 else {
                     id++;

@@ -437,7 +437,7 @@ public interface ITransformerVisitor<V> extends ISensorVisitor<Phrase<V>>, IAllA
         for ( Stmt<Phrase<V>> e : nnStepStmt.getIoNeurons().get() ) {
             newIoNeurons.get().add((Stmt<V>) e.modify(this));
         }
-        return NNStepStmt.make(newIoNeurons, nnStepStmt.getProperty(), nnStepStmt.getComment());
+        return NNStepStmt.make(nnStepStmt.getNetDefinition(), newIoNeurons, nnStepStmt.getProperty(), nnStepStmt.getComment());
     }
 
     @Override

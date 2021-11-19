@@ -1,11 +1,10 @@
-import * as exports from 'exports';
 import * as MSG from 'message';
-import * as LOG from 'log';
 import * as UTIL from 'util';
 import * as NAOSIM from 'webots.simulation';
 import * as SIM from 'simulation.simulation';
 import CONST from 'simulation.constants';
 import * as GUISTATE_C from 'guiState.controller';
+import * as NN_CTRL from 'nn.controller';
 import * as TOUR_C from 'tour.controller';
 import * as PROG_C from 'program.controller';
 import * as PROGRAM from 'program.model';
@@ -316,6 +315,7 @@ function initEvents() {
 }
 
 function initSimulation(result) {
+    NN_CTRL.prepareNNfromNNstep();
     SIM.init([result], true, GUISTATE_C.getRobotGroup());
     $('#simControl').addClass('typcn-media-play-outline').removeClass('typcn-media-play');
     if (SIM.getNumRobots() === 1 && debug) {
@@ -398,6 +398,7 @@ function toggleSimEvent(event) {
 
         PROGRAM.runInSim(GUISTATE_C.getProgramName(), configName, xmlTextProgram, xmlConfigText, language, function (result) {
             if (result.rc == 'ok') {
+                NN_CTRL.prepareNNfromNNstep();
                 setTimeout(function () {
                     SIM.setPause(false);
                     SIM.interpreterAddEvent(event);

@@ -253,6 +253,7 @@ function setRobot(robot, result, opt_init) {
     GUISTATE.gui.configuration = result.configuration;
     GUISTATE.gui.sim = result.sim;
     GUISTATE.gui.multipleSim = result.multipleSim;
+    GUISTATE.gui.nn = result.nn;
     GUISTATE.gui.webotsSim = result.webotsSim;
     GUISTATE.gui.webotsUrl = result.webotsUrl;
     GUISTATE.gui.neuralNetwork = result.neuralNetwork === undefined ? false : result.neuralNetwork;
@@ -398,6 +399,16 @@ function setRobot(robot, result, opt_init) {
         $('#robotWlan').removeClass('hidden');
     } else {
         $('#robotWlan').addClass('hidden');
+    }
+
+    if (GUISTATE.gui.nn) {
+        $('#tabNNctxt').show();
+        $('#menuTabNNctxt').show();
+        $('#nn').show();
+    } else {
+        $('#tabNNctxt').hide();
+        $('#menuTabNNctxt').hide();
+        $('#nn').hide();
     }
 
     UTIL.clearTabAlert('tabConfiguration'); // also clear tab alert when switching robots
@@ -1085,6 +1096,10 @@ function hasMultiSim() {
     return GUISTATE.gui.multipleSim == true;
 }
 
+function hasNN() {
+    return GUISTATE.gui.nn == true;
+}
+
 function hasWebotsSim() {
     return GUISTATE.gui.webotsSim == true;
 }
@@ -1329,6 +1344,7 @@ export {
     checkSim,
     hasSim,
     hasMultiSim,
+    hasNN,
     hasWebotsSim,
     getWebotsUrl,
     getListOfTutorials,

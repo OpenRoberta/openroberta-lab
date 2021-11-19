@@ -518,14 +518,16 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
 
     @Override
     public final V visitNNStepStmt(NNStepStmt<V> nnStepStmt) {
-        for ( Stmt<V> inputNeuron : nnStepStmt.getInputNeurons() ) {
+        final List<Stmt<V>> inputNeurons = nnStepStmt.getInputNeurons();
+        final List<Stmt<V>> outputNeurons = nnStepStmt.getOutputNeurons();
+        for ( Stmt<V> inputNeuron : inputNeurons ) {
             inputNeuron.accept(this);
         }
-        JSONObject o = makeNode(C.NNSTEP_STMT);
+        JSONObject o = makeNode(C.NNSTEP_STMT).put(C.ARG1, inputNeurons.size()).put(C.ARG2, outputNeurons.size());
         app(o);
-        for ( Stmt<V> outputNeuronAsStmt : nnStepStmt.getOutputNeurons() ) {
+        for ( Stmt<V> outputNeuronAsStmt : outputNeurons ) {
             NNOutputNeuronStmt outputNeuron = (NNOutputNeuronStmt) outputNeuronAsStmt;
-            JSONObject ov = makeNode(C.ASSIGN_STMT).put(C.NAME, outputNeuron.getValue());
+            JSONObject ov = makeNode(C.ASSIGN_STMT).put(C.NAME, ((Var) outputNeuron.getValue()).getValue());
             app(ov);
         }
         return null;

@@ -9,8 +9,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
- * the request description for the /like REST request<br>
- * <br>
+ * the request description for the /like REST request<br><br>
  * Version: 1<br>
  * Datum: 2020-06-15
  */
@@ -242,19 +241,7 @@ public class LikeRequest extends BaseRequest {
 
     @Override
     public String toString() {
-        return "LikeRequest [immutable="
-            + this.immutable
-            + ", cmd="
-            + this.cmd
-            + ", programName="
-            + this.programName
-            + ", robotName="
-            + this.robotName
-            + ", author="
-            + this.author
-            + ", like="
-            + this.like
-            + " ]";
+        return "LikeRequest [immutable=" + this.immutable + ", cmd=" + this.cmd + ", programName=" + this.programName + ", robotName=" + this.robotName + ", author=" + this.author + ", like=" + this.like + " ]";
     }
 
     @Override

@@ -9,8 +9,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
- * the request description for the /program/userGroupMembers/names REST request, response is: ListingNamesResponse<br>
- * <br>
+ * the request description for the /program/userGroupMembers/names REST request, response is: ListingNamesResponse<br><br>
  * Version: 1<br>
  * Datum: 2020-06-15
  */

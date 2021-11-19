@@ -9,8 +9,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
- * for future use! Replaces the bad dottet names. Data about the state of the robot<br>
- * <br>
+ * for future use! Replaces the bad dottet names. Data about the state of the robot<br><br>
  * Version: 1<br>
  * Datum: 2020-06-15
  */
@@ -333,23 +332,7 @@ public class RobotInfo {
 
     @Override
     public String toString() {
-        return "RobotInfo [immutable="
-            + this.immutable
-            + ", wait="
-            + this.wait
-            + ", battery="
-            + this.battery
-            + ", name="
-            + this.name
-            + ", version="
-            + this.version
-            + ", firmwareName="
-            + this.firmwareName
-            + ", sensorvalues="
-            + this.sensorvalues
-            + ", nepoexitvalue="
-            + this.nepoexitvalue
-            + " ]";
+        return "RobotInfo [immutable=" + this.immutable + ", wait=" + this.wait + ", battery=" + this.battery + ", name=" + this.name + ", version=" + this.version + ", firmwareName=" + this.firmwareName + ", sensorvalues=" + this.sensorvalues + ", nepoexitvalue=" + this.nepoexitvalue + " ]";
     }
 
     @Override

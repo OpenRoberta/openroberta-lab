@@ -31,7 +31,7 @@
 				<block type="robActions_NNstep" id="E;Q4^dR0?F1D]?@Ks;;6" intask="true">
 					<statement name="IONEURON">
 						<block type="robActions_inputneuron" id="8hhz{x7).AEpJiS54Thm" intask="true">
-							<field name="NAME">inp</field>
+							<field name="NAME">in1</field>
 							<value name="VALUE">
 								<block type="math_number" id="!zBe2Y(znX-AjuIB_kEL" intask="true">
 									<field name="NUM">1</field>
@@ -39,7 +39,7 @@
 							</value>
 						</block>
 						<block type="robActions_inputneuron" id="r+V7yJsZL2X`LkVe:]Za" intask="true">
-							<field name="NAME">inp</field>
+							<field name="NAME">in2</field>
 							<value name="VALUE">
 								<block type="math_number" id="V|+_KaMfVVc`+%W]q?pN" intask="true">
 									<field name="NUM">2</field>
@@ -47,7 +47,7 @@
 							</value>
 						</block>
 						<block type="robActions_inputneuron" id="B^~c-Rd+7z`t;!s-59vv" intask="true">
-							<field name="NAME">inp</field>
+							<field name="NAME">in3</field>
 							<value name="VALUE">
 								<block type="math_arithmetic" id=")H2v2oW/v,gL@aGddUoI" intask="true">
 									<field name="OP">ADD</field>
@@ -65,7 +65,7 @@
 							</value>
 						</block>
 						<block type="robActions_outputneuron" id="eQ`*;]Cm`h!2d49Xg0+K" intask="true">
-							<field name="NAME">outp</field>
+							<field name="NAME">out1</field>
 							<value name="VALUE">
 								<block type="variables_get" id="(7f2s*];ywi7Kl3Prj0A" intask="true">
 									<mutation datatype="Number"/>
@@ -74,7 +74,7 @@
 							</value>
 						</block>
 						<block type="robActions_outputneuron" id="hXDQkc#RuLMT=BG:}*nm" intask="true">
-							<field name="NAME">outp</field>
+							<field name="NAME">out2</field>
 							<value name="VALUE">
 								<block type="variables_get" id="FMGE@G]v7:WtCbX9s.F1" intask="true">
 									<mutation datatype="Number"/>

@@ -9,8 +9,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
- * the request description for the /entity REST request, TODO: remove this duplication of ListingRequest<br>
- * <br>
+ * the request description for the /entity REST request, TODO: remove this duplication of ListingRequest<br><br>
  * Version: 1<br>
  * Datum: 2020-06-15
  */
@@ -240,19 +239,7 @@ public class EntityRequest extends BaseRequest {
 
     @Override
     public String toString() {
-        return "EntityRequest [immutable="
-            + this.immutable
-            + ", cmd="
-            + this.cmd
-            + ", programName="
-            + this.programName
-            + ", owner="
-            + this.owner
-            + ", author="
-            + this.author
-            + ", configName="
-            + this.configName
-            + " ]";
+        return "EntityRequest [immutable=" + this.immutable + ", cmd=" + this.cmd + ", programName=" + this.programName + ", owner=" + this.owner + ", author=" + this.author + ", configName=" + this.configName + " ]";
     }
 
     @Override

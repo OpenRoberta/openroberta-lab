@@ -10,9 +10,9 @@ import * as d3 from 'd3';
 
 let mainWidth;
 
-const RECT_SIZE = 30;
-const SPACE_BETWEEN_NODES = 90;
-const BIAS_SIZE = 5;
+const RECT_SIZE = 50;
+const SPACE_BETWEEN_NODES = 60;
+const BIAS_SIZE = 10;
 
 enum HoverType {
     BIAS,
@@ -30,7 +30,6 @@ let state = new State();
 let linkWidthScale = d3.scale.linear().domain([0, 5]).range([1, 10]).clamp(true);
 let colorScale = d3.scale.linear<string, number>().domain([-1, 0, 1]).range(['#f59322', '#e8eaeb', '#0877bd']).clamp(true);
 
-let boundary: { [id: string]: number[][] } = {};
 let network: nn.Node[][] = null;
 
 function makeGUI() {
@@ -97,7 +96,7 @@ function updateWeightsUI(network: nn.Node[][], container) {
     }
 }
 
-function drawNode(cx: number, cy: number, nodeId: string, nodeType: NodeType, container, node?: nn.Node) {
+function drawNode(numberLabel: string, cx: number, cy: number, nodeId: string, nodeType: NodeType, container, node?: nn.Node) {
     let x = cx - RECT_SIZE / 2;
     let y = cy - RECT_SIZE / 2;
     let nodeClass = nodeType === NodeType.INPUT ? 'node_input' : nodeType === NodeType.HIDDEN ? 'node_hidden' : 'node_output';
@@ -114,9 +113,15 @@ function drawNode(cx: number, cy: number, nodeId: string, nodeType: NodeType, co
         width: RECT_SIZE,
         height: RECT_SIZE,
     });
+    let numberLabelNode = nodeGroup.append('text').attr({
+        class: 'main-label',
+        x: 10,
+        y: 20,
+        'text-anchor': 'start',
+    });
+    numberLabelNode.append('tspan').text(numberLabel);
     let activeOrNotClass = state[nodeId] ? 'active' : 'inactive';
     if (nodeType === NodeType.INPUT) {
-        let label = state.inputs[nodeId];
         // Draw the input label.
         let text = nodeGroup.append('text').attr({
             class: 'main-label',
@@ -124,29 +129,18 @@ function drawNode(cx: number, cy: number, nodeId: string, nodeType: NodeType, co
             y: RECT_SIZE / 2,
             'text-anchor': 'end',
         });
-        if (/[_^]/.test(label)) {
-            let myRe = /(.*?)([_^])(.)/g;
-            let myArray;
-            let lastIndex;
-            while ((myArray = myRe.exec(label)) != null) {
-                lastIndex = myRe.lastIndex;
-                let prefix = myArray[1];
-                let sep = myArray[2];
-                let suffix = myArray[3];
-                if (prefix) {
-                    text.append('tspan').text(prefix);
-                }
-                text.append('tspan')
-                    .attr('baseline-shift', sep === '_' ? 'sub' : 'super')
-                    .style('font-size', '9px')
-                    .text(suffix);
-            }
-            if (label.substring(lastIndex)) {
-                text.append('tspan').text(label.substring(lastIndex));
-            }
-        } else {
-            text.append('tspan').text(label);
-        }
+        text.append('tspan').text(nodeId);
+        nodeGroup.classed(activeOrNotClass, true);
+    }
+    if (nodeType === NodeType.OUTPUT) {
+        // Draw the output label.
+        let text = nodeGroup.append('text').attr({
+            class: 'main-label',
+            x: RECT_SIZE + 10,
+            y: RECT_SIZE / 2,
+            'text-anchor': 'start',
+        });
+        text.append('tspan').text(nodeId);
         nodeGroup.classed(activeOrNotClass, true);
     }
     if (nodeType !== NodeType.INPUT) {
@@ -220,26 +214,26 @@ function drawNetwork(network: nn.Node[][]): void {
     let targetIdWithCallout = null;
 
     // Draw the input layer separately.
-    let cx = RECT_SIZE / 2 + 50;
-    let nodeIds = Object.keys(state.inputs);
+    let cxI = RECT_SIZE / 2 + 50;
+    let nodeIds = state.inputs;
     let maxY = nodeIndexScale(nodeIds.length);
     nodeIds.forEach((nodeId, i) => {
         let cy = nodeIndexScale(i) + RECT_SIZE / 2;
-        node2coord[nodeId] = { cx, cy };
-        drawNode(cx, cy, nodeId, NodeType.INPUT, container);
+        node2coord[nodeId] = { cx: cxI, cy: cy };
+        drawNode('0.' + i, cxI, cy, nodeId, NodeType.INPUT, container);
     });
 
     // Draw the intermediate layers, exclude input (id:0) and output (id:numLayers-1)
     for (let layerIdx = 1; layerIdx < numLayers - 1; layerIdx++) {
         let numNodes = network[layerIdx].length;
-        let cx = layerScale(layerIdx) + RECT_SIZE / 2;
+        let cxH = layerScale(layerIdx) + RECT_SIZE / 2;
         maxY = Math.max(maxY, nodeIndexScale(numNodes));
         addPlusMinusControl(layerScale(layerIdx), layerIdx);
         for (let i = 0; i < numNodes; i++) {
             let node = network[layerIdx][i];
             let cy = nodeIndexScale(i) + RECT_SIZE / 2;
-            node2coord[node.id] = { cx, cy };
-            drawNode(cx, cy, node.id, NodeType.HIDDEN, container, node);
+            node2coord[node.id] = { cx: cxH, cy: cy };
+            drawNode('' + layerIdx + '.' + i, cxH, cy, node.id, NodeType.HIDDEN, container, node);
 
             // Show callout to thumbnails.
             let numNodes = network[layerIdx].length;
@@ -248,7 +242,7 @@ function drawNetwork(network: nn.Node[][]): void {
                 calloutThumb.style({
                     display: null,
                     top: `${20 + 3 + cy}px`,
-                    left: `${cx}px`,
+                    left: `${cxH}px`,
                 });
                 idWithCallout = node.id;
             }
@@ -284,13 +278,13 @@ function drawNetwork(network: nn.Node[][]): void {
     {
         let outputLayer = network[numLayers - 1];
         let numOutputs = outputLayer.length;
-        let cx = width - 3 * RECT_SIZE;
+        let cxO = width - 3 * RECT_SIZE;
         maxY = Math.max(maxY, nodeIndexScale(numOutputs));
         for (let j = 0; j < numOutputs; j++) {
             let node = outputLayer[j];
             let cy = nodeIndexScale(j) + RECT_SIZE / 2;
-            node2coord[node.id] = { cx, cy };
-            drawNode(cx, cy, node.id, NodeType.OUTPUT, container, node);
+            node2coord[node.id] = { cx: cxO, cy: cy };
+            drawNode('' + (numLayers - 1) + '.' + j, cxO, cy, node.id, NodeType.OUTPUT, container, node);
             // Draw links.
             for (let i = 0; i < node.inputLinks.length; i++) {
                 let link = node.inputLinks[i];
@@ -459,27 +453,22 @@ function updateUI(firstStep = false) {
     }
 }
 
-function constructInputIds(): string[] {
-    let result: string[] = [];
-    for (let inputName in state.inputs) {
-        result.push(inputName);
-    }
-    return result;
-}
-
-function reset() {
+export function reset() {
     let suffix = state.numHiddenLayers !== 1 ? 's' : '';
     d3.select('#layers-label').text('Hidden layer' + suffix);
     d3.select('#num-layers').text(state.numHiddenLayers);
 
-    // Make a simple network.
-    let shape = [state.numInputs].concat(state.networkShape).concat([state.numOutputs]);
-    let outputActivation = nn.Activations.LINEAR; // was: TANH;
-    let oldWeights: number[][][] = extractWeights(network);
-    network = nn.buildNetwork(shape, state.activation, outputActivation, state.regularization, constructInputIds(), state.initZero);
-    replaceWeights(network, oldWeights);
+    makeSimpleNetwork();
     drawNetwork(network);
     updateUI(true);
+}
+
+export function makeSimpleNetwork() {
+    let shape = [state.numInputs].concat(state.networkShape).concat([state.numOutputs]);
+    let outputActivation = nn.Activations.LINEAR; // was: TANH;
+    network = nn.buildNetwork(shape, state.activation, outputActivation, state.regularization, state.inputs, state.outputs, state.initZero);
+    replaceWeights(network, state.weights);
+    replaceBiases(network, state.biases);
 }
 
 function extractWeights(network: nn.Node[][]): number[][][] {
@@ -498,6 +487,20 @@ function extractWeights(network: nn.Node[][]): number[][][] {
         }
     }
     return weightsAllLayers;
+}
+
+function extractBiases(network: nn.Node[][]): number[][] {
+    let biasesAllLayers: number[][] = [];
+    if (network != null && network.length > 0) {
+        for (let layer of network) {
+            let biasesOneLayer: number[] = [];
+            for (let node of layer) {
+                biasesOneLayer.push(node.bias);
+            }
+            biasesAllLayers.push(biasesOneLayer);
+        }
+    }
+    return biasesAllLayers;
 }
 
 function replaceWeights(network: nn.Node[][], weightsAllLayers: number[][][]): void {
@@ -527,6 +530,32 @@ function replaceWeights(network: nn.Node[][], weightsAllLayers: number[][][]): v
     }
 }
 
+function replaceBiases(network: nn.Node[][], biasesAllLayers: number[][]): void {
+    if (network != null && network.length > 0 && biasesAllLayers != null) {
+        for (let i = 0; i < biasesAllLayers.length && i < network.length; i += 1) {
+            let layer = network[i];
+            let layerBiases = biasesAllLayers[i];
+            if (layer == null || layerBiases == null) {
+                break;
+            }
+            for (let j = 0; j < layerBiases.length && j < layer.length; j += 1) {
+                let node = layer[j];
+                let nodeBias = layerBiases[j];
+                if (node == null || nodeBias == null) {
+                    break;
+                }
+                node.bias = nodeBias;
+            }
+        }
+    }
+}
+
+export function setPlayground(stateFromNNstep: any, inputNeurons: string[], outputNeurons: string[]) {
+    state = new State();
+    state.setFromJson(stateFromNNstep, inputNeurons, outputNeurons);
+    makeSimpleNetwork();
+}
+
 export function runPlayground() {
     makeGUI();
     reset();
@@ -541,4 +570,10 @@ export function oneStep(inputData: number[]): number[] {
         outputData.push(node.output);
     }
     return outputData;
+}
+
+export function getStateAsJSONString(): String {
+    state.weights = extractWeights(network);
+    state.biases = extractBiases(network);
+    return JSON.stringify(state);
 }

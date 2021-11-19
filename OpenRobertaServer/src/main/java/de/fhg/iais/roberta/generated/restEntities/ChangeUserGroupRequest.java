@@ -14,8 +14,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
- * the request description for the /userGroup/createUserGroup and /userGroup/addGroupMembers REST request, returns UserGroupResponse<br>
- * <br>
+ * the request description for the /userGroup/createUserGroup and /userGroup/addGroupMembers REST request, returns UserGroupResponse<br><br>
  * Version: 1<br>
  * Datum: 2020-06-15
  */
@@ -232,15 +231,7 @@ public class ChangeUserGroupRequest extends BaseRequest {
 
     @Override
     public String toString() {
-        return "ChangeUserGroupRequest [immutable="
-            + this.immutable
-            + ", cmd="
-            + this.cmd
-            + ", groupName="
-            + this.groupName
-            + ", groupMemberNames="
-            + this.groupMemberNames
-            + " ]";
+        return "ChangeUserGroupRequest [immutable=" + this.immutable + ", cmd=" + this.cmd + ", groupName=" + this.groupName + ", groupMemberNames=" + this.groupMemberNames + " ]";
     }
 
     @Override

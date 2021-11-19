@@ -65,12 +65,36 @@ export class State {
     collectStats = false;
     numHiddenLayers = 1;
     networkShape: number[] = [3];
-    numInputs = 3;
-    inputs = {
-        i1: 'I_1',
-        i2: 'I_2',
-        i3: 'I_3',
-    };
-    numOutputs = 3;
+    weights: number[][][] = undefined;
+    biases: number[][] = undefined;
     seed: string;
+
+    numInputs = 0;
+    numOutputs = 0;
+    inputs: string[];
+    outputs: string[];
+
+    setFromJson(json: any, inputNeurons: string[], outputNeurons: string[]): void {
+        this.learningRate = json.learningRate !== undefined ? json.learningRate : 0.03;
+        this.regularizationRate = json.regularizationRate !== undefined ? json.regularizationRate : 0;
+        this.noise = json.noise !== undefined ? json.noise : 0;
+        this.batchSize = json.batchSize !== undefined ? json.batchSize : 10;
+        this.discretize = json.discretize !== undefined ? json.discretize : false;
+        this.percTrainData = json.percTrainData !== undefined ? json.percTrainData : 50;
+        this.activationKey = json.activationKey !== undefined ? json.activationKey : 'linear';
+        this.activation = activations[this.activationKey];
+        this.regularization = null;
+        this.initZero = json.initZero !== undefined ? json.initZero : false;
+        this.collectStats = json.collectStats !== undefined ? json.collectStats :false;
+        this.numHiddenLayers = json.numHiddenLayers !== undefined ? json.numHiddenLayers : 1;
+        this.networkShape = json.networkShape !== undefined ? json.networkShape : [3];
+        this.weights = json.weights !== undefined ? json.weights : undefined;
+        this.biases = json.biases !== undefined ? json.biases : undefined;
+        this.seed = json.seed !== undefined ? json.seed : undefined;
+
+        this.numInputs = inputNeurons.length;
+        this.numOutputs = outputNeurons.length;
+        this.inputs = inputNeurons;
+        this.outputs = outputNeurons;
+    }
 }
