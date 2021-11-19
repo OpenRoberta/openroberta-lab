@@ -38,7 +38,7 @@ define(["require", "exports", "message", "log", "guiState.controller", "program.
             if (GUISTATE_C.isKioskMode()) {
                 $('#infoButton').hide();
                 $('#feedbackButton').hide();
-                // für Einsteiger-Tutorials ist die Code-Ansicht eher verwirrend als hilfreich, daher zeigen wir die Schaltfläche nicht
+                // for beginner tutorials the code view is more confusing than helpful, so we don't show the button in kiosk mode
                 if (tutorial.level.startsWith('1')) {
                     $('#codeButton').hide();
                 }
