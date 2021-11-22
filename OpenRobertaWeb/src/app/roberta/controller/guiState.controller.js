@@ -121,6 +121,10 @@ function isConfigurationAnonymous() {
     return GUISTATE.configuration.name == '';
 }
 
+function isKioskMode() {
+    return GUISTATE.kiosk && GUISTATE.kiosk === true;
+}
+
 function setState(result) {
     if (result['server.version']) {
         GUISTATE.server.version = result['server.version'];
@@ -175,7 +179,7 @@ function setState(result) {
         $('#iconDisplayLogin').addClass('error');
     }
 
-    connectionType = getConnection();
+    let connectionType = getConnection();
     switch (getConnection()) {
         case GUISTATE.gui.connectionType.AGENTORTOKEN:
             if (GUISTATE.gui.isAgent === true) {
@@ -399,6 +403,10 @@ function setRobot(robot, result, opt_init) {
     UTIL.clearTabAlert('tabConfiguration'); // also clear tab alert when switching robots
 }
 
+function setKioskMode(kiosk) {
+    GUISTATE.kiosk = kiosk;
+}
+
 function findGroup(robot) {
     var robots = getRobots();
     for (var propt in robots) {
@@ -412,6 +420,7 @@ function findGroup(robot) {
 
 function findRobot(group) {
     var robots = getRobots();
+    let robot;
     for (robot in robots) {
         if (robots[robot].group === group) {
             return robots[robot].name;
@@ -1225,6 +1234,7 @@ export {
     isConfigurationStandard,
     getConfigurationStandardName,
     isConfigurationAnonymous,
+    isKioskMode,
     setState,
     getIsAgent,
     setIsAgent,
@@ -1233,6 +1243,7 @@ export {
     getBricklyWorkspace,
     setBricklyWorkspace,
     setRobot,
+    setKioskMode,
     findGroup,
     findRobot,
     setConnectionState,

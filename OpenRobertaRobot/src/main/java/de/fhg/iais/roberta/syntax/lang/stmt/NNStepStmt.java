@@ -1,13 +1,16 @@
 package de.fhg.iais.roberta.syntax.lang.stmt;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
+import de.fhg.iais.roberta.blockly.generated.Statement;
 import de.fhg.iais.roberta.blockly.generated.Value;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
+import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.syntax.lang.expr.Var;
@@ -23,13 +26,11 @@ import de.fhg.iais.roberta.util.dbc.Assert;
  */
 public class NNStepStmt<V> extends Stmt<V> {
 
-    private final List<Expr<V>> il;
-    private final List<Var<V>> ol;
+    private final StmtList<V> ioNeurons;
 
-    private NNStepStmt(List<Expr<V>> il, List<Var<V>> ol, BlocklyBlockProperties properties, BlocklyComment comment) {
+    private NNStepStmt(StmtList<V> ioNeurons, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(BlockTypeContainer.getByName("NNSTEP_STMT"), properties, comment);
-        this.il = il;
-        this.ol = ol;
+        this.ioNeurons = ioNeurons;
         setReadOnly();
     }
 
@@ -38,16 +39,32 @@ public class NNStepStmt<V> extends Stmt<V> {
      *
      * @return read only object of class {@link NNStepStmt}
      */
-    public static <V> NNStepStmt<V> make(List<Expr<V>> il, List<Var<V>> ol, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new NNStepStmt<>(il, ol, properties, comment);
+    public static <V> NNStepStmt<V> make(StmtList<V> ioNeurons, BlocklyBlockProperties properties, BlocklyComment comment) {
+        return new NNStepStmt<>(ioNeurons, properties, comment);
     }
 
-    public List<Expr<V>> getIl() {
-        return this.il;
+    public StmtList<V> getIoNeurons() {
+        return this.ioNeurons;
     }
 
-    public List<Var<V>> getOl() {
-        return this.ol;
+    public List<Stmt<V>> getInputNeurons() {
+        final List<Stmt<V>> inputNeurons = new ArrayList<>();
+        for ( Stmt<V> ioNeuron : ioNeurons.get() ) {
+            if (ioNeuron.getKind().getName().equals("NN_INPUT_NEURON_STMT")) {
+                inputNeurons.add(ioNeuron);
+            }
+        }
+        return inputNeurons;
+    }
+
+    public List<Stmt<V>> getOutputNeurons() {
+        final List<Stmt<V>> outputNeurons = new ArrayList<>();
+        for ( Stmt<V> ioNeuron : ioNeurons.get() ) {
+            if (ioNeuron.getKind().getName().equals("NN_OUTPUT_NEURON_STMT")) {
+                outputNeurons.add(ioNeuron);
+            }
+        }
+        return outputNeurons;
     }
 
     @Override
@@ -64,32 +81,16 @@ public class NNStepStmt<V> extends Stmt<V> {
      */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2ProgramAst<V> helper) {
         helper.getDropdownFactory();
-        List<Value> values = Jaxb2Ast.extractValues(block, (short) 6);
-        Phrase<V> i0 = helper.extractValue(values, new ExprParam("INPUT0", BlocklyType.NUMBER_INT));
-        Phrase<V> i1 = helper.extractValue(values, new ExprParam("INPUT1", BlocklyType.NUMBER_INT));
-        Phrase<V> i2 = helper.extractValue(values, new ExprParam("INPUT2", BlocklyType.NUMBER_INT));
-        List<Expr<V>> il = Arrays.asList(Jaxb2Ast.convertPhraseToExpr(i0), Jaxb2Ast.convertPhraseToExpr(i1), Jaxb2Ast.convertPhraseToExpr(i2));
-        Phrase<V> o0 = helper.extractValue(values, new ExprParam("OUTPUT0", BlocklyType.NUMBER_INT));
-        Phrase<V> o1 = helper.extractValue(values, new ExprParam("OUTPUT1", BlocklyType.NUMBER_INT));
-        Phrase<V> o2 = helper.extractValue(values, new ExprParam("OUTPUT2", BlocklyType.NUMBER_INT));
-        Assert.isTrue(o0.getClass().equals(Var.class) && o1.getClass().equals(Var.class) && o2.getClass().equals(Var.class));
-        final Var<V> v0 = (Var<V>) Jaxb2Ast.convertPhraseToExpr(o0);
-        final Var<V> v1 = (Var<V>) Jaxb2Ast.convertPhraseToExpr(o1);
-        final Var<V> v2 = (Var<V>) Jaxb2Ast.convertPhraseToExpr(o2);
-        List<Var<V>> ol = Arrays.asList(v0, v1, v2);
-        return NNStepStmt.make(il, ol, Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
+        final List<Statement> ioNeuronsWrapped = block.getStatement();
+        final StmtList<V> ioNeurons = helper.extractStatement(ioNeuronsWrapped, "IONEURON");
+        return NNStepStmt.make(ioNeurons, Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
     }
 
     @Override
     public Block astToBlock() {
         Block jaxbDestination = new Block();
-        Ast2Jaxb.addValue(jaxbDestination, "INPUT0", this.il.get(0));
-        Ast2Jaxb.addValue(jaxbDestination, "INPUT1", this.il.get(1));
-        Ast2Jaxb.addValue(jaxbDestination, "INPUT2", this.il.get(2));
-        Ast2Jaxb.addValue(jaxbDestination, "OUTPUT0", this.ol.get(0));
-        Ast2Jaxb.addValue(jaxbDestination, "OUTPUT1", this.ol.get(1));
-        Ast2Jaxb.addValue(jaxbDestination, "OUTPUT2", this.ol.get(2));
         Ast2Jaxb.setBasicProperties(this, jaxbDestination);
+        Ast2Jaxb.addStatement(jaxbDestination, "IONEURON", ioNeurons);
         return jaxbDestination;
     }
 

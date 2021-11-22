@@ -269,10 +269,10 @@ function init() {
             progCodeController.init();
             progSimController.init();
             progRunController.init();
-            menuController.init();
             tutorialController.init();
             userGroupController.init();
             notificationController.init();
+            menuController.init();
             // nnController.init();
 
             $('.cover').fadeOut(100, function () {

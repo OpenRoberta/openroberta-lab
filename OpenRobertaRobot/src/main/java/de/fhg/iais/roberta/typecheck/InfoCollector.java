@@ -86,6 +86,8 @@ import de.fhg.iais.roberta.syntax.lang.stmt.ExprStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.FunctionStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.IfStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.MethodStmt;
+import de.fhg.iais.roberta.syntax.lang.stmt.NNInputNeuronStmt;
+import de.fhg.iais.roberta.syntax.lang.stmt.NNOutputNeuronStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.NNStepStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.RepeatStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.SensorStmt;
@@ -250,6 +252,18 @@ public class InfoCollector<T> implements ILanguageVisitor<T>, ISensorVisitor<T>,
     @Override
     public T visitNNStepStmt(NNStepStmt<T> nnStepStmt) {
         extractInfos(nnStepStmt);
+        return null;
+    }
+
+    @Override
+    public T visitNNInputNeuronStmt(NNInputNeuronStmt<T> nnInputNeuronStmt) {
+        extractInfos(nnInputNeuronStmt);
+        return null;
+    }
+
+    @Override
+    public T visitNNOutputNeuronStmt(NNOutputNeuronStmt<T> nnOutputNeuronStmt) {
+        extractInfos(nnOutputNeuronStmt);
         return null;
     }
 

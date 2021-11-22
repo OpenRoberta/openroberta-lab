@@ -12,5 +12,8 @@
     "format:check": "cd OpenRobertaWeb && npm run format:check"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "prettier": "^2.4.1"
+  }
 }

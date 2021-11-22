@@ -1,4 +1,4 @@
-define(["require", "exports", "message", "comm", "wrap", "robot.controller", "socket.controller", "user.controller", "notification.controller", "userGroup.controller", "guiState.controller", "program.controller", "multSim.controller", "progRun.controller", "configuration.controller", "import.controller", "tour.controller", "sourceCodeEditor.controller", "jquery", "blockly", "slick"], function (require, exports, MSG, COMM, WRAP, ROBOT_C, SOCKET_C, USER_C, NOTIFICATION_C, USERGROUP_C, GUISTATE_C, PROGRAM_C, MULT_SIM, RUN_C, CONFIGURATION_C, IMPORT_C, TOUR_C, SOURCECODE_C, $, Blockly) {
+define(["require", "exports", "message", "comm", "wrap", "robot.controller", "socket.controller", "user.controller", "notification.controller", "userGroup.controller", "guiState.controller", "program.controller", "multSim.controller", "progRun.controller", "configuration.controller", "import.controller", "tour.controller", "sourceCodeEditor.controller", "jquery", "blockly", "progTutorial.controller", "slick"], function (require, exports, MSG, COMM, WRAP, ROBOT_C, SOCKET_C, USER_C, NOTIFICATION_C, USERGROUP_C, GUISTATE_C, PROGRAM_C, MULT_SIM, RUN_C, CONFIGURATION_C, IMPORT_C, TOUR_C, SOURCECODE_C, $, Blockly, TUTORIAL_C) {
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.init = void 0;
     var n = 0;
@@ -6,6 +6,8 @@ define(["require", "exports", "message", "comm", "wrap", "robot.controller", "so
     var QUERY_DELIMITER = '&';
     var QUERY_ASSIGNMENT = '=';
     var LOAD_SYSTEM_CALL = 'loadSystem';
+    var TUTORIAL = 'tutorial';
+    var KIOSK = 'kiosk';
     function cleanUri() {
         var uri = window.location.toString();
         var clean_uri = uri.substring(0, uri.lastIndexOf('/'));
@@ -55,6 +57,21 @@ define(["require", "exports", "message", "comm", "wrap", "robot.controller", "so
         if (loadSystem) {
             GUISTATE_C.setStartWithoutPopup();
             ROBOT_C.switchRobot(loadSystem, true);
+        }
+        var tutorial = getUrlParameter(TUTORIAL);
+        if (tutorial) {
+            if (tutorial === 'true' || tutorial === true) {
+                GUISTATE_C.setStartWithoutPopup();
+                $('#tabTutorialList').clickWrap();
+            }
+            else {
+                var kiosk = getUrlParameter(KIOSK);
+                if (kiosk && kiosk === 'true') {
+                    GUISTATE_C.setKioskMode(true);
+                }
+                GUISTATE_C.setStartWithoutPopup();
+                TUTORIAL_C.loadFromTutorial(tutorial);
+            }
         }
     }
     function init() {
@@ -452,10 +469,10 @@ define(["require", "exports", "message", "comm", "wrap", "robot.controller", "so
                         var ports = SOCKET_C.getPortList();
                         var robots = SOCKET_C.getRobotList();
                         $('#singleModalListInput').empty();
-                        i = 0;
+                        var i_1 = 0;
                         ports.forEach(function (port) {
-                            $('#singleModalListInput').append('<option value="' + port + '" selected>' + robots[i] + ' ' + port + '</option>');
-                            i++;
+                            $('#singleModalListInput').append('<option value="' + port + '" selected>' + robots[i_1] + ' ' + port + '</option>');
+                            i_1++;
                         });
                         ROBOT_C.showListModal();
                     }

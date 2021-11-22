@@ -175,6 +175,14 @@ block:
       category: STMT
       implementor: de.fhg.iais.roberta.syntax.lang.stmt.NNStepStmt
       type: [robactions_nnstep]
+  NN_INPUT_NEURON_STMT:
+    category: STMT
+    implementor: de.fhg.iais.roberta.syntax.lang.stmt.NNInputNeuronStmt
+    type: [ robActions_inputneuron ]
+  NN_OUTPUT_NEURON_STMT:
+    category: STMT
+    implementor: de.fhg.iais.roberta.syntax.lang.stmt.NNOutputNeuronStmt
+    type: [ robActions_outputneuron ]
   REPEAT_STMT:
       category: STMT
       implementor: de.fhg.iais.roberta.syntax.lang.stmt.RepeatStmt

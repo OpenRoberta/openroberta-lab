@@ -12,6 +12,7 @@ import * as $ from 'jquery';
 const INITIAL_WIDTH = 0.5;
 var blocklyWorkspace;
 var tutorialList;
+var tutorialId;
 var tutorial;
 var step = 0;
 var maxSteps = 0;
@@ -38,13 +39,21 @@ function initEvents() {
 function loadFromTutorial(tutId) {
     // initialize this tutorial
     tutorialId = tutId;
-    tutorial = tutorialList[tutId];
+    tutorial = tutorialList && tutorialList[tutId];
     if (tutorial) {
         ROBOT_C.switchRobot(tutorial.robot, null, startTutorial);
     }
 
     function startTutorial() {
         $('#tabProgram').clickWrap();
+        if (GUISTATE_C.isKioskMode()) {
+            $('#infoButton').hide();
+            $('#feedbackButton').hide();
+            // for beginner tutorials the code view is more confusing than helpful, so we don't show the button in kiosk mode
+            if (tutorial.level.startsWith('1')) {
+                $('#codeButton').hide();
+            }
+        }
         if (tutorial.initXML) {
             IMPORT_C.loadProgramFromXML('egal', tutorial.initXML);
         }
@@ -395,10 +404,9 @@ function checkQuiz() {
     var countCorrect = 0;
     var countChecked = 0;
     var totalQuestions = $('.quiz.question').length;
-    var totalCorrect = $('.quiz.answer [value=true').length;
+    var totalCorrect = $('.quiz.answer [value=true]').length;
     $('.quiz input').each(function (i, elem) {
-        $this = $(this);
-        $label = $('label>span[for="' + $this.attr('id') + '"]');
+        let $label = $('label>span[for="' + $(this).attr('id') + '"]');
         if ($(this).is(':checked')) {
             countChecked++;
         }
@@ -492,12 +500,17 @@ function closeTutorialView() {
 
 function exitTutorial() {
     Blockly.hideChaff();
-    closeTutorialView();
     $('#tutorial-navigation').fadeOut(750);
     $('#head-navigation').fadeIn(750);
     $('#tutorialButton').fadeOut();
     $('.blocklyToolboxDiv>.levelTabs').removeClass('invisible');
     PROG_C.loadExternalToolbox(GUISTATE_C.getProgramToolbox());
     Blockly.mainWorkspace.options.maxBlocks = undefined;
-    $('#tabTutorialList').clickWrap();
+    if (GUISTATE_C.isKioskMode()) {
+        $('.modal').modal('hide');
+        loadFromTutorial(tutorialId);
+    } else {
+        closeTutorialView();
+        $('#tabTutorialList').clickWrap();
+    }
 }

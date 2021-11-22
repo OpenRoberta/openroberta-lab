@@ -84,6 +84,8 @@ import de.fhg.iais.roberta.syntax.lang.stmt.ExprStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.FunctionStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.IfStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.MethodStmt;
+import de.fhg.iais.roberta.syntax.lang.stmt.NNInputNeuronStmt;
+import de.fhg.iais.roberta.syntax.lang.stmt.NNOutputNeuronStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.NNStepStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.RepeatStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.RepeatStmt.Mode;
@@ -516,15 +518,28 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
 
     @Override
     public final V visitNNStepStmt(NNStepStmt<V> nnStepStmt) {
-        for ( Expr<V> e : nnStepStmt.getIl() ) {
-            e.accept(this);
+        for ( Stmt<V> inputNeuron : nnStepStmt.getInputNeurons() ) {
+            inputNeuron.accept(this);
         }
         JSONObject o = makeNode(C.NNSTEP_STMT);
         app(o);
-        for ( Var<V> v : nnStepStmt.getOl() ) {
-            JSONObject ov = makeNode(C.ASSIGN_STMT).put(C.NAME, v.getValue());
+        for ( Stmt<V> outputNeuronAsStmt : nnStepStmt.getOutputNeurons() ) {
+            NNOutputNeuronStmt outputNeuron = (NNOutputNeuronStmt) outputNeuronAsStmt;
+            JSONObject ov = makeNode(C.ASSIGN_STMT).put(C.NAME, outputNeuron.getValue());
             app(ov);
         }
+        return null;
+    }
+
+    @Override
+    public final V visitNNInputNeuronStmt(NNInputNeuronStmt<V> inputNeuronStmt) {
+        inputNeuronStmt.getValue().accept(this);
+        return null;
+    }
+
+    @Override
+    public final V visitNNOutputNeuronStmt(NNOutputNeuronStmt<V> nnOutputNeuronStmt) {
+        // code is generated in method visitNNStepStmt
         return null;
     }
 
