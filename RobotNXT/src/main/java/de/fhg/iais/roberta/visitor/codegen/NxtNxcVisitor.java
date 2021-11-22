@@ -1311,9 +1311,9 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
                     break;
                 case SC.LIGHT:
                     if ( usedSensor.getMode().equals("LIGHT") ) {
-                        this.sb.append("true);");
-                    } else {
                         this.sb.append("false);");
+                    } else {
+                        this.sb.append("true);");
                     }
                     break;
                 case SC.TOUCH:
