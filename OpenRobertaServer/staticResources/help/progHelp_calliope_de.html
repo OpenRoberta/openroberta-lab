@@ -76,9 +76,6 @@
 </ul></div><div id="mbedActions_write_to_pin" class="help expert"><h3 id="ProgrammierBlöckeCalliope-»Schreibe...WertaufPin...«[Experten-Block]">»Schreibe ... Wert auf Pin ...« <span class="typcn typcn-star"></span></h3><p>Mit dem Block »Schreibe ... Wert auf Pin ...« kannst du einen analogen oder digitalen Wert auf einen der Pins schreiben.</p><p>Einstellmöglichkeiten und Eingabewert:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-sorted-down">Option, analog oder digital. »Analog« sind die Werte zwischen 0 und 1023. 0 bedeutet, dass es keine keine Spannung am Pin anliegt, und 1023 bedeutet, dass die vollen 3.3V anliegen. »Digital« sind entweder 0 oder 1. 0 bedeutet, dass keine Spannung anliegt und 1 bedeutet, dass volle Spannung anliegt.</li><li class="typcn typcn-arrow-sorted-down">Option, wähle den Ausgabepin aus.</li><li class="typcn typcn-arrow-left">Zahl, zu schreibender Wer. »Analog« sind die Werte zwischen 0 und 1023. 0 bedeutet, dass es keine keine Spannung am Pin anliegt, und 1023 bedeutet, dass die vollen 3.3V anliegen. »Digital« sind entweder 0 oder 1. 0 bedeutet, dass keine Spannung anliegt und 1 bedeutet, dass volle Spannung anliegt.</li>
-</ul></div><div id="mbedActions_pin_set_pull" class="help expert"><h3 id="ProgrammierBlöckeCalliope-»SetzePull...anPin...«[Experten-Block]">»Setze Pull ... an Pin ...« <span class="typcn typcn-star"></span></h3><p class="western">Mit diesem Block konfigurierst du den Pull des ausgewählten Pins.</p><div class="confluence-information-macro confluence-information-macro-information"><div class="confluence-information-macro-body"><p>Viele Calliope mini-Pins können als Pull-ups konfiguriert werden. So kann beispielsweise ein Pull-up die Spannung eines Pins auf hoch setzen (3,3 Volt oder 1 beim Aufruf eines digitalen Lesepins). Wenn ein Ende einer Taste mit P0 verbunden ist (auf hoch gesetzt) und das andere Ende mit GND (0 Volt), dann wird beim Drücken der Taste P0 auf 0 Volt umgeschaltet, und dein Programm erkennt einen Tastendruck.</p></div></div><p class="western auto-cursor-target">Einstellmöglichkeiten:
-</p><ul style="margin-top: 0; margin-bottom: 10px">
-<li class="typcn typcn-arrow-sorted-down">Option, wähle aus, ob der Pin als Pull-up oder Pull-down konfiguriert werden soll.</li><li class="typcn typcn-arrow-sorted-down">Option, wähle den zu konfigurierenden Pin auf dem Calliope mini aus.</li>
 </ul></div><div id="mbedActions_switch_led_matrix" class="help expert"><h3 id="ProgrammierBlöckeCalliope-»SchalteLEDMatrix...«[Experten-Block]">»Schalte LED Matrix ...« <span class="typcn typcn-star"></span></h3><p class="western">Mit diesem Block wird die LED Matrix  ein- oder ausgeschaltet.</p><p class="western auto-cursor-target">Einstellmöglichkeiten:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-sorted-down">An / Aus - steuert, ob die LED Matrix ein- oder ausgeschaltet wird.</li>
@@ -459,18 +456,18 @@
 <li class="typcn typcn-arrow-left">Zahl; Helligkeit der Lampe im Raster, Zahl zwischen 0 und 9.</li>
 </ul></div><div id="mbedImage_get_image" class="help beginner"><h3 id="ProgrammierBlöckeCalliope-»Bild«"><span style="color: rgb(0,0,0);">»Bild«</span><span style="color: rgb(0,0,0);"> </span></h3><p>Mit dem Block <span style="color: rgb(0,0,0);">»Bild« kannst du ein vordefiniertes Bild auswählen</span><span style="color: rgb(0,0,0);"><span>.</span></span></p><p>Auswahlmöglichkeiten:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
-<li class="typcn typcn-arrow-sorted-down">Bild, vordefiniertes Bild.</li>
+<li class="typcn typcn-arrow-right">Bild, vordefiniertes Bild.</li>
 </ul></div><div id="mbedImage_invert" class="help expert"><h3 id="ProgrammierBlöckeCalliope-»invertiere«[Experten-Block]">»invertiere« <span class="typcn typcn-star"></span></h3><p>Ein Bild wird umgekehrt. Ursprünglich leuchtende LEDs im Calliope-Display werden ausgeschaltet, ausgeschaltete LEDs werden eingeschaltet.</p><p>Eingabewert:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-left">Bild, das invertiert werden soll.</li>
-</ul>Rückgabewert:
-<ul style="margin-top: 0; margin-bottom: 10px">
+</ul><br><p>Rückgabewert:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-right">Bild, das invertiert wurde.</li>
 </ul></div><div id="mbedImage_shift" class="help expert"><h3 id="ProgrammierBlöckeCalliope-»verschiebe«[Experten-Block]">»verschiebe« <span class="typcn typcn-star"></span></h3><p>Ein Bild wird um einzelne Positionen verschoben. Die Verschieberichtung und die Anzahl Positionen auf dem Display werden eingegeben.</p><p>Eingabewerte und Einstellmöglichkeiten:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-left">Bild, das verschoben werden soll.</li><li class="typcn typcn-arrow-sorted-down">Richtung, in die das Bild verschoben werden soll; Auswahlmöglichkeiten: oben, unten, links oder rechts.</li><li class="typcn typcn-arrow-left">Zahl, um wie viele Positionen das Bild verschoben werden soll.</li>
-</ul>Rückgabewert:
-<ul style="margin-top: 0; margin-bottom: 10px">
+</ul><br><p>Rückgabewert:
+</p><ul style="margin-top: 0; margin-bottom: 10px">
 <li class="typcn typcn-arrow-right">Bild, verschoben um die eingestellten Werte.</li>
 </ul></div><div id="mbedCommunication_sendBlock" class="help expert"><h3 id="ProgrammierBlöckeCalliope-»SendeNachrichtZeichenkette«[Experten-Block]">»Sende Nachricht Zeichenkette« <span class="typcn typcn-star"></span></h3><p>Der Calliope sendet eine Nachricht. Alle Calliope in der nähren Umgebung können diese Nachricht empfangen.</p><p>Eingabewert:
 </p><ul style="margin-top: 0; margin-bottom: 10px">
