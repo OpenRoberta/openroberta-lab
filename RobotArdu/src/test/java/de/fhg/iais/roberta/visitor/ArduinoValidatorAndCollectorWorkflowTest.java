@@ -9,12 +9,17 @@ import org.junit.Test;
 import de.fhg.iais.roberta.bean.UsedHardwareBean;
 import de.fhg.iais.roberta.components.ConfigurationComponent;
 import de.fhg.iais.roberta.components.Project;
+import de.fhg.iais.roberta.mode.action.BrickLedColor;
+import de.fhg.iais.roberta.mode.action.LightMode;
 import de.fhg.iais.roberta.syntax.MotionParam;
 import de.fhg.iais.roberta.syntax.MotorDuration;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.SC;
+import de.fhg.iais.roberta.syntax.action.light.LightAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
+import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
 import de.fhg.iais.roberta.syntax.lang.expr.NumConst;
+import de.fhg.iais.roberta.syntax.lang.expr.RgbColor;
 import de.fhg.iais.roberta.syntax.sensor.SensorMetaDataBean;
 import de.fhg.iais.roberta.syntax.sensor.generic.DropSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor;
@@ -91,7 +96,7 @@ public class ArduinoValidatorAndCollectorWorkflowTest extends WorkflowTest {
 
         Project project = executeWorkflow();
 
-        assertHasNepoInfo(moistureSensor, NepoInfo.Severity.ERROR ,"CONFIGURATION_ERROR_SENSOR_WRONG");
+        assertHasNepoInfo(moistureSensor, NepoInfo.Severity.ERROR, "CONFIGURATION_ERROR_SENSOR_WRONG");
     }
 
     @Test
@@ -390,6 +395,54 @@ public class ArduinoValidatorAndCollectorWorkflowTest extends WorkflowTest {
         executeWorkflow();
 
         assertHasNoNepoInfo(motorOnAction);
+    }
+
+    @Test
+    public void visitLightAction() {
+        configurationComponents.add(new ConfigurationComponent(SC.LIGHT, true, "P1", "P1", new HashMap<>()));
+
+        RgbColor<Void> rgbColor = new RgbColor<>(new NumConst<>("10"), new NumConst<>("10"), new NumConst<>("10"), new NumConst<>("10"));
+
+        LightAction<Void> lightAction = new LightAction<>("P1", BrickLedColor.ORANGE, LightMode.DEFAULT, rgbColor);
+        phrases.add(lightAction);
+
+        executeWorkflow();
+
+        assertHasNoNepoInfo(lightAction);
+    }
+
+    @Test
+    public void visitLightAction_noActor() {
+        RgbColor<Void> rgbColor = new RgbColor<>(new NumConst<>("10"), new NumConst<>("10"), new NumConst<>("10"), new NumConst<>("10"));
+
+        LightAction<Void> lightAction = new LightAction<>("P1", BrickLedColor.ORANGE, LightMode.DEFAULT, rgbColor);
+        phrases.add(lightAction);
+
+        executeWorkflow();
+
+        assertHasNepoInfo(lightAction, NepoInfo.Severity.ERROR, "CONFIGURATION_ERROR_ACTOR_MISSING");
+    }
+
+    @Test
+    public void visitPlayNoteAction() {
+        configurationComponents.add(new ConfigurationComponent(SC.MUSIC, true, "P1", "P1", new HashMap<>()));
+
+        PlayNoteAction<Void> playNoteAction = new PlayNoteAction<>("100", "100", "P1");
+        phrases.add(playNoteAction);
+
+        executeWorkflow();
+
+        assertHasNoNepoInfo(playNoteAction);
+    }
+
+    @Test
+    public void visitPlayNoteAction_noPort() {
+        PlayNoteAction<Void> playNoteAction = new PlayNoteAction<>("100", "100", "P1");
+        phrases.add(playNoteAction);
+
+        executeWorkflow();
+
+        assertHasNepoInfo(playNoteAction, NepoInfo.Severity.ERROR, "CONFIGURATION_ERROR_ACTOR_MISSING");
     }
 
     private UsedHardwareBean getUsedHardwareBean(Project project) {

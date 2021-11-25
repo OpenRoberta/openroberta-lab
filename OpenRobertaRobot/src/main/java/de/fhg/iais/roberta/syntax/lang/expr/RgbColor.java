@@ -32,6 +32,15 @@ public class RgbColor<V> extends Expr<V> {
         setReadOnly();
     }
 
+    public RgbColor(Expr<V> r, Expr<V> g, Expr<V> b, Expr<V> a) {
+        super(BlockTypeContainer.getByName("RGB_COLOR"));
+        R = r;
+        G = g;
+        B = b;
+        A = a;
+        setReadOnly();
+    }
+
     // TODO: inline, if proposal is accepted
     public Expr<V> getR() {
         return R;

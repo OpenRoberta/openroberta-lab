@@ -39,6 +39,16 @@ public class PlayNoteAction<V> extends Action<V> {
         setReadOnly();
     }
 
+    public PlayNoteAction(String duration, String frequency, String port) {
+        super(BlockTypeContainer.getByName("PLAY_NOTE_ACTION"));
+        Assert.isTrue(NumberUtils.isCreatable(duration) && NumberUtils.isCreatable(frequency));
+        this.duration = duration;
+        this.frequency = frequency;
+        this.port = port;
+        this.hide = null;
+        setReadOnly();
+    }
+
     /**
      * Creates instance of {@link PlayNoteAction}. This instance is read only and can not be modified.
      *

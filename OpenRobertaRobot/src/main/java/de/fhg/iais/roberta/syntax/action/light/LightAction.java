@@ -42,6 +42,16 @@ public class LightAction<V> extends Action<V> {
         setReadOnly();
     }
 
+    public LightAction(String port, IBrickLedColor color, ILightMode mode, Expr<V> rgbLedColor) {
+        super(BlockTypeContainer.getByName("LIGHT_ACTION"));
+        Assert.isTrue(mode != null);
+        this.rgbLedColor = rgbLedColor;
+        this.color = color;
+        this.port = port;
+        this.mode = mode;
+        setReadOnly();
+    }
+
     /**
      * Creates instance of {@link LightAction}. This instance is read only and can not be modified.
      *
