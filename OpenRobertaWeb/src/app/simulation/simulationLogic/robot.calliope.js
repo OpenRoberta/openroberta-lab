@@ -325,50 +325,52 @@ Calliope.prototype.update = function () {
 };
 
 Calliope.prototype.handleMouse = function (e, offsetX, offsetY, scale, w, h) {
-    w = w / scale;
-    h = h / scale;
-    var X = e.clientX || e.originalEvent.touches[0].pageX;
-    var Y = e.clientY || e.originalEvent.touches[0].pageY;
-    var top = $('#robotLayer').offset().top + $('#robotLayer').width() / 2;
-    var left = $('#robotLayer').offset().left + $('#robotLayer').height() / 2;
-    startX = parseInt(X - left, 10) / scale;
-    startY = parseInt(Y - top, 10) / scale;
-    var scsq = 1;
-    if (scale < 1) scsq = scale * scale;
-    var dxA = startX - this.button.xA;
-    var dyA = startY + this.button.yA;
-    var A = dxA * dxA + dyA * dyA < (this.button.rA * this.button.rA) / scsq;
-    var dxB = startX - this.button.xB;
-    var dyB = startY + this.button.yB;
-    var B = dxB * dxB + dyB * dyB < (this.button.rB * this.button.rB) / scsq;
-    var dxReset = startX - this.button.xReset;
-    var dyReset = startY + this.button.yReset;
-    var Reset = dxReset * dxReset + dyReset * dyReset < (this.button.rReset * this.button.rReset) / scsq;
+    if (e.type !== 'touchend') {
+        w = w / scale;
+        h = h / scale;
+        var X = e.clientX || e.originalEvent.touches[0].pageX;
+        var Y = e.clientY || e.originalEvent.touches[0].pageY;
+        var top = $('#robotLayer').offset().top + $('#robotLayer').width() / 2;
+        var left = $('#robotLayer').offset().left + $('#robotLayer').height() / 2;
+        startX = parseInt(X - left, 10) / scale;
+        startY = parseInt(Y - top, 10) / scale;
+        var scsq = 1;
+        if (scale < 1) scsq = scale * scale;
+        var dxA = startX - this.button.xA;
+        var dyA = startY + this.button.yA;
+        var A = dxA * dxA + dyA * dyA < (this.button.rA * this.button.rA) / scsq;
+        var dxB = startX - this.button.xB;
+        var dyB = startY + this.button.yB;
+        var B = dxB * dxB + dyB * dyB < (this.button.rB * this.button.rB) / scsq;
+        var dxReset = startX - this.button.xReset;
+        var dyReset = startY + this.button.yReset;
+        var Reset = dxReset * dxReset + dyReset * dyReset < (this.button.rReset * this.button.rReset) / scsq;
 
-    var dxBothA = startX - this.button.xBothA;
-    var dyBothA = startY + this.button.yBothA;
-    var dxBothB = startX - this.button.xBothB;
-    var dyBothB = startY + this.button.yBothB;
-    var bothA = Math.pow(dxBothA, 2) + Math.pow(dyBothA, 2) < Math.pow(this.button.rBoth, 2) / scsq;
-    var bothB = Math.pow(dxBothB, 2) + Math.pow(dyBothB, 2) < Math.pow(this.button.rBoth, 2) / scsq;
-    var bothButtons = bothA || bothB;
+        var dxBothA = startX - this.button.xBothA;
+        var dyBothA = startY + this.button.yBothA;
+        var dxBothB = startX - this.button.xBothB;
+        var dyBothB = startY + this.button.yBothB;
+        var bothA = Math.pow(dxBothA, 2) + Math.pow(dyBothA, 2) < Math.pow(this.button.rBoth, 2) / scsq;
+        var bothB = Math.pow(dxBothB, 2) + Math.pow(dyBothB, 2) < Math.pow(this.button.rBoth, 2) / scsq;
+        var bothButtons = bothA || bothB;
 
-    var dxPin0 = startX - this.pin0.x;
-    var dyPin0 = startY + this.pin0.y;
-    var Pin0 = dxPin0 * dxPin0 + dyPin0 * dyPin0 < (this.pin0.r * this.pin0.r) / scsq;
-    var dxPin1 = startX - this.pin1.x;
-    var dyPin1 = startY + this.pin1.y;
-    var Pin1 = dxPin1 * dxPin1 + dyPin1 * dyPin1 < (this.pin1.r * this.pin1.r) / scsq;
-    var dxPin2 = startX - this.pin2.x;
-    var dyPin2 = startY + this.pin2.y;
-    var Pin2 = dxPin2 * dxPin2 + dyPin2 * dyPin2 < (this.pin2.r * this.pin2.r) / scsq;
-    var dxPin3 = startX - this.pin3.x;
-    var dyPin3 = startY + this.pin3.y;
-    var Pin3 = dxPin3 * dxPin3 + dyPin3 * dyPin3 < (this.pin3.r * this.pin3.r) / scsq;
-    // special case, display (center: 0,0) represents light level
-    var dxDisplay = startX;
-    var dyDisplay = startY + 20;
-    var Display = dxDisplay * dxDisplay + dyDisplay * dyDisplay < this.display.rLight * this.display.rLight;
+        var dxPin0 = startX - this.pin0.x;
+        var dyPin0 = startY + this.pin0.y;
+        var Pin0 = dxPin0 * dxPin0 + dyPin0 * dyPin0 < (this.pin0.r * this.pin0.r) / scsq;
+        var dxPin1 = startX - this.pin1.x;
+        var dyPin1 = startY + this.pin1.y;
+        var Pin1 = dxPin1 * dxPin1 + dyPin1 * dyPin1 < (this.pin1.r * this.pin1.r) / scsq;
+        var dxPin2 = startX - this.pin2.x;
+        var dyPin2 = startY + this.pin2.y;
+        var Pin2 = dxPin2 * dxPin2 + dyPin2 * dyPin2 < (this.pin2.r * this.pin2.r) / scsq;
+        var dxPin3 = startX - this.pin3.x;
+        var dyPin3 = startY + this.pin3.y;
+        var Pin3 = dxPin3 * dxPin3 + dyPin3 * dyPin3 < (this.pin3.r * this.pin3.r) / scsq;
+        // special case, display (center: 0,0) represents light level
+        var dxDisplay = startX;
+        var dyDisplay = startY + 20;
+        var Display = dxDisplay * dxDisplay + dyDisplay * dyDisplay < this.display.rLight * this.display.rLight;
+    }
     var lightSliderActive = $('#sliderLight').val() !== '100';
     if (!lightSliderActive) {
         this.display.lightLevel = 100;
@@ -397,13 +399,6 @@ Calliope.prototype.handleMouse = function (e, offsetX, offsetY, scale, w, h) {
             }
         } else if (e.type === 'mousemove' && Display && !lightSliderActive) {
             this.display.lightLevel = 50;
-        } else if (e.type === 'mouseup') {
-            this.pin0.touched = false;
-            this.pin1.touched = false;
-            this.pin2.touched = false;
-            this.pin3.touched = false;
-            this.buttons.A = false;
-            this.buttons.B = false;
         }
         if (Display && !lightSliderActive) {
             $('#robotLayer').css('cursor', 'crosshair');
@@ -412,6 +407,14 @@ Calliope.prototype.handleMouse = function (e, offsetX, offsetY, scale, w, h) {
         }
     } else {
         $('#robotLayer').css('cursor', 'auto');
+    }
+    if (e.type === 'mouseup' || e.type === 'touchend') {
+        this.pin0.touched = false;
+        this.pin1.touched = false;
+        this.pin2.touched = false;
+        this.pin3.touched = false;
+        this.buttons.A = false;
+        this.buttons.B = false;
     }
 };
 

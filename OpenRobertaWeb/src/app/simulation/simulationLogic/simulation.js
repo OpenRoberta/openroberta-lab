@@ -1579,7 +1579,7 @@ function addMouseEvents() {
             handleMouseMove(e);
         }
     });
-    $('#robotLayer').mouseup(function (e) {
+    $('#robotLayer').on('mouseup touchend',function (e) {
         if (robots[robotIndex].handleMouseUp) {
             robots[robotIndex].handleMouseUp(e, offsetX, offsetY, scale, scene.playground.w / 2, scene.playground.h / 2);
         } else {
