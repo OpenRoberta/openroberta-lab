@@ -1,4 +1,3 @@
-import * as exports from 'exports';
 import * as MSG from 'message';
 import * as LOG from 'log';
 import * as $ from 'jquery';
@@ -744,6 +743,17 @@ function annotateBlocks(workspace, annotations) {
         }
     }
 }
+
+function removeLinks($elem) {
+    $elem
+        .filter(function () {
+            return $(this).attr('href') && ($(this).attr('href').startsWith('http') || $(this).attr('href').startsWith('javascript:linkTo'));
+        })
+        .each(function () {
+            $(this).removeAttr('href');
+        });
+}
+
 export {
     base64decode,
     clone,
@@ -772,4 +782,5 @@ export {
     clearTabAlert,
     clearAnnotations,
     annotateBlocks,
+    removeLinks,
 };

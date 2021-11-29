@@ -1,5 +1,3 @@
-import * as exports from 'exports';
-import * as COMM from 'comm';
 import * as MSG from 'message';
 import * as LOG from 'log';
 import * as GUISTATE_C from 'guiState.controller';
@@ -7,6 +5,7 @@ import * as PROG_C from 'program.controller';
 import * as ROBOT_C from 'robot.controller';
 import * as IMPORT_C from 'import.controller';
 import * as Blockly from 'blockly';
+import * as U from 'util';
 import * as $ from 'jquery';
 
 const INITIAL_WIDTH = 0.5;
@@ -53,6 +52,7 @@ function loadFromTutorial(tutId) {
             if (tutorial.level.startsWith('1')) {
                 $('#codeButton').hide();
             }
+            U.removeLinks($('#legalDiv a'));
         }
         if (tutorial.initXML) {
             IMPORT_C.loadProgramFromXML('egal', tutorial.initXML);
@@ -145,6 +145,9 @@ function showOverview() {
     html += GUISTATE_C.getMenuRobotRealName(tutorial.robot);
     $('#tutorialOverviewText').html(html);
     $('#tutorialOverviewTitle').html(tutorial.name);
+    if (GUISTATE_C.isKioskMode()) {
+        U.removeLinks($('#tutorialOverview a'));
+    }
     $('#tutorialAbort').off('click.dismiss.bs.modal');
     $('#tutorialAbort').onWrap(
         'click.dismiss.bs.modal',
@@ -254,6 +257,9 @@ function createInstruction() {
         } else {
             // apparently a step without an instruction -> go directly to the quiz
             createQuiz();
+        }
+        if (GUISTATE_C.isKioskMode()) {
+            U.removeLinks($('#tutorialContent a'));
         }
     }
 }

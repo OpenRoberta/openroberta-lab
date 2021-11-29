@@ -1,6 +1,6 @@
 define(["require", "exports", "message", "log", "jquery", "blockly", "jquery-validate", "bootstrap"], function (require, exports, MSG, LOG, $, Blockly) {
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.annotateBlocks = exports.clearAnnotations = exports.clearTabAlert = exports.alertTab = exports.isLocalStorageAvailable = exports.countBlocks = exports.getHashFrom = exports.download = exports.getBasename = exports.sgn = exports.roundUltraSound = exports.round = exports.response = exports.showMsgOnTop = exports.showSingleListModal = exports.showSingleModal = exports.setFocusOnElement = exports.checkVisibility = exports.calcDataTableHeight = exports.formatResultLog = exports.parseDate = exports.formatDate = exports.setObjectProperty = exports.getPropertyFromObject = exports.isEmpty = exports.clone = exports.base64decode = void 0;
+    exports.removeLinks = exports.annotateBlocks = exports.clearAnnotations = exports.clearTabAlert = exports.alertTab = exports.isLocalStorageAvailable = exports.countBlocks = exports.getHashFrom = exports.download = exports.getBasename = exports.sgn = exports.roundUltraSound = exports.round = exports.response = exports.showMsgOnTop = exports.showSingleListModal = exports.showSingleModal = exports.setFocusOnElement = exports.checkVisibility = exports.calcDataTableHeight = exports.formatResultLog = exports.parseDate = exports.formatDate = exports.setObjectProperty = exports.getPropertyFromObject = exports.isEmpty = exports.clone = exports.base64decode = void 0;
     var ANIMATION_DURATION = 750;
     var ratioWorkspace = 1;
     /**
@@ -709,4 +709,14 @@ define(["require", "exports", "message", "log", "jquery", "blockly", "jquery-val
         }
     }
     exports.annotateBlocks = annotateBlocks;
+    function removeLinks($elem) {
+        $elem
+            .filter(function () {
+            return $(this).attr('href') && ($(this).attr('href').startsWith('http') || $(this).attr('href').startsWith('javascript:linkTo'));
+        })
+            .each(function () {
+            $(this).removeAttr('href');
+        });
+    }
+    exports.removeLinks = removeLinks;
 });
