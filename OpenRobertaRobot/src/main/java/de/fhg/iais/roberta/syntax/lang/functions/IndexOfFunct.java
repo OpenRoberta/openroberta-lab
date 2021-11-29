@@ -39,6 +39,14 @@ public class IndexOfFunct<V> extends Function<V> {
         setReadOnly();
     }
 
+    public IndexOfFunct(IIndexLocation name, List<Expr<V>> param) {
+        super(BlockTypeContainer.getByName("TEXT_INDEX_OF_FUNCT"));
+        Assert.isTrue(name != null && param != null);
+        this.location = name;
+        this.param = param;
+        setReadOnly();
+    }
+
     /**
      * Creates instance of {@link IndexOfFunct}. This instance is read only and can not be modified.
      *

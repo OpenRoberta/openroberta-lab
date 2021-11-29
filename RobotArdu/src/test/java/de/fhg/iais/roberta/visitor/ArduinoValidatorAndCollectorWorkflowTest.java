@@ -2,24 +2,37 @@ package de.fhg.iais.roberta.visitor;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
 
 import de.fhg.iais.roberta.bean.UsedHardwareBean;
+import de.fhg.iais.roberta.components.Category;
 import de.fhg.iais.roberta.components.ConfigurationComponent;
 import de.fhg.iais.roberta.components.Project;
+import de.fhg.iais.roberta.inter.mode.action.IRelayMode;
+import de.fhg.iais.roberta.inter.mode.general.IMode;
 import de.fhg.iais.roberta.mode.action.BrickLedColor;
 import de.fhg.iais.roberta.mode.action.LightMode;
+import de.fhg.iais.roberta.mode.action.RelayMode;
+import de.fhg.iais.roberta.mode.general.IndexLocation;
+import de.fhg.iais.roberta.syntax.BlockType;
 import de.fhg.iais.roberta.syntax.MotionParam;
 import de.fhg.iais.roberta.syntax.MotorDuration;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.SC;
+import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
+import de.fhg.iais.roberta.syntax.action.generic.PinWriteValueAction;
 import de.fhg.iais.roberta.syntax.action.light.LightAction;
+import de.fhg.iais.roberta.syntax.action.light.LightStatusAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
+import de.fhg.iais.roberta.syntax.actors.arduino.RelayAction;
+import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.syntax.lang.expr.NumConst;
 import de.fhg.iais.roberta.syntax.lang.expr.RgbColor;
+import de.fhg.iais.roberta.syntax.lang.functions.IndexOfFunct;
 import de.fhg.iais.roberta.syntax.sensor.SensorMetaDataBean;
 import de.fhg.iais.roberta.syntax.sensor.generic.DropSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor;
@@ -27,6 +40,7 @@ import de.fhg.iais.roberta.syntax.sensor.generic.HumiditySensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.KeysSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.MoistureSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.MotionSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.PinGetValueSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.PulseSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.RfidSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.VoltageSensor;
@@ -444,6 +458,110 @@ public class ArduinoValidatorAndCollectorWorkflowTest extends WorkflowTest {
 
         assertHasNepoInfo(playNoteAction, NepoInfo.Severity.ERROR, "CONFIGURATION_ERROR_ACTOR_MISSING");
     }
+
+    @Test
+    public void visitLightStatusActionOff() {
+        configurationComponents.add(new ConfigurationComponent(SC.LIGHT, true, "P1", "P1", new HashMap<>()));
+
+        LightStatusAction<Void> lightStatusAction = new LightStatusAction<>("P1", LightStatusAction.Status.OFF);
+        phrases.add(lightStatusAction);
+
+        executeWorkflow();
+        assertHasNoNepoInfo(lightStatusAction);
+    }
+
+    @Test
+    public void visitLightStatusActionOff_noPort() {
+        LightStatusAction<Void> lightStatusAction = new LightStatusAction<>("P1", LightStatusAction.Status.OFF);
+        phrases.add(lightStatusAction);
+
+        executeWorkflow();
+        assertHasNepoInfo(lightStatusAction, NepoInfo.Severity.ERROR, "CONFIGURATION_ERROR_ACTOR_MISSING");
+    }
+
+    @Test
+    public void visitLightStatusActionReset() {
+        configurationComponents.add(new ConfigurationComponent(SC.LIGHT, true, "P1", "P1", new HashMap<>()));
+
+        LightStatusAction<Void> lightStatusAction = new LightStatusAction<>("P1", LightStatusAction.Status.RESET);
+        phrases.add(lightStatusAction);
+
+        executeWorkflow();
+        assertHasNoNepoInfo(lightStatusAction);
+    }
+
+    @Test
+    public void visitLightStatusActionReset_noPort() {
+        LightStatusAction<Void> lightStatusAction = new LightStatusAction<>("P1", LightStatusAction.Status.RESET);
+        phrases.add(lightStatusAction);
+
+        executeWorkflow();
+        assertHasNepoInfo(lightStatusAction, NepoInfo.Severity.ERROR, "CONFIGURATION_ERROR_ACTOR_MISSING");
+    }
+
+    @Test
+    public void visitRelayAction(){
+        configurationComponents.add(new ConfigurationComponent(SC.OTHER, true, "P1", "P1", new HashMap<>()));
+
+        RelayAction<Void> relayAction = new RelayAction<>("P1", RelayMode.DEFAULT);
+        phrases.add(relayAction);
+
+        executeWorkflow();
+        assertHasNoNepoInfo(relayAction);
+    }
+
+    @Test
+    public void visitRelayAction_noPort(){
+        RelayAction<Void> relayAction = new RelayAction<>("P1", RelayMode.DEFAULT);
+        phrases.add(relayAction);
+
+        executeWorkflow();
+        assertHasNepoInfo(relayAction, NepoInfo.Severity.ERROR, "CONFIGURATION_ERROR_ACTOR_MISSING");
+    }
+
+
+    @Test
+    public void visitShowTexAction(){
+        configurationComponents.add(new ConfigurationComponent(SC.DISPLAY, true, "P1", "P1", new HashMap<>()));
+
+        ShowTextAction<Void> showTextAction = new ShowTextAction<>( new NumConst<>("Text"), new NumConst<>("0"), new NumConst<>("0"), "P1");
+
+        executeWorkflow();
+        assertHasNoNepoInfo(showTextAction);
+    }
+
+    @Test
+    public void visitPinGetValueSensor() {
+        configurationComponents.add(new ConfigurationComponent(SC.OTHER, false, "P1", "P1", new HashMap<>()));
+
+        PinGetValueSensor<Void> pinGetValueSensor = new PinGetValueSensor<>(new SensorMetaDataBean("P1", "", "", null));
+        phrases.add(pinGetValueSensor);
+
+        executeWorkflow();
+        assertHasNoNepoInfo(pinGetValueSensor);
+    }
+
+    @Test
+    public void visitPinWriteValueAction() {
+        configurationComponents.add(new ConfigurationComponent(SC.DIGITAL_PIN, true, "P1", "P1", new HashMap<>()));
+
+        PinWriteValueAction<Void> pinWriteValueAction = new PinWriteValueAction<>("1","P1", new NumConst<>("1"), true);
+        phrases.add(pinWriteValueAction);
+
+        executeWorkflow();
+        assertHasNoNepoInfo(pinWriteValueAction);
+    }
+
+    @Test
+    public void visitPinWriteValueAction_noPort() {
+        PinWriteValueAction<Void> pinWriteValueAction = new PinWriteValueAction<>("1","P1", new NumConst<>("1"), true);
+        phrases.add(pinWriteValueAction);
+
+        executeWorkflow();
+        assertHasNepoInfo(pinWriteValueAction, NepoInfo.Severity.ERROR, "CONFIGURATION_ERROR_ACTOR_MISSING");
+    }
+
+
 
     private UsedHardwareBean getUsedHardwareBean(Project project) {
         return project.getWorkerResult(UsedHardwareBean.class);
