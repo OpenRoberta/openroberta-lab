@@ -14,7 +14,7 @@ define(["require", "exports", "./interpreter.constants", "./interpreter.util"], 
             this.pc = 0;
             this.bindings = {};
             this.stack = [];
-            this.currentBlocks = new Set();
+            this.currentBlocks = [];
             this.debugMode = false;
             // p( 'storeCode with state reset' );
         }
@@ -202,7 +202,7 @@ define(["require", "exports", "./interpreter.constants", "./interpreter.util"], 
                     stackmachineJsHelper.getJqueryObject(block === null || block === void 0 ? void 0 : block.svgPath_).removeClass('breakpoint').addClass('selectedBreakpoint');
                 }
                 _this.highlightBlock(block);
-                _this.currentBlocks.add(block.id);
+                _this.addToCurrentBlock(block.id);
             });
         };
         /** removes block froms currentBlocks and removes highlighting from block**/
@@ -213,13 +213,13 @@ define(["require", "exports", "./interpreter.constants", "./interpreter.util"], 
                     stackmachineJsHelper.getJqueryObject(block === null || block === void 0 ? void 0 : block.svgPath_).removeClass('selectedBreakpoint').addClass('breakpoint');
                 }
                 _this.removeBlockHighlight(block);
-                _this.currentBlocks.delete(block.id);
+                _this.removeFromCurrentBlock(block.id);
             });
         };
         /** Returns true if the current block is currently being executed**/
         State.prototype.beingExecuted = function (stmt) {
             var blockId = stmt[C.HIGHTLIGHT_PLUS].slice(-1).pop();
-            return blockId && this.currentBlocks.has(blockId);
+            return blockId && this.isInCurrentBlock(blockId);
         };
         State.prototype.highlightBlock = function (block) {
             stackmachineJsHelper.getJqueryObject(block.svgPath_).stop(true, true).animate({ 'fill-opacity': '1' }, 0);
@@ -266,6 +266,22 @@ define(["require", "exports", "./interpreter.constants", "./interpreter.util"], 
                     stackmachineJsHelper.getJqueryObject(block.svgPath_).removeClass('breakpoint').removeClass('selectedBreakpoint');
                 }
             });
+        };
+        State.prototype.addToCurrentBlock = function (id) {
+            var index = this.currentBlocks.indexOf(id, 0);
+            if (index > -1) {
+                return;
+            }
+            this.currentBlocks.push(id);
+        };
+        State.prototype.removeFromCurrentBlock = function (id) {
+            var index = this.currentBlocks.indexOf(id, 0);
+            if (index > -1) {
+                this.currentBlocks.splice(index, 1);
+            }
+        };
+        State.prototype.isInCurrentBlock = function (id) {
+            return this.currentBlocks.indexOf(id, 0) > -1;
         };
         return State;
     }());

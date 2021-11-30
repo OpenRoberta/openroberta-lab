@@ -247,7 +247,7 @@ function getDt() {
 
 var pause = false;
 
-function setPause(value) {
+export function setPause(value) {
     if (!value && readyRobots.indexOf(false) > -1) {
         setTimeout(function () {
             setPause(false);
@@ -1579,7 +1579,7 @@ function addMouseEvents() {
             handleMouseMove(e);
         }
     });
-    $('#robotLayer').on('mouseup touchend',function (e) {
+    $('#robotLayer').on('mouseup touchend', function (e) {
         if (robots[robotIndex].handleMouseUp) {
             robots[robotIndex].handleMouseUp(e, offsetX, offsetY, scale, scene.playground.w / 2, scene.playground.h / 2);
         } else {
@@ -2234,7 +2234,6 @@ export {
     getColorAreaList,
     initMicrophone,
     getDt,
-    setPause,
     setStep,
     setInfo,
     resetPose,

@@ -4,7 +4,7 @@ import * as LOG from 'log';
 import * as UTIL from 'util';
 import * as NAOSIM from 'webots.simulation';
 import * as SIM from 'simulation.simulation';
-import * as CONST from 'simulation.constants';
+import CONST from 'simulation.constants';
 import * as GUISTATE_C from 'guiState.controller';
 import * as TOUR_C from 'tour.controller';
 import * as PROG_C from 'program.controller';
