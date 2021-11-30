@@ -1,5 +1,6 @@
 package de.fhg.iais.roberta.visitor;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -17,6 +18,7 @@ import de.fhg.iais.roberta.mode.action.BrickLedColor;
 import de.fhg.iais.roberta.mode.action.LightMode;
 import de.fhg.iais.roberta.mode.action.RelayMode;
 import de.fhg.iais.roberta.mode.general.IndexLocation;
+import de.fhg.iais.roberta.mode.general.ListElementOperations;
 import de.fhg.iais.roberta.syntax.BlockType;
 import de.fhg.iais.roberta.syntax.MotionParam;
 import de.fhg.iais.roberta.syntax.MotorDuration;
@@ -30,9 +32,17 @@ import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.RelayAction;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
+import de.fhg.iais.roberta.syntax.lang.expr.ExprList;
+import de.fhg.iais.roberta.syntax.lang.expr.ListCreate;
 import de.fhg.iais.roberta.syntax.lang.expr.NumConst;
 import de.fhg.iais.roberta.syntax.lang.expr.RgbColor;
+import de.fhg.iais.roberta.syntax.lang.functions.FunctionNames;
+import de.fhg.iais.roberta.syntax.lang.functions.GetSubFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.IndexOfFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.LengthOfIsEmptyFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.ListGetIndex;
+import de.fhg.iais.roberta.syntax.lang.functions.ListSetIndex;
+import de.fhg.iais.roberta.syntax.lang.functions.MathOnListFunct;
 import de.fhg.iais.roberta.syntax.sensor.SensorMetaDataBean;
 import de.fhg.iais.roberta.syntax.sensor.generic.DropSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor;
@@ -561,6 +571,118 @@ public class ArduinoValidatorAndCollectorWorkflowTest extends WorkflowTest {
         assertHasNepoInfo(pinWriteValueAction, NepoInfo.Severity.ERROR, "CONFIGURATION_ERROR_ACTOR_MISSING");
     }
 
+    @Test
+    public void visitIndexOfFunct(){
+        List<Expr<Void>> param = new ArrayList<Expr<Void>>();
+        param.add(new NumConst<>("10"));
+        param.add(new NumConst<>("10"));
+        param.add(new NumConst<>("10"));
+
+        IndexOfFunct<Void> listSetIndex = new IndexOfFunct<>(IndexLocation.FIRST, param);
+        phrases.add(listSetIndex);
+
+        executeWorkflow();
+        assertHasNoNepoInfo(listSetIndex);
+    }
+
+    @Test
+    public void visitIndexOfFunct_noFirsstElement(){
+        List<Expr<Void>> param = new ArrayList<Expr<Void>>();
+        param.add(new NumConst<>("ListCreate "));
+        param.add(new NumConst<>("10"));
+        param.add(new NumConst<>("10"));
+
+        IndexOfFunct<Void> listSetIndex = new IndexOfFunct<>(IndexLocation.FIRST, param);
+        phrases.add(listSetIndex);
+
+        executeWorkflow();
+        assertHasNepoInfo(listSetIndex, NepoInfo.Severity.ERROR, "BLOCK_USED_INCORRECTLY");
+    }
+
+    @Test
+    public void visitListGetIndex(){
+        List<Expr<Void>> param = new ArrayList<Expr<Void>>();
+        param.add(new NumConst<>("10"));
+        param.add(new NumConst<>("10"));
+        param.add(new NumConst<>("10"));
+
+        ListGetIndex<Void> listGetIndex = new ListGetIndex<>(ListElementOperations.GET, IndexLocation.FIRST, param, null);
+        phrases.add(listGetIndex);
+
+        executeWorkflow();
+        assertHasNoNepoInfo(listGetIndex);
+    }
+
+    @Test
+    public void visitListGetIndex_noFirsstElement(){
+        List<Expr<Void>> param = new ArrayList<Expr<Void>>();
+        param.add(new NumConst<>("ListCreate "));
+        param.add(new NumConst<>("10"));
+        param.add(new NumConst<>("10"));
+
+        ListGetIndex<Void> listGetIndex = new ListGetIndex<>(ListElementOperations.GET, IndexLocation.FIRST, param, null);
+        phrases.add(listGetIndex);
+
+        executeWorkflow();
+        assertHasNepoInfo(listGetIndex, NepoInfo.Severity.ERROR, "BLOCK_USED_INCORRECTLY");
+    }
+
+    @Test
+    public void visitLengthOfIsEmptyFunct(){
+        List<Expr<Void>> param = new ArrayList<Expr<Void>>();
+        param.add(new NumConst<>("10"));
+        param.add(new NumConst<>("10"));
+        param.add(new NumConst<>("10"));
+
+        LengthOfIsEmptyFunct<Void> lengthOfIsEmptyFunct = new LengthOfIsEmptyFunct<>(FunctionNames.LIST_IS_EMPTY, param);
+        phrases.add(lengthOfIsEmptyFunct);
+
+        executeWorkflow();
+        assertHasNoNepoInfo(lengthOfIsEmptyFunct);
+    }
+
+    @Test
+    public void visitLengthOfIsEmptyFunct_noFirsstElement(){
+        List<Expr<Void>> param = new ArrayList<Expr<Void>>();
+        param.add(new NumConst<>("ListCreate "));
+        param.add(new NumConst<>("10"));
+        param.add(new NumConst<>("10"));
+
+        LengthOfIsEmptyFunct<Void> lengthOfIsEmptyFunct = new LengthOfIsEmptyFunct<>(FunctionNames.LIST_IS_EMPTY, param);
+        phrases.add(lengthOfIsEmptyFunct);
+
+        executeWorkflow();
+        assertHasNepoInfo(lengthOfIsEmptyFunct, NepoInfo.Severity.ERROR, "BLOCK_USED_INCORRECTLY");
+
+    }
+
+    @Test
+    public void visitMathOnListFunct(){
+        List<Expr<Void>> param = new ArrayList<Expr<Void>>();
+        param.add(new NumConst<>("10"));
+        param.add(new NumConst<>("10"));
+        param.add(new NumConst<>("10"));
+
+        MathOnListFunct<Void> mathOnListFunct = new MathOnListFunct<>(FunctionNames.LIST_IS_EMPTY, param);
+        phrases.add(mathOnListFunct);
+
+        executeWorkflow();
+        assertHasNoNepoInfo(mathOnListFunct);
+    }
+
+    @Test
+    public void visitMathOnListFunct_noFirsstElement(){
+        List<Expr<Void>> param = new ArrayList<Expr<Void>>();
+        param.add(new NumConst<>("ListCreate "));
+        param.add(new NumConst<>("10"));
+        param.add(new NumConst<>("10"));
+
+        MathOnListFunct<Void> mathOnListFunct = new MathOnListFunct<>(FunctionNames.LIST_IS_EMPTY, param);
+        phrases.add(mathOnListFunct);
+
+        executeWorkflow();
+        assertHasNepoInfo(mathOnListFunct, NepoInfo.Severity.ERROR, "BLOCK_USED_INCORRECTLY");
+    }
 
 
     private UsedHardwareBean getUsedHardwareBean(Project project) {

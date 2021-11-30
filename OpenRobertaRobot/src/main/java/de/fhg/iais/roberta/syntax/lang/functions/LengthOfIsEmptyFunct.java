@@ -37,6 +37,14 @@ public class LengthOfIsEmptyFunct<V> extends Function<V> {
         setReadOnly();
     }
 
+    public LengthOfIsEmptyFunct(FunctionNames name, List<Expr<V>> param) {
+        super(BlockTypeContainer.getByName("LENGTH_OF_IS_EMPTY_FUNCT"));
+        Assert.isTrue(name != null && param != null);
+        this.functName = name;
+        this.param = param;
+        setReadOnly();
+    }
+
     /**
      * Creates instance of {@link LengthOfIsEmptyFunct}. This instance is read only and can not be modified.
      *
