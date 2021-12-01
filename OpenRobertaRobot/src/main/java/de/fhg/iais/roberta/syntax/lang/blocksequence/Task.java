@@ -18,10 +18,6 @@ public abstract class Task<V> extends Phrase<V> {
         super(kind, properties, comment);
     }
 
-    public Task(BlockType kind) {
-        super(kind);
-    }
-
     /**
      * get the precedence of the task
      * <b>This is the default implementation of annotated AST classes</b>

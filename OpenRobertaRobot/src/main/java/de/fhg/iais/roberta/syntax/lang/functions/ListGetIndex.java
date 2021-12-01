@@ -55,21 +55,6 @@ public class ListGetIndex<V> extends Function<V> {
         setReadOnly();
     }
 
-    public ListGetIndex(
-        IListElementOperations mode,
-        IIndexLocation name,
-        List<Expr<V>> param,
-        String dataType
-        ) {
-        super(BlockTypeContainer.getByName("LIST_INDEX_OF"));
-        Assert.isTrue(mode != null && name != null && param != null);
-        this.mode = mode;
-        this.location = name;
-        this.param = param;
-        this.dataType = dataType;
-        setReadOnly();
-    }
-
     /**
      * Creates instance of {@link ListGetIndex}. This instance is read only and can not be modified.
      *

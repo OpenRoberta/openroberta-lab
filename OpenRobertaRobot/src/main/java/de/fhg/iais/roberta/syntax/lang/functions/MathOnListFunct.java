@@ -38,14 +38,6 @@ public class MathOnListFunct<V> extends Function<V> {
         setReadOnly();
     }
 
-    public MathOnListFunct(FunctionNames name, List<Expr<V>> param) {
-        super(BlockTypeContainer.getByName("MATH_ON_LIST_FUNCT"));
-        Assert.isTrue(name != null && param != null);
-        this.functName = name;
-        this.param = param;
-        setReadOnly();
-    }
-
     /**
      * Creates instance of {@link MathOnListFunct}. This instance is read only and can not be modified.
      *

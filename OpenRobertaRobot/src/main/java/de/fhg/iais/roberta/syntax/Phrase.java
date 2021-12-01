@@ -40,12 +40,6 @@ abstract public class Phrase<V> {
         this.comment = comment;
     }
 
-    public Phrase(BlockType kind) {
-        this.kind = kind;
-        this.property = BlocklyBlockProperties.make(kind.getName(), "1");
-        this.comment = null;
-    }
-
     /**
      * @return true, if the object is writable/mutable. This is true, if {@link #setReadOnly()} has not yet been called for this object
      */

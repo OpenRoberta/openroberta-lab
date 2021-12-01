@@ -24,11 +24,6 @@ public class PinGetValueSensor<V> extends ExternalSensor<V> {
         setReadOnly();
     }
 
-    public PinGetValueSensor(SensorMetaDataBean sensorMetaDataBean) {
-        super(sensorMetaDataBean, BlockTypeContainer.getByName("PIN_READ_VALUE"));
-        setReadOnly();
-    }
-
     /**
      * Create object of the class {@link PinGetValueSensor}.
      *

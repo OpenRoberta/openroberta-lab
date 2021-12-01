@@ -30,14 +30,6 @@ public class RelayAction<V> extends Action<V> {
         setReadOnly();
     }
 
-    public RelayAction(String port, IRelayMode mode) {
-        super(BlockTypeContainer.getByName("RELAY_ACTION"));
-        Assert.isTrue(mode != null);
-        this.port = port;
-        this.mode = mode;
-        setReadOnly();
-    }
-
     /**
      * Creates instance of {@link RelayAction}. This instance is read only and can not be modified.
      *

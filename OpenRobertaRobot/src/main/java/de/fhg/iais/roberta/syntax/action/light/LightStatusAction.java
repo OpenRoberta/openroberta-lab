@@ -35,14 +35,6 @@ public class LightStatusAction<V> extends Action<V> implements WithUserDefinedPo
         setReadOnly();
     }
 
-    public LightStatusAction(String userDefinedPort, Status status) {
-        super(BlockTypeContainer.getByName("LIGHT_STATUS_ACTION"));
-        Assert.isTrue(status != null);
-        this.status = status;
-        this.userDefinedPort = userDefinedPort;
-        setReadOnly();
-    }
-
     /**
      * Creates instance of {@link LightStatusAction}. This instance is read only and can not be modified.
      *

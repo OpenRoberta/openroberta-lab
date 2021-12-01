@@ -27,10 +27,6 @@ public abstract class Function<V> extends Phrase<V> {
 
     }
 
-    public Function(BlockType kind) {
-        super(kind);
-    }
-
     /**
      * get the precedence of the expression
      * <b>This is the default implementation of annotated AST classes</b>

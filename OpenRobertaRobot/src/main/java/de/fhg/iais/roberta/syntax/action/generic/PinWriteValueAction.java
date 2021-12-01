@@ -52,20 +52,6 @@ public class PinWriteValueAction<V> extends Action<V> {
         setReadOnly();
     }
 
-    public PinWriteValueAction(
-        String pinValue,
-        String port,
-        Expr<V> value,
-        boolean actorPortAndMode
-        ) {
-        super(BlockTypeContainer.getByName("PIN_WRITE_VALUE"));
-        this.pinValue = pinValue;
-        this.port = port;
-        this.value = value;
-        this.actorPortAndMode = actorPortAndMode;
-        setReadOnly();
-    }
-
     /**
      * Create object of the class {@link PinWriteValueAction}.
      *

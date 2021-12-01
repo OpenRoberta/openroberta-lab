@@ -16,11 +16,6 @@ public class MotionSensor<V> extends ExternalSensor<V> {
         setReadOnly();
     }
 
-    public MotionSensor(SensorMetaDataBean sensorMetaDataBean) {
-        super(sensorMetaDataBean, BlockTypeContainer.getByName("MOTION_SENSING"));
-        setReadOnly();
-    }
-
     /**
      * Create object of the class {@link MotionSensor}.
      *

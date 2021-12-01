@@ -30,11 +30,6 @@ public class EncoderSensor<V> extends ExternalSensor<V> {
         setReadOnly();
     }
 
-    public EncoderSensor(SensorMetaDataBean sensorMetaDataBean) {
-        super(sensorMetaDataBean, BlockTypeContainer.getByName("ENCODER_SENSING"));
-        setReadOnly();
-    }
-
     /**
      * Create object of the class {@link EncoderSensor}.
      *

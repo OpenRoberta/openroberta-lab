@@ -17,11 +17,6 @@ public class HumiditySensor<V> extends ExternalSensor<V> {
         setReadOnly();
     }
 
-    public HumiditySensor(SensorMetaDataBean sensorMetaDataBean) {
-        super(sensorMetaDataBean, BlockTypeContainer.getByName("HUMIDITY_SENSING"));
-        setReadOnly();
-    }
-
     /**
      * Create object of the class {@link HumiditySensor}.
      *

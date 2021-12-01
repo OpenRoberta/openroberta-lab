@@ -31,12 +31,10 @@ public abstract class ExternalSensor<V> extends Sensor<V> implements WithUserDef
      */
     public ExternalSensor(SensorMetaDataBean metaDataBean, BlockType kind, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(kind, properties, comment);
-        this.metaDataBean = validateSensorMetaDataBean(metaDataBean);
-    }
-
-    public ExternalSensor(SensorMetaDataBean metaDataBean, BlockType kind) {
-        super(kind);
-        this.metaDataBean = validateSensorMetaDataBean(metaDataBean);
+        Assert.notNull(metaDataBean.getMode());
+        Assert.notNull(metaDataBean.getPort());
+        Assert.notNull(metaDataBean.getSlot());
+        this.metaDataBean = metaDataBean;
     }
 
     /**
@@ -133,10 +131,4 @@ public abstract class ExternalSensor<V> extends Sensor<V> implements WithUserDef
         return InfraredSensor.make(sensorData, Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
     }
 
-    private SensorMetaDataBean validateSensorMetaDataBean(SensorMetaDataBean metaDataBean) {
-        Assert.notNull(metaDataBean.getMode());
-        Assert.notNull(metaDataBean.getPort());
-        Assert.notNull(metaDataBean.getSlot());
-        return metaDataBean;
-    }
 }
