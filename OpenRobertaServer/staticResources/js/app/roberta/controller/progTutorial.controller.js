@@ -39,7 +39,7 @@ define(["require", "exports", "message", "log", "guiState.controller", "program.
                 $('#infoButton').hide();
                 $('#feedbackButton').hide();
                 // for beginner tutorials the code view is more confusing than helpful, so we don't show the button in kiosk mode
-                if (tutorial.level.startsWith('1')) {
+                if (tutorial.level.indexOf('1') === 0) {
                     $('#codeButton').hide();
                 }
                 U.removeLinks($('#legalDiv a'));
