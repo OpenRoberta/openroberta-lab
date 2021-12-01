@@ -17,11 +17,11 @@ import de.fhg.iais.roberta.components.Project;
 import de.fhg.iais.roberta.syntax.SC;
 import de.fhg.iais.roberta.typecheck.NepoInfo;
 import de.fhg.iais.roberta.util.Key;
-import de.fhg.iais.roberta.visitor.validate.AbstractProgramValidatorVisitor;
-import de.fhg.iais.roberta.visitor.validate.ArduinoBrickValidatorVisitor;
-import de.fhg.iais.roberta.worker.AbstractValidatorWorker;
+import de.fhg.iais.roberta.visitor.validate.ArduinoValidatorAndCollectorVisitor;
+import de.fhg.iais.roberta.visitor.validate.CommonNepoValidatorAndCollectorVisitor;
+import de.fhg.iais.roberta.worker.AbstractValidatorAndCollectorWorker;
 
-public class ArduinoConfigurationValidatorWorker extends AbstractValidatorWorker {
+public abstract class ArduinoValidatorAndCollectorWorker extends AbstractValidatorAndCollectorWorker {
 
     private static final Set<String> OVERLAPPING_PINS =
         Stream
@@ -55,7 +55,7 @@ public class ArduinoConfigurationValidatorWorker extends AbstractValidatorWorker
 
     private final List<String> freePins;
 
-    public ArduinoConfigurationValidatorWorker(List<String> freePins) {
+    public ArduinoValidatorAndCollectorWorker(List<String> freePins) {
         this.freePins = Collections.unmodifiableList(freePins);
     }
 
@@ -68,8 +68,8 @@ public class ArduinoConfigurationValidatorWorker extends AbstractValidatorWorker
     }
 
     @Override
-    protected AbstractProgramValidatorVisitor getVisitor(Project project, ClassToInstanceMap<IProjectBean.IBuilder<?>> beanBuilders) {
-        return new ArduinoBrickValidatorVisitor(project.getConfigurationAst(), beanBuilders);
+    protected CommonNepoValidatorAndCollectorVisitor getVisitor(Project project, ClassToInstanceMap<IProjectBean.IBuilder<?>> beanBuilders) {
+        return new ArduinoValidatorAndCollectorVisitor(project.getConfigurationAst(), beanBuilders);
     }
 
     private static void checkPinOverlap(ConfigurationComponent configurationComponent, Project project, List<String> currentFreePins) {

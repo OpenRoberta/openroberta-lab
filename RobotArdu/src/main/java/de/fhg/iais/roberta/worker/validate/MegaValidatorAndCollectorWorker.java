@@ -3,8 +3,8 @@ package de.fhg.iais.roberta.worker.validate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class MegaConfigurationValidatorWorker extends ArduinoConfigurationValidatorWorker {
-    public MegaConfigurationValidatorWorker() {
+public class MegaValidatorAndCollectorWorker extends ArduinoValidatorAndCollectorWorker {
+    public MegaValidatorAndCollectorWorker() {
         super(
             Stream
                 .of(

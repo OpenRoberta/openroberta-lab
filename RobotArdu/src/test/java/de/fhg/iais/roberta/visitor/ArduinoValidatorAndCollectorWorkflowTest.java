@@ -38,7 +38,6 @@ import de.fhg.iais.roberta.syntax.lang.functions.ListGetIndex;
 import de.fhg.iais.roberta.syntax.lang.functions.MathOnListFunct;
 import de.fhg.iais.roberta.syntax.sensor.SensorMetaDataBean;
 import de.fhg.iais.roberta.syntax.sensor.generic.DropSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.HumiditySensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.KeysSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.MoistureSensor;
@@ -48,9 +47,7 @@ import de.fhg.iais.roberta.syntax.sensor.generic.PulseSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.RfidSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.VoltageSensor;
 import de.fhg.iais.roberta.typecheck.NepoInfo;
-import de.fhg.iais.roberta.worker.collect.ArduinoUsedHardwareCollectorWorker;
-import de.fhg.iais.roberta.worker.collect.ArduinoUsedMethodCollectorWorker;
-import de.fhg.iais.roberta.worker.validate.UnoConfigurationValidatorWorker;
+import de.fhg.iais.roberta.worker.validate.UnoValidatorAndCollectorWorker;
 
 public class ArduinoValidatorAndCollectorWorkflowTest extends WorkflowTest {
 
@@ -58,7 +55,7 @@ public class ArduinoValidatorAndCollectorWorkflowTest extends WorkflowTest {
 
     public ArduinoValidatorAndCollectorWorkflowTest() {
         setupRobotFactory("uno");
-        workerChain = Arrays.asList(new UnoConfigurationValidatorWorker(), new ArduinoUsedHardwareCollectorWorker(), new ArduinoUsedMethodCollectorWorker());
+        workerChain = Arrays.asList(new UnoValidatorAndCollectorWorker());
     }
 
     @Test
@@ -113,7 +110,7 @@ public class ArduinoValidatorAndCollectorWorkflowTest extends WorkflowTest {
         MoistureSensor<Void> moistureSensor = MoistureSensor.make(new SensorMetaDataBean("P1", "", "", null), bp, null);
         phrases.add(moistureSensor);
 
-        Project project = executeWorkflow();
+        executeWorkflow();
 
         assertHasNepoInfo(moistureSensor, NepoInfo.Severity.ERROR, "CONFIGURATION_ERROR_SENSOR_WRONG");
     }
@@ -318,40 +315,6 @@ public class ArduinoValidatorAndCollectorWorkflowTest extends WorkflowTest {
     }
 
     @Test
-    public void visitEncoderSensor_withPort() {
-        configurationComponents.add(new ConfigurationComponent(SC.ENCODER, false, "P1", "P1", new HashMap<>()));
-
-        EncoderSensor<Void> encoderSensor = EncoderSensor.make(new SensorMetaDataBean("P1", "", "", null), bp, null);
-        phrases.add(encoderSensor);
-
-        executeWorkflow();
-
-        assertHasNoNepoInfo(encoderSensor);
-    }
-
-    @Test
-    public void visitEncoderSensor_withoutPort() {
-        EncoderSensor<Void> encoderSensor = EncoderSensor.make(new SensorMetaDataBean("P1", "", "", null), bp, null);
-        phrases.add(encoderSensor);
-
-        executeWorkflow();
-
-        assertHasNepoInfo(encoderSensor, NepoInfo.Severity.ERROR, "CONFIGURATION_ERROR_SENSOR_MISSING");
-    }
-
-    @Test
-    public void visitEncoderSensor_withWrongType() {
-        configurationComponents.add(new ConfigurationComponent(SC.MOISTURE, false, "P1", "P1", new HashMap<>()));
-
-        EncoderSensor<Void> encoderSensor = EncoderSensor.make(new SensorMetaDataBean("P1", "", "", null), bp, null);
-        phrases.add(encoderSensor);
-
-        executeWorkflow();
-
-        assertHasNepoInfo(encoderSensor, NepoInfo.Severity.ERROR, "CONFIGURATION_ERROR_SENSOR_WRONG");
-    }
-
-    @Test
     public void visitMotorOnAction() {
         configurationComponents.add(new ConfigurationComponent(SC.MOTOR_DRIVE, true, "P1", "P1", new HashMap<>()));
 
@@ -529,6 +492,7 @@ public class ArduinoValidatorAndCollectorWorkflowTest extends WorkflowTest {
         configurationComponents.add(new ConfigurationComponent(SC.DISPLAY, true, "P1", "P1", new HashMap<>()));
 
         ShowTextAction<Void> showTextAction = ShowTextAction.make(NumConst.make("Text"), NumConst.make("0"), NumConst.make("0"), "P1", bp, null);
+        phrases.add(showTextAction);
 
         executeWorkflow();
         assertHasNoNepoInfo(showTextAction);
@@ -664,7 +628,7 @@ public class ArduinoValidatorAndCollectorWorkflowTest extends WorkflowTest {
     }
 
     @Test
-    public void visitMathOnListFunct_noFirsstElement() {
+    public void visitMathOnListFunct_noFirstElement() {
         List<Expr<Void>> param = new ArrayList<>();
         param.add(NumConst.make("ListCreate "));
         param.add(NumConst.make("10"));

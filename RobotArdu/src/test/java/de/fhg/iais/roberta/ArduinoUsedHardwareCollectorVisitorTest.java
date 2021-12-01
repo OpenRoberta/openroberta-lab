@@ -13,6 +13,7 @@ import org.junit.Test;
 import com.google.common.collect.ImmutableClassToInstanceMap;
 import com.google.common.collect.Lists;
 
+import de.fhg.iais.roberta.bean.ErrorAndWarningBean;
 import de.fhg.iais.roberta.bean.IProjectBean;
 import de.fhg.iais.roberta.bean.UsedHardwareBean;
 import de.fhg.iais.roberta.bean.UsedMethodBean;
@@ -26,6 +27,7 @@ import de.fhg.iais.roberta.util.Util;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.util.test.UnitTestHelper;
 import de.fhg.iais.roberta.visitor.collect.ArduinoUsedHardwareCollectorVisitor;
+import de.fhg.iais.roberta.visitor.validate.ArduinoValidatorAndCollectorVisitor;
 
 public class ArduinoUsedHardwareCollectorVisitorTest {
     private static RobotFactory testFactory;
@@ -33,16 +35,6 @@ public class ArduinoUsedHardwareCollectorVisitorTest {
     @BeforeClass
     public static void setup() {
         testFactory = new RobotFactory(new PluginProperties("uno", "", "", Util.loadProperties("classpath:/uno.properties")));
-    }
-    
-    public static final String COLLECTOR_ALL_HELPER_METHODS_XML = "/collector/all_helper_methods.xml";
-
-    public static ConfigurationAst makeInvalidConfig() {
-        ConfigurationComponent pinS2 = new ConfigurationComponent("PIN", false, "S2", "S2", Collections.emptyMap());
-
-        ArrayList<ConfigurationComponent> components = Lists.newArrayList(pinS2);
-
-        return new ConfigurationAst.Builder().setTrackWidth(11f).setWheelDiameter(5.6f).addComponents(components).build();
     }
 
     public static ConfigurationAst makeValidConfig() {
@@ -55,46 +47,24 @@ public class ArduinoUsedHardwareCollectorVisitorTest {
     }
 
     @Test
-    public void testInconsistency() {
-        List<List<Phrase<Void>>> phrases = UnitTestHelper.getProgramAst(testFactory, COLLECTOR_ALL_HELPER_METHODS_XML);
-
-        ConfigurationAst nanoConfig = makeInvalidConfig();
-        UsedHardwareBean.Builder usedHardwareBeanBuilder = new UsedHardwareBean.Builder();
-        UsedMethodBean.Builder usedMethodBeanBuilder = new UsedMethodBean.Builder();
-        ImmutableClassToInstanceMap<IProjectBean.IBuilder<?>> beanBuilders =
-            ImmutableClassToInstanceMap.<IProjectBean
-                .IBuilder<?>> builder().put(UsedHardwareBean.Builder.class, usedHardwareBeanBuilder).put(UsedMethodBean.Builder.class, usedMethodBeanBuilder).build();
-        ArduinoUsedHardwareCollectorVisitor visitor = new ArduinoUsedHardwareCollectorVisitor(nanoConfig, beanBuilders);
-
-        Assertions.assertThatThrownBy(() -> {
-            phrases.stream()
-                .flatMap(Collection::stream)
-                .forEach(voidPhrase -> voidPhrase.accept(visitor));
-        })
-            .isInstanceOf(DbcException.class)
-            .hasMessageContaining("Inconsistent");
-    }
-
-
-    @Test
-    public void testNormal() throws Exception {
+    public void testNormal() {
         List<List<Phrase<Void>>> phrases = UnitTestHelper.getProgramAst(testFactory, "/collector/all_helper_methods.xml");
 
         ConfigurationAst nanoConfig = makeValidConfig();
         UsedHardwareBean.Builder usedHardwareBeanBuilder = new UsedHardwareBean.Builder();
         UsedMethodBean.Builder usedMethodBeanBuilder = new UsedMethodBean.Builder();
-        ImmutableClassToInstanceMap<IProjectBean.IBuilder<?>> beanBuilders =
-            ImmutableClassToInstanceMap.<IProjectBean
-                .IBuilder<?>> builder().put(UsedHardwareBean.Builder.class, usedHardwareBeanBuilder).put(UsedMethodBean.Builder.class, usedMethodBeanBuilder).build();
-        ArduinoUsedHardwareCollectorVisitor visitor = new ArduinoUsedHardwareCollectorVisitor(nanoConfig, beanBuilders);
+        ErrorAndWarningBean.Builder errorAndWarningBean = new ErrorAndWarningBean.Builder();
+        ImmutableClassToInstanceMap<IProjectBean.IBuilder<?>> beanBuilders = ImmutableClassToInstanceMap.<IProjectBean.IBuilder<?>> builder()
+            .put(UsedHardwareBean.Builder.class, usedHardwareBeanBuilder)
+            .put(UsedMethodBean.Builder.class, usedMethodBeanBuilder)
+            .put(ErrorAndWarningBean.Builder.class, errorAndWarningBean)
+            .build();
+        ArduinoValidatorAndCollectorVisitor visitor = new ArduinoValidatorAndCollectorVisitor(nanoConfig, beanBuilders);
 
-        phrases.stream()
-            .flatMap(Collection::stream)
-            .forEach(voidPhrase -> voidPhrase.accept(visitor));
+        phrases.stream().flatMap(Collection::stream).forEach(voidPhrase -> voidPhrase.accept(visitor));
 
         Set<UsedSensor> usedSensors = usedHardwareBeanBuilder.build().getUsedSensors();
-        Assertions.assertThat(usedSensors)
-            .hasSize(2);
+        Assertions.assertThat(usedSensors).hasSize(2);
     }
 
 }
