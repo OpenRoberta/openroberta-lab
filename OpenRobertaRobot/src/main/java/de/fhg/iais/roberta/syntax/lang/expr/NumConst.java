@@ -25,13 +25,6 @@ public class NumConst<V> extends Expr<V> {
         setReadOnly();
     }
 
-    public NumConst(String value) {
-        super(BlockTypeContainer.getByName("NUM_CONST"));
-        Assert.isTrue(!value.equals(""));
-        this.value = value;
-        setReadOnly();
-    }
-
     /**
      * factory method: create an AST instance of {@link NumConst}
      *
