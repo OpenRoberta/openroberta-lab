@@ -158,7 +158,7 @@ function parseDate(d) {
 function formatResultLog(result) {
     var str = '{';
     var comma = false;
-    for (key in result) {
+    for (var key in result) {
         if (comma) {
             str += ',';
         } else {
@@ -747,7 +747,7 @@ function annotateBlocks(workspace, annotations) {
 function removeLinks($elem) {
     $elem
         .filter(function () {
-            return $(this).attr('href') && ($(this).attr('href').startsWith('http') || $(this).attr('href').startsWith('javascript:linkTo'));
+            return $(this).attr('href') && ($(this).attr('href').indexOf('http') === 0 || $(this).attr('href').indexOf('javascript:linkTo') === 0);
         })
         .each(function () {
             $(this).removeAttr('href');
