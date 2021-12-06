@@ -24,37 +24,6 @@ import de.fhg.iais.roberta.worker.AbstractValidatorAndCollectorWorker;
 import de.fhg.iais.roberta.worker.AbstractValidatorWorker;
 
 public abstract class ArduinoValidatorWorker extends AbstractValidatorWorker {
-
-    private static final Set<String> OVERLAPPING_PINS =
-        Stream
-            .of(
-                "INPUT",
-                "OUTPUT",
-                "+",
-                "S",
-                "PULSE",
-                "TRIG",
-                "ECHO",
-                "RED",
-                "GREEN",
-                "BLUE",
-                "RST",
-                "IN",
-                "SDA",
-                "RS",
-                "E",
-                "D4",
-                "D5",
-                "D6",
-                "D7",
-                "PIN1",
-                "IN1",
-                "IN2",
-                "IN3",
-                "IN4",
-                "OUT")
-            .collect(Collectors.toCollection(HashSet::new));
-
     private final List<String> freePins;
 
     public ArduinoValidatorWorker(List<String> freePins) {
@@ -63,48 +32,8 @@ public abstract class ArduinoValidatorWorker extends AbstractValidatorWorker {
 
     @Override
     public void execute(Project project) {
-        List<String> currentFreePins = new ArrayList<>(this.freePins);
-        project.getConfigurationAst().getConfigurationComponents().forEach((k, v) -> checkPinOverlap(v, project, currentFreePins));
-        project.getConfigurationAst().getConfigurationComponents().forEach((k, v) -> checkRgbInternalUse(v, project));
+        ArduinoConfigurationValidator arduinoConfigurationValidator = new ArduinoConfigurationValidator(project);
+        arduinoConfigurationValidator.validateConfiguration(freePins);
         super.execute(project);
-    }
-
-    private static void checkPinOverlap(ConfigurationComponent configurationComponent, Project project, List<String> currentFreePins) {
-        Map<String, String> componentProperties = configurationComponent.getComponentProperties();
-        List<String> blockPins = new ArrayList<>();
-        componentProperties.forEach((k, v) -> {
-            if ( OVERLAPPING_PINS.contains(k) ) {
-                if ( currentFreePins.contains(v) ) {
-                    blockPins.add(v);
-                    currentFreePins.removeIf(s -> s.equals(v) && !v.equals(SC.LED_BUILTIN)); // built in LED cannot overlap
-                } else {
-                    project.addToErrorCounter(1, null);
-                    project.setResult(Key.PROGRAM_INVALID_STATEMETNS);
-                    String blockId = configurationComponent.getProperty().getBlocklyId();
-                    project.addToConfAnnotationList(blockId, NepoInfo.error("CONFIGURATION_ERROR_OVERLAPPING_PORTS"));
-                }
-            }
-        });
-        if ( blockPins.stream().distinct().count() != blockPins.size() ) {
-            project.addToErrorCounter(1, null);
-            project.setResult(Key.PROGRAM_INVALID_STATEMETNS);
-            String blockId = configurationComponent.getProperty().getBlocklyId();
-            project.addToConfAnnotationList(blockId, NepoInfo.error("CONFIGURATION_ERROR_OVERLAPPING_PORTS"));
-        }
-    }
-
-    // TODO restructure validator worker for more generic usage patterns
-    private static void checkRgbInternalUse(ConfigurationComponent configurationComponent, Project project) {
-        if ( configurationComponent.getComponentType().equals(SC.RGBLED) ) {
-            Map<String, String> componentProperties = configurationComponent.getComponentProperties();
-            componentProperties.forEach((k, v) -> {
-                if ( v.equals(SC.LED_BUILTIN) && !project.getRobot().equals("unowifirev2") ) {
-                    project.addToErrorCounter(1, null);
-                    project.setResult(Key.PROGRAM_INVALID_STATEMETNS);
-                    project
-                        .addToConfAnnotationList(configurationComponent.getProperty().getBlocklyId(), NepoInfo.error("CONFIGURATION_ERROR_NO_BUILTIN_RGBLED"));
-                }
-            });
-        }
     }
 }
