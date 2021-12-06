@@ -49,9 +49,7 @@ import de.fhg.iais.roberta.syntax.sensor.generic.VoltageSensor;
 import de.fhg.iais.roberta.typecheck.NepoInfo;
 import de.fhg.iais.roberta.worker.validate.UnoValidatorAndCollectorWorker;
 
-public class ArduinoValidatorAndCollectorWorkflowTest extends WorkflowTest {
-
-    private final static BlocklyBlockProperties bp = BlocklyBlockProperties.make("1", "1");
+public class ArduinoValidatorAndCollectorWorkflowTest extends AbstractValidatorAndCollectorWorkflowTest {
 
     public ArduinoValidatorAndCollectorWorkflowTest() {
         setupRobotFactory("uno");
@@ -639,73 +637,6 @@ public class ArduinoValidatorAndCollectorWorkflowTest extends WorkflowTest {
 
         executeWorkflow();
         assertHasNepoInfo(mathOnListFunct, NepoInfo.Severity.ERROR, "BLOCK_USED_INCORRECTLY");
-    }
-
-    private UsedHardwareBean getUsedHardwareBean(Project project) {
-        return project.getWorkerResult(UsedHardwareBean.class);
-    }
-
-    private void assertHasUsedSensor(Project project, String userDefinedPort, String type, String mode) {
-        UsedHardwareBean usedHardwareBean = getUsedHardwareBean(project);
-        assertHasUsedSensor(usedHardwareBean, userDefinedPort, type, mode);
-    }
-
-    private void assertHasUsedSensor(UsedHardwareBean usedHardwareBean, String userDefinedPort, String type, String mode) {
-        Assertions
-            .assertThat(usedHardwareBean.getUsedSensors())
-            .anySatisfy(usedSensor -> {
-                Assertions
-                    .assertThat(usedSensor.getPort())
-                    .isEqualTo(userDefinedPort);
-                Assertions
-                    .assertThat(usedSensor.getMode())
-                    .isEqualTo(mode);
-                Assertions
-                    .assertThat(usedSensor.getType())
-                    .isEqualTo(type);
-            });
-    }
-
-    private void assertHasUsedActor(Project project, String userDefinedPort, String type) {
-        UsedHardwareBean usedHardwareBean = getUsedHardwareBean(project);
-        assertHasUsedActor(usedHardwareBean, userDefinedPort, type);
-    }
-
-    private void assertHasUsedActor(UsedHardwareBean usedHardwareBean, String userDefinedPort, String type) {
-        Assertions
-            .assertThat(usedHardwareBean.getUsedActors())
-            .anySatisfy(usedActor -> {
-                Assertions
-                    .assertThat(usedActor.getPort())
-                    .isEqualTo(userDefinedPort);
-                Assertions
-                    .assertThat(usedActor.getType())
-                    .isEqualTo(type);
-            });
-    }
-
-    private void assertHasNoNepoInfo(Phrase<Void> phrase) {
-        Assertions
-            .assertThat(phrase
-                .getInfos()
-                .getInfos())
-            .isEmpty();
-    }
-
-    private void assertHasNepoInfo(Phrase<Void> phrase, NepoInfo.Severity severity, String message) {
-        Assertions
-            .assertThat(phrase
-                .getInfos()
-                .getInfos())
-            .as(String.format("Phrase %s should have NepoInfo %s with message \"%s\"", phrase, severity, message))
-            .anySatisfy((nepoInfo) -> {
-                Assertions
-                    .assertThat(nepoInfo.getMessage())
-                    .isEqualTo(message);
-                Assertions
-                    .assertThat(nepoInfo.getSeverity())
-                    .isEqualTo(severity);
-            });
     }
 
 }

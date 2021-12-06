@@ -1,6 +1,5 @@
 package de.fhg.iais.roberta.worker.validate;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
