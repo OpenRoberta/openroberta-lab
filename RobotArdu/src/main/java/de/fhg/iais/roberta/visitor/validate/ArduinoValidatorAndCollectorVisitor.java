@@ -24,6 +24,7 @@ import de.fhg.iais.roberta.syntax.action.serial.SerialWriteAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.RelayAction;
+import de.fhg.iais.roberta.syntax.lang.expr.Var;
 import de.fhg.iais.roberta.syntax.lang.functions.GetSubFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.IndexOfFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.LengthOfIsEmptyFunct;
@@ -96,23 +97,21 @@ public class ArduinoValidatorAndCollectorVisitor extends CommonNepoValidatorAndC
 
     @Override
     public Void visitApds9960ColorSensor(Apds9960ColorSensor<Void> sensor) {
-        sensor.getR().accept(this);
-        sensor.getG().accept(this);
-        sensor.getB().accept(this);
+        requiredComponentVisited(sensor, sensor.getR(), sensor.getG(), sensor.getB());
         usedHardwareBuilder.addUsedActor(new UsedActor(SC.APDS9960, SC.APDS9960));
         return null;
     }
 
     @Override
     public Void visitApds9960DistanceSensor(Apds9960DistanceSensor<Void> sensor) {
-        sensor.getDistance().accept(this);
+        requiredComponentVisited(sensor, sensor.getDistance());
         this.getBuilder(UsedHardwareBean.Builder.class).addUsedActor(new UsedActor(SC.APDS9960, SC.APDS9960));
         return null;
     }
 
     @Override
     public Void visitApds9960GestureSensor(Apds9960GestureSensor<Void> sensor) {
-        sensor.getGesture().accept(this);
+        requiredComponentVisited(sensor, sensor.getGesture());
         this.getBuilder(UsedHardwareBean.Builder.class).addUsedActor(new UsedActor(SC.APDS9960, SC.APDS9960));
         return null;
     }
@@ -138,11 +137,11 @@ public class ArduinoValidatorAndCollectorVisitor extends CommonNepoValidatorAndC
     @Override
     public Void visitGetSampleSensor(GetSampleSensor<Void> sensorGetSample) {
         Sensor<Void> sensor = sensorGetSample.getSensor();
+        requiredComponentVisited(sensorGetSample, sensor);
         // TODO remove once rfid library is supported for unowifirev2
         if ( sensor.getKind().hasName("RFID_SENSING") ) {
             addWarningToPhrase(sensorGetSample, "BLOCK_NOT_SUPPORTED");
         }
-        requiredComponentVisited(sensorGetSample, sensor);
         return null;
     }
 
@@ -162,14 +161,14 @@ public class ArduinoValidatorAndCollectorVisitor extends CommonNepoValidatorAndC
 
     @Override
     public Void visitHts221HumiditySensor(Hts221HumiditySensor<Void> sensor) {
-        sensor.getHumidity().accept(this);
+        requiredComponentVisited(sensor, sensor.getHumidity());
         this.getBuilder(UsedHardwareBean.Builder.class).addUsedActor(new UsedActor(SC.HTS221, SC.HTS221));
         return null;
     }
 
     @Override
     public Void visitHts221TemperatureSensor(Hts221TemperatureSensor<Void> sensor) {
-        sensor.getTemperature().accept(this);
+        requiredComponentVisited(sensor, sensor.getTemperature());
         this.getBuilder(UsedHardwareBean.Builder.class).addUsedActor(new UsedActor(SC.HTS221, SC.HTS221));
         return null;
     }
@@ -256,34 +255,28 @@ public class ArduinoValidatorAndCollectorVisitor extends CommonNepoValidatorAndC
 
     @Override
     public Void visitLps22hbPressureSensor(Lps22hbPressureSensor<Void> sensor) {
-        sensor.getPressure().accept(this);
+        requiredComponentVisited(sensor, sensor.getPressure());
         this.getBuilder(UsedHardwareBean.Builder.class).addUsedActor(new UsedActor(SC.LPS22HB, SC.LPS22HB));
         return null;
     }
 
     @Override
     public Void visitLsm9ds1AccSensor(Lsm9ds1AccSensor<Void> sensor) {
-        sensor.getX().accept(this);
-        sensor.getY().accept(this);
-        sensor.getZ().accept(this);
+        requiredComponentVisited(sensor, sensor.getX(), sensor.getY(), sensor.getZ());
         this.getBuilder(UsedHardwareBean.Builder.class).addUsedActor(new UsedActor(SC.LSM9DS1, SC.LSM9DS1));
         return null;
     }
 
     @Override
     public Void visitLsm9ds1GyroSensor(Lsm9ds1GyroSensor<Void> sensor) {
-        sensor.x.accept(this);
-        sensor.y.accept(this);
-        sensor.z.accept(this);
+        requiredComponentVisited(sensor, sensor.x, sensor.y, sensor.z);
         this.getBuilder(UsedHardwareBean.Builder.class).addUsedActor(new UsedActor(SC.LSM9DS1, SC.LSM9DS1));
         return null;
     }
 
     @Override
     public Void visitLsm9ds1MagneticFieldSensor(Lsm9ds1MagneticFieldSensor<Void> sensor) {
-        sensor.getX().accept(this);
-        sensor.getY().accept(this);
-        sensor.getZ().accept(this);
+        requiredComponentVisited(sensor, sensor.getX(), sensor.getY(), sensor.getZ());
         this.getBuilder(UsedHardwareBean.Builder.class).addUsedActor(new UsedActor(SC.LSM9DS1, SC.LSM9DS1));
         return null;
     }
@@ -315,33 +308,30 @@ public class ArduinoValidatorAndCollectorVisitor extends CommonNepoValidatorAndC
         MotionParam<Void> param = motorOnAction.getParam();
         requiredComponentVisited(param.getSpeed());
         Optional.ofNullable(motorOnAction.getDurationValue()).ifPresent(this::requiredComponentVisited);
-
         ConfigurationComponent usedConfigurationBlock = this.robotConfiguration.optConfigurationComponent(motorOnAction.getUserDefinedPort());
         if ( usedConfigurationBlock == null ) {
             addErrorToPhrase(motorOnAction, "CONFIGURATION_ERROR_ACTOR_MISSING");
         } else if ( usedConfigurationBlock.getComponentType().equals(SC.OTHER) && param.getDuration() != null ) {
             addErrorToPhrase(motorOnAction, "CONFIGURATION_ERROR_OTHER_NOT_SUPPORTED");
-        } else {
-            //this.getBuilder(UsedHardwareBean.Builder.class).addUsedActor(new UsedActor(motorOnAction.getUserDefinedPort(), usedConfigurationBlock.getComponentType()));
         }
         return null;
     }
 
     @Override
     public Void visitNeuralNetworkAddRawData(NeuralNetworkAddRawData<Void> nn) {
-        nn.getRawData().accept(this);
+        requiredComponentVisited(nn, nn.getRawData());
         return null;
     }
 
     @Override
     public Void visitNeuralNetworkAddTrainingsData(NeuralNetworkAddTrainingsData<Void> nn) {
-        nn.getClassNumber().accept(this);
+        requiredComponentVisited(nn, nn.getClassNumber());
         return null;
     }
 
     @Override
     public Void visitNeuralNetworkClassify(NeuralNetworkClassify<Void> nn) {
-        nn.probabilities.accept(this);
+        requiredComponentVisited(nn, nn.probabilities);
         return null;
     }
 
@@ -352,9 +342,7 @@ public class ArduinoValidatorAndCollectorVisitor extends CommonNepoValidatorAndC
 
     @Override
     public Void visitNeuralNetworkSetup(NeuralNetworkSetup<Void> nn) {
-        nn.getNumberOfClasses().accept(this);
-        nn.getNumberInputNeurons().accept(this);
-        nn.getMaxNumberOfNeurons().accept(this);
+        requiredComponentVisited(nn, nn.getNumberOfClasses(), nn.getNumberInputNeurons(), nn.getMaxNumberOfNeurons());
         return null;
     }
 
@@ -426,7 +414,6 @@ public class ArduinoValidatorAndCollectorVisitor extends CommonNepoValidatorAndC
     @Override
     public Void visitSerialWriteAction(SerialWriteAction<Void> serialWriteAction) {
         requiredComponentVisited(serialWriteAction, serialWriteAction.getValue());
-        serialWriteAction.getValue().accept(this);
         this.getBuilder(UsedHardwareBean.Builder.class).addUsedActor(new UsedActor(SC.SERIAL, SC.SERIAL));
         return null;
     }
