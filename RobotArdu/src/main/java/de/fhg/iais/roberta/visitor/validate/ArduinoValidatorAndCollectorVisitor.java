@@ -142,6 +142,7 @@ public class ArduinoValidatorAndCollectorVisitor extends CommonNepoValidatorAndC
         if ( sensor.getKind().hasName("RFID_SENSING") ) {
             addWarningToPhrase(sensorGetSample, "BLOCK_NOT_SUPPORTED");
         }
+        requiredComponentVisited(sensorGetSample, sensor);
         return null;
     }
 
@@ -210,6 +211,7 @@ public class ArduinoValidatorAndCollectorVisitor extends CommonNepoValidatorAndC
 
     @Override
     public Void visitLightAction(LightAction<Void> lightAction) {
+        optionalComponentVisited(lightAction.getRgbLedColor());
         if ( lightAction.getInfos().getErrorCount() == 0 ) {
             ConfigurationComponent usedConfigurationBlock = this.robotConfiguration.optConfigurationComponent(lightAction.getPort());
             if ( usedConfigurationBlock == null ) {
@@ -320,7 +322,7 @@ public class ArduinoValidatorAndCollectorVisitor extends CommonNepoValidatorAndC
         } else if ( usedConfigurationBlock.getComponentType().equals(SC.OTHER) && param.getDuration() != null ) {
             addErrorToPhrase(motorOnAction, "CONFIGURATION_ERROR_OTHER_NOT_SUPPORTED");
         } else {
-            this.getBuilder(UsedHardwareBean.Builder.class).addUsedActor(new UsedActor(motorOnAction.getUserDefinedPort(), usedConfigurationBlock.getComponentType()));
+            //this.getBuilder(UsedHardwareBean.Builder.class).addUsedActor(new UsedActor(motorOnAction.getUserDefinedPort(), usedConfigurationBlock.getComponentType()));
         }
         return null;
     }
@@ -370,6 +372,7 @@ public class ArduinoValidatorAndCollectorVisitor extends CommonNepoValidatorAndC
 
     @Override
     public Void visitPinWriteValueAction(PinWriteValueAction<Void> pinWriteValueAction) {
+        requiredComponentVisited(pinWriteValueAction, pinWriteValueAction.getValue());
         if ( pinWriteValueAction.getInfos().getErrorCount() == 0 ) {
             ConfigurationComponent usedConfigurationBlock = this.robotConfiguration.optConfigurationComponent(pinWriteValueAction.getPort());
             if ( usedConfigurationBlock == null ) {
@@ -422,6 +425,7 @@ public class ArduinoValidatorAndCollectorVisitor extends CommonNepoValidatorAndC
 
     @Override
     public Void visitSerialWriteAction(SerialWriteAction<Void> serialWriteAction) {
+        requiredComponentVisited(serialWriteAction, serialWriteAction.getValue());
         serialWriteAction.getValue().accept(this);
         this.getBuilder(UsedHardwareBean.Builder.class).addUsedActor(new UsedActor(SC.SERIAL, SC.SERIAL));
         return null;
@@ -429,6 +433,7 @@ public class ArduinoValidatorAndCollectorVisitor extends CommonNepoValidatorAndC
 
     @Override
     public Void visitShowTextAction(ShowTextAction<Void> showTextAction) {
+        requiredComponentVisited(showTextAction, showTextAction.msg, showTextAction.x, showTextAction.y);
         if ( showTextAction.getInfos().getErrorCount() == 0 ) {
             ConfigurationComponent usedConfigurationBlock = this.robotConfiguration.optConfigurationComponent(showTextAction.port);
             if ( usedConfigurationBlock == null ) {
@@ -453,6 +458,7 @@ public class ArduinoValidatorAndCollectorVisitor extends CommonNepoValidatorAndC
 
     @Override
     public Void visitToneAction(ToneAction<Void> toneAction) {
+        requiredComponentVisited(toneAction, toneAction.getDuration(), toneAction.getFrequency());
         if ( toneAction.getInfos().getErrorCount() == 0 ) {
             ConfigurationComponent usedConfigurationBlock = this.robotConfiguration.optConfigurationComponent(toneAction.getPort());
             if ( usedConfigurationBlock == null ) {
