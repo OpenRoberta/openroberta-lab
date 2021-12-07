@@ -112,6 +112,7 @@ public class ArduinoUsedMethodCollectorVisitor extends AbstractUsedMethodCollect
 
     @Override
     public Void visitGetSampleSensor(GetSampleSensor<Void> sensorGetSample) {
+        sensorGetSample.getSensor().accept(this);
         return null;
     }
 

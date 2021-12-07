@@ -8,12 +8,10 @@ import com.google.common.collect.ClassToInstanceMap;
 import de.fhg.iais.roberta.bean.IProjectBean;
 import de.fhg.iais.roberta.components.Project;
 import de.fhg.iais.roberta.visitor.validate.AbstractBrickValidatorVisitor;
-import de.fhg.iais.roberta.visitor.validate.AbstractProgramValidatorVisitor;
-import de.fhg.iais.roberta.visitor.validate.CommonNepoValidatorAndCollectorVisitor;
 import de.fhg.iais.roberta.visitor.validate.SenseboxBrickValidatorVisitor;
 
-public class SenseboxValidatorAndCollectorWorker extends ArduinoValidatorWorker {
-    public SenseboxValidatorAndCollectorWorker() {
+public class SenseboxValidatorWorker extends ArduinoValidatorWorker {
+    public SenseboxValidatorWorker() {
         super(Stream.of("LED_BUILTIN", "0", "1", "2", "3", "4", "5", "6", "7", "8").collect(Collectors.toList()));
     }
 
