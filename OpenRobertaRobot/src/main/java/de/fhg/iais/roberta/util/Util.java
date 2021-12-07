@@ -8,7 +8,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.ProcessBuilder.Redirect;
 import java.lang.reflect.Constructor;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -25,6 +24,7 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.StringJoiner;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -43,7 +43,8 @@ import de.fhg.iais.roberta.util.dbc.DbcException;
 public class Util {
     private static final Logger LOG = LoggerFactory.getLogger(Util.class);
     private static final String PROPERTY_DEFAULT_PATH = "classpath:/openRoberta.properties";
-
+    // see: https://stackoverflow.com/questions/201323/how-can-i-validate-an-email-address-using-a-regular-expression
+    private static final Pattern VALID_EMAIL = Pattern.compile("(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|\"(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*\")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\])");
     /**
      * YAML parser. NOT thread-safe!
      */
@@ -253,7 +254,7 @@ public class Util {
     private static void loadIncludes(Properties properties, InputStream inputStream) throws IOException {
         BufferedReader reader = null;
         try {
-            reader = new BufferedReader(new InputStreamReader(inputStream, Charset.forName("iso-8859-1")));
+            reader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.ISO_8859_1));
             String line = null;
             while ( (line = reader.readLine()) != null ) {
                 if ( line.startsWith("#include ") ) {
@@ -267,6 +268,16 @@ public class Util {
                 reader.close();
             }
         }
+    }
+
+    /**
+     * Check whether a String is a valid Java identifier. It is checked, that no reserved word is used
+     *
+     * @param s String to check
+     * @return <code>true</code> if the given String is a valid Java identifier; <code>false</code> otherwise.
+     */
+    public final static boolean isValidEmailAddress(String s) {
+        return s != null && VALID_EMAIL.matcher(s).matches();
     }
 
     /**
@@ -322,7 +333,7 @@ public class Util {
         final Class<?> clazz = Util.class;
         final String lineSeparator = System.lineSeparator();
         final StringBuilder sb = new StringBuilder();
-        try (BufferedReader in = new BufferedReader(new InputStreamReader(clazz.getResourceAsStream(resourceName), "UTF-8"))) {
+        try (BufferedReader in = new BufferedReader(new InputStreamReader(clazz.getResourceAsStream(resourceName), StandardCharsets.UTF_8))) {
             String line;
             while ( (line = in.readLine()) != null ) {
                 sb.append(line).append(lineSeparator);
@@ -386,7 +397,7 @@ public class Util {
         Assert.nonEmptyString(uri, "URI is null or empty at %s", prefixForDebug);
         InputStream in = getInputStream(false, uri);
         try {
-            Map<?, ?> map = (Map<?, ?>) YAML.load(in);
+            Map<?, ?> map = YAML.load(in);
             JSONObject toAdd = new JSONObject(map);
             Object includeObject = toAdd.remove("include");
             Util.mergeJsonIntoFirst(prefixForDebug, accumulator, toAdd, override);
@@ -420,7 +431,7 @@ public class Util {
         Assert.nonEmptyString(uri, "URI is null or empty");
         InputStream in = getInputStream(false, uri);
         try {
-            Map<?, ?> map = (Map<?, ?>) YAML.load(in);
+            Map<?, ?> map = YAML.load(in);
             return new JSONObject(map);
         } catch ( Exception e ) {
             throw new DbcException("invalid YAML file " + uri, e);
@@ -558,11 +569,11 @@ public class Util {
     /**
      * Compares two version strings.
      *
-     * @note It does not work if "1.10" is supposed to be equal to "1.10.0".
      * @param str1 a string of ordinal numbers separated by decimal points.
      * @param str2 a string of ordinal numbers separated by decimal points.
      * @return The result is a negative integer if str1 is _numerically_ less than str2. The result is a positive integer if str1 is _numerically_ greater than
-     *         str2. The result is zero if the strings are _numerically_ equal.
+     *     str2. The result is zero if the strings are _numerically_ equal.
+     * @note It does not work if "1.10" is supposed to be equal to "1.10.0".
      */
     public static int versionCompare(String str1, String str2) {
         String[] vals1 = str1.split("\\.");

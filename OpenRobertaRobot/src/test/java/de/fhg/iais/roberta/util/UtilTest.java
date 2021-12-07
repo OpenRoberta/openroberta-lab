@@ -27,6 +27,18 @@ public class UtilTest {
     }
 
     @Test
+    public void testEmailAdresses() {
+        assertTrue(Util.isValidEmailAddress("a@b.de"));
+        assertTrue(Util.isValidEmailAddress("a@b.com"));
+        assertTrue(Util.isValidEmailAddress("1.a.v.b@c.d.e.f.com"));
+        assertFalse(Util.isValidEmailAddress(null));
+        assertFalse(Util.isValidEmailAddress(""));
+        assertFalse(Util.isValidEmailAddress(" "));
+        assertFalse(Util.isValidEmailAddress("abcd"));
+        assertFalse(Util.isValidEmailAddress("a@b"));
+    }
+
+    @Test
     public void testCreateMapOk() {
         Map<String, String> map = Util.createMap("1", "2", "3", "4");
         assertTrue(map.size() == 2);

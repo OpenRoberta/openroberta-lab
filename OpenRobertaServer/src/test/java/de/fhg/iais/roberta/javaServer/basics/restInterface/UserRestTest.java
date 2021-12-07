@@ -38,15 +38,21 @@ public class UserRestTest extends AbstractRestInterfaceTest {
             Assert.assertEquals(0, this.memoryDbSetup.getOneBigIntegerAsLong("select count(*) from USER"));
             restUser(
                 this.sPid,
-                "{'cmd':'createUser';'accountName':'pid';'userName':'cavy';'password':'dip';'userEmail':'cavy1@home';'role':'STUDENT', 'isYoungerThen14': false, 'language': 'de'}",
-                "error",
-                Key.USER_ACTIVATION_SENT_MAIL_FAIL);
+                "{'cmd':'createUser';'accountName':'pid';'userName':'cavy';'password':'dip';'userEmail':'cavy1@home.de';'role':'STUDENT', 'isYoungerThen14': false, 'language': 'de'}",
+                "ok",
+                Key.USER_ACTIVATION_SENT_MAIL_SUCCESS);
             Assert.assertEquals(1, this.memoryDbSetup.getOneBigIntegerAsLong("select count(*) from USER"));
             restUser(
                 this.sPid,
-                "{'cmd':'createUser';'accountName':'pid';'userName':'secondTry';'password':'dip';'userEmail':'cavy1@home';'role':'STUDENT', 'isYoungerThen14': false, 'language': 'de'}",
+                "{'cmd':'createUser';'accountName':'pid';'userName':'secondTry';'password':'dip';'userEmail':'cavy2@home.de';'role':'STUDENT', 'isYoungerThen14': false, 'language': 'de'}",
                 "error",
                 Key.USER_CREATE_ERROR_NOT_SAVED_TO_DB);
+            Assert.assertEquals(1, this.memoryDbSetup.getOneBigIntegerAsLong("select count(*) from USER"));
+            restUser(
+                this.sPid,
+                "{'cmd':'createUser';'accountName':'mailAlreadyUsed';'userName':'thirdTry';'password':'dip';'userEmail':'cavy1@home.de';'role':'STUDENT', 'isYoungerThen14': false, 'language': 'de'}",
+                "error",
+                Key.USER_ERROR_EMAIL_USED);
             Assert.assertEquals(1, this.memoryDbSetup.getOneBigIntegerAsLong("select count(*) from USER"));
             restUser(
                 this.sPid,
@@ -93,7 +99,7 @@ public class UserRestTest extends AbstractRestInterfaceTest {
         Assert.assertEquals(2, this.memoryDbSetup.getOneBigIntegerAsLong("select count(*) from USER"));
         restUser(
             this.sMinscha,
-            "{'cmd':'updateUser';'accountName':'minscha';'userName':'cavy1231';'userEmail':'cavy@home';'role':'STUDENT', 'isYoungerThen14': false, 'language': 'de'}",
+            "{'cmd':'updateUser';'accountName':'minscha';'userName':'cavy1231';'userEmail':'cavy@home.de';'role':'STUDENT', 'isYoungerThen14': false, 'language': 'de'}",
             "error",
             Key.USER_ERROR_NOT_LOGGED_IN);
 
@@ -102,9 +108,9 @@ public class UserRestTest extends AbstractRestInterfaceTest {
 
         restUser(
             this.sMinscha,
-            "{'cmd':'updateUser';'accountName':'minscha';'userName':'cavy1231';'userEmail':'cavy@home';'role':'STUDENT', 'isYoungerThen14': false, 'language': 'de'}",
+            "{'cmd':'updateUser';'accountName':'minscha';'userName':'cavy1231';'userEmail':'cavy@home.de';'role':'STUDENT', 'isYoungerThen14': false, 'language': 'de'}",
             "ok",
-            Key.USER_DEACTIVATION_SUCCESS);
+            Key.USER_ACTIVATION_SENT_MAIL_SUCCESS);
 
         restUser(this.sMinscha, "{'cmd':'getUser'}", "ok", Key.USER_GET_ONE_SUCCESS);
         this.response.getEntity().toString().contains("cavy1231");
