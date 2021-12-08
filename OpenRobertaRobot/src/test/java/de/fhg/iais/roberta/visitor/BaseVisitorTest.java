@@ -14,7 +14,7 @@ import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
-public class IVisitorTest {
+public class BaseVisitorTest {
 
     private SpecificVisitor visitor;
 
