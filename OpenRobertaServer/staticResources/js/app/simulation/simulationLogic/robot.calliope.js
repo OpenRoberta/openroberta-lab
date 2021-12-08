@@ -414,7 +414,7 @@ define(["require", "exports", "simulation.simulation", "simulation.robot.mbed", 
         }
     };
     Calliope.prototype.controle = function () {
-        $('#simRobotContent').append('<div id="mbedContent"><div id="mbedButtons" class="btn-group btn-group-vertical" data-toggle="buttons">' + //
+        $('#simRobotContent').append('<div id="mbedContent"><form id="mbed-form"><div id="mbedButtons" class="btn-group btn-group-vertical" data-toggle="buttons">' + //
             '<label style="margin: 8px;margin-top: 12px; margin-left: 0">' +
             Blockly.Msg.SENSOR_GESTURE +
             '</label>' + //
@@ -436,14 +436,18 @@ define(["require", "exports", "simulation.simulation", "simulation.robot.mbed", 
             '<label class="btn simbtn"><input type="radio" id="freefall" name="options" autocomplete="off" >' +
             Blockly.Msg.SENSOR_GESTURE_FREEFALL +
             '</label>' + //
-            '<label style="margin: 8px;margin-top: 12px; margin-left: 0">' +
+            '<label for="rangeCompass" style="margin: 8px;margin-top: 12px; margin-left: 0">' +
             Blockly.Msg.SENSOR_COMPASS +
-            '</label><input type="text" value="0" style="margin-bottom: 8px;margin-top: 12px; min-width: 45px; width: 45px; display: inline-block; border: 1px solid #333; border-radius: 2px; text-align: right;" id="range" />' +
-            '<div style="margin:8px 0; "><input id="slider" type="range" min="0" max="360" value="0" step="5" /></div>' + //
-            '<label style="margin: 8px;margin-top: 12px; margin-left: 0">' +
+            '</label><input type="text" value="0" style="margin-bottom: 8px;margin-top: 12px; min-width: 45px; width: 45px; display: inline-block; border: 1px solid #333; border-radius: 2px; text-align: right; float: right" id="rangeCompass"; name="rangeCompass"; class="range" />' +
+            '<div style="margin:8px 0; "><input id="sliderCompass" type="range" min="0" max="360" value="0" step="5" /></div>' + //
+            '<label for="rangeLight" style="margin: 8px;margin-top: 12px; margin-left: 0">' +
             Blockly.Msg.SENSOR_LIGHT +
-            '</label><input type="text" value="0" style="margin-bottom: 8px;margin-top: 12px; min-width: 45px; width: 45px; display: inline-block; border: 1px solid #333; border-radius: 2px; text-align: right; float: right;" id="rangeLight" />' +
+            '</label><input type="text" value="0" style="margin-bottom: 8px;margin-top: 12px; min-width: 45px; width: 45px; display: inline-block; border: 1px solid #333; border-radius: 2px; text-align: right; float: right;" id="rangeLight"; name="rangeLight"; class="range" />' +
             '<div style="margin:8px 0; "><input id="sliderLight" type="range" min="0" max="100" value="0" /></div>' + //
+            '<label for="rangeTemperature" style="margin: 8px;margin-top: 12px; margin-left: 0">' +
+            Blockly.Msg.SENSOR_TEMPERATURE +
+            '</label><input type="text" value="0" style="margin-bottom: 8px;margin-top: 12px; min-width: 45px; width: 45px; display: inline-block; border: 1px solid #333; border-radius: 2px; text-align: right; float: right;" id="rangeTemperature"; name="rangeTemperature"; class="range" />' +
+            '<div style="margin:8px 0; "><input id="sliderTemperature" type="range" min="-25" max="75" value="0" step="1" /></div>' + //
             '<label style="width:100%;margin: 8px;margin-top: 12px; margin-left: 0"><select class="customDropdown" id="pin"><option id="0">' +
             Blockly.Msg.SENSOR_PIN +
             ' 0</option><option id="1">' +
