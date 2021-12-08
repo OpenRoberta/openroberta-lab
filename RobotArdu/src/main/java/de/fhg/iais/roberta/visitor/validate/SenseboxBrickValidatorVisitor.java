@@ -24,6 +24,7 @@ import de.fhg.iais.roberta.syntax.lang.functions.LengthOfIsEmptyFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.ListGetIndex;
 import de.fhg.iais.roberta.syntax.lang.functions.ListSetIndex;
 import de.fhg.iais.roberta.syntax.lang.functions.MathOnListFunct;
+import de.fhg.iais.roberta.syntax.sensor.generic.GetSampleSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.HumiditySensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.KeysSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
@@ -64,6 +65,11 @@ public class SenseboxBrickValidatorVisitor extends AbstractBrickValidatorVisitor
     @Override
     public Void visitPinGetValueSensor(PinGetValueSensor<Void> pinGetValueSensor) {
         return null;
+    }
+
+    @Override
+    public Void visitGetSampleSensor(GetSampleSensor<Void> sensorGetSample) {
+        return super.visitGetSampleSensor(sensorGetSample);
     }
 
     @Override
