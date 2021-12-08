@@ -106,30 +106,41 @@ define(["require", "exports", "interpreter.constants", "util", "simulation.robot
             that.gesture = {};
             that.gesture[e.currentTarget.id] = true;
         });
+        var $mbedForm = $('#mbed-form');
+        var $sliderCompass = $('#sliderCompass');
+        var $rangeCompass = $('#rangeCompass');
+        $sliderCompass.on('mousedown touchstart', function (e) {
+            e.stopPropagation();
+        });
+        $sliderCompass.on('input change', function (e) {
+            e.preventDefault();
+            $rangeCompass.val($sliderCompass.val());
+            that.compass.degree = $sliderCompass.val();
+            lastCompassVal = $sliderCompass;
+            e.stopPropagation();
+        });
+        $rangeCompass.on('change', function (e) {
+            e.preventDefault();
+            var compassValue = parseInt($rangeCompass.val());
+            $mbedForm.validate();
+            if (!$mbedForm.valid())
+                $rangeCompass.val(lastCompassVal);
+            else {
+                if (compassValue < 0)
+                    compassValue = 0;
+                else if (compassValue > 360)
+                    compassValue = 360;
+                $rangeCompass.val(compassValue);
+                $sliderCompass.val(compassValue);
+                that.compass.degree = compassValue;
+                lastCompassVal = compassValue;
+            }
+            e.stopPropagation();
+        });
         this.compass.degree = 0;
-        $('#slider').on('mousedown touchstart', function (e) {
-            e.stopPropagation();
-        });
-        $('#slider').on('input change', function (e) {
-            e.preventDefault();
-            $('#range').val($('#slider').val());
-            that.compass.degree = $('#slider').val();
-            e.stopPropagation();
-        });
-        $('#range').on('change', function (e) {
-            e.preventDefault();
-            var sval = $('#range').val();
-            if (isNaN(sval))
-                $('#range').val(180);
-            if (parseInt(sval) < 0)
-                $('#range').val(0);
-            if (parseInt(sval) > 360)
-                $('#range').val(360);
-            $('#slider').val($('#range').val());
-            e.stopPropagation();
-        });
-        var $rangeLight = $('#rangeLight');
+        var lastCompassVal = 0;
         var $sliderLight = $('#sliderLight');
+        var $rangeLight = $('#rangeLight');
         $sliderLight.on('mousedown touchstart', function (e) {
             e.stopPropagation();
         });
@@ -142,20 +153,53 @@ define(["require", "exports", "interpreter.constants", "util", "simulation.robot
         });
         $rangeLight.on('change', function (e) {
             e.preventDefault();
-            var lightValue = $rangeLight.val();
-            if (isNaN(lightValue))
-                $rangeLight.val(0);
-            if (parseInt(lightValue) < 0)
-                $rangeLight.val(0);
-            if (parseInt(lightValue) > 100)
-                $rangeLight.val(100);
-            lightValue = $rangeLight.val();
-            $sliderLight.val(lightValue);
-            that.display.lightLevel = lightValue;
+            var lightValue = parseInt($rangeLight.val());
+            $mbedForm.validate();
+            if (!$mbedForm.valid())
+                $rangeLight.val($sliderLight.val());
+            else {
+                if (lightValue < 0)
+                    lightValue = 0;
+                else if (lightValue > 100)
+                    lightValue = 100;
+                $rangeLight.val(lightValue);
+                $sliderLight.val(lightValue);
+                that.display.lightLevel = lightValue;
+            }
             e.stopPropagation();
         });
         $sliderLight.val(100);
         $rangeLight.val(100);
+        var $sliderTemperature = $('#sliderTemperature');
+        var $rangeTemperature = $('#rangeTemperature');
+        $sliderTemperature.on('mousedown touchstart', function (e) {
+            e.stopPropagation();
+        });
+        $sliderTemperature.on('input change', function (e) {
+            e.preventDefault();
+            $rangeTemperature.val($sliderTemperature.val());
+            that.temperature.degree = $sliderTemperature.val();
+            e.stopPropagation();
+        });
+        $rangeTemperature.on('change', function (e) {
+            e.preventDefault();
+            var temperatureValue = parseInt($rangeTemperature.val());
+            $mbedForm.validate();
+            if (!$mbedForm.valid())
+                $rangeTemperature.val($sliderTemperature.val());
+            else {
+                if (temperatureValue < -25)
+                    temperatureValue = -25;
+                else if (temperatureValue > 75)
+                    temperatureValue = 75;
+                $rangeTemperature.val(temperatureValue);
+                $sliderTemperature.val(temperatureValue);
+                that.temperature.degree = temperatureValue;
+            }
+            e.stopPropagation();
+        });
+        $sliderTemperature.val(25);
+        $rangeTemperature.val(25);
         for (var i = 0; i < 4; i++) {
             if (this['pin' + i]) {
                 delete this['pin' + i].analogIn;
@@ -223,6 +267,7 @@ define(["require", "exports", "interpreter.constants", "util", "simulation.robot
             that['pin' + that.pin.no][that.pin.state + 'In'] = $('#slider1').val();
             e.stopPropagation();
         });
+        validateInput();
     };
     /**
      * Execution of the actions given by the running program.
@@ -526,7 +571,7 @@ define(["require", "exports", "interpreter.constants", "util", "simulation.robot
         this.handleMouse(e, offsetX, offsetY, scale, w, h);
     };
     Mbed.prototype.controle = function () {
-        $('#simRobotContent').append('<div id="mbedContent"><div id="mbedButtons" class="btn-group btn-group-vertical" data-toggle="buttons">' + //
+        $('#simRobotContent').append('<div id="mbedContent"><form id="mbed-form"><div id="mbedButtons" class="btn-group btn-group-vertical" data-toggle="buttons">' + //
             '<label style="margin: 8px;margin-top: 12px; margin-left: 0">' +
             Blockly.Msg.SENSOR_GESTURE +
             '</label>' + //
@@ -548,14 +593,18 @@ define(["require", "exports", "interpreter.constants", "util", "simulation.robot
             '<label class="btn simbtn"><input type="radio" id="freefall" name="options" autocomplete="off" >' +
             Blockly.Msg.SENSOR_GESTURE_FREEFALL +
             '</label>' + //
-            '<label style="margin: 8px;margin-top: 12px; margin-left: 0">' +
+            '<label for="rangeCompass style="margin: 8px;margin-top: 12px; margin-left: 0">' +
             Blockly.Msg.SENSOR_COMPASS +
-            '</label><input type="text" value="0" style="margin-bottom: 8px;margin-top: 12px; min-width: 45px; width: 45px; display: inline-block; border: 1px solid #333; border-radius: 2px; text-align: right;" id="range" />' +
-            '<div style="margin:8px 0; "><input id="slider" type="range" min="0" max="360" value="0" step="5" /></div>' + //
-            '<label style="margin: 8px;margin-top: 12px; margin-left: 0">' +
+            '</label><input type="text" value="0" style="margin-bottom: 8px;margin-top: 12px; min-width: 45px; width: 45px; display: inline-block; border: 1px solid #333; border-radius: 2px; text-align: right; float: right" id="rangeCompass": name="rangeCompass"; class="range" />' +
+            '<div style="margin:8px 0; "><input id="sliderCompass" type="range" min="0" max="360" value="0" step="5" /></div>' + //
+            '<label for="rangeLight" style="margin: 8px;margin-top: 12px; margin-left: 0">' +
             Blockly.Msg.SENSOR_LIGHT +
-            '</label><input type="text" value="0" style="margin-bottom: 8px;margin-top: 12px; min-width: 45px; width: 45px; display: inline-block; border: 1px solid #333; border-radius: 2px; text-align: right; float: right;" id="rangeLight" />' +
+            '</label><input type="text" value="0" style="margin-bottom: 8px;margin-top: 12px; min-width: 45px; width: 45px; display: inline-block; border: 1px solid #333; border-radius: 2px; text-align: right; float: right;" id="rangeLight"; name="rangeLight"; class="range" />' +
             '<div style="margin:8px 0; "><input id="sliderLight" type="range" min="0" max="100" value="0" /></div>' + //
+            '<label for="rangeTemperature" style="margin: 8px;margin-top: 12px; margin-left: 0">' +
+            Blockly.Msg.SENSOR_TEMPERATURE +
+            '</label><input type="text" value="0" style="margin-bottom: 8px;margin-top: 12px; min-width: 45px; width: 45px; display: inline-block; border: 1px solid #333; border-radius: 2px; text-align: right; float: right;" id="rangeTemperature"; name="rangeTemperature"; class="range" />' +
+            '<div style="margin:8px 0; "><input id="sliderTemperature" type="range" min="-25" max="75" value="0" step="1" /></div>' + //
             '<label style="width:100%;margin: 8px;margin-top: 12px; margin-left: 0"><select class="customDropdown" id="pin"><option id="0">' +
             Blockly.Msg.SENSOR_PIN +
             ' 0</option><option id="1">' +
@@ -568,5 +617,30 @@ define(["require", "exports", "interpreter.constants", "util", "simulation.robot
             '<div style="margin:8px 0; "><input id="slider1" type="range" min="0" max="1023" value="0" step="1" /></div></div>'); //
     };
     Mbed.prototype.resetPose = function () { };
+    function validateInput() {
+        $.validator.addClassRules('range', { required: true, number: true });
+        $('#mbed-form').validate({
+            messages: {
+                rangeCompass: {
+                    required: false,
+                    number: false,
+                },
+                rangeLight: {
+                    required: false,
+                    number: false,
+                },
+                rangeTemperature: {
+                    required: false,
+                    number: false,
+                },
+            },
+            highlight: function (element) {
+                $(element).css('background-color', '#faa');
+            },
+            unhighlight: function (element) {
+                $(element).css('background-color', '#fff');
+            },
+        });
+    }
     exports.default = Mbed;
 });
