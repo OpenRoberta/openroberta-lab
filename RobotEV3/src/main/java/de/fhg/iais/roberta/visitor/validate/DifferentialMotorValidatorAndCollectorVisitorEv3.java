@@ -1,4 +1,4 @@
-package de.fhg.iais.roberta.visitor.hardware.actor;
+package de.fhg.iais.roberta.visitor.validate;
 
 import java.util.Optional;
 
@@ -17,15 +17,14 @@ import de.fhg.iais.roberta.syntax.action.motor.differential.MotorDriveStopAction
 import de.fhg.iais.roberta.syntax.action.motor.differential.TurnAction;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.syntax.lang.expr.NumConst;
-import de.fhg.iais.roberta.visitor.IVisitor;
+import de.fhg.iais.roberta.visitor.hardware.actor.IDifferentialMotorVisitor;
 
-public class DifferentialMotorValidatorAndCollectorVisitor extends MotorValidatorAndCollectorVisitor implements IDifferentialMotorVisitor<Void> {
+public abstract class DifferentialMotorValidatorAndCollectorVisitorEv3 extends MotorValidatorAndCollectorVisitor implements IDifferentialMotorVisitor<Void> {
 
-    public DifferentialMotorValidatorAndCollectorVisitor(
-        IVisitor<Void> mainVisitor,
+    public DifferentialMotorValidatorAndCollectorVisitorEv3(
         ConfigurationAst robotConfiguration,
         ClassToInstanceMap<IProjectBean.IBuilder<?>> beanBuilders) {
-        super(mainVisitor, robotConfiguration, beanBuilders);
+        super(robotConfiguration, beanBuilders);
     }
 
     @Override
