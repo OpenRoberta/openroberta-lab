@@ -1,4 +1,4 @@
-package de.fhg.iais.roberta.visitor.hardware.actor;
+package de.fhg.iais.roberta.visitor.validate;
 
 import com.google.common.collect.ClassToInstanceMap;
 
@@ -17,18 +17,16 @@ import de.fhg.iais.roberta.syntax.action.motor.MotorSetPowerAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorStopAction;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.syntax.lang.expr.NumConst;
-import de.fhg.iais.roberta.visitor.IVisitor;
-import de.fhg.iais.roberta.visitor.validate.AbstractValidatorAndCollectorVisitor;
+import de.fhg.iais.roberta.visitor.hardware.actor.IMotorVisitor;
 
-public class MotorValidatorAndCollectorVisitor extends AbstractValidatorAndCollectorVisitor implements IMotorVisitor<Void> {
+public abstract class MotorValidatorAndCollectorVisitor extends CommonNepoValidatorAndCollectorVisitor implements IMotorVisitor<Void> {
 
     public static final double DOUBLE_EPS = 1E-7;
 
     public MotorValidatorAndCollectorVisitor(
-        IVisitor<Void> mainVisitor,
         ConfigurationAst robotConfiguration,
         ClassToInstanceMap<IProjectBean.IBuilder<?>> beanBuilders) {
-        super(mainVisitor, robotConfiguration, beanBuilders);
+        super(robotConfiguration, beanBuilders);
     }
 
     @Override
@@ -79,7 +77,6 @@ public class MotorValidatorAndCollectorVisitor extends AbstractValidatorAndColle
             checkForZeroSpeed(action, speed);
         }
     }
-
 
     protected void checkForZeroSpeed(Action<Void> action, Expr<Void> speed) {
         if ( speed.getKind().hasName("NUM_CONST") ) {
