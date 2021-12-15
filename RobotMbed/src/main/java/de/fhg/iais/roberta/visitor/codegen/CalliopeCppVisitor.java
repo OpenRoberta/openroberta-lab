@@ -469,6 +469,7 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
             case "B":
                 if ( isDualMode() ) {
                     this.sb.append("_uBit.soundmotor.motor").append(pin1).append("Off();"); // Coast vs OFF
+                    this.sb.append("//float, break and sleep doesn't work with more than one motor connected");
                 } else {
                     this.sb.append("_uBit.soundmotor.motor");
                     switch ( (MotorStopMode) motorStopAction.getMode() ) {
@@ -1235,46 +1236,50 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
         ConfigurationComponent confCompB = this.robotConfiguration.getConfigurationComponent(portB);
         String pin1A = confCompA.getComponentType().equals("CALLIBOT") ? getCallibotPin(confCompA, portA) : confCompA.getProperty("PIN1");
         String pin1B = confCompB.getComponentType().equals("CALLIBOT") ? getCallibotPin(confCompB, portB) : confCompB.getProperty("PIN1");
-        if ( pin1A.equals("A") && pin1B.equals("B") ) {
-            this.sb.append("_uBit.soundmotor.motorAOn(");
+        if ( pin1A.equals("A") && pin1B.equals("B") || pin1A.equals("B") && pin1B.equals("A") ) {
+            this.sb.append("_uBit.soundmotor.motor").append(pin1A).append("On(");
             bothMotorsOnAction.getSpeedA().accept(this);
             this.sb.append(");");
             nlIndent();
-            this.sb.append("_uBit.soundmotor.motorBOn(");
+            this.sb.append("_uBit.soundmotor.motor").append(pin1B).append("On(");
             bothMotorsOnAction.getSpeedB().accept(this);
             this.sb.append(");");
-        } else if ( pin1A.equals("B") && pin1B.equals("A") ) {
-            this.sb.append("_uBit.soundmotor.motorBOn(");
-            bothMotorsOnAction.getSpeedA().accept(this);
-            this.sb.append(");");
-            nlIndent();
-            this.sb.append("_uBit.soundmotor.motorAOn(");
-            bothMotorsOnAction.getSpeedB().accept(this);
-            this.sb.append(");");
+            return null;
         }
-        if ( pin1A.equals("0") ) {
+        if ( pin1A.equals("0") && pin1B.equals("2") ) {
             this.sb.append("_cbSetMotors(_buf, &_i2c, ");
             bothMotorsOnAction.getSpeedA().accept(this);
             this.sb.append(", ");
             bothMotorsOnAction.getSpeedB().accept(this);
             this.sb.append(");");
+        } else if ( pin1A.equals("2") && pin1B.equals("0") ) {
+            this.sb.append("_cbSetMotors(_buf, &_i2c, ");
+            bothMotorsOnAction.getSpeedB().accept(this);
+            this.sb.append(", ");
+            bothMotorsOnAction.getSpeedA().accept(this);
+            this.sb.append(");");
         }
-
         return null;
     }
 
     @Override
     public Void visitBothMotorsStopAction(BothMotorsStopAction<Void> bothMotorsStopAction) {
         Set<String> motorPorts = getMotorPins();
-        boolean both = false;
-        if ( motorPorts.contains("A") || motorPorts.contains("B") ) { // Internal motors
+        boolean newLine = false;
+        if ( motorPorts.contains("A") ) { // Internal motors
             this.sb.append("_uBit.soundmotor.motorAOff();");
-            nlIndent();
+            newLine = true;
+        }
+        if ( motorPorts.contains("B") ) {
+            if ( newLine ) {
+                nlIndent();
+            } else {
+                newLine = true;
+            }
             this.sb.append("_uBit.soundmotor.motorBOff();");
-            both = true;
         }
         if ( motorPorts.contains("0") || motorPorts.contains("2") ) { // Calli:bot motors
-            if ( both ) {
+            if ( newLine ) {
                 nlIndent();
             }
             this.sb.append("_cbSetMotors(_buf, &_i2c, 0, 0);");
@@ -1396,7 +1401,6 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
         }
         servoSetAction.getValue().accept(this);
         this.sb.append(");");
-
         return null;
     }
 

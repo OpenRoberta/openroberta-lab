@@ -1,13 +1,15 @@
 package de.fhg.iais.roberta.visitor.validate;
 
+import java.util.Map;
+
 import com.google.common.collect.ClassToInstanceMap;
 
 import de.fhg.iais.roberta.bean.IProjectBean;
+import de.fhg.iais.roberta.bean.UsedHardwareBean;
 import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.components.ConfigurationComponent;
 import de.fhg.iais.roberta.components.UsedActor;
 import de.fhg.iais.roberta.components.UsedSensor;
-import de.fhg.iais.roberta.mode.action.mbed.DisplayImageMode;
 import de.fhg.iais.roberta.syntax.MotorDuration;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.SC;
@@ -97,7 +99,7 @@ public class MbedValidatorAndCollectorVisitor extends CommonNepoValidatorAndColl
         boolean allActorsPresent = (usedActorA != null) && (usedActorB != null);
         if ( !allActorsPresent ) {
             addErrorToPhrase(bothMotorsOnAction, "CONFIGURATION_ERROR_ACTOR_MISSING");
-        } else if ( (!usedActorA.getComponentType().equals("CALLIBOT")) && usedActorA.equals(usedActorB) ) {
+        } else if ( bothMotorsOnAction.getPortA().equals(bothMotorsOnAction.getPortB()) || !usedActorA.getComponentType().equals(usedActorB.getComponentType()) ) {
             addWarningToPhrase(bothMotorsOnAction, "BLOCK_NOT_EXECUTED");
         } else if ( usedActorA.getComponentType().equals("CALLIBOT") ) {
             usedHardwareBuilder.addUsedActor(new UsedActor("", SC.CALLIBOT));
@@ -108,8 +110,13 @@ public class MbedValidatorAndCollectorVisitor extends CommonNepoValidatorAndColl
 
     @Override
     public Void visitBothMotorsStopAction(BothMotorsStopAction<Void> bothMotorsStopAction) {
-        checkActorByTypeExists(bothMotorsStopAction, "CALLIBOT");
-        usedHardwareBuilder.addUsedActor(new UsedActor("", SC.CALLIBOT));
+        Boolean isCallibotPresent = robotConfiguration.isComponentTypePresent(SC.CALLIBOT);
+        Boolean isMotorPresent = robotConfiguration.isComponentTypePresent("MOTOR");
+        if ( isCallibotPresent ) {
+            usedHardwareBuilder.addUsedActor(new UsedActor("", SC.CALLIBOT));
+        } else if ( !isMotorPresent ) {
+            addErrorToPhrase(bothMotorsStopAction, "CONFIGURATION_ERROR_ACTOR_MISSING");
+        }
         return null;
     }
 
@@ -294,11 +301,43 @@ public class MbedValidatorAndCollectorVisitor extends CommonNepoValidatorAndColl
 
     @Override
     public Void visitMotionKitDualSetAction(MotionKitDualSetAction<Void> motionKitDualSetAction) {
+        Map<String, ConfigurationComponent> usedConfig = robotConfiguration.getConfigurationComponents();
+        if ( robotConfiguration.isComponentTypePresent(SC.CALLIBOT) || robotConfiguration.isComponentTypePresent("LEDBAR") || robotConfiguration.isComponentTypePresent("FOURDIGITDISPLAY") ) {
+            addErrorToPhrase(motionKitDualSetAction, "CONFIGURATION_ERROR_OVERLAPPING_PORTS");
+            return null;
+        }
+        for ( Map.Entry<String, ConfigurationComponent> confComp : usedConfig.entrySet() ) {
+            String confType = confComp.getValue().getComponentType();
+            if ( confType.equals(SC.SERVOMOTOR) || confType.equals(SC.DIGITAL_INPUT) || confType.equals(SC.ANALOG_INPUT) ) {
+                String pin1 = confComp.getValue().getProperty("PIN1");
+                if ( pin1.equals("C16") || pin1.equals("C17") || pin1.equals("5") ) {
+                    addErrorToPhrase(motionKitDualSetAction, "CONFIGURATION_ERROR_OVERLAPPING_PORTS");
+                    return null;
+                }
+            }
+        }
+        usedHardwareBuilder.addUsedActor(new UsedActor("", "MOTIONKIT"));
         return null;
     }
 
     @Override
     public Void visitMotionKitSingleSetAction(MotionKitSingleSetAction<Void> motionKitSingleSetAction) {
+        Map<String, ConfigurationComponent> usedConfig = robotConfiguration.getConfigurationComponents();
+        if ( robotConfiguration.isComponentTypePresent(SC.CALLIBOT) || robotConfiguration.isComponentTypePresent("LEDBAR") || robotConfiguration.isComponentTypePresent("FOURDIGITDISPLAY") ) {
+            addErrorToPhrase(motionKitSingleSetAction, "CONFIGURATION_ERROR_OVERLAPPING_PORTS");
+            return null;
+        }
+        for ( Map.Entry<String, ConfigurationComponent> confComp : usedConfig.entrySet() ) {
+            String confType = confComp.getValue().getComponentType();
+            if ( confType.equals(SC.SERVOMOTOR) || confType.equals(SC.DIGITAL_INPUT) || confType.equals(SC.ANALOG_INPUT) ) {
+                String pin1 = confComp.getValue().getProperty("PIN1");
+                if ( pin1.equals("C16") || pin1.equals("C17") || pin1.equals("5") ) {
+                    addWarningToPhrase(motionKitSingleSetAction, "CONFIGURATION_ERROR_OVERLAPPING_PORTS");
+                    return null;
+                }
+            }
+        }
+        usedHardwareBuilder.addUsedActor(new UsedActor(motionKitSingleSetAction.getPort(), "MOTIONKIT"));
         return null;
     }
 
@@ -405,6 +444,13 @@ public class MbedValidatorAndCollectorVisitor extends CommonNepoValidatorAndColl
 
     @Override
     public Void visitServoSetAction(ServoSetAction<Void> servoSetAction) {
+        Boolean isMotionKitUsed = usedHardwareBuilder.build().isActorUsed("MOTIONKIT");
+        Boolean isCallibotpresent = robotConfiguration.isComponentTypePresent(SC.CALLIBOT);
+        ConfigurationComponent usedActor = robotConfiguration.optConfigurationComponent(servoSetAction.getUserDefinedPort());
+        String pin1 = usedActor.getProperty("PIN1");
+        if ( (pin1.equals("C16") || pin1.equals("C17") || pin1.equals("5")) && (isMotionKitUsed || isCallibotpresent) ) {
+            addWarningToPhrase(servoSetAction, "CONFIGURATION_ERROR_OVERLAPPING_PORTS");
+        }
         requiredComponentVisited(servoSetAction, servoSetAction.getValue());
         return addActorMaybeCallibot(servoSetAction, SC.SERVOMOTOR);
     }
@@ -558,7 +604,7 @@ public class MbedValidatorAndCollectorVisitor extends CommonNepoValidatorAndColl
     private Void addActorMaybeCallibot(WithUserDefinedPort<Void> phrase) {
         final String userDefinedPort = phrase.getUserDefinedPort();
         ConfigurationComponent configurationComponent = checkActorByPortExists((Phrase<Void>) phrase, userDefinedPort);
-        if (configurationComponent != null) {
+        if ( configurationComponent != null ) {
             return addActorMaybeCallibot(phrase, configurationComponent.getComponentType());
         } else {
             return null; // checkActorByPortExists added the error message
