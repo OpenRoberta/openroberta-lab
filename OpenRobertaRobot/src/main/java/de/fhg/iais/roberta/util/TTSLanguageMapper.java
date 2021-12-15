@@ -1,4 +1,4 @@
-package de.fhg.iais.roberta.visitor.codegen.utilities;
+package de.fhg.iais.roberta.util;
 
 import de.fhg.iais.roberta.inter.mode.action.ILanguage;
 import de.fhg.iais.roberta.mode.action.Language;

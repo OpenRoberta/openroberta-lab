@@ -11,6 +11,6 @@ public final class RaspberryPiPythonGeneratorWorker extends AbstractLanguageGene
 
     @Override
     protected AbstractLanguageVisitor getVisitor(Project project, ClassToInstanceMap<IProjectBean> beans) {
-        return new RaspberryPiPythonVisitor(project.getProgramAst().getTree(), project.getConfigurationAst(), beans);
+        return new RaspberryPiPythonVisitor(project.getProgramAst().getTree(), project.getLanguage(), project.getConfigurationAst(), beans);
     }
 }

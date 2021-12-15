@@ -1,12 +1,12 @@
 <toolbox_set id='toolbox' style='display: none'>
     <category name='TOOLBOX_DIALOG' svg='true'>
-        <block type='robDialog_conf_intent' />
-        <block type='robDialog_conf_slot' />
+        <block type='robConf_intent'/>
+        <block type='robConf_slot'/>
     </category>
     <category name='TOOLBOX_ACTION' svg='true'>
-        <block type='robConf_led' />
+        <block type='robConf_led'/>
     </category>
     <category name='TOOLBOX_SENSOR' svg='true'>
-        <block type='robConf_key' />
+        <block type='robConf_key'/>
     </category>
 </toolbox_set>

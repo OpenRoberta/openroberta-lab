@@ -11,6 +11,7 @@ import de.fhg.iais.roberta.bean.UsedHardwareBean;
 import de.fhg.iais.roberta.components.Category;
 import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.components.ConfigurationComponent;
+import de.fhg.iais.roberta.inter.mode.action.ILanguage;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.SCRaspberryPi;
 import de.fhg.iais.roberta.syntax.action.light.LightAction;
@@ -41,6 +42,7 @@ import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.visitor.IVisitor;
 import de.fhg.iais.roberta.visitor.hardware.IRaspberryPiVisitor;
 import de.fhg.iais.roberta.visitor.lang.codegen.prog.AbstractPythonVisitor;
+import de.fhg.iais.roberta.util.TTSLanguageMapper;
 
 /**
  * This class is implementing {@link IVisitor}. All methods are implemented and they append a human-readable Python code representation of a phrase to a
@@ -48,6 +50,7 @@ import de.fhg.iais.roberta.visitor.lang.codegen.prog.AbstractPythonVisitor;
  */
 public final class RaspberryPiPythonVisitor extends AbstractPythonVisitor implements IRaspberryPiVisitor<Void> {
     protected final ConfigurationAst brickConfiguration;
+    private final ILanguage language;
 
     /**
      * initialize the Python code generator visitor.
@@ -55,8 +58,13 @@ public final class RaspberryPiPythonVisitor extends AbstractPythonVisitor implem
      * @param brickConfiguration hardware configuration of the brick
      * @param programPhrases to generate the code from
      */
-    public RaspberryPiPythonVisitor(List<List<Phrase<Void>>> programPhrases, ConfigurationAst brickConfiguration, ClassToInstanceMap<IProjectBean> beans) {
+    public RaspberryPiPythonVisitor(
+        List<List<Phrase<Void>>> programPhrases,
+        ILanguage language,
+        ConfigurationAst brickConfiguration,
+        ClassToInstanceMap<IProjectBean> beans) {
         super(programPhrases, beans);
+        this.language = language;
         this.brickConfiguration = brickConfiguration;
     }
 
@@ -182,6 +190,8 @@ public final class RaspberryPiPythonVisitor extends AbstractPythonVisitor implem
         nlIndent();
         this.sb.append("import speech_recognizer_roberta");
         nlIndent();
+        this.sb.append("import subprocess as sP");
+        nlIndent();
         this.sb.append("import os");
         nlIndent();
         nlIndent();
@@ -257,7 +267,7 @@ public final class RaspberryPiPythonVisitor extends AbstractPythonVisitor implem
             incrIndentation();
             nlIndent();
             String pleaseRepeat = "Ich habe das nicht verstanden, bitte versuchen Sie es noch einmal";
-            this.sb.append("print(os.system('sh speech_syntheziser.sh \"").append(pleaseRepeat).append("\"'))");
+            this.sb.append("sP.call(['espeak', '-v', '").append(TTSLanguageMapper.getLanguageString(this.language)).append("', '").append(pleaseRepeat).append("'])");
             decrIndentation();
             nlIndent();
         }
@@ -283,8 +293,14 @@ public final class RaspberryPiPythonVisitor extends AbstractPythonVisitor implem
         // FIXME: we can only print about 30 chars
         this.sb.append("print(e)");
         decrIndentation();
+        nlIndent();
+        this.sb.append("finally:");
+        incrIndentation();
+        nlIndent();
+        this.sb.append("board.close()");
         decrIndentation();
         nlIndent();
+        decrIndentation();
         nlIndent();
         this.sb.append("if __name__ == \"__main__\":");
         incrIndentation();
@@ -373,9 +389,9 @@ public final class RaspberryPiPythonVisitor extends AbstractPythonVisitor implem
 
     @Override
     public Void visitSayTextAction(SayTextAction<Void> sayTextAction) {
-        this.sb.append("print(os.system('sh speech_syntheziser.sh ");
+        this.sb.append("sP.call([\"espeak\", \"-v\", \"").append(TTSLanguageMapper.getLanguageString(this.language)).append("\", ");
         sayTextAction.getMsg().accept(this);
-        this.sb.append("'))");
+        this.sb.append("])");
         return null;
     }
 
