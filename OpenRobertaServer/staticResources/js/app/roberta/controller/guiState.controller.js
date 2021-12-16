@@ -86,7 +86,7 @@ define(['exports', 'util', 'message', 'guiState.model', 'progHelp.controller', '
 
     /**
      * Check if a program is a standard program or not
-     * 
+     *
      */
     function isProgramStandard() {
         return GUISTATE.program.name == 'NEPOprog';
@@ -117,7 +117,10 @@ define(['exports', 'util', 'message', 'guiState.model', 'progHelp.controller', '
         return GUISTATE.configuration.name == '';
     }
     exports.isConfigurationAnonymous = isConfigurationAnonymous;
-
+    function isKioskMode() {
+        return GUISTATE.kiosk && GUISTATE.kiosk === true;
+    }
+    exports.isKioskMode = isKioskMode;
     function setState(result) {
         if (result['server.version']) {
             GUISTATE.server.version = result['server.version'];
@@ -171,8 +174,7 @@ define(['exports', 'util', 'message', 'guiState.model', 'progHelp.controller', '
             $('#iconDisplayLogin').removeClass('ok');
             $('#iconDisplayLogin').addClass('error');
         }
-
-        connectionType = getConnection();
+        var connectionType = getConnection();
         switch (getConnection()) {
             case GUISTATE.gui.connectionType.AGENTORTOKEN:
                 if (GUISTATE.gui.isAgent === true) {
@@ -403,7 +405,10 @@ define(['exports', 'util', 'message', 'guiState.model', 'progHelp.controller', '
         UTIL.clearTabAlert('tabConfiguration'); // also clear tab alert when switching robots
     }
     exports.setRobot = setRobot;
-
+    function setKioskMode(kiosk) {
+        GUISTATE.kiosk = kiosk;
+    }
+    exports.setKioskMode = setKioskMode;
     function findGroup(robot) {
         var robots = getRobots();
         for (var propt in robots) {
@@ -418,6 +423,7 @@ define(['exports', 'util', 'message', 'guiState.model', 'progHelp.controller', '
 
     function findRobot(group) {
         var robots = getRobots();
+        var robot;
         for (robot in robots) {
             if (robots[robot].group === group) {
                 return robots[robot].name;
@@ -1113,7 +1119,7 @@ define(['exports', 'util', 'message', 'guiState.model', 'progHelp.controller', '
 
     /**
      * Set configuration
-     * @param {*} result 
+     * @param {*} result
      */
     function setConfiguration(result) {
         if (result) {

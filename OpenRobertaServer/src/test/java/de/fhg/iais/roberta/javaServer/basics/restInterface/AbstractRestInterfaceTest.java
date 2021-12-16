@@ -4,6 +4,7 @@ import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.generated.restEntities.FullRestRequest;
 import de.fhg.iais.roberta.javaServer.basics.TestConfiguration;
 import de.fhg.iais.roberta.javaServer.restServices.all.controller.*;
+import de.fhg.iais.roberta.main.MailManagement;
 import de.fhg.iais.roberta.main.ServerStarter;
 import de.fhg.iais.roberta.persistence.util.DbSession;
 import de.fhg.iais.roberta.persistence.util.DbSetup;
@@ -19,6 +20,10 @@ import de.fhg.iais.roberta.util.dbc.DbcException;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.runners.MockitoJUnitRunner;
 
 import javax.ws.rs.core.Response;
 import java.sql.Timestamp;
@@ -58,6 +63,7 @@ import java.util.Map;
  *
  * @author rbudde
  */
+@RunWith(MockitoJUnitRunner.class)
 public abstract class AbstractRestInterfaceTest {
     protected static final List<String> EMPTY_STRING_LIST = Collections.emptyList();
     protected static final String PROG_PRE_ROBOT = "<block_set xmlns=\\\"http://de.fhg.iais.roberta.blockly\\\" robottype=\\\"";
@@ -110,7 +116,9 @@ public abstract class AbstractRestInterfaceTest {
         this.serverProperties.getserverProperties().put("server.public", "true"); // not dangerous! For this.restUser the mail management is set to null
 
         this.robotCommunicator = new RobotCommunicator();
-        this.restUser = new ClientUser(this.robotCommunicator, this.serverProperties, null);
+
+        MailManagement mailManagement = Mockito.mock(MailManagement.class);
+        this.restUser = new ClientUser(this.robotCommunicator, this.serverProperties, mailManagement);
 
         TestConfiguration tc = TestConfiguration.setup();
         this.sessionFactoryWrapper = tc.getSessionFactoryWrapper();
@@ -144,7 +152,7 @@ public abstract class AbstractRestInterfaceTest {
 
     /**
      * creates two users with following data:<br>
-     * accountName: 'pid' , userName: 'cavy' , password: 'dip', userEmail: 'cavy1@home'<br>
+     * accountName: 'pid' , userName: 'cavy' , password: 'dip', userEmail: 'cavy1@home.de'<br>
      * accountName: 'minscha' , userName: 'cavy' , password: '12', userEmail: null
      * 
      * @throws Exception
@@ -153,9 +161,9 @@ public abstract class AbstractRestInterfaceTest {
         //craete and activate "pid"
         restUser(
             this.sPid,
-            "{'cmd':'createUser';'accountName':'pid';'userName':'cavy';'password':'dip';'userEmail':'cavy1@home';'role':'STUDENT', 'isYoungerThen14': false, 'language': 'de'}",
-            "error",
-            Key.USER_ACTIVATION_SENT_MAIL_FAIL);
+            "{'cmd':'createUser';'accountName':'pid';'userName':'cavy';'password':'dip';'userEmail':'cavy1@home.de';'role':'STUDENT', 'isYoungerThen14': false, 'language': 'de'}",
+            "ok",
+            Key.USER_ACTIVATION_SENT_MAIL_SUCCESS);
         String url = this.memoryDbSetup.getOne("select URL_POSTFIX from PENDING_EMAIL_CONFIRMATIONS").toString();
         restUser(this.sPid, "{'cmd':'activateUser'; 'userActivationLink': '" + url + "';}", "ok", Key.USER_ACTIVATION_SUCCESS);
         //create "Minscha"

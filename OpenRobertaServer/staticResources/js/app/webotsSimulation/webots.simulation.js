@@ -150,29 +150,29 @@ define(["require", "exports", "jquery", "guiState.controller"], function (requir
             $("#webotsProgress").height("120px");
             var that = this;
             this.view.onstdout = function (text) {
-                if (text.startsWith("finish")) {
-                    $("#simControl").trigger("click");
+                if (text.indexOf('finish') === 0) {
+                    $('#simControl').trigger('click');
                 }
-                else if (text.startsWith("say")) {
-                    var data = text.split(":");
+                else if (text.indexOf('say') === 0) {
+                    var data = text.split(':');
                     that.sayText(data);
                 }
-                else if (text.startsWith("setLanguage")) {
-                    var data = text.split(":");
+                else if (text.indexOf('setLanguage') === 0) {
+                    var data = text.split(':');
                     that.lang = data[1];
                 }
-                else if (text.startsWith("setVolume")) {
-                    var data = text.split(":");
+                else if (text.indexOf('setVolume') === 0) {
+                    var data = text.split(':');
                     that.volume = parseInt(data[1]) / 100;
                 }
-                else if (text.startsWith("getVolume")) {
+                else if (text.indexOf('getVolume') === 0) {
                     var message = {
                         name: "NAO",
                         message: "volume:" + that.volume * 100
                     };
-                    that.sendMessage("robot:" + JSON.stringify(message));
+                    that.sendMessage('robot:' + JSON.stringify(message));
                 }
-                else if (text.startsWith("recognizeSpeech")) {
+                else if (text.indexOf('recognizeSpeech')) {
                     that.recognizeSpeech();
                 }
                 else {

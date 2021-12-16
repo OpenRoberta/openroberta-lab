@@ -72,7 +72,8 @@ public class ClientUser {
         this.isPublicServer = serverProperties.getBooleanProperty("server.public");
     }
 
-    private static String[] statusText = new String[2];
+    // TODO: static variables (they are changed!) in a REST resource are very dangerous. Refactor, i.e. remove!
+    private static final String[] statusText = new String[2];
     private static long statusTextTimestamp;
 
     @POST
@@ -186,8 +187,8 @@ public class ClientUser {
     }
 
     /**
-    * used to check wether or not the current user is logged in 
-     */ 
+     * used to check wether or not the current user is logged in
+     */
     @POST
     @Path("/loggedInCheck")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -310,10 +311,20 @@ public class ClientUser {
             String account = request.getAccountName();
             String password = request.getPassword();
             String email = request.getUserEmail();
+            email = email == null ? "" : email.trim();
             String userName = request.getUserName();
             String role = request.getRole();
             //String tag = request.getString("tag");
             boolean isYoungerThen14 = request.getIsYoungerThen14();
+            if ( !email.equals("") && !Util.isValidEmailAddress(email) ) {
+                return UtilForREST.makeBaseResponseForError(Key.USER_ERROR_EMAIL_INVALID, httpSessionState, this.brickCommunicator);
+            } else if ( !email.equals("") ) {
+                final User userByEmail = up.getUserByEmail(email);
+                boolean emailInUseByAnotherUser = userByEmail != null;
+                if ( emailInUseByAnotherUser ) {
+                    return UtilForREST.makeBaseResponseForError(Key.USER_ERROR_EMAIL_USED, httpSessionState, this.brickCommunicator);
+                }
+            }
             up.createUser(account, password, userName, role, email, null, isYoungerThen14);
             if ( this.isPublicServer && !email.equals("") && up.succeeded() ) {
                 PendingEmailConfirmationsProcessor pendingConfirmationProcessor = new PendingEmailConfirmationsProcessor(dbSession, httpSessionState);
@@ -350,10 +361,10 @@ public class ClientUser {
             response.setCmd(cmd);
             UserProcessor up = new UserProcessor(dbSession, httpSessionState);
             PendingEmailConfirmationsProcessor pendingConfirmationProcessor = new PendingEmailConfirmationsProcessor(dbSession, httpSessionState);
-
             String account = request.getAccountName();
             String userName = request.getUserName();
             String email = request.getUserEmail();
+            email = email == null ? "" : email.trim();
             String role = request.getRole();
             //String tag = request.getString("tag");
             boolean isYoungerThen14 = request.getIsYoungerThen14();
@@ -361,20 +372,28 @@ public class ClientUser {
             User user = httpSessionState.isUserLoggedIn() ? up.getUser(httpSessionState.getUserId()) : null;
             if ( user == null ) {
                 return UtilForREST.makeBaseResponseForError(Key.USER_ERROR_NOT_LOGGED_IN, httpSessionState, this.brickCommunicator);
+            } else if ( !user.getAccount().equals(account) || user.getUserGroup() != null ) {
+                return UtilForREST.makeBaseResponseForError(Key.USER_UPDATE_ERROR_ACCOUNT_WRONG, httpSessionState, this.brickCommunicator);
+            } else if ( !email.equals("") && !Util.isValidEmailAddress(email) ) {
+                return UtilForREST.makeBaseResponseForError(Key.USER_ERROR_EMAIL_INVALID, httpSessionState, this.brickCommunicator);
             } else {
-                if ( !user.getAccount().equals(account) || user.getUserGroup() != null ) {
-                    return UtilForREST.makeBaseResponseForError(Key.USER_UPDATE_ERROR_ACCOUNT_WRONG, httpSessionState, this.brickCommunicator);
-                } else {
-                    String oldEmail = user.getEmail();
-                    up.updateUser(account, userName, role, email, null, isYoungerThen14);
-                    if ( this.isPublicServer && !oldEmail.equals(email) && up.succeeded() ) {
-                        String lang = request.getLanguage();
-                        PendingEmailConfirmations confirmation = pendingConfirmationProcessor.createEmailConfirmation(account);
-                        sendActivationMail(up, confirmation.getUrlPostfix(), account, email, lang, isYoungerThen14);
-                        up.deactivateAccount(user.getId());
+                String oldEmail = user.getEmail();
+                boolean isMailChanged = !email.equals(oldEmail);
+                if ( isMailChanged && !email.equals("") ) {
+                    // new email: check whether already used or not
+                    final User userByEmail = up.getUserByEmail(email);
+                    boolean emailInUseByAnotherUser = userByEmail != null && userByEmail.getId() != user.getId();
+                    if ( emailInUseByAnotherUser ) {
+                        return UtilForREST.makeBaseResponseForError(Key.USER_ERROR_EMAIL_USED, httpSessionState, this.brickCommunicator);
                     }
-                    UtilForREST.addResultInfo(response, up);
                 }
+                final boolean deactivateAccount = this.isPublicServer && isMailChanged;
+                up.updateUser(user, userName, role, email, null, isYoungerThen14, deactivateAccount);
+                if ( deactivateAccount && up.succeeded() ) {
+                    PendingEmailConfirmations confirmation = pendingConfirmationProcessor.createEmailConfirmation(account);
+                    sendActivationMail(up, confirmation.getUrlPostfix(), account, email, request.getLanguage(), isYoungerThen14);
+                }
+                UtilForREST.addResultInfo(response, up);
             }
             return UtilForREST.responseWithFrontendInfo(response, httpSessionState, this.brickCommunicator);
         } catch ( Exception e ) {
@@ -510,8 +529,6 @@ public class ClientUser {
             }
             Key statusKey = recoverySuccessful ? Key.SERVER_SUCCESS : Key.USER_PASSWORD_RECOVERY_EXPIRED_URL;
             up.setStatus(ProcessorStatus.SUCCEEDED, statusKey, responseParameters);
-            if ( recoverySuccessful ) {
-            }
             response.setResetPasswordLinkExpired(recoverySuccessful);
             UtilForREST.addResultInfo(response, up);
             return UtilForREST.responseWithFrontendInfo(response, httpSessionState, this.brickCommunicator);
@@ -553,6 +570,8 @@ public class ClientUser {
             LostPassword lostPassword = lostPasswordProcessor.loadLostPassword(resetPasswordLink);
             if ( lostPassword != null ) {
                 up.resetPassword(lostPassword.getUserID(), newPassword);
+            } else {
+                up.setStatus(ProcessorStatus.FAILED, lostPasswordProcessor.getMessage(), new HashMap<>());
             }
             if ( up.getMessage() == Key.USER_UPDATE_SUCCESS ) {
                 lostPasswordProcessor.deleteLostPassword(resetPasswordLink);

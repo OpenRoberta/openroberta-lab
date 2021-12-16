@@ -5,7 +5,7 @@ define(['exports', 'message', 'log', 'jquery', 'jquery-validate', 'bootstrap'], 
     var ratioWorkspace = 1;
     /**
      * Decode base64 string to array of bytes
-     * 
+     *
      * @param b64string
      *            A base64 encoded string
      */
@@ -23,7 +23,7 @@ define(['exports', 'message', 'log', 'jquery', 'jquery-validate', 'bootstrap'], 
         var copy;
 
         // Handle the 3 simple types, and null or undefined
-        if (null == obj || "object" != typeof obj)
+        if (null == obj || 'object' != typeof obj)
             return obj;
 
         // Handle Date
@@ -52,7 +52,7 @@ define(['exports', 'message', 'log', 'jquery', 'jquery-validate', 'bootstrap'], 
             return copy;
         }
 
-        throw new Error("Unable to copy obj! Its type isn't supported.");
+        throw new Error('Unable to copy obj! Its type isn\'t supported.');
     }
     exports.clone = clone;
 
@@ -68,7 +68,7 @@ define(['exports', 'message', 'log', 'jquery', 'jquery-validate', 'bootstrap'], 
             return false;
 
         //index of next property split
-        var _index = prop.indexOf('.')
+        var _index = prop.indexOf('.');
 
         //property split found; recursive call
         if (_index > -1) {
@@ -83,7 +83,7 @@ define(['exports', 'message', 'log', 'jquery', 'jquery-validate', 'bootstrap'], 
         return obj[prop];
     }
 
-    exports.getPropertyFromObject = getPropertyFromObject
+    exports.getPropertyFromObject = getPropertyFromObject;
 
     function setObjectProperty(obj, prop, value, arrayIndex) {
         //property not found
@@ -91,7 +91,7 @@ define(['exports', 'message', 'log', 'jquery', 'jquery-validate', 'bootstrap'], 
             return false;
 
         //index of next property split
-        var _index = prop.indexOf('.')
+        var _index = prop.indexOf('.');
 
         //property split found; recursive call
         if (_index > -1) {
@@ -106,29 +106,29 @@ define(['exports', 'message', 'log', 'jquery', 'jquery-validate', 'bootstrap'], 
         obj[prop] = value;
     }
 
-    exports.setObjectProperty = setObjectProperty
+    exports.setObjectProperty = setObjectProperty;
 
     /**
      * Format date
-     * 
+     *
      * @param {date}
      *            date from server to be formatted
      */
     function formatDate(dateLong) {
         if (dateLong) {
             var date = new Date(dateLong);
-            var datestring = ("0" + date.getDate()).slice(-2) + "." + ("0" + (date.getMonth() + 1)).slice(-2) + "." + date.getFullYear() + ", " +
-                ("0" + date.getHours()).slice(-2) + ":" + ("0" + date.getMinutes()).slice(-2);
+            var datestring = ('0' + date.getDate()).slice(-2) + '.' + ('0' + (date.getMonth() + 1)).slice(-2) + '.' + date.getFullYear() + ', ' +
+                ('0' + date.getHours()).slice(-2) + ':' + ('0' + date.getMinutes()).slice(-2);
             return datestring;
         } else {
-            return "";
+            return '';
         }
     }
     exports.formatDate = formatDate;
 
     /**
      * Convert date into numeric value
-     * 
+     *
      * @param {d}
      *            date in the form 'dd.mm.yyyy, hh:mm:ss'
      */
@@ -152,14 +152,14 @@ define(['exports', 'message', 'log', 'jquery', 'jquery-validate', 'bootstrap'], 
 
     /**
      * Format result of server call for logging
-     * 
+     *
      * @param {result}
      *            Result-object from server call
      */
     function formatResultLog(result) {
-        var str = "{";
+        var str = '{';
         var comma = false;
-        for (key in result) {
+        for (var key in result) {
             if (comma) {
                 str += ',';
             } else {
@@ -190,10 +190,10 @@ define(['exports', 'message', 'log', 'jquery', 'jquery-validate', 'bootstrap'], 
 
     function checkVisibility() {
         var stateKey, eventKey, keys = {
-            hidden: "visibilitychange",
-            webkitHidden: "webkitvisibilitychange",
-            mozHidden: "mozvisibilitychange",
-            msHidden: "msvisibilitychange"
+            hidden: 'visibilitychange',
+            webkitHidden: 'webkitvisibilitychange',
+            mozHidden: 'mozvisibilitychange',
+            msHidden: 'msvisibilitychange'
         };
         for (stateKey in keys) {
             if (stateKey in document) {
@@ -212,7 +212,7 @@ define(['exports', 'message', 'log', 'jquery', 'jquery-validate', 'bootstrap'], 
 
     function setFocusOnElement($elem) {
         setTimeout(function() {
-            if ($elem.is(":visible") == true) {
+            if ($elem.is(':visible') == true) {
                 $elem.focus();
             }
         }, 800);
@@ -233,8 +233,8 @@ define(['exports', 'message', 'log', 'jquery', 'jquery-validate', 'bootstrap'], 
         });
         $('#single-modal-form').removeData('validator');
         $('#single-modal-form').validate(validator);
-        setFocusOnElement($("#singleModalInput"));
-        $("#single-modal").modal('show');
+        setFocusOnElement($('#singleModalInput'));
+        $('#single-modal').modal('show');
     }
     exports.showSingleModal = showSingleModal;
 
@@ -247,50 +247,50 @@ define(['exports', 'message', 'log', 'jquery', 'jquery-validate', 'bootstrap'], 
             $('#single-modal-list-form').unbind('submit');
             onHidden();
         });
-        setFocusOnElement($("#singleModalListInput"));
-        $("#single-modal-list").modal('show');
+        setFocusOnElement($('#singleModalListInput'));
+        $('#single-modal-list').modal('show');
     }
     exports.showSingleListModal = showSingleListModal;
 
     /**
      * Helper to show the information on top of the share modal.
-     * 
+     *
      */
     function showMsgOnTop(msg) {
-        $('#show-message').find('button').removeAttr("data-dismiss");
+        $('#show-message').find('button').removeAttr('data-dismiss');
         $('#show-message').find('button').oneWrap('click', function(e) {
-            $('#show-message').modal("hide");
-            $('#show-message').find('button').attr("data-dismiss", "modal");
+            $('#show-message').modal('hide');
+            $('#show-message').find('button').attr('data-dismiss', 'modal');
         });
         MSG.displayInformation({
-            rc: "not ok"
-        }, "", msg);
+            rc: 'not ok'
+        }, '', msg);
     }
     exports.showMsgOnTop = showMsgOnTop;
 
     /**
      * Handle result of server call
-     * 
+     *
      * @param {result}
      *            Result-object from server call
      */
     function response(result) {
         LOG.info('result from server: ' + formatResultLog(result));
         if (result.rc != 'ok') {
-            MSG.displayMessage(result.message, "POPUP", "");
+            MSG.displayMessage(result.message, 'POPUP', '');
         }
     }
     exports.response = response;
 
     /**
      * Rounds a number to required decimal
-     * 
+     *
      * @param value
      *            {Number} - to be rounded
      * @param decimals
      *            {Number} - number of decimals after rounding
      * @return {Number} rounded number
-     * 
+     *
      */
     function round(value, decimals) {
         return Number(Math.round(value + 'e' + decimals) + 'e-' + decimals);
@@ -300,13 +300,13 @@ define(['exports', 'message', 'log', 'jquery', 'jquery-validate', 'bootstrap'], 
     /**
      * Rounds a number to required decimal and clips value to the range [0, 255]
      * (Range of UltraSound sensor)
-     * 
+     *
      * @param value
      *            {Number} - to be rounded
      * @param decimals
      *            {Number} - number of decimals after rounding
      * @return {Number} rounded and clipped number
-     * 
+     *
      */
     function roundUltraSound(value, decimals) {
         var ultraReading = round(value, decimals);
@@ -320,7 +320,7 @@ define(['exports', 'message', 'log', 'jquery', 'jquery-validate', 'bootstrap'], 
 
     /**
      * Get the sign of the number.
-     * 
+     *
      * @param x
      *            {Number} -
      * @return {Number} - 1 if it is positive number o/w return -1
@@ -332,14 +332,14 @@ define(['exports', 'message', 'log', 'jquery', 'jquery-validate', 'bootstrap'], 
 
     /**
      * Returns the basename (i.e. "hello" in "C:/folder/hello.txt")
-     * 
+     *
      * @param path
      *            {String} - path
      */
     function getBasename(path) {
         var base = new String(path).substring(path.lastIndexOf('/') + 1);
-        if (base.lastIndexOf(".") != -1) {
-            base = base.substring(0, base.lastIndexOf("."));
+        if (base.lastIndexOf('.') != -1) {
+            base = base.substring(0, base.lastIndexOf('.'));
         }
         return base;
     }
@@ -406,8 +406,8 @@ define(['exports', 'message', 'log', 'jquery', 'jquery-validate', 'bootstrap'], 
 
     function isLocalStorageAvailable() {
         try {
-            localStorage.setItem("test", "test");
-            localStorage.removeItem("test");
+            localStorage.setItem('test', 'test');
+            localStorage.removeItem('test');
             return true;
         } catch (e) {
             return false;
@@ -418,48 +418,48 @@ define(['exports', 'message', 'log', 'jquery', 'jquery-validate', 'bootstrap'], 
     function alertTab(tabIdentifier) {
         clearTabAlert(tabIdentifier);
         $('#' + tabIdentifier).width(); // trigger a reflow to sync animations
-        $('#' + tabIdentifier).prepend('<span class="typcn typcn-warning-outline"></span>') // add alert typicon
+        $('#' + tabIdentifier).prepend('<span class="typcn typcn-warning-outline"></span>'); // add alert typicon
         $('#' + tabIdentifier).addClass('blinking');
     }
     exports.alertTab = alertTab;
 
     function clearTabAlert(tabIdentifier) {
-        $('#' + tabIdentifier).children().remove('.typcn') // remove alert typicon
+        $('#' + tabIdentifier).children().remove('.typcn'); // remove alert typicon
         $('#' + tabIdentifier).removeClass('blinking');
     }
     exports.clearTabAlert = clearTabAlert;
 
     var __entityMap = {
-        "&": "&amp;",
-        "<": "&lt;",
-        ">": "&gt;",
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
         '"': '&quot;',
-        "'": '&#39;',
-        "/": '&#x2F;'
+        '\'': '&#39;',
+        '/': '&#x2F;'
     };
 
     String.prototype.escapeHTML = function() {
         return String(this).replace(/[&<>"'\/]/g, function(s) {
             return __entityMap[s];
         });
-    }
+    };
 
     $.fn.draggable = function(opt) {
 
         opt = $.extend({
-            handle: "",
-            cursor: "move",
-            draggableClass: "draggable",
-            activeHandleClass: "active-handle"
+            handle: '',
+            cursor: 'move',
+            draggableClass: 'draggable',
+            activeHandleClass: 'active-handle'
         }, opt);
 
         var $selected = null;
-        var $elements = (opt.handle === "") ? this : this.find(opt.handle);
+        var $elements = (opt.handle === '') ? this : this.find(opt.handle);
 
-        $elements.css('cursor', opt.cursor).on("mousedown touchstart", function(e) {
+        $elements.css('cursor', opt.cursor).on('mousedown touchstart', function(e) {
             var pageX = e.pageX || e.originalEvent.touches[0].pageX;
             var pageY = e.pageY || e.originalEvent.touches[0].pageY;
-            if (opt.handle === "") {
+            if (opt.handle === '') {
                 $selected = $(this);
                 $selected.addClass(opt.draggableClass);
             } else {
@@ -470,8 +470,8 @@ define(['exports', 'message', 'log', 'jquery', 'jquery-validate', 'bootstrap'], 
                 drg_w = $selected.outerWidth(),
                 pos_y = $selected.offset().top + drg_h - pageY,
                 pos_x = $selected.offset().left +
-                drg_w - pageX;
-            $(document).on("mousemove touchmove", function(e) {
+                    drg_w - pageX;
+            $(document).on('mousemove touchmove', function(e) {
                 var pageX = e.pageX || e.originalEvent.touches[0].pageX;
                 var pageY = e.pageY || e.originalEvent.touches[0].pageY;
                 // special case movable slider between workspace and right divs
@@ -489,7 +489,7 @@ define(['exports', 'message', 'log', 'jquery', 'jquery-validate', 'bootstrap'], 
                     });
                     $('.fromRight').css({
                         'width': $(window).width() - $('#blockly').width()
-                    })
+                    });
                     ratioWorkspace = $('#blockly').outerWidth() / $('#main-section').outerWidth();
                     $(window).resize();
                 } else {
@@ -499,18 +499,18 @@ define(['exports', 'message', 'log', 'jquery', 'jquery-validate', 'bootstrap'], 
                     });
                 }
                 $selected.css({
-                    right: 'auto',
+                    right: 'auto'
                 });
-            }).on("mouseup touchend", function() {
-                $(this).off("mousemove touchmove"); // Unbind events from document
+            }).on('mouseup touchend', function() {
+                $(this).off('mousemove touchmove'); // Unbind events from document
                 if ($selected !== null) {
                     $selected.removeClass(opt.draggableClass);
                     $selected = null;
                 }
             });
-        }).on("mouseup touchend", function() {
+        }).on('mouseup touchend', function() {
             if ($selected) {
-                if (opt.handle === "") {
+                if (opt.handle === '') {
                     $selected.removeClass(opt.draggableClass);
                 } else {
                     $selected.removeClass(opt.draggableClass).find(opt.handle).removeClass(opt.activeHandleClass);
@@ -525,16 +525,16 @@ define(['exports', 'message', 'log', 'jquery', 'jquery-validate', 'bootstrap'], 
     const originalAddClass = $.fn.addClass;
     $.fn.addClass = function() {
         let result = originalAddClass.apply(this, arguments);
-        $(this).trigger("classChange");
+        $(this).trigger('classChange');
         return result;
-    }
+    };
 
     const originalRemoveClass = $.fn.removeClass;
     $.fn.removeClass = function() {
         let result = originalRemoveClass.apply(this, arguments);
-        $(this).trigger("classChange");
+        $(this).trigger('classChange');
         return result;
-    }
+    };
 
     $.fn.closeRightView = function(opt_callBack) {
         if ($('.fromRight.rightActive').hasClass('shifting')) {
@@ -549,7 +549,7 @@ define(['exports', 'message', 'log', 'jquery', 'jquery-validate', 'bootstrap'], 
         }, {
             duration: ANIMATION_DURATION,
             start: function() {
-                $(".modal").modal("hide");
+                $('.modal').modal('hide');
                 $('.rightMenuButton.rightActive').removeClass('rightActive');
             },
             step: function(now) {
@@ -585,7 +585,7 @@ define(['exports', 'message', 'log', 'jquery', 'jquery-validate', 'bootstrap'], 
         var width;
         var smallScreen;
         let buttonName = viewName;
-        if (opt_callBack && typeof opt_callBack == "string") {
+        if (opt_callBack && typeof opt_callBack == 'string') {
             buttonName = opt_callBack;
         }
         if ($(window).width() < 768) {
@@ -671,8 +671,8 @@ define(['exports', 'message', 'log', 'jquery', 'jquery-validate', 'bootstrap'], 
             $('#bricklyDiv').width(parentWidth);
             $('#bricklyDiv').height(height);
         }
-        // here comes a fix for a strange browser behavior while zoom is not 100%. It is just in case (e.g. chrome 125% works fine, 110% not). 
-        // Seems that either the returned sizes from the browser sometimes include margins/borders and sometimes not or that the assigned sizes behave 
+        // here comes a fix for a strange browser behavior while zoom is not 100%. It is just in case (e.g. chrome 125% works fine, 110% not).
+        // Seems that either the returned sizes from the browser sometimes include margins/borders and sometimes not or that the assigned sizes behave
         // different (with and without margins/borders).
         var diff = $('#main-section').outerWidth() - $('#blocklyDiv').outerWidth() - rightWidth;
         if (diff != 0) {
@@ -688,7 +688,7 @@ define(['exports', 'message', 'log', 'jquery', 'jquery-validate', 'bootstrap'], 
      * Remove error and warning annotation from all blocks located in this
      * workspace. Usually this is done with a reload of all blocks, but here we
      * only want to remove the annotations.
-     * 
+     *
      * @param {workspacee}
      *            workspace
      */
@@ -715,7 +715,7 @@ define(['exports', 'message', 'log', 'jquery', 'jquery-validate', 'bootstrap'], 
     /**
      * Annotate the visible configuration blocks with warnings and errors
      * generated server side.
-     * 
+     *
      * @param {object}
      *            confAnnos - {block id, {type of annotation, message key}}
      */
@@ -725,23 +725,32 @@ define(['exports', 'message', 'log', 'jquery', 'jquery-validate', 'bootstrap'], 
             if (block) {
                 var anno = annotations[annoId];
                 for (var annoType in anno) {
-                    var annoMsg = Blockly.Msg[anno[annoType]] || anno[annoType] || "unknown error";
+                    var annoMsg = Blockly.Msg[anno[annoType]] || anno[annoType] || 'unknown error';
                     switch (annoType) {
-                        case "ERROR":
+                        case 'ERROR':
                             block.setErrorText(annoMsg);
                             block.error.setVisible(true);
                             break;
-                        case "WARNING":
+                        case 'WARNING':
                             block.setWarningText(annoMsg);
                             block.warning.setVisible(true);
                             break;
                         default:
-                            console.warn("Unsupported annotation: " + annoType);
+                            console.warn('Unsupported annotation: ' + annoType);
                     }
                 }
             }
         }
     }
     exports.annotateBlocks = annotateBlocks;
-
+    function removeLinks($elem) {
+        $elem
+            .filter(function() {
+                return $(this).attr('href') && ($(this).attr('href').indexOf('http') === 0 || $(this).attr('href').indexOf('javascript:linkTo') === 0);
+            })
+            .each(function() {
+                $(this).removeAttr('href');
+            });
+    }
+    exports.removeLinks = removeLinks;
 });
