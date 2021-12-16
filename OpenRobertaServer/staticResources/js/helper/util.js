@@ -1,7 +1,7 @@
-define(["require", "exports", "message", "log", "jquery", "blockly", "jquery-validate", "bootstrap"], function (require, exports, MSG, LOG, $, Blockly) {
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.removeLinks = exports.annotateBlocks = exports.clearAnnotations = exports.clearTabAlert = exports.alertTab = exports.isLocalStorageAvailable = exports.countBlocks = exports.getHashFrom = exports.download = exports.getBasename = exports.sgn = exports.roundUltraSound = exports.round = exports.response = exports.showMsgOnTop = exports.showSingleListModal = exports.showSingleModal = exports.setFocusOnElement = exports.checkVisibility = exports.calcDataTableHeight = exports.formatResultLog = exports.parseDate = exports.formatDate = exports.setObjectProperty = exports.getPropertyFromObject = exports.isEmpty = exports.clone = exports.base64decode = void 0;
-    var ANIMATION_DURATION = 750;
+define(['exports', 'message', 'log', 'jquery', 'jquery-validate', 'bootstrap'], function(exports, MSG, LOG, $) {
+
+    const ANIMATION_DURATION = 750;
+
     var ratioWorkspace = 1;
     /**
      * Decode base64 string to array of bytes
@@ -18,17 +18,21 @@ define(["require", "exports", "message", "log", "jquery", "blockly", "jquery-val
         return new Uint8Array(byteNumbers);
     }
     exports.base64decode = base64decode;
+
     function clone(obj) {
         var copy;
+
         // Handle the 3 simple types, and null or undefined
         if (null == obj || 'object' != typeof obj)
             return obj;
+
         // Handle Date
         if (obj instanceof Date) {
             copy = new Date();
             copy.setTime(obj.getTime());
             return copy;
         }
+
         // Handle Array
         if (obj instanceof Array) {
             copy = [];
@@ -37,6 +41,7 @@ define(["require", "exports", "message", "log", "jquery", "blockly", "jquery-val
             }
             return copy;
         }
+
         // Handle Object
         if (obj instanceof Object) {
             copy = {};
@@ -46,49 +51,63 @@ define(["require", "exports", "message", "log", "jquery", "blockly", "jquery-val
             }
             return copy;
         }
-        throw new Error("Unable to copy obj! Its type isn't supported.");
+
+        throw new Error('Unable to copy obj! Its type isn\'t supported.');
     }
     exports.clone = clone;
+
     function isEmpty(obj) {
         return Object.keys(obj).length === 0 && obj.constructor === Object;
     }
+
     exports.isEmpty = isEmpty;
+
     function getPropertyFromObject(obj, prop, arrayIndex) {
         //property not found
         if (typeof obj === 'undefined')
             return false;
+
         //index of next property split
         var _index = prop.indexOf('.');
+
         //property split found; recursive call
         if (_index > -1) {
             //get object at property (before split), pass on remainder
             return getPropertyFromObject(obj[prop.substring(0, _index)], prop.substr(_index + 1), arrayIndex);
         }
+
         //no split; get property
         if (arrayIndex != undefined) {
             return obj[prop][arrayIndex];
         }
         return obj[prop];
     }
+
     exports.getPropertyFromObject = getPropertyFromObject;
+
     function setObjectProperty(obj, prop, value, arrayIndex) {
         //property not found
         if (typeof obj === 'undefined')
             return false;
+
         //index of next property split
         var _index = prop.indexOf('.');
+
         //property split found; recursive call
         if (_index > -1) {
             //get object at property (before split), pass on remainder
             return setObjectProperty(obj[prop.substring(0, _index)], prop.substr(_index + 1), value, arrayIndex);
         }
+
         //no split; get property
         if (arrayIndex != undefined) {
-            return (obj[prop][arrayIndex] = value);
+            return obj[prop][arrayIndex] = value;
         }
         obj[prop] = value;
     }
+
     exports.setObjectProperty = setObjectProperty;
+
     /**
      * Format date
      *
@@ -98,22 +117,15 @@ define(["require", "exports", "message", "log", "jquery", "blockly", "jquery-val
     function formatDate(dateLong) {
         if (dateLong) {
             var date = new Date(dateLong);
-            var datestring = ('0' + date.getDate()).slice(-2) +
-                '.' +
-                ('0' + (date.getMonth() + 1)).slice(-2) +
-                '.' +
-                date.getFullYear() +
-                ', ' +
-                ('0' + date.getHours()).slice(-2) +
-                ':' +
-                ('0' + date.getMinutes()).slice(-2);
+            var datestring = ('0' + date.getDate()).slice(-2) + '.' + ('0' + (date.getMonth() + 1)).slice(-2) + '.' + date.getFullYear() + ', ' +
+                ('0' + date.getHours()).slice(-2) + ':' + ('0' + date.getMinutes()).slice(-2);
             return datestring;
-        }
-        else {
+        } else {
             return '';
         }
     }
     exports.formatDate = formatDate;
+
     /**
      * Convert date into numeric value
      *
@@ -137,6 +149,7 @@ define(["require", "exports", "message", "log", "jquery", "blockly", "jquery-val
         return 0;
     }
     exports.parseDate = parseDate;
+
     /**
      * Format result of server call for logging
      *
@@ -149,8 +162,7 @@ define(["require", "exports", "message", "log", "jquery", "blockly", "jquery-val
         for (var key in result) {
             if (comma) {
                 str += ',';
-            }
-            else {
+            } else {
                 comma = true;
             }
             str += '"' + key + '":';
@@ -158,8 +170,7 @@ define(["require", "exports", "message", "log", "jquery", "blockly", "jquery-val
                 // The output of items is limited to the first 100 characters
                 if (result[key].length > 100) {
                     str += '"' + JSON.stringify(result[key]).substring(1, 100) + ' ..."';
-                }
-                else {
+                } else {
                     str += JSON.stringify(result[key]);
                 }
             }
@@ -168,6 +179,7 @@ define(["require", "exports", "message", "log", "jquery", "blockly", "jquery-val
         return str;
     }
     exports.formatResultLog = formatResultLog;
+
     /**
      * Calculate height of data table
      */
@@ -175,12 +187,13 @@ define(["require", "exports", "message", "log", "jquery", "blockly", "jquery-val
         return Math.round($(window).height() - 100);
     }
     exports.calcDataTableHeight = calcDataTableHeight;
+
     function checkVisibility() {
         var stateKey, eventKey, keys = {
             hidden: 'visibilitychange',
             webkitHidden: 'webkitvisibilitychange',
             mozHidden: 'mozvisibilitychange',
-            msHidden: 'msvisibilitychange',
+            msHidden: 'msvisibilitychange'
         };
         for (stateKey in keys) {
             if (stateKey in document) {
@@ -188,7 +201,7 @@ define(["require", "exports", "message", "log", "jquery", "blockly", "jquery-val
                 break;
             }
         }
-        return function (c) {
+        return function(c) {
             if (c) {
                 document.addEventListener(eventKey, c);
             }
@@ -196,21 +209,23 @@ define(["require", "exports", "message", "log", "jquery", "blockly", "jquery-val
         };
     }
     exports.checkVisibility = checkVisibility;
+
     function setFocusOnElement($elem) {
-        setTimeout(function () {
+        setTimeout(function() {
             if ($elem.is(':visible') == true) {
                 $elem.focus();
             }
         }, 800);
     }
     exports.setFocusOnElement = setFocusOnElement;
+
     function showSingleModal(customize, onSubmit, onHidden, validator) {
         customize();
-        $('#single-modal-form').onWrap('submit', function (e) {
+        $('#single-modal-form').onWrap('submit', function(e) {
             e.preventDefault();
             onSubmit();
         });
-        $('#single-modal').onWrap('hidden.bs.modal', function () {
+        $('#single-modal').onWrap('hidden.bs.modal', function() {
             $('#single-modal-form').off('submit');
             $('#singleModalInput').val('');
             $('#single-modal-form').validate().resetForm();
@@ -222,12 +237,13 @@ define(["require", "exports", "message", "log", "jquery", "blockly", "jquery-val
         $('#single-modal').modal('show');
     }
     exports.showSingleModal = showSingleModal;
+
     function showSingleListModal(customize, onSubmit, onHidden, validator) {
-        $('#single-modal-list-form').onWrap('submit', function (e) {
+        $('#single-modal-list-form').onWrap('submit', function(e) {
             e.preventDefault();
             onSubmit();
         });
-        $('#single-modal-list').onWrap('hidden.bs.modal', function () {
+        $('#single-modal-list').onWrap('hidden.bs.modal', function() {
             $('#single-modal-list-form').unbind('submit');
             onHidden();
         });
@@ -235,23 +251,23 @@ define(["require", "exports", "message", "log", "jquery", "blockly", "jquery-val
         $('#single-modal-list').modal('show');
     }
     exports.showSingleListModal = showSingleListModal;
+
     /**
      * Helper to show the information on top of the share modal.
      *
      */
     function showMsgOnTop(msg) {
         $('#show-message').find('button').removeAttr('data-dismiss');
-        $('#show-message')
-            .find('button')
-            .oneWrap('click', function (e) {
+        $('#show-message').find('button').oneWrap('click', function(e) {
             $('#show-message').modal('hide');
             $('#show-message').find('button').attr('data-dismiss', 'modal');
         });
         MSG.displayInformation({
-            rc: 'not ok',
+            rc: 'not ok'
         }, '', msg);
     }
     exports.showMsgOnTop = showMsgOnTop;
+
     /**
      * Handle result of server call
      *
@@ -265,6 +281,7 @@ define(["require", "exports", "message", "log", "jquery", "blockly", "jquery-val
         }
     }
     exports.response = response;
+
     /**
      * Rounds a number to required decimal
      *
@@ -279,6 +296,7 @@ define(["require", "exports", "message", "log", "jquery", "blockly", "jquery-val
         return Number(Math.round(value + 'e' + decimals) + 'e-' + decimals);
     }
     exports.round = round;
+
     /**
      * Rounds a number to required decimal and clips value to the range [0, 255]
      * (Range of UltraSound sensor)
@@ -295,9 +313,11 @@ define(["require", "exports", "message", "log", "jquery", "blockly", "jquery-val
         if (ultraReading > 255) {
             ultraReading = 255;
         }
+
         return ultraReading;
     }
     exports.roundUltraSound = roundUltraSound;
+
     /**
      * Get the sign of the number.
      *
@@ -309,6 +329,7 @@ define(["require", "exports", "message", "log", "jquery", "blockly", "jquery-val
         return (x > 0) - (x < 0);
     }
     exports.sgn = sgn;
+
     /**
      * Returns the basename (i.e. "hello" in "C:/folder/hello.txt")
      *
@@ -323,18 +344,19 @@ define(["require", "exports", "message", "log", "jquery", "blockly", "jquery-val
         return base;
     }
     exports.getBasename = getBasename;
+
     function destroyClickedElement(event) {
         document.body.removeChild(event.target);
     }
+
     function download(fileName, content) {
         if ('Blob' in window && navigator.userAgent.toLowerCase().match(/iPad|iPhone|Android/i) == null) {
             var contentAsBlob = new Blob([content], {
-                type: 'application/octet-stream',
+                type: 'application/octet-stream'
             });
             if ('msSaveOrOpenBlob' in navigator) {
                 navigator.msSaveOrOpenBlob(contentAsBlob, fileName);
-            }
-            else {
+            } else {
                 var downloadLink = document.createElement('a');
                 downloadLink.download = fileName;
                 downloadLink.innerHTML = 'Download File';
@@ -344,8 +366,7 @@ define(["require", "exports", "message", "log", "jquery", "blockly", "jquery-val
                 document.body.appendChild(downloadLink);
                 downloadLink.click();
             }
-        }
-        else {
+        } else {
             var downloadLink = document.createElement('a');
             downloadLink.setAttribute('href', 'data:text/' + fileName.substring(fileName.indexOf('.') + 1) + ';charset=utf-8,' + encodeURIComponent(content));
             downloadLink.setAttribute('download', fileName);
@@ -356,41 +377,44 @@ define(["require", "exports", "message", "log", "jquery", "blockly", "jquery-val
         }
     }
     exports.download = download;
+
     function getHashFrom(string) {
         var hash = 0;
         for (var i = 0; i < string.length; i++) {
-            hash = (hash << 5) - hash + string.charCodeAt(i++);
+            hash = ((hash << 5) - hash) + string.charCodeAt(i++);
         }
-        return hash < 0 ? hash * -1 + 0xffffffff : hash;
+        return (hash < 0) ? ((hash * -1) + 0xFFFFFFFF) : hash;
     }
     exports.getHashFrom = getHashFrom;
+
     function countBlocks(xmlString) {
         var counter = 0;
         var pos = 0;
+
         while (true) {
             pos = xmlString.indexOf('<block', pos);
             if (pos != -1) {
                 counter++;
                 pos += 6;
-            }
-            else {
+            } else {
                 break;
             }
         }
         return counter - 1;
     }
     exports.countBlocks = countBlocks;
+
     function isLocalStorageAvailable() {
         try {
             localStorage.setItem('test', 'test');
             localStorage.removeItem('test');
             return true;
-        }
-        catch (e) {
+        } catch (e) {
             return false;
         }
     }
     exports.isLocalStorageAvailable = isLocalStorageAvailable;
+
     function alertTab(tabIdentifier) {
         clearTabAlert(tabIdentifier);
         $('#' + tabIdentifier).width(); // trigger a reflow to sync animations
@@ -398,51 +422,56 @@ define(["require", "exports", "message", "log", "jquery", "blockly", "jquery-val
         $('#' + tabIdentifier).addClass('blinking');
     }
     exports.alertTab = alertTab;
+
     function clearTabAlert(tabIdentifier) {
-        $('#' + tabIdentifier)
-            .children()
-            .remove('.typcn'); // remove alert typicon
+        $('#' + tabIdentifier).children().remove('.typcn'); // remove alert typicon
         $('#' + tabIdentifier).removeClass('blinking');
     }
     exports.clearTabAlert = clearTabAlert;
+
     var __entityMap = {
         '&': '&amp;',
         '<': '&lt;',
         '>': '&gt;',
         '"': '&quot;',
-        "'": '&#39;',
-        '/': '&#x2F;',
+        '\'': '&#39;',
+        '/': '&#x2F;'
     };
-    String.prototype.escapeHTML = function () {
-        return String(this).replace(/[&<>"'\/]/g, function (s) {
+
+    String.prototype.escapeHTML = function() {
+        return String(this).replace(/[&<>"'\/]/g, function(s) {
             return __entityMap[s];
         });
     };
-    $.fn.draggable = function (opt) {
+
+    $.fn.draggable = function(opt) {
+
         opt = $.extend({
             handle: '',
             cursor: 'move',
             draggableClass: 'draggable',
-            activeHandleClass: 'active-handle',
+            activeHandleClass: 'active-handle'
         }, opt);
+
         var $selected = null;
-        var $elements = opt.handle === '' ? this : this.find(opt.handle);
-        $elements
-            .css('cursor', opt.cursor)
-            .on('mousedown touchstart', function (e) {
+        var $elements = (opt.handle === '') ? this : this.find(opt.handle);
+
+        $elements.css('cursor', opt.cursor).on('mousedown touchstart', function(e) {
             var pageX = e.pageX || e.originalEvent.touches[0].pageX;
             var pageY = e.pageY || e.originalEvent.touches[0].pageY;
             if (opt.handle === '') {
                 $selected = $(this);
                 $selected.addClass(opt.draggableClass);
-            }
-            else {
+            } else {
                 $selected = $(this).parent();
                 $selected.addClass(opt.draggableClass).find(opt.handle).addClass(opt.activeHandleClass);
             }
-            var drg_h = $selected.outerHeight(), drg_w = $selected.outerWidth(), pos_y = $selected.offset().top + drg_h - pageY, pos_x = $selected.offset().left + drg_w - pageX;
-            $(document)
-                .on('mousemove touchmove', function (e) {
+            var drg_h = $selected.outerHeight(),
+                drg_w = $selected.outerWidth(),
+                pos_y = $selected.offset().top + drg_h - pageY,
+                pos_x = $selected.offset().left +
+                    drg_w - pageX;
+            $(document).on('mousemove touchmove', function(e) {
                 var pageX = e.pageX || e.originalEvent.touches[0].pageX;
                 var pageY = e.pageY || e.originalEvent.touches[0].pageY;
                 // special case movable slider between workspace and right divs
@@ -452,42 +481,38 @@ define(["require", "exports", "message", "log", "jquery", "blockly", "jquery-val
                     var left = Math.max(left, 42);
                     $selected.offset({
                         top: 0,
-                        left: left - 4,
+                        left: left - 4
                     });
                     $('#blockly').width(left + 3);
                     $('.rightMenuButton').css({
-                        right: $(window).width() - left,
+                        'right': $(window).width() - left
                     });
                     $('.fromRight').css({
-                        width: $(window).width() - $('#blockly').width(),
+                        'width': $(window).width() - $('#blockly').width()
                     });
                     ratioWorkspace = $('#blockly').outerWidth() / $('#main-section').outerWidth();
                     $(window).resize();
-                }
-                else {
+                } else {
                     $selected.offset({
                         top: pageY + pos_y - drg_h,
-                        left: pageX + pos_x - drg_w,
+                        left: pageX + pos_x - drg_w
                     });
                 }
                 $selected.css({
-                    right: 'auto',
+                    right: 'auto'
                 });
-            })
-                .on('mouseup touchend', function () {
+            }).on('mouseup touchend', function() {
                 $(this).off('mousemove touchmove'); // Unbind events from document
                 if ($selected !== null) {
                     $selected.removeClass(opt.draggableClass);
                     $selected = null;
                 }
             });
-        })
-            .on('mouseup touchend', function () {
+        }).on('mouseup touchend', function() {
             if ($selected) {
                 if (opt.handle === '') {
                     $selected.removeClass(opt.draggableClass);
-                }
-                else {
+                } else {
                     $selected.removeClass(opt.draggableClass).find(opt.handle).removeClass(opt.activeHandleClass);
                 }
             }
@@ -495,19 +520,23 @@ define(["require", "exports", "message", "log", "jquery", "blockly", "jquery-val
         });
         return this;
     };
-    var originalAddClass = $.fn.addClass;
-    $.fn.addClass = function () {
-        var result = originalAddClass.apply(this, arguments);
+
+
+    const originalAddClass = $.fn.addClass;
+    $.fn.addClass = function() {
+        let result = originalAddClass.apply(this, arguments);
         $(this).trigger('classChange');
         return result;
     };
-    var originalRemoveClass = $.fn.removeClass;
-    $.fn.removeClass = function () {
-        var result = originalRemoveClass.apply(this, arguments);
+
+    const originalRemoveClass = $.fn.removeClass;
+    $.fn.removeClass = function() {
+        let result = originalRemoveClass.apply(this, arguments);
         $(this).trigger('classChange');
         return result;
     };
-    $.fn.closeRightView = function (opt_callBack) {
+
+    $.fn.closeRightView = function(opt_callBack) {
         if ($('.fromRight.rightActive').hasClass('shifting')) {
             return;
         }
@@ -516,20 +545,20 @@ define(["require", "exports", "message", "log", "jquery", "blockly", "jquery-val
         $('.blocklyToolboxDiv').css('display', 'inherit');
         var that = this; //$('#blockly')
         $('.fromRight.rightActive').animate({
-            width: 0,
+            width: 0
         }, {
             duration: ANIMATION_DURATION,
-            start: function () {
+            start: function() {
                 $('.modal').modal('hide');
                 $('.rightMenuButton.rightActive').removeClass('rightActive');
             },
-            step: function (now) {
+            step: function(now) {
                 that.width($('#main-section').outerWidth() - now);
                 $('.rightMenuButton').css('right', now);
                 ratioWorkspace = $('#blockly').outerWidth() / $('#main-section').outerWidth();
                 $(window).resize();
             },
-            done: function () {
+            done: function() {
                 that.width($('#main-section').outerWidth());
                 $('.rightMenuButton').css('right', 0);
                 ratioWorkspace = 1;
@@ -542,27 +571,27 @@ define(["require", "exports", "message", "log", "jquery", "blockly", "jquery-val
                     opt_callBack();
                 }
             },
-            always: function () {
+            always: function() {
                 $('.fromRight.shifting').removeClass('shifting');
-            },
+            }
         });
     };
-    $.fn.openRightView = function (viewName, initialViewWidth, opt_callBack) {
+
+    $.fn.openRightView = function(viewName, initialViewWidth, opt_callBack) {
         if ($('.fromRight.rightActive').hasClass('shifting')) {
             return;
         }
         Blockly.hideChaff();
         var width;
         var smallScreen;
-        var buttonName = viewName;
+        let buttonName = viewName;
         if (opt_callBack && typeof opt_callBack == 'string') {
             buttonName = opt_callBack;
         }
         if ($(window).width() < 768) {
             smallScreen = true;
             width = this.width() - 52;
-        }
-        else {
+        } else {
             smallScreen = false;
             width = this.width() * initialViewWidth;
         }
@@ -579,21 +608,22 @@ define(["require", "exports", "message", "log", "jquery", "blockly", "jquery-val
             }
             return;
         }
+
         this.addClass('rightActive');
         $('#' + viewName + 'Div').addClass('shifting');
         $('#' + viewName + 'Div, #' + buttonName + 'Button').addClass('rightActive');
         var that = this;
         $('.fromRight.rightActive').animate({
-            width: width,
+            width: width
         }, {
             duration: ANIMATION_DURATION,
-            step: function (now, tween) {
+            step: function(now, tween) {
                 that.width($('#main-section').outerWidth() - now);
                 $('.rightMenuButton').css('right', now);
                 ratioWorkspace = $('#blockly').outerWidth() / $('#main-section').outerWidth();
                 $(window).resize();
             },
-            done: function () {
+            done: function() {
                 $('#sliderDiv').show();
                 that.width($('#main-section').outerWidth() - $('.fromRight.rightActive').width());
                 $('.rightMenuButton').css('right', $('.fromRight.rightActive').width());
@@ -603,22 +633,25 @@ define(["require", "exports", "message", "log", "jquery", "blockly", "jquery-val
                     $('.blocklyToolboxDiv').css('display', 'none');
                 }
                 $('#sliderDiv').css({
-                    left: that.width() - 7,
+                    'left': that.width() - 7
                 });
                 if (typeof opt_callBack == 'function') {
                     opt_callBack();
                 }
             },
-            always: function () {
+            always: function() {
                 $('#' + viewName + 'Div').removeClass('shifting');
-            },
+            }
         });
     };
-    $(window).resize(function () {
+
+    $(window).resize(function() {
         var parentWidth = $('#main-section').outerWidth();
         var height = Math.max($('#blockly').outerHeight(), $('#brickly').outerHeight());
+
         var rightWidth = (1 - ratioWorkspace) * parentWidth;
         var leftWidth = ratioWorkspace * parentWidth;
+
         if (!$('.fromRight.rightActive.shifting').length > 0) {
             if ($('.fromRight.rightActive').length > 0) {
                 $('.fromRight.rightActive').width(rightWidth);
@@ -626,10 +659,10 @@ define(["require", "exports", "message", "log", "jquery", "blockly", "jquery-val
                 $('#sliderDiv').css('left', leftWidth - 7);
             }
             $('#blockly').width(leftWidth);
-        }
-        else {
+        } else {
             leftWidth = $('#blockly').outerWidth();
         }
+
         if ($('#blocklyDiv')) {
             $('#blocklyDiv').width(leftWidth - 4);
             $('#blocklyDiv').height(height);
@@ -650,6 +683,7 @@ define(["require", "exports", "message", "log", "jquery", "blockly", "jquery-val
             Blockly.svgResize(workspace);
         }
     });
+
     /**
      * Remove error and warning annotation from all blocks located in this
      * workspace. Usually this is done with a reload of all blocks, but here we
@@ -668,8 +702,7 @@ define(["require", "exports", "message", "log", "jquery", "blockly", "jquery-val
                     if (block.error) {
                         block.error.dispose();
                         block.render();
-                    }
-                    else if (block.warning) {
+                    } else if (block.warning) {
                         block.warning.dispose();
                         block.render();
                     }
@@ -678,6 +711,7 @@ define(["require", "exports", "message", "log", "jquery", "blockly", "jquery-val
         }
     }
     exports.clearAnnotations = clearAnnotations;
+
     /**
      * Annotate the visible configuration blocks with warnings and errors
      * generated server side.
@@ -711,12 +745,12 @@ define(["require", "exports", "message", "log", "jquery", "blockly", "jquery-val
     exports.annotateBlocks = annotateBlocks;
     function removeLinks($elem) {
         $elem
-            .filter(function () {
-            return $(this).attr('href') && ($(this).attr('href').indexOf('http') === 0 || $(this).attr('href').indexOf('javascript:linkTo') === 0);
-        })
-            .each(function () {
-            $(this).removeAttr('href');
-        });
+            .filter(function() {
+                return $(this).attr('href') && ($(this).attr('href').indexOf('http') === 0 || $(this).attr('href').indexOf('javascript:linkTo') === 0);
+            })
+            .each(function() {
+                $(this).removeAttr('href');
+            });
     }
     exports.removeLinks = removeLinks;
 });
