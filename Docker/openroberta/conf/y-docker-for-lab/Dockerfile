@@ -1,10 +1,10 @@
 ARG FROM
 FROM $FROM
 
-VOLUME /opt/admin
+VOLUME /opt/admin /tmp/openrobertaTmp
 EXPOSE 1999
 
-RUN mkdir --parent /opt/openroberta-lab/lib /tmp/openrobertaTmp
+RUN mkdir --parent /opt/openroberta-lab/lib
 WORKDIR /opt/openroberta-lab
 
 COPY ["./","./"]

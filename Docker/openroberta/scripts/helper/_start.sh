@@ -48,6 +48,7 @@ RUN="\
 docker run -d --name=${CONTAINER} \
 --network ${DOCKER_NETWORK_NAME} -p ${PORT}:1999 $REMOTE_DEBUG_PORT \
 -v ${SERVER_DIR_OF_ONE_SERVER}/admin:/opt/admin \
+-v ${SERVER_DIR_OF_ONE_SERVER}/openrobertaTmp:/tmp/openrobertaTmp \
 ${IMAGE} $REMOTE_DEBUG_PARAM $GC_LOGGING_PARAM \
 -d database.uri=db-server \
 -d database.name=openroberta-db-${SERVER_NAME} \
