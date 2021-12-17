@@ -5,7 +5,6 @@ import java.util.Map;
 import com.google.common.collect.ClassToInstanceMap;
 
 import de.fhg.iais.roberta.bean.IProjectBean;
-import de.fhg.iais.roberta.bean.UsedHardwareBean;
 import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.components.ConfigurationComponent;
 import de.fhg.iais.roberta.components.UsedActor;
@@ -110,11 +109,9 @@ public class MbedValidatorAndCollectorVisitor extends CommonNepoValidatorAndColl
 
     @Override
     public Void visitBothMotorsStopAction(BothMotorsStopAction<Void> bothMotorsStopAction) {
-        Boolean isCallibotPresent = robotConfiguration.isComponentTypePresent(SC.CALLIBOT);
-        Boolean isMotorPresent = robotConfiguration.isComponentTypePresent("MOTOR");
-        if ( isCallibotPresent ) {
+        if ( robotConfiguration.isComponentTypePresent(SC.CALLIBOT) ) {
             usedHardwareBuilder.addUsedActor(new UsedActor("", SC.CALLIBOT));
-        } else if ( !isMotorPresent ) {
+        } else if ( !robotConfiguration.isComponentTypePresent("MOTOR") ) {
             addErrorToPhrase(bothMotorsStopAction, "CONFIGURATION_ERROR_ACTOR_MISSING");
         }
         return null;
@@ -301,43 +298,21 @@ public class MbedValidatorAndCollectorVisitor extends CommonNepoValidatorAndColl
 
     @Override
     public Void visitMotionKitDualSetAction(MotionKitDualSetAction<Void> motionKitDualSetAction) {
-        Map<String, ConfigurationComponent> usedConfig = robotConfiguration.getConfigurationComponents();
-        if ( robotConfiguration.isComponentTypePresent(SC.CALLIBOT) || robotConfiguration.isComponentTypePresent("LEDBAR") || robotConfiguration.isComponentTypePresent("FOURDIGITDISPLAY") ) {
-            addErrorToPhrase(motionKitDualSetAction, "CONFIGURATION_ERROR_OVERLAPPING_PORTS");
-            return null;
+        if ( isMotionKitPinsOverlapping() ) {
+            addErrorToPhrase(motionKitDualSetAction, "MOTIONKIT_BLOCK_WARNING");
+        } else {
+            usedHardwareBuilder.addUsedActor(new UsedActor("", "MOTIONKIT"));
         }
-        for ( Map.Entry<String, ConfigurationComponent> confComp : usedConfig.entrySet() ) {
-            String confType = confComp.getValue().getComponentType();
-            if ( confType.equals(SC.SERVOMOTOR) || confType.equals(SC.DIGITAL_INPUT) || confType.equals(SC.ANALOG_INPUT) ) {
-                String pin1 = confComp.getValue().getProperty("PIN1");
-                if ( pin1.equals("C16") || pin1.equals("C17") || pin1.equals("5") ) {
-                    addErrorToPhrase(motionKitDualSetAction, "CONFIGURATION_ERROR_OVERLAPPING_PORTS");
-                    return null;
-                }
-            }
-        }
-        usedHardwareBuilder.addUsedActor(new UsedActor("", "MOTIONKIT"));
         return null;
     }
 
     @Override
     public Void visitMotionKitSingleSetAction(MotionKitSingleSetAction<Void> motionKitSingleSetAction) {
-        Map<String, ConfigurationComponent> usedConfig = robotConfiguration.getConfigurationComponents();
-        if ( robotConfiguration.isComponentTypePresent(SC.CALLIBOT) || robotConfiguration.isComponentTypePresent("LEDBAR") || robotConfiguration.isComponentTypePresent("FOURDIGITDISPLAY") ) {
-            addErrorToPhrase(motionKitSingleSetAction, "CONFIGURATION_ERROR_OVERLAPPING_PORTS");
-            return null;
+        if ( isMotionKitPinsOverlapping() ) {
+            addWarningToPhrase(motionKitSingleSetAction, "MOTIONKIT_BLOCK_WARNING");
+        } else {
+            usedHardwareBuilder.addUsedActor(new UsedActor(motionKitSingleSetAction.getPort(), "MOTIONKIT"));
         }
-        for ( Map.Entry<String, ConfigurationComponent> confComp : usedConfig.entrySet() ) {
-            String confType = confComp.getValue().getComponentType();
-            if ( confType.equals(SC.SERVOMOTOR) || confType.equals(SC.DIGITAL_INPUT) || confType.equals(SC.ANALOG_INPUT) ) {
-                String pin1 = confComp.getValue().getProperty("PIN1");
-                if ( pin1.equals("C16") || pin1.equals("C17") || pin1.equals("5") ) {
-                    addWarningToPhrase(motionKitSingleSetAction, "CONFIGURATION_ERROR_OVERLAPPING_PORTS");
-                    return null;
-                }
-            }
-        }
-        usedHardwareBuilder.addUsedActor(new UsedActor(motionKitSingleSetAction.getPort(), "MOTIONKIT"));
         return null;
     }
 
@@ -444,13 +419,6 @@ public class MbedValidatorAndCollectorVisitor extends CommonNepoValidatorAndColl
 
     @Override
     public Void visitServoSetAction(ServoSetAction<Void> servoSetAction) {
-        Boolean isMotionKitUsed = usedHardwareBuilder.build().isActorUsed("MOTIONKIT");
-        Boolean isCallibotpresent = robotConfiguration.isComponentTypePresent(SC.CALLIBOT);
-        ConfigurationComponent usedActor = robotConfiguration.optConfigurationComponent(servoSetAction.getUserDefinedPort());
-        String pin1 = usedActor.getProperty("PIN1");
-        if ( (pin1.equals("C16") || pin1.equals("C17") || pin1.equals("5")) && (isMotionKitUsed || isCallibotpresent) ) {
-            addWarningToPhrase(servoSetAction, "CONFIGURATION_ERROR_OVERLAPPING_PORTS");
-        }
         requiredComponentVisited(servoSetAction, servoSetAction.getValue());
         return addActorMaybeCallibot(servoSetAction, SC.SERVOMOTOR);
     }
@@ -584,6 +552,7 @@ public class MbedValidatorAndCollectorVisitor extends CommonNepoValidatorAndColl
         return usedSensor;
     }
 
+
     protected ConfigurationComponent checkMotorPort(MoveAction<Void> action) {
         ConfigurationComponent configurationComponent = robotConfiguration.optConfigurationComponent(action.getUserDefinedPort());
         if ( configurationComponent == null ) {
@@ -622,5 +591,26 @@ public class MbedValidatorAndCollectorVisitor extends CommonNepoValidatorAndColl
             }
         }
         return null;
+    }
+
+    private Boolean isMotionKitPinsOverlapping() {
+        Map<String, ConfigurationComponent> usedConfig = robotConfiguration.getConfigurationComponents();
+        if ( robotConfiguration.optConfigurationComponentByType(SC.CALLIBOT) != null || robotConfiguration.isComponentTypePresent("LEDBAR") ||
+            robotConfiguration.isComponentTypePresent("FOURDIGITDISPLAY") ||
+            robotConfiguration.isComponentTypePresent(SC.ULTRASONIC) ||
+            robotConfiguration.isComponentTypePresent(SC.HUMIDITY) ||
+            robotConfiguration.isComponentTypePresent(SC.COLOUR) ) {
+            return true;
+        }
+        for ( Map.Entry<String, ConfigurationComponent> confComp : usedConfig.entrySet() ) {
+            String confType = confComp.getValue().getComponentType();
+            if ( confType.equals(SC.SERVOMOTOR) || confType.equals(SC.DIGITAL_INPUT) || confType.equals(SC.ANALOG_INPUT) ) {
+                String pin1 = confComp.getValue().getProperty("PIN1");
+                if ( pin1.equals("1") || pin1.equals("2") || pin1.equals("4") || pin1.equals("5") || pin1.equals("C16") || pin1.equals("C17") ) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }
