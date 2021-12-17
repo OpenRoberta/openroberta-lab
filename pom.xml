@@ -315,6 +315,11 @@
                 <artifactId>jsch</artifactId>
                 <version>0.1.54</version>
             </dependency>
+            <dependency>
+                <groupId>com.googlecode.owasp-java-html-sanitizer</groupId>
+                <artifactId>owasp-java-html-sanitizer</artifactId>
+                <version>20211018.1</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
     <dependencies>
