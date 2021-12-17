@@ -827,6 +827,7 @@ Blockly.Msg.MODE_Z = "Z-Wert";
 Blockly.Msg.MOISTURE_TOOLTIP = "Block für den Feuchtigkeitsensor.";
 Blockly.Msg.MOTIONKIT = "MotionKit";  // untranslated
 Blockly.Msg.MOTIONKIT_DUAL_TOOLTIP = "Setzt den jeweiligen MotionKit Motor auf die entsprechende Richtung.";
+Blockly.Msg.MOTIONKIT_PIN_OVERLAP_WARNING = "Das MotionKit benutzt die Pins P1, P2, A0, A1, C16 und C17 also überprüfe bitte das kein anderer Konfigurations-Block diese verwendet!";
 Blockly.Msg.MOTIONKIT_SINGLE_TOOLTIP = "Setzt den/die ausgewählten MotionKit Motor/Motoren auf die entsprechende Richtung.";
 Blockly.Msg.MOTION_TOOLTIP = "Block für den Bewegungssensor.";
 Blockly.Msg.MOTOR = "Motor";

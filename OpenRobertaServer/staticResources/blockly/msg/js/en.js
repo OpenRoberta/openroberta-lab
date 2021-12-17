@@ -827,6 +827,7 @@ Blockly.Msg.MODE_Z = "Z-value";
 Blockly.Msg.MOISTURE_TOOLTIP = "Represents a moisture sensor.";
 Blockly.Msg.MOTIONKIT = "MotionKit";
 Blockly.Msg.MOTIONKIT_DUAL_TOOLTIP = "Sets each MotionKit motor to the specified direction.";
+Blockly.Msg.MOTIONKIT_PIN_OVERLAP_WARNING = "The MotionKit uses the pins P1, P2, A0, A1, C16 and C17, so please make sure no other configuration-block uses them!";
 Blockly.Msg.MOTIONKIT_SINGLE_TOOLTIP = "Sets the selected MotionKit motor/motors to the specified direction.";
 Blockly.Msg.MOTION_TOOLTIP = "Represents a motion sensor.";
 Blockly.Msg.MOTOR = "motor";

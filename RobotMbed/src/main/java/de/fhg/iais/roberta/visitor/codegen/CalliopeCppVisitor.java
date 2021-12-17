@@ -1278,7 +1278,7 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
             }
             this.sb.append("_uBit.soundmotor.motorBOff();");
         }
-        if ( motorPorts.contains("0") || motorPorts.contains("2") ) { // Calli:bot motors
+        if ( motorPorts.contains("0") ) { // Calli:bot motors
             if ( newLine ) {
                 nlIndent();
             }
