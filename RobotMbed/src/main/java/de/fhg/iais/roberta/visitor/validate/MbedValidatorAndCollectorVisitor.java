@@ -75,6 +75,8 @@ import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.visitor.CalliopeMethods;
 import de.fhg.iais.roberta.visitor.IMbedVisitorWithoutDefault;
 
+import de.poulter.roberta.syntax.action.mbed.DcMotorSetAction;
+
 public class MbedValidatorAndCollectorVisitor extends CommonNepoValidatorAndCollectorVisitor implements IMbedVisitorWithoutDefault<Void> {
 
     public static final double DOUBLE_EPS = 1E-7;
@@ -577,4 +579,13 @@ public class MbedValidatorAndCollectorVisitor extends CommonNepoValidatorAndColl
         }
         return null;
     }
+    
+    @Override
+    public Void visitDcMotorSetAction(DcMotorSetAction<Void> dcMotorSetAction) {
+        requiredComponentVisited(dcMotorSetAction, dcMotorSetAction.getSpeed());
+        usedHardwareBuilder.addUsedActor(new UsedActor("", SC.DCMOTOR));
+
+        return null;
+    }
+
 }

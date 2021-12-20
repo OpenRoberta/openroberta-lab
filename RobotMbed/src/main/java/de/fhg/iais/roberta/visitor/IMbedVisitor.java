@@ -39,6 +39,8 @@ import de.fhg.iais.roberta.visitor.hardware.actor.ISerialVisitor;
 import de.fhg.iais.roberta.visitor.hardware.actor.ISoundVisitor;
 import de.fhg.iais.roberta.visitor.hardware.sensor.ISensorVisitor;
 
+import de.poulter.roberta.syntax.action.mbed.DcMotorSetAction;
+
 /**
  * Interface to be used with the visitor pattern to traverse an AST (and generate code, e.g.).
  */
@@ -304,6 +306,10 @@ public interface IMbedVisitor<V>
 
     @Override
     default V visitPlayFileAction(PlayFileAction<V> playFileAction) {
+        throw new DbcException("Block is not implemented!");
+    }
+    
+    default V visitDcMotorSetAction(DcMotorSetAction<V> dcMotorSetAction) {
         throw new DbcException("Block is not implemented!");
     }
 

@@ -49,6 +49,7 @@ import de.fhg.iais.roberta.visitor.hardware.actor.IMotorVisitor;
 import de.fhg.iais.roberta.visitor.hardware.actor.IPinVisitor;
 import de.fhg.iais.roberta.visitor.hardware.actor.ISerialVisitor;
 import de.fhg.iais.roberta.visitor.hardware.actor.ISimpleSoundVisitor;
+import de.poulter.roberta.syntax.action.mbed.DcMotorSetAction;
 
 /**
  * Interface to be used with the visitor pattern to traverse an AST (and generate code, e.g.).
@@ -145,4 +146,6 @@ public interface IMbedVisitorWithoutDefault<V>
     V visitHumiditySensor(HumiditySensor<V> humiditySensor);
 
     V visitInfraredSensor(InfraredSensor<V> infraredSensor);
+
+    V visitDcMotorSetAction(DcMotorSetAction<V> dcMotorSetAction);
 }

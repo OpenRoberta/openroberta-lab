@@ -136,5 +136,7 @@ public interface SC {
     String HTS221 = "HTS221";
 
     String OLEDSSD1306I2C = "OLEDSSD1306I2C";
+    
+    String DCMOTOR = "DCMOTOR";
 
 }

@@ -106,6 +106,8 @@ import de.fhg.iais.roberta.visitor.IMbedVisitor;
 import de.fhg.iais.roberta.visitor.IVisitor;
 import de.fhg.iais.roberta.visitor.lang.codegen.prog.AbstractCppVisitor;
 
+import de.poulter.roberta.syntax.action.mbed.DcMotorSetAction;
+
 /**
  * This class is implementing {@link IVisitor}. All methods are implemented and they append a human-readable C++ code representation of a phrase to a
  * StringBuilder. <b>This representation is correct C++ code for Calliope systems.</b> <br>
@@ -705,6 +707,10 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
             nlIndent();
             this.sb.append("_uBit.accelerometer.updateSample();");
         }
+        if ( this.getBean(UsedHardwareBean.class).isActorUsed(SC.DCMOTOR)) {
+            nlIndent();
+            this.sb.append("dcMotor.init();");
+        }
         return null;
     }
 
@@ -1082,6 +1088,10 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
                 nlIndent();
                 this.sb.append("_cbStop(_buf, &_i2c);");
             }
+            if ( this.getBean(UsedHardwareBean.class).isActorUsed(SC.DCMOTOR) ) {
+                nlIndent();
+                this.sb.append("dcMotor.release();");
+            }
             nlIndent();
             this.sb.append("release_fiber();");
             decrIndentation();
@@ -1212,6 +1222,10 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
             this.sb.append("MicroBitColor _TCS3472_color;");
             nlIndent();
             this.sb.append("char _TCS3472_time = 0xff;");
+        }
+        if ( this.getBean(UsedHardwareBean.class).isActorUsed(SC.DCMOTOR)) {
+            sb.append("#include \"DcMotor.h\"\n");
+            sb.append("DcMotor dcMotor;\n");
         }
     }
 
@@ -1527,4 +1541,16 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
         Set<String> motorPins = getMotorPins();
         return motorPins.stream().filter(s -> s.equals("A") || s.equals("B")).count() > 1;
     }
+    
+    @Override
+    public Void visitDcMotorSetAction(DcMotorSetAction<Void> dcMotorSetAction) {
+        String port = dcMotorSetAction.getPort();
+
+        this.sb.append("dcMotor.set(Motor::M").append(port).append(", ");
+        dcMotorSetAction.getSpeed().accept(this);
+        this.sb.append(");");
+
+        return null;
+    }
+    
 }

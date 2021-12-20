@@ -142,6 +142,10 @@
 				<field name="DIRECTION_LEFT">FOREWARD</field>
 				<field name="DIRECTION_RIGHT">FOREWARD</field>
 			</block>
+			<block type="mbedActions_dcmotor_set">
+				<field name="PORT">1</field>
+				<field name="POWER">0</field>
+			</block>
 		</category>
 		<category name="TOOLBOX_SOUND" svg="true">
 			<block type="mbedActions_play_tone">

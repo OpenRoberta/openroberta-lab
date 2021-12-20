@@ -25,6 +25,7 @@ import de.fhg.iais.roberta.syntax.sensor.generic.PinGetValueSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.RadioRssiSensor;
 import de.fhg.iais.roberta.visitor.IMbedVisitorWithoutDefault;
+import de.poulter.roberta.syntax.action.mbed.DcMotorSetAction;
 
 public final class CalliopeSimValidatorAndCollectorVisitor extends MbedValidatorAndCollectorVisitor implements IMbedVisitorWithoutDefault<Void> {
 
@@ -145,5 +146,11 @@ public final class CalliopeSimValidatorAndCollectorVisitor extends MbedValidator
     public Void visitMotionKitDualSetAction(MotionKitDualSetAction<Void> motionKitDualSetAction) {
         addWarningToPhrase(motionKitDualSetAction, "SIM_BLOCK_NOT_SUPPORTED");
         return super.visitMotionKitDualSetAction(motionKitDualSetAction);
+    }
+    
+    @Override
+    public Void visitDcMotorSetAction(DcMotorSetAction<Void> dcMotorSetAction) {
+        addWarningToPhrase(dcMotorSetAction, "SIM_BLOCK_NOT_SUPPORTED");
+        return super.visitDcMotorSetAction(dcMotorSetAction);
     }
 }

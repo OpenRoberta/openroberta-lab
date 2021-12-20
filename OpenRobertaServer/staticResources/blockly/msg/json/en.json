@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2021-12-01 11:09:28.460337",
+		"lastupdated": "2021-12-19 21:34:24.883947",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -1775,5 +1775,9 @@
 	"POPUP_REPLACE": "Replace",
 	"POPUP_BACKGROUND_REPLACE": "A program with the same name already exists. <br> Would you like to replace it?",
 	"POPUP_BACKGROUND_REPLACE_CONFIGURATION": "A configuration with the same name already exists. <br> Would you like to replace it?",
-	"ORA_CONFIGURATION_SAVE_AS_ERROR_CONFIGURATION_EXISTS": "This configuration already exists."
+	"ORA_CONFIGURATION_SAVE_AS_ERROR_CONFIGURATION_EXISTS": "This configuration already exists.",
+	"DCMOTOR_M1": "Motor port 1",
+	"DCMOTOR_M2": "Motor port 2",
+	"DCMOTOR_M3": "Motor port 3",
+	"DCMOTOR_M4": "Motor port 4"
 }

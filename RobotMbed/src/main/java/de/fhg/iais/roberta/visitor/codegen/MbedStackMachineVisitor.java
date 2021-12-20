@@ -69,6 +69,8 @@ import de.fhg.iais.roberta.visitor.C;
 import de.fhg.iais.roberta.visitor.IMbedVisitor;
 import de.fhg.iais.roberta.visitor.lang.codegen.AbstractStackMachineVisitor;
 
+import de.poulter.roberta.syntax.action.mbed.DcMotorSetAction;
+
 public class MbedStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> implements IMbedVisitor<V> {
 
     public MbedStackMachineVisitor(ConfigurationAst configuration, List<List<Phrase<Void>>> phrases) {
@@ -467,6 +469,11 @@ public class MbedStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> i
 
     @Override
     public V visitMotionKitDualSetAction(MotionKitDualSetAction<V> motionKitDualSetAction) {
+        return null;
+    }
+    
+    @Override
+    public V visitDcMotorSetAction(DcMotorSetAction<V> dcMotorSetAction) {
         return null;
     }
 }

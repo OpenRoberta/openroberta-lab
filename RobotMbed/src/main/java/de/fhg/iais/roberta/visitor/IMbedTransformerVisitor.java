@@ -31,6 +31,8 @@ import de.fhg.iais.roberta.syntax.functions.mbed.ImageShiftFunction;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.syntax.sensor.mbed.RadioRssiSensor;
 
+import de.poulter.roberta.syntax.action.mbed.DcMotorSetAction;
+
 public interface IMbedTransformerVisitor<V> extends ITransformerVisitor<V>, IMbedVisitor<Phrase<V>> {
 
     @Override
@@ -241,5 +243,15 @@ public interface IMbedTransformerVisitor<V> extends ITransformerVisitor<V>, IMbe
     @Override
     default Phrase<V> visitPlayFileAction(PlayFileAction<Phrase<V>> playFileAction) {
         return IMbedVisitor.super.visitPlayFileAction(playFileAction);
+    }
+    
+    @Override
+    default Phrase<V> visitDcMotorSetAction(DcMotorSetAction<Phrase<V>> dcMotorSetAction) {
+        return DcMotorSetAction.make(
+            dcMotorSetAction.getPort(),
+            (Expr<V>) dcMotorSetAction.getSpeed().modify(this),
+            dcMotorSetAction.getProperty(),
+            dcMotorSetAction.getComment()
+        );
     }
 }

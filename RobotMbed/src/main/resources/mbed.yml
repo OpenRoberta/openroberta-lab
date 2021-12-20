@@ -108,6 +108,11 @@ block:
     category: ACTOR
     implementor: de.fhg.iais.roberta.syntax.action.mbed.MotionKitDualSetAction
     type: [mbedActions_motionkit_dual_set]
+  DC_MOTOR_SET_ACTION:
+    category: ACTOR
+    implementor: de.poulter.roberta.syntax.action.mbed.DcMotorSetAction
+    type: [mbedActions_dcmotor_set]
+
 mode:
   motionkit: [FOREWARD, BACKWARD, 'OFF']
 
