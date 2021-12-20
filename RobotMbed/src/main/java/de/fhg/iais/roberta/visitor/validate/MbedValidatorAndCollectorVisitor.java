@@ -299,7 +299,7 @@ public class MbedValidatorAndCollectorVisitor extends CommonNepoValidatorAndColl
     @Override
     public Void visitMotionKitDualSetAction(MotionKitDualSetAction<Void> motionKitDualSetAction) {
         if ( isMotionKitPinsOverlapping() ) {
-            addErrorToPhrase(motionKitDualSetAction, "MOTIONKIT_BLOCK_WARNING");
+            addErrorToPhrase(motionKitDualSetAction, "MOTIONKIT_PIN_OVERLAP_WARNING");
         } else {
             usedHardwareBuilder.addUsedActor(new UsedActor("", "MOTIONKIT"));
         }
@@ -309,7 +309,7 @@ public class MbedValidatorAndCollectorVisitor extends CommonNepoValidatorAndColl
     @Override
     public Void visitMotionKitSingleSetAction(MotionKitSingleSetAction<Void> motionKitSingleSetAction) {
         if ( isMotionKitPinsOverlapping() ) {
-            addWarningToPhrase(motionKitSingleSetAction, "MOTIONKIT_BLOCK_WARNING");
+            addWarningToPhrase(motionKitSingleSetAction, "MOTIONKIT_PIN_OVERLAP_WARNING");
         } else {
             usedHardwareBuilder.addUsedActor(new UsedActor(motionKitSingleSetAction.getPort(), "MOTIONKIT"));
         }
