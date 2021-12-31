@@ -577,6 +577,9 @@
 .typcn-message:before {
   content: "\e9b3";
 }
+.typcn-raspberrypi:before {
+   content: "\e9b3";
+}
 .typcn-message-typing:before {
   content: "\e9b4";
 }

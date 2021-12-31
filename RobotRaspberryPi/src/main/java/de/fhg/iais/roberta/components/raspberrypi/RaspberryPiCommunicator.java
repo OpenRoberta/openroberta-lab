@@ -29,8 +29,7 @@ public class RaspberryPiCommunicator {
      */
     public void uploadFile(String path, String programName) throws Exception {
         List<String> fileNames = new ArrayList<>();
-        fileNames.add("speech_recognizer_roberta.py");
-        fileNames.add("speech_syntheziser.sh");
+        //fileNames.add("speech_recognizer_roberta.py");
 
         Session session = null;
         try {
@@ -39,14 +38,14 @@ public class RaspberryPiCommunicator {
             String password = this.pluginProperties.getStringProperty("raspi.password");
             programName += ".py";
             session = createSession(user, ip, 22, password);
-           // sshCommand(session, "rm " + programName);
-            for ( String fname : fileNames ) {
-               // sshCommand(session, "rm " + fname);
-                copyLocalToRemote(session, this.pluginProperties.getCompilerResourceDir() + "roberta", ".", fname);
-            }
+            // sshCommand(session, "rm " + programName);
+            //for ( String fname : fileNames ) {
+            // sshCommand(session, "rm " + fname);
+            //copyLocalToRemote(session, this.pluginProperties.getCompilerResourceDir() + "roberta", ".", fname);
+            //}
             copyLocalToRemote(session, path, ".", programName);
             sshCommand(session, "python3 " + programName);
-          //  sshCommand(session, "rm " + programName);
+            //  sshCommand(session, "rm " + programName);
         } finally {
             try {
                 if ( session != null ) {

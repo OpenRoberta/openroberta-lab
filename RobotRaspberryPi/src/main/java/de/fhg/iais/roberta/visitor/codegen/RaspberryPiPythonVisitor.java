@@ -13,6 +13,7 @@ import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.components.ConfigurationComponent;
 import de.fhg.iais.roberta.inter.mode.action.ILanguage;
 import de.fhg.iais.roberta.syntax.Phrase;
+import de.fhg.iais.roberta.syntax.SC;
 import de.fhg.iais.roberta.syntax.SCRaspberryPi;
 import de.fhg.iais.roberta.syntax.action.light.LightAction;
 import de.fhg.iais.roberta.syntax.action.light.LightStatusAction;
@@ -20,6 +21,7 @@ import de.fhg.iais.roberta.syntax.action.raspberrypi.LedBlinkAction;
 import de.fhg.iais.roberta.syntax.action.raspberrypi.LedDimAction;
 import de.fhg.iais.roberta.syntax.action.raspberrypi.LedGetAction;
 import de.fhg.iais.roberta.syntax.action.raspberrypi.LedSetAction;
+import de.fhg.iais.roberta.syntax.action.sound.VolumeAction;
 import de.fhg.iais.roberta.syntax.action.speech.SayTextAction;
 import de.fhg.iais.roberta.syntax.action.speech.SetLanguageAction;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
@@ -38,11 +40,11 @@ import de.fhg.iais.roberta.syntax.sensor.generic.KeysSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
 import de.fhg.iais.roberta.syntax.sensors.raspberrypi.SlotSensor;
+import de.fhg.iais.roberta.util.TTSLanguageMapper;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.visitor.IVisitor;
 import de.fhg.iais.roberta.visitor.hardware.IRaspberryPiVisitor;
 import de.fhg.iais.roberta.visitor.lang.codegen.prog.AbstractPythonVisitor;
-import de.fhg.iais.roberta.util.TTSLanguageMapper;
 
 /**
  * This class is implementing {@link IVisitor}. All methods are implemented and they append a human-readable Python code representation of a phrase to a
@@ -121,8 +123,20 @@ public final class RaspberryPiPythonVisitor extends AbstractPythonVisitor implem
         StmtList<Void> variables = mainTask.getVariables();
         variables.accept(this);
         //nlIndent();
+        nlIndent();
+        if ( this.getBean(UsedHardwareBean.class).isActorUsed(SC.SOUND) ) {
+            this.usedGlobalVarInFunctions.add("__volume");
+            this.sb.append("__volume = 100");
+            nlIndent();
+        }
         this.sb.append("board = Board()");
         nlIndent();
+        String modelLanguage = "en";
+        if ( TTSLanguageMapper.getLanguageString(this.language).equals("de") ) {
+            modelLanguage = TTSLanguageMapper.getLanguageString(this.language);
+        }
+        this.sb.append("rSR = RobertaSpeechRecognition(\"").append(modelLanguage).append("\")");
+
         generateUserDefinedMethods();
         if ( !this.getBean(CodeGeneratorSetupBean.class).getUsedMethods().isEmpty() ) {
             String helperMethodImpls =
@@ -139,9 +153,12 @@ public final class RaspberryPiPythonVisitor extends AbstractPythonVisitor implem
         this.sb.append("def run():");
         incrIndentation();
         List<Stmt<Void>> variableList = variables.get();
-        if ( !variableList.isEmpty() ) {
+        if ( !this.usedGlobalVarInFunctions.isEmpty() ) {
             nlIndent();
             this.sb.append("global " + String.join(", ", this.usedGlobalVarInFunctions));
+        }
+        if ( !variableList.isEmpty() ) {
+            nlIndent();
         } else {
             addPassIfProgramIsEmpty();
         }
@@ -188,11 +205,11 @@ public final class RaspberryPiPythonVisitor extends AbstractPythonVisitor implem
         nlIndent();
         this.sb.append("from time import sleep");
         nlIndent();
-        this.sb.append("import speech_recognizer_roberta");
+        this.sb.append("from sRR import RobertaSpeechRecognition");
         nlIndent();
         this.sb.append("import subprocess as sP");
         nlIndent();
-        this.sb.append("import os");
+        this.sb.append("import sys");
         nlIndent();
         nlIndent();
         this.sb.append("class BreakOutOfALoop(Exception): pass");
@@ -243,7 +260,13 @@ public final class RaspberryPiPythonVisitor extends AbstractPythonVisitor implem
             this.sb.append("while True:");
             incrIndentation();
             nlIndent();
-            this.sb.append("myphrase = speech_recognizer_roberta.recognize_speech()");
+            this.sb.append("myphrase = rSR.getRecognizedSpeech()");
+            nlIndent();
+            this.sb.append("if not myphrase:");
+            incrIndentation();
+            nlIndent();
+            this.sb.append("continue");
+            decrIndentation();
             nlIndent();
             this.sb.append("print(myphrase)");
             nlIndent();
@@ -266,8 +289,13 @@ public final class RaspberryPiPythonVisitor extends AbstractPythonVisitor implem
             this.sb.append("else:");
             incrIndentation();
             nlIndent();
-            String pleaseRepeat = "Ich habe das nicht verstanden, bitte versuchen Sie es noch einmal";
-            this.sb.append("sP.call(['espeak', '-v', '").append(TTSLanguageMapper.getLanguageString(this.language)).append("', '").append(pleaseRepeat).append("'])");
+            String pleaseRepeat = "";
+            if ( TTSLanguageMapper.getLanguageString(this.language).equals("de") ) {
+                pleaseRepeat = "Ich habe das nicht verstanden, bitte versuchen Sie es noch einmal";
+            } else {
+                pleaseRepeat = "I did not understand, please try again";
+            }
+            this.sb.append("sP.call([\"espeak\", \"-v\", \"").append(TTSLanguageMapper.getLanguageString(this.language)).append("\", \"").append(pleaseRepeat).append("\"])");
             decrIndentation();
             nlIndent();
         }
@@ -389,9 +417,26 @@ public final class RaspberryPiPythonVisitor extends AbstractPythonVisitor implem
 
     @Override
     public Void visitSayTextAction(SayTextAction<Void> sayTextAction) {
-        this.sb.append("sP.call([\"espeak\", \"-v\", \"").append(TTSLanguageMapper.getLanguageString(this.language)).append("\", ");
+        this.sb.append("sP.call([\"espeak\", \"-a\", str(__volume), \"-v\", \"").append(TTSLanguageMapper.getLanguageString(this.language)).append("\", ");
         sayTextAction.getMsg().accept(this);
         this.sb.append("])");
+        return null;
+    }
+
+    @Override
+    public Void visitVolumeAction(VolumeAction<Void> volumeAction) {
+        switch ( volumeAction.getMode() ) {
+            case SET:
+                this.sb.append("__volume = (");
+                volumeAction.getVolume().accept(this);
+                this.sb.append(") * 2");
+                break;
+            case GET:
+                this.sb.append("__volume / 2");
+                break;
+            default:
+                throw new DbcException("Invalid volume action mode!");
+        }
         return null;
     }
 
@@ -425,14 +470,13 @@ public final class RaspberryPiPythonVisitor extends AbstractPythonVisitor implem
             }
             intentStmt.getElseList().accept(this);
             nlIndent();
-            this.sb.append("return False");
+            this.sb.append("return True");
         } else {
+            intentStmt.getElseList().accept(this);
+            nlIndent();
             if ( intentStmt.getIntent().toLowerCase().contentEquals("stop") ) {
-                nlIndent();
-                this.sb.append("os.exit(1)");
+                this.sb.append("sys.exit()");
             } else {
-                intentStmt.getElseList().accept(this);
-                nlIndent();
                 this.sb.append("return True");
             }
         }

@@ -33,6 +33,7 @@ import de.fhg.iais.roberta.syntax.action.nao.TurnDegrees;
 import de.fhg.iais.roberta.syntax.action.nao.WalkAsync;
 import de.fhg.iais.roberta.syntax.action.nao.WalkDistance;
 import de.fhg.iais.roberta.syntax.action.nao.WalkTo;
+import de.fhg.iais.roberta.syntax.action.sound.VolumeAction;
 import de.fhg.iais.roberta.syntax.action.speech.SayTextAction;
 import de.fhg.iais.roberta.syntax.action.speech.SetLanguageAction;
 import de.fhg.iais.roberta.syntax.lang.functions.MathCastCharFunct;
@@ -204,6 +205,11 @@ public class NaoValidatorAndCollectorVisitor extends CommonNepoValidatorAndColle
         requiredComponentVisited(sayTextAction, sayTextAction.getMsg());
         optionalComponentVisited(sayTextAction.getPitch());
         optionalComponentVisited(sayTextAction.getSpeed());
+        return null;
+    }
+
+    @Override
+    public Void visitVolumeAction(VolumeAction<Void> volumeAction) {
         return null;
     }
 

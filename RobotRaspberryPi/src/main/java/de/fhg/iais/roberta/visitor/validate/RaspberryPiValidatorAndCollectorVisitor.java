@@ -15,6 +15,7 @@ import de.fhg.iais.roberta.syntax.action.raspberrypi.LedBlinkAction;
 import de.fhg.iais.roberta.syntax.action.raspberrypi.LedDimAction;
 import de.fhg.iais.roberta.syntax.action.raspberrypi.LedGetAction;
 import de.fhg.iais.roberta.syntax.action.raspberrypi.LedSetAction;
+import de.fhg.iais.roberta.syntax.action.sound.VolumeAction;
 import de.fhg.iais.roberta.syntax.action.speech.SayTextAction;
 import de.fhg.iais.roberta.syntax.action.speech.SetLanguageAction;
 import de.fhg.iais.roberta.syntax.lang.expr.ColorHexString;
@@ -102,6 +103,14 @@ public class RaspberryPiValidatorAndCollectorVisitor extends CommonNepoValidator
         optionalComponentVisited(sayTextAction.getPitch());
         requiredComponentVisited(sayTextAction, sayTextAction.getMsg());
         usedHardwareBuilder.addUsedActor(new UsedActor(BlocklyConstants.EMPTY_PORT, SC.VOICE));
+        usedHardwareBuilder.addUsedActor(new UsedActor(BlocklyConstants.EMPTY_PORT, SC.SOUND));
+        return null;
+    }
+
+    @Override
+    public Void visitVolumeAction(VolumeAction<Void> volumeAction) {
+        optionalComponentVisited(volumeAction.getVolume());
+        usedHardwareBuilder.addUsedActor(new UsedActor(BlocklyConstants.EMPTY_PORT, SC.SOUND));
         return null;
     }
 

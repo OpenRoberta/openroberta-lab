@@ -12,6 +12,14 @@
                     </block>
                 </value>
             </block>
+            <block type="robActions_play_setVolume">
+                <value name="VOLUME">
+                    <block type="math_number">
+                        <field name="NUM">50</field>
+                    </block>
+                </value>
+            </block>
+            <block type="robActions_play_getVolume"/>
         </category>
         <category name="TOOLBOX_LIGHT" svg="true">
             <block type="robActions_brickLight_on"></block>

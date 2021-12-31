@@ -47,7 +47,7 @@
         <block type="robConf_intent" id="13" intask="true">
             <mutation items="4"/>
             <field name="NAME">Stop</field>
-            <field name="SAMPLE1">Stop</field>
+            <field name="SAMPLE1">Stopp</field>
             <field name="SAMPLE2">Stoppe</field>
             <field name="SAMPLE3">Beenden</field>
             <field name="SAMPLE4">Abbruch</field>
