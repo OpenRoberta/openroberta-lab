@@ -231,18 +231,6 @@ MOVE_HAND_JOINT:
 
         clamped_angles.append(clamped_angle)
 
-      start_time = robot.getTime()
-      while robot.step(robot.timeStep) != -1:
-        values_reached = []
-        for i in range(0, robot.PHALANX_MAX):
-          sensor: PositionSensor = phalanx[i].getPositionSensor()
-          values_reached.append(math.fabs(sensor.getValue() - clamped_angles[i]) <= DELTA)
-
-        is_timeout = robot.getTime() - start_time >= TIMEOUT
-        is_finished = (len([done for done in values_reached if done]) == robot.PHALANX_MAX)
-        if is_finished or is_timeout:
-          break
-
 SET_LED:
   PYTHON: |
     def set_led(robot, led: Led, rgb):
@@ -287,14 +275,6 @@ MOVE_JOINT:
       rad = max(rad, device.getMinPosition())
 
       device.setPosition(rad)
-
-      start_time = robot.getTime()
-      while robot.step(robot.timeStep) != -1:
-        value_reached = math.fabs(sensor.getValue() - rad) <= DELTA
-        timeout = robot.getTime() - start_time >= TIMEOUT
-        if value_reached or timeout:
-          break
-
       sensor.disable()
     
 TURN:
