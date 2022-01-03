@@ -253,9 +253,7 @@ define(["require", "exports", "simulation.simulation", "simulation.math", "util"
                 }
             }
         }
-        if (SIM.getDebugMode()) {
-            drawVariables();
-        }
+        drawVariables();
         this.rCtx.scale(SIM.getScale(), SIM.getScale());
         this.rCtx.save();
         this.rCtx.translate(this.backgroundImg.width / 2.0 + 10, this.backgroundImg.height / 2.0 + 10);
@@ -350,9 +348,7 @@ define(["require", "exports", "simulation.simulation", "simulation.math", "util"
                             '</span></div>');
                     }
                 }
-                if (SIM.getDebugMode()) {
-                    drawVariables();
-                }
+                drawVariables();
             }
             this.rCtx.scale(SIM.getScale(), SIM.getScale());
             this.rCtx.save();

@@ -262,9 +262,7 @@ Scene.prototype.drawMbed = function () {
             }
         }
     }
-    if (SIM.getDebugMode()) {
-        drawVariables();
-    }
+    drawVariables();
     this.rCtx.scale(SIM.getScale(), SIM.getScale());
     this.rCtx.save();
 
@@ -372,9 +370,7 @@ Scene.prototype.drawRobots = function () {
                     );
                 }
             }
-            if (SIM.getDebugMode()) {
-                drawVariables();
-            }
+            drawVariables();
         }
         this.rCtx.scale(SIM.getScale(), SIM.getScale());
         this.rCtx.save();
