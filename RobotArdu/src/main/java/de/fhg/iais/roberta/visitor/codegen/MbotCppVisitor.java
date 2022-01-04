@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import com.google.common.collect.ClassToInstanceMap;
 
@@ -19,7 +20,6 @@ import de.fhg.iais.roberta.syntax.MotorDuration;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.SC;
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
-import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
 import de.fhg.iais.roberta.syntax.action.light.LightAction;
 import de.fhg.iais.roberta.syntax.action.light.LightStatusAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorGetPowerAction;
@@ -31,10 +31,8 @@ import de.fhg.iais.roberta.syntax.action.motor.differential.DriveAction;
 import de.fhg.iais.roberta.syntax.action.motor.differential.MotorDriveStopAction;
 import de.fhg.iais.roberta.syntax.action.motor.differential.TurnAction;
 import de.fhg.iais.roberta.syntax.action.serial.SerialWriteAction;
-import de.fhg.iais.roberta.syntax.action.sound.PlayFileAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
-import de.fhg.iais.roberta.syntax.action.sound.VolumeAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.LEDMatrixImageAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.LEDMatrixSetBrightnessAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.LEDMatrixTextAction;
@@ -255,7 +253,7 @@ public final class MbotCppVisitor extends AbstractCommonArduinoCppVisitor implem
     public Void visitMotorOnAction(MotorOnAction<Void> motorOnAction) {
         final MotorDuration<Void> duration = motorOnAction.getParam().getDuration();
         this.sb.append("_meDCmotor").append(motorOnAction.getUserDefinedPort()).append(".run(");
-        if ( !this.configuration.getFirstMotorPort(SC.RIGHT).equals(motorOnAction.getUserDefinedPort()) ) {
+        if ( !Objects.equals(this.configuration.getFirstMotorPort(SC.RIGHT), motorOnAction.getUserDefinedPort()) ) {
             this.sb.append("-1*");
         }
         this.sb.append("(");
