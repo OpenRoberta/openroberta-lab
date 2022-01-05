@@ -99,7 +99,7 @@ public class MbedValidatorAndCollectorVisitor extends CommonNepoValidatorAndColl
         if ( !allActorsPresent ) {
             addErrorToPhrase(bothMotorsOnAction, "CONFIGURATION_ERROR_ACTOR_MISSING");
         } else if ( bothMotorsOnAction.getPortA().equals(bothMotorsOnAction.getPortB()) || !usedActorA.getComponentType().equals(usedActorB.getComponentType()) ) {
-            addWarningToPhrase(bothMotorsOnAction, "BLOCK_NOT_EXECUTED");
+            addErrorToPhrase(bothMotorsOnAction, "BLOCK_NOT_EXECUTED");
         } else if ( usedActorA.getComponentType().equals("CALLIBOT") ) {
             usedHardwareBuilder.addUsedActor(new UsedActor("", SC.CALLIBOT));
         }
@@ -309,7 +309,7 @@ public class MbedValidatorAndCollectorVisitor extends CommonNepoValidatorAndColl
     @Override
     public Void visitMotionKitSingleSetAction(MotionKitSingleSetAction<Void> motionKitSingleSetAction) {
         if ( isMotionKitPinsOverlapping() ) {
-            addWarningToPhrase(motionKitSingleSetAction, "MOTIONKIT_PIN_OVERLAP_WARNING");
+            addErrorToPhrase(motionKitSingleSetAction, "MOTIONKIT_PIN_OVERLAP_WARNING");
         } else {
             usedHardwareBuilder.addUsedActor(new UsedActor(motionKitSingleSetAction.getPort(), "MOTIONKIT"));
         }
