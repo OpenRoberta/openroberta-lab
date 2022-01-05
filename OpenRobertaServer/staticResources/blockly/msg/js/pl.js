@@ -1140,6 +1140,7 @@ Blockly.Msg.PIN_PULL = "pull";  // untranslated
 Blockly.Msg.PIN_PULL_DOWN = "down";  // untranslated
 Blockly.Msg.PIN_PULL_NONE = "none";  // untranslated
 Blockly.Msg.PIN_PULL_UP = "up";  // untranslated
+Blockly.Msg.PIN_SET_PULL_BLOCK_WARNING = "This block got replaced. Please use the 'Sensor digital'-block from the robotconfiguration";  // untranslated
 Blockly.Msg.PIN_SET_PULL_TOOLTIP = "Sets the pull of the chosen pin";  // untranslated
 Blockly.Msg.PIN_WRITE = "zapisz";
 Blockly.Msg.PITCH = "wysokość";

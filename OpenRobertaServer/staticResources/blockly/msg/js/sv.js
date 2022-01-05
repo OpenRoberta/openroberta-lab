@@ -1140,6 +1140,7 @@ Blockly.Msg.PIN_PULL = "dra";
 Blockly.Msg.PIN_PULL_DOWN = "ner";
 Blockly.Msg.PIN_PULL_NONE = "ingen";
 Blockly.Msg.PIN_PULL_UP = "upp";
+Blockly.Msg.PIN_SET_PULL_BLOCK_WARNING = "This block got replaced. Please use the 'Sensor digital'-block from the robotconfiguration";  // untranslated
 Blockly.Msg.PIN_SET_PULL_TOOLTIP = "Ställer in draget på det valda stiftet";
 Blockly.Msg.PIN_WRITE = "skriv";
 Blockly.Msg.PITCH = "lutning";

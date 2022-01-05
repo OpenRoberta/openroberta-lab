@@ -40,7 +40,6 @@ import de.fhg.iais.roberta.syntax.action.mbed.LedBarSetAction;
 import de.fhg.iais.roberta.syntax.action.mbed.LedOnAction;
 import de.fhg.iais.roberta.syntax.action.mbed.MotionKitDualSetAction;
 import de.fhg.iais.roberta.syntax.action.mbed.MotionKitSingleSetAction;
-import de.fhg.iais.roberta.syntax.action.mbed.PinSetPullAction;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioReceiveAction;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioSendAction;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioSetChannelAction;
@@ -647,16 +646,6 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
     }
 
     @Override
-    public Void visitPinSetPullAction(PinSetPullAction<Void> pinSetPullAction) {
-        String port = pinSetPullAction.getPort();
-        ConfigurationComponent configurationComponent = this.robotConfiguration.getConfigurationComponent(port);
-        String pin1 = configurationComponent.getProperty("PIN1");
-        String mode = pinSetPullAction.getMode();
-        this.sb.append("_uBit.io." + PIN_MAP.get(pin1) + ".setPull(Pull").append(WordUtils.capitalizeFully(mode)).append(");");
-        return null;
-    }
-
-    @Override
     public Void visitMainTask(MainTask<Void> mainTask) {
         if ( this.getBean(UsedHardwareBean.class).isSensorUsed(SC.TIMER) ) {
             this.sb.append("int _initTime = _uBit.systemTime();");
@@ -674,6 +663,23 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
         if ( this.getBean(UsedHardwareBean.class).isActorUsed(SC.CALLIBOT) ) {
             nlIndent();
             this.sb.append("_cbInit(_buf, &_i2c, &_uBit);");
+        }
+        if ( this.robotConfiguration.isComponentTypePresent(SC.DIGITAL_PIN) ) {
+            for ( ConfigurationComponent usedConfigurationBlock : this.robotConfiguration.getConfigurationComponentsValues() ) {
+                if ( usedConfigurationBlock.getComponentType().equals(SC.DIGITAL_PIN) ) {
+                    String pin1 = usedConfigurationBlock.getProperty("PIN1");
+                    String mode = usedConfigurationBlock.getProperty("PIN_PULL");
+                    if ( mode.equals("PIN_PULL_UP") ) {
+                        mode = "UP";
+                    } else if ( mode.equals("PIN_PULL_DOWN") ) {
+                        mode = "DOWN";
+                    } else {
+                        continue;
+                    }
+                    nlIndent();
+                    this.sb.append("_uBit.io." + PIN_MAP.get(pin1) + ".setPull(Pull").append(WordUtils.capitalizeFully(mode)).append(");");
+                }
+            }
         }
         if ( this.getBean(UsedHardwareBean.class).isSensorUsed(SC.COLOR) ) {
             String integrationTime = "2_4MS";

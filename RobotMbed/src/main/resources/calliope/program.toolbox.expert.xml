@@ -166,7 +166,6 @@
 					</block>
 				</value>
 			</block>
-			<block type="mbedActions_pin_set_pull" />
 			<block type="mbedActions_switch_led_matrix" />
 		</category>
 	</category>

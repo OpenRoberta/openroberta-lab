@@ -1140,6 +1140,7 @@ Blockly.Msg.PIN_PULL = "падцяжка";
 Blockly.Msg.PIN_PULL_DOWN = "уніз";
 Blockly.Msg.PIN_PULL_NONE = "адсутнічае";
 Blockly.Msg.PIN_PULL_UP = "уверх";
+Blockly.Msg.PIN_SET_PULL_BLOCK_WARNING = "This block got replaced. Please use the 'Sensor digital'-block from the robotconfiguration";  // untranslated
 Blockly.Msg.PIN_SET_PULL_TOOLTIP = "Выстаўляе падцяжку для абранага піна";
 Blockly.Msg.PIN_WRITE = "запісаць";
 Blockly.Msg.PITCH = "тэмбр";

@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2021-12-17 15:54:48.373358",
+		"lastupdated": "2022-01-05 16:44:40.981781",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -923,6 +923,7 @@
 	"PIN_PULL_DOWN": "down",
 	"PIN_PULL_NONE": "none",
 	"PIN_SET_PULL_TOOLTIP": "Sets the pull of the chosen pin",
+	"PIN_SET_PULL_BLOCK_WARNING": "This block got replaced. Please use the 'Sensor digital'-block from the robotconfiguration",
 	"CONFIGURATION_ERROR_MOTORS_ROTATION_DIRECTION": "The direction of rotation of the left and right motor is different!",
 	"CONFIGURATION_ERROR_MULTIPLE_RIGHT_MOTORS": "You have multiple right motors assigned to your configuration!",
 	"CONFIGURATION_ERROR_MULTIPLE_LEFT_MOTORS": "You have multiple left motors assigned to your configuration!",
