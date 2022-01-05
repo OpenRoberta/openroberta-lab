@@ -11,7 +11,6 @@ import de.fhg.iais.roberta.syntax.action.mbed.FourDigitDisplayShowAction;
 import de.fhg.iais.roberta.syntax.action.mbed.LedBarSetAction;
 import de.fhg.iais.roberta.syntax.action.mbed.MotionKitDualSetAction;
 import de.fhg.iais.roberta.syntax.action.mbed.MotionKitSingleSetAction;
-import de.fhg.iais.roberta.syntax.action.mbed.PinSetPullAction;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioReceiveAction;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioSendAction;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioSetChannelAction;
@@ -87,6 +86,7 @@ public final class CalliopeSimValidatorAndCollectorVisitor extends MbedValidator
         addWarningToPhrase(accelerometerSensor, "SIM_BLOCK_NOT_SUPPORTED");
         return super.visitAccelerometerSensor(accelerometerSensor);
     }
+
     @Override
     public Void visitGyroSensor(GyroSensor<Void> gyroSensor) {
         addWarningToPhrase(gyroSensor, "SIM_BLOCK_NOT_SUPPORTED");
@@ -109,12 +109,6 @@ public final class CalliopeSimValidatorAndCollectorVisitor extends MbedValidator
     public Void visitLedBarSetAction(LedBarSetAction<Void> ledBarSetAction) {
         addWarningToPhrase(ledBarSetAction, "SIM_BLOCK_NOT_SUPPORTED");
         return super.visitLedBarSetAction(ledBarSetAction);
-    }
-
-    @Override
-    public Void visitPinSetPullAction(PinSetPullAction<Void> pinSetPull) {
-        addWarningToPhrase(pinSetPull, "SIM_BLOCK_NOT_SUPPORTED");
-        return super.visitPinSetPullAction(pinSetPull);
     }
 
     @Override

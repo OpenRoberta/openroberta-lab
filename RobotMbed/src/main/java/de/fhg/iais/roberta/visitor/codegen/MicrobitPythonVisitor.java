@@ -21,7 +21,6 @@ import de.fhg.iais.roberta.syntax.action.mbed.DisplayGetPixelAction;
 import de.fhg.iais.roberta.syntax.action.mbed.DisplayImageAction;
 import de.fhg.iais.roberta.syntax.action.mbed.DisplaySetPixelAction;
 import de.fhg.iais.roberta.syntax.action.mbed.DisplayTextAction;
-import de.fhg.iais.roberta.syntax.action.mbed.PinSetPullAction;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioReceiveAction;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioSendAction;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioSetChannelAction;
@@ -256,6 +255,24 @@ public final class MicrobitPythonVisitor extends AbstractPythonVisitor implement
         if ( !this.usedGlobalVarInFunctions.isEmpty() ) {
             this.sb.append("global ").append(String.join(", ", this.usedGlobalVarInFunctions));
         }
+//        TODO add as soon as microbit runtime is updated
+//        if ( this.robotConfiguration.isComponentTypePresent(SC.DIGITAL_PIN) ) {
+//            for ( ConfigurationComponent usedConfigurationBlock : this.robotConfiguration.getConfigurationComponentsValues() ) {
+//                if ( usedConfigurationBlock.getComponentType().equals(SC.DIGITAL_PIN) ) {
+//                    String pin1 = usedConfigurationBlock.getProperty("PIN1");
+//                    String mode = usedConfigurationBlock.getProperty("PIN_PULL");
+//                    if ( mode.equals("PIN_PULL_UP") ) {
+//                        mode = "PULL_UP";
+//                    } else if ( mode.equals("PIN_PULL_DOWN") ) {
+//                        mode = "PULL_DOWN";
+//                    } else {
+//                        continue;
+//                    }
+//                    nlIndent();
+//                    this.sb.append("microbit.MicroBitDigitalPin.set_pull(microbit.pin" + pin1 + ".").append(mode).append(");");
+//                }
+//            }
+//        }
         return null;
     }
 
@@ -360,26 +377,6 @@ public final class MicrobitPythonVisitor extends AbstractPythonVisitor implement
         this.sb.append(".write_").append(valueType);
         pinWriteValueAction.getValue().accept(this);
         this.sb.append(");");
-        return null;
-    }
-
-    @Override
-    public Void visitPinSetPullAction(PinSetPullAction<Void> pinSetPullAction) {
-        // TODO add as soon as microbit runtime is updated
-        //        this.sb.append("microbit.pin" + pinSetPullAction.getPort().getValues()[0] + ".set_pull(");
-        //        switch ( pinSetPullAction.getMode() ) {
-        //            case SC.UP:
-        //                this.sb.append("PULL_UP");
-        //                break;
-        //            case SC.DOWN:
-        //                this.sb.append("PULL_DOWN");
-        //                break;
-        //            case SC.NONE:
-        //            default:
-        //                this.sb.append("NO_PULL");
-        //                break;
-        //        }
-        //        this.sb.append(");");
         return null;
     }
 

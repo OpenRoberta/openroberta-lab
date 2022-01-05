@@ -1140,6 +1140,7 @@ Blockly.Msg.PIN_PULL = "tirare";
 Blockly.Msg.PIN_PULL_DOWN = "giù";
 Blockly.Msg.PIN_PULL_NONE = "nessuna";
 Blockly.Msg.PIN_PULL_UP = "su";
+Blockly.Msg.PIN_SET_PULL_BLOCK_WARNING = "This block got replaced. Please use the 'Sensor digital'-block from the robotconfiguration";  // untranslated
 Blockly.Msg.PIN_SET_PULL_TOOLTIP = "imposta la spinta del perno scelto";
 Blockly.Msg.PIN_WRITE = "scrivi";
 Blockly.Msg.PITCH = "intonazione";

@@ -168,6 +168,16 @@
                                 </block>
                             </value>
                         </block>
+                        <block type="robActions_serial_print" id="OOExq1u2({j?9pnZTzQO" intask="true">
+                            <value name="OUT">
+                                <block type="robSensors_out_getSample" id="ynW1)BJ.LV#E8:~I+Wpx" intask="true">
+                                    <mutation mode="DIGITAL"></mutation>
+                                    <field name="MODE">DIGITAL</field>
+                                    <field name="SENSORPORT">S_UP</field>
+                                    <field name="SLOT"></field>
+                                </block>
+                            </value>
+                        </block>
                         <block type="robActions_serial_print" id="_Eldb9_?_`j^LOa67bt-" intask="true">
                             <value name="OUT">
                                 <block type="robSensors_timer_getSample" id="~40oKwYF!VLemgLa!4rn" intask="true">
@@ -344,6 +354,26 @@
                                     <value name="B">
                                         <block type="math_number" id="uS:%k,k.Qp]D*rw9)n5!" intask="true">
                                             <field name="NUM">1</field>
+                                        </block>
+                                    </value>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="robControls_wait_for" id="2Z;sy!h,efNU/m?g}Gu|" intask="true">
+                            <value name="WAIT0">
+                                <block type="logic_compare" id="ygvrZ2uOXS6=g[6Zs/||" intask="true">
+                                    <field name="OP">EQ</field>
+                                    <value name="A">
+                                        <block type="robSensors_getSample" id="]0)@sdmpP6?H7b)yS3pG" intask="true">
+                                            <mutation input="OUT_DIGITAL"></mutation>
+                                            <field name="SENSORTYPE">OUT_DIGITAL</field>
+                                            <field name="SENSORPORT">S_UP</field>
+                                            <field name="SLOT"></field>
+                                        </block>
+                                    </value>
+                                    <value name="B">
+                                        <block type="math_number" id="i%r(-8~!Goeh+MBJNE:0" intask="true">
+                                            <field name="NUM">0</field>
                                         </block>
                                     </value>
                                 </block>
@@ -655,7 +685,15 @@
         </block_set>
     </program>
     <config>
-        <block_set robottype="arduino" xmlversion="3.1" description="" tags="" xmlns="http://de.fhg.iais.roberta.blockly">
+        <block_set robottype="arduino" xmlversion="3.1" description="" tags=""
+                   xmlns="http://de.fhg.iais.roberta.blockly">
+            <instance x="579" y="-102">
+                <block type="robConf_digitalout" id="=3UH=y@DD~}+LHV|^DSV" intask="true">
+                    <field name="NAME">S_UP</field>
+                    <field name="PIN_PULL">PIN_PULL_UP</field>
+                    <field name="OUTPUT">1</field>
+                </block>
+            </instance>
             <instance x="1175" y="-58">
                 <block type="robConf_potentiometer" id="u+|)RZI25l(IY|bO+eD^" intask="true">
                     <field name="NAME">P2</field>
@@ -686,6 +724,11 @@
                     <field name="OUTPUT">11</field>
                 </block>
             </instance>
+            <instance x="250" y="250">
+                <block type="robConf_robot" id="robot" intask="true">
+                    <field name="NAME">undefined</field>
+                </block>
+            </instance>
             <instance x="1163" y="204">
                 <block type="robConf_pulse" id=";*WblJ,h~#|j_kusm9y)" intask="true">
                     <field name="NAME">P</field>
@@ -699,9 +742,10 @@
                     <field name="SDA">10</field>
                 </block>
             </instance>
-            <instance x="555" y="-97">
+            <instance x="578" y="-198">
                 <block type="robConf_digitalout" id="tgx7Iy*Zc8p!V(yR`n7e" intask="true">
                     <field name="NAME">S</field>
+                    <field name="PIN_PULL">PIN_PULL_NONE</field>
                     <field name="OUTPUT">0</field>
                 </block>
             </instance>

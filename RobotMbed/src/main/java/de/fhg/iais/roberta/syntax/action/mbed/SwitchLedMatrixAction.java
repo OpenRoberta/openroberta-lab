@@ -15,13 +15,6 @@ import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 
-/**
- * This class represents the <b>mbedActions_pin_set_pull</b> blocks from Blockly into the AST (abstract syntax tree). Object from this class will generate code
- * for reading values from a given pin.<br/>
- * <br>
- * <br>
- * To create an instance from this class use the method {@link #make(BlocklyBlockProperties, BlocklyComment)}.<br>
- */
 public class SwitchLedMatrixAction<V> extends Action<V> {
     private final boolean activated;
 

@@ -1140,6 +1140,7 @@ Blockly.Msg.PIN_PULL = "拉";
 Blockly.Msg.PIN_PULL_DOWN = "下";
 Blockly.Msg.PIN_PULL_NONE = "無";
 Blockly.Msg.PIN_PULL_UP = "上";
+Blockly.Msg.PIN_SET_PULL_BLOCK_WARNING = "This block got replaced. Please use the 'Sensor digital'-block from the robotconfiguration";  // untranslated
 Blockly.Msg.PIN_SET_PULL_TOOLTIP = "設置所選 pin 的拉(Pull)能力";
 Blockly.Msg.PIN_WRITE = "寫";
 Blockly.Msg.PITCH = "音高";

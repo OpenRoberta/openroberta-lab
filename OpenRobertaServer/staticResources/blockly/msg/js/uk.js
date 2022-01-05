@@ -1140,6 +1140,7 @@ Blockly.Msg.PIN_PULL = "підтяжка";
 Blockly.Msg.PIN_PULL_DOWN = "до землі";
 Blockly.Msg.PIN_PULL_NONE = "відсутня";
 Blockly.Msg.PIN_PULL_UP = "до живлення";
+Blockly.Msg.PIN_SET_PULL_BLOCK_WARNING = "This block got replaced. Please use the 'Sensor digital'-block from the robotconfiguration";  // untranslated
 Blockly.Msg.PIN_SET_PULL_TOOLTIP = "Виставляє підтяжку для вибраного піна";
 Blockly.Msg.PIN_WRITE = "записати";
 Blockly.Msg.PITCH = "тембр";

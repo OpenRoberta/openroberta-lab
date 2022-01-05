@@ -351,9 +351,8 @@ public class MbedValidatorAndCollectorVisitor extends CommonNepoValidatorAndColl
     }
 
     @Override
-    public Void visitPinSetPullAction(PinSetPullAction<Void> pinSetPull) {
-        checkActorByPortExists(pinSetPull, pinSetPull.getPort());
-        usedHardwareBuilder.addUsedActor(new UsedActor(pinSetPull.getPort(), SC.PIN_VALUE));
+    public Void visitPinSetPullAction(PinSetPullAction<Void> pinSetPullAction) {
+        addErrorToPhrase(pinSetPullAction, "");
         return null;
     }
 

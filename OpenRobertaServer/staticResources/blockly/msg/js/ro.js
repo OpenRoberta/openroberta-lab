@@ -1140,6 +1140,7 @@ Blockly.Msg.PIN_PULL = "împinge";
 Blockly.Msg.PIN_PULL_DOWN = "jos";
 Blockly.Msg.PIN_PULL_NONE = "nu împinge";
 Blockly.Msg.PIN_PULL_UP = "sus";
+Blockly.Msg.PIN_SET_PULL_BLOCK_WARNING = "This block got replaced. Please use the 'Sensor digital'-block from the robotconfiguration";  // untranslated
 Blockly.Msg.PIN_SET_PULL_TOOLTIP = "Setează tragerea pinului ales";
 Blockly.Msg.PIN_WRITE = "scrie";
 Blockly.Msg.PITCH = "pas";
