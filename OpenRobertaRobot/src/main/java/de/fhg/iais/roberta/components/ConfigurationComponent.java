@@ -1,11 +1,13 @@
 package de.fhg.iais.roberta.components;
 
+import java.math.BigInteger;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Instance;
+import de.fhg.iais.roberta.blockly.generated.Mutation;
 import de.fhg.iais.roberta.factory.BlocklyDropdownFactory;
 import de.fhg.iais.roberta.syntax.BlockType;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
@@ -177,6 +179,11 @@ public class ConfigurationComponent extends Phrase<Void> {
     public Block astToBlock() {
         Block destination = new Block();
         Ast2Jaxb.setBasicProperties(this, destination);
+        if (this.componentType.equals("INTENT") || this.componentType.equals("SLOT")) {
+            Mutation mutation = new Mutation();
+            mutation.setItems(BigInteger.valueOf((this.getComponentProperties().size())));
+            destination.setMutation(mutation);
+        }
         Ast2Jaxb.addField(destination, "NAME", this.userDefinedPortName);
         this.componentProperties.forEach((key, value) -> Ast2Jaxb.addField(destination, key, value));
         return destination;

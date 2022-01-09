@@ -1,0 +1,49 @@
+<block_set robottype="raspberrypi" xmlversion="3.1" description="" tags="" xmlns="http://de.fhg.iais.roberta.blockly">
+    <instance x="672" y="259">
+        <block type="robConf_intent" id="12" intask="true">
+            <field name="NAME">Help</field>
+            <field name="SAMPLE1">Hilfe</field>
+        </block>
+    </instance>
+    <instance x="672" y="93">
+        <block type="robConf_key" id="b5a^iK}*_SNcMs?]}6PM" intask="true">
+            <field name="NAME">T</field>
+        </block>
+    </instance>
+    <instance x="672" y="51">
+        <block type="robConf_led" id="31P?uX3Q;DD@mSzhNHS*" intask="true">
+            <field name="NAME">Button</field>
+        </block>
+    </instance>
+    <instance x="672" y="333">
+        <block type="robConf_intent" id="13" intask="true">
+            <field name="NAME">Stop</field>
+            <field name="SAMPLE1">Stopp</field>
+            <field name="SAMPLE2">Stoppe</field>
+            <field name="SAMPLE3">Beenden</field>
+            <field name="SAMPLE4">Abbruch</field>
+        </block>
+    </instance>
+    <instance x="672" y="134">
+        <block type="robConf_intent" id="11" intask="true">
+            <field name="NAME">Welcome</field>
+            <field name="SAMPLE1">Hallo</field>
+            <field name="SAMPLE2">Hi</field>
+            <field name="SAMPLE3">Was</field>
+        </block>
+    </instance>
+    <instance x="325" y="204">
+        <block type="robConf_slot" id="EHdJ7kLY)G1Y(h.-+wM2" intask="true">
+            <field name="NAME">Off</field>
+            <field name="SAMPLE1">aus</field>
+        </block>
+    </instance>
+    <instance x="325" y="53">
+        <block type="robConf_slot" id="?2{g/goO:)bGIhjJs!D{" intask="true">
+            <field name="NAME">On</field>
+            <field name="SAMPLE1">an</field>
+            <field name="SAMPLE2">ein</field>
+            <field name="SAMPLE3">anmachen</field>
+        </block>
+    </instance>
+</block_set>

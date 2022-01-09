@@ -1,4 +1,4 @@
-package de.fhg.iais.roberta.components.raspberrypi;
+package de.fhg.iais.roberta.components;
 
 import java.io.File;
 import java.io.FileInputStream;
