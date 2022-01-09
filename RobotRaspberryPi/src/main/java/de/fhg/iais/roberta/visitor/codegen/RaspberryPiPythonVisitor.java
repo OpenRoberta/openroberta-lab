@@ -1,5 +1,6 @@
 package de.fhg.iais.roberta.visitor.codegen;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -51,7 +52,7 @@ import de.fhg.iais.roberta.visitor.lang.codegen.prog.AbstractPythonVisitor;
  * StringBuilder. <b>This representation is correct Python code.</b> <br>
  */
 public final class RaspberryPiPythonVisitor extends AbstractPythonVisitor implements IRaspberryPiVisitor<Void> {
-    protected final ConfigurationAst brickConfiguration;
+    private final ConfigurationAst brickConfiguration;
     private final ILanguage language;
 
     /**
@@ -61,10 +62,7 @@ public final class RaspberryPiPythonVisitor extends AbstractPythonVisitor implem
      * @param programPhrases to generate the code from
      */
     public RaspberryPiPythonVisitor(
-        List<List<Phrase<Void>>> programPhrases,
-        ILanguage language,
-        ConfigurationAst brickConfiguration,
-        ClassToInstanceMap<IProjectBean> beans) {
+        List<List<Phrase<Void>>> programPhrases, ILanguage language, ConfigurationAst brickConfiguration, ClassToInstanceMap<IProjectBean> beans) {
         super(programPhrases, beans);
         this.language = language;
         this.brickConfiguration = brickConfiguration;
@@ -135,33 +133,27 @@ public final class RaspberryPiPythonVisitor extends AbstractPythonVisitor implem
         if ( TTSLanguageMapper.getLanguageString(this.language).equals("de") ) {
             modelLanguage = TTSLanguageMapper.getLanguageString(this.language);
         }
-        this.sb.append("rSR = RobertaSpeechRecognition(\"").append(modelLanguage).append("\")");
+        this.sb.append("rSR = RobertaSpeechRecognition(\"").append(modelLanguage).append("\", vocabulary_list)");
 
         generateUserDefinedMethods();
         if ( !this.getBean(CodeGeneratorSetupBean.class).getUsedMethods().isEmpty() ) {
-            String helperMethodImpls =
-                this
-                    .getBean(CodeGeneratorSetupBean.class)
-                    .getHelperMethodGenerator()
-                    .getHelperMethodDefinitions(this.getBean(CodeGeneratorSetupBean.class).getUsedMethods());
+            String helperMethodImpls = this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodDefinitions(this.getBean(CodeGeneratorSetupBean.class).getUsedMethods());
             this.sb.append(helperMethodImpls);
         }
-        this.programPhrases.stream().filter(phrase -> phrase.getKind().getCategory() == Category.DIALOG).forEach(e -> {
-            e.accept(this);
-        });
+        this.programPhrases.stream().filter(phrase -> phrase.getKind().getCategory() == Category.DIALOG).forEach(e -> e.accept(this));
         nlIndent();
         this.sb.append("def run():");
         incrIndentation();
         List<Stmt<Void>> variableList = variables.get();
         if ( !this.usedGlobalVarInFunctions.isEmpty() ) {
             nlIndent();
-            this.sb.append("global " + String.join(", ", this.usedGlobalVarInFunctions));
+            this.sb.append("global ").append(String.join(", ", this.usedGlobalVarInFunctions));
         }
         if ( !variableList.isEmpty() ) {
             nlIndent();
-        } else {
-            addPassIfProgramIsEmpty();
         }
+        nlIndent();
+        this.sb.append("signal.signal(signal.SIGTERM, _signal_handler)");
         return null;
     }
 
@@ -173,15 +165,10 @@ public final class RaspberryPiPythonVisitor extends AbstractPythonVisitor implem
     }
 
     private void generateProgramMainBody() {
-        this.programPhrases
-            .stream()
-            .filter(
-                phrase -> (phrase.getKind().getCategory() != Category.METHOD && phrase.getKind().getCategory() != Category.DIALOG)
-                    || phrase.getKind().hasName("METHOD_CALL"))
-            .forEach(p -> {
-                nlIndent();
-                p.accept(this);
-            });
+        this.programPhrases.stream().filter(phrase -> (phrase.getKind().getCategory() != Category.METHOD && phrase.getKind().getCategory() != Category.DIALOG) || phrase.getKind().hasName("METHOD_CALL")).forEach(p -> {
+            nlIndent();
+            p.accept(this);
+        });
     }
 
     @Override
@@ -211,31 +198,25 @@ public final class RaspberryPiPythonVisitor extends AbstractPythonVisitor implem
         nlIndent();
         this.sb.append("import sys");
         nlIndent();
+        this.sb.append("import signal");
+        nlIndent();
         nlIndent();
         this.sb.append("class BreakOutOfALoop(Exception): pass");
         nlIndent();
         this.sb.append("class ContinueLoop(Exception): pass");
         nlIndent();
-        nlIndent();
         if ( !this.getBean(UsedHardwareBean.class).getUsedIntents().isEmpty() ) {
+            nlIndent();
+            List<String> vocabularyList = new ArrayList<>();
             for ( ConfigurationComponent usedConfigurationBlock : this.brickConfiguration.getConfigurationComponentsValues() ) {
                 switch ( usedConfigurationBlock.getComponentType() ) {
                     case SCRaspberryPi.INTENT:
                     case SCRaspberryPi.SLOT:
-                        this.sb
-                            .append(usedConfigurationBlock.getComponentType())
-                            .append("_")
-                            .append(usedConfigurationBlock.getUserDefinedPortName().toLowerCase())
-                            .append(" = [\"");
-                        this.sb
-                            .append(
-                                usedConfigurationBlock
-                                    .getComponentProperties()
-                                    .entrySet()
-                                    .stream()
-                                    .map(s -> s.getValue().toLowerCase())
-                                    .collect(Collectors.joining("\", \"")));
+                        String varName = usedConfigurationBlock.getComponentType() + "_" + usedConfigurationBlock.getUserDefinedPortName().toLowerCase();
+                        this.sb.append(varName).append(" = [\"");
+                        this.sb.append(usedConfigurationBlock.getComponentProperties().values().stream().map(String::toLowerCase).collect(Collectors.joining("\", \"")));
                         this.sb.append("\"]");
+                        vocabularyList.add(varName);
                         nlIndent();
                         break;
                     case SCRaspberryPi.KEY:
@@ -246,6 +227,10 @@ public final class RaspberryPiPythonVisitor extends AbstractPythonVisitor implem
                         throw new DbcException("Configuration block is not supported: " + usedConfigurationBlock.getComponentType());
                 }
             }
+            this.sb.append("vocabulary_list = ");
+            this.sb.append(String.join(" + ", vocabularyList));
+            this.sb.append(" + [\"<UKN>\"]");
+            nlIndent();
         }
     }
 
@@ -289,7 +274,7 @@ public final class RaspberryPiPythonVisitor extends AbstractPythonVisitor implem
             this.sb.append("else:");
             incrIndentation();
             nlIndent();
-            String pleaseRepeat = "";
+            String pleaseRepeat;
             if ( TTSLanguageMapper.getLanguageString(this.language).equals("de") ) {
                 pleaseRepeat = "Ich habe das nicht verstanden, bitte versuchen Sie es noch einmal";
             } else {
@@ -449,7 +434,7 @@ public final class RaspberryPiPythonVisitor extends AbstractPythonVisitor implem
         incrIndentation();
         nlIndent();
         if ( !this.usedGlobalVarInFunctions.isEmpty() ) {
-            this.sb.append("global " + String.join(", ", this.usedGlobalVarInFunctions));
+            this.sb.append("global ").append(String.join(", ", this.usedGlobalVarInFunctions));
             nlIndent();
         }
         this.sb.append("if _contains(phrase.lower(), INTENT_").append(intentName.toLowerCase()).append("):");

@@ -21,3 +21,10 @@ CONTAINS:
             if ((" " + phrase + " ").find(" " + test + " ") >= 0):
                 return True
         return False
+
+SIGNAL:
+  PYTHON: |
+    def _signal_handler(signum, frame):
+        global board
+        board.close()
+        sys.exit()

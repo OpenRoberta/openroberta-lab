@@ -2,6 +2,7 @@ package de.fhg.iais.roberta.components;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
@@ -39,13 +40,11 @@ public class RaspberryPiCommunicator {
             programName += ".py";
             session = createSession(user, ip, 22, password);
             // sshCommand(session, "rm " + programName);
-            //for ( String fname : fileNames ) {
+            // for ( String fname : fileNames ) {
             // sshCommand(session, "rm " + fname);
-            //copyLocalToRemote(session, this.pluginProperties.getCompilerResourceDir() + "roberta", ".", fname);
-            //}
+            // copyLocalToRemote(session, this.pluginProperties.getCompilerResourceDir() + "roberta", ".", fname);
             copyLocalToRemote(session, path, ".", programName);
-            sshCommand(session, "python3 " + programName);
-            //  sshCommand(session, "rm " + programName);
+            sshCommand(session, "./command.sh " + programName);
         } finally {
             try {
                 if ( session != null ) {

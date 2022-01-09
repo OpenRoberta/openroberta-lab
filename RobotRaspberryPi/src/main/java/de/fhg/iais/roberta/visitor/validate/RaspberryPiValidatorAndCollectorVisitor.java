@@ -24,14 +24,14 @@ import de.fhg.iais.roberta.syntax.sensor.ExternalSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.KeysSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.syntax.sensors.raspberrypi.SlotSensor;
-import de.fhg.iais.roberta.visitor.RaspberryPiMethods;
+import de.fhg.iais.roberta.visitor.collect.RaspberryPiMethods;
 import de.fhg.iais.roberta.visitor.hardware.IRaspberryPiVisitor;
 
 public class RaspberryPiValidatorAndCollectorVisitor extends CommonNepoValidatorAndCollectorVisitor implements IRaspberryPiVisitor<Void> {
 
-
     public RaspberryPiValidatorAndCollectorVisitor(ConfigurationAst robotConfiguration, ClassToInstanceMap<IProjectBean.IBuilder<?>> beanBuilders) {
         super(robotConfiguration, beanBuilders);
+        usedMethodBuilder.addUsedMethod(RaspberryPiMethods.SIGNAL);
     }
 
     @Override
