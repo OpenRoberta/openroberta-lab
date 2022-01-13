@@ -14,7 +14,7 @@
     <parent>
         <groupId>de.fhg.iais.openroberta</groupId>
         <artifactId>OpenRobertaParent</artifactId>
-        <version>4.2.6</version>
+        <version>4.2.7-SNAPSHOT</version>
     </parent>
     <artifactId>RobotEV3</artifactId>
     <name>RobotEV3</name>
