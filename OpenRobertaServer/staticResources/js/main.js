@@ -259,11 +259,11 @@ function init() {
         progCodeController.init();
         progSimController.init();
         progRunController.init();
-        menuController.init();
         tutorialController.init();
         userGroupController.init();
         notificationController.init();
         nnController.init();
+        menuController.init();
         $('.cover').fadeOut(100, function () {
             if (guiStateController.getStartWithoutPopup()) {
                 userModel.getStatusText(function (result) {
