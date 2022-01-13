@@ -15,7 +15,7 @@
 	<parent>
 		<groupId>de.fhg.iais.openroberta</groupId>
 		<artifactId>OpenRobertaParent</artifactId>
-		<version>4.2.6-SNAPSHOT</version>
+		<version>4.2.6</version>
 	</parent>
 	<artifactId>RobotRaspberryPi</artifactId>
 	<name>RobotRaspberryPi</name>
