@@ -272,7 +272,7 @@ export class State {
     /** Will add highlights from all currently blocks being currently executed and all given Breakpoints
      * @param breakPoints the array of breakpoint block id's to have their highlights added*/
     public addHighlights(breakPoints: any[]) {
-        Array.from(this.currentBlocks)
+        [...this.currentBlocks]
             .map((blockId) => stackmachineJsHelper.getBlockById(blockId))
             .forEach((block) => this.highlightBlock(block));
 
@@ -291,7 +291,7 @@ export class State {
     /** Will remove highlights from all currently blocks being currently executed and all given Breakpoints
      * @param breakPoints the array of breakpoint block id's to have their highlights removed*/
     public removeHighlights(breakPoints: any[]) {
-        Array.from(this.currentBlocks)
+        [...this.currentBlocks]
             .map((blockId) => stackmachineJsHelper.getBlockById(blockId))
             .forEach((block) => {
                 let object = stackmachineJsHelper.getJqueryObject(block);

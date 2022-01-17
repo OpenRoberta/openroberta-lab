@@ -1,3 +1,10 @@
+var __spreadArrays = (this && this.__spreadArrays) || function () {
+    for (var s = 0, i = 0, il = arguments.length; i < il; i++) s += arguments[i].length;
+    for (var r = Array(s), k = 0, i = 0; i < il; i++)
+        for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++)
+            r[k] = a[j];
+    return r;
+};
 define(["require", "exports", "./interpreter.constants", "./interpreter.util"], function (require, exports, C, U) {
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.State = void 0;
@@ -231,8 +238,7 @@ define(["require", "exports", "./interpreter.constants", "./interpreter.util"], 
          * @param breakPoints the array of breakpoint block id's to have their highlights added*/
         State.prototype.addHighlights = function (breakPoints) {
             var _this = this;
-            Array.from(this.currentBlocks)
-                .map(function (blockId) { return stackmachineJsHelper.getBlockById(blockId); })
+            __spreadArrays(this.currentBlocks).map(function (blockId) { return stackmachineJsHelper.getBlockById(blockId); })
                 .forEach(function (block) { return _this.highlightBlock(block); });
             breakPoints.forEach(function (id) {
                 var block = stackmachineJsHelper.getBlockById(id);
@@ -250,8 +256,7 @@ define(["require", "exports", "./interpreter.constants", "./interpreter.util"], 
          * @param breakPoints the array of breakpoint block id's to have their highlights removed*/
         State.prototype.removeHighlights = function (breakPoints) {
             var _this = this;
-            Array.from(this.currentBlocks)
-                .map(function (blockId) { return stackmachineJsHelper.getBlockById(blockId); })
+            __spreadArrays(this.currentBlocks).map(function (blockId) { return stackmachineJsHelper.getBlockById(blockId); })
                 .forEach(function (block) {
                 var object = stackmachineJsHelper.getJqueryObject(block);
                 if (object.hasClass('selectedBreakpoint')) {

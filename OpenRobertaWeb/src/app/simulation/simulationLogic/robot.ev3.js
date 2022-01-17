@@ -251,13 +251,14 @@ function Ev3(pose, configuration, num, robotBehaviour) {
         timer5: false,
     };
     var SpeechSynthesis = window.speechSynthesis;
-    //cancel needed so speak works in chrome because it's created already speaking
-    SpeechSynthesis.cancel();
     if (!SpeechSynthesis) {
         context = null;
         console.log(
             'Sorry, but the Speech Synthesis API is not supported by your browser. Please, consider upgrading to the latest version or downloading Google Chrome or Mozilla Firefox'
         );
+    } else {
+        //cancel needed so speak works in chrome because it's created already speaking
+        SpeechSynthesis.cancel();
     }
     this.sayText = {
         language: 'en-US',
