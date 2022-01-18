@@ -38,15 +38,14 @@ export function init() {
 }
 
 export function prepareNNfromNNstep() {
-    var nnStepBlock = getTheNNstepBlock();
-    if (!nnStepBlock) {
-        return;
-    }
     var inputNeurons = [];
     var outputNeurons = [];
+    var state = new State();
     var nnStepBlock = getTheNNstepBlock();
-    var state = nnStepBlock.data === undefined || nnStepBlock.data === null ? new State() : JSON.parse(nnStepBlock.data);
-    extractInputOutputNeurons(inputNeurons, outputNeurons, nnStepBlock.getChildren());
+    if (nnStepBlock) {
+        state = nnStepBlock.data === undefined || nnStepBlock.data === null ? new State() : JSON.parse(nnStepBlock.data);
+        extractInputOutputNeurons(inputNeurons, outputNeurons, nnStepBlock.getChildren());
+    }
     PG.setPlayground(state, inputNeurons, outputNeurons);
 }
 

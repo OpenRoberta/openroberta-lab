@@ -19,6 +19,7 @@ define(["require", "exports"], function (require, exports) {
             /** List of input links. */
             this.inputLinks = [];
             this.bias = 0.0; // was: 0.1
+            this.biasOrig = '0.0';
             /** List of output links. */
             this.outputs = [];
             /** Error derivative with respect to this node's output. */
@@ -134,7 +135,7 @@ define(["require", "exports"], function (require, exports) {
      */
     var Link = /** @class */ (function () {
         /**
-         * Constructs a link in the neural network initialized with random weight.
+         * Constructs a link in the neural network.
          *
          * @param source The source node.
          * @param dest The destination node.
@@ -142,7 +143,8 @@ define(["require", "exports"], function (require, exports) {
          *     penalty for this weight. If null, there will be no regularization.
          */
         function Link(source, dest, regularization, initZero) {
-            this.weight = 0.0; // was: Math.random() - 0.5;
+            this.weight = 0.0;
+            this.weightOrig = '0';
             this.isDead = false;
             /** Error derivative with respect to this weight. */
             this.errorDer = 0;
@@ -156,6 +158,7 @@ define(["require", "exports"], function (require, exports) {
             this.regularization = regularization;
             if (initZero) {
                 this.weight = 0;
+                this.weightOrig = '0';
             }
         }
         return Link;

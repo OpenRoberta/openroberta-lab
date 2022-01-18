@@ -251,17 +251,6 @@ header h1 .optional {
   justify-content: space-between;
 }
 
-#top-controls .timeline-controls {
-  display: -webkit-box;
-  display: -moz-box;
-  display: -ms-flexbox;
-  display: -webkit-flex;
-  display: flex;
-  align-items: center;
-  margin-right: 20px;
-  width: 140px;
-}
-
 #play-pause-button .material-icons {
   color: white;
   font-size: 36px;
@@ -282,7 +271,7 @@ header h1 .optional {
 
 #top-controls .control {
   flex-grow: 1;
-  max-width: 180px;
+  max-width: 240px;
   min-width: 110px;
   margin-left: 30px;
   margin-top: 6px;
@@ -746,12 +735,6 @@ g.column rect {
   width: 40%;
 }
 
-#main-part .hidden-layers h4 {
-  -webkit-justify-content: center;
-  justify-content: center;
-  margin-top: -5px;
-}
-
 .hidden-layers #layers-label {
   width: 125px;
   display: inline-block;
@@ -761,10 +744,6 @@ g.column rect {
   margin: 0 10px;
   width: 10px;
   display: inline-block;
-}
-
-.hidden-layers h4 .mdl-button {
-  margin-right: 5px;
 }
 
 .bracket {

@@ -619,8 +619,17 @@ limitations under the License.
         <div id="nn" style="display: none;" class="tab-pane fade">
             <div id="top-controls">
                 <div class="container l--page">
-                    <div class="control ui-activation">
-                        <label for="activations">Activation</label>
+                    <div class="control">
+                        <button id="add-layers" class="mdl-button mdl-js-button mdl-button--icon">
+                            <i class="material-icons">add</i>
+                        </button>
+                        <button id="remove-layers" class="mdl-button mdl-js-button mdl-button--icon">
+                            <i class="material-icons">remove</i>
+                        </button>
+                        <span id="num-layers"></span> <span id="layers-label"></span>
+                    </div>
+                    <div class="control">
+                        <label for="activations">Aktivierung</label>
                         <div class="select">
                             <select id="activations">
                                 <option value="linear">Linear</option>
@@ -630,8 +639,8 @@ limitations under the License.
                             </select>
                         </div>
                     </div>
-                    <div class="control ui-regularization">
-                        <label for="regularizations">Regularization</label>
+                    <div class="control">
+                        <label for="regularizations">Regularisierung</label>
                         <div class="select">
                             <select id="regularizations">
                                 <option value="none">None</option>
@@ -642,12 +651,10 @@ limitations under the License.
                     </div>
                 </div>
             </div>
-
             <!-- Main Part -->
             <div id="main-part" class="l--page">
                 <!-- Features Column -->
                 <div class="column features">
-                    <h4>Inputs</h4>
                     <div id="network">
                         <svg id="svg" width="510" height="450">
                             <defs>
@@ -658,52 +665,20 @@ limitations under the License.
                         </svg>
                         <!-- Hover card -->
                         <div id="hovercard">
-                            <div style="font-size: 10px">Click anywhere to edit.</div>
+                            <div style="font-size: 10px">Klicken zum Ändern</div>
                             <div>
-                                <span class="type">Weight/Bias</span> is <span class="value">0.2</span><span><input type="number" /></span>.
+                                <span class="type">Gewicht/Bias</span> ist <span class="value">0</span><span><input/></span>
                             </div>
                         </div>
-                        <div class="callout thumbnail">
-                            <svg viewBox="0 0 30 30">
-                  <defs>
-                    <marker id="arrow" markerWidth="5" markerHeight="5" refx="5" refy="2.5" orient="auto" markerUnits="userSpaceOnUse">
-                      <path d="M0,0 L5,2.5 L0,5 z" />
-                    </marker>
-                  </defs>
-                  <path d="M12,30C5,20 2,15 12,0" marker-end="url(#arrow)">
-                </svg>
-                        </div>
-                        <div class="callout weights">
-                            <svg viewBox="0 0 30 30">
-                                <defs>
-                                    <marker id="arrow" markerWidth="5" markerHeight="5" refx="5" refy="2.5" orient="auto" markerUnits="userSpaceOnUse">
-                                        <path d="M0,0 L5,2.5 L0,5 z" />
-                                    </marker>
-                                </defs>
-                                <path d="M12,30C5,20 2,15 12,0" marker-end="url(#arrow)">
-                            </svg>
-                        </div>
+                        <div class="callout weights"></div>
                     </div>
                 </div>
 
                 <!-- Hidden Layers Column -->
-                <div class="column hidden-layers">
-                    <h4>
-                        <div class="ui-numHiddenLayers">
-                            <button id="add-layers" class="mdl-button mdl-js-button mdl-button--icon">
-                                <i class="material-icons">add</i>
-                            </button>
-                            <button id="remove-layers" class="mdl-button mdl-js-button mdl-button--icon">
-                                <i class="material-icons">remove</i>
-                            </button>
-                        </div>
-                        <span id="num-layers"></span> <span id="layers-label"></span>
-                    </h4>
-                </div>
+                <div class="column hidden-layers"></div>
 
                 <!-- Output Column -->
                 <div class="column output">
-                    <h4>Outputs</h4>
                 </div>
                 <div class="column right"></div>
             </div>

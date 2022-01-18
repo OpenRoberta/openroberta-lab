@@ -14,6 +14,7 @@ export class Node {
     /** List of input links. */
     inputLinks: Link[] = [];
     bias = 0.0; // was: 0.1
+    biasOrig = '0.0';
     /** List of output links. */
     outputs: Link[] = [];
     totalInput: number;
@@ -150,7 +151,8 @@ export class Link {
     id: string;
     source: Node;
     dest: Node;
-    weight = 0.0; // was: Math.random() - 0.5;
+    weight = 0.0;
+    weightOrig = '0';
     isDead = false;
     /** Error derivative with respect to this weight. */
     errorDer = 0;
@@ -161,7 +163,7 @@ export class Link {
     regularization: RegularizationFunction;
 
     /**
-     * Constructs a link in the neural network initialized with random weight.
+     * Constructs a link in the neural network.
      *
      * @param source The source node.
      * @param dest The destination node.
@@ -175,6 +177,7 @@ export class Link {
         this.regularization = regularization;
         if (initZero) {
             this.weight = 0;
+            this.weightOrig = '0';
         }
     }
 }

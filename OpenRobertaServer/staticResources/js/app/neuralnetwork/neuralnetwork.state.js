@@ -56,7 +56,7 @@ define(["require", "exports", "./neuralnetwork.nn"], function (require, exports,
             this.initZero = false;
             this.collectStats = false;
             this.numHiddenLayers = 1;
-            this.networkShape = [3];
+            this.networkShape = [2];
             this.weights = undefined;
             this.biases = undefined;
             this.numInputs = 0;
@@ -75,7 +75,7 @@ define(["require", "exports", "./neuralnetwork.nn"], function (require, exports,
             this.initZero = json.initZero !== undefined ? json.initZero : false;
             this.collectStats = json.collectStats !== undefined ? json.collectStats : false;
             this.numHiddenLayers = json.numHiddenLayers !== undefined ? json.numHiddenLayers : 1;
-            this.networkShape = json.networkShape !== undefined ? json.networkShape : [3];
+            this.networkShape = json.networkShape !== undefined ? json.networkShape : [2];
             this.weights = json.weights !== undefined ? json.weights : undefined;
             this.biases = json.biases !== undefined ? json.biases : undefined;
             this.seed = json.seed !== undefined ? json.seed : undefined;

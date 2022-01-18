@@ -22,7 +22,7 @@ define(["require", "exports", "./neuralnetwork.nn", "./neuralnetwork.state", "d3
         NodeType[NodeType["OUTPUT"] = 2] = "OUTPUT";
     })(NodeType || (NodeType = {}));
     var state = new neuralnetwork_state_1.State();
-    var linkWidthScale = d3.scale.linear().domain([0, 5]).range([1, 10]).clamp(true);
+    var linkWidthScale = d3.scale.linear().domain([0, 2]).range([1, 10]).clamp(true);
     var colorScale = d3.scale.linear().domain([-1, 0, 1]).range(['#f59322', '#e8eaeb', '#0877bd']).clamp(true);
     var network = null;
     function makeGUI() {
@@ -105,28 +105,12 @@ define(["require", "exports", "./neuralnetwork.nn", "./neuralnetwork.state", "d3
             y: 20,
             'text-anchor': 'start',
         });
-        numberLabelNode.append('tspan').text(numberLabel);
+        numberLabelNode.append('tspan').text(numberLabel === null ? nodeId : numberLabel);
         var activeOrNotClass = state[nodeId] ? 'active' : 'inactive';
         if (nodeType === NodeType.INPUT) {
-            // Draw the input label.
-            var text = nodeGroup.append('text').attr({
-                class: 'main-label',
-                x: -10,
-                y: RECT_SIZE / 2,
-                'text-anchor': 'end',
-            });
-            text.append('tspan').text(nodeId);
             nodeGroup.classed(activeOrNotClass, true);
         }
         if (nodeType === NodeType.OUTPUT) {
-            // Draw the output label.
-            var text = nodeGroup.append('text').attr({
-                class: 'main-label',
-                x: RECT_SIZE + 10,
-                y: RECT_SIZE / 2,
-                'text-anchor': 'start',
-            });
-            text.append('tspan').text(nodeId);
             nodeGroup.classed(activeOrNotClass, true);
         }
         if (nodeType !== NodeType.INPUT) {
@@ -200,7 +184,7 @@ define(["require", "exports", "./neuralnetwork.nn", "./neuralnetwork.state", "d3
         nodeIds.forEach(function (nodeId, i) {
             var cy = nodeIndexScale(i) + RECT_SIZE / 2;
             node2coord[nodeId] = { cx: cxI, cy: cy };
-            drawNode('0.' + i, cxI, cy, nodeId, NodeType.INPUT, container);
+            drawNode(null, cxI, cy, nodeId, NodeType.INPUT, container);
         });
         // Draw the intermediate layers, exclude input (id:0) and output (id:numLayers-1)
         for (var layerIdx = 1; layerIdx < numLayers - 1; layerIdx++) {
@@ -212,7 +196,7 @@ define(["require", "exports", "./neuralnetwork.nn", "./neuralnetwork.state", "d3
                 var node = network[layerIdx][i];
                 var cy = nodeIndexScale(i) + RECT_SIZE / 2;
                 node2coord[node.id] = { cx: cxH, cy: cy };
-                drawNode('' + layerIdx + '.' + i, cxH, cy, node.id, NodeType.HIDDEN, container, node);
+                drawNode('h' + layerIdx + '.n' + (i + 1), cxH, cy, node.id, NodeType.HIDDEN, container, node);
                 // Show callout to thumbnails.
                 var numNodes_1 = network[layerIdx].length;
                 var nextNumNodes = network[layerIdx + 1].length;
@@ -258,7 +242,7 @@ define(["require", "exports", "./neuralnetwork.nn", "./neuralnetwork.state", "d3
                 var node = outputLayer[j];
                 var cy = nodeIndexScale(j) + RECT_SIZE / 2;
                 node2coord[node.id] = { cx: cxO, cy: cy };
-                drawNode('' + (numLayers - 1) + '.' + j, cxO, cy, node.id, NodeType.OUTPUT, container, node);
+                drawNode(null, cxO, cy, node.id, NodeType.OUTPUT, container, node);
                 // Draw links.
                 for (var i = 0; i < node.inputLinks.length; i++) {
                     var link = node.inputLinks[i];
@@ -316,6 +300,7 @@ define(["require", "exports", "./neuralnetwork.nn", "./neuralnetwork.state", "d3
         div.append('div').text(state.networkShape[i] + ' neuron' + suffix);
     }
     function updateHoverCard(type, nodeOrLink, coordinates) {
+        // nodeOrLink : nn.Node | nn.Link
         var hovercard = d3.select('#hovercard');
         if (type == null) {
             hovercard.style('display', 'none');
@@ -327,13 +312,23 @@ define(["require", "exports", "./neuralnetwork.nn", "./neuralnetwork.state", "d3
             var input = hovercard.select('input');
             input.style('display', null);
             input.on('input', function () {
-                if (this.value != null && this.value !== '') {
+                if (this.value != null) {
                     if (type === HoverType.WEIGHT) {
-                        nodeOrLink.weight = +this.value;
+                        var weights = string2weight(this.value);
+                        if (weights !== null) {
+                            nodeOrLink.weight = weights[0];
+                            nodeOrLink.weightOrig = weights[1];
+                        }
                     }
                     else {
-                        nodeOrLink.bias = +this.value;
+                        var biases = strint2bias(this.value);
+                        if (biases !== null) {
+                            nodeOrLink.bias = biases[0];
+                            nodeOrLink.biasOrig = biases[1];
+                        }
                     }
+                    state.weights = extractWeights(network);
+                    state.biases = extractBiases(network);
                     updateUI();
                 }
             });
@@ -344,16 +339,16 @@ define(["require", "exports", "./neuralnetwork.nn", "./neuralnetwork.state", "d3
             });
             input.node().focus();
         });
-        var value = type === HoverType.WEIGHT ? nodeOrLink.weight : nodeOrLink.bias;
-        var name = type === HoverType.WEIGHT ? 'Weight' : 'Bias';
+        var value = type === HoverType.WEIGHT ? nodeOrLink.weightOrig : nodeOrLink.biasOrig;
+        var name = type === HoverType.WEIGHT ? 'Gewicht' : 'Bias';
         hovercard.style({
             left: coordinates[0] + 20 + "px",
             top: coordinates[1] + "px",
             display: 'block',
         });
         hovercard.select('.type').text(name);
-        hovercard.select('.value').style('display', null).text(value.toPrecision(2));
-        hovercard.select('input').property('value', value.toPrecision(2)).style('display', 'none');
+        hovercard.select('.value').style('display', null).text(value);
+        hovercard.select('input').property('value', value).style('display', 'none');
     }
     function drawLink(input, node2coord, network, container, isFirst, index, length) {
         var line = container.insert('path', ':first-child');
@@ -392,20 +387,8 @@ define(["require", "exports", "./neuralnetwork.nn", "./neuralnetwork.state", "d3
     }
     function updateUI(firstStep) {
         if (firstStep === void 0) { firstStep = false; }
-        // Update the links visually.
         updateWeightsUI(network, d3.select('g.core'));
-        // Update the bias values visually.
         updateBiasesUI(network);
-        function zeroPad(n) {
-            var pad = '000000';
-            return (pad + n).slice(-pad.length);
-        }
-        function addCommas(s) {
-            return s.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-        }
-        function humanReadable(n) {
-            return n.toFixed(3);
-        }
     }
     function reset() {
         var suffix = state.numHiddenLayers !== 1 ? 's' : '';
@@ -435,7 +418,7 @@ define(["require", "exports", "./neuralnetwork.nn", "./neuralnetwork.state", "d3
                     var weightsOneNode = [];
                     for (var _b = 0, _c = node.outputs; _b < _c.length; _b++) {
                         var link = _c[_b];
-                        weightsOneNode.push(link.weight);
+                        weightsOneNode.push(link.weightOrig);
                     }
                     weightsOneLayer.push(weightsOneNode);
                 }
@@ -452,7 +435,7 @@ define(["require", "exports", "./neuralnetwork.nn", "./neuralnetwork.state", "d3
                 var biasesOneLayer = [];
                 for (var _a = 0, layer_2 = layer; _a < layer_2.length; _a++) {
                     var node = layer_2[_a];
-                    biasesOneLayer.push(node.bias);
+                    biasesOneLayer.push(node.biasOrig);
                 }
                 biasesAllLayers.push(biasesOneLayer);
             }
@@ -479,7 +462,9 @@ define(["require", "exports", "./neuralnetwork.nn", "./neuralnetwork.state", "d3
                         if (link == null || linkWeight == null) {
                             break;
                         }
-                        link.weight = linkWeight;
+                        var weights = string2weight(linkWeight);
+                        link.weight = weights === null ? 0 : weights[0];
+                        link.weightOrig = weights === null ? '0' : weights[1];
                     }
                 }
             }
@@ -499,9 +484,58 @@ define(["require", "exports", "./neuralnetwork.nn", "./neuralnetwork.state", "d3
                     if (node == null || nodeBias == null) {
                         break;
                     }
-                    node.bias = nodeBias;
+                    var biases = strint2bias(nodeBias);
+                    node.bias = biases === null ? 0 : biases[0];
+                    node.biasOrig = biases === null ? '0' : biases[1];
                 }
             }
+        }
+    }
+    function string2weight(value) {
+        var valueTrimmed = value.trim();
+        if (valueTrimmed === '') {
+            return [0, '0'];
+        }
+        else {
+            var opOpt = valueTrimmed.substr(0, 1);
+            var weight = 0;
+            if (opOpt === '*') {
+                weight = +valueTrimmed.substr(1).trim();
+            }
+            else if (opOpt === ':' || opOpt === '/') {
+                var divident = +valueTrimmed.substr(1).trim();
+                if (divident >= 1.0) {
+                    weight = 1.0 / divident;
+                }
+                else {
+                    weight = divident;
+                }
+            }
+            else {
+                weight = +valueTrimmed;
+            }
+            if (isNaN(weight)) {
+                return null;
+            }
+            else {
+                return [weight, valueTrimmed];
+            }
+        }
+    }
+    function strint2bias(value) {
+        var valueTrimmed = value.trim();
+        var valueNumber = +valueTrimmed;
+        if (valueTrimmed === '') {
+            return [0, '0'];
+        }
+        else {
+            if (isNaN(valueNumber)) {
+                return null;
+            }
+            else {
+                return [valueNumber, valueTrimmed];
+            }
+            return [+valueTrimmed, valueTrimmed];
         }
     }
     function setPlayground(stateFromNNstep, inputNeurons, outputNeurons) {

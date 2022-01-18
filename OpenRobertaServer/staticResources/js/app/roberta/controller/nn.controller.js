@@ -18,15 +18,14 @@ define(["require", "exports", "log", "guiState.controller", "neuralnetwork.playg
     }
     exports.init = init;
     function prepareNNfromNNstep() {
-        var nnStepBlock = getTheNNstepBlock();
-        if (!nnStepBlock) {
-            return;
-        }
         var inputNeurons = [];
         var outputNeurons = [];
+        var state = new neuralnetwork_state_1.State();
         var nnStepBlock = getTheNNstepBlock();
-        var state = nnStepBlock.data === undefined || nnStepBlock.data === null ? new neuralnetwork_state_1.State() : JSON.parse(nnStepBlock.data);
-        extractInputOutputNeurons(inputNeurons, outputNeurons, nnStepBlock.getChildren());
+        if (nnStepBlock) {
+            state = nnStepBlock.data === undefined || nnStepBlock.data === null ? new neuralnetwork_state_1.State() : JSON.parse(nnStepBlock.data);
+            extractInputOutputNeurons(inputNeurons, outputNeurons, nnStepBlock.getChildren());
+        }
         PG.setPlayground(state, inputNeurons, outputNeurons);
     }
     exports.prepareNNfromNNstep = prepareNNfromNNstep;
