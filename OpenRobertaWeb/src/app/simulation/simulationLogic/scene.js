@@ -70,12 +70,12 @@ Scene.prototype.resetAllCanvas = function (opt_img) {
     $('.canvasSim').each(function () {
         if ($(this).hasClass('unified')) {
             if (resetUnified) {
-                this.width = w / sc;
-                this.height = h / sc;
+                this.width = Math.round(w / sc);
+                this.height = Math.round(h / sc);
             }
         } else {
-            this.width = w;
-            this.height = h;
+            this.width = Math.round(w);
+            this.height = Math.round(h);
         }
     });
     if (resetUnified) {
