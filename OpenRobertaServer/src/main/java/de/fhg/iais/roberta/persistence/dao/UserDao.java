@@ -124,14 +124,6 @@ public class UserDao extends AbstractDao<User> {
         return 1;
     }
 
-    /**
-     * create a write lock for the table USER to avoid deadlocks. This is a no op if concurrency control is not 2PL, but MVCC
-     */
-    public void lockTable() {
-        this.session.createSqlQuery("lock table USER write").executeUpdate();
-        this.session.addToLog("lock", "is now aquired");
-    }
-
     private User getOneOrNoUser(Query hql) {
         @SuppressWarnings("unchecked")
         List<User> il = hql.list();

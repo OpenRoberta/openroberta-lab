@@ -1,4 +1,3 @@
-import * as SIM from 'simulation.simulation';
 import Mbed from 'simulation.robot.mbed';
 
 /**
@@ -168,45 +167,47 @@ var startX;
 var startY;
 
 Mbed.prototype.handleMouse = function (e, offsetX, offsetY, scale, w, h) {
-    w = w / scale;
-    h = h / scale;
-    var X = e.clientX || e.originalEvent.touches[0].pageX;
-    var Y = e.clientY || e.originalEvent.touches[0].pageY;
-    var top = $('#robotLayer').offset().top + $('#robotLayer').width() / 2;
-    var left = $('#robotLayer').offset().left + $('#robotLayer').height() / 2;
-    startX = parseInt(X - left, 10) / scale;
-    startY = parseInt(Y - top, 10) / scale;
-    var scsq = 1;
-    if (scale < 1) scsq = scale * scale;
-    var dxA = startX - this.button.xA;
-    var dyA = startY + this.button.yA;
-    var A = dxA * dxA + dyA * dyA < (this.button.rA * this.button.rA) / scsq;
-    var dxB = startX - this.button.xB;
-    var dyB = startY + this.button.yB;
-    var B = dxB * dxB + dyB * dyB < (this.button.rB * this.button.rB) / scsq;
-    var dxReset = startX - this.button.xReset;
-    var dyReset = startY + this.button.yReset;
-    var Reset = dxReset * dxReset + dyReset * dyReset < (this.button.rReset * this.button.rReset) / scsq;
+    if (e.type !== 'touchend') {
+        w = w / scale;
+        h = h / scale;
+        var X = e.clientX || e.originalEvent.touches[0].pageX;
+        var Y = e.clientY || e.originalEvent.touches[0].pageY;
+        var top = $('#robotLayer').offset().top + $('#robotLayer').width() / 2;
+        var left = $('#robotLayer').offset().left + $('#robotLayer').height() / 2;
+        startX = parseInt(X - left, 10) / scale;
+        startY = parseInt(Y - top, 10) / scale;
+        var scsq = 1;
+        if (scale < 1) scsq = scale * scale;
+        var dxA = startX - this.button.xA;
+        var dyA = startY + this.button.yA;
+        var A = dxA * dxA + dyA * dyA < (this.button.rA * this.button.rA) / scsq;
+        var dxB = startX - this.button.xB;
+        var dyB = startY + this.button.yB;
+        var B = dxB * dxB + dyB * dyB < (this.button.rB * this.button.rB) / scsq;
+        var dxReset = startX - this.button.xReset;
+        var dyReset = startY + this.button.yReset;
+        var Reset = dxReset * dxReset + dyReset * dyReset < (this.button.rReset * this.button.rReset) / scsq;
 
-    var dxBothA = startX - this.button.xBothA;
-    var dyBothA = startY + this.button.yBothA;
-    var dxBothB = startX - this.button.xBothB;
-    var dyBothB = startY + this.button.yBothB;
-    var bothA = Math.pow(dxBothA, 2) + Math.pow(dyBothA, 2) < Math.pow(this.button.rBoth, 2) / scsq;
-    var bothB = Math.pow(dxBothB, 2) + Math.pow(dyBothB, 2) < Math.pow(this.button.rBoth, 2) / scsq;
-    var bothButtons = bothA || bothB;
+        var dxBothA = startX - this.button.xBothA;
+        var dyBothA = startY + this.button.yBothA;
+        var dxBothB = startX - this.button.xBothB;
+        var dyBothB = startY + this.button.yBothB;
+        var bothA = Math.pow(dxBothA, 2) + Math.pow(dyBothA, 2) < Math.pow(this.button.rBoth, 2) / scsq;
+        var bothB = Math.pow(dxBothB, 2) + Math.pow(dyBothB, 2) < Math.pow(this.button.rBoth, 2) / scsq;
+        var bothButtons = bothA || bothB;
 
-    var Pin0 = startX > this.pin0.x && -startY > this.pin0.y && startX < this.pin0.x + this.pin0.wh && -startY < this.pin0.y + this.pin0.wh;
-    var Pin1 = startX > this.pin1.x && -startY > this.pin1.y && startX < this.pin1.x + this.pin1.wh && -startY < this.pin1.y + this.pin1.wh;
-    var Pin2 = startX > this.pin2.x && -startY > this.pin2.y && startX < this.pin2.x + this.pin2.wh && -startY < this.pin2.y + this.pin2.wh;
-    // special case, display (center: 0,0) represents light level
-    var dxDisplay = startX;
-    var dyDisplay = startY + 20;
-    var Display = dxDisplay * dxDisplay + dyDisplay * dyDisplay < this.display.rLight * this.display.rLight; //
+        var Pin0 = startX > this.pin0.x && -startY > this.pin0.y && startX < this.pin0.x + this.pin0.wh && -startY < this.pin0.y + this.pin0.wh;
+        var Pin1 = startX > this.pin1.x && -startY > this.pin1.y && startX < this.pin1.x + this.pin1.wh && -startY < this.pin1.y + this.pin1.wh;
+        var Pin2 = startX > this.pin2.x && -startY > this.pin2.y && startX < this.pin2.x + this.pin2.wh && -startY < this.pin2.y + this.pin2.wh;
+        // special case, display (center: 0,0) represents light level
+        var dxDisplay = startX;
+        var dyDisplay = startY + 20;
+        var Display = dxDisplay * dxDisplay + dyDisplay * dyDisplay < this.display.rLight * this.display.rLight;
+    }
     var lightSliderActive = $('#sliderLight').val() !== '100';
     if (!lightSliderActive) this.display.lightLevel = 100;
     if (A || B || Reset || bothButtons || Display || Pin0 || Pin1 || Pin2) {
-        if (e.type === 'mousedown') {
+        if (e.type === 'mousedown' || e.type === 'touchstart') {
             if (A) {
                 this.buttons.A = true;
             } else if (B) {
@@ -227,12 +228,6 @@ Mbed.prototype.handleMouse = function (e, offsetX, offsetY, scale, w, h) {
             }
         } else if (e.type === 'mousemove' && Display && !lightSliderActive) {
             this.display.lightLevel = 50;
-        } else if (e.type === 'mouseup') {
-            this.pin0.touched = false;
-            this.pin1.touched = false;
-            this.pin2.touched = false;
-            this.buttons.A = false;
-            this.buttons.B = false;
         }
         if (Display && !lightSliderActive) {
             $('#robotLayer').css('cursor', 'crosshair');
@@ -241,6 +236,13 @@ Mbed.prototype.handleMouse = function (e, offsetX, offsetY, scale, w, h) {
         }
     } else {
         $('#robotLayer').css('cursor', 'auto');
+    }
+    if (e.type === 'mouseup' || e.type === 'touchend') {
+        this.pin0.touched = false;
+        this.pin1.touched = false;
+        this.pin2.touched = false;
+        this.buttons.A = false;
+        this.buttons.B = false;
     }
 };
 

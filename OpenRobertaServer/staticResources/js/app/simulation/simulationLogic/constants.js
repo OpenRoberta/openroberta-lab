@@ -1,6 +1,6 @@
 define(["require", "exports"], function (require, exports) {
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.default = {
+    var CONST = {
         ARG1: 'arg1',
         ARG2: 'arg2',
         EXPR: 'expr',
@@ -276,4 +276,5 @@ define(["require", "exports"], function (require, exports) {
         MIN_SIZE_OBJECT: 10,
         CORNER_RADIUS: 5,
     };
+    exports.default = CONST;
 });

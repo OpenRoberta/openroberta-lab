@@ -702,6 +702,13 @@ public class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor implement
                     nlIndent();
                     break;
                 case SC.DIGITAL_PIN:
+                    this.sb.append("pinMode(_input_" + usedConfigurationBlock.getUserDefinedPortName() + ", INPUT");
+                    if ( usedConfigurationBlock.getProperty("PIN_PULL").equals("PIN_PULL_UP") ) {
+                        this.sb.append("_PULLUP");
+                    }
+                    this.sb.append(");");
+                    nlIndent();
+                    break;
                 case SC.ANALOG_PIN:
                     this.sb.append("pinMode(_input_" + usedConfigurationBlock.getUserDefinedPortName() + ", INPUT);");
                     nlIndent();

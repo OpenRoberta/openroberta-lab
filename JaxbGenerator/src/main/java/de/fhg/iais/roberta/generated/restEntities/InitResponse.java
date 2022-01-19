@@ -9,8 +9,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
- * response for the /init REST request<br>
- * <br>
+ * response for the /init REST request<br><br>
  * Version: 1<br>
  * Datum: 2020-06-15
  */
@@ -271,45 +270,7 @@ public class InitResponse extends BaseResponse {
 
     @Override
     public String toString() {
-        return "InitResponse [immutable="
-            + this.immutable
-            + ", cmd="
-            + this.cmd
-            + ", rc="
-            + this.rc
-            + ", message="
-            + this.message
-            + ", cause="
-            + this.cause
-            + ", parameters="
-            + this.parameters
-            + ", initToken="
-            + this.initToken
-            + ", serverTime="
-            + this.serverTime
-            + ", serverVersion="
-            + this.serverVersion
-            + ", robotWait="
-            + this.robotWait
-            + ", robotBattery="
-            + this.robotBattery
-            + ", robotName="
-            + this.robotName
-            + ", robotVersion="
-            + this.robotVersion
-            + ", robotFirmwareName="
-            + this.robotFirmwareName
-            + ", robotSensorvalues="
-            + this.robotSensorvalues
-            + ", robotNepoexitvalue="
-            + this.robotNepoexitvalue
-            + ", robotState="
-            + this.robotState
-            + ", notificationsAvailable="
-            + this.notificationsAvailable
-            + ", server="
-            + this.server
-            + " ]";
+        return "InitResponse [immutable=" + this.immutable + ", cmd=" + this.cmd + ", rc=" + this.rc + ", message=" + this.message + ", cause=" + this.cause + ", parameters=" + this.parameters + ", initToken=" + this.initToken + ", serverTime=" + this.serverTime + ", serverVersion=" + this.serverVersion + ", robotWait=" + this.robotWait + ", robotBattery=" + this.robotBattery + ", robotName=" + this.robotName + ", robotVersion=" + this.robotVersion + ", robotFirmwareName=" + this.robotFirmwareName + ", robotSensorvalues=" + this.robotSensorvalues + ", robotNepoexitvalue=" + this.robotNepoexitvalue + ", robotState=" + this.robotState + ", notificationsAvailable=" + this.notificationsAvailable + ", server=" + this.server + " ]";
     }
 
     @Override

@@ -9,8 +9,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
- * DEPRECATED: remove after 4.0.0 deplyoment<br>
- * <br>
+ * DEPRECATED: remove after 4.0.0 deplyoment<br><br>
  * Version: 1<br>
  * Datum: 2020-06-15
  */

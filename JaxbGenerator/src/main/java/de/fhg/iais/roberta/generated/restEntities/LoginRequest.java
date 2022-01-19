@@ -9,8 +9,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
- * the request description for the /login REST request<br>
- * <br>
+ * the request description for the /login REST request<br><br>
  * Version: 1<br>
  * Datum: 2020-06-15
  */
@@ -256,19 +255,7 @@ public class LoginRequest extends BaseRequest {
 
     @Override
     public String toString() {
-        return "LoginRequest [immutable="
-            + this.immutable
-            + ", cmd="
-            + this.cmd
-            + ", accountName="
-            + this.accountName
-            + ", password="
-            + this.password
-            + ", userGroupOwner="
-            + this.userGroupOwner
-            + ", userGroupName="
-            + this.userGroupName
-            + " ]";
+        return "LoginRequest [immutable=" + this.immutable + ", cmd=" + this.cmd + ", accountName=" + this.accountName + ", password=" + this.password + ", userGroupOwner=" + this.userGroupOwner + ", userGroupName=" + this.userGroupName + " ]";
     }
 
     @Override

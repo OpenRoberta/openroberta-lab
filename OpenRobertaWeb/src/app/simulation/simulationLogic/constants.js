@@ -1,4 +1,4 @@
-export default {
+var CONST = {
     ARG1: 'arg1',
 
     ARG2: 'arg2',
@@ -538,3 +538,5 @@ export default {
 
     CORNER_RADIUS: 5,
 };
+
+export default CONST;

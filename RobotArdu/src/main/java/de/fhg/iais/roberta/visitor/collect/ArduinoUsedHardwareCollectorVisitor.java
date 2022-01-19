@@ -20,6 +20,7 @@ import de.fhg.iais.roberta.syntax.neuralnetwork.NeuralNetworkInitRawData;
 import de.fhg.iais.roberta.syntax.neuralnetwork.NeuralNetworkSetup;
 import de.fhg.iais.roberta.syntax.neuralnetwork.NeuralNetworkTrain;
 import de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.GetSampleSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.PinGetValueSensor;
 import de.fhg.iais.roberta.syntax.sensors.arduino.nano33blesense.Apds9960ColorSensor;
 import de.fhg.iais.roberta.syntax.sensors.arduino.nano33blesense.Apds9960DistanceSensor;
@@ -43,18 +44,20 @@ public final class ArduinoUsedHardwareCollectorVisitor extends AbstractUsedHardw
     }
 
     @Override
-    public Void visitMotorOnAction(MotorOnAction<Void> motorOnAction) {
-        motorOnAction.getParam().getSpeed().accept(this);
-        if ( motorOnAction.getParam().getDuration() != null ) {
-            motorOnAction.getDurationValue().accept(this);
-        }
-        if ( this.robotConfiguration != null ) {
-            //TODO: nothing done on MotorOnAction
-            //Actor actor = this.brickConfiguration.getActors().get(motorOnAction.getPort());
-            //if ( actor != null ) {
-            //    this.getBuilder(UsedHardwareBean.Builder.class).addUsedActor(new UsedActor(motorOnAction.getPort(), actor.getName()));
-            //}
-        }
+    public Void visitApds9960ColorSensor(Apds9960ColorSensor<Void> sensor) {
+        this.getBuilder(UsedHardwareBean.Builder.class).addUsedActor(new UsedActor(SC.APDS9960, SC.APDS9960));
+        return null;
+    }
+
+    @Override
+    public Void visitApds9960DistanceSensor(Apds9960DistanceSensor<Void> sensor) {
+        this.getBuilder(UsedHardwareBean.Builder.class).addUsedActor(new UsedActor(SC.APDS9960, SC.APDS9960));
+        return null;
+    }
+
+    @Override
+    public Void visitApds9960GestureSensor(Apds9960GestureSensor<Void> sensor) {
+        this.getBuilder(UsedHardwareBean.Builder.class).addUsedActor(new UsedActor(SC.APDS9960, SC.APDS9960));
         return null;
     }
 
@@ -65,32 +68,25 @@ public final class ArduinoUsedHardwareCollectorVisitor extends AbstractUsedHardw
     }
 
     @Override
-    public Void visitRelayAction(RelayAction<Void> relayAction) {
+    public Void visitGetSampleSensor(GetSampleSensor<Void> sensorGetSample) {
+        return super.visitGetSampleSensor(sensorGetSample);
+    }
+
+    @Override
+    public Void visitHts221HumiditySensor(Hts221HumiditySensor<Void> sensor) {
+        this.getBuilder(UsedHardwareBean.Builder.class).addUsedActor(new UsedActor(SC.HTS221, SC.HTS221));
         return null;
     }
 
     @Override
-    public Void visitPinGetValueSensor(PinGetValueSensor<Void> pinGetValueSensor) {
-        ConfigurationComponent sensor = this.robotConfiguration.optConfigurationComponent(pinGetValueSensor.getUserDefinedPort());
-        if ( sensor == null ) {
-            throw new DbcException("Inconsistent configuration and program " + pinGetValueSensor);
-        }
-
-        this.getBuilder(UsedHardwareBean.Builder.class).addUsedSensor(new UsedSensor(pinGetValueSensor.getUserDefinedPort(), SC.PIN_VALUE, pinGetValueSensor.getMode()));
+    public Void visitHts221TemperatureSensor(Hts221TemperatureSensor<Void> sensor) {
+        this.getBuilder(UsedHardwareBean.Builder.class).addUsedActor(new UsedActor(SC.HTS221, SC.HTS221));
         return null;
     }
 
     @Override
-    public Void visitPinWriteValueAction(PinWriteValueAction<Void> pinWriteValueSensor) {
-        pinWriteValueSensor.getValue().accept(this);
-        this.getBuilder(UsedHardwareBean.Builder.class).addUsedActor(new UsedActor(pinWriteValueSensor.getPort(), SC.ANALOG_PIN));
-        return null;
-    }
-
-    @Override
-    public Void visitSerialWriteAction(SerialWriteAction<Void> serialWriteAction) {
-        serialWriteAction.getValue().accept(this);
-        this.getBuilder(UsedHardwareBean.Builder.class).addUsedActor(new UsedActor(SC.SERIAL, SC.SERIAL));
+    public Void visitLps22hbPressureSensor(Lps22hbPressureSensor<Void> sensor) {
+        this.getBuilder(UsedHardwareBean.Builder.class).addUsedActor(new UsedActor(SC.LPS22HB, SC.LPS22HB));
         return null;
     }
 
@@ -113,51 +109,18 @@ public final class ArduinoUsedHardwareCollectorVisitor extends AbstractUsedHardw
     }
 
     @Override
-    public Void visitApds9960DistanceSensor(Apds9960DistanceSensor<Void> sensor) {
-        this.getBuilder(UsedHardwareBean.Builder.class).addUsedActor(new UsedActor(SC.APDS9960, SC.APDS9960));
-        return null;
-    }
-
-    @Override
-    public Void visitApds9960GestureSensor(Apds9960GestureSensor<Void> sensor) {
-        this.getBuilder(UsedHardwareBean.Builder.class).addUsedActor(new UsedActor(SC.APDS9960, SC.APDS9960));
-        return null;
-    }
-
-    @Override
-    public Void visitApds9960ColorSensor(Apds9960ColorSensor<Void> sensor) {
-        this.getBuilder(UsedHardwareBean.Builder.class).addUsedActor(new UsedActor(SC.APDS9960, SC.APDS9960));
-        return null;
-    }
-
-    @Override
-    public Void visitLps22hbPressureSensor(Lps22hbPressureSensor<Void> sensor) {
-        this.getBuilder(UsedHardwareBean.Builder.class).addUsedActor(new UsedActor(SC.LPS22HB, SC.LPS22HB));
-        return null;
-    }
-
-    @Override
-    public Void visitHts221TemperatureSensor(Hts221TemperatureSensor<Void> sensor) {
-        this.getBuilder(UsedHardwareBean.Builder.class).addUsedActor(new UsedActor(SC.HTS221, SC.HTS221));
-        return null;
-    }
-
-    @Override
-    public Void visitHts221HumiditySensor(Hts221HumiditySensor<Void> sensor) {
-        this.getBuilder(UsedHardwareBean.Builder.class).addUsedActor(new UsedActor(SC.HTS221, SC.HTS221));
-        return null;
-    }
-
-    @Override
-    public Void visitNeuralNetworkSetup(NeuralNetworkSetup<Void> nn) {
-        nn.getNumberOfClasses().accept(this);
-        nn.getNumberInputNeurons().accept(this);
-        nn.getMaxNumberOfNeurons().accept(this);
-        return null;
-    }
-
-    @Override
-    public Void visitNeuralNetworkInitRawData(NeuralNetworkInitRawData<Void> nn) {
+    public Void visitMotorOnAction(MotorOnAction<Void> motorOnAction) {
+        motorOnAction.getParam().getSpeed().accept(this);
+        if ( motorOnAction.getParam().getDuration() != null ) {
+            motorOnAction.getDurationValue().accept(this);
+        }
+        if ( this.robotConfiguration != null ) {
+            //TODO: nothing done on MotorOnAction
+            //Actor actor = this.brickConfiguration.getActors().get(motorOnAction.getPort());
+            //if ( actor != null ) {
+            //    this.getBuilder(UsedHardwareBean.Builder.class).addUsedActor(new UsedActor(motorOnAction.getPort(), actor.getName()));
+            //}
+        }
         return null;
     }
 
@@ -174,13 +137,56 @@ public final class ArduinoUsedHardwareCollectorVisitor extends AbstractUsedHardw
     }
 
     @Override
+    public Void visitNeuralNetworkClassify(NeuralNetworkClassify<Void> nn) {
+        nn.probabilities.accept(this);
+        return null;
+    }
+
+    @Override
+    public Void visitNeuralNetworkInitRawData(NeuralNetworkInitRawData<Void> nn) {
+        return null;
+    }
+
+    @Override
+    public Void visitNeuralNetworkSetup(NeuralNetworkSetup<Void> nn) {
+        nn.getNumberOfClasses().accept(this);
+        nn.getNumberInputNeurons().accept(this);
+        nn.getMaxNumberOfNeurons().accept(this);
+        return null;
+    }
+
+    @Override
     public Void visitNeuralNetworkTrain(NeuralNetworkTrain<Void> nn) {
         return null;
     }
 
     @Override
-    public Void visitNeuralNetworkClassify(NeuralNetworkClassify<Void> nn) {
-        nn.probabilities.accept(this);
+    public Void visitPinGetValueSensor(PinGetValueSensor<Void> pinGetValueSensor) {
+        ConfigurationComponent sensor = this.robotConfiguration.optConfigurationComponent(pinGetValueSensor.getUserDefinedPort());
+        if ( sensor == null ) {
+            throw new DbcException("Inconsistent configuration and program " + pinGetValueSensor);
+        }
+
+        this.getBuilder(UsedHardwareBean.Builder.class).addUsedSensor(new UsedSensor(pinGetValueSensor.getUserDefinedPort(), SC.PIN_VALUE, pinGetValueSensor.getMode()));
+        return null;
+    }
+
+    @Override
+    public Void visitPinWriteValueAction(PinWriteValueAction<Void> pinWriteValueSensor) {
+        pinWriteValueSensor.getValue().accept(this);
+        this.getBuilder(UsedHardwareBean.Builder.class).addUsedActor(new UsedActor(pinWriteValueSensor.getPort(), SC.ANALOG_PIN));
+        return null;
+    }
+
+    @Override
+    public Void visitRelayAction(RelayAction<Void> relayAction) {
+        return null;
+    }
+
+    @Override
+    public Void visitSerialWriteAction(SerialWriteAction<Void> serialWriteAction) {
+        serialWriteAction.getValue().accept(this);
+        this.getBuilder(UsedHardwareBean.Builder.class).addUsedActor(new UsedActor(SC.SERIAL, SC.SERIAL));
         return null;
     }
 }

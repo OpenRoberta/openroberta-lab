@@ -70,7 +70,45 @@ public abstract class AbstractUsedHardwareCollectorVisitor extends AbstractColle
     }
 
     @Override
-    public Void visitKeysSensor(KeysSensor<Void> keysSensor) {
+    public Void visitAccelerometerSensor(AccelerometerSensor<Void> accelerometerSensor) {
+        this
+            .getBuilder(UsedHardwareBean.Builder.class)
+            .addUsedSensor(new UsedSensor(accelerometerSensor.getUserDefinedPort(), SC.ACCELEROMETER, accelerometerSensor.getMode()));
+        return null;
+    }
+
+    @Override
+    public Void visitBluetoothCheckConnectAction(BluetoothCheckConnectAction<Void> bluetoothCheckConnectAction) {
+        bluetoothCheckConnectAction.getConnection().accept(this);
+        return null;
+    }
+
+    @Override
+    public Void visitBluetoothConnectAction(BluetoothConnectAction<Void> bluetoothConnectAction) {
+        bluetoothConnectAction.getAddress().accept(this);
+        return null;
+    }
+
+    @Override
+    public Void visitBluetoothReceiveAction(BluetoothReceiveAction<Void> bluetoothReceiveAction) {
+        bluetoothReceiveAction.getConnection().accept(this);
+        return null;
+    }
+
+    @Override
+    public Void visitBluetoothSendAction(BluetoothSendAction<Void> bluetoothSendAction) {
+        bluetoothSendAction.getConnection().accept(this);
+        bluetoothSendAction.getMsg().accept(this);
+        return null;
+    }
+
+    @Override
+    public Void visitBluetoothWaitForConnectionAction(BluetoothWaitForConnectionAction<Void> bluetoothWaitForConnection) {
+        return null;
+    }
+
+    @Override
+    public Void visitClearDisplayAction(ClearDisplayAction<Void> clearDisplayAction) {
         return null;
     }
 
@@ -81,26 +119,35 @@ public abstract class AbstractUsedHardwareCollectorVisitor extends AbstractColle
     }
 
     @Override
-    public Void visitLightSensor(LightSensor<Void> lightSensor) {
-        this.getBuilder(UsedHardwareBean.Builder.class).addUsedSensor(new UsedSensor(lightSensor.getUserDefinedPort(), SC.LIGHT, lightSensor.getMode()));
+    public Void visitCompassSensor(CompassSensor<Void> compassSensor) {
+        this.getBuilder(UsedHardwareBean.Builder.class).addUsedSensor(new UsedSensor(compassSensor.getUserDefinedPort(), SC.COMPASS, compassSensor.getMode()));
         return null;
     }
 
     @Override
-    public Void visitSoundSensor(SoundSensor<Void> soundSensor) {
-        this.getBuilder(UsedHardwareBean.Builder.class).addUsedSensor(new UsedSensor(soundSensor.getUserDefinedPort(), SC.SOUND, soundSensor.getMode()));
+    public Void visitCurveAction(CurveAction<Void> curveAction) {
+        curveAction.getParamLeft().getSpeed().accept(this);
+        curveAction.getParamRight().getSpeed().accept(this);
+        if ( curveAction.getParamLeft().getDuration() != null ) {
+            curveAction.getParamLeft().getDuration().getValue().accept(this);
+        }
+        addLeftAndRightMotorToUsedActors();
         return null;
     }
 
     @Override
-    public Void visitTemperatureSensor(TemperatureSensor<Void> temperatureSensor) {
-        this.getBuilder(UsedHardwareBean.Builder.class).addUsedSensor(new UsedSensor(temperatureSensor.getUserDefinedPort(), SC.TEMPERATURE, temperatureSensor.getMode()));
+    public Void visitDriveAction(DriveAction<Void> driveAction) {
+        driveAction.getParam().getSpeed().accept(this);
+        if ( driveAction.getParam().getDuration() != null ) {
+            driveAction.getParam().getDuration().getValue().accept(this);
+        }
+        addLeftAndRightMotorToUsedActors();
         return null;
     }
 
     @Override
-    public Void visitVoltageSensor(VoltageSensor<Void> voltageSensor) {
-        this.getBuilder(UsedHardwareBean.Builder.class).addUsedSensor(new UsedSensor(voltageSensor.getUserDefinedPort(), SC.VOLTAGE, voltageSensor.getMode()));
+    public Void visitDropSensor(DropSensor<Void> dropSensor) {
+        this.getBuilder(UsedHardwareBean.Builder.class).addUsedSensor(new UsedSensor(dropSensor.getUserDefinedPort(), SC.DROP, dropSensor.getMode()));
         return null;
     }
 
@@ -118,8 +165,8 @@ public abstract class AbstractUsedHardwareCollectorVisitor extends AbstractColle
     }
 
     @Override
-    public Void visitInfraredSensor(InfraredSensor<Void> infraredSensor) {
-        this.getBuilder(UsedHardwareBean.Builder.class).addUsedSensor(new UsedSensor(infraredSensor.getUserDefinedPort(), SC.INFRARED, infraredSensor.getMode()));
+    public Void visitHumiditySensor(HumiditySensor<Void> humiditySensor) {
+        this.getBuilder(UsedHardwareBean.Builder.class).addUsedSensor(new UsedSensor(humiditySensor.getUserDefinedPort(), SC.HUMIDITY, humiditySensor.getMode()));
         return null;
     }
 
@@ -130,38 +177,29 @@ public abstract class AbstractUsedHardwareCollectorVisitor extends AbstractColle
     }
 
     @Override
-    public Void visitTouchSensor(TouchSensor<Void> touchSensor) {
-        this.getBuilder(UsedHardwareBean.Builder.class).addUsedSensor(new UsedSensor(touchSensor.getUserDefinedPort(), SC.TOUCH, touchSensor.getMode()));
+    public Void visitInfraredSensor(InfraredSensor<Void> infraredSensor) {
+        this.getBuilder(UsedHardwareBean.Builder.class).addUsedSensor(new UsedSensor(infraredSensor.getUserDefinedPort(), SC.INFRARED, infraredSensor.getMode()));
         return null;
     }
 
     @Override
-    public Void visitUltrasonicSensor(UltrasonicSensor<Void> ultrasonicSensor) {
-        this.getBuilder(UsedHardwareBean.Builder.class).addUsedSensor(new UsedSensor(ultrasonicSensor.getUserDefinedPort(), SC.ULTRASONIC, ultrasonicSensor.getMode()));
+    public Void visitKeysSensor(KeysSensor<Void> keysSensor) {
         return null;
     }
 
     @Override
-    public Void visitHumiditySensor(HumiditySensor<Void> humiditySensor) {
-        this.getBuilder(UsedHardwareBean.Builder.class).addUsedSensor(new UsedSensor(humiditySensor.getUserDefinedPort(), SC.HUMIDITY, humiditySensor.getMode()));
+    public Void visitLightAction(LightAction<Void> lightAction) {
         return null;
     }
 
     @Override
-    public Void visitCompassSensor(CompassSensor<Void> compassSensor) {
-        this.getBuilder(UsedHardwareBean.Builder.class).addUsedSensor(new UsedSensor(compassSensor.getUserDefinedPort(), SC.COMPASS, compassSensor.getMode()));
+    public Void visitLightSensor(LightSensor<Void> lightSensor) {
+        this.getBuilder(UsedHardwareBean.Builder.class).addUsedSensor(new UsedSensor(lightSensor.getUserDefinedPort(), SC.LIGHT, lightSensor.getMode()));
         return null;
     }
 
     @Override
-    public Void visitMotionSensor(MotionSensor<Void> motionSensor) {
-        this.getBuilder(UsedHardwareBean.Builder.class).addUsedSensor(new UsedSensor(motionSensor.getUserDefinedPort(), SC.MOTION, motionSensor.getMode()));
-        return null;
-    }
-
-    @Override
-    public Void visitDropSensor(DropSensor<Void> dropSensor) {
-        this.getBuilder(UsedHardwareBean.Builder.class).addUsedSensor(new UsedSensor(dropSensor.getUserDefinedPort(), SC.DROP, dropSensor.getMode()));
+    public Void visitLightStatusAction(LightStatusAction<Void> lightStatusAction) {
         return null;
     }
 
@@ -172,59 +210,8 @@ public abstract class AbstractUsedHardwareCollectorVisitor extends AbstractColle
     }
 
     @Override
-    public Void visitAccelerometerSensor(AccelerometerSensor<Void> accelerometerSensor) {
-        this
-            .getBuilder(UsedHardwareBean.Builder.class)
-            .addUsedSensor(new UsedSensor(accelerometerSensor.getUserDefinedPort(), SC.ACCELEROMETER, accelerometerSensor.getMode()));
-        return null;
-    }
-
-    @Override
-    public Void visitPulseSensor(PulseSensor<Void> pulseSensor) {
-        this.getBuilder(UsedHardwareBean.Builder.class).addUsedSensor(new UsedSensor(pulseSensor.getUserDefinedPort(), SC.PULSE, pulseSensor.getMode()));
-        return null;
-    }
-
-    @Override
-    public Void visitRfidSensor(RfidSensor<Void> rfidSensor) {
-        this.getBuilder(UsedHardwareBean.Builder.class).addUsedSensor(new UsedSensor(rfidSensor.getUserDefinedPort(), SC.RFID, rfidSensor.getMode()));
-        return null;
-    }
-
-    @Override
-    public Void visitTimerSensor(TimerSensor<Void> timerSensor) {
-        this.getBuilder(UsedHardwareBean.Builder.class).addUsedSensor(new UsedSensor(timerSensor.getUserDefinedPort(), SC.TIMER, timerSensor.getMode()));
-        return null;
-    }
-
-    @Override
-    public Void visitDriveAction(DriveAction<Void> driveAction) {
-        driveAction.getParam().getSpeed().accept(this);
-        if ( driveAction.getParam().getDuration() != null ) {
-            driveAction.getParam().getDuration().getValue().accept(this);
-        }
-        addLeftAndRightMotorToUsedActors();
-        return null;
-    }
-
-    @Override
-    public Void visitCurveAction(CurveAction<Void> curveAction) {
-        curveAction.getParamLeft().getSpeed().accept(this);
-        curveAction.getParamRight().getSpeed().accept(this);
-        if ( curveAction.getParamLeft().getDuration() != null ) {
-            curveAction.getParamLeft().getDuration().getValue().accept(this);
-        }
-        addLeftAndRightMotorToUsedActors();
-        return null;
-    }
-
-    @Override
-    public Void visitTurnAction(TurnAction<Void> turnAction) {
-        turnAction.getParam().getSpeed().accept(this);
-        if ( turnAction.getParam().getDuration() != null ) {
-            turnAction.getParam().getDuration().getValue().accept(this);
-        }
-        addLeftAndRightMotorToUsedActors();
+    public Void visitMotionSensor(MotionSensor<Void> motionSensor) {
+        this.getBuilder(UsedHardwareBean.Builder.class).addUsedSensor(new UsedSensor(motionSensor.getUserDefinedPort(), SC.MOTION, motionSensor.getMode()));
         return null;
     }
 
@@ -232,18 +219,6 @@ public abstract class AbstractUsedHardwareCollectorVisitor extends AbstractColle
     public Void visitMotorDriveStopAction(MotorDriveStopAction<Void> stopAction) {
         addLeftAndRightMotorToUsedActors();
         return null;
-    }
-
-    private void addLeftAndRightMotorToUsedActors() {
-        //TODO: remove the check
-        if ( this.robotConfiguration != null ) {
-            String userDefinedLeftPortName = this.robotConfiguration.getFirstMotor("LEFT").getUserDefinedPortName();
-            String userDefinedRightPortName = this.robotConfiguration.getFirstMotor("RIGHT").getUserDefinedPortName();
-            if ( (userDefinedLeftPortName != null) && (userDefinedRightPortName != null) ) {
-                this.getBuilder(UsedHardwareBean.Builder.class).addUsedActor(new UsedActor(userDefinedLeftPortName, SC.LARGE));
-                this.getBuilder(UsedHardwareBean.Builder.class).addUsedActor(new UsedActor(userDefinedRightPortName, SC.LARGE));
-            }
-        }
     }
 
     @Override
@@ -280,32 +255,13 @@ public abstract class AbstractUsedHardwareCollectorVisitor extends AbstractColle
     }
 
     @Override
-    public Void visitClearDisplayAction(ClearDisplayAction<Void> clearDisplayAction) {
+    public Void visitPinWriteValueAction(PinWriteValueAction<Void> pinWriteValueAction) {
+        pinWriteValueAction.getValue().accept(this);
         return null;
     }
 
     @Override
-    public Void visitShowTextAction(ShowTextAction<Void> showTextAction) {
-        showTextAction.msg.accept(this);
-        showTextAction.x.accept(this);
-        showTextAction.y.accept(this);
-        return null;
-    }
-
-    @Override
-    public Void visitLightAction(LightAction<Void> lightAction) {
-        return null;
-    }
-
-    @Override
-    public Void visitLightStatusAction(LightStatusAction<Void> lightStatusAction) {
-        return null;
-    }
-
-    @Override
-    public Void visitToneAction(ToneAction<Void> toneAction) {
-        toneAction.getDuration().accept(this);
-        toneAction.getFrequency().accept(this);
+    public Void visitPlayFileAction(PlayFileAction<Void> playFileAction) {
         return null;
     }
 
@@ -315,15 +271,14 @@ public abstract class AbstractUsedHardwareCollectorVisitor extends AbstractColle
     }
 
     @Override
-    public Void visitVolumeAction(VolumeAction<Void> volumeAction) {
-        if ( volumeAction.getMode() == Mode.SET ) {
-            volumeAction.getVolume().accept(this);
-        }
+    public Void visitPulseSensor(PulseSensor<Void> pulseSensor) {
+        this.getBuilder(UsedHardwareBean.Builder.class).addUsedSensor(new UsedSensor(pulseSensor.getUserDefinedPort(), SC.PULSE, pulseSensor.getMode()));
         return null;
     }
 
     @Override
-    public Void visitSetLanguageAction(SetLanguageAction<Void> setLanguageAction) {
+    public Void visitRfidSensor(RfidSensor<Void> rfidSensor) {
+        this.getBuilder(UsedHardwareBean.Builder.class).addUsedSensor(new UsedSensor(rfidSensor.getUserDefinedPort(), SC.RFID, rfidSensor.getMode()));
         return null;
     }
 
@@ -336,49 +291,94 @@ public abstract class AbstractUsedHardwareCollectorVisitor extends AbstractColle
     }
 
     @Override
-    public Void visitPlayFileAction(PlayFileAction<Void> playFileAction) {
-        return null;
-    }
-
-    @Override
-    public Void visitBluetoothReceiveAction(BluetoothReceiveAction<Void> bluetoothReceiveAction) {
-        bluetoothReceiveAction.getConnection().accept(this);
-        return null;
-    }
-
-    @Override
-    public Void visitBluetoothConnectAction(BluetoothConnectAction<Void> bluetoothConnectAction) {
-        bluetoothConnectAction.getAddress().accept(this);
-        return null;
-    }
-
-    @Override
-    public Void visitBluetoothSendAction(BluetoothSendAction<Void> bluetoothSendAction) {
-        bluetoothSendAction.getConnection().accept(this);
-        bluetoothSendAction.getMsg().accept(this);
-        return null;
-    }
-
-    @Override
-    public Void visitBluetoothWaitForConnectionAction(BluetoothWaitForConnectionAction<Void> bluetoothWaitForConnection) {
-        return null;
-    }
-
-    @Override
-    public Void visitBluetoothCheckConnectAction(BluetoothCheckConnectAction<Void> bluetoothCheckConnectAction) {
-        bluetoothCheckConnectAction.getConnection().accept(this);
-        return null;
-    }
-
-    @Override
     public Void visitSerialWriteAction(SerialWriteAction<Void> serialWriteAction) {
         serialWriteAction.getValue().accept(this);
         return null;
     }
 
     @Override
-    public Void visitPinWriteValueAction(PinWriteValueAction<Void> pinWriteValueAction) {
-        pinWriteValueAction.getValue().accept(this);
+    public Void visitSetLanguageAction(SetLanguageAction<Void> setLanguageAction) {
         return null;
+    }
+
+    @Override
+    public Void visitShowTextAction(ShowTextAction<Void> showTextAction) {
+        showTextAction.msg.accept(this);
+        showTextAction.x.accept(this);
+        showTextAction.y.accept(this);
+        return null;
+    }
+
+    @Override
+    public Void visitSoundSensor(SoundSensor<Void> soundSensor) {
+        this.getBuilder(UsedHardwareBean.Builder.class).addUsedSensor(new UsedSensor(soundSensor.getUserDefinedPort(), SC.SOUND, soundSensor.getMode()));
+        return null;
+    }
+
+    @Override
+    public Void visitTemperatureSensor(TemperatureSensor<Void> temperatureSensor) {
+        this.getBuilder(UsedHardwareBean.Builder.class).addUsedSensor(new UsedSensor(temperatureSensor.getUserDefinedPort(), SC.TEMPERATURE, temperatureSensor.getMode()));
+        return null;
+    }
+
+    @Override
+    public Void visitTimerSensor(TimerSensor<Void> timerSensor) {
+        this.getBuilder(UsedHardwareBean.Builder.class).addUsedSensor(new UsedSensor(timerSensor.getUserDefinedPort(), SC.TIMER, timerSensor.getMode()));
+        return null;
+    }
+
+    @Override
+    public Void visitToneAction(ToneAction<Void> toneAction) {
+        toneAction.getDuration().accept(this);
+        toneAction.getFrequency().accept(this);
+        return null;
+    }
+
+    @Override
+    public Void visitTouchSensor(TouchSensor<Void> touchSensor) {
+        this.getBuilder(UsedHardwareBean.Builder.class).addUsedSensor(new UsedSensor(touchSensor.getUserDefinedPort(), SC.TOUCH, touchSensor.getMode()));
+        return null;
+    }
+
+    @Override
+    public Void visitTurnAction(TurnAction<Void> turnAction) {
+        turnAction.getParam().getSpeed().accept(this);
+        if ( turnAction.getParam().getDuration() != null ) {
+            turnAction.getParam().getDuration().getValue().accept(this);
+        }
+        addLeftAndRightMotorToUsedActors();
+        return null;
+    }
+
+    @Override
+    public Void visitUltrasonicSensor(UltrasonicSensor<Void> ultrasonicSensor) {
+        this.getBuilder(UsedHardwareBean.Builder.class).addUsedSensor(new UsedSensor(ultrasonicSensor.getUserDefinedPort(), SC.ULTRASONIC, ultrasonicSensor.getMode()));
+        return null;
+    }
+
+    @Override
+    public Void visitVoltageSensor(VoltageSensor<Void> voltageSensor) {
+        this.getBuilder(UsedHardwareBean.Builder.class).addUsedSensor(new UsedSensor(voltageSensor.getUserDefinedPort(), SC.VOLTAGE, voltageSensor.getMode()));
+        return null;
+    }
+
+    @Override
+    public Void visitVolumeAction(VolumeAction<Void> volumeAction) {
+        if ( volumeAction.getMode() == Mode.SET ) {
+            volumeAction.getVolume().accept(this);
+        }
+        return null;
+    }
+
+    private void addLeftAndRightMotorToUsedActors() {
+        //TODO: remove the check
+        if ( this.robotConfiguration != null ) {
+            String userDefinedLeftPortName = this.robotConfiguration.getFirstMotor("LEFT").getUserDefinedPortName();
+            String userDefinedRightPortName = this.robotConfiguration.getFirstMotor("RIGHT").getUserDefinedPortName();
+            if ( (userDefinedLeftPortName != null) && (userDefinedRightPortName != null) ) {
+                this.getBuilder(UsedHardwareBean.Builder.class).addUsedActor(new UsedActor(userDefinedLeftPortName, SC.LARGE));
+                this.getBuilder(UsedHardwareBean.Builder.class).addUsedActor(new UsedActor(userDefinedRightPortName, SC.LARGE));
+            }
+        }
     }
 }

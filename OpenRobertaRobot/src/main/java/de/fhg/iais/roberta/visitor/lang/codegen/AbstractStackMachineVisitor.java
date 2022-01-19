@@ -102,6 +102,7 @@ import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.typecheck.NepoInfo;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
+import de.fhg.iais.roberta.visitor.BaseVisitor;
 import de.fhg.iais.roberta.visitor.C;
 import de.fhg.iais.roberta.visitor.IVisitor;
 import de.fhg.iais.roberta.visitor.lang.ILanguageVisitor;
@@ -111,7 +112,7 @@ import static de.fhg.iais.roberta.visitor.lang.codegen.JumpLinker.JumpTarget.INT
 import static de.fhg.iais.roberta.visitor.lang.codegen.JumpLinker.JumpTarget.METHOD_END;
 import static de.fhg.iais.roberta.visitor.lang.codegen.JumpLinker.JumpTarget.STATEMENT_END;
 
-public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor<V> {
+public abstract class AbstractStackMachineVisitor<V> extends BaseVisitor<V> implements ILanguageVisitor<V> {
     private static final Predicate<String> IS_INVALID_BLOCK_ID = s -> s.equals("1");
     private static final List<Class<? extends Phrase>> DONT_ADD_DEBUG_STOP = Arrays.asList(Expr.class, VarDeclaration.class, Sensor.class, MainTask.class, ExprStmt.class, StmtList.class, RepeatStmt.class, WaitStmt.class);
 
@@ -145,12 +146,16 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
 
     @Override
     public V visit(Phrase<V> visitable) {
-        boolean isNotMainTask = !(visitable instanceof MainTask);
-        boolean shouldHighlight = isNotMainTask && !openBlocks.contains(visitable.getProperty().getBlocklyId());
+        boolean shouldHighlight = shouldBeHighlighted(visitable);
         if ( shouldHighlight ) beginPhrase(visitable);
-        V visit = ILanguageVisitor.super.visit(visitable);
+        V result = super.visit(visitable);
         if ( shouldHighlight ) endPhrase(visitable);
-        return visit;
+        return result;
+    }
+
+    private boolean shouldBeHighlighted(Phrase<V> visitable) {
+        boolean isNotMainTask = !(visitable instanceof MainTask);
+        return isNotMainTask && !openBlocks.contains(visitable.getProperty().getBlocklyId());
     }
 
     protected void endPhrase(Phrase<V> phrase) {
@@ -518,14 +523,16 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
 
     @Override
     public final V visitNNStepStmt(NNStepStmt<V> nnStepStmt) {
-        for ( Stmt<V> inputNeuron : nnStepStmt.getInputNeurons() ) {
+        final List<Stmt<V>> inputNeurons = nnStepStmt.getInputNeurons();
+        final List<Stmt<V>> outputNeurons = nnStepStmt.getOutputNeurons();
+        for ( Stmt<V> inputNeuron : inputNeurons ) {
             inputNeuron.accept(this);
         }
-        JSONObject o = makeNode(C.NNSTEP_STMT);
+        JSONObject o = makeNode(C.NNSTEP_STMT).put(C.ARG1, inputNeurons.size()).put(C.ARG2, outputNeurons.size());
         app(o);
-        for ( Stmt<V> outputNeuronAsStmt : nnStepStmt.getOutputNeurons() ) {
+        for ( Stmt<V> outputNeuronAsStmt : outputNeurons ) {
             NNOutputNeuronStmt outputNeuron = (NNOutputNeuronStmt) outputNeuronAsStmt;
-            JSONObject ov = makeNode(C.ASSIGN_STMT).put(C.NAME, outputNeuron.getValue());
+            JSONObject ov = makeNode(C.ASSIGN_STMT).put(C.NAME, ((Var) outputNeuron.getValue()).getValue());
             app(ov);
         }
         return null;

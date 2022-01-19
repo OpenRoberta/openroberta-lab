@@ -222,7 +222,7 @@ define(["require", "exports", "./interpreter.state", "./interpreter.constants", 
                         break;
                     }
                     case C.NNSTEP_STMT:
-                        this.evalNNStep();
+                        this.evalNNStep(stmt[C.ARG1], stmt[C.ARG2]);
                         break;
                     case C.LED_ON_ACTION: {
                         var color_1 = this.state.pop();
@@ -937,14 +937,17 @@ define(["require", "exports", "./interpreter.state", "./interpreter.constants", 
                 }
             }
         };
-        Interpreter.prototype.evalNNStep = function () {
-            console.log('NNStep encountered');
+        Interpreter.prototype.evalNNStep = function (numberInputNeurons, numberOutputNeurons) {
             var s = this.state;
-            var i2 = s.pop();
-            var i1 = s.pop();
-            var i0 = s.pop();
-            var inputData = [i0, i1, i2];
+            var inputData = [];
+            for (var i = 0; i < numberInputNeurons; i++) {
+                inputData.push(s.pop());
+            }
+            inputData = inputData.reverse();
             var outputData = PG.oneStep(inputData);
+            if (outputData.length != numberOutputNeurons) {
+                U.dbcException('NN returned wrong number of outputs: ' + outputData.length.toString + ' !=' + numberOutputNeurons.toString);
+            }
             for (var i = outputData.length - 1; i >= 0; i--) {
                 s.push(outputData[i]);
             }

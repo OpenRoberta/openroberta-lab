@@ -1,6 +1,6 @@
 define(["require", "exports", "util", "message", "guiState.model", "progHelp.controller", "legal.controller", "webview.controller", "confVisualization", "socket.controller", "jquery", "blockly"], function (require, exports, UTIL, MSG, GUISTATE, HELP_C, LEGAL_C, WEBVIEW_C, CV, SOCKET_C, $, Blockly) {
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.getLegalTextsMap = exports.updateTutorialMenu = exports.updateMenuStatus = exports.setWebview = exports.inWebview = exports.getTheme = exports.getAvailableHelp = exports.getSocket = exports.setSocket = exports.getPingTime = exports.setPingTime = exports.doPing = exports.setPing = exports.isProgramToDownload = exports.setProgramToDownload = exports.getCommandLine = exports.getSignature = exports.getVendor = exports.getConnection = exports.getConnectionTypeEnum = exports.getListOfTutorials = exports.getWebotsUrl = exports.hasWebotsSim = exports.hasMultiSim = exports.hasSim = exports.checkSim = exports.setConfiguration = exports.setProgram = exports.setLogout = exports.setLogin = exports.getUserUserGroupOwner = exports.getUserUserGroup = exports.isUserMemberOfUserGroup = exports.isUserAccountActivated = exports.getUserAccountName = exports.getUserName = exports.isPublicServerVersion = exports.getServerVersion = exports.setStartWithoutPopup = exports.getStartWithoutPopup = exports.getConfigurationConf = exports.getProgramProg = exports.getConfigurationToolbox = exports.getProgramToolbox = exports.getRobots = exports.getProgramXML = exports.setProgramXML = exports.getConfigurationXML = exports.setConfigurationXML = exports.setRobotToken = exports.getRobotFWName = exports.setDefaultRobot = exports.getDefaultRobot = exports.getConfToolbox = exports.getToolbox = exports.getProgramToolboxLevel = exports.setProgramToolboxLevel = exports.setConfigurationNameDefault = exports.setConfigurationName = exports.getConfigurationName = exports.setProgramShareRelation = exports.getProgramShareRelation = exports.setProgramAuthorName = exports.getProgramAuthorName = exports.setProgramOwnerName = exports.getProgramOwnerName = exports.setProgramName = exports.getProgramName = exports.setProgramTimestamp = exports.getProgramTimestamp = exports.isUserLoggedIn = exports.getBinaryFileExtension = exports.getSourceCodeFileExtension = exports.getProgramSource = exports.setProgramSource = exports.getProgramShared = exports.setConfigurationSaved = exports.isConfigurationSaved = exports.setProgramSaved = exports.isProgramSaved = exports.getLanguage = exports.setLanguage = exports.getPrevView = exports.getView = exports.setView = exports.hasRobotDefaultFirmware = exports.getRobotVersion = exports.getRobotState = exports.getRobotBattery = exports.getRobotName = exports.getRobotTime = exports.isRobotDisconnected = exports.isConfigurationUsed = exports.isRobotConnected = exports.getRobotInfoEN = exports.getRobotInfoDE = exports.getIsRobotBeta = exports.getMenuRobotRealName = exports.getRobotRealName = exports.getRobotPort = exports.setRobotPort = exports.getRobotGroup = exports.getRobot = exports.setRunEnabled = exports.isRunEnabled = exports.setConnectionState = exports.findRobot = exports.findGroup = exports.setKioskMode = exports.setRobot = exports.setBricklyWorkspace = exports.getBricklyWorkspace = exports.setBlocklyWorkspace = exports.getBlocklyWorkspace = exports.setIsAgent = exports.getIsAgent = exports.setState = exports.isKioskMode = exports.isConfigurationAnonymous = exports.getConfigurationStandardName = exports.isConfigurationStandard = exports.isProgramWritable = exports.isProgramStandard = exports.setInitialState = exports.init = void 0;
+    exports.getLegalTextsMap = exports.updateTutorialMenu = exports.updateMenuStatus = exports.setWebview = exports.inWebview = exports.getTheme = exports.getAvailableHelp = exports.getSocket = exports.setSocket = exports.getPingTime = exports.setPingTime = exports.doPing = exports.setPing = exports.isProgramToDownload = exports.setProgramToDownload = exports.getCommandLine = exports.getSignature = exports.getVendor = exports.getConnection = exports.getConnectionTypeEnum = exports.getListOfTutorials = exports.getWebotsUrl = exports.hasWebotsSim = exports.hasNN = exports.hasMultiSim = exports.hasSim = exports.checkSim = exports.setConfiguration = exports.setProgram = exports.setLogout = exports.setLogin = exports.getUserUserGroupOwner = exports.getUserUserGroup = exports.isUserMemberOfUserGroup = exports.isUserAccountActivated = exports.getUserAccountName = exports.getUserName = exports.isPublicServerVersion = exports.getServerVersion = exports.setStartWithoutPopup = exports.getStartWithoutPopup = exports.getConfigurationConf = exports.getProgramProg = exports.getConfigurationToolbox = exports.getProgramToolbox = exports.getRobots = exports.getProgramXML = exports.setProgramXML = exports.getConfigurationXML = exports.setConfigurationXML = exports.setRobotToken = exports.getRobotFWName = exports.setDefaultRobot = exports.getDefaultRobot = exports.getConfToolbox = exports.getToolbox = exports.getProgramToolboxLevel = exports.setProgramToolboxLevel = exports.setConfigurationNameDefault = exports.setConfigurationName = exports.getConfigurationName = exports.setProgramShareRelation = exports.getProgramShareRelation = exports.setProgramAuthorName = exports.getProgramAuthorName = exports.setProgramOwnerName = exports.getProgramOwnerName = exports.setProgramName = exports.getProgramName = exports.setProgramTimestamp = exports.getProgramTimestamp = exports.isUserLoggedIn = exports.getBinaryFileExtension = exports.getSourceCodeFileExtension = exports.getProgramSource = exports.setProgramSource = exports.getProgramShared = exports.setConfigurationSaved = exports.isConfigurationSaved = exports.setProgramSaved = exports.isProgramSaved = exports.getLanguage = exports.setLanguage = exports.getPrevView = exports.getView = exports.setView = exports.hasRobotDefaultFirmware = exports.getRobotVersion = exports.getRobotState = exports.getRobotBattery = exports.getRobotName = exports.getRobotTime = exports.isRobotDisconnected = exports.isConfigurationUsed = exports.isRobotConnected = exports.getRobotInfoEN = exports.getRobotInfoDE = exports.getIsRobotBeta = exports.getMenuRobotRealName = exports.getRobotRealName = exports.getRobotPort = exports.setRobotPort = exports.getRobotGroup = exports.getRobot = exports.setRunEnabled = exports.isRunEnabled = exports.setConnectionState = exports.findRobot = exports.findGroup = exports.setKioskMode = exports.setRobot = exports.setBricklyWorkspace = exports.getBricklyWorkspace = exports.setBlocklyWorkspace = exports.getBlocklyWorkspace = exports.setIsAgent = exports.getIsAgent = exports.setState = exports.isKioskMode = exports.isConfigurationAnonymous = exports.getConfigurationStandardName = exports.isConfigurationStandard = exports.isProgramWritable = exports.isProgramStandard = exports.setInitialState = exports.init = void 0;
     var LONG = 300000; // Ping time 5min
     var SHORT = 3000; // Ping time 3sec
     /**
@@ -247,6 +247,7 @@ define(["require", "exports", "util", "message", "guiState.model", "progHelp.con
         GUISTATE.gui.configuration = result.configuration;
         GUISTATE.gui.sim = result.sim;
         GUISTATE.gui.multipleSim = result.multipleSim;
+        GUISTATE.gui.nn = result.nn;
         GUISTATE.gui.webotsSim = result.webotsSim;
         GUISTATE.gui.webotsUrl = result.webotsUrl;
         GUISTATE.gui.neuralNetwork = result.neuralNetwork === undefined ? false : result.neuralNetwork;
@@ -388,6 +389,16 @@ define(["require", "exports", "util", "message", "guiState.model", "progHelp.con
         }
         else {
             $('#robotWlan').addClass('hidden');
+        }
+        if (GUISTATE.gui.nn) {
+            $('#tabNNctxt').show();
+            $('#menuTabNNctxt').show();
+            $('#nn').show();
+        }
+        else {
+            $('#tabNNctxt').hide();
+            $('#menuTabNNctxt').hide();
+            $('#nn').hide();
         }
         UTIL.clearTabAlert('tabConfiguration'); // also clear tab alert when switching robots
     }
@@ -1081,6 +1092,10 @@ define(["require", "exports", "util", "message", "guiState.model", "progHelp.con
         return GUISTATE.gui.multipleSim == true;
     }
     exports.hasMultiSim = hasMultiSim;
+    function hasNN() {
+        return GUISTATE.gui.nn == true;
+    }
+    exports.hasNN = hasNN;
     function hasWebotsSim() {
         return GUISTATE.gui.webotsSim == true;
     }

@@ -38,7 +38,7 @@ public class ShowTextAction<V> extends Action<V> {
         setReadOnly();
     }
 
-    public static <V> Phrase<V> make(Expr<V> msg, Expr<V> column, Expr<V> row, String port, BlocklyBlockProperties properties, BlocklyComment comment) {
+    public static <V> ShowTextAction<V> make(Expr<V> msg, Expr<V> column, Expr<V> row, String port, BlocklyBlockProperties properties, BlocklyComment comment) {
         return new ShowTextAction<>(BlockTypeContainer.getByName("SHOW_TEXT_ACTION"),properties,comment,msg,column,row,port);
     }
 }

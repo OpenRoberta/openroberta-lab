@@ -1,3 +1,10 @@
+var __spreadArrays = (this && this.__spreadArrays) || function () {
+    for (var s = 0, i = 0, il = arguments.length; i < il; i++) s += arguments[i].length;
+    for (var r = Array(s), k = 0, i = 0; i < il; i++)
+        for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++)
+            r[k] = a[j];
+    return r;
+};
 define(["require", "exports", "./interpreter.constants", "./interpreter.util"], function (require, exports, C, U) {
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.State = void 0;
@@ -14,7 +21,7 @@ define(["require", "exports", "./interpreter.constants", "./interpreter.util"], 
             this.pc = 0;
             this.bindings = {};
             this.stack = [];
-            this.currentBlocks = new Set();
+            this.currentBlocks = [];
             this.debugMode = false;
             // p( 'storeCode with state reset' );
         }
@@ -202,7 +209,7 @@ define(["require", "exports", "./interpreter.constants", "./interpreter.util"], 
                     stackmachineJsHelper.getJqueryObject(block === null || block === void 0 ? void 0 : block.svgPath_).removeClass('breakpoint').addClass('selectedBreakpoint');
                 }
                 _this.highlightBlock(block);
-                _this.currentBlocks.add(block.id);
+                _this.addToCurrentBlock(block.id);
             });
         };
         /** removes block froms currentBlocks and removes highlighting from block**/
@@ -213,13 +220,13 @@ define(["require", "exports", "./interpreter.constants", "./interpreter.util"], 
                     stackmachineJsHelper.getJqueryObject(block === null || block === void 0 ? void 0 : block.svgPath_).removeClass('selectedBreakpoint').addClass('breakpoint');
                 }
                 _this.removeBlockHighlight(block);
-                _this.currentBlocks.delete(block.id);
+                _this.removeFromCurrentBlock(block.id);
             });
         };
         /** Returns true if the current block is currently being executed**/
         State.prototype.beingExecuted = function (stmt) {
             var blockId = stmt[C.HIGHTLIGHT_PLUS].slice(-1).pop();
-            return blockId && this.currentBlocks.has(blockId);
+            return blockId && this.isInCurrentBlock(blockId);
         };
         State.prototype.highlightBlock = function (block) {
             stackmachineJsHelper.getJqueryObject(block.svgPath_).stop(true, true).animate({ 'fill-opacity': '1' }, 0);
@@ -231,8 +238,7 @@ define(["require", "exports", "./interpreter.constants", "./interpreter.util"], 
          * @param breakPoints the array of breakpoint block id's to have their highlights added*/
         State.prototype.addHighlights = function (breakPoints) {
             var _this = this;
-            Array.from(this.currentBlocks)
-                .map(function (blockId) { return stackmachineJsHelper.getBlockById(blockId); })
+            __spreadArrays(this.currentBlocks).map(function (blockId) { return stackmachineJsHelper.getBlockById(blockId); })
                 .forEach(function (block) { return _this.highlightBlock(block); });
             breakPoints.forEach(function (id) {
                 var block = stackmachineJsHelper.getBlockById(id);
@@ -250,8 +256,7 @@ define(["require", "exports", "./interpreter.constants", "./interpreter.util"], 
          * @param breakPoints the array of breakpoint block id's to have their highlights removed*/
         State.prototype.removeHighlights = function (breakPoints) {
             var _this = this;
-            Array.from(this.currentBlocks)
-                .map(function (blockId) { return stackmachineJsHelper.getBlockById(blockId); })
+            __spreadArrays(this.currentBlocks).map(function (blockId) { return stackmachineJsHelper.getBlockById(blockId); })
                 .forEach(function (block) {
                 var object = stackmachineJsHelper.getJqueryObject(block);
                 if (object.hasClass('selectedBreakpoint')) {
@@ -266,6 +271,22 @@ define(["require", "exports", "./interpreter.constants", "./interpreter.util"], 
                     stackmachineJsHelper.getJqueryObject(block.svgPath_).removeClass('breakpoint').removeClass('selectedBreakpoint');
                 }
             });
+        };
+        State.prototype.addToCurrentBlock = function (id) {
+            var index = this.currentBlocks.indexOf(id, 0);
+            if (index > -1) {
+                return;
+            }
+            this.currentBlocks.push(id);
+        };
+        State.prototype.removeFromCurrentBlock = function (id) {
+            var index = this.currentBlocks.indexOf(id, 0);
+            if (index > -1) {
+                this.currentBlocks.splice(index, 1);
+            }
+        };
+        State.prototype.isInCurrentBlock = function (id) {
+            return this.currentBlocks.indexOf(id, 0) > -1;
         };
         return State;
     }());

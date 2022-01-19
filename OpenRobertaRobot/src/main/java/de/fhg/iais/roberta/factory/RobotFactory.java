@@ -109,6 +109,11 @@ public class RobotFactory implements IRobotFactory {
     }
 
     @Override
+    public final Boolean hasNN() {
+        return this.pluginProperties.getStringProperty("robot.nn") != null && this.pluginProperties.getStringProperty("robot.nn").equals("true");
+    }
+
+    @Override
     public Boolean hasWebotsSim() {
         return this.pluginProperties.getStringProperty("robot.webots.sim") != null && this.pluginProperties.getStringProperty("robot.webots.sim").equals("true");
     }

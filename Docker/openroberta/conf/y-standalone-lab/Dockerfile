@@ -9,10 +9,10 @@ RUN mvn clean install -DskipTests && ./ora.sh export /tmp/build/export gzip
 
 FROM openroberta/base:$BASEVERSION
 
-VOLUME /opt/db
+VOLUME /opt/db /tmp/openrobertaTmp
 EXPOSE 1999
 
-RUN mkdir --parent /opt/openroberta-lab/lib /tmp/openrobertaTmp
+RUN mkdir --parent /opt/openroberta-lab/lib
 WORKDIR /opt/openroberta-lab
 
 COPY --from=build /tmp/build/export .

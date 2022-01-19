@@ -61,13 +61,13 @@ define(["require", "exports", "simulation.simulation", "simulation.math", "util"
         $('.canvasSim').each(function () {
             if ($(this).hasClass('unified')) {
                 if (resetUnified) {
-                    this.width = w / sc;
-                    this.height = h / sc;
+                    this.width = Math.round(w / sc);
+                    this.height = Math.round(h / sc);
                 }
             }
             else {
-                this.width = w;
-                this.height = h;
+                this.width = Math.round(w);
+                this.height = Math.round(h);
             }
         });
         if (resetUnified) {
@@ -233,7 +233,7 @@ define(["require", "exports", "simulation.simulation", "simulation.math", "util"
         $('#notConstantValue').append('<div><label>Time</label><span>' + UTIL.round(this.robots[0].time, 3) + 's</span></div>');
         $('#notConstantValue').append('<div><label>Compass</label><span>' + UTIL.round(this.robots[0].compass.degree, 0) + '°</span></div>');
         $('#notConstantValue').append('<div><label>Light Sensor</label><span>' + UTIL.round(this.robots[0].display.lightLevel, 0) + '%</span></div>');
-        $('#notConstantValue').append('<div><label>Temperature</label><span>' + UTIL.round(this.robots[0].temperature.degree, 2) + '°</span></div>');
+        $('#notConstantValue').append('<div><label>Temperature</label><span>' + UTIL.round(this.robots[0].temperature.degree, 0) + '°</span></div>');
         var gesture;
         for (var i in this.robots[0].gesture) {
             gesture = i;
@@ -253,9 +253,7 @@ define(["require", "exports", "simulation.simulation", "simulation.math", "util"
                 }
             }
         }
-        if (SIM.getDebugMode()) {
-            drawVariables();
-        }
+        drawVariables();
         this.rCtx.scale(SIM.getScale(), SIM.getScale());
         this.rCtx.save();
         this.rCtx.translate(this.backgroundImg.width / 2.0 + 10, this.backgroundImg.height / 2.0 + 10);
@@ -350,9 +348,7 @@ define(["require", "exports", "simulation.simulation", "simulation.math", "util"
                             '</span></div>');
                     }
                 }
-                if (SIM.getDebugMode()) {
-                    drawVariables();
-                }
+                drawVariables();
             }
             this.rCtx.scale(SIM.getScale(), SIM.getScale());
             this.rCtx.save();

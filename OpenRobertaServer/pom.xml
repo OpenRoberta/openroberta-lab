@@ -14,7 +14,7 @@
     <parent>
         <groupId>de.fhg.iais.openroberta</groupId>
         <artifactId>OpenRobertaParent</artifactId>
-        <version>4.2.2-SNAPSHOT</version>
+        <version>4.2.8-SNAPSHOT</version>
     </parent>
     <artifactId>OpenRobertaServer</artifactId>
     <name>OpenRobertaServer</name>
@@ -122,7 +122,6 @@
         <dependency>
             <groupId>com.googlecode.owasp-java-html-sanitizer</groupId>
             <artifactId>owasp-java-html-sanitizer</artifactId>
-            <version>20180219.1</version>
         </dependency>
     </dependencies>
     <build>

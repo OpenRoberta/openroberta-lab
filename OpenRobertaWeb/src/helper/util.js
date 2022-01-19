@@ -1,4 +1,3 @@
-import * as exports from 'exports';
 import * as MSG from 'message';
 import * as LOG from 'log';
 import * as $ from 'jquery';
@@ -159,7 +158,7 @@ function parseDate(d) {
 function formatResultLog(result) {
     var str = '{';
     var comma = false;
-    for (key in result) {
+    for (var key in result) {
         if (comma) {
             str += ',';
         } else {
@@ -744,6 +743,17 @@ function annotateBlocks(workspace, annotations) {
         }
     }
 }
+
+function removeLinks($elem) {
+    $elem
+        .filter(function () {
+            return $(this).attr('href') && ($(this).attr('href').indexOf('http') === 0 || $(this).attr('href').indexOf('javascript:linkTo') === 0);
+        })
+        .each(function () {
+            $(this).removeAttr('href');
+        });
+}
+
 export {
     base64decode,
     clone,
@@ -772,4 +782,5 @@ export {
     clearTabAlert,
     clearAnnotations,
     annotateBlocks,
+    removeLinks,
 };

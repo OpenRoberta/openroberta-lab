@@ -4,7 +4,7 @@
  */
 define(["require", "exports", "simulation.scene", "simulation.constants", "util", "interpreter.interpreter", "interpreter.robotSimBehaviour", "volume-meter", "message", "jquery", "huebee", "blockly"], function (require, exports, simulation_scene_1, simulation_constants_1, UTIL, SIM_I, MBED_R, Volume, MSG, $, HUEBEE, Blockly) {
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.getSimVariables = exports.endDebugging = exports.interpreterAddEvent = exports.updateDebugMode = exports.getDebugMode = exports.getWebAudio = exports.importImage = exports.resetScene = exports.exportConfigData = exports.importConfigData = exports.getInfo = exports.getGround = exports.getScale = exports.cancel = exports.getSelectedRobot = exports.getRobotIndex = exports.run = exports.init = exports.stopProgram = exports.toggleColorPicker = exports.addColorArea = exports.addObstacle = exports.deleteSelectedObject = exports.resetPose = exports.setInfo = exports.setStep = exports.setPause = exports.getDt = exports.initMicrophone = exports.getColorAreaList = exports.getObstacleList = exports.getBackground = exports.setBackground = exports.getNumRobots = void 0;
+    exports.getSimVariables = exports.endDebugging = exports.interpreterAddEvent = exports.updateDebugMode = exports.getDebugMode = exports.getWebAudio = exports.importImage = exports.resetScene = exports.exportConfigData = exports.importConfigData = exports.getInfo = exports.getGround = exports.getScale = exports.cancel = exports.getSelectedRobot = exports.getRobotIndex = exports.run = exports.init = exports.stopProgram = exports.toggleColorPicker = exports.addColorArea = exports.addObstacle = exports.deleteSelectedObject = exports.resetPose = exports.setInfo = exports.setStep = exports.getDt = exports.initMicrophone = exports.getColorAreaList = exports.getObstacleList = exports.getBackground = exports.setBackground = exports.getNumRobots = exports.setPause = void 0;
     var standColorObstacle = '#33B8CA';
     var standColorArea = '#FBED00';
     var interpreters;
@@ -148,7 +148,7 @@ define(["require", "exports", "simulation.scene", "simulation.constants", "util"
         var moduleName = 'simulation.robot.' + simRobotType;
         removeMouseEvents();
         resetSelection();
-        new Promise(function (resolve_1, reject_1) { require([moduleName], resolve_1, reject_1); }).then(function (ROBOT) {
+        require([moduleName], function (ROBOT) {
             createRobots(ROBOT.default, numRobots);
             for (var i = 0; i < robots.length; i++) {
                 robots[i].debug = debug;
@@ -499,7 +499,7 @@ define(["require", "exports", "simulation.scene", "simulation.constants", "util"
         if (currentBackground > 1) {
             if (isIE() || isEdge()) {
                 // TODO IE and Edge: Input event not firing for file type of input
-                $('.dropdown.sim, .simScene').show();
+                $('.dropdown.sim, .simScene, #simEditButtons').show();
                 $('#simImport').hide();
             }
             else {
@@ -523,7 +523,8 @@ define(["require", "exports", "simulation.scene", "simulation.constants", "util"
             robots = [];
             readyRobots = [];
             isDownRobots = [];
-            new Promise(function (resolve_2, reject_2) { require(['simulation.robot.' + simRobotType], resolve_2, reject_2); }).then(function (reqRobot) {
+            var moduleName = 'simulation.robot.' + simRobotType;
+            require([moduleName], function (reqRobot) {
                 createRobots(reqRobot.default, numRobots);
                 for (var i = 0; i < numRobots; i++) {
                     robots[i].reset();
@@ -1532,7 +1533,7 @@ define(["require", "exports", "simulation.scene", "simulation.constants", "util"
                 handleMouseMove(e);
             }
         });
-        $('#robotLayer').mouseup(function (e) {
+        $('#robotLayer').on('mouseup touchend', function (e) {
             if (robots[robotIndex].handleMouseUp) {
                 robots[robotIndex].handleMouseUp(e, offsetX, offsetY, scale, scene.playground.w / 2, scene.playground.h / 2);
             }

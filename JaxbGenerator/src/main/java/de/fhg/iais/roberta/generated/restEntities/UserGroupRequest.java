@@ -9,8 +9,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
- * the request description for the /userGroup/getUserGroup REST request, returns UserGroupResponse<br>
- * <br>
+ * the request description for the /userGroup/getUserGroup REST request, returns UserGroupResponse<br><br>
  * Version: 1<br>
  * Datum: 2020-06-15
  */

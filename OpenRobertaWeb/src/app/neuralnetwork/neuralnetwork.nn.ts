@@ -198,6 +198,7 @@ export function buildNetwork(
     outputActivation: ActivationFunction,
     regularization: RegularizationFunction,
     inputIds: string[],
+    outputIds: string[],
     initZero?: boolean
 ): Node[][] {
     let numLayers = networkShape.length;
@@ -214,6 +215,8 @@ export function buildNetwork(
             let nodeId = id.toString();
             if (isInputLayer) {
                 nodeId = inputIds[i];
+            } else if (isOutputLayer) {
+                nodeId = outputIds[i];
             } else {
                 id++;
             }

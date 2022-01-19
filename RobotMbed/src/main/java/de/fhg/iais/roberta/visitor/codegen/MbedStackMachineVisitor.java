@@ -30,7 +30,6 @@ import de.fhg.iais.roberta.syntax.action.mbed.LedBarSetAction;
 import de.fhg.iais.roberta.syntax.action.mbed.LedOnAction;
 import de.fhg.iais.roberta.syntax.action.mbed.MotionKitDualSetAction;
 import de.fhg.iais.roberta.syntax.action.mbed.MotionKitSingleSetAction;
-import de.fhg.iais.roberta.syntax.action.mbed.PinSetPullAction;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioReceiveAction;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioSendAction;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioSetChannelAction;
@@ -315,11 +314,6 @@ public class MbedStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> i
         JSONObject o = makeNode(C.GET_SAMPLE).put(C.GET_SAMPLE, C.PIN + pin1).put(C.MODE, mode.toLowerCase()).put(C.NAME, "calliope");
 
         return app(o);
-    }
-
-    @Override
-    public V visitPinSetPullAction(PinSetPullAction<V> pinSetPullAction) {
-        return null;
     }
 
     @Override

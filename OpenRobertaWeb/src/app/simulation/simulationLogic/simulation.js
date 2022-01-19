@@ -169,7 +169,7 @@ function setBackground(num) {
 
     removeMouseEvents();
     resetSelection();
-    import(moduleName).then(function (ROBOT) {
+    require([moduleName], function (ROBOT) {
         createRobots(ROBOT.default, numRobots);
         for (var i = 0; i < robots.length; i++) {
             robots[i].debug = debug;
@@ -247,7 +247,7 @@ function getDt() {
 
 var pause = false;
 
-function setPause(value) {
+export function setPause(value) {
     if (!value && readyRobots.indexOf(false) > -1) {
         setTimeout(function () {
             setPause(false);
@@ -532,7 +532,7 @@ function init(programs, refresh, robotType) {
     if (currentBackground > 1) {
         if (isIE() || isEdge()) {
             // TODO IE and Edge: Input event not firing for file type of input
-            $('.dropdown.sim, .simScene').show();
+            $('.dropdown.sim, .simScene, #simEditButtons').show();
             $('#simImport').hide();
         } else {
             $('.dropdown.sim, .simScene, #simImport, #simResetPose, #simEditButtons').show();
@@ -556,7 +556,8 @@ function init(programs, refresh, robotType) {
         robots = [];
         readyRobots = [];
         isDownRobots = [];
-        import('simulation.robot.' + simRobotType).then(function (reqRobot) {
+        var moduleName = 'simulation.robot.' + simRobotType;
+        require([moduleName], function (reqRobot) {
             createRobots(reqRobot.default, numRobots);
             for (var i = 0; i < numRobots; i++) {
                 robots[i].reset();
@@ -1579,7 +1580,7 @@ function addMouseEvents() {
             handleMouseMove(e);
         }
     });
-    $('#robotLayer').mouseup(function (e) {
+    $('#robotLayer').on('mouseup touchend', function (e) {
         if (robots[robotIndex].handleMouseUp) {
             robots[robotIndex].handleMouseUp(e, offsetX, offsetY, scale, scene.playground.w / 2, scene.playground.h / 2);
         } else {
@@ -2234,7 +2235,6 @@ export {
     getColorAreaList,
     initMicrophone,
     getDt,
-    setPause,
     setStep,
     setInfo,
     resetPose,

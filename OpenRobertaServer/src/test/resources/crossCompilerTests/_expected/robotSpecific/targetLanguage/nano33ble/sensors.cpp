@@ -12,6 +12,7 @@
 void sensorsWaitUntil();
 void sensors();
 
+int _input_S3 = 5;
 int _output_B = 4;
 int _SensorPin_P2 = A4;
 int _output_L2 = A3;
@@ -47,6 +48,12 @@ void sensorsWaitUntil() {
     }
     while (true) {
         if ( digitalRead(_input_S) == 1 ) {
+            break;
+        }
+        delay(1);
+    }
+    while (true) {
+        if ( digitalRead(_input_S3) == 0 ) {
             break;
         }
         delay(1);
@@ -110,6 +117,7 @@ void sensorsWaitUntil() {
 void sensors() {
     Serial.println(analogRead(_input_S2));
     Serial.println(digitalRead(_input_S));
+    Serial.println(digitalRead(_input_S3));
     Serial.println(digitalRead(_taster_T));
     Serial.println((int) (millis() - __time_1));
     __time_1 = millis();
@@ -125,6 +133,7 @@ void sensors() {
 void setup()
 {
     Serial.begin(9600);
+    pinMode(_input_S3, INPUT_PULLUP);
     pinMode(_output_B, INPUT);
     pinMode(_led_L, OUTPUT);
     APDS.begin();

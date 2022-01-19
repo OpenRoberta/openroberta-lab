@@ -9,8 +9,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
- * basic request<br>
- * <br>
+ * basic request<br><br>
  * Version: 1<br>
  * Datum: 2020-06-15
  */

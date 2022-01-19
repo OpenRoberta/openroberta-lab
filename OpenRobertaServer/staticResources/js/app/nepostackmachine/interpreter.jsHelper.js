@@ -7,7 +7,7 @@ define(["require", "exports", "simulation.simulation", "blockly"], function (req
     }
     exports.getBlockById = getBlockById;
     function setSimBreak() {
-        simulation_simulation_1.default.setPause(true);
+        simulation_simulation_1.setPause(true);
     }
     exports.setSimBreak = setSimBreak;
     function getJqueryObject(object) {

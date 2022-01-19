@@ -14,8 +14,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
- * full request for the /init call with initToken, logging and request data<br>
- * <br>
+ * full request for the /init call with initToken, logging and request data<br><br>
  * Version: 1<br>
  * Datum: 2020-06-15
  */

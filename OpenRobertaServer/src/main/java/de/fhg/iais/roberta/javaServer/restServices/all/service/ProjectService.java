@@ -10,7 +10,6 @@ public final class ProjectService {
     }
 
     public static void executeWorkflow(String workflowName, Project project) {
-
         List<IWorker> workflowPipe = project.getRobotFactory().getWorkerPipe(workflowName);
         if ( project.hasSucceeded() ) {
             for ( IWorker worker : workflowPipe ) {

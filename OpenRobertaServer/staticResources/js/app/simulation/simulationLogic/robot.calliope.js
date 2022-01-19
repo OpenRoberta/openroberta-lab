@@ -311,49 +311,51 @@ define(["require", "exports", "simulation.simulation", "simulation.robot.mbed", 
         }
     };
     Calliope.prototype.handleMouse = function (e, offsetX, offsetY, scale, w, h) {
-        w = w / scale;
-        h = h / scale;
-        var X = e.clientX || e.originalEvent.touches[0].pageX;
-        var Y = e.clientY || e.originalEvent.touches[0].pageY;
-        var top = $('#robotLayer').offset().top + $('#robotLayer').width() / 2;
-        var left = $('#robotLayer').offset().left + $('#robotLayer').height() / 2;
-        startX = parseInt(X - left, 10) / scale;
-        startY = parseInt(Y - top, 10) / scale;
-        var scsq = 1;
-        if (scale < 1)
-            scsq = scale * scale;
-        var dxA = startX - this.button.xA;
-        var dyA = startY + this.button.yA;
-        var A = dxA * dxA + dyA * dyA < (this.button.rA * this.button.rA) / scsq;
-        var dxB = startX - this.button.xB;
-        var dyB = startY + this.button.yB;
-        var B = dxB * dxB + dyB * dyB < (this.button.rB * this.button.rB) / scsq;
-        var dxReset = startX - this.button.xReset;
-        var dyReset = startY + this.button.yReset;
-        var Reset = dxReset * dxReset + dyReset * dyReset < (this.button.rReset * this.button.rReset) / scsq;
-        var dxBothA = startX - this.button.xBothA;
-        var dyBothA = startY + this.button.yBothA;
-        var dxBothB = startX - this.button.xBothB;
-        var dyBothB = startY + this.button.yBothB;
-        var bothA = Math.pow(dxBothA, 2) + Math.pow(dyBothA, 2) < Math.pow(this.button.rBoth, 2) / scsq;
-        var bothB = Math.pow(dxBothB, 2) + Math.pow(dyBothB, 2) < Math.pow(this.button.rBoth, 2) / scsq;
-        var bothButtons = bothA || bothB;
-        var dxPin0 = startX - this.pin0.x;
-        var dyPin0 = startY + this.pin0.y;
-        var Pin0 = dxPin0 * dxPin0 + dyPin0 * dyPin0 < (this.pin0.r * this.pin0.r) / scsq;
-        var dxPin1 = startX - this.pin1.x;
-        var dyPin1 = startY + this.pin1.y;
-        var Pin1 = dxPin1 * dxPin1 + dyPin1 * dyPin1 < (this.pin1.r * this.pin1.r) / scsq;
-        var dxPin2 = startX - this.pin2.x;
-        var dyPin2 = startY + this.pin2.y;
-        var Pin2 = dxPin2 * dxPin2 + dyPin2 * dyPin2 < (this.pin2.r * this.pin2.r) / scsq;
-        var dxPin3 = startX - this.pin3.x;
-        var dyPin3 = startY + this.pin3.y;
-        var Pin3 = dxPin3 * dxPin3 + dyPin3 * dyPin3 < (this.pin3.r * this.pin3.r) / scsq;
-        // special case, display (center: 0,0) represents light level
-        var dxDisplay = startX;
-        var dyDisplay = startY + 20;
-        var Display = dxDisplay * dxDisplay + dyDisplay * dyDisplay < this.display.rLight * this.display.rLight;
+        if (e.type !== 'touchend') {
+            w = w / scale;
+            h = h / scale;
+            var X = e.clientX || e.originalEvent.touches[0].pageX;
+            var Y = e.clientY || e.originalEvent.touches[0].pageY;
+            var top = $('#robotLayer').offset().top + $('#robotLayer').width() / 2;
+            var left = $('#robotLayer').offset().left + $('#robotLayer').height() / 2;
+            startX = parseInt(X - left, 10) / scale;
+            startY = parseInt(Y - top, 10) / scale;
+            var scsq = 1;
+            if (scale < 1)
+                scsq = scale * scale;
+            var dxA = startX - this.button.xA;
+            var dyA = startY + this.button.yA;
+            var A = dxA * dxA + dyA * dyA < (this.button.rA * this.button.rA) / scsq;
+            var dxB = startX - this.button.xB;
+            var dyB = startY + this.button.yB;
+            var B = dxB * dxB + dyB * dyB < (this.button.rB * this.button.rB) / scsq;
+            var dxReset = startX - this.button.xReset;
+            var dyReset = startY + this.button.yReset;
+            var Reset = dxReset * dxReset + dyReset * dyReset < (this.button.rReset * this.button.rReset) / scsq;
+            var dxBothA = startX - this.button.xBothA;
+            var dyBothA = startY + this.button.yBothA;
+            var dxBothB = startX - this.button.xBothB;
+            var dyBothB = startY + this.button.yBothB;
+            var bothA = Math.pow(dxBothA, 2) + Math.pow(dyBothA, 2) < Math.pow(this.button.rBoth, 2) / scsq;
+            var bothB = Math.pow(dxBothB, 2) + Math.pow(dyBothB, 2) < Math.pow(this.button.rBoth, 2) / scsq;
+            var bothButtons = bothA || bothB;
+            var dxPin0 = startX - this.pin0.x;
+            var dyPin0 = startY + this.pin0.y;
+            var Pin0 = dxPin0 * dxPin0 + dyPin0 * dyPin0 < (this.pin0.r * this.pin0.r) / scsq;
+            var dxPin1 = startX - this.pin1.x;
+            var dyPin1 = startY + this.pin1.y;
+            var Pin1 = dxPin1 * dxPin1 + dyPin1 * dyPin1 < (this.pin1.r * this.pin1.r) / scsq;
+            var dxPin2 = startX - this.pin2.x;
+            var dyPin2 = startY + this.pin2.y;
+            var Pin2 = dxPin2 * dxPin2 + dyPin2 * dyPin2 < (this.pin2.r * this.pin2.r) / scsq;
+            var dxPin3 = startX - this.pin3.x;
+            var dyPin3 = startY + this.pin3.y;
+            var Pin3 = dxPin3 * dxPin3 + dyPin3 * dyPin3 < (this.pin3.r * this.pin3.r) / scsq;
+            // special case, display (center: 0,0) represents light level
+            var dxDisplay = startX;
+            var dyDisplay = startY + 20;
+            var Display = dxDisplay * dxDisplay + dyDisplay * dyDisplay < this.display.rLight * this.display.rLight;
+        }
         var lightSliderActive = $('#sliderLight').val() !== '100';
         if (!lightSliderActive) {
             this.display.lightLevel = 100;
@@ -392,14 +394,6 @@ define(["require", "exports", "simulation.simulation", "simulation.robot.mbed", 
             else if (e.type === 'mousemove' && Display && !lightSliderActive) {
                 this.display.lightLevel = 50;
             }
-            else if (e.type === 'mouseup') {
-                this.pin0.touched = false;
-                this.pin1.touched = false;
-                this.pin2.touched = false;
-                this.pin3.touched = false;
-                this.buttons.A = false;
-                this.buttons.B = false;
-            }
             if (Display && !lightSliderActive) {
                 $('#robotLayer').css('cursor', 'crosshair');
             }
@@ -410,9 +404,17 @@ define(["require", "exports", "simulation.simulation", "simulation.robot.mbed", 
         else {
             $('#robotLayer').css('cursor', 'auto');
         }
+        if (e.type === 'mouseup' || e.type === 'touchend') {
+            this.pin0.touched = false;
+            this.pin1.touched = false;
+            this.pin2.touched = false;
+            this.pin3.touched = false;
+            this.buttons.A = false;
+            this.buttons.B = false;
+        }
     };
     Calliope.prototype.controle = function () {
-        $('#simRobotContent').append('<div id="mbedContent"><div id="mbedButtons" class="btn-group btn-group-vertical" data-toggle="buttons">' + //
+        $('#simRobotContent').append('<div id="mbedContent"><form id="mbed-form"><div id="mbedButtons" class="btn-group btn-group-vertical" data-toggle="buttons">' + //
             '<label style="margin: 8px;margin-top: 12px; margin-left: 0">' +
             Blockly.Msg.SENSOR_GESTURE +
             '</label>' + //
@@ -434,14 +436,18 @@ define(["require", "exports", "simulation.simulation", "simulation.robot.mbed", 
             '<label class="btn simbtn"><input type="radio" id="freefall" name="options" autocomplete="off" >' +
             Blockly.Msg.SENSOR_GESTURE_FREEFALL +
             '</label>' + //
-            '<label style="margin: 8px;margin-top: 12px; margin-left: 0">' +
+            '<label for="rangeCompass" style="margin: 8px;margin-top: 12px; margin-left: 0">' +
             Blockly.Msg.SENSOR_COMPASS +
-            '</label><input type="text" value="0" style="margin-bottom: 8px;margin-top: 12px; min-width: 45px; width: 45px; display: inline-block; border: 1px solid #333; border-radius: 2px; text-align: right;" id="range" />' +
-            '<div style="margin:8px 0; "><input id="slider" type="range" min="0" max="360" value="0" step="5" /></div>' + //
-            '<label style="margin: 8px;margin-top: 12px; margin-left: 0">' +
+            '</label><input type="text" value="0" style="margin-bottom: 8px;margin-top: 12px; min-width: 45px; width: 45px; display: inline-block; border: 1px solid #333; border-radius: 2px; text-align: right; float: right" id="rangeCompass"; name="rangeCompass"; class="range" />' +
+            '<div style="margin:8px 0; "><input id="sliderCompass" type="range" min="0" max="360" value="0" step="5" /></div>' + //
+            '<label for="rangeLight" style="margin: 8px;margin-top: 12px; margin-left: 0">' +
             Blockly.Msg.SENSOR_LIGHT +
-            '</label><input type="text" value="0" style="margin-bottom: 8px;margin-top: 12px; min-width: 45px; width: 45px; display: inline-block; border: 1px solid #333; border-radius: 2px; text-align: right; float: right;" id="rangeLight" />' +
+            '</label><input type="text" value="0" style="margin-bottom: 8px;margin-top: 12px; min-width: 45px; width: 45px; display: inline-block; border: 1px solid #333; border-radius: 2px; text-align: right; float: right;" id="rangeLight"; name="rangeLight"; class="range" />' +
             '<div style="margin:8px 0; "><input id="sliderLight" type="range" min="0" max="100" value="0" /></div>' + //
+            '<label for="rangeTemperature" style="margin: 8px;margin-top: 12px; margin-left: 0">' +
+            Blockly.Msg.SENSOR_TEMPERATURE +
+            '</label><input type="text" value="0" style="margin-bottom: 8px;margin-top: 12px; min-width: 45px; width: 45px; display: inline-block; border: 1px solid #333; border-radius: 2px; text-align: right; float: right;" id="rangeTemperature"; name="rangeTemperature"; class="range" />' +
+            '<div style="margin:8px 0; "><input id="sliderTemperature" type="range" min="-25" max="75" value="0" step="1" /></div>' + //
             '<label style="width:100%;margin: 8px;margin-top: 12px; margin-left: 0"><select class="customDropdown" id="pin"><option id="0">' +
             Blockly.Msg.SENSOR_PIN +
             ' 0</option><option id="1">' +

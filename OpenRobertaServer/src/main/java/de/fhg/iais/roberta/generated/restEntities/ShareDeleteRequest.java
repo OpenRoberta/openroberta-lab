@@ -9,8 +9,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
- * the request description for the /share/delete REST request<br>
- * <br>
+ * the request description for the /share/delete REST request<br><br>
  * Version: 1<br>
  * Datum: 2020-06-15
  */
@@ -211,17 +210,7 @@ public class ShareDeleteRequest extends BaseRequest {
 
     @Override
     public String toString() {
-        return "ShareDeleteRequest [immutable="
-            + this.immutable
-            + ", cmd="
-            + this.cmd
-            + ", programName="
-            + this.programName
-            + ", owner="
-            + this.owner
-            + ", author="
-            + this.author
-            + " ]";
+        return "ShareDeleteRequest [immutable=" + this.immutable + ", cmd=" + this.cmd + ", programName=" + this.programName + ", owner=" + this.owner + ", author=" + this.author + " ]";
     }
 
     @Override

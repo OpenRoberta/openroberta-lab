@@ -1,4 +1,4 @@
-define(["require", "exports", "message", "log", "guiState.controller", "program.controller", "robot.controller", "import.controller", "blockly", "jquery"], function (require, exports, MSG, LOG, GUISTATE_C, PROG_C, ROBOT_C, IMPORT_C, Blockly, $) {
+define(["require", "exports", "message", "log", "guiState.controller", "program.controller", "robot.controller", "import.controller", "blockly", "util", "jquery"], function (require, exports, MSG, LOG, GUISTATE_C, PROG_C, ROBOT_C, IMPORT_C, Blockly, U, $) {
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.loadFromTutorial = exports.init = void 0;
     var INITIAL_WIDTH = 0.5;
@@ -39,9 +39,10 @@ define(["require", "exports", "message", "log", "guiState.controller", "program.
                 $('#infoButton').hide();
                 $('#feedbackButton').hide();
                 // for beginner tutorials the code view is more confusing than helpful, so we don't show the button in kiosk mode
-                if (tutorial.level.startsWith('1')) {
+                if (tutorial.level.indexOf('1') === 0) {
                     $('#codeButton').hide();
                 }
+                U.removeLinks($('#legalDiv a'));
             }
             if (tutorial.initXML) {
                 IMPORT_C.loadProgramFromXML('egal', tutorial.initXML);
@@ -126,6 +127,9 @@ define(["require", "exports", "message", "log", "guiState.controller", "program.
         html += GUISTATE_C.getMenuRobotRealName(tutorial.robot);
         $('#tutorialOverviewText').html(html);
         $('#tutorialOverviewTitle').html(tutorial.name);
+        if (GUISTATE_C.isKioskMode()) {
+            U.removeLinks($('#tutorialOverview a'));
+        }
         $('#tutorialAbort').off('click.dismiss.bs.modal');
         $('#tutorialAbort').onWrap('click.dismiss.bs.modal', function (event) {
             exitTutorial();
@@ -212,6 +216,9 @@ define(["require", "exports", "message", "log", "guiState.controller", "program.
             else {
                 // apparently a step without an instruction -> go directly to the quiz
                 createQuiz();
+            }
+            if (GUISTATE_C.isKioskMode()) {
+                U.removeLinks($('#tutorialContent a'));
             }
         }
     }

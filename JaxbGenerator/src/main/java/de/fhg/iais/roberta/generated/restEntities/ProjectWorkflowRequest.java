@@ -9,8 +9,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
- * the request description for the /projectWorkflow/* REST request<br>
- * <br>
+ * the request description for the /projectWorkflow/* REST request<br><br>
  * Version: 1<br>
  * Datum: 2020-06-15
  */
@@ -413,27 +412,7 @@ public class ProjectWorkflowRequest extends BaseRequest {
 
     @Override
     public String toString() {
-        return "ProjectWorkflowRequest [immutable="
-            + this.immutable
-            + ", cmd="
-            + this.cmd
-            + ", programName="
-            + this.programName
-            + ", configurationName="
-            + this.configurationName
-            + ", progXML="
-            + this.progXML
-            + ", confXML="
-            + this.confXML
-            + ", SSID="
-            + this.SSID
-            + ", password="
-            + this.password
-            + ", language="
-            + this.language
-            + ", robot="
-            + this.robot
-            + " ]";
+        return "ProjectWorkflowRequest [immutable=" + this.immutable + ", cmd=" + this.cmd + ", programName=" + this.programName + ", configurationName=" + this.configurationName + ", progXML=" + this.progXML + ", confXML=" + this.confXML + ", SSID=" + this.SSID + ", password=" + this.password + ", language=" + this.language + ", robot=" + this.robot + " ]";
     }
 
     @Override

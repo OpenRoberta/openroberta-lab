@@ -1,4 +1,4 @@
-define(["require", "exports", "message", "util", "webots.simulation", "simulation.simulation", "simulation.constants", "guiState.controller", "tour.controller", "program.controller", "program.model", "blockly", "jquery", "jquery-validate"], function (require, exports, MSG, UTIL, NAOSIM, SIM, CONST, GUISTATE_C, TOUR_C, PROG_C, PROGRAM, Blockly, $) {
+define(["require", "exports", "message", "util", "webots.simulation", "simulation.simulation", "simulation.constants", "guiState.controller", "nn.controller", "tour.controller", "program.controller", "program.model", "blockly", "jquery", "jquery-validate"], function (require, exports, MSG, UTIL, NAOSIM, SIM, simulation_constants_1, GUISTATE_C, NN_CTRL, TOUR_C, PROG_C, PROGRAM, Blockly, $) {
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.init = void 0;
     var INITIAL_WIDTH = 0.5;
@@ -40,7 +40,7 @@ define(["require", "exports", "message", "util", "webots.simulation", "simulatio
             event.stopPropagation();
             if (SIM.getNumRobots() <= 1) {
                 if (SIM.getDebugMode()) {
-                    toggleSimEvent(CONST.DEBUG_BREAKPOINT);
+                    toggleSimEvent(simulation_constants_1.default.DEBUG_BREAKPOINT);
                 }
                 else {
                     if ($('#simControl').hasClass('typcn-media-play-outline')) {
@@ -118,7 +118,7 @@ define(["require", "exports", "message", "util", "webots.simulation", "simulatio
             var robot = GUISTATE_C.getRobot();
             var position = $('#simDiv').position();
             position.top += 12;
-            if (robot == 'calliope' || robot == 'microbit') {
+            if (robot == 'calliope2016' || robot == 'calliope2017' || robot == 'calliope2017NoBlue' || robot == 'microbit') {
                 position.left = $('#blocklyDiv').width() + 12;
                 $('#simRobotModal').css({
                     top: position.top,
@@ -154,10 +154,10 @@ define(["require", "exports", "message", "util", "webots.simulation", "simulatio
             SIM.resetPose();
         }, 'sim reset pose clicked');
         $('#simControlStepInto').onWrap('click', function (event) {
-            toggleSimEvent(CONST.DEBUG_STEP_INTO);
+            toggleSimEvent(simulation_constants_1.default.DEBUG_STEP_INTO);
         }, 'sim step into clicked');
         $('#simControlStepOver').onWrap('click', function (event) {
-            toggleSimEvent(CONST.DEBUG_STEP_OVER);
+            toggleSimEvent(simulation_constants_1.default.DEBUG_STEP_OVER);
         }, 'sim step over clicked');
         $('#simAddObstacleRectangle').onWrap('click', function (event) {
             SIM.addObstacle('rectangle');
@@ -205,6 +205,7 @@ define(["require", "exports", "message", "util", "webots.simulation", "simulatio
         }, 'sim toggle background clicked');
     }
     function initSimulation(result) {
+        NN_CTRL.prepareNNfromNNstep();
         SIM.init([result], true, GUISTATE_C.getRobotGroup());
         $('#simControl').addClass('typcn-media-play-outline').removeClass('typcn-media-play');
         if (SIM.getNumRobots() === 1 && debug) {
@@ -285,6 +286,7 @@ define(["require", "exports", "message", "util", "webots.simulation", "simulatio
             var language = GUISTATE_C.getLanguage();
             PROGRAM.runInSim(GUISTATE_C.getProgramName(), configName, xmlTextProgram, xmlConfigText, language, function (result) {
                 if (result.rc == 'ok') {
+                    NN_CTRL.prepareNNfromNNstep();
                     setTimeout(function () {
                         SIM.setPause(false);
                         SIM.interpreterAddEvent(event);

@@ -1,0 +1,154 @@
+<export xmlns="http://de.fhg.iais.roberta.blockly">
+    <program>
+        <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="calliope" xmlversion="3.1" description="" tags="">
+            <instance x="375" y="50">
+                <block type="robControls_start" id="uB@uFXT:5=`xejjfT)vu" intask="true" deletable="false">
+                    <mutation declare="false"></mutation>
+                    <field name="DEBUG"></field>
+                </block>
+            </instance>
+        </block_set>
+    </program>
+    <config>
+        <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="calliope" xmlversion="3.1" description="" tags="">
+            <instance x="-223" y="-1298">
+                <block type="robConf_digitalout" id="m!*`5?8?u_IzP=J+nCvS" intask="true">
+                    <field name="NAME">S_P0_D</field>
+                    <field name="PIN_PULL">PIN_PULL_NONE</field>
+                    <field name="PIN1">0</field>
+                </block>
+            </instance>
+            <instance x="6" y="-1296">
+                <block type="robConf_digitalout" id=".U._61m-tgfT}g2{Ww_m" intask="true">
+                    <field name="NAME">S_C04_D_UP</field>
+                    <field name="PIN_PULL">PIN_PULL_UP</field>
+                    <field name="PIN1">C04</field>
+                </block>
+            </instance>
+            <instance x="258" y="-1296">
+                <block type="robConf_digitalout" id="|K-R^3q)ZmXWF4%dFtCa" intask="true">
+                    <field name="NAME">S_C10_D_DOWN</field>
+                    <field name="PIN_PULL">PIN_PULL_DOWN</field>
+                    <field name="PIN1">C10</field>
+                </block>
+            </instance>
+            <instance x="-222" y="-1224">
+                <block type="robConf_digitalout" id="e~KlZ+/u~0KFXYqpvEZI" intask="true">
+                    <field name="NAME">S_P1_D</field>
+                    <field name="PIN_PULL">PIN_PULL_NONE</field>
+                    <field name="PIN1">1</field>
+                </block>
+            </instance>
+            <instance x="5" y="-1219">
+                <block type="robConf_digitalout" id="mbt[W@N]qJv5!(rsaoI8" intask="true">
+                    <field name="NAME">S_C05_D_UP</field>
+                    <field name="PIN_PULL">PIN_PULL_UP</field>
+                    <field name="PIN1">C05</field>
+                </block>
+            </instance>
+            <instance x="258" y="-1219">
+                <block type="robConf_digitalout" id="-^kKFSTu]qHO42XtXL;e" intask="true">
+                    <field name="NAME">S_C11_D_DOWN</field>
+                    <field name="PIN_PULL">PIN_PULL_DOWN</field>
+                    <field name="PIN1">C11</field>
+                </block>
+            </instance>
+            <instance x="-219" y="-1150">
+                <block type="robConf_digitalout" id="b#[vU~?r1?3K;jejW4u=" intask="true">
+                    <field name="NAME">S_P2_D</field>
+                    <field name="PIN_PULL">PIN_PULL_NONE</field>
+                    <field name="PIN1">2</field>
+                </block>
+            </instance>
+            <instance x="6" y="-1145">
+                <block type="robConf_digitalout" id="Z(H(c`o=~mJfQGBu/wp%" intask="true">
+                    <field name="NAME">S_C06_D_UP</field>
+                    <field name="PIN_PULL">PIN_PULL_UP</field>
+                    <field name="PIN1">C06</field>
+                </block>
+            </instance>
+            <instance x="257" y="-1143">
+                <block type="robConf_digitalout" id="yv^r.~GxFOJ7gpK=uf3s" intask="true">
+                    <field name="NAME">S_C12_D_DOWN</field>
+                    <field name="PIN_PULL">PIN_PULL_DOWN</field>
+                    <field name="PIN1">C12</field>
+                </block>
+            </instance>
+            <instance x="-220" y="-1071">
+                <block type="robConf_digitalout" id="~kmt3.lTm*KlL~S-2kQ|" intask="true">
+                    <field name="NAME">S_P3_D</field>
+                    <field name="PIN_PULL">PIN_PULL_NONE</field>
+                    <field name="PIN1">3</field>
+                </block>
+            </instance>
+            <instance x="5" y="-1069">
+                <block type="robConf_digitalout" id="*hC/ltT[o*XgrMVL{U^7" intask="true">
+                    <field name="NAME">S_C07_D_UP</field>
+                    <field name="PIN_PULL">PIN_PULL_UP</field>
+                    <field name="PIN1">C07</field>
+                </block>
+            </instance>
+            <instance x="257" y="-1068">
+                <block type="robConf_digitalout" id="P[R@LQVy:cjF`kdh/.JF" intask="true">
+                    <field name="NAME">S_C16_D_DOWN</field>
+                    <field name="PIN_PULL">PIN_PULL_DOWN</field>
+                    <field name="PIN1">C16</field>
+                </block>
+            </instance>
+            <instance x="-224" y="-992">
+                <block type="robConf_digitalout" id="GHX+,*QuI009Fkc^LG%q" intask="true">
+                    <field name="NAME">S_A0_D</field>
+                    <field name="PIN_PULL">PIN_PULL_NONE</field>
+                    <field name="PIN1">4</field>
+                </block>
+            </instance>
+            <instance x="5" y="-991">
+                <block type="robConf_digitalout" id="2JYHvry:.[q/_%3riL.O" intask="true">
+                    <field name="NAME">S_C08_D_UP</field>
+                    <field name="PIN_PULL">PIN_PULL_UP</field>
+                    <field name="PIN1">C08</field>
+                </block>
+            </instance>
+            <instance x="256" y="-992">
+                <block type="robConf_digitalout" id="dRuDiLMWpTmdXBUUcrBn" intask="true">
+                    <field name="NAME">S_C17_D_DOWN</field>
+                    <field name="PIN_PULL">PIN_PULL_DOWN</field>
+                    <field name="PIN1">C17</field>
+                </block>
+            </instance>
+            <instance x="738" y="-1007">
+                <block type="robConf_robot" id="robot" intask="true">
+                    <field name="ROBOT">undefined</field>
+                </block>
+            </instance>
+            <instance x="-224" y="-913">
+                <block type="robConf_digitalout" id="BTg;g?uqy=tnxI*@*ig/" intask="true">
+                    <field name="NAME">S_A1_D</field>
+                    <field name="PIN_PULL">PIN_PULL_NONE</field>
+                    <field name="PIN1">5</field>
+                </block>
+            </instance>
+            <instance x="3" y="-911">
+                <block type="robConf_digitalout" id="F,G~(Yr*NU/+w3_kZaoc" intask="true">
+                    <field name="NAME">S_C09_D_UP</field>
+                    <field name="PIN_PULL">PIN_PULL_UP</field>
+                    <field name="PIN1">C09</field>
+                </block>
+            </instance>
+            <instance x="256" y="-915">
+                <block type="robConf_digitalout" id="[i8|by3:{uuo::##obQa" intask="true">
+                    <field name="NAME">S_C18_D_DOWN</field>
+                    <field name="PIN_PULL">PIN_PULL_DOWN</field>
+                    <field name="PIN1">C18</field>
+                </block>
+            </instance>
+            <instance x="255" y="-841">
+                <block type="robConf_digitalout" id="g7}~:hk97LQnQQ8`!@X^" intask="true">
+                    <field name="NAME">S_C19_D_DOWN</field>
+                    <field name="PIN_PULL">PIN_PULL_DOWN</field>
+                    <field name="PIN1">C19</field>
+                </block>
+            </instance>
+        </block_set>
+    </config>
+</export>

@@ -40,6 +40,7 @@ function init() {
     gui.vendor = '';
     gui.sim = false;
     gui.multipleSim = false;
+    gui.nn = false;
     gui.webotsSim = false;
     gui.webotsUrl = '';
     gui.fileExtension = '';

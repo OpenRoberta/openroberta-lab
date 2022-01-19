@@ -134,24 +134,24 @@ class WebotsSimulation extends StreamingViewer {
 
         let that = this;
         this.view.onstdout = function (text: string) {
-            if (text.startsWith('finish')) {
+            if (text.indexOf('finish') === 0) {
                 $('#simControl').trigger('click');
-            } else if (text.startsWith('say')) {
+            } else if (text.indexOf('say') === 0) {
                 let data = text.split(':');
                 that.sayText(data);
-            } else if (text.startsWith('setLanguage')) {
+            } else if (text.indexOf('setLanguage') === 0) {
                 let data = text.split(':');
                 that.lang = data[1];
-            } else if (text.startsWith('setVolume')) {
+            } else if (text.indexOf('setVolume') === 0) {
                 let data = text.split(':');
                 that.volume = parseInt(data[1]) / 100;
-            } else if (text.startsWith('getVolume')) {
+            } else if (text.indexOf('getVolume') === 0) {
                 let message = {
                     name: 'NAO',
                     message: 'volume:' + that.volume * 100,
                 };
                 that.sendMessage('robot:' + JSON.stringify(message));
-            } else if (text.startsWith('recognizeSpeech')) {
+            } else if (text.indexOf('recognizeSpeech')) {
                 that.recognizeSpeech();
             } else {
                 // console.log(text);  // enable this maybe for debugging
