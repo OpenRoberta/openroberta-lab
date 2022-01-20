@@ -19,7 +19,7 @@ int rAsInt, gAsInt, bAsInt;
 #define OLED_RESET 4
 #define SCREEN_WIDTH 128
 #define SCREEN_HEIGHT 64
-Adafruit_SSD1306 _lcd_O(SCREEN_WIDTH,SCREEN_HEIGHT,&Wire, OLED_RESET);
+Adafruit_SSD1306 _lcd_O(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 int _led_red_R = 5;
 int _led_green_R = 1;
 int _led_blue_R = 0;
@@ -34,6 +34,8 @@ void setup()
     pinMode(_led_L, OUTPUT);
     APDS.begin();
     _lcd_O.begin(SSD1306_SWITCHCAPVCC, SCREEN_ADDRESS);
+    _lcd_O.clearDisplay();
+    _lcd_O.setTextColor(SSD1306_WHITE);
     pinMode(_led_red_R, OUTPUT);
     pinMode(_led_green_R, OUTPUT);
     pinMode(_led_blue_R, OUTPUT);
@@ -60,6 +62,7 @@ void loop()
     _lcd_O.print("Hallo");
     _lcd_O.display();
     _lcd_O.clearDisplay();
+    _lcd_O.display();
     analogWrite(_output_Aa, (int)1);
     digitalWrite(_output_Ad, (int)1);
     digitalWrite(_relay_rel, LOW);

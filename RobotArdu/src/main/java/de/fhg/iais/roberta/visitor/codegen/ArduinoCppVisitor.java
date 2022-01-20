@@ -87,6 +87,8 @@ public class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor implement
         this.sb.append("_lcd_").append(clearDisplayAction.port);
         if ( clearDisplayAction.getProperty().getBlockType().contains("oledssd1306i2c") ) {
             this.sb.append(".clearDisplay();");
+            nlIndent();
+            this.sb.append("_lcd_").append(clearDisplayAction.port).append((".display();"));
         } else {
             this.sb.append(".clear();");
         }
@@ -665,6 +667,10 @@ public class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor implement
                 case SC.OLEDSSD1306I2C:
                     this.sb.append("_lcd_" + usedConfigurationBlock.getUserDefinedPortName() + ".begin(SSD1306_SWITCHCAPVCC, SCREEN_ADDRESS);");
                     nlIndent();
+                    this.sb.append("_lcd_").append(usedConfigurationBlock.getUserDefinedPortName()).append(".clearDisplay();");
+                    nlIndent();
+                    this.sb.append("_lcd_").append(usedConfigurationBlock.getUserDefinedPortName()).append(".setTextColor(SSD1306_WHITE);");
+                    nlIndent();
                     break;
 
                 case SC.LED:
@@ -851,7 +857,7 @@ public class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor implement
                     nlIndent();
                     this.sb.append("#define SCREEN_HEIGHT ").append(addressssd1306.equals("0x3D") ? "64" : "32");
                     nlIndent();
-                    this.sb.append("Adafruit_SSD1306 _lcd_").append(blockName).append("(SCREEN_WIDTH,SCREEN_HEIGHT,&Wire, OLED_RESET);");
+                    this.sb.append("Adafruit_SSD1306 _lcd_").append(blockName).append("(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);");
                     nlIndent();
                     break;
                 case SC.LED:
