@@ -13,8 +13,8 @@ export class Node {
     id: string;
     /** List of input links. */
     inputLinks: Link[] = [];
-    bias = 0.0; // was: 0.1
-    biasOrig = '0.0';
+    bias = 0; // was: 0.1
+    biasOrig = '0';
     /** List of output links. */
     outputs: Link[] = [];
     totalInput: number;

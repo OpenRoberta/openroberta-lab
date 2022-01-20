@@ -18,8 +18,8 @@ define(["require", "exports"], function (require, exports) {
         function Node(id, activation, initZero) {
             /** List of input links. */
             this.inputLinks = [];
-            this.bias = 0.0; // was: 0.1
-            this.biasOrig = '0.0';
+            this.bias = 0; // was: 0.1
+            this.biasOrig = '0';
             /** List of output links. */
             this.outputs = [];
             /** Error derivative with respect to this node's output. */
